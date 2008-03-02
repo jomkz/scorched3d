@@ -1,0 +1,25 @@
+This is a Bender model for Scorched 3D (www.scorched3d.co.uk), made in Blender. I dare you to say that ten times fast. =) 
+
+It's Bender! Now you can hurl beer bottles at all who stand in your path. 
+
+Included are Bender and his beer bottle projectiles. It's the product of two afternoons of hard labor. Free to use, but please credit me if you'd like to modify it. It weighs in at approximately 1900 polygons for the tank model. That's a few hundred more than I would have liked, but he needs them for his round curvy body and I dare say.. he's worth it! Okay, I *had* to say that, because he made me. I don't argue with Bender. 
+
+It's been tested with Scorched 3D 38.1b. Unzip into your Scorched 3D directory if you're using windows, or ~scorched3d/share/ in un*x. (there is no 'share' directory in windows) and add this to your tanks.xml: 
+
+        <tank>
+                <name>Bender</name>
+                <catagory>Humour</catagory>
+                <model type="MilkShape">bender/bender.txt</model>
+                <projectilemodel type="MilkShape">beer_bottle/bottle.txt</projectilemodel>
+        </tank>
+
+
+Thanks to cbx550f for his Blender export script, which saved me a LOT of hassle and meant I could do this work entirely in Blender. Great job cbx!
+
+
+Enjoy!
+
+  - antivert
+
+
+Hello to everyone in the Scorched 3D forums! If you're using Windows and you can't read this file, open it in wordpad. A bit pointless for me to say that if you can't read it though!

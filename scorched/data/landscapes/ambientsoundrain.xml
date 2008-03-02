@@ -1,0 +1,10 @@
+<ambientsound>
+		<sound>
+			<position type='ambient'></position>
+			<timing type='looped'></timing>
+			<sound type='file'>
+				<file>data/wav/misc/rain.wav</file>
+				<gain>1.0</gain>
+			</sound>
+		</sound>
+</ambientsound>

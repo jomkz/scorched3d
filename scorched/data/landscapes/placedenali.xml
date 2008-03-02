@@ -1,0 +1,75 @@
+<place>
+		<placement type='direct'>
+			<position>
+				<position>
+					<A>96</A>
+					<B>52</B>
+					<C>0</C>
+				</position>
+			</position>
+			<object type='group'>
+				<groupobject>
+					<offset>
+						<A>0</A>
+						<B>0</B>
+						<C>0</C>
+					</offset>
+					<object type='model'>
+						<model type='MilkShape'>data/accessories/shack/shack.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/shack/shack.txt</modelburnt>
+						<modelrotation>60</modelrotation>
+						<modelscale>0.07</modelscale>
+						<flattenarea>-1.0</flattenarea>
+						<border>5.0</border>
+						<groupname>none</groupname>
+					</object>
+				</groupobject>
+				<groupobject>
+					<offset>
+						<A>-5</A>
+						<B>2</B>
+						<C>0</C>
+					</offset>
+					<object type='shadow'>
+						<groundmap type='bmp'>
+							<image>data/landscapes/path.bmp</image>
+							<alpha>data/landscapes/patha.bmp</alpha>
+							<invert>true</invert>
+						</groundmap>
+					</object>
+				</groupobject>
+				<groupobject>
+					<offset>
+						<A>-7</A>
+						<B>4</B>
+						<C>0</C>
+					</offset>
+					<object type='model'>
+						<model type='MilkShape'>data/accessories/shack/shack.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/shack/shack.txt</modelburnt>
+						<modelrotation>180</modelrotation>
+						<modelscale>0.07</modelscale>
+						<flattenarea>-1.0</flattenarea>
+						<border>5.0</border>
+						<groupname>none</groupname>
+					</object>
+				</groupobject>
+				<groupobject>
+					<offset>
+						<A>-8</A>
+						<B>-2</B>
+						<C>0</C>
+					</offset>
+					<object type='model'>
+						<model type='MilkShape'>data/accessories/shack/shack.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/shack/shack.txt</modelburnt>
+						<modelrotation>10</modelrotation>
+						<modelscale>0.07</modelscale>
+						<flattenarea>-1.0</flattenarea>
+						<border>5.0</border>
+						<groupname>none</groupname>
+					</object>
+				</groupobject>
+			</object>
+		</placement>
+</place>

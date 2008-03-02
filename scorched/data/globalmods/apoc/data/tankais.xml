@@ -1,0 +1,781 @@
+<ais>
+	<ai>
+		<name>Sniper</name>
+		<description>A computer controlled player.
+Snipers prefer to use laser weapons and guns.</description>
+		<availableforrandom>true</availableforrandom>
+		<availableforplayers>true</availableforplayers>
+		
+		<weapons>
+			<!-- A list of weapon sets that will be considered during buying.
+				Only one weaponset will be selected. -->
+			<weaponset>WeaponSetSniper</weaponset>
+		</weapons>
+		<defense>
+			<!-- Use batteries if available -->
+			<usebatteries>true</usebatteries>
+			<!-- Use shields if available -->
+			<useshields>true</useshields>
+			<!-- Use parachutes if available -->
+			<useparachutes>true</useparachutes>
+		</defense>
+		<attack>
+			<resign>
+				<!-- Try resigning rules -->
+				<useresign>true</useresign>
+				<!-- Don't consider resigning unless you have less than this amount of life -->
+				<resignlife>10.0</resignlife>
+			</resign>
+			<movement>
+				<!-- Tank must have fuel before movement can occur. -->
+				<!-- Try movement rules -->
+				<usefuel>true</usefuel>
+				<!-- The amount of damage taken before movement is considered -->
+				<movementdamage>300.0</movementdamage>
+				<!-- Once the above damage has been taken the chance to move out the way -->
+				<movementdamagechance>0.3</movementdamagechance>
+				<!-- The amount of life before we consider moving -->
+				<movementlife>75.0</movementlife>
+				<!-- The randomness applied to the final movement position -->
+				<movementrandom>10.0</movementrandom>
+				<!-- The distance left between the target tank and the movement destination -->
+				<movementcloseness>15.0</movementcloseness>
+			</movement>
+			<groupshot>
+				<!-- The number of tanks that need to be grouped before considering a group shot 
+					A group shot is available if targets are close together and the tank has
+					a hugeweapon. -->
+				<groupshotsize>0</groupshotsize>
+				<!-- The chance that a group shot will be considered -->
+				<groupshotchance>0.0</groupshotchance>
+				<!-- The max distance between tanks considered grouped -->
+				<grouptargetdistance>25.0</grouptargetdistance>
+			</groupshot>
+			<sniper>
+				<!-- Sniper shots are used for both lasers and projectiles on full power. -->
+				<!-- How close do I need to be from a target before considering a sniper shot -->
+				<sniperusedistance>100.0</sniperusedistance>
+				<!-- The distance in degress that my 1st sniper shot may miss by -->
+				<sniperstartdistance>0.0</sniperstartdistance>
+				<!-- The distance in degrees that my best sniper shot may miss by -->
+				<sniperenddistance>0.0</sniperenddistance>
+				<!-- The min distance in degrees that each sniper shot will improve -->
+				<snipermindecrement>2.0</snipermindecrement>
+				<!-- The max distance in degrees that each sniper shot will improve -->
+				<snipermaxdecrement>5.0</snipermaxdecrement>
+				<!-- The maximum amount of accuracy in degrees that will be lost if the tank moves -->
+				<snipermovementfactor>4.0</snipermovementfactor>
+			</sniper>
+			<projectile>
+				<!-- The minimum distance to allow for shots.  Stops self kills -->
+				<projectilemindistance>10.0</projectilemindistance>
+				<!-- These are all distances of the 1st particle of the projectile to hit the ground. -->
+				<!-- The distance that the 1st projectile shot may miss by -->
+				<projectilestartdistance>10.0</projectilestartdistance>
+				<!-- The distance that the my best projectile shot may get to -->
+				<projectileenddistance>5.0</projectileenddistance>
+				<!-- The min distance that each projecile shot will improve -->
+				<projectilemindecrement>1.0</projectilemindecrement>
+				<!-- The max distance that each projecile shot will improve -->
+				<projectilemaxdecrement>4.0</projectilemaxdecrement>
+				<!-- How close a shot do I need to get to a target before firing large weapons -->
+				<largeweaponusedistance>10.0</largeweaponusedistance>
+				<!-- The maximum amount of accuracy that will be lost if the tank moves -->
+				<projectilemovementfactor>10.0</projectilemovementfactor>
+			</projectile>
+
+			<!-- 
+				Weighting factors use to determine which tank to fire at. 
+				Targets are all ranked using these factors.
+				The top weighted targets are selected to be fired at 1st. 
+				Each factor is multiplied by the weight and then all factors are added
+				to give the total weighting. 
+				All factors are in the range -1.0 to 1.0 before weighting.
+			-->
+			<targets>
+				<health>0.5</health>
+				<random>0</random>
+				<player>0</player>
+				<shield>-0.5</shield>
+				<score>0.5</score>
+				<repeat>1.0</repeat>
+				<damagetaken>1.0</damagetaken>
+				<damagedone>0.5</damagedone>
+				<distance>-1.0</distance>
+			</targets>		  
+		</attack>
+	</ai>
+	
+	<ai>
+		<name>Cyborg</name>
+		<description>A computer controlled player.
+Cyborgs are like Sharks, except they can
+use batteries.</description>
+		<!-- Is the random computer player allowed this tank type -->
+		<availableforrandom>true</availableforrandom>
+		<!-- Are AIs controlling players allowed to use the type -->
+		<availableforplayers>true</availableforplayers>
+
+		<weapons>
+			<!-- A list of weapon sets that will be considered during buying.
+				Only one weaponset will be selected. -->
+			<weaponset>WeaponSetNukes</weaponset>
+		</weapons>
+		<defense>
+			<!-- Use batteries if available -->
+			<usebatteries>true</usebatteries>
+			<!-- Use shields if available -->
+			<useshields>true</useshields>
+			<!-- Use parachutes if available -->
+			<useparachutes>true</useparachutes>
+		</defense>
+		<attack>
+			<resign>
+				<!-- Try resigning rules -->
+				<useresign>true</useresign>
+				<!-- Don't consider resigning unless you have less than this amount of life -->
+				<resignlife>10.0</resignlife>
+			</resign>
+			<movement>
+				<!-- Tank must have fuel before movement can occur. -->
+				<!-- Try movement rules -->
+				<usefuel>true</usefuel>
+				<!-- The amount of damage taken before movement is considered-->
+				<movementdamage>300.0</movementdamage>
+				<!-- Once the above damage has been taken the chance to move out the way -->
+				<movementdamagechance>0.3</movementdamagechance>
+				<!-- The amount of life before we consider moving -->
+				<movementlife>75.0</movementlife>
+				<!-- The randomness applied to the final movement position -->
+				<movementrandom>10.0</movementrandom>
+				<!-- The distance left between the target tank and the movement destination -->
+				<movementcloseness>15.0</movementcloseness>
+			</movement>
+			<groupshot>
+				<!-- The number of tanks that need to be grouped before considering a group shot 
+					A group shot is available if targets are close together and the tank has
+					a hugeweapon. -->
+				<groupshotsize>2</groupshotsize>
+				<!-- The chance that a group shot will be considered -->
+				<groupshotchance>0.7</groupshotchance>
+				<!-- The max distance between tanks considered grouped -->
+				<grouptargetdistance>25.0</grouptargetdistance>
+			</groupshot>
+			<sniper>
+				<!-- Sniper shots are used for both lasers and projectiles on full power. -->
+				<!-- How close do I need to be from a target before considering a sniper shot -->
+				<sniperusedistance>80.0</sniperusedistance>
+				<!-- The distance in degress that my 1st sniper shot may miss by -->
+				<sniperstartdistance>0.0</sniperstartdistance>
+				<!-- The distance in degrees that my best sniper shot may miss by -->
+				<sniperenddistance>0.0</sniperenddistance>
+				<!-- The min distance in degrees that each sniper shot will improve -->
+				<snipermindecrement>2.0</snipermindecrement>
+				<!-- The max distance in degrees that each sniper shot will improve -->
+				<snipermaxdecrement>5.0</snipermaxdecrement>
+				<!-- The maximum amount of accuracy in degrees that will be lost if the tank moves -->
+				<snipermovementfactor>4.0</snipermovementfactor>
+			</sniper>
+			<projectile>
+				<projectilemindistance>10.0</projectilemindistance>
+				<!-- These are all distances of the 1st particle of the projectile to hit the ground. -->
+				<!-- The distance that the 1st projectile shot may miss by -->
+				<projectilestartdistance>10.0</projectilestartdistance>
+				<!-- The distance that the my best projectile shot may get to -->
+				<projectileenddistance>5.0</projectileenddistance>
+				<!-- The min distance that each projecile shot will improve -->
+				<projectilemindecrement>1.0</projectilemindecrement>
+				<!-- The max distance that each projecile shot will improve -->
+				<projectilemaxdecrement>4.0</projectilemaxdecrement>
+				<!-- How close a shot do I need to get to a target before firing large weapons -->
+				<largeweaponusedistance>10.0</largeweaponusedistance>
+				<!-- The maximum amount of accuracy that will be lost if the tank moves -->
+				<projectilemovementfactor>10.0</projectilemovementfactor>
+			</projectile>
+
+			<!-- 
+				Weighting factors use to determine which tank to fire at. 
+				Targets are all ranked using these factors.
+				The top weighted targets are selected to be fired at 1st. 
+				Each factor is multiplied by the weight and then all factors are added
+				to give the total weighting. 
+				All factors are in the range -1.0 to 1.0 before weighting.
+			-->
+			<targets>
+				<health>0</health>
+				<random>0</random>
+				<player>0</player>
+				<shield>0</shield>
+				<score>0</score>
+				<repeat>0</repeat>
+				<damagetaken>0</damagetaken>
+				<damagedone>0</damagedone>
+				<distance>-1.0</distance>
+			</targets>		  
+		</attack>
+	</ai>
+	
+	<ai>
+		<name>Pyro</name>
+		<description>A computer controlled player.
+A Pyro is a refined version of the cyborg
+that prefers to use fire-based weaponry.</description>
+		<availableforrandom>true</availableforrandom>
+		<availableforplayers>true</availableforplayers>
+		
+		<weapons>
+			<!-- A list of weapon sets that will be considered during buying.
+				Only one weaponset will be selected. -->
+			<weaponset>WeaponSetFire</weaponset>
+		</weapons>
+		<defense>
+			<!-- Use batteries if available -->
+			<usebatteries>true</usebatteries>
+			<!-- Use shields if available -->
+			<useshields>true</useshields>
+			<!-- Use parachutes if available -->
+			<useparachutes>true</useparachutes>
+		</defense>
+		<attack>
+			<resign>
+				<!-- Try resigning rules -->
+				<useresign>true</useresign>
+				<!-- Don't consider resigning unless you have less than this amount of life -->
+				<resignlife>10.0</resignlife>
+			</resign>
+			<movement>
+				<!-- Tank must have fuel before movement can occur. -->
+				<!-- Try movement rules -->
+				<usefuel>true</usefuel>
+				<!-- The amount of damage taken before movement is considered-->
+				<movementdamage>300.0</movementdamage>
+				<!-- Once the above damage has been taken the chance to move out the way -->
+				<movementdamagechance>0.3</movementdamagechance>
+				<!-- The amount of life before we consider moving -->
+				<movementlife>75.0</movementlife>
+				<!-- The randomness applied to the final movement position -->
+				<movementrandom>10.0</movementrandom>
+				<!-- The distance left between the target tank and the movement destination -->
+				<movementcloseness>15.0</movementcloseness>
+			</movement>
+			<groupshot>
+				<!-- The number of tanks that need to be grouped before considering a group shot 
+					A group shot is available if targets are close together and the tank has
+					a hugeweapon. -->
+				<groupshotsize>2</groupshotsize>
+				<!-- The chance that a group shot will be considered -->
+				<groupshotchance>0.7</groupshotchance>
+				<!-- The max distance between tanks considered grouped -->
+				<grouptargetdistance>25.0</grouptargetdistance>
+			</groupshot>
+			<sniper>
+				<!-- Sniper shots are used for both lasers and projectiles on full power. -->
+				<!-- How close do I need to be from a target before considering a sniper shot -->
+				<sniperusedistance>60.0</sniperusedistance>
+				<!-- The distance in degress that my 1st sniper shot may miss by -->
+				<sniperstartdistance>0.0</sniperstartdistance>
+				<!-- The distance in degrees that my best sniper shot may miss by -->
+				<sniperenddistance>0.0</sniperenddistance>
+				<!-- The min distance in degrees that each sniper shot will improve -->
+				<snipermindecrement>2.0</snipermindecrement>
+				<!-- The max distance in degrees that each sniper shot will improve -->
+				<snipermaxdecrement>5.0</snipermaxdecrement>
+				<!-- The maximum amount of accuracy in degrees that will be lost if the tank moves -->
+				<snipermovementfactor>4.0</snipermovementfactor>
+			</sniper>
+			<projectile>
+				<projectilemindistance>10.0</projectilemindistance>
+				<!-- These are all distances of the 1st particle of the projectile to hit the ground. -->
+				<!-- The distance that the 1st projectile shot may miss by -->
+				<projectilestartdistance>10.0</projectilestartdistance>
+				<!-- The distance that the my best projectile shot may get to -->
+				<projectileenddistance>5.0</projectileenddistance>
+				<!-- The min distance that each projecile shot will improve -->
+				<projectilemindecrement>1.0</projectilemindecrement>
+				<!-- The max distance that each projecile shot will improve -->
+				<projectilemaxdecrement>4.0</projectilemaxdecrement>
+				<!-- How close a shot do I need to get to a target before firing large weapons -->
+				<largeweaponusedistance>10.0</largeweaponusedistance>
+				<!-- The maximum amount of accuracy that will be lost if the tank moves -->
+				<projectilemovementfactor>10.0</projectilemovementfactor>
+			</projectile>
+
+			<!-- 
+				Weighting factors use to determine which tank to fire at. 
+				Targets are all ranked using these factors.
+				The top weighted targets are selected to be fired at 1st. 
+				Each factor is multiplied by the weight and then all factors are added
+				to give the total weighting. 
+				All factors are in the range -1.0 to 1.0 before weighting.
+			-->
+			<targets>
+				<health>0</health>
+				<random>0</random>
+				<player>0</player>
+				<shield>0</shield>
+				<score>0</score>
+				<repeat>0</repeat>
+				<damagetaken>0</damagetaken>
+				<damagedone>0</damagedone>
+				<distance>-1.0</distance>
+			</targets>		  
+		</attack>
+	</ai>
+
+	<ai>
+		<name>Chemist</name>
+		<description>A computer controlled player.
+Chemists are Cyborgs that specialize in the
+use of bio/chemical weaponry.</description>
+		<availableforrandom>true</availableforrandom>
+		<availableforplayers>true</availableforplayers>
+		
+		<weapons>
+			<!-- A list of weapon sets that will be considered during buying.
+				Only one weaponset will be selected. -->
+			<weaponset>WeaponSetChem</weaponset>
+		</weapons>
+		<defense>
+			<!-- Use batteries if available -->
+			<usebatteries>true</usebatteries>
+			<!-- Use shields if available -->
+			<useshields>true</useshields>
+			<!-- Use parachutes if available -->
+			<useparachutes>true</useparachutes>
+		</defense>
+		<attack>
+			<resign>
+				<!-- Try resigning rules -->
+				<useresign>true</useresign>
+				<!-- Don't consider resigning unless you have less than this amount of life -->
+				<resignlife>10.0</resignlife>
+			</resign>
+			<movement>
+				<!-- Tank must have fuel before movement can occur. -->
+				<!-- Try movement rules -->
+				<usefuel>true</usefuel>
+				<!-- The amount of damage taken before movement is considered-->
+				<movementdamage>300.0</movementdamage>
+				<!-- Once the above damage has been taken the chance to move out the way -->
+				<movementdamagechance>0.3</movementdamagechance>
+				<!-- The amount of life before we consider moving -->
+				<movementlife>75.0</movementlife>
+				<!-- The randomness applied to the final movement position -->
+				<movementrandom>10.0</movementrandom>
+				<!-- The distance left between the target tank and the movement destination -->
+				<movementcloseness>15.0</movementcloseness>
+			</movement>
+			<groupshot>
+				<!-- The number of tanks that need to be grouped before considering a group shot 
+					A group shot is available if targets are close together and the tank has
+					a hugeweapon. -->
+				<groupshotsize>2</groupshotsize>
+				<!-- The chance that a group shot will be considered -->
+				<groupshotchance>0.7</groupshotchance>
+				<!-- The max distance between tanks considered grouped -->
+				<grouptargetdistance>25.0</grouptargetdistance>
+			</groupshot>
+			<sniper>
+				<!-- Sniper shots are used for both lasers and projectiles on full power. -->
+				<!-- How close do I need to be from a target before considering a sniper shot -->
+				<sniperusedistance>60.0</sniperusedistance>
+				<!-- The distance in degress that my 1st sniper shot may miss by -->
+				<sniperstartdistance>0.0</sniperstartdistance>
+				<!-- The distance in degrees that my best sniper shot may miss by -->
+				<sniperenddistance>0.0</sniperenddistance>
+				<!-- The min distance in degrees that each sniper shot will improve -->
+				<snipermindecrement>2.0</snipermindecrement>
+				<!-- The max distance in degrees that each sniper shot will improve -->
+				<snipermaxdecrement>5.0</snipermaxdecrement>
+				<!-- The maximum amount of accuracy in degrees that will be lost if the tank moves -->
+				<snipermovementfactor>4.0</snipermovementfactor>
+			</sniper>
+			<projectile>
+				<projectilemindistance>10.0</projectilemindistance>
+				<!-- These are all distances of the 1st particle of the projectile to hit the ground. -->
+				<!-- The distance that the 1st projectile shot may miss by -->
+				<projectilestartdistance>10.0</projectilestartdistance>
+				<!-- The distance that the my best projectile shot may get to -->
+				<projectileenddistance>5.0</projectileenddistance>
+				<!-- The min distance that each projecile shot will improve -->
+				<projectilemindecrement>1.0</projectilemindecrement>
+				<!-- The max distance that each projecile shot will improve -->
+				<projectilemaxdecrement>4.0</projectilemaxdecrement>
+				<!-- How close a shot do I need to get to a target before firing large weapons -->
+				<largeweaponusedistance>10.0</largeweaponusedistance>
+				<!-- The maximum amount of accuracy that will be lost if the tank moves -->
+				<projectilemovementfactor>10.0</projectilemovementfactor>
+			</projectile>
+
+			<!-- 
+				Weighting factors use to determine which tank to fire at. 
+				Targets are all ranked using these factors.
+				The top weighted targets are selected to be fired at 1st. 
+				Each factor is multiplied by the weight and then all factors are added
+				to give the total weighting. 
+				All factors are in the range -1.0 to 1.0 before weighting.
+			-->
+			<targets>
+				<health>0</health>
+				<random>0</random>
+				<player>0</player>
+				<shield>0</shield>
+				<score>0</score>
+				<repeat>0</repeat>
+				<damagetaken>0</damagetaken>
+				<damagedone>0</damagedone>
+				<distance>-1.0</distance>
+			</targets>		  
+		</attack>
+	</ai>
+	
+	<ai>
+		<name>Shocker</name>
+		<description>A computer controlled player.
+Shockers are Cyborgs that specialize in
+the use of energy based weaponset.</description>
+		<availableforrandom>true</availableforrandom>
+		<availableforplayers>true</availableforplayers>
+		
+		<weapons>
+			<!-- A list of weapon sets that will be considered during buying.
+				Only one weaponset will be selected. -->
+			<weaponset>WeaponSetShock</weaponset>
+		</weapons>
+		<defense>
+			<!-- Use batteries if available -->
+			<usebatteries>true</usebatteries>
+			<!-- Use shields if available -->
+			<useshields>true</useshields>
+			<!-- Use parachutes if available -->
+			<useparachutes>true</useparachutes>
+		</defense>
+		<attack>
+			<resign>
+				<!-- Try resigning rules -->
+				<useresign>true</useresign>
+				<!-- Don't consider resigning unless you have less than this amount of life -->
+				<resignlife>10.0</resignlife>
+			</resign>
+			<movement>
+				<!-- Tank must have fuel before movement can occur. -->
+				<!-- Try movement rules -->
+				<usefuel>true</usefuel>
+				<!-- The amount of damage taken before movement is considered-->
+				<movementdamage>300.0</movementdamage>
+				<!-- Once the above damage has been taken the chance to move out the way -->
+				<movementdamagechance>0.3</movementdamagechance>
+				<!-- The amount of life before we consider moving -->
+				<movementlife>75.0</movementlife>
+				<!-- The randomness applied to the final movement position -->
+				<movementrandom>10.0</movementrandom>
+				<!-- The distance left between the target tank and the movement destination -->
+				<movementcloseness>15.0</movementcloseness>
+			</movement>
+			<groupshot>
+				<!-- The number of tanks that need to be grouped before considering a group shot 
+					A group shot is available if targets are close together and the tank has
+					a hugeweapon. -->
+				<groupshotsize>2</groupshotsize>
+				<!-- The chance that a group shot will be considered -->
+				<groupshotchance>0.7</groupshotchance>
+				<!-- The max distance between tanks considered grouped -->
+				<grouptargetdistance>25.0</grouptargetdistance>
+			</groupshot>
+			<sniper>
+				<!-- Sniper shots are used for both lasers and projectiles on full power. -->
+				<!-- How close do I need to be from a target before considering a sniper shot -->
+				<sniperusedistance>60.0</sniperusedistance>
+				<!-- The distance in degress that my 1st sniper shot may miss by -->
+				<sniperstartdistance>0.0</sniperstartdistance>
+				<!-- The distance in degrees that my best sniper shot may miss by -->
+				<sniperenddistance>0.0</sniperenddistance>
+				<!-- The min distance in degrees that each sniper shot will improve -->
+				<snipermindecrement>2.0</snipermindecrement>
+				<!-- The max distance in degrees that each sniper shot will improve -->
+				<snipermaxdecrement>5.0</snipermaxdecrement>
+				<!-- The maximum amount of accuracy in degrees that will be lost if the tank moves -->
+				<snipermovementfactor>4.0</snipermovementfactor>
+			</sniper>
+			<projectile>
+				<projectilemindistance>5.0</projectilemindistance>
+				<!-- These are all distances of the 1st particle of the projectile to hit the ground. -->
+				<!-- The distance that the 1st projectile shot may miss by -->
+				<projectilestartdistance>10.0</projectilestartdistance>
+				<!-- The distance that the my best projectile shot may get to -->
+				<projectileenddistance>5.0</projectileenddistance>
+				<!-- The min distance that each projecile shot will improve -->
+				<projectilemindecrement>1.0</projectilemindecrement>
+				<!-- The max distance that each projecile shot will improve -->
+				<projectilemaxdecrement>4.0</projectilemaxdecrement>
+				<!-- How close a shot do I need to get to a target before firing large weapons -->
+				<largeweaponusedistance>10.0</largeweaponusedistance>
+				<!-- The maximum amount of accuracy that will be lost if the tank moves -->
+				<projectilemovementfactor>10.0</projectilemovementfactor>
+			</projectile>
+
+			<!-- 
+				Weighting factors use to determine which tank to fire at. 
+				Targets are all ranked using these factors.
+				The top weighted targets are selected to be fired at 1st. 
+				Each factor is multiplied by the weight and then all factors are added
+				to give the total weighting. 
+				All factors are in the range -1.0 to 1.0 before weighting.
+			-->
+			<targets>
+				<health>0</health>
+				<random>0</random>
+				<player>0</player>
+				<shield>0</shield>
+				<score>0</score>
+				<repeat>0</repeat>
+				<damagetaken>0</damagetaken>
+				<damagedone>0</damagedone>
+				<distance>-1.0</distance>
+			</targets>		  
+		</attack>
+	</ai>
+	
+	<ai>
+		<name>Hard Target</name>
+		<description>A computer controlled player.
+These tanks act as static targets.  They
+will NEVER fire back but can use defense.</description>
+		<availableforplayers>true</availableforplayers>
+		<availableforrandom>false</availableforrandom>
+		<weapons>
+			<weaponset>WeaponSetDefense</weaponset>
+		</weapons>
+		<defense>
+			<usebatteries>true</usebatteries>
+			<useshields>true</useshields>
+			<useparachutes>true</useparachutes>
+		</defense>
+		<attack>
+			<resign>
+				<useresign>false</useresign>
+				<resignlife>10.0</resignlife>
+			</resign>
+			<movement>
+				<usefuel>true</usefuel>
+				<movementdamage>300.0</movementdamage>
+				<movementdamagechance>0.3</movementdamagechance>
+				<movementlife>75.0</movementlife>
+				<movementrandom>10.0</movementrandom>
+				<movementcloseness>15.0</movementcloseness>
+			</movement>
+			<groupshot>
+				<groupshotsize>0</groupshotsize>
+				<groupshotchance>0.7</groupshotchance>
+				<grouptargetdistance>25.0</grouptargetdistance>
+			</groupshot>
+			<sniper>
+				<sniperusedistance>0</sniperusedistance>
+				<sniperstartdistance>0.0</sniperstartdistance>
+				<sniperenddistance>0.0</sniperenddistance>
+				<snipermindecrement>2.0</snipermindecrement>
+				<snipermaxdecrement>5.0</snipermaxdecrement>
+				<snipermovementfactor>4.0</snipermovementfactor>
+			</sniper>
+			<projectile>
+				<projectilemindistance>0.0</projectilemindistance>
+				<projectilestartdistance>10.0</projectilestartdistance>
+				<projectileenddistance>5.0</projectileenddistance>
+				<projectilemindecrement>1.0</projectilemindecrement>
+				<projectilemaxdecrement>4.0</projectilemaxdecrement>
+				<largeweaponusedistance>10.0</largeweaponusedistance>
+				<projectilemovementfactor>10.0</projectilemovementfactor>
+			</projectile>
+			<targets>
+				<health>0</health>
+				<random>1.0</random>
+				<player>0</player>
+				<shield>0</shield>
+				<score>-1.0</score>
+				<repeat>0</repeat>
+				<damagetaken>0</damagetaken>
+				<damagedone>0</damagedone>
+				<distance>0.0</distance>
+			</targets>
+		</attack>	
+	</ai>
+	
+	<ai>
+		<name>Target</name>
+		<description>A computer controlled player. 
+These tanks act as static targets. 
+They will NEVER fire back.</description>
+		<availableforrandom>true</availableforrandom>
+		<availableforplayers>true</availableforplayers>
+
+		<weapons>
+			<weaponset>WeaponSetEmpty</weaponset>
+		</weapons>
+		<defense>
+			<usebatteries>false</usebatteries>
+			<useshields>false</useshields>
+			<useparachutes>false</useparachutes>
+		</defense>
+		<attack>
+			<resign>
+				<useresign>false</useresign>
+				<resignlife>10.0</resignlife>
+			</resign>
+			<movement>
+				<usefuel>false</usefuel>
+				<movementdamage>300.0</movementdamage>
+				<movementdamagechance>0.3</movementdamagechance>
+				<movementlife>75.0</movementlife>
+				<movementrandom>10.0</movementrandom>
+				<movementcloseness>15.0</movementcloseness>
+			</movement>
+			<groupshot>
+				<groupshotsize>0</groupshotsize>
+				<groupshotchance>0.7</groupshotchance>
+				<grouptargetdistance>25.0</grouptargetdistance>
+			</groupshot>
+			<sniper>
+				<sniperusedistance>80.0</sniperusedistance>
+				<sniperstartdistance>0.0</sniperstartdistance>
+				<sniperenddistance>0.0</sniperenddistance>
+				<snipermindecrement>2.0</snipermindecrement>
+				<snipermaxdecrement>5.0</snipermaxdecrement>
+				<snipermovementfactor>4.0</snipermovementfactor>
+			</sniper>
+			<projectile>
+				<projectilemindistance>10.0</projectilemindistance>
+				<projectilestartdistance>10.0</projectilestartdistance>
+				<projectileenddistance>5.0</projectileenddistance>
+				<projectilemindecrement>1.0</projectilemindecrement>
+				<projectilemaxdecrement>4.0</projectilemaxdecrement>
+				<largeweaponusedistance>10.0</largeweaponusedistance>
+				<projectilemovementfactor>10.0</projectilemovementfactor>
+			</projectile>
+			<targets>
+				<health>0</health>
+				<random>0</random>
+				<player>0</player>
+				<shield>0</shield>
+				<score>0</score>
+				<repeat>0</repeat>
+				<damagetaken>0</damagetaken>
+				<damagedone>0</damagedone>
+				<distance>0.0</distance>
+			</targets>
+		</attack>	
+	</ai>
+	
+	<!--
+	
+	<ai>
+		<name>Shark</name>
+		<description>A computer controlled player.
+Sharks are like Choosers, except they take 
+grudges against players that are 
+shooting at them.</description>
+		<aimsniper>50</aimsniper>
+		<sniperwobble>6</sniperwobble>
+		<aimtype>refined</aimtype>
+		<targettype>agressor</targettype>
+		<nodefenses>false</nodefenses>
+		<noresign>false</noresign>
+		<availableforrandom>true</availableforrandom>
+		<checknearcollision>true</checknearcollision>
+		<weaponset>
+			<weapon><name>Parachute</name><level>10</level><type>defense</type></weapon>
+			<weapon><name>Baby Nuke</name><level>20</level><type>explosionlarge</type></weapon>	
+			<weapon><name>MIRV</name><level>20</level><type>explosionlarge</type></weapon>
+			<weapon><name>Shield</name><level>20</level><type>defense</type></weapon>
+			<weapon><name>Auto Defense</name><level>30</level><type>defense</type></weapon>
+			<weapon><name>Nuke</name><level>30</level><type>explosionlarge</type></weapon>
+			<weapon><name>Baby Missile</name><level>1</level><type>explosionsmall</type></weapon>
+		</weaponset>
+	</ai>
+
+	<ai>
+		<name>Chooser</name>
+		<description>A computer controlled player.
+Choosers are like Tossers, except they can 
+also fire in straight line when close 
+enough.</description>
+		<aimsniper>50</aimsniper>
+		<sniperwobble>4</sniperwobble>
+		<aimtype>refined</aimtype>
+		<targettype>nearest</targettype>
+		<nodefenses>false</nodefenses>
+		<noresign>false</noresign>
+		<availableforrandom>true</availableforrandom>
+		<checknearcollision>true</checknearcollision>
+		<weaponset>
+			<weapon><name>Parachute</name><level>10</level><type>defense</type></weapon>
+			<weapon><name>Baby Nuke</name><level>20</level><type>explosionlarge</type></weapon>	
+			<weapon><name>MIRV</name><level>20</level><type>explosionlarge</type></weapon>
+			<weapon><name>Nuke</name><level>30</level><type>explosionlarge</type></weapon>
+			<weapon><name>Baby Missile</name><level>1</level><type>explosionsmall</type></weapon>
+		</weaponset>
+	</ai>
+	
+	<ai>
+		<name>Tosser</name>
+		<description>A computer controlled player.
+Tossers start out like Shooters, but they'll 
+refine their aim to get closer and 
+closer, until they hit. If their initial 
+shot isn't too close, you have some 
+time to kill them.</description>
+		<aimsniper>0</aimsniper>
+		<aimtype>refined</aimtype>
+		<targettype>nearest</targettype>
+		<nodefenses>false</nodefenses>
+		<noresign>true</noresign>
+		<availableforrandom>true</availableforrandom>
+		<checknearcollision>false</checknearcollision>
+		<weaponset>
+			<weapon><name>Missile</name><level>20</level><type>explosionsmall</type></weapon>
+			<weapon><name>Baby Nuke</name><level>20</level><type>explosionlarge</type></weapon>	
+			<weapon><name>MIRV</name><level>20</level><type>explosionlarge</type></weapon>
+			<weapon><name>Nuke</name><level>30</level><type>explosionlarge</type></weapon>
+			<weapon><name>Baby Missile</name><level>1</level><type>explosionsmall</type></weapon>
+		</weaponset>
+	</ai>
+	
+	<ai>
+		<name>Shooter</name>
+		<description>A computer controlled player.
+Shooters can be significantly deadlier than 
+Morons, but they don't ever learn, 
+not refining subsiquent shots.</description>
+		<aimsniper>0</aimsniper>
+		<aimtype>guess</aimtype>
+		<targettype>nearest</targettype>
+		<nodefenses>false</nodefenses>
+		<noresign>true</noresign>
+		<availableforrandom>true</availableforrandom>
+		<checknearcollision>false</checknearcollision>
+		<weaponset>
+			<weapon><name>Missile</name><level>20</level><type>explosionsmall</type></weapon>
+			<weapon><name>Baby Nuke</name><level>20</level><type>explosionlarge</type></weapon>
+			<weapon><name>Baby Missile</name><level>1</level><type>explosionsmall</type></weapon>
+		</weaponset>
+	</ai>
+	
+	<ai>
+		<name>Moron</name>
+		<description>A computer controlled player.
+Well, you can't get much stupider than this. 
+Morons just pick an angle and power, 
+and shoot. Definitely for beginners 
+only.</description>
+		<aimsniper>0</aimsniper>
+		<aimtype>random</aimtype>
+		<targettype>nearest</targettype>
+		<noresign>true</noresign>
+		<nodefenses>false</nodefenses>
+		<checknearcollision>false</checknearcollision>
+		<availableforrandom>true</availableforrandom>
+		<weaponset>
+			<weapon><name>Missile</name><level>2</level><type>explosionsmall</type></weapon>
+			<weapon><name>Baby Missile</name><level>1</level><type>explosionsmall</type></weapon>
+		</weaponset>
+	</ai> -->
+</ais>

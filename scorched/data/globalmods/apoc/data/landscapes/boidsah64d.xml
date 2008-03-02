@@ -1,0 +1,37 @@
+<boids>
+	<placement type="bounds">
+		<count>2</count>
+		<minbounds><A>0</A><B>0</B><C>10</C></minbounds>
+		<maxbounds><A>255</A><B>255</B><C>50</C></maxbounds>
+		<object type='target'>
+			<model type="MilkShape">data/meshes/ah64d/ah64d.txt</model>
+			<modelscale>0.01</modelscale>
+			<nocollision>false</nocollision>
+			<displayshadow>true</displayshadow>
+			<groupname>boids-ah64d</groupname>
+			<removeaction>Airplane</removeaction>
+		</object>
+	</placement>
+	<movement type="boids">
+		<minbounds><A>0</A><B>0</B><C>10</C></minbounds>
+		<maxbounds><A>255</A><B>255</B><C>50</C></maxbounds>
+		<maxvelocity>2.5</maxvelocity>
+		<maxacceleration>2.0</maxacceleration>
+		<cruisedistance>4.0</cruisedistance>
+		<groupname>boids-ah64d</groupname>
+	</movement>
+	<sound>
+		<position type='set'>
+			<maxsounds>2</maxsounds>
+			<name>boids-ah64d</name>
+		</position>
+		<timing type='repeat'>
+			<min>0</min>
+			<max>2</max>
+		</timing>
+		<sound type='file'>
+			<file>data/wav/misc/apache_1.wav</file>
+			<gain>0.15</gain>
+		</sound>
+	</sound>
+</boids>

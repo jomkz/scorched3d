@@ -1,0 +1,1810 @@
+<accessories>
+	<accessory>
+		<name>Parachute</name>
+		<armslevel>7</armslevel>
+		<description>Deployed when the tank falls.  
+Prevents the tank from taking falling damage.
+Parachutes must be enbabled before they are
+effective.</description>
+		<icon>para.bmp</icon>
+		<activationsound>misc/para.wav</activationsound>
+		<bundlesize>8</bundlesize>
+		<cost>10000</cost>
+		<accessoryaction type='Parachute'>
+		<!--<slowforce><a>0.0</a><b>0.0</b><c>3.0</c></slowforce>-->
+		</accessoryaction>
+		<freemarketlimits>0</freemarketlimits>
+	</accessory>
+	<accessory>
+		<name>Battery</name>
+		<armslevel>7</armslevel>
+		<description>Used to re-charge tank life.
+Giving more health and longer shots.</description>
+		<icon>battery.bmp</icon>
+		<activationsound>battery/battery.wav</activationsound>
+		<bundlesize>10</bundlesize>
+		<cost>5000</cost>
+		<accessoryaction type='Battery'></accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Fuel</name>
+		<armslevel>7</armslevel>
+		<description>Allows the tank to move.
+When it is the players turn the tank may choose 
+to move rather than fire.  Maximum range is 50.</description>
+		<icon>fuel.bmp</icon>
+		<activationsound>battery/battery.wav</activationsound>
+		<bundlesize>40</bundlesize>
+		<cost>6000</cost>
+		<accessoryaction type='WeaponSelectPosition'>
+			<aimedweapon type='WeaponMoveTank'>
+				<steptime>0.05</steptime>
+				<maximumrange>50</maximumrange>
+			</aimedweapon>
+		</accessoryaction>
+		<nomuzzleflash/>
+		<positionselection>fuel</positionselection>
+		<group>fuel</group>
+		<tabgroup>defense</tabgroup>
+	</accessory>
+	<accessory>
+		<name>Rocket Fuel</name>
+		<armslevel>7</armslevel>
+		<description>Allows the tank to move very fast.
+When it is the players turn the tank may choose 
+to move rather than fire.  Maximum range is 75.</description>
+		<icon>fuel.bmp</icon>
+		<activationsound>battery/battery.wav</activationsound>
+		<bundlesize>30</bundlesize>
+		<cost>10000</cost>
+		<accessoryaction type='WeaponSelectPosition'>
+			<aimedweapon type='WeaponMoveTank'>
+				<steptime>0.025</steptime>
+				<maximumrange>75</maximumrange>
+			</aimedweapon>
+		</accessoryaction>
+		<nomuzzleflash/>
+		<positionselection>fuel</positionselection>
+		<group>fuel</group>
+		<tabgroup>defense</tabgroup>
+	</accessory>
+	<accessory>
+		<name>Shield</name>
+		<armslevel>8</armslevel>
+		<description>A small defensive shield that protects 
+the tank from small amounts of damage. 
+Shields must be activated before they 
+work.</description>
+		<icon>shield.bmp</icon>
+		<activationsound>shield/activate.wav</activationsound>
+		<bundlesize>3</bundlesize>
+		<cost>20000</cost>
+		<accessoryaction type='ShieldRound'>
+			<radius>3.0</radius>
+			<halfshield>false</halfshield>
+			<color>
+				<r>1.0</r>
+				<g>1.0</g>
+				<b>1.0</b>
+			</color>
+			<collisionsound>shield/hit.wav</collisionsound>
+			<removepower>20</removepower>
+			<penetration>1.0</penetration>
+			<power>100</power>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Heavy Shield</name>
+		<armslevel>7</armslevel>
+		<description>A large defensive shield that protects
+the tank.  Shields must be activated before they 
+work.</description>
+		<icon>hshield.bmp</icon>
+		<activationsound>shield/activate.wav</activationsound>
+		<bundlesize>2</bundlesize>
+		<cost>25000</cost>
+		<accessoryaction type='ShieldRound'>
+			<radius>6.0</radius>
+			<halfshield>false</halfshield>
+			<color>
+				<r>1.0</r>
+				<g>1.0</g>
+				<b>1.0</b>
+			</color>
+			<collisionsound>shield/hit.wav</collisionsound>
+			<removepower>15</removepower>
+			<penetration>1.0</penetration>
+			<power>100</power>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Force Shield</name>
+		<armslevel>6</armslevel>
+		<description>A shield that deflects direct hits and
+protects the tank from damage. Shields must 
+be activated before they work.</description>
+		<icon>fshield.bmp</icon>
+		<activationsound>shield/activateforce.wav</activationsound>
+		<bundlesize>2</bundlesize>
+		<cost>30000</cost>
+		<accessoryaction type='ShieldRoundReflective'>
+			<radius>5.0</radius>
+			<halfshield>false</halfshield>
+			<deflectfactor>1.0</deflectfactor>
+			<color>
+				<r>0.5</r>
+				<g>1.0</g>
+				<b>1.0</b>
+			</color>
+			<collisionsound>shield/hit2.wav</collisionsound>
+			<removepower>20</removepower>
+			<penetration>1.0</penetration>
+			<power>100</power>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Mag Deflect</name>
+		<armslevel>8</armslevel>
+		<description>A small reflective shield that protects
+the tank from small amounts of damage. 
+Mag shields reflect any shots that hit
+them in a small area above the tank.
+Shields must be activated before they work.</description>
+		<icon>mag.bmp</icon>
+		<activationsound>shield/activmag.wav</activationsound>
+		<bundlesize>2</bundlesize>
+		<cost>10000</cost>
+		<accessoryaction type='ShieldRoundMag'>
+			<radius>3.0</radius>
+			<halfshield>true</halfshield>
+			<deflectpower>50</deflectpower>
+			<color>
+				<r>0.0</r>
+				<g>1.0</g>
+				<b>0.0</b>
+			</color>
+			<collisionsound>shield/hit2.wav</collisionsound>
+			<removepower>4</removepower>
+			<penetration>1.0</penetration>
+			<power>100</power>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Heavy Mag</name>
+		<armslevel>6</armslevel>
+		<description>A large reflective shield that protects
+the tank from small amounts of damage.
+Reflects shots away in a wide area 
+above the tank.  Shields must be 
+activated before they work.</description>
+		<icon>smag.bmp</icon>
+		<activationsound>shield/activmag.wav</activationsound>
+		<bundlesize>2</bundlesize>
+		<cost>20000</cost>
+		<accessoryaction type='ShieldRoundMag'>
+			<radius>6.0</radius>
+			<halfshield>true</halfshield>
+			<deflectpower>100</deflectpower>
+			<color>
+				<r>1.0</r>
+				<g>0.0</g>
+				<b>0.0</b>
+			</color>
+			<collisionsound>shield/hit2.wav</collisionsound>
+			<removepower>3</removepower>
+			<penetration>1.0</penetration>
+			<power>100</power>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Auto Defense</name>
+		<armslevel>7</armslevel>
+		<description>Allows the tank to raise shields and 
+activate parachutes before the tanks 
+main move.</description>
+		<icon>autod.bmp</icon>
+		<bundlesize>1</bundlesize>
+		<cost>3000</cost>
+		<maximumnumber>1</maximumnumber>
+		<accessoryaction type='AutoDefense'></accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Napalm</name>
+		<armslevel>5</armslevel>
+		<description>A projectile weapon that explodes 
+into two streams of flame. Any tanks
+near the flames will loose life.</description>
+		<icon>napalm.bmp</icon>
+		<bundlesize>10</bundlesize>
+		<cost>10000</cost>
+		<activationsound>shoot/small.wav</activationsound>
+		<model type='MilkShape'>napalm/napalm.txt</model>
+		<accessoryaction type='WeaponProjectile'>
+			<projectilemodel type='MilkShape'>napalm/napalm.txt</projectilemodel>
+			<collisionaction type='WeaponNapalm'>
+				<napalmtime>8.0</napalmtime>
+				<napalmheight>2.0</napalmheight>
+				<steptime>0.1</steptime>
+				<hurtsteptime>2.0</hurtsteptime>
+				<hurtpersecond>1.0</hurtpersecond>
+				<numberstreams>2</numberstreams>
+				<effectradius>5</effectradius>
+				<napalmtexture>flames</napalmtexture>
+				<napalmsound>explosions/napalm.wav</napalmsound>
+				<allowunderwater>false</allowunderwater>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Hot Napalm</name>
+		<armslevel>3</armslevel>
+		<description>A projectile weapon that explodes 
+into three very hot streams of flame. 
+Any tanks near the flames will loose life.</description>
+		<icon>hnapalm.bmp</icon>
+		<bundlesize>3</bundlesize>
+		<cost>20000</cost>
+		<activationsound>shoot/small.wav</activationsound>
+		<model type='MilkShape'>napalm/napalm.txt</model>
+		<accessoryaction type='WeaponProjectile'>
+			<projectilemodel type='MilkShape'>napalm/napalm.txt</projectilemodel>
+			<collisionaction type='WeaponNapalm'>
+				<napalmtime>8.0</napalmtime>
+				<napalmheight>2.0</napalmheight>
+				<steptime>0.1</steptime>
+				<hurtsteptime>2.0</hurtsteptime>
+				<hurtpersecond>2.0</hurtpersecond>
+				<numberstreams>3</numberstreams>
+				<effectradius>5</effectradius>
+				<napalmtexture>flames</napalmtexture>
+				<napalmsound>explosions/napalm.wav</napalmsound>
+				<allowunderwater>false</allowunderwater>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Baby Roller</name>
+		<armslevel>8</armslevel>
+		<description>A projectile weapon that explodes 
+into a number of rolling bombs. These 
+bombs roll downhill exploding on 
+contact with any tank.</description>
+		<icon>broller.bmp</icon>
+		<bundlesize>10</bundlesize>
+		<cost>5000</cost>
+		<activationsound>shoot/small.wav</activationsound>
+		<accessoryaction type='WeaponProjectile'>
+			<collisionaction type='WeaponRoller'>
+				<numberrollers>8</numberrollers>
+				<time>RANGE(7,9)</time>
+				<rollermodel type='MilkShape'>roller/roller.txt</rollermodel>
+				<!--<maintainvelocity>true</maintainvelocity>-->
+				<collisionaction type='WeaponExplosion'>
+					<hurtamount>1.0</hurtamount>
+					<deform>down</deform>
+					<size>2</size>
+					<explosiontexture>exp00</explosiontexture>
+					<explosionsound>explosions/small.wav</explosionsound>
+				</collisionaction>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Roller</name>
+		<armslevel>8</armslevel>
+		<description>A projectile weapon that explodes 
+into a number of rolling bombs.  These
+bombs roll downhill exploding on contact 
+with any tank.</description>
+		<icon>roller.bmp</icon>
+		<bundlesize>5</bundlesize>
+		<cost>6000</cost>
+		<activationsound>shoot/medium.wav</activationsound>
+		<accessoryaction type='WeaponProjectile'>
+			<collisionaction type='WeaponRoller'>
+				<numberrollers>8</numberrollers>
+				<time>RANGE(7,9)</time>
+				<rollermodel type='MilkShape'>roller/roller.txt</rollermodel>
+				<collisionaction type='WeaponExplosion'>
+					<hurtamount>1.0</hurtamount>
+					<deform>down</deform>
+					<size>5</size>
+					<explosiontexture>exp00</explosiontexture>
+					<explosionsound>explosions/medium.wav</explosionsound>
+				</collisionaction>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Heavy Roller</name>
+		<armslevel>8</armslevel>
+		<description>A projectile weapon that explodes 
+into a number of rolling bombs.  These
+bombs roll downhill exploding on contact 
+with any tank.</description>
+		<icon>hroller.bmp</icon>
+		<bundlesize>2</bundlesize>
+		<cost>7500</cost>
+		<activationsound>shoot/large.wav</activationsound>
+		<accessoryaction type='WeaponProjectile'>
+			<collisionaction type='WeaponRoller'>
+				<numberrollers>6</numberrollers>
+				<time>RANGE(7,9)</time>
+				<rollermodel type='MilkShape'>roller/roller.txt</rollermodel>
+				<collisionaction type='WeaponExplosion'>
+					<hurtamount>1.0</hurtamount>
+					<deform>down</deform>
+					<size>9</size>
+					<explosiontexture>exp00</explosiontexture>
+					<explosionsound>explosions/large.wav</explosionsound>
+				</collisionaction>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Baby Missile</name>
+		<armslevel>10</armslevel>
+		<description>A small explosive projectile weapon</description>
+		<icon>bmissile.bmp</icon>
+		<startingnumber>-1</startingnumber>
+		<activationsound>shoot/small.wav</activationsound>
+		<modelscale>0.5</modelscale>
+		<accessoryaction type='WeaponProjectile'>
+			<projectilescale>0.5</projectilescale>
+			<spinspeed>1.0</spinspeed>
+			<!--<thrusttime>4.0</thrusttime>
+			<thrustamount>1.0</thrustamount>-->
+			<collisionaction type='WeaponExplosion'>
+				<hurtamount>1.0</hurtamount>
+				<deform>down</deform>
+				<size>4</size>
+				<explosiontexture>exp00</explosiontexture>
+				<explosionsound>explosions/small.wav</explosionsound>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Missile</name>
+		<armslevel>9</armslevel>
+		<description>A mid-size explosive projectile weapon</description>
+		<icon>missile.bmp</icon>
+		<bundlesize>5</bundlesize>
+		<cost>1875</cost>
+		<activationsound>shoot/medium.wav</activationsound>
+		<modelscale>0.75</modelscale>
+		<accessoryaction type='WeaponProjectile'>
+			<projectilescale>0.75</projectilescale>
+			<collisionaction type='WeaponExplosion'>
+				<hurtamount>1.0</hurtamount>
+				<deform>down</deform>
+				<size>6</size>
+				<explosiontexture>exp00</explosiontexture>
+				<explosionsound>explosions/medium.wav</explosionsound>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Baby Nuke</name>
+		<armslevel>6</armslevel>
+		<description>A large explosive projectile weapon</description>
+		<icon>bnuke.bmp</icon>
+		<bundlesize>3</bundlesize>
+		<cost>6000</cost>
+		<activationsound>shoot/large.wav</activationsound>
+		<model type='MilkShape'>littleboy/littleboy.txt</model>
+		<accessoryaction type='WeaponProjectile'>
+			<projectilemodel type='MilkShape'>littleboy/littleboy.txt</projectilemodel>
+			<collisionaction type='WeaponExplosion'>
+				<hurtamount>1.0</hurtamount>
+				<deform>down</deform>
+				<size>11</size>
+				<explosionshake>2.0</explosionshake>
+				<explosiontexture>exp00</explosiontexture>
+				<explosionsound>explosions/large.wav</explosionsound>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Nuke</name>
+		<armslevel>4</armslevel>
+		<description>A very large explosive projectile weapon</description>
+		<icon>nuke.bmp</icon>
+		<bundlesize>2</bundlesize>
+		<cost>10000</cost>
+		<activationsound>shoot/xlarge.wav</activationsound>
+		<model type='MilkShape'>fatman/fatman.txt</model>
+		<accessoryaction type='WeaponProjectile'>
+			<projectilemodel type='MilkShape'>fatman/fatman.txt</projectilemodel>
+			<collisionaction type='WeaponExplosion'>
+				<hurtamount>1.0</hurtamount>
+				<deform>down</deform>
+				<size>18</size>
+				<createmushroomamount>1.0</createmushroomamount>
+				<minlife>0.5</minlife>
+				<maxlife>1.5</maxlife>
+				<explosionshake>4.0</explosionshake>
+				<explosiontexture>exp00</explosiontexture>
+				<explosionsound>explosions/xlarge.wav</explosionsound>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Dirt Clod</name>
+		<armslevel>10</armslevel>
+		<description>A projectile weapon that explodes making 
+a small mound of earth. The explosion 
+does not  harm tanks but can be used 
+to cover them.</description>
+		<icon>dclod.bmp</icon>
+		<bundlesize>10</bundlesize>
+		<cost>5000</cost>
+		<activationsound>shoot/small.wav</activationsound>
+		<model type='MilkShape'>dirt/dirt.txt</model>
+		<modelscale>0.6</modelscale>
+		<accessoryaction type='WeaponProjectile'>
+			<projectilemodel type='MilkShape'>dirt/dirt.txt</projectilemodel>
+			<projectilescale>0.6</projectilescale>
+			<collisionaction type='WeaponExplosion'>
+				<hurtamount>0.0</hurtamount>
+				<nocreatedebris></nocreatedebris>
+				<deform>up</deform>
+				<size>6</size>
+				<explosiontexture>exp03</explosiontexture>
+				<explosionsound>explosions/gloop.wav</explosionsound>
+				<explodeunderground>false</explodeunderground>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Dirt Ball</name>
+		<armslevel>9</armslevel>
+		<description>A projectile weapon that explodes making
+a medium mound of earth.  The explosion
+does not harm tanks but can be used to 
+cover them.</description>
+		<icon>dball.bmp</icon>
+		<bundlesize>5</bundlesize>
+		<cost>5000</cost>
+		<activationsound>shoot/small.wav</activationsound>
+		<model type='MilkShape'>dirt/dirt.txt</model>
+		<modelscale>0.8</modelscale>
+		<accessoryaction type='WeaponProjectile'>
+			<projectilemodel type='MilkShape'>dirt/dirt.txt</projectilemodel>
+			<projectilescale>0.8</projectilescale>
+			<collisionaction type='WeaponExplosion'>
+				<deform>up</deform>
+				<hurtamount>0.0</hurtamount>
+				<nocreatedebris></nocreatedebris>
+				<size>10</size>
+				<explosiontexture>exp03</explosiontexture>
+				<explosionsound>explosions/gloop.wav</explosionsound>
+				<explodeunderground>false</explodeunderground>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Ton Of Dirt</name>
+		<armslevel>7</armslevel>
+		<description>
+			A projectile weapon that explodes making
+			a large mound of earth.  The explosion
+			does not harm tanks but can be used to
+			cover them.
+		</description>
+		<icon>tdirt.bmp</icon>
+		<bundlesize>2</bundlesize>
+		<cost>6750</cost>
+		<activationsound>shoot/small.wav</activationsound>
+		<model type='MilkShape'>dirt/dirt.txt</model>
+		<accessoryaction type='WeaponProjectile'>
+			<projectilemodel type='MilkShape'>dirt/dirt.txt</projectilemodel>
+			<collisionaction type='WeaponExplosion'>
+				<deform>up</deform>
+				<hurtamount>0.0</hurtamount>
+				<nocreatedebris></nocreatedebris>
+				<size>18</size>
+				<explosiontexture>exp03</explosiontexture>
+				<explosionsound>explosions/gloop.wav</explosionsound>
+				<explodeunderground>false</explodeunderground>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Dirt Charge</name><armslevel>7</armslevel>
+		<description>A projectile weapon that throws many
+small dirt clods in all directions.</description>
+		<icon>dcharge.bmp</icon>
+		<bundlesize>3</bundlesize><cost>5000</cost>
+		<activationsound>shoot/flare.wav</activationsound>
+		<model type='MilkShape'>dirt/dirt.txt</model>
+		<accessoryaction type='WeaponProjectile'>
+			<projectilemodel type='MilkShape'>dirt/dirt.txt</projectilemodel>
+			<collisionaction type='WeaponMulti'>
+				<subweapon1 type='WeaponExplosion'>
+					<hurtamount>0</hurtamount>
+					<deform>down</deform><size>4</size>
+					<explosionsound>explosions/gloop.wav</explosionsound>
+					<explosiontexture>exp03</explosiontexture>
+				</subweapon1>
+				<subweapon2 type='WeaponAimedOver'>
+					<nowarheads>5</nowarheads>
+					<percentagemiss>1</percentagemiss>
+					<maxaimdistance>0</maxaimdistance>
+					<inaccuracy>50</inaccuracy>
+					<aimedweapon type='WeaponProjectile'>
+						<nocreateflame/><nocreatesmoke/>
+						<timedcollision>0.6</timedcollision>
+						<projectilescale>0.8</projectilescale>
+						<projectilemodel type='MilkShape'>dirt/dirt.txt</projectilemodel>
+						<collisionaction type='WeaponMulti'>
+							<subweapon1 type='WeaponExplosion'>
+								<hurtamount>0</hurtamount>
+								<deform>down</deform>
+								<size>3</size>
+								<explosionsound>explosions/gloop.wav</explosionsound>
+								<explosiontexture>exp03</explosiontexture>
+								<nocreatedebris/>
+							</subweapon1>
+							<subweapon2 type='WeaponAimedOver'>
+								<nowarheads>3</nowarheads>
+								<percentagemiss>1</percentagemiss>
+								<maxaimdistance>0</maxaimdistance>
+								<inaccuracy>20</inaccuracy>
+								<aimedweapon type='WeaponProjectile'>
+									<nocreateflame/>
+									<nocreatesmoke/>
+									<timedcollision>0.8</timedcollision>
+									<projectilescale>0.6</projectilescale>
+									<projectilemodel type='MilkShape'>dirt/dirt.txt</projectilemodel>
+									<collisionaction type='WeaponMulti'>
+										<subweapon1 type='WeaponExplosion'>
+											<hurtamount>0</hurtamount>
+											<deform>down</deform>
+											<size>3</size>
+											<explosionsound>explosions/gloop.wav</explosionsound>
+											<explosiontexture>exp03</explosiontexture>
+											<nocreatedebris/>
+										</subweapon1>
+										<subweapon2 type='WeaponAimedOver'>
+											<nowarheads>2</nowarheads>
+											<percentagemiss>5</percentagemiss>
+											<maxaimdistance>0</maxaimdistance>
+											<inaccuracy>50</inaccuracy>
+											<aimedweapon type='WeaponVelocity'>
+											<velocitychange>0.85</velocitychange>
+											<aimedweapon type='WeaponProjectile'>
+												<nocreateflame/>
+												<nocreatesmoke/>
+												<timedcollision>0.8</timedcollision>
+												<projectilescale>0.5</projectilescale>
+												<projectilemodel type='MilkShape'>dirt/dirt.txt</projectilemodel>
+												<collisionaction type='WeaponMulti'>
+													<subweapon1 type='WeaponExplosion'>
+														<hurtamount>0</hurtamount>
+														<deform>down</deform>
+														<size>2</size>
+														<explosionsound>explosions/gloop.wav</explosionsound>
+														<explosiontexture>exp03</explosiontexture>
+														<nocreatedebris/>
+													</subweapon1>
+													<subweapon2 type='WeaponAimedOver'>
+														<nowarheads>2</nowarheads>
+														<percentagemiss>5</percentagemiss>
+														<maxaimdistance>0</maxaimdistance>
+														<inaccuracy>20</inaccuracy>
+														<aimedweapon type='WeaponVelocity'>
+														    <velocitychange>0.7</velocitychange>
+															<aimedweapon type='WeaponProjectile'>
+															<nocreateflame/>
+															<nocreatesmoke/>
+															<projectilescale>0.5</projectilescale>
+															<shieldhurtfactor>0.5</shieldhurtfactor>
+															<projectilemodel type='ase'>
+																<mesh>roller.ase</mesh><skin>white.bmp</skin>
+																 </projectilemodel>
+																<collisionaction type='WeaponExplosion'>
+																	<hurtamount>0</hurtamount>
+																	<deform>up</deform><size>3.0</size>
+																	<explosionsound>explosions/gloop.wav</explosionsound>
+																	<explosiontexture>exp03</explosiontexture>
+																	<nocreatedebris/>
+																</collisionaction>
+			                                            	</aimedweapon>
+			                                            </aimedweapon>	
+													</subweapon2>
+												</collisionaction>
+											</aimedweapon>
+											</aimedweapon>
+										</subweapon2>
+									</collisionaction>
+								</aimedweapon>
+							</subweapon2>	
+						</collisionaction>
+					</aimedweapon>
+				</subweapon2>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Riot Bomb</name>
+		<armslevel>10</armslevel>
+		<description>A projectile weapon that explodes removing
+a small amount of earth. The explosion
+does not harm tanks but can be used to 
+remove earth from under them.</description>
+		<icon>rbomb.bmp</icon>
+		<bundlesize>5</bundlesize>
+		<cost>5000</cost>
+		<activationsound>shoot/small.wav</activationsound>
+		<model type='MilkShape'>riot/riot.txt</model>
+		<accessoryaction type='WeaponProjectile'>
+			<projectilemodel type='MilkShape'>riot/riot.txt</projectilemodel>
+			<collisionaction type='WeaponExplosion'>
+				<deform>down</deform>
+				<hurtamount>0.0</hurtamount>
+				<nocreatedebris></nocreatedebris>
+				<size>6</size>
+				<explosiontexture>exp03</explosiontexture>
+				<explosionsound>explosions/crunch.wav</explosionsound>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Hvy Riot Bomb</name>
+		<armslevel>8</armslevel>
+		<description>A projectile weapon that explodes removing
+a large amount of earth. The explosion
+does not harm tanks but can be used to 
+remove earth from under them.</description>
+		<icon>hrbomb.bmp</icon>
+		<bundlesize>2</bundlesize>
+		<cost>4750</cost>
+		<activationsound>shoot/small.wav</activationsound>
+		<model type='MilkShape'>riot/riot.txt</model>
+		<accessoryaction type='WeaponProjectile'>
+			<projectilemodel type='MilkShape'>riot/riot.txt</projectilemodel>
+			<collisionaction type='WeaponExplosion'>
+				<deform>down</deform>
+				<hurtamount>0.0</hurtamount>
+				<nocreatedebris></nocreatedebris>
+				<size>12</size>
+				<explosiontexture>exp03</explosiontexture>
+				<explosionsound>explosions/crunch.wav</explosionsound>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Riot Charge</name>
+		<armslevel>8</armslevel>
+		<description>Riot Charges destroy a wedge-shaped section of
+dirt from around your turret.  This weapon's
+primary use is to unbury yourself when you get
+covered with dirt.</description>
+		<icon>rcharge.bmp</icon>
+		<bundlesize>10</bundlesize>
+		<cost>2000</cost>
+		<model type='MilkShape'>riot/riot.txt</model>
+		<accessoryaction type='WeaponTranslate'>
+			<translatedist>2.0</translatedist>
+			<nextaction type='WeaponMulti'>
+				<subweapon1 type='WeaponExplosion'>
+					<hurtamount>0.0</hurtamount>
+					<nocreatedebris></nocreatedebris>
+					<deform>down</deform>
+					<size>2</size>
+					<explosiontexture>exp03</explosiontexture>
+					<explosionsound>explosions/crunch.wav</explosionsound>
+				</subweapon1>
+				<subweapon2 type='WeaponTranslate'>
+					<translatedist>3.0</translatedist>
+					<nextaction type='WeaponMulti'>
+						<subweapon1 type='WeaponExplosion'>
+							<hurtamount>0.0</hurtamount>
+							<nocreatedebris></nocreatedebris>
+							<deform>down</deform>
+							<size>5</size>
+							<explosiontexture>exp03</explosiontexture>
+							<explosionsound>none</explosionsound>
+						</subweapon1>
+						<subweapon2 type='WeaponTranslate'>
+							<translatedist>6.0</translatedist>
+							<nextaction type='WeaponExplosion'>
+								<hurtamount>0.0</hurtamount>
+								<nocreatedebris></nocreatedebris>
+								<deform>down</deform>
+								<size>6</size>
+								<explosiontexture>exp03</explosiontexture>
+								<explosionsound>none</explosionsound>
+							</nextaction>
+						</subweapon2>
+					</nextaction>
+				</subweapon2>
+			</nextaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Riot Blast</name>
+		<armslevel>7</armslevel>
+		<description>Riot Blasts are a larger version of the Riot
+Charge.  The destroy a wider angle of dirt, and
+the thickness of the wedge destroyed is also greater.</description>
+		<icon>rblast.bmp</icon>
+		<bundlesize>5</bundlesize>
+		<cost>5000</cost>
+		<model type='MilkShape'>riot/riot.txt</model>
+		<accessoryaction type='WeaponTranslate'>
+			<translatedist>2.0</translatedist>
+			<nextaction type='WeaponMulti'>
+				<subweapon1 type='WeaponExplosion'>
+					<hurtamount>0.0</hurtamount>
+					<nocreatedebris></nocreatedebris>
+					<deform>down</deform>
+					<size>4</size>
+					<explosiontexture>exp03</explosiontexture>
+					<explosionsound>explosions/crunch.wav</explosionsound>
+				</subweapon1>
+				<subweapon2 type='WeaponTranslate'>
+					<translatedist>3.0</translatedist>
+					<nextaction type='WeaponMulti'>
+						<subweapon1 type='WeaponExplosion'>
+							<hurtamount>0.0</hurtamount>
+							<nocreatedebris></nocreatedebris>
+							<deform>down</deform>
+							<size>7</size>
+							<explosiontexture>exp03</explosiontexture>
+							<explosionsound>none</explosionsound>
+						</subweapon1>
+						<subweapon2 type='WeaponTranslate'>
+							<translatedist>6.0</translatedist>
+							<nextaction type='WeaponExplosion'>
+								<hurtamount>0.0</hurtamount>
+								<nocreatedebris></nocreatedebris>
+								<deform>down</deform>
+								<size>10</size>
+								<explosiontexture>exp03</explosiontexture>
+								<explosionsound>none</explosionsound>
+							</nextaction>
+						</subweapon2>
+					</nextaction>
+				</subweapon2>
+			</nextaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Leap Frog</name>
+		<armslevel>7</armslevel>
+		<description>An explosive projectile weapon.  When the 
+warhead explodes it creates other
+small warheads that continue in the 
+same direction as the original.</description>
+		<icon>lfrog.bmp</icon>
+		<bundlesize>2</bundlesize>
+		<cost>10000</cost>
+		<activationsound>shoot/medium.wav</activationsound>
+		<model type='MilkShape'>bouncingbetty/bouncingbetty.txt</model>
+		<accessoryaction type='WeaponProjectile'>
+			<projectilemodel type='MilkShape'>bouncingbetty/bouncingbetty.txt</projectilemodel>
+			<collisionaction type='WeaponMulti'>
+				<subweapon1 type='WeaponExplosion'>
+					<hurtamount>1.0</hurtamount>
+					<deform>down</deform>
+					<size>8</size>
+					<explosiontexture>exp01</explosiontexture>
+					<explosionsound>explosions/medium.wav</explosionsound>
+				</subweapon1>
+				<subweapon2 type='WeaponLeapFrog'>
+					<bounce>0.6</bounce>
+					<collisionaction type='WeaponProjectile'>
+						<projectilemodel type='MilkShape'>bouncingbetty/bouncingbetty.txt</projectilemodel>
+						<collisionaction type='WeaponMulti'>
+							<subweapon1 type='WeaponExplosion'>
+								<hurtamount>1.0</hurtamount>
+								<deform>down</deform>
+								<size>7</size>
+								<explosiontexture>exp01</explosiontexture>
+								<explosionsound>explosions/medium.wav</explosionsound>
+							</subweapon1>
+							<subweapon2 type='WeaponLeapFrog'>
+								<bounce>0.6</bounce>
+								<collisionaction type='WeaponProjectile'>
+									<projectilemodel type='MilkShape'>bouncingbetty/bouncingbetty.txt</projectilemodel>
+									<collisionaction type='WeaponExplosion'>
+										<hurtamount>1.0</hurtamount>
+										<deform>down</deform>
+										<size>6</size>
+										<explosiontexture>exp01</explosiontexture>
+										<explosionsound>explosions/medium.wav</explosionsound>
+									</collisionaction>
+								</collisionaction>
+							</subweapon2>
+						</collisionaction>
+					</collisionaction>
+				</subweapon2>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Baby Digger</name>
+		<armslevel>8</armslevel>
+		<description>A projectile weapon that explodes 
+creating a few underground 
+tank-seeking riot bombs.</description>
+		<icon>bdigger.bmp</icon>
+		<bundlesize>10</bundlesize>
+		<cost>3000</cost>
+		<activationsound>shoot/flare.wav</activationsound>
+		<model type='MilkShape'>digger/digger.txt</model>
+		<modelscale>0.5</modelscale>
+		<accessoryaction type='WeaponProjectile'>
+			<projectilescale>0.5</projectilescale>
+			<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+			<collisionaction type='WeaponAimedUnder'>
+				<nowarheads>3</nowarheads>
+				<inaccuracy>40</inaccuracy>
+				<percentagemiss>20</percentagemiss>
+				<maxaimdistance>75</maxaimdistance>
+				<aimedweapon type='WeaponProjectile'>
+					<under></under>
+					<projectilescale>0.5</projectilescale>
+					<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+					<collisionaction type='WeaponExplosion'>
+						<deform>down</deform>
+						<hurtamount>0.0</hurtamount>
+						<nocreatedebris></nocreatedebris>
+						<size>6</size>
+						<explosiontexture>exp03</explosiontexture>
+						<explosionsound>explosions/crunch.wav</explosionsound>
+					</collisionaction>
+				</aimedweapon>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Digger</name>
+		<armslevel>7</armslevel>
+		<description>A projectile weapon that explodes 
+creating several underground 
+tank-seeking riot bombs.</description>
+		<icon>digger.bmp</icon>
+		<bundlesize>5</bundlesize>
+		<cost>2500</cost>
+		<activationsound>shoot/flare.wav</activationsound>
+		<model type='MilkShape'>digger/digger.txt</model>
+		<accessoryaction type='WeaponProjectile'>
+			<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+			<collisionaction type='WeaponAimedUnder'>
+				<nowarheads>5</nowarheads>
+				<inaccuracy>40</inaccuracy>
+				<percentagemiss>20</percentagemiss>
+				<maxaimdistance>75</maxaimdistance>
+				<aimedweapon type='WeaponProjectile'>
+					<under></under>
+					<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+					<collisionaction type='WeaponExplosion'>
+						<deform>down</deform>
+						<hurtamount>0.0</hurtamount>
+						<nocreatedebris></nocreatedebris>
+						<size>6</size>
+						<explosiontexture>exp03</explosiontexture>
+						<explosionsound>explosions/crunch.wav</explosionsound>
+					</collisionaction>
+				</aimedweapon>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Heavy Digger</name>
+		<armslevel>6</armslevel>
+		<description>A projectile weapon that explodes 
+creating many underground 
+tank-seeking riot bombs.</description>
+		<icon>hdigger.bmp</icon>
+		<bundlesize>2</bundlesize>
+		<cost>6750</cost>
+		<activationsound>shoot/flare.wav</activationsound>
+		<model type='MilkShape'>digger/digger.txt</model>
+		<modelscale>2</modelscale>
+		<accessoryaction type='WeaponProjectile'>
+			<projectilescale>2</projectilescale>
+			<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+			<collisionaction type='WeaponAimedUnder'>
+				<nowarheads>10</nowarheads>
+				<inaccuracy>40</inaccuracy>
+				<percentagemiss>20</percentagemiss>
+				<maxaimdistance>75</maxaimdistance>
+				<aimedweapon type='WeaponProjectile'>
+					<projectilescale>2</projectilescale>
+					<under></under>
+					<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+					<collisionaction type='WeaponExplosion'>
+						<deform>down</deform>
+						<hurtamount>0.0</hurtamount>
+						<nocreatedebris></nocreatedebris>
+						<size>6</size>
+						<explosiontexture>exp03</explosiontexture>
+						<explosionsound>explosions/crunch.wav</explosionsound>
+					</collisionaction>
+				</aimedweapon>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Baby Sandhog</name>
+		<armslevel>8</armslevel>
+		<description>A projectile weapon that explodes creating
+some small burrowing missiles. These 
+missiles target nearby tanks.</description>
+		<icon>bshog.bmp</icon>
+		<bundlesize>7</bundlesize>
+		<cost>14000</cost>
+		<activationsound>shoot/flare.wav</activationsound>
+		<model type='MilkShape'>digger/digger.txt</model>
+		<modelscale>0.5</modelscale>
+		<accessoryaction type='WeaponProjectile'>
+			<projectilescale>0.5</projectilescale>
+			<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+			<collisionaction type='WeaponAimedUnder'>
+				<nowarheads>2</nowarheads>
+				<inaccuracy>30</inaccuracy>
+				<percentagemiss>20</percentagemiss>
+				<maxaimdistance>40</maxaimdistance>
+				<aimedweapon type='WeaponProjectile'>
+					<projectilescale>0.5</projectilescale>
+					<under></under>
+					<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+					<collisionaction type='WeaponExplosion'>
+						<hurtamount>1.0</hurtamount>
+						<deform>down</deform>
+						<size>4</size>
+						<explosiontexture>exp03</explosiontexture>
+						<explosionsound>explosions/medium.wav</explosionsound>
+					</collisionaction>
+				</aimedweapon>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Sandhog</name>
+		<armslevel>5</armslevel>
+		<description>A projectile weapon that explodes
+creating some burrowing missiles. These 
+missiles target nearby tanks.</description>
+		<icon>shog.bmp</icon>
+		<bundlesize>5</bundlesize>
+		<cost>20000</cost>
+		<activationsound>shoot/flare.wav</activationsound>
+		<model type='MilkShape'>digger/digger.txt</model>
+		<accessoryaction type='WeaponProjectile'>
+			<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+			<collisionaction type='WeaponAimedUnder'>
+				<nowarheads>5</nowarheads>
+				<inaccuracy>20</inaccuracy>
+				<percentagemiss>20</percentagemiss>
+				<maxaimdistance>50</maxaimdistance>
+				<aimedweapon type='WeaponProjectile'>
+					<under></under>
+					<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+					<collisionaction type='WeaponExplosion'>
+						<hurtamount>1.0</hurtamount>
+						<deform>down</deform>
+						<size>4</size>
+						<explosiontexture>exp03</explosiontexture>
+						<explosionsound>explosions/medium.wav</explosionsound>
+					</collisionaction>
+				</aimedweapon>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Heavy Sandhog</name>
+		<armslevel>3</armslevel>
+		<description>A projectile weapon that explodes
+creating many burrowing missiles. These 
+missiles target nearby tanks.</description>
+		<icon>hshog.bmp</icon>
+		<bundlesize>2</bundlesize>
+		<cost>25000</cost>
+		<activationsound>shoot/flare.wav</activationsound>
+		<model type='MilkShape'>digger/digger.txt</model>
+		<modelscale>2</modelscale>
+		<accessoryaction type='WeaponProjectile'>
+			<projectilescale>2</projectilescale>
+			<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+			<collisionaction type='WeaponAimedUnder'>
+				<nowarheads>16</nowarheads>
+				<inaccuracy>20</inaccuracy>
+				<percentagemiss>10</percentagemiss>
+				<maxaimdistance>120</maxaimdistance>
+				<aimedweapon type='WeaponProjectile'>
+					<projectilescale>2</projectilescale>
+					<under></under>
+					<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+					<collisionaction type='WeaponExplosion'>
+						<hurtamount>1.0</hurtamount>
+						<deform>down</deform>
+						<size>4</size>
+						<explosiontexture>exp03</explosiontexture>
+						<explosionsound>explosions/medium.wav</explosionsound>
+					</collisionaction>
+				</aimedweapon>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>MIRV</name>
+		<armslevel>6</armslevel>
+		<description>A projectile weapon that on 
+reaching its highest point releases 
+several small warheads. These warheads 
+fan out in a straight line from the 
+direction of the firer.</description>
+		<icon>mirv.bmp</icon>
+		<bundlesize>3</bundlesize>
+		<cost>10000</cost>
+		<activationsound>shoot/large.wav</activationsound>
+		<model type='ase'>
+			<mesh>clusterbomb.ase</mesh>
+			<skin>white.bmp</skin>
+		</model>
+		<accessoryaction type='WeaponProjectile'>
+			<apexcollision></apexcollision>
+			<projectilemodel type='ase'>
+				<mesh>clusterbomb.ase</mesh>
+				<skin>white.bmp</skin>
+			</projectilemodel>
+			<collisionaction type='WeaponMirv'>
+				<nowarheads>5</nowarheads>
+				<hspreaddist>0.0</hspreaddist>
+				<vspreaddist>5.0</vspreaddist>
+				<aimedweapon type='WeaponProjectile'>
+					<projectilescale>0.2</projectilescale>
+					<projectilemodel type='MilkShape'>bomblet/bomblet.txt</projectilemodel>
+					<collisionaction type='WeaponExplosion'>
+						<deform>down</deform>
+						<hurtamount>1.0</hurtamount>
+						<size>6</size>
+						<explosionsound>explosions/large.wav</explosionsound>
+						<explosiontexture>exp04</explosiontexture>
+					</collisionaction>
+				</aimedweapon>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Spread MIRV</name>
+		<armslevel>6</armslevel>
+		<description>A projectile weapon that on reaching
+its highest point releases several 
+small warheads. These warheads fan out 
+in a random direction.</description>
+		<icon>mirv.bmp</icon>
+		<bundlesize>4</bundlesize>
+		<cost>10000</cost>
+		<activationsound>shoot/large.wav</activationsound>
+		<model type='ase'>
+			<mesh>clusterbomb.ase</mesh>
+			<skin>white.bmp</skin>
+		</model>
+		<accessoryaction type='WeaponProjectile'>
+			<apexcollision></apexcollision>
+			<projectilemodel type='ase'>
+				<mesh>clusterbomb.ase</mesh>
+				<skin>white.bmp</skin>
+			</projectilemodel>
+			<collisionaction type='WeaponMirv'>
+				<nowarheads>5</nowarheads>
+				<hspreaddist>1.0</hspreaddist>
+				<vspreaddist>5.0</vspreaddist>
+				<aimedweapon type='WeaponProjectile'>
+					<projectilescale>0.2</projectilescale>
+					<projectilemodel type='MilkShape'>bomblet/bomblet.txt</projectilemodel>
+					<collisionaction type='WeaponExplosion'>
+						<deform>down</deform>
+						<hurtamount>1.0</hurtamount>
+						<size>6</size>
+						<explosionsound>explosions/large.wav</explosionsound>
+						<explosiontexture>exp04</explosiontexture>
+					</collisionaction>
+				</aimedweapon>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Death's Head</name>
+		<armslevel>2</armslevel>
+		<description>A projectile weapon that on
+reaching its highest point releases 
+many large warheads. These warheads fan 
+out in a random direction.</description>
+		<icon>dhead.bmp</icon>
+		<bundlesize>1</bundlesize>
+		<cost>20000</cost>
+		<activationsound>shoot/launch.wav</activationsound>
+		<model type='MilkShape'>icbm/icbm.txt</model>
+		<modelscale>5</modelscale>
+		<accessoryaction type='WeaponProjectile'>
+			<apexcollision></apexcollision>
+			<projectilescale>5</projectilescale>
+			<projectilemodel type='MilkShape'>icbm/icbm.txt</projectilemodel>
+			<collisionaction type='WeaponMirv'>
+				<nowarheads>20</nowarheads>
+				<hspreaddist>1.0</hspreaddist>
+				<vspreaddist>5.0</vspreaddist>
+				<aimedweapon type='WeaponProjectile'>
+					<projectilescale>0.5</projectilescale>
+					<projectilemodel type='MilkShape'>mirvwarhead/mirvwarhead.txt</projectilemodel>
+					<collisionaction type='WeaponExplosion'>
+						<deform>down</deform>
+						<hurtamount>1.0</hurtamount>
+						<size>18</size>
+						<createmushroomamount>0.2</createmushroomamount>
+						<explosionsound>explosions/xlarge.wav</explosionsound>
+						<explosiontexture>exp04</explosiontexture>
+						<explosionshake>2.0</explosionshake>
+					</collisionaction>
+				</aimedweapon>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Funky Bomb</name>
+		<armslevel>3</armslevel>
+		<description>A projectile weapon that on 
+exploding releases many small 
+missiles that automatically 
+target nearby tanks.</description>
+		<icon>fbomb.bmp</icon>
+		<bundlesize>2</bundlesize>
+		<cost>15000</cost>
+		<activationsound>shoot/large.wav</activationsound>
+		<model type='MilkShape'>icbm/icbm.txt</model>
+		<accessoryaction type='WeaponProjectile'>
+			<projectilemodel type='MilkShape'>icbm/icbm.txt</projectilemodel>
+			<collisionaction type='WeaponMulti'>
+				<subweapon1 type='WeaponExplosion'>
+					<hurtamount>1.0</hurtamount>
+					<multicolor></multicolor>
+					<deform>down</deform>
+					<size>10</size>
+					<explosionsound>explosions/large.wav</explosionsound>
+					<explosiontexture>exp02</explosiontexture>
+					<explosionshake>1.0</explosionshake>
+				</subweapon1>			
+				<subweapon2 type='WeaponAimedOver'>
+					<nowarheads>12</nowarheads>
+					<percentagemiss>12</percentagemiss>
+					<maxaimdistance>RANGE(40,55)</maxaimdistance>
+					<inaccuracy>12</inaccuracy>
+						<aimedweapon type='WeaponDelay'>
+							<delay>RANGE(0.4,8)</delay>
+							<delayedweapon type='WeaponVelocity'>
+							<velocitychange>RANGE(0.8,1.05)</velocitychange>
+							<aimedweapon type='WeaponProjectile'>
+							<shieldhurtfactor>0.85</shieldhurtfactor>
+							<projectilemodel type='MilkShape'>bomb/bomb.txt</projectilemodel>
+								<collisionaction type='WeaponRandomChoice'>
+									<weaponchoice1>
+										<weight>6</weight>
+										<weapon type='WeaponExplosion'>
+										<hurtamount>0.85</hurtamount>
+										<multicolor></multicolor>
+										<minlife>1.2</minlife>
+										<maxlife>2</maxlife>
+										<deform>down</deform>
+										<size>4</size>
+										<explosionsound>explosions/small.wav</explosionsound>
+										<explosiontexture>exp02</explosiontexture>
+										</weapon>
+									</weaponchoice1>
+									<weaponchoice2>
+										<weight>6</weight>
+										<weapon type='WeaponExplosion'>
+										<hurtamount>0.85</hurtamount>
+										<multicolor></multicolor>
+										<minlife>1.2</minlife>
+										<maxlife>2</maxlife>
+										<deform>down</deform>
+										<size>7</size>
+										<explosionsound>explosions/medium.wav</explosionsound>
+										<explosiontexture>exp02</explosiontexture>
+										</weapon>
+									</weaponchoice2>
+									<weaponchoice3>
+										<weight>6</weight>
+										<weapon type='WeaponExplosion'>
+										<hurtamount>0.85</hurtamount>
+										<multicolor></multicolor>
+										<minlife>1.2</minlife>
+										<maxlife>2</maxlife>
+										<deform>down</deform>
+										<size>9</size>
+										<explosionsound>explosions/large.wav</explosionsound>
+										<explosiontexture>exp02</explosiontexture>
+										</weapon>
+									</weaponchoice3>
+									<weaponchoice4>
+										<weight>6</weight>
+										<weapon type='WeaponExplosion'>
+										<hurtamount>0.85</hurtamount>
+										<multicolor></multicolor>
+										<minlife>1.2</minlife>
+										<maxlife>2</maxlife>
+										<deform>down</deform>
+										<size>12</size>
+										<explosionsound>explosions/large.wav</explosionsound>
+										<explosiontexture>exp02</explosiontexture>
+										</weapon>
+									</weaponchoice4>
+								</collisionaction>
+							</aimedweapon>
+						</delayedweapon>
+					</aimedweapon>
+				</subweapon2>		
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Tracer</name>
+		<armslevel>10</armslevel>
+		<description>A projectile weapon that 
+causes no damage. Can be used to 
+determine range without wasting 
+other weapons.  Leaves a marker at the 
+final position.</description>
+		<icon>tracer.bmp</icon>
+		<bundlesize>20</bundlesize>
+		<cost>10</cost>
+		<activationsound>shoot/flare.wav</activationsound>
+		<model type='MilkShape'>flare.txt</model>
+		<accessoryaction type='WeaponProjectile'>
+			<nocreateflame></nocreateflame>
+			<projectilemodel type='MilkShape'>flare.txt</projectilemodel>
+			<showendpoint></showendpoint>
+			<collisionaction type='WeaponNull'></collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Smoke Tracer</name>
+		<armslevel>9</armslevel>
+		<description>A projectile weapon that
+causes no damage.  Can be used to 
+determine range without wasting 
+other weapons.  Leaves a colored 
+trace of the shot path.</description>
+		<icon>stracer.bmp</icon>
+		<bundlesize>10</bundlesize>
+		<cost>500</cost>
+		<activationsound>shoot/flare.wav</activationsound>
+		<model type='MilkShape'>flare.txt</model>
+		<accessoryaction type='WeaponProjectile'>
+			<nocreateflame></nocreateflame>
+			<projectilemodel type='MilkShape'>flare.txt</projectilemodel>
+			<showendpoint></showendpoint>
+			<showshotpath></showshotpath>
+			<collisionaction type='WeaponNull'></collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>WeaponMuzzle</name>
+		<armslevel>0</armslevel>
+		<description>The muzzle flash for guns</description>
+		<maximumnumber>0</maximumnumber>
+		<accessoryaction type='WeaponMuzzle'>
+			<hurtamount>0.0</hurtamount>
+			<nocreatedebris></nocreatedebris>
+			<nocreatesplash></nocreatesplash>
+			<deform>none</deform>
+			<size>2</size>
+			<explosiontexture>default</explosiontexture>
+			<explosionsound>none</explosionsound>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>DriveOverDestroy</name>
+		<armslevel>0</armslevel>
+		<description>The explosion seen when tanks drive over objects</description>
+		<maximumnumber>0</maximumnumber>
+		<accessoryaction type='WeaponExplosion'>
+			<hurtamount>0.0</hurtamount>
+			<nocreatedebris></nocreatedebris>
+			<nocreatesplash></nocreatesplash>
+			<deform>none</deform>
+			<size>1</size>
+			<noluminance></noluminance>
+			<explosiontexture>smoke</explosiontexture>
+			<explosionsound>none</explosionsound>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Lightning</name>
+		<armslevel>10</armslevel>
+		<maximumnumber>0</maximumnumber>
+		<accessoryaction type="WeaponCenterPosition">
+			<height>150</height>
+			<nextaction type="WeaponScatterPosition">
+				<landheight>false</landheight>
+				<landonly>false</landonly>
+				<scatterpercentage>90</scatterpercentage>
+				<aimedweapon type="WeaponScatterDirection">
+					<direction><A>0</A><B>0</B><C>-1</C></direction>
+					<directionoffset><A>0</A><B>0</B><C>0</C></directionoffset>		
+					<aimedweapon type='WeaponMulti'>
+						<subweapon1 type='WeaponSound'>
+							<sound>data/wav/misc/thunder.wav</sound>
+							<sound>data/wav/misc/thunder2.wav</sound>
+							<sound>data/wav/misc/thunder3.wav</sound>
+							<relative>true</relative>
+						</subweapon1>
+						<subweapon2 type='WeaponDelay'>
+							<delay>0.5</delay>
+							<delayedweapon type='WeaponMulti'>
+								<subweapon1 type='WeaponSkyFlash'></subweapon1>
+								<subweapon2 type='WeaponLightning'>
+									<conelength>190</conelength>
+									<seglength>6</seglength>
+									<segvar>12</segvar>
+									<size>4</size>
+									<sizevar>-1</sizevar>
+									<minsize>0.1</minsize>
+									<splitprob>0.1</splitprob>
+									<splitvar>0.03</splitvar>
+									<deathprob>0.03</deathprob>
+									<derivangle>0.5</derivangle>
+									<anglevar>0.94</anglevar>
+									<totaltime>1</totaltime>
+									<seghurt>0</seghurt>
+									<seghurtradius>0</seghurtradius>
+									<sound>none</sound>
+								</subweapon2>
+							</delayedweapon>
+						</subweapon2>
+					</aimedweapon>
+				</aimedweapon>
+			</nextaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Meteor</name>
+		<armslevel>10</armslevel>
+		<maximumnumber>0</maximumnumber>
+		<accessoryaction type="WeaponCenterPosition">
+			<height>150</height>
+			<nextaction type="WeaponScatterPosition">
+				<landheight>false</landheight>
+				<landonly>false</landonly>
+				<scatterpercentage>90</scatterpercentage>
+				<aimedweapon type="WeaponScatterDirection">
+					<direction><A>0</A><B>0</B><C>-1</C></direction>
+					<directionoffset><A>0</A><B>0</B><C>0</C></directionoffset>		
+					<aimedweapon type='WeaponAimedOver'>
+						<nowarheads>5</nowarheads>
+						<percentagemiss>20</percentagemiss>
+						<maxaimdistance>0</maxaimdistance>
+						<inaccuracy>10</inaccuracy>
+						<aimedweapon type='WeaponProjectile'>
+							<projectilemodel type='ase'>
+								<mesh>roller.ase</mesh>
+								<skin>magma.bmp</skin>
+							</projectilemodel>
+							<collisionaction type='WeaponExplosion'>
+								<hurtamount>0.0</hurtamount>
+								<deform>none</deform>
+								<size>4</size>
+								<explosionsound>explosions/small.wav</explosionsound>
+								<explosiontexture>exp04</explosiontexture>
+							</collisionaction>
+						</aimedweapon>
+					</aimedweapon>
+				</aimedweapon>
+			</nextaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Laser</name>
+		<armslevel>10</armslevel>
+		<bundlesize>4</bundlesize>
+		<icon>laser.bmp</icon>
+		<model type="MilkShape">laser/laser.txt</model>
+		<description>Fires a laser that cuts through hills 
+and shields damaging the tank directly.</description>
+		<cost>8000</cost>
+		<activationsound>shoot/laser1.wav</activationsound>
+		<nomuzzleflash/>
+		<accessoryaction type='WeaponLaser'>
+			<totaltime>1</totaltime>
+			<minimumdistance>10</minimumdistance>
+			<maximumdistance>200</maximumdistance>
+			<minimumhurt>34</minimumhurt>
+			<maximumhurt>40</maximumhurt>
+			<hurtradius>2</hurtradius>
+			<color>
+				<A>1.0</A>
+				<B>0.0</B>
+				<C>0.0</C>
+			</color>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Heavy Laser</name>
+		<armslevel>6</armslevel>
+		<bundlesize>2</bundlesize>
+		<icon>hlaser.bmp</icon>
+		<model type="MilkShape">laser/hlaser.txt</model>
+		<description>Fires a powerful laser that cuts through hills 
+and shields damaging the tank directly.</description>
+		<cost>10000</cost>
+		<activationsound>shoot/laser1.wav</activationsound>
+		<nomuzzleflash/>
+		<accessoryaction type='WeaponLaser'>
+			<totaltime>1</totaltime>
+			<minimumdistance>10</minimumdistance>
+			<maximumdistance>200</maximumdistance>
+			<minimumhurt>60</minimumhurt>
+			<maximumhurt>70</maximumhurt>
+			<hurtradius>2</hurtradius>
+			<color>
+				<A>0.0</A>
+				<B>0.0</B>
+				<C>1.0</C>
+			</color>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Teleport</name>
+		<armslevel>6</armslevel>
+		<description>A teleport moves you to a random location on the map.</description>
+		<icon>teleport.bmp</icon>
+		<activationsound>none</activationsound>
+		<bundlesize>1</bundlesize>
+		<model type="MilkShape">teleport/teleport.txt</model>
+		<nomuzzleflash/>
+		<cost>15000</cost>
+		<accessoryaction type="WeaponCenterPosition">
+			<height>0</height>
+			<nextaction type="WeaponScatterPosition">
+				<landheight>true</landheight>
+				<landonly>true</landonly>
+				<scatterpercentage>90</scatterpercentage>	
+				<aimedweapon type='WeaponTeleport'>
+					<sound>data/wav/misc/teleport.wav</sound>
+					<delay>2.0</delay>
+				</aimedweapon>
+			</nextaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>WeaponDeathAnimation</name>
+		<armslevel>0</armslevel>
+		<description>The tank explosion weapon</description>
+		<maximumnumber>0</maximumnumber>
+		<accessoryaction type='WeaponMulti'>
+			<subweapon1 type='WeaponAnimation'>
+				<animation>ExplosionRingRenderer</animation>
+				<data>data/wav/explosions/tank.wav</data>
+			</subweapon1>
+			<subweapon2 type='WeaponRandomChoice'>
+				<weaponchoice1>
+					<weight>60</weight>
+					<weapon type='WeaponInvokeWeapon'>
+						<invoke>Baby Nuke</invoke>
+					</weapon>
+				</weaponchoice1>
+				<weaponchoice2>
+					<weight>10</weight>
+					<weapon type='WeaponInvokeWeapon'>
+						<invoke>Nuke</invoke>
+					</weapon>
+				</weaponchoice2>
+				<weaponchoice3>
+					<weight>10</weight>
+					<weapon type='WeaponInvokeWeapon'>
+						<invoke>Ton Of Dirt</invoke>
+					</weapon>
+				</weaponchoice3>
+				<weaponchoice4>
+					<weight>10</weight>
+					<weapon type='WeaponInvokeWeapon'>
+						<invoke>Hvy Riot Bomb</invoke>
+					</weapon>
+				</weaponchoice4>
+				<weaponchoice5>
+					<weight>10</weight>
+					<weapon type='WeaponInvokeWeapon'>
+						<invoke>Funky Bomb</invoke>
+					</weapon>
+				</weaponchoice5>
+				<weaponchoice6>
+					<weight>10</weight>
+					<weapon type='WeaponAnimation'>
+						<animation>ExplosionLaserBeamRenderer</animation>
+						<data>data/wav/misc/laserdeath.wav</data>
+					</weapon>
+				</weaponchoice6>
+			</subweapon2>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>Teleport Position</name>
+		<armslevel>6</armslevel>
+		<description>A projectile that teleports you to the location of impact.</description>
+		<icon>teleport.bmp</icon>
+		<activationsound>shoot/small.wav</activationsound>
+		<bundlesize>1</bundlesize>
+		<modelscale>0.5</modelscale>
+		<cost>20000</cost>
+		<accessoryaction type='WeaponProjectile'>
+			<projectilescale>0.5</projectilescale>
+			<spinspeed>1.0</spinspeed>
+			<collisionaction type='WeaponTeleport'>
+				<sound>data/wav/misc/teleport.wav</sound>
+				<delay>2.0</delay>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	
+	
+	
+	
+	<accessory>
+		<name>TreeExplode</name>
+		<armslevel>9</armslevel>
+		<maximumnumber>0</maximumnumber>
+		<description>A test weapon for testing trees exploding!</description>
+		<icon>missile.bmp</icon>
+		<bundlesize>1</bundlesize>
+		<cost>1875</cost>
+		<activationsound>shoot/medium.wav</activationsound>
+		<modelscale>0.75</modelscale>
+		<accessoryaction type='WeaponExplosion'>
+			<hurtamount>0.0</hurtamount>
+			<deform>none</deform>
+			<size>6</size>
+			<explosiontexture>exp00</explosiontexture>
+			<explosionsound>explosions/medium.wav</explosionsound>
+		</accessoryaction>
+	</accessory>	
+	<accessory>
+		<name>TestPowerUpWeapon</name>
+		<aionly>true</aionly>
+		<accessoryaction type='WeaponGivePower'>
+			<power>2000</power>
+		</accessoryaction>
+	</accessory>
+	<accessory>
+		<name>TestShield</name>
+		<aionly>true</aionly>
+		<accessoryaction type='ShieldRound'>
+			<radius>8.0</radius>
+			<halfshield>false</halfshield>
+			<color>
+				<r>1.0</r>
+				<g>1.0</g>
+				<b>1.0</b>
+			</color>
+			<collisionsound>shield/hit.wav</collisionsound>
+			<removepower>20</removepower>
+			<penetration>1.0</penetration>
+			<power>1000</power>
+			<laserproof>true</laserproof>
+			<movementproof>true</movementproof>
+		</accessoryaction>
+	</accessory>	
+	<accessory>
+		<name>TestPowerUp</name>
+		<armslevel>9</armslevel>
+		<maximumnumber>0</maximumnumber>
+		<description>A test powerup</description>
+		<accessoryaction type="WeaponRepeat">
+			<repeat>10</repeat>
+			<repeatweapon type="WeaponCenterPosition">
+				<height>150</height>
+				<nextaction type="WeaponScatterPosition">
+					<landheight>false</landheight>
+					<landonly>true</landonly>
+					<scatterpercentage>75</scatterpercentage>
+					<aimedweapon type='WeaponAddTarget'>
+						<name>Bannana</name>
+						<model type="MilkShape">banana/banana.txt</model>
+						<modelscale>0.01</modelscale>
+						<shield>Shield</shield>
+						<parachute>Parachute</parachute>
+						<removeaction>TestPowerUpWeapon</removeaction>
+					</aimedweapon>
+				</nextaction>
+			</repeatweapon>
+		</accessoryaction>
+	</accessory>
+
+
+
+	<accessory>
+		<name>Test Puncture</name>
+		<maximumnumber>0</maximumnumber>
+		<bundlesize>2</bundlesize>
+		<cost>10000</cost>
+		<model type='MilkShape'>bouncingbetty/bouncingbetty.txt</model>
+		<accessoryaction type='WeaponLabel'>
+			<label>label1</label>
+			<nextweapon type='WeaponProjectile'>
+				<projectilemodel type='MilkShape'>bouncingbetty/bouncingbetty.txt</projectilemodel>
+				<collisionaction type='WeaponMulti'>
+					<subweapon1 type='WeaponExplosion'>
+						<hurtamount>1.0</hurtamount>
+						<deform>down</deform>
+						<size>8</size>
+						<explosiontexture>exp01</explosiontexture>
+						<explosionsound>explosions/medium.wav</explosionsound>
+					</subweapon1>
+					<subweapon2 type='WeaponGotoLabel'>
+						<label>label1</label>
+						<count>10</count>
+					</subweapon2>
+				</collisionaction>
+			</nextweapon>
+		</accessoryaction>
+	</accessory>
+
+
+	<accessory>
+		<name>Test Leap Frog</name>
+		<maximumnumber>0</maximumnumber>
+		<bundlesize>2</bundlesize>
+		<cost>10000</cost>
+		<activationsound>shoot/medium.wav</activationsound>
+		<model type='MilkShape'>bouncingbetty/bouncingbetty.txt</model>
+		<accessoryaction type='WeaponLabel'>
+			<label>label1</label>
+			<nextweapon type='WeaponProjectile'>
+				<projectilemodel type='MilkShape'>bouncingbetty/bouncingbetty.txt</projectilemodel>
+				<collisionaction type='WeaponMulti'>
+					<subweapon1 type='WeaponExplosion'>
+						<hurtamount>1.0</hurtamount>
+						<deform>down</deform>
+						<size>8</size>
+						<explosiontexture>exp01</explosiontexture>
+						<explosionsound>explosions/medium.wav</explosionsound>
+					</subweapon1>
+					<subweapon2 type='WeaponLeapFrog'>
+						<bounce>0.4</bounce>
+						<collisionaction type='WeaponGotoLabel'>
+							<label>label1</label>
+							<count>10</count>
+						</collisionaction>
+					</subweapon2>
+				</collisionaction>
+			</nextweapon>
+		</accessoryaction>
+	</accessory>
+	
+	<accessory>
+		<name>Teleport Test</name>
+		<maximumnumber>0</maximumnumber>
+		<bundlesize>1</bundlesize>
+		<model type="MilkShape">teleport/teleport.txt</model>
+		<nomuzzleflash/>
+		<cost>15000</cost>
+		<accessoryaction type='WeaponSelectPosition'>
+			<aimedweapon type='WeaponTeleport'>
+				<sound>data/wav/misc/teleport.wav</sound>
+				<delay>2.0</delay>
+			</aimedweapon>
+		</accessoryaction>
+		<positionselection>fuellimit</positionselection>
+		<positionselectionlimit>40</positionselectionlimit>
+	</accessory>
+	
+	
+	<accessory>
+		<name>Team Action Test</name>
+		<maximumnumber>0</maximumnumber>
+		<bundlesize>1</bundlesize>
+		<cost>15000</cost>
+		<accessoryaction type='WeaponTeamAction'>
+			<team0 type='WeaponTeleport'>
+				<sound>data/wav/misc/teleport.wav</sound>
+				<delay>2.0</delay>
+			</team0>
+		</accessoryaction>
+	</accessory>
+	
+	<accessory>
+		<name>Type Action Test</name>
+		<maximumnumber>0</maximumnumber>
+		<bundlesize>1</bundlesize>
+		<cost>15000</cost>
+		<accessoryaction type='WeaponTypeAction'>
+			<none type='WeaponTeleport'>
+				<sound>data/wav/misc/teleport.wav</sound>
+				<delay>2.0</delay>
+			</none>
+		</accessoryaction>
+	</accessory>
+	
+	<accessory>
+		<name>GroupWin</name>
+		<maximumnumber>0</maximumnumber>
+		<accessoryaction type='WeaponGiveWin'>
+			<objective>Destroyed group bob</objective>
+			<winningteam>1</winningteam>
+		</accessoryaction>
+	</accessory>
+	
+	<accessory>
+		<name>TestSquareShield</name>
+		<maximumnumber>0</maximumnumber>
+		<armslevel>8</armslevel>
+		<icon>shield.bmp</icon>
+		<activationsound>shield/activate.wav</activationsound>
+		<bundlesize>3</bundlesize>
+		<cost>20000</cost>
+		<accessoryaction type='ShieldSquareReflective'>
+			<movementproof>true</movementproof>
+			<deflectfactor>1.0</deflectfactor>
+			<size>
+				<a>3.0</a>
+				<b>3.0</b>
+				<c>3.0</c>
+			</size>
+			<color>
+				<r>1.0</r>
+				<g>1.0</g>
+				<b>1.0</b>
+			</color>
+			<collisionsound>shield/hit.wav</collisionsound>
+			<removepower>20</removepower>
+			<penetration>1.0</penetration>
+			<power>100</power>
+		</accessoryaction>
+	</accessory>
+        <accessory>
+                <name>TestWeaponPosition</name>
+                <armslevel>10</armslevel>
+		<maximumnumber>0</maximumnumber>
+                <description>Test Accessory for WeaponPosition</description>
+                <icon>bmissile.bmp</icon>
+                <startingnumber>-1</startingnumber>
+                <activationsound>shoot/small.wav</activationsound>
+		<accessoryaction type='WeaponPosition'>
+			<position><a>128</a><b>128</b><c>66</c></position>
+			<positionoffset><a>33</a><b>33</b><c>33</c></positionoffset>
+			<!-- onground>true</onground -->
+                        <aimedweapon type='WeaponReference'>
+				<weapon>Smoke Tracer</weapon>
+			</aimedweapon>
+		</accessoryaction>
+	</accessory>
+        <accessory>
+                <name>TestNumberParser</name>
+                <armslevel>10</armslevel>
+                <description>Test accessory for the NumberParser class.</description>
+                <icon>bmissile.bmp</icon>
+		<maximumnumber>0</maximumnumber>
+                <startingnumber>-1</startingnumber>
+                <activationsound>shoot/small.wav</activationsound>
+                <accessoryaction type='WeaponRepeat'>
+                        <repeat>10</repeat>
+                        <delay>0.255555</delay>
+                        <repeatweapon type="WeaponRedirect">
+                                <habs>false</habs>
+                                <vabs>false</vabs>
+                                <!-- DISTRIBUTION will randomly pick from the list of values -->
+                                <hredirect>DISTRIBUTION(1,5,10.1,20,40,80,160)</hredirect>
+                                <!-- RANGE(x,y,z) will pick a random value from x to y, with an optional step of z -->
+                                <vredirect>RANGE(0,90,10)</vredirect>
+                                <nextaction type="WeaponReference">
+                                        <weapon>Smoke Tracer</weapon>
+                                </nextaction>
+                        </repeatweapon>
+                </accessoryaction>
+        </accessory>
+	<accessory>
+		<name>BoidsLaser</name>
+		<maximumnumber>0</maximumnumber>
+		<accessoryaction type='WeaponGroupSelect'>
+			<groupname>boids-gulls</groupname>
+			<nextaction type="WeaponReference">
+				<weapon>Laser</weapon>
+			</nextaction>			
+		</accessoryaction>
+	</accessory>
+</accessories>

@@ -1,0 +1,53 @@
+#include header.html 
+
+#include menu.html
+
+#include settingsmenu.html
+
+<form method="post">
+<table align="center" border="0">
+	<tr>
+		<td align="center">Mod Settings<br>
+	</tr>
+	<tr>
+		<td align="center">
+			<input type="hidden" name="sid" value="[[sid]]"> 
+			<i>Note: Some of the settings below cannot be altered on a running system.</i>
+			<table border="1" width="400">
+				<tr class=heading>
+					<td>Mod</td>
+					<td>Description</td>
+					<td>Enabled</td>
+				</tr>
+				[[MODS]]
+			</table>
+			<a href="/mods?sid=[[sid]]">Show all currently loaded mod files.</a>
+		</td>
+	</tr>
+	<tr>
+		<td align="Left">
+			<br>
+			<input type="submit" name="action" value="Set"> <i>Set these settings as the server current settings.</i><br>
+			<input type="submit" name="action" value="Load"> <i>Load settings from server.xml file.</i><br>
+			<input type="submit" name="action" value="Save"> <i>Save settings to server.xml file.</i><br>
+		</td>
+	</tr>
+</table>
+</form>
+<form method="post" enctype="multipart/form-data">
+<table align="center" border="0">
+	<tr>
+		<td align="center">Mod Upload<br>
+	</tr>	
+	<tr>
+		<td align="center">
+			Upload new mod : <input type="file" name="modupload" size="25" value="" class="post" />
+			<input type="submit" name="action" value="Upload">
+		</td>
+	</tr>
+
+</table>
+</form>
+
+
+#include footer.html

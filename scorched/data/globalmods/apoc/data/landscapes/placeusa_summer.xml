@@ -1,0 +1,281 @@
+<place>
+		<placement type='mask'>
+			<numobjects>2500</numobjects>
+			<mask>data/landscapes/masks/usa-pines.bmp</mask>
+			<minheight>8</minheight>
+			<maxheight>30</maxheight>
+			<mincloseness>0.5</mincloseness>
+			<minslope>0.5</minslope>
+			<xsnap>0</xsnap>
+			<ysnap>0</ysnap>
+			<object type='random'>
+				<randomobject>
+					<object type='model'>
+						<model type='Tree'>
+							<type>pine</type>
+							<snow>false</snow>
+							<burnt>false</burnt>
+						</model>
+						<modelburnt type='Tree'>
+							<type>pine</type>
+							<snow>false</snow>
+							<burnt>true</burnt>
+						</modelburnt>				 
+						<modelscale>1.0</modelscale> 
+						<modelscalediff>2.0</modelscalediff> 
+						<modelrotationsnap>1</modelrotationsnap> 
+						<modelbrightness>-1.0</modelbrightness> 
+						<displayshadow>false</displayshadow> 
+						<nodamageburn>true</nodamageburn> 
+						<displaydamage>false</displaydamage> 
+						<drawshadow>true</drawshadow> 
+						<groupname>trees</groupname>
+					</object>
+				</randomobject>
+				<randomobject>
+					<object type='model'>
+						<model type='Tree'>
+							<type>pine2</type>
+							<snow>false</snow>
+							<burnt>false</burnt>
+						</model>
+						<modelburnt type='Tree'>
+							<type>pine2</type>
+							<snow>false</snow>
+							<burnt>true</burnt>
+						</modelburnt>				 
+						<modelscale>1.0</modelscale> 
+						<modelscalediff>2.0</modelscalediff> 
+						<modelrotationsnap>1</modelrotationsnap> 
+						<modelbrightness>-1.0</modelbrightness> 
+						<displayshadow>false</displayshadow> 
+						<nodamageburn>true</nodamageburn> 
+						<displaydamage>false</displaydamage> 
+						<drawshadow>true</drawshadow> 
+						<groupname>trees</groupname>
+					</object>
+				</randomobject>
+				<randomobject>
+					<object type='model'>
+						<model type='Tree'>
+							<type>pine3</type>
+							<snow>false</snow>
+							<burnt>false</burnt>
+						</model>
+						<modelburnt type='Tree'>
+							<type>pine3</type>
+							<snow>false</snow>
+							<burnt>true</burnt>
+						</modelburnt>				 
+						<modelscale>1.0</modelscale> 
+						<modelscalediff>2.0</modelscalediff> 
+						<modelrotationsnap>1</modelrotationsnap> 
+						<modelbrightness>-1.0</modelbrightness> 
+						<displayshadow>false</displayshadow> 
+						<nodamageburn>true</nodamageburn> 
+						<displaydamage>false</displaydamage> 
+						<drawshadow>true</drawshadow> 
+						<groupname>trees</groupname>
+					</object>
+				</randomobject>
+				<randomobject>
+					<object type='model'>
+						<model type='Tree'>
+							<type>pine4</type>
+							<snow>false</snow>
+							<burnt>false</burnt>
+						</model>
+						<modelburnt type='Tree'>
+							<type>pine4</type>
+							<snow>false</snow>
+							<burnt>true</burnt>
+						</modelburnt>				 
+						<modelscale>1.0</modelscale> 
+						<modelscalediff>2.0</modelscalediff> 
+						<modelrotationsnap>1</modelrotationsnap> 
+						<modelbrightness>-1.0</modelbrightness> 
+						<displayshadow>false</displayshadow> 
+						<nodamageburn>true</nodamageburn> 
+						<displaydamage>false</displaydamage> 
+						<drawshadow>true</drawshadow> 
+						<groupname>trees</groupname>
+					</object>
+				</randomobject>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>2500</numobjects>
+			<mask>data/landscapes/masks/usa-palms.bmp</mask>
+			<minheight>5</minheight>
+			<maxheight>20</maxheight>
+			<mincloseness>0.5</mincloseness>
+			<minslope>0.5</minslope>
+			<xsnap>0</xsnap>
+			<ysnap>0</ysnap>
+			<object type='random'>
+				<randomobject>
+					<object type='model'>
+						<model type='Tree'>
+							<type>palm</type>
+							<snow>false</snow>
+							<burnt>false</burnt>
+						</model>
+						<modelburnt type='Tree'>
+							<type>palm</type>
+							<snow>false</snow>
+							<burnt>true</burnt>
+						</modelburnt>				 
+						<modelscale>1.0</modelscale> 
+						<modelscalediff>2.0</modelscalediff> 
+						<modelrotationsnap>1</modelrotationsnap> 
+						<modelbrightness>-1.0</modelbrightness> 
+						<displayshadow>false</displayshadow> 
+						<nodamageburn>true</nodamageburn> 
+						<displaydamage>false</displaydamage> 
+						<drawshadow>true</drawshadow> 
+						<groupname>trees</groupname>
+					</object>
+				</randomobject>
+				<randomobject>
+					<object type='model'>
+						<model type='Tree'>
+							<type>palmb2</type>
+							<snow>false</snow>
+							<burnt>false</burnt>
+						</model>
+						<modelburnt type='Tree'>
+							<type>palmb2</type>
+							<snow>false</snow>
+							<burnt>true</burnt>
+						</modelburnt>				 
+						<modelscale>1.0</modelscale> 
+						<modelscalediff>2.0</modelscalediff> 
+						<modelrotationsnap>1</modelrotationsnap> 
+						<modelbrightness>-1.0</modelbrightness> 
+						<displayshadow>false</displayshadow> 
+						<nodamageburn>true</nodamageburn> 
+						<displaydamage>false</displaydamage> 
+						<drawshadow>true</drawshadow> 
+						<groupname>trees</groupname>
+					</object>
+				</randomobject>
+				<randomobject>
+					<object type='model'>
+						<model type='Tree'>
+							<type>palmb3</type>
+							<snow>false</snow>
+							<burnt>false</burnt>
+						</model>
+						<modelburnt type='Tree'>
+							<type>palmb3</type>
+							<snow>false</snow>
+							<burnt>true</burnt>
+						</modelburnt>				 
+						<modelscale>1.0</modelscale> 
+						<modelscalediff>2.0</modelscalediff> 
+						<modelrotationsnap>1</modelrotationsnap> 
+						<modelbrightness>-1.0</modelbrightness> 
+						<displayshadow>false</displayshadow> 
+						<nodamageburn>true</nodamageburn> 
+						<displaydamage>false</displaydamage> 
+						<drawshadow>true</drawshadow> 
+						<groupname>trees</groupname>
+					</object>
+				</randomobject>
+				<randomobject>
+					<object type='model'>
+						<model type='Tree'>
+							<type>palmb4</type>
+							<snow>false</snow>
+							<burnt>false</burnt>
+						</model>
+						<modelburnt type='Tree'>
+							<type>palmb4</type>
+							<snow>false</snow>
+							<burnt>true</burnt>
+						</modelburnt>				 
+						<modelscale>1.0</modelscale> 
+						<modelscalediff>2.0</modelscalediff> 
+						<modelrotationsnap>1</modelrotationsnap> 
+						<modelbrightness>-1.0</modelbrightness> 
+						<displayshadow>false</displayshadow> 
+						<nodamageburn>true</nodamageburn> 
+						<displaydamage>false</displaydamage> 
+						<drawshadow>true</drawshadow> 
+						<groupname>trees</groupname>
+					</object>
+				</randomobject>
+				<randomobject>
+					<object type='model'>
+						<model type='Tree'>
+							<type>palmb5</type>
+							<snow>false</snow>
+							<burnt>false</burnt>
+						</model>
+						<modelburnt type='Tree'>
+							<type>palmb5</type>
+							<snow>false</snow>
+							<burnt>true</burnt>
+						</modelburnt>				 
+						<modelscale>1.0</modelscale> 
+						<modelscalediff>2.0</modelscalediff> 
+						<modelrotationsnap>1</modelrotationsnap> 
+						<modelbrightness>-1.0</modelbrightness> 
+						<displayshadow>false</displayshadow> 
+						<nodamageburn>true</nodamageburn> 
+						<displaydamage>false</displaydamage> 
+						<drawshadow>true</drawshadow> 
+						<groupname>trees</groupname>
+					</object>
+				</randomobject>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>500</numobjects>
+			<mask>data/landscapes/masks/usa-cactus.bmp</mask>
+			<minheight>5</minheight>
+			<maxheight>20</maxheight>
+			<mincloseness>0.5</mincloseness>
+			<minslope>0.5</minslope>
+			<xsnap>0</xsnap>
+			<ysnap>0</ysnap>
+			<object type='model'>
+				<model type='MilkShape'>data/accessories/objects/cactussmall.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/objects/cactussmallburnt.txt</modelburnt>
+				<modelrotationsnap>5</modelrotationsnap>
+				<groupname></groupname>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>50</numobjects>
+			<mask>data/landscapes/masks/usa-pines.bmp</mask>
+			<minheight>5</minheight>
+			<maxheight>20</maxheight>
+			<mincloseness>1</mincloseness>
+			<minslope>0.5</minslope>
+			<xsnap>0</xsnap>
+			<ysnap>0</ysnap>
+			<object type='model'>
+				<model type='MilkShape'>data/accessories/objects/deer1.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/objects/deerburnt.txt</modelburnt>
+				<modelrotationsnap>5</modelrotationsnap>
+				<groupname></groupname>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>50</numobjects>
+			<mask>data/landscapes/masks/usa-pines.bmp</mask>
+			<minheight>5</minheight>
+			<maxheight>20</maxheight>
+			<mincloseness>1</mincloseness>
+			<minslope>0.5</minslope>
+			<xsnap>0</xsnap>
+			<ysnap>0</ysnap>
+			<object type='model'>
+				<model type='MilkShape'>data/accessories/objects/deer2.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/objects/deerburnt.txt</modelburnt>
+				<modelrotationsnap>5</modelrotationsnap>
+				<groupname></groupname>
+			</object>
+		</placement>
+</place>

@@ -1,0 +1,38 @@
+#include header.html 
+
+#include menu.html
+
+<table align="center" border="0">
+	<tr>
+		<td align="center">Current Server Admin Sessions</td>
+	</tr>
+	<tr>
+		<td align="center">
+				<table border="1" width="760">
+					<tr class=heading>
+						<td>Name</td>
+						<td>Time</td>
+						<td>IP</td>
+					</tr>
+					[[SESSIONS]]
+				</table>
+
+		</td>
+	</tr>
+	<tr>
+		<td align="center"><br>Admin Accounts</td>
+	</tr>
+	<tr>
+		<td align="center">
+				<table border="1" width="760">
+					<tr class=heading>
+						<td>Name</td>
+					</tr>
+					[[ADMINS]]
+				</table>
+
+		</td>
+	</tr>
+</table>
+
+#include footer.html

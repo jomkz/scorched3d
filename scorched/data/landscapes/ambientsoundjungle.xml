@@ -1,0 +1,41 @@
+<ambientsound>
+		<sound>
+			<position type='group'>
+				<name>trees</name>
+				<falloff>1.0</falloff>
+			</position>
+			<timing type='looped'></timing>
+			<sound type='file'>
+				<file>data/wav/misc/birds2.wav</file>
+				<gain>1.0</gain>
+			</sound>
+		</sound>
+		<sound>
+			<position type='group'>
+				<name>trees</name>
+				<falloff>1.0</falloff>
+			</position>
+			<timing type='repeat'>
+				<min>10</min>
+				<max>60</max>
+			</timing>
+			<sound type='file'>
+				<file>data/wav/misc/birdchirp2.wav</file>
+				<gain>1.0</gain>
+			</sound>
+		</sound>
+		<sound>
+			<position type='group'>
+				<name>trees</name>
+				<falloff>1.0</falloff>
+			</position>
+			<timing type='repeat'>
+				<min>10</min>
+				<max>60</max>
+			</timing>
+			<sound type='file'>
+				<file>data/wav/misc/birdchirp3.wav</file>
+				<gain>1.0</gain>
+			</sound>
+		</sound>
+</ambientsound>

@@ -1,0 +1,32 @@
+#include header.html 
+
+#include menu.html
+
+<table align="center" border="0">
+	<tr>
+		<td align="center">Current Top Ranks</td>
+	</tr>
+	<tr>
+		<td align="center">
+			[[RANKS]]
+		</td>
+	</tr>
+
+	<tr align=center><td>
+		<form method="post">
+			Find players :
+			<input type="text" name="find">
+			<input type="submit" name="action" value="Find">
+		</form>
+	</td></tr>
+	<tr align=center><td>
+		<form method="post">
+			Combine players.
+			Updated Player:<input type="text" name="player1">
+			Removed Player:<input type="text" name="player2">
+			<input type="submit" name="action" value="Combine">
+		</form>
+	</td></tr>
+</table>
+
+#include footer.html

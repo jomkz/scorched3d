@@ -1,0 +1,11 @@
+<events>
+	<event>
+		<condition type="groupsize">
+			<groupname>bob</groupname>
+			<groupsize>0</groupsize>
+		</condition>
+		<action type="fireweapon">
+			<weapon>GroupWin</weapon>
+		</action>
+	</event>
+</events>

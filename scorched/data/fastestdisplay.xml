@@ -1,0 +1,102 @@
+<options source='Scorched3D'>
+	<!-- How many explosion clouds are drawn -->
+	<!-- (default value : "8") -->
+	<option>
+		<name>ExplosionParts</name>
+		<value>4</value>
+	</option>
+	<!-- How many explosion sub clouds are drawn -->
+	<!-- (default value : "4") -->
+	<option>
+		<name>ExplosionSubParts</name>
+		<value>2</value>
+	</option>
+	<!-- The number of particles that each explosion will create (relative to explosion size) -->
+	<!-- (default value : "20") -->
+	<option>
+		<name>ExplosionParticleMult</name>
+		<value>10</value>
+	</option>
+	<!-- Number of sound channels to mix. -->
+	<!-- (default value : "8") -->
+	<option>
+		<name>SoundChannels</name>
+		<value>2</value>
+	</option>
+	<!-- Use detail textures on the landscape.Adds the texture seen when very close to the landscape.Requires multi-texturing -->
+	<!-- (default value : "on") -->
+	<option>
+		<name>DetailTexture</name>
+		<value>off</value>
+	</option>
+	<!-- Smooth/AA the dialog lines -->
+	<!-- (default value : "on") -->
+	<option>
+		<name>SmoothLines</name>
+		<value>off</value>
+	</option>
+	<!-- Do not use any OpenGL extensions.  Turn off to disable any extra OpenGL features. -->
+	<!-- (default value : "off") -->
+	<option>
+		<name>NoGLExt</name>
+		<value>on</value>
+	</option>
+	<!-- Do not draw real-time shadows. -->
+	<!-- (default value : "off") -->
+	<option>
+		<name>NoShadows</name>
+		<value>on</value>
+	</option>
+	<!-- Only draw one sky layer. -->
+	<!-- (default value : "off") -->
+	<option>
+		<name>NoSkyLayers</name>
+		<value>on</value>
+	</option>
+	<!-- Do not animate the sky -->
+	<!-- (default value : "off") -->
+	<option>
+		<name>NoSkyMovement</name>
+		<value>on</value>
+	</option>
+	<!-- Do not draw precipitation -->
+	<!-- (default value : "off") -->
+	<option>
+		<name>NoPrecipitation</name>
+		<value>on</value>
+	</option>
+	<!-- Draw very simple flat water with no shading -->
+	<!-- (default value : "off") -->
+	<option>
+		<name>NoWaterMovement</name>
+		<value>on</value>
+	</option>
+	<!-- Do not draw the moving shore waves. -->
+	<!-- (default value : "off") -->
+	<option>
+		<name>NoWaves</name>
+		<value>on</value>
+	</option>
+	<!-- The texture details setting.  Lower is faster. -->
+	<!-- (default value : "1") -->
+	<option>
+		<name>TexureSize</name>
+		<value>0</value>
+	</option>
+	<!-- The number of effects allowed at once. -->
+	<!-- (default value : "1") -->
+	<option>
+		<name>EffectsDetail</name>
+		<value>0</value>
+	</option>
+	<!-- Do not use dynamic lighting calculations for models -->
+	<!-- (default value : "off") -->
+	<option>
+		<name>NoModelLighting</name>
+		<value>on</value>
+	</option>
+	<option>
+		<name>FullClear</name>
+		<value>off</value>
+	</option>
+</options>

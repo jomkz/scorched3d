@@ -1,0 +1,42 @@
+#include header.html 
+
+#include menu.html
+
+#include settingsmenu.html
+
+<form method="post">
+<table align="center" border="0">
+	<tr>
+		<td align="center">Landscape Settings<br>
+	</tr>
+	<tr>
+		<td>
+			<input type="hidden" name="sid" value="[[sid]]"> 
+			<table border="1" width="400">
+				<tr class=heading>
+					<td>Landscape</td>
+					<td>Description</td>
+					<td>Enabled</td>
+				</tr>
+				[[LANDSCAPES]]
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td align="Left">
+			<input type="submit" name="action" value="Select All">
+			<input type="submit" name="action" value="Select None">
+		</td>
+	</tr>
+	<tr>
+		<td align="Left">
+			<br><br>
+			<input type="submit" name="action" value="Set"> <i>Set these settings as the server current settings.</i><br>
+			<input type="submit" name="action" value="Load"> <i>Load settings from server.xml file.</i><br>
+			<input type="submit" name="action" value="Save"> <i>Save settings to server.xml file.</i><br>
+		</td>
+	</tr>
+</table>
+</form>
+
+#include footer.html

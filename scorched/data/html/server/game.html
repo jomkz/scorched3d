@@ -1,0 +1,29 @@
+#include header.html 
+
+#include menu.html
+
+<table align="center" border="0">
+	<tr>
+		<td align="center">Game</td>
+	</tr>
+	<tr>
+		<td align="left">
+			Players : [[PLAYERS]]<br>
+			State : [[STATE]]<br>
+			Round : [[ROUND]]<br>
+			Move : [[MOVE]]<br>
+			BytesI : [[BI]]  BytesO: [[BO]]  Ping : [[P]]  Conect : [[C]]<br>	
+		</td>
+	</tr>
+	<tr>
+		<td align="center">
+		<form method="post">
+			<input type="hidden" name="sid" value="[[sid]]"> 
+			<input type="submit" name="action" value="NewGame"> 
+			<input type="submit" name="action" value="KillAll">
+		</form>
+		</td>
+	</tr>
+</table>
+
+#include footer.html

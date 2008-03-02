@@ -1,0 +1,62 @@
+<tex>
+	<detail>data/textures/landscape/default/detail.bmp</detail>
+	<magmasmall>data/textures/landscape/default/magma-small.bmp</magmasmall>
+	<scorch>data/textures/landscape/storm/scorch.bmp</scorch>
+	<lowestlandheight>0.0</lowestlandheight>
+	<skytexture>data/textures/landscape/storm/cloud1.bmp</skytexture>
+	<skytexturemask>data/textures/landscape/storm/cloud1m.bmp</skytexturemask>
+	<skycolormap>data/textures/clearsky.bmp</skycolormap>
+	<skytimeofday>8</skytimeofday>
+	<skysunxy>90</skysunxy>
+	<skysunyz>30</skysunyz>
+	<skyambience><A>0.2</A><B>0.2</B><C>0.2</C></skyambience>
+	<skydiffuse><A>0.6</A><B>0.6</B><C>0.6</C></skydiffuse>
+	<fog><A>0.5</A><B>0.5</B><C>0.5</C></fog>
+	<fogdensity>0.001</fogdensity>
+	<suncolor><A>1.0</A><B>1.0</B><C>1.0</C></suncolor>
+	<suntexture>data/textures/glow1.bmp</suntexture>
+	<border type="water">
+		<reflection>data/textures/landscape/storm/cubemap.bmp</reflection>
+		<texture>data/textures/landscape/default/water.bmp</texture>
+		<wavetopa><A>0.0</A><B>0.0</B><C>0.0</C></wavetopa>
+		<wavetopb><A>0.49</A><B>0.83</B><C>0.94</C></wavetopb>
+		<wavebottoma><A>0.0</A><B>0.0</B><C>0.0</C></wavebottoma>
+		<wavebottomb><A>0.29</A><B>0.56</B><C>0.91</C></wavebottomb>
+		<wavelight><A>1.0</A><B>1.0</B><C>1.0</C></wavelight>
+		<foam>data/textures/foam.png</foam>
+		<height>5.0</height>
+	</border>
+	<texture type="generate">
+		<rockside>data/textures/landscape/tropical/rockside.bmp</rockside>
+		<roof>data/textures/landscape/tropical/texture0.bmp</roof>
+		<shore>data/textures/landscape/tropical/shore.bmp</shore>
+		<surround>data/textures/landscape/tropical/texture0.bmp</surround>
+		<texture0>data/textures/landscape/tropical/texture0.bmp</texture0>
+		<texture1>data/textures/landscape/tropical/texture1.bmp</texture1>
+		<texture2>data/textures/landscape/tropical/texture2.bmp</texture2>
+		<texture3>data/textures/landscape/tropical/texture3.bmp</texture3>
+		<texture4>data/textures/landscape/tropical/texture4.bmp</texture4>
+	</texture>
+	<placements>
+		<placement>data/landscapes/placecity2.xml</placement>
+		<placement>data/landscapes/placesummercitypine.xml</placement>
+	</placements>
+	<ambientsounds>
+		<ambientsound>data/landscapes/ambientsoundrain.xml</ambientsound>
+		<ambientsound>data/landscapes/ambientsoundwaves.xml</ambientsound>
+		<ambientsound>data/landscapes/ambientsoundjet.xml</ambientsound>
+		<ambientsound>data/landscapes/ambientsoundhelicopter.xml</ambientsound>
+		<ambientsound>data/landscapes/ambientsoundbuildings.xml</ambientsound>
+		<ambientsound>data/landscapes/ambientsoundcars.xml</ambientsound>
+	</ambientsounds>
+	<precipitation type="rain">
+		<particles>60</particles>
+	</precipitation>
+	<events>
+		<event>data/landscapes/eventslightning.xml</event>
+		<event>data/landscapes/eventscargodrop.xml</event>
+	</events>
+	<boids>
+		<boid>data/landscapes/boidscity.xml</boid>
+	</boids>
+</tex>

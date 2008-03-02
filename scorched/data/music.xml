@@ -1,0 +1,27 @@
+<music>
+	<music>
+		<!-- 
+		One or more playstate tags to denote which states to play this music file in.   
+		Possible values are:-
+		loading, buying, playing, shot, score, wait
+		-->
+		<playstate>loading</playstate>
+		<playstate>wait</playstate>
+		<!-- The name of the file to play in this state(s) -->
+		<file>data/music/mix3_loop1.ogg</file>
+		<!-- Volume 0 to 1 -->
+		<gain>1</gain>
+	</music>
+	<music>
+		<playstate>buying</playstate>
+		<playstate>playing</playstate>
+		<file>data/music/mix3_loop2.ogg</file>
+		<gain>1</gain>
+	</music>
+	<music>
+		<playstate>score</playstate>
+		<playstate>shot</playstate>
+		<file>data/music/mix3_loop3.ogg</file>
+		<gain>1</gain>
+	</music>
+</music>

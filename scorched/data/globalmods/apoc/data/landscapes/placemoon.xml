@@ -1,0 +1,66 @@
+<place>
+		<placement type='mask'>
+			<numobjects>75</numobjects>
+			<mask>data/landscapes/masks/anywhere.bmp</mask>
+			<minheight>0</minheight>
+			<maxheight>40</maxheight>
+			<mincloseness>1</mincloseness>
+			<minslope>0.75</minslope>
+			<xsnap>0</xsnap>
+			<ysnap>0</ysnap>
+			<object type='model'>
+				<model type='MilkShape'>data/accessories/objects/rock1.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/objects/rock1.txt</modelburnt>
+				<modelrotationsnap>5</modelrotationsnap>
+				<groupname></groupname>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>75</numobjects>
+			<mask>data/landscapes/masks/anywhere.bmp</mask>
+			<minheight>0</minheight>
+			<maxheight>40</maxheight>
+			<mincloseness>0.6</mincloseness>
+			<minslope>0.75</minslope>
+			<xsnap>0</xsnap>
+			<ysnap>0</ysnap>
+			<object type='model'>
+				<model type='MilkShape'>data/accessories/objects/rock2.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/objects/rock2.txt</modelburnt>
+				<modelrotationsnap>5</modelrotationsnap>
+				<groupname></groupname>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>75</numobjects>
+			<mask>data/landscapes/masks/anywhere.bmp</mask>
+			<minheight>0</minheight>
+			<maxheight>40</maxheight>
+			<mincloseness>4</mincloseness>
+			<minslope>0.75</minslope>
+			<xsnap>0</xsnap>
+			<ysnap>0</ysnap>
+			<object type='model'>
+				<model type='MilkShape'>data/accessories/objects/rock3.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/objects/rock3.txt</modelburnt>
+				<modelrotationsnap>5</modelrotationsnap>
+				<groupname></groupname>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>75</numobjects>
+			<mask>data/landscapes/masks/anywhere.bmp</mask>
+			<minheight>0</minheight>
+			<maxheight>40</maxheight>
+			<mincloseness>0.6</mincloseness>
+			<minslope>0.75</minslope>
+			<xsnap>0</xsnap>
+			<ysnap>0</ysnap>
+			<object type='model'>
+				<model type='MilkShape'>data/accessories/objects/rock4.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/objects/rock4.txt</modelburnt>
+				<modelrotationsnap>5</modelrotationsnap>
+				<groupname></groupname>
+			</object>
+		</placement>
+</place>

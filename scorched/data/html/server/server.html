@@ -1,0 +1,41 @@
+#include header.html 
+
+#include menu.html
+
+<table align="center" border="0">
+	<tr><td align=center>Server State</td></tr>
+	<tr>
+		<td align="center">
+			<table align="center" border="0">
+				<tr><td>Current Server State : </td><td>[[STATE]]</td></tr>
+				<tr><td>Server Start Time : </td><td>[[STARTTIME]]</td></tr>
+				<tr><td>Server Version : </td><td>[[VERSION]]</td></tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td align="center">
+		<form method="post">
+			<input type="hidden" name="sid" value="[[sid]]"> 
+			<input type="submit" name="action" value="Stop Server"><br>
+			<input type="submit" name="action" value="Stop Server When Empty"> (Currently [[EXITEMPTY]])<br>
+		</form>
+		</td>
+	</tr>
+	<tr><td align=center>Logging State</td></tr>
+	<tr>
+		<td align="center">
+		<form method="post">
+			<table align="center" border="0">
+				<tr><td>State Logging : </td><td>[[STATELOGGING]]</td></tr>
+				<tr><td>Message Logging : </td><td>[[MESSAGELOGGING]]</td></tr>
+			</table>
+			<input type="hidden" name="sid" value="[[sid]]"> 
+			<input type="submit" name="action" value="Set Logging"><br>
+		</form>
+		</td>
+	</tr>
+
+</table>
+
+#include footer.html
