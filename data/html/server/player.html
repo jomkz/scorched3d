@@ -1,0 +1,62 @@
+#include header.html 
+
+#include menu.html
+
+<form method="post">
+	<table align="center" border="0">
+		<tr>
+			<td align="center">Players</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="hidden" name="sid" value="[[sid]]">
+				<table border="1" width="760">
+					<tr class=heading>
+						<td>Id</td>
+						<td>Name</td>
+						<td>Type</td>
+						<td>Time</td>
+						<td>Score</td>
+						<td>State</td>
+						<td>Team</td>
+						<td>Select</td>
+					</tr>
+					[[PLAYERS]]
+				</table>
+				Players : [[NOPLAYERS]]
+			</td>
+		</tr>
+		<tr>
+			<td align="center">
+				<br>
+				Selected Player Actions<br>
+				<input type="submit" name="action" value="Kick"> 
+				<input type="submit" name="action" value="Banned">
+				<input type="submit" name="action" value="Slap"> 
+				<input type="submit" name="action" value="Poor">
+				<input type="submit" name="action" value="Flag">
+				<br>
+				<input type="submit" name="action" value="Mute"> 
+				<input type="submit" name="action" value="UnMute">
+				<input type="submit" name="action" value="PermMute"> 
+				<input type="submit" name="action" value="UnPermMute">
+				<br>
+				<input type="submit" name="action" value="ShowAliases"> 
+				<input type="submit" name="action" value="ShowIPAliases">
+			</td>
+		</tr>
+		<tr>
+			<td align="center">
+				<input type="text" name="reason" value="<ban reason>">
+			</td>
+		</tr>
+		<tr>
+			<td align="center">
+				<br>
+				Add New Player<br>
+				[[ADD]]
+			</td>
+		</tr>
+	</table>
+</form>
+#include footer.html

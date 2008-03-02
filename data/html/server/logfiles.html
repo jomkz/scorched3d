@@ -1,0 +1,21 @@
+#include header.html
+
+#include menu.html
+
+<table align=center border=0>
+<tr><td align=center>Log Files</td></tr>
+<tr><td>
+<table border=1 width=600>
+	<tr class=heading><td>File</td><td>Date</td></tr>
+	[[LOG]]
+</table>
+</td></tr>
+<tr align=right><td>
+<form method="post">
+<input type="text" name="search">
+<input type="submit" name="action" value="Search">
+</form>
+</td></tr>
+</table>
+
+#include footer.html

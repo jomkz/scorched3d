@@ -1,0 +1,38 @@
+Laser Weapon 1.4
+
+About:
+This is a tweaked version of the laser weapon primitive made by Gavin.
+
+Changes and Additions include:
+Cost/Bundle Amount Added
+Longer Range (In some cases the laser would not reach a far opponent)
+Longer Animation (1 more second to be exact)
+Sound Added
+Fixed Icon
+Description Added
+HUD model Added
+
+
+Revision History:
+v1.2: Added HUD Model
+v1.3: Tweaked damage settings to more accurately reflect tweaked maximum distance.
+v1.4: Reduced poly count and added slight transparency.
+
+
+How the Laser Operates:
+I was a bit confused on exactly how the laser worked but I soon later figured it out.
+
+The shorter the laser is, the more damage it will do. This, of course, adds to the skill needed to use this weapon.
+
+The laser will penetrate through mountains and shields.
+
+
+
+Authors:
+Laser Animation and Implementation by Gavin
+Enabled and Tweaked by Deathstryker
+
+Special Thanks for helping me with this:
+Gavin
+Apollo Tangent
+A Moogle

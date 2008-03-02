@@ -1,0 +1,26 @@
+<options source='Scorched3D'>
+	<!-- Do not use any sound. -->
+	<option>
+		<name>NoSound</name>
+		<value>on</value>
+		<defaultvalue>off</defaultvalue>
+	</option>
+	<!-- The window width to use (in pixels) -->
+	<option>
+		<name>ScreenWidth</name>
+		<value>800</value>
+		<defaultvalue>640</defaultvalue>
+	</option>
+	<!-- The window height to use (in pixels) -->
+	<option>
+		<name>ScreenHeight</name>
+		<value>600</value>
+		<defaultvalue>480</defaultvalue>
+	</option>
+	<!-- Run the game in a full screen mode.  The default is a windowed mode. -->
+	<option>
+		<name>FullScreen</name>
+		<value>on</value>
+		<defaultvalue>off</defaultvalue>
+	</option>
+</options>

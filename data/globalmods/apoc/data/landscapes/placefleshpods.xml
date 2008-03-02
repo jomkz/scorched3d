@@ -1,0 +1,70 @@
+<place>
+		<placement type='mask'>
+			<numobjects>20</numobjects>
+			<mask>data/landscapes/masks/anywhere.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>100</maxheight>
+			<mincloseness>10</mincloseness>
+			<minslope>0.5</minslope>
+			<xsnap>0</xsnap>
+			<ysnap>0</ysnap>
+			<object type='target'>
+				<name>Fleshy Pod</name>
+				<model type='MilkShape'>data/accessories/objects/fleshpod.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/objects/fleshpod.txt</modelburnt>
+				<modelscale>0.4</modelscale>
+				<removeaction>Fleshy Pod</removeaction>
+				<burnaction>Small Bldg</burnaction>
+				<driveovertodestroy>true</driveovertodestroy>
+				<life>50</life>
+				<shield>none</shield>
+				<parachute>none</parachute>
+				<flattenarea>-1.0</flattenarea>
+				<border>10</border>
+			</object>
+			<!--<object type='model'>
+				<model type='MilkShape'>data/accessories/objects/fleshpod.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/objects/fleshpod.txt</modelburnt>
+				<modelscale>0.4</modelscale>
+				<removeaction>Fleshy Pod</removeaction>
+				<burnaction>Small Bldg</burnaction>
+				<driveovertodestroy>true</driveovertodestroy>
+				<flattenarea>-1.0</flattenarea>
+				<border>10</border>
+			</object>-->
+		</placement>
+		<placement type='mask'>
+			<numobjects>20</numobjects>
+			<mask>data/landscapes/masks/anywhere.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>100</maxheight>
+			<mincloseness>10</mincloseness>
+			<minslope>0.5</minslope>
+			<xsnap>0</xsnap>
+			<ysnap>0</ysnap>
+			<object type='target'>
+				<name>Acidic Pod</name>
+				<model type='MilkShape'>data/accessories/objects/acidpod.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/objects/acidpod.txt</modelburnt>
+				<modelscale>0.4</modelscale>
+				<removeaction>Acid Pod</removeaction>
+				<burnaction>Small Bldg</burnaction>
+				<driveovertodestroy>true</driveovertodestroy>
+				<life>50</life>
+				<shield>none</shield>
+				<parachute>none</parachute>
+				<flattenarea>-1.0</flattenarea>
+				<border>10</border>
+			</object>
+			<!--<object type='model'>
+				<model type='MilkShape'>data/accessories/objects/acidpod.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/objects/acidpod.txt</modelburnt>
+				<modelscale>0.4</modelscale>
+				<removeaction>Acid Pod</removeaction>
+				<burnaction>Small Bldg</burnaction>
+				<driveovertodestroy>true</driveovertodestroy>
+				<flattenarea>-1.0</flattenarea>
+				<border>10</border>
+			</object>-->
+		</placement>
+</place>

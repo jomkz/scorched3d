@@ -1,0 +1,8 @@
+<options source='Scorched3D'>
+	<!-- Do not use any OpenGL extensions.  Turn off to disable any extra OpenGL features. -->
+	<!-- (default value : "off") -->
+	<option>
+		<name>NoGLShaders</name>
+		<value>on</value>
+	</option>
+</options>

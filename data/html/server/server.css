@@ -1,0 +1,15 @@
+body {	
+	background-color: #000000;
+	color: #ffffff;
+}
+
+input { color: white; background-color: black; }
+textarea { color: white; background-color: black; }
+select { color: white; background-color: black; }
+tr.heading {background-color: #333333; font-weight: bold}
+
+/*font,th,td,p { font-family: Verdana, Arial, Helvetica, sans-serif }*/
+a:link,a:active,a:visited { text-decoration: none; color : #ff9933; }
+a:hover         { text-decoration: underline; 
+		font-style: bold; color : #ff9933; }
+hr      { height: 0px; border: solid #D1D7DC 0px; border-top-width: 1px;}

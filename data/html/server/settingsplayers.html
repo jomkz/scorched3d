@@ -1,0 +1,46 @@
+#include header.html 
+
+#include menu.html
+
+#include settingsmenu.html
+
+<form method="post">
+<table align="center" border="0">
+	<tr>
+		<td align="center">Player Settings<br>
+	</tr>
+	<tr>
+		<td align="center">
+			<input type="hidden" name="sid" value="[[sid]]"> 
+			<table border="0" width="400">
+				<tr><td>Min players :</td><td>[[NumberOfMinPlayers_set]]</td></tr>
+				<tr><td>Max players :</td><td>[[NumberOfPlayers_set]]</td></tr>
+				<tr><td>Remove bots after players :</td><td>[[RemoveBotsAtPlayers_set]]</td></tr>
+				<tr><td>Players are persistent (residual):</td><td>[[ResidualPlayers_set]]</td></tr>
+				<tr><td>Bot name prefix :</td><td>[[BotNamePrefix_set]]</td></tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td align="center">Startup Player Settings<br>
+	</tr>
+	<tr>
+		<td align="center">
+			<i>Note: The settings below cannot be altered on a running system.</i>
+			<table border="0" width="400">
+				[[PLAYERS]]
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td align="Left">
+			<br><br>
+			<input type="submit" name="action" value="Set"> <i>Set these settings as the server current settings.</i><br>
+			<input type="submit" name="action" value="Load"> <i>Load settings from server.xml file.</i><br>
+			<input type="submit" name="action" value="Save"> <i>Save settings to server.xml file.</i><br>
+		</td>
+	</tr>
+</table>
+</form>
+
+#include footer.html

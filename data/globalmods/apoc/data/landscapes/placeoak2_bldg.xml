@@ -1,0 +1,28 @@
+<place>
+		<placement type='trees'>
+			<numobjects>400000</numobjects>
+			<numclusters>12</numclusters>
+			<minheight>6</minheight>
+			<maxheight>15</maxheight>
+			<object type='model'>
+				<model type='Tree'>
+					<type>oak3</type>
+					<snow>false</snow>
+					<burnt>false</burnt>
+				</model>
+				<modelburnt type='Tree'>
+					<type>oak3</type>
+					<snow>false</snow>
+					<burnt>true</burnt>
+				</modelburnt>				 
+				<modelscale>1.0</modelscale> 
+				<modelscalediff>2.0</modelscalediff> 
+				<modelrotationsnap>1</modelrotationsnap> 
+				<modelbrightness>-1.0</modelbrightness> 
+				<displayshadow>false</displayshadow> 
+				<nodamageburn>true</nodamageburn> 
+				<displaydamage>false</displaydamage> 
+				<drawshadow>true</drawshadow>
+			</object>
+		</placement>
+</place>

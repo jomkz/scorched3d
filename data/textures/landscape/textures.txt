@@ -1,0 +1,14 @@
+available skins/mods :
+
+hell 
+snow 
+sand 
+vulcano 
+tropical
+storm
+
+thanks go to :
+- to <booda> for providing the originall version of hell.
+- <brian judy> for his free texture art on which most textures
+  of snow & sand are based
+- <matt smith> for the original vulcano, tropical, and storm  

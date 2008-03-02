@@ -1,0 +1,89 @@
+Scorched 3D - http://www.scorched3d.co.uk
+
+Overview
+--------
+
+Scorched3D supports multiple platforms : Win32, Linux, OSX and Solaris.
+Each platform requires different libraries and compilers.  The
+following sections outline a brief guide to compiling.
+
+If any errors are encountered please see the FAQ and Forums at
+http://www.scorched3d.co.uk
+
+
+Windows (Win32)
+---------------
+
+Compilation of Scorched3D is supported on windows via the 
+Microsoft Visual Studio .NET compiler :- 
+ http://www.microsoft.com/visualc
+and the free borland compiler :-
+ http://www.borland.com/products/downloads/download_cbuilder.html.
+
+To compile using Visual Studio .NET compiler :- 
+1) Load the scorched.sln file in the base directory.
+2) Choose build from the build menu.  No extra libraries are required
+as they are all bundled in the source distribution.
+
+Linux
+-----
+Compiling requirements  : 
+
+ * GNU tools (http://www.gnu.org/directory/GNU/)
+    aclocal (GNU aclocal) 1.6		[aclocal --version]
+    automake (GNU automake) 1.6		[automake --version]
+    autoconf (GNU autoconf) 2.57	[autoconf --version]
+    GNU Make 3.80			[make --version]
+    gcc version 3.2 			[g++ --version]
+
+ * Simple Directmedia Layer (http://www.libsdl.org/)
+    SDL 1.2.4
+
+ * FreeType2 (http://www.freetype.org)
+    freetype 7.0.1                      [freetype-config --version]
+
+ * OpenAL (http://www.openal.org)
+    openal 0.0.8  [openal-config --version]
+
+  cvs -d:pserver:guest@opensource.creative.com:/usr/local/cvs-repository login
+  (use password "guest")
+  cvs -d:pserver:guest@opensource.creative.com:/usr/local/cvs-repository co openal 
+
+ * WX-windows (http://www.wxwindows.org)
+    wx-windows 2.4.2			[wx-config --version]
+
+ * OpenGL (http://www.opengl.org) 	[glxinfo | grep -i version]
+    server glx version string: 1.3
+    client glx version string: 1.3
+    OpenGL version string: 1.4.0 
+    glu version: 1.3
+
+Make sure at least all these are properly installed.
+Any required m4 files are now packaged as part of the scorched3d
+distribution.
+
+Run the following commands to compile scorched :-
+
+1) chmod +x autogen.sh
+2) ./autogen.sh
+3) make 
+(on some systems build times can be reduced by using the -j2
+flag for make)
+4) make install (may need to be done as root)
+
+If you are compiling from CVS or a development version and the
+compiler complains of missing files at link time you may need to 
+run the createAMMakefile.pl script in the scripts directory.
+Do this before step 1.
+
+By default Scorched3D will be installed in /usr/local/games/scorched3d.
+The Scorched3D executable is called scorched3d and is located
+in the bin directory off this directory.  
+
+MacOSX
+------
+The Mac version has now been updated to be compiled in the same
+way as the linux version.  See above.
+Use wxmac instead of wxgtk to allow the user to run without X11.
+
+

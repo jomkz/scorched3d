@@ -1,0 +1,45 @@
+#include header.html
+
+#include menu.html
+
+<table align=center border=0>
+<tr><td align=center>Log Messages</td></tr>
+<tr><td>
+<table border=1 width=760>
+	<tr class=heading><td>Index</td><td>Message</td></tr>
+	[[LOG]]
+</table>
+[[PAGES]]
+</td></tr>
+
+<tr><td><a href="/logfile?sid=[[sid]]">View Full Log Files</a></td></tr>
+
+<tr><td align="right">
+	<table>
+		<tr>
+                <td>
+                <form method="post">
+                        <input type="hidden" name="sid" value="[[sid]]">
+                        <input type="hidden" name="RefreshRate" value="[[RefreshRate]]">
+                        <input type="submit" value="Refresh">
+                </form>
+                </td>
+                <td>
+                <form method="post">
+                        <input type="hidden" name="sid" value="[[sid]]">
+                                <SELECT name="RefreshRate">
+                                <OPTION selected value="">No Refresh</OPTION>
+                                <OPTION value="15">15 Seconds</OPTION>
+                                <OPTION value="30">30 Seconds</OPTION>
+                                <OPTION value="60">60 Seconds</OPTION>
+                        </SELECT>
+                        <input type="submit" value="Set">
+                </form>
+		</td>
+		</tr>
+	</table>
+</td></tr>
+
+</table>
+
+#include footer.html

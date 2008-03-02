@@ -1,0 +1,13 @@
+Batteries can be used to heal yourself.:Each battery heals 10 health points.
+Shields protect you from weapon damage.:Shields must be enabled before they work.
+Parachutes protect you from falling damage.:Parachutes must be enabled before they work.
+Buying fuel will allow your tank to move.:See fuel in the online documentation.
+All shots are affected by wind.:When aiming take the wind into account.
+The 's' key will show you your current score,:and the score of the other players.
+The 't' key allows you to talk to online players.:The 'y' key allows you to talk to the same team.
+The 'a' key will auto-aim at the mouse pointer.:Only the rotation is aimed, not power or elevation.
+Use the 0 to 9 keys to switch camera views.
+The 'c' key will show a second camera view.:Clicking on the window will change the view.
+Use different weapons to defeat shields.:e.g. diggers, sandhogs and napalm.
+You can skip your move in the player menu.:The player menu is at the top of the screen.
+You can play against other players on the:same computer by choosing a custom game.

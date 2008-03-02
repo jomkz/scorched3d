@@ -1,0 +1,37 @@
+#include header.html 
+
+#include menu.html
+
+#include settingsmenu.html
+
+<form method="post">
+<table align="center" border="0">
+	<tr>
+		<td align="center">All Settings<br>
+<i>Note: Some of these settings cannot be altered on a running system.</i></td>
+	</tr>
+	<tr>
+		<td>
+			<input type="hidden" name="sid" value="[[sid]]"> 
+			<table border="1" width="760">
+				<tr class=heading>
+					<td>Setting</td>
+					<td>Description</td>
+					<td>Value</td>
+				</tr>
+				[[SETTINGS]]
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td align="Left">
+			<br><br>
+			<input type="submit" name="action" value="Set"> <i>Set these settings as the server current settings.</i><br>
+			<input type="submit" name="action" value="Load"> <i>Load settings from server.xml file.</i><br>
+			<input type="submit" name="action" value="Save"> <i>Save settings to server.xml file.</i><br>
+		</td>
+	</tr>
+</table>
+</form>
+
+#include footer.html

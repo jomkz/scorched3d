@@ -1,0 +1,422 @@
+<options source='Scorched3D'>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType1</name>
+		<value>Shark</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType2</name>
+		<value>Shark</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType3</name>
+		<value>Shark</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType4</name>
+		<value>Shark</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType5</name>
+		<value>Shark</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType6</name>
+		<value>Shark</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType7</name>
+		<value>Shark</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType8</name>
+		<value>Shark</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType9</name>
+		<value>Shark</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType10</name>
+		<value>Shark</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType11</name>
+		<value>Human</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType12</name>
+		<value>Human</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType13</name>
+		<value>Human</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType14</name>
+		<value>Human</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType15</name>
+		<value>Human</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType16</name>
+		<value>Human</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType17</name>
+		<value>Human</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType18</name>
+		<value>Human</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType19</name>
+		<value>Human</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType20</name>
+		<value>Human</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType21</name>
+		<value>Human</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType22</name>
+		<value>Human</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType23</name>
+		<value>Human</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<option>
+		<name>PlayerType24</name>
+		<value>Human</value>
+		<defaultvalue>Human</defaultvalue>
+	</option>
+	<!-- The largest weapon type allowed -->
+	<option>
+		<name>MaxArmsLevel</name>
+		<value>10</value>
+		<defaultvalue>10</defaultvalue>
+	</option>
+	<!-- The maximum number of turns all players are allowed in each round (0 = infinite) -->
+	<option>
+		<name>MaxNumberOfRoundTurns</name>
+		<value>15</value>
+		<defaultvalue>15</defaultvalue>
+	</option>
+	<!-- The amount of time each player has for each shot -->
+	<option>
+		<name>ShotTime</name>
+		<value>0</value>
+		<defaultvalue>0</defaultvalue>
+	</option>
+	<!-- The amount of time each player has to buy weapons and use auto defense -->
+	<option>
+		<name>BuyingTime</name>
+		<value>0</value>
+		<defaultvalue>0</defaultvalue>
+	</option>
+	<!-- The amount of time to show the end of game scores for -->
+	<option>
+		<name>ScoreTime</name>
+		<value>15</value>
+		<defaultvalue>15</defaultvalue>
+	</option>
+	<!-- The number of moves a player is allowed to miss (due to the shot timer) -->
+	<option>
+		<name>AllowedMissedMoves</name>
+		<value>3</value>
+		<defaultvalue>3</defaultvalue>
+	</option>
+	<!-- The number of rounds to play in each game -->
+	<option>
+		<name>NumberOfRounds</name>
+		<value>10</value>
+		<defaultvalue>5</defaultvalue>
+	</option>
+	<!-- The number of each weapon the player is allowed -->
+	<option>
+		<name>MaxNumberWeapons</name>
+		<value>90</value>
+		<defaultvalue>90</defaultvalue>
+	</option>
+	<!-- How the winnder is choosen -->
+	<option>
+		<name>ScoreType</name>
+		<value>0</value>
+		<defaultvalue>0</defaultvalue>
+	</option>
+	<!-- The number of teams (1 == no teams) -->
+	<option>
+		<name>Teams</name>
+		<value>1</value>
+		<defaultvalue>1</defaultvalue>
+	</option>
+	<!-- The maximum number of players to allow -->
+	<option>
+		<name>NumberOfPlayers</name>
+		<value>10</value>
+		<defaultvalue>2</defaultvalue>
+	</option>
+	<!-- The minimum number of players to allow -->
+	<option>
+		<name>NumberOfMinPlayers</name>
+		<value>10</value>
+		<defaultvalue>2</defaultvalue>
+	</option>
+	<!-- The number of players to allow before remvoing bots -->
+	<option>
+		<name>RemoveBotsAtPlayers</name>
+		<value>0</value>
+		<defaultvalue>0</defaultvalue>
+	</option>
+	<!-- The percentage chance the computers will say something when killed -->
+	<option>
+		<name>ComputersDeathTalk</name>
+		<value>100</value>
+		<defaultvalue>100</defaultvalue>
+	</option>
+	<!-- The percentage chance the computers will say something when shooting -->
+	<option>
+		<name>ComputersAttackTalk</name>
+		<value>10</value>
+		<defaultvalue>25</defaultvalue>
+	</option>
+	<!-- The first round players are allowed to buy on -->
+	<option>
+		<name>MoneyBuyOnRound</name>
+		<value>1</value>
+		<defaultvalue>2</defaultvalue>
+	</option>
+	<!-- The money awarded for each won round -->
+	<option>
+		<name>MoneyWonForRound</name>
+		<value>5000</value>
+		<defaultvalue>5000</defaultvalue>
+	</option>
+	<!-- The largest landscape (in bytes) that will be sent to the clients -->
+	<option>
+		<name>MaxLandscapeSize</name>
+		<value>200000</value>
+		<defaultvalue>200000</defaultvalue>
+	</option>
+	<!-- The money awarded for each person hit * weapon used -->
+	<option>
+		<name>MoneyWonPerHitPoint</name>
+		<value>100</value>
+		<defaultvalue>100</defaultvalue>
+	</option>
+	<!-- The money awarded for each person killed * weapon used -->
+	<option>
+		<name>MoneyWonPerKillPoint</name>
+		<value>500</value>
+		<defaultvalue>500</defaultvalue>
+	</option>
+	<!-- The scale of the adjustment changes made by the free market -->
+	<option>
+		<name>FreeMarketAdjustment</name>
+		<value>100</value>
+		<defaultvalue>100</defaultvalue>
+	</option>
+	<!-- The money awarded is proportional to the amount of health removed -->
+	<option>
+		<name>MoneyPerHealthPoint</name>
+		<value>on</value>
+		<defaultvalue>on</defaultvalue>
+	</option>
+	<!-- The money each player starts with -->
+	<option>
+		<name>MoneyStarting</name>
+		<value>250000</value>
+		<defaultvalue>10000</defaultvalue>
+	</option>
+	<!-- The amount of time to give clients to respond before kicking them -->
+	<option>
+		<name>IdleKickTime</name>
+		<value>30</value>
+		<defaultvalue>30</defaultvalue>
+	</option>
+	<!-- The interest awarded at the end of each round -->
+	<option>
+		<name>MoneyInterest</name>
+		<value>15</value>
+		<defaultvalue>15</defaultvalue>
+	</option>
+	<!-- Show power is limited by the amount of health a player has -->
+	<option>
+		<name>LimitPowerByHealth</name>
+		<value>on</value>
+		<defaultvalue>on</defaultvalue>
+	</option>
+	<!-- Automatically ballance teams at the start of each round -->
+	<option>
+		<name>AutoBallanceTeams</name>
+		<value>on</value>
+		<defaultvalue>on</defaultvalue>
+	</option>
+	<!-- The player turn mode -->
+	<option>
+		<name>TurnType</name>
+		<value>0</value>
+		<defaultvalue>1</defaultvalue>
+	</option>
+	<!-- The force of the wind -->
+	<option>
+		<name>WindForce</name>
+		<value>0</value>
+		<defaultvalue>0</defaultvalue>
+	</option>
+	<!-- When the wind changes -->
+	<option>
+		<name>WindType</name>
+		<value>0</value>
+		<defaultvalue>0</defaultvalue>
+	</option>
+	<!-- The type of walls allowed -->
+	<option>
+		<name>WallType</name>
+		<value>0</value>
+		<defaultvalue>0</defaultvalue>
+	</option>
+	<!-- The scale of the weapons used -->
+	<option>
+		<name>WeaponScale</name>
+		<value>1</value>
+		<defaultvalue>1</defaultvalue>
+	</option>
+	<!-- Speicifies the name of the economy to use -->
+	<option>
+		<name>Economy</name>
+		<value>EconomyFreeMarket</value>
+		<defaultvalue>EconomyFreeMarket</defaultvalue>
+	</option>
+	<!-- Colon seperated list of landscape names -->
+	<option>
+		<name>Landscapes</name>
+		<value>oldstyle:lowlands:hilly:ridge:islands:halfed:valley</value>
+		<defaultvalue></defaultvalue>
+	</option>
+	<!-- The master list server for scorched3d -->
+	<option>
+		<name>MasterListServer</name>
+		<value>www.employees.org</value>
+		<defaultvalue>scorched3d.sourceforge.net</defaultvalue>
+	</option>
+	<!-- The URI on the master list server for scorched3d -->
+	<option>
+		<name>MasterListServerURI</name>
+		<value>/~gcamp/scorched</value>
+		<defaultvalue>/scorched</defaultvalue>
+	</option>
+	<!-- The type of player stats to be logged (none, pgsql, mysql, file) -->
+	<option>
+		<name>StatsLogger</name>
+		<value>none</value>
+		<defaultvalue>none</defaultvalue>
+	</option>
+	<!-- The type of server events to be logged to file (none, file) -->
+	<option>
+		<name>ServerLogger</name>
+		<value>none</value>
+		<defaultvalue>none</defaultvalue>
+	</option>
+	<!-- Prepend and bot name with the specified text -->
+	<option>
+		<name>BotNamePrefix</name>
+		<value>(Bot) </value>
+		<defaultvalue>(Bot) </defaultvalue>
+	</option>
+	<!-- Choose random bot names instread of sequential names -->
+	<option>
+		<name>RandomizeBotNames</name>
+		<value>off</value>
+		<defaultvalue>off</defaultvalue>
+	</option>
+	<!-- Start the game will all the weapons -->
+	<option>
+		<name>GiveAllWeapons</name>
+		<value>off</value>
+		<defaultvalue>off</defaultvalue>
+	</option>
+	<!-- The name of the server to start -->
+	<option>
+		<name>ServerName</name>
+		<value>No Name</value>
+		<defaultvalue>No Name</defaultvalue>
+	</option>
+	<!-- The password for this server (empty password = no password) -->
+	<option>
+		<name>ServerPassword</name>
+		<value></value>
+		<defaultvalue></defaultvalue>
+	</option>
+	<!-- The port to start the server on -->
+	<option>
+		<name>PortNo</name>
+		<value>27270</value>
+		<defaultvalue>27270</defaultvalue>
+	</option>
+	<!-- IP address to publish to scorched net clients (auto-detected if not given). -->
+	<option>
+		<name>PublishAddress</name>
+		<value>AutoDetect</value>
+		<defaultvalue>AutoDetect</defaultvalue>
+	</option>
+	<!-- Allow other scorched net clients to see this server.  Do not use for LAN games. -->
+	<option>
+		<name>PublishServer</name>
+		<value>off</value>
+		<defaultvalue>off</defaultvalue>
+	</option>
+</options>

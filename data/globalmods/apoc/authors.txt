@@ -1,0 +1,61 @@
+This is a listing of all the players who have made contributions to the mod (whether they know it or not).
+If there is anything that you think I may have used in the mod that was originally done by you and your
+name does not appear in the list below, please send an e-mail to bobirov@yahoo.com stating your name and
+the content that is in question.  I don't want to leave anyone out, and I am sorry if I have not listed you.
+
+	- Gavin Camp
+		- Made it all possible and has implemented many, many things in the game which were not necessary to recreate Scorched Earth but have made it possible to create so much more.  Without his deligence and attention to his user base, most of this mod would not be possible.  Thank you so much.
+	
+	- Bobirov (Robert Hand)
+		Landscapes:
+			- apoccity, bighill, bullseye, colosseum, donuthills, maze, mountains, pillars, plateau, ring, ruffles, usa, world
+		Sounds:
+			- Made thud.wav, gas.wav myself
+			- Made tripleshot.wav using the flare sound
+			- Assembled lightningbolt, factoryloop1, nuclearloop, cheeringloop, screaming from various sounds
+			- Obtained the rest from various sources on the net
+			- Obtained and adjusted ambient sounds for the city layouts
+		Textures:
+			- cloud00, gas00, light00, smoke-orange explosion textures
+			- recolored acid00 to make lava explosion texture
+			- all the custom weapon icons (with the exception of flamethrower)
+		Projectile Models:
+			- bullet, shotgunshell, moab, tsarbomba
+		Object Models:
+			- gasstation1, office3, nuclearplant, 9volt, medkit, cash, mushroom, parachute, container, fleshpod, acidpod, igloo, male1
+		- All custom accessory xml unless stated otherwise
+		- All the additional xml (updating landscapes, object placement, ai types, etc)
+		- Scaling, repositioning, poly reduction and retexturing of the object models
+	
+	- ShoCkwaVe
+		Projectile Models:
+			- megamirv, wobblebomb, fusionbarrel, m7a3, grenade, redhornet, remorcebomblet texture, shockbomblet, shockrocket
+		Building Models (including burnt versions and original texturing):
+			- bar1, church1, factory1, farm1, house1, logcabin1, office1, office2, office4, office5, skyscraper1, skyscraper2, skyscraper3, stadium, store1, trailorhouse1, hospital, mainport
+		Boid Models
+		    - 737ua, cessna, fight4life
+		Object Models
+			- boulders, fuelbarrel, cow1
+		Weapon Models
+			- 50cal, flamethrower
+		Landscapes:
+			- arizonaislands
+		Weapons:
+			- flame thrower
+	
+	- Nexus6
+		- Landscapes:
+			- castle, craters, desertmesa, hexisle, hillcity, moon, nexuscanyon, pyramids, pyramids-v2, steppes, terraces, twotowers, weathered
+			
+	- Black-Rose
+		- Some landscape textures from the Black-Rose Mod
+		
+	- Dracon23
+		- Original Hornet's Nest, MOAB, Travolta, Napalm MIRV and Roller MIRV xml
+			
+	- R@p7oR
+		Projectile Models:
+			- napalm
+		Sounds:
+			- bhit, machinegun (slightly edited by me though to reduce number of shots)
+			
