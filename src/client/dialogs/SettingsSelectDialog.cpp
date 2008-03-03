@@ -100,7 +100,7 @@ void SettingsSelectDialog::display()
 	else
 	{
 		Logger::log(S3D::formatStringBuffer("Single custom file not found \"%s\"",
-			singlecustom));
+			singlecustom.c_str()));
 	}
 
 	GLWOptionEntry::updateControls(controls_);

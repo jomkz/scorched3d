@@ -42,9 +42,9 @@ m4_include([configure-wx.m4])
 m4_include([configure-ogg.m4])
 m4_include([configure-ft.m4])
 m4_include([configure-fftw.m4])
-S3D_SUBDIRS="scorched scorchedc scorcheds"
+S3D_SUBDIRS="launcher client server"
 else
-S3D_SUBDIRS="scorcheds"
+S3D_SUBDIRS="server"
 fi
 m4_include([configure-sdl.m4])
 m4_include([configure-flt.m4])
@@ -75,9 +75,9 @@ AC_CHECK_HEADERS(unistd.h iconv.h)
 # FIXEME
 dnl Checking for Zlib Png Jpeg
 if test `uname` == Darwin; then
-LIBS="$LIBS -lz -framework UnixImageIO"
+LIBS="$LIBS -lexpat -lz -framework UnixImageIO"
 else
-LIBS="$LIBS -lz -lpng -ljpeg"
+LIBS="$LIBS -lexpat -lz -lpng -ljpeg"
 fi
 
 # Directory setup stuff
@@ -108,7 +108,10 @@ AC_LANG_CPLUSPLUS
 AC_OUTPUT([
 Makefile
 src/Makefile
-src/scorched/Makefile
-src/scorchedc/Makefile
-src/scorcheds/Makefile
+src/launcher/Makefile
+src/launcher/scorched/Makefile
+src/client/Makefile
+src/client/scorchedc/Makefile
+src/server/Makefile
+src/server/scorcheds/Makefile
 ])

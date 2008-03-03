@@ -113,3 +113,4 @@ const char *S3D::formatStringBuffer(const char *format, ...)
 	return buffer->c_str();
 }
 */
+

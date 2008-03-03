@@ -622,7 +622,7 @@ bool SettingsFrame::TransferDataFromWindow()
 	if (playersPanel_)
 	{
 		context_.getBotNamePrefixEntry().setValue(
-			IDC_EDIT3_CTRL->GetValue().mb_str(wxConvUTF8));
+			std::string(IDC_EDIT3_CTRL->GetValue().mb_str(wxConvUTF8)));
 
 		// Read min + max players
 		int minPlayers = 2;
@@ -645,7 +645,7 @@ bool SettingsFrame::TransferDataFromWindow()
 		for (int i=0; i<24; i++)
 		{
 			context_.getPlayerType(i).setValue( 
-				IDC_COMBO_PTYPE_CTRL[i]->GetValue().mb_str(wxConvUTF8));
+				std::string(IDC_COMBO_PTYPE_CTRL[i]->GetValue().mb_str(wxConvUTF8)));
 		}
 	}
 
@@ -672,7 +672,7 @@ bool SettingsFrame::TransferDataFromWindow()
 	// MOTD
 	{
 		context_.getMOTDEntry().setValue(
-			IDC_MOTD_CTRL->GetValue().mb_str(wxConvUTF8));
+			std::string(IDC_MOTD_CTRL->GetValue().mb_str(wxConvUTF8)));
 	}
 
 	OptionEntrySetterUtil::updateEntries(setters_);

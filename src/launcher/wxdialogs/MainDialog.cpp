@@ -33,7 +33,6 @@
 #include <wxdialogs/DisplayDialog.h>
 #include <wxdialogs/ServerSDialog.h>
 #include <wxdialogs/TrueTypeFont.h>
-#include <server/ServerMain.h>
 #include <scorched/ScorchedParams.h>
 #include <graph/OptionsDisplay.h>
 #include <common/Defines.h>

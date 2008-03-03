@@ -493,3 +493,4 @@ void TankMenus::runScriptConsole(std::list<GLConsoleRuleSplit> list)
 		ScorchedClient::instance()->getLUAWrapper().runScript(script);
 	}
 }
+

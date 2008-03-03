@@ -72,3 +72,4 @@ void SkyLine::actualDraw(float radius, float radius2, float height)
 	}
 	glEnd();
 }
+

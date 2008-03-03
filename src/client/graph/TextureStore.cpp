@@ -113,3 +113,4 @@ GLTexture *TextureStore::loadTexture(const std::string &name,
 	skins_[wholeName] = texture;
 	return texture;
 }
+

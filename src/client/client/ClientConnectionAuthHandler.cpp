@@ -146,3 +146,4 @@ void ClientConnectionAuthHandler::cancelAuth()
 	ScorchedClient::instance()->getGameState().stimulate(
 		ClientState::StimOptions);
 }
+

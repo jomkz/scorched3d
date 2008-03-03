@@ -114,11 +114,11 @@ bool ServerAuthHandlerPrefered::load()
 	if (!file.readFile(filename))
 	{
 		Logger::log(S3D::formatStringBuffer("Failed to parse user file \"%s\"\n%s", 
-			filename, file.getParserError()));
+			filename.c_str(), file.getParserError()));
 		return false;
 	}
 
-	Logger::log(S3D::formatStringBuffer("Refreshing user list %s", filename));
+	Logger::log(S3D::formatStringBuffer("Refreshing user list %s", filename.c_str()));
 	lastReadTime_ = (unsigned int) fileTime;
 	entries_.clear();
 	if (!file.getRootNode()) return true; // Empty File

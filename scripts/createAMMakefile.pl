@@ -68,7 +68,7 @@ print CLIENT "bin_PROGRAMS = $binary\n\n";
 print CLIENT $binary."_SOURCES = \\\n";
 print CLIENT @clientfiles;
 print CLIENT "\n";
-print CLIENT "AM_CPPFLAGS = -I../porting -I.. ${flags}\n";
+print CLIENT "AM_CPPFLAGS = -I../../common/porting -I../../common ${flags}\n";
 print CLIENT "LDADD = ${libs}\n";
 print CLIENT "\n";
 
@@ -88,23 +88,23 @@ close(CLIENT);
 
 createInstallMakefile();
 createBinaryMakefile(
-	"../src/scorched/scorched.vcproj", 
-	"../src/scorched/Makefile.am", 
+	"../src/launcher/scorched/scorched.vcproj", 
+	"../src/launcher/scorched/Makefile.am", 
 	"scorched3d",
-	'@WX_CFLAGS@ @FT2_CFLAGS@ @SDL_CFLAGS@',
+	'-I../../client -I../../server -I../../launcher @WX_CFLAGS@ @FT2_CFLAGS@ @SDL_CFLAGS@',
 	'@WX_LIBS@ @FT2_LIBS@ @SDL_LIBS@'
 	);
 createBinaryMakefile(
-	"../src/scorchedc/scorchedc.vcproj", 
-	"../src/scorchedc/Makefile.am", 
+	"../src/client/scorchedc/scorchedc.vcproj", 
+	"../src/client/scorchedc/Makefile.am", 
 	"scorched3dc",
-	'@FFTW_CFLAGS@ @AL_CFLAGS@ @FT2_CFLAGS@ @OGG_CFLAGS@ @SDL_CFLAGS@',
+	'-I../../client -I../../server  @FFTW_CFLAGS@ @AL_CFLAGS@ @FT2_CFLAGS@ @OGG_CFLAGS@ @SDL_CFLAGS@',
 	'@FFTW_LIBS@ @AL_LIBS@ @FT2_LIBS@ @GL_LIBS@ @OGG_LIBS@ @SDL_LIBS@'
 	);
 createBinaryMakefile(
-	"../src/scorcheds/scorcheds.vcproj", 
-	"../src/scorcheds/Makefile.am", 
+	"../src/server/scorcheds/scorcheds.vcproj", 
+	"../src/server/scorcheds/Makefile.am", 
 	"scorched3ds",
-	'-DS3D_SERVER=1 @SDL_CFLAGS@ @MYSQL_CFLAGS@',
+	'-I../../server -DS3D_SERVER=1 @SDL_CFLAGS@ @MYSQL_CFLAGS@',
 	'@SDL_LIBS@ @MYSQL_LIBS@'
 	);

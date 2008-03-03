@@ -381,7 +381,7 @@ void MainCamera::SaveScreen::draw(const unsigned state)
 
 		// Don't print to banner otherwise this message will be in
 		// the screenshot!
-		Logger::log(S3D::formatStringBuffer("Screen shot saved as file \"%s\"", fileName));
+		Logger::log(S3D::formatStringBuffer("Screen shot saved as file \"%s\"", fileName.c_str()));
 
 		// snapshot sound
 		CACHE_SOUND(sound, S3D::getDataFile("data/wav/misc/camera.wav"));

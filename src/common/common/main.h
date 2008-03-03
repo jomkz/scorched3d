@@ -103,6 +103,7 @@ void run_main(int argc, char *argv[], OptionsParameters &params)
 #else
 			getcwd(path, sizeof(path));
 #endif // _WIN32
+			std::string dataPath = S3D::getDataFile("data");
 			S3D::dialogExit(
 				scorched3dAppName, S3D::formatStringBuffer(
 				"Error: This game requires the Scorched3D data directory to run.\n"
@@ -111,7 +112,7 @@ void run_main(int argc, char *argv[], OptionsParameters &params)
 				"The data directory is set to \"%s\" which does not exist.\n"
 				"(Current working directory %s)\n\n"
 				"If Scorched3D does not run please re-install Scorched3D.",
-				S3D::getDataFile("data"), path));
+				dataPath.c_str(), path));
 		}
 	}
 	else fclose(checkfile);

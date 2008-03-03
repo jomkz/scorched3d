@@ -142,15 +142,17 @@ bool ModFiles::loadModFiles(const std::string &mod,
 		}
 
 		Logger::log(S3D::formatStringBuffer("Loaded mod \"%s\", %u files, space required %u (%u) bytes", 
-			mod, files_.size(), totalCompSize, totalSize));
+			mod.c_str(), files_.size(), totalCompSize, totalSize));
 
 		if (!createDir && files_.empty())
 		{
+			std::string modFile = S3D::getModFile(mod);
+			std::string globalModFile = S3D::getGlobalModFile(mod);
 			S3D::dialogMessage("Mod", S3D::formatStringBuffer(
 				"Failed to find \"%s\" mod files in directories \"%s\" \"%s\"",
-				mod,
-				S3D::getModFile(mod),
-				S3D::getGlobalModFile(mod)));
+				mod.c_str(),
+				modFile.c_str(),
+				globalModFile.c_str()));
 			return false;
 		}
 	}
@@ -234,7 +236,7 @@ bool ModFiles::loadModFile(const std::string &fullFileName,
 	{
 		S3D::dialogMessage("Mod", S3D::formatStringBuffer(
 			"Error: Failed to load file \"%s\" mod directory \"%s\" in the \"%s\" mod",
-			fullFileName,
+			fullFileName.c_str(),
 			modDir.c_str(),
 			mod.c_str()));
 		return false;

@@ -181,7 +181,7 @@ bool ServerAdminSessions::getAllCredentials(std::list<Credential> &creds)
 	{
 		ServerCommon::serverLog( 
 			S3D::formatStringBuffer("Please create file %s to have admin users", 
-			fileName));
+			fileName.c_str()));
 		return false;
 	}
 

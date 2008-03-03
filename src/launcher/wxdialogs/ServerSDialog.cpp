@@ -144,12 +144,12 @@ bool ServerSFrame::TransferDataFromWindow()
 {
 	options_.getPortNoEntry().setValue(atoi(IDC_SERVER_PORT_CTRL->GetValue().mb_str(wxConvUTF8)));
 	options_.getManagementPortNoEntry().setValue(atoi(IDC_SERVERMANAGEMENT_PORT_CTRL->GetValue().mb_str(wxConvUTF8)));
-	options_.getServerNameEntry().setValue(IDC_SERVER_NAME_CTRL->GetValue().mb_str(wxConvUTF8));
+	options_.getServerNameEntry().setValue(std::string(IDC_SERVER_NAME_CTRL->GetValue().mb_str(wxConvUTF8)));
 	options_.getPublishServerEntry().setValue(IDC_PUBLISH_CTRL->GetValue());
-	options_.getPublishAddressEntry().setValue(IDC_PUBLISHIP_CTRL->GetValue().mb_str(wxConvUTF8));
+	options_.getPublishAddressEntry().setValue(std::string(IDC_PUBLISHIP_CTRL->GetValue().mb_str(wxConvUTF8)));
 	options_.getAllowSameIPEntry().setValue(IDC_ALLOWSAME_CTRL->GetValue());
 	options_.getAllowSameUniqueIdEntry().setValue(IDC_ALLOWSAMEID_CTRL->GetValue());
-	options_.getModEntry().setValue(IDC_SERVER_MOD_CTRL->GetValue().mb_str(wxConvUTF8));
+	options_.getModEntry().setValue(std::string(IDC_SERVER_MOD_CTRL->GetValue().mb_str(wxConvUTF8)));
 	options_.getServerFileLoggerEntry().setValue((IDC_LOGTOFILE_CTRL->GetValue()?"file":"none"));
 	return true;
 }

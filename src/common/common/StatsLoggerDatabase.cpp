@@ -80,7 +80,7 @@ void StatsLoggerDatabase::createLogger()
 		!file.getRootNode())
 	{
 		Logger::log(S3D::formatStringBuffer("Failed to parse %s settings file. Error: %s", 
-			fileName,
+			fileName.c_str(),
 			file.getParserError()));
 		return;
 	}
@@ -92,7 +92,7 @@ void StatsLoggerDatabase::createLogger()
 		!file.getRootNode()->getNamedChild("db", db) ||
 		!file.getRootNode()->getNamedChild("prefix", prefix)) 
 	{
-		Logger::log(S3D::formatStringBuffer("Failed to parse %s settings file.", fileName));
+		Logger::log(S3D::formatStringBuffer("Failed to parse %s settings file.", fileName.c_str()));
 		return;
 	}
 
