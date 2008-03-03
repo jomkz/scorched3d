@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <wxdialogs/MainDialog.h>
-#include <server/ServerMain.h>
 #include <common/OptionsGame.h>
 #include <wx/wx.h>
 #include <wx/image.h>

@@ -184,3 +184,4 @@ float Water::getWaveDistance(int x, int y)
 {
 	return wWaveDistance_->getWaveDistance(x, y);
 }
+

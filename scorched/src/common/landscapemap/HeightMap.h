@@ -60,7 +60,7 @@ public:
 	fixed getInterpHeight(fixed w, fixed h);
 
 	// Get normal functions
-	inline FixedVector &getNormal(int w, int h);
+	FixedVector &getNormal(int w, int h);
 	void getInterpNormal(fixed w, fixed h, FixedVector &normal);
 
 	bool getIntersect(Line &direction, Vector &intersect);

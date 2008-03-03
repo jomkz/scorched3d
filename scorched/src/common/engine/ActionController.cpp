@@ -53,7 +53,7 @@ void ActionController::clear(bool warn)
 		if (warn)
 		{
 			Logger::log(S3D::formatStringBuffer("Warning: removing added timed out action %s, %s",
-				act->getActionType(), (act->getReferenced()?"Ref":"UnRef")));
+				act->getActionType().c_str(), (act->getReferenced()?"Ref":"UnRef")));
 		}
 		delete act;
 	}
@@ -66,7 +66,7 @@ void ActionController::clear(bool warn)
 		if (warn)
 		{
 			Logger::log(S3D::formatStringBuffer("Warning: removing added timed out action %s, %s",
-				act->getActionType(), (act->getReferenced()?"Ref":"UnRef")));
+				act->getActionType().c_str(), (act->getReferenced()?"Ref":"UnRef")));
 		}
 		delete act;
 	}
@@ -108,7 +108,7 @@ void ActionController::logActions()
 	for (int a=0; a<actions_.actionCount; a++)
 	{
 		Action *act = actions_.actions[a];
-		Logger::log(S3D::formatStringBuffer("Action : %s", act->getActionType()));
+		Logger::log(S3D::formatStringBuffer("Action : %s", act->getActionType().c_str()));
 	}
 }
 
@@ -293,7 +293,7 @@ void ActionController::stepActions(fixed frameTime)
 			if ((time_ - act->getActionStartTime() > 30))
 			{
 				Logger::log(S3D::formatStringBuffer("Warning: removing timed out action %s",
-					act->getActionType()));
+					act->getActionType().c_str()));
 				remove = true;
 			}
 		}

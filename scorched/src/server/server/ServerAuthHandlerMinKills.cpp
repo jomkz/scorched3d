@@ -98,7 +98,7 @@ void ServerAuthHandlerMinKills::setup()
 	if (!file.getRootNode()->getNamedChild("minkills", minKills_) ||
 		!file.getRootNode()->getNamedChild("maxkills", maxKills_)) 
 	{
-		Logger::log(S3D::formatStringBuffer("Failed to parse %s settings file.", fileName));
+		Logger::log(S3D::formatStringBuffer("Failed to parse %s settings file.", fileName.c_str()));
 		return;
 	}
 	Logger::log(S3D::formatStringBuffer("ServerAuthHandlerMinKills : minkills=%i, maxkills=%i",

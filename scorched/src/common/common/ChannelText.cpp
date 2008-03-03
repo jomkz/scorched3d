@@ -54,3 +54,4 @@ ChannelDefinition::ChannelDefinition(const char *c, unsigned int t) :
 	channel_(c), type_(t)
 {
 }
+

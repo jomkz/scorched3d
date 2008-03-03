@@ -123,7 +123,7 @@ bool ClientSave::restoreClient(bool loadGameState, bool loadPlayers)
 			"Saved version : %s\n"
 			"Current version : %s\n",
 			version.c_str(),
-			S3D::ScorchedProtocolVersion));
+			S3D::ScorchedProtocolVersion.c_str()));
 		return false;
 	}
 	

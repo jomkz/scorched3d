@@ -190,7 +190,7 @@ void OptionEntrySetterUtil::updateEntries(
 			{
 				wxTextCtrl *control = (wxTextCtrl *) entrySetter.getControl();
 				entrySetter.getEntry().setValueFromString(
-					control->GetValue().mb_str(wxConvUTF8));
+					std::string(control->GetValue().mb_str(wxConvUTF8)));
 			}
 			break;
 		case OptionEntry::OptionEntryBoundedIntType:
@@ -199,7 +199,7 @@ void OptionEntrySetterUtil::updateEntries(
 			{
 				wxComboBox *control = (wxComboBox *) entrySetter.getControl();
 				entrySetter.getEntry().setValueFromString(
-					control->GetValue().mb_str(wxConvUTF8));
+					std::string(control->GetValue().mb_str(wxConvUTF8)));
 			}
 			break;
 		case OptionEntry::OptionEntryBoolType:

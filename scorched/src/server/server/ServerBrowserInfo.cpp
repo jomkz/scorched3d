@@ -244,5 +244,5 @@ std::string ServerBrowserInfo::addTag(const std::string &name, const std::string
 	std::string content(value), result;
 	XMLNode::removeSpecialChars(content, result);
 
-	return S3D::formatStringBuffer("%s='%s' ", name, result.c_str());
+	return S3D::formatStringBuffer("%s='%s' ", name.c_str(), result.c_str());
 }

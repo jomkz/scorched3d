@@ -118,8 +118,9 @@ DisplayFrame::DisplayFrame() :
 	wxSizer *mainPanelSizer = new wxBoxSizer(wxVERTICAL);
 	createMainControls(mainPanel_, mainPanelSizer);
 
+	std::string settingsFileStr = S3D::getSettingsFile("");
 	std::string settingsFileStd = 
-		S3D::formatStringBuffer("Settings Dir : %s", S3D::getSettingsFile(""));
+		S3D::formatStringBuffer("Settings Dir : %s", settingsFileStr.c_str());
 	wxString settingsFile(settingsFileStd.c_str(), wxConvUTF8);
 	settingsFile.Replace(wxT("//"), wxT("/"));
 #ifdef _WIN32
@@ -638,9 +639,9 @@ bool DisplayFrame::TransferDataFromWindow()
 	OptionsDisplay::instance()->getSideScrollEntry().setValue(IDC_SIDESCROLL_CTRL->GetValue());
 	OptionsDisplay::instance()->getStorePlayerCameraEntry().setValue(IDC_PLAYERCAMERA_CTRL->GetValue());
 	OptionsDisplay::instance()->getValidateServerIpEntry().setValue(IDC_VALIDATESERVER_CTRL->GetValue());
-	OptionsDisplay::instance()->getOnlineUserNameEntry().setValue(IDC_USERNAME_CTRL->GetValue().mb_str(wxConvUTF8));
-	OptionsDisplay::instance()->getOnlineTankModelEntry().setValue(IDC_TANKMODEL_CTRL->GetValue().mb_str(wxConvUTF8));
-	OptionsDisplay::instance()->getHostDescriptionEntry().setValue(IDC_HOSTDESC_CTRL->GetValue().mb_str(wxConvUTF8));
+	OptionsDisplay::instance()->getOnlineUserNameEntry().setValue(std::string(IDC_USERNAME_CTRL->GetValue().mb_str(wxConvUTF8)));
+	OptionsDisplay::instance()->getOnlineTankModelEntry().setValue(std::string(IDC_TANKMODEL_CTRL->GetValue().mb_str(wxConvUTF8)));
+	OptionsDisplay::instance()->getHostDescriptionEntry().setValue(std::string(IDC_HOSTDESC_CTRL->GetValue().mb_str(wxConvUTF8)));
 	OptionsDisplay::instance()->getDetailTextureEntry().setValue(!IDC_NODETAILTEX_CTRL->GetValue());
 	OptionsDisplay::instance()->getMoreResEntry().setValue(IDC_MORERES_CTRL->GetValue());
 	//OptionsDisplay::instance()->getSwapYAxisEntry().setValue(IDC_SWAPYAXIS_CTRL->GetValue());
@@ -700,20 +701,20 @@ void DisplayFrame::onExportMod(wxCommandEvent &event)
 
 	wxString file = ::wxFileSelector(wxT("Please choose the export file to save"),
 		convertString(S3D::getSettingsFile("")), // default path
-		convertString(S3D::formatStringBuffer("%s.s3m", (const char *) selection.mb_str(wxConvUTF8))), // default filename
+		convertString(S3D::formatStringBuffer("%s.s3m", (const char *) (selection.mb_str(wxConvUTF8)))), // default filename
 		wxT(""), // default extension
 		wxT("*.s3m"),
 		wxSAVE);
 	if (file.empty()) return;
 	ModFiles files;
-	if (!files.loadModFiles(selection.mb_str(wxConvUTF8), false))
+	if (!files.loadModFiles(std::string(selection.mb_str(wxConvUTF8)), false))
 	{
 		S3D::dialogMessage("Export Mod", "Failed to load mod files");
 		return;
 	}
 	if (!files.exportModFiles(
-		selection.mb_str(wxConvUTF8), 
-		file.mb_str(wxConvUTF8)))
+		std::string(selection.mb_str(wxConvUTF8)), 
+		std::string(file.mb_str(wxConvUTF8))))
 	{
 		S3D::dialogMessage("Export Mod", "Failed to write mod export file");
 		return;
@@ -731,7 +732,7 @@ void DisplayFrame::onImportMod(wxCommandEvent &event)
 	if (file.empty()) return;
 	ModFiles files;
 	std::string mod;
-	if (!files.importModFiles(mod, file.mb_str(wxConvUTF8)))
+	if (!files.importModFiles(mod, std::string(file.mb_str(wxConvUTF8))))
 	{
 		S3D::dialogMessage("Import Mod", "Failed to read mod export file");
 		return;

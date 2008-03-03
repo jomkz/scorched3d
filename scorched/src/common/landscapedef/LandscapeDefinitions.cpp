@@ -308,3 +308,4 @@ LandscapeDefinitionsEntry *LandscapeDefinitions::getRandomLandscapeDefnEntry(
 
 	return result;
 }
+
