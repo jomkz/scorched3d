@@ -35,7 +35,7 @@ public:
 	};
 
 	GLWLabel(float x = 0.0f, float y = 0.0f, 
-		const std::string &labelText = 0,
+		const std::string &labelText = "",
 		float size = 14.0f,
 		unsigned int flags = 0);
 	virtual ~GLWLabel();

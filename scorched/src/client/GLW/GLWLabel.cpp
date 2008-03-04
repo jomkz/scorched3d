@@ -28,7 +28,7 @@ GLWLabel::GLWLabel(float x, float y, const std::string &labelText,
 	GLWidget(x, y, 0.0f, 20.0f), size_(size),
 	color_(GLWFont::widgetFontColor), flags_(flags)
 {
-	if (labelText[0]) setText(labelText);
+	setText(labelText);
 	tooltipTransparent_ = true;
 }
 
