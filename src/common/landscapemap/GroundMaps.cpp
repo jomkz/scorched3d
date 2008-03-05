@@ -197,8 +197,7 @@ void GroundMaps::generateObjects(
 void GroundMaps::saveHMap()
 {
 	// Save this height map for later
-	map_.resetMinHeight();
-	map_.backup();
+	// map_.backup();
 }
 
 fixed GroundMaps::getHeight(int w, int h)

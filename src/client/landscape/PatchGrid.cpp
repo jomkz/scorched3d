@@ -279,8 +279,8 @@ void PatchGrid::tesselate()
 void PatchGrid::visibility()
 {
 	GLCameraFrustum *frustum = GLCameraFrustum::instance();
-	int divideWidth = hMap_->getMapWidth() / hMap_->getMapMinWidth();
-	int divideHeight = hMap_->getMapHeight() / hMap_->getMapMinHeight();
+	//int divideWidth = hMap_->getMapWidth() / hMap_->getMapMinWidth();
+	//int divideHeight = hMap_->getMapHeight() / hMap_->getMapMinHeight();
 
 	// Check visibility
 	Vector point, point2;
@@ -292,7 +292,7 @@ void PatchGrid::visibility()
 			// Check patch visibility
 			point = (*patch)->getMidPoint();
 			point2 = (*patch)->getMidPoint();
-			point2[2] = MAX(
+			/*point2[2] = MAX(
 				hMap_->getMaxHeight(((*patch)->getX() + 2) / divideWidth, 
 					((*patch)->getY() + 2)  / divideHeight).asFloat(),
 				hMap_->getMaxHeight(((*patch)->getX() + (*patch)->getWidth() - 2) / divideWidth, 
@@ -301,7 +301,7 @@ void PatchGrid::visibility()
 				hMap_->getMaxHeight(((*patch)->getX() + 2) / divideWidth, 
 					((*patch)->getY() + 2)  / divideHeight).asFloat(),
 				hMap_->getMaxHeight(((*patch)->getX() + (*patch)->getWidth() - 2) / divideWidth, 
-					((*patch)->getY() + (*patch)->getWidth() - 2) / divideHeight ).asFloat()) / 2.0f;
+					((*patch)->getY() + (*patch)->getWidth() - 2) / divideHeight ).asFloat()) / 2.0f;*/
 
 			float width = MAX(point[2], (*patch)->getWidth() + 5.0f);
 

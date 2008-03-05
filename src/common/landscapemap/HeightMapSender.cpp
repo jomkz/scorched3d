@@ -46,7 +46,7 @@ bool HeightMapSender::generateHMapDiff(
 		for (int i = 0; i<(hMap.getMapWidth() + 1); i++)
 		{
 			fixed current = hMap.getHeight(i, j);
-			fixed stored = hMap.getBackupHeight(i, j);
+			fixed stored = current;//hMap.getBackupHeight(i, j);
 
 			// Send the current height if it is different from the original
 			// or FLT_MAX is it the same as the original.

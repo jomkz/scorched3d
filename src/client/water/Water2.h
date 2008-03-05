@@ -22,6 +22,7 @@
 #define __INCLUDE_Water2h_INCLUDE__
 
 #include <water/Water2Patches.h>
+#include <water/Water2PatchVisibility.h>
 
 class LandscapeDefn;
 class ImageHandle;

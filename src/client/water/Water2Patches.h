@@ -22,7 +22,6 @@
 #define __INCLUDE_Water2Patchesh_INCLUDE__
 
 #include <water/Water2Patch.h>
-#include <water/Water2PatchVisibility.h>
 #include <image/ImageHandle.h>
 #include <GLEXT/GLTexture.h>
 

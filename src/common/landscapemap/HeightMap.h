@@ -35,27 +35,16 @@ public:
 	virtual ~HeightMap();
 
 	void create(int width, int height);
-	void backup();
 	void reset();
-	void resetNormals();
-	void resetMinHeight();
 
 	// Height map size fns
 	int getMapWidth() { return width_; }
 	int getMapHeight() { return height_; }
-	int getMapMinWidth() { return minWidth_; }
-	int getMapMinHeight() { return minHeight_; }
 
 	// Get height fns (z values)
-	fixed getMinHeight(int w, int h);
-	fixed getMaxHeight(int w, int h);
-	inline fixed getBackupHeight(int w, int h) {
-		if (w >= 0 && h >= 0 && w<=width_ && h<=height_) 
-			return backupMap_[(width_+1) * h + w]; 
-		return fixed(0); }
 	inline fixed getHeight(int w, int h) { 
 		if (w >= 0 && h >= 0 && w<=width_ && h<=height_) 
-			return hMap_[(width_+1) * h + w]; 
+			return heightData_[(width_+1) * h + w].position[2]; 
 		return fixed(0); }
 	fixed getInterpHeight(fixed w, fixed h);
 
@@ -65,16 +54,18 @@ public:
 
 	bool getIntersect(Line &direction, Vector &intersect);
 
-	// Returns the actual internal HeightMap points
-	// Should not be used
+	// Alters the actual internal HeightMap points
+	// Should not be used generally
 	void setHeight(int w, int h, fixed height);
 
 protected:
-	FixedVector nvec;
-	int width_, height_, minWidth_, minHeight_;
-	fixed *hMap_, *backupMap_;
-	fixed *minMap_, *maxMap_;
-	FixedVector *normals_;
+	int width_, height_;
+	struct HeightData
+	{
+		FixedVector position;
+		FixedVector normal;
+	};
+	HeightData *heightData_;
 
 	bool getVector(FixedVector &vec, int x, int y);
 	void getVectorPos(int pos, int &x, int &y, int dist=1);
