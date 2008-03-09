@@ -31,6 +31,7 @@
 #include <landscape/PatchGrid.h>
 #include <landscape/TriNodePool.h>
 
+#include <land/LandPatchGrid.h>
 #include <GLEXT/GLVertexBufferObject.h>
 #include <geomipmap/MipMapPatchIndexs.h>
 #include <landscapemap/LandscapeMaps.h>
@@ -324,7 +325,14 @@ void PatchGrid::visibility()
 void PatchGrid::draw(PatchSide::DrawType sides)
 {
 	static MipMapPatchIndexs patchIndices;
-	if (patchIndices.getNoPositions() == 0)	patchIndices.generate(64, 256);
+	static LandPatchGrid landPatchGrid;
+	if (patchIndices.getNoPositions() == 0)	
+	{
+		patchIndices.generate(64, 256);
+		landPatchGrid.generate();
+	}
+
+	landPatchGrid.draw();
 
 	MipMapPatchIndex &index = patchIndices.getIndex(0, 0);
 

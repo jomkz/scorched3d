@@ -5957,6 +5957,34 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="land"
+			>
+			<File
+				RelativePath="..\land\LandPatch.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\land\LandPatch.h"
+				>
+			</File>
+			<File
+				RelativePath="..\land\LandPatchGrid.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\land\LandPatchGrid.h"
+				>
+			</File>
+			<File
+				RelativePath="..\land\LandVisibilityPatch.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\land\LandVisibilityPatch.h"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
