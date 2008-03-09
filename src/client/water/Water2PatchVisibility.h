@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_Water2PatchVisibilityh_INCLUDE__)
 #define __INCLUDE_Water2PatchVisibilityh_INCLUDE__
 
-#include <water/Water2PatchIndexs.h>
+#include <geomipmap/MipMapPatchIndexs.h>
 #include <common/Vector.h>
 
 class GLSLShaderSetup;
@@ -35,7 +35,7 @@ public:
 	void generate(Vector &offset, unsigned int totalSize, 
 		unsigned int patchesSize, unsigned int patchSize);
 	void draw(Water2Patches &patches, 
-		Water2PatchIndexs &indexes, Vector &cameraPosition, 
+		MipMapPatchIndexs &indexes, Vector &cameraPosition, 
 		Vector landscapeSize,
 		GLSLShaderSetup *waterShader);
 

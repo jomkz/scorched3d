@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_Water2Patchh_INCLUDE__)
 #define __INCLUDE_Water2Patchh_INCLUDE__
 
-#include <water/Water2PatchIndexs.h>
+#include <geomipmap/MipMapPatchIndexs.h>
 #include <water/Water2Constants.h>
 #include <vector>
 
@@ -43,7 +43,7 @@ public:
 		int size, int totalSize,
 		int posX, int posY,
 		float waterHeight);
-	void draw(Water2PatchIndexs &indexes, 
+	void draw(MipMapPatchIndexs &indexes, 
 		int indexPosition, int borders);
 
 	Data *getData(int x, int y);
@@ -53,7 +53,7 @@ protected:
 	Data *data_;
 	GLVertexBufferObject *bufferObject_;
 
-	void draw(Water2PatchIndex &index);
+	void draw(MipMapPatchIndex &index);
 };
 
 #endif // __INCLUDE_Water2Patchh_INCLUDE__

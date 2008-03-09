@@ -31,6 +31,14 @@ class Line;
 class HeightMap  
 {
 public:
+	struct HeightData
+	{
+		FixedVector position;
+		FixedVector normal;
+		float texCoord1x, texCoord1y;
+		float texCoord2x, texCoord2y;
+	};
+
 	HeightMap();
 	virtual ~HeightMap();
 
@@ -55,16 +63,13 @@ public:
 	bool getIntersect(Line &direction, Vector &intersect);
 
 	// Alters the actual internal HeightMap points
-	// Should not be used generally
 	void setHeight(int w, int h, fixed height);
+
+	// Should only be used read only
+	HeightData *getHeightData() { return heightData_; }
 
 protected:
 	int width_, height_;
-	struct HeightData
-	{
-		FixedVector position;
-		FixedVector normal;
-	};
 	HeightData *heightData_;
 
 	bool getVector(FixedVector &vec, int x, int y);

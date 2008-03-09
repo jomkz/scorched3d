@@ -18,23 +18,23 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <water/Water2PatchIndex.h>
+#include <geomipmap/MipMapPatchIndex.h>
 #include <graph/OptionsDisplay.h>
 #include <GLEXT/GLVertexBufferObject.h>
 #include <GLEXT/GLStateExtension.h>
 #include <vector>
 
-Water2PatchIndex::Water2PatchIndex() : 
+MipMapPatchIndex::MipMapPatchIndex() : 
 	indices_(0), size_(0), bufferObject_(0)
 {
 }
 
-Water2PatchIndex::~Water2PatchIndex()
+MipMapPatchIndex::~MipMapPatchIndex()
 {
 	delete [] indices_;
 }
 
-void Water2PatchIndex::generate(int size, int skip, unsigned int border)
+void MipMapPatchIndex::generate(int size, int totalsize, int skip, unsigned int border)
 {
 	std::vector<unsigned int> indices;
 
@@ -57,40 +57,43 @@ void Water2PatchIndex::generate(int size, int skip, unsigned int border)
 
 			int iLeft = i;
 			int iRight = i;
-			if (border & BorderLeft)
+			if (skip < size)
 			{
-				if (x == size && up)
+				if (border & BorderLeft)
 				{
-					iRight += (size + 1) * skip;
+					if (x == size && up)
+					{
+						iRight += (size + 1) * skip;
+					}
+					if (x == 0 && !up)
+					{
+						iLeft += (size + 1) * skip;
+					}
 				}
-				if (x == 0 && !up)
+				if (border & BorderRight)
 				{
-					iLeft += (size + 1) * skip;
+					if (x == 0 && up)
+					{
+						iRight -= (size + 1) * skip;
+					}
+					if (x == size && !up)
+					{
+						iLeft -= (size + 1) * skip;
+					}
 				}
-			}
-			if (border & BorderRight)
-			{
-				if (x == 0 && up)
+				if (border & BorderBottom)
 				{
-					iRight -= (size + 1) * skip;
+					if (y == 0 && !left)
+					{
+						iLeft += skip;
+					}
 				}
-				if (x == size && !up)
+				if (border & BorderTop)
 				{
-					iLeft -= (size + 1) * skip;
-				}
-			}
-			if (border & BorderBottom)
-			{
-				if (y == 0 && !left)
-				{
-					iLeft += skip;
-				}
-			}
-			if (border & BorderTop)
-			{
-				if (y == (size - skip) && !left)
-				{
-					iRight += skip;
+					if (y == (size - skip) && !left)
+					{
+						iRight += skip;
+					}
 				}
 			}
 
@@ -110,10 +113,36 @@ void Water2PatchIndex::generate(int size, int skip, unsigned int border)
 		indices.pop_back();
 	}
 
+	// Generate a mapping from the indices to the actual world indices
+	// for when the patch size is larger than the index size.
+	// Done here to keep the above code simpler.
+	unsigned int *mappingIndices = new unsigned int[(size + 1) * (size + 1)];
+	unsigned int *currentMappingIndex = mappingIndices;
+	unsigned int currentMappingCount = 0;
+	for (int y=0; y<=size; y+=1)
+	{
+		for (int x=0; x<=size; x+=1, currentMappingIndex++, currentMappingCount++)
+		{
+			*currentMappingIndex = currentMappingCount;
+		}
+		currentMappingCount += totalsize - size;
+	}
+
+	// Put the calculated indices into a unsigned array for OpenGL access
 	size_ = (int) indices.size();
 	if (!indices_) indices_ = new unsigned int[size_];
-	for (int i=0; i<size_; i++) indices_[i] = indices[i];
+	for (int i=0; i<size_; i++)
+	{
+		int j = indices[i];
+		if (j <0 || j > (size + 1) * (size + 1))
+		{
+			printf("Hmm");
+		}
+		indices_[i] = mappingIndices[j];
+	}
+	delete [] mappingIndices;
 
+	// Store this arry in a vertex buffer (if available)
 	if (GLStateExtension::hasVBO() &&
 		!OptionsDisplay::instance()->getNoWaterBuffers())
 	{

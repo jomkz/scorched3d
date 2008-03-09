@@ -18,31 +18,34 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <water/Water2PatchIndexs.h>
+#if !defined(__INCLUDE_MipMapPatchIndexsh_INCLUDE__)
+#define __INCLUDE_MipMapPatchIndexsh_INCLUDE__
 
-Water2PatchIndexs::Water2PatchIndexs() : noPositions_(0)
+#include <geomipmap/MipMapPatchIndex.h>
+#include <vector>
+
+class MipMapPatchIndexs
 {
-}
+public:
+	MipMapPatchIndexs();
+	~MipMapPatchIndexs();
 
-Water2PatchIndexs::~Water2PatchIndexs()
-{
-}
+	MipMapPatchIndex &getIndex(int position, int border) 
+	{ 
+		if (position<0) position=0;
+		else if (position >= getNoPositions()) position = getNoPositions()-1;
+		if (border<0) border=0;
+		if (border>15) border=15;
 
-void Water2PatchIndexs::generate(int size)
-{
-	noPositions_ = 0;
-	int j = 1;
-	for (;;)
-	{
-		noPositions_ ++;
-		for (unsigned int i=0; i<=15; i++)
-		{
-			Water2PatchIndex *index = new Water2PatchIndex();
-			index->generate(size, j, i);
-			indexs_.push_back(index);
-		}
-
-		j *= 2;
-		if (j > size) break;
+		return *indexs_[position * 16 + border]; 
 	}
-}
+	int getNoPositions() { return noPositions_; }
+
+	void generate(int size, int totalsize);
+
+protected:
+	int noPositions_;
+	std::vector<MipMapPatchIndex *> indexs_;
+};
+
+#endif // __INCLUDE_MipMapPatchIndexsh_INCLUDE__

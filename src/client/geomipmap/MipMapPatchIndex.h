@@ -18,34 +18,34 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_Water2PatchIndexsh_INCLUDE__)
-#define __INCLUDE_Water2PatchIndexsh_INCLUDE__
+#if !defined(__INCLUDE_MipMapPatchIndexh_INCLUDE__)
+#define __INCLUDE_MipMapPatchIndexh_INCLUDE__
 
-#include <water/Water2PatchIndex.h>
-#include <vector>
-
-class Water2PatchIndexs
+class GLVertexBufferObject;
+class MipMapPatchIndex
 {
 public:
-	Water2PatchIndexs();
-	~Water2PatchIndexs();
+	MipMapPatchIndex();
+	~MipMapPatchIndex();
 
-	Water2PatchIndex &getIndex(int position, int border) 
-	{ 
-		if (position<0) position=0;
-		else if (position >= getNoPositions()) position = getNoPositions()-1;
-		if (border<0) border=0;
-		if (border>15) border=15;
+	enum Borders
+	{
+		BorderLeft = 1,
+		BorderRight = 2,
+		BorderTop = 4,
+		BorderBottom = 8
+	};
 
-		return *indexs_[position * 16 + border]; 
-	}
-	int getNoPositions() { return noPositions_; }
+	void generate(int size, int totalsize, int skip, unsigned int border);
 
-	void generate(int size);
+	unsigned int *getIndices() { return indices_; }
+	int getSize() { return size_; }
+	GLVertexBufferObject *getBufferObject() { return bufferObject_; }
 
 protected:
-	int noPositions_;
-	std::vector<Water2PatchIndex *> indexs_;
+	int size_;
+	unsigned int *indices_;
+	GLVertexBufferObject *bufferObject_;
 };
 
-#endif // __INCLUDE_Water2PatchIndexsh_INCLUDE__
+#endif // __INCLUDE_MipMapPatchIndexh_INCLUDE__

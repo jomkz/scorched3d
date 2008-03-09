@@ -5337,22 +5337,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\water\Water2PatchIndex.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\water\Water2PatchIndex.h"
-				>
-			</File>
-			<File
-				RelativePath="..\water\Water2PatchIndexs.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\water\Water2PatchIndexs.h"
-				>
-			</File>
-			<File
 				RelativePath="..\water\Water2PatchVisibility.cpp"
 				>
 			</File>
@@ -5950,6 +5934,26 @@
 			</File>
 			<File
 				RelativePath="..\..\server\server\TurnController.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="geomipmap"
+			>
+			<File
+				RelativePath="..\geomipmap\MipMapPatchIndex.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\geomipmap\MipMapPatchIndex.h"
+				>
+			</File>
+			<File
+				RelativePath="..\geomipmap\MipMapPatchIndexs.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\geomipmap\MipMapPatchIndexs.h"
 				>
 			</File>
 		</Filter>

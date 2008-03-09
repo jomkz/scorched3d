@@ -134,6 +134,11 @@ public:
 		return m_nVal; 
 	}
 
+	int	*getInternalData() 
+	{
+		return &m_nVal;
+	}
+
 	fixed floor()
 	{
 		return fixed(m_nVal/FIXED_RESOLUTION);

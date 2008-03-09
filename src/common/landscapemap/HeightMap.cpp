@@ -56,7 +56,17 @@ void HeightMap::reset()
 			current->position[0] = fixed(x);
 			current->position[1] = fixed(y);
 			current->position[2] = fixed(0);
-			current->normal.zero();
+
+			current->normal[0] = fixed(0);
+			current->normal[1] = fixed(0);
+			current->normal[2] = fixed(1);
+
+			current->texCoord1x = float(x) / float(width_);
+			current->texCoord1y = float(y) / float(height_);
+
+			current->texCoord2x = float(x) / float(width_) * float(64);
+			current->texCoord2y = float(y) / float(height_) * float(64);
+
 			current++;
 		}
 	}

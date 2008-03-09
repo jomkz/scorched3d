@@ -18,34 +18,31 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_Water2PatchIndexh_INCLUDE__)
-#define __INCLUDE_Water2PatchIndexh_INCLUDE__
+#include <geomipmap/MipMapPatchIndexs.h>
 
-class GLVertexBufferObject;
-class Water2PatchIndex
+MipMapPatchIndexs::MipMapPatchIndexs() : noPositions_(0)
 {
-public:
-	Water2PatchIndex();
-	~Water2PatchIndex();
+}
 
-	enum Borders
+MipMapPatchIndexs::~MipMapPatchIndexs()
+{
+}
+
+void MipMapPatchIndexs::generate(int size, int totalsize)
+{
+	noPositions_ = 0;
+	int j = 1;
+	for (;;)
 	{
-		BorderLeft = 1,
-		BorderRight = 2,
-		BorderTop = 4,
-		BorderBottom = 8
-	};
+		noPositions_ ++;
+		for (unsigned int i=0; i<=15; i++)
+		{
+			MipMapPatchIndex *index = new MipMapPatchIndex();
+			index->generate(size, totalsize, j, i);
+			indexs_.push_back(index);
+		}
 
-	void generate(int size, int skip, unsigned int border);
-
-	unsigned int *getIndices() { return indices_; }
-	int getSize() { return size_; }
-	GLVertexBufferObject *getBufferObject() { return bufferObject_; }
-
-protected:
-	int size_;
-	unsigned int *indices_;
-	GLVertexBufferObject *bufferObject_;
-};
-
-#endif // __INCLUDE_Water2PatchIndexh_INCLUDE__
+		j *= 2;
+		if (j > size) break;
+	}
+}

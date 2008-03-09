@@ -81,7 +81,7 @@ void Water2PatchVisibility::generate(Vector &offset, unsigned int totalSize,
 }
 
 void Water2PatchVisibility::draw(Water2Patches &patches,
-	Water2PatchIndexs &indexes, Vector &cameraPosition,
+	MipMapPatchIndexs &indexes, Vector &cameraPosition,
 	Vector landscapeSize,
 	GLSLShaderSetup *waterShader)
 {
@@ -145,22 +145,22 @@ void Water2PatchVisibility::draw(Water2Patches &patches,
 			if (leftIndex != NotVisible && leftIndex > index) 
 			{
 				if (leftIndex > index + 1) continue;
-				borders |= Water2PatchIndex::BorderLeft;
+				borders |= MipMapPatchIndex::BorderLeft;
 			}
 			if (rightIndex != NotVisible && rightIndex > index)
 			{
 				if (rightIndex > index + 1) continue;
-				borders |= Water2PatchIndex::BorderRight;
+				borders |= MipMapPatchIndex::BorderRight;
 			}
 			if (topIndex != NotVisible && topIndex > index) 
 			{
 				if (topIndex > index + 1) continue;
-				borders |= Water2PatchIndex::BorderTop;
+				borders |= MipMapPatchIndex::BorderTop;
 			}
 			if (bottomIndex != NotVisible && bottomIndex > index) 
 			{
 				if (bottomIndex > index + 1) continue;
-				borders |= Water2PatchIndex::BorderBottom;
+				borders |= MipMapPatchIndex::BorderBottom;
 			}
 
 			if (entry.anyoffset)
