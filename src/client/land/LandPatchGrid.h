@@ -23,6 +23,7 @@
 
 #include <land/LandPatch.h>
 #include <land/LandVisibilityPatch.h>
+#include <geomipmap/MipMapPatchIndexs.h>
 
 class LandPatchGrid
 {
@@ -36,6 +37,7 @@ public:
 	LandPatch *getLandPatch(int x, int y);
 
 protected:
+	MipMapPatchIndexs landIndexs_;
 	LandPatch *patches_;
 	LandVisibilityPatch *visibilityPatches_;
 
@@ -44,6 +46,8 @@ protected:
 	int visibilityWidth_, visibilityHeight_;
 
 	void clear();
+	void drawVisibility();
+	void drawLand();
 };
 
 #endif // __INCLUDE_LandPatchGridh_INCLUDE__

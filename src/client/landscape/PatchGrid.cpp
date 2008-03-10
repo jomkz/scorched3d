@@ -324,108 +324,18 @@ void PatchGrid::visibility()
 
 void PatchGrid::draw(PatchSide::DrawType sides)
 {
-	static MipMapPatchIndexs patchIndices;
 	static LandPatchGrid landPatchGrid;
-	if (patchIndices.getNoPositions() == 0)	
+	static bool init = false;
+	if (!init)	
 	{
-		patchIndices.generate(64, 256);
+		init = true;
 		landPatchGrid.generate();
 	}
 
 	landPatchGrid.draw();
 
-	MipMapPatchIndex &index = patchIndices.getIndex(0, 0);
-
-	glPushMatrix();
-
-	// Scale from fixed to floats (1 fixed unit is 10000)
-	glScalef(0.0001f, 0.0001f, 0.0001f);
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-	if (GLStateExtension::hasMultiTex())
-	{
-		glClientActiveTextureARB(GL_TEXTURE1_ARB);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		if (GLStateExtension::getTextureUnits() > 2)
-		{
-			glClientActiveTextureARB(GL_TEXTURE2_ARB);
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		}
-	}
-	glClientActiveTextureARB(GL_TEXTURE0_ARB);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	for (int y=0; y<4; y++)
-	{
-		for (int x=0; x<4; x++)
-		{
-			HeightMap::HeightData *heightData = &ScorchedClient::instance()->getLandscapeMaps().
-				getGroundMaps().getHeightMap().getHeightData()[(x * 64) + (y * (256 + 1) * 64)];
-
-			// Map data to draw
-			int *data = heightData->position[0].getInternalData();
-
-			// Vertices On
-			glVertexPointer(3, GL_INT, sizeof(HeightMap::HeightData), data);
-
-			// Normals On
-			glNormalPointer(GL_INT, sizeof(HeightMap::HeightData), data + 3);
-
-			// Tex Coords
-			glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), data + 6);
-			if (GLStateExtension::hasMultiTex())
-			{
-				glClientActiveTextureARB(GL_TEXTURE1_ARB);
-				glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), data + 6);
-				if (GLStateExtension::getTextureUnits() > 2)
-				{
-					glClientActiveTextureARB(GL_TEXTURE2_ARB);
-					glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), data + 8);
-				}
-			}
-
-			// Map indices to draw
-			unsigned int *indices = 0;
-			if (index.getBufferObject())
-			{
-				index.getBufferObject()->bind();
-			}
-			else
-			{
-				indices = index.getIndices();
-			}
-
-			// Draw elements
-			glDrawElements(GL_TRIANGLE_STRIP, 
-				index.getSize(), 
-				GL_UNSIGNED_INT, 
-				indices);
-
-			if (index.getBufferObject())
-			{
-				index.getBufferObject()->unbind();
-			}
-		}
-	}
 
 
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
-	if (GLStateExtension::hasMultiTex())
-	{
-		glClientActiveTextureARB(GL_TEXTURE1_ARB);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		if (GLStateExtension::getTextureUnits() > 2)
-		{
-			glClientActiveTextureARB(GL_TEXTURE2_ARB);
-			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		}
-	}
-	glClientActiveTextureARB(GL_TEXTURE0_ARB);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	glPopMatrix();
 
 	return;
 

@@ -19,9 +19,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <land/LandPatch.h>
-#include <GLEXT/GLState.h>
+#include <landscapemap/LandscapeMaps.h>
+#include <geomipmap/MipMapPatchIndexs.h>
+#include <client/ScorchedClient.h>
+#include <GLEXT/GLStateExtension.h>
+#include <GLEXT/GLVertexBufferObject.h>
+#include <GLEXT/GLInfo.h>
 
-LandPatch::LandPatch() : visible_(false)
+LandPatch::LandPatch() : visible_(false), heightMapData_(0)
 {
 }
 
@@ -29,17 +34,77 @@ LandPatch::~LandPatch()
 {
 }
 
-void LandPatch::draw()
+void LandPatch::setLocation(int x, int y)
 {
-	GLState currentState(GLState::TEXTURE_OFF);
+	x_ = x; y_ = y;
 
-	glLineWidth(2.0f);
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glBegin(GL_LINE_LOOP);
-		glVertex2f(location_[0], location_[1]);
-		glVertex2f(location_[0] + 64.0f, location_[1]);
-		glVertex2f(location_[0] + 64.0f, location_[1] + 64.0f);
-		glVertex2f(location_[0], location_[1] + 64.0f);
-	glEnd();
-	glLineWidth(1.0);
+	int mapWidth = ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getMapWidth();
+	int mapHeight = ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getMapHeight();
+
+	if (x >= 0 && y >= 0 &&
+		x < mapWidth && y < mapHeight)
+	{
+		HeightMap::HeightData *heightData = &ScorchedClient::instance()->getLandscapeMaps().
+			getGroundMaps().getHeightMap().getHeightData()[x + (y * (mapWidth + 1))];
+		heightMapData_ = heightData->position[0].getInternalData();
+	}
+}
+
+void LandPatch::draw(MipMapPatchIndexs &indexes, int indexPosition, int borders)
+{
+	if (!heightMapData_) return;
+
+	MipMapPatchIndex &index = indexes.getIndex(indexPosition, borders);
+
+	// No triangles
+	GLInfo::addNoTriangles(index.getSize());
+
+	// draw
+	draw(index);
+}
+
+void LandPatch::draw(MipMapPatchIndex &index)
+{
+	// Vertices On
+	glVertexPointer(3, GL_INT, sizeof(HeightMap::HeightData), heightMapData_);
+
+	// Normals On
+	glNormalPointer(GL_INT, sizeof(HeightMap::HeightData), heightMapData_ + 3);
+
+	// Tex Coords
+	glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), heightMapData_ + 6);
+	if (GLStateExtension::hasMultiTex())
+	{
+		glClientActiveTextureARB(GL_TEXTURE1_ARB);
+		glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), heightMapData_ + 6);
+		if (GLStateExtension::getTextureUnits() > 2)
+		{
+			glClientActiveTextureARB(GL_TEXTURE2_ARB);
+			glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), heightMapData_ + 8);
+		}
+	}
+
+	// Map indices to draw
+	unsigned int *indices = 0;
+	if (index.getBufferObject())
+	{
+		index.getBufferObject()->bind();
+	}
+	else
+	{
+		indices = index.getIndices();
+	}
+
+	// Draw elements
+	glDrawElements(GL_TRIANGLE_STRIP, 
+		index.getSize(), 
+		GL_UNSIGNED_INT, 
+		indices);
+
+	if (index.getBufferObject())
+	{
+		index.getBufferObject()->unbind();
+	}
 }

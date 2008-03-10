@@ -21,6 +21,7 @@
 #include <land/LandPatchGrid.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <client/ScorchedClient.h>
+#include <GLEXT/GLStateExtension.h>
 
 LandPatchGrid::LandPatchGrid() : patches_(0), visibilityPatches_(0)
 {
@@ -53,6 +54,9 @@ void LandPatchGrid::generate()
 	actualWidth = (actualWidth / 512) * 512; // The actual width and height are multiples of 512
 	actualHeight = (actualHeight / 512) * 512;
 
+	// Generate land indices
+	landIndexs_.generate(64, mapWidth);
+
 	// Find the mid point
 	midX_ = -actualWidth / 2 + mapWidth / 2;
 	midY_ = -actualHeight / 2 + mapHeight / 2;
@@ -73,8 +77,7 @@ void LandPatchGrid::generate()
 		{
 			for (int x=0; x<width_; x++, currentPatch++)
 			{
-				Vector location(x * 64.0f + midX_, y * 64.0f + midY_);
-				currentPatch->setLocation(location);
+				currentPatch->setLocation(x * 64 + midX_, y * 64 + midY_);
 			}
 		}
 	}
@@ -116,19 +119,45 @@ LandPatch *LandPatchGrid::getLandPatch(int x, int y)
 
 void LandPatchGrid::draw()
 {
+	drawVisibility();
+	drawLand();
+}
+
+void LandPatchGrid::drawVisibility()
+{
 	// Calculate visibility
+	LandVisibilityPatch *currentPatch = visibilityPatches_;
+	for (int y=0; y<visibilityHeight_; y++)
 	{
-		LandVisibilityPatch *currentPatch = visibilityPatches_;
-		for (int y=0; y<visibilityHeight_; y++)
+		for (int x=0; x<visibilityWidth_; x++, currentPatch++)
 		{
-			for (int x=0; x<visibilityWidth_; x++, currentPatch++)
-			{
-				currentPatch->calculateVisibility();
-			}
+			currentPatch->calculateVisibility();
 		}
 	}
+}
 
-	// Draw Land
+void LandPatchGrid::drawLand()
+{
+	glPushMatrix();
+
+	// Scale from fixed to floats (1 fixed unit is 10000)
+	glScalef(0.0001f, 0.0001f, 0.0001f);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	if (GLStateExtension::hasMultiTex())
+	{
+		glClientActiveTextureARB(GL_TEXTURE1_ARB);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		if (GLStateExtension::getTextureUnits() > 2)
+		{
+			glClientActiveTextureARB(GL_TEXTURE2_ARB);
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		}
+	}
+	glClientActiveTextureARB(GL_TEXTURE0_ARB);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
 	{
 		int visibleCount = 0, notVisibleCount = 0;
 		LandPatch *currentPatch = patches_;
@@ -139,7 +168,7 @@ void LandPatchGrid::draw()
 				if (currentPatch->getVisible())
 				{
 					visibleCount ++;
-					currentPatch->draw();
+					currentPatch->draw(landIndexs_, 0, 0);
 				}
 				else
 				{
@@ -148,4 +177,21 @@ void LandPatchGrid::draw()
 			}
 		}
 	}
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	if (GLStateExtension::hasMultiTex())
+	{
+		glClientActiveTextureARB(GL_TEXTURE1_ARB);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		if (GLStateExtension::getTextureUnits() > 2)
+		{
+			glClientActiveTextureARB(GL_TEXTURE2_ARB);
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		}
+	}
+	glClientActiveTextureARB(GL_TEXTURE0_ARB);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glPopMatrix();
 }
