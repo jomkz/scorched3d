@@ -31,7 +31,7 @@
 #include <landscape/PatchGrid.h>
 #include <landscape/TriNodePool.h>
 
-#include <land/LandPatchGrid.h>
+#include <land/VisibilityPatchGrid.h>
 #include <GLEXT/GLVertexBufferObject.h>
 #include <geomipmap/MipMapPatchIndexs.h>
 #include <landscapemap/LandscapeMaps.h>
@@ -324,15 +324,15 @@ void PatchGrid::visibility()
 
 void PatchGrid::draw(PatchSide::DrawType sides)
 {
-	static LandPatchGrid landPatchGrid;
 	static bool init = false;
 	if (!init)	
 	{
 		init = true;
-		landPatchGrid.generate();
+		VisibilityPatchGrid::instance()->generate();
 	}
 
-	landPatchGrid.draw();
+	VisibilityPatchGrid::instance()->drawVisibility();
+	VisibilityPatchGrid::instance()->drawLand();
 
 
 

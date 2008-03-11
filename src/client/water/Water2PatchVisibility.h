@@ -25,6 +25,7 @@
 #include <common/Vector.h>
 
 class GLSLShaderSetup;
+class WaterVisibilityPatch;
 class Water2Patches;
 class Water2PatchVisibility
 {
@@ -43,6 +44,10 @@ public:
 	{
 		if (x < 0 || x >= size_ || y < 0 || y >= size_) return NotVisible;
 		return visibility_[x + y * size_].visibilityIndex;
+	}
+	unsigned int getVisibilityIndex(int x, int y, WaterVisibilityPatch *currentPatch)
+	{
+		return NotVisible;
 	}
 
 	static const unsigned int NotVisible;

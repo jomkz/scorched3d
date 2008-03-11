@@ -18,29 +18,39 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <land/LandVisibilityPatchGrid.h>
+#include <land/VisibilityPatchGrid.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <client/ScorchedClient.h>
 #include <GLEXT/GLStateExtension.h>
 
-LandVisibilityPatchGrid::LandVisibilityPatchGrid() : patches_(0), visibilityPatches_(0)
+VisibilityPatchGrid *VisibilityPatchGrid::instance()
+{
+	static VisibilityPatchGrid instance;
+	return &instance;
+}
+
+VisibilityPatchGrid::VisibilityPatchGrid() : 
+	landPatches_(0), waterPatches_(0), visibilityPatches_(0)
 {
 }
 
-LandVisibilityPatchGrid::~LandVisibilityPatchGrid()
+VisibilityPatchGrid::~VisibilityPatchGrid()
 {
 }
 
-void LandVisibilityPatchGrid::clear()
+void VisibilityPatchGrid::clear()
 {
-	delete [] patches_;
-	patches_ = 0;
+	delete [] landPatches_;
+	landPatches_ = 0;
+
+	delete [] waterPatches_;
+	waterPatches_ = 0;
 
 	delete [] visibilityPatches_;
 	visibilityPatches_ = 0;
 }
 
-void LandVisibilityPatchGrid::generate()
+void VisibilityPatchGrid::generate()
 {
 	clear();
 
@@ -65,19 +75,38 @@ void LandVisibilityPatchGrid::generate()
 
 	{
 		// Divide this visible area into a set of patches
-		width_ = actualWidth / 64;
-		height_ = actualHeight / 64;
+		landWidth_ = actualWidth / 64;
+		landHeight_ = actualHeight / 64;
 
 		// Create the patches
-		patches_ = new LandVisibilityPatch[width_ * height_];
+		landPatches_ = new LandVisibilityPatch[landWidth_ * landHeight_];
 
 		// For each patch set it's location
-		LandVisibilityPatch *currentPatch = patches_;
-		for (int y=0; y<height_; y++)
+		LandVisibilityPatch *currentPatch = landPatches_;
+		for (int y=0; y<landHeight_; y++)
 		{
-			for (int x=0; x<width_; x++, currentPatch++)
+			for (int x=0; x<landWidth_; x++, currentPatch++)
 			{
 				currentPatch->setLocation(x * 64 + midX_, y * 64 + midY_);
+			}
+		}
+	}
+
+	{
+		// Divide this visible area into a set of patches
+		waterWidth_ = actualWidth / 128;
+		waterHeight_ = actualHeight / 128;
+
+		// Create the patches
+		waterPatches_ = new WaterVisibilityPatch[waterWidth_ * waterHeight_];
+
+		// For each patch set it's location
+		WaterVisibilityPatch *currentPatch = waterPatches_;
+		for (int y=0; y<waterHeight_; y++)
+		{
+			for (int x=0; x<waterWidth_; x++, currentPatch++)
+			{
+				currentPatch->setLocation(x * 128 + midX_, y * 128 + midY_);
 			}
 		}
 	}
@@ -88,10 +117,10 @@ void LandVisibilityPatchGrid::generate()
 		visibilityHeight_ = actualHeight / 512;
 
 		// Create the set of visibility patches
-		visibilityPatches_ = new LandVisibilityPatch[visibilityWidth_ * visibilityHeight_];
+		visibilityPatches_ = new VisibilityPatchQuad[visibilityWidth_ * visibilityHeight_];
 
 		// Set the visibility location
-		LandVisibilityPatch *currentPatch = visibilityPatches_;
+		VisibilityPatchQuad *currentPatch = visibilityPatches_;
 		for (int y=0; y<visibilityHeight_; y++)
 		{
 			for (int x=0; x<visibilityWidth_; x++, currentPatch++)
@@ -102,31 +131,38 @@ void LandVisibilityPatchGrid::generate()
 	}
 }
 
-
-LandVisibilityPatch *LandVisibilityPatchGrid::getLandVisibilityPatch(int x, int y)
+LandVisibilityPatch *VisibilityPatchGrid::getLandVisibilityPatch(int x, int y)
 {
 	int realX = (x - midX_) / 64;
 	int realY = (y - midY_) / 64;
 
 	if (realX < 0 || realY < 0 ||
-		realX >= width_ || realY >= height_) 
+		realX >= landWidth_ || realY >= landHeight_) 
 	{
 		return 0;
 	}
 
-	return &patches_[realX + realY * width_];
+	return &landPatches_[realX + realY * landWidth_];
 }
 
-void LandVisibilityPatchGrid::draw()
+WaterVisibilityPatch *VisibilityPatchGrid::getWaterVisibilityPatch(int x, int y)
 {
-	drawVisibility();
-	drawLand();
+	int realX = (x - midX_) / 128;
+	int realY = (y - midY_) / 128;
+
+	if (realX < 0 || realY < 0 ||
+		realX >= waterWidth_ || realY >= waterHeight_) 
+	{
+		return 0;
+	}
+
+	return &waterPatches_[realX + realY * waterWidth_];
 }
 
-void LandVisibilityPatchGrid::drawVisibility()
+void VisibilityPatchGrid::drawVisibility()
 {
 	// Calculate visibility
-	LandVisibilityPatch *currentPatch = visibilityPatches_;
+	VisibilityPatchQuad *currentPatch = visibilityPatches_;
 	for (int y=0; y<visibilityHeight_; y++)
 	{
 		for (int x=0; x<visibilityWidth_; x++, currentPatch++)
@@ -136,7 +172,7 @@ void LandVisibilityPatchGrid::drawVisibility()
 	}
 }
 
-void LandVisibilityPatchGrid::drawLand()
+void VisibilityPatchGrid::drawLand()
 {
 	glPushMatrix();
 
@@ -160,10 +196,10 @@ void LandVisibilityPatchGrid::drawLand()
 
 	{
 		int visibleCount = 0, notVisibleCount = 0;
-		LandVisibilityPatch *currentPatch = patches_;
-		for (int y=0; y<height_; y++)
+		LandVisibilityPatch *currentPatch = landPatches_;
+		for (int y=0; y<landHeight_; y++)
 		{
-			for (int x=0; x<width_; x++, currentPatch++)
+			for (int x=0; x<landWidth_; x++, currentPatch++)
 			{
 				if (currentPatch->getVisible())
 				{

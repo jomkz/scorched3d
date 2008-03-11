@@ -5961,27 +5961,35 @@
 			Name="land"
 			>
 			<File
-				RelativePath="..\land\LandPatch.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\land\LandPatch.h"
-				>
-			</File>
-			<File
-				RelativePath="..\land\LandPatchGrid.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\land\LandPatchGrid.h"
-				>
-			</File>
-			<File
 				RelativePath="..\land\LandVisibilityPatch.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\land\LandVisibilityPatch.h"
+				>
+			</File>
+			<File
+				RelativePath="..\land\VisibilityPatchGrid.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\land\VisibilityPatchGrid.h"
+				>
+			</File>
+			<File
+				RelativePath="..\land\VisibilityPatchQuad.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\land\VisibilityPatchQuad.h"
+				>
+			</File>
+			<File
+				RelativePath="..\land\WaterVisibilityPatch.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\land\WaterVisibilityPatch.h"
 				>
 			</File>
 		</Filter>

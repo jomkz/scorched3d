@@ -25,6 +25,7 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <landscape/Landscape.h>
 #include <landscape/Sky.h>
+#include <land/VisibilityPatchGrid.h>
 #include <GLSL/GLSLShaderSetup.h>
 #include <GLEXT/GLCameraFrustum.h>
 
@@ -85,9 +86,112 @@ void Water2PatchVisibility::draw(Water2Patches &patches,
 	Vector landscapeSize,
 	GLSLShaderSetup *waterShader)
 {
-	
+	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "WATER_DRAW");
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+
+	// Draw all patches
+	VisibilityPatchGrid *visibilityGrid = VisibilityPatchGrid::instance();
+	WaterVisibilityPatch *currentPatch = visibilityGrid->getWaterPatches();
+
+	for (int y=0; y<visibilityGrid->getWaterHeight(); y++)
+	{
+		for (int x=0; x<visibilityGrid->getWaterWidth(); x++, currentPatch++)
+		{
+			if (!currentPatch->getVisible()) continue;
+
+			unsigned int index = 6;//currentPatch->visibilityIndex;
+			if (index == NotVisible) continue;
+
+			unsigned int borders = 0;
+			unsigned int leftIndex = getVisibilityIndex(x - 1, y, currentPatch - 1);
+			unsigned int rightIndex = getVisibilityIndex(x + 1, y, currentPatch + 1);
+			unsigned int topIndex = getVisibilityIndex(x, y + 1, currentPatch + visibilityGrid->getWaterWidth());
+			unsigned int bottomIndex = getVisibilityIndex(x, y - 1, currentPatch - visibilityGrid->getWaterWidth());
+
+			if (leftIndex != NotVisible && leftIndex > index) 
+			{
+				if (leftIndex > index + 1) continue;
+				borders |= MipMapPatchIndex::BorderLeft;
+			}
+			if (rightIndex != NotVisible && rightIndex > index)
+			{
+				if (rightIndex > index + 1) continue;
+				borders |= MipMapPatchIndex::BorderRight;
+			}
+			if (topIndex != NotVisible && topIndex > index) 
+			{
+				if (topIndex > index + 1) continue;
+				borders |= MipMapPatchIndex::BorderTop;
+			}
+			if (bottomIndex != NotVisible && bottomIndex > index) 
+			{
+				if (bottomIndex > index + 1) continue;
+				borders |= MipMapPatchIndex::BorderBottom;
+			}
+
+			if (currentPatch->getAnyOffset())
+			{
+				glPushMatrix();
+				glTranslatef(
+					currentPatch->getOffset()[0],
+					currentPatch->getOffset()[1], 
+					currentPatch->getOffset()[2]);
+			}
+
+			// Setup the texture matrix for texture 0
+			if (waterShader)
+			{
+				Vector landfoam;
+				landfoam[0] = currentPatch->getOffset()[0];
+				landfoam[1] = currentPatch->getOffset()[1];
+				/*landfoam[2] = ((entry.position[0] >= 0.0f && entry.position[1] >= 0.0f &&
+					entry.position[0] <= landscapeSize[0] && entry.position[1] <= landscapeSize[1])?1.0f:0.0f);*/
+				waterShader->set_uniform("landfoam", landfoam);
+
+				// Set lighting position
+				// done after the translation
+				Landscape::instance()->getSky().getSun().setLightPosition(true);
+
+				// get projection and modelview matrix
+				// done after the translation
+				static float proj[16], model[16];
+				glGetFloatv(GL_PROJECTION_MATRIX, proj);
+				glGetFloatv(GL_MODELVIEW_MATRIX, model);
+
+				// Setup the texture matrix for texture 1
+				glActiveTexture(GL_TEXTURE1);
+				glMatrixMode(GL_TEXTURE);
+				glLoadIdentity();
+				glTranslatef(0.5f,0.5f,0.0f);
+				glScalef(0.5f,0.5f,1.0f);
+				glMultMatrixf(proj);
+				glMultMatrixf(model);
+				glMatrixMode(GL_MODELVIEW);
+
+				// Reset to texture 0
+				glActiveTexture(GL_TEXTURE0);
+			}
+
+			Water2Patch *patch = patches.getPatch(
+				x % patches.getSize(), y % patches.getSize());
+			patch->draw(indexes, index, borders);
+
+			if (currentPatch->getAnyOffset())
+			{
+				glPopMatrix();
+			}
+		}
+	}
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+
+	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "WATER_DRAW");
+
+
 	// Figure the visibility for all patches
-	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "WATER_VISIBILITY");
+	/*GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "WATER_VISIBILITY");
 	int i=0;
 	for (int y=0; y<size_; y++)
 	{
@@ -217,5 +321,5 @@ void Water2PatchVisibility::draw(Water2Patches &patches,
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 
-	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "WATER_DRAW");
+	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "WATER_DRAW");*/
 }

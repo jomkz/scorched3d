@@ -18,34 +18,35 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <land/LandVisibilityPatchQuad.h>
-#include <land/LandVisibilityPatchGrid.h>
+#include <land/VisibilityPatchQuad.h>
+#include <land/VisibilityPatchGrid.h>
 #include <GLEXT/GLCameraFrustum.h>
 
-LandVisibilityPatchQuad::LandVisibilityPatchQuad() :
+VisibilityPatchQuad::VisibilityPatchQuad() :
 	topLeft_(0), topRight_(0),
 	botLeft_(0), botRight_(0),
-	LandVisibilityPatch_(0)
+	landVisibilityPatch_(0),
+	waterVisibilityPatch_(0)
 {
 }
 
-LandVisibilityPatchQuad::~LandVisibilityPatchQuad()
+VisibilityPatchQuad::~VisibilityPatchQuad()
 {
 	delete topLeft_; delete topRight_;
 	delete botLeft_; delete botRight_;
 }
 
-void LandVisibilityPatchQuad::setLocation(LandVisibilityPatchGrid *patchGrid, int x, int y, int size)
+void VisibilityPatchQuad::setLocation(VisibilityPatchGrid *patchGrid, int x, int y, int size)
 {
 	x_ = x; y_ = y; size_ = size;
 	position_ = Vector(x_ + size_ / 2, y_ + size_ / 2);
 
 	if (size > 64)
 	{
-		topLeft_ = new LandVisibilityPatchQuad();
-		topRight_ = new LandVisibilityPatchQuad();
-		botLeft_ = new LandVisibilityPatchQuad();
-		botRight_ = new LandVisibilityPatchQuad();
+		topLeft_ = new VisibilityPatchQuad();
+		topRight_ = new VisibilityPatchQuad();
+		botLeft_ = new VisibilityPatchQuad();
+		botRight_ = new VisibilityPatchQuad();
 
 		topLeft_->setLocation(patchGrid, x, y, size / 2);
 		topRight_->setLocation(patchGrid, x + size / 2, y, size / 2);
@@ -56,17 +57,19 @@ void LandVisibilityPatchQuad::setLocation(LandVisibilityPatchGrid *patchGrid, in
 	if (size == 64)
 	{
 		// Land
-		LandVisibilityPatch_ = patchGrid->getLandVisibilityPatch(x, y);
+		landVisibilityPatch_ = patchGrid->getLandVisibilityPatch(x, y);
 	}
 	else if (size == 128)
 	{
 		// Water
+		waterVisibilityPatch_ = patchGrid->getWaterVisibilityPatch(x, y);
 	}
 }
 
-void LandVisibilityPatchQuad::setNotVisible()
+void VisibilityPatchQuad::setNotVisible()
 {
-	if (LandVisibilityPatch_) LandVisibilityPatch_->setVisible(false);
+	if (landVisibilityPatch_) landVisibilityPatch_->setVisible(false);
+	if (waterVisibilityPatch_) waterVisibilityPatch_->setVisible(false);
 
 	// Update Children
 	if (topLeft_) topLeft_->setNotVisible();
@@ -75,9 +78,10 @@ void LandVisibilityPatchQuad::setNotVisible()
 	if (botRight_) botRight_->setNotVisible();
 }
 
-void LandVisibilityPatchQuad::setVisible()
+void VisibilityPatchQuad::setVisible()
 {
-	if (LandVisibilityPatch_) LandVisibilityPatch_->setVisible(true);
+	if (landVisibilityPatch_) landVisibilityPatch_->setVisible(true);
+	if (waterVisibilityPatch_) waterVisibilityPatch_->setVisible(true);
 
 	// Update Children
 	if (topLeft_) topLeft_->calculateVisibility();
@@ -86,7 +90,7 @@ void LandVisibilityPatchQuad::setVisible()
 	if (botRight_) botRight_->calculateVisibility();	
 }
 
-void LandVisibilityPatchQuad::calculateVisibility()
+void VisibilityPatchQuad::calculateVisibility()
 {
 	if (!GLCameraFrustum::instance()->sphereInFrustum(position_, float(size_)))
 	{

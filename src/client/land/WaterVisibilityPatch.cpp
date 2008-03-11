@@ -18,33 +18,32 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_LandVisibilityPatchQuadh_INCLUDE__)
-#define __INCLUDE_LandVisibilityPatchQuadh_INCLUDE__
+#include <land/WaterVisibilityPatch.h>
+#include <geomipmap/MipMapPatchIndexs.h>
 
-#include <common/Vector.h>
-
-class LandVisibilityPatch;
-class LandVisibilityPatchGrid;
-class LandVisibilityPatchQuad
+WaterVisibilityPatch::WaterVisibilityPatch() : visible_(false)
 {
-public:
-	LandVisibilityPatchQuad();
-	~LandVisibilityPatchQuad();
+}
 
-	void setLocation(LandVisibilityPatchGrid *patchGrid, int x, int y, int size);
-	void calculateVisibility();
+WaterVisibilityPatch::~WaterVisibilityPatch()
+{
+}
 
-	void setNotVisible();
-	void setVisible();
+void WaterVisibilityPatch::setLocation(int x, int y)
+{
+	x_ = x; y_ = y;
 
-protected:
-	int x_, y_;
-	int size_;
-	Vector position_;
+	int offX = (x / 256) * 256;
+	if (x < 0 && x % 256 != 0) offX -= 256;
+	int offY = (y / 256) * 256;
+	if (y < 0 && y % 256 != 0) offY -= 256;
 
-	LandVisibilityPatch *LandVisibilityPatch_;
-	LandVisibilityPatchQuad *topLeft_, *topRight_;
-	LandVisibilityPatchQuad *botLeft_, *botRight_;
-};
+	offset_ = Vector(offX, offY, 0);
+	anyOffset_ = (offset_ != Vector::getNullVector());
+}
 
-#endif // __INCLUDE_LandVisibilityPatchQuadh_INCLUDE__
+void WaterVisibilityPatch::draw(MipMapPatchIndexs &indexes, 
+	int indexPosition, int borders)
+{
+
+}

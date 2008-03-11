@@ -18,36 +18,35 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_LandVisibilityPatchGridh_INCLUDE__)
-#define __INCLUDE_LandVisibilityPatchGridh_INCLUDE__
+#if !defined(__INCLUDE_WaterVisibilityPatchh_INCLUDE__)
+#define __INCLUDE_WaterVisibilityPatchh_INCLUDE__
 
-#include <land/LandVisibilityPatch.h>
-#include <land/LandVisibilityPatchQuad.h>
-#include <geomipmap/MipMapPatchIndexs.h>
+#include <common/Vector.h>
 
-class LandVisibilityPatchGrid
+class MipMapPatchIndexs;
+class MipMapPatchIndex;
+
+class WaterVisibilityPatch
 {
 public:
-	LandVisibilityPatchGrid();
-	~LandVisibilityPatchGrid();
+	WaterVisibilityPatch();
+	~WaterVisibilityPatch();
 
-	void generate();
-	void draw();
+	void setLocation(int x, int y);
 
-	LandVisibilityPatch *getLandVisibilityPatch(int x, int y);
+	void setVisible(bool visible) { visible_ = visible; }
+	bool getVisible() { return visible_; }
+	Vector &getOffset() { return offset_; }
+	bool getAnyOffset() { return anyOffset_; }
+
+	void draw(MipMapPatchIndexs &indexes, 
+		int indexPosition, int borders);
 
 protected:
-	MipMapPatchIndexs landIndexs_;
-	LandVisibilityPatch *landPatches_;
-	LandVisibilityPatchQuad *patchQuads_;
-
-	int midX_, midY_;
-	int width_, height_;
-	int visibilityWidth_, visibilityHeight_;
-
-	void clear();
-	void drawVisibility();
-	void drawLand();
+	int x_, y_;
+	bool visible_;
+	bool anyOffset_;
+	Vector offset_;
 };
 
-#endif // __INCLUDE_LandVisibilityPatchGridh_INCLUDE__
+#endif // __INCLUDE_WaterVisibilityPatchh_INCLUDE__
