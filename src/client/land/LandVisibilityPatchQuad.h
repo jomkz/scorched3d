@@ -18,36 +18,33 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_LandPatchGridh_INCLUDE__)
-#define __INCLUDE_LandPatchGridh_INCLUDE__
+#if !defined(__INCLUDE_LandVisibilityPatchQuadh_INCLUDE__)
+#define __INCLUDE_LandVisibilityPatchQuadh_INCLUDE__
 
-#include <land/LandPatch.h>
-#include <land/LandVisibilityPatch.h>
-#include <geomipmap/MipMapPatchIndexs.h>
+#include <common/Vector.h>
 
-class LandPatchGrid
+class LandVisibilityPatch;
+class LandVisibilityPatchGrid;
+class LandVisibilityPatchQuad
 {
 public:
-	LandPatchGrid();
-	~LandPatchGrid();
+	LandVisibilityPatchQuad();
+	~LandVisibilityPatchQuad();
 
-	void generate();
-	void draw();
+	void setLocation(LandVisibilityPatchGrid *patchGrid, int x, int y, int size);
+	void calculateVisibility();
 
-	LandPatch *getLandPatch(int x, int y);
+	void setNotVisible();
+	void setVisible();
 
 protected:
-	MipMapPatchIndexs landIndexs_;
-	LandPatch *patches_;
-	LandVisibilityPatch *visibilityPatches_;
+	int x_, y_;
+	int size_;
+	Vector position_;
 
-	int midX_, midY_;
-	int width_, height_;
-	int visibilityWidth_, visibilityHeight_;
-
-	void clear();
-	void drawVisibility();
-	void drawLand();
+	LandVisibilityPatch *LandVisibilityPatch_;
+	LandVisibilityPatchQuad *topLeft_, *topRight_;
+	LandVisibilityPatchQuad *botLeft_, *botRight_;
 };
 
-#endif // __INCLUDE_LandPatchGridh_INCLUDE__
+#endif // __INCLUDE_LandVisibilityPatchQuadh_INCLUDE__

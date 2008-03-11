@@ -18,20 +18,20 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <land/LandPatchGrid.h>
+#include <land/LandVisibilityPatchGrid.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <client/ScorchedClient.h>
 #include <GLEXT/GLStateExtension.h>
 
-LandPatchGrid::LandPatchGrid() : patches_(0), visibilityPatches_(0)
+LandVisibilityPatchGrid::LandVisibilityPatchGrid() : patches_(0), visibilityPatches_(0)
 {
 }
 
-LandPatchGrid::~LandPatchGrid()
+LandVisibilityPatchGrid::~LandVisibilityPatchGrid()
 {
 }
 
-void LandPatchGrid::clear()
+void LandVisibilityPatchGrid::clear()
 {
 	delete [] patches_;
 	patches_ = 0;
@@ -40,7 +40,7 @@ void LandPatchGrid::clear()
 	visibilityPatches_ = 0;
 }
 
-void LandPatchGrid::generate()
+void LandVisibilityPatchGrid::generate()
 {
 	clear();
 
@@ -69,10 +69,10 @@ void LandPatchGrid::generate()
 		height_ = actualHeight / 64;
 
 		// Create the patches
-		patches_ = new LandPatch[width_ * height_];
+		patches_ = new LandVisibilityPatch[width_ * height_];
 
 		// For each patch set it's location
-		LandPatch *currentPatch = patches_;
+		LandVisibilityPatch *currentPatch = patches_;
 		for (int y=0; y<height_; y++)
 		{
 			for (int x=0; x<width_; x++, currentPatch++)
@@ -103,7 +103,7 @@ void LandPatchGrid::generate()
 }
 
 
-LandPatch *LandPatchGrid::getLandPatch(int x, int y)
+LandVisibilityPatch *LandVisibilityPatchGrid::getLandVisibilityPatch(int x, int y)
 {
 	int realX = (x - midX_) / 64;
 	int realY = (y - midY_) / 64;
@@ -117,13 +117,13 @@ LandPatch *LandPatchGrid::getLandPatch(int x, int y)
 	return &patches_[realX + realY * width_];
 }
 
-void LandPatchGrid::draw()
+void LandVisibilityPatchGrid::draw()
 {
 	drawVisibility();
 	drawLand();
 }
 
-void LandPatchGrid::drawVisibility()
+void LandVisibilityPatchGrid::drawVisibility()
 {
 	// Calculate visibility
 	LandVisibilityPatch *currentPatch = visibilityPatches_;
@@ -136,7 +136,7 @@ void LandPatchGrid::drawVisibility()
 	}
 }
 
-void LandPatchGrid::drawLand()
+void LandVisibilityPatchGrid::drawLand()
 {
 	glPushMatrix();
 
@@ -160,7 +160,7 @@ void LandPatchGrid::drawLand()
 
 	{
 		int visibleCount = 0, notVisibleCount = 0;
-		LandPatch *currentPatch = patches_;
+		LandVisibilityPatch *currentPatch = patches_;
 		for (int y=0; y<height_; y++)
 		{
 			for (int x=0; x<width_; x++, currentPatch++)

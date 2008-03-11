@@ -19,81 +19,92 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <land/LandVisibilityPatch.h>
-#include <land/LandPatchGrid.h>
-#include <GLEXT/GLCameraFrustum.h>
+#include <landscapemap/LandscapeMaps.h>
+#include <geomipmap/MipMapPatchIndexs.h>
+#include <client/ScorchedClient.h>
+#include <GLEXT/GLStateExtension.h>
+#include <GLEXT/GLVertexBufferObject.h>
+#include <GLEXT/GLInfo.h>
 
-LandVisibilityPatch::LandVisibilityPatch() :
-	topLeft_(0), topRight_(0),
-	botLeft_(0), botRight_(0),
-	landPatch_(0)
+LandVisibilityPatch::LandVisibilityPatch() : visible_(false), heightMapData_(0)
 {
 }
 
 LandVisibilityPatch::~LandVisibilityPatch()
 {
-	delete topLeft_; delete topRight_;
-	delete botLeft_; delete botRight_;
 }
 
-void LandVisibilityPatch::setLocation(LandPatchGrid *patchGrid, int x, int y, int size)
+void LandVisibilityPatch::setLocation(int x, int y)
 {
-	x_ = x; y_ = y; size_ = size;
-	position_ = Vector(x_ + size_ / 2, y_ + size_ / 2);
+	x_ = x; y_ = y;
 
-	if (size > 64)
-	{
-		topLeft_ = new LandVisibilityPatch();
-		topRight_ = new LandVisibilityPatch();
-		botLeft_ = new LandVisibilityPatch();
-		botRight_ = new LandVisibilityPatch();
+	int mapWidth = ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getMapWidth();
+	int mapHeight = ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getMapHeight();
 
-		topLeft_->setLocation(patchGrid, x, y, size / 2);
-		topRight_->setLocation(patchGrid, x + size / 2, y, size / 2);
-		botLeft_->setLocation(patchGrid, x, y + size / 2, size / 2);
-		botRight_->setLocation(patchGrid, x + size / 2, y + size / 2, size / 2);
-	}
-
-	if (size == 64)
+	if (x >= 0 && y >= 0 &&
+		x < mapWidth && y < mapHeight)
 	{
-		// Land
-		landPatch_ = patchGrid->getLandPatch(x, y);
-	}
-	else if (size == 128)
-	{
-		// Water
+		HeightMap::HeightData *heightData = &ScorchedClient::instance()->getLandscapeMaps().
+			getGroundMaps().getHeightMap().getHeightData()[x + (y * (mapWidth + 1))];
+		heightMapData_ = heightData->position[0].getInternalData();
 	}
 }
 
-void LandVisibilityPatch::setNotVisible()
+void LandVisibilityPatch::draw(MipMapPatchIndexs &indexes, int indexPosition, int borders)
 {
-	if (landPatch_) landPatch_->setVisible(false);
+	if (!heightMapData_) return;
 
-	// Update Children
-	if (topLeft_) topLeft_->setNotVisible();
-	if (topRight_) topRight_->setNotVisible();
-	if (botLeft_) botLeft_->setNotVisible();
-	if (botRight_) botRight_->setNotVisible();
+	MipMapPatchIndex &index = indexes.getIndex(indexPosition, borders);
+
+	// No triangles
+	GLInfo::addNoTriangles(index.getSize());
+
+	// draw
+	draw(index);
 }
 
-void LandVisibilityPatch::setVisible()
+void LandVisibilityPatch::draw(MipMapPatchIndex &index)
 {
-	if (landPatch_) landPatch_->setVisible(true);
+	// Vertices On
+	glVertexPointer(3, GL_INT, sizeof(HeightMap::HeightData), heightMapData_);
 
-	// Update Children
-	if (topLeft_) topLeft_->calculateVisibility();
-	if (topRight_) topRight_->calculateVisibility();
-	if (botLeft_) botLeft_->calculateVisibility();
-	if (botRight_) botRight_->calculateVisibility();	
-}
+	// Normals On
+	glNormalPointer(GL_INT, sizeof(HeightMap::HeightData), heightMapData_ + 3);
 
-void LandVisibilityPatch::calculateVisibility()
-{
-	if (!GLCameraFrustum::instance()->sphereInFrustum(position_, float(size_)))
+	// Tex Coords
+	glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), heightMapData_ + 6);
+	if (GLStateExtension::hasMultiTex())
 	{
-		setNotVisible();
+		glClientActiveTextureARB(GL_TEXTURE1_ARB);
+		glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), heightMapData_ + 6);
+		if (GLStateExtension::getTextureUnits() > 2)
+		{
+			glClientActiveTextureARB(GL_TEXTURE2_ARB);
+			glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), heightMapData_ + 8);
+		}
+	}
+
+	// Map indices to draw
+	unsigned int *indices = 0;
+	if (index.getBufferObject())
+	{
+		index.getBufferObject()->bind();
 	}
 	else
 	{
-		setVisible();
+		indices = index.getIndices();
+	}
+
+	// Draw elements
+	glDrawElements(GL_TRIANGLE_STRIP, 
+		index.getSize(), 
+		GL_UNSIGNED_INT, 
+		indices);
+
+	if (index.getBufferObject())
+	{
+		index.getBufferObject()->unbind();
 	}
 }

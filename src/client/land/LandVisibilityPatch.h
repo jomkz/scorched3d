@@ -23,28 +23,29 @@
 
 #include <common/Vector.h>
 
-class LandPatch;
-class LandPatchGrid;
+class MipMapPatchIndexs;
+class MipMapPatchIndex;
+
 class LandVisibilityPatch
 {
 public:
 	LandVisibilityPatch();
 	~LandVisibilityPatch();
 
-	void setLocation(LandPatchGrid *patchGrid, int x, int y, int size);
-	void calculateVisibility();
+	void setLocation(int x, int y);
 
-	void setNotVisible();
-	void setVisible();
+	void setVisible(bool visible) { visible_ = visible; }
+	bool getVisible() { return visible_; }
+
+	void draw(MipMapPatchIndexs &indexes, 
+		int indexPosition, int borders);
 
 protected:
 	int x_, y_;
-	int size_;
-	Vector position_;
+	int *heightMapData_;
+	bool visible_;
 
-	LandPatch *landPatch_;
-	LandVisibilityPatch *topLeft_, *topRight_;
-	LandVisibilityPatch *botLeft_, *botRight_;
+	void draw(MipMapPatchIndex &index);
 };
 
 #endif // __INCLUDE_LandVisibilityPatchh_INCLUDE__
