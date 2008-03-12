@@ -21,6 +21,7 @@
 #include <landscape/Surround.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeDefn.h>
+#include <land/VisibilityPatchGrid.h>
 #include <client/ScorchedClient.h>
 #include <graph/OptionsDisplay.h>
 
@@ -35,7 +36,9 @@ Surround::~Surround()
 
 void Surround::draw(bool detail, bool lightMap)
 {
-	default_.draw(detail, lightMap);
+	VisibilityPatchGrid::instance()->drawSurround();
+
+	//default_.draw(detail, lightMap);
 	if (ScorchedClient::instance()->getLandscapeMaps().getDefinitions().
 		getDefn()->surround->getType() != LandscapeDefnType::eNone &&
 		OptionsDisplay::instance()->getDrawSurround())

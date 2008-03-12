@@ -32,7 +32,7 @@ LandVisibilityPatch::LandVisibilityPatch() :
 	visible_(false), heightMapData_(0),
 	leftPatch_(0), rightPatch_(0),
 	topPatch_(0), bottomPatch_(0),
-	visibilityIndex_(4)
+	visibilityIndex_(-1)
 {
 }
 
@@ -70,24 +70,36 @@ void LandVisibilityPatch::setLocation(int x, int y,
 
 void LandVisibilityPatch::setVisible(Vector &cameraPos, bool visible)
 { 
-	if (visible && heightMapData_)
-	{
-		visible_ = true;
+	visible_ = visible;
 
-		visibilityIndex_ = 6;
-		if (!OptionsDisplay::instance()->getNoWaterLOD())
+
+	if (visible)
+	{
+		if  (heightMapData_)
 		{
-			float distance = (cameraPos - position_).Magnitude();
-			visibilityIndex_ = int(distance - 50.0f) / 70;
-			visibilityIndex_ = MAX(0, MIN(visibilityIndex_, 6));
-		}
+			visibilityIndex_ = 6;
+			if (!OptionsDisplay::instance()->getNoWaterLOD())
+			{
+				float distance = (cameraPos - position_).Magnitude();
+				visibilityIndex_ = int(distance - 50.0f) / 70;
+				visibilityIndex_ = MAX(0, MIN(visibilityIndex_, 6));
+			}
 
-		VisibilityPatchGrid::instance()->addVisibleLandPatch(this);
+			VisibilityPatchGrid::instance()->addVisibleLandPatch(this);
+		}
+		else
+		{
+			VisibilityPatchGrid::instance()->addVisibleSurroundPatch(this);
+		}
 	}
-	else
-	{
-		visible_ = false;
-	}
+}
+
+void LandVisibilityPatch::drawSurround()
+{
+	glVertex2i(x_, y_);
+	glVertex2i(x_ + 64, y_);
+	glVertex2i(x_ + 64, y_ + 64);
+	glVertex2i(x_, y_ + 64);
 }
 
 void LandVisibilityPatch::draw(MipMapPatchIndexs &indexes, int indexPosition, int borders)

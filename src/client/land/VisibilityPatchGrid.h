@@ -32,14 +32,19 @@ public:
 	static VisibilityPatchGrid *instance();
 
 	void generate();
+
 	void drawVisibility();
-	void drawLand();
+	void drawLand(int addIndex = 0);
+	void drawSimpleLand();
+	void drawSurround();
 
 	LandVisibilityPatch *getLandVisibilityPatch(int x, int y);
 	WaterVisibilityPatch *getWaterVisibilityPatch(int x, int y);
 
 	int getVisibleLandPatchesCount() { return visibleLandPatchesCount_; }
 	LandVisibilityPatch **getVisibleLandPatches() { return visibleLandPatches_; }
+	int getVisibleSurroundPatchesCount() { return visibleSurroundPatchesCount_; }
+	LandVisibilityPatch **getVisibleSurroundPatches() { return visibleSurroundPatches_; }
 	int getVisibleWaterPatchesCount() { return visibleWaterPatchesCount_; }
 	WaterVisibilityPatch **getVisibleWaterPatches() { return visibleWaterPatches_; }
 
@@ -48,6 +53,13 @@ public:
 		*lastVisibleLandPatches_ = patch;
 		visibleLandPatchesCount_++;
 		lastVisibleLandPatches_ ++;
+	}
+
+	void addVisibleSurroundPatch(LandVisibilityPatch *patch)
+	{
+		*lastVisibleSurroundPatches_ = patch;
+		visibleSurroundPatchesCount_++;
+		lastVisibleSurroundPatches_ ++;
 	}
 
 	void addVisibleWaterPatch(WaterVisibilityPatch *patch)
@@ -71,8 +83,14 @@ protected:
 	// This is recreated from the visibilty data
 	int visibleLandPatchesCount_;
 	LandVisibilityPatch **visibleLandPatches_, **lastVisibleLandPatches_;
+	int visibleSurroundPatchesCount_;
+	LandVisibilityPatch **visibleSurroundPatches_, **lastVisibleSurroundPatches_;
 	int visibleWaterPatchesCount_;
 	WaterVisibilityPatch **visibleWaterPatches_, **lastVisibleWaterPatches_;
+
+	// The list of all land patches
+	int allLandPatchesCount_;
+	LandVisibilityPatch **allLandPatches_;
 
 	// The size of the patches
 	int midX_, midY_;

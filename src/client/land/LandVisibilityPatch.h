@@ -40,6 +40,8 @@ public:
 	void setVisible(Vector &cameraPos, bool visible);
 	int getVisibilityIndex() { return visible_?visibilityIndex_:-1; }
 
+	bool hasData() { return (heightMapData_ != 0); }
+
 	LandVisibilityPatch *getLeftPatch() { return leftPatch_; }
 	LandVisibilityPatch *getRightPatch() { return rightPatch_; }
 	LandVisibilityPatch *getTopPatch() { return topPatch_; }
@@ -47,6 +49,7 @@ public:
 
 	void draw(MipMapPatchIndexs &indexes, 
 		int indexPosition, int borders);
+	void drawSurround();
 
 protected:
 	int x_, y_;
