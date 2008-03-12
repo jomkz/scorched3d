@@ -26,7 +26,10 @@
 #include <GLEXT/GLVertexBufferObject.h>
 #include <GLEXT/GLInfo.h>
 
-LandVisibilityPatch::LandVisibilityPatch() : visible_(false), heightMapData_(0)
+LandVisibilityPatch::LandVisibilityPatch() : 
+	visible_(false), heightMapData_(0),
+	leftPatch_(0), rightPatch_(0),
+	topPatch_(0), bottomPatch_(0)
 {
 }
 
@@ -34,9 +37,17 @@ LandVisibilityPatch::~LandVisibilityPatch()
 {
 }
 
-void LandVisibilityPatch::setLocation(int x, int y)
+void LandVisibilityPatch::setLocation(int x, int y,
+	LandVisibilityPatch *leftPatch, 
+	LandVisibilityPatch *rightPatch, 
+	LandVisibilityPatch *topPatch, 
+	LandVisibilityPatch *bottomPatch)
 {
 	x_ = x; y_ = y;
+	leftPatch_ = leftPatch;
+	rightPatch_ = rightPatch;
+	topPatch_ = topPatch;
+	bottomPatch_ = bottomPatch;
 
 	int mapWidth = ScorchedClient::instance()->getLandscapeMaps().
 		getGroundMaps().getMapWidth();

@@ -32,10 +32,17 @@ public:
 	LandVisibilityPatch();
 	~LandVisibilityPatch();
 
-	void setLocation(int x, int y);
-
+	void setLocation(int x, int y,
+		LandVisibilityPatch *leftPatch, 
+		LandVisibilityPatch *rightPatch, 
+		LandVisibilityPatch *topPatch, 
+		LandVisibilityPatch *bottomPatch);
 	void setVisible(bool visible) { visible_ = visible; }
-	bool getVisible() { return visible_; }
+
+	LandVisibilityPatch *getLeftPatch() { return leftPatch_; }
+	LandVisibilityPatch *getRightPatch() { return rightPatch_; }
+	LandVisibilityPatch *getTopPatch() { return topPatch_; }
+	LandVisibilityPatch *getBottomPatch() { return bottomPatch_; }
 
 	void draw(MipMapPatchIndexs &indexes, 
 		int indexPosition, int borders);
@@ -44,6 +51,10 @@ protected:
 	int x_, y_;
 	int *heightMapData_;
 	bool visible_;
+	LandVisibilityPatch *leftPatch_;
+	LandVisibilityPatch *rightPatch_; 
+	LandVisibilityPatch *topPatch_;
+	LandVisibilityPatch *bottomPatch_;
 
 	void draw(MipMapPatchIndex &index);
 };

@@ -21,7 +21,11 @@
 #include <land/WaterVisibilityPatch.h>
 #include <geomipmap/MipMapPatchIndexs.h>
 
-WaterVisibilityPatch::WaterVisibilityPatch() : visible_(false)
+WaterVisibilityPatch::WaterVisibilityPatch() : 
+	visible_(false),
+	leftPatch_(0), rightPatch_(0),
+	topPatch_(0), bottomPatch_(0),
+	visibilityIndex_(4)
 {
 }
 
@@ -29,17 +33,22 @@ WaterVisibilityPatch::~WaterVisibilityPatch()
 {
 }
 
-void WaterVisibilityPatch::setLocation(int x, int y)
+void WaterVisibilityPatch::setLocation(int x, int y,
+	WaterVisibilityPatch *leftPatch, 
+	WaterVisibilityPatch *rightPatch, 
+	WaterVisibilityPatch *topPatch, 
+	WaterVisibilityPatch *bottomPatch)
 {
 	x_ = x; y_ = y;
+	leftPatch_ = leftPatch;
+	rightPatch_ = rightPatch;
+	topPatch_ = topPatch;
+	bottomPatch_ = bottomPatch;
 
-	int offX = (x / 256) * 256;
-	if (x < 0 && x % 256 != 0) offX -= 256;
-	int offY = (y / 256) * 256;
-	if (y < 0 && y % 256 != 0) offY -= 256;
+	patchX_ = (abs(x_) / 128) % 2;
+	patchY_ = (abs(y_) / 128) % 2;
 
-	offset_ = Vector(offX, offY, 0);
-	anyOffset_ = (offset_ != Vector::getNullVector());
+	offset_ = Vector(x_, y_, 0);
 }
 
 void WaterVisibilityPatch::draw(MipMapPatchIndexs &indexes, 

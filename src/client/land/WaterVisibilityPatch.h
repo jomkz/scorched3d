@@ -32,21 +32,36 @@ public:
 	WaterVisibilityPatch();
 	~WaterVisibilityPatch();
 
-	void setLocation(int x, int y);
-
+	void setLocation(int x, int y,
+		WaterVisibilityPatch *leftPatch, 
+		WaterVisibilityPatch *rightPatch, 
+		WaterVisibilityPatch *topPatch, 
+		WaterVisibilityPatch *bottomPatch);
 	void setVisible(bool visible) { visible_ = visible; }
-	bool getVisible() { return visible_; }
+
+	int getVisibilityIndex() { return visible_?visibilityIndex_:-1; }
+	int getPatchX() { return patchX_; }
+	int getPatchY() { return patchY_; }
 	Vector &getOffset() { return offset_; }
-	bool getAnyOffset() { return anyOffset_; }
+
+	WaterVisibilityPatch *getLeftPatch() { return leftPatch_; }
+	WaterVisibilityPatch *getRightPatch() { return rightPatch_; }
+	WaterVisibilityPatch *getTopPatch() { return topPatch_; }
+	WaterVisibilityPatch *getBottomPatch() { return bottomPatch_; }
 
 	void draw(MipMapPatchIndexs &indexes, 
 		int indexPosition, int borders);
 
 protected:
 	int x_, y_;
+	int patchX_, patchY_;
+	int visibilityIndex_;
 	bool visible_;
-	bool anyOffset_;
 	Vector offset_;
+	WaterVisibilityPatch *leftPatch_;
+	WaterVisibilityPatch *rightPatch_; 
+	WaterVisibilityPatch *topPatch_;
+	WaterVisibilityPatch *bottomPatch_;
 };
 
 #endif // __INCLUDE_WaterVisibilityPatchh_INCLUDE__

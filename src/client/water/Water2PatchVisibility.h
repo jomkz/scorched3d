@@ -40,18 +40,6 @@ public:
 		Vector landscapeSize,
 		GLSLShaderSetup *waterShader);
 
-	unsigned int getVisibility(int x, int y)
-	{
-		if (x < 0 || x >= size_ || y < 0 || y >= size_) return NotVisible;
-		return visibility_[x + y * size_].visibilityIndex;
-	}
-	unsigned int getVisibilityIndex(int x, int y, WaterVisibilityPatch *currentPatch)
-	{
-		return NotVisible;
-	}
-
-	static const unsigned int NotVisible;
-
 protected:
 	struct VisibilityEntry
 	{

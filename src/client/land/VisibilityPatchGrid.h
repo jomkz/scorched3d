@@ -38,20 +38,43 @@ public:
 	LandVisibilityPatch *getLandVisibilityPatch(int x, int y);
 	WaterVisibilityPatch *getWaterVisibilityPatch(int x, int y);
 
-	int getLandWidth() { return landWidth_; }
-	int getLandHeight() { return landHeight_; }
-	LandVisibilityPatch *getLandPatches() { return landPatches_; }
+	int getVisibleLandPatchesCount() { return visibleLandPatchesCount_; }
+	LandVisibilityPatch **getVisibleLandPatches() { return visibleLandPatches_; }
+	int getVisibleWaterPatchesCount() { return visibleWaterPatchesCount_; }
+	WaterVisibilityPatch **getVisibleWaterPatches() { return visibleWaterPatches_; }
 
-	int getWaterWidth() { return waterWidth_; }
-	int getWaterHeight() { return waterHeight_; }
-	WaterVisibilityPatch *getWaterPatches() { return waterPatches_; }
+	void addVisibleLandPatch(LandVisibilityPatch *patch)
+	{
+		*lastVisibleLandPatches_ = patch;
+		visibleLandPatchesCount_++;
+		lastVisibleLandPatches_ ++;
+	}
+
+	void addVisibleWaterPatch(WaterVisibilityPatch *patch)
+	{
+		*lastVisibleWaterPatches_ = patch;
+		visibleWaterPatchesCount_++;
+		lastVisibleWaterPatches_ ++;
+	}
 
 protected:
 	MipMapPatchIndexs landIndexs_;
+
+	// All the visibility patches
 	LandVisibilityPatch *landPatches_;
 	WaterVisibilityPatch *waterPatches_;
+
+	// The visibility data that decides if a visibility patch is visible or not
 	VisibilityPatchQuad *visibilityPatches_;
 
+	// The list of visible patches to draw each frame
+	// This is recreated from the visibilty data
+	int visibleLandPatchesCount_;
+	LandVisibilityPatch **visibleLandPatches_, **lastVisibleLandPatches_;
+	int visibleWaterPatchesCount_;
+	WaterVisibilityPatch **visibleWaterPatches_, **lastVisibleWaterPatches_;
+
+	// The size of the patches
 	int midX_, midY_;
 	int landWidth_, landHeight_;
 	int waterWidth_, waterHeight_;

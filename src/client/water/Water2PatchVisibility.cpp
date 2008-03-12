@@ -31,10 +31,8 @@
 
 #include <water/Water2Constants.h>
 
-const unsigned int Water2PatchVisibility::NotVisible = 9999;
-
 Water2PatchVisibility::VisibilityEntry::VisibilityEntry() :
-	visibilityIndex(Water2PatchVisibility::NotVisible)
+	visibilityIndex(9999)
 {
 }
 
@@ -92,96 +90,91 @@ void Water2PatchVisibility::draw(Water2Patches &patches,
 
 	// Draw all patches
 	VisibilityPatchGrid *visibilityGrid = VisibilityPatchGrid::instance();
-	WaterVisibilityPatch *currentPatch = visibilityGrid->getWaterPatches();
 
-	for (int y=0; y<visibilityGrid->getWaterHeight(); y++)
+	WaterVisibilityPatch **currentPatchPtr = visibilityGrid->getVisibleWaterPatches();
+	for (int i=0; i<visibilityGrid->getVisibleWaterPatchesCount(); i++, currentPatchPtr++)
 	{
-		for (int x=0; x<visibilityGrid->getWaterWidth(); x++, currentPatch++)
+		WaterVisibilityPatch *currentPatch = *currentPatchPtr;
+
+		unsigned int index = currentPatch->getVisibilityIndex();
+		if (index == -1) continue;
+
+		unsigned int borders = 0;
+		unsigned int leftIndex = currentPatch->getLeftPatch()?
+			currentPatch->getLeftPatch()->getVisibilityIndex():-1;
+		unsigned int rightIndex = currentPatch->getRightPatch()?
+			currentPatch->getRightPatch()->getVisibilityIndex():-1;
+		unsigned int topIndex = currentPatch->getTopPatch()?
+			currentPatch->getTopPatch()->getVisibilityIndex():-1;
+		unsigned int bottomIndex = currentPatch->getBottomPatch()?
+			currentPatch->getBottomPatch()->getVisibilityIndex():-1;
+
+		if (leftIndex != -1 && leftIndex > index) 
 		{
-			if (!currentPatch->getVisible()) continue;
-
-			unsigned int index = 6;//currentPatch->visibilityIndex;
-			if (index == NotVisible) continue;
-
-			unsigned int borders = 0;
-			unsigned int leftIndex = getVisibilityIndex(x - 1, y, currentPatch - 1);
-			unsigned int rightIndex = getVisibilityIndex(x + 1, y, currentPatch + 1);
-			unsigned int topIndex = getVisibilityIndex(x, y + 1, currentPatch + visibilityGrid->getWaterWidth());
-			unsigned int bottomIndex = getVisibilityIndex(x, y - 1, currentPatch - visibilityGrid->getWaterWidth());
-
-			if (leftIndex != NotVisible && leftIndex > index) 
-			{
-				if (leftIndex > index + 1) continue;
-				borders |= MipMapPatchIndex::BorderLeft;
-			}
-			if (rightIndex != NotVisible && rightIndex > index)
-			{
-				if (rightIndex > index + 1) continue;
-				borders |= MipMapPatchIndex::BorderRight;
-			}
-			if (topIndex != NotVisible && topIndex > index) 
-			{
-				if (topIndex > index + 1) continue;
-				borders |= MipMapPatchIndex::BorderTop;
-			}
-			if (bottomIndex != NotVisible && bottomIndex > index) 
-			{
-				if (bottomIndex > index + 1) continue;
-				borders |= MipMapPatchIndex::BorderBottom;
-			}
-
-			if (currentPatch->getAnyOffset())
-			{
-				glPushMatrix();
-				glTranslatef(
-					currentPatch->getOffset()[0],
-					currentPatch->getOffset()[1], 
-					currentPatch->getOffset()[2]);
-			}
-
-			// Setup the texture matrix for texture 0
-			if (waterShader)
-			{
-				Vector landfoam;
-				landfoam[0] = currentPatch->getOffset()[0];
-				landfoam[1] = currentPatch->getOffset()[1];
-				/*landfoam[2] = ((entry.position[0] >= 0.0f && entry.position[1] >= 0.0f &&
-					entry.position[0] <= landscapeSize[0] && entry.position[1] <= landscapeSize[1])?1.0f:0.0f);*/
-				waterShader->set_uniform("landfoam", landfoam);
-
-				// Set lighting position
-				// done after the translation
-				Landscape::instance()->getSky().getSun().setLightPosition(true);
-
-				// get projection and modelview matrix
-				// done after the translation
-				static float proj[16], model[16];
-				glGetFloatv(GL_PROJECTION_MATRIX, proj);
-				glGetFloatv(GL_MODELVIEW_MATRIX, model);
-
-				// Setup the texture matrix for texture 1
-				glActiveTexture(GL_TEXTURE1);
-				glMatrixMode(GL_TEXTURE);
-				glLoadIdentity();
-				glTranslatef(0.5f,0.5f,0.0f);
-				glScalef(0.5f,0.5f,1.0f);
-				glMultMatrixf(proj);
-				glMultMatrixf(model);
-				glMatrixMode(GL_MODELVIEW);
-
-				// Reset to texture 0
-				glActiveTexture(GL_TEXTURE0);
-			}
-
-			Water2Patch *patch = patches.getPatch(
-				x % patches.getSize(), y % patches.getSize());
-			patch->draw(indexes, index, borders);
-
-			if (currentPatch->getAnyOffset())
-			{
-				glPopMatrix();
-			}
+			if (leftIndex > index + 1) continue;
+			borders |= MipMapPatchIndex::BorderLeft;
 		}
+		if (rightIndex != -1 && rightIndex > index)
+		{
+			if (rightIndex > index + 1) continue;
+			borders |= MipMapPatchIndex::BorderRight;
+		}
+		if (topIndex != -1 && topIndex > index) 
+		{
+			if (topIndex > index + 1) continue;
+			borders |= MipMapPatchIndex::BorderTop;
+		}
+		if (bottomIndex != -1 && bottomIndex > index) 
+		{
+			if (bottomIndex > index + 1) continue;
+			borders |= MipMapPatchIndex::BorderBottom;
+		}
+
+		glPushMatrix();
+		glTranslatef(
+			currentPatch->getOffset()[0],
+			currentPatch->getOffset()[1], 
+			currentPatch->getOffset()[2]);
+
+		// Setup the texture matrix for texture 0
+		if (waterShader)
+		{
+			Vector landfoam;
+			landfoam[0] = currentPatch->getOffset()[0];
+			landfoam[1] = currentPatch->getOffset()[1];
+			/*landfoam[2] = ((entry.position[0] >= 0.0f && entry.position[1] >= 0.0f &&
+				entry.position[0] <= landscapeSize[0] && entry.position[1] <= landscapeSize[1])?1.0f:0.0f);*/
+			waterShader->set_uniform("landfoam", landfoam);
+
+			// Set lighting position
+			// done after the translation
+			Landscape::instance()->getSky().getSun().setLightPosition(true);
+
+			// get projection and modelview matrix
+			// done after the translation
+			static float proj[16], model[16];
+			glGetFloatv(GL_PROJECTION_MATRIX, proj);
+			glGetFloatv(GL_MODELVIEW_MATRIX, model);
+
+			// Setup the texture matrix for texture 1
+			glActiveTexture(GL_TEXTURE1);
+			glMatrixMode(GL_TEXTURE);
+			glLoadIdentity();
+			glTranslatef(0.5f,0.5f,0.0f);
+			glScalef(0.5f,0.5f,1.0f);
+			glMultMatrixf(proj);
+			glMultMatrixf(model);
+			glMatrixMode(GL_MODELVIEW);
+
+			// Reset to texture 0
+			glActiveTexture(GL_TEXTURE0);
+		}
+
+		Water2Patch *patch = patches.getPatch(
+			currentPatch->getPatchX(), currentPatch->getPatchY());
+		patch->draw(indexes, index, borders);
+
+		glPopMatrix();
 	}
 
 	glDisableClientState(GL_VERTEX_ARRAY);

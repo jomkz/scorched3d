@@ -80,8 +80,16 @@ void VisibilityPatchQuad::setNotVisible()
 
 void VisibilityPatchQuad::setVisible()
 {
-	if (landVisibilityPatch_) landVisibilityPatch_->setVisible(true);
-	if (waterVisibilityPatch_) waterVisibilityPatch_->setVisible(true);
+	if (landVisibilityPatch_)
+	{
+		landVisibilityPatch_->setVisible(true);
+		VisibilityPatchGrid::instance()->addVisibleLandPatch(landVisibilityPatch_);
+	}
+	if (waterVisibilityPatch_)
+	{
+		waterVisibilityPatch_->setVisible(true);
+		VisibilityPatchGrid::instance()->addVisibleWaterPatch(waterVisibilityPatch_);
+	}
 
 	// Update Children
 	if (topLeft_) topLeft_->calculateVisibility();

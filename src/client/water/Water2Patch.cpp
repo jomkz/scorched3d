@@ -53,8 +53,8 @@ static Vector getPosition(Water2Points &heights,
 	Vector &height = heights.getPoint(currentXNormalized, currentYNormalized);
 
 	Vector result(
-		height[0] + float(currentX) * 2.0f,
-		height[1] + float(currentY) * 2.0f,
+		height[0] + float(x) * 2.0f,
+		height[1] + float(y) * 2.0f,
 		height[2]);
 	return result;
 }
@@ -67,7 +67,7 @@ void Water2Patch::generate(Water2Points &heights,
 	size_ = size;
 	if (!data_) data_ = new Data[(size + 1) * (size + 1)];
 
-	int startX = posX * size;
+	int startX = posX * size;  
 	int startY = posY * size;
 
 	{
