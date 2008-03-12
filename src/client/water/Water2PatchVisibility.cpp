@@ -122,12 +122,12 @@ void Water2PatchVisibility::draw(Water2Patches &patches,
 		if (topIndex != -1 && topIndex > index) 
 		{
 			if (topIndex > index + 1) continue;
-			borders |= MipMapPatchIndex::BorderBottom
+			borders |= MipMapPatchIndex::BorderBottom;
 		}
 		if (bottomIndex != -1 && bottomIndex > index) 
 		{
 			if (bottomIndex > index + 1) continue;
-			borders |= MipMapPatchIndex::BorderTop;;
+			borders |= MipMapPatchIndex::BorderTop;
 		}
 
 		glPushMatrix();

@@ -60,10 +60,10 @@ void WaterVisibilityPatch::setVisible(Vector &cameraPos, bool visible)
 
 	if (visible)
 	{
-		int index = 6;
+		float distance = (cameraPos - position_).Magnitude();
+		visibilityIndex_ = 6;
 		if (!OptionsDisplay::instance()->getNoWaterLOD())
 		{
-			float distance = (cameraPos - position_).Magnitude();
 			visibilityIndex_ = int(distance - 50.0f) / 130;
 			if (OptionsDisplay::instance()->getNoWaterMovement())
 			{
@@ -72,6 +72,9 @@ void WaterVisibilityPatch::setVisible(Vector &cameraPos, bool visible)
 			visibilityIndex_ = MAX(0, MIN(visibilityIndex_, 6));
 		}
 
-		VisibilityPatchGrid::instance()->addVisibleWaterPatch(this);
+		if (distance < 2000.0f)
+		{
+			VisibilityPatchGrid::instance()->addVisibleWaterPatch(this);
+		}
 	}
 }
