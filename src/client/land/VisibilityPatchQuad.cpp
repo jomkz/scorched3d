@@ -66,46 +66,38 @@ void VisibilityPatchQuad::setLocation(VisibilityPatchGrid *patchGrid, int x, int
 	}
 }
 
-void VisibilityPatchQuad::setNotVisible()
+void VisibilityPatchQuad::setNotVisible(Vector &cameraPos)
 {
-	if (landVisibilityPatch_) landVisibilityPatch_->setVisible(false);
-	if (waterVisibilityPatch_) waterVisibilityPatch_->setVisible(false);
+	if (landVisibilityPatch_) landVisibilityPatch_->setVisible(cameraPos, false);
+	if (waterVisibilityPatch_) waterVisibilityPatch_->setVisible(cameraPos, false);
 
 	// Update Children
-	if (topLeft_) topLeft_->setNotVisible();
-	if (topRight_) topRight_->setNotVisible();
-	if (botLeft_) botLeft_->setNotVisible();
-	if (botRight_) botRight_->setNotVisible();
+	if (topLeft_) topLeft_->setNotVisible(cameraPos);
+	if (topRight_) topRight_->setNotVisible(cameraPos);
+	if (botLeft_) botLeft_->setNotVisible(cameraPos);
+	if (botRight_) botRight_->setNotVisible(cameraPos);
 }
 
-void VisibilityPatchQuad::setVisible()
+void VisibilityPatchQuad::setVisible(Vector &cameraPos)
 {
-	if (landVisibilityPatch_)
-	{
-		landVisibilityPatch_->setVisible(true);
-		VisibilityPatchGrid::instance()->addVisibleLandPatch(landVisibilityPatch_);
-	}
-	if (waterVisibilityPatch_)
-	{
-		waterVisibilityPatch_->setVisible(true);
-		VisibilityPatchGrid::instance()->addVisibleWaterPatch(waterVisibilityPatch_);
-	}
+	if (landVisibilityPatch_) landVisibilityPatch_->setVisible(cameraPos, true);
+	if (waterVisibilityPatch_) waterVisibilityPatch_->setVisible(cameraPos, true);
 
 	// Update Children
-	if (topLeft_) topLeft_->calculateVisibility();
-	if (topRight_) topRight_->calculateVisibility();
-	if (botLeft_) botLeft_->calculateVisibility();
-	if (botRight_) botRight_->calculateVisibility();	
+	if (topLeft_) topLeft_->calculateVisibility(cameraPos);
+	if (topRight_) topRight_->calculateVisibility(cameraPos);
+	if (botLeft_) botLeft_->calculateVisibility(cameraPos);
+	if (botRight_) botRight_->calculateVisibility(cameraPos);	
 }
 
-void VisibilityPatchQuad::calculateVisibility()
+void VisibilityPatchQuad::calculateVisibility(Vector &cameraPos)
 {
 	if (!GLCameraFrustum::instance()->sphereInFrustum(position_, float(size_)))
 	{
-		setNotVisible();
+		setNotVisible(cameraPos);
 	}
 	else
 	{
-		setVisible();
+		setVisible(cameraPos);
 	}
 }

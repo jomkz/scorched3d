@@ -22,6 +22,7 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <client/ScorchedClient.h>
 #include <GLEXT/GLStateExtension.h>
+#include <graph/MainCamera.h>
 
 VisibilityPatchGrid *VisibilityPatchGrid::instance()
 {
@@ -188,6 +189,9 @@ WaterVisibilityPatch *VisibilityPatchGrid::getWaterVisibilityPatch(int x, int y)
 
 void VisibilityPatchGrid::drawVisibility()
 {
+	Vector &cameraPos = 
+		MainCamera::instance()->getTarget().getCamera().getCurrentPos();
+
 	visibleLandPatchesCount_ = 0;
 	visibleWaterPatchesCount_ = 0;
 	lastVisibleLandPatches_ = visibleLandPatches_;
@@ -199,7 +203,7 @@ void VisibilityPatchGrid::drawVisibility()
 	{
 		for (int x=0; x<visibilityWidth_; x++, currentPatch++)
 		{
-			currentPatch->calculateVisibility();
+			currentPatch->calculateVisibility(cameraPos);
 		}
 	}
 }

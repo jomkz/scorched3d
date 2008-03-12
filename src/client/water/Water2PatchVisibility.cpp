@@ -122,12 +122,12 @@ void Water2PatchVisibility::draw(Water2Patches &patches,
 		if (topIndex != -1 && topIndex > index) 
 		{
 			if (topIndex > index + 1) continue;
-			borders |= MipMapPatchIndex::BorderTop;
+			borders |= MipMapPatchIndex::BorderBottom
 		}
 		if (bottomIndex != -1 && bottomIndex > index) 
 		{
 			if (bottomIndex > index + 1) continue;
-			borders |= MipMapPatchIndex::BorderBottom;
+			borders |= MipMapPatchIndex::BorderTop;;
 		}
 
 		glPushMatrix();
@@ -142,8 +142,10 @@ void Water2PatchVisibility::draw(Water2Patches &patches,
 			Vector landfoam;
 			landfoam[0] = currentPatch->getOffset()[0];
 			landfoam[1] = currentPatch->getOffset()[1];
-			/*landfoam[2] = ((entry.position[0] >= 0.0f && entry.position[1] >= 0.0f &&
-				entry.position[0] <= landscapeSize[0] && entry.position[1] <= landscapeSize[1])?1.0f:0.0f);*/
+			landfoam[2] = ((currentPatch->getPosition()[0] >= 0.0f && 
+				currentPatch->getPosition()[1] >= 0.0f &&
+				currentPatch->getPosition()[0] <= landscapeSize[0] && 
+				currentPatch->getPosition()[1] <= landscapeSize[1])?1.0f:0.0f);
 			waterShader->set_uniform("landfoam", landfoam);
 
 			// Set lighting position

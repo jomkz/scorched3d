@@ -37,27 +37,25 @@ public:
 		WaterVisibilityPatch *rightPatch, 
 		WaterVisibilityPatch *topPatch, 
 		WaterVisibilityPatch *bottomPatch);
-	void setVisible(bool visible) { visible_ = visible; }
+	void setVisible(Vector &cameraPos, bool visible);
 
 	int getVisibilityIndex() { return visible_?visibilityIndex_:-1; }
 	int getPatchX() { return patchX_; }
 	int getPatchY() { return patchY_; }
 	Vector &getOffset() { return offset_; }
+	Vector &getPosition() { return position_; }
 
 	WaterVisibilityPatch *getLeftPatch() { return leftPatch_; }
 	WaterVisibilityPatch *getRightPatch() { return rightPatch_; }
 	WaterVisibilityPatch *getTopPatch() { return topPatch_; }
 	WaterVisibilityPatch *getBottomPatch() { return bottomPatch_; }
 
-	void draw(MipMapPatchIndexs &indexes, 
-		int indexPosition, int borders);
-
 protected:
 	int x_, y_;
 	int patchX_, patchY_;
 	int visibilityIndex_;
 	bool visible_;
-	Vector offset_;
+	Vector offset_, position_;
 	WaterVisibilityPatch *leftPatch_;
 	WaterVisibilityPatch *rightPatch_; 
 	WaterVisibilityPatch *topPatch_;

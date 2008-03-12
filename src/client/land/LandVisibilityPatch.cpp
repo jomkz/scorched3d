@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <land/LandVisibilityPatch.h>
+#include <land/VisibilityPatchGrid.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <geomipmap/MipMapPatchIndexs.h>
 #include <client/ScorchedClient.h>
@@ -74,6 +75,16 @@ void LandVisibilityPatch::draw(MipMapPatchIndexs &indexes, int indexPosition, in
 
 	// draw
 	draw(index);
+}
+
+void LandVisibilityPatch::setVisible(Vector &cameraPos, bool visible)
+{ 
+	visible_ = visible; 
+
+	if (visible && heightMapData_)
+	{
+		VisibilityPatchGrid::instance()->addVisibleLandPatch(this);
+	}
 }
 
 void LandVisibilityPatch::draw(MipMapPatchIndex &index)

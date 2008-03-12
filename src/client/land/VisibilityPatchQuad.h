@@ -33,10 +33,10 @@ public:
 	~VisibilityPatchQuad();
 
 	void setLocation(VisibilityPatchGrid *patchGrid, int x, int y, int size);
-	void calculateVisibility();
+	void calculateVisibility(Vector &cameraPos);
 
-	void setNotVisible();
-	void setVisible();
+	void setNotVisible(Vector &cameraPos);
+	void setVisible(Vector &cameraPos);
 
 protected:
 	int x_, y_;

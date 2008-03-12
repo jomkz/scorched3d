@@ -19,7 +19,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <land/WaterVisibilityPatch.h>
+#include <land/VisibilityPatchGrid.h>
 #include <geomipmap/MipMapPatchIndexs.h>
+#include <graph/OptionsDisplay.h>
 
 WaterVisibilityPatch::WaterVisibilityPatch() : 
 	visible_(false),
@@ -49,10 +51,27 @@ void WaterVisibilityPatch::setLocation(int x, int y,
 	patchY_ = (abs(y_) / 128) % 2;
 
 	offset_ = Vector(x_, y_, 0);
+	position_ = Vector(x_ + 64, y_ + 64, 5);
 }
 
-void WaterVisibilityPatch::draw(MipMapPatchIndexs &indexes, 
-	int indexPosition, int borders)
-{
+void WaterVisibilityPatch::setVisible(Vector &cameraPos, bool visible)
+{ 
+	visible_ = visible; 
 
+	if (visible)
+	{
+		int index = 6;
+		if (!OptionsDisplay::instance()->getNoWaterLOD())
+		{
+			float distance = (cameraPos - position_).Magnitude();
+			visibilityIndex_ = int(distance - 50.0f) / 130;
+			if (OptionsDisplay::instance()->getNoWaterMovement())
+			{
+				visibilityIndex_ += 3;
+			}
+			visibilityIndex_ = MAX(0, MIN(visibilityIndex_, 6));
+		}
+
+		VisibilityPatchGrid::instance()->addVisibleWaterPatch(this);
+	}
 }
