@@ -38,6 +38,7 @@ public:
 		LandVisibilityPatch *topPatch, 
 		LandVisibilityPatch *bottomPatch);
 	void setVisible(Vector &cameraPos, bool visible);
+	int getVisibilityIndex() { return visible_?visibilityIndex_:-1; }
 
 	LandVisibilityPatch *getLeftPatch() { return leftPatch_; }
 	LandVisibilityPatch *getRightPatch() { return rightPatch_; }
@@ -50,7 +51,9 @@ public:
 protected:
 	int x_, y_;
 	int *heightMapData_;
+	int visibilityIndex_;
 	bool visible_;
+	Vector position_;
 	LandVisibilityPatch *leftPatch_;
 	LandVisibilityPatch *rightPatch_; 
 	LandVisibilityPatch *topPatch_;

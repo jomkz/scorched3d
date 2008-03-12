@@ -22,6 +22,7 @@
 #include <land/VisibilityPatchGrid.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <geomipmap/MipMapPatchIndexs.h>
+#include <graph/OptionsDisplay.h>
 #include <client/ScorchedClient.h>
 #include <GLEXT/GLStateExtension.h>
 #include <GLEXT/GLVertexBufferObject.h>
@@ -30,7 +31,8 @@
 LandVisibilityPatch::LandVisibilityPatch() : 
 	visible_(false), heightMapData_(0),
 	leftPatch_(0), rightPatch_(0),
-	topPatch_(0), bottomPatch_(0)
+	topPatch_(0), bottomPatch_(0),
+	visibilityIndex_(4)
 {
 }
 
@@ -50,6 +52,8 @@ void LandVisibilityPatch::setLocation(int x, int y,
 	topPatch_ = topPatch;
 	bottomPatch_ = bottomPatch;
 
+	position_ = Vector(x_ + 32, y_ + 32, 5);
+
 	int mapWidth = ScorchedClient::instance()->getLandscapeMaps().
 		getGroundMaps().getMapWidth();
 	int mapHeight = ScorchedClient::instance()->getLandscapeMaps().
@@ -64,6 +68,28 @@ void LandVisibilityPatch::setLocation(int x, int y,
 	}
 }
 
+void LandVisibilityPatch::setVisible(Vector &cameraPos, bool visible)
+{ 
+	if (visible && heightMapData_)
+	{
+		visible_ = true;
+
+		visibilityIndex_ = 6;
+		if (!OptionsDisplay::instance()->getNoWaterLOD())
+		{
+			float distance = (cameraPos - position_).Magnitude();
+			visibilityIndex_ = int(distance - 50.0f) / 70;
+			visibilityIndex_ = MAX(0, MIN(visibilityIndex_, 6));
+		}
+
+		VisibilityPatchGrid::instance()->addVisibleLandPatch(this);
+	}
+	else
+	{
+		visible_ = false;
+	}
+}
+
 void LandVisibilityPatch::draw(MipMapPatchIndexs &indexes, int indexPosition, int borders)
 {
 	if (!heightMapData_) return;
@@ -75,16 +101,6 @@ void LandVisibilityPatch::draw(MipMapPatchIndexs &indexes, int indexPosition, in
 
 	// draw
 	draw(index);
-}
-
-void LandVisibilityPatch::setVisible(Vector &cameraPos, bool visible)
-{ 
-	visible_ = visible; 
-
-	if (visible && heightMapData_)
-	{
-		VisibilityPatchGrid::instance()->addVisibleLandPatch(this);
-	}
 }
 
 void LandVisibilityPatch::draw(MipMapPatchIndex &index)

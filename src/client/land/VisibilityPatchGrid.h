@@ -81,6 +81,7 @@ protected:
 	int visibilityWidth_, visibilityHeight_;
 
 	void clear();
+	void drawLandPatches();
 
 private:
 	VisibilityPatchGrid();

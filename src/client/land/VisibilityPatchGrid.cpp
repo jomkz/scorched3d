@@ -235,7 +235,41 @@ void VisibilityPatchGrid::drawLand()
 		for (int i=0; i<visibleLandPatchesCount_; i++, currentPatchPtr++)
 		{
 			LandVisibilityPatch *currentPatch = *currentPatchPtr;
-			currentPatch->draw(landIndexs_, 4, 0);
+			unsigned int index = currentPatch->getVisibilityIndex();
+			if (index == -1) continue;
+
+			unsigned int borders = 0;
+			unsigned int leftIndex = currentPatch->getLeftPatch()?
+				currentPatch->getLeftPatch()->getVisibilityIndex():-1;
+			unsigned int rightIndex = currentPatch->getRightPatch()?
+				currentPatch->getRightPatch()->getVisibilityIndex():-1;
+			unsigned int topIndex = currentPatch->getTopPatch()?
+				currentPatch->getTopPatch()->getVisibilityIndex():-1;
+			unsigned int bottomIndex = currentPatch->getBottomPatch()?
+				currentPatch->getBottomPatch()->getVisibilityIndex():-1;
+
+			if (leftIndex != -1 && leftIndex > index) 
+			{
+				if (leftIndex > index + 1) continue;
+				borders |= MipMapPatchIndex::BorderLeft;
+			}
+			if (rightIndex != -1 && rightIndex > index)
+			{
+				if (rightIndex > index + 1) continue;
+				borders |= MipMapPatchIndex::BorderRight;
+			}
+			if (topIndex != -1 && topIndex > index) 
+			{
+				if (topIndex > index + 1) continue;
+				borders |= MipMapPatchIndex::BorderBottom;
+			}
+			if (bottomIndex != -1 && bottomIndex > index) 
+			{
+				if (bottomIndex > index + 1) continue;
+				borders |= MipMapPatchIndex::BorderTop;
+			}
+
+			currentPatch->draw(landIndexs_, index, borders);
 		}
 	}
 
