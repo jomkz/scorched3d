@@ -44,11 +44,11 @@
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/src/client&quot;;&quot;$(SolutionDir)/src/server&quot;;&quot;$(SolutionDir)/src/common&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/zlib/zlib&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/jpg&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/SDL&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/expat/expat&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/png/png&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/al&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/fftw3&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/vorbis&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/ogg&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/freetype&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC"
 				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
+				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
