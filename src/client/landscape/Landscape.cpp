@@ -411,7 +411,11 @@ void Landscape::generate(ProgressCounter *counter)
 		bitmapPlanAlpha_ = ImageFactory::createBlank(planTexSize, planTexSize, true);
 		bitmapPlan_ = ImageFactory::createBlank(planTexSize, planTexSize);
 		bitmapPlanAlphaAlpha_ = ImageFactory::createBlank(planTexSize, planTexSize);
+		splatMap_ = ImageFactory::createBlank(1024, 1024);
 	}
+
+	ImageHandle splatMask1 = ImageFactory::createBlank(mapTexSize, mapTexSize, true, 0);
+	ImageHandle splatMask2 = ImageFactory::createBlank(mapTexSize, mapTexSize, true, 0);
 
 	ImageHandle plana = ImageFactory::loadImageHandle(S3D::getDataFile("data/windows/planaa.bmp"));
 	ImageModifier::scalePlanBitmap(bitmapPlanAlphaAlpha_, plana,
@@ -444,8 +448,6 @@ void Landscape::generate(ProgressCounter *counter)
 			ImageFactory::loadImageHandle(S3D::getDataFile(generate->rockside.c_str()));
 		ImageHandle bitmapRoof = 
 			ImageFactory::loadImageHandle(S3D::getDataFile(generate->roof.c_str()));
-		ImageHandle bitmapSurround = 
-			ImageFactory::loadImageHandle(S3D::getDataFile(generate->surround.c_str()));
 		Image *bitmaps[5];
 		bitmaps[0] = &texture0;
 		bitmaps[1] = &texture1;
@@ -457,19 +459,22 @@ void Landscape::generate(ProgressCounter *counter)
 		if (counter) counter->setNewOp("Landscape Map");
 		ImageModifier::addHeightToBitmap(
 			ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap(),
-			mainMap_,
+			mainMap_, splatMask1, splatMask2,
 			bitmapRock, bitmapShore, bitmaps, 5, 1024, counter);
+
+		// Generate splat texture maps
+		ImageModifier::addTexturesToBitmap(
+			splatMap_,
+			bitmapRock, bitmapShore, bitmaps, 5);
+		splatTextures_.create(splatMap_, false);
 
 		// Set the general surround and roof texture
 		groundTexture_.replace(texture0, false);
-		surroundTexture_.replace(bitmapSurround, false);
 		roofTexture_.replace(bitmapRoof, true);
 
-
-		// Normal texture
-		ImageHandle bitmapNormals =
-			ImageFactory::loadImageHandle(S3D::getDataFile("data/textures/landscape/default/normal_map.bmp"));
-		normalTexture_.create(bitmapNormals);
+		// Set up the splat textures
+		splatMaskTexture1_.replace(splatMask1, false);
+		splatMaskTexture2_.replace(splatMask2, false);
 	}
 	else
 	{
@@ -641,16 +646,12 @@ void Landscape::actualDrawLandTextured()
 			glActiveTextureARB(GL_TEXTURE0_ARB);
 		}
 
-glMatrixMode(GL_TEXTURE);
-glLoadIdentity();
-glMatrixMode(GL_MODELVIEW);
-
 		texture_.draw(true);
 	}
 	
 	glColor3f(1.0f, 1.0f, 1.0f);
 	VisibilityPatchGrid::instance()->drawLand();
-	VisibilityPatchGrid::instance()->drawSurround();
+	//VisibilityPatchGrid::instance()->drawSurround();
 
 	if (OptionsDisplay::instance()->getUseLandscapeTexture())
 	{
@@ -754,49 +755,28 @@ void Landscape::actualDrawLandShader()
 	getSky().getSun().setLightPosition(false);
 
 	landShader_->use();
-	landShader_->set_gl_texture(texture_, "mainmap", 0);
-	landShader_->set_gl_texture(shadowFrameBuffer_, "shadow", 1);
-	landShader_->set_gl_texture(detailTexture_, "detailmap", 2);
+	landShader_->set_gl_texture(splatMaskTexture1_, "splat1map", 0);
+	landShader_->set_gl_texture(splatMaskTexture2_, "splat2map", 1);
+	landShader_->set_gl_texture(splatTextures_, "splattex", 2);
+	landShader_->set_gl_texture(shadowFrameBuffer_, "shadow", 3);
 
-	// Tex 3
+	// Enable Tex
 	glActiveTextureARB(GL_TEXTURE3_ARB);
-	normalTexture_.draw();
-
-	// Tex 2
-	glActiveTextureARB(GL_TEXTURE2_ARB);
-	glEnable(GL_TEXTURE_2D);
-	detailTexture_.draw(true);
-
-	// Tex 1
-	glActiveTextureARB(GL_TEXTURE1_ARB);
-	glEnable(GL_TEXTURE_2D);
-	shadowFrameBuffer_.bindDepthTexture();
 	glMatrixMode(GL_TEXTURE);
 	glLoadMatrixf(shadowTextureMatrix_);
 	glMatrixMode(GL_MODELVIEW);
-
-	// Tex 0
 	glActiveTextureARB(GL_TEXTURE0_ARB);
-	texture_.draw();
 
 	// Draw
 	glColor3f(1.0f, 1.0f, 1.0f);
 	VisibilityPatchGrid::instance()->drawLand();
-	VisibilityPatchGrid::instance()->drawSurround();
+	//VisibilityPatchGrid::instance()->drawSurround();
 
-	// Disable
+	// Disable Tex
 	glActiveTextureARB(GL_TEXTURE3_ARB);
-	glDisable(GL_TEXTURE_2D);
-	glActiveTextureARB(GL_TEXTURE2_ARB);
 	glMatrixMode(GL_TEXTURE);
 	glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW);
-	glDisable(GL_TEXTURE_2D);
-	glActiveTextureARB(GL_TEXTURE1_ARB);
-	glMatrixMode(GL_TEXTURE);
-	glLoadIdentity();
-	glMatrixMode(GL_MODELVIEW);
-	glDisable(GL_TEXTURE_2D);
 	glActiveTextureARB(GL_TEXTURE0_ARB);
 
 	landShader_->use_fixed();

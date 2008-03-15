@@ -64,7 +64,6 @@ public:
 	GLTexture &getPlanATexture() { return planAlphaTexture_; }
 	GLTexture &getPlanTexture() { return planTexture_; }
 	GLTexture &getLandscapeTexture1() { return landTex1_; }
-	GLTexture &getSurroundTexture() { return surroundTexture_; }
 	GLTexture &getGroundTexture() { return groundTexture_; }
 	GLTexture &getDetailTexture() { return detailTexture_; }
 	GLTexture &getRoofTexture() { return roofTexture_; }
@@ -108,12 +107,14 @@ protected:
 	GLTexture magTexture_;
 	GLTexture planTexture_;
 	GLTexture planAlphaTexture_;
-	GLTexture surroundTexture_;
 	GLTexture detailTexture_;
 	GLTexture roofTexture_;
 	GLTexture landTex1_;
 	GLTexture groundTexture_;
-	GLTexture normalTexture_;
+	GLTexture splatMaskTexture1_;
+	GLTexture splatMaskTexture2_;
+	GLTexture splatTextures_;
+	ImageHandle splatMap_;
 	ImageHandle mainMap_;
 	ImageHandle scorchMap_;
 	ImageHandle bitmapPlanAlphaAlpha_;

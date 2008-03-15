@@ -1,42 +1,41 @@
 uniform sampler2DShadow shadow;
-uniform sampler2D mainmap;
-uniform sampler2D detailmap;
+uniform sampler2D splat1map;
+uniform sampler2D splat2map;
+uniform sampler2D splattex;
 
 varying vec3 normal,lightDir;
-//varying vec3 halfVector;
 
 void main()
 {
     // Look up the diffuse color and shadow states for each light source.
-    float s0 = shadow2DProj(shadow, gl_TexCoord[1]).r;
+    float s0 = 1.0;//shadow2DProj(shadow, gl_TexCoord[3]).r;
 
 	// compute the dot product between normal and normalized lightdir
 	vec3 n = normalize(normal);
 	float NdotL = max(dot(n,normalize(lightDir)),0.0) * s0;
 
-	// add exp fog (depth cueing)
-	// float fog = exp2(-gl_Fog.density * gl_FogFragCoord * 7.0 * 1.442695);
-	// float fog_factor = clamp(fog, 0.8, 1.0);
-
 	// Light color
 	vec4 ambient = gl_LightSource[1].ambient; //* gl_FrontMaterial.ambient;
 	vec4 diffuse = gl_LightSource[1].diffuse; //* gl_FrontMaterial.diffuse;
-	vec4 lightcolor = (diffuse * NdotL + ambient);
-
-	/* Specular	
-	vec3 halfV = normalize(halfVector);
-	float NdotHV = max(dot(n,halfV),0.0);
-	color += gl_FrontMaterial.specular * gl_LightSource[1].specular * 
-					pow(NdotHV,gl_FrontMaterial.shininess);
-	*/
+	vec4 lightcolor = vec4(1.0, 1.0, 1.0, 1.0);//(diffuse * NdotL + ambient);
 
     // Compute the final pixel color
-	vec4 groundColor = texture2D(mainmap, gl_TexCoord[0].xy);
-	vec4 detailColor = texture2D(detailmap, gl_TexCoord[2].xy);
+	vec4 splat1 = texture2D(splat1map, gl_TexCoord[0].xy);
+	vec4 splat2 = texture2D(splat2map, gl_TexCoord[0].xy);
 	
-	vec3 finalColor =
-		((groundColor.rgb * 3.5) + detailColor.rgb) / 4.0 * lightcolor.rgb;
-		
-	// gl_FragColor = vec4(mix(vec3(0.1, 0.1, 0.1), finalColor, fog_factor), 1.0);
+	vec2 splatcoord = vec2(fract(gl_TexCoord[2].x) * 0.25, fract(gl_TexCoord[2].y) * 0.25);
+	
+	vec4 groundColor = vec4(0, 0, 0, 0);
+	if (splat1.r) groundColor += texture2D(splattex, vec2(splatcoord.x + 0.0412, splatcoord.y + 0.0412)) * splat1.r;
+	if (splat1.g) groundColor += texture2D(splattex, vec2(splatcoord.x + 0.3745, splatcoord.y + 0.0412)) * splat1.g;
+	if (splat1.b) groundColor += texture2D(splattex, vec2(splatcoord.x + 0.7080, splatcoord.y + 0.0412)) * splat1.b;
+	if (splat1.a) groundColor += texture2D(splattex, vec2(splatcoord.x + 0.0412, splatcoord.y + 0.3745)) * splat1.a;
+	if (splat2.r) groundColor += texture2D(splattex, vec2(splatcoord.x + 0.3745, splatcoord.y + 0.3745)) * splat2.r;
+	if (splat2.g) groundColor += texture2D(splattex, vec2(splatcoord.x + 0.7080, splatcoord.y + 0.3745)) * splat2.g;
+	if (splat2.b) groundColor += texture2D(splattex, vec2(splatcoord.x + 0.0412, splatcoord.y + 0.7080)) * splat2.b;
+	
+	//groundColor = texture2D(splattex, gl_TexCoord[0].xy);
+	
+	vec3 finalColor = groundColor.rgb * lightcolor.rgb;
 	gl_FragColor = vec4(finalColor, 1.0);
 }

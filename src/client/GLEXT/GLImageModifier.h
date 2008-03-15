@@ -45,12 +45,22 @@ namespace ImageModifier
 
 	void addHeightToBitmap(HeightMap &hMap,
 							Image &destBitmap, 
+							Image &destSplat1Bitmap,
+							Image &destSplat2Bitmap,
 							Image &slopeBitmap,
 							Image &shoreBitmap,
 							Image **heightBitmaps,
 							int numberSources,
 							int destBitmapScaleSize,
 							ProgressCounter *counter = 0);
+
+	void addTexturesToBitmap(
+		Image &destBitmap,
+		Image &slopeBitmap,
+		Image &shoreBitmap,
+		Image **heightBitmaps,
+		int numberSources);
+
 
 	void addWaterToBitmap(HeightMap &hMap,
 							Image &destBitmap,

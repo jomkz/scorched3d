@@ -50,8 +50,8 @@ void HeightMap::reset()
 {
 	HeightData *current = heightData_;
 
-	int texTileX = width_ / 32;
-	int texTileY = height_ / 32;
+	int texTileX = width_ / 16;
+	int texTileY = height_ / 16;
 
 	for (int y=0; y<=height_; y++)
 	{
