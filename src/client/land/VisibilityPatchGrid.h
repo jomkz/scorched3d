@@ -26,6 +26,9 @@
 #include <land/VisibilityPatchQuad.h>
 #include <geomipmap/MipMapPatchIndexs.h>
 
+class GLSLShaderSetup;
+class WaterVisibilityPatch;
+class Water2Patches;
 class VisibilityPatchGrid
 {
 public:
@@ -37,16 +40,15 @@ public:
 	void drawLand(int addIndex = 0);
 	void drawSimpleLand();
 	void drawSurround();
+	void drawWater(Water2Patches &patches, 
+		MipMapPatchIndexs &indexes, Vector &cameraPosition, 
+		Vector landscapeSize,
+		GLSLShaderSetup *waterShader);
 
 	LandVisibilityPatch *getLandVisibilityPatch(int x, int y);
 	WaterVisibilityPatch *getWaterVisibilityPatch(int x, int y);
 
 	int getVisibleLandPatchesCount() { return visibleLandPatchesCount_; }
-	LandVisibilityPatch **getVisibleLandPatches() { return visibleLandPatches_; }
-	int getVisibleSurroundPatchesCount() { return visibleSurroundPatchesCount_; }
-	LandVisibilityPatch **getVisibleSurroundPatches() { return visibleSurroundPatches_; }
-	int getVisibleWaterPatchesCount() { return visibleWaterPatchesCount_; }
-	WaterVisibilityPatch **getVisibleWaterPatches() { return visibleWaterPatches_; }
 
 	void addVisibleLandPatch(LandVisibilityPatch *patch)
 	{

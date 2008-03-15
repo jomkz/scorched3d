@@ -29,7 +29,8 @@
 #include <GLEXT/GLTextureCubeMap.h>
 #include <client/ScorchedClient.h>
 #include <landscape/Landscape.h>
-#include <landscape/Sky.h>
+#include <sky/Sky.h>
+#include <land/VisibilityPatchGrid.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeDefn.h>
@@ -319,7 +320,7 @@ void Water2Renderer::drawWater(Water2 &water2)
 	// Draw Water
 	Vector &cameraPos = 
 		MainCamera::instance()->getTarget().getCamera().getCurrentPos();
-	water2.getVisibility().draw(
+	VisibilityPatchGrid::instance()->drawWater(
 		*currentPatch_, water2.getIndexs(), cameraPos, landscapeSize_, waterShader_);
 }
 

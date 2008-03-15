@@ -49,6 +49,10 @@ void HeightMap::create(const int width, const int height)
 void HeightMap::reset()
 {
 	HeightData *current = heightData_;
+
+	int texTileX = width_ / 32;
+	int texTileY = height_ / 32;
+
 	for (int y=0; y<=height_; y++)
 	{
 		for (int x=0; x<=width_; x++)
@@ -64,8 +68,8 @@ void HeightMap::reset()
 			current->texCoord1x = float(x) / float(width_);
 			current->texCoord1y = float(y) / float(height_);
 
-			current->texCoord2x = float(x) / float(width_) * float(64);
-			current->texCoord2y = float(y) / float(height_) * float(64);
+			current->texCoord2x = float(x) / float(width_) * float(texTileX);
+			current->texCoord2y = float(y) / float(height_) * float(texTileY);
 
 			current++;
 		}

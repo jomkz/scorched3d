@@ -19,47 +19,57 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <GLEXT/GLState.h>
-#include <landscape/Patch.h>
+#include <sky/SkyLine.h>
+#include <common/Defines.h>
+#include <math.h>
 
-Patch::Patch(HeightMap *map, PatchTexCoord *coord, 
-	int x, int y, int width) :
-	x_(x), y_(y), width_(width),
-	leftSide_(map, coord, x, y, width),
-	rightSide_(map, coord, x+width, y+width, -width),
-	forceVariance_(false), recalculate_(false), visible_(true),
-	midPoint_(x + width / 2, y + width / 2, 0)
+SkyLine::SkyLine() :
+	listNo_(0)
 {
-
 }
 
-Patch::~Patch()
+SkyLine::~SkyLine()
 {
-
+	clear();
 }
 
-void Patch::reset()
+void SkyLine::clear()
 {
-	leftSide_.reset();
-	rightSide_.reset();
-
-	leftSide_.getTriNode()->BaseNeighbor = rightSide_.getTriNode();
-	rightSide_.getTriNode()->BaseNeighbor = leftSide_.getTriNode();
+	if (listNo_) glDeleteLists(listNo_, 1);
+	listNo_ = 0;
 }
 
-void Patch::computeVariance()
+void SkyLine::draw(float radius, float radius2, float height)
 {
-	leftSide_.computeVariance();
-	rightSide_.computeVariance();
+	if (listNo_)
+	{
+		glCallList(listNo_);
+	}
+	else
+	{
+		glNewList(listNo_ = glGenLists(1), GL_COMPILE_AND_EXECUTE);
+			actualDraw(radius, radius2, height);
+		glEndList();
+	}
 }
 
-void Patch::tessalate(unsigned currentVariance)
+void SkyLine::actualDraw(float radius, float radius2, float height)
 {
-	leftSide_.tesselate(currentVariance);
-	rightSide_.tesselate(currentVariance);
+	GLState state(GLState::TEXTURE_ON | GLState::BLEND_ON | GLState::ALPHATEST_ON);
+
+	glColor3f(1.0f, 1.0f, 1.0);
+	glBegin(GL_QUAD_STRIP);
+	for (float a=0.0f; a<=360.0f; a+=360.0f / 12)
+	{
+		float x = sinf(a / 180.0f * PI) * radius;
+		float y = cosf(a / 180.0f * PI) * radius2;
+
+		glTexCoord2f(a / 360.0f, 1.0f);
+		glVertex3f(x, y, height);
+
+		glTexCoord2f(a / 360.0f, 0.0f);
+		glVertex3f(x, y, 0.0f);
+	}
+	glEnd();
 }
 
-void Patch::draw(PatchSide::DrawType side)
-{
-	leftSide_.draw(side);
-	rightSide_.draw(side);
-}

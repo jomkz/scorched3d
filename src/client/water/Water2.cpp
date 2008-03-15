@@ -120,10 +120,6 @@ void Water2::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)
 		indexs_.generate(wave_patch_width, wave_patch_width);
 	}
 
-	// Create visibility mesh
-	Vector offset(-1536.0f, -1536.0f, 0.0f);
-	visibility_.generate(offset, wave_resolution * 15, wave_resolution, wave_patch_width);
-
 	// compute amount of foam per vertex sample
 	LandscapeDefn &defn = *ScorchedClient::instance()->getLandscapeMaps().
 		getDefinitions().getDefn();

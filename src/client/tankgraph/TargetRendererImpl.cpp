@@ -27,7 +27,7 @@
 #include <graph/ParticleEngine.h>
 #include <graph/OptionsDisplay.h>
 #include <common/Defines.h>
-#include <landscape/Hemisphere.h>
+#include <sky/Hemisphere.h>
 #include <weapons/ShieldRound.h>
 #include <weapons/ShieldSquare.h>
 #include <weapons/Accessory.h>

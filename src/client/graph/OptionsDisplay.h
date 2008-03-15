@@ -46,15 +46,6 @@ public:
 	int getTankModelSize() { return tankModelSize_; }
 	OptionEntryInt &getTankModelSizeEntry() { return tankModelSize_; }
 
-	int getRoamVarianceRamp() { return roamVarianceRamp_; }
-	OptionEntryInt &getRoamVarianceRampEntry() { return roamVarianceRamp_; }
-
-	int getRoamVarianceStart() { return roamVarianceStart_; }
-	OptionEntryInt &getRoamVarianceStartEntry() { return roamVarianceStart_; }
-
-	int getRoamVarianceTank() { return roamVarianceTank_; }
-	OptionEntryInt &getRoamVarianceTankEntry() { return roamVarianceTank_; }
-
 	int getNumberExplosionParts() { return explosionParts_; }
 	OptionEntryInt &getNumberExplosionPartsEntry() { return explosionParts_; }
 
@@ -82,9 +73,6 @@ public:
 	bool getNoLenseFlare() { return noLenseFlare_; }
 	OptionEntryBool &getNoLenseFlareEntry() { return noLenseFlare_; }
 
-	bool getNoROAM() { return noROAM_; }
-	OptionEntryBool &getNoROAMEntry() { return noROAM_; }
-
 	bool getNoShadows() { return noShadows_; }
 	OptionEntryBool &getNoShadowsEntry() { return noShadows_; }
 
@@ -99,9 +87,6 @@ public:
 
 	bool getNoSimulateParticles() { return noSimulateParticles_; }
 	OptionEntryBool &getNoSimulateParticlesEntry() { return noSimulateParticles_; }
-
-	bool getNoTessalation() { return noTessalation_; }
-	OptionEntryBool &getNoTessalationEntry() { return noTessalation_; }
 
 	bool getNoModelLOD() { return noModelLOD_; }
 	OptionEntryBool &getNoModelLODEntry() { return noModelLOD_; }
@@ -316,10 +301,10 @@ public:
 	int getTexSize() { return texSize_; }
 	OptionEntryInt &getTexSizeEntry() { return texSize_; }
 
-	int  getScreenWidth() { return screenWidth_; }
+	int getScreenWidth() { return screenWidth_; }
 	OptionEntryInt  &getScreenWidthEntry() { return screenWidth_; }
 
-	int  getScreenHeight() { return screenHeight_; }
+	int getScreenHeight() { return screenHeight_; }
 	OptionEntryInt  &getScreenHeightEntry() { return screenHeight_; }
 
 	int getDepthBufferBits() { return depthBufferBits_; }
@@ -337,22 +322,22 @@ public:
 	bool getSaveWindowPositions() { return saveWindowPositions_; }
 	OptionEntryBool &getSaveWindowPositionsEntry() { return saveWindowPositions_; }
 
-	const char * getOnlineUserName() { return onlineUserName_; }
+	const char *getOnlineUserName() { return onlineUserName_; }
 	OptionEntryString &getOnlineUserNameEntry() { return onlineUserName_; }
 
-	const char * getOnlineTankModel() { return onlineTankModel_; }
+	const char *getOnlineTankModel() { return onlineTankModel_; }
 	OptionEntryString &getOnlineTankModelEntry() { return onlineTankModel_; }
 
-	const char * getOnlineUserIcon() { return onlineUserIcon_; }
+	const char *getOnlineUserIcon() { return onlineUserIcon_; }
 	OptionEntryString &getOnlineUserIconEntry() { return onlineUserIcon_; }
 
 	Vector getOnlineColor() { return onlineColor_; }
 	OptionEntryVector &getOnlineColorEntry() { return onlineColor_; }
 
-	const char * getHostDescription() { return hostDescription_; }
+	const char *getHostDescription() { return hostDescription_; }
 	OptionEntryString &getHostDescriptionEntry() { return hostDescription_; }
 
-	const char * getBuyTab() { return buyTab_; }
+	const char *getBuyTab() { return buyTab_; }
 	OptionEntryString &getBuyTabEntry() { return buyTab_; }
 
 	int getToolTipTime() { return toolTipTime_; }
@@ -396,6 +381,11 @@ protected:
 	OptionEntryBool depricatedNoCg_;
 	OptionEntryBool depricatedNoAmbientSound_;
 	OptionEntryBool depricatedFullClear_;
+	OptionEntryInt depricatedRoamVarianceStart_;
+	OptionEntryInt depricatedRoamVarianceRamp_;
+	OptionEntryInt depricatedRoamVarianceTank_;
+	OptionEntryBool depricatedNoROAM_;
+	OptionEntryBool depricatedNoTessalation_;
 
 	OptionEntryBoundedInt brightness_;
 	OptionEntryBoundedInt explosionParts_;
@@ -458,12 +448,7 @@ protected:
 	OptionEntryBool noTrees_;
 	OptionEntryBool noDepthSorting_;
 	OptionEntryBool hideFinalScore_;
-	OptionEntryInt roamVarianceStart_;
-	OptionEntryInt roamVarianceRamp_;
-	OptionEntryInt roamVarianceTank_;
 	OptionEntryBool hideMenus_;
-	OptionEntryBool noROAM_;
-	OptionEntryBool noTessalation_;
 	OptionEntryBool noVBO_;
 	OptionEntryBool noModelLOD_;
 	OptionEntryBool noModelLighting_;

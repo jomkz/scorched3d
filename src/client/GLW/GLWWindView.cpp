@@ -30,7 +30,7 @@
 #include <graph/ModelRendererSimulator.h>
 #include <landscape/Landscape.h>
 #include <landscapemap/LandscapeMaps.h>
-#include <landscape/Sky.h>
+#include <sky/Sky.h>
 #include <math.h>
 
 REGISTER_CLASS_SOURCE(GLWWindView);

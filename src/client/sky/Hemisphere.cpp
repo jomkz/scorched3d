@@ -21,7 +21,7 @@
 #include <image/Image.h>
 #include <GLEXT/GLState.h>
 #include <common/Vector.h>
-#include <landscape/Hemisphere.h>
+#include <sky/Hemisphere.h>
 #include <common/Defines.h>
 #include <vector>
 #include <math.h>

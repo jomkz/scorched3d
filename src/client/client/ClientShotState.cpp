@@ -28,8 +28,6 @@
 #include <common/Logger.h>
 #include <coms/ComsPlayMovesMessage.h>
 #include <landscape/Landscape.h>
-#include <landscape/PatchGrid.h>
-#include <landscape/Landscape.h>
 
 ClientShotState *ClientShotState::instance_ = 0;
 
@@ -96,9 +94,6 @@ bool ClientShotState::acceptStateChange(const unsigned state,
 	// All the shots have finished, move to finished
 	if (shotState_.run(frameTime))
 	{
-		// Check area around tank has correct variance
-		Landscape::instance()->getPatchGrid().recalculateTankVariance();
-
 		// Tell the server we have finished processing the landscape
 		// This will stimulate us into the wait state
 		ClientWaitState::instance()->sendClientReady();

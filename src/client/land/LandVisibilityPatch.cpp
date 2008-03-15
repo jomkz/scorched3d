@@ -118,23 +118,24 @@ void LandVisibilityPatch::draw(MipMapPatchIndexs &indexes, int indexPosition, in
 void LandVisibilityPatch::draw(MipMapPatchIndex &index)
 {
 	// Vertices On
-	glVertexPointer(3, GL_INT, sizeof(HeightMap::HeightData), heightMapData_);
+	glVertexPointer(3, GL_INT, sizeof(HeightMap::HeightData), &heightMapData_[0]);
 
 	// Normals On
-	glNormalPointer(GL_INT, sizeof(HeightMap::HeightData), heightMapData_ + 3);
+	glNormalPointer(GL_INT, sizeof(HeightMap::HeightData), &heightMapData_[3]);
 
 	// Tex Coords
-	glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), heightMapData_ + 6);
 	if (GLStateExtension::hasMultiTex())
 	{
 		glClientActiveTextureARB(GL_TEXTURE1_ARB);
-		glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), heightMapData_ + 6);
+		glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[6]);
 		if (GLStateExtension::getTextureUnits() > 2)
 		{
 			glClientActiveTextureARB(GL_TEXTURE2_ARB);
-			glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), heightMapData_ + 8);
+			glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[8]);
 		}
 	}
+	glClientActiveTextureARB(GL_TEXTURE0_ARB);
+	glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[6]);
 
 	// Map indices to draw
 	unsigned int *indices = 0;

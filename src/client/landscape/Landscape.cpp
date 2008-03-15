@@ -26,16 +26,15 @@
 #include <landscape/Smoke.h>
 #include <landscape/Wall.h>
 #include <landscape/ShadowMap.h>
-#include <landscape/Sky.h>
-#include <landscape/Surround.h>
 #include <landscape/InfoMap.h>
 #include <landscape/HeightMapRenderer.h>
-#include <landscape/PatchGrid.h>
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeDefn.h>
 #include <landscapedef/LandscapeDefinition.h>
 #include <landscapedef/LandscapeDefinitions.h>
+#include <sky/Sky.h>
 #include <water/Water.h>
+#include <land/VisibilityPatchGrid.h>
 #include <movement/TargetMovement.h>
 #include <image/ImageFactory.h>
 #include <image/ImageBitmap.h>
@@ -47,9 +46,9 @@
 #include <common/OptionsTransient.h>
 #include <common/Defines.h>
 #include <graph/OptionsDisplay.h>
+#include <graph/MainCamera.h>
 #include <sound/Sound.h>
 #include <client/ScorchedClient.h>
-#include <graph/MainCamera.h>
 #include <dialogs/CameraDialog.h>
 #include <engine/ActionController.h>
 #include <tankgraph/RenderTargets.h>
@@ -72,12 +71,8 @@ Landscape::Landscape() :
 	changeCount_(1),
 	landShader_(0)
 {
-	patchGrid_ = new PatchGrid(
-		&ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap(), 16), 
 	water_ = new Water();
 	points_ = new LandscapePoints();
-	surround_ = new Surround(
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap());
 	sky_ = new Sky();
 	smoke_ = new Smoke();
 	wall_ = new Wall();
@@ -110,7 +105,6 @@ void Landscape::simulate(float frameTime)
 	float speedMult = ScorchedClient::instance()->
 		getActionController().getFast().asFloat();
 	water_->simulate(frameTime * speedMult);
-	patchGrid_->simulate(frameTime);
 	sky_->simulate(frameTime * speedMult);
 	wall_->simulate(frameTime * speedMult);
 	LandscapeSoundManager::instance()->simulate(frameTime * speedMult);
@@ -123,9 +117,6 @@ void Landscape::recalculate(int posX, int posY, int dist)
 		resetLandscape_ = true;
 		resetLandscapeTimer_ = 1.0f; // Recalculate the water in x seconds
 	}
-
-	// Recalculate the level of detail for the terrain
-	patchGrid_->recalculate(posX, posY, dist);
 }
 
 void Landscape::reset(ProgressCounter *counter)
@@ -134,7 +125,6 @@ void Landscape::reset(ProgressCounter *counter)
 
 	// Recalculate all landscape objects
 	// Ensure all objects use any new landscape
-	patchGrid_->reset(counter);
 	ScorchedClient::instance()->getParticleEngine().killAll();
 	MainCamera::instance()->getTarget().
 		getPrecipitationEngine().killAll();
@@ -201,7 +191,7 @@ void Landscape::drawShadows()
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_PRE");
 
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_DRAW_LAND");
-	patchGrid_->draw(PatchSide::typeTop);
+	VisibilityPatchGrid::instance()->drawSimpleLand();
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_DRAW_LAND");
 
 	RenderTargets::instance()->shadowDraw();
@@ -281,9 +271,14 @@ void Landscape::drawLand()
 {
 	drawSetup();
 
+	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LOD");
+	VisibilityPatchGrid::instance()->drawVisibility();
+	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LOD");	
+
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SKY");
 	sky_->drawBackdrop();
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SKY");
+
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LAND");
 	if (OptionsDisplay::instance()->getDrawLandscape())
 	{
@@ -296,17 +291,13 @@ void Landscape::drawLand()
 		{
 			actualDrawLandTextured();
 		}
-		if (OptionsDisplay::instance()->getDrawNormals())
-		{
-			GLState currentState(GLState::TEXTURE_OFF);
-			glColor3f(1.0f, 1.0f, 1.0f);
-			patchGrid_->draw(PatchSide::typeNormals);
-		}
 	}
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LAND");
+
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_POINTS");
 	points_->draw();
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_POINTS");
+
 	if (OptionsDisplay::instance()->getDrawMovement())
 	{
 		ScorchedClient::instance()->getTargetMovement().draw();
@@ -487,7 +478,7 @@ void Landscape::generate(ProgressCounter *counter)
 			tex->texture->getType()));
 	}
 
-	patchGrid_->generate();
+	VisibilityPatchGrid::instance()->generate();
 	points_->generate();
 
 	// Add lighting to the landscape texture
@@ -574,7 +565,6 @@ void Landscape::generate(ProgressCounter *counter)
 	
 	// Load the sky
 	sky_->generate();
-	surround_->generate();
 
 	// Load water
 	water_->generate(counter);
@@ -651,21 +641,16 @@ void Landscape::actualDrawLandTextured()
 			glActiveTextureARB(GL_TEXTURE0_ARB);
 		}
 
+glMatrixMode(GL_TEXTURE);
+glLoadIdentity();
+glMatrixMode(GL_MODELVIEW);
+
 		texture_.draw(true);
 	}
 	
-	if (OptionsDisplay::instance()->getNoROAM())
-	{
-		HeightMapRenderer::drawHeightMap(
-			ScorchedClient::instance()->getLandscapeMaps().
-				getGroundMaps().getHeightMap());
-	}
-	else
-	{
-		glColor3f(1.0f, 1.0f, 1.0f);
-		patchGrid_->draw(PatchSide::typeTop);
-	}
-	surround_->draw(useDetail, true);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	VisibilityPatchGrid::instance()->drawLand();
+	VisibilityPatchGrid::instance()->drawSurround();
 
 	if (OptionsDisplay::instance()->getUseLandscapeTexture())
 	{
@@ -711,7 +696,7 @@ void Landscape::actualDrawLandReflection()
 	}
 	
 	glColor3f(1.0f, 1.0f, 1.0f);
-	patchGrid_->draw(PatchSide::typeTop);
+	VisibilityPatchGrid::instance()->drawLand(2);
 }
 
 void Landscape::createShadowMatrix()
@@ -795,18 +780,9 @@ void Landscape::actualDrawLandShader()
 	texture_.draw();
 
 	// Draw
-	if (OptionsDisplay::instance()->getNoROAM())
-	{
-		HeightMapRenderer::drawHeightMap(
-			ScorchedClient::instance()->getLandscapeMaps().
-				getGroundMaps().getHeightMap());
-	}
-	else
-	{
-		glColor3f(1.0f, 1.0f, 1.0f);
-		patchGrid_->draw(PatchSide::typeTop);
-	}
-	surround_->draw(true, false);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	VisibilityPatchGrid::instance()->drawLand();
+	VisibilityPatchGrid::instance()->drawSurround();
 
 	// Disable
 	glActiveTextureARB(GL_TEXTURE3_ARB);

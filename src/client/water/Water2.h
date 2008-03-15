@@ -22,7 +22,6 @@
 #define __INCLUDE_Water2h_INCLUDE__
 
 #include <water/Water2Patches.h>
-#include <water/Water2PatchVisibility.h>
 
 class LandscapeDefn;
 class ImageHandle;
@@ -37,14 +36,12 @@ public:
 	void generate(LandscapeTexBorderWater *water, ProgressCounter *counter = 0);
 
 	Water2Patches &getPatch(float time);
-	Water2PatchVisibility &getVisibility() { return visibility_; }
 	MipMapPatchIndexs &getIndexs() { return indexs_; }
 
 protected:
 	int generatedPatches_;
 	Water2Patches patches_[256];
 	MipMapPatchIndexs indexs_;
-	Water2PatchVisibility visibility_;
 
 	void generateAOF(Water2Points &wd, ImageHandle *aofImage, float *rndtab, 
 		Water2Points *displacements, float *aof);

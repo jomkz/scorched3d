@@ -24,7 +24,6 @@
 #include <engine/ActionController.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscape/Landscape.h>
-#include <landscape/PatchGrid.h>
 #include <coms/ComsGameStateMessage.h>
 
 ClientGameStateHandler *ClientGameStateHandler::instance_ = 0;
@@ -58,8 +57,6 @@ bool ClientGameStateHandler::processMessage(
 {
 	ComsGameStateMessage message;
 	if (!message.readMessage(reader)) return false;
-
-	Landscape::instance()->getPatchGrid().recalculateTankVariance();
 
 	return true;
 }

@@ -18,13 +18,13 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <landscape/SkyDome.h>
-#include <landscape/Sky.h>
+#include <sky/SkyDome.h>
+#include <sky/Sky.h>
+#include <sky/Hemisphere.h>
 #include <landscape/Landscape.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeDefinition.h>
-#include <landscape/Hemisphere.h>
 #include <GLEXT/GLState.h>
 #include <GLEXT/GLCamera.h>
 #include <image/ImageFactory.h>

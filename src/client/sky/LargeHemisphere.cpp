@@ -21,8 +21,8 @@
 #include <common/Vector.h>
 #include <GLEXT/GLStateExtension.h>
 #include <GLEXT/GLInfo.h>
-#include <landscape/LargeHemisphere.h>
-#include <landscape/Hemisphere.h>
+#include <sky/LargeHemisphere.h>
+#include <sky/Hemisphere.h>
 
 LargeHemisphere::LargeHemisphere()
 {

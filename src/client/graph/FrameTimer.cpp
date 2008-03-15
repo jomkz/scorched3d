@@ -31,8 +31,8 @@
 #include <client/ClientChannelManager.h>
 #include <engine/ActionController.h>
 #include <landscape/Landscape.h>
-#include <landscape/PatchGrid.h>
 #include <landscape/ShadowMap.h>
+#include <land/VisibilityPatchGrid.h>
 
 FrameTimer *FrameTimer::instance_ = 0;
 
@@ -87,11 +87,11 @@ void FrameTimer::simulate(const unsigned state, float frameTime)
 		{
 			ChannelText chText
 				("info",
-					S3D::formatStringBuffer("%.2f FPS (%iTRI %iPART %iSQR %iSND %uSHD %uS)", 
+					S3D::formatStringBuffer("%.2f FPS (%iTRI %iPART %iSQR %iSND %uSHD %uGLS)", 
 					fps,
 					tris,
 					pOnScreen,
-					Landscape::instance()->getPatchGrid().getDrawnPatches(),
+					VisibilityPatchGrid::instance()->getVisibleLandPatchesCount(),
 					Sound::instance()->getPlayingChannels(),
 					Landscape::instance()->getShadowMap().getShadowCount(), 
 					lastStateCount_));

@@ -29,10 +29,8 @@ class Wall;
 class ShadowMap;
 class Smoke;
 class ProgressCounter;
-class PatchGrid;
 class Water;
 class LandscapePoints;
-class Surround;
 class Sky;
 class GLSLShaderSetup;
 class Landscape
@@ -57,7 +55,6 @@ public:
 	Wall &getWall() { return *wall_; }
 	Sky &getSky() { return *sky_; }
 	Water &getWater() { return *water_; }
-	PatchGrid &getPatchGrid() { return *patchGrid_; }
 
 	// Textures created during landscape texturing
 	Image &getMainMap() { return mainMap_; }
@@ -100,9 +97,7 @@ protected:
 
 	// All objects that are used to draw the scene
 	Wall *wall_;
-	PatchGrid *patchGrid_;
 	Sky *sky_;
-	Surround *surround_;
 	Smoke *smoke_;
 	Water *water_;
 	LandscapeTextureType textureType_;

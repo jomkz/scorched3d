@@ -32,7 +32,7 @@
 #include <GLEXT/GLCamera.h>
 #include <GLEXT/GLGlobalState.h>
 #include <landscape/Landscape.h>
-#include <landscape/Sky.h>
+#include <sky/Sky.h>
 #include <algorithm>
 
 static inline float approx_distance(float  dx, float dy, float dz)

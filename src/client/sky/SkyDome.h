@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-//    Scorched3D (c) 2000-2003
+//    Scorched3D (c) 2000-2004
 //
 //    This file is part of Scorched3D.
 //
@@ -18,35 +18,45 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
+#if !defined(__INCLUDE_SkyDomeh_INCLUDE__)
+#define __INCLUDE_SkyDomeh_INCLUDE__
 
-// TriNodePool.h: interface for the TriNodePool class.
-//
-//////////////////////////////////////////////////////////////////////
+#include <sky/LargeHemisphere.h>
+#include <sky/SkyLine.h>
+#include <GLEXT/GLTexture.h>
+#include <image/ImageHandle.h>
 
-#if !defined(AFX_TRINODEPOOL_H__0A6192D7_293E_4695_AD2C_79372C0BB387__INCLUDED_)
-#define AFX_TRINODEPOOL_H__0A6192D7_293E_4695_AD2C_79372C0BB387__INCLUDED_
-
-
-#include <landscape/TriNode.h>
-
-class TriNodePool  
+class SkyDome
 {
 public:
-	static TriNodePool *instance();
+	SkyDome();
+	virtual ~SkyDome();
 
-    TriNode *getNextTriNode();
-	void reset();
+	void simulate(float frameTime);
+	void drawBackdrop();
+	void drawLayers();
+	void generate();
+	void flash();
 
 protected:
-	static TriNodePool *instance_;
-	TriNode *triNodeCount_;
-	TriNode *triNodeMaxCount_;
-	TriNode *nodes_;
+	float xy_;
+	float cloudSpeed_;
+	Vector cloudDirection_;
+	float flashTime_;
+	GLTexture cloudTexture_;
+	GLTexture starTexture_;
+	GLTexture skyLineTexture_;
+	ImageHandle skyColorsMap_;
+	bool useStarTexture_;
+	bool noSunFog_;
+	bool horizonGlow_;
+	bool useSkyLine_;
 
-private:
-	TriNodePool();
-	virtual ~TriNodePool();
-
+	SkyLine skyLine1_;
+	LargeHemisphere clouds1_;
+	LargeHemisphere clouds2_;
+	LargeHemisphere colors_;
+	LargeHemisphere stars_;
 };
 
-#endif // !defined(AFX_TRINODEPOOL_H__0A6192D7_293E_4695_AD2C_79372C0BB387__INCLUDED_)
+#endif // __INCLUDE_SkyDomeh_INCLUDE__

@@ -18,9 +18,9 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <landscape/SkyRoof.h>
-#include <landscape/Sky.h>
-#include <landscape/Sun.h>
+#include <sky/SkyRoof.h>
+#include <sky/Sky.h>
+#include <sky/Sun.h>
 #include <landscape/Landscape.h>
 #include <landscapedef/LandscapeDefinition.h>
 #include <landscapedef/LandscapeTex.h>
