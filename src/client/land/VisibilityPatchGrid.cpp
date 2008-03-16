@@ -342,6 +342,8 @@ void VisibilityPatchGrid::drawSurround()
 {
 	glBegin(GL_QUADS);
 	{
+		glColor3f(1.0f, 1.0f, 1.0f);
+
 		LandVisibilityPatch **currentPatchPtr = visibleSurroundPatches_;
 		for (int i=0; i<visibleSurroundPatchesCount_; i++, currentPatchPtr++)
 		{

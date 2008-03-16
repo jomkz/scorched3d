@@ -54,6 +54,9 @@ namespace ImageModifier
 							int destBitmapScaleSize,
 							ProgressCounter *counter = 0);
 
+	void redBitmap(
+		Image &destBitmap);
+
 	void addTexturesToBitmap(
 		Image &destBitmap,
 		Image &slopeBitmap,

@@ -416,6 +416,9 @@ void Landscape::generate(ProgressCounter *counter)
 
 	ImageHandle splatMask1 = ImageFactory::createBlank(mapTexSize, mapTexSize, true, 0);
 	ImageHandle splatMask2 = ImageFactory::createBlank(mapTexSize, mapTexSize, true, 0);
+	ImageHandle splatMaskBorder1 = ImageFactory::createBlank(64, 64, true, 0);
+	ImageHandle splatMaskBorder2 = ImageFactory::createBlank(64, 64, true, 0);
+	ImageModifier::redBitmap(splatMaskBorder1);
 
 	ImageHandle plana = ImageFactory::loadImageHandle(S3D::getDataFile("data/windows/planaa.bmp"));
 	ImageModifier::scalePlanBitmap(bitmapPlanAlphaAlpha_, plana,
@@ -475,6 +478,8 @@ void Landscape::generate(ProgressCounter *counter)
 		// Set up the splat textures
 		splatMaskTexture1_.replace(splatMask1, false);
 		splatMaskTexture2_.replace(splatMask2, false);
+		splatMaskTextureBorder1_.replace(splatMaskBorder1, false);
+		splatMaskTextureBorder2_.replace(splatMaskBorder2, false);
 	}
 	else
 	{
@@ -651,7 +656,10 @@ void Landscape::actualDrawLandTextured()
 	
 	glColor3f(1.0f, 1.0f, 1.0f);
 	VisibilityPatchGrid::instance()->drawLand();
-	//VisibilityPatchGrid::instance()->drawSurround();
+	if (OptionsDisplay::instance()->getDrawSurround())
+	{
+		VisibilityPatchGrid::instance()->drawSurround();
+	}
 
 	if (OptionsDisplay::instance()->getUseLandscapeTexture())
 	{
@@ -770,7 +778,12 @@ void Landscape::actualDrawLandShader()
 	// Draw
 	glColor3f(1.0f, 1.0f, 1.0f);
 	VisibilityPatchGrid::instance()->drawLand();
-	//VisibilityPatchGrid::instance()->drawSurround();
+	if (OptionsDisplay::instance()->getDrawSurround())
+	{
+		landShader_->set_gl_texture(splatMaskTextureBorder1_, "splat1map", 0);
+		landShader_->set_gl_texture(splatMaskTextureBorder2_, "splat2map", 1);
+		VisibilityPatchGrid::instance()->drawSurround();
+	}
 
 	// Disable Tex
 	glActiveTextureARB(GL_TEXTURE3_ARB);

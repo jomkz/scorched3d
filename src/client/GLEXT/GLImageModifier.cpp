@@ -421,6 +421,22 @@ void ImageModifier::addHeightToBitmap(HeightMap &hMap,
 	delete [] heightBitmaps;
 }
 
+void ImageModifier::redBitmap(
+		Image &destBitmap)
+{
+	unsigned char *destBits = destBitmap.getBits();
+	for (int y=0; y<destBitmap.getHeight(); y++)
+	{
+		for (int x=0; x<destBitmap.getWidth(); x++, destBits += 4)
+		{
+			destBits[0] = 255;
+			destBits[1] = 0;
+			destBits[2] = 0;
+			destBits[3] = 0;
+		}
+	}
+}
+
 void ImageModifier::addTexturesToBitmap(
 		Image &destBitmap,
 		Image &slopeBitmap,

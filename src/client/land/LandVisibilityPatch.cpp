@@ -96,10 +96,56 @@ void LandVisibilityPatch::setVisible(Vector &cameraPos, bool visible)
 
 void LandVisibilityPatch::drawSurround()
 {
-	glVertex2i(x_, y_);
-	glVertex2i(x_ + 64, y_);
+	//glPushMatrix();
+
+	//glTranslatef((float) x_, (float) y_, 0.0f);
+	glNormal3f(0.0f, 0.0f, 1.0f);
+
+	glTexCoord2f(0.0f, 0.0f);
+	if (GLStateExtension::hasMultiTex())
+	{
+		glMultiTexCoord2fARB(GL_TEXTURE1_ARB, 0.0f, 0.0f);
+		if (GLStateExtension::getTextureUnits() > 2)
+		{
+			glMultiTexCoord2fARB(GL_TEXTURE2_ARB, 0.0f, 0.0f);
+		}
+	}
+	glVertex2i(x_ + 0, y_ + 0);
+
+	glTexCoord2f(1.0f, 0.0f);
+	if (GLStateExtension::hasMultiTex())
+	{
+		glMultiTexCoord2fARB(GL_TEXTURE1_ARB, 1.0f, 0.0f);
+		if (GLStateExtension::getTextureUnits() > 2)
+		{
+			glMultiTexCoord2fARB(GL_TEXTURE2_ARB, 4.0f, 0.0f);
+		}
+	}
+	glVertex2i(x_ + 64, y_ + 0);
+
+	glTexCoord2f(1.0f, 1.0f);
+	if (GLStateExtension::hasMultiTex())
+	{
+		glMultiTexCoord2fARB(GL_TEXTURE1_ARB, 1.0f, 1.0f);
+		if (GLStateExtension::getTextureUnits() > 2)
+		{
+			glMultiTexCoord2fARB(GL_TEXTURE2_ARB, 4.0f, 4.0f);
+		}
+	}
 	glVertex2i(x_ + 64, y_ + 64);
-	glVertex2i(x_, y_ + 64);
+
+	glTexCoord2f(0.0f, 1.0f);
+	if (GLStateExtension::hasMultiTex())
+	{
+		glMultiTexCoord2fARB(GL_TEXTURE1_ARB, 0.0f, 1.0f);
+		if (GLStateExtension::getTextureUnits() > 2)
+		{
+			glMultiTexCoord2fARB(GL_TEXTURE2_ARB, 0.0f, 4.0f);
+		}
+	}
+	glVertex2i(x_ + 0, y_ + 64);
+
+	//glPopMatrix();
 }
 
 void LandVisibilityPatch::draw(MipMapPatchIndexs &indexes, int indexPosition, int borders)

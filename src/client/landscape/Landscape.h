@@ -113,6 +113,8 @@ protected:
 	GLTexture groundTexture_;
 	GLTexture splatMaskTexture1_;
 	GLTexture splatMaskTexture2_;
+	GLTexture splatMaskTextureBorder1_;
+	GLTexture splatMaskTextureBorder2_;
 	GLTexture splatTextures_;
 	ImageHandle splatMap_;
 	ImageHandle mainMap_;
