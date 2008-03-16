@@ -65,6 +65,10 @@ void HeightMap::reset()
 			current->normal[1] = fixed(0);
 			current->normal[2] = fixed(1);
 
+			current->floatNormal[0] = 0.0f;
+			current->floatNormal[1] = 0.0f;
+			current->floatNormal[2] = 1.0f;
+
 			current->texCoord1x = float(x) / float(width_);
 			current->texCoord1y = float(y) / float(height_);
 
@@ -80,9 +84,7 @@ bool HeightMap::getVector(FixedVector &vec, int x, int y)
 {
 	if (x < 0 || y < 0 || x>width_ || y>height_) return false;
 
-	vec[0] = fixed(x);
-	vec[1] = fixed(y);
-	vec[2] = getHeight(x,y);
+	vec = heightData_[(width_+1) * y + x].position;
 	return true;
 }
 
@@ -160,7 +162,11 @@ FixedVector &HeightMap::getNormal(int w, int h)
 	if (w >= 0 && h >= 0 && w<=width_ && h<=height_) 
 	{
 		int pos = (width_+1) * h + w;
-		FixedVector &normal = heightData_[pos].normal;
+
+		HeightMap::HeightData *heightData = &heightData_[pos];
+
+		FixedVector &normal = heightData->normal;
+		Vector &floatNormal = heightData->floatNormal;
 		if (normal[0] == fixed(0) && 
 			normal[1] == fixed(0) && 
 			normal[2] == fixed(0))
@@ -169,7 +175,7 @@ FixedVector &HeightMap::getNormal(int w, int h)
 			int y = h;
 
 			static FixedVector C;
-			getVector(C, x, y);
+			C = heightData->position;
 
 			static FixedVector total;
 			total.zero();
@@ -204,6 +210,7 @@ FixedVector &HeightMap::getNormal(int w, int h)
 			}
 
 			normal = total.Normalize();
+			normal.asVector(floatNormal);
 		}
 
 		return normal; 

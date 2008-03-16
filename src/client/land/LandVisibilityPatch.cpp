@@ -96,9 +96,6 @@ void LandVisibilityPatch::setVisible(Vector &cameraPos, bool visible)
 
 void LandVisibilityPatch::drawSurround()
 {
-	//glPushMatrix();
-
-	//glTranslatef((float) x_, (float) y_, 0.0f);
 	glNormal3f(0.0f, 0.0f, 1.0f);
 
 	glTexCoord2f(0.0f, 0.0f);
@@ -144,8 +141,6 @@ void LandVisibilityPatch::drawSurround()
 		}
 	}
 	glVertex2i(x_ + 0, y_ + 64);
-
-	//glPopMatrix();
 }
 
 void LandVisibilityPatch::draw(MipMapPatchIndexs &indexes, int indexPosition, int borders)
@@ -167,21 +162,21 @@ void LandVisibilityPatch::draw(MipMapPatchIndex &index)
 	glVertexPointer(3, GL_INT, sizeof(HeightMap::HeightData), &heightMapData_[0]);
 
 	// Normals On
-	glNormalPointer(GL_INT, sizeof(HeightMap::HeightData), &heightMapData_[3]);
+	glNormalPointer(GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[6]);
 
 	// Tex Coords
 	if (GLStateExtension::hasMultiTex())
 	{
 		glClientActiveTextureARB(GL_TEXTURE1_ARB);
-		glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[6]);
+		glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[9]);
 		if (GLStateExtension::getTextureUnits() > 2)
 		{
 			glClientActiveTextureARB(GL_TEXTURE2_ARB);
-			glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[8]);
+			glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[11]);
 		}
 	}
 	glClientActiveTextureARB(GL_TEXTURE0_ARB);
-	glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[6]);
+	glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[9]);
 
 	// Map indices to draw
 	unsigned int *indices = 0;

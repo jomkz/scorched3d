@@ -142,6 +142,18 @@ bool HeightMapLoader::generateTerrain(
 			defn->getType()));
 		return false;
 	}
+
+	// Make sure normals are correct for drawing
+	if (counter) counter->setNewOp("Setting Normals");
+	for (int y=0; y<hmap.getMapHeight(); y++)
+	{
+		if (counter) counter->setNewPercentage((100.0f * float(y)) / float(hmap.getMapHeight()));
+
+		for (int x=0; x<hmap.getMapWidth(); x++)
+		{
+			hmap.getNormal(x, y);
+		}
+	}
 	
 	return true;
 }

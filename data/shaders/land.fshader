@@ -8,16 +8,15 @@ varying vec3 normal,lightDir;
 void main()
 {
     // Look up the diffuse color and shadow states for each light source.
-    float s0 = 1.0;//shadow2DProj(shadow, gl_TexCoord[3]).r;
+    float s0 = shadow2DProj(shadow, gl_TexCoord[3]).r;
 
 	// compute the dot product between normal and normalized lightdir
-	vec3 n = normalize(normal);
-	float NdotL = max(dot(n,normalize(lightDir)),0.0) * s0;
+	float NdotL = max(dot(normal,normalize(lightDir)),0.0) * s0;
 
 	// Light color
 	vec4 ambient = gl_LightSource[1].ambient; //* gl_FrontMaterial.ambient;
 	vec4 diffuse = gl_LightSource[1].diffuse; //* gl_FrontMaterial.diffuse;
-	vec4 lightcolor = vec4(1.0, 1.0, 1.0, 1.0);//(diffuse * NdotL + ambient);
+	vec4 lightcolor = (diffuse * NdotL + ambient);
 
     // Compute the final pixel color
 	vec4 splat1 = texture2D(splat1map, gl_TexCoord[0].xy);
