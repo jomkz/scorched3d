@@ -91,7 +91,7 @@ public:
 	int getMouseX() { return currentMouseX_; }
 	int getMouseY() { return currentMouseY_; }
 	bool &getStateLogging() { return stateLogging_; }
-	bool &getStateTimeLogging() { return stateTimeLogging_; }
+	float &getStateTimeLogging() { return stateTimeLogging_; }
 
 	GameStatePerfCounter *getPerfCounter(const char *name);
 
@@ -183,8 +183,9 @@ protected:
 	std::string name_;
 	unsigned pendingStimulus_;
 	bool fakeMiddleButton_;
-	bool stateLogging_, stateTimeLogging_;
-	float timerSimulateTime_;
+	bool stateLogging_;
+	float stateTimeLogging_;
+	int frameCount_;
 	Clock timerClock_;
 	Clock overallTimerClock_;
 	Clock doubleClickClock_;

@@ -47,6 +47,23 @@ protected:
 
 };
 
+class GLConsoleRuleFnINumberAdapter : 
+	public GLConsoleRuleFnI
+{
+public:
+	GLConsoleRuleFnINumberAdapter(const char *name, float &param);
+	virtual ~GLConsoleRuleFnINumberAdapter();
+
+	// Inherited from GLConsoleRuleFnI
+	virtual float getNumberParam(const char *name);
+	virtual void  setNumberParam(const char *name, float value);
+
+protected:
+	std::string name_;
+	float &param_;
+
+};
+
 class GLConsoleRuleFnIOptionsAdapter :
 	public GLConsoleRuleFnI
 {

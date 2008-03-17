@@ -91,7 +91,7 @@ TankMenus::TankMenus() : logger_("ClientLog")
 	new GLConsoleRuleFnIBooleanAdapter(
 		"ActionProfiling",
 		ScorchedServer::instance()->getActionController().getActionProfiling());
-	new GLConsoleRuleFnIBooleanAdapter(
+	new GLConsoleRuleFnINumberAdapter(
 		"StateTimeLogging",
 		ScorchedClient::instance()->getGameState().getStateTimeLogging());
 	

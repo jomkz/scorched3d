@@ -25,13 +25,13 @@ void main()
 	vec2 splatcoord = vec2(fract(gl_TexCoord[2].x) * 0.25, fract(gl_TexCoord[2].y) * 0.25);
 	
 	vec4 groundColor = vec4(0, 0, 0, 0);
-	if (splat1.r) groundColor += texture2D(splattex, vec2(splatcoord.x + 0.0412, splatcoord.y + 0.0412)) * splat1.r;
-	if (splat1.g) groundColor += texture2D(splattex, vec2(splatcoord.x + 0.3745, splatcoord.y + 0.0412)) * splat1.g;
-	if (splat1.b) groundColor += texture2D(splattex, vec2(splatcoord.x + 0.7080, splatcoord.y + 0.0412)) * splat1.b;
-	if (splat1.a) groundColor += texture2D(splattex, vec2(splatcoord.x + 0.0412, splatcoord.y + 0.3745)) * splat1.a;
-	if (splat2.r) groundColor += texture2D(splattex, vec2(splatcoord.x + 0.3745, splatcoord.y + 0.3745)) * splat2.r;
-	if (splat2.g) groundColor += texture2D(splattex, vec2(splatcoord.x + 0.7080, splatcoord.y + 0.3745)) * splat2.g;
-	if (splat2.b) groundColor += texture2D(splattex, vec2(splatcoord.x + 0.0412, splatcoord.y + 0.7080)) * splat2.b;
+	if (splat1.r > 0.0) groundColor += texture2D(splattex, vec2(splatcoord.x + 0.0412, splatcoord.y + 0.0412)) * splat1.r;
+	if (splat1.g > 0.0) groundColor += texture2D(splattex, vec2(splatcoord.x + 0.3745, splatcoord.y + 0.0412)) * splat1.g;
+	if (splat1.b > 0.0) groundColor += texture2D(splattex, vec2(splatcoord.x + 0.7080, splatcoord.y + 0.0412)) * splat1.b;
+	if (splat1.a > 0.0) groundColor += texture2D(splattex, vec2(splatcoord.x + 0.0412, splatcoord.y + 0.3745)) * splat1.a;
+	if (splat2.r > 0.0) groundColor += texture2D(splattex, vec2(splatcoord.x + 0.3745, splatcoord.y + 0.3745)) * splat2.r;
+	if (splat2.g > 0.0) groundColor += texture2D(splattex, vec2(splatcoord.x + 0.7080, splatcoord.y + 0.3745)) * splat2.g;
+	if (splat2.b > 0.0) groundColor += texture2D(splattex, vec2(splatcoord.x + 0.0412, splatcoord.y + 0.7080)) * splat2.b;
 	
 	//groundColor = texture2D(splattex, gl_TexCoord[0].xy);
 	

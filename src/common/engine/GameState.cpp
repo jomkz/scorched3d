@@ -65,7 +65,8 @@ GameState::GameState(const char *name) :
 	currentStateI_(0),
 	currentMouseX_(0), currentMouseY_(0),
 	mouseDoubleX_(0), mouseDoubleY_(0),
-	stateLogging_(false), stateTimeLogging_(false)
+	stateLogging_(false), 
+	stateTimeLogging_(0.0f), frameCount_(0)
 {
 	clearTimers();
 }
@@ -295,8 +296,7 @@ void GameState::simulate(float simTime)
 		GameStateEntry *thisEntry = currentEntry_;
 		unsigned thisState = currentState_;
 
-		timerSimulateTime_ += simTime;
-		if (timerSimulateTime_ > 10.0f) clearTimers(true);
+		if (frameCount_ > int(stateTimeLogging_)) clearTimers(true);
 
 		timerClock_.getTicksDifference();
 		int timerCount = 0;
@@ -383,6 +383,8 @@ void GameState::draw()
 	{
 		GameStateEntry *thisEntry = currentEntry_;
 		unsigned thisState = currentState_;
+
+		frameCount_ ++;
 
 		timerClock_.getTicksDifference();
 		int timerCount = 0;
@@ -651,7 +653,7 @@ void GameState::addStateStimulus(const unsigned state,
 void GameState::clearTimers(bool printTimers)
 {
 	unsigned int sinceLastTime = overallTimerClock_.getTicksDifference();
-	if (printTimers && stateTimeLogging_)
+	if (printTimers && stateTimeLogging_ > 0.0f)
 	{
 		unsigned int simulateTotal = 0, drawTotal = 0;
 		for (int i=0; i<50; i++)
@@ -710,7 +712,7 @@ void GameState::clearTimers(bool printTimers)
 	}
 
 	memset(&timers_, 0, sizeof(timers_));
-	timerSimulateTime_ = 0.0f;
+	frameCount_ = 0;
 }
 
 GameStatePerfCounter *GameState::getPerfCounter(const char *name)

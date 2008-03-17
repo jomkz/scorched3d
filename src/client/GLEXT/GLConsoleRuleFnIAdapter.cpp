@@ -57,6 +57,33 @@ void GLConsoleRuleFnIBooleanAdapter::setBoolParam(const char *name, bool value)
 	param_ = value;
 }
 
+GLConsoleRuleFnINumberAdapter::GLConsoleRuleFnINumberAdapter(const char *name, float &param)
+	: name_(name), param_(param)
+{
+	GLConsole::instance()->addFunction(
+		name, 
+		this,
+		GLConsoleRuleTypeNumber, 
+		GLConsoleRuleAccessTypeReadWrite);
+}
+
+GLConsoleRuleFnINumberAdapter::~GLConsoleRuleFnINumberAdapter()
+{
+
+}
+
+float GLConsoleRuleFnINumberAdapter::getNumberParam(const char *name)
+{
+	DIALOG_ASSERT(name_ == name);
+	return param_;
+}
+
+void GLConsoleRuleFnINumberAdapter::setNumberParam(const char *name, float value)
+{
+	DIALOG_ASSERT(name_ == name);
+	param_ = value;
+}
+
 GLConsoleRuleFnIOptionsAdapter::GLConsoleRuleFnIOptionsAdapter(
 	OptionEntry &entry,
 	GLConsoleRuleAccessType access) :
