@@ -385,7 +385,7 @@ void ImageModifier::addHeightToBitmap(HeightMap &hMap,
 				destBits[1] += (GLubyte) ((float) sourceBits3[1] * blendSideAmount);
 				destBits[2] += (GLubyte) ((float) sourceBits3[2] * blendSideAmount);
 
-				destSplat2Bits[1] = (GLubyte) (255.0f * blendSideAmount);
+				destSplat2Bits[0] = (GLubyte) (255.0f * blendSideAmount);
 			}
 
 			if (blendShoreAmount > 0.0f)
@@ -396,7 +396,7 @@ void ImageModifier::addHeightToBitmap(HeightMap &hMap,
 				destBits[1] += (GLubyte) ((float) sourceBits4[1] * blendShoreAmount);
 				destBits[2] += (GLubyte) ((float) sourceBits4[2] * blendShoreAmount);
 
-				destSplat2Bits[2] = (GLubyte) (255.0f * blendShoreAmount);
+				destSplat2Bits[1] = (GLubyte) (255.0f * blendShoreAmount);
 			}
 
 			for (i=0; i<numberSources+2; i++) bitmapItors[i]->incX();
