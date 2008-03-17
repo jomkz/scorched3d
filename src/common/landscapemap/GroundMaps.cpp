@@ -70,14 +70,6 @@ void GroundMaps::generateHMap(
 	map_.create(defnCache_.getDefn()->landscapewidth, 
 		defnCache_.getDefn()->landscapeheight);
 
-	// Surround map is 640 units larger the heightmap (on each side)
-	// And each surround map square is equal to 16 heightmap units
-	int surroundWidth = defnCache_.getDefn()->landscapewidth + 640 * 2;
-	int surroundHeight = defnCache_.getDefn()->landscapeheight + 640 * 2;
-	surroundWidth /= 16;
-	surroundHeight /= 16;
-	smap_.create(surroundWidth, surroundHeight);
-
 	// Generate the landscape
 	bool levelSurround = false;
 	if (!HeightMapLoader::generateTerrain(
@@ -88,31 +80,6 @@ void GroundMaps::generateHMap(
 		counter))
 	{
 		S3D::dialogExit("Landscape", "Failed to generate landscape");
-	}
-
-	// Generate the surround
-	if (defnCache_.getDefn()->surround->getType() != LandscapeDefnType::eNone)
-	{
-		if (!HeightMapLoader::generateTerrain(
-			defnCache_.getSeed() + 1,
-			defnCache_.getDefn()->surround,
-			smap_,
-			levelSurround,
-			counter))
-		{
-			S3D::dialogExit("Landscape", "Failed to generate surround");
-		}
-
-		if (levelSurround)
-		{
-			for (int j=40; j<=56; j++)
-			{
-				for (int i=40; i<=56; i++)
-				{
-					smap_.setHeight(i, j, 0);
-				}
-			}
-		}
 	}
 }
 
@@ -202,57 +169,21 @@ void GroundMaps::saveHMap()
 
 fixed GroundMaps::getHeight(int w, int h)
 {
-	// Check if we are in the normal heightmap
-	if (w < 0 || h < 0 || w > map_.getMapWidth() || h > map_.getMapHeight())
-	{
-		// Check for no surround
-		if (defnCache_.getDefn()->surround->getType() == LandscapeDefnType::eNone)
-		{
-			return fixed(0);
-		}
-
-		// Check if we are in the surround
-		if (w < -640.0f || h < -640.0f || 
-			w > map_.getMapWidth() + 640 || 
-			h > map_.getMapHeight() + 640)
-		{
-			return fixed(0);
-		}
-
-		// Return surround
-		int a = (w + 640) / 16;
-		int b = (h + 640) / 16;
-		return smap_.getHeight(a, b);
-	}
 	return map_.getHeight(w, h);
 }
 
 fixed GroundMaps::getInterpHeight(fixed w, fixed h)
 {
-	if (w < 0 || h < 0 || w > map_.getMapWidth() || h > map_.getMapHeight())
-	{
-		return getHeight(w.asInt(), h.asInt());
-	}
 	return map_.getInterpHeight(w, h);
 }
 
 FixedVector &GroundMaps::getNormal(int w, int h)
 {
-	if (w < 0 || h < 0 || w > map_.getMapWidth() || h > map_.getMapHeight())
-	{
-		static FixedVector up(0, 0, 1);
-		return up;
-	}
-	return  map_.getNormal(w, h);
+	return map_.getNormal(w, h);
 }
 
 void GroundMaps::getInterpNormal(fixed w, fixed h, FixedVector &normal)
 {
-	if (w < 0 || h < 0 || w > map_.getMapWidth() || h > map_.getMapHeight())
-	{
-		static FixedVector up(0, 0, 1);
-		normal = up;
-	}
 	FixedVector result;
 	map_.getInterpNormal(w, h, normal);
 }

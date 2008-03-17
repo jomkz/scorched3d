@@ -114,7 +114,6 @@ public:
 	int landscapeheight;
 
 	LandscapeDefnType *roof;
-	LandscapeDefnType *surround;
 	LandscapeDefnType *tankstart;
 	LandscapeDefnType *heightmap;
 	LandscapeTexDefn texDefn;

@@ -443,32 +443,29 @@ void Landscape::generate(ProgressCounter *counter)
 			ImageFactory::loadImageHandle(S3D::getDataFile(generate->texture2.c_str()));
 		ImageHandle texture3 = 
 			ImageFactory::loadImageHandle(S3D::getDataFile(generate->texture3.c_str()));
-		ImageHandle texture4 = 
-			ImageFactory::loadImageHandle(S3D::getDataFile(generate->texture4.c_str()));
 		ImageHandle bitmapShore = 
 			ImageFactory::loadImageHandle(S3D::getDataFile(generate->shore.c_str()));
 		ImageHandle bitmapRock = 
 			ImageFactory::loadImageHandle(S3D::getDataFile(generate->rockside.c_str()));
 		ImageHandle bitmapRoof = 
 			ImageFactory::loadImageHandle(S3D::getDataFile(generate->roof.c_str()));
-		Image *bitmaps[5];
+		Image *bitmaps[4];
 		bitmaps[0] = &texture0;
 		bitmaps[1] = &texture1;
 		bitmaps[2] = &texture2;
 		bitmaps[3] = &texture3;
-		bitmaps[4] = &texture4;
 
 		// Generate the new landscape
 		if (counter) counter->setNewOp("Landscape Map");
 		ImageModifier::addHeightToBitmap(
 			ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap(),
 			mainMap_, splatMask1, splatMask2,
-			bitmapRock, bitmapShore, bitmaps, 5, 1024, counter);
+			bitmapRock, bitmapShore, bitmaps, 4, 1024, counter);
 
 		// Generate splat texture maps
 		ImageModifier::addTexturesToBitmap(
 			splatMap_,
-			bitmapRock, bitmapShore, bitmaps, 5);
+			bitmapRock, bitmapShore, bitmaps, 4);
 		splatTextures_.create(splatMap_, false);
 
 		// Set the general surround and roof texture

@@ -451,8 +451,12 @@ void ImageModifier::addTexturesToBitmap(
 	}
 	sources.push_back(&slopeBitmap);
 	sources.push_back(&shoreBitmap);
-	sources.push_back(&shoreBitmap);
-	sources.push_back(&shoreBitmap);
+
+	int currentCount = sources.size();
+	for (int i=currentCount; i<9; i++)
+	{
+		sources.push_back(&shoreBitmap);
+	}
 	
 	unsigned char *destBits = destBitmap.getBits();
 	for (int y=0; y<destBitmap.getHeight(); y++)

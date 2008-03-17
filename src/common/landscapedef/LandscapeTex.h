@@ -96,7 +96,6 @@ public:
 class LandscapeTexTextureGenerate : public LandscapeTexType
 {
 public:
-	std::string surround;
 	std::string roof;
 	std::string rockside;
 	std::string shore;
@@ -104,7 +103,6 @@ public:
 	std::string texture1;
 	std::string texture2;
 	std::string texture3;
-	std::string texture4;
 
 	virtual bool readXML(XMLNode *node);
 	virtual TexType getType() { return eTextureGenerate; }

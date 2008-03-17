@@ -3,7 +3,7 @@
     <maxplayers>24</maxplayers>
 	<landscapewidth>320</landscapewidth>
 	<landscapeheight>224</landscapeheight>
-    <surround type="none"></surround>
+
 	<roof type="sky"></roof>
     <tankstart type="height">
     	<startcloseness>20</startcloseness>

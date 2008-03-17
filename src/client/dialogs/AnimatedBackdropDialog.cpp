@@ -71,7 +71,8 @@ void AnimatedBackdropDialog::init()
 
 	if (!ScorchedClient::instance()->getLandscapes().readLandscapeDefinitions())
 	{
-		return;
+		S3D::dialogExit("Landscape Definitions",
+			"Failed to parse landscape definitions");
 	}
 
 	LandscapeDefinition definition = ScorchedClient::instance()->getLandscapes().getLandscapeDefn(

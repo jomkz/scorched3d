@@ -30,12 +30,10 @@
 		<rockside>data/textures/landscape/china/rockside.bmp</rockside>
 		<shore>data/textures/landscape/china/shore.bmp</shore>
 		<roof>data/textures/landscape/china/texture0.bmp</roof>
-		<surround>data/textures/landscape/china/texture2.bmp</surround>
 		<texture0>data/textures/landscape/china/texture0.bmp</texture0>
 		<texture1>data/textures/landscape/china/texture1.bmp</texture1>
 		<texture2>data/textures/landscape/china/texture2.bmp</texture2>
 		<texture3>data/textures/landscape/china/texture3.bmp</texture3>
-		<texture4>data/textures/landscape/china/texture4.bmp</texture4>
 	</texture>
 	<ambientsounds>
 		<ambientsound>data/landscapes/ambientsoundwaves.xml</ambientsound>

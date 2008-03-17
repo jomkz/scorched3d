@@ -30,12 +30,10 @@
 		<rockside>data/textures/landscape/tropical/rockside.bmp</rockside>
 		<shore>data/textures/landscape/tropical/shore.bmp</shore>
 		<roof>data/textures/landscape/tropical/texture0.bmp</roof>
-		<surround>data/textures/landscape/tropical/texture2.bmp</surround>
 		<texture0>data/textures/landscape/tropical/texture0.bmp</texture0>
-		<texture1>data/textures/landscape/tropical/texture1.bmp</texture1>
-		<texture2>data/textures/landscape/tropical/texture2.bmp</texture2>
-		<texture3>data/textures/landscape/tropical/texture3.bmp</texture3>
-		<texture4>data/textures/landscape/tropical/texture4.bmp</texture4>
+		<texture1>data/textures/landscape/tropical/texture2.bmp</texture1>
+		<texture2>data/textures/landscape/tropical/texture3.bmp</texture2>
+		<texture3>data/textures/landscape/tropical/texture4.bmp</texture3>
 	</texture>
 	<placements><placement>data/landscapes/placepalm2.xml</placement></placements>
 	<ambientsounds>

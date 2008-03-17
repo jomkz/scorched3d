@@ -329,7 +329,7 @@ void VisibilityPatchGrid::drawSimpleLand()
 		for (int i=0; i<allLandPatchesCount_; i++, currentPatchPtr++)
 		{
 			LandVisibilityPatch *currentPatch = *currentPatchPtr;
-			currentPatch->draw(landIndexs_, 4, 0);
+			currentPatch->draw(landIndexs_, 3, 0);
 		}
 	}
 

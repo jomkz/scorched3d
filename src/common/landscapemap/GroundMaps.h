@@ -61,11 +61,9 @@ public:
 
 	// Actual heightmap
 	HeightMap &getHeightMap() { return map_; }
-	HeightMap &getSurroundMap() { return smap_; }
 
 protected:
 	HeightMap map_; // The current level's heightmap
-	HeightMap smap_; // The surround of the landscape
 	NapalmMap nmap_; // How high napalm is at certain points
 	TargetGroups groups_; // The groups in the scene
 	LandscapeDefinitionCache &defnCache_;

@@ -48,15 +48,6 @@ static LandscapeDefnType *fetchRoofMapDefnType(const char *type)
 	return 0;
 }
 
-static LandscapeDefnType *fetchSurroundDefnType(const char *type)
-{
-	if (0 == strcmp(type, "none")) return new LandscapeDefnTypeNone;
-	if (0 == strcmp(type, "generate")) return new LandscapeDefnHeightMapGenerate;
-	if (0 == strcmp(type, "file")) return new LandscapeDefnHeightMapFile;
-	S3D::dialogMessage("LandscapeDefnType", S3D::formatStringBuffer("Unknown surround type %s", type));
-	return 0;
-}
-
 static bool parseMinMax(XMLNode *parent, const char *name, 
 	fixed &min, fixed &max)
 {
@@ -154,7 +145,7 @@ bool LandscapeDefnHeightMapGenerate::readXML(XMLNode *node)
 }
 
 LandscapeDefn::LandscapeDefn() :
-	heightmap(0), tankstart(0), surround(0), roof(0)
+	heightmap(0), tankstart(0), roof(0)
 {
 }
 
@@ -184,14 +175,6 @@ bool LandscapeDefn::readXML(LandscapeDefinitions *definitions, XMLNode *node)
 		if (!heightNode->getNamedParameter("type", heightmaptype)) return false;
 		if (!(heightmap = fetchHeightMapDefnType(heightmaptype.c_str()))) return false;
 		if (!heightmap->readXML(heightNode)) return false;
-	}
-	{
-		XMLNode *surroundNode;
-		std::string surroundtype;
-		if (!node->getNamedChild("surround", surroundNode)) return false;
-		if (!surroundNode->getNamedParameter("type", surroundtype)) return false;
-		if (!(surround = fetchSurroundDefnType(surroundtype.c_str()))) return false;
-		if (!surround->readXML(surroundNode)) return false;
 	}
 	{
 		XMLNode *roofNode;
