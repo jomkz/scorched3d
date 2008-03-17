@@ -116,13 +116,15 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				WholeProgramOptimization="false"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/src/client&quot;;&quot;$(SolutionDir)/src/server&quot;;&quot;$(SolutionDir)/src/launcher&quot;;&quot;$(SolutionDir)/src/common&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/zlib/zlib&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/SDL&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/expat/expat&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/wx&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/freetype&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;COMPILED_FROM_DSP;XML_STATIC;WINVER=0x400;_MT;wxUSE_GUI=1;S3D_SERVER"
+				StringPooling="true"
 				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
+				EnableFunctionLevelLinking="false"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="3"
+				DebugInformationFormat="0"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -137,10 +139,12 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="Ws2_32.lib comctl32.lib $(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL.lib $(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL_net.lib $(SolutionDir)/../scorched-dep-win32/lib/SDL/SDLmain.lib $(SolutionDir)/../scorched-dep-win32/lib/zlib/zlib1.lib $(SolutionDir)/../scorched-dep-win32/lib/expat/libexpat.lib $(SolutionDir)/../scorched-dep-win32/lib/wx/wxmsw.lib $(SolutionDir)/../scorched-dep-win32/lib/truetype/libfreetype.lib"
 				LinkIncremental="1"
-				GenerateDebugInformation="true"
+				GenerateDebugInformation="false"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				LinkTimeCodeGeneration="0"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool

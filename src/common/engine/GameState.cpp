@@ -673,7 +673,7 @@ void GameState::clearTimers(bool printTimers)
 
 		Logger::log(
 			"----------------------------------------");
-		Logger::log(S3D::formatStringBuffer("%s Draw : %u (%u%%), Simulate : %u (%u%%), Other : %i (%u%%)", 
+		Logger::log(S3D::formatStringBuffer("%30s Draw : %4u (%3u%%), Simulate : %4u (%3u%%)\nOther : %4i (%3u%%)\n\n", 
 			name_.c_str(),
 			drawTotal, drawTotalPer,
 			simulateTotal, simulateTotalPer,
@@ -686,7 +686,7 @@ void GameState::clearTimers(bool printTimers)
 					(100 * timers_[i].simulateTime) / sinceLastTime;
 				unsigned int percentageDraw =
 					(100 * timers_[i].drawTime) / sinceLastTime;
-				Logger::log(S3D::formatStringBuffer("%i:%s - Draw : %u (%u%%), Simulate : %u (%u%%)", 
+				Logger::log(S3D::formatStringBuffer("%2i:%25s - Draw : %4u (%3u%%), Simulate : %4u (%3u%%)", 
 					i, 
 					timers_[i].gameStateI->getGameStateIName(),
 					timers_[i].drawTime, percentageDraw,
@@ -702,7 +702,7 @@ void GameState::clearTimers(bool printTimers)
 					const char *state2 = counter->getGameStateI()->getGameStateIName();
 					if (state1 == state2)
 					{
-						Logger::log(S3D::formatStringBuffer("    %s : %u", 
+						Logger::log(S3D::formatStringBuffer("%35s +- %4u", 
 							counter->getName(),
 							counter->getTotal()));
 					}

@@ -116,13 +116,15 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				WholeProgramOptimization="false"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/src/server&quot;;&quot;$(SolutionDir)/src/common&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/zlib/zlib&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/jpg&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/SDL&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/expat/expat&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/png/png&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/mysql&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;S3D_SERVER;_CRT_SECURE_NO_WARNINGS;HAVE_MYSQL;XML_STATIC"
+				StringPooling="true"
 				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
+				EnableFunctionLevelLinking="false"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="3"
+				DebugInformationFormat="0"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -137,10 +139,12 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="Ws2_32.lib $(SolutionDir)/../scorched-dep-win32/lib/jpg/jpeg.lib $(SolutionDir)/../scorched-dep-win32/lib/mysql/libmysql.lib $(SolutionDir)/../scorched-dep-win32/lib/png/libpng13.lib $(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL.lib $(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL_net.lib $(SolutionDir)/../scorched-dep-win32/lib/SDL/SDLmain.lib $(SolutionDir)/../scorched-dep-win32/lib/zlib/zlib1.lib $(SolutionDir)/../scorched-dep-win32/lib/expat/libexpat.lib"
 				LinkIncremental="1"
-				GenerateDebugInformation="true"
+				GenerateDebugInformation="false"
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				LinkTimeCodeGeneration="0"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool

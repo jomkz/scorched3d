@@ -22,7 +22,7 @@
 #include <landscape/Landscape.h>
 
 LandscapeStateLandHandler::LandscapeStateLandHandler() :
-	GameStateI("LandscapeLandStateHandler")
+	GameStateI("LandscapeLand")
 {
 }
 
@@ -42,7 +42,7 @@ void LandscapeStateLandHandler::simulate(const unsigned state, float frameTime)
 }
 
 LandscapeStateWaterHandler::LandscapeStateWaterHandler() :
-	GameStateI("LandscapeStateWaterHandler")
+	GameStateI("LandscapeWater")
 {
 }
 
@@ -60,7 +60,7 @@ void LandscapeStateWaterHandler::simulate(const unsigned state, float frameTime)
 }
 
 LandscapeStateObjectsHandler::LandscapeStateObjectsHandler() :
-	GameStateI("LandscapeStateObjectsHandler")
+	GameStateI("LandscapeObjects")
 {
 }
 
