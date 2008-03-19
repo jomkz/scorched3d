@@ -23,6 +23,7 @@
 
 #include <engine/GameState.h>
 #include <common/KeyboardHistory.h>
+#include <vector>
 
 class GameStateI  
 {
@@ -48,8 +49,17 @@ public:
 
 	const char *getGameStateIName() { return gameStateIName_; }
 
+	int getPerfCounter(const char *perfName);
+	void startPerfCount(int counter);
+	void endPerfCount(int counter);
+
+	std::vector<GameStatePerfCounter *> &getPerfCounters() { return perfCounters_; }
+
 protected:
 	const char *gameStateIName_;
+	std::vector<GameStatePerfCounter *> perfCounters_;
+
+	static std::vector<std::string> perfCounterNames_;
 };
 
 #endif // !defined(AFX_GAMESTATEI_H__B6753299_ED54_45EB_A635_733A34F0C920__INCLUDED_)

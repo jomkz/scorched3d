@@ -28,8 +28,8 @@
 #include <limits.h>
 #include <SDL/SDL.h>
 
-GameStatePerfCounter::GameStatePerfCounter(GameStateI *gameStateI, const char *name) : 
-	name_(name), total_(0), gameStateI_(gameStateI)
+GameStatePerfCounter::GameStatePerfCounter(const char *name) : 
+	name_(name), total_(0), used_(false)
 {
 }
 
@@ -39,11 +39,13 @@ GameStatePerfCounter::~GameStatePerfCounter()
 
 void GameStatePerfCounter::start()
 {
+	used_ = true;
 	start_ = SDL_GetTicks();
 }
 
 void GameStatePerfCounter::end()
 {
+	used_ = true;
 	unsigned int end = SDL_GetTicks();
 	total_ += end - start_;
 }
@@ -52,6 +54,7 @@ unsigned int GameStatePerfCounter::getTotal()
 { 
 	unsigned int lastTotal = total_;
 	total_ = 0;
+	used_ = false;
 	return lastTotal; 
 }
 
@@ -692,15 +695,13 @@ void GameState::clearTimers(bool printTimers)
 					timers_[i].drawTime, percentageDraw,
 					timers_[i].simulateTime, percentageSimulate));
 
-				std::list<GameStatePerfCounter *>::iterator itor;
-				for (itor = perfCounters_.begin();
-					itor != perfCounters_.end();
+				std::vector<GameStatePerfCounter *>::iterator itor;
+				for (itor = timers_[i].gameStateI->getPerfCounters().begin();
+					itor != timers_[i].gameStateI->getPerfCounters().end();
 					itor++)
 				{
 					GameStatePerfCounter *counter = *itor;
-					const char *state1 = timers_[i].gameStateI->getGameStateIName();
-					const char *state2 = counter->getGameStateI()->getGameStateIName();
-					if (state1 == state2)
+					if (counter->getUsed())
 					{
 						Logger::log(S3D::formatStringBuffer("%35s +- %4u", 
 							counter->getName(),
@@ -715,18 +716,20 @@ void GameState::clearTimers(bool printTimers)
 	frameCount_ = 0;
 }
 
-GameStatePerfCounter *GameState::getPerfCounter(const char *name)
+int GameState::getPerfCounter(const char *name)
 {
-	std::list<GameStatePerfCounter *>::iterator itor;
-	for (itor = perfCounters_.begin();
-		itor != perfCounters_.end();
-		itor++)
-	{
-		GameStatePerfCounter *counter = *itor;
-		if (0 == strcmp(counter->getName(), name)) return counter;
-	}
+	DIALOG_ASSERT(currentStateI_);
+	return currentStateI_->getPerfCounter(name);
+}
 
-	GameStatePerfCounter *counter = new GameStatePerfCounter(currentStateI_, name);
-	perfCounters_.push_back(counter);
-	return counter;
+void GameState::startPerfCount(int counter)
+{
+	DIALOG_ASSERT(currentStateI_);
+	currentStateI_->startPerfCount(counter);
+}
+
+void GameState::endPerfCount(int counter)
+{
+	DIALOG_ASSERT(currentStateI_);
+	currentStateI_->endPerfCount(counter);
 }
