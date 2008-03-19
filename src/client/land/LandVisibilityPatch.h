@@ -23,7 +23,6 @@
 
 #include <common/Vector.h>
 
-class MipMapPatchIndexs;
 class MipMapPatchIndex;
 
 class LandVisibilityPatch
@@ -47,8 +46,7 @@ public:
 	LandVisibilityPatch *getTopPatch() { return topPatch_; }
 	LandVisibilityPatch *getBottomPatch() { return bottomPatch_; }
 
-	void draw(MipMapPatchIndexs &indexes, 
-		int indexPosition, int borders);
+	void draw(MipMapPatchIndex &index);
 	void drawSurround();
 
 protected:
@@ -62,7 +60,6 @@ protected:
 	LandVisibilityPatch *topPatch_;
 	LandVisibilityPatch *bottomPatch_;
 
-	void draw(MipMapPatchIndex &index);
 };
 
 #endif // __INCLUDE_LandVisibilityPatchh_INCLUDE__

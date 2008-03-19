@@ -30,10 +30,10 @@ public:
 
 	enum Borders
 	{
-		BorderLeft = 1,
-		BorderRight = 2,
-		BorderTop = 4,
-		BorderBottom = 8
+		BorderLeft =   0x00000007,
+		BorderRight =  0x00000038,
+		BorderTop =    0x000001C0,
+		BorderBottom = 0x00000E00
 	};
 
 	void generate(int size, int totalsize, int skip, unsigned int border);

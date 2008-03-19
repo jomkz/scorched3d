@@ -43,9 +43,8 @@ public:
 		int size, int totalSize,
 		int posX, int posY,
 		float waterHeight);
-	void draw(MipMapPatchIndexs &indexes, 
-		int indexPosition, int borders);
 
+	void draw(MipMapPatchIndex &index);
 	Data *getData(int x, int y);
 
 protected:
@@ -53,7 +52,7 @@ protected:
 	Data *data_;
 	GLVertexBufferObject *bufferObject_;
 
-	void draw(MipMapPatchIndex &index);
+	
 };
 
 #endif // __INCLUDE_Water2Patchh_INCLUDE__

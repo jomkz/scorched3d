@@ -36,10 +36,29 @@ MipMapPatchIndex::~MipMapPatchIndex()
 
 void MipMapPatchIndex::generate(int size, int totalsize, int skip, unsigned int border)
 {
-	std::vector<unsigned int> indices;
+	// Calculate the border (if any)
+	unsigned int borderLeft  = (border & BorderLeft)  >> 0;
+	unsigned int borderRight = (border & BorderRight) >> 3;
+	unsigned int borderTop   = (border & BorderTop)   >> 6;
+	unsigned int borderBottom= (border & BorderBottom)>> 9;
+
+	int borderLeftSkip = skip * (1 << borderLeft);
+	int borderRightSkip = skip * (1 << borderRight);
+	int borderTopSkip = skip * (1 << borderTop);
+	int borderBottomSkip = skip * (1 << borderBottom);
+
+	if (border != 0 &&
+		(borderLeftSkip > size ||
+		borderRightSkip > size ||
+		borderTopSkip > size ||
+		borderBottomSkip > size))
+	{
+		return;
+	}
 
 	// Generate a standard x by y grid of indices for a triangle strip
 	// use degenerate indices to keep winding in the correct order
+	std::vector<unsigned int> indices;
 	int j=0;
 	for (int y=0; y<size; y+=skip)
 	{
@@ -83,40 +102,39 @@ void MipMapPatchIndex::generate(int size, int totalsize, int skip, unsigned int 
 	unsigned int *mappingIndices = new unsigned int[(size + 1) * (size + 1)];
 	unsigned int *currentMappingIndex = mappingIndices;
 	unsigned int currentMappingCount = 0;
-	unsigned int lastGoodX, lastGoodY;
+	unsigned int lastGoodXTop, lastGoodXBottom, lastGoodYLeft, lastGoodYRight;
 	for (int y=0; y<=size; y+=1)
 	{
 		// Record last possible y border index
-		if (y % (skip * 2) == 0) lastGoodY = currentMappingCount;
+		if (y % borderLeftSkip == 0) lastGoodYLeft = currentMappingCount;
+		if (y % borderRightSkip == 0) lastGoodYRight = currentMappingCount;
 
 		for (int x=0; x<=size; x+=1, currentMappingIndex++, currentMappingCount++)
 		{
 			// Record last possible x border index
-			if (x % (skip * 2) == 0) lastGoodX = currentMappingCount;
+			if (x % borderTopSkip == 0) lastGoodXTop = currentMappingCount;
+			if (x % borderBottomSkip == 0) lastGoodXBottom = currentMappingCount;
 
 			// Set the index for case with no border
 			*currentMappingIndex = currentMappingCount;
 
 			// Move indices if we are on a border case
 			// and not only drawing one triangle
-			if (skip < size)
+			if (((border & BorderLeft) > 0) && x == 0)
 			{
-				if (border & BorderLeft && x == 0)
-				{
-					*currentMappingIndex = lastGoodY;
-				}
-				if (border & BorderRight && x == size)
-				{
-					*currentMappingIndex = lastGoodY + size;
-				}
-				if (border & BorderBottom && y == 0)
-				{
-					*currentMappingIndex = lastGoodX;
-				}
-				if (border & BorderTop && y == size)
-				{
-					*currentMappingIndex = lastGoodX;
-				}
+				*currentMappingIndex = lastGoodYLeft;
+			}
+			if (((border & BorderRight) > 0) && x == size)
+			{
+				*currentMappingIndex = lastGoodYRight + size;
+			}
+			if (((border & BorderBottom) > 0) && y == 0)
+			{
+				*currentMappingIndex = lastGoodXBottom;
+			}
+			if (((border & BorderTop) > 0) && y == size)
+			{
+				*currentMappingIndex = lastGoodXTop;
 			}
 		}
 		currentMappingCount += totalsize - size;

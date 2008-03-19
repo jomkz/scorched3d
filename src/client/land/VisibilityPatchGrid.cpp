@@ -263,37 +263,19 @@ void VisibilityPatchGrid::drawLand(int addIndex)
 			if (index == -1) continue;
 
 			unsigned int borders = 0;
-			unsigned int leftIndex = currentPatch->getLeftPatch()?
+			int leftIndex = currentPatch->getLeftPatch()?
 				currentPatch->getLeftPatch()->getVisibilityIndex():-1;
-			unsigned int rightIndex = currentPatch->getRightPatch()?
+			int rightIndex = currentPatch->getRightPatch()?
 				currentPatch->getRightPatch()->getVisibilityIndex():-1;
-			unsigned int topIndex = currentPatch->getTopPatch()?
+			int topIndex = currentPatch->getTopPatch()?
 				currentPatch->getTopPatch()->getVisibilityIndex():-1;
-			unsigned int bottomIndex = currentPatch->getBottomPatch()?
+			int bottomIndex = currentPatch->getBottomPatch()?
 				currentPatch->getBottomPatch()->getVisibilityIndex():-1;
 
-			if (leftIndex != -1 && leftIndex > index) 
-			{
-				if (leftIndex > index + 1) continue;
-				borders |= MipMapPatchIndex::BorderLeft;
-			}
-			if (rightIndex != -1 && rightIndex > index)
-			{
-				if (rightIndex > index + 1) continue;
-				borders |= MipMapPatchIndex::BorderRight;
-			}
-			if (topIndex != -1 && topIndex > index) 
-			{
-				if (topIndex > index + 1) continue;
-				borders |= MipMapPatchIndex::BorderBottom;
-			}
-			if (bottomIndex != -1 && bottomIndex > index) 
-			{
-				if (bottomIndex > index + 1) continue;
-				borders |= MipMapPatchIndex::BorderTop;
-			}
+			MipMapPatchIndex &landIndex = 
+				landIndexs_.getIndex(index, leftIndex, rightIndex, topIndex, bottomIndex, addIndex);
 
-			currentPatch->draw(landIndexs_, MIN(6, index + addIndex), borders);
+			currentPatch->draw(landIndex);
 		}
 	}
 
@@ -329,7 +311,8 @@ void VisibilityPatchGrid::drawSimpleLand()
 		for (int i=0; i<allLandPatchesCount_; i++, currentPatchPtr++)
 		{
 			LandVisibilityPatch *currentPatch = *currentPatchPtr;
-			currentPatch->draw(landIndexs_, 3, 0);
+			MipMapPatchIndex &landIndex = landIndexs_.getIndex(3, 0);
+			currentPatch->draw(landIndex);
 		}
 	}
 
@@ -373,35 +356,17 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 		if (index == -1) continue;
 
 		unsigned int borders = 0;
-		unsigned int leftIndex = currentPatch->getLeftPatch()?
+		int leftIndex = currentPatch->getLeftPatch()?
 			currentPatch->getLeftPatch()->getVisibilityIndex():-1;
-		unsigned int rightIndex = currentPatch->getRightPatch()?
+		int rightIndex = currentPatch->getRightPatch()?
 			currentPatch->getRightPatch()->getVisibilityIndex():-1;
-		unsigned int topIndex = currentPatch->getTopPatch()?
+		int topIndex = currentPatch->getTopPatch()?
 			currentPatch->getTopPatch()->getVisibilityIndex():-1;
-		unsigned int bottomIndex = currentPatch->getBottomPatch()?
+		int bottomIndex = currentPatch->getBottomPatch()?
 			currentPatch->getBottomPatch()->getVisibilityIndex():-1;
 
-		if (leftIndex != -1 && leftIndex > index) 
-		{
-			if (leftIndex > index + 1) continue;
-			borders |= MipMapPatchIndex::BorderLeft;
-		}
-		if (rightIndex != -1 && rightIndex > index)
-		{
-			if (rightIndex > index + 1) continue;
-			borders |= MipMapPatchIndex::BorderRight;
-		}
-		if (topIndex != -1 && topIndex > index) 
-		{
-			if (topIndex > index + 1) continue;
-			borders |= MipMapPatchIndex::BorderBottom;
-		}
-		if (bottomIndex != -1 && bottomIndex > index) 
-		{
-			if (bottomIndex > index + 1) continue;
-			borders |= MipMapPatchIndex::BorderTop;
-		}
+		MipMapPatchIndex &patchIndex = 
+			indexes.getIndex(index, leftIndex, rightIndex, topIndex, bottomIndex, 0);
 
 		glPushMatrix();
 		glTranslatef(
@@ -447,7 +412,7 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 
 		Water2Patch *patch = patches.getPatch(
 			currentPatch->getPatchX(), currentPatch->getPatchY());
-		patch->draw(indexes, index, borders);
+		patch->draw(patchIndex);
 
 		glPopMatrix();
 	}

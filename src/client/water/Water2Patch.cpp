@@ -134,19 +134,11 @@ void Water2Patch::generate(Water2Points &heights,
 	}
 }
 
-void Water2Patch::draw(MipMapPatchIndexs &indexes, int indexPosition, int borders)
+void Water2Patch::draw(MipMapPatchIndex &index)
 {
-	MipMapPatchIndex &index = indexes.getIndex(indexPosition, borders);
-
 	// No triangles
 	GLInfo::addNoTriangles(index.getSize());
 
-	// draw
-	draw(index);
-}
-
-void Water2Patch::draw(MipMapPatchIndex &index)
-{
 	// Map data to draw
 	float *data = 0;
 	if (bufferObject_)

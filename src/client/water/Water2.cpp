@@ -114,7 +114,7 @@ void Water2::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)
 		}
 	}
 
-	if (indexs_.getNoPositions() == 0)
+	if (indexs_.getNoLevels() == 0)
 	{
 		// Create the indexes
 		indexs_.generate(wave_patch_width, wave_patch_width);

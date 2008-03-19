@@ -20,7 +20,7 @@
 
 #include <geomipmap/MipMapPatchIndexs.h>
 
-MipMapPatchIndexs::MipMapPatchIndexs() : noPositions_(0)
+MipMapPatchIndexs::MipMapPatchIndexs()
 {
 }
 
@@ -30,19 +30,18 @@ MipMapPatchIndexs::~MipMapPatchIndexs()
 
 void MipMapPatchIndexs::generate(int size, int totalsize)
 {
-	noPositions_ = 0;
-	int j = 1;
-	for (;;)
+	
+	for (int lod=1; lod<=size; lod*=2)
 	{
-		noPositions_ ++;
-		for (unsigned int i=0; i<=15; i++)
+		IndexLevel *level = new IndexLevel();
+		levels_.push_back(level);
+
+		// borders
+		for (unsigned int borders=0; borders<=4095; borders++)
 		{
 			MipMapPatchIndex *index = new MipMapPatchIndex();
-			index->generate(size, totalsize, j, i);
-			indexs_.push_back(index);
+			index->generate(size, totalsize, lod, borders);
+			level->borderIndexs_.push_back(index);
 		}
-
-		j *= 2;
-		if (j > size) break;
 	}
 }

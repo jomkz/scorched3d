@@ -22,30 +22,69 @@
 #define __INCLUDE_MipMapPatchIndexsh_INCLUDE__
 
 #include <geomipmap/MipMapPatchIndex.h>
+#include <common/DefinesAssert.h>
+#include <common/DefinesMath.h>
 #include <vector>
 
 class MipMapPatchIndexs
 {
+protected:
+
+	class IndexLevel // One per LOD
+	{
+	public:
+		std::vector<MipMapPatchIndex *> borderIndexs_;
+	};
+
 public:
 	MipMapPatchIndexs();
 	~MipMapPatchIndexs();
 
-	MipMapPatchIndex &getIndex(int position, int border) 
-	{ 
-		if (position<0) position=0;
-		else if (position >= getNoPositions()) position = getNoPositions()-1;
-		if (border<0) border=0;
-		if (border>15) border=15;
+	MipMapPatchIndex &getIndex(int lod, int leftLod, int rightLod, int topLod, int bottomLod, int addLod = 0)
+	{
+		unsigned int borders = 0;
+		if (leftLod != -1 && leftLod > lod) 
+		{
+			borders |= (leftLod - lod);
+		}
+		if (rightLod != -1 && rightLod > lod)
+		{
+			borders |= (rightLod - lod) << 3;
+		}
+		if (topLod != -1 && topLod > lod) 
+		{
+			borders |= (topLod - lod) << 9;
+		}
+		if (bottomLod != -1 && bottomLod > lod) 
+		{
+			borders |= (bottomLod - lod) << 6;
+		}
 
-		return *indexs_[position * 16 + border]; 
+		int newLod = MIN(lod + addLod, getNoLevels() - 1);
+		return getIndex(newLod, borders);
 	}
-	int getNoPositions() { return noPositions_; }
+
+	MipMapPatchIndex &getIndex(int lod, int border) 
+	{ 
+		if (lod<0) lod=0;
+		else if (lod >= getNoLevels()) lod = getNoLevels()-1;
+
+		DIALOG_ASSERT(border < 4096);
+
+		IndexLevel *level = levels_[lod];
+		MipMapPatchIndex *index = level->borderIndexs_[border];
+
+		DIALOG_ASSERT(index->getIndices());
+
+		return *index;
+	}
+	int getNoLevels() { return (int) levels_.size(); }
 
 	void generate(int size, int totalsize);
 
 protected:
-	int noPositions_;
-	std::vector<MipMapPatchIndex *> indexs_;
+
+	std::vector<IndexLevel *> levels_;
 };
 
 #endif // __INCLUDE_MipMapPatchIndexsh_INCLUDE__

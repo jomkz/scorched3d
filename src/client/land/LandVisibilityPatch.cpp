@@ -152,21 +152,13 @@ void LandVisibilityPatch::drawSurround()
 	glVertex2i(x_ + 0, y_ + 32);
 }
 
-void LandVisibilityPatch::draw(MipMapPatchIndexs &indexes, int indexPosition, int borders)
+void LandVisibilityPatch::draw(MipMapPatchIndex &index)
 {
 	if (!heightMapData_) return;
-
-	MipMapPatchIndex &index = indexes.getIndex(indexPosition, borders);
 
 	// No triangles
 	GLInfo::addNoTriangles(index.getSize());
 
-	// draw
-	draw(index);
-}
-
-void LandVisibilityPatch::draw(MipMapPatchIndex &index)
-{
 	// Vertices On
 	glVertexPointer(3, GL_INT, sizeof(HeightMap::HeightData), &heightMapData_[0]);
 
