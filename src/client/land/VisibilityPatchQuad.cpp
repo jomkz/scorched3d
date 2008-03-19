@@ -41,7 +41,7 @@ void VisibilityPatchQuad::setLocation(VisibilityPatchGrid *patchGrid, int x, int
 	x_ = x; y_ = y; size_ = size;
 	position_ = Vector(x_ + size_ / 2, y_ + size_ / 2);
 
-	if (size > 64)
+	if (size > 32)
 	{
 		topLeft_ = new VisibilityPatchQuad();
 		topRight_ = new VisibilityPatchQuad();
@@ -54,7 +54,7 @@ void VisibilityPatchQuad::setLocation(VisibilityPatchGrid *patchGrid, int x, int
 		botRight_->setLocation(patchGrid, x + size / 2, y + size / 2, size / 2);
 	}
 
-	if (size == 64)
+	if (size == 32)
 	{
 		// Land
 		landVisibilityPatch_ = patchGrid->getLandVisibilityPatch(x, y);

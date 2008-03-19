@@ -91,18 +91,18 @@ void VisibilityPatchGrid::generate()
 	actualHeight = (actualHeight / 512) * 512;
 
 	// Generate land indices
-	landIndexs_.generate(64, mapWidth);
+	landIndexs_.generate(32, mapWidth);
 
 	// Find the mid point
 	midX_ = -actualWidth / 2 + mapWidth / 2;
 	midY_ = -actualHeight / 2 + mapHeight / 2;
-	midX_ = (midX_ / 64) * 64; // Move to the nearest 64 boundry
-	midY_ = (midY_ / 64) * 64;
+	midX_ = (midX_ / 32) * 32; // Move to the nearest 32 boundry
+	midY_ = (midY_ / 32) * 32;
 
 	{
 		// Divide this visible area into a set of patches
-		landWidth_ = actualWidth / 64;
-		landHeight_ = actualHeight / 64;
+		landWidth_ = actualWidth / 32;
+		landHeight_ = actualHeight / 32;
 
 		// Create the patches
 		landPatches_ = new LandVisibilityPatch[landWidth_ * landHeight_];
@@ -124,7 +124,7 @@ void VisibilityPatchGrid::generate()
 				LandVisibilityPatch *topPatch = (y==0?0:currentPatch-landWidth_);
 				LandVisibilityPatch *bottomPatch = (y==landHeight_-1?0:currentPatch+landWidth_);
 
-				currentPatch->setLocation(x * 64 + midX_, y * 64 + midY_,
+				currentPatch->setLocation(x * 32 + midX_, y * 32 + midY_,
 					leftPatch, rightPatch, topPatch, bottomPatch);
 				if (currentPatch->hasData())
 				{
@@ -183,8 +183,8 @@ void VisibilityPatchGrid::generate()
 
 LandVisibilityPatch *VisibilityPatchGrid::getLandVisibilityPatch(int x, int y)
 {
-	int realX = (x - midX_) / 64;
-	int realY = (y - midY_) / 64;
+	int realX = (x - midX_) / 32;
+	int realY = (y - midY_) / 32;
 
 	if (realX < 0 || realY < 0 ||
 		realX >= landWidth_ || realY >= landHeight_) 

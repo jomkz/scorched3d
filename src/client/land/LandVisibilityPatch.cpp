@@ -52,7 +52,7 @@ void LandVisibilityPatch::setLocation(int x, int y,
 	topPatch_ = topPatch;
 	bottomPatch_ = bottomPatch;
 
-	position_ = Vector(x_ + 32, y_ + 32, 5);
+	position_ = Vector(x_ + 16, y_ + 16, 5);
 
 	int mapWidth = ScorchedClient::instance()->getLandscapeMaps().
 		getGroundMaps().getMapWidth();
@@ -77,12 +77,21 @@ void LandVisibilityPatch::setVisible(Vector &cameraPos, bool visible)
 	{
 		if  (heightMapData_)
 		{
-			visibilityIndex_ = 6;
+			visibilityIndex_ = 3;
 			if (!OptionsDisplay::instance()->getNoWaterLOD())
 			{
 				float distance = (cameraPos - position_).Magnitude();
-				visibilityIndex_ = int(distance - 50.0f) / 70;
-				visibilityIndex_ = MAX(0, MIN(visibilityIndex_, 6));
+
+				if (distance < 512) 
+				{
+					visibilityIndex_ = (int(distance) - 50) / 40;
+					visibilityIndex_ = MAX(0, MIN(visibilityIndex_, 3));
+				}
+				else
+				{
+					visibilityIndex_ = (int(distance) - (512 - 140)) / 40;
+					visibilityIndex_ = MAX(0, MIN(visibilityIndex_, 5));
+				}
 			}
 
 			VisibilityPatchGrid::instance()->addVisibleLandPatch(this);
@@ -118,7 +127,7 @@ void LandVisibilityPatch::drawSurround()
 			glMultiTexCoord2fARB(GL_TEXTURE2_ARB, 4.0f, 0.0f);
 		}
 	}
-	glVertex2i(x_ + 64, y_ + 0);
+	glVertex2i(x_ + 32, y_ + 0);
 
 	glTexCoord2f(1.0f, 1.0f);
 	if (GLStateExtension::hasMultiTex())
@@ -129,7 +138,7 @@ void LandVisibilityPatch::drawSurround()
 			glMultiTexCoord2fARB(GL_TEXTURE2_ARB, 4.0f, 4.0f);
 		}
 	}
-	glVertex2i(x_ + 64, y_ + 64);
+	glVertex2i(x_ + 32, y_ + 32);
 
 	glTexCoord2f(0.0f, 1.0f);
 	if (GLStateExtension::hasMultiTex())
@@ -140,7 +149,7 @@ void LandVisibilityPatch::drawSurround()
 			glMultiTexCoord2fARB(GL_TEXTURE2_ARB, 0.0f, 4.0f);
 		}
 	}
-	glVertex2i(x_ + 0, y_ + 64);
+	glVertex2i(x_ + 0, y_ + 32);
 }
 
 void LandVisibilityPatch::draw(MipMapPatchIndexs &indexes, int indexPosition, int borders)
