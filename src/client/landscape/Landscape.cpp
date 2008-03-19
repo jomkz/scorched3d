@@ -279,7 +279,6 @@ void Landscape::drawLand()
 	sky_->drawBackdrop();
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SKY");
 
-	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LAND");
 	if (OptionsDisplay::instance()->getDrawLandscape())
 	{
 		if (GLStateExtension::hasHardwareShadows() &&
@@ -292,7 +291,6 @@ void Landscape::drawLand()
 			actualDrawLandTextured();
 		}
 	}
-	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LAND");
 
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_POINTS");
 	points_->draw();
@@ -772,14 +770,21 @@ void Landscape::actualDrawLandShader()
 	glMatrixMode(GL_MODELVIEW);
 	glActiveTextureARB(GL_TEXTURE0_ARB);
 
-	// Draw
 	glColor3f(1.0f, 1.0f, 1.0f);
+
+	// Draw Land
+	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LAND");
 	VisibilityPatchGrid::instance()->drawLand();
+	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LAND");
+
+	// Draw Surround
 	if (OptionsDisplay::instance()->getDrawSurround())
 	{
+		GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SURROUND");
 		landShader_->set_gl_texture(splatMaskTextureBorder1_, "splat1map", 0);
 		landShader_->set_gl_texture(splatMaskTextureBorder2_, "splat2map", 1);
 		VisibilityPatchGrid::instance()->drawSurround();
+		GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SURROUND");
 	}
 
 	// Disable Tex

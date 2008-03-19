@@ -167,7 +167,9 @@ void RenderTargets::shadowDraw()
 
 void RenderTargets::draw()
 {
+	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "TARGETS_CREATE_LISTS");
 	createLists();
+	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "TARGETS_CREATE_LISTS");
 
 	// Don't put fully transparent areas into the depth buffer
 	unsigned int wantedstate = GLState::BLEND_ON | 
@@ -178,6 +180,7 @@ void RenderTargets::draw()
 	Landscape::instance()->getSky().getSun().setLightPosition(false);
 
 	// Trees
+	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "TARGETS_DRAW_TREES");
 	{
 		GLGlobalState globalState(0);
 		RenderObjectList &renderList = renderObjectLists_.getTreeList();
@@ -187,8 +190,10 @@ void RenderTargets::draw()
 			(*object)->render();
 		}
 	}
+	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "TARGETS_DRAW_TREES");
 
 	// Models
+	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "TARGETS_DRAW_MODELS");
 	{
 		GLGlobalState globalState(0);
 		RenderObjectList &renderList = renderObjectLists_.getModelList();
@@ -198,6 +203,7 @@ void RenderTargets::draw()
 			(*object)->render();
 		}
 	}
+	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "TARGETS_DRAW_MODELS");
 }
 
 void RenderTargets::draw2d()
