@@ -38,14 +38,17 @@ void MipMapPatchIndex::generate(int size, int totalsize, int skip, unsigned int 
 {
 	std::vector<unsigned int> indices;
 
+	// Generate a standard x by y grid of indices for a triangle strip
+	// use degenerate indices to keep winding in the correct order
 	int j=0;
 	for (int y=0; y<size; y+=skip)
 	{
 		for (int x=0; x<=size; x+=skip)
 		{
 			int i = 0;
+			// Check which way we are working across the grid
+			// alter the index order accordingly
 			bool up = (y % (2 * skip) == 0);
-			bool left = (x % (2 * skip) == 0);
 			if (up)
 			{
 				i = (size - x + y * (size + 1));
@@ -55,54 +58,14 @@ void MipMapPatchIndex::generate(int size, int totalsize, int skip, unsigned int 
 				i = (x + y * (size + 1));
 			}
 
-			int iLeft = i;
-			int iRight = i;
-			if (skip < size)
-			{
-				if (border & BorderLeft)
-				{
-					if (x == size && up)
-					{
-						iRight += (size + 1) * skip;
-					}
-					if (x == 0 && !up)
-					{
-						iLeft += (size + 1) * skip;
-					}
-				}
-				if (border & BorderRight)
-				{
-					if (x == 0 && up)
-					{
-						iRight -= (size + 1) * skip;
-					}
-					if (x == size && !up)
-					{
-						iLeft -= (size + 1) * skip;
-					}
-				}
-				if (border & BorderBottom)
-				{
-					if (y == 0 && !left)
-					{
-						iLeft += skip;
-					}
-				}
-				if (border & BorderTop)
-				{
-					if (y == (size - skip) && !left)
-					{
-						iRight += skip;
-					}
-				}
-			}
-
-			indices.push_back(iLeft);
-			indices.push_back(iRight + (size + 1) * skip);
+			// Add index for each side of the strip
+			indices.push_back(i);
+			indices.push_back(i + (size + 1) * skip);
 			
+			// Add degenerate index when needed
 			if (x == size)
 			{
-				indices.push_back(iRight + (size + 1) * skip);
+				indices.push_back(i + (size + 1) * skip);
 			}
 		}
 	}
@@ -115,15 +78,46 @@ void MipMapPatchIndex::generate(int size, int totalsize, int skip, unsigned int 
 
 	// Generate a mapping from the indices to the actual world indices
 	// for when the patch size is larger than the index size.
+	// Also move indices that don't exist in border squares.
 	// Done here to keep the above code simpler.
 	unsigned int *mappingIndices = new unsigned int[(size + 1) * (size + 1)];
 	unsigned int *currentMappingIndex = mappingIndices;
 	unsigned int currentMappingCount = 0;
+	unsigned int lastGoodX, lastGoodY;
 	for (int y=0; y<=size; y+=1)
 	{
+		// Record last possible y border index
+		if (y % (skip * 2) == 0) lastGoodY = currentMappingCount;
+
 		for (int x=0; x<=size; x+=1, currentMappingIndex++, currentMappingCount++)
 		{
+			// Record last possible x border index
+			if (x % (skip * 2) == 0) lastGoodX = currentMappingCount;
+
+			// Set the index for case with no border
 			*currentMappingIndex = currentMappingCount;
+
+			// Move indices if we are on a border case
+			// and not only drawing one triangle
+			if (skip < size)
+			{
+				if (border & BorderLeft && x == 0)
+				{
+					*currentMappingIndex = lastGoodY;
+				}
+				if (border & BorderRight && x == size)
+				{
+					*currentMappingIndex = lastGoodY + size;
+				}
+				if (border & BorderBottom && y == 0)
+				{
+					*currentMappingIndex = lastGoodX;
+				}
+				if (border & BorderTop && y == size)
+				{
+					*currentMappingIndex = lastGoodX;
+				}
+			}
 		}
 		currentMappingCount += totalsize - size;
 	}
@@ -134,15 +128,12 @@ void MipMapPatchIndex::generate(int size, int totalsize, int skip, unsigned int 
 	for (int i=0; i<size_; i++)
 	{
 		int j = indices[i];
-		if (j <0 || j > (size + 1) * (size + 1))
-		{
-			printf("Hmm");
-		}
+		DIALOG_ASSERT(!(j <0 || j > (size + 1) * (size + 1)));
 		indices_[i] = mappingIndices[j];
 	}
 	delete [] mappingIndices;
 
-	// Store this arry in a vertex buffer (if available)
+	// Store this array in a vertex buffer (if available)
 	if (GLStateExtension::hasVBO() &&
 		!OptionsDisplay::instance()->getNoWaterBuffers())
 	{
