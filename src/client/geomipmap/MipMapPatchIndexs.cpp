@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <geomipmap/MipMapPatchIndexs.h>
+#include <common/Logger.h>
 
 MipMapPatchIndexs::MipMapPatchIndexs()
 {
@@ -30,7 +31,7 @@ MipMapPatchIndexs::~MipMapPatchIndexs()
 
 void MipMapPatchIndexs::generate(int size, int totalsize)
 {
-	
+	unsigned int totalVerts = 0;
 	for (int lod=1; lod<=size; lod*=2)
 	{
 		IndexLevel *level = new IndexLevel();
@@ -42,6 +43,13 @@ void MipMapPatchIndexs::generate(int size, int totalsize)
 			MipMapPatchIndex *index = new MipMapPatchIndex();
 			index->generate(size, totalsize, lod, borders);
 			level->borderIndexs_.push_back(index);
+			if (index->getIndices())
+			{
+				totalVerts += index->getSize();
+			}
 		}
 	}
+
+	Logger::log(S3D::formatStringBuffer(
+		"Index Memory Size : %u bytes", totalVerts * sizeof(unsigned int)));
 }

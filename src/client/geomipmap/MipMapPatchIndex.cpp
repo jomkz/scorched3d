@@ -58,7 +58,7 @@ void MipMapPatchIndex::generate(int size, int totalsize, int skip, unsigned int 
 
 	// Generate a standard x by y grid of indices for a triangle strip
 	// use degenerate indices to keep winding in the correct order
-	std::vector<unsigned int> indices;
+	std::vector<unsigned short> indices;
 	int j=0;
 	for (int y=0; y<size; y+=skip)
 	{
@@ -99,10 +99,10 @@ void MipMapPatchIndex::generate(int size, int totalsize, int skip, unsigned int 
 	// for when the patch size is larger than the index size.
 	// Also move indices that don't exist in border squares.
 	// Done here to keep the above code simpler.
-	unsigned int *mappingIndices = new unsigned int[(size + 1) * (size + 1)];
-	unsigned int *currentMappingIndex = mappingIndices;
-	unsigned int currentMappingCount = 0;
-	unsigned int lastGoodXTop, lastGoodXBottom, lastGoodYLeft, lastGoodYRight;
+	unsigned short *mappingIndices = new unsigned short[(size + 1) * (size + 1)];
+	unsigned short *currentMappingIndex = mappingIndices;
+	unsigned short currentMappingCount = 0;
+	unsigned short lastGoodXTop, lastGoodXBottom, lastGoodYLeft, lastGoodYRight;
 	for (int y=0; y<=size; y+=1)
 	{
 		// Record last possible y border index
@@ -142,7 +142,7 @@ void MipMapPatchIndex::generate(int size, int totalsize, int skip, unsigned int 
 
 	// Put the calculated indices into a unsigned array for OpenGL access
 	size_ = (int) indices.size();
-	if (!indices_) indices_ = new unsigned int[size_];
+	if (!indices_) indices_ = new unsigned short[size_];
 	for (int i=0; i<size_; i++)
 	{
 		int j = indices[i];
@@ -157,6 +157,6 @@ void MipMapPatchIndex::generate(int size, int totalsize, int skip, unsigned int 
 	{
 		delete bufferObject_;
 		bufferObject_ = new GLVertexBufferObject(true);
-		bufferObject_->init_data(size_ * sizeof(unsigned int), indices_, GL_STATIC_DRAW);
+		bufferObject_->init_data(size_ * sizeof(unsigned short), indices_, GL_STATIC_DRAW);
 	}
 }

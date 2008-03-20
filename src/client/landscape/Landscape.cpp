@@ -40,7 +40,7 @@
 #include <image/ImageBitmap.h>
 #include <GLEXT/GLImageModifier.h>
 #include <GLEXT/GLStateExtension.h>
-#include <GLEXT/GLConsoleRuleMethodIAdapter.h>
+#include <console/ConsoleRuleMethodIAdapter.h>
 #include <GLEXT/GLCameraFrustum.h>
 #include <GLSL/GLSLShaderSetup.h>
 #include <common/OptionsTransient.h>
@@ -77,7 +77,7 @@ Landscape::Landscape() :
 	smoke_ = new Smoke();
 	wall_ = new Wall();
 
-	new GLConsoleRuleMethodIAdapter<Landscape>(
+	new ConsoleRuleMethodIAdapter<Landscape>(
 		this, &Landscape::savePlan, "SavePlan");
 }
 
@@ -191,7 +191,7 @@ void Landscape::drawShadows()
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_PRE");
 
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_DRAW_LAND");
-	VisibilityPatchGrid::instance()->drawSimpleLand();
+	//VisibilityPatchGrid::instance()->drawSimpleLand();
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_DRAW_LAND");
 
 	RenderTargets::instance()->shadowDraw();
@@ -650,10 +650,15 @@ void Landscape::actualDrawLandTextured()
 	}
 	
 	glColor3f(1.0f, 1.0f, 1.0f);
+	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LAND");
 	VisibilityPatchGrid::instance()->drawLand();
+	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LAND");
+
 	if (OptionsDisplay::instance()->getDrawSurround())
 	{
+		GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SURROUND");
 		VisibilityPatchGrid::instance()->drawSurround();
+		GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SURROUND");
 	}
 
 	if (OptionsDisplay::instance()->getUseLandscapeTexture())

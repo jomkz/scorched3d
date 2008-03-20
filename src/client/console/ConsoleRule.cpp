@@ -18,9 +18,40 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <GLEXT/GLVertexSet.h>
 
-GLVertexSet::~GLVertexSet()
+// ConsoleRule.cpp: implementation of the ConsoleRule class.
+//
+//////////////////////////////////////////////////////////////////////
+
+#include <console/ConsoleRule.h>
+#include <common/Defines.h>
+#include <string.h>
+
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
+
+ConsoleRule::ConsoleRule(const char *name) : name_(name)
 {
 
+}
+
+ConsoleRule::~ConsoleRule()
+{
+
+}
+
+void ConsoleRule::addRuleFail(std::string &failLine, int position, int length)
+{
+	int noSpaces = position - (int) failLine.length();
+	for (int i=0; i<noSpaces; i++) failLine += ' ';
+	for (int j=0; j<length; j++) failLine += '^';
+}
+
+bool ConsoleRule::matchRule(const char *line)
+{
+	int len = (int) strlen(line);
+	if ((int) name_.length() < len) return false;
+
+	return (_strnicmp(line, name_.c_str(), len) == 0);
 }

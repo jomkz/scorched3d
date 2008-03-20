@@ -35,6 +35,7 @@ public:
 	{
 		FixedVector position;
 		FixedVector normal;
+		Vector floatPosition;
 		Vector floatNormal;
 		float texCoord1x, texCoord1y;
 		float texCoord2x, texCoord2y;

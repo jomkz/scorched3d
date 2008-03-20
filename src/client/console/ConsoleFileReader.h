@@ -18,27 +18,21 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_GLVERTEXARRAYGROUP_H__281612E4_C081_45C1_A049_B92631DBA524__INCLUDED_)
-#define AFX_GLVERTEXARRAYGROUP_H__281612E4_C081_45C1_A049_B92631DBA524__INCLUDED_
 
-#include <GLEXT/GLVertexArray.h>
-#include <vector>
+// ConsoleFileReader.h: interface for the ConsoleFileReader class.
+//
+//////////////////////////////////////////////////////////////////////
 
-class GLVertexSetGroup : public GLVertexSet
+#if !defined(AFX_ConsoleFILEREADER_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)
+#define AFX_ConsoleFILEREADER_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_
+
+#include <string>
+
+namespace ConsoleFileReader
 {
-public:
-	GLVertexSetGroup();
-	virtual ~GLVertexSetGroup();
-
-	void addToGroup(GLVertexSet &set);
-	void destroyGroup();
-
-	virtual int getNoTris();
-	virtual void draw();
-
-protected:
-	std::vector<GLVertexSet *> sets_;
-
+	bool loadFileIntoConsole(const std::string &fileName,
+		std::string &errorMessage);
+	void saveConsoleIntoFile(const std::string &fileName);
 };
 
-#endif // !defined(AFX_GLVERTEXARRAYGROUP_H__281612E4_C081_45C1_A049_B92631DBA524__INCLUDED_)
+#endif // !defined(AFX_ConsoleFILEREADER_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)

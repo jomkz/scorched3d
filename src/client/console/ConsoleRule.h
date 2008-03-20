@@ -19,42 +19,42 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-// GLConsoleRule.h: interface for the GLConsoleRule class.
+// ConsoleRule.h: interface for the ConsoleRule class.
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_GLCONSOLERULE_H__7A8C972C_069D_44F7_A604_A8A8D1B4773A__INCLUDED_)
-#define AFX_GLCONSOLERULE_H__7A8C972C_069D_44F7_A604_A8A8D1B4773A__INCLUDED_
+#if !defined(AFX_ConsoleRULE_H__7A8C972C_069D_44F7_A604_A8A8D1B4773A__INCLUDED_)
+#define AFX_ConsoleRULE_H__7A8C972C_069D_44F7_A604_A8A8D1B4773A__INCLUDED_
 
 #include <string>
 #include <list>
 #include <map>
 
-enum GLConsoleRuleType
+enum ConsoleRuleType
 {
-	GLConsoleRuleTypeBoolean,
-	GLConsoleRuleTypeNumber,
-	GLConsoleRuleTypeString
+	ConsoleRuleTypeBoolean,
+	ConsoleRuleTypeNumber,
+	ConsoleRuleTypeString
 };
 
-struct GLConsoleRuleSplit
+struct ConsoleRuleSplit
 {
 	std::string rule;
 	int position;
 	bool valueBool;
 	float valueNumber;
 
-	GLConsoleRuleType type;
+	ConsoleRuleType type;
 };
 
-class GLConsoleRule
+class ConsoleRule
 {
 public:
-	GLConsoleRule(const char *name);
-	virtual ~GLConsoleRule();
+	ConsoleRule(const char *name);
+	virtual ~ConsoleRule();
 
 	virtual void checkRule(const char *line, 
-					std::list<GLConsoleRuleSplit> split, 
+					std::list<ConsoleRuleSplit> split, 
 					std::string &result, 
 					std::list<std::string> &resultList) = 0;
 	virtual void dump(std::list<std::string> &resultList) = 0;
@@ -68,4 +68,4 @@ protected:
 
 };
 
-#endif // !defined(AFX_GLCONSOLERULE_H__7A8C972C_069D_44F7_A604_A8A8D1B4773A__INCLUDED_)
+#endif // !defined(AFX_ConsoleRULE_H__7A8C972C_069D_44F7_A604_A8A8D1B4773A__INCLUDED_)

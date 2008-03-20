@@ -362,8 +362,6 @@ void DisplayFrame::refreshScreen()
 	IDC_NOLANDSCAPESCORCH_CTRL->SetToolTip(wxString(OptionsDisplay::instance()->getNoGLTexSubImageEntry().getDescription(), wxConvUTF8));
 	IDC_NOMULTITEX_CTRL->SetValue(OptionsDisplay::instance()->getNoGLMultiTex());
 	IDC_NOMULTITEX_CTRL->SetToolTip(wxString(OptionsDisplay::instance()->getNoGLMultiTexEntry().getDescription(), wxConvUTF8));
-	IDC_NOCOMPILEDARRAYS_CTRL->SetValue(OptionsDisplay::instance()->getNoGLCompiledArrays());
-	IDC_NOCOMPILEDARRAYS_CTRL->SetToolTip(wxString(OptionsDisplay::instance()->getNoGLCompiledArraysEntry().getDescription(), wxConvUTF8));
 	IDC_NOENVCOMBINE_CTRL->SetValue(OptionsDisplay::instance()->getNoGLEnvCombine());
 	IDC_NOENVCOMBINE_CTRL->SetToolTip(wxString(OptionsDisplay::instance()->getNoGLEnvCombineEntry().getDescription(), wxConvUTF8));
 	IDC_NOSHADERS_CTRL->SetValue(OptionsDisplay::instance()->getNoGLShaders());
@@ -602,7 +600,6 @@ bool DisplayFrame::TransferDataFromWindow()
 	OptionsDisplay::instance()->getNoGLTexSubImageEntry().setValue(IDC_NOLANDSCAPESCORCH_CTRL->GetValue());
 	OptionsDisplay::instance()->getNoGLExtEntry().setValue(IDC_NOEXT_CTRL->GetValue());
 	OptionsDisplay::instance()->getNoGLMultiTexEntry().setValue(IDC_NOMULTITEX_CTRL->GetValue());
-	OptionsDisplay::instance()->getNoGLCompiledArraysEntry().setValue(IDC_NOCOMPILEDARRAYS_CTRL->GetValue());
 	OptionsDisplay::instance()->getNoGLEnvCombineEntry().setValue(IDC_NOENVCOMBINE_CTRL->GetValue());
 	OptionsDisplay::instance()->getNoGLShadersEntry().setValue(IDC_NOSHADERS_CTRL->GetValue());
 	OptionsDisplay::instance()->getNoGLShadowsEntry().setValue(IDC_NOSHADOWS_CTRL->GetValue());

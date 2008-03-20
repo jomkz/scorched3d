@@ -22,7 +22,7 @@
 #define __INCLUDE_ClientChannelManagerh_INCLUDE__
 
 #include <coms/ComsMessageHandler.h>
-#include <GLEXT/GLConsoleRuleMethodIAdapter.h>
+#include <console/ConsoleRuleMethodIAdapter.h>
 #include <client/ClientChannelManagerI.h>
 #include <set>
 
@@ -75,7 +75,7 @@ protected:
 	std::set<unsigned int> mutedPlayers_;
 	std::map<unsigned int, ChannelEntry *> recievers_;
 	unsigned int getChannelEntry(ClientChannelManagerI *reciever);
-	void say(std::list<GLConsoleRuleSplit> list);
+	void say(std::list<ConsoleRuleSplit> list);
 
 private:
 	ClientChannelManager();

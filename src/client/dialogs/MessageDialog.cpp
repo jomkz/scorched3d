@@ -21,7 +21,7 @@
 #include <dialogs/MessageDialog.h>
 #include <client/ScorchedClient.h>
 #include <common/OptionsScorched.h>
-#include <GLEXT/GLConsole.h>
+#include <console/Console.h>
 #include <GLEXT/GLViewPort.h>
 #include <GLW/GLWFont.h>
 

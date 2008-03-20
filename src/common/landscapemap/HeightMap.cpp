@@ -65,6 +65,10 @@ void HeightMap::reset()
 			current->normal[1] = fixed(0);
 			current->normal[2] = fixed(1);
 
+			current->floatPosition[0] = float(x);
+			current->floatPosition[1] = float(y);
+			current->floatPosition[2] = 0.0f;
+
 			current->floatNormal[0] = 0.0f;
 			current->floatNormal[1] = 0.0f;
 			current->floatNormal[2] = 1.0f;
@@ -262,7 +266,10 @@ void HeightMap::getInterpNormal(fixed w, fixed h, FixedVector &normal)
 void HeightMap::setHeight(int w, int h, fixed height)
 {
 	DIALOG_ASSERT(w >= 0 && h >= 0 && w<=width_ && h<=height_);
-	heightData_[(width_+1) * h + w].position[2] = height;
+
+	HeightData &data = heightData_[(width_+1) * h + w];
+	data.position[2] = height;
+	data.floatPosition[2] = height.asFloat();
 
 	// Reset all of the normals around this position
 	for (int dist=1; dist<=3; dist++)

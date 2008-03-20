@@ -62,8 +62,8 @@
 #include <dialogs/AnimatedBackdropDialog.h>
 #include <dialogs/BackdropDialog.h>
 #include <server/ScorchedServer.h>
-#include <GLEXT/GLConsoleFileReader.h>
-#include <GLEXT/GLConsole.h>
+#include <console/ConsoleFileReader.h>
+#include <console/Console.h>
 #include <GLW/GLWWindowManager.h>
 #include <GLW/GLWWindowSkinManager.h>
 #include <engine/MainLoop.h>
@@ -213,7 +213,7 @@ static bool initWindows(ProgressCounter *progressCounter)
 	HelpButtonDialog::instance();
 
 	std::string errorString;
-	if (!GLConsoleFileReader::loadFileIntoConsole(S3D::getDataFile("data/autoexec.xml"), errorString))
+	if (!ConsoleFileReader::loadFileIntoConsole(S3D::getDataFile("data/autoexec.xml"), errorString))
 	{
 		S3D::dialogMessage("Failed to parse data/autoexec.xml", errorString);
 		return false;

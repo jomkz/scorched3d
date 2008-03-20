@@ -21,7 +21,7 @@
 #if !defined(AFX_ClientAdmin_H__571BC1CA_BDBC_4F2B_9F83_4AA083520198__INCLUDED_)
 #define AFX_ClientAdmin_H__571BC1CA_BDBC_4F2B_9F83_4AA083520198__INCLUDED_
 
-#include <GLEXT/GLConsoleRuleMethodIAdapter.h>
+#include <console/ConsoleRuleMethodIAdapter.h>
 
 class ClientAdmin
 {
@@ -31,7 +31,7 @@ public:
 protected:
 	static ClientAdmin *instance_;
 
-	void admin(std::list<GLConsoleRuleSplit> split, std::list<std::string> &result);
+	void admin(std::list<ConsoleRuleSplit> split, std::list<std::string> &result);
 	void adminHelp(std::list<std::string> &result);
 
 private:

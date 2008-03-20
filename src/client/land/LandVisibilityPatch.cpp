@@ -64,7 +64,7 @@ void LandVisibilityPatch::setLocation(int x, int y,
 	{
 		HeightMap::HeightData *heightData = &ScorchedClient::instance()->getLandscapeMaps().
 			getGroundMaps().getHeightMap().getHeightData()[x + (y * (mapWidth + 1))];
-		heightMapData_ = heightData->position[0].getInternalData();
+		heightMapData_ = (float *) &heightData->floatPosition;
 	}
 }
 
@@ -156,48 +156,74 @@ void LandVisibilityPatch::draw(MipMapPatchIndex &index)
 {
 	if (!heightMapData_) return;
 
-	// No triangles
-	GLInfo::addNoTriangles(index.getSize());
+	// Number triangles
+	GLInfo::addNoTriangles(index.getSize() - 2);
 
-	// Vertices On
-	glVertexPointer(3, GL_INT, sizeof(HeightMap::HeightData), &heightMapData_[0]);
-
-	// Normals On
-	glNormalPointer(GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[6]);
-
-	// Tex Coords
-	if (GLStateExtension::hasMultiTex())
+	if (!OptionsDisplay::instance()->getNoGLDrawElements())
 	{
-		glClientActiveTextureARB(GL_TEXTURE1_ARB);
-		glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[9]);
-		if (GLStateExtension::getTextureUnits() > 2)
+		// Vertices On
+		glVertexPointer(3, GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[0]);
+
+		// Normals On
+		glNormalPointer(GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[3]);
+
+		// Tex Coords
+		if (GLStateExtension::hasMultiTex())
 		{
-			glClientActiveTextureARB(GL_TEXTURE2_ARB);
-			glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[11]);
+			glClientActiveTextureARB(GL_TEXTURE1_ARB);
+			glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[6]);
+			if (GLStateExtension::getTextureUnits() > 2)
+			{
+				glClientActiveTextureARB(GL_TEXTURE2_ARB);
+				glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[8]);
+			}
 		}
-	}
-	glClientActiveTextureARB(GL_TEXTURE0_ARB);
-	glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[9]);
+		glClientActiveTextureARB(GL_TEXTURE0_ARB);
+		glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[6]);
 
-	// Map indices to draw
-	unsigned int *indices = 0;
-	if (index.getBufferObject())
-	{
-		index.getBufferObject()->bind();
+		// Map indices to draw
+		unsigned short *indices = 0;
+		if (index.getBufferObject())
+		{
+			index.getBufferObject()->bind();
+		}
+		else
+		{
+			indices = index.getIndices();
+		}
+
+		// Draw elements
+		glDrawElements(GL_TRIANGLE_STRIP, 
+			index.getSize(), 
+			GL_UNSIGNED_SHORT, 
+			indices);
+
+		if (index.getBufferObject())
+		{
+			index.getBufferObject()->unbind();
+		}
 	}
 	else
 	{
-		indices = index.getIndices();
-	}
+		glBegin(GL_TRIANGLE_STRIP);
+			for (int i=0; i<index.getSize(); i++)
+			{
+				float *data = heightMapData_ + 
+					(sizeof(HeightMap::HeightData) / 4 * index.getIndices()[i]);
 
-	// Draw elements
-	glDrawElements(GL_TRIANGLE_STRIP, 
-		index.getSize(), 
-		GL_UNSIGNED_INT, 
-		indices);
+				glVertex3fv(data);
+				glNormal3fv(data + 3);
+				glTexCoord2fv(data + 6);
 
-	if (index.getBufferObject())
-	{
-		index.getBufferObject()->unbind();
+				if (GLStateExtension::hasMultiTex())
+				{
+					glMultiTexCoord2fvARB(GL_TEXTURE1_ARB, data + 8);
+					if (GLStateExtension::getTextureUnits() > 2)
+					{
+						glMultiTexCoord2fvARB(GL_TEXTURE2_ARB, data + 6);
+					}
+				}
+			}
+		glEnd();
 	}
 }

@@ -100,6 +100,8 @@ void Water2Renderer::drawPoints(WaterMapPoints &points)
 
 void Water2Renderer::drawWaterShaders(Water2 &water2)
 {
+	//GLState state(GLState::LIGHTING_OFF | GLState::TEXTURE_OFF);
+
 	GLState state(GLState::LIGHTING_OFF | GLState::TEXTURE_ON | GLState::BLEND_ON);
 
 	glPushAttrib(GL_ALL_ATTRIB_BITS);

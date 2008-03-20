@@ -38,13 +38,13 @@ public:
 
 	void generate(int size, int totalsize, int skip, unsigned int border);
 
-	unsigned int *getIndices() { return indices_; }
+	unsigned short *getIndices() { return indices_; }
 	int getSize() { return size_; }
 	GLVertexBufferObject *getBufferObject() { return bufferObject_; }
 
 protected:
 	int size_;
-	unsigned int *indices_;
+	unsigned short *indices_;
 	GLVertexBufferObject *bufferObject_;
 };
 

@@ -18,35 +18,35 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_GLConsoleRuleMethodIAdapterh_INCLUDE__)
-#define __INCLUDE_GLConsoleRuleMethodIAdapterh_INCLUDE__
+#if !defined(__INCLUDE_ConsoleRuleMethodIAdapterh_INCLUDE__)
+#define __INCLUDE_ConsoleRuleMethodIAdapterh_INCLUDE__
 
-#include <GLEXT/GLConsole.h>
+#include <console/Console.h>
 
 // Q. Hmm what happens when you have a long winded naming scheme?
 // A. name -> inf
 
 // Usage pattern :-
-// 	new GLConsoleRuleMethodIAdapter<InfoMap>(
+// 	new ConsoleRuleMethodIAdapter<InfoMap>(
 //		this, showHeightBands, "InfoHeightBands");
 // Calls InfoMap::showHeightBands when InfoHeightBands is selected 
 // in the console
 template<class T>
-class GLConsoleRuleMethodIAdapter : public GLConsoleRuleMethodI
+class ConsoleRuleMethodIAdapter : public ConsoleRuleMethodI
 {
 public:
-	GLConsoleRuleMethodIAdapter(T *inst, void (T::*call)(), const char *name) 
+	ConsoleRuleMethodIAdapter(T *inst, void (T::*call)(), const char *name) 
 		: inst_(inst), call_(call), name_(name)
 	{
-		GLConsole::instance()->addMethod(name_.c_str(), this);
+		Console::instance()->addMethod(name_.c_str(), this);
 	};
-	virtual ~GLConsoleRuleMethodIAdapter()
+	virtual ~ConsoleRuleMethodIAdapter()
 	{
-		GLConsole::instance()->removeMethod(name_.c_str());
+		Console::instance()->removeMethod(name_.c_str());
 	};
 
 	virtual void runMethod(const char *name, 
-						   std::list<GLConsoleRuleSplit> split,
+						   std::list<ConsoleRuleSplit> split,
 						   std::string &result,
 						   std::list<std::string> &resultList)
 	{
@@ -61,21 +61,21 @@ protected:
 
 // Same as above but passed params to method
 template<class T>
-class GLConsoleRuleMethodIAdapterEx : public GLConsoleRuleMethodI
+class ConsoleRuleMethodIAdapterEx : public ConsoleRuleMethodI
 {
 public:
-	GLConsoleRuleMethodIAdapterEx(T *inst, void (T::*call)(std::list<GLConsoleRuleSplit>), const char *name) 
+	ConsoleRuleMethodIAdapterEx(T *inst, void (T::*call)(std::list<ConsoleRuleSplit>), const char *name) 
 		: inst_(inst), call_(call), name_(name)
 	{
-		GLConsole::instance()->addMethod(name_.c_str(), this);
+		Console::instance()->addMethod(name_.c_str(), this);
 	};
-	virtual ~GLConsoleRuleMethodIAdapterEx()
+	virtual ~ConsoleRuleMethodIAdapterEx()
 	{
-		GLConsole::instance()->removeMethod(name_.c_str());
+		Console::instance()->removeMethod(name_.c_str());
 	};
 
 	virtual void runMethod(const char *name, 
-						   std::list<GLConsoleRuleSplit> split,
+						   std::list<ConsoleRuleSplit> split,
 						   std::string &result,
 						   std::list<std::string> &resultList)
 	{
@@ -85,26 +85,26 @@ public:
 protected:
 	std::string name_;
 	T *inst_;
-	void (T::*call_)(std::list<GLConsoleRuleSplit>);
+	void (T::*call_)(std::list<ConsoleRuleSplit>);
 };
 
 // Same as above but passed params and result to method
 template<class T>
-class GLConsoleRuleMethodIAdapterEx2 : public GLConsoleRuleMethodI
+class ConsoleRuleMethodIAdapterEx2 : public ConsoleRuleMethodI
 {
 public:
-	GLConsoleRuleMethodIAdapterEx2(T *inst, void (T::*call)(std::list<GLConsoleRuleSplit>, 
+	ConsoleRuleMethodIAdapterEx2(T *inst, void (T::*call)(std::list<ConsoleRuleSplit>, 
 		std::list<std::string>&), const char *name)
 		: inst_(inst), call_(call), name_(name)
 	{
-		GLConsole::instance()->addMethod(name_.c_str(), this);
+		Console::instance()->addMethod(name_.c_str(), this);
 	};
-	virtual ~GLConsoleRuleMethodIAdapterEx2()
+	virtual ~ConsoleRuleMethodIAdapterEx2()
 	{
-		GLConsole::instance()->removeMethod(name_.c_str());
+		Console::instance()->removeMethod(name_.c_str());
 	};
 	virtual void runMethod(const char *name,  
-		std::list<GLConsoleRuleSplit> split,
+		std::list<ConsoleRuleSplit> split,
 		std::string &result,
 		std::list<std::string> &resultList)
 	{
@@ -114,7 +114,7 @@ public:
 protected:
 	std::string name_;
 	T *inst_;
-	void (T::*call_)(std::list<GLConsoleRuleSplit>, std::list<std::string>&);
+	void (T::*call_)(std::list<ConsoleRuleSplit>, std::list<std::string>&);
 };                         
 
 #endif

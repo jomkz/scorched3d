@@ -19,11 +19,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-// GLConsoleRuleFn.cpp: implementation of the GLConsoleRuleFn class.
+// ConsoleRuleFn.cpp: implementation of the ConsoleRuleFn class.
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <GLEXT/GLConsoleRuleFn.h>
+#include <console/ConsoleRuleFn.h>
 #include <common/Defines.h>
 #include <stdio.h>
 
@@ -31,34 +31,34 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-GLConsoleRuleFnI::~GLConsoleRuleFnI()
+ConsoleRuleFnI::~ConsoleRuleFnI()
 {
 
 }
 
-GLConsoleRuleFn::GLConsoleRuleFn(const char *name, 
-								GLConsoleRuleFnI *user, 
-								GLConsoleRuleType type, 
-								GLConsoleRuleAccessType access) :
-	GLConsoleRule(name), user_(user), type_(type), access_(access)
+ConsoleRuleFn::ConsoleRuleFn(const char *name, 
+								ConsoleRuleFnI *user, 
+								ConsoleRuleType type, 
+								ConsoleRuleAccessType access) :
+	ConsoleRule(name), user_(user), type_(type), access_(access)
 {
 
 }
 
-GLConsoleRuleFn::~GLConsoleRuleFn()
+ConsoleRuleFn::~ConsoleRuleFn()
 {
 
 }
 
-void GLConsoleRuleFn::checkRule(const char *line, 
-							  std::list<GLConsoleRuleSplit> split, 
+void ConsoleRuleFn::checkRule(const char *line, 
+							  std::list<ConsoleRuleSplit> split, 
 							  std::string &result, 
 							  std::list<std::string> &resultList)
 {
 	result = line;
 	if (split.size() == 1)
 	{
-		if (access_ == GLConsoleRuleAccessTypeWrite)
+		if (access_ == ConsoleRuleAccessTypeWrite)
 		{
 			resultList.push_back("Function is write only");
 		}
@@ -69,14 +69,14 @@ void GLConsoleRuleFn::checkRule(const char *line,
 	}
 	else if (split.size() == 2)
 	{
-		std::list<GLConsoleRuleSplit>::iterator iter = split.begin();
+		std::list<ConsoleRuleSplit>::iterator iter = split.begin();
 		iter++;
-		GLConsoleRuleSplit &split = (*iter);
+		ConsoleRuleSplit &split = (*iter);
 
-		if (access_ == GLConsoleRuleAccessTypeRead)
+		if (access_ == ConsoleRuleAccessTypeRead)
 		{
 			std::string failed;
-			GLConsoleRule::addRuleFail(failed, split.position, (int) split.rule.length());
+			ConsoleRule::addRuleFail(failed, split.position, (int) split.rule.length());
 			resultList.push_back(failed);
 			resultList.push_back("Function is read only");
 		}
@@ -85,7 +85,7 @@ void GLConsoleRuleFn::checkRule(const char *line,
 			if (split.type != type_)
 			{
 				std::string failed;
-				GLConsoleRule::addRuleFail(failed, split.position, (int) split.rule.length());
+				ConsoleRule::addRuleFail(failed, split.position, (int) split.rule.length());
 				resultList.push_back(failed);
 				resultList.push_back("Wrong argument type");
 			}
@@ -99,47 +99,47 @@ void GLConsoleRuleFn::checkRule(const char *line,
 	else
 	{
 		std::string failed;
-		std::list<GLConsoleRuleSplit>::iterator iter = split.begin();
+		std::list<ConsoleRuleSplit>::iterator iter = split.begin();
 		iter++; iter++;
 		for (;iter!=split.end();iter++)
 		{
-			GLConsoleRuleSplit &split = (*iter);
-			GLConsoleRule::addRuleFail(failed, split.position, (int) split.rule.length());
+			ConsoleRuleSplit &split = (*iter);
+			ConsoleRule::addRuleFail(failed, split.position, (int) split.rule.length());
 		}
 		resultList.push_back(failed);
 		resultList.push_back("Too many arguments to fn");
 	}
 }
 
-void GLConsoleRuleFn::setValue(GLConsoleRuleSplit &split)
+void ConsoleRuleFn::setValue(ConsoleRuleSplit &split)
 {
 	switch (type_)
 	{
-	case GLConsoleRuleTypeBoolean:
+	case ConsoleRuleTypeBoolean:
 		user_->setBoolParam(name_.c_str(), split.valueBool);
 		break;
-	case GLConsoleRuleTypeNumber:
+	case ConsoleRuleTypeNumber:
 		user_->setNumberParam(name_.c_str(), split.valueNumber);
 		break;
-	case GLConsoleRuleTypeString:
+	case ConsoleRuleTypeString:
 		user_->setStringParam(name_.c_str(), split.rule.c_str());
 	}
 }
 
-const char *GLConsoleRuleFn::getValue()
+const char *ConsoleRuleFn::getValue()
 {
 	static std::string value;
 	switch (type_)
 	{
-	case GLConsoleRuleTypeBoolean:
+	case ConsoleRuleTypeBoolean:
 		value = (user_->getBoolParam(name_.c_str())?"on":"off");
 		break;
-	case GLConsoleRuleTypeNumber:
+	case ConsoleRuleTypeNumber:
 		static char buffer[10];
 		snprintf(buffer, 10, "%.2f", user_->getNumberParam(name_.c_str()));
 		value = buffer;
 		break;
-	case GLConsoleRuleTypeString:
+	case ConsoleRuleTypeString:
 		value = user_->getStringParam(name_.c_str());
 		break;
 	default:
@@ -152,31 +152,31 @@ const char *GLConsoleRuleFn::getValue()
 	return result.c_str();
 }
 
-void GLConsoleRuleFn::dump(std::list<std::string> &resultList)
+void ConsoleRuleFn::dump(std::list<std::string> &resultList)
 {
 	std::string result = "  " + name_ + "=";
 	switch (type_)
 	{
-	case GLConsoleRuleTypeBoolean:
+	case ConsoleRuleTypeBoolean:
 		result += "<on|off>";
 		break;
-	case GLConsoleRuleTypeNumber:
+	case ConsoleRuleTypeNumber:
 		result += "<number>";
 		break;
-	case GLConsoleRuleTypeString:
+	case ConsoleRuleTypeString:
 		result += "<word>";
 		break;
 	}
 
 	switch (access_)
 	{
-	case GLConsoleRuleAccessTypeRead:
+	case ConsoleRuleAccessTypeRead:
 		result += "  (Read only)";
 		break;
-	case GLConsoleRuleAccessTypeWrite:
+	case ConsoleRuleAccessTypeWrite:
 		result += "  (Write only)";
 		break;
-	case GLConsoleRuleAccessTypeReadWrite:
+	case ConsoleRuleAccessTypeReadWrite:
 		result += "  (Read and Write)";
 		break;
 	}

@@ -18,47 +18,48 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <GLEXT/GLVertexSetGroup.h>
 
-GLVertexSetGroup::GLVertexSetGroup()
+// ConsoleRuleMethod.cpp: implementation of the ConsoleRuleMethod class.
+//
+//////////////////////////////////////////////////////////////////////
+
+#include <console/ConsoleRuleMethod.h>
+
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
+
+ConsoleRuleMethodI::~ConsoleRuleMethodI()
 {
 
 }
 
-GLVertexSetGroup::~GLVertexSetGroup()
+ConsoleRuleMethod::ConsoleRuleMethod(const char *name,
+										 ConsoleRuleMethodI *user) : 
+	ConsoleRule(name),
+	user_(user)
 {
 
 }
 
-void GLVertexSetGroup::draw()
+ConsoleRuleMethod::~ConsoleRuleMethod()
 {
-	for (unsigned int i=0; i<sets_.size(); i++)
-	{
-		sets_[i]->draw();
-	}
+
 }
 
-void GLVertexSetGroup::destroyGroup()
+void ConsoleRuleMethod::checkRule(const char *line, 
+				std::list<ConsoleRuleSplit> split, 
+				std::string &result, 
+				std::list<std::string> &resultList)
 {
-	while (!sets_.empty())
-	{
-		delete sets_.back();
-		sets_.pop_back();		
-	}
+	std::list<ConsoleRuleSplit>::iterator iter = split.begin();
+	result = line;
+
+	user_->runMethod(name_.c_str(), split, result, resultList);
 }
 
-void GLVertexSetGroup::addToGroup(GLVertexSet &set)
+void ConsoleRuleMethod::dump(std::list<std::string> &resultList)
 {
-	sets_.push_back(&set);
-}
-
-int GLVertexSetGroup::getNoTris()
-{
-	int tris = 0;
-	for (unsigned int i=0; i<sets_.size(); i++)
-	{
-		tris += sets_[i]->getNoTris();
-	}
-
-	return tris;
+	std::string result = "  " + name_;
+	resultList.push_back(result);
 }

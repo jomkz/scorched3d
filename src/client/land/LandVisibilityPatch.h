@@ -51,7 +51,7 @@ public:
 
 protected:
 	int x_, y_;
-	int *heightMapData_;
+	float *heightMapData_;
 	int visibilityIndex_;
 	bool visible_;
 	Vector position_;

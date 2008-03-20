@@ -288,9 +288,6 @@ static void createTroubleControls(wxWindow *parent, wxSizer *sizer)
 		IDC_NOLANDSCAPESCORCH_CTRL = 
 			new wxCheckBox(parent, -1, wxT("No TexSubImaging"));
 		glDetailSizer2->Add(IDC_NOLANDSCAPESCORCH_CTRL, 0);
-		IDC_NOCOMPILEDARRAYS_CTRL = 
-			new wxCheckBox(parent, -1, wxT("No compiled arrays"));
-		glDetailSizer2->Add(IDC_NOCOMPILEDARRAYS_CTRL, 0);
 		IDC_NOENVCOMBINE_CTRL = 
 			new wxCheckBox(parent, -1, wxT("No combined textures"));
 		glDetailSizer2->Add(IDC_NOENVCOMBINE_CTRL, 0);

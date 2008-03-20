@@ -22,24 +22,24 @@
 #include <common/Defines.h>
 #include <common/Logger.h>
 #include <GLEXT/GLState.h>
-#include <GLEXT/GLConsole.h>
+#include <console/Console.h>
 #include <GLEXT/GLViewPort.h>
 #include <GLW/GLWFont.h>
 #include <GLW/GLWToolTip.h>
 
-GLConsole *GLConsole::instance_ = 0;
+Console *Console::instance_ = 0;
 
-GLConsole *GLConsole::instance()
+Console *Console::instance()
 {
 	if (!instance_)
 	{
-		instance_ = new GLConsole;
+		instance_ = new Console;
 	}
 	return instance_;
 }
 
-GLConsole::GLConsole() : 
-	GameStateI("GLConsole"),
+Console::Console() : 
+	GameStateI("Console"),
 	height_(0.0f), opening_(false), lines_(1000), 
 	methods_(rules_, lines_), showCursor_(true)
 {
@@ -47,17 +47,17 @@ GLConsole::GLConsole() :
 	font_ = GLWFont::instance()->getCourierFont();
 }
 
-GLConsole::~GLConsole()
+Console::~Console()
 {
 
 }
 
-void GLConsole::logMessage(LoggerInfo &info)
+void Console::logMessage(LoggerInfo &info)
 {
 	addLine(false, info.getMessage());
 }
 
-void GLConsole::keyboardCheck(const unsigned state, float frameTime, 
+void Console::keyboardCheck(const unsigned state, float frameTime, 
 							   char *buffer, unsigned int keyState,
 							   KeyboardHistory::HistoryElement *history, int hisCount, 
 							   bool &skipRest)
@@ -101,13 +101,13 @@ void GLConsole::keyboardCheck(const unsigned state, float frameTime,
 					break;
 				case SDLK_TAB:
 					{
-						std::list<GLConsoleRule *> matches;
+						std::list<ConsoleRule *> matches;
 						const char *result = rules_.matchRule(currentLine_.c_str(), matches);
 						if (result) currentLine_ = result;
 						if (matches.size() > 1)
 						{
 							addLine(false, "-------------------");
-							std::list<GLConsoleRule *>::iterator itor;
+							std::list<ConsoleRule *>::iterator itor;
 							for (itor = matches.begin();
 								itor != matches.end();
 								itor++)
@@ -167,7 +167,7 @@ void GLConsole::keyboardCheck(const unsigned state, float frameTime,
 	}
 }
 
-void GLConsole::simulate(const unsigned state, float frameTime)
+void Console::simulate(const unsigned state, float frameTime)
 {
 	const GLfloat dropSpeed = 600.0f;
 	if (opening_)
@@ -189,7 +189,7 @@ void GLConsole::simulate(const unsigned state, float frameTime)
 	}
 }
 
-void GLConsole::draw(const unsigned state)
+void Console::draw(const unsigned state)
 {
 	if (height_ <= 0.0f) return;
 
@@ -202,7 +202,7 @@ void GLConsole::draw(const unsigned state)
 	drawText(width, top);
 }
 
-void GLConsole::drawBackdrop(float width, float top)
+void Console::drawBackdrop(float width, float top)
 {
 	if (height_ > top * .75f) height_ = top * .75f;
 
@@ -232,7 +232,7 @@ void GLConsole::drawBackdrop(float width, float top)
 	glEnd();
 }
 
-void GLConsole::drawText(float width, float top)
+void Console::drawText(float width, float top)
 {
 	static Vector color(1.0f, 1.0f, 1.0f);
 	font_->draw(color, 14,
@@ -244,7 +244,7 @@ void GLConsole::drawText(float width, float top)
 	lines_.drawLines(font_, top - (height_ - 14.0f), top, width);
 }
 
-void GLConsole::parseLine(const char *line)
+void Console::parseLine(const char *line)
 {
 	std::list<std::string> linesToAdd;
 	std::string result;
@@ -260,7 +260,7 @@ void GLConsole::parseLine(const char *line)
 	}
 }
 
-void GLConsole::addLine(bool parse, const std::string &text)
+void Console::addLine(bool parse, const std::string &text)
 {
 	if (parse)
 	{
@@ -272,12 +272,12 @@ void GLConsole::addLine(bool parse, const std::string &text)
 	}
 }
 
-bool GLConsole::addFunction(const char *name, 
-							GLConsoleRuleFnI *user, 
-							GLConsoleRuleType type, 
-							GLConsoleRuleAccessType access)
+bool Console::addFunction(const char *name, 
+							ConsoleRuleFnI *user, 
+							ConsoleRuleType type, 
+							ConsoleRuleAccessType access)
 {
-	GLConsoleRuleFn *rule = new GLConsoleRuleFn(name, user, type, access);
+	ConsoleRuleFn *rule = new ConsoleRuleFn(name, user, type, access);
 	if (!rules_.addRule(rule))
 	{
 		delete rule;
@@ -286,18 +286,18 @@ bool GLConsole::addFunction(const char *name,
 	return true;
 }
 
-bool GLConsole::removeFunction(const char *name)
+bool Console::removeFunction(const char *name)
 {
-	GLConsoleRule *rule = rules_.removeRule(name);
+	ConsoleRule *rule = rules_.removeRule(name);
 	delete rule;
 
 	return (rule!=0);
 }
 
-bool GLConsole::addMethod(const char *name,
-						  GLConsoleRuleMethodI *user)
+bool Console::addMethod(const char *name,
+						  ConsoleRuleMethodI *user)
 {
-	GLConsoleRuleMethod *rule = new GLConsoleRuleMethod(name, user);
+	ConsoleRuleMethod *rule = new ConsoleRuleMethod(name, user);
 	if (!rules_.addRule(rule))
 	{
 		delete rule;
@@ -306,9 +306,9 @@ bool GLConsole::addMethod(const char *name,
 	return true;
 }
 
-bool GLConsole::removeMethod(const char *name)
+bool Console::removeMethod(const char *name)
 {
-	GLConsoleRule *rule = rules_.removeRule(name);
+	ConsoleRule *rule = rules_.removeRule(name);
 	delete rule;
 
 	return (rule!=0);

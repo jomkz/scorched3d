@@ -21,7 +21,7 @@
 #include <landscape/InfoMap.h>
 #include <landscape/Landscape.h>
 #include <landscapemap/LandscapeMaps.h>
-#include <GLEXT/GLConsoleRuleMethodIAdapter.h>
+#include <console/ConsoleRuleMethodIAdapter.h>
 #include <image/ImageFactory.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientParams.h>
@@ -48,9 +48,9 @@ InfoMap::~InfoMap()
 
 void InfoMap::addAdapters()
 {
-	static GLConsoleRuleMethodIAdapter<Landscape> *off = 0;
-	static GLConsoleRuleMethodIAdapter<InfoMap> *bands = 0;
-	static GLConsoleRuleMethodIAdapter<InfoMap> *grid = 0;
+	static ConsoleRuleMethodIAdapter<Landscape> *off = 0;
+	static ConsoleRuleMethodIAdapter<InfoMap> *bands = 0;
+	static ConsoleRuleMethodIAdapter<InfoMap> *grid = 0;
 	
 	delete off; off = 0;
 	delete bands; bands = 0;
@@ -59,11 +59,11 @@ void InfoMap::addAdapters()
 	if(ScorchedClient::instance()->getOptionsGame().getDebugFeatures() ||
 		!ClientParams::instance()->getConnectedToServer())
 	{
-		off = new GLConsoleRuleMethodIAdapter<Landscape>(
+		off = new ConsoleRuleMethodIAdapter<Landscape>(
 			Landscape::instance(), &Landscape::restoreLandscapeTexture, "LandscapeInfoOff");
-		bands = new GLConsoleRuleMethodIAdapter<InfoMap>(
+		bands = new ConsoleRuleMethodIAdapter<InfoMap>(
 			this, &InfoMap::showHeightBands, "LandscapeInfoHeightBands");
-		grid = new GLConsoleRuleMethodIAdapter<InfoMap>(
+		grid = new ConsoleRuleMethodIAdapter<InfoMap>(
 			this, &InfoMap::showGrid, "LandscapeInfoGrid");
 	}
 }

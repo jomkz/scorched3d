@@ -18,24 +18,24 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <GLEXT/GLConsoleLines.h>
+#include <console/ConsoleLines.h>
 #include <common/DefinesString.h>
 #include <string>
 
-unsigned GLConsoleLine::nextLineNumber_ = 0;
+unsigned ConsoleLine::nextLineNumber_ = 0;
 
-GLConsoleLine::GLConsoleLine() :
+ConsoleLine::ConsoleLine() :
 	lineType_(eNone), lineNumber_(0)
 {
 
 }
 
-GLConsoleLine::~GLConsoleLine()
+ConsoleLine::~ConsoleLine()
 {
 
 }
 
-void GLConsoleLine::set(const char *line, LineType type)
+void ConsoleLine::set(const char *line, LineType type)
 {
 	line_ = std::string(line);
 	lineType_ = type;
@@ -50,7 +50,7 @@ void GLConsoleLine::set(const char *line, LineType type)
 	lineNumberStr_= S3D::formatStringBuffer("%4i", lineNumber_);
 }
 
-void GLConsoleLine::drawLine(float x, float y, GLFont2d *font)
+void ConsoleLine::drawLine(float x, float y, GLFont2d *font)
 {
 	static Vector color(0.9f, 0.9f, 0.9f);
 	if (lineType_ != eNone)
@@ -74,27 +74,27 @@ void GLConsoleLine::drawLine(float x, float y, GLFont2d *font)
 	}
 }
 
-GLConsoleLines::GLConsoleLines(int maxLines) :
+ConsoleLines::ConsoleLines(int maxLines) :
 	maxLines_(maxLines), currentLine_(0)
 {
 }
 
-GLConsoleLines::~GLConsoleLines()
+ConsoleLines::~ConsoleLines()
 {
 }
 
-void GLConsoleLines::clear()
+void ConsoleLines::clear()
 {
 	currentLine_ = 0;
 	while (!lines_.empty())
 	{
-		GLConsoleLine *line = lines_.front();
+		ConsoleLine *line = lines_.front();
 		lines_.pop_front();
 		delete line;
 	}
 }
 
-void GLConsoleLines::scroll(int lines)
+void ConsoleLines::scroll(int lines)
 {
 	currentLine_ -= lines;
 	if (currentLine_ < 0) currentLine_ = 0;
@@ -102,15 +102,15 @@ void GLConsoleLines::scroll(int lines)
 		currentLine_ = (int) lines_.size();
 }
 
-const char *GLConsoleLines::getItem(int linecount)
+const char *ConsoleLines::getItem(int linecount)
 {
 	int linesSize = (int) lines_.size();
 	if (linecount < 0)
 	{
 		for (int line = currentLine_ + 1; line < linesSize; line++)
 		{
-			GLConsoleLine *consoleline = lines_[line];
-			if (consoleline->getLineType() == GLConsoleLine::eCommand)
+			ConsoleLine *consoleline = lines_[line];
+			if (consoleline->getLineType() == ConsoleLine::eCommand)
 			{
 				linecount++;
 				currentLine_ = line;
@@ -122,8 +122,8 @@ const char *GLConsoleLines::getItem(int linecount)
 	{
 		for (int line = currentLine_ - 1; line >= 0 && line < linesSize; line--)
 		{
-			GLConsoleLine *consoleline = lines_[line];
-			if (consoleline->getLineType() == GLConsoleLine::eCommand)
+			ConsoleLine *consoleline = lines_[line];
+			if (consoleline->getLineType() == ConsoleLine::eCommand)
 			{
 				linecount--;
 				currentLine_ = line;
@@ -135,7 +135,7 @@ const char *GLConsoleLines::getItem(int linecount)
 	// Check the command is valid and return the line
 	if (currentLine_ >= 0 && currentLine_ < linesSize)
 	{
-		if (lines_[currentLine_]->getLineType()  == GLConsoleLine::eCommand)
+		if (lines_[currentLine_]->getLineType()  == ConsoleLine::eCommand)
 		{
 			static std::string result;
 
@@ -146,7 +146,7 @@ const char *GLConsoleLines::getItem(int linecount)
 			int current = currentLine_ - 1;
 			while (current < linesSize && 
 				current >= 0 &&
-				lines_[current]->getLineType() == GLConsoleLine::eCommandCont)
+				lines_[current]->getLineType() == ConsoleLine::eCommandCont)
 			{
 				result.append(lines_[current]->getLine());
 				current--;
@@ -158,7 +158,7 @@ const char *GLConsoleLines::getItem(int linecount)
 	return "";
 }
 
-void GLConsoleLines::addLine(const char *text, bool showPointer)
+void ConsoleLines::addLine(const char *text, bool showPointer)
 {
 	if (showPointer) reset();
 
@@ -192,20 +192,20 @@ void GLConsoleLines::addLine(const char *text, bool showPointer)
 	}
 }
 
-void GLConsoleLines::addSmallLine(int sectionNo, const char *text, bool showPointer)
+void ConsoleLines::addSmallLine(int sectionNo, const char *text, bool showPointer)
 {
-	GLConsoleLine::LineType type = GLConsoleLine::eNone;
+	ConsoleLine::LineType type = ConsoleLine::eNone;
 	if (showPointer)
 	{
-		if (sectionNo == 0) type = GLConsoleLine::eCommand;
-		else type = GLConsoleLine::eCommandCont;
+		if (sectionNo == 0) type = ConsoleLine::eCommand;
+		else type = ConsoleLine::eCommandCont;
 	}
 
 	if (lines_.size() == maxLines_)
 	{
 		// We need to reuse the lines
 		// reuse the first line
-		GLConsoleLine *line = lines_.back();
+		ConsoleLine *line = lines_.back();
 		lines_.pop_back();
 		line->set(text, type);
 		lines_.push_front(line);
@@ -213,7 +213,7 @@ void GLConsoleLines::addSmallLine(int sectionNo, const char *text, bool showPoin
 	else
 	{
 		// Add a new line
-		GLConsoleLine *line = new GLConsoleLine;
+		ConsoleLine *line = new ConsoleLine;
 		line->set(text, type);
 		lines_.push_front(line);
 	}
@@ -227,7 +227,7 @@ void GLConsoleLines::addSmallLine(int sectionNo, const char *text, bool showPoin
 	}
 }
 
-void GLConsoleLines::drawLines(GLFont2d *font, float startHeight, float totalHeight, float totalWidth)
+void ConsoleLines::drawLines(GLFont2d *font, float startHeight, float totalHeight, float totalWidth)
 {
 	if (currentLine_ != 0)
 	{
@@ -252,7 +252,7 @@ void GLConsoleLines::drawLines(GLFont2d *font, float startHeight, float totalHei
 		float position = startHeight + 20.0f;
 		for (int i=currentLine_; i<(int) lines_.size(); i++)
 		{
-			GLConsoleLine *line = lines_[i];
+			ConsoleLine *line = lines_[i];
 			line->drawLine(20.0f, position, font);
 
 			position += 15.0f;

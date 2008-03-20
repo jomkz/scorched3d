@@ -19,137 +19,137 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-// GLConsoleRuleFnIAdapter.cpp: implementation of the GLConsoleRuleFnIAdapter class.
+// ConsoleRuleFnIAdapter.cpp: implementation of the ConsoleRuleFnIAdapter class.
 //
 //////////////////////////////////////////////////////////////////////
 
 #include <common/Defines.h>
-#include <GLEXT/GLConsoleRuleFnIAdapter.h>
+#include <console/ConsoleRuleFnIAdapter.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-GLConsoleRuleFnIBooleanAdapter::GLConsoleRuleFnIBooleanAdapter(const char *name, bool &param)
+ConsoleRuleFnIBooleanAdapter::ConsoleRuleFnIBooleanAdapter(const char *name, bool &param)
 	: name_(name), param_(param)
 {
-	GLConsole::instance()->addFunction(
+	Console::instance()->addFunction(
 		name, 
 		this,
-		GLConsoleRuleTypeBoolean, 
-		GLConsoleRuleAccessTypeReadWrite);
+		ConsoleRuleTypeBoolean, 
+		ConsoleRuleAccessTypeReadWrite);
 }
 
-GLConsoleRuleFnIBooleanAdapter::~GLConsoleRuleFnIBooleanAdapter()
+ConsoleRuleFnIBooleanAdapter::~ConsoleRuleFnIBooleanAdapter()
 {
 
 }
 
-bool GLConsoleRuleFnIBooleanAdapter::getBoolParam(const char *name)
+bool ConsoleRuleFnIBooleanAdapter::getBoolParam(const char *name)
 {
 	DIALOG_ASSERT(name_ == name);
 	return param_;
 }
 
-void GLConsoleRuleFnIBooleanAdapter::setBoolParam(const char *name, bool value)
+void ConsoleRuleFnIBooleanAdapter::setBoolParam(const char *name, bool value)
 {
 	DIALOG_ASSERT(name_ == name);
 	param_ = value;
 }
 
-GLConsoleRuleFnINumberAdapter::GLConsoleRuleFnINumberAdapter(const char *name, float &param)
+ConsoleRuleFnINumberAdapter::ConsoleRuleFnINumberAdapter(const char *name, float &param)
 	: name_(name), param_(param)
 {
-	GLConsole::instance()->addFunction(
+	Console::instance()->addFunction(
 		name, 
 		this,
-		GLConsoleRuleTypeNumber, 
-		GLConsoleRuleAccessTypeReadWrite);
+		ConsoleRuleTypeNumber, 
+		ConsoleRuleAccessTypeReadWrite);
 }
 
-GLConsoleRuleFnINumberAdapter::~GLConsoleRuleFnINumberAdapter()
+ConsoleRuleFnINumberAdapter::~ConsoleRuleFnINumberAdapter()
 {
 
 }
 
-float GLConsoleRuleFnINumberAdapter::getNumberParam(const char *name)
+float ConsoleRuleFnINumberAdapter::getNumberParam(const char *name)
 {
 	DIALOG_ASSERT(name_ == name);
 	return param_;
 }
 
-void GLConsoleRuleFnINumberAdapter::setNumberParam(const char *name, float value)
+void ConsoleRuleFnINumberAdapter::setNumberParam(const char *name, float value)
 {
 	DIALOG_ASSERT(name_ == name);
 	param_ = value;
 }
 
-GLConsoleRuleFnIOptionsAdapter::GLConsoleRuleFnIOptionsAdapter(
+ConsoleRuleFnIOptionsAdapter::ConsoleRuleFnIOptionsAdapter(
 	OptionEntry &entry,
-	GLConsoleRuleAccessType access) :
+	ConsoleRuleAccessType access) :
 	entry_(entry)
 {
-	GLConsoleRuleType type = GLConsoleRuleTypeBoolean;
+	ConsoleRuleType type = ConsoleRuleTypeBoolean;
 	switch (entry.getEntryType())
 	{
 		case OptionEntry::OptionEntryEnumType:
 		case OptionEntry::OptionEntryIntType:
 		case OptionEntry::OptionEntryBoundedIntType:
 		case OptionEntry::OptionEntryFloatType:
-			type = GLConsoleRuleTypeNumber;
+			type = ConsoleRuleTypeNumber;
 		break;
 		case OptionEntry::OptionEntryVectorType:
 		case OptionEntry::OptionEntryStringEnumType:
 		case OptionEntry::OptionEntryStringType:
 		case OptionEntry::OptionEntryTextType:
-			type = GLConsoleRuleTypeString;
+			type = ConsoleRuleTypeString;
 		break;
 		case OptionEntry::OptionEntryBoolType:
-			type = GLConsoleRuleTypeBoolean;
+			type = ConsoleRuleTypeBoolean;
 		break;
 		default:
 			DIALOG_ASSERT(0);
 		break;
 	}
 
-	GLConsole::instance()->addFunction(
+	Console::instance()->addFunction(
 		entry.getName(), 
 		this,
 		type, 
 		access);
 }
 
-GLConsoleRuleFnIOptionsAdapter::~GLConsoleRuleFnIOptionsAdapter()
+ConsoleRuleFnIOptionsAdapter::~ConsoleRuleFnIOptionsAdapter()
 {
-	GLConsole::instance()->removeFunction(entry_.getName());
+	Console::instance()->removeFunction(entry_.getName());
 }
 
-bool GLConsoleRuleFnIOptionsAdapter::getBoolParam(const char *name)
+bool ConsoleRuleFnIOptionsAdapter::getBoolParam(const char *name)
 {
 	return ((OptionEntryBool &) entry_).getValue();
 }
 
-void GLConsoleRuleFnIOptionsAdapter::setBoolParam(const char *name, bool value)
+void ConsoleRuleFnIOptionsAdapter::setBoolParam(const char *name, bool value)
 {
 	((OptionEntryBool &) entry_).setValue(value);
 }
 
-float GLConsoleRuleFnIOptionsAdapter::getNumberParam(const char *name)
+float ConsoleRuleFnIOptionsAdapter::getNumberParam(const char *name)
 {
 	return (float) (((OptionEntryInt &) entry_).getValue());
 }
 
-void  GLConsoleRuleFnIOptionsAdapter::setNumberParam(const char *name, float value)
+void  ConsoleRuleFnIOptionsAdapter::setNumberParam(const char *name, float value)
 {
 	((OptionEntryInt &) entry_).setValue(int(value));
 }
 
-const char *GLConsoleRuleFnIOptionsAdapter::getStringParam(const char *name)
+const char *ConsoleRuleFnIOptionsAdapter::getStringParam(const char *name)
 {
 	return ((OptionEntryString &) entry_).getValue();
 }
 
-void GLConsoleRuleFnIOptionsAdapter::setStringParam(const char *name, const char *value)
+void ConsoleRuleFnIOptionsAdapter::setStringParam(const char *name, const char *value)
 {
 	((OptionEntryString &) entry_).setValue(value);
 }

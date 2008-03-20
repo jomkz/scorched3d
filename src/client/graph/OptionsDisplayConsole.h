@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_OptionsDisplayConsoleh_INCLUDE__)
 #define __INCLUDE_OptionsDisplayConsoleh_INCLUDE__
 
-#include <GLEXT/GLConsoleRuleFnIAdapter.h>
+#include <console/ConsoleRuleFnIAdapter.h>
 
 class OptionsDisplayConsole
 {
@@ -32,7 +32,7 @@ public:
 
 protected:
 	static OptionsDisplayConsole *instance_;
-	std::list<GLConsoleRuleFnIOptionsAdapter *> adapters_;
+	std::list<ConsoleRuleFnIOptionsAdapter *> adapters_;
 
 private:
 	OptionsDisplayConsole();

@@ -20,7 +20,7 @@
 
 #include <sprites/ExplosionLaserBeamRenderer.h>
 #include <common/Defines.h>
-#include <GLEXT/GLConsole.h>
+#include <console/Console.h>
 #include <image/ImageFactory.h>
 #include <sound/SoundUtils.h>
 #include <client/ScorchedClient.h>

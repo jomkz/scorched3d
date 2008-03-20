@@ -23,7 +23,7 @@
 #include <GLW/GLWPanel.h>
 #include <GLW/GLWWindowManager.h>
 #include <GLEXT/GLState.h>
-#include <GLEXT/GLConsole.h>
+#include <console/Console.h>
 #include <XML/XMLParser.h>
 #include <common/Defines.h>
 
@@ -113,7 +113,7 @@ void GLWTalkBox::keyDown(char *buffer, unsigned int keyState,
 					*c = '\'';
 				}
 
-				GLConsole::instance()->addLine(true, 
+				Console::instance()->addLine(true, 
 					S3D::formatStringBuffer("%s \"%s\"",
 					((mode_ == eTeamSay)?"Teamsay":"Say"),
 					text));

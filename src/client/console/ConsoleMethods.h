@@ -19,4 +19,35 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-#include <GLEXT/GLConsoleRuleMethodIAdapter.h>
+// ConsoleMethods.h: interface for the ConsoleMethods class.
+//
+//////////////////////////////////////////////////////////////////////
+
+#if !defined(AFX_ConsoleMETHODS_H__D5E893D4_E73A_49CB_B0E8_8C945C692CC7__INCLUDED_)
+#define AFX_ConsoleMETHODS_H__D5E893D4_E73A_49CB_B0E8_8C945C692CC7__INCLUDED_
+
+
+#include <console/ConsoleRuleMethod.h>
+#include <console/ConsoleRules.h>
+#include <console/ConsoleLines.h>
+
+class ConsoleMethods : public ConsoleRuleMethodI
+{
+public:
+	ConsoleMethods(ConsoleRules &rules,
+					ConsoleLines &lines);
+	virtual ~ConsoleMethods();
+
+	// Inherited from ConsoleMethodI
+	virtual void runMethod(const char *name, 
+		std::list<ConsoleRuleSplit> split,
+		std::string &result,
+		std::list<std::string> &resultList);
+
+protected:
+	ConsoleRules &rules_;
+	ConsoleLines &lines_;
+
+};
+
+#endif // !defined(AFX_ConsoleMETHODS_H__D5E893D4_E73A_49CB_B0E8_8C945C692CC7__INCLUDED_)

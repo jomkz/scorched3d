@@ -18,34 +18,34 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_GLCONSOLE_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)
-#define AFX_GLCONSOLE_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_
+#if !defined(AFX_Console_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)
+#define AFX_Console_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_
 
 #include <common/LoggerI.h>
 #include <engine/GameStateI.h>
 #include <GLEXT/GLFont2d.h>
-#include <GLEXT/GLConsoleMethods.h>
-#include <GLEXT/GLConsoleRuleFn.h>
-#include <GLEXT/GLConsoleRuleMethod.h>
+#include <console/ConsoleMethods.h>
+#include <console/ConsoleRuleFn.h>
+#include <console/ConsoleRuleMethod.h>
 
-class GLConsole : public GameStateI, public LoggerI
+class Console : public GameStateI, public LoggerI
 {
 public:
-	static GLConsole *instance();
+	static Console *instance();
 
 	bool addFunction(const char *name, 
-		GLConsoleRuleFnI *user,
-		GLConsoleRuleType type, 
-		GLConsoleRuleAccessType access);
+		ConsoleRuleFnI *user,
+		ConsoleRuleType type, 
+		ConsoleRuleAccessType access);
 	bool removeFunction(const char *name);
 
 	bool addMethod(const char *name,
-		GLConsoleRuleMethodI *user);
+		ConsoleRuleMethodI *user);
 	bool removeMethod(const char *name);
 
 	void addLine(bool parse, const std::string &line);
 
-	std::deque<GLConsoleLine *> &getLines() { return lines_.getLines(); }
+	std::deque<ConsoleLine *> &getLines() { return lines_.getLines(); }
 
 	// Inherited from GameStateI
 	virtual void simulate(const unsigned state, float frameTime);
@@ -59,14 +59,14 @@ public:
 	virtual void logMessage(LoggerInfo &info);
 
 protected:
-	static GLConsole *instance_;
+	static Console *instance_;
 	float height_;
 	bool opening_;
 	bool showCursor_;
 	GLFont2d *font_;
-	GLConsoleLines lines_;
-	GLConsoleRules rules_;
-	GLConsoleMethods methods_;
+	ConsoleLines lines_;
+	ConsoleRules rules_;
+	ConsoleMethods methods_;
 	std::string currentLine_;
 
 	void drawBackdrop(float width, float top);
@@ -74,9 +74,9 @@ protected:
 	void parseLine(const char *line);
 
 private:
-	GLConsole();
-	virtual ~GLConsole();
+	Console();
+	virtual ~Console();
 
 };
 
-#endif // !defined(AFX_GLCONSOLE_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)
+#endif // !defined(AFX_Console_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)

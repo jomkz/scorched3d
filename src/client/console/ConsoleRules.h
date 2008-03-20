@@ -19,42 +19,35 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-// GLConsoleRuleMethod.h: interface for the GLConsoleRuleMethod class.
+// ConsoleRules.h: interface for the ConsoleRules class.
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_GLCONSOLERULEMETHOD_H__3B593346_8294_4DBC_8338_D2EA270FFDC8__INCLUDED_)
-#define AFX_GLCONSOLERULEMETHOD_H__3B593346_8294_4DBC_8338_D2EA270FFDC8__INCLUDED_
+#if !defined(AFX_ConsoleRULES_H__F75EC197_F0BD_459C_BC62_929D3A97FB5A__INCLUDED_)
+#define AFX_ConsoleRULES_H__F75EC197_F0BD_459C_BC62_929D3A97FB5A__INCLUDED_
 
+#include <console/ConsoleRule.h>
 
-#include <GLEXT/GLConsoleRule.h>
-
-class GLConsoleRuleMethodI
+class ConsoleRules  
 {
 public:
-	virtual ~GLConsoleRuleMethodI();
+	ConsoleRules();
+	virtual ~ConsoleRules();
 
-	virtual void runMethod(const char *name, 
-						   std::list<GLConsoleRuleSplit> split,
-						   std::string &result,
-						   std::list<std::string> &resultList) = 0;
-};
+	void addLine(const char *line, std::string &result, std::list<std::string> &resultList);
+	bool addRule(ConsoleRule *rule);
+	ConsoleRule *removeRule(const char *rule);
 
-class GLConsoleRuleMethod : public GLConsoleRule
-{
-public:
-	GLConsoleRuleMethod(const char *name,
-			GLConsoleRuleMethodI *user);
-	virtual ~GLConsoleRuleMethod();
-
-	void checkRule(const char *line, 
-				std::list<GLConsoleRuleSplit> split, 
-				std::string &result, 
-				std::list<std::string> &resultList);
+	const char *matchRule(const char *line,
+						std::list<ConsoleRule *> &matches);
 	void dump(std::list<std::string> &resultList);
 
 protected:
-	GLConsoleRuleMethodI *user_;
+	std::map<std::string, ConsoleRule *> rules_;
+
+	bool parseLine(const char *line, std::list<ConsoleRuleSplit> &split);
+	void parseAddLine(int position, const char *line, std::list<ConsoleRuleSplit> &split);
+
 };
 
-#endif // !defined(AFX_GLCONSOLERULEMETHOD_H__3B593346_8294_4DBC_8338_D2EA270FFDC8__INCLUDED_)
+#endif // !defined(AFX_ConsoleRULES_H__F75EC197_F0BD_459C_BC62_929D3A97FB5A__INCLUDED_)

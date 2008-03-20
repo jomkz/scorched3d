@@ -18,30 +18,30 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <GLEXT/GLConsoleMethods.h>
-#include <GLEXT/GLConsoleFileReader.h>
+#include <console/ConsoleMethods.h>
+#include <console/ConsoleFileReader.h>
 #include <client/ScorchedClient.h>
 #include <engine/MainLoop.h>
 
-GLConsoleMethods::GLConsoleMethods(GLConsoleRules &rules,
-								   GLConsoleLines &lines) :
+ConsoleMethods::ConsoleMethods(ConsoleRules &rules,
+								   ConsoleLines &lines) :
 	rules_(rules), lines_(lines)
 {
-	rules_.addRule(new GLConsoleRuleMethod("consoleload", this));
-	rules_.addRule(new GLConsoleRuleMethod("consolesave", this));
-	rules_.addRule(new GLConsoleRuleMethod("exit", this));
-	rules_.addRule(new GLConsoleRuleMethod("quit", this));
-	rules_.addRule(new GLConsoleRuleMethod("clear", this));
-	rules_.addRule(new GLConsoleRuleMethod("help", this));
+	rules_.addRule(new ConsoleRuleMethod("consoleload", this));
+	rules_.addRule(new ConsoleRuleMethod("consolesave", this));
+	rules_.addRule(new ConsoleRuleMethod("exit", this));
+	rules_.addRule(new ConsoleRuleMethod("quit", this));
+	rules_.addRule(new ConsoleRuleMethod("clear", this));
+	rules_.addRule(new ConsoleRuleMethod("help", this));
 }
 
-GLConsoleMethods::~GLConsoleMethods()
+ConsoleMethods::~ConsoleMethods()
 {
 
 }
 
-void GLConsoleMethods::runMethod(const char *name,
-								 std::list<GLConsoleRuleSplit> split,
+void ConsoleMethods::runMethod(const char *name,
+								 std::list<ConsoleRuleSplit> split,
 								 std::string &result,
 								 std::list<std::string> &resultList)
 {
@@ -68,8 +68,8 @@ void GLConsoleMethods::runMethod(const char *name,
 		else
 		{
 			std::string errorString;
-			GLConsoleRuleSplit option = split.front();
-			if (!GLConsoleFileReader::loadFileIntoConsole(option.rule.c_str(), errorString))
+			ConsoleRuleSplit option = split.front();
+			if (!ConsoleFileReader::loadFileIntoConsole(option.rule.c_str(), errorString))
 			{
 				resultList.push_back("  Load failed.");
 				resultList.push_back(errorString);
@@ -88,8 +88,8 @@ void GLConsoleMethods::runMethod(const char *name,
 		}
 		else
 		{
-			GLConsoleRuleSplit option = split.front();
-			GLConsoleFileReader::saveConsoleIntoFile(option.rule.c_str());
+			ConsoleRuleSplit option = split.front();
+			ConsoleFileReader::saveConsoleIntoFile(option.rule.c_str());
 			result += " ";
 			result += option.rule.c_str();
 		}

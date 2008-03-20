@@ -27,6 +27,7 @@
 #include <GLEXT/GLStateExtension.h>
 #include <GLSL/GLSLShaderSetup.h>
 #include <graph/MainCamera.h>
+#include <graph/OptionsDisplay.h>
 
 VisibilityPatchGrid *VisibilityPatchGrid::instance()
 {
@@ -234,25 +235,23 @@ void VisibilityPatchGrid::drawVisibility()
 
 void VisibilityPatchGrid::drawLand(int addIndex)
 {
-	glPushMatrix();
-
-	// Scale from fixed to floats (1 fixed unit is 10000)
-	glScalef(0.0001f, 0.0001f, 0.0001f);
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-	if (GLStateExtension::hasMultiTex())
+	if (!OptionsDisplay::instance()->getNoGLDrawElements())
 	{
-		glClientActiveTextureARB(GL_TEXTURE1_ARB);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		if (GLStateExtension::getTextureUnits() > 2)
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_NORMAL_ARRAY);
+		if (GLStateExtension::hasMultiTex())
 		{
-			glClientActiveTextureARB(GL_TEXTURE2_ARB);
+			glClientActiveTextureARB(GL_TEXTURE1_ARB);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			if (GLStateExtension::getTextureUnits() > 2)
+			{
+				glClientActiveTextureARB(GL_TEXTURE2_ARB);
+				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			}
 		}
+		glClientActiveTextureARB(GL_TEXTURE0_ARB);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	}
-	glClientActiveTextureARB(GL_TEXTURE0_ARB);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	{
 		LandVisibilityPatch **currentPatchPtr = visibleLandPatches_;
@@ -279,46 +278,46 @@ void VisibilityPatchGrid::drawLand(int addIndex)
 		}
 	}
 
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
-	if (GLStateExtension::hasMultiTex())
+	if (!OptionsDisplay::instance()->getNoGLDrawElements())
 	{
-		glClientActiveTextureARB(GL_TEXTURE1_ARB);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		if (GLStateExtension::getTextureUnits() > 2)
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_NORMAL_ARRAY);
+		if (GLStateExtension::hasMultiTex())
 		{
-			glClientActiveTextureARB(GL_TEXTURE2_ARB);
+			glClientActiveTextureARB(GL_TEXTURE1_ARB);
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+			if (GLStateExtension::getTextureUnits() > 2)
+			{
+				glClientActiveTextureARB(GL_TEXTURE2_ARB);
+				glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+			}
 		}
+		glClientActiveTextureARB(GL_TEXTURE0_ARB);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	}
-	glClientActiveTextureARB(GL_TEXTURE0_ARB);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	glPopMatrix();
 }
 
 void VisibilityPatchGrid::drawSimpleLand()
 {
-	glPushMatrix();
-
-	// Scale from fixed to floats (1 fixed unit is 10000)
-	glScalef(0.0001f, 0.0001f, 0.0001f);
-
-	glEnableClientState(GL_VERTEX_ARRAY);
+	if (!OptionsDisplay::instance()->getNoGLDrawElements())
+	{
+		glEnableClientState(GL_VERTEX_ARRAY);
+	}
 
 	{
 		LandVisibilityPatch **currentPatchPtr = allLandPatches_;
 		for (int i=0; i<allLandPatchesCount_; i++, currentPatchPtr++)
 		{
 			LandVisibilityPatch *currentPatch = *currentPatchPtr;
-			MipMapPatchIndex &landIndex = landIndexs_.getIndex(3, 0);
+			MipMapPatchIndex &landIndex = landIndexs_.getIndex(4, 0);
 			currentPatch->draw(landIndex);
 		}
 	}
 
-	glDisableClientState(GL_VERTEX_ARRAY);
-
-	glPopMatrix();
+	if (!OptionsDisplay::instance()->getNoGLDrawElements())
+	{
+		glDisableClientState(GL_VERTEX_ARRAY);
+	}
 }
 
 void VisibilityPatchGrid::drawSurround()
@@ -343,8 +342,12 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 		GLSLShaderSetup *waterShader)
 {
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "WATER_DRAW");
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
+
+	if (!OptionsDisplay::instance()->getNoGLDrawElements())
+	{
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_NORMAL_ARRAY);
+	}
 
 	// Draw all patches
 	WaterVisibilityPatch **currentPatchPtr = visibleWaterPatches_;
@@ -417,8 +420,11 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 		glPopMatrix();
 	}
 
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
+	if (!OptionsDisplay::instance()->getNoGLDrawElements())
+	{
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_NORMAL_ARRAY);
+	}
 
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "WATER_DRAW");
 }

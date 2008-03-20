@@ -82,6 +82,9 @@ public:
 	bool getNoGLShadows() { return noGLShadows_; }
 	OptionEntryBool &getNoGLShadowsEntry() { return noGLShadows_; }
 
+	bool getNoGLDrawElements() { return noGLDrawElements_; }
+	OptionEntryBool &getNoGLDrawElementsEntry() { return noGLDrawElements_; }
+
 	bool getNoDrawParticles() { return noDrawParticles_; }
 	OptionEntryBool &getNoDrawParticlesEntry() { return noDrawParticles_; }
 
@@ -147,9 +150,6 @@ public:
 
 	bool getNoGLSphereMap() { return noGLSphereMap_; }
 	OptionEntryBool &getNoGLSphereMapEntry() { return noGLSphereMap_; }
-
-	bool getNoGLCompiledArrays() { return noGLCompiledArrays_; }
-	OptionEntryBool &getNoGLCompiledArraysEntry() { return noGLCompiledArrays_; }
 	
 	bool getNoGLEnvCombine() { return noGLEnvCombine_; }
 	OptionEntryBool &getNoGLEnvCombineEntry() { return noGLEnvCombine_; }
@@ -386,6 +386,7 @@ protected:
 	OptionEntryInt depricatedRoamVarianceTank_;
 	OptionEntryBool depricatedNoROAM_;
 	OptionEntryBool depricatedNoTessalation_;
+	OptionEntryBool depricatedNoGLCompiledArrays_;
 
 	OptionEntryBoundedInt brightness_;
 	OptionEntryBoundedInt explosionParts_;
@@ -412,9 +413,9 @@ protected:
 	OptionEntryBool noGLSphereMap_;
 	OptionEntryBool noGLExt_;
 	OptionEntryBool noGLMultiTex_;
-	OptionEntryBool noGLCompiledArrays_;
 	OptionEntryBool noGLEnvCombine_;
 	OptionEntryBool noGLHardwareMipmaps_;
+	OptionEntryBool noGLDrawElements_;
 	OptionEntryBool noGLShaders_;
 	OptionEntryBool invertElevation_;
 	OptionEntryBool invertMouse_;

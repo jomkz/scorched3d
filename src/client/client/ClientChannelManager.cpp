@@ -23,7 +23,7 @@
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsChannelMessage.h>
 #include <coms/ComsChannelTextMessage.h>
-#include <GLEXT/GLConsole.h>
+#include <console/Console.h>
 #include <common/Logger.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
@@ -75,7 +75,7 @@ ClientChannelManager::ClientChannelManager()
 		"ComsChannelTextMessage",
 		this);
 
-	new GLConsoleRuleMethodIAdapterEx<ClientChannelManager>(
+	new ConsoleRuleMethodIAdapterEx<ClientChannelManager>(
 		this, &ClientChannelManager::say, "Say");
 }
 
@@ -212,7 +212,7 @@ unsigned int ClientChannelManager::getChannelEntry(ClientChannelManagerI *reciev
 	return 0;
 }
 
-void ClientChannelManager::say(std::list<GLConsoleRuleSplit> list)
+void ClientChannelManager::say(std::list<ConsoleRuleSplit> list)
 {
 	bool usage = false;
 
@@ -231,7 +231,7 @@ void ClientChannelManager::say(std::list<GLConsoleRuleSplit> list)
 	}
 	else usage = true;
 
-	GLConsole::instance()->addLine(false, "Usage: say <channel> <text>");
+	Console::instance()->addLine(false, "Usage: say <channel> <text>");
 }
 
 void ClientChannelManager::sendText(const ChannelText &constText)

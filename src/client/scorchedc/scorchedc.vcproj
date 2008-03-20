@@ -3681,86 +3681,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\GLEXT\GLConsole.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsole.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleFileReader.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleFileReader.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleLines.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleLines.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleMethods.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleMethods.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRule.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRule.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRuleFn.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRuleFn.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRuleFnIAdapter.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRuleFnIAdapter.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRuleMethod.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRuleMethod.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRuleMethodIAdapter.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRuleMethodIAdapter.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRules.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRules.h"
-				>
-			</File>
-			<File
 				RelativePath="..\GLEXT\glew.c"
 				>
 			</File>
@@ -3909,35 +3829,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\GLEXT\GLVertexArray.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLVertexArray.h"
-				>
-			</File>
-			<File
 				RelativePath="..\GLEXT\GLVertexBufferObject.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\GLEXT\GLVertexBufferObject.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLVertexSet.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLVertexSet.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLVertexSetGroup.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLVertexSetGroup.h"
 				>
 			</File>
 			<File
@@ -5902,6 +5798,90 @@
 			</File>
 			<File
 				RelativePath="..\graph\TutorialFile.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="console"
+			>
+			<File
+				RelativePath="..\console\Console.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\console\Console.h"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleFileReader.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleFileReader.h"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleLines.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleLines.h"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleMethods.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleMethods.h"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleRule.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleRule.h"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleRuleFn.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleRuleFn.h"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleRuleFnIAdapter.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleRuleFnIAdapter.h"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleRuleMethod.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleRuleMethod.h"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleRuleMethodIAdapter.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleRuleMethodIAdapter.h"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleRules.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleRules.h"
 				>
 			</File>
 		</Filter>

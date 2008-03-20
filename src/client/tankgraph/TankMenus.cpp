@@ -51,47 +51,47 @@
 #include <dialogs/ResignDialog.h>
 #include <dialogs/SkipDialog.h>
 #include <sound/SoundUtils.h>
-#include <GLEXT/GLConsoleRuleFnIAdapter.h>
+#include <console/ConsoleRuleFnIAdapter.h>
 #include <image/ImageFactory.h>
 #include <GLEXT/GLTexture.h>
 #include <lua/LUAWrapper.h>
 
 TankMenus::TankMenus() : logger_("ClientLog")
 {
-	new GLConsoleRuleMethodIAdapter<Landscape>(
+	new ConsoleRuleMethodIAdapter<Landscape>(
 		Landscape::instance(), &Landscape::updatePlanTexture, "ResetPlan");
-	new GLConsoleRuleMethodIAdapter<Landscape>(
+	new ConsoleRuleMethodIAdapter<Landscape>(
 		Landscape::instance(), &Landscape::updatePlanATexture, "ResetAPlan");
 
-	new GLConsoleRuleMethodIAdapter<TankMenus>(
+	new ConsoleRuleMethodIAdapter<TankMenus>(
 		this, &TankMenus::resetLandscape, "ResetLandscape");
-	new GLConsoleRuleMethodIAdapter<TankMenus>(
+	new ConsoleRuleMethodIAdapter<TankMenus>(
 		this, &TankMenus::clearTracerLines, "ClearTracerLines");
-	new GLConsoleRuleMethodIAdapter<TankMenus>(
+	new ConsoleRuleMethodIAdapter<TankMenus>(
 		this, &TankMenus::showTankDetails, "TankDetails");
-	new GLConsoleRuleMethodIAdapter<TankMenus>(
+	new ConsoleRuleMethodIAdapter<TankMenus>(
 		this, &TankMenus::showTargetDetails, "TargetDetails");
-	new GLConsoleRuleMethodIAdapter<TankMenus>(
+	new ConsoleRuleMethodIAdapter<TankMenus>(
 		this, &TankMenus::showTextureDetails, "TextureDetails");
-	new GLConsoleRuleMethodIAdapter<TankMenus>(
+	new ConsoleRuleMethodIAdapter<TankMenus>(
 		this, &TankMenus::logToFile, "LogToFile");
-	new GLConsoleRuleMethodIAdapter<TankMenus>(
+	new ConsoleRuleMethodIAdapter<TankMenus>(
 		this, &TankMenus::groupInfo, "GroupInfo");
-	new GLConsoleRuleMethodIAdapterEx<TankMenus>(
+	new ConsoleRuleMethodIAdapterEx<TankMenus>(
 		this, &TankMenus::runScriptConsole, "RunScript");
-	new GLConsoleRuleFnIBooleanAdapter(
+	new ConsoleRuleFnIBooleanAdapter(
 		"ComsMessageLogging", 
 		ScorchedClient::instance()->getComsMessageHandler().getMessageLogging());
-	new GLConsoleRuleFnIBooleanAdapter(
+	new ConsoleRuleFnIBooleanAdapter(
 		"StateLogging", 
 		ScorchedClient::instance()->getGameState().getStateLogging());
-	new GLConsoleRuleFnIBooleanAdapter(
+	new ConsoleRuleFnIBooleanAdapter(
 		"ActionLogging",
 		ScorchedClient::instance()->getActionController().getActionLogging());
-	new GLConsoleRuleFnIBooleanAdapter(
+	new ConsoleRuleFnIBooleanAdapter(
 		"ActionProfiling",
 		ScorchedServer::instance()->getActionController().getActionProfiling());
-	new GLConsoleRuleFnINumberAdapter(
+	new ConsoleRuleFnINumberAdapter(
 		"StateTimeLogging",
 		ScorchedClient::instance()->getGameState().getStateTimeLogging());
 	
@@ -143,7 +143,7 @@ void TankMenus::logToFile()
 
 void TankMenus::showTextureDetails()
 {
-	GLConsole::instance()->addLine(false,
+	Console::instance()->addLine(false,
 		S3D::formatStringBuffer("%i bytes", GLTexture::getTextureSpace()));
 }
 
@@ -167,7 +167,7 @@ void TankMenus::showInventory()
 		itor++)
 	{
 		Tank *tank = (*itor).second;
-		GLConsole::instance()->addLine(false,
+		Console::instance()->addLine(false,
 			S3D::formatStringBuffer("--%s------------------------------------",
 			tank->getName()));
 
@@ -182,12 +182,12 @@ void TankMenus::showInventory()
 		{
 			Accessory *accessory = (*aitor);
 
-			GLConsole::instance()->addLine(false,
+			Console::instance()->addLine(false,
 				S3D::formatStringBuffer("%s - %i", accessory->getName(), 
 				tank->getAccessories().getAccessoryCount(accessory)));
 		}
 
-		GLConsole::instance()->addLine(false,
+		Console::instance()->addLine(false,
 			"----------------------------------------------------");
 	}
 }
@@ -219,7 +219,7 @@ void TankMenus::showTargetDetails()
 	}
 
 	char buffer[1024];
-	GLConsole::instance()->addLine(false,
+	Console::instance()->addLine(false,
 		"--Target Dump-----------------------------------------");
 	std::map<std::string, unsigned int>::iterator resultItor;
 	for (resultItor = results.begin();
@@ -227,11 +227,11 @@ void TankMenus::showTargetDetails()
 		resultItor++)
 	{
 		snprintf(buffer, 1024, "\"%s\" - %u", resultItor->first.c_str(), resultItor->second);
-		GLConsole::instance()->addLine(false, buffer);
+		Console::instance()->addLine(false, buffer);
 	}
 	snprintf(buffer, 1024, "TOTAL - %u", targets.size());
-	GLConsole::instance()->addLine(false, buffer);
-	GLConsole::instance()->addLine(false,
+	Console::instance()->addLine(false, buffer);
+	Console::instance()->addLine(false,
 		"----------------------------------------------------");
 }
 
@@ -242,7 +242,7 @@ void TankMenus::showTankDetails()
 	Tank *currentTank = 
 		ScorchedClient::instance()->getTankContainer().getCurrentTank();
 
-	GLConsole::instance()->addLine(false,
+	Console::instance()->addLine(false,
 		"--Tank Dump-----------------------------------------");
 		
 	std::map<unsigned int, Tank *>::iterator itor;
@@ -274,10 +274,10 @@ void TankMenus::showTankDetails()
 			description,
 			tank->getName(), 
 			tank->getModelContainer().getTankModelName());
-		GLConsole::instance()->addLine(false, buffer);
+		Console::instance()->addLine(false, buffer);
 	}
 
-	GLConsole::instance()->addLine(false,
+	Console::instance()->addLine(false,
 		"----------------------------------------------------");
 }
 
@@ -484,7 +484,7 @@ bool TankMenus::AccessoryMenu::getEnabled(const char* menuName)
 	return false;
 }
 
-void TankMenus::runScriptConsole(std::list<GLConsoleRuleSplit> list)
+void TankMenus::runScriptConsole(std::list<ConsoleRuleSplit> list)
 {
 	list.pop_front();
 	if (!list.empty())

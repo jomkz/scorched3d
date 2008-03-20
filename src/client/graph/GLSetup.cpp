@@ -20,7 +20,7 @@
 
 #include <graph/GLSetup.h>
 #include <GLEXT/GLStateExtension.h>
-#include <GLEXT/GLConsole.h>
+#include <console/Console.h>
 
 void GLSetup::setup()
 {
@@ -48,7 +48,7 @@ void GLSetup::setup()
 
 	glAlphaFunc(GL_GREATER, 0.00f);
 
-	GLConsole::instance(); // Make sure console is inited
+	Console::instance(); // Make sure console is inited
 	GLState::setBaseState(GLState::TEXTURE_ON | GLState::BLEND_OFF | GLState::DEPTH_ON);
 	GLStateExtension::setup();
 }

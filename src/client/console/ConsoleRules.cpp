@@ -19,30 +19,30 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-// GLConsoleRules.cpp: implementation of the GLConsoleRules class.
+// ConsoleRules.cpp: implementation of the ConsoleRules class.
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <GLEXT/GLConsoleRules.h>
+#include <console/ConsoleRules.h>
 #include <common/Defines.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-GLConsoleRules::GLConsoleRules()
+ConsoleRules::ConsoleRules()
 {
 
 }
 
-GLConsoleRules::~GLConsoleRules()
+ConsoleRules::~ConsoleRules()
 {
 
 }
 
-bool GLConsoleRules::addRule(GLConsoleRule *rule)
+bool ConsoleRules::addRule(ConsoleRule *rule)
 {
-	std::map<std::string, GLConsoleRule *>::iterator itor =
+	std::map<std::string, ConsoleRule *>::iterator itor =
 		rules_.find(rule->getName());
 	if (itor != rules_.end())
 	{
@@ -56,23 +56,23 @@ bool GLConsoleRules::addRule(GLConsoleRule *rule)
 	return true;
 }
 
-GLConsoleRule *GLConsoleRules::removeRule(const char *rulename) 
+ConsoleRule *ConsoleRules::removeRule(const char *rulename) 
 {
 	std::string removeName(rulename);
 	_strlwr((char *) removeName.c_str());
 
-	std::map<std::string, GLConsoleRule *>::iterator itor =
+	std::map<std::string, ConsoleRule *>::iterator itor =
 		rules_.find(removeName);
 	if (itor == rules_.end()) return 0;
 
-	GLConsoleRule *result = itor->second;
+	ConsoleRule *result = itor->second;
 	rules_.erase(itor);
 	return result;
 }
 
-const char *GLConsoleRules::matchRule(const char *line, std::list<GLConsoleRule *> &matches)
+const char *ConsoleRules::matchRule(const char *line, std::list<ConsoleRule *> &matches)
 {
-	std::map<std::string, GLConsoleRule *>::iterator itor;
+	std::map<std::string, ConsoleRule *>::iterator itor;
 	for (itor = rules_.begin();
 		itor != rules_.end();
 		itor++)
@@ -92,7 +92,7 @@ const char *GLConsoleRules::matchRule(const char *line, std::list<GLConsoleRule 
 	int pos = (int) strlen(line);
 	while (true)
 	{
-		std::list<GLConsoleRule *>::iterator itor2 = matches.begin();
+		std::list<ConsoleRule *>::iterator itor2 = matches.begin();
 		char letter = (*itor2)->getName()[pos];
 		
 		for (itor2++;
@@ -110,14 +110,14 @@ const char *GLConsoleRules::matchRule(const char *line, std::list<GLConsoleRule 
 	return buffer;
 }
 
-void GLConsoleRules::addLine(const char *line, std::string &result, std::list<std::string> &resultList)
+void ConsoleRules::addLine(const char *line, std::string &result, std::list<std::string> &resultList)
 {
-	std::list<GLConsoleRuleSplit> split;
+	std::list<ConsoleRuleSplit> split;
 	if (!parseLine(line, split))
 	{
 		result = line;
 		std::string failed;
-		GLConsoleRule::addRuleFail(failed, (int) strlen(line), 1);
+		ConsoleRule::addRuleFail(failed, (int) strlen(line), 1);
 		resultList.push_back(failed);
 		resultList.push_back("Non terminated quote");
 	}
@@ -130,15 +130,15 @@ void GLConsoleRules::addLine(const char *line, std::string &result, std::list<st
 		}
 		else
 		{
-			GLConsoleRuleSplit firstSplit = split.front();
+			ConsoleRuleSplit firstSplit = split.front();
 			_strlwr((char *)firstSplit.rule.c_str());
-			std::map<std::string, GLConsoleRule *>::iterator itor =
+			std::map<std::string, ConsoleRule *>::iterator itor =
 				rules_.find(firstSplit.rule);
 			if (itor == rules_.end())
 			{
 				result = line;
 				std::string failed;
-				GLConsoleRule::addRuleFail(failed, firstSplit.position, (int) firstSplit.rule.length());
+				ConsoleRule::addRuleFail(failed, firstSplit.position, (int) firstSplit.rule.length());
 				resultList.push_back(failed);
 				resultList.push_back(std::string("Unrecognised function ") + "\"" + firstSplit.rule + "\"");
 			}
@@ -150,7 +150,7 @@ void GLConsoleRules::addLine(const char *line, std::string &result, std::list<st
 	}
 }
 
-bool GLConsoleRules::parseLine(const char *line, std::list<GLConsoleRuleSplit> &split)
+bool ConsoleRules::parseLine(const char *line, std::list<ConsoleRuleSplit> &split)
 {
 	int pos = -1;
 	bool inQuote = false;
@@ -193,23 +193,23 @@ bool GLConsoleRules::parseLine(const char *line, std::list<GLConsoleRuleSplit> &
 	return !inQuote;
 }
 
-void GLConsoleRules::parseAddLine(int position, const char *line, std::list<GLConsoleRuleSplit> &split)
+void ConsoleRules::parseAddLine(int position, const char *line, std::list<ConsoleRuleSplit> &split)
 {
 	int n = (int) strlen(line);
 	if (n == 0) return;
 
-	GLConsoleRuleSplit newSplit;
+	ConsoleRuleSplit newSplit;
 	newSplit.rule = line;
 	newSplit.position = position;
 
 	if (strcmp(line, "on") == 0)
 	{
-		newSplit.type = GLConsoleRuleTypeBoolean;
+		newSplit.type = ConsoleRuleTypeBoolean;
 		newSplit.valueBool = true;
 	}
 	else if (strcmp(line, "off") == 0)
 	{
-		newSplit.type = GLConsoleRuleTypeBoolean;
+		newSplit.type = ConsoleRuleTypeBoolean;
 		newSplit.valueBool = false;
 	}
 	else
@@ -229,23 +229,23 @@ void GLConsoleRules::parseAddLine(int position, const char *line, std::list<GLCo
 
 		if (numbersOnly)
 		{
-			newSplit.type = GLConsoleRuleTypeNumber;
+			newSplit.type = ConsoleRuleTypeNumber;
 			newSplit.valueNumber = (float) atof(line);
 		}
 		else
 		{
-			newSplit.type = GLConsoleRuleTypeString;
+			newSplit.type = ConsoleRuleTypeString;
 		}
 	}
 
 	split.push_back(newSplit);
 }
 
-void GLConsoleRules::dump(std::list<std::string> &resultList)
+void ConsoleRules::dump(std::list<std::string> &resultList)
 {
 	std::list<std::string> sortList;
 
-	std::map<std::string, GLConsoleRule *>::iterator itor;
+	std::map<std::string, ConsoleRule *>::iterator itor;
 	for (itor = rules_.begin();
 		itor != rules_.end();
 		itor++)

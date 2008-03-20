@@ -19,35 +19,4 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-// GLConsoleMethods.h: interface for the GLConsoleMethods class.
-//
-//////////////////////////////////////////////////////////////////////
-
-#if !defined(AFX_GLCONSOLEMETHODS_H__D5E893D4_E73A_49CB_B0E8_8C945C692CC7__INCLUDED_)
-#define AFX_GLCONSOLEMETHODS_H__D5E893D4_E73A_49CB_B0E8_8C945C692CC7__INCLUDED_
-
-
-#include <GLEXT/GLConsoleRuleMethod.h>
-#include <GLEXT/GLConsoleRules.h>
-#include <GLEXT/GLConsoleLines.h>
-
-class GLConsoleMethods : public GLConsoleRuleMethodI
-{
-public:
-	GLConsoleMethods(GLConsoleRules &rules,
-					GLConsoleLines &lines);
-	virtual ~GLConsoleMethods();
-
-	// Inherited from GLConsoleMethodI
-	virtual void runMethod(const char *name, 
-		std::list<GLConsoleRuleSplit> split,
-		std::string &result,
-		std::list<std::string> &resultList);
-
-protected:
-	GLConsoleRules &rules_;
-	GLConsoleLines &lines_;
-
-};
-
-#endif // !defined(AFX_GLCONSOLEMETHODS_H__D5E893D4_E73A_49CB_B0E8_8C945C692CC7__INCLUDED_)
+#include <console/ConsoleRuleMethodIAdapter.h>

@@ -18,23 +18,23 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_GLCONSOLERULEFN_H__B0DEC68E_5D12_410F_AEA2_3BF1AF6B3319__INCLUDED_)
-#define AFX_GLCONSOLERULEFN_H__B0DEC68E_5D12_410F_AEA2_3BF1AF6B3319__INCLUDED_
+#if !defined(AFX_ConsoleRULEFN_H__B0DEC68E_5D12_410F_AEA2_3BF1AF6B3319__INCLUDED_)
+#define AFX_ConsoleRULEFN_H__B0DEC68E_5D12_410F_AEA2_3BF1AF6B3319__INCLUDED_
 
-#include <GLEXT/GLConsoleRule.h>
+#include <console/ConsoleRule.h>
 #include <common/DefinesAssert.h>
 
-enum GLConsoleRuleAccessType
+enum ConsoleRuleAccessType
 {
-	GLConsoleRuleAccessTypeRead = 1,
-	GLConsoleRuleAccessTypeWrite = 2,
-	GLConsoleRuleAccessTypeReadWrite = 3
+	ConsoleRuleAccessTypeRead = 1,
+	ConsoleRuleAccessTypeWrite = 2,
+	ConsoleRuleAccessTypeReadWrite = 3
 };
 
-class GLConsoleRuleFnI
+class ConsoleRuleFnI
 {
 public:
-	virtual ~GLConsoleRuleFnI();
+	virtual ~ConsoleRuleFnI();
 
 	virtual bool getBoolParam(const char *name) { DIALOG_ASSERT(0); return true; }
 	virtual void setBoolParam(const char *name, bool value) { DIALOG_ASSERT(0); }
@@ -46,28 +46,28 @@ public:
 	virtual void setStringParam(const char *name, const char *value) { DIALOG_ASSERT(0); }
 };
 
-class GLConsoleRuleFn : public GLConsoleRule
+class ConsoleRuleFn : public ConsoleRule
 {
 public:
-	GLConsoleRuleFn(const char *name, 
-		GLConsoleRuleFnI *user, 
-		GLConsoleRuleType type, 
-		GLConsoleRuleAccessType access = GLConsoleRuleAccessTypeReadWrite);
-	virtual ~GLConsoleRuleFn();
+	ConsoleRuleFn(const char *name, 
+		ConsoleRuleFnI *user, 
+		ConsoleRuleType type, 
+		ConsoleRuleAccessType access = ConsoleRuleAccessTypeReadWrite);
+	virtual ~ConsoleRuleFn();
 
 	void checkRule(const char *line, 
-					std::list<GLConsoleRuleSplit> split, 
+					std::list<ConsoleRuleSplit> split, 
 					std::string &result, 
 					std::list<std::string> &resultList);
 	void dump(std::list<std::string> &resultList);
 
 protected:
-	GLConsoleRuleFnI *user_;
-	GLConsoleRuleType type_;
-	GLConsoleRuleAccessType access_;
+	ConsoleRuleFnI *user_;
+	ConsoleRuleType type_;
+	ConsoleRuleAccessType access_;
 
-	void setValue(GLConsoleRuleSplit &split);
+	void setValue(ConsoleRuleSplit &split);
 	const char *getValue();
 };
 
-#endif // !defined(AFX_GLCONSOLERULEFN_H__B0DEC68E_5D12_410F_AEA2_3BF1AF6B3319__INCLUDED_)
+#endif // !defined(AFX_ConsoleRULEFN_H__B0DEC68E_5D12_410F_AEA2_3BF1AF6B3319__INCLUDED_)

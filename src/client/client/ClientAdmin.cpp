@@ -22,7 +22,7 @@
 #include <client/ScorchedClient.h>
 #include <client/ClientChannelManager.h>
 #include <tank/TankContainer.h>
-#include <GLEXT/GLConsole.h>
+#include <console/Console.h>
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsAdminMessage.h>
 #include <common/Defines.h>
@@ -40,7 +40,7 @@ ClientAdmin *ClientAdmin::instance()
 
 ClientAdmin::ClientAdmin() 
 {
-	new GLConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
 		this, &ClientAdmin::admin, "admin");
 }
 
@@ -49,14 +49,14 @@ ClientAdmin::~ClientAdmin()
 
 }
 
-void ClientAdmin::admin(std::list<GLConsoleRuleSplit> split, 
+void ClientAdmin::admin(std::list<ConsoleRuleSplit> split, 
 	std::list<std::string> &result)
 {
 	split.pop_front();
 	if (split.empty()) adminHelp(result);
 	else
 	{
-		GLConsoleRuleSplit firstsplit = split.front();
+		ConsoleRuleSplit firstsplit = split.front();
 		split.pop_front();
 
 		bool failed = false;
@@ -110,7 +110,7 @@ void ClientAdmin::admin(std::list<GLConsoleRuleSplit> split,
 			if (split.empty()) failed = true;
 			else
 			{
-				GLConsoleRuleSplit secondsplit = split.front();
+				ConsoleRuleSplit secondsplit = split.front();
 				result.push_back(S3D::formatStringBuffer("  sending %s %s...", 
 					firstsplit.rule.c_str(),
 					secondsplit.rule.c_str()));
@@ -150,12 +150,12 @@ void ClientAdmin::admin(std::list<GLConsoleRuleSplit> split,
 			if (split.empty()) failed = true;
 			else
 			{
-				GLConsoleRuleSplit secondsplit = split.front();
+				ConsoleRuleSplit secondsplit = split.front();
 				split.pop_front();
 				if (split.empty()) failed = true;
 				else
 				{
-					GLConsoleRuleSplit thirdsplit = split.front();
+					ConsoleRuleSplit thirdsplit = split.front();
 					result.push_back(S3D::formatStringBuffer("  sending %s %s %s...", 
 						firstsplit.rule.c_str(),
 						secondsplit.rule.c_str(),
@@ -182,7 +182,7 @@ void ClientAdmin::admin(std::list<GLConsoleRuleSplit> split,
 		if (failed)
 		{
 			std::string failed;
-			GLConsoleRule::addRuleFail(failed, firstsplit.position, 
+			ConsoleRule::addRuleFail(failed, firstsplit.position, 
 					(int) firstsplit.rule.length());
 			result.push_back(failed);
 			result.push_back(std::string("Unrecognised admin function ") + 

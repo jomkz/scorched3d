@@ -18,7 +18,7 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <GLEXT/GLConsoleRuleMethodIAdapter.h>
+#include <console/ConsoleRuleMethodIAdapter.h>
 #include <common/Defines.h>
 #include <graph/OptionsDisplay.h>
 #include <common/Logger.h>
@@ -53,9 +53,9 @@ Sound::Sound() :
 	init_(false), totalTime_(0.0f),
 	GameStateI("Sound")
 {
-	new GLConsoleRuleMethodIAdapter<Sound>(
+	new ConsoleRuleMethodIAdapter<Sound>(
 		this, &Sound::showSoundBuffers, "SoundBuffers");
-	new GLConsoleRuleMethodIAdapterEx<Sound>(
+	new ConsoleRuleMethodIAdapterEx<Sound>(
 		this, &Sound::soundPlay, "SoundPlay");
 }
 
@@ -158,7 +158,7 @@ bool Sound::init(int channels)
 	return init_;
 }
 
-void Sound::soundPlay(std::list<GLConsoleRuleSplit> list)
+void Sound::soundPlay(std::list<ConsoleRuleSplit> list)
 {
 	list.pop_front();
 	if (!list.empty())

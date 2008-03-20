@@ -136,52 +136,68 @@ void Water2Patch::generate(Water2Points &heights,
 
 void Water2Patch::draw(MipMapPatchIndex &index)
 {
-	// No triangles
+	// Number triangles
 	GLInfo::addNoTriangles(index.getSize());
 
-	// Map data to draw
-	float *data = 0;
-	if (bufferObject_)
+	if (!OptionsDisplay::instance()->getNoGLDrawElements())
 	{
-		bufferObject_->bind();
+		// Map data to draw
+		float *data = 0;
+		if (bufferObject_)
+		{
+			bufferObject_->bind();
+		}
+		else
+		{
+			data = &data_[0].x;
+		}
+
+		// Vertices On
+		glVertexPointer(3, GL_FLOAT, sizeof(Data), data);
+
+		// Normals On
+		glNormalPointer(GL_FLOAT, sizeof(Data), data + 3);
+
+		// Unmap data to draw
+		if (bufferObject_)
+		{
+			bufferObject_->unbind();
+		}
+
+		// Map indices to draw
+		unsigned short *indices = 0;
+		if (index.getBufferObject())
+		{
+			index.getBufferObject()->bind();
+		}
+		else
+		{
+			indices = index.getIndices();
+		}
+
+		// Draw elements
+		glDrawElements(GL_TRIANGLE_STRIP, 
+			index.getSize(), 
+			GL_UNSIGNED_SHORT, 
+			indices);
+
+		if (index.getBufferObject())
+		{
+			index.getBufferObject()->unbind();
+		}
 	}
 	else
 	{
-		data = &data_[0].x;
-	}
+		glBegin(GL_TRIANGLE_STRIP);
+			for (int i=0; i<index.getSize(); i++)
+			{
+				float *data = &data_[0].x + 
+					(sizeof(Data) / 4 * index.getIndices()[i]);
 
-	// Vertices On
-	glVertexPointer(3, GL_FLOAT, sizeof(Data), data);
-
-	// Normals On
-	glNormalPointer(GL_FLOAT, sizeof(Data), data + 3);
-
-	// Unmap data to draw
-	if (bufferObject_)
-	{
-		bufferObject_->unbind();
-	}
-
-	// Map indices to draw
-	unsigned int *indices = 0;
-	if (index.getBufferObject())
-	{
-		index.getBufferObject()->bind();
-	}
-	else
-	{
-		indices = index.getIndices();
-	}
-
-	// Draw elements
-	glDrawElements(GL_TRIANGLE_STRIP, 
-		index.getSize(), 
-		GL_UNSIGNED_INT, 
-		indices);
-
-	if (index.getBufferObject())
-	{
-		index.getBufferObject()->unbind();
+				glVertex3fv(data);
+				glNormal3fv(data + 3);
+			}
+		glEnd();
 	}
 }
 

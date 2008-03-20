@@ -19,47 +19,42 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-// GLConsoleRuleMethod.cpp: implementation of the GLConsoleRuleMethod class.
+// ConsoleRuleMethod.h: interface for the ConsoleRuleMethod class.
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <GLEXT/GLConsoleRuleMethod.h>
+#if !defined(AFX_ConsoleRULEMETHOD_H__3B593346_8294_4DBC_8338_D2EA270FFDC8__INCLUDED_)
+#define AFX_ConsoleRULEMETHOD_H__3B593346_8294_4DBC_8338_D2EA270FFDC8__INCLUDED_
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
-GLConsoleRuleMethodI::~GLConsoleRuleMethodI()
+#include <console/ConsoleRule.h>
+
+class ConsoleRuleMethodI
 {
+public:
+	virtual ~ConsoleRuleMethodI();
 
-}
+	virtual void runMethod(const char *name, 
+						   std::list<ConsoleRuleSplit> split,
+						   std::string &result,
+						   std::list<std::string> &resultList) = 0;
+};
 
-GLConsoleRuleMethod::GLConsoleRuleMethod(const char *name,
-										 GLConsoleRuleMethodI *user) : 
-	GLConsoleRule(name),
-	user_(user)
+class ConsoleRuleMethod : public ConsoleRule
 {
+public:
+	ConsoleRuleMethod(const char *name,
+			ConsoleRuleMethodI *user);
+	virtual ~ConsoleRuleMethod();
 
-}
-
-GLConsoleRuleMethod::~GLConsoleRuleMethod()
-{
-
-}
-
-void GLConsoleRuleMethod::checkRule(const char *line, 
-				std::list<GLConsoleRuleSplit> split, 
+	void checkRule(const char *line, 
+				std::list<ConsoleRuleSplit> split, 
 				std::string &result, 
-				std::list<std::string> &resultList)
-{
-	std::list<GLConsoleRuleSplit>::iterator iter = split.begin();
-	result = line;
+				std::list<std::string> &resultList);
+	void dump(std::list<std::string> &resultList);
 
-	user_->runMethod(name_.c_str(), split, result, resultList);
-}
+protected:
+	ConsoleRuleMethodI *user_;
+};
 
-void GLConsoleRuleMethod::dump(std::list<std::string> &resultList)
-{
-	std::string result = "  " + name_;
-	resultList.push_back(result);
-}
+#endif // !defined(AFX_ConsoleRULEMETHOD_H__3B593346_8294_4DBC_8338_D2EA270FFDC8__INCLUDED_)

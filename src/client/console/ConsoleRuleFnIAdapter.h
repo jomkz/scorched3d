@@ -19,25 +19,25 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-// GLConsoleRuleFnIAdapter.h: interface for the GLConsoleRuleFnIAdapter class.
+// ConsoleRuleFnIAdapter.h: interface for the ConsoleRuleFnIAdapter class.
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_GLCONSOLERULEFNIADAPTER_H__A8429FA2_3499_4F4A_95BC_9F94FC58C087__INCLUDED_)
-#define AFX_GLCONSOLERULEFNIADAPTER_H__A8429FA2_3499_4F4A_95BC_9F94FC58C087__INCLUDED_
+#if !defined(AFX_ConsoleRULEFNIADAPTER_H__A8429FA2_3499_4F4A_95BC_9F94FC58C087__INCLUDED_)
+#define AFX_ConsoleRULEFNIADAPTER_H__A8429FA2_3499_4F4A_95BC_9F94FC58C087__INCLUDED_
 
 #include <common/OptionEntry.h>
-#include <GLEXT/GLConsole.h>
+#include <console/Console.h>
 #include <string>
 
-class GLConsoleRuleFnIBooleanAdapter : 
-	public GLConsoleRuleFnI
+class ConsoleRuleFnIBooleanAdapter : 
+	public ConsoleRuleFnI
 {
 public:
-	GLConsoleRuleFnIBooleanAdapter(const char *name, bool &param);
-	virtual ~GLConsoleRuleFnIBooleanAdapter();
+	ConsoleRuleFnIBooleanAdapter(const char *name, bool &param);
+	virtual ~ConsoleRuleFnIBooleanAdapter();
 
-	// Inherited from GLConsoleRuleFnI
+	// Inherited from ConsoleRuleFnI
 	virtual bool getBoolParam(const char *name);
 	virtual void setBoolParam(const char *name, bool value);
 
@@ -47,14 +47,14 @@ protected:
 
 };
 
-class GLConsoleRuleFnINumberAdapter : 
-	public GLConsoleRuleFnI
+class ConsoleRuleFnINumberAdapter : 
+	public ConsoleRuleFnI
 {
 public:
-	GLConsoleRuleFnINumberAdapter(const char *name, float &param);
-	virtual ~GLConsoleRuleFnINumberAdapter();
+	ConsoleRuleFnINumberAdapter(const char *name, float &param);
+	virtual ~ConsoleRuleFnINumberAdapter();
 
-	// Inherited from GLConsoleRuleFnI
+	// Inherited from ConsoleRuleFnI
 	virtual float getNumberParam(const char *name);
 	virtual void  setNumberParam(const char *name, float value);
 
@@ -64,15 +64,15 @@ protected:
 
 };
 
-class GLConsoleRuleFnIOptionsAdapter :
-	public GLConsoleRuleFnI
+class ConsoleRuleFnIOptionsAdapter :
+	public ConsoleRuleFnI
 {
 public:
-	GLConsoleRuleFnIOptionsAdapter(OptionEntry &entry,
-		GLConsoleRuleAccessType access);
-	virtual ~GLConsoleRuleFnIOptionsAdapter();
+	ConsoleRuleFnIOptionsAdapter(OptionEntry &entry,
+		ConsoleRuleAccessType access);
+	virtual ~ConsoleRuleFnIOptionsAdapter();
 
-	// Inherited from GLConsoleRuleFnI
+	// Inherited from ConsoleRuleFnI
 	virtual bool getBoolParam(const char *name);
 	virtual void setBoolParam(const char *name, bool value);
 	virtual float getNumberParam(const char *name);
@@ -85,4 +85,4 @@ protected:
 
 };
 
-#endif // !defined(AFX_GLCONSOLERULEFNIADAPTER_H__A8429FA2_3499_4F4A_95BC_9F94FC58C087__INCLUDED_)
+#endif // !defined(AFX_ConsoleRULEFNIADAPTER_H__A8429FA2_3499_4F4A_95BC_9F94FC58C087__INCLUDED_)

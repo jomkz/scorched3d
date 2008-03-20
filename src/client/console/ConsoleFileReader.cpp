@@ -18,16 +18,16 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <GLEXT/GLConsole.h>
-#include <GLEXT/GLConsoleFileReader.h>
-#include <GLEXT/GLConsole.h>
+#include <console/Console.h>
+#include <console/ConsoleFileReader.h>
+#include <console/Console.h>
 #include <common/FileLines.h>
 #include <common/DefinesString.h>
 #include <XML/XMLFile.h>
 #include <XML/XMLParser.h>
 #include <stdio.h>
 
-bool GLConsoleFileReader::loadFileIntoConsole(const std::string &fileName,
+bool ConsoleFileReader::loadFileIntoConsole(const std::string &fileName,
 											  std::string &errorMessage)
 {
 	XMLFile file;
@@ -47,19 +47,19 @@ bool GLConsoleFileReader::loadFileIntoConsole(const std::string &fileName,
 		XMLNode *currentNode = (*childrenItor);		
 		if (strcmp(currentNode->getName(), "command")==0)
 		{
-			GLConsole::instance()->addLine(true, currentNode->getContent());
+			Console::instance()->addLine(true, currentNode->getContent());
 		}
 	}
 	return true;
 }
 
-void GLConsoleFileReader::saveConsoleIntoFile(const std::string &filename)
+void ConsoleFileReader::saveConsoleIntoFile(const std::string &filename)
 {
 	FileLines filelines;
 	filelines.addLine("<commands source=\"Scorched3D\">");
 
-	std::deque<GLConsoleLine *> &lines = GLConsole::instance()->getLines();
-	std::deque<GLConsoleLine *>::iterator itor;
+	std::deque<ConsoleLine *> &lines = Console::instance()->getLines();
+	std::deque<ConsoleLine *>::iterator itor;
 	for (itor = lines.begin();
 		itor != lines.end();
 		itor++)
@@ -67,7 +67,7 @@ void GLConsoleFileReader::saveConsoleIntoFile(const std::string &filename)
 		std::string cleanLine;
 		std::string dirtyLine((*itor)->getLine());
 		XMLNode::removeSpecialChars(dirtyLine, cleanLine);
-		if ((*itor)->getLineType() != GLConsoleLine::eNone)
+		if ((*itor)->getLineType() != ConsoleLine::eNone)
 		{
 			filelines.addLine(S3D::formatStringBuffer("  <command>%s</command>",
 				cleanLine.c_str()));

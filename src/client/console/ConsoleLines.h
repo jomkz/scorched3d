@@ -18,14 +18,14 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_GLCONSOLELINES_H__2DA65C94_3E52_43C6_B75B_D0CEDBF6A9DE__INCLUDED_)
-#define AFX_GLCONSOLELINES_H__2DA65C94_3E52_43C6_B75B_D0CEDBF6A9DE__INCLUDED_
+#if !defined(AFX_ConsoleLINES_H__2DA65C94_3E52_43C6_B75B_D0CEDBF6A9DE__INCLUDED_)
+#define AFX_ConsoleLINES_H__2DA65C94_3E52_43C6_B75B_D0CEDBF6A9DE__INCLUDED_
 
 #include <GLEXT/GLFont2d.h>
 #include <deque>
 #include <string>
 
-class GLConsoleLine
+class ConsoleLine
 {
 public:
 	enum LineType
@@ -35,8 +35,8 @@ public:
 		eCommandCont
 	};
 
-	GLConsoleLine();
-	virtual ~GLConsoleLine();
+	ConsoleLine();
+	virtual ~ConsoleLine();
 
 	void set(const char *line, LineType type);
 	void drawLine(float x, float y, GLFont2d *font);
@@ -53,11 +53,11 @@ protected:
 
 };
 
-class GLConsoleLines  
+class ConsoleLines  
 {
 public:
-	GLConsoleLines(int maxLines);
-	virtual ~GLConsoleLines();
+	ConsoleLines(int maxLines);
+	virtual ~ConsoleLines();
 
 	void addLine(const char *line, bool showPointer);
 	void drawLines(GLFont2d *font, float startHeight, float totalHeight, float totalWidth);
@@ -69,10 +69,10 @@ public:
 	const char *getItem(int lines);
 
 	int getMaxLines() { return maxLines_; }
-	std::deque<GLConsoleLine *> &getLines() { return lines_; }
+	std::deque<ConsoleLine *> &getLines() { return lines_; }
 
 protected:
-	std::deque<GLConsoleLine *> lines_;
+	std::deque<ConsoleLine *> lines_;
 	int maxLines_;
 	int currentLine_;
 
@@ -80,4 +80,4 @@ protected:
 
 };
 
-#endif // !defined(AFX_GLCONSOLELINES_H__2DA65C94_3E52_43C6_B75B_D0CEDBF6A9DE__INCLUDED_)
+#endif // !defined(AFX_ConsoleLINES_H__2DA65C94_3E52_43C6_B75B_D0CEDBF6A9DE__INCLUDED_)
