@@ -47,6 +47,9 @@ ConnectDialog::ConnectDialog() :
 	connectionState_(eWaiting),
 	tryCount_(0), lastTime_(0), idStore_(0)
 {
+	connectionState_ = eWaiting;
+	tryCount_ = 0;
+	lastTime_ = 0;
 }
 
 ConnectDialog::~ConnectDialog()
@@ -69,9 +72,7 @@ UniqueIdStore &ConnectDialog::getIdStore()
 
 void ConnectDialog::windowInit(const unsigned state)
 {
-	connectionState_ = eWaiting;
-	tryCount_ = 0;
-	lastTime_ = 0;
+
 }
 
 void ConnectDialog::simulate(float frameTime)

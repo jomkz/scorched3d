@@ -32,6 +32,7 @@
 #include <client/ClientLoadPlayersState.h>
 #include <client/ClientSaveScreenState.h>
 #include <client/ScorchedClient.h>
+#include <client/ClientProcessingLoop.h>
 #include <sound/Sound.h>
 #include <tankgraph/RenderTargets.h>
 #include <tankgraph/TankKeyboardControl.h>
@@ -42,8 +43,20 @@
 #include <GLEXT/GLCameraFrustum.h>
 #include <console/Console.h>
 
+void ClientState::addMandatoryComponents(GameState &gameState, unsigned state)
+{
+	gameState.addStateLoop(state, Main2DCamera::instance(), 
+		ClientProcessingLoop::instance());
+	gameState.addStateLoop(state, Main2DCamera::instance(), 
+		Sound::instance()); // SOUND
+	gameState.addStateLoop(state, Main2DCamera::instance(),
+		LandscapeMusicManager::instance()); // MUSIC
+}
+
 void ClientState::addWindowManager(GameState &gameState, unsigned state)
 {
+	addMandatoryComponents(gameState, state);
+
 	gameState.addStateKeyEntry(state, Console::instance());
 	gameState.addStateEntry(state, GLWWindowManager::instance());
 	gameState.addStateLoop(state, Main2DCamera::instance(), 
@@ -62,10 +75,6 @@ void ClientState::addWindowManager(GameState &gameState, unsigned state)
 	gameState.addStateMouseWheelEntry(state, GLWWindowManager::instance());
 	gameState.addStateLoop(state, Main2DCamera::instance(),
 		Console::instance());
-	gameState.addStateLoop(state, Main2DCamera::instance(), 
-		Sound::instance()); // SOUND
-	gameState.addStateLoop(state, Main2DCamera::instance(),
-		LandscapeMusicManager::instance()); // MUSIC
 }
 
 void ClientState::addStandardComponents(GameState &gameState, unsigned state)

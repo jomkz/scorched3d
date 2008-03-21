@@ -18,11 +18,6 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-
-// MainLoop.h: interface for the MainLoop class.
-//
-//////////////////////////////////////////////////////////////////////
-
 #if !defined(AFX_MainLoop_H__6E7B84B0_E055_48B6_B992_4D4C3C7455E0__INCLUDED_)
 #define AFX_MainLoop_H__6E7B84B0_E055_48B6_B992_4D4C3C7455E0__INCLUDED_
 
@@ -46,17 +41,19 @@ public:
 
 	void swapBuffers();
 	Clock &getTimer() { return fTimer_; }
-	float getDrawTime() { return lastDrawTime_; } // Time taken to draw last frame
 
 	void exitLoop() { exitLoop_ = true; }
+	bool &getDrawLogging() { return drawLogging_; }
 
 protected:
 	std::list<MainLoopI *> newMainLoops_;
 	std::set<MainLoopI *> mainLoops_;
 	Clock fTimer_; // Frame/simulation timer
 	Clock dTimer_; // Draw timer
+	float drawTime_, clearTime_;
+	float totalTime_;
 	bool exitLoop_;
-	float lastDrawTime_;
+	bool drawLogging_;
 
 	void simulate(float frameTime);
 	void addNew();

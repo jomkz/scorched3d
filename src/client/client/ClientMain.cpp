@@ -32,6 +32,7 @@
 #include <client/ClientGiftMoneyHandler.h>
 #include <client/ClientLinesHandler.h>
 #include <client/ClientStartGameHandler.h>
+#include <client/ClientProcessingLoop.h>
 #include <client/ClientScoreHandler.h>
 #include <client/ClientAddPlayerHandler.h>
 #include <client/ClientNewGameHandler.h>
@@ -47,10 +48,8 @@
 #include <client/ClientFileHandler.h>
 #include <client/ClientDefenseHandler.h>
 #include <client/ClientPlayerStatusHandler.h>
-#include <client/ClientKeepAliveSender.h>
 #include <client/ClientState.h>
 #include <client/ClientWindowSetup.h>
-#include <graph/FrameLimiter.h>
 #include <graph/Mouse.h>
 #include <graph/Gamma.h>
 #include <graph/OptionsDisplay.h>
@@ -75,7 +74,6 @@
 #include <net/NetLoopBack.h>
 #include <common/ARGParser.h>
 #include <common/Keyboard.h>
-#include <common/Logger.h>
 #include <common/OptionsScorched.h>
 #include <common/Keyboard.h>
 #include <common/ProgressCounter.h>
@@ -307,7 +305,6 @@ bool ClientMain::startClient()
 
 bool ClientMain::clientEventLoop(float frameTime)
 {
-	static float serverTime = 0.0f;
 	static SDL_Event event;
 	bool idle = true;
 	if (SDL_PollEvent(&event))
@@ -357,31 +354,6 @@ bool ClientMain::clientEventLoop(float frameTime)
 		}
 	}
 
-	ClientKeepAliveSender::instance()->sendKeepAlive();
-	if (!ClientParams::instance()->getConnectedToServer())
-	{
-		serverTime += frameTime;
-		if (serverTime > 0.05f)
-		{
-			serverTime = 0.0f;
-			serverLoop();
-		}
-	}
-
-	Logger::processLogEntries();
-	if (ScorchedClient::instance()->getContext().netInterface)
-	{
-		ScorchedClient::instance()->getNetInterface().processMessages();
-	}
-
-	if (ClientParams::instance()->getExitTime() > 0)
-	{
-		if (time(0) > ClientParams::instance()->getExitTime())
-		{
-			exit(0);
-		}
-	}
-
 	return idle;
 }
 
@@ -407,7 +379,6 @@ bool ClientMain::clientMain()
 
 	// Enter the SDL main loop to process SDL events
 	Clock loopClock;
-	FrameLimiter limiter;
 	for (;;)
 	{
 		float frameTime = loopClock.getTimeDifference();
@@ -417,11 +388,10 @@ bool ClientMain::clientMain()
 		if ((!paused) && (idle) )
 		{
 			ScorchedClient::instance()->getMainLoop().draw();
-			limiter.limitFrameTime(); // Make sure frame rate is not exceeded
 		}
 		else
 		{
-			limiter.dontLimitFrameTime();
+			ClientProcessingLoop::instance()->dontLimitFrameTime();
 		}
 		if (paused) SDL_Delay(100);  // Otherwise when not drawing graphics its an infinite loop	
 	}

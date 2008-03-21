@@ -20,6 +20,7 @@
 
 #include <engine/MainLoop.h>
 #include <common/Defines.h>
+#include <common/Logger.h>
 #ifndef S3D_SERVER
 #include <graph/OptionsDisplay.h>
 #include <GLEXT/GLState.h>
@@ -27,7 +28,10 @@
 #include <SDL/SDL.h>
 #endif
 
-MainLoop::MainLoop() :  exitLoop_(false), lastDrawTime_(0.0f)
+MainLoop::MainLoop() : 
+	exitLoop_(false), drawLogging_(false),
+	drawTime_(0.0f), clearTime_(0.0f),
+	totalTime_(0.0f)
 {
 
 }
@@ -68,6 +72,8 @@ void MainLoop::swapBuffers()
 bool MainLoop::mainLoop()
 {
 	float frameTime = fTimer_.getTimeDifference();
+	totalTime_ += frameTime;
+
 	while (frameTime > 0.0f)
 	{
 		addNew();
@@ -97,12 +103,11 @@ void MainLoop::draw()
 {
 #ifndef S3D_SERVER
 	GLInfo::resetNoTriangles();
-	lastDrawTime_ = dTimer_.getTimeDifference();
+	dTimer_.getTimeDifference();
 	static bool firstTime = true;
 	if (firstTime)
 	{
 		firstTime = false;
-		glClearDepth(0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
@@ -114,14 +119,22 @@ void MainLoop::draw()
 		MainLoopI *current = (*itor);
 		current->draw();
 	}
+	drawTime_ += dTimer_.getTimeDifference();
 
-	glFlush();
 	swapBuffers();
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glClearDepth(1.0f);
-		glDepthRange(0.0, 1.0);
-		glDepthFunc(GL_LESS);
+	}
+	clearTime_ += dTimer_.getTimeDifference();
+
+	if (drawLogging_ &&
+		totalTime_ > 10.0f)
+	{
+		Logger::log(S3D::formatStringBuffer("Total %.2f = Draw %.2f + Clear %.2f",
+			totalTime_, drawTime_, clearTime_));
+		totalTime_ = 0.0f;
+		drawTime_ = 0.0f;
+		clearTime_ = 0.0f;
 	}
 #endif
 }

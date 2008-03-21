@@ -27,6 +27,7 @@
 #include <graph/Main2DCamera.h>
 #include <client/ClientMain.h>
 #include <client/ClientState.h>
+#include <client/ClientProcessingLoop.h>
 #include <engine/MainLoop.h>
 #include <common/Clock.h>
 #include <common/Defines.h>
@@ -218,6 +219,7 @@ void ProgressDialogSync::progressChange(const std::string &op, const float perce
 	timeDelay2 += frameTime;
 
 	ClientMain::clientEventLoop(frameTime);	
+	ClientProcessingLoop::instance()->simulate(0, frameTime);
 
 	ProgressDialog::instance()->progressChange(op, percentage);
 

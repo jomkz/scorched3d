@@ -22,6 +22,7 @@
 #include <weapons/AccessoryStore.h>
 #include <engine/GameState.h>
 #include <engine/ActionController.h>
+#include <engine/MainLoop.h>
 #include <client/ClientState.h>
 #include <client/ScorchedClient.h>
 #include <server/ScorchedServer.h>
@@ -94,6 +95,12 @@ TankMenus::TankMenus() : logger_("ClientLog")
 	new ConsoleRuleFnINumberAdapter(
 		"StateTimeLogging",
 		ScorchedClient::instance()->getGameState().getStateTimeLogging());
+	new ConsoleRuleFnINumberAdapter(
+		"ServerStateTimeLogging",
+		ScorchedServer::instance()->getGameState().getStateTimeLogging());
+	new ConsoleRuleFnIBooleanAdapter(
+		"MainLoopLogging",
+		ScorchedClient::instance()->getMainLoop().getDrawLogging());
 	
 	if (OptionsDisplay::instance()->getClientLogToFile())
 	{

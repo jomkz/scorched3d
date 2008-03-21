@@ -19,52 +19,32 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-#if !defined(__INCLUDE_ClientStateh_INCLUDE__)
-#define __INCLUDE_ClientStateh_INCLUDE__
+#if !defined(__INCLUDE_ClientProcessingLooph_INCLUDE__)
+#define __INCLUDE_ClientProcessingLooph_INCLUDE__
 
-#include <engine/GameState.h>
+#include <engine/GameStateI.h>
+#include <graph/FrameLimiter.h>
 
-namespace ClientState  
+class ClientProcessingLoop : 
+	public GameStateI
 {
-	enum Stimulus
-	{
-		StimOptions = 1,
-		StimNextPlayerDialog,
-		StimGetPlayers,
-		StimLoadPlayers,
-		StimLoadFiles,
-		StimWait,
-		StimBuyWeapons,
-		StimAutoDefense,
-		StimPlaying,
-		StimDisconnected,
-		StimGameStopped,
-		StimShot,
-		StimScore,
-		StimConnect
-	};
+public:
+	static ClientProcessingLoop *instance();
 
-	enum State
-	{
-		StateOptions = 1,
-		StateConnect,
-		StateDisconnected,
-		StateLoadFiles,
-		StateGetPlayers,
-		StateLoadPlayers,
-		StateLoadLevel,
-		StateWait,
-		StateBuyWeapons,
-		StateAutoDefense,
-		StatePlaying,
-		StateShot,
-		StateScore
-	};
+	virtual void simulate(const unsigned state, float simTime);
+	virtual void draw(const unsigned state);
 
-	void setupGameState();
-	void addWindowManager(GameState &gameState, unsigned state);
-	void addStandardComponents(GameState &gameState, unsigned state);
-	void addMandatoryComponents(GameState &gameState, unsigned state);
+	void dontLimitFrameTime() { limiter_.dontLimitFrameTime(); }
+
+protected:
+	static ClientProcessingLoop *instance_;
+	FrameLimiter limiter_;
+	float serverTime_;
+
+private:
+	ClientProcessingLoop();
+	virtual ~ClientProcessingLoop();
 };
+
 
 #endif

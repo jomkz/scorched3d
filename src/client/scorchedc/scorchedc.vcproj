@@ -3257,6 +3257,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\client\ClientProcessingLoop.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\client\ClientProcessingLoop.h"
+				>
+			</File>
+			<File
 				RelativePath="..\client\ClientReloadAdaptor.cpp"
 				>
 			</File>
