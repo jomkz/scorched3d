@@ -24,6 +24,7 @@
 #include <land/LandVisibilityPatch.h>
 #include <land/WaterVisibilityPatch.h>
 #include <land/VisibilityPatchQuad.h>
+#include <land/LandSurround.h>
 #include <geomipmap/MipMapPatchIndexs.h>
 
 class GLSLShaderSetup;
@@ -57,13 +58,6 @@ public:
 		lastVisibleLandPatches_ ++;
 	}
 
-	void addVisibleSurroundPatch(LandVisibilityPatch *patch)
-	{
-		*lastVisibleSurroundPatches_ = patch;
-		visibleSurroundPatchesCount_++;
-		lastVisibleSurroundPatches_ ++;
-	}
-
 	void addVisibleWaterPatch(WaterVisibilityPatch *patch)
 	{
 		*lastVisibleWaterPatches_ = patch;
@@ -72,6 +66,7 @@ public:
 	}
 
 protected:
+	LandSurround surround_;
 	MipMapPatchIndexs landIndexs_;
 
 	// All the visibility patches
@@ -85,8 +80,6 @@ protected:
 	// This is recreated from the visibilty data
 	int visibleLandPatchesCount_;
 	LandVisibilityPatch **visibleLandPatches_, **lastVisibleLandPatches_;
-	int visibleSurroundPatchesCount_;
-	LandVisibilityPatch **visibleSurroundPatches_, **lastVisibleSurroundPatches_;
 	int visibleWaterPatchesCount_;
 	WaterVisibilityPatch **visibleWaterPatches_, **lastVisibleWaterPatches_;
 

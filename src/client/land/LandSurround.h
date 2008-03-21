@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-//    Scorched3D (c) 2000-2004
+//    Scorched3D (c) 2000-2003
 //
 //    This file is part of Scorched3D.
 //
@@ -18,36 +18,26 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_VisibilityPatchQuadh_INCLUDE__)
-#define __INCLUDE_VisibilityPatchQuadh_INCLUDE__
+#if !defined(AFX_LandSurround_H__2FD73942_AF29_49ED_8DD8_925E2E14E464__INCLUDED_)
+#define AFX_LandSurround_H__2FD73942_AF29_49ED_8DD8_925E2E14E464__INCLUDED_
 
-#include <common/Vector.h>
+#include <landscapemap/HeightMap.h>
 
-class LandVisibilityPatch;
-class WaterVisibilityPatch;
-class VisibilityPatchGrid;
-class VisibilityPatchQuad
+class LandSurround  
 {
 public:
-	VisibilityPatchQuad();
-	~VisibilityPatchQuad();
+	LandSurround();
+	virtual ~LandSurround();
 
-	void setLocation(VisibilityPatchGrid *patchGrid, int x, int y, int size, 
-		int mapwidth, int mapheight);
-	void calculateVisibility(Vector &cameraPos);
-
-	void setNotVisible(Vector &cameraPos);
-	void setVisible(Vector &cameraPos);
+	void draw(HeightMap &map, bool detail, bool lightMap);
+	void generate();
 
 protected:
-	int x_, y_;
-	int size_;
-	Vector position_;
+	unsigned int listNo_;
+	Vector hMapBoxVerts_[16];
+	void generateList(HeightMap &map, bool detail, bool lightMap);
+	void generateVerts(HeightMap &map);
 
-	WaterVisibilityPatch *waterVisibilityPatch_;
-	LandVisibilityPatch *landVisibilityPatch_;
-	VisibilityPatchQuad *topLeft_, *topRight_;
-	VisibilityPatchQuad *botLeft_, *botRight_;
 };
 
-#endif // __INCLUDE_VisibilityPatchQuadh_INCLUDE__
+#endif // !defined(AFX_LandSurround_H__2FD73942_AF29_49ED_8DD8_925E2E14E464__INCLUDED_)

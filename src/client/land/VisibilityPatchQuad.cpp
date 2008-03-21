@@ -36,22 +36,30 @@ VisibilityPatchQuad::~VisibilityPatchQuad()
 	delete botLeft_; delete botRight_;
 }
 
-void VisibilityPatchQuad::setLocation(VisibilityPatchGrid *patchGrid, int x, int y, int size)
+void VisibilityPatchQuad::setLocation(VisibilityPatchGrid *patchGrid, int x, int y, int size,
+	int mapwidth, int mapheight)
 {
 	x_ = x; y_ = y; size_ = size;
 	position_ = Vector(x_ + size_ / 2, y_ + size_ / 2);
 
-	if (size > 32)
+	int stopsize = 128;
+	if (x_ >= 0 && y_ >=0 &&
+		x < mapwidth && y < mapheight) 
+	{
+		stopsize = 32;
+	}
+
+	if (size > stopsize)
 	{
 		topLeft_ = new VisibilityPatchQuad();
 		topRight_ = new VisibilityPatchQuad();
 		botLeft_ = new VisibilityPatchQuad();
 		botRight_ = new VisibilityPatchQuad();
 
-		topLeft_->setLocation(patchGrid, x, y, size / 2);
-		topRight_->setLocation(patchGrid, x + size / 2, y, size / 2);
-		botLeft_->setLocation(patchGrid, x, y + size / 2, size / 2);
-		botRight_->setLocation(patchGrid, x + size / 2, y + size / 2, size / 2);
+		topLeft_->setLocation(patchGrid, x, y, size / 2, mapwidth, mapheight);
+		topRight_->setLocation(patchGrid, x + size / 2, y, size / 2, mapwidth, mapheight);
+		botLeft_->setLocation(patchGrid, x, y + size / 2, size / 2, mapwidth, mapheight);
+		botRight_->setLocation(patchGrid, x + size / 2, y + size / 2, size / 2, mapwidth, mapheight);
 	}
 
 	if (size == 32)

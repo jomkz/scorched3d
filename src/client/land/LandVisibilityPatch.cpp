@@ -72,84 +72,29 @@ void LandVisibilityPatch::setVisible(Vector &cameraPos, bool visible)
 { 
 	visible_ = visible;
 
+	DIALOG_ASSERT(heightMapData_);
 
 	if (visible)
 	{
-		if  (heightMapData_)
+		visibilityIndex_ = 3;
+		if (!OptionsDisplay::instance()->getNoWaterLOD())
 		{
-			visibilityIndex_ = 3;
-			if (!OptionsDisplay::instance()->getNoWaterLOD())
+			float distance = (cameraPos - position_).Magnitude();
+
+			if (distance < 512) 
 			{
-				float distance = (cameraPos - position_).Magnitude();
-
-				if (distance < 512) 
-				{
-					visibilityIndex_ = (int(distance) - 50) / 40;
-					visibilityIndex_ = MAX(0, MIN(visibilityIndex_, 3));
-				}
-				else
-				{
-					visibilityIndex_ = (int(distance) - (512 - 140)) / 40;
-					visibilityIndex_ = MAX(0, MIN(visibilityIndex_, 5));
-				}
+				visibilityIndex_ = (int(distance) - 50) / 40;
+				visibilityIndex_ = MAX(0, MIN(visibilityIndex_, 3));
 			}
+			else
+			{
+				visibilityIndex_ = (int(distance) - (512 - 140)) / 40;
+				visibilityIndex_ = MAX(0, MIN(visibilityIndex_, 5));
+			}
+		}
 
-			VisibilityPatchGrid::instance()->addVisibleLandPatch(this);
-		}
-		else
-		{
-			VisibilityPatchGrid::instance()->addVisibleSurroundPatch(this);
-		}
+		VisibilityPatchGrid::instance()->addVisibleLandPatch(this);
 	}
-}
-
-void LandVisibilityPatch::drawSurround()
-{
-	glNormal3f(0.0f, 0.0f, 1.0f);
-
-	glTexCoord2f(0.0f, 0.0f);
-	if (GLStateExtension::hasMultiTex())
-	{
-		glMultiTexCoord2fARB(GL_TEXTURE1_ARB, 0.0f, 0.0f);
-		if (GLStateExtension::getTextureUnits() > 2)
-		{
-			glMultiTexCoord2fARB(GL_TEXTURE2_ARB, 0.0f, 0.0f);
-		}
-	}
-	glVertex2i(x_ + 0, y_ + 0);
-
-	glTexCoord2f(1.0f, 0.0f);
-	if (GLStateExtension::hasMultiTex())
-	{
-		glMultiTexCoord2fARB(GL_TEXTURE1_ARB, 1.0f, 0.0f);
-		if (GLStateExtension::getTextureUnits() > 2)
-		{
-			glMultiTexCoord2fARB(GL_TEXTURE2_ARB, 4.0f, 0.0f);
-		}
-	}
-	glVertex2i(x_ + 32, y_ + 0);
-
-	glTexCoord2f(1.0f, 1.0f);
-	if (GLStateExtension::hasMultiTex())
-	{
-		glMultiTexCoord2fARB(GL_TEXTURE1_ARB, 1.0f, 1.0f);
-		if (GLStateExtension::getTextureUnits() > 2)
-		{
-			glMultiTexCoord2fARB(GL_TEXTURE2_ARB, 4.0f, 4.0f);
-		}
-	}
-	glVertex2i(x_ + 32, y_ + 32);
-
-	glTexCoord2f(0.0f, 1.0f);
-	if (GLStateExtension::hasMultiTex())
-	{
-		glMultiTexCoord2fARB(GL_TEXTURE1_ARB, 0.0f, 1.0f);
-		if (GLStateExtension::getTextureUnits() > 2)
-		{
-			glMultiTexCoord2fARB(GL_TEXTURE2_ARB, 0.0f, 4.0f);
-		}
-	}
-	glVertex2i(x_ + 0, y_ + 32);
 }
 
 void LandVisibilityPatch::draw(MipMapPatchIndex &index)

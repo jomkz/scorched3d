@@ -5513,6 +5513,14 @@
 			Name="land"
 			>
 			<File
+				RelativePath="..\land\LandSurround.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\land\LandSurround.h"
+				>
+			</File>
+			<File
 				RelativePath="..\land\LandVisibilityPatch.cpp"
 				>
 			</File>

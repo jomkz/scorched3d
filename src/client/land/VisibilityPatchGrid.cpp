@@ -38,8 +38,8 @@ VisibilityPatchGrid *VisibilityPatchGrid::instance()
 VisibilityPatchGrid::VisibilityPatchGrid() : 
 	landPatches_(0), waterPatches_(0), visibilityPatches_(0),
 	visibleLandPatches_(0), visibleWaterPatches_(0), 
-	visibleSurroundPatches_(0), allLandPatchesCount_(0),
-	visibleLandPatchesCount_(0), visibleSurroundPatchesCount_(0), 
+	allLandPatchesCount_(0),
+	visibleLandPatchesCount_(0), 
 	visibleWaterPatchesCount_(0), allLandPatches_(0)
 {
 }
@@ -61,14 +61,10 @@ void VisibilityPatchGrid::clear()
 
 	visibleLandPatchesCount_ = 0;
 	visibleWaterPatchesCount_ = 0;
-	visibleSurroundPatchesCount_ = 0;
 	allLandPatchesCount_ = 0;
 
 	delete [] visibleLandPatches_;
 	visibleLandPatches_ = 0;
-
-	delete [] visibleSurroundPatches_;
-	visibleSurroundPatches_ = 0;
 
 	delete [] visibleWaterPatches_;
 	visibleWaterPatches_ = 0;
@@ -108,8 +104,6 @@ void VisibilityPatchGrid::generate()
 		// Create the patches
 		landPatches_ = new LandVisibilityPatch[landWidth_ * landHeight_];
 		visibleLandPatches_ = lastVisibleLandPatches_ =
-			new LandVisibilityPatch*[landWidth_ * landHeight_];
-		visibleSurroundPatches_ = lastVisibleSurroundPatches_ =
 			new LandVisibilityPatch*[landWidth_ * landHeight_];
 		allLandPatches_ =
 			new LandVisibilityPatch*[landWidth_ * landHeight_];
@@ -176,10 +170,13 @@ void VisibilityPatchGrid::generate()
 		{
 			for (int x=0; x<visibilityWidth_; x++, currentPatch++)
 			{
-				currentPatch->setLocation(this, x * 512 + midX_, y * 512 + midY_, 512);
+				currentPatch->setLocation(this, x * 512 + midX_, y * 512 + midY_, 512,
+					mapWidth, mapHeight);
 			}
 		}
 	}
+
+	surround_.generate();
 }
 
 LandVisibilityPatch *VisibilityPatchGrid::getLandVisibilityPatch(int x, int y)
@@ -217,10 +214,8 @@ void VisibilityPatchGrid::drawVisibility()
 
 	visibleLandPatchesCount_ = 0;
 	visibleWaterPatchesCount_ = 0;
-	visibleSurroundPatchesCount_ = 0;
 	lastVisibleLandPatches_ = visibleLandPatches_;
 	lastVisibleWaterPatches_ = visibleWaterPatches_;
-	lastVisibleSurroundPatches_ = visibleSurroundPatches_;
 
 	// Calculate visibility
 	VisibilityPatchQuad *currentPatch = visibilityPatches_;
@@ -322,18 +317,8 @@ void VisibilityPatchGrid::drawSimpleLand()
 
 void VisibilityPatchGrid::drawSurround()
 {
-	glBegin(GL_QUADS);
-	{
-		glColor3f(1.0f, 1.0f, 1.0f);
-
-		LandVisibilityPatch **currentPatchPtr = visibleSurroundPatches_;
-		for (int i=0; i<visibleSurroundPatchesCount_; i++, currentPatchPtr++)
-		{
-			LandVisibilityPatch *currentPatch = *currentPatchPtr;
-			currentPatch->drawSurround();
-		}
-	}
-	glEnd();
+	surround_.draw(ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getHeightMap(), true, true);
 }
 
 void VisibilityPatchGrid::drawWater(Water2Patches &patches, 

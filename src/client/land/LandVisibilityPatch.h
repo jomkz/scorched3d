@@ -47,7 +47,6 @@ public:
 	LandVisibilityPatch *getBottomPatch() { return bottomPatch_; }
 
 	void draw(MipMapPatchIndex &index);
-	void drawSurround();
 
 protected:
 	int x_, y_;
