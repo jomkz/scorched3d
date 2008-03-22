@@ -26,6 +26,7 @@
 #include <common/DefinesMath.h>
 #include <vector>
 
+class GLVertexBufferObject;
 class MipMapPatchIndexs
 {
 protected:
@@ -80,11 +81,13 @@ public:
 	}
 	int getNoLevels() { return (int) levels_.size(); }
 
-	void generate(int size, int totalsize);
+	void generate(int size, int totalsize, unsigned int totallods = 99);
+
+	GLVertexBufferObject *getBufferObject() { return bufferObject_; }
 
 protected:
-
 	std::vector<IndexLevel *> levels_;
+	GLVertexBufferObject *bufferObject_;
 };
 
 #endif // __INCLUDE_MipMapPatchIndexsh_INCLUDE__

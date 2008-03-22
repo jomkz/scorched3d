@@ -19,9 +19,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <geomipmap/MipMapPatchIndexs.h>
+#include <GLEXT/GLStateExtension.h>
+#include <GLEXT/GLVertexBufferObject.h>
+#include <graph/OptionsDisplay.h>
 #include <common/Logger.h>
 
-MipMapPatchIndexs::MipMapPatchIndexs()
+MipMapPatchIndexs::MipMapPatchIndexs() : 
+	bufferObject_(0)
 {
 }
 
@@ -29,7 +33,7 @@ MipMapPatchIndexs::~MipMapPatchIndexs()
 {
 }
 
-void MipMapPatchIndexs::generate(int size, int totalsize)
+void MipMapPatchIndexs::generate(int size, int totalsize, unsigned int totallods)
 {
 	unsigned int totalVerts = 0;
 	for (int lod=1; lod<=size; lod*=2)
@@ -41,7 +45,7 @@ void MipMapPatchIndexs::generate(int size, int totalsize)
 		for (unsigned int borders=0; borders<=4095; borders++)
 		{
 			MipMapPatchIndex *index = new MipMapPatchIndex();
-			index->generate(size, totalsize, lod, borders);
+			index->generate(size, totalsize, lod, borders, totallods);
 			level->borderIndexs_.push_back(index);
 			if (index->getIndices())
 			{
@@ -50,6 +54,34 @@ void MipMapPatchIndexs::generate(int size, int totalsize)
 		}
 	}
 
+	int totalBufferSizeBytes = totalVerts * sizeof(unsigned short);
 	Logger::log(S3D::formatStringBuffer(
-		"Index Memory Size : %u bytes", totalVerts * sizeof(unsigned int)));
+		"Index Memory Size : %u bytes", totalBufferSizeBytes));
+
+	// Store this array in a vertex buffer (if available)
+	if (GLStateExtension::hasVBO() &&
+		!OptionsDisplay::instance()->getNoWaterBuffers())
+	{
+		delete bufferObject_;
+		bufferObject_ = new GLVertexBufferObject(true);
+		bufferObject_->init_data(totalBufferSizeBytes, 0, GL_STATIC_DRAW);
+
+		unsigned int offsetBytes = 0;
+		int i = 0;
+		for (int lod=1; lod<=size; lod*=2, i++)
+		{
+			IndexLevel *level = levels_[i];
+			for (unsigned int borders=0; borders<=4095; borders++)
+			{
+				MipMapPatchIndex *index = level->borderIndexs_[borders];
+				if (index->getIndices())
+				{
+					unsigned int bufferSizeBytes = index->getSize() * sizeof(unsigned short);
+					bufferObject_->init_sub_data(offsetBytes, bufferSizeBytes, index->getIndices());
+					index->setBufferOffSet(offsetBytes);
+					offsetBytes += bufferSizeBytes;
+				}
+			}
+		}
+	}
 }

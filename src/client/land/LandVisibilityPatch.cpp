@@ -32,7 +32,8 @@ LandVisibilityPatch::LandVisibilityPatch() :
 	visible_(false), heightMapData_(0),
 	leftPatch_(0), rightPatch_(0),
 	topPatch_(0), bottomPatch_(0),
-	visibilityIndex_(-1)
+	visibilityIndex_(-1),
+	dataSize_(0)
 {
 }
 
@@ -58,6 +59,8 @@ void LandVisibilityPatch::setLocation(int x, int y,
 		getGroundMaps().getMapWidth();
 	int mapHeight = ScorchedClient::instance()->getLandscapeMaps().
 		getGroundMaps().getMapHeight();
+
+	dataSize_ = (mapWidth + 1) * (mapHeight + 1);
 
 	if (x >= 0 && y >= 0 &&
 		x < mapWidth && y < mapHeight)
@@ -128,9 +131,9 @@ void LandVisibilityPatch::draw(MipMapPatchIndex &index)
 
 		// Map indices to draw
 		unsigned short *indices = 0;
-		if (index.getBufferObject())
+		if (index.getBufferOffSet() != -1)
 		{
-			index.getBufferObject()->bind();
+			indices = (unsigned short *) NULL + (index.getBufferOffSet() / sizeof(unsigned short));
 		}
 		else
 		{
@@ -138,15 +141,12 @@ void LandVisibilityPatch::draw(MipMapPatchIndex &index)
 		}
 
 		// Draw elements
-		glDrawElements(GL_TRIANGLE_STRIP, 
+		glDrawRangeElements(GL_TRIANGLE_STRIP, 
+			0, 
+			dataSize_,
 			index.getSize(), 
 			GL_UNSIGNED_SHORT, 
 			indices);
-
-		if (index.getBufferObject())
-		{
-			index.getBufferObject()->unbind();
-		}
 	}
 	else
 	{

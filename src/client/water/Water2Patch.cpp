@@ -22,13 +22,13 @@
 #include <water/Water2Constants.h>
 #include <common/Logger.h>
 #include <graph/OptionsDisplay.h>
-#include <GLEXT/GLVertexBufferObject.h>
 #include <GLEXT/GLState.h>
 #include <GLEXT/GLStateExtension.h>
+#include <GLEXT/GLVertexBufferObject.h>
 #include <GLEXT/GLInfo.h>
 
 Water2Patch::Water2Patch() : 
-	data_(0), size_(0), bufferObject_(0)
+	data_(0), dataSize_(0), size_(0), bufferOffSet_(-1)
 {
 }
 
@@ -65,7 +65,8 @@ void Water2Patch::generate(Water2Points &heights,
 	float waterHeight)
 {
 	size_ = size;
-	if (!data_) data_ = new Data[(size + 1) * (size + 1)];
+	dataSize_ = (size + 1) * (size + 1);
+	if (!data_) data_ = new Data[dataSize_];
 
 	int startX = posX * size;  
 	int startY = posY * size;
@@ -124,14 +125,6 @@ void Water2Patch::generate(Water2Points &heights,
 			}
 		}
 	}
-
-	if (GLStateExtension::hasVBO() &&
-		!OptionsDisplay::instance()->getNoWaterBuffers())
-	{
-		delete bufferObject_;
-		bufferObject_ = new GLVertexBufferObject();
-		bufferObject_->init_data((size + 1) * (size + 1) * sizeof(Data), data_, GL_STREAM_DRAW);
-	}
 }
 
 void Water2Patch::draw(MipMapPatchIndex &index)
@@ -143,9 +136,9 @@ void Water2Patch::draw(MipMapPatchIndex &index)
 	{
 		// Map data to draw
 		float *data = 0;
-		if (bufferObject_)
+		if (bufferOffSet_ != -1)
 		{
-			bufferObject_->bind();
+			data = (float*) NULL + (bufferOffSet_ / sizeof(unsigned int));
 		}
 		else
 		{
@@ -158,17 +151,11 @@ void Water2Patch::draw(MipMapPatchIndex &index)
 		// Normals On
 		glNormalPointer(GL_FLOAT, sizeof(Data), data + 3);
 
-		// Unmap data to draw
-		if (bufferObject_)
-		{
-			bufferObject_->unbind();
-		}
-
 		// Map indices to draw
 		unsigned short *indices = 0;
-		if (index.getBufferObject())
+		if (index.getBufferOffSet() != -1)
 		{
-			index.getBufferObject()->bind();
+			indices = (unsigned short *) NULL + (index.getBufferOffSet() / sizeof(unsigned short));
 		}
 		else
 		{
@@ -176,15 +163,12 @@ void Water2Patch::draw(MipMapPatchIndex &index)
 		}
 
 		// Draw elements
-		glDrawElements(GL_TRIANGLE_STRIP, 
+		glDrawRangeElements(GL_TRIANGLE_STRIP, 
+			0, 
+			dataSize_,
 			index.getSize(), 
 			GL_UNSIGNED_SHORT, 
 			indices);
-
-		if (index.getBufferObject())
-		{
-			index.getBufferObject()->unbind();
-		}
 	}
 	else
 	{

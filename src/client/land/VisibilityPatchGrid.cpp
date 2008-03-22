@@ -25,6 +25,7 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <client/ScorchedClient.h>
 #include <GLEXT/GLStateExtension.h>
+#include <GLEXT/GLVertexBufferObject.h>
 #include <GLSL/GLSLShaderSetup.h>
 #include <graph/MainCamera.h>
 #include <graph/OptionsDisplay.h>
@@ -232,6 +233,12 @@ void VisibilityPatchGrid::drawLand(int addIndex)
 {
 	if (!OptionsDisplay::instance()->getNoGLDrawElements())
 	{
+		// Map indices to draw
+		if (landIndexs_.getBufferObject())
+		{
+			landIndexs_.getBufferObject()->bind();
+		}
+
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnableClientState(GL_NORMAL_ARRAY);
 		if (GLStateExtension::hasMultiTex())
@@ -289,6 +296,12 @@ void VisibilityPatchGrid::drawLand(int addIndex)
 		}
 		glClientActiveTextureARB(GL_TEXTURE0_ARB);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+		// Unmap indices to draw
+		if (landIndexs_.getBufferObject())
+		{
+			landIndexs_.getBufferObject()->unbind();
+		}
 	}
 }
 
@@ -296,6 +309,12 @@ void VisibilityPatchGrid::drawSimpleLand()
 {
 	if (!OptionsDisplay::instance()->getNoGLDrawElements())
 	{
+		// Map indices to draw
+		if (landIndexs_.getBufferObject())
+		{
+			landIndexs_.getBufferObject()->bind();
+		}
+
 		glEnableClientState(GL_VERTEX_ARRAY);
 	}
 
@@ -312,6 +331,12 @@ void VisibilityPatchGrid::drawSimpleLand()
 	if (!OptionsDisplay::instance()->getNoGLDrawElements())
 	{
 		glDisableClientState(GL_VERTEX_ARRAY);
+
+		// Unmap indices to draw
+		if (landIndexs_.getBufferObject())
+		{
+			landIndexs_.getBufferObject()->unbind();
+		}
 	}
 }
 
@@ -332,6 +357,18 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 	{
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnableClientState(GL_NORMAL_ARRAY);
+
+		// Map the vertex VBO
+		if (patches.getBufferObject())
+		{
+			patches.getBufferObject()->bind();
+		}
+
+		// Map indices to draw
+		if (indexes.getBufferObject())
+		{
+			indexes.getBufferObject()->bind();
+		}
 	}
 
 	// Draw all patches
@@ -407,6 +444,18 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 
 	if (!OptionsDisplay::instance()->getNoGLDrawElements())
 	{
+		// Unmap data to draw
+		if (patches.getBufferObject())
+		{
+			patches.getBufferObject()->unbind();
+		}
+
+		// Unmap indices to draw
+		if (indexes.getBufferObject())
+		{
+			indexes.getBufferObject()->unbind();
+		}
+
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_NORMAL_ARRAY);
 	}

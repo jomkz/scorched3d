@@ -21,7 +21,6 @@
 #if !defined(__INCLUDE_MipMapPatchIndexh_INCLUDE__)
 #define __INCLUDE_MipMapPatchIndexh_INCLUDE__
 
-class GLVertexBufferObject;
 class MipMapPatchIndex
 {
 public:
@@ -36,16 +35,17 @@ public:
 		BorderBottom = 0x00000E00
 	};
 
-	void generate(int size, int totalsize, int skip, unsigned int border);
+	void generate(int size, int totalsize, int skip, unsigned int border, unsigned int totallods);
+	void setBufferOffSet(int offset) { bufferOffSet_ = offset; }
 
 	unsigned short *getIndices() { return indices_; }
+	unsigned int getBufferOffSet() { return bufferOffSet_; }
 	int getSize() { return size_; }
-	GLVertexBufferObject *getBufferObject() { return bufferObject_; }
 
 protected:
 	int size_;
 	unsigned short *indices_;
-	GLVertexBufferObject *bufferObject_;
+	unsigned int bufferOffSet_;
 };
 
 #endif // __INCLUDE_MipMapPatchIndexh_INCLUDE__

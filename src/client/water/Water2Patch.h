@@ -25,7 +25,6 @@
 #include <water/Water2Constants.h>
 #include <vector>
 
-class GLVertexBufferObject;
 class Water2Patch
 {
 public:
@@ -43,16 +42,16 @@ public:
 		int size, int totalSize,
 		int posX, int posY,
 		float waterHeight);
+	void setBufferOffSet(int offset) { bufferOffSet_ = offset; }
 
 	void draw(MipMapPatchIndex &index);
 	Data *getData(int x, int y);
+	Data *getInternalData() { return data_; }
 
 protected:
-	int size_;
-	Data *data_;
-	GLVertexBufferObject *bufferObject_;
-
-	
+	int size_, dataSize_;
+	int bufferOffSet_;
+	Data *data_;	
 };
 
 #endif // __INCLUDE_Water2Patchh_INCLUDE__

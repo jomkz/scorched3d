@@ -19,13 +19,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <geomipmap/MipMapPatchIndex.h>
-#include <graph/OptionsDisplay.h>
-#include <GLEXT/GLVertexBufferObject.h>
-#include <GLEXT/GLStateExtension.h>
+#include <common/DefinesAssert.h>
 #include <vector>
 
 MipMapPatchIndex::MipMapPatchIndex() : 
-	indices_(0), size_(0), bufferObject_(0)
+	indices_(0), size_(0), bufferOffSet_(-1)
 {
 }
 
@@ -34,13 +32,23 @@ MipMapPatchIndex::~MipMapPatchIndex()
 	delete [] indices_;
 }
 
-void MipMapPatchIndex::generate(int size, int totalsize, int skip, unsigned int border)
+void MipMapPatchIndex::generate(int size, int totalsize, int skip, unsigned int border, unsigned int totallods)
 {
 	// Calculate the border (if any)
 	unsigned int borderLeft  = (border & BorderLeft)  >> 0;
 	unsigned int borderRight = (border & BorderRight) >> 3;
 	unsigned int borderTop   = (border & BorderTop)   >> 6;
 	unsigned int borderBottom= (border & BorderBottom)>> 9;
+
+	if (borderLeft > totallods ||
+		borderRight > totallods ||
+		borderTop > totallods ||
+		borderBottom > totallods)
+	{
+		// Check if we are exceeding the total number of lol levels
+		// e.g. the adjacent water patches only vary by 1 or 2 levels not the full range
+		return;
+	}
 
 	int borderLeftSkip = skip * (1 << borderLeft);
 	int borderRightSkip = skip * (1 << borderRight);
@@ -53,6 +61,8 @@ void MipMapPatchIndex::generate(int size, int totalsize, int skip, unsigned int 
 		borderTopSkip > size ||
 		borderBottomSkip > size))
 	{
+		// Check if we are try to border to a square that is larger than us
+		// i.e not needed
 		return;
 	}
 
@@ -150,13 +160,4 @@ void MipMapPatchIndex::generate(int size, int totalsize, int skip, unsigned int 
 		indices_[i] = mappingIndices[j];
 	}
 	delete [] mappingIndices;
-
-	// Store this array in a vertex buffer (if available)
-	if (GLStateExtension::hasVBO() &&
-		!OptionsDisplay::instance()->getNoWaterBuffers())
-	{
-		delete bufferObject_;
-		bufferObject_ = new GLVertexBufferObject(true);
-		bufferObject_->init_data(size_ * sizeof(unsigned short), indices_, GL_STATIC_DRAW);
-	}
 }

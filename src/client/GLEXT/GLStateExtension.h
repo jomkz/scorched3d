@@ -30,6 +30,8 @@ public:
 
 	// Use VBO
 	static bool hasVBO() { return hasVBO_; }
+	static int getMaxElementVertices() { return maxElementVertices_; }
+	static int getMaxElementIndices() { return maxElementIndices_; }
 	// Use MultiTex
 	static bool hasMultiTex() { return hasMultiTex_; }
 	// Use framebuffers
@@ -60,6 +62,8 @@ protected:
 	static bool hasFBO_;
 	static bool hasShaders_;
 	static int textureUnits_;
+	static int maxElementVertices_;
+	static int maxElementIndices_;
 	static bool hasCubeMap_;
 	static bool hasSphereMap_;
 	static bool hasHardwareMipmaps_;
