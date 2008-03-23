@@ -106,6 +106,11 @@ void Water2Patches::generateNormalMap()
 	}
 }
 
+Water2Patch *Water2Patches::getPatch(int index)
+{
+	return &patches_[index];
+}
+
 Water2Patch *Water2Patches::getPatch(int x, int y)
 {
 	int position = x + y * size_;

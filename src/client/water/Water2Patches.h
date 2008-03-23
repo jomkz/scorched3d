@@ -36,6 +36,7 @@ public:
 		unsigned int totalSize, unsigned int patchSize,
 		float waterHeight);
 
+	Water2Patch *getPatch(int index);
 	Water2Patch *getPatch(int x, int y);
 	Water2Patch::Data *getPoint(int x, int y);
 	int getSize() { return size_; }

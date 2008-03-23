@@ -49,6 +49,7 @@ void WaterVisibilityPatch::setLocation(int x, int y,
 
 	patchX_ = (abs(x_) / 128) % 2;
 	patchY_ = (abs(y_) / 128) % 2;
+	patchIndex_ = patchX_ + patchY_ * 2;
 
 	offset_ = Vector(x_, y_, 0);
 	position_ = Vector(x_ + 64, y_ + 64, 5);
@@ -74,7 +75,7 @@ void WaterVisibilityPatch::setVisible(Vector &cameraPos, bool visible)
 
 		if (distance < 2000.0f)
 		{
-			VisibilityPatchGrid::instance()->addVisibleWaterPatch(this);
+			VisibilityPatchGrid::instance()->addVisibleWaterPatch(patchIndex_, this);
 		}
 	}
 }

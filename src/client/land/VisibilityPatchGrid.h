@@ -58,13 +58,12 @@ public:
 		lastVisibleLandPatches_ ++;
 	}
 
-	void addVisibleWaterPatch(WaterVisibilityPatch *patch)
+	void addVisibleWaterPatch(int index, WaterVisibilityPatch *patch)
 	{
-		*lastVisibleWaterPatches_ = patch;
-		visibleWaterPatchesCount_++;
-		lastVisibleWaterPatches_ ++;
+		*waterVisibility_[index].lastVisibleWaterPatches = patch;
+		waterVisibility_[index].visibleWaterPatchesCount++;
+		waterVisibility_[index].lastVisibleWaterPatches++;
 	}
-
 protected:
 	LandSurround surround_;
 	MipMapPatchIndexs landIndexs_;
@@ -80,8 +79,16 @@ protected:
 	// This is recreated from the visibilty data
 	int visibleLandPatchesCount_;
 	LandVisibilityPatch **visibleLandPatches_, **lastVisibleLandPatches_;
-	int visibleWaterPatchesCount_;
-	WaterVisibilityPatch **visibleWaterPatches_, **lastVisibleWaterPatches_;
+	struct WaterVisibility
+	{
+		WaterVisibility() : visibleWaterPatchesCount(0), visibleWaterPatches(0), 
+			lastVisibleWaterPatches(0) {}
+
+		int visibleWaterPatchesCount;
+		WaterVisibilityPatch **visibleWaterPatches, **lastVisibleWaterPatches;
+
+	};
+	WaterVisibility waterVisibility_[4];
 
 	// The list of all land patches
 	int allLandPatchesCount_;

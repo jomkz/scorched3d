@@ -38,10 +38,8 @@ VisibilityPatchGrid *VisibilityPatchGrid::instance()
 
 VisibilityPatchGrid::VisibilityPatchGrid() : 
 	landPatches_(0), waterPatches_(0), visibilityPatches_(0),
-	visibleLandPatches_(0), visibleWaterPatches_(0), 
-	allLandPatchesCount_(0),
-	visibleLandPatchesCount_(0), 
-	visibleWaterPatchesCount_(0), allLandPatches_(0)
+	visibleLandPatches_(0), visibleLandPatchesCount_(0), 
+	allLandPatchesCount_(0), allLandPatches_(0)
 {
 }
 
@@ -60,18 +58,20 @@ void VisibilityPatchGrid::clear()
 	delete [] visibilityPatches_;
 	visibilityPatches_ = 0;
 
-	visibleLandPatchesCount_ = 0;
-	visibleWaterPatchesCount_ = 0;
-	allLandPatchesCount_ = 0;
-
 	delete [] visibleLandPatches_;
+	visibleLandPatchesCount_ = 0;
 	visibleLandPatches_ = 0;
 
-	delete [] visibleWaterPatches_;
-	visibleWaterPatches_ = 0;
+	for (int i=0; i<4; i++)
+	{
+		delete waterVisibility_[i].visibleWaterPatches;
+		waterVisibility_[i].visibleWaterPatches = 0;
+		waterVisibility_[i].visibleWaterPatchesCount = 0;
+	}
 
 	delete [] allLandPatches_;
 	allLandPatches_ = 0;
+	allLandPatchesCount_ = 0;
 }
 
 void VisibilityPatchGrid::generate()
@@ -137,8 +137,11 @@ void VisibilityPatchGrid::generate()
 
 		// Create the patches
 		waterPatches_ = new WaterVisibilityPatch[waterWidth_ * waterHeight_];
-		visibleWaterPatches_ = lastVisibleWaterPatches_ =
-			new WaterVisibilityPatch*[waterWidth_ * waterHeight_];
+		for (int i=0; i<4; i++)
+		{
+			waterVisibility_[i].visibleWaterPatches =
+				new WaterVisibilityPatch*[waterWidth_ * waterHeight_];
+		}
 
 		// For each patch set it's location
 		WaterVisibilityPatch *currentPatch = waterPatches_;
@@ -214,9 +217,12 @@ void VisibilityPatchGrid::drawVisibility()
 		MainCamera::instance()->getTarget().getCamera().getCurrentPos();
 
 	visibleLandPatchesCount_ = 0;
-	visibleWaterPatchesCount_ = 0;
 	lastVisibleLandPatches_ = visibleLandPatches_;
-	lastVisibleWaterPatches_ = visibleWaterPatches_;
+	for (int i=0; i<4; i++)
+	{
+		waterVisibility_[i].visibleWaterPatchesCount = 0;
+		waterVisibility_[i].lastVisibleWaterPatches = waterVisibility_[i].visibleWaterPatches;
+	}
 
 	// Calculate visibility
 	VisibilityPatchQuad *currentPatch = visibilityPatches_;
@@ -371,75 +377,98 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 		}
 	}
 
-	// Draw all patches
-	WaterVisibilityPatch **currentPatchPtr = visibleWaterPatches_;
-	for (int i=0; i<visibleWaterPatchesCount_; i++, currentPatchPtr++)
+	for (int w=0; w<4; w++)
 	{
-		WaterVisibilityPatch *currentPatch = *currentPatchPtr;
+		Water2Patch *patch = patches.getPatch(w);
 
-		unsigned int index = currentPatch->getVisibilityIndex();
-		if (index == -1) continue;
-
-		unsigned int borders = 0;
-		int leftIndex = currentPatch->getLeftPatch()?
-			currentPatch->getLeftPatch()->getVisibilityIndex():-1;
-		int rightIndex = currentPatch->getRightPatch()?
-			currentPatch->getRightPatch()->getVisibilityIndex():-1;
-		int topIndex = currentPatch->getTopPatch()?
-			currentPatch->getTopPatch()->getVisibilityIndex():-1;
-		int bottomIndex = currentPatch->getBottomPatch()?
-			currentPatch->getBottomPatch()->getVisibilityIndex():-1;
-
-		MipMapPatchIndex &patchIndex = 
-			indexes.getIndex(index, leftIndex, rightIndex, topIndex, bottomIndex, 0);
-
-		glPushMatrix();
-		glTranslatef(
-			currentPatch->getOffset()[0],
-			currentPatch->getOffset()[1], 
-			currentPatch->getOffset()[2]);
-
-		// Setup the texture matrix for texture 0
-		if (waterShader)
+		if (!OptionsDisplay::instance()->getNoGLDrawElements())
 		{
-			Vector landfoam;
-			landfoam[0] = currentPatch->getOffset()[0];
-			landfoam[1] = currentPatch->getOffset()[1];
-			landfoam[2] = ((currentPatch->getPosition()[0] >= 0.0f && 
-				currentPatch->getPosition()[1] >= 0.0f &&
-				currentPatch->getPosition()[0] <= landscapeSize[0] && 
-				currentPatch->getPosition()[1] <= landscapeSize[1])?1.0f:0.0f);
-			waterShader->set_uniform("landfoam", landfoam);
+			// Map data to draw
+			float *data = 0;
+			if (patch->getBufferOffSet() != -1)
+			{
+				data = (float*) NULL + (patch->getBufferOffSet() / sizeof(unsigned int));
+			}
+			else
+			{
+				data = &patch->getInternalData()->x;
+			}
 
-			// Set lighting position
-			// done after the translation
-			Landscape::instance()->getSky().getSun().setLightPosition(true);
+			// Vertices On
+			glVertexPointer(3, GL_FLOAT, sizeof(Water2Patch::Data), data);
 
-			// get projection and modelview matrix
-			// done after the translation
-			static float proj[16], model[16];
-			glGetFloatv(GL_PROJECTION_MATRIX, proj);
-			glGetFloatv(GL_MODELVIEW_MATRIX, model);
-
-			// Setup the texture matrix for texture 1
-			glActiveTexture(GL_TEXTURE1);
-			glMatrixMode(GL_TEXTURE);
-			glLoadIdentity();
-			glTranslatef(0.5f,0.5f,0.0f);
-			glScalef(0.5f,0.5f,1.0f);
-			glMultMatrixf(proj);
-			glMultMatrixf(model);
-			glMatrixMode(GL_MODELVIEW);
-
-			// Reset to texture 0
-			glActiveTexture(GL_TEXTURE0);
+			// Normals On
+			glNormalPointer(GL_FLOAT, sizeof(Water2Patch::Data), data + 3);
 		}
 
-		Water2Patch *patch = patches.getPatch(
-			currentPatch->getPatchX(), currentPatch->getPatchY());
-		patch->draw(patchIndex);
+		// Draw all patches
+		WaterVisibilityPatch **currentPatchPtr = waterVisibility_[w].visibleWaterPatches;
+		for (int i=0; i<waterVisibility_[w].visibleWaterPatchesCount; i++, currentPatchPtr++)
+		{
+			WaterVisibilityPatch *currentPatch = *currentPatchPtr;
 
-		glPopMatrix();
+			unsigned int index = currentPatch->getVisibilityIndex();
+			if (index == -1) continue;
+
+			unsigned int borders = 0;
+			int leftIndex = currentPatch->getLeftPatch()?
+				currentPatch->getLeftPatch()->getVisibilityIndex():-1;
+			int rightIndex = currentPatch->getRightPatch()?
+				currentPatch->getRightPatch()->getVisibilityIndex():-1;
+			int topIndex = currentPatch->getTopPatch()?
+				currentPatch->getTopPatch()->getVisibilityIndex():-1;
+			int bottomIndex = currentPatch->getBottomPatch()?
+				currentPatch->getBottomPatch()->getVisibilityIndex():-1;
+
+			MipMapPatchIndex &patchIndex = 
+				indexes.getIndex(index, leftIndex, rightIndex, topIndex, bottomIndex, 0);
+
+			glPushMatrix();
+			glTranslatef(
+				currentPatch->getOffset()[0],
+				currentPatch->getOffset()[1], 
+				currentPatch->getOffset()[2]);
+
+			// Setup the texture matrix for texture 0
+			if (waterShader)
+			{
+				Vector landfoam;
+				landfoam[0] = currentPatch->getOffset()[0];
+				landfoam[1] = currentPatch->getOffset()[1];
+				landfoam[2] = ((currentPatch->getPosition()[0] >= 0.0f && 
+					currentPatch->getPosition()[1] >= 0.0f &&
+					currentPatch->getPosition()[0] <= landscapeSize[0] && 
+					currentPatch->getPosition()[1] <= landscapeSize[1])?1.0f:0.0f);
+				waterShader->set_uniform("landfoam", landfoam);
+
+				// Set lighting position
+				// done after the translation
+				Landscape::instance()->getSky().getSun().setLightPosition(true);
+
+				// get projection and modelview matrix
+				// done after the translation
+				static float proj[16], model[16];
+				glGetFloatv(GL_PROJECTION_MATRIX, proj);
+				glGetFloatv(GL_MODELVIEW_MATRIX, model);
+
+				// Setup the texture matrix for texture 1
+				glActiveTexture(GL_TEXTURE1);
+				glMatrixMode(GL_TEXTURE);
+				glLoadIdentity();
+				glTranslatef(0.5f,0.5f,0.0f);
+				glScalef(0.5f,0.5f,1.0f);
+				glMultMatrixf(proj);
+				glMultMatrixf(model);
+				glMatrixMode(GL_MODELVIEW);
+
+				// Reset to texture 0
+				glActiveTexture(GL_TEXTURE0);
+			}
+
+			patch->draw(patchIndex);
+
+			glPopMatrix();
+		}
 	}
 
 	if (!OptionsDisplay::instance()->getNoGLDrawElements())

@@ -52,7 +52,7 @@ public:
 
 protected:
 	int x_, y_;
-	int patchX_, patchY_;
+	int patchX_, patchY_, patchIndex_;
 	int visibilityIndex_;
 	bool visible_;
 	Vector offset_, position_;

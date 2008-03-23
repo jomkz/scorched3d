@@ -134,23 +134,6 @@ void Water2Patch::draw(MipMapPatchIndex &index)
 
 	if (!OptionsDisplay::instance()->getNoGLDrawElements())
 	{
-		// Map data to draw
-		float *data = 0;
-		if (bufferOffSet_ != -1)
-		{
-			data = (float*) NULL + (bufferOffSet_ / sizeof(unsigned int));
-		}
-		else
-		{
-			data = &data_[0].x;
-		}
-
-		// Vertices On
-		glVertexPointer(3, GL_FLOAT, sizeof(Data), data);
-
-		// Normals On
-		glNormalPointer(GL_FLOAT, sizeof(Data), data + 3);
-
 		// Map indices to draw
 		unsigned short *indices = 0;
 		if (index.getBufferOffSet() != -1)

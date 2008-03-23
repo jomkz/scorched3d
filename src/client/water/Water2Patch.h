@@ -43,6 +43,7 @@ public:
 		int posX, int posY,
 		float waterHeight);
 	void setBufferOffSet(int offset) { bufferOffSet_ = offset; }
+	int getBufferOffSet() { return bufferOffSet_; }
 
 	void draw(MipMapPatchIndex &index);
 	Data *getData(int x, int y);
