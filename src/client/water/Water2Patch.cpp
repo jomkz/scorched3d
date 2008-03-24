@@ -147,8 +147,8 @@ void Water2Patch::draw(MipMapPatchIndex &index)
 
 		// Draw elements
 		glDrawRangeElements(GL_TRIANGLE_STRIP, 
-			0, 
-			dataSize_,
+			index.getMinIndex(), 
+			index.getMaxIndex(),
 			index.getSize(), 
 			GL_UNSIGNED_SHORT, 
 			indices);

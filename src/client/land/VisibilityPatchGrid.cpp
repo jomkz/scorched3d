@@ -401,6 +401,10 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 			glNormalPointer(GL_FLOAT, sizeof(Water2Patch::Data), data + 3);
 		}
 
+		static float startproj[16], startmodel[16];
+		glGetFloatv(GL_PROJECTION_MATRIX, startproj);
+		glGetFloatv(GL_MODELVIEW_MATRIX, startmodel);
+
 		// Draw all patches
 		WaterVisibilityPatch **currentPatchPtr = waterVisibility_[w].visibleWaterPatches;
 		for (int i=0; i<waterVisibility_[w].visibleWaterPatchesCount; i++, currentPatchPtr++)
@@ -445,11 +449,10 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 				// done after the translation
 				Landscape::instance()->getSky().getSun().setLightPosition(true);
 
-				// get projection and modelview matrix
+				// get modelview matrix
 				// done after the translation
-				static float proj[16], model[16];
-				glGetFloatv(GL_PROJECTION_MATRIX, proj);
-				glGetFloatv(GL_MODELVIEW_MATRIX, model);
+				/*static float model[16];
+				glGetFloatv(GL_MODELVIEW_MATRIX, model);*/
 
 				// Setup the texture matrix for texture 1
 				glActiveTexture(GL_TEXTURE1);
@@ -457,8 +460,12 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 				glLoadIdentity();
 				glTranslatef(0.5f,0.5f,0.0f);
 				glScalef(0.5f,0.5f,1.0f);
-				glMultMatrixf(proj);
-				glMultMatrixf(model);
+				glMultMatrixf(startproj);
+				glMultMatrixf(startmodel);
+				glTranslatef(
+					currentPatch->getOffset()[0],
+					currentPatch->getOffset()[1], 
+					currentPatch->getOffset()[2]);
 				glMatrixMode(GL_MODELVIEW);
 
 				// Reset to texture 0

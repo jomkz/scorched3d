@@ -41,9 +41,11 @@ public:
 	unsigned short *getIndices() { return indices_; }
 	unsigned int getBufferOffSet() { return bufferOffSet_; }
 	int getSize() { return size_; }
+	int getMinIndex() { return minIndex_; }
+	int getMaxIndex() { return maxIndex_; }
 
 protected:
-	int size_;
+	int size_, minIndex_, maxIndex_;
 	unsigned short *indices_;
 	unsigned int bufferOffSet_;
 };

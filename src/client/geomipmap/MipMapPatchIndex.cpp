@@ -20,10 +20,12 @@
 
 #include <geomipmap/MipMapPatchIndex.h>
 #include <common/DefinesAssert.h>
+#include <limits.h>
 #include <vector>
 
 MipMapPatchIndex::MipMapPatchIndex() : 
-	indices_(0), size_(0), bufferOffSet_(-1)
+	indices_(0), size_(0), bufferOffSet_(-1),
+	minIndex_(INT_MAX), maxIndex_(0)
 {
 }
 
@@ -157,7 +159,10 @@ void MipMapPatchIndex::generate(int size, int totalsize, int skip, unsigned int 
 	{
 		int j = indices[i];
 		DIALOG_ASSERT(!(j <0 || j > (size + 1) * (size + 1)));
-		indices_[i] = mappingIndices[j];
+		int k = mappingIndices[j];
+		indices_[i] = k;
+		if (k > maxIndex_) maxIndex_ = k;
+		else if (k < minIndex_) minIndex_ = k;
 	}
 	delete [] mappingIndices;
 }
