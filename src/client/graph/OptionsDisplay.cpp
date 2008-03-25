@@ -224,6 +224,8 @@ OptionsDisplay::OptionsDisplay() :
 		"Draw water waves (breakers)", RWAccess, false),
 	noWaterLOD_(options_, "NoWaterLOD",
 		"Draw water at minimum detail", RWAccess, false),
+	noLandLOD_(options_, "NoLandLOD",
+		"Draw water at MAXIMUM detail", RWAccess, false),
 	noSkyLayers_(options_, "NoSkyLayers",
 		"Only draw one sky layer.", RWAccess, false),
 	noSkyMovement_(options_, "NoSkyMovement",

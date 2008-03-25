@@ -54,6 +54,7 @@ protected:
 	int dataSize_;
 	int visibilityIndex_;
 	bool visible_;
+	float indexErrors_[6];
 	Vector position_;
 	LandVisibilityPatch *leftPatch_;
 	LandVisibilityPatch *rightPatch_; 

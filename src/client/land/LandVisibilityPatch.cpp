@@ -24,6 +24,7 @@
 #include <geomipmap/MipMapPatchIndexs.h>
 #include <graph/OptionsDisplay.h>
 #include <client/ScorchedClient.h>
+#include <common/Logger.h>
 #include <GLEXT/GLStateExtension.h>
 #include <GLEXT/GLVertexBufferObject.h>
 #include <GLEXT/GLInfo.h>
@@ -41,12 +42,62 @@ LandVisibilityPatch::~LandVisibilityPatch()
 {
 }
 
+static float getHeight(int x, int y)
+{
+	int mapWidth = ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getHeightMap().getMapWidth();
+	return ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getHeightMap().getHeightData()[x + (y * (mapWidth + 1))].floatPosition[2];
+}
+
+static float calculateError(int x1, int x2, int y1, int y2,
+	float x1y1, float x2y2, float x1y2, float x2y1)
+{
+	if (x2 - x1 <= 1) return 0.0f;
+
+	int midx = (x1 + x2) / 2;
+	int midy = (y1 + y2) / 2;
+	float actualheight = getHeight(midx, midy);
+
+	float approxheight1 = (x1y1 + x2y2) / 2.0f;
+	float approxheight2 = (x1y2 + x2y1) / 2.0f;
+	float approxheight3 = (x1y1 + x1y2) / 2.0f;
+	float approxheight4 = (x1y1 + x2y1) / 2.0f;
+	float approxheight5 = (x1y2 + x2y2) / 2.0f;
+	float approxheight6 = (x2y1 + x2y2) / 2.0f;
+
+	float heightdiff1 = fabs(approxheight1 - actualheight);
+	float heightdiff2 = fabs(approxheight2 - actualheight);
+	
+	float errorChild1 = calculateError(x1, midx, y1, midy,
+		x1y1, approxheight1, approxheight3, approxheight4);
+	float errorChild2 = calculateError(midx, x2, y1, midy,
+		approxheight4, approxheight6, approxheight1, x2y1);
+	float errorChild3 = calculateError(x1, midx, midy, y2,
+		approxheight3, approxheight5, x1y2, approxheight2);
+	float errorChild4 = calculateError(midx, x2, midy, y2,
+		approxheight2, x2y2, approxheight5, approxheight6);
+
+	float errorChildren = MAX(errorChild1, MAX(errorChild2, MAX(errorChild3, errorChild4)));
+	float totalError = MAX(errorChildren, MAX(heightdiff1, heightdiff2));
+	return totalError;
+}
+
 void LandVisibilityPatch::setLocation(int x, int y,
 	LandVisibilityPatch *leftPatch, 
 	LandVisibilityPatch *rightPatch, 
 	LandVisibilityPatch *topPatch, 
 	LandVisibilityPatch *bottomPatch)
 {
+	int mapWidth = ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getMapWidth();
+	int mapHeight = ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getMapHeight();
+
+	DIALOG_ASSERT(x >= 0 && y >= 0 &&
+		x < mapWidth && y < mapHeight);
+
+	// Set location and neighbors
 	x_ = x; y_ = y;
 	leftPatch_ = leftPatch;
 	rightPatch_ = rightPatch;
@@ -55,19 +106,38 @@ void LandVisibilityPatch::setLocation(int x, int y,
 
 	position_ = Vector(x_ + 16, y_ + 16, 5);
 
-	int mapWidth = ScorchedClient::instance()->getLandscapeMaps().
-		getGroundMaps().getMapWidth();
-	int mapHeight = ScorchedClient::instance()->getLandscapeMaps().
-		getGroundMaps().getMapHeight();
-
+	// Set pointers to heightmap
 	dataSize_ = (mapWidth + 1) * (mapHeight + 1);
+	HeightMap::HeightData *heightData = &ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getHeightMap().getHeightData()[x + (y * (mapWidth + 1))];
+	heightMapData_ = (float *) &heightData->floatPosition;
 
-	if (x >= 0 && y >= 0 &&
-		x < mapWidth && y < mapHeight)
+	for (int i=0; i<=5; i++)
 	{
-		HeightMap::HeightData *heightData = &ScorchedClient::instance()->getLandscapeMaps().
-			getGroundMaps().getHeightMap().getHeightData()[x + (y * (mapWidth + 1))];
-		heightMapData_ = (float *) &heightData->floatPosition;
+		float error = 0.0f;
+		if (i>0)
+		{
+			int skip = 1 << i;
+			for (int y1=y_; y1<y_+32; y1+=skip)
+			{
+				for (int x1=x_; x1<x_+32; x1+=skip)
+				{
+					int x2 = x1 + skip;
+					int y2 = y1 + skip;
+
+					float x1y1 = getHeight(x1, y1);
+					float x2y2 = getHeight(x2, y2);
+					float x1y2 = getHeight(x1, y2);
+					float x2y1 = getHeight(x2, y1);
+
+					float thisError = calculateError(x1, x2, y1, y2,
+						x1y1, x2y2, x1y2, x2y1);
+					error = MAX(error, thisError);				
+				}
+			}
+		}
+
+		indexErrors_[i] = error;
 	}
 }
 
@@ -79,20 +149,20 @@ void LandVisibilityPatch::setVisible(Vector &cameraPos, bool visible)
 
 	if (visible)
 	{
-		visibilityIndex_ = 3;
-		if (!OptionsDisplay::instance()->getNoWaterLOD())
-		{
-			float distance = (cameraPos - position_).Magnitude();
+		float distance = (cameraPos - position_).Magnitude();
 
-			if (distance < 512) 
+		float maxError = 8.0f;
+		if (distance < 32.0f) maxError = 1.0f;
+		else if (distance < 64.0f) maxError = 3.0f;
+		else if (distance < 256.0f) maxError = 5.0f;
+
+		visibilityIndex_ = 0;
+		if (!OptionsDisplay::instance()->getNoLandLOD())
+		{
+			for (int i=0; i<=5; i++)
 			{
-				visibilityIndex_ = (int(distance) - 50) / 40;
-				visibilityIndex_ = MAX(0, MIN(visibilityIndex_, 3));
-			}
-			else
-			{
-				visibilityIndex_ = (int(distance) - (512 - 140)) / 40;
-				visibilityIndex_ = MAX(0, MIN(visibilityIndex_, 5));
+				if (indexErrors_[i] > maxError) break;
+				visibilityIndex_ = i;
 			}
 		}
 

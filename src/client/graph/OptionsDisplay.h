@@ -244,6 +244,9 @@ public:
 	bool getNoWaterLOD() { return noWaterLOD_; }
 	OptionEntryBool &getNoWaterLODEntry() { return noWaterLOD_; }
 
+	bool getNoLandLOD() { return noLandLOD_; }
+	OptionEntryBool &getNoLandLODEntry() { return noLandLOD_; }
+
 	bool getNoSkyMovement() { return noSkyMovement_; }
 	OptionEntryBool &getNoSkyMovementEntry() { return noSkyMovement_; }
 
@@ -462,6 +465,7 @@ protected:
 	OptionEntryBool noWaterMovement_;
 	OptionEntryBool noWaterWaves_;
 	OptionEntryBool noWaterLOD_;
+	OptionEntryBool noLandLOD_;
 	OptionEntryBool noWaterReflections_;
 	OptionEntryBool noProgressBackdrop_;
 	OptionEntryBool showContextHelp_;

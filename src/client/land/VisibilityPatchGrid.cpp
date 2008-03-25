@@ -99,8 +99,8 @@ void VisibilityPatchGrid::generate()
 
 	{
 		// Divide this visible area into a set of patches
-		landWidth_ = actualWidth / 32;
-		landHeight_ = actualHeight / 32;
+		landWidth_ = mapWidth / 32;
+		landHeight_ = mapHeight / 32;
 
 		// Create the patches
 		landPatches_ = new LandVisibilityPatch[landWidth_ * landHeight_];
@@ -120,12 +120,9 @@ void VisibilityPatchGrid::generate()
 				LandVisibilityPatch *topPatch = (y==0?0:currentPatch-landWidth_);
 				LandVisibilityPatch *bottomPatch = (y==landHeight_-1?0:currentPatch+landWidth_);
 
-				currentPatch->setLocation(x * 32 + midX_, y * 32 + midY_,
+				currentPatch->setLocation(x * 32, y * 32,
 					leftPatch, rightPatch, topPatch, bottomPatch);
-				if (currentPatch->hasData())
-				{
-					allLandPatches_[allLandPatchesCount_++] = currentPatch;
-				}
+				allLandPatches_[allLandPatchesCount_++] = currentPatch;
 			}
 		}
 	}
@@ -185,8 +182,8 @@ void VisibilityPatchGrid::generate()
 
 LandVisibilityPatch *VisibilityPatchGrid::getLandVisibilityPatch(int x, int y)
 {
-	int realX = (x - midX_) / 32;
-	int realY = (y - midY_) / 32;
+	int realX = x / 32;
+	int realY = y / 32;
 
 	if (realX < 0 || realY < 0 ||
 		realX >= landWidth_ || realY >= landHeight_) 
