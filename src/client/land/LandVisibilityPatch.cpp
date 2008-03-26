@@ -23,11 +23,13 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <geomipmap/MipMapPatchIndexs.h>
 #include <graph/OptionsDisplay.h>
+#include <graph/MainCamera.h>
 #include <client/ScorchedClient.h>
 #include <common/Logger.h>
 #include <GLEXT/GLStateExtension.h>
 #include <GLEXT/GLVertexBufferObject.h>
 #include <GLEXT/GLInfo.h>
+#include <GLW/GLWFont.h>
 
 LandVisibilityPatch::LandVisibilityPatch() : 
 	visible_(false), heightMapData_(0),
@@ -104,14 +106,14 @@ void LandVisibilityPatch::setLocation(int x, int y,
 	topPatch_ = topPatch;
 	bottomPatch_ = bottomPatch;
 
-	position_ = Vector(x_ + 16, y_ + 16, 5);
-
 	// Set pointers to heightmap
 	dataSize_ = (mapWidth + 1) * (mapHeight + 1);
 	HeightMap::HeightData *heightData = &ScorchedClient::instance()->getLandscapeMaps().
 		getGroundMaps().getHeightMap().getHeightData()[x + (y * (mapWidth + 1))];
 	heightMapData_ = (float *) &heightData->floatPosition;
 
+	maxHeight_ = 0.0f;
+	minHeight_ = 100000.0f;
 	for (int i=0; i<=5; i++)
 	{
 		float error = 0.0f;
@@ -132,13 +134,21 @@ void LandVisibilityPatch::setLocation(int x, int y,
 
 					float thisError = calculateError(x1, x2, y1, y2,
 						x1y1, x2y2, x1y2, x2y1);
-					error = MAX(error, thisError);				
+					error = MAX(error, thisError);		
+
+					if (x1y1 > maxHeight_) maxHeight_ = x1y1;
+					if (x1y1 < minHeight_) minHeight_ = x1y1;
 				}
 			}
 		}
 
 		indexErrors_[i] = error;
 	}
+
+	float heightRange = maxHeight_ - minHeight_;
+	boundingSize_ = MAX(32.0f, heightRange) * 1.25f;
+	position_ = Vector(float(x_ + 16), float(y_ + 16), 
+		heightRange / 2.0f + minHeight_);
 }
 
 void LandVisibilityPatch::setVisible(Vector &cameraPos, bool visible)
@@ -232,13 +242,39 @@ void LandVisibilityPatch::draw(MipMapPatchIndex &index)
 
 				if (GLStateExtension::hasMultiTex())
 				{
-					glMultiTexCoord2fvARB(GL_TEXTURE1_ARB, data + 8);
+					glMultiTexCoord2fvARB(GL_TEXTURE1_ARB, data + 6);
 					if (GLStateExtension::getTextureUnits() > 2)
 					{
-						glMultiTexCoord2fvARB(GL_TEXTURE2_ARB, data + 6);
+						glMultiTexCoord2fvARB(GL_TEXTURE2_ARB, data + 8);
 					}
 				}
 			}
 		glEnd();
 	}
+}
+
+void LandVisibilityPatch::drawLODLevel(MipMapPatchIndex &index)
+{
+	if (OptionsDisplay::instance()->getDrawLines()) glPolygonMode(GL_FRONT, GL_FILL);
+
+	Vector red(1.0f, 0.0f, 0.0f);
+	Vector yellow(1.0f, 1.0f, 0.0f);
+	GLWFont::instance()->getGameFont()->drawBilboard(red, 1.0f, 3.0f, 
+		position_[0], position_[1], position_[2], 
+		S3D::formatStringBuffer("%i", visibilityIndex_));
+
+	if ((MainCamera::instance()->getCamera().getLookAt() - position_).Magnitude() < 20.0f)
+	{
+		for (int i=0; i<index.getSize(); i++)
+		{
+			float *data = heightMapData_ + 
+				(sizeof(HeightMap::HeightData) / 4 * index.getIndices()[i]);
+
+			GLWFont::instance()->getGameFont()->drawBilboard(yellow, 1.0f, 1.0f, 
+				data[0], data[1], data[2] + i * 1.5f, 
+				S3D::formatStringBuffer("%i", i));
+		}
+	}
+
+	if (OptionsDisplay::instance()->getDrawLines()) glPolygonMode(GL_FRONT, GL_LINE);
 }

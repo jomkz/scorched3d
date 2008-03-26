@@ -184,6 +184,9 @@ public:
 	bool getDrawLines() { return drawLines_; }
 	OptionEntryBool &getDrawLinesEntry() { return drawLines_; }
 
+	bool getDrawLandLOD() { return drawLandLOD_; }
+	OptionEntryBool &getDrawLandLODEntry() { return drawLandLOD_; }
+
 	bool getDrawNormals() { return drawNormals_; }
 	OptionEntryBool &getDrawNormalsEntry() { return drawNormals_; }
 
@@ -432,6 +435,7 @@ protected:
 	OptionEntryBool drawNormals_;
 	OptionEntryBool drawGraphicalShadowMap_;
 	OptionEntryBool drawLines_;
+	OptionEntryBool drawLandLOD_;
 	OptionEntryFloat drawDistance_;
 	OptionEntryFloat drawDistanceFade_;
 	OptionEntryBool drawCollisionGeoms_;

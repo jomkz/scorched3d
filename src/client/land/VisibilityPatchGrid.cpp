@@ -308,6 +308,34 @@ void VisibilityPatchGrid::drawLand(int addIndex)
 	}
 }
 
+void VisibilityPatchGrid::drawLandLODLevels()
+{
+	{
+		LandVisibilityPatch **currentPatchPtr = allLandPatches_;
+		for (int i=0; i<allLandPatchesCount_; i++, currentPatchPtr++)
+		{
+			LandVisibilityPatch *currentPatch = *currentPatchPtr;
+			unsigned int index = currentPatch->getVisibilityIndex();
+			if (index == -1) continue;
+
+			unsigned int borders = 0;
+			int leftIndex = currentPatch->getLeftPatch()?
+				currentPatch->getLeftPatch()->getVisibilityIndex():-1;
+			int rightIndex = currentPatch->getRightPatch()?
+				currentPatch->getRightPatch()->getVisibilityIndex():-1;
+			int topIndex = currentPatch->getTopPatch()?
+				currentPatch->getTopPatch()->getVisibilityIndex():-1;
+			int bottomIndex = currentPatch->getBottomPatch()?
+				currentPatch->getBottomPatch()->getVisibilityIndex():-1;
+
+			MipMapPatchIndex &landIndex = 
+				landIndexs_.getIndex(index, leftIndex, rightIndex, topIndex, bottomIndex, 0);
+
+			currentPatch->drawLODLevel(landIndex);
+		}
+	}
+}
+
 void VisibilityPatchGrid::drawSimpleLand()
 {
 	if (!OptionsDisplay::instance()->getNoGLDrawElements())

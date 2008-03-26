@@ -47,10 +47,15 @@ public:
 	LandVisibilityPatch *getBottomPatch() { return bottomPatch_; }
 
 	void draw(MipMapPatchIndex &index);
+	void drawLODLevel(MipMapPatchIndex &index);
+
+	Vector &getPosition() { return position_; }
+	float getBoundingSize() { return boundingSize_; }
 
 protected:
 	int x_, y_;
 	float *heightMapData_;
+	float maxHeight_, minHeight_, boundingSize_;
 	int dataSize_;
 	int visibilityIndex_;
 	bool visible_;

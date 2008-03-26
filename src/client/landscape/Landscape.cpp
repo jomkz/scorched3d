@@ -653,6 +653,10 @@ void Landscape::actualDrawLandTextured()
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LAND");
 	VisibilityPatchGrid::instance()->drawLand();
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LAND");
+	if (OptionsDisplay::instance()->getDrawLandLOD())
+	{
+		VisibilityPatchGrid::instance()->drawLandLODLevels();
+	}
 
 	if (OptionsDisplay::instance()->getDrawSurround())
 	{

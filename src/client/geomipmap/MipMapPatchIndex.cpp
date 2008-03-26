@@ -94,17 +94,11 @@ void MipMapPatchIndex::generate(int size, int totalsize, int skip, unsigned int 
 			indices.push_back(i + (size + 1) * skip);
 			
 			// Add degenerate index when needed
-			if (x == size)
+			if (x == size && (y != (size - skip)))
 			{
 				indices.push_back(i + (size + 1) * skip);
 			}
 		}
-	}
-
-	// Special case for the single square
-	if (indices.size() % 2 == 1)
-	{
-		indices.pop_back();
 	}
 
 	// Generate a mapping from the indices to the actual world indices
@@ -125,6 +119,7 @@ void MipMapPatchIndex::generate(int size, int totalsize, int skip, unsigned int 
 		{
 			// Record last possible x border index
 			if (x % borderTopSkip == 0) lastGoodXTop = currentMappingCount;
+			else if (x % borderTopSkip == 1) lastGoodXTop += borderTopSkip;
 			if (x % borderBottomSkip == 0) lastGoodXBottom = currentMappingCount;
 
 			// Set the index for case with no border

@@ -40,6 +40,7 @@ public:
 
 protected:
 	int generatedPatches_;
+	float indexErrors_[7];
 	Water2Patches patches_[256];
 	MipMapPatchIndexs indexs_;
 

@@ -40,6 +40,7 @@ public:
 	void drawVisibility();
 	void drawLand(int addIndex = 0);
 	void drawSimpleLand();
+	void drawLandLODLevels();
 	void drawSurround();
 	void drawWater(Water2Patches &patches, 
 		MipMapPatchIndexs &indexes, Vector &cameraPosition, 

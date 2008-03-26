@@ -192,6 +192,8 @@ OptionsDisplay::OptionsDisplay() :
 		"Checks if the server ip address matches the published address", RAccess, true),
 	drawLines_(options_, "DrawLines", 
 		"Do not fill in the landscape", DebugOnly | RWAccess, false),
+	drawLandLOD_(options_, "DrawLandLOD", 
+		"Show the LOD levels and indices of the land patches", DebugOnly | RWAccess, false),
 	drawNormals_(options_, "DrawNormals", 
 		"Show landscape normals on the landscape", RWAccess, false),
 	drawGraphicalShadowMap_(options_, "DrawGraphicalShadowMap", 

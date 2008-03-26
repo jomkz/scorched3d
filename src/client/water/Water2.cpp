@@ -51,6 +51,44 @@ Water2Patches &Water2::getPatch(float time)
 	return patches_[index];
 }
 
+static float calculateError(Water2Points &displacement,
+	int x1, int x2, int y1, int y2,
+	float x1y1, float x2y2, float x1y2, float x2y1)
+{
+	if (x2 - x1 <= 1) return 0.0f;
+
+	int midx = (x1 + x2) / 2;
+	int midy = (y1 + y2) / 2;
+	float actualheight = displacement.getPoint(midx, midy)[2];
+
+	float approxheight1 = (x1y1 + x2y2) / 2.0f;
+	float approxheight2 = (x1y2 + x2y1) / 2.0f;
+	float approxheight3 = (x1y1 + x1y2) / 2.0f;
+	float approxheight4 = (x1y1 + x2y1) / 2.0f;
+	float approxheight5 = (x1y2 + x2y2) / 2.0f;
+	float approxheight6 = (x2y1 + x2y2) / 2.0f;
+
+	float heightdiff1 = fabs(approxheight1 - actualheight);
+	float heightdiff2 = fabs(approxheight2 - actualheight);
+	
+	float errorChild1 = calculateError(displacement,
+		x1, midx, y1, midy,
+		x1y1, approxheight1, approxheight3, approxheight4);
+	float errorChild2 = calculateError(displacement,
+		midx, x2, y1, midy,
+		approxheight4, approxheight6, approxheight1, x2y1);
+	float errorChild3 = calculateError(displacement,
+		x1, midx, midy, y2,
+		approxheight3, approxheight5, x1y2, approxheight2);
+	float errorChild4 = calculateError(displacement,
+		midx, x2, midy, y2,
+		approxheight2, x2y2, approxheight5, approxheight6);
+
+	float errorChildren = MAX(errorChild1, MAX(errorChild2, MAX(errorChild3, errorChild4)));
+	float totalError = MAX(errorChildren, MAX(heightdiff1, heightdiff2));
+	return totalError;
+}
+
 void Water2::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)
 {
 	if (counter) counter->setNewOp("Water motion");
@@ -105,6 +143,39 @@ void Water2::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)
 		patches_[i].generate(displacements[i], wave_resolution, 
 			wave_patch_width, water->height.asFloat());
 		generatedPatches_++;
+
+		// Figure out the error for each LOD level for the water
+		// Do this for 1 64x64 patch as they should all be roughly similar
+		if (i == 0)
+		{
+			for (int j=0; j<=6; j++)
+			{
+				float error = 0.0f;
+				if (j>0)
+				{
+					int skip = 1 << j;
+					for (int y1=0; y1<wave_patch_width; y1+=skip)
+					{
+						for (int x1=0; x1<wave_patch_width; x1+=skip)
+						{
+							int x2 = x1 + skip;
+							int y2 = y1 + skip;
+
+							float x1y1 = displacements[i].getPoint(x1, y1)[2];
+							float x2y2 = displacements[i].getPoint(x2, y2)[2];
+							float x1y2 = displacements[i].getPoint(x1, y2)[2];
+							float x2y1 = displacements[i].getPoint(x2, y1)[2];
+
+							float thisError = calculateError(displacements[i],
+								x1, x2, y1, y2,
+								x1y1, x2y2, x1y2, x2y1);
+							error = MAX(error, thisError);
+						}
+					}
+				}
+				indexErrors_[j] = error;
+			}
+		}
 
 		// If we are not drawing water or no movement generate one patch
 		if (OptionsDisplay::instance()->getNoWaterMovement() ||

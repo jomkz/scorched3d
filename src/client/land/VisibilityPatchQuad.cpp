@@ -100,7 +100,15 @@ void VisibilityPatchQuad::setVisible(Vector &cameraPos)
 
 void VisibilityPatchQuad::calculateVisibility(Vector &cameraPos)
 {
-	if (!GLCameraFrustum::instance()->sphereInFrustum(position_, float(size_)))
+	Vector *position = &position_;
+	float size = float(size_);
+	if (landVisibilityPatch_)
+	{
+		position = &landVisibilityPatch_->getPosition();
+		size = landVisibilityPatch_->getBoundingSize();
+	}
+
+	if (!GLCameraFrustum::instance()->sphereInFrustum(*position, size))
 	{
 		setNotVisible(cameraPos);
 	}
