@@ -6,6 +6,7 @@ Updated directory structure to enforce server only builds (client directories ar
 Changed landscape to use geomipmaps instead of ROAM
 Removed option to have border heightmap around landscape (just make larger landscape)
 Optimized indexing of water and landscape into larger VBOs
+Water LOD now depends on water mesh detail as well as distance
 Added quadtree for water/land visibility
 Started experimental splatting texture mapping for landscape
 Started LUA scripting language support
