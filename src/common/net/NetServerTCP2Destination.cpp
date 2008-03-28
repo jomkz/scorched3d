@@ -64,7 +64,7 @@ static int SDLNet_TCP_Recv_Wrapper(TCPsocket sock, void *data, int maxlen)
 	return result;
 }
 
-static int SDLNet_TCP_Send_Wrapper(TCPsocket sock, const void *datap, int len)
+static int SDLNet_TCP_Send_Wrapper(TCPsocket sock, void *datap, int len)
 {
 #ifdef WIN32
 	WSASetLastError(0);
