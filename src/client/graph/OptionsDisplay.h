@@ -115,6 +115,9 @@ public:
 	bool getUseLandscapeTexture() { return useLandscapeTexture_; }
 	OptionEntryBool &getUseLandscapeTextureEntry() { return useLandscapeTexture_; }
 
+	bool getUseWaterTexture() { return useWaterTexture_; }
+	OptionEntryBool &getUseWaterTextureEntry() { return useWaterTexture_; }
+
 	bool getFullScreen() { return fullScreen_; }
 	OptionEntryBool &getFullScreenEntry() { return fullScreen_; }
 
@@ -461,6 +464,7 @@ protected:
 	OptionEntryBool noModelLOD_;
 	OptionEntryBool noModelLighting_;
 	OptionEntryBool useLandscapeTexture_;
+	OptionEntryBool useWaterTexture_;
 	OptionEntryBool noSkyLayers_;
 	OptionEntryBool noSkyMovement_;
 	OptionEntryBool noPrecipitation_;

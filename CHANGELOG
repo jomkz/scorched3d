@@ -3,3 +3,9 @@ The price of each accessory is calculated and stored exactly with no rounding, t
 Removed the dependancy on returning char * from certain S3D APIs (for thread safety)
 Most S3D global APIs are now namespaced into the S3D:: namespace
 Updated directory structure to enforce server only builds (client directories are not added to server -I path)
+Changed landscape to use geomipmaps instead of ROAM
+Removed option to have border heightmap around landscape (just make larger landscape)
+Optimized indexing of water and landscape into larger VBOs
+Added quadtree for water/land visibility
+Started experimental splatting texture mapping for landscape
+Started LUA scripting language support

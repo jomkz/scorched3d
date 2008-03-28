@@ -35,7 +35,7 @@ class VisibilityPatchGrid
 public:
 	static VisibilityPatchGrid *instance();
 
-	void generate();
+	void generate(float *waterIndexErrors);
 
 	void drawVisibility();
 	void drawLand(int addIndex = 0);

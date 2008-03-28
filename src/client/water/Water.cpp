@@ -185,3 +185,7 @@ float Water::getWaveDistance(int x, int y)
 	return wWaveDistance_->getWaveDistance(x, y);
 }
 
+float *Water::getIndexErrors()
+{ 
+	return wMap_->getIndexErrors(); 
+}

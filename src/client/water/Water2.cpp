@@ -21,6 +21,7 @@
 #include <water/Water2.h>
 #include <common/Vector.h>
 #include <common/Vector4.h>
+#include <common/Logger.h>
 #include <common/ProgressCounter.h>
 #include <common/OptionsTransient.h>
 #include <client/ScorchedClient.h>
@@ -173,6 +174,9 @@ void Water2::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)
 						}
 					}
 				}
+
+				Logger::log(S3D::formatStringBuffer("Water index %i %.2f", j, error));
+
 				indexErrors_[j] = error;
 			}
 		}

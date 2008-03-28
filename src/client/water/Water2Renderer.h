@@ -62,7 +62,7 @@ protected:
 
 	void drawWaterShaders(Water2 &water2);
 	void drawWaterNoShaders(Water2 &water2);
-	void drawWater(Water2 &water2);
+	void drawWater(Water2 &water2, GLSLShaderSetup *waterShader);
 };
 
 #endif // __INCLUDE_Water2Rendererh_INCLUDE__

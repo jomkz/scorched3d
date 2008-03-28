@@ -160,6 +160,16 @@ bool LandscapeDefn::readXML(LandscapeDefinitions *definitions, XMLNode *node)
 	if (!node->getNamedChild("landscapewidth", landscapewidth)) return false;
 	if (!node->getNamedChild("landscapeheight", landscapeheight)) return false;
 
+	if (landscapewidth % 32 != 0 ||
+		landscapeheight % 32 != 0)
+	{
+		S3D::dialogMessage("Scorched3D",
+			S3D::formatStringBuffer(
+				"ERROR: Landscape width and height must each be a multiple of 32.\n"
+				"Specified size : %ix%i", landscapewidth, landscapeheight));
+		return false;
+	}
+
 	{
 		XMLNode *startNode;
 		std::string tankstarttype;

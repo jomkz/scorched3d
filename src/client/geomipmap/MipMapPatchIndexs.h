@@ -41,7 +41,7 @@ public:
 	MipMapPatchIndexs();
 	~MipMapPatchIndexs();
 
-	MipMapPatchIndex &getIndex(int lod, int leftLod, int rightLod, int topLod, int bottomLod, int addLod = 0)
+	MipMapPatchIndex *getIndex(int lod, int leftLod, int rightLod, int topLod, int bottomLod, int addLod = 0)
 	{
 		lod = MIN(lod + addLod, getNoLevels() - 1);
 		leftLod = MIN(leftLod + addLod, getNoLevels() - 1);
@@ -70,7 +70,7 @@ public:
 		return getIndex(lod, borders);
 	}
 
-	MipMapPatchIndex &getIndex(int lod, int border) 
+	MipMapPatchIndex *getIndex(int lod, int border) 
 	{ 
 		if (lod<0) lod=0;
 		else if (lod >= getNoLevels()) lod = getNoLevels()-1;
@@ -79,10 +79,9 @@ public:
 
 		IndexLevel *level = levels_[lod];
 		MipMapPatchIndex *index = level->borderIndexs_[border];
+		if (!index->getIndices()) return 0;
 
-		DIALOG_ASSERT(index->getIndices());
-
-		return *index;
+		return index;
 	}
 	int getNoLevels() { return (int) levels_.size(); }
 

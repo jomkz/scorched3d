@@ -27,7 +27,6 @@
 #include <client/ScorchedClient.h>
 #include <common/Logger.h>
 #include <GLEXT/GLStateExtension.h>
-#include <GLEXT/GLVertexBufferObject.h>
 #include <GLEXT/GLInfo.h>
 #include <GLW/GLWFont.h>
 

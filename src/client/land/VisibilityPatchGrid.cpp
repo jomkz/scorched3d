@@ -74,7 +74,7 @@ void VisibilityPatchGrid::clear()
 	allLandPatchesCount_ = 0;
 }
 
-void VisibilityPatchGrid::generate()
+void VisibilityPatchGrid::generate(float *waterIndexErrors)
 {
 	clear();
 
@@ -152,7 +152,8 @@ void VisibilityPatchGrid::generate()
 				WaterVisibilityPatch *bottomPatch = (y==waterHeight_-1?0:currentPatch+waterWidth_);
 
 				currentPatch->setLocation(x * 128 + midX_, y * 128 + midY_,
-					leftPatch, rightPatch, topPatch, bottomPatch);
+					leftPatch, rightPatch, topPatch, bottomPatch,
+					waterIndexErrors);
 			}
 		}
 	}
@@ -276,10 +277,9 @@ void VisibilityPatchGrid::drawLand(int addIndex)
 			int bottomIndex = currentPatch->getBottomPatch()?
 				currentPatch->getBottomPatch()->getVisibilityIndex():-1;
 
-			MipMapPatchIndex &landIndex = 
+			MipMapPatchIndex *landIndex = 
 				landIndexs_.getIndex(index, leftIndex, rightIndex, topIndex, bottomIndex, addIndex);
-
-			currentPatch->draw(landIndex);
+			if (landIndex) currentPatch->draw(*landIndex);
 		}
 	}
 
@@ -328,10 +328,9 @@ void VisibilityPatchGrid::drawLandLODLevels()
 			int bottomIndex = currentPatch->getBottomPatch()?
 				currentPatch->getBottomPatch()->getVisibilityIndex():-1;
 
-			MipMapPatchIndex &landIndex = 
+			MipMapPatchIndex *landIndex = 
 				landIndexs_.getIndex(index, leftIndex, rightIndex, topIndex, bottomIndex, 0);
-
-			currentPatch->drawLODLevel(landIndex);
+			if (landIndex) currentPatch->drawLODLevel(*landIndex);
 		}
 	}
 }
@@ -354,8 +353,8 @@ void VisibilityPatchGrid::drawSimpleLand()
 		for (int i=0; i<allLandPatchesCount_; i++, currentPatchPtr++)
 		{
 			LandVisibilityPatch *currentPatch = *currentPatchPtr;
-			MipMapPatchIndex &landIndex = landIndexs_.getIndex(4, 0);
-			currentPatch->draw(landIndex);
+			MipMapPatchIndex *landIndex = landIndexs_.getIndex(4, 0);
+			if (landIndex) currentPatch->draw(*landIndex);
 		}
 	}
 
@@ -449,9 +448,6 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 			int bottomIndex = currentPatch->getBottomPatch()?
 				currentPatch->getBottomPatch()->getVisibilityIndex():-1;
 
-			MipMapPatchIndex &patchIndex = 
-				indexes.getIndex(index, leftIndex, rightIndex, topIndex, bottomIndex, 0);
-
 			glPushMatrix();
 			glTranslatef(
 				currentPatch->getOffset()[0],
@@ -497,7 +493,9 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 				glActiveTexture(GL_TEXTURE0);
 			}
 
-			patch->draw(patchIndex);
+			MipMapPatchIndex *patchIndex = 
+				indexes.getIndex(index, leftIndex, rightIndex, topIndex, bottomIndex, 0);
+			if (patchIndex) patch->draw(*patchIndex);
 
 			glPopMatrix();
 		}

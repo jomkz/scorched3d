@@ -254,6 +254,8 @@ OptionsDisplay::OptionsDisplay() :
 		"Do not use dynamic lighting calculations for models", RWAccess, false),
 	useLandscapeTexture_(options_, "LandscapeTexture",
 		"Texture the landscape", RWAccess, true),
+	useWaterTexture_(options_, "WaterTexture",
+		"Texture the water", RWAccess, true),
 	noLenseFlare_(options_,"NoLenseFlare", 
 		"Do not show the full lense flare effect", RWAccess, true),
 	softwareMouse_(options_,"SoftwareMouse", 

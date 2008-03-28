@@ -76,7 +76,8 @@ void Water2Renderer::draw(Water2 &water2, WaterMapPoints &points, WaterWaves &wa
 	waves.draw(*currentPatch_);
 
 	// Draw Water
-	if (GLStateExtension::hasShaders())
+	if (GLStateExtension::hasShaders() &&
+		OptionsDisplay::instance()->getUseWaterTexture())
 	{
 		drawWaterShaders(water2);
 	}
@@ -174,7 +175,7 @@ void Water2Renderer::drawWaterShaders(Water2 &water2)
 
 	// Draw Water
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	drawWater(water2);
+	drawWater(water2, waterShader_);
 
 	// Cleanup	
 	waterShader_->use_fixed();
@@ -207,7 +208,8 @@ void Water2Renderer::drawWaterNoShaders(Water2 &water2)
 	static float PlaneS[] = { 0.0f, 1.0f / 20.0f, 0.0f, 0.0f };
 	static float PlaneT[] = { 1.0f / 20.0f, 0.0f, 0.0f, 0.0f };
 
-	if (GLStateExtension::hasMultiTex())
+	if (GLStateExtension::hasMultiTex() &&
+		OptionsDisplay::instance()->getUseWaterTexture())
 	{
 		// Set up texture coordinate generation for base texture
 		glActiveTextureARB(GL_TEXTURE1);
@@ -255,7 +257,13 @@ void Water2Renderer::drawWaterNoShaders(Water2 &water2)
 		Landscape::instance()->getSky().getSun().setLightPosition();
 	}
 
-	if (GLStateExtension::hasCubeMap())
+	if (!OptionsDisplay::instance()->getUseWaterTexture())
+	{
+		GLState currentState(GLState::LIGHTING_OFF | GLState::TEXTURE_OFF);
+		glColor3f(0.0f, 0.3f, 1.0f);
+		drawWater(water2, 0);
+	}
+	else if (GLStateExtension::hasCubeMap())
 	{
 		GLState currentState(state | GLState::TEXTURE_OFF | GLState::BLEND_ON | GLState::CUBEMAP_ON);
 
@@ -267,7 +275,7 @@ void Water2Renderer::drawWaterNoShaders(Water2 &water2)
 		glTexGenf(GL_T, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP_EXT);
 		glTexGenf(GL_R, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP_EXT);
 
-		drawWater(water2);
+		drawWater(water2, 0);
 	}
 	else if (GLStateExtension::hasSphereMap())
 	{
@@ -282,7 +290,7 @@ void Water2Renderer::drawWaterNoShaders(Water2 &water2)
 		glTexGenf(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
 		glTexGenf(GL_R, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
 
-		drawWater(water2);
+		drawWater(water2, 0);
 	}
 	else
 	{
@@ -297,7 +305,7 @@ void Water2Renderer::drawWaterNoShaders(Water2 &water2)
 		glTexGenfv(GL_S, GL_OBJECT_PLANE, PlaneS);
 		glTexGenfv(GL_T, GL_OBJECT_PLANE, PlaneT);
 
-		drawWater(water2);
+		drawWater(water2, 0);
 	}
 
 	if (GLStateExtension::hasMultiTex())
@@ -317,13 +325,13 @@ void Water2Renderer::drawWaterNoShaders(Water2 &water2)
 	glPopAttrib();
 }
 
-void Water2Renderer::drawWater(Water2 &water2)
+void Water2Renderer::drawWater(Water2 &water2, GLSLShaderSetup *waterShader)
 {
 	// Draw Water
 	Vector &cameraPos = 
 		MainCamera::instance()->getTarget().getCamera().getCurrentPos();
 	VisibilityPatchGrid::instance()->drawWater(
-		*currentPatch_, water2.getIndexs(), cameraPos, landscapeSize_, waterShader_);
+		*currentPatch_, water2.getIndexs(), cameraPos, landscapeSize_, waterShader);
 }
 
 void Water2Renderer::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)

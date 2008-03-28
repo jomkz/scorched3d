@@ -37,6 +37,7 @@ public:
 
 	Water2Patches &getPatch(float time);
 	MipMapPatchIndexs &getIndexs() { return indexs_; }
+	float *getIndexErrors() { return indexErrors_; }
 
 protected:
 	int generatedPatches_;

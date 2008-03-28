@@ -27,7 +27,8 @@ WaterVisibilityPatch::WaterVisibilityPatch() :
 	visible_(false),
 	leftPatch_(0), rightPatch_(0),
 	topPatch_(0), bottomPatch_(0),
-	visibilityIndex_(4)
+	visibilityIndex_(4),
+	waterIndexErrors_(0)
 {
 }
 
@@ -39,13 +40,15 @@ void WaterVisibilityPatch::setLocation(int x, int y,
 	WaterVisibilityPatch *leftPatch, 
 	WaterVisibilityPatch *rightPatch, 
 	WaterVisibilityPatch *topPatch, 
-	WaterVisibilityPatch *bottomPatch)
+	WaterVisibilityPatch *bottomPatch,
+	float *waterIndexErrors)
 {
 	x_ = x; y_ = y;
 	leftPatch_ = leftPatch;
 	rightPatch_ = rightPatch;
 	topPatch_ = topPatch;
 	bottomPatch_ = bottomPatch;
+	waterIndexErrors_ = waterIndexErrors;
 
 	patchX_ = (abs(x_) / 128) % 2;
 	patchY_ = (abs(y_) / 128) % 2;
@@ -66,6 +69,10 @@ void WaterVisibilityPatch::setVisible(Vector &cameraPos, bool visible)
 		if (!OptionsDisplay::instance()->getNoWaterLOD())
 		{
 			visibilityIndex_ = int(distance - 50.0f) / 130;
+			if (waterIndexErrors_[6] < 1.0f) visibilityIndex_ += 3;
+			else if (waterIndexErrors_[6] < 2.0f) visibilityIndex_ += 2;
+			else if (waterIndexErrors_[6] < 3.0f) visibilityIndex_ += 1;
+
 			if (OptionsDisplay::instance()->getNoWaterMovement())
 			{
 				visibilityIndex_ += 3;
