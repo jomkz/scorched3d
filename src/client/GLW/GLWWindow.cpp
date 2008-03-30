@@ -221,16 +221,6 @@ void GLWWindow::drawMaximizedWindow()
 	else if (windowState_ & eTransparent || windowState_ & eSemiTransparent)
 	{
 		{
-			// NOTE WE DONT NEED CUNNING STUFF NOW
-			// AS WE DO A DEPTH CLEAR IN 2DCAMERA
-
-			//GLState newState(GLState::DEPTH_ON);
-			// Do some cunning depth stuff to ensure that
-			// anything drawn over the window will still be drawn
-			// even if it is drawn with DEPTH_ON
-			//GLint func;
-			//glGetIntegerv(GL_DEPTH_FUNC, &func);
-			//glDepthFunc(GL_ALWAYS);
 			glPushMatrix();
 				glTranslatef(0.0f, 0.0f, 0.0f);
 				{
@@ -245,7 +235,6 @@ void GLWWindow::drawMaximizedWindow()
 				drawSurround(x_, y_, w_, h_);
 				glLineWidth(1.0f);
 			glPopMatrix();
-			//glDepthFunc(func);
 		}
 
 		glPushMatrix();

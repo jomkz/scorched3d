@@ -67,7 +67,6 @@ public:
 	GLTexture &getGroundTexture() { return groundTexture_; }
 	GLTexture &getDetailTexture() { return detailTexture_; }
 	GLTexture &getRoofTexture() { return roofTexture_; }
-	GLTexture &getColorDepthMap() { return colorDepthMap_; }
 
 	LandscapeTextureType getTextureType() { return textureType_; }
 	void setTextureType(LandscapeTextureType type) { textureType_ = type; }
@@ -77,6 +76,7 @@ public:
 
 	void updatePlanTexture();
 	void updatePlanATexture();
+	void drawGraphicalShadowMap();
 	int getPlanTexSize();
 	int getMapTexSize();
 

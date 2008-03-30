@@ -191,10 +191,13 @@ void Landscape::drawShadows()
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_PRE");
 
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_DRAW_LAND");
-	//VisibilityPatchGrid::instance()->drawSimpleLand();
+	VisibilityPatchGrid::instance()->drawSimpleLand();
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_DRAW_LAND");
 
-	RenderTargets::instance()->shadowDraw();
+	if (!OptionsDisplay::instance()->getNoGLObjectShadows())
+	{
+		RenderTargets::instance()->shadowDraw();
+	}
 
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_POST");
 
@@ -290,6 +293,11 @@ void Landscape::drawLand()
 		{
 			actualDrawLandTextured();
 		}
+	}
+
+	if (OptionsDisplay::instance()->getDrawGraphicalShadowMap())
+	{
+		drawGraphicalShadowMap();
 	}
 
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_POINTS");
@@ -661,6 +669,7 @@ void Landscape::actualDrawLandTextured()
 	if (OptionsDisplay::instance()->getDrawSurround())
 	{
 		GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SURROUND");
+		getGroundTexture().draw(true);
 		VisibilityPatchGrid::instance()->drawSurround();
 		GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SURROUND");
 	}
@@ -754,15 +763,12 @@ void Landscape::createShadowMatrix()
 	glMultMatrixf(lightModelMatrix_);
 	glMultMatrixf(modelMatrixI);
 	glGetFloatv(GL_TEXTURE_MATRIX, shadowTextureMatrix_);
-	glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW);
 }
 
 void Landscape::actualDrawLandShader()
 {
 	GLState glState(GLState::TEXTURE_ON | GLState::DEPTH_ON);
-
-	createShadowMatrix();
 
 	getSky().getSun().setLightPosition(false);
 
@@ -775,8 +781,7 @@ void Landscape::actualDrawLandShader()
 	// Enable Tex
 	glActiveTextureARB(GL_TEXTURE3_ARB);
 	glMatrixMode(GL_TEXTURE);
-	glLoadMatrixf(shadowTextureMatrix_);
-	glMatrixMode(GL_MODELVIEW);
+	createShadowMatrix();
 	glActiveTextureARB(GL_TEXTURE0_ARB);
 
 	glColor3f(1.0f, 1.0f, 1.0f);
@@ -804,40 +809,40 @@ void Landscape::actualDrawLandShader()
 	glActiveTextureARB(GL_TEXTURE0_ARB);
 
 	landShader_->use_fixed();
+}
 
-	if (OptionsDisplay::instance()->getDrawGraphicalShadowMap())
-	{
-		GLState state(GLState::TEXTURE_ON);
+void Landscape::drawGraphicalShadowMap()
+{
+	GLState state(GLState::TEXTURE_ON);
 
-		glColor3f( 1.f, 1.f, 1.f );
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
-		glLoadIdentity();
-		gluOrtho2D(0, 800, 0, 600);
-		glMatrixMode(GL_TEXTURE);
-		glPushMatrix();
-		glLoadIdentity();
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-		glLoadIdentity();
-		getColorDepthMap().draw(true);
-		glBegin(GL_QUADS);
-			glTexCoord2f(0.f,   0.f);
-			glVertex2i  (0,   0);
-			glTexCoord2f(1.f, 0.f);
-			glVertex2i  (300, 0);
-			glTexCoord2f(1.f, 1.f);
-			glVertex2i  (300, 300);
-			glTexCoord2f(0.f,   1.f);
-			glVertex2i  (0,   300);
-		glEnd();  
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-		glMatrixMode( GL_TEXTURE );
-		glPopMatrix();
-		glMatrixMode( GL_MODELVIEW );
-		glPopMatrix();
-	}
+	glColor3f( 1.f, 1.f, 1.f );
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0, 800, 0, 600);
+	glMatrixMode(GL_TEXTURE);
+	glPushMatrix();
+	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+	colorDepthMap_.draw(true);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.f,   0.f);
+		glVertex2i  (0,   0);
+		glTexCoord2f(1.f, 0.f);
+		glVertex2i  (300, 0);
+		glTexCoord2f(1.f, 1.f);
+		glVertex2i  (300, 300);
+		glTexCoord2f(0.f,   1.f);
+		glVertex2i  (0,   300);
+	glEnd();  
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode( GL_TEXTURE );
+	glPopMatrix();
+	glMatrixMode( GL_MODELVIEW );
+	glPopMatrix();
 }
 
 void Landscape::updatePlanATexture()

@@ -470,11 +470,6 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 				// done after the translation
 				Landscape::instance()->getSky().getSun().setLightPosition(true);
 
-				// get modelview matrix
-				// done after the translation
-				/*static float model[16];
-				glGetFloatv(GL_MODELVIEW_MATRIX, model);*/
-
 				// Setup the texture matrix for texture 1
 				glActiveTexture(GL_TEXTURE1);
 				glMatrixMode(GL_TEXTURE);

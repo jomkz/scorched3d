@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <landscapes>
-	<landscape>
+
+  <landscape>
+    <name>denalilandperf</name>
+    <description></description>
+    <picture>denali-pic.bmp</picture>
+    <weight>100</weight>
+    <defn>
+      <item>data/landscapes/defndenali.xml</item>
+    </defn>
+    <tex>
+      <item>data/landscapes/texdenalilandperf.xml</item>
+    </tex>
+  </landscape>
+
+  <landscape>
 		<name>oldstyle</name>
 		<description></description>
 		<picture>oldstyle-pic.bmp</picture>

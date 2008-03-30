@@ -113,18 +113,8 @@ bool GLTexture::createObject()
 {
 	if (!textureValid())
 	{
-		glGetError(); // Clear error indicator
-
 		GLfloat priority = 1.0f;
 		glGenTextures(1, &texNum_);
-		GLenum result = glGetError();
-		if (texNum_ == 0 ||
-			result == GL_INVALID_VALUE ||
-			result == GL_INVALID_OPERATION)
-		{
-			//DIALOG_ASSERT("Failed to create texture" == 0);
-			return false;
-		}
 		if (usedNumbers_.find(texNum_) != usedNumbers_.end())
 		{
 			DIALOG_ASSERT("Texture Reuse" == 0);
@@ -259,12 +249,6 @@ bool GLTexture::create(GLint width, GLint height, GLenum format)
 	if (!createObject()) return false;
 
 	glBindTexture(texType_, texNum_);
-	GLenum result = glGetError();
-	if (result == GL_INVALID_VALUE ||
-		result == GL_INVALID_OPERATION)
-	{
-		return false;
-	}
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
@@ -288,12 +272,6 @@ bool GLTexture::createBufferTexture(GLint width, GLint height, bool depthTex)
 	if (!createObject()) return false;
 
 	glBindTexture(texType_, texNum_);
-	GLenum result = glGetError();
-	if (result == GL_INVALID_VALUE ||
-		result == GL_INVALID_OPERATION)
-	{
-		return false;
-	}
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 

@@ -124,6 +124,8 @@ void MainLoop::draw()
 	swapBuffers();
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		GLboolean result;
+		glGetBooleanv(GL_BLEND, &result);
 	}
 	clearTime_ += dTimer_.getTimeDifference();
 

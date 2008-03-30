@@ -50,7 +50,6 @@ void LandSurround::draw(HeightMap &map, bool detail, bool lightMap)
 		glEndList();
 	}
 	
-	Landscape::instance()->getGroundTexture().draw(true);
 	glCallList(listNo_);
 
 	GLInfo::addNoTriangles(8);
@@ -115,23 +114,16 @@ void LandSurround::generateList(HeightMap &map, bool detail, bool lightMap)
 		Landscape::instance()->getSky().getSun().getPosition();
 	Vector normal(0.0f, 0.0f, 1.0f);
 
-	float texMultX = 
-		64.0f *
-        (float(Landscape::instance()->getGroundTexture().getWidth()) /
-		256.0f);
-	float texMultY = 
-		64.0f *
-        (float(Landscape::instance()->getGroundTexture().getHeight()) /
-		256.0f);
-
+	float width = float(Landscape::instance()->getGroundTexture().getWidth());
+	float height = float(Landscape::instance()->getGroundTexture().getHeight());
+	float texTileX = width / 16.0f;
+	float texTileY = height / 16.0f;
+	
 	glBegin(GL_QUADS);
 	for (int i=0; i<8; i++) 
 	{
 		for (int j=0; j<4; j++) 
 		{
-			float x = hMapBoxVerts_[dataOfs[i][j]][0] / texMultX;
-			float y = hMapBoxVerts_[dataOfs[i][j]][1] / texMultY;
-
 			Vector pos = hMapBoxVerts_[dataOfs[i][j]];
 			Vector sunDirection = (sunPos - pos).Normalize();
 			float diffuseLightMult = 
@@ -141,8 +133,19 @@ void LandSurround::generateList(HeightMap &map, bool detail, bool lightMap)
 			light[1] = MIN(1.0f, light[1]);
 			light[2] = MIN(1.0f, light[2]);
 
-			glTexCoord2f(x, y);
-			if (detail) glMultiTexCoord2fARB(GL_TEXTURE2_ARB, x, y);
+			float texX = hMapBoxVerts_[dataOfs[i][j]][0] / width;
+			float texY = hMapBoxVerts_[dataOfs[i][j]][1] / height;
+
+			glMultiTexCoord2fARB(GL_TEXTURE0_ARB, texX, texY);
+			if (GLStateExtension::hasMultiTex())
+			{
+				glMultiTexCoord2fARB(GL_TEXTURE1_ARB, texX, texY);
+				if (GLStateExtension::getTextureUnits() > 2)
+				{
+					glMultiTexCoord2fARB(GL_TEXTURE2_ARB, texX * texTileX, texY * texTileY);
+				}
+			}
+
 			if (lightMap) glColor3fv(light);
 			else glColor3f(1.0f, 1.0f, 1.0f);
 			glNormal3f(0.0f, 0.0f, 1.0f);
