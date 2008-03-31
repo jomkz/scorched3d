@@ -144,6 +144,11 @@ void Water::drawPoints()
 	wTex_->drawPoints(*wMapPoints_);
 }
 
+GLTexture &Water::getReflectionTexture()
+{
+	return wTex_->getReflectionTexture();
+}
+
 bool Water::explosion(Vector position, float size)
 {
 	if (!waterOn_ ||

@@ -52,6 +52,8 @@ public:
 	void unBindWaterReflection();
 	void drawPoints();
 
+	GLTexture &getReflectionTexture();
+
 protected:
 	bool waterOn_;
 	float height_;

@@ -196,6 +196,9 @@ public:
 	bool getDrawGraphicalShadowMap() { return drawGraphicalShadowMap_; }
 	OptionEntryBool &getDrawGraphicalShadowMapEntry() { return drawGraphicalShadowMap_; }
 
+	bool getDrawGraphicalReflectionMap() { return drawGraphicalReflectionMap_; }
+	OptionEntryBool &getDrawGraphicalReflectionMapEntry() { return drawGraphicalReflectionMap_; }
+
 	bool getDrawCollisionGeoms() { return drawCollisionGeoms_; }
 	OptionEntryBool &getDrawCollisionGeomsEntry() { return drawCollisionGeoms_; }
 
@@ -441,6 +444,7 @@ protected:
 	OptionEntryBool noSimulateParticles_;
 	OptionEntryBool drawNormals_;
 	OptionEntryBool drawGraphicalShadowMap_;
+	OptionEntryBool drawGraphicalReflectionMap_;
 	OptionEntryBool drawLines_;
 	OptionEntryBool drawLandLOD_;
 	OptionEntryFloat drawDistance_;

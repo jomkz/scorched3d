@@ -77,6 +77,7 @@ public:
 	void updatePlanTexture();
 	void updatePlanATexture();
 	void drawGraphicalShadowMap();
+	void drawGraphicalReflectionMap();
 	int getPlanTexSize();
 	int getMapTexSize();
 

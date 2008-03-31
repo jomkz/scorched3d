@@ -228,6 +228,10 @@ void LandVisibilityPatch::draw(MipMapPatchIndex &index)
 			index.getSize(), 
 			GL_UNSIGNED_SHORT, 
 			indices);
+		DIALOG_ASSERT((index.getMaxIndex()-index.getMinIndex()+1) < 
+			GLStateExtension::getMaxElementVertices());
+		DIALOG_ASSERT(index.getSize() < 
+			GLStateExtension::getMaxElementIndices());
 	}
 	else
 	{
@@ -237,10 +241,8 @@ void LandVisibilityPatch::draw(MipMapPatchIndex &index)
 				float *data = heightMapData_ + 
 					(sizeof(HeightMap::HeightData) / 4 * index.getIndices()[i]);
 
-				glVertex3fv(data);
 				glNormal3fv(data + 3);
 				glTexCoord2fv(data + 6);
-
 				if (GLStateExtension::hasMultiTex())
 				{
 					glMultiTexCoord2fvARB(GL_TEXTURE1_ARB, data + 6);
@@ -249,6 +251,8 @@ void LandVisibilityPatch::draw(MipMapPatchIndex &index)
 						glMultiTexCoord2fvARB(GL_TEXTURE2_ARB, data + 8);
 					}
 				}
+
+				glVertex3fv(data);
 			}
 		glEnd();
 	}

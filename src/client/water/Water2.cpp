@@ -175,8 +175,6 @@ void Water2::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)
 					}
 				}
 
-				Logger::log(S3D::formatStringBuffer("Water index %i %.2f", j, error));
-
 				indexErrors_[j] = error;
 			}
 		}

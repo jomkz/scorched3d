@@ -45,6 +45,7 @@ public:
 	void bindWaterReflection() { reflectionBuffer_.bind(); }
 	void unBindWaterReflection() { reflectionBuffer_.unBind(); }
 	void drawPoints(WaterMapPoints &points);
+	GLTexture &getReflectionTexture() { return reflectionTexture_; }
 
 protected:
 	float totalTime_;

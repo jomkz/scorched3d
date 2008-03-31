@@ -152,6 +152,10 @@ void Water2Patch::draw(MipMapPatchIndex &index)
 			index.getSize(), 
 			GL_UNSIGNED_SHORT, 
 			indices);
+		DIALOG_ASSERT((index.getMaxIndex()-index.getMinIndex()+1) < 
+			GLStateExtension::getMaxElementVertices());
+		DIALOG_ASSERT(index.getSize() < 
+			GLStateExtension::getMaxElementIndices());
 	}
 	else
 	{
@@ -161,8 +165,8 @@ void Water2Patch::draw(MipMapPatchIndex &index)
 				float *data = &data_[0].x + 
 					(sizeof(Data) / 4 * index.getIndices()[i]);
 
-				glVertex3fv(data);
 				glNormal3fv(data + 3);
+				glVertex3fv(data);
 			}
 		glEnd();
 	}
