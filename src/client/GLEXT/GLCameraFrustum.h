@@ -37,6 +37,7 @@ public:
 	virtual void draw(const unsigned state);
 
 	bool sphereInFrustum(Vector &point, float fRadius = 1, Vector &color = FrustrumWhite);
+	bool sphereInFrustumThreadSafe(Vector &point, float fRadius);
 	void backupFrustum();
 	void restoreFrustum();
 	void drawBilboard(

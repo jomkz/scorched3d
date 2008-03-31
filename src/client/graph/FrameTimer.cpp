@@ -87,11 +87,12 @@ void FrameTimer::simulate(const unsigned state, float frameTime)
 		{
 			ChannelText chText
 				("info",
-					S3D::formatStringBuffer("%.2f FPS (%iTRI %iPART %iSQR %iSND %uSHD %uGLS)", 
+					S3D::formatStringBuffer("%.2f FPS (%iTRI %iP %i&%iSQ %iSND %uSHD %uGLS)", 
 					fps,
 					tris,
 					pOnScreen,
 					VisibilityPatchGrid::instance()->getVisibleLandPatchesCount(),
+					VisibilityPatchGrid::instance()->getVisibleWaterPatchesCount(),
 					Sound::instance()->getPlayingChannels(),
 					Landscape::instance()->getShadowMap().getShadowCount(), 
 					lastStateCount_));

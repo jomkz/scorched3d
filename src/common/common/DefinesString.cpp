@@ -88,29 +88,4 @@ extern std::string S3D::formatStringBuffer(const char *format, ...)
 	return result;
 }
 
-/*
-const char *S3D::formatStringBuffer(const char *format, ...)
-{
-	if (!format) return "";
-
-	static SDL_mutex *formatMutex = SDL_CreateMutex();
-
-	// A little fix to allow formatString to be used more than once in
-	// the same calling line.  Does waste memory though.
-	// Also made thread safe although the S3D::formatStringBuffer is better
-	// as thread safty is lost if the number of buffers in use is exceeded
-	SDL_LockMutex(formatMutex);
-	static std::string buffers[25];
-	static unsigned int pos = 0;
-	std::string *buffer = &buffers[pos++ % 25];
-	SDL_UnlockMutex(formatMutex);
-
-	va_list ap; 
-	va_start(ap, format); 
-	(*buffer) = S3D::formatStringList(format, ap);
-	va_end(ap); 
-
-	return buffer->c_str();
-}
-*/
 

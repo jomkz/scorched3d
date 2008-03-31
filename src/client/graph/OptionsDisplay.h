@@ -247,6 +247,9 @@ public:
 	bool getNoWaterWaves() { return noWaterWaves_; }
 	OptionEntryBool &getNoWaterWavesEntry() { return noWaterWaves_; }
 
+	bool getNoThreadedDraw() { return noThreadedDraw_; }
+	OptionEntryBool &getNoThreadedDrawEntry() { return noThreadedDraw_; }
+
 	bool getNoWaterLOD() { return noWaterLOD_; }
 	OptionEntryBool &getNoWaterLODEntry() { return noWaterLOD_; }
 
@@ -426,6 +429,7 @@ protected:
 	OptionEntryBool noGLHardwareMipmaps_;
 	OptionEntryBool noGLDrawElements_;
 	OptionEntryBool noGLShaders_;
+	OptionEntryBool noThreadedDraw_;
 	OptionEntryBool invertElevation_;
 	OptionEntryBool invertMouse_;
 	OptionEntryBool noSound_;

@@ -24,10 +24,10 @@
 #include <sky/Sky.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <client/ScorchedClient.h>
+#include <engine/GameState.h>
 #include <GLEXT/GLStateExtension.h>
 #include <GLEXT/GLVertexBufferObject.h>
 #include <GLSL/GLSLShaderSetup.h>
-#include <graph/MainCamera.h>
 #include <graph/OptionsDisplay.h>
 
 VisibilityPatchGrid *VisibilityPatchGrid::instance()
@@ -37,9 +37,7 @@ VisibilityPatchGrid *VisibilityPatchGrid::instance()
 }
 
 VisibilityPatchGrid::VisibilityPatchGrid() : 
-	landPatches_(0), waterPatches_(0), visibilityPatches_(0),
-	visibleLandPatches_(0), visibleLandPatchesCount_(0), 
-	allLandPatchesCount_(0), allLandPatches_(0)
+	landPatches_(0), waterPatches_(0), visibilityPatches_(0)
 {
 }
 
@@ -57,21 +55,6 @@ void VisibilityPatchGrid::clear()
 
 	delete [] visibilityPatches_;
 	visibilityPatches_ = 0;
-
-	delete [] visibleLandPatches_;
-	visibleLandPatchesCount_ = 0;
-	visibleLandPatches_ = 0;
-
-	for (int i=0; i<4; i++)
-	{
-		delete waterVisibility_[i].visibleWaterPatches;
-		waterVisibility_[i].visibleWaterPatches = 0;
-		waterVisibility_[i].visibleWaterPatchesCount = 0;
-	}
-
-	delete [] allLandPatches_;
-	allLandPatches_ = 0;
-	allLandPatchesCount_ = 0;
 }
 
 void VisibilityPatchGrid::generate(float *waterIndexErrors)
@@ -104,10 +87,6 @@ void VisibilityPatchGrid::generate(float *waterIndexErrors)
 
 		// Create the patches
 		landPatches_ = new LandVisibilityPatch[landWidth_ * landHeight_];
-		visibleLandPatches_ = lastVisibleLandPatches_ =
-			new LandVisibilityPatch*[landWidth_ * landHeight_];
-		allLandPatches_ =
-			new LandVisibilityPatch*[landWidth_ * landHeight_];
 
 		// For each patch set it's location
 		LandVisibilityPatch *currentPatch = landPatches_;
@@ -122,7 +101,6 @@ void VisibilityPatchGrid::generate(float *waterIndexErrors)
 
 				currentPatch->setLocation(x * 32, y * 32,
 					leftPatch, rightPatch, topPatch, bottomPatch);
-				allLandPatches_[allLandPatchesCount_++] = currentPatch;
 			}
 		}
 	}
@@ -134,11 +112,6 @@ void VisibilityPatchGrid::generate(float *waterIndexErrors)
 
 		// Create the patches
 		waterPatches_ = new WaterVisibilityPatch[waterWidth_ * waterHeight_];
-		for (int i=0; i<4; i++)
-		{
-			waterVisibility_[i].visibleWaterPatches =
-				new WaterVisibilityPatch*[waterWidth_ * waterHeight_];
-		}
 
 		// For each patch set it's location
 		WaterVisibilityPatch *currentPatch = waterPatches_;
@@ -178,6 +151,11 @@ void VisibilityPatchGrid::generate(float *waterIndexErrors)
 		}
 	}
 
+	{
+		patchInfos_.generate(landWidth_ * landHeight_, waterWidth_ * waterHeight_,
+			visibilityPatches_, visibilityWidth_, visibilityHeight_);
+	}
+
 	surround_.generate();
 }
 
@@ -209,28 +187,14 @@ WaterVisibilityPatch *VisibilityPatchGrid::getWaterVisibilityPatch(int x, int y)
 	return &waterPatches_[realX + realY * waterWidth_];
 }
 
-void VisibilityPatchGrid::drawVisibility()
+void VisibilityPatchGrid::startCalculateVisibility()
 {
-	Vector &cameraPos = 
-		MainCamera::instance()->getTarget().getCamera().getCurrentPos();
+	patchInfos_.startCalculateVisibility();
+}
 
-	visibleLandPatchesCount_ = 0;
-	lastVisibleLandPatches_ = visibleLandPatches_;
-	for (int i=0; i<4; i++)
-	{
-		waterVisibility_[i].visibleWaterPatchesCount = 0;
-		waterVisibility_[i].lastVisibleWaterPatches = waterVisibility_[i].visibleWaterPatches;
-	}
-
-	// Calculate visibility
-	VisibilityPatchQuad *currentPatch = visibilityPatches_;
-	for (int y=0; y<visibilityHeight_; y++)
-	{
-		for (int x=0; x<visibilityWidth_; x++, currentPatch++)
-		{
-			currentPatch->calculateVisibility(cameraPos);
-		}
-	}
+void VisibilityPatchGrid::endCalculateVisibility()
+{
+	patchInfos_.endCalculateVisibility();
 }
 
 void VisibilityPatchGrid::drawLand(int addIndex)
@@ -260,8 +224,9 @@ void VisibilityPatchGrid::drawLand(int addIndex)
 	}
 
 	{
-		LandVisibilityPatch **currentPatchPtr = visibleLandPatches_;
-		for (int i=0; i<visibleLandPatchesCount_; i++, currentPatchPtr++)
+		VisibilityPatchInfo &patchInfo = patchInfos_.getCurrent();
+		LandVisibilityPatch **currentPatchPtr = patchInfo.landVisibility_.visibleLandPatches;
+		for (int i=0; i<patchInfo.landVisibility_.visibleLandPatchesCount; i++, currentPatchPtr++)
 		{
 			LandVisibilityPatch *currentPatch = *currentPatchPtr;
 			unsigned int index = currentPatch->getVisibilityIndex();
@@ -311,8 +276,9 @@ void VisibilityPatchGrid::drawLand(int addIndex)
 void VisibilityPatchGrid::drawLandLODLevels()
 {
 	{
-		LandVisibilityPatch **currentPatchPtr = allLandPatches_;
-		for (int i=0; i<allLandPatchesCount_; i++, currentPatchPtr++)
+		VisibilityPatchInfo &patchInfo = patchInfos_.getCurrent();
+		LandVisibilityPatch **currentPatchPtr = patchInfo.landVisibility_.visibleLandPatches;
+		for (int i=0; i<patchInfo.landVisibility_.visibleLandPatchesCount; i++, currentPatchPtr++)
 		{
 			LandVisibilityPatch *currentPatch = *currentPatchPtr;
 			unsigned int index = currentPatch->getVisibilityIndex();
@@ -349,12 +315,14 @@ void VisibilityPatchGrid::drawSimpleLand()
 	}
 
 	{
-		LandVisibilityPatch **currentPatchPtr = allLandPatches_;
-		for (int i=0; i<allLandPatchesCount_; i++, currentPatchPtr++)
+		LandVisibilityPatch *currentPatch = landPatches_;
+		for (int y=0; y<landHeight_; y++)
 		{
-			LandVisibilityPatch *currentPatch = *currentPatchPtr;
-			MipMapPatchIndex *landIndex = landIndexs_.getIndex(4, 0);
-			if (landIndex) currentPatch->draw(*landIndex);
+			for (int x=0; x<landWidth_; x++, currentPatch++)
+			{
+				MipMapPatchIndex *landIndex = landIndexs_.getIndex(4, 0);
+				if (landIndex) currentPatch->draw(*landIndex);
+			}
 		}
 	}
 
@@ -430,8 +398,9 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 		glGetFloatv(GL_MODELVIEW_MATRIX, startmodel);
 
 		// Draw all patches
-		WaterVisibilityPatch **currentPatchPtr = waterVisibility_[w].visibleWaterPatches;
-		for (int i=0; i<waterVisibility_[w].visibleWaterPatchesCount; i++, currentPatchPtr++)
+		VisibilityPatchInfo &patchInfo = patchInfos_.getCurrent();
+		WaterVisibilityPatch **currentPatchPtr = patchInfo.waterVisibility_[w].visibleWaterPatches;
+		for (int i=0; i<patchInfo.waterVisibility_[w].visibleWaterPatchesCount; i++, currentPatchPtr++)
 		{
 			WaterVisibilityPatch *currentPatch = *currentPatchPtr;
 

@@ -275,7 +275,7 @@ void Landscape::drawLand()
 	drawSetup();
 
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LOD");
-	VisibilityPatchGrid::instance()->drawVisibility();
+	VisibilityPatchGrid::instance()->startCalculateVisibility();
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LOD");	
 
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SKY");
@@ -308,6 +308,10 @@ void Landscape::drawLand()
 	{
 		ScorchedClient::instance()->getTargetMovement().draw();
 	}
+
+	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LOD");
+	VisibilityPatchGrid::instance()->endCalculateVisibility();
+	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LOD");	
 
 	drawTearDown();
 }

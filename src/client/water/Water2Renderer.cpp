@@ -65,9 +65,11 @@ void Water2Renderer::draw(Water2 &water2, WaterMapPoints &points, WaterWaves &wa
 		currentPatch_ = &currentPatch;
 
 		// Set the normal map for the current water frame
-		if (GLStateExtension::hasShaders())
+		if (GLStateExtension::hasShaders() &&
+			!OptionsDisplay::instance()->getNoWaterMovement())
 		{
-			normalTexture_.replace(currentPatch_->getNormalMap(), false);
+			normalTexture_.replace(currentPatch_->getNormalMap(), 
+				GLStateExtension::hasHardwareMipmaps());
 		}
 	}
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "WATER_PATCHSETUP");
@@ -386,7 +388,7 @@ void Water2Renderer::generate(LandscapeTexBorderWater *water, ProgressCounter *c
 	}
 
 	ImageHandle map = ImageFactory::createBlank(128, 128, false, 0);
-	normalTexture_.create(map, false);
+	normalTexture_.create(map, GLStateExtension::hasHardwareMipmaps());
 
 	LandscapeDefn &defn = *ScorchedClient::instance()->getLandscapeMaps().
 		getDefinitions().getDefn();

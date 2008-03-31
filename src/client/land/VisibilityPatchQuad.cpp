@@ -74,31 +74,43 @@ void VisibilityPatchQuad::setLocation(VisibilityPatchGrid *patchGrid, int x, int
 	}
 }
 
-void VisibilityPatchQuad::setNotVisible(Vector &cameraPos)
+void VisibilityPatchQuad::setNotVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos)
 {
-	if (landVisibilityPatch_) landVisibilityPatch_->setVisible(cameraPos, false);
-	if (waterVisibilityPatch_) waterVisibilityPatch_->setVisible(cameraPos, false);
+	if (landVisibilityPatch_) landVisibilityPatch_->setNotVisible();
+	if (waterVisibilityPatch_) waterVisibilityPatch_->setNotVisible();
 
 	// Update Children
-	if (topLeft_) topLeft_->setNotVisible(cameraPos);
-	if (topRight_) topRight_->setNotVisible(cameraPos);
-	if (botLeft_) botLeft_->setNotVisible(cameraPos);
-	if (botRight_) botRight_->setNotVisible(cameraPos);
+	if (topLeft_) topLeft_->setNotVisible(patchInfo, cameraPos);
+	if (topRight_) topRight_->setNotVisible(patchInfo, cameraPos);
+	if (botLeft_) botLeft_->setNotVisible(patchInfo, cameraPos);
+	if (botRight_) botRight_->setNotVisible(patchInfo, cameraPos);
 }
 
-void VisibilityPatchQuad::setVisible(Vector &cameraPos)
+void VisibilityPatchQuad::setVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos)
 {
-	if (landVisibilityPatch_) landVisibilityPatch_->setVisible(cameraPos, true);
-	if (waterVisibilityPatch_) waterVisibilityPatch_->setVisible(cameraPos, true);
+	if (landVisibilityPatch_)
+	{
+		if (landVisibilityPatch_->setVisible(cameraPos))
+		{
+			patchInfo.addVisibleLandPatch(landVisibilityPatch_);
+		}
+	}
+	if (waterVisibilityPatch_)
+	{
+		if (waterVisibilityPatch_->setVisible(cameraPos))
+		{
+			patchInfo.addVisibleWaterPatch(waterVisibilityPatch_->getPatchIndex(), waterVisibilityPatch_);
+		}
+	}
 
 	// Update Children
-	if (topLeft_) topLeft_->calculateVisibility(cameraPos);
-	if (topRight_) topRight_->calculateVisibility(cameraPos);
-	if (botLeft_) botLeft_->calculateVisibility(cameraPos);
-	if (botRight_) botRight_->calculateVisibility(cameraPos);	
+	if (topLeft_) topLeft_->calculateVisibility(patchInfo, cameraPos);
+	if (topRight_) topRight_->calculateVisibility(patchInfo, cameraPos);
+	if (botLeft_) botLeft_->calculateVisibility(patchInfo, cameraPos);
+	if (botRight_) botRight_->calculateVisibility(patchInfo, cameraPos);	
 }
 
-void VisibilityPatchQuad::calculateVisibility(Vector &cameraPos)
+void VisibilityPatchQuad::calculateVisibility(VisibilityPatchInfo &patchInfo, Vector &cameraPos)
 {
 	Vector *position = &position_;
 	float size = float(size_);
@@ -108,12 +120,12 @@ void VisibilityPatchQuad::calculateVisibility(Vector &cameraPos)
 		size = landVisibilityPatch_->getBoundingSize();
 	}
 
-	if (!GLCameraFrustum::instance()->sphereInFrustum(*position, size))
+	if (!GLCameraFrustum::instance()->sphereInFrustumThreadSafe(*position, size))
 	{
-		setNotVisible(cameraPos);
+		setNotVisible(patchInfo, cameraPos);
 	}
 	else
 	{
-		setVisible(cameraPos);
+		setVisible(patchInfo, cameraPos);
 	}
 }

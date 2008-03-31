@@ -18,36 +18,40 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_VisibilityPatchQuadh_INCLUDE__)
-#define __INCLUDE_VisibilityPatchQuadh_INCLUDE__
+#if !defined(__INCLUDE_VisibilityPatchInfosh_INCLUDE__)
+#define __INCLUDE_VisibilityPatchInfosh_INCLUDE__
 
 #include <land/VisibilityPatchInfo.h>
-#include <common/Vector.h>
+#include <SDL/SDL_thread.h>
 
-class VisibilityPatchGrid;
-class VisibilityPatchQuad
+class VisibilityPatchQuad;
+class VisibilityPatchInfos
 {
 public:
-	VisibilityPatchQuad();
-	~VisibilityPatchQuad();
+	VisibilityPatchInfos();
+	~VisibilityPatchInfos();
 
-	void setLocation(VisibilityPatchGrid *patchGrid, int x, int y, int size, 
-		int mapwidth, int mapheight);
-	void calculateVisibility(VisibilityPatchInfo &patchInfo, Vector &cameraPos);
+	VisibilityPatchInfo &getCurrent() {
+		return patchInfos_[current_?0:1]; }
+
+	void generate(int maxLandPatches, int maxWaterPatches,
+		VisibilityPatchQuad *visibilityPatches,
+		int visibilityWidth, int visibilityHeight);
+	void startCalculateVisibility();
+	void endCalculateVisibility();
 
 protected:
-	int x_, y_;
-	int size_;
-	Vector position_;
+	SDL_Thread *visibilityThread_;
+	SDL_mutex *visibilityMutex_;
+	SDL_cond *visibilityCondition_;
+	VisibilityPatchQuad *visibilityPatches_;
+	int visibilityWidth_, visibilityHeight_;
+	VisibilityPatchInfo patchInfos_[2];
+	bool current_;
 
-	WaterVisibilityPatch *waterVisibilityPatch_;
-	LandVisibilityPatch *landVisibilityPatch_;
-	VisibilityPatchQuad *topLeft_, *topRight_;
-	VisibilityPatchQuad *botLeft_, *botRight_;
-
-	void setNotVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos);
-	void setVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos);
-
+	static int visibilityThreadFunc(void *c);
+	void realVsibilityThreadFunc();
+	void calculateVisibility();
 };
 
-#endif // __INCLUDE_VisibilityPatchQuadh_INCLUDE__
+#endif // __INCLUDE_VisibilityPatchInfosh_INCLUDE__

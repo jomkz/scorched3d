@@ -150,33 +150,35 @@ void LandVisibilityPatch::setLocation(int x, int y,
 		heightRange / 2.0f + minHeight_);
 }
 
-void LandVisibilityPatch::setVisible(Vector &cameraPos, bool visible)
+bool LandVisibilityPatch::setVisible(Vector &cameraPos)
 { 
-	visible_ = visible;
-
+	visible_ = true;
 	DIALOG_ASSERT(heightMapData_);
 
-	if (visible)
+	float distance = (cameraPos - position_).Magnitude();
+
+	float maxError = 8.0f;
+	if (distance < 32.0f) maxError = 1.0f;
+	else if (distance < 64.0f) maxError = 3.0f;
+	else if (distance < 256.0f) maxError = 5.0f;
+
+	visibilityIndex_ = 0;
+	if (!OptionsDisplay::instance()->getNoLandLOD())
 	{
-		float distance = (cameraPos - position_).Magnitude();
-
-		float maxError = 8.0f;
-		if (distance < 32.0f) maxError = 1.0f;
-		else if (distance < 64.0f) maxError = 3.0f;
-		else if (distance < 256.0f) maxError = 5.0f;
-
-		visibilityIndex_ = 0;
-		if (!OptionsDisplay::instance()->getNoLandLOD())
+		for (int i=0; i<=5; i++)
 		{
-			for (int i=0; i<=5; i++)
-			{
-				if (indexErrors_[i] > maxError) break;
-				visibilityIndex_ = i;
-			}
+			if (indexErrors_[i] > maxError) break;
+			visibilityIndex_ = i;
 		}
-
-		VisibilityPatchGrid::instance()->addVisibleLandPatch(this);
 	}
+
+	return true;
+}
+
+void LandVisibilityPatch::setNotVisible()
+{
+	visible_ = false;
+	DIALOG_ASSERT(heightMapData_);
 }
 
 void LandVisibilityPatch::draw(MipMapPatchIndex &index)

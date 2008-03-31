@@ -21,9 +21,8 @@
 #if !defined(__INCLUDE_VisibilityPatchGridh_INCLUDE__)
 #define __INCLUDE_VisibilityPatchGridh_INCLUDE__
 
-#include <land/LandVisibilityPatch.h>
-#include <land/WaterVisibilityPatch.h>
 #include <land/VisibilityPatchQuad.h>
+#include <land/VisibilityPatchInfos.h>
 #include <land/LandSurround.h>
 #include <geomipmap/MipMapPatchIndexs.h>
 
@@ -37,7 +36,9 @@ public:
 
 	void generate(float *waterIndexErrors);
 
-	void drawVisibility();
+	void startCalculateVisibility();
+	void endCalculateVisibility();
+
 	void drawLand(int addIndex = 0);
 	void drawSimpleLand();
 	void drawLandLODLevels();
@@ -47,24 +48,13 @@ public:
 		Vector landscapeSize,
 		GLSLShaderSetup *waterShader);
 
+	int getVisibleLandPatchesCount() { 
+		return patchInfos_.getCurrent().getVisibleLandPatchesCount(); }
+	int getVisibleWaterPatchesCount() {
+		return patchInfos_.getCurrent().getVisibleWaterPatchesCount(); }
+
 	LandVisibilityPatch *getLandVisibilityPatch(int x, int y);
 	WaterVisibilityPatch *getWaterVisibilityPatch(int x, int y);
-
-	int getVisibleLandPatchesCount() { return visibleLandPatchesCount_; }
-
-	void addVisibleLandPatch(LandVisibilityPatch *patch)
-	{
-		*lastVisibleLandPatches_ = patch;
-		visibleLandPatchesCount_++;
-		lastVisibleLandPatches_ ++;
-	}
-
-	void addVisibleWaterPatch(int index, WaterVisibilityPatch *patch)
-	{
-		*waterVisibility_[index].lastVisibleWaterPatches = patch;
-		waterVisibility_[index].visibleWaterPatchesCount++;
-		waterVisibility_[index].lastVisibleWaterPatches++;
-	}
 protected:
 	LandSurround surround_;
 	MipMapPatchIndexs landIndexs_;
@@ -76,24 +66,8 @@ protected:
 	// The visibility data that decides if a visibility patch is visible or not
 	VisibilityPatchQuad *visibilityPatches_;
 
-	// The list of visible patches to draw each frame
-	// This is recreated from the visibilty data
-	int visibleLandPatchesCount_;
-	LandVisibilityPatch **visibleLandPatches_, **lastVisibleLandPatches_;
-	struct WaterVisibility
-	{
-		WaterVisibility() : visibleWaterPatchesCount(0), visibleWaterPatches(0), 
-			lastVisibleWaterPatches(0) {}
-
-		int visibleWaterPatchesCount;
-		WaterVisibilityPatch **visibleWaterPatches, **lastVisibleWaterPatches;
-
-	};
-	WaterVisibility waterVisibility_[4];
-
-	// The list of all land patches
-	int allLandPatchesCount_;
-	LandVisibilityPatch **allLandPatches_;
+	// The list of visibile patches
+	VisibilityPatchInfos patchInfos_;
 
 	// The size of the patches
 	int midX_, midY_;

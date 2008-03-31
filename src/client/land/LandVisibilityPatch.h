@@ -36,10 +36,13 @@ public:
 		LandVisibilityPatch *rightPatch, 
 		LandVisibilityPatch *topPatch, 
 		LandVisibilityPatch *bottomPatch);
-	void setVisible(Vector &cameraPos, bool visible);
-	int getVisibilityIndex() { return visible_?visibilityIndex_:-1; }
+	bool setVisible(Vector &cameraPos);
+	void setNotVisible();
 
+	int getVisibilityIndex() { return visible_?visibilityIndex_:-1; }
 	bool hasData() { return (heightMapData_ != 0); }
+	Vector &getPosition() { return position_; }
+	float getBoundingSize() { return boundingSize_; }
 
 	LandVisibilityPatch *getLeftPatch() { return leftPatch_; }
 	LandVisibilityPatch *getRightPatch() { return rightPatch_; }
@@ -48,9 +51,6 @@ public:
 
 	void draw(MipMapPatchIndex &index);
 	void drawLODLevel(MipMapPatchIndex &index);
-
-	Vector &getPosition() { return position_; }
-	float getBoundingSize() { return boundingSize_; }
 
 protected:
 	int x_, y_;

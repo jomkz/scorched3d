@@ -144,6 +144,8 @@ OptionsDisplay::OptionsDisplay() :
 		"Only use one texture for all models and the landscape.", RAccess, false),
 	depricatedNoGLCompiledArrays_(options_, "NoGLCompiledArrays",
 		"Do not compile vertex arrays.", OptionEntry::DataDepricated, false),
+	noThreadedDraw_(options_, "NoThreadedDraw",
+		"Don't calculate landscape in another thread", RWAccess, false),
 	noGLEnvCombine_(options_, "NoGLEnvCombine",
 		"Only use one texture on the landscape.", RAccess, false),
 	noGLCubeMap_(options_, "NoGLCubeMap",

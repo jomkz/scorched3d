@@ -179,6 +179,11 @@ bool GLCameraFrustum::sphereInFrustum(Vector &point,
 		glPopMatrix();
 	}
 
+	return sphereInFrustumThreadSafe(point, fRadius);
+}
+
+bool GLCameraFrustum::sphereInFrustumThreadSafe(Vector &point, float fRadius)
+{
 	for (int iCurPlane = 0; iCurPlane<6; iCurPlane++)
 	{
 		float value = 

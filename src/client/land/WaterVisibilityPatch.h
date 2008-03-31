@@ -38,11 +38,13 @@ public:
 		WaterVisibilityPatch *topPatch, 
 		WaterVisibilityPatch *bottomPatch,
 		float *waterIndexErrors);
-	void setVisible(Vector &cameraPos, bool visible);
+	bool setVisible(Vector &cameraPos);
+	void setNotVisible();
 
 	int getVisibilityIndex() { return visible_?visibilityIndex_:-1; }
 	int getPatchX() { return patchX_; }
 	int getPatchY() { return patchY_; }
+	int getPatchIndex() { return patchIndex_; }
 	Vector &getOffset() { return offset_; }
 	Vector &getPosition() { return position_; }
 
