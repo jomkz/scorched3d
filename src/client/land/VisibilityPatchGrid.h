@@ -39,8 +39,7 @@ public:
 	void startCalculateVisibility();
 	void endCalculateVisibility();
 
-	void drawLand(int addIndex = 0);
-	void drawSimpleLand();
+	void drawLand(int addIndex = 0, bool simple = false);
 	void drawLandLODLevels();
 	void drawSurround();
 	void drawWater(Water2Patches &patches, 

@@ -27,7 +27,7 @@
 #include <landscape/Wall.h>
 #include <landscape/ShadowMap.h>
 #include <landscape/InfoMap.h>
-#include <landscape/HeightMapRenderer.h>
+#include <landscape/GraphicalLandscapeMap.h>
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeDefn.h>
 #include <landscapedef/LandscapeDefinition.h>
@@ -191,7 +191,7 @@ void Landscape::drawShadows()
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_PRE");
 
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_DRAW_LAND");
-	VisibilityPatchGrid::instance()->drawSimpleLand();
+	VisibilityPatchGrid::instance()->drawLand(0, true);
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_DRAW_LAND");
 
 	if (!OptionsDisplay::instance()->getNoGLObjectShadows())
@@ -411,6 +411,11 @@ int Landscape::getMapTexSize()
 
 void Landscape::generate(ProgressCounter *counter)
 {
+	GraphicalLandscapeMap *landscapeMap = (GraphicalLandscapeMap *)
+		ScorchedClient::instance()->getLandscapeMaps().
+			getGroundMaps().getHeightMap().getGraphicalMap();
+	landscapeMap->updateWholeBuffer();
+
 	textureType_ = eDefault;
 	InfoMap::instance()->addAdapters();
 

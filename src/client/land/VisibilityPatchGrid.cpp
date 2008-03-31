@@ -23,6 +23,7 @@
 #include <water/Water2Patches.h>
 #include <sky/Sky.h>
 #include <landscapemap/LandscapeMaps.h>
+#include <landscape/GraphicalLandscapeMap.h>
 #include <client/ScorchedClient.h>
 #include <engine/GameState.h>
 #include <GLEXT/GLStateExtension.h>
@@ -197,9 +198,14 @@ void VisibilityPatchGrid::endCalculateVisibility()
 	patchInfos_.endCalculateVisibility();
 }
 
-void VisibilityPatchGrid::drawLand(int addIndex)
+void VisibilityPatchGrid::drawLand(int addIndex, bool simple)
 {
-	if (!OptionsDisplay::instance()->getNoGLDrawElements())
+	GraphicalLandscapeMap *landscapeMap = (GraphicalLandscapeMap *)
+		ScorchedClient::instance()->getLandscapeMaps().
+			getGroundMaps().getHeightMap().getGraphicalMap();
+
+	if (!OptionsDisplay::instance()->getNoGLDrawElements() &&
+		GLStateExtension::hasDrawRangeElements())
 	{
 		// Map indices to draw
 		if (landIndexs_.getBufferObject())
@@ -207,22 +213,44 @@ void VisibilityPatchGrid::drawLand(int addIndex)
 			landIndexs_.getBufferObject()->bind();
 		}
 
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL_NORMAL_ARRAY);
-		if (GLStateExtension::hasMultiTex())
+		// Map the vertex VBO
+		if (landscapeMap->getBufferObject())
 		{
-			glClientActiveTextureARB(GL_TEXTURE1_ARB);
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-			if (GLStateExtension::getTextureUnits() > 2)
-			{
-				glClientActiveTextureARB(GL_TEXTURE2_ARB);
-				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-			}
+			landscapeMap->getBufferObject()->bind();
 		}
-		glClientActiveTextureARB(GL_TEXTURE0_ARB);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+		if (!simple)
+		{
+			glEnableClientState(GL_NORMAL_ARRAY);
+			if (GLStateExtension::hasMultiTex())
+			{
+				glClientActiveTextureARB(GL_TEXTURE1_ARB);
+				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+				if (GLStateExtension::getTextureUnits() > 2)
+				{
+					glClientActiveTextureARB(GL_TEXTURE2_ARB);
+					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+				}
+			}
+			glClientActiveTextureARB(GL_TEXTURE0_ARB);
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		}
 	}
 
+	if (simple)
+	{
+		LandVisibilityPatch *currentPatch = landPatches_;
+		for (int y=0; y<landHeight_; y++)
+		{
+			for (int x=0; x<landWidth_; x++, currentPatch++)
+			{
+				MipMapPatchIndex *landIndex = landIndexs_.getIndex(4, 0);
+				if (landIndex) currentPatch->draw(*landIndex, true);
+			}
+		}
+	}
+	else
 	{
 		VisibilityPatchInfo &patchInfo = patchInfos_.getCurrent();
 		LandVisibilityPatch **currentPatchPtr = patchInfo.landVisibility_.visibleLandPatches;
@@ -244,31 +272,41 @@ void VisibilityPatchGrid::drawLand(int addIndex)
 
 			MipMapPatchIndex *landIndex = 
 				landIndexs_.getIndex(index, leftIndex, rightIndex, topIndex, bottomIndex, addIndex);
-			if (landIndex) currentPatch->draw(*landIndex);
+			if (landIndex) currentPatch->draw(*landIndex, false);
 		}
 	}
 
-	if (!OptionsDisplay::instance()->getNoGLDrawElements())
+	if (!OptionsDisplay::instance()->getNoGLDrawElements() &&
+		GLStateExtension::hasDrawRangeElements())
 	{
 		glDisableClientState(GL_VERTEX_ARRAY);
-		glDisableClientState(GL_NORMAL_ARRAY);
-		if (GLStateExtension::hasMultiTex())
+		if (!simple)
 		{
-			glClientActiveTextureARB(GL_TEXTURE1_ARB);
-			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-			if (GLStateExtension::getTextureUnits() > 2)
+			glDisableClientState(GL_NORMAL_ARRAY);
+			if (GLStateExtension::hasMultiTex())
 			{
-				glClientActiveTextureARB(GL_TEXTURE2_ARB);
+				glClientActiveTextureARB(GL_TEXTURE1_ARB);
 				glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+				if (GLStateExtension::getTextureUnits() > 2)
+				{
+					glClientActiveTextureARB(GL_TEXTURE2_ARB);
+					glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+				}
 			}
+			glClientActiveTextureARB(GL_TEXTURE0_ARB);
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		}
-		glClientActiveTextureARB(GL_TEXTURE0_ARB);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 		// Unmap indices to draw
 		if (landIndexs_.getBufferObject())
 		{
 			landIndexs_.getBufferObject()->unbind();
+		}
+
+		// Unmap the vertex VBO
+		if (landscapeMap->getBufferObject())
+		{
+			landscapeMap->getBufferObject()->unbind();
 		}
 	}
 }
@@ -301,43 +339,6 @@ void VisibilityPatchGrid::drawLandLODLevels()
 	}
 }
 
-void VisibilityPatchGrid::drawSimpleLand()
-{
-	if (!OptionsDisplay::instance()->getNoGLDrawElements())
-	{
-		// Map indices to draw
-		if (landIndexs_.getBufferObject())
-		{
-			landIndexs_.getBufferObject()->bind();
-		}
-
-		glEnableClientState(GL_VERTEX_ARRAY);
-	}
-
-	{
-		LandVisibilityPatch *currentPatch = landPatches_;
-		for (int y=0; y<landHeight_; y++)
-		{
-			for (int x=0; x<landWidth_; x++, currentPatch++)
-			{
-				MipMapPatchIndex *landIndex = landIndexs_.getIndex(4, 0);
-				if (landIndex) currentPatch->draw(*landIndex);
-			}
-		}
-	}
-
-	if (!OptionsDisplay::instance()->getNoGLDrawElements())
-	{
-		glDisableClientState(GL_VERTEX_ARRAY);
-
-		// Unmap indices to draw
-		if (landIndexs_.getBufferObject())
-		{
-			landIndexs_.getBufferObject()->unbind();
-		}
-	}
-}
-
 void VisibilityPatchGrid::drawSurround()
 {
 	surround_.draw(ScorchedClient::instance()->getLandscapeMaps().
@@ -351,7 +352,8 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 {
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "WATER_DRAW");
 
-	if (!OptionsDisplay::instance()->getNoGLDrawElements())
+	if (!OptionsDisplay::instance()->getNoGLDrawElements() &&
+		GLStateExtension::hasDrawRangeElements())
 	{
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnableClientState(GL_NORMAL_ARRAY);
@@ -373,7 +375,8 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 	{
 		Water2Patch *patch = patches.getPatch(w);
 
-		if (!OptionsDisplay::instance()->getNoGLDrawElements())
+		if (!OptionsDisplay::instance()->getNoGLDrawElements() &&
+			GLStateExtension::hasDrawRangeElements())
 		{
 			// Map data to draw
 			float *data = 0;
@@ -465,7 +468,8 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 		}
 	}
 
-	if (!OptionsDisplay::instance()->getNoGLDrawElements())
+	if (!OptionsDisplay::instance()->getNoGLDrawElements() &&
+		GLStateExtension::hasDrawRangeElements())
 	{
 		// Unmap data to draw
 		if (patches.getBufferObject())

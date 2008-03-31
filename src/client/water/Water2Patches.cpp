@@ -56,8 +56,7 @@ void Water2Patches::generate(Water2Points &heights,
 	}
 
 	// Generate the VBO if any
-	if (GLStateExtension::hasVBO() &&
-		!OptionsDisplay::instance()->getNoWaterBuffers())
+	if (GLStateExtension::hasVBO())
 	{
 		int patchVolume = (patchSize + 1) * (patchSize + 1);
 		int bufferSizeBytes = patchVolume * sizeof(Water2Patch::Data);

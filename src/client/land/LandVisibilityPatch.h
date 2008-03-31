@@ -40,7 +40,6 @@ public:
 	void setNotVisible();
 
 	int getVisibilityIndex() { return visible_?visibilityIndex_:-1; }
-	bool hasData() { return (heightMapData_ != 0); }
 	Vector &getPosition() { return position_; }
 	float getBoundingSize() { return boundingSize_; }
 
@@ -49,12 +48,12 @@ public:
 	LandVisibilityPatch *getTopPatch() { return topPatch_; }
 	LandVisibilityPatch *getBottomPatch() { return bottomPatch_; }
 
-	void draw(MipMapPatchIndex &index);
+	void draw(MipMapPatchIndex &index, bool simple);
 	void drawLODLevel(MipMapPatchIndex &index);
 
 protected:
 	int x_, y_;
-	float *heightMapData_;
+	int dataOffSet_;
 	float maxHeight_, minHeight_, boundingSize_;
 	int dataSize_;
 	int visibilityIndex_;

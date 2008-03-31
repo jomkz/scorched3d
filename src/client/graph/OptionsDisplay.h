@@ -244,9 +244,6 @@ public:
 	bool getNoWaterReflections() { return noWaterReflections_; }
 	OptionEntryBool &getNoWaterReflectionsEntry() { return noWaterReflections_; }
 
-	bool getNoWaterBuffers() { return noWaterBuffers_; }
-	OptionEntryBool &getNoWaterBuffersEntry() { return noWaterBuffers_; }
-
 	bool getNoWaterWaves() { return noWaterWaves_; }
 	OptionEntryBool &getNoWaterWavesEntry() { return noWaterWaves_; }
 
@@ -477,7 +474,7 @@ protected:
 	OptionEntryBool noSkyMovement_;
 	OptionEntryBool noPrecipitation_;
 	OptionEntryBool frameTimer_;
-	OptionEntryBool noWaterBuffers_;
+	OptionEntryBool depricatedMoWaterBuffers_;
 	OptionEntryBool noWaterMovement_;
 	OptionEntryBool noWaterWaves_;
 	OptionEntryBool noWaterLOD_;

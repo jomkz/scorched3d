@@ -132,7 +132,8 @@ void Water2Patch::draw(MipMapPatchIndex &index)
 	// Number triangles
 	GLInfo::addNoTriangles(index.getSize());
 
-	if (!OptionsDisplay::instance()->getNoGLDrawElements())
+	if (!OptionsDisplay::instance()->getNoGLDrawElements() &&
+		GLStateExtension::hasDrawRangeElements())
 	{
 		// Map indices to draw
 		unsigned short *indices = 0;

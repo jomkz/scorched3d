@@ -1469,6 +1469,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\landscapemap\GraphicalHeightMap.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\landscapemap\GraphicalHeightMap.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\landscapemap\GroundMaps.cpp"
 				>
 			</File>
@@ -4366,6 +4374,14 @@
 			</File>
 			<File
 				RelativePath="..\landscape\DeformTextures.h"
+				>
+			</File>
+			<File
+				RelativePath="..\landscape\GraphicalLandscapeMap.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\landscape\GraphicalLandscapeMap.h"
 				>
 			</File>
 			<File

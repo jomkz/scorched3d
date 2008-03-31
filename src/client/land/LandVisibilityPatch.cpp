@@ -21,6 +21,8 @@
 #include <land/LandVisibilityPatch.h>
 #include <land/VisibilityPatchGrid.h>
 #include <landscapemap/LandscapeMaps.h>
+#include <landscapemap/GraphicalHeightMap.h>
+#include <landscape/GraphicalLandscapeMap.h>
 #include <geomipmap/MipMapPatchIndexs.h>
 #include <graph/OptionsDisplay.h>
 #include <graph/MainCamera.h>
@@ -31,7 +33,7 @@
 #include <GLW/GLWFont.h>
 
 LandVisibilityPatch::LandVisibilityPatch() : 
-	visible_(false), heightMapData_(0),
+	visible_(false), 
 	leftPatch_(0), rightPatch_(0),
 	topPatch_(0), bottomPatch_(0),
 	visibilityIndex_(-1),
@@ -47,8 +49,11 @@ static float getHeight(int x, int y)
 {
 	int mapWidth = ScorchedClient::instance()->getLandscapeMaps().
 		getGroundMaps().getHeightMap().getMapWidth();
-	return ScorchedClient::instance()->getLandscapeMaps().
-		getGroundMaps().getHeightMap().getHeightData()[x + (y * (mapWidth + 1))].floatPosition[2];
+
+	GraphicalLandscapeMap *landscapeMap = (GraphicalLandscapeMap *)
+		ScorchedClient::instance()->getLandscapeMaps().
+			getGroundMaps().getHeightMap().getGraphicalMap();
+	return landscapeMap->getHeightData()[x + (y * (mapWidth + 1))].floatPosition[2];
 }
 
 static float calculateError(int x1, int x2, int y1, int y2,
@@ -107,9 +112,12 @@ void LandVisibilityPatch::setLocation(int x, int y,
 
 	// Set pointers to heightmap
 	dataSize_ = (mapWidth + 1) * (mapHeight + 1);
-	HeightMap::HeightData *heightData = &ScorchedClient::instance()->getLandscapeMaps().
-		getGroundMaps().getHeightMap().getHeightData()[x + (y * (mapWidth + 1))];
-	heightMapData_ = (float *) &heightData->floatPosition;
+
+	GraphicalLandscapeMap *landscapeMap = (GraphicalLandscapeMap *)
+		ScorchedClient::instance()->getLandscapeMaps().
+			getGroundMaps().getHeightMap().getGraphicalMap();
+	dataOffSet_ = (x + (y * (mapWidth + 1))) * 
+		sizeof(GraphicalLandscapeMap::HeightData) / sizeof(float);
 
 	maxHeight_ = 0.0f;
 	minHeight_ = 100000.0f;
@@ -153,7 +161,6 @@ void LandVisibilityPatch::setLocation(int x, int y,
 bool LandVisibilityPatch::setVisible(Vector &cameraPos)
 { 
 	visible_ = true;
-	DIALOG_ASSERT(heightMapData_);
 
 	float distance = (cameraPos - position_).Magnitude();
 
@@ -178,37 +185,54 @@ bool LandVisibilityPatch::setVisible(Vector &cameraPos)
 void LandVisibilityPatch::setNotVisible()
 {
 	visible_ = false;
-	DIALOG_ASSERT(heightMapData_);
 }
 
-void LandVisibilityPatch::draw(MipMapPatchIndex &index)
+void LandVisibilityPatch::draw(MipMapPatchIndex &index, bool simple)
 {
-	if (!heightMapData_) return;
+	GraphicalLandscapeMap *landscapeMap = (GraphicalLandscapeMap *)
+		ScorchedClient::instance()->getLandscapeMaps().
+			getGroundMaps().getHeightMap().getGraphicalMap();
+	float *heightMapData = &landscapeMap->getHeightData()->floatPosition[0];
 
 	// Number triangles
 	GLInfo::addNoTriangles(index.getSize() - 2);
 
-	if (!OptionsDisplay::instance()->getNoGLDrawElements())
+	if (!OptionsDisplay::instance()->getNoGLDrawElements() &&
+		GLStateExtension::hasDrawRangeElements())
 	{
-		// Vertices On
-		glVertexPointer(3, GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[0]);
-
-		// Normals On
-		glNormalPointer(GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[3]);
-
-		// Tex Coords
-		if (GLStateExtension::hasMultiTex())
+		// Map data to draw
+		float *data = 0;
+		if (landscapeMap->getBufferObject())
 		{
-			glClientActiveTextureARB(GL_TEXTURE1_ARB);
-			glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[6]);
-			if (GLStateExtension::getTextureUnits() > 2)
-			{
-				glClientActiveTextureARB(GL_TEXTURE2_ARB);
-				glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[8]);
-			}
+			data = (float*) NULL + dataOffSet_;
 		}
-		glClientActiveTextureARB(GL_TEXTURE0_ARB);
-		glTexCoordPointer(2, GL_FLOAT, sizeof(HeightMap::HeightData), &heightMapData_[6]);
+		else
+		{
+			data = &heightMapData[dataOffSet_];
+		}
+
+		// Vertices On
+		glVertexPointer(3, GL_FLOAT, sizeof(GraphicalLandscapeMap::HeightData), data);
+
+		if (!simple)
+		{
+			// Normals On
+			glNormalPointer(GL_FLOAT, sizeof(GraphicalLandscapeMap::HeightData), data + 3);
+
+			// Tex Coords
+			if (GLStateExtension::hasMultiTex())
+			{
+				glClientActiveTextureARB(GL_TEXTURE1_ARB);
+				glTexCoordPointer(2, GL_FLOAT, sizeof(GraphicalLandscapeMap::HeightData), data + 6);
+				if (GLStateExtension::getTextureUnits() > 2)
+				{
+					glClientActiveTextureARB(GL_TEXTURE2_ARB);
+					glTexCoordPointer(2, GL_FLOAT, sizeof(GraphicalLandscapeMap::HeightData), data + 8);
+				}
+			}
+			glClientActiveTextureARB(GL_TEXTURE0_ARB);
+			glTexCoordPointer(2, GL_FLOAT, sizeof(GraphicalLandscapeMap::HeightData), data + 6);
+		}
 
 		// Map indices to draw
 		unsigned short *indices = 0;
@@ -238,17 +262,19 @@ void LandVisibilityPatch::draw(MipMapPatchIndex &index)
 		glBegin(GL_TRIANGLE_STRIP);
 			for (int i=0; i<index.getSize(); i++)
 			{
-				float *data = heightMapData_ + 
-					(sizeof(HeightMap::HeightData) / 4 * index.getIndices()[i]);
-
-				glNormal3fv(data + 3);
-				glTexCoord2fv(data + 6);
-				if (GLStateExtension::hasMultiTex())
+				float *data = &heightMapData[dataOffSet_] + 
+					(sizeof(GraphicalLandscapeMap::HeightData) / 4 * index.getIndices()[i]);
+				if (!simple)
 				{
-					glMultiTexCoord2fvARB(GL_TEXTURE1_ARB, data + 6);
-					if (GLStateExtension::getTextureUnits() > 2)
+					glNormal3fv(data + 3);
+					glTexCoord2fv(data + 6);
+					if (GLStateExtension::hasMultiTex())
 					{
-						glMultiTexCoord2fvARB(GL_TEXTURE2_ARB, data + 8);
+						glMultiTexCoord2fvARB(GL_TEXTURE1_ARB, data + 6);
+						if (GLStateExtension::getTextureUnits() > 2)
+						{
+							glMultiTexCoord2fvARB(GL_TEXTURE2_ARB, data + 8);
+						}
 					}
 				}
 
@@ -262,6 +288,11 @@ void LandVisibilityPatch::drawLODLevel(MipMapPatchIndex &index)
 {
 	if (OptionsDisplay::instance()->getDrawLines()) glPolygonMode(GL_FRONT, GL_FILL);
 
+	GraphicalLandscapeMap *landscapeMap = (GraphicalLandscapeMap *)
+		ScorchedClient::instance()->getLandscapeMaps().
+			getGroundMaps().getHeightMap().getGraphicalMap();
+	float *heightMapData = &landscapeMap->getHeightData()->floatPosition[0];
+
 	Vector red(1.0f, 0.0f, 0.0f);
 	Vector yellow(1.0f, 1.0f, 0.0f);
 	GLWFont::instance()->getGameFont()->drawBilboard(red, 1.0f, 3.0f, 
@@ -272,8 +303,8 @@ void LandVisibilityPatch::drawLODLevel(MipMapPatchIndex &index)
 	{
 		for (int i=0; i<index.getSize(); i++)
 		{
-			float *data = heightMapData_ + 
-				(sizeof(HeightMap::HeightData) / 4 * index.getIndices()[i]);
+			float *data = &heightMapData[dataOffSet_] + 
+				(sizeof(GraphicalLandscapeMap::HeightData) / 4 * index.getIndices()[i]);
 
 			GLWFont::instance()->getGameFont()->drawBilboard(yellow, 1.0f, 1.0f, 
 				data[0], data[1], data[2] + i * 1.5f, 

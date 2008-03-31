@@ -20,13 +20,14 @@
 
 #include <common/Triangle.h>
 #include <landscapemap/HeightMap.h>
+#include <landscapemap/GraphicalHeightMap.h>
 #include <common/Defines.h>
 
 static const int minMapShift = 3;
 static FixedVector nvec(fixed(0), fixed(0), fixed(1));
 
 HeightMap::HeightMap() : 
-	heightData_(0)
+	heightData_(0), graphicalMap_(0)
 {
 }
 
@@ -44,15 +45,13 @@ void HeightMap::create(const int width, const int height)
 	heightData_ = new HeightData[(width_ + 1) * (height_ + 1)];
 
 	reset();
+
+	if (graphicalMap_) graphicalMap_->create(width, height);
 }
 
 void HeightMap::reset()
 {
 	HeightData *current = heightData_;
-
-	int texTileX = width_ / 16;
-	int texTileY = height_ / 16;
-
 	for (int y=0; y<=height_; y++)
 	{
 		for (int x=0; x<=width_; x++)
@@ -64,20 +63,6 @@ void HeightMap::reset()
 			current->normal[0] = fixed(0);
 			current->normal[1] = fixed(0);
 			current->normal[2] = fixed(1);
-
-			current->floatPosition[0] = float(x);
-			current->floatPosition[1] = float(y);
-			current->floatPosition[2] = 0.0f;
-
-			current->floatNormal[0] = 0.0f;
-			current->floatNormal[1] = 0.0f;
-			current->floatNormal[2] = 1.0f;
-
-			current->texCoord1x = float(x) / float(width_);
-			current->texCoord1y = float(y) / float(height_);
-
-			current->texCoord2x = float(x) / float(width_) * float(texTileX);
-			current->texCoord2y = float(y) / float(height_) * float(texTileY);
 
 			current++;
 		}
@@ -170,7 +155,6 @@ FixedVector &HeightMap::getNormal(int w, int h)
 		HeightMap::HeightData *heightData = &heightData_[pos];
 
 		FixedVector &normal = heightData->normal;
-		Vector &floatNormal = heightData->floatNormal;
 		if (normal[0] == fixed(0) && 
 			normal[1] == fixed(0) && 
 			normal[2] == fixed(0))
@@ -214,7 +198,7 @@ FixedVector &HeightMap::getNormal(int w, int h)
 			}
 
 			normal = total.Normalize();
-			normal.asVector(floatNormal);
+			if (graphicalMap_) graphicalMap_->setNormal(w, h, normal.asVector());			
 		}
 
 		return normal; 
@@ -269,7 +253,7 @@ void HeightMap::setHeight(int w, int h, fixed height)
 
 	HeightData &data = heightData_[(width_+1) * h + w];
 	data.position[2] = height;
-	data.floatPosition[2] = height.asFloat();
+	if (graphicalMap_) graphicalMap_->setHeight(w, h, height.asFloat());
 
 	// Reset all of the normals around this position
 	for (int dist=1; dist<=3; dist++)

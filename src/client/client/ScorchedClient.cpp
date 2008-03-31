@@ -19,11 +19,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <client/ScorchedClient.h>
-#include <graph/MainCamera.h>
 #include <engine/MainLoop.h>
-#include <graph/ParticleEngine.h>
 #include <engine/GameState.h>
+#include <graph/MainCamera.h>
+#include <graph/ParticleEngine.h>
 #include <graph/OptionsDisplay.h>
+#include <landscapemap/LandscapeMaps.h>
+#include <landscape/GraphicalLandscapeMap.h>
 
 ScorchedClient *ScorchedClient::instance_ = 0;
 
@@ -53,6 +55,9 @@ ScorchedClient::ScorchedClient() :
 	particleEngine_ = new ParticleEngine(
 		&MainCamera::instance()->getCamera(), 
 		numberOfBilboards);
+
+	getLandscapeMaps().getGroundMaps().getHeightMap().setGraphicalMap(
+		new GraphicalLandscapeMap());
 }
 
 ScorchedClient::~ScorchedClient()

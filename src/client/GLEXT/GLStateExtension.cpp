@@ -35,6 +35,7 @@ bool GLStateExtension::noTexSubImage_ = false;
 bool GLStateExtension::hasBlendColor_ = false;
 bool GLStateExtension::hasShaders_ = false;
 bool GLStateExtension::hasFBO_ = false;
+bool GLStateExtension::hasDrawRangeElements_ = false;
 int GLStateExtension::textureUnits_ = 0;
 int GLStateExtension::maxElementVertices_ = 0;
 int GLStateExtension::maxElementIndices_ = 0;
@@ -52,8 +53,15 @@ void GLStateExtension::setup()
 	{
 		if (!OptionsDisplay::instance()->getNoVBO())
 		{
-			if (GLEW_ARB_vertex_buffer_object &&
-				GLEW_EXT_draw_range_elements)
+			if (GLEW_ARB_vertex_buffer_object)
+			{
+				hasVBO_ = true;
+			}
+		}
+
+		if (!OptionsDisplay::instance()->getNoGLDrawElements())
+		{
+			if (GLEW_EXT_draw_range_elements)
 			{
 				GLint maxElementIndices;
 				glGetIntegerv(GL_MAX_ELEMENTS_INDICES, &maxElementIndices);
@@ -62,8 +70,7 @@ void GLStateExtension::setup()
 				GLint maxElementVertices;
 				glGetIntegerv(GL_MAX_ELEMENTS_VERTICES, &maxElementVertices);		 
 				maxElementVertices_ = maxElementVertices;
-
-				hasVBO_ = true;
+				hasDrawRangeElements_ = true;
 			}
 		}
 
@@ -141,6 +148,8 @@ void GLStateExtension::setup()
 		(hasMultiTex()?"On":"Off"),textureUnits_));
 	Logger::log(S3D::formatStringBuffer("VERTEX BUFFER OBJECT:%s", 
 		(hasVBO()?"On":"Off")));
+	Logger::log(S3D::formatStringBuffer("DRAW RANGE ELEMENTS:%s", 
+		(hasDrawRangeElements()?"On":"Off")));
 	Logger::log(S3D::formatStringBuffer("GL_MAX_ELEMENTS_VERTICES:%i", 
 		getMaxElementVertices()));
 	Logger::log(S3D::formatStringBuffer("GL_MAX_ELEMENTS_INDICES:%i", 

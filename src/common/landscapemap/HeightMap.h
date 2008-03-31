@@ -27,20 +27,10 @@
 #include <common/Vector.h>
 
 class Line;
-
+class GraphicalHeightMap;
 class HeightMap  
 {
 public:
-	struct HeightData
-	{
-		FixedVector position;
-		FixedVector normal;
-		Vector floatPosition;
-		Vector floatNormal;
-		float texCoord1x, texCoord1y;
-		float texCoord2x, texCoord2y;
-	};
-
 	HeightMap();
 	virtual ~HeightMap();
 
@@ -67,12 +57,19 @@ public:
 	// Alters the actual internal HeightMap points
 	void setHeight(int w, int h, fixed height);
 
-	// Should only be used read only
-	HeightData *getHeightData() { return heightData_; }
+	GraphicalHeightMap *getGraphicalMap() { return graphicalMap_; }
+	void setGraphicalMap(GraphicalHeightMap *map) { graphicalMap_ = map; }
 
 protected:
+	struct HeightData
+	{
+		FixedVector position;
+		FixedVector normal;
+	};
+
 	int width_, height_;
 	HeightData *heightData_;
+	GraphicalHeightMap *graphicalMap_;
 
 	bool getVector(FixedVector &vec, int x, int y);
 	void getVectorPos(int pos, int &x, int &y, int dist=1);

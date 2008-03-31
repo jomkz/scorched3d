@@ -59,8 +59,7 @@ void MipMapPatchIndexs::generate(int size, int totalsize, unsigned int totallods
 		"Index Memory Size : %u bytes", totalBufferSizeBytes));
 
 	// Store this array in a vertex buffer (if available)
-	if (GLStateExtension::hasVBO() &&
-		!OptionsDisplay::instance()->getNoWaterBuffers())
+	if (GLStateExtension::hasVBO())
 	{
 		delete bufferObject_;
 		bufferObject_ = new GLVertexBufferObject(true);
