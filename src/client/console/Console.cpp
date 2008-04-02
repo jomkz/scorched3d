@@ -169,7 +169,7 @@ void Console::keyboardCheck(const unsigned state, float frameTime,
 
 void Console::simulate(const unsigned state, float frameTime)
 {
-	const GLfloat dropSpeed = 600.0f;
+	const GLfloat dropSpeed = 1200.0f;
 	if (opening_)
 	{
 		height_ += frameTime * dropSpeed;
@@ -204,7 +204,7 @@ void Console::draw(const unsigned state)
 
 void Console::drawBackdrop(float width, float top)
 {
-	if (height_ > top * .75f) height_ = top * .75f;
+	if (height_ > top * .85f) height_ = top * .85f;
 
 	GLWToolTip::instance()->clearToolTip(
 		0.0f, top - height_ + 10.0f,
