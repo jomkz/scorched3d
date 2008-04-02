@@ -324,13 +324,14 @@ void Landscape::drawWater()
 {
 	if (!water_->getWaterOn()) return;
 
-	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "WATER_REFLECTIONS");
 	if (GLStateExtension::hasFBO() &&
 		GLStateExtension::hasShaders() &&
 		!OptionsDisplay::instance()->getNoWaterReflections() &&
 		OptionsDisplay::instance()->getDrawWater() &&
 		water_->getWaterOn())
 	{
+		GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "WATER_REFLECTIONS");
+
 		water_->bindWaterReflection();
 
 		glClearColor(0, 1.0f/16.0f, 1.0f/8.0f, 0);
@@ -356,8 +357,9 @@ void Landscape::drawWater()
 		glPopMatrix();
 
 		water_->unBindWaterReflection();
+
+		GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "WATER_REFLECTIONS");
 	}
-	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "WATER_REFLECTIONS");
 
 	drawSetup();
 
