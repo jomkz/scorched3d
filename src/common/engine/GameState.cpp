@@ -689,11 +689,14 @@ void GameState::clearTimers(bool printTimers)
 					(100 * timers_[i].simulateTime) / sinceLastTime;
 				unsigned int percentageDraw =
 					(100 * timers_[i].drawTime) / sinceLastTime;
-				Logger::log(S3D::formatStringBuffer("%2i:%25s - Draw : %4u (%3u%%), Simulate : %4u (%3u%%)", 
-					i, 
-					timers_[i].gameStateI->getGameStateIName(),
-					timers_[i].drawTime, percentageDraw,
-					timers_[i].simulateTime, percentageSimulate));
+				if (percentageSimulate > 0 || percentageDraw > 0)
+				{
+					Logger::log(S3D::formatStringBuffer("%2i:%25s - Draw : %4u (%3u%%), Simulate : %4u (%3u%%)", 
+						i, 
+						timers_[i].gameStateI->getGameStateIName(),
+						timers_[i].drawTime, percentageDraw,
+						timers_[i].simulateTime, percentageSimulate));
+				}
 
 				std::vector<GameStatePerfCounter *>::iterator itor;
 				for (itor = timers_[i].gameStateI->getPerfCounters().begin();
@@ -701,11 +704,14 @@ void GameState::clearTimers(bool printTimers)
 					itor++)
 				{
 					GameStatePerfCounter *counter = *itor;
-					if (counter->getUsed())
+					bool used = counter->getUsed();
+					int total = counter->getTotal();
+					if (used && total > 0 &&
+						(percentageSimulate > 0 || percentageDraw > 0))
 					{
 						Logger::log(S3D::formatStringBuffer("%35s +- %4u", 
 							counter->getName(),
-							counter->getTotal()));
+							total));
 					}
 				}
 			}
