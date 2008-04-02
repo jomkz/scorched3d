@@ -75,7 +75,9 @@ void Water2Renderer::draw(Water2 &water2, WaterMapPoints &points, WaterWaves &wa
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "WATER_PATCHSETUP");
 
 	// Draw waves
+	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "WATER_WAVES");
 	waves.draw(*currentPatch_);
+	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "WATER_WAVES");
 
 	// Draw Water
 	if (GLStateExtension::hasShaders() &&

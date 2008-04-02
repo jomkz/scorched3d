@@ -328,7 +328,8 @@ void Landscape::drawWater()
 	if (GLStateExtension::hasFBO() &&
 		GLStateExtension::hasShaders() &&
 		!OptionsDisplay::instance()->getNoWaterReflections() &&
-		OptionsDisplay::instance()->getDrawWater())
+		OptionsDisplay::instance()->getDrawWater() &&
+		water_->getWaterOn())
 	{
 		water_->bindWaterReflection();
 

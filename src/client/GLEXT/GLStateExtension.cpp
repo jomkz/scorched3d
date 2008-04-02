@@ -49,16 +49,9 @@ void GLStateExtension::setup()
 	}
 	Logger::log(S3D::formatStringBuffer("GLEW VERSION:%s", glewGetString(GLEW_VERSION)));
 
+	bool vertexRangeExceeded = false;
 	if (!OptionsDisplay::instance()->getNoGLExt())
 	{
-		if (!OptionsDisplay::instance()->getNoVBO())
-		{
-			if (GLEW_ARB_vertex_buffer_object)
-			{
-				hasVBO_ = true;
-			}
-		}
-
 		if (!OptionsDisplay::instance()->getNoGLDrawElements())
 		{
 			if (GLEW_EXT_draw_range_elements)
@@ -70,7 +63,24 @@ void GLStateExtension::setup()
 				GLint maxElementVertices;
 				glGetIntegerv(GL_MAX_ELEMENTS_VERTICES, &maxElementVertices);		 
 				maxElementVertices_ = maxElementVertices;
-				hasDrawRangeElements_ = true;
+
+				if (maxElementIndices_ < 16000 ||
+					maxElementVertices_ < 128000)
+				{
+					vertexRangeExceeded = true;
+				}
+				else
+				{
+					hasDrawRangeElements_ = true;
+
+					if (!OptionsDisplay::instance()->getNoVBO())
+					{
+						if (GLEW_ARB_vertex_buffer_object)
+						{
+							hasVBO_ = true;
+						}
+					}
+				}
 			}
 		}
 
@@ -148,8 +158,9 @@ void GLStateExtension::setup()
 		(hasMultiTex()?"On":"Off"),textureUnits_));
 	Logger::log(S3D::formatStringBuffer("VERTEX BUFFER OBJECT:%s", 
 		(hasVBO()?"On":"Off")));
-	Logger::log(S3D::formatStringBuffer("DRAW RANGE ELEMENTS:%s", 
-		(hasDrawRangeElements()?"On":"Off")));
+	Logger::log(S3D::formatStringBuffer("DRAW RANGE ELEMENTS:%s%s", 
+		(hasDrawRangeElements()?"On":"Off"), 
+		(vertexRangeExceeded?" (DISABLED DUE TO MAX_ELEMENTS)":"")));
 	Logger::log(S3D::formatStringBuffer("GL_MAX_ELEMENTS_VERTICES:%i", 
 		getMaxElementVertices()));
 	Logger::log(S3D::formatStringBuffer("GL_MAX_ELEMENTS_INDICES:%i", 
