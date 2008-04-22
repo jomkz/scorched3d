@@ -32,11 +32,12 @@ public:
 	~VisibilityPatchInfos();
 
 	VisibilityPatchInfo &getCurrent() {
-		return patchInfos_[current_?0:1]; }
+		return patchInfo_; }
 
 	void generate(int maxLandPatches, int maxWaterPatches,
 		VisibilityPatchQuad *visibilityPatches,
 		int visibilityWidth, int visibilityHeight);
+	void calculateVisibility();
 	void startCalculateVisibility();
 	void endCalculateVisibility();
 
@@ -46,12 +47,11 @@ protected:
 	SDL_cond *visibilityCondition_;
 	VisibilityPatchQuad *visibilityPatches_;
 	int visibilityWidth_, visibilityHeight_;
-	VisibilityPatchInfo patchInfos_[2];
+	VisibilityPatchInfo patchInfo_;
 	bool current_;
 
 	static int visibilityThreadFunc(void *c);
 	void realVsibilityThreadFunc();
-	void calculateVisibility();
 };
 
 #endif // __INCLUDE_VisibilityPatchInfosh_INCLUDE__

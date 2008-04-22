@@ -36,6 +36,7 @@ public:
 
 	void generate(float *waterIndexErrors);
 
+	void calculateVisibility();
 	void startCalculateVisibility();
 	void endCalculateVisibility();
 

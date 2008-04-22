@@ -188,6 +188,11 @@ WaterVisibilityPatch *VisibilityPatchGrid::getWaterVisibilityPatch(int x, int y)
 	return &waterPatches_[realX + realY * waterWidth_];
 }
 
+void VisibilityPatchGrid::calculateVisibility()
+{
+	patchInfos_.calculateVisibility();
+}
+
 void VisibilityPatchGrid::startCalculateVisibility()
 {
 	patchInfos_.startCalculateVisibility();

@@ -37,8 +37,7 @@ void VisibilityPatchInfos::generate(int maxLandPatches, int maxWaterPatches,
 	VisibilityPatchQuad *visibilityPatches,
 	int visibilityWidth, int visibilityHeight)
 {
-	patchInfos_[0].generate(maxLandPatches, maxWaterPatches);
-	patchInfos_[1].generate(maxLandPatches, maxWaterPatches);
+	patchInfo_.generate(maxLandPatches, maxWaterPatches);
 
 	visibilityPatches_ = visibilityPatches;
 	visibilityWidth_ = visibilityWidth;
@@ -91,9 +90,7 @@ void VisibilityPatchInfos::calculateVisibility()
 	Vector &cameraPos = 
 		MainCamera::instance()->getTarget().getCamera().getCurrentPos();
 
-	// NOTE: We've swapped the 1 and 0
-	// so we calculate the one that is NOT current
-	VisibilityPatchInfo &patchInfo = patchInfos_[current_?1:0];
+	VisibilityPatchInfo &patchInfo = patchInfo_;
 	patchInfo.reset();
 
 	// Calculate visibility

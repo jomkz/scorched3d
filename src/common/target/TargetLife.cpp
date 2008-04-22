@@ -52,7 +52,7 @@ void TargetLife::setLife(fixed life)
 	life_ = life;
 
 	if (life_ >= maxLife_) life_ = maxLife_;
-	if (life_ <= 0)
+	if (life_ < 1)
 	{
 		life_ = 0;
 		setRotation(0); // Updates space too
