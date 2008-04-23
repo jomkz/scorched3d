@@ -25,7 +25,7 @@
 
 GraphicalLandscapeMap::GraphicalLandscapeMap() : 
 	heightData_(0), bufferObject_(0), 
-	width_(0), height_(0)
+	width_(0), height_(0), bufferSizeBytes_(0)
 {
 }
 
@@ -41,6 +41,18 @@ void GraphicalLandscapeMap::create(const int width, const int height)
 
 	delete [] heightData_;
 	heightData_ = new HeightData[(width_ + 1) * (height_ + 1)];
+	int patchVolume = (width_ + 1) * (height_ + 1);
+	bufferSizeBytes_ = patchVolume * sizeof(GraphicalLandscapeMap::HeightData);
+
+	if (GLStateExtension::hasVBO())
+	{
+		if (!bufferObject_ || bufferObject_->get_map_size() != bufferSizeBytes_) 
+		{
+			delete bufferObject_;
+			bufferObject_ = new GLVertexBufferObject();
+			bufferObject_->init_data(bufferSizeBytes_, heightData_, GL_STATIC_DRAW);
+		}
+	}
 
 	reset();
 }
@@ -94,14 +106,7 @@ void GraphicalLandscapeMap::setNormal(int w, int h, Vector &normal)
 void GraphicalLandscapeMap::updateWholeBuffer()
 {
 	// Generate the VBO if any
-	if (GLStateExtension::hasVBO())
-	{
-		int patchVolume = (width_ + 1) * (height_ + 1);
-		int bufferSizeBytes = patchVolume * sizeof(GraphicalLandscapeMap::HeightData);
+	if (!GLStateExtension::hasVBO()) return;
 
-		delete bufferObject_;
-		bufferObject_ = new GLVertexBufferObject();
-		bufferObject_->init_data(bufferSizeBytes, 0, GL_STATIC_DRAW);
-		bufferObject_->init_sub_data(0, bufferSizeBytes, heightData_);
-	}
+	bufferObject_->init_data(bufferSizeBytes_, heightData_, GL_STATIC_DRAW);
 }

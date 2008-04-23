@@ -2,7 +2,6 @@
 	<detail>data/textures/landscape/default/detail.bmp</detail>
 	<magmasmall>data/textures/landscape/default/magma-small.bmp</magmasmall>
 	<scorch>data/textures/landscape/snow/scorch.bmp</scorch>
-	<lowestlandheight>0.0</lowestlandheight>
 	<skytexture>data/textures/landscape/moon/sky.bmp</skytexture>
 	<skytexturestatic>data/textures/landscape/moon/stars.bmp</skytexturestatic>
 	<skytexturemask>data/textures/landscape/moon/sky.bmp</skytexturemask>

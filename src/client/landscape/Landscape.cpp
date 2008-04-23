@@ -96,6 +96,12 @@ void Landscape::simulate(float frameTime)
 			updatePlanATexture();
 			updatePlanTexture();
 
+			// Update the landscape
+			GraphicalLandscapeMap *landscapeMap = (GraphicalLandscapeMap *)
+				ScorchedClient::instance()->getLandscapeMaps().
+					getGroundMaps().getHeightMap().getGraphicalMap();
+			landscapeMap->updateWholeBuffer();
+
 			// Re-calculate the landsacpe on the wind indicator
 			changeCount_++;
 			resetLandscape_ = false;
@@ -110,7 +116,7 @@ void Landscape::simulate(float frameTime)
 	LandscapeSoundManager::instance()->simulate(frameTime * speedMult);
 }
 
-void Landscape::recalculate(int posX, int posY, int dist)
+void Landscape::recalculate()
 {
 	if (!resetLandscape_)
 	{
@@ -125,7 +131,8 @@ void Landscape::reset(ProgressCounter *counter)
 
 	// Recalculate all landscape objects
 	// Ensure all objects use any new landscape
-	ScorchedClient::instance()->getParticleEngine().killAll();
+	ScorchedClient::instance()->
+		getParticleEngine().killAll();
 	MainCamera::instance()->getTarget().
 		getPrecipitationEngine().killAll();
 	CameraDialog::instance()->getCamera().
@@ -681,7 +688,7 @@ void Landscape::actualDrawLandTextured()
 	if (OptionsDisplay::instance()->getDrawSurround())
 	{
 		GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SURROUND");
-		getGroundTexture().draw(true);
+		groundTexture_.draw(true);
 		VisibilityPatchGrid::instance()->drawSurround();
 		GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SURROUND");
 	}
@@ -784,11 +791,18 @@ void Landscape::actualDrawLandShader()
 
 	getSky().getSun().setLightPosition(false);
 
+#ifdef SPLAT_MAP
 	landShader_->use();
 	landShader_->set_gl_texture(splatMaskTexture1_, "splat1map", 0);
 	landShader_->set_gl_texture(splatMaskTexture2_, "splat2map", 1);
 	landShader_->set_gl_texture(splatTextures_, "splattex", 2);
 	landShader_->set_gl_texture(shadowFrameBuffer_, "shadow", 3);
+#else
+	landShader_->use();
+	landShader_->set_gl_texture(texture_, "mainmap", 0);
+	landShader_->set_gl_texture(detailTexture_, "detailmap", 2);
+	landShader_->set_gl_texture(shadowFrameBuffer_, "shadow", 3);
+#endif
 
 	// Enable Tex
 	glActiveTextureARB(GL_TEXTURE3_ARB);
@@ -807,8 +821,12 @@ void Landscape::actualDrawLandShader()
 	if (OptionsDisplay::instance()->getDrawSurround())
 	{
 		GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SURROUND");
+#ifdef SPLAT_MAP
 		landShader_->set_gl_texture(splatMaskTextureBorder1_, "splat1map", 0);
 		landShader_->set_gl_texture(splatMaskTextureBorder2_, "splat2map", 1);
+#else
+		landShader_->set_gl_texture(groundTexture_, "mainmap", 0);
+#endif
 		VisibilityPatchGrid::instance()->drawSurround();
 		GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SURROUND");
 	}

@@ -45,7 +45,7 @@ public:
 	};
 
 	void generate(ProgressCounter *counter = 0);
-	void recalculate(int posX, int posY, int dist);
+	void recalculate();
 	void restoreLandscapeTexture();
 	void reset(ProgressCounter *counter = 0);
 

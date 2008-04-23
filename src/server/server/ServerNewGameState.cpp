@@ -45,7 +45,6 @@
 #include <coms/ComsNewGameMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <landscapemap/LandscapeMaps.h>
-#include <landscapemap/DeformLandscape.h>
 #include <landscapemap/HeightMapSender.h>
 #include <landscapedef/LandscapeDefn.h>
 #include <landscapedef/LandscapeDefinitions.h>

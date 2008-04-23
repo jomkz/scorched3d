@@ -55,6 +55,7 @@ public:
 
 protected:
 	int width_, height_;
+	int bufferSizeBytes_;
 	HeightData *heightData_;
 	GLVertexBufferObject *bufferObject_;
 };

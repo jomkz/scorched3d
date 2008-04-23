@@ -61,9 +61,12 @@ void MipMapPatchIndexs::generate(int size, int totalsize, unsigned int totallods
 	// Store this array in a vertex buffer (if available)
 	if (GLStateExtension::hasVBO())
 	{
-		delete bufferObject_;
-		bufferObject_ = new GLVertexBufferObject(true);
-		bufferObject_->init_data(totalBufferSizeBytes, 0, GL_STATIC_DRAW);
+		if (!bufferObject_ || bufferObject_->get_map_size() != totalBufferSizeBytes) 
+		{
+			delete bufferObject_;
+			bufferObject_ = new GLVertexBufferObject(true);
+			bufferObject_->init_data(totalBufferSizeBytes, 0, GL_STATIC_DRAW);
+		}
 
 		unsigned int offsetBytes = 0;
 		int i = 0;

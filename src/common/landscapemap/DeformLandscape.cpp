@@ -51,7 +51,6 @@ bool DeformLandscape::deformLandscape(
 	if (iradius > 49) iradius = 49;
 
 	fixed lowestHeight = fixed(0);
-		//context.landscapeMaps->getDefinitions().getTex()->lowestlandheight;
 
 	// Take out or add a chunk into the landsacpe
 	for (int x=-iradius; x<=iradius; x++)
@@ -133,6 +132,23 @@ bool DeformLandscape::deformLandscape(
 		}
 	}
 
+	if (hits)
+	{
+		// Take out or add a chunk into the landsacpe
+		for (int x=-iradius-3; x<=iradius+3; x++)
+		{
+			for (int y=-iradius-3; y<=iradius+3; y++)
+			{
+				FixedVector newPos(pos[0] + x, pos[1] + y, pos[2]);
+				if ((newPos[0] >= fixed(0)) && (newPos[0] < hmap.getMapWidth()) &&
+					(newPos[1] >= fixed(0)) && (newPos[1] < hmap.getMapHeight()))
+				{
+					hmap.getNormal(newPos[0].asInt(), newPos[1].asInt());
+				}
+			}
+		}
+	}
+
 	return hits;
 }
 
@@ -165,6 +181,21 @@ void DeformLandscape::flattenArea(
 				iy < hmap.getMapHeight())
 			{
 				hmap.setHeight(ix, iy, tankPos[2]);
+			}
+		}
+	}
+
+	for (int x=-iSize-3; x<=iSize+3; x++)
+	{
+		for (int y=-iSize-3; y<=iSize+3; y++)
+		{
+			int ix = posX + x;
+			int iy = posY + y;
+			if (ix >= 0 && iy >= 0 &&
+				ix < hmap.getMapWidth() &&
+				iy < hmap.getMapHeight())
+			{
+				hmap.getNormal(ix, iy);
 			}
 		}
 	}

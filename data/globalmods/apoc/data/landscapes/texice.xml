@@ -4,7 +4,6 @@
 	<scorch>data/textures/landscape/ice/scorch.bmp</scorch>
 	<fog><A>0.6</A><B>0.77</B><C>0.8</C></fog>
 	<fogdensity>0.001</fogdensity>
-	<lowestlandheight>0.0</lowestlandheight>
 	<skytexture>data/textures/landscape/ice/cloud1.bmp</skytexture>
 	<skytexturemask>data/textures/landscape/default/cloud1m.bmp</skytexturemask>
 	<skycolormap>data/textures/clearsky.bmp</skycolormap>

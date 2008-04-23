@@ -4385,14 +4385,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\landscape\HeightMapRenderer.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\HeightMapRenderer.h"
-				>
-			</File>
-			<File
 				RelativePath="..\landscape\InfoMap.cpp"
 				>
 			</File>

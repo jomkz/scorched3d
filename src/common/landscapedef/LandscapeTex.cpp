@@ -143,9 +143,6 @@ bool LandscapeTex::readXML(LandscapeDefinitions *definitions, XMLNode *node)
 	if (!node->getNamedChild("skydiffuse", skydiffuse)) return false;
 	if (!node->getNamedChild("skyambience", skyambience)) return false;
 
-	float lowestlandheight;
-	node->getNamedChild("lowestlandheight", lowestlandheight, false);
-
 	if (!S3D::checkDataFile(detail.c_str())) return false;
 	if (!S3D::checkDataFile(magmasmall.c_str())) return false;
 	if (!S3D::checkDataFile(scorch.c_str())) return false;

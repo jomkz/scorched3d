@@ -10,3 +10,4 @@ Water LOD now depends on water mesh detail as well as distance
 Added quadtree for water/land visibility
 Started experimental splatting texture mapping for landscape
 Started LUA scripting language support
+Player dies when less than 1 HP (avoids 0 HP tanks)

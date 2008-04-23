@@ -171,7 +171,7 @@ FixedVector &HeightMap::getNormal(int w, int h)
 			int times = 0;
 			for (int dist=1; dist<=3; dist+=2)
 			{
-				for (int a=0, b=1; a<4; a++, b++)
+				for (int a=0, b=1; a<4; a+=2, b+=2)
 				{
 					if (b>3) b=0;
 

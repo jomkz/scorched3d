@@ -62,9 +62,12 @@ void Water2Patches::generate(Water2Points &heights,
 		int bufferSizeBytes = patchVolume * sizeof(Water2Patch::Data);
 		int allBuffersSizeBytes = bufferSizeBytes * i;
 
-		delete bufferObject_;
-		bufferObject_ = new GLVertexBufferObject();
-		bufferObject_->init_data(allBuffersSizeBytes, 0, GL_STATIC_DRAW);
+		if (!bufferObject_ || bufferObject_->get_map_size() != allBuffersSizeBytes) 
+		{
+			delete bufferObject_;
+			bufferObject_ = new GLVertexBufferObject();
+			bufferObject_->init_data(allBuffersSizeBytes, 0, GL_STATIC_DRAW);
+		}
 
 		i=0;
 		for (int y=0; y<size_; y++)

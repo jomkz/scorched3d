@@ -284,10 +284,7 @@ void Explosion::simulate(fixed frameTime, bool &remove)
 #ifndef S3D_SERVER
 					if (!context_->serverMode) 
 					{
-						Landscape::instance()->recalculate(
-							(int) newPosition[0].asFloat(), 
-							(int) newPosition[1].asFloat(), 
-							(int) explosionSize.asFloat());
+						Landscape::instance()->recalculate();
 
 						DeformTextures::deformLandscape(
 							newPosition.asVector(), 
