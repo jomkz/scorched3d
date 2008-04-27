@@ -27,6 +27,9 @@
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <target/TargetLife.h>
+#ifndef S3D_SERVER
+	#include <land/VisibilityPatchGrid.h>
+#endif
 
 Resurrection::Resurrection(
 	unsigned int playerId,
@@ -79,6 +82,12 @@ void Resurrection::simulate(fixed frameTime, bool &remove)
 		tank->rezTank();
 		tank->getLife().setTargetPosition(position_);
 		DeformLandscape::flattenArea(*context_, position_);
+#ifndef S3D_SERVER
+		if (!context_->serverMode)
+		{
+			VisibilityPatchGrid::instance()->recalculateErrors(position_, 2);
+		}
+#endif
 	}
 
 	Action::simulate(frameTime, remove);

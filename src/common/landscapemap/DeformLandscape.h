@@ -21,28 +21,62 @@
 #if !defined(AFX_DEFORMCIRCULAR_H__7E191509_3CD0_4EA5_A6B2_7C96C081C1AD__INCLUDED_)
 #define AFX_DEFORMCIRCULAR_H__7E191509_3CD0_4EA5_A6B2_7C96C081C1AD__INCLUDED_
 
-class FixedVector;
 class ScorchedContext;
+class ProgressCounter;
 
-#include <common/fixed.h>
+#include <common/FixedVector.h>
+#include <vector>
 
-namespace DeformLandscape
+class DeformLandscape
 {
+public:
 	struct DeformPoints
 	{
 		fixed map[100][100];
 	};
+	enum DeformType
+	{
+		eDeformLandscapeUp = 1,
+		eDeformLandscapeDown = 2,
+		eFlattenArea = 3,
+	};
+	struct DeformInfo
+	{
+		int type;
+		FixedVector pos;
+		fixed radius;
+	};
 
-	bool deformLandscape(
+	static bool deformLandscape(
 		ScorchedContext &context,
 		FixedVector &pos, fixed radius, 
 		bool down, DeformPoints &map);
-	void flattenArea(
+	static void flattenArea(
 		ScorchedContext &context, 
 		FixedVector &tankPos,
 		bool removeObjects = true,
 		fixed size = 2);
 
+	static void clearInfos();
+	static std::vector<DeformInfo> &getInfos() { return deformInfos_; }
+	static void applyInfos(ScorchedContext &context, 
+		std::vector<DeformInfo> &infos,
+		ProgressCounter *counter = 0);
+
+private:
+	static std::vector<DeformInfo> deformInfos_;
+
+	static bool deformLandscapeInternal(
+		ScorchedContext &context,
+		FixedVector &pos, fixed radius, 
+		bool down, DeformPoints &map,
+		bool setNormals);
+	static void flattenAreaInternal(
+		ScorchedContext &context, 
+		FixedVector &tankPos,
+		bool removeObjects,
+		fixed size,
+		bool setNormals);
 };
 
 #endif // !defined(AFX_DEFORMCIRCULAR_H__7E191509_3CD0_4EA5_A6B2_7C96C081C1AD__INCLUDED_)

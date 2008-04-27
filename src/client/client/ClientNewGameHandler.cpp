@@ -41,7 +41,7 @@
 #include <dialogs/ProgressDialog.h>
 #include <dialogs/RulesDialog.h>
 #include <landscapemap/LandscapeMaps.h>
-#include <landscapemap/HeightMapSender.h>
+#include <landscapemap/DeformLandscape.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <landscape/Landscape.h>
 #include <tank/TankContainer.h>
@@ -137,15 +137,11 @@ bool ClientNewGameHandler::actualProcessMessage(
 	ScorchedClient::instance()->getLandscapeMaps().generateMaps(
 		ScorchedClient::instance()->getContext(),
 		message.getLevelMessage().getGroundMapsDefn(),
-		message.getLevelMessage().getTankPositions(),
 		ProgressDialogSync::instance());
-
-	if (!HeightMapSender::generateHMapFromDiff(
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap(),
-		message.getLevelMessage().getHeightMap()))
-	{
-		S3D::dialogExit("Scorched3D", "Failed to generate heightmap diff");
-	}
+	DeformLandscape::applyInfos(
+		ScorchedClient::instance()->getContext(),
+		message.getLevelMessage().getDeformInfos(),
+		ProgressDialogSync::instance());
 
 	// Calculate all the new landscape settings (graphics)
 	Landscape::instance()->generate(ProgressDialogSync::instance());

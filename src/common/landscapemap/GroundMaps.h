@@ -38,7 +38,6 @@ public:
 	// Generates the next level
 	void generateMaps(
 		ScorchedContext &context,
-		std::list<FixedVector> &tankPositions,
 		ProgressCounter *counter = 0);
 
 	// Height map functions
@@ -80,7 +79,6 @@ protected:
 		ScorchedContext &context,
 		unsigned int &playerId,
 		ProgressCounter *counter = 0);
-	void saveHMap();
 
 };
 

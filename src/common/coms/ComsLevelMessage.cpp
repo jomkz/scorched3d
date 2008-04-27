@@ -45,20 +45,22 @@ LandscapeDefinition &ComsLevelMessage::getGroundMapsDefn()
 bool ComsLevelMessage::writeMessage(NetBuffer &buffer)
 {
 	if (!hdef_.writeMessage(buffer)) return false;
-	if (!hMap_.writeMessage(buffer)) return false;
 	buffer.addToBuffer(newTargets_);
 	buffer.addToBuffer(oldTargets_);
 
-	buffer.addToBuffer((int) tankPositions_.size());
+	buffer.addToBuffer((int) deformInfos_.size());
 	{
-		std::list<FixedVector>::iterator itor;
-		for (itor = tankPositions_.begin();
-			itor != tankPositions_.end();
+		std::vector<DeformLandscape::DeformInfo>::iterator itor;
+		for (itor = deformInfos_.begin();
+			itor != deformInfos_.end();
 			itor++)
 		{
-			buffer.addToBuffer(*itor);
+			DeformLandscape::DeformInfo &info = *itor;
+			buffer.addToBuffer(info.type);
+			buffer.addToBuffer(info.pos);
+			buffer.addToBuffer(info.radius);
 		}
-	}
+	}	
 
 	buffer.addToBuffer((int) targetIds_.size());
 	{
@@ -77,17 +79,18 @@ bool ComsLevelMessage::writeMessage(NetBuffer &buffer)
 bool ComsLevelMessage::readMessage(NetBufferReader &reader)
 {
 	if (!hdef_.readMessage(reader)) return false;
-	if (!hMap_.readMessage(reader)) return false;
 	if (!reader.getFromBuffer(newTargets_)) return false;
 	if (!reader.getFromBuffer(oldTargets_)) return false;
 
-	int tankPosSize = 0;
-	if (!reader.getFromBuffer(tankPosSize)) return false;
-	for (int i=0; i<tankPosSize; i++)
+	int infosSize = 0;
+	if (!reader.getFromBuffer(infosSize)) return false;
+	for (int i=0; i<infosSize; i++)
 	{
-		FixedVector tankPos;
-		if (!reader.getFromBuffer(tankPos)) return false;
-		tankPositions_.push_back(tankPos);
+		DeformLandscape::DeformInfo info;
+		if (!reader.getFromBuffer(info.type)) return false;
+		if (!reader.getFromBuffer(info.pos)) return false;
+		if (!reader.getFromBuffer(info.radius)) return false;
+		deformInfos_.push_back(info);
 	}
 
 	int targetIdSize = 0;

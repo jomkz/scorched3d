@@ -21,10 +21,10 @@
 #ifndef _comsLevelMessage_h
 #define _comsLevelMessage_h
 
-#include <list>
+#include <vector>
 #include <set>
-#include <coms/ComsHeightMapMessage.h>
 #include <landscapedef/LandscapeDefinition.h>
+#include <landscapemap/DeformLandscape.h>
 
 class ComsLevelMessage : public ComsMessage
 {
@@ -36,8 +36,7 @@ public:
 
 	// Accessors
 	LandscapeDefinition &getGroundMapsDefn();
-	ComsHeightMapMessage &getHeightMap() { return hMap_; }
-	std::list<FixedVector> &getTankPositions() { return tankPositions_; }
+	std::vector<DeformLandscape::DeformInfo> &getDeformInfos() { return deformInfos_; }
 	std::set<unsigned int> &getTargetIds() { return targetIds_; }
 	NetBuffer &getNewTargets() { return newTargets_; }
 	NetBuffer &getOldTargets() { return oldTargets_; }
@@ -48,9 +47,8 @@ public:
 
 protected:
 	LandscapeDefinition hdef_;
-	ComsHeightMapMessage hMap_;
-	std::list<FixedVector> tankPositions_;
 	std::set<unsigned int> targetIds_;
+	std::vector<DeformLandscape::DeformInfo> deformInfos_;
 	NetBuffer newTargets_;
 	NetBuffer oldTargets_;
 

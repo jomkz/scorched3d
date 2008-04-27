@@ -83,12 +83,10 @@ void ClientReloadAdaptor::reloadLandscapeObjects()
 	std::list<FixedVector> tankPositions;
 	ScorchedServer::instance()->getLandscapeMaps().generateMaps(
 		ScorchedServer::instance()->getContext(), 
-		serverDefinitions.getDefinition(), 
-		tankPositions);
+		serverDefinitions.getDefinition());
 	ScorchedClient::instance()->getLandscapeMaps().generateMaps(
 		ScorchedClient::instance()->getContext(),
-		serverDefinitions.getDefinition(),
-		tankPositions);
+		serverDefinitions.getDefinition());
 
 	// Classes that store refs to defns and texs
 	LandscapeSoundManager::instance()->addSounds();

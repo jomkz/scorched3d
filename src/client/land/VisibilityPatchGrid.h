@@ -22,7 +22,7 @@
 #define __INCLUDE_VisibilityPatchGridh_INCLUDE__
 
 #include <land/VisibilityPatchQuad.h>
-#include <land/VisibilityPatchInfos.h>
+#include <land/VisibilityPatchInfo.h>
 #include <land/LandSurround.h>
 #include <geomipmap/MipMapPatchIndexs.h>
 
@@ -37,8 +37,7 @@ public:
 	void generate(float *waterIndexErrors);
 
 	void calculateVisibility();
-	void startCalculateVisibility();
-	void endCalculateVisibility();
+	void recalculateErrors(FixedVector &position, fixed size);
 
 	void drawLand(int addIndex = 0, bool simple = false);
 	void drawLandLODLevels();
@@ -49,9 +48,9 @@ public:
 		GLSLShaderSetup *waterShader);
 
 	int getVisibleLandPatchesCount() { 
-		return patchInfos_.getCurrent().getVisibleLandPatchesCount(); }
+		return patchInfo_.getVisibleLandPatchesCount(); }
 	int getVisibleWaterPatchesCount() {
-		return patchInfos_.getCurrent().getVisibleWaterPatchesCount(); }
+		return patchInfo_.getVisibleWaterPatchesCount(); }
 
 	LandVisibilityPatch *getLandVisibilityPatch(int x, int y);
 	WaterVisibilityPatch *getWaterVisibilityPatch(int x, int y);
@@ -60,14 +59,12 @@ protected:
 	MipMapPatchIndexs landIndexs_;
 
 	// All the visibility patches
+	VisibilityPatchInfo patchInfo_;
 	LandVisibilityPatch *landPatches_;
 	WaterVisibilityPatch *waterPatches_;
 
 	// The visibility data that decides if a visibility patch is visible or not
 	VisibilityPatchQuad *visibilityPatches_;
-
-	// The list of visibile patches
-	VisibilityPatchInfos patchInfos_;
 
 	// The size of the patches
 	int midX_, midY_;

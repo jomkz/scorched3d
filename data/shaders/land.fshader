@@ -7,7 +7,7 @@ varying vec3 normal,lightDir;
 void main()
 {
     // Look up the diffuse color and shadow states for each light source.
-    float s0 = shadow2DProj(shadow, gl_TexCoord[1]).r;
+    float s0 = shadow2DProj(shadow, gl_TexCoord[3]).r;
 
 	// compute the dot product between normal and normalized lightdir
 	vec3 n = normalize(normal);

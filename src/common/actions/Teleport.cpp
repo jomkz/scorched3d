@@ -35,6 +35,7 @@
 #ifndef S3D_SERVER
 	#include <sound/SoundUtils.h>
 	#include <sprites/TeleportRenderer.h>
+	#include <land/VisibilityPatchGrid.h>
 #endif
 
 Teleport::Teleport(FixedVector position,
@@ -130,6 +131,12 @@ void Teleport::simulate(fixed frameTime, bool &remove)
 				// Set this position and flatten the landscape
 				tank->getLife().setTargetPosition(position_);
 				DeformLandscape::flattenArea(*context_, position_);
+#ifndef S3D_SERVER
+				if (!context_->serverMode)
+				{
+					VisibilityPatchGrid::instance()->recalculateErrors(position_, 2);
+				}
+#endif
 			}
 			else
 			{

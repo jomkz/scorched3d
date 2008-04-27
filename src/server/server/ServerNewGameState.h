@@ -45,10 +45,10 @@ public:
 	static void removeTargets();
 
 protected:
-	static std::list<FixedVector> tankPositions_;
-
 	static void checkTeamsAuto();
 	static void checkTeamsBotsVs();
+
+	static std::list<Tank *> resetTankStates(unsigned int state);
 
 };
 

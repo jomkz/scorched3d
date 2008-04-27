@@ -30,7 +30,10 @@
 #include <engine/ActionController.h>
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
+#include <common/ProgressCounter.h>
 #include <math.h>
+
+std::vector<DeformLandscape::DeformInfo> DeformLandscape::deformInfos_;
 
 bool DeformLandscape::deformLandscape(
 	ScorchedContext &context,
@@ -44,6 +47,24 @@ bool DeformLandscape::deformLandscape(
 				radius.getInternal(), (down?"Down":"Up")));
 	}
 
+	bool hits = deformLandscapeInternal(context, pos, radius, down, map, true);
+	if (hits && context.serverMode)
+	{
+		DeformInfo deformInfo;
+		deformInfo.type = down?eDeformLandscapeDown:eDeformLandscapeUp;
+		deformInfo.pos = pos;
+		deformInfo.radius = radius;
+		deformInfos_.push_back(deformInfo);
+	}
+
+	return hits;
+}
+
+bool DeformLandscape::deformLandscapeInternal(
+	ScorchedContext &context,
+	FixedVector &pos, fixed radius, bool down, DeformPoints &map, 
+	bool setNormals)
+{
 	HeightMap &hmap = context.landscapeMaps->getGroundMaps().getHeightMap();
 
 	bool hits = false;
@@ -124,15 +145,18 @@ bool DeformLandscape::deformLandscape(
 						}
 					}
 
-					if (newHeight != currentHeight)	hits = true;
-					hmap.setHeight(newPos[0].asInt(), newPos[1].asInt(), newHeight);
+					if (newHeight != currentHeight)
+					{
+						hits = true;
+						hmap.setHeight(newPos[0].asInt(), newPos[1].asInt(), newHeight);
+					}
 					map.map[x+iradius][y+iradius] = newMap;
 				}
 			}
 		}
 	}
 
-	if (hits)
+	if (hits && setNormals)
 	{
 		// Take out or add a chunk into the landsacpe
 		for (int x=-iradius-3; x<=iradius+3; x++)
@@ -164,40 +188,14 @@ void DeformLandscape::flattenArea(
 			size.getInternal()));
 	}
 
-	int iSize = size.asInt();
-	HeightMap &hmap = context.landscapeMaps->getGroundMaps().getHeightMap();
-	int posX = tankPos[0].asInt();
-	int posY = tankPos[1].asInt();
-
-	// Flatten a small area around the tank
-	for (int x=-iSize; x<=iSize; x++)
+	flattenAreaInternal(context, tankPos, removeObjects, size, true);
+	if (context.serverMode)
 	{
-		for (int y=-iSize; y<=iSize; y++)
-		{
-			int ix = posX + x;
-			int iy = posY + y;
-			if (ix >= 0 && iy >= 0 &&
-				ix < hmap.getMapWidth() &&
-				iy < hmap.getMapHeight())
-			{
-				hmap.setHeight(ix, iy, tankPos[2]);
-			}
-		}
-	}
-
-	for (int x=-iSize-3; x<=iSize+3; x++)
-	{
-		for (int y=-iSize-3; y<=iSize+3; y++)
-		{
-			int ix = posX + x;
-			int iy = posY + y;
-			if (ix >= 0 && iy >= 0 &&
-				ix < hmap.getMapWidth() &&
-				iy < hmap.getMapHeight())
-			{
-				hmap.getNormal(ix, iy);
-			}
-		}
+		DeformInfo deformInfo;
+		deformInfo.type = eFlattenArea;
+		deformInfo.pos = tankPos;
+		deformInfo.radius = size;
+		deformInfos_.push_back(deformInfo);
 	}
 
 	if (removeObjects)
@@ -222,3 +220,96 @@ void DeformLandscape::flattenArea(
 	}
 }
 
+
+void DeformLandscape::flattenAreaInternal(
+	ScorchedContext &context, FixedVector &tankPos, 
+	bool removeObjects, fixed size, bool setNormals)
+{
+	int iSize = size.asInt();
+	HeightMap &hmap = context.landscapeMaps->getGroundMaps().getHeightMap();
+	int posX = tankPos[0].asInt();
+	int posY = tankPos[1].asInt();
+
+	// Flatten a small area around the tank
+	for (int x=-iSize; x<=iSize; x++)
+	{
+		for (int y=-iSize; y<=iSize; y++)
+		{
+			int ix = posX + x;
+			int iy = posY + y;
+			if (ix >= 0 && iy >= 0 &&
+				ix < hmap.getMapWidth() &&
+				iy < hmap.getMapHeight())
+			{
+				hmap.setHeight(ix, iy, tankPos[2]);
+			}
+		}
+	}
+
+	if (setNormals)
+	{
+		for (int x=-iSize-3; x<=iSize+3; x++)
+		{
+			for (int y=-iSize-3; y<=iSize+3; y++)
+			{
+				int ix = posX + x;
+				int iy = posY + y;
+				if (ix >= 0 && iy >= 0 &&
+					ix < hmap.getMapWidth() &&
+					iy < hmap.getMapHeight())
+				{
+					hmap.getNormal(ix, iy);
+				}
+			}
+		}
+	}
+}
+
+void DeformLandscape::clearInfos()
+{
+	deformInfos_.clear();
+}
+
+void DeformLandscape::applyInfos(ScorchedContext &context, 
+	std::vector<DeformInfo> &infos,
+	ProgressCounter *counter)
+{
+	DeformPoints map;
+
+	if (counter) counter->setNewOp("Landscape Diffs");
+
+	deformInfos_.clear();
+	int count = (int) infos.size();
+	int i = 0;
+	std::vector<DeformInfo>::iterator itor;
+	for (itor = infos.begin();
+		itor != infos.end();
+		itor++, i++)
+	{
+		if (counter) counter->setNewPercentage((100.0f * float(i)) / float(count));
+
+		DeformInfo &info = *itor;
+		switch (info.type)
+		{
+		case eDeformLandscapeUp:
+			deformLandscapeInternal(context, info.pos, info.radius, false, map, false);
+			break;
+		case eDeformLandscapeDown:
+			deformLandscapeInternal(context, info.pos, info.radius, true, map, false);
+			break;
+		case eFlattenArea:
+			flattenAreaInternal(context, info.pos, false, info.radius, false);
+		}
+	}
+
+	if (counter) counter->setNewOp("Landscape Normals");
+	HeightMap &hmap = context.landscapeMaps->getGroundMaps().getHeightMap();
+	for (int x=0; x<=hmap.getMapWidth(); x++)
+	{
+		if (counter) counter->setNewPercentage((100.0f * float(x)) / float(hmap.getMapWidth()));
+		for (int y=0; y<=hmap.getMapHeight(); y++)
+		{
+			hmap.getNormal(x, y);
+		}
+	}
+}

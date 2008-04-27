@@ -34,6 +34,7 @@
 	#include <graph/MainCamera.h>
 	#include <client/ScorchedClient.h>
 	#include <sound/SoundUtils.h>
+	#include <land/VisibilityPatchGrid.h>
 #endif
 #include <landscapemap/DeformLandscape.h>
 #include <landscapemap/LandscapeMaps.h>
@@ -285,6 +286,7 @@ void Explosion::simulate(fixed frameTime, bool &remove)
 					if (!context_->serverMode) 
 					{
 						Landscape::instance()->recalculate();
+						VisibilityPatchGrid::instance()->recalculateErrors(newPosition, explosionSize);
 
 						DeformTextures::deformLandscape(
 							newPosition.asVector(), 

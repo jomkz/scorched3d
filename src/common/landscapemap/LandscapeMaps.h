@@ -35,7 +35,6 @@ public:
 	void generateMaps(
 		ScorchedContext &context,
 		LandscapeDefinition &defn,
-		std::list<FixedVector> &tankPositions,
 		ProgressCounter *counter = 0);
 
 	GroundMaps &getGroundMaps() { return gMaps_; }

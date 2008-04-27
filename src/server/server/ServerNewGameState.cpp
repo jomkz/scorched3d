@@ -45,7 +45,6 @@
 #include <coms/ComsNewGameMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <landscapemap/LandscapeMaps.h>
-#include <landscapemap/HeightMapSender.h>
 #include <landscapedef/LandscapeDefn.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <placement/PlacementTankPosition.h>
@@ -59,8 +58,6 @@
 #include <algorithm>
 
 extern Clock serverTimer;
-
-std::list<FixedVector> ServerNewGameState::tankPositions_;
 
 ServerNewGameState::ServerNewGameState() :
 	GameStateI("ServerNewGameState")
@@ -155,9 +152,12 @@ void ServerNewGameState::enterState(const unsigned state)
 	// Check teams are even
 	checkTeams();
 
+	// Make sure all tanks that should be playing are playing
+	resetTankStates(state);
+
 	// Generate the new level
 	ScorchedServer::instance()->getLandscapeMaps().generateMaps(
-		ScorchedServer::instance()->getContext(), defn, tankPositions_);
+		ScorchedServer::instance()->getContext(), defn);
 
 	// Add pending tanks (all tanks should be pending) into the game
 	addTanksToGame(state, sendGameState);
@@ -178,28 +178,8 @@ void ServerNewGameState::enterState(const unsigned state)
 int ServerNewGameState::addTanksToGame(const unsigned state,
 									   bool addState)
 {
-	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	std::map<unsigned int, Tank *>::iterator itor;
-
-	// Check if there are any tanks needing the next level
-	bool pending = false;
-	for (itor = tanks.begin();
-		itor != tanks.end();
-		itor++)
-	{
-		Tank *tank = (*itor).second;
-
-		// Check to see if any tanks are pending being added
-		if (tank->getState().getState() == TankState::sPending ||
-			(state == ServerState::ServerStateNewGame && (
-			tank->getState().getState() == TankState::sDead ||
-			tank->getState().getState() == TankState::sNormal)))
-		{
-			pending = true;
-		}
-	}
-	if (!pending) return 0;
+	std::list<Tank *> tanks = resetTankStates(state);
+	if (tanks.empty()) return 0;
 
 	// Generate the level message
 	ComsNewGameMessage newGameMessage;
@@ -241,15 +221,10 @@ int ServerNewGameState::addTanksToGame(const unsigned state,
 	}
 
 	// Add the height map info
-	newGameMessage.getLevelMessage().getTankPositions() = tankPositions_;
 	newGameMessage.getLevelMessage().createMessage(
 		ScorchedServer::instance()->getLandscapeMaps().getDefinitions().getDefinition());
-	if (!HeightMapSender::generateHMapDiff(
-		ScorchedServer::instance()->getLandscapeMaps().getGroundMaps().getHeightMap(),
-		newGameMessage.getLevelMessage().getHeightMap()))
-	{
-		Logger::log( "ERROR: Failed to generate diff");
-	}
+	newGameMessage.getLevelMessage().getDeformInfos() = 
+		DeformLandscape::getInfos();
 	LandscapeDefinitionCache &definitions =
 		ScorchedServer::instance()->getLandscapeMaps().getDefinitions();
 	ServerCommon::serverLog(
@@ -259,11 +234,12 @@ int ServerNewGameState::addTanksToGame(const unsigned state,
 		definitions.getDefinition().getTex()));
 
 	// Check if the generated landscape is too large to send to the clients
-	if (newGameMessage.getLevelMessage().getHeightMap().getLevelLen() >
-		(unsigned int) ScorchedServer::instance()->getOptionsGame().getMaxLandscapeSize())
+	int sendSize = int(newGameMessage.getLevelMessage().getDeformInfos().size()) *
+		sizeof(DeformLandscape::DeformInfo);
+	if (sendSize > ScorchedServer::instance()->getOptionsGame().getMaxLandscapeSize())
 	{
 		ServerCommon::sendString(0, S3D::formatStringBuffer("Landscape too large to send to waiting clients (%i bytes).", 
-			newGameMessage.getLevelMessage().getHeightMap().getLevelLen()));
+			sendSize));
 		return 0;
 	}
 
@@ -273,8 +249,42 @@ int ServerNewGameState::addTanksToGame(const unsigned state,
 	std::set<unsigned int> destinations;
 	std::set<unsigned int>::iterator findItor;
 
+	std::list<Tank *>::iterator itor;
+	for (itor = tanks.begin();
+		itor != tanks.end();
+		itor++)
+	{
+		Tank *tank = *itor;
+
+		// We need to wait for a ready message
+		tank->getState().setNotReady();
+
+		// Add to the list of destinations to send this message to
+		// (if not already added)
+		unsigned int destination = tank->getDestinationId();
+		findItor = destinations.find(destination);
+		if (findItor == destinations.end())
+		{
+			destinations.insert(destination);
+			sendDestinations.push_back(destination);
+		}
+	}
+
+	// Send after all of the states have been set
+	// Do this after incase the message contains the new states
+	ComsMessageSender::sendToMultipleClients(newGameMessage, sendDestinations);
+
+	return (int) tanks.size();
+}
+
+std::list<Tank *> ServerNewGameState::resetTankStates(unsigned int state)
+{
+	std::list<Tank *> resultingTanks;
+
 	// Tell any pending tanks to join the game
-	int count = 0;
+	std::map<unsigned int, Tank *> &tanks = 
+		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
 		itor++)
@@ -286,7 +296,7 @@ int ServerNewGameState::addTanksToGame(const unsigned state,
 			tank->getState().getState() == TankState::sDead ||
 			tank->getState().getState() == TankState::sNormal)))
 		{
-			count++;
+			resultingTanks.push_back(tank);
 
 			// This is the very first time this tank
 			// has played the game, load it with the starting
@@ -320,27 +330,10 @@ int ServerNewGameState::addTanksToGame(const unsigned state,
 				// This tank is now playing (but dead)
 				tank->getState().setState(TankState::sDead);
 			}
-
-			// We need to wait for a ready message
-			tank->getState().setNotReady();
-
-			// Add to the list of destinations to send this message to
-			// (if not already added)
-			unsigned int destination = tank->getDestinationId();
-			findItor = destinations.find(destination);
-			if (findItor == destinations.end())
-			{
-				destinations.insert(destination);
-				sendDestinations.push_back(destination);
-			}
 		}
 	}
 
-	// Send after all of the states have been set
-	// Do this after incase the message contains the new states
-	ComsMessageSender::sendToMultipleClients(newGameMessage, sendDestinations);
-
-	return count;
+	return resultingTanks;
 }
 
 void ServerNewGameState::checkTeams()

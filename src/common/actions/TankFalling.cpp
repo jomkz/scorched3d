@@ -34,6 +34,9 @@
 #include <weapons/Parachute.h>
 #include <common/OptionsScorched.h>
 #include <landscapemap/DeformLandscape.h>
+#ifndef S3D_SERVER
+	#include <land/VisibilityPatchGrid.h>
+#endif
 
 TankFalling::TankFalling(Weapon *weapon, unsigned int fallingPlayerId,
 				   WeaponFireContext &weaponContext,
@@ -172,6 +175,12 @@ void TankFalling::collision(PhysicsParticleObject &position,
 		if (!current->isTarget())
 		{
 			DeformLandscape::flattenArea(*context_, position.getPosition());
+#ifndef S3D_SERVER
+			if (!context_->serverMode)
+			{
+				VisibilityPatchGrid::instance()->recalculateErrors(position.getPosition(), 2);
+			}
+#endif
 		}
 
 		// Add the damage to the tank

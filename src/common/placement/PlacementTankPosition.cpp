@@ -31,13 +31,11 @@
 #include <image/ImageFactory.h>
 #include <common/Logger.h>
 
-void PlacementTankPosition::flattenTankPositions(std::list<FixedVector> &tankPositions, 
+void PlacementTankPosition::flattenTankPositions(
 	ScorchedContext &context)
 {
 	if (context.serverMode)
 	{
-		tankPositions.clear();
-
 		LandscapeDefinitionCache &definitions = 
 			context.landscapeMaps->getDefinitions();
 
@@ -54,8 +52,7 @@ void PlacementTankPosition::flattenTankPositions(std::list<FixedVector> &tankPos
 			Tank *tank = (*mainitor).second;
 
 			if (!tank->getState().getSpectator() &&
-				((tank->getState().getState() == TankState::sDead) ||
-				tank->getState().getState() == TankState::sNormal))
+				tank->getState().getState() == TankState::sNormal)
 			{
 				FixedVector tankPos = PlacementTankPosition::placeTank(
 					tank->getPlayerId(), tank->getTeam(), 
@@ -63,20 +60,7 @@ void PlacementTankPosition::flattenTankPositions(std::list<FixedVector> &tankPos
 
 				tank->getLife().setTargetPosition(tankPos);
 				DeformLandscape::flattenArea(context, tankPos);
-
-				tankPositions.push_back(tankPos);
 			}
-		}
-	}
-	else
-	{
-		std::list<FixedVector>::iterator itor;
-		for (itor = tankPositions.begin();
-			itor != tankPositions.end();
-			itor++)
-		{
-			FixedVector &tankPos = *itor;
-			DeformLandscape::flattenArea(context, tankPos);
 		}
 	}
 }

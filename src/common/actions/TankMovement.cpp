@@ -37,6 +37,7 @@
 	#include <image/ImageStore.h>
 	#include <GLEXT/GLImageModifier.h>
 	#include <sound/Sound.h>
+	#include <land/VisibilityPatchGrid.h>
 #endif
 #include <tank/TankContainer.h>
 #include <tank/TankModelStore.h>
@@ -274,6 +275,12 @@ void TankMovement::simulationMove(fixed frameTime)
 			{
 				// Move the tank to the final position
 				DeformLandscape::flattenArea(*context_, current->getLife().getTargetPosition());
+#ifndef S3D_SERVER
+				if (!context_->serverMode)
+				{
+					VisibilityPatchGrid::instance()->recalculateErrors(current->getLife().getTargetPosition(), 2);
+				}
+#endif
 			}
 		}
 

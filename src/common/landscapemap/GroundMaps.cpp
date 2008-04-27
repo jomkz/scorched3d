@@ -41,7 +41,6 @@ GroundMaps::~GroundMaps()
 
 void GroundMaps::generateMaps(
 	ScorchedContext &context,
-	std::list<FixedVector> &tankPositions,
 	ProgressCounter *counter)
 {
 	generateHMap(context, counter);
@@ -49,17 +48,12 @@ void GroundMaps::generateMaps(
 
 	// Place the tanks after the objects and hmap
 	// This can remove objects, and flatten the hmap
-	PlacementTankPosition::flattenTankPositions(tankPositions, context);
+	PlacementTankPosition::flattenTankPositions(context);
 
 	// Create movement after targets, so we can mark 
 	// those targets that are in movement groups
 	context.targetMovement->generate(context); 
 	nmap_.create(getMapWidth(), getMapHeight());
-
-	// Store the hmap to create the landscape diff.
-	// This must be done after all modifications are 
-	// made to the landscape height
-	saveHMap();
 }
 
 void GroundMaps::generateHMap(
@@ -159,12 +153,6 @@ void GroundMaps::generateObjects(
 				entry.position_, entry.size_);
 		}
 	}
-}
-
-void GroundMaps::saveHMap()
-{
-	// Save this height map for later
-	// map_.backup();
 }
 
 fixed GroundMaps::getHeight(int w, int h)

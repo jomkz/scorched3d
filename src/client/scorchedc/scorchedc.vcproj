@@ -1005,14 +1005,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsHeightMapMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsHeightMapMessage.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\coms\ComsInitializeMessage.cpp"
 				>
 			</File>
@@ -1506,14 +1498,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\landscapemap\HeightMapModifier.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\landscapemap\HeightMapSender.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\landscapemap\HeightMapSender.h"
 				>
 			</File>
 			<File
@@ -5550,14 +5534,6 @@
 			</File>
 			<File
 				RelativePath="..\land\VisibilityPatchInfo.h"
-				>
-			</File>
-			<File
-				RelativePath="..\land\VisibilityPatchInfos.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\land\VisibilityPatchInfos.h"
 				>
 			</File>
 			<File

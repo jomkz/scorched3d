@@ -487,21 +487,23 @@ void Landscape::generate(ProgressCounter *counter)
 			mainMap_, splatMask1, splatMask2,
 			bitmapRock, bitmapShore, bitmaps, 4, 1024, counter);
 
+#ifdef SPLAT_MAP
 		// Generate splat texture maps
 		ImageModifier::addTexturesToBitmap(
 			splatMap_,
 			bitmapRock, bitmapShore, bitmaps, 4);
 		splatTextures_.create(splatMap_, false);
 
-		// Set the general surround and roof texture
-		groundTexture_.replace(texture0, false);
-		roofTexture_.replace(bitmapRoof, true);
-
 		// Set up the splat textures
 		splatMaskTexture1_.replace(splatMask1, false);
 		splatMaskTexture2_.replace(splatMask2, false);
 		splatMaskTextureBorder1_.replace(splatMaskBorder1, false);
 		splatMaskTextureBorder2_.replace(splatMaskBorder2, false);
+#endif
+
+		// Set the general surround and roof texture
+		groundTexture_.replace(texture0, false);
+		roofTexture_.replace(bitmapRoof, true);
 	}
 	else
 	{

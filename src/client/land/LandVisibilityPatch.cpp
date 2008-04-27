@@ -33,7 +33,7 @@
 #include <GLW/GLWFont.h>
 
 LandVisibilityPatch::LandVisibilityPatch() : 
-	visible_(false), 
+	visible_(false), recalculateErrors_(false),
 	leftPatch_(0), rightPatch_(0),
 	topPatch_(0), bottomPatch_(0),
 	visibilityIndex_(-1),
@@ -119,6 +119,11 @@ void LandVisibilityPatch::setLocation(int x, int y,
 	dataOffSet_ = (x + (y * (mapWidth + 1))) * 
 		sizeof(GraphicalLandscapeMap::HeightData) / sizeof(float);
 
+	calculateErrors();
+}
+
+void LandVisibilityPatch::calculateErrors()
+{
 	maxHeight_ = 0.0f;
 	minHeight_ = 100000.0f;
 	for (int i=0; i<=5; i++)
@@ -161,6 +166,12 @@ void LandVisibilityPatch::setLocation(int x, int y,
 bool LandVisibilityPatch::setVisible(Vector &cameraPos)
 { 
 	visible_ = true;
+
+	if (recalculateErrors_) 
+	{
+		calculateErrors();
+		recalculateErrors_ = false;
+	}
 
 	float distance = (cameraPos - position_).Magnitude();
 

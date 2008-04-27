@@ -38,6 +38,7 @@ public:
 		LandVisibilityPatch *bottomPatch);
 	bool setVisible(Vector &cameraPos);
 	void setNotVisible();
+	void setRecalculateErrors() { recalculateErrors_ = true; }
 
 	int getVisibilityIndex() { return visible_?visibilityIndex_:-1; }
 	Vector &getPosition() { return position_; }
@@ -57,7 +58,7 @@ protected:
 	float maxHeight_, minHeight_, boundingSize_;
 	int dataSize_;
 	int visibilityIndex_;
-	bool visible_;
+	bool visible_, recalculateErrors_;
 	float indexErrors_[6];
 	Vector position_;
 	LandVisibilityPatch *leftPatch_;
@@ -65,6 +66,7 @@ protected:
 	LandVisibilityPatch *topPatch_;
 	LandVisibilityPatch *bottomPatch_;
 
+	void calculateErrors();
 };
 
 #endif // __INCLUDE_LandVisibilityPatchh_INCLUDE__

@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <landscapemap/LandscapeMaps.h>
+#include <landscapemap/DeformLandscape.h>
 #include <engine/ScorchedContext.h>
 
 LandscapeMaps::LandscapeMaps() :
@@ -33,11 +34,11 @@ LandscapeMaps::~LandscapeMaps()
 void LandscapeMaps::generateMaps(
 	ScorchedContext &context,
 	LandscapeDefinition &defn,
-	std::list<FixedVector> &tankPositions,
 	ProgressCounter *counter)
 {
+	DeformLandscape::clearInfos();
 	dCache_.setDefinition(context, defn);
-	gMaps_.generateMaps(context, tankPositions, counter);
+	gMaps_.generateMaps(context, counter);
 	rMaps_.generateMaps(context, counter);
 }
 
