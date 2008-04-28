@@ -34,6 +34,15 @@ NetMessageHandler::NetMessageHandler() :
 
 NetMessageHandler::~NetMessageHandler()
 {
+	SDL_LockMutex(messagesMutex_);
+	while (!messages_.empty())
+	{
+		NetMessage *message = messages_.front();
+		messages_.pop_front();
+		NetMessagePool::instance()->addToPool(message);
+	}	
+	SDL_UnlockMutex(messagesMutex_);
+
 	SDL_DestroyMutex(messagesMutex_);
 }
 

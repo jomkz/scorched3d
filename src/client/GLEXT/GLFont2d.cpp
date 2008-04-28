@@ -155,7 +155,7 @@ void GLFont2d::drawOutlineWidthRhs(float len, Vector &color, float size, float s
 		int l = 0;
 		float width = 0.0f;
 		char *a=& ((char *)text.c_str())[slen-1];
-		for (; a >= text; a--, l++)
+		for (; a >= (char *) text.c_str(); a--, l++)
 		{
 			width += float(characters_[*a].advances) * (size2==0.0?size:size2) / height_;
 			if (width > len) break;

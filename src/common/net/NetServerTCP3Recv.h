@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-//    Scorched3D (c) 2000-2003
+//    Scorched3D (c) 2000-2004
 //
 //    This file is part of Scorched3D.
 //
@@ -18,32 +18,38 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <server/ServerParams.h>
+#if !defined(__INCLUDE_NetServerTCP3Recvh_INCLUDE__)
+#define __INCLUDE_NetServerTCP3Recvh_INCLUDE__
 
-ServerParams *ServerParams::instance_ = 0;
+#include <net/NetInterface.h>
+#include <list>
 
-ServerParams *ServerParams::instance()
+class NetServerTCP3Recv
 {
-	if (!instance_)
-	{
-		instance_ = new ServerParams;
-	}
+public:
+	NetServerTCP3Recv(TCPsocket socket, 
+		unsigned int destinationId, unsigned int ipAddress,
+		NetMessageHandler *recieveMessageHandler);
+	virtual ~NetServerTCP3Recv();
 
-	return instance_;
-}
+	bool getStopped() { return stopped_; }
+	void stop() { running_ = false; }
+	void wait();
 
-ServerParams::ServerParams() :
-	server_(options_, "startserver",
-		"Starts a scorched 3d server, requires the name of the server settings file e.g. data/server.xml", 0, ""),
-	hideWindow_(options_, "hidewindow",
-		"Hides the scorched3d console window (windows)", 0, false),
-	startCustom_(options_, "startcustom",
-		"Starts a scorched 3d server, uses the last server made", 0, false)
-{
+	unsigned int getMessagesRecieved() { return messagesRecieved_; }
+	unsigned int getBytesIn() { return bytesIn_; }
 
-}
+protected:
+	bool stopped_, running_;
+	unsigned int destinationId_, ipAddress_;
+	TCPsocket socket_;
+	SDLNet_SocketSet socketSet_;
+	SDL_Thread *recvThread_;
+	NetMessageHandler *recieveMessageHandler_;
+	unsigned int messagesRecieved_, bytesIn_;
 
-ServerParams::~ServerParams()
-{
-	
-}
+	static int recvThreadFunc(void *c);
+	bool actualRecvFunc();
+};
+
+#endif // __INCLUDE_NetServerTCP3Recvh_INCLUDE__

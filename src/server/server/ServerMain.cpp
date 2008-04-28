@@ -26,6 +26,7 @@
 #include <net/NetLoopBack.h>
 #include <net/NetServerTCP.h>
 #include <net/NetServerTCP2.h>
+#include <net/NetServerTCP3.h>
 #include <common/Defines.h>
 #include <common/Clock.h>
 #include <common/ARGParser.h>
@@ -103,7 +104,8 @@ bool startServer(bool local, ProgressCounter *counter)
 		ScorchedServer::instance()->getContext().netInterface = 
 			//new NetServerTCP(new NetServerTCPScorchedProtocol());
 			//new NetServerUDP();
-			new NetServerTCP2();
+			//new NetServerTCP2();
+			new NetServerTCP3();
 	}
 
 	ScorchedServer::instance()->getOptionsGame().updateChangeSet();

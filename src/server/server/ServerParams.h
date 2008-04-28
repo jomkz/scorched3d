@@ -30,12 +30,16 @@ public:
 
 	const char *getServerFile() { return server_.getValue(); }
 	bool getHideWindow() { return hideWindow_.getValue(); }
+	bool getServerCustom() { return startCustom_.getValue(); }
+
+	void setServerFile(const std::string &file) { server_.setValue(file); }
 
 protected:
 	static ServerParams *instance_;
 
 	OptionEntryString server_;
 	OptionEntryBool hideWindow_;
+	OptionEntryBool startCustom_;
 
 private:
 	ServerParams();

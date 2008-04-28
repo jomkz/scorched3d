@@ -18,19 +18,19 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_NetServerUDPh_INCLUDE__)
-#define __INCLUDE_NetServerUDPh_INCLUDE__
+#if !defined(__INCLUDE_NetServerTCP3h_INCLUDE__)
+#define __INCLUDE_NetServerTCP3h_INCLUDE__
 
-#include <net/NetServerUDPDestination.h>
+#include <net/NetServerTCP3Destination.h>
 #include <map>
 
-class NetServerUDP : 
+class NetServerTCP3 : 
 	public NetInterface,
 	public NetMessageHandlerI
 {
 public:
-	NetServerUDP();
-	virtual ~NetServerUDP();
+	NetServerTCP3();
+	virtual ~NetServerTCP3();
 
 	// NetInterface
 	virtual bool started();
@@ -52,39 +52,29 @@ public:
 	virtual void processMessage(NetMessage &message);
 
 protected:
-	friend class NetServerUDPDestination;
-
-	enum PacketType
-	{
-		eConnect = 1,
-		eConnectAck = 2,
-		eDisconnect = 3,
-		eData = 4,
-		eDataFin = 5,
-		eDataAck = 6
-	};
+	friend class NetServerTCP3Destination;
 
 	NetMessageHandler outgoingMessageHandler_;
 	NetMessageHandler incomingMessageHandler_;
-	UDPsocket udpsock_;
-	UDPpacket **packetVIn_;
-	UDPpacket **packetVOut_;
+	TCPsocket serverSock_;
+	SDLNet_SocketSet serverSockSet_;
 	SDL_Thread *sendRecvThread_;
-	std::map<unsigned int, NetServerUDPDestination *> destinations_;
+	bool stopped_;
+	std::map<unsigned int, NetServerTCP3Destination *> destinations_;
+	std::list<NetServerTCP3Destination *> finishedDestinations_;
 	unsigned int serverDestinationId_;
 	unsigned int nextDestinationId_;
 
-	bool checkIncoming();
-	bool checkOutgoing();
+	void checkNewConnections();
+	void checkClients();
 	bool startProcessing();
+
 	void actualSendRecvFunc();
-	bool sendConnect(IPaddress &address, PacketType type);
 	static int sendRecvThreadFunc(void *);
 
 	void destroyDestination(unsigned int destinationId, 
 		NetMessage::DisconnectFlags type);
-	unsigned int getDestination(IPaddress &address);
-	unsigned int addDestination(IPaddress &address);
+	unsigned int addDestination(TCPsocket &socket);
 };
 
-#endif // __INCLUDE_NetServerUDPh_INCLUDE__
+#endif // __INCLUDE_NetServerTCP3h_INCLUDE__

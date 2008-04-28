@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-//    Scorched3D (c) 2000-2003
+//    Scorched3D (c) 2000-2004
 //
 //    This file is part of Scorched3D.
 //
@@ -18,32 +18,20 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <server/ServerParams.h>
+#if !defined(__INCLUDE_NetServerTCP3Comsh_INCLUDE__)
+#define __INCLUDE_NetServerTCP3Comsh_INCLUDE__
 
-ServerParams *ServerParams::instance_ = 0;
+#include <net/NetInterface.h>
 
-ServerParams *ServerParams::instance()
+class NetServerTCP3Coms
 {
-	if (!instance_)
-	{
-		instance_ = new ServerParams;
-	}
+public:
+	static int SDLNet_TCP_Recv_Wrapper(
+		TCPsocket sock, void *data, int maxlen);
+	static int SDLNet_TCP_Send_Wrapper(
+		TCPsocket sock, void *datap, int len);
+	static bool SDLNet_TCP_Recv_Full(
+		TCPsocket socket, char *dest, int len);
+};
 
-	return instance_;
-}
-
-ServerParams::ServerParams() :
-	server_(options_, "startserver",
-		"Starts a scorched 3d server, requires the name of the server settings file e.g. data/server.xml", 0, ""),
-	hideWindow_(options_, "hidewindow",
-		"Hides the scorched3d console window (windows)", 0, false),
-	startCustom_(options_, "startcustom",
-		"Starts a scorched 3d server, uses the last server made", 0, false)
-{
-
-}
-
-ServerParams::~ServerParams()
-{
-	
-}
+#endif // __INCLUDE_NetServerTCP3Comsh_INCLUDE__

@@ -44,11 +44,11 @@
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/src/server&quot;;&quot;$(SolutionDir)/src/common&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/zlib/zlib&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/jpg&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/SDL&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/expat/expat&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/png/png&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/mysql&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;S3D_SERVER;_CRT_SECURE_NO_WARNINGS;HAVE_MYSQL;XML_STATIC"
 				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
+				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -3129,6 +3129,46 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\net\NetServerTCP3.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Coms.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Coms.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Destination.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Destination.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Recv.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Recv.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Send.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Send.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\net\NetServerTCPProtocol.cpp"
 				>
 			</File>
@@ -3142,22 +3182,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\net\NetServerTCPRead.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerUDP.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerUDP.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerUDPDestination.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerUDPDestination.h"
 				>
 			</File>
 		</Filter>

@@ -1949,6 +1949,46 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\net\NetServerTCP3.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Coms.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Coms.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Destination.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Destination.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Recv.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Recv.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Send.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Send.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\net\NetServerTCPProtocol.cpp"
 				>
 			</File>
@@ -1962,22 +2002,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\net\NetServerTCPRead.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerUDP.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerUDP.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerUDPDestination.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerUDPDestination.h"
 				>
 			</File>
 		</Filter>
