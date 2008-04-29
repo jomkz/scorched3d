@@ -175,10 +175,10 @@ bool LandVisibilityPatch::setVisible(Vector &cameraPos)
 
 	float distance = (cameraPos - position_).Magnitude();
 
-	float maxError = 8.0f;
+	float maxError = 5.0f;
 	if (distance < 32.0f) maxError = 1.0f;
-	else if (distance < 64.0f) maxError = 3.0f;
-	else if (distance < 256.0f) maxError = 5.0f;
+	else if (distance < 64.0f) maxError = 1.5f;
+	else if (distance < 256.0f) maxError = 3.0f;
 
 	visibilityIndex_ = 0;
 	if (!OptionsDisplay::instance()->getNoLandLOD())

@@ -45,6 +45,233 @@ void HeightMapModifier::levelSurround(HeightMap &hmap)
 	}
 }
 
+static int noiseFn(int x, int y, int random)
+{
+    int n = x + y * 57 + random * 131;
+    n = (n<<13) ^ n;
+    return ((n * (n * n * 15731 + 789221) +
+		1376312589)&0x7fffffff);
+}
+
+void HeightMapModifier::noise(HeightMap &hmap, 
+	LandscapeDefnHeightMapGenerate &defn,
+	RandomGenerator &generator,
+	ProgressCounter *counter)
+{
+	if (counter) counter->setNewOp("Noise");
+	if (defn.noisefactor == 0) return;
+
+	unsigned int randomU = generator.getRandUInt() % 5000;
+	int random = (int) randomU;
+
+	fixed *noisemap = new fixed[defn.noisewidth * defn.noiseheight];
+	for (int y=0; y<defn.noiseheight; y++)
+	{
+		for (int x=0; x<defn.noisewidth; x++)
+		{
+			int noise = (noiseFn(x,  y,  random) -
+				(INT_MAX / 2)) / 100000;
+			noisemap[x + y * defn.noisewidth] = 
+				fixed(true, noise) * defn.noisefactor;
+		}
+	}
+
+	// Should perhaps lineraly interp, but smoothing is done afterwards
+	for (int x=0; x<=hmap.getMapWidth(); x++)
+	{
+		if (counter) counter->setNewPercentage((100.0f * float(x)) / float(hmap.getMapWidth()));
+		for (int y=0; y<=hmap.getMapHeight(); y++)
+		{
+			fixed nx = fixed(defn.noisewidth) * fixed(x) / fixed(hmap.getMapWidth());
+			fixed ny = fixed(defn.noiseheight) * fixed(y) / fixed(hmap.getMapHeight());
+			if (nx >= defn.noisewidth) nx = defn.noisewidth - 1;
+			if (ny >= defn.noiseheight) ny = defn.noiseheight - 1;
+
+			fixed height = hmap.getHeight(x, y);
+			fixed newHeight = height + 
+				noisemap[nx.asInt() + ny.asInt() * defn.noisewidth];
+			newHeight = MAX(newHeight, 0);
+			hmap.setHeight(x, y, newHeight);
+		}
+	}
+}
+
+void HeightMapModifier::edgeEnhance(HeightMap &hmap, 
+	LandscapeDefnHeightMapGenerate &defn,
+	RandomGenerator &generator,
+	ProgressCounter *counter)
+{
+	if (counter) counter->setNewOp("Edge Enhance");
+	
+	fixed *newhMap_ = new fixed[(hmap.getMapWidth()+1) * (hmap.getMapHeight()+1)];
+	fixed *point = newhMap_;
+	fixed max, pixel;
+	for (int y=0; y<=hmap.getMapHeight(); y++)
+	{
+		if (counter) counter->setNewPercentage((100.0f * float(y)) / float(hmap.getMapHeight()));
+		for (int x=0; x<=hmap.getMapWidth(); x++, point++)
+        {
+			fixed height = hmap.getHeight(x, y);
+			if (x>0 && y>0 && x<hmap.getMapWidth() && y<hmap.getMapHeight())
+			{
+				max = (hmap.getHeight(x + 1, y + 1) - hmap.getHeight(x - 1, y - 1)).abs();
+				
+				pixel = (hmap.getHeight(x - 1, y + 1) - hmap.getHeight(x + 1, y - 1)).abs();
+				if (pixel > max) max = pixel;
+
+				pixel = (hmap.getHeight(x - 1, y) - hmap.getHeight(x + 1, y)).abs();
+				if (pixel > max) max = pixel;
+
+				pixel = (hmap.getHeight(x, y - 1) - hmap.getHeight(x, y + 1)).abs();
+				if (pixel > max) max = pixel;
+
+				*point = MAX(height, max + height);
+			}
+			else
+			{
+				*point = height;
+			}
+			*point = MAX(*point, 0);
+        }
+    }    
+
+	fixed *start = newhMap_;
+	for (int y=0; y<=hmap.getMapHeight(); y++)
+	{
+		for (int x=0; x<=hmap.getMapWidth(); x++)
+		{
+			hmap.setHeight(x, y, *(start++));
+		}
+	}
+	delete [] newhMap_;
+}
+
+static void getPos(int pos, int &x, int &y, int dist)
+{
+	switch (pos)
+	{
+	case 0:
+		x = -dist;
+		y = -dist;
+		break;
+	case 1:
+		x = dist;
+		y = dist;
+		break;
+	case 2:
+		x = dist;
+		y = -dist;
+		break;
+	case 3:
+		x = -dist;
+		y = dist;
+		break;
+	case 4:
+		x = -dist;
+		y = 0;
+		break;
+	case 5:
+		x = dist;
+		y = 0;
+		break;
+	case 6:
+		x = 0;
+		y = dist;
+		break;
+	case 7:
+		x = 0;
+		y = -dist;
+		break;
+	}
+}
+
+void HeightMapModifier::waterErosion(HeightMap &hmap, 
+	LandscapeDefnHeightMapGenerate &defn,
+	RandomGenerator &generator,
+	ProgressCounter *counter)
+{
+	if (counter) counter->setNewOp("Water Erosion");
+
+	int x = 128;//generator.getRandUInt() % hmap.getMapWidth();
+	int y = 128;//generator.getRandUInt() % hmap.getMapHeight();
+	
+	int startx = x;
+	int starty = y;
+	fixed startHeight = hmap.getHeight(x, y);
+
+	int nx, ny;
+	for (int i=0; i<500; i++)
+	{
+		// Find next position to be lowered
+		fixed minHeight = fixed::MAX_FIXED;
+		int distFromStart = (x - startx) * (x - startx) +
+			(y - starty) * (y - starty);
+		int minIndex = -1;
+		for (int a=0; a<4; a++)
+		{
+			getPos(a, nx, ny, 1);
+			if (x + nx >= 0 &&
+				y + ny >= 0 &&
+				x + nx <= hmap.getMapWidth() &&
+				y + ny <= hmap.getMapHeight())
+			{
+				int newDistFromStart = 
+					(x + nx - startx) * (x + nx - startx) +
+					(y + ny - starty) * (y + ny - starty);
+				if (newDistFromStart > distFromStart)
+				{
+					fixed newHeight = hmap.getHeight(x + nx, y + ny);
+					if (newHeight < minHeight) 
+					{
+						minIndex = a;
+						minHeight = newHeight;
+					}
+				}
+			}
+		}
+
+		if (minIndex == -1) 
+		{
+			break;
+		}
+
+		// Set new height
+		fixed lowered = fixed(i) / fixed(6);
+		fixed currentheight = hmap.getHeight(x, y);
+		startHeight = MIN(startHeight, currentheight);
+		fixed newheight = MAX(startHeight - lowered, 0);
+		hmap.setHeight(x, y, newheight);
+
+		for (int j=1; j<10; j++)
+		{
+			for (int a=0; a<8; a++)
+			{
+				getPos(a, nx, ny, j);
+				if (x + nx >= 0 &&
+					y + ny >= 0 &&
+					x + nx <= hmap.getMapWidth() &&
+					y + ny <= hmap.getMapHeight())
+				{
+					fixed surroundheight = hmap.getHeight(x + nx, y + ny);
+					fixed raised = fixed(j) / fixed(2);
+					fixed newsurroundheight = newheight + raised;
+					if (surroundheight > newsurroundheight)
+					{
+						hmap.setHeight(x + nx, y + ny, newsurroundheight);
+					}
+				}
+			}
+		}
+
+		// Move x,y
+		{
+			getPos(minIndex, nx, ny, 1);
+			x += nx;
+			y += ny;
+		}
+	}
+}
+
 void HeightMapModifier::smooth(HeightMap &hmap, 
 							   LandscapeDefnHeightMapGenerate &defn,
 							   ProgressCounter *counter)
@@ -273,6 +500,9 @@ void HeightMapModifier::generateTerrain(HeightMap &hmap,
 	}
 
 	scale(hmap, defn, generator, counter);
+	noise(hmap, defn, generator, counter);
+	//edgeEnhance(hmap, defn, generator, counter);
+	//waterErosion(hmap, defn, generator, counter);
 	if (defn.levelsurround) levelSurround(hmap);
 	smooth(hmap, defn, counter);
 	if (defn.levelsurround) levelSurround(hmap);

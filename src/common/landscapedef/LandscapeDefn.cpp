@@ -137,6 +137,12 @@ bool LandscapeDefnHeightMapGenerate::readXML(XMLNode *node)
 	if (!node->getNamedChild("landsmoothing", landsmoothing)) return false;
 	if (!node->getNamedChild("levelsurround", levelsurround)) return false;
 
+	noisefactor = 1;
+	noiseheight = noisewidth = 64;
+	node->getNamedChild("noisefactor", noisefactor, false);
+	node->getNamedChild("noisewidth", noisewidth, false);
+	node->getNamedChild("noiseheight", noiseheight, false);
+
 	if (!mask.empty())
 	{
 		if (!S3D::checkDataFile(mask.c_str())) return false;

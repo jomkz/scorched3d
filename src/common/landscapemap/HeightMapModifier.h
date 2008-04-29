@@ -30,6 +30,18 @@ class LandscapeDefnHeightMapGenerate;
 namespace HeightMapModifier  
 {
 	void levelSurround(HeightMap &hmap);
+	void noise(HeightMap &hmap, 
+		LandscapeDefnHeightMapGenerate &defn,
+		RandomGenerator &generator,
+		ProgressCounter *counter = 0);
+	void edgeEnhance(HeightMap &hmap, 
+		LandscapeDefnHeightMapGenerate &defn,
+		RandomGenerator &generator,
+		ProgressCounter *counter = 0);
+	void waterErosion(HeightMap &hmap, 
+		LandscapeDefnHeightMapGenerate &defn,
+		RandomGenerator &generator,
+		ProgressCounter *counter = 0);
 	void smooth(HeightMap &hmap, 
 		LandscapeDefnHeightMapGenerate &defn,
 		ProgressCounter *counter = 0);

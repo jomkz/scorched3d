@@ -91,6 +91,8 @@ class LandscapeDefnHeightMapGenerate : public LandscapeDefnType
 public:
 	std::string mask;
 	int landhillsmax, landhillsmin;
+	fixed noisefactor;
+	int noisewidth, noiseheight;
 	fixed landheightmax, landheightmin;
 	fixed landpeakwidthxmax, landpeakwidthxmin;
 	fixed landpeakwidthymax, landpeakwidthymin;
