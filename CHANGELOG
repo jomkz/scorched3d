@@ -13,3 +13,4 @@ Started LUA scripting language support
 Player dies when less than 1 HP (avoids 0 HP tanks)
 Fixed tanks being positioned in the corner when joining at round begining
 Added -startcustom option to server to start using default server.xml file
+Added errosion and noise to options for landscape generation

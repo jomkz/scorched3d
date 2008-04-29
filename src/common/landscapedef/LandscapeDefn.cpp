@@ -143,6 +143,19 @@ bool LandscapeDefnHeightMapGenerate::readXML(XMLNode *node)
 	node->getNamedChild("noisewidth", noisewidth, false);
 	node->getNamedChild("noiseheight", noiseheight, false);
 
+	errosions = 0;
+	errosionlayering = 0;
+	errosionsurroundsize = 25;
+	errosionforce = fixed(1) / fixed(25);
+	errosionmaxdepth = fixed(4);
+	errosionsurroundforce = fixed(1);
+	node->getNamedChild("errosions", errosions, false);
+	node->getNamedChild("errosionlayering", errosionlayering, false);
+	node->getNamedChild("errosionforce", errosionforce, false);
+	node->getNamedChild("errosionmaxdepth", errosionmaxdepth, false);
+	node->getNamedChild("errosionsurroundforce", errosionsurroundforce, false);
+	node->getNamedChild("errosionsurroundsize", errosionsurroundsize, false);
+
 	if (!mask.empty())
 	{
 		if (!S3D::checkDataFile(mask.c_str())) return false;

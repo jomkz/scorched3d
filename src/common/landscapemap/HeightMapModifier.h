@@ -38,7 +38,7 @@ namespace HeightMapModifier
 		LandscapeDefnHeightMapGenerate &defn,
 		RandomGenerator &generator,
 		ProgressCounter *counter = 0);
-	void waterErosion(HeightMap &hmap, 
+	void waterErrosion(HeightMap &hmap, 
 		LandscapeDefnHeightMapGenerate &defn,
 		RandomGenerator &generator,
 		ProgressCounter *counter = 0);

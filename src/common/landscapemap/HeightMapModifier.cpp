@@ -58,8 +58,8 @@ void HeightMapModifier::noise(HeightMap &hmap,
 	RandomGenerator &generator,
 	ProgressCounter *counter)
 {
-	if (counter) counter->setNewOp("Noise");
 	if (defn.noisefactor == 0) return;
+	if (counter) counter->setNewOp("Noise");
 
 	unsigned int randomU = generator.getRandUInt() % 5000;
 	int random = (int) randomU;
@@ -185,91 +185,130 @@ static void getPos(int pos, int &x, int &y, int dist)
 	}
 }
 
-void HeightMapModifier::waterErosion(HeightMap &hmap, 
+void HeightMapModifier::waterErrosion(HeightMap &hmap, 
 	LandscapeDefnHeightMapGenerate &defn,
 	RandomGenerator &generator,
 	ProgressCounter *counter)
 {
-	if (counter) counter->setNewOp("Water Erosion");
+	if (defn.errosions == 0) return;
+	if (counter) counter->setNewOp("Water Errosion");
 
-	int x = 128;//generator.getRandUInt() % hmap.getMapWidth();
-	int y = 128;//generator.getRandUInt() % hmap.getMapHeight();
-	
-	int startx = x;
-	int starty = y;
-	fixed startHeight = hmap.getHeight(x, y);
-
-	int nx, ny;
-	for (int i=0; i<500; i++)
+	// Copy the height map, so we don't keep running down the same paths
+	// as we have already created
+	fixed *newhMap = new fixed[(hmap.getMapWidth()+1) * (hmap.getMapHeight()+1)];
+	fixed *start = newhMap;
+	for (int y=0; y<=hmap.getMapHeight(); y++)
 	{
-		// Find next position to be lowered
-		fixed minHeight = fixed::MAX_FIXED;
-		int distFromStart = (x - startx) * (x - startx) +
-			(y - starty) * (y - starty);
-		int minIndex = -1;
-		for (int a=0; a<4; a++)
+		for (int x=0; x<=hmap.getMapWidth(); x++, start++)
 		{
-			getPos(a, nx, ny, 1);
-			if (x + nx >= 0 &&
-				y + ny >= 0 &&
-				x + nx <= hmap.getMapWidth() &&
-				y + ny <= hmap.getMapHeight())
-			{
-				int newDistFromStart = 
-					(x + nx - startx) * (x + nx - startx) +
-					(y + ny - starty) * (y + ny - starty);
-				if (newDistFromStart > distFromStart)
-				{
-					fixed newHeight = hmap.getHeight(x + nx, y + ny);
-					if (newHeight < minHeight) 
-					{
-						minIndex = a;
-						minHeight = newHeight;
-					}
-				}
-			}
+			*start = hmap.getHeight(x, y);
 		}
+	}
 
-		if (minIndex == -1) 
+	// Keep a count of how many paths have used the same squares
+	int *seen = new int[(hmap.getMapWidth()+1) * (hmap.getMapHeight()+1)];
+	memset(seen, 0, sizeof(int) * (hmap.getMapWidth()+1) * (hmap.getMapHeight()+1));
+
+	// For each errosion stream
+	for (int o=0; o<defn.errosions; o++) 
+	{
+		if (counter) counter->setNewPercentage((100.0f * float(o)) / float(30));
+
+		// Choose a random start
+		int x = generator.getRandUInt() % hmap.getMapWidth();
+		int y = generator.getRandUInt() % hmap.getMapHeight();
+		
+		// Set the position and starting height
+		int startx = x;
+		int starty = y;
+		fixed startHeight = hmap.getHeight(x, y);
+
+		// For a set number of itterations
+		int nx, ny;
+		for (int i=0; i<500; i++)
 		{
-			break;
-		}
+			// Find next position to be lowered
+			fixed minHeight = fixed::MAX_FIXED;
+			int distFromStart = (x - startx) * (x - startx) +
+				(y - starty) * (y - starty);
 
-		// Set new height
-		fixed lowered = fixed(i) / fixed(6);
-		fixed currentheight = hmap.getHeight(x, y);
-		startHeight = MIN(startHeight, currentheight);
-		fixed newheight = MAX(startHeight - lowered, 0);
-		hmap.setHeight(x, y, newheight);
-
-		for (int j=1; j<10; j++)
-		{
-			for (int a=0; a<8; a++)
+			// Find the lowest square around the current square
+			// this must be further away from the start than the current
+			int minIndex = -1;
+			for (int a=0; a<4; a++)
 			{
-				getPos(a, nx, ny, j);
+				getPos(a, nx, ny, 1);
 				if (x + nx >= 0 &&
 					y + ny >= 0 &&
 					x + nx <= hmap.getMapWidth() &&
 					y + ny <= hmap.getMapHeight())
 				{
-					fixed surroundheight = hmap.getHeight(x + nx, y + ny);
-					fixed raised = fixed(j) / fixed(2);
-					fixed newsurroundheight = newheight + raised;
-					if (surroundheight > newsurroundheight)
+					int newDistFromStart = 
+						(x + nx - startx) * (x + nx - startx) +
+						(y + ny - starty) * (y + ny - starty);
+					if (newDistFromStart > distFromStart)
 					{
-						hmap.setHeight(x + nx, y + ny, newsurroundheight);
+						fixed newHeight = newhMap[x + nx + (y + ny) * (hmap.getMapWidth()+1)];
+						if (newHeight < minHeight) 
+						{
+							minIndex = a;
+							minHeight = newHeight;
+						}
 					}
 				}
 			}
-		}
 
-		// Move x,y
-		{
-			getPos(minIndex, nx, ny, 1);
-			x += nx;
-			y += ny;
+			// Check if have found any, or if we have been here with too many streams
+			if (minIndex == -1 || seen[x + y * (hmap.getMapWidth()+1)] > defn.errosionlayering) 
+			{
+				break;
+			}
+			seen[x + y * (hmap.getMapWidth()+1)]++;
+
+			// Set new height, make sure it is lower than the start by a certain amount
+			fixed lowered = fixed(i) * defn.errosionforce;
+			lowered = MIN(lowered, defn.errosionmaxdepth);
+			fixed currentheight = hmap.getHeight(x, y);
+			startHeight = MIN(startHeight, currentheight);
+			fixed newheight = MAX(startHeight - lowered, 0);
+			hmap.setHeight(x, y, newheight);
+
+			// Lower the surrounding area so its not so severe
+			int size = 1;
+			while (true)
+			{
+				fixed raised = fixed(size) * defn.errosionsurroundforce;
+				for (int a=-size; a<=size; a++)
+				{
+					for (int b=-size; b<=size; b++)
+					{
+						if (a==-size || a==size || b==-size || b==size)
+						{
+							fixed newSurroundHeight = startHeight - lowered + raised + generator.getRandFixed() * 2;
+							newSurroundHeight = MAX(newSurroundHeight, 0);
+							fixed oldSurroundHeight = hmap.getHeight(x + a, y + b);
+							if (oldSurroundHeight > newSurroundHeight)
+							{
+								hmap.setHeight(x + a , y + b, newSurroundHeight);
+							}
+						}
+					}
+				}
+				size++;
+				if (size > defn.errosionsurroundsize) break;
+			}
+
+			// Move to the next x,y
+			{
+				getPos(minIndex, nx, ny, 1);
+				x += nx;
+				y += ny;
+			}
 		}
 	}
+
+	delete [] newhMap;
+	delete [] seen;
 }
 
 void HeightMapModifier::smooth(HeightMap &hmap, 
@@ -502,7 +541,7 @@ void HeightMapModifier::generateTerrain(HeightMap &hmap,
 	scale(hmap, defn, generator, counter);
 	noise(hmap, defn, generator, counter);
 	//edgeEnhance(hmap, defn, generator, counter);
-	//waterErosion(hmap, defn, generator, counter);
+	waterErrosion(hmap, defn, generator, counter);
 	if (defn.levelsurround) levelSurround(hmap);
 	smooth(hmap, defn, counter);
 	if (defn.levelsurround) levelSurround(hmap);
