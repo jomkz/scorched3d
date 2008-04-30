@@ -33,6 +33,7 @@ public:
 	~WaterVisibilityPatch();
 
 	void setLocation(int x, int y,
+		int patchX, int patchY,
 		WaterVisibilityPatch *leftPatch, 
 		WaterVisibilityPatch *rightPatch, 
 		WaterVisibilityPatch *topPatch, 

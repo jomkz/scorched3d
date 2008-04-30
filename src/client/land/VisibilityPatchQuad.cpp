@@ -43,7 +43,8 @@ void VisibilityPatchQuad::setLocation(VisibilityPatchGrid *patchGrid, int x, int
 	position_ = Vector(x_ + size_ / 2, y_ + size_ / 2);
 
 	int stopsize = 128;
-	if (x_ >= 0 && y_ >=0 &&
+	if ((x_ + size_) > 0 && 
+		(y_ + size_) > 0 &&
 		x < mapwidth && y < mapheight) 
 	{
 		stopsize = 32;
@@ -120,7 +121,13 @@ void VisibilityPatchQuad::calculateVisibility(VisibilityPatchInfo &patchInfo, Ve
 		size = landVisibilityPatch_->getBoundingSize();
 	}
 
-	if (!GLCameraFrustum::instance()->sphereInFrustumThreadSafe(*position, size))
+	bool visible = true;
+	if (size_ == 32 || size_ == 128 || size_ == 512)
+	{
+		visible = GLCameraFrustum::instance()->sphereInFrustum(*position, size);
+	}
+
+	if (!visible)
 	{
 		setNotVisible(patchInfo, cameraPos);
 	}

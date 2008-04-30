@@ -35,7 +35,7 @@ void WaterWaveDistance::generate(
 	int mapWidth, int mapHeight, float waterHeight,
 	ProgressCounter *counter)
 {
-	if (counter) counter->setNewOp("Waves distance");
+	if (counter) counter->setNewOp("Waves Distance");
 
 	// Wave distance
 	distanceWidthMult_ = 4;

@@ -67,7 +67,7 @@ void VisibilityPatchGrid::generate(float *waterIndexErrors)
 	int mapWidth = ScorchedClient::instance()->getLandscapeMaps().
 		getGroundMaps().getMapWidth();
 	int mapHeight = ScorchedClient::instance()->getLandscapeMaps().
-		getGroundMaps().getMapWidth();
+		getGroundMaps().getMapHeight();
 	int actualWidth = mapWidth + 4096; // The map visible area is at least 4096*4096
 	int actualHeight = mapHeight + 4096;
 	actualWidth = (actualWidth / 512) * 512; // The actual width and height are multiples of 512
@@ -83,7 +83,7 @@ void VisibilityPatchGrid::generate(float *waterIndexErrors)
 	midY_ = (midY_ / 32) * 32;
 
 	{
-		// Divide this visible area into a set of patches
+		// Devide this visible area into a set of patches
 		landWidth_ = mapWidth / 32;
 		landHeight_ = mapHeight / 32;
 
@@ -117,9 +117,9 @@ void VisibilityPatchGrid::generate(float *waterIndexErrors)
 
 		// For each patch set it's location
 		WaterVisibilityPatch *currentPatch = waterPatches_;
-		for (int y=0; y<waterHeight_; y++)
+		for (int y=0, py=0; y<waterHeight_; y++, py++)
 		{
-			for (int x=0; x<waterWidth_; x++, currentPatch++)
+			for (int x=0, px=0; x<waterWidth_; x++, currentPatch++, px++)
 			{
 				WaterVisibilityPatch *leftPatch = (x==0?0:currentPatch-1);
 				WaterVisibilityPatch *rightPatch = (x==waterWidth_-1?0:currentPatch+1);
@@ -127,6 +127,7 @@ void VisibilityPatchGrid::generate(float *waterIndexErrors)
 				WaterVisibilityPatch *bottomPatch = (y==waterHeight_-1?0:currentPatch+waterWidth_);
 
 				currentPatch->setLocation(x * 128 + midX_, y * 128 + midY_,
+					px % 2, py % 2,
 					leftPatch, rightPatch, topPatch, bottomPatch,
 					waterIndexErrors);
 			}
@@ -299,7 +300,10 @@ void VisibilityPatchGrid::drawLand(int addIndex, bool simple)
 		{
 			LandVisibilityPatch *currentPatch = *currentPatchPtr;
 			unsigned int index = currentPatch->getVisibilityIndex();
-			if (index == -1) continue;
+			if (index == -1) 
+			{
+				continue;
+			}
 
 			unsigned int borders = 0;
 			int leftIndex = currentPatch->getLeftPatch()?

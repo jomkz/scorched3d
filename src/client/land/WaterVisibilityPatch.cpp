@@ -37,6 +37,7 @@ WaterVisibilityPatch::~WaterVisibilityPatch()
 }
 
 void WaterVisibilityPatch::setLocation(int x, int y,
+	int patchX, int patchY,
 	WaterVisibilityPatch *leftPatch, 
 	WaterVisibilityPatch *rightPatch, 
 	WaterVisibilityPatch *topPatch, 
@@ -50,8 +51,8 @@ void WaterVisibilityPatch::setLocation(int x, int y,
 	bottomPatch_ = bottomPatch;
 	waterIndexErrors_ = waterIndexErrors;
 
-	patchX_ = (abs(x_) / 128) % 2;
-	patchY_ = (abs(y_) / 128) % 2;
+	patchX_ = patchX;
+	patchY_ = patchY;
 	patchIndex_ = patchX_ + patchY_ * 2;
 
 	offset_ = Vector(x_, y_, 0);

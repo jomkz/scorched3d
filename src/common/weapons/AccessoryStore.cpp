@@ -39,7 +39,7 @@ AccessoryStore::~AccessoryStore()
 bool AccessoryStore::parseFile(
 	OptionsScorched &context, ProgressCounter *counter)
 {
-	if (counter) counter->setNewOp("Loading weapons");
+	if (counter) counter->setNewOp("Loading Weapons");
 
 	std::string fileName = S3D::getDataFile("data/accessories.xml");
 	clearAccessories();

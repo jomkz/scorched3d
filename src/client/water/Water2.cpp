@@ -92,7 +92,7 @@ static float calculateError(Water2Points &displacement,
 
 void Water2::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)
 {
-	if (counter) counter->setNewOp("Water motion");
+	if (counter) counter->setNewOp("Water Motion");
 
 	// Calculate water for position n
 	float windSpeed = ScorchedClient::instance()->
