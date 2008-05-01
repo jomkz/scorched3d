@@ -28,6 +28,7 @@ class ImagePng : public Image
 {
 public:
 	ImagePng();
+	ImagePng(int startWidth, int startHeight, bool alpha = false, unsigned char fill = 0);
 	virtual ~ImagePng();
 
 	virtual void removeOwnership() { owner_ = false; }
@@ -48,6 +49,8 @@ public:
 	bool loadFromFile(const std::string &filename, bool readalpha = false);
 	bool loadFromFile(const std::string &filename, const std::string &alphafilename, bool invert);
 	bool loadFromBuffer(NetBuffer &buffer, bool readalpha = false);
+
+	bool writeToBuffer(NetBuffer &buffer);
 
 protected:
 	bool owner_;

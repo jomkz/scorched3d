@@ -28,6 +28,7 @@
 #include <landscapedef/LandscapeDefn.h>
 #include <engine/ViewPoints.h>
 #include <image/ImageFactory.h>
+#include <image/ImagePng.h>
 #include <dialogs/MainMenuDialog.h>
 #include <sound/Sound.h>
 #include <sound/SoundUtils.h>
@@ -374,10 +375,19 @@ void MainCamera::SaveScreen::draw(const unsigned state)
 		static unsigned counter = 0;
 		time_t currentTime = time(0);
 		std::string fileName = 
-			S3D::getHomeFile(S3D::formatStringBuffer("ScreenShot-%i-%i.bmp", currentTime, counter++));
+			S3D::getHomeFile(S3D::formatStringBuffer("ScreenShot-%i-%i.png", currentTime, counter++));
 
 		ImageHandle screenMap = ImageFactory::grabScreen();
-		screenMap.writeToFile(fileName);
+
+		ImagePng png(screenMap.getWidth(), screenMap.getHeight());
+		memcpy(png.getBits(), screenMap.getBits(), screenMap.getWidth() * screenMap.getHeight() * 3);
+
+		NetBuffer buffer;
+		png.writeToBuffer(buffer);
+
+		FILE *out = fopen(fileName.c_str(), "wb");
+		fwrite(buffer.getBuffer(), 1, buffer.getBufferUsed(), out);
+		fclose(out);
 
 		// Don't print to banner otherwise this message will be in
 		// the screenshot!
