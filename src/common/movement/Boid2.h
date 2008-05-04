@@ -35,7 +35,7 @@ public:
 	Boid2(ScorchedContext &context, Target *target, TargetMovementEntryBoids *world); 
 	~Boid2();
 
-	void update(fixed frameTime, std::vector<Boid2*> &boidSet);  
+	void update(fixed frameTime, std::vector<Boid2*> &boidSet, bool complexUpdate);  
 	void clearTarget();
 
 protected:

@@ -30,7 +30,8 @@
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeMovement.h>
 
-TargetMovementEntryBoids::TargetMovementEntryBoids()
+TargetMovementEntryBoids::TargetMovementEntryBoids() :
+	movementNumber_(0)
 {
 }
 
@@ -99,6 +100,7 @@ void TargetMovementEntryBoids::makeBoids(ScorchedContext &context,
 
 void TargetMovementEntryBoids::simulate(ScorchedContext &context, fixed frameTime)
 {
+	movementNumber_++;
 	std::vector<Boid2*> boidSet;
 
 	// For each target set position and rotation based on its offset
@@ -135,21 +137,19 @@ void TargetMovementEntryBoids::processSet(fixed frameTime, std::vector<Boid2*> &
 		itor++)
 	{
 		Boid2 *boid = (*itor);
-		boid->update(frameTime, boidSet);
+		boid->update(frameTime, boidSet, (movementNumber_ % 10) == 0);
 	}
 }
 
 bool TargetMovementEntryBoids::writeMessage(NetBuffer &buffer)
 {
-	// No serialization needed as the boid movement code 
-	// contains no random factors!
+	buffer.addToBuffer(movementNumber_);
 	return true;
 }
 
 bool TargetMovementEntryBoids::readMessage(NetBufferReader &reader)
 {
-	// No serialization needed as the boid movement code 
-	// contains no random factors!
+	if (!reader.getFromBuffer(movementNumber_)) return false;
 	return true;
 }
 

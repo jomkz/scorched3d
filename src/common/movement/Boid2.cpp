@@ -53,7 +53,7 @@ void Boid2::clearTarget()
 	target_ = 0;
 }
 
-void Boid2::update(fixed frameTime, std::vector<Boid2*> &boidSet)
+void Boid2::update(fixed frameTime, std::vector<Boid2*> &boidSet, bool complexUpdate)
 {
 	// Limit Velocity
 	directionMag_ = getVelocity().Magnitude();
@@ -84,7 +84,10 @@ void Boid2::update(fixed frameTime, std::vector<Boid2*> &boidSet)
 	}
 	else
 	{
-		newVelocity = checkGrouping(boidSet);
+		if (complexUpdate)
+		{
+			newVelocity = checkGrouping(boidSet);
+		}
 
 		// Wander
 		{

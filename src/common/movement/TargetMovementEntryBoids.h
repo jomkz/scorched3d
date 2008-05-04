@@ -54,6 +54,7 @@ public:
 protected:
 	TargetGroupsSetEntry *groupEntry_;
 
+	unsigned int movementNumber_;
 	FixedVector minBounds_, maxBounds_;
 	fixed cruiseDistance_;
 	fixed maxVelocity_, cruiseVelocity_;
