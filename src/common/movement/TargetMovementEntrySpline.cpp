@@ -101,13 +101,18 @@ void TargetMovementEntrySpline::generate(ScorchedContext &context,
 			S3D::dialogExit("TargetMovementEntrySpline",
 				"Movement can be assigned to level targets only (no tanks)");
 		}
+		if (entry->getTarget()->getTargetState().getMovement())
+		{
+			S3D::dialogExit("TargetMovementEntryBoids",
+				"Only one movement can be assigned to each target");
+		}
 
 		// Set this target as moving
-		entry->getTarget()->getTargetState().setMovement(true);
+		entry->getTarget()->getTargetState().setMovement(new TargetStateMovement());
 	}
 }
 
-void TargetMovementEntrySpline::simulate(fixed frameTime)
+void TargetMovementEntrySpline::simulate(ScorchedContext &context, fixed frameTime)
 {
 	// Update the position of all of the targets along the path
 	path_.simulate(frameTime);

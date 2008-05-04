@@ -38,4 +38,7 @@
 	</texture>
 	<placements>
 	</placements>
+  <boids>
+    <boid>data/landscapes/boidslargenumber.xml</boid>
+  </boids>
 </tex>

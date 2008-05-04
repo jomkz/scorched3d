@@ -25,6 +25,13 @@ class TankFalling;
 class NetBuffer;
 class NetBufferReader;
 
+class TargetStateMovement
+{
+public:
+	TargetStateMovement();
+	virtual ~TargetStateMovement();
+};
+
 class TargetState
 {
 public:
@@ -55,8 +62,8 @@ public:
 	bool getNoFallingDamage() { return noFallingDamage_; }
 	void setNoFallingDamage(bool noFalling) { noFallingDamage_ = noFalling; }
 
-	bool getMovement() { return movement_; }
-	void setMovement(bool movement) { movement_ = movement; }
+	TargetStateMovement *getMovement() { return movement_; }
+	void setMovement(TargetStateMovement *movement) { movement_ = movement; }
 
 	void setDriveOverToDestroy(bool d) { driveOverToDestroy_ = d; }
 	bool getDriveOverToDestroy() { return driveOverToDestroy_; }
@@ -69,7 +76,7 @@ public:
 
 protected:
 	TankFalling *falling_;
-	bool movement_;
+	TargetStateMovement *movement_;
 	bool displayHardwareShadow_;
 	bool displayShadow_;
 	bool displayDamage_;

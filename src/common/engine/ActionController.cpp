@@ -277,7 +277,7 @@ void ActionController::stepActions(fixed frameTime)
 	}
 
 	// Move the targets
-	context_->targetMovement->simulate(frameTime);
+	context_->targetMovement->simulate(*context_, frameTime);
 
 	// Itterate and draw all of the actions
 	int keepcount=0;

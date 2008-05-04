@@ -36,17 +36,6 @@ TargetMovementEntryBoids::TargetMovementEntryBoids()
 
 TargetMovementEntryBoids::~TargetMovementEntryBoids()
 {
-	{
-		std::map<unsigned int, Boid2 *>::iterator itor;
-		for (itor = boidsMap_.begin();
-			itor != boidsMap_.end();
-			itor++)
-		{
-			Boid2 *boid = (*itor).second;
-			delete boid;
-		}
-		boidsMap_.clear();
-	}
 }
 
 void TargetMovementEntryBoids::generate(ScorchedContext &context, 
@@ -96,18 +85,22 @@ void TargetMovementEntryBoids::makeBoids(ScorchedContext &context,
 			S3D::dialogExit("TargetMovementEntryBoids",
 				"Movement can be assigned to level targets only (no tanks)");
 		}
+		if (groupEntry->getTarget()->getTargetState().getMovement())
+		{
+			S3D::dialogExit("TargetMovementEntryBoids",
+				"Only one movement can be assigned to each target");
+		}
 
 		// Set this target as moving
-		groupEntry->getTarget()->getTargetState().setMovement(true);
-
-		// Add to world
 		Boid2 *boid = new Boid2(context, groupEntry->getTarget(), this);
-		boidsMap_[playerId] = boid;
+		groupEntry->getTarget()->getTargetState().setMovement(boid);
 	}
 }
 
-void TargetMovementEntryBoids::simulate(fixed frameTime)
+void TargetMovementEntryBoids::simulate(ScorchedContext &context, fixed frameTime)
 {
+	std::vector<Boid2*> boidSet;
+
 	// For each target set position and rotation based on its offset
 	std::map<unsigned int, TargetGroup *> &objects = groupEntry_->getObjects();
 	std::map<unsigned int, TargetGroup *>::iterator itor;
@@ -117,15 +110,32 @@ void TargetMovementEntryBoids::simulate(fixed frameTime)
 	{
 		unsigned int playerId = (*itor).first;
 		TargetGroup *groupEntry = (*itor).second;
-		
-		// Find the boid for this target
-		std::map<unsigned int, Boid2 *>::iterator findItor = boidsMap_.find(playerId);
-		if (findItor != boidsMap_.end())
+
+		Boid2 *boid = (Boid2 *) groupEntry->getTarget()->getTargetState().getMovement();
+		if (!boid) continue;
+
+		boidSet.push_back(boid);
+		if (boidSet.size() == 5)
 		{
-			// Update boid and target
-			Boid2 *boid = (*findItor).second;
-			boid->update(frameTime);
+			processSet(frameTime, boidSet);
+			boidSet.clear();
 		}
+	}
+
+	processSet(frameTime, boidSet);
+}
+
+void TargetMovementEntryBoids::processSet(fixed frameTime, std::vector<Boid2*> &boidSet)
+{
+	if (boidSet.empty()) return;
+
+	std::vector<Boid2*>::iterator itor;
+	for (itor = boidSet.begin();
+		itor != boidSet.end();
+		itor++)
+	{
+		Boid2 *boid = (*itor);
+		boid->update(frameTime, boidSet);
 	}
 }
 

@@ -23,7 +23,14 @@
 
 #include <common/SplinePath.h>
 #include <movement/TargetMovementEntry.h>
+#include <target/TargetState.h>
 #include <map>
+
+class TargetMovementEntryShipsOffset : public TargetStateMovement
+{
+public:
+	FixedVector offset;
+};
 
 class TargetGroupsGroupEntry;
 class TargetMovementEntryShips : public TargetMovementEntry
@@ -36,7 +43,7 @@ public:
 	virtual void generate(ScorchedContext &context, 
 		RandomGenerator &random, 
 		LandscapeMovementType *movementType);
-	virtual void simulate(fixed frameTime);
+	virtual void simulate(ScorchedContext &context, fixed frameTime);
 	virtual void draw();
 	virtual bool writeMessage(NetBuffer &buffer);
 	virtual bool readMessage(NetBufferReader &reader);
@@ -44,7 +51,6 @@ public:
 protected:
 	SplinePath path_;
 	TargetGroupsGroupEntry *groupEntry_;
-	std::map<unsigned int, FixedVector> offsets_;
 };
 
 #endif // __INCLUDE_TargetMovementEntryShipsh_INCLUDE__
