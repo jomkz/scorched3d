@@ -23,7 +23,6 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapemap/GraphicalHeightMap.h>
 #include <landscape/GraphicalLandscapeMap.h>
-#include <geomipmap/MipMapPatchIndexs.h>
 #include <graph/OptionsDisplay.h>
 #include <graph/MainCamera.h>
 #include <client/ScorchedClient.h>

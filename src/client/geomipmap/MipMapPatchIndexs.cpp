@@ -24,6 +24,20 @@
 #include <graph/OptionsDisplay.h>
 #include <common/Logger.h>
 
+MipMapPatchIndexs::IndexLevel::IndexLevel()
+{
+}
+
+MipMapPatchIndexs::IndexLevel::~IndexLevel()
+{
+	while (!borderIndexs_.empty())
+	{
+		MipMapPatchIndex *index = borderIndexs_.back();
+		borderIndexs_.pop_back();
+		delete index;
+	}
+}
+
 MipMapPatchIndexs::MipMapPatchIndexs() : 
 	bufferObject_(0)
 {
@@ -35,6 +49,13 @@ MipMapPatchIndexs::~MipMapPatchIndexs()
 
 void MipMapPatchIndexs::generate(int size, int totalsize, unsigned int totallods)
 {
+	while (!levels_.empty())
+	{
+		IndexLevel *level = levels_.back();
+		levels_.pop_back();
+		delete level;
+	}
+
 	unsigned int totalVerts = 0;
 	for (int lod=1; lod<=size; lod*=2)
 	{

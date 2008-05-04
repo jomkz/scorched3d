@@ -34,6 +34,9 @@ protected:
 	class IndexLevel // One per LOD
 	{
 	public:
+		IndexLevel();
+		~IndexLevel();
+
 		std::vector<MipMapPatchIndex *> borderIndexs_;
 	};
 
