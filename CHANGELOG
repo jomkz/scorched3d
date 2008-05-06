@@ -14,3 +14,6 @@ Player dies when less than 1 HP (avoids 0 HP tanks)
 Fixed tanks being positioned in the corner when joining at round begining
 Added -startcustom option to server to start using default server.xml file
 Added errosion and noise to options for landscape generation
+Optimized collision space updates to be more efficient
+Boids are now all grouped into groups of 5 to make flocking algorithm more efficient
+New boids can be added in the middle of a round

@@ -79,23 +79,28 @@ void TargetMovementEntryBoids::makeBoids(ScorchedContext &context,
 	{
 		unsigned int playerId = (*itor).first;
 		TargetGroup *groupEntry = (*itor).second;
-
-		if (!groupEntry->getTarget()->isTarget() ||
-			groupEntry->getTarget()->getPlayerId() >= TargetID::MIN_TARGET_TRANSIENT_ID)
-		{
-			S3D::dialogExit("TargetMovementEntryBoids",
-				"Movement can be assigned to level targets only (no tanks)");
-		}
-		if (groupEntry->getTarget()->getTargetState().getMovement())
-		{
-			S3D::dialogExit("TargetMovementEntryBoids",
-				"Only one movement can be assigned to each target");
-		}
-
-		// Set this target as moving
-		Boid2 *boid = new Boid2(context, groupEntry->getTarget(), this);
-		groupEntry->getTarget()->getTargetState().setMovement(boid);
+		makeBoid(context, groupEntry);
 	}
+}
+
+Boid2 *TargetMovementEntryBoids::makeBoid(ScorchedContext &context, TargetGroup *groupEntry)
+{
+	if (!groupEntry->getTarget()->isTarget() ||
+		groupEntry->getTarget()->getPlayerId() >= TargetID::MIN_TARGET_TRANSIENT_ID)
+	{
+		S3D::dialogExit("TargetMovementEntryBoids",
+			"Movement can be assigned to level targets only (no tanks)");
+	}
+	if (groupEntry->getTarget()->getTargetState().getMovement())
+	{
+		S3D::dialogExit("TargetMovementEntryBoids",
+			"Only one movement can be assigned to each target");
+	}
+
+	// Set this target as moving
+	Boid2 *boid = new Boid2(context, groupEntry->getTarget(), this);
+	groupEntry->getTarget()->getTargetState().setMovement(boid);
+	return boid;
 }
 
 void TargetMovementEntryBoids::simulate(ScorchedContext &context, fixed frameTime)
@@ -114,7 +119,7 @@ void TargetMovementEntryBoids::simulate(ScorchedContext &context, fixed frameTim
 		TargetGroup *groupEntry = (*itor).second;
 
 		Boid2 *boid = (Boid2 *) groupEntry->getTarget()->getTargetState().getMovement();
-		if (!boid) continue;
+		if (!boid) boid = makeBoid(context, groupEntry);
 
 		boidSet.push_back(boid);
 		if (boidSet.size() == 5)

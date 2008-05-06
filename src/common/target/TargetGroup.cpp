@@ -25,6 +25,7 @@
 #include <landscapemap/TargetGroupsGroupEntry.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <net/NetBuffer.h>
+#include <set>
 
 TargetGroup::TargetGroup(ScorchedContext &context) :
 	context_(context)

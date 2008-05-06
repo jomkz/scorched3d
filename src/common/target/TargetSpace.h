@@ -24,6 +24,7 @@
 #include <target/Target.h>
 #include <map>
 #include <set>
+#include <vector>
 
 class ScorchedContext;
 class TargetSpace
@@ -47,6 +48,7 @@ protected:
 	{
 	public:
 		std::map<unsigned int, Target *> targets;
+		int squarenum;
 	};
 
 	ScorchedContext *context_;
@@ -72,7 +74,7 @@ protected:
 		y /= spaceSq_;
 	}
 
-	void addTarget(Target *target);
+	void getSquares(Target *target, std::vector<Square*> &squares);
 	void removeTarget(Target *target);
 
 private:

@@ -62,6 +62,7 @@ protected:
 
 	void makeBoids(ScorchedContext &context, RandomGenerator &random,
 		FixedVector &maxBounds, FixedVector &minBounds);
+	Boid2 *makeBoid(ScorchedContext &context, TargetGroup *groupEntry);
 	void processSet(fixed frameTime, std::vector<Boid2*> &boidSet);
 };
 

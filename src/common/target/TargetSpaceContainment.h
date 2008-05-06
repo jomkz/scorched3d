@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_TargetSpaceContainmenth_INCLUDE__)
 #define __INCLUDE_TargetSpaceContainmenth_INCLUDE__
 
-#include <set>
+#include <vector>
 
 class TargetSpaceContainment
 {
@@ -30,7 +30,7 @@ public:
 	virtual ~TargetSpaceContainment();
 
 	// Which squares this target ocupies within the target space
-	std::set<int> squares;
+	std::vector<int> squares;
 
 private:
 	TargetSpaceContainment(TargetSpaceContainment &other);
