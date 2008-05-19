@@ -18,40 +18,4 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <land/VisibilityPatchInfo.h>
-
-VisibilityPatchInfo::VisibilityPatchInfo()
-{
-}
-
-VisibilityPatchInfo::~VisibilityPatchInfo()
-{
-}
-
-void VisibilityPatchInfo::clear()
-{
-	landVisibility_.clear();
-	treeVisibility_.clear();
-	targetVisibility_.clear();
-	for (int i=0; i<4; i++) waterVisibility_[i].clear();
-}
-
-void VisibilityPatchInfo::generate(int maxLandPatches, int maxWaterPatches, int maxTargetPatches)
-{
-	clear();
-
-	landVisibility_.generate(maxLandPatches);
-	treeVisibility_.generate(maxTargetPatches);
-	targetVisibility_.generate(maxTargetPatches);
-	for (int i=0; i<4; i++) waterVisibility_[i].generate(maxWaterPatches);
-
-	reset();
-}
-
-void VisibilityPatchInfo::reset()
-{
-	landVisibility_.reset();
-	treeVisibility_.reset();
-	targetVisibility_.reset();
-	for (int i=0; i<4; i++) waterVisibility_[i].reset();
-}
+#include <land/VisibilityList.h>

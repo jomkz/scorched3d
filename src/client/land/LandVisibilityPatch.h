@@ -36,7 +36,7 @@ public:
 		LandVisibilityPatch *rightPatch, 
 		LandVisibilityPatch *topPatch, 
 		LandVisibilityPatch *bottomPatch);
-	bool setVisible(Vector &cameraPos);
+	bool setVisible(float distance);
 	void setNotVisible();
 	void setRecalculateErrors() { recalculateErrors_ = true; }
 

@@ -23,6 +23,8 @@
 
 #include <land/LandVisibilityPatch.h>
 #include <land/WaterVisibilityPatch.h>
+#include <land/TargetVisibilityPatch.h>
+#include <land/VisibilityList.h>
 
 class VisibilityPatchInfo
 {
@@ -31,54 +33,43 @@ public:
 	~VisibilityPatchInfo();
 
 	int getVisibleLandPatchesCount() { 
-		return landVisibility_.visibleLandPatchesCount; }
+		return landVisibility_.getVisibleCount(); }
 	int getVisibleWaterPatchesCount() { 
-		return waterVisibility_[0].visibleWaterPatchesCount +
-			waterVisibility_[1].visibleWaterPatchesCount +
-			waterVisibility_[2].visibleWaterPatchesCount +
-			waterVisibility_[3].visibleWaterPatchesCount; }
+		return waterVisibility_[0].getVisibleCount() +
+			waterVisibility_[1].getVisibleCount() +
+			waterVisibility_[2].getVisibleCount() +
+			waterVisibility_[3].getVisibleCount(); }
 
 	void reset();
-	void generate(int maxLandPatches, int maxWaterPatches);
+	void generate(int maxLandPatches, int maxWaterPatches, int maxTargetPatches);
 
-	struct LandVisibility
+	VisibilityList<LandVisibilityPatch> &getLandVisibility() 
 	{
-		LandVisibility() : visibleLandPatchesCount(0), visibleLandPatches(0), 
-			lastVisibleLandPatches(0) {}
-
-		int visibleLandPatchesCount;
-		LandVisibilityPatch **visibleLandPatches, **lastVisibleLandPatches;
-
-	};
-	LandVisibility landVisibility_;
-
-	struct WaterVisibility
-	{
-		WaterVisibility() : visibleWaterPatchesCount(0), visibleWaterPatches(0), 
-			lastVisibleWaterPatches(0) {}
-
-		int visibleWaterPatchesCount;
-		WaterVisibilityPatch **visibleWaterPatches, **lastVisibleWaterPatches;
-
-	};
-	WaterVisibility waterVisibility_[4];
-
-	void addVisibleLandPatch(LandVisibilityPatch *patch)
-	{
-		*landVisibility_.lastVisibleLandPatches = patch;
-		landVisibility_.visibleLandPatchesCount++;
-		landVisibility_.lastVisibleLandPatches++;
+		return landVisibility_;
 	}
 
-	void addVisibleWaterPatch(int index, WaterVisibilityPatch *patch)
+	VisibilityList<WaterVisibilityPatch> &getWaterVisibility(int index) 
 	{
 		DIALOG_ASSERT(index >= 0 && index <= 4);
-
-		*waterVisibility_[index].lastVisibleWaterPatches = patch;
-		waterVisibility_[index].visibleWaterPatchesCount++;
-		waterVisibility_[index].lastVisibleWaterPatches++;
+		return waterVisibility_[index];
 	}
+
+	VisibilityList<TargetVisibilityPatch> &getTreeVisibility()
+	{
+		return treeVisibility_;
+	}
+
+	VisibilityList<TargetVisibilityPatch> &getTargetVisibility()
+	{
+		return targetVisibility_;
+	}
+
 protected:
+	VisibilityList<WaterVisibilityPatch> waterVisibility_[4];
+	VisibilityList<LandVisibilityPatch> landVisibility_;
+	VisibilityList<TargetVisibilityPatch> treeVisibility_;
+	VisibilityList<TargetVisibilityPatch> targetVisibility_;
+
 	void clear();
 };
 

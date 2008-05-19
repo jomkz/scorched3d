@@ -18,40 +18,36 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <land/VisibilityPatchInfo.h>
+#include <land/TargetVisibilityPatch.h>
+#include <client/ScorchedClient.h>
+#include <landscapemap/LandscapeMaps.h>
 
-VisibilityPatchInfo::VisibilityPatchInfo()
+TargetVisibilityPatch::TargetVisibilityPatch() : 
+	visible_(false)
 {
 }
 
-VisibilityPatchInfo::~VisibilityPatchInfo()
+TargetVisibilityPatch::~TargetVisibilityPatch()
 {
 }
 
-void VisibilityPatchInfo::clear()
+void TargetVisibilityPatch::setLocation(int x, int y)
 {
-	landVisibility_.clear();
-	treeVisibility_.clear();
-	targetVisibility_.clear();
-	for (int i=0; i<4; i++) waterVisibility_[i].clear();
+	// Set location and neighbors
+	x_ = x; y_ = y;
+	float heightRange = 0.0f;
+	float minHeight = 0.0f;
+	position_ = Vector(float(x_ + 16), float(y_ + 16), 
+		heightRange / 2.0f + minHeight);
 }
 
-void VisibilityPatchInfo::generate(int maxLandPatches, int maxWaterPatches, int maxTargetPatches)
-{
-	clear();
-
-	landVisibility_.generate(maxLandPatches);
-	treeVisibility_.generate(maxTargetPatches);
-	targetVisibility_.generate(maxTargetPatches);
-	for (int i=0; i<4; i++) waterVisibility_[i].generate(maxWaterPatches);
-
-	reset();
+bool TargetVisibilityPatch::setVisible(float distance)
+{ 
+	visible_ = true;
+	return true;
 }
 
-void VisibilityPatchInfo::reset()
+void TargetVisibilityPatch::setNotVisible()
 {
-	landVisibility_.reset();
-	treeVisibility_.reset();
-	targetVisibility_.reset();
-	for (int i=0; i<4; i++) waterVisibility_[i].reset();
+	visible_ = false;
 }

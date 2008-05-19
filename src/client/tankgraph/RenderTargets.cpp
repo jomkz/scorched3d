@@ -29,6 +29,8 @@
 #include <target/TargetLife.h>
 #include <client/ClientState.h>
 #include <client/ScorchedClient.h>
+#include <common/OptionsScorched.h>
+#include <engine/ActionController.h>
 #include <GLEXT/GLCamera.h>
 #include <GLEXT/GLGlobalState.h>
 #include <landscape/Landscape.h>
@@ -81,21 +83,32 @@ void RenderTargets::Renderer3D::draw(const unsigned state)
 
 void RenderTargets::Renderer3D::simulate(const unsigned state, float simTime)
 {
-	// Simulate all of the tanks
-	std::map<unsigned int, Target *> &targets = 
-		ScorchedClient::instance()->getTargetContainer().getTargets();
-	std::map<unsigned int, Target *>::iterator itor;
-	for (itor = targets.begin();
-		itor != targets.end();
-		itor++)
+	stepTime += simTime;
+
+	// step size = 1.0 / physics fps = steps per second
+	const float stepSize = 1.0f / float(ScorchedClient::instance()->getOptionsGame().getPhysicsFPS());
+	if (stepTime >= stepSize)
 	{
-		Target *target = (*itor).second;
-		TargetRenderer *renderer = target->getRenderer();
-		if (renderer)
+		float time = stepTime * ScorchedClient::instance()->getActionController().getFast().asFloat();
+
+		// Simulate all of the tanks
+		std::map<unsigned int, Target *> &targets = 
+			ScorchedClient::instance()->getTargetContainer().getTargets();
+		std::map<unsigned int, Target *>::iterator itor;
+		for (itor = targets.begin();
+			itor != targets.end();
+			itor++)
 		{
-			TargetRendererImpl *rendererImpl = (TargetRendererImpl *) renderer;
-			rendererImpl->simulate(simTime);
+			Target *target = (*itor).second;
+			TargetRenderer *renderer = target->getRenderer();
+			if (renderer)
+			{
+				TargetRendererImpl *rendererImpl = (TargetRendererImpl *) renderer;
+				rendererImpl->simulate(time);
+			}
 		}
+
+		stepTime = 0.0f;
 	}
 
 	RenderTargets::instance()->createLists_ = true;

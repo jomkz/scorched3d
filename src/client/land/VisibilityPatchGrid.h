@@ -53,6 +53,7 @@ public:
 		return patchInfo_.getVisibleWaterPatchesCount(); }
 
 	LandVisibilityPatch *getLandVisibilityPatch(int x, int y);
+	TargetVisibilityPatch *getTargetVisibilityPatch(int x, int y);
 	WaterVisibilityPatch *getWaterVisibilityPatch(int x, int y);
 protected:
 	LandSurround surround_;
@@ -61,6 +62,7 @@ protected:
 	// All the visibility patches
 	VisibilityPatchInfo patchInfo_;
 	LandVisibilityPatch *landPatches_;
+	TargetVisibilityPatch *targetPatches_;
 	WaterVisibilityPatch *waterPatches_;
 
 	// The visibility data that decides if a visibility patch is visible or not
@@ -70,6 +72,7 @@ protected:
 	int midX_, midY_;
 	int landWidth_, landHeight_;
 	int waterWidth_, waterHeight_;
+	int targetWidth_, targetHeight_;
 	int visibilityWidth_, visibilityHeight_;
 
 	void clear();

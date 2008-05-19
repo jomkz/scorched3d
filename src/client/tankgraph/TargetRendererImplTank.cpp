@@ -337,7 +337,6 @@ void TargetRendererImplTank::simulate(float frameTime)
 {
 	if (!tank_->getAlive()) return;
 
-	frameTime *= ScorchedClient::instance()->getActionController().getFast().asFloat();
 	totalTime_ += frameTime;
 	frame_ += frameTime * 20.0f;
 

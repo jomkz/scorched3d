@@ -243,6 +243,8 @@ LandscapeDefinition LandscapeDefinitions::getRandomLandscapeDefn(
 	std::string tex = getLeastUsedFile(result->texs);
 	std::string defn = getLeastUsedFile(result->defns);
 	unsigned int seed = (unsigned int) rand();
+	LandscapeTex *landscapeTex = getTex(tex.c_str());
+	if (landscapeTex->seed != 0) seed = landscapeTex->seed;
 
 	LandscapeDefinition entry(
 		tex.c_str(), defn.c_str(), seed, result->name.c_str());

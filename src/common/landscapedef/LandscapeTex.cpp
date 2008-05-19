@@ -118,6 +118,8 @@ LandscapeTex::~LandscapeTex()
 
 bool LandscapeTex::readXML(LandscapeDefinitions *definitions, XMLNode *node)
 {
+	seed = 0;
+	node->getNamedChild("seed", seed, false);
 	skytexturestatic = "";
 	nosunfog = false; nohorizonglow = false; nosunblend = false;
 	if (!node->getNamedChild("detail", detail)) return false;

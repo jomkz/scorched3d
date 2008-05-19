@@ -18,40 +18,30 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <land/VisibilityPatchInfo.h>
+#if !defined(__INCLUDE_TargetVisibilityPatchh_INCLUDE__)
+#define __INCLUDE_TargetVisibilityPatchh_INCLUDE__
 
-VisibilityPatchInfo::VisibilityPatchInfo()
+#include <common/Vector.h>
+
+class TargetVisibilityPatch
 {
-}
+public:
+	TargetVisibilityPatch();
+	~TargetVisibilityPatch();
 
-VisibilityPatchInfo::~VisibilityPatchInfo()
-{
-}
+	void setLocation(int x, int y);
+	bool setVisible(float distance);
+	void setNotVisible();
 
-void VisibilityPatchInfo::clear()
-{
-	landVisibility_.clear();
-	treeVisibility_.clear();
-	targetVisibility_.clear();
-	for (int i=0; i<4; i++) waterVisibility_[i].clear();
-}
+	bool hasTrees() { return false; }
+	bool hasTargets() { return false; }
 
-void VisibilityPatchInfo::generate(int maxLandPatches, int maxWaterPatches, int maxTargetPatches)
-{
-	clear();
+	Vector &getPosition() { return position_; }
 
-	landVisibility_.generate(maxLandPatches);
-	treeVisibility_.generate(maxTargetPatches);
-	targetVisibility_.generate(maxTargetPatches);
-	for (int i=0; i<4; i++) waterVisibility_[i].generate(maxWaterPatches);
+protected:
+	int x_, y_;
+	bool visible_;
+	Vector position_;
+};
 
-	reset();
-}
-
-void VisibilityPatchInfo::reset()
-{
-	landVisibility_.reset();
-	treeVisibility_.reset();
-	targetVisibility_.reset();
-	for (int i=0; i<4; i++) waterVisibility_[i].reset();
-}
+#endif // __INCLUDE_TargetVisibilityPatchh_INCLUDE__

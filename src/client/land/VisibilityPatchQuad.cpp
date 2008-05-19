@@ -26,7 +26,8 @@ VisibilityPatchQuad::VisibilityPatchQuad() :
 	topLeft_(0), topRight_(0),
 	botLeft_(0), botRight_(0),
 	landVisibilityPatch_(0),
-	waterVisibilityPatch_(0)
+	waterVisibilityPatch_(0),
+	targetVisibilityPatch_(0)
 {
 }
 
@@ -42,15 +43,7 @@ void VisibilityPatchQuad::setLocation(VisibilityPatchGrid *patchGrid, int x, int
 	x_ = x; y_ = y; size_ = size;
 	position_ = Vector(x_ + size_ / 2, y_ + size_ / 2);
 
-	int stopsize = 128;
-	if ((x_ + size_) > 0 && 
-		(y_ + size_) > 0 &&
-		x < mapwidth && y < mapheight) 
-	{
-		stopsize = 32;
-	}
-
-	if (size > stopsize)
+	if (size > 32)
 	{
 		topLeft_ = new VisibilityPatchQuad();
 		topRight_ = new VisibilityPatchQuad();
@@ -65,8 +58,15 @@ void VisibilityPatchQuad::setLocation(VisibilityPatchGrid *patchGrid, int x, int
 
 	if (size == 32)
 	{
-		// Land
-		landVisibilityPatch_ = patchGrid->getLandVisibilityPatch(x, y);
+		if ((x + size_) > 0 && 
+			(y + size_) > 0 &&
+			x < mapwidth && y < mapheight) 
+		{
+			// Land
+			landVisibilityPatch_ = patchGrid->getLandVisibilityPatch(x, y);
+		}
+		// Targets
+		targetVisibilityPatch_ = patchGrid->getTargetVisibilityPatch(x, y);
 	}
 	else if (size == 128)
 	{
@@ -78,6 +78,7 @@ void VisibilityPatchQuad::setLocation(VisibilityPatchGrid *patchGrid, int x, int
 void VisibilityPatchQuad::setNotVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos)
 {
 	if (landVisibilityPatch_) landVisibilityPatch_->setNotVisible();
+	if (targetVisibilityPatch_) targetVisibilityPatch_->setNotVisible();
 	if (waterVisibilityPatch_) waterVisibilityPatch_->setNotVisible();
 
 	// Update Children
@@ -91,16 +92,33 @@ void VisibilityPatchQuad::setVisible(VisibilityPatchInfo &patchInfo, Vector &cam
 {
 	if (landVisibilityPatch_)
 	{
-		if (landVisibilityPatch_->setVisible(cameraPos))
+		float distance = (cameraPos - landVisibilityPatch_->getPosition()).Magnitude();
+		if (landVisibilityPatch_->setVisible(distance))
 		{
-			patchInfo.addVisibleLandPatch(landVisibilityPatch_);
+			patchInfo.getLandVisibility().add(landVisibilityPatch_);
 		}
 	}
+	if (targetVisibilityPatch_)
+	{
+		if (targetVisibilityPatch_->hasTargets() ||
+			targetVisibilityPatch_->hasTrees())
+		{
+			float distance = (cameraPos - targetVisibilityPatch_->getPosition()).Magnitude();
+			if (targetVisibilityPatch_->setVisible(distance))
+			{
+				if (targetVisibilityPatch_->hasTargets()) 
+					patchInfo.getTargetVisibility().add(targetVisibilityPatch_);
+				if (targetVisibilityPatch_->hasTrees()) 
+					patchInfo.getTreeVisibility().add(targetVisibilityPatch_);
+			}
+		}
+	}
+
 	if (waterVisibilityPatch_)
 	{
 		if (waterVisibilityPatch_->setVisible(cameraPos))
 		{
-			patchInfo.addVisibleWaterPatch(waterVisibilityPatch_->getPatchIndex(), waterVisibilityPatch_);
+			patchInfo.getWaterVisibility(waterVisibilityPatch_->getPatchIndex()).add(waterVisibilityPatch_);
 		}
 	}
 

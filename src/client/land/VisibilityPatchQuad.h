@@ -42,6 +42,7 @@ protected:
 
 	WaterVisibilityPatch *waterVisibilityPatch_;
 	LandVisibilityPatch *landVisibilityPatch_;
+	TargetVisibilityPatch *targetVisibilityPatch_;
 	VisibilityPatchQuad *topLeft_, *topRight_;
 	VisibilityPatchQuad *botLeft_, *botRight_;
 

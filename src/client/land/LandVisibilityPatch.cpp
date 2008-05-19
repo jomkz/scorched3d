@@ -162,7 +162,7 @@ void LandVisibilityPatch::calculateErrors()
 		heightRange / 2.0f + minHeight_);
 }
 
-bool LandVisibilityPatch::setVisible(Vector &cameraPos)
+bool LandVisibilityPatch::setVisible(float distance)
 { 
 	visible_ = true;
 
@@ -171,8 +171,6 @@ bool LandVisibilityPatch::setVisible(Vector &cameraPos)
 		calculateErrors();
 		recalculateErrors_ = false;
 	}
-
-	float distance = (cameraPos - position_).Magnitude();
 
 	float maxError = 5.0f;
 	if (distance < 32.0f) maxError = 1.0f;

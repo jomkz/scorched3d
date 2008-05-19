@@ -5545,6 +5545,22 @@
 				>
 			</File>
 			<File
+				RelativePath="..\land\TargetVisibilityPatch.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\land\TargetVisibilityPatch.h"
+				>
+			</File>
+			<File
+				RelativePath="..\land\VisibilityList.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\land\VisibilityList.h"
+				>
+			</File>
+			<File
 				RelativePath="..\land\VisibilityPatchGrid.cpp"
 				>
 			</File>

@@ -114,6 +114,7 @@ public:
 	LandscapeTex();
 	virtual ~LandscapeTex();
 
+	unsigned int seed;
 	std::string detail;
 	std::string magmasmall;
 	std::string scorch;

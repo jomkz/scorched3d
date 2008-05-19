@@ -110,7 +110,6 @@ void TargetRendererImplTarget::simulate(float frameTime)
 {
 	if (!target_->getAlive()) return;
 
-	frameTime *= ScorchedClient::instance()->getActionController().getFast().asFloat();
 	totalTime_ += frameTime;
 	if (shieldHit_ > 0.0f)
 	{
