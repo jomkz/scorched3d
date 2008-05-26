@@ -38,7 +38,8 @@ GLWSelectorEntry::GLWSelectorEntry(const std::string &text,
 	userData_(userData),
 	dataText_(dataText),
 	color_(1.0f, 1.0f, 1.0f),
-	textureWidth_(0)
+	textureWidth_(0),
+	seperator_(false)
 {
 
 }

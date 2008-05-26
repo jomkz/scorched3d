@@ -27,7 +27,7 @@ GLMenuItem::GLMenuItem(const char *text,
 	void *userData) : 
 	menuText_(text), tip_(tooltip), 
 	selected_(selected), texture_(texture),
-	userData_(userData)
+	userData_(userData), seperator_(false)
 {
 }
 

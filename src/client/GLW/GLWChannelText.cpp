@@ -438,6 +438,7 @@ void GLWChannelText::buttonDown(unsigned int id)
 	GLWSelectorEntry mute("Ignore", &muteTooltip);
 	GLWSelectorEntry whisper("Whisper", &whisperTooltip);
 	GLWSelectorEntry bar("---");
+	bar.setSeperator();
 	GLWSelectorEntry joinChannel("Join Channel", &joinTooltip);
 	GLWSelectorEntry leaveChannel("Leave Channel", &leaveTooltip);
 	GLWSelectorEntry selectChannel("Select Channel", &selectTooltip);

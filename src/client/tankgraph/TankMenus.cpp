@@ -297,7 +297,9 @@ TankMenus::PlayerMenu::PlayerMenu()
 		S3D::getDataFile("data/windows/settinga.bmp"),
 		false);
 	DIALOG_ASSERT(map->getBits());
-	MainMenuDialog::instance()->addMenu("Player", 32, 
+	MainMenuDialog::instance()->addMenu("Player", 
+		"Skip move, resign, and quit",
+		32, 
 		ClientState::StatePlaying, this, map);
 
 	MainMenuDialog::instance()->addMenuItem("Player", 
@@ -379,7 +381,9 @@ TankMenus::AccessoryMenu::AccessoryMenu()
 		S3D::getDataFile("data/windows/bomba.bmp"),
 		false);
 	DIALOG_ASSERT(map->getBits());
-	MainMenuDialog::instance()->addMenu("Weapons", 32, 
+	MainMenuDialog::instance()->addMenu("Weapons", 
+		"Change the current weapon and enable defenses",
+		32, 
 		ClientState::StatePlaying, this, map);
 }
 
@@ -449,7 +453,9 @@ bool TankMenus::AccessoryMenu::getMenuItems(const char* menuName,
 			if (!firstIteration &&
 				0 != strcmp(lastGroup.c_str(), accessory->getTabGroupName()))
 			{
-				result.push_back("----------");
+				GLMenuItem bar("----------");
+				bar.setSeperator();
+				result.push_back(bar);
 			}
 			lastGroup = accessory->getTabGroupName();
 			firstIteration = false;

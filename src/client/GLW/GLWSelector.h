@@ -46,6 +46,8 @@ public:
 	ToolTip *getToolTip() { return tip_; }
 	GLTexture *getIcon() { return icon_; }
 	bool getSelected() { return selected_; }
+	bool getSeperator() { return seperator_; }
+	void setSeperator() { seperator_ = true; }
 	void *getUserData() { return userData_; }
 	Vector &getColor() { return color_; }
 	int &getTextureWidth() { return textureWidth_; }
@@ -59,7 +61,7 @@ protected:
 	int textureWidth_;
 	ToolTip *tip_;
 	Vector color_;
-	bool selected_;
+	bool selected_, seperator_;
 	void *userData_;
 	std::list<GLWSelectorEntry> popups_;
 };

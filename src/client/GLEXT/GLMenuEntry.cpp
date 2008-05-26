@@ -32,6 +32,7 @@ static const float menuItemHeight = 20.0f;
 
 GLMenuEntry::GLMenuEntry(
 	char *menuName, 
+	const char *menuDescription,
 	float width, 
 	unsigned int state,
 	GLMenuI *callback,
@@ -39,8 +40,10 @@ GLMenuEntry::GLMenuEntry(
 	unsigned int flags) :
 	left_(0.0f), width_(width), height_(0.0f),
 	callback_(callback),
-	menuName_(menuName), state_(state), selected_(false),
-	texture_(0), icon_(icon), flags_(flags)
+	menuName_(menuName), menuDescription_(menuDescription),
+	state_(state), selected_(false),
+	texture_(0), icon_(icon), flags_(flags),
+	toolTip_(ToolTip::ToolTipHelp, menuName, menuDescription)
 {
 }
 
@@ -129,6 +132,18 @@ void GLMenuEntry::drawText()
 			top_ - 15.0f, 0.0f, menuTitle);
 }
 
+bool GLMenuEntry::inMenu(float currentTop, int x, int y)
+{
+	float height = menuItemHeight;
+	if (icon_) height = 32.0f;
+	if (y > currentTop - height &&
+		x>left_ && x<left_ + width_) 
+	{
+		return true;
+	}
+	return false;
+}
+
 bool GLMenuEntry::click(float currentTop, int x, int y)
 {
 	float height = menuItemHeight;
@@ -165,6 +180,7 @@ bool GLMenuEntry::click(float currentTop, int x, int y)
 						item.getUserData()
 						)
 					);
+				if (item.getSeperator()) entries.back().setSeperator();
 			}
 			GLWSelector::instance()->showSelector(
 				this, 

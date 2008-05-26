@@ -30,6 +30,7 @@ class GLMenuEntry : public GLWSelectorI
 {
 public:
 	GLMenuEntry(char *menuName, 
+		const char *menuDescription,
 		float width, 
 		unsigned int state,
 		GLMenuI *callback,
@@ -38,6 +39,7 @@ public:
 	virtual ~GLMenuEntry();
 
 	bool click(float currentTop, int x, int y);
+	bool inMenu(float currentTop, int x, int y);
 	unsigned int getState() { return state_; }
 	void draw(float currentTop, float currentLeft);
 
@@ -48,7 +50,9 @@ public:
 	float getH() { return height_; }
 	bool getSelected() { return selected_; }
 	const char *getName() { return menuName_.c_str(); }
+	const char *getDescription() { return menuDescription_.c_str(); }
 	GLMenuI *getCallback() { return callback_; }
+	ToolTip &getToolTip() { return toolTip_; }
 	unsigned int getFlags() { return flags_; }
 
 	virtual void itemSelected(GLWSelectorEntry *entry, int position);
@@ -62,9 +66,11 @@ protected:
 	unsigned int flags_;
 	GLMenuI *callback_;
 	GLTexture *texture_;
+	ToolTip toolTip_;
 	Image *icon_;
 	std::list<GLMenuItem> menuItems_;
 	std::string menuName_;
+	std::string menuDescription_;
 
 	void drawText();
 	void drawIcon();

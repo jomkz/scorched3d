@@ -49,6 +49,7 @@ GLMenuEntry *GLMenu::getMenu(char *menuItem)
 }
 
 bool GLMenu::addMenu(char *menuName, 
+	const char *menuDescription,
 	float width, 
 	unsigned int state,
 	GLMenuI *callback,
@@ -57,7 +58,9 @@ bool GLMenu::addMenu(char *menuName,
 {
 	if (getMenu(menuName)) return false;
 
-	GLMenuEntry *entry = new GLMenuEntry(menuName, width, state, 
+	GLMenuEntry *entry = new GLMenuEntry(
+		menuName, menuDescription,
+		width, state, 
 		callback, icon, flags);
 	menuList_[std::string(menuName)] = entry;
 	return true;
@@ -78,6 +81,8 @@ void GLMenu::draw()
 
 	float currentTop = (float) GLViewPort::getHeight();
 	setY(currentTop - h_);
+	int x = ScorchedClient::instance()->getGameState().getMouseX();
+	int y = ScorchedClient::instance()->getGameState().getMouseY();
 
 	unsigned int currentState =
 		ScorchedClient::instance()->getGameState().getState();
@@ -93,13 +98,17 @@ void GLMenu::draw()
 		{
 			selected = true;
 		}
+		else if (entry->inMenu(currentTop, x, y))
+		{
+			GLWToolTip::instance()->addToolTip(&entry->getToolTip(),
+				entry->getX() - 10.0f, entry->getY() - 75, 
+				entry->getW(), 75.0f);
+		}
 	}	
 
 	bool show = true;
 	if (OptionsDisplay::instance()->getHideMenus())
 	{
-		int x = ScorchedClient::instance()->getGameState().getMouseX();
-		int y = ScorchedClient::instance()->getGameState().getMouseY();
 		show = (selected || GLWWindowManager::instance()->getFocus(x, y) == getId());
 	}
 	if (show)

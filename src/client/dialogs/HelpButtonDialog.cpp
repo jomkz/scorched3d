@@ -54,8 +54,11 @@ HelpButtonDialog::HelpMenu::HelpMenu()
 			false);
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->
-		addMenu("Help", 32.0f, 0, this, map,
-		GLMenu::eMenuAlignRight);
+		addMenu("Help", 
+			"Launch an external web browser containing the\n"
+			"Scorched3D online help.",
+			32.0f, 0, this, map,
+			GLMenu::eMenuAlignRight);
 }
 
 GLTexture &HelpButtonDialog::HelpMenu::getHelpTexture()
@@ -91,8 +94,10 @@ HelpButtonDialog::VolumeMenu::VolumeMenu()
 		false);
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->
-		addMenu("Volume", 32.0f, 0, this, map,
-		GLMenu::eMenuAlignRight);
+		addMenu("Volume", 
+			"Change the sound and volume settings",
+			32.0f, 0, this, map,
+			GLMenu::eMenuAlignRight);
 }
 
 bool HelpButtonDialog::VolumeMenu::menuOpened(const char* menuName)

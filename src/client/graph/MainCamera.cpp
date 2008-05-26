@@ -63,7 +63,9 @@ MainCamera::MainCamera() :
 		false);
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->addMenu(
-		"Camera", 32, 0, this, map);
+		"Camera", 
+		"Change the current camera view.",
+		32, 0, this, map);
 }
 
 MainCamera::~MainCamera()

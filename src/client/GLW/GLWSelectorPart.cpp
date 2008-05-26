@@ -63,7 +63,7 @@ void GLWSelectorPart::calculateDimensions(float drawX, float drawY)
 	{
 		// Get height
 		GLWSelectorEntry &item = (*itor);
-		if (item.getText()[0] == '-') selectedHeight += 8.0f;
+		if (item.getSeperator()) selectedHeight += 8.0f;
 		else selectedHeight += 18.0f;
 
 		// Get width
@@ -161,7 +161,7 @@ void GLWSelectorPart::draw()
 		GLWSelectorEntry &item = (*itor);
 
 		// Check if the item is a seperator
-		if (item.getText()[0] == '-')
+		if (item.getSeperator())
 		{
 			// Draw a seperator
 			glBegin(GL_LINES);
@@ -290,7 +290,7 @@ void GLWSelectorPart::mouseDown(float mouseX, float mouseY, bool &hit)
 			GLWSelectorEntry &item = (*itor);
 		
 			// Check if the item is a seperator
-			if (item.getText()[0] == '-')
+			if (item.getSeperator())
 			{
 				position++;
 				currentTop -= 8.0f;

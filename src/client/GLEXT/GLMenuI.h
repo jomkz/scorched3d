@@ -44,12 +44,14 @@ public:
 	GLTexture *getTexture() { return texture_; }
 	bool getSelected() { return selected_; }
 	void *getUserData() { return userData_; }
+	bool getSeperator() { return seperator_; }
+	void setSeperator() { seperator_ = true; }
 
 protected:
 	std::string menuText_;
 	ToolTip *tip_;
 	GLTexture *texture_;
-	bool selected_;
+	bool selected_, seperator_;
 	void *userData_;
 };
 

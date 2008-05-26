@@ -53,7 +53,9 @@ GLWWindowManager::GLWWindowManager() :
 		false);
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->
-		addMenu("Windows", 32.0f, 0, this, map);
+		addMenu("Windows", 
+			"Hide and display aspects of the user interface",
+			32.0f, 0, this, map);
 }
 
 GLWWindowManager::~GLWWindowManager()
