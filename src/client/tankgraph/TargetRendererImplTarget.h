@@ -38,12 +38,10 @@ public:
 	// TargetRendererImpl
 	virtual void drawParticle(float distance);
 	virtual void simulate(float frameTime);
-	virtual void addToLists(float distance, RenderObjectLists &renderList);
 
-	// RenderObject
-	virtual void render();
-	virtual void renderShadow();
-	virtual void render2D();
+	void render(float distance);
+	void renderShadow(float distance);
+	void render2D(float distance);
 
 	// TargetRenderer
 	virtual void shieldHit();
@@ -58,11 +56,9 @@ protected:
 	Target *target_;
 	ModelRendererSimulator *modelRenderer_;
 	ModelRendererSimulator *burntModelRenderer_;
-	bool canSeeTank_;
 	bool burnt_;
 	float shieldHit_, totalTime_;
-	float scale_, color_, size_;
-	float fade_, distance_;
+	float scale_, color_;
 	GLWTargetTips targetTips_;
 };
 

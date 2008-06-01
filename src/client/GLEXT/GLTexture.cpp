@@ -23,8 +23,9 @@
 #include <common/Defines.h>
 #include <set>
 
-static std::set<GLuint> usedNumbers_;
+//static std::set<GLuint> usedNumbers_;
 unsigned int GLTexture::textureSpace_ = 0;
+unsigned int GLTexture::textureSets_ = 0;
 
 GLTexture::GLTexture() : 
 	texNum_(0), texType_(GL_TEXTURE_2D), 
@@ -40,7 +41,7 @@ GLTexture::~GLTexture()
 	if (texNum_)
 	{
 		glDeleteTextures(1, &texNum_);
-		usedNumbers_.erase(texNum_);
+		//usedNumbers_.erase(texNum_);
 		texNum_ = 0;
 	}
 }
@@ -51,6 +52,7 @@ void GLTexture::draw(bool force)
 	{
 		glBindTexture(texType_, texNum_);
 		lastBind_ = this;
+		textureSets_++;
 	}
 }
 
@@ -67,7 +69,7 @@ bool GLTexture::replace(Image &bitmap, bool mipMap)
 			(bitmap.getHeight() != height_))
 		{
 			glDeleteTextures(1, &texNum_);
-			usedNumbers_.erase(texNum_);
+			//usedNumbers_.erase(texNum_);
 			texNum_ = 0;
 		}
 	}
@@ -115,11 +117,11 @@ bool GLTexture::createObject()
 	{
 		GLfloat priority = 1.0f;
 		glGenTextures(1, &texNum_);
-		if (usedNumbers_.find(texNum_) != usedNumbers_.end())
-		{
-			DIALOG_ASSERT("Texture Reuse" == 0);
-		}
-		usedNumbers_.insert(texNum_);
+		//if (usedNumbers_.find(texNum_) != usedNumbers_.end())
+		//{
+		//	DIALOG_ASSERT("Texture Reuse" == 0);
+		//}
+		//usedNumbers_.insert(texNum_);
 
 		glPrioritizeTextures(1, &texNum_, &priority);
 	}

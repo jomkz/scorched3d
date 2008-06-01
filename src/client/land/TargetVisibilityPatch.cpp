@@ -21,9 +21,10 @@
 #include <land/TargetVisibilityPatch.h>
 #include <client/ScorchedClient.h>
 #include <landscapemap/LandscapeMaps.h>
+#include <graph/OptionsDisplay.h>
 
 TargetVisibilityPatch::TargetVisibilityPatch() : 
-	visible_(false)
+	visible_(false), distance_(0.0f)
 {
 }
 
@@ -43,8 +44,16 @@ void TargetVisibilityPatch::setLocation(int x, int y)
 
 bool TargetVisibilityPatch::setVisible(float distance)
 { 
-	visible_ = true;
-	return true;
+	if (distance < OptionsDisplay::instance()->getDrawCullingDistance() + 100.0f)
+	{
+		distance_ = distance;
+		visible_ = true;
+	}
+	else
+	{
+		visible_ = false;
+	}
+	return visible_;
 }
 
 void TargetVisibilityPatch::setNotVisible()

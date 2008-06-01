@@ -29,6 +29,11 @@ class FrameTimer : public GameStateI
 public:
 	static FrameTimer *instance();
 
+	float getFPS() { return fps_; }
+	unsigned int getLastStateCount() { return lastStateCount_; }
+	unsigned int getLastTris() { return lastTris_; }
+	unsigned int getLastTextureSets() { return lastTextureSets_; }
+
 	// Inherited from GameStateI
 	virtual void draw(const unsigned state);
 	virtual void simulate(const unsigned state, float frameTime);
@@ -38,7 +43,8 @@ protected:
 	float totalTime_;
 	int frameCount_;
 	Clock frameClock_;
-	unsigned int lastStateCount_;
+	unsigned int lastStateCount_, lastTris_, lastTextureSets_;
+	float fps_;
 
 private:
 	FrameTimer();

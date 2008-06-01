@@ -25,7 +25,7 @@
 #include <image/ImageFactory.h>
 #include <common/Defines.h>
 
-Wall::Wall()
+Wall::Wall() : createdTexture_(false)
 {
 	for (int i=0; i<4; i++) fadeTime_[i] = 0.0f;
 }
@@ -36,8 +36,9 @@ Wall::~Wall()
 
 void Wall::draw()
 {
-	if (!texture_.textureValid())
+	if (!createdTexture_)
 	{
+		createdTexture_ = true;
 		std::string file1 = S3D::getDataFile("data/textures/bordershield/grid.bmp");
 		std::string file2 = S3D::getDataFile("data/textures/bordershield/grid.bmp");
 		ImageHandle map = ImageFactory::loadImageHandle(file1.c_str(), file2.c_str(), false);

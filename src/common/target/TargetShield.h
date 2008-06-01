@@ -41,6 +41,7 @@ public:
 	void setCurrentShield(Accessory *sh);
 
 	fixed getShieldPower() { return power_; }
+	fixed getShieldBoundingSize() { return boundingSize_; }
 	void setShieldPower(fixed power);
 
 	// Serialize
@@ -51,7 +52,7 @@ protected:
 	Target *target_;
 	ScorchedContext &context_;
 	Accessory *currentShield_;
-	fixed power_;
+	fixed power_, boundingSize_;
 };
 
 #endif // __INCLUDE_TargetShieldh_INCLUDE__

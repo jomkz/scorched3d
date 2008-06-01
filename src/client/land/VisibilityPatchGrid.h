@@ -26,6 +26,7 @@
 #include <land/LandSurround.h>
 #include <geomipmap/MipMapPatchIndexs.h>
 
+class Target;
 class GLSLShaderSetup;
 class WaterVisibilityPatch;
 class Water2Patches;
@@ -34,7 +35,7 @@ class VisibilityPatchGrid
 public:
 	static VisibilityPatchGrid *instance();
 
-	void generate(float *waterIndexErrors);
+	void generate();
 
 	void calculateVisibility();
 	void recalculateErrors(FixedVector &position, fixed size);
@@ -51,6 +52,8 @@ public:
 		return patchInfo_.getVisibleLandPatchesCount(); }
 	int getVisibleWaterPatchesCount() {
 		return patchInfo_.getVisibleWaterPatchesCount(); }
+
+	VisibilityPatchInfo &getPatchInfo() { return patchInfo_; }
 
 	LandVisibilityPatch *getLandVisibilityPatch(int x, int y);
 	TargetVisibilityPatch *getTargetVisibilityPatch(int x, int y);

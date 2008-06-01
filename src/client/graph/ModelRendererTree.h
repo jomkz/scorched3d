@@ -39,11 +39,15 @@ public:
 
 	virtual Model *getModel() { return model_; }
 
+	static void setSkipPre(bool skip) { skipPre_ = skip; }
+	static void drawInternalPre(bool setState);
+	void drawInternal(float distance, float fade, bool setState);
+
 protected:
 	Model *model_;
-
 	int treeType_;
 
+	static bool skipPre_;
 	static GLuint treePineList, treePineSmallList;
 	static GLuint treePine2List, treePine2SmallList;
 	static GLuint treePine3List, treePine3SmallList;

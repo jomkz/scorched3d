@@ -4757,30 +4757,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\tankgraph\RenderObject.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\tankgraph\RenderObject.h"
-				>
-			</File>
-			<File
-				RelativePath="..\tankgraph\RenderObjectList.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\tankgraph\RenderObjectList.h"
-				>
-			</File>
-			<File
-				RelativePath="..\tankgraph\RenderObjectLists.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\tankgraph\RenderObjectLists.h"
-				>
-			</File>
-			<File
 				RelativePath="..\tankgraph\RenderTargets.cpp"
 				>
 			</File>
@@ -5545,19 +5521,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\land\TargetList.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\land\TargetList.h"
+				>
+			</File>
+			<File
 				RelativePath="..\land\TargetVisibilityPatch.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\land\TargetVisibilityPatch.h"
-				>
-			</File>
-			<File
-				RelativePath="..\land\VisibilityList.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\land\VisibilityList.h"
 				>
 			</File>
 			<File

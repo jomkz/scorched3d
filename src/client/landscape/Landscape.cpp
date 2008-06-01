@@ -512,7 +512,6 @@ void Landscape::generate(ProgressCounter *counter)
 			tex->texture->getType()));
 	}
 
-	VisibilityPatchGrid::instance()->generate(water_->getIndexErrors());
 	points_->generate();
 
 	// Add lighting to the landscape texture

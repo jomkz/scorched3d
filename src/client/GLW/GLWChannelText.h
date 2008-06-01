@@ -74,6 +74,7 @@ protected:
 	float fontSize_, outlineFontSize_;
 	float ctime_;
 	bool cursor_, visible_;
+	bool createdTexture_;
 	int maxTextLen_;
 	unsigned int whisperDest_;
 	std::string whisperDestStr_;

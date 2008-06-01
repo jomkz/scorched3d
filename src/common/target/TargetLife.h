@@ -58,6 +58,7 @@ public:
 	Vector &getFloatPosition() { return floatPosition_; }
 	Vector &getFloatAabbSize() { return floatAabbSize_; }
 	float *getFloatRotMatrix() { return floatRotMatrix_; }
+	float getFloatBoundingSize() { return floatBoundingSize_; }
 	Vector &getFloatCenterPosition();
 
 	// Collision
@@ -85,7 +86,7 @@ protected:
 	FixedVector size_;
 	Vector floatPosition_;
 	Vector floatAabbSize_;
-	float floatRotMatrix_[16];
+	float floatRotMatrix_[16], floatBoundingSize_;
 	fixed life_;
 	fixed maxLife_;
 	bool sphereGeom_;

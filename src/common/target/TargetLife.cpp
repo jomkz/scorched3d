@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <target/TargetLife.h>
+#include <target/TargetRenderer.h>
 #include <target/TargetSpace.h>
 #include <target/TargetState.h>
 #include <target/Target.h>
@@ -32,7 +33,7 @@
 TargetLife::TargetLife(ScorchedContext &context, unsigned int playerId) :
 	context_(context), sphereGeom_(true),
 	life_(0), maxLife_(1), target_(0),
-	size_(2, 2, 2)
+	size_(2, 2, 2), floatBoundingSize_(0.0f)
 {
 }
 
@@ -241,6 +242,7 @@ void TargetLife::setBoundingSphere(bool sphereGeom)
 
 void TargetLife::updateSpace()
 {
+	if (target_->getRenderer()) target_->getRenderer()->moved();
 	context_.targetSpace->updateTarget(target_);
 }
 
@@ -357,5 +359,9 @@ void TargetLife::updateAABB()
 			}
 		}
 	}
-	if (!context_.serverMode) aabbSize_.asVector(floatAabbSize_);
+	if (!context_.serverMode)
+	{
+		aabbSize_.asVector(floatAabbSize_);
+		floatBoundingSize_ = floatAabbSize_.Max();
+	}
 }

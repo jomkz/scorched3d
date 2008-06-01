@@ -58,11 +58,11 @@ public:
 	int getBrightness() { return brightness_; }
 	OptionEntryInt &getBrightnessEntry() { return brightness_; }
 
-	float getDrawDistance() { return drawDistance_; }
-	OptionEntryFloat &getDrawDistanceEntry() { return drawDistance_; } ;
+	float getDrawCullingDistance() { return drawCullingDistance_; }
+	OptionEntryFloat &getDrawCullingDistanceEntry() { return drawCullingDistance_; } ;
 
-	float getDrawDistanceFade() { return drawDistanceFade_; }
-	OptionEntryFloat &getDrawDistanceFadeEntry() { return drawDistanceFade_; } ;
+	float getDrawFadeStartDistance() { return drawFadeStartDistance_; }
+	OptionEntryFloat &getDrawFadeStartDistanceEntry() { return drawFadeStartDistance_; } ;
 
 	bool getSmoothLines() { return smoothLines_; }
 	OptionEntryBool &getSmoothLinesEntry() { return smoothLines_; }
@@ -399,6 +399,8 @@ protected:
 	OptionEntryBool depricatedNoROAM_;
 	OptionEntryBool depricatedNoTessalation_;
 	OptionEntryBool depricatedNoGLCompiledArrays_;
+	OptionEntryFloat depricatedDrawDistance_;
+	OptionEntryFloat depricatedDrawDistanceFade_;
 
 	OptionEntryBoundedInt brightness_;
 	OptionEntryBoundedInt explosionParts_;
@@ -444,8 +446,8 @@ protected:
 	OptionEntryBool drawGraphicalReflectionMap_;
 	OptionEntryBool drawLines_;
 	OptionEntryBool drawLandLOD_;
-	OptionEntryFloat drawDistance_;
-	OptionEntryFloat drawDistanceFade_;
+	OptionEntryFloat drawCullingDistance_;
+	OptionEntryFloat drawFadeStartDistance_;
 	OptionEntryBool drawCollisionGeoms_;
 	OptionEntryBool drawCollisionSpace_;
 	OptionEntryBool drawBoundingSpheres_;

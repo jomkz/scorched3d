@@ -63,7 +63,7 @@ void VisibilityPatchGrid::clear()
 	visibilityPatches_ = 0;
 }
 
-void VisibilityPatchGrid::generate(float *waterIndexErrors)
+void VisibilityPatchGrid::generate()
 {
 	clear();
 
@@ -151,8 +151,7 @@ void VisibilityPatchGrid::generate(float *waterIndexErrors)
 
 				currentPatch->setLocation(x * 128 + midX_, y * 128 + midY_,
 					px % 2, py % 2,
-					leftPatch, rightPatch, topPatch, bottomPatch,
-					waterIndexErrors);
+					leftPatch, rightPatch, topPatch, bottomPatch);
 			}
 		}
 	}
@@ -335,12 +334,11 @@ void VisibilityPatchGrid::drawLand(int addIndex, bool simple)
 	}
 	else
 	{
-		LandVisibilityPatch **currentPatchPtr = patchInfo_.getLandVisibility().getVisiblePatches();
-		int count = patchInfo_.getLandVisibility().getVisibleCount();
-
-		for (int i=0; i<count; i++, currentPatchPtr++)
+		void *currentPatchPtr = 0;
+		TargetListIterator patchItor(patchInfo_.getLandVisibility());
+		while (currentPatchPtr = patchItor.getNext())
 		{
-			LandVisibilityPatch *currentPatch = *currentPatchPtr;
+			LandVisibilityPatch *currentPatch = (LandVisibilityPatch *) currentPatchPtr;
 			unsigned int index = currentPatch->getVisibilityIndex();
 			if (index == -1) 
 			{
@@ -401,12 +399,11 @@ void VisibilityPatchGrid::drawLand(int addIndex, bool simple)
 void VisibilityPatchGrid::drawLandLODLevels()
 {
 	{
-		LandVisibilityPatch **currentPatchPtr = patchInfo_.getLandVisibility().getVisiblePatches();
-		int count = patchInfo_.getLandVisibility().getVisibleCount();
-
-		for (int i=0; i<count; i++, currentPatchPtr++)
+		void *currentPatchPtr = 0;
+		TargetListIterator patchItor(patchInfo_.getLandVisibility());
+		while (currentPatchPtr = patchItor.getNext())
 		{
-			LandVisibilityPatch *currentPatch = *currentPatchPtr;
+			LandVisibilityPatch *currentPatch = (LandVisibilityPatch *) currentPatchPtr;
 			unsigned int index = currentPatch->getVisibilityIndex();
 			if (index == -1) continue;
 
@@ -489,13 +486,11 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 		glGetFloatv(GL_MODELVIEW_MATRIX, startmodel);
 
 		// Draw all patches
-		WaterVisibilityPatch **currentPatchPtr = patchInfo_.getWaterVisibility(w).getVisiblePatches();
-		int count = patchInfo_.getWaterVisibility(w).getVisibleCount();
-
-		for (int i=0; i<count; i++, currentPatchPtr++)
+		void *currentPatchPtr = 0;
+		TargetListIterator patchItor(patchInfo_.getWaterVisibility(w));
+		while (currentPatchPtr = patchItor.getNext())
 		{
-			WaterVisibilityPatch *currentPatch = *currentPatchPtr;
-
+			WaterVisibilityPatch *currentPatch = (WaterVisibilityPatch *) currentPatchPtr;
 			unsigned int index = currentPatch->getVisibilityIndex();
 			if (index == -1) continue;
 

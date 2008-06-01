@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <tankgraph/TargetRendererImplTank.h>
-#include <tankgraph/RenderObjectLists.h>
 #include <tank/TankLib.h>
 #include <tank/TankContainer.h>
 #include <tank/TankModelStore.h>
@@ -75,12 +74,12 @@ ModelRendererSimulator *TargetRendererImplTankAIM::getAutoAimModel()
 }
 
 TargetRendererImplTank::TargetRendererImplTank(Tank *tank) :
+	TargetRendererImpl(tank),
 	tank_(tank), tankTips_(tank),
-	model_(0), mesh_(0), canSeeTank_(false),
+	model_(0), mesh_(0), 
 	smokeTime_(0.0f), smokeWaitForTime_(0.0f),
 	fireOffSet_(0.0f), shieldHit_(0.0f),
-	totalTime_(0.0f), distance_(0.0f), 
-	fade_(1.0f), size_(2.0f)
+	totalTime_(0.0f)
 {
 	frame_ = (float) rand();
 }
@@ -120,42 +119,7 @@ TankMesh *TargetRendererImplTank::getMesh()
 	return mesh_;
 }
 
-void TargetRendererImplTank::addToLists(float distance, RenderObjectLists &renderList)
-{
-	distance_ = distance;
-	canSeeTank_ = false;
-	if (!tank_->getAlive()) return;
-
-	// Get target size
-	size_ = getTargetSize(tank_);
-
-	// Don't draw the tank/target if we are drawing shadows and shadows are off
-	// for this target
-	if (tank_->getTargetState().getDisplayHardwareShadow())
-	{
-		renderList.getShadowList().add(this);
-	}
-
-	// Figure out the drawing distance
-	fade_ = getTargetFade(tank_, distance, 
-		size_ * 2.5f * float(OptionsDisplay::instance()->getTankModelSize()) / 100.0f);
-
-	renderList.getModelList().add(this);
-
-	// Check we can see the target
-	if (!GLCameraFrustum::instance()->
-		sphereInFrustum(tank_->getLife().getFloatPosition(), 
-		size_ / 2.0f,
-		GLCameraFrustum::FrustrumRed))
-	{
-		return;
-	}
-	canSeeTank_ = true;
-
-	renderList.get2DList().add(this);
-}
-
-void TargetRendererImplTank::render()
+void TargetRendererImplTank::render(float distance)
 {
 	if (TargetRendererImplTankAIM::drawAim())
 	{
@@ -168,16 +132,17 @@ void TargetRendererImplTank::render()
 		glPopMatrix();
 	}
 
-	// Check we can see the tank
-	if (!canSeeTank_) return;
+	float size = getTargetSize();
+	float fade = getTargetFade(distance, 
+		size * 2.5f * float(OptionsDisplay::instance()->getTankModelSize()) / 100.0f);
 
-	createParticle(tank_);
-	storeTarget2DPos(tank_);
+	createParticle();
+	storeTarget2DPos();
 
 	bool currentTank = 
 		(tank_ == ScorchedClient::instance()->getTankContainer().getCurrentTank() &&
 		ScorchedClient::instance()->getGameState().getState() == ClientState::StatePlaying);
-	if (fade_ > 0.0f)
+	if (fade > 0.0f)
 	{
 		// Add the tank shadow
 		if (tank_->getTargetState().getDisplayShadow() &&
@@ -188,7 +153,7 @@ void TargetRendererImplTank::render()
 				tank_->getLife().getFloatPosition()[0], 
 				tank_->getLife().getFloatPosition()[1], 
 				(tank_->getLife().getSize().Max().asFloat() + 2.0f) * modelSize, 
-				fade_);
+				fade);
 		}
 
 		// Draw the tank model
@@ -203,7 +168,7 @@ void TargetRendererImplTank::render()
 				fireOffSet_, 
 				tank_->getPosition().getRotationGunXY().asFloat(), 
 				tank_->getPosition().getRotationGunYZ().asFloat(),
-				false, modelSize, fade_, true);
+				false, modelSize, fade, true);
 		}
 	}
 
@@ -221,7 +186,7 @@ void TargetRendererImplTank::render()
 	drawLife();
 }
 
-void TargetRendererImplTank::renderShadow()
+void TargetRendererImplTank::renderShadow(float distance)
 {
 	TankMesh *mesh = getMesh();
 	if (mesh)
@@ -234,17 +199,16 @@ void TargetRendererImplTank::renderShadow()
 			fireOffSet_, 
 			tank_->getPosition().getRotationGunXY().asFloat(), 
 			tank_->getPosition().getRotationGunYZ().asFloat(),
-			false, modelSize, fade_, false);
+			false, modelSize, 1.0f, false);
 	}
 }
 
 void TargetRendererImplTank::drawParticle(float distance)
 {
-	if (!canSeeTank_ ||
-		tank_->getState().getState() != TankState::sNormal) return;
-
-	drawParachute(tank_);
-	drawShield(tank_, shieldHit_, totalTime_);
+	if (!getVisible()) return;
+	
+	drawParachute();
+	drawShield(shieldHit_, totalTime_);
 	
 	if (!tank_->isTemp()) drawInfo();
 }
@@ -335,8 +299,6 @@ void TargetRendererImplTank::shieldHit()
 
 void TargetRendererImplTank::simulate(float frameTime)
 {
-	if (!tank_->getAlive()) return;
-
 	totalTime_ += frameTime;
 	frame_ += frameTime * 20.0f;
 
@@ -395,8 +357,11 @@ void TargetRendererImplTank::drawArrow()
 	// Arrow over tank	
 	{
 		static GLTexture arrowTexture;
-		if (!arrowTexture.textureValid())
+		static bool createdTexture = false;
+		if (!createdTexture)
 		{
+			createdTexture = true;
+
 			std::string file1 = S3D::getDataFile("data/windows/arrow.bmp");
 			std::string file2 = S3D::getDataFile("data/windows/arrowi.bmp");
 			ImageHandle bitmap = 
@@ -517,7 +482,7 @@ void TargetRendererImplTank::drawLifeBar(Vector &bilX, float value,
 	glEnd();
 }
 
-void TargetRendererImplTank::render2D()
+void TargetRendererImplTank::render2D(float distance)
 {
 	// Add the tooltip that displays the tank info
 	GLWToolTip::instance()->addToolTip(&tankTips_.tankTip,

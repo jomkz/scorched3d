@@ -26,7 +26,7 @@
 
 class GLTexture;
 class Image;
-class GLMenuEntry : public GLWSelectorI
+class GLMenuEntry : public GLWSelectorI, public ToolTipI
 {
 public:
 	GLMenuEntry(char *menuName, 
@@ -57,6 +57,8 @@ public:
 
 	virtual void itemSelected(GLWSelectorEntry *entry, int position);
 	virtual void noItemSelected();
+
+	virtual void populateCalled(unsigned int id);
 
 protected:
 	bool selected_;

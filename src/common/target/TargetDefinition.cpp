@@ -205,10 +205,6 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 		target->setBurnAction((Weapon *) action->getAction());
 	}
 
-	target->getLife().setTargetPosition(position);
-
-	groups_.addToGroups(context, &target->getGroup(), false);
-
 #ifndef S3D_SERVER
 	if (!context.serverMode)
 	{
@@ -218,6 +214,9 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 				finalModelScale.asFloat(), finalBrightness.asFloat()));
 	}
 #endif // #ifndef S3D_SERVER
+
+	target->getLife().setTargetPosition(position);
+	groups_.addToGroups(context, &target->getGroup(), false);
 
 	return target;
 }

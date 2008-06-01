@@ -60,3 +60,8 @@ bool GLMenuI::menuOpened(const char* menuName)
 {
 	return true;
 }
+
+const char *GLMenuI::getMenuToolTip(const char* menuName)
+{
+	return 0;
+}

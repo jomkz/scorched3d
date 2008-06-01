@@ -110,6 +110,7 @@ protected:
 	GLWIconButton upButton_;
 	GLWIconButton downButton_;
 	GLWIconButton resetButton_;
+	bool createdTexture_;
 	GLTexture upTexture_;
 	GLTexture downTexture_;
 	GLTexture resetTexture_;

@@ -37,6 +37,8 @@ static const float titleWidth = 100.0f;
 static const float titleHeight = 20.0f;
 static const float shadowWidth = 10.0f;
 
+GLTexture GLWWindow::moveTexture_;
+
 GLWWindow::GLWWindow(const char *name, float x, float y, 
 					 float w, float h,
 					 unsigned int states,
@@ -171,8 +173,11 @@ void GLWWindow::drawMaximizedWindow()
 	if (windowState_ & eCircle ||
 		windowState_ & eNoDraw)
 	{
-		if (!moveTexture_.textureValid())
+		static bool createdTexture = false;
+		if (!createdTexture)
 		{
+			createdTexture = true;
+
 			ImageHandle moveMap = ImageFactory::loadAlphaImageHandle(
 				S3D::getDataFile("data/windows/move.bmp"));
 			moveTexture_.create(moveMap, false);

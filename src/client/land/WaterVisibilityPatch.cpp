@@ -20,6 +20,8 @@
 
 #include <land/WaterVisibilityPatch.h>
 #include <land/VisibilityPatchGrid.h>
+#include <landscape/Landscape.h>
+#include <water/Water.h>
 #include <geomipmap/MipMapPatchIndexs.h>
 #include <graph/OptionsDisplay.h>
 
@@ -27,8 +29,7 @@ WaterVisibilityPatch::WaterVisibilityPatch() :
 	visible_(false),
 	leftPatch_(0), rightPatch_(0),
 	topPatch_(0), bottomPatch_(0),
-	visibilityIndex_(4),
-	waterIndexErrors_(0)
+	visibilityIndex_(4)
 {
 }
 
@@ -41,15 +42,13 @@ void WaterVisibilityPatch::setLocation(int x, int y,
 	WaterVisibilityPatch *leftPatch, 
 	WaterVisibilityPatch *rightPatch, 
 	WaterVisibilityPatch *topPatch, 
-	WaterVisibilityPatch *bottomPatch,
-	float *waterIndexErrors)
+	WaterVisibilityPatch *bottomPatch)
 {
 	x_ = x; y_ = y;
 	leftPatch_ = leftPatch;
 	rightPatch_ = rightPatch;
 	topPatch_ = topPatch;
 	bottomPatch_ = bottomPatch;
-	waterIndexErrors_ = waterIndexErrors;
 
 	patchX_ = patchX;
 	patchY_ = patchY;
@@ -65,10 +64,12 @@ bool WaterVisibilityPatch::setVisible(Vector &cameraPos)
 	visibilityIndex_ = 6;
 	if (!OptionsDisplay::instance()->getNoWaterLOD())
 	{
+		float *waterIndexErrors = Landscape::instance()->getWater().getIndexErrors();
+
 		visibilityIndex_ = int(distance - 50.0f) / 130;
-		if (waterIndexErrors_[6] < 1.0f) visibilityIndex_ += 3;
-		else if (waterIndexErrors_[6] < 2.0f) visibilityIndex_ += 2;
-		else if (waterIndexErrors_[6] < 3.0f) visibilityIndex_ += 1;
+		if (waterIndexErrors[6] < 1.0f) visibilityIndex_ += 3;
+		else if (waterIndexErrors[6] < 2.0f) visibilityIndex_ += 2;
+		else if (waterIndexErrors[6] < 3.0f) visibilityIndex_ += 1;
 
 		if (OptionsDisplay::instance()->getNoWaterMovement())
 		{

@@ -26,7 +26,7 @@
 REGISTER_CLASS_SOURCE(GLWDropDownColor);
 
 GLWDropDownColor::GLWDropDownColor(float x, float y, float w) :
-	GLWDropDown(x, y, w)
+	GLWDropDown(x, y, w), createdTexture_(false)
 {
 }
 
@@ -36,8 +36,9 @@ GLWDropDownColor::~GLWDropDownColor()
 
 void GLWDropDownColor::addColor(Vector &color)
 {
-	if (!colorTexture_.textureValid())
+	if (!createdTexture_)
 	{
+		createdTexture_ = true;
 		ImageHandle map = ImageFactory::loadImageHandle(
 			S3D::getDataFile("data/windows/white.bmp"));
 		colorTexture_.create(map);

@@ -24,7 +24,6 @@
 #ifndef S3D_SERVER
 #include <graph/OptionsDisplay.h>
 #include <GLEXT/GLState.h>
-#include <GLEXT/GLInfo.h>
 #include <SDL/SDL.h>
 #endif
 
@@ -102,7 +101,6 @@ void MainLoop::simulate(float frameTime)
 void MainLoop::draw()
 {
 #ifndef S3D_SERVER
-	GLInfo::resetNoTriangles();
 	dTimer_.getTimeDifference();
 	static bool firstTime = true;
 	if (firstTime)

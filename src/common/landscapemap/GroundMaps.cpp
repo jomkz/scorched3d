@@ -29,6 +29,9 @@
 #include <movement/TargetMovement.h>
 #include <common/Logger.h>
 #include <tankai/TankAIAdder.h>
+#ifndef S3D_SERVER
+#include <land/VisibilityPatchGrid.h>
+#endif
 
 GroundMaps::GroundMaps(LandscapeDefinitionCache &defnCache) :
 	defnCache_(defnCache)
@@ -44,6 +47,12 @@ void GroundMaps::generateMaps(
 	ProgressCounter *counter)
 {
 	generateHMap(context, counter);
+#ifndef S3D_SERVER
+	if (!context.serverMode)
+	{
+		VisibilityPatchGrid::instance()->generate();
+	}
+#endif
 	generateObjects(context, counter);
 
 	// Place the tanks after the objects and hmap

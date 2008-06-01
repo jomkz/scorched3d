@@ -51,7 +51,8 @@ GLWChannelView::GLWChannelView() :
 	downButton_(x_ + 2.0f, y_ + 1.0f, 12.0f, 12.0f),
 	resetButton_(x_ + 2.0f, y_ + 1.0f, 14.0f, 14.0f),
 	scrollUpKey_(0), scrollDownKey_(0), scrollResetKey_(0),
-	handler_(0)
+	handler_(0),
+	createdTexture_(false)
 {
 	upButton_.setHandler(this);
 	downButton_.setHandler(this);
@@ -374,9 +375,9 @@ void GLWChannelView::setY(float y)
 void GLWChannelView::draw()
 {
 	GLWidget::draw();
-
-	if (!upTexture_.textureValid())
+	if (!createdTexture_)
 	{
+		createdTexture_ = true;
 		ImageHandle upImg = ImageFactory::loadAlphaImageHandle(
 			S3D::getDataFile("data/windows/arrow_u.png"));
 		ImageHandle downImg = ImageFactory::loadAlphaImageHandle(

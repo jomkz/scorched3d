@@ -65,6 +65,7 @@ public:
 	virtual bool getEnabled(const char* menuName);
 	virtual bool getMenuItems(const char* menuName, std::list<GLMenuItem> &result);
 	virtual bool menuOpened(const char* menuName);
+	virtual const char *getMenuToolTip(const char* menuName);
 };
 
 #endif // !defined(AFX_GLMENUI_H__7171A46C_8265_4A9F_A984_889EF2547CB1__INCLUDED_)

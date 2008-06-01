@@ -57,8 +57,10 @@ void BackdropDialog::draw()
 
 void BackdropDialog::drawBackground()
 {
-	if (!backTex_.textureValid())
+	static bool createdTexture = false;
+	if (!createdTexture)
 	{
+		createdTexture = true;
 		ImageHandle originalBackMap = ImageFactory::loadImageHandle(
 			S3D::getDataFile("data/windows/backdrop.jpg"));
 		int w = originalBackMap.getWidth();
@@ -138,8 +140,10 @@ void BackdropDialog::drawLogo()
 
 void BackdropDialog::drawFooter()
 {
-	if (!footerTex_.textureValid())
+	static bool createdTexture = false;
+	if (!createdTexture)
 	{
+		createdTexture = true;
 		ImageHandle logoMap = ImageFactory::loadAlphaImageHandle(
 			S3D::getDataFile("data/windows/hiscore.png"));
 		footerTex_.create(logoMap, false);
@@ -177,7 +181,7 @@ void BackdropDialog::drawFooter()
 void BackdropDialog::capture()
 {
 	if (OptionsDisplay::instance()->getNoProgressBackdrop()) return;
-	if (!backTex_.textureValid()) return;
+	if (!backTex_.getTexName() == 0) return;
 
 	glRasterPos2i(0, 0);
 

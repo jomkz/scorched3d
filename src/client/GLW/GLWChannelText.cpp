@@ -44,7 +44,7 @@ GLWChannelText::GLWChannelText() :
 	visible_(false),
 	button_(x_ + 2.0f, y_ + 4.0f, 12.0f, 12.0f),
 	fontSize_(12.0f), outlineFontSize_(14.0f),
-	whisperDest_(0)
+	whisperDest_(0), createdTexture_(false)
 {
 	view_.setHandler(this);
 	button_.setHandler(this);
@@ -82,8 +82,9 @@ void GLWChannelText::draw()
 		setH(view_.getH());
 	}
 
-	if (!buttonTexture_.textureValid())
+	if (!createdTexture_)
 	{
+		createdTexture_ = true;
 		ImageHandle buttonImg = ImageFactory::loadAlphaImageHandle(
 			S3D::getDataFile("data/windows/arrow_r.png"));
 		buttonTexture_.create(buttonImg, false);

@@ -45,6 +45,7 @@ GLMenuEntry::GLMenuEntry(
 	texture_(0), icon_(icon), flags_(flags),
 	toolTip_(ToolTip::ToolTipHelp, menuName, menuDescription)
 {
+	toolTip_.setHandler(this);
 }
 
 GLMenuEntry::~GLMenuEntry()
@@ -222,4 +223,13 @@ void GLMenuEntry::itemSelected(GLWSelectorEntry *entry, int position)
 	}
 
 	callback_->menuSelection(menuName_.c_str(), position, item);
+}
+
+void GLMenuEntry::populateCalled(unsigned int id)
+{
+	if (callback_)
+	{
+		const char *text = callback_->getMenuToolTip(menuName_.c_str());
+		if (text) toolTip_.setText(ToolTip::ToolTipHelp, menuName_.c_str(), text);
+	}
 }

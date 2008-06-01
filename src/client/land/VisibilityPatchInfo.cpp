@@ -40,10 +40,10 @@ void VisibilityPatchInfo::generate(int maxLandPatches, int maxWaterPatches, int 
 {
 	clear();
 
-	landVisibility_.generate(maxLandPatches);
-	treeVisibility_.generate(maxTargetPatches);
-	targetVisibility_.generate(maxTargetPatches);
-	for (int i=0; i<4; i++) waterVisibility_[i].generate(maxWaterPatches);
+	landVisibility_.setCapacity(maxLandPatches);
+	treeVisibility_.setCapacity(maxTargetPatches);
+	targetVisibility_.setCapacity(maxTargetPatches);
+	for (int i=0; i<4; i++) waterVisibility_[i].setCapacity(maxWaterPatches);
 
 	reset();
 }

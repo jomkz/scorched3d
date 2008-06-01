@@ -73,13 +73,11 @@ public:
 
 	// TargetRendererImpl
 	virtual void simulate(float frameTime);
-	virtual void addToLists(float distance, RenderObjectLists &renderList);
 	virtual void drawParticle(float distance);
 
-	// RenderObject
-	virtual void render();
-	virtual void renderShadow();
-	virtual void render2D();
+	void render(float distance);
+	void renderShadow(float distance);
+	void render2D(float distance);
 
 	// TargetRenderer
 	virtual void fired();
@@ -101,9 +99,6 @@ protected:
 	float smokeTime_, smokeWaitForTime_;
 	float totalTime_;
 	float frame_;
-	float distance_, fade_;
-	float size_;
-	bool canSeeTank_;
 
 	void drawInfo();
 	void drawLife();

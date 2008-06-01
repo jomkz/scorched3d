@@ -181,7 +181,8 @@ void PlacementTypeTree::getPositions(ScorchedContext &context,
 	for (int i=0; i<NoIterations && objectCount < maxobjects; i++)
 	{
 		if (i % 1000 == 0) if (counter) 
-			counter->setNewPercentage(float(i)/float(NoIterations)*100.0f);
+			counter->setNewPercentage(
+				MAX(float(i)/float(NoIterations), float(objectCount) / float(maxobjects)) *100.0f);
 
 		fixed lx = generator.getRandFixed() * fixed(groundMapWidth);
 		fixed ly = generator.getRandFixed() * fixed(groundMapHeight);

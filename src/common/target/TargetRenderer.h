@@ -29,6 +29,7 @@ public:
 	TargetRenderer();
 	virtual ~TargetRenderer();
 
+	virtual void moved() = 0;
 	virtual void targetBurnt() = 0;
 	virtual void shieldHit() = 0;
 	virtual void fired() = 0;

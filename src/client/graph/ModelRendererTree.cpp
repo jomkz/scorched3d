@@ -27,6 +27,8 @@
 #include <GLEXT/GLTexture.h>
 #include <GLEXT/GLInfo.h>
 
+bool ModelRendererTree::skipPre_ = false;
+
 // Pine
 GLTexture ModelRendererTree::pineTextureA_;
 GLTexture ModelRendererTree::pineTextureB_;
@@ -356,15 +358,24 @@ ModelRendererTree::~ModelRendererTree()
 void ModelRendererTree::draw(float currentFrame, 
 	float distance, float fade, bool setState)
 {
-	draw(currentFrame, distance, fade, setState);
+	drawBottomAligned(currentFrame, distance, fade, setState);
 }
 
 void ModelRendererTree::drawBottomAligned(float currentFrame, 
 	float distance, float fade, bool setState)
 {
+	GLGlobalState globalState(0);
+	if (!skipPre_) drawInternalPre(setState);
+	drawInternal(distance, fade, setState);
+}
+
+void ModelRendererTree::drawInternalPre(bool setState)
+{
 	// Create the tree textures and models
-	if (!pineTextureA_.textureValid())
+	static bool listsCreated = false;
+	if (!listsCreated)
 	{
+		listsCreated = true;
 		{
 			std::string file1 = S3D::getDataFile("data/textures/pine2.bmp");
 			std::string file2 = S3D::getDataFile("data/textures/pine2a.bmp");
@@ -640,8 +651,44 @@ void ModelRendererTree::drawBottomAligned(float currentFrame,
 		glEndList();	
 	}
 
-	if (OptionsDisplay::instance()->getNoTrees()) return;
+	unsigned int state = 0;
+	if (setState)
+	{
+		state = GLState::TEXTURE_ON;
+		bool vertexLighting = OptionsDisplay::instance()->getNoModelLighting();
+		if (!vertexLighting)
+		{
+			state |= 
+				GLState::NORMALIZE_ON | 
+				GLState::LIGHTING_ON | 
+				GLState::LIGHT1_ON;
 
+			Vector4 ambientColor(0.4f, 0.4f, 0.4f, 1.0f);
+			Vector4 diffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
+			Vector4 specularColor(0.0f, 0.0f, 0.0f, 1.0f);
+			Vector4 emissiveColor(0.0f, 0.0f, 0.0f, 1.0f);
+			float shininess = 0.0f;
+			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambientColor);
+			glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuseColor);
+			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specularColor);
+			glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emissiveColor);
+			glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+		}
+		else
+		{
+			state |= 
+				GLState::NORMALIZE_OFF | 
+				GLState::LIGHTING_OFF | 
+				GLState::LIGHT1_OFF;
+
+			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		}
+	}
+	GLGlobalState globalState(state);
+}
+
+void ModelRendererTree::drawInternal(float distance, float fade, bool setState)
+{
 	// Figure out which display list to call
 	GLTexture *texture = 0;
 	GLuint treeList = 0;
@@ -785,56 +832,21 @@ void ModelRendererTree::drawBottomAligned(float currentFrame,
 		break;
 	};
 
-	unsigned int state = 0;
+	DIALOG_ASSERT(texture && treeList && smallTreeList);
 	if (setState)
-	{
-		state = GLState::TEXTURE_ON;
-		bool vertexLighting = OptionsDisplay::instance()->getNoModelLighting();
-		if (!vertexLighting)
-		{
-			state |= 
-				GLState::NORMALIZE_ON | 
-				GLState::LIGHTING_ON | 
-				GLState::LIGHT1_ON;
-
-			Vector4 ambientColor(0.4f, 0.4f, 0.4f, 1.0f);
-			Vector4 diffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
-			Vector4 specularColor(0.0f, 0.0f, 0.0f, 1.0f);
-			Vector4 emissiveColor(0.0f, 0.0f, 0.0f, 1.0f);
-			float shininess = 0.0f;
-			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambientColor);
-			glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuseColor);
-			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specularColor);
-			glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emissiveColor);
-			glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
-		}
-		else
-		{
-			state |= 
-				GLState::NORMALIZE_OFF | 
-				GLState::LIGHTING_OFF | 
-				GLState::LIGHT1_OFF;
-		}
-	}
-	GLGlobalState globalState(state);
-
-	if (texture && setState)
 	{
 		texture->draw();
 	}
-
-	DIALOG_ASSERT(treeList && smallTreeList);
-	glPushMatrix();
-		if (OptionsDisplay::instance()->getLowTreeDetail() || distance > 16000)
-		{
-			glCallList(smallTreeList);
-			GLInfo::addNoTriangles(20);
-		}
-		else 
-		{
-			glCallList(treeList);
-			GLInfo::addNoTriangles(10);
-		}
-	glPopMatrix();
+	
+	if (OptionsDisplay::instance()->getLowTreeDetail() || distance > 125.0f)
+	{
+		glCallList(smallTreeList);
+		GLInfo::addNoTriangles(20);
+	}
+	else 
+	{
+		glCallList(treeList);
+		GLInfo::addNoTriangles(10);
+	}
 }
 

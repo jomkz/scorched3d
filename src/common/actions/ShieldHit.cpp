@@ -25,10 +25,10 @@
 #include <weapons/Shield.h>
 #include <target/TargetContainer.h>
 #include <target/TargetShield.h>
+#include <target/TargetRenderer.h>
 #ifndef S3D_SERVER
 	#include <sound/SoundUtils.h>
 	#include <GLEXT/GLLenseFlare.h>
-	#include <tankgraph/TargetRendererImplTank.h>
 #endif
 
 ShieldHit::ShieldHit(unsigned int playerId,

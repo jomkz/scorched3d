@@ -136,12 +136,27 @@ void ConsoleRuleFnIOptionsAdapter::setBoolParam(const char *name, bool value)
 
 float ConsoleRuleFnIOptionsAdapter::getNumberParam(const char *name)
 {
-	return (float) (((OptionEntryInt &) entry_).getValue());
+	if (entry_.getEntryType() == OptionEntry::OptionEntryIntType)
+	{
+		return (float) (((OptionEntryInt &) entry_).getValue());
+	}
+	else if (entry_.getEntryType() == OptionEntry::OptionEntryFloatType)
+	{
+		return ((OptionEntryFloat &) entry_).getValue();
+	}
+	return -99.99f;
 }
 
 void  ConsoleRuleFnIOptionsAdapter::setNumberParam(const char *name, float value)
 {
-	((OptionEntryInt &) entry_).setValue(int(value));
+	if (entry_.getEntryType() == OptionEntry::OptionEntryIntType)
+	{
+		((OptionEntryInt &) entry_).setValue(int(value));
+	}
+	else if (entry_.getEntryType() == OptionEntry::OptionEntryFloatType)
+	{
+		((OptionEntryFloat &) entry_).setValue(value);
+	}
 }
 
 const char *ConsoleRuleFnIOptionsAdapter::getStringParam(const char *name)

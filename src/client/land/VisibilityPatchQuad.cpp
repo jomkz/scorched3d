@@ -107,9 +107,13 @@ void VisibilityPatchQuad::setVisible(VisibilityPatchInfo &patchInfo, Vector &cam
 			if (targetVisibilityPatch_->setVisible(distance))
 			{
 				if (targetVisibilityPatch_->hasTargets()) 
+				{
 					patchInfo.getTargetVisibility().add(targetVisibilityPatch_);
+				}
 				if (targetVisibilityPatch_->hasTrees()) 
+				{
 					patchInfo.getTreeVisibility().add(targetVisibilityPatch_);
+				}
 			}
 		}
 	}

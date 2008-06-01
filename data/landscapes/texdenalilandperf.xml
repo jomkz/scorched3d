@@ -1,4 +1,5 @@
 <tex>
+  <seed>10</seed>
 	<detail>data/textures/landscape/denali/detail.bmp</detail>
 	<magmasmall>data/textures/landscape/default/magma-small.bmp</magmasmall>
 	<scorch>data/textures/landscape/denali/scorch.bmp</scorch>
@@ -37,8 +38,9 @@
 		<texture3>data/textures/landscape/denali/texture4.bmp</texture3>
 	</texture>
 	<placements>
+     <placement>data/landscapes/placepinelargenumber.xml</placement>
 	</placements>
   <boids>
-    <boid>data/landscapes/boidslargenumber.xml</boid>
+    <!--<boid>data/landscapes/boidslargenumber.xml</boid>-->
   </boids>
 </tex>

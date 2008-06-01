@@ -23,7 +23,6 @@
 
 #include <engine/GameStateI.h>
 #include <tankgraph/TankMenus.h>
-#include <tankgraph/RenderObjectLists.h>
 
 class RenderTargets
 {
@@ -52,18 +51,19 @@ public:
 
 	void shadowDraw();
 
+	unsigned int getTreesDrawn() { return treesDrawn_; }
+	unsigned int getTargetsDrawn() { return targetsDrawn_; }
+
 	friend struct Renderer3D;
 	friend struct Renderer2D;
 protected:
 	static RenderTargets *instance_;
 
+	unsigned int treesDrawn_, targetsDrawn_;
 	TankMenus menus_;
-	bool createLists_;
-	RenderObjectLists renderObjectLists_;
 
 	void draw2d();
 	void draw();
-	void createLists();
 
 private:
 	RenderTargets();

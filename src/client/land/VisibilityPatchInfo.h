@@ -24,7 +24,7 @@
 #include <land/LandVisibilityPatch.h>
 #include <land/WaterVisibilityPatch.h>
 #include <land/TargetVisibilityPatch.h>
-#include <land/VisibilityList.h>
+#include <land/TargetList.h>
 
 class VisibilityPatchInfo
 {
@@ -33,42 +33,42 @@ public:
 	~VisibilityPatchInfo();
 
 	int getVisibleLandPatchesCount() { 
-		return landVisibility_.getVisibleCount(); }
+		return landVisibility_.getObjectCount(); }
 	int getVisibleWaterPatchesCount() { 
-		return waterVisibility_[0].getVisibleCount() +
-			waterVisibility_[1].getVisibleCount() +
-			waterVisibility_[2].getVisibleCount() +
-			waterVisibility_[3].getVisibleCount(); }
+		return waterVisibility_[0].getObjectCount() +
+			waterVisibility_[1].getObjectCount() +
+			waterVisibility_[2].getObjectCount() +
+			waterVisibility_[3].getObjectCount(); }
 
 	void reset();
 	void generate(int maxLandPatches, int maxWaterPatches, int maxTargetPatches);
 
-	VisibilityList<LandVisibilityPatch> &getLandVisibility() 
+	TargetList &getLandVisibility() 
 	{
 		return landVisibility_;
 	}
 
-	VisibilityList<WaterVisibilityPatch> &getWaterVisibility(int index) 
+	TargetList &getWaterVisibility(int index) 
 	{
 		DIALOG_ASSERT(index >= 0 && index <= 4);
 		return waterVisibility_[index];
 	}
 
-	VisibilityList<TargetVisibilityPatch> &getTreeVisibility()
+	TargetList &getTreeVisibility()
 	{
 		return treeVisibility_;
 	}
 
-	VisibilityList<TargetVisibilityPatch> &getTargetVisibility()
+	TargetList &getTargetVisibility()
 	{
 		return targetVisibility_;
 	}
 
 protected:
-	VisibilityList<WaterVisibilityPatch> waterVisibility_[4];
-	VisibilityList<LandVisibilityPatch> landVisibility_;
-	VisibilityList<TargetVisibilityPatch> treeVisibility_;
-	VisibilityList<TargetVisibilityPatch> targetVisibility_;
+	TargetList waterVisibility_[4];
+	TargetList landVisibility_;
+	TargetList treeVisibility_;
+	TargetList targetVisibility_;
 
 	void clear();
 };

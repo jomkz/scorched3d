@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-//    Scorched3D (c) 2000-2003
+//    Scorched3D (c) 2000-2004
 //
 //    This file is part of Scorched3D.
 //
@@ -18,35 +18,4 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_RenderObjectListsh_INCLUDE__)
-#define __INCLUDE_RenderObjectListsh_INCLUDE__
-
-#include <tankgraph/RenderObjectList.h>
-
-class RenderObjectLists
-{
-public:
-	RenderObjectLists();
-	virtual ~RenderObjectLists();
-
-	void reset()
-	{
-		treeList_.reset();
-		modelList_.reset();
-		shadowList_.reset();
-		twoDList_.reset();
-	}
-
-	RenderObjectList &getTreeList() { return treeList_; }
-	RenderObjectList &getModelList() { return modelList_; }
-	RenderObjectList &getShadowList() { return shadowList_; }
-	RenderObjectList &get2DList() { return twoDList_; }
-
-protected:
-	RenderObjectList treeList_;
-	RenderObjectList modelList_;
-	RenderObjectList shadowList_;
-	RenderObjectList twoDList_;
-};
-
-#endif
+#include <land/TargetList.h>
