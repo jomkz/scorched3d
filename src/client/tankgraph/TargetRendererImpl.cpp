@@ -45,9 +45,9 @@ TargetRendererImpl::HighlightType TargetRendererImpl::highlightType_ =
 
 TargetRendererImpl::TargetRendererImpl(Target *target) : 
 	target_(target),
-	particleMade_(false), tree_(false),
+	particleMade_(false), tree_(false), matrixCached_(false),
 	posX_(0.0f), posY_(0.0f), posZ_(0.0f),
-	currentVisibilityPatch_(0)
+	currentVisibilityPatch_(0), patchEpoc_(-1)
 {
 
 }
@@ -59,6 +59,8 @@ TargetRendererImpl::~TargetRendererImpl()
 
 void TargetRendererImpl::moved()
 {
+	if (VisibilityPatchGrid::instance()->getEpocNumber() == 0) return;
+
 	TargetVisibilityPatch *newPatch = 0;
 	if (target_->getAlive())
 	{
@@ -67,10 +69,16 @@ void TargetRendererImpl::moved()
 			position[0].asInt(), position[1].asInt());
 	}
 	setMovedPatch(newPatch);
+	matrixCached_ = false;
 }
 
 void TargetRendererImpl::setMovedPatch(TargetVisibilityPatch *newPatch)
 {
+	if (patchEpoc_ != VisibilityPatchGrid::instance()->getEpocNumber())
+	{
+		currentVisibilityPatch_ = 0;
+		patchEpoc_ = VisibilityPatchGrid::instance()->getEpocNumber();
+	}
 	if (newPatch != currentVisibilityPatch_)
 	{
 		if (currentVisibilityPatch_)

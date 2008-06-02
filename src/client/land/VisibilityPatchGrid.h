@@ -48,6 +48,7 @@ public:
 		Vector landscapeSize,
 		GLSLShaderSetup *waterShader);
 
+	int getEpocNumber() { return epoc_; }
 	int getVisibleLandPatchesCount() { 
 		return patchInfo_.getVisibleLandPatchesCount(); }
 	int getVisibleWaterPatchesCount() {
@@ -59,6 +60,7 @@ public:
 	TargetVisibilityPatch *getTargetVisibilityPatch(int x, int y);
 	WaterVisibilityPatch *getWaterVisibilityPatch(int x, int y);
 protected:
+	int epoc_;
 	LandSurround surround_;
 	MipMapPatchIndexs landIndexs_;
 

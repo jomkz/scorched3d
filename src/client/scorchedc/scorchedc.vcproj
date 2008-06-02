@@ -389,6 +389,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\common\Matrix16.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\common\Matrix16.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\common\ModelID.cpp"
 				>
 			</File>

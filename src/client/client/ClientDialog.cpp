@@ -77,13 +77,6 @@ bool createScorchedWindow()
 	Gamma::instance()->set();
 
 	GLSetup::setup();
-	/*if (!OptionsDisplay::instance()->getNoCg())
-	{
-		if (!CGLoader::instance()->init())
-		{
-			return false;
-		}
-	}*/
 
 	return true;
 }

@@ -28,9 +28,9 @@
 #include <engine/GameState.h>
 #include <GLEXT/GLStateExtension.h>
 #include <GLEXT/GLVertexBufferObject.h>
+#include <GLEXT/GLCamera.h>
 #include <GLSL/GLSLShaderSetup.h>
 #include <graph/OptionsDisplay.h>
-#include <graph/MainCamera.h>
 
 VisibilityPatchGrid *VisibilityPatchGrid::instance()
 {
@@ -40,7 +40,8 @@ VisibilityPatchGrid *VisibilityPatchGrid::instance()
 
 VisibilityPatchGrid::VisibilityPatchGrid() : 
 	landPatches_(0), targetPatches_(0), 
-	waterPatches_(0), visibilityPatches_(0)
+	waterPatches_(0), visibilityPatches_(0),
+	epoc_(0)
 {
 }
 
@@ -66,6 +67,7 @@ void VisibilityPatchGrid::clear()
 void VisibilityPatchGrid::generate()
 {
 	clear();
+	epoc_++;
 
 	// Figure out how large the visible area will be
 	int mapWidth = ScorchedClient::instance()->getLandscapeMaps().
@@ -222,6 +224,8 @@ void VisibilityPatchGrid::recalculateErrors(FixedVector &position, fixed size)
 
 LandVisibilityPatch *VisibilityPatchGrid::getLandVisibilityPatch(int x, int y)
 {
+	DIALOG_ASSERT(epoc_);
+
 	int realX = x / 32;
 	int realY = y / 32;
 
@@ -236,6 +240,8 @@ LandVisibilityPatch *VisibilityPatchGrid::getLandVisibilityPatch(int x, int y)
 
 TargetVisibilityPatch *VisibilityPatchGrid::getTargetVisibilityPatch(int x, int y)
 {
+	DIALOG_ASSERT(epoc_);
+
 	int realX = (x - midX_) / 32;
 	int realY = (y - midY_) / 32;
 
@@ -250,6 +256,8 @@ TargetVisibilityPatch *VisibilityPatchGrid::getTargetVisibilityPatch(int x, int 
 
 WaterVisibilityPatch *VisibilityPatchGrid::getWaterVisibilityPatch(int x, int y)
 {
+	DIALOG_ASSERT(epoc_);
+
 	int realX = (x - midX_) / 128;
 	int realY = (y - midY_) / 128;
 
@@ -264,8 +272,7 @@ WaterVisibilityPatch *VisibilityPatchGrid::getWaterVisibilityPatch(int x, int y)
 
 void VisibilityPatchGrid::calculateVisibility()
 {
-	Vector &cameraPos = 
-		MainCamera::instance()->getTarget().getCamera().getCurrentPos();
+	Vector &cameraPos = GLCamera::getCurrentCamera()->getCurrentPos();
 
 	patchInfo_.reset();
 

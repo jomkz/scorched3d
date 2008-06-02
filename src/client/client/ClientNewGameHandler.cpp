@@ -24,7 +24,6 @@
 #include <client/ClientWaitState.h>
 #include <client/ClientReloadAdaptor.h>
 #include <graph/SpeedChange.h>
-#include <graph/MainCamera.h>
 #include <graph/OptionsDisplayConsole.h>
 #include <tankgraph/RenderTracer.h>
 #include <weapons/AccessoryStore.h>
@@ -46,6 +45,7 @@
 #include <landscape/Landscape.h>
 #include <tank/TankContainer.h>
 #include <tank/TankCamera.h>
+#include <target/TargetRenderer.h>
 #include <tankai/TankAIAdder.h>
 
 ClientNewGameHandler *ClientNewGameHandler::instance_ = 0;
@@ -241,6 +241,7 @@ bool ClientNewGameHandler::actualProcessMessage(
 		tankItor++)
 	{
 		Tank *current = (*tankItor).second;
+		current->getRenderer()->moved();
 		current->getCamera().setCameraType(1);
 	}
 

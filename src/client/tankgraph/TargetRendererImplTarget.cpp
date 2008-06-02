@@ -101,13 +101,22 @@ void TargetRendererImplTarget::render(float distance)
 		glColor4f(color_, color_, color_, fade);
 	}
 
-	glPushMatrix();
-		glTranslatef(
+	// Generate and cache the OpenGL transform matrix
+	if (!matrixCached_)
+	{
+		cachedMatrix_.identity();
+		cachedMatrix_.translate(
 			target_->getLife().getFloatPosition()[0], 
 			target_->getLife().getFloatPosition()[1], 
 			target_->getLife().getFloatPosition()[2]);
-		glMultMatrixf(target_->getLife().getFloatRotMatrix());
-		glScalef(scale_, scale_, scale_);
+		cachedMatrix_.multiply(target_->getLife().getFloatRotMatrix());
+		cachedMatrix_.scale(scale_, scale_, scale_);
+
+		matrixCached_ = true;
+	}
+
+	glPushMatrix();
+		glMultMatrixf(cachedMatrix_);
 		if (burnt_) burntModelRenderer_->drawBottomAligned(distance, fade);
 		else modelRenderer_->drawBottomAligned(distance, fade);
 	glPopMatrix();

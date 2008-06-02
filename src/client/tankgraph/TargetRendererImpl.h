@@ -23,6 +23,7 @@
 
 #include <target/Target.h>
 #include <target/TargetRenderer.h>
+#include <common/Matrix16.h>
 
 class TargetVisibilityPatch;
 class RenderObjectLists;
@@ -52,9 +53,11 @@ public:
 
 protected:
 	static HighlightType highlightType_;
-	bool tree_;
+	bool tree_, matrixCached_;
+	Matrix16 cachedMatrix_;
 	Target *target_;
 	TargetVisibilityPatch *currentVisibilityPatch_;
+	int patchEpoc_;
 	bool particleMade_;
 
 	void drawShield(float shieldHit, float totalTime);

@@ -24,16 +24,17 @@
 #include <water/WaterWaves.h>
 #include <common/Vector4.h>
 #include <image/ImageFactory.h>
-#include <GLEXT/GLStateExtension.h>
 #include <image/ImageFactory.h>
+#include <GLEXT/GLStateExtension.h>
+#include <GLEXT/GLCamera.h>
 #include <GLEXT/GLTextureCubeMap.h>
 #include <client/ScorchedClient.h>
-#include <landscape/Landscape.h>
 #include <sky/Sky.h>
 #include <land/VisibilityPatchGrid.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeDefn.h>
+#include <landscape/Landscape.h>
 #include <graph/MainCamera.h>
 #include <graph/OptionsDisplay.h>
 
@@ -111,7 +112,7 @@ void Water2Renderer::drawWaterShaders(Water2 &water2)
 
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 
-	Vector cameraPos = MainCamera::instance()->getTarget().getCamera().getCurrentPos();
+	Vector cameraPos = GLCamera::getCurrentCamera()->getCurrentPos();
 	cameraPos[2] = -waterHeight_;
 	waterShader_->use();
 	waterShader_->set_uniform("viewpos", cameraPos);
@@ -332,8 +333,7 @@ void Water2Renderer::drawWaterNoShaders(Water2 &water2)
 void Water2Renderer::drawWater(Water2 &water2, GLSLShaderSetup *waterShader)
 {
 	// Draw Water
-	Vector &cameraPos = 
-		MainCamera::instance()->getTarget().getCamera().getCurrentPos();
+	Vector &cameraPos = GLCamera::getCurrentCamera()->getCurrentPos();
 	VisibilityPatchGrid::instance()->drawWater(
 		*currentPatch_, water2.getIndexs(), cameraPos, landscapeSize_, waterShader);
 }
