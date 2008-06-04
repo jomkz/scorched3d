@@ -433,7 +433,7 @@ float TargetRendererImpl::getTargetSize()
 float TargetRendererImpl::getTargetFade(float distance, float size)
 {
 	// Figure out the drawing distance
-	float drawCullingDistance = OptionsDisplay::instance()->getDrawCullingDistance() + size * 20.0f;
+	float drawCullingDistance = OptionsDisplay::instance()->getDrawCullingDistance() * size;
 	float drawFadeStartDistance =  OptionsDisplay::instance()->getDrawFadeStartDistance();
 	float drawFadeDistance = drawCullingDistance - drawFadeStartDistance;
 	float fade = 1.0f;

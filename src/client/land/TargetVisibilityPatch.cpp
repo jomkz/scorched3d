@@ -44,14 +44,14 @@ void TargetVisibilityPatch::setLocation(int x, int y)
 
 bool TargetVisibilityPatch::setVisible(float distance)
 { 
-	if (distance < OptionsDisplay::instance()->getDrawCullingDistance() + 100.0f)
+	//if (distance < OptionsDisplay::instance()->getDrawCullingDistance() + 100.0f)
 	{
 		distance_ = distance;
 		visible_ = true;
 	}
-	else
+	//else
 	{
-		visible_ = false;
+		//visible_ = false;
 	}
 	return visible_;
 }
