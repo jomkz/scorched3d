@@ -826,7 +826,23 @@ void Landscape::actualDrawLandShader()
 		landShader_->set_gl_texture(splatMaskTextureBorder1_, "splat1map", 0);
 		landShader_->set_gl_texture(splatMaskTextureBorder2_, "splat2map", 1);
 #else
-		landShader_->set_gl_texture(groundTexture_, "mainmap", 0);
+		if (OptionsDisplay::instance()->getDrawWater())
+		{
+			// Disable Tex
+			glActiveTextureARB(GL_TEXTURE3_ARB);
+			glMatrixMode(GL_TEXTURE);
+			glLoadIdentity();
+			glMatrixMode(GL_MODELVIEW);
+			glActiveTextureARB(GL_TEXTURE0_ARB);
+
+			landShader_->use_fixed();
+
+			groundTexture_.draw(true);
+		}
+		else
+		{
+			landShader_->set_gl_texture(groundTexture_, "mainmap", 0);
+		}
 #endif
 		VisibilityPatchGrid::instance()->drawSurround();
 		GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SURROUND");

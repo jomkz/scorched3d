@@ -38,7 +38,7 @@
 		<texture3>data/textures/landscape/denali/texture4.bmp</texture3>
 	</texture>
 	<placements>
-     <placement>data/landscapes/placepinelargenumber.xml</placement>
+     <!--<placement>data/landscapes/placepinelargenumber.xml</placement>-->
 	</placements>
   <boids>
     <!--<boid>data/landscapes/boidslargenumber.xml</boid>-->

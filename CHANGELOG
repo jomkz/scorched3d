@@ -17,3 +17,6 @@ Added errosion and noise to options for landscape generation
 Optimized collision space updates to be more efficient
 Boids are now all grouped into groups of 5 to make flocking algorithm more efficient
 New boids can be added in the middle of a round
+Added option for simpler water shaders for framerate improvement
+Optimized object visibility checks to use quadtree
+Optimized/minimized OpenGL calls during landscape/water rendering

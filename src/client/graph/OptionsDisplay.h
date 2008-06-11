@@ -163,6 +163,9 @@ public:
 	bool getNoGLShaders() { return noGLShaders_; }
 	OptionEntryBool &getNoGLShadersEntry() { return noGLShaders_; }
 
+	bool getSimpleWaterShaders() { return simpleWaterShaders_; }
+	OptionEntryBool &getSimpleWaterShadersEntry() { return simpleWaterShaders_; }
+
 	bool getNoProgressBackdrop() { return noProgressBackdrop_; }
 	OptionEntryBool &getNoProgressBackdropEntry() { return noProgressBackdrop_; }
 	
@@ -431,6 +434,7 @@ protected:
 	OptionEntryBool noGLHardwareMipmaps_;
 	OptionEntryBool noGLDrawElements_;
 	OptionEntryBool noGLShaders_;
+	OptionEntryBool simpleWaterShaders_;
 	OptionEntryBool noThreadedDraw_;
 	OptionEntryBool invertElevation_;
 	OptionEntryBool invertMouse_;

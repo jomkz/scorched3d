@@ -520,14 +520,17 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 			// Setup the texture matrix for texture 0
 			if (waterShader)
 			{
-				Vector landfoam;
-				landfoam[0] = currentPatch->getOffset()[0];
-				landfoam[1] = currentPatch->getOffset()[1];
-				landfoam[2] = ((currentPatch->getPosition()[0] >= 0.0f && 
-					currentPatch->getPosition()[1] >= 0.0f &&
-					currentPatch->getPosition()[0] <= landscapeSize[0] && 
-					currentPatch->getPosition()[1] <= landscapeSize[1])?1.0f:0.0f);
-				waterShader->set_uniform("landfoam", landfoam);
+				if (!OptionsDisplay::instance()->getSimpleWaterShaders())
+				{
+					Vector landfoam;
+					landfoam[0] = currentPatch->getOffset()[0];
+					landfoam[1] = currentPatch->getOffset()[1];
+					landfoam[2] = ((currentPatch->getPosition()[0] >= 0.0f && 
+						currentPatch->getPosition()[1] >= 0.0f &&
+						currentPatch->getPosition()[0] <= landscapeSize[0] && 
+						currentPatch->getPosition()[1] <= landscapeSize[1])?1.0f:0.0f);
+					waterShader->set_uniform("landfoam", landfoam);
+				}
 
 				// Set lighting position
 				// done after the translation

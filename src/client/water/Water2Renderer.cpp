@@ -67,7 +67,8 @@ void Water2Renderer::draw(Water2 &water2, WaterMapPoints &points, WaterWaves &wa
 
 		// Set the normal map for the current water frame
 		if (GLStateExtension::hasShaders() &&
-			!OptionsDisplay::instance()->getNoWaterMovement())
+			!OptionsDisplay::instance()->getNoWaterMovement() &&
+			!OptionsDisplay::instance()->getSimpleWaterShaders())
 		{
 			normalTexture_.replace(currentPatch_->getNormalMap(), 
 				GLStateExtension::hasHardwareMipmaps());
@@ -118,7 +119,10 @@ void Water2Renderer::drawWaterShaders(Water2 &water2)
 	waterShader_->set_uniform("viewpos", cameraPos);
 
 	// Tex 3
-	waterShader_->set_gl_texture(currentPatch_->getAOF(), "tex_foamamount", 3);
+	if (!OptionsDisplay::instance()->getSimpleWaterShaders())
+	{
+		waterShader_->set_gl_texture(currentPatch_->getAOF(), "tex_foamamount", 3);
+	}
 
 	// Tex 2
 	if (Landscape::instance()->getShadowFrameBuffer().bufferValid())
@@ -163,9 +167,12 @@ void Water2Renderer::drawWaterShaders(Water2 &water2)
 
 	// Tex 0
 	glActiveTextureARB(GL_TEXTURE0);
-	waterShader_->set_uniform("noise_xform_0", noise_0_pos);
-	waterShader_->set_uniform("noise_xform_1", noise_1_pos);
-	waterShader_->set_gl_texture(normalTexture_, "tex_normal", 0);
+	if (!OptionsDisplay::instance()->getSimpleWaterShaders())
+	{
+		waterShader_->set_uniform("noise_xform_0", noise_0_pos);
+		waterShader_->set_uniform("noise_xform_1", noise_1_pos);
+		waterShader_->set_gl_texture(normalTexture_, "tex_normal", 0);
+	}
 
 	const float noisetilescale = 1.0f/32.0f;//meters (128/16=8, 8tex/m).
 	glMatrixMode(GL_TEXTURE);
@@ -346,9 +353,18 @@ void Water2Renderer::generate(LandscapeTexBorderWater *water, ProgressCounter *c
 		// Load shaders
 		if (!waterShader_) 
 		{
-			waterShader_ = new GLSLShaderSetup(
-				S3D::getDataFile("data/shaders/water.vshader"),
-				S3D::getDataFile("data/shaders/water.fshader"));
+			if (OptionsDisplay::instance()->getSimpleWaterShaders())
+			{
+				waterShader_ = new GLSLShaderSetup(
+					S3D::getDataFile("data/shaders/watersimple.vshader"),
+					S3D::getDataFile("data/shaders/watersimple.fshader"));
+			}
+			else
+			{
+				waterShader_ = new GLSLShaderSetup(
+					S3D::getDataFile("data/shaders/water.vshader"),
+					S3D::getDataFile("data/shaders/water.fshader"));
+			}
 		}
 	}
 
@@ -398,7 +414,6 @@ void Water2Renderer::generate(LandscapeTexBorderWater *water, ProgressCounter *c
 
 	if (GLStateExtension::hasShaders())
 	{
-		Vector landfoam;
 		Vector upwelltop(wavetop[0], wavetop[1], wavetop[2]);
 		Vector upwellbot(wavebottom[0], wavebottom[1], wavebottom[2]);
 		Vector upwelltopbot = upwelltop - upwellbot;
@@ -407,8 +422,12 @@ void Water2Renderer::generate(LandscapeTexBorderWater *water, ProgressCounter *c
 		waterShader_->set_uniform("upwelltop", upwelltop);
 		waterShader_->set_uniform("upwellbot", upwellbot);
 		waterShader_->set_uniform("upwelltopbot", upwelltopbot);
-		waterShader_->set_uniform("landfoam", landfoam);
-		waterShader_->set_uniform("landscape_size", landscapeSize_);
+		if (!OptionsDisplay::instance()->getSimpleWaterShaders())
+		{
+			Vector landfoam;
+			waterShader_->set_uniform("landfoam", landfoam);
+			waterShader_->set_uniform("landscape_size", landscapeSize_);
+		}
 		waterShader_->use_fixed();
 	}
 	else

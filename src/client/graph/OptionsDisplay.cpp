@@ -138,6 +138,8 @@ OptionsDisplay::OptionsDisplay() :
 		"Do not use texture area replacing.  Required to be able to scorch the ground.", RAccess, false),
 	noGLShaders_(options_, "NoGLShaders",
 		"Do not use shaders.", RAccess, false),
+	simpleWaterShaders_(options_, "SimpleWaterShaders",
+		"Use simple shaders for the water.", RAccess, false),
 	noPlanDraw_(options_, "NoPlanDraw", 
 		"Do not show any drawings from other players on the plan window.", RWAccess, false),
 	noFog_(options_, "NoFog", 
