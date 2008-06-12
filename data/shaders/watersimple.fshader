@@ -47,5 +47,5 @@ void main()
 			       fresnel* min(1.0, s0 + 0.8)) + specular_color * s0;
 	
 	// output color is a mix between fog and final color
-	gl_FragColor = vec4(mix(vec3(gl_Fog.color), water_color, fog_factor), max(1.0 - fog_factor, 0.7));
+	gl_FragColor = vec4(mix(vec3(gl_Fog.color), water_color, fog_factor), max(1.0 - fog_factor, 0.85));
 }
