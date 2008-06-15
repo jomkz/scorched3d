@@ -39,15 +39,21 @@
 #include <image/ImageFactory.h>
 #include <memory.h>
 
-MovementMap::MovementMap(int width, int height,
+MovementMap::MovementMap(
 	Tank *tank, 
 	ScorchedContext &context) :
-	width_(width), height_(height),
 	tank_(tank), context_(context)
 {
+	arenaX_ = context_.landscapeMaps->getGroundMaps().getArenaX();
+	arenaY_ = context_.landscapeMaps->getGroundMaps().getArenaY();
+	arenaWidth_ = context_.landscapeMaps->getGroundMaps().getArenaWidth();
+	arenaHeight_ = context_.landscapeMaps->getGroundMaps().getArenaHeight();
+	landscapeWidth_ = context_.landscapeMaps->getGroundMaps().getLandscapeWidth();
+	landscapeHeight_ = context_.landscapeMaps->getGroundMaps().getLandscapeHeight();
+
 	// Create the empty movement map
-	entries_ = new MovementMapEntry[(width + 1) * (height + 1)];
-	memset(entries_, (int) eNotInitialized, sizeof(MovementMapEntry) * (width + 1) * (height + 1));
+	entries_ = new MovementMapEntry[(landscapeWidth_ + 1) * (landscapeHeight_ + 1)];
+	memset(entries_, (int) eNotInitialized, sizeof(MovementMapEntry) * (landscapeWidth_ + 1) * (landscapeHeight_ + 1));
 
 	// Get the minimum height we are allowed to move to
 	minHeight_ = getWaterHeight();
@@ -82,9 +88,9 @@ unsigned int MovementMap::POINT_TO_UINT(unsigned int x, unsigned int y)
 
 MovementMap::MovementMapEntry &MovementMap::getEntry(int w, int h)
 { 
-	if (w >= 0 && h >= 0 && w<=width_ && h<=height_)
+	if (w>=arenaX_ && h>=arenaY_ && w<=arenaX_ + arenaWidth_ && h<=arenaY_ + arenaHeight_)
 	{
-		MovementMapEntry &entry = entries_[(width_+1) * h + w];
+		MovementMapEntry &entry = entries_[(landscapeWidth_+1) * h + w];
 		return entry;
 	}
 	static MovementMapEntry entry(eNoMovement, fixed(1000), 0, 0);
@@ -137,9 +143,10 @@ void MovementMap::addPoint(unsigned int x, unsigned int y,
 					 unsigned int epoc)
 {
 	// Check that we are not going outside the arena
-	if (x < 5 || y < 5 ||
-		x > (unsigned int) (width_ - 5) ||
-		y > (unsigned int) (height_ - 5)) return;
+	if (x < (unsigned int) (arenaX_ + 5) || 
+		y < (unsigned int) (arenaY_ + 5) ||
+		x > (unsigned int) (arenaX_ + arenaWidth_ - 5) ||
+		y > (unsigned int) (arenaY_ + arenaHeight_ - 5)) return;
 
 	// Check if we can already reach this point
 	// Through a shorted already visited path
@@ -376,9 +383,10 @@ void MovementMap::addPoint(unsigned int x, unsigned int y,
 	 FixedVector &position)
 {
 	// Check that we are not going outside the arena
-	if (x < 5 || y < 5 ||
-		x > (unsigned int) (width_ - 5) ||
-		y > (unsigned int) (height_ - 5)) return;
+	if (x < (unsigned int) (arenaX_ + 5) || 
+		y < (unsigned int) (arenaY_ + 5) ||
+		x > (unsigned int) (arenaX_ + arenaWidth_ - 5) ||
+		y > (unsigned int) (arenaY_ + arenaHeight_ - 5)) return;
 
 	// Check if we can already reach this point
 	// through a shorter already visited path
@@ -562,10 +570,10 @@ void MovementMap::movementTexture()
 		Landscape::instance()->getMainMap().getWidth(),
 		Landscape::instance()->getMainMap().getHeight());
 
-	float width = (float)
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getMapWidth();
-	float height = (float)
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getMapHeight();
+	float landscapeWidth = (float)
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeWidth();
+	float landscpeHeight = (float)
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeHeight();
 
 	GLubyte *src = Landscape::instance()->getMainMap().getBits();
 	GLubyte *dest = newMap.getBits();
@@ -574,15 +582,15 @@ void MovementMap::movementTexture()
 		int y1 = y + 1;
 		if (y1 == newMap.getHeight()) y1--;
 
-		int posY = int(float(y) / float(newMap.getHeight()) * height);
-		int posY1 = int(float(y1) / float(newMap.getHeight()) * height);
+		int posY = int(float(y) / float(newMap.getHeight()) * landscpeHeight);
+		int posY1 = int(float(y1) / float(newMap.getHeight()) * landscpeHeight);
 		for (int x=0; x<newMap.getWidth(); x++)
 		{
 			int x1 = x + 1;
 			if (x1 == newMap.getWidth()) x1--;
 
-			int posX = int(float(x) / float(newMap.getWidth()) * width);
-			int posX1 = int(float(x1) / float(newMap.getWidth()) * width);
+			int posX = int(float(x) / float(newMap.getWidth()) * landscapeWidth);
+			int posX1 = int(float(x1) / float(newMap.getWidth()) * landscapeWidth);
 
 			MovementMapEntryType type1 = getEntry(posX1, posY).type;
 			MovementMapEntryType type2 = getEntry(posX, posY).type;
@@ -625,10 +633,19 @@ void MovementMap::limitTexture(FixedVector &center, int limit)
 		Landscape::instance()->getMainMap().getWidth(),
 		Landscape::instance()->getMainMap().getHeight());
 
-	float width = (float)
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getMapWidth();
-	float height = (float)
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getMapHeight();
+	float landscapeWidth = (float)
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeWidth();
+	float landscpeHeight = (float)
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeHeight();
+
+	int arenaX = 
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaX();
+	int arenaY = 
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaY();
+	int arenaWidth = 
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaWidth();
+	int arenaHeight = 
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaHeight();
 
 	GLubyte *src = Landscape::instance()->getMainMap().getBits();
 	GLubyte *dest = newMap.getBits();
@@ -637,22 +654,32 @@ void MovementMap::limitTexture(FixedVector &center, int limit)
 		int y1 = y + 1;
 		if (y1 == newMap.getHeight()) y1--;
 
-		int posY = int(float(y) / float(newMap.getHeight()) * height);
-		int posY1 = int(float(y1) / float(newMap.getHeight()) * height);
+		int posY = int(float(y) / float(newMap.getHeight()) * landscpeHeight);
+		int posY1 = int(float(y1) / float(newMap.getHeight()) * landscpeHeight);
 		for (int x=0; x<newMap.getWidth(); x++)
 		{
 			int x1 = x + 1;
 			if (x1 == newMap.getWidth()) x1--;
 
-			int posX = int(float(x) / float(newMap.getWidth()) * width);
-			int posX1 = int(float(x1) / float(newMap.getWidth()) * width);
+			int posX = int(float(x) / float(newMap.getWidth()) * landscapeWidth);
+			int posX1 = int(float(x1) / float(newMap.getWidth()) * landscapeWidth);
 
-			FixedVector position1(posX1, posY, 0);
-			FixedVector position2(posX, posY, 0);
-			FixedVector position3(posX, posY1, 0);
-			bool in1 = (position1 - center).Magnitude() < limit;
-			bool in2 = (position2 - center).Magnitude() < limit;
-			bool in3 = (position3 - center).Magnitude() < limit;
+			bool in1 = false;
+			bool in2 = false;
+			bool in3 = false;
+			if (posX > arenaX &&
+				posY > arenaY &&
+				posX > arenaX + arenaWidth &&
+				posY > arenaY + arenaHeight)
+			{
+				FixedVector position1(posX1, posY, 0);
+				FixedVector position2(posX, posY, 0);
+				FixedVector position3(posX, posY1, 0);
+
+				in1 = (position1 - center).Magnitude() < limit;
+				in2 = (position2 - center).Magnitude() < limit;
+				in3 = (position3 - center).Magnitude() < limit;
+			}
 
 			if (in1 != in2 || in2 != in3)
 			{

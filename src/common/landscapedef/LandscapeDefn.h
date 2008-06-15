@@ -117,10 +117,14 @@ public:
 	LandscapeDefn();
 	virtual ~LandscapeDefn();
 
-	int minplayers;
-	int maxplayers;
-	int landscapewidth;
-	int landscapeheight;
+	int getMinPlayers() { return minplayers; }
+	int getMaxPlayers() { return maxplayers; }
+	int getLandscapeWidth() { return landscapewidth; }
+	int getLandscapeHeight() { return landscapeheight; }
+	int getArenaWidth() { return arenawidth; }
+	int getArenaHeight() { return arenaheight; }
+	int getArenaX() { return arenax; }
+	int getArenaY() { return arenay; }
 
 	LandscapeDefnType *roof;
 	LandscapeDefnType *tankstart;
@@ -128,6 +132,12 @@ public:
 	LandscapeTexDefn texDefn;
 
 	bool readXML(LandscapeDefinitions *definitions, XMLNode *node);
+
+protected:
+	int minplayers, maxplayers;
+	int landscapewidth, landscapeheight;
+	int arenawidth, arenaheight;
+	int arenax, arenay;
 
 private:
 	LandscapeDefn(const LandscapeDefn &other);

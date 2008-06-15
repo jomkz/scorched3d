@@ -77,12 +77,11 @@ void WeaponScatterPosition::fireWeapon(ScorchedContext &context,
 	}
 
 	fixed scatterpercentage = scatterpercentage_.getValue(context);
-	fixed width = 
-		fixed(context.landscapeMaps->getGroundMaps().getMapWidth()) *
-		scatterpercentage / 100;
-	fixed height = 
-		fixed(context.landscapeMaps->getGroundMaps().getMapHeight()) *
-		scatterpercentage / 100;
+
+	fixed arenaWidth = fixed(context.landscapeMaps->getGroundMaps().getArenaWidth());
+	fixed arenaHeight = fixed(context.landscapeMaps->getGroundMaps().getArenaHeight());
+	fixed scatterWidth = arenaWidth * scatterpercentage / 100;
+	fixed scatterHeight = arenaHeight * scatterpercentage / 100;
 
 	FixedVector pos;
 	RandomGenerator &random = context.actionController->getRandom();
@@ -91,8 +90,8 @@ void WeaponScatterPosition::fireWeapon(ScorchedContext &context,
 	{
 		ok = true;
 
-		pos[0] = p[0] + (random.getRandFixed() * width) - (width / 2);
-		pos[1] = p[1] + (random.getRandFixed() * height) - (height / 2);
+		pos[0] = p[0] + (random.getRandFixed() * scatterWidth) - (scatterWidth / 2);
+		pos[1] = p[1] + (random.getRandFixed() * scatterHeight) - (scatterHeight / 2);
 		pos[2] = p[2];
 		if (landheight_)
 		{

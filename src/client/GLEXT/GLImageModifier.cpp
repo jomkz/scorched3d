@@ -27,6 +27,7 @@
 #include <engine/ScorchedContext.h>
 #include <landscape/Landscape.h>
 #include <landscapemap/LandscapeMaps.h>
+#include <client/ScorchedClient.h>
 #include <common/Defines.h>
 
 bool ImageModifier::findIntersection(HeightMap &hMap,
@@ -584,37 +585,55 @@ void ImageModifier::addWaterToBitmap(HeightMap &hMap,
 }
 
 void ImageModifier::addBorderToBitmap(Image &destBitmap,
-										int borderWidth,
-										float colors[3])
+	int borderSize,
+	float colors[3])
 {
+	int arenaX = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaX();
+	int arenaY = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaY();
+	int arenaWidth = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaWidth();
+	int arenaHeight = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaHeight();
+	int landscapeWidth = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeWidth();
+	int landscapeHeight = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeHeight();
+
+	int borderX = int(float(arenaX) / float(landscapeWidth) * float(destBitmap.getWidth()));
+	int borderY = int(float(arenaY) / float(landscapeHeight) * float(destBitmap.getHeight()));
+	int borderWidth = int(float(arenaWidth) / float(landscapeWidth) * float(destBitmap.getWidth()));
+	int borderHeight = int(float(arenaHeight) / float(landscapeHeight) * float(destBitmap.getHeight()));
+	if (borderWidth + borderX >= destBitmap.getWidth()) borderWidth = destBitmap.getWidth() - borderX - 1;
+	if (borderHeight + borderY >= destBitmap.getHeight()) borderHeight = destBitmap.getHeight() - borderY - 1;
+
 	DIALOG_ASSERT(destBitmap.getComponents() == 3);
 
-	for (int x=0; x<destBitmap.getWidth(); x++)
+	for (int x=borderX; x<=borderX+borderWidth; x++)
 	{
-		for (int i=0; i<borderWidth; i++)
+		for (int i=0; i<borderSize; i++)
 		{
-			GLubyte *destBits = &destBitmap.getBits()[(x + i * destBitmap.getWidth()) * 3];
+			int pos = (x * 3) + ((borderY + i) * destBitmap.getWidth() * 3);
+			GLubyte *destBits = destBitmap.getBitsOffset(pos);
 			destBits[0] = GLubyte(colors[0] * 255.0f);
 			destBits[1] = GLubyte(colors[1] * 255.0f);
 			destBits[2] = GLubyte(colors[2] * 255.0f);
 
-			destBits = &destBitmap.getBits()[(x + (destBitmap.getHeight() -1 - i) * destBitmap.getWidth()) * 3];
+			pos = (x * 3) + ((borderY + borderHeight - i) * destBitmap.getWidth() * 3);
+			destBits = destBitmap.getBitsOffset(pos);
 			destBits[0] = GLubyte(colors[0] * 255.0f);
 			destBits[1] = GLubyte(colors[1] * 255.0f);
 			destBits[2] = GLubyte(colors[2] * 255.0f);
 		}
 	}
 
-	for (int y=0; y<destBitmap.getWidth(); y++)
+	for (int y=borderY; y<=borderY+borderHeight; y++)
 	{
-		for (int i=0; i<borderWidth; i++)
+		for (int i=0; i<borderSize; i++)
 		{
-			GLubyte *destBits = &destBitmap.getBits()[(i + y * destBitmap.getWidth()) * 3];
+			int pos = ((borderX + i) * 3) + (y * destBitmap.getWidth() * 3);
+			GLubyte *destBits = destBitmap.getBitsOffset(pos);
 			destBits[0] = GLubyte(colors[0] * 255.0f);
 			destBits[1] = GLubyte(colors[1] * 255.0f);
 			destBits[2] = GLubyte(colors[2] * 255.0f);
 
-			destBits = &destBitmap.getBits()[(destBitmap.getWidth() - 1 - i + y * destBitmap.getWidth()) * 3];
+			pos = ((borderX + borderWidth - i) * 3) + (y * destBitmap.getWidth() * 3);
+			destBits = destBitmap.getBitsOffset(pos);
 			destBits[0] = GLubyte(colors[0] * 255.0f);
 			destBits[1] = GLubyte(colors[1] * 255.0f);
 			destBits[2] = GLubyte(colors[2] * 255.0f);
@@ -648,9 +667,9 @@ void ImageModifier::addCircleToLandscape(
 	float sx, float sy, float sw, float opacity)
 {
 	float shadowMultWidth = (float) Landscape::instance()->getMainMap().getWidth() / 
-		context.landscapeMaps->getGroundMaps().getMapWidth();
+		context.landscapeMaps->getGroundMaps().getLandscapeWidth();
 	float shadowMultHeight = (float) Landscape::instance()->getMainMap().getHeight() / 
-		context.landscapeMaps->getGroundMaps().getMapHeight();
+		context.landscapeMaps->getGroundMaps().getLandscapeHeight();
 
 	addCircle(Landscape::instance()->getMainMap(),
 		sx * shadowMultWidth, sy * shadowMultHeight, 
@@ -713,9 +732,9 @@ void ImageModifier::addBitmapToLandscape(
 	bool commit)
 {
 	float shadowMultWidth = (float) Landscape::instance()->getMainMap().getWidth() / 
-		context.landscapeMaps->getGroundMaps().getMapWidth();
+		context.landscapeMaps->getGroundMaps().getLandscapeWidth();
 	float shadowMultHeight = (float) Landscape::instance()->getMainMap().getHeight() / 
-		context.landscapeMaps->getGroundMaps().getMapHeight();
+		context.landscapeMaps->getGroundMaps().getLandscapeHeight();
 
 	addBitmap(
 		Landscape::instance()->getMainMap(),

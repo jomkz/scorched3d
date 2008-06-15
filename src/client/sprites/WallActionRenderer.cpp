@@ -64,10 +64,19 @@ void WallActionRenderer::init()
 	offsetAmount += 0.02f;
 	if (offsetAmount > 0.4f) offsetAmount = 0.1f;
 
+	float arenaX = (float) ScorchedClient::instance()->getLandscapeMaps().
+		getDefinitions().getDefn()->getArenaX();
+	float arenaY = (float) ScorchedClient::instance()->getLandscapeMaps().
+		getDefinitions().getDefn()->getArenaY();
+	float arenaWidth = (float) ScorchedClient::instance()->getLandscapeMaps().
+		getDefinitions().getDefn()->getArenaWidth();
+	float arenaHeight = (float) ScorchedClient::instance()->getLandscapeMaps().
+		getDefinitions().getDefn()->getArenaHeight();
+
 	switch (type_)
 	{
 	case OptionsTransient::LeftSide:
-		pos[0] = 0.0f;
+		pos[0] = arenaX;
 		xOff_ = -offset; yOff_ = 0.0f;
 		offSet1 = Vector(0.0f, 1.0f, 1.0f);
 		offSet2 = Vector(0.0f, 1.0f, -1.0f);
@@ -75,8 +84,7 @@ void WallActionRenderer::init()
 		offSet4 = Vector(0.0f, -1.0f, 1.0f);
 		break;
 	case OptionsTransient::RightSide:
-		pos[0] = (float) 
-			ScorchedClient::instance()->getLandscapeMaps().getDefinitions().getDefn()->landscapewidth;
+		pos[0] = arenaX + arenaWidth;
 		xOff_ = -offset; yOff_ = 0.0f;
 		offSet1 = Vector(0.0f, 1.0f, 1.0f);
 		offSet2 = Vector(0.0f, 1.0f, -1.0f);
@@ -84,7 +92,7 @@ void WallActionRenderer::init()
 		offSet4 = Vector(0.0f, -1.0f, 1.0f);
 		break;
 	case OptionsTransient::TopSide:
-		pos[1] = 0.0f;
+		pos[1] = arenaY;
 		xOff_ = 0.0f; yOff_ = offset;
 		offSet1 = Vector(1.0f, 0.0f, 1.0f);
 		offSet2 = Vector(1.0f, 0.0f, -1.0f);
@@ -93,8 +101,7 @@ void WallActionRenderer::init()
 		break;
 	default:
 	case OptionsTransient::BotSide:
-		pos[1] = (float) 
-			ScorchedClient::instance()->getLandscapeMaps().getDefinitions().getDefn()->landscapeheight;
+		pos[1] = arenaY + arenaHeight;
 		xOff_ = 0.0f; yOff_ = offset;
 		offSet1 = Vector(1.0f, 0.0f, 1.0f);
 		offSet2 = Vector(1.0f, 0.0f, -1.0f);

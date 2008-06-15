@@ -402,9 +402,9 @@ void TargetSpace::draw()
 			Vector size(spaceSq_, spaceSq_, 20);
 
 			if (position[0] > ScorchedClient::instance()->getLandscapeMaps().
-				getGroundMaps().getMapWidth() ||
+				getGroundMaps().getLandscapeWidth() ||
 				position[1] > ScorchedClient::instance()->getLandscapeMaps().
-				getGroundMaps().getMapHeight())
+				getGroundMaps().getLandscapeHeight())
 			{
 				continue;
 			}

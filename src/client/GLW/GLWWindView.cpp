@@ -123,7 +123,6 @@ void GLWWindView::drawDisplay()
 	Vector &lookAt = MainCamera::instance()->getCamera().getLookAt();
 	Vector dir = (lookAt - lookFrom).Normalize();
 
-	float scale = 0.1f;
 	float scale2 = MIN(w_, h_) / 90.0f;
 	float angXY = atan2f(dir[0], dir[1]) / 3.14f * 180.0f;
 	float angYZ = acosf(dir[2]) / 3.14f * 180.0f + 180.0f;
@@ -139,13 +138,15 @@ void GLWWindView::drawDisplay()
 
 		// Draw the minature landscape
 		glScalef(scale2, scale2, scale2);
-		if (listNo_) glCallList(listNo_);
-		else
-		{
-			glNewList(listNo_ = glGenLists(1), GL_COMPILE_AND_EXECUTE);
-				drawScene();
-			glEndList();
-		}
+		glPushMatrix();
+			if (listNo_) glCallList(listNo_);
+			else
+			{
+				glNewList(listNo_ = glGenLists(1), GL_COMPILE_AND_EXECUTE);
+					drawScene();
+				glEndList();
+			}
+		glPopMatrix();
 
 		// Draw the wind arrow for direction
 		GLState texState(GLState::TEXTURE_OFF);
@@ -159,7 +160,7 @@ void GLWWindView::drawDisplay()
 			glLightfv(GL_LIGHT1, GL_POSITION, sunPosition);
 
 			glTranslatef(0.0f, 0.0f, 20.0f);
-			glScalef(scale, scale, scale);
+			glScalef(0.1f, 0.1f, 0.1f);
 
 			glRotatef(-ScorchedClient::instance()->getOptionsTransient().getWindAngle().asFloat(), 
 				0.0f, 0.0f, 1.0f);
@@ -177,60 +178,82 @@ void GLWWindView::drawScene()
 
 	HeightMap &hmp = ScorchedClient::instance()->getLandscapeMaps().
 		getGroundMaps().getHeightMap();
-	int maxSize = MAX(hmp.getMapWidth(), hmp.getMapHeight());
-	int sqSizeW = hmp.getMapWidth() / 16;
-	int sqSizeH = hmp.getMapHeight() / 16;
-	const float squareSizeWidth = 30.0f * float(hmp.getMapWidth()) / float(maxSize);
-	const float squareSizeHeight = 30.0f * float(hmp.getMapHeight()) / float(maxSize);
-	float heightPer = 30.0f / float(maxSize) * 2.0f;
 
-	for (int y=0; y<=hmp.getMapHeight()-sqSizeH; y+=sqSizeH)
+	int arenaX = ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaX();
+	int arenaY = ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaY();
+	int arenaWidth = ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaWidth();
+	int arenaHeight = ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaHeight();
+	int landscapeWidth = ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getLandscapeWidth();
+	int landscapeHeight = ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getLandscapeHeight();
+
+	int maxSize = MAX(arenaWidth, arenaHeight);
+	float scale = 60.0f / maxSize;
+	glScalef(scale, scale, scale);
+	glTranslatef(arenaWidth/-2.0f-arenaX, arenaHeight/-2.0f-arenaY, 0.0f);
+
+	int sqSizeW = arenaWidth / 16;
+	int sqSizeH = arenaHeight / 16;
+	for (int y=arenaY; y<=arenaY+arenaHeight-sqSizeH; y+=sqSizeH)
 	{
 		glBegin(GL_QUAD_STRIP);
-		for (int x=0; x<=hmp.getMapWidth(); x+=sqSizeW)
+		for (int x=arenaX; x<=arenaX+arenaWidth; x+=sqSizeW)
 		{
-			float xPer = float(x) / float(hmp.getMapWidth());
-			float yPer = float(y) / float(hmp.getMapHeight());
-			float yPer2 = float(y+sqSizeH) / float(hmp.getMapHeight());
-
-			float xPos = xPer * squareSizeWidth * 2 - squareSizeWidth;
-			float yPos = yPer * squareSizeHeight * 2 - squareSizeHeight;
-			float yPos2 = yPer2 * squareSizeHeight * 2 - squareSizeHeight;
+			float xPer = float(x) / float(landscapeWidth);
+			float yPer = float(y) / float(landscapeHeight);
+			float yPer2 = float(y + sqSizeH) / float(landscapeHeight);
 
 			glTexCoord2f(xPer, yPer2);
-			glVertex3f(xPos, yPos2, hmp.getHeight(x, y+sqSizeH).asFloat() * heightPer);
+			glVertex3f(float(x), float(y + sqSizeH), hmp.getHeight(x, y+sqSizeH).asFloat());
 			glTexCoord2f(xPer, yPer);
-			glVertex3f(xPos, yPos, hmp.getHeight(x, y).asFloat() * heightPer);
+			glVertex3f(float(x), float(y), hmp.getHeight(x, y).asFloat());
 		}
 		glEnd();
 	}
 
 	Landscape::instance()->getMagTexture().draw();
 	glBegin(GL_QUAD_STRIP);
-		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(-squareSizeWidth, -squareSizeHeight, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(-squareSizeWidth, -squareSizeHeight, -10.0f);
+	for (int y=arenaY; y<=arenaY+arenaHeight; y+=sqSizeH)
+	{
+		float per = float(y - arenaY) / float(arenaHeight);
 
-		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(squareSizeWidth, -squareSizeHeight, 0.0f);
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(squareSizeWidth, -squareSizeHeight, -10.0f);
+		glTexCoord2f(per, 0.0f);
+		glVertex3f(float(arenaX), float(y), -15.0f);
+		glTexCoord2f(per, 1.0f);
+		glVertex3f(float(arenaX), float(y), hmp.getHeight(arenaX, y).asFloat());		
+	}
+	for (int x=arenaX; x<=arenaX+arenaWidth; x+=sqSizeW)
+	{
+		float per = float(x - arenaX) / float(arenaWidth);
 
-		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(squareSizeWidth, squareSizeHeight, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(squareSizeWidth, squareSizeHeight, -10.0f);
+		glTexCoord2f(per, 0.0f);
+		glVertex3f(float(x), float(arenaY + arenaHeight), -15.0f);
+		glTexCoord2f(per, 1.0f);
+		glVertex3f(float(x), float(arenaY + arenaHeight), hmp.getHeight(x, arenaY + arenaHeight).asFloat());		
+	}
+	for (int y=arenaY+arenaHeight; y>=arenaY; y-=sqSizeH)
+	{
+		float per = float(y - arenaY) / float(arenaHeight);
 
-		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(-squareSizeWidth, squareSizeHeight, 0.0f);
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(-squareSizeWidth, squareSizeHeight, -10.0f);
+		glTexCoord2f(per, 0.0f);
+		glVertex3f(float(arenaX + arenaWidth), float(y), -15.0f);
+		glTexCoord2f(per, 1.0f);
+		glVertex3f(float(arenaX + arenaWidth), float(y), hmp.getHeight(arenaX + arenaWidth, y).asFloat());		
+	}
+	for (int x=arenaX+arenaWidth; x>=arenaX; x-=sqSizeW)
+	{
+		float per = float(x - arenaX) / float(arenaWidth);
 
-		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(-squareSizeWidth, -squareSizeHeight, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(-squareSizeWidth, -squareSizeHeight, -10.0f);
+		glTexCoord2f(per, 0.0f);
+		glVertex3f(float(x), float(arenaY), -15.0f);
+		glTexCoord2f(per, 1.0f);
+		glVertex3f(float(x), float(arenaY), hmp.getHeight(x, arenaY).asFloat());		
+	}
 	glEnd();
 }
 

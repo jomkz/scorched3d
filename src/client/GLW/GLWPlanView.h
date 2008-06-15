@@ -51,6 +51,7 @@ protected:
 		std::list<Vector> recievepoints;
 	};
 
+	float landscapeWidth_, landscapeHeight_;
 	float animationTime_;
 	float flashTime_;
 	float totalTime_;

@@ -21,12 +21,25 @@
 #include <image/Image.h>
 #include <image/ImageFactory.h>
 #include <image/ImageHandle.h>
+#include <common/DefinesAssert.h>
 #include <SDL/SDL.h>
 #include "string.h"
 
 Image::~Image()
 {
 
+}
+
+unsigned char *Image::getBitsPos(int x, int y)
+{
+	DIALOG_ASSERT(x >= 0 && y >= 0 && x < getWidth() && y < getHeight());
+	return &getBits()[(x * getComponents()) + (y * getWidth() * getComponents())];
+}
+
+unsigned char *Image::getBitsOffset(int offset)
+{
+	DIALOG_ASSERT(offset >=0 && offset < getComponents() * getWidth() * getHeight());
+	return &getBits()[offset];
 }
 
 bool Image::writeToFile(const std::string &filename)

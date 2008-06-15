@@ -78,9 +78,9 @@ void InfoMap::showHeightBands()
 		Landscape::instance()->getMainMap().getHeight()];
 
 	const float width = (float)
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getMapWidth();
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeWidth();
 	const float height = (float)
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getMapHeight();
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeHeight();
 	const float sqSizeWidth = width / float(newMap.getWidth());
 	const float sqSizeHeight = height / float(newMap.getHeight());
 	const float heightSep = 3.0f;

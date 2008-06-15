@@ -49,8 +49,8 @@ fixed RoofMaps::getRoofHeight(int x, int y)
 	}
 
 	// Factors should be caclculated from hmap height/width
-	int const xFactor = defnCache_.getDefn()->landscapewidth / rmap_.getMapWidth();
-	int const yFactor = defnCache_.getDefn()->landscapeheight / rmap_.getMapHeight();
+	int const xFactor = defnCache_.getDefn()->getLandscapeWidth() / rmap_.getMapWidth();
+	int const yFactor = defnCache_.getDefn()->getLandscapeHeight() / rmap_.getMapHeight();
 
 	x /= xFactor;
 	y /= yFactor;
@@ -75,8 +75,8 @@ fixed RoofMaps::getInterpRoofHeight(fixed x, fixed y)
 	}
 
 	// Factors should be caclculated from hmap height/width
-	int const xFactor = defnCache_.getDefn()->landscapewidth / rmap_.getMapWidth();
-	int const yFactor = defnCache_.getDefn()->landscapeheight / rmap_.getMapHeight();
+	int const xFactor = defnCache_.getDefn()->getLandscapeWidth() / rmap_.getMapWidth();
+	int const yFactor = defnCache_.getDefn()->getLandscapeHeight() / rmap_.getMapHeight();
 
 	x /= xFactor;
 	y /= yFactor;
@@ -92,8 +92,8 @@ void RoofMaps::generateRMap(
 	ProgressCounter *counter)
 {
 	// calculate roof size and set it
-	int mapWidth = defnCache_.getDefn()->landscapewidth / 4;
-	int mapHeight = defnCache_.getDefn()->landscapewidth / 4;
+	int mapWidth = defnCache_.getDefn()->getLandscapeWidth() / 4;
+	int mapHeight = defnCache_.getDefn()->getLandscapeHeight() / 4;
 	rmap_.create(mapWidth, mapHeight);
 
 	// Generate the roof

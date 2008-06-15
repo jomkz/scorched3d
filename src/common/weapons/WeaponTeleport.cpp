@@ -68,13 +68,15 @@ void WeaponTeleport::fireWeapon(ScorchedContext &context,
 		allowedHeight = water->height;
 	}
 
-	int mapWidth = context.landscapeMaps->getGroundMaps().getMapWidth();
-	int mapHeight = context.landscapeMaps->getGroundMaps().getMapHeight();
+	int arenaX = context.landscapeMaps->getGroundMaps().getArenaX();
+	int arenaY = context.landscapeMaps->getGroundMaps().getArenaY();
+	int arenaWidth = context.landscapeMaps->getGroundMaps().getArenaWidth();
+	int arenaHeight = context.landscapeMaps->getGroundMaps().getArenaHeight();
 
-	if (position[0] > 5 && 
-		position[1] > 5 &&
-		position[0] < fixed(mapWidth - 5) &&
-		position[1] < fixed(mapHeight - 5))
+	if (position[0] > fixed(arenaX + 5) && 
+		position[1] > fixed(arenaY + 5) &&
+		position[0] < fixed(arenaX + arenaWidth - 5) &&
+		position[1] < fixed(arenaY + arenaHeight - 5))
 	{
 		fixed landscapeHeight = context.landscapeMaps->getGroundMaps().getInterpHeight(
 			position[0], position[1]);

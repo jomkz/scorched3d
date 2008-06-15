@@ -145,12 +145,17 @@ bool ServerShotHolder::validateFiredMessage(
 	// Check weapons selection parameters
 	if (accessory->getPositionSelect() != Accessory::ePositionSelectNone)
 	{
-		int landWidth = ScorchedServer::instance()->
-			getLandscapeMaps().getDefinitions().getDefn()->landscapewidth;
-		int landHeight = ScorchedServer::instance()->
-			getLandscapeMaps().getDefinitions().getDefn()->landscapeheight;
-		if (message.getSelectPositionX() <= 0 || message.getSelectPositionX() >= landWidth &&
-			message.getSelectPositionY() <= 0 || message.getSelectPositionY() >= landHeight)
+		int arenaX = ScorchedServer::instance()->
+			getLandscapeMaps().getDefinitions().getDefn()->getArenaX();
+		int arenaY = ScorchedServer::instance()->
+			getLandscapeMaps().getDefinitions().getDefn()->getArenaY();
+		int arenaWidth = ScorchedServer::instance()->
+			getLandscapeMaps().getDefinitions().getDefn()->getArenaWidth();
+		int arenaHeight = ScorchedServer::instance()->
+			getLandscapeMaps().getDefinitions().getDefn()->getArenaHeight();
+
+		if (message.getSelectPositionX() <= arenaX || message.getSelectPositionX() >= arenaX + arenaWidth &&
+			message.getSelectPositionY() <= arenaY || message.getSelectPositionY() >= arenaY + arenaHeight)
 		{
 			return false;
 		}
@@ -167,7 +172,7 @@ bool ServerShotHolder::validateFiredMessage(
 		}
 		else if (accessory->getPositionSelect() == Accessory::ePositionSelectFuelLimit)
 		{
-			MovementMap mmap(landWidth, landHeight, 
+			MovementMap mmap(
 				tank,
 				ScorchedServer::instance()->getContext());
 

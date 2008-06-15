@@ -89,9 +89,9 @@ void ShadowMap::addShadow(float mapx, float mapy, float mapw, float opacity, boo
 	if (mapw > 10.0f) return; // Sanity check
 
 	int mapWidth = 
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getMapWidth();
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeWidth();
 	int mapHeight = 
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getMapHeight();
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeHeight();
 
 	float sx = mapx * size_ / float(mapWidth);
 	float sy = mapy * size_ / float(mapHeight);

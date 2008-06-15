@@ -70,9 +70,9 @@ static bool tankMaskCloseness(ScorchedContext &context, int team,
 {
 	// Find the mask position
 	int maskX = (tankPos[0] * fixed(tankMask->getWidth())).asInt() / 
-		context.landscapeMaps->getDefinitions().getDefn()->landscapewidth;
+		context.landscapeMaps->getDefinitions().getDefn()->getLandscapeWidth();
 	int maskY = (tankPos[1] * fixed(tankMask->getHeight())).asInt() / 
-		context.landscapeMaps->getDefinitions().getDefn()->landscapeheight;
+		context.landscapeMaps->getDefinitions().getDefn()->getLandscapeHeight();
 	unsigned char *maskPos = tankMask->getBits() +
 		maskX * 3 + maskY * tankMask->getWidth() * 3;
 		
@@ -203,17 +203,20 @@ FixedVector PlacementTankPosition::placeTank(unsigned int playerId, int team,
 			defn->getType()));
 	}
     
+	int arenaX = context.landscapeMaps->getGroundMaps().getArenaX();
+	int arenaY = context.landscapeMaps->getGroundMaps().getArenaY();
+	int arenaWidth = context.landscapeMaps->getGroundMaps().getArenaWidth();
+	int arenaHeight = context.landscapeMaps->getGroundMaps().getArenaHeight();
+
 	int maxIt = 100;
 	int i;
 	for (i=maxIt; i>0; i--)
 	{
 		// Find a new position for the tank
-		fixed posX = fixed (context.landscapeMaps->getDefinitions().
-			getDefn()->landscapewidth - tankBorder * 2) * 
-			generator.getRandFixed() + fixed(tankBorder);
-		fixed posY = fixed (context.landscapeMaps->getDefinitions().
-			getDefn()->landscapeheight - tankBorder * 2) * 
-			generator.getRandFixed() + fixed(tankBorder);
+		fixed posX = fixed(arenaX) + (fixed(arenaWidth - tankBorder * 2) * 
+			generator.getRandFixed()) + fixed(tankBorder);
+		fixed posY = fixed(arenaY) + (fixed(arenaHeight - tankBorder * 2) * 
+			generator.getRandFixed()) + fixed(tankBorder);
 		fixed height = context.landscapeMaps->getGroundMaps().
 			getHeight(posX.asInt(), posY.asInt());
 		FixedVector normal = context.landscapeMaps->getGroundMaps().

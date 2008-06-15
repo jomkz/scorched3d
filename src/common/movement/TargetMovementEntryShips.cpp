@@ -40,8 +40,8 @@ TargetMovementEntryShips::~TargetMovementEntryShips()
 void TargetMovementEntryShips::generate(ScorchedContext &context, 
 	RandomGenerator &random, LandscapeMovementType *movementType)
 {
-	int mapWidth = context.landscapeMaps->getGroundMaps().getMapWidth();
-	int mapHeight = context.landscapeMaps->getGroundMaps().getMapHeight();
+	int mapWidth = context.landscapeMaps->getGroundMaps().getLandscapeWidth();
+	int mapHeight = context.landscapeMaps->getGroundMaps().getLandscapeHeight();
 	LandscapeTex &tex = *context.landscapeMaps->getDefinitions().getTex();
 
 	// Get the water height (if water is on)

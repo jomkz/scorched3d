@@ -51,9 +51,15 @@ public:
 	fixed &getNapalmHeight(int w, int h)
 		{ return nmap_.getNapalmHeight(w, h); }
 
+	// Deformable landscape area fns
+	int getLandscapeWidth();
+	int getLandscapeHeight();
+
 	// Playable landscape area fns
-	int getMapWidth() { return map_.getMapWidth(); }
-	int getMapHeight() { return map_.getMapHeight(); }
+	int getArenaWidth();
+	int getArenaHeight();
+	int getArenaX();
+	int getArenaY();
 
 	// Objects funtions
 	TargetGroups &getGroups() { return groups_; }
@@ -62,6 +68,8 @@ public:
 	HeightMap &getHeightMap() { return map_; }
 
 protected:
+	int arenaX_, arenaY_;
+	int arenaWidth_, arenaHeight_;
 	HeightMap map_; // The current level's heightmap
 	NapalmMap nmap_; // How high napalm is at certain points
 	TargetGroups groups_; // The groups in the scene

@@ -20,6 +20,7 @@
 
 #include <landscapemap/GroundMaps.h>
 #include <landscapemap/HeightMapLoader.h>
+#include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeInclude.h>
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeDefinitions.h>
@@ -34,7 +35,11 @@
 #endif
 
 GroundMaps::GroundMaps(LandscapeDefinitionCache &defnCache) :
-	defnCache_(defnCache)
+	defnCache_(defnCache), 
+	arenaX_(-1),
+	arenaY_(-1),
+	arenaWidth_(-1), 
+	arenaHeight_(-1)
 {
 }
 
@@ -46,6 +51,11 @@ void GroundMaps::generateMaps(
 	ScorchedContext &context,
 	ProgressCounter *counter)
 {
+	arenaWidth_ = context.landscapeMaps->getDefinitions().getDefn()->getArenaWidth();
+	arenaHeight_ = context.landscapeMaps->getDefinitions().getDefn()->getArenaHeight();
+	arenaX_ = context.landscapeMaps->getDefinitions().getDefn()->getArenaX();
+	arenaY_ = context.landscapeMaps->getDefinitions().getDefn()->getArenaY();
+
 	generateHMap(context, counter);
 #ifndef S3D_SERVER
 	if (!context.serverMode)
@@ -62,7 +72,37 @@ void GroundMaps::generateMaps(
 	// Create movement after targets, so we can mark 
 	// those targets that are in movement groups
 	context.targetMovement->generate(context); 
-	nmap_.create(getMapWidth(), getMapHeight());
+	nmap_.create(getLandscapeWidth(), getLandscapeHeight());
+}
+
+int GroundMaps::getLandscapeWidth()
+{
+	return map_.getMapWidth();
+}
+
+int GroundMaps::getLandscapeHeight()
+{
+	return map_.getMapHeight();
+}
+
+int GroundMaps::getArenaWidth()
+{
+	return arenaWidth_;
+}
+
+int GroundMaps::getArenaHeight()
+{
+	return arenaHeight_;
+}
+
+int GroundMaps::getArenaX()
+{
+	return arenaX_;
+}
+
+int GroundMaps::getArenaY()
+{
+	return arenaY_;
 }
 
 void GroundMaps::generateHMap(
@@ -70,8 +110,8 @@ void GroundMaps::generateHMap(
 	ProgressCounter *counter)
 {
 	// Initialize the ground and surround maps
-	map_.create(defnCache_.getDefn()->landscapewidth, 
-		defnCache_.getDefn()->landscapeheight);
+	map_.create(defnCache_.getDefn()->getLandscapeWidth(), 
+		defnCache_.getDefn()->getLandscapeHeight());
 
 	// Generate the landscape
 	bool levelSurround = false;

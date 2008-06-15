@@ -188,6 +188,19 @@ bool LandscapeDefn::readXML(LandscapeDefinitions *definitions, XMLNode *node)
 				"Specified size : %ix%i", landscapewidth, landscapeheight));
 		return false;
 	}
+	if (!node->getNamedChild("arenawidth", arenawidth, false)) arenawidth = landscapewidth;
+	if (!node->getNamedChild("arenaheight", arenaheight, false)) arenaheight = landscapeheight;
+	if (arenawidth > landscapewidth ||
+		arenaheight > landscapeheight)
+	{
+		S3D::dialogMessage("Scorched3D",
+			S3D::formatStringBuffer(
+				"ERROR: Arena width and height must each be less than or equal to the landscape size.\n"
+				"Specified size : %ix%i", arenawidth, arenaheight));
+		return false;
+	}
+	arenax = (landscapewidth - arenawidth) / 2;
+	arenay = (landscapeheight - arenaheight) / 2;
 
 	{
 		XMLNode *startNode;

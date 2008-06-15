@@ -61,7 +61,7 @@ public:
 		bool operator<(const QueuePosition &rhs) const;
 	};
 
-	MovementMap(int width, int height, 
+	MovementMap(
 		Tank *tank, 
 		ScorchedContext &context);
 	virtual ~MovementMap();
@@ -85,7 +85,9 @@ public:
 
 protected:
 	MovementMapEntry *entries_;
-	int width_, height_;
+	int landscapeWidth_, landscapeHeight_;
+	int arenaX_, arenaY_;
+	int arenaWidth_, arenaHeight_;
 	fixed minHeight_;
 	Tank *tank_;
 	ScorchedContext &context_;

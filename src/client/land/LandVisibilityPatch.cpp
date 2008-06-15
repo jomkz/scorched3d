@@ -47,7 +47,7 @@ LandVisibilityPatch::~LandVisibilityPatch()
 static float getHeight(int x, int y)
 {
 	int mapWidth = ScorchedClient::instance()->getLandscapeMaps().
-		getGroundMaps().getHeightMap().getMapWidth();
+		getGroundMaps().getLandscapeWidth();
 
 	GraphicalLandscapeMap *landscapeMap = (GraphicalLandscapeMap *)
 		ScorchedClient::instance()->getLandscapeMaps().
@@ -95,9 +95,9 @@ void LandVisibilityPatch::setLocation(int x, int y,
 	LandVisibilityPatch *bottomPatch)
 {
 	int mapWidth = ScorchedClient::instance()->getLandscapeMaps().
-		getGroundMaps().getMapWidth();
+		getGroundMaps().getLandscapeWidth();
 	int mapHeight = ScorchedClient::instance()->getLandscapeMaps().
-		getGroundMaps().getMapHeight();
+		getGroundMaps().getLandscapeHeight();
 
 	DIALOG_ASSERT(x >= 0 && y >= 0 &&
 		x < mapWidth && y < mapHeight);

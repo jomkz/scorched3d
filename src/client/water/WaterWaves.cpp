@@ -51,9 +51,9 @@ void WaterWaves::generateWaves(float waterHeight, ProgressCounter *counter)
 	if (!OptionsDisplay::instance()->getDrawWater()) return;
 
 	int mapWidth = ScorchedClient::instance()->getLandscapeMaps().
-		getGroundMaps().getMapWidth();
+		getGroundMaps().getLandscapeWidth();
 	int mapHeight = ScorchedClient::instance()->getLandscapeMaps().
-		getGroundMaps().getMapHeight();
+		getGroundMaps().getLandscapeHeight();
 
 	// Wave points
 	WaterWaveContext context;

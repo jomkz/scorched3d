@@ -80,17 +80,6 @@ void WeaponAimedOver::fireWeapon(ScorchedContext &context,
 {
 	FixedVector position = sentPosition;
 
-	// Make sure that this position is inside the walls (if any)
-	if (context.optionsTransient->getWallType() != OptionsTransient::wallNone)
-	{
-		if (position[0] < 6) position[0] = 6;
-		else if (position[0] > (fixed)context.landscapeMaps->getGroundMaps().getMapWidth() - 6) 
-			position[0] = (fixed)context.landscapeMaps->getGroundMaps().getMapWidth() - 6;
-		if (position[1] < 6) position[1] = 6;
-		else if (position[1] > (fixed)context.landscapeMaps->getGroundMaps().getMapHeight() - 6)
-				position[1] = (fixed)context.landscapeMaps->getGroundMaps().getMapHeight() - 6;
-	}
-
 	// Make sure that this position is above ground
 	fixed minHeight = context.landscapeMaps->getGroundMaps().getInterpHeight(
 		position[0], position[1]);

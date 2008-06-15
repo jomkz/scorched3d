@@ -106,8 +106,6 @@ void TankMovement::init()
 	// Upper 32 bits = x positions
 	std::list<unsigned int> positions;
 	MovementMap mmap(
-		context_->landscapeMaps->getDefinitions().getDefn()->landscapewidth,
-		context_->landscapeMaps->getDefinitions().getDefn()->landscapeheight,
 		tank, 
 		*context_);
 	FixedVector pos(positionX_, positionY_, 0);

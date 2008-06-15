@@ -51,8 +51,8 @@ void Sun::setPosition(float sunRotXY, float sunRotYZ)
 	sunRotXY = sunRotXY / 180.0f * 3.14f;
 	sunRotYZ = sunRotYZ / 180.0f * 3.14f;
 	position_ = Vector(
-		(sinf(sunRotXY) * 900.0f * cosf(sunRotYZ)) + defn.landscapewidth / 2.0f, 
-		(cosf(sunRotXY) * 900.0f * cosf(sunRotYZ)) + defn.landscapeheight / 2.0f, 
+		(sinf(sunRotXY) * 900.0f * cosf(sunRotYZ)) + defn.getLandscapeWidth() / 2.0f, 
+		(cosf(sunRotXY) * 900.0f * cosf(sunRotYZ)) + defn.getLandscapeHeight() / 2.0f, 
 		(sinf(sunRotYZ) * 900.0f));
 }
 

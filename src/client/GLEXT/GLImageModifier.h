@@ -77,8 +77,8 @@ namespace ImageModifier
 							float waterHeight);
 
 	void addBorderToBitmap(Image &destBitmap,
-							int borderWidth,
-							float colors[3]);
+		int borderWidth,
+		float colors[3]);
 
 	void makeBitmapTransparent(Image &output,
 		Image &input,

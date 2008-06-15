@@ -71,9 +71,9 @@ void VisibilityPatchGrid::generate()
 
 	// Figure out how large the visible area will be
 	int mapWidth = ScorchedClient::instance()->getLandscapeMaps().
-		getGroundMaps().getMapWidth();
+		getGroundMaps().getLandscapeWidth();
 	int mapHeight = ScorchedClient::instance()->getLandscapeMaps().
-		getGroundMaps().getMapHeight();
+		getGroundMaps().getLandscapeHeight();
 	int actualWidth = mapWidth + 4096; // The map visible area is at least 4096*4096
 	int actualHeight = mapHeight + 4096;
 	actualWidth = (actualWidth / 512) * 512; // The actual width and height are multiples of 512

@@ -410,7 +410,7 @@ void Water2Renderer::generate(LandscapeTexBorderWater *water, ProgressCounter *c
 
 	LandscapeDefn &defn = *ScorchedClient::instance()->getLandscapeMaps().
 		getDefinitions().getDefn();
-	landscapeSize_ = Vector(defn.landscapewidth, defn.landscapeheight);
+	landscapeSize_ = Vector(defn.getLandscapeWidth(), defn.getLandscapeHeight());
 
 	if (GLStateExtension::hasShaders())
 	{

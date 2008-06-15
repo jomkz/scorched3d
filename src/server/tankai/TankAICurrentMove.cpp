@@ -577,8 +577,6 @@ bool TankAICurrentMove::makeMoveShot(Tank *tank,
 
 		// Can we move to this target at all?
 		MovementMap mmap(
-			context.landscapeMaps->getGroundMaps().getMapWidth(),
-			context.landscapeMaps->getGroundMaps().getMapHeight(),
 			tank, 
 			context);
 		if (!mmap.calculatePosition(FixedVector::fromVector(targetPos), 
@@ -644,11 +642,20 @@ bool TankAICurrentMove::makeGroupShot(Tank *tank,
 	HeightMap &map = 
 		ScorchedServer::instance()->getLandscapeMaps().getGroundMaps().getHeightMap();
 
+	int arenaX = ScorchedServer::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaX();
+	int arenaY = ScorchedServer::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaY();
+	int arenaWidth = ScorchedServer::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaWidth();
+	int arenaHeight = ScorchedServer::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaHeight();
+
 	// Braindead way of finding groupings
 	// For each landscape square
-	for (int y=0; y<map.getMapHeight(); y+=4)
+	for (int y=arenaY; y<arenaY + arenaHeight; y+=4)
 	{
-		for (int x=0; x<map.getMapWidth(); x+=4)
+		for (int x=arenaX; x<arenaX + arenaWidth; x+=4)
 		{
 			GroupingEntry entry;
 			entry.position = Vector(float(x), float(y), map.getHeight(x, y).asFloat());

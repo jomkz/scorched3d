@@ -210,7 +210,7 @@ LandscapeDefinition LandscapeDefinitions::getRandomLandscapeDefn(
 				defnitor++)
 			{
 				LandscapeDefn *defn = getDefn(defnitor->c_str());
-				if (players >= defn->minplayers && players <= defn->maxplayers)
+				if (players >= defn->getMinPlayers() && players <= defn->getMaxPlayers())
 				{
 					minMaxPassedLandscapes.push_back(&current);
 					break;

@@ -45,20 +45,23 @@ void Wall::draw()
 		texture_.create(map, true);
 	}
 
-	float wallWidth = (float)
-		ScorchedClient::instance()->getLandscapeMaps().
-			getGroundMaps().getMapWidth();
-	float wallHeight = (float)
-		ScorchedClient::instance()->getLandscapeMaps().
-			getGroundMaps().getMapHeight();
-	Vector botA(0.0f, 0.0f, 0.0f);
-	Vector botB(wallWidth, 0.0f, 0.0f);
-	Vector botC(wallWidth, wallHeight, 0.0f);
-	Vector botD(0.0f, wallHeight, 0.0f);
-	Vector topA(0.0f, 0.0f, 256.0f);
-	Vector topB(wallWidth, 0.0f, 256.0f);
-	Vector topC(wallWidth, wallHeight, 256.0f);
-	Vector topD(0.0f, wallHeight, 256.0f);
+	float arenaX = (float) ScorchedClient::instance()->getLandscapeMaps().
+			getGroundMaps().getArenaX();
+	float arenaY = (float) ScorchedClient::instance()->getLandscapeMaps().
+			getGroundMaps().getArenaY();
+	float arenaWidth = (float) ScorchedClient::instance()->getLandscapeMaps().
+			getGroundMaps().getArenaWidth();
+	float arenaHeight = (float) ScorchedClient::instance()->getLandscapeMaps().
+			getGroundMaps().getArenaHeight();
+
+	Vector botA(arenaX, arenaY, 0.0f);
+	Vector botB(arenaX + arenaWidth, arenaY, 0.0f);
+	Vector botC(arenaX + arenaWidth, arenaY + arenaHeight, 0.0f);
+	Vector botD(arenaX, arenaY + arenaHeight, 0.0f);
+	Vector topA(arenaX, arenaY, 256.0f);
+	Vector topB(arenaX + arenaWidth, arenaY, 256.0f);
+	Vector topC(arenaX + arenaWidth, arenaY + arenaHeight, 256.0f);
+	Vector topD(arenaX, arenaY + arenaHeight, 256.0f);
 
 	if (fadeTime_[OptionsTransient::LeftSide] > 0.0f ||
 		fadeTime_[OptionsTransient::BotSide] > 0.0f ||

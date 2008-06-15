@@ -71,8 +71,8 @@ void PlacementTypeTree::getPositions(ScorchedContext &context,
 	unsigned char objectMap[64 * 64];
 	memset(objectMap, 0, sizeof(unsigned char) * 64 * 64);
 
-	int groundMapWidth = context.landscapeMaps->getGroundMaps().getMapWidth();
-	int groundMapHeight = context.landscapeMaps->getGroundMaps().getMapHeight();
+	int groundMapWidth = context.landscapeMaps->getGroundMaps().getLandscapeWidth();
+	int groundMapHeight = context.landscapeMaps->getGroundMaps().getLandscapeHeight();
 
 	// A few points where trees will be clustered around
 	int treeMapMultWidth  = groundMapWidth / 64;

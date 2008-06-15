@@ -124,11 +124,6 @@ void WeaponNapalm::addNapalm(ScorchedContext &context,
 {
 	// Ensure that the napalm has not hit the walls
 	// or anything outside the landscape
-	if (x > 1 && y > 1 &&
-		x < context.landscapeMaps->getGroundMaps().getMapWidth() - 1 &&
-		y < context.landscapeMaps->getGroundMaps().getMapHeight() - 1)
-	{
-		context.actionController->addAction(
-			new Napalm(x, y, this, weaponContext));
-	}
+	context.actionController->addAction(
+		new Napalm(x, y, this, weaponContext));
 }

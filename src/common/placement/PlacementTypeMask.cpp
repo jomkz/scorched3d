@@ -53,8 +53,8 @@ void PlacementTypeMask::getPositions(ScorchedContext &context,
 	std::list<Position> &returnPositions,
 	ProgressCounter *counter)
 {
-	int groundMapWidth = context.landscapeMaps->getGroundMaps().getMapWidth();
-	int groundMapHeight = context.landscapeMaps->getGroundMaps().getMapHeight();
+	int groundMapWidth = context.landscapeMaps->getGroundMaps().getLandscapeWidth();
+	int groundMapHeight = context.landscapeMaps->getGroundMaps().getLandscapeHeight();
 
 	ImageHandle map = ImageFactory::loadImageHandle(S3D::getDataFile(mask.c_str()));
 	if (!map.getBits())

@@ -344,8 +344,8 @@ void Water2::generateTransparency(Water2Points &wd,
 			float waterHeight = points[2];
 
 			// Not quite right!! but it will do
-			int lx = int(float(x) * float(defn.landscapewidth) / float(wave_resolution));
-			int ly = int(float(y) * float(defn.landscapeheight) / float(wave_resolution));
+			int lx = int(float(x) * float(defn.getLandscapeWidth()) / float(wave_resolution));
+			int ly = int(float(y) * float(defn.getLandscapeHeight()) / float(wave_resolution));
 			float groundHeight = ScorchedClient::instance()->getLandscapeMaps().
 				getGroundMaps().getHeight(lx, ly).asFloat();
 			

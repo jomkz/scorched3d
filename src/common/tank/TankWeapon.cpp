@@ -114,8 +114,6 @@ void TankWeapon::setCurrentWeapon(Accessory *wp)
 				if (moveWeapon)
 				{
 					MovementMap mmap(
-						context_.landscapeMaps->getGroundMaps().getMapWidth(),
-						context_.landscapeMaps->getGroundMaps().getMapHeight(),
 						tank_, 
 						context_);
 					mmap.calculateAllPositions(mmap.getFuel(moveWeapon));
@@ -125,8 +123,6 @@ void TankWeapon::setCurrentWeapon(Accessory *wp)
 			else if (wp->getPositionSelect() == Accessory::ePositionSelectFuelLimit)
 			{
 				MovementMap mmap(
-					context_.landscapeMaps->getGroundMaps().getMapWidth(),
-					context_.landscapeMaps->getGroundMaps().getMapHeight(),
 					tank_, 
 					context_);
 				mmap.calculateAllPositions(fixed(wp->getPositionSelectLimit()));

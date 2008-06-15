@@ -28,6 +28,7 @@
 #include <graph/MainCamera.h>
 #include <client/ClientLinesHandler.h>
 #include <landscape/Landscape.h>
+#include <landscape/LandscapePoints.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
@@ -137,6 +138,11 @@ void GLWPlanView::simulate(float frameTime)
 
 void GLWPlanView::draw()
 {
+	landscapeWidth_ = (float) 
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeWidth();
+	landscapeHeight_ = (float) 
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeHeight();
+
 	if (firstTime_)
 	{
 		firstTime_ = false;
@@ -264,18 +270,14 @@ void GLWPlanView::drawLine(PlayerDrawnInfo &info)
 void GLWPlanView::drawTexture()
 {
 	// Draw the camera pointer
-	float mapWidth = (float) ScorchedClient::instance()->
-		getLandscapeMaps().getGroundMaps().getMapWidth();
-	float mapHeight = (float) ScorchedClient::instance()->
-		getLandscapeMaps().getGroundMaps().getMapHeight();
-	float maxWidth = MAX(mapWidth, mapHeight);
+	float maxWidth = MAX(landscapeWidth_, landscapeHeight_);
 
 	Vector lowerLeft(0.0f, 0.0f, 0.0f);
-	Vector upperRight(mapWidth / maxWidth, mapHeight / maxWidth, 0.0f);
-	lowerLeft[0] += (maxWidth - mapWidth) / maxWidth / 2.0f;
-	upperRight[0] += (maxWidth - mapWidth) / maxWidth / 2.0f;
-	lowerLeft[1] += (maxWidth - mapHeight) / maxWidth / 2.0f;
-	upperRight[1] += (maxWidth - mapHeight) / maxWidth / 2.0f;
+	Vector upperRight(landscapeWidth_ / maxWidth, landscapeHeight_ / maxWidth, 0.0f);
+	lowerLeft[0] += (maxWidth - landscapeWidth_) / maxWidth / 2.0f;
+	upperRight[0] += (maxWidth - landscapeWidth_) / maxWidth / 2.0f;
+	lowerLeft[1] += (maxWidth - landscapeHeight_) / maxWidth / 2.0f;
+	upperRight[1] += (maxWidth - landscapeHeight_) / maxWidth / 2.0f;
 
 	// Draw the square of land
 	glColor3f(planColor_, planColor_, planColor_);
@@ -295,11 +297,7 @@ void GLWPlanView::drawTexture()
 void GLWPlanView::drawCameraPointer()
 {
 	// Draw the camera pointer
-	float mapWidth = (float) ScorchedClient::instance()->
-		getLandscapeMaps().getGroundMaps().getMapWidth();
-	float mapHeight = (float) ScorchedClient::instance()->
-		getLandscapeMaps().getGroundMaps().getMapHeight();
-	float maxWidth = MAX(mapWidth, mapHeight);
+	float maxWidth = MAX(landscapeWidth_, landscapeHeight_);
 
 	Vector mid(0.5f, 0.5f);
 	// Get camera positions
@@ -311,13 +309,13 @@ void GLWPlanView::drawCameraPointer()
 	Vector directionPerp = direction.get2DPerp();
 
 	// Force camera positions between 0 and 1
-	currentPos[0] += (maxWidth - mapWidth) / 2.0f;
-	currentPos[1] += (maxWidth - mapHeight) / 2.0f;
+	currentPos[0] += (maxWidth - landscapeWidth_) / 2.0f;
+	currentPos[1] += (maxWidth - landscapeHeight_) / 2.0f;
 	currentPos[0] /= maxWidth;
 	currentPos[1] /= maxWidth;
 	currentPos[2] = 0.0f;
-	lookAt[0] += (maxWidth - mapWidth) / 2.0f;
-	lookAt[1] += (maxWidth - mapHeight) / 2.0f;
+	lookAt[0] += (maxWidth - landscapeWidth_) / 2.0f;
+	lookAt[1] += (maxWidth - landscapeHeight_) / 2.0f;
 	lookAt[0] /= maxWidth;
 	lookAt[1] /= maxWidth;
 	lookAt[2] = 0.0f;
@@ -381,41 +379,12 @@ void GLWPlanView::drawBuoys()
 		break;	// should never happen....
 	}
 
-	int mapWidth = ScorchedClient::instance()->
-		getLandscapeMaps().getGroundMaps().getMapWidth();
-	int mapHeight = ScorchedClient::instance()->
-		getLandscapeMaps().getGroundMaps().getMapHeight();
-	int maxWidth = MAX(mapWidth, mapHeight);
-	
-	// Note: Buoys are placed every 64 units, stretched up to fit
-	// ie: a 256 map will have 4, a 240 will have three
-	//
-	// Figure out how many bouys
-	int pointsX = mapWidth / 64;	// Each point is 64 units apart, as per landscape/LandscapePoints.cpp
-	int pointsY = mapHeight / 64;
-
 	// Get the scaling factor for non-square maps
-	float xscale = (float) mapWidth / (float) maxWidth;
-	float yscale = (float) mapHeight / (float) maxWidth;
+	int maxWidth = (int) MAX(landscapeWidth_, landscapeHeight_);
+	float xscale = (float) landscapeWidth_ / (float) maxWidth;
+	float yscale = (float) landscapeHeight_ / (float) maxWidth;
 
-
-	int i;
-	std::vector<Vector> points;
-	// Generate the points (not scaled yet)
-	for (i=0; i<pointsX; i++)
-	{
-		float pos = 1.0f / float(pointsX - 1) * float(i);
-
-		points.push_back(Vector(pos, 0.0f));
-		points.push_back(Vector(pos, float(mapHeight)));
-	}
-	for (i=0; i<pointsY; i++)
-	{
-		float pos = 1.0f / float(pointsY - 1) * float(i);
-
-		points.push_back(Vector(0.0f, pos));
-		points.push_back(Vector(float(mapWidth), pos));
-	}
+	std::vector<Vector> &points = Landscape::instance()->getPoints().getPoints();
 
 	// Plot the dots, scaling for non-square maps
 	// Draw the dots!
@@ -470,11 +439,7 @@ void GLWPlanView::drawTanks()
 	if (currentTanks.empty()) return;
 
 	// Draw the current tank bolder
-	float mapWidth = (float) 
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getMapWidth();
-	float mapHeight = (float) 
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getMapHeight();
-	float maxWidth = MAX(mapWidth, mapHeight);
+	float maxWidth = MAX(landscapeWidth_, landscapeHeight_);
 
 	Vector position;
 	drawCurrentTank();
@@ -496,8 +461,8 @@ void GLWPlanView::drawTanks()
 			!tank->getState().getSpectator())
 		{
 			position = tank->getPosition().getTankPosition().asVector();
-			position[0] += (maxWidth - mapWidth) / 2.0f;
-			position[1] += (maxWidth - mapHeight) / 2.0f;
+			position[0] += (maxWidth - landscapeWidth_) / 2.0f;
+			position[1] += (maxWidth - landscapeHeight_) / 2.0f;
 			position /= maxWidth;
 
 			glVertex3fv(position);
@@ -517,8 +482,8 @@ void GLWPlanView::drawTanks()
 		{
 			glColor3fv(tank->getColor());
 			position = tank->getPosition().getTankPosition().asVector();
-			position[0] += (maxWidth - mapWidth) / 2.0f;
-			position[1] += (maxWidth - mapHeight) / 2.0f;
+			position[0] += (maxWidth - landscapeWidth_) / 2.0f;
+			position[1] += (maxWidth - landscapeHeight_) / 2.0f;
 			position /= maxWidth;
 
 			if ((flash_ && tank->getState().getReadyState() == TankState::SNotReady) ||
@@ -555,17 +520,13 @@ void GLWPlanView::drawCurrentTank()
 		ClientState::StatePlaying) return;
 
 	// Calculate the constants
-	float mapWidth = (float) 
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getMapWidth();
-	float mapHeight = (float) 
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getMapHeight();
-	float maxWidth = MAX(mapWidth, mapHeight);
+	float maxWidth = MAX(landscapeWidth_, landscapeHeight_);
 	float scale = animationTime_ / maxAnimationTime;
 	Vector position;
 	float rot = -currentTank->getPosition().getRotationGunXY().asFloat() * degToRad;
 	position = currentTank->getPosition().getTankPosition().asVector();
-	position[0] += (maxWidth - mapWidth) / 2.0f;
-	position[1] += (maxWidth - mapHeight) / 2.0f;
+	position[0] += (maxWidth - landscapeWidth_) / 2.0f;
+	position[1] += (maxWidth - landscapeHeight_) / 2.0f;
 	position /= maxWidth;
 
 	// Build a display list to build the ring
@@ -613,22 +574,31 @@ void GLWPlanView::mouseDown(int button, float x, float y, bool &skipRest)
 
 		if (button == GameState::MouseButtonLeft)
 		{
-			float mapWidth = (float) ScorchedClient::instance()->
-				getLandscapeMaps().getGroundMaps().getMapWidth();
-			float mapHeight = (float) ScorchedClient::instance()->
-				getLandscapeMaps().getGroundMaps().getMapHeight();
-			float maxWidth = MAX(mapWidth, mapHeight);
+			int arenaX = ScorchedClient::instance()->
+				getLandscapeMaps().getGroundMaps().getArenaX();
+			int arenaY = ScorchedClient::instance()->
+				getLandscapeMaps().getGroundMaps().getArenaY();
+			int arenaWidth = ScorchedClient::instance()->
+				getLandscapeMaps().getGroundMaps().getArenaWidth();
+			int arenaHeight = ScorchedClient::instance()->
+				getLandscapeMaps().getGroundMaps().getArenaHeight();
 
+			float maxWidth = MAX(landscapeWidth_, landscapeHeight_);
 			float mapX = ((x - x_) / w_) * maxWidth;
 			float mapY = ((y - y_) / h_) * maxWidth;
-			mapX -= (maxWidth - mapWidth) / 2.0f;
-			mapY -= (maxWidth - mapHeight) / 2.0f;
+			mapX -= (maxWidth - landscapeWidth_) / 2.0f;
+			mapY -= (maxWidth - landscapeHeight_) / 2.0f;
 
-			Vector lookAt(mapX, mapY, ScorchedClient::instance()->
-				getLandscapeMaps().getGroundMaps().getInterpHeight(
-					fixed::fromFloat(mapX), fixed::fromFloat(mapY)).asFloat() + 5.0f);
-			MainCamera::instance()->getTarget().setCameraType(TargetCamera::CamFree);
-			MainCamera::instance()->getCamera().setLookAt(lookAt);
+			if (mapX > arenaX && mapY > arenaY &&
+				mapX < arenaX + arenaWidth &&
+				mapY < arenaY + arenaHeight)
+			{
+				Vector lookAt(mapX, mapY, ScorchedClient::instance()->
+					getLandscapeMaps().getGroundMaps().getInterpHeight(
+						fixed::fromFloat(mapX), fixed::fromFloat(mapY)).asFloat() + 5.0f);
+				MainCamera::instance()->getTarget().setCameraType(TargetCamera::CamFree);
+				MainCamera::instance()->getCamera().setLookAt(lookAt);
+			}
 		}
 		else if (button == GameState::MouseButtonRight)
 		{

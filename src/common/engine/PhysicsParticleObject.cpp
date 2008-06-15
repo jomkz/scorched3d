@@ -201,6 +201,11 @@ void PhysicsParticleObject::checkCollision()
 PhysicsParticleObject::CollisionAction PhysicsParticleObject::checkShotCollision(
 	CollisionInfo &collision, Target *target)
 {
+	int arenaX = context_->landscapeMaps->getGroundMaps().getArenaX();
+	int arenaY = context_->landscapeMaps->getGroundMaps().getArenaY();
+	int arenaWidth = context_->landscapeMaps->getGroundMaps().getArenaWidth();
+	int arenaHeight = context_->landscapeMaps->getGroundMaps().getArenaHeight();
+
 	switch(collision.collisionId)
 	{
 	case CollisionIdLandscape:
@@ -243,26 +248,16 @@ PhysicsParticleObject::CollisionAction PhysicsParticleObject::checkShotCollision
 		switch(collision.collisionId)
 		{
 		case CollisionIdWallLeft:
-			{
-				position_[0] = fixed(true, 1000);
-			}
+			position_[0] = arenaX + 1;
 			break;
 		case CollisionIdWallRight:
-			{
-				int landscapeWidth = context_->landscapeMaps->getGroundMaps().getMapWidth();
-				position_[0] = fixed(landscapeWidth) - fixed(true, 1000);
-			}
+			position_[0] = arenaX + arenaWidth - 1;
 			break;
 		case CollisionIdWallTop:
-			{
-				position_[1] = fixed(true, 1000);
-			}
+			position_[1] = arenaY + 1;
 			break;
 		case CollisionIdWallBottom:
-			{
-				int landscapeHeight = context_->landscapeMaps->getGroundMaps().getMapHeight();
-				position_[1] = fixed(landscapeHeight) - fixed(true, 1000);
-			}
+			position_[1] = arenaY + arenaHeight - 1;
 			break;
 		}
 
@@ -279,22 +274,16 @@ PhysicsParticleObject::CollisionAction PhysicsParticleObject::checkShotCollision
 			switch (collision.collisionId)
 			{
 			case CollisionIdWallLeft:
-				{
-					int landscapeWidth = context_->landscapeMaps->getGroundMaps().getMapWidth();
-					position_[0] = landscapeWidth - 10;
-				}
+				position_[0] = arenaX + arenaWidth - 10;
 				break;
 			case CollisionIdWallRight:
-				position_[0] = 10;
+				position_[0] = arenaX + 10;
 				break;
 			case CollisionIdWallTop:
-				{
-					int landscapeHeight = context_->landscapeMaps->getGroundMaps().getMapHeight();
-					position_[1] = landscapeHeight - 10;
-				}
+				position_[1] = arenaY + arenaHeight - 10;
 				break;
 			case CollisionIdWallBottom:
-				position_[1] = 10;
+				position_[1] = arenaX + 10;
 				break;
 			}
 			return CollisionActionNone;
@@ -309,6 +298,11 @@ PhysicsParticleObject::CollisionAction PhysicsParticleObject::checkShotCollision
 PhysicsParticleObject::CollisionAction PhysicsParticleObject::checkBounceCollision(
 	CollisionInfo &collision, Target *target)
 {
+	int arenaX = context_->landscapeMaps->getGroundMaps().getArenaX();
+	int arenaY = context_->landscapeMaps->getGroundMaps().getArenaY();
+	int arenaWidth = context_->landscapeMaps->getGroundMaps().getArenaWidth();
+	int arenaHeight = context_->landscapeMaps->getGroundMaps().getArenaHeight();
+
 	switch(collision.collisionId)
 	{
 	case CollisionIdRoof:
@@ -327,26 +321,16 @@ PhysicsParticleObject::CollisionAction PhysicsParticleObject::checkBounceCollisi
 			switch(collision.collisionId)
 			{
 			case CollisionIdWallLeft:
-				{
-					position_[0] = fixed(true, 1000);
-				}
+				position_[0] = arenaX + 1;
 				break;
 			case CollisionIdWallRight:
-				{
-					int landscapeWidth = context_->landscapeMaps->getGroundMaps().getMapWidth();
-					position_[0] = fixed(landscapeWidth) - fixed(true, 1000);
-				}
+				position_[0] = arenaX + arenaWidth - 1;
 				break;
 			case CollisionIdWallTop:
-				{
-					position_[1] = fixed(true, 1000);
-				}
+				position_[1] = arenaY + 1;
 				break;
 			case CollisionIdWallBottom:
-				{
-					int landscapeHeight = context_->landscapeMaps->getGroundMaps().getMapHeight();
-					position_[1] = fixed(landscapeHeight) - fixed(true, 1000);
-				}
+				position_[1] = arenaY + arenaHeight - 1;
 				break;
 			}
 		}
@@ -375,6 +359,11 @@ PhysicsParticleObject::CollisionAction PhysicsParticleObject::checkBounceCollisi
 PhysicsParticleObject::CollisionAction PhysicsParticleObject::checkFallingCollision(
 	CollisionInfo &collision, Target *target)
 {
+	int arenaX = context_->landscapeMaps->getGroundMaps().getArenaX();
+	int arenaY = context_->landscapeMaps->getGroundMaps().getArenaY();
+	int arenaWidth = context_->landscapeMaps->getGroundMaps().getArenaWidth();
+	int arenaHeight = context_->landscapeMaps->getGroundMaps().getArenaHeight();
+
 	switch(collision.collisionId)
 	{
 	case CollisionIdTarget:
@@ -389,26 +378,16 @@ PhysicsParticleObject::CollisionAction PhysicsParticleObject::checkFallingCollis
 		switch(collision.collisionId)
 		{
 		case CollisionIdWallLeft:
-			{
-				position_[0] = fixed(true, 1000);
-			}
+			position_[0] = arenaX + 1;
 			break;
 		case CollisionIdWallRight:
-			{
-				int landscapeWidth = context_->landscapeMaps->getGroundMaps().getMapWidth();
-				position_[0] = fixed(landscapeWidth) - fixed(true, 1000);
-			}
+			position_[0] = arenaX + arenaWidth - 1;
 			break;
 		case CollisionIdWallTop:
-			{
-				position_[1] = fixed(true, 1000);
-			}
+			position_[1] = arenaY + 1;
 			break;
 		case CollisionIdWallBottom:
-			{
-				int landscapeHeight = context_->landscapeMaps->getGroundMaps().getMapHeight();
-				position_[1] = fixed(landscapeHeight) - fixed(true, 1000);
-			}
+			position_[1] = arenaY + arenaHeight - 1;
 			break;
 		}
 
@@ -494,30 +473,32 @@ bool PhysicsParticleObject::getWallCollision(CollisionInfo &collision)
 	// Check if we collide with walls
 	if (!wallCollision_) return false;
 
-	int landscapeWidth = context_->landscapeMaps->getGroundMaps().getMapWidth();
-	int landscapeHeight = context_->landscapeMaps->getGroundMaps().getMapHeight();
-	if (position_[0] <= 0)
+	int arenaX = context_->landscapeMaps->getGroundMaps().getArenaX();
+	int arenaY = context_->landscapeMaps->getGroundMaps().getArenaY();
+	int arenaWidth = context_->landscapeMaps->getGroundMaps().getArenaWidth();
+	int arenaHeight = context_->landscapeMaps->getGroundMaps().getArenaHeight();
+	if (position_[0] <= arenaX)
 	{
 		collision.collisionId = CollisionIdWallLeft;
 		collision.deflectFactor = 1;
 		collision.normal = FixedVector(1, 0, 0);
 		return true;
 	}
-	else if (position_[0] >= landscapeWidth)
+	else if (position_[0] >= arenaX + arenaWidth)
 	{
 		collision.collisionId = CollisionIdWallRight;
 		collision.deflectFactor = 1;
 		collision.normal = FixedVector(-1, 0, 0);
 		return true;
 	}
-	else if (position_[1] <= 0)
+	else if (position_[1] <= arenaY)
 	{
 		collision.collisionId = CollisionIdWallTop;
 		collision.deflectFactor = 1;
 		collision.normal = FixedVector(0, 1, 0);
 		return true;
 	}
-	else if (position_[1] >= landscapeHeight)
+	else if (position_[1] >= arenaY + arenaHeight)
 	{
 		collision.collisionId = CollisionIdWallBottom;
 		collision.deflectFactor = 1;

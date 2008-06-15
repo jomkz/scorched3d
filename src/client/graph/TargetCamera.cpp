@@ -440,11 +440,16 @@ void TargetCamera::mouseDrag(GameState::MouseButton button,
 		if (dragging_)
 		{
 			cameraPos_ = CamFree;
-			float mapWidth = (float) ScorchedClient::instance()->getLandscapeMaps().
-				getGroundMaps().getMapWidth();
-			float mapHeight = (float) ScorchedClient::instance()->getLandscapeMaps().
-				getGroundMaps().getMapHeight();
-			mainCam_.scroll(float(-x / 2), float(-y / 2), mapWidth, mapHeight);
+			float arenaWidth = (float) ScorchedClient::instance()->getLandscapeMaps().
+				getGroundMaps().getArenaWidth();
+			float arenaHeight = (float) ScorchedClient::instance()->getLandscapeMaps().
+				getGroundMaps().getArenaHeight();
+			float arenaX = (float) ScorchedClient::instance()->getLandscapeMaps().
+				getGroundMaps().getArenaX();
+			float arenaY = (float) ScorchedClient::instance()->getLandscapeMaps().
+				getGroundMaps().getArenaY();
+			mainCam_.scroll(float(-x / 2), float(-y / 2), 
+				arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight);
 		}
 	}
 	else
@@ -515,24 +520,28 @@ void TargetCamera::mouseUp(GameState::MouseButton button,
 		}
 	}
 
-	// Just look at the point on the landscape
-	if (selectType == Accessory::ePositionSelectNone)
-	{
-		cameraPos_ = CamFree;
-		mainCam_.setLookAt(lastLandIntersect_);
-		return;
-	}
-
 	// Try to move the tank to the position on the landscape
-	int landWidth = ScorchedClient::instance()->
-		getLandscapeMaps().getDefinitions().getDefn()->landscapewidth;
-	int landHeight = ScorchedClient::instance()->
-		getLandscapeMaps().getDefinitions().getDefn()->landscapeheight;
+	int arenaWidth = ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaWidth();
+	int arenaHeight = ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaHeight();
+	int arenaX = ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaX();
+	int arenaY = ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaY();
 	int posX = (int) lastLandIntersect_[0];
 	int posY = (int) lastLandIntersect_[1];
-	if (posX > 0 && posX < landWidth &&
-		posY > 0 && posY < landHeight)
+	if (posX > arenaX && posX < arenaX + arenaWidth &&
+		posY > arenaY && posY < arenaY + arenaHeight)
 	{
+		// Just look at the point on the landscape
+		if (selectType == Accessory::ePositionSelectNone)
+		{
+			cameraPos_ = CamFree;
+			mainCam_.setLookAt(lastLandIntersect_);
+			return;
+		}
+
 		if (selectType == Accessory::ePositionSelectFuel)
 		{
 			WeaponMoveTank *moveWeapon = (WeaponMoveTank *)
@@ -541,7 +550,7 @@ void TargetCamera::mouseUp(GameState::MouseButton button,
 					currentWeapon->getAccessoryId(), "WeaponMoveTank");
 			if (!moveWeapon) return;
 
-			MovementMap mmap(landWidth, landHeight, 
+			MovementMap mmap(
 				currentTank,
 				ScorchedClient::instance()->getContext());
 
@@ -554,7 +563,7 @@ void TargetCamera::mouseUp(GameState::MouseButton button,
 		else if (selectType == Accessory::ePositionSelectFuelLimit)
 		{
 			int limit = currentWeapon->getPositionSelectLimit();
-			MovementMap mmap(landWidth, landHeight, 
+			MovementMap mmap(
 				currentTank,
 				ScorchedClient::instance()->getContext());
 

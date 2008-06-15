@@ -149,9 +149,9 @@ void Landscape::drawShadows()
 	GLState glstate(GLState::TEXTURE_OFF | GLState::DEPTH_ON);
 
 	float landWidth = ScorchedClient::instance()->getLandscapeMaps().
-		getGroundMaps().getMapWidth() / 2.0f;
+		getGroundMaps().getLandscapeWidth() / 2.0f;
 	float landHeight = ScorchedClient::instance()->getLandscapeMaps().
-		getGroundMaps().getMapHeight() / 2.0f;
+		getGroundMaps().getLandscapeHeight() / 2.0f;
 	float maxWidth = MAX(landWidth, landHeight);
 
 	// Get the sun's position and landscape dimensions
@@ -447,8 +447,8 @@ void Landscape::generate(ProgressCounter *counter)
 
 	ImageHandle plana = ImageFactory::loadImageHandle(S3D::getDataFile("data/windows/planaa.bmp"));
 	ImageModifier::scalePlanBitmap(bitmapPlanAlphaAlpha_, plana,
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getMapWidth(),
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getMapHeight());
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeWidth(),
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeHeight());
 
 	// Load the texture bitmaps from resources 
 	LandscapeDefn *defn = 

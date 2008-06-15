@@ -191,26 +191,20 @@ void WeaponRoller::addRoller(ScorchedContext &context,
 	WeaponFireContext &weaponContext,
 	FixedVector &position, FixedVector &velocity)
 {
-	// Ensure that the Roller has not hit the walls
-	// or anything outside the landscape
 	RandomGenerator &random = context.actionController->getRandom();
-	if (position[0] > 1 && position[1] > 1 &&
-		position[0] < context.landscapeMaps->getGroundMaps().getMapWidth() - 1 &&
-		position[1] < context.landscapeMaps->getGroundMaps().getMapHeight() - 1)
+
+	FixedVector newVelocity;
+	if (maintainVelocity_)
 	{
-		FixedVector newVelocity;
-		if (maintainVelocity_)
-		{
-			newVelocity = velocity * dampenVelocity_;
-		}
-		else
-		{
-			newVelocity[0] = random.getRandFixed() - fixed(true, 5000);
-			newVelocity[1] = random.getRandFixed() - fixed(true, 5000);
-			newVelocity[2] = random.getRandFixed() * 2;
-		}
-		
-		context.actionController->addAction(
-			new ShotBounce(this, position, newVelocity, weaponContext));
+		newVelocity = velocity * dampenVelocity_;
 	}
+	else
+	{
+		newVelocity[0] = random.getRandFixed() - fixed(true, 5000);
+		newVelocity[1] = random.getRandFixed() - fixed(true, 5000);
+		newVelocity[2] = random.getRandFixed() * 2;
+	}
+	
+	context.actionController->addAction(
+		new ShotBounce(this, position, newVelocity, weaponContext));
 }

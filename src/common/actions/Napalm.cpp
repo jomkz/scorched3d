@@ -175,8 +175,8 @@ fixed Napalm::getHeight(int x, int y)
 {
 	LandscapeMaps *hmap = context_->landscapeMaps;
 	if (x < 0 || y < 0 ||
-		x > hmap->getGroundMaps().getMapWidth() ||
-		y > hmap->getGroundMaps().getMapHeight())
+		x > hmap->getGroundMaps().getLandscapeWidth() ||
+		y > hmap->getGroundMaps().getLandscapeHeight())
 	{
 		// The height at the sides of the landscape is huge
 		// so we will never go there with the napalm

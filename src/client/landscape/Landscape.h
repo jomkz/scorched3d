@@ -55,6 +55,7 @@ public:
 	Wall &getWall() { return *wall_; }
 	Sky &getSky() { return *sky_; }
 	Water &getWater() { return *water_; }
+	LandscapePoints &getPoints() { return *points_; }
 
 	// Textures created during landscape texturing
 	Image &getMainMap() { return mainMap_; }
