@@ -22,6 +22,7 @@
 #define __INCLUDE_GLWPlanViewh_INCLUDE__
 
 #include <GLW/GLWidget.h>
+#include <GLEXT/GLTexture.h>
 #include <common/Vector.h>
 #include <list>
 #include <map>
@@ -51,6 +52,8 @@ protected:
 		std::list<Vector> recievepoints;
 	};
 
+	GLTexture arrowTex_;
+	float arenaX_, arenaY_, arenaWidth_, arenaHeight_;
 	float landscapeWidth_, landscapeHeight_;
 	float animationTime_;
 	float flashTime_;
@@ -69,7 +72,6 @@ protected:
 	void drawWall();
 	void drawCameraPointer();
 	void drawTanks();
-	void drawCurrentTank();
 	void drawLines();
 	void drawLine(PlayerDrawnInfo &info);
 	void drawBuoys();

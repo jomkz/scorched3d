@@ -435,7 +435,7 @@ void Landscape::generate(ProgressCounter *counter)
 		mainMap_ = ImageFactory::createBlank(mapTexSize, mapTexSize);
 		bitmapPlanAlpha_ = ImageFactory::createBlank(planTexSize, planTexSize, true);
 		bitmapPlan_ = ImageFactory::createBlank(planTexSize, planTexSize);
-		bitmapPlanAlphaAlpha_ = ImageFactory::createBlank(planTexSize, planTexSize);
+		bitmapPlanAlphaAlpha_ = ImageFactory::createBlank(planTexSize, planTexSize, false, 0);
 		splatMap_ = ImageFactory::createBlank(1024, 1024);
 	}
 
@@ -445,10 +445,12 @@ void Landscape::generate(ProgressCounter *counter)
 	ImageHandle splatMaskBorder2 = ImageFactory::createBlank(64, 64, true, 0);
 	ImageModifier::redBitmap(splatMaskBorder1);
 
-	ImageHandle plana = ImageFactory::loadImageHandle(S3D::getDataFile("data/windows/planaa.bmp"));
+	// Removed for now as plan is square
+	// If (when) re-instated need to scale alpha map by playable arena, not full map size
+	/*ImageHandle plana = ImageFactory::loadImageHandle(S3D::getDataFile("data/windows/planaa.bmp"));
 	ImageModifier::scalePlanBitmap(bitmapPlanAlphaAlpha_, plana,
 		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeWidth(),
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeHeight());
+	ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeHeight());*/
 
 	// Load the texture bitmaps from resources 
 	LandscapeDefn *defn = 
