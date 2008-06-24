@@ -23,6 +23,8 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <graph/OptionsDisplay.h>
 
+std::set<void *> TargetVisibilityPatch::largeTargets_;
+
 TargetVisibilityPatch::TargetVisibilityPatch() : 
 	visible_(false), distance_(0.0f)
 {

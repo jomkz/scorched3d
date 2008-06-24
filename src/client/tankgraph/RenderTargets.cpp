@@ -102,6 +102,14 @@ void RenderTargets::Renderer3D::simulate(const unsigned state, float simTime)
 			}
 		}
 
+		itor.init(TargetVisibilityPatch::getLargeTargets());
+		while (currentObject = itor.getNext())
+		{
+			Target *target = (Target *) currentObject;
+			TargetRendererImpl *renderImpl = (TargetRendererImpl *) target->getRenderer();
+			renderImpl->simulate(time);
+		}
+
 		stepTime = 0.0f;
 	}
 }
@@ -109,6 +117,28 @@ void RenderTargets::Renderer3D::simulate(const unsigned state, float simTime)
 void RenderTargets::Renderer3D::enterState(const unsigned state)
 {
 
+}
+
+static void drawTargetShadows(TargetVisibilityIterator &itor, float distance) 
+{
+	void *currentObject = 0;
+	while (currentObject = itor.getNext())
+	{
+		Target *target = (Target *) currentObject;
+		if (target->getTargetState().getDisplayHardwareShadow())
+		{
+			if (target->isTarget())
+			{
+				TargetRendererImplTarget *renderImpl = (TargetRendererImplTarget *) target->getRenderer();
+				renderImpl->renderShadow(distance);
+			}
+			else
+			{
+				TargetRendererImplTank *renderImpl = (TargetRendererImplTank *) target->getRenderer();
+				renderImpl->renderShadow(distance);
+			}
+		}
+	}
 }
 
 void RenderTargets::shadowDraw()
@@ -126,7 +156,7 @@ void RenderTargets::shadowDraw()
 			ModelRendererTree::setSkipPre(true);
 			ModelRendererTree::drawInternalPre(false);
 
-			void *currentPatchPtr = 0, *currentObject = 0;
+			void *currentPatchPtr = 0;
 			TargetListIterator patchItor(patchInfo.getTreeVisibility());
 			TargetVisibilityIterator itor;
 			while (currentPatchPtr = patchItor.getNext())
@@ -134,30 +164,14 @@ void RenderTargets::shadowDraw()
 				TargetVisibilityPatch *currentPatch = (TargetVisibilityPatch *) currentPatchPtr;
 
 				itor.init(currentPatch->getTrees());
-				while (currentObject = itor.getNext())
-				{
-					Target *target = (Target *) currentObject;
-					if (target->getTargetState().getDisplayHardwareShadow())
-					{
-						if (target->isTarget())
-						{
-							TargetRendererImplTarget *renderImpl = (TargetRendererImplTarget *) target->getRenderer();
-							renderImpl->renderShadow(currentPatch->getDistance());
-						}
-						else
-						{
-							TargetRendererImplTank *renderImpl = (TargetRendererImplTank *) target->getRenderer();
-							renderImpl->renderShadow(currentPatch->getDistance());
-						}
-					}
-				}
+				drawTargetShadows(itor, currentPatch->getDistance());
 			}
 
 			ModelRendererTree::setSkipPre(false);
 		}
 		{
 			GLGlobalState globalState(0);
-			void *currentPatchPtr = 0, *currentObject = 0;
+			void *currentPatchPtr = 0;
 			TargetListIterator patchItor(patchInfo.getTargetVisibility());
 			TargetVisibilityIterator itor;
 			while (currentPatchPtr = patchItor.getNext())
@@ -165,27 +179,38 @@ void RenderTargets::shadowDraw()
 				TargetVisibilityPatch *currentPatch = (TargetVisibilityPatch *) currentPatchPtr;
 
 				itor.init(currentPatch->getTargets());
-				while (currentObject = itor.getNext())
-				{
-					Target *target = (Target *) currentObject;
-					if (target->getTargetState().getDisplayHardwareShadow())
-					{
-						if (target->isTarget())
-						{
-							TargetRendererImplTarget *renderImpl = (TargetRendererImplTarget *) target->getRenderer();
-							renderImpl->renderShadow(currentPatch->getDistance());
-						}
-						else
-						{
-							TargetRendererImplTank *renderImpl = (TargetRendererImplTank *) target->getRenderer();
-							renderImpl->renderShadow(currentPatch->getDistance());
-						}
-					}
-				}
+				drawTargetShadows(itor, currentPatch->getDistance());
 			}
+		}
+
+		{
+			GLGlobalState globalState(0);
+			TargetVisibilityIterator itor;
+
+			itor.init(TargetVisibilityPatch::getLargeTargets());
+			drawTargetShadows(itor, 0.0f);
 		}
 	}
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_DRAW_OBJ");
+}
+
+static void drawTargets(TargetVisibilityIterator &itor, float distance)
+{
+	void *currentObject = 0;
+	while (currentObject = itor.getNext())
+	{
+		Target *target = (Target *) currentObject;
+		if (target->isTarget())
+		{
+			TargetRendererImplTarget *renderImpl = (TargetRendererImplTarget *) target->getRenderer();
+			renderImpl->render(distance);
+		}
+		else
+		{
+			TargetRendererImplTank *renderImpl = (TargetRendererImplTank *) target->getRenderer();
+			renderImpl->render(distance);
+		}
+	}
 }
 
 void RenderTargets::draw()
@@ -209,7 +234,7 @@ void RenderTargets::draw()
 		ModelRendererTree::setSkipPre(true);
 		ModelRendererTree::drawInternalPre(true);
 
-		void *currentPatchPtr = 0, *currentObject = 0;
+		void *currentPatchPtr = 0;
 		TargetListIterator patchItor(patchInfo.getTreeVisibility());
 		TargetVisibilityIterator itor;
 		while (currentPatchPtr = patchItor.getNext())
@@ -217,13 +242,9 @@ void RenderTargets::draw()
 			TargetVisibilityPatch *currentPatch = (TargetVisibilityPatch *) currentPatchPtr;
 
 			itor.init(currentPatch->getTrees());
-			while (currentObject = itor.getNext())
-			{
-				Target *target = (Target *) currentObject;
-				TargetRendererImplTarget *renderImpl = (TargetRendererImplTarget *) target->getRenderer();
-				renderImpl->render(currentPatch->getDistance());
-				treesDrawn_++;
-			}
+			drawTargets(itor, currentPatch->getDistance());
+
+			treesDrawn_+=currentPatch->getTrees().size();
 		}
 
 		ModelRendererTree::setSkipPre(false);
@@ -244,24 +265,38 @@ void RenderTargets::draw()
 			TargetVisibilityPatch *currentPatch = (TargetVisibilityPatch *) currentPatchPtr;
 
 			itor.init(currentPatch->getTargets());
-			while (currentObject = itor.getNext())
-			{
-				Target *target = (Target *) currentObject;
-				if (target->isTarget())
-				{
-					TargetRendererImplTarget *renderImpl = (TargetRendererImplTarget *) target->getRenderer();
-					renderImpl->render(currentPatch->getDistance());
-				}
-				else
-				{
-					TargetRendererImplTank *renderImpl = (TargetRendererImplTank *) target->getRenderer();
-					renderImpl->render(currentPatch->getDistance());
-				}
-				targetsDrawn_++;
-			}
+			drawTargets(itor, currentPatch->getDistance());
+
+			targetsDrawn_+=currentPatch->getTargets().size();
+		}
+
+		{
+			itor.init(TargetVisibilityPatch::getLargeTargets());
+			drawTargets(itor, 0.0f);
+
+			targetsDrawn_+=TargetVisibilityPatch::getLargeTargets().size();
 		}
 	}
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "TARGETS_DRAW_MODELS");
+}
+
+static void drawTargets2D(TargetVisibilityIterator &itor, float distance)
+{
+	void *currentObject = 0;
+	while (currentObject = itor.getNext())
+	{
+		Target *target = (Target *) currentObject;
+		if (target->isTarget())
+		{
+			TargetRendererImplTarget *renderImpl = (TargetRendererImplTarget *) target->getRenderer();
+			renderImpl->render2D(distance);
+		}
+		else
+		{
+			TargetRendererImplTank *renderImpl = (TargetRendererImplTank *) target->getRenderer();
+			renderImpl->render2D(distance);
+		}
+	}
 }
 
 void RenderTargets::draw2d()
@@ -270,7 +305,7 @@ void RenderTargets::draw2d()
 
 	// 2D
 	{
-		void *currentPatchPtr = 0, *currentObject = 0;
+		void *currentPatchPtr = 0;
 		TargetListIterator patchItor(patchInfo.getTargetVisibility());
 		TargetVisibilityIterator itor;
 		while (currentPatchPtr = patchItor.getNext())
@@ -278,21 +313,7 @@ void RenderTargets::draw2d()
 			TargetVisibilityPatch *currentPatch = (TargetVisibilityPatch *) currentPatchPtr;
 
 			itor.init(currentPatch->getTooltips());
-			while (currentObject = itor.getNext())
-			{
-				Target *target = (Target *) currentObject;
-				TargetRendererImpl *renderImpl = (TargetRendererImpl *) target->getRenderer();
-				if (target->isTarget())
-				{
-					TargetRendererImplTarget *renderImpl = (TargetRendererImplTarget *) target->getRenderer();
-					renderImpl->render2D(currentPatch->getDistance());
-				}
-				else
-				{
-					TargetRendererImplTank *renderImpl = (TargetRendererImplTank *) target->getRenderer();
-					renderImpl->render2D(currentPatch->getDistance());
-				}
-			}
+			drawTargets2D(itor, currentPatch->getDistance());
 		}
 	}
 }

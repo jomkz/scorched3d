@@ -20,3 +20,4 @@ New boids can be added in the middle of a round
 Added option for simpler water shaders for framerate improvement
 Optimized object visibility checks to use quadtree
 Optimized/minimized OpenGL calls during landscape/water rendering
+Added arenawidth and arenaheight options to landscape defn to allow smaller playable area to be defined

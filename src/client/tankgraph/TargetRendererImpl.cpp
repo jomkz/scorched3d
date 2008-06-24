@@ -74,6 +74,15 @@ void TargetRendererImpl::moved()
 
 void TargetRendererImpl::setMovedPatch(TargetVisibilityPatch *newPatch)
 {
+	float boundingSize = target_->getLife().getFloatBoundingSize();
+	if (boundingSize > 32.0f) // Landscape square size
+	{
+		if (newPatch) TargetVisibilityPatch::addLargeTarget(target_);
+		else TargetVisibilityPatch::removeLargeTarget(target_);
+
+		return;
+	}
+
 	if (patchEpoc_ != VisibilityPatchGrid::instance()->getEpocNumber())
 	{
 		currentVisibilityPatch_ = 0;

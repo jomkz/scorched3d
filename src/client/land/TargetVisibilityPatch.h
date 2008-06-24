@@ -42,6 +42,10 @@ public:
 	Vector &getPosition() { return position_; }
 	bool getVisible() { return visible_; }
 
+	static std::set<void *> &getLargeTargets() { return largeTargets_; }
+	static void addLargeTarget(Target *target) { largeTargets_.insert(target); }
+	static void removeLargeTarget(Target *target) { largeTargets_.erase(target); }
+
 	std::set<void *> &getTargets() { return targets_; }
 	void addTarget(Target *target) { targets_.insert(target); }
 	void removeTarget(Target *target) { targets_.erase(target); }
@@ -60,6 +64,7 @@ protected:
 	float distance_;
 	Vector position_;
 	std::set<void *> trees_, targets_, tooltips_;
+	static std::set<void *> largeTargets_;
 };
 
 class TargetVisibilityIterator
