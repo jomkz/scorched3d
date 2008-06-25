@@ -582,6 +582,7 @@ bool TankAICurrentMove::makeMoveShot(Tank *tank,
 		if (!mmap.calculatePosition(FixedVector::fromVector(targetPos), 
 			fixed::fromFloat(totalDistance))) return false;
 		float totalFuel = mmap.getFuel(moveWeapon).asFloat();
+		if (totalFuel <= 5) return false; // Stop it from moving very small amounts
 
 		// Calculate the path
 		MovementMap::MovementMapEntry entry =

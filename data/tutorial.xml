@@ -319,16 +319,16 @@ Once you have bought all you want, or have run out of money click the <event act
 
 		<step>
 			<name>defenses2</name>
-			<text>Shields protect your tank making it hard to kill.  Shields need to be activated to work.
-Once activated the shield absorbs some of the damage your tank would have taken.
+			<text>Shields protect your tank making it harder to kill.  Shields need to be activated to work.
+Once activated, the shield absorbs some of the damage your tank would have taken.
 If you have bought shields you can activate them by clicking on the <event action="highlight" window="Player" control="Shield">shield icon</event> and choosing the shield from the list.
 <a href="defenses3">Click Here to Continue...</a></text>
 		</step>			
 		
 		<step>
 			<name>defenses3</name>
-			<text>Batteries allow you to recharge your tank's health.  The less health you have the shorter a distance you can fire.
-If you have bought batteries, and have lost some health, you can reacharge your health by clicking on the <event action="highlight" window="Player" control="Battery">battery icon</event> and choosing to use some batteries from the list.
+			<text>Batteries allow you to recharge your tank's health.  The less health you have, the shorter the distance you can fire.
+If you have bought batteries, and have lost some health, you can recharge your health by clicking on the <event action="highlight" window="Player" control="Battery">battery icon</event> and choosing to use some batteries from the list.
 <a href="defenses4">Click Here to Continue...</a></text>
 		</step>			
 

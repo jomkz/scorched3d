@@ -4,7 +4,7 @@
 		<armslevel>7</armslevel>
 		<description>Deployed when the tank falls.  
 Prevents the tank from taking falling damage.
-Parachutes must be enbabled before they are
+Parachutes must be enabled before they are
 effective.</description>
 		<icon>para.bmp</icon>
 		<activationsound>misc/para.wav</activationsound>
@@ -213,7 +213,7 @@ main move.</description>
 		<armslevel>5</armslevel>
 		<description>A projectile weapon that explodes 
 into two streams of flame. Any tanks
-near the flames will loose life.</description>
+near the flames will lose life.</description>
 		<icon>napalm.bmp</icon>
 		<bundlesize>10</bundlesize>
 		<cost>10000</cost>
@@ -240,7 +240,7 @@ near the flames will loose life.</description>
 		<armslevel>3</armslevel>
 		<description>A projectile weapon that explodes 
 into three very hot streams of flame. 
-Any tanks near the flames will loose life.</description>
+Any tanks near the flames will lose life.</description>
 		<icon>hnapalm.bmp</icon>
 		<bundlesize>3</bundlesize>
 		<cost>20000</cost>
