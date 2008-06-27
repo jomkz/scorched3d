@@ -1765,6 +1765,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\lua\LUAScript.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAScript.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\lua\LUAWrapper.cpp"
 				>
 			</File>
@@ -2958,6 +2966,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\weapons\WeaponScatterPosition.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\weapons\WeaponScript.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\weapons\WeaponScript.h"
 				>
 			</File>
 			<File

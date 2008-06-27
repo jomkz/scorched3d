@@ -19,11 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <lua/LUAWrapper.h>
-#include <lua/LUAFns.h>
-#include <common/Logger.h>
-#include "lua.h"
-#include "lauxlib.h"
-#include "lualib.h"
 
 LUAWrapper::LUAWrapper() :
 	context_(0)
@@ -34,43 +29,7 @@ LUAWrapper::~LUAWrapper()
 {
 }
 
-bool LUAWrapper::runScript(const char *filename)
+LUAScript *LUAWrapper::createScript()
 {
-	lua_State *L = lua_open();
-	
-	// Load the available libraries
-	luaopen_base(L); 
-	luaopen_table(L); 
-	//luaopen_io(L); 
-	luaopen_string(L); 
-	luaopen_s3d(L);
-	//luaopen_math(L); 
-
-	// Store the context globaly
-	lua_pushlightuserdata(L, (void *) this);
-	lua_setglobal(L, "wrapper");
-
-	// Load the script
-	bool result = true;
-	int temp_int = luaL_loadfile(L, filename);
-	if (temp_int == 0)
-	{
-		// Run the script
-		temp_int = lua_pcall(L,0,0,0);
-		if (temp_int != 0)
-		{
-			Logger::log(S3D::formatStringBuffer(
-				"ERROR: LUA error : %s", lua_tostring(L, -1)));
-			result = false;
-		}
-	}
-	else
-	{
-		Logger::log(S3D::formatStringBuffer(
-			"ERROR: Failed to load file \"%s\"", filename));
-		result = false;
-	}
-
-	lua_close(L);
-	return result;
+	return new LUAScript(this);
 }

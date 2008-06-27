@@ -55,7 +55,7 @@ bool WeaponRandomChoice::parseXML(AccessoryCreateContext &context, XMLNode *acce
 		// Get the weapon
 		XMLNode *weaponNode = 0;
 		if (!subNode->getNamedChild("weapon", weaponNode)) return false;
-		AccessoryPart *accessory = context.getAccessoryStore()->
+		AccessoryPart *accessory = context.getAccessoryStore().
 			createAccessoryPart(context, parent_, weaponNode);
 		if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
 		{

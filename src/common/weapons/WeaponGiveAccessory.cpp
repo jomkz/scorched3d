@@ -46,7 +46,7 @@ bool WeaponGiveAccessory::parseXML(AccessoryCreateContext &context, XMLNode *acc
 	std::string giveaccessory;
 	while (accessoryNode->getNamedChild("giveaccessory", giveaccessory, false))
 	{
-		Accessory *accessory = context.getAccessoryStore()->
+		Accessory *accessory = context.getAccessoryStore().
 			findByPrimaryAccessoryName(giveaccessory.c_str());
 		if (!accessory)
 		{

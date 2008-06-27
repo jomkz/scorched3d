@@ -93,7 +93,7 @@ bool ClientInitializeHandler::initialize()
 
 	// Load the accessory files
 	if (!ScorchedClient::instance()->getAccessoryStore().parseFile(
-		ScorchedClient::instance()->getOptionsGame(),
+		ScorchedClient::instance()->getContext(),
 		ProgressDialogSync::instance())) return false;
 
 	// Load tank models here

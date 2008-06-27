@@ -24,24 +24,26 @@
 #include <map>
 #include <string>
 
+#include <engine/ScorchedContext.h>
+
 class OptionsScorched;
 class AccessoryStore;
 class WeaponLabel;
 class AccessoryCreateContext  
 {
 public:
-	AccessoryCreateContext(OptionsScorched &optionsGame, AccessoryStore *store);
+	AccessoryCreateContext(ScorchedContext &context);
 	virtual ~AccessoryCreateContext();
 
-	OptionsScorched &getOptionsGame() { return optionsGame_; }
-	AccessoryStore *getAccessoryStore() { return store_; }
+	ScorchedContext &getScorchedContext() { return context_; }
+	OptionsScorched &getOptionsGame() { return *context_.optionsGame; }
+	AccessoryStore &getAccessoryStore() { return *context_.accessoryStore; }
 	WeaponLabel *getLabel(const char *label);
 	void addLabel(const char *label, WeaponLabel *weapon);
 	void removeLabel(const char *label);
 
 protected:
-	OptionsScorched &optionsGame_;
-	AccessoryStore *store_;
+	ScorchedContext &context_;
 	std::map<std::string, WeaponLabel*> labels_;
 
 private:

@@ -22,6 +22,12 @@
 #include <lua/LUAWrapper.h>
 #include <common/OptionEntry.h>
 #include <common/OptionsScorched.h>
+#include <common/FixedVector.h>
+#include <common/Logger.h>
+#include <tank/TankContainer.h>
+#include <tank/TankState.h>
+#include <target/TargetLife.h>
+#include <weapons/AccessoryStore.h>
 
 #define LUA_LIB
 
@@ -38,21 +44,167 @@ static LUAWrapper *getWrapper(lua_State *L)
 	return wrapper;
 }
 
-static int s3d_options_game (lua_State *L) 
+static FixedVector getVector(lua_State *L, int pos)
+{
+	FixedVector result;
+
+	luaL_checktype(L, pos, LUA_TTABLE);
+
+	lua_pushstring(L, "x");
+	lua_gettable(L, pos);
+	result[0] = fixed(true, luaL_checknumber(L, -1));
+	lua_pop(L, 1);
+
+	lua_pushstring(L, "y");
+	lua_gettable(L, pos);
+	result[1] = fixed(true, luaL_checknumber(L, -1));
+	lua_pop(L, 1);
+
+	lua_pushstring(L, "z");
+	lua_gettable(L, pos);
+	result[2] = fixed(true, luaL_checknumber(L, -1));
+	lua_pop(L, 1);
+
+	return result;
+}
+
+static void addVector(lua_State *L, FixedVector &vec)
+{
+	lua_newtable(L);
+
+	lua_pushstring(L, "x");
+	lua_pushnumber(L, vec[0].getInternal());
+	lua_settable(L, -3);
+
+	lua_pushstring(L, "y");
+	lua_pushnumber(L, vec[1].getInternal());
+	lua_settable(L, -3);
+
+	lua_pushstring(L, "z");
+	lua_pushnumber(L, vec[2].getInternal());
+	lua_settable(L, -3);
+}
+
+static void addTank(lua_State *L, Tank *tank)
+{
+	lua_newtable(L);
+
+	lua_pushstring(L, "name");
+	lua_pushstring(L, tank->getName());
+	lua_settable(L, -3);
+
+	lua_pushstring(L, "id");
+	lua_pushnumber(L, tank->getPlayerId());
+	lua_settable(L, -3);
+
+	lua_pushstring(L, "position");
+	addVector(L, tank->getLife().getCenterPosition());
+	lua_settable(L, -3);
+
+	lua_pushstring(L, "alive");
+	lua_pushboolean(L, tank->getAlive()?1:0);
+	lua_settable(L, -3);
+
+	lua_pushstring(L, "team");
+	lua_pushnumber(L, tank->getTeam() * FIXED_RESOLUTION);
+	lua_settable(L, -3);
+}
+
+static int s3d_get_option(lua_State *L) 
 {
 	LUAWrapper *wrapper = getWrapper(L);
 
+	const char *optionName = luaL_checkstring(L, 1);
 	OptionEntry *entry = OptionEntryHelper::getEntry(
 		wrapper->getContext()->optionsGame->getMainOptions().getOptions(),
-		"mod");
+		optionName);
 	if (entry) lua_pushstring(L, entry->getValueAsString());
-	else lua_pushstring(L, "");
+	else 
+	{
+		Logger::log(S3D::formatStringBuffer("s3d_get_option:Failed to an option named %s", optionName));
+		lua_pushstring(L, "");
+	}
 
 	return 1;
 }
 
+static int s3d_get_tank(lua_State *L) 
+{
+	LUAWrapper *wrapper = getWrapper(L);
+
+	int number = luaL_checknumber(L, 1);
+	Tank *tank =
+		wrapper->getContext()->tankContainer->getTankById((unsigned int) number);
+	if (tank) addTank(L, tank);
+	else
+	{
+		Logger::log(S3D::formatStringBuffer("s3d_get_option:Failed to an tank id %u", 
+			(unsigned int) number));
+		lua_pushstring(L, "");
+	}
+
+	return 1;
+}
+
+static int s3d_get_tanks(lua_State *L) 
+{
+	LUAWrapper *wrapper = getWrapper(L);
+
+	std::map<unsigned int, Tank *> &tanks =
+		wrapper->getContext()->tankContainer->getAllTanks();
+	lua_newtable(L);
+
+	std::map<unsigned int, Tank *>::iterator itor;
+	for (itor = tanks.begin(); 
+		itor != tanks.end();
+		itor++)
+	{
+		Tank *tank = itor->second;
+		lua_pushnumber(L, tank->getPlayerId());
+		addTank(L, tank);
+		lua_settable(L, -3);
+	}
+
+	return 1;
+}
+
+static int s3d_fire_weapon(lua_State *L) 
+{
+	LUAWrapper *wrapper = getWrapper(L);
+
+	const char *weaponName = luaL_checkstring(L, 1);
+	int playerId = luaL_checknumber(L, 2);
+	FixedVector position = getVector(L, 3);
+	FixedVector velocity = getVector(L, 4);
+
+	Accessory *accessory =
+		wrapper->getContext()->accessoryStore->findByPrimaryAccessoryName(weaponName);
+	if (!accessory) 
+	{
+		Logger::log(S3D::formatStringBuffer("Failed to find accessory named %s", weaponName));
+		return 0;
+	}
+
+	AccessoryPart *accessoryPart = accessory->getAction();
+	if (!accessoryPart || accessoryPart->getType() != AccessoryPart::AccessoryWeapon)
+	{
+		Logger::log(S3D::formatStringBuffer("Accessory named %s is not a weapons", weaponName));
+		return 0;
+	}
+
+	Weapon *weapon = (Weapon*) accessoryPart;
+
+	WeaponFireContext weaponContext(playerId, 0);
+	weapon->fireWeapon(*wrapper->getContext(), weaponContext, position, velocity);
+
+	return 0;
+}
+
 static const luaL_Reg s3dlib[] = {
-	{"options_game",  s3d_options_game},
+	{"get_option",  s3d_get_option},
+	{"get_tank",  s3d_get_tank},
+	{"get_tanks",  s3d_get_tanks},
+	{"fire_weapon", s3d_fire_weapon}, 
 	{NULL, NULL}
 };
 

@@ -37,7 +37,7 @@ AccessoryStore::~AccessoryStore()
 }
 
 bool AccessoryStore::parseFile(
-	OptionsScorched &context, ProgressCounter *counter)
+	ScorchedContext &context, ProgressCounter *counter)
 {
 	if (counter) counter->setNewOp("Loading Weapons");
 
@@ -73,7 +73,7 @@ bool AccessoryStore::parseFile(
 			float(++childCount) / float(noChildren) * 100.0f);
 
 		// Parse the accessory
-		AccessoryCreateContext createContext(context, this);
+		AccessoryCreateContext createContext(context);
 		Accessory *accessory = new Accessory();
 		if (!accessory->parseXML(createContext, currentNode))
 		{

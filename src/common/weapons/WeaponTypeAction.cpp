@@ -50,7 +50,7 @@ bool WeaponTypeAction::parseXML(AccessoryCreateContext &context, XMLNode *access
 		accessoryNode->getNamedChild(node->getName(), tmpNode); // Just to remove child
 
 		// Check next weapon is correct type
-		AccessoryPart *accessory = context.getAccessoryStore()->
+		AccessoryPart *accessory = context.getAccessoryStore().
 			createAccessoryPart(context, parent_, node);
 		if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
 		{

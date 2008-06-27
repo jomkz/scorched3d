@@ -47,7 +47,7 @@ bool WeaponTeamAction::parseXML(AccessoryCreateContext &context, XMLNode *access
 		if (accessoryNode->getNamedChild(nodeName.c_str(), subNode, false))
 		{
 			// Check next weapon is correct type
-			AccessoryPart *accessory = context.getAccessoryStore()->
+			AccessoryPart *accessory = context.getAccessoryStore().
 				createAccessoryPart(context, parent_, subNode);
 			if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
 			{

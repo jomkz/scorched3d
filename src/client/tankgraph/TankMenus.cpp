@@ -502,8 +502,12 @@ void TankMenus::runScriptConsole(std::list<ConsoleRuleSplit> list)
 	list.pop_front();
 	if (!list.empty())
 	{
-		const char *script = (char *) list.begin()->rule.c_str();
-		ScorchedClient::instance()->getLUAWrapper().runScript(script);
+		const char *fileName = (char *) list.begin()->rule.c_str();
+		LUAScript *script = 
+			ScorchedClient::instance()->getLUAWrapper().createScript();
+		script->loadFromFile(fileName);
+
+		delete script;
 	}
 }
 

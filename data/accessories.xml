@@ -1617,7 +1617,24 @@ and shields damaging the tank directly.</description>
 
 
 
-	<accessory>
+  <accessory>
+    <name>Test Script</name>
+    <bundlesize>2</bundlesize>
+    <cost>10</cost>
+    <accessoryaction type='WeaponScript'>
+      <filename>data/lua/accessories/test.lua</filename>
+      <entrypoint>runWeapon</entrypoint>
+      <variable>
+        <name>testvar1</name>
+        <value>10</value>
+      </variable>
+    </accessoryaction>
+  </accessory>
+
+
+
+
+  <accessory>
 		<name>Test Puncture</name>
 		<maximumnumber>0</maximumnumber>
 		<bundlesize>2</bundlesize>

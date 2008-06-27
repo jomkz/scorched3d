@@ -43,7 +43,7 @@ bool WeaponReference::parseXML(AccessoryCreateContext &context, XMLNode *accesso
 	if (!accessoryNode->getNamedChild("weapon", subNode)) return false;
 
 	// Find the accessory name
-	std::map<std::string, XMLNode *> &nodes = context.getAccessoryStore()->getParsingNodes();
+	std::map<std::string, XMLNode *> &nodes = context.getAccessoryStore().getParsingNodes();
 	std::map<std::string, XMLNode *>::iterator finditor =
 		nodes.find(subNode.c_str());
 	if (finditor == nodes.end()) 
@@ -61,7 +61,7 @@ bool WeaponReference::parseXML(AccessoryCreateContext &context, XMLNode *accesso
 	if (!weaponNode->getNamedChild("accessoryaction", actionNode)) return false;
 	
 	// Create the new weapon
-	AccessoryPart *accessory = context.getAccessoryStore()->
+	AccessoryPart *accessory = context.getAccessoryStore().
 		createAccessoryPart(context, parent_, actionNode);
 	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
 	{

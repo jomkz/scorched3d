@@ -6,21 +6,21 @@
 		<picture>oldstyle-pic.bmp</picture>
 		<weight>100</weight>
 		<defn>
-			<item>data/landscapes/defntest.xml</item>
-      <!--<item>data/landscapes/defnoldstyleerrosion.xml</item>
+			<!--<item>data/landscapes/defntest.xml</item>-->
+      <item>data/landscapes/defnoldstyleerrosion.xml</item>
 			<item>data/landscapes/defnoldstyle.xml</item>
-			<item>data/landscapes/defnlowlands.xml</item>-->
+			<item>data/landscapes/defnlowlands.xml</item>
 		</defn>
 		<tex>
 			<item>data/landscapes/texdefault.xml</item>
-			<!--<item>data/landscapes/texhell.xml</item>
+			<item>data/landscapes/texhell.xml</item>
 			<item>data/landscapes/texsand.xml</item>
 			<item>data/landscapes/texsnow.xml</item>
 			<item>data/landscapes/textropical.xml</item>
 			<item>data/landscapes/texvulcano.xml</item>
 			<item>data/landscapes/texstorm.xml</item>
 			<item>data/landscapes/texnight.xml</item>
-			<item>data/landscapes/texsahara.xml</item>-->
+			<item>data/landscapes/texsahara.xml</item>
 		</tex>
 	</landscape>
 	<landscape>

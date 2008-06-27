@@ -18,25 +18,33 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_LUAWrapper_INCLUDE__)
-#define __INCLUDE_LUAWrapper_INCLUDE__
+#if !defined(__INCLUDE_LUAScript_INCLUDE__)
+#define __INCLUDE_LUAScript_INCLUDE__
 
-#include <engine/ScorchedContext.h>
-#include <lua/LUAScript.h>
+#include <string>
+#include <common/FixedVector.h>
 
-class LUAWrapper
+#include "lua.h"
+
+class LUAWrapper;
+class LUAScript
 {
 public:
-	LUAWrapper();
-	~LUAWrapper();
+	LUAScript(LUAWrapper *wrapper);
+	~LUAScript();
 
-	LUAScript *createScript();
+	bool loadFromFile(const std::string &filename);
 
-	ScorchedContext *getContext() { return context_; }
-	void setContext(ScorchedContext *context) { context_ = context; }
+	bool startFunction(const std::string &functionName);
+	bool endFunction(int argCount);
+
+	bool addNumberParameter(fixed number);
+	bool addVectorParameter(const FixedVector &vector);
+
+	bool setGlobal(const std::string &name, fixed value);
 
 protected:
-	ScorchedContext *context_;
+	lua_State *L_;
 };
 
-#endif // __INCLUDE_LUAWrapper_INCLUDE__
+#endif // __INCLUDE_LUAScript_INCLUDE__

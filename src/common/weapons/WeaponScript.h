@@ -18,25 +18,31 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_LUAWrapper_INCLUDE__)
-#define __INCLUDE_LUAWrapper_INCLUDE__
+#if !defined(__INCLUDE_WeaponScripth_INCLUDE__)
+#define __INCLUDE_WeaponScripth_INCLUDE__
 
-#include <engine/ScorchedContext.h>
-#include <lua/LUAScript.h>
+#include <weapons/Weapon.h>
 
-class LUAWrapper
+class LUAScript;
+class WeaponScript  : public Weapon
 {
 public:
-	LUAWrapper();
-	~LUAWrapper();
+	WeaponScript();
+	virtual ~WeaponScript();
 
-	LUAScript *createScript();
+	virtual bool parseXML(AccessoryCreateContext &context,
+		XMLNode *accessoryNode);
 
-	ScorchedContext *getContext() { return context_; }
-	void setContext(ScorchedContext *context) { context_ = context; }
+	// Inherited from Weapon
+	void fireWeapon(ScorchedContext &context,
+		WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity);
+
+	REGISTER_ACCESSORY_HEADER(WeaponScript, AccessoryPart::AccessoryWeapon);
 
 protected:
-	ScorchedContext *context_;
+	LUAScript *script_;
+	std::string entrypoint_;
 };
 
-#endif // __INCLUDE_LUAWrapper_INCLUDE__
+
+#endif // __INCLUDE_WeaponScripth_INCLUDE__

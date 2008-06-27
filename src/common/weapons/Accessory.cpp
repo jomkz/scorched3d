@@ -121,7 +121,7 @@ bool Accessory::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode
 	// Get action
 	XMLNode *subNode = 0;
 	if (!accessoryNode->getNamedChild("accessoryaction", subNode)) return false;
-	accessoryAction_ = context.getAccessoryStore()->createAccessoryPart(context, this, subNode);
+	accessoryAction_ = context.getAccessoryStore().createAccessoryPart(context, this, subNode);
 	if (!accessoryAction_)
 	{
 		S3D::dialogMessage("Accessory", S3D::formatStringBuffer(
@@ -152,7 +152,7 @@ bool Accessory::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode
 			positionSelect_ = ePositionSelectFuel;
 
 			// Make sure there is a "WeaponMoveTank" under here somewhere
-			if (!context.getAccessoryStore()->findAccessoryPartByAccessoryId(
+			if (!context.getAccessoryStore().findAccessoryPartByAccessoryId(
 				getAccessoryId(), "WeaponMoveTank"))
 			{
 				return accessoryNode->returnError(
