@@ -6,7 +6,7 @@ function runWeapon(playerId, position, velocity)
 	print(position.x, position.y, position.z);
 	print(velocity.x, velocity.y, velocity.z);
 	
-	
+	-- Create an explosion at each tank
 	tanks = s3d.get_tanks();
 	for k,v in pairs(tanks) do 
 		if (v.alive) then 
@@ -14,10 +14,9 @@ function runWeapon(playerId, position, velocity)
 			print(v.id);
 			print(v.position.x, v.position.y, v.position.z);
 			
+			-- Check get_tank gives the same as get_tanks
 			t = s3d.get_tank(v.id);
 			print(t.name);
-			
-			newvelocity = {x=0, y=0, z=0};
 			
 			s3dweapon.explosion(playerId, v.position, { 
 				size = 10,
@@ -26,11 +25,13 @@ function runWeapon(playerId, position, velocity)
 				animate = false
 			});
 			
---			s3d.fire_weapon("Nuke", playerId, v.position, newvelocity);
+--			or instead of the above we could fire a weapon at this position
+--			s3d.fire_weapon("Nuke", playerId, v.position, {x=0, y=0, z=0});
 		end
 	end
 	
 	
+	-- Create an explosion line from landscape corner to corner
 	landwidth = s3d.get_landscapewidth();
 	landheight = s3d.get_landscapeheight();
 	
@@ -49,6 +50,8 @@ function runWeapon(playerId, position, velocity)
 		landstart = landstart + 15;
 	end
 	
+	
+	-- Create an explosion ring 100 units wide at the center of the landscape
 	landmidx = landwidth/2;
 	landmidy = landheight/2;
 	
