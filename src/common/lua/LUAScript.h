@@ -36,6 +36,8 @@ public:
 
 	bool loadFromFile(const std::string &filename, std::string &error);
 
+	void addWeaponFunctions();
+
 	bool startFunction(const std::string &functionName);
 	bool endFunction(int argCount);
 

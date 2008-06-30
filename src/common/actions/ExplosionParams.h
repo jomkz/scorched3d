@@ -30,9 +30,9 @@ class ExplosionParams
 public:
 	enum DeformType
 	{
-		DeformDown,
-		DeformUp,
-		DeformNone
+		DeformNone = 0,
+		DeformDown = 1,
+		DeformUp = 2,
 	};
 
 	ExplosionParams();
@@ -71,20 +71,20 @@ public:
 	const char *getDeformTexture() { return deformTexture_.c_str(); }
 
 protected:
-	bool deleteAfterUse_;
 	fixed size_;
+	fixed hurtAmount_;
 	fixed shake_;
 	fixed minLife_, maxLife_;
+	fixed createMushroomAmount_;
 	bool luminance_;
 	bool windAffected_;
 	bool multiColored_;
 	bool createDebris_;
-	fixed createMushroomAmount_;
 	bool createSplash_;
 	bool explodeUnderGround_;
 	bool onlyHurtShield_;
 	bool animate_;
-	fixed hurtAmount_;
+	
 	std::string deformTexture_;
 	std::string explosionTexture_;
 	std::string explosionSound_;

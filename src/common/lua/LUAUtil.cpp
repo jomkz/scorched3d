@@ -63,11 +63,50 @@ FixedVector LUAUtil::getVectorFromStack(lua_State *L, int position)
 	return result;
 }
 
-fixed LUAUtil::getNumberFromTable(lua_State *L, int tablePosition, const char *name)
+fixed LUAUtil::getNumberFromTable(lua_State *L, int tablePosition, const char *name, fixed defaultResult)
 {
 	lua_pushstring(L, name);
 	lua_gettable(L, tablePosition);
-	fixed result = fixed(true, luaL_checknumber(L, -1));
+	
+	fixed result = defaultResult;
+	if (!lua_isnil(L, -1)) 
+	{
+		result = fixed(true, luaL_checknumber(L, -1));
+	}
+	lua_pop(L, 1);
+
+	return result;
+}
+
+bool LUAUtil::getBoolFromTable(lua_State *L, int tablePosition, 
+	const char *name, bool defaultResult)
+{
+	lua_pushstring(L, name);
+	lua_gettable(L, tablePosition);
+
+	bool result = defaultResult;
+	if (!lua_isnil(L, -1) &&
+		lua_isboolean(L, -1))
+	{
+		result = (lua_toboolean(L, -1) != 0);
+	}
+	lua_pop(L, 1);
+
+	return result;
+}
+
+std::string LUAUtil::getStringFromTable(lua_State *L, int tablePosition, 
+	const char *name, std::string &defaultResult)
+{
+	lua_pushstring(L, name);
+	lua_gettable(L, tablePosition);
+
+	std::string result = defaultResult;
+	if (!lua_isnil(L, -1) &&
+		lua_isstring(L, -1))
+	{
+		result = lua_tostring(L, -1);
+	}
 	lua_pop(L, 1);
 
 	return result;

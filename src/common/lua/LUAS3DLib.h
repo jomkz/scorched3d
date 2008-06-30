@@ -18,28 +18,12 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_LUAUtil_INCLUDE__)
-#define __INCLUDE_LUAUtil_INCLUDE__
-
-#include <string>
-#include <common/FixedVector.h>
+#if !defined(__INCLUDE_LUAS3DLib_INCLUDE__)
+#define __INCLUDE_LUAS3DLib_INCLUDE__
 
 #include "lua.h"
-#include "lauxlib.h"
-#include "lualib.h"
 
-class LUAUtil
-{
-public:
-	static void addVectorToStack(lua_State *L, const FixedVector &vector);
-	static FixedVector getVectorFromStack(lua_State *L, int position);
+#define LUA_S3DLIBNAME	"s3d"
+LUALIB_API int (luaopen_s3d) (lua_State *L);
 
-	static fixed getNumberFromTable(lua_State *L, int tablePosition, 
-		const char *name, fixed defaultResult);
-	static bool getBoolFromTable(lua_State *L, int tablePosition, 
-		const char *name, bool defaultResult);
-	static std::string getStringFromTable(lua_State *L, int tablePosition, 
-		const char *name, std::string &defaultResult);
-};
-
-#endif // __INCLUDE_LUAUtil_INCLUDE__
+#endif // __INCLUDE_LUAS3DLib_INCLUDE__

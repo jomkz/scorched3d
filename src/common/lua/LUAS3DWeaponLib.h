@@ -18,12 +18,12 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_LUAFns_INCLUDE__)
-#define __INCLUDE_LUAFns_INCLUDE__
+#if !defined(__INCLUDE_LUAWeaponFns_INCLUDE__)
+#define __INCLUDE_LUAWeaponFns_INCLUDE__
 
 #include "lua.h"
 
-#define LUA_S3DLIBNAME	"s3d"
-LUALIB_API int (luaopen_s3d) (lua_State *L);
+#define LUA_S3DWEAPONLIBNAME "s3dweapon"
+LUALIB_API int (luaopen_s3dweapon) (lua_State *L);
 
-#endif // __INCLUDE_LUAFns_INCLUDE__
+#endif // __INCLUDE_LUAWeaponFns_INCLUDE__

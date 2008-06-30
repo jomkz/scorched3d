@@ -48,6 +48,7 @@ bool WeaponScript::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 
 	std::string luaErrorString;
 	script_ = context.getScorchedContext().luaScriptFactory->createScript();
+	script_->addWeaponFunctions();
 	if (!script_->loadFromFile(S3D::getDataFile(filename), luaErrorString))
 	{
 		return accessoryNode->returnError(

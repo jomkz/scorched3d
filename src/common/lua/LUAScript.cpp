@@ -20,11 +20,12 @@
 
 #include <lua/LUAScript.h>
 #include <lua/LUAUtil.h>
+#include <lua/LUAS3DLib.h>
+#include <lua/LUAS3DWeaponLib.h>
 #include <common/Logger.h>
 
 #include "lauxlib.h"
 #include "lualib.h"
-#include "LUAFns.h"
 
 LUAScript::LUAScript(ScorchedContext *context) :
 	context_(context),
@@ -36,10 +37,9 @@ LUAScript::LUAScript(ScorchedContext *context) :
 	// Load the available libraries
 	luaopen_base(L_); 
 	luaopen_table(L_); 
-	//luaopen_io(L_); 
+	luaopen_math(L_); 
 	luaopen_string(L_); 
 	luaopen_s3d(L_);
-	//luaopen_math(L_); 
 
 	// Store the context globaly
 	lua_pushlightuserdata(L_, (void *) this);
@@ -53,6 +53,11 @@ LUAScript::~LUAScript()
 		lua_close(L_);
 		L_ = 0;
 	}
+}
+
+void LUAScript::addWeaponFunctions()
+{
+	luaopen_s3dweapon(L_);
 }
 
 bool LUAScript::loadFromFile(const std::string &filename, std::string &error)
