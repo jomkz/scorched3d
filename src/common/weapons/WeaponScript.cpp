@@ -21,7 +21,7 @@
 #include <weapons/WeaponScript.h>
 #include <weapons/AccessoryStore.h>
 #include <common/Defines.h>
-#include <lua/LUAWrapper.h>
+#include <lua/LUAScriptFactory.h>
 #include <lua/LUAScript.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponScript);
@@ -46,12 +46,15 @@ bool WeaponScript::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 	if (!accessoryNode->getNamedChild("filename", filename)) return false;
 	if (!accessoryNode->getNamedChild("entrypoint", entrypoint_)) return false;
 
-	script_ = context.getScorchedContext().luaWrapper->createScript();
-	if (!script_->loadFromFile(S3D::getDataFile(filename)))
+	std::string luaErrorString;
+	script_ = context.getScorchedContext().luaScriptFactory->createScript();
+	if (!script_->loadFromFile(S3D::getDataFile(filename), luaErrorString))
 	{
 		return accessoryNode->returnError(
-			S3D::formatStringBuffer("Failed to load lua script %s", filename));
+			S3D::formatStringBuffer("Failed to load lua script %s : %s", 
+			filename.c_str(), luaErrorString.c_str()));
 	}
+	script_->setWeapon(this);
 
 	XMLNode *variable;
 	while (accessoryNode->getNamedChild("variable", variable, false))

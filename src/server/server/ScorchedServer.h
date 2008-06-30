@@ -47,7 +47,7 @@ public:
 	LandscapeDefinitions &getLandscapes() { return *context_.landscapes; }
 	TankAIStore &getTankAIs() { return *tankAIStore_; }
 	TankModelStore &getTankModels() { return *context_.tankModelStore; }
-	LUAWrapper &getLUAWrapper() { return *context_.luaWrapper; }
+	LUAScriptFactory &getLUAScriptFactory() { return *context_.luaScriptFactory; }
 
 protected:
 	static ScorchedServer *instance_;

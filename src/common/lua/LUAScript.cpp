@@ -19,14 +19,17 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <lua/LUAScript.h>
+#include <lua/LUAUtil.h>
 #include <common/Logger.h>
 
 #include "lauxlib.h"
 #include "lualib.h"
 #include "LUAFns.h"
 
-LUAScript::LUAScript(LUAWrapper *wrapper) :
-	L_(0)
+LUAScript::LUAScript(ScorchedContext *context) :
+	context_(context),
+	L_(0),
+	weapon_(0)
 {
 	L_ = lua_open();
 	
@@ -39,8 +42,8 @@ LUAScript::LUAScript(LUAWrapper *wrapper) :
 	//luaopen_math(L_); 
 
 	// Store the context globaly
-	lua_pushlightuserdata(L_, (void *) wrapper);
-	lua_setglobal(L_, "wrapper");
+	lua_pushlightuserdata(L_, (void *) this);
+	lua_setglobal(L_, "s3d_script");
 }
 
 LUAScript::~LUAScript()
@@ -52,15 +55,15 @@ LUAScript::~LUAScript()
 	}
 }
 
-bool LUAScript::loadFromFile(const std::string &filename)
+bool LUAScript::loadFromFile(const std::string &filename, std::string &error)
 {
 	// Load the script
 	bool result = true;
 	int temp_int = luaL_dofile(L_, filename.c_str());
 	if (temp_int != 0)
 	{
-		Logger::log(S3D::formatStringBuffer(
-			"ERROR: LUA error : %s", lua_tostring(L_, -1)));
+		error = S3D::formatStringBuffer(
+			"ERROR: LUA error : %s", lua_tostring(L_, -1));
 		result = false;
 	}
 	
@@ -100,20 +103,6 @@ bool LUAScript::addNumberParameter(fixed number)
 
 bool LUAScript::addVectorParameter(const FixedVector &v)
 {
-	FixedVector &vec = (FixedVector &) v;
-
-	lua_newtable(L_);
-	lua_pushstring(L_, "x");
-	lua_pushnumber(L_, vec[0].getInternal());
-	lua_settable(L_, -3);
-
-	lua_pushstring(L_, "y");
-	lua_pushnumber(L_, vec[1].getInternal());
-	lua_settable(L_, -3);
-
-	lua_pushstring(L_, "z");
-	lua_pushnumber(L_, vec[2].getInternal());
-	lua_settable(L_, -3);
-
+	LUAUtil::addVectorToStack(L_, v);
 	return true;
 }

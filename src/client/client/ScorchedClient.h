@@ -47,7 +47,7 @@ public:
 	ParticleEngine &getParticleEngine() { return *particleEngine_; }
 	LandscapeDefinitions &getLandscapes() { return *context_.landscapes; }
 	TankModelStore &getTankModels() { return *context_.tankModelStore; }
-	LUAWrapper &getLUAWrapper() { return *context_.luaWrapper; }
+	LUAScriptFactory &getLUAScriptFactory() { return *context_.luaScriptFactory; }
 
 protected:
 	static ScorchedClient *instance_;

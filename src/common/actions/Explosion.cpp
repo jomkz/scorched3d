@@ -49,8 +49,10 @@
 #include <math.h>
 
 Explosion::Explosion(FixedVector &position,
-	WeaponExplosion *weapon, WeaponFireContext &weaponContext) :
+	ExplosionParams *params,
+	Weapon *weapon, WeaponFireContext &weaponContext) :
 	ActionReferenced("Explosion"),
+	params_(params),
 	firstTime_(true), totalTime_(0),
 	weapon_(weapon), weaponContext_(weaponContext), 
 	position_(position)
@@ -59,6 +61,7 @@ Explosion::Explosion(FixedVector &position,
 
 Explosion::~Explosion()
 {
+	delete params_;
 }
 
 void Explosion::init()
@@ -72,7 +75,7 @@ void Explosion::init()
 							 OptionsGame::ScaleMedium);
 	multiplier *= fixed(true, 5000);
 	multiplier += 1;
-	fixed explosionSize = weapon_->getSize() * multiplier;	
+	fixed explosionSize = params_->getSize() * multiplier;	
 
 #ifndef S3D_SERVER
 	if (!context_->serverMode) 
@@ -83,16 +86,16 @@ void Explosion::init()
 
 		// If there is a weapon play a splash sound when in water
 		bool waterSplash = false;
-		if (weapon_->getCreateSplash())
+		if (params_->getCreateSplash())
 		{
 			waterSplash = 
 				Landscape::instance()->getWater().explosion(
-					position_.asVector(), weapon_->getSize().asFloat());
+					position_.asVector(), params_->getSize().asFloat());
 		}
 
 		// Create particles from the center of the explosion
 		// These particles will render smoke trails or bits of debris
-		if (weapon_->getCreateDebris())
+		if (params_->getCreateDebris())
 		{
 			// If we are below the ground create the spray of dirt (or water)
 			if (aboveGround < 1.0f && !waterSplash)
@@ -115,7 +118,7 @@ void Explosion::init()
 
 				sprayemitter.emitSpray(position_.asVector(), 
 					ScorchedClient::instance()->getParticleEngine(),
-					weapon_->getSize().asFloat() - 2.0f,
+					params_->getSize().asFloat() - 2.0f,
 					&Landscape::instance()->getLandscapeTexture1());
 			}
 
@@ -138,7 +141,7 @@ void Explosion::init()
 			// Create debris
 			float mult = float(
 				OptionsDisplay::instance()->getExplosionParticlesMult()) / 40.0f;
-			int debris = 5 + int(weapon_->getSize().asFloat() * mult);
+			int debris = 5 + int(params_->getSize().asFloat() * mult);
 			emitter.emitDebris(debris,
 				position_.asVector(), 
 				ScorchedClient::instance()->getParticleEngine());
@@ -165,19 +168,19 @@ void Explosion::init()
 
 		{
 			GLTextureSet *texture = 0;
-			if (0 != strcmp(weapon_->getExplosionTexture(), "none"))
+			if (0 != strcmp(params_->getExplosionTexture(), "none"))
 			{
 				texture = ExplosionTextures::instance()->getTextureSetByName(
-					weapon_->getExplosionTexture());
+					params_->getExplosionTexture());
 			}
 
 			if (texture)
 			{
-				Vector expColor = weapon_->getExplosionColor().asVector();
+				Vector expColor = params_->getExplosionColor().asVector();
 
 				ParticleEmitter exploemitter;
 				exploemitter.setAttributes(
-					weapon_->getMinLife().asFloat(), weapon_->getMaxLife().asFloat(), // Life
+					params_->getMinLife().asFloat(), params_->getMaxLife().asFloat(), // Life
 					0.2f, 0.5f, // Mass
 					0.01f, 0.02f, // Friction
 					Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, 0.0f, 0.0f), // Velocity
@@ -188,28 +191,28 @@ void Explosion::init()
 					0.2f, 0.2f, 0.5f, 0.5f, // Start Size
 					2.2f, 2.2f, 4.0f, 4.0f, // EndSize
 					Vector(0.0f, 0.0f, 0.0f), // Gravity
-					weapon_->getLuminance(),
-					weapon_->getWindAffected());
+					params_->getLuminance(),
+					params_->getWindAffected());
 				exploemitter.emitExplosion(position_.asVector(),
 					ScorchedClient::instance()->getParticleEngine(),
 					explosionSize.asFloat(),
 					texture,
-					weapon_->getAnimate());
+					params_->getAnimate());
 			}
 		}
 
-		if (weapon_->getCreateMushroomAmount() > 0)
+		if (params_->getCreateMushroomAmount() > 0)
 		{
-			if (RAND <= weapon_->getCreateMushroomAmount().asFloat())
+			if (RAND <= params_->getCreateMushroomAmount().asFloat())
 			{
 				context_->actionController->addAction(
 					new SpriteAction(
-					new ExplosionNukeRenderer(position_.asVector(), weapon_->getSize().asFloat() - 2.0f)));	
+					new ExplosionNukeRenderer(position_.asVector(), params_->getSize().asFloat() - 2.0f)));	
 			}
 		}
 
 		// Make the camera shake
-		MainCamera::instance()->getCamera().addShake(weapon_->getShake().asFloat());
+		MainCamera::instance()->getCamera().addShake(params_->getShake().asFloat());
 	}
 #endif // #ifndef S3D_SERVER
 }
@@ -230,12 +233,12 @@ void Explosion::simulate(fixed frameTime, bool &remove)
 #ifndef S3D_SERVER
 		if (!context_->serverMode) 
 		{
-			if (weapon_->getExplosionSound() &&
-				0 != strcmp("none", weapon_->getExplosionSound()))
+			if (params_->getExplosionSound() &&
+				0 != strcmp("none", params_->getExplosionSound()))
 			{
 				SoundBuffer *expSound = 
 					Sound::instance()->fetchOrCreateBuffer(
-						S3D::getDataFile(S3D::formatStringBuffer("data/wav/%s", weapon_->getExplosionSound())));
+						S3D::getDataFile(S3D::formatStringBuffer("data/wav/%s", params_->getExplosionSound())));
 				SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
 					expSound, position_.asVector());
 			}
@@ -248,12 +251,12 @@ void Explosion::simulate(fixed frameTime, bool &remove)
 
 		// Dirt should only form along the ground
 		FixedVector newPosition = position_;
-		if (weapon_->getDeformType() == DeformUp)
+		if (params_->getDeformType() == ExplosionParams::DeformUp)
 		{
 			newPosition[2] = landHeight;
 		}
 
-		if (weapon_->getDeformType() != DeformNone)
+		if (params_->getDeformType() != ExplosionParams::DeformNone)
 		{
 			// Get the actual explosion size
 			fixed multiplier = 
@@ -261,10 +264,10 @@ void Explosion::simulate(fixed frameTime, bool &remove)
 					OptionsGame::ScaleMedium);
 			multiplier *= fixed(true, 5000);
 			multiplier += 1;
-			fixed explosionSize = weapon_->getSize() * multiplier;	
+			fixed explosionSize = params_->getSize() * multiplier;	
 
 			// Check if we are allowed to explode underground
-			if (!weapon_->getExplodeUnderGround())
+			if (!params_->getExplodeUnderGround())
 			{
 				if (position_[2] - landHeight < -1)
 				{
@@ -280,7 +283,7 @@ void Explosion::simulate(fixed frameTime, bool &remove)
 				if (DeformLandscape::deformLandscape(
 					*context_,
 					newPosition, explosionSize, 
-					(weapon_->getDeformType() == DeformDown), map))
+					(params_->getDeformType() == ExplosionParams::DeformDown), map))
 				{
 #ifndef S3D_SERVER
 					if (!context_->serverMode) 
@@ -291,7 +294,7 @@ void Explosion::simulate(fixed frameTime, bool &remove)
 						DeformTextures::deformLandscape(
 							newPosition.asVector(), 
 							explosionSize.asFloat(),  
-							ExplosionTextures::instance()->getScorchBitmap(weapon_->getDeformTexture()),
+							ExplosionTextures::instance()->getScorchBitmap(params_->getDeformTexture()),
 							map);
 					}
 #endif // #ifndef S3D_SERVER
@@ -299,18 +302,18 @@ void Explosion::simulate(fixed frameTime, bool &remove)
 			}
 		}
 
-		if (weapon_->getHurtAmount() != 0 ||
-			weapon_->getDeformType() != DeformNone)
+		if (params_->getHurtAmount() != 0 ||
+			params_->getDeformType() != ExplosionParams::DeformNone)
 		{
 			// Check the tanks for damage
 			TargetDamageCalc::explosion(
 				*context_,
 				weapon_, weaponContext_, 
 				newPosition, 
-				weapon_->getSize() , 
-				weapon_->getHurtAmount(),
-				(weapon_->getDeformType() != DeformNone),
-				weapon_->getOnlyHurtShield());
+				params_->getSize() , 
+				params_->getHurtAmount(),
+				(params_->getDeformType() != ExplosionParams::DeformNone),
+				params_->getOnlyHurtShield());
 		}
 	}
 

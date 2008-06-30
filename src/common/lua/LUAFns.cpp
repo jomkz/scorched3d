@@ -19,7 +19,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <lua/LUAFns.h>
-#include <lua/LUAWrapper.h>
+#include <lua/LUAScript.h>
+#include <lua/LUAUtil.h>
 #include <common/OptionEntry.h>
 #include <common/OptionsScorched.h>
 #include <common/FixedVector.h>
@@ -28,6 +29,10 @@
 #include <tank/TankState.h>
 #include <target/TargetLife.h>
 #include <weapons/AccessoryStore.h>
+#include <weapons/Weapon.h>
+#include <actions/Explosion.h>
+#include <actions/ExplosionParams.h>
+#include <engine/ActionController.h>
 
 #define LUA_LIB
 
@@ -36,53 +41,12 @@
 #include "lauxlib.h"
 #include "lualib.h"
 
-static LUAWrapper *getWrapper(lua_State *L)
+static LUAScript *getScript(lua_State *L)
 {
-	lua_getglobal(L, "wrapper");
-	LUAWrapper *wrapper = (LUAWrapper *) lua_touserdata(L, -1);
+	lua_getglobal(L, "s3d_script");
+	LUAScript *script = (LUAScript *) lua_touserdata(L, -1);
 	lua_pop(L, 1);
-	return wrapper;
-}
-
-static FixedVector getVector(lua_State *L, int pos)
-{
-	FixedVector result;
-
-	luaL_checktype(L, pos, LUA_TTABLE);
-
-	lua_pushstring(L, "x");
-	lua_gettable(L, pos);
-	result[0] = fixed(true, luaL_checknumber(L, -1));
-	lua_pop(L, 1);
-
-	lua_pushstring(L, "y");
-	lua_gettable(L, pos);
-	result[1] = fixed(true, luaL_checknumber(L, -1));
-	lua_pop(L, 1);
-
-	lua_pushstring(L, "z");
-	lua_gettable(L, pos);
-	result[2] = fixed(true, luaL_checknumber(L, -1));
-	lua_pop(L, 1);
-
-	return result;
-}
-
-static void addVector(lua_State *L, FixedVector &vec)
-{
-	lua_newtable(L);
-
-	lua_pushstring(L, "x");
-	lua_pushnumber(L, vec[0].getInternal());
-	lua_settable(L, -3);
-
-	lua_pushstring(L, "y");
-	lua_pushnumber(L, vec[1].getInternal());
-	lua_settable(L, -3);
-
-	lua_pushstring(L, "z");
-	lua_pushnumber(L, vec[2].getInternal());
-	lua_settable(L, -3);
+	return script;
 }
 
 static void addTank(lua_State *L, Tank *tank)
@@ -98,7 +62,7 @@ static void addTank(lua_State *L, Tank *tank)
 	lua_settable(L, -3);
 
 	lua_pushstring(L, "position");
-	addVector(L, tank->getLife().getCenterPosition());
+	LUAUtil::addVectorToStack(L, tank->getLife().getCenterPosition());
 	lua_settable(L, -3);
 
 	lua_pushstring(L, "alive");
@@ -112,7 +76,7 @@ static void addTank(lua_State *L, Tank *tank)
 
 static int s3d_get_option(lua_State *L) 
 {
-	LUAWrapper *wrapper = getWrapper(L);
+	LUAScript *wrapper = getScript(L);
 
 	const char *optionName = luaL_checkstring(L, 1);
 	OptionEntry *entry = OptionEntryHelper::getEntry(
@@ -130,7 +94,7 @@ static int s3d_get_option(lua_State *L)
 
 static int s3d_get_tank(lua_State *L) 
 {
-	LUAWrapper *wrapper = getWrapper(L);
+	LUAScript *wrapper = getScript(L);
 
 	int number = luaL_checknumber(L, 1);
 	Tank *tank =
@@ -148,7 +112,7 @@ static int s3d_get_tank(lua_State *L)
 
 static int s3d_get_tanks(lua_State *L) 
 {
-	LUAWrapper *wrapper = getWrapper(L);
+	LUAScript *wrapper = getScript(L);
 
 	std::map<unsigned int, Tank *> &tanks =
 		wrapper->getContext()->tankContainer->getAllTanks();
@@ -170,12 +134,12 @@ static int s3d_get_tanks(lua_State *L)
 
 static int s3d_fire_weapon(lua_State *L) 
 {
-	LUAWrapper *wrapper = getWrapper(L);
+	LUAScript *wrapper = getScript(L);
 
 	const char *weaponName = luaL_checkstring(L, 1);
 	int playerId = luaL_checknumber(L, 2);
-	FixedVector position = getVector(L, 3);
-	FixedVector velocity = getVector(L, 4);
+	FixedVector position = LUAUtil::getVectorFromStack(L, 3);
+	FixedVector velocity = LUAUtil::getVectorFromStack(L, 4);
 
 	Accessory *accessory =
 		wrapper->getContext()->accessoryStore->findByPrimaryAccessoryName(weaponName);
@@ -200,11 +164,29 @@ static int s3d_fire_weapon(lua_State *L)
 	return 0;
 }
 
+static int s3d_explosion(lua_State *L) 
+{
+	LUAScript *wrapper = getScript(L);
+	ExplosionParams *explosionParams = new ExplosionParams();
+
+	unsigned int playerId = (unsigned int) luaL_checknumber(L, 1);
+	FixedVector position = LUAUtil::getVectorFromStack(L, 2);
+	explosionParams->parseLUA(L, 3);	
+
+	WeaponFireContext fireContext(playerId, 0);
+	Explosion *explosion = new Explosion(
+		position, explosionParams, wrapper->getWeapon(), fireContext);
+	wrapper->getContext()->actionController->addAction(explosion);
+
+	return 0;
+}
+
 static const luaL_Reg s3dlib[] = {
 	{"get_option",  s3d_get_option},
 	{"get_tank",  s3d_get_tank},
 	{"get_tanks",  s3d_get_tanks},
 	{"fire_weapon", s3d_fire_weapon}, 
+	{"explosion", s3d_explosion},
 	{NULL, NULL}
 };
 

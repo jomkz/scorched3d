@@ -625,6 +625,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\actions\ExplosionParams.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\ExplosionParams.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\actions\Laser.cpp"
 				>
 			</File>
@@ -1773,11 +1781,19 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\lua\LUAWrapper.cpp"
+				RelativePath="..\..\common\lua\LUAScriptFactory.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\lua\LUAWrapper.h"
+				RelativePath="..\..\common\lua\LUAScriptFactory.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAUtil.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAUtil.h"
 				>
 			</File>
 			<File

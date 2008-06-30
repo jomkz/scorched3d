@@ -18,25 +18,18 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_LUAWrapper_INCLUDE__)
-#define __INCLUDE_LUAWrapper_INCLUDE__
+#include <lua/LUAScriptFactory.h>
 
-#include <engine/ScorchedContext.h>
-#include <lua/LUAScript.h>
-
-class LUAWrapper
+LUAScriptFactory::LUAScriptFactory() :
+	context_(0)
 {
-public:
-	LUAWrapper();
-	~LUAWrapper();
+}
 
-	LUAScript *createScript();
+LUAScriptFactory::~LUAScriptFactory()
+{
+}
 
-	ScorchedContext *getContext() { return context_; }
-	void setContext(ScorchedContext *context) { context_ = context; }
-
-protected:
-	ScorchedContext *context_;
-};
-
-#endif // __INCLUDE_LUAWrapper_INCLUDE__
+LUAScript *LUAScriptFactory::createScript()
+{
+	return new LUAScript(context_);
+}

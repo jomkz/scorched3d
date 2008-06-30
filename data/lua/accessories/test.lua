@@ -16,7 +16,12 @@ function runWeapon(playerId, position, velocity)
 			
 			newvelocity = {x=0, y=0, z=0};
 			
-			s3d.fire_weapon("Nuke", playerId, v.position, newvelocity);
+			s3d.explosion(playerId, v.position, { 
+				size = 10,
+				hurtamount = 1.0
+			});
+			
+--			s3d.fire_weapon("Nuke", playerId, v.position, newvelocity);
 		end
 	end
 end

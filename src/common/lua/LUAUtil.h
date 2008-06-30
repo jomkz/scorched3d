@@ -18,41 +18,23 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_LUAScript_INCLUDE__)
-#define __INCLUDE_LUAScript_INCLUDE__
+#if !defined(__INCLUDE_LUAUtil_INCLUDE__)
+#define __INCLUDE_LUAUtil_INCLUDE__
 
 #include <string>
 #include <common/FixedVector.h>
 
 #include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
 
-class Weapon;
-class ScorchedContext;
-class LUAScript
+class LUAUtil
 {
 public:
-	LUAScript(ScorchedContext *context);
-	~LUAScript();
+	static void addVectorToStack(lua_State *L, const FixedVector &vector);
+	static FixedVector getVectorFromStack(lua_State *L, int position);
 
-	bool loadFromFile(const std::string &filename, std::string &error);
-
-	bool startFunction(const std::string &functionName);
-	bool endFunction(int argCount);
-
-	bool addNumberParameter(fixed number);
-	bool addVectorParameter(const FixedVector &vector);
-
-	bool setGlobal(const std::string &name, fixed value);
-
-	ScorchedContext *getContext() { return context_; }
-
-	void setWeapon(Weapon *weapon) { weapon_ = weapon; }
-	Weapon *getWeapon() { return weapon_; }
-
-protected:
-	Weapon *weapon_;
-	ScorchedContext *context_;
-	lua_State *L_;
+	static fixed getNumberFromTable(lua_State *L, int tablePosition, const char *name);
 };
 
-#endif // __INCLUDE_LUAScript_INCLUDE__
+#endif // __INCLUDE_LUAUtil_INCLUDE__

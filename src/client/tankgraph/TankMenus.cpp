@@ -55,7 +55,7 @@
 #include <console/ConsoleRuleFnIAdapter.h>
 #include <image/ImageFactory.h>
 #include <GLEXT/GLTexture.h>
-#include <lua/LUAWrapper.h>
+#include <lua/LUAScriptFactory.h>
 
 TankMenus::TankMenus() : logger_("ClientLog")
 {
@@ -504,8 +504,14 @@ void TankMenus::runScriptConsole(std::list<ConsoleRuleSplit> list)
 	{
 		const char *fileName = (char *) list.begin()->rule.c_str();
 		LUAScript *script = 
-			ScorchedClient::instance()->getLUAWrapper().createScript();
-		script->loadFromFile(fileName);
+			ScorchedClient::instance()->getLUAScriptFactory().createScript();
+
+		std::string luaErrorString;
+		if (!script->loadFromFile(fileName, luaErrorString))
+		{
+			Logger::log(S3D::formatStringBuffer("Script returned an error : %s",
+				luaErrorString.c_str()));
+		}
 
 		delete script;
 	}

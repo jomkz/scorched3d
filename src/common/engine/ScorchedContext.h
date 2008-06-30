@@ -38,7 +38,7 @@ class LandscapeDefinitions;
 class TankContainer;
 class TankModelStore;
 class TankTeamScore;
-class LUAWrapper;
+class LUAScriptFactory;
 
 class ScorchedContext
 {
@@ -63,7 +63,7 @@ public:
 	TankTeamScore *tankTeamScore;
 	TargetSpace *targetSpace;
 	TargetMovement *targetMovement;
-	LUAWrapper *luaWrapper;
+	LUAScriptFactory *luaScriptFactory;
 	bool serverMode;
 };
 
