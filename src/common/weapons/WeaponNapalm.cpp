@@ -29,9 +29,7 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponNapalm);
 
-WeaponNapalm::WeaponNapalm() : 
-	noSmoke_(false), noObjectDamage_(false),
-	groundScorchPer_(fixed(true, 2000))
+WeaponNapalm::WeaponNapalm()
 {
 
 }
@@ -45,37 +43,16 @@ bool WeaponNapalm::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 {
 	if (!Weapon::parseXML(context, accessoryNode)) return false;
 
-	// Mandatory Attributes
 	if (!accessoryNode->getNamedChild("napalmtime", napalmTime_)) return false;
 	if (!accessoryNode->getNamedChild("napalmheight", napalmHeight_)) return false;
 	if (!accessoryNode->getNamedChild("steptime", stepTime_)) return false;
 	if (!accessoryNode->getNamedChild("hurtsteptime", hurtStepTime_)) return false;
 	if (!accessoryNode->getNamedChild("hurtpersecond", hurtPerSecond_)) return false;
 	if (!accessoryNode->getNamedChild("numberstreams", numberStreams_)) return false;
-	if (!accessoryNode->getNamedChild("effectradius", effectRadius_)) return false;
 	if (!accessoryNode->getNamedChild("napalmsound", napalmSound_)) return false;
-	if (!accessoryNode->getNamedChild("napalmtexture", napalmTexture_)) return false;
-	if (!accessoryNode->getNamedChild("allowunderwater", allowUnderWater_)) return false;
-	if (!S3D::checkDataFile(S3D::formatStringBuffer("data/wav/%s", getNapalmSound()))) return false;
+	if (!S3D::checkDataFile(S3D::formatStringBuffer("data/wav/%s", napalmSound_.c_str()))) return false;
 
-	// Get the optional luminance node
-	XMLNode *noLuminanceNode = 0; luminance_ = true;
-	accessoryNode->getNamedChild("noluminance", noLuminanceNode, false);
-	if (noLuminanceNode) luminance_ = false;
-
-	// Optional deform texture
-	if (accessoryNode->getNamedChild("deformtexture", deformTexture_, false))
-	{
-		if (!S3D::checkDataFile(getDeformTexture())) return false;
-	}
-
-	// Optional Attributes
-	XMLNode *noSmokeNode = 0, *noObjectDamageNode = 0;
-	accessoryNode->getNamedChild("groundscorchper", groundScorchPer_, false);
-	accessoryNode->getNamedChild("nosmoke", noSmokeNode, false);
-	accessoryNode->getNamedChild("noobjectdamage", noObjectDamageNode, false);
-	if (noSmokeNode) noSmoke_ = true;
-	if (noObjectDamageNode) noObjectDamage_ = true;
+	if (!params_.parseXML(accessoryNode)) return false;
 
 	return true;
 }
@@ -106,12 +83,12 @@ void WeaponNapalm::fireWeapon(ScorchedContext &context,
 #ifndef S3D_SERVER
 	if (!context.serverMode) 
 	{
-		if (getNapalmSound()[0] &&
-			0 != strcmp(getNapalmSound(), "none"))
+		if (napalmSound_.c_str()[0] &&
+			0 != strcmp(napalmSound_.c_str(), "none"))
 		{
 			SoundBuffer *expSound = 
 				Sound::instance()->fetchOrCreateBuffer(
-					S3D::getDataFile(S3D::formatStringBuffer("data/wav/%s", getNapalmSound())));
+					S3D::getDataFile(S3D::formatStringBuffer("data/wav/%s", napalmSound_.c_str())));
 			SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
 				expSound, position.asVector());
 		}
@@ -122,8 +99,15 @@ void WeaponNapalm::fireWeapon(ScorchedContext &context,
 void WeaponNapalm::addNapalm(ScorchedContext &context, 
 	WeaponFireContext &weaponContext, int x, int y)
 {
+	NapalmParams *params = new NapalmParams(params_);
+	params->setNapalmTime(napalmTime_.getValue(context));
+	params->setNapalmHeight(napalmHeight_.getValue(context));
+	params->setStepTime(stepTime_.getValue(context));
+	params->setHurtStepTime(hurtStepTime_.getValue(context));
+	params->setHurtPerSecond(hurtPerSecond_.getValue(context));
+
 	// Ensure that the napalm has not hit the walls
 	// or anything outside the landscape
 	context.actionController->addAction(
-		new Napalm(x, y, this, weaponContext));
+		new Napalm(x, y, this, params, weaponContext));
 }

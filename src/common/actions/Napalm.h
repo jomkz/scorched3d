@@ -40,7 +40,8 @@ public:
 		int posX, posY;
 	};
 
-	Napalm(int x, int y, Weapon *weapon, WeaponFireContext &weaponContext);
+	Napalm(int x, int y, Weapon *weapon, NapalmParams *params, 
+		WeaponFireContext &weaponContext);
 	virtual ~Napalm();
 
 	virtual void init();
@@ -48,12 +49,13 @@ public:
 	virtual std::string getActionDetails();
 
 	unsigned int getPlayerId() { return weaponContext_.getPlayerId(); }
-	WeaponNapalm *getWeapon() { return weapon_; }
+	NapalmParams *getParams() { return params_; }
 
 protected:
 	int x_, y_;
 	WeaponFireContext weaponContext_;
-	WeaponNapalm *weapon_;
+	NapalmParams *params_;
+	Weapon *weapon_;
 	Counter counter_;
 	GLTextureSet *set_;
 
@@ -61,12 +63,6 @@ protected:
 	bool hitWater_;
 	fixed totalTime_, hurtTime_;
 	fixed napalmTime_;
-	fixed allowedNapalmTime_;
-	fixed napalmHeight_;
-	fixed stepTime_;
-	fixed hurtStepTime_;
-	fixed hurtPerSecond_;
-	fixed groundScorchPer_;
 	int effectRadius_;
 	std::list<NapalmEntry *> napalmPoints_;
 

@@ -1837,6 +1837,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\actions\NapalmParams.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\NapalmParams.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\actions\Resurrection.cpp"
 				>
 			</File>

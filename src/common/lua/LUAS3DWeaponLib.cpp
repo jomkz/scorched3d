@@ -24,6 +24,7 @@
 #include <weapons/AccessoryStore.h>
 #include <actions/Explosion.h>
 #include <actions/ExplosionParams.h>
+#include <actions/Napalm.h>
 #include <engine/ActionController.h>
 #include <common/Logger.h>
 
@@ -101,9 +102,28 @@ static int s3d_explosion(lua_State *L)
 	return 0;
 }
 
+static int s3d_napalm(lua_State *L) 
+{
+	LUAScript *wrapper = getScript(L);
+	NapalmParams *napalmParams = new NapalmParams();
+
+	unsigned int playerId = (unsigned int) luaL_checknumber(L, 1);
+	FixedVector position = LUAUtil::getVectorFromStack(L, 2);
+	napalmParams->parseLUA(L, 3);	
+
+	WeaponFireContext fireContext(playerId, 0);
+	Napalm *napalm = new Napalm(
+		position[0].asInt(), position[1].asInt(),
+		wrapper->getWeapon(), napalmParams, fireContext);
+	wrapper->getContext()->actionController->addAction(napalm);
+
+	return 0;
+}
+
 static const luaL_Reg s3dweaponlib[] = {
 	{"fire_weapon", s3d_fire_weapon}, 
 	{"explosion", s3d_explosion},
+	{"napalm", s3d_napalm},
 	{"random", s3d_random},
 	{NULL, NULL}
 };

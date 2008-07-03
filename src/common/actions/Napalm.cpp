@@ -45,10 +45,11 @@
 static const int deformSize = 3;
 
 Napalm::Napalm(int x, int y, Weapon *weapon, 
+	NapalmParams *params,
 	WeaponFireContext &weaponContext) :
 	ActionReferenced("Napalm"),
 	x_(x), y_(y), napalmTime_(0), 
-	weapon_((WeaponNapalm *) weapon), 
+	weapon_(weapon), 
 	weaponContext_(weaponContext), hitWater_(false),
 	totalTime_(0), hurtTime_(0),
 	counter_(0.1f, 0.1f), set_(0)
@@ -57,19 +58,11 @@ Napalm::Napalm(int x, int y, Weapon *weapon,
 
 Napalm::~Napalm()
 {
+	delete params_;
 }
 
 void Napalm::init()
 {
-	// Get the NumberParser variables 
-	allowedNapalmTime_ = getWeapon()->getNapalmTime(*context_);
-	napalmHeight_ = getWeapon()->getNaplamHeight(*context_);
-	stepTime_ = getWeapon()->getStepTime(*context_);
-	hurtStepTime_ = getWeapon()->getHurtStepTime(*context_);
-	hurtPerSecond_ = getWeapon()->getHurtPerSecond(*context_);
-	groundScorchPer_ = getWeapon()->getGroundScorchPer(*context_);
-
-
 	fixed ShowTime = 5;
 	FixedVector position(fixed(x_), fixed(y_), context_->landscapeMaps->
 		getGroundMaps().getHeight(x_, y_));
@@ -81,7 +74,7 @@ void Napalm::init()
 	if (!context_->serverMode) 
 	{
 		set_ = ExplosionTextures::instance()->getTextureSetByName(
-			weapon_->getNapalmTexture());
+			params_->getNapalmTexture());
 	}
 #endif // #ifndef S3D_SERVER
 }
@@ -97,7 +90,7 @@ void Napalm::simulate(fixed frameTime, bool &remove)
 #ifndef S3D_SERVER
 	if (!context_->serverMode)
 	{
-		if (!weapon_->getNoSmoke() &&
+		if (!params_->getNoSmoke() &&
 			counter_.nextDraw(frameTime.asFloat()))
 		{
 			int count = int(RAND * float(napalmPoints_.size()));
@@ -128,11 +121,11 @@ void Napalm::simulate(fixed frameTime, bool &remove)
 	// once the time interval has expired then start taking it away
 	// Once all napalm has disapeared the simulation is over
 	totalTime_ += frameTime;
-	while (totalTime_ > stepTime_)
+	while (totalTime_ > params_->getStepTime())
 	{
-		totalTime_ -= stepTime_;
-		napalmTime_ += stepTime_;
-		if (napalmTime_ < allowedNapalmTime_)
+		totalTime_ -= params_->getStepTime();
+		napalmTime_ += params_->getStepTime();
+		if (napalmTime_ < params_->getNapalmTime())
 		{
 			// Still within the time period, add more napalm
 			simulateAddStep();
@@ -161,9 +154,9 @@ void Napalm::simulate(fixed frameTime, bool &remove)
 
 	// Calculate how much damage to make to the tanks
 	hurtTime_ += frameTime;
-	while (hurtTime_ > hurtStepTime_)
+	while (hurtTime_ > params_->getHurtStepTime())
 	{
-		hurtTime_ -= hurtStepTime_;
+		hurtTime_ -= params_->getHurtStepTime();
 
 		simulateDamage();
 	}
@@ -201,7 +194,7 @@ void Napalm::simulateRmStep()
 	int y = entry->posY;
 	delete entry;
 
-	context_->landscapeMaps->getGroundMaps().getNapalmHeight(x, y) -= napalmHeight_;
+	context_->landscapeMaps->getGroundMaps().getNapalmHeight(x, y) -= params_->getNapalmHeight();
 }
 
 void Napalm::simulateAddStep()
@@ -209,7 +202,7 @@ void Napalm::simulateAddStep()
 	// Get the height of this point
 	fixed height = getHeight(x_, y_);
 
-	if (!weapon_->getAllowUnderWater())
+	if (!params_->getAllowUnderWater())
 	{
 		// Napalm does not go under water (for now)
 		// Perhaps we could add a boiling water sound at some point
@@ -243,7 +236,7 @@ void Napalm::simulateAddStep()
 	{
 		ParticleEmitter emitter;
 		emitter.setAttributes(
-			allowedNapalmTime_.asFloat(), allowedNapalmTime_.asFloat(),
+			params_->getNapalmTime().asFloat(), params_->getNapalmTime().asFloat(),
 			0.5f, 1.0f, // Mass
 			0.01f, 0.02f, // Friction
 			Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, 0.0f, 0.0f), // Velocity
@@ -254,7 +247,7 @@ void Napalm::simulateAddStep()
 			1.5f, 1.5f, 1.5f, 1.5f, // Start Size
 			1.5f, 1.5f, 1.5f, 1.5f, // EndSize
 			Vector(0.0f, 0.0f, 0.0f), // Gravity
-			weapon_->getLuminance(),
+			params_->getLuminance(),
 			false);
 		Vector position1(float(x_) + 0.5f, float(y_) - 0.2f, 0.0f);
 		Vector position2(float(x_) - 0.5f, float(y_) - 0.2f, 0.0f);
@@ -292,8 +285,8 @@ void Napalm::simulateAddStep()
 	}
 	*/
 
-	context_->landscapeMaps->getGroundMaps().getNapalmHeight(x_, y_) += napalmHeight_;
-	height += napalmHeight_;
+	context_->landscapeMaps->getGroundMaps().getNapalmHeight(x_, y_) += params_->getNapalmHeight();
+	height += params_->getNapalmHeight();
 
 #ifndef S3D_SERVER
 	if (!context_->serverMode)
@@ -323,13 +316,13 @@ void Napalm::simulateAddStep()
 		// Add the ground scorch
 		if (!GLStateExtension::getNoTexSubImage())
 		{
-			if (RAND < groundScorchPer_.asFloat())
+			if (RAND < params_->getGroundScorchPer().asFloat())
 			{
 				Vector pos(x_, y_);
 				DeformTextures::deformLandscape(pos, 
 					(int) (deformSize + 1),
 					ExplosionTextures::instance()->getScorchBitmap(
-						weapon_->getDeformTexture()),
+						params_->getDeformTexture()),
 					deformMap);
 			}
 		}
@@ -384,7 +377,7 @@ void Napalm::simulateAddStep()
 
 void Napalm::simulateDamage()
 {
-	const int EffectRadius = weapon_->getEffectRadius();
+	const int EffectRadius = params_->getEffectRadius();
 
 	// Store how much each tank is damaged
 	// Keep in a map so we don't need to create multiple
@@ -424,11 +417,11 @@ void Napalm::simulateDamage()
 					TargetDamageCalc.find(target->getPlayerId());
 				if (damageItor == TargetDamageCalc.end())
 				{
-					TargetDamageCalc[target->getPlayerId()] = hurtPerSecond_;
+					TargetDamageCalc[target->getPlayerId()] = params_->getHurtPerSecond();
 				}
 				else
 				{
-					TargetDamageCalc[target->getPlayerId()] += hurtPerSecond_;
+					TargetDamageCalc[target->getPlayerId()] += params_->getHurtPerSecond();
 				}
 			}
 		}
@@ -458,7 +451,7 @@ void Napalm::simulateDamage()
 
 			// Set this target to burnt
 			if (target->getRenderer() &&
-				!weapon_->getNoObjectDamage())
+				!params_->getNoObjectDamage())
 			{
 				target->getRenderer()->targetBurnt();
 			}

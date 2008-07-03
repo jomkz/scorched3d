@@ -36,6 +36,8 @@ public:
 
 	static fixed getNumberFromTable(lua_State *L, int tablePosition, 
 		const char *name, fixed defaultResult);
+	static int getIntFromTable(lua_State *L, int tablePosition, 
+		const char *name, int defaultResult);
 	static bool getBoolFromTable(lua_State *L, int tablePosition, 
 		const char *name, bool defaultResult);
 	static std::string getStringFromTable(lua_State *L, int tablePosition, 

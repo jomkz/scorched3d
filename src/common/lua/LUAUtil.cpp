@@ -78,6 +78,22 @@ fixed LUAUtil::getNumberFromTable(lua_State *L, int tablePosition, const char *n
 	return result;
 }
 
+int LUAUtil::getIntFromTable(lua_State *L, int tablePosition, const char *name, int defaultResult)
+{
+	lua_pushstring(L, name);
+	lua_gettable(L, tablePosition);
+	
+	int result = defaultResult;
+	if (!lua_isnil(L, -1)) 
+	{
+		fixed fresult = fixed(true, luaL_checknumber(L, -1));
+		result = fresult.asInt();
+	}
+	lua_pop(L, 1);
+
+	return result;
+}
+
 bool LUAUtil::getBoolFromTable(lua_State *L, int tablePosition, 
 	const char *name, bool defaultResult)
 {
