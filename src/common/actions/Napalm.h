@@ -63,7 +63,6 @@ protected:
 	bool hitWater_;
 	fixed totalTime_, hurtTime_;
 	fixed napalmTime_;
-	int effectRadius_;
 	std::list<NapalmEntry *> napalmPoints_;
 
 	fixed getHeight(int x, int y);

@@ -49,7 +49,7 @@ Napalm::Napalm(int x, int y, Weapon *weapon,
 	WeaponFireContext &weaponContext) :
 	ActionReferenced("Napalm"),
 	x_(x), y_(y), napalmTime_(0), 
-	weapon_(weapon), 
+	weapon_(weapon), params_(params),
 	weaponContext_(weaponContext), hitWater_(false),
 	totalTime_(0), hurtTime_(0),
 	counter_(0.1f, 0.1f), set_(0)
