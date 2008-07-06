@@ -42,24 +42,24 @@ RulesDialog *RulesDialog::instance()
 }
 
 RulesDialog::RulesDialog() : 
-	GLWWindow("Rules", 0.0f, 0.0f, 540.0f, 395.0f, eSmallTitle,
+	GLWWindow("Rules", 0.0f, 0.0f, 740.0f, 480.0f, eSmallTitle,
 		"Shows the game rules for the game\n"
 		"in progress.")
 {
 	needCentered_ = true;
-	okId_ = addWidget(new GLWTextButton("Ok", 475, 10, 55, this, 
+	okId_ = addWidget(new GLWTextButton("Ok", 675, 10, 55, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX))->getId();
 	motdTab_ = (GLWTab *)
-		addWidget(new GLWTab("MoTD", 10, 40, 520, 315));
+		addWidget(new GLWTab("MoTD", 10, 40, 720, 400));
 	rulesTab_ = (GLWTab *)
-		addWidget(new GLWTab("Rules", 10, 40, 520, 315));
+		addWidget(new GLWTab("Rules", 10, 40, 720, 400));
 
 	motdList_ = (GLWListView *) motdTab_->
-		addWidget(new GLWListView(10, 10, 500, 240, 100));
+		addWidget(new GLWListView(10, 10, 700, 325, 100));
 	rulesList_ = (GLWListView *) rulesTab_->
-		addWidget(new GLWListView(10, 10, 500, 130, 500));
+		addWidget(new GLWListView(10, 10, 700, 215, 500));
 	icon_ = (GLWIcon *) motdTab_->
-		addWidget(new GLWIcon(65, 255, 390, 50));
+		addWidget(new GLWIcon(165, 340, 390, 50));
 }
 
 RulesDialog::~RulesDialog()

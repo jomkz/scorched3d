@@ -29,10 +29,10 @@
 #include <GLW/GLWFont.h>
 #include <GLW/GLWTranslate.h>
 
-static const float TankSquareSize = 60.0f;
+static const float TankSquareSize = 90.0f;
 static const float TankHalfSquareSize = TankSquareSize / 2.0f;
 static const float TankPadding = 20.0f;
-static const float TankInfo = 165.0f;
+static const float TankInfo = 320.0f;
 
 GLWTankViewer::GLWTankViewer(float x, float y, int numH, int numV) :
 	GLWidget(x, y, 
@@ -40,7 +40,7 @@ GLWTankViewer::GLWTankViewer(float x, float y, int numH, int numV) :
 					 TankSquareSize * numV + TankPadding),
 	scrollBar_(w_ - 12.0f, y + 2.0f, h_ - 4.0f, 0, 0, numV),
 	infoWindow_(x + TankSquareSize * numH + TankPadding + 10.0f, 
-				y + TankSquareSize * numV + TankPadding - TankInfo - 35.0f, 
+				y + TankSquareSize * numV + TankPadding - TankInfo + 30.0f, 
 				TankInfo, TankInfo, true),
 	numH_(numH), numV_(numV),
 	rot_(0.0f), selected_(0),
@@ -48,9 +48,9 @@ GLWTankViewer::GLWTankViewer(float x, float y, int numH, int numV) :
 	rotXYD_(1.0f), rotYZD_(1.0f),
 	totalTime_(0.0f),
 	team_(0),
-	catagoryChoice_(x + TankSquareSize * numH + TankPadding + 10.0f, 
-					y + TankSquareSize * numV + TankPadding - 25.0f,
-					TankInfo)
+	catagoryChoice_(x, 
+					y + TankSquareSize * numV + TankPadding + 5.0f,
+					+ TankSquareSize * numH + TankPadding)
 {
 	std::set<std::string> &catagories = 
 		ScorchedClient::instance()->getTankModels().getModelCatagories();
@@ -302,7 +302,7 @@ void GLWTankViewer::draw()
 		selected_ < (int) models_.size())
 	{
 		const float infoX = infoWindow_.getX() + (infoWindow_.getW() / 2.0f);
-		const float infoY = infoWindow_.getY() + (infoWindow_.getH() / 2.0f) - 15.0f;
+		const float infoY = infoWindow_.getY() + (infoWindow_.getH() / 2.0f) - 35.0f;
 		glPushMatrix();
 			glTranslatef(infoX, infoY, 0.0f);
 			glLightfv(GL_LIGHT1, GL_POSITION, sunPosition);
@@ -310,7 +310,7 @@ void GLWTankViewer::draw()
 			drawCaption(selected_);
 			glRotatef(-45.0f, 1.0f, 0.0f, 0.0f);
 			glRotatef(rot_, 0.0f, 0.0f, 1.0f);
-			glScalef(50.0f, 50.0f, 50.0f);
+			glScalef(100.0f, 100.0f, 100.0f);
 	
 			drawItem(selected_, true);
 		glPopMatrix();
@@ -371,9 +371,10 @@ void GLWTankViewer::drawCaption(int pos)
 
 	Vector color(0.3f, 0.3f, 0.3f);
 	GLWFont::instance()->getGameFont()->
-		drawWidth(TankSquareSize * 2 + TankPadding, 
-			color, 10.0f, -70.0f, 75.0f, 0.0f, 
-			models_[pos].model->getName());
+		drawWidth(TankInfo - 20.0f, 
+			color, 10.0f, -150.0f, 155.0f, 0.0f, 
+			S3D::formatStringBuffer("Tank Name : %s", 
+			models_[pos].model->getName()));
 	/*GLWFont::instance()->getGameFont()->
 		drawWidth(TankSquareSize * 2 + TankPadding, 
 			color, 10.0f, -70.0f, 63.0f, 0.0f, 

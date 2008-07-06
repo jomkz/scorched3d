@@ -40,17 +40,17 @@ struct ColumnInfo
 static ColumnInfo gamescols[] = 
 {
 	GLWIconTable::Column("", 60), "",
-	GLWIconTable::Column("Server Name", 250), "servername",
-	GLWIconTable::Column("Plyrs", 55), "noplayers",
-	GLWIconTable::Column("Round", 50), "round",
-	GLWIconTable::Column("Mod", 70), "mod",
-	GLWIconTable::Column("Game Type", 160), "gametype"
+	GLWIconTable::Column("Server Name", 255), "servername",
+	GLWIconTable::Column("Plyrs", 60), "noplayers",
+	GLWIconTable::Column("Round", 55), "round",
+	GLWIconTable::Column("Mod", 95), "mod",
+	GLWIconTable::Column("Game Type", 200), "gametype"
 };
 static ColumnInfo playerscols[] =
 {
-	GLWIconTable::Column("Player", 250), "pn",
-	GLWIconTable::Column("Score", 240), "ps",
-	GLWIconTable::Column("Time", 100), "pt",
+	GLWIconTable::Column("Player", 270), "pn",
+	GLWIconTable::Column("Score", 260), "ps",
+	GLWIconTable::Column("Time", 140), "pt",
 	GLWIconTable::Column("Real", 60), "pa"
 };
 
@@ -66,7 +66,7 @@ NetworkSelectDialog *NetworkSelectDialog::instance()
 }
 
 NetworkSelectDialog::NetworkSelectDialog() : 
-	GLWWindow("", 700.0f, 560.0f, 0, ""),
+	GLWWindow("", 780.0f, 560.0f, 0, ""),
 	totalTime_(0.0f), invalidateId_(0),
 	okTex_(0), questionTex_(0),
 	warningTex_(0), noentryTex_(0),
@@ -82,19 +82,19 @@ NetworkSelectDialog::NetworkSelectDialog() :
 		playerscolumns.push_back(playerscols[i].col);
 	}
 
-	gamesIconTable_ = new GLWIconTable(10.0f, 165.0f, 680.0f, 350.0f, &gamescolumns, 20.0f);
+	gamesIconTable_ = new GLWIconTable(10.0f, 165.0f, 760.0f, 350.0f, &gamescolumns, 20.0f);
 	addWidget(gamesIconTable_);
 	gamesIconTable_->setHandler(this);
 
-	playersIconTable_ = new GLWIconTable(10.0f, 45.0f, 680.0f, 110.0f, &playerscolumns, 20.0f);
+	playersIconTable_ = new GLWIconTable(10.0f, 45.0f, 760.0f, 110.0f, &playerscolumns, 20.0f);
 	addWidget(playersIconTable_);
 	playersIconTable_->setHandler(this);
 
 	ok_ = (GLWTextButton *) addWidget(
-		new GLWTextButton("Join Game", 560, 10, 130, this, 
+		new GLWTextButton("Join Game", 640, 10, 130, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX));
 	cancelId_ = addWidget(
-		new GLWTextButton("Cancel", 450, 10, 105, this, 
+		new GLWTextButton("Cancel", 530, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX))->getId();
 	refresh_ = (GLWTextButton *) addWidget(
 		new GLWTextButton("Refresh List", 175, 10, 150, this, 
@@ -104,12 +104,12 @@ NetworkSelectDialog::NetworkSelectDialog() :
 		GLWButton::ButtonFlagCenterX));
 
 	ipaddress_ = (GLWTextBox *) addWidget(
-		new GLWTextBox(170.0f, 525.0f, 300.0));
-	addWidget(new GLWLabel(35.0f, 525.0f, "Connect To :"));
+		new GLWTextBox(210.0f, 525.0f, 300.0));
+	addWidget(new GLWLabel(75.0f, 525.0f, "Connect To :"));
 	ipaddress_->setHandler(this);
 
 	refreshType_ = (GLWDropDownText *) addWidget(
-		new GLWDropDownText(490.0f, 525.0f, 150.0f));
+		new GLWDropDownText(530.0f, 525.0f, 150.0f));
 	refreshType_->addText("Internet");
 	refreshType_->addText("LAN");
 	refreshType_->addText("Favourites");

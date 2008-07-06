@@ -53,7 +53,7 @@ PlayerDialog *PlayerDialog::instance()
 }
 
 PlayerDialog::PlayerDialog() : 
-	GLWWindow("Team", 10.0f, 10.0f, 465.0f, 340.0f, eSmallTitle,
+	GLWWindow("Team", 10.0f, 10.0f, 740.0f, 480.0f, eSmallTitle,
 		"Allows the player to make changes to their\n"
 		"name, their tank and to change teams."),
 	allocatedTeam_(0), cancelId_(0), viewer_(0)
@@ -61,15 +61,15 @@ PlayerDialog::PlayerDialog() :
 	needCentered_ = true;
 
 	// Add buttons
-	okId_ = addWidget(new GLWTextButton("Ok", 395, 10, 55, this, 
+	okId_ = addWidget(new GLWTextButton("Ok", 675, 10, 55, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX))->getId();
 	if (ClientParams::instance()->getConnectedToServer())
 	{
-		cancelId_ = addWidget(new GLWTextButton("Cancel", 300, 10, 85, this, 
+		cancelId_ = addWidget(new GLWTextButton("Cancel", 580, 10, 85, this, 
 			GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX))->getId();
 	}
 
-	GLWPanel *infoPanel = new GLWPanel(10.0f, 260.0f, 445.0f, 70.0f,
+	GLWPanel *infoPanel = new GLWPanel(10.0f, 390.0f, 720.0f, 75.0f,
 		false, true, true);
 	addWidget(infoPanel);
 
@@ -78,6 +78,8 @@ PlayerDialog::PlayerDialog() :
 	colorTexture_.create(map);
 
 	// Create players avatar choice
+	GLWLabel *avatarLabel = (GLWLabel *) 
+		infoPanel->addWidget(new GLWLabel(10, 25, "Avatar:"));
 	avatarTip1_.setText(ToolTip::ToolTipHelp, "Avatar", 
 		"The current player's avatar.\n"
 		"Click to change.\n");
@@ -85,7 +87,7 @@ PlayerDialog::PlayerDialog() :
 		"The current player's avatar.\n"
 		"CANNOT be changed while playing,\n"
 		"you must quit to change.");
-	imageList_ = new GLWImageList(10.0f, 20.0f);
+	imageList_ = new GLWImageList(95.0f, 20.0f);
 	imageList_->addDirectory(S3D::getSettingsFile("avatars"));
 	imageList_->addDirectory(S3D::getDataFile("data/avatars"));
 	imageList_->setCurrentShortPath("player.png");
@@ -99,10 +101,10 @@ PlayerDialog::PlayerDialog() :
 		"Use the backspace or delete key to remove this name.\n"
 		"Type in a new player name via the keyboad to change.");
 	GLWLabel *nameLabel = (GLWLabel *) 
-		infoPanel->addWidget(new GLWLabel(50, 40, "Name:"));
+		infoPanel->addWidget(new GLWLabel(145, 40, "Name:"));
 	nameLabel->setToolTip(nameTip);
 	playerName_ = (GLWTextBox *) 
-		infoPanel->addWidget(new GLWTextBox(120, 40, 320, "Player"));
+		infoPanel->addWidget(new GLWTextBox(215, 40, 495, "Player"));
 	playerName_->setMaxTextLen(22);
 	playerName_->setToolTip(nameTip);
 	playerName_->setName("Name");
@@ -112,10 +114,10 @@ PlayerDialog::PlayerDialog() :
 		"Change the team this player will join.\n"
 		"This is only available when playing team games.");
 	teamLabel_ = (GLWLabel *) 
-		infoPanel->addWidget(new GLWLabel(250, 5, "Team:"));
+		infoPanel->addWidget(new GLWLabel(145, 8, "Team:"));
 	teamLabel_->setToolTip(teamTip);
 	teamDropDown_ = (GLWDropDownText *) 
-		infoPanel->addWidget(new GLWDropDownText(320, 5, 120));
+		infoPanel->addWidget(new GLWDropDownText(215, 8, 120));
 	teamDropDown_->setHandler(this);
 	teamDropDown_->setToolTip(teamTip);
 	teamDropDown_->setName("Team");
@@ -125,10 +127,10 @@ PlayerDialog::PlayerDialog() :
 		"Change the color this player displayed as.\n"
 		"This is only available when playing non-team games.");
 	colorLabel_ = (GLWLabel *) 
-		infoPanel->addWidget(new GLWLabel(250, 5, "Color:"));
+		infoPanel->addWidget(new GLWLabel(145, 8, "Color:"));
 	colorLabel_->setToolTip(colorTip);
 	colorDropDown_ = (GLWDropDownColor *) 
-		infoPanel->addWidget(new GLWDropDownColor(320, 5, 120));
+		infoPanel->addWidget(new GLWDropDownColor(215, 8, 120));
 	colorDropDown_->setHandler(this);
 	colorDropDown_->setToolTip(colorTip);
 	colorDropDown_->setName("Color");
@@ -139,10 +141,10 @@ PlayerDialog::PlayerDialog() :
 		"players.  This is only available when playing\n"
 		"single player games.");
 	GLWLabel *typeLabel = (GLWLabel *) 
-		infoPanel->addWidget(new GLWLabel(50, 5, "Type:"));
+		infoPanel->addWidget(new GLWLabel(520, 8, "Type:"));
 	typeLabel->setToolTip(typeTip);
 	typeDropDown_ = (GLWDropDownText *) 
-		infoPanel->addWidget(new GLWDropDownText(120, 5, 120));
+		infoPanel->addWidget(new GLWDropDownText(590, 8, 120));
 	typeDropDown_->setHandler(this);
 	typeDropDown_->setToolTip(typeTip);
 	typeDropDown_->setName("Type");
@@ -206,7 +208,7 @@ void PlayerDialog::display()
 
 	if (!viewer_)
 	{
-		GLWPanel *infoPanel = new GLWPanel(10.0f, 40.0f, 445.0f, 210.0f,
+		GLWPanel *infoPanel = new GLWPanel(10.0f, 40.0f, 720.0f, 330.0f,
 			false, true, true);
 		viewer_ = new GLWTankViewer(5.0f, 5.0f, 4, 3);
 		viewer_->setName("Tank");
