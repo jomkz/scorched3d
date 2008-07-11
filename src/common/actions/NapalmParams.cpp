@@ -34,8 +34,10 @@ NapalmParams::NapalmParams() :
 	noObjectDamage_(false),
 	allowUnderWater_(false),
 	luminance_(true),
+	singleFlow_(true),
 	napalmTexture_("flames"),
-	deformTexture_("")
+	deformTexture_(""),
+	numberParticles_(100)
 {
 }
 
@@ -50,10 +52,16 @@ bool NapalmParams::parseXML(XMLNode *accessoryNode)
 	if (!accessoryNode->getNamedChild("napalmtexture", napalmTexture_)) return false;
 	if (!accessoryNode->getNamedChild("allowunderwater", allowUnderWater_)) return false;
 
+	accessoryNode->getNamedChild("numberparticles", numberParticles_, false);
+
 	// Get the optional luminance node
 	XMLNode *noLuminanceNode = 0; luminance_ = true;
 	accessoryNode->getNamedChild("noluminance", noLuminanceNode, false);
 	if (noLuminanceNode) luminance_ = false;
+
+	XMLNode *noSingleFlowNode = 0; singleFlow_ = true;
+	accessoryNode->getNamedChild("nosingleflow", noSingleFlowNode, false);
+	if (noSingleFlowNode) singleFlow_ = false;
 
 	// Optional deform texture
 	if (accessoryNode->getNamedChild("deformtexture", deformTexture_, false))
@@ -83,10 +91,12 @@ void NapalmParams::parseLUA(lua_State *L, int position)
 	hurtPerSecond_ = LUAUtil::getNumberFromTable(L, position, "hurtpersecond", hurtPerSecond_);
 	groundScorchPer_ = LUAUtil::getNumberFromTable(L, position, "groundscorchper", groundScorchPer_);
 	effectRadius_ = LUAUtil::getIntFromTable(L, position, "effectradius", effectRadius_);
+	numberParticles_ = LUAUtil::getIntFromTable(L, position, "numberparticles", numberParticles_);
 	noSmoke_ = LUAUtil::getBoolFromTable(L, position, "nosmoke", noSmoke_);
 	noObjectDamage_ = LUAUtil::getBoolFromTable(L, position, "noobjectdamage", noObjectDamage_);
 	allowUnderWater_ = LUAUtil::getBoolFromTable(L, position, "allowunderwater", allowUnderWater_);
 	luminance_ = LUAUtil::getBoolFromTable(L, position, "luminance", luminance_);
+	singleFlow_ = LUAUtil::getBoolFromTable(L, position, "singleflow", singleFlow_);
 	napalmTexture_ = LUAUtil::getStringFromTable(L, position, "napalmtexture", napalmTexture_);
 	deformTexture_ = LUAUtil::getStringFromTable(L, position, "deformtexture", deformTexture_);
 }

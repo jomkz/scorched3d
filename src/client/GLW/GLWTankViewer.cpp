@@ -372,7 +372,7 @@ void GLWTankViewer::drawCaption(int pos)
 	Vector color(0.3f, 0.3f, 0.3f);
 	GLWFont::instance()->getGameFont()->
 		drawWidth(TankInfo - 20.0f, 
-			color, 10.0f, -150.0f, 155.0f, 0.0f, 
+			color, 10.0f, -150.0f, 175.0f, 0.0f, 
 			S3D::formatStringBuffer("Tank Name : %s", 
 			models_[pos].model->getName()));
 	/*GLWFont::instance()->getGameFont()->

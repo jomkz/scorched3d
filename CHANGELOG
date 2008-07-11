@@ -9,7 +9,7 @@ Optimized indexing of water and landscape into larger VBOs
 Water LOD now depends on water mesh detail as well as distance
 Added quadtree for water/land visibility
 Started experimental splatting texture mapping for landscape
-Started LUA scripting language support
+Added LUA scripting language support
 Player dies when less than 1 HP (avoids 0 HP tanks)
 Fixed tanks being positioned in the corner when joining at round begining
 Added -startcustom option to server to start using default server.xml file
@@ -21,3 +21,6 @@ Added option for simpler water shaders for framerate improvement
 Optimized object visibility checks to use quadtree
 Optimized/minimized OpenGL calls during landscape/water rendering
 Added arenawidth and arenaheight options to landscape defn to allow smaller playable area to be defined
+Added weaponscript for LUA scripted weapons
+Enlarged the LAN, MOTD and Tank dialogs to fit mimimum GUI size
+Added nosingleflow attribute to napalm to make it fill the area more

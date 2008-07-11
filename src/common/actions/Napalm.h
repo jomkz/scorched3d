@@ -26,6 +26,8 @@
 #include <common/Counter.h>
 #include <landscapemap/DeformLandscape.h>
 #include <list>
+#include <vector>
+#include <set>
 
 class GLTextureSet;
 class Napalm : public ActionReferenced
@@ -33,9 +35,10 @@ class Napalm : public ActionReferenced
 public:
 	struct NapalmEntry 
 	{
-		NapalmEntry(int x, int y, int o) : 
-			offset(o), posX(x), posY(y) {}
+		NapalmEntry(int x, int y, int o, int p) : 
+			offset(o), posX(x), posY(y), pset(p) {}
 
+		int pset;
 		int offset;
 		int posX, posY;
 	};
@@ -52,7 +55,7 @@ public:
 	NapalmParams *getParams() { return params_; }
 
 protected:
-	int x_, y_;
+	std::set<unsigned int> edgePoints_;
 	WeaponFireContext weaponContext_;
 	NapalmParams *params_;
 	Weapon *weapon_;
@@ -60,13 +63,16 @@ protected:
 	GLTextureSet *set_;
 
 	// Not sent by wire
-	bool hitWater_;
+	int particleSet_;
+	int startX_, startY_;
 	fixed totalTime_, hurtTime_;
 	fixed napalmTime_;
 	std::list<NapalmEntry *> napalmPoints_;
+	std::vector<NapalmEntry *> napalmRANDPoints_;
 
 	fixed getHeight(int x, int y);
 	void simulateAddStep();
+	void simulateAddEdge(int x, int y);
 	void simulateRmStep();
 	void simulateDamage();
 

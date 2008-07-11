@@ -48,10 +48,12 @@ public:
 	fixed getHurtPerSecond() { return hurtPerSecond_; }
 	fixed getGroundScorchPer() { return groundScorchPer_; }
 	int getEffectRadius() { return effectRadius_; }
+	int getNumberParticles() { return numberParticles_; }
 	bool getNoSmoke() { return noSmoke_; }
 	bool getNoObjectDamage() { return noObjectDamage_; }
 	bool getAllowUnderWater() { return allowUnderWater_; }
 	bool getLuminance() { return luminance_; }
+	bool getSingleFlow() { return singleFlow_; }
 	const char *getNapalmTexture() { return napalmTexture_.c_str(); }
 	const char *getDeformTexture() { return deformTexture_.c_str(); }
 
@@ -63,9 +65,11 @@ protected:
 	fixed hurtPerSecond_;// Damage per second
 	fixed groundScorchPer_; // The percentage chance the ground will be scorched
 	int effectRadius_;   // How close do tanks take damage
+	int numberParticles_;// How many napalm particles can be created
 	bool noSmoke_;       // Turns off smoke emitted by napalm
 	bool noObjectDamage_;// Turns off burning damage to landscape objects
 	bool allowUnderWater_;// Turns on/off napalm working under water
+	bool singleFlow_;    // Use a single flow of napalm or cover the whole downward area
 	bool luminance_;     // The texutre luminance
 	std::string napalmTexture_;
 	std::string deformTexture_;

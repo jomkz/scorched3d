@@ -223,15 +223,16 @@ near the flames will lose life.</description>
 			<projectilemodel type='MilkShape'>napalm/napalm.txt</projectilemodel>
 			<collisionaction type='WeaponNapalm'>
 				<napalmtime>8.0</napalmtime>
-				<napalmheight>2.0</napalmheight>
+				<napalmheight>0.2</napalmheight>
 				<steptime>0.1</steptime>
 				<hurtsteptime>2.0</hurtsteptime>
 				<hurtpersecond>1.0</hurtpersecond>
-				<numberstreams>2</numberstreams>
+				<numberstreams>1</numberstreams>
 				<effectradius>5</effectradius>
 				<napalmtexture>flames</napalmtexture>
 				<napalmsound>explosions/napalm.wav</napalmsound>
 				<allowunderwater>false</allowunderwater>
+        <!--<nosingleflow/>-->
 			</collisionaction>
 		</accessoryaction>
 	</accessory>
@@ -250,7 +251,7 @@ Any tanks near the flames will lose life.</description>
 			<projectilemodel type='MilkShape'>napalm/napalm.txt</projectilemodel>
 			<collisionaction type='WeaponNapalm'>
 				<napalmtime>8.0</napalmtime>
-				<napalmheight>2.0</napalmheight>
+				<napalmheight>0.2</napalmheight>
 				<steptime>0.1</steptime>
 				<hurtsteptime>2.0</hurtsteptime>
 				<hurtpersecond>2.0</hurtpersecond>

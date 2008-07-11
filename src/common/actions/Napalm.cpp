@@ -29,7 +29,6 @@
 #include <actions/CameraPositionAction.h>
 #ifndef S3D_SERVER
 	#include <sprites/ExplosionTextures.h>
-	#include <sprites/NapalmRenderer.h>
 	#include <GLEXT/GLStateExtension.h>
 	#include <landscape/Landscape.h>
 	#include <landscape/DeformTextures.h>
@@ -43,16 +42,23 @@
 #include <common/Defines.h>
 
 static const int deformSize = 3;
+static DeformLandscape::DeformPoints deformMap;
+static bool deformCreated = false;
+
+#define XY_TO_UINT(x, y) ((((unsigned int) x) << 16) | (((unsigned int) y) & 0xffff))
+#define UINT_TO_X(pt) ((int)(pt >> 16))
+#define UINT_TO_Y(pt) ((int)(pt & 0xffff))
 
 Napalm::Napalm(int x, int y, Weapon *weapon, 
 	NapalmParams *params,
 	WeaponFireContext &weaponContext) :
 	ActionReferenced("Napalm"),
-	x_(x), y_(y), napalmTime_(0), 
+	startX_(x), startY_(y), napalmTime_(0), 
 	weapon_(weapon), params_(params),
-	weaponContext_(weaponContext), hitWater_(false),
+	weaponContext_(weaponContext), 
 	totalTime_(0), hurtTime_(0),
-	counter_(0.1f, 0.1f), set_(0)
+	counter_(0.1f, 0.1f), set_(0),
+	particleSet_(0)
 {
 }
 
@@ -63,12 +69,34 @@ Napalm::~Napalm()
 
 void Napalm::init()
 {
+	if (!deformCreated)
+	{
+		deformCreated = true;
+
+		Vector center(deformSize + 1, deformSize + 1);
+		for (int a=0; a<(deformSize + 1) * 2; a++)
+		{
+			for (int b=0; b<(deformSize + 1) * 2; b++)
+			{
+				Vector pos(a, b);
+				float dist = (center - pos).Magnitude();
+				dist /= deformSize;
+				dist = 1.0f - MIN(1.0f, dist);
+
+				DIALOG_ASSERT(a < 100 && b < 100);
+				deformMap.map[a][b] = fixed::fromFloat(dist);
+			}
+		}
+	}
+
 	fixed ShowTime = 5;
-	FixedVector position(fixed(x_), fixed(y_), context_->landscapeMaps->
-		getGroundMaps().getHeight(x_, y_));
+	FixedVector position(fixed(startX_), fixed(startY_), context_->landscapeMaps->
+		getGroundMaps().getHeight(startX_, startY_));
 	CameraPositionAction *pos = new CameraPositionAction(
 		position, ShowTime, 5);
 	context_->actionController->addAction(pos);
+
+	edgePoints_.insert(XY_TO_UINT(startX_, startY_));
 
 #ifndef S3D_SERVER
 	if (!context_->serverMode) 
@@ -82,7 +110,7 @@ void Napalm::init()
 std::string Napalm::getActionDetails()
 {
 	return S3D::formatStringBuffer("%i,%i %s",
-		x_, y_, weapon_->getParent()->getName());
+		startX_, startY_, weapon_->getParent()->getName());
 }
 
 void Napalm::simulate(fixed frameTime, bool &remove)
@@ -90,29 +118,18 @@ void Napalm::simulate(fixed frameTime, bool &remove)
 #ifndef S3D_SERVER
 	if (!context_->serverMode)
 	{
-		if (!params_->getNoSmoke() &&
+		if (!napalmPoints_.empty() &&
+			!params_->getNoSmoke() &&
 			counter_.nextDraw(frameTime.asFloat()))
 		{
-			int count = int(RAND * float(napalmPoints_.size()));
+			int count = rand() % napalmPoints_.size();
 
-			std::list<Napalm::NapalmEntry *>::iterator itor;
-			std::list<Napalm::NapalmEntry *>::iterator endItor = 
-				napalmPoints_.end();
-			for (itor = napalmPoints_.begin();
-					itor != endItor;
-					itor++, count--)
-			{
-				NapalmEntry *entry = (*itor);
-				if (count == 0)
-				{
-					fixed posZ = 
-						ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeight(
-						entry->posX, entry->posY);
-					Landscape::instance()->getSmoke().
-						addSmoke(float(entry->posX), float(entry->posY), posZ.asFloat());
-					break;
-				}
-			}
+			NapalmEntry *entry = napalmRANDPoints_[napalmRANDPoints_.size() - 1 - count];
+			fixed posZ = 
+				ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeight(
+				entry->posX, entry->posY);
+			Landscape::instance()->getSmoke().
+				addSmoke(float(entry->posX), float(entry->posY), posZ.asFloat());
 		}
 	}
 #endif // #ifndef S3D_SERVER
@@ -128,7 +145,10 @@ void Napalm::simulate(fixed frameTime, bool &remove)
 		if (napalmTime_ < params_->getNapalmTime())
 		{
 			// Still within the time period, add more napalm
-			simulateAddStep();
+			if (int(napalmPoints_.size()) < params_->getNumberParticles()) 
+			{
+				simulateAddStep();
+			}
 
 			// Check for the case where we land in water
 			if (napalmPoints_.empty())
@@ -186,26 +206,52 @@ fixed Napalm::getHeight(int x, int y)
 
 void Napalm::simulateRmStep()
 {
-	// Remove the first napalm point from the list
-	// and remove the height from the landscape
-	NapalmEntry *entry = napalmPoints_.front();
-	napalmPoints_.pop_front();
-	int x = entry->posX;
-	int y = entry->posY;
-	delete entry;
+	int pset = napalmPoints_.front()->pset;
+	while (!napalmPoints_.empty()) 
+	{
+		// Check if the entry should be removed
+		NapalmEntry *entry = napalmPoints_.front();
+		if (pset != entry->pset) break;
 
-	context_->landscapeMaps->getGroundMaps().getNapalmHeight(x, y) -= params_->getNapalmHeight();
+		// Remove the first napalm point from the list
+		// and remove the height from the landscape
+		napalmPoints_.pop_front();
+		int x = entry->posX;
+		int y = entry->posY;
+		delete entry;
+
+		context_->landscapeMaps->getGroundMaps().getNapalmHeight(x, y) -= params_->getNapalmHeight();
+	}
 }
 
 void Napalm::simulateAddStep()
 {
+	particleSet_++;
+
+	std::set<unsigned int> currentEdges = edgePoints_;
+	edgePoints_.clear();
+
+	std::set<unsigned int>::iterator itor;
+	for (itor = currentEdges.begin();
+		itor != currentEdges.end();
+		itor++)
+	{
+		unsigned int currentEdge = *itor;
+		int x = UINT_TO_X(currentEdge);
+		int y = UINT_TO_Y(currentEdge);
+
+		simulateAddEdge(x, y);
+	}
+}
+
+void Napalm::simulateAddEdge(int x, int y)
+{
 	// Get the height of this point
-	fixed height = getHeight(x_, y_);
+	fixed height = getHeight(x, y);
 
 	if (!params_->getAllowUnderWater())
 	{
-		// Napalm does not go under water (for now)
-		// Perhaps we could add a boiling water sound at some point
+		// Check napalm is under water 
 		fixed waterHeight = -10;
 		LandscapeTex &tex = *context_->landscapeMaps->getDefinitions().getTex();
 		if (tex.border->getType() == LandscapeTexType::eWater)
@@ -217,11 +263,7 @@ void Napalm::simulateAddStep()
 
 		if (height < waterHeight) // Water height
 		{
-			if (!hitWater_)
-			{
-				// This is the first time we have hit the water
-				hitWater_ = true;
-			}
+			// Perhaps we could add a boiling water sound at some point
 			return;
 		}
 	} 
@@ -229,8 +271,9 @@ void Napalm::simulateAddStep()
 	// Add this current point to the napalm map
 	RandomGenerator &random = context_->actionController->getRandom();
 	int offset = (random.getRandFixed() * 31).asInt();
-	NapalmEntry *newEntry = new NapalmEntry(x_, y_, offset);
+	NapalmEntry *newEntry = new NapalmEntry(x, y, offset, particleSet_);
 	napalmPoints_.push_back(newEntry);
+	napalmRANDPoints_.push_back(newEntry);
 #ifndef S3D_SERVER
 	if (!context_->serverMode)
 	{
@@ -249,9 +292,9 @@ void Napalm::simulateAddStep()
 			Vector(0.0f, 0.0f, 0.0f), // Gravity
 			params_->getLuminance(),
 			false);
-		Vector position1(float(x_) + 0.5f, float(y_) - 0.2f, 0.0f);
-		Vector position2(float(x_) - 0.5f, float(y_) - 0.2f, 0.0f);
-		Vector position3(float(x_) + 0.0f, float(y_) + 0.5f, 0.0f);
+		Vector position1(float(x) + 0.5f, float(y) - 0.2f, 0.0f);
+		Vector position2(float(x) - 0.5f, float(y) - 0.2f, 0.0f);
+		Vector position3(float(x) + 0.0f, float(y) + 0.5f, 0.0f);
 		emitter.emitNapalm(
 			position1, 
 			ScorchedClient::instance()->getParticleEngine(),
@@ -264,114 +307,110 @@ void Napalm::simulateAddStep()
 			position3, 
 			ScorchedClient::instance()->getParticleEngine(),
 			set_);
-	}
-#endif // #ifndef S3D_SERVER
-
-	/*
-	if (!weapon_->getNoObjectDamage())
-	{
-		context_->landscapeMaps->getGroundMaps().getObjects().burnObjects(
-			*context_,
-			(unsigned int) x_, (unsigned int) y_,
-			playerId_);
-		context_->landscapeMaps->getGroundMaps().getObjects().burnObjects(
-			*context_,
-			(unsigned int) x_ + 1, (unsigned int) y_ + 1,
-			playerId_);
-		context_->landscapeMaps->getGroundMaps().getObjects().burnObjects(
-			*context_,
-			(unsigned int) x_ - 1, (unsigned int) y_ - 1,
-			playerId_);
-	}
-	*/
-
-	context_->landscapeMaps->getGroundMaps().getNapalmHeight(x_, y_) += params_->getNapalmHeight();
-	height += params_->getNapalmHeight();
-
-#ifndef S3D_SERVER
-	if (!context_->serverMode)
-	{
-		static DeformLandscape::DeformPoints deformMap;
-		static bool deformCreated = false;
-		if (!deformCreated)
-		{
-			deformCreated = true;
-
-			Vector center(deformSize + 1, deformSize + 1);
-			for (int x=0; x<(deformSize + 1) * 2; x++)
-			{
-				for (int y=0; y<(deformSize + 1) * 2; y++)
-				{
-					Vector pos(x, y);
-					float dist = (center - pos).Magnitude();
-					dist /= deformSize;
-					dist = 1.0f - MIN(1.0f, dist);
-
-					DIALOG_ASSERT(x < 100 && y < 100);
-					deformMap.map[x][y] = fixed::fromFloat(dist);
-				}
-			}
-		}
 
 		// Add the ground scorch
 		if (!GLStateExtension::getNoTexSubImage())
 		{
-			if (RAND < params_->getGroundScorchPer().asFloat())
+			if (height == context_->landscapeMaps->getGroundMaps().getHeight(x, y)) 
 			{
-				Vector pos(x_, y_);
-				DeformTextures::deformLandscape(pos, 
-					(int) (deformSize + 1),
-					ExplosionTextures::instance()->getScorchBitmap(
-						params_->getDeformTexture()),
-					deformMap);
+				if (RAND < params_->getGroundScorchPer().asFloat())
+				{
+					Vector pos(x, y);
+					DeformTextures::deformLandscape(pos, 
+						(int) (deformSize + 1),
+						ExplosionTextures::instance()->getScorchBitmap(
+							params_->getDeformTexture()),
+						deformMap);
+				}
 			}
 		}
 	}
 #endif // #ifndef S3D_SERVER
 
+	context_->landscapeMaps->getGroundMaps().getNapalmHeight(x, y) += params_->getNapalmHeight();
+
 	// Calculate every time as the landscape may change
 	// due to other actions
-	fixed heightL = getHeight(x_-1, y_);
-	fixed heightR = getHeight(x_+1, y_);
-	fixed heightU = getHeight(x_, y_+1);
-	fixed heightD = getHeight(x_, y_-1);
+	fixed heightL = getHeight(x-1, y);
+	fixed heightR = getHeight(x+1, y);
+	fixed heightU = getHeight(x, y+1);
+	fixed heightD = getHeight(x, y-1);
 
-	// Find the new point to move to (if any)
-	// This point must be lower than the current point
-	if (heightL < height &&
-		heightL < heightR &&
-		heightL < heightU &&
-		heightL < heightD)
+	if (params_->getSingleFlow()) 
 	{
-		// Move left
-		x_ -= 1;
-	}
-	else if (heightR < height &&
-		heightR < heightL &&
-		heightR < heightU &&
-		heightR < heightD)
-	{
-		// Move right
-		x_ += 1;
-	}
-	else if (heightU < height &&
-		heightU < heightL &&
-		heightU < heightR &&
-		heightU < heightD)
-	{
-		// Move up
-		y_ += 1;
-	}
-	else if (heightD < height)
-	{
-		// Move down
-		y_ -= 1;
+		// Find the new point to move to (if any)
+		// This point must be lower than the current point
+		if (heightL < height &&
+			heightL < heightR &&
+			heightL < heightU &&
+			heightL < heightD)
+		{
+			// Move left
+			edgePoints_.insert(XY_TO_UINT(x - 1, y));
+		}
+		else if (heightR < height &&
+			heightR < heightL &&
+			heightR < heightU &&
+			heightR < heightD)
+		{
+			// Move right
+			edgePoints_.insert(XY_TO_UINT(x + 1, y));
+		}
+		else if (heightU < height &&
+			heightU < heightL &&
+			heightU < heightR &&
+			heightU < heightD)
+		{
+			// Move up
+			edgePoints_.insert(XY_TO_UINT(x, y + 1));
+		}
+		else if (heightD < height)
+		{
+			// Move down
+			edgePoints_.insert(XY_TO_UINT(x, y - 1));
+		}
+		else
+		{
+			// None of the landscape is currently lower than the current point
+			// Just wait, as this point will be now be covered in napalm
+			// and may get higher and higher until it is
+			edgePoints_.insert(XY_TO_UINT(x, y));
+		}
 	}
 	else
 	{
-		// None of the landscape is currently lower than the current point
-		// Just wait, as this point will be now be covered in napalm
-		// and may get higher and higher until it is
+		int addedCount = 0;
+		if (heightL < height)
+		{
+			// Move left
+			addedCount++;
+			edgePoints_.insert(XY_TO_UINT(x - 1, y));
+		}
+		if (heightR < height)
+		{
+			// Move right
+			addedCount++;
+			edgePoints_.insert(XY_TO_UINT(x + 1, y));
+		}
+		if (heightU < height)
+		{
+			// Move up
+			addedCount++;
+			edgePoints_.insert(XY_TO_UINT(x, y + 1));
+		}
+		if (heightD < height)
+		{
+			// Move down
+			addedCount++;
+			edgePoints_.insert(XY_TO_UINT(x, y - 1));
+		}
+		if (addedCount == 0)
+		{
+			// None of the landscape is currently lower than the current point
+			// Just wait, as this point will be now be covered in napalm
+			// and may get higher and higher until it is
+			edgePoints_.insert(XY_TO_UINT(x, y));
+		}
 	}
 }
 
@@ -382,7 +421,8 @@ void Napalm::simulateDamage()
 	// Store how much each tank is damaged
 	// Keep in a map so we don't need to create multiple
 	// damage actions.  Now we only create one per tank
-	static std::map<unsigned int, fixed> TargetDamageCalc;
+	static std::map<Target *, fixed> TargetDamageCalc;
+	TargetDamageCalc.clear();
 
 	// Add damage into the damage map for each napalm point that is near to
 	// the tanks
@@ -413,15 +453,15 @@ void Napalm::simulateDamage()
 			Target *target = (*itor).second;
 			if (target->getAlive())
 			{
-				std::map<unsigned int, fixed>::iterator damageItor = 
-					TargetDamageCalc.find(target->getPlayerId());
+				std::map<Target *, fixed>::iterator damageItor = 
+					TargetDamageCalc.find(target);
 				if (damageItor == TargetDamageCalc.end())
 				{
-					TargetDamageCalc[target->getPlayerId()] = params_->getHurtPerSecond();
+					TargetDamageCalc[target] = params_->getHurtPerSecond();
 				}
 				else
 				{
-					TargetDamageCalc[target->getPlayerId()] += params_->getHurtPerSecond();
+					TargetDamageCalc[target] += params_->getHurtPerSecond();
 				}
 			}
 		}
@@ -430,16 +470,13 @@ void Napalm::simulateDamage()
 	// Add all the damage to the tanks (if any)
 	if (!TargetDamageCalc.empty())
 	{
-		std::map<unsigned int, fixed>::iterator damageItor;
+		std::map<Target *, fixed>::iterator damageItor;
 		for (damageItor = TargetDamageCalc.begin();
 			damageItor != TargetDamageCalc.end();
 			damageItor++)
 		{
-			unsigned int playerId = (*damageItor).first;
+			Target *target = (*damageItor).first;
 			fixed damage = (*damageItor).second;
-
-			Target *target = context_->targetContainer->getTargetById(playerId);
-			if (!target) continue;
 
 			// Add damage to the tank
 			// If allowed for this target type (mainly for trees)
