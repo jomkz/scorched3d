@@ -46,18 +46,18 @@ TankSay::~TankSay()
 void TankSay::init()
 {
 	Tank *tank = 
-		context_->tankContainer->getTankById(playerId_);
+		context_->getTankContainer().getTankById(playerId_);
 	if (tank)
 	{
 #ifndef S3D_SERVER
-		if (!context_->serverMode) 
+		if (!context_->getServerMode()) 
 		{
 			// put a speach bubble over the talking tank
 			Vector white(1.0f, 1.0f, 1.0f);
 			TalkRenderer *talk = new TalkRenderer(
 				tank->getPosition().getTankTurretPosition().asVector(),
 				white);
-			context_->actionController->addAction(new SpriteAction(talk));
+			context_->getActionController().addAction(new SpriteAction(talk));
 
 			ChannelText text("general", text_);
 			text.setSrcPlayerId(playerId_);

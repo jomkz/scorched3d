@@ -53,8 +53,8 @@ void PlacementTypeMask::getPositions(ScorchedContext &context,
 	std::list<Position> &returnPositions,
 	ProgressCounter *counter)
 {
-	int groundMapWidth = context.landscapeMaps->getGroundMaps().getLandscapeWidth();
-	int groundMapHeight = context.landscapeMaps->getGroundMaps().getLandscapeHeight();
+	int groundMapWidth = context.getLandscapeMaps().getGroundMaps().getLandscapeWidth();
+	int groundMapHeight = context.getLandscapeMaps().getGroundMaps().getLandscapeHeight();
 
 	ImageHandle map = ImageFactory::loadImageHandle(S3D::getDataFile(mask.c_str()));
 	if (!map.getBits())
@@ -86,9 +86,9 @@ void PlacementTypeMask::getPositions(ScorchedContext &context,
 		ly = MIN(MAX(fixed(0), ly), fixed(groundMapHeight));
 
 		fixed height = 
-			context.landscapeMaps->getGroundMaps().getInterpHeight(lx, ly);
+			context.getLandscapeMaps().getGroundMaps().getInterpHeight(lx, ly);
 		FixedVector normal;
-		context.landscapeMaps->
+		context.getLandscapeMaps().
 			getGroundMaps().getInterpNormal(lx, ly, normal);
 		if (height > minheight && 
 			height < maxheight &&

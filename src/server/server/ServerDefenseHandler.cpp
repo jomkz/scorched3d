@@ -131,7 +131,7 @@ void ServerDefenseHandler::processDefenseMessage(
 	case ComsDefenseMessage::eShieldUp:
 		{
 			Accessory *accessory = 
-				ScorchedServer::instance()->getContext().accessoryStore->
+				ScorchedServer::instance()->getContext().getAccessoryStore().
 					findByAccessoryId(message.getInfoId());
 			if (accessory->getType() == AccessoryPart::AccessoryShield)
 			{
@@ -157,7 +157,7 @@ void ServerDefenseHandler::processDefenseMessage(
 	case ComsDefenseMessage::eParachutesUp:
 		{
 			Accessory *accessory = 
-				ScorchedServer::instance()->getContext().accessoryStore->
+				ScorchedServer::instance()->getContext().getAccessoryStore().
 					findByAccessoryId(message.getInfoId());
 			if (accessory->getType() == AccessoryPart::AccessoryParachute)
 			{

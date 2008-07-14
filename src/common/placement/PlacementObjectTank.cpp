@@ -49,9 +49,9 @@ void PlacementObjectTank::createObject(ScorchedContext &context,
 	++playerId;
 	Tank *tank = tankDef_.createTank(
 		playerId, position.position, context, generator);
-	context.tankContainer->addTank(tank);
+	context.getTankContainer().addTank(tank);
 
-	context.landscapeMaps->getGroundMaps().getGroups().getShadows().push_back(
+	context.getLandscapeMaps().getGroundMaps().getGroups().getShadows().push_back(
 		PlacementShadowDefinition::Entry(
 		&tankDef_.getShadow(),
 		position.position,

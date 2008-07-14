@@ -253,7 +253,7 @@ bool Keyboard::loadKeyFile(const std::string &fileName, bool masterFile)
 		 childrenItor != children.end();
 		 childrenItor++)
     {
-		// Parse the tank entry
+		// Parse the key entry
         XMLNode *currentNode = (*childrenItor);
 		if (strcmp(currentNode->getName(), "keyentry"))
 		{

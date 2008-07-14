@@ -88,7 +88,7 @@ Accessory *TankWeapon::getCurrent()
 void TankWeapon::setCurrentWeapon(Accessory *wp)
 {
 #ifndef S3D_SERVER
-	if (!context_.serverMode)
+	if (!context_.getServerMode())
 	{
 		// Only show this information on this tanks client
 		if (ScorchedClient::instance()->getTankContainer().getCurrentDestinationId() ==
@@ -109,7 +109,7 @@ void TankWeapon::setCurrentWeapon(Accessory *wp)
 			if (wp->getPositionSelect() == Accessory::ePositionSelectFuel)
 			{
 				WeaponMoveTank *moveWeapon = (WeaponMoveTank *)
-					context_.accessoryStore->findAccessoryPartByAccessoryId(
+					context_.getAccessoryStore().findAccessoryPartByAccessoryId(
 						wp->getAccessoryId(), "WeaponMoveTank");
 				if (moveWeapon)
 				{

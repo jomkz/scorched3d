@@ -38,6 +38,7 @@
 static LUAScript *getScript(lua_State *L)
 {
 	lua_getglobal(L, "s3d_script");
+	DIALOG_ASSERT(!lua_isnil(L, -1));
 	LUAScript *script = (LUAScript *) lua_touserdata(L, -1);
 	lua_pop(L, 1);
 	return script;
@@ -47,7 +48,7 @@ static int s3d_random(lua_State *L)
 {
 	LUAScript *wrapper = getScript(L);
 	fixed result = wrapper->getContext()->
-		actionController->getRandom().getRandFixed();
+		getActionController().getRandom().getRandFixed();
 
 	lua_pushnumber(L, result.getInternal());
 	return 1;
@@ -63,7 +64,7 @@ static int s3d_fire_weapon(lua_State *L)
 	FixedVector velocity = LUAUtil::getVectorFromStack(L, 4);
 
 	Accessory *accessory =
-		wrapper->getContext()->accessoryStore->findByPrimaryAccessoryName(weaponName);
+		wrapper->getContext()->getAccessoryStore().findByPrimaryAccessoryName(weaponName);
 	if (!accessory) 
 	{
 		Logger::log(S3D::formatStringBuffer("Failed to find accessory named %s", weaponName));
@@ -97,7 +98,7 @@ static int s3d_explosion(lua_State *L)
 	WeaponFireContext fireContext(playerId, 0);
 	Explosion *explosion = new Explosion(
 		position, explosionParams, wrapper->getWeapon(), fireContext);
-	wrapper->getContext()->actionController->addAction(explosion);
+	wrapper->getContext()->getActionController().addAction(explosion);
 
 	return 0;
 }
@@ -115,7 +116,7 @@ static int s3d_napalm(lua_State *L)
 	Napalm *napalm = new Napalm(
 		position[0].asInt(), position[1].asInt(),
 		wrapper->getWeapon(), napalmParams, fireContext);
-	wrapper->getContext()->actionController->addAction(napalm);
+	wrapper->getContext()->getActionController().addAction(napalm);
 
 	return 0;
 }

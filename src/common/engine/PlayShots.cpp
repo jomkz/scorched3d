@@ -94,7 +94,7 @@ void PlayShots::playShots(ScorchedContext &context, bool roundStart)
 
 		// Check the tank exists for this player
 		// It may not if the player has left the game after firing.
-		Tank *tank = context.tankContainer->getTankById(playerId);
+		Tank *tank = context.getTankContainer().getTankById(playerId);
 		if (tank)
 		{
 			// This tank has now made a move, reset its missed move counter
@@ -127,11 +127,11 @@ void PlayShots::processPlayedMoveMessage(ScorchedContext &context,
 				// has finished buying, do nothing
 				break;
 			case ComsPlayedMoveMessage::eResign:
-				if (context.optionsGame->getResignMode() == OptionsGame::ResignStart)
+				if (context.getOptionsGame().getResignMode() == OptionsGame::ResignStart)
 				{
 					processResignMessage(context, message, tank);
 				}
-				else if (context.optionsGame->getResignMode() == OptionsGame::ResignDueToHealth)
+				else if (context.getOptionsGame().getResignMode() == OptionsGame::ResignDueToHealth)
 				{
 					if (tank->getLife().getMaxLife() / 2 <= tank->getLife().getLife())
 					{
@@ -150,8 +150,8 @@ void PlayShots::processPlayedMoveMessage(ScorchedContext &context,
 		switch (message.getType())
 		{
 			case ComsPlayedMoveMessage::eResign:
-				if (context.optionsGame->getResignMode() == OptionsGame::ResignEnd ||
-					context.optionsGame->getResignMode() == OptionsGame::ResignDueToHealth)
+				if (context.getOptionsGame().getResignMode() == OptionsGame::ResignEnd ||
+					context.getOptionsGame().getResignMode() == OptionsGame::ResignDueToHealth)
 				{
 					processResignMessage(context, message, tank);
 				}
@@ -171,7 +171,7 @@ void PlayShots::processResignMessage(ScorchedContext &context,
 	{
 		// Tank resign action
 		TankResign *resign = new TankResign(tank->getPlayerId());
-		context.actionController->addAction(resign);
+		context.getActionController().addAction(resign);
 
 		StatsLogger::instance()->tankResigned(tank);
 	}
@@ -188,7 +188,7 @@ void PlayShots::processFiredMessage(ScorchedContext &context,
 
 	// Check the weapon name exists and is a weapon
 	Accessory *accessory = 
-		context.accessoryStore->findByAccessoryId(message.getWeaponId());
+		context.getAccessoryStore().findByAccessoryId(message.getWeaponId());
 	if (!accessory) return;
 
 	Weapon *weapon = (Weapon *) accessory->getAction();
@@ -205,7 +205,7 @@ void PlayShots::processFiredMessage(ScorchedContext &context,
 	TankFired *fired = new TankFired(tank->getPlayerId(), 
 		weapon,
 		message.getRotationXY(), message.getRotationYZ());
-	context.actionController->addAction(fired);
+	context.getActionController().addAction(fired);
 
 	// Set the tank to have the correct rotation etc..
 	tank->getPosition().rotateGunXY(

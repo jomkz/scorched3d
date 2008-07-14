@@ -60,7 +60,7 @@ bool ComsMessageSender::formMessage(ComsMessage &message)
 bool ComsMessageSender::sendToServer(
 	ComsMessage &message, unsigned int flags)
 {
-	if (!ScorchedClient::instance()->getContext().netInterface ||
+	if (!ScorchedClient::instance()->getNetInterfaceValid() ||
 		!ScorchedClient::instance()->getNetInterface().started()) return false;
 	if (!formMessage(message)) return false;
 
@@ -107,7 +107,7 @@ bool ComsMessageSender::sendToMultipleClients(
 					destination,
 					defaultBuffer.getBufferUsed()));
 			}	
-			if (!ScorchedServer::instance()->getContext().netInterface ||
+			if (!ScorchedServer::instance()->getNetInterfaceValid() ||
 				!ScorchedServer::instance()->getNetInterface().started())
 			{
 				Logger::log( "ERROR: ComsMessageSender::sendToMultipleClients - Server not started");

@@ -50,7 +50,7 @@ bool WeaponGiveLives::parseXML(AccessoryCreateContext &context, XMLNode *accesso
 void WeaponGiveLives::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	context.actionController->addAction(
+	context.getActionController().addAction(
 		new CallbackWeapon("WeaponGiveLives", this, 0, 0, 
 			weaponContext, position, velocity));
 }
@@ -60,7 +60,7 @@ void WeaponGiveLives::weaponCallback(
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 	unsigned int userData)
 {
-	Tank *tank = context.tankContainer->getTankById(weaponContext.getPlayerId());
+	Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
 	if (!tank) return;
 
 	if (tank->getState().getMaxLives() > 0)
@@ -68,7 +68,7 @@ void WeaponGiveLives::weaponCallback(
 		tank->getState().setLives(
 			MAX(tank->getState().getLives() + lives_, 1));
 
-		if (!context.serverMode)
+		if (!context.getServerMode())
 		{
 			if (lives_ > 0)
 			{

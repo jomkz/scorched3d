@@ -205,7 +205,7 @@ Target *TargetSpace::getCollision(FixedVector &position)
 		}
 	}
 
-	if (context_->optionsGame->getActionSyncCheck())
+	if (context_->getOptionsGame().getActionSyncCheck())
 	{
 		std::string targets;
 		if (result)
@@ -217,7 +217,7 @@ Target *TargetSpace::getCollision(FixedVector &position)
 				result->getLife().getTargetPosition()[2].getInternal()));
 		}
 
-		context_->actionController->addSyncCheck(
+		context_->getActionController().addSyncCheck(
 			S3D::formatStringBuffer("CollisionSet : %i,%i,%i %s", 
 				position[0].getInternal(),
 				position[1].getInternal(),
@@ -289,7 +289,7 @@ void TargetSpace::getCollisionSet(FixedVector &position, fixed radius,
 		}
 	}
 
-	if (context_->optionsGame->getActionSyncCheck())
+	if (context_->getOptionsGame().getActionSyncCheck())
 	{
 		std::string targets;
 		std::map<unsigned int, Target *>::iterator itor;
@@ -304,7 +304,7 @@ void TargetSpace::getCollisionSet(FixedVector &position, fixed radius,
 				itor->second->getLife().getTargetPosition()[2].getInternal()));
 		}
 
-		context_->actionController->addSyncCheck(
+		context_->getActionController().addSyncCheck(
 			S3D::formatStringBuffer("CollisionSet : %i,%i,%i %i \"%s\"", 
 				position[0].getInternal(),
 				position[1].getInternal(),

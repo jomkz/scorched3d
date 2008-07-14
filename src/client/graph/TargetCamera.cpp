@@ -294,10 +294,10 @@ bool TargetCamera::moveCamera(float frameTime, bool playing)
 		}
 		break;
 	case CamGun:
-		if (ScorchedClient::instance()->getContext().viewPoints->getLookAtCount() > 0)
+		if (ScorchedClient::instance()->getContext().getViewPoints().getLookAtCount() > 0)
 		{
 			FixedVector lookatPos, lookfromPos;
-			ScorchedClient::instance()->getContext().viewPoints->
+			ScorchedClient::instance()->getContext().getViewPoints().
 				getValues(lookatPos, lookfromPos);
 
 			mainCam_.setLookAt(lookatPos.asVector(), true);

@@ -172,7 +172,7 @@ void ActionController::setFast(fixed speedMult)
 
 void ActionController::addSyncCheck(const std::string &msg)
 {
-	DIALOG_ASSERT(context_->optionsGame->getActionSyncCheck());
+	DIALOG_ASSERT(context_->getOptionsGame().getActionSyncCheck());
 	syncCheck_.push_back(msg);
 }
 
@@ -185,7 +185,7 @@ void ActionController::addAction(Action *action)
 	if (action->getReferenced())
 	{
 		action->setActionNumber(++actionNumber_);
-		if (context_->optionsGame->getActionSyncCheck())
+		if (context_->getOptionsGame().getActionSyncCheck())
 		{
 			std::string actionType = action->getActionType();
 			std::string actionDetails = action->getActionDetails();
@@ -252,7 +252,7 @@ void ActionController::simulate(const unsigned state, float ft)
 	stepTime_ += frameTime;
 
 	// step size = 1.0 / physics fps = steps per second
-	const fixed stepSize = fixed(1) / fixed(context_->optionsGame->getPhysicsFPS());
+	const fixed stepSize = fixed(1) / fixed(context_->getOptionsGame().getPhysicsFPS());
 	while (stepTime_ >= stepSize)
 	{
 		time_ += stepSize;
@@ -277,7 +277,7 @@ void ActionController::stepActions(fixed frameTime)
 	}
 
 	// Move the targets
-	context_->targetMovement->simulate(*context_, frameTime);
+	context_->getTargetMovement().simulate(*context_, frameTime);
 
 	// Itterate and draw all of the actions
 	int keepcount=0;
@@ -306,7 +306,7 @@ void ActionController::stepActions(fixed frameTime)
 				referenceCount_--;
 				if (referenceCount_<0) referenceCount_ = 0;
 
-				if (context_->optionsGame->getActionSyncCheck())
+				if (context_->getOptionsGame().getActionSyncCheck())
 				{
 					std::string actionType = act->getActionType();
 					std::string actionDetails = act->getActionDetails();

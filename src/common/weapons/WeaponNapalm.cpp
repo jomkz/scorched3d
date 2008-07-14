@@ -60,7 +60,7 @@ bool WeaponNapalm::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 void WeaponNapalm::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	fixed minHeight = context.landscapeMaps->getGroundMaps().getInterpHeight(
+	fixed minHeight = context.getLandscapeMaps().getGroundMaps().getInterpHeight(
 		position[0], position[1]);
 
 	// Make sure position is not underground
@@ -72,7 +72,7 @@ void WeaponNapalm::fireWeapon(ScorchedContext &context,
 		}
 	}
 
-	RandomGenerator &random = context.actionController->getRandom();
+	RandomGenerator &random = context.getActionController().getRandom();
 	for (int i=0; i<numberStreams_; i++)
 	{
 		int x = (position[0] + random.getRandFixed() * 4 - 2).asInt();
@@ -81,7 +81,7 @@ void WeaponNapalm::fireWeapon(ScorchedContext &context,
 	}
 
 #ifndef S3D_SERVER
-	if (!context.serverMode) 
+	if (!context.getServerMode()) 
 	{
 		if (napalmSound_.c_str()[0] &&
 			0 != strcmp(napalmSound_.c_str(), "none"))
@@ -108,6 +108,6 @@ void WeaponNapalm::addNapalm(ScorchedContext &context,
 
 	// Ensure that the napalm has not hit the walls
 	// or anything outside the landscape
-	context.actionController->addAction(
+	context.getActionController().addAction(
 		new Napalm(x, y, this, params, weaponContext));
 }

@@ -51,7 +51,7 @@ TankFalling::~TankFalling()
 {
 	if (context_)
 	{
-		Target *target = context_->targetContainer->getTargetById(fallingPlayerId_);
+		Target *target = context_->getTargetContainer().getTargetById(fallingPlayerId_);
 		if (target)
 		{
 			if (target->getTargetState().getFalling() == this)
@@ -65,7 +65,7 @@ TankFalling::~TankFalling()
 void TankFalling::init()
 {
 	Target *current = 
-		context_->targetContainer->getTargetById(fallingPlayerId_);
+		context_->getTargetContainer().getTargetById(fallingPlayerId_);
 	if (current && 
 		!current->getTargetState().getFalling() && 
 		!current->getTargetState().getNoFalling())
@@ -100,7 +100,7 @@ void TankFalling::simulate(fixed frameTime, bool &remove)
 		if (parachute_)	applyForce(parachute_->getSlowForce());
 
 		// Move the tank to the new position
-		Target *target = context_->targetContainer->getTargetById(fallingPlayerId_);
+		Target *target = context_->getTargetContainer().getTargetById(fallingPlayerId_);
 		if (target && target->getAlive())
 		{
 			FixedVector &position = getCurrentPosition();
@@ -118,7 +118,7 @@ void TankFalling::simulate(fixed frameTime, bool &remove)
 void TankFalling::collision(PhysicsParticleObject &position, 
 	ScorchedCollisionId collisionId)
 {
-	Target *current = context_->targetContainer->getTargetById(fallingPlayerId_);
+	Target *current = context_->getTargetContainer().getTargetById(fallingPlayerId_);
 	if (current && current->getAlive())
 	{
 		// Find how far we have falled to get the total damage
@@ -126,7 +126,7 @@ void TankFalling::collision(PhysicsParticleObject &position,
 		fixed damage = dist * 20;
 
 		// Check we need to cancel the damage
-		fixed minDist = fixed(context_->optionsGame->
+		fixed minDist = fixed(context_->getOptionsGame().
 			getMinFallingDistance()) / 10;
 		if (dist < minDist)
 		{
@@ -158,9 +158,9 @@ void TankFalling::collision(PhysicsParticleObject &position,
 			}
 		}
 
-		if (context_->optionsGame->getActionSyncCheck())
+		if (context_->getOptionsGame().getActionSyncCheck())
 		{
-			context_->actionController->addSyncCheck(
+			context_->getActionController().addSyncCheck(
 				S3D::formatStringBuffer("TankFalling: %u %i, %i, %i", 
 					current->getPlayerId(),
 					position.getPosition()[0].getInternal(),
@@ -176,7 +176,7 @@ void TankFalling::collision(PhysicsParticleObject &position,
 		{
 			DeformLandscape::flattenArea(*context_, position.getPosition());
 #ifndef S3D_SERVER
-			if (!context_->serverMode)
+			if (!context_->getServerMode())
 			{
 				VisibilityPatchGrid::instance()->recalculateErrors(position.getPosition(), 2);
 			}
@@ -192,7 +192,7 @@ void TankFalling::collision(PhysicsParticleObject &position,
 
 		// Check if we have collected/given any items
 		std::map<unsigned int, Target *> collisionTargets;
-		context_->targetSpace->getCollisionSet(
+		context_->getTargetSpace().getCollisionSet(
 			current->getLife().getTargetPosition(), 3, collisionTargets, false);
 		std::map<unsigned int, Target *>::iterator itor;
 		for (itor = collisionTargets.begin();
@@ -209,7 +209,7 @@ void TankFalling::collision(PhysicsParticleObject &position,
 				WeaponFireContext weaponContext(weaponContext_);
 				weaponContext.setPlayerId(collisionTarget->getPlayerId());
 
-				context_->actionController->addAction(
+				context_->getActionController().addAction(
 					new TankDamage(weapon_, current->getPlayerId(), weaponContext, 
 						current->getLife().getLife(),
 						false, false, false));
@@ -222,7 +222,7 @@ void TankFalling::collision(PhysicsParticleObject &position,
 				WeaponFireContext weaponContext(weaponContext_);
 				weaponContext.setPlayerId(current->getPlayerId());
 
-				context_->actionController->addAction(
+				context_->getActionController().addAction(
 					new TankDamage(weapon_, 
 					collisionTarget->getPlayerId(), weaponContext_, 
 					collisionTarget->getLife().getLife(),

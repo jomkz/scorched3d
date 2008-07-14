@@ -131,34 +131,34 @@ static bool initComs(ProgressCounter *progressCounter)
 	ScorchedClient::instance();
 
 	// Tidy up any existing net handlers
-	if (ScorchedClient::instance()->getContext().netInterface)
+	if (ScorchedClient::instance()->getContext().getNetInterfaceValid())
 	{
-		ScorchedClient::instance()->getContext().netInterface->stop();
-		delete ScorchedClient::instance()->getContext().netInterface;
-		ScorchedClient::instance()->getContext().netInterface = 0;
+		ScorchedClient::instance()->getContext().getNetInterface().stop();
+		delete &ScorchedClient::instance()->getContext().getNetInterface();
+		ScorchedClient::instance()->getContext().setNetInterface(0);
 	}
-	if (ScorchedServer::instance()->getContext().netInterface)
+	if (ScorchedServer::instance()->getContext().getNetInterfaceValid())
 	{
-		ScorchedServer::instance()->getContext().netInterface->stop();
-		delete ScorchedServer::instance()->getContext().netInterface;
-		ScorchedServer::instance()->getContext().netInterface = 0;
+		ScorchedServer::instance()->getContext().getNetInterface().stop();
+		delete &ScorchedServer::instance()->getContext().getNetInterface();
+		ScorchedServer::instance()->getContext().setNetInterface(0);
 	}
 
 	// Create the new net handlers
 	if (ClientParams::instance()->getConnectedToServer())
 	{
-		ScorchedClient::instance()->getContext().netInterface = 
+		ScorchedClient::instance()->getContext().setNetInterface(
 			//new NetServerTCP(new NetServerTCPScorchedProtocol());
 			//new NetServerUDP();
 			//new NetServerTCP2();
-			new NetServerTCP3();
+			new NetServerTCP3());
 	}
 	else
 	{
 		NetLoopBack *serverLoopBack = new NetLoopBack(NetLoopBack::ServerLoopBackID);
-		ScorchedServer::instance()->getContext().netInterface = serverLoopBack;
+		ScorchedServer::instance()->getContext().setNetInterface(serverLoopBack);
 		NetLoopBack *clientLoopBack = new NetLoopBack(NetLoopBack::ClientLoopBackID);
-		ScorchedClient::instance()->getContext().netInterface = clientLoopBack;
+		ScorchedClient::instance()->getContext().setNetInterface(clientLoopBack);
 		serverLoopBack->setLoopBack(clientLoopBack);
 		clientLoopBack->setLoopBack(serverLoopBack);
 	}
@@ -397,7 +397,7 @@ bool ClientMain::clientMain()
 		if (paused) SDL_Delay(100);  // Otherwise when not drawing graphics its an infinite loop	
 	}
 
-	if (ScorchedClient::instance()->getContext().netInterface)
+	if (ScorchedClient::instance()->getContext().getNetInterfaceValid())
 	{
 		ScorchedClient::instance()->getNetInterface().disconnectAllClients();
 	}

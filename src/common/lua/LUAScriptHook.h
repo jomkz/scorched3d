@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-//    Scorched3D (c) 2000-2003
+//    Scorched3D (c) 2000-2004
 //
 //    This file is part of Scorched3D.
 //
@@ -18,35 +18,52 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <actions/SkyFlash.h>
-#include <engine/ScorchedContext.h>
-#ifndef S3D_SERVER
-	#include <landscape/Landscape.h>
-	#include <sky/Sky.h>
-#endif
+#if !defined(__INCLUDE_LUAScriptHook_INCLUDE__)
+#define __INCLUDE_LUAScriptHook_INCLUDE__
 
-SkyFlash::SkyFlash() :
-	ActionReferenced("SkyFlash")
-{
-}
+#include <lua/LUAScriptFactory.h>
+#include <map>
+#include <vector>
 
-SkyFlash::~SkyFlash()
+class LUAScriptHook
 {
-}
-
-void SkyFlash::init()
-{
-}
-
-void SkyFlash::simulate(fixed frameTime, bool &remove)
-{
-#ifndef S3D_SERVER
-	if (!context_->getServerMode())
+public:
+	class Param
 	{
-		Landscape::instance()->getSky().flashSky();
-	}
-#endif // #ifndef S3D_SERVER
+	public:
+		enum Type
+		{
+			eString,
+			eNumber
+		};
 
-	remove = true;
-	Action::simulate(frameTime, remove);
-}
+		Param(fixed innumber) :
+			number(innumber), type(eNumber) {};
+		Param(const std::string &instr) :
+			str(instr), type(eString) {};
+
+		Type type;
+		fixed number;
+		std::string str;
+	};
+
+	LUAScriptHook(LUAScriptFactory *factory);
+	~LUAScriptHook();
+
+	void addHookProvider(const std::string &hookName);
+
+	void callHook(const std::string &hookName, std::vector<Param> &params);
+	bool loadHooks(const std::string &fileName);
+
+protected:
+	struct HookEntry
+	{
+		LUAScript *script;
+		std::string entryPoint;
+	};
+
+	LUAScriptFactory *factory_;
+	std::map<std::string, std::vector<HookEntry> > hookNames_;
+};
+
+#endif // __INCLUDE_LUAScriptHook_INCLUDE__

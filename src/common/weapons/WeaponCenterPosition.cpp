@@ -61,10 +61,10 @@ bool WeaponCenterPosition::parseXML(AccessoryCreateContext &context, XMLNode *ac
 void WeaponCenterPosition::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	int arenaX = context.landscapeMaps->getGroundMaps().getArenaX();
-	int arenaY = context.landscapeMaps->getGroundMaps().getArenaY();
-	int arenaWidth = context.landscapeMaps->getGroundMaps().getArenaWidth();
-	int arenaHeight = context.landscapeMaps->getGroundMaps().getArenaHeight();
+	int arenaX = context.getLandscapeMaps().getGroundMaps().getArenaX();
+	int arenaY = context.getLandscapeMaps().getGroundMaps().getArenaY();
+	int arenaWidth = context.getLandscapeMaps().getGroundMaps().getArenaWidth();
+	int arenaHeight = context.getLandscapeMaps().getGroundMaps().getArenaHeight();
 
 	FixedVector newPositon = position;
 	newPositon[0] = (arenaWidth / 2) + arenaX;

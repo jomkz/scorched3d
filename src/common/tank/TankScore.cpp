@@ -47,7 +47,7 @@ void TankScore::newMatch()
 {
 	resetTotalEarnedStats();
 	money_ = 0;
-	setMoney(context_.optionsGame->getStartMoney());
+	setMoney(context_.getOptionsGame().getStartMoney());
 	wins_ = 0;
 	kills_ = turnKills_ = 0;
 	assists_ = 0;

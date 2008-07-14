@@ -62,7 +62,7 @@ void TargetShield::setCurrentShield(Accessory *sh)
 	}
 
 	// Update the target space with this new shield information
-	context_.targetSpace->updateTarget(target_);
+	context_.getTargetSpace().updateTarget(target_);
 }
 
 void TargetShield::setShieldPower(fixed power)
@@ -88,7 +88,7 @@ bool TargetShield::readMessage(NetBufferReader &reader)
 	unsigned int shieldId;
 	if (!reader.getFromBuffer(shieldId)) return false;
 	if (shieldId == 0) setCurrentShield(0);
-	else setCurrentShield(context_.accessoryStore->findByAccessoryId(shieldId));
+	else setCurrentShield(context_.getAccessoryStore().findByAccessoryId(shieldId));
 	if (shieldId != 0) if (!reader.getFromBuffer(power_)) return false;
 	return true;
 }

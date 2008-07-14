@@ -69,18 +69,18 @@ void Explosion::init()
 	fixed ShowTime = 4;
 	CameraPositionAction *pos = new CameraPositionAction(
 		position_, ShowTime, 10);
-	context_->actionController->addAction(pos);
+	context_->getActionController().addAction(pos);
 
-	fixed multiplier = fixed(((int) context_->optionsGame->getWeapScale()) - 
+	fixed multiplier = fixed(((int) context_->getOptionsGame().getWeapScale()) - 
 							 OptionsGame::ScaleMedium);
 	multiplier *= fixed(true, 5000);
 	multiplier += 1;
 	fixed explosionSize = params_->getSize() * multiplier;	
 
 #ifndef S3D_SERVER
-	if (!context_->serverMode) 
+	if (!context_->getServerMode()) 
 	{
-		float height = context_->landscapeMaps->getGroundMaps().getInterpHeight(
+		float height = context_->getLandscapeMaps().getGroundMaps().getInterpHeight(
 			position_[0], position_[1]).asFloat();
 		float aboveGround = position_[2].asFloat() - height;
 
@@ -163,7 +163,7 @@ void Explosion::init()
 		}
 		else
 		{
-			context_->viewPoints->explosion(weaponContext_.getPlayerId());
+			context_->getViewPoints().explosion(weaponContext_.getPlayerId());
 		}
 
 		{
@@ -205,7 +205,7 @@ void Explosion::init()
 		{
 			if (RAND <= params_->getCreateMushroomAmount().asFloat())
 			{
-				context_->actionController->addAction(
+				context_->getActionController().addAction(
 					new SpriteAction(
 					new ExplosionNukeRenderer(position_.asVector(), params_->getSize().asFloat() - 2.0f)));	
 			}
@@ -231,7 +231,7 @@ void Explosion::simulate(fixed frameTime, bool &remove)
 	{
 		firstTime_ = false;
 #ifndef S3D_SERVER
-		if (!context_->serverMode) 
+		if (!context_->getServerMode()) 
 		{
 			if (params_->getExplosionSound() &&
 				0 != strcmp("none", params_->getExplosionSound()))
@@ -246,7 +246,7 @@ void Explosion::simulate(fixed frameTime, bool &remove)
 #endif // #ifndef S3D_SERVER
 
 		// Get the land height at the explosion
-		fixed landHeight = context_->landscapeMaps->getGroundMaps().
+		fixed landHeight = context_->getLandscapeMaps().getGroundMaps().
 				getInterpHeight(position_[0], position_[1]);
 
 		// Dirt should only form along the ground
@@ -260,7 +260,7 @@ void Explosion::simulate(fixed frameTime, bool &remove)
 		{
 			// Get the actual explosion size
 			fixed multiplier = 
-				fixed(((int) context_->optionsGame->getWeapScale()) - 
+				fixed(((int) context_->getOptionsGame().getWeapScale()) - 
 					OptionsGame::ScaleMedium);
 			multiplier *= fixed(true, 5000);
 			multiplier += 1;
@@ -286,7 +286,7 @@ void Explosion::simulate(fixed frameTime, bool &remove)
 					(params_->getDeformType() == ExplosionParams::DeformDown), map))
 				{
 #ifndef S3D_SERVER
-					if (!context_->serverMode) 
+					if (!context_->getServerMode()) 
 					{
 						Landscape::instance()->recalculate();
 						VisibilityPatchGrid::instance()->recalculateErrors(newPosition, explosionSize);

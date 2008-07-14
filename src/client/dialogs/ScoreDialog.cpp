@@ -328,7 +328,7 @@ void ScoreDialog::draw()
 			{
 				addScoreLine(y, 
 					TankColorGenerator::getTeamColor(i + 1),
-					ScorchedClient::instance()->getContext().tankTeamScore->getScore(i+1));
+					ScorchedClient::instance()->getContext().getTankTeamScore().getScore(i+1));
 				y+= lineSpacer;
 				y+= lineSpacer;
 			}

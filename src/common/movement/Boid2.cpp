@@ -212,11 +212,11 @@ bool Boid2::checkCollision(FixedVector &normal)
 		fixed dist = fixed(i) * 3;
 		FixedVector newPosition = position + direction_ * dist;
 
-		if (context_.landscapeMaps->getGroundMaps().getHeight(
+		if (context_.getLandscapeMaps().getGroundMaps().getHeight(
 			newPosition[0].asInt(), newPosition[1].asInt()) > newPosition[2] - fixed(5))
 		{
 			collision++;
-			normal += context_.landscapeMaps->getGroundMaps().getNormal(
+			normal += context_.getLandscapeMaps().getGroundMaps().getNormal(
 				newPosition[0].asInt(), newPosition[1].asInt());
 			break;
 		}

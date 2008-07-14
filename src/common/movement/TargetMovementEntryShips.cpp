@@ -40,9 +40,9 @@ TargetMovementEntryShips::~TargetMovementEntryShips()
 void TargetMovementEntryShips::generate(ScorchedContext &context, 
 	RandomGenerator &random, LandscapeMovementType *movementType)
 {
-	int mapWidth = context.landscapeMaps->getGroundMaps().getLandscapeWidth();
-	int mapHeight = context.landscapeMaps->getGroundMaps().getLandscapeHeight();
-	LandscapeTex &tex = *context.landscapeMaps->getDefinitions().getTex();
+	int mapWidth = context.getLandscapeMaps().getGroundMaps().getLandscapeWidth();
+	int mapHeight = context.getLandscapeMaps().getGroundMaps().getLandscapeHeight();
+	LandscapeTex &tex = *context.getLandscapeMaps().getDefinitions().getTex();
 
 	// Get the water height (if water is on)
 	fixed waterHeight = 0;
@@ -83,7 +83,7 @@ void TargetMovementEntryShips::generate(ScorchedContext &context,
 	path_.simulate(shipGroup->starttime);
 
 	// Find the group to move the objects in
-	groupEntry_ = context.landscapeMaps->getGroundMaps().getGroups().
+	groupEntry_ = context.getLandscapeMaps().getGroundMaps().getGroups().
 		getGroup(shipGroup->groupname.c_str());
 	if (!groupEntry_)
 	{

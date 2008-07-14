@@ -117,7 +117,7 @@ void WeaponRoller::fireWeapon(ScorchedContext &context,
 
 	dampenVelocity_ = dampenVelocityExp_.getValue(context, dampenVelocity_);
 
-	fixed minHeight = context.landscapeMaps->getGroundMaps().getInterpHeight(
+	fixed minHeight = context.getLandscapeMaps().getGroundMaps().getInterpHeight(
 		oldposition[0], oldposition[1]);
 
 	// Make sure position is not underground
@@ -129,7 +129,7 @@ void WeaponRoller::fireWeapon(ScorchedContext &context,
 		}
 	}
 
-	RandomGenerator &random = context.actionController->getRandom();
+	RandomGenerator &random = context.getActionController().getRandom();
 	int numberRollers = numberRollers_.getUInt(context);
 	for (int i=0; i<numberRollers; i++)
 	{
@@ -139,13 +139,13 @@ void WeaponRoller::fireWeapon(ScorchedContext &context,
 		// Make a slightly different starting position
 		position[0] += random.getRandFixed() * 2 - 1;
 		position[1] += random.getRandFixed() * 2 - 1;
-		fixed minHeight = context.landscapeMaps->getGroundMaps().getInterpHeight(
+		fixed minHeight = context.getLandscapeMaps().getGroundMaps().getInterpHeight(
 			position[0], position[1]) + 1;
 		if (position[2] < minHeight) position[2] = minHeight;
 				
 		// Check if we have hit the roof (quite litteraly)
 		{
-			fixed maxHeight = context.landscapeMaps->getRoofMaps().getInterpRoofHeight(
+			fixed maxHeight = context.getLandscapeMaps().getRoofMaps().getInterpRoofHeight(
 				position[0] / 4, position[1] / 4);
 			if (position[2] > maxHeight - 1)
 			{
@@ -159,7 +159,7 @@ void WeaponRoller::fireWeapon(ScorchedContext &context,
 		{
 			ok = true;
 			std::map<unsigned int, Target *> &targets = 
-				context.targetContainer->getTargets();
+				context.getTargetContainer().getTargets();
 			std::map<unsigned int, Target *>::iterator itor;
 			for (itor = targets.begin();
 				itor != targets.end();
@@ -191,7 +191,7 @@ void WeaponRoller::addRoller(ScorchedContext &context,
 	WeaponFireContext &weaponContext,
 	FixedVector &position, FixedVector &velocity)
 {
-	RandomGenerator &random = context.actionController->getRandom();
+	RandomGenerator &random = context.getActionController().getRandom();
 
 	FixedVector newVelocity;
 	if (maintainVelocity_)
@@ -205,6 +205,6 @@ void WeaponRoller::addRoller(ScorchedContext &context,
 		newVelocity[2] = random.getRandFixed() * 2;
 	}
 	
-	context.actionController->addAction(
+	context.getActionController().addAction(
 		new ShotBounce(this, position, newVelocity, weaponContext));
 }

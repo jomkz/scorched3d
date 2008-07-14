@@ -59,7 +59,7 @@ void WeaponTeleport::fireWeapon(ScorchedContext &context,
 {
 	// Mininum height
 	fixed allowedHeight = 0;
-	LandscapeTex &tex = *context.landscapeMaps->getDefinitions().getTex();
+	LandscapeTex &tex = *context.getLandscapeMaps().getDefinitions().getTex();
 		if (tex.border->getType() == LandscapeTexType::eWater)
 	{
 		LandscapeTexBorderWater *water = 
@@ -68,21 +68,21 @@ void WeaponTeleport::fireWeapon(ScorchedContext &context,
 		allowedHeight = water->height;
 	}
 
-	int arenaX = context.landscapeMaps->getGroundMaps().getArenaX();
-	int arenaY = context.landscapeMaps->getGroundMaps().getArenaY();
-	int arenaWidth = context.landscapeMaps->getGroundMaps().getArenaWidth();
-	int arenaHeight = context.landscapeMaps->getGroundMaps().getArenaHeight();
+	int arenaX = context.getLandscapeMaps().getGroundMaps().getArenaX();
+	int arenaY = context.getLandscapeMaps().getGroundMaps().getArenaY();
+	int arenaWidth = context.getLandscapeMaps().getGroundMaps().getArenaWidth();
+	int arenaHeight = context.getLandscapeMaps().getGroundMaps().getArenaHeight();
 
 	if (position[0] > fixed(arenaX + 5) && 
 		position[1] > fixed(arenaY + 5) &&
 		position[0] < fixed(arenaX + arenaWidth - 5) &&
 		position[1] < fixed(arenaY + arenaHeight - 5))
 	{
-		fixed landscapeHeight = context.landscapeMaps->getGroundMaps().getInterpHeight(
+		fixed landscapeHeight = context.getLandscapeMaps().getGroundMaps().getInterpHeight(
 			position[0], position[1]);
 		if (landscapeHeight >= allowedHeight - 1)
 		{
-			context.actionController->addAction(
+			context.getActionController().addAction(
 				new Teleport(position, weaponContext, this));
 		}
 	}

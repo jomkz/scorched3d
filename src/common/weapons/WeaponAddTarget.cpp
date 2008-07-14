@@ -42,5 +42,5 @@ void WeaponAddTarget::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
 	Action *action = new AddTarget(position, this);
-	context.actionController->addAction(action);
+	context.getActionController().addAction(action);
 }

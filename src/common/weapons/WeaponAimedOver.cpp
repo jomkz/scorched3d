@@ -81,7 +81,7 @@ void WeaponAimedOver::fireWeapon(ScorchedContext &context,
 	FixedVector position = sentPosition;
 
 	// Make sure that this position is above ground
-	fixed minHeight = context.landscapeMaps->getGroundMaps().getInterpHeight(
+	fixed minHeight = context.getLandscapeMaps().getGroundMaps().getInterpHeight(
 		position[0], position[1]);
 	if (position[2] < minHeight + fixed(true, 5000))
 	{
@@ -91,7 +91,7 @@ void WeaponAimedOver::fireWeapon(ScorchedContext &context,
 	bool ceiling = false;
 	{
 		// This will return MAX_FLT when there is no roof
-		fixed maxHeight = context.landscapeMaps->getRoofMaps().getInterpRoofHeight(
+		fixed maxHeight = context.getLandscapeMaps().getRoofMaps().getInterpRoofHeight(
 			position[0] / 4, position[1] / 4);
 		if (position[2] > maxHeight - 1)
 		{
@@ -136,7 +136,7 @@ void WeaponAimedOver::fireWeapon(ScorchedContext &context,
 		}
 	}
 
-	RandomGenerator &random = context.actionController->getRandom();
+	RandomGenerator &random = context.getActionController().getRandom();
 	
 	// Add a percetage that we will not fire at any tank
 	maxDist *= (percentageMissChance_.getValue(context) / 100) + 1;

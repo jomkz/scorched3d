@@ -123,7 +123,7 @@ bool ServerShotHolder::validateFiredMessage(
 {
 	// Check the weapon name exists and is a weapon
 	Accessory *accessory = 
-		context.accessoryStore->findByAccessoryId(
+		context.getAccessoryStore().findByAccessoryId(
 		message.getWeaponId());
 	if (accessory && accessory->getType() != AccessoryPart::AccessoryWeapon)
 	{
@@ -138,8 +138,8 @@ bool ServerShotHolder::validateFiredMessage(
 
 	// Check armslevel
 	if ((10 - accessory->getArmsLevel()) <=
-		context.optionsTransient->getArmsLevel() ||
-		context.optionsGame->getGiveAllWeapons()) {}
+		context.getOptionsTransient().getArmsLevel() ||
+		context.getOptionsGame().getGiveAllWeapons()) {}
 	else return false;
 
 	// Check weapons selection parameters

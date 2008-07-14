@@ -66,7 +66,7 @@ void TankState::newGame()
 	setState(sNormal);
 	if (!tank_->isTemp())
 	{
-		maxLives_ = context_.optionsGame->getPlayerLives();
+		maxLives_ = context_.getOptionsGame().getPlayerLives();
 	}
 
 	lives_ = maxLives_;

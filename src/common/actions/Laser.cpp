@@ -98,7 +98,7 @@ void Laser::simulate(fixed frameTime, bool &remove)
 			while (!end)
 			{
 				std::map<unsigned int, Target *> collisionTargets;
-				context_->targetSpace->getCollisionSet(pos, 
+				context_->getTargetSpace().getCollisionSet(pos, 
 					fixed(weapon_->getHurtRadius(*context_)), collisionTargets);
 				std::map<unsigned int, Target *>::iterator itor;
 				for (itor = collisionTargets.begin();
@@ -121,7 +121,7 @@ void Laser::simulate(fixed frameTime, bool &remove)
 								FixedVector offset = current->getLife().getTargetPosition() - pos;
 								if (shield->inShield(offset))
 								{
-									context_->actionController->addAction(
+									context_->getActionController().addAction(
 										new ShieldHit(current->getPlayerId(), pos, 0));
 
 									end = true;
@@ -159,7 +159,7 @@ void Laser::simulate(fixed frameTime, bool &remove)
 				itor++)
 			{
 				unsigned int damagedTarget = (*itor);
-				context_->actionController->addAction(
+				context_->getActionController().addAction(
 					new TankDamage(
 						weapon_, damagedTarget, weaponContext_,
 						damage_, false, false, false));
@@ -176,7 +176,7 @@ void Laser::simulate(fixed frameTime, bool &remove)
 void Laser::draw()
 {
 #ifndef S3D_SERVER
-	if (!context_->serverMode && (drawLength_ > 0))
+	if (!context_->getServerMode() && (drawLength_ > 0))
 	{
 		static GLUquadric *obj = 0;
 		if (!obj)

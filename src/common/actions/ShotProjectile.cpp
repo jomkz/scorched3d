@@ -50,7 +50,7 @@ ShotProjectile::ShotProjectile(FixedVector &startPosition, FixedVector &velocity
 void ShotProjectile::init()
 {
 #ifndef S3D_SERVER
-	if (!context_->serverMode) 
+	if (!context_->getServerMode()) 
 	{
 		setActionRender(new MissileActionRenderer(flareType_, 
 				weapon_->getScale(*context_).asFloat(),
@@ -58,7 +58,7 @@ void ShotProjectile::init()
 	}
 #endif // #ifndef S3D_SERVER
 
-	vPoint_ = context_->viewPoints->getNewViewPoint(weaponContext_.getPlayerId());
+	vPoint_ = context_->getViewPoints().getNewViewPoint(weaponContext_.getPlayerId());
 	PhysicsParticleInfo info(ParticleTypeShot, weaponContext_.getPlayerId(), this);
 	setPhysics(info, startPosition_, velocity_, 
 		0, 0, weapon_->getWindFactor(*context_), getWeapon()->getUnder(), 
@@ -79,7 +79,7 @@ std::string ShotProjectile::getActionDetails()
 
 ShotProjectile::~ShotProjectile()
 {
-	if (vPoint_) context_->viewPoints->releaseViewPoint(vPoint_);
+	if (vPoint_) context_->getViewPoints().releaseViewPoint(vPoint_);
 }
 
 void ShotProjectile::collision(PhysicsParticleObject &position, 
@@ -89,7 +89,7 @@ void ShotProjectile::collision(PhysicsParticleObject &position,
 	{
 		// Tell all AIs about this collision
 		std::map<unsigned int, Tank *> tanks = 
-			context_->tankContainer->getAllTanks();
+			context_->getTankContainer().getAllTanks();
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = tanks.begin();
 			itor != tanks.end();
@@ -144,7 +144,7 @@ void ShotProjectile::simulate(fixed frameTime, bool &remove)
 		getWeapon()->getWaterCollision())
 	{
 		fixed waterHeight = -10;
-		LandscapeTex &tex = *context_->landscapeMaps->getDefinitions().getTex();
+		LandscapeTex &tex = *context_->getLandscapeMaps().getDefinitions().getTex();
 		if (tex.border->getType() == LandscapeTexType::eWater)
 		{
 			LandscapeTexBorderWater *water = 
@@ -206,7 +206,7 @@ void ShotProjectile::simulate(fixed frameTime, bool &remove)
 
 	// Shot path
 #ifndef S3D_SERVER
-	if (!context_->serverMode)
+	if (!context_->getServerMode())
 	{
 		if (getWeapon()->getShowShotPath())
 		{
@@ -230,7 +230,7 @@ void ShotProjectile::simulate(fixed frameTime, bool &remove)
 void ShotProjectile::doCollision(FixedVector &position)
 {	
 #ifndef S3D_SERVER
-	if (!context_->serverMode)
+	if (!context_->getServerMode())
 	{
 		if (getWeapon()->getShowShotPath())
 		{

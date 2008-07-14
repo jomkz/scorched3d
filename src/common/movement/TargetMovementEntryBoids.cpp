@@ -54,7 +54,7 @@ void TargetMovementEntryBoids::generate(ScorchedContext &context,
 	maxBounds_ = boids->maxbounds;
 
 	// Find the group to move the objects in
-	groupEntry_ = context.landscapeMaps->getGroundMaps().getGroups().
+	groupEntry_ = context.getLandscapeMaps().getGroundMaps().getGroups().
 		getGroup(boids->groupname.c_str());
 	if (!groupEntry_)
 	{

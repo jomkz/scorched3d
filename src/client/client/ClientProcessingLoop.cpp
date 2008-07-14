@@ -61,7 +61,7 @@ void ClientProcessingLoop::simulate(const unsigned state, float frameTime)
 	}
 
 	Logger::processLogEntries();
-	if (ScorchedClient::instance()->getContext().netInterface)
+	if (ScorchedClient::instance()->getContext().getNetInterfaceValid())
 	{
 		ScorchedClient::instance()->getNetInterface().processMessages();
 	}

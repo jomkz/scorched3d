@@ -53,7 +53,7 @@ bool ClientSave::storeClient()
 	// Transient State
 	if (!ScorchedServer::instance()->getOptionsTransient().writeToBuffer(
 		buffer)) return false;
-	if (!ScorchedServer::instance()->getContext().tankTeamScore->writeMessage(
+	if (!ScorchedServer::instance()->getContext().getTankTeamScore().writeMessage(
 		buffer)) return false;
 	
 	// No Players
@@ -142,7 +142,7 @@ bool ClientSave::restoreClient(bool loadGameState, bool loadPlayers)
 	// Transient State
 	if (!ScorchedServer::instance()->getOptionsTransient().readFromBuffer(
 		reader)) return false;
-	if (!ScorchedServer::instance()->getContext().tankTeamScore->readMessage(
+	if (!ScorchedServer::instance()->getContext().getTankTeamScore().readMessage(
 		reader)) return false;
 	
 	if (!loadPlayers) return true;

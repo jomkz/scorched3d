@@ -83,7 +83,7 @@ Tank *TankDefinition::createTank(unsigned int playerId,
 	if (team_ == 0) color = Vector(0.7f, 0.7f, 0.7f);
 
 	TankModel *model =
-		context.tankModelStore->getModelByName(
+		context.getTankModels().getModelByName(
 			tankmodel_.c_str(), 
 			team_,
 			true);
@@ -98,7 +98,7 @@ Tank *TankDefinition::createTank(unsigned int playerId,
 		name_.c_str(), color, model->getName(), model->getTypeName());
 	tank->getLife().setBoundingSphere(boundingsphere_);
 
-	if (context.serverMode)
+	if (context.getServerMode())
 	{
 		TankAI *ai = ScorchedServer::instance()->getTankAIs().getAIByName(ai_.c_str());
 		if (!ai)
@@ -119,7 +119,7 @@ Tank *TankDefinition::createTank(unsigned int playerId,
 #endif
 	}
 
-	if (context.optionsGame->getTeams() > 1)
+	if (context.getOptionsGame().getTeams() > 1)
 	{
 		tank->setTeam(team_);
 	}
@@ -134,7 +134,7 @@ Tank *TankDefinition::createTank(unsigned int playerId,
 
 	if (shield_.c_str()[0] && 0 != strcmp(shield_.c_str(), "none"))
 	{
-		Accessory *shield = context.accessoryStore->
+		Accessory *shield = context.getAccessoryStore().
 			findByPrimaryAccessoryName(shield_.c_str());
 		if (!shield)
 		{
@@ -148,7 +148,7 @@ Tank *TankDefinition::createTank(unsigned int playerId,
 
 	if (parachute_.c_str()[0] && 0 != strcmp(parachute_.c_str(), "none"))
 	{
-		Accessory *parachute = context.accessoryStore->
+		Accessory *parachute = context.getAccessoryStore().
 			findByPrimaryAccessoryName(parachute_.c_str());
 		if (!parachute)
 		{
@@ -162,7 +162,7 @@ Tank *TankDefinition::createTank(unsigned int playerId,
 
 	if (removeaction_.c_str()[0] && 0 != strcmp(removeaction_.c_str(), "none"))
 	{
-		Accessory *action = context.accessoryStore->
+		Accessory *action = context.getAccessoryStore().
 			findByPrimaryAccessoryName(removeaction_.c_str());		
 		if (!action || action->getType() != AccessoryPart::AccessoryWeapon)
 		{
@@ -175,7 +175,7 @@ Tank *TankDefinition::createTank(unsigned int playerId,
 	}
 	if (burnaction_.c_str()[0] && 0 != strcmp(burnaction_.c_str(), "none"))
 	{
-		Accessory *action = context.accessoryStore->
+		Accessory *action = context.getAccessoryStore().
 			findByPrimaryAccessoryName(burnaction_.c_str());		
 		if (!action || action->getType() != AccessoryPart::AccessoryWeapon)
 		{

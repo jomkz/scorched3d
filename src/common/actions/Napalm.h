@@ -55,7 +55,6 @@ public:
 	NapalmParams *getParams() { return params_; }
 
 protected:
-	std::set<unsigned int> edgePoints_;
 	WeaponFireContext weaponContext_;
 	NapalmParams *params_;
 	Weapon *weapon_;
@@ -67,6 +66,8 @@ protected:
 	int startX_, startY_;
 	fixed totalTime_, hurtTime_;
 	fixed napalmTime_;
+	std::set<unsigned int> edgePoints_;
+	std::map<unsigned int, int> napalmPointsCount_;
 	std::list<NapalmEntry *> napalmPoints_;
 	std::vector<NapalmEntry *> napalmRANDPoints_;
 

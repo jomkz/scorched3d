@@ -51,7 +51,7 @@ bool WeaponGiveLife::parseXML(AccessoryCreateContext &context, XMLNode *accessor
 void WeaponGiveLife::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	context.actionController->addAction(
+	context.getActionController().addAction(
 		new CallbackWeapon("WeaponGiveLife", this, 0, 0, 
 			weaponContext, position, velocity));
 }
@@ -61,7 +61,7 @@ void WeaponGiveLife::weaponCallback(
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 	unsigned int userData)
 {
-	Tank *tank = context.tankContainer->getTankById(weaponContext.getPlayerId());
+	Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
 	if (!tank) return;
 
 	fixed life = life_.getValue(context);
@@ -75,7 +75,7 @@ void WeaponGiveLife::weaponCallback(
 		tank->getLife().setLife(
 			tank->getLife().getLife() + life);
 
-		if (!context.serverMode)
+		if (!context.getServerMode())
 		{
 			ChannelText text("combat", 
 				S3D::formatStringBuffer("[p:%s] received %.0f life", 
@@ -97,7 +97,7 @@ void WeaponGiveLife::weaponCallback(
 				tank->getLife().getLife() + life);
 		}
 
-		if (!context.serverMode)
+		if (!context.getServerMode())
 		{
 			ChannelText text("combat", 
 				S3D::formatStringBuffer("[p:%s] lost %.0f life", 

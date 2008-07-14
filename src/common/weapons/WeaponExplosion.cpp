@@ -67,6 +67,6 @@ void WeaponExplosion::fireWeapon(ScorchedContext &context,
 
 	Action *action = new Explosion(
 		position, newParams, this, weaponContext);
-	context.actionController->addAction(action);	
+	context.getActionController().addAction(action);	
 }
 

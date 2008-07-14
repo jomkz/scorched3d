@@ -104,7 +104,7 @@ void Tank::newMatch()
 void Tank::newGame()
 {
 	TankType *tankType = 
-		context_.tankModelStore->getTypeByName(
+		context_.getTankModels().getTypeByName(
 			getModelContainer().getTankTypeName());
 	getLife().setMaxLife(tankType->getLife());
 
@@ -139,7 +139,7 @@ bool Tank::getAlive()
 
 Weapon *Tank::getDeathAction()
 {
-	setDeathAction(context_.accessoryStore->getDeathAnimation());
+	setDeathAction(context_.getAccessoryStore().getDeathAnimation());
 	return Target::getDeathAction();
 }
 
@@ -211,7 +211,7 @@ bool Tank::readMessage(NetBufferReader &reader)
 		return false;
 	}
 
-	if (!context_.serverMode)
+	if (!context_.getServerMode())
 	{
 		// If any humans turn into computers remove the HumanAI
 		if (destinationId_ == 0) setTankAI(0);

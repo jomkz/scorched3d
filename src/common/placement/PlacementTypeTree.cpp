@@ -71,8 +71,8 @@ void PlacementTypeTree::getPositions(ScorchedContext &context,
 	unsigned char objectMap[64 * 64];
 	memset(objectMap, 0, sizeof(unsigned char) * 64 * 64);
 
-	int groundMapWidth = context.landscapeMaps->getGroundMaps().getLandscapeWidth();
-	int groundMapHeight = context.landscapeMaps->getGroundMaps().getLandscapeHeight();
+	int groundMapWidth = context.getLandscapeMaps().getGroundMaps().getLandscapeWidth();
+	int groundMapHeight = context.getLandscapeMaps().getGroundMaps().getLandscapeHeight();
 
 	// A few points where trees will be clustered around
 	int treeMapMultWidth  = groundMapWidth / 64;
@@ -85,11 +85,11 @@ void PlacementTypeTree::getPositions(ScorchedContext &context,
 
 		// Check point is in the correct height band
 		fixed height = 
-			context.landscapeMaps->
+			context.getLandscapeMaps().
 				getGroundMaps().getHeight(
 					x * treeMapMultWidth, y * treeMapMultHeight);
 		FixedVector &normal =
-			context.landscapeMaps->
+			context.getLandscapeMaps().
 				getGroundMaps().getNormal(
 					x * treeMapMultWidth, y * treeMapMultHeight);
 
@@ -114,11 +114,11 @@ void PlacementTypeTree::getPositions(ScorchedContext &context,
 					newY >= 0 && newY < 64)
 				{
 					FixedVector &normal =
-						context.landscapeMaps->
+						context.getLandscapeMaps().
 						getGroundMaps().getNormal(
 							newX * treeMapMultWidth, newY * treeMapMultHeight);
 					height = 
-						context.landscapeMaps->
+						context.getLandscapeMaps().
 						getGroundMaps().getHeight(
 							newX * treeMapMultWidth, newY * treeMapMultHeight);
 					if (height > minheight && 
@@ -196,7 +196,7 @@ void PlacementTypeTree::getPositions(ScorchedContext &context,
 		if (nr < r)
 		{
 			fixed height = 
-				context.landscapeMaps->
+				context.getLandscapeMaps().
 					getGroundMaps().getInterpHeight(lx, ly);
 
 			if (height > minheight + fixed(true, 5000))

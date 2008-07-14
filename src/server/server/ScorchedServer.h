@@ -25,33 +25,17 @@
 
 class TankDeadContainer;
 class TankAIStore;
-class ScorchedServer
+class ScorchedServer : public ScorchedContext
 {
 public:
 	static ScorchedServer *instance();
 
-	AccessoryStore &getAccessoryStore() { return *context_.accessoryStore; }
-	GameState &getGameState() { return *context_.gameState; }
-	TankContainer &getTankContainer() { return *context_.tankContainer; }
-	TargetContainer &getTargetContainer() { return *context_.targetContainer; }
-	TargetMovement &getTargetMovement() { return *context_.targetMovement; }
 	TankDeadContainer &getTankDeadContainer() { return *deadContainer_; }
-	ActionController &getActionController() { return *context_.actionController; }
-	LandscapeMaps &getLandscapeMaps() { return *context_.landscapeMaps; }
-	ScorchedContext &getContext() { return context_; }
-	NetInterface &getNetInterface() { return *context_.netInterface; }
-	OptionsScorched &getOptionsGame() { return *context_.optionsGame; }
-	OptionsTransient &getOptionsTransient() { return *context_.optionsTransient; }
-	ComsMessageHandler &getComsMessageHandler() { return *context_.comsMessageHandler; }
-	ModFiles &getModFiles() { return *context_.modFiles; }
-	LandscapeDefinitions &getLandscapes() { return *context_.landscapes; }
+	ScorchedContext &getContext() { return *this; }
 	TankAIStore &getTankAIs() { return *tankAIStore_; }
-	TankModelStore &getTankModels() { return *context_.tankModelStore; }
-	LUAScriptFactory &getLUAScriptFactory() { return *context_.luaScriptFactory; }
 
 protected:
 	static ScorchedServer *instance_;
-	ScorchedContext context_;
 	TankDeadContainer *deadContainer_;
 	TankAIStore *tankAIStore_;
 

@@ -2977,6 +2977,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\lua\LUAScriptHook.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAScriptHook.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\lua\LUAUtil.cpp"
 				>
 			</File>

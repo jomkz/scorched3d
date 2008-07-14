@@ -71,7 +71,7 @@ void WeaponMirv::fireWeapon(ScorchedContext &context,
 	// Add a shot that will fall where the original was aimed
 	aimedWeapon_->fireWeapon(context, weaponContext, position, velocity);
 
-	RandomGenerator &random = context.actionController->getRandom();
+	RandomGenerator &random = context.getActionController().getRandom();
 
 	// Add all of the sub warheads that have a random spread
 	fixed hspreadDist;

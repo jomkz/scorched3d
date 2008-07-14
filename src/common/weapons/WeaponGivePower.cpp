@@ -50,7 +50,7 @@ bool WeaponGivePower::parseXML(AccessoryCreateContext &context, XMLNode *accesso
 void WeaponGivePower::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	context.actionController->addAction(
+	context.getActionController().addAction(
 		new CallbackWeapon("WeaponGivePower", this, 0, 0, 
 			weaponContext, position, velocity));
 }
@@ -60,14 +60,14 @@ void WeaponGivePower::weaponCallback(
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 	unsigned int userData)
 {
-	Tank *tank = context.tankContainer->getTankById(weaponContext.getPlayerId());
+	Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
 	if (!tank) return;
 
 	fixed power = power_.getValue(context);
 	tank->getPosition().setMaxPower(
 		MAX(tank->getPosition().getMaxPower(), power));
 
-	if (!context.serverMode)
+	if (!context.getServerMode())
 	{
 		ChannelText text("combat", 
 			S3D::formatStringBuffer("[p:%s] received %.0f power", 

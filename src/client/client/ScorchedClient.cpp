@@ -39,12 +39,12 @@ ScorchedClient *ScorchedClient::instance()
 }
 
 ScorchedClient::ScorchedClient() : 
-	context_("Client")
+	ScorchedContext("Client")
 {
 	mainLoop_ = new MainLoop();
 	mainLoop_->clear();
-	mainLoop_->addMainLoop(context_.gameState);
-	context_.serverMode = false;
+	mainLoop_->addMainLoop(gameState);
+	serverMode = false;
 
 	// Calculate how many particles we can see
 	int numberOfBilboards = 6000;

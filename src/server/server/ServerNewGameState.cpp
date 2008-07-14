@@ -102,16 +102,16 @@ void ServerNewGameState::enterState(const unsigned state)
 
 	// Get a landscape definition to use
 	LandscapeDefinition defn = ScorchedServer::instance()->getLandscapes().getRandomLandscapeDefn(
-		*ScorchedServer::instance()->getContext().optionsGame,
-		*ScorchedServer::instance()->getContext().tankContainer);
+		ScorchedServer::instance()->getContext().getOptionsGame(),
+		ScorchedServer::instance()->getContext().getTankContainer());
 
 	// Load the per level options
 	ScorchedServer::instance()->getOptionsGame().updateLevelOptions(
 		ScorchedServer::instance()->getContext(), defn);
 
 	// Set all options (wind etc..)
-	ScorchedServer::instance()->getContext().optionsTransient->newGame();
-	ScorchedServer::instance()->getContext().tankTeamScore->newGame();
+	ScorchedServer::instance()->getContext().getOptionsTransient().newGame();
+	ScorchedServer::instance()->getContext().getTankTeamScore().newGame();
 
 	// Check if we can load/save a game
 #ifndef S3D_SERVER

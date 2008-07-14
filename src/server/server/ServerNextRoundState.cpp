@@ -45,7 +45,7 @@ void ServerNextRoundState::enterState(const unsigned state)
 {
 	// Move all tanks into the next round
 	// Load the set of options for this next player
-	ScorchedServer::instance()->getContext().optionsTransient->nextRound();
+	ScorchedServer::instance()->getContext().getOptionsTransient().nextRound();
 
 	// Tell the stats about the start of a new round
 	bool weaponBuy = 

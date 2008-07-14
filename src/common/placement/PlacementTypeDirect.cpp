@@ -62,7 +62,7 @@ void PlacementTypeDirect::getPositions(ScorchedContext &context,
 
 		Position position = (*itor);
 		fixed height = 
-			context.landscapeMaps->
+			context.getLandscapeMaps().
 				getGroundMaps().getInterpHeight(position.position[0], position.position[1]);
 		if (position.position[2] == 0) position.position[2] = height;
 

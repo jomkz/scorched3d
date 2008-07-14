@@ -50,7 +50,7 @@ void ShotState::setup()
 	// Set all player kills this turn to 0 (used for multikill)
 	{
 		std::map<unsigned int, Tank *> &tanks = 
-			context_.tankContainer->getPlayingTanks();
+			context_.getTankContainer().getPlayingTanks();
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = tanks.begin();
 			itor != tanks.end();
@@ -62,13 +62,13 @@ void ShotState::setup()
 	}
 
 	// Reset the counts in the action controller
-	context_.actionController->resetTime();
-	context_.actionController->clear();
+	context_.getActionController().resetTime();
+	context_.getActionController().clear();
 
-	if (context_.optionsGame->getActionSyncCheck())
+	if (context_.getOptionsGame().getActionSyncCheck())
 	{
 		std::map<unsigned int, Target *> &targets =
-			context_.targetContainer->getTargets();
+			context_.getTargetContainer().getTargets();
 		std::map<unsigned int, Target *>::iterator itor;
 		for (itor = targets.begin();
 			itor != targets.end();
@@ -79,7 +79,7 @@ void ShotState::setup()
 				target->getTargetState().getMovement() ||
 				!target->isTarget())
 			{
-				context_.actionController->addSyncCheck(
+				context_.getActionController().addSyncCheck(
 					S3D::formatStringBuffer("TargetDef : %u %s %i %i,%i,%i %i,%i,%i %s", 
 						target->getPlayerId(),
 						target->getName(),
@@ -104,12 +104,12 @@ void ShotState::setup()
 	lastTime_ = false;
 
 	// Add all of the new events
-	context_.actionController->getEvents().initialize(context_);
+	context_.getActionController().getEvents().initialize(context_);
 }
 
 bool ShotState::run(float frameTime)
 {
-	if (!context_.actionController->noReferencedActions() ||
+	if (!context_.getActionController().noReferencedActions() ||
 		firstTime_)
 	{
 		// The action controller will now have shots to simulate
@@ -135,9 +135,9 @@ bool ShotState::run(float frameTime)
 			// We have finished all shots
 			Logger::log(S3D::formatStringBuffer(
 				"Finished playing Shots %.2f seconds", 
-					context_.actionController->getActionTime().asFloat()));
-			context_.actionController->getEvents().clear();
-			context_.actionController->logProfiledActions();
+					context_.getActionController().getActionTime().asFloat()));
+			context_.getActionController().getEvents().clear();
+			context_.getActionController().logProfiledActions();
 
 			return true;
 		}
@@ -148,7 +148,7 @@ bool ShotState::run(float frameTime)
 void ShotState::resurectTanks()
 {
 	std::map<unsigned int, Tank *> &tanks =
-		context_.tankContainer->getPlayingTanks();
+		context_.getTankContainer().getPlayingTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
@@ -165,11 +165,11 @@ void ShotState::resurectTanks()
 			FixedVector tankPos = PlacementTankPosition::placeTank(
 				tank->getPlayerId(), tank->getTeam(),
 				context_,
-				context_.actionController->getRandom());
+				context_.getActionController().getRandom());
 
 			Resurrection *rez = new Resurrection(
 				tank->getPlayerId(), tankPos);
-			context_.actionController->addAction(rez);
+			context_.getActionController().addAction(rez);
 		}
 	}	
 }

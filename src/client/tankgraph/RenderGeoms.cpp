@@ -57,7 +57,7 @@ void RenderGeoms::draw(const unsigned state)
 
 void RenderGeoms::drawTargetSpace()
 {
-	ScorchedClient::instance()->getContext().targetSpace->draw();
+	ScorchedClient::instance()->getContext().getTargetSpace().draw();
 }
 
 void RenderGeoms::drawCollisionBounds()

@@ -82,10 +82,18 @@ bool LUAScript::setGlobal(const std::string &name, fixed value)
 	return true;
 }
 
+bool LUAScript::functionExists(const std::string &functionName)
+{
+	lua_getglobal(L_, functionName.c_str());
+	bool exists = !lua_isnil(L_, -1);
+	lua_pop(L_, 1);
+	return exists;
+}
+
 bool LUAScript::startFunction(const std::string &functionName)
 {
 	lua_getglobal(L_, functionName.c_str());
-	return true;
+	return !lua_isnil(L_, -1);
 }
 
 bool LUAScript::endFunction(int argCount)
@@ -97,6 +105,12 @@ bool LUAScript::endFunction(int argCount)
 			"ERROR: LUA error : %s", lua_tostring(L_, -1)));
 		return false;
 	}
+	return true;
+}
+
+bool LUAScript::addStringParameter(const std::string &str)
+{
+	lua_pushstring(L_, str.c_str());
 	return true;
 }
 

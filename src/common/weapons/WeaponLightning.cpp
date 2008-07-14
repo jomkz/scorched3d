@@ -80,6 +80,6 @@ void WeaponLightning::fireWeapon(ScorchedContext &context,
 
 	Action *action = new Lightning(
 		this, weaponContext, position, velocity); 
-	context.actionController->addAction(action);	
+	context.getActionController().addAction(action);	
 }
 

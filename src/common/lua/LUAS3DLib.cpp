@@ -75,7 +75,7 @@ static int s3d_get_option(lua_State *L)
 
 	const char *optionName = luaL_checkstring(L, 1);
 	OptionEntry *entry = OptionEntryHelper::getEntry(
-		wrapper->getContext()->optionsGame->getMainOptions().getOptions(),
+		wrapper->getContext()->getOptionsGame().getMainOptions().getOptions(),
 		optionName);
 	if (entry) lua_pushstring(L, entry->getValueAsString());
 	else 
@@ -93,7 +93,7 @@ static int s3d_get_tank(lua_State *L)
 
 	int number = luaL_checknumber(L, 1);
 	Tank *tank =
-		wrapper->getContext()->tankContainer->getTankById((unsigned int) number);
+		wrapper->getContext()->getTankContainer().getTankById((unsigned int) number);
 	if (tank) addTank(L, tank);
 	else
 	{
@@ -110,7 +110,7 @@ static int s3d_get_tanks(lua_State *L)
 	LUAScript *wrapper = getScript(L);
 
 	std::map<unsigned int, Tank *> &tanks =
-		wrapper->getContext()->tankContainer->getAllTanks();
+		wrapper->getContext()->getTankContainer().getAllTanks();
 	lua_newtable(L);
 
 	std::map<unsigned int, Tank *>::iterator itor;
@@ -134,7 +134,7 @@ static int s3d_get_height(lua_State *L)
 	fixed x = fixed(true, luaL_checknumber(L, 1));
 	fixed y = fixed(true, luaL_checknumber(L, 2));
 
-	fixed result = wrapper->getContext()->landscapeMaps->getGroundMaps().getHeight(
+	fixed result = wrapper->getContext()->getLandscapeMaps().getGroundMaps().getHeight(
 		x.asInt(), y.asInt());
 	lua_pushnumber(L, result.getInternal());
 
@@ -145,7 +145,7 @@ static int s3d_get_arenawidth(lua_State *L)
 {
 	LUAScript *wrapper = getScript(L);
 
-	fixed result(wrapper->getContext()->landscapeMaps->getGroundMaps().getArenaWidth());
+	fixed result(wrapper->getContext()->getLandscapeMaps().getGroundMaps().getArenaWidth());
 	lua_pushnumber(L, result.getInternal());
 
 	return 1;
@@ -155,7 +155,7 @@ static int s3d_get_arenaheight(lua_State *L)
 {
 	LUAScript *wrapper = getScript(L);
 
-	fixed result(wrapper->getContext()->landscapeMaps->getGroundMaps().getArenaHeight());
+	fixed result(wrapper->getContext()->getLandscapeMaps().getGroundMaps().getArenaHeight());
 	lua_pushnumber(L, result.getInternal());
 
 	return 1;
@@ -165,7 +165,7 @@ static int s3d_get_landscapewidth(lua_State *L)
 {
 	LUAScript *wrapper = getScript(L);
 
-	fixed result(wrapper->getContext()->landscapeMaps->getGroundMaps().getLandscapeWidth());
+	fixed result(wrapper->getContext()->getLandscapeMaps().getGroundMaps().getLandscapeWidth());
 	lua_pushnumber(L, result.getInternal());
 
 	return 1;
@@ -175,7 +175,7 @@ static int s3d_get_landscapeheight(lua_State *L)
 {
 	LUAScript *wrapper = getScript(L);
 
-	fixed result(wrapper->getContext()->landscapeMaps->getGroundMaps().getLandscapeHeight());
+	fixed result(wrapper->getContext()->getLandscapeMaps().getGroundMaps().getLandscapeHeight());
 	lua_pushnumber(L, result.getInternal());
 
 	return 1;

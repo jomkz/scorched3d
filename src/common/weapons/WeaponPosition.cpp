@@ -69,11 +69,11 @@ void WeaponPosition::fireWeapon(ScorchedContext &context,
 {
 	// Position the fired weapon at the desired position, 
 	// +/- optional random offset
-	RandomGenerator &random = context.actionController->getRandom();
+	RandomGenerator &random = context.getActionController().getRandom();
 
 	if(onGround_)
 	{
-		fixed minHeight = context.landscapeMaps->getGroundMaps().getInterpHeight(
+		fixed minHeight = context.getLandscapeMaps().getGroundMaps().getInterpHeight(
 		                position[0], position[1]);
 		position_[2] = minHeight;
 	}

@@ -67,7 +67,7 @@ void WeaponScatterPosition::fireWeapon(ScorchedContext &context,
 {
 	// Mininum height, if we are grounding
 	fixed allowedHeight = 0;
-	LandscapeTex &tex = *context.landscapeMaps->getDefinitions().getTex();
+	LandscapeTex &tex = *context.getLandscapeMaps().getDefinitions().getTex();
 		if (tex.border->getType() == LandscapeTexType::eWater)
 	{
 		LandscapeTexBorderWater *water = 
@@ -78,13 +78,13 @@ void WeaponScatterPosition::fireWeapon(ScorchedContext &context,
 
 	fixed scatterpercentage = scatterpercentage_.getValue(context);
 
-	fixed arenaWidth = fixed(context.landscapeMaps->getGroundMaps().getArenaWidth());
-	fixed arenaHeight = fixed(context.landscapeMaps->getGroundMaps().getArenaHeight());
+	fixed arenaWidth = fixed(context.getLandscapeMaps().getGroundMaps().getArenaWidth());
+	fixed arenaHeight = fixed(context.getLandscapeMaps().getGroundMaps().getArenaHeight());
 	fixed scatterWidth = arenaWidth * scatterpercentage / 100;
 	fixed scatterHeight = arenaHeight * scatterpercentage / 100;
 
 	FixedVector pos;
-	RandomGenerator &random = context.actionController->getRandom();
+	RandomGenerator &random = context.getActionController().getRandom();
 	bool ok = false;
 	while (!ok)
 	{
@@ -95,7 +95,7 @@ void WeaponScatterPosition::fireWeapon(ScorchedContext &context,
 		pos[2] = p[2];
 		if (landheight_)
 		{
-			pos[2] = context.landscapeMaps->getGroundMaps().getInterpHeight(
+			pos[2] = context.getLandscapeMaps().getGroundMaps().getInterpHeight(
 				pos[0], pos[1]);
 		}
 

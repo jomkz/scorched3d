@@ -46,6 +46,7 @@ static DeformLandscape::DeformPoints deformMap;
 static bool deformCreated = false;
 
 #define XY_TO_UINT(x, y) ((((unsigned int) x) << 16) | (((unsigned int) y) & 0xffff))
+#define XY2_TO_UINT(x, y) ((((unsigned int) x - x % 2) << 16) | (((unsigned int) y - y % 2) & 0xffff))
 #define UINT_TO_X(pt) ((int)(pt >> 16))
 #define UINT_TO_Y(pt) ((int)(pt & 0xffff))
 
@@ -90,16 +91,16 @@ void Napalm::init()
 	}
 
 	fixed ShowTime = 5;
-	FixedVector position(fixed(startX_), fixed(startY_), context_->landscapeMaps->
+	FixedVector position(fixed(startX_), fixed(startY_), context_->getLandscapeMaps().
 		getGroundMaps().getHeight(startX_, startY_));
 	CameraPositionAction *pos = new CameraPositionAction(
 		position, ShowTime, 5);
-	context_->actionController->addAction(pos);
+	context_->getActionController().addAction(pos);
 
 	edgePoints_.insert(XY_TO_UINT(startX_, startY_));
 
 #ifndef S3D_SERVER
-	if (!context_->serverMode) 
+	if (!context_->getServerMode()) 
 	{
 		set_ = ExplosionTextures::instance()->getTextureSetByName(
 			params_->getNapalmTexture());
@@ -116,7 +117,7 @@ std::string Napalm::getActionDetails()
 void Napalm::simulate(fixed frameTime, bool &remove)
 {
 #ifndef S3D_SERVER
-	if (!context_->serverMode)
+	if (!context_->getServerMode())
 	{
 		if (!napalmPoints_.empty() &&
 			!params_->getNoSmoke() &&
@@ -186,7 +187,7 @@ void Napalm::simulate(fixed frameTime, bool &remove)
 
 fixed Napalm::getHeight(int x, int y)
 {
-	LandscapeMaps *hmap = context_->landscapeMaps;
+	LandscapeMaps *hmap = &context_->getLandscapeMaps();
 	if (x < 0 || y < 0 ||
 		x > hmap->getGroundMaps().getLandscapeWidth() ||
 		y > hmap->getGroundMaps().getLandscapeHeight())
@@ -220,7 +221,16 @@ void Napalm::simulateRmStep()
 		int y = entry->posY;
 		delete entry;
 
-		context_->landscapeMaps->getGroundMaps().getNapalmHeight(x, y) -= params_->getNapalmHeight();
+		unsigned int pointsCount = XY2_TO_UINT(x, y);
+		std::map<unsigned int, int>::iterator countItor =
+			napalmPointsCount_.find(pointsCount);
+		if (countItor != napalmPointsCount_.end())
+		{
+			countItor->second--;
+			if (countItor->second == 0) napalmPointsCount_.erase(countItor);
+		}
+
+		context_->getLandscapeMaps().getGroundMaps().getNapalmHeight(x, y) -= params_->getNapalmHeight();
 	}
 }
 
@@ -253,7 +263,7 @@ void Napalm::simulateAddEdge(int x, int y)
 	{
 		// Check napalm is under water 
 		fixed waterHeight = -10;
-		LandscapeTex &tex = *context_->landscapeMaps->getDefinitions().getTex();
+		LandscapeTex &tex = *context_->getLandscapeMaps().getDefinitions().getTex();
 		if (tex.border->getType() == LandscapeTexType::eWater)
 		{
 			LandscapeTexBorderWater *water = 
@@ -269,13 +279,26 @@ void Napalm::simulateAddEdge(int x, int y)
 	} 
 
 	// Add this current point to the napalm map
-	RandomGenerator &random = context_->actionController->getRandom();
+	RandomGenerator &random = context_->getActionController().getRandom();
 	int offset = (random.getRandFixed() * 31).asInt();
 	NapalmEntry *newEntry = new NapalmEntry(x, y, offset, particleSet_);
 	napalmPoints_.push_back(newEntry);
 	napalmRANDPoints_.push_back(newEntry);
+
+	unsigned int pointsCount = XY2_TO_UINT(x, y);
+	std::map<unsigned int, int>::iterator countItor =
+		napalmPointsCount_.find(pointsCount);
+	if (countItor == napalmPointsCount_.end())
+	{
+		napalmPointsCount_.insert(std::pair<unsigned int, int>(pointsCount, 1));
+	}
+	else
+	{
+		countItor->second++;
+	}
+
 #ifndef S3D_SERVER
-	if (!context_->serverMode)
+	if (!context_->getServerMode())
 	{
 		ParticleEmitter emitter;
 		emitter.setAttributes(
@@ -311,7 +334,7 @@ void Napalm::simulateAddEdge(int x, int y)
 		// Add the ground scorch
 		if (!GLStateExtension::getNoTexSubImage())
 		{
-			if (height == context_->landscapeMaps->getGroundMaps().getHeight(x, y)) 
+			if (height == context_->getLandscapeMaps().getGroundMaps().getHeight(x, y)) 
 			{
 				if (RAND < params_->getGroundScorchPer().asFloat())
 				{
@@ -327,7 +350,7 @@ void Napalm::simulateAddEdge(int x, int y)
 	}
 #endif // #ifndef S3D_SERVER
 
-	context_->landscapeMaps->getGroundMaps().getNapalmHeight(x, y) += params_->getNapalmHeight();
+	context_->getLandscapeMaps().getGroundMaps().getNapalmHeight(x, y) += params_->getNapalmHeight();
 
 	// Calculate every time as the landscape may change
 	// due to other actions
@@ -426,24 +449,26 @@ void Napalm::simulateDamage()
 
 	// Add damage into the damage map for each napalm point that is near to
 	// the tanks
-	std::list<NapalmEntry *>::iterator itor;
-	std::list<NapalmEntry *>::iterator endItor = 
-		napalmPoints_.end();
-	for (itor = napalmPoints_.begin();
-		itor != endItor;
-		itor++)
+	std::map<unsigned int, int>::iterator itor =
+		napalmPointsCount_.begin();
+	std::map<unsigned int, int>::iterator endItor = 
+		napalmPointsCount_.end();
+	for (;itor != endItor; itor++)
 	{
-		NapalmEntry *entry = (*itor);
+		unsigned int pointsCount = itor->first;
+		fixed count = fixed(itor->second);
+		int x = UINT_TO_X(pointsCount);
+		int y = UINT_TO_Y(pointsCount);
 
-		fixed height = context_->landscapeMaps->getGroundMaps().
-			getHeight(entry->posX, entry->posY);
+		fixed height = context_->getLandscapeMaps().getGroundMaps().
+			getHeight(x, y);
 		FixedVector position(
-			fixed(entry->posX), 
-			fixed(entry->posY),
+			fixed(x), 
+			fixed(y),
 			height);
 
 		std::map<unsigned int, Target *> collisionTargets;
-		context_->targetSpace->getCollisionSet(position, 
+		context_->getTargetSpace().getCollisionSet(position, 
 			fixed(EffectRadius), collisionTargets);
 		std::map<unsigned int, Target *>::iterator itor;
 		for (itor = collisionTargets.begin();
@@ -457,11 +482,11 @@ void Napalm::simulateDamage()
 					TargetDamageCalc.find(target);
 				if (damageItor == TargetDamageCalc.end())
 				{
-					TargetDamageCalc[target] = params_->getHurtPerSecond();
+					TargetDamageCalc[target] = count * params_->getHurtPerSecond();
 				}
 				else
 				{
-					TargetDamageCalc[target] += params_->getHurtPerSecond();
+					TargetDamageCalc[target] += count * params_->getHurtPerSecond();
 				}
 			}
 		}

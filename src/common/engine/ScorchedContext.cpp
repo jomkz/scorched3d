@@ -34,7 +34,7 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <weapons/AccessoryStore.h>
-#include <lua/LUAScriptFactory.h>
+#include <lua/LUAScriptHook.h>
 
 ScorchedContext::ScorchedContext(const char *name) : 
 	serverMode(false)
@@ -57,10 +57,11 @@ ScorchedContext::ScorchedContext(const char *name) :
 	targetSpace = new TargetSpace();
 	targetMovement = new TargetMovement();
 	luaScriptFactory = new LUAScriptFactory();
+	luaScriptHook = new LUAScriptHook(luaScriptFactory);
 
-	viewPoints->setContext(this);
-	actionController->setScorchedContext(this);
-	targetSpace->setContext(this);
+	getViewPoints().setContext(this);
+	getActionController().setScorchedContext(this);
+	getTargetSpace().setContext(this);
 	luaScriptFactory->setContext(this);
 }
 

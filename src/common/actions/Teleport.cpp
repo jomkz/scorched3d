@@ -54,31 +54,31 @@ Teleport::Teleport(FixedVector position,
 
 Teleport::~Teleport()
 {
-	if (vPoint_) context_->viewPoints->releaseViewPoint(vPoint_);
+	if (vPoint_) context_->getViewPoints().releaseViewPoint(vPoint_);
 }
 
 void Teleport::init()
 {
-	vPoint_ = context_->viewPoints->getNewViewPoint(weaponContext_.getPlayerId());
+	vPoint_ = context_->getViewPoints().getNewViewPoint(weaponContext_.getPlayerId());
 
 #ifndef S3D_SERVER
-	if (!context_->serverMode)
+	if (!context_->getServerMode())
 	{
-		Tank *tank = context_->tankContainer->getTankById(weaponContext_.getPlayerId());
+		Tank *tank = context_->getTankContainer().getTankById(weaponContext_.getPlayerId());
 		if (tank && tank->getState().getState() == TankState::sNormal)
 		{
 			Vector white(1.0f, 1.0f, 1.0f);
 			TeleportRenderer *teleport = new TeleportRenderer(
 				tank->getPosition().getTankTurretPosition().asVector(),
 				white);
-			context_->actionController->addAction(new SpriteAction(teleport));
+			context_->getActionController().addAction(new SpriteAction(teleport));
 		}
 	}
 #endif
 
 	CameraPositionAction *pos = new CameraPositionAction(
 		position_, 5, 5);
-	context_->actionController->addAction(pos);
+	context_->getActionController().addAction(pos);
 }
 
 void Teleport::simulate(fixed frameTime, bool &remove)
@@ -90,9 +90,9 @@ void Teleport::simulate(fixed frameTime, bool &remove)
 		firstTime_ = false;
 
 #ifndef S3D_SERVER
-		if (!context_->serverMode)
+		if (!context_->getServerMode())
 		{
-			Tank *tank = context_->tankContainer->getTankById(weaponContext_.getPlayerId());
+			Tank *tank = context_->getTankContainer().getTankById(weaponContext_.getPlayerId());
 			if (tank && tank->getState().getState() == TankState::sNormal)
 			{
 				SoundBuffer *activateSound = 
@@ -108,19 +108,19 @@ void Teleport::simulate(fixed frameTime, bool &remove)
 	totalTime_ += frameTime;
 	if (totalTime_ > weapon_->getDelay(*context_))
 	{
-		Tank *tank = context_->tankContainer->getTankById(weaponContext_.getPlayerId());
+		Tank *tank = context_->getTankContainer().getTankById(weaponContext_.getPlayerId());
 		if (tank && tank->getState().getState() == TankState::sNormal)
 		{
-			fixed height = context_->landscapeMaps->getGroundMaps().getInterpHeight(
+			fixed height = context_->getLandscapeMaps().getGroundMaps().getInterpHeight(
 				position_[0], position_[1]);
 			if (weapon_->getGroundOnly() || height >= position_[2])
 			{
 				// Set the position on the ground
 				position_[2] = height;
 
-				if (context_->optionsGame->getActionSyncCheck())
+				if (context_->getOptionsGame().getActionSyncCheck())
 				{
-					context_->actionController->addSyncCheck(
+					context_->getActionController().addSyncCheck(
 						S3D::formatStringBuffer("Telport: %u %i, %i, %i", 
 							tank->getPlayerId(),
 							position_[0].getInternal(),
@@ -132,7 +132,7 @@ void Teleport::simulate(fixed frameTime, bool &remove)
 				tank->getLife().setTargetPosition(position_);
 				DeformLandscape::flattenArea(*context_, position_);
 #ifndef S3D_SERVER
-				if (!context_->serverMode)
+				if (!context_->getServerMode())
 				{
 					VisibilityPatchGrid::instance()->recalculateErrors(position_, 2);
 				}
@@ -140,9 +140,9 @@ void Teleport::simulate(fixed frameTime, bool &remove)
 			}
 			else
 			{
-				if (context_->optionsGame->getActionSyncCheck())
+				if (context_->getOptionsGame().getActionSyncCheck())
 				{
-					context_->actionController->addSyncCheck(
+					context_->getActionController().addSyncCheck(
 						S3D::formatStringBuffer("Telport: %u %i, %i, %i", 
 							tank->getPlayerId(),
 							position_[0].getInternal(),

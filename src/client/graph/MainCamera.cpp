@@ -201,7 +201,7 @@ void MainCamera::simulate(const unsigned state, float frameTime)
 		}
 	}
 
-	ScorchedClient::instance()->getContext().viewPoints->simulate(
+	ScorchedClient::instance()->getContext().getViewPoints().simulate(
 		fixed::fromFloat(frameTime));
 	targetCam_.simulate(frameTime, (state == ClientState::StatePlaying));
 

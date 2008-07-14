@@ -160,7 +160,7 @@ bool ChannelTextParser::createPlayerEntry(ScorchedContext &context,
 	entry.text = S3D::formatStringBuffer("[%s]", part);
 	entry.data = 0;
 
-	Tank *tank = context.tankContainer->getTankByName(part);
+	Tank *tank = context.getTankContainer().getTankByName(part);
 	if (tank)
 	{
 		entry.data = tank->getPlayerId();

@@ -111,11 +111,11 @@ int ViewPoints::getLookAtCount()
 
 ViewPoints::ViewPoint *ViewPoints::getNewViewPoint(unsigned int playerId)
 {
-	if (context_->serverMode) return 0;
+	if (context_->getServerMode()) return 0;
 	if (playerId == 0) return 0;
 
-	if (context_->tankContainer->getCurrentPlayerId() != playerId &&
-		context_->optionsGame->getTurnType() == OptionsGame::TurnSimultaneous)
+	if (context_->getTankContainer().getCurrentPlayerId() != playerId &&
+		context_->getOptionsGame().getTurnType() == OptionsGame::TurnSimultaneous)
 	{
 		return 0;
 	}
@@ -127,10 +127,10 @@ ViewPoints::ViewPoint *ViewPoints::getNewViewPoint(unsigned int playerId)
 
 void ViewPoints::explosion(unsigned int playerId)
 {
-	if (context_->serverMode) return;
+	if (context_->getServerMode()) return;
 
-	if (context_->tankContainer->getCurrentPlayerId() != playerId &&
-		context_->optionsGame->getTurnType() == OptionsGame::TurnSimultaneous)
+	if (context_->getTankContainer().getCurrentPlayerId() != playerId &&
+		context_->getOptionsGame().getTurnType() == OptionsGame::TurnSimultaneous)
 	{
 		return;
 	}

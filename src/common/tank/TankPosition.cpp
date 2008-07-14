@@ -66,7 +66,7 @@ std::vector<TankPosition::ShotEntry> &TankPosition::getOldShots()
 
 void TankPosition::newGame()
 {
-	TankType *type = context_.tankModelStore->getTypeByName(
+	TankType *type = context_.getTankModels().getTypeByName(
 		tank_->getModelContainer().getTankTypeName());
 
 	maxPower_ = type->getPower();
@@ -74,7 +74,7 @@ void TankPosition::newGame()
 
 void TankPosition::clientNewGame()
 {
-	TankType *type = context_.tankModelStore->getTypeByName(
+	TankType *type = context_.getTankModels().getTypeByName(
 		tank_->getModelContainer().getTankTypeName());
 
 	maxPower_ = type->getPower();
@@ -183,7 +183,7 @@ fixed TankPosition::changePower(fixed power, bool diff)
 	else power_ = power;
 
 	if (power_ < 0) power_ = 0;
-	if (context_.optionsGame->getLimitPowerByHealth())
+	if (context_.getOptionsGame().getLimitPowerByHealth())
 	{
 		fixed maxPosPower = 
 			tank_->getLife().getLife() / tank_->getLife().getMaxLife() * maxPower_;

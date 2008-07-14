@@ -564,7 +564,7 @@ bool TankAICurrentMove::makeMoveShot(Tank *tank,
 
 	ScorchedContext &context = ScorchedServer::instance()->getContext();
 	WeaponMoveTank *moveWeapon = (WeaponMoveTank *)
-		context.accessoryStore->findAccessoryPartByAccessoryId(
+		context.getAccessoryStore().findAccessoryPartByAccessoryId(
 			fuel->getAccessoryId(), "WeaponMoveTank");
 	if (moveWeapon)
 	{

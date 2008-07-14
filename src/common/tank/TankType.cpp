@@ -47,7 +47,7 @@ bool TankType::initFromXML(ScorchedContext &context, XMLNode *node)
 		if (!accessoryNode->getNamedChild("count", count)) return false;
 		if (!accessoryNode->failChildren()) return false;
 
-		Accessory *accessory = context.accessoryStore->
+		Accessory *accessory = context.getAccessoryStore().
 			findByPrimaryAccessoryName(name.c_str());
 		if (!accessory)
 		{
@@ -62,7 +62,7 @@ bool TankType::initFromXML(ScorchedContext &context, XMLNode *node)
 		if (!accessoryNode->getNamedChild("name", name)) return false;
 		if (!accessoryNode->failChildren()) return false;
 
-		Accessory *accessory = context.accessoryStore->
+		Accessory *accessory = context.getAccessoryStore().
 			findByPrimaryAccessoryName(name.c_str());
 		if (!accessory)
 		{

@@ -44,12 +44,12 @@ MovementMap::MovementMap(
 	ScorchedContext &context) :
 	tank_(tank), context_(context)
 {
-	arenaX_ = context_.landscapeMaps->getGroundMaps().getArenaX();
-	arenaY_ = context_.landscapeMaps->getGroundMaps().getArenaY();
-	arenaWidth_ = context_.landscapeMaps->getGroundMaps().getArenaWidth();
-	arenaHeight_ = context_.landscapeMaps->getGroundMaps().getArenaHeight();
-	landscapeWidth_ = context_.landscapeMaps->getGroundMaps().getLandscapeWidth();
-	landscapeHeight_ = context_.landscapeMaps->getGroundMaps().getLandscapeHeight();
+	arenaX_ = context_.getLandscapeMaps().getGroundMaps().getArenaX();
+	arenaY_ = context_.getLandscapeMaps().getGroundMaps().getArenaY();
+	arenaWidth_ = context_.getLandscapeMaps().getGroundMaps().getArenaWidth();
+	arenaHeight_ = context_.getLandscapeMaps().getGroundMaps().getArenaHeight();
+	landscapeWidth_ = context_.getLandscapeMaps().getGroundMaps().getLandscapeWidth();
+	landscapeHeight_ = context_.getLandscapeMaps().getGroundMaps().getLandscapeHeight();
 
 	// Create the empty movement map
 	entries_ = new MovementMapEntry[(landscapeWidth_ + 1) * (landscapeHeight_ + 1)];
@@ -62,7 +62,7 @@ MovementMap::MovementMap(
 	// to see if we are in their shields
 	std::map<unsigned int, Target *>::iterator targetItor;
 	std::map<unsigned int, Target *> &targets = 
-		context.targetContainer->getTargets();
+		context.getTargetContainer().getTargets();
 	for (targetItor = targets.begin(); 
 		targetItor != targets.end();
 		targetItor++)
@@ -107,7 +107,7 @@ MovementMap::MovementMapEntry &MovementMap::getAndCheckEntry(int w, int h)
 	if (entry.type == eNotInitialized)
 	{
 		fixed height = 
-			context_.landscapeMaps->getGroundMaps().getHeight(w, h);
+			context_.getLandscapeMaps().getGroundMaps().getHeight(w, h);
 		FixedVector position(w, h, height);
 		entry.type = eNotSeen;
 
@@ -165,7 +165,7 @@ void MovementMap::addPoint(unsigned int x, unsigned int y,
 
 	// Find how much the tank has to climb to reach this new point
 	// check that this is acceptable
-	fixed newHeight = context_.landscapeMaps->getGroundMaps().getHeight(
+	fixed newHeight = context_.getLandscapeMaps().getGroundMaps().getHeight(
 		x, y);
 
 	// Check water height 
@@ -175,7 +175,7 @@ void MovementMap::addPoint(unsigned int x, unsigned int y,
 	}
 
 	// Check climing height
-	fixed MaxTankClimbHeight = fixed(context_.optionsGame->
+	fixed MaxTankClimbHeight = fixed(context_.getOptionsGame().
 		getMaxClimbingDistance()) / fixed(10);
 	if (newHeight - height > MaxTankClimbHeight) 
 	{
@@ -233,7 +233,7 @@ bool MovementMap::movementProof(ScorchedContext &context, Target *target, Tank *
 		{
 			movementProof = false;
 		}
-		else if (context.optionsGame->getTeams() > 1 &&
+		else if (context.getOptionsGame().getTeams() > 1 &&
 			!target->isTarget())
 		{
 			Tank *targetTank = (Tank *) target;
@@ -283,7 +283,7 @@ bool MovementMap::allowedPosition(ScorchedContext &context, Tank *tank, FixedVec
 {
 	std::map<unsigned int, Target *>::iterator targetItor;
 	std::map<unsigned int, Target *> targets;
-	context.targetSpace->getCollisionSet(position, fixed(1), targets);
+	context.getTargetSpace().getCollisionSet(position, fixed(1), targets);
 	for (targetItor = targets.begin(); 
 		targetItor != targets.end();
 		targetItor++)
@@ -303,12 +303,12 @@ fixed MovementMap::getWaterHeight()
 {
 	// Calculate the water height
 	fixed waterHeight = (-10);
-	if (context_.optionsGame->getMovementRestriction() ==
+	if (context_.getOptionsGame().getMovementRestriction() ==
 		OptionsGame::MovementRestrictionLand ||
-		context_.optionsGame->getMovementRestriction() ==
+		context_.getOptionsGame().getMovementRestriction() ==
 		OptionsGame::MovementRestrictionLandOrAbove)
 	{
-		LandscapeTex &tex = *context_.landscapeMaps->getDefinitions().getTex();
+		LandscapeTex &tex = *context_.getLandscapeMaps().getDefinitions().getTex();
 		if (tex.border->getType() == LandscapeTexType::eWater)
 		{
 			LandscapeTexBorderWater *water = 
@@ -318,7 +318,7 @@ fixed MovementMap::getWaterHeight()
 		}
 	}
 
-	if (context_.optionsGame->getMovementRestriction() ==
+	if (context_.getOptionsGame().getMovementRestriction() ==
 		OptionsGame::MovementRestrictionLandOrAbove)
 	{
 		if (waterHeight > tank_->getPosition().getTankPosition()[2] - fixed(true, 1000))
@@ -346,12 +346,12 @@ fixed MovementMap::getFuel(WeaponMoveTank *weapon)
 
 bool MovementMap::tankBurried()
 {
-	fixed landscapeHeight = context_.landscapeMaps->getGroundMaps().getInterpHeight(
+	fixed landscapeHeight = context_.getLandscapeMaps().getGroundMaps().getInterpHeight(
 		tank_->getPosition().getTankPosition()[0],
 		tank_->getPosition().getTankPosition()[1]);
 	fixed tankHeight = 
 		tank_->getPosition().getTankPosition()[2];
-	fixed MaxTankClimbHeight = fixed(context_.optionsGame->
+	fixed MaxTankClimbHeight = fixed(context_.getOptionsGame().
 		getMaxClimbingDistance()) / fixed(10);
 	if (landscapeHeight > tankHeight + MaxTankClimbHeight)
 	{
@@ -397,13 +397,13 @@ void MovementMap::addPoint(unsigned int x, unsigned int y,
 
 	// Find how much the tank has to climb to reach this new point
 	// check that this is acceptable
-	fixed newHeight = context_.landscapeMaps->getGroundMaps().getHeight(x, y);
+	fixed newHeight = context_.getLandscapeMaps().getGroundMaps().getHeight(x, y);
 
 	// Check water height 
 	if (newHeight < minHeight_) return; 
 
 	// Check climing height
-	fixed MaxTankClimbHeight = fixed(context_.optionsGame->
+	fixed MaxTankClimbHeight = fixed(context_.getOptionsGame().
 		getMaxClimbingDistance()) / fixed(10);
 	if (newHeight - height > MaxTankClimbHeight) return;
 
@@ -477,7 +477,7 @@ bool MovementMap::calculatePosition(FixedVector &position, fixed fuel)
 		if (dist <= fuel)
 		{
 			fixed height = 
-				context_.landscapeMaps->getGroundMaps().getHeight(x, y);
+				context_.getLandscapeMaps().getGroundMaps().getHeight(x, y);
 
 			addPoint(x+1, y, height, dist + 1, priorityQueue, pt, position);
 			addPoint(x, y+1, height, dist + 1, priorityQueue, pt, position);
@@ -545,7 +545,7 @@ void MovementMap::calculateAllPositions(fixed fuel)
 			if (dist <= fuel)
 			{
 				fixed height = 
-					context_.landscapeMaps->getGroundMaps().getHeight(x, y);
+					context_.getLandscapeMaps().getGroundMaps().getHeight(x, y);
 
 				addPoint(x+1, y, height, dist + 1, edgeList, pt, epoc);
 				addPoint(x, y+1, height, dist + 1, edgeList, pt, epoc);

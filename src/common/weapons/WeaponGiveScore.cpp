@@ -51,7 +51,7 @@ bool WeaponGiveScore::parseXML(AccessoryCreateContext &context, XMLNode *accesso
 void WeaponGiveScore::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	context.actionController->addAction(
+	context.getActionController().addAction(
 		new CallbackWeapon("WeaponGiveScore", this, 0, 0, 
 			weaponContext, position, velocity));
 }
@@ -61,16 +61,16 @@ void WeaponGiveScore::weaponCallback(
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 	unsigned int userData)
 {
-	Tank *tank = context.tankContainer->getTankById(weaponContext.getPlayerId());
+	Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
 	if (!tank) return;
 
 	tank->getScore().setScore(tank->getScore().getScore() + score_);
 	if (tank->getTeam() > 0)
 	{
-		context.tankTeamScore->addScore(score_, tank->getTeam());
+		context.getTankTeamScore().addScore(score_, tank->getTeam());
 	}
 
-	if (!context.serverMode)
+	if (!context.getServerMode())
 	{
 		if (score_ > 0)
 		{

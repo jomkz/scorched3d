@@ -36,8 +36,8 @@ void LandscapeDefinitionCache::setDefinition(
 	ScorchedContext &context, LandscapeDefinition &defn)
 {
 	defn_ = defn;
-	cachedTex_ = context.landscapes->getTex(defn_.getTex());
-	cachedDefn_ = context.landscapes->getDefn(defn_.getDefn());
+	cachedTex_ = context.getLandscapes().getTex(defn_.getTex());
+	cachedDefn_ = context.getLandscapes().getDefn(defn_.getDefn());
 	if (!cachedTex_ || !cachedDefn_)
 	{
 		S3D::dialogExit("LandscapeMaps", S3D::formatStringBuffer(

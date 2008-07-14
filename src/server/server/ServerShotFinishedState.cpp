@@ -188,18 +188,18 @@ bool ServerShotFinishedState::scoreWinners()
 
 			if (tank->getAlive())
 			{
-				ScorchedServer::instance()->getContext().tankTeamScore->addScore(
+				ScorchedServer::instance()->getContext().getTankTeamScore().addScore(
 				        scoreWonForLives * tank->getState().getLives(), tank->getTeam());
 			}
 		}
 
 		std::set<int> winningTeams;
 		int winningTeam = 
-			ScorchedServer::instance()->getContext().tankTeamScore->getWonGame();
+			ScorchedServer::instance()->getContext().getTankTeamScore().getWonGame();
 		if (winningTeam != 0)
 		{
 			winningTeams.insert(winningTeam);
-			ScorchedServer::instance()->getContext().tankTeamScore->addScore(
+			ScorchedServer::instance()->getContext().getTankTeamScore().addScore(
 				scoreWonForRound, winningTeam);
 		}
 		else
@@ -215,7 +215,7 @@ bool ServerShotFinishedState::scoreWinners()
 				{
 					if (winningTeams.find(tank->getTeam()) == winningTeams.end())
 					{
-						ScorchedServer::instance()->getContext().tankTeamScore->addScore(
+						ScorchedServer::instance()->getContext().getTankTeamScore().addScore(
 							scoreWonForRound, tank->getTeam());
 						winningTeams.insert(tank->getTeam());
 

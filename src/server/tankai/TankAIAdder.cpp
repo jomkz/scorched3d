@@ -45,7 +45,7 @@ unsigned int TankAIAdder::getNextTankId(const char *uniqueId, ScorchedContext &c
 	{
 		unsigned int id = StatsLogger::instance()->getStatsId(uniqueId);
 		if (id != 0 &&
-			!context.targetContainer->getTargetById(id))
+			!context.getTargetContainer().getTargetById(id))
 		{
 			DIALOG_ASSERT(id >= TargetID::MIN_TANK_ID && id <= TargetID::MAX_TANK_ID);
 			return id;
@@ -54,7 +54,7 @@ unsigned int TankAIAdder::getNextTankId(const char *uniqueId, ScorchedContext &c
 
 	// Get the transient id
 	static unsigned int id = TargetID::START_TRANSIENT_TANK_ID;
-	while (context.targetContainer->getTargetById(id))
+	while (context.getTargetContainer().getTargetById(id))
 	{
 		++id;
 		if (id >= TargetID::MAX_TANK_ID) id = TargetID::START_TRANSIENT_TANK_ID;
@@ -67,7 +67,7 @@ unsigned int TankAIAdder::getNextTankId(const char *uniqueId, ScorchedContext &c
 unsigned int TankAIAdder::getNextTargetId(ScorchedContext &context)
 {
 	unsigned int targetId_ = TargetID::MIN_TARGET_TRANSIENT_ID;
-	while (context.targetContainer->getTargetById(targetId_))
+	while (context.getTargetContainer().getTargetById(targetId_))
 	{
 		++targetId_;
 		if (targetId_ >= TargetID::MAX_TARGET_ID) targetId_ = TargetID::MIN_TARGET_TRANSIENT_ID;

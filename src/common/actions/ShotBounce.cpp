@@ -51,13 +51,13 @@ void ShotBounce::init()
 		1, 5, weapon_->getWindFactor(*context_), false, weapon_->getRoll());
 
 	FixedVector lookatPos;
-	vPoint_ = context_->viewPoints->getNewViewPoint(weaponContext_.getPlayerId());
-	context_->viewPoints->getValues(lookatPos, lookFrom_);
+	vPoint_ = context_->getViewPoints().getNewViewPoint(weaponContext_.getPlayerId());
+	context_->getViewPoints().getValues(lookatPos, lookFrom_);
 
 	// Point the action camera at this event
 	CameraPositionAction *pos = new CameraPositionAction(
 		startPosition_, 5, 5);
-	context_->actionController->addAction(pos);
+	context_->getActionController().addAction(pos);
 }
 
 ShotBounce::~ShotBounce()
@@ -65,7 +65,7 @@ ShotBounce::~ShotBounce()
 #ifndef S3D_SERVER
 	delete model_;
 #endif
-	if (vPoint_) context_->viewPoints->releaseViewPoint(vPoint_);
+	if (vPoint_) context_->getViewPoints().releaseViewPoint(vPoint_);
 }
 
 std::string ShotBounce::getActionDetails()
@@ -101,7 +101,7 @@ void ShotBounce::simulate(fixed frameTime, bool &remove)
 void ShotBounce::draw()
 {
 #ifndef S3D_SERVER
-	if (!context_->serverMode) 
+	if (!context_->getServerMode()) 
 	{
 		static float rotMatrix[16];
 		getRotationQuat().getOpenGLRotationMatrix(rotMatrix);

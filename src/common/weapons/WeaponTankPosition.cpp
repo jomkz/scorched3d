@@ -65,7 +65,7 @@ void WeaponTankPosition::fireWeapon(ScorchedContext &context,
 	// This weapon re-centers the current shot on the firing tank.
 	// This can be used for firing from a moving tank
 
-	Tank *tank = context.tankContainer->getTankById(weaponContext.getPlayerId());
+	Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
 	if (tank && tank->getState().getState() == TankState::sNormal)
 	{
 		FixedVector newPosition = tank->getLife().getTargetPosition();

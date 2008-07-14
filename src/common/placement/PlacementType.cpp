@@ -90,7 +90,7 @@ bool PlacementType::checkCloseness(FixedVector &position,
 {
 	// Check for border closeness for targets
 	std::map<unsigned int, Target *> &targets = 
-		context.targetContainer->getTargets();
+		context.getTargetContainer().getTargets();
 	std::map<unsigned int, Target *>::iterator targetsitor;
 	for (targetsitor = targets.begin();
 		targetsitor != targets.end();

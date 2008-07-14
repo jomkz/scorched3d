@@ -39,16 +39,16 @@ bool DeformLandscape::deformLandscape(
 	ScorchedContext &context,
 	FixedVector &pos, fixed radius, bool down, DeformPoints &map)
 {
-	if (context.optionsGame->getActionSyncCheck())
+	if (context.getOptionsGame().getActionSyncCheck())
 	{
-		context.actionController->addSyncCheck(
+		context.getActionController().addSyncCheck(
 			S3D::formatStringBuffer("Deform : %i,%i,%i %i %s", 
 				pos[0].getInternal(), pos[1].getInternal(), pos[2].getInternal(), 
 				radius.getInternal(), (down?"Down":"Up")));
 	}
 
 	bool hits = deformLandscapeInternal(context, pos, radius, down, map, true);
-	if (hits && context.serverMode)
+	if (hits && context.getServerMode())
 	{
 		DeformInfo deformInfo;
 		deformInfo.type = down?eDeformLandscapeDown:eDeformLandscapeUp;
@@ -65,7 +65,7 @@ bool DeformLandscape::deformLandscapeInternal(
 	FixedVector &pos, fixed radius, bool down, DeformPoints &map, 
 	bool setNormals)
 {
-	HeightMap &hmap = context.landscapeMaps->getGroundMaps().getHeightMap();
+	HeightMap &hmap = context.getLandscapeMaps().getGroundMaps().getHeightMap();
 
 	bool hits = false;
 	int iradius = (int) radius.asInt() + 1;
@@ -180,16 +180,16 @@ void DeformLandscape::flattenArea(
 	ScorchedContext &context, FixedVector &tankPos, 
 	bool removeObjects, fixed size)
 {
-	if (context.optionsGame->getActionSyncCheck())
+	if (context.getOptionsGame().getActionSyncCheck())
 	{
-		context.actionController->addSyncCheck(
+		context.getActionController().addSyncCheck(
 			S3D::formatStringBuffer("Flatten : %i,%i,%i %i", 
 			tankPos[0].getInternal(), tankPos[1].getInternal(), tankPos[2].getInternal(), 
 			size.getInternal()));
 	}
 
 	flattenAreaInternal(context, tankPos, removeObjects, size, true);
-	if (context.serverMode)
+	if (context.getServerMode())
 	{
 		DeformInfo deformInfo;
 		deformInfo.type = eFlattenArea;
@@ -202,7 +202,7 @@ void DeformLandscape::flattenArea(
 	{
 		// Remove any targets in this location
 		std::map<unsigned int, Target *> collisionTargets;
-		context.targetSpace->getCollisionSet(tankPos, size * fixed(true, 15000), collisionTargets);
+		context.getTargetSpace().getCollisionSet(tankPos, size * fixed(true, 15000), collisionTargets);
 		std::map<unsigned int, Target *>::iterator itor;
 		for (itor = collisionTargets.begin();
 			itor != collisionTargets.end();
@@ -213,7 +213,7 @@ void DeformLandscape::flattenArea(
 				target->getTargetState().getFlattenDestroy())
 			{
 				Target *removedTarget = 
-					context.targetContainer->removeTarget(target->getPlayerId());
+					context.getTargetContainer().removeTarget(target->getPlayerId());
 				delete removedTarget;
 			}
 		}
@@ -226,7 +226,7 @@ void DeformLandscape::flattenAreaInternal(
 	bool removeObjects, fixed size, bool setNormals)
 {
 	int iSize = size.asInt();
-	HeightMap &hmap = context.landscapeMaps->getGroundMaps().getHeightMap();
+	HeightMap &hmap = context.getLandscapeMaps().getGroundMaps().getHeightMap();
 	int posX = tankPos[0].asInt();
 	int posY = tankPos[1].asInt();
 
@@ -303,7 +303,7 @@ void DeformLandscape::applyInfos(ScorchedContext &context,
 	}
 
 	if (counter) counter->setNewOp("Landscape Normals");
-	HeightMap &hmap = context.landscapeMaps->getGroundMaps().getHeightMap();
+	HeightMap &hmap = context.getLandscapeMaps().getGroundMaps().getHeightMap();
 	for (int x=0; x<=hmap.getMapWidth(); x++)
 	{
 		if (counter) counter->setNewPercentage((100.0f * float(x)) / float(hmap.getMapWidth()));

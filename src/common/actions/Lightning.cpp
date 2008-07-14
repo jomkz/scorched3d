@@ -69,7 +69,7 @@ void Lightning::init()
 		unsigned int playerId = (*hurtItor).first;
 		fixed damage = (*hurtItor).second;
 
-		Target *target = context_->targetContainer->getTargetById(playerId);
+		Target *target = context_->getTargetContainer().getTargetById(playerId);
 		if (target)
 		{
 			TargetDamageCalc::damageTarget(
@@ -90,7 +90,7 @@ std::string Lightning::getActionDetails()
 void Lightning::simulate(fixed frameTime, bool &remove)
 {
 #ifndef S3D_SERVER
-	if (!context_->serverMode)
+	if (!context_->getServerMode())
 	{   
 		if (firstTime_)
 		{ 
@@ -116,7 +116,7 @@ void Lightning::simulate(fixed frameTime, bool &remove)
 void Lightning::draw()
 {
 #ifndef S3D_SERVER
-	if (!context_->serverMode)
+	if (!context_->getServerMode())
 	{
 		Vector &cameraPos = 
 			GLCamera::getCurrentCamera()->getCurrentPos();
@@ -182,7 +182,7 @@ void Lightning::draw()
 void Lightning::dispaceDirection(FixedVector &direction, 
 	FixedVector &originalDirection, fixed angle)
 {
-	RandomGenerator &generator = context_->actionController->getRandom();
+	RandomGenerator &generator = context_->getActionController().getRandom();
 
 	int breakCount = 0;
 
@@ -217,7 +217,7 @@ void Lightning::generateLightning(int id, int depth, fixed size,
 {
 	if (id > 100) return;
 
-	RandomGenerator &generator = context_->actionController->getRandom();
+	RandomGenerator &generator = context_->getActionController().getRandom();
 	fixed length = weapon_->getSegLength() + 
 		weapon_->getSegVar() * generator.getRandFixed();
 	FixedVector end = start + direction * length;
@@ -287,7 +287,7 @@ void Lightning::damageTargets(FixedVector &position,
 	if (weapon_->getSegHurt() <= 0) return;
 
 	std::map<unsigned int, Target *> collisionTargets;
-	context_->targetSpace->getCollisionSet(position, 
+	context_->getTargetSpace().getCollisionSet(position, 
 		weapon_->getSegHurtRadius() * fixed(true, 15000), collisionTargets);
 	std::map<unsigned int, Target *>::iterator itor;
 	for (itor = collisionTargets.begin();

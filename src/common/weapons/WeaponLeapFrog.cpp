@@ -66,7 +66,7 @@ void WeaponLeapFrog::fireWeapon(ScorchedContext &context,
 	if (newVelocity[2] < 0) newVelocity[2] *= -1;
 
 	FixedVector newPosition = position;
-	fixed minHeight = context.landscapeMaps->getGroundMaps().getInterpHeight(
+	fixed minHeight = context.getLandscapeMaps().getGroundMaps().getInterpHeight(
 		position[0], position[1]);
 
 	if (position[2] < minHeight + fixed(true, 7000))

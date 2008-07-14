@@ -66,7 +66,7 @@ void TankAccessories::newMatch()
 	// and also if give all accessories is set
 	{
 		std::list<Accessory *> accessories = 
-			context_.accessoryStore->getAllAccessories();
+			context_.getAccessoryStore().getAllAccessories();
 		std::list<Accessory *>::iterator itor;
 		for (itor = accessories.begin();
 			itor != accessories.end();
@@ -76,7 +76,7 @@ void TankAccessories::newMatch()
 			if (accessory->getMaximumNumber() > 0)
 			{
 				int startingNumber = accessory->getStartingNumber();
-				if (context_.optionsGame->getGiveAllWeapons())
+				if (context_.getOptionsGame().getGiveAllWeapons())
 				{
 					startingNumber = -1;
 				}
@@ -91,7 +91,7 @@ void TankAccessories::newMatch()
 
 	// Add all of the accessories that come from the tank's type
 	{
-		TankType *type = context_.tankModelStore->getTypeByName(
+		TankType *type = context_.getTankModels().getTypeByName(
 			tank_->getModelContainer().getTankTypeName());
 		std::map<Accessory *, int> accessories = type->getAccessories();
 		std::map<Accessory *, int>::iterator itor;
@@ -188,7 +188,7 @@ int TankAccessories::getAccessoryCount(Accessory *accessory)
 bool TankAccessories::accessoryAllowed(Accessory *accessory, int count)
 {
 	// Check if this tank type allows this accessory
-	TankType *type = context_.tankModelStore->getTypeByName(
+	TankType *type = context_.getTankModels().getTypeByName(
 		tank_->getModelContainer().getTankTypeName());
 	if (type->getAccessoryDisabled(accessory)) return false;
 
@@ -203,7 +203,7 @@ bool TankAccessories::accessoryAllowed(Accessory *accessory, int count)
 
 	// Check if this accessory exceeds the current arms level
 	if (10 - accessory->getArmsLevel() > 
-		context_.optionsTransient->getArmsLevel())
+		context_.getOptionsTransient().getArmsLevel())
 	{
 		return false;
 	}
@@ -403,7 +403,7 @@ bool TankAccessories::readMessage(NetBufferReader &reader)
 		if (!reader.getFromBuffer(accessoryCount)) return false;
 
 		Accessory *accessory = 
-			context_.accessoryStore->findByAccessoryId(accessoryId);
+			context_.getAccessoryStore().findByAccessoryId(accessoryId);
 		if (!accessory)
 		{
 			return false;
@@ -418,7 +418,7 @@ bool TankAccessories::readMessage(NetBufferReader &reader)
 
 void TankAccessories::activate(Accessory *accessory)
 {
-	DIALOG_ASSERT(!context_.serverMode);
+	DIALOG_ASSERT(!context_.getServerMode());
 
 #ifndef S3D_SERVER
 	switch (accessory->getType())

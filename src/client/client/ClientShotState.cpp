@@ -61,7 +61,7 @@ bool ClientShotState::processMessage(
 {
 	// Reset graphics
 	Landscape::instance()->restoreLandscapeTexture();
-	ScorchedClient::instance()->getContext().viewPoints->reset();
+	ScorchedClient::instance()->getContext().getViewPoints().reset();
 
 	// Read the new shots into the action controller
 	ComsPlayMovesMessage playMovesMessage;

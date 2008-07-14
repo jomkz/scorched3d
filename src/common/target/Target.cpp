@@ -58,7 +58,7 @@ Target::Target(unsigned int playerId,
 
 Target::~Target()
 {
-	context_.landscapeMaps->getGroundMaps().getGroups().
+	context_.getLandscapeMaps().getGroundMaps().getGroups().
 		removeFromGroups(&getGroup());
 	life_->setLife(0);
 
@@ -98,8 +98,8 @@ bool Target::writeMessage(NetBuffer &buffer)
 	if (!targetState_->writeMessage(buffer)) return false;
 	if (!group_->writeMessage(buffer)) return false;
 	buffer.addToBuffer(border_);
-	if (!context_.accessoryStore->writeWeapon(buffer, deathAction_)) return false;
-	if (!context_.accessoryStore->writeWeapon(buffer, burnAction_)) return false;
+	if (!context_.getAccessoryStore().writeWeapon(buffer, deathAction_)) return false;
+	if (!context_.getAccessoryStore().writeWeapon(buffer, burnAction_)) return false;
 
 	return true;
 }
@@ -141,8 +141,8 @@ bool Target::readMessage(NetBufferReader &reader)
 		Logger::log("Target::border read failed");
 		return false;
 	}
-	deathAction_ = context_.accessoryStore->readWeapon(reader);
-	burnAction_ = context_.accessoryStore->readWeapon(reader);
+	deathAction_ = context_.getAccessoryStore().readWeapon(reader);
+	burnAction_ = context_.getAccessoryStore().readWeapon(reader);
 
 	return true;
 }

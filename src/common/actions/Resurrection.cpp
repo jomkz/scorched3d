@@ -53,11 +53,11 @@ void Resurrection::simulate(fixed frameTime, bool &remove)
 {
 	remove = true;
 
-	Tank *tank = context_->tankContainer->getTankById(playerId_);
+	Tank *tank = context_->getTankContainer().getTankById(playerId_);
 	if (tank)
 	{
 #ifndef S3D_SERVER
-		if (!context_->serverMode)
+		if (!context_->getServerMode())
 		{
 			ChannelText text("combat",
 				S3D::formatStringBuffer("[p:%s] was resurrected, %i lives remaining",
@@ -68,9 +68,9 @@ void Resurrection::simulate(fixed frameTime, bool &remove)
 		}
 #endif
 
-		if (context_->optionsGame->getActionSyncCheck())
+		if (context_->getOptionsGame().getActionSyncCheck())
 		{
-			context_->actionController->addSyncCheck(
+			context_->getActionController().addSyncCheck(
 				S3D::formatStringBuffer("TankRez: %u %i, %i, %i", 
 					tank->getPlayerId(),
 					position_[0].getInternal(),
@@ -83,7 +83,7 @@ void Resurrection::simulate(fixed frameTime, bool &remove)
 		tank->getLife().setTargetPosition(position_);
 		DeformLandscape::flattenArea(*context_, position_);
 #ifndef S3D_SERVER
-		if (!context_->serverMode)
+		if (!context_->getServerMode())
 		{
 			VisibilityPatchGrid::instance()->recalculateErrors(position_, 2);
 		}

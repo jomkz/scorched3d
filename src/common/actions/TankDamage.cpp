@@ -65,14 +65,14 @@ TankDamage::~TankDamage()
 void TankDamage::init()
 {
 	Target *damagedTarget = 
-		context_->targetContainer->getTargetById(damagedPlayerId_);
+		context_->getTargetContainer().getTargetById(damagedPlayerId_);
 	if (damagedTarget && !damagedTarget->isTarget())
 	{
 		CameraPositionAction *pos = new CameraPositionAction(
 			damagedTarget->getLife().getTargetPosition(), 
 			4,
 			15);
-		context_->actionController->addAction(pos);
+		context_->getActionController().addAction(pos);
 	}
 }
 
@@ -100,7 +100,7 @@ void TankDamage::calculateDamage()
 
 	// Find the tank that has been damaged
 	Target *damagedTarget = 
-		context_->targetContainer->getTargetById(damagedPlayerId_);
+		context_->getTargetContainer().getTargetById(damagedPlayerId_);
 	if (!damagedTarget || !damagedTarget->getAlive()) return;
 
 	// Tell this tanks ai that is has been hurt by another tank
@@ -108,7 +108,7 @@ void TankDamage::calculateDamage()
 	{
 		// Tell all AIs about this collision
 		std::map<unsigned int, Tank *> tanks = 
-			context_->tankContainer->getAllTanks();
+			context_->getTankContainer().getAllTanks();
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = tanks.begin();
 			itor != tanks.end();
@@ -161,7 +161,7 @@ void TankDamage::calculateDamage()
 	if (damage_ > 0 && !shieldOnlyDamage_)
 	{
 #ifndef S3D_SERVER
-		if (!context_->serverMode &&
+		if (!context_->getServerMode() &&
 			damagedTarget->getTargetState().getDisplayDamage())
 		{
 			Vector position = damagedTarget->getLife().getFloatPosition();
@@ -170,7 +170,7 @@ void TankDamage::calculateDamage()
 			position[2] += RAND * 5.0f - 2.5f;
 
 			Vector redColor(0.75f, 0.0f, 0.0f);
-			context_->actionController->addAction(
+			context_->getActionController().addAction(
 				new SpriteAction(
 					new TextActionRenderer(
 						position,
@@ -183,16 +183,16 @@ void TankDamage::calculateDamage()
 		if (damage_ > damagedTarget->getLife().getLife()) damage_ = 
 			damagedTarget->getLife().getLife();
 		damagedTarget->getLife().setLife(damagedTarget->getLife().getLife() - damage_);
-		if (context_->optionsGame->getLimitPowerByHealth() &&
+		if (context_->getOptionsGame().getLimitPowerByHealth() &&
 			!damagedTarget->isTarget())
 		{
 			Tank *damagedTank = (Tank *) damagedTarget;
 			damagedTank->getPosition().changePower(0, true);
 		}
 
-		if (context_->optionsGame->getActionSyncCheck())
+		if (context_->getOptionsGame().getActionSyncCheck())
 		{
-			context_->actionController->addSyncCheck(
+			context_->getActionController().addSyncCheck(
 				S3D::formatStringBuffer("TankDamage: %u %i", 
 					damagedTarget->getPlayerId(),
 					damagedTarget->getLife().getLife().getInternal()));
@@ -204,7 +204,7 @@ void TankDamage::calculateDamage()
 		// Add any score got from this endevour
 		// Should always be a tank that has fired
 		Tank *firedTank = 
-			context_->tankContainer->getTankById(firedPlayerId);
+			context_->getTankContainer().getTankById(firedPlayerId);
 		if (firedTank && !damagedTarget->isTarget())
 		{	
 			Tank *damagedTank = (Tank *) damagedTarget;
@@ -214,16 +214,16 @@ void TankDamage::calculateDamage()
 
 			// Calculate team kills
 			bool selfKill = (damagedPlayerId_ ==  firedPlayerId);
-			bool teamKill = ((context_->optionsGame->getTeams() > 1) &&
+			bool teamKill = ((context_->getOptionsGame().getTeams() > 1) &&
 				(firedTank->getTeam() == damagedTank->getTeam()));
 
 			if (!killedTank)
 			{
 				// Calculate money won for not killing this tank
 				int moneyPerHit = 
-					context_->optionsGame->getMoneyWonPerHitPoint() *
+					context_->getOptionsGame().getMoneyWonPerHitPoint() *
 						weapon_->getArmsLevel();
-				if (context_->optionsGame->getMoneyPerHealthPoint()) 
+				if (context_->getOptionsGame().getMoneyPerHealthPoint()) 
 					moneyPerHit = (moneyPerHit * damage_.asInt()) / 100;
 				if (selfKill || teamKill) moneyPerHit *= -1;
 
@@ -233,7 +233,7 @@ void TankDamage::calculateDamage()
 			else 
 			{
 				int moneyPerKill = 
-					context_->optionsGame->getMoneyWonPerKillPoint() *
+					context_->getOptionsGame().getMoneyWonPerKillPoint() *
 						weapon_->getArmsLevel();
 				if (!selfKill && !teamKill)
 				{
@@ -241,18 +241,18 @@ void TankDamage::calculateDamage()
 					// so for the first kill turn kills will be 0
 					// i.e. no multikill bonus for 1st kill
 					moneyPerKill +=
-						context_->optionsGame->getMoneyWonPerMultiKillPoint() *
+						context_->getOptionsGame().getMoneyWonPerMultiKillPoint() *
 							weapon_->getArmsLevel() *
 							firedTank->getScore().getTurnKills();
 				}
-				if (context_->optionsGame->getMoneyPerHealthPoint()) 
+				if (context_->getOptionsGame().getMoneyPerHealthPoint()) 
 					moneyPerKill = (moneyPerKill * damage_.asInt()) / 100;
-				int scorePerKill = context_->optionsGame->getScorePerKill();
+				int scorePerKill = context_->getOptionsGame().getScorePerKill();
 
 				int moneyPerAssist = 
-					context_->optionsGame->getMoneyWonPerAssistPoint() *
+					context_->getOptionsGame().getMoneyWonPerAssistPoint() *
 						weapon_->getArmsLevel();
-				int scorePerAssist = context_->optionsGame->getScorePerAssist();
+				int scorePerAssist = context_->getOptionsGame().getScorePerAssist();
 
 				// Update kills and score
 				if (selfKill || teamKill)
@@ -266,7 +266,7 @@ void TankDamage::calculateDamage()
 
 					if (firedTank->getTeam() > 0)
 					{
-						context_->tankTeamScore->addScore(
+						context_->getTankTeamScore().addScore(
 							-scorePerKill, firedTank->getTeam());
 					}
 				}
@@ -283,7 +283,7 @@ void TankDamage::calculateDamage()
 
 					if (firedTank->getTeam() > 0)
 					{
-						context_->tankTeamScore->addScore(
+						context_->getTankTeamScore().addScore(
 							scorePerKill, firedTank->getTeam());
 					}
 				}
@@ -298,7 +298,7 @@ void TankDamage::calculateDamage()
 				{
 					unsigned int hurtByPlayer = (*itor);
 					Tank *hurtByTank = 
-						context_->tankContainer->getTankById(hurtByPlayer);
+						context_->getTankContainer().getTankById(hurtByPlayer);
 					if (!hurtByTank) continue;
 
 					// Only score when the tank does not hurt itself
@@ -308,7 +308,7 @@ void TankDamage::calculateDamage()
 					if (hurtByTank == firedTank) continue;
 
 					// or a team member
-					if ((context_->optionsGame->getTeams() > 1) &&
+					if ((context_->getOptionsGame().getTeams() > 1) &&
 						(hurtByTank->getTeam() == damagedTank->getTeam())) continue;
 
 					// Update assist score
@@ -321,7 +321,7 @@ void TankDamage::calculateDamage()
 
 					if (hurtByTank->getTeam() > 0)
 					{
-						context_->tankTeamScore->addScore(
+						context_->getTankTeamScore().addScore(
 							scorePerAssist, hurtByTank->getTeam());
 					}
 				}
@@ -354,7 +354,7 @@ void TankDamage::calculateDamage()
 	{
 		// The tank is not dead check if it needs to fall
 		FixedVector &position = damagedTarget->getLife().getTargetPosition();
-		if (context_->landscapeMaps->getGroundMaps().
+		if (context_->getLandscapeMaps().getGroundMaps().
 			getInterpHeight(position[0], position[1]) < position[2])
 		{
 			// Check this tank is not already falling
@@ -369,7 +369,7 @@ void TankDamage::calculateDamage()
 				}
 
 				// Tank falling
-				context_->actionController->addAction(
+				context_->getActionController().addAction(
 					new TankFalling(weapon_, damagedPlayerId_, weaponContext_,
 						parachute));
 			}
@@ -382,11 +382,11 @@ void TankDamage::calculateDamage()
 		damagedTarget->isTarget())
 	{
 		Target *removedTarget = 
-			context_->targetContainer->
+			context_->getTargetContainer().
 				removeTarget(damagedTarget->getPlayerId());
-		if (context_->optionsGame->getActionSyncCheck())
+		if (context_->getOptionsGame().getActionSyncCheck())
 		{
-			context_->actionController->addSyncCheck(
+			context_->getActionController().addSyncCheck(
 				S3D::formatStringBuffer("RemoveTarget : %u %s", 
 					removedTarget->getPlayerId(),
 					removedTarget->getName()));
@@ -399,7 +399,7 @@ void TankDamage::calculateDamage()
 void TankDamage::calculateDeath()
 {
 	Target *killedTarget = 
-		context_->targetContainer->getTargetById(damagedPlayerId_);
+		context_->getTargetContainer().getTargetById(damagedPlayerId_);
 	if (!killedTarget) return;
 
 	// Log the death
@@ -410,9 +410,9 @@ void TankDamage::calculateDeath()
 	Weapon *weapon = killedTarget->getDeathAction();
 	if (weapon)
 	{
-		if (context_->optionsGame->getActionSyncCheck())
+		if (context_->getOptionsGame().getActionSyncCheck())
 		{
-			context_->actionController->addSyncCheck(
+			context_->getActionController().addSyncCheck(
 				S3D::formatStringBuffer("DeathAction: %s", 
 					weapon->getParent()->getName()));
 		}
@@ -432,16 +432,16 @@ void TankDamage::logDeath()
 	unsigned int firedPlayerId = weaponContext_.getPlayerId();
 
 	Target *killedTarget = 
-		context_->targetContainer->getTargetById(damagedPlayerId_);
+		context_->getTargetContainer().getTargetById(damagedPlayerId_);
 	if (killedTarget->isTarget()) return;
 
 	// Print the banner on who killed who
 	GLTexture *weaponTexture = 0;
 #ifndef S3D_SERVER
-	if (!context_->serverMode)
+	if (!context_->getServerMode())
 	{
 		Accessory *accessory = 
-			context_->accessoryStore->
+			context_->getAccessoryStore().
 			findByAccessoryId(weapon_->getParent()->getAccessoryId());
 		if (accessory)
 		{
@@ -457,13 +457,13 @@ void TankDamage::logDeath()
 		const char *line = TankAIStrings::instance()->getDeathLine(*context_);
 		if (line)
 		{
-			context_->actionController->addAction(
+			context_->getActionController().addAction(
 				new TankSay(killedTank->getPlayerId(), line));
 		}
 	}
 
 	Tank *firedTank = 
-		context_->tankContainer->getTankById(firedPlayerId);
+		context_->getTankContainer().getTankById(firedPlayerId);
 	if (firedTank)
 	{
 		if (damagedPlayerId_ == firedPlayerId)
@@ -472,7 +472,7 @@ void TankDamage::logDeath()
 				tankSelfKilled(firedTank, weapon_);
 			StatsLogger::instance()->
 				weaponKilled(weapon_, (weaponContext_.getData() & Weapon::eDataDeathAnimation));
-			if (!context_->serverMode)
+			if (!context_->getServerMode())
 			{
 				ChannelText text("combat", 
 					S3D::formatStringBuffer("[p:%s] killed self with a [w:%s]",
@@ -484,14 +484,14 @@ void TankDamage::logDeath()
 				ChannelManager::showText(text);
 			}
 		}
-		else if ((context_->optionsGame->getTeams() > 1) &&
+		else if ((context_->getOptionsGame().getTeams() > 1) &&
 				(firedTank->getTeam() == killedTank->getTeam())) 
 		{
 			StatsLogger::instance()->
 				tankTeamKilled(firedTank, killedTank, weapon_);
 			StatsLogger::instance()->
 				weaponKilled(weapon_, (weaponContext_.getData() & Weapon::eDataDeathAnimation));
-			if (!context_->serverMode)
+			if (!context_->getServerMode())
 			{
 				ChannelText text("combat", 
 					S3D::formatStringBuffer("[p:%s] team killed [p:%s] with a [w:%s]",
@@ -510,7 +510,7 @@ void TankDamage::logDeath()
 				tankKilled(firedTank, killedTank, weapon_);
 			StatsLogger::instance()->
 				weaponKilled(weapon_, (weaponContext_.getData() & Weapon::eDataDeathAnimation));
-			if (!context_->serverMode)
+			if (!context_->getServerMode())
 			{
 				ChannelText text("combat", 
 					S3D::formatStringBuffer("[p:%s] %skilled [p:%s] with a [w:%s]",
@@ -534,7 +534,7 @@ void TankDamage::logDeath()
 			tankKilled(&firedTank, killedTank, weapon_); 
 		StatsLogger::instance()->
 			weaponKilled(weapon_, (weaponContext_.getData() & Weapon::eDataDeathAnimation));
-		if (!context_->serverMode)
+		if (!context_->getServerMode())
 		{
 			ChannelText text("combat", 
 					S3D::formatStringBuffer("[p:%s] %skilled [p:%s] with a [w:%s]",

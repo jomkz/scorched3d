@@ -106,7 +106,7 @@ fixed NumberParser::getValue(ScorchedContext &context) //RandomGenerator &genera
         step_ = 0;
         std::list<fixed>::iterator itor;
         itor = operands_.begin();
-        RandomGenerator &random = context.actionController->getRandom();
+		RandomGenerator &random = context.getActionController().getRandom();
 
         if (expression_.find("RANGE",0) != std::string::npos)
         {

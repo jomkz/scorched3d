@@ -667,9 +667,9 @@ void ImageModifier::addCircleToLandscape(
 	float sx, float sy, float sw, float opacity)
 {
 	float shadowMultWidth = (float) Landscape::instance()->getMainMap().getWidth() / 
-		context.landscapeMaps->getGroundMaps().getLandscapeWidth();
+		context.getLandscapeMaps().getGroundMaps().getLandscapeWidth();
 	float shadowMultHeight = (float) Landscape::instance()->getMainMap().getHeight() / 
-		context.landscapeMaps->getGroundMaps().getLandscapeHeight();
+		context.getLandscapeMaps().getGroundMaps().getLandscapeHeight();
 
 	addCircle(Landscape::instance()->getMainMap(),
 		sx * shadowMultWidth, sy * shadowMultHeight, 
@@ -732,9 +732,9 @@ void ImageModifier::addBitmapToLandscape(
 	bool commit)
 {
 	float shadowMultWidth = (float) Landscape::instance()->getMainMap().getWidth() / 
-		context.landscapeMaps->getGroundMaps().getLandscapeWidth();
+		context.getLandscapeMaps().getGroundMaps().getLandscapeWidth();
 	float shadowMultHeight = (float) Landscape::instance()->getMainMap().getHeight() / 
-		context.landscapeMaps->getGroundMaps().getLandscapeHeight();
+		context.getLandscapeMaps().getGroundMaps().getLandscapeHeight();
 
 	addBitmap(
 		Landscape::instance()->getMainMap(),

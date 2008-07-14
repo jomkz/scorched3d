@@ -64,7 +64,7 @@ void WeaponDelay::fireWeapon(ScorchedContext &context,
 		"WeaponDelay", 
 		this, delay_.getValue(context), 0,
 		weaponContext, position, velocity);
-	context.actionController->addAction(action);
+	context.getActionController().addAction(action);
 }
 
 void WeaponDelay::weaponCallback(

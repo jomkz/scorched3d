@@ -44,7 +44,7 @@ bool ServerNextShotState::getRoundFinished()
 {
 	// Check why this round has finished
 	int teamWonGame = 
-		ScorchedServer::instance()->getContext().tankTeamScore->getWonGame();
+		ScorchedServer::instance()->getContext().getTankTeamScore().getWonGame();
 	if (teamWonGame > 0)
 	{
 		// A team has won

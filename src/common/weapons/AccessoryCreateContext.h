@@ -36,8 +36,8 @@ public:
 	virtual ~AccessoryCreateContext();
 
 	ScorchedContext &getScorchedContext() { return context_; }
-	OptionsScorched &getOptionsGame() { return *context_.optionsGame; }
-	AccessoryStore &getAccessoryStore() { return *context_.accessoryStore; }
+	OptionsScorched &getOptionsGame() { return context_.getOptionsGame(); }
+	AccessoryStore &getAccessoryStore() { return context_.getAccessoryStore(); }
 	WeaponLabel *getLabel(const char *label);
 	void addLabel(const char *label, WeaponLabel *weapon);
 	void removeLabel(const char *label);

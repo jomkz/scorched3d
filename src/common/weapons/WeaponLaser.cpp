@@ -60,6 +60,6 @@ void WeaponLaser::fireWeapon(ScorchedContext &context,
 	//hurtRadius_ = hurtRadiusExp_.getValue(context);
 	//totalTime_ = totalTimeExp_.getValue(context);
 
-	context.actionController->addAction(
+	context.getActionController().addAction(
 		new Laser(this, position, velocity, weaponContext));
 }

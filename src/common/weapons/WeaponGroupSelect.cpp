@@ -63,14 +63,14 @@ void WeaponGroupSelect::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
 	// Find the group to select the objects in
-	TargetGroupsSetEntry *groupEntry = context.landscapeMaps->getGroundMaps().getGroups().
+	TargetGroupsSetEntry *groupEntry = context.getLandscapeMaps().getGroundMaps().getGroups().
 		getGroup(groupName_.c_str());
 	if (!groupEntry) return;
 
 	// Select the object
 	int objectCount = groupEntry->getObjectCount();
 	if (objectCount == 0) return;
-	unsigned int object = context.actionController->getRandom().getRandUInt() % objectCount;
+	unsigned int object = context.getActionController().getRandom().getRandUInt() % objectCount;
 	TargetGroup *entry = groupEntry->getObjectByPos(object);
 
 	FixedVector newPosition = entry->getTarget()->getLife().getTargetPosition();

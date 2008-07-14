@@ -47,7 +47,7 @@ bool WeaponScript::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 	if (!accessoryNode->getNamedChild("entrypoint", entrypoint_)) return false;
 
 	std::string luaErrorString;
-	script_ = context.getScorchedContext().luaScriptFactory->createScript();
+	script_ = context.getScorchedContext().getLUAScriptFactory().createScript();
 	script_->addWeaponFunctions();
 	if (!script_->loadFromFile(S3D::getDataFile(filename), luaErrorString))
 	{

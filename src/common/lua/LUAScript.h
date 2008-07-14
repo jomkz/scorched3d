@@ -38,9 +38,11 @@ public:
 
 	void addWeaponFunctions();
 
+	bool functionExists(const std::string &functionName);
 	bool startFunction(const std::string &functionName);
 	bool endFunction(int argCount);
 
+	bool addStringParameter(const std::string &str);
 	bool addNumberParameter(fixed number);
 	bool addVectorParameter(const FixedVector &vector);
 

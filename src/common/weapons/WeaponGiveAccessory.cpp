@@ -65,7 +65,7 @@ bool WeaponGiveAccessory::parseXML(AccessoryCreateContext &context, XMLNode *acc
 void WeaponGiveAccessory::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	context.actionController->addAction(
+	context.getActionController().addAction(
 		new CallbackWeapon("WeaponGiveAccessory", this, 0, 0, 
 			weaponContext, position, velocity));
 }
@@ -75,7 +75,7 @@ void WeaponGiveAccessory::weaponCallback(
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 	unsigned int userData)
 {
-	Tank *tank = context.tankContainer->getTankById(weaponContext.getPlayerId());
+	Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
 	if (!tank) return;
 
 	std::vector<Accessory *>::iterator itor;
@@ -90,7 +90,7 @@ void WeaponGiveAccessory::weaponCallback(
 			if (tank->getAccessories().accessoryAllowed(accessory, number_))
 			{
 				tank->getAccessories().add(accessory, number_);
-				if (!context.serverMode)
+				if (!context.getServerMode())
 				{
 					ChannelText text("combat", 
 						S3D::formatStringBuffer("[p:%s] received %i * [w:%s]", 
@@ -105,7 +105,7 @@ void WeaponGiveAccessory::weaponCallback(
 				int money = accessory->getSellPrice() * number_;
 				tank->getScore().setMoney(tank->getScore().getMoney() + money);
 
-				if (!context.serverMode)
+				if (!context.getServerMode())
 				{
 					ChannelText text("combat", 
 						S3D::formatStringBuffer("[p:%s] received $%i", 
@@ -123,7 +123,7 @@ void WeaponGiveAccessory::weaponCallback(
 				int loose = MIN(count, -number_);
 
 				tank->getAccessories().rm(accessory, loose);
-				if (!context.serverMode)
+				if (!context.getServerMode())
 				{
 					ChannelText text("combat", 
 						S3D::formatStringBuffer("[p:%s] lost %i * [w:%s]", 

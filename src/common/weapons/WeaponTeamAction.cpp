@@ -69,7 +69,7 @@ bool WeaponTeamAction::parseXML(AccessoryCreateContext &context, XMLNode *access
 void WeaponTeamAction::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	context.actionController->addAction(
+	context.getActionController().addAction(
 		new CallbackWeapon("WeaponTeamAction", this, 0, 0, 
 			weaponContext, position, velocity));
 }
@@ -79,7 +79,7 @@ void WeaponTeamAction::weaponCallback(
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 	unsigned int userData)
 {
-	Tank *tank = context.tankContainer->getTankById(weaponContext.getPlayerId());
+	Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
 	if (!tank) return;
 
 	Weapon *action = action_[tank->getTeam()];

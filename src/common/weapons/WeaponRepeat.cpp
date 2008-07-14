@@ -83,7 +83,7 @@ void WeaponRepeat::weaponCallback(
 
 	if (userData > 1)
 	{
-		context.actionController->addAction(
+		context.getActionController().addAction(
 			new CallbackWeapon("WeaponRepeat", this, delay_.getValue(context), userData - 1, 
 				weaponContext, position, velocity));
 	}

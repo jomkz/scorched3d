@@ -45,7 +45,7 @@ void PlacementObjectShadow::createObject(ScorchedContext &context,
 	unsigned int &playerId,
 	PlacementType::Position &position)
 {
-	context.landscapeMaps->getGroundMaps().getGroups().getShadows().push_back(
+	context.getLandscapeMaps().getGroundMaps().getGroups().getShadows().push_back(
 		PlacementShadowDefinition::Entry(
 		&shadowDef_,
 		position.position,

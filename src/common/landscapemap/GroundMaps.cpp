@@ -51,14 +51,14 @@ void GroundMaps::generateMaps(
 	ScorchedContext &context,
 	ProgressCounter *counter)
 {
-	arenaWidth_ = context.landscapeMaps->getDefinitions().getDefn()->getArenaWidth();
-	arenaHeight_ = context.landscapeMaps->getDefinitions().getDefn()->getArenaHeight();
-	arenaX_ = context.landscapeMaps->getDefinitions().getDefn()->getArenaX();
-	arenaY_ = context.landscapeMaps->getDefinitions().getDefn()->getArenaY();
+	arenaWidth_ = context.getLandscapeMaps().getDefinitions().getDefn()->getArenaWidth();
+	arenaHeight_ = context.getLandscapeMaps().getDefinitions().getDefn()->getArenaHeight();
+	arenaX_ = context.getLandscapeMaps().getDefinitions().getDefn()->getArenaX();
+	arenaY_ = context.getLandscapeMaps().getDefinitions().getDefn()->getArenaY();
 
 	generateHMap(context, counter);
 #ifndef S3D_SERVER
-	if (!context.serverMode)
+	if (!context.getServerMode())
 	{
 		VisibilityPatchGrid::instance()->generate();
 	}
@@ -71,7 +71,7 @@ void GroundMaps::generateMaps(
 
 	// Create movement after targets, so we can mark 
 	// those targets that are in movement groups
-	context.targetMovement->generate(context); 
+	context.getTargetMovement().generate(context); 
 	nmap_.create(getLandscapeWidth(), getLandscapeHeight());
 }
 
