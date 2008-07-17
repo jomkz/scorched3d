@@ -31,8 +31,8 @@ public:
 protected:
 	static ClientAdmin *instance_;
 
-	void admin(std::list<ConsoleRuleSplit> split, std::list<std::string> &result);
-	void adminHelp(std::list<std::string> &result);
+	void admin(std::vector<ConsoleRuleValue> split);
+	void adminHelp();
 
 private:
 	ClientAdmin();

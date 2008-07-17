@@ -55,8 +55,9 @@ Sound::Sound() :
 {
 	new ConsoleRuleMethodIAdapter<Sound>(
 		this, &Sound::showSoundBuffers, "SoundBuffers");
-	new ConsoleRuleMethodIAdapterEx<Sound>(
+	/*new ConsoleRuleMethodIAdapterEx<Sound>(
 		this, &Sound::soundPlay, "SoundPlay");
+		*/
 }
 
 Sound::~Sound()
@@ -158,8 +159,9 @@ bool Sound::init(int channels)
 	return init_;
 }
 
-void Sound::soundPlay(std::list<ConsoleRuleSplit> list)
+void Sound::soundPlay(std::list<ConsoleRuleValue> list)
 {
+	/*
 	list.pop_front();
 	if (!list.empty())
 	{
@@ -171,6 +173,7 @@ void Sound::soundPlay(std::list<ConsoleRuleSplit> list)
 		source->setRelative();
 		source->play(buffer);
 	}
+	*/
 }
 
 void Sound::showSoundBuffers()

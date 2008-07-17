@@ -64,11 +64,9 @@ public:
 
 	void clear();
 
-	void reset() { currentLine_ = 0; }
+	void resetScroll() { currentLine_ = 0; }
 	void scroll(int lines);
-	const char *getItem(int lines);
 
-	int getMaxLines() { return maxLines_; }
 	std::deque<ConsoleLine *> &getLines() { return lines_; }
 
 protected:

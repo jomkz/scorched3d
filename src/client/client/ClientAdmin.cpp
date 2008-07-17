@@ -40,8 +40,8 @@ ClientAdmin *ClientAdmin::instance()
 
 ClientAdmin::ClientAdmin() 
 {
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::admin, "admin");
+	//new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+	//	this, &ClientAdmin::admin, "admin");
 }
 
 ClientAdmin::~ClientAdmin()
@@ -49,14 +49,13 @@ ClientAdmin::~ClientAdmin()
 
 }
 
-void ClientAdmin::admin(std::list<ConsoleRuleSplit> split, 
-	std::list<std::string> &result)
+void ClientAdmin::admin(std::vector<ConsoleRuleValue> split)
 {
-	split.pop_front();
+	/*split.pop_front();
 	if (split.empty()) adminHelp(result);
 	else
 	{
-		ConsoleRuleSplit firstsplit = split.front();
+		ConsoleRuleValue firstsplit = split.front();
 		split.pop_front();
 
 		bool failed = false;
@@ -110,7 +109,7 @@ void ClientAdmin::admin(std::list<ConsoleRuleSplit> split,
 			if (split.empty()) failed = true;
 			else
 			{
-				ConsoleRuleSplit secondsplit = split.front();
+				ConsoleRuleValue secondsplit = split.front();
 				result.push_back(S3D::formatStringBuffer("  sending %s %s...", 
 					firstsplit.rule.c_str(),
 					secondsplit.rule.c_str()));
@@ -150,12 +149,12 @@ void ClientAdmin::admin(std::list<ConsoleRuleSplit> split,
 			if (split.empty()) failed = true;
 			else
 			{
-				ConsoleRuleSplit secondsplit = split.front();
+				ConsoleRuleValue secondsplit = split.front();
 				split.pop_front();
 				if (split.empty()) failed = true;
 				else
 				{
-					ConsoleRuleSplit thirdsplit = split.front();
+					ConsoleRuleValue thirdsplit = split.front();
 					result.push_back(S3D::formatStringBuffer("  sending %s %s %s...", 
 						firstsplit.rule.c_str(),
 						secondsplit.rule.c_str(),
@@ -189,29 +188,29 @@ void ClientAdmin::admin(std::list<ConsoleRuleSplit> split,
 				"\"" + firstsplit.rule + "\"");
 			adminHelp(result);
 		}
-	}
+	}*/
 }
 
-void ClientAdmin::adminHelp(std::list<std::string> &result)
+void ClientAdmin::adminHelp()
 {
-	result.push_back("  help - This help");
-	result.push_back("  login <username> <password> - Login as admin");
-	result.push_back("  logout - Logoff as admin");
-	result.push_back("  show - Show ids for all current players");
-	result.push_back("  showbanned - Shows all banned/perm muted players");
-	result.push_back("  killall - Kills all current players and starts next round");
-	result.push_back("  newgame - Kills all current players and starts new game");	
-	result.push_back("  kick <player id> - Kicks specified player");
-	result.push_back("  ban <player id> - Bans and kicks specified player");
-	result.push_back("  poor <player id> - Removes all money from player");
-	result.push_back("  mute <player id> - Mutes specified player for everyone");
-	result.push_back("  flag <player id> - Flags specified player for all admins");
-	result.push_back("  unmute <player id> - Un-mutes specified player for everyone");
-	result.push_back("  permmute <player id> - Mutes specified player for everyone perminantly");
-	result.push_back("  unpermmute <player id> - Un-Mutes specified player for everyone perminantly");
-	result.push_back("  slap <player id> <health> - Removes health from specified player");
-	result.push_back("  talk <text> - Admin talk to all players (white with no name)");
-	result.push_back("  admintalk <text> - Admin talk to all admin players only");
-	result.push_back("  message <text> - Message to all players (yellow in center of screen)");
-	result.push_back("  synccheck - Check client landscape is in sync with server");
+	Console::instance()->addLine(false, "  help - This help");
+	Console::instance()->addLine(false, "  login <username> <password> - Login as admin");
+	Console::instance()->addLine(false, "  logout - Logoff as admin");
+	Console::instance()->addLine(false, "  show - Show ids for all current players");
+	Console::instance()->addLine(false, "  showbanned - Shows all banned/perm muted players");
+	Console::instance()->addLine(false, "  killall - Kills all current players and starts next round");
+	Console::instance()->addLine(false, "  newgame - Kills all current players and starts new game");	
+	Console::instance()->addLine(false, "  kick <player id> - Kicks specified player");
+	Console::instance()->addLine(false, "  ban <player id> - Bans and kicks specified player");
+	Console::instance()->addLine(false, "  poor <player id> - Removes all money from player");
+	Console::instance()->addLine(false, "  mute <player id> - Mutes specified player for everyone");
+	Console::instance()->addLine(false, "  flag <player id> - Flags specified player for all admins");
+	Console::instance()->addLine(false, "  unmute <player id> - Un-mutes specified player for everyone");
+	Console::instance()->addLine(false, "  permmute <player id> - Mutes specified player for everyone perminantly");
+	Console::instance()->addLine(false, "  unpermmute <player id> - Un-Mutes specified player for everyone perminantly");
+	Console::instance()->addLine(false, "  slap <player id> <health> - Removes health from specified player");
+	Console::instance()->addLine(false, "  talk <text> - Admin talk to all players (white with no name)");
+	Console::instance()->addLine(false, "  admintalk <text> - Admin talk to all admin players only");
+	Console::instance()->addLine(false, "  message <text> - Message to all players (yellow in center of screen)");
+	Console::instance()->addLine(false, "  synccheck - Check client landscape is in sync with server");
 }

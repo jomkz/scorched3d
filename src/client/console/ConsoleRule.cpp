@@ -18,20 +18,23 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-
-// ConsoleRule.cpp: implementation of the ConsoleRule class.
-//
-//////////////////////////////////////////////////////////////////////
-
 #include <console/ConsoleRule.h>
 #include <common/Defines.h>
 #include <string.h>
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ConsoleRuleParam::ConsoleRuleParam(const std::string &constant) :
+	name_(constant), type_(ConsoleRuleTypeNone)
+{
+}
 
-ConsoleRule::ConsoleRule(const char *name) : name_(name)
+ConsoleRuleParam::ConsoleRuleParam(const std::string &name, ConsoleRuleType type) :
+	name_(name), type_(type)
+{
+}
+
+ConsoleRule::ConsoleRule(const char *name,
+	const std::vector<ConsoleRuleParam> &params) : 
+	name_(name), params_(params)
 {
 
 }
@@ -41,17 +44,146 @@ ConsoleRule::~ConsoleRule()
 
 }
 
-void ConsoleRule::addRuleFail(std::string &failLine, int position, int length)
+std::string ConsoleRule::toString()
 {
-	int noSpaces = position - (int) failLine.length();
-	for (int i=0; i<noSpaces; i++) failLine += ' ';
-	for (int j=0; j<length; j++) failLine += '^';
+	std::string result;
+	result.append(getName());
+	for (int p=0; p<(int) params_.size(); p++)
+	{
+		ConsoleRuleParam &param = params_[p];
+		result.append(" ");
+		switch (param.getType())
+		{
+		case ConsoleRuleTypeBoolean:
+			result.append("<on|off>");
+			break;
+		case ConsoleRuleTypeNumber:
+			result.append("<number>");
+			break;
+		case ConsoleRuleTypeString:
+			result.append("<").append(param.getName()).append(">");
+			break;
+		}
+	}
+	return result;
 }
 
-bool ConsoleRule::matchRule(const char *line)
+std::string ConsoleRule::valuesToString(std::vector<ConsoleRuleValue> &values)
 {
-	int len = (int) strlen(line);
-	if ((int) name_.length() < len) return false;
+	if (values.empty()) return "";
 
-	return (_strnicmp(line, name_.c_str(), len) == 0);
+	std::string result;
+	result.append(values[0].valueString);
+	for (int p=1; p<(int) values.size(); p++)
+	{
+		ConsoleRuleValue &value = values[p];
+		result.append(" ");
+		switch (value.type)
+		{
+		case ConsoleRuleTypeBoolean:
+			result.append("<on|off>");
+			break;
+		case ConsoleRuleTypeNumber:
+			result.append("<number>");
+			break;
+		case ConsoleRuleTypeString:
+			result.append("<string>");
+			break;
+		}
+	}
+	return result;
+}
+
+bool ConsoleRule::matchesExactParams(std::vector<ConsoleRuleValue> &values)
+{
+	if (values.size() != params_.size() + 1) return false;
+	return matchesParams(values);
+}
+
+bool ConsoleRule::matchesParams(std::vector<ConsoleRuleValue> &values)
+{
+	if (values.size() > params_.size() + 1) return false;
+
+	for (int v=1; v<(int) values.size(); v++)
+	{
+		ConsoleRuleParam &param = params_[v-1];
+		ConsoleRuleValue &value = values[v];
+
+		switch (param.getType())
+		{
+		case ConsoleRuleTypeNone:
+			if (0 != strcmp(param.getName(), value.valueString.c_str())) return false;
+			break;
+		case ConsoleRuleTypeString:
+			break;
+		case ConsoleRuleTypeBoolean:
+			if (value.type != ConsoleRuleTypeBoolean) return false;
+			break;
+		case ConsoleRuleTypeNumber:
+			if (value.type != ConsoleRuleTypeNumber) return false;
+			break;
+		}
+	}
+
+	return true;
+}
+
+std::vector<ConsoleRuleParam> ConsoleUtil::formParams(
+	const ConsoleRuleParam &param1)
+{
+	std::vector<ConsoleRuleParam> result;
+	result.push_back(param1);
+	return result;
+}
+
+std::vector<ConsoleRuleParam> ConsoleUtil::formParams(
+	const ConsoleRuleParam &param1, 
+	const ConsoleRuleParam &param2)
+{
+	std::vector<ConsoleRuleParam> result;
+	result.push_back(param1);
+	result.push_back(param2);
+	return result;
+}
+
+std::vector<ConsoleRuleParam> ConsoleUtil::formParams(
+	const ConsoleRuleParam &param1, 
+	const ConsoleRuleParam &param2, 
+	const ConsoleRuleParam &param3)
+{
+	std::vector<ConsoleRuleParam> result;
+	result.push_back(param1);
+	result.push_back(param2);
+	result.push_back(param3);
+	return result;
+}
+
+std::vector<ConsoleRuleParam> ConsoleUtil::formParams(
+	const ConsoleRuleParam &param1, 
+	const ConsoleRuleParam &param2, 
+	const ConsoleRuleParam &param3, 
+	const ConsoleRuleParam &param4)
+{
+	std::vector<ConsoleRuleParam> result;
+	result.push_back(param1);
+	result.push_back(param2);
+	result.push_back(param3);
+	result.push_back(param4);
+	return result;
+}
+
+std::vector<ConsoleRuleParam> ConsoleUtil::formParams(
+	const ConsoleRuleParam &param1, 
+	const ConsoleRuleParam &param2, 
+	const ConsoleRuleParam &param3, 
+	const ConsoleRuleParam &param4, 
+	const ConsoleRuleParam &param5)
+{
+	std::vector<ConsoleRuleParam> result;
+	result.push_back(param1);
+	result.push_back(param2);
+	result.push_back(param3);
+	result.push_back(param4);
+	result.push_back(param5);
+	return result;
 }

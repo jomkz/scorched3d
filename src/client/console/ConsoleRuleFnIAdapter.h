@@ -18,16 +18,11 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-
-// ConsoleRuleFnIAdapter.h: interface for the ConsoleRuleFnIAdapter class.
-//
-//////////////////////////////////////////////////////////////////////
-
 #if !defined(AFX_ConsoleRULEFNIADAPTER_H__A8429FA2_3499_4F4A_95BC_9F94FC58C087__INCLUDED_)
 #define AFX_ConsoleRULEFNIADAPTER_H__A8429FA2_3499_4F4A_95BC_9F94FC58C087__INCLUDED_
 
 #include <common/OptionEntry.h>
-#include <console/Console.h>
+#include <console/ConsoleRuleFn.h>
 #include <string>
 
 class ConsoleRuleFnIBooleanAdapter : 
@@ -42,6 +37,7 @@ public:
 	virtual void setBoolParam(const char *name, bool value);
 
 protected:
+	ConsoleRuleFn *readRule_, *writeRule_;
 	std::string name_;
 	bool &param_;
 
@@ -59,6 +55,7 @@ public:
 	virtual void  setNumberParam(const char *name, float value);
 
 protected:
+	ConsoleRuleFn *readRule_, *writeRule_;
 	std::string name_;
 	float &param_;
 
@@ -68,8 +65,7 @@ class ConsoleRuleFnIOptionsAdapter :
 	public ConsoleRuleFnI
 {
 public:
-	ConsoleRuleFnIOptionsAdapter(OptionEntry &entry,
-		ConsoleRuleAccessType access);
+	ConsoleRuleFnIOptionsAdapter(OptionEntry &entry, bool write = false);
 	virtual ~ConsoleRuleFnIOptionsAdapter();
 
 	// Inherited from ConsoleRuleFnI
@@ -82,7 +78,7 @@ public:
 
 protected:
 	OptionEntry &entry_;
-
+	ConsoleRuleFn *readRule_, *writeRule_;
 };
 
 #endif // !defined(AFX_ConsoleRULEFNIADAPTER_H__A8429FA2_3499_4F4A_95BC_9F94FC58C087__INCLUDED_)

@@ -75,8 +75,8 @@ ClientChannelManager::ClientChannelManager()
 		"ComsChannelTextMessage",
 		this);
 
-	new ConsoleRuleMethodIAdapterEx<ClientChannelManager>(
-		this, &ClientChannelManager::say, "Say");
+	//new ConsoleRuleMethodIAdapterEx<ClientChannelManager>(
+	//	this, &ClientChannelManager::say, "Say");
 }
 
 ClientChannelManager::~ClientChannelManager()
@@ -212,8 +212,9 @@ unsigned int ClientChannelManager::getChannelEntry(ClientChannelManagerI *reciev
 	return 0;
 }
 
-void ClientChannelManager::say(std::list<ConsoleRuleSplit> list)
+void ClientChannelManager::say(std::list<ConsoleRuleValue> list)
 {
+	/*
 	bool usage = false;
 
 	list.pop_front();
@@ -232,6 +233,7 @@ void ClientChannelManager::say(std::list<ConsoleRuleSplit> list)
 	else usage = true;
 
 	Console::instance()->addLine(false, "Usage: say <channel> <text>");
+	*/
 }
 
 void ClientChannelManager::sendText(const ChannelText &constText)

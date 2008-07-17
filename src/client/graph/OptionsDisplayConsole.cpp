@@ -70,12 +70,12 @@ void OptionsDisplayConsole::addDisplayToConsole()
 		}
 		else if (!(entry->getData() & OptionEntry::DataDepricated))
 		{
-			ConsoleRuleAccessType access = ConsoleRuleAccessTypeRead;
-			if (entry->getData() & OptionsDisplay::RWAccess) access = ConsoleRuleAccessTypeReadWrite;
+			bool write = false;
+			if (entry->getData() & OptionsDisplay::RWAccess) write = true;
 
 			adapters_.push_back(new ConsoleRuleFnIOptionsAdapter(
 				*entry,
-				access));
+				write));
 		}
 	}
 }

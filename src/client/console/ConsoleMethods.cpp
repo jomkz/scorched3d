@@ -18,21 +18,34 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <console/ConsoleRuleMethodIAdapter.h>
 #include <console/ConsoleMethods.h>
 #include <console/ConsoleFileReader.h>
 #include <client/ScorchedClient.h>
 #include <engine/MainLoop.h>
 
-ConsoleMethods::ConsoleMethods(ConsoleRules &rules,
-								   ConsoleLines &lines) :
-	rules_(rules), lines_(lines)
+ConsoleMethods::ConsoleMethods()
 {
-	rules_.addRule(new ConsoleRuleMethod("consoleload", this));
-	rules_.addRule(new ConsoleRuleMethod("consolesave", this));
-	rules_.addRule(new ConsoleRuleMethod("exit", this));
-	rules_.addRule(new ConsoleRuleMethod("quit", this));
-	rules_.addRule(new ConsoleRuleMethod("clear", this));
-	rules_.addRule(new ConsoleRuleMethod("help", this));
+	new ConsoleRuleMethodIAdapter<ConsoleMethods>(
+		this, &ConsoleMethods::clear, 
+		"clear");
+	new ConsoleRuleMethodIAdapter<ConsoleMethods>(
+		this, &ConsoleMethods::exit, 
+		"exit");
+	new ConsoleRuleMethodIAdapter<ConsoleMethods>(
+		this, &ConsoleMethods::exit, 
+		"quit");
+	new ConsoleRuleMethodIAdapter<ConsoleMethods>(
+		this, &ConsoleMethods::help, 
+		"help");
+	new ConsoleRuleMethodIAdapterEx<ConsoleMethods>(
+		this, &ConsoleMethods::consoleLoad, 
+		"consoleload", 
+		ConsoleUtil::formParams(ConsoleRuleParam("filename", ConsoleRuleTypeString)));
+	new ConsoleRuleMethodIAdapterEx<ConsoleMethods>(
+		this, &ConsoleMethods::consoleSave, 
+		"consolesave", 
+		ConsoleUtil::formParams(ConsoleRuleParam("filename", ConsoleRuleTypeString)));
 }
 
 ConsoleMethods::~ConsoleMethods()
@@ -40,58 +53,37 @@ ConsoleMethods::~ConsoleMethods()
 
 }
 
-void ConsoleMethods::runMethod(const char *name,
-								 std::list<ConsoleRuleSplit> split,
-								 std::string &result,
-								 std::list<std::string> &resultList)
+void ConsoleMethods::clear()
 {
-	if (!strcmp(name, "clear"))
+	Console::instance()->clear();
+}
+
+void ConsoleMethods::help()
+{
+	Console::instance()->help();
+}
+
+void ConsoleMethods::exit()
+{
+	ScorchedClient::instance()->getMainLoop().exitLoop();
+}
+
+void ConsoleMethods::consoleLoad(std::vector<ConsoleRuleValue> &values)
+{
+	ConsoleRuleValue option = values[1];
+	std::string errorString;
+	if (!ConsoleFileReader::loadFileIntoConsole(
+		option.valueString.c_str(), errorString))
 	{
-		lines_.clear();
+		Console::instance()->addLine(false, 
+			S3D::formatStringBuffer("Failed to load to console \"%s\"",
+			errorString.c_str()));
 	}
-	else if (!strcmp(name, "help"))
-	{
-		rules_.dump(resultList);
-	}
-	else if (!strcmp(name, "exit") || !strcmp(name, "quit"))
-	{
-		ScorchedClient::instance()->getMainLoop().exitLoop();
-	}
-	else if (!strcmp(name, "consoleload"))
-	{
-		split.pop_front();
-		if (split.empty())
-		{
-			resultList.push_back("consoleload <filename>");
-			resultList.push_back("  Loads <filename> into the console.");
-		}
-		else
-		{
-			std::string errorString;
-			ConsoleRuleSplit option = split.front();
-			if (!ConsoleFileReader::loadFileIntoConsole(option.rule.c_str(), errorString))
-			{
-				resultList.push_back("  Load failed.");
-				resultList.push_back(errorString);
-			}
-			result += " ";
-			result += option.rule.c_str();
-		}
-	}
-	else if (!strcmp(name, "consolesave"))
-	{
-		split.pop_front();
-		if (split.empty())
-		{
-			resultList.push_back("consolesave <filename>");
-			resultList.push_back("  Saves the console into <filename>.");
-		}
-		else
-		{
-			ConsoleRuleSplit option = split.front();
-			ConsoleFileReader::saveConsoleIntoFile(option.rule.c_str());
-			result += " ";
-			result += option.rule.c_str();
-		}
-	}
+}
+
+void ConsoleMethods::consoleSave(std::vector<ConsoleRuleValue> &values)
+{
+	ConsoleRuleValue option = values[1];
+	ConsoleFileReader::saveConsoleIntoFile(
+		option.valueString.c_str());
 }

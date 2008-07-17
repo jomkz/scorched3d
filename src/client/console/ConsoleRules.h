@@ -18,36 +18,41 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-
-// ConsoleRules.h: interface for the ConsoleRules class.
-//
-//////////////////////////////////////////////////////////////////////
-
 #if !defined(AFX_ConsoleRULES_H__F75EC197_F0BD_459C_BC62_929D3A97FB5A__INCLUDED_)
 #define AFX_ConsoleRULES_H__F75EC197_F0BD_459C_BC62_929D3A97FB5A__INCLUDED_
 
 #include <console/ConsoleRule.h>
 
+class Console;
 class ConsoleRules  
 {
 public:
 	ConsoleRules();
 	virtual ~ConsoleRules();
 
-	void addLine(const char *line, std::string &result, std::list<std::string> &resultList);
-	bool addRule(ConsoleRule *rule);
-	ConsoleRule *removeRule(const char *rule);
+	void addLine(Console *console, const char *line);
 
-	const char *matchRule(const char *line,
-						std::list<ConsoleRule *> &matches);
-	void dump(std::list<std::string> &resultList);
+	void addRule(ConsoleRule *rule);
+	void removeRule(ConsoleRule *rule);
+
+	std::string matchRule(const char *line,
+		std::vector<ConsoleRule *> &matches);
+	void dump(std::vector<std::string> &resultList);
 
 protected:
-	std::map<std::string, ConsoleRule *> rules_;
+	typedef std::multimap<std::string, ConsoleRule *> RulesMap;
+	RulesMap rules_;
 
-	bool parseLine(const char *line, std::list<ConsoleRuleSplit> &split);
-	void parseAddLine(int position, const char *line, std::list<ConsoleRuleSplit> &split);
-
+	bool parseLine(const char *line, 
+		std::vector<ConsoleRuleValue> &split);
+	void parseAddLine(int position, const char *line, 
+		std::vector<ConsoleRuleValue> &split);
+	ConsoleRule *matchRule(std::vector<ConsoleRuleValue> &values,
+		std::vector<ConsoleRule *> &closeMatches);
+	void getMatchedRules(
+		std::vector<ConsoleRule *> &result,
+		std::multimap<int, ConsoleRule *> &matchedRules,
+		int argCount);
 };
 
 #endif // !defined(AFX_ConsoleRULES_H__F75EC197_F0BD_459C_BC62_929D3A97FB5A__INCLUDED_)

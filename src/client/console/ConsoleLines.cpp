@@ -102,66 +102,8 @@ void ConsoleLines::scroll(int lines)
 		currentLine_ = (int) lines_.size();
 }
 
-const char *ConsoleLines::getItem(int linecount)
-{
-	int linesSize = (int) lines_.size();
-	if (linecount < 0)
-	{
-		for (int line = currentLine_ + 1; line < linesSize; line++)
-		{
-			ConsoleLine *consoleline = lines_[line];
-			if (consoleline->getLineType() == ConsoleLine::eCommand)
-			{
-				linecount++;
-				currentLine_ = line;
-				if (linecount == 0) break;
-			}
-		}
-	}
-	else
-	{
-		for (int line = currentLine_ - 1; line >= 0 && line < linesSize; line--)
-		{
-			ConsoleLine *consoleline = lines_[line];
-			if (consoleline->getLineType() == ConsoleLine::eCommand)
-			{
-				linecount--;
-				currentLine_ = line;
-				if (linecount == 0) break;
-			}
-		}
-	}
-
-	// Check the command is valid and return the line
-	if (currentLine_ >= 0 && currentLine_ < linesSize)
-	{
-		if (lines_[currentLine_]->getLineType()  == ConsoleLine::eCommand)
-		{
-			static std::string result;
-
-			// This current line
-			result = lines_[currentLine_]->getLine();
-
-			// Any continues of this line
-			int current = currentLine_ - 1;
-			while (current < linesSize && 
-				current >= 0 &&
-				lines_[current]->getLineType() == ConsoleLine::eCommandCont)
-			{
-				result.append(lines_[current]->getLine());
-				current--;
-			}
-
-			return result.c_str();
-		}
-	}
-	return "";
-}
-
 void ConsoleLines::addLine(const char *text, bool showPointer)
 {
-	if (showPointer) reset();
-
 	const int bufferSize = 80;
 	int section = 0;
 	int len = (int) strlen(text);

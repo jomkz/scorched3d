@@ -18,29 +18,44 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-
-// ConsoleRuleFn.cpp: implementation of the ConsoleRuleFn class.
-//
-//////////////////////////////////////////////////////////////////////
-
+#include <console/Console.h>
 #include <console/ConsoleRuleFn.h>
 #include <common/Defines.h>
 #include <stdio.h>
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
-
 ConsoleRuleFnI::~ConsoleRuleFnI()
 {
+}
 
+static std::vector<ConsoleRuleParam> generateFnParams(
+	ConsoleRuleType type, bool write)
+{
+	std::vector<ConsoleRuleParam> params;
+	if (!write)
+	{
+		switch(type)
+		{
+		case ConsoleRuleTypeBoolean:
+			params.push_back(ConsoleRuleParam("<boolean>", ConsoleRuleTypeBoolean));
+			break;
+		case ConsoleRuleTypeNumber:
+			params.push_back(ConsoleRuleParam("<number>", ConsoleRuleTypeNumber));
+			break;
+		default:
+			params.push_back(ConsoleRuleParam("<string>", ConsoleRuleTypeString));
+			break;
+		}
+	}
+	return params;
 }
 
 ConsoleRuleFn::ConsoleRuleFn(const char *name, 
-								ConsoleRuleFnI *user, 
-								ConsoleRuleType type, 
-								ConsoleRuleAccessType access) :
-	ConsoleRule(name), user_(user), type_(type), access_(access)
+	ConsoleRuleFnI *user, 
+	ConsoleRuleType type, 
+	bool write) :
+	ConsoleRule(name, generateFnParams(type, write)), 
+	user_(user), 
+	type_(type)
 {
 
 }
@@ -50,68 +65,20 @@ ConsoleRuleFn::~ConsoleRuleFn()
 
 }
 
-void ConsoleRuleFn::checkRule(const char *line, 
-							  std::list<ConsoleRuleSplit> split, 
-							  std::string &result, 
-							  std::list<std::string> &resultList)
+void ConsoleRuleFn::runRule(
+	Console *console,
+	const char *wholeLine,
+	std::vector<ConsoleRuleValue> &values)
 {
-	result = line;
-	if (split.size() == 1)
+	if (values.size() == 2)
 	{
-		if (access_ == ConsoleRuleAccessTypeWrite)
-		{
-			resultList.push_back("Function is write only");
-		}
-		else
-		{
-			resultList.push_back(getValue());
-		}
+		ConsoleRuleValue &value = values[1];
+		setValue(value);
 	}
-	else if (split.size() == 2)
-	{
-		std::list<ConsoleRuleSplit>::iterator iter = split.begin();
-		iter++;
-		ConsoleRuleSplit &split = (*iter);
-
-		if (access_ == ConsoleRuleAccessTypeRead)
-		{
-			std::string failed;
-			ConsoleRule::addRuleFail(failed, split.position, (int) split.rule.length());
-			resultList.push_back(failed);
-			resultList.push_back("Function is read only");
-		}
-		else
-		{
-			if (split.type != type_)
-			{
-				std::string failed;
-				ConsoleRule::addRuleFail(failed, split.position, (int) split.rule.length());
-				resultList.push_back(failed);
-				resultList.push_back("Wrong argument type");
-			}
-			else
-			{
-				setValue(split);
-				resultList.push_back(getValue());
-			}
-		}
-	}
-	else
-	{
-		std::string failed;
-		std::list<ConsoleRuleSplit>::iterator iter = split.begin();
-		iter++; iter++;
-		for (;iter!=split.end();iter++)
-		{
-			ConsoleRuleSplit &split = (*iter);
-			ConsoleRule::addRuleFail(failed, split.position, (int) split.rule.length());
-		}
-		resultList.push_back(failed);
-		resultList.push_back("Too many arguments to fn");
-	}
+	console->addLine(false, getValue());
 }
 
-void ConsoleRuleFn::setValue(ConsoleRuleSplit &split)
+void ConsoleRuleFn::setValue(ConsoleRuleValue &split)
 {
 	switch (type_)
 	{
@@ -122,7 +89,7 @@ void ConsoleRuleFn::setValue(ConsoleRuleSplit &split)
 		user_->setNumberParam(name_.c_str(), split.valueNumber);
 		break;
 	case ConsoleRuleTypeString:
-		user_->setStringParam(name_.c_str(), split.rule.c_str());
+		user_->setStringParam(name_.c_str(), split.valueString.c_str());
 	}
 }
 
@@ -152,38 +119,3 @@ const char *ConsoleRuleFn::getValue()
 	return result.c_str();
 }
 
-void ConsoleRuleFn::dump(std::list<std::string> &resultList)
-{
-	std::string result = "  " + name_ + "=";
-	switch (type_)
-	{
-	case ConsoleRuleTypeBoolean:
-		result += "<on|off>";
-		break;
-	case ConsoleRuleTypeNumber:
-		result += "<number>";
-		break;
-	case ConsoleRuleTypeString:
-		result += "<word>";
-		break;
-	}
-
-	switch (access_)
-	{
-	case ConsoleRuleAccessTypeRead:
-		result += "  (Read only)";
-		break;
-	case ConsoleRuleAccessTypeWrite:
-		result += "  (Write only)";
-		break;
-	case ConsoleRuleAccessTypeReadWrite:
-		result += "  (Read and Write)";
-		break;
-	}
-
-	result += " (";
-	result += getValue();
-	result += ")";
-
-	resultList.push_back(result);
-}

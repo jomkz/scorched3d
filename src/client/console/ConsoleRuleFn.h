@@ -24,13 +24,6 @@
 #include <console/ConsoleRule.h>
 #include <common/DefinesAssert.h>
 
-enum ConsoleRuleAccessType
-{
-	ConsoleRuleAccessTypeRead = 1,
-	ConsoleRuleAccessTypeWrite = 2,
-	ConsoleRuleAccessTypeReadWrite = 3
-};
-
 class ConsoleRuleFnI
 {
 public:
@@ -52,21 +45,19 @@ public:
 	ConsoleRuleFn(const char *name, 
 		ConsoleRuleFnI *user, 
 		ConsoleRuleType type, 
-		ConsoleRuleAccessType access = ConsoleRuleAccessTypeReadWrite);
+		bool write = false);
 	virtual ~ConsoleRuleFn();
 
-	void checkRule(const char *line, 
-					std::list<ConsoleRuleSplit> split, 
-					std::string &result, 
-					std::list<std::string> &resultList);
-	void dump(std::list<std::string> &resultList);
+	virtual void runRule(
+		Console *console,
+		const char *wholeLine,
+		std::vector<ConsoleRuleValue> &values);
 
 protected:
 	ConsoleRuleFnI *user_;
 	ConsoleRuleType type_;
-	ConsoleRuleAccessType access_;
 
-	void setValue(ConsoleRuleSplit &split);
+	void setValue(ConsoleRuleValue &split);
 	const char *getValue();
 };
 

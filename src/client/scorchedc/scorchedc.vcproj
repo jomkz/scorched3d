@@ -5917,6 +5917,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\console\ConsoleImpl.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleImpl.h"
+				>
+			</File>
+			<File
 				RelativePath="..\console\ConsoleLines.cpp"
 				>
 			</File>
@@ -5954,14 +5962,6 @@
 			</File>
 			<File
 				RelativePath="..\console\ConsoleRuleFnIAdapter.h"
-				>
-			</File>
-			<File
-				RelativePath="..\console\ConsoleRuleMethod.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\console\ConsoleRuleMethod.h"
 				>
 			</File>
 			<File

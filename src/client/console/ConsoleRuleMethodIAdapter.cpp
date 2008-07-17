@@ -18,5 +18,26 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #include <console/ConsoleRuleMethodIAdapter.h>
+
+class TestClass
+{
+public:
+	TestClass() 
+	{
+		new ConsoleRuleMethodIAdapter<TestClass>(
+			this, &TestClass::test2, 
+			"test2", std::vector<ConsoleRuleParam>());
+		new ConsoleRuleMethodIAdapterEx<TestClass>(
+			this, &TestClass::test, 
+			"test", std::vector<ConsoleRuleParam>());
+	}
+
+	void test(std::vector<ConsoleRuleValue>& values)
+	{
+	}
+
+	void test2()
+	{
+	}
+};

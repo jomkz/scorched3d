@@ -41,7 +41,7 @@
 #include <landscape/LandscapeStateHandler.h>
 #include <landscape/LandscapeMusicManager.h>
 #include <GLEXT/GLCameraFrustum.h>
-#include <console/Console.h>
+#include <console/ConsoleImpl.h>
 
 void ClientState::addMandatoryComponents(GameState &gameState, unsigned state)
 {
@@ -59,7 +59,7 @@ void ClientState::addWindowManager(GameState &gameState, unsigned state)
 {
 	addMandatoryComponents(gameState, state);
 
-	gameState.addStateKeyEntry(state, Console::instance());
+	gameState.addStateKeyEntry(state, (ConsoleImpl *) Console::instance());
 	gameState.addStateEntry(state, GLWWindowManager::instance());
 	gameState.addStateLoop(state, Main2DCamera::instance(), 
 		GLWWindowManager::instance());
@@ -76,7 +76,7 @@ void ClientState::addWindowManager(GameState &gameState, unsigned state)
 	gameState.addStateKeyEntry(state, GLWWindowManager::instance());
 	gameState.addStateMouseWheelEntry(state, GLWWindowManager::instance());
 	gameState.addStateLoop(state, Main2DCamera::instance(),
-		Console::instance());
+		(ConsoleImpl *) Console::instance());
 }
 
 void ClientState::addStandardComponents(GameState &gameState, unsigned state)

@@ -18,17 +18,9 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-
-// ConsoleRules.cpp: implementation of the ConsoleRules class.
-//
-//////////////////////////////////////////////////////////////////////
-
 #include <console/ConsoleRules.h>
+#include <console/Console.h>
 #include <common/Defines.h>
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
 ConsoleRules::ConsoleRules()
 {
@@ -40,117 +32,217 @@ ConsoleRules::~ConsoleRules()
 
 }
 
-bool ConsoleRules::addRule(ConsoleRule *rule)
+void ConsoleRules::addRule(ConsoleRule *rule)
 {
-	std::map<std::string, ConsoleRule *>::iterator itor =
-		rules_.find(rule->getName());
-	if (itor != rules_.end())
-	{
-		return false;
-	}
+	removeRule(rule);
 
 	std::string addName = rule->getName();
 	_strlwr((char *) addName.c_str());
-	rules_[addName] = rule;
-
-	return true;
+	rules_.insert(std::pair<std::string, ConsoleRule *>(addName, rule));
 }
 
-ConsoleRule *ConsoleRules::removeRule(const char *rulename) 
+void ConsoleRules::removeRule(ConsoleRule *rule) 
 {
-	std::string removeName(rulename);
-	_strlwr((char *) removeName.c_str());
-
-	std::map<std::string, ConsoleRule *>::iterator itor =
-		rules_.find(removeName);
-	if (itor == rules_.end()) return 0;
-
-	ConsoleRule *result = itor->second;
-	rules_.erase(itor);
-	return result;
-}
-
-const char *ConsoleRules::matchRule(const char *line, std::list<ConsoleRule *> &matches)
-{
-	std::map<std::string, ConsoleRule *>::iterator itor;
+	std::multimap<std::string, ConsoleRule *>::iterator itor;
 	for (itor = rules_.begin();
 		itor != rules_.end();
 		itor++)
 	{
-		if ((*itor).second->matchRule(line))
+		ConsoleRule *r = itor->second;
+		if (r == rule)
 		{
-			matches.push_back((*itor).second);
-		}		
-	}
-
-	if (matches.empty()) return 0;
-	if (matches.size() == 1) return matches.front()->getName();
-
-	static char buffer[1024];
-	snprintf(buffer, sizeof(buffer), "%s", line);
-
-	int pos = (int) strlen(line);
-	while (true)
-	{
-		std::list<ConsoleRule *>::iterator itor2 = matches.begin();
-		char letter = (*itor2)->getName()[pos];
-		
-		for (itor2++;
-			itor2 != matches.end();
-			itor2++)
-		{
-			if ((*itor2)->getName()[pos] != letter) return buffer;
+			rules_.erase(itor);
+			break;
 		}
-
-		buffer[pos] = letter;
-		buffer[pos+1] = '\0';
-		pos++;
 	}
-
-	return buffer;
 }
 
-void ConsoleRules::addLine(const char *line, std::string &result, std::list<std::string> &resultList)
+std::string ConsoleRules::matchRule(const char *line, 
+	std::vector<ConsoleRule *> &matches)
 {
-	std::list<ConsoleRuleSplit> split;
-	if (!parseLine(line, split))
+	std::vector<ConsoleRuleValue> values;
+	parseLine(line, values);
+
+	if (values.empty())
 	{
-		result = line;
-		std::string failed;
-		ConsoleRule::addRuleFail(failed, (int) strlen(line), 1);
-		resultList.push_back(failed);
-		resultList.push_back("Non terminated quote");
+		std::multimap<std::string, ConsoleRule *>::iterator itor;
+		for (itor = rules_.begin();
+			itor != rules_.end();
+			itor++)
+		{
+			ConsoleRule *rule = itor->second;
+			matches.push_back((*itor).second);
+		}
+		return "";
+	}
+	else if (values.size() == 1)
+	{
+		std::multimap<std::string, ConsoleRule *>::iterator itor;
+		for (itor = rules_.begin();
+			itor != rules_.end();
+			itor++)
+		{
+			ConsoleRule *rule = itor->second;
+
+			ConsoleRuleValue &nameValue = values[0];
+			unsigned int nameLen = strlen(rule->getName());
+			if (nameLen >= nameValue.valueString.length() &&
+				_strnicmp(line, rule->getName(), nameValue.valueString.length()) == 0)
+			{
+				matches.push_back((*itor).second);
+			}
+		}
+
+		if (matches.empty()) return "";
+		if (matches.size() == 1) return matches[0]->toString();
+
+		ConsoleRuleValue &firstValue = values[0];
+		for (int i=(int) firstValue.valueString.length();; i++)
+		{
+			ConsoleRule *firstRule = matches[0];
+			for (int j=0; j<(int)matches.size(); j++)
+			{
+				ConsoleRule *secondRule = matches[j];
+				if ((int) strlen(secondRule->getName()) < i ||
+					0 != _strnicmp(secondRule->getName(), firstRule->getName(), i))
+				{
+					std::string buffer;
+					buffer.append(secondRule->getName(), i - 1);
+					return buffer;					
+				}
+			}
+		}
+	}
+	else if (values.size() > 1)
+	{
+		std::multimap<std::string, ConsoleRule *>::iterator itor;
+		for (itor = rules_.begin();
+			itor != rules_.end();
+			itor++)
+		{
+			ConsoleRule *rule = itor->second;
+			ConsoleRuleValue &nameValue = values[0];
+			if (0 == _stricmp(rule->getName(), nameValue.valueString.c_str()))
+			{
+				if (rule->matchesParams(values))
+				{
+					matches.push_back((*itor).second);
+				}
+			}
+		}
+
+		if (matches.empty()) return "";
+		return "";
+	}
+
+	return "";
+}
+
+void ConsoleRules::addLine(Console *console, const char *line)
+{
+	std::vector<ConsoleRuleValue> values;
+	if (!parseLine(line, values))
+	{
+		console->addLine(false, S3D::formatStringBuffer(
+			"Non terminated quote in : %s",
+			line));
+		return;
+	}
+
+	if (values.empty()) return; // Should never happen!
+
+	std::vector<ConsoleRule *> closeMatches;
+	ConsoleRule *exactMatch = matchRule(values, closeMatches);
+	if (exactMatch)
+	{
+		exactMatch->runRule(console, line, values);
 	}
 	else
 	{
-		if (split.empty())
+		std::string valuesString = ConsoleRule::valuesToString(values);
+		console->addLine(false, "Unrecognised function :");
+		console->addLine(false, S3D::formatStringBuffer(
+			"  %s",
+			valuesString.c_str()));
+		if (!closeMatches.empty())
 		{
-			result = line;
-			resultList.push_back("Input line is empty.");
-		}
-		else
-		{
-			ConsoleRuleSplit firstSplit = split.front();
-			_strlwr((char *)firstSplit.rule.c_str());
-			std::map<std::string, ConsoleRule *>::iterator itor =
-				rules_.find(firstSplit.rule);
-			if (itor == rules_.end())
+			console->addLine(false, "Possible matches are :");
+			std::vector<ConsoleRule *>::iterator itor;
+			for (itor = closeMatches.begin();
+				itor != closeMatches.end();
+				itor++)
 			{
-				result = line;
-				std::string failed;
-				ConsoleRule::addRuleFail(failed, firstSplit.position, (int) firstSplit.rule.length());
-				resultList.push_back(failed);
-				resultList.push_back(std::string("Unrecognised function ") + "\"" + firstSplit.rule + "\"");
-			}
-			else
-			{
-				(*itor).second->checkRule(line, split, result, resultList);
+				std::string text = (*itor)->toString();
+				console->addLine(false, S3D::formatStringBuffer(
+					"  %s", text.c_str()));				
 			}
 		}
 	}
 }
 
-bool ConsoleRules::parseLine(const char *line, std::list<ConsoleRuleSplit> &split)
+ConsoleRule *ConsoleRules::matchRule(
+	std::vector<ConsoleRuleValue> &values,
+	std::vector<ConsoleRule *> &closeMatches)
+{
+	std::multimap<int, ConsoleRule *> matchedRules;
+
+	ConsoleRuleValue firstValue = values.front();
+	_strlwr((char *)firstValue.valueString.c_str());
+	std::pair<RulesMap::iterator, RulesMap::iterator> itp = 
+		rules_.equal_range(firstValue.valueString);
+	for (RulesMap::iterator itor = itp.first; itor != itp.second; ++itor) 
+	{
+		ConsoleRule *rule = itor->second;
+		matchedRules.insert(
+			std::pair<int, ConsoleRule *>(
+				(int) rule->getParams().size(), rule));
+	}
+
+	if (matchedRules.empty()) return 0;
+
+	std::vector<ConsoleRule *>::iterator ruleItor;
+	std::vector<ConsoleRule *> sameNumberArgs;
+	getMatchedRules(sameNumberArgs, matchedRules, (int) values.size() - 1);
+	if (!sameNumberArgs.empty())
+	{
+		for (ruleItor = sameNumberArgs.begin();
+			ruleItor != sameNumberArgs.end();
+			ruleItor++)
+		{
+			ConsoleRule *rule = *ruleItor;
+			closeMatches.push_back(rule);
+			if (rule->matchesExactParams(values)) 
+			{
+				closeMatches.clear();
+				return rule;
+			}
+		}
+	}
+
+	return 0;
+}
+
+void ConsoleRules::getMatchedRules(
+	std::vector<ConsoleRule *> &result,
+	std::multimap<int, ConsoleRule *> &matchedRules,
+	int argCount)
+{
+	result.clear();
+	std::pair<
+		std::multimap<int, ConsoleRule *>::iterator, 
+		std::multimap<int, ConsoleRule *>::iterator> itp = 
+		matchedRules.equal_range(argCount);
+	for (std::multimap<int, ConsoleRule *>::iterator itor = itp.first; 
+		itor != itp.second; 
+		++itor) 
+	{
+		ConsoleRule *rule = itor->second;
+		result.push_back(rule);
+	}
+}
+
+bool ConsoleRules::parseLine(const char *line, 
+	std::vector<ConsoleRuleValue> &split)
 {
 	int pos = -1;
 	bool inQuote = false;
@@ -185,7 +277,7 @@ bool ConsoleRules::parseLine(const char *line, std::list<ConsoleRuleSplit> &spli
 		}
 		else
 		{
-			if (pos == -1) pos = i + 1;
+			if (pos == -1) pos = i;
 			currentEntry += c;
 		}
 	}
@@ -193,13 +285,14 @@ bool ConsoleRules::parseLine(const char *line, std::list<ConsoleRuleSplit> &spli
 	return !inQuote;
 }
 
-void ConsoleRules::parseAddLine(int position, const char *line, std::list<ConsoleRuleSplit> &split)
+void ConsoleRules::parseAddLine(int position, const char *line, 
+	std::vector<ConsoleRuleValue> &split)
 {
 	int n = (int) strlen(line);
 	if (n == 0) return;
 
-	ConsoleRuleSplit newSplit;
-	newSplit.rule = line;
+	ConsoleRuleValue newSplit;
+	newSplit.valueString = line;
 	newSplit.position = position;
 
 	if (strcmp(line, "on") == 0)
@@ -241,24 +334,14 @@ void ConsoleRules::parseAddLine(int position, const char *line, std::list<Consol
 	split.push_back(newSplit);
 }
 
-void ConsoleRules::dump(std::list<std::string> &resultList)
+void ConsoleRules::dump(std::vector<std::string> &resultList)
 {
-	std::list<std::string> sortList;
-
-	std::map<std::string, ConsoleRule *>::iterator itor;
+	std::multimap<std::string, ConsoleRule *>::iterator itor;
 	for (itor = rules_.begin();
 		itor != rules_.end();
 		itor++)
 	{
-		sortList.push_back((*itor).first);
-	}
-
-	sortList.sort();
-	std::list<std::string>::iterator itor2;
-	for (itor2 = sortList.begin();
-		itor2 != sortList.end();
-		itor2++)
-	{
-		rules_[itor2->c_str()]->dump(resultList);
+		ConsoleRule *rule = itor->second;
+		resultList.push_back(rule->toString());
 	}
 }

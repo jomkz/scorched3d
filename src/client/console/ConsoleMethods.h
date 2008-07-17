@@ -18,36 +18,23 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-
-// ConsoleMethods.h: interface for the ConsoleMethods class.
-//
-//////////////////////////////////////////////////////////////////////
-
 #if !defined(AFX_ConsoleMETHODS_H__D5E893D4_E73A_49CB_B0E8_8C945C692CC7__INCLUDED_)
 #define AFX_ConsoleMETHODS_H__D5E893D4_E73A_49CB_B0E8_8C945C692CC7__INCLUDED_
 
+#include <console/ConsoleRule.h>
 
-#include <console/ConsoleRuleMethod.h>
-#include <console/ConsoleRules.h>
-#include <console/ConsoleLines.h>
-
-class ConsoleMethods : public ConsoleRuleMethodI
+class Console;
+class ConsoleMethods
 {
 public:
-	ConsoleMethods(ConsoleRules &rules,
-					ConsoleLines &lines);
+	ConsoleMethods();
 	virtual ~ConsoleMethods();
 
-	// Inherited from ConsoleMethodI
-	virtual void runMethod(const char *name, 
-		std::list<ConsoleRuleSplit> split,
-		std::string &result,
-		std::list<std::string> &resultList);
-
-protected:
-	ConsoleRules &rules_;
-	ConsoleLines &lines_;
-
+	void clear();
+	void exit();
+	void help();
+	void consoleLoad(std::vector<ConsoleRuleValue> &values);
+	void consoleSave(std::vector<ConsoleRuleValue> &values);
 };
 
 #endif // !defined(AFX_ConsoleMETHODS_H__D5E893D4_E73A_49CB_B0E8_8C945C692CC7__INCLUDED_)

@@ -32,23 +32,33 @@
 // Calls InfoMap::showHeightBands when InfoHeightBands is selected 
 // in the console
 template<class T>
-class ConsoleRuleMethodIAdapter : public ConsoleRuleMethodI
+class ConsoleRuleMethodIAdapter : public ConsoleRule
 {
 public:
-	ConsoleRuleMethodIAdapter(T *inst, void (T::*call)(), const char *name) 
-		: inst_(inst), call_(call), name_(name)
+	ConsoleRuleMethodIAdapter(T *inst, 
+		void (T::*call)(), 
+		const char *name) : 
+		ConsoleRule(name, std::vector<ConsoleRuleParam>()), inst_(inst), call_(call)
 	{
-		Console::instance()->addMethod(name_.c_str(), this);
+		Console::instance()->addRule(this);
+	};
+
+	ConsoleRuleMethodIAdapter(T *inst, 
+		void (T::*call)(), 
+		const char *name, const std::vector<ConsoleRuleParam> &params) : 
+		ConsoleRule(name, params), inst_(inst), call_(call)
+	{
+		Console::instance()->addRule(this);
 	};
 	virtual ~ConsoleRuleMethodIAdapter()
 	{
-		Console::instance()->removeMethod(name_.c_str());
+		Console::instance()->removeRule(this);
 	};
 
-	virtual void runMethod(const char *name, 
-						   std::list<ConsoleRuleSplit> split,
-						   std::string &result,
-						   std::list<std::string> &resultList)
+	virtual void runRule(
+		Console *console,
+		const char *wholeLine,
+		std::vector<ConsoleRuleValue> &values)
 	{
 		(inst_->*call_)();
 	};
@@ -61,61 +71,34 @@ protected:
 
 // Same as above but passed params to method
 template<class T>
-class ConsoleRuleMethodIAdapterEx : public ConsoleRuleMethodI
+class ConsoleRuleMethodIAdapterEx : public ConsoleRule
 {
 public:
-	ConsoleRuleMethodIAdapterEx(T *inst, void (T::*call)(std::list<ConsoleRuleSplit>), const char *name) 
-		: inst_(inst), call_(call), name_(name)
+	ConsoleRuleMethodIAdapterEx(T *inst, 
+		void (T::*call)(std::vector<ConsoleRuleValue>&), 
+		const char *name, const std::vector<ConsoleRuleParam> &params) :
+		ConsoleRule(name, params), inst_(inst), call_(call)
 	{
-		Console::instance()->addMethod(name_.c_str(), this);
+		Console::instance()->addRule(this);
 	};
 	virtual ~ConsoleRuleMethodIAdapterEx()
 	{
-		Console::instance()->removeMethod(name_.c_str());
+		Console::instance()->removeRule(this);
 	};
 
-	virtual void runMethod(const char *name, 
-						   std::list<ConsoleRuleSplit> split,
-						   std::string &result,
-						   std::list<std::string> &resultList)
+	virtual void runRule(
+		Console *console,
+		const char *wholeLine,
+		std::vector<ConsoleRuleValue> &values)
 	{
-		(inst_->*call_)(split);
+		(inst_->*call_)(values);
 	};
 
 protected:
 	std::string name_;
 	T *inst_;
-	void (T::*call_)(std::list<ConsoleRuleSplit>);
+	void (T::*call_)(std::vector<ConsoleRuleValue>&);
 };
-
-// Same as above but passed params and result to method
-template<class T>
-class ConsoleRuleMethodIAdapterEx2 : public ConsoleRuleMethodI
-{
-public:
-	ConsoleRuleMethodIAdapterEx2(T *inst, void (T::*call)(std::list<ConsoleRuleSplit>, 
-		std::list<std::string>&), const char *name)
-		: inst_(inst), call_(call), name_(name)
-	{
-		Console::instance()->addMethod(name_.c_str(), this);
-	};
-	virtual ~ConsoleRuleMethodIAdapterEx2()
-	{
-		Console::instance()->removeMethod(name_.c_str());
-	};
-	virtual void runMethod(const char *name,  
-		std::list<ConsoleRuleSplit> split,
-		std::string &result,
-		std::list<std::string> &resultList)
-	{
-		(inst_->*call_)(split, resultList);
-	};
-	
-protected:
-	std::string name_;
-	T *inst_;
-	void (T::*call_)(std::list<ConsoleRuleSplit>, std::list<std::string>&);
-};                         
 
 #endif
 

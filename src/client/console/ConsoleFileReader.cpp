@@ -18,7 +18,7 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <console/Console.h>
+#include <console/ConsoleImpl.h>
 #include <console/ConsoleFileReader.h>
 #include <console/Console.h>
 #include <common/FileLines.h>
@@ -58,7 +58,8 @@ void ConsoleFileReader::saveConsoleIntoFile(const std::string &filename)
 	FileLines filelines;
 	filelines.addLine("<commands source=\"Scorched3D\">");
 
-	std::deque<ConsoleLine *> &lines = Console::instance()->getLines();
+	std::deque<ConsoleLine *> &lines = 
+		((ConsoleImpl *) Console::instance())->getLines();
 	std::deque<ConsoleLine *>::iterator itor;
 	for (itor = lines.begin();
 		itor != lines.end();

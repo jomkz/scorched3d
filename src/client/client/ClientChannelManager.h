@@ -22,8 +22,8 @@
 #define __INCLUDE_ClientChannelManagerh_INCLUDE__
 
 #include <coms/ComsMessageHandler.h>
-#include <console/ConsoleRuleMethodIAdapter.h>
 #include <client/ClientChannelManagerI.h>
+#include <console/ConsoleRule.h>
 #include <set>
 
 class ClientChannelManager : 
@@ -75,7 +75,7 @@ protected:
 	std::set<unsigned int> mutedPlayers_;
 	std::map<unsigned int, ChannelEntry *> recievers_;
 	unsigned int getChannelEntry(ClientChannelManagerI *reciever);
-	void say(std::list<ConsoleRuleSplit> list);
+	void say(std::list<ConsoleRuleValue> list);
 
 private:
 	ClientChannelManager();

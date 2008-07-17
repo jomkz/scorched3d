@@ -18,31 +18,25 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-
-// ConsoleRuleFnIAdapter.cpp: implementation of the ConsoleRuleFnIAdapter class.
-//
-//////////////////////////////////////////////////////////////////////
-
 #include <common/Defines.h>
+#include <console/Console.h>
 #include <console/ConsoleRuleFnIAdapter.h>
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
 ConsoleRuleFnIBooleanAdapter::ConsoleRuleFnIBooleanAdapter(const char *name, bool &param)
 	: name_(name), param_(param)
 {
-	Console::instance()->addFunction(
-		name, 
-		this,
-		ConsoleRuleTypeBoolean, 
-		ConsoleRuleAccessTypeReadWrite);
+	readRule_ = new ConsoleRuleFn(name, this, ConsoleRuleTypeBoolean, false);
+	writeRule_ = new ConsoleRuleFn(name, this, ConsoleRuleTypeBoolean, true);
+	Console::instance()->addRule(readRule_);
+	Console::instance()->addRule(writeRule_);
 }
 
 ConsoleRuleFnIBooleanAdapter::~ConsoleRuleFnIBooleanAdapter()
 {
-
+	Console::instance()->removeRule(readRule_);
+	Console::instance()->removeRule(writeRule_);
+	delete readRule_;
+	delete writeRule_;
 }
 
 bool ConsoleRuleFnIBooleanAdapter::getBoolParam(const char *name)
@@ -60,16 +54,18 @@ void ConsoleRuleFnIBooleanAdapter::setBoolParam(const char *name, bool value)
 ConsoleRuleFnINumberAdapter::ConsoleRuleFnINumberAdapter(const char *name, float &param)
 	: name_(name), param_(param)
 {
-	Console::instance()->addFunction(
-		name, 
-		this,
-		ConsoleRuleTypeNumber, 
-		ConsoleRuleAccessTypeReadWrite);
+	readRule_ = new ConsoleRuleFn(name, this, ConsoleRuleTypeNumber, false);
+	writeRule_ = new ConsoleRuleFn(name, this, ConsoleRuleTypeNumber, true);
+	Console::instance()->addRule(readRule_);
+	Console::instance()->addRule(writeRule_);
 }
 
 ConsoleRuleFnINumberAdapter::~ConsoleRuleFnINumberAdapter()
 {
-
+	Console::instance()->removeRule(readRule_);
+	Console::instance()->removeRule(writeRule_);
+	delete readRule_;
+	delete writeRule_;
 }
 
 float ConsoleRuleFnINumberAdapter::getNumberParam(const char *name)
@@ -85,17 +81,17 @@ void ConsoleRuleFnINumberAdapter::setNumberParam(const char *name, float value)
 }
 
 ConsoleRuleFnIOptionsAdapter::ConsoleRuleFnIOptionsAdapter(
-	OptionEntry &entry,
-	ConsoleRuleAccessType access) :
+	OptionEntry &entry, bool write) :
 	entry_(entry)
 {
-	ConsoleRuleType type = ConsoleRuleTypeBoolean;
+	ConsoleRuleType type = ConsoleRuleTypeNone;
 	switch (entry.getEntryType())
 	{
 		case OptionEntry::OptionEntryEnumType:
 		case OptionEntry::OptionEntryIntType:
 		case OptionEntry::OptionEntryBoundedIntType:
 		case OptionEntry::OptionEntryFloatType:
+		case OptionEntry::OptionEntryFixedType:
 			type = ConsoleRuleTypeNumber;
 		break;
 		case OptionEntry::OptionEntryVectorType:
@@ -112,16 +108,27 @@ ConsoleRuleFnIOptionsAdapter::ConsoleRuleFnIOptionsAdapter(
 		break;
 	}
 
-	Console::instance()->addFunction(
-		entry.getName(), 
-		this,
-		type, 
-		access);
+	readRule_ = new ConsoleRuleFn(entry.getName(), this, type, false);
+	Console::instance()->addRule(readRule_);
+	if (write) 
+	{
+		writeRule_ = new ConsoleRuleFn(entry.getName(), this, type, true);
+		Console::instance()->addRule(writeRule_);
+	}
 }
 
 ConsoleRuleFnIOptionsAdapter::~ConsoleRuleFnIOptionsAdapter()
 {
-	Console::instance()->removeFunction(entry_.getName());
+	if (readRule_)
+	{
+		Console::instance()->removeRule(readRule_);
+		delete readRule_;
+	}
+	if (writeRule_)
+	{
+		Console::instance()->removeRule(writeRule_);
+		delete writeRule_;
+	}
 }
 
 bool ConsoleRuleFnIOptionsAdapter::getBoolParam(const char *name)
@@ -144,6 +151,10 @@ float ConsoleRuleFnIOptionsAdapter::getNumberParam(const char *name)
 	{
 		return ((OptionEntryFloat &) entry_).getValue();
 	}
+	else if (entry_.getEntryType() == OptionEntry::OptionEntryFixedType)
+	{
+		return ((OptionEntryFixed&) entry_).getValue().asFloat();
+	}
 	return -99.99f;
 }
 
@@ -156,6 +167,10 @@ void  ConsoleRuleFnIOptionsAdapter::setNumberParam(const char *name, float value
 	else if (entry_.getEntryType() == OptionEntry::OptionEntryFloatType)
 	{
 		((OptionEntryFloat &) entry_).setValue(value);
+	}
+	else if (entry_.getEntryType() == OptionEntry::OptionEntryFixedType)
+	{
+		((OptionEntryFixed &) entry_).setValue(fixed(int(value)));
 	}
 }
 

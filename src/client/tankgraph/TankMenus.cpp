@@ -53,6 +53,7 @@
 #include <dialogs/SkipDialog.h>
 #include <sound/SoundUtils.h>
 #include <console/ConsoleRuleFnIAdapter.h>
+#include <console/ConsoleRuleMethodIAdapter.h>
 #include <image/ImageFactory.h>
 #include <GLEXT/GLTexture.h>
 #include <lua/LUAScriptFactory.h>
@@ -78,8 +79,8 @@ TankMenus::TankMenus() : logger_("ClientLog")
 		this, &TankMenus::logToFile, "LogToFile");
 	new ConsoleRuleMethodIAdapter<TankMenus>(
 		this, &TankMenus::groupInfo, "GroupInfo");
-	new ConsoleRuleMethodIAdapterEx<TankMenus>(
-		this, &TankMenus::runScriptConsole, "RunScript");
+	//new ConsoleRuleMethodIAdapterEx<TankMenus>(
+	//	this, &TankMenus::runScriptConsole, "RunScript");
 	new ConsoleRuleFnIBooleanAdapter(
 		"ComsMessageLogging", 
 		ScorchedClient::instance()->getComsMessageHandler().getMessageLogging());
@@ -497,8 +498,9 @@ bool TankMenus::AccessoryMenu::getEnabled(const char* menuName)
 	return false;
 }
 
-void TankMenus::runScriptConsole(std::list<ConsoleRuleSplit> list)
+void TankMenus::runScriptConsole(std::list<ConsoleRuleValue> list)
 {
+	/*
 	list.pop_front();
 	if (!list.empty())
 	{
@@ -515,5 +517,6 @@ void TankMenus::runScriptConsole(std::list<ConsoleRuleSplit> list)
 
 		delete script;
 	}
+	*/
 }
 
