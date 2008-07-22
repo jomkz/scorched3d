@@ -55,9 +55,10 @@ Sound::Sound() :
 {
 	new ConsoleRuleMethodIAdapter<Sound>(
 		this, &Sound::showSoundBuffers, "SoundBuffers");
-	/*new ConsoleRuleMethodIAdapterEx<Sound>(
-		this, &Sound::soundPlay, "SoundPlay");
-		*/
+	new ConsoleRuleMethodIAdapterEx<Sound>(
+		this, &Sound::soundPlay, "SoundPlay", 
+		ConsoleUtil::formParams(
+		ConsoleRuleParam("filename", ConsoleRuleTypeString)));
 }
 
 Sound::~Sound()
@@ -159,21 +160,16 @@ bool Sound::init(int channels)
 	return init_;
 }
 
-void Sound::soundPlay(std::list<ConsoleRuleValue> list)
+void Sound::soundPlay(std::vector<ConsoleRuleValue> &values)
 {
-	/*
-	list.pop_front();
-	if (!list.empty())
-	{
-		SoundBuffer *buffer = 
-			fetchOrCreateBuffer(
-			(char *) list.begin()->rule.c_str());
-		VirtualSoundSource *source = 
-			new VirtualSoundSource(10000, false, true);
-		source->setRelative();
-		source->play(buffer);
-	}
-	*/
+	ConsoleRuleValue &fileName = values[1];
+
+	SoundBuffer *buffer = 
+		fetchOrCreateBuffer(fileName.valueString);
+	VirtualSoundSource *source = 
+		new VirtualSoundSource(10000, false, true);
+	source->setRelative();
+	source->play(buffer);
 }
 
 void Sound::showSoundBuffers()

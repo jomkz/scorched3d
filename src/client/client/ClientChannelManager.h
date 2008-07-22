@@ -75,7 +75,7 @@ protected:
 	std::set<unsigned int> mutedPlayers_;
 	std::map<unsigned int, ChannelEntry *> recievers_;
 	unsigned int getChannelEntry(ClientChannelManagerI *reciever);
-	void say(std::list<ConsoleRuleValue> list);
+	void say(std::vector<ConsoleRuleValue> &values);
 
 private:
 	ClientChannelManager();

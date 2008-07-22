@@ -24,3 +24,5 @@ Added arenawidth and arenaheight options to landscape defn to allow smaller play
 Added weaponscript for LUA scripted weapons
 Enlarged the LAN, MOTD and Tank dialogs to fit mimimum GUI size
 Added nosingleflow attribute to napalm to make it fill the area more
+Added console enforced parsing of console commands
+Added console tab completion for console command arguments

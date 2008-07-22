@@ -33,8 +33,10 @@ ConsoleRuleParam::ConsoleRuleParam(const std::string &name, ConsoleRuleType type
 }
 
 ConsoleRule::ConsoleRule(const char *name,
-	const std::vector<ConsoleRuleParam> &params) : 
-	name_(name), params_(params)
+	const std::vector<ConsoleRuleParam> &params,
+	unsigned int userData) : 
+	name_(name), params_(params), 
+	userData_(userData)
 {
 
 }
@@ -63,7 +65,38 @@ std::string ConsoleRule::toString()
 		case ConsoleRuleTypeString:
 			result.append("<").append(param.getName()).append(">");
 			break;
+		case ConsoleRuleTypeNone:
+			result.append(param.getName());
+			break;
 		}
+	}
+	return result;
+}
+
+std::string ConsoleRule::toString(std::vector<ConsoleRuleValue> &values)
+{
+	std::string result;
+	result.append(getName()).append(" ");
+	for (int p=1; p<(int) values.size(); p++)
+	{
+		ConsoleRuleParam &param = params_[p - 1];
+		ConsoleRuleValue &value = values[p];
+		switch (param.getType())
+		{
+		case ConsoleRuleTypeBoolean:
+			result.append(value.valueString.c_str());
+			break;
+		case ConsoleRuleTypeNumber:
+			result.append(value.valueString.c_str());
+			break;
+		case ConsoleRuleTypeString:
+			result.append(value.valueString.c_str());
+			break;
+		case ConsoleRuleTypeNone:
+			result.append(param.getName());
+			break;
+		}
+		result.append(" ");
 	}
 	return result;
 }
@@ -89,6 +122,9 @@ std::string ConsoleRule::valuesToString(std::vector<ConsoleRuleValue> &values)
 		case ConsoleRuleTypeString:
 			result.append("<string>");
 			break;
+		case ConsoleRuleTypeNone:
+			result.append(value.valueString);
+			break;
 		}
 	}
 	return result;
@@ -97,10 +133,32 @@ std::string ConsoleRule::valuesToString(std::vector<ConsoleRuleValue> &values)
 bool ConsoleRule::matchesExactParams(std::vector<ConsoleRuleValue> &values)
 {
 	if (values.size() != params_.size() + 1) return false;
-	return matchesParams(values);
+
+	for (int v=1; v<(int) values.size(); v++)
+	{
+		ConsoleRuleParam &param = params_[v-1];
+		ConsoleRuleValue &value = values[v];
+
+		switch (param.getType())
+		{
+		case ConsoleRuleTypeNone:
+			if (0 != stricmp(param.getName(), value.valueString.c_str())) return false;
+			break;
+		case ConsoleRuleTypeString:
+			break;
+		case ConsoleRuleTypeBoolean:
+			if (value.type != ConsoleRuleTypeBoolean) return false;
+			break;
+		case ConsoleRuleTypeNumber:
+			if (value.type != ConsoleRuleTypeNumber) return false;
+			break;
+		}
+	}
+
+	return true;
 }
 
-bool ConsoleRule::matchesParams(std::vector<ConsoleRuleValue> &values)
+bool ConsoleRule::matchesPartialParams(std::vector<ConsoleRuleValue> &values)
 {
 	if (values.size() > params_.size() + 1) return false;
 
@@ -112,12 +170,30 @@ bool ConsoleRule::matchesParams(std::vector<ConsoleRuleValue> &values)
 		switch (param.getType())
 		{
 		case ConsoleRuleTypeNone:
-			if (0 != strcmp(param.getName(), value.valueString.c_str())) return false;
+			if (v == int(values.size()) - 1 &&
+				value.valueString.length() < strlen(param.getName()))
+			{
+				if (0 != _strnicmp(param.getName(), 
+					value.valueString.c_str(), value.valueString.length())) return false;
+			}
+			else
+			{
+				if (0 != stricmp(param.getName(), 
+					value.valueString.c_str())) return false;
+			}
 			break;
 		case ConsoleRuleTypeString:
 			break;
 		case ConsoleRuleTypeBoolean:
-			if (value.type != ConsoleRuleTypeBoolean) return false;
+			if (value.valueString.length() == 1 &&
+				0 != _strnicmp(value.valueString.c_str(), "o", 1)) return false;
+			else if (value.valueString.length() == 2 &&
+				(0 != _strnicmp(value.valueString.c_str(), "on", 2) &&
+				0 != _strnicmp(value.valueString.c_str(), "of", 2))) return false;
+			else if (value.valueString.length() == 3 &&
+				0 != _strnicmp(value.valueString.c_str(), "off", 3)) return false;
+			else if (value.valueString.length() > 3) return false;
+			return true;
 			break;
 		case ConsoleRuleTypeNumber:
 			if (value.type != ConsoleRuleTypeNumber) return false;

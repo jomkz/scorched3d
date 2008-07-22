@@ -100,5 +100,37 @@ protected:
 	void (T::*call_)(std::vector<ConsoleRuleValue>&);
 };
 
+// Same as above but passed userdata to method
+template<class T>
+class ConsoleRuleMethodIAdapterEx2 : public ConsoleRule
+{
+public:
+	ConsoleRuleMethodIAdapterEx2(T *inst, 
+		void (T::*call)(std::vector<ConsoleRuleValue>&, unsigned int), 
+		const char *name, const std::vector<ConsoleRuleParam> &params,
+		unsigned int userData) :
+		ConsoleRule(name, params, userData), inst_(inst), call_(call)
+	{
+		Console::instance()->addRule(this);
+	};
+	virtual ~ConsoleRuleMethodIAdapterEx2()
+	{
+		Console::instance()->removeRule(this);
+	};
+
+	virtual void runRule(
+		Console *console,
+		const char *wholeLine,
+		std::vector<ConsoleRuleValue> &values)
+	{
+		(inst_->*call_)(values, userData_);
+	};
+
+protected:
+	std::string name_;
+	T *inst_;
+	void (T::*call_)(std::vector<ConsoleRuleValue>&, unsigned int);
+};
+
 #endif
 

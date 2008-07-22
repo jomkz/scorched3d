@@ -75,7 +75,7 @@ std::string ConsoleRules::matchRule(const char *line,
 		}
 		return "";
 	}
-	else if (values.size() == 1)
+	else 
 	{
 		std::multimap<std::string, ConsoleRule *>::iterator itor;
 		for (itor = rules_.begin();
@@ -83,18 +83,31 @@ std::string ConsoleRules::matchRule(const char *line,
 			itor++)
 		{
 			ConsoleRule *rule = itor->second;
-
 			ConsoleRuleValue &nameValue = values[0];
-			unsigned int nameLen = strlen(rule->getName());
-			if (nameLen >= nameValue.valueString.length() &&
-				_strnicmp(line, rule->getName(), nameValue.valueString.length()) == 0)
+
+			if (values.size() == 1)
 			{
-				matches.push_back((*itor).second);
+				unsigned int nameLen = strlen(rule->getName());
+				if (nameLen >= nameValue.valueString.length() &&
+					_strnicmp(line, rule->getName(), nameValue.valueString.length()) == 0)
+				{
+					matches.push_back((*itor).second);
+				}
+			}
+			else
+			{
+				if (0 == _stricmp(rule->getName(), nameValue.valueString.c_str()))
+				{
+					if (rule->matchesPartialParams(values))
+					{
+						matches.push_back((*itor).second);
+					}
+				}
 			}
 		}
 
 		if (matches.empty()) return "";
-		if (matches.size() == 1) return matches[0]->toString();
+		if (matches.size() == 1) return matches[0]->toString(values);
 
 		ConsoleRuleValue &firstValue = values[0];
 		for (int i=(int) firstValue.valueString.length();; i++)
@@ -103,36 +116,18 @@ std::string ConsoleRules::matchRule(const char *line,
 			for (int j=0; j<(int)matches.size(); j++)
 			{
 				ConsoleRule *secondRule = matches[j];
-				if ((int) strlen(secondRule->getName()) < i ||
-					0 != _strnicmp(secondRule->getName(), firstRule->getName(), i))
+				std::string firstString = firstRule->toString(values);
+				std::string secondString = secondRule->toString(values);
+
+				if ((int) strlen(secondString.c_str()) < i ||
+					0 != _strnicmp(secondString.c_str(), firstString.c_str(), i))
 				{
 					std::string buffer;
-					buffer.append(secondRule->getName(), i - 1);
+					buffer.append(secondString.c_str(), i - 1);
 					return buffer;					
 				}
 			}
 		}
-	}
-	else if (values.size() > 1)
-	{
-		std::multimap<std::string, ConsoleRule *>::iterator itor;
-		for (itor = rules_.begin();
-			itor != rules_.end();
-			itor++)
-		{
-			ConsoleRule *rule = itor->second;
-			ConsoleRuleValue &nameValue = values[0];
-			if (0 == _stricmp(rule->getName(), nameValue.valueString.c_str()))
-			{
-				if (rule->matchesParams(values))
-				{
-					matches.push_back((*itor).second);
-				}
-			}
-		}
-
-		if (matches.empty()) return "";
-		return "";
 	}
 
 	return "";

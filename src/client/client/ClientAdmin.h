@@ -31,7 +31,12 @@ public:
 protected:
 	static ClientAdmin *instance_;
 
-	void admin(std::vector<ConsoleRuleValue> split);
+	void adminNoParams(std::vector<ConsoleRuleValue> &split, 
+		unsigned int userData);
+	void adminOneParam(std::vector<ConsoleRuleValue> &split, 
+		unsigned int userData);
+	void adminTwoParam(std::vector<ConsoleRuleValue> &split, 
+		unsigned int userData);
 	void adminHelp();
 
 private:

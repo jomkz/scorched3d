@@ -62,7 +62,9 @@ class Console;
 class ConsoleRule
 {
 public:
-	ConsoleRule(const char *name, const std::vector<ConsoleRuleParam> &params);
+	ConsoleRule(const char *name, 
+		const std::vector<ConsoleRuleParam> &params,
+		unsigned int userData = 0);
 	virtual ~ConsoleRule();
 
 	virtual void runRule(
@@ -71,16 +73,19 @@ public:
 		std::vector<ConsoleRuleValue> &values) = 0;
 
 	std::string toString();
+	std::string toString(std::vector<ConsoleRuleValue> &values);
 	static std::string valuesToString(std::vector<ConsoleRuleValue> &values);
 
 	const char *getName() { return name_.c_str(); }
 	std::vector<ConsoleRuleParam> &getParams() { return params_; }
+	unsigned int getUserData() { return userData_; }
 
-	bool matchesParams(std::vector<ConsoleRuleValue> &values);
+	bool matchesPartialParams(std::vector<ConsoleRuleValue> &values);
 	bool matchesExactParams(std::vector<ConsoleRuleValue> &values);
 protected:
 	std::string name_;
 	std::vector<ConsoleRuleParam> params_;
+	unsigned int userData_;
 
 };
 

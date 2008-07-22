@@ -45,7 +45,7 @@ public:
 	void destroy();
 
 	void showSoundBuffers();
-	void soundPlay(std::list<ConsoleRuleValue> list);
+	void soundPlay(std::vector<ConsoleRuleValue> &values);
 
 	SoundBuffer *fetchOrCreateBuffer(const std::string &filename);
 	SoundListener *getDefaultListener();

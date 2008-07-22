@@ -23,7 +23,7 @@
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsChannelMessage.h>
 #include <coms/ComsChannelTextMessage.h>
-#include <console/Console.h>
+#include <console/ConsoleRuleMethodIAdapter.h>
 #include <common/Logger.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
@@ -75,8 +75,11 @@ ClientChannelManager::ClientChannelManager()
 		"ComsChannelTextMessage",
 		this);
 
-	//new ConsoleRuleMethodIAdapterEx<ClientChannelManager>(
-	//	this, &ClientChannelManager::say, "Say");
+	new ConsoleRuleMethodIAdapterEx<ClientChannelManager>(
+		this, &ClientChannelManager::say, "Say", 
+		ConsoleUtil::formParams(
+		ConsoleRuleParam("channel", ConsoleRuleTypeString),
+		ConsoleRuleParam("text", ConsoleRuleTypeString)));
 }
 
 ClientChannelManager::~ClientChannelManager()
@@ -212,28 +215,14 @@ unsigned int ClientChannelManager::getChannelEntry(ClientChannelManagerI *reciev
 	return 0;
 }
 
-void ClientChannelManager::say(std::list<ConsoleRuleValue> list)
+void ClientChannelManager::say(std::vector<ConsoleRuleValue> &values)
 {
-	/*
-	bool usage = false;
+	ConsoleRuleValue &channelValue = values[1];
+	ConsoleRuleValue &textValue = values[2];
 
-	list.pop_front();
-	if (!list.empty())
-	{
-		std::string channel = list.begin()->rule;
-		list.pop_front();
-		if (!list.empty())
-		{
-			std::string text = list.begin()->rule;
-			ChannelText message(channel, text);
-			sendText(message);
-		}
-		else usage = true;
-	}
-	else usage = true;
-
-	Console::instance()->addLine(false, "Usage: say <channel> <text>");
-	*/
+	ChannelText message(channelValue.valueString.c_str(), 
+		textValue.valueString.c_str());
+	sendText(message);
 }
 
 void ClientChannelManager::sendText(const ChannelText &constText)
