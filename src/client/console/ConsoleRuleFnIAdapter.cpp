@@ -22,8 +22,9 @@
 #include <console/Console.h>
 #include <console/ConsoleRuleFnIAdapter.h>
 
-ConsoleRuleFnIBooleanAdapter::ConsoleRuleFnIBooleanAdapter(const char *name, bool &param)
-	: name_(name), param_(param)
+ConsoleRuleFnIBooleanAdapter::ConsoleRuleFnIBooleanAdapter(const char *name, bool &param) : 
+	name_(name), param_(param),
+	readRule_(0), writeRule_(0)
 {
 	readRule_ = new ConsoleRuleFn(name, this, ConsoleRuleTypeBoolean, false);
 	writeRule_ = new ConsoleRuleFn(name, this, ConsoleRuleTypeBoolean, true);
@@ -51,8 +52,9 @@ void ConsoleRuleFnIBooleanAdapter::setBoolParam(const char *name, bool value)
 	param_ = value;
 }
 
-ConsoleRuleFnINumberAdapter::ConsoleRuleFnINumberAdapter(const char *name, float &param)
-	: name_(name), param_(param)
+ConsoleRuleFnINumberAdapter::ConsoleRuleFnINumberAdapter(const char *name, float &param) : 
+	name_(name), param_(param),
+	readRule_(0), writeRule_(0)
 {
 	readRule_ = new ConsoleRuleFn(name, this, ConsoleRuleTypeNumber, false);
 	writeRule_ = new ConsoleRuleFn(name, this, ConsoleRuleTypeNumber, true);
@@ -80,9 +82,9 @@ void ConsoleRuleFnINumberAdapter::setNumberParam(const char *name, float value)
 	param_ = value;
 }
 
-ConsoleRuleFnIOptionsAdapter::ConsoleRuleFnIOptionsAdapter(
-	OptionEntry &entry, bool write) :
-	entry_(entry)
+ConsoleRuleFnIOptionsAdapter::ConsoleRuleFnIOptionsAdapter(OptionEntry &entry, bool write) :
+	entry_(entry),
+	readRule_(0), writeRule_(0)
 {
 	ConsoleRuleType type = ConsoleRuleTypeNone;
 	switch (entry.getEntryType())
