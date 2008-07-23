@@ -1689,6 +1689,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\weapons\WeaponScript.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\weapons\WeaponScript.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\weapons\WeaponSelectPosition.cpp"
 				>
 			</File>
