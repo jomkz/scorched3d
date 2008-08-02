@@ -31,10 +31,12 @@
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <common/StatsLogger.h>
+#include <LUA/LUAScriptHook.h>
 
 ServerNextRoundState::ServerNextRoundState() :
 	GameStateI("ServerNextRoundState")
 {
+	ScorchedServer::instance()->getLUAScriptHook().addHookProvider("server_newround");
 }
 
 ServerNextRoundState::~ServerNextRoundState()
@@ -68,6 +70,10 @@ void ServerNextRoundState::enterState(const unsigned state)
 
 	// Setup this list of players that need to move before this round is over
 	TurnController::instance()->nextRound();
+
+	// Notify scripts of a new game starting
+	ScorchedServer::instance()->getLUAScriptHook().callHook("server_newround", 
+		LUAScriptHook::formParam());
 
 	// Make sure all clients have the correct game settings
 	ComsGameStateMessage message;

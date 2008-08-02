@@ -70,7 +70,6 @@ void WeaponGiveScore::weaponCallback(
 		context.getTankTeamScore().addScore(score_, tank->getTeam());
 	}
 
-	if (!context.getServerMode())
 	{
 		if (score_ > 0)
 		{
@@ -78,7 +77,7 @@ void WeaponGiveScore::weaponCallback(
 				S3D::formatStringBuffer("[p:%s] received %i bonus score", 
 				tank->getName(), score_));
 			//info.setPlayerId(weaponContext.getPlayerId());
-			ChannelManager::showText(text);
+			ChannelManager::showText(context, text);
 		}
 		else
 		{
@@ -86,7 +85,7 @@ void WeaponGiveScore::weaponCallback(
 				S3D::formatStringBuffer("[p:%s] lost %i bonus score", 
 				tank->getName(), -score_));
 			//info.setPlayerId(weaponContext.getPlayerId());
-			ChannelManager::showText(text);
+			ChannelManager::showText(context, text);
 		}
 	}
 }

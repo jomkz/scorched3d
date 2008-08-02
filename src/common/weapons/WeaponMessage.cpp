@@ -60,11 +60,10 @@ void WeaponMessage::weaponCallback(
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 	unsigned int userData)
 {
-	if (!context.getServerMode())
 	{
 		ChannelText text("combat", 
-			S3D::formatStringBuffer("%s",message_.c_str()));
-		ChannelManager::showText(text);
+			S3D::formatStringBuffer("%s", message_.c_str()));
+		ChannelManager::showText(context, text);
 	}
 }
 

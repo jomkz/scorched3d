@@ -36,6 +36,7 @@ public:
 	void newMatch();
 	void changed();
 	int getNoBatteries();
+	bool canUse();
 
 protected:
 	ScorchedContext &context_;

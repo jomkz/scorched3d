@@ -48,6 +48,7 @@
 #include <landscapedef/LandscapeDefn.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <placement/PlacementTankPosition.h>
+#include <lua/LUAScriptHook.h>
 #include <common/RandomGenerator.h>
 #include <common/OptionsTransient.h>
 #include <common/OptionsScorched.h>
@@ -62,6 +63,7 @@ extern Clock serverTimer;
 ServerNewGameState::ServerNewGameState() :
 	GameStateI("ServerNewGameState")
 {
+	ScorchedServer::instance()->getLUAScriptHook().addHookProvider("server_newgame");
 }
 
 ServerNewGameState::~ServerNewGameState()
@@ -164,6 +166,10 @@ void ServerNewGameState::enterState(const unsigned state)
 
 	// Create the player order for this game
 	TurnController::instance()->newGame();
+
+	// Notify scripts of a new game starting
+	ScorchedServer::instance()->getLUAScriptHook().callHook("server_newgame", 
+		LUAScriptHook::formParam());
 
 	// As we have not returned to the main loop for ages the
 	// timer will have a lot of time in it

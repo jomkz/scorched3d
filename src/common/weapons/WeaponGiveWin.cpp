@@ -78,14 +78,13 @@ void WeaponGiveWin::weaponCallback(
 		}
 		context.getTankTeamScore().setWonGame(team);
 
-		if (!context.getServerMode())
 		{
 			ChannelText text("combat", 
 				S3D::formatStringBuffer("%s team %s and won the game", 
 				TankColorGenerator::getTeamName(team), 
 				objective_.c_str()));
 			//info.setPlayerId(weaponContext.getPlayerId());
-			ChannelManager::showText(text);
+			ChannelManager::showText(context, text);
 		}
 	}
 	else
@@ -95,13 +94,12 @@ void WeaponGiveWin::weaponCallback(
 
 		tank->getScore().setWonGame();
 
-		if (!context.getServerMode())
 		{
 			ChannelText text("combat", 
 				S3D::formatStringBuffer("[p:%s] %s and won the game", 
 				tank->getName(), objective_.c_str()));
 			//info.setPlayerId(weaponContext.getPlayerId());
-			ChannelManager::showText(text);
+			ChannelManager::showText(context, text);
 		}
 	}
 }

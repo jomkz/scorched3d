@@ -192,13 +192,12 @@ void PlayShots::processFiredMessage(ScorchedContext &context,
 	if (!accessory) return;
 
 	Weapon *weapon = (Weapon *) accessory->getAction();
-	if (accessory->getPositionSelect() != Accessory::ePositionSelectFuel &&
-		weapon->getUseUp())
+	if (accessory->getUseNumber() > 0)
 	{
 		// Actually use up one of the weapons
 		// Fuel, is used up differently at the rate of one weapon per movement square
 		// This is done sperately in the tank movement action
-		tank->getAccessories().rm(accessory, 1);
+		tank->getAccessories().rm(accessory, accessory->getUseNumber());
 	}
 
 	// shot fired action

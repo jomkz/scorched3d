@@ -40,6 +40,7 @@
 #include <tank/TankSort.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
+#include <lua/LUAScriptHook.h>
 
 float ServerShotFinishedState::speed_(1.0f);
 
@@ -47,6 +48,7 @@ ServerShotFinishedState::ServerShotFinishedState(ServerShotState *shotState) :
 	GameStateI("ServerShotFinishedState"),
 	shotState_(shotState)
 {
+	ScorchedServer::instance()->getLUAScriptHook().addHookProvider("server_score");
 }
 
 ServerShotFinishedState::~ServerShotFinishedState()
@@ -318,6 +320,31 @@ bool ServerShotFinishedState::scoreWinners()
 		}
 	}
 
+	// Check if this is the last round that will be played
+	bool overAllWinner = false;
+	if (ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() >=
+		ScorchedServer::instance()->getOptionsGame().getNoRounds())
+	{
+		overAllWinner = true;
+	}
+	else
+	{
+		if (ServerTooFewPlayersStimulus::instance()->acceptStateChange(0, 
+			ServerState::ServerStateTooFewPlayers, 0.0f))
+		{
+			if (ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() >
+				ScorchedServer::instance()->getOptionsGame().getNoRounds() / 2 && 
+				ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() > 2)
+			{
+				overAllWinner = true;
+			}
+		}
+	}
+
+	// Tell scripts to score 
+	ScorchedServer::instance()->getLUAScriptHook().callHook("server_score", 
+		LUAScriptHook::formParam(LUAScriptHook::Param(overAllWinner)));
+
 	// Update the stats for the players before sending out the
 	// stats message
 	std::map<unsigned int, Tank *> &tanks = 
@@ -344,27 +371,6 @@ bool ServerShotFinishedState::scoreWinners()
 		// Get the new tanks rank
 		std::string rank = StatsLogger::instance()->tankRank(tank);
 		tank->getScore().setStatsRank(rank.c_str());
-	}
-
-	// Check if this is the last round that will be played
-	bool overAllWinner = false;
-	if (ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() >=
-		ScorchedServer::instance()->getOptionsGame().getNoRounds())
-	{
-		overAllWinner = true;
-	}
-	else
-	{
-		if (ServerTooFewPlayersStimulus::instance()->acceptStateChange(0, 
-			ServerState::ServerStateTooFewPlayers, 0.0f))
-		{
-			if (ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() >
-				ScorchedServer::instance()->getOptionsGame().getNoRounds() / 2 && 
-				ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() > 2)
-			{
-				overAllWinner = true;
-			}
-		}
 	}
 
 	// Its the very last round, score the overall winner

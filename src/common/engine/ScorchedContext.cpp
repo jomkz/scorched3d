@@ -36,8 +36,8 @@
 #include <weapons/AccessoryStore.h>
 #include <lua/LUAScriptHook.h>
 
-ScorchedContext::ScorchedContext(const char *name) : 
-	serverMode(false)
+ScorchedContext::ScorchedContext(const char *name, bool server) : 
+	serverMode(server)
 {
 	actionController = new ActionController();
 	accessoryStore = new AccessoryStore();
@@ -57,7 +57,9 @@ ScorchedContext::ScorchedContext(const char *name) :
 	targetSpace = new TargetSpace();
 	targetMovement = new TargetMovement();
 	luaScriptFactory = new LUAScriptFactory();
-	luaScriptHook = new LUAScriptHook(luaScriptFactory);
+	luaScriptHook = new LUAScriptHook(luaScriptFactory,
+		server?"server":"client",
+		server?S3D::getSettingsFile("serverhooks"):S3D::getSettingsFile("clienthooks"));
 
 	getViewPoints().setContext(this);
 	getActionController().setScorchedContext(this);

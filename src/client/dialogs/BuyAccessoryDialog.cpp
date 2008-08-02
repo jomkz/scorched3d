@@ -553,7 +553,7 @@ void BuyAccessoryDialog::buttonDown(unsigned int id)
 				ComsMessageSender::sendToServer(buyMessage);
 
 				// Add the accessory
-				tank->getAccessories().rm(acc);
+				tank->getAccessories().rm(acc, 1);
 				tank->getScore().setMoney(tank->getScore().getMoney() + acc->getSellPrice());
 
 				// Refresh the window

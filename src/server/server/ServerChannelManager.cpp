@@ -22,6 +22,7 @@
 #include <server/ScorchedServer.h>
 #include <server/ScorchedServerUtil.h>
 #include <server/ServerCommon.h>
+#include <LUA/LUAScriptHook.h>
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsChannelMessage.h>
 #include <coms/ComsChannelTextMessage.h>
@@ -36,6 +37,7 @@ ServerChannelManager::ChannelEntry::ChannelEntry(
 	filter_(filter),
 	auth_(auth)
 {
+	ScorchedServer::instance()->getLUAScriptHook().addHookProvider("server_channeltext");
 }
 
 ServerChannelManager::ChannelEntry::~ChannelEntry()
@@ -541,6 +543,13 @@ void ServerChannelManager::actualSend(const ChannelText &constText,
 
 	// Update the message with the filtered text
 	text.setMessage(filteredText.c_str());
+
+	// Send to any scripts for processing
+	ScorchedServer::instance()->getLUAScriptHook().callHook("server_channeltext", 
+		LUAScriptHook::formParam(
+			LUAScriptHook::Param(fixed(true, tank?tank->getPlayerId():0)),
+			LUAScriptHook::Param(text.getChannel()),
+			LUAScriptHook::Param(text.getMessage())));
 
 	// Send to all clients
 	std::map<unsigned int, DestinationEntry *>::iterator destItor;

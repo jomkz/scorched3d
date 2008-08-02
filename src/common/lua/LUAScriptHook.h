@@ -34,26 +34,41 @@ public:
 		enum Type
 		{
 			eString,
-			eNumber
+			eNumber,
+			eBoolean
 		};
 
 		Param(fixed innumber) :
 			number(innumber), type(eNumber) {};
+		Param(const char *instr) :
+			str(instr), type(eString) {};
 		Param(const std::string &instr) :
 			str(instr), type(eString) {};
+		Param(bool b) :
+			boolean(b), type(eBoolean) {};
 
 		Type type;
 		fixed number;
+		bool boolean;
 		std::string str;
 	};
 
-	LUAScriptHook(LUAScriptFactory *factory);
+	LUAScriptHook(LUAScriptFactory *factory, 
+		const std::string &hooksName,
+		const std::string &directoryName);
 	~LUAScriptHook();
 
 	void addHookProvider(const std::string &hookName);
 
-	void callHook(const std::string &hookName, std::vector<Param> &params);
-	bool loadHooks(const std::string &fileName);
+	void callHook(const std::string &hookName, const std::vector<Param> &params);
+	void clearHooks();
+	bool loadHooks();
+	void listHooks();
+
+	static std::vector<Param> formParam();
+	static std::vector<Param> formParam(const Param &param1);
+	static std::vector<Param> formParam(const Param &param1, const Param &param2);
+	static std::vector<Param> formParam(const Param &param1, const Param &param2, const Param &param3);
 
 protected:
 	struct HookEntry
@@ -62,8 +77,11 @@ protected:
 		std::string entryPoint;
 	};
 
+	std::string directoryName_, hooksName_;
 	LUAScriptFactory *factory_;
 	std::map<std::string, std::vector<HookEntry> > hookNames_;
+	bool loadHook(const std::string &directoryName, const std::string &fileName);
+	void reloadHooks() { loadHooks(); }
 };
 
 #endif // __INCLUDE_LUAScriptHook_INCLUDE__

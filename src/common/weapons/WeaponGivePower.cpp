@@ -67,12 +67,11 @@ void WeaponGivePower::weaponCallback(
 	tank->getPosition().setMaxPower(
 		MAX(tank->getPosition().getMaxPower(), power));
 
-	if (!context.getServerMode())
 	{
 		ChannelText text("combat", 
 			S3D::formatStringBuffer("[p:%s] received %.0f power", 
 			tank->getName(), power.asFloat()));
 		//info.setPlayerId(weaponContext.getPlayerId());
-		ChannelManager::showText(text);
+		ChannelManager::showText(context, text);
 	}
 }

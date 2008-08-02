@@ -131,10 +131,7 @@ bool ServerShotHolder::validateFiredMessage(
 	}
 
 	// Check this tank has these weapons
-	int count = 
-		tank->getAccessories().getAccessoryCount(accessory);
-	if (count > 0 || count == -1) {}
-	else return false;
+	if (!tank->getAccessories().canUse(accessory)) return false;
 
 	// Check armslevel
 	if ((10 - accessory->getArmsLevel()) <=

@@ -120,6 +120,12 @@ bool LUAScript::addNumberParameter(fixed number)
 	return true;
 }
 
+bool LUAScript::addBoolParameter(bool boolean)
+{
+	lua_pushboolean(L_, boolean);
+	return true;
+}
+
 bool LUAScript::addVectorParameter(const FixedVector &v)
 {
 	LUAUtil::addVectorToStack(L_, v);

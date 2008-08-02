@@ -23,10 +23,11 @@
 
 #include <common/ChannelText.h>
 
+class ScorchedContext;
 class ChannelManager
 {
 public:
-	static void showText(const ChannelText &text);
+	static void showText(ScorchedContext &context, const ChannelText &text);
 
 private:
 	ChannelManager();

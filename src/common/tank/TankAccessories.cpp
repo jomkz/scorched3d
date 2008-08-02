@@ -173,6 +173,14 @@ std::list<Accessory *> &TankAccessories::getAllAccessoriesByGroup(
 	return emptyList;
 }
 
+bool TankAccessories::canUse(Accessory *accessory)
+{
+	int count = getAccessoryCount(accessory);
+	if (count == 0) return false;
+	if (count == -1 || count >= accessory->getUseNumber()) return true;
+	return false;
+}
+
 int TankAccessories::getAccessoryCount(Accessory *accessory)
 {
 	std::map<Accessory *, int>::iterator foundAccessory =

@@ -90,28 +90,25 @@ void WeaponGiveAccessory::weaponCallback(
 			if (tank->getAccessories().accessoryAllowed(accessory, number_))
 			{
 				tank->getAccessories().add(accessory, number_);
-				if (!context.getServerMode())
 				{
 					ChannelText text("combat", 
 						S3D::formatStringBuffer("[p:%s] received %i * [w:%s]", 
 						tank->getName(),
 						number_, accessory->getName()));
 					//info.setPlayerId(weaponContext.getPlayerId());
-					ChannelManager::showText(text);
+					ChannelManager::showText(context, text);
 				}
 			}
 			else
 			{
 				int money = accessory->getSellPrice() * number_;
 				tank->getScore().setMoney(tank->getScore().getMoney() + money);
-
-				if (!context.getServerMode())
 				{
 					ChannelText text("combat", 
 						S3D::formatStringBuffer("[p:%s] received $%i", 
 						tank->getName(), money));
 					//info.setPlayerId(weaponContext.getPlayerId());
-					ChannelManager::showText(text);
+					ChannelManager::showText(context, text);
 				}
 			}
 		}
@@ -123,14 +120,13 @@ void WeaponGiveAccessory::weaponCallback(
 				int loose = MIN(count, -number_);
 
 				tank->getAccessories().rm(accessory, loose);
-				if (!context.getServerMode())
 				{
 					ChannelText text("combat", 
 						S3D::formatStringBuffer("[p:%s] lost %i * [w:%s]", 
 						tank->getName(),
 						loose, accessory->getName()));
 					//info.setPlayerId(weaponContext.getPlayerId());
-					ChannelManager::showText(text);
+					ChannelManager::showText(context, text);
 				}
 			}
 		}

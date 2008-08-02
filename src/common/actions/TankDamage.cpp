@@ -472,7 +472,6 @@ void TankDamage::logDeath()
 				tankSelfKilled(firedTank, weapon_);
 			StatsLogger::instance()->
 				weaponKilled(weapon_, (weaponContext_.getData() & Weapon::eDataDeathAnimation));
-			if (!context_->getServerMode())
 			{
 				ChannelText text("combat", 
 					S3D::formatStringBuffer("[p:%s] killed self with a [w:%s]",
@@ -481,7 +480,7 @@ void TankDamage::logDeath()
 				//info.setPlayerId(firedPlayerId);
 				//info.setOtherPlayerId(damagedPlayerId_);
 				//info.setIcon(weaponTexture);
-				ChannelManager::showText(text);
+				ChannelManager::showText(*context_, text);
 			}
 		}
 		else if ((context_->getOptionsGame().getTeams() > 1) &&
@@ -491,7 +490,6 @@ void TankDamage::logDeath()
 				tankTeamKilled(firedTank, killedTank, weapon_);
 			StatsLogger::instance()->
 				weaponKilled(weapon_, (weaponContext_.getData() & Weapon::eDataDeathAnimation));
-			if (!context_->getServerMode())
 			{
 				ChannelText text("combat", 
 					S3D::formatStringBuffer("[p:%s] team killed [p:%s] with a [w:%s]",
@@ -501,7 +499,7 @@ void TankDamage::logDeath()
 				//info.setPlayerId(firedPlayerId);
 				//info.setOtherPlayerId(damagedPlayerId_);
 				//info.setIcon(weaponTexture);
-				ChannelManager::showText(text);
+				ChannelManager::showText(*context_, text);
 			}
 		}
 		else
@@ -510,7 +508,6 @@ void TankDamage::logDeath()
 				tankKilled(firedTank, killedTank, weapon_);
 			StatsLogger::instance()->
 				weaponKilled(weapon_, (weaponContext_.getData() & Weapon::eDataDeathAnimation));
-			if (!context_->getServerMode())
 			{
 				ChannelText text("combat", 
 					S3D::formatStringBuffer("[p:%s] %skilled [p:%s] with a [w:%s]",
@@ -521,7 +518,7 @@ void TankDamage::logDeath()
 				//info.setPlayerId(firedPlayerId);
 				//info.setOtherPlayerId(damagedPlayerId_);
 				//info.setIcon(weaponTexture);
-				ChannelManager::showText(text);
+				ChannelManager::showText(*context_, text);
 			}
 		}
 	}
@@ -534,7 +531,6 @@ void TankDamage::logDeath()
 			tankKilled(&firedTank, killedTank, weapon_); 
 		StatsLogger::instance()->
 			weaponKilled(weapon_, (weaponContext_.getData() & Weapon::eDataDeathAnimation));
-		if (!context_->getServerMode())
 		{
 			ChannelText text("combat", 
 					S3D::formatStringBuffer("[p:%s] %skilled [p:%s] with a [w:%s]",
@@ -545,7 +541,7 @@ void TankDamage::logDeath()
 			//info.setPlayerId(firedPlayerId);
 			//info.setOtherPlayerId(damagedPlayerId_);
 			//info.setIcon(weaponTexture);
-			ChannelManager::showText(text);
+			ChannelManager::showText(*context_, text);
 		}
 	}
 }

@@ -48,7 +48,7 @@ int WeaponFireContext::getIncLabelCount(unsigned int label)
 }
 
 Weapon::Weapon() : 
-	armsLevel_(-1), useUp_(true)
+	armsLevel_(-1)
 {
 
 }
@@ -62,7 +62,6 @@ bool Weapon::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
 {
 	// Get the optional weapon armslevel
 	accessoryNode->getNamedChild("armslevel", armsLevel_, false);
-	accessoryNode->getNamedChild("useup", useUp_, false);
 
 	return true;
 }

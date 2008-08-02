@@ -75,13 +75,12 @@ void WeaponGiveLife::weaponCallback(
 		tank->getLife().setLife(
 			tank->getLife().getLife() + life);
 
-		if (!context.getServerMode())
 		{
 			ChannelText text("combat", 
 				S3D::formatStringBuffer("[p:%s] received %.0f life", 
 				tank->getName(), life.asFloat()));
 			//info.setPlayerId(weaponContext.getPlayerId());
-			ChannelManager::showText(text);
+			ChannelManager::showText(context, text);
 		}
 	}
 	else
@@ -97,13 +96,12 @@ void WeaponGiveLife::weaponCallback(
 				tank->getLife().getLife() + life);
 		}
 
-		if (!context.getServerMode())
 		{
 			ChannelText text("combat", 
 				S3D::formatStringBuffer("[p:%s] lost %.0f life", 
 				tank->getName(), -life.asFloat()));
 			//info.setPlayerId(weaponContext.getPlayerId());
-			ChannelManager::showText(text);
+			ChannelManager::showText(context, text);
 		}
 	}
 }

@@ -91,7 +91,7 @@ bool ClientNewGameHandler::processMessage(
 
 		Logger::log(message);
 		ChannelText text("info", message);
-		ChannelManager::showText(text);
+		ChannelManager::showText(ScorchedClient::instance()->getContext(), text);
 	}
 
 	return result;

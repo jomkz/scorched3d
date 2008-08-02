@@ -44,7 +44,7 @@ class LUAScriptHook;
 class ScorchedContext
 {
 public:
-	ScorchedContext(const char *name);
+	ScorchedContext(const char *name, bool server);
 	virtual ~ScorchedContext();
 
 	bool getServerMode() { return serverMode; }

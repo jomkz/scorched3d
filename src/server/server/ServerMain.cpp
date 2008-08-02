@@ -24,9 +24,8 @@
 #include <weapons/AccessoryStore.h>
 #include <weapons/EconomyStore.h>
 #include <net/NetLoopBack.h>
-#include <net/NetServerTCP.h>
-#include <net/NetServerTCP2.h>
 #include <net/NetServerTCP3.h>
+#include <lua/LUAScriptHook.h>
 #include <common/Defines.h>
 #include <common/Clock.h>
 #include <common/ARGParser.h>
@@ -162,6 +161,9 @@ bool startServer(bool local, ProgressCounter *counter)
 	EconomyStore::instance();
 
 	checkSettings();
+
+	// Load all script hooks
+	if (!ScorchedServer::instance()->getLUAScriptHook().loadHooks()) return false;
 
 	return true;
 }

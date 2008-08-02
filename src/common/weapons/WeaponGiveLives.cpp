@@ -68,7 +68,6 @@ void WeaponGiveLives::weaponCallback(
 		tank->getState().setLives(
 			MAX(tank->getState().getLives() + lives_, 1));
 
-		if (!context.getServerMode())
 		{
 			if (lives_ > 0)
 			{
@@ -76,7 +75,7 @@ void WeaponGiveLives::weaponCallback(
 					S3D::formatStringBuffer("[p:%s] has received %i extra live(s)", 
 					tank->getName(), lives_));
 				//info.setPlayerId(weaponContext.getPlayerId());
-				ChannelManager::showText(text);
+				ChannelManager::showText(context, text);
 			}
 			else
 			{
@@ -84,7 +83,7 @@ void WeaponGiveLives::weaponCallback(
 					S3D::formatStringBuffer("[p:%s] has lost %i extra live(s)", 
 					tank->getName(), -lives_));
 				//info.setPlayerId(weaponContext.getPlayerId());
-				ChannelManager::showText(text);
+				ChannelManager::showText(context, text);
 			}
 		}
 	}

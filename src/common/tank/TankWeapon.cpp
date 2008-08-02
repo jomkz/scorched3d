@@ -52,27 +52,29 @@ void TankWeapon::newMatch()
 
 void TankWeapon::changed()
 {
-	int weaponCount = tank_->getAccessories().
-		getAccessoryCount(currentWeapon_);
-	if (weaponCount == 0 ||
+	if (!tank_->getAccessories().canUse(currentWeapon_) ||
 		currentWeapon_ == 0)
 	{
+		setCurrentWeapon(0);
 		std::list<Accessory *> &result =
 			tank_->getAccessories().getAllAccessoriesByGroup("weapon");
-		if (!result.empty())
+		std::list<Accessory *>::iterator itor;
+		for (itor = result.begin();
+			itor != result.end();
+			itor++)
 		{
-			setWeapon(result.front());
-		}
-		else
-		{
-			setCurrentWeapon(0);
+			if (tank_->getAccessories().canUse(*itor))
+			{
+				setWeapon(*itor);
+				break;
+			}
 		}
 	}
 }
 
 bool TankWeapon::setWeapon(Accessory *wp)
 {
-	if (tank_->getAccessories().getAccessoryCount(wp) != 0)
+	if (tank_->getAccessories().canUse(wp))
 	{
 		setCurrentWeapon(wp);
 		return true;
@@ -135,6 +137,7 @@ void TankWeapon::setCurrentWeapon(Accessory *wp)
 			}
 
 			ChannelManager::showText(
+				ScorchedClient::instance()->getContext(),
 				S3D::formatStringBuffer("Click ground to activate %s", wp->getName()));
 		}
 

@@ -49,10 +49,9 @@ ScorchedServer *ScorchedServer::instance()
 	return instance_;
 }
 
-ScorchedServer::ScorchedServer() : ScorchedContext("Server")
+ScorchedServer::ScorchedServer() : ScorchedContext("Server", true)
 {
 	deadContainer_ = new TankDeadContainer;
-	serverMode = true;
 	tankAIStore_ = new TankAIStore;
 }
 

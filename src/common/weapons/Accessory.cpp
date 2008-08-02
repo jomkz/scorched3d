@@ -44,6 +44,7 @@ Accessory::Accessory() :
 	positionSelect_(ePositionSelectNone), positionSelectLimit_(10),
 	maximumNumber_(0),
 	startingNumber_(0),
+	useNumber_(1),
 	muzzleFlash_(true),
 	aiOnly_(false),
 	botOnly_(false)
@@ -101,6 +102,9 @@ bool Accessory::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode
 
 	// Get the starting number
 	accessoryNode->getNamedChild("startingnumber", startingNumber_, false);
+
+	// Get the number to use of firing
+	accessoryNode->getNamedChild("usenumber", useNumber_, false);
 
 	// Freemarket limits
 	accessoryNode->getNamedChild("freemarketlimits", freemarketLimits_, false);

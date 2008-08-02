@@ -57,14 +57,13 @@ void Resurrection::simulate(fixed frameTime, bool &remove)
 	if (tank)
 	{
 #ifndef S3D_SERVER
-		if (!context_->getServerMode())
 		{
 			ChannelText text("combat",
 				S3D::formatStringBuffer("[p:%s] was resurrected, %i lives remaining",
 					tank->getName(),
 					tank->getState().getLives()));
 			//info.setPlayerId(playerId_);
-			ChannelManager::showText(text);
+			ChannelManager::showText(*context_, text);
 		}
 #endif
 

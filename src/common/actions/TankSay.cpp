@@ -61,7 +61,7 @@ void TankSay::init()
 
 			ChannelText text("general", text_);
 			text.setSrcPlayerId(playerId_);
-			ChannelManager::showText(text);
+			ChannelManager::showText(*context_, text);
 		}
 #endif // #ifndef S3D_SERVER
 	}

@@ -19,17 +19,29 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <common/ChannelManager.h>
+#include <engine/ScorchedContext.h>
 #ifndef S3D_SERVER
 	#include <client/ClientChannelManager.h>
+#else
+	#include <common/Logger.h>
 #endif
 
 ChannelManager::ChannelManager()
 {
 }
 
-void ChannelManager::showText(const ChannelText &text)
+void ChannelManager::showText(ScorchedContext &context, const ChannelText &text)
 {
 #ifndef S3D_SERVER
-	ClientChannelManager::instance()->showText(text);
+	if (!context.getServerMode()) 
+	{
+		ClientChannelManager::instance()->showText(text);
+	}
+#else
+	ChannelText &nonConst = (ChannelText &) text;
+	if (0 == strcmp(nonConst.getChannel(), "combat"))
+	{
+		Logger::log(nonConst.getMessage());
+	}
 #endif
 }

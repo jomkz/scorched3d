@@ -65,7 +65,6 @@ void WeaponGiveMoney::weaponCallback(
 
 	tank->getScore().setMoney(tank->getScore().getMoney() + money_);
 
-	if (!context.getServerMode())
 	{
 		if (money_ > 0)
 		{
@@ -73,7 +72,7 @@ void WeaponGiveMoney::weaponCallback(
 				S3D::formatStringBuffer("[p:%s] received $%i", 
 				tank->getName(), money_));
 			//info.setPlayerId(weaponContext.getPlayerId());
-			ChannelManager::showText(text);
+			ChannelManager::showText(context, text);
 		}
 		else
 		{
@@ -81,7 +80,7 @@ void WeaponGiveMoney::weaponCallback(
 				S3D::formatStringBuffer("[p:%s] lost $%i", 
 				tank->getName(), -money_));
 			//info.setPlayerId(weaponContext.getPlayerId());
-			ChannelManager::showText(text);
+			ChannelManager::showText(context, text);
 		}
 	}
 }

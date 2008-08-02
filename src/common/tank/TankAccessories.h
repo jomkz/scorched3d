@@ -37,8 +37,10 @@ public:
 
 	void newMatch();
 	void add(Accessory *accessory, int count, bool check = true);
-	void rm(Accessory *accessory, int count = 1);
+	void rm(Accessory *accessory, int count);
 	void clearAccessories();
+
+	bool canUse(Accessory *accessory);
 
 	void activate(Accessory *accessory);
 

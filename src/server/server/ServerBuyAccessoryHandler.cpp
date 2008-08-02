@@ -149,7 +149,7 @@ bool ServerBuyAccessoryHandler::processMessage(
 			tank, accessory->getName());
 
 		// Remove the accessory
-		tank->getAccessories().rm(accessory);
+		tank->getAccessories().rm(accessory, 1);
 		tank->getScore().setMoney(
 			tank->getScore().getMoney() + accessory->getSellPrice());
 	}

@@ -54,6 +54,7 @@ to move rather than fire.</description>
 		</accessoryaction>
 		<nomuzzleflash/>
 		<positionselection>fuel</positionselection>
+    <usenumber>0</usenumber>
 		<group>fuel</group>
 	</accessory>
 	<accessory>
@@ -72,6 +73,7 @@ accelerated rate.</description>
 		</accessoryaction>
 		<nomuzzleflash/>
 		<positionselection>fuel</positionselection>
+    <usenumber>0</usenumber>
 		<group>fuel</group>
 	</accessory>
 	<accessory>

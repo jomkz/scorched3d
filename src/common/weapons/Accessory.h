@@ -61,6 +61,7 @@ public:
 	const int getArmsLevel() { return armsLevel_; }
 	const int getMaximumNumber() { return maximumNumber_; }
 	const int getStartingNumber() { return startingNumber_; }
+	const int getUseNumber() { return useNumber_; }
 	const bool getAIOnly() { return aiOnly_; }
 	const bool getBotOnly() { return botOnly_; }
 	PositionSelectType getPositionSelect() { return positionSelect_; }
@@ -113,6 +114,7 @@ protected:
 	int originalSellPrice_;
 	int freemarketLimits_;
 	int maximumNumber_;
+	int useNumber_;
 	int startingNumber_;
 	fixed modelScale_;
 	bool muzzleFlash_;

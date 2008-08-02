@@ -20,10 +20,38 @@
 
 #include <lua/LUAScriptHook.h>
 #include <XML/XMLFile.h>
+#include <common/FileList.h>
+#include <common/Logger.h>
+#ifndef S3D_SERVER
+#include <console/ConsoleRuleMethodIAdapter.h>
+#endif
 
-LUAScriptHook::LUAScriptHook(LUAScriptFactory *factory) :
-	factory_(factory)
+LUAScriptHook::LUAScriptHook(LUAScriptFactory *factory, 
+	const std::string &hooksName,
+	const std::string &directoryName) :
+	factory_(factory),
+	hooksName_(hooksName),
+	directoryName_(directoryName)
 {
+#ifndef S3D_SERVER
+
+	new ConsoleRuleMethodIAdapter<LUAScriptHook>(
+		this, &LUAScriptHook::clearHooks, "scriptHook", 
+		ConsoleUtil::formParams(
+			ConsoleRuleParam(hooksName_),
+			ConsoleRuleParam("clear")));
+	new ConsoleRuleMethodIAdapter<LUAScriptHook>(
+		this, &LUAScriptHook::reloadHooks, "scriptHook", 
+		ConsoleUtil::formParams(
+			ConsoleRuleParam(hooksName_),
+			ConsoleRuleParam("load")));
+	new ConsoleRuleMethodIAdapter<LUAScriptHook>(
+		this, &LUAScriptHook::listHooks, "scriptHook", 
+		ConsoleUtil::formParams(
+			ConsoleRuleParam(hooksName_),
+			ConsoleRuleParam("list")));
+
+#endif
 }
 
 LUAScriptHook::~LUAScriptHook()
@@ -37,14 +65,14 @@ void LUAScriptHook::addHookProvider(const std::string &hookName)
 			(hookName, std::vector<HookEntry>()));
 }
 
-void LUAScriptHook::callHook(const std::string &hookName, std::vector<Param> &params)
+void LUAScriptHook::callHook(const std::string &hookName, const std::vector<Param> &params)
 {
 	std::map<std::string, std::vector<HookEntry> >::iterator hookItor =
 		hookNames_.find(hookName);
 	if (hookItor == hookNames_.end()) return;
 
-	std::vector<Param>::iterator paramItor, 
-		endParamItor = params.end();
+	std::vector<Param>::const_iterator paramItor;
+	std::vector<Param>::const_iterator endParamItor = params.end();
 	std::vector<HookEntry>::iterator 
 		itor = hookItor->second.begin(), 
 		endItor = hookItor->second.end();
@@ -57,13 +85,17 @@ void LUAScriptHook::callHook(const std::string &hookName, std::vector<Param> &pa
 			paramItor != endParamItor;
 			paramItor++)
 		{
-			if (paramItor->type == Param::eNumber)
+			switch (paramItor->type) 
 			{
+			case Param::eNumber:
 				script->addNumberParameter(paramItor->number);
-			}
-			else
-			{
+				break;
+			case Param::eBoolean:
+				script->addBoolParameter(paramItor->boolean);
+				break;
+			default:
 				script->addStringParameter(paramItor->str);
+				break;
 			}
 		}
 
@@ -71,7 +103,56 @@ void LUAScriptHook::callHook(const std::string &hookName, std::vector<Param> &pa
 	}
 }
 
-bool LUAScriptHook::loadHooks(const std::string &fileName)
+void LUAScriptHook::listHooks()
+{
+	Logger::log("Hooks -----------------------------");
+	std::map<std::string, std::vector<HookEntry> >::iterator topItor;
+	for (topItor = hookNames_.begin();
+		topItor != hookNames_.end();
+		topItor++)
+	{
+		Logger::log(S3D::formatStringBuffer("  %s", topItor->first.c_str()));
+	}
+}
+
+void LUAScriptHook::clearHooks()
+{
+	std::map<std::string, std::vector<HookEntry> >::iterator topItor;
+	for (topItor = hookNames_.begin();
+		topItor != hookNames_.end();
+		topItor++)
+	{
+		std::vector<HookEntry>::iterator itor;
+		for (itor = topItor->second.begin();
+			itor != topItor->second.end();
+			itor++)
+		{
+			HookEntry &entry = *itor;
+			delete entry.script;
+		}
+		topItor->second.clear();
+	}
+}
+
+bool LUAScriptHook::loadHooks()
+{
+	clearHooks();
+
+	FileList fileList(directoryName_, "*.xml", true);
+
+	FileList::ListType &files = fileList.getFiles();
+	FileList::ListType::iterator itor;
+	for (itor = files.begin();
+		itor != files.end();
+		itor++)
+	{
+		if (!loadHook(directoryName_, *itor)) return false;
+	}
+
+	return true;
+}
+
+bool LUAScriptHook::loadHook(const std::string &directoryName, const std::string &fileName)
 {
 	XMLFile file;
     if (!file.readFile(fileName))
@@ -95,8 +176,15 @@ bool LUAScriptHook::loadHooks(const std::string &fileName)
 		std::string scriptFileName, error;
 		if (!currentNode->getNamedChild("filename", scriptFileName)) return false;
 
+		if (scriptFileName.length() > 0 &&
+			scriptFileName[0] != '/' &&
+			scriptFileName[0] != '\\')
+		{
+			scriptFileName = directoryName + "/" + scriptFileName;
+		}
+
 		LUAScript *script = factory_->createScript();
-		if (!script->loadFromFile(S3D::getDataFile(scriptFileName), error))
+		if (!script->loadFromFile(scriptFileName, error))
 		{
 			S3D::dialogMessage("LUAScriptHook", S3D::formatStringBuffer(
 				"From file %s, failed to parse LUA script \"%s\"\n%s", 
@@ -141,4 +229,34 @@ bool LUAScriptHook::loadHooks(const std::string &fileName)
 	}
 
 	return true;
+}
+
+std::vector<LUAScriptHook::Param> LUAScriptHook::formParam()
+{
+	std::vector<Param> result;
+	return result;
+}
+
+std::vector<LUAScriptHook::Param> LUAScriptHook::formParam(const Param &param1)
+{
+	std::vector<Param> result;
+	result.push_back(param1);
+	return result;
+}
+
+std::vector<LUAScriptHook::Param> LUAScriptHook::formParam(const Param &param1, const Param &param2)
+{
+	std::vector<Param> result;
+	result.push_back(param1);
+	result.push_back(param2);
+	return result;
+}
+
+std::vector<LUAScriptHook::Param> LUAScriptHook::formParam(const Param &param1, const Param &param2, const Param &param3)
+{
+	std::vector<Param> result;
+	result.push_back(param1);
+	result.push_back(param2);
+	result.push_back(param3);
+	return result;
 }

@@ -15,4 +15,5 @@ void main()
     gl_TexCoord[3] = gl_TextureMatrix[3] * vertex;
 
     gl_Position = ftransform();
+    gl_FogFragCoord = max(gl_Position.z - 350.0, 0.0);
 } 

@@ -358,7 +358,7 @@ void TankMovement::moveTank(Tank *tank)
 	// -1 means use 1 unit of fuel per movement square
 	if (useF && (weapon_->getUseFuel() == -1))
 	{
-		tank->getAccessories().rm(weapon_->getParent());
+		tank->getAccessories().rm(weapon_->getParent(), 1);
 	}
 
 	// Actually move the tank

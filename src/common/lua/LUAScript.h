@@ -44,6 +44,7 @@ public:
 
 	bool addStringParameter(const std::string &str);
 	bool addNumberParameter(fixed number);
+	bool addBoolParameter(bool boolean);
 	bool addVectorParameter(const FixedVector &vector);
 
 	bool setGlobal(const std::string &name, fixed value);

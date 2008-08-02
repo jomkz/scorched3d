@@ -105,12 +105,11 @@ void TankResign::simulate(fixed frameTime, bool &remove)
 			}
 
 #ifndef S3D_SERVER
-			if (!context_->getServerMode())
 			{
 				ChannelText text("combat",
 					S3D::formatStringBuffer("[p:%s] resigned from round", tank->getName()));
 				//info.setPlayerId(playerId_);
-				ChannelManager::showText(text);
+				ChannelManager::showText(*context_, text);
 			}
 #endif // #ifndef S3D_SERVER
 		}

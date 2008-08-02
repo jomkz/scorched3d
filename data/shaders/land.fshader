@@ -6,6 +6,10 @@ varying vec3 normal,lightDir;
 
 void main()
 {
+	// add exp fog
+	float fog = exp2(-gl_Fog.density * gl_FogFragCoord * 3.0 * 1.442695);
+	float fog_factor = clamp(fog, 0.0, 1.0);
+
     // Look up the diffuse color and shadow states for each light source.
     float s0 = shadow2DProj(shadow, gl_TexCoord[3]).r;
 
@@ -25,6 +29,5 @@ void main()
 	vec3 finalColor =
 		((groundColor.rgb * 3.5) + detailColor.rgb) / 4.0 * lightcolor.rgb;
 		
-	// gl_FragColor = vec4(mix(vec3(0.1, 0.1, 0.1), finalColor, fog_factor), 1.0);
-	gl_FragColor = vec4(finalColor, 1.0);
+	gl_FragColor = vec4(mix(vec3(gl_Fog.color), finalColor, fog_factor), 1.0);
 }

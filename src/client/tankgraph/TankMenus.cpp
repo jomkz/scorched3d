@@ -428,7 +428,7 @@ bool TankMenus::AccessoryMenu::getMenuItems(const char* menuName,
 			Accessory *accessory = (*itor);
 			int accessoryCount = 
 				firstTank->getAccessories().getAccessoryCount(accessory);
-			if (accessoryCount == 0) continue;
+			if (!firstTank->getAccessories().canUse(accessory)) continue;
 
 			bool sel = false;
 			switch (accessory->getType())

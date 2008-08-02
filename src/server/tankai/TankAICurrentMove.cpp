@@ -741,7 +741,7 @@ bool TankAICurrentMove::useAvailableBatteries(Tank *tank)
 	bool result = false;
 	while (tank->getLife().getLife() < 
 		tank->getLife().getMaxLife() &&
-		tank->getAccessories().getBatteries().getNoBatteries() != 0)
+		tank->getAccessories().getBatteries().canUse())
 	{
 		std::list<Accessory *> &entries =
 			tank->getAccessories().getAllAccessoriesByType(

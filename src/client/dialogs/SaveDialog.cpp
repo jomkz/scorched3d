@@ -89,13 +89,14 @@ void SaveDialog::buttonDown(unsigned int id)
 			std::string saveFile = S3D::formatStringBuffer("%s.s3d", textBox_->getText().c_str());
 			if (ClientSave::saveClient(S3D::getSaveFile(saveFile.c_str())))
 			{
-				ChannelText text("info", S3D::formatStringBuffer("Saved as \"%s\"", saveFile.c_str()));
-				ChannelManager::showText(text);
+				ChannelText text("info", 
+					S3D::formatStringBuffer("Saved as \"%s\"", saveFile.c_str()));
+				ChannelManager::showText(ScorchedClient::instance()->getContext(), text);
 			}
 			else
 			{
 				ChannelText text("info", "Save failed");
-				ChannelManager::showText(text);
+				ChannelManager::showText(ScorchedClient::instance()->getContext(), text);
 			}
 			GLWWindowManager::instance()->hideWindow(id_);
 		}
