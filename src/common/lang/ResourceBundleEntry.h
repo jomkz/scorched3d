@@ -18,51 +18,23 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __SNPRINTF_SAMBA__
-#define __SNPRINTF_SAMBA__
+#if !defined(__INCLUDE_ResourceBundleEntry_INCLUDE__)
+#define __INCLUDE_ResourceBundleEntry_INCLUDE__
 
-#include <stdio.h> // For snprintf on linux
 #include <string>
-#include <stdarg.h> // For va_list
 
-#ifndef HAVE_SNPRINTF
-
-#define snprintf smb_snprintf
-#define vsnprintf smb_vsnprintf
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-extern int snprintf(char *str, size_t size, const char *format, ...);
-extern int vsnprintf(char *str, size_t size, const char *format, va_list ap);
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif // HAVE_SNPRINTF
-
-/*
-#define _STD_USING
-#ifdef sprintf
-#undef sprintf
-#endif 
-#define sprintf __ERROR__XX__NEVER_USE_SPRINTF__;
-
-#ifdef vsprintf
-#undef vsprintf
-#endif 
-#define vsprintf __ERROR__XX__NEVER_USE_VSPRINTF__;
-*/
-
-namespace S3D
+class ResourceBundleEntry
 {
-	//extern const char *formatStringBuffer(const char *format, ...);
-	std::string formatStringBuffer(const char *format, ...);
-	std::string formatStringList(const char *format, va_list ap);
-	char *stristr(const char *x, const char *y);
-	void trim(std::string &value);
-}
+public:
+	ResourceBundleEntry(const std::string &key);
+	ResourceBundleEntry(const std::string &key, 
+		const std::string &valu);
 
-#endif // __SNPRINTF_SAMBA__
+	const char *getKey() { return key_.c_str(); }
+	const char *getValue() { return value_.c_str(); }
+
+private:
+	std::string key_, value_;
+};
+
+#endif // __INCLUDE_ResourceBundleEntry_INCLUDE__

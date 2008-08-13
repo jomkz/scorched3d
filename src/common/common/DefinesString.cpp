@@ -25,6 +25,13 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_thread.h>
 
+void S3D::trim(std::string &value)
+{
+	int start = value.find_first_not_of(" \t\n");
+	int end = value.find_last_not_of(" \t\n");
+	value = std::string(value, start, end-start);
+}
+
 char *S3D::stristr(const char *x, const char *y)
 {
 	std::string newX(x);
