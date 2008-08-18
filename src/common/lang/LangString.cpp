@@ -18,31 +18,21 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ResourceBundleEntry_INCLUDE__)
-#define __INCLUDE_ResourceBundleEntry_INCLUDE__
-
 #include <lang/LangString.h>
-#include <vector>
 
-class ResourceBundleEntry
+void LangStringUtil::append(LangString &output, const std::string &input)
 {
-public:
-	ResourceBundleEntry(const std::string &key);
-	ResourceBundleEntry(const std::string &key, 
-		const std::string &value);
+	for (unsigned int i=0; i<input.size(); i++)
+	{
+		output.push_back(input[i]);
+	}
+}
 
-	const char *getKey() { return key_.c_str(); }
-	const char *getValue() { return value_.c_str(); }
-
-	LangString getString();
-	LangString getString(std::string param1);
-	LangString getString(std::string param1, std::string param2);
-	LangString getString(std::string param1, std::string param2, std::string param3);
-
-private:
-	std::vector<LangString> parts_;
-	std::vector<int> positions_;
-	std::string key_, value_;
-};
-
-#endif // __INCLUDE_ResourceBundleEntry_INCLUDE__
+void LangStringUtil::replace(LangString &output, const std::string &input)
+{
+	output.clear();
+	for (unsigned int i=0; i<input.size(); i++)
+	{
+		output.push_back(input[i]);
+	}
+}

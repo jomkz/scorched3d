@@ -50,12 +50,12 @@ bool GLFont2d::getInit()
 	return (textures_ != 0);
 }
 
-float GLFont2d::getWidth(float size, const std::string &text, int len)
+float GLFont2d::getWidth(float size, const LangString &text, int len)
 {
 	float width = 0.0f;
 	if (len == 0) len = (int) text.size();
 
-	char *a=(char *) text.c_str();
+	const unsigned int *a = text.c_str();
 	for (int i=0; i<len; i++, a++)
 	{
 		width += float(characters_[*a].advances) * size / height_;
@@ -63,11 +63,11 @@ float GLFont2d::getWidth(float size, const std::string &text, int len)
 	return width;
 }
 
-int GLFont2d::getChars(float size, const std::string &text, float len)
+int GLFont2d::getChars(float size, const LangString &text, float len)
 {
 	int l = 0;
 	float width = 0.0f;
-	for (char *a=(char *) text.c_str(); *a; a++)
+	for (const unsigned int *a=text.c_str(); *a; a++)
 	{
 		width += float(characters_[*a].advances) * size / height_;
 		if (width < len) l++;
@@ -77,43 +77,29 @@ int GLFont2d::getChars(float size, const std::string &text, float len)
 
 void GLFont2d::draw(Vector &color, float size, 
 	float x, float y, float z, 
-	const std::string &text)
+	const LangString &text)
 {
 	drawString((GLsizei) text.size(), color, 1.0f, size, x, y, z, text.c_str(), false);
 }
 
 void GLFont2d::drawA(Vector &color, float alpha, float size, 
 	float x, float y, float z, 
-	const std::string &text)
+	const LangString &text)
 {
 	drawString((GLsizei) text.size(), color, alpha, size, x, y, z, text.c_str(), false);
 }
 
 void GLFont2d::drawA(GLFont2dI *handler, Vector &color, float alpha, float size, 
 	  float x, float y, float z, 
-	  const std::string &text)
+	  const LangString &text)
 {
 	drawStringHandler((GLsizei) text.size(), handler, color, alpha, size, x, y, z, text.c_str());
-}
-
-void GLFont2d::drawOutline(Vector &color, float size, float size2,
-	float x, float y, float z, 
-	const std::string &text)
-{
-	drawString((GLsizei) text.size(), color, 1.0f, size, x, y, z, text.c_str(), false, size2);
-}
-
-void GLFont2d::drawOutlineA(Vector &color, float alpha, float size, float size2,
-	float x, float y, float z, 
-	const std::string &text)
-{
-	drawString((GLsizei) text.size(), color, alpha, size, x, y, z, text.c_str(), false, size2);
 }
 
 void GLFont2d::drawSubStr(int start, int len,
 	 Vector &color, float size, 
 	 float x, float y, float z, 
-	 const std::string &text)
+	 const LangString &text)
 {
 	drawSubStrA(start, len, color, 1.0f, size, x, y, z, text);
 }
@@ -121,11 +107,11 @@ void GLFont2d::drawSubStr(int start, int len,
 void GLFont2d::drawSubStrA(int start, int len,
 	Vector &color, float alpha, float size, 
 	float x, float y, float z, 
-	const std::string &text)
+	const LangString &text)
 {
 	int s = start;
 	float width = 0.0f;
-	for (char *a=(char *) text.c_str(); *a; a++)
+	for (const unsigned int *a=text.c_str(); *a; a++)
 	{
 		if (--s < 0) break;
 		width += float(characters_[*a].advances) * size / height_;
@@ -139,45 +125,118 @@ void GLFont2d::drawSubStrA(int start, int len,
 
 void GLFont2d::drawWidth(float len, Vector &color, float size, 
 	float x, float y, float z, 
-	const std::string &text)
+	const LangString &text)
 {
 	int l = getChars(size, text, len);
 	drawString(l, color, 1.0f, size, x, y, z, text.c_str(), false);
 }
 
-void GLFont2d::drawOutlineWidthRhs(float len, Vector &color, float size, float size2,
+void GLFont2d::drawWidthRhs(float len, Vector &color, float size, 
 	float x, float y, float z, 
-	const std::string &text)
+	const LangString &text)
 {
 	int slen = text.size();
 	if (slen > 0)
 	{
 		int l = 0;
 		float width = 0.0f;
-		char *a=& ((char *)text.c_str())[slen-1];
-		for (; a >= (char *) text.c_str(); a--, l++)
+		const unsigned int *a=& (text.c_str())[slen-1];
+		for (; a >= text.c_str(); a--, l++)
 		{
-			width += float(characters_[*a].advances) * (size2==0.0?size:size2) / height_;
+			width += float(characters_[*a].advances) * size / height_;
 			if (width > len) break;
 		}
 		a++;
 
-		drawString(l, color, 1.0f, size, x, y, z, a, false, size2);
+		drawString(l, color, 1.0f, size, x, y, z, a, false, 0.0f);
 	}
 }
 
-void GLFont2d::drawWidthRhs(float len, Vector &color, float size, 
+void GLFont2d::drawBilboard(Vector &color, float alpha, float size, 
+	float x, float y, float z, 
+	const LangString &text)
+{
+	drawString((GLsizei) text.size(), color, alpha, size, x, y, z, text.c_str(), true);
+}
+
+float GLFont2d::getWidth(float size, const std::string &text, int len)
+{
+	LangStringUtil::replace(langText_, text);
+	return getWidth(size, langText_, len);
+}
+
+int GLFont2d::getChars(float size, const std::string &text, float len)
+{
+	LangStringUtil::replace(langText_, text);
+	return getChars(size, langText_, len);
+}
+
+void GLFont2d::draw(Vector &color, float size, 
 	float x, float y, float z, 
 	const std::string &text)
 {
-	drawOutlineWidthRhs(len, color, size, 0.0f, x, y, z, text.c_str());
+	LangStringUtil::replace(langText_, text);
+	draw(color, size, x, y, z, langText_);
+}
+
+void GLFont2d::drawA(Vector &color, float alpha, float size, 
+	float x, float y, float z, 
+	const std::string &text)
+{
+	LangStringUtil::replace(langText_, text);
+	drawA(color, alpha, size, x, y, z, langText_);
+}
+
+void GLFont2d::drawA(GLFont2dI *handler, Vector &color, float alpha, float size, 
+	float x, float y, float z, 
+	const std::string &text)
+{
+	LangStringUtil::replace(langText_, text);
+	drawA(handler, color, alpha, size, x, y, z, langText_);
+}
+
+void GLFont2d::drawWidth(float width, 
+	Vector &color, float size, 
+	float x, float y, float z, 
+	const std::string &text)
+{
+	LangStringUtil::replace(langText_, text);
+	drawWidth(width, color, size, x, y, z, langText_);
+}
+
+void GLFont2d::drawWidthRhs(float width, 
+	Vector &color, float size, 
+	float x, float y, float z, 
+	const std::string &text)
+{
+	LangStringUtil::replace(langText_, text);
+	drawWidthRhs(width, color, size, x, y, z, langText_);
+}
+
+void GLFont2d::drawSubStr(int start, int len,
+	Vector &color, float size, 
+	float x, float y, float z, 
+	const std::string &text)
+{
+	LangStringUtil::replace(langText_, text);
+	drawSubStr(start, len, color, size, x, y, z, langText_);
+}
+
+void GLFont2d::drawSubStrA(int start, int len,
+	Vector &color, float alpha, float size, 
+	float x, float y, float z, 
+	const std::string &text)
+{
+	LangStringUtil::replace(langText_, text);
+	drawSubStrA(start, len, color, alpha, size, x, y, z, langText_);
 }
 
 void GLFont2d::drawBilboard(Vector &color, float alpha, float size, 
 	float x, float y, float z, 
 	const std::string &text)
 {
-	drawString((GLsizei) text.size(), color, alpha, size, x, y, z, text.c_str(), true);
+	LangStringUtil::replace(langText_, text);
+	drawBilboard(color, alpha, size, x, y, z, langText_);
 }
 
 static void drawLetter(char ch, GLuint list_base, GLuint *tex_base, 
@@ -212,9 +271,11 @@ static void drawLetter(char ch, GLuint list_base, GLuint *tex_base,
 	glTranslatef(bilX[0], bilX[1], bilX[2]);
 }
 
-bool GLFont2d::drawStringHandler(unsigned length, GLFont2dI *handler, Vector &color, float alpha, float size, 
+bool GLFont2d::drawStringHandler(unsigned length, 
+	GLFont2dI *handler, 
+	Vector &color, float alpha, float size, 
 	float x, float y, float z, 
-	const char *string)
+	const unsigned int *string)
 {
 	if (textures_)
 	{
@@ -256,7 +317,7 @@ bool GLFont2d::drawStringHandler(unsigned length, GLFont2dI *handler, Vector &co
 
 bool GLFont2d::drawString(unsigned length, Vector &color, float alpha, float size, 
 	float x, float y, float z, 
-	const char *string,
+	const unsigned int *string,
 	bool bilboard,
 	float size2)
 {
@@ -273,7 +334,7 @@ bool GLFont2d::drawString(unsigned length, Vector &color, float alpha, float siz
 				glTranslatef(x,y,z);
 				glScalef(size / height_, size / height_, size / height_);
 
-				for (const char *current = string; *current; current++)
+				for (const unsigned int *current = string; *current; current++)
 				{
 					drawLetter(*current, list_base_,textures_,characters_);
 				}
@@ -287,7 +348,7 @@ bool GLFont2d::drawString(unsigned length, Vector &color, float alpha, float siz
 				glPushMatrix();
 					glTranslatef(x,y,z);
 					glScalef(size / height_, size / height_, size / height_);
-					glCallLists(length, GL_UNSIGNED_BYTE, string);
+					glCallLists(length, GL_UNSIGNED_INT, string);
 				glPopMatrix();
 			glPopAttrib();
 		}

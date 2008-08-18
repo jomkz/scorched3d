@@ -18,31 +18,17 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ResourceBundleEntry_INCLUDE__)
-#define __INCLUDE_ResourceBundleEntry_INCLUDE__
+#if !defined(__INCLUDE_LangString_INCLUDE__)
+#define __INCLUDE_LangString_INCLUDE__
 
-#include <lang/LangString.h>
-#include <vector>
+#include <string>
 
-class ResourceBundleEntry
+typedef std::basic_string<unsigned int> LangString;
+
+namespace LangStringUtil
 {
-public:
-	ResourceBundleEntry(const std::string &key);
-	ResourceBundleEntry(const std::string &key, 
-		const std::string &value);
-
-	const char *getKey() { return key_.c_str(); }
-	const char *getValue() { return value_.c_str(); }
-
-	LangString getString();
-	LangString getString(std::string param1);
-	LangString getString(std::string param1, std::string param2);
-	LangString getString(std::string param1, std::string param2, std::string param3);
-
-private:
-	std::vector<LangString> parts_;
-	std::vector<int> positions_;
-	std::string key_, value_;
+	void append(LangString &output, const std::string &input);
+	void replace(LangString &output, const std::string &input);
 };
 
-#endif // __INCLUDE_ResourceBundleEntry_INCLUDE__
+#endif // __INCLUDE_LangString_INCLUDE__

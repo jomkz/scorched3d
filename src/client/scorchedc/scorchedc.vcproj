@@ -6001,6 +6001,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\lang\LangString.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\LangString.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\lang\ResourceBundle.cpp"
 				>
 			</File>
