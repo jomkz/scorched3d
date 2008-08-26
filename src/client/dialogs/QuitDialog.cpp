@@ -43,7 +43,7 @@ QuitDialog::QuitDialog() :
 		"Allows the player to quit the game.")
 {
 	killButton_ = (GLWTextButton *) 
-		addWidget(new GLWTextButton("Mass Tank Kill", 10, 115, 190, this, 
+		addWidget(new GLWTextButton(LANG_RESOURCE("Mass Tank Kill"), 10, 115, 190, this, 
 		GLWButton::ButtonFlagCenterX));
 	killButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Mass tank kill",
 		"Kills all the tanks and starts the next\n"
@@ -51,20 +51,20 @@ QuitDialog::QuitDialog() :
 		"games."));
 
 	saveButton_ = (GLWTextButton *) 
-		addWidget(new GLWTextButton("Save Game", 10, 80, 190, this,
+		addWidget(new GLWTextButton(LANG_RESOURCE("Save Game"), 10, 80, 190, this,
 		GLWButton::ButtonFlagCenterX));
 	saveButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Save Game",
 		"Saves the games.\n"
 		"Only available in single player games."));
 
 	quitButton_ = (GLWTextButton *) 
-		addWidget(new GLWTextButton("Quit Game", 10, 45, 190, this, 
+		addWidget(new GLWTextButton(LANG_RESOURCE("Quit Game"), 10, 45, 190, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX));
 	quitButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Quit Game",
 		"Quits Scorched3D"));
 
 	okButton_ = (GLWTextButton *) 
-		addWidget(new GLWTextButton("Cancel", 95, 10, 105, this, 
+		addWidget(new GLWTextButton(LANG_RESOURCE("Cancel"), 95, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX));
 	okButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Cancel",
 		"Return to the game."));

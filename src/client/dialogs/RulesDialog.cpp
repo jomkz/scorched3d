@@ -47,12 +47,12 @@ RulesDialog::RulesDialog() :
 		"in progress.")
 {
 	needCentered_ = true;
-	okId_ = addWidget(new GLWTextButton("Ok", 675, 10, 55, this, 
+	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("Ok"), 675, 10, 55, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX))->getId();
 	motdTab_ = (GLWTab *)
-		addWidget(new GLWTab("MoTD", 10, 40, 720, 400));
+		addWidget(new GLWTab("MoTD", LANG_RESOURCE("MoTD"), 10, 40, 720, 400));
 	rulesTab_ = (GLWTab *)
-		addWidget(new GLWTab("Rules", 10, 40, 720, 400));
+		addWidget(new GLWTab("Rules", LANG_RESOURCE("Rules"), 10, 40, 720, 400));
 
 	motdList_ = (GLWListView *) motdTab_->
 		addWidget(new GLWListView(10, 10, 700, 325, 100));

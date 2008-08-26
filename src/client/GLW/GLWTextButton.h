@@ -27,7 +27,7 @@
 class GLWTextButton : public GLWButton
 {
 public:
-	GLWTextButton(const std::string &buttonText = "", 
+	GLWTextButton(const LangString &buttonText = LangString(), 
 		float x = 0.0f, float y = 0.0f, float w = 0.0f, 
 		GLWButtonI *handler = 0,
 		unsigned flags = 0,
@@ -36,10 +36,10 @@ public:
 
 	virtual void draw();
 
-	void setText(const std::string &text) 
-		{ label_.setText(text); setName(text); }
-	const char *getText() { return label_.getText(); }
+	void setText(const LangString &text) 
+		{ label_.setText(text); }
 	void setColor(const Vector &color) { color_ = color; }
+	bool getEmpty() { return label_.getEmpty(); }
 
 	REGISTER_CLASS_HEADER(GLWTextButton);
 

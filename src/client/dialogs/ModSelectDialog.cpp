@@ -85,9 +85,9 @@ ModSelectDialog::ModSelectDialog() :
 	iconList_ = new GLWIconList(10.0f, 40.0f, 280.0f, 360.0f, 50.0f);
 	addWidget(iconList_);
 
-	okId_ = addWidget(new GLWTextButton("Ok", 235, 10, 55, this, 
+	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("Ok"), 235, 10, 55, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX))->getId();
-	cancelId_ = addWidget(new GLWTextButton("Cancel", 120, 10, 105, this, 
+	cancelId_ = addWidget(new GLWTextButton(LANG_RESOURCE("Cancel"), 120, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX))->getId();
 
 	iconList_->setHandler(this);

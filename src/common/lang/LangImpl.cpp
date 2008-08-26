@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <lang/LangImpl.h>
+#include <lang/ResourceBundleEntryImpl.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_thread.h>
 
@@ -53,7 +54,7 @@ ResourceBundleEntry *LangImpl::getEntry(const std::string &key)
 	}
 	if (!entry) 
 	{
-		entry = new ResourceBundleEntry(key);
+		entry = new ResourceBundleEntryImpl(key, key);
 		defaultBundle_.addEntry(entry);
 	}
 

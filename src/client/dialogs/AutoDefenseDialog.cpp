@@ -62,11 +62,11 @@ AutoDefenseDialog::AutoDefenseDialog() :
 	ddshields_->setHandler(this);
 
 	GLWPanel *buttonPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
-	GLWButton *cancelButton = new GLWTextButton("Cancel", 95, 10, 105, this, 
+	GLWButton *cancelButton = new GLWTextButton(LANG_RESOURCE("Cancel"), 95, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX);
 	cancelId_ = cancelButton->getId();
 	buttonPanel->addWidget(cancelButton, 0, SpaceRight, 10.0f);
-	GLWButton *okButton = new GLWTextButton("Ok", 235, 10, 55, this, 
+	GLWButton *okButton = new GLWTextButton(LANG_RESOURCE("Ok"), 235, 10, 55, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX);
 	okId_ = okButton->getId();
 	buttonPanel->addWidget(okButton);
@@ -169,13 +169,13 @@ void AutoDefenseDialog::displayCurrent()
 	// Put information at the top of the dialog
 	topPanel_->clear();
 	topPanel_->addWidget(new GLWFlag(tank->getColor(), 5, 15, 60));
-	topPanel_->addWidget(new GLWLabel(75, 10, tank->getName()));
+	topPanel_->addWidget(new GLWLabel(75, 10, LANG_STRING(tank->getName())));
 	topPanel_->addWidget(new GLWLabel(260, 20, 
-		S3D::formatStringBuffer("$%i", tank->getScore().getMoney())));
+		LANG_STRING(S3D::formatStringBuffer("$%i", tank->getScore().getMoney()))));
 	topPanel_->addWidget(new GLWLabel(260, 0,
-		S3D::formatStringBuffer("Round %i of %i", 
-		ScorchedClient::instance()->getOptionsTransient().getCurrentRoundNo(),
-		ScorchedClient::instance()->getOptionsGame().getNoRounds())));
+		LANG_RESOURCE_2("ROUND_OF", 
+		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsTransient().getCurrentRoundNo()),
+		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsGame().getNoRounds()))));
 
 	// Put shields info
 	static ToolTip shieldsOffTip(ToolTip::ToolTipHelp, "Shields Off",

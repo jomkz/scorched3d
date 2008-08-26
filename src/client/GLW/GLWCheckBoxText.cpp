@@ -23,13 +23,13 @@
 REGISTER_CLASS_SOURCE(GLWCheckBoxText);
 
 GLWCheckBoxText::GLWCheckBoxText(float x, float y, 
-		const char *text,
+		const LangString &text,
 		bool startState,
 		float offset) :
 	GLWidget(x, y, 0.0f, 20.0f),
 	offset_(offset),
 	box_(x, y, startState),
-	label_(x + box_.getW() + 5.0f - offset_, y - 2.0f - offset_, (char *)  text)
+	label_(x + box_.getW() + 5.0f - offset_, y - 2.0f - offset_, text)
 {
 }
 

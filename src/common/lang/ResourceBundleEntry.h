@@ -22,27 +22,20 @@
 #define __INCLUDE_ResourceBundleEntry_INCLUDE__
 
 #include <lang/LangString.h>
-#include <vector>
 
 class ResourceBundleEntry
 {
 public:
-	ResourceBundleEntry(const std::string &key);
-	ResourceBundleEntry(const std::string &key, 
-		const std::string &value);
+	virtual const char *getKey() = 0;
 
-	const char *getKey() { return key_.c_str(); }
-	const char *getValue() { return value_.c_str(); }
-
-	LangString getString();
-	LangString getString(std::string param1);
-	LangString getString(std::string param1, std::string param2);
-	LangString getString(std::string param1, std::string param2, std::string param3);
-
-private:
-	std::vector<LangString> parts_;
-	std::vector<int> positions_;
-	std::string key_, value_;
+	virtual LangString getString() = 0;
+	virtual LangString getString(const std::string &param1) = 0;
+	virtual LangString getString(const std::string &param1, 
+		const std::string &param2) = 0;
+	virtual LangString getString(const std::string &param1, 
+		const std::string &param2, const std::string &param3) = 0;
+	virtual LangString getString(const std::string &param1, 
+		const std::string &param2, const std::string &param3, const std::string &param4) = 0;
 };
 
 #endif // __INCLUDE_ResourceBundleEntry_INCLUDE__

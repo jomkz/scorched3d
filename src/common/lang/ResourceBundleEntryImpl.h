@@ -18,5 +18,35 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <lang/ResourceBundleEntry.h>
+#if !defined(__INCLUDE_ResourceBundleEntryImpl_INCLUDE__)
+#define __INCLUDE_ResourceBundleEntryImpl_INCLUDE__
 
+#include <lang/LangString.h>
+#include <lang/ResourceBundleEntry.h>
+#include <vector>
+
+class ResourceBundleEntryImpl : public ResourceBundleEntry
+{
+public:
+	ResourceBundleEntryImpl(const std::string &key);
+	ResourceBundleEntryImpl(const std::string &key, 
+		const std::string &value);
+
+	virtual const char *getKey() { return key_.c_str(); }
+
+	virtual LangString getString();
+	virtual LangString getString(const std::string &param1);
+	virtual LangString getString(const std::string &param1, 
+		const std::string &param2);
+	virtual LangString getString(const std::string &param1, 
+		const std::string &param2, const std::string &param3);
+	virtual LangString getString(const std::string &param1, 
+		const std::string &param2, const std::string &param3, const std::string &param4);
+
+private:
+	std::vector<LangString> parts_;
+	std::vector<int> positions_;
+	std::string key_;
+};
+
+#endif // __INCLUDE_ResourceBundleEntryImpl_INCLUDE__

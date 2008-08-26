@@ -19,11 +19,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <lang/ResourceBundle.h>
+#include <lang/ResourceBundleEntryImpl.h>
 #include <common/DefinesString.h>
 
 ResourceBundleEntry *ResourceBundle::getEntry(const std::string &key)
 {
-	ResourceBundleEntry searchEntry(key);
+	ResourceBundleEntryImpl searchEntry(key);
 	ResourceBundleSet::iterator findItor = entries_.find(&searchEntry);
 	if (findItor == entries_.end()) return 0;
 	return *findItor;
@@ -65,7 +66,7 @@ bool ResourceBundle::loadFromFile(const std::string &file)
 		if (key.size() == 0) continue;
 		if (key[0] == '#' || key[0] == '\\' || key[0] == ';') continue;
 
-		ResourceBundleEntry *entry = new ResourceBundleEntry(key, value);
+		ResourceBundleEntry *entry = new ResourceBundleEntryImpl(key, value);
 		addEntry(entry);
 	}
 	fclose(in);

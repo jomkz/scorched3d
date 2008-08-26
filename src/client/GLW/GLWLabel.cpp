@@ -23,7 +23,7 @@
 
 REGISTER_CLASS_SOURCE(GLWLabel);
 
-GLWLabel::GLWLabel(float x, float y, const std::string &labelText, 
+GLWLabel::GLWLabel(float x, float y, const LangString &labelText, 
 	float size, unsigned int flags) : 
 	GLWidget(x, y, 0.0f, 20.0f), size_(size),
 	color_(GLWFont::widgetFontColor), flags_(flags)
@@ -48,17 +48,21 @@ void GLWLabel::setSize(float size)
 	w_ = 0.0f;
 }
 
-void GLWLabel::setText(const std::string &text)
+void GLWLabel::setText(const LangString &text)
 { 
 	labelText_ = text.c_str(); 
 	if (flags_ & eMultiLine)
 	{
 		labelTexts_.clear();
-		char *token = strtok((char *) text.c_str(), "\n");
-		while(token != 0)
+		LangString current;
+		for (unsigned int i=0; i<text.size(); i++)
 		{
-			labelTexts_.push_back(token);
-			token = strtok(0, "\n");
+			if (text[i] != '\n') current.push_back(text[i]);
+			else 
+			{
+				labelTexts_.push_back(current);
+				current.clear();
+			}
 		}
 	}
 
@@ -73,16 +77,15 @@ void GLWLabel::calcWidth()
 		{
 			for (int i=0; i<(int) labelTexts_.size(); i++)
 			{
-				const char *text = labelTexts_[i].c_str();
 				w_ = MAX(w_, GLWFont::instance()->getGameFont()->getWidth(
-					size_, (char *) text));
+					size_, labelTexts_[i]));
 			}
 			h_ = float(labelTexts_.size()) * 20.0f / 14.0f * size_;
 		}
 		else
 		{
 			w_ = GLWFont::instance()->getGameFont()->getWidth(
-				size_, (char *) labelText_.c_str());
+				size_, labelText_);
 			h_ = 20.0f / 14.0f * size_;
 		}
 	}
@@ -99,17 +102,15 @@ void GLWLabel::draw()
 	{
 		for (int i=0; i<(int) labelTexts_.size(); i++)
 		{
-			const char *text = labelTexts_[labelTexts_.size() - (i + 1)].c_str();
-
+			const LangString &text = labelTexts_[labelTexts_.size() - (i + 1)];
 			GLWFont::instance()->getGameFont()->draw(
 				color_, size_,
-				x_, y_ + 6.0f + float(i) * 20.0f / 14.0f * size_, 0.0f, (char *) text);
+				x_, y_ + 6.0f + float(i) * 20.0f / 14.0f * size_, 0.0f, text);
 		}
 	}
 	else
 	{
 		GLWFont::instance()->getGameFont()->draw(
-			color_, size_,
-			x_, y_ + 6.0f, 0.0f, (char *) labelText_.c_str());
+			color_, size_, x_, y_ + 6.0f, 0.0f, labelText_);
 	}
 }

@@ -22,11 +22,8 @@
 #define __INCLUDE_Lang_INCLUDE__
 
 #include <string>
+#include <lang/ResourceBundleEntry.h>
 
-#define LANG_TEXT(name, key) static ResourceBundleEntry *name = \
-	Lang::instance()->getEntry(key);
-
-class ResourceBundleEntry;
 class Lang
 {
 public:

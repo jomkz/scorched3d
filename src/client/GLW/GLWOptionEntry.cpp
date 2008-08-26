@@ -41,7 +41,7 @@ void GLWOptionEntry::createEntry(
 	std::list<GLWOptionEntry> &controls, 
 	GLWPanel *parent, OptionEntry &entry)
 {
-	GLWLabel *staticText = new GLWLabel(0.0f, 0.0f, (char *) entry.getName());
+	GLWLabel *staticText = new GLWLabel(0.0f, 0.0f, LANG_RESOURCE(entry.getName()));
 	staticText->setToolTip(new ToolTip(ToolTip::ToolTipHelp, entry.getName(), entry.getDescription()));
 	parent->addWidget(staticText, 0, GLWPanel::AlignRight | 
 		GLWPanel::SpaceLeft | GLWPanel::SpaceTop, 10.0f);

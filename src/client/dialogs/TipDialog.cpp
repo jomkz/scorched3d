@@ -40,17 +40,17 @@ TipDialog::TipDialog() :
 {
 	needCentered_ = true;
 
-	helpBox_ = new GLWCheckBoxText(0.0f, 0.0f, "Show Help Tooltips");
+	helpBox_ = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("Show Help Tooltips"));
 	addWidget(helpBox_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
-	infoBox_ = new GLWCheckBoxText(0.0f, 0.0f, "Show Info Tooltips");
+	infoBox_ = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("Show Info Tooltips"));
 	addWidget(infoBox_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
 
 	GLWPanel *buttonPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
-	GLWButton *cancelButton = new GLWTextButton("Cancel", 95, 10, 105, this, 
+	GLWButton *cancelButton = new GLWTextButton(LANG_RESOURCE("Cancel"), 95, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX);
 	cancelId_ = cancelButton->getId();
 	buttonPanel->addWidget(cancelButton, 0, SpaceRight, 10.0f);
-	GLWButton *okButton = new GLWTextButton("Ok", 235, 10, 55, this, 
+	GLWButton *okButton = new GLWTextButton(LANG_RESOURCE("Ok"), 235, 10, 55, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX);
 	okId_ = okButton->getId();
 	buttonPanel->addWidget(okButton);

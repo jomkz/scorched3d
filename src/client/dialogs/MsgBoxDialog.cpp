@@ -44,14 +44,14 @@ MsgBoxDialog::MsgBoxDialog() :
 	icon_ = new GLWIcon(0.0f, 0.0f, 32.0f, 32.0f, texture);
 	topPanel->addWidget(icon_, 0, SpaceLeft | SpaceTop | AlignTop, 10.0f);
 
-	message_ = new GLWLabel(0.0f, 0.0f, "", 8.0f, GLWLabel::eMultiLine);
+	message_ = new GLWLabel(0.0f, 0.0f, LANG_STRING(""), 8.0f, GLWLabel::eMultiLine);
 	topPanel->addWidget(message_, 0, SpaceTop | SpaceLeft | SpaceRight | AlignCenterLeftRight, 10.0f);
 
 	topPanel->setLayout(GLWPanel::LayoutHorizontal);
 	addWidget(topPanel);
 
 	okButton_ = (GLWTextButton *) 
-		addWidget(new GLWTextButton("Cancel", 95, 10, 105, this, 
+		addWidget(new GLWTextButton(LANG_RESOURCE("Cancel"), 95, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagOk | 
 		GLWButton::ButtonFlagCenterX), 0, SpaceAll | AlignRight, 10.0f);
 	okButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Cancel",
@@ -70,7 +70,7 @@ MsgBoxDialog::~MsgBoxDialog()
 
 void MsgBoxDialog::show(const std::string &message)
 {
-	message_->setText(message);
+	message_->setText(LANG_STRING(message));
 	message_->calcWidth();
 	layout();
 

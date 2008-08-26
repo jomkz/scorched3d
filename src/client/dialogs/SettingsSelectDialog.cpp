@@ -60,7 +60,8 @@ SettingsSelectDialog::SettingsSelectDialog() :
 
 	GLWPanel *topPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, true, true);
 	topPanel->addWidget(controlPanel);
-	GLWButton *advancedButton = new GLWTextButton("Advanced Options", 0.0f, 0.0f, 200.0f, this,
+	GLWButton *advancedButton = new GLWTextButton(LANG_RESOURCE("Advanced Options"), 
+		0.0f, 0.0f, 200.0f, this,
 		GLWButton::ButtonFlagCenterX);
 	advancedId_ = advancedButton->getId();
 	topPanel->addWidget(advancedButton, 0, AlignRight | SpaceAll, 10.0f);
@@ -68,11 +69,11 @@ SettingsSelectDialog::SettingsSelectDialog() :
 	addWidget(topPanel, 0, SpaceAll, 10.0f);
 
 	GLWPanel *buttonPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
-	GLWButton *cancelButton = new GLWTextButton("Cancel", 0.0f, 0.0f, 105, this, 
+	GLWButton *cancelButton = new GLWTextButton(LANG_RESOURCE("Cancel"), 0.0f, 0.0f, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX);
 	cancelId_ = cancelButton->getId();
 	buttonPanel->addWidget(cancelButton, 0, SpaceRight, 10.0f);
-	GLWButton *okButton = new GLWTextButton("Ok", 0.0f, 0.0f, 55, this, 
+	GLWButton *okButton = new GLWTextButton(LANG_RESOURCE("Ok"), 0.0f, 0.0f, 55, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX);
 	okId_ = okButton->getId();
 	buttonPanel->addWidget(okButton);

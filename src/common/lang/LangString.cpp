@@ -20,6 +20,13 @@
 
 #include <lang/LangString.h>
 
+LangString LangStringUtil::convert(const std::string &input)
+{
+	LangString result;
+	append(result, input);
+	return result;
+}
+
 void LangStringUtil::append(LangString &output, const std::string &input)
 {
 	for (unsigned int i=0; i<input.size(); i++)

@@ -61,11 +61,11 @@ PlayerDialog::PlayerDialog() :
 	needCentered_ = true;
 
 	// Add buttons
-	okId_ = addWidget(new GLWTextButton("Ok", 675, 10, 55, this, 
+	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("Ok"), 675, 10, 55, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX))->getId();
 	if (ClientParams::instance()->getConnectedToServer())
 	{
-		cancelId_ = addWidget(new GLWTextButton("Cancel", 580, 10, 85, this, 
+		cancelId_ = addWidget(new GLWTextButton(LANG_RESOURCE("Cancel"), 580, 10, 85, this, 
 			GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX))->getId();
 	}
 
@@ -79,7 +79,7 @@ PlayerDialog::PlayerDialog() :
 
 	// Create players avatar choice
 	GLWLabel *avatarLabel = (GLWLabel *) 
-		infoPanel->addWidget(new GLWLabel(10, 25, "Avatar:"));
+		infoPanel->addWidget(new GLWLabel(10, 25, LANG_RESOURCE("Avatar:")));
 	avatarTip1_.setText(ToolTip::ToolTipHelp, "Avatar", 
 		"The current player's avatar.\n"
 		"Click to change.\n");
@@ -101,7 +101,7 @@ PlayerDialog::PlayerDialog() :
 		"Use the backspace or delete key to remove this name.\n"
 		"Type in a new player name via the keyboad to change.");
 	GLWLabel *nameLabel = (GLWLabel *) 
-		infoPanel->addWidget(new GLWLabel(145, 40, "Name:"));
+		infoPanel->addWidget(new GLWLabel(145, 40, LANG_RESOURCE("Name:")));
 	nameLabel->setToolTip(nameTip);
 	playerName_ = (GLWTextBox *) 
 		infoPanel->addWidget(new GLWTextBox(215, 40, 495, "Player"));
@@ -114,7 +114,7 @@ PlayerDialog::PlayerDialog() :
 		"Change the team this player will join.\n"
 		"This is only available when playing team games.");
 	teamLabel_ = (GLWLabel *) 
-		infoPanel->addWidget(new GLWLabel(145, 8, "Team:"));
+		infoPanel->addWidget(new GLWLabel(145, 8, LANG_RESOURCE("Team:")));
 	teamLabel_->setToolTip(teamTip);
 	teamDropDown_ = (GLWDropDownText *) 
 		infoPanel->addWidget(new GLWDropDownText(215, 8, 120));
@@ -127,7 +127,7 @@ PlayerDialog::PlayerDialog() :
 		"Change the color this player displayed as.\n"
 		"This is only available when playing non-team games.");
 	colorLabel_ = (GLWLabel *) 
-		infoPanel->addWidget(new GLWLabel(145, 8, "Color:"));
+		infoPanel->addWidget(new GLWLabel(145, 8, LANG_RESOURCE("Color:")));
 	colorLabel_->setToolTip(colorTip);
 	colorDropDown_ = (GLWDropDownColor *) 
 		infoPanel->addWidget(new GLWDropDownColor(215, 8, 120));
@@ -141,7 +141,7 @@ PlayerDialog::PlayerDialog() :
 		"players.  This is only available when playing\n"
 		"single player games.");
 	GLWLabel *typeLabel = (GLWLabel *) 
-		infoPanel->addWidget(new GLWLabel(520, 8, "Type:"));
+		infoPanel->addWidget(new GLWLabel(520, 8, LANG_RESOURCE("Type:")));
 	typeLabel->setToolTip(typeTip);
 	typeDropDown_ = (GLWDropDownText *) 
 		infoPanel->addWidget(new GLWDropDownText(590, 8, 120));

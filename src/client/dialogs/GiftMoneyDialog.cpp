@@ -49,13 +49,13 @@ GiftMoneyDialog::GiftMoneyDialog() :
 
 	GLWPanel *mainPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
 	mainPanel->addWidget(
-		new GLWLabel(0.0f, 0.0f, "Gift"), 
+		new GLWLabel(0.0f, 0.0f, LANG_RESOURCE("Gift")), 
 		0, SpaceRight, 10.0f);
 	money_ = (GLWDropDownText *) mainPanel->addWidget(
 		new GLWDropDownText(0.0f, 0.0f, 150.0f), 
 		0, SpaceRight, 10.0f);
 	mainPanel->addWidget(
-		new GLWLabel(0.0f, 0.0f, "to"), 
+		new GLWLabel(0.0f, 0.0f, LANG_RESOURCE("to")), 
 		0, SpaceRight, 10.0f);
 	players_ = (GLWDropDownText *) mainPanel->addWidget(
 		new GLWDropDownText(0.0f, 0.0f, 150.0f));
@@ -63,11 +63,11 @@ GiftMoneyDialog::GiftMoneyDialog() :
 	addWidget(mainPanel, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
 
 	GLWPanel *buttonPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
-	GLWButton *cancelButton = new GLWTextButton("Cancel", 95, 10, 105, this, 
+	GLWButton *cancelButton = new GLWTextButton(LANG_RESOURCE("Cancel"), 95, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX);
 	cancelId_ = cancelButton->getId();
 	buttonPanel->addWidget(cancelButton, 0, SpaceRight, 10.0f);
-	GLWButton *okButton = new GLWTextButton("Ok", 235, 10, 55, this, 
+	GLWButton *okButton = new GLWTextButton(LANG_RESOURCE("Ok"), 235, 10, 55, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX);
 	okId_ = okButton->getId();
 	buttonPanel->addWidget(okButton);

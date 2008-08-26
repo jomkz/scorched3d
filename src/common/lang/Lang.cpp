@@ -26,9 +26,3 @@ Lang *Lang::instance()
 	static LangImpl instance;
 	return &instance;
 }
-
-static void testMacro()
-{
-	LANG_TEXT(bob, "test");
-	bob->getKey();
-}

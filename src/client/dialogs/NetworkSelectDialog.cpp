@@ -91,21 +91,21 @@ NetworkSelectDialog::NetworkSelectDialog() :
 	playersIconTable_->setHandler(this);
 
 	ok_ = (GLWTextButton *) addWidget(
-		new GLWTextButton("Join Game", 640, 10, 130, this, 
+		new GLWTextButton(LANG_RESOURCE("Join Game"), 640, 10, 130, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX));
 	cancelId_ = addWidget(
-		new GLWTextButton("Cancel", 530, 10, 105, this, 
+		new GLWTextButton(LANG_RESOURCE("Cancel"), 530, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX))->getId();
 	refresh_ = (GLWTextButton *) addWidget(
-		new GLWTextButton("Refresh List", 175, 10, 150, this, 
+		new GLWTextButton(LANG_RESOURCE("Refresh List"), 175, 10, 150, this, 
 		GLWButton::ButtonFlagCenterX));
 	favourites_ = (GLWTextButton *) addWidget(
-		new GLWTextButton("Add Favourite", 10, 10, 155, this, 
+		new GLWTextButton(LANG_RESOURCE("Add Favourite"), 10, 10, 155, this, 
 		GLWButton::ButtonFlagCenterX));
 
 	ipaddress_ = (GLWTextBox *) addWidget(
 		new GLWTextBox(210.0f, 525.0f, 300.0));
-	addWidget(new GLWLabel(75.0f, 525.0f, "Connect To :"));
+	addWidget(new GLWLabel(75.0f, 525.0f, LANG_RESOURCE("Connect To :")));
 	ipaddress_->setHandler(this);
 
 	refreshType_ = (GLWDropDownText *) addWidget(
@@ -465,11 +465,11 @@ void NetworkSelectDialog::updateTable()
 	// Set the button accordingly
 	if (!ServerBrowser::instance()->getRefreshing())
 	{
-		refresh_->setText("Refresh List");
+		refresh_->setText(LANG_RESOURCE("Refresh List"));
 	}
 	else
 	{
-		refresh_->setText("Stop Refresh");
+		refresh_->setText(LANG_RESOURCE("Stop Refresh"));
 	}
 
 	// Check if we have more items to display
@@ -487,11 +487,11 @@ void NetworkSelectDialog::select(unsigned int id, const int pos, GLWSelectorEntr
 {
 	if (0 == strcmp(refreshType_->getCurrentText(), "Favourites"))
 	{
-		favourites_->setText("Del Favourite");
+		favourites_->setText(LANG_RESOURCE("Del Favourite"));
 	}
 	else
 	{
-		favourites_->setText("Add Favourite");
+		favourites_->setText(LANG_RESOURCE("Add Favourite"));
 	}
 
 	startRefresh();

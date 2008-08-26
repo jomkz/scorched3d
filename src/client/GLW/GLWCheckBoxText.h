@@ -28,7 +28,7 @@ class GLWCheckBoxText : public GLWidget
 {
 public:
 	GLWCheckBoxText(float x = 0.0f, float y = 0.0f, 
-		const char *text = "",
+		const LangString &text = LangString(),
 		bool startState = true,
 		float offset = 0.0f);
 	virtual ~GLWCheckBoxText();

@@ -36,7 +36,8 @@ public:
 class GLWTab : public GLWScrollPanel
 {
 public:
-	GLWTab(char *tabName = "", 
+	GLWTab(const std::string &tabName = "", 
+		const LangString &tabLabel = LangString(),
 		float x = 0.0f, float y = 0.0f, 
 		float w = 0.0f, float h =  0.0f);
 	virtual ~GLWTab();
@@ -48,7 +49,7 @@ public:
 	virtual void setH(float h);
 
 	float getTw();
-	const char *getName() { return label_.getText(); }
+	const char *getName() { return name_.c_str(); }
 	
 	void setDepressed();
 	bool getDepressed() { return depressed_; }
@@ -57,6 +58,7 @@ public:
 	REGISTER_CLASS_HEADER(GLWTab);
 
 protected:
+	std::string name_;
 	bool depressed_;
 	GLWLabel label_;
 	GLWTabI *handler_;

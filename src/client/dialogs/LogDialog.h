@@ -45,7 +45,7 @@ public:
 	// LoggerI
 	virtual void logMessage(LoggerInfo &info);
 
-	void setServerName(const char *name) { serverName_->setText(name); }
+	void setServerName(const char *name) { serverName_->setText(LANG_STRING(name)); }
 
 protected:
 	static LogDialog *instance_;

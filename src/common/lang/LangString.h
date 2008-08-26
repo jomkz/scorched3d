@@ -23,10 +23,14 @@
 
 #include <string>
 
-typedef std::basic_string<unsigned int> LangString;
+#define LANG_STRING(x) LangStringUtil::convert(x)
+
+typedef unsigned int LangStringStorage;
+typedef std::basic_string<LangStringStorage> LangString;
 
 namespace LangStringUtil
 {
+	LangString convert(const std::string &input);
 	void append(LangString &output, const std::string &input);
 	void replace(LangString &output, const std::string &input);
 };
