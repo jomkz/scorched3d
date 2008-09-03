@@ -50,6 +50,7 @@
 #include <client/ClientPlayerStatusHandler.h>
 #include <client/ClientState.h>
 #include <client/ClientWindowSetup.h>
+#include <lang/Lang.h>
 #include <graph/Mouse.h>
 #include <graph/Gamma.h>
 #include <graph/OptionsDisplay.h>
@@ -405,6 +406,7 @@ bool ClientMain::clientMain()
     SDL_Delay(1000);
 	Gamma::instance()->reset();
 	Sound::instance()->destroy();
+	Lang::instance()->saveUndefined();
 
 	return true;
 }

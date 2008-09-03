@@ -30,13 +30,15 @@ class LangImpl : public Lang
 public:
 	LangImpl();
 
-	ResourceBundleEntry *getEntry(const std::string &key);
+	virtual void saveUndefined();
+
+	virtual ResourceBundleEntry *getEntry(const std::string &key);
 
 protected:
 	void init();
 
 	std::vector<ResourceBundle *> bundles_;
-	ResourceBundle defaultBundle_;
+	ResourceBundle undefinedBundle_;
 };
 
 #endif // __INCLUDE_LangImpl_INCLUDE__

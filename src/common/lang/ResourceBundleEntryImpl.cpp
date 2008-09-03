@@ -31,7 +31,43 @@ ResourceBundleEntryImpl::ResourceBundleEntryImpl(const std::string &key,
 	const std::string &value) :
 	key_(key)
 {
-	parts_.push_back(LANG_STRING(value));
+	int valueLen = value.size();
+	int current = 0;
+	while (current < valueLen)
+	{
+		int bstart = value.find("{", current);
+		if (bstart == std::string::npos) 
+		{
+			parts_.push_back(LANG_STRING(std::string(value, current)));
+			break;
+		}
+
+		int bend = value.find("}", bstart);
+		if (bend == std::string::npos)
+		{
+			parts_.push_back(LANG_STRING(std::string(value, current)));
+			break;
+		}
+
+		int charstart = value.find_first_not_of("0123456789", bstart+1);
+		if (charstart != bend)
+		{
+			parts_.push_back(LANG_STRING(std::string(value, current)));
+			break;
+		}
+
+		std::string position(value, bstart+1, bend - bstart - 1);
+		std::string part(value, current, bstart-current);
+
+		positions_.push_back(atoi(position.c_str()));
+		parts_.push_back(LANG_STRING(part));
+
+		current = bend + 1;
+		if (current >= valueLen)
+		{
+			parts_.push_back(LANG_STRING(""));
+		}
+	}	
 }
 
 LangString ResourceBundleEntryImpl::getString()

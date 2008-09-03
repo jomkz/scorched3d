@@ -20,6 +20,7 @@
 
 #include <lang/LangImpl.h>
 #include <lang/ResourceBundleEntryImpl.h>
+#include <common/Defines.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_thread.h>
 
@@ -34,8 +35,17 @@ LangImpl::LangImpl()
 void LangImpl::init()
 {
 	SDL_LockMutex(langMutex);
-	bundles_.push_back(&defaultBundle_);
+	ResourceBundle *langBundle = new ResourceBundle();
+	langBundle->loadFromFile(S3D::getDataFile("data/lang/lang.resource"));
+	bundles_.push_back(langBundle);
+
+	bundles_.push_back(&undefinedBundle_);
 	SDL_UnlockMutex(langMutex);
+}
+
+void LangImpl::saveUndefined()
+{
+	undefinedBundle_.writeToFile(S3D::getDataFile("data/lang/lang_undefined.resource"));
 }
 
 ResourceBundleEntry *LangImpl::getEntry(const std::string &key)
@@ -55,7 +65,7 @@ ResourceBundleEntry *LangImpl::getEntry(const std::string &key)
 	if (!entry) 
 	{
 		entry = new ResourceBundleEntryImpl(key, key);
-		defaultBundle_.addEntry(entry);
+		undefinedBundle_.addEntry(entry);
 	}
 
 	SDL_UnlockMutex(langMutex);

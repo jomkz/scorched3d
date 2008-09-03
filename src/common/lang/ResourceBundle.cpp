@@ -73,3 +73,21 @@ bool ResourceBundle::loadFromFile(const std::string &file)
 
 	return true;
 }
+
+bool ResourceBundle::writeToFile(const std::string &file)
+{
+	FILE *out = fopen(file.c_str(), "w");
+	if (!out) return false;
+
+	ResourceBundleSet::iterator itor;
+	for (itor = entries_.begin();
+		itor != entries_.end();
+		++itor)
+	{
+		ResourceBundleEntry *entry = *itor;
+		fprintf(out, "%s = \n", entry->getKey());
+	}
+
+	fclose(out);
+	return true;
+}

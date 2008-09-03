@@ -28,6 +28,7 @@ class ResourceBundle
 {
 public:
 	bool loadFromFile(const std::string &file);
+	bool writeToFile(const std::string &file);
 
 	ResourceBundleEntry *getEntry(const std::string &key);
 	void addEntry(ResourceBundleEntry *entry);

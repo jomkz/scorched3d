@@ -29,6 +29,8 @@ class Lang
 public:
 	static Lang *instance();
 
+	virtual void saveUndefined() = 0;
+
 	virtual ResourceBundleEntry *getEntry(const std::string &key) = 0;
 };
 
