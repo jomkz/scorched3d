@@ -195,6 +195,8 @@ void Model::setupBones()
 			Vertex *vertex = mesh->getVertex(j);
 			if (vertex->boneIndex != -1)
 			{
+				DIALOG_ASSERT(vertex->boneIndex < int(bones_.size()));
+
 				BoneType *type = baseBoneTypes_[vertex->boneIndex];
 				mesh->getReferencesBones() = true;
 
