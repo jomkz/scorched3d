@@ -31,7 +31,7 @@
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <common/StatsLogger.h>
-#include <LUA/LUAScriptHook.h>
+#include <lua/LUAScriptHook.h>
 
 ServerNextRoundState::ServerNextRoundState() :
 	GameStateI("ServerNextRoundState")

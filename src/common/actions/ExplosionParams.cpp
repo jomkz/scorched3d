@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <actions/ExplosionParams.h>
-#include <LUA/LUAUtil.h>
+#include <lua/LUAUtil.h>
 #include <XML/XMLNode.h>
 
 ExplosionParams::ExplosionParams() :

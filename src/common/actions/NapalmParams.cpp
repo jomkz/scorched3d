@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <actions/NapalmParams.h>
-#include <LUA/LUAUtil.h>
+#include <lua/LUAUtil.h>
 #include <XML/XMLNode.h>
 
 NapalmParams::NapalmParams() : 
