@@ -96,7 +96,7 @@ std::string ConsoleRules::matchRule(const char *line,
 			}
 			else
 			{
-				if (0 == _stricmp(rule->getName(), nameValue.valueString.c_str()))
+				if (0 == stricmp(rule->getName(), nameValue.valueString.c_str()))
 				{
 					if (rule->matchesPartialParams(values))
 					{
