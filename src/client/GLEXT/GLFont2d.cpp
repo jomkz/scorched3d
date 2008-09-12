@@ -239,7 +239,7 @@ void GLFont2d::drawBilboard(Vector &color, float alpha, float size,
 	drawBilboard(color, alpha, size, x, y, z, langText_);
 }
 
-static void drawLetter(char ch, GLuint list_base, GLuint *tex_base, 
+static void drawLetter(unsigned int ch, GLuint list_base, GLuint *tex_base, 
 	GLFont2d::CharEntry *characters)
 {
 	Vector &bilX = GLCameraFrustum::instance()->getBilboardVectorX();

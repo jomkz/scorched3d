@@ -85,7 +85,7 @@ std::string S3D::formatStringList(const char *format, va_list ap)
 	return result;
 }
 
-extern std::string S3D::formatStringBuffer(const char *format, ...)
+std::string S3D::formatStringBuffer(const char *format, ...)
 {
 	va_list ap; 
 	va_start(ap, format); 

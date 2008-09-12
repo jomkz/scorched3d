@@ -26,6 +26,16 @@
 
 ConsoleMethods::ConsoleMethods()
 {
+
+}
+
+ConsoleMethods::~ConsoleMethods()
+{
+
+}
+
+void ConsoleMethods::init()
+{
 	new ConsoleRuleMethodIAdapter<ConsoleMethods>(
 		this, &ConsoleMethods::clear, 
 		"clear");
@@ -46,11 +56,6 @@ ConsoleMethods::ConsoleMethods()
 		this, &ConsoleMethods::consoleSave, 
 		"consolesave", 
 		ConsoleUtil::formParams(ConsoleRuleParam("filename", ConsoleRuleTypeString)));
-}
-
-ConsoleMethods::~ConsoleMethods()
-{
-
 }
 
 void ConsoleMethods::clear()

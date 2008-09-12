@@ -30,16 +30,20 @@
 ConsoleImpl::ConsoleImpl() : 
 	GameStateI("Console"),
 	height_(0.0f), opening_(false), 
-	lines_(1000), historyPosition_(-1),
+	lines_(1000), historyPosition_(-1), font_(0),
 	showCursor_(true)
 {
 	Logger::addLogger(this);
-	font_ = GLWFont::instance()->getCourierFont();
 }
 
 ConsoleImpl::~ConsoleImpl()
 {
 
+}
+
+void ConsoleImpl::init()
+{
+	methods_.init();
 }
 
 void ConsoleImpl::logMessage(LoggerInfo &info)
@@ -246,6 +250,7 @@ void ConsoleImpl::drawBackdrop(float width, float top)
 void ConsoleImpl::drawText(float width, float top)
 {
 	static Vector color(1.0f, 1.0f, 1.0f);
+	if (!font_) font_ = GLWFont::instance()->getCourierFont();
 	font_->draw(color, 14,
 		10.0f, top - (height_ - 14.0f), 0.0f, 
 		S3D::formatStringBuffer("> %s%c", 

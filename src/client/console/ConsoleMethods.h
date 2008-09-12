@@ -30,6 +30,9 @@ public:
 	ConsoleMethods();
 	virtual ~ConsoleMethods();
 
+	void init();
+
+private:
 	void clear();
 	void exit();
 	void help();
