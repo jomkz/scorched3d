@@ -161,13 +161,13 @@ void GLFont2d::drawBilboard(Vector &color, float alpha, float size,
 
 float GLFont2d::getWidth(float size, const std::string &text, int len)
 {
-	LangStringUtil::replace(langText_, text);
+	LangStringUtil::replaceToLang(langText_, text);
 	return getWidth(size, langText_, len);
 }
 
 int GLFont2d::getChars(float size, const std::string &text, float len)
 {
-	LangStringUtil::replace(langText_, text);
+	LangStringUtil::replaceToLang(langText_, text);
 	return getChars(size, langText_, len);
 }
 
@@ -175,7 +175,7 @@ void GLFont2d::draw(Vector &color, float size,
 	float x, float y, float z, 
 	const std::string &text)
 {
-	LangStringUtil::replace(langText_, text);
+	LangStringUtil::replaceToLang(langText_, text);
 	draw(color, size, x, y, z, langText_);
 }
 
@@ -183,7 +183,7 @@ void GLFont2d::drawA(Vector &color, float alpha, float size,
 	float x, float y, float z, 
 	const std::string &text)
 {
-	LangStringUtil::replace(langText_, text);
+	LangStringUtil::replaceToLang(langText_, text);
 	drawA(color, alpha, size, x, y, z, langText_);
 }
 
@@ -191,7 +191,7 @@ void GLFont2d::drawA(GLFont2dI *handler, Vector &color, float alpha, float size,
 	float x, float y, float z, 
 	const std::string &text)
 {
-	LangStringUtil::replace(langText_, text);
+	LangStringUtil::replaceToLang(langText_, text);
 	drawA(handler, color, alpha, size, x, y, z, langText_);
 }
 
@@ -200,7 +200,7 @@ void GLFont2d::drawWidth(float width,
 	float x, float y, float z, 
 	const std::string &text)
 {
-	LangStringUtil::replace(langText_, text);
+	LangStringUtil::replaceToLang(langText_, text);
 	drawWidth(width, color, size, x, y, z, langText_);
 }
 
@@ -209,7 +209,7 @@ void GLFont2d::drawWidthRhs(float width,
 	float x, float y, float z, 
 	const std::string &text)
 {
-	LangStringUtil::replace(langText_, text);
+	LangStringUtil::replaceToLang(langText_, text);
 	drawWidthRhs(width, color, size, x, y, z, langText_);
 }
 
@@ -218,7 +218,7 @@ void GLFont2d::drawSubStr(int start, int len,
 	float x, float y, float z, 
 	const std::string &text)
 {
-	LangStringUtil::replace(langText_, text);
+	LangStringUtil::replaceToLang(langText_, text);
 	drawSubStr(start, len, color, size, x, y, z, langText_);
 }
 
@@ -227,7 +227,7 @@ void GLFont2d::drawSubStrA(int start, int len,
 	float x, float y, float z, 
 	const std::string &text)
 {
-	LangStringUtil::replace(langText_, text);
+	LangStringUtil::replaceToLang(langText_, text);
 	drawSubStrA(start, len, color, alpha, size, x, y, z, langText_);
 }
 
@@ -235,7 +235,7 @@ void GLFont2d::drawBilboard(Vector &color, float alpha, float size,
 	float x, float y, float z, 
 	const std::string &text)
 {
-	LangStringUtil::replace(langText_, text);
+	LangStringUtil::replaceToLang(langText_, text);
 	drawBilboard(color, alpha, size, x, y, z, langText_);
 }
 

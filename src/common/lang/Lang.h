@@ -31,7 +31,8 @@ public:
 
 	virtual void saveUndefined() = 0;
 
-	virtual ResourceBundleEntry *getEntry(const std::string &key) = 0;
+	virtual ResourceBundleEntry *getEntry(
+		const std::string &key, const std::string &value) = 0;
 };
 
 #endif // __INCLUDE_Lang_INCLUDE__

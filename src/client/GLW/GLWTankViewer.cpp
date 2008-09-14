@@ -26,6 +26,7 @@
 #include <graph/OptionsDisplay.h>
 #include <graph/ModelRendererMesh.h>
 #include <common/DefinesString.h>
+#include <lang/LangResource.h>
 #include <GLW/GLWFont.h>
 #include <GLW/GLWTranslate.h>
 
@@ -59,12 +60,15 @@ GLWTankViewer::GLWTankViewer(float x, float y, int numH, int numV) :
 		 catItor != catagories.end();
 		 catItor++)
 	{
-		catagoryChoice_.addText((*catItor).c_str());
+		catagoryChoice_.addText(LANG_RESOURCE(*catItor, *catItor), (*catItor));
 	}
 
 	catagoryChoice_.setHandler(this);
 	catagoryChoice_.setCurrentPosition(0);
-	select(0, 0, GLWSelectorEntry(catagoryChoice_.getCurrentText()));
+	if (catagoryChoice_.getCurrentEntry()) 
+	{
+		select(0, 0, *catagoryChoice_.getCurrentEntry());
+	}
 
 	catagoryChoice_.setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Model Catagory",
 		"Displays the currently selected model catagory.\n"
@@ -120,7 +124,7 @@ void GLWTankViewer::select(unsigned int id,
 		 modelItor++)
 	{
 		TankModel *tankModel = (*modelItor);
-		if (tankModel->isOfCatagory(value.getText()))
+		if (tankModel->isOfCatagory(value.getDataText()))
 		{
 			// Check if this tank is allowed for this team
 			if (!tankModel->isOfTeam(team_) ||
@@ -369,16 +373,13 @@ void GLWTankViewer::drawCaption(int pos)
 {
 	GLState state(GLState::DEPTH_OFF);
 
+	LANG_RESOURCE_VAR_1(TANK_NAME, "TANK_NAME", "Tank Name : {0}", models_[pos].model->getName());
+
 	Vector color(0.3f, 0.3f, 0.3f);
 	GLWFont::instance()->getGameFont()->
 		drawWidth(TankInfo - 20.0f, 
 			color, 10.0f, -150.0f, 175.0f, 0.0f, 
-			S3D::formatStringBuffer("Tank Name : %s", 
-			models_[pos].model->getName()));
-	/*GLWFont::instance()->getGameFont()->
-		drawWidth(TankSquareSize * 2 + TankPadding, 
-			color, 10.0f, -70.0f, 63.0f, 0.0f, 
-			S3D::formatStringBuffer("(%i Triangles)", models_[pos]->getNoTris()));*/
+			TANK_NAME);
 }
 void GLWTankViewer::drawItem(int pos, bool selected)
 {

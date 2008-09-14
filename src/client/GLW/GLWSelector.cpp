@@ -25,7 +25,7 @@
 #include <common/Defines.h>
 #include <graph/OptionsDisplay.h>
 
-GLWSelectorEntry::GLWSelectorEntry(const std::string &text, 
+GLWSelectorEntry::GLWSelectorEntry(const LangString &text, 
 	ToolTip *tooltip, 
 	bool selected,
 	GLTexture *icon,

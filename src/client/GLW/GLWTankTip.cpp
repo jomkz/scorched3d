@@ -36,6 +36,7 @@
 #include <client/ClientState.h>
 #include <common/Defines.h>
 #include <graph/OptionsDisplay.h>
+#include <lang/LangResource.h>
 
 TankUndoMenu::TankUndoMenu(Tank *tank) :
 	tank_(tank)
@@ -63,7 +64,7 @@ void TankUndoMenu::showItems(float x, float y)
 			i, oldShots[i].power.asFloat(), oldShots[i].ele.asFloat(),
 			(360.0f - oldShots[i].rot.asFloat()));
 		entries.push_back(
-			GLWSelectorEntry(buffer, &useTip, 0, 0, (void *) 
+			GLWSelectorEntry(LANG_STRING(buffer), &useTip, 0, 0, (void *) 
 				((unsigned int) (oldShots.size() - 1 - i))));
 	}
 
@@ -133,27 +134,14 @@ void TankFuelTip::showItems(float x, float y)
 		Accessory *current = (*itor);
 		if (tank_->getAccessories().canUse(current))
 		{
-			int count = tank_->getAccessories().getAccessoryCount(current);
-
-			char buffer[128];
-			if (count >= 0)
-			{
-				snprintf(buffer, 128, "%s (%i)", 
-					current->getName(),
-					count);
-			}
-			else
-			{
-				snprintf(buffer, 128, "%s (In)",
-					current->getName());
-			}
-
-			entries.push_back(GLWSelectorEntry(buffer, &current->getToolTip(), 
+			entries.push_back(GLWSelectorEntry(
+				tank_->getAccessories().getAccessoryAndCountString(current), 
+				&current->getToolTip(), 
 				(tank_->getAccessories().getWeapons().getCurrent() == current), 
 				current->getTexture(), current));
 		}
 	}
-	entries.push_back(GLWSelectorEntry("Off", &offTip, 0, 0, 0));
+	entries.push_back(GLWSelectorEntry(LANG_RESOURCE("OFF", "Off"), &offTip, 0, 0, 0));
 	GLWSelector::instance()->showSelector(this, x, y, entries,
 		ClientState::StatePlaying);
 }
@@ -226,12 +214,12 @@ void TankBatteryTip::showItems(float x, float y)
 	{
 		for (int i=1; i<=MIN(count,10); i++)
 		{
-			char buffer[128];
-			snprintf(buffer, 128, "Use %i", i);
-			entries.push_back(GLWSelectorEntry(buffer, &useTip, 0, 0, (void *) i));
+			entries.push_back(GLWSelectorEntry(
+				LANG_RESOURCE_1("USE_I", "Use {0}", S3D::formatStringBuffer("%i", i)), 
+				&useTip, 0, 0, (void *) i));
 		}
 	}
-	entries.push_back(GLWSelectorEntry("Cancel", &offTip, 0, 0, (void *) 0));
+	entries.push_back(GLWSelectorEntry(LANG_RESOURCE("CANCEL", "Cancel"), &offTip, 0, 0, (void *) 0));
 	GLWSelector::instance()->showSelector(this, x, y, entries,
 		ClientState::StatePlaying);		
 }
@@ -288,25 +276,13 @@ void TankShieldTip::showItems(float x, float y)
 		Accessory *current = (*itor);
 		if (tank_->getAccessories().canUse(current))
 		{
-			int count = tank_->getAccessories().getAccessoryCount(current);
-
-			char buffer[128];
-			if (count >= 0)
-			{
-				snprintf(buffer, 128, "%s (%i)", 
-					current->getName(),
-					count);
-			}
-			else
-			{
-				snprintf(buffer, 128, "%s (In)",
-					current->getName());
-			}
-			entries.push_back(GLWSelectorEntry(buffer, &current->getToolTip(), 
+			entries.push_back(GLWSelectorEntry(
+				tank_->getAccessories().getAccessoryAndCountString(current), 
+				&current->getToolTip(), 
 				(currentShield == current), current->getTexture(), current));
 		}
 	}
-	entries.push_back(GLWSelectorEntry("Off", &offTip, 0, 0, 0));
+	entries.push_back(GLWSelectorEntry(LANG_RESOURCE("OFF", "Off"), &offTip, 0, 0, 0));
 	GLWSelector::instance()->showSelector(this, x, y, entries,
 		ClientState::StatePlaying);
 }
@@ -435,25 +411,13 @@ void TankParachutesTip::showItems(float x, float y)
 		Accessory *current = (*itor);
 		if (tank_->getAccessories().canUse(*itor))
 		{
-			int count = tank_->getAccessories().getAccessoryCount(current);
-
-			char buffer[128];
-			if (count >= 0)
-			{
-				snprintf(buffer, 128, "%s (%i)", 
-					current->getName(),
-					count);
-			}
-			else
-			{
-				snprintf(buffer, 128, "%s (In)",
-					current->getName());
-			}
-			entries.push_back(GLWSelectorEntry(buffer, &current->getToolTip(), 
+			entries.push_back(GLWSelectorEntry(
+				tank_->getAccessories().getAccessoryAndCountString(current), 
+				&current->getToolTip(), 
 				(currentParachute == current), current->getTexture(), current));
 		}
 	}
-	entries.push_back(GLWSelectorEntry("Off", &offTip, 0, 0, 0));
+	entries.push_back(GLWSelectorEntry(LANG_RESOURCE("OFF", "Off"), &offTip, 0, 0, 0));
 	GLWSelector::instance()->showSelector(this, x, y, entries,
 		ClientState::StatePlaying);
 }
@@ -497,8 +461,8 @@ void TankAutoDefenseTip::showItems(float x, float y)
 	
 	std::list<GLWSelectorEntry> entries;
 	if (tank_->getAccessories().getAutoDefense().haveDefense()) 
-		entries.push_back(GLWSelectorEntry("On", &useTip));
-	else entries.push_back(GLWSelectorEntry("Off", &offTip));
+		entries.push_back(GLWSelectorEntry(LANG_RESOURCE("ON", "On"), &useTip));
+	else entries.push_back(GLWSelectorEntry(LANG_RESOURCE("OFF", "Off"), &offTip));
 	GLWSelector::instance()->showSelector(0, x, y, entries,
 		ClientState::StatePlaying);
 }
@@ -558,21 +522,9 @@ void TankWeaponTip::showItems(float x, float y)
 		Accessory *weapon = (*itor);
 		if (tank_->getAccessories().canUse(weapon))
 		{
-			int count = tank_->getAccessories().getAccessoryCount(weapon);
-
-			char buffer[128];
-			if (count > 0)
-			{
-				snprintf(buffer, 128, "%s (%i)", 
-					weapon->getName(),
-					count);
-			}
-			else
-			{
-				snprintf(buffer, 128, "%s (In)", 
-					weapon->getName());
-			}
-			GLWSelectorEntry newEntry(buffer, &weapon->getToolTip(), 
+			GLWSelectorEntry newEntry(
+				tank_->getAccessories().getAccessoryAndCountString(weapon), 
+				&weapon->getToolTip(), 
 				(currentWeapon == weapon), weapon->getTexture(), weapon);
 			entries.push_back(newEntry);
 		}

@@ -84,9 +84,9 @@ SaveSelectDialog::SaveSelectDialog() :
 	iconList_ = new GLWIconList(10.0f, 40.0f, 280.0f, 360.0f, 50.0f);
 	addWidget(iconList_);
 
-	ok_ = (GLWButton *) addWidget(new GLWTextButton(LANG_RESOURCE("Ok"), 235, 10, 55, this, 
+	ok_ = (GLWButton *) addWidget(new GLWTextButton(LANG_RESOURCE("OK", "Ok"), 235, 10, 55, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX));
-	cancelId_ = addWidget(new GLWTextButton(LANG_RESOURCE("Cancel"), 120, 10, 105, this, 
+	cancelId_ = addWidget(new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 120, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX))->getId();
 	iconList_->setHandler(this);
 }

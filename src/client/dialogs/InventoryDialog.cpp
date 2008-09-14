@@ -48,16 +48,16 @@ InventoryDialog::InventoryDialog() :
 	GLWWindow("Inventory", 10.0f, 10.0f, 440.0f, 300.0f, 0,
 		"Show the current weapon inventory")
 {
-	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("Ok"), 375, 10, 55, this, 
+	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("OK", "Ok"), 375, 10, 55, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX))->getId();
 
 	sellTab_ = (GLWTab *)
-		addWidget(new GLWTab("Inv", LANG_RESOURCE("Inv"), 10, 40, 420, 160));
+		addWidget(new GLWTab("Inv", LANG_RESOURCE("INVENTORY_TAB", "Inv"), 10, 40, 420, 160));
 	topPanel_ = (GLWPanel *)
 		addWidget(new GLWPanel(10, 265, 420, 50));
 	sortBox_ = (GLWCheckBox *) addWidget(new GLWCheckBox(10, 10));
 	sortBox_->setHandler(this);
-	addWidget(new GLWLabel(35, 7, LANG_RESOURCE("Sort accessories by name")));
+	addWidget(new GLWLabel(35, 7, LANG_RESOURCE("SORT_ACCESSORIES", "Sort accessories by name")));
 }
 
 InventoryDialog::~InventoryDialog()
@@ -99,7 +99,7 @@ void InventoryDialog::addPlayerName()
 	topPanel_->addWidget(new GLWLabel(260, 20, 
 		LANG_STRING(S3D::formatStringBuffer("$%i", tank->getScore().getMoney()))));
 	topPanel_->addWidget(new GLWLabel(260, 0,
-		LANG_RESOURCE_2("ROUND_OF", 
+		LANG_RESOURCE_2("ROUND_OF", "Round {0} of {1}",
 		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsTransient().getCurrentRoundNo()),
 		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsGame().getNoRounds()))));
 }
@@ -129,9 +129,9 @@ void InventoryDialog::addPlayerWeapons()
 		GLWPanel *newPanel = (GLWPanel *)
 			sellTab_->addWidget(new GLWPanel(10.0f, (float) height, 315.0f, 20.0f, true));
 		newPanel->setToolTip(&current->getToolTip());
-		newPanel->addWidget(new GLWLabel(0, -2, count>0?LANG_STRING(S3D::formatStringBuffer("%i", count)):LANG_RESOURCE("In")));
+		newPanel->addWidget(new GLWLabel(0, -2, tank->getAccessories().getAccessoryCountString(current)));
 		newPanel->addWidget(new GLWIcon(30, 2, 16, 16, current->getTexture()));
-		newPanel->addWidget(new GLWLabel(50, -2, LANG_STRING(current->getName())));
+		newPanel->addWidget(new GLWLabel(50, -2, LANG_RESOURCE(current->getName(), current->getName())));
 		newPanel->addWidget(new GLWLabel(205, -2, 
 			LANG_STRING(S3D::formatStringBuffer("$%i/%i", current->getSellPrice(), 1))));
 

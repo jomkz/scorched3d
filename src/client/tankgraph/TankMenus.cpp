@@ -298,32 +298,33 @@ TankMenus::PlayerMenu::PlayerMenu()
 		S3D::getDataFile("data/windows/settinga.bmp"),
 		false);
 	DIALOG_ASSERT(map->getBits());
-	MainMenuDialog::instance()->addMenu("Player", 
+	MainMenuDialog::instance()->addMenu(LANG_RESOURCE("PLAYER", "Player"), 
+		"Player",
 		"Skip move, resign, and quit",
 		32, 
 		ClientState::StatePlaying, this, map);
 
 	MainMenuDialog::instance()->addMenuItem("Player", 
-		GLMenuItem("Skip Move",
+		GLMenuItem(LANG_RESOURCE("SKIP_MOVE", "Skip Move"),
 		new ToolTip(ToolTip::ToolTipHelp, "Skip Move", 
 			"Player forfits this move.")));
 	MainMenuDialog::instance()->addMenuItem("Player", 
-		GLMenuItem("Resign Round",
+		GLMenuItem(LANG_RESOURCE("RESIGN_ROUND", "Resign Round"),
 		new ToolTip(ToolTip::ToolTipHelp, "Resign Round", 
 			"Player resigns from this round.\n"
 			"Player takes no part in the rest of the round.")));
 	MainMenuDialog::instance()->addMenuItem("Player", 
-		GLMenuItem("Exit Game",
+		GLMenuItem(LANG_RESOURCE("EXIT_GAME", "Exit Game"),
 		new ToolTip(ToolTip::ToolTipHelp, "Exit Game", 
 			"Stop Playing Scorched.")));
 	if (!ClientParams::instance()->getConnectedToServer())
 	{
 		MainMenuDialog::instance()->addMenuItem("Player",
-			GLMenuItem("Mass Tank Kill",
+			GLMenuItem(LANG_RESOURCE("MASS_TANK_KILL", "Mass Tank Kill"),
 			new ToolTip(ToolTip::ToolTipHelp, "Mass Tank Kill",
 				"Kill all tanks.\nStarts the next round.")));
 		MainMenuDialog::instance()->addMenuItem("Player",
-			GLMenuItem("Save",
+			GLMenuItem(LANG_RESOURCE("SAVE", "Save"),
 			new ToolTip(ToolTip::ToolTipHelp, "Save", 
 				"Save this game.")));
 	}
@@ -382,7 +383,8 @@ TankMenus::AccessoryMenu::AccessoryMenu()
 		S3D::getDataFile("data/windows/bomba.bmp"),
 		false);
 	DIALOG_ASSERT(map->getBits());
-	MainMenuDialog::instance()->addMenu("Weapons", 
+	MainMenuDialog::instance()->addMenu(LANG_RESOURCE("WEAPONS", "Weapons"), 
+		"Weapons", 
 		"Change the current weapon and enable defenses",
 		32, 
 		ClientState::StatePlaying, this, map);
@@ -454,28 +456,16 @@ bool TankMenus::AccessoryMenu::getMenuItems(const char* menuName,
 			if (!firstIteration &&
 				0 != strcmp(lastGroup.c_str(), accessory->getTabGroupName()))
 			{
-				GLMenuItem bar("----------");
+				GLMenuItem bar(LANG_STRING("----------"));
 				bar.setSeperator();
 				result.push_back(bar);
 			}
 			lastGroup = accessory->getTabGroupName();
 			firstIteration = false;
 
-			char buffer[1024];
-			if (accessoryCount > 0)
-			{
-				snprintf(buffer, 1024, "%s (%i)", 
-					accessory->getName(), accessoryCount);
-			}
-			else
-			{
-				snprintf(buffer, 1024, "%s (In)", 
-					accessory->getName());
-			}
-
 			result.push_back(
 				GLMenuItem(
-					buffer, 
+					firstTank->getAccessories().getAccessoryAndCountString(accessory), 
 					&accessory->getToolTip(), 
 					sel,
 					accessory->getTexture(),

@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <GLW/GLWDropDownColor.h>
-#include <GLW/GLWFont.h>
 #include <image/ImageFactory.h>
 #include <client/ScorchedClient.h>
 
@@ -44,7 +43,7 @@ void GLWDropDownColor::addColor(Vector &color)
 		colorTexture_.create(map);
 	}
 
-	GLWSelectorEntry entry("", 0, false, &colorTexture_, 0);
+	GLWSelectorEntry entry(LANG_STRING(""), 0, false, &colorTexture_, 0);
 	entry.getColor() = color;
 	entry.getTextureWidth() = 32;
 	addEntry(entry);

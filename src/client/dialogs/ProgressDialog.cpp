@@ -59,7 +59,7 @@ ProgressDialog::~ProgressDialog()
 {
 }
 
-void ProgressDialog::progressChange(const std::string &op, const float percentage)
+void ProgressDialog::progressChange(const LangString &op, const float percentage)
 {
 	progressText_ = op;
 	progressPercentage_ = percentage;
@@ -145,13 +145,13 @@ void ProgressDialog::draw()
 			GLWFont::instance()->getGameShadowFont()->drawWidth(380.0f, 
 				GLWColors::black, 
 				14.0f, 0.0f - 2.0f, 33.0f + 2.0f, 0.0f, 
-				progressText_.c_str());
+				progressText_);
 
 			Vector white(1.0f, 1.0f, 1.0f);
 			GLWFont::instance()->getGameFont()->drawWidth(380.0f, 
 				white, 
 				14.0f, 0.0f, 33.0f, 0.0f, 
-				progressText_.c_str());
+				progressText_);
 		glPopMatrix();
 
 		// Draw the icon
@@ -209,7 +209,7 @@ ProgressDialogSync::~ProgressDialogSync()
 {
 }
 
-void ProgressDialogSync::progressChange(const std::string &op, const float percentage)
+void ProgressDialogSync::progressChange(const LangString &op, const float percentage)
 {
 	static Clock localTimer;
 	static float timeDelay = 0.0f;

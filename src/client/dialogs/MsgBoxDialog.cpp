@@ -51,7 +51,7 @@ MsgBoxDialog::MsgBoxDialog() :
 	addWidget(topPanel);
 
 	okButton_ = (GLWTextButton *) 
-		addWidget(new GLWTextButton(LANG_RESOURCE("Cancel"), 95, 10, 105, this, 
+		addWidget(new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 95, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagOk | 
 		GLWButton::ButtonFlagCenterX), 0, SpaceAll | AlignRight, 10.0f);
 	okButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Cancel",

@@ -18,22 +18,17 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-
-// ProgressCounter.h: interface for the ProgressCounter class.
-//
-//////////////////////////////////////////////////////////////////////
-
 #if !defined(AFX_PROGRESSCOUNTER_H__4FA8EFA4_46AC_4790_9F55_B47AEF18EFEC__INCLUDED_)
 #define AFX_PROGRESSCOUNTER_H__4FA8EFA4_46AC_4790_9F55_B47AEF18EFEC__INCLUDED_
 
-#include <string>
+#include <lang/LangString.h>
 
 class ProgressCounterI
 {
 public:
 	virtual ~ProgressCounterI();
 
-	virtual void progressChange(const std::string &op, const float percentage) = 0;
+	virtual void progressChange(const LangString &op, const float percentage) = 0;
 };
 
 class ProgressCounter  
@@ -43,14 +38,14 @@ public:
 	virtual ~ProgressCounter();
 
 	void setUser(ProgressCounterI *user) { user_ = user; }
-	void setNewOp(const std::string &op);
+	void setNewOp(const LangString &op);
 	void setNewPercentage(float percentage);
 
-	const char *getCurrentOp() { return currentOp_.c_str(); }
+	LangString &getCurrentOp() { return currentOp_; }
 	const float getCurrentPercentage() { return currentPercentage_; }
 
 protected:
-	std::string currentOp_;
+	LangString currentOp_;
 	float currentPercentage_;
 	ProgressCounterI *user_;
 

@@ -32,6 +32,7 @@
 #include <GLEXT/GLState.h>
 #include <GLEXT/GLStateExtension.h>
 #include <image/ImageFactory.h>
+#include <lang/LangResource.h>
 #include "ocean_wave_generator.h"
 
 #include <water/Water2Constants.h>
@@ -92,7 +93,7 @@ static float calculateError(Water2Points &displacement,
 
 void Water2::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)
 {
-	if (counter) counter->setNewOp("Water Motion");
+	if (counter) counter->setNewOp(LANG_RESOURCE("WATER_MOTION", "Water Motion"));
 
 	// Calculate water for position n
 	float windSpeed = ScorchedClient::instance()->
@@ -217,7 +218,7 @@ void Water2::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)
 		!OptionsDisplay::instance()->getNoWaterWaves() &&
 		!OptionsDisplay::instance()->getSimpleWaterShaders())
 	{
-		counter->setNewOp("Water Waves");
+		counter->setNewOp(LANG_RESOURCE("WATER_WAVES", "Water Waves"));
 		for (unsigned k = 0; k < wave_phases; ++k) 
 		{
 			if (counter) counter->setNewPercentage(float(k * 50) / float(wave_phases));
@@ -228,7 +229,7 @@ void Water2::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)
 	}
 
 	// Waves, oaf part 2
-	counter->setNewOp("Water Effects");
+	counter->setNewOp(LANG_RESOURCE("WATER_EFFECTS", "Water Effects"));
 	for (unsigned k = 0; k < wave_phases; ++k) 
 	{
 		if (counter) counter->setNewPercentage(float(k * 50) / float(wave_phases));

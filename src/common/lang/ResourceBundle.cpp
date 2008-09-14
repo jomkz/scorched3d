@@ -85,7 +85,9 @@ bool ResourceBundle::writeToFile(const std::string &file)
 		++itor)
 	{
 		ResourceBundleEntry *entry = *itor;
-		fprintf(out, "%s = \n", entry->getKey());
+
+		std::string value = entry->getValue();
+		fprintf(out, "%s = %s\n", entry->getKey(), value.c_str());
 	}
 
 	fclose(out);

@@ -29,7 +29,9 @@ class Image;
 class GLMenuEntry : public GLWSelectorI, public ToolTipI
 {
 public:
-	GLMenuEntry(char *menuName, 
+	GLMenuEntry(
+		const LangString &menuName,
+		char *menuNameInternal, 
 		const char *menuDescription,
 		float width, 
 		unsigned int state,
@@ -49,7 +51,8 @@ public:
 	float getW() { return width_; }
 	float getH() { return height_; }
 	bool getSelected() { return selected_; }
-	const char *getName() { return menuName_.c_str(); }
+	LangString &getName() { return menuName_; }
+	const char *getNameInternal() { return menuNameInternal_.c_str(); }
 	const char *getDescription() { return menuDescription_.c_str(); }
 	GLMenuI *getCallback() { return callback_; }
 	ToolTip &getToolTip() { return toolTip_; }
@@ -71,7 +74,8 @@ protected:
 	ToolTip toolTip_;
 	Image *icon_;
 	std::list<GLMenuItem> menuItems_;
-	std::string menuName_;
+	LangString menuName_;
+	std::string menuNameInternal_;
 	std::string menuDescription_;
 
 	void drawText();

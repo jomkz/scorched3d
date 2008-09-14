@@ -44,11 +44,11 @@ SkipDialog::SkipDialog() :
 	GLWWindow("Skip", 210.0f, 115.0f, 0,
 		"Allows the player to skip the current move.")
 {
-	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("Skip Move"), 10, 80, 190, this, 
+	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("SKIP MOVE", "Skip Move"), 10, 80, 190, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX))->getId();
-	allId_ = addWidget(new GLWTextButton(LANG_RESOURCE("Skip All Moves"), 10, 45, 190, this, 
+	allId_ = addWidget(new GLWTextButton(LANG_RESOURCE("SKIP ALL MOVES", "Skip All Moves"), 10, 45, 190, this, 
 		GLWButton::ButtonFlagCenterX))->getId();
-	cancelId_ = addWidget(new GLWTextButton(LANG_RESOURCE("Cancel"), 95, 10, 105, this, 
+	cancelId_ = addWidget(new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 95, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX))->getId();
 }
 

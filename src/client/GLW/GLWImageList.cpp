@@ -168,8 +168,8 @@ void GLWImageList::mouseDown(int button, float x, float y,
 			{
 				GLWImageListEntry *entry = (*itor);
 				entries.push_back(
-					GLWSelectorEntry(entry->shortFileName.c_str(), 
-					0, 0, &entry->texture));
+					GLWSelectorEntry(LANG_STRING(entry->shortFileName.c_str()),
+					0, 0, &entry->texture, 0, entry->shortFileName));
 			}
 
 			GLWSelector::instance()->showSelector(
@@ -195,6 +195,6 @@ void GLWImageList::mouseDrag(int button, float mx, float my,
 
 void GLWImageList::itemSelected(GLWSelectorEntry *entry, int position)
 {
-	setCurrentShortPath(entry->getText());
+	setCurrentShortPath(entry->getDataText());
 }
 

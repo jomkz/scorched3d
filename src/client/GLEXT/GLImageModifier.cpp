@@ -28,6 +28,7 @@
 #include <landscape/Landscape.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <client/ScorchedClient.h>
+#include <lang/LangResource.h>
 #include <common/Defines.h>
 
 bool ImageModifier::findIntersection(HeightMap &hMap,
@@ -99,7 +100,7 @@ void ImageModifier::addLightMapToBitmap(Image &destBitmap,
 	const int sideFade = 16;
 	const int lightMapWidth = 256; // Resolution of the light map
 
-	if (counter) counter->setNewOp("Light Map");
+	if (counter) counter->setNewOp(LANG_RESOURCE("LIGHT_MAP", "Light Map"));
 
 	// Itterate the dest bitmap pixels
 	GLfloat *bitmap = new GLfloat[lightMapWidth * lightMapWidth * 3];

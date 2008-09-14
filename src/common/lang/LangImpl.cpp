@@ -48,7 +48,8 @@ void LangImpl::saveUndefined()
 	undefinedBundle_.writeToFile(S3D::getDataFile("data/lang/lang_undefined.resource"));
 }
 
-ResourceBundleEntry *LangImpl::getEntry(const std::string &key)
+ResourceBundleEntry *LangImpl::getEntry(
+	const std::string &key, const std::string &value)
 {
 	SDL_LockMutex(langMutex);
 
@@ -64,7 +65,7 @@ ResourceBundleEntry *LangImpl::getEntry(const std::string &key)
 	}
 	if (!entry) 
 	{
-		entry = new ResourceBundleEntryImpl(key, key);
+		entry = new ResourceBundleEntryImpl(key, value);
 		undefinedBundle_.addEntry(entry);
 	}
 

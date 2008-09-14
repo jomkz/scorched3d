@@ -20,71 +20,76 @@
 
 #include <lang/LangResource.h>
 
-LangString LangResource::getKey(const std::string &key)
+LangString LangResource::getKey(const std::string &key, const std::string &value)
 {
-	LANG_RESOURCE_VAR(result, key);
+	ResourceBundleEntry *bundle = Lang::instance()->getEntry(key, value);
+	LangString result = bundle->getString();
 	return result;
 }
 
-LangString LangResource::getKey(const std::string &key, 
+LangString LangResource::getKey(const std::string &key, const std::string &value, 
 	const std::string &param1)
 {
-	LANG_RESOURCE_VAR_1(result, key, param1);
+	ResourceBundleEntry *bundle = Lang::instance()->getEntry(key, value);
+	LangString result = bundle->getString(param1);
 	return result;
 }
 
-LangString LangResource::getKey(const std::string &key, 
+LangString LangResource::getKey(const std::string &key, const std::string &value, 
 	const std::string &param1, const std::string &param2)
 {
-	LANG_RESOURCE_VAR_2(result, key, param1, param2);
+	ResourceBundleEntry *bundle = Lang::instance()->getEntry(key, value);
+	LangString result = bundle->getString(param1, param2);
 	return result;
 }
 
-LangString LangResource::getKey(const std::string &key, 
+LangString LangResource::getKey(const std::string &key, const std::string &value, 
 	const std::string &param1, const std::string &param2, const std::string &param3)
 {
-	LANG_RESOURCE_VAR_3(result, key, param1, param2, param3);
+	ResourceBundleEntry *bundle = Lang::instance()->getEntry(key, value);
+	LangString result = bundle->getString(param1, param2, param3);
 	return result;
 }
 
-LangString LangResource::getKey(const std::string &key, 
+LangString LangResource::getKey(const std::string &key, const std::string &value, 
 	const std::string &param1, const std::string &param2, const std::string &param3, const std::string &param4)
 {
-	LANG_RESOURCE_VAR_4(result, key, param1, param2, param3, param4);
+	ResourceBundleEntry *bundle = Lang::instance()->getEntry(key, value);
+	LangString result = bundle->getString(param1, param2, param3, param4);
 	return result;
 }
 
 static void testMacro()
 {
-	LANG_RESOURCE("hmm");
+	LANG_RESOURCE("hmm", "hmm value");
 
-	LANG_RESOURCE_VAR(bob_0, "test");
+	LANG_RESOURCE_VAR(bob_0, "test", "test value");
 	bob_0.c_str();
 
-	LANG_RESOURCE_VAR_1(bob_1, "test", "1");
+	LANG_RESOURCE_VAR_1(bob_1, "test", "test value {0}", "1");
 	bob_1.c_str();
 
-	LANG_RESOURCE_VAR_2(bob_2, "test", "1", "2");
+	LANG_RESOURCE_VAR_2(bob_2, "test", "test value {0} {1}", "1", "2");
 	bob_2.c_str();
 
-	LANG_RESOURCE_VAR_3(bob_3, "test", "1", "2", "3");
+	LANG_RESOURCE_VAR_3(bob_3, "test", "test value {0} {1} {2}", "1", "2", "3");
 	bob_3.c_str();
 
-	LANG_RESOURCE_VAR_4(bob_4, "test", "1", "2", "3", "4");
+	LANG_RESOURCE_VAR_4(bob_4, "test", "test value {0} {1} {2} {3}", "1", "2", "3", "4");
 	bob_4.c_str();
 
-	LANG_RESOURCE_CONST_VAR(bob_c_0, "test");
+	LANG_RESOURCE_CONST_VAR(bob_c_0, "test", "test value");
 	bob_c_0.c_str();
 
-	LANG_RESOURCE_CONST_VAR_1(bob_c_1, "test", "1");
+	LANG_RESOURCE_CONST_VAR_1(bob_c_1, "test {0}", "test value", "1");
 	bob_c_1.c_str();
 
-	LANG_RESOURCE_CONST_VAR_2(bob_c_2, "test", "1", "2");
+	LANG_RESOURCE_CONST_VAR_2(bob_c_2, "test {0} {1}", "test value", "1", "2");
 	bob_c_2.c_str();
 
-	LANG_RESOURCE_CONST_VAR_3(bob_c_3, "test", "1", "2", "3");
+	LANG_RESOURCE_CONST_VAR_3(bob_c_3, "test {0} {1} {2}", "test value", "1", "2", "3");
 	bob_c_3.c_str();
 
-	LANG_RESOURCE_CONST_VAR_4(bob_c_4, "test", "1", "2", "3", "4");
+	LANG_RESOURCE_CONST_VAR_4(bob_c_4, "test {0} {1} {2} {3}", "test value", "1", "2", "3", "4");
 	bob_c_4.c_str();
 }

@@ -42,7 +42,7 @@ GLWIconTable::GLWIconTable(
 			Column &col = *itor;
 			GLWTextButton *button = new
 				GLWTextButton(
-				LANG_RESOURCE(col.name), 
+				col.name, 
 				colx, y_ + h_ - 20.0f, 
 				col.width, this, 
 				GLWButton::ButtonFlagCenterX, 10);

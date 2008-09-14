@@ -23,7 +23,6 @@
 #include <GLEXT/GLViewPort.h>
 #include <GLEXT/GLMenuEntry.h>
 #include <GLW/GLWWindowManager.h>
-#include <GLW/GLWFont.h>
 #include <client/ScorchedClient.h>
 #include <graph/OptionsDisplay.h>
 
@@ -48,7 +47,9 @@ GLMenuEntry *GLMenu::getMenu(char *menuItem)
 	return 0;
 }
 
-bool GLMenu::addMenu(char *menuName, 
+bool GLMenu::addMenu(
+	const LangString &menuName,
+	char *menuNameInternal, 
 	const char *menuDescription,
 	float width, 
 	unsigned int state,
@@ -56,13 +57,13 @@ bool GLMenu::addMenu(char *menuName,
 	Image *icon,
 	unsigned int flags)
 {
-	if (getMenu(menuName)) return false;
+	if (getMenu(menuNameInternal)) return false;
 
 	GLMenuEntry *entry = new GLMenuEntry(
-		menuName, menuDescription,
+		menuName, menuNameInternal, menuDescription,
 		width, state, 
 		callback, icon, flags);
-	menuList_[std::string(menuName)] = entry;
+	menuList_[std::string(menuNameInternal)] = entry;
 	return true;
 }
 
@@ -125,7 +126,7 @@ void GLMenu::draw()
 				if (entry->getState() == 0 ||
 					entry->getState() == currentState)
 				{
-					if (entry->getCallback()->getEnabled(entry->getName()))
+					if (entry->getCallback()->getEnabled(entry->getNameInternal()))
 					{
 						entry->draw(
 							currentTop - 1.0f, currentWidth);
@@ -146,7 +147,7 @@ void GLMenu::draw()
 				if (entry->getState() == 0 ||
 					entry->getState() == currentState)
 				{
-					if (entry->getCallback()->getEnabled(entry->getName()))
+					if (entry->getCallback()->getEnabled(entry->getNameInternal()))
 					{
 						currentWidth -= entry->getW() + 1.0f;
 						entry->draw(

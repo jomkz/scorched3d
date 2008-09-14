@@ -24,6 +24,7 @@
 #include <GLW/GLWWindow.h>
 #include <GLW/GLWToolTip.h>
 #include <GLEXT/GLTexture.h>
+#include <lang/LangString.h>
 #include <string>
 #include <list>
 #include <map>
@@ -34,14 +35,14 @@ Defines the contents of one row of the selection dialog.
 class GLWSelectorEntry
 {
 public:
-	GLWSelectorEntry(const std::string &text = "", 
+	GLWSelectorEntry(const LangString &text = LangString(), 
 		ToolTip *tooltip = 0, 
 		bool selected = false,
 		GLTexture *icon = 0,
 		void *userData = 0,
 		const std::string &dataText = "");
 	
-	const char *getText() { return text_.c_str(); }
+	LangString &getText() { return text_; }
 	const char *getDataText() { return dataText_.c_str(); }
 	ToolTip *getToolTip() { return tip_; }
 	GLTexture *getIcon() { return icon_; }
@@ -55,7 +56,7 @@ public:
 	std::list<GLWSelectorEntry> &getPopups() { return popups_; }
 	
 protected:
-	std::string text_;
+	LangString text_;
 	std::string dataText_;
 	GLTexture *icon_;
 	int textureWidth_;

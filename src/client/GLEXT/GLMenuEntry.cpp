@@ -25,13 +25,15 @@
 #include <image/Image.h>
 #include <GLW/GLWidget.h>
 #include <GLW/GLWFont.h>
+#include <lang/LangResource.h>
 
 static Vector color(0.9f, 0.9f, 1.0f);
 static Vector itemcolor(0.1f, 0.1f, 0.4f);
 static const float menuItemHeight = 20.0f;
 
 GLMenuEntry::GLMenuEntry(
-	char *menuName, 
+	const LangString &menuName,
+	char *menuNameInternal, 
 	const char *menuDescription,
 	float width, 
 	unsigned int state,
@@ -40,10 +42,11 @@ GLMenuEntry::GLMenuEntry(
 	unsigned int flags) :
 	left_(0.0f), width_(width), height_(0.0f),
 	callback_(callback),
-	menuName_(menuName), menuDescription_(menuDescription),
+	menuName_(menuName), menuNameInternal_(menuNameInternal), 
+	menuDescription_(menuDescription),
 	state_(state), selected_(false),
 	texture_(0), icon_(icon), flags_(flags),
-	toolTip_(ToolTip::ToolTipHelp, menuName, menuDescription)
+	toolTip_(ToolTip::ToolTipHelp, menuNameInternal, menuDescription)
 {
 	toolTip_.setHandler(this);
 }
@@ -121,16 +124,16 @@ void GLMenuEntry::drawText()
 	}
 
 	// Get and print the menu title text
-	char *menuTitle = (char *) callback_->getMenuText(menuName_.c_str());
+	LangString *menuTitle = callback_->getMenuText(menuNameInternal_.c_str());
 	if (!menuTitle)
 	{
 		// Else default to the name of the menu
-		menuTitle = (char *) menuName_.c_str();
+		menuTitle = &menuName_;
 	}
 
 	GLWFont::instance()->getGameFont()->
 		draw((selected_?color:itemcolor), 12, left_ + 5.0f, 
-			top_ - 15.0f, 0.0f, menuTitle);
+			top_ - 15.0f, 0.0f, *menuTitle);
 }
 
 bool GLMenuEntry::inMenu(float currentTop, int x, int y)
@@ -153,13 +156,13 @@ bool GLMenuEntry::click(float currentTop, int x, int y)
 	if (y > currentTop - height &&
 		x>left_ && x<left_ + width_) 
 	{
-		if (callback_->menuOpened(menuName_.c_str()))
+		if (callback_->menuOpened(menuNameInternal_.c_str()))
 		{
 			selected_ = true;
 			
 			// Get the contents of the menu
 			std::list<GLMenuItem> tmpMenuItems;
-			if (callback_->getMenuItems(menuName_.c_str(), tmpMenuItems))
+			if (callback_->getMenuItems(menuNameInternal_.c_str(), tmpMenuItems))
 			{
 				menuItems_ = tmpMenuItems;
 			}
@@ -208,7 +211,7 @@ void GLMenuEntry::noItemSelected()
 void GLMenuEntry::itemSelected(GLWSelectorEntry *entry, int position)
 {
 	selected_ = false;
-	GLMenuItem item("None");
+	GLMenuItem item(LANG_RESOURCE("NONE", "None"));
 
 	int pos = 0;
 	std::list<GLMenuItem>::iterator itor;
@@ -222,14 +225,14 @@ void GLMenuEntry::itemSelected(GLWSelectorEntry *entry, int position)
 		}
 	}
 
-	callback_->menuSelection(menuName_.c_str(), position, item);
+	callback_->menuSelection(menuNameInternal_.c_str(), position, item);
 }
 
 void GLMenuEntry::populateCalled(unsigned int id)
 {
 	if (callback_)
 	{
-		const char *text = callback_->getMenuToolTip(menuName_.c_str());
-		if (text) toolTip_.setText(ToolTip::ToolTipHelp, menuName_.c_str(), text);
+		const char *text = callback_->getMenuToolTip(menuNameInternal_.c_str());
+		if (text) toolTip_.setText(ToolTip::ToolTipHelp, menuNameInternal_.c_str(), text);
 	}
 }

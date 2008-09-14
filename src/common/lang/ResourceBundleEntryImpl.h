@@ -33,6 +33,7 @@ public:
 		const std::string &value);
 
 	virtual const char *getKey() { return key_.c_str(); }
+	virtual std::string getValue();
 
 	virtual LangString getString();
 	virtual LangString getString(const std::string &param1);

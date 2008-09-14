@@ -30,6 +30,7 @@
 #include <movement/TargetMovement.h>
 #include <common/Logger.h>
 #include <tankai/TankAIAdder.h>
+#include <lang/LangResource.h>
 #ifndef S3D_SERVER
 #include <land/VisibilityPatchGrid.h>
 #endif
@@ -132,7 +133,7 @@ void GroundMaps::generateObject(RandomGenerator &generator,
 	unsigned int &playerId,
 	ProgressCounter *counter)
 {
-	if (counter) counter->setNewOp("Populating Landscape");
+	if (counter) counter->setNewOp(LANG_RESOURCE("POPULATING_LANDSCAPE", "Populating Landscape"));
 
 	// Generate all the objects using the objects definitions
 	for (unsigned int i=0; i<place.placements.size(); i++)

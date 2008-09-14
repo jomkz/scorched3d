@@ -25,6 +25,7 @@
 #include <common/Defines.h>
 #include <image/ImageBitmap.h>
 #include <image/ImageFactory.h>
+#include <lang/LangResource.h>
 
 void HeightMapModifier::levelSurround(HeightMap &hmap)
 {
@@ -59,7 +60,7 @@ void HeightMapModifier::noise(HeightMap &hmap,
 	ProgressCounter *counter)
 {
 	if (defn.noisefactor == 0) return;
-	if (counter) counter->setNewOp("Noise");
+	if (counter) counter->setNewOp(LANG_RESOURCE("NOISE", "Noise"));
 
 	unsigned int randomU = generator.getRandUInt() % 5000;
 	int random = (int) randomU;
@@ -101,7 +102,7 @@ void HeightMapModifier::edgeEnhance(HeightMap &hmap,
 	RandomGenerator &generator,
 	ProgressCounter *counter)
 {
-	if (counter) counter->setNewOp("Edge Enhance");
+	if (counter) counter->setNewOp(LANG_RESOURCE("EDGE_ENHANCE", "Edge Enhance"));
 	
 	fixed *newhMap_ = new fixed[(hmap.getMapWidth()+1) * (hmap.getMapHeight()+1)];
 	fixed *point = newhMap_;
@@ -191,7 +192,7 @@ void HeightMapModifier::waterErrosion(HeightMap &hmap,
 	ProgressCounter *counter)
 {
 	if (defn.errosions == 0) return;
-	if (counter) counter->setNewOp("Water Errosion");
+	if (counter) counter->setNewOp(LANG_RESOURCE("WATER_ERROSION", "Water Errosion"));
 
 	// Copy the height map, so we don't keep running down the same paths
 	// as we have already created
@@ -316,7 +317,7 @@ void HeightMapModifier::smooth(HeightMap &hmap,
 							   ProgressCounter *counter)
 {
 	if (defn.landsmoothing == 0) return;
-	if (counter) counter->setNewOp("Smoothing");
+	if (counter) counter->setNewOp(LANG_RESOURCE("SMOOTING", "Smoothing"));
 
 	fixed *newhMap_ = new fixed[(hmap.getMapWidth()+1) * (hmap.getMapHeight()+1)];
 
@@ -374,7 +375,7 @@ void HeightMapModifier::scale(HeightMap &hmap,
 							  RandomGenerator &generator, 
 							  ProgressCounter *counter)
 {
-	if (counter) counter->setNewOp("Scaling Phase 1");
+	if (counter) counter->setNewOp(LANG_RESOURCE("SCALING_PHASE_1", "Scaling Phase 1"));
 
 	fixed max = hmap.getHeight(0,0);
 	fixed min = hmap.getHeight(0,0);
@@ -390,7 +391,7 @@ void HeightMapModifier::scale(HeightMap &hmap,
 		}
 	}
 
-	if (counter) counter->setNewOp("Scaling Phase 2");
+	if (counter) counter->setNewOp(LANG_RESOURCE("SCALING_PHASE_2", "Scaling Phase 2"));
 
 	fixed realMax = ((fixed(defn.landheightmax) - fixed(defn.landheightmin)) * generator.getRandFixed()) + 
 		defn.landheightmin;
@@ -454,7 +455,7 @@ void HeightMapModifier::generateTerrain(HeightMap &hmap,
 										RandomGenerator &offsetGenerator,
 										ProgressCounter *counter)
 {
-	if (counter) counter->setNewOp("Teraform Landscape");
+	if (counter) counter->setNewOp(LANG_RESOURCE("TERAFORM_LANDSCAPE", "Teraform Landscape"));
 
 	// Create a default mask that allows everything
 	ImageBitmap bmap(256, 256);

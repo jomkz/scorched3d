@@ -29,6 +29,7 @@
 #include <common/OptionsTransient.h>
 #include <common/Defines.h>
 #include <client/ScorchedClient.h>
+#include <lang/LangResource.h>
 
 RulesDialog *RulesDialog::instance_ = 0;
 
@@ -47,12 +48,12 @@ RulesDialog::RulesDialog() :
 		"in progress.")
 {
 	needCentered_ = true;
-	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("Ok"), 675, 10, 55, this, 
+	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("OK", "Ok"), 675, 10, 55, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX))->getId();
 	motdTab_ = (GLWTab *)
-		addWidget(new GLWTab("MoTD", LANG_RESOURCE("MoTD"), 10, 40, 720, 400));
+		addWidget(new GLWTab("MoTD", LANG_RESOURCE("MOTD_TAB", "MoTD"), 10, 40, 720, 400));
 	rulesTab_ = (GLWTab *)
-		addWidget(new GLWTab("Rules", LANG_RESOURCE("Rules"), 10, 40, 720, 400));
+		addWidget(new GLWTab("Rules", LANG_RESOURCE("RULES_TAB", "Rules"), 10, 40, 720, 400));
 
 	motdList_ = (GLWListView *) motdTab_->
 		addWidget(new GLWListView(10, 10, 700, 325, 100));
@@ -151,44 +152,55 @@ void RulesDialog::drawRules()
 	const char *type = "Annihilate free for all";
 	if (options.getTeams() > 1) type = "Annihilate opposing team(s)";
 
+	LANG_RESOURCE_VAR_1(TYPE_LABEL, "TYPE_LABEL", "Type : {0}", type);
 	GLWFont::instance()->getGameFont()->draw(
 		yellow,
 		12,
 		left, top - 45.0f, 0.0f,
-		S3D::formatStringBuffer("Type : %s", 
-		type));
+		TYPE_LABEL);
 
-
+	LANG_RESOURCE_VAR_1(MOD_LABEL, "MOD_LABEL", "Mod : {0}", 
+		ScorchedClient::instance()->getOptionsGame().getMod());
 	GLWFont::instance()->getGameFont()->draw(
 		yellow,
 		12,
 		left, top - 75.0f, 0.0f,
-		S3D::formatStringBuffer("Mod : %s", 
-		ScorchedClient::instance()->getOptionsGame().getMod()));
+		MOD_LABEL);
+
+	LANG_RESOURCE_VAR_1(GAME_TYPE_LABEL, "GAME_TYPE_LABEL", "Game type : {0}", 
+		ScorchedClient::instance()->getOptionsTransient().getGameType());
 	GLWFont::instance()->getGameFont()->draw(
 		yellow,
 		12,
 		left, top - 90.0f, 0.0f,
-		S3D::formatStringBuffer("Game type : %s", 
-		ScorchedClient::instance()->getOptionsTransient().getGameType()));
+		GAME_TYPE_LABEL);
+
+	LANG_RESOURCE_VAR_1(TEAMS_LABEL, "TEAMS_LABEL", "Teams : {0}", 
+		S3D::formatStringBuffer("%i", options.getTeams()));
+	LANG_RESOURCE_VAR(TEAMS_NONE, "TEAMS_NONE", "Teams : None");
 	GLWFont::instance()->getGameFont()->draw(
 		yellow,
 		12,
 		left, top - 105.0f, 0.0f,
-		S3D::formatStringBuffer(((options.getTeams() > 1)?"Teams : %i":"Teams : None"),
-		options.getTeams()));
+		(options.getTeams() > 1)?TEAMS_LABEL:TEAMS_NONE);
+
+	LANG_RESOURCE_VAR_1(SHOT_TIME_LABEL, "SHOT_TIME_LABEL", "Shot Time : {0}", 
+		S3D::formatStringBuffer("%i", options.getShotTime()));
+	LANG_RESOURCE_VAR(SHOT_TIME_UNLIMITED, "SHOT_TIME_UNLIMITED", "Shot time : Unlimited");
 	GLWFont::instance()->getGameFont()->draw(
 		yellow,
 		12,
 		left, top - 135.0f, 0.0f,
-		S3D::formatStringBuffer(((options.getShotTime() > 0)?"Shot time : %i (s)":"Shot time : Unlimited"),
-		options.getShotTime()));
+		(options.getShotTime() > 0)?SHOT_TIME_LABEL:SHOT_TIME_UNLIMITED);
+
+	LANG_RESOURCE_VAR_1(BUYING_TIME_LABEL, "BUYING_TIME_LABEL", "Buying Time : {0}", 
+		S3D::formatStringBuffer("%i", options.getShotTime()));
+	LANG_RESOURCE_VAR(BUYING_TIME_UNLIMITED, "BUYING_TIME_UNLIMITED", "Buying time : Unlimited");
 	GLWFont::instance()->getGameFont()->draw(
 		yellow,
 		12,
 		left, top - 150.0f, 0.0f,
-		S3D::formatStringBuffer(((options.getBuyingTime() > 0)?"Buying time : %i (s)":"Buying time : Unlimited"),
-		options.getShotTime()));
+		(options.getBuyingTime() > 0)?BUYING_TIME_LABEL:BUYING_TIME_UNLIMITED);
 }
 
 void RulesDialog::buttonDown(unsigned int id)

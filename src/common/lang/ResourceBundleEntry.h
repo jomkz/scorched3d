@@ -27,6 +27,7 @@ class ResourceBundleEntry
 {
 public:
 	virtual const char *getKey() = 0;
+	virtual std::string getValue() = 0;
 
 	virtual LangString getString() = 0;
 	virtual LangString getString(const std::string &param1) = 0;

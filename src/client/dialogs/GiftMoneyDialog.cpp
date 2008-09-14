@@ -49,13 +49,13 @@ GiftMoneyDialog::GiftMoneyDialog() :
 
 	GLWPanel *mainPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
 	mainPanel->addWidget(
-		new GLWLabel(0.0f, 0.0f, LANG_RESOURCE("Gift")), 
+		new GLWLabel(0.0f, 0.0f, LANG_RESOURCE("GIFT", "Gift")), 
 		0, SpaceRight, 10.0f);
 	money_ = (GLWDropDownText *) mainPanel->addWidget(
 		new GLWDropDownText(0.0f, 0.0f, 150.0f), 
 		0, SpaceRight, 10.0f);
 	mainPanel->addWidget(
-		new GLWLabel(0.0f, 0.0f, LANG_RESOURCE("to")), 
+		new GLWLabel(0.0f, 0.0f, LANG_RESOURCE("TO", "to")), 
 		0, SpaceRight, 10.0f);
 	players_ = (GLWDropDownText *) mainPanel->addWidget(
 		new GLWDropDownText(0.0f, 0.0f, 150.0f));
@@ -63,11 +63,11 @@ GiftMoneyDialog::GiftMoneyDialog() :
 	addWidget(mainPanel, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
 
 	GLWPanel *buttonPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
-	GLWButton *cancelButton = new GLWTextButton(LANG_RESOURCE("Cancel"), 95, 10, 105, this, 
+	GLWButton *cancelButton = new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 95, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX);
 	cancelId_ = cancelButton->getId();
 	buttonPanel->addWidget(cancelButton, 0, SpaceRight, 10.0f);
-	GLWButton *okButton = new GLWTextButton(LANG_RESOURCE("Ok"), 235, 10, 55, this, 
+	GLWButton *okButton = new GLWTextButton(LANG_RESOURCE("OK", "Ok"), 235, 10, 55, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX);
 	okId_ = okButton->getId();
 	buttonPanel->addWidget(okButton);
@@ -100,19 +100,19 @@ void GiftMoneyDialog::display()
 
 	// Add available amounts of money
 	if (currentTank->getScore().getMoney() >= 1000)
-		money_->addEntry(GLWSelectorEntry("$1000", 0, false, 0, (void *) 1000));
+		money_->addEntry(GLWSelectorEntry(LANG_RESOURCE("1000_DOLLARS", "$1000"), 0, false, 0, (void *) 1000));
 	if (currentTank->getScore().getMoney() >= 2500)
-		money_->addEntry(GLWSelectorEntry("$2500", 0, false, 0, (void *) 2500));
+		money_->addEntry(GLWSelectorEntry(LANG_RESOURCE("2500_DOLLARS", "$2500"), 0, false, 0, (void *) 2500));
 	if (currentTank->getScore().getMoney() >= 5000)
-		money_->addEntry(GLWSelectorEntry("$5000", 0, false, 0, (void *) 5000));
+		money_->addEntry(GLWSelectorEntry(LANG_RESOURCE("5000_DOLLARS", "$5000"), 0, false, 0, (void *) 5000));
 	if (currentTank->getScore().getMoney() >= 10000)
-		money_->addEntry(GLWSelectorEntry("$10000", 0, false, 0, (void *) 10000));
+		money_->addEntry(GLWSelectorEntry(LANG_RESOURCE("10000_DOLLARS", "$10000"), 0, false, 0, (void *) 10000));
 	if (currentTank->getScore().getMoney() >= 15000)
-		money_->addEntry(GLWSelectorEntry("$15000", 0, false, 0, (void *) 15000));
+		money_->addEntry(GLWSelectorEntry(LANG_RESOURCE("15000_DOLLARS", "$15000"), 0, false, 0, (void *) 15000));
 	if (currentTank->getScore().getMoney() >= 20000)
-		money_->addEntry(GLWSelectorEntry("$20000", 0, false, 0, (void *) 20000));
+		money_->addEntry(GLWSelectorEntry(LANG_RESOURCE("20000_DOLLARS", "$20000"), 0, false, 0, (void *) 20000));
 	if (currentTank->getScore().getMoney() >= 25000)
-		money_->addEntry(GLWSelectorEntry("$25000", 0, false, 0, (void *) 25000));
+		money_->addEntry(GLWSelectorEntry(LANG_RESOURCE("25000_DOLLARS", "$25000"), 0, false, 0, (void *) 25000));
 
 	// Add all tanks in the same team as the current
 	std::map<unsigned int, Tank *> &tanks = 
@@ -130,7 +130,7 @@ void GiftMoneyDialog::display()
 			tank->getState().getState() == TankState::sNormal))
 		{
 			players_->addEntry(GLWSelectorEntry(
-				tank->getName(), 0, false, 0, (void *) tank->getPlayerId()));
+				LANG_STRING(tank->getName()), 0, false, 0, (void *) tank->getPlayerId()));
 		}
 	}
 }

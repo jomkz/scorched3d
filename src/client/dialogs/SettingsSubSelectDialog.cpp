@@ -93,23 +93,23 @@ SettingsSubSelectDialog::SettingsSubSelectDialog() :
 	// Create Tabs
 	GLWTabContainer *tabPanel = new GLWTabContainer(0.0f, 0.0f, 0.0f, 0.0f);
 	mainTab_ = (GLWTab *)
-		tabPanel->addWidget(new GLWTab("Main", LANG_RESOURCE("Main"), 10, 40, 520, 315));
+		tabPanel->addWidget(new GLWTab("Main", LANG_RESOURCE("MAIN_TAB", "Main"), 10, 40, 520, 315));
 	mainTab_->setGridWidth(2);
 	mainTab_->setLayout(GLWPanel::LayoutGrid);
 	ecoTab_ = (GLWTab *)
-		tabPanel->addWidget(new GLWTab("Eco", LANG_RESOURCE("Eco"), 10, 40, 520, 315));
+		tabPanel->addWidget(new GLWTab("Eco", LANG_RESOURCE("ECONOMY_TAB", "Eco"), 10, 40, 520, 315));
 	ecoTab_->setGridWidth(2);
 	ecoTab_->setLayout(GLWPanel::LayoutGrid);
 	scoreTab_ = (GLWTab *)
-		tabPanel->addWidget(new GLWTab("Score", LANG_RESOURCE("Score"), 10, 40, 520, 315));
+		tabPanel->addWidget(new GLWTab("Score", LANG_RESOURCE("SCORE_TAB", "Score"), 10, 40, 520, 315));
 	scoreTab_->setGridWidth(2);
 	scoreTab_->setLayout(GLWPanel::LayoutGrid);
 	envTab_ = (GLWTab *)
-		tabPanel->addWidget(new GLWTab("Env", LANG_RESOURCE("Env"), 10, 40, 520, 315));
+		tabPanel->addWidget(new GLWTab("Env", LANG_RESOURCE("ENVIRONMENT_TAB", "Env"), 10, 40, 520, 315));
 	envTab_->setGridWidth(2);
 	envTab_->setLayout(GLWPanel::LayoutGrid);
 	landTab_ = (GLWTab *)
-		tabPanel->addWidget(new GLWTab("Land", LANG_RESOURCE("Land"), 10, 40, 520, 315));
+		tabPanel->addWidget(new GLWTab("Land", LANG_RESOURCE("LANDSCAPE_TAB", "Land"), 10, 40, 520, 315));
 
 	GLWPanel *landSettingsPanel = new GLWPanel(10.0f, 10.0f, 200.0f, 40.0f, false, false);
 	landTab_->addWidget(landSettingsPanel);
@@ -206,11 +206,11 @@ SettingsSubSelectDialog::SettingsSubSelectDialog() :
 
 	// Create buttons
 	GLWPanel *buttonPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
-	GLWButton *cancelButton = new GLWTextButton(LANG_RESOURCE("Cancel"), 0.0f, 0.0f, 105, this, 
+	GLWButton *cancelButton = new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 0.0f, 0.0f, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX);
 	cancelId_ = cancelButton->getId();
 	buttonPanel->addWidget(cancelButton, 0, SpaceRight, 10.0f);
-	GLWButton *okButton = new GLWTextButton(LANG_RESOURCE("Ok"), 0.0f, 0.0f, 55, this, 
+	GLWButton *okButton = new GLWTextButton(LANG_RESOURCE("OK", "Ok"), 0.0f, 0.0f, 55, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX);
 	okId_ = okButton->getId();
 	buttonPanel->addWidget(okButton);
@@ -227,9 +227,11 @@ SettingsSubSelectDialog::SettingsSubSelectDialog() :
 		280.0f, landTab_->getH() - 80.0f,
 		50.0f, GLWIconList::eNoDrawSelected);
 	landTab_->addWidget(landList_);
-	selectAllId_ = landTab_->addWidget(new GLWTextButton(LANG_RESOURCE("Select All"), 70.0f, 40.0f, 180, this,
+	selectAllId_ = landTab_->addWidget(new GLWTextButton(
+		LANG_RESOURCE("SELECT_ALL", "Select All"), 70.0f, 40.0f, 180, this,
 		GLWButton::ButtonFlagCenterX))->getId();
-	selectNoneId_ = landTab_->addWidget(new GLWTextButton(LANG_RESOURCE("Select None"), 270.0f, 40.0f, 180, this,
+	selectNoneId_ = landTab_->addWidget(new GLWTextButton(
+		LANG_RESOURCE("SELECT_NONE", "Select None"), 270.0f, 40.0f, 180, this,
 		GLWButton::ButtonFlagCenterX))->getId();
 	landSettingsPanel->setX((landTab_->getW() - landSettingsPanel->getW()) / 2.0f);
 }

@@ -21,6 +21,7 @@
 #include <water/WaterWaveDistance.h>
 #include <client/ScorchedClient.h>
 #include <landscapemap/LandscapeMaps.h>
+#include <lang/LangResource.h>
 #include <common/ProgressCounter.h>
 
 WaterWaveDistance::WaterWaveDistance() : waveDistance_(0)
@@ -35,7 +36,7 @@ void WaterWaveDistance::generate(
 	int mapWidth, int mapHeight, float waterHeight,
 	ProgressCounter *counter)
 {
-	if (counter) counter->setNewOp("Waves Distance");
+	if (counter) counter->setNewOp(LANG_RESOURCE("WAVES_DISTANCE", "Waves Distance"));
 
 	// Wave distance
 	distanceWidthMult_ = 4;

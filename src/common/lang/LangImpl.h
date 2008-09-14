@@ -32,7 +32,8 @@ public:
 
 	virtual void saveUndefined();
 
-	virtual ResourceBundleEntry *getEntry(const std::string &key);
+	virtual ResourceBundleEntry *getEntry(
+		const std::string &key, const std::string &value);
 
 protected:
 	void init();

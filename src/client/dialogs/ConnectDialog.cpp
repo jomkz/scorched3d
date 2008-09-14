@@ -131,8 +131,10 @@ void ConnectDialog::tryConnection()
 	}	
 
 	ProgressDialog::instance()->progressChange(
-		S3D::formatStringBuffer("Connecting to \"%s:%i\" (%i)....", 
-			host_.c_str(), port_, tryCount_), 0);
+		LANG_RESOURCE_3("CONNECTING_TO", "Connecting to \"{0}:{1}\" ({3})....", 
+			host_, 
+			S3D::formatStringBuffer("%i", port_), 
+			S3D::formatStringBuffer("%i", tryCount_)), 0);
 
 	connectionState_ = eTryingConnection;
 	if (ClientParams::instance()->getConnectedToServer())
@@ -171,7 +173,7 @@ void ConnectDialog::tryLocalConnection()
 
 void ConnectDialog::connected()
 {
-	ProgressDialog::instance()->progressChange("Connected", 100);
+	ProgressDialog::instance()->progressChange(LANG_RESOURCE("CONNECTED", "Connected"), 100);
 
 	// Wait for the coms to start
 	for (int i=0; i<10 && !ScorchedClient::instance()->getNetInterface().started(); i++)

@@ -34,7 +34,7 @@ class ProgressDialog :
 public:
 	static ProgressDialog *instance();
 
-	virtual void progressChange(const std::string &op, const float percentage);
+	virtual void progressChange(const LangString &op, const float percentage);
 	virtual void draw();
 
 	void changeTip();
@@ -46,7 +46,7 @@ protected:
 	GLTexture icon_;
 	GLTexture bar1_, bar2_;
 	FileLines tips_;
-	std::string progressText_;
+	LangString progressText_;
 	float progressPercentage_;
 
 private:
@@ -61,7 +61,7 @@ class ProgressDialogSync :
 public:
 	static ProgressDialogSync *instance();
 
-	virtual void progressChange(const std::string &op, const float percentage);
+	virtual void progressChange(const LangString &op, const float percentage);
 
 protected:
 	static ProgressDialogSync *instance_;

@@ -25,6 +25,7 @@
 #include <tank/TankWeapon.h>
 #include <tank/TankAutoDefense.h>
 #include <tank/TankBatteries.h>
+#include <lang/LangString.h>
 
 class ScorchedContext;
 class TankAccessories  
@@ -55,6 +56,9 @@ public:
 	TankWeapon &getWeapons() { return tankWeapon_; }
 	TankAutoDefense &getAutoDefense() { return tankAuto_; }
 	TankBatteries &getBatteries() { return tankBatteries_; }
+
+	LangString getAccessoryCountString(Accessory *accessory);
+	LangString getAccessoryAndCountString(Accessory *accessory);
 
 	// Serialize the tank accessories
 	bool writeMessage(NetBuffer &buffer, bool writeAccessories);

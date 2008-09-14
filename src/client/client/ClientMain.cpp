@@ -50,7 +50,7 @@
 #include <client/ClientPlayerStatusHandler.h>
 #include <client/ClientState.h>
 #include <client/ClientWindowSetup.h>
-#include <lang/Lang.h>
+#include <lang/LangResource.h>
 #include <graph/Mouse.h>
 #include <graph/Gamma.h>
 #include <graph/OptionsDisplay.h>
@@ -90,7 +90,7 @@ extern char scorched3dAppName[128];
 static bool initHardware(ProgressCounter *progressCounter)
 {
 	progressCounter->setNewPercentage(0.0f);
-	progressCounter->setNewOp("Initializing Keyboard");
+	progressCounter->setNewOp(LANG_RESOURCE("INITIALIZING_KEYBOARD", "Initializing Keyboard"));
 	if (!Keyboard::instance()->init())
 	{
 		S3D::dialogMessage("Scorched3D Keyboard", 
@@ -101,7 +101,7 @@ static bool initHardware(ProgressCounter *progressCounter)
 		);
 		return false;
 	}
-	progressCounter->setNewOp("Loading Keyboard Bindings");
+	progressCounter->setNewOp(LANG_RESOURCE("LOADING_KEYBOARD", "Loading Keyboard Bindings"));
 	if (!Keyboard::instance()->loadKeyFile())
 	{
 		S3D::dialogMessage("Scorched3D Keyboard", 
@@ -111,7 +111,7 @@ static bool initHardware(ProgressCounter *progressCounter)
 
 	if (!OptionsDisplay::instance()->getNoSound())
 	{
-		progressCounter->setNewOp("Initializing Sound SW");
+		progressCounter->setNewOp(LANG_RESOURCE("INITIALIZING_SOUND", "Initializing Sound"));
 		if (!Sound::instance()->init(
 			OptionsDisplay::instance()->getSoundChannels()))
 		{
@@ -128,7 +128,7 @@ static bool initHardware(ProgressCounter *progressCounter)
 static bool initComs(ProgressCounter *progressCounter)
 {
 	progressCounter->setNewPercentage(0.0f);
-	progressCounter->setNewOp("Initializing Coms");
+	progressCounter->setNewOp(LANG_RESOURCE("INITIALIZING_COMS", "Initializing Coms"));
 	ScorchedClient::instance();
 
 	// Tidy up any existing net handlers
@@ -203,7 +203,7 @@ static bool initComsHandlers()
 static bool initWindows(ProgressCounter *progressCounter)
 {
 	progressCounter->setNewPercentage(0.0f);
-	progressCounter->setNewOp("Initializing Windows");
+	progressCounter->setNewOp(LANG_RESOURCE("INITIALIZING_WINDOWS", "Initializing Windows"));
 	if (!GLWWindowSkinManager::defaultinstance()->loadWindows())
 	{
 		S3D::dialogMessage("Scorched3D", "Failed to load default windows skins");

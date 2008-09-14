@@ -40,6 +40,7 @@
 #include <client/ScorchedClient.h>
 #include <client/ClientScoreHandler.h>
 #include <server/ScorchedServer.h>
+#include <lang/LangResource.h>
 #include <stdio.h>
 
 static const float rankLeft = 15.0f;
@@ -160,10 +161,16 @@ void ScoreDialog::draw()
 	Vector white(0.9f, 0.9f, 1.0f);
 	bool server = (ClientParams::instance()->getConnectedToServer());
 	{
-		const char *text = "Current Rankings";
+		LANG_RESOURCE_VAR(CURRENT_RANKINGS, "CURRENT_RANKINGS", "Current Rankings");
+		LANG_RESOURCE_VAR(FINAL_RANKINGS, "FINAL_RANKINGS", "Final Rankings");
+		LANG_RESOURCE_VAR(WAITING_FOR_PLAYERS, "WAITING_FOR_PLAYERS", "Waiting for more players");
+		LANG_RESOURCE_VAR(WAITING_TO_JOIN, "WAITING_TO_JOIN", "Waiting to join game");
+		LangString SERVER_NAME = LANG_STRING(ScorchedClient::instance()->getOptionsGame().getServerName());
+
+		LangString *text = &CURRENT_RANKINGS;
 		if (finished)
 		{
-			text = "Final Rankings";
+			text = &FINAL_RANKINGS;
 		}
 		else if (ScorchedClient::instance()->getGameState().getState() == 
 			ClientState::StateGetPlayers)
@@ -172,60 +179,70 @@ void ScoreDialog::draw()
 			if (ScorchedClient::instance()->getTankContainer().getNoOfNonSpectatorTanks() <
 				ScorchedClient::instance()->getOptionsGame().getNoMinPlayers())
 			{
-				text = "Waiting for more players";
+				text = &WAITING_FOR_PLAYERS;
 			}
 			else
 			{
-				text = "Waiting to join game";
+				text = &WAITING_TO_JOIN;
 			}
 		}
 		else if (server)
 		{
-			text = ScorchedClient::instance()->getOptionsGame().getServerName();
+			text = &SERVER_NAME;
 		}
 
 		GLWFont::instance()->getGameShadowFont()->draw(
 			GLWColors::black,
 				20,
 				x_ + 8.0f - 2.0f, y_ + h_ - 22.0f + 2.0f, 0.0f,
-				text);
+				*text);
 		GLWFont::instance()->getGameFont()->draw(
 				white,
 				20,
 				x_ + 8.0f, y_ + h_ - 22.0f, 0.0f,
-				text);
+				*text);
 	}
 
 	if (!finished) 
 	{
-		char moves[256];
-		moves[0] = '\0';
+		LangString buffer;
+
+		LANG_RESOURCE_VAR_2(ROUND_OF, "ROUND_OF", "Round {0} of {1}",
+			S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsTransient().getCurrentRoundNo()),
+			S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsGame().getNoRounds()));
+		buffer.append(ROUND_OF);
+
 		if (ScorchedClient::instance()->getOptionsGame().getNoMaxRoundTurns() > 0)
 		{
-			snprintf(moves, 256, ",Move %i of %i", 
-				ScorchedClient::instance()->getOptionsTransient().getCurrentGameNo(),
-				ScorchedClient::instance()->getOptionsGame().getNoMaxRoundTurns());
+			LANG_RESOURCE_VAR_2(MOVE_OF, "MOVE_OF", ",Move {0} of {1}",
+				S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsTransient().getCurrentGameNo()),
+				S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsGame().getNoMaxRoundTurns()));
+			buffer.append(MOVE_OF);
 		}
-		std::string rounds = S3D::formatStringBuffer("Round %i of %i%s",
-				ScorchedClient::instance()->getOptionsTransient().getCurrentRoundNo(),
-				ScorchedClient::instance()->getOptionsGame().getNoRounds(),
-				moves);
 
 		float roundsWidth = GLWFont::instance()->getGameFont()->getWidth(
-			10, rounds);
+			10, buffer);
 		GLWFont::instance()->getGameFont()->draw(
 			white,
 			10,
 			x_ + 470 - roundsWidth, y_ + h_ - 40.0f, 0.0f,
-			rounds);
+			buffer);
 	}
+
+	LANG_RESOURCE_VAR(SCORE_NAME, "SCORE_NAME", "Name");
+	LANG_RESOURCE_VAR(SCORE_K, "SCORE_K", "K");
+	LANG_RESOURCE_VAR(SCORE_W, "SCORE_W", "W");
+	LANG_RESOURCE_VAR(SCORE_A, "SCORE_A", "A");
+	LANG_RESOURCE_VAR(SCORE_SCORE, "SCORE_SCORE", "Score");
+	LANG_RESOURCE_VAR(SCORE_RANK, "SCORE_RANK", "Rank");
+	LANG_RESOURCE_VAR(SCORE_L, "SCORE_L", "L");
 
 	float y = lineSpacer + 10.0f;
 	GLWFont::instance()->getGameFont()->draw(
 			white,
 			12,
 			x_ + nameLeft, y_ + h_ - y - lineSpacer - 26.0f, 0.0f,
-			"Name");
+			SCORE_NAME);
 	GLWToolTip::instance()->addToolTip(ToolTip::ToolTipHelp, "Name", "The name of the player",
 		x_ + nameLeft, y_ + h_ - y - lineSpacer - 26.0f, 100.0f, 16.0f);
 
@@ -233,7 +250,7 @@ void ScoreDialog::draw()
 			white,
 			12,
 			x_ + killsLeft, y_ + h_ - y - lineSpacer - 26.0f, 0.0f,
-			"K");
+			SCORE_K);
 	GLWToolTip::instance()->addToolTip(ToolTip::ToolTipHelp, "Kills", 
 		S3D::formatStringBuffer("The number of players this player has killed.\n%i score awarded per kill.",
 		ScorchedClient::instance()->getOptionsGame().getScorePerKill()),
@@ -243,7 +260,7 @@ void ScoreDialog::draw()
 			white,
 			12,
 			x_ + winsLeft, y_ + h_ - y - lineSpacer - 26.0f, 0.0f,
-			"W");
+			SCORE_W);
 	GLWToolTip::instance()->addToolTip(ToolTip::ToolTipHelp, "Wins", 
 		S3D::formatStringBuffer("The number of rounds this player has won.\n%i score awarded per round won.",
 		ScorchedClient::instance()->getOptionsGame().getScoreWonForRound()),
@@ -253,7 +270,7 @@ void ScoreDialog::draw()
 			white,
 			12,
 			x_ + assistsLeft, y_ + h_ - y - lineSpacer - 26.0f, 0.0f,
-			"A");
+			SCORE_A);
 	GLWToolTip::instance()->addToolTip(ToolTip::ToolTipHelp, "Assists", 
 		S3D::formatStringBuffer("The number of kills this player has assisted in.\n%i score awarded per assist.",
 		ScorchedClient::instance()->getOptionsGame().getScorePerAssist()),
@@ -273,7 +290,7 @@ void ScoreDialog::draw()
 			white,
 			12,
 			x_ + scoreLeft, y_ + h_ - y - lineSpacer - 26.0f, 0.0f,
-			"Score");
+			SCORE_SCORE);
 	GLWToolTip::instance()->addToolTip(ToolTip::ToolTipHelp, "Score", 
 		"The current score for this player.\nCalculated from the number of kills, wins, money and bonus score awards.",
 		x_ + scoreLeft, y_ + h_ - y - lineSpacer - 26.0f, 80.0f, 16.0f);
@@ -282,7 +299,7 @@ void ScoreDialog::draw()
 			white,
 			12,
 			x_ + statsLeft, y_ + h_ - y - lineSpacer - 26.0f, 0.0f,
-			"Rank");
+			SCORE_RANK);
 	GLWToolTip::instance()->addToolTip(ToolTip::ToolTipHelp, "Rank", "The current online ranking for this player.",
 		x_ + statsLeft, y_ + h_ - y - lineSpacer - 26.0f, 40.0f, 16.0f);
 
@@ -290,7 +307,7 @@ void ScoreDialog::draw()
 		white,
 		12,
 		x_ + livesLeft, y_ + h_ - y - lineSpacer - 26.0f, 0.0f,
-		"L");
+		SCORE_L);
 	GLWToolTip::instance()->addToolTip(ToolTip::ToolTipHelp, "Lives", 
 		S3D::formatStringBuffer("The current number of lives this player has left.\n%i score awarded for each life remaining.",
 		ScorchedClient::instance()->getOptionsGame().getScoreWonForLives()),

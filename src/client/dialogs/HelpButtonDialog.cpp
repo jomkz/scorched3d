@@ -70,7 +70,8 @@ HelpButtonDialog::HelpMenu::HelpMenu()
 			false);
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->
-		addMenu("Help", 
+		addMenu(LANG_RESOURCE("HELP", "Help"), 
+			"Help", 
 			"Launch an external web browser containing the\n"
 			"Scorched3D online help.",
 			32.0f, 0, this, map,
@@ -79,7 +80,7 @@ HelpButtonDialog::HelpMenu::HelpMenu()
 
 bool HelpButtonDialog::HelpMenu::getMenuItems(const char* menuName, std::list<GLMenuItem> &result)
 {
-	result.push_back(GLMenuItem("Show Online Help"));
+	result.push_back(GLMenuItem(LANG_RESOURCE("SHOW_ONLINE_HELP", "Show Online Help")));
 	return true;
 }
 
@@ -97,7 +98,8 @@ HelpButtonDialog::VolumeMenu::VolumeMenu()
 		false);
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->
-		addMenu("Volume", 
+		addMenu(LANG_RESOURCE("VOLUME", "Volume"), 
+			"Volume",
 			"Change the sound and volume settings",
 			32.0f, 0, this, map,
 			GLMenu::eMenuAlignRight);
@@ -119,7 +121,8 @@ HelpButtonDialog::PerformanceMenu::PerformanceMenu()
 			false);
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->
-		addMenu("Performance", 
+		addMenu(LANG_RESOURCE("PERFORMANCE", "Perofmance"),
+			"Performance", 
 			"",
 			32.0f, 0, this, map,
 			GLMenu::eMenuAlignRight);

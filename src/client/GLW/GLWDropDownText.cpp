@@ -33,19 +33,32 @@ GLWDropDownText::~GLWDropDownText()
 {
 }
 
-void GLWDropDownText::addText(const std::string &text)
+void GLWDropDownText::addText(const LangString &text, const std::string &datatext)
 {
-	GLWSelectorEntry entry(text.c_str());
+	GLWSelectorEntry entry(text, 0, false, 0, 0, datatext);
 	addEntry(entry);
 }
 
-const char *GLWDropDownText::getCurrentText()
+LangString &GLWDropDownText::getCurrentText()
 {
-	if (!getCurrentEntry()) return "";
+	static LangString empty;
+	if (!getCurrentEntry()) return empty;
 	return getCurrentEntry()->getText();
 }
 
-void GLWDropDownText::setCurrentText(const std::string &text)
+const char *GLWDropDownText::getCurrentDataText()
+{
+	if (!getCurrentEntry()) return "";
+	return getCurrentEntry()->getDataText();
+}
+
+bool GLWDropDownText::isSelected(const LangString &text)
+{
+	LangString current = getCurrentText();
+	return (current == text);
+}
+
+void GLWDropDownText::setCurrentText(const LangString &text)
 {
 	int position = 0;
 	std::list<GLWSelectorEntry>::iterator itor;
@@ -54,7 +67,7 @@ void GLWDropDownText::setCurrentText(const std::string &text)
 		itor++)
 	{
 		GLWSelectorEntry &entry = *itor;
-		if (0 == strcmp(text.c_str(), entry.getText()))
+		if (entry.getText() == text)
 		{
 			current_ = &entry;
 			break;

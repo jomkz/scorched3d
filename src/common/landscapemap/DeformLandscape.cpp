@@ -31,6 +31,7 @@
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
 #include <common/ProgressCounter.h>
+#include <lang/LangResource.h>
 #include <math.h>
 
 std::vector<DeformLandscape::DeformInfo> DeformLandscape::deformInfos_;
@@ -276,7 +277,7 @@ void DeformLandscape::applyInfos(ScorchedContext &context,
 {
 	DeformPoints map;
 
-	if (counter) counter->setNewOp("Landscape Diffs");
+	if (counter) counter->setNewOp(LANG_RESOURCE("LANDSCAPE_DIFFS", "Landscape Diffs"));
 
 	deformInfos_.clear();
 	int count = (int) infos.size();
@@ -302,7 +303,7 @@ void DeformLandscape::applyInfos(ScorchedContext &context,
 		}
 	}
 
-	if (counter) counter->setNewOp("Landscape Normals");
+	if (counter) counter->setNewOp(LANG_RESOURCE("LANDSCAPE_NORMALS", "Landscape Normals"));
 	HeightMap &hmap = context.getLandscapeMaps().getGroundMaps().getHeightMap();
 	for (int x=0; x<=hmap.getMapWidth(); x++)
 	{

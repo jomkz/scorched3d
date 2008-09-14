@@ -23,16 +23,18 @@
 
 #include <string>
 
-#define LANG_STRING(x) LangStringUtil::convert(x)
+#define LANG_STRING(x) LangStringUtil::convertToLang(x)
 
 typedef unsigned int LangStringStorage;
 typedef std::basic_string<LangStringStorage> LangString;
 
 namespace LangStringUtil
 {
-	LangString convert(const std::string &input);
-	void append(LangString &output, const std::string &input);
-	void replace(LangString &output, const std::string &input);
+	LangString convertToLang(const std::string &input);
+	void appendToLang(LangString &output, const std::string &input);
+	void replaceToLang(LangString &output, const std::string &input);
+
+	std::string convertFromLang(const LangString &input);
 };
 
 #endif // __INCLUDE_LangString_INCLUDE__

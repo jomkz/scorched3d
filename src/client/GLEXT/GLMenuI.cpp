@@ -20,7 +20,7 @@
 
 #include <GLEXT/GLMenuI.h>
 
-GLMenuItem::GLMenuItem(const char *text, 
+GLMenuItem::GLMenuItem(const LangString &text, 
 	ToolTip *tooltip, 
 	bool selected,
 	GLTexture *texture,
@@ -36,7 +36,7 @@ GLMenuI::~GLMenuI()
 
 }
 
-const char *GLMenuI::getMenuText(const char* menuName)
+LangString *GLMenuI::getMenuText(const char* menuName)
 {
 	return 0;
 }

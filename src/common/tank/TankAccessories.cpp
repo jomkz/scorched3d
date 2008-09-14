@@ -32,6 +32,7 @@
 #endif
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
+#include <lang/LangResource.h>
 
 TankAccessories::TankAccessories(ScorchedContext &context) :
 	context_(context),
@@ -345,6 +346,34 @@ void TankAccessories::rm(Accessory *accessory, int count)
 	}
 
 	changed();
+}
+
+LangString TankAccessories::getAccessoryCountString(Accessory *accessory)
+{
+	int count = getAccessoryCount(accessory);
+	LangString buffer;
+	if (count >= 0)
+	{
+		buffer.append(LANG_STRING(S3D::formatStringBuffer("%i", count)));
+	}
+	else
+	{
+		buffer.append(LANG_STRING("In"));
+	}
+
+	return buffer;
+}
+
+LangString TankAccessories::getAccessoryAndCountString(Accessory *accessory)
+{
+	int count = getAccessoryCount(accessory);
+	LangString buffer;
+	buffer.append(LANG_RESOURCE(accessory->getName(), accessory->getName())).
+		append(LANG_STRING(" ("));
+	buffer.append(getAccessoryCountString(accessory));
+	buffer.append(LANG_STRING(")"));
+
+	return buffer;
 }
 
 void TankAccessories::changed()

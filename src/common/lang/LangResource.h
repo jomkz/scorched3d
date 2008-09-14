@@ -23,53 +23,53 @@
 
 #include <lang/Lang.h>
 
-#define LANG_RESOURCE(key) LangResource::getKey(key)
-#define LANG_RESOURCE_1(key, param1) LangResource::getKey(key, param1)
-#define LANG_RESOURCE_2(key, param1, param2) LangResource::getKey(key, param1, param2)
-#define LANG_RESOURCE_3(key, param1, param2, param3) LangResource::getKey(key, param1, param2, param3)
-#define LANG_RESOURCE_4(key, param1, param2, param3, param4) LangResource::getKey(key, param1, param2, param3, param4)
+#define LANG_RESOURCE(key, value) LangResource::getKey(key, value)
+#define LANG_RESOURCE_1(key, value, param1) LangResource::getKey(key, value, param1)
+#define LANG_RESOURCE_2(key, value, param1, param2) LangResource::getKey(key, value, param1, param2)
+#define LANG_RESOURCE_3(key, value, param1, param2, param3) LangResource::getKey(key, value, param1, param2, param3)
+#define LANG_RESOURCE_4(key, value, param1, param2, param3, param4) LangResource::getKey(key, value, param1, param2, param3, param4)
 
-#define LANG_RESOURCE_VAR(name, key) ResourceBundleEntry *TEXT_BUNDLE_##name = \
-	Lang::instance()->getEntry(key); \
-	LangString name = TEXT_BUNDLE_##name->getString();
-#define LANG_RESOURCE_VAR_1(name, key, param1) ResourceBundleEntry *TEXT_BUNDLE_##name = \
-	Lang::instance()->getEntry(key); \
-	LangString name = TEXT_BUNDLE_##name->getString(param1);
-#define LANG_RESOURCE_VAR_2(name, key, param1, param2) ResourceBundleEntry *TEXT_BUNDLE_##name = \
-	Lang::instance()->getEntry(key); \
-	LangString name = TEXT_BUNDLE_##name->getString(param1, param2);
-#define LANG_RESOURCE_VAR_3(name, key, param1, param2, param3) ResourceBundleEntry *TEXT_BUNDLE_##name = \
-	Lang::instance()->getEntry(key); \
-	LangString name = TEXT_BUNDLE_##name->getString(param1, param2, param3);
-#define LANG_RESOURCE_VAR_4(name, key, param1, param2, param3, param4) ResourceBundleEntry *TEXT_BUNDLE_##name = \
-	Lang::instance()->getEntry(key); \
-	LangString name = TEXT_BUNDLE_##name->getString(param1, param2, param3, param4);
-
-#define LANG_RESOURCE_CONST_VAR(name, key) static ResourceBundleEntry *TEXT_BUNDLE_##name = \
-	Lang::instance()->getEntry(key); \
+#define LANG_RESOURCE_VAR(name, key, value) static ResourceBundleEntry *TEXT_BUNDLE_##name = \
+	Lang::instance()->getEntry(key, value); \
 	static LangString name = TEXT_BUNDLE_##name->getString();
-#define LANG_RESOURCE_CONST_VAR_1(name, key, param1) static ResourceBundleEntry *TEXT_BUNDLE_##name = \
-	Lang::instance()->getEntry(key); \
+#define LANG_RESOURCE_VAR_1(name, key, value, param1) static ResourceBundleEntry *TEXT_BUNDLE_##name = \
+	Lang::instance()->getEntry(key, value); \
 	LangString name = TEXT_BUNDLE_##name->getString(param1);
-#define LANG_RESOURCE_CONST_VAR_2(name, key, param1, param2) static ResourceBundleEntry *TEXT_BUNDLE_##name = \
-	Lang::instance()->getEntry(key); \
+#define LANG_RESOURCE_VAR_2(name, key, value, param1, param2) static ResourceBundleEntry *TEXT_BUNDLE_##name = \
+	Lang::instance()->getEntry(key, value); \
 	LangString name = TEXT_BUNDLE_##name->getString(param1, param2);
-#define LANG_RESOURCE_CONST_VAR_3(name, key, param1, param2, param3) static ResourceBundleEntry *TEXT_BUNDLE_##name = \
-	Lang::instance()->getEntry(key); \
+#define LANG_RESOURCE_VAR_3(name, key, value, param1, param2, param3) static ResourceBundleEntry *TEXT_BUNDLE_##name = \
+	Lang::instance()->getEntry(key, value); \
 	LangString name = TEXT_BUNDLE_##name->getString(param1, param2, param3);
-#define LANG_RESOURCE_CONST_VAR_4(name, key, param1, param2, param3, param4) static ResourceBundleEntry *TEXT_BUNDLE_##name = \
-	Lang::instance()->getEntry(key); \
+#define LANG_RESOURCE_VAR_4(name, key, value, param1, param2, param3, param4) static ResourceBundleEntry *TEXT_BUNDLE_##name = \
+	Lang::instance()->getEntry(key, value); \
 	LangString name = TEXT_BUNDLE_##name->getString(param1, param2, param3, param4);
+
+#define LANG_RESOURCE_CONST_VAR(name, key, value) static ResourceBundleEntry *TEXT_BUNDLE_##name = \
+	Lang::instance()->getEntry(key, value); \
+	static LangString name = TEXT_BUNDLE_##name->getString();
+#define LANG_RESOURCE_CONST_VAR_1(name, key, value, param1) static ResourceBundleEntry *TEXT_BUNDLE_##name = \
+	Lang::instance()->getEntry(key, value); \
+	static LangString name = TEXT_BUNDLE_##name->getString(param1);
+#define LANG_RESOURCE_CONST_VAR_2(name, key, value, param1, param2) static ResourceBundleEntry *TEXT_BUNDLE_##name = \
+	Lang::instance()->getEntry(key, value); \
+	static LangString name = TEXT_BUNDLE_##name->getString(param1, param2);
+#define LANG_RESOURCE_CONST_VAR_3(name, key, value, param1, param2, param3) static ResourceBundleEntry *TEXT_BUNDLE_##name = \
+	Lang::instance()->getEntry(key, value); \
+	static LangString name = TEXT_BUNDLE_##name->getString(param1, param2, param3);
+#define LANG_RESOURCE_CONST_VAR_4(name, key, value, param1, param2, param3, param4) static ResourceBundleEntry *TEXT_BUNDLE_##name = \
+	Lang::instance()->getEntry(key, value); \
+	static LangString name = TEXT_BUNDLE_##name->getString(param1, param2, param3, param4);
 
 namespace LangResource
 {
-	LangString getKey(const std::string &key);
-	LangString getKey(const std::string &key, const std::string &param1);
-	LangString getKey(const std::string &key, const std::string &param1, 
+	LangString getKey(const std::string &key, const std::string &value);
+	LangString getKey(const std::string &key, const std::string &value, const std::string &param1);
+	LangString getKey(const std::string &key, const std::string &value, const std::string &param1, 
 		const std::string &param2);
-	LangString getKey(const std::string &key, const std::string &param1, 
+	LangString getKey(const std::string &key, const std::string &value, const std::string &param1, 
 		const std::string &param2, const std::string &param3);
-	LangString getKey(const std::string &key, const std::string &param1, 
+	LangString getKey(const std::string &key, const std::string &value, const std::string &param1, 
 		const std::string &param2, const std::string &param3, const std::string &param4);
 }
 

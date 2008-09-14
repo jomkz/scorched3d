@@ -28,6 +28,7 @@
 #include <landscape/Landscape.h>
 #include <tankgraph/RenderTargets.h>
 #include <engine/ActionController.h>
+#include <lang/LangResource.h>
 
 CameraDialog *CameraDialog::instance_ = 0;
 
@@ -138,10 +139,12 @@ void CameraDialog::draw()
 	// Draw the camera name
 	GLState newState(GLState::TEXTURE_OFF);
 	Vector col(0.7f, 0.7f, 0.7f);
+
+	LANG_RESOURCE_VAR_1(CAMERA, "CAMERA_CHOICE", "{0} Camera", 
+		targetCam_.getCameraNames()[targetCam_.getCameraType()]);
 	GLWFont::instance()->getGameFont()->
 		draw(col, 10.0f, x_ + 15.0f, y_ + 15.0f, 0.0f, 
-		S3D::formatStringBuffer("%s Camera",
-		targetCam_.getCameraNames()[targetCam_.getCameraType()]));
+		CAMERA);
 }
 
 void CameraDialog::simulate(float frameTime)

@@ -24,13 +24,14 @@
 #include <common/RandomGenerator.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
+#include <lang/LangResource.h>
 
 void HeightMapLoader::loadTerrain(HeightMap &hmap, 
 	Image &bitmap,
 	bool levelSurround,
 	ProgressCounter *counter)
 {
-	if (counter) counter->setNewOp("Loading Landscape");
+	if (counter) counter->setNewOp(LANG_RESOURCE("LOADING_LANDSCAPE", "Loading Landscape"));
 	hmap.reset();
 
 	fixed dhx = fixed(bitmap.getWidth()) / fixed(hmap.getMapWidth()+1);
@@ -144,7 +145,7 @@ bool HeightMapLoader::generateTerrain(
 	}
 
 	// Make sure normals are correct for drawing
-	if (counter) counter->setNewOp("Setting Normals");
+	if (counter) counter->setNewOp(LANG_RESOURCE("SETTINGS_NORMALS", "Setting Normals"));
 	for (int y=0; y<hmap.getMapHeight(); y++)
 	{
 		if (counter) counter->setNewPercentage((100.0f * float(y)) / float(hmap.getMapHeight()));

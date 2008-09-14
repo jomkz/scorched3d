@@ -57,10 +57,12 @@ void GLWIconListModItem::draw(float x, float y, float w)
 		GLWTranslate::getPosX() + x, 
 		GLWTranslate::getPosY() + y, w, 50.0f);
 
+	LANG_RESOURCE_VAR_1(MOD_CHOICE, "MOD_LABEL", "Mod : {0}", 
+		modInfo_.getName());
 	GLWFont::instance()->getGameFont()->draw(
 		GLWFont::widgetFontColor, 
 		12.0f, x + 50.0f, y + 25.0f, 0.0f, 
-		S3D::formatStringBuffer("Mod : %s", modInfo_.getName()));
+		MOD_CHOICE);
 	GLWFont::instance()->getGameFont()->drawWidth(
 		w - 50.0f,
 		GLWFont::widgetFontColor, 
@@ -85,9 +87,9 @@ ModSelectDialog::ModSelectDialog() :
 	iconList_ = new GLWIconList(10.0f, 40.0f, 280.0f, 360.0f, 50.0f);
 	addWidget(iconList_);
 
-	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("Ok"), 235, 10, 55, this, 
+	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("OK", "Ok"), 235, 10, 55, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX))->getId();
-	cancelId_ = addWidget(new GLWTextButton(LANG_RESOURCE("Cancel"), 120, 10, 105, this, 
+	cancelId_ = addWidget(new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 120, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX))->getId();
 
 	iconList_->setHandler(this);

@@ -38,7 +38,9 @@ public:
 	GLMenu();
 	virtual ~GLMenu();
 
-	bool addMenu(char *menuName, 
+	bool addMenu(
+		const LangString &menuName,
+		char *menuNameInternal, 
 		const char *menuDescription,
 		float width, 
 		unsigned int state,

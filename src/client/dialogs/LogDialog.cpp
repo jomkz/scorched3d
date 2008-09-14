@@ -43,10 +43,10 @@ LogDialog::LogDialog() :
 {
 	needCentered_ = true;
 	quit_ = (GLWTextButton *) 
-		addWidget(new GLWTextButton(LANG_RESOURCE("Quit"), 205, 10, 85, this, 
+		addWidget(new GLWTextButton(LANG_RESOURCE("QUIT", "Quit"), 205, 10, 85, this, 
 		GLWButton::ButtonFlagCenterX));
 	listView_ = (GLWListView *) addWidget(new GLWListView(10, 40, 280, 140, 100));
-	serverName_ = (GLWLabel *) addWidget(new GLWLabel(5, 195, LANG_RESOURCE("Local")));
+	serverName_ = (GLWLabel *) addWidget(new GLWLabel(5, 195, LANG_RESOURCE("LOCAL", "Local")));
 
 	// Add this class as a log handler
 	Logger::addLogger(this);

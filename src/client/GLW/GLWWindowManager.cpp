@@ -24,6 +24,7 @@
 #include <dialogs/MainMenuDialog.h>
 #include <graph/OptionsDisplay.h>
 #include <common/Defines.h>
+#include <lang/LangResource.h>
 #include <XML/XMLFile.h>
 #include <limits.h>
 #include <set>
@@ -53,7 +54,8 @@ GLWWindowManager::GLWWindowManager() :
 		false);
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->
-		addMenu("Windows", 
+		addMenu(LANG_RESOURCE("WINDOWS", "Windows"), 
+			"Windows",
 			"Hide and display aspects of the user interface",
 			32.0f, 0, this, map);
 }
@@ -514,7 +516,7 @@ bool GLWWindowManager::getMenuItems(const char* menuName,
 			{
 				items.push_back(
 					GLMenuItem(
-						window->getName(), 
+						LANG_RESOURCE(window->getName(), window->getName()), 
 						&window->getToolTip(), 
 						windowVisible(window->getId())));
 			}

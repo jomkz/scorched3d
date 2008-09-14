@@ -32,6 +32,7 @@
 #include <landscapedef/LandscapeDefn.h>
 #include <landscapedef/LandscapeDefinition.h>
 #include <landscapedef/LandscapeDefinitions.h>
+#include <lang/LangResource.h>
 #include <sky/Sky.h>
 #include <water/Water.h>
 #include <land/VisibilityPatchGrid.h>
@@ -483,7 +484,7 @@ void Landscape::generate(ProgressCounter *counter)
 		bitmaps[3] = &texture3;
 
 		// Generate the new landscape
-		if (counter) counter->setNewOp("Landscape Map");
+		if (counter) counter->setNewOp(LANG_RESOURCE("LANDSCAPE_MAP", "Landscape Map"));
 		ImageModifier::addHeightToBitmap(
 			ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap(),
 			mainMap_, splatMask1, splatMask2,

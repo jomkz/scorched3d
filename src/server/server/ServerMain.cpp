@@ -240,7 +240,7 @@ void serverLoop()
 class ConsoleServerProgressCounter : public ProgressCounterI
 {
 public:
-	ConsoleServerProgressCounter() : lastOp_(""), hashes_(0) {}
+	ConsoleServerProgressCounter() : lastOp_(), hashes_(0) {}
 
 	virtual void drawHashes(int neededHashes)
 	{
@@ -259,17 +259,19 @@ public:
 		fflush(stdout);
 	}
 
-	virtual void progressChange(const std::string &op, const float percentage)
+	virtual void progressChange(const LangString &op, const float percentage)
 	{
-		if (0 != strcmp(op.c_str(), lastOp_.c_str()))
+		if (op != lastOp_)
 		{
-			if (lastOp_.c_str()[0])
+			if (lastOp_.empty())
 			{
 				drawHashes(25);
 			}
 
-			Logger::log(op);
-			printf("%s:", op.c_str());
+			std::string opStr = LangStringUtil::convertFromLang(op);
+
+			Logger::log(opStr);
+			printf("%s:", opStr.c_str());
 			lastOp_ = op;
 			hashes_ = 0;
 		}
@@ -278,7 +280,7 @@ public:
 		drawHashes(neededHashes);
 	}
 protected:
-	std::string lastOp_;
+	LangString lastOp_;
 	int hashes_;
 };
 

@@ -23,6 +23,7 @@
 #include <common/Logger.h>
 #include <weapons/AccessoryStore.h>
 #include <weapons/Weapon.h>
+#include <lang/LangResource.h>
 #include <math.h>
 #include <stdio.h>
 
@@ -39,7 +40,7 @@ AccessoryStore::~AccessoryStore()
 bool AccessoryStore::parseFile(
 	ScorchedContext &context, ProgressCounter *counter)
 {
-	if (counter) counter->setNewOp("Loading Weapons");
+	if (counter) counter->setNewOp(LANG_RESOURCE("LOADING_WEAPONS", "Loading Weapons"));
 
 	std::string fileName = S3D::getDataFile("data/accessories.xml");
 	clearAccessories();

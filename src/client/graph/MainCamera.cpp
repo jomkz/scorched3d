@@ -39,6 +39,7 @@
 #include <coms/ComsMessageSender.h>
 #include <tank/TankContainer.h>
 #include <tank/TankCamera.h>
+#include <lang/LangResource.h>
 #include <math.h>
 #include <time.h>
 
@@ -63,6 +64,7 @@ MainCamera::MainCamera() :
 		false);
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->addMenu(
+		LANG_RESOURCE("CAMERA", "Camera"),
 		"Camera", 
 		"Change the current camera view.",
 		32, 0, this, map);
@@ -84,7 +86,8 @@ bool MainCamera::getMenuItems(const char* menuName,
 {
 	for (int i=0; i<TargetCamera::getNoCameraNames(); i++)
 	{
-		result.push_back(GLMenuItem(TargetCamera::getCameraNames()[i], 
+		result.push_back(GLMenuItem(
+			LANG_RESOURCE(TargetCamera::getCameraNames()[i], TargetCamera::getCameraNames()[i]),
 			&TargetCamera::getCameraToolTips()[i],
 			(targetCam_.getCameraType() == 
 			(TargetCamera::CamType) i)));

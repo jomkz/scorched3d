@@ -20,14 +20,14 @@
 
 #include <lang/LangString.h>
 
-LangString LangStringUtil::convert(const std::string &input)
+LangString LangStringUtil::convertToLang(const std::string &input)
 {
 	LangString result;
-	append(result, input);
+	appendToLang(result, input);
 	return result;
 }
 
-void LangStringUtil::append(LangString &output, const std::string &input)
+void LangStringUtil::appendToLang(LangString &output, const std::string &input)
 {
 	for (unsigned int i=0; i<input.size(); i++)
 	{
@@ -35,7 +35,7 @@ void LangStringUtil::append(LangString &output, const std::string &input)
 	}
 }
 
-void LangStringUtil::replace(LangString &output, const std::string &input)
+void LangStringUtil::replaceToLang(LangString &output, const std::string &input)
 {
 	output.clear();
 	for (unsigned int i=0; i<input.size(); i++)
@@ -43,3 +43,14 @@ void LangStringUtil::replace(LangString &output, const std::string &input)
 		output.push_back(input[i]);
 	}
 }
+
+std::string LangStringUtil::convertFromLang(const LangString &input)
+{
+	std::string result;
+	for (unsigned int i=0; i<input.size(); i++)
+	{
+		result.push_back((char) input[i]);
+	}	
+	return result;
+}
+
