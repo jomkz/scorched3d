@@ -46,7 +46,8 @@ static ColumnInfo *getGamesCols()
 		GLWIconTable::Column(LANG_RESOURCE("PLYRS", "Plyrs"), 60), "noplayers",
 		GLWIconTable::Column(LANG_RESOURCE("ROUND", "Round"), 55), "round",
 		GLWIconTable::Column(LANG_RESOURCE("MOD", "Mod"), 95), "mod",
-		GLWIconTable::Column(LANG_RESOURCE("GAME_TYPE", "Game Type"), 200), "gametype"
+		GLWIconTable::Column(LANG_RESOURCE("GAME_TYPE", "Game Type"), 200), "gametype",
+		GLWIconTable::Column(LANG_STRING(""), -1), ""
 	};
 	return gamescols;
 }
@@ -58,7 +59,8 @@ static ColumnInfo *getPlayerCols()
 		GLWIconTable::Column(LANG_RESOURCE("PLAYER", "Player"), 270), "pn",
 		GLWIconTable::Column(LANG_RESOURCE("SCORE", "Score"), 260), "ps",
 		GLWIconTable::Column(LANG_RESOURCE("TIME", "Time"), 140), "pt",
-		GLWIconTable::Column(LANG_RESOURCE("REAL", "Real"), 60), "pa"
+		GLWIconTable::Column(LANG_RESOURCE("REAL", "Real"), 60), "pa",
+		GLWIconTable::Column(LANG_STRING(""), -1), ""
 	};
 	return playerscols;
 }
@@ -82,12 +84,14 @@ NetworkSelectDialog::NetworkSelectDialog() :
 	tankTex_(0)
 {
 	std::list<GLWIconTable::Column> gamescolumns, playerscolumns;
-	for (int i=0; i<sizeof(getGamesCols())/sizeof(ColumnInfo); i++)
+	for (int i=0;; i++)
 	{
+		if (getGamesCols()[i].col.width == -1) break;
 		gamescolumns.push_back(getGamesCols()[i].col);
 	}
-	for (int i=0; i<sizeof(getPlayerCols())/sizeof(ColumnInfo); i++)
+	for (int i=0;; i++)
 	{
+		if (getPlayerCols()[i].col.width == -1) break;
 		playerscolumns.push_back(getPlayerCols()[i].col);
 	}
 
