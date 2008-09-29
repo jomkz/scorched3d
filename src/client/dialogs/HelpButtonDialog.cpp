@@ -116,8 +116,8 @@ HelpButtonDialog::PerformanceMenu::PerformanceMenu()
 {
 	Image *map = 
 		ImageFactory::loadImage(
-			S3D::getDataFile("data/windows/help.bmp"),
-			S3D::getDataFile("data/windows/helpa.bmp"),
+			S3D::getDataFile("data/windows/perf.bmp"),
+			S3D::getDataFile("data/windows/perfa.bmp"),
 			false);
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->

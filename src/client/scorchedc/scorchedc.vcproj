@@ -5985,6 +5985,14 @@
 			Name="lang"
 			>
 			<File
+				RelativePath="..\..\common\lang\CachedValueString.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\CachedValueString.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\lang\Lang.cpp"
 				>
 			</File>

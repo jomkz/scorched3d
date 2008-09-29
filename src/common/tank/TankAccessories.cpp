@@ -358,7 +358,8 @@ LangString TankAccessories::getAccessoryCountString(Accessory *accessory)
 	}
 	else
 	{
-		buffer.append(LANG_STRING("In"));
+		LANG_RESOURCE_VAR(INF, "INF", "In");
+		buffer.append(INF);
 	}
 
 	return buffer;

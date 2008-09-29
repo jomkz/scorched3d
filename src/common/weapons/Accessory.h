@@ -26,6 +26,7 @@
 #include <XML/XMLFile.h>
 #include <weapons/AccessoryPart.h>
 #include <weapons/AccessoryCreateContext.h>
+#include <lang/LangString.h>
 #include <string>
 #include <map>
 
@@ -51,6 +52,7 @@ public:
 
 	const char *getActivationSound();
 	const char *getName() { return name_.c_str(); }
+	LangString &getStringName();
 	const char *getDescription() { return description_.c_str(); }
 	const int getPrice() { return price_; }
 	const int getSellPrice() { return sellPrice_; }
@@ -100,6 +102,7 @@ protected:
 	PositionSelectType positionSelect_;
 	ToolTip toolTip_;
 	ModelID modelId_;
+	LangString stringName_;
 	std::string iconName_;
 	std::string groupName_, tabGroupName_;
 	std::string name_;

@@ -24,6 +24,7 @@
 #include <weapons/AccessoryStore.h>
 #include <common/Defines.h>
 #include <common/OptionsScorched.h>
+#include <lang/LangResource.h>
 #include <stdlib.h>
 
 unsigned int Accessory::nextAccessoryId_ = 0;
@@ -221,6 +222,15 @@ bool Accessory::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode
 	}
 
 	return true;
+}
+
+LangString &Accessory::getStringName()
+{
+	if (stringName_.size() == 0)
+	{
+		stringName_ = LANG_RESOURCE(getName(), getName());
+	}
+	return stringName_;
 }
 
 const char *Accessory::getActivationSound()
