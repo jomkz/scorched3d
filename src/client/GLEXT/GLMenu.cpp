@@ -50,7 +50,7 @@ GLMenuEntry *GLMenu::getMenu(char *menuItem)
 bool GLMenu::addMenu(
 	const LangString &menuName,
 	char *menuNameInternal, 
-	const char *menuDescription,
+	const LangString &menuDescription,
 	float width, 
 	unsigned int state,
 	GLMenuI *callback,

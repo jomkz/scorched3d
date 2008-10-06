@@ -27,7 +27,7 @@ ToolTipI::~ToolTipI()
 
 }
 
-ToolTip::ToolTip(unsigned int type, const std::string &tit, const std::string &tex) 
+ToolTip::ToolTip(unsigned int type, const LangString &tit, const LangString &tex) 
 	: id_(++nextId_), handler_(0)
 {
 	setText(type, tit, tex);
@@ -43,7 +43,7 @@ void ToolTip::populate()
 }
 
 void ToolTip::setText(unsigned int type, 
-	const std::string &title, const std::string &text)
+	const LangString &title, const LangString &text)
 {
 	type_ = type; title_ = title; text_ = text;
 }

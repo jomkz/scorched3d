@@ -30,6 +30,7 @@
 #include <graph/ModelRendererSimulator.h>
 #include <landscape/Landscape.h>
 #include <landscapemap/LandscapeMaps.h>
+#include <lang/LangResource.h>
 #include <sky/Sky.h>
 #include <math.h>
 
@@ -45,41 +46,43 @@ WindDialogToolTip::~WindDialogToolTip()
 
 void WindDialogToolTip::populate()
 {
-	const char *wallTypeStr = "Currently no walls";
+	LangString wallTypeStr = LANG_RESOURCE("WALLS_NONE", "Currently no walls");
 	OptionsTransient::WallType wallType =
 		ScorchedClient::instance()->getOptionsTransient().getWallType();
 	switch (wallType)
 	{
 	case OptionsTransient::wallBouncy:
-		wallTypeStr = "Current Wall Type : Bouncy";
+		wallTypeStr = LANG_RESOURCE("WALLS_BOUNCY", "Current Wall Type : Bouncy");
 		break;
 	case OptionsTransient::wallConcrete:
-		wallTypeStr = "Current Wall Type : Concrete";
+		wallTypeStr = LANG_RESOURCE("WALLS_CONCRETE", "Current Wall Type : Concrete");
 		break;
 	case OptionsTransient::wallWrapAround:
-		wallTypeStr = "Current Wall Type : Wrap Around";
+		wallTypeStr = LANG_RESOURCE("WALL_WRAP", "Current Wall Type : Wrap Around");
 		break;
 	}
 
 	if (ScorchedClient::instance()->
 		getOptionsTransient().getWindSpeed() == 0)
 	{
-		setText(ToolTip::ToolTipHelp, "Wind", S3D::formatStringBuffer(
+		setText(ToolTip::ToolTipHelp, 
+			LANG_RESOURCE("WIND", "Wind"), 
+			LANG_RESOURCE("WIND_TOOLTIP_NOWIND", 
 			"Displays the current wind direction\n"
 			"and speed, and the wall type.\n"
-			"Currently No Wind.\n"
-			"%s", wallTypeStr));
+			"Currently No Wind.\n") + 
+			wallTypeStr);
 	}
 	else
 	{
-		setText(ToolTip::ToolTipHelp, "Wind", S3D::formatStringBuffer(
+		setText(ToolTip::ToolTipHelp, LANG_RESOURCE("WIND", "Wind"), 
+			LANG_RESOURCE_1("WIND_TOOLTIP_WIND",
 			"Displays the current wind direction\n"
 			"and speed, and the wall type.\n"
-			"Current Wind Force : %i (out of 5)\n"
-			"%s",
-			(int) ScorchedClient::instance()->
-			getOptionsTransient().getWindSpeed().asFloat(),
-			wallTypeStr));
+			"Current Wind Force : {0} (out of 5)\n",
+			S3D::formatStringBuffer("%i", (int) ScorchedClient::instance()->
+			getOptionsTransient().getWindSpeed().asFloat())) +
+			wallTypeStr);
 	}
 }
 

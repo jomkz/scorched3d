@@ -70,15 +70,19 @@ GLWTankViewer::GLWTankViewer(float x, float y, int numH, int numV) :
 		select(0, 0, *catagoryChoice_.getCurrentEntry());
 	}
 
-	catagoryChoice_.setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Model Catagory",
+	catagoryChoice_.setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("MODEL_CATAGORY", "Model Catagory"),
+		LANG_RESOURCE("MODEL_CATAGORY_TOOLTIP", 
 		"Displays the currently selected model catagory.\n"
 		"To make models easier to locate\n"
-		"tank models are grouped by catagory."));
-	infoWindow_.setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Current Model",
+		"tank models are grouped by catagory.")));
+	infoWindow_.setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("CURRENT_MODEL", "Current Model"),
+		LANG_RESOURCE("CURRENT_MODEL_TOOLTIP", 
 		"Displays the currently selected tank model.\n"
 		"This is the model this player will use in game.\n"
 		"Choose a new model from the selection on the\n"
-		"left."));
+		"left.")));
 }
 
 GLWTankViewer::~GLWTankViewer()
@@ -283,8 +287,8 @@ void GLWTankViewer::draw()
 						getTypeByName(models_[vectorPos].model->getTypeName());
 					toolTip_.setText(
 						ToolTip::ToolTipInfo, 
-						models_[vectorPos].model->getName(),
-						type->getDescription());	
+						LANG_STRING(models_[vectorPos].model->getName()),
+						LANG_STRING(type->getDescription()));	
 				}
 
 				float scale = 22.0f / 60.0f * TankSquareSize;

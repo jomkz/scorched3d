@@ -41,6 +41,7 @@
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsLinesMessage.h>
 #include <graph/OptionsDisplay.h>
+#include <lang/LangResource.h>
 #include <math.h>
 
 REGISTER_CLASS_SOURCE(GLWPlanView);
@@ -54,12 +55,13 @@ GLWPlanView::GLWPlanView(float x, float y, float w, float h) :
 	flash_(true), dragging_(false), firstTime_(true),
 	planColor_(1.0f)
 {
-	setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Plan View",
-		"Shows the position of the the tanks\n"
+	setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("PLAN_VIEW", "Plan View"),
+		LANG_RESOURCE("PLAN_VIEW_TOOLTIP", "Shows the position of the the tanks\n"
 		"on a overhead map of the island.\n"
 		"Flashing tanks are still to make a move.\n"
 		"Clicking on the plan will move the camera\n"
-		"to look at that point."));
+		"to look at that point.")));
 }
 
 GLWPlanView::~GLWPlanView()

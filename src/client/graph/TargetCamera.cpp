@@ -45,6 +45,7 @@
 #include <common/Logger.h>
 #include <common/LoggerI.h>
 #include <common/Defines.h>
+#include <lang/LangResource.h>
 #include <math.h>
 
 static const char *cameraNames[] = 
@@ -162,8 +163,9 @@ ToolTip *TargetCamera::getCameraToolTips()
 		cameraToolTips = new ToolTip[noCameraDescriptions];
 		for (int i=0; i<noCameraDescriptions; i++)
 		{
-			cameraToolTips[i].setText(ToolTip::ToolTipHelp, getCameraNames()[i],
-				cameraDescriptions[i]);
+			cameraToolTips[i].setText(ToolTip::ToolTipHelp, 
+				LANG_RESOURCE(getCameraNames()[i], getCameraNames()[i]),
+				LANG_RESOURCE(std::string(getCameraNames()[i]) + "_camera", cameraDescriptions[i]));
 		}
 	}
 	return cameraToolTips;

@@ -39,7 +39,8 @@ unsigned int Accessory::nextAccessoryId_ = 0;
 
 Accessory::Accessory() :
 	accessoryId_(++nextAccessoryId_),
-	name_("NONAME"), description_("NODESC"), toolTip_(ToolTip::ToolTipHelp, "", ""),
+	name_("NONAME"), description_("NODESC"), 
+	toolTip_(ToolTip::ToolTipHelp, LangString(), LangString()),
 	price_(0), bundle_(1), armsLevel_(9), freemarketLimits_(150),
 	modelScale_(1),
 	positionSelect_(ePositionSelectNone), positionSelectLimit_(10),
@@ -74,7 +75,7 @@ bool Accessory::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode
 
 	// Get the accessory description
 	accessoryNode->getNamedChild("description", description_, false);
-	toolTip_.setText(ToolTip::ToolTipHelp, getName(), getDescription());
+	toolTip_.setText(ToolTip::ToolTipHelp, LANG_STRING(getName()), LANG_STRING(getDescription()));
 
 	// Get the accessory icon
 	if (accessoryNode->getNamedChild("icon", iconName_, false))

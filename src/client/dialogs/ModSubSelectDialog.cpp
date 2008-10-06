@@ -33,7 +33,9 @@
 
 GLWIconListSubModItem::GLWIconListSubModItem(ModInfo::MenuEntry &modInfoEntry) :
 	modInfoEntry_(modInfoEntry), 
-	tip_(ToolTip::ToolTipHelp, modInfoEntry.shortdescription.c_str(), modInfoEntry.description.c_str()),
+	tip_(ToolTip::ToolTipHelp, 
+		LANG_STRING(modInfoEntry.shortdescription), 
+		LANG_STRING(modInfoEntry.description)),
 	icon_(0.0f, 0.0f, 40.0f, 40.0f)
 {
 	if (S3D::fileExists(modInfoEntry_.icon.c_str()))

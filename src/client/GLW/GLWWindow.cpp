@@ -20,14 +20,15 @@
 
 #include <GLEXT/GLState.h>
 #include <GLEXT/GLTexture.h>
-#include <image/ImageFactory.h>
 #include <GLEXT/GLViewPort.h>
+#include <image/ImageFactory.h>
 #include <XML/XMLParser.h>
 #include <GLW/GLWWindow.h>
 #include <GLW/GLWWindowManager.h>
 #include <client/ScorchedClient.h>
 #include <common/Defines.h>
 #include <graph/OptionsDisplay.h>
+#include <lang/LangResource.h>
 
 static const float roundSize = 20.0f;
 static const float smallRoundSize = 10.0f;
@@ -39,27 +40,29 @@ static const float shadowWidth = 10.0f;
 
 GLTexture GLWWindow::moveTexture_;
 
-GLWWindow::GLWWindow(const char *name, float x, float y, 
+GLWWindow::GLWWindow(const std::string &name, float x, float y, 
 					 float w, float h,
 					 unsigned int states,
-					 const char *description) : 
+					 const std::string &description) : 
 	GLWPanel(x, y, w, h), dragging_(NoDrag), 
 	needCentered_(false), showTitle_(false), 
 	disabled_(false), windowState_(states), maxWindowSize_(0.0f),
-	description_(description), toolTip_(ToolTip::ToolTipHelp, name, description),
+	description_(description), toolTip_(ToolTip::ToolTipHelp, 
+	LANG_RESOURCE(name, name), LANG_RESOURCE(name + "_window", description)),
 	initPosition_(false), windowLevel_(100000)
 {
 	setName(name);
 	getDrawPanel() = false;
 }
 
-GLWWindow::GLWWindow(const char *name, float w, float h,
+GLWWindow::GLWWindow(const std::string &name, float w, float h,
 					 unsigned int states,
-					 const char *description) :
+					 const std::string &description) :
 	GLWPanel(0.0f, 0.0f, w, h), dragging_(NoDrag), 
 	needCentered_(true), showTitle_(false), 
 	disabled_(false), windowState_(states),
-	description_(description), toolTip_(ToolTip::ToolTipHelp, name, description),
+	description_(description), toolTip_(ToolTip::ToolTipHelp, 
+	LANG_RESOURCE(name, name), LANG_RESOURCE(name + "_window", description)),
 	initPosition_(false), windowLevel_(100000)
 {
 	setName(name);
@@ -207,8 +210,9 @@ void GLWWindow::drawMaximizedWindow()
 				float sizeX = 20.0f;
 				float sizeY = 20.0f;
 
-				static ToolTip moveTip(ToolTip::ToolTipHelp, "Move",
-					"Left click and drag to move the window.");
+				static ToolTip moveTip(ToolTip::ToolTipHelp, 
+					LANG_RESOURCE("WINDOW_MOVE", "Move Window"),
+					LANG_RESOURCE("WINDOW_MOVE_TOOLTIP", "Left click and drag to move the window."));
 				GLWToolTip::instance()->addToolTip(&moveTip, 
 					x_, y_ + h_ - sizeY, sizeX, sizeY);
 
@@ -479,7 +483,8 @@ bool GLWWindow::initFromXML(XMLNode *node)
 
 	// Desc
 	if (!node->getNamedChild("description", description_)) return false;
-	if (!noTooltip) toolTip_.setText(ToolTip::ToolTipHelp, name_.c_str(), description_.c_str());
+	if (!noTooltip) toolTip_.setText(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE(name_, name_), LANG_RESOURCE(name_ + "_window", description_));
 
 	// Disabled
 	XMLNode *disabled = 0;

@@ -27,6 +27,7 @@
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankPosition.h>
+#include <lang/LangResource.h>
 
 REGISTER_CLASS_SOURCE(GLWTankSlider);
 
@@ -34,11 +35,12 @@ GLWTankSlider::GLWTankSlider() :
 	GLWDragger(0.0f, 0.0f, 0.0f, 100.0f)
 {
 	setHandler(this);
-	setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Power",
-		"Change the power of the current tank\n"
+	setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("POWER", "Power"),
+		LANG_RESOURCE("POWER_TOOLTIP", "Change the power of the current tank\n"
 		"by clicking with the left mouse button\n"
 		"and dragging up and down.\n"
-		"Shift key decreases sensitivity."));
+		"Shift key decreases sensitivity.")));
 }
 
 GLWTankSlider::~GLWTankSlider()

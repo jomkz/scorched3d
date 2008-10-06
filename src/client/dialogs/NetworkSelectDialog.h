@@ -80,8 +80,8 @@ protected:
 	void startRefresh();
 	void stopRefresh();
 	bool serverCompatable(std::string pversion, std::string version);
-	GLTexture *getTexture(int row, const char *&message);
-	void drawIcon(GLTexture *tex, float &x, float y, const char *message);
+	GLTexture *getTexture(int row, LangString *&message);
+	void drawIcon(GLTexture *tex, float &x, float y, LangString &message);
 
 	void drawColumnGames(unsigned int id, int row, int column, float x, float y, float w);
 	void drawColumnPlayers(unsigned int id, int row, int col, float x, float y, float w);

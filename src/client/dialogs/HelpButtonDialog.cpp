@@ -72,8 +72,8 @@ HelpButtonDialog::HelpMenu::HelpMenu()
 	MainMenuDialog::instance()->
 		addMenu(LANG_RESOURCE("HELP", "Help"), 
 			"Help", 
-			"Launch an external web browser containing the\n"
-			"Scorched3D online help.",
+			LANG_RESOURCE("HELP_MENU", "Launch an external web browser containing the\n"
+			"Scorched3D online help."),
 			32.0f, 0, this, map,
 			GLMenu::eMenuAlignRight);
 }
@@ -100,7 +100,7 @@ HelpButtonDialog::VolumeMenu::VolumeMenu()
 	MainMenuDialog::instance()->
 		addMenu(LANG_RESOURCE("VOLUME", "Volume"), 
 			"Volume",
-			"Change the sound and volume settings",
+			LANG_RESOURCE("VOLUME_MENU", "Change the sound and volume settings"),
 			32.0f, 0, this, map,
 			GLMenu::eMenuAlignRight);
 }
@@ -123,7 +123,7 @@ HelpButtonDialog::PerformanceMenu::PerformanceMenu()
 	MainMenuDialog::instance()->
 		addMenu(LANG_RESOURCE("PERFORMANCE", "Perofmance"),
 			"Performance", 
-			"",
+			LANG_STRING(""),
 			32.0f, 0, this, map,
 			GLMenu::eMenuAlignRight);
 }
@@ -138,9 +138,9 @@ void HelpButtonDialog::PerformanceMenu::menuSelection(const char* menuName,
 {
 }
 
-const char *HelpButtonDialog::PerformanceMenu::getMenuToolTip(const char* menuName)
+LangStringStorage *HelpButtonDialog::PerformanceMenu::getMenuToolTip(const char* menuName)
 {
-	static std::string result;
+	static LangString result;
 
 	unsigned int pOnScreen = 
 		ScorchedClient::instance()->
@@ -148,7 +148,7 @@ const char *HelpButtonDialog::PerformanceMenu::getMenuToolTip(const char* menuNa
 		MainCamera::instance()->getTarget().
 			getPrecipitationEngine().getParticlesOnScreen();
 
-	result = S3D::formatStringBuffer(
+	result = LANG_STRING(S3D::formatStringBuffer(
 		"%.2f Frames Per Second\n"
 		"  %i Triangles Drawn\n"
 		"  %i Particles Drawn\n"
@@ -170,7 +170,7 @@ const char *HelpButtonDialog::PerformanceMenu::getMenuToolTip(const char* menuNa
 		Sound::instance()->getPlayingChannels(),
 		Landscape::instance()->getShadowMap().getShadowCount(), 
 		FrameTimer::instance()->getLastStateCount(),
-		FrameTimer::instance()->getLastTextureSets());
+		FrameTimer::instance()->getLastTextureSets()));
 
-	return result.c_str();
+	return (LangStringStorage *) result.c_str();
 }

@@ -37,7 +37,7 @@ SettingsSubSelectDialogListItem::SettingsSubSelectDialogListItem(
 	bool selected) :
 	name_(name), 
 	selected_(0.0f, 0.0f, selected), 
-	tip_(ToolTip::ToolTipHelp, name, description),
+	tip_(ToolTip::ToolTipHelp, LANG_STRING(name), LANG_STRING(description)),
 	icon_(0.0f, 0.0f, 40.0f, 40.0f)
 {
 	if (S3D::fileExists(icon))
@@ -65,7 +65,7 @@ void SettingsSubSelectDialogListItem::draw(float x, float y, float w)
 		w - 50.0f,
 		GLWFont::widgetFontColor, 
 		12.0f, x + 75.0f, y + 17.0f, 0.0f, 
-		name_.c_str());
+		name_);
 
 	selected_.setX(x + 50.0f);
 	selected_.setY(y + 13.0f);

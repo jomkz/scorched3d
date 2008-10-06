@@ -300,33 +300,40 @@ TankMenus::PlayerMenu::PlayerMenu()
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->addMenu(LANG_RESOURCE("PLAYER", "Player"), 
 		"Player",
-		"Skip move, resign, and quit",
+		LANG_RESOURCE("PLAYER_WINDOW", "Skip move, resign, and quit"),
 		32, 
 		ClientState::StatePlaying, this, map);
 
 	MainMenuDialog::instance()->addMenuItem("Player", 
 		GLMenuItem(LANG_RESOURCE("SKIP_MOVE", "Skip Move"),
-		new ToolTip(ToolTip::ToolTipHelp, "Skip Move", 
-			"Player forfits this move.")));
+		new ToolTip(ToolTip::ToolTipHelp, 
+			LANG_RESOURCE("SKIP_MOVE", "Skip Move"), 
+			LANG_RESOURCE("SKIP_MOVE_TOOLTIP", "Player forfits this move."))));
 	MainMenuDialog::instance()->addMenuItem("Player", 
 		GLMenuItem(LANG_RESOURCE("RESIGN_ROUND", "Resign Round"),
-		new ToolTip(ToolTip::ToolTipHelp, "Resign Round", 
+		new ToolTip(ToolTip::ToolTipHelp, 
+			LANG_RESOURCE("RESIGN_ROUND", "Resign Round"), 
+			LANG_RESOURCE("RESIGN_ROUND_TOOLTIP", 
 			"Player resigns from this round.\n"
-			"Player takes no part in the rest of the round.")));
+			"Player takes no part in the rest of the round."))));
 	MainMenuDialog::instance()->addMenuItem("Player", 
 		GLMenuItem(LANG_RESOURCE("EXIT_GAME", "Exit Game"),
-		new ToolTip(ToolTip::ToolTipHelp, "Exit Game", 
-			"Stop Playing Scorched.")));
+		new ToolTip(ToolTip::ToolTipHelp, 
+			LANG_RESOURCE("EXIT_GAME", "Exit Game"), 
+			LANG_RESOURCE("EXIT_GAME_TOOLTIP", "Stop Playing Scorched."))));
 	if (!ClientParams::instance()->getConnectedToServer())
 	{
 		MainMenuDialog::instance()->addMenuItem("Player",
 			GLMenuItem(LANG_RESOURCE("MASS_TANK_KILL", "Mass Tank Kill"),
-			new ToolTip(ToolTip::ToolTipHelp, "Mass Tank Kill",
-				"Kill all tanks.\nStarts the next round.")));
+			new ToolTip(ToolTip::ToolTipHelp, 
+				LANG_RESOURCE("MASS_TANK_KILL", "Mass Tank Kill"),
+				LANG_RESOURCE("MASS_TANK_KILL_TOOLTIP", 
+				"Kill all tanks.\nStarts the next round."))));
 		MainMenuDialog::instance()->addMenuItem("Player",
 			GLMenuItem(LANG_RESOURCE("SAVE", "Save"),
-			new ToolTip(ToolTip::ToolTipHelp, "Save", 
-				"Save this game.")));
+			new ToolTip(ToolTip::ToolTipHelp, 
+				LANG_RESOURCE("SAVE", "Save"),
+				LANG_RESOURCE("SAVE_TOOLTIP", "Save this game."))));
 	}
 }
 
@@ -385,7 +392,7 @@ TankMenus::AccessoryMenu::AccessoryMenu()
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->addMenu(LANG_RESOURCE("WEAPONS", "Weapons"), 
 		"Weapons", 
-		"Change the current weapon and enable defenses",
+		LANG_RESOURCE("WEAPONS_WINDOW", "Change the current weapon and enable defenses"),
 		32, 
 		ClientState::StatePlaying, this, map);
 }

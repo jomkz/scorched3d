@@ -66,7 +66,7 @@ MainCamera::MainCamera() :
 	MainMenuDialog::instance()->addMenu(
 		LANG_RESOURCE("CAMERA", "Camera"),
 		"Camera", 
-		"Change the current camera view.",
+		LANG_RESOURCE("CAMERA_MENU", "Change the current camera view."),
 		32, 0, this, map);
 }
 

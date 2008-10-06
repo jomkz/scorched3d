@@ -32,7 +32,7 @@ public:
 	GLMenuEntry(
 		const LangString &menuName,
 		char *menuNameInternal, 
-		const char *menuDescription,
+		const LangString &menuDescription,
 		float width, 
 		unsigned int state,
 		GLMenuI *callback,
@@ -53,7 +53,6 @@ public:
 	bool getSelected() { return selected_; }
 	LangString &getName() { return menuName_; }
 	const char *getNameInternal() { return menuNameInternal_.c_str(); }
-	const char *getDescription() { return menuDescription_.c_str(); }
 	GLMenuI *getCallback() { return callback_; }
 	ToolTip &getToolTip() { return toolTip_; }
 	unsigned int getFlags() { return flags_; }
@@ -74,9 +73,8 @@ protected:
 	ToolTip toolTip_;
 	Image *icon_;
 	std::list<GLMenuItem> menuItems_;
-	LangString menuName_;
+	LangString menuName_, menuDescription_;
 	std::string menuNameInternal_;
-	std::string menuDescription_;
 
 	void drawText();
 	void drawIcon();

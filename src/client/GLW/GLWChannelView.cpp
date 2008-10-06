@@ -31,6 +31,7 @@
 #include <client/ScorchedClient.h>
 #include <sound/SoundUtils.h>
 #include <tank/TankContainer.h>
+#include <lang/LangResource.h>
 
 GLWChannelViewI::~GLWChannelViewI()
 {
@@ -60,17 +61,17 @@ GLWChannelView::GLWChannelView() :
 
 	upButton_.setToolTip(new ToolTip(
 		ToolTip::ToolTipAlignLeft | ToolTip::ToolTipHelp, 
-		"Chat", 
-		"Show previous chat entry"));
+		LANG_RESOURCE("CHAT_PREVIOUS", "Chat Previous"), 
+		LANG_RESOURCE("CHAT_PREVIOUS_TOOLTIP", "Show previous chat entry")));
 	downButton_.setToolTip(new ToolTip(
 		ToolTip::ToolTipAlignLeft | ToolTip::ToolTipHelp, 
-		"Chat", 
-		"Show next chat entry"));
+		LANG_RESOURCE("CHAT_NEXT", "Chat Next"), 
+		LANG_RESOURCE("CHAT_NEXT_TOOLTIP", "Show next chat entry")));
 	resetButton_.setToolTip(new ToolTip(
 		ToolTip::ToolTipAlignLeft | ToolTip::ToolTipHelp, 
-		"Chat", 
-		"View end of the chat log, \n"
-		"hide all elapsed entries"));
+		LANG_RESOURCE("CHAT_LAST", "Chat Last"), 
+		LANG_RESOURCE("CHAT_LAST_TOOLTIP", "View end of the chat log, \n"
+		"hide all elapsed entries")));
 }
 
 GLWChannelView::~GLWChannelView()

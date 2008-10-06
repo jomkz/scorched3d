@@ -148,7 +148,7 @@ void NetworkSelectDialog::simulate(float frameTime)
 	}
 }
 
-void NetworkSelectDialog::drawIcon(GLTexture *tex, float &x, float y, const char *message)
+void NetworkSelectDialog::drawIcon(GLTexture *tex, float &x, float y, LangString &message)
 {
 	GLState state(GLState::TEXTURE_ON | GLState::BLEND_ON);
 	glColor3f(1.0f, 1.0f, 1.0f);
@@ -172,13 +172,14 @@ void NetworkSelectDialog::drawIcon(GLTexture *tex, float &x, float y, const char
 		GLWTranslate::getPosY() + y, 
 		w, h))
 	{
-		colToolTip_.setText(ToolTip::ToolTipInfo, "Status Icon", message);
+		colToolTip_.setText(ToolTip::ToolTipInfo, 
+			LANG_RESOURCE("STATUS_ICON", "Status Icon"), message);
 	}
 
 	x += w;
 }
 
-GLTexture *NetworkSelectDialog::getTexture(int row, const char *&message)
+GLTexture *NetworkSelectDialog::getTexture(int row, LangString *&message)
 {
 	std::string pversion =
 		ServerBrowser::instance()->getServerList().
@@ -188,7 +189,9 @@ GLTexture *NetworkSelectDialog::getTexture(int row, const char *&message)
 			getEntryValue(row, "version");
 	if (!serverCompatable(pversion, version))
 	{
-		message = "Incompatible version.";
+		LANG_RESOURCE_CONST_VAR(INCOMPATIBLE, 
+			"INCOMPATIBLE_VERSION", "Incompatible version.");
+		message = &INCOMPATIBLE;
 		return noentryTex_;
 	}
 
@@ -201,7 +204,9 @@ GLTexture *NetworkSelectDialog::getTexture(int row, const char *&message)
 	if (clients.size() > 0 &&
 		0 == strcmp(clients.c_str(), maxclients.c_str()))
 	{
-		message = "Server is full.";
+		LANG_RESOURCE_CONST_VAR(SERVER_FULL, 
+			"SERVER_FULL", "Server is full.");
+		message = &SERVER_FULL;
 		return exclaimTex_;
 	}
 	
@@ -210,16 +215,22 @@ GLTexture *NetworkSelectDialog::getTexture(int row, const char *&message)
 			getEntryValue(row, "state");
 	if (0 == strcmp(state.c_str(), "Waiting"))
 	{
-		message = "Game has not started.";
+		LANG_RESOURCE_CONST_VAR(NOT_STARTED, 
+			"GAME_NOT_STARTED", "Game has not started.");
+		message = &NOT_STARTED;
 		return warningTex_;
 	}
 	if (0 == strcmp(state.c_str(), "Started"))
 	{
-		message = "Game in progress and spaces on server.";
+		LANG_RESOURCE_CONST_VAR(GAME_PROGESS, 
+			"GAME_IN_PROGRESS", "Game in progress and spaces on server.");
+		message = &GAME_PROGESS;
 		return okTex_;
 	}
 
-	message = "Cannot contact server.";
+	LANG_RESOURCE_CONST_VAR(CANNOT_CONTACT_SERVER, 
+		"CANNOT_CONTACT_SERVER", "Cannot contact server.");
+	message = &CANNOT_CONTACT_SERVER;
 	return questionTex_;
 }
 
@@ -270,16 +281,22 @@ void NetworkSelectDialog::drawColumnGames(unsigned int id, int row, int col,
 				S3D::getDataFile("data/windows/tank2s.bmp"));
 		}
 
-		const char *message = "None";
-		GLTexture *tex = getTexture(row, message);
-		drawIcon(tex, x, y, message);
+		LANG_RESOURCE_CONST_VAR(NONE, "NONE", "None");
+
+		{
+			LangString *message = &NONE;
+			GLTexture *tex = getTexture(row, message);
+			drawIcon(tex, x, y, *message);
+		}
 
 		std::string key = 
 			ServerBrowser::instance()->getServerList().
 				getEntryValue(row, "password");
 		if (0 == strcmp(key.c_str(), "On"))
 		{
-			drawIcon(keyTex_, x, y, "Password protected.");
+			LANG_RESOURCE_CONST_VAR(
+				PASSWORD_PROTECTED, "PASSWORD_PROTECTED", "Password protected.");
+			drawIcon(keyTex_, x, y, PASSWORD_PROTECTED);
 		}
 
 		std::string officialStr = 
@@ -287,11 +304,15 @@ void NetworkSelectDialog::drawColumnGames(unsigned int id, int row, int col,
 				getEntryValue(row, "type");
 		if (officialStr == "official")
 		{
-			drawIcon(tankTex_, x, y, "An offical server.");
+			LANG_RESOURCE_CONST_VAR(
+				OFFICAL_SERVER, "OFFICAL_SERVER", "An offical server.");
+			drawIcon(tankTex_, x, y, OFFICAL_SERVER);
 		}
 		else if (officialStr == "mod")
 		{
-			drawIcon(cogTex_, x, y, "Home of mod server.");
+			LANG_RESOURCE_CONST_VAR(
+				MOD_SERVER, "MOD_SERVER", "Home of mod server.");
+			drawIcon(cogTex_, x, y, MOD_SERVER);
 		}
 	}
 	else if (col == 2)
@@ -359,7 +380,8 @@ void NetworkSelectDialog::drawColumnGames(unsigned int id, int row, int col,
 				w, 20.0f))
 			{
 				colToolTip_.setText(ToolTip::ToolTipInfo, 
-					LangStringUtil::convertFromLang(getGamesCols()[col].col.name), tipValue);
+					getGamesCols()[col].col.name, 
+					LANG_STRING(tipValue));
 			}
 		}
 	}

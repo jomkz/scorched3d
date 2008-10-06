@@ -32,7 +32,9 @@
 
 GLWIconListSaveItem::GLWIconListSaveItem(
 	const char *file, const char *time) :
-	tip_(ToolTip::ToolTipHelp, "Save", "Load a previously saved game."),
+	tip_(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("SAVE", "Save"), 
+		LANG_RESOURCE("SAVE_TOOLTIP", "Load a previously saved game.")),
 	icon_(0.0f, 0.0f, 40.0f, 40.0f),
 	file_(file), time_(time)
 {

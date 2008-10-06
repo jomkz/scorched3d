@@ -24,6 +24,7 @@
 #include <tank/TankContainer.h>
 #include <tankgraph/TargetRendererImplTank.h>
 #include <client/ScorchedClient.h>
+#include <lang/LangResource.h>
 
 GLWChannelViewTextRenderer::GLWChannelViewTextRenderer(GLWChannelView *channelView) :
 	channelView_(channelView)
@@ -66,22 +67,26 @@ void GLWChannelViewTextRenderer::drawCharacter(
 				}
 				else
 				{
-					toolTip_.setText(ToolTip::ToolTipInfo, textEntry->part.c_str(),
-						"Player disconnected");		
+					toolTip_.setText(ToolTip::ToolTipInfo, 
+						LANG_RESOURCE("PLAYER_DISCONECTED", "Player disconnected"),
+						LANG_STRING(textEntry->part));		
 				}
 			}
 			break;
 		case eChannelEntry:
-			toolTip_.setText(ToolTip::ToolTipHelp, "Channel",
-				textEntry->part.c_str());		
+			toolTip_.setText(ToolTip::ToolTipHelp, 
+				LANG_RESOURCE("CHANNEL", "Channel"),
+				LANG_STRING(textEntry->part));		
 			break;
 		case eWeaponEntry:
-			toolTip_.setText(ToolTip::ToolTipHelp, "Weapon",
-				textEntry->part.c_str());	
+			toolTip_.setText(ToolTip::ToolTipHelp, 
+				LANG_RESOURCE("WEAPON", "Weapon"),
+				LANG_STRING(textEntry->part));	
 			break;
 		case eAdminEntry:
-			toolTip_.setText(ToolTip::ToolTipHelp, "Admin",
-				textEntry->part.c_str());	
+			toolTip_.setText(ToolTip::ToolTipHelp, 
+				LANG_RESOURCE("ADMIN", "Admin"),
+				LANG_STRING(textEntry->part));	
 			break;
 		}
 	}

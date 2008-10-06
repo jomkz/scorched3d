@@ -56,7 +56,7 @@ GLWWindowManager::GLWWindowManager() :
 	MainMenuDialog::instance()->
 		addMenu(LANG_RESOURCE("WINDOWS", "Windows"), 
 			"Windows",
-			"Hide and display aspects of the user interface",
+			LANG_RESOURCE("WINDOWS_WINDOW", "Hide and display aspects of the user interface"),
 			32.0f, 0, this, map);
 }
 

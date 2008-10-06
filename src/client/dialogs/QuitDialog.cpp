@@ -45,29 +45,33 @@ QuitDialog::QuitDialog() :
 	killButton_ = (GLWTextButton *) 
 		addWidget(new GLWTextButton(LANG_RESOURCE("MASS_TANK_KILL", "Mass Tank Kill"), 10, 115, 190, this, 
 		GLWButton::ButtonFlagCenterX));
-	killButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Mass tank kill",
-		"Kills all the tanks and starts the next\n"
+	killButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("MASS_TANK_KILL", "Mass tank kill"),
+		LANG_RESOURCE("MADD_TANK_KILL_TOOLTIP", "Kills all the tanks and starts the next\n"
 		"round.  Only available in single player\n"
-		"games."));
+		"games.")));
 
 	saveButton_ = (GLWTextButton *) 
 		addWidget(new GLWTextButton(LANG_RESOURCE("SAVE_GAME", "Save Game"), 10, 80, 190, this,
 		GLWButton::ButtonFlagCenterX));
-	saveButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Save Game",
-		"Saves the games.\n"
-		"Only available in single player games."));
+	saveButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("SAVE_GAME", "Save Game"),
+		LANG_RESOURCE("SAVE_GAME_TOOLTIP", "Saves the games.\n"
+		"Only available in single player games.")));
 
 	quitButton_ = (GLWTextButton *) 
 		addWidget(new GLWTextButton(LANG_RESOURCE("QUIT_GAME", "Quit Game"), 10, 45, 190, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX));
-	quitButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Quit Game",
-		"Quits Scorched3D"));
+	quitButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("QUIT_GAME", "Quit Game"),
+		LANG_RESOURCE("QUIT_GAME_TOOLTIP", "Quits Scorched3D")));
 
 	okButton_ = (GLWTextButton *) 
 		addWidget(new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 95, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX));
-	okButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Cancel",
-		"Return to the game."));
+	okButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("CANCEL", "Cancel"),
+		LANG_RESOURCE("CANCEL_TOOLTIP", "Return to the game.")));
 }
 
 QuitDialog::~QuitDialog()

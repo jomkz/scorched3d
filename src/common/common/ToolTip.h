@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_ToolTiph_INCLUDE__)
 #define __INCLUDE_ToolTiph_INCLUDE__
 
-#include <string>
+#include <lang/LangString.h>
 
 class GLWToolTip;
 class ToolTipI
@@ -46,12 +46,13 @@ public:
 
 	friend class GLWToolTip;
 	ToolTip(unsigned int type = ToolTipNone, 
-		const std::string &title = "", const std::string &text = "");
+		const LangString &title = LangString(), 
+		const LangString &text = LangString());
 	virtual ~ToolTip();
 
 	// Used to set the title and text of the tooltip
 	void setText(unsigned int type, 
-		const std::string &title, const std::string &text);
+		const LangString &title, const LangString &text);
 
 	// Called just before the tooltip is shown
 	// can be used to dynamically populate the title and text fields
@@ -60,8 +61,8 @@ public:
 	void setHandler(ToolTipI *handler) { handler_ = handler; }
 
 	unsigned int getId() { return id_; }
-	const char *getText() { return text_.c_str(); }
-	const char *getTitle() { return title_.c_str(); }
+	LangString &getText() { return text_; }
+	LangString &getTitle() { return title_; }
 	unsigned int getType() { return type_; }
 
 protected:
@@ -69,8 +70,8 @@ protected:
 	ToolTipI *handler_;
 	unsigned int id_;
 	static unsigned int nextId_;
-	std::string text_;
-	std::string title_;
+	LangString text_;
+	LangString title_;
 
 };
 #endif // __INCLUDE_ToolTiph_INCLUDE__

@@ -34,7 +34,7 @@ static const float menuItemHeight = 20.0f;
 GLMenuEntry::GLMenuEntry(
 	const LangString &menuName,
 	char *menuNameInternal, 
-	const char *menuDescription,
+	const LangString &menuDescription,
 	float width, 
 	unsigned int state,
 	GLMenuI *callback,
@@ -46,7 +46,7 @@ GLMenuEntry::GLMenuEntry(
 	menuDescription_(menuDescription),
 	state_(state), selected_(false),
 	texture_(0), icon_(icon), flags_(flags),
-	toolTip_(ToolTip::ToolTipHelp, menuNameInternal, menuDescription)
+	toolTip_(ToolTip::ToolTipHelp, menuName, menuDescription)
 {
 	toolTip_.setHandler(this);
 }
@@ -232,7 +232,7 @@ void GLMenuEntry::populateCalled(unsigned int id)
 {
 	if (callback_)
 	{
-		const char *text = callback_->getMenuToolTip(menuNameInternal_.c_str());
-		if (text) toolTip_.setText(ToolTip::ToolTipHelp, menuNameInternal_.c_str(), text);
+		LangStringStorage *text = callback_->getMenuToolTip(menuNameInternal_.c_str());
+		if (text) toolTip_.setText(ToolTip::ToolTipHelp, menuName_, text);
 	}
 }

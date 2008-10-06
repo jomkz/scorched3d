@@ -63,7 +63,7 @@ public:
 			const int position, GLMenuItem &item);
 		virtual bool getMenuItems(const char* menuName, 
 			std::list<GLMenuItem> &result);
-		virtual const char *getMenuToolTip(const char* menuName);
+		virtual LangStringStorage *getMenuToolTip(const char* menuName);
 
 	protected:
 		GLTexture helpTexture_;

@@ -327,10 +327,11 @@ bool BuyAccessoryDialog::addAccessory(
 	sortBox->setHandler(this);
 	sortBox->setW(14);
 	sortBox->setH(14);
-	sortBox->setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Favorite Weapon",
-		"Set/unset this weapon as a favorite.\n"
+	sortBox->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("FAVOURITE_WEAPON", "Favorite Weapon"),
+		LANG_RESOURCE("FAVOURITE_WEAPON_TOOLTIP", "Set/unset this weapon as a favorite.\n"
 		"Favorite weapons will show in the\n"
-		"favorites tab."));
+		"favorites tab.")));
 	sortBox->setState(favorites_.find(current->getName()) != favorites_.end());
 	favMap_[sortBox->getId()] = current;
 	
@@ -351,9 +352,12 @@ bool BuyAccessoryDialog::addAccessory(
 					210, 2, 100, this, 
 			GLWButton::ButtonFlagCenterX, 12.0f));
 		button->setColor(Vector(0.0f, 0.4f, 0.0f));
-		button->setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Buy", 
-			S3D::formatStringBuffer("Buy %i %s(s) for $%i", 
-				current->getBundle(), current->getName(), current->getPrice())));
+		button->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+			LANG_RESOURCE("BUY", "Buy"), 
+			LANG_RESOURCE_3("BUY_TOOLTIP", "Buy {0} {1}(s) for ${2}",
+				S3D::formatStringBuffer("%i", current->getBundle()),
+				current->getName(),
+				S3D::formatStringBuffer("%i", current->getPrice()))));
 		button->setH(button->getH() - 2.0f);
 		buyMap_[button->getId()] = current;
 	}
@@ -378,9 +382,11 @@ bool BuyAccessoryDialog::addAccessory(
 					312, 2, 100, this,
 			GLWButton::ButtonFlagCenterX, 12.0f));
 		button->setColor(Vector(0.7f, 0.0f, 0.0f));
-		button->setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Sell", 
-			S3D::formatStringBuffer("Sell 1 %s for $%i", 
-				current->getName(), current->getSellPrice())));
+		button->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+			LANG_RESOURCE("SELL", "Sell"), 
+			LANG_RESOURCE_2("SELL_TOOLTIP", "Sell 1 {0} for ${1}",
+				current->getName(),
+				S3D::formatStringBuffer("%i", current->getSellPrice()))));
 		button->setH(button->getH() - 2.0f);
 		sellMap_[button->getId()] = current;
 	}

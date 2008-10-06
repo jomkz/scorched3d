@@ -36,6 +36,7 @@
 #include <client/ClientState.h>
 #include <client/ClientDefenseHandler.h>
 #include <client/ScorchedClient.h>
+#include <lang/LangResource.h>
 
 AutoDefenseDialog::AutoDefenseDialog() :
 	GLWWindow("Auto Defense", 10.0f, 10.0f, 440.0f, 280.0f, 0,
@@ -51,14 +52,16 @@ AutoDefenseDialog::AutoDefenseDialog() :
 	ddpara_ = (GLWDropDownText *) addWidget(new GLWDropDownText(120, 170, 420),
 		0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
 	ddpara_->setHandler(this);
-	ddpara_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Enable Parachutes",
-		"Choose to enable parachutes before the\n"
-		"beginning of the next round."));
+	ddpara_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("ENABLE_PARACHUTES", "Enable Parachutes"),
+		LANG_RESOURCE("ENABLE_PARACHUTES_TOOLTIP", "Choose to enable parachutes before the\n"
+		"beginning of the next round.")));
 	ddshields_ = (GLWDropDownText *) addWidget(new GLWDropDownText(120, 200, 420),
 		0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
-	ddshields_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Choose Shields",
-		"Choose the shield to use at the beginning\n"
-		"of the next round."));
+	ddshields_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("CHOOSE_SHIELDS", "Choose Shields"),
+		LANG_RESOURCE("CHOOSE_SHIELDS_TOOLTIP", "Choose the shield to use at the beginning\n"
+		"of the next round.")));
 	ddshields_->setHandler(this);
 
 	GLWPanel *buttonPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
@@ -178,8 +181,9 @@ void AutoDefenseDialog::displayCurrent()
 		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsGame().getNoRounds()))));
 
 	// Put shields info
-	static ToolTip shieldsOffTip(ToolTip::ToolTipHelp, "Shields Off",
-		"Turns off shields.");
+	static ToolTip shieldsOffTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("SHIELDS_OFF", "Shields Off"),
+		LANG_RESOURCE("SHIELDS_OFF_TOOLTIP", "Turns off shields."));
 	ddshields_->clear();
 	std::list<Accessory *>::iterator shieldsItor;
 	std::list<Accessory *> &shields =
@@ -197,8 +201,9 @@ void AutoDefenseDialog::displayCurrent()
 	}
 
 	// Put paras info
-	static ToolTip parachutesOffTip(ToolTip::ToolTipHelp, "Parachutes Off",
-		"Turns off parachutes.");
+	static ToolTip parachutesOffTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("PARACHUTES_OFF", "Parachutes Off"),
+		LANG_RESOURCE("PARACHUTES_OFF_TOOLTIP", "Turns off parachutes."));
 	ddpara_->clear();
 	std::list<Accessory *>::iterator parachutesItor;
 	std::list<Accessory *> &parachutes =

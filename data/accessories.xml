@@ -488,12 +488,10 @@ cover them.</description>
 	<accessory>
 		<name>Ton Of Dirt</name>
 		<armslevel>7</armslevel>
-		<description>
-			A projectile weapon that explodes making
-			a large mound of earth.  The explosion
-			does not harm tanks but can be used to
-			cover them.
-		</description>
+		<description>A projectile weapon that explodes making
+a large mound of earth.  The explosion
+does not harm tanks but can be used to
+cover them.</description>
 		<icon>tdirt.bmp</icon>
 		<bundlesize>2</bundlesize>
 		<cost>6750</cost>

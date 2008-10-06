@@ -51,7 +51,8 @@ GLWChannelText::GLWChannelText() :
 	button_.setHandler(this);
 	button_.setToolTip(new ToolTip(
 		ToolTip::ToolTipAlignLeft | ToolTip::ToolTipHelp, 
-		"Chat", "Show chat menu"));
+		LANG_RESOURCE("CHAT", "Chat"), 
+		LANG_RESOURCE("CHAT_SHOW_TOOLTIP", "Show chat menu")));
 	prompt_.setChannelView(&view_);
 }
 
@@ -416,26 +417,35 @@ void GLWChannelText::buttonDown(unsigned int id)
 
 	// All of the tooltips
 	static ToolTip muteTooltip(ToolTip::ToolTipHelp | ToolTip::ToolTipAlignBottom, 
-		"Ignore", "Ignore chat from another player (mute)");
+		LANG_RESOURCE("IGNORE", "Ignore"), 
+		LANG_RESOURCE("IGNORE_TOOLTIP", "Ignore chat from another player (mute)"));
 	static ToolTip whisperTooltip(ToolTip::ToolTipHelp | ToolTip::ToolTipAlignBottom, 
-		"Whisper", "Send private chat to another player");
+		LANG_RESOURCE("WHISPER", "Whisper"), 
+		LANG_RESOURCE("WHISPER_TOOLTIP", "Send private chat to another player"));
 	static ToolTip joinTooltip(ToolTip::ToolTipHelp | ToolTip::ToolTipAlignBottom, 
-		"Join Channel", "Join another chat channel.\n"
-		"You will be able to see messages sent on this channel");
+		LANG_RESOURCE("JOIN_CHANNEL", "Join Channel"), 
+		LANG_RESOURCE("JOIN_CHANNEL_TOOLTIP", "Join another chat channel.\n"
+		"You will be able to see messages sent on this channel"));
 	static ToolTip leaveTooltip(ToolTip::ToolTipHelp | ToolTip::ToolTipAlignBottom, 
-		"Leave Channel", "Leave a current chat channel.\n"
-		"You will stop recieving messages sent on this channel");
+		LANG_RESOURCE("LEAVE_CHANNEL", "Leave Channel"), 
+		LANG_RESOURCE("LEAVE_CHANNEL_TOOLTIP", "Leave a current chat channel.\n"
+		"You will stop recieving messages sent on this channel"));
 	static ToolTip selectTooltip(ToolTip::ToolTipHelp | ToolTip::ToolTipAlignBottom, 
-		"Select Channel", "Select the current channel.\n"
-		"This is the channel you will send messages on.");
+		LANG_RESOURCE("SELECT_CHANNEL", "Select Channel"), 
+		LANG_RESOURCE("SELECT_CHANNEL_TOOLTIP", "Select the current channel.\n"
+		"This is the channel you will send messages on."));
 	static ToolTip colorTooltip(ToolTip::ToolTipHelp | ToolTip::ToolTipAlignBottom, 
-		"Channel Color", "Change the color of the current channel.");
+		LANG_RESOURCE("CHANNEL_COLOR", "Channel Color"), 
+		LANG_RESOURCE("CHANNEL_COLOR_TOOLTIP", "Change the color of the current channel."));
 	static ToolTip resendTooltip(ToolTip::ToolTipHelp | ToolTip::ToolTipAlignBottom, 
-		"Resend", "Resend a previously sent message.");
+		LANG_RESOURCE("RESEND", "Resend"), 
+		LANG_RESOURCE("RESEND_TOOLTIP", "Resend a previously sent message."));
 	static ToolTip replyTooltip(ToolTip::ToolTipHelp | ToolTip::ToolTipAlignBottom, 
-		"Reply", "Reply to the last person that whispered you.");
+		LANG_RESOURCE("REPLY", "Reply"), 
+		LANG_RESOURCE("REPLY_TOOLTIP", "Reply to the last person that whispered you."));
 	static ToolTip chatTooltip(ToolTip::ToolTipHelp | ToolTip::ToolTipAlignBottom, 
-		"Chat", "Show or hide the chat text entry box.");
+		LANG_RESOURCE("CHAT", "Chat"), 
+		LANG_RESOURCE("CHAT_TOOLTIP", "Show or hide the chat text entry box."));
 
 	GLWSelectorEntry mute(LANG_RESOURCE("IGNORE", "Ignore"), &muteTooltip);
 	GLWSelectorEntry whisper(LANG_RESOURCE("WHISPER", "Whisper"), &whisperTooltip);

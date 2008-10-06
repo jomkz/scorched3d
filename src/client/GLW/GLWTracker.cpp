@@ -28,6 +28,7 @@
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankPosition.h>
+#include <lang/LangResource.h>
 
 REGISTER_CLASS_SOURCE(GLWTracker);
 
@@ -85,12 +86,14 @@ GLWTankTracker::GLWTankTracker() :
 	GLWTracker(0.0f, 0.0f, 0.0f, 100.0f)
 {
 	setHandler(this);
-	setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Rotation/Elevation",
+	setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("ROTATION_ELEVATION", "Rotation/Elevation"),
+		LANG_RESOURCE("ROTATION_ELEVATION_TOOLTIP", 
 		"Change the rotation and elevation of the\n"
 		"current tank by clicking with the left\n"
 		"mouse button and dragging up and down,\n"
 		"left and right.\n"
-		"Shift key decreases sensitivity."));
+		"Shift key decreases sensitivity.")));
 }
 
 GLWTankTracker::~GLWTankTracker()

@@ -41,9 +41,14 @@ void GLWOptionEntry::createEntry(
 	std::list<GLWOptionEntry> &controls, 
 	GLWPanel *parent, OptionEntry &entry)
 {
+	std::string descriptionName;
+	descriptionName.append(entry.getName()).append("_description");
+
 	GLWLabel *staticText = new GLWLabel(0.0f, 0.0f, 
 		LANG_RESOURCE(entry.getName(), entry.getName()));
-	staticText->setToolTip(new ToolTip(ToolTip::ToolTipHelp, entry.getName(), entry.getDescription()));
+	staticText->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE(entry.getName(), entry.getName()), 
+		LANG_RESOURCE(descriptionName, entry.getDescription())));
 	parent->addWidget(staticText, 0, GLWPanel::AlignRight | 
 		GLWPanel::SpaceLeft | GLWPanel::SpaceTop, 10.0f);
 
@@ -122,7 +127,9 @@ void GLWOptionEntry::createEntry(
 			entry.getName(), entry.getEntryType()));
 	}
 
-	control->setToolTip(new ToolTip(ToolTip::ToolTipHelp, entry.getName(), entry.getDescription()));
+	control->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE(entry.getName(), entry.getName()), 
+		LANG_RESOURCE(descriptionName, entry.getDescription())));
 	parent->addWidget(control, 0, 
 		GLWPanel::SpaceRight | GLWPanel::SpaceLeft | GLWPanel::SpaceTop, 10.0f);
 
