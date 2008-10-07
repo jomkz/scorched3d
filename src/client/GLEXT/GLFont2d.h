@@ -120,8 +120,7 @@ protected:
 		float size, 
 		float x, float y, float z, 
 		const unsigned int *string,
-		bool bilboard,
-		float size2 = 0.0f);
+		bool bilboard);
 	virtual bool drawStringHandler(unsigned length, 
 		GLFont2dI *handler, 
 		Vector &color, float alpha, 

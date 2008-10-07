@@ -148,7 +148,7 @@ void GLFont2d::drawWidthRhs(float len, Vector &color, float size,
 		}
 		a++;
 
-		drawString(l, color, 1.0f, size, x, y, z, a, false, 0.0f);
+		drawString(l, color, 1.0f, size, x, y, z, a, false);
 	}
 }
 
@@ -318,8 +318,7 @@ bool GLFont2d::drawStringHandler(unsigned length,
 bool GLFont2d::drawString(unsigned length, Vector &color, float alpha, float size, 
 	float x, float y, float z, 
 	const unsigned int *string,
-	bool bilboard,
-	float size2)
+	bool bilboard)
 {
 	if (textures_)
 	{
@@ -340,7 +339,7 @@ bool GLFont2d::drawString(unsigned length, Vector &color, float alpha, float siz
 				}
 			glPopMatrix();
 		}
-		else if (size2 == 0.0f)
+		else 
 		{
 			glPushAttrib(GL_LIST_BIT);
 				glListBase(list_base_);
@@ -351,22 +350,6 @@ bool GLFont2d::drawString(unsigned length, Vector &color, float alpha, float siz
 					glCallLists(length, GL_UNSIGNED_INT, string);
 				glPopMatrix();
 			glPopAttrib();
-		}
-		else
-		{
-			glPushMatrix();
-				glTranslatef(x,y,z);
-				glScalef(size / height_, size / height_, size / height_);
-				float scale = size / height_;
-				float outlineScale = size2 / height_;
-				for (;*string; string++)
-				{
-					float advances = (float)((characters_+*string)->advances);
-					unsigned int list = *string;
-					glCallList(list + list_base_);
-					glTranslatef(-advances + advances * outlineScale / scale,0.0f ,0.0f);
-				}
-			glPopMatrix();
 		}
 
 		return true;
