@@ -18,39 +18,34 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_GLWFONT_H__0BCF1F78_3D58_47EC_8B98_EB39AB3CADD4__INCLUDED_)
-#define AFX_GLWFONT_H__0BCF1F78_3D58_47EC_8B98_EB39AB3CADD4__INCLUDED_
+#ifndef _GLFONT2DFREETYPE_H_
+#define _GLFONT2DFREETYPE_H_
 
-#include <GLEXT/GLFont2d.h>
+#include <GLEXT/GLFont2dStorage.h>
+#include <ft2build.h>
+#include <freetype/freetype.h>
+#include <freetype/ftglyph.h>
+#include <freetype/ftoutln.h>
+#include <freetype/fttrigon.h>
+#include <string>
 
-class GLWFont
+class GLFont2dFreeType
 {
 public:
-	static GLWFont *instance();
+	GLFont2dFreeType();
+	~GLFont2dFreeType();
 
-	static Vector widgetFontColor;
-	static Vector disabledWidgetFontColor;
-
-	GLFont2d *getGameFont() { return gameFont_; }
-	GLFont2d *getGameShadowFont() { return gameShadowFont_; }
-	GLFont2d *getCourierFont() { return courierFont_; }
-	GLFont2d *getNormalFont() { return normalFont_; }
-	GLFont2d *getNormalShadowFont() { return normalShadowFont_; }
-
-	void displayCharacterInfo();
+	bool createFont(const std::string &typeFace, unsigned int h, bool makeShadow);
+	bool createCharacter(char ch, GLFont2dStorage::CharEntry *character);
 
 protected:
-	static  GLWFont *instance_;
-	GLFont2d *gameFont_;
-	GLFont2d *gameShadowFont_;
-	GLFont2d *courierFont_;
-	GLFont2d *normalFont_;
-	GLFont2d *normalShadowFont_;
+	bool makeShadow_;
 
-private:
-	GLWFont();
-	virtual ~GLWFont();
+	FT_Library library_;
 
+	// The Object In Which FreeType Holds Information On A Given
+	// Font Is Called A "face".
+	FT_Face face_;
 };
 
-#endif // !defined(AFX_GLWFONT_H__0BCF1F78_3D58_47EC_8B98_EB39AB3CADD4__INCLUDED_)
+#endif /* _GLFONT2DFREETYPE_H_ */

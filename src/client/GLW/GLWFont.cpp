@@ -20,6 +20,8 @@
 
 #include <GLW/GLWFont.h>
 #include <common/Defines.h>
+#include <console/ConsoleRuleMethodIAdapter.h>
+#include <common/Logger.h>
 
 Vector GLWFont::widgetFontColor = Vector(0.2f, 0.2f, 0.2f);
 Vector GLWFont::disabledWidgetFontColor = Vector(0.4f, 0.4f, 0.4f);
@@ -60,9 +62,19 @@ GLWFont::GLWFont()
 		S3D::getDataFile("data/fonts/vera.ttf"),
 		16,
 		true);
+
+	new ConsoleRuleMethodIAdapter<GLWFont>(
+		this, &GLWFont::displayCharacterInfo, "CharacterInfo");
 }
 
 GLWFont::~GLWFont()
 {
 
+}
+
+void GLWFont::displayCharacterInfo()
+{
+	Logger::log(S3D::formatStringBuffer("Characters : %u\nCharacter Blocks : %u\n",
+		GLFont2d::getTotalCharacters(),
+		GLFont2dStorage::getTotalCharacterBlocks()));
 }

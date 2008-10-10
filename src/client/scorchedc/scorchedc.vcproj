@@ -3785,6 +3785,22 @@
 				>
 			</File>
 			<File
+				RelativePath="..\GLEXT\GLFont2dFreeType.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\GLEXT\GLFont2dFreeType.h"
+				>
+			</File>
+			<File
+				RelativePath="..\GLEXT\GLFont2dStorage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\GLEXT\GLFont2dStorage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\GLEXT\GLFrameBufferObject.cpp"
 				>
 			</File>

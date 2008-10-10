@@ -37,7 +37,7 @@ GLWChannelViewTextRenderer::~GLWChannelViewTextRenderer()
 
 void GLWChannelViewTextRenderer::drawCharacter(
 	int charPosition, Vector &position, 
-	GLFont2d::CharEntry &charEntry, Vector4 &color)
+	GLFont2dStorage::CharEntry &charEntry, Vector4 &color)
 {
 	ChannelTextEntry *textEntry = getEntry(charPosition);
 	if (!textEntry) return;
