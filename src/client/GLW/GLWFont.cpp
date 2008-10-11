@@ -42,24 +42,24 @@ GLWFont::GLWFont()
 {
 	gameFont_ = new GLFont2d;
 	gameFont_->createFont(
-		S3D::getDataFile("data/fonts/test.ttf"),
+		S3D::getDataFile("data/fonts/dejavusconbd.ttf"),
 		16);
 	gameShadowFont_ = new GLFont2d;
 	gameShadowFont_->createFont(
-		S3D::getDataFile("data/fonts/test.ttf"),
+		S3D::getDataFile("data/fonts/dejavusconbd.ttf"),
 		16,
 		true);
 	courierFont_ = new GLFont2d;
 	courierFont_->createFont(
-		S3D::getDataFile("data/fonts/veramobd.ttf"),
+		S3D::getDataFile("data/fonts/dejavusmobd.ttf"),
 		16);
 	normalFont_ = new GLFont2d;
 	normalFont_->createFont(
-		S3D::getDataFile("data/fonts/vera.ttf"),
+		S3D::getDataFile("data/fonts/dejavusans.ttf"),
 		16);
 	normalShadowFont_ = new GLFont2d;
 	normalShadowFont_->createFont(
-		S3D::getDataFile("data/fonts/vera.ttf"),
+		S3D::getDataFile("data/fonts/dejavusans.ttf"),
 		16,
 		true);
 

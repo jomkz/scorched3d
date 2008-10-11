@@ -37,7 +37,8 @@ GLWTankSlider::GLWTankSlider() :
 	setHandler(this);
 	setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
 		LANG_RESOURCE("POWER", "Power"),
-		LANG_RESOURCE("POWER_TOOLTIP", "Change the power of the current tank\n"
+		LANG_RESOURCE("POWER_CHANGE_TOOLTIP", 
+		"Change the power of the current tank\n"
 		"by clicking with the left mouse button\n"
 		"and dragging up and down.\n"
 		"Shift key decreases sensitivity.")));

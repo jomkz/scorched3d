@@ -61,21 +61,19 @@ GLFont2dStorage::~GLFont2dStorage()
 
 GLFont2dStorage::CharEntry *GLFont2dStorage::getEntry(unsigned int character)
 {
-	div_t divresult;
-	divresult = div(character, 256);
-	DIALOG_ASSERT(divresult.quot < 40);
-	DIALOG_ASSERT(divresult.rem < 256);
+	unsigned int blockCount = character >> 8;
+	unsigned int remainderCount = character & 0xFF;
 
 	// Get storage block
-	StorageBlock *block = blocks_[divresult.quot];
+	StorageBlock *block = blocks_[blockCount];
 	if (!block)
 	{
 		block = new StorageBlock();
-		blocks_[divresult.quot] = block;
+		blocks_[blockCount] = block;
 		totalCharacterBlocks_++;
 	}
 
 	// Get character
-	CharEntry *entry = &block->entries[divresult.rem];
+	CharEntry *entry = &block->entries[remainderCount];
 	return entry;
 }

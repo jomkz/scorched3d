@@ -30,3 +30,5 @@ Added script hooks to allow LUA scripts to be called on S3D events
 Combat messages are now shown in the server log
 Fog also applied to landscape in shader mode
 Added usenumber attribute to accessories to specifiy the number to use up when fired (supported 0 or 1)
+Changed fonts to dejavu to provide a larger set of characters
+Added multi-lingual support to Scorched3D (most words customizable, more added if there is demand)
