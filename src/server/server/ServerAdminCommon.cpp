@@ -249,7 +249,7 @@ bool ServerAdminCommon::adminSay(ServerAdminSessions::SessionParams *session,
 	const char *channel, const char *text)
 {
 	ChannelText channelText(channel, text);
-	channelText.setAdminPlayer(session->userName.c_str());
+	channelText.setAdminPlayer(session->credentials.username.c_str());
 	ServerChannelManager::instance()->sendText(channelText, true);
 
 	return true;

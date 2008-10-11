@@ -1,0 +1,29 @@
+#include header.html 
+
+#include menu.html
+
+#include adminmenu.html
+
+<form method="post">
+	<table align="center" border="0">
+		<tr>
+			<td align="center">Account</td>
+		</tr>
+		<tr>
+			<td align="center">
+				[[MESSAGE]]
+				<table border="0" width="400">
+					<tr><td>User Name :</td><td>[[USERNAME]]</td></tr>
+					<tr><td>Old Password :</td><td><input type="password" name="oldpassword" value=""></td></tr>
+					<tr><td>New Password :</td><td><input type="password" name="newpassword" value=""></td></tr>
+				</table>				
+			</td>
+		</tr>
+		<tr>
+			<td align="left">
+				<input type="submit" name="setpassword" value="Set Password">
+			</td>
+		</tr>
+	</table>
+</form>
+#include footer.html

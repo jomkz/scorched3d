@@ -65,6 +65,7 @@ ServerWebServer::ServerWebServer() :
 	addRequestHandler("/banned", new ServerWebHandler::BannedHandler());
 	addRequestHandler("/mods", new ServerWebHandler::ModsHandler());
 	addRequestHandler("/sessions", new ServerWebHandler::SessionsHandler());
+	addRequestHandler("/account", new ServerWebHandler::AccountHandler());
 	addRequestHandler("/stats", new ServerWebHandler::StatsHandler());
 	addRequestHandler("/settingsmain", new ServerWebSettingsHandler::SettingsMainHandler());
 	addRequestHandler("/settingsall", new ServerWebSettingsHandler::SettingsAllHandler());
@@ -272,7 +273,7 @@ void ServerWebServer::processMessage(NetMessage &message)
 								ServerAdminSessions::instance()->getSession(sid);
 							if (session)
 							{
-								username = session->userName;
+								username = session->credentials.username;
 							}
 						}
 
@@ -354,7 +355,7 @@ bool ServerWebServer::processRequest(
 			// No, or credentials are not correct
 			// Show the login page after a delay
 			if (!ServerWebServerUtil::getHtmlTemplate(
-				"login.html", fields, text)) return false;
+				0, "login.html", fields, text)) return false;
 			delayed = true;
 		}
 	}
@@ -470,44 +471,32 @@ bool ServerWebServer::validateUser(
 	const char *url,
 	std::map<std::string, std::string> &fields)
 {
-	bool authenticated = false;
-
-	// Check if this is a local user
-	if (0 == strcmp(ip, "127.0.0.1"))
+	// Create a session for the user
+	unsigned int sid = ServerAdminSessions::instance()->login(
+		fields["name"].c_str(),
+		fields["password"].c_str(),
+		ip);
+	if (sid != 0)
 	{
-		fields["name"] = "localconnection";
-		authenticated = true;
-	}
-	else
-	{
-		// Check if user has a valid username and password
-		if (fields.find("name") != fields.end() ||
-			fields.find("password") != fields.end()) 
-		{
-			if (ServerAdminSessions::instance()->authenticate(
-				fields["name"].c_str(),
-				fields["password"].c_str()))
-			{
-				authenticated = true;
-			}
-		}
-	}
-
-	if (authenticated)
-	{
-		// Create a session for the authenticated user
-		unsigned int sid = ServerAdminSessions::instance()->login(
-			fields["name"].c_str(), ip);
-
 		// Set the sid for use in the html templates
 		fields["sid"] = S3D::formatStringBuffer("%u", sid);
 
+		ServerAdminSessions::SessionParams *adminSession =
+			ServerAdminSessions::instance()->getSession(sid);
+
 		ServerCommon::sendString(0,
 			S3D::formatStringBuffer("server admin \"%s\" logged in",
-			fields["name"].c_str()));
+			adminSession->credentials.username.c_str()));
+
+		return true;
+	}
+	else
+	{
+		Logger::log(S3D::formatStringBuffer("Failed login for server admin \"%s\", via web, ip \"%s\"",
+			fields["name"].c_str(), ip));
 	}
 
-	return authenticated;
+	return false;
 }
 
 bool ServerWebServer::processQueue(ServerWebServerQueue &queue, bool keepEntries)

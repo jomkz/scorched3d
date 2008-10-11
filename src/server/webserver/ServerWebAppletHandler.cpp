@@ -64,7 +64,7 @@ bool ServerWebAppletHandler::AppletHtmlHandler::processRequest(
 	ServerWebServerIRequest &request,
 	std::string &text)
 {
-	return ServerWebServerUtil::getHtmlTemplate("applet.html", request.getFields(), text);
+	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "applet.html", request.getFields(), text);
 }
 
 bool ServerWebAppletHandler::AppletActionHandler::processRequest(

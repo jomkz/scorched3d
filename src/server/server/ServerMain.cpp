@@ -263,7 +263,7 @@ public:
 	{
 		if (op != lastOp_)
 		{
-			if (lastOp_.empty())
+			if (!lastOp_.empty())
 			{
 				drawHashes(25);
 			}

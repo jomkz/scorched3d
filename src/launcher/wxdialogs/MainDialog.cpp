@@ -300,8 +300,8 @@ MainFrame::MainFrame() :
 		"Quit", "- Exit the game.", 30, 340
 	};
 
-	TrueTypeFont largeImageFont(S3D::getDataFile("data/fonts/vera.ttf"), 14);
-	TrueTypeFont smallImageFont(S3D::getDataFile("data/fonts/vera.ttf"), 12);
+	TrueTypeFont largeImageFont(S3D::getDataFile("data/fonts/dejavusans.ttf"), 14);
+	TrueTypeFont smallImageFont(S3D::getDataFile("data/fonts/dejavusans.ttf"), 12);
 
 	for (int i=0; i<sizeof(imageDefinitions) / sizeof(ImageDefinition); i++)
 	{

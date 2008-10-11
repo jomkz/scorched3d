@@ -37,27 +37,31 @@ public:
 		std::string password;
 	};
 
-	bool authenticate(const char *name, const char *password);
-	bool getAllCredentials(std::list<Credential> &creds);
-
 	// Sessions
 	struct SessionParams
 	{
 		unsigned int sessionTime;
 		unsigned int sid;
 		std::string ipAddress;
-		std::string userName;
+		Credential credentials;
 	};
 
-	std::map<unsigned int, SessionParams> &getAllSessions() { return sessions_; }
+	unsigned int login(const char *name, const char *password, const char *ipAddress);
+	void logout(unsigned int sid);
 
 	SessionParams *getFirstSession();
 	SessionParams *getSession(unsigned int sid);
 
-	unsigned int login(const char *userId, const char *ipAddress);
-	void logout(unsigned int sid);
+	bool setPassword(const char *name, 
+		const char *oldpassword, const char *newpassword);
+
+	Credential &getLocalUserCredentials() { return localCreds_; }
+	bool getAllCredentials(std::list<Credential> &creds);
+	bool setAllCredentials(std::list<Credential> &creds);
+	std::map<unsigned int, SessionParams> &getAllSessions() { return sessions_; }
 
 protected:
+	Credential localCreds_;
 	std::map<unsigned int, SessionParams> sessions_;
 
 private:

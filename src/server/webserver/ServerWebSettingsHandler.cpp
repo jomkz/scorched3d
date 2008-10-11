@@ -151,7 +151,7 @@ bool ServerWebSettingsHandler::SettingsPlayersHandler::processRequest(
 			writeOptionsToFile((char *) ServerParams::instance()->getServerFile());
 	}
 
-	return ServerWebServerUtil::getHtmlTemplate("settingsplayers.html", request.getFields(), text);
+	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "settingsplayers.html", request.getFields(), text);
 }
 
 bool ServerWebSettingsHandler::SettingsLandscapeHandler::processRequest(
@@ -237,7 +237,7 @@ bool ServerWebSettingsHandler::SettingsLandscapeHandler::processRequest(
 			writeOptionsToFile((char *) ServerParams::instance()->getServerFile());
 	}
 
-	return ServerWebServerUtil::getHtmlTemplate("settingslandscape.html", request.getFields(), text);
+	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "settingslandscape.html", request.getFields(), text);
 }
 
 bool ServerWebSettingsHandler::SettingsAllHandler::processRequest(
@@ -298,7 +298,7 @@ bool ServerWebSettingsHandler::SettingsAllHandler::processRequest(
 			writeOptionsToFile((char *) ServerParams::instance()->getServerFile());
 	}
 
-	return ServerWebServerUtil::getHtmlTemplate("settingsall.html", request.getFields(), text);
+	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "settingsall.html", request.getFields(), text);
 }
 
 bool ServerWebSettingsHandler::SettingsMainHandler::processRequest(
@@ -328,7 +328,7 @@ bool ServerWebSettingsHandler::SettingsMainHandler::processRequest(
 			writeOptionsToFile((char *) ServerParams::instance()->getServerFile());
 	}
 
-	return ServerWebServerUtil::getHtmlTemplate("settingsmain.html", request.getFields(), text);
+	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "settingsmain.html", request.getFields(), text);
 }
 
 bool ServerWebSettingsHandler::SettingsModHandler::processRequest(
@@ -367,6 +367,7 @@ bool ServerWebSettingsHandler::SettingsModHandler::processRequest(
 				if (files.writeModFiles(mod))
 				{
 					return ServerWebServerUtil::getHtmlMessage(
+						request.getSession(), 
 						"Mod Upload", 
 						S3D::formatStringBuffer("Successfuly uploaded and imported mod %s",
 						(mod[0]?mod.c_str():"Unknown")), 
@@ -375,6 +376,7 @@ bool ServerWebSettingsHandler::SettingsModHandler::processRequest(
 				else
 				{
 					return ServerWebServerUtil::getHtmlMessage(
+						request.getSession(), 
 						"Mod Upload", 
 						"Failed to write mod files to disk", 
 						request.getFields(), text);
@@ -383,6 +385,7 @@ bool ServerWebSettingsHandler::SettingsModHandler::processRequest(
 			else
 			{
 				return ServerWebServerUtil::getHtmlMessage(
+					request.getSession(), 
 					"Mod Upload", 
 					"Failed to load mod files from network", 
 					request.getFields(), text);
@@ -422,5 +425,5 @@ bool ServerWebSettingsHandler::SettingsModHandler::processRequest(
 			writeOptionsToFile((char *) ServerParams::instance()->getServerFile());
 	}
 
-	return ServerWebServerUtil::getHtmlTemplate("settingsmod.html", request.getFields(), text);
+	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "settingsmod.html", request.getFields(), text);
 }

@@ -34,6 +34,8 @@ ServerAdminSessions *ServerAdminSessions::instance()
 
 ServerAdminSessions::ServerAdminSessions()
 {
+	localCreds_.password = "";
+	localCreds_.username = "localaccount";
 }
 
 ServerAdminSessions::~ServerAdminSessions()
@@ -85,8 +87,43 @@ ServerAdminSessions::SessionParams *ServerAdminSessions::getSession(unsigned int
 	return 0;
 }
 
-unsigned int ServerAdminSessions::login(const char *userId, const char *ipAddress)
+unsigned int ServerAdminSessions::login(const char *name, const char *password, const char *ipAddress)
 {
+	bool local = (0 == strcmp(ipAddress, "127.0.0.1"));
+#ifndef S3D_SERVER
+	local = true;
+#endif
+
+	// Find if the username and password match
+	Credential userCreds;
+	if (local)
+	{
+		userCreds = localCreds_;
+	}
+	else
+	{
+		bool found = false;
+		{
+			std::list<Credential> creds;
+			getAllCredentials(creds);
+			std::list<Credential>::iterator itor;
+			for (itor = creds.begin();
+				itor != creds.end();
+				itor++)
+			{
+				Credential &credential = (*itor);
+				if (0 == strcmp(name, credential.username.c_str()) &&
+					0 == strcmp(password, credential.password.c_str()))
+				{
+					userCreds = credential;
+					found = true;
+					break;
+				}
+			}
+		}
+		if (!found) return 0;
+	}
+
 	unsigned int sid = 0;
 
 	// Try to find an existing session for this user
@@ -96,7 +133,8 @@ unsigned int ServerAdminSessions::login(const char *userId, const char *ipAddres
 		itor++)
 	{
 		SessionParams &params = (*itor).second;
-		if (0 == strcmp(params.userName.c_str(), userId))
+		if (0 == strcmp(params.credentials.username.c_str(), 
+			userCreds.username.c_str()))
 		{
 			// Found one
 			sid = (*itor).first;
@@ -111,14 +149,14 @@ unsigned int ServerAdminSessions::login(const char *userId, const char *ipAddres
 		do 
 		{
 			sid = rand();
-		} while (sessions_.find(sid) != sessions_.end());
+		} while (sessions_.find(sid) != sessions_.end() || sid == 0);
 	}
 
 	// Update the session params
 	unsigned int currentTime = (unsigned int) time(0);
 	SessionParams params;
 	params.sessionTime = currentTime;
-	params.userName = userId;
+	params.credentials = userCreds;
 	params.ipAddress = ipAddress;
 	params.sid = sid;
 	sessions_[sid] = params;
@@ -136,30 +174,52 @@ void ServerAdminSessions::logout(unsigned int sid)
 	}
 }
 
-bool ServerAdminSessions::authenticate(const char *name, const char *password)
+bool ServerAdminSessions::setPassword(const char *name, 
+	const char *oldpassword, const char *newpassword)
 {
-#ifndef S3D_SERVER
-	{
-		return true;
-	}
-#endif
-
 	std::list<Credential> creds;
+	getAllCredentials(creds);
 	std::list<Credential>::iterator itor;
-	if (!getAllCredentials(creds)) return false;
-
 	for (itor = creds.begin();
 		itor != creds.end();
 		itor++)
 	{
 		Credential &credential = (*itor);
 		if (0 == strcmp(name, credential.username.c_str()) &&
-			0 == strcmp(password, credential.password.c_str()))
+			0 == strcmp(oldpassword, credential.password.c_str()))
 		{
+			credential.password = newpassword;
+			setAllCredentials(creds);
 			return true;
 		}
 	}
 	return false;
+}
+
+bool ServerAdminSessions::setAllCredentials(std::list<Credential> &creds)
+{
+	std::string fileName = 
+		S3D::getSettingsFile(S3D::formatStringBuffer("adminpassword-%i.xml",
+			ScorchedServer::instance()->getOptionsGame().getPortNo()));
+
+	XMLNode usersNode("users");
+	std::list<Credential>::iterator itor;
+	for (itor = creds.begin();
+		itor != creds.end();
+		itor++)
+	{
+		Credential &credential = *itor;
+		XMLNode *userNode = new XMLNode("user");
+
+		userNode->addChild(new XMLNode("name", credential.username));
+		userNode->addChild(new XMLNode("password", credential.password));
+
+		usersNode.addChild(userNode);
+	}
+
+	if (!usersNode.writeToFile(fileName)) return false;
+
+	return true;	
 }
 
 bool ServerAdminSessions::getAllCredentials(std::list<Credential> &creds)

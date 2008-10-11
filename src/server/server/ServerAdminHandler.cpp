@@ -26,6 +26,7 @@
 #include <server/ServerAdminCommon.h>
 #include <server/ServerAdminSessions.h>
 #include <common/StatsLogger.h>
+#include <common/Logger.h>
 #include <common/Defines.h>
 #include <coms/ComsAdminMessage.h>
 #include <coms/ComsSyncCheckMessage.h>
@@ -82,20 +83,21 @@ bool ServerAdminHandler::processMessage(
 	// Login if that is what is happening
 	if (message.getType() == ComsAdminMessage::AdminLogin)
 	{
-		if (ServerAdminSessions::instance()->
-			authenticate(message.getParam1(), message.getParam2()))
+		unsigned int sid = ServerAdminSessions::instance()->
+			login(message.getParam1(), message.getParam2(), "");
+		if (sid != 0)
 		{
+			ServerAdminSessions::SessionParams *adminSession =
+				ServerAdminSessions::instance()->getSession(sid);
+
 			ServerCommon::sendString(0,
 				S3D::formatStringBuffer("server admin \"%s\" logged in",
-				message.getParam1()));
+				adminSession->credentials.username.c_str()));
 			ServerCommon::serverLog(
 				S3D::formatStringBuffer("\"%s\" logged in as server admin \"%s\"",
 				adminTank->getName(),
-				message.getParam1()));
+				adminSession->credentials.username.c_str()));
 
-			unsigned int sid = 
-				ServerAdminSessions::instance()->login(message.getParam1(), 
-					NetInterface::getIpName(netMessage.getIpAddress()));
 			adminTank->getState().setAdmin(sid);
 			ServerChannelManager::instance()->refreshDestination(
 				netMessage.getDestinationId());
@@ -105,6 +107,10 @@ bool ServerAdminHandler::processMessage(
 			adminTank->getState().setAdminTries(
 				adminTank->getState().getAdminTries() + 1);
 			
+			Logger::log(S3D::formatStringBuffer("Failed login for server admin \"%s\", via console, ip \"%s\"",
+				message.getParam1(),
+				NetInterface::getIpName(netMessage.getIpAddress())));
+
 			ServerCommon::sendString(destinationId,
 				S3D::formatStringBuffer("Incorrect admin password (try %i/3)", 
 				adminTank->getState().getAdminTries()));
@@ -125,7 +131,7 @@ bool ServerAdminHandler::processMessage(
 			"You are not logged in as admin");
 		return true;		
 	}
-	const char *adminName = adminSession->userName.c_str();
+	const char *adminName = adminSession->credentials.username.c_str();
 
 	// Do admin fn (we are logged in at this point)
 	switch (message.getType())
