@@ -179,7 +179,7 @@ void GLWScorchedInfo::draw()
 			GLWFont::instance()->getGameFont()->draw(
 				current->getColor(), fontSize_,
 				x_, y_, 0.0f,
-				current->getScore().getStatsRank());
+				S3D::formatStringBuffer("%i", current->getScore().getRank()));
 		break;
 		case eAutoDefenseCount:
 			setToolTip(&renderer->getTips()->autodTip);

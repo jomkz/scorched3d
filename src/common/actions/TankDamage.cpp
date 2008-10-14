@@ -466,6 +466,9 @@ void TankDamage::logDeath()
 		context_->getTankContainer().getTankById(firedPlayerId);
 	if (firedTank)
 	{
+		int skillChange = TankScore::calcSkillDifference(
+			firedTank, killedTank, weapon_->getArmsLevel());
+
 		if (damagedPlayerId_ == firedPlayerId)
 		{
 			StatsLogger::instance()->
@@ -474,12 +477,10 @@ void TankDamage::logDeath()
 				weaponKilled(weapon_, (weaponContext_.getData() & Weapon::eDataDeathAnimation));
 			{
 				ChannelText text("combat", 
-					S3D::formatStringBuffer("[p:%s] killed self with a [w:%s]",
+					S3D::formatStringBuffer("[p:%s] killed self with a [w:%s] (%i skill change)",
 						killedTank->getName(),
-						weapon_->getParent()->getName()));
-				//info.setPlayerId(firedPlayerId);
-				//info.setOtherPlayerId(damagedPlayerId_);
-				//info.setIcon(weaponTexture);
+						weapon_->getParent()->getName(),
+						skillChange));
 				ChannelManager::showText(*context_, text);
 			}
 		}
@@ -492,13 +493,11 @@ void TankDamage::logDeath()
 				weaponKilled(weapon_, (weaponContext_.getData() & Weapon::eDataDeathAnimation));
 			{
 				ChannelText text("combat", 
-					S3D::formatStringBuffer("[p:%s] team killed [p:%s] with a [w:%s]",
+					S3D::formatStringBuffer("[p:%s] team killed [p:%s] with a [w:%s] (%i skill change)",
 						firedTank->getName(),
 						killedTank->getName(),
-						weapon_->getParent()->getName()));
-				//info.setPlayerId(firedPlayerId);
-				//info.setOtherPlayerId(damagedPlayerId_);
-				//info.setIcon(weaponTexture);
+						weapon_->getParent()->getName(),
+						skillChange));
 				ChannelManager::showText(*context_, text);
 			}
 		}
@@ -510,14 +509,12 @@ void TankDamage::logDeath()
 				weaponKilled(weapon_, (weaponContext_.getData() & Weapon::eDataDeathAnimation));
 			{
 				ChannelText text("combat", 
-					S3D::formatStringBuffer("[p:%s] %skilled [p:%s] with a [w:%s]",
+					S3D::formatStringBuffer("[p:%s] %skilled [p:%s] with a [w:%s] (%i skill change)",
 					firedTank->getName(),
 					((firedTank->getScore().getTurnKills() > 1)?"multi-":""),
 					killedTank->getName(),
-					weapon_->getParent()->getName()));
-				//info.setPlayerId(firedPlayerId);
-				//info.setOtherPlayerId(damagedPlayerId_);
-				//info.setIcon(weaponTexture);
+					weapon_->getParent()->getName(),
+					skillChange));
 				ChannelManager::showText(*context_, text);
 			}
 		}
@@ -538,9 +535,6 @@ void TankDamage::logDeath()
 				((firedTank.getScore().getTurnKills() > 1)?"multi-":""),
 				killedTank->getName(),
 				weapon_->getParent()->getName()));
-			//info.setPlayerId(firedPlayerId);
-			//info.setOtherPlayerId(damagedPlayerId_);
-			//info.setIcon(weaponTexture);
 			ChannelManager::showText(*context_, text);
 		}
 	}

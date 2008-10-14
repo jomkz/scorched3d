@@ -89,7 +89,7 @@ OptionsDisplay::OptionsDisplay() :
 	brightness_(options_, "Brightness", 
 		"The game screen brightness (gamma).", RAccess, 10, 3, 40, 1),
 	fullScreen_(options_, "FullScreen", 
-		"Run the game in a full screen mode.", RAccess | NoRestore, true),
+		"Run the game in a full screen mode.", RAccess | NoRestore, (S3D::getOSDesc() == "Windows")),
 	moreRes_(options_, "MoreRes",
 		"Show more screen resolutions in the drop down.  By default only hardware supported modes are shown.", RAccess, false),
 	depricatedFullClear_(options_, "FullClear", 

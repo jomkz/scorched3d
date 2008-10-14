@@ -552,11 +552,14 @@ void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
 			10,
 			textX + readyLeft, textY, 0.0f,
 			((current->getState().getReadyState() == TankState::SNotReady)?"*":" "));
-		GLWFont::instance()->getGameFont()->draw(
-			current->getColor(),
-			10,
-			textX + statsLeft, textY, 0.0f,
-			current->getScore().getStatsRank());
+		if (current->getScore().getRank() >= 0)
+		{
+			GLWFont::instance()->getGameFont()->draw(
+				current->getColor(),
+				10,
+				textX + statsLeft, textY, 0.0f,
+				S3D::formatStringBuffer("%i", current->getScore().getRank()));
+		}
 		GLWFont::instance()->getGameFont()->draw(
 			current->getColor(),
 			10,

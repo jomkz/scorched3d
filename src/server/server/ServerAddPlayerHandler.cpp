@@ -180,12 +180,12 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 
 #ifdef S3D_SERVER
 	{
-		std::string rank = StatsLogger::instance()->tankRank(tank);
-		if (strcmp(rank.c_str(), "-") != 0)
+		StatsLogger::TankRank rank = StatsLogger::instance()->tankRank(tank);
+		if (rank.rank >= 0)
 		{
 			ServerCommon::sendString(0, 
-				S3D::formatStringBuffer("Welcome back %s, you are ranked %s",
-				tank->getName(), rank.c_str()));
+				S3D::formatStringBuffer("Welcome back %s, you are ranked %i",
+				tank->getName(), rank.rank));
 		}
 
 		if (tank->getState().getSpectator())

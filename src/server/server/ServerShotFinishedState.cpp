@@ -369,8 +369,9 @@ bool ServerShotFinishedState::scoreWinners()
 		tank->getScore().resetTotalEarnedStats();
 
 		// Get the new tanks rank
-		std::string rank = StatsLogger::instance()->tankRank(tank);
-		tank->getScore().setStatsRank(rank.c_str());
+		StatsLogger::TankRank rank = StatsLogger::instance()->tankRank(tank);
+		tank->getScore().setRank(rank.rank);
+		tank->getScore().setSkill(rank.skill);
 	}
 
 	// Its the very last round, score the overall winner

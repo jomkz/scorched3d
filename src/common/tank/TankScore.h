@@ -64,6 +64,15 @@ public:
 	bool getWonGame() { return wonGame_; }
 	void setWonGame() { wonGame_ = true; }
 
+	int getRank() { return rank_; }
+	void setRank(int rank) { rank_ = rank; }
+
+	int getSkill() { return skill_; }
+	void setSkill(int skill) { skill_ = skill; }
+
+	int getStartSkill() { return startSkill_; }
+	void setStartSkill(int skill) { startSkill_ = skill; }
+
 	std::set<unsigned int> &getHurtBy() { return hurtBy_; }
 
 	time_t getTimePlayed() { return time(0) - startTime_; }
@@ -74,8 +83,6 @@ public:
 	int getTotalMoneyEarnedStat() { return totalMoneyEarned_; }
 	int getTotalScoreEarnedStat() { return totalScoreEarned_; }
 	void resetTotalEarnedStats();
-	void setStatsRank(const char *rank) { statsRank_ = rank; }
-	const char *getStatsRank() { return statsRank_.c_str(); }
 
 	// Get info as text
 	const char *getTimePlayedString();
@@ -85,11 +92,13 @@ public:
 	bool writeMessage(NetBuffer &buffer);
 	bool readMessage(NetBufferReader &reader);
 
+	static int calcSkillDifference(Tank *firedTank, Tank *deadTank, int weaponLevel);
+
 protected:
 	Tank *tank_;
-	std::string statsRank_;
 	std::set<unsigned int> hurtBy_;
 	ScorchedContext &context_;
+	int rank_, skill_, startSkill_;
 	int kills_, turnKills_;
 	int assists_;
 	int money_;

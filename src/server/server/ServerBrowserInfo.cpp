@@ -234,7 +234,7 @@ void ServerBrowserInfo::processPlayerMessage(std::list<std::string> &reply)
 		reply.push_back(addTag(tmp, (tank->getTankAI()?"N":"Y")));
 
 		snprintf(tmp, 128, "pr%i", i);
-		reply.push_back(addTag(tmp, tank->getScore().getStatsRank()));
+		reply.push_back(addTag(tmp, S3D::formatStringBuffer("%i", tank->getScore().getRank())));
 	}
 
 }

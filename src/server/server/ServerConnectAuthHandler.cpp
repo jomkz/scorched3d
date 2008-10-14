@@ -31,6 +31,7 @@
 #include <tank/TankModelContainer.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
+#include <tank/TankScore.h>
 #include <tankai/TankAIAdder.h>
 #include <tankai/TankAIStrings.h>
 #include <common/Defines.h>
@@ -338,6 +339,12 @@ void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,
 		std::string alias = aliases.front();
 		tank->setName(alias.c_str());
 	}
+
+	// Set the tanks rank and skill
+	StatsLogger::TankRank rank = StatsLogger::instance()->tankRank(tank);
+	tank->getScore().setRank(rank.rank);
+	tank->getScore().setSkill(rank.skill);
+	tank->getScore().setStartSkill(rank.skill);
 
 	// Add the tank to the list of tanks
 	ScorchedServer::instance()->getTankContainer().addTank(tank);

@@ -126,11 +126,6 @@ std::list<std::string> StatsLoggerFile::getIpAliases(const char *unqiueId)
 	return result;
 }
 
-std::string StatsLoggerFile::tankRank(Tank *firedTank)
-{
-	return "-";
-}
-
 void StatsLoggerFile::tankFired(Tank *firedTank, Weapon *weapon)
 {
 	createLogger();
