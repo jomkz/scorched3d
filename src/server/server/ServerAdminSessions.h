@@ -35,6 +35,7 @@ public:
 	{
 		std::string username;
 		std::string password;
+		int userlevel;
 	};
 
 	// Sessions

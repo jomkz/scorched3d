@@ -36,6 +36,7 @@ ServerAdminSessions::ServerAdminSessions()
 {
 	localCreds_.password = "";
 	localCreds_.username = "localaccount";
+	localCreds_.userlevel = 10;
 }
 
 ServerAdminSessions::~ServerAdminSessions()
@@ -256,6 +257,7 @@ bool ServerAdminSessions::getAllCredentials(std::list<Credential> &creds)
 		if (strcmp(currentNode->getName(), "user")) return false;
 
 		Credential credential;
+		credential.userlevel = 10;
 		if (!currentNode->getNamedChild("name", credential.username)) return false;
 		if (!currentNode->getNamedChild("password", credential.password)) return false;
 		if (!currentNode->failChildren()) return false;

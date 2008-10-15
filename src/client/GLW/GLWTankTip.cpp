@@ -615,11 +615,11 @@ static void generateTargetTip(LangString &tip, Target *target)
 		}
 
 		tip.append(LANG_RESOURCE_2("TARGET_LIVES", "\nLives   : {0}/{1}",
-			S3D::formatStringBuffer("%.0f", tank->getState().getLives()),
-			S3D::formatStringBuffer("%.0f", tank->getState().getMaxLives())));
+			S3D::formatStringBuffer("%i", tank->getState().getLives()),
+			S3D::formatStringBuffer("%i", tank->getState().getMaxLives())));
 
 		tip.append(LANG_RESOURCE_1("TARGET_SCORE", "\nScore   : {0}",
-			S3D::formatStringBuffer("%.0f", tank->getScore().getScore())));
+			S3D::formatStringBuffer("%i", tank->getScore().getScore())));
 	}
 }
 

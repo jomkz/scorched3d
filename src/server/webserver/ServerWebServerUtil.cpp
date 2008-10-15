@@ -414,7 +414,10 @@ bool ServerWebServerUtil::getTemplate(
 		if (start2 == std::string::npos) break;
 		result.replace(start2, 5, "");
 
-		result.replace(start1, start2 - start1, "");
+		if (number > session->credentials.userlevel)
+		{
+			result.replace(start1, start2 - start1, "");
+		}
 	}
 
 	return true;
