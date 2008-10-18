@@ -227,7 +227,7 @@ bool ServerAdminHandler::processMessage(
 	case ComsAdminMessage::AdminBan:
 		{
 			if (!ServerAdminCommon::banPlayer(
-				adminName,
+				adminSession->credentials,
 				atoi(message.getParam1()), "<via console>"))
 			{
 				ServerCommon::sendString(destinationId, "Unknown player for ban");
@@ -237,7 +237,7 @@ bool ServerAdminHandler::processMessage(
 	case ComsAdminMessage::AdminFlag:
 		{
 			if (!ServerAdminCommon::flagPlayer(
-				adminName,
+				adminSession->credentials,
 				atoi(message.getParam1()), "<via console>"))
 			{
 				ServerCommon::sendString(destinationId, "Unknown player for flag");
@@ -247,7 +247,7 @@ bool ServerAdminHandler::processMessage(
 	case ComsAdminMessage::AdminPoor:
 		{
 			if (!ServerAdminCommon::poorPlayer(
-				adminName,
+				adminSession->credentials,
 				atoi(message.getParam1())))
 			{
 				ServerCommon::sendString(destinationId, "Unknown player for poor");
@@ -257,7 +257,7 @@ bool ServerAdminHandler::processMessage(
 	case ComsAdminMessage::AdminKick:
 		{
 			if (!ServerAdminCommon::kickPlayer(
-				adminName,
+				adminSession->credentials,
 				atoi(message.getParam1())))
 			{
 				ServerCommon::sendString(destinationId, "Unknown player for kick");
@@ -269,7 +269,7 @@ bool ServerAdminHandler::processMessage(
 		{
 			bool mute = (message.getType() == ComsAdminMessage::AdminMute);
 			if (!ServerAdminCommon::mutePlayer(
-				adminName,
+				adminSession->credentials,
 				atoi(message.getParam1()), mute))
 			{
 				ServerCommon::sendString(destinationId, "Unknown player for mute");
@@ -279,7 +279,7 @@ bool ServerAdminHandler::processMessage(
 	case ComsAdminMessage::AdminPermMute:
 		{
 			if (!ServerAdminCommon::permMutePlayer(
-				adminName,
+				adminSession->credentials,
 				atoi(message.getParam1()), "<via console>"))
 			{
 				ServerCommon::sendString(destinationId, "Unknown player for permmute");
@@ -289,7 +289,7 @@ bool ServerAdminHandler::processMessage(
 	case ComsAdminMessage::AdminUnPermMute:
 		{
 			if (!ServerAdminCommon::unpermMutePlayer(
-				adminName,
+				adminSession->credentials,
 				atoi(message.getParam1())))
 			{
 				ServerCommon::sendString(destinationId, "Unknown player for inpermmute");
@@ -297,13 +297,13 @@ bool ServerAdminHandler::processMessage(
 		}
 		break;
 	case ComsAdminMessage::AdminTalk:
-		ServerAdminCommon::adminSay(adminSession, "info", message.getParam1());
+		ServerAdminCommon::adminSay(adminSession->credentials, "info", message.getParam1());
 		break;
 	case ComsAdminMessage::AdminAdminTalk:
-		ServerAdminCommon::adminSay(adminSession, "admin", message.getParam1());
+		ServerAdminCommon::adminSay(adminSession->credentials, "admin", message.getParam1());
 		break;
 	case ComsAdminMessage::AdminMessage:
-		ServerAdminCommon::adminSay(adminSession, "banner", message.getParam1());
+		ServerAdminCommon::adminSay(adminSession->credentials, "banner", message.getParam1());
 		break;
 	case ComsAdminMessage::AdminSyncCheck:
 		{
@@ -313,15 +313,15 @@ bool ServerAdminHandler::processMessage(
 		}
 		break;
 	case ComsAdminMessage::AdminKillAll:
-		ServerAdminCommon::killAll(adminName);
+		ServerAdminCommon::killAll(adminSession->credentials);
 		break;
 	case ComsAdminMessage::AdminNewGame:
-		ServerAdminCommon::newGame(adminName);
+		ServerAdminCommon::newGame(adminSession->credentials);
 		break;	
 	case ComsAdminMessage::AdminSlap:
 		{
 			if (!ServerAdminCommon::slapPlayer(
-				adminName,
+				adminSession->credentials,
 				atoi(message.getParam1()), (float) atof(message.getParam2())))
 			{
 				ServerCommon::sendString(destinationId, "Unknown player for slap");

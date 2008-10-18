@@ -95,6 +95,9 @@ bool ServerWebSettingsHandler::SettingsPlayersHandler::processRequest(
 	ServerWebServerIRequest &request,
 	std::string &text)
 {
+	if (!request.getSession()->credentials.hasPermission(
+		ServerAdminSessions::PERMISSION_ALTERSETTINGS)) return true;
+
 	const char *action = getField(request.getFields(), "action");
 	if (action && 0 == strcmp(action, "Load"))
 	{
@@ -158,6 +161,9 @@ bool ServerWebSettingsHandler::SettingsLandscapeHandler::processRequest(
 	ServerWebServerIRequest &request,
 	std::string &text)
 {
+	if (!request.getSession()->credentials.hasPermission(
+		ServerAdminSessions::PERMISSION_ALTERSETTINGS)) return true;
+
 	const char *action = getField(request.getFields(), "action");
 	if (action && 0 == strcmp(action, "Load"))
 	{
@@ -244,6 +250,9 @@ bool ServerWebSettingsHandler::SettingsAllHandler::processRequest(
 	ServerWebServerIRequest &request,
 	std::string &text)
 {
+	if (!request.getSession()->credentials.hasPermission(
+		ServerAdminSessions::PERMISSION_ALTERSETTINGS)) return true;
+
 	std::list<OptionEntry *>::iterator itor;
 	std::list<OptionEntry *> &options = 
 		ScorchedServer::instance()->getOptionsGame().
@@ -305,6 +314,9 @@ bool ServerWebSettingsHandler::SettingsMainHandler::processRequest(
 	ServerWebServerIRequest &request,
 	std::string &text)
 {
+	if (!request.getSession()->credentials.hasPermission(
+		ServerAdminSessions::PERMISSION_ALTERSETTINGS)) return true;
+
 	std::list<OptionEntry *>::iterator itor;
 	std::list<OptionEntry *> &options = 
 		ScorchedServer::instance()->getOptionsGame().
@@ -335,6 +347,9 @@ bool ServerWebSettingsHandler::SettingsModHandler::processRequest(
 	ServerWebServerIRequest &request,
 	std::string &text)
 {
+	if (!request.getSession()->credentials.hasPermission(
+		ServerAdminSessions::PERMISSION_ALTERSETTINGS)) return true;
+
 	std::list<OptionEntry *>::iterator itor;
 	std::list<OptionEntry *> &options = 
 		ScorchedServer::instance()->getOptionsGame().

@@ -35,3 +35,4 @@ Added multi-lingual support to Scorched3D (most words customizable, more added i
 Admin users can now change their own passwords
 Fullscreen mode is now only the default on Win32 systems
 Skill and skill change now displayed on tooltips and combat messages
+Added server admin permissions

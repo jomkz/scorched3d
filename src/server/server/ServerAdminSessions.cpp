@@ -22,8 +22,18 @@
 #include <server/ScorchedServer.h>
 #include <server/ServerCommon.h>
 #include <common/OptionsScorched.h>
+#include <common/Logger.h>
 #include <XML/XMLFile.h>
 #include <time.h>
+
+std::string ServerAdminSessions::PERMISSION_BANPLAYER("banplayer");
+std::string ServerAdminSessions::PERMISSION_KICKPLAYER("kickplayer");
+std::string ServerAdminSessions::PERMISSION_ALIASPLAYER("aliasplayer");
+std::string ServerAdminSessions::PERMISSION_ADDPLAYER("addplayer");
+std::string ServerAdminSessions::PERMISSION_VIEWLOGS("viewlogs");
+std::string ServerAdminSessions::PERMISSION_ALTERGAME("altergame");
+std::string ServerAdminSessions::PERMISSION_ALTERSERVER("alterserver");
+std::string ServerAdminSessions::PERMISSION_ALTERSETTINGS("altersettings");
 
 ServerAdminSessions *ServerAdminSessions::instance()
 {
@@ -36,7 +46,14 @@ ServerAdminSessions::ServerAdminSessions()
 {
 	localCreds_.password = "";
 	localCreds_.username = "localaccount";
-	localCreds_.userlevel = 10;
+	localCreds_.permissions.insert(ServerAdminSessions::PERMISSION_BANPLAYER);
+	localCreds_.permissions.insert(ServerAdminSessions::PERMISSION_KICKPLAYER);
+	localCreds_.permissions.insert(ServerAdminSessions::PERMISSION_ALIASPLAYER);
+	localCreds_.permissions.insert(ServerAdminSessions::PERMISSION_ADDPLAYER);
+	localCreds_.permissions.insert(ServerAdminSessions::PERMISSION_VIEWLOGS);
+	localCreds_.permissions.insert(ServerAdminSessions::PERMISSION_ALTERGAME);
+	localCreds_.permissions.insert(ServerAdminSessions::PERMISSION_ALTERSERVER);
+	localCreds_.permissions.insert(ServerAdminSessions::PERMISSION_ALTERSETTINGS);
 }
 
 ServerAdminSessions::~ServerAdminSessions()
@@ -215,6 +232,14 @@ bool ServerAdminSessions::setAllCredentials(std::list<Credential> &creds)
 		userNode->addChild(new XMLNode("name", credential.username));
 		userNode->addChild(new XMLNode("password", credential.password));
 
+		std::set<std::string>::iterator permitor;
+		for (permitor = credential.permissions.begin();
+			permitor != credential.permissions.end();
+			permitor++)
+		{
+			userNode->addChild(new XMLNode("permission", *permitor));
+		}
+
 		usersNode.addChild(userNode);
 	}
 
@@ -257,9 +282,25 @@ bool ServerAdminSessions::getAllCredentials(std::list<Credential> &creds)
 		if (strcmp(currentNode->getName(), "user")) return false;
 
 		Credential credential;
-		credential.userlevel = 10;
 		if (!currentNode->getNamedChild("name", credential.username)) return false;
 		if (!currentNode->getNamedChild("password", credential.password)) return false;
+
+		std::string permission;
+		while (currentNode->getNamedChild("permission", permission, false))
+		{
+			if (localCreds_.hasPermission(permission))
+			{
+				credential.permissions.insert(permission);
+			}
+			else
+			{
+				Logger::log(S3D::formatStringBuffer(
+					"ERROR: Trying to give admin %s unavailable permission %s",
+					credential.username.c_str(),
+					permission.c_str()));
+			}
+		}
+
 		if (!currentNode->failChildren()) return false;
 		creds.push_back(credential);
 	}

@@ -400,21 +400,21 @@ bool ServerWebServerUtil::getTemplate(
 
 	while (true)
 	{
-		// Find start {{0}}
+		// Find start {{permission}}
 		int start1 = result.find("{{");
 		if (start1 == std::string::npos) break;
-		int end2 = result.find("}}", start1);
-		if (end2 == std::string::npos) break;
-		if (end2 - start1 != 3) break;
-		int number = result[start1 + 2] - 48;
-		result.replace(start1, 5, "");
+		int end1 = result.find("}}", start1);
+		if (end1 == std::string::npos) break;
+		std::string perm(result, start1 + 2, end1 - start1 - 2);
+		result.replace(start1, end1 - start1 + 2, "");
 
-		// Find end {{0}}
-		int start2 = result.find(S3D::formatStringBuffer("{{%i}}", number), start1);
+		// Find end {{permission}}
+		int start2 = result.find(S3D::formatStringBuffer("{{%s}}", perm.c_str()), start1);
 		if (start2 == std::string::npos) break;
-		result.replace(start2, 5, "");
+		result.replace(start2, 4 + perm.size(), "");
 
-		if (number > session->credentials.userlevel)
+		if (session->credentials.permissions.find(perm) == 
+			session->credentials.permissions.end())
 		{
 			result.replace(start1, start2 - start1, "");
 		}

@@ -26,18 +26,19 @@
 
 namespace ServerAdminCommon
 {
-	bool kickPlayer(const char *adminUser, unsigned int playerId);
-	bool poorPlayer(const char *adminUser, unsigned int playerId);
-	bool banPlayer(const char *adminUser, unsigned int playerId, const char *reason);
-	bool flagPlayer(const char *adminUser, unsigned int playerId, const char *reason);
-	bool slapPlayer(const char *adminUser, unsigned int playerId, float slap);
-	bool mutePlayer(const char *adminUser, unsigned int playerId, bool mute);
-	bool permMutePlayer(const char *adminUser, unsigned int playerId, const char *reason);
-	bool unpermMutePlayer(const char *adminUser, unsigned int playerId);
-	bool newGame(const char *adminUser);
-	bool killAll(const char *adminUser);
+	bool addPlayer(ServerAdminSessions::Credential &credential, const char *playerType);
+	bool kickPlayer(ServerAdminSessions::Credential &credential, unsigned int playerId);
+	bool poorPlayer(ServerAdminSessions::Credential &credential, unsigned int playerId);
+	bool banPlayer(ServerAdminSessions::Credential &credential, unsigned int playerId, const char *reason);
+	bool flagPlayer(ServerAdminSessions::Credential &credential, unsigned int playerId, const char *reason);
+	bool slapPlayer(ServerAdminSessions::Credential &credential, unsigned int playerId, float slap);
+	bool mutePlayer(ServerAdminSessions::Credential &credential, unsigned int playerId, bool mute);
+	bool permMutePlayer(ServerAdminSessions::Credential &credential, unsigned int playerId, const char *reason);
+	bool unpermMutePlayer(ServerAdminSessions::Credential &credential, unsigned int playerId);
+	bool newGame(ServerAdminSessions::Credential &credential);
+	bool killAll(ServerAdminSessions::Credential &credential);
 
-	bool adminSay(ServerAdminSessions::SessionParams *session,
+	bool adminSay(ServerAdminSessions::Credential &credential,
 		const char *channel, const char *text);
 }
 

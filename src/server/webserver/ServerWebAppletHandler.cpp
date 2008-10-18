@@ -82,7 +82,7 @@ bool ServerWebAppletHandler::AppletActionHandler::processRequest(
 			const char *channel = ServerWebServerUtil::getField(request.getFields(), "channel");
 			if (text && channel && request.getSession())
 			{
-				ServerAdminCommon::adminSay(request.getSession(), channel, text);
+				ServerAdminCommon::adminSay(request.getSession()->credentials, channel, text);
 			}
 		}
 	}

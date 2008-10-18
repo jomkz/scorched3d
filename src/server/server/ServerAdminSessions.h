@@ -22,6 +22,7 @@
 #define __INCLUDE_ServerAdminSessionsh_INCLUDE__
 
 #include <map>
+#include <set>
 #include <list>
 #include <string>
 
@@ -30,12 +31,24 @@ class ServerAdminSessions
 public:
 	static ServerAdminSessions *instance();
 
+	static std::string PERMISSION_BANPLAYER;
+	static std::string PERMISSION_KICKPLAYER;
+	static std::string PERMISSION_ALIASPLAYER;
+	static std::string PERMISSION_ADDPLAYER;
+	static std::string PERMISSION_VIEWLOGS;
+	static std::string PERMISSION_ALTERGAME;
+	static std::string PERMISSION_ALTERSERVER;
+	static std::string PERMISSION_ALTERSETTINGS;
+
 	// Creds
 	struct Credential
 	{
 		std::string username;
 		std::string password;
-		int userlevel;
+		std::set<std::string> permissions;
+
+		bool hasPermission(const std::string &perm) 
+			{ return (permissions.find(perm) != permissions.end()); }
 	};
 
 	// Sessions

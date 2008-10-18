@@ -26,13 +26,12 @@
 				Players : [[NOPLAYERS]]
 			</td>
 		</tr>
-		{{0}}
 		<tr>
 			<td align="center">
 				<br>
 				Selected Player Actions<br>
-				<input type="submit" name="action" value="Kick"> 
-				<input type="submit" name="action" value="Banned">
+				{{kickplayer}}<input type="submit" name="action" value="Kick">{{kickplayer}}
+				{{banplayer}}<input type="submit" name="action" value="Banned">{{banplayer}}
 				<input type="submit" name="action" value="Slap"> 
 				<input type="submit" name="action" value="Poor">
 				<input type="submit" name="action" value="Flag">
@@ -42,15 +41,20 @@
 				<input type="submit" name="action" value="PermMute"> 
 				<input type="submit" name="action" value="UnPermMute">
 				<br>
+				{{aliasesplayer}}
 				<input type="submit" name="action" value="ShowAliases"> 
 				<input type="submit" name="action" value="ShowIPAliases">
+				{{aliasesplayer}}
 			</td>
 		</tr>
+		{{banplayer}}
 		<tr>
 			<td align="center">
 				<input type="text" name="reason" value="<ban reason>">
 			</td>
 		</tr>
+		{{banplayer}}
+		{{addplayer}}
 		<tr>
 			<td align="center">
 				<br>
@@ -58,7 +62,7 @@
 				[[ADD]]
 			</td>
 		</tr>
-		{{0}}
+		{{addplayer}}
 	</table>
 </form>
 #include footer.html
