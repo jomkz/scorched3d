@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-//    Scorched3D (c) 2000-2003
+//    Scorched3D (c) 2000-2004
 //
 //    This file is part of Scorched3D.
 //
@@ -18,22 +18,30 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <server/ServerChannelAuth.h>
-#include <server/ScorchedServer.h>
-#include <server/ServerMessageHandler.h>
+#include <coms/ComsAdminResultMessage.h>
 
-ServerChannelAuth::ServerChannelAuth()
+ComsAdminResultMessage::ComsAdminResultMessage(
+	unsigned int sid) :
+	ComsMessage("ComsAdminResultMessage"),
+	sid_(sid)
 {
+
 }
 
-ServerChannelAuth::~ServerChannelAuth()
+ComsAdminResultMessage::~ComsAdminResultMessage()
 {
+
 }
 
-bool ServerChannelAuthAdmin::allowConnection(
-	const char *channel, unsigned int destination)
+bool ComsAdminResultMessage::writeMessage(NetBuffer &buffer)
 {
-	ServerMessageHandler::DestinationInfo *destinationInfo =
-		ServerMessageHandler::instance()->getDestinationInfo(destination);
-	return (destinationInfo && destinationInfo->admin);
+	buffer.addToBuffer(sid_);
+	return true;
 }
+
+bool ComsAdminResultMessage::readMessage(NetBufferReader &reader)
+{
+	if (!reader.getFromBuffer(sid_)) return false; 
+	return true;
+}
+

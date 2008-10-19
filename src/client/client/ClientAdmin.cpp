@@ -21,6 +21,7 @@
 #include <client/ClientAdmin.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientChannelManager.h>
+#include <client/ClientAdminResultHandler.h>
 #include <tank/TankContainer.h>
 #include <console/Console.h>
 #include <coms/ComsMessageSender.h>
@@ -145,6 +146,10 @@ ClientAdmin::ClientAdmin()
 		ConsoleRuleParam("username", ConsoleRuleTypeString),
 		ConsoleRuleParam("password", ConsoleRuleTypeString)),
 		(unsigned int) ComsAdminMessage::AdminLogin);
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminNoParams, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("login")),
+		(unsigned int) ComsAdminMessage::AdminLogin);
 }
 
 ClientAdmin::~ClientAdmin()
@@ -158,12 +163,17 @@ void ClientAdmin::adminNoParams(std::vector<ConsoleRuleValue> &values,
 	ComsAdminMessage::ComsAdminMessageType type = 
 		(ComsAdminMessage::ComsAdminMessageType) userData;
 
-	ComsAdminMessage message(type);
+	unsigned int sid = ClientAdminResultHandler::instance()->getSid();
+	ComsAdminMessage message(sid, type);
 	ComsMessageSender::sendToServer(message);
 
 	if (type == ComsAdminMessage::AdminLogout)
 	{
 		ClientChannelManager::instance()->removeChannel("admin");
+	}
+	else if (type == ComsAdminMessage::AdminLogin)
+	{
+		ClientChannelManager::instance()->addChannel("general", "admin");
 	}
 }
 
@@ -175,7 +185,8 @@ void ClientAdmin::adminOneParam(std::vector<ConsoleRuleValue> &values,
 
 	ConsoleRuleValue param = values[2];
 
-	ComsAdminMessage message(type, param.valueString.c_str());
+	unsigned int sid = ClientAdminResultHandler::instance()->getSid();
+	ComsAdminMessage message(sid, type, param.valueString.c_str());
 	ComsMessageSender::sendToServer(message);
 }
 
@@ -188,7 +199,8 @@ void ClientAdmin::adminTwoParam(std::vector<ConsoleRuleValue> &values,
 	ConsoleRuleValue param1 = values[2];
 	ConsoleRuleValue param2 = values[3];
 
-	ComsAdminMessage message(type, 
+	unsigned int sid = ClientAdminResultHandler::instance()->getSid();
+	ComsAdminMessage message(sid, type, 
 		param1.valueString.c_str(), param2.valueString.c_str());
 	ComsMessageSender::sendToServer(message);
 

@@ -37,6 +37,19 @@
 #include <common/OptionsScorched.h>
 #include <common/StatsLogger.h>
 
+ServerMessageHandler::DestinationInfo::DestinationInfo() :
+	adminTries(0), admin(false)
+{
+}
+
+ServerMessageHandler::DestinationInfo *ServerMessageHandler::getDestinationInfo(unsigned int destinationId)
+{
+	std::map<unsigned int, DestinationInfo>::iterator itor = 
+		destinationInfos_.find(destinationId);
+	if (itor == destinationInfos_.end()) return 0;
+	return &itor->second;
+}
+
 ServerMessageHandler *ServerMessageHandler::instance_ = 0;
 
 ServerMessageHandler *ServerMessageHandler::instance()
@@ -112,6 +125,9 @@ void ServerMessageHandler::clientConnected(NetMessage &message)
 		}
 	}
 
+	// Add to list of destinations
+	destinationInfos_[message.getDestinationId()] = DestinationInfo();
+
 	Logger::log(S3D::formatStringBuffer("Client connected dest=\"%i\" ip=\"%s\"", 
 		message.getDestinationId(),
 		NetInterface::getIpName(message.getIpAddress())));
@@ -158,6 +174,9 @@ void ServerMessageHandler::clientDisconnected(NetMessage &message)
 
 	// Inform the channel manager
 	ServerChannelManager::instance()->destinationDisconnected(message.getDestinationId());
+
+	// Remove from list of destinations
+	destinationInfos_.erase(message.getDestinationId());
 }
 
 void ServerMessageHandler::destroyPlayer(unsigned int tankId, const char *reason)

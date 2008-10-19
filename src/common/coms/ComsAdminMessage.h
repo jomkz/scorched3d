@@ -30,6 +30,7 @@ public:
 	{
 		AdminNone,
 		AdminLogin,
+		AdminLoginLocal,
 		AdminLogout,
 		AdminShow,
 		AdminShowBanned,
@@ -51,11 +52,13 @@ public:
 	};
 
 	ComsAdminMessage(
+		unsigned int sid = 0,
 		ComsAdminMessageType type = AdminNone, 
 		const char *param1_ = "",
 		const char *param2_ = "");
 	virtual ~ComsAdminMessage();
 
+	unsigned int getSid() { return sid_; }
 	ComsAdminMessageType getType() { return type_; }
 	const char *getParam1() { return param1_.c_str(); }
 	const char *getParam2() { return param2_.c_str(); }
@@ -65,6 +68,7 @@ public:
 	virtual bool readMessage(NetBufferReader &reader);
 
 protected:
+	unsigned int sid_;
 	ComsAdminMessageType type_;
 	std::string param1_;
 	std::string param2_;

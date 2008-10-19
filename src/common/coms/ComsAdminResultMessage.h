@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-//    Scorched3D (c) 2000-2003
+//    Scorched3D (c) 2000-2004
 //
 //    This file is part of Scorched3D.
 //
@@ -18,22 +18,31 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <server/ServerChannelAuth.h>
-#include <server/ScorchedServer.h>
-#include <server/ServerMessageHandler.h>
+#if !defined(__INCLUDE_ComsAdminResultMessageh_INCLUDE__)
+#define __INCLUDE_ComsAdminResultMessageh_INCLUDE__
 
-ServerChannelAuth::ServerChannelAuth()
-{
-}
+#include <coms/ComsMessage.h>
 
-ServerChannelAuth::~ServerChannelAuth()
+class ComsAdminResultMessage : public ComsMessage
 {
-}
+public:
+	ComsAdminResultMessage(unsigned int sid = 0);
+	virtual ~ComsAdminResultMessage();
 
-bool ServerChannelAuthAdmin::allowConnection(
-	const char *channel, unsigned int destination)
-{
-	ServerMessageHandler::DestinationInfo *destinationInfo =
-		ServerMessageHandler::instance()->getDestinationInfo(destination);
-	return (destinationInfo && destinationInfo->admin);
-}
+	unsigned int getSid() { return sid_; }
+
+	// Inherited from ComsMessage
+	virtual bool writeMessage(NetBuffer &buffer);
+	virtual bool readMessage(NetBufferReader &reader);
+
+protected:
+	unsigned int sid_;
+
+private:
+	ComsAdminResultMessage(const ComsAdminResultMessage &);
+	const ComsAdminResultMessage & operator=(const ComsAdminResultMessage &);
+
+};
+
+#endif // __INCLUDE_ComsAdminResultMessageh_INCLUDE__
+

@@ -917,6 +917,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\coms\ComsAdminResultMessage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\coms\ComsAdminResultMessage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\coms\ComsBuyAccessoryMessage.cpp"
 				>
 			</File>
@@ -3158,6 +3166,14 @@
 			</File>
 			<File
 				RelativePath="..\client\ClientAdmin.h"
+				>
+			</File>
+			<File
+				RelativePath="..\client\ClientAdminResultHandler.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\client\ClientAdminResultHandler.h"
 				>
 			</File>
 			<File

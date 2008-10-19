@@ -42,6 +42,7 @@
 #include <client/ClientRmPlayerHandler.h>
 #include <client/ClientGameStateHandler.h>
 #include <client/ClientInitializeHandler.h>
+#include <client/ClientAdminResultHandler.h>
 #include <client/ClientPlayerStateHandler.h>
 #include <client/ClientStartTimerHandler.h>
 #include <client/ClientSyncCheckHandler.h>
@@ -156,9 +157,9 @@ static bool initComs(ProgressCounter *progressCounter)
 	}
 	else
 	{
-		NetLoopBack *serverLoopBack = new NetLoopBack(NetLoopBack::ServerLoopBackID);
+		NetLoopBack *serverLoopBack = new NetLoopBack(true);
 		ScorchedServer::instance()->getContext().setNetInterface(serverLoopBack);
-		NetLoopBack *clientLoopBack = new NetLoopBack(NetLoopBack::ClientLoopBackID);
+		NetLoopBack *clientLoopBack = new NetLoopBack(false);
 		ScorchedClient::instance()->getContext().setNetInterface(clientLoopBack);
 		serverLoopBack->setLoopBack(clientLoopBack);
 		clientLoopBack->setLoopBack(serverLoopBack);
@@ -196,6 +197,7 @@ static bool initComsHandlers()
 	ClientDefenseHandler::instance();
 	ClientPlayerStatusHandler::instance();
 	ClientScoreHandler::instance();
+	ClientAdminResultHandler::instance();
 
 	return true;
 }

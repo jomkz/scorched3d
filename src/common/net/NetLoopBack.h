@@ -27,13 +27,7 @@
 class NetLoopBack : public NetInterface
 {
 public:
-	enum LoopBackIDS
-	{
-		ClientLoopBackID = 100001,
-		ServerLoopBackID = 200002
-	};
-
-	NetLoopBack(unsigned int currentId);
+	NetLoopBack(bool server);
 	virtual ~NetLoopBack();
 
 	void setLoopBack(NetLoopBack *loopback);
@@ -54,7 +48,7 @@ public:
 		unsigned int destination, unsigned int flags = 0);
 
 protected:
-	unsigned int currentId_;
+	bool server_;
 	NetMessageHandler messageHandler_;
 	NetLoopBack *loopback_;
 };

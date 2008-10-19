@@ -18,22 +18,44 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <server/ServerChannelAuth.h>
-#include <server/ScorchedServer.h>
-#include <server/ServerMessageHandler.h>
+#if !defined(__INCLUDE_ClientAdminResultHandlerh_INCLUDE__)
+#define __INCLUDE_ClientAdminResultHandlerh_INCLUDE__
 
-ServerChannelAuth::ServerChannelAuth()
-{
-}
+#include <coms/ComsMessageHandler.h>
+#include <set>
 
-ServerChannelAuth::~ServerChannelAuth()
+class ClientAdminResultHandlerI
 {
-}
+public:
+	virtual void adminResult(unsigned int sid) = 0;
+};
 
-bool ServerChannelAuthAdmin::allowConnection(
-	const char *channel, unsigned int destination)
+class ClientAdminResultHandler : 
+	public ComsMessageHandlerI
 {
-	ServerMessageHandler::DestinationInfo *destinationInfo =
-		ServerMessageHandler::instance()->getDestinationInfo(destination);
-	return (destinationInfo && destinationInfo->admin);
-}
+public:
+	static ClientAdminResultHandler *instance();
+
+	void addHandler(ClientAdminResultHandlerI *handler) 
+		{ handlers_.insert(handler); }
+	void removeHandler(ClientAdminResultHandlerI *handler) 
+		{ handlers_.erase(handler); }
+
+	unsigned int getSid() { return sid_; }
+
+	// Inherited from ComsMessageHandlerI
+	virtual bool processMessage(
+		NetMessage &message,
+		const char *messageType,
+		NetBufferReader &reader);
+protected:
+	std::set<ClientAdminResultHandlerI *> handlers_;
+	unsigned int sid_;
+
+private:
+	ClientAdminResultHandler();
+	virtual ~ClientAdminResultHandler();
+
+};
+
+#endif

@@ -23,12 +23,21 @@
 #define __INCLUDE_ServerMessageHandlerh_INCLUDE__
 
 #include <coms/ComsMessageHandler.h>
+#include <map>
 
 class ServerMessageHandler : 
 	public ComsMessageConnectionHandlerI
 {
 public:
 	static ServerMessageHandler *instance();
+
+	struct DestinationInfo
+	{
+		DestinationInfo();
+
+		int adminTries;
+		bool admin;
+	};
 
 	virtual void clientConnected(NetMessage &message);
 	virtual void clientDisconnected(NetMessage &message);
@@ -38,12 +47,15 @@ public:
 	virtual void messageRecv(unsigned int destinationId);
 	virtual void messageSent(unsigned int destinationId);
 
+	DestinationInfo *getDestinationInfo(unsigned int destinationId);
+
 	void destroyPlayer(unsigned int playerId, const char *reason);
 	void destroyTaggedPlayers();
 
 protected:
 	static ServerMessageHandler *instance_;
 	void actualDestroyPlayer(unsigned int tankId);
+	std::map<unsigned int, DestinationInfo> destinationInfos_;
 
 private:
 	ServerMessageHandler();

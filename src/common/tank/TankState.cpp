@@ -43,9 +43,9 @@ allowedStateTransitions[] =
 
 TankState::TankState(ScorchedContext &context, unsigned int playerId) : 
 	state_(sLoading), tank_(0),
-	readyState_(sReady), sid_(0),
+	readyState_(sReady),
 	context_(context), spectator_(false), 
-	muted_(false), adminTries_(0),
+	muted_(false),
 	skipshots_(false),
 	lives_(0), maxLives_(1), destroy_(false)
 {

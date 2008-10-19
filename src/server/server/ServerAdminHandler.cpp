@@ -25,10 +25,12 @@
 #include <server/ServerCommon.h>
 #include <server/ServerAdminCommon.h>
 #include <server/ServerAdminSessions.h>
+#include <server/ServerMessageHandler.h>
 #include <common/StatsLogger.h>
 #include <common/Logger.h>
 #include <common/Defines.h>
 #include <coms/ComsAdminMessage.h>
+#include <coms/ComsAdminResultMessage.h>
 #include <coms/ComsSyncCheckMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <net/NetInterface.h>
@@ -64,71 +66,77 @@ bool ServerAdminHandler::processMessage(
 
 	unsigned int destinationId = netMessage.getDestinationId();
 
-	// Find the tank for this destination
-	Tank *adminTank = 0;
-	std::map<unsigned int, Tank *>::iterator itor;
-	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->
-			getTankContainer().getPlayingTanks();
-	for (itor = tanks.begin();
-		itor != tanks.end();
-		itor++)
-	{
-		Tank *tank = (*itor).second;
-		if (tank->getDestinationId() == destinationId)
-			adminTank = tank;
-	}
-	if (!adminTank) return true;
+	ServerMessageHandler::DestinationInfo *destinationInfo =
+		ServerMessageHandler::instance()->getDestinationInfo(destinationId);
+	if (!destinationInfo) return false;
 
 	// Login if that is what is happening
-	if (message.getType() == ComsAdminMessage::AdminLogin)
+	if (message.getType() == ComsAdminMessage::AdminLogin ||
+		message.getType() == ComsAdminMessage::AdminLoginLocal)
 	{
 		unsigned int sid = ServerAdminSessions::instance()->
-			login(message.getParam1(), message.getParam2(), "");
+			login(message.getParam1(), message.getParam2(),
+			NetInterface::getIpName(netMessage.getIpAddress()));
 		if (sid != 0)
 		{
 			ServerAdminSessions::SessionParams *adminSession =
 				ServerAdminSessions::instance()->getSession(sid);
 
+			ServerChannelManager::instance()->refreshDestination(destinationId);
+
 			ServerCommon::sendString(0,
-				S3D::formatStringBuffer("server admin \"%s\" logged in",
+				S3D::formatStringBuffer("Server admin \"%s\" logged in",
 				adminSession->credentials.username.c_str()));
 			ServerCommon::serverLog(
-				S3D::formatStringBuffer("\"%s\" logged in as server admin \"%s\"",
-				adminTank->getName(),
-				adminSession->credentials.username.c_str()));
+				S3D::formatStringBuffer("Server admin \"%s\" logged in, destination id \"%u\"",
+				adminSession->credentials.username.c_str(),
+				destinationId));
 
-			adminTank->getState().setAdmin(sid);
-			ServerChannelManager::instance()->refreshDestination(
-				netMessage.getDestinationId());
+			ComsAdminResultMessage resultMessage(sid);
+			ComsMessageSender::sendToSingleClient(resultMessage, destinationId);
+			destinationInfo->admin = true;
+			destinationInfo->adminTries = 0;
 		}
 		else
 		{
-			adminTank->getState().setAdminTries(
-				adminTank->getState().getAdminTries() + 1);
-			
-			Logger::log(S3D::formatStringBuffer("Failed login for server admin \"%s\", via console, ip \"%s\"",
-				message.getParam1(),
-				NetInterface::getIpName(netMessage.getIpAddress())));
-
-			ServerCommon::sendString(destinationId,
-				S3D::formatStringBuffer("Incorrect admin password (try %i/3)", 
-				adminTank->getState().getAdminTries()));
-			if (adminTank->getState().getAdminTries() > 3)
+			if (message.getType() != ComsAdminMessage::AdminLoginLocal)
 			{
-				ServerCommon::kickPlayer(adminTank->getPlayerId());
+				destinationInfo->adminTries++;
+				
+				ServerCommon::sendString(destinationId,
+					S3D::formatStringBuffer("Incorrect admin password (try %i/3)", 
+					destinationInfo->adminTries));
+				if (destinationInfo->adminTries > 3)
+				{
+					ServerCommon::kickDestination(destinationId);
+				}
+
+				Logger::log(S3D::formatStringBuffer(
+					"Failed login for server admin \"%s\" via console, ip \"%s\", destination id \"%u\"",
+					message.getParam1(),
+					NetInterface::getIpName(netMessage.getIpAddress()),
+					destinationId));
 			}
+
+			ComsAdminResultMessage resultMessage(0);
+			ComsMessageSender::sendToSingleClient(resultMessage, destinationId);
+			destinationInfo->admin = false;
 		}
 		return true;
 	}
 
 	// Only allow logged in tanks (may have timed out)
 	ServerAdminSessions::SessionParams *adminSession =
-		ServerAdminSessions::instance()->getSession(adminTank->getState().getAdmin());
+		ServerAdminSessions::instance()->getSession(message.getSid());
 	if (!adminSession)
 	{
 		ServerCommon::sendString(destinationId,
 			"You are not logged in as admin");
+
+		ComsAdminResultMessage resultMessage(0);
+		ComsMessageSender::sendToSingleClient(resultMessage, destinationId);
+		destinationInfo->admin = false;
+
 		return true;		
 	}
 	const char *adminName = adminSession->credentials.username.c_str();
@@ -167,21 +175,18 @@ bool ServerAdminHandler::processMessage(
 	case ComsAdminMessage::AdminLogout:
 		{
 			ServerCommon::sendString(0,
-				S3D::formatStringBuffer("server admin \"%s\" logged out",
+				S3D::formatStringBuffer("Server admin \"%s\" logged out",
 				adminName));
 			ServerCommon::serverLog(
-				S3D::formatStringBuffer("\"%s\" logged out as server admin \"%s\"",
-				adminTank->getName(),
+				S3D::formatStringBuffer("Server admin \"%s\" logged out",
 				adminName));
 
-			if (adminTank->getState().getAdmin())
-			{
-				ServerAdminSessions::instance()->logout(
-					adminTank->getState().getAdmin());
-			}
-			adminTank->getState().setAdmin(0);
-			ServerChannelManager::instance()->refreshDestination(
-				netMessage.getDestinationId());
+			ServerAdminSessions::instance()->logout(message.getSid());
+			ServerChannelManager::instance()->refreshDestination(destinationId);
+
+			ComsAdminResultMessage resultMessage(0);
+			ComsMessageSender::sendToSingleClient(resultMessage, destinationId);
+			destinationInfo->admin = false;
 		}
 		break;
 	case ComsAdminMessage::AdminShowBanned:
