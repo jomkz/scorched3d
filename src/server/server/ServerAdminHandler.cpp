@@ -70,16 +70,21 @@ bool ServerAdminHandler::processMessage(
 		ServerMessageHandler::instance()->getDestinationInfo(destinationId);
 	if (!destinationInfo) return false;
 
-	// Login if that is what is happening
+	// Check if the SID is valid
+	ServerAdminSessions::SessionParams *adminSession =
+		ServerAdminSessions::instance()->getSession(message.getSid());
+
+	// Check if we are logging in
 	if (message.getType() == ComsAdminMessage::AdminLogin ||
 		message.getType() == ComsAdminMessage::AdminLoginLocal)
-	{
-		unsigned int sid = ServerAdminSessions::instance()->
-			login(message.getParam1(), message.getParam2(),
-			NetInterface::getIpName(netMessage.getIpAddress()));
-		if (sid != 0)
+	{	
+		unsigned int sid = message.getSid();
+		if (adminSession ||
+			(sid = ServerAdminSessions::instance()->
+				login(message.getParam1(), message.getParam2(),
+				NetInterface::getIpName(netMessage.getIpAddress()))) != 0)
 		{
-			ServerAdminSessions::SessionParams *adminSession =
+			adminSession =
 				ServerAdminSessions::instance()->getSession(sid);
 
 			ServerChannelManager::instance()->refreshDestination(destinationId);
@@ -92,10 +97,12 @@ bool ServerAdminHandler::processMessage(
 				adminSession->credentials.username.c_str(),
 				destinationId));
 
-			ComsAdminResultMessage resultMessage(sid);
+			ComsAdminResultMessage resultMessage(sid, message.getType());
 			ComsMessageSender::sendToSingleClient(resultMessage, destinationId);
 			destinationInfo->admin = true;
 			destinationInfo->adminTries = 0;
+
+			return true;
 		}
 		else
 		{
@@ -118,26 +125,24 @@ bool ServerAdminHandler::processMessage(
 					destinationId));
 			}
 
-			ComsAdminResultMessage resultMessage(0);
+			ComsAdminResultMessage resultMessage(0, message.getType());
 			ComsMessageSender::sendToSingleClient(resultMessage, destinationId);
 			destinationInfo->admin = false;
+
+			return true;
 		}
-		return true;
 	}
 
-	// Only allow logged in tanks (may have timed out)
-	ServerAdminSessions::SessionParams *adminSession =
-		ServerAdminSessions::instance()->getSession(message.getSid());
 	if (!adminSession)
 	{
 		ServerCommon::sendString(destinationId,
 			"You are not logged in as admin");
 
-		ComsAdminResultMessage resultMessage(0);
+		ComsAdminResultMessage resultMessage(0, message.getType());
 		ComsMessageSender::sendToSingleClient(resultMessage, destinationId);
 		destinationInfo->admin = false;
 
-		return true;		
+		return true;	
 	}
 	const char *adminName = adminSession->credentials.username.c_str();
 
@@ -184,7 +189,7 @@ bool ServerAdminHandler::processMessage(
 			ServerAdminSessions::instance()->logout(message.getSid());
 			ServerChannelManager::instance()->refreshDestination(destinationId);
 
-			ComsAdminResultMessage resultMessage(0);
+			ComsAdminResultMessage resultMessage(0, message.getType());
 			ComsMessageSender::sendToSingleClient(resultMessage, destinationId);
 			destinationInfo->admin = false;
 		}
@@ -331,6 +336,16 @@ bool ServerAdminHandler::processMessage(
 			{
 				ServerCommon::sendString(destinationId, "Unknown player for slap");
 			}
+		}
+		break;
+	case ComsAdminMessage::AdminAdd:
+		{
+			if (!ServerAdminCommon::addPlayer(
+				adminSession->credentials,
+				message.getParam1()))
+			{
+				ServerCommon::sendString(destinationId, "Unknown player type to add");
+			}	
 		}
 		break;
 	}

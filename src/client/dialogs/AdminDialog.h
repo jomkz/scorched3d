@@ -18,44 +18,48 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ClientAdminResultHandlerh_INCLUDE__)
-#define __INCLUDE_ClientAdminResultHandlerh_INCLUDE__
+#if !defined(__INCLUDE_AdminDialogh_INCLUDE__)
+#define __INCLUDE_AdminDialogh_INCLUDE__
 
-#include <coms/ComsAdminMessage.h>
-#include <coms/ComsMessageHandler.h>
-#include <set>
+#include <GLW/GLWWindow.h>
+#include <GLW/GLWTextButton.h>
+#include <GLW/GLWIconTable.h>
+#include <GLW/GLWTab.h>
+#include <GLW/GLWDropDown.h>
 
-class ClientAdminResultHandlerI
+class AdminDialog : 
+	public GLWWindow,
+	public GLWButtonI,
+	public GLWIconTableI
 {
 public:
-	virtual void adminResult(unsigned int sid, ComsAdminMessage::ComsAdminMessageType type) = 0;
-};
+	static AdminDialog *instance();
 
-class ClientAdminResultHandler : 
-	public ComsMessageHandlerI
-{
-public:
-	static ClientAdminResultHandler *instance();
+	// GLWWindow
+	virtual void display();
 
-	void addHandler(ClientAdminResultHandlerI *handler) 
-		{ handlers_.insert(handler); }
-	void removeHandler(ClientAdminResultHandlerI *handler) 
-		{ handlers_.erase(handler); }
+	// GLWButtonI
+	virtual void buttonDown(unsigned int id);
 
-	unsigned int getSid() { return sid_; }
+	// GLWIconTableI
+	virtual void drawColumn(unsigned int id, int row, int column, float x, float y, float w);
+	virtual void rowSelected(unsigned int id, int row);
+	virtual void rowChosen(unsigned int id, int row);
+	virtual void columnSelected(unsigned int id, int col);
 
-	// Inherited from ComsMessageHandlerI
-	virtual bool processMessage(
-		NetMessage &message,
-		const char *messageType,
-		NetBufferReader &reader);
 protected:
-	std::set<ClientAdminResultHandlerI *> handlers_;
-	unsigned int sid_;
+	static AdminDialog *instance_;
+	GLWIconTable *adminTable_;
+	GLWTextButton *ok_;
+	GLWButton *kickButton_, *banButton_, *slapButton_;
+	GLWButton *poorButton_, *muteButton_, *unmuteButton_;
+	GLWTab *playerTab_, *botsTab_;
+	GLWDropDown *aiSelector_;
+	GLWButton *addButton_;
 
 private:
-	ClientAdminResultHandler();
-	virtual ~ClientAdminResultHandler();
+	AdminDialog();
+	virtual ~AdminDialog();
 
 };
 

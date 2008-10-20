@@ -58,7 +58,7 @@ bool ClientAdminResultHandler::processMessage(
 			itor != handlers_.end();
 			itor++)
 		{
-			(*itor)->adminResult(message.getSid());
+			(*itor)->adminResult(message.getSid(), message.getType());
 		}
 	}
 

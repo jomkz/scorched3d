@@ -23,8 +23,8 @@
 ComsAdminMessage::ComsAdminMessage(
 	unsigned int sid,
 	ComsAdminMessageType type,
-	const char *param1,
-	const char *param2) :
+	const std::string &param1,
+	const std::string &param2) :
 	ComsMessage("ComsAdminMessage"),
 	sid_(sid),
 	type_(type),

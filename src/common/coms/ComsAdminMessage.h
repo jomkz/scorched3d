@@ -48,14 +48,15 @@ public:
 		AdminAdminTalk,
 		AdminTalk,
 		AdminMessage,
-		AdminNewGame
+		AdminNewGame,
+		AdminAdd
 	};
 
 	ComsAdminMessage(
 		unsigned int sid = 0,
 		ComsAdminMessageType type = AdminNone, 
-		const char *param1_ = "",
-		const char *param2_ = "");
+		const std::string &param1_ = "",
+		const std::string &param2_ = "");
 	virtual ~ComsAdminMessage();
 
 	unsigned int getSid() { return sid_; }

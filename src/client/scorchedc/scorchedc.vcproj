@@ -3485,6 +3485,30 @@
 			Name="dialogs"
 			>
 			<File
+				RelativePath="..\dialogs\AdminAuthDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\dialogs\AdminAuthDialog.h"
+				>
+			</File>
+			<File
+				RelativePath="..\dialogs\AdminCheckDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\dialogs\AdminCheckDialog.h"
+				>
+			</File>
+			<File
+				RelativePath="..\dialogs\AdminDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\dialogs\AdminDialog.h"
+				>
+			</File>
+			<File
 				RelativePath="..\dialogs\AnimatedBackdropDialog.cpp"
 				>
 			</File>

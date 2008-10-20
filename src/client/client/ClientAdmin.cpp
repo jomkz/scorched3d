@@ -130,6 +130,11 @@ ClientAdmin::ClientAdmin()
 		ConsoleUtil::formParams(ConsoleRuleParam("message"), 
 		ConsoleRuleParam("text", ConsoleRuleTypeString)),
 		(unsigned int) ComsAdminMessage::AdminMessage);
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminOneParam, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("add"), 
+		ConsoleRuleParam("playertype", ConsoleRuleTypeString)),
+		(unsigned int) ComsAdminMessage::AdminAdd);
 
 	// Two Number Params
 	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(

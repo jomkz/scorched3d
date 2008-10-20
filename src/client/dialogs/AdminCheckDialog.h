@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-//    Scorched3D (c) 2000-2004
+//    Scorched3D (c) 2000-2003
 //
 //    This file is part of Scorched3D.
 //
@@ -18,34 +18,29 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ComsAdminResultMessageh_INCLUDE__)
-#define __INCLUDE_ComsAdminResultMessageh_INCLUDE__
+#if !defined(__INCLUDE_AdminCheckDialogh_INCLUDE__)
+#define __INCLUDE_AdminCheckDialogh_INCLUDE__
 
-#include <coms/ComsAdminMessage.h>
+#include <GLW/GLWWindow.h>
+#include <client/ClientAdminResultHandler.h>
 
-class ComsAdminResultMessage : public ComsMessage
+class AdminCheckDialog : public GLWWindow, public ClientAdminResultHandlerI
 {
 public:
-	ComsAdminResultMessage(unsigned int sid = 0,
-		ComsAdminMessage::ComsAdminMessageType type = ComsAdminMessage::AdminNone);
-	virtual ~ComsAdminResultMessage();
+	static AdminCheckDialog *instance();
 
-	unsigned int getSid() { return sid_; }
-	ComsAdminMessage::ComsAdminMessageType getType() { return type_; }
+	// Inherited from GLWWindow
+	virtual void display();
 
-	// Inherited from ComsMessage
-	virtual bool writeMessage(NetBuffer &buffer);
-	virtual bool readMessage(NetBufferReader &reader);
+	// Inherited from ClientAdminResultHandlerI
+	virtual void adminResult(unsigned int sid, ComsAdminMessage::ComsAdminMessageType type);
 
 protected:
-	unsigned int sid_;
-	ComsAdminMessage::ComsAdminMessageType type_;
+	static AdminCheckDialog *instance_;
 
 private:
-	ComsAdminResultMessage(const ComsAdminResultMessage &);
-	const ComsAdminResultMessage & operator=(const ComsAdminResultMessage &);
-
+	AdminCheckDialog();
+	virtual ~AdminCheckDialog();
 };
 
-#endif // __INCLUDE_ComsAdminResultMessageh_INCLUDE__
-
+#endif

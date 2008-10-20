@@ -18,66 +18,64 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <dialogs/AuthDialog.h>
-#include <graph/OptionsDisplay.h>
+#include <dialogs/AdminAuthDialog.h>
+#include <dialogs/AdminDialog.h>
 #include <GLW/GLWTextButton.h>
 #include <GLW/GLWWindowManager.h>
-#include <client/ClientParams.h>
-#include <client/ClientConnectionAuthHandler.h>
+#include <client/ClientAdminResultHandler.h>
+#include <coms/ComsAdminMessage.h>
+#include <coms/ComsMessageSender.h>
 
-AuthDialog *AuthDialog::instance_ = 0;
+AdminAuthDialog *AdminAuthDialog::instance_ = 0;
 
-AuthDialog *AuthDialog::instance()
+AdminAuthDialog *AdminAuthDialog::instance()
 {
 	if (!instance_)
 	{
-		instance_ = new AuthDialog;
+		instance_ = new AdminAuthDialog;
 	}
 	return instance_;
 }
 
-AuthDialog::AuthDialog() :
-	GLWWindow("", 10.0f, 10.0f, 300.0f, 70.0f, eSmallTitle, ""),
-	auth_(0)
+AdminAuthDialog::AdminAuthDialog() :
+	GLWWindow("", 10.0f, 10.0f, 300.0f, 70.0f, eSmallTitle, "")
 {
 	needCentered_ = true;
 }
 
-AuthDialog::~AuthDialog()
+AdminAuthDialog::~AdminAuthDialog()
 {
 }
 
-void AuthDialog::display()
+void AdminAuthDialog::display()
 {
 	GLWWindow::display();
 
 	clear();
 
 	addWidget(
-		new GLWLabel(0.0f, 0.0f, LANG_RESOURCE("AUTH_LINE", "This server requires authentication.")), 
+		new GLWLabel(0.0f, 0.0f, LANG_RESOURCE("ADMINAUTH_LINE", "Admin authentication.")), 
 		0, SpaceAll, 10.0f);
 
 	GLWPanel *inputPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
 
 	username_ = 0;
-	if (auth_ & eNameRequired)
 	{
-		username_ = new GLWTextBox(0.0f, 0.0f, 200.0f,
-			(char *) ClientParams::instance()->getUserName());
+		username_ = new GLWTextBox(0.0f, 0.0f, 200.0f, "");
 		inputPanel->addWidget(new GLWLabel(0.0f, 0.0f, LANG_RESOURCE("USER_NAME_LABEL", "User Name :")));
 		inputPanel->addWidget(username_, 0, SpaceLeft | SpaceTop, 10.0f);
 	}
 	password_ = 0;
-	if (auth_ & ePasswordRequired)
 	{
-		password_ = new GLWTextBox(0.0f, 0.0f, 200.0f, 
-			(char *) ClientParams::instance()->getPassword(), GLWTextBox::eFlagPassword);
+		password_ = new GLWTextBox(0.0f, 0.0f, 200.0f, "", GLWTextBox::eFlagPassword);
 		inputPanel->addWidget(new GLWLabel(0.0f, 0.0f, LANG_RESOURCE("PASSWORD_LABEL", "Password :")));
 		inputPanel->addWidget(password_, 0, SpaceLeft | SpaceTop, 10.0f);
 	}
 	inputPanel->setGridWidth(2);
 	inputPanel->setLayout(GLWPanel::LayoutGrid);
 	addWidget(inputPanel, 0, SpaceAll, 10.0f);
+
+	username_->setCurrent();
 
 	GLWPanel *buttonPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
 	GLWButton *cancelButton = new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 95, 10, 105, this, 
@@ -91,25 +89,19 @@ void AuthDialog::display()
 	buttonPanel->setLayout(GLWPanel::LayoutHorizontal);
 	addWidget(buttonPanel, 0, SpaceAll, 10.0f);
 
-
 	setLayout(GLWPanel::LayoutVerticle);
 	layout();
 }
 
-void AuthDialog::buttonDown(unsigned int id)
+void AdminAuthDialog::buttonDown(unsigned int id)
 {
 	GLWWindowManager::instance()->hideWindow(getId());
 	if (id == okId_)
 	{
-		if (username_) 
-			ClientParams::instance()->setUserName(username_->getText().c_str());
-		if (password_) 
-			ClientParams::instance()->setPassword(password_->getText().c_str());
-
-		ClientConnectionAuthHandler::instance()->sendAuth();
-	}
-	else
-	{
-		ClientConnectionAuthHandler::instance()->cancelAuth();
+		unsigned int sid = ClientAdminResultHandler::instance()->getSid();
+		ComsAdminMessage message(sid, ComsAdminMessage::AdminLogin, 
+			username_->getText().c_str(), 
+			password_->getText().c_str());
+		ComsMessageSender::sendToServer(message);
 	}
 }

@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-//    Scorched3D (c) 2000-2004
+//    Scorched3D (c) 2000-2003
 //
 //    This file is part of Scorched3D.
 //
@@ -18,34 +18,35 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ComsAdminResultMessageh_INCLUDE__)
-#define __INCLUDE_ComsAdminResultMessageh_INCLUDE__
+#if !defined(__INCLUDE_AdminAuthDialogh_INCLUDE__)
+#define __INCLUDE_AdminAuthDialogh_INCLUDE__
 
-#include <coms/ComsAdminMessage.h>
+#include <GLW/GLWWindow.h>
+#include <GLW/GLWButton.h>
+#include <GLW/GLWTextBox.h>
 
-class ComsAdminResultMessage : public ComsMessage
+class AdminAuthDialog : public GLWWindow,
+	public GLWButtonI
 {
 public:
-	ComsAdminResultMessage(unsigned int sid = 0,
-		ComsAdminMessage::ComsAdminMessageType type = ComsAdminMessage::AdminNone);
-	virtual ~ComsAdminResultMessage();
+	static AdminAuthDialog *instance();
 
-	unsigned int getSid() { return sid_; }
-	ComsAdminMessage::ComsAdminMessageType getType() { return type_; }
+	// Inherited from GLWButtonI
+	virtual void buttonDown(unsigned int id);
 
-	// Inherited from ComsMessage
-	virtual bool writeMessage(NetBuffer &buffer);
-	virtual bool readMessage(NetBufferReader &reader);
+	// Inherited from GLWWindow
+	virtual void display();
 
 protected:
-	unsigned int sid_;
-	ComsAdminMessage::ComsAdminMessageType type_;
+	static AdminAuthDialog *instance_;
+	unsigned int okId_, cancelId_;
+
+	GLWTextBox *username_;
+	GLWTextBox *password_;
 
 private:
-	ComsAdminResultMessage(const ComsAdminResultMessage &);
-	const ComsAdminResultMessage & operator=(const ComsAdminResultMessage &);
-
+	AdminAuthDialog();
+	virtual ~AdminAuthDialog();
 };
 
-#endif // __INCLUDE_ComsAdminResultMessageh_INCLUDE__
-
+#endif

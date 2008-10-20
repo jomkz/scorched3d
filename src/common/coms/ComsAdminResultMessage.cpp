@@ -21,9 +21,10 @@
 #include <coms/ComsAdminResultMessage.h>
 
 ComsAdminResultMessage::ComsAdminResultMessage(
-	unsigned int sid) :
+	unsigned int sid,
+	ComsAdminMessage::ComsAdminMessageType type) :
 	ComsMessage("ComsAdminResultMessage"),
-	sid_(sid)
+	sid_(sid), type_(type)
 {
 
 }
@@ -36,12 +37,16 @@ ComsAdminResultMessage::~ComsAdminResultMessage()
 bool ComsAdminResultMessage::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(sid_);
+	buffer.addToBuffer((int) type_);
 	return true;
 }
 
 bool ComsAdminResultMessage::readMessage(NetBufferReader &reader)
 {
 	if (!reader.getFromBuffer(sid_)) return false; 
+	int t = 0;
+	if (!reader.getFromBuffer(t)) return false; 
+	type_ = (ComsAdminMessage::ComsAdminMessageType) t;
 	return true;
 }
 
