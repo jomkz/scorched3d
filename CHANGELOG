@@ -32,7 +32,8 @@ Fog also applied to landscape in shader mode
 Added usenumber attribute to accessories to specifiy the number to use up when fired (supported 0 or 1)
 Changed fonts to dejavu to provide a larger set of characters
 Added multi-lingual support to Scorched3D (most words customizable, more added if there is demand)
-Admin users can now change their own passwords
 Fullscreen mode is now only the default on Win32 systems
 Skill and skill change now displayed on tooltips and combat messages
 Added server admin permissions
+Admin users can now change their own passwords
+Added server GUI to client to perform simple add/remove player operations.  Can be used in offline mode too.
