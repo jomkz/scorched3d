@@ -33,7 +33,7 @@ namespace KeyboardHistory
 	struct HistoryElement
 	{
 		SDLKey sdlKey;
-		char representedKey;
+		unsigned int representedUnicode;
 	};
 }
 

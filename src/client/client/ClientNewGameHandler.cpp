@@ -84,12 +84,12 @@ bool ClientNewGameHandler::processMessage(
 
 	if (idleTime > 0 && int(generateTime) > idleTime - 5)
 	{
-		std::string message = S3D::formatStringBuffer(
+		LangString message = LANG_RESOURCE("LEVEL_TIMEOUT_WARNING",
 			"Warning: Your PC is taking a long time to generate levels.\n"
 			"This may cause you to be kicked by some servers.\n"
 			"You can fix this by lowering your display settings");
 
-		Logger::log(message);
+		Logger::log(LangStringUtil::convertFromLang(message));
 		ChannelText text("info", message);
 		ChannelManager::showText(ScorchedClient::instance()->getContext(), text);
 	}

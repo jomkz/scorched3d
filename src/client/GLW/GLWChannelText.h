@@ -70,7 +70,7 @@ protected:
 	GLWIconButton button_;
 	GLWChannelView view_;
 	std::map<KeyboardKey *, std::string> keys_;
-	std::string text_;
+	LangString text_;
 	float fontSize_, outlineFontSize_;
 	float ctime_;
 	bool cursor_, visible_;
@@ -79,8 +79,8 @@ protected:
 	unsigned int whisperDest_;
 	std::string whisperDestStr_;
 
-	void processNotVisibleKey(char c, unsigned int dik, bool &skipRest);
-	void processVisibleKey(char c, unsigned int dik);
+	void processNotVisibleKey(unsigned int unicode, unsigned int dik, bool &skipRest);
+	void processVisibleKey(unsigned int unicode, unsigned int dik);
 	void processSpecialText();
 	void processNormalText();
 	bool checkCurrentChannel();

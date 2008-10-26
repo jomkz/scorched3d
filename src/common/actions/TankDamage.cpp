@@ -45,6 +45,7 @@
 #include <target/TargetParachute.h>
 #include <target/TargetState.h>
 #include <tankai/TankAIStrings.h>
+#include <lang/LangResource.h>
 
 TankDamage::TankDamage(Weapon *weapon, 
 		unsigned int damagedPlayerId, WeaponFireContext &weaponContext,
@@ -458,12 +459,22 @@ void TankDamage::logDeath()
 		if (line)
 		{
 			context_->getActionController().addAction(
-				new TankSay(killedTank->getPlayerId(), line));
+				new TankSay(killedTank->getPlayerId(), 
+				LANG_STRING(line)));
 		}
 	}
 
-	Tank *firedTank = 
-		context_->getTankContainer().getTankById(firedPlayerId);
+	Tank *firedTank = 0;
+	if (firedPlayerId != 0) firedTank = context_->getTankContainer().getTankById(firedPlayerId);
+	else
+	{
+		Vector white(1.0f, 1.0f, 1.0f);
+		static Tank envTank(*context_, 0, 0, "Environment", 
+			white, "", "");
+		envTank.setUniqueId("Environment");
+		firedTank = &envTank;
+	}
+
 	if (firedTank)
 	{
 		int skillChange = TankScore::calcSkillDifference(
@@ -476,11 +487,13 @@ void TankDamage::logDeath()
 			StatsLogger::instance()->
 				weaponKilled(weapon_, (weaponContext_.getData() & Weapon::eDataDeathAnimation));
 			{
-				ChannelText text("combat", 
-					S3D::formatStringBuffer("[p:%s] killed self with a [w:%s] (%i skill change)",
-						killedTank->getName(),
+				ChannelText text("combat",
+					LANG_RESOURCE_3(
+						"TANK_KILLED_SELF", 
+						"[p:{0}] killed self with a [w:{1}] ({2} skill change)",
+						firedTank->getName(),
 						weapon_->getParent()->getName(),
-						skillChange));
+						S3D::formatStringBuffer("%i", skillChange)));
 				ChannelManager::showText(*context_, text);
 			}
 		}
@@ -493,11 +506,13 @@ void TankDamage::logDeath()
 				weaponKilled(weapon_, (weaponContext_.getData() & Weapon::eDataDeathAnimation));
 			{
 				ChannelText text("combat", 
-					S3D::formatStringBuffer("[p:%s] team killed [p:%s] with a [w:%s] (%i skill change)",
+					LANG_RESOURCE_4(
+						"TANK_KILLED_TEAM",
+						"[p:{0}] team killed [p:{1}] with a [w:{2}] ({3} skill change)",
 						firedTank->getName(),
 						killedTank->getName(),
 						weapon_->getParent()->getName(),
-						skillChange));
+						S3D::formatStringBuffer("%i", skillChange)));
 				ChannelManager::showText(*context_, text);
 			}
 		}
@@ -508,34 +523,31 @@ void TankDamage::logDeath()
 			StatsLogger::instance()->
 				weaponKilled(weapon_, (weaponContext_.getData() & Weapon::eDataDeathAnimation));
 			{
-				ChannelText text("combat", 
-					S3D::formatStringBuffer("[p:%s] %skilled [p:%s] with a [w:%s] (%i skill change)",
-					firedTank->getName(),
-					((firedTank->getScore().getTurnKills() > 1)?"multi-":""),
-					killedTank->getName(),
-					weapon_->getParent()->getName(),
-					skillChange));
-				ChannelManager::showText(*context_, text);
+				if (firedTank->getScore().getTurnKills() > 1)
+				{
+					ChannelText text("combat", 
+						LANG_RESOURCE_4(
+						"TANK_KILLED_MULTIOTHER",
+						"[p:{0}] multi-killed [p:{1}] with a [w:{2}] ({3} skill change)",
+						firedTank->getName(),
+						killedTank->getName(),
+						weapon_->getParent()->getName(),
+						S3D::formatStringBuffer("%i", skillChange)));
+					ChannelManager::showText(*context_, text);
+				}
+				else
+				{
+					ChannelText text("combat", 
+						LANG_RESOURCE_4(
+						"TANK_KILLED_OTHER",
+						"[p:{0}] killed [p:{1}] with a [w:{2}] ({3} skill change)",
+						firedTank->getName(),
+						killedTank->getName(),
+						weapon_->getParent()->getName(),
+						S3D::formatStringBuffer("%i", skillChange)));
+					ChannelManager::showText(*context_, text);
+				}
 			}
-		}
-	}
-	else if (firedPlayerId == 0)
-	{
-		static Tank firedTank(*context_, 0, 0, "Environment", 
-			Vector::getNullVector(), "", "");
-		firedTank.setUniqueId("Environment");
-		StatsLogger::instance()->
-			tankKilled(&firedTank, killedTank, weapon_); 
-		StatsLogger::instance()->
-			weaponKilled(weapon_, (weaponContext_.getData() & Weapon::eDataDeathAnimation));
-		{
-			ChannelText text("combat", 
-					S3D::formatStringBuffer("[p:%s] %skilled [p:%s] with a [w:%s]",
-				firedTank.getName(),
-				((firedTank.getScore().getTurnKills() > 1)?"multi-":""),
-				killedTank->getName(),
-				weapon_->getParent()->getName()));
-			ChannelManager::showText(*context_, text);
 		}
 	}
 }

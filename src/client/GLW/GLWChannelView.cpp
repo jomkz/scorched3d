@@ -78,7 +78,7 @@ GLWChannelView::~GLWChannelView()
 {
 }
 
-GLWChannelView::CurrentChannelEntry *GLWChannelView::getChannel(const char *channelName)
+GLWChannelView::CurrentChannelEntry *GLWChannelView::getChannel(const std::string &channelName)
 {
 	std::list<CurrentChannelEntry>::iterator itor;
 	for (itor = currentChannels_.begin();
@@ -86,8 +86,8 @@ GLWChannelView::CurrentChannelEntry *GLWChannelView::getChannel(const char *chan
 		itor++)
 	{
 		CurrentChannelEntry &current = *itor;
-		if (0 == stricmp(current.channel.c_str(), channelName)) return &current;
-		if (current.id == atoi(channelName)) return &current;
+		if (channelName == current.channel) return &current;
+		if (current.id == atoi(channelName.c_str())) return &current;
 	}
 	return 0;
 }
@@ -168,7 +168,7 @@ void GLWChannelView::registeredForChannels(
 	if (handler_) handler_->channelsChanged(getId());
 }
 
-void GLWChannelView::joinChannel(const char *channelName)
+void GLWChannelView::joinChannel(const std::string &channelName)
 {
 	std::list<std::string> channels;
 	formCurrentChannelList(channels);
@@ -177,7 +177,7 @@ void GLWChannelView::joinChannel(const char *channelName)
 	ClientChannelManager::instance()->changeRegistration(this, channels);
 }
 
-void GLWChannelView::leaveChannel(const char *channelName)
+void GLWChannelView::leaveChannel(const std::string &channelName)
 {
 	std::list<std::string> channels;
 	formCurrentChannelList(channels);
@@ -226,23 +226,23 @@ void GLWChannelView::channelText(ChannelText &channelText)
 	}
 	if (channelText.getAdminPlayer()[0])
 	{
-		channelName.append(S3D::formatStringBuffer("[a:%s]", channelText.getAdminPlayer()));
+		channelName.append(S3D::formatStringBuffer("[a:%s]", channelText.getAdminPlayer().c_str()));
 	}
 	if (!channelName.empty())
 	{
 		channelName.append(" : ");
 	}
-
-	std::string inputText = S3D::formatStringBuffer("%s%s", 
-		channelName.c_str(), channelText.getMessage());
+	LangString inputText;
+	LangStringUtil::appendToLang(inputText, channelName);
+	inputText.append(channelText.getMessage());
 
 	GLWChannelViewTextRenderer chanText(this);
-	chanText.parseText(ScorchedClient::instance()->getContext(), inputText.c_str());
+	chanText.parseText(ScorchedClient::instance()->getContext(), inputText);
 	
 	bool firstTime = true;
 	int currentLen = 0;
-	const char *text = chanText.getText();
-	int totalLen = (int) strlen(text);
+	const LangString &text = chanText.getString();
+	int totalLen = (int) text.size();
 	while (currentLen < totalLen)
 	{
 		// Get the next split position
@@ -280,10 +280,10 @@ void GLWChannelView::buttonDown(unsigned int id)
 	}
 }
 
-int GLWChannelView::splitLine(const char *message)
+int GLWChannelView::splitLine(const LangString &message)
 {
 	int lastSpace = 0;
-	int totalLen = (int) strlen(message);
+	int totalLen = (int) message.size();
 	for (int len=1; len<totalLen; len++)
 	{
 		float width = 0.0f;
@@ -462,7 +462,7 @@ void GLWChannelView::draw()
 			GLWFont::instance()->getGameShadowFont()->
 				drawA(GLWColors::black, alpha, fontSize_,
 					x - 1.0f, y + 1.0f, 0.0f, 
-					entry.text.getText());
+					entry.text.getString());
 		}
 	}
 	// Draw the actual text
@@ -488,7 +488,7 @@ void GLWChannelView::draw()
 			GLWFont::instance()->getGameFont()->
 				drawA(&entry.text, entry.color, alpha, fontSize_,
 					x, y, 0.0f, 
-					entry.text.getText());
+					entry.text.getString());
 		}
 	}
 }

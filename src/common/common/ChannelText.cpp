@@ -20,7 +20,7 @@
 
 #include <common/ChannelText.h>
 
-ChannelText::ChannelText(const std::string &channel, const std::string &message) : 
+ChannelText::ChannelText(const std::string &channel, const LangString &message) : 
 	srcPlayerId_(0), destPlayerId_(0),
 	channel_(channel),
 	message_(message),

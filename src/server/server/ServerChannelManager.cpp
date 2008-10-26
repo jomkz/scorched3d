@@ -28,6 +28,7 @@
 #include <coms/ComsChannelTextMessage.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
+#include <lang/LangResource.h>
 
 ServerChannelManager::ChannelEntry::ChannelEntry(
 	ChannelDefinition def,
@@ -57,12 +58,12 @@ ServerChannelManager::DestinationEntry::DestinationEntry(
 {
 }
 
-bool ServerChannelManager::DestinationEntry::hasChannel(const char *channel) 
+bool ServerChannelManager::DestinationEntry::hasChannel(const std::string &channel) 
 { 
 	return (channels_.find(channel) != channels_.end()); 
 }
 
-void ServerChannelManager::DestinationEntry::addChannel(const char *channel, unsigned int localId, bool current)
+void ServerChannelManager::DestinationEntry::addChannel(const std::string &channel, unsigned int localId, bool current)
 {
 	if (!hasLocalId(localId)) return;
 
@@ -80,7 +81,7 @@ void ServerChannelManager::DestinationEntry::addChannel(const char *channel, uns
 	updateChannels();
 }
 
-void ServerChannelManager::DestinationEntry::removeChannel(const char *channel, unsigned int localId)
+void ServerChannelManager::DestinationEntry::removeChannel(const std::string &channel, unsigned int localId)
 {
 	if (!hasLocalId(localId)) return;
 	localEntries_[localId].getChannels().erase(channel);
@@ -88,7 +89,7 @@ void ServerChannelManager::DestinationEntry::removeChannel(const char *channel, 
 	updateChannels();
 }
 
-void ServerChannelManager::DestinationEntry::getLocalIds(const char *channel, std::list<unsigned int> &ids)
+void ServerChannelManager::DestinationEntry::getLocalIds(const std::string &channel, std::list<unsigned int> &ids)
 {
 	std::map<unsigned int, DestinationLocalEntry>::iterator itor;
 	for (itor = localEntries_.begin();
@@ -210,7 +211,8 @@ void ServerChannelManager::simulate(float frameTime)
 				entry->setMuteTime(t);
 
 				ChannelText text("info", 
-					S3D::formatStringBuffer("You have been muted for %i seconds for spamming!",
+					LANG_RESOURCE_1("CHANNEL_AUTO_MUTED", 
+					"You have been muted for {0} seconds for spamming!",
 					MuteTime));
 				sendText(text, entry->getDestinationId(), true);
 			}
@@ -221,7 +223,9 @@ void ServerChannelManager::simulate(float frameTime)
 				{
 					entry->setMuteTime(0);
 
-					ChannelText text("info", "You have been unmuted.");
+					ChannelText text("info", 
+						LANG_RESOURCE("CHANNEL_AUTO_UNMUTED", 
+						"You have been unmuted."));
 					sendText(text, entry->getDestinationId(), true);
 				}
 			}
@@ -239,7 +243,7 @@ void ServerChannelManager::destinationDisconnected(unsigned int destinationId)
 	delete entry;
 }
 
-ServerChannelManager::ChannelEntry *ServerChannelManager::getChannelEntryByName(const char *name)
+ServerChannelManager::ChannelEntry *ServerChannelManager::getChannelEntryByName(const std::string &name)
 {
 	std::list<ChannelEntry *>::iterator itor;
 	for (itor = channelEntries_.begin();
@@ -247,7 +251,7 @@ ServerChannelManager::ChannelEntry *ServerChannelManager::getChannelEntryByName(
 		itor++)
 	{
 		ChannelEntry *entry = *itor;
-		if (0 == strcmp(entry->getName(), name)) return entry;
+		if (name == entry->getName()) return entry;
 	}
 	return 0;
 }
@@ -488,18 +492,18 @@ void ServerChannelManager::actualSend(const ChannelText &constText,
 		return;
 	}
 
-	std::string filteredText(text.getMessage());
+	LangString filteredText(text.getMessage());
 	if (filter)
 	{
 		// Filter the string for bad language
 		ScorchedServerUtil::instance()->textFilter.filterString(filteredText);
 
 		// Remove any bad characters
-		for (char *r = (char *) filteredText.c_str(); *r; r++)
+		for (unsigned int *r = (unsigned int *) filteredText.c_str(); *r; r++)
 		{
 			if (*r == '%' || *r < 0) *r = ' ';
 		}
-		for (char *r = (char *) filteredText.c_str(); *r; r++)
+		for (unsigned int *r = (unsigned int *) filteredText.c_str(); *r; r++)
 		{
 			if (*r == '[') *r = '(';
 			else if (*r == ']') *r = ')';
@@ -510,25 +514,26 @@ void ServerChannelManager::actualSend(const ChannelText &constText,
 	std::string logtext;
 	if (log)
 	{
+		std::string logMessage = LangStringUtil::convertFromLang(filteredText);
 		if (tank)
 		{
 			logtext = S3D::formatStringBuffer("[%s][%s] : \"%s\"", 
-				text.getChannel(),
+				text.getChannel().c_str(),
 				tank->getName(),
-				filteredText.c_str());
+				logMessage.c_str());
 		}
 		else if (text.getAdminPlayer()[0])
 		{
 			logtext = S3D::formatStringBuffer("[%s][%s (Admin)] : \"%s\"", 
-				text.getChannel(),
-				text.getAdminPlayer(),
-				filteredText.c_str());
+				text.getChannel().c_str(),
+				text.getAdminPlayer().c_str(),
+				logMessage.c_str());
 		}
 		else
 		{
 			logtext = S3D::formatStringBuffer("[%s] : \"%s\"", 
-				text.getChannel(),
-				filteredText.c_str());
+				text.getChannel().c_str(),
+				logMessage.c_str());
 		}
 	}
 	if (logtext[0])
@@ -542,7 +547,7 @@ void ServerChannelManager::actualSend(const ChannelText &constText,
 	}
 
 	// Update the message with the filtered text
-	text.setMessage(filteredText.c_str());
+	text.setMessage(filteredText);
 
 	// Send to any scripts for processing
 	ScorchedServer::instance()->getLUAScriptHook().callHook("server_channeltext", 
@@ -660,7 +665,7 @@ bool ServerChannelManager::processMessage(
 		}
 
 		// Check that we don't recieve too much text
-		if (strlen(textMessage.getChannelText().getMessage()) > 1024) return true;
+		if (textMessage.getChannelText().getMessage().size() > 1024) return true;
 
 		// Increment message count
 		destEntry->setMessageCount(destEntry->getMessageCount() + 1);
@@ -671,7 +676,9 @@ bool ServerChannelManager::processMessage(
 			destEntry->getMuteTime())
 		{
 			ChannelText mutedText(textMessage.getChannelText());
-			mutedText.setMessage(S3D::formatStringBuffer("**muted** %s", mutedText.getMessage()));
+			mutedText.setMessage(
+				LANG_RESOURCE("SERVER_MUTED_MESSAGE", "**muted** ") + 
+				mutedText.getMessage());
 			ChannelText adminText(mutedText);
 			adminText.setChannel("admin");
 

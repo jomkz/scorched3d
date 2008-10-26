@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_ServerTextFilterh_INCLUDE__)
 #define __INCLUDE_ServerTextFilterh_INCLUDE__
 
-#include <string>
+#include <lang/LangString.h>
 #include <list>
 #include <time.h>
 
@@ -31,16 +31,16 @@ public:
 	ServerTextFilter();
 	virtual ~ServerTextFilter();
 
-	void filterString(std::string &text);
+	void filterString(LangString &text);
 
 protected:
 	struct TextPart
 	{
-		std::string part;
-		char *pos;
+		LangString part;
+		unsigned int *pos;
 	};
 
-	std::list<std::string> words_;
+	std::list<LangString> words_;
 	time_t lastReadTime_;
 	void loadFile();
 };

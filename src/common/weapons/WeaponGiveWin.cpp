@@ -28,6 +28,7 @@
 #include <common/Defines.h>
 #include <common/ChannelManager.h>
 #include <common/OptionsScorched.h>
+#include <lang/LangResource.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponGiveWin);
 
@@ -80,10 +81,10 @@ void WeaponGiveWin::weaponCallback(
 
 		{
 			ChannelText text("combat", 
-				S3D::formatStringBuffer("%s team %s and won the game", 
+				LANG_RESOURCE_2("TANK_TEAM_WIN",
+				"{0} team {1} and won the game", 
 				TankColorGenerator::getTeamName(team), 
-				objective_.c_str()));
-			//info.setPlayerId(weaponContext.getPlayerId());
+				objective_));
 			ChannelManager::showText(context, text);
 		}
 	}
@@ -96,9 +97,10 @@ void WeaponGiveWin::weaponCallback(
 
 		{
 			ChannelText text("combat", 
-				S3D::formatStringBuffer("[p:%s] %s and won the game", 
-				tank->getName(), objective_.c_str()));
-			//info.setPlayerId(weaponContext.getPlayerId());
+				LANG_RESOURCE_2("TANK_SINGLE_WIN",
+				"[p:{0}] {1} and won the game", 
+				tank->getName(), 
+				objective_));
 			ChannelManager::showText(context, text);
 		}
 	}

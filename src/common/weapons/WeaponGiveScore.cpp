@@ -26,6 +26,7 @@
 #include <tank/TankScore.h>
 #include <common/Defines.h>
 #include <common/ChannelManager.h>
+#include <lang/LangResource.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponGiveScore);
 
@@ -74,17 +75,19 @@ void WeaponGiveScore::weaponCallback(
 		if (score_ > 0)
 		{
 			ChannelText text("combat", 
-				S3D::formatStringBuffer("[p:%s] received %i bonus score", 
-				tank->getName(), score_));
-			//info.setPlayerId(weaponContext.getPlayerId());
+				LANG_RESOURCE_2("TANK_GET_SCORE",
+				"[p:{0}] received {1} bonus score", 
+				tank->getName(), 
+				S3D::formatStringBuffer("%i", score_)));
 			ChannelManager::showText(context, text);
 		}
 		else
 		{
 			ChannelText text("combat", 
-				S3D::formatStringBuffer("[p:%s] lost %i bonus score", 
-				tank->getName(), -score_));
-			//info.setPlayerId(weaponContext.getPlayerId());
+				LANG_RESOURCE_2("TANK_LOST_SCORE",
+				"[p:{0}] lost {1} bonus score", 
+				tank->getName(), 
+				S3D::formatStringBuffer("%i", -score_)));
 			ChannelManager::showText(context, text);
 		}
 	}

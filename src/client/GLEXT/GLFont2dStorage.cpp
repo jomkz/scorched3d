@@ -64,6 +64,8 @@ GLFont2dStorage::CharEntry *GLFont2dStorage::getEntry(unsigned int character)
 	unsigned int blockCount = character >> 8;
 	unsigned int remainderCount = character & 0xFF;
 
+	if (blockCount >= 40) return getEntry('?');
+
 	// Get storage block
 	StorageBlock *block = blocks_[blockCount];
 	if (!block)

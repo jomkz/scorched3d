@@ -110,7 +110,7 @@ PlayerDialog::PlayerDialog() :
 		infoPanel->addWidget(new GLWLabel(145, 40, LANG_RESOURCE("NAME_LABEL", "Name:")));
 	nameLabel->setToolTip(nameTip);
 	playerName_ = (GLWTextBox *) 
-		infoPanel->addWidget(new GLWTextBox(215, 40, 495, "Player"));
+		infoPanel->addWidget(new GLWTextBox(215, 40, 495, LANG_RESOURCE("PLAYER", "Player")));
 	playerName_->setMaxTextLen(22);
 	playerName_->setToolTip(nameTip);
 	playerName_->setName("Name");
@@ -297,7 +297,7 @@ void PlayerDialog::nextPlayer()
 	{
 		// If we are connected online then use the online name
 		playerName_->setText(
-			OptionsDisplay::instance()->getOnlineUserName());
+			LANG_STRING(OptionsDisplay::instance()->getOnlineUserName()));
 		viewer_->selectModelByName(
 			OptionsDisplay::instance()->getOnlineTankModel());
 		if (!imageList_->setCurrentShortPath(
@@ -309,7 +309,7 @@ void PlayerDialog::nextPlayer()
 	else
 	{
 		// Else use the default names
-		if (tank) playerName_->setText(tank->getName());
+		if (tank) playerName_->setText(LANG_STRING(tank->getName()));
 	}
 		
 	if (tank->getState().getSpectator())

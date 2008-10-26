@@ -22,6 +22,7 @@
 #include <GLW/GLWTextButton.h>
 #include <GLW/GLWLabel.h>
 #include <GLW/GLWWindowManager.h>
+#include <lang/LangResource.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientSave.h>
 #include <common/ChannelManager.h>
@@ -77,7 +78,7 @@ void SaveDialog::display()
 	GLWWindow::display();
 
 	std::string text = S3D::formatStringBuffer("saved-%i", time(0));
-	textBox_->setText(text);
+	textBox_->setText(LANG_STRING(text));
 }
 
 void SaveDialog::buttonDown(unsigned int id)
@@ -90,12 +91,12 @@ void SaveDialog::buttonDown(unsigned int id)
 			if (ClientSave::saveClient(S3D::getSaveFile(saveFile.c_str())))
 			{
 				ChannelText text("info", 
-					S3D::formatStringBuffer("Saved as \"%s\"", saveFile.c_str()));
+					LANG_RESOURCE_1("SAVED_AS", "Saved as \"{0}\"", saveFile));
 				ChannelManager::showText(ScorchedClient::instance()->getContext(), text);
 			}
 			else
 			{
-				ChannelText text("info", "Save failed");
+				ChannelText text("info", LANG_RESOURCE("SAVE_FAILED", "Save failed"));
 				ChannelManager::showText(ScorchedClient::instance()->getContext(), text);
 			}
 			GLWWindowManager::instance()->hideWindow(id_);

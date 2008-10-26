@@ -665,8 +665,9 @@ void TargetCamera::keyboardCheck(float frameTime,
 		useHeightFunc_ = !useHeightFunc_;
 		ChannelManager::showText(
 			ScorchedClient::instance()->getContext(), 
-			ChannelText("info", S3D::formatStringBuffer("Restricted camera movement : %s", 
-			(useHeightFunc_?"On":"Off"))));
+			ChannelText("info", 
+				LANG_RESOURCE("RESTRICED_CAMERA_MOVEMENT", "Restricted camera movement : ") + 
+				(useHeightFunc_?LANG_RESOURCE("ON", "On"):LANG_RESOURCE("OFF", "Off"))));
 	}
 	mainCam_.setUseHeightFunc(useHeightFunc_);
 }

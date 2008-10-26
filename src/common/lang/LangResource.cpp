@@ -28,7 +28,7 @@ LangString LangResource::getKey(const std::string &key, const std::string &value
 }
 
 LangString LangResource::getKey(const std::string &key, const std::string &value, 
-	const std::string &param1)
+	const LangStringConverter &param1)
 {
 	ResourceBundleEntry *bundle = Lang::instance()->getEntry(key, value);
 	LangString result = bundle->getString(param1);
@@ -36,7 +36,7 @@ LangString LangResource::getKey(const std::string &key, const std::string &value
 }
 
 LangString LangResource::getKey(const std::string &key, const std::string &value, 
-	const std::string &param1, const std::string &param2)
+	const LangStringConverter &param1, const LangStringConverter &param2)
 {
 	ResourceBundleEntry *bundle = Lang::instance()->getEntry(key, value);
 	LangString result = bundle->getString(param1, param2);
@@ -44,7 +44,7 @@ LangString LangResource::getKey(const std::string &key, const std::string &value
 }
 
 LangString LangResource::getKey(const std::string &key, const std::string &value, 
-	const std::string &param1, const std::string &param2, const std::string &param3)
+	const LangStringConverter &param1, const LangStringConverter &param2, const LangStringConverter &param3)
 {
 	ResourceBundleEntry *bundle = Lang::instance()->getEntry(key, value);
 	LangString result = bundle->getString(param1, param2, param3);
@@ -52,7 +52,7 @@ LangString LangResource::getKey(const std::string &key, const std::string &value
 }
 
 LangString LangResource::getKey(const std::string &key, const std::string &value, 
-	const std::string &param1, const std::string &param2, const std::string &param3, const std::string &param4)
+	const LangStringConverter &param1, const LangStringConverter &param2, const LangStringConverter &param3, const LangStringConverter &param4)
 {
 	ResourceBundleEntry *bundle = Lang::instance()->getEntry(key, value);
 	LangString result = bundle->getString(param1, param2, param3, param4);

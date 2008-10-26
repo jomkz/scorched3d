@@ -65,7 +65,7 @@ ResourceBundleEntry *LangImpl::getEntry(
 	}
 	if (!entry) 
 	{
-		entry = new ResourceBundleEntryImpl(key, value);
+		entry = new ResourceBundleEntryImpl(key, LANG_STRING(value));
 		undefinedBundle_.addEntry(entry);
 	}
 

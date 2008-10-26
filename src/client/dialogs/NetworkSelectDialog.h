@@ -54,7 +54,7 @@ public:
 	virtual void columnSelected(unsigned int id, int col);
 
 	// GLWTextBoxI
-	virtual void textChanged(unsigned int id, const char *text);
+	virtual void textChanged(unsigned int id, const LangString &text);
 
 	// GLWDropDownI
 	virtual void select(unsigned int id, const int pos, GLWSelectorEntry value);

@@ -48,7 +48,7 @@ void ClientChannelManager::ChannelEntry::setChannels(std::list<ChannelDefinition
 	}
 }
 
-bool ClientChannelManager::ChannelEntry::hasChannel(const char *channel)
+bool ClientChannelManager::ChannelEntry::hasChannel(const std::string &channel)
 {
 	return (channels_.find(channel) != channels_.end());
 }
@@ -221,7 +221,7 @@ void ClientChannelManager::say(std::vector<ConsoleRuleValue> &values)
 	ConsoleRuleValue &textValue = values[2];
 
 	ChannelText message(channelValue.valueString.c_str(), 
-		textValue.valueString.c_str());
+		LANG_STRING(textValue.valueString));
 	sendText(message);
 }
 
@@ -262,9 +262,11 @@ void ClientChannelManager::showText(const ChannelText &constText)
 	// Add this line to the console
 	if (!(text.getFlags() & ChannelText::eNoLog))
 	{
+		std::string mes(LangStringUtil::convertFromLang(text.getMessage()));
+
 		Logger::log(S3D::formatStringBuffer("[%s] : %s",
-			text.getChannel(),
-			text.getMessage()));
+			text.getChannel().c_str(),
+			mes.c_str()));
 	}
 
 	// Send to all recievers
@@ -331,18 +333,19 @@ bool ClientChannelManager::processMessage(
 		if (tank && tank->getState().getMuted()) return true;
 
 		// Log this message
+		std::string mes(LangStringUtil::convertFromLang(textMessage.getChannelText().getMessage()));
 		if (tank)
 		{
 			Logger::log(S3D::formatStringBuffer("[%s][%s] : %s",
-				textMessage.getChannelText().getChannel(),
+				textMessage.getChannelText().getChannel().c_str(),
 				tank->getName(),
-				textMessage.getChannelText().getMessage()));
+				mes.c_str()));
 		}
 		else
 		{
 			Logger::log(S3D::formatStringBuffer("[%s] : %s",
-				textMessage.getChannelText().getChannel(),
-				textMessage.getChannelText().getMessage()));
+				textMessage.getChannelText().getChannel().c_str(),
+				mes.c_str()));
 		}
 
 		// Foreach reciever

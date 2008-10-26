@@ -28,13 +28,41 @@
 typedef unsigned int LangStringStorage;
 typedef std::basic_string<LangStringStorage> LangString;
 
+class LangStringConverter
+{
+public:
+	LangStringConverter(const char *value); 
+	LangStringConverter(const std::string &value); 
+	LangStringConverter(const LangString &value); 
+	LangStringConverter(const int value); 
+	LangStringConverter(const unsigned int value); 
+	LangStringConverter(const float value, int decimal = 0); 
+
+	LangString &getValue() { return value_; }
+	const LangString &getValue() const { return value_; }
+
+	std::string getValueAsString();
+
+private:
+	LangString value_;
+
+	void appendValue(const std::string &value);
+};
+
 namespace LangStringUtil
 {
-	LangString convertToLang(const std::string &input);
-	void appendToLang(LangString &output, const std::string &input);
-	void replaceToLang(LangString &output, const std::string &input);
+	LangString convertToLang(const LangStringConverter &input);
+	void appendToLang(LangString &output, const LangStringConverter &input);
+	void replaceToLang(LangString &output, const LangStringConverter &input);
 
 	std::string convertFromLang(const LangString &input);
+
+	void lowercase(LangString &str1);
+	int strcmp(const LangString &str1, const LangString &str2);
+	int stricmp(const LangString &str1, const LangString &str2);
+	int strlen(const LangString &str1);
+	unsigned int *strstr(const unsigned int *str1, const LangString &str2);
+	unsigned int *stristr(const unsigned int *str1, const LangString &str2);
 };
 
 #endif // __INCLUDE_LangString_INCLUDE__

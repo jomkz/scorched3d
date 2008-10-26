@@ -27,16 +27,16 @@ class ResourceBundleEntry
 {
 public:
 	virtual const char *getKey() = 0;
-	virtual std::string getValue() = 0;
+	virtual LangString getValue() = 0;
 
 	virtual LangString getString() = 0;
-	virtual LangString getString(const std::string &param1) = 0;
-	virtual LangString getString(const std::string &param1, 
-		const std::string &param2) = 0;
-	virtual LangString getString(const std::string &param1, 
-		const std::string &param2, const std::string &param3) = 0;
-	virtual LangString getString(const std::string &param1, 
-		const std::string &param2, const std::string &param3, const std::string &param4) = 0;
+	virtual LangString getString(const LangStringConverter &param1) = 0;
+	virtual LangString getString(const LangStringConverter &param1, 
+		const LangStringConverter &param2) = 0;
+	virtual LangString getString(const LangStringConverter &param1, 
+		const LangStringConverter &param2, const LangStringConverter &param3) = 0;
+	virtual LangString getString(const LangStringConverter &param1, 
+		const LangStringConverter &param2, const LangStringConverter &param3, const LangStringConverter &param4) = 0;
 };
 
 #endif // __INCLUDE_ResourceBundleEntry_INCLUDE__

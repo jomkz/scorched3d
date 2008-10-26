@@ -70,16 +70,8 @@ void ServerTimedMessage::checkEntries(time_t currentTime)
 		{
 			entry.lastTime = currentTime;
 			
-			std::string message = entry.messages.front();
- 			/* Note message.c_str() is a user supplied printf format string
-			   with possible a conversion specifier to display the ctime.
-			   Since these messages are loaded from a local file this is
-			   reasonable safe, although it would be better to just
-			   always prefix times-messages with the ctime and to not
-			   interpreted user supplied data this way. */
-
-			ChannelText textMessage("announce", 
-				S3D::formatStringBuffer(message.c_str(), ctime(&currentTime)));
+			LangString message = entry.messages.front();
+			ChannelText textMessage("announce", message);
 			ServerChannelManager::instance()->sendText(textMessage, false);
 			entry.messages.pop_front();
 			entry.messages.push_back(message);
@@ -125,7 +117,7 @@ bool ServerTimedMessage::load()
 		if (!currentNode->getNamedChild("repeattime", entry.timeInterval)) return false;
 		while (currentNode->getNamedChild("text", text, false))
 		{
-			entry.messages.push_back(text);
+			entry.messages.push_back(LANG_STRING(text));
 		}
 		entries_.push_back(entry);
 	}

@@ -61,8 +61,7 @@ void WeaponMessage::weaponCallback(
 	unsigned int userData)
 {
 	{
-		ChannelText text("combat", 
-			S3D::formatStringBuffer("%s", message_.c_str()));
+		ChannelText text("combat", LANG_STRING(message_));
 		ChannelManager::showText(context, text);
 	}
 }

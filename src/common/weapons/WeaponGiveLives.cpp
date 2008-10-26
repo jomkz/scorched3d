@@ -25,6 +25,7 @@
 #include <tank/TankState.h>
 #include <common/Defines.h>
 #include <common/ChannelManager.h>
+#include <lang/LangResource.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponGiveLives);
 
@@ -72,17 +73,19 @@ void WeaponGiveLives::weaponCallback(
 			if (lives_ > 0)
 			{
 				ChannelText text("combat", 
-					S3D::formatStringBuffer("[p:%s] has received %i extra live(s)", 
-					tank->getName(), lives_));
-				//info.setPlayerId(weaponContext.getPlayerId());
+					LANG_RESOURCE_2("TANK_GET_LIVE",
+					"[p:{0}] has received {1} extra live(s)", 
+					tank->getName(), 
+					S3D::formatStringBuffer("%i", lives_)));
 				ChannelManager::showText(context, text);
 			}
 			else
 			{
 				ChannelText text("combat", 
-					S3D::formatStringBuffer("[p:%s] has lost %i extra live(s)", 
-					tank->getName(), -lives_));
-				//info.setPlayerId(weaponContext.getPlayerId());
+					LANG_RESOURCE_2("TANK_LOST_LIVE",
+					"[p:{0}] has lost {1} extra live(s)", 
+					tank->getName(), 
+					S3D::formatStringBuffer("%i", -lives_)));
 				ChannelManager::showText(context, text);
 			}
 		}

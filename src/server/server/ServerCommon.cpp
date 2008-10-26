@@ -62,7 +62,7 @@ void ServerCommon::startFileLogger()
 
 void ServerCommon::sendStringMessage(unsigned int destinationId, const std::string &text)
 {
-	ChannelText message("banner", text);
+	ChannelText message("banner", LANG_STRING(text));
 	if (destinationId == 0)
 	{
 		ServerChannelManager::instance()->sendText(message, true);
@@ -75,7 +75,7 @@ void ServerCommon::sendStringMessage(unsigned int destinationId, const std::stri
 
 void ServerCommon::sendString(unsigned int destinationId, const std::string &text)
 {
-	ChannelText message("info", text);
+	ChannelText message("info", LANG_STRING(text));
 	if (destinationId == 0)
 	{
 		ServerChannelManager::instance()->sendText(message, true);
@@ -88,7 +88,7 @@ void ServerCommon::sendString(unsigned int destinationId, const std::string &tex
 
 void ServerCommon::sendStringAdmin(const std::string &text)
 {
-	ChannelText message("admin", text);
+	ChannelText message("admin", LANG_STRING(text));
 	ServerChannelManager::instance()->sendText(message, true);
 }
 

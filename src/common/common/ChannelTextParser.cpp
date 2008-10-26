@@ -21,6 +21,7 @@
 #include <common/ChannelTextParser.h>
 #include <engine/ScorchedContext.h>
 #include <tank/TankContainer.h>
+#include <lang/LangResource.h>
 
 ChannelTextParser::ChannelTextParser()
 {
@@ -48,7 +49,7 @@ void ChannelTextParser::subset(ChannelTextParser &other, int start, int len)
 	// Create this channel text from a subset of another channel text
 	for (int i=start; i<start+len; i++)
 	{
-		text_.append(S3D::formatStringBuffer("%c", other.text_.c_str()[i]));
+		text_.push_back(other.text_.c_str()[i]);
 		entryIndex_.push_back(other.entryIndex_[i]);
 	}
 }
@@ -61,7 +62,7 @@ void ChannelTextParser::addIndex(int number, unsigned char index)
 	}
 }
 
-void ChannelTextParser::parseText(ScorchedContext &context, const char *text)
+void ChannelTextParser::parseText(ScorchedContext &context, const LangString &text)
 {
 	// Clear any existing items
 	text_.clear();
@@ -69,11 +70,11 @@ void ChannelTextParser::parseText(ScorchedContext &context, const char *text)
 	entries_.clear();
 
 	// Parse out all of the urls
-	const char *pos = text;
-	const char *start = 0;
+	const unsigned int *pos = text.c_str();
+	const unsigned int *start = 0;
 
 	// Find the next [
-	while (start = strchr(pos, '['))
+	while (start = LangStringUtil::strstr(pos, LANG_STRING("[")))
 	{
 		// Add all text before [
 		text_.append(pos, start - pos);
@@ -81,16 +82,16 @@ void ChannelTextParser::parseText(ScorchedContext &context, const char *text)
 		pos = start; // Skip to this point
 
 		// Find the next ]
-		const char *end = strchr(start, ']');
+		const unsigned int *end = LangStringUtil::strstr(start, LANG_STRING("]"));
 		if (end)
 		{
 			// Create the url
-			std::string url;
+			LangString url;
 			url.append(pos, end - pos + 1);
 
 			// Parse the url
 			ChannelTextEntry newEntry;
-			if (parseUrl(context, url.c_str(), newEntry))
+			if (parseUrl(context, url, newEntry))
 			{
 				// Update the entryIndex array to point to the newEntry
 				entries_.push_back(newEntry);
@@ -113,54 +114,57 @@ void ChannelTextParser::parseText(ScorchedContext &context, const char *text)
 
 	// Add all remaining text
 	text_.append(pos);
-	addIndex((int) strlen(pos), 0);
+	addIndex(LangStringUtil::strlen(pos), 0);
 }
 
 bool ChannelTextParser::parseUrl(ScorchedContext &context, 
-	const char *url, ChannelTextEntry &entry)
+	const LangString &url, ChannelTextEntry &entry)
 {
 	// Find the url seperator
-	const char *colon = strchr(url, ':');
+	const unsigned int *colon = LangStringUtil::strstr(url.c_str(), LANG_STRING(":"));
 	if (!colon) return false;
 
 	// Strip the [] chars and the :
-	std::string urlPart(url + 1, colon - url - 1);
-	std::string otherPart(colon + 1, strlen(colon) - 2);
+	LangString urlPart(url.c_str() + 1, colon - url.c_str() - 1);
+	LangString otherPart(colon + 1, LangStringUtil::strlen(colon) - 2);
 	entry.part = otherPart;
 
 	// Find a url handler based on the url
 	// Hardcoded for now
-	if (0 == strcmp(urlPart.c_str(), "c")) // A channel
+	if (urlPart == LANG_STRING("c")) // A channel
 	{
-		return createChannelEntry(context, otherPart.c_str(), entry);
+		return createChannelEntry(context, otherPart, entry);
 	}
-	else if (0 == strcmp(urlPart.c_str(), "p")) // A player
+	else if (urlPart == LANG_STRING("p")) // A player
 	{
-		return createPlayerEntry(context, otherPart.c_str(), entry);
+		return createPlayerEntry(context, otherPart, entry);
 	}
-	else if (0 == strcmp(urlPart.c_str(), "t")) // A tip
+	else if (urlPart == LANG_STRING("t")) // A tip
 	{
-		return createTipEntry(context, otherPart.c_str(), entry);
+		return createTipEntry(context, otherPart, entry);
 	}
-	else if (0 == strcmp(urlPart.c_str(), "w")) // A weapon
+	else if (urlPart == LANG_STRING("w")) // A weapon
 	{
-		return createWeaponEntry(context, otherPart.c_str(), entry);
+		return createWeaponEntry(context, otherPart, entry);
 	} 
-	else if (0 == strcmp(urlPart.c_str(), "a")) // An admin
+	else if (urlPart == LANG_STRING("a")) // An admin
 	{
-		return createAdminEntry(context, otherPart.c_str(), entry);
+		return createAdminEntry(context, otherPart, entry);
 	}
 	return false;
 }
 
 bool ChannelTextParser::createPlayerEntry(ScorchedContext &context, 
-	const char *part, ChannelTextEntry &entry)
+	const LangString &part, ChannelTextEntry &entry)
 {
 	entry.type = ePlayerEntry;
-	entry.text = S3D::formatStringBuffer("[%s]", part);
+	entry.text.push_back('[');
+	entry.text.append(part);
+	entry.text.push_back(']');
 	entry.data = 0;
 
-	Tank *tank = context.getTankContainer().getTankByName(part);
+	std::string tankName = LangStringUtil::convertFromLang(part);
+	Tank *tank = context.getTankContainer().getTankByName(tankName.c_str());
 	if (tank)
 	{
 		entry.data = tank->getPlayerId();
@@ -171,39 +175,45 @@ bool ChannelTextParser::createPlayerEntry(ScorchedContext &context,
 }
 
 bool ChannelTextParser::createWeaponEntry(ScorchedContext &context, 
-	const char *part, ChannelTextEntry &entry)
+	const LangString &part, ChannelTextEntry &entry)
 {
 	entry.type = eWeaponEntry;
-	entry.text = S3D::formatStringBuffer("[%s]", part);
+	entry.text.push_back('[');
+	entry.text.append(part);
+	entry.text.push_back(']');
 	entry.color = Vector(1.0f, 1.0f, 1.0f);
 
 	return true;
 }
 
 bool ChannelTextParser::createTipEntry(ScorchedContext &context, 
-	const char *part, ChannelTextEntry &entry)
+	const LangString &part, ChannelTextEntry &entry)
 {
 	entry.type = eTipEntry;
-	entry.text = S3D::formatStringBuffer("%s", part);
+	entry.text = part;
 	entry.color = Vector(1.0f, 1.0f, 0.0f);
 
 	return true;
 }
 
 bool ChannelTextParser::createChannelEntry(ScorchedContext &context, 
-	const char *part, ChannelTextEntry &entry)
+	const LangString &part, ChannelTextEntry &entry)
 {
 	entry.type = eChannelEntry;
-	entry.text = S3D::formatStringBuffer("[%s]", part);
+	entry.text.push_back('[');
+	entry.text.append(part);
+	entry.text.push_back(']');
 
 	return true;
 }
 
 bool ChannelTextParser::createAdminEntry(ScorchedContext &context, 
-	const char *part, ChannelTextEntry &entry)
+	const LangString &part, ChannelTextEntry &entry)
 {
 	entry.type = eAdminEntry;
-	entry.text = S3D::formatStringBuffer("%s (Admin)", part);
+	entry.text.append(part);
+	entry.text.push_back(' ');
+	entry.text.append(LANG_RESOURCE("ADMIN_BRK", "(Admin)"));
 	entry.color = Vector(1.0f, 1.0f, 1.0f);
 
 	return true;

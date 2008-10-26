@@ -25,6 +25,7 @@
 #include <tank/TankPosition.h>
 #include <common/Defines.h>
 #include <common/ChannelManager.h>
+#include <lang/LangResource.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponGivePower);
 
@@ -69,9 +70,10 @@ void WeaponGivePower::weaponCallback(
 
 	{
 		ChannelText text("combat", 
-			S3D::formatStringBuffer("[p:%s] received %.0f power", 
-			tank->getName(), power.asFloat()));
-		//info.setPlayerId(weaponContext.getPlayerId());
+			LANG_RESOURCE_2("TANK_GET_POWER",
+			"[p:{0}] received {1} power", 
+			tank->getName(), 
+			S3D::formatStringBuffer("%.0f", power.asFloat())));
 		ChannelManager::showText(context, text);
 	}
 }

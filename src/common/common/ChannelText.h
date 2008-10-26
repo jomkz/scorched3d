@@ -58,18 +58,18 @@ public:
 
 	ChannelText(
 		const std::string &channel = "", 
-		const std::string &message = "");
+		const LangString &message = LangString());
 
 	void setChannel(const std::string &channel) { channel_ = channel; }
-	void setMessage(const std::string &message) { message_ = message; }
+	void setMessage(const LangString &message) { message_ = message; }
 	void setSrcPlayerId(unsigned int srcPlayerId) { srcPlayerId_ = srcPlayerId; }
 	void setDestPlayerId(unsigned int destPlayerId) { destPlayerId_ = destPlayerId; }
 	void setFlags(unsigned int flags) { flags_ = flags; }
-	void setAdminPlayer(const char *admin) { admin_ = admin; }
+	void setAdminPlayer(const std::string &admin) { admin_ = admin; }
 
-	const char *getChannel() { return channel_.c_str(); }
-	const char *getMessage() { return message_.c_str(); }
-	const char *getAdminPlayer() { return admin_.c_str(); }
+	const std::string &getChannel() { return channel_; }
+	const LangString &getMessage() { return message_; }
+	const std::string &getAdminPlayer() { return admin_; }
     unsigned int getSrcPlayerId() { return srcPlayerId_; }
 	unsigned int getDestPlayerId() { return destPlayerId_; }
 	unsigned int getFlags() { return flags_; }
@@ -82,7 +82,7 @@ protected:
 	unsigned int destPlayerId_;
 	unsigned int flags_;
 	std::string channel_;
-	std::string message_;
+	LangString message_;
 	std::string admin_;
 };
 

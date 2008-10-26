@@ -18,42 +18,31 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_MessageDialogh_INCLUDE__)
-#define __INCLUDE_MessageDialogh_INCLUDE__
+#if !defined(__INCLUDE_LangStringParameterized_INCLUDE__)
+#define __INCLUDE_LangStringParameterized_INCLUDE__
 
-#include <GLW/GLWWindow.h>
-#include <client/ClientChannelManager.h>
-#include <string>
-#include <list>
+#include <lang/LangString.h>
+#include <vector>
 
-class MessageDialog : 
-	public GLWWindow,
-	public ClientChannelManagerI
+class LangStringParameterized
 {
 public:
-	static MessageDialog *instance();
+	LangStringParameterized(const LangString &value);
 
-	void clear();
+	LangString getValue();
 
-	// GLWWindow
-	virtual void draw();
-	virtual void simulate(float frameTime);
-
-	// ClientChannelManagerI
-	virtual void channelText(ChannelText &text);
-	virtual void registeredForChannels(
-		std::list<ChannelDefinition> &registeredChannels,
-		std::list<ChannelDefinition> &availableChannels);
-
-protected:
-	static MessageDialog *instance_;
-	float showTime_;
-	LangString currentText_;
-	std::list<LangString> texts_;
+	LangString getParameterizedString();
+	LangString getParameterizedString(const LangStringConverter &param1);
+	LangString getParameterizedString(const LangStringConverter &param1, 
+		const LangStringConverter &param2);
+	LangString getParameterizedString(const LangStringConverter &param1, 
+		const LangStringConverter &param2, const LangStringConverter &param3);
+	LangString getParameterizedString(const LangStringConverter &param1, 
+		const LangStringConverter &param2, const LangStringConverter &param3, const LangStringConverter &param4);
 
 private:
-	MessageDialog();
-	virtual ~MessageDialog();
+	std::vector<LangString> parts_;
+	std::vector<int> positions_;
 };
 
-#endif // __INCLUDE_MessageDialogh_INCLUDE__
+#endif // __INCLUDE_LangStringParameterized_INCLUDE__

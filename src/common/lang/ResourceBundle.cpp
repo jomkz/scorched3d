@@ -66,7 +66,10 @@ bool ResourceBundle::loadFromFile(const std::string &file)
 		if (key.size() == 0) continue;
 		if (key[0] == '#' || key[0] == '\\' || key[0] == ';') continue;
 
-		ResourceBundleEntry *entry = new ResourceBundleEntryImpl(key, value);
+		LangString langValue;
+		LangStringUtil::appendToLang(langValue, value);
+
+		ResourceBundleEntry *entry = new ResourceBundleEntryImpl(key, langValue);
 		addEntry(entry);
 	}
 	fclose(in);
@@ -86,7 +89,7 @@ bool ResourceBundle::writeToFile(const std::string &file)
 	{
 		ResourceBundleEntry *entry = *itor;
 
-		std::string value = entry->getValue();
+		std::string value = LangStringUtil::convertFromLang(entry->getValue());
 		fprintf(out, "%s = %s\n", entry->getKey(), value.c_str());
 	}
 

@@ -455,7 +455,7 @@ void NetworkSelectDialog::rowSelectedGames(unsigned int id, int row)
 	}
 
 	// Set ip address for this server
-	ipaddress_->setText(ipaddress.c_str());
+	ipaddress_->setText(LANG_STRING(ipaddress));
 
 	// Set players for this server
 	std::string players = 
@@ -486,7 +486,7 @@ void NetworkSelectDialog::columnSelectedGames(unsigned int id, int col)
 
 void NetworkSelectDialog::display()
 {
-	ipaddress_->setText("");
+	ipaddress_->setText(LangString());
 	refreshType_->setCurrentText(LANG_RESOURCE("INTERNET", "Internet"));
 }
 
@@ -555,7 +555,7 @@ void NetworkSelectDialog::stopRefresh()
 	updateTable();
 }
 
-void NetworkSelectDialog::textChanged(unsigned int id, const char *text)
+void NetworkSelectDialog::textChanged(unsigned int id, const LangString &text)
 {
 	ok_->setEnabled(text[0]!='\0');
 	favourites_->setEnabled(text[0]!='\0');

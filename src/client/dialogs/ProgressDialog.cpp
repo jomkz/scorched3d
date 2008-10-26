@@ -35,6 +35,7 @@
 #include <GLW/GLWFont.h>
 #include <GLW/GLWWindowManager.h>
 #include <GLW/GLWColors.h>
+#include <lang/LangResource.h>
 #include <image/ImagePng.h>
 #include <image/ImageFactory.h>
 #include <math.h>
@@ -75,7 +76,7 @@ void ProgressDialog::changeTip()
 	char *nl = (char *) strchr(tip.c_str(), ':');
 	if (nl) *nl = ' ';
 
-	ChannelText text("announce", S3D::formatStringBuffer("[t:Tip:] %s", tip.c_str()));
+	ChannelText text("announce", LANG_RESOURCE_1("TIP_ENTRY", "[t:Tip:] {0}", tip));
 	ClientChannelManager::instance()->showText(text);
 }
 

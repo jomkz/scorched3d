@@ -31,8 +31,7 @@
 #include <common/Defines.h>
 #include <common/ChannelManager.h>
 
-TankSay::TankSay(unsigned int playerId,
-		const char *text) :
+TankSay::TankSay(unsigned int playerId, const LangString &text) :
 	ActionReferenced("TankSay"),
 	playerId_(playerId), text_(text)
 {

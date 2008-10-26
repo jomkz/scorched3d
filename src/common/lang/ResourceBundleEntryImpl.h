@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_ResourceBundleEntryImpl_INCLUDE__)
 #define __INCLUDE_ResourceBundleEntryImpl_INCLUDE__
 
-#include <lang/LangString.h>
+#include <lang/LangStringParameterized.h>
 #include <lang/ResourceBundleEntry.h>
 #include <vector>
 
@@ -30,23 +30,22 @@ class ResourceBundleEntryImpl : public ResourceBundleEntry
 public:
 	ResourceBundleEntryImpl(const std::string &key);
 	ResourceBundleEntryImpl(const std::string &key, 
-		const std::string &value);
+		const LangString &value);
 
 	virtual const char *getKey() { return key_.c_str(); }
-	virtual std::string getValue();
+	virtual LangString getValue();
 
 	virtual LangString getString();
-	virtual LangString getString(const std::string &param1);
-	virtual LangString getString(const std::string &param1, 
-		const std::string &param2);
-	virtual LangString getString(const std::string &param1, 
-		const std::string &param2, const std::string &param3);
-	virtual LangString getString(const std::string &param1, 
-		const std::string &param2, const std::string &param3, const std::string &param4);
+	virtual LangString getString(const LangStringConverter &param1);
+	virtual LangString getString(const LangStringConverter &param1, 
+		const LangStringConverter &param2);
+	virtual LangString getString(const LangStringConverter &param1, 
+		const LangStringConverter &param2, const LangStringConverter &param3);
+	virtual LangString getString(const LangStringConverter &param1, 
+		const LangStringConverter &param2, const LangStringConverter &param3, const LangStringConverter &param4);
 
 private:
-	std::vector<LangString> parts_;
-	std::vector<int> positions_;
+	LangStringParameterized parameterizedString_;
 	std::string key_;
 };
 

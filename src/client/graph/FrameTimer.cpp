@@ -24,6 +24,7 @@
 #include <graph/OptionsDisplay.h>
 #include <GLEXT/GLInfo.h>
 #include <GLEXT/GLTexture.h>
+#include <lang/LangResource.h>
 
 FrameTimer *FrameTimer::instance_ = 0;
 
@@ -77,7 +78,11 @@ void FrameTimer::simulate(const unsigned state, float frameTime)
 
 		if (OptionsDisplay::instance()->getFrameTimer())
 		{
-			ChannelText chText("info", S3D::formatStringBuffer("%.2f frames per second.", fps_));
+			ChannelText chText("info", 
+				LANG_RESOURCE_1(
+					"X_FRAMES_PER_SECOND", 
+					"{0} frames per second.", 
+					S3D::formatStringBuffer("%.2f", fps_)));
 			chText.setFlags(ChannelText::eNoLog | ChannelText::eNoSound);
 			ClientChannelManager::instance()->showText(chText);
 		}

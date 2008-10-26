@@ -22,6 +22,7 @@
 #define __INCLUDE_LUAScriptHook_INCLUDE__
 
 #include <lua/LUAScriptFactory.h>
+#include <lang/LangString.h>
 #include <map>
 #include <vector>
 
@@ -44,6 +45,8 @@ public:
 			str(instr), type(eString) {};
 		Param(const std::string &instr) :
 			str(instr), type(eString) {};
+		Param(const LangString &instr) :
+			str(LangStringUtil::convertFromLang(instr)), type(eString) {};
 		Param(bool b) :
 			boolean(b), type(eBoolean) {};
 

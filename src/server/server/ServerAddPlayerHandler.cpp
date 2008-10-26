@@ -250,7 +250,9 @@ void ServerAddPlayerHandler::filterName(Tank *tank,
 	std::string &sentname)
 {
 	// Ensure this name does not have any "bad" words in it
-	ScorchedServerUtil::instance()->textFilter.filterString(sentname);
+	LangString sentNameLangString(LANG_STRING(sentname));
+	ScorchedServerUtil::instance()->textFilter.filterString(sentNameLangString);
+	sentname = LangStringUtil::convertFromLang(sentNameLangString);
 
 	// Form the correct player name
 	// Remove spaces from the front of the name and

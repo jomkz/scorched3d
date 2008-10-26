@@ -24,6 +24,8 @@
 #include <tank/TankScore.h>
 #include <coms/ComsGiftMoneyMessage.h>
 #include <dialogs/BuyAccessoryDialog.h>
+#include <lang/LangResource.h>
+#include <common/ChannelManager.h>
 
 ClientGiftMoneyHandler *ClientGiftMoneyHandler::instance_ = 0;
 
@@ -55,13 +57,22 @@ bool ClientGiftMoneyHandler::processMessage(
 	ComsGiftMoneyMessage message;
 	if (!message.readMessage(reader)) return false;
 
-	Tank *tank = ScorchedClient::instance()->getTankContainer().
+	Tank *toTank = ScorchedClient::instance()->getTankContainer().
 		getTankById(message.getToPlayerId());
-	if (!tank) return true;
+	Tank *fromTank = ScorchedClient::instance()->getTankContainer().
+		getTankById(message.getFromPlayerId());
+	if (!toTank || !fromTank) return true;
 
-	tank->getScore().setMoney(tank->getScore().getMoney() + 
+	toTank->getScore().setMoney(toTank->getScore().getMoney() + 
 		message.getMoney());
+	fromTank->getScore().setMoney(fromTank->getScore().getMoney() - 
+		message.getMoney());
+
 	BuyAccessoryDialog::instance()->playerRefreshKeepPos();
+
+	ChannelText text("combat", LANG_RESOURCE_3("TANK_GIFT_MESSAGE", "[p:{0}] gifts ${1} to [p:{2}]", 
+			fromTank->getName(), message.getMoney(), toTank->getName()));
+	ChannelManager::showText(ScorchedClient::instance()->getContext(), text);
 
 	return true;
 }

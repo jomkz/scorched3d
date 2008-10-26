@@ -28,8 +28,8 @@
 REGISTER_CLASS_SOURCE(GLWTextBox);
 
 GLWTextBox::GLWTextBox(float x, float y, float w, 
-	char *startText, unsigned int flags) :
-	GLWidget(x, y, w, 25.0f), ctime_(0.0f), text_(startText?startText:""), 
+	const LangString &startText, unsigned int flags) :
+	GLWidget(x, y, w, 25.0f), ctime_(0.0f), text_(startText), 
 	flags_(flags),
 	cursor_(false), maxTextLen_(0), handler_(0),
 	current_(true)
@@ -61,18 +61,17 @@ void GLWTextBox::draw()
 	glEnd();
 	if (current_) glLineWidth(1.0f);
 
-	std::string text = text_.c_str();
+	LangString text = text_;
 	if (flags_ & eFlagPassword)
 	{
-		std::string stars( text_.size(), '*');
-		text = S3D::formatStringBuffer("%s", stars.c_str());
+		text = LangString(text_.size(), '*');
 	}
 
 	GLWFont::instance()->getGameFont()->drawWidth(
 		w_,
 		GLWFont::widgetFontColor, 14,
 		x_ + 5.0f, y_ + 5.0f, 0.0f, 
-		S3D::formatStringBuffer("%s%s", text.c_str(), ((cursor_&&current_)?"_":"")));
+		(cursor_&&current_)?text + LANG_STRING("_"):text);
 }
 
 void GLWTextBox::keyDown(char *buffer, unsigned int keyState, 
@@ -86,7 +85,7 @@ void GLWTextBox::keyDown(char *buffer, unsigned int keyState,
 
 	for (int i=0; i<hisCount; i++)
 	{
-		char c = history[i].representedKey;
+		unsigned int unicodeKey = history[i].representedUnicode;
 		unsigned int dik = history[i].sdlKey;
 		if (dik == SDLK_BACKSPACE || dik == SDLK_DELETE)
 		{
@@ -123,11 +122,11 @@ void GLWTextBox::keyDown(char *buffer, unsigned int keyState,
 
 			break;
 		}
-		else if (c >= ' ')
+		else if (unicodeKey >= ' ')
 		{
 			if ((maxTextLen_==0) || ((int) text_.size() < maxTextLen_))
 			{
-				text_ += c;
+				text_ += unicodeKey;
 				if (handler_) handler_->textChanged(id_, text_.c_str());
 			}
 		}
@@ -136,6 +135,13 @@ void GLWTextBox::keyDown(char *buffer, unsigned int keyState,
 			skipRest = false; // Don't swallow return or escape
 		}
 	}
+}
+
+std::string &GLWTextBox::getText() 
+{
+	static std::string result; 
+	result = LangStringUtil::convertFromLang(text_); 
+	return result;
 }
 
 void GLWTextBox::mouseDown(int button, float x, float y, bool &skipRest)
@@ -147,7 +153,7 @@ void GLWTextBox::mouseDown(int button, float x, float y, bool &skipRest)
 	}
 }
 
-void GLWTextBox::setText(const std::string &text)
+void GLWTextBox::setText(const LangString &text)
 { 
 	text_ = text; 
 	if (handler_) handler_->textChanged(id_, text_.c_str());

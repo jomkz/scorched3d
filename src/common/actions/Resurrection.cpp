@@ -27,6 +27,7 @@
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <target/TargetLife.h>
+#include <lang/LangResource.h>
 #ifndef S3D_SERVER
 	#include <land/VisibilityPatchGrid.h>
 #endif
@@ -59,9 +60,11 @@ void Resurrection::simulate(fixed frameTime, bool &remove)
 #ifndef S3D_SERVER
 		{
 			ChannelText text("combat",
-				S3D::formatStringBuffer("[p:%s] was resurrected, %i lives remaining",
+				LANG_RESOURCE_2(
+					"TANK_RESURRECTED", 
+					"[p:{0}] was resurrected, {1} lives remaining",
 					tank->getName(),
-					tank->getState().getLives()));
+					S3D::formatStringBuffer("%i", tank->getState().getLives())));
 			//info.setPlayerId(playerId_);
 			ChannelManager::showText(*context_, text);
 		}

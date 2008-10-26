@@ -757,6 +757,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\lang\LangStringParameterized.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\LangStringParameterized.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\lang\ResourceBundle.cpp"
 				>
 			</File>

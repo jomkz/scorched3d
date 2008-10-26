@@ -60,17 +60,17 @@ void ConsoleLine::drawLine(float x, float y, GLFont2d *font)
 			// We show a line number of those lines with commands
 			// on them
 			font->draw(color, 12, x, y, 0.0f, lineNumberStr_.c_str());
-			font->draw(color, 12, x + 50.0f, y, 0.0f, line_.c_str());
+			font->draw(color, 12, x + 50.0f, y, 0.0f, line_);
 		}
 		else
 		{
 			font->draw(color, 12, x + 50.0f, y, 0.0f, "...");
-			font->draw(color, 12, x + 90.0f, y, 0.0f, line_.c_str());
+			font->draw(color, 12, x + 90.0f, y, 0.0f, line_);
 		}
 	}
 	else
 	{
-		font->draw(color, 12, x + 50.0f, y, 0.0f, line_.c_str());
+		font->draw(color, 12, x + 50.0f, y, 0.0f, line_);
 	}
 }
 

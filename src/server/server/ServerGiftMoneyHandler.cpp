@@ -22,7 +22,6 @@
 #include <server/ScorchedServer.h>
 #include <server/ServerShotHolder.h>
 #include <server/ServerState.h>
-#include <server/ServerChannelManager.h>
 #include <server/TurnController.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
@@ -140,21 +139,8 @@ bool ServerGiftMoneyHandler::processMessage(
 	toTank->getScore().setMoney(
 		toTank->getScore().getMoney() + money);
 
-	// Tell everyone about the gift
-	const char *channel = "combat";
-	if (ScorchedServer::instance()->getOptionsGame().getTeams() > 1)
-	{
-		channel = "team";
-	}
-
-	ChannelText text(channel, 
-		S3D::formatStringBuffer("[p:%s] gifts $%i to [p:%s]", 
-			fromTank->getName(), money, toTank->getName()));
-	ServerChannelManager::instance()->sendText(text, true, false);
-
 	// Forward this message to the intended
-	ComsMessageSender::sendToSingleClient(
-		message, toTank->getDestinationId());
+	ComsMessageSender::sendToAllPlayingClients(message);
 
 	return true;
 }

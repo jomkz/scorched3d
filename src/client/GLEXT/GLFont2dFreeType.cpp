@@ -85,7 +85,12 @@ bool GLFont2dFreeType::createCharacter(char ch, GLFont2dStorage::CharEntry *char
 	// Into A Bitmap.  This Actually Requires A Couple Of FreeType Commands:
 
 	// Load The Glyph For Our Character.
-	if(FT_Load_Glyph( face_, FT_Get_Char_Index( face_, ch ), FT_LOAD_DEFAULT )) 
+	FT_UInt charIndex = FT_Get_Char_Index( face_, ch );
+	if (!charIndex) {
+		charIndex = FT_Get_Char_Index( face_, '?');
+	}
+
+	if(FT_Load_Glyph( face_, charIndex, FT_LOAD_DEFAULT )) 
 	{ 
 		S3D::dialogMessage("GLFont", "FT_Load_Glyph failed"); return false; 
 	}

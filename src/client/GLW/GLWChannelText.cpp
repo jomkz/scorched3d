@@ -120,33 +120,33 @@ void GLWChannelText::draw()
 
 	// Get the width of the prompt
 	float promptWidth = GLWFont::instance()->getGameFont()->getWidth(
-		fontSize_, prompt_.getText());
+		fontSize_, prompt_.getString());
 
 	// Draw prompt black outline
 	GLWFont::instance()->getGameShadowFont()->
 		drawA(GLWColors::black, 1.0f, fontSize_,
 			x_ + 20.0f - 1.0f, y_ + 5.0f + 1.0f, 0.0f, 
-			prompt_.getText());
+			prompt_.getString());
 	
 	// Draw text black outline
 	GLWFont::instance()->getGameShadowFont()->drawWidthRhs(
 		w_ - 25.0f - promptWidth,
 		GLWColors::black, fontSize_,
 		x_ + 20.0f + promptWidth - 1.0f, y_ + 5.0f + 1.0f, 0.0f, 
-		text_.c_str());
+		text_);
 
 	// Draw the prompt
 	GLWFont::instance()->getGameFont()->
 		drawA(&prompt_, channelEntry_.color, 1.0f, fontSize_,
 			x_ + 20.0f, y_ + 5.0f, 0.0f, 
-			prompt_.getText());
+			prompt_.getString());
 
 	// Draw the text
 	GLWFont::instance()->getGameFont()->drawWidthRhs(
 		w_ - 25.0f - promptWidth,
 		channelEntry_.color, fontSize_,
 		x_ + 20.0f + promptWidth, y_ + 5.0f, 0.0f, 
-		text_.c_str());
+		text_);
 }
 
 void GLWChannelText::keyDown(char *buffer, unsigned int keyState, 
@@ -156,23 +156,23 @@ void GLWChannelText::keyDown(char *buffer, unsigned int keyState,
 	if (visible_) skipRest = true;
 	for (int i=0; i<hisCount; i++)
 	{
-		char c = history[i].representedKey;
+		unsigned int unicode = history[i].representedUnicode;
 		unsigned int dik = history[i].sdlKey;
 
 		if (!visible_)
 		{
-			processNotVisibleKey(c, dik, skipRest);
+			processNotVisibleKey(unicode, dik, skipRest);
 		}
 		else
 		{
-			processVisibleKey(c, dik);
+			processVisibleKey(unicode, dik);
 		}
 	}
 	if (visible_) skipRest = true;
 	else view_.keyDown(buffer, keyState, history, hisCount, skipRest);
 }
 
-void GLWChannelText::processNotVisibleKey(char c, unsigned int dik, bool &skipRest)
+void GLWChannelText::processNotVisibleKey(unsigned int unicode, unsigned int dik, bool &skipRest)
 {
 	// Check all of the key entries to see if the channel needs to be displayed
 	std::map<KeyboardKey *, std::string>::iterator keyItor;
@@ -196,7 +196,7 @@ void GLWChannelText::processNotVisibleKey(char c, unsigned int dik, bool &skipRe
 				setVisible(true);
 				skipRest = true;
 
-				text_ = "";
+				text_.clear();
 				if (!channel.empty())
 				{
 					GLWChannelView::CurrentChannelEntry *channelEntry = view_.getChannel(
@@ -204,8 +204,8 @@ void GLWChannelText::processNotVisibleKey(char c, unsigned int dik, bool &skipRe
 					if (channelEntry) setChannelEntry(*channelEntry);
 				}
 
-				if (entry.key == SDLK_SLASH) text_ = "/";
-				else if (entry.key == SDLK_BACKSLASH) text_ = "\\";
+				if (entry.key == SDLK_SLASH) text_ = LANG_STRING("/");
+				else if (entry.key == SDLK_BACKSLASH) text_ = LANG_STRING("\\");
 
 				break;
 			}
@@ -218,7 +218,7 @@ void GLWChannelText::processNotVisibleKey(char c, unsigned int dik, bool &skipRe
 	}
 }
 
-void GLWChannelText::processVisibleKey(char c, unsigned int dik)
+void GLWChannelText::processVisibleKey(unsigned int unicode, unsigned int dik)
 {
 	if (dik == SDLK_BACKSPACE || dik == SDLK_DELETE)
 	{
@@ -231,7 +231,7 @@ void GLWChannelText::processVisibleKey(char c, unsigned int dik)
 	{
 		if (!text_.empty())
 		{
-			text_ = "";
+			text_.clear();
 		}
 		else
 		{
@@ -242,7 +242,6 @@ void GLWChannelText::processVisibleKey(char c, unsigned int dik)
 	{
 		if (!text_.empty())
 		{
-			char *text = (char *) text_.c_str();
 			if (text_[0] == '\\' || text_[0] == '/')
 			{
 				processSpecialText();
@@ -253,19 +252,19 @@ void GLWChannelText::processVisibleKey(char c, unsigned int dik)
 			}
 		}
 		setVisible(false);
-		text_ = "";
+		text_.clear();
 	}
-	else if (c >= ' ')
+	else if (unicode >= ' ')
 	{
 		if ((maxTextLen_==0) || ((int) text_.size() < maxTextLen_))
 		{
-			if ((text_[0] == '\\' || text_[0] == '/') && c == ' ')
+			if ((text_[0] == '\\' || text_[0] == '/') && unicode == ' ')
 			{
 				processSpecialText();
 			}
 			else
 			{
-				text_ += c;
+				text_ += unicode;
 			}
 		}
 	}
@@ -285,7 +284,7 @@ void GLWChannelText::setVisible(bool visible)
 
 void GLWChannelText::processNormalText()
 {
-	ChannelText text(channelEntry_.channel.c_str(), text_.c_str());
+	ChannelText text(channelEntry_.channel.c_str(), text_);
 	if (channelEntry_.type & ChannelDefinition::eWhisperChannel)
 	{
 		text.setDestPlayerId(whisperDest_);
@@ -298,17 +297,19 @@ void GLWChannelText::processNormalText()
 
 void GLWChannelText::processSpecialText()
 {
+	LangString channelPart(&text_[1]);
+
 	GLWChannelView::CurrentChannelEntry *channelEntry = 
-		view_.getChannel(&text_[1]);
+		view_.getChannel(LangStringUtil::convertFromLang(channelPart));
 	if (channelEntry && 
 		channelValid(channelEntry->channel.c_str()))
 	{
-		text_ = "";
+		text_.clear();
 		setChannelEntry(*channelEntry);
 	}
-	else if (strcmp("r", &text_[1]) == 0)
+	else if (channelPart == LANG_STRING("r"))
 	{
-		text_ = "";
+		text_.clear();
 
 		whisperDest_ = view_.getLastWhisperSrc();
 		GLWChannelView::CurrentChannelEntry *channelEntry = 
@@ -319,9 +320,9 @@ void GLWChannelText::processSpecialText()
 			setChannelEntry(*channelEntry);
 		}
 	}
-	else if (strcmp("t", &text_[1]) == 0)
+	else if (channelPart == LANG_STRING("t"))
 	{
-		text_ = "";
+		text_.clear();
 
 		GLWChannelView::CurrentChannelEntry *channelEntry = 
 			view_.getChannel("team");
@@ -331,10 +332,10 @@ void GLWChannelText::processSpecialText()
 			setChannelEntry(*channelEntry);
 		}
 	}
-	else if (strcmp("s", &text_[1]) == 0 ||
-		strcmp("say", &text_[1]) == 0)
+	else if (channelPart == LANG_STRING("s") || 
+		channelPart == LANG_STRING("say"))
 	{
-		text_ = "";
+		text_.clear();
 
 		GLWChannelView::CurrentChannelEntry *channelEntry = 
 			view_.getChannel("general");
@@ -466,8 +467,8 @@ void GLWChannelText::buttonDown(unsigned int id)
 		resendItor++)
 	{
 		ChannelText &channelText = *resendItor;
-		resend.getPopups().push_back(GLWSelectorEntry(LANG_STRING(channelText.getMessage()), 
-			0, false, 0, (void *) eResendSelectorStart, channelText.getMessage()));
+		resend.getPopups().push_back(GLWSelectorEntry(channelText.getMessage(), 
+			0, false, 0, (void *) eResendSelectorStart));
 	}
 
 	// For each tank
@@ -646,7 +647,7 @@ void GLWChannelText::itemSelected(GLWSelectorEntry *entry, int position)
 		}
 		break;
 	case eChatSelectorStart:
-		text_ = "";
+		text_.clear();
 		if (visible_) setVisible(false);
 		else if (checkCurrentChannel()) setVisible(true);
 		break;
@@ -660,7 +661,7 @@ void GLWChannelText::itemSelected(GLWSelectorEntry *entry, int position)
 			{
 				setChannelEntry(*channelEntry);
 
-				text_ = "";
+				text_.clear();
 				setVisible(true);
 			}
 		}
@@ -673,7 +674,7 @@ void GLWChannelText::itemSelected(GLWSelectorEntry *entry, int position)
 				resendItor++)
 			{
 				ChannelText &text = *resendItor;
-				if (0 == strcmp(text.getMessage(), entry->getDataText())) 
+				if (text.getMessage() == entry->getText()) 
 				{
 					ClientChannelManager::instance()->sendText(text);
 					break;
@@ -782,7 +783,7 @@ void GLWChannelText::setChannelEntry(GLWChannelView::CurrentChannelEntry &entry)
 		channelName = S3D::formatStringBuffer("%u. [c:%s] : ",
 			channelEntry_.id, channelEntry_.channel.c_str());
 	}
-	prompt_.parseText(ScorchedClient::instance()->getContext(), channelName.c_str());
+	prompt_.parseText(ScorchedClient::instance()->getContext(), LANG_STRING(channelName));
 }
 
 bool GLWChannelText::initFromXML(XMLNode *node)

@@ -61,13 +61,13 @@ void AdminAuthDialog::display()
 
 	username_ = 0;
 	{
-		username_ = new GLWTextBox(0.0f, 0.0f, 200.0f, "");
+		username_ = new GLWTextBox(0.0f, 0.0f, 200.0f);
 		inputPanel->addWidget(new GLWLabel(0.0f, 0.0f, LANG_RESOURCE("USER_NAME_LABEL", "User Name :")));
 		inputPanel->addWidget(username_, 0, SpaceLeft | SpaceTop, 10.0f);
 	}
 	password_ = 0;
 	{
-		password_ = new GLWTextBox(0.0f, 0.0f, 200.0f, "", GLWTextBox::eFlagPassword);
+		password_ = new GLWTextBox(0.0f, 0.0f, 200.0f, LangString(), GLWTextBox::eFlagPassword);
 		inputPanel->addWidget(new GLWLabel(0.0f, 0.0f, LANG_RESOURCE("PASSWORD_LABEL", "Password :")));
 		inputPanel->addWidget(password_, 0, SpaceLeft | SpaceTop, 10.0f);
 	}

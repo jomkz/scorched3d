@@ -65,7 +65,7 @@ protected:
 		void setChannels(std::list<ChannelDefinition> &channels);
 		std::set<std::string> &getChannels() { return channels_; }
 
-		bool hasChannel(const char *channel);
+		bool hasChannel(const std::string &channel);
 
 	protected:
 		ClientChannelManagerI *user_;

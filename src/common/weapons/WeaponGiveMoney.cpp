@@ -25,6 +25,7 @@
 #include <tank/TankScore.h>
 #include <common/Defines.h>
 #include <common/ChannelManager.h>
+#include <lang/LangResource.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponGiveMoney);
 
@@ -69,17 +70,19 @@ void WeaponGiveMoney::weaponCallback(
 		if (money_ > 0)
 		{
 			ChannelText text("combat", 
-				S3D::formatStringBuffer("[p:%s] received $%i", 
-				tank->getName(), money_));
-			//info.setPlayerId(weaponContext.getPlayerId());
+				LANG_RESOURCE_2("TANK_GET_MONEY",
+				"[p:{0}] received ${1}", 
+				tank->getName(), 
+				S3D::formatStringBuffer("%i", money_)));
 			ChannelManager::showText(context, text);
 		}
 		else
 		{
 			ChannelText text("combat", 
-				S3D::formatStringBuffer("[p:%s] lost $%i", 
-				tank->getName(), -money_));
-			//info.setPlayerId(weaponContext.getPlayerId());
+				LANG_RESOURCE_2("TANK_LOST_MONEY",
+				"[p:{0}] lost ${1}", 
+				tank->getName(), 
+				S3D::formatStringBuffer("%i", -money_)));
 			ChannelManager::showText(context, text);
 		}
 	}

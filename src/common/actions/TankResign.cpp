@@ -27,6 +27,7 @@
 #include <common/Defines.h>
 #include <common/ChannelManager.h>
 #include <common/OptionsScorched.h>
+#include <lang/LangResource.h>
 
 TankResign::TankResign(unsigned int playerId) :
 	ActionReferenced("TankResign"),
@@ -107,7 +108,10 @@ void TankResign::simulate(fixed frameTime, bool &remove)
 #ifndef S3D_SERVER
 			{
 				ChannelText text("combat",
-					S3D::formatStringBuffer("[p:%s] resigned from round", tank->getName()));
+					LANG_RESOURCE_1(
+						"TANK_RESIGNED",
+						"[p:{0}] resigned from round", 
+						tank->getName()));
 				//info.setPlayerId(playerId_);
 				ChannelManager::showText(*context_, text);
 			}

@@ -154,9 +154,6 @@ void GiftMoneyDialog::buttonDown(unsigned int id)
 				ComsGiftMoneyMessage message(
 					currentTank->getPlayerId(), playerId, money);
 				ComsMessageSender::sendToServer(message);
-
-				currentTank->getScore().setMoney(
-					currentTank->getScore().getMoney() - money);
 			}
 		}
 	}

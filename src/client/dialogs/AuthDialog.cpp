@@ -63,7 +63,7 @@ void AuthDialog::display()
 	if (auth_ & eNameRequired)
 	{
 		username_ = new GLWTextBox(0.0f, 0.0f, 200.0f,
-			(char *) ClientParams::instance()->getUserName());
+			LANG_STRING(ClientParams::instance()->getUserName()));
 		inputPanel->addWidget(new GLWLabel(0.0f, 0.0f, LANG_RESOURCE("USER_NAME_LABEL", "User Name :")));
 		inputPanel->addWidget(username_, 0, SpaceLeft | SpaceTop, 10.0f);
 	}
@@ -71,7 +71,7 @@ void AuthDialog::display()
 	if (auth_ & ePasswordRequired)
 	{
 		password_ = new GLWTextBox(0.0f, 0.0f, 200.0f, 
-			(char *) ClientParams::instance()->getPassword(), GLWTextBox::eFlagPassword);
+			LANG_STRING(ClientParams::instance()->getPassword()), GLWTextBox::eFlagPassword);
 		inputPanel->addWidget(new GLWLabel(0.0f, 0.0f, LANG_RESOURCE("PASSWORD_LABEL", "Password :")));
 		inputPanel->addWidget(password_, 0, SpaceLeft | SpaceTop, 10.0f);
 	}

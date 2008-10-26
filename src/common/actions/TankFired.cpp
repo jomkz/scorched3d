@@ -77,7 +77,8 @@ void TankFired::simulate(fixed frameTime, bool &remove)
 				if (line)
 				{
 					context_->getActionController().addAction(
-						new TankSay(tank->getPlayerId(), line));
+						new TankSay(tank->getPlayerId(), 
+						LANG_STRING(line)));
 				}
 			}
 

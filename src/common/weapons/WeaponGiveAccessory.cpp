@@ -26,6 +26,7 @@
 #include <tank/TankScore.h>
 #include <common/Defines.h>
 #include <common/ChannelManager.h>
+#include <lang/LangResource.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponGiveAccessory);
 
@@ -92,9 +93,11 @@ void WeaponGiveAccessory::weaponCallback(
 				tank->getAccessories().add(accessory, number_);
 				{
 					ChannelText text("combat", 
-						S3D::formatStringBuffer("[p:%s] received %i * [w:%s]", 
+						LANG_RESOURCE_3("TANK_GET_ACCESSORY",
+						"[p:{0}] received {1} * [w:{2}]", 
 						tank->getName(),
-						number_, accessory->getName()));
+						S3D::formatStringBuffer("%i", number_), 
+						accessory->getName()));
 					//info.setPlayerId(weaponContext.getPlayerId());
 					ChannelManager::showText(context, text);
 				}
@@ -105,9 +108,10 @@ void WeaponGiveAccessory::weaponCallback(
 				tank->getScore().setMoney(tank->getScore().getMoney() + money);
 				{
 					ChannelText text("combat", 
-						S3D::formatStringBuffer("[p:%s] received $%i", 
-						tank->getName(), money));
-					//info.setPlayerId(weaponContext.getPlayerId());
+						LANG_RESOURCE_2("TANK_GET_MONEY",
+						"[p:{0}] received ${1}", 
+						tank->getName(), 
+						S3D::formatStringBuffer("%i", money)));
 					ChannelManager::showText(context, text);
 				}
 			}
@@ -122,10 +126,11 @@ void WeaponGiveAccessory::weaponCallback(
 				tank->getAccessories().rm(accessory, loose);
 				{
 					ChannelText text("combat", 
-						S3D::formatStringBuffer("[p:%s] lost %i * [w:%s]", 
+						LANG_RESOURCE_3("TANK_LOST_ACCESSORY",
+						"[p:{0}] lost {1} * [w:{2}]", 
 						tank->getName(),
-						loose, accessory->getName()));
-					//info.setPlayerId(weaponContext.getPlayerId());
+						S3D::formatStringBuffer("%i", loose), 
+						accessory->getName()));
 					ChannelManager::showText(context, text);
 				}
 			}

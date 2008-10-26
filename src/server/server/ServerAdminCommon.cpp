@@ -266,7 +266,9 @@ bool ServerAdminCommon::killAll(ServerAdminSessions::Credential &credential)
 bool ServerAdminCommon::adminSay(ServerAdminSessions::Credential &credential,
 	const char *channel, const char *text)
 {
-	ChannelText channelText(channel, text);
+	LangString langString(LANG_STRING(text));
+
+	ChannelText channelText(channel, langString);
 	channelText.setAdminPlayer(credential.username.c_str());
 	ServerChannelManager::instance()->sendText(channelText, true);
 

@@ -64,13 +64,13 @@
 namespace LangResource
 {
 	LangString getKey(const std::string &key, const std::string &value);
-	LangString getKey(const std::string &key, const std::string &value, const std::string &param1);
-	LangString getKey(const std::string &key, const std::string &value, const std::string &param1, 
-		const std::string &param2);
-	LangString getKey(const std::string &key, const std::string &value, const std::string &param1, 
-		const std::string &param2, const std::string &param3);
-	LangString getKey(const std::string &key, const std::string &value, const std::string &param1, 
-		const std::string &param2, const std::string &param3, const std::string &param4);
+	LangString getKey(const std::string &key, const std::string &value, const LangStringConverter &param1);
+	LangString getKey(const std::string &key, const std::string &value, const LangStringConverter &param1, 
+		const LangStringConverter &param2);
+	LangString getKey(const std::string &key, const std::string &value, const LangStringConverter &param1, 
+		const LangStringConverter &param2, const LangStringConverter &param3);
+	LangString getKey(const std::string &key, const std::string &value, const LangStringConverter &param1, 
+		const LangStringConverter &param2, const LangStringConverter &param3, const LangStringConverter &param4);
 }
 
 #endif // __INCLUDE_LangText_INCLUDE__

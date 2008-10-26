@@ -25,6 +25,7 @@
 #include <target/TargetLife.h>
 #include <common/Defines.h>
 #include <common/ChannelManager.h>
+#include <lang/LangResource.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponGiveLife);
 
@@ -77,9 +78,10 @@ void WeaponGiveLife::weaponCallback(
 
 		{
 			ChannelText text("combat", 
-				S3D::formatStringBuffer("[p:%s] received %.0f life", 
-				tank->getName(), life.asFloat()));
-			//info.setPlayerId(weaponContext.getPlayerId());
+				LANG_RESOURCE_2("TANK_GET_LIFE",
+				"[p:{0}] received {1} life", 
+				tank->getName(), 
+				S3D::formatStringBuffer("%.0f", life.asFloat())));
 			ChannelManager::showText(context, text);
 		}
 	}
@@ -98,9 +100,10 @@ void WeaponGiveLife::weaponCallback(
 
 		{
 			ChannelText text("combat", 
-				S3D::formatStringBuffer("[p:%s] lost %.0f life", 
-				tank->getName(), -life.asFloat()));
-			//info.setPlayerId(weaponContext.getPlayerId());
+				LANG_RESOURCE_2("TANK_LOST_LIFE",
+				"[p:{0}] lost {1} life", 
+				tank->getName(), 
+				S3D::formatStringBuffer("%.0f", -life.asFloat())));
 			ChannelManager::showText(context, text);
 		}
 	}

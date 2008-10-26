@@ -158,7 +158,7 @@ void GLWOptionEntry::updateControls(
 		case OptionEntry::OptionEntryStringType:
 			{
 				GLWTextBox *control = (GLWTextBox *) entrySetter.getControl();
-				control->setText(entrySetter.getEntry()->getValueAsString());
+				control->setText(LANG_STRING(entrySetter.getEntry()->getValueAsString()));
 			}
 			break;
 		case OptionEntry::OptionEntryBoundedIntType:

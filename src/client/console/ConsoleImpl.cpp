@@ -78,13 +78,13 @@ void ConsoleImpl::keyboardCheck(const unsigned state, float frameTime,
 		if (!skipRest)
 		for (int i=0; i<hisCount; i++)
 		{
-			char c = history[i].representedKey;
+			char unicodeKey = history[i].representedUnicode;
 			unsigned int dik = history[i].sdlKey;
 
-			if (c >= ' ')
+			if (unicodeKey >= ' ')
 			{
 				resetPositions();
-				currentLine_ += c;
+				if (unicodeKey < 127) currentLine_ += (char) unicodeKey;
 			}
 			else 
 			{
