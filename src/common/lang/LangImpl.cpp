@@ -51,6 +51,12 @@ void LangImpl::saveUndefined()
 ResourceBundleEntry *LangImpl::getEntry(
 	const std::string &key, const std::string &value)
 {
+	return getEntry(key, LANG_STRING(value));
+}
+
+ResourceBundleEntry *LangImpl::getEntry(
+	const std::string &key, const LangString &value)
+{
 	SDL_LockMutex(langMutex);
 
 	ResourceBundleEntry *entry = 0;
@@ -65,7 +71,7 @@ ResourceBundleEntry *LangImpl::getEntry(
 	}
 	if (!entry) 
 	{
-		entry = new ResourceBundleEntryImpl(key, LANG_STRING(value));
+		entry = new ResourceBundleEntryImpl(key, value);
 		undefinedBundle_.addEntry(entry);
 	}
 

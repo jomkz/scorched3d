@@ -38,16 +38,16 @@ public:
 	ConsoleLine();
 	virtual ~ConsoleLine();
 
-	void set(const char *line, LineType type);
+	void set(const LangString &line, LineType type);
 	void drawLine(float x, float y, GLFont2d *font);
 
 	LineType getLineType() { return lineType_; }
-	const char *getLine() { return line_.c_str(); }
+	const LangString &getLine() { return line_; }
 
 protected:
 	unsigned int lineNumber_;
-	std::string line_;
-	std::string lineNumberStr_;
+	LangString line_;
+	LangString lineNumberStr_;
 	static unsigned nextLineNumber_;
 	LineType lineType_;
 
@@ -59,7 +59,7 @@ public:
 	ConsoleLines(int maxLines);
 	virtual ~ConsoleLines();
 
-	void addLine(const char *line, bool showPointer);
+	void addLine(const std::string &line, bool showPointer);
 	void drawLines(GLFont2d *font, float startHeight, float totalHeight, float totalWidth);
 
 	void clear();
@@ -74,7 +74,7 @@ protected:
 	int maxLines_;
 	int currentLine_;
 
-	void addSmallLine(int section, const char *line, bool showPointer);
+	void addSmallLine(int section, const LangString &line, bool showPointer);
 
 };
 

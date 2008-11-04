@@ -24,6 +24,7 @@
 #include <server/ServerState.h>
 #include <server/ServerCommon.h>
 #include <server/ServerShotHolder.h>
+#include <server/ServerChannelManager.h>
 #include <tank/TankContainer.h>
 #include <tank/TankTeamScore.h>
 #include <tank/TankScore.h>
@@ -105,7 +106,11 @@ void ServerNextShotState::enterState(const unsigned state)
 			ScorchedServer::instance()->getOptionsGame().getNoMaxRoundTurns() &&
 			ScorchedServer::instance()->getOptionsGame().getNoMaxRoundTurns() > 0)
 		{
-			ServerCommon::sendString(0, "Skipping round due to turn limit");
+			ServerChannelManager::instance()->sendText(
+				ChannelText("info", 
+					"ROUND_SKIP_TURN_LIMIT", 
+					"Skipping round due to turn limit"),
+				true);
 
 			// Clear any shots that may be waiting
 			ServerShotHolder::instance()->clearShots();

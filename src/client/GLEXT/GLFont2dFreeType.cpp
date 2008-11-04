@@ -79,13 +79,13 @@ bool GLFont2dFreeType::createFont(const std::string &typeFace, unsigned int h, b
 	return true;
 }
 
-bool GLFont2dFreeType::createCharacter(char ch, GLFont2dStorage::CharEntry *character) 
+bool GLFont2dFreeType::createCharacter(unsigned int ch, GLFont2dStorage::CharEntry *character) 
 {
 	// The First Thing We Do Is Get FreeType To Render Our Character
 	// Into A Bitmap.  This Actually Requires A Couple Of FreeType Commands:
 
 	// Load The Glyph For Our Character.
-	FT_UInt charIndex = FT_Get_Char_Index( face_, ch );
+ 	FT_UInt charIndex = FT_Get_Char_Index( face_, ch );
 	if (!charIndex) {
 		charIndex = FT_Get_Char_Index( face_, '?');
 	}

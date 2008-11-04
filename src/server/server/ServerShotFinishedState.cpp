@@ -24,6 +24,7 @@
 #include <server/ServerTooFewPlayersStimulus.h>
 #include <server/ServerMessageHandler.h>
 #include <server/ServerNextShotState.h>
+#include <server/ServerChannelManager.h>
 #include <server/ServerShotState.h>
 #include <server/ServerCommon.h>
 #include <common/Logger.h>
@@ -433,15 +434,21 @@ void ServerShotFinishedState::scoreOverallWinner()
 
 			if (winners.size() == 1)
 			{
-				ServerCommon::sendStringMessage(0, 
-					S3D::formatStringBuffer("%s is the overall winner!", 
-					names.c_str()));
+				ServerChannelManager::instance()->sendText(
+					ChannelText("banner",
+						"PLAYER_OVERALL_WINNER",
+						"{0} is the overall winner!", 
+						names),
+					true);
 			}
 			else
 			{
-				ServerCommon::sendStringMessage(0, 
-					S3D::formatStringBuffer("%s are the overall winners!", 
-					names.c_str()));
+				ServerChannelManager::instance()->sendText(
+					ChannelText("banner",
+						"PLAYERS_OVERALL_WINNERS",
+						"{0} are the overall winners!", 
+						names),
+					true);
 			}
 		}
 	}
@@ -451,13 +458,20 @@ void ServerShotFinishedState::scoreOverallWinner()
 			ScorchedServer::instance()->getContext());
 		if (winningTeam == 0)
 		{
-			ServerCommon::sendStringMessage(0, "The game is a draw!");
+			ServerChannelManager::instance()->sendText(
+				ChannelText("banner", 
+					"GAME_DRAWN",
+					"The game is a draw!"),
+				true);
 		}
 		else
 		{
-			ServerCommon::sendStringMessage(0, 
-				S3D::formatStringBuffer("%s team is the overall winner!",
-				TankColorGenerator::getTeamName(winningTeam)));
+			ServerChannelManager::instance()->sendText(
+				ChannelText("banner",
+					"TEAM_OVERALL_WINNER",
+					"{0} team is the overall winner!",
+					TankColorGenerator::getTeamName(winningTeam)),
+				true);
 		}
 		
 		// Score all the winning tanks as overall winners

@@ -196,8 +196,12 @@ void ServerMessageHandler::destroyPlayer(unsigned int tankId, const char *reason
 		tank->getDestinationId(),
 		tankId, tank->getName(),
 		reason));
-	ServerCommon::sendString(0, S3D::formatStringBuffer("Player disconnected \"%s\" (%s)",
-		tank->getName(), reason));	
+	ServerChannelManager::instance()->sendText(
+		ChannelText("info", 
+			"PLAYER_DISCONNECTED", 
+			"Player disconnected \"{0}\" ({1})",
+			tank->getName(), reason),
+		true);
 
 	// Check if we can remove player
 	if (tank->getState().getState() == TankState::sNormal &&

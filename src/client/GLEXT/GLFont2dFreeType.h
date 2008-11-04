@@ -36,7 +36,7 @@ public:
 	~GLFont2dFreeType();
 
 	bool createFont(const std::string &typeFace, unsigned int h, bool makeShadow);
-	bool createCharacter(char ch, GLFont2dStorage::CharEntry *character);
+	bool createCharacter(unsigned int ch, GLFont2dStorage::CharEntry *character);
 
 protected:
 	bool makeShadow_;

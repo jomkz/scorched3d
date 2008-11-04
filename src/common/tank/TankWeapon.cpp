@@ -34,6 +34,7 @@
 #endif
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapemap/MovementMap.h>
+#include <lang/LangResource.h>
 
 TankWeapon::TankWeapon(ScorchedContext &context) : 
 	currentWeapon_(0), context_(context),
@@ -136,9 +137,13 @@ void TankWeapon::setCurrentWeapon(Accessory *wp)
 					wp->getPositionSelectLimit());
 			}
 
-			ChannelManager::showText(
-				ScorchedClient::instance()->getContext(),
-				S3D::formatStringBuffer("Click ground to activate %s", wp->getName()));
+			ChannelText text("banner",
+				LANG_RESOURCE_1(
+					"GROUND_WEAPON_ACTIVATE", 
+					"Click ground to activate {0}",
+					wp->getName()));
+			ChannelManager::showText(ScorchedClient::instance()->getContext(), 
+				text);
 		}
 
 		}

@@ -23,6 +23,7 @@
 #include <server/ServerState.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerMessageHandler.h>
+#include <server/ServerChannelManager.h>
 #include <server/TurnController.h>
 #include <server/ServerCommon.h>
 #ifndef S3D_SERVER
@@ -86,7 +87,9 @@ void ServerNewGameState::enterState(const unsigned state)
 	StatsLogger::instance()->gameStart(currentTanks);
 
 	// Tell clients a new game is starting
-	ServerCommon::sendString(0, "Next Round");
+	ServerChannelManager::instance()->sendText(
+		ChannelText("info", "NEXT_ROUND", "Next Round"),
+		true);
 
 	// Make any enconomic changes
 	EconomyStore::instance()->getEconomy()->calculatePrices();
@@ -99,7 +102,11 @@ void ServerNewGameState::enterState(const unsigned state)
 	if (ScorchedServer::instance()->getOptionsGame().commitChanges())
 	{
 		sendGameState = true;
-		ServerCommon::sendString(0, "Game options have been changed!");
+		ServerChannelManager::instance()->sendText(
+			ChannelText("info", 
+				"GAME_OPTIONS_CHANGED", 
+				"Game options have been changed!"),
+			true);
 	}
 
 	// Get a landscape definition to use
@@ -244,8 +251,12 @@ int ServerNewGameState::addTanksToGame(const unsigned state,
 		sizeof(DeformLandscape::DeformInfo);
 	if (sendSize > ScorchedServer::instance()->getOptionsGame().getMaxLandscapeSize())
 	{
-		ServerCommon::sendString(0, S3D::formatStringBuffer("Landscape too large to send to waiting clients (%i bytes).", 
-			sendSize));
+		ServerChannelManager::instance()->sendText(
+			ChannelText("info", 
+				"LANDSCAPE_TOO_LARGE",
+				"Landscape too large to send to waiting clients ({0} bytes).", 
+				sendSize),
+			true);
 		return 0;
 	}
 
@@ -495,16 +506,28 @@ void ServerNewGameState::checkTeamsAuto()
 		if (ScorchedServer::instance()->getOptionsGame().getTeamBallance() ==
 			OptionsGame::TeamBallanceAutoByScore)
 		{
-			ServerCommon::sendString(0, "Auto ballancing teams, by score");
+			ServerChannelManager::instance()->sendText(
+				ChannelText("info", 
+					"SCORE_AUTO_BALLANCE", 
+					"Auto ballancing teams, by score"),
+				true);
 		}
 		else if (ScorchedServer::instance()->getOptionsGame().getTeamBallance() ==
 			OptionsGame::TeamBallanceAutoByBots)
 		{
-			ServerCommon::sendString(0, "Auto ballancing teams, by bots");
+			ServerChannelManager::instance()->sendText(
+				ChannelText("info",
+					"BOTS_AUTO_BALLANCE",
+					"Auto ballancing teams, by bots"),
+				true);
 		}
 		else
 		{
-			ServerCommon::sendString(0, "Auto ballancing teams");
+			ServerChannelManager::instance()->sendText(
+				ChannelText("info",
+					"NORMAL_AUTO_BALLANCE",
+					"Auto ballancing teams"),
+				true);
 		}
 	}
 }

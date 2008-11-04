@@ -23,7 +23,7 @@
 #include <server/ScorchedServer.h>
 #include <server/ScorchedServerUtil.h>
 #include <server/ServerState.h>
-#include <server/ServerCommon.h>
+#include <server/ServerChannelManager.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <common/StatsLogger.h>
@@ -78,8 +78,11 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 		tank->getState().getState() != TankState::sLoading &&
 		tank->getState().getState() != TankState::sInitializing))
 	{
-		ServerCommon::sendString(netMessage.getDestinationId(), 
-			"Can only change tank when dead.");
+		ServerChannelManager::instance()->sendText( 
+			ChannelText("info", "CHANGE_WHEN_DEAD", 
+			"Can only change tank when dead."),
+			netMessage.getDestinationId(), 
+			false);
 		return true;
 	}
 
@@ -89,8 +92,11 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 		if (ScorchedServer::instance()->getGameState().getState() !=
 			ServerState::ServerStateTooFewPlayers)
 		{
-			ServerCommon::sendString(netMessage.getDestinationId(), 
-				"Can only change type before game starts.");
+			ServerChannelManager::instance()->sendText( 
+				ChannelText("info", "CHANGE_WHEN_STARTED", 
+					"Can only change type before game starts."),
+					netMessage.getDestinationId(),
+					false);
 			return true;
 		}
 
@@ -131,9 +137,12 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 
 			if (name != tank->getName())
 			{
-				ServerCommon::sendString(0, 
-					S3D::formatStringBuffer("Player changed name \"%s\"->\"%s\"",
-					tank->getName(), name.c_str()));
+				ServerChannelManager::instance()->sendText( 
+					ChannelText("info",
+						"PLAYER_NAME_CHANGE",
+						"Player changed name \"{0}\"->\"{1}\"",
+						tank->getName(), name),
+					true);
 			}
 		}
 #endif // #ifdef S3D_SERVER
@@ -183,16 +192,22 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 		StatsLogger::TankRank rank = StatsLogger::instance()->tankRank(tank);
 		if (rank.rank >= 0)
 		{
-			ServerCommon::sendString(0, 
-				S3D::formatStringBuffer("Welcome back %s, you are ranked %i",
-				tank->getName(), rank.rank));
+			ServerChannelManager::instance()->sendText( 
+				ChannelText("info",
+					"WELCOME_BACK",
+					"Welcome back {0}, you are ranked {1}",
+					tank->getName(), rank.rank),
+				true);
 		}
 
 		if (tank->getState().getSpectator())
 		{
-			ServerCommon::sendString(0, 
-				S3D::formatStringBuffer("Player playing \"%s\"",
-				tank->getName()));
+			ServerChannelManager::instance()->sendText( 
+				ChannelText("info",
+					"PLAYER_PLAYING",
+					"Player playing \"{0}\"",
+					tank->getName()),
+				true);
 
 			if (ScorchedServer::instance()->getGameState().getState() == 
 				ServerState::ServerStateStarting)

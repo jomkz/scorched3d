@@ -68,9 +68,13 @@ void AdminCheckDialog::adminResult(unsigned int sid, ComsAdminMessage::ComsAdmin
 		ClientChannelManager::instance()->addChannel("general", "admin");
 		GLWWindowManager::instance()->showWindow(AdminDialog::instance()->getId());
 	}
-	else if (type != ComsAdminMessage::AdminLogout)
+	else 
 	{
 		ClientChannelManager::instance()->removeChannel("admin");
-		GLWWindowManager::instance()->showWindow(AdminAuthDialog::instance()->getId());
+		if (type == ComsAdminMessage::AdminLogin ||
+			type == ComsAdminMessage::AdminLoginLocal)
+		{
+			GLWWindowManager::instance()->showWindow(AdminAuthDialog::instance()->getId());
+		}
 	}
 }

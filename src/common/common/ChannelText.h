@@ -22,6 +22,7 @@
 #define __INCLUDE_ChannelTexth_INCLUDE__
 
 #include <string>
+#include <vector>
 #include <net/NetBuffer.h>
 
 class ChannelDefinition
@@ -56,31 +57,70 @@ public:
 		eNoSound = 2
 	};
 
+	ChannelText();
 	ChannelText(
-		const std::string &channel = "", 
-		const LangString &message = LangString());
+		const std::string &channel, 
+		const LangString &message);
+	ChannelText(
+		const std::string &channel, 
+		const std::string &key,
+		const std::string &value);
+	ChannelText(
+		const std::string &channel, 
+		const std::string &key,
+		const std::string &value,
+		const LangStringConverter &param1);
+	ChannelText(
+		const std::string &channel, 
+		const std::string &key,
+		const std::string &value,
+		const LangStringConverter &param1,
+		const LangStringConverter &param2);
+	ChannelText(
+		const std::string &channel, 
+		const std::string &key,
+		const std::string &value,
+		const LangStringConverter &param1,
+		const LangStringConverter &param2,
+		const LangStringConverter &param3);
+	ChannelText(
+		const std::string &channel, 
+		const std::string &key,
+		const std::string &value,
+		const LangStringConverter &param1,
+		const LangStringConverter &param2,
+		const LangStringConverter &param3,
+		const LangStringConverter &param4);
 
 	void setChannel(const std::string &channel) { channel_ = channel; }
 	void setMessage(const LangString &message) { message_ = message; }
+	void setMessageKey(const std::string &key) { messageKey_ = key; }
+	void setMessageValue(const std::string &value) { messageValue_ = value; }
 	void setSrcPlayerId(unsigned int srcPlayerId) { srcPlayerId_ = srcPlayerId; }
 	void setDestPlayerId(unsigned int destPlayerId) { destPlayerId_ = destPlayerId; }
 	void setFlags(unsigned int flags) { flags_ = flags; }
 	void setAdminPlayer(const std::string &admin) { admin_ = admin; }
 
 	const std::string &getChannel() { return channel_; }
-	const LangString &getMessage() { return message_; }
+	const LangString &getMessage();
 	const std::string &getAdminPlayer() { return admin_; }
+	const std::string &getMessageKey() { return messageKey_; }
+	const std::string &getMessageValue() { return messageValue_; }
+	const std::vector<LangString> &getMessageParams() { return messageParams_; }
     unsigned int getSrcPlayerId() { return srcPlayerId_; }
 	unsigned int getDestPlayerId() { return destPlayerId_; }
 	unsigned int getFlags() { return flags_; }
 
-    bool writeMessage(NetBuffer &buffer);
-    bool readMessage(NetBufferReader &reader);
+    virtual bool writeMessage(NetBuffer &buffer);
+    virtual bool readMessage(NetBufferReader &reader);
 
 protected:
 	unsigned int srcPlayerId_;
 	unsigned int destPlayerId_;
 	unsigned int flags_;
+	std::string messageKey_;
+	std::vector<LangString> messageParams_;
+	std::string messageValue_;
 	std::string channel_;
 	LangString message_;
 	std::string admin_;

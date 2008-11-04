@@ -60,38 +60,6 @@ void ServerCommon::startFileLogger()
 	}	
 }
 
-void ServerCommon::sendStringMessage(unsigned int destinationId, const std::string &text)
-{
-	ChannelText message("banner", LANG_STRING(text));
-	if (destinationId == 0)
-	{
-		ServerChannelManager::instance()->sendText(message, true);
-	}
-	else
-	{
-		ServerChannelManager::instance()->sendText(message, destinationId, false);
-	}
-}
-
-void ServerCommon::sendString(unsigned int destinationId, const std::string &text)
-{
-	ChannelText message("info", LANG_STRING(text));
-	if (destinationId == 0)
-	{
-		ServerChannelManager::instance()->sendText(message, true);
-	}
-	else
-	{
-		ServerChannelManager::instance()->sendText(message, destinationId, false);
-	}
-}
-
-void ServerCommon::sendStringAdmin(const std::string &text)
-{
-	ChannelText message("admin", LANG_STRING(text));
-	ServerChannelManager::instance()->sendText(message, true);
-}
-
 void ServerCommon::kickDestination(unsigned int destinationId, 
 	const std::string &message)
 {
@@ -137,9 +105,10 @@ void ServerCommon::kickPlayer(unsigned int playerId)
 		getTankContainer().getTankById(playerId);
 	if (tank)
 	{
-		sendString(0, S3D::formatStringBuffer(
-			"Player \"%s\" has been kicked from the server",
-			tank->getName(), tank->getPlayerId()));
+		ServerChannelManager::instance()->sendText(ChannelText("info", 
+			"ADMIN_PLAYER_KICKED", 
+			"Player \"{0}\" has been kicked from the server",
+			tank->getName()), true);
 		Logger::log(S3D::formatStringBuffer("Kicking client \"%s\" \"%i\"", 
 			tank->getName(), tank->getPlayerId()));
 

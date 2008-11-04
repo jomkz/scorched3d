@@ -35,9 +35,9 @@ ConsoleLine::~ConsoleLine()
 
 }
 
-void ConsoleLine::set(const char *line, LineType type)
+void ConsoleLine::set(const LangString &line, LineType type)
 {
-	line_ = std::string(line);
+	line_ = line;
 	lineType_ = type;
 	if (lineType_ == eCommand)
 	{
@@ -47,7 +47,7 @@ void ConsoleLine::set(const char *line, LineType type)
 	{
 		lineNumber_ = nextLineNumber_;
 	}
-	lineNumberStr_= S3D::formatStringBuffer("%4i", lineNumber_);
+	lineNumberStr_= LANG_STRING(S3D::formatStringBuffer("%4i", lineNumber_));
 }
 
 void ConsoleLine::drawLine(float x, float y, GLFont2d *font)
@@ -59,7 +59,7 @@ void ConsoleLine::drawLine(float x, float y, GLFont2d *font)
 		{
 			// We show a line number of those lines with commands
 			// on them
-			font->draw(color, 12, x, y, 0.0f, lineNumberStr_.c_str());
+			font->draw(color, 12, x, y, 0.0f, lineNumberStr_);
 			font->draw(color, 12, x + 50.0f, y, 0.0f, line_);
 		}
 		else
@@ -102,39 +102,29 @@ void ConsoleLines::scroll(int lines)
 		currentLine_ = (int) lines_.size();
 }
 
-void ConsoleLines::addLine(const char *text, bool showPointer)
+void ConsoleLines::addLine(const std::string &originalText, bool showPointer)
 {
-	const int bufferSize = 80;
+	LangString langStringText(LANG_STRING(originalText)), buffer;
+
 	int section = 0;
-	int len = (int) strlen(text);
-	if (len < bufferSize)
+	for (const unsigned int *a=langStringText.c_str(); 
+		*a; 
+		a++)
 	{
-		addSmallLine(section++, text, showPointer);
-	}
-	else
-	{
-		static char buffer[bufferSize + 2];
-		int c = 0;
-		const char *a;
-		for (a=text, c=0; *a; a++, c++)
+		if (*a != '\n') buffer.push_back(*a);
+		if (buffer.size() > 80 || (buffer.size() > 65 && *a ==' ') || *a=='\n')
 		{
-			buffer[c] = *a;
-			if ((c==bufferSize) || (c>bufferSize-15 && *a ==' '))
-			{
-				buffer[c+1] = '\0';
-				c=-1;
-				addSmallLine(section++, buffer, showPointer);
-			}
-		}
-		if (buffer[0]) 
-		{
-			buffer[c] = '\0';
 			addSmallLine(section++, buffer, showPointer);
+			buffer.clear();
 		}
+	}
+	if (!buffer.empty()) 
+	{
+		addSmallLine(section++, buffer, showPointer);
 	}
 }
 
-void ConsoleLines::addSmallLine(int sectionNo, const char *text, bool showPointer)
+void ConsoleLines::addSmallLine(int sectionNo, const LangString &text, bool showPointer)
 {
 	ConsoleLine::LineType type = ConsoleLine::eNone;
 	if (showPointer)

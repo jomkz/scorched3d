@@ -21,15 +21,11 @@
 #if !defined(__INCLUDE_ServerCommonh_INCLUDE__)
 #define __INCLUDE_ServerCommonh_INCLUDE__
 
-#include <server/ServerBanned.h>
-#include <common/DefinesString.h>
+#include <common/ChannelText.h>
 
 namespace ServerCommon
 {
 	void startFileLogger();
-	void sendString(unsigned int destinationId, const std::string &text);
-	void sendStringMessage(unsigned int destinationId, const std::string &text);
-	void sendStringAdmin(const std::string &text);
 	void serverLog(const std::string &text);
 	void kickDestination(unsigned int destinationId, const std::string &message = "");
 	void kickPlayer(unsigned int playerId);

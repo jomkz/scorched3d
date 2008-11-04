@@ -34,6 +34,8 @@ public:
 
 	virtual ResourceBundleEntry *getEntry(
 		const std::string &key, const std::string &value);
+	virtual ResourceBundleEntry *getEntry(
+		const std::string &key, const LangString &value);
 
 protected:
 	void init();

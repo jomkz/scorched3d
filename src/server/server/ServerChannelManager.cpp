@@ -26,6 +26,7 @@
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsChannelMessage.h>
 #include <coms/ComsChannelTextMessage.h>
+#include <common/OptionsScorched.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <lang/LangResource.h>
@@ -502,11 +503,15 @@ void ServerChannelManager::actualSend(const ChannelText &constText,
 		for (unsigned int *r = (unsigned int *) filteredText.c_str(); *r; r++)
 		{
 			if (*r == '%' || *r < 0) *r = ' ';
-		}
-		for (unsigned int *r = (unsigned int *) filteredText.c_str(); *r; r++)
-		{
-			if (*r == '[') *r = '(';
+			else if (*r == '[') *r = '(';
 			else if (*r == ']') *r = ')';
+		}
+		if (!ScorchedServer::instance()->getOptionsGame().getAllowMultiLingualChat())
+		{
+			for (unsigned int *r = (unsigned int *) filteredText.c_str(); *r; r++)
+			{
+				if (*r > 127) *r = '?';
+			}
 		}
 	}
 
@@ -611,6 +616,8 @@ bool ServerChannelManager::processMessage(
 		ComsChannelTextMessage textMessage;
 		if (!textMessage.readMessage(reader)) return false;
 		textMessage.getChannelText().setAdminPlayer("");
+		textMessage.getChannelText().setMessageKey("");
+		textMessage.getChannelText().setMessageValue("");
 
 		// Validate that this message came from this tank
 		Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(

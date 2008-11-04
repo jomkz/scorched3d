@@ -262,7 +262,7 @@ void ConsoleImpl::drawText(float width, float top)
 
 void ConsoleImpl::addLine(bool parse, const std::string &text)
 {
-	lines_.addLine(text.c_str(), parse);
+	lines_.addLine(text, parse);
 	if (parse)
 	{
 		rules_.addLine(this, text.c_str());

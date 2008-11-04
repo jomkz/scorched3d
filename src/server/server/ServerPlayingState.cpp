@@ -22,6 +22,7 @@
 #include <server/ServerShotHolder.h>
 #include <server/ServerState.h>
 #include <server/ScorchedServer.h>
+#include <server/ServerChannelManager.h>
 #include <server/TurnController.h>
 #include <server/ServerCommon.h>
 #include <tank/TankContainer.h>
@@ -91,11 +92,13 @@ bool ServerPlayingState::acceptStateChange(const unsigned state,
 						// If the allowed missed moves has been specified
 						if (ScorchedServer::instance()->getOptionsGame().getAllowedMissedMoves() > 0)
 						{
-							ServerCommon::sendString(0, 
-								S3D::formatStringBuffer("Player \"%s\" failed to %s, allowed %i more missed move(s)",
-								tank->getName(),
-								((state == ServerState::ServerStateBuying)?"buy":"move"),
-								ScorchedServer::instance()->getOptionsGame().getAllowedMissedMoves() - movesMissed));
+							ServerChannelManager::instance()->sendText(
+								ChannelText("info",
+									"Player \"{0}\" failed to {1}, allowed {2} more missed move(s)",
+									tank->getName(),
+									((state == ServerState::ServerStateBuying)?"buy":"move"),
+									ScorchedServer::instance()->getOptionsGame().getAllowedMissedMoves() - movesMissed),
+								true);
 
 							// And this player has exceeded them
 							if (movesMissed >= ScorchedServer::instance()->getOptionsGame().getAllowedMissedMoves())

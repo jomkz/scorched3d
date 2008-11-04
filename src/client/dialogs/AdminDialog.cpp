@@ -96,7 +96,11 @@ AdminDialog::AdminDialog() :
 			itor != aiNames.getAis().end();
 			itor++)
 		{
-			aiSelector_->addEntry(GLWSelectorEntry(LANG_STRING(*itor), 0, false, 0, 0, *itor));
+			if (*itor != "Human")
+			{
+				aiSelector_->addEntry(GLWSelectorEntry(
+					LANG_STRING(*itor), 0, false, 0, 0, *itor));
+			}
 		}
 		addButton_ = (GLWTextButton *)
 			botsTab_->addWidget(new GLWTextButton(LANG_RESOURCE("ADD", "Add"), 10, 120, 80, this, 

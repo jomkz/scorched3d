@@ -66,7 +66,7 @@ void ConsoleFileReader::saveConsoleIntoFile(const std::string &filename)
 		itor++)
 	{
 		std::string cleanLine;
-		std::string dirtyLine((*itor)->getLine());
+		std::string dirtyLine(LangStringUtil::convertFromLang((*itor)->getLine()));
 		XMLNode::removeSpecialChars(dirtyLine, cleanLine);
 		if ((*itor)->getLineType() != ConsoleLine::eNone)
 		{

@@ -25,6 +25,7 @@
 #include <webserver/ServerWebHandler.h>
 #include <webserver/ServerWebSettingsHandler.h>
 #include <webserver/ServerWebAppletHandler.h>
+#include <server/ServerChannelManager.h>
 #include <server/ServerCommon.h>
 #include <webserver/ServerWebServerUtil.h>
 #include <server/ScorchedServer.h>
@@ -484,9 +485,12 @@ bool ServerWebServer::validateUser(
 		ServerAdminSessions::SessionParams *adminSession =
 			ServerAdminSessions::instance()->getSession(sid);
 
-		ServerCommon::sendString(0,
-			S3D::formatStringBuffer("server admin \"%s\" logged in",
-			adminSession->credentials.username.c_str()));
+		ServerChannelManager::instance()->sendText(
+			ChannelText("info",
+				"ADMIN_WEB_LOGIN",
+				"server admin \"{0}\" logged in",
+				adminSession->credentials.username.c_str()),
+			true);
 
 		return true;
 	}

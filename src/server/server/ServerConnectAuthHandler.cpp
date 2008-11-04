@@ -20,6 +20,7 @@
 
 #include <server/ServerConnectAuthHandler.h>
 #include <server/ServerConnectHandler.h>
+#include <server/ServerChannelManager.h>
 #include <server/ServerState.h>
 #include <server/ServerBanned.h>
 #include <server/ScorchedServer.h>
@@ -372,8 +373,11 @@ void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,
 			tank->getUniqueId(),
 			tank->getSUI()));
 
-		ServerCommon::sendString(0, S3D::formatStringBuffer("Player connected \"%s\"",
-			tank->getName()));
+		ServerChannelManager::instance()->sendText(
+			ChannelText("info", 
+				"Player connected \"{0}\"",
+				tank->getName()),
+			true);
 	}
 #endif
 
@@ -388,13 +392,21 @@ void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,
 		if (type == ServerBanned::Muted)	
 		{
 			tank->getState().setMuted(true);
-			ServerCommon::sendStringAdmin(S3D::formatStringBuffer("Player admin muted \"%s\"",
-				tank->getName()));
+			ServerChannelManager::instance()->sendText( 
+				ChannelText("admin", 
+					"PLAYER_ADMIN_MUTED", 
+					"Player admin muted \"{0}\"",
+					tank->getName()),
+					true);
 		}
 		else if (type == ServerBanned::Flagged)
 		{
-			ServerCommon::sendStringAdmin(S3D::formatStringBuffer("Player admin flagged \"%s\"",
-				tank->getName()));
+			ServerChannelManager::instance()->sendText( 
+				ChannelText("admin",
+					"PLAYER_ADMIN_FLAGGED",
+					"Player admin flagged \"{0}\"",
+					tank->getName()),
+					true);
 		}
 	}
 }
