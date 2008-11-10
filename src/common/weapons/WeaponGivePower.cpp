@@ -72,7 +72,7 @@ void WeaponGivePower::weaponCallback(
 		ChannelText text("combat", 
 			LANG_RESOURCE_2("TANK_GET_POWER",
 			"[p:{0}] received {1} power", 
-			tank->getName(), 
+			tank->getTargetName(), 
 			S3D::formatStringBuffer("%.0f", power.asFloat())));
 		ChannelManager::showText(context, text);
 	}

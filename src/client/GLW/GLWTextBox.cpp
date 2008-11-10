@@ -29,12 +29,12 @@ REGISTER_CLASS_SOURCE(GLWTextBox);
 
 GLWTextBox::GLWTextBox(float x, float y, float w, 
 	const LangString &startText, unsigned int flags) :
-	GLWidget(x, y, w, 25.0f), ctime_(0.0f), text_(startText), 
+	GLWidget(x, y, w, 25.0f), ctime_(0.0f),
 	flags_(flags),
 	cursor_(false), maxTextLen_(0), handler_(0),
-	current_(true)
+	current_(true), allowUnicode_(true)
 {
-
+	setText(startText);
 }
 
 GLWTextBox::~GLWTextBox()
@@ -92,7 +92,7 @@ void GLWTextBox::keyDown(char *buffer, unsigned int keyState,
 			if (!text_.empty())
 			{
 				text_ = text_.substr(0, text_.length() - 1);
-				if (handler_) handler_->textChanged(id_, text_.c_str());
+				if (handler_) handler_->textChanged(id_, text_);
 			}
 		}
 		else if (dik == SDLK_TAB)
@@ -122,12 +122,12 @@ void GLWTextBox::keyDown(char *buffer, unsigned int keyState,
 
 			break;
 		}
-		else if (unicodeKey >= ' ')
+		else if (unicodeKey >= ' ' && (unicodeKey <= 127 || allowUnicode_))
 		{
 			if ((maxTextLen_==0) || ((int) text_.size() < maxTextLen_))
 			{
 				text_ += unicodeKey;
-				if (handler_) handler_->textChanged(id_, text_.c_str());
+				if (handler_) handler_->textChanged(id_, text_);
 			}
 		}
 		else 
@@ -156,7 +156,14 @@ void GLWTextBox::mouseDown(int button, float x, float y, bool &skipRest)
 void GLWTextBox::setText(const LangString &text)
 { 
 	text_ = text; 
-	if (handler_) handler_->textChanged(id_, text_.c_str());
+	if (!allowUnicode_)
+	{
+		for (unsigned int *c=(unsigned int *) text.c_str(); *c; c++)
+		{
+			if (*c > 127) *c = '?';
+		}
+	}
+	if (handler_) handler_->textChanged(id_, text_);
 }
 
 void GLWTextBox::setParent(GLWPanel *parent)

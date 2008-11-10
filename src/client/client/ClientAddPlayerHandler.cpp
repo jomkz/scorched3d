@@ -89,7 +89,8 @@ bool ClientAddPlayerHandler::processMessage(
 			tank->getState().setMuted(true);
 		}
 
-		Logger::log(S3D::formatStringBuffer("Tank connected \"%s\"", tank->getName()));
+		Logger::log(S3D::formatStringBuffer("Tank connected \"%s\"", 
+			tank->getCStrName().c_str()));
 	}
 	else
 	{

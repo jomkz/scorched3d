@@ -450,30 +450,35 @@ void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
 	}
 
 	// Form the name
-	static char name[256];
-	// Max strcat usage 12
-	snprintf(name, sizeof(name) - 12, "%s", current->getName());
+	static LangString name;
+
+	// Max length 12
+	if (current->getTargetName().size() > 12) 
+		name = current->getTargetName().substr(0, 12);
+	else
+		name = current->getTargetName();
+
 	if (finished && ! ClientParams::instance()->getConnectedToServer())
 	{
-		strcat(name, " (");
+		name.append(LANG_STRING(" ("));
 		Tank *serverTank = 
 			ScorchedServer::instance()->getTankContainer().getTankById(
 			current->getPlayerId());
 		TankAI *tankAI = serverTank->getTankAI();
-		if (tankAI) strcat(name, tankAI->getName());
-		else strcat(name, "Human");
-		strcat(name, ")");
+		if (tankAI) name.append(LANG_STRING(tankAI->getName()));
+		else name.append(LANG_RESOURCE("HUMAN", "Human"));
+		name.append(LANG_STRING(")"));
 	}
 	else if (current->getState().getState() != TankState::sNormal)
 	{
-		strcat(name, " (");
-		strcat(name, current->getState().getSmallStateString());
-		strcat(name, ")");
+		name.append(LANG_STRING(" ("));
+		name.append(current->getState().getSmallStateLangString());
+		name.append(LANG_STRING(")"));
 	}
 
 	if (current->getState().getSpectator())
 	{
-		name[50] = '\0'; // Limit length
+		if (name.size() > 50) name = name.substr(0, 50); // Limit length
 
 		// Print the name on the screen
 		GLWFont::instance()->getGameFont()->draw(
@@ -490,7 +495,7 @@ void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
 	}
 	else
 	{
-		name[26] = '\0'; // Limit length
+		if (name.size() > 25) name = name.substr(0, 25); // Limit length
 
 		GLState state(GLState::TEXTURE_ON);
 		glColor3f(1.0f, 1.0f, 1.0f);

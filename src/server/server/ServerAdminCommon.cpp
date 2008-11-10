@@ -68,7 +68,8 @@ static void internalBanPlayer(ServerAdminSessions::Credential &credential,
 		if (ipAddress != 0)
 		{	
 			ScorchedServerUtil::instance()->bannedPlayers.
-				addBanned(ipAddress, tank->getName(), tank->getUniqueId(), tank->getSUI(), 
+				addBanned(ipAddress, tank->getTargetName(), 
+					tank->getUniqueId(), tank->getSUI(), 
 					type, credential.username.c_str(), reason);
 			if (type == ServerBanned::Banned)
 			{
@@ -104,7 +105,7 @@ bool ServerAdminCommon::kickPlayer(ServerAdminSessions::Credential &credential, 
 		"ADMIN_KICK",
 		"\"{0}\" admin kick \"{1}\"",
 		credential.username,
-		targetTank->getName()));
+		targetTank->getTargetName()));
 	ServerCommon::kickPlayer(
 		targetTank->getPlayerId());
 
@@ -121,7 +122,7 @@ bool ServerAdminCommon::poorPlayer(ServerAdminSessions::Credential &credential, 
 		"ADMIN_POOR",
 		"\"{0}\" admin poor \"{1}\"",
 		credential.username,
-		targetTank->getName()));
+		targetTank->getTargetName()));
 	targetTank->getScore().setMoney(0);
 
 	return true;
@@ -139,7 +140,7 @@ bool ServerAdminCommon::banPlayer(ServerAdminSessions::Credential &credential, u
 		"ADMIN_BAN",
 		"\"{0}\" admin ban \"{1}\"",
 		credential.username,
-		targetTank->getName()));
+		targetTank->getTargetName()));
 	internalBanPlayer(
 		credential,
 		targetTank->getPlayerId(), 
@@ -159,7 +160,7 @@ bool ServerAdminCommon::slapPlayer(ServerAdminSessions::Credential &credential, 
 		"ADMIN_SLAP",
 		"\"{0}\" admin slap \"{1}\" {2}",
 		credential.username,
-		targetTank->getName(),
+		targetTank->getTargetName(),
 		slap));
 	targetTank->getLife().setLife(
 		targetTank->getLife().getLife() - fixed(int(slap)));
@@ -177,7 +178,7 @@ bool ServerAdminCommon::flagPlayer(ServerAdminSessions::Credential &credential, 
 		"ADMIN_FLAG",
 		"\"{0}\" admin flag \"{1}\"",
 		credential.username,
-		targetTank->getName()));
+		targetTank->getTargetName()));
 	internalBanPlayer(
 		credential,
 		targetTank->getPlayerId(), 
@@ -197,7 +198,7 @@ bool ServerAdminCommon::mutePlayer(ServerAdminSessions::Credential &credential, 
 		mute?"ADMIN_MUTE":"ADMIN_UNMUTE",
 		mute?"\"{0}\" admin mute \"{0}\"":"\"{0}\" admin unmute \"{0}\"",
 		credential.username,
-		targetTank->getName()));
+		targetTank->getTargetName()));
 	targetTank->getState().setMuted(mute); 
 
 	return true;
@@ -213,7 +214,7 @@ bool ServerAdminCommon::permMutePlayer(ServerAdminSessions::Credential &credenti
 		"ADMIN_PERMMUTE",
 		"\"{0}\" admin permmute \"{1}\"",
 		credential.username,
-		targetTank->getName()));
+		targetTank->getTargetName()));
 	internalBanPlayer(
 		credential,
 		targetTank->getPlayerId(),
@@ -234,7 +235,7 @@ bool ServerAdminCommon::unpermMutePlayer(ServerAdminSessions::Credential &creden
 		"ADMIN_UNPERMMUTE",
 		"\"{0}\" admin unpermmute \"{1}\"",
 		credential.username,
-		targetTank->getName()));
+		targetTank->getTargetName()));
 	internalBanPlayer(
 		credential,
 		targetTank->getPlayerId(),

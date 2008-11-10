@@ -135,10 +135,10 @@ void TankAIAdder::addTankAI(ScorchedServer &context, const char *aiName)
 		}
 
 		// For the tank ai's name
-		std::string newname = 
-			context.getOptionsGame().getBotNamePrefix();
-		newname += TankAIStrings::instance()->getAIPlayerName(
-			ScorchedServer::instance()->getContext());
+		LangString newname = 
+			LANG_STRING(context.getOptionsGame().getBotNamePrefix());
+		newname += LANG_STRING(TankAIStrings::instance()->getAIPlayerName(
+			ScorchedServer::instance()->getContext()));
 
 		// Form the tank ai model
 		Vector color = TankColorGenerator::instance()->getNextColor(
@@ -151,7 +151,7 @@ void TankAIAdder::addTankAI(ScorchedServer &context, const char *aiName)
 			context.getContext(),
 			getNextTankId(uniqueId, context.getContext()),
 			0,
-			newname.c_str(),
+			newname,
 			color,
 			tankModel->getName(),
 			tankModel->getTypeName());
@@ -171,7 +171,7 @@ void TankAIAdder::addTankAI(ScorchedServer &context, const char *aiName)
 		Logger::log(S3D::formatStringBuffer("Player connected dest=\"%i\" id=\"%i\" name=\"%s\" unique=[%s]",
 			tank->getDestinationId(),
 			tank->getPlayerId(),
-			tank->getName(),
+			tank->getCStrName().c_str(),
 			tank->getUniqueId()));
 
 		StatsLogger::instance()->tankConnected(tank);
@@ -182,7 +182,7 @@ void TankAIAdder::addTankAI(ScorchedServer &context, const char *aiName)
 			// Tell the clients to create this tank
 			ComsAddPlayerMessage addPlayerMessage(
 				tank->getPlayerId(),
-				tank->getName(),
+				tank->getTargetName(),
 				tank->getColor(),
 				tank->getModelContainer().getTankModelName(),
 				tank->getModelContainer().getTankTypeName(),

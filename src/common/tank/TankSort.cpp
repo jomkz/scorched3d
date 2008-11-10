@@ -27,13 +27,13 @@
 #include <common/OptionsScorched.h>
 
 int TankSort::compare(ScorchedContext &context,
-		const char *nameX, TankScore &scoreX,
-		const char *nameY, TankScore &scoreY)
+		const LangString &nameX, TankScore &scoreX,
+		const LangString &nameY, TankScore &scoreY)
 {
 	if (scoreX.getScore() > scoreY.getScore()) return 1;
 	if (scoreX.getScore() == scoreY.getScore())
 	{
-		return strcmp(nameX, nameY);
+		return LangStringUtil::strcmp(nameX, nameY);
 	}
 	return -1;
 }
@@ -48,7 +48,8 @@ bool TankSort::SortOnScore::operator()(const Tank *x, const Tank *y, ScorchedCon
 	if (tankX.getState().getSpectator() &&
 		tankY.getState().getSpectator())
 	{
-		if (strcmp(((Tank *)x)->getName(), ((Tank *)y)->getName()) < 0) return true;
+		if (LangStringUtil::strcmp(((Tank *)x)->getTargetName(), 
+			((Tank *)y)->getTargetName()) < 0) return true;
 		return false;
 	}
 	else if (tankX.getState().getSpectator())
@@ -61,8 +62,8 @@ bool TankSort::SortOnScore::operator()(const Tank *x, const Tank *y, ScorchedCon
 	}
 
 	int compareResult = compare(context, 
-		tankX.getName(), scoreX, 
-		tankY.getName(), scoreY);
+		tankX.getTargetName(), scoreX, 
+		tankY.getTargetName(), scoreY);
 	return (compareResult > 0);
 }
 

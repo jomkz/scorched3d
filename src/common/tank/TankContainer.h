@@ -41,7 +41,7 @@ public:
 
 	Tank *removeTank(unsigned int playerId);
 	Tank *getTankById(unsigned int id);
-	Tank *getTankByName(const char *name);
+	Tank *getTankByName(const LangString &name);
 	
 	void clientNewGame();
 	

@@ -177,7 +177,7 @@ void TankMenus::showInventory()
 		Tank *tank = (*itor).second;
 		Console::instance()->addLine(false,
 			S3D::formatStringBuffer("--%s------------------------------------",
-			tank->getName()));
+			tank->getCStrName().c_str()));
 
 		std::list<Accessory *> accessories;
 		tank->getAccessories().getAllAccessories(accessories);
@@ -212,7 +212,7 @@ void TankMenus::showTargetDetails()
 	{
 		Target *target = (*itor).second;
 
-		std::string name = target->getName();
+		std::string name = target->getCStrName();
 		if (target->isTarget() &&
 			target->getRenderer() &&
 			name.empty())
@@ -280,7 +280,7 @@ void TankMenus::showTankDetails()
 			tank->getPlayerId(),
 			currentTank == tank?'>':' ',
 			description,
-			tank->getName(), 
+			tank->getCStrName().c_str(), 
 			tank->getModelContainer().getTankModelName());
 		Console::instance()->addLine(false, buffer);
 	}

@@ -108,9 +108,9 @@ void ServerCommon::kickPlayer(unsigned int playerId)
 		ServerChannelManager::instance()->sendText(ChannelText("info", 
 			"ADMIN_PLAYER_KICKED", 
 			"Player \"{0}\" has been kicked from the server",
-			tank->getName()), true);
+			tank->getTargetName()), true);
 		Logger::log(S3D::formatStringBuffer("Kicking client \"%s\" \"%i\"", 
-			tank->getName(), tank->getPlayerId()));
+			tank->getCStrName().c_str(), tank->getPlayerId()));
 
 		if (tank->getDestinationId() == 0)
 		{

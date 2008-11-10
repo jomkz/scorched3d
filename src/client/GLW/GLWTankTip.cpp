@@ -321,6 +321,23 @@ void TankShieldTip::itemSelected(GLWSelectorEntry *entry, int position)
 			((Accessory *)entry->getUserData())->getAccessoryId());
 }
 
+TankRankTip::TankRankTip(Tank *tank) : 
+	tank_(tank)
+{
+}
+
+TankRankTip::~TankRankTip()
+{
+}
+
+void TankRankTip::populate()
+{
+	setText(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("RANK", "Rank"),
+		LANG_RESOURCE("RANK_TOOLTIP",
+		"The current online ranking of this player"));
+}
+
 TankHealthTip::TankHealthTip(Tank *tank) : 
 	tank_(tank)
 {
@@ -650,7 +667,7 @@ void TankTip::populate()
 			S3D::formatStringBuffer("%i", tank_->getScore().getRank())));
 	}
 
-	setText(ToolTip::ToolTipInfo, LANG_STRING(tank_->getName()), tip.c_str());
+	setText(ToolTip::ToolTipInfo, tank_->getTargetName(), tip.c_str());
 }
 
 TargetTip::TargetTip(Target *target) : 
@@ -666,7 +683,7 @@ void TargetTip::populate()
 {
 	LangString tip;
 	generateTargetTip(tip, target_);
-	setText(ToolTip::ToolTipInfo, LANG_STRING(target_->getName()), tip.c_str());
+	setText(ToolTip::ToolTipInfo, target_->getTargetName(), tip);
 }
 
 GLWTargetTips::GLWTargetTips(Target *target) : 
@@ -691,6 +708,7 @@ GLWTankTips::GLWTankTips(Tank *tank) :
 	shieldTip(tank),
 	batteryTip(tank),
 	fuelTip(tank),
+	rankTip(tank),
 	nameTip(ToolTip::ToolTipHelp, 
 		LANG_RESOURCE("PLAYER_NAME", "Player Name"),
 		LANG_RESOURCE("PLAYER_CURRENTLY_PLAYING", 

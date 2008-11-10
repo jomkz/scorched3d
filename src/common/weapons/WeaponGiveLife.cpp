@@ -80,7 +80,7 @@ void WeaponGiveLife::weaponCallback(
 			ChannelText text("combat", 
 				LANG_RESOURCE_2("TANK_GET_LIFE",
 				"[p:{0}] received {1} life", 
-				tank->getName(), 
+				tank->getTargetName(), 
 				S3D::formatStringBuffer("%.0f", life.asFloat())));
 			ChannelManager::showText(context, text);
 		}
@@ -102,7 +102,7 @@ void WeaponGiveLife::weaponCallback(
 			ChannelText text("combat", 
 				LANG_RESOURCE_2("TANK_LOST_LIFE",
 				"[p:{0}] lost {1} life", 
-				tank->getName(), 
+				tank->getTargetName(), 
 				S3D::formatStringBuffer("%.0f", -life.asFloat())));
 			ChannelManager::showText(context, text);
 		}

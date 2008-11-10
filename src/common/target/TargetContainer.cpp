@@ -45,8 +45,8 @@ void TargetContainer::internalAddTarget(Target *target)
 			S3D::formatStringBuffer("Duplicate target %u being added to container.\n"
 			"Original :%s, this %s",
 			target->getPlayerId(),
-			original->getName(),
-			target->getName()));
+			original->getCStrName().c_str(),
+			target->getCStrName().c_str()));
 	}
 
 	targets_[target->getPlayerId()] = target;

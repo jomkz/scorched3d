@@ -49,7 +49,7 @@ static void addTank(lua_State *L, Tank *tank)
 	lua_newtable(L);
 
 	lua_pushstring(L, "name");
-	lua_pushstring(L, tank->getName());
+	lua_pushstring(L, tank->getCStrName().c_str());
 	lua_settable(L, -3);
 
 	lua_pushstring(L, "id");

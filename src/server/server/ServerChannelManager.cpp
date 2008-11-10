@@ -524,7 +524,7 @@ void ServerChannelManager::actualSend(const ChannelText &constText,
 		{
 			logtext = S3D::formatStringBuffer("[%s][%s] : \"%s\"", 
 				text.getChannel().c_str(),
-				tank->getName(),
+				tank->getCStrName().c_str(),
 				logMessage.c_str());
 		}
 		else if (text.getAdminPlayer()[0])
@@ -706,9 +706,13 @@ bool ServerChannelManager::processMessage(
 				sendText(textMessage.getChannelText(), 
 					destTank->getDestinationId(), true);
 
-				// And the the sender
-				sendText(textMessage.getChannelText(), 
-					tank->getDestinationId(), true);
+				// And the the sender (if different)
+				if (tank->getDestinationId() !=
+					destTank->getDestinationId())
+				{
+					sendText(textMessage.getChannelText(), 
+						tank->getDestinationId(), true);
+				}
 			}
 		}
 		else

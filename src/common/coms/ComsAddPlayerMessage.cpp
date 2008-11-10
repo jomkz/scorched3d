@@ -27,7 +27,7 @@ ComsAddPlayerMessage::ComsAddPlayerMessage() :
 
 ComsAddPlayerMessage::ComsAddPlayerMessage(
 		unsigned int playerId,
-		const char *playerName,
+		const LangString &playerName,
 		Vector playerColor,
 		const char *modelName,
 		const char *typeName,

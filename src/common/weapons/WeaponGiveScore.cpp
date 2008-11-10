@@ -77,7 +77,7 @@ void WeaponGiveScore::weaponCallback(
 			ChannelText text("combat", 
 				LANG_RESOURCE_2("TANK_GET_SCORE",
 				"[p:{0}] received {1} bonus score", 
-				tank->getName(), 
+				tank->getTargetName(), 
 				S3D::formatStringBuffer("%i", score_)));
 			ChannelManager::showText(context, text);
 		}
@@ -86,7 +86,7 @@ void WeaponGiveScore::weaponCallback(
 			ChannelText text("combat", 
 				LANG_RESOURCE_2("TANK_LOST_SCORE",
 				"[p:{0}] lost {1} bonus score", 
-				tank->getName(), 
+				tank->getTargetName(), 
 				S3D::formatStringBuffer("%i", -score_)));
 			ChannelManager::showText(context, text);
 		}

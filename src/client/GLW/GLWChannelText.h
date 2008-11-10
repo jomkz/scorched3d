@@ -77,7 +77,7 @@ protected:
 	bool createdTexture_;
 	int maxTextLen_;
 	unsigned int whisperDest_;
-	std::string whisperDestStr_;
+	LangString whisperDestStr_;
 
 	void processNotVisibleKey(unsigned int unicode, unsigned int dik, bool &skipRest);
 	void processVisibleKey(unsigned int unicode, unsigned int dik);

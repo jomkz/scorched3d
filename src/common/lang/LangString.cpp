@@ -154,6 +154,20 @@ void LangStringUtil::lowercase(LangString &str1)
 
 int LangStringUtil::strcmp(const LangString &str1, const LangString &str2)
 {
+	if (str1.size() < str2.size()) return -1;
+	if (str1.size() > str2.size()) return 1;
+
+	for (const unsigned int *c1 = str1.c_str(),
+		*c2 = str2.c_str();
+		*c1, *c2;
+		c1++, c2++)
+	{
+		if (c1 < c2) return -1;
+		if (c1 > c2) return 1;
+	}
+
+	return 0;
+	
 	return (str1 == str2)?0:1;
 }
 
@@ -187,4 +201,13 @@ unsigned int *LangStringUtil::stristr(const unsigned int *str1, const LangString
 	unsigned int pos = str1l.find(str2l);
 	if (pos == LangString::npos) return 0;
 	return (unsigned int*)(str1 + pos);
+}
+
+void LangStringUtil::trim(LangString &value)
+{
+	int start = value.find_first_not_of(LANG_STRING(" \t\n"));
+	int end = value.find_last_not_of(LANG_STRING(" \t\n"));
+	if (start == LangString::npos) value.clear();
+	else if (end == LangString::npos) value.clear();
+	else value = LangString(value, start, end-start+1);
 }

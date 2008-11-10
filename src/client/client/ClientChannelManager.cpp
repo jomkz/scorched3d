@@ -333,12 +333,13 @@ bool ClientChannelManager::processMessage(
 		if (tank && tank->getState().getMuted()) return true;
 
 		// Log this message
-		std::string mes(LangStringUtil::convertFromLang(textMessage.getChannelText().getMessage()));
+		std::string mes(LangStringUtil::convertFromLang(
+			textMessage.getChannelText().getMessage()));
 		if (tank)
 		{
 			Logger::log(S3D::formatStringBuffer("[%s][%s] : %s",
 				textMessage.getChannelText().getChannel().c_str(),
-				tank->getName(),
+				tank->getCStrName().c_str(),
 				mes.c_str()));
 		}
 		else

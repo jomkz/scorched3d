@@ -92,13 +92,26 @@ bool ServerPlayingState::acceptStateChange(const unsigned state,
 						// If the allowed missed moves has been specified
 						if (ScorchedServer::instance()->getOptionsGame().getAllowedMissedMoves() > 0)
 						{
-							ServerChannelManager::instance()->sendText(
-								ChannelText("info",
-									"Player \"{0}\" failed to {1}, allowed {2} more missed move(s)",
-									tank->getName(),
-									((state == ServerState::ServerStateBuying)?"buy":"move"),
-									ScorchedServer::instance()->getOptionsGame().getAllowedMissedMoves() - movesMissed),
-								true);
+							if (state == ServerState::ServerStateBuying)
+							{
+								ServerChannelManager::instance()->sendText(
+									ChannelText("info",
+										"PLAYER_MISSED_BUY",
+										"Player \"{0}\" failed to buy, allowed {1} more missed move(s)",
+										tank->getTargetName(),
+										ScorchedServer::instance()->getOptionsGame().getAllowedMissedMoves() - movesMissed),
+									true);
+							}
+							else
+							{
+								ServerChannelManager::instance()->sendText(
+									ChannelText("info",
+										"PLAYER_MISSED_SHOOT",
+										"Player \"{0}\" failed to shoot, allowed {1} more missed move(s)",
+										tank->getTargetName(),
+										ScorchedServer::instance()->getOptionsGame().getAllowedMissedMoves() - movesMissed),
+									true);
+							}
 
 							// And this player has exceeded them
 							if (movesMissed >= ScorchedServer::instance()->getOptionsGame().getAllowedMissedMoves())

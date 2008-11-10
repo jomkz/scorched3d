@@ -76,6 +76,7 @@ public:
 	
 	const char *getStateString();
 	const char *getSmallStateString();
+	LangString &getSmallStateLangString();
 
 	// Serialize the tank
 	bool writeMessage(NetBuffer &buffer);

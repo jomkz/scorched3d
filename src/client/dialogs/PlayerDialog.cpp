@@ -114,6 +114,8 @@ PlayerDialog::PlayerDialog() :
 	playerName_->setMaxTextLen(22);
 	playerName_->setToolTip(nameTip);
 	playerName_->setName("Name");
+	playerName_->setAllowUnicode(
+		ScorchedClient::instance()->getOptionsGame().getAllowMultiLingualNames());
 	
 	// Create team choice
 	ToolTip *teamTip = new ToolTip(ToolTip::ToolTipHelp, 
@@ -309,7 +311,7 @@ void PlayerDialog::nextPlayer()
 	else
 	{
 		// Else use the default names
-		if (tank) playerName_->setText(LANG_STRING(tank->getName()));
+		if (tank) playerName_->setText(tank->getTargetName());
 	}
 		
 	if (tank->getState().getSpectator())
@@ -421,7 +423,7 @@ void PlayerDialog::buttonDown(unsigned int id)
 
 			// Add this player
 			ComsAddPlayerMessage message(currentPlayerId_,
-				playerName_->getText().c_str(),
+				playerName_->getLangString(),
 				colorDropDown_->getCurrentColor(),
 				model->getName(),
 				model->getTypeName(),

@@ -139,7 +139,7 @@ void BuyAccessoryDialog::addPlayerName()
 	if (!tank) return;
 	flag_ = (GLWFlag *) topPanel_->addWidget(new GLWFlag(tank->getColor(), 5, 15, 60));
 	flag_->setOffset(flagOffset);
-	topPanel_->addWidget(new GLWLabel(75, 10, LANG_STRING(tank->getName())));
+	topPanel_->addWidget(new GLWLabel(75, 10, tank->getTargetName()));
 	topPanel_->addWidget(new GLWLabel(260, 20, 
 		LANG_STRING(S3D::formatStringBuffer("$%i", tank->getScore().getMoney()))));
 	topPanel_->addWidget(new GLWLabel(260, 0, 

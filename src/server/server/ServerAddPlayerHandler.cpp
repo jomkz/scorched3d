@@ -122,32 +122,28 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 	}
 
 	// Setup the new player
-	std::string name(message.getPlayerName());
+	LangString name(message.getPlayerName());
 	filterName(tank, name);
-	if (name != tank->getName())
-	{
-		getUniqueName(tank, name);
 
-		// Tell this computer that a new tank has connected
 #ifdef S3D_SERVER
-		{
-			Logger::log(S3D::formatStringBuffer("Player playing dest=\"%i\" id=\"%i\" \"%s\"->\"%s\"",
-				tank->getDestinationId(), tank->getPlayerId(),
-				tank->getName(), name.c_str()));
+	// Tell this computer that a new tank has connected
+	if (name != tank->getTargetName())
+	{
+		Logger::log(S3D::formatStringBuffer(
+			"Player playing dest=\"%i\" id=\"%i\" \"%s\"->\"%s\"",
+			tank->getDestinationId(), tank->getPlayerId(),
+			tank->getCStrName().c_str(), name.c_str()));
 
-			if (name != tank->getName())
-			{
-				ServerChannelManager::instance()->sendText( 
-					ChannelText("info",
-						"PLAYER_NAME_CHANGE",
-						"Player changed name \"{0}\"->\"{1}\"",
-						tank->getName(), name),
-					true);
-			}
-		}
-#endif // #ifdef S3D_SERVER
+		ServerChannelManager::instance()->sendText( 
+			ChannelText("info",
+				"PLAYER_NAME_CHANGE",
+				"Player \"{0}\" changed name to \"{1}\"",
+				tank->getTargetName(), name),
+			true);
 	}
-	tank->setName(name.c_str());
+#endif // #ifdef S3D_SERVER
+
+	tank->setName(name);
 
 	// Player has set a new color
 	if (tank->getTeam() == 0 &&
@@ -196,7 +192,7 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 				ChannelText("info",
 					"WELCOME_BACK",
 					"Welcome back {0}, you are ranked {1}",
-					tank->getName(), rank.rank),
+					tank->getTargetName(), rank.rank),
 				true);
 		}
 
@@ -206,7 +202,7 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 				ChannelText("info",
 					"PLAYER_PLAYING",
 					"Player playing \"{0}\"",
-					tank->getName()),
+					tank->getTargetName()),
 				true);
 
 			if (ScorchedServer::instance()->getGameState().getState() == 
@@ -261,63 +257,69 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 	return true;
 }
 
-void ServerAddPlayerHandler::filterName(Tank *tank,
-	std::string &sentname)
+bool ServerAddPlayerHandler::filterName(Tank *tank,
+	LangString &sentname)
 {
+	LangString originalname = sentname;
+
+	// Remove spaces from the front and end of the name 
+	LangStringUtil::trim(sentname);
+
 	// Ensure this name does not have any "bad" words in it
-	LangString sentNameLangString(LANG_STRING(sentname));
-	ScorchedServerUtil::instance()->textFilter.filterString(sentNameLangString);
-	sentname = LangStringUtil::convertFromLang(sentNameLangString);
+	ScorchedServerUtil::instance()->textFilter.filterString(sentname);
 
-	// Form the correct player name
-	// Remove spaces from the front of the name and
-	// unwanted characters from middle
-	char *nameBeginning = (char *) sentname.c_str();
-	while (*nameBeginning == ' ') nameBeginning++;
-
-	char *nameEnding = nameBeginning + strlen(nameBeginning);
-	while (*nameEnding == ' ' || *nameEnding == '\0') { *nameEnding = '\0'; nameEnding--; }
-
-	char *nameMiddle = nameBeginning;
-	for (;*nameMiddle; nameMiddle++)
+	// Remove unwanted characters from middle
+	for (unsigned int *c = (unsigned int *) sentname.c_str(); *c;  c++)
 	{
-		if (*nameMiddle == '\"') *nameMiddle = '\'';
-		else if (*nameMiddle == ']') *nameMiddle = ')';
-		else if (*nameMiddle == '[') *nameMiddle = '(';
-		else if (*nameMiddle == '%') *nameMiddle = '$'; // Save problems with special chars
+		if (*c == '\"') *c = '\'';
+		else if (*c == ']') *c = ')';
+		else if (*c == '[') *c = '(';
+		else if (*c == '%') *c = '$'; // Save problems with special chars
+		if (!ScorchedServer::instance()->getOptionsGame().getAllowMultiLingualNames())
+		{
+			if (*c > 127) *c = '?';
+		}
 	}
 
 	// Ensure this name does not have the bot name in it
-	const char *botPrefix = 
-		ScorchedServer::instance()->getOptionsGame().getBotNamePrefix();
-	char *botPrefixPos = S3D::stristr(sentname.c_str(), botPrefix);
+	LangString botPrefix = 
+		LANG_STRING(ScorchedServer::instance()->getOptionsGame().getBotNamePrefix());
+	unsigned int *botPrefixPos = LangStringUtil::stristr(sentname.c_str(), botPrefix);
 	if (botPrefixPos)
 	{
-		for (int i=0; i<(int) strlen(botPrefix); i++, botPrefixPos++)
+		for (int i=0; i<(int) botPrefix.size(); i++, botPrefixPos++)
 		{
-			(*botPrefixPos) = ' ';
+			(*botPrefixPos) = '*';
 		}
 	}		
 
 	// Check the client provides a name with a least 1 char in it
 	// and the name is less than 16 chars
-	std::string playerName;
-	int nameLen = strlen(nameBeginning);
-	if (nameLen == 0) playerName = "NoName";
-	else if (nameLen < 22) playerName = nameBeginning;
-	else playerName.append(nameBeginning, 22);
+	if (sentname.size() == 0) sentname = LANG_STRING("NoName");
+	if (sentname.size() > 22) sentname = sentname.substr(0, 22);
 
-	sentname = playerName;
-}
-
-void ServerAddPlayerHandler::getUniqueName(Tank *tank,
-	std::string &playerName)
-{
 	// Make sure no-one has the same name
-	while (ScorchedServer::instance()->getTankContainer().
-		getTankByName(playerName.c_str()))
+	for (;;)
 	{
-		playerName += "(2)";
+		bool found = false;
+		std::map<unsigned int, Tank *>::iterator mainitor;
+		std::map<unsigned int, Tank *> tanks = 
+			ScorchedServer::instance()->getTankContainer().getAllTanks();
+		for (mainitor = tanks.begin();
+			mainitor != tanks.end();
+			mainitor++)
+		{
+			Tank *currentTank = (*mainitor).second;
+			if (currentTank->getTargetName() == sentname &&
+				tank != currentTank) 
+			{
+				found = true;
+				break;
+			}
+		}
+
+		if (!found) break;
+		sentname += LANG_STRING("(2)");
 	}
 
 	// Make sure that no-one else has the same registered name
@@ -329,10 +331,12 @@ void ServerAddPlayerHandler::getUniqueName(Tank *tank,
 		if (authHandler)
 		{
 			while (!authHandler->authenticateUserName(tank->getUniqueId(),
-				playerName.c_str()))
+				sentname))
 			{
-				playerName += "(2)";
+				sentname += LANG_STRING("(2)");
 			}
 		}
 	}
+
+	return (sentname != originalname);
 }

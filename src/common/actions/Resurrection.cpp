@@ -63,9 +63,8 @@ void Resurrection::simulate(fixed frameTime, bool &remove)
 				LANG_RESOURCE_2(
 					"TANK_RESURRECTED", 
 					"[p:{0}] was resurrected, {1} lives remaining",
-					tank->getName(),
+					tank->getTargetName(),
 					S3D::formatStringBuffer("%i", tank->getState().getLives())));
-			//info.setPlayerId(playerId_);
 			ChannelManager::showText(*context_, text);
 		}
 #endif

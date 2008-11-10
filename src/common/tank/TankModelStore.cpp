@@ -157,7 +157,6 @@ TankModel *TankModelStore::getRandomModel(int team, bool ai)
 		itor++)
 	{
 		TankModel *model = (*itor);
-
 		if (strcmp(model->getName(), "Random") != 0)
 		{
 			if (model->isOfTeam(team) && 

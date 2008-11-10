@@ -39,7 +39,7 @@ public:
 	virtual bool authenticateUser(ComsConnectAuthMessage &authMessage, 
 		std::string &message);
 	virtual bool authenticateUserName(const char *uniqueId, 
-		const char *playername);
+		const LangString &playername);
 	virtual void banUser(const char *uniqueId);
 
 protected:

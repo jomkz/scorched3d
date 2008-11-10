@@ -29,7 +29,9 @@ void S3D::trim(std::string &value)
 {
 	int start = value.find_first_not_of(" \t\n");
 	int end = value.find_last_not_of(" \t\n");
-	value = std::string(value, start, end-start+1);
+	if (start == std::string::npos) value = "";
+	else if (end == std::string::npos) value = "";
+	else value = std::string(value, start, end-start+1);
 }
 
 char *S3D::stristr(const char *x, const char *y)

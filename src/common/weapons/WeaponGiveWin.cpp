@@ -99,7 +99,7 @@ void WeaponGiveWin::weaponCallback(
 			ChannelText text("combat", 
 				LANG_RESOURCE_2("TANK_SINGLE_WIN",
 				"[p:{0}] {1} and won the game", 
-				tank->getName(), 
+				tank->getTargetName(), 
 				objective_));
 			ChannelManager::showText(context, text);
 		}

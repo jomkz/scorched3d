@@ -265,7 +265,8 @@ bool ComsSyncCheckMessage::readMessage(NetBufferReader &reader)
 					tmpBuffer.getBuffer()[i] != reader.getBuffer()[reader.getReadSize() + i])
 				{
 					syncCheckLog(S3D::formatStringBuffer("SyncCheck %i - Targets values differ : %u:%s, position %i", 
-							syncCount, playerId, target->getName(), i));
+							syncCount, playerId, 
+							target->getCStrName().c_str(), i));
 
 					different = true;
 					Logger::addLogger(syncCheckFileLogger);
@@ -285,7 +286,7 @@ bool ComsSyncCheckMessage::readMessage(NetBufferReader &reader)
 
 		if (target->isTarget())
 		{
-			static Target *tmpTarget = new Target(0, "",
+			static Target *tmpTarget = new Target(0, LangString(),
 				ScorchedClient::instance()->getContext());
 			if (!tmpTarget->readMessage(reader)) return false;
 			tmpTarget->getLife().setLife(0);
@@ -296,7 +297,7 @@ bool ComsSyncCheckMessage::readMessage(NetBufferReader &reader)
 				ScorchedClient::instance()->getContext(),
 				0,
 				0, 
-				"",
+				LangString(),
 				Vector::getNullVector(),
 				"",
 				"");

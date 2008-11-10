@@ -34,7 +34,9 @@
 #include <common/ToolTip.h>
 #include <common/Defines.h>
 #include <common/Keyboard.h>
+#include <common/OptionsScorched.h>
 #include <lang/LangResource.h>
+#include <lang/LangParam.h>
 
 std::list<ChannelText> GLWChannelText::lastMessages_;
 
@@ -256,15 +258,19 @@ void GLWChannelText::processVisibleKey(unsigned int unicode, unsigned int dik)
 	}
 	else if (unicode >= ' ')
 	{
-		if ((maxTextLen_==0) || ((int) text_.size() < maxTextLen_))
+		if (ScorchedClient::instance()->getOptionsGame().getAllowMultiLingualChat() ||
+			unicode <= 127)
 		{
-			if ((text_[0] == '\\' || text_[0] == '/') && unicode == ' ')
+			if ((maxTextLen_==0) || ((int) text_.size() < maxTextLen_))
 			{
-				processSpecialText();
-			}
-			else
-			{
-				text_ += unicode;
+				if ((text_[0] == '\\' || text_[0] == '/') && unicode == ' ')
+				{
+					processSpecialText();
+				}
+				else
+				{
+					text_ += unicode;
+				}
 			}
 		}
 	}
@@ -486,10 +492,10 @@ void GLWChannelText::buttonDown(unsigned int id)
 			!tank->getDestinationId()) continue;
 
 		// Add tanks to the mute and whisper lines
-		mute.getPopups().push_back(GLWSelectorEntry(LANG_STRING(tank->getName()),
-			0, tank->getState().getMuted(), 0, (void *) eMuteSelectorStart, tank->getName()));
-		whisper.getPopups().push_back(GLWSelectorEntry(LANG_STRING(tank->getName()),
-			0, false, 0, (void *) eWhisperSelectorStart, tank->getName()));
+		mute.getPopups().push_back(GLWSelectorEntry(tank->getTargetName(),
+			0, tank->getState().getMuted(), 0, (void *) eMuteSelectorStart));
+		whisper.getPopups().push_back(GLWSelectorEntry(tank->getTargetName(),
+			0, false, 0, (void *) eWhisperSelectorStart));
 	}
 
 	// For each current channel
@@ -514,8 +520,8 @@ void GLWChannelText::buttonDown(unsigned int id)
 		{
 			// Add an entry saying which channels we can write on
 			selectChannel.getPopups().push_back(GLWSelectorEntry(
-				LANG_STRING(S3D::formatStringBuffer("%u. %s %s", channel.id, channel.channel.c_str(),
-				(channel.type & ChannelDefinition::eWhisperChannel?whisperDestStr_.c_str():""))),
+				LANG_RESOURCE_3("WHISPER_CHANNEL", "{0}. {1} {2}", channel.id, channel.channel,
+				(channel.type & ChannelDefinition::eWhisperChannel?whisperDestStr_:LangString())),
 				0, (channelEntry_.channel == channel.channel), 0, 
 				(void *) eSelectSelectorStart, channel.channel.c_str()));
 		}
@@ -585,7 +591,7 @@ void GLWChannelText::itemSelected(GLWSelectorEntry *entry, int position)
 		{
 			Tank *tank = 
 				ScorchedClient::instance()->getTankContainer().
-					getTankByName(entry->getDataText());
+					getTankByName(entry->getText());
 			if (tank) 
 			{
 				if (tank->getState().getMuted()) 
@@ -607,7 +613,7 @@ void GLWChannelText::itemSelected(GLWSelectorEntry *entry, int position)
 		{
 			Tank *tank = 
 				ScorchedClient::instance()->getTankContainer().
-					getTankByName(entry->getDataText());
+					getTankByName(entry->getText());
 			if (tank)
 			{
 				whisperDest_ = tank->getPlayerId();
@@ -701,12 +707,12 @@ bool GLWChannelText::channelValid(const char *channelName)
 		if (whisperTank)
 		{
 			whisperDestValid = true;
-			whisperDestStr_ = whisperTank->getName();
+			whisperDestStr_ = whisperTank->getTargetName();
 		}
 		else
 		{
 			whisperDest_ = 0;
-			whisperDestStr_ = "";
+			whisperDestStr_.clear();
 		}
 	}
 
@@ -771,19 +777,19 @@ void GLWChannelText::setChannelEntry(GLWChannelView::CurrentChannelEntry &entry)
 {
 	channelEntry_ = entry;
 
-	std::string channelName = "";
+	LangString channelName;
 	if (channelEntry_.type & ChannelDefinition::eWhisperChannel)
 	{
-		channelName = S3D::formatStringBuffer("%u. [c:%s][p:%s] : ",
-			channelEntry_.id, channelEntry_.channel.c_str(), 
-			whisperDestStr_.c_str());
+		channelName = LANG_PARAM_3("{0}. [c:{1}][p:{2}] : ",
+			channelEntry_.id, channelEntry_.channel, 
+			whisperDestStr_);
 	}
 	else
 	{
-		channelName = S3D::formatStringBuffer("%u. [c:%s] : ",
-			channelEntry_.id, channelEntry_.channel.c_str());
+		channelName = LANG_PARAM_2("{0}. [c:{1}] : ",
+			channelEntry_.id, channelEntry_.channel);
 	}
-	prompt_.parseText(ScorchedClient::instance()->getContext(), LANG_STRING(channelName));
+	prompt_.parseText(ScorchedClient::instance()->getContext(), channelName);
 }
 
 bool GLWChannelText::initFromXML(XMLNode *node)

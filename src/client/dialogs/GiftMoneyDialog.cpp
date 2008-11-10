@@ -130,7 +130,7 @@ void GiftMoneyDialog::display()
 			tank->getState().getState() == TankState::sNormal))
 		{
 			players_->addEntry(GLWSelectorEntry(
-				LANG_STRING(tank->getName()), 0, false, 0, (void *) tank->getPlayerId()));
+				tank->getTargetName(), 0, false, 0, (void *) tank->getPlayerId()));
 		}
 	}
 }

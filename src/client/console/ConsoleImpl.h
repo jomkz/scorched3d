@@ -35,7 +35,7 @@ public:
 	ConsoleImpl();
 	virtual ~ConsoleImpl();
 
-	void init();
+	virtual void init();
 
 	virtual void addRule(ConsoleRule *rule) { rules_.addRule(rule); }
 	virtual void removeRule(ConsoleRule *rule) { rules_.removeRule(rule); }

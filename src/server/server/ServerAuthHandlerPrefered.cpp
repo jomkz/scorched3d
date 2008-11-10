@@ -52,9 +52,10 @@ bool ServerAuthHandlerPrefered::authenticateUser(ComsConnectAuthMessage &authMes
 }
 
 bool ServerAuthHandlerPrefered::authenticateUserName(const char *uniqueId, 
-	const char *playername)
+	const LangString &playername)
 {
-	UserEntry *userEntry = getUserByName(playername);
+	std::string strName = LangStringUtil::convertFromLang(playername);
+	UserEntry *userEntry = getUserByName(strName.c_str());
 	if (!userEntry) return true;
 	if (0 == strcmp(userEntry->uniqueid.c_str(), uniqueId)) return true;
 	return false;

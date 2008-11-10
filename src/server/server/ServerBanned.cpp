@@ -67,7 +67,7 @@ bool ServerBanned::load(bool force)
 		childrenItor++)
 	{
 		XMLNode *currentNode = (*childrenItor);
-		XMLNode *maskNode = 0, *nameNode = 0, *timeNode = 0, *typeNode = 0;
+		XMLNode *maskNode = 0, *timeNode = 0, *typeNode = 0;
 
 		// Read the mask
 		unsigned int m = UINT_MAX;
@@ -85,7 +85,8 @@ bool ServerBanned::load(bool force)
 			m = mask[3] << 24 | mask[2] << 16 | mask[1] << 8 | mask[0];
 		}
 
-		std::string name, adminname, uniqueid, reason, SUI;
+		LangString name;
+		std::string adminname, uniqueid, reason, SUI;
 		currentNode->getNamedParameter("name", name, false);
 		currentNode->getNamedParameter("adminname", adminname, false);
 		currentNode->getNamedParameter("reason", reason, false);
@@ -130,7 +131,7 @@ bool ServerBanned::load(bool force)
 		ip = address[3] << 24 | address[2] << 16 | address[1] << 8 | address[0];
 
 		// Add the new entry
-		addBannedEntry(ip, m, name.c_str(), uniqueid.c_str(), SUI.c_str(), 
+		addBannedEntry(ip, m, name, uniqueid.c_str(), SUI.c_str(), 
 			(unsigned int) bantime, type,
 			adminname.c_str(), reason.c_str());
 	}
@@ -192,7 +193,7 @@ ServerBanned::BannedType ServerBanned::getBanned(
 	return NotBanned;
 }
 
-void ServerBanned::addBanned(unsigned int ip, const char *name, 
+void ServerBanned::addBanned(unsigned int ip, const LangString &name, 
 	const char *uniqueId, const char *SUI, BannedType type, 
 	const char *adminname, const char *reason)
 {
@@ -202,7 +203,7 @@ void ServerBanned::addBanned(unsigned int ip, const char *name,
 }
 
 void ServerBanned::addBannedEntry(unsigned int ip, unsigned int mask,
-	const char *name, const char *uniqueId, const char *SUid, unsigned int bantime, BannedType type,
+	const LangString &name, const char *uniqueId, const char *SUid, unsigned int bantime, BannedType type,
 	const char *adminname, const char *reason)
 {
 	unsigned int newip = mask & ip;
@@ -315,7 +316,7 @@ bool ServerBanned::save()
 						XMLNode::XMLParameterType));
 			}
 			optionNode->addParameter(new XMLNode("name", 
-					entry.name.c_str(),
+					entry.name,
 					XMLNode::XMLParameterType));
 			optionNode->addParameter(new XMLNode("time", 
 					S3D::formatStringBuffer("%u", (unsigned int) entry.bantime),
@@ -324,16 +325,16 @@ bool ServerBanned::save()
 					getBannedTypeStr(entry.type),
 					XMLNode::XMLParameterType));
 			optionNode->addParameter(new XMLNode("id", 
-					entry.uniqueid.c_str(),
+					entry.uniqueid,
 					XMLNode::XMLParameterType));
 			optionNode->addParameter(new XMLNode("SUI",
- 					entry.SUI.c_str(),
+ 					entry.SUI,
  					XMLNode::XMLParameterType));
 			optionNode->addParameter(new XMLNode("adminname", 
-					entry.adminname.c_str(),
+					entry.adminname,
 					XMLNode::XMLParameterType));
 			optionNode->addParameter(new XMLNode("reason", 
-					entry.reason.c_str(),
+					entry.reason,
 					XMLNode::XMLParameterType));
 
 			// Add to file

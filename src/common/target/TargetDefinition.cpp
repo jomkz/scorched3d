@@ -105,7 +105,7 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 	RandomGenerator &generator)
 {
 	Target *target = new Target(playerId, 
-		name_.c_str(), context);
+		name_, context);
 	target->getLife().setBoundingSphere(boundingsphere_);
 
 	fixed rotation = modelrotation_;

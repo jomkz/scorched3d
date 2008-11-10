@@ -214,6 +214,7 @@ static bool initWindows(ProgressCounter *progressCounter)
 	ClientWindowSetup::setupStartWindows(GLWWindowSkinManager::defaultinstance());
 	HelpButtonDialog::instance();
 
+	Console::instance()->init();
 	std::string errorString;
 	if (!ConsoleFileReader::loadFileIntoConsole(S3D::getDataFile("data/autoexec.xml"), errorString))
 	{

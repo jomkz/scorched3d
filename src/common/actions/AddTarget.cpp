@@ -61,7 +61,7 @@ void AddTarget::simulate(fixed frameTime, bool &remove)
 		context_->getActionController().addSyncCheck(
 			S3D::formatStringBuffer("AddTarget : %u %s %i,%i,%i", 
 				playerId,
-				target->getName(),
+				target->getCStrName().c_str(),
 				position_[0].getInternal(),
 				position_[1].getInternal(),
 				position_[2].getInternal()));

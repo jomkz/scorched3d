@@ -39,7 +39,8 @@ public:
 	};
 
 	GLWTextBox(float x = 0.0f, float y = 0.0f, 
-		float w = 0.0f, const LangString &startText = LangString(),
+		float w = 0.0f, 
+		const LangString &startText = LangString(),
 		unsigned int flags = 0);
 	virtual ~GLWTextBox();
 
@@ -54,6 +55,7 @@ public:
 	virtual void mouseDown(int button, float x, float y, bool &skipRest);
 
 	void setCurrent();
+	void setAllowUnicode(bool allowUnicode) { allowUnicode_ = allowUnicode; }
 
 	std::string &getText();
 	LangString &getLangString() { return text_; }
@@ -65,6 +67,7 @@ public:
 protected:
 	float ctime_;
 	bool cursor_, current_;
+	bool allowUnicode_;
 	unsigned int maxTextLen_, flags_;
 	LangString text_;
 	GLWTextBoxI *handler_;

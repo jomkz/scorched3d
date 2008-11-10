@@ -32,6 +32,7 @@
 #include <sound/SoundUtils.h>
 #include <tank/TankContainer.h>
 #include <lang/LangResource.h>
+#include <lang/LangParam.h>
 
 GLWChannelViewI::~GLWChannelViewI()
 {
@@ -211,33 +212,31 @@ void GLWChannelView::channelText(ChannelText &channelText)
 		}
 	}
 
-	std::string channelName;
+	LangString channelName;
 	if (showChannelNumber_)
 	{
-		channelName.append(S3D::formatStringBuffer("%u. ", channel->id));
+		channelName.append(LANG_PARAM_1("{0}. ", channel->id));
 	}
 	if (showChannelName_)
 	{
-		channelName.append(S3D::formatStringBuffer("[c:%s]", channel->channel.c_str()));
+		channelName.append(LANG_PARAM_1("[c:{0}]", channel->channel));
 	}
 	if (tank)
 	{
-		channelName.append(S3D::formatStringBuffer("[p:%s]", tank->getName()));
+		channelName.append(LANG_PARAM_1("[p:{0}]", tank->getTargetName()));
 	}
 	if (channelText.getAdminPlayer()[0])
 	{
-		channelName.append(S3D::formatStringBuffer("[a:%s]", channelText.getAdminPlayer().c_str()));
+		channelName.append(LANG_PARAM_1("[a:{0}]", channelText.getAdminPlayer()));
 	}
 	if (!channelName.empty())
 	{
-		channelName.append(" : ");
+		channelName.append(LANG_STRING(" : "));
 	}
-	LangString inputText;
-	LangStringUtil::appendToLang(inputText, channelName);
-	inputText.append(channelText.getMessage());
+	channelName.append(channelText.getMessage());
 
 	GLWChannelViewTextRenderer chanText(this);
-	chanText.parseText(ScorchedClient::instance()->getContext(), inputText);
+	chanText.parseText(ScorchedClient::instance()->getContext(), channelName);
 	
 	bool firstTime = true;
 	int currentLen = 0;

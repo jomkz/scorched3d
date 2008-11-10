@@ -177,7 +177,7 @@ bool ClientSave::restoreClient(bool loadGameState, bool loadPlayers)
 				ScorchedServer::instance()->getContext(),
 				playerId, // PlayerId
 				0, // DestinationId
-				"", // Name
+				LangString(), // Name
 				color,
 				"",
 				"");
@@ -191,7 +191,7 @@ bool ClientSave::restoreClient(bool loadGameState, bool loadPlayers)
 			{
 				ComsAddPlayerMessage message(
 					tank.getPlayerId(),
-					tank.getName(),
+					tank.getTargetName(),
 					tank.getColor(),
 					tank.getModelContainer().getTankModelName(),
 					tank.getModelContainer().getTankTypeName(),

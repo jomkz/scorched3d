@@ -139,7 +139,8 @@ void AdminDialog::drawColumn(unsigned int id, int row, int col,
 			{
 				GLWFont::instance()->getGameFont()->drawWidth(w, 
 					GLWFont::widgetFontColor, 
-					10.0f, x + 3.0f, y + 5.0f, 0.0f, itor->second->getName());
+					10.0f, x + 3.0f, y + 5.0f, 0.0f, 
+					itor->second->getTargetName());
 			}
 			else
 			{

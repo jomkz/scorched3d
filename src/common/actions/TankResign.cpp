@@ -111,8 +111,7 @@ void TankResign::simulate(fixed frameTime, bool &remove)
 					LANG_RESOURCE_1(
 						"TANK_RESIGNED",
 						"[p:{0}] resigned from round", 
-						tank->getName()));
-				//info.setPlayerId(playerId_);
+						tank->getTargetName()));
 				ChannelManager::showText(*context_, text);
 			}
 #endif // #ifndef S3D_SERVER

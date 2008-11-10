@@ -18,16 +18,25 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_LangStringParameterized_INCLUDE__)
-#define __INCLUDE_LangStringParameterized_INCLUDE__
+#if !defined(__INCLUDE_LangParam_INCLUDE__)
+#define __INCLUDE_LangParam_INCLUDE__
 
 #include <lang/LangString.h>
 #include <vector>
 
-class LangStringParameterized
+#define LANG_PARAM_1(key, param1) \
+	LangParam::getKey(key, param1)
+#define LANG_PARAM_2(key, param1, param2) \
+	LangParam::getKey(key, param1, param2)
+#define LANG_PARAM_3(key, param1, param2, param3) \
+	LangParam::getKey(key, param1, param2, param3)
+#define LANG_PARAM_4(key, param1, param2, param3, param4) \
+	LangParam::getKey(key, param1, param2, param3, param4)
+
+class LangParam
 {
 public:
-	LangStringParameterized(const LangString &value);
+	LangParam(const LangStringConverter &value);
 
 	LangString getValue();
 
@@ -40,9 +49,24 @@ public:
 	LangString getParameterizedString(const LangStringConverter &param1, 
 		const LangStringConverter &param2, const LangStringConverter &param3, const LangStringConverter &param4);
 
+	static LangString getKey(const LangStringConverter &value,
+		const LangStringConverter &param1);
+	static LangString getKey(const LangStringConverter &value,
+		const LangStringConverter &param1,
+		const LangStringConverter &param2);
+	static LangString getKey(const LangStringConverter &value,
+		const LangStringConverter &param1,
+		const LangStringConverter &param2,
+		const LangStringConverter &param3);
+	static LangString getKey(const LangStringConverter &value,
+		const LangStringConverter &param1,
+		const LangStringConverter &param2,
+		const LangStringConverter &param3,
+		const LangStringConverter &param4);
+
 private:
 	std::vector<LangString> parts_;
 	std::vector<int> positions_;
 };
 
-#endif // __INCLUDE_LangStringParameterized_INCLUDE__
+#endif // __INCLUDE_LangParam_INCLUDE__

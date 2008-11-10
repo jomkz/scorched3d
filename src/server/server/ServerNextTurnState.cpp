@@ -112,7 +112,7 @@ void ServerNextTurnState::enterState(const unsigned state)
 					ChannelText("banner",
 						"TANK'S MOVE",
 						"{0}'s Move", 
-						tank->getName()),
+						tank->getTargetName()),
 					false);
 
 				// Tell the clients to start the game

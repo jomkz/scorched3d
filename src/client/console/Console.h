@@ -28,6 +28,8 @@ class Console
 public:
 	static Console *instance();
 
+	virtual void init() = 0;
+
 	virtual void addRule(ConsoleRule *rule) = 0;
 	virtual void removeRule(ConsoleRule *rule) = 0;
 

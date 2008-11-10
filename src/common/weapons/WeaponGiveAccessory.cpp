@@ -95,10 +95,9 @@ void WeaponGiveAccessory::weaponCallback(
 					ChannelText text("combat", 
 						LANG_RESOURCE_3("TANK_GET_ACCESSORY",
 						"[p:{0}] received {1} * [w:{2}]", 
-						tank->getName(),
+						tank->getTargetName(),
 						S3D::formatStringBuffer("%i", number_), 
 						accessory->getName()));
-					//info.setPlayerId(weaponContext.getPlayerId());
 					ChannelManager::showText(context, text);
 				}
 			}
@@ -110,7 +109,7 @@ void WeaponGiveAccessory::weaponCallback(
 					ChannelText text("combat", 
 						LANG_RESOURCE_2("TANK_GET_MONEY",
 						"[p:{0}] received ${1}", 
-						tank->getName(), 
+						tank->getTargetName(), 
 						S3D::formatStringBuffer("%i", money)));
 					ChannelManager::showText(context, text);
 				}
@@ -128,7 +127,7 @@ void WeaponGiveAccessory::weaponCallback(
 					ChannelText text("combat", 
 						LANG_RESOURCE_3("TANK_LOST_ACCESSORY",
 						"[p:{0}] lost {1} * [w:{2}]", 
-						tank->getName(),
+						tank->getTargetName(),
 						S3D::formatStringBuffer("%i", loose), 
 						accessory->getName()));
 					ChannelManager::showText(context, text);

@@ -70,8 +70,13 @@ bool ClientGiftMoneyHandler::processMessage(
 
 	BuyAccessoryDialog::instance()->playerRefreshKeepPos();
 
-	ChannelText text("combat", LANG_RESOURCE_3("TANK_GIFT_MESSAGE", "[p:{0}] gifts ${1} to [p:{2}]", 
-			fromTank->getName(), message.getMoney(), toTank->getName()));
+	ChannelText text("combat", 
+		LANG_RESOURCE_3(
+			"TANK_GIFT_MESSAGE", 
+			"[p:{0}] gifts ${1} to [p:{2}]", 
+			fromTank->getTargetName(), 
+			message.getMoney(), 
+			toTank->getTargetName()));
 	ChannelManager::showText(ScorchedClient::instance()->getContext(), text);
 
 	return true;

@@ -186,7 +186,7 @@ bool ClientNewGameHandler::actualProcessMessage(
 	{
 		Target *newTarget = new Target(
 			newTargetId, 
-			"", 
+			LangString(), 
 			ScorchedClient::instance()->getContext());
 		if (!newTarget->readMessage(newTargets))
 		{

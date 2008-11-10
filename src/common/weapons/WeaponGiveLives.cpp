@@ -75,7 +75,7 @@ void WeaponGiveLives::weaponCallback(
 				ChannelText text("combat", 
 					LANG_RESOURCE_2("TANK_GET_LIVE",
 					"[p:{0}] has received {1} extra live(s)", 
-					tank->getName(), 
+					tank->getTargetName(), 
 					S3D::formatStringBuffer("%i", lives_)));
 				ChannelManager::showText(context, text);
 			}
@@ -84,7 +84,7 @@ void WeaponGiveLives::weaponCallback(
 				ChannelText text("combat", 
 					LANG_RESOURCE_2("TANK_LOST_LIVE",
 					"[p:{0}] has lost {1} extra live(s)", 
-					tank->getName(), 
+					tank->getTargetName(), 
 					S3D::formatStringBuffer("%i", -lives_)));
 				ChannelManager::showText(context, text);
 			}

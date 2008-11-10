@@ -163,8 +163,7 @@ bool ChannelTextParser::createPlayerEntry(ScorchedContext &context,
 	entry.text.push_back(']');
 	entry.data = 0;
 
-	std::string tankName = LangStringUtil::convertFromLang(part);
-	Tank *tank = context.getTankContainer().getTankByName(tankName.c_str());
+	Tank *tank = context.getTankContainer().getTankByName(part);
 	if (tank)
 	{
 		entry.data = tank->getPlayerId();

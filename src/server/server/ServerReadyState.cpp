@@ -156,7 +156,7 @@ bool ServerReadyState::acceptStateChange(const unsigned state,
 					ChannelText("info",
 						"KICK_RESPONSE_TIMEOUTE",
 						"{0} kicked for not responding for {1} seconds", 
-						tank->getName(), idleTime_),
+						tank->getTargetName(), idleTime_),
 					true);
 				ServerCommon::kickDestination(tank->getDestinationId());
 			}

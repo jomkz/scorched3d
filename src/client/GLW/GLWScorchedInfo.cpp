@@ -147,13 +147,13 @@ void GLWScorchedInfo::draw()
 			if (!noCenter_) 
 			{
 				float namewidth = GLWFont::instance()->getGameFont()->getWidth(
-					fontSize_, current->getName());
+					fontSize_, current->getTargetName());
 				offSet = w_ / 2.0f - (namewidth / 2.0f);
 			}
 			GLWFont::instance()->getGameFont()->draw(
 				current->getColor(), fontSize_,
 				x_ + offSet, y_, 0.0f,
-				current->getName());
+				current->getTargetName());
 		}
 		break;
 		case ePlayerIcon:
@@ -174,12 +174,15 @@ void GLWScorchedInfo::draw()
 			glEnd();
 		}
 		break;
-		case ePlayerColor:
-			setToolTip(&renderer->getTips()->nameTip);
-			GLWFont::instance()->getGameFont()->draw(
-				current->getColor(), fontSize_,
-				x_, y_, 0.0f,
-				S3D::formatStringBuffer("%i", current->getScore().getRank()));
+		case ePlayerRank:
+			setToolTip(&renderer->getTips()->rankTip);
+			if (current->getScore().getRank() > -1)
+			{
+				GLWFont::instance()->getGameFont()->draw(
+					current->getColor(), fontSize_,
+					x_, y_, 0.0f,
+					S3D::formatStringBuffer("%i", current->getScore().getRank()));
+			}
 		break;
 		case eAutoDefenseCount:
 			setToolTip(&renderer->getTips()->autodTip);
@@ -483,7 +486,7 @@ void GLWScorchedInfo::mouseDown(int button, float x, float y, bool &skipRest)
 			break;
 			case ePlayerIcon:
 			break;
-			case ePlayerColor:
+			case ePlayerRank:
 			break;
 			case eAutoDefenseCount:
 				tankTips->autodTip.showItems(GLWTranslate::getPosX() + x, 
@@ -549,7 +552,7 @@ bool GLWScorchedInfo::initFromXML(XMLNode *node)
 	if (0 == strcmp(typeNode->getContent(), "wind")) infoType_ = eWind;
 	else if (0 == strcmp(typeNode->getContent(), "playername")) infoType_ = ePlayerName;
 	else if (0 == strcmp(typeNode->getContent(), "playericon")) infoType_ = ePlayerIcon;
-	else if (0 == strcmp(typeNode->getContent(), "playercolor")) infoType_ = ePlayerColor;
+	else if (0 == strcmp(typeNode->getContent(), "playerrank")) infoType_ = ePlayerRank;
 	else if (0 == strcmp(typeNode->getContent(), "autodefensecount")) infoType_ = eAutoDefenseCount;
 	else if (0 == strcmp(typeNode->getContent(), "parachutecount")) infoType_ = eParachuteCount;
 	else if (0 == strcmp(typeNode->getContent(), "shieldcount")) infoType_ = eShieldCount;

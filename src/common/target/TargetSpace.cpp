@@ -182,7 +182,7 @@ Target *TargetSpace::getCollision(FixedVector &position)
 		if (!target->getAlive())
 		{
 			Logger::log(S3D::formatStringBuffer("ERROR: Dead target %u:%s in space",
-				target->getPlayerId(), target->getName()));
+				target->getPlayerId(), target->getCStrName().c_str()));
 			continue;
 		}
 
@@ -270,7 +270,7 @@ void TargetSpace::getCollisionSet(FixedVector &position, fixed radius,
 				if (!target->getAlive())
 				{
 					Logger::log(S3D::formatStringBuffer("ERROR: Dead target %u:%s in space",
-						target->getPlayerId(), target->getName()));
+						target->getPlayerId(), target->getCStrName().c_str()));
 					continue;
 				}
 

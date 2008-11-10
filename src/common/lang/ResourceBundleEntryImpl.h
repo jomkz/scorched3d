@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_ResourceBundleEntryImpl_INCLUDE__)
 #define __INCLUDE_ResourceBundleEntryImpl_INCLUDE__
 
-#include <lang/LangStringParameterized.h>
+#include <lang/LangParam.h>
 #include <lang/ResourceBundleEntry.h>
 #include <vector>
 
@@ -45,7 +45,7 @@ public:
 		const LangStringConverter &param2, const LangStringConverter &param3, const LangStringConverter &param4);
 
 private:
-	LangStringParameterized parameterizedString_;
+	LangParam parameterizedString_;
 	std::string key_;
 };
 

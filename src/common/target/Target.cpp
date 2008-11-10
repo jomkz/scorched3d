@@ -32,17 +32,19 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
+#include <common/OptionsScorched.h>
 
 Target::Target(unsigned int playerId, 
-	const char *name,
+	const LangString &name,
 	ScorchedContext &context) :
 	playerId_(playerId),
-	name_(name),
 	context_(context),
 	deathAction_(0), burnAction_(0),
 	renderer_(0), 
 	border_(0)
 {
+	setName(name);
+
 	life_ = new TargetLife(context, playerId);
 	shield_ = new TargetShield(context, playerId);
 	parachute_ = new TargetParachute(context);
@@ -87,6 +89,27 @@ bool Target::isTemp()
 bool Target::getAlive()
 {
 	return (life_->getLife() > 0);
+}
+
+void Target::setName(const LangString &name)
+{
+	name_ = name;
+	if (!context_.getOptionsGame().getAllowMultiLingualNames() &&
+		!isTarget())
+	{
+		for (unsigned int *c = (unsigned int *)name_.c_str();
+			*c;
+			c++)
+		{
+			if (*c > 127) *c = '?';
+		}
+	}
+}
+
+const std::string &Target::getCStrName()
+{
+	cStrName_ = LangStringUtil::convertFromLang(name_);
+	return cStrName_;
 }
 
 bool Target::writeMessage(NetBuffer &buffer)

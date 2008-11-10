@@ -120,7 +120,7 @@ void ServerShotFinishedState::enterState(const unsigned state)
 			{
 				Tank *tank = (*itor).second;
 				ServerCommon::serverLog(S3D::formatStringBuffer("%s - %s",
-					tank->getName(),
+					tank->getCStrName().c_str(),
 					tank->getScore().getScoreString()));
 			}
 			ServerCommon::serverLog("--------------------");
@@ -412,7 +412,7 @@ void ServerShotFinishedState::scoreOverallWinner()
 		{
 			Tank *topScore = *(sortedTanks.begin());
 
-			std::string names;
+			LangString names;
 			std::list<Tank *> winners;
             std::list<Tank *>::iterator scoreitor;
 			for (scoreitor = sortedTanks.begin();
@@ -424,8 +424,8 @@ void ServerShotFinishedState::scoreOverallWinner()
 					current->getScore().getScore())
 				{
 					winners.push_back(current);
-					if (!names.empty()) names.append(",");
-					names.append(current->getName());
+					if (!names.empty()) names.append(LANG_STRING(","));
+					names.append(current->getTargetName());
 
 					// Score the winning tank as the overall winner
 					StatsLogger::instance()->tankOverallWinner(current);

@@ -150,7 +150,7 @@ bool ComsPlayerStateMessage::readMessage(NetBufferReader &reader)
 			{
 				Tank *tank = itor->second;
 				Logger::log(S3D::formatStringBuffer("  Possible tank %u\"%s\"",
-					tank->getPlayerId(), tank->getName()));
+					tank->getPlayerId(), tank->getCStrName().c_str()));
 			}
 
 			return false;

@@ -71,7 +71,7 @@ bool ClientScoreHandler::processMessage(
 		{
 			Tank *tank = (*itor).second;
 			Logger::log(S3D::formatStringBuffer("%s - %s",
-				tank->getName(),
+				tank->getCStrName().c_str(),
 				tank->getScore().getScoreString()));
 		}
 		Logger::log("--------------------");

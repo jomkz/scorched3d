@@ -72,7 +72,7 @@ void WeaponGiveMoney::weaponCallback(
 			ChannelText text("combat", 
 				LANG_RESOURCE_2("TANK_GET_MONEY",
 				"[p:{0}] received ${1}", 
-				tank->getName(), 
+				tank->getTargetName(), 
 				S3D::formatStringBuffer("%i", money_)));
 			ChannelManager::showText(context, text);
 		}
@@ -81,7 +81,7 @@ void WeaponGiveMoney::weaponCallback(
 			ChannelText text("combat", 
 				LANG_RESOURCE_2("TANK_LOST_MONEY",
 				"[p:{0}] lost ${1}", 
-				tank->getName(), 
+				tank->getTargetName(), 
 				S3D::formatStringBuffer("%i", -money_)));
 			ChannelManager::showText(context, text);
 		}

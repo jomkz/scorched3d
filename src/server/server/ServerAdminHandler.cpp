@@ -176,7 +176,7 @@ bool ServerAdminHandler::processMessage(
 				result += 
 					S3D::formatStringBuffer("%i \"%s\" \"%s\" \"%u\" %s \n",
 						tank->getPlayerId(), 
-						tank->getName(),
+						tank->getCStrName().c_str(),
 						NetInterface::getIpName(tank->getIpAddress()),
 						StatsLogger::instance()->getStatsId(tank->getUniqueId()),
 						(tank->getState().getMuted()?"Muted":"Not Muted"));
@@ -233,9 +233,10 @@ bool ServerAdminHandler::processMessage(
 					unsigned int ip = (*ipitor).first;
 					ServerBanned::BannedEntry &entry = (*ipitor).second;
 					std::string ipName = NetInterface::getIpName(ip);
+					std::string name = LangStringUtil::convertFromLang(entry.name);
 
 					result += S3D::formatStringBuffer("\"%s:%s:%s\" %s %s (%s) - %s",
-						entry.name.c_str(),
+						name.c_str(),
 						entry.uniqueid.c_str(),
 						entry.SUI.c_str(),
 						ServerBanned::getBannedTypeStr(entry.type),

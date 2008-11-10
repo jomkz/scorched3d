@@ -82,7 +82,7 @@ void ShotState::setup()
 				context_.getActionController().addSyncCheck(
 					S3D::formatStringBuffer("TargetDef : %u %s %i %i,%i,%i %i,%i,%i %s", 
 						target->getPlayerId(),
-						target->getName(),
+						target->getCStrName().c_str(),
 						target->getLife().getLife().getInternal(),
 						target->getLife().getTargetPosition()[0].getInternal(),
 						target->getLife().getTargetPosition()[1].getInternal(),

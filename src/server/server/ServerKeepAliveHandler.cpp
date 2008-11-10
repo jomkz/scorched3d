@@ -100,7 +100,7 @@ void ServerKeepAliveHandler::checkKeepAlives()
 					ChannelText("info",
 						"KEEPALIVE_KICK",
 						"\"{0}\" Kicked for exceeding keep alive timeout ({1} seconds)",
-						current->getName(),
+						current->getTargetName(),
 						theTime - current->getKeepAlive()),
 					true);
 

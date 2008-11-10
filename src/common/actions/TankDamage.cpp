@@ -390,7 +390,7 @@ void TankDamage::calculateDamage()
 			context_->getActionController().addSyncCheck(
 				S3D::formatStringBuffer("RemoveTarget : %u %s", 
 					removedTarget->getPlayerId(),
-					removedTarget->getName()));
+					removedTarget->getCStrName().c_str()));
 		}
 
 		delete removedTarget;
@@ -469,8 +469,10 @@ void TankDamage::logDeath()
 	else
 	{
 		Vector white(1.0f, 1.0f, 1.0f);
-		static Tank envTank(*context_, 0, 0, "Environment", 
-			white, "", "");
+		static Tank envTank(*context_, 0, 0, 
+			LANG_STRING("Environment"), 
+			white, 
+			"", "");
 		envTank.setUniqueId("Environment");
 		firedTank = &envTank;
 	}
@@ -491,7 +493,7 @@ void TankDamage::logDeath()
 					LANG_RESOURCE_3(
 						"TANK_KILLED_SELF", 
 						"[p:{0}] killed self with a [w:{1}] ({2} skill change)",
-						firedTank->getName(),
+						firedTank->getTargetName(),
 						weapon_->getParent()->getName(),
 						S3D::formatStringBuffer("%i", skillChange)));
 				ChannelManager::showText(*context_, text);
@@ -509,8 +511,8 @@ void TankDamage::logDeath()
 					LANG_RESOURCE_4(
 						"TANK_KILLED_TEAM",
 						"[p:{0}] team killed [p:{1}] with a [w:{2}] ({3} skill change)",
-						firedTank->getName(),
-						killedTank->getName(),
+						firedTank->getTargetName(),
+						killedTank->getTargetName(),
 						weapon_->getParent()->getName(),
 						S3D::formatStringBuffer("%i", skillChange)));
 				ChannelManager::showText(*context_, text);
@@ -529,8 +531,8 @@ void TankDamage::logDeath()
 						LANG_RESOURCE_4(
 						"TANK_KILLED_MULTIOTHER",
 						"[p:{0}] multi-killed [p:{1}] with a [w:{2}] ({3} skill change)",
-						firedTank->getName(),
-						killedTank->getName(),
+						firedTank->getTargetName(),
+						killedTank->getTargetName(),
 						weapon_->getParent()->getName(),
 						S3D::formatStringBuffer("%i", skillChange)));
 					ChannelManager::showText(*context_, text);
@@ -541,8 +543,8 @@ void TankDamage::logDeath()
 						LANG_RESOURCE_4(
 						"TANK_KILLED_OTHER",
 						"[p:{0}] killed [p:{1}] with a [w:{2}] ({3} skill change)",
-						firedTank->getName(),
-						killedTank->getName(),
+						firedTank->getTargetName(),
+						killedTank->getTargetName(),
 						weapon_->getParent()->getName(),
 						S3D::formatStringBuffer("%i", skillChange)));
 					ChannelManager::showText(*context_, text);

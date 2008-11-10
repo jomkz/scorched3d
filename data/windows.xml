@@ -291,7 +291,7 @@ including its health, and defense status</description>
 			</item>
 			<item>
 				<widget type="GLWScorchedInfo">
-					<type>playercolor</type>
+					<type>playerrank</type>
 					<x>160</x><y>6</y>
 					<w>15</w><h>15</h>
 					<fontsize>10</fontsize>

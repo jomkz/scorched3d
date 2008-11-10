@@ -232,7 +232,7 @@ void TargetRendererImplTank::drawInfo()
 	{
 		Vector &bilX = GLCameraFrustum::instance()->getBilboardVectorX(); 
 		bilX *= 0.5f * GLWFont::instance()->getGameFont()->getWidth(
-			1, tank_->getName());
+			1, tank_->getTargetName());
 
 		glDepthMask(GL_FALSE);
 		GLWFont::instance()->getGameFont()->drawBilboard(
@@ -240,7 +240,7 @@ void TargetRendererImplTank::drawInfo()
 			(float) tank_->getLife().getFloatPosition()[0] - bilX[0], 
 			(float) tank_->getLife().getFloatPosition()[1] - bilX[1], 
 			(float) height + 8.0f,
-			tank_->getName());
+			tank_->getTargetName());
 		glDepthMask(GL_TRUE);
 	}
 
@@ -250,7 +250,7 @@ void TargetRendererImplTank::drawInfo()
 		if (OptionsDisplay::instance()->getDrawPlayerNames())
 		{
 			bilX *= 0.5f * GLWFont::instance()->getGameFont()->getWidth(
-				1, tank_->getName());
+				1, tank_->getTargetName());
 			bilX += bilX.Normalize() * 1.0f;
 		}
 		else

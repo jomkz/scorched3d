@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_ServerAuthHandlerh_INCLUDE__)
 #define __INCLUDE_ServerAuthHandlerh_INCLUDE__
 
-#include <string>
+#include <lang/LangString.h>
 #include <coms/ComsConnectAuthMessage.h>
 
 class ServerAuthHandler
@@ -34,7 +34,7 @@ public:
 	virtual bool authenticateUser(ComsConnectAuthMessage &authMessage, 
 		std::string &message) = 0;
 	virtual bool authenticateUserName(const char *uniqueId, 
-		const char *playername) = 0;
+		const LangString &playername) = 0;
 	virtual void banUser(const char *uniqueId) = 0;
 };
 

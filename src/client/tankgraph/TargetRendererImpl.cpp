@@ -95,7 +95,8 @@ void TargetRendererImpl::setMovedPatch(TargetVisibilityPatch *newPatch)
 			if (!tree_)
 			{
 				currentVisibilityPatch_->removeTarget(target_);
-				if (target_->getName()[0]) currentVisibilityPatch_->removeTooltip(target_);
+				if (!target_->getTargetName().empty()) 
+					currentVisibilityPatch_->removeTooltip(target_);
 			}
 			else 
 			{
@@ -107,7 +108,8 @@ void TargetRendererImpl::setMovedPatch(TargetVisibilityPatch *newPatch)
 			if (!tree_)
 			{
 				newPatch->addTarget(target_);
-				if (target_->getName()[0]) newPatch->addTooltip(target_);
+				if (!target_->getTargetName().empty()) 
+					newPatch->addTooltip(target_);
 			}
 			else 
 			{
@@ -456,7 +458,7 @@ float TargetRendererImpl::getTargetFade(float distance, float size)
 
 void TargetRendererImpl::storeTarget2DPos()
 {
-	if (!target_->getName()[0]) return;
+	if (target_->getTargetName().empty()) return;
 
 	Vector &tankTurretPos = 
 		target_->getLife().getFloatCenterPosition();
