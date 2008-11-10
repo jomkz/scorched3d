@@ -11,7 +11,7 @@ void main()
 	float fog_factor = clamp(fog, 0.0, 1.0);
 
     // Look up the diffuse color and shadow states for each light source.
-    float s0 = shadow2DProj(shadow, gl_TexCoord[3]).r;
+    float s0 = shadow2DProj(shadow, gl_TexCoord[2]).r;
 
 	// compute the dot product between normal and normalized lightdir
 	vec3 n = normalize(normal);
@@ -24,7 +24,7 @@ void main()
 
     // Compute the final pixel color
 	vec4 groundColor = texture2D(mainmap, gl_TexCoord[0].xy);
-	vec4 detailColor = texture2D(detailmap, gl_TexCoord[2].xy);
+	vec4 detailColor = texture2D(detailmap, gl_TexCoord[1].xy);
 	
 	vec3 finalColor =
 		((groundColor.rgb * 3.5) + detailColor.rgb) / 4.0 * lightcolor.rgb;

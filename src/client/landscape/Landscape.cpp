@@ -209,39 +209,49 @@ void Landscape::drawShadows()
 
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_POST");
 
+	static bool createdMap = false;
 	if (OptionsDisplay::instance()->getDrawGraphicalShadowMap())
 	{
-		static float *depthResult = 
-			new float[shadowFrameBuffer_.getWidth() * shadowFrameBuffer_.getHeight()];
-		static ImageHandle depthImage =
-			ImageFactory::createBlank(shadowFrameBuffer_.getWidth(),
-				shadowFrameBuffer_.getHeight());
-
-		glReadPixels(0, 0, 
-			shadowFrameBuffer_.getWidth(), shadowFrameBuffer_.getHeight(),
-			GL_DEPTH_COMPONENT, GL_FLOAT, depthResult);
-
-		float min = 1.0, max = 0.0;
-		float *src = depthResult;
-		unsigned char *dest = depthImage.getBits();
-		for (int i=0; i<shadowFrameBuffer_.getWidth() * shadowFrameBuffer_.getHeight(); i++, src++, dest+=3)
+		if (!createdMap)
 		{
-			if (*src != 1.0f)
+			createdMap = true;
+
+			static float *depthResult = 
+				new float[shadowFrameBuffer_.getWidth() * shadowFrameBuffer_.getHeight()];
+			static ImageHandle depthImage =
+				ImageFactory::createBlank(shadowFrameBuffer_.getWidth(),
+					shadowFrameBuffer_.getHeight());
+
+			glReadPixels(0, 0, 
+				shadowFrameBuffer_.getWidth(), shadowFrameBuffer_.getHeight(),
+				GL_DEPTH_COMPONENT, GL_FLOAT, depthResult);
+
+			float min = 1.0, max = 0.0;
+			float *src = depthResult;
+			unsigned char *dest = depthImage.getBits();
+			for (int i=0; i<shadowFrameBuffer_.getWidth() * shadowFrameBuffer_.getHeight(); i++, src++, dest+=3)
 			{
-				if (*src != 0.0f)
+				if (*src != 1.0f)
 				{
-					min = MIN(min, *src);
-					max = MAX(max, *src);
+					if (*src != 0.0f)
+					{
+						min = MIN(min, *src);
+						max = MAX(max, *src);
+					}
+
+					//*src = 0.0f; // Black and white
+					dest[0] = (unsigned char) (*src * 255.0f);
+					dest[1] = (unsigned char) (*src * 255.0f);
+					dest[2] = (unsigned char) (*src * 255.0f);
 				}
-
-				//*src = 0.0f; // Black and white
-				dest[0] = (unsigned char) (*src * 255.0f);
-				dest[1] = (unsigned char) (*src * 255.0f);
-				dest[2] = (unsigned char) (*src * 255.0f);
 			}
-		}
 
-		colorDepthMap_.replace(depthImage);
+			colorDepthMap_.replace(depthImage);
+		}
+	}
+	else
+	{
+		createdMap = false;
 	}
 
 	//restore states
@@ -804,15 +814,16 @@ void Landscape::actualDrawLandShader()
 #else
 	landShader_->use();
 	landShader_->set_gl_texture(texture_, "mainmap", 0);
-	landShader_->set_gl_texture(detailTexture_, "detailmap", 2);
-	landShader_->set_gl_texture(shadowFrameBuffer_, "shadow", 3);
-#endif
+	landShader_->set_gl_texture(detailTexture_, "detailmap", 1);
 
-	// Enable Tex
-	glActiveTextureARB(GL_TEXTURE3_ARB);
+	glActiveTextureARB(GL_TEXTURE2_ARB);
+	glEnable(GL_TEXTURE_2D);
+	landShader_->set_gl_texture(shadowFrameBuffer_, "shadow", 2);
 	glMatrixMode(GL_TEXTURE);
 	createShadowMatrix();
+	glMatrixMode(GL_MODELVIEW);
 	glActiveTextureARB(GL_TEXTURE0_ARB);
+#endif
 
 	glColor3f(1.0f, 1.0f, 1.0f);
 
@@ -832,7 +843,7 @@ void Landscape::actualDrawLandShader()
 		if (OptionsDisplay::instance()->getDrawWater())
 		{
 			// Disable Tex
-			glActiveTextureARB(GL_TEXTURE3_ARB);
+			glActiveTextureARB(GL_TEXTURE2_ARB);
 			glMatrixMode(GL_TEXTURE);
 			glLoadIdentity();
 			glMatrixMode(GL_MODELVIEW);
@@ -852,7 +863,7 @@ void Landscape::actualDrawLandShader()
 	}
 
 	// Disable Tex
-	glActiveTextureARB(GL_TEXTURE3_ARB);
+	glActiveTextureARB(GL_TEXTURE2_ARB);
 	glMatrixMode(GL_TEXTURE);
 	glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW);

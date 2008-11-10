@@ -11,8 +11,8 @@ void main()
 	lightDir = normalize(aux);
 		
     gl_TexCoord[0] = gl_MultiTexCoord0;
-    gl_TexCoord[2] = gl_MultiTexCoord2;
-    gl_TexCoord[3] = gl_TextureMatrix[3] * vertex;
+    gl_TexCoord[1] = gl_MultiTexCoord2;
+    gl_TexCoord[2] = gl_TextureMatrix[2] * vertex;
 
     gl_Position = ftransform();
     gl_FogFragCoord = max(gl_Position.z - 350.0, 0.0);
