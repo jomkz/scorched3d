@@ -11,9 +11,10 @@ varying vec4 noise_texc; // xy = 1st coord pair, za = 2nd coord pair
 uniform sampler2D tex_normal;		// normal map, RGB
 uniform sampler2D tex_reflection;	// reflection, RGB
 uniform sampler2D tex_foamamount;	// r = aof open sea, g = aof round land, b = actual foam tex
-uniform sampler2DShadow tex_shadow;	// shadow map DEPTH_COMPONENT
 uniform vec3 landscape_size;
-uniform float use_shadow;
+#ifdef USE_SHADOWS
+uniform sampler2DShadow tex_shadow;	// shadow map DEPTH_COMPONENT
+#endif
 
 const float water_shininess = 120.0;
 
@@ -25,7 +26,9 @@ void main()
 
 	// compute shaodw amount
 	float s0 = 1.0;
-	if (use_shadow == 1.0) s0 = shadow2DProj(tex_shadow, gl_TexCoord[2]).r;
+#ifdef USE_SHADOWS
+	s0 = shadow2DProj(tex_shadow, gl_TexCoord[2]).r;
+#endif
 
 	// compute normal vector
 	vec3 N0 = vec3(texture2D(tex_normal, noise_texc.xy) * 2.0 - 1.0) * fog_factor;

@@ -456,6 +456,18 @@ void Landscape::generate(ProgressCounter *counter)
 	ImageHandle splatMaskBorder2 = ImageFactory::createBlank(64, 64, true, 0);
 	ImageModifier::redBitmap(splatMaskBorder1);
 
+	if (GLStateExtension::hasHardwareShadows())
+	{
+		if (!shadowFrameBuffer_.bufferValid())
+		{
+			// Create the frame buffer
+			if (!shadowFrameBuffer_.create(2048, 2048))
+			{
+				S3D::dialogExit("Scorched3D", "Failed to create shadow frame buffer");
+			}
+		}
+	}
+
 	// Removed for now as plan is square
 	// If (when) re-instated need to scale alpha map by playable arena, not full map size
 	/*ImageHandle plana = ImageFactory::loadImageHandle(S3D::getDataFile("data/windows/planaa.bmp"));
@@ -618,18 +630,6 @@ void Landscape::generate(ProgressCounter *counter)
 	// Create the plan textures (for the plan and wind dialogs)
 	updatePlanTexture();
 	updatePlanATexture();
-
-	if (GLStateExtension::hasHardwareShadows())
-	{
-		if (!shadowFrameBuffer_.bufferValid())
-		{
-			// Create the frame buffer
-			if (!shadowFrameBuffer_.create(2048, 2048))
-			{
-				S3D::dialogExit("Scorched3D", "Failed to create shadow frame buffer");
-			}
-		}
-	}
 
 	// Add any ambientsounds
 	LandscapeSoundManager::instance()->addSounds();

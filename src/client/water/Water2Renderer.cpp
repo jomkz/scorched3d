@@ -107,8 +107,6 @@ void Water2Renderer::drawPoints(WaterMapPoints &points)
 
 void Water2Renderer::drawWaterShaders(Water2 &water2)
 {
-	//GLState state(GLState::LIGHTING_OFF | GLState::TEXTURE_OFF);
-
 	GLState state(GLState::LIGHTING_OFF | GLState::TEXTURE_ON | GLState::BLEND_ON);
 
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
@@ -134,12 +132,6 @@ void Water2Renderer::drawWaterShaders(Water2 &water2)
 		glMatrixMode(GL_TEXTURE);
 		glLoadMatrixf(Landscape::instance()->getShadowTextureMatrix());
 		glMatrixMode(GL_MODELVIEW);
-
-		waterShader_->set_uniform("use_shadow", 1.0);
-	}
-	else
-	{
-		waterShader_->set_uniform("use_shadow", 0.0);
 	}
 
 	// texture units / coordinates:
@@ -353,17 +345,25 @@ void Water2Renderer::generate(LandscapeTexBorderWater *water, ProgressCounter *c
 		// Load shaders
 		if (!waterShader_) 
 		{
+			GLSLShader::defines_list dl;
+			if (Landscape::instance()->getShadowFrameBuffer().bufferValid())
+			{
+				dl.push_back("USE_SHADOWS");
+			}
+
 			if (OptionsDisplay::instance()->getSimpleWaterShaders())
 			{
 				waterShader_ = new GLSLShaderSetup(
 					S3D::getDataFile("data/shaders/watersimple.vshader"),
-					S3D::getDataFile("data/shaders/watersimple.fshader"));
+					S3D::getDataFile("data/shaders/watersimple.fshader"),
+					dl);
 			}
 			else
 			{
 				waterShader_ = new GLSLShaderSetup(
 					S3D::getDataFile("data/shaders/water.vshader"),
-					S3D::getDataFile("data/shaders/water.fshader"));
+					S3D::getDataFile("data/shaders/water.fshader"),
+					dl);
 			}
 		}
 	}
