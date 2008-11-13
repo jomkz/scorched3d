@@ -1521,7 +1521,13 @@ and shields damaging the tank directly.</description>
 						<data>data/wav/misc/laserdeath.wav</data>
 					</weapon>
 				</weaponchoice6>
-			</subweapon2>
+        <weaponchoice7>
+          <weight>10</weight>
+          <weapon type='WeaponInvokeWeapon'>
+            <invoke>Dirt Charge</invoke>
+          </weapon>
+        </weaponchoice7>
+      </subweapon2>
 		</accessoryaction>
 	</accessory>
 	<accessory>
