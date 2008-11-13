@@ -91,7 +91,7 @@ work.</description>
 			</color>
 			<collisionsound>shield/hit.wav</collisionsound>
 			<removepower>20</removepower>
-			<penetration>1.0</penetration>
+			<penetration>0.7</penetration>
 			<power>100</power>
 		</accessoryaction>
 	</accessory>
@@ -106,7 +106,7 @@ work.</description>
 		<bundlesize>2</bundlesize>
 		<cost>25000</cost>
 		<accessoryaction type='ShieldRound'>
-			<radius>6.0</radius>
+			<radius>5.0</radius>
 			<halfshield>false</halfshield>
 			<color>
 				<r>1.0</r>
@@ -115,7 +115,7 @@ work.</description>
 			</color>
 			<collisionsound>shield/hit.wav</collisionsound>
 			<removepower>15</removepower>
-			<penetration>1.0</penetration>
+			<penetration>0.8</penetration>
 			<power>100</power>
 		</accessoryaction>
 	</accessory>
@@ -167,7 +167,7 @@ Shields must be activated before they work.</description>
 			</color>
 			<collisionsound>shield/hit2.wav</collisionsound>
 			<removepower>4</removepower>
-			<penetration>1.0</penetration>
+			<penetration>0.7</penetration>
 			<power>100</power>
 		</accessoryaction>
 	</accessory>
@@ -193,8 +193,8 @@ activated before they work.</description>
 				<b>0.0</b>
 			</color>
 			<collisionsound>shield/hit2.wav</collisionsound>
-			<removepower>3</removepower>
-			<penetration>1.0</penetration>
+			<removepower>2</removepower>
+			<penetration>0.7</penetration>
 			<power>100</power>
 		</accessoryaction>
 	</accessory>
