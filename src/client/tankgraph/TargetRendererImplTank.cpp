@@ -271,7 +271,6 @@ void TargetRendererImplTank::drawInfo()
 
 void TargetRendererImplTank::drawSight()
 {
-	GLState currentState(GLState::BLEND_OFF | GLState::TEXTURE_OFF);
 	glPushMatrix();
 		glTranslatef(
 			tank_->getPosition().getTankGunPosition()[0].asFloat(),

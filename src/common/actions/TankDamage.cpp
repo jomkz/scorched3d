@@ -492,7 +492,7 @@ void TankDamage::logDeath()
 				ChannelText text("combat",
 					LANG_RESOURCE_3(
 						"TANK_KILLED_SELF", 
-						"[p:{0}] killed self with a [w:{1}] ({2} skill change)",
+						"[p:{0}] killed self with a [w:{1}] ({2} skill)",
 						firedTank->getTargetName(),
 						weapon_->getParent()->getName(),
 						S3D::formatStringBuffer("%i", skillChange)));
@@ -510,7 +510,7 @@ void TankDamage::logDeath()
 				ChannelText text("combat", 
 					LANG_RESOURCE_4(
 						"TANK_KILLED_TEAM",
-						"[p:{0}] team killed [p:{1}] with a [w:{2}] ({3} skill change)",
+						"[p:{0}] team killed [p:{1}] with a [w:{2}] ({3} skill)",
 						firedTank->getTargetName(),
 						killedTank->getTargetName(),
 						weapon_->getParent()->getName(),
@@ -530,7 +530,7 @@ void TankDamage::logDeath()
 					ChannelText text("combat", 
 						LANG_RESOURCE_4(
 						"TANK_KILLED_MULTIOTHER",
-						"[p:{0}] multi-killed [p:{1}] with a [w:{2}] ({3} skill change)",
+						"[p:{0}] multi-killed [p:{1}] with a [w:{2}] ({3} skill)",
 						firedTank->getTargetName(),
 						killedTank->getTargetName(),
 						weapon_->getParent()->getName(),
@@ -542,7 +542,7 @@ void TankDamage::logDeath()
 					ChannelText text("combat", 
 						LANG_RESOURCE_4(
 						"TANK_KILLED_OTHER",
-						"[p:{0}] killed [p:{1}] with a [w:{2}] ({3} skill change)",
+						"[p:{0}] killed [p:{1}] with a [w:{2}] ({3} skill)",
 						firedTank->getTargetName(),
 						killedTank->getTargetName(),
 						weapon_->getParent()->getName(),

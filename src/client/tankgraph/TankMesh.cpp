@@ -155,7 +155,6 @@ void TankMesh::drawMesh(unsigned int m, Mesh *mesh, float currentFrame, bool set
 					OptionsDisplay::instance()->getDrawPlayerSight() &&
 					OptionsDisplay::instance()->getOldSightPosition())
 				{
-					GLState sightState(GLState::BLEND_OFF | GLState::TEXTURE_OFF | GLState::LIGHTING_OFF);
 					glPushMatrix();
 						glScalef(1.0f / scale_, 1.0f / scale_, 1.0f / scale_);
 						drawSight();
@@ -174,13 +173,15 @@ void TankMesh::drawMesh(unsigned int m, Mesh *mesh, float currentFrame, bool set
 
 void TankMesh::drawSight()
 {
+	GLState sightState(GLState::BLEND_OFF | GLState::TEXTURE_OFF | GLState::LIGHTING_OFF);
+
 	static GLuint sightList_ = 0;
 	if (!sightList_)
 	{
 		glNewList(sightList_ = glGenLists(1), GL_COMPILE);
 			glBegin(GL_QUAD_STRIP);
 				float x;
-				for (x=135.0f; x>=90.0f; x-=9.0f)
+				for (x=126.0f; x>=90.0f; x-=9.0f)
 				{
 					const float deg = 3.14f / 180.0f;
 					float dx = x * deg;
