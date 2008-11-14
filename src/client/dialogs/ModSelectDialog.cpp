@@ -33,7 +33,7 @@
 GLWIconListModItem::GLWIconListModItem(ModInfo &modInfo) :
 	modInfo_(modInfo), 
 	tip_(ToolTip::ToolTipHelp, 
-		LANG_STRING(modInfo.getName()), 
+		LANG_STRING(modInfo.getShortDescription()), 
 		LANG_STRING(modInfo.getDescription())),
 	icon_(0.0f, 0.0f, 40.0f, 40.0f)
 {
@@ -59,16 +59,10 @@ void GLWIconListModItem::draw(float x, float y, float w)
 		GLWTranslate::getPosX() + x, 
 		GLWTranslate::getPosY() + y, w, 50.0f);
 
-	LANG_RESOURCE_VAR_1(MOD_CHOICE, "MOD_LABEL", "Mod : {0}", 
-		modInfo_.getName());
-	GLWFont::instance()->getGameFont()->draw(
-		GLWFont::widgetFontColor, 
-		12.0f, x + 50.0f, y + 25.0f, 0.0f, 
-		MOD_CHOICE);
 	GLWFont::instance()->getGameFont()->drawWidth(
 		w - 50.0f,
 		GLWFont::widgetFontColor, 
-		8.0f, x + 50.0f, y + 12.0f, 0.0f, 
+		10.0f, x + 50.0f, y + 18.0f, 0.0f, 
 		modInfo_.getShortDescription());
 }
 

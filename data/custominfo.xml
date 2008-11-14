@@ -1,6 +1,6 @@
 <modinfo>
 	<main>
-		<shortdescription>Play a custom game.</shortdescription>
+		<shortdescription>Play a customized game.</shortdescription>
 		<description>Start a single or multi-player game.
 Choose all game settings.</description>
 		<icon>data/windows/tank-cus.bmp</icon>

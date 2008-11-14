@@ -63,7 +63,7 @@ void GLWIconListSubModItem::draw(float x, float y, float w)
 	GLWFont::instance()->getGameFont()->drawWidth(
 		w - 50.0f,
 		GLWFont::widgetFontColor, 
-		8.0f, x + 50.0f, y + 17.0f, 0.0f, 
+		10.0f, x + 50.0f, y + 18.0f, 0.0f, 
 		modInfoEntry_.shortdescription.c_str());
 }
 
