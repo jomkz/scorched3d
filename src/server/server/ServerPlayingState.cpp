@@ -28,6 +28,7 @@
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
+#include <lua/LUAScriptHook.h>
 #include <common/OptionsScorched.h>
 #include <common/Logger.h>
 
@@ -35,6 +36,7 @@ ServerPlayingState::ServerPlayingState() :
 	GameStateI("ServerPlayingState"),
 	time_(0.0f)
 {
+	ScorchedServer::instance()->getLUAScriptHook().addHookProvider("server_playing");
 }
 
 ServerPlayingState::~ServerPlayingState()
@@ -45,6 +47,9 @@ void ServerPlayingState::enterState(const unsigned state)
 {
 	// Set the wait timer to the current time
 	time_ = 0.0f;
+
+	// Notify scripts of a new game starting
+	ScorchedServer::instance()->getLUAScriptHook().callHook("server_playing");
 }
 
 bool ServerPlayingState::acceptStateChange(const unsigned state, 

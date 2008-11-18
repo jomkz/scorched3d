@@ -25,6 +25,7 @@
 #include <actions/Explosion.h>
 #include <actions/ExplosionParams.h>
 #include <actions/Napalm.h>
+#include <actions/Laser.h>
 #include <engine/ActionController.h>
 #include <common/Logger.h>
 
@@ -121,10 +122,31 @@ static int s3d_napalm(lua_State *L)
 	return 0;
 }
 
+static int s3d_laser(lua_State *L) 
+{
+	LUAScript *wrapper = getScript(L);
+	LaserParams *laserParams = new LaserParams();
+
+	unsigned int playerId = (unsigned int) luaL_checknumber(L, 1);
+	FixedVector position = LUAUtil::getVectorFromStack(L, 2);
+	FixedVector direction = LUAUtil::getVectorFromStack(L, 3);
+	laserParams->parseLUA(L, 4);
+
+	WeaponFireContext fireContext(playerId, 0);
+	Laser *laser = new Laser(
+		wrapper->getWeapon(), laserParams,
+		position, direction,
+		fireContext);
+	wrapper->getContext()->getActionController().addAction(laser);
+
+	return 0;
+}
+
 static const luaL_Reg s3dweaponlib[] = {
 	{"fire_weapon", s3d_fire_weapon}, 
 	{"explosion", s3d_explosion},
 	{"napalm", s3d_napalm},
+	{"laser", s3d_laser},
 	{"random", s3d_random},
 	{NULL, NULL}
 };

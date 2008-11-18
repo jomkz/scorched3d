@@ -556,10 +556,9 @@ void ServerChannelManager::actualSend(const ChannelText &constText,
 
 	// Send to any scripts for processing
 	ScorchedServer::instance()->getLUAScriptHook().callHook("server_channeltext", 
-		LUAScriptHook::formParam(
-			LUAScriptHook::Param(fixed(true, tank?tank->getPlayerId():0)),
-			LUAScriptHook::Param(text.getChannel()),
-			LUAScriptHook::Param(text.getMessage())));
+		fixed(true, tank?tank->getPlayerId():0),
+		text.getChannel(),
+		text.getMessage());
 
 	// Send to all clients
 	std::map<unsigned int, DestinationEntry *>::iterator destItor;

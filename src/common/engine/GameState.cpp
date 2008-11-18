@@ -248,24 +248,42 @@ void GameState::mouseUpDown(MouseButton button, bool down, int x, int y)
 				currentList = &currentEntry_->subMouseDownLeftList;
 				break;
 			}
+
+			if (fakeMiddleButton_ && 
+				(MouseButtonLeft & currentMouseState_ && 
+				MouseButtonRight & currentMouseState_))
+			{
+				mouseMDragX_ = x;
+				mouseMDragY_ = y;
+			}
 		}
 		else
 		{
+			if (fakeMiddleButton_ && 
+				(MouseButtonLeft & currentMouseState_ && 
+				MouseButtonRight & currentMouseState_))
+			{
+				currentList = &currentEntry_->subMouseUpMiddleList;
+			}
+			else
+			{
+				switch(button)
+				{
+				case MouseButtonRight:
+					currentList = &currentEntry_->subMouseUpRightList;
+					break;
+				case MouseButtonMiddle:
+					currentList = &currentEntry_->subMouseUpMiddleList;
+					break;
+				default:
+					currentList = &currentEntry_->subMouseUpLeftList;
+					break;
+				}
+			}
+
 			if (button <= MouseButtonLeftDoubleClick)
 			{
 				currentMouseState_ ^= (unsigned) button;
-			}
-			switch(button)
-			{
-			case MouseButtonRight:
-				currentList = &currentEntry_->subMouseUpRightList;
-				break;
-			case MouseButtonMiddle:
-				currentList = &currentEntry_->subMouseUpMiddleList;
-				break;
-			default:
-				currentList = &currentEntry_->subMouseUpLeftList;
-				break;
 			}
 		}
 

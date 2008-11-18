@@ -72,8 +72,7 @@ void ServerNextRoundState::enterState(const unsigned state)
 	TurnController::instance()->nextRound();
 
 	// Notify scripts of a new game starting
-	ScorchedServer::instance()->getLUAScriptHook().callHook("server_newround", 
-		LUAScriptHook::formParam());
+	ScorchedServer::instance()->getLUAScriptHook().callHook("server_newround");
 
 	// Make sure all clients have the correct game settings
 	ComsGameStateMessage message;

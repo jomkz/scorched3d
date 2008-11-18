@@ -65,7 +65,39 @@ void LUAScriptHook::addHookProvider(const std::string &hookName)
 			(hookName, std::vector<HookEntry>()));
 }
 
-void LUAScriptHook::callHook(const std::string &hookName, const std::vector<Param> &params)
+void LUAScriptHook::callHook(const std::string &hookName)
+{
+	std::vector<Param> result;
+	callHookInternal(hookName, result);	
+}
+
+void LUAScriptHook::callHook(const std::string &hookName, const Param &param1)
+{
+	std::vector<Param> result;
+	result.push_back(param1);
+	callHookInternal(hookName, result);	
+}
+
+void LUAScriptHook::callHook(const std::string &hookName, const Param &param1, 
+	const Param &param2)
+{
+	std::vector<Param> result;
+	result.push_back(param1);
+	result.push_back(param2);
+	callHookInternal(hookName, result);	
+}
+
+void LUAScriptHook::callHook(const std::string &hookName, const Param &param1, 
+	const Param &param2, const Param &param3)
+{
+	std::vector<Param> result;
+	result.push_back(param1);
+	result.push_back(param2);
+	result.push_back(param3);
+	callHookInternal(hookName, result);	
+}
+
+void LUAScriptHook::callHookInternal(const std::string &hookName, const std::vector<Param> &params)
 {
 	std::map<std::string, std::vector<HookEntry> >::iterator hookItor =
 		hookNames_.find(hookName);
@@ -229,34 +261,4 @@ bool LUAScriptHook::loadHook(const std::string &directoryName, const std::string
 	}
 
 	return true;
-}
-
-std::vector<LUAScriptHook::Param> LUAScriptHook::formParam()
-{
-	std::vector<Param> result;
-	return result;
-}
-
-std::vector<LUAScriptHook::Param> LUAScriptHook::formParam(const Param &param1)
-{
-	std::vector<Param> result;
-	result.push_back(param1);
-	return result;
-}
-
-std::vector<LUAScriptHook::Param> LUAScriptHook::formParam(const Param &param1, const Param &param2)
-{
-	std::vector<Param> result;
-	result.push_back(param1);
-	result.push_back(param2);
-	return result;
-}
-
-std::vector<LUAScriptHook::Param> LUAScriptHook::formParam(const Param &param1, const Param &param2, const Param &param3)
-{
-	std::vector<Param> result;
-	result.push_back(param1);
-	result.push_back(param2);
-	result.push_back(param3);
-	return result;
 }

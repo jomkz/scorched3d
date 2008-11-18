@@ -593,6 +593,14 @@
 			Name="actions"
 			>
 			<File
+				RelativePath="..\..\common\actions\ActionParams.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\ActionParams.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\actions\AddTarget.cpp"
 				>
 			</File>
@@ -638,6 +646,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\actions\Laser.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\LaserParams.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\LaserParams.h"
 				>
 			</File>
 			<File

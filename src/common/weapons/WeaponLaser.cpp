@@ -25,7 +25,7 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponLaser);
 
-WeaponLaser::WeaponLaser() : hurtFirer_(false)
+WeaponLaser::WeaponLaser()
 {
 }
 
@@ -43,8 +43,8 @@ bool WeaponLaser::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNo
 	if (!accessoryNode->getNamedChild("minimumdistance", minimumDistance_)) return false;
 	if (!accessoryNode->getNamedChild("maximumdistance", maximumDistance_)) return false;
 	if (!accessoryNode->getNamedChild("totaltime", totalTime_)) return false;
-	if (!accessoryNode->getNamedChild("color", color_)) return false;
-	accessoryNode->getNamedChild("hurtfirer", hurtFirer_, false);
+
+	if (!laserParams_.parseXML(accessoryNode)) return false;
 
 	return true;
 }
@@ -52,14 +52,14 @@ bool WeaponLaser::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNo
 void WeaponLaser::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	// convert NumberParser expressions to values
-	//minimumHurt_ = minimumHurtExp_.getValue(context);
-	//maximumHurt_ = maximumHurtExp_.getValue(context);
-	//minimumDistance_ = minimumDistanceExp_.getValue(context);
-	//maximumDistance_ = maximumDistanceExp_.getValue(context);
-	//hurtRadius_ = hurtRadiusExp_.getValue(context);
-	//totalTime_ = totalTimeExp_.getValue(context);
+	LaserParams *params = new LaserParams(laserParams_);
+	params->setMinimumHurt(minimumHurt_.getValue(context));
+	params->setMaximumHurt(maximumHurt_.getValue(context));
+	params->setHurtRadius(hurtRadius_.getValue(context));
+	params->setMinimumDistance(minimumDistance_.getValue(context));
+	params->setMaximumDistance(maximumDistance_.getValue(context));
+	params->setTotalTime(totalTime_.getValue(context));
 
 	context.getActionController().addAction(
-		new Laser(this, position, velocity, weaponContext));
+		new Laser(this, params, position, velocity, weaponContext));
 }

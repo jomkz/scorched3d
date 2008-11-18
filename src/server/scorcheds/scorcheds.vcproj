@@ -1829,6 +1829,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\actions\LaserParams.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\LaserParams.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\actions\Lightning.cpp"
 				>
 			</File>

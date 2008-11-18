@@ -175,8 +175,7 @@ void ServerNewGameState::enterState(const unsigned state)
 	TurnController::instance()->newGame();
 
 	// Notify scripts of a new game starting
-	ScorchedServer::instance()->getLUAScriptHook().callHook("server_newgame", 
-		LUAScriptHook::formParam());
+	ScorchedServer::instance()->getLUAScriptHook().callHook("server_newgame");
 
 	// As we have not returned to the main loop for ages the
 	// timer will have a lot of time in it

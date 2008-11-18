@@ -344,7 +344,7 @@ bool ServerShotFinishedState::scoreWinners()
 
 	// Tell scripts to score 
 	ScorchedServer::instance()->getLUAScriptHook().callHook("server_score", 
-		LUAScriptHook::formParam(LUAScriptHook::Param(overAllWinner)));
+		overAllWinner);
 
 	// Update the stats for the players before sending out the
 	// stats message
