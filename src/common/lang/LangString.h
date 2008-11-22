@@ -60,7 +60,7 @@ namespace LangStringUtil
 	void trim(LangString &str1);
 	void lowercase(LangString &str1);
 	int strcmp(const LangString &str1, const LangString &str2);
-	int stricmp(const LangString &str1, const LangString &str2);
+	int strcasecmp(const LangString &str1, const LangString &str2);
 	int strlen(const LangString &str1);
 	unsigned int *strstr(const unsigned int *str1, const LangString &str2);
 	unsigned int *stristr(const unsigned int *str1, const LangString &str2);

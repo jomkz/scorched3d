@@ -118,9 +118,9 @@ public:
 	void addParameter(XMLNode *node);
 	void addContent(const char *data, int len);
 
-	static void removeSpecialChars(std::string &content,
+	static void removeSpecialChars(const std::string &content,
 		std::string &result);
-	static void addSpecialChars(std::string &content, 
+	static void addSpecialChars(const std::string &content, 
 		std::string &result);
 	static const char *getSpacer(int space);
 

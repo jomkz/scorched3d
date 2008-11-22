@@ -24,7 +24,7 @@
 #include <stdio.h>
 #include <common/NumberParser.h>
 
-void XMLNode::removeSpecialChars(std::string &content, std::string &result)
+void XMLNode::removeSpecialChars(const std::string &content, std::string &result)
 {
 	result = "";
 	for (char *c=(char *) content.c_str(); *c; c++)
@@ -42,7 +42,7 @@ void XMLNode::removeSpecialChars(std::string &content, std::string &result)
 	}
 }
 
-void XMLNode::addSpecialChars(std::string &content, std::string &result)
+void XMLNode::addSpecialChars(const std::string &content, std::string &result)
 {
 	result = "";
 	for (char *c=(char *) content.c_str(); *c; c++)

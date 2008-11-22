@@ -171,7 +171,7 @@ int LangStringUtil::strcmp(const LangString &str1, const LangString &str2)
 	return (str1 == str2)?0:1;
 }
 
-int LangStringUtil::stricmp(const LangString &str1, const LangString &str2)
+int LangStringUtil::strcasecmp(const LangString &str1, const LangString &str2)
 {
 	LangString str1l(str1);
 	LangString str2l(str2);

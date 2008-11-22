@@ -116,7 +116,7 @@ void ServerTextFilter::filterString(LangString &inputText)
 			for (witor = words_.begin(); witor != words_.end(); witor++)
 			{
 				const unsigned int *word = (*witor).c_str();
-				if (LangStringUtil::stricmp(text, word) == 0)
+				if (LangStringUtil::strcasecmp(text, word) == 0)
 				{
 					// If they match, * out all parts
 					for (int k=i; k<=j; k++)
