@@ -55,8 +55,8 @@ void S3D::showURL(const std::string &url)
 	WinExec(buffer.c_str() ,SW_SHOWDEFAULT);
 #else
 #ifdef __DARWIN__
-	std::string buffer = S3D::formatStringBuffer("open %s");
-	system(buffer.c_str(), url.c_str()));
+	std::string buffer = S3D::formatStringBuffer("open %s", url.c_str());
+	system(buffer.c_str());
 #else
 	std::string buffer = S3D::formatStringBuffer("firefox %s", url.c_str());
 	system(buffer.c_str());
