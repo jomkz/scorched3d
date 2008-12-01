@@ -42,10 +42,10 @@ while test $# -gt 0; do
       echo 
       ;;
     --libs)
-      echo -framework Cocoa -framework SDL -L`pwd`/osx/lib -lSDLmain
+      echo -I/Library/Frameworks/SDL.framework/Headers -framework Cocoa -framework SDL -I`pwd`/../scorched-dep-osx/lib `pwd`/../scorched-dep-osx/lib/SDLMain.m
       ;;
     --static-libs)
-      echo -framework Cocoa -framework SDL -L`pwd`/osx/lib -lSDLmain
+      echo -I/Library/Frameworks/SDL.framework/Headers -framework Cocoa -framework SDL -I`pwd`/../scorched-dep-osx/lib `pwd`/../scorched-dep-osx/lib/SDLMain.m
       ;;
     *)
       echo "${usage}" 1>&2
