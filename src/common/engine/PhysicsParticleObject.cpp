@@ -103,6 +103,8 @@ void PhysicsParticleObject::checkCollision()
 	CollisionInfo collision;
 	collision.collisionId = CollisionIdNone;
 
+	fixed bounceFactor = 2;
+
 	// Find if we have had a collision
 	CollisionAction action = CollisionActionNone;
 	Target *target = context_->getTargetSpace().getCollision(position_);
@@ -141,6 +143,7 @@ void PhysicsParticleObject::checkCollision()
 			action = checkBounceCollision(collision, target);
 
 			velocity_[2] = MIN(velocity_[2], 1);
+			bounceFactor = fixed(true, 1750);
 		}
 		break;
 	case ParticleTypeFalling:
@@ -168,7 +171,7 @@ void PhysicsParticleObject::checkCollision()
 			fixed strength = velocity_.Magnitude();
 			FixedVector direction = velocity_ / strength;
 			fixed dotp = -collision.normal.dotP(direction);
-			direction = direction + collision.normal * (dotp * 2);
+			direction = direction + collision.normal * (dotp * bounceFactor);
 			velocity_ = direction * strength * collision.deflectFactor;
 
 			fixed landHeight = 
