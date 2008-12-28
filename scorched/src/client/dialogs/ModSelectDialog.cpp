@@ -32,7 +32,9 @@
 
 GLWIconListModItem::GLWIconListModItem(ModInfo &modInfo) :
 	modInfo_(modInfo), 
-	tip_(ToolTip::ToolTipHelp, modInfo.getName(), modInfo.getDescription()),
+	tip_(ToolTip::ToolTipHelp, 
+		LANG_STRING(modInfo.getShortDescription()), 
+		LANG_STRING(modInfo.getDescription())),
 	icon_(0.0f, 0.0f, 40.0f, 40.0f)
 {
 	if (S3D::fileExists(modInfo_.getIcon()))
@@ -57,14 +59,10 @@ void GLWIconListModItem::draw(float x, float y, float w)
 		GLWTranslate::getPosX() + x, 
 		GLWTranslate::getPosY() + y, w, 50.0f);
 
-	GLWFont::instance()->getGameFont()->draw(
-		GLWFont::widgetFontColor, 
-		12.0f, x + 50.0f, y + 25.0f, 0.0f, 
-		S3D::formatStringBuffer("Mod : %s", modInfo_.getName()));
 	GLWFont::instance()->getGameFont()->drawWidth(
 		w - 50.0f,
 		GLWFont::widgetFontColor, 
-		8.0f, x + 50.0f, y + 12.0f, 0.0f, 
+		10.0f, x + 50.0f, y + 18.0f, 0.0f, 
 		modInfo_.getShortDescription());
 }
 
@@ -85,9 +83,9 @@ ModSelectDialog::ModSelectDialog() :
 	iconList_ = new GLWIconList(10.0f, 40.0f, 280.0f, 360.0f, 50.0f);
 	addWidget(iconList_);
 
-	okId_ = addWidget(new GLWTextButton("Ok", 235, 10, 55, this, 
+	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("OK", "Ok"), 235, 10, 55, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX))->getId();
-	cancelId_ = addWidget(new GLWTextButton("Cancel", 120, 10, 105, this, 
+	cancelId_ = addWidget(new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 120, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX))->getId();
 
 	iconList_->setHandler(this);

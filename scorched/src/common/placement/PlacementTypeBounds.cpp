@@ -69,7 +69,7 @@ void PlacementTypeBounds::getPositions(ScorchedContext &context,
 			position.position[2] = 
 				generator.getRandFixed() * (maxbounds[2] - minbounds[2]) + minbounds[2];
 		} 
-		while (context.landscapeMaps->getGroundMaps().
+		while (context.getLandscapeMaps().getGroundMaps().
 			getInterpHeight(position.position[0], position.position[1]) >= position.position[2]);
 
 		// Set velocity pointing into the middle

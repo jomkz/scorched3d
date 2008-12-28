@@ -21,6 +21,7 @@
 #include <server/ServerStartingState.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerNewGameState.h>
+#include <server/ServerChannelManager.h>
 #include <server/ServerState.h>
 #include <server/ServerCommon.h>
 #include <coms/ComsMessageSender.h>
@@ -52,8 +53,12 @@ bool ServerStartingState::acceptStateChange(const unsigned state,
 	{
 		if (int(startTime) % 5 == 0)
 		{
-			ServerCommon::sendString(0, 
-				S3D::formatStringBuffer("Game starting in %.0f seconds...", timeLeft_));
+			ServerChannelManager::instance()->sendText(
+				ChannelText("info", 
+					"GAME_STARTING_IN_X", 
+					"Game starting in {0} seconds...", 
+					timeLeft_),
+				false);
 		}
 	}
 

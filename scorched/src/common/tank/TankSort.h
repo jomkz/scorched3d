@@ -18,15 +18,11 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-
-// TankSort.h: interface for the TankSort class.
-//
-//////////////////////////////////////////////////////////////////////
-
 #if !defined(AFX_TANKSORT_H__21F68DAD_9352_4673_9E24_B869AD5645AE__INCLUDED_)
 #define AFX_TANKSORT_H__21F68DAD_9352_4673_9E24_B869AD5645AE__INCLUDED_
 
 #include <list>
+#include <lang/LangString.h>
 #include <engine/ScorchedContext.h>
 
 class Tank;
@@ -39,8 +35,8 @@ namespace TankSort
 	};
 
 	int compare(ScorchedContext &context,
-		const char *nameX, TankScore &scoreX,
-		const char *nameY, TankScore &scoreY);
+		const LangString &nameX, TankScore &scoreX,
+		const LangString &nameY, TankScore &scoreY);
 
 	int getWinningTeam(ScorchedContext &context);
 	void getSortedTanks(std::list<Tank *> &list, ScorchedContext &context);

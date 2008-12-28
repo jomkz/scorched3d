@@ -21,10 +21,13 @@
 #include <water/Water2Patches.h>
 #include <GLEXT/GLState.h>
 #include <GLEXT/GLFont2d.h>
+#include <GLEXT/GLVertexBufferObject.h>
+#include <GLEXT/GLStateExtension.h>
+#include <graph/OptionsDisplay.h>
 #include <image/ImageFactory.h>
 
 Water2Patches::Water2Patches() : patches_(0), 
-	size_(0), totalSize_(0), patchSize_(0)
+	size_(0), totalSize_(0), patchSize_(0), bufferObject_(0)
 {
 }
 
@@ -49,6 +52,31 @@ void Water2Patches::generate(Water2Points &heights,
 		for (int x=0; x<size_; x++, i++)
 		{
 			patches_[i].generate(heights, patchSize, int(totalSize), x , y, waterHeight);
+		}
+	}
+
+	// Generate the VBO if any
+	if (GLStateExtension::hasVBO())
+	{
+		int patchVolume = (patchSize + 1) * (patchSize + 1);
+		int bufferSizeBytes = patchVolume * sizeof(Water2Patch::Data);
+		int allBuffersSizeBytes = bufferSizeBytes * i;
+
+		if (!bufferObject_ || bufferObject_->get_map_size() != allBuffersSizeBytes) 
+		{
+			delete bufferObject_;
+			bufferObject_ = new GLVertexBufferObject();
+			bufferObject_->init_data(allBuffersSizeBytes, 0, GL_STATIC_DRAW);
+		}
+
+		i=0;
+		for (int y=0; y<size_; y++)
+		{
+			for (int x=0; x<size_; x++, i++)
+			{
+				bufferObject_->init_sub_data(i * bufferSizeBytes, bufferSizeBytes, patches_[i].getInternalData());
+				patches_[i].setBufferOffSet(i * bufferSizeBytes);
+			}
 		}
 	}
 
@@ -78,6 +106,11 @@ void Water2Patches::generateNormalMap()
 			normalBits[2] = (unsigned char)(data->nz*127.0f+128.0f);
 		}
 	}
+}
+
+Water2Patch *Water2Patches::getPatch(int index)
+{
+	return &patches_[index];
 }
 
 Water2Patch *Water2Patches::getPatch(int x, int y)

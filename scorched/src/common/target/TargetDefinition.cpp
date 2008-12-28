@@ -105,7 +105,7 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 	RandomGenerator &generator)
 {
 	Target *target = new Target(playerId, 
-		name_.c_str(), context);
+		name_, context);
 	target->getLife().setBoundingSphere(boundingsphere_);
 
 	fixed rotation = modelrotation_;
@@ -152,7 +152,7 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 
 	if (shield_.c_str()[0] && 0 != strcmp(shield_.c_str(), "none"))
 	{
-		Accessory *shield = context.accessoryStore->
+		Accessory *shield = context.getAccessoryStore().
 			findByPrimaryAccessoryName(shield_.c_str());
 		if (!shield)
 		{
@@ -166,7 +166,7 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 
 	if (parachute_.c_str()[0] && 0 != strcmp(parachute_.c_str(), "none"))
 	{
-		Accessory *parachute = context.accessoryStore->
+		Accessory *parachute = context.getAccessoryStore().
 			findByPrimaryAccessoryName(parachute_.c_str());
 		if (!parachute)
 		{
@@ -180,7 +180,7 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 
 	if (removeaction_.c_str()[0] && 0 != strcmp(removeaction_.c_str(), "none"))
 	{
-		Accessory *action = context.accessoryStore->
+		Accessory *action = context.getAccessoryStore().
 			findByPrimaryAccessoryName(removeaction_.c_str());		
 		if (!action || action->getType() != AccessoryPart::AccessoryWeapon)
 		{
@@ -193,7 +193,7 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 	}
 	if (burnaction_.c_str()[0] && 0 != strcmp(burnaction_.c_str(), "none"))
 	{
-		Accessory *action = context.accessoryStore->
+		Accessory *action = context.getAccessoryStore().
 			findByPrimaryAccessoryName(burnaction_.c_str());		
 		if (!action || action->getType() != AccessoryPart::AccessoryWeapon)
 		{
@@ -205,12 +205,8 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 		target->setBurnAction((Weapon *) action->getAction());
 	}
 
-	target->getLife().setTargetPosition(position);
-
-	groups_.addToGroups(context, &target->getGroup(), false);
-
 #ifndef S3D_SERVER
-	if (!context.serverMode)
+	if (!context.getServerMode())
 	{
 		target->setRenderer(
 			new TargetRendererImplTarget(
@@ -218,6 +214,9 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 				finalModelScale.asFloat(), finalBrightness.asFloat()));
 	}
 #endif // #ifndef S3D_SERVER
+
+	target->getLife().setTargetPosition(position);
+	groups_.addToGroups(context, &target->getGroup(), false);
 
 	return target;
 }

@@ -33,7 +33,7 @@ public:
 	virtual ~TargetMovement();
 
 	void generate(ScorchedContext &context);
-	void simulate(fixed frameTime);
+	void simulate(ScorchedContext &context, fixed frameTime);
 	void draw();
 
 	// Serialize the movement data (if any)

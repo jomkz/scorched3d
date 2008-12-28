@@ -21,7 +21,7 @@
 #ifndef _NETBUFFER_H_
 #define _NETBUFFER_H_
 
-#include <string>
+#include <lang/LangString.h>
 #include <common/FixedVector4.h>
 #include <common/FixedVector.h>
 #include <SDL/SDL.h>
@@ -51,6 +51,8 @@ public:
 	void addToBuffer(const char *add);
 	void addToBuffer(std::string &string);
 	void addToBuffer(const std::string &string);
+	void addToBuffer(LangString &string);
+	void addToBuffer(const LangString &string);
 	void addToBuffer(const char add);
 	void addToBuffer(const int add);
 	void addToBuffer(const float add);
@@ -105,6 +107,7 @@ public:
 	bool getFromBuffer(bool &result);
 	bool getFromBuffer(unsigned int &result);
 	bool getFromBuffer(std::string &string, bool safe = true);
+	bool getFromBuffer(LangString &string);
 	bool getFromBuffer(NetBuffer &buffer);
 
 	// Gets raw data from the buffer

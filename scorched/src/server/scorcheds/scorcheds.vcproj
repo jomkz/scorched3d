@@ -42,13 +42,13 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/src/server&quot;;&quot;$(SolutionDir)/src/common&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/zlib/zlib&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/jpg&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/SDL&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/expat/expat&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/png/png&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/mysql&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;S3D_SERVER;_CRT_SECURE_NO_WARNINGS;HAVE_MYSQL;XML_STATIC"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;S3D_SERVER;_CRT_SECURE_NO_WARNINGS;HAVE_MYSQL;XML_STATIC;PNG_DLL;PNG_NO_STDIO;PNG_NO_GLOBAL_ARRAYS"
 				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
+				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -116,13 +116,15 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				WholeProgramOptimization="false"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/src/server&quot;;&quot;$(SolutionDir)/src/common&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/zlib/zlib&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/jpg&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/SDL&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/expat/expat&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/png/png&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/mysql&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;S3D_SERVER;_CRT_SECURE_NO_WARNINGS;HAVE_MYSQL;XML_STATIC"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;S3D_SERVER;_CRT_SECURE_NO_WARNINGS;HAVE_MYSQL;XML_STATIC;PNG_DLL;PNG_NO_STDIO;PNG_NO_GLOBAL_ARRAYS"
+				StringPooling="true"
 				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
+				EnableFunctionLevelLinking="false"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="3"
+				DebugInformationFormat="0"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -137,10 +139,12 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="Ws2_32.lib $(SolutionDir)/../scorched-dep-win32/lib/jpg/jpeg.lib $(SolutionDir)/../scorched-dep-win32/lib/mysql/libmysql.lib $(SolutionDir)/../scorched-dep-win32/lib/png/libpng13.lib $(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL.lib $(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL_net.lib $(SolutionDir)/../scorched-dep-win32/lib/SDL/SDLmain.lib $(SolutionDir)/../scorched-dep-win32/lib/zlib/zlib1.lib $(SolutionDir)/../scorched-dep-win32/lib/expat/libexpat.lib"
 				LinkIncremental="1"
-				GenerateDebugInformation="true"
+				GenerateDebugInformation="false"
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				LinkTimeCodeGeneration="0"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -1685,6 +1689,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\weapons\WeaponScript.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\weapons\WeaponScript.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\weapons\WeaponSelectPosition.cpp"
 				>
 			</File>
@@ -1801,11 +1813,27 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\actions\ExplosionParams.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\ExplosionParams.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\actions\Laser.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\common\actions\Laser.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\LaserParams.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\LaserParams.h"
 				>
 			</File>
 			<File
@@ -1822,6 +1850,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\actions\Napalm.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\NapalmParams.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\NapalmParams.h"
 				>
 			</File>
 			<File
@@ -2077,6 +2113,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\coms\ComsAdminResultMessage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\coms\ComsAdminResultMessage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\coms\ComsBuyAccessoryMessage.cpp"
 				>
 			</File>
@@ -2186,14 +2230,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\coms\ComsHaveModFilesMessage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsHeightMapMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsHeightMapMessage.h"
 				>
 			</File>
 			<File
@@ -2685,14 +2721,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\landscapemap\HeightMapSender.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\landscapemap\HeightMapSender.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\landscapemap\LandscapeMaps.cpp"
 				>
 			</File>
@@ -2937,23 +2965,55 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\lua\LUAFns.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\lua\LUAFns.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\lua\lualib.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\lua\LUAWrapper.cpp"
+				RelativePath="..\..\common\lua\LUAS3DLib.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\lua\LUAWrapper.h"
+				RelativePath="..\..\common\lua\LUAS3DLib.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAS3DWeaponLib.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAS3DWeaponLib.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAScript.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAScript.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAScriptFactory.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAScriptFactory.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAScriptHook.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAScriptHook.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAUtil.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAUtil.h"
 				>
 			</File>
 			<File
@@ -3141,6 +3201,46 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\net\NetServerTCP3.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Coms.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Coms.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Destination.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Destination.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Recv.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Recv.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Send.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Send.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\net\NetServerTCPProtocol.cpp"
 				>
 			</File>
@@ -3154,22 +3254,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\net\NetServerTCPRead.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerUDP.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerUDP.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerUDPDestination.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerUDPDestination.h"
 				>
 			</File>
 		</Filter>
@@ -3674,6 +3758,74 @@
 			</File>
 			<File
 				RelativePath="..\..\common\image\ImageStore.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="lang"
+			>
+			<File
+				RelativePath="..\..\common\lang\Lang.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\Lang.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\LangImpl.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\LangImpl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\LangParam.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\LangParam.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\LangResource.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\LangResource.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\LangString.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\LangString.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\ResourceBundle.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\ResourceBundle.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\ResourceBundleEntry.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\ResourceBundleEntry.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\ResourceBundleEntryImpl.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\ResourceBundleEntryImpl.h"
 				>
 			</File>
 		</Filter>

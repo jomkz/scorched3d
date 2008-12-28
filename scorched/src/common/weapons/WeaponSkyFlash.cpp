@@ -43,6 +43,6 @@ bool WeaponSkyFlash::parseXML(AccessoryCreateContext &context, XMLNode *accessor
 void WeaponSkyFlash::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	context.actionController->addAction(new SkyFlash);
+	context.getActionController().addAction(new SkyFlash);
 }
 

@@ -20,26 +20,21 @@
 
 #include <tankgraph/RenderTargets.h>
 #include <tankgraph/TargetRendererImplTank.h>
+#include <tankgraph/TargetRendererImplTarget.h>
 #include <tankgraph/RenderTracer.h>
 #include <tankgraph/RenderGeoms.h>
-#include <graph/ModelRendererTree.h>
-#include <graph/ModelRendererMesh.h>
 #include <graph/OptionsDisplay.h>
+#include <graph/ModelRendererTree.h>
 #include <tank/TankContainer.h>
-#include <target/TargetLife.h>
-#include <client/ClientState.h>
+#include <target/TargetState.h>
 #include <client/ScorchedClient.h>
-#include <GLEXT/GLCamera.h>
+#include <common/OptionsScorched.h>
+#include <engine/ActionController.h>
 #include <GLEXT/GLGlobalState.h>
 #include <landscape/Landscape.h>
-#include <landscape/Sky.h>
+#include <land/VisibilityPatchGrid.h>
+#include <sky/Sky.h>
 #include <algorithm>
-
-static inline float approx_distance(float  dx, float dy, float dz)
-{
-   float approx = (dx * dx) + (dy * dy) + (dz * dz);
-   return approx;
-}
 
 RenderTargets *RenderTargets::instance_ = 0;
 
@@ -52,7 +47,8 @@ RenderTargets *RenderTargets::instance()
 	return instance_;
 }
 
-RenderTargets::RenderTargets() : createLists_(false)
+RenderTargets::RenderTargets() :
+	treesDrawn_(0), targetsDrawn_(0)
 {
 }
 
@@ -81,94 +77,144 @@ void RenderTargets::Renderer3D::draw(const unsigned state)
 
 void RenderTargets::Renderer3D::simulate(const unsigned state, float simTime)
 {
-	// Simulate all of the tanks
-	std::map<unsigned int, Target *> &targets = 
-		ScorchedClient::instance()->getTargetContainer().getTargets();
-	std::map<unsigned int, Target *>::iterator itor;
-	for (itor = targets.begin();
-		itor != targets.end();
-		itor++)
-	{
-		Target *target = (*itor).second;
-		TargetRenderer *renderer = target->getRenderer();
-		if (renderer)
-		{
-			TargetRendererImpl *rendererImpl = (TargetRendererImpl *) renderer;
-			rendererImpl->simulate(simTime);
-		}
-	}
+	VisibilityPatchInfo &patchInfo = VisibilityPatchGrid::instance()->getPatchInfo();
+	stepTime += simTime;
 
-	RenderTargets::instance()->createLists_ = true;
+	// step size = 1.0 / physics fps = steps per second
+	const float stepSize = 1.0f / float(ScorchedClient::instance()->getOptionsGame().getPhysicsFPS());
+	if (stepTime >= stepSize)
+	{
+		float time = stepTime * ScorchedClient::instance()->getActionController().getFast().asFloat();
+
+		void *currentPatchPtr = 0, *currentObject = 0;
+		TargetListIterator patchItor(patchInfo.getTargetVisibility());
+		TargetVisibilityIterator itor;
+		while (currentPatchPtr = patchItor.getNext())
+		{
+			TargetVisibilityPatch *currentPatch = (TargetVisibilityPatch *) currentPatchPtr;
+
+			itor.init(currentPatch->getTargets());
+			while (currentObject = itor.getNext())
+			{
+				Target *target = (Target *) currentObject;
+				TargetRendererImpl *renderImpl = (TargetRendererImpl *) target->getRenderer();
+				renderImpl->simulate(time);
+			}
+		}
+
+		itor.init(TargetVisibilityPatch::getLargeTargets());
+		while (currentObject = itor.getNext())
+		{
+			Target *target = (Target *) currentObject;
+			TargetRendererImpl *renderImpl = (TargetRendererImpl *) target->getRenderer();
+			renderImpl->simulate(time);
+		}
+
+		stepTime = 0.0f;
+	}
 }
 
 void RenderTargets::Renderer3D::enterState(const unsigned state)
 {
-	RenderTargets::instance()->createLists_ = true;
+
 }
 
-void RenderTargets::createLists()
+static void drawTargetShadows(TargetVisibilityIterator &itor, float distance) 
 {
-	if (!createLists_) return;
-	createLists_ = false;
-
-	// Camera position for LOD
-	Vector &campos = GLCamera::getCurrentCamera()->getCurrentPos();
-
-	// Reset everything that is to be drawn
-	RenderObjectLists &objectsList = 
-		RenderTargets::instance()->renderObjectLists_;
-	objectsList.reset();
-
-	std::map<unsigned int, Target *> &targets = 
-		ScorchedClient::instance()->getTargetContainer().getTargets();
-	std::map<unsigned int, Target *>::iterator itor;
-	for (itor = targets.begin();
-		itor != targets.end();
-		itor++)
+	void *currentObject = 0;
+	while (currentObject = itor.getNext())
 	{
-		Target *target = (*itor).second;
-		TargetRenderer *renderer = target->getRenderer();
-		if (renderer)
+		Target *target = (Target *) currentObject;
+		if (target->getTargetState().getDisplayHardwareShadow())
 		{
-			float distance = approx_distance(
-				target->getLife().getFloatPosition()[0] - campos[0],
-				target->getLife().getFloatPosition()[1] - campos[1],
-				target->getLife().getFloatPosition()[2] - campos[2]);
-
-			TargetRendererImpl *rendererImpl = (TargetRendererImpl *) renderer;
-			rendererImpl->addToLists(distance, objectsList);
+			if (target->isTarget())
+			{
+				TargetRendererImplTarget *renderImpl = (TargetRendererImplTarget *) target->getRenderer();
+				renderImpl->renderShadow(distance);
+			}
+			else
+			{
+				TargetRendererImplTank *renderImpl = (TargetRendererImplTank *) target->getRenderer();
+				renderImpl->renderShadow(distance);
+			}
 		}
 	}
 }
 
 void RenderTargets::shadowDraw()
 {
-	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_CREATE_LISTS");
-	createLists();
-	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_CREATE_LISTS");
+	VisibilityPatchInfo &patchInfo = VisibilityPatchGrid::instance()->getPatchInfo();
 
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_DRAW_OBJ");
-	// Shadows
-	if (!OptionsDisplay::instance()->getNoGLObjectShadows())
 	{
 		unsigned int wantedstate = GLState::BLEND_OFF | 
 			GLState::ALPHATEST_OFF | GLState::TEXTURE_OFF;
+		GLState glstate(wantedstate);
 
-		GLGlobalState globalState(wantedstate);
-		RenderObjectList &renderList = renderObjectLists_.getShadowList();
-		RenderObject **object = renderList.getObjects();
-		for (unsigned int c=0; c<renderList.getCount(); c++, object++)
 		{
-			(*object)->renderShadow();
+			GLGlobalState globalState(0);
+			ModelRendererTree::setSkipPre(true);
+			ModelRendererTree::drawInternalPre(false);
+
+			void *currentPatchPtr = 0;
+			TargetListIterator patchItor(patchInfo.getTreeVisibility());
+			TargetVisibilityIterator itor;
+			while (currentPatchPtr = patchItor.getNext())
+			{
+				TargetVisibilityPatch *currentPatch = (TargetVisibilityPatch *) currentPatchPtr;
+
+				itor.init(currentPatch->getTrees());
+				drawTargetShadows(itor, currentPatch->getDistance());
+			}
+
+			ModelRendererTree::setSkipPre(false);
+		}
+		{
+			GLGlobalState globalState(0);
+			void *currentPatchPtr = 0;
+			TargetListIterator patchItor(patchInfo.getTargetVisibility());
+			TargetVisibilityIterator itor;
+			while (currentPatchPtr = patchItor.getNext())
+			{
+				TargetVisibilityPatch *currentPatch = (TargetVisibilityPatch *) currentPatchPtr;
+
+				itor.init(currentPatch->getTargets());
+				drawTargetShadows(itor, currentPatch->getDistance());
+			}
+		}
+
+		{
+			GLGlobalState globalState(0);
+			TargetVisibilityIterator itor;
+
+			itor.init(TargetVisibilityPatch::getLargeTargets());
+			drawTargetShadows(itor, 0.0f);
 		}
 	}
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_DRAW_OBJ");
 }
 
+static void drawTargets(TargetVisibilityIterator &itor, float distance)
+{
+	void *currentObject = 0;
+	while (currentObject = itor.getNext())
+	{
+		Target *target = (Target *) currentObject;
+		if (target->isTarget())
+		{
+			TargetRendererImplTarget *renderImpl = (TargetRendererImplTarget *) target->getRenderer();
+			renderImpl->render(distance);
+		}
+		else
+		{
+			TargetRendererImplTank *renderImpl = (TargetRendererImplTank *) target->getRenderer();
+			renderImpl->render(distance);
+		}
+	}
+}
+
 void RenderTargets::draw()
 {
-	createLists();
-
 	// Don't put fully transparent areas into the depth buffer
 	unsigned int wantedstate = GLState::BLEND_ON | 
 		GLState::ALPHATEST_ON | GLState::TEXTURE_ON | 
@@ -177,40 +223,97 @@ void RenderTargets::draw()
 	GLState glstate(wantedstate);
 	Landscape::instance()->getSky().getSun().setLightPosition(false);
 
+	VisibilityPatchInfo &patchInfo = VisibilityPatchGrid::instance()->getPatchInfo();
+
 	// Trees
+	treesDrawn_ = 0;
+	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "TARGETS_DRAW_TREES");
+	if (!OptionsDisplay::instance()->getNoTrees())
 	{
 		GLGlobalState globalState(0);
-		RenderObjectList &renderList = renderObjectLists_.getTreeList();
-		RenderObject **object = renderList.getObjects();
-		for (unsigned int c=0; c<renderList.getCount(); c++, object++)
+		ModelRendererTree::setSkipPre(true);
+		ModelRendererTree::drawInternalPre(true);
+
+		void *currentPatchPtr = 0;
+		TargetListIterator patchItor(patchInfo.getTreeVisibility());
+		TargetVisibilityIterator itor;
+		while (currentPatchPtr = patchItor.getNext())
 		{
-			(*object)->render();
+			TargetVisibilityPatch *currentPatch = (TargetVisibilityPatch *) currentPatchPtr;
+
+			itor.init(currentPatch->getTrees());
+			drawTargets(itor, currentPatch->getDistance());
+
+			treesDrawn_+=currentPatch->getTrees().size();
 		}
+
+		ModelRendererTree::setSkipPre(false);
 	}
+	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "TARGETS_DRAW_TREES");
 
 	// Models
+	targetsDrawn_ = 0;
+	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "TARGETS_DRAW_MODELS");
 	{
 		GLGlobalState globalState(0);
-		RenderObjectList &renderList = renderObjectLists_.getModelList();
-		RenderObject **object = renderList.getObjects();
-		for (unsigned int c=0; c<renderList.getCount(); c++, object++)
+
+		void *currentPatchPtr = 0, *currentObject = 0;
+		TargetListIterator patchItor(patchInfo.getTargetVisibility());
+		TargetVisibilityIterator itor;
+		while (currentPatchPtr = patchItor.getNext())
 		{
-			(*object)->render();
+			TargetVisibilityPatch *currentPatch = (TargetVisibilityPatch *) currentPatchPtr;
+
+			itor.init(currentPatch->getTargets());
+			drawTargets(itor, currentPatch->getDistance());
+
+			targetsDrawn_+=currentPatch->getTargets().size();
+		}
+
+		{
+			itor.init(TargetVisibilityPatch::getLargeTargets());
+			drawTargets(itor, 0.0f);
+
+			targetsDrawn_+=TargetVisibilityPatch::getLargeTargets().size();
+		}
+	}
+	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "TARGETS_DRAW_MODELS");
+}
+
+static void drawTargets2D(TargetVisibilityIterator &itor, float distance)
+{
+	void *currentObject = 0;
+	while (currentObject = itor.getNext())
+	{
+		Target *target = (Target *) currentObject;
+		if (target->isTarget())
+		{
+			TargetRendererImplTarget *renderImpl = (TargetRendererImplTarget *) target->getRenderer();
+			renderImpl->render2D(distance);
+		}
+		else
+		{
+			TargetRendererImplTank *renderImpl = (TargetRendererImplTank *) target->getRenderer();
+			renderImpl->render2D(distance);
 		}
 	}
 }
 
 void RenderTargets::draw2d()
 {
-	createLists();
+	VisibilityPatchInfo &patchInfo = VisibilityPatchGrid::instance()->getPatchInfo();
 
 	// 2D
 	{
-		RenderObjectList &renderList = renderObjectLists_.get2DList();
-		RenderObject **object = renderList.getObjects();
-		for (unsigned int c=0; c<renderList.getCount(); c++, object++)
+		void *currentPatchPtr = 0;
+		TargetListIterator patchItor(patchInfo.getTargetVisibility());
+		TargetVisibilityIterator itor;
+		while (currentPatchPtr = patchItor.getNext())
 		{
-			(*object)->render2D();
+			TargetVisibilityPatch *currentPatch = (TargetVisibilityPatch *) currentPatchPtr;
+
+			itor.init(currentPatch->getTooltips());
+			drawTargets2D(itor, currentPatch->getDistance());
 		}
 	}
 }

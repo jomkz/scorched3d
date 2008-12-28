@@ -23,11 +23,12 @@
 
 #include <engine/ActionReferenced.h>
 #include <weapons/WeaponLaser.h>
+#include <actions/LaserParams.h>
 
 class Laser : public ActionReferenced
 {
 public:
-	Laser(WeaponLaser *weapon,
+	Laser(Weapon *weapon, LaserParams *params,
 		FixedVector &position, FixedVector &direction,
 		WeaponFireContext &weaponContext);
 	virtual ~Laser();
@@ -38,10 +39,11 @@ public:
 	virtual std::string getActionDetails();
 
 protected:
+	LaserParams *params_;
 	fixed totalTime_;
 	fixed drawLength_;
 	WeaponFireContext weaponContext_;
-	WeaponLaser *weapon_;
+	Weapon *weapon_;
 	FixedVector position_, direction_;
 
 	bool firstTime_;

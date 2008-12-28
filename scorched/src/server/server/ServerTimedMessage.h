@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_ServerTimedMessageh_INCLUDE__)
 #define __INCLUDE_ServerTimedMessageh_INCLUDE__
 
-#include <string>
+#include <lang/LangString.h>
 #include <list>
 #include <time.h>
 
@@ -39,7 +39,7 @@ protected:
 		TimedMessageEntry() : lastTime(0) {}
 		unsigned int timeInterval;
 		time_t lastTime;
-		std::list<std::string> messages;
+		std::list<LangString> messages;
 	};
 
 	time_t lastCheckTime_, lastReadTime_;

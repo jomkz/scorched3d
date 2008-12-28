@@ -22,6 +22,7 @@
 #include <server/ServerState.h>
 #include <server/ScorchedServer.h>
 #include <server/TurnController.h>
+#include <server/ServerChannelManager.h>
 #include <server/ServerCommon.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
@@ -107,8 +108,12 @@ void ServerNextTurnState::enterState(const unsigned state)
 			}
 			else
 			{
-				ServerCommon::sendStringMessage(tank->getDestinationId(), 
-					S3D::formatStringBuffer("%s's Move", tank->getName()));
+				ServerChannelManager::instance()->sendText(
+					ChannelText("banner",
+						"TANK'S MOVE",
+						"{0}'s Move", 
+						tank->getTargetName()),
+					false);
 
 				// Tell the clients to start the game
 				ComsStartGameMessage startMessage(tank->getPlayerId(), weaponBuy);

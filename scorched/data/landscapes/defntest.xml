@@ -3,7 +3,8 @@
 	<maxplayers>24</maxplayers>
 	<landscapewidth>256</landscapewidth>
 	<landscapeheight>512</landscapeheight>
-	<surround type="none"></surround>
+  <arenawidth>128</arenawidth>
+  <arenaheight>256</arenaheight>
 	<roof type="sky"></roof>
 	<tankstart type="height">
 		<startcloseness>20</startcloseness>

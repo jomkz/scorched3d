@@ -25,6 +25,7 @@
 #include <common/Defines.h>
 #include <image/ImageBitmap.h>
 #include <image/ImageFactory.h>
+#include <lang/LangResource.h>
 
 void HeightMapModifier::levelSurround(HeightMap &hmap)
 {
@@ -45,12 +46,278 @@ void HeightMapModifier::levelSurround(HeightMap &hmap)
 	}
 }
 
+static int noiseFn(int x, int y, int random)
+{
+    int n = x + y * 57 + random * 131;
+    n = (n<<13) ^ n;
+    return ((n * (n * n * 15731 + 789221) +
+		1376312589)&0x7fffffff);
+}
+
+void HeightMapModifier::noise(HeightMap &hmap, 
+	LandscapeDefnHeightMapGenerate &defn,
+	RandomGenerator &generator,
+	ProgressCounter *counter)
+{
+	if (defn.noisefactor == 0) return;
+	if (counter) counter->setNewOp(LANG_RESOURCE("NOISE", "Noise"));
+
+	unsigned int randomU = generator.getRandUInt() % 5000;
+	int random = (int) randomU;
+
+	fixed *noisemap = new fixed[defn.noisewidth * defn.noiseheight];
+	for (int y=0; y<defn.noiseheight; y++)
+	{
+		for (int x=0; x<defn.noisewidth; x++)
+		{
+			int noise = (noiseFn(x,  y,  random) -
+				(INT_MAX / 2)) / 100000;
+			noisemap[x + y * defn.noisewidth] = 
+				fixed(true, noise) * defn.noisefactor;
+		}
+	}
+
+	// Should perhaps lineraly interp, but smoothing is done afterwards
+	for (int x=0; x<=hmap.getMapWidth(); x++)
+	{
+		if (counter) counter->setNewPercentage((100.0f * float(x)) / float(hmap.getMapWidth()));
+		for (int y=0; y<=hmap.getMapHeight(); y++)
+		{
+			fixed nx = fixed(defn.noisewidth) * fixed(x) / fixed(hmap.getMapWidth());
+			fixed ny = fixed(defn.noiseheight) * fixed(y) / fixed(hmap.getMapHeight());
+			if (nx >= defn.noisewidth) nx = defn.noisewidth - 1;
+			if (ny >= defn.noiseheight) ny = defn.noiseheight - 1;
+
+			fixed height = hmap.getHeight(x, y);
+			fixed newHeight = height + 
+				noisemap[nx.asInt() + ny.asInt() * defn.noisewidth];
+			newHeight = MAX(newHeight, 0);
+			hmap.setHeight(x, y, newHeight);
+		}
+	}
+}
+
+void HeightMapModifier::edgeEnhance(HeightMap &hmap, 
+	LandscapeDefnHeightMapGenerate &defn,
+	RandomGenerator &generator,
+	ProgressCounter *counter)
+{
+	if (counter) counter->setNewOp(LANG_RESOURCE("EDGE_ENHANCE", "Edge Enhance"));
+	
+	fixed *newhMap_ = new fixed[(hmap.getMapWidth()+1) * (hmap.getMapHeight()+1)];
+	fixed *point = newhMap_;
+	fixed max, pixel;
+	for (int y=0; y<=hmap.getMapHeight(); y++)
+	{
+		if (counter) counter->setNewPercentage((100.0f * float(y)) / float(hmap.getMapHeight()));
+		for (int x=0; x<=hmap.getMapWidth(); x++, point++)
+        {
+			fixed height = hmap.getHeight(x, y);
+			if (x>0 && y>0 && x<hmap.getMapWidth() && y<hmap.getMapHeight())
+			{
+				max = (hmap.getHeight(x + 1, y + 1) - hmap.getHeight(x - 1, y - 1)).abs();
+				
+				pixel = (hmap.getHeight(x - 1, y + 1) - hmap.getHeight(x + 1, y - 1)).abs();
+				if (pixel > max) max = pixel;
+
+				pixel = (hmap.getHeight(x - 1, y) - hmap.getHeight(x + 1, y)).abs();
+				if (pixel > max) max = pixel;
+
+				pixel = (hmap.getHeight(x, y - 1) - hmap.getHeight(x, y + 1)).abs();
+				if (pixel > max) max = pixel;
+
+				*point = MAX(height, max + height);
+			}
+			else
+			{
+				*point = height;
+			}
+			*point = MAX(*point, 0);
+        }
+    }    
+
+	fixed *start = newhMap_;
+	for (int y=0; y<=hmap.getMapHeight(); y++)
+	{
+		for (int x=0; x<=hmap.getMapWidth(); x++)
+		{
+			hmap.setHeight(x, y, *(start++));
+		}
+	}
+	delete [] newhMap_;
+}
+
+static void getPos(int pos, int &x, int &y, int dist)
+{
+	switch (pos)
+	{
+	case 0:
+		x = -dist;
+		y = -dist;
+		break;
+	case 1:
+		x = dist;
+		y = dist;
+		break;
+	case 2:
+		x = dist;
+		y = -dist;
+		break;
+	case 3:
+		x = -dist;
+		y = dist;
+		break;
+	case 4:
+		x = -dist;
+		y = 0;
+		break;
+	case 5:
+		x = dist;
+		y = 0;
+		break;
+	case 6:
+		x = 0;
+		y = dist;
+		break;
+	case 7:
+		x = 0;
+		y = -dist;
+		break;
+	}
+}
+
+void HeightMapModifier::waterErrosion(HeightMap &hmap, 
+	LandscapeDefnHeightMapGenerate &defn,
+	RandomGenerator &generator,
+	ProgressCounter *counter)
+{
+	if (defn.errosions == 0) return;
+	if (counter) counter->setNewOp(LANG_RESOURCE("WATER_ERROSION", "Water Errosion"));
+
+	// Copy the height map, so we don't keep running down the same paths
+	// as we have already created
+	fixed *newhMap = new fixed[(hmap.getMapWidth()+1) * (hmap.getMapHeight()+1)];
+	fixed *start = newhMap;
+	for (int y=0; y<=hmap.getMapHeight(); y++)
+	{
+		for (int x=0; x<=hmap.getMapWidth(); x++, start++)
+		{
+			*start = hmap.getHeight(x, y);
+		}
+	}
+
+	// Keep a count of how many paths have used the same squares
+	int *seen = new int[(hmap.getMapWidth()+1) * (hmap.getMapHeight()+1)];
+	memset(seen, 0, sizeof(int) * (hmap.getMapWidth()+1) * (hmap.getMapHeight()+1));
+
+	// For each errosion stream
+	for (int o=0; o<defn.errosions; o++) 
+	{
+		if (counter) counter->setNewPercentage((100.0f * float(o)) / float(30));
+
+		// Choose a random start
+		int x = generator.getRandUInt() % hmap.getMapWidth();
+		int y = generator.getRandUInt() % hmap.getMapHeight();
+		
+		// Set the position and starting height
+		int startx = x;
+		int starty = y;
+		fixed startHeight = hmap.getHeight(x, y);
+
+		// For a set number of itterations
+		int nx, ny;
+		for (int i=0; i<500; i++)
+		{
+			// Find next position to be lowered
+			fixed minHeight = fixed::MAX_FIXED;
+			int distFromStart = (x - startx) * (x - startx) +
+				(y - starty) * (y - starty);
+
+			// Find the lowest square around the current square
+			// this must be further away from the start than the current
+			int minIndex = -1;
+			for (int a=0; a<4; a++)
+			{
+				getPos(a, nx, ny, 1);
+				if (x + nx >= 0 &&
+					y + ny >= 0 &&
+					x + nx <= hmap.getMapWidth() &&
+					y + ny <= hmap.getMapHeight())
+				{
+					int newDistFromStart = 
+						(x + nx - startx) * (x + nx - startx) +
+						(y + ny - starty) * (y + ny - starty);
+					if (newDistFromStart > distFromStart)
+					{
+						fixed newHeight = newhMap[x + nx + (y + ny) * (hmap.getMapWidth()+1)];
+						if (newHeight < minHeight) 
+						{
+							minIndex = a;
+							minHeight = newHeight;
+						}
+					}
+				}
+			}
+
+			// Check if have found any, or if we have been here with too many streams
+			if (minIndex == -1 || seen[x + y * (hmap.getMapWidth()+1)] > defn.errosionlayering) 
+			{
+				break;
+			}
+			seen[x + y * (hmap.getMapWidth()+1)]++;
+
+			// Set new height, make sure it is lower than the start by a certain amount
+			fixed lowered = fixed(i) * defn.errosionforce;
+			lowered = MIN(lowered, defn.errosionmaxdepth);
+			fixed currentheight = hmap.getHeight(x, y);
+			startHeight = MIN(startHeight, currentheight);
+			fixed newheight = MAX(startHeight - lowered, 0);
+			hmap.setHeight(x, y, newheight);
+
+			// Lower the surrounding area so its not so severe
+			int size = 1;
+			while (true)
+			{
+				fixed raised = fixed(size) * defn.errosionsurroundforce;
+				for (int a=-size; a<=size; a++)
+				{
+					for (int b=-size; b<=size; b++)
+					{
+						if (a==-size || a==size || b==-size || b==size)
+						{
+							fixed newSurroundHeight = startHeight - lowered + raised + generator.getRandFixed() * 2;
+							newSurroundHeight = MAX(newSurroundHeight, 0);
+							fixed oldSurroundHeight = hmap.getHeight(x + a, y + b);
+							if (oldSurroundHeight > newSurroundHeight)
+							{
+								hmap.setHeight(x + a , y + b, newSurroundHeight);
+							}
+						}
+					}
+				}
+				size++;
+				if (size > defn.errosionsurroundsize) break;
+			}
+
+			// Move to the next x,y
+			{
+				getPos(minIndex, nx, ny, 1);
+				x += nx;
+				y += ny;
+			}
+		}
+	}
+
+	delete [] newhMap;
+	delete [] seen;
+}
+
 void HeightMapModifier::smooth(HeightMap &hmap, 
 							   LandscapeDefnHeightMapGenerate &defn,
 							   ProgressCounter *counter)
 {
 	if (defn.landsmoothing == 0) return;
-	if (counter) counter->setNewOp("Smoothing");
+	if (counter) counter->setNewOp(LANG_RESOURCE("SMOOTING", "Smoothing"));
 
 	fixed *newhMap_ = new fixed[(hmap.getMapWidth()+1) * (hmap.getMapHeight()+1)];
 
@@ -108,7 +375,7 @@ void HeightMapModifier::scale(HeightMap &hmap,
 							  RandomGenerator &generator, 
 							  ProgressCounter *counter)
 {
-	if (counter) counter->setNewOp("Scaling Phase 1");
+	if (counter) counter->setNewOp(LANG_RESOURCE("SCALING_PHASE_1", "Scaling Phase 1"));
 
 	fixed max = hmap.getHeight(0,0);
 	fixed min = hmap.getHeight(0,0);
@@ -124,7 +391,7 @@ void HeightMapModifier::scale(HeightMap &hmap,
 		}
 	}
 
-	if (counter) counter->setNewOp("Scaling Phase 2");
+	if (counter) counter->setNewOp(LANG_RESOURCE("SCALING_PHASE_2", "Scaling Phase 2"));
 
 	fixed realMax = ((fixed(defn.landheightmax) - fixed(defn.landheightmin)) * generator.getRandFixed()) + 
 		defn.landheightmin;
@@ -188,7 +455,7 @@ void HeightMapModifier::generateTerrain(HeightMap &hmap,
 										RandomGenerator &offsetGenerator,
 										ProgressCounter *counter)
 {
-	if (counter) counter->setNewOp("Teraform Landscape");
+	if (counter) counter->setNewOp(LANG_RESOURCE("TERAFORM_LANDSCAPE", "Teraform Landscape"));
 
 	// Create a default mask that allows everything
 	ImageBitmap bmap(256, 256);
@@ -273,6 +540,9 @@ void HeightMapModifier::generateTerrain(HeightMap &hmap,
 	}
 
 	scale(hmap, defn, generator, counter);
+	noise(hmap, defn, generator, counter);
+	//edgeEnhance(hmap, defn, generator, counter);
+	waterErrosion(hmap, defn, generator, counter);
 	if (defn.levelsurround) levelSurround(hmap);
 	smooth(hmap, defn, counter);
 	if (defn.levelsurround) levelSurround(hmap);

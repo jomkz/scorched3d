@@ -106,6 +106,15 @@ namespace ServerWebHandler
 			std::string &text);
 	};
 
+	class AccountHandler : public ServerWebServerI
+	{
+	public:
+		virtual ServerWebServerI *createCopy() { return new AccountHandler(); }
+		virtual bool processRequest(
+			ServerWebServerIRequest &request,
+			std::string &text);
+	};
+
 	class StatsHandler : public ServerWebServerI
 	{
 	public:

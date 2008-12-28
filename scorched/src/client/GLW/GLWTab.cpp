@@ -32,9 +32,12 @@ GLWTabI::~GLWTabI()
 
 }
 
-GLWTab::GLWTab(char *tabName, float x, float y, float w, float h) :
+GLWTab::GLWTab(const std::string &tabName, 
+	const LangString &tabLabel,
+	float x, float y, float w, float h) :
 	GLWScrollPanel(x, y, w, h), index_(-1.0f),
-	label_(x + 5.0f + -1.0f, y + h - 3.0f, tabName),
+	label_(x + 5.0f + -1.0f, y + h - 3.0f, tabLabel),
+	name_(tabName),
 	handler_(0), depressed_(true)
 {
 	label_.setSize(12.0f);

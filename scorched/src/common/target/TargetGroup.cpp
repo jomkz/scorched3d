@@ -25,6 +25,7 @@
 #include <landscapemap/TargetGroupsGroupEntry.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <net/NetBuffer.h>
+#include <set>
 
 TargetGroup::TargetGroup(ScorchedContext &context) :
 	context_(context)
@@ -74,7 +75,7 @@ bool TargetGroup::readMessage(NetBufferReader &reader)
 		if (!reader.getFromBuffer(groupName)) return false;
 
 		TargetGroupsGroupEntry *group = 
-			context_.landscapeMaps->getGroundMaps().getGroups().getGroup(groupName.c_str());
+			context_.getLandscapeMaps().getGroundMaps().getGroups().getGroup(groupName.c_str());
 		if (group && !group->hasObject(this))
 		{
 			group->addObject(this, false);

@@ -32,6 +32,7 @@
 #include <client/ClientLoadPlayersState.h>
 #include <client/ClientSaveScreenState.h>
 #include <client/ScorchedClient.h>
+#include <client/ClientProcessingLoop.h>
 #include <sound/Sound.h>
 #include <tankgraph/RenderTargets.h>
 #include <tankgraph/TankKeyboardControl.h>
@@ -40,11 +41,25 @@
 #include <landscape/LandscapeStateHandler.h>
 #include <landscape/LandscapeMusicManager.h>
 #include <GLEXT/GLCameraFrustum.h>
-#include <GLEXT/GLConsole.h>
+#include <console/ConsoleImpl.h>
+
+void ClientState::addMandatoryComponents(GameState &gameState, unsigned state)
+{
+	gameState.addStateLoop(state, Main2DCamera::instance(), 
+		ClientProcessingLoop::instance());
+	gameState.addStateLoop(state, Main2DCamera::instance(), 
+		Sound::instance()); // SOUND
+	gameState.addStateLoop(state, Main2DCamera::instance(),
+		LandscapeMusicManager::instance()); // MUSIC
+	gameState.addStateLoop(state, Main2DCamera::instance(), 
+		FrameTimer::instance());
+}
 
 void ClientState::addWindowManager(GameState &gameState, unsigned state)
 {
-	gameState.addStateKeyEntry(state, GLConsole::instance());
+	addMandatoryComponents(gameState, state);
+
+	gameState.addStateKeyEntry(state, (ConsoleImpl *) Console::instance());
 	gameState.addStateEntry(state, GLWWindowManager::instance());
 	gameState.addStateLoop(state, Main2DCamera::instance(), 
 		GLWWindowManager::instance());
@@ -61,11 +76,7 @@ void ClientState::addWindowManager(GameState &gameState, unsigned state)
 	gameState.addStateKeyEntry(state, GLWWindowManager::instance());
 	gameState.addStateMouseWheelEntry(state, GLWWindowManager::instance());
 	gameState.addStateLoop(state, Main2DCamera::instance(),
-		GLConsole::instance());
-	gameState.addStateLoop(state, Main2DCamera::instance(), 
-		Sound::instance()); // SOUND
-	gameState.addStateLoop(state, Main2DCamera::instance(),
-		LandscapeMusicManager::instance()); // MUSIC
+		(ConsoleImpl *) Console::instance());
 }
 
 void ClientState::addStandardComponents(GameState &gameState, unsigned state)
@@ -90,8 +101,6 @@ void ClientState::addStandardComponents(GameState &gameState, unsigned state)
 		MainCamera::instance(), &MainCamera::instance()->precipitation_);
 	gameState.addStateLoop(state, 
 		Main2DCamera::instance(), &RenderTargets::instance()->render2D);
-	gameState.addStateLoop(state, 
-		MainCamera::instance(), FrameTimer::instance());
 	gameState.addStateLoop(state, 
 		Main2DCamera::instance(), SpeedChange::instance());
 	addWindowManager(gameState, state);

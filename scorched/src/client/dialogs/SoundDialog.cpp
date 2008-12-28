@@ -44,7 +44,7 @@ SoundDialog::SoundDialog() :
 
 	{
 	GLWPanel *soundVolumePanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
-	soundVolumePanel->addWidget(new GLWLabel(0.0f, 0.0f, "Sound Volume    "), 0, SpaceRight, 10.0f);
+	soundVolumePanel->addWidget(new GLWLabel(0.0f, 0.0f, LANG_RESOURCE("SOUND_VOLUME", "Sound Volume    ")), 0, SpaceRight, 10.0f);
 	soundVolume_ = new GLWSlider(0.0f, 0.0f, 300.0f);
 	soundVolumePanel->addWidget(soundVolume_, 0, AlignCenterLeftRight);
 	soundVolumePanel->setLayout(GLWPanel::LayoutHorizontal);
@@ -53,7 +53,7 @@ SoundDialog::SoundDialog() :
 
 	{
 	GLWPanel *ambientSoundVolumePanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
-	ambientSoundVolumePanel->addWidget(new GLWLabel(0.0f, 0.0f, "Ambient Volume"), 0, SpaceRight, 10.0f);
+	ambientSoundVolumePanel->addWidget(new GLWLabel(0.0f, 0.0f, LANG_RESOURCE("AMBIENT_VOLUME", "Ambient Volume")), 0, SpaceRight, 10.0f);
 	ambientSoundVolume_ = new GLWSlider(0.0f, 0.0f, 300.0f);
 	ambientSoundVolumePanel->addWidget(ambientSoundVolume_, 0, AlignCenterLeftRight);
 	ambientSoundVolumePanel->setLayout(GLWPanel::LayoutHorizontal);
@@ -62,7 +62,7 @@ SoundDialog::SoundDialog() :
 
 	{
 	GLWPanel *musicVolumePanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
-	musicVolumePanel->addWidget(new GLWLabel(0.0f, 0.0f, "Music Volume    "), 0, SpaceRight, 10.0f);
+	musicVolumePanel->addWidget(new GLWLabel(0.0f, 0.0f, LANG_RESOURCE("MUSIC_VOLUME", "Music Volume    ")), 0, SpaceRight, 10.0f);
 	musicVolume_ = new GLWSlider(0.0f, 0.0f, 300.0f);
 	musicVolumePanel->addWidget(musicVolume_, 0, AlignCenterLeftRight);
 	musicVolumePanel->setLayout(GLWPanel::LayoutHorizontal);
@@ -70,23 +70,23 @@ SoundDialog::SoundDialog() :
 	}
 
 	GLWPanel *checkPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
-	noSoundBox_ = new GLWCheckBoxText(0.0f, 0.0f, "No Sound");
+	noSoundBox_ = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("NO_SOUND", "No Sound"));
 	checkPanel->addWidget(noSoundBox_, 0, SpaceRight, 10.0f);
-	noMusicBox_ = new GLWCheckBoxText(0.0f, 0.0f, "No Music");
+	noMusicBox_ = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("NO MUSIC", "No Music"));
 	checkPanel->addWidget(noMusicBox_);
 	checkPanel->setLayout(GLWPanel::LayoutHorizontal);
 	addWidget(checkPanel, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
 
 	GLWPanel *buttonPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
-	GLWButton *cancelButton = new GLWTextButton("Cancel", 95, 10, 105, this, 
+	GLWButton *cancelButton = new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 95, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX);
 	cancelId_ = cancelButton->getId();
 	buttonPanel->addWidget(cancelButton, 0, SpaceRight, 10.0f);
-	GLWButton *applyButton = new GLWTextButton("Apply", 235, 10, 110, this,
+	GLWButton *applyButton = new GLWTextButton(LANG_RESOURCE("APPLY", "Apply"), 235, 10, 110, this,
 		GLWButton::ButtonFlagCenterX);
 	applyId_ = applyButton->getId();
 	buttonPanel->addWidget(applyButton, 0, SpaceRight, 10.0f);
-	GLWButton *okButton = new GLWTextButton("Ok", 475, 10, 55, this, 
+	GLWButton *okButton = new GLWTextButton(LANG_RESOURCE("OK", "Ok"), 475, 10, 55, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX);
 	okId_ = okButton->getId();
 	buttonPanel->addWidget(okButton);

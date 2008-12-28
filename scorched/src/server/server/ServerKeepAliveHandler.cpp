@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <server/ServerKeepAliveHandler.h>
+#include <server/ServerChannelManager.h>
 #include <server/ServerCommon.h>
 #include <server/ScorchedServer.h>
 #include <common/Logger.h>
@@ -95,10 +96,13 @@ void ServerKeepAliveHandler::checkKeepAlives()
 			if (current->getKeepAlive() != 0 &&
 				theTime - current->getKeepAlive()  > allowedTime)
 			{
-				ServerCommon::sendString(0, 
-					S3D::formatStringBuffer("\"%s\" Kicked for exceeding keep alive timeout (%u seconds)",
-						current->getName(),
-						theTime - current->getKeepAlive()));
+				ServerChannelManager::instance()->sendText(
+					ChannelText("info",
+						"KEEPALIVE_KICK",
+						"\"{0}\" Kicked for exceeding keep alive timeout ({1} seconds)",
+						current->getTargetName(),
+						theTime - current->getKeepAlive()),
+					true);
 
 				ServerCommon::kickDestination(current->getDestinationId());
 

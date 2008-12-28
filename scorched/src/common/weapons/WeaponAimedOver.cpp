@@ -52,7 +52,7 @@ bool WeaponAimedOver::parseXML(AccessoryCreateContext &context, XMLNode *accesso
 	if (!accessoryNode->getNamedChild("aimedweapon", subNode)) return false;
 
 	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore()->
+	AccessoryPart *accessory = context.getAccessoryStore().
 		createAccessoryPart(context, parent_, subNode);
 	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
 	{
@@ -80,19 +80,8 @@ void WeaponAimedOver::fireWeapon(ScorchedContext &context,
 {
 	FixedVector position = sentPosition;
 
-	// Make sure that this position is inside the walls (if any)
-	if (context.optionsTransient->getWallType() != OptionsTransient::wallNone)
-	{
-		if (position[0] < 6) position[0] = 6;
-		else if (position[0] > (fixed)context.landscapeMaps->getGroundMaps().getMapWidth() - 6) 
-			position[0] = (fixed)context.landscapeMaps->getGroundMaps().getMapWidth() - 6;
-		if (position[1] < 6) position[1] = 6;
-		else if (position[1] > (fixed)context.landscapeMaps->getGroundMaps().getMapHeight() - 6)
-				position[1] = (fixed)context.landscapeMaps->getGroundMaps().getMapHeight() - 6;
-	}
-
 	// Make sure that this position is above ground
-	fixed minHeight = context.landscapeMaps->getGroundMaps().getInterpHeight(
+	fixed minHeight = context.getLandscapeMaps().getGroundMaps().getInterpHeight(
 		position[0], position[1]);
 	if (position[2] < minHeight + fixed(true, 5000))
 	{
@@ -102,7 +91,7 @@ void WeaponAimedOver::fireWeapon(ScorchedContext &context,
 	bool ceiling = false;
 	{
 		// This will return MAX_FLT when there is no roof
-		fixed maxHeight = context.landscapeMaps->getRoofMaps().getInterpRoofHeight(
+		fixed maxHeight = context.getLandscapeMaps().getRoofMaps().getInterpRoofHeight(
 			position[0] / 4, position[1] / 4);
 		if (position[2] > maxHeight - 1)
 		{
@@ -147,7 +136,7 @@ void WeaponAimedOver::fireWeapon(ScorchedContext &context,
 		}
 	}
 
-	RandomGenerator &random = context.actionController->getRandom();
+	RandomGenerator &random = context.getActionController().getRandom();
 	
 	// Add a percetage that we will not fire at any tank
 	maxDist *= (percentageMissChance_.getValue(context) / 100) + 1;

@@ -282,6 +282,7 @@ void ServerWebServerUtil::getHtmlNotFound(
 }
 
 bool ServerWebServerUtil::getHtmlTemplate(
+	ServerAdminSessions::SessionParams *session,
 	const std::string &name,
 	std::map<std::string, std::string> &fields,
 	std::string &result)
@@ -294,10 +295,11 @@ bool ServerWebServerUtil::getHtmlTemplate(
 		"\r\n";
 	result.append(header);
 
-	return getTemplate(name, fields, result);
+	return getTemplate(session, name, fields, result);
 }
 
 bool ServerWebServerUtil::getTemplate(
+	ServerAdminSessions::SessionParams *session,
 	const std::string &name,
 	std::map<std::string, std::string> &fields,
 	std::string &result)
@@ -321,7 +323,7 @@ bool ServerWebServerUtil::getTemplate(
 		{
 			// Add the included file
 			std::string tmp;
-			if (!getTemplate(include, fields, tmp))
+			if (!getTemplate(session, include, fields, tmp))
 			{
 				return false;
 			}
@@ -396,10 +398,33 @@ bool ServerWebServerUtil::getTemplate(
 	}
 	fclose(in);
 
+	while (true)
+	{
+		// Find start {{permission}}
+		int start1 = result.find("{{");
+		if (start1 == std::string::npos) break;
+		int end1 = result.find("}}", start1);
+		if (end1 == std::string::npos) break;
+		std::string perm(result, start1 + 2, end1 - start1 - 2);
+		result.replace(start1, end1 - start1 + 2, "");
+
+		// Find end {{permission}}
+		int start2 = result.find(S3D::formatStringBuffer("{{%s}}", perm.c_str()), start1);
+		if (start2 == std::string::npos) break;
+		result.replace(start2, 4 + perm.size(), "");
+
+		if (session->credentials.permissions.find(perm) == 
+			session->credentials.permissions.end())
+		{
+			result.replace(start1, start2 - start1, "");
+		}
+	}
+
 	return true;
 }
 
 bool ServerWebServerUtil::getHtmlMessage(
+	ServerAdminSessions::SessionParams *session,
 	const std::string &title,
 	const std::string &text,
 	std::map<std::string, std::string> &fields,
@@ -407,5 +432,5 @@ bool ServerWebServerUtil::getHtmlMessage(
 {
 	fields["MESSAGE"] = text;
 	fields["TITLE"] = title;
-	return getHtmlTemplate("message.html", fields, result);
+	return getHtmlTemplate(session, "message.html", fields, result);
 }

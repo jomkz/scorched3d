@@ -46,15 +46,6 @@ public:
 	int getTankModelSize() { return tankModelSize_; }
 	OptionEntryInt &getTankModelSizeEntry() { return tankModelSize_; }
 
-	int getRoamVarianceRamp() { return roamVarianceRamp_; }
-	OptionEntryInt &getRoamVarianceRampEntry() { return roamVarianceRamp_; }
-
-	int getRoamVarianceStart() { return roamVarianceStart_; }
-	OptionEntryInt &getRoamVarianceStartEntry() { return roamVarianceStart_; }
-
-	int getRoamVarianceTank() { return roamVarianceTank_; }
-	OptionEntryInt &getRoamVarianceTankEntry() { return roamVarianceTank_; }
-
 	int getNumberExplosionParts() { return explosionParts_; }
 	OptionEntryInt &getNumberExplosionPartsEntry() { return explosionParts_; }
 
@@ -67,11 +58,11 @@ public:
 	int getBrightness() { return brightness_; }
 	OptionEntryInt &getBrightnessEntry() { return brightness_; }
 
-	float getDrawDistance() { return drawDistance_; }
-	OptionEntryFloat &getDrawDistanceEntry() { return drawDistance_; } ;
+	float getDrawCullingDistance() { return drawCullingDistance_; }
+	OptionEntryFloat &getDrawCullingDistanceEntry() { return drawCullingDistance_; } ;
 
-	float getDrawDistanceFade() { return drawDistanceFade_; }
-	OptionEntryFloat &getDrawDistanceFadeEntry() { return drawDistanceFade_; } ;
+	float getDrawFadeStartDistance() { return drawFadeStartDistance_; }
+	OptionEntryFloat &getDrawFadeStartDistanceEntry() { return drawFadeStartDistance_; } ;
 
 	bool getSmoothLines() { return smoothLines_; }
 	OptionEntryBool &getSmoothLinesEntry() { return smoothLines_; }
@@ -82,9 +73,6 @@ public:
 	bool getNoLenseFlare() { return noLenseFlare_; }
 	OptionEntryBool &getNoLenseFlareEntry() { return noLenseFlare_; }
 
-	bool getNoROAM() { return noROAM_; }
-	OptionEntryBool &getNoROAMEntry() { return noROAM_; }
-
 	bool getNoShadows() { return noShadows_; }
 	OptionEntryBool &getNoShadowsEntry() { return noShadows_; }
 
@@ -94,14 +82,14 @@ public:
 	bool getNoGLShadows() { return noGLShadows_; }
 	OptionEntryBool &getNoGLShadowsEntry() { return noGLShadows_; }
 
+	bool getNoGLDrawElements() { return noGLDrawElements_; }
+	OptionEntryBool &getNoGLDrawElementsEntry() { return noGLDrawElements_; }
+
 	bool getNoDrawParticles() { return noDrawParticles_; }
 	OptionEntryBool &getNoDrawParticlesEntry() { return noDrawParticles_; }
 
 	bool getNoSimulateParticles() { return noSimulateParticles_; }
 	OptionEntryBool &getNoSimulateParticlesEntry() { return noSimulateParticles_; }
-
-	bool getNoTessalation() { return noTessalation_; }
-	OptionEntryBool &getNoTessalationEntry() { return noTessalation_; }
 
 	bool getNoModelLOD() { return noModelLOD_; }
 	OptionEntryBool &getNoModelLODEntry() { return noModelLOD_; }
@@ -126,6 +114,9 @@ public:
 
 	bool getUseLandscapeTexture() { return useLandscapeTexture_; }
 	OptionEntryBool &getUseLandscapeTextureEntry() { return useLandscapeTexture_; }
+
+	bool getUseWaterTexture() { return useWaterTexture_; }
+	OptionEntryBool &getUseWaterTextureEntry() { return useWaterTexture_; }
 
 	bool getFullScreen() { return fullScreen_; }
 	OptionEntryBool &getFullScreenEntry() { return fullScreen_; }
@@ -162,9 +153,6 @@ public:
 
 	bool getNoGLSphereMap() { return noGLSphereMap_; }
 	OptionEntryBool &getNoGLSphereMapEntry() { return noGLSphereMap_; }
-
-	bool getNoGLCompiledArrays() { return noGLCompiledArrays_; }
-	OptionEntryBool &getNoGLCompiledArraysEntry() { return noGLCompiledArrays_; }
 	
 	bool getNoGLEnvCombine() { return noGLEnvCombine_; }
 	OptionEntryBool &getNoGLEnvCombineEntry() { return noGLEnvCombine_; }
@@ -174,6 +162,9 @@ public:
 
 	bool getNoGLShaders() { return noGLShaders_; }
 	OptionEntryBool &getNoGLShadersEntry() { return noGLShaders_; }
+
+	bool getSimpleWaterShaders() { return simpleWaterShaders_; }
+	OptionEntryBool &getSimpleWaterShadersEntry() { return simpleWaterShaders_; }
 
 	bool getNoProgressBackdrop() { return noProgressBackdrop_; }
 	OptionEntryBool &getNoProgressBackdropEntry() { return noProgressBackdrop_; }
@@ -199,11 +190,17 @@ public:
 	bool getDrawLines() { return drawLines_; }
 	OptionEntryBool &getDrawLinesEntry() { return drawLines_; }
 
+	bool getDrawLandLOD() { return drawLandLOD_; }
+	OptionEntryBool &getDrawLandLODEntry() { return drawLandLOD_; }
+
 	bool getDrawNormals() { return drawNormals_; }
 	OptionEntryBool &getDrawNormalsEntry() { return drawNormals_; }
 
 	bool getDrawGraphicalShadowMap() { return drawGraphicalShadowMap_; }
 	OptionEntryBool &getDrawGraphicalShadowMapEntry() { return drawGraphicalShadowMap_; }
+
+	bool getDrawGraphicalReflectionMap() { return drawGraphicalReflectionMap_; }
+	OptionEntryBool &getDrawGraphicalReflectionMapEntry() { return drawGraphicalReflectionMap_; }
 
 	bool getDrawCollisionGeoms() { return drawCollisionGeoms_; }
 	OptionEntryBool &getDrawCollisionGeomsEntry() { return drawCollisionGeoms_; }
@@ -250,14 +247,17 @@ public:
 	bool getNoWaterReflections() { return noWaterReflections_; }
 	OptionEntryBool &getNoWaterReflectionsEntry() { return noWaterReflections_; }
 
-	bool getNoWaterBuffers() { return noWaterBuffers_; }
-	OptionEntryBool &getNoWaterBuffersEntry() { return noWaterBuffers_; }
-
 	bool getNoWaterWaves() { return noWaterWaves_; }
 	OptionEntryBool &getNoWaterWavesEntry() { return noWaterWaves_; }
 
+	bool getNoThreadedDraw() { return noThreadedDraw_; }
+	OptionEntryBool &getNoThreadedDrawEntry() { return noThreadedDraw_; }
+
 	bool getNoWaterLOD() { return noWaterLOD_; }
 	OptionEntryBool &getNoWaterLODEntry() { return noWaterLOD_; }
+
+	bool getNoLandLOD() { return noLandLOD_; }
+	OptionEntryBool &getNoLandLODEntry() { return noLandLOD_; }
 
 	bool getNoSkyMovement() { return noSkyMovement_; }
 	OptionEntryBool &getNoSkyMovementEntry() { return noSkyMovement_; }
@@ -316,10 +316,10 @@ public:
 	int getTexSize() { return texSize_; }
 	OptionEntryInt &getTexSizeEntry() { return texSize_; }
 
-	int  getScreenWidth() { return screenWidth_; }
+	int getScreenWidth() { return screenWidth_; }
 	OptionEntryInt  &getScreenWidthEntry() { return screenWidth_; }
 
-	int  getScreenHeight() { return screenHeight_; }
+	int getScreenHeight() { return screenHeight_; }
 	OptionEntryInt  &getScreenHeightEntry() { return screenHeight_; }
 
 	int getDepthBufferBits() { return depthBufferBits_; }
@@ -337,22 +337,22 @@ public:
 	bool getSaveWindowPositions() { return saveWindowPositions_; }
 	OptionEntryBool &getSaveWindowPositionsEntry() { return saveWindowPositions_; }
 
-	const char * getOnlineUserName() { return onlineUserName_; }
+	const char *getOnlineUserName() { return onlineUserName_; }
 	OptionEntryString &getOnlineUserNameEntry() { return onlineUserName_; }
 
-	const char * getOnlineTankModel() { return onlineTankModel_; }
+	const char *getOnlineTankModel() { return onlineTankModel_; }
 	OptionEntryString &getOnlineTankModelEntry() { return onlineTankModel_; }
 
-	const char * getOnlineUserIcon() { return onlineUserIcon_; }
+	const char *getOnlineUserIcon() { return onlineUserIcon_; }
 	OptionEntryString &getOnlineUserIconEntry() { return onlineUserIcon_; }
 
 	Vector getOnlineColor() { return onlineColor_; }
 	OptionEntryVector &getOnlineColorEntry() { return onlineColor_; }
 
-	const char * getHostDescription() { return hostDescription_; }
+	const char *getHostDescription() { return hostDescription_; }
 	OptionEntryString &getHostDescriptionEntry() { return hostDescription_; }
 
-	const char * getBuyTab() { return buyTab_; }
+	const char *getBuyTab() { return buyTab_; }
 	OptionEntryString &getBuyTabEntry() { return buyTab_; }
 
 	int getToolTipTime() { return toolTipTime_; }
@@ -396,6 +396,14 @@ protected:
 	OptionEntryBool depricatedNoCg_;
 	OptionEntryBool depricatedNoAmbientSound_;
 	OptionEntryBool depricatedFullClear_;
+	OptionEntryInt depricatedRoamVarianceStart_;
+	OptionEntryInt depricatedRoamVarianceRamp_;
+	OptionEntryInt depricatedRoamVarianceTank_;
+	OptionEntryBool depricatedNoROAM_;
+	OptionEntryBool depricatedNoTessalation_;
+	OptionEntryBool depricatedNoGLCompiledArrays_;
+	OptionEntryFloat depricatedDrawDistance_;
+	OptionEntryFloat depricatedDrawDistanceFade_;
 
 	OptionEntryBoundedInt brightness_;
 	OptionEntryBoundedInt explosionParts_;
@@ -422,10 +430,12 @@ protected:
 	OptionEntryBool noGLSphereMap_;
 	OptionEntryBool noGLExt_;
 	OptionEntryBool noGLMultiTex_;
-	OptionEntryBool noGLCompiledArrays_;
 	OptionEntryBool noGLEnvCombine_;
 	OptionEntryBool noGLHardwareMipmaps_;
+	OptionEntryBool noGLDrawElements_;
 	OptionEntryBool noGLShaders_;
+	OptionEntryBool simpleWaterShaders_;
+	OptionEntryBool noThreadedDraw_;
 	OptionEntryBool invertElevation_;
 	OptionEntryBool invertMouse_;
 	OptionEntryBool noSound_;
@@ -437,9 +447,11 @@ protected:
 	OptionEntryBool noSimulateParticles_;
 	OptionEntryBool drawNormals_;
 	OptionEntryBool drawGraphicalShadowMap_;
+	OptionEntryBool drawGraphicalReflectionMap_;
 	OptionEntryBool drawLines_;
-	OptionEntryFloat drawDistance_;
-	OptionEntryFloat drawDistanceFade_;
+	OptionEntryBool drawLandLOD_;
+	OptionEntryFloat drawCullingDistance_;
+	OptionEntryFloat drawFadeStartDistance_;
 	OptionEntryBool drawCollisionGeoms_;
 	OptionEntryBool drawCollisionSpace_;
 	OptionEntryBool drawBoundingSpheres_;
@@ -458,24 +470,21 @@ protected:
 	OptionEntryBool noTrees_;
 	OptionEntryBool noDepthSorting_;
 	OptionEntryBool hideFinalScore_;
-	OptionEntryInt roamVarianceStart_;
-	OptionEntryInt roamVarianceRamp_;
-	OptionEntryInt roamVarianceTank_;
 	OptionEntryBool hideMenus_;
-	OptionEntryBool noROAM_;
-	OptionEntryBool noTessalation_;
 	OptionEntryBool noVBO_;
 	OptionEntryBool noModelLOD_;
 	OptionEntryBool noModelLighting_;
 	OptionEntryBool useLandscapeTexture_;
+	OptionEntryBool useWaterTexture_;
 	OptionEntryBool noSkyLayers_;
 	OptionEntryBool noSkyMovement_;
 	OptionEntryBool noPrecipitation_;
 	OptionEntryBool frameTimer_;
-	OptionEntryBool noWaterBuffers_;
+	OptionEntryBool depricatedMoWaterBuffers_;
 	OptionEntryBool noWaterMovement_;
 	OptionEntryBool noWaterWaves_;
 	OptionEntryBool noWaterLOD_;
+	OptionEntryBool noLandLOD_;
 	OptionEntryBool noWaterReflections_;
 	OptionEntryBool noProgressBackdrop_;
 	OptionEntryBool showContextHelp_;

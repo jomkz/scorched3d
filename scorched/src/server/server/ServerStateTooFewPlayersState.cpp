@@ -20,6 +20,7 @@
 
 #include <server/ServerStateTooFewPlayersState.h>
 #include <server/ServerTooFewPlayersStimulus.h>
+#include <server/ServerChannelManager.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerNewGameState.h>
 #include <server/ServerState.h>
@@ -50,7 +51,11 @@ void ServerStateTooFewPlayersState::enterState(const unsigned state)
 	ComsGameStoppedMessage gameStopped;
 	ComsMessageSender::sendToAllPlayingClients(gameStopped);
 
-	ServerCommon::sendString(0, "Too few players, stopping play");
+	ServerChannelManager::instance()->sendText(
+		ChannelText("info", 
+			"TOO_FEW_PLAYERS", 
+			"Too few players, stopping play"),
+		true);
 }
 
 bool ServerStateTooFewPlayersState::acceptStateChange(const unsigned state, 
@@ -68,7 +73,11 @@ bool ServerStateTooFewPlayersState::acceptStateChange(const unsigned state,
 		totalTime_ = 0.0f;
 		if (ScorchedServer::instance()->getOptionsGame().commitChanges())
 		{
-			ServerCommon::sendString(0, "Game options have been changed!");
+			ServerChannelManager::instance()->sendText(
+				ChannelText("info", 
+					"GAME_OPTIONS_CHANGED", 
+					"Game options have been changed!"),
+				true);
 		}	
 	}
 

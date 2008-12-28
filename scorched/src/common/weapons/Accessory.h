@@ -26,6 +26,7 @@
 #include <XML/XMLFile.h>
 #include <weapons/AccessoryPart.h>
 #include <weapons/AccessoryCreateContext.h>
+#include <lang/LangString.h>
 #include <string>
 #include <map>
 
@@ -51,6 +52,7 @@ public:
 
 	const char *getActivationSound();
 	const char *getName() { return name_.c_str(); }
+	LangString &getStringName();
 	const char *getDescription() { return description_.c_str(); }
 	const int getPrice() { return price_; }
 	const int getSellPrice() { return sellPrice_; }
@@ -61,6 +63,7 @@ public:
 	const int getArmsLevel() { return armsLevel_; }
 	const int getMaximumNumber() { return maximumNumber_; }
 	const int getStartingNumber() { return startingNumber_; }
+	const int getUseNumber() { return useNumber_; }
 	const bool getAIOnly() { return aiOnly_; }
 	const bool getBotOnly() { return botOnly_; }
 	PositionSelectType getPositionSelect() { return positionSelect_; }
@@ -99,6 +102,7 @@ protected:
 	PositionSelectType positionSelect_;
 	ToolTip toolTip_;
 	ModelID modelId_;
+	LangString stringName_;
 	std::string iconName_;
 	std::string groupName_, tabGroupName_;
 	std::string name_;
@@ -113,6 +117,7 @@ protected:
 	int originalSellPrice_;
 	int freemarketLimits_;
 	int maximumNumber_;
+	int useNumber_;
 	int startingNumber_;
 	fixed modelScale_;
 	bool muzzleFlash_;

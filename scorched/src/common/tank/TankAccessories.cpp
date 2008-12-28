@@ -32,6 +32,7 @@
 #endif
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
+#include <lang/LangResource.h>
 
 TankAccessories::TankAccessories(ScorchedContext &context) :
 	context_(context),
@@ -66,7 +67,7 @@ void TankAccessories::newMatch()
 	// and also if give all accessories is set
 	{
 		std::list<Accessory *> accessories = 
-			context_.accessoryStore->getAllAccessories();
+			context_.getAccessoryStore().getAllAccessories();
 		std::list<Accessory *>::iterator itor;
 		for (itor = accessories.begin();
 			itor != accessories.end();
@@ -76,7 +77,7 @@ void TankAccessories::newMatch()
 			if (accessory->getMaximumNumber() > 0)
 			{
 				int startingNumber = accessory->getStartingNumber();
-				if (context_.optionsGame->getGiveAllWeapons())
+				if (context_.getOptionsGame().getGiveAllWeapons())
 				{
 					startingNumber = -1;
 				}
@@ -91,7 +92,7 @@ void TankAccessories::newMatch()
 
 	// Add all of the accessories that come from the tank's type
 	{
-		TankType *type = context_.tankModelStore->getTypeByName(
+		TankType *type = context_.getTankModels().getTypeByName(
 			tank_->getModelContainer().getTankTypeName());
 		std::map<Accessory *, int> accessories = type->getAccessories();
 		std::map<Accessory *, int>::iterator itor;
@@ -173,6 +174,14 @@ std::list<Accessory *> &TankAccessories::getAllAccessoriesByGroup(
 	return emptyList;
 }
 
+bool TankAccessories::canUse(Accessory *accessory)
+{
+	int count = getAccessoryCount(accessory);
+	if (count == 0) return false;
+	if (count == -1 || count >= accessory->getUseNumber()) return true;
+	return false;
+}
+
 int TankAccessories::getAccessoryCount(Accessory *accessory)
 {
 	std::map<Accessory *, int>::iterator foundAccessory =
@@ -188,7 +197,7 @@ int TankAccessories::getAccessoryCount(Accessory *accessory)
 bool TankAccessories::accessoryAllowed(Accessory *accessory, int count)
 {
 	// Check if this tank type allows this accessory
-	TankType *type = context_.tankModelStore->getTypeByName(
+	TankType *type = context_.getTankModels().getTypeByName(
 		tank_->getModelContainer().getTankTypeName());
 	if (type->getAccessoryDisabled(accessory)) return false;
 
@@ -203,7 +212,7 @@ bool TankAccessories::accessoryAllowed(Accessory *accessory, int count)
 
 	// Check if this accessory exceeds the current arms level
 	if (10 - accessory->getArmsLevel() > 
-		context_.optionsTransient->getArmsLevel())
+		context_.getOptionsTransient().getArmsLevel())
 	{
 		return false;
 	}
@@ -339,6 +348,35 @@ void TankAccessories::rm(Accessory *accessory, int count)
 	changed();
 }
 
+LangString TankAccessories::getAccessoryCountString(Accessory *accessory)
+{
+	int count = getAccessoryCount(accessory);
+	LangString buffer;
+	if (count >= 0)
+	{
+		buffer.append(LANG_STRING(S3D::formatStringBuffer("%i", count)));
+	}
+	else
+	{
+		LANG_RESOURCE_VAR(INF, "INF", "In");
+		buffer.append(INF);
+	}
+
+	return buffer;
+}
+
+LangString TankAccessories::getAccessoryAndCountString(Accessory *accessory)
+{
+	int count = getAccessoryCount(accessory);
+	LangString buffer;
+	buffer.append(LANG_RESOURCE(accessory->getName(), accessory->getName())).
+		append(LANG_STRING(" ("));
+	buffer.append(getAccessoryCountString(accessory));
+	buffer.append(LANG_STRING(")"));
+
+	return buffer;
+}
+
 void TankAccessories::changed()
 {
 	// Tell the appropriate container that the count has changed
@@ -403,7 +441,7 @@ bool TankAccessories::readMessage(NetBufferReader &reader)
 		if (!reader.getFromBuffer(accessoryCount)) return false;
 
 		Accessory *accessory = 
-			context_.accessoryStore->findByAccessoryId(accessoryId);
+			context_.getAccessoryStore().findByAccessoryId(accessoryId);
 		if (!accessory)
 		{
 			return false;
@@ -418,7 +456,7 @@ bool TankAccessories::readMessage(NetBufferReader &reader)
 
 void TankAccessories::activate(Accessory *accessory)
 {
-	DIALOG_ASSERT(!context_.serverMode);
+	DIALOG_ASSERT(!context_.getServerMode());
 
 #ifndef S3D_SERVER
 	switch (accessory->getType())

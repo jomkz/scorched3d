@@ -33,6 +33,8 @@ public:
 	void generate();
 	void draw();
 
+	std::vector<Vector> &getPoints() { return points_; }
+
 protected:
 	std::vector<Vector> points_;
 };

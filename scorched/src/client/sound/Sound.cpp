@@ -18,7 +18,7 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <GLEXT/GLConsoleRuleMethodIAdapter.h>
+#include <console/ConsoleRuleMethodIAdapter.h>
 #include <common/Defines.h>
 #include <graph/OptionsDisplay.h>
 #include <common/Logger.h>
@@ -53,10 +53,12 @@ Sound::Sound() :
 	init_(false), totalTime_(0.0f),
 	GameStateI("Sound")
 {
-	new GLConsoleRuleMethodIAdapter<Sound>(
+	new ConsoleRuleMethodIAdapter<Sound>(
 		this, &Sound::showSoundBuffers, "SoundBuffers");
-	new GLConsoleRuleMethodIAdapterEx<Sound>(
-		this, &Sound::soundPlay, "SoundPlay");
+	new ConsoleRuleMethodIAdapterEx<Sound>(
+		this, &Sound::soundPlay, "SoundPlay", 
+		ConsoleUtil::formParams(
+		ConsoleRuleParam("filename", ConsoleRuleTypeString)));
 }
 
 Sound::~Sound()
@@ -158,19 +160,16 @@ bool Sound::init(int channels)
 	return init_;
 }
 
-void Sound::soundPlay(std::list<GLConsoleRuleSplit> list)
+void Sound::soundPlay(std::vector<ConsoleRuleValue> &values)
 {
-	list.pop_front();
-	if (!list.empty())
-	{
-		SoundBuffer *buffer = 
-			fetchOrCreateBuffer(
-			(char *) list.begin()->rule.c_str());
-		VirtualSoundSource *source = 
-			new VirtualSoundSource(10000, false, true);
-		source->setRelative();
-		source->play(buffer);
-	}
+	ConsoleRuleValue &fileName = values[1];
+
+	SoundBuffer *buffer = 
+		fetchOrCreateBuffer(fileName.valueString);
+	VirtualSoundSource *source = 
+		new VirtualSoundSource(10000, false, true);
+	source->setRelative();
+	source->play(buffer);
 }
 
 void Sound::showSoundBuffers()

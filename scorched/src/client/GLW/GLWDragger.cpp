@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <GLW/GLWDragger.h>
-#include <GLW/GLWFont.h>
 #include <GLEXT/GLState.h>
 #include <common/Keyboard.h>
 #include <common/ToolTip.h>

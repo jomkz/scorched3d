@@ -22,13 +22,13 @@
 #include <water/Water2Constants.h>
 #include <common/Logger.h>
 #include <graph/OptionsDisplay.h>
-#include <GLEXT/GLVertexBufferObject.h>
 #include <GLEXT/GLState.h>
 #include <GLEXT/GLStateExtension.h>
+#include <GLEXT/GLVertexBufferObject.h>
 #include <GLEXT/GLInfo.h>
 
 Water2Patch::Water2Patch() : 
-	data_(0), size_(0), bufferObject_(0)
+	data_(0), dataSize_(0), size_(0), bufferOffSet_(-1)
 {
 }
 
@@ -53,8 +53,8 @@ static Vector getPosition(Water2Points &heights,
 	Vector &height = heights.getPoint(currentXNormalized, currentYNormalized);
 
 	Vector result(
-		height[0] + float(currentX) * 2.0f,
-		height[1] + float(currentY) * 2.0f,
+		height[0] + float(x) * 2.0f,
+		height[1] + float(y) * 2.0f,
 		height[2]);
 	return result;
 }
@@ -65,9 +65,10 @@ void Water2Patch::generate(Water2Points &heights,
 	float waterHeight)
 {
 	size_ = size;
-	if (!data_) data_ = new Data[(size + 1) * (size + 1)];
+	dataSize_ = (size + 1) * (size + 1);
+	if (!data_) data_ = new Data[dataSize_];
 
-	int startX = posX * size;
+	int startX = posX * size;  
 	int startY = posY * size;
 
 	{
@@ -124,72 +125,51 @@ void Water2Patch::generate(Water2Points &heights,
 			}
 		}
 	}
-
-	if (GLStateExtension::hasVBO() &&
-		!OptionsDisplay::instance()->getNoWaterBuffers())
-	{
-		delete bufferObject_;
-		bufferObject_ = new GLVertexBufferObject();
-		bufferObject_->init_data((size + 1) * (size + 1) * sizeof(Data), data_, GL_STREAM_DRAW);
-	}
 }
 
-void Water2Patch::draw(Water2PatchIndexs &indexes, int indexPosition, int borders)
+void Water2Patch::draw(MipMapPatchIndex &index)
 {
-	Water2PatchIndex &index = indexes.getIndex(indexPosition, borders);
-
-	// No triangles
+	// Number triangles
 	GLInfo::addNoTriangles(index.getSize());
 
-	// draw
-	draw(index);
-}
-
-void Water2Patch::draw(Water2PatchIndex &index)
-{
-	// Map data to draw
-	float *data = 0;
-	if (bufferObject_)
+	if (!OptionsDisplay::instance()->getNoGLDrawElements() &&
+		GLStateExtension::hasDrawRangeElements())
 	{
-		bufferObject_->bind();
+		// Map indices to draw
+		unsigned short *indices = 0;
+		if (index.getBufferOffSet() != -1)
+		{
+			indices = (unsigned short *) NULL + (index.getBufferOffSet() / sizeof(unsigned short));
+		}
+		else
+		{
+			indices = index.getIndices();
+		}
+
+		// Draw elements
+		glDrawRangeElements(GL_TRIANGLE_STRIP, 
+			index.getMinIndex(), 
+			index.getMaxIndex(),
+			index.getSize(), 
+			GL_UNSIGNED_SHORT, 
+			indices);
+		DIALOG_ASSERT((index.getMaxIndex()-index.getMinIndex()+1) < 
+			GLStateExtension::getMaxElementVertices());
+		DIALOG_ASSERT(index.getSize() < 
+			GLStateExtension::getMaxElementIndices());
 	}
 	else
 	{
-		data = &data_[0].x;
-	}
+		glBegin(GL_TRIANGLE_STRIP);
+			for (int i=0; i<index.getSize(); i++)
+			{
+				float *data = &data_[0].x + 
+					(sizeof(Data) / 4 * index.getIndices()[i]);
 
-	// Vertices On
-	glVertexPointer(3, GL_FLOAT, sizeof(Data), data);
-
-	// Normals On
-	glNormalPointer(GL_FLOAT, sizeof(Data), data + 3);
-
-	// Unmap data to draw
-	if (bufferObject_)
-	{
-		bufferObject_->unbind();
-	}
-
-	// Map indices to draw
-	unsigned int *indices = 0;
-	if (index.getBufferObject())
-	{
-		index.getBufferObject()->bind();
-	}
-	else
-	{
-		indices = index.getIndices();
-	}
-
-	// Draw elements
-	glDrawElements(GL_TRIANGLE_STRIP, 
-		index.getSize(), 
-		GL_UNSIGNED_INT, 
-		indices);
-
-	if (index.getBufferObject())
-	{
-		index.getBufferObject()->unbind();
+				glNormal3fv(data + 3);
+				glVertex3fv(data);
+			}
+		glEnd();
 	}
 }
 

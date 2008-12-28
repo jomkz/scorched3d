@@ -22,6 +22,7 @@
 #include <client/ScorchedClient.h>
 #include <tankgraph/TankKeyboardControlUtil.h>
 #include <common/ToolTip.h>
+#include <lang/LangResource.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 
@@ -30,9 +31,11 @@ REGISTER_CLASS_SOURCE(GLWTankFire);
 GLWTankFire::GLWTankFire() :
 	GLWidget(0.0f, 0.0f, 0.0f, 0.0f)
 {
-	setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Fire Current Weapon",
+	setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("FIRE_CURRENT_WEAPON", "Fire Current Weapon"),
+		LANG_RESOURCE("FIRE_CURRENT_WEAPON_TOOLTIP", 
 		"Fires the current tanks currently selected\n"
-		"weapon."));
+		"weapon.")));
 }
 
 GLWTankFire::~GLWTankFire()

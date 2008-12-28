@@ -26,6 +26,7 @@
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
+#include <tankai/TankAIAdder.h>
 #include <target/TargetLife.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
@@ -33,7 +34,7 @@
 
 static FileLogger *serverAdminFileLogger = 0;
 
-static void adminLog(const std::string &message)
+static void adminLog(const ChannelText &message)
 {
 	if (!serverAdminFileLogger) 
 	{
@@ -43,13 +44,15 @@ static void adminLog(const std::string &message)
 		serverAdminFileLogger = new FileLogger(buffer);
 	}	
 
-	ServerCommon::sendString(0, message);
-	LoggerInfo info(message);
+	ServerChannelManager::instance()->sendText(message, true);
+
+	LangString str = ((ChannelText &)message).getMessage();
+	LoggerInfo info(LangStringUtil::convertFromLang(str));
 	info.setTime();
 	serverAdminFileLogger->logMessage(info);
 }
 
-static void internalBanPlayer(const char *adminName, 
+static void internalBanPlayer(ServerAdminSessions::Credential &credential,  
 	unsigned int playerId,
 	ServerBanned::BannedType type, const char *reason)
 {
@@ -65,8 +68,9 @@ static void internalBanPlayer(const char *adminName,
 		if (ipAddress != 0)
 		{	
 			ScorchedServerUtil::instance()->bannedPlayers.
-				addBanned(ipAddress, tank->getName(), tank->getUniqueId(), tank->getSUI(), 
-					type, adminName, reason);
+				addBanned(ipAddress, tank->getTargetName(), 
+					tank->getUniqueId(), tank->getSUI(), 
+					type, credential.username.c_str(), reason);
 			if (type == ServerBanned::Banned)
 			{
 				ServerCommon::kickPlayer(playerId);
@@ -82,49 +86,63 @@ static void internalBanPlayer(const char *adminName,
 	}
 }
 
-bool ServerAdminCommon::kickPlayer(const char *adminUser, unsigned int playerId)
+bool ServerAdminCommon::addPlayer(ServerAdminSessions::Credential &credential, const char *playerType)
 {
+	if (!credential.hasPermission(ServerAdminSessions::PERMISSION_ADDPLAYER)) return false;
+	TankAIAdder::addTankAI(*ScorchedServer::instance(), playerType);
+	return true;
+}
+
+bool ServerAdminCommon::kickPlayer(ServerAdminSessions::Credential &credential, unsigned int playerId)
+{
+	if (!credential.hasPermission(ServerAdminSessions::PERMISSION_KICKPLAYER)) return false;
+
 	Tank *targetTank = ScorchedServer::instance()->
 		getTankContainer().getTankById(playerId);
 	if (!targetTank) return false;
 
-	adminLog(
-		S3D::formatStringBuffer("\"%s\" admin kick \"%s\"",
-		adminUser,
-		targetTank->getName()));
+	adminLog(ChannelText("info",
+		"ADMIN_KICK",
+		"\"{0}\" admin kick \"{1}\"",
+		credential.username,
+		targetTank->getTargetName()));
 	ServerCommon::kickPlayer(
 		targetTank->getPlayerId());
 
 	return true;
 }
 
-bool ServerAdminCommon::poorPlayer(const char *adminUser, unsigned int playerId)
+bool ServerAdminCommon::poorPlayer(ServerAdminSessions::Credential &credential, unsigned int playerId)
 {
 	Tank *targetTank = ScorchedServer::instance()->
 		getTankContainer().getTankById(playerId);
 	if (!targetTank) return false;
 
-	adminLog(
-		S3D::formatStringBuffer("\"%s\" admin poor \"%s\"",
-		adminUser,
-		targetTank->getName()));
+	adminLog(ChannelText("info",
+		"ADMIN_POOR",
+		"\"{0}\" admin poor \"{1}\"",
+		credential.username,
+		targetTank->getTargetName()));
 	targetTank->getScore().setMoney(0);
 
 	return true;
 }
 
-bool ServerAdminCommon::banPlayer(const char *adminUser, unsigned int playerId, const char *reason)
+bool ServerAdminCommon::banPlayer(ServerAdminSessions::Credential &credential, unsigned int playerId, const char *reason)
 {
+	if (!credential.hasPermission(ServerAdminSessions::PERMISSION_BANPLAYER)) return false;
+
 	Tank *targetTank = ScorchedServer::instance()->
 		getTankContainer().getTankById(playerId);
 	if (!targetTank) return false;
 
-	adminLog(
-		S3D::formatStringBuffer("\"%s\" admin ban \"%s\"",
-		adminUser,
-		targetTank->getName()));
+	adminLog(ChannelText("info",
+		"ADMIN_BAN",
+		"\"{0}\" admin ban \"{1}\"",
+		credential.username,
+		targetTank->getTargetName()));
 	internalBanPlayer(
-		adminUser,
+		credential,
 		targetTank->getPlayerId(), 
 		ServerBanned::Banned, 
 		reason);
@@ -132,16 +150,17 @@ bool ServerAdminCommon::banPlayer(const char *adminUser, unsigned int playerId, 
 	return true;
 }
 
-bool ServerAdminCommon::slapPlayer(const char *adminUser, unsigned int playerId, float slap)
+bool ServerAdminCommon::slapPlayer(ServerAdminSessions::Credential &credential, unsigned int playerId, float slap)
 {
 	Tank *targetTank = ScorchedServer::instance()->
 		getTankContainer().getTankById(playerId);
 	if (!targetTank) return false;
 
-	adminLog(
-		S3D::formatStringBuffer("\"%s\" admin slap \"%s\" %.0f",
-		adminUser,
-		targetTank->getName(),
+	adminLog(ChannelText("info",
+		"ADMIN_SLAP",
+		"\"{0}\" admin slap \"{1}\" {2}",
+		credential.username,
+		targetTank->getTargetName(),
 		slap));
 	targetTank->getLife().setLife(
 		targetTank->getLife().getLife() - fixed(int(slap)));
@@ -149,18 +168,19 @@ bool ServerAdminCommon::slapPlayer(const char *adminUser, unsigned int playerId,
 	return true;
 }
 
-bool ServerAdminCommon::flagPlayer(const char *adminUser, unsigned int playerId, const char *reason)
+bool ServerAdminCommon::flagPlayer(ServerAdminSessions::Credential &credential, unsigned int playerId, const char *reason)
 {
 	Tank *targetTank = ScorchedServer::instance()->
 		getTankContainer().getTankById(playerId);
 	if (!targetTank) return false;
 
-	adminLog(
-		S3D::formatStringBuffer("\"%s\" admin flag \"%s\"",
-		adminUser,
-		targetTank->getName()));
+	adminLog(ChannelText("info",
+		"ADMIN_FLAG",
+		"\"{0}\" admin flag \"{1}\"",
+		credential.username,
+		targetTank->getTargetName()));
 	internalBanPlayer(
-		adminUser,
+		credential,
 		targetTank->getPlayerId(), 
 		ServerBanned::Flagged, 
 		reason);
@@ -168,34 +188,35 @@ bool ServerAdminCommon::flagPlayer(const char *adminUser, unsigned int playerId,
 	return true;
 }
 
-bool ServerAdminCommon::mutePlayer(const char *adminUser, unsigned int playerId, bool mute)
+bool ServerAdminCommon::mutePlayer(ServerAdminSessions::Credential &credential, unsigned int playerId, bool mute)
 {
 	Tank *targetTank = ScorchedServer::instance()->
 		getTankContainer().getTankById(playerId);
 	if (!targetTank) return false;
 
-	adminLog(
-		S3D::formatStringBuffer("\"%s\" admin %s \"%s\"",
-		adminUser,
-		(mute?"mute":"unmute"),
-		targetTank->getName()));
+	adminLog(ChannelText("info",
+		mute?"ADMIN_MUTE":"ADMIN_UNMUTE",
+		mute?"\"{0}\" admin mute \"{0}\"":"\"{0}\" admin unmute \"{0}\"",
+		credential.username,
+		targetTank->getTargetName()));
 	targetTank->getState().setMuted(mute); 
 
 	return true;
 }
 
-bool ServerAdminCommon::permMutePlayer(const char *adminUser, unsigned int playerId, const char *reason)
+bool ServerAdminCommon::permMutePlayer(ServerAdminSessions::Credential &credential, unsigned int playerId, const char *reason)
 {
 	Tank *targetTank = ScorchedServer::instance()->
 		getTankContainer().getTankById(playerId);
 	if (!targetTank) return false;
 
-	adminLog(
-		S3D::formatStringBuffer("\"%s\" admin permmute \"%s\"",
-		adminUser,
-		targetTank->getName()));
+	adminLog(ChannelText("info",
+		"ADMIN_PERMMUTE",
+		"\"{0}\" admin permmute \"{1}\"",
+		credential.username,
+		targetTank->getTargetName()));
 	internalBanPlayer(
-		adminUser,
+		credential,
 		targetTank->getPlayerId(),
 		ServerBanned::Muted, 
 		reason);
@@ -204,18 +225,19 @@ bool ServerAdminCommon::permMutePlayer(const char *adminUser, unsigned int playe
 	return true;
 }
 
-bool ServerAdminCommon::unpermMutePlayer(const char *adminUser, unsigned int playerId)
+bool ServerAdminCommon::unpermMutePlayer(ServerAdminSessions::Credential &credential, unsigned int playerId)
 {
 	Tank *targetTank = ScorchedServer::instance()->
 		getTankContainer().getTankById(playerId);
 	if (!targetTank) return false;
 
-	adminLog(
-		S3D::formatStringBuffer("\"%s\" admin unpermmute \"%s\"",
-		adminUser,
-		targetTank->getName()));
+	adminLog(ChannelText("info",
+		"ADMIN_UNPERMMUTE",
+		"\"{0}\" admin unpermmute \"{1}\"",
+		credential.username,
+		targetTank->getTargetName()));
 	internalBanPlayer(
-		adminUser,
+		credential,
 		targetTank->getPlayerId(),
 		ServerBanned::NotBanned, 
 		"");
@@ -224,32 +246,42 @@ bool ServerAdminCommon::unpermMutePlayer(const char *adminUser, unsigned int pla
 	return true;
 }
 
-bool ServerAdminCommon::newGame(const char *adminUser)
+bool ServerAdminCommon::newGame(ServerAdminSessions::Credential &credential)
 {
-	adminLog(
-		S3D::formatStringBuffer("\"%s\" admin new game",
-		adminUser));
+	if (!credential.hasPermission(
+		ServerAdminSessions::PERMISSION_ALTERGAME)) return false;
+
+	adminLog(ChannelText("info",
+		"ADMIN_NEW_GAME",
+		"\"{0}\" admin new game",
+		credential.username));
 	ServerCommon::killAll();
 	ScorchedServer::instance()->getOptionsTransient().startNewGame();	
 
 	return true;
 }
 
-bool ServerAdminCommon::killAll(const char *adminUser)
+bool ServerAdminCommon::killAll(ServerAdminSessions::Credential &credential)
 {
-	adminLog(
-		S3D::formatStringBuffer("\"%s\" admin kill all",
-		adminUser));
+	if (!credential.hasPermission(
+		ServerAdminSessions::PERMISSION_ALTERGAME)) return false;
+
+	adminLog(ChannelText("info",
+		"ADMIN_KILL_ALL",
+		"\"{0}\" admin kill all",
+		credential.username));
 	ServerCommon::killAll();
 
 	return true;
 }
 
-bool ServerAdminCommon::adminSay(ServerAdminSessions::SessionParams *session,
+bool ServerAdminCommon::adminSay(ServerAdminSessions::Credential &credential,
 	const char *channel, const char *text)
 {
-	ChannelText channelText(channel, text);
-	channelText.setAdminPlayer(session->userName.c_str());
+	LangString langString(LANG_STRING(text));
+
+	ChannelText channelText(channel, langString);
+	channelText.setAdminPlayer(credential.username.c_str());
 	ServerChannelManager::instance()->sendText(channelText, true);
 
 	return true;

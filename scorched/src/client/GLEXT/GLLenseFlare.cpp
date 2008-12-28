@@ -25,6 +25,7 @@
 #include <GLEXT/GLLenseFlare.h>
 #include <GLEXT/GLCameraFrustum.h>
 #include <common/Defines.h>
+#include <lang/LangResource.h>
 
 GLLenseFlare *GLLenseFlare::instance_ = 0;
 
@@ -65,7 +66,7 @@ void GLLenseFlare::setFlare(int index, int type, float scale, float loc,
 
 void GLLenseFlare::init(ProgressCounter *counter)
 {
-	if (counter) counter->setNewOp("Lens Flares");
+	if (counter) counter->setNewOp(LANG_RESOURCE("LENS_FLARES", "Lens Flares"));
 
 	Vector red1(1.0f, 0.0f, 0.0f);
 	Vector green1(0.0f, 1.0f, 0.0f);

@@ -23,6 +23,7 @@
 #include <graph/ModelRendererSimulator.h>
 #include <graph/ModelRendererMesh.h>
 #include <landscape/MapPoints.h>
+#include <landscapemap/LandscapeMaps.h>
 #include <GLEXT/GLGlobalState.h>
 #include <client/ScorchedClient.h>
 #include <common/OptionsTransient.h>
@@ -67,26 +68,31 @@ void WaterMapPoints::draw(Water2Patches &currentPatch)
 	}
 }
 
-void WaterMapPoints::generate(int mapWidth, int mapHeight)
+void WaterMapPoints::generate()
 {
-	int pointsWidth = mapWidth / 64; // One point every 64 units
-	int pointsHeight = mapHeight / 64; // One point every 64 units
-
 	pts_.clear();
 
+	int arenaX = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaX();
+	int arenaY = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaY();
+	int arenaWidth = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaWidth();
+	int arenaHeight = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaHeight();
+
+	int pointsX = arenaWidth / 32; // Each point is 32 units appart
+	int pointsY = arenaHeight / 32; // Each point is 32 units appart
+	
 	int i;
-	for (i=0; i<pointsWidth; i++)
+	for (i=0; i<=pointsX; i++)
 	{
-		float pos = float(mapWidth) / float(pointsWidth-1) * float(i);
+		int pos = 32 * i;
 
-		pts_.push_back(Vector(pos, 0.0f));
-		pts_.push_back(Vector(pos, float(mapHeight)));
+		pts_.push_back(Vector(arenaX + pos, arenaY));
+		pts_.push_back(Vector(arenaX + pos, arenaY + arenaHeight));
 	}
-	for (i=1; i<pointsHeight-1; i++)
+	for (i=1; i<=pointsY-1; i++)
 	{
-		float pos = float(mapHeight) / float(pointsHeight-1) * float(i);
+		int pos = 32 * i;
 
-		pts_.push_back(Vector(0.0f, pos));
-		pts_.push_back(Vector(float(mapWidth), pos));
+		pts_.push_back(Vector(arenaX, arenaY + pos));
+		pts_.push_back(Vector(arenaX + arenaWidth, arenaY + pos));
 	}
 }

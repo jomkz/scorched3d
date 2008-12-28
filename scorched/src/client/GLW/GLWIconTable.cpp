@@ -42,7 +42,7 @@ GLWIconTable::GLWIconTable(
 			Column &col = *itor;
 			GLWTextButton *button = new
 				GLWTextButton(
-				(char *) col.name.c_str(), 
+				col.name, 
 				colx, y_ + h_ - 20.0f, 
 				col.width, this, 
 				GLWButton::ButtonFlagCenterX, 10);
@@ -87,7 +87,7 @@ void GLWIconTable::draw()
 	for (int j=0; j<(int) columns_.size(); j++)
 	{
 		GLWTextButton *column = columns_[j];
-		if (column->getText()[0]) column->draw();
+		if (!column->getEmpty()) column->draw();
 	}
 
 	// Figure out how many rows to show

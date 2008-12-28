@@ -69,25 +69,28 @@ void LandscapePoints::generate()
 {
 	points_.clear();
 
-	int width = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getMapWidth();
-	int height = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getMapHeight();
-	int pointsX = width / 64; // Each point is 64 units appart
-	int pointsY = height / 64; // Each point is 64 units appart
+	int arenaX = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaX();
+	int arenaY = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaY();
+	int arenaWidth = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaWidth();
+	int arenaHeight = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaHeight();
+
+	int pointsX = arenaWidth / 32; // Each point is 32 units appart
+	int pointsY = arenaHeight / 32; // Each point is 32 units appart
 	
 	int i;
-	for (i=0; i<pointsX; i++)
+	for (i=0; i<=pointsX; i++)
 	{
-		float pos = float(width) / float(pointsX-1) * float(i);
+		int pos = 32 * i;
 
-		points_.push_back(Vector(pos, 0.0f));
-		points_.push_back(Vector(pos, float(height)));
+		points_.push_back(Vector(arenaX + pos, arenaY));
+		points_.push_back(Vector(arenaX + pos, arenaY + arenaHeight));
 	}
-	for (i=1; i<pointsY-1; i++)
+	for (i=1; i<=pointsY-1; i++)
 	{
-		float pos = float(height) / float(pointsY-1) * float(i);
+		int pos = 32 * i;
 
-		points_.push_back(Vector(0.0f, pos));
-		points_.push_back(Vector(float(width), pos));
+		points_.push_back(Vector(arenaX, arenaY + pos));
+		points_.push_back(Vector(arenaX + arenaWidth, arenaY + pos));
 	}
 }
 

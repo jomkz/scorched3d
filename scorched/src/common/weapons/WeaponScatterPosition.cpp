@@ -47,7 +47,7 @@ bool WeaponScatterPosition::parseXML(AccessoryCreateContext &context, XMLNode *a
 	if (!accessoryNode->getNamedChild("aimedweapon", subNode)) return false;
 
 	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore()->
+	AccessoryPart *accessory = context.getAccessoryStore().
 		createAccessoryPart(context, parent_, subNode);
 	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
 	{
@@ -67,7 +67,7 @@ void WeaponScatterPosition::fireWeapon(ScorchedContext &context,
 {
 	// Mininum height, if we are grounding
 	fixed allowedHeight = 0;
-	LandscapeTex &tex = *context.landscapeMaps->getDefinitions().getTex();
+	LandscapeTex &tex = *context.getLandscapeMaps().getDefinitions().getTex();
 		if (tex.border->getType() == LandscapeTexType::eWater)
 	{
 		LandscapeTexBorderWater *water = 
@@ -77,26 +77,25 @@ void WeaponScatterPosition::fireWeapon(ScorchedContext &context,
 	}
 
 	fixed scatterpercentage = scatterpercentage_.getValue(context);
-	fixed width = 
-		fixed(context.landscapeMaps->getGroundMaps().getMapWidth()) *
-		scatterpercentage / 100;
-	fixed height = 
-		fixed(context.landscapeMaps->getGroundMaps().getMapHeight()) *
-		scatterpercentage / 100;
+
+	fixed arenaWidth = fixed(context.getLandscapeMaps().getGroundMaps().getArenaWidth());
+	fixed arenaHeight = fixed(context.getLandscapeMaps().getGroundMaps().getArenaHeight());
+	fixed scatterWidth = arenaWidth * scatterpercentage / 100;
+	fixed scatterHeight = arenaHeight * scatterpercentage / 100;
 
 	FixedVector pos;
-	RandomGenerator &random = context.actionController->getRandom();
+	RandomGenerator &random = context.getActionController().getRandom();
 	bool ok = false;
 	while (!ok)
 	{
 		ok = true;
 
-		pos[0] = p[0] + (random.getRandFixed() * width) - (width / 2);
-		pos[1] = p[1] + (random.getRandFixed() * height) - (height / 2);
+		pos[0] = p[0] + (random.getRandFixed() * scatterWidth) - (scatterWidth / 2);
+		pos[1] = p[1] + (random.getRandFixed() * scatterHeight) - (scatterHeight / 2);
 		pos[2] = p[2];
 		if (landheight_)
 		{
-			pos[2] = context.landscapeMaps->getGroundMaps().getInterpHeight(
+			pos[2] = context.getLandscapeMaps().getGroundMaps().getInterpHeight(
 				pos[0], pos[1]);
 		}
 

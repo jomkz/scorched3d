@@ -23,21 +23,20 @@
 
 #include <target/Target.h>
 #include <target/TargetRenderer.h>
-#include <tankgraph/RenderObject.h>
+#include <common/Matrix16.h>
 
+class TargetVisibilityPatch;
 class RenderObjectLists;
-class TargetRendererImpl : 
-	public TargetRenderer, 
-	public RenderObject
+class TargetRendererImpl : public TargetRenderer
 {
 public:
-	TargetRendererImpl();
+	TargetRendererImpl(Target *target);
 	virtual ~TargetRendererImpl();
 
 	// Interface
 	virtual void drawParticle(float distance) = 0;
 	virtual void simulate(float frameTime) = 0;
-	virtual void addToLists(float distance, RenderObjectLists &renderList) = 0;
+	virtual void moved();
 
 	// Particles
 	void setMakeParticle() { particleMade_ = false; }
@@ -50,18 +49,27 @@ public:
 		eOtherHighlight
 	};
 	static void setHighlightType(HighlightType type) { highlightType_ = type; }
-	void createParticle(Target *target);
+	void createParticle();
 
 protected:
 	static HighlightType highlightType_;
+	bool tree_, matrixCached_;
+	Matrix16 cachedMatrix_;
+	Target *target_;
+	TargetVisibilityPatch *currentVisibilityPatch_;
+	int patchEpoc_;
 	bool particleMade_;
 
-	void drawShield(Target *target, float shieldHit, float totalTime);
-	void drawParachute(Target *target);
+	void drawShield(float shieldHit, float totalTime);
+	void drawParachute();
 
-	float getTargetSize(Target *target);
-	float getTargetFade(Target *target, float distance, float size);
-	void storeTarget2DPos(Target *target);
+	bool getVisible();
+
+	float getTargetSize();
+	float getTargetFade(float distance, float size);
+	void storeTarget2DPos();
+
+	void setMovedPatch(TargetVisibilityPatch *newPatch);
 
 	double posX_, posY_, posZ_;
 };

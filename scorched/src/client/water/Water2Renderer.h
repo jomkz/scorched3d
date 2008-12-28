@@ -45,6 +45,7 @@ public:
 	void bindWaterReflection() { reflectionBuffer_.bind(); }
 	void unBindWaterReflection() { reflectionBuffer_.unBind(); }
 	void drawPoints(WaterMapPoints &points);
+	GLTexture &getReflectionTexture() { return reflectionTexture_; }
 
 protected:
 	float totalTime_;
@@ -62,7 +63,7 @@ protected:
 
 	void drawWaterShaders(Water2 &water2);
 	void drawWaterNoShaders(Water2 &water2);
-	void drawWater(Water2 &water2);
+	void drawWater(Water2 &water2, GLSLShaderSetup *waterShader);
 };
 
 #endif // __INCLUDE_Water2Rendererh_INCLUDE__

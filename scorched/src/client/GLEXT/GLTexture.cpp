@@ -23,8 +23,9 @@
 #include <common/Defines.h>
 #include <set>
 
-static std::set<GLuint> usedNumbers_;
+//static std::set<GLuint> usedNumbers_;
 unsigned int GLTexture::textureSpace_ = 0;
+unsigned int GLTexture::textureSets_ = 0;
 
 GLTexture::GLTexture() : 
 	texNum_(0), texType_(GL_TEXTURE_2D), 
@@ -40,7 +41,7 @@ GLTexture::~GLTexture()
 	if (texNum_)
 	{
 		glDeleteTextures(1, &texNum_);
-		usedNumbers_.erase(texNum_);
+		//usedNumbers_.erase(texNum_);
 		texNum_ = 0;
 	}
 }
@@ -51,6 +52,7 @@ void GLTexture::draw(bool force)
 	{
 		glBindTexture(texType_, texNum_);
 		lastBind_ = this;
+		textureSets_++;
 	}
 }
 
@@ -67,7 +69,7 @@ bool GLTexture::replace(Image &bitmap, bool mipMap)
 			(bitmap.getHeight() != height_))
 		{
 			glDeleteTextures(1, &texNum_);
-			usedNumbers_.erase(texNum_);
+			//usedNumbers_.erase(texNum_);
 			texNum_ = 0;
 		}
 	}
@@ -113,23 +115,13 @@ bool GLTexture::createObject()
 {
 	if (!textureValid())
 	{
-		glGetError(); // Clear error indicator
-
 		GLfloat priority = 1.0f;
 		glGenTextures(1, &texNum_);
-		GLenum result = glGetError();
-		if (texNum_ == 0 ||
-			result == GL_INVALID_VALUE ||
-			result == GL_INVALID_OPERATION)
-		{
-			//DIALOG_ASSERT("Failed to create texture" == 0);
-			return false;
-		}
-		if (usedNumbers_.find(texNum_) != usedNumbers_.end())
-		{
-			DIALOG_ASSERT("Texture Reuse" == 0);
-		}
-		usedNumbers_.insert(texNum_);
+		//if (usedNumbers_.find(texNum_) != usedNumbers_.end())
+		//{
+		//	DIALOG_ASSERT("Texture Reuse" == 0);
+		//}
+		//usedNumbers_.insert(texNum_);
 
 		glPrioritizeTextures(1, &texNum_, &priority);
 	}
@@ -259,12 +251,6 @@ bool GLTexture::create(GLint width, GLint height, GLenum format)
 	if (!createObject()) return false;
 
 	glBindTexture(texType_, texNum_);
-	GLenum result = glGetError();
-	if (result == GL_INVALID_VALUE ||
-		result == GL_INVALID_OPERATION)
-	{
-		return false;
-	}
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
@@ -288,12 +274,6 @@ bool GLTexture::createBufferTexture(GLint width, GLint height, bool depthTex)
 	if (!createObject()) return false;
 
 	glBindTexture(texType_, texNum_);
-	GLenum result = glGetError();
-	if (result == GL_INVALID_VALUE ||
-		result == GL_INVALID_OPERATION)
-	{
-		return false;
-	}
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 

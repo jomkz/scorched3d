@@ -1,33 +1,39 @@
 <modinfo>
 	<main>
-		<shortdescription>Play a normal Scorched3D game.</shortdescription>
-		<description>Start a single or multi-player game.
-One or more people play against themselves or the computer.</description>
+		<shortdescription>Play a normal game.</shortdescription>
+		<description>Start a single-player game.
+One person plays against the computer.
+Choose a custom game for more options or to play with 
+more than one human player.</description>
 		<icon>data/windows/tank2.bmp</icon>
 		<url>http://www.scorched3d.co.uk</url>
-		<protocolversion>dl</protocolversion>
+		<protocolversion>ea</protocolversion>
 	</main>
 	<game>
-		<shortdescription>Start an target practice game.</shortdescription>
-		<description>Play a practice level against targets that don't fire back.</description>
+		<shortdescription>Target practice</shortdescription>
+		<description>Play a practice level against targets that don't fire back.
+Start with all of the weapons.</description>
 		<icon>data/windows/target.bmp</icon>
 		<gamefile>data/singletarget.xml</gamefile>
 	</game>
 	<game>
-		<shortdescription>Start an easy single player game.</shortdescription>
-		<description>Play a quick game against easy computer players.</description>
+		<shortdescription>Easy Game</shortdescription>
+		<description>Play a quick game against easy computer players.
+Buy immediately with lots of money.</description>
 		<icon>data/windows/tank-easy.bmp</icon>
 		<gamefile>data/singleeasy.xml</gamefile>
 	</game>
 	<game>
-		<shortdescription>Start an normal single player game.</shortdescription>
-		<description>Play a quick game against normal strength computer players.</description>
+		<shortdescription>Normal Game</shortdescription>
+		<description>Play a quick game against normal strength computer players.
+Buy immediately with some money.</description>
 		<icon>data/windows/tank-med.bmp</icon>
 		<gamefile>data/singlenormal.xml</gamefile>
 	</game>
 	<game>
-		<shortdescription>Start an hard single player game.</shortdescription>
-		<description>Play a quick game against hard computer players.</description>
+		<shortdescription>Hard Game</shortdescription>
+		<description>Play a quick game against hard computer players.
+Buy immediately with little money.</description>
 		<icon>data/windows/tank-hard.bmp</icon>
 		<gamefile>data/singlehard.xml</gamefile>
 	</game>

@@ -32,17 +32,19 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
+#include <common/OptionsScorched.h>
 
 Target::Target(unsigned int playerId, 
-	const char *name,
+	const LangString &name,
 	ScorchedContext &context) :
 	playerId_(playerId),
-	name_(name),
 	context_(context),
 	deathAction_(0), burnAction_(0),
 	renderer_(0), 
 	border_(0)
 {
+	setName(name);
+
 	life_ = new TargetLife(context, playerId);
 	shield_ = new TargetShield(context, playerId);
 	parachute_ = new TargetParachute(context);
@@ -58,7 +60,7 @@ Target::Target(unsigned int playerId,
 
 Target::~Target()
 {
-	context_.landscapeMaps->getGroundMaps().getGroups().
+	context_.getLandscapeMaps().getGroundMaps().getGroups().
 		removeFromGroups(&getGroup());
 	life_->setLife(0);
 
@@ -89,6 +91,27 @@ bool Target::getAlive()
 	return (life_->getLife() > 0);
 }
 
+void Target::setName(const LangString &name)
+{
+	name_ = name;
+	if (!context_.getOptionsGame().getAllowMultiLingualNames() &&
+		!isTarget())
+	{
+		for (unsigned int *c = (unsigned int *)name_.c_str();
+			*c;
+			c++)
+		{
+			if (*c > 127) *c = '?';
+		}
+	}
+}
+
+const std::string &Target::getCStrName()
+{
+	cStrName_ = LangStringUtil::convertFromLang(name_);
+	return cStrName_;
+}
+
 bool Target::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(name_);
@@ -98,8 +121,8 @@ bool Target::writeMessage(NetBuffer &buffer)
 	if (!targetState_->writeMessage(buffer)) return false;
 	if (!group_->writeMessage(buffer)) return false;
 	buffer.addToBuffer(border_);
-	if (!context_.accessoryStore->writeWeapon(buffer, deathAction_)) return false;
-	if (!context_.accessoryStore->writeWeapon(buffer, burnAction_)) return false;
+	if (!context_.getAccessoryStore().writeWeapon(buffer, deathAction_)) return false;
+	if (!context_.getAccessoryStore().writeWeapon(buffer, burnAction_)) return false;
 
 	return true;
 }
@@ -141,8 +164,8 @@ bool Target::readMessage(NetBufferReader &reader)
 		Logger::log("Target::border read failed");
 		return false;
 	}
-	deathAction_ = context_.accessoryStore->readWeapon(reader);
-	burnAction_ = context_.accessoryStore->readWeapon(reader);
+	deathAction_ = context_.getAccessoryStore().readWeapon(reader);
+	burnAction_ = context_.getAccessoryStore().readWeapon(reader);
 
 	return true;
 }

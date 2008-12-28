@@ -44,7 +44,7 @@ bool TankModel::initFromXML(ScorchedContext &context, XMLNode *node)
 	// Get the tank type (if any)
 	typeName_ = "none";
 	node->getNamedChild("type", typeName_, false);
-	TankType *type = context.tankModelStore->getTypeByName(typeName_.c_str());
+	TankType *type = context.getTankModels().getTypeByName(typeName_.c_str());
 	if (!type)
 	{
 		return node->returnError(

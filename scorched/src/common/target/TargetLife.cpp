@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <target/TargetLife.h>
+#include <target/TargetRenderer.h>
 #include <target/TargetSpace.h>
 #include <target/TargetState.h>
 #include <target/Target.h>
@@ -32,7 +33,7 @@
 TargetLife::TargetLife(ScorchedContext &context, unsigned int playerId) :
 	context_(context), sphereGeom_(true),
 	life_(0), maxLife_(1), target_(0),
-	size_(2, 2, 2)
+	size_(2, 2, 2), floatBoundingSize_(0.0f)
 {
 }
 
@@ -52,7 +53,7 @@ void TargetLife::setLife(fixed life)
 	life_ = life;
 
 	if (life_ >= maxLife_) life_ = maxLife_;
-	if (life_ <= 0)
+	if (life_ < 1)
 	{
 		life_ = 0;
 		setRotation(0); // Updates space too
@@ -75,11 +76,11 @@ void TargetLife::setSize(FixedVector &size)
 void TargetLife::setTargetPositionAndRotation(FixedVector &pos, fixed rotation)
 {
 	targetPosition_ = pos;
-	if (!context_.serverMode) targetPosition_.asVector(floatPosition_);
+	if (!context_.getServerMode()) targetPosition_.asVector(floatPosition_);
 
 	FixedVector zaxis(0, 0, 1);
 	quaternion_.setQuatFromAxisAndAngle(zaxis, rotation / 180 * fixed::XPI);
-	if (!context_.serverMode) quaternion_.getOpenGLRotationMatrix(floatRotMatrix_);
+	if (!context_.getServerMode()) quaternion_.getOpenGLRotationMatrix(floatRotMatrix_);
 
 	updateAABB();
 	updateSpace();
@@ -88,7 +89,7 @@ void TargetLife::setTargetPositionAndRotation(FixedVector &pos, fixed rotation)
 void TargetLife::setTargetPosition(FixedVector &pos)
 {
 	targetPosition_ = pos;
-	if (!context_.serverMode) targetPosition_.asVector(floatPosition_);
+	if (!context_.getServerMode()) targetPosition_.asVector(floatPosition_);
 
 	updateSpace();
 }
@@ -97,7 +98,7 @@ void TargetLife::setRotation(fixed rotation)
 {
 	FixedVector zaxis(0, 0, 1);
 	quaternion_.setQuatFromAxisAndAngle(zaxis, rotation / 180 * fixed::XPI);
-	if (!context_.serverMode) quaternion_.getOpenGLRotationMatrix(floatRotMatrix_);
+	if (!context_.getServerMode()) quaternion_.getOpenGLRotationMatrix(floatRotMatrix_);
 
 	updateAABB();
 	updateSpace();
@@ -241,7 +242,8 @@ void TargetLife::setBoundingSphere(bool sphereGeom)
 
 void TargetLife::updateSpace()
 {
-	context_.targetSpace->updateTarget(target_);
+	if (target_->getRenderer()) target_->getRenderer()->moved();
+	context_.getTargetSpace().updateTarget(target_);
 }
 
 bool TargetLife::writeMessage(NetBuffer &buffer)
@@ -357,5 +359,9 @@ void TargetLife::updateAABB()
 			}
 		}
 	}
-	if (!context_.serverMode) aabbSize_.asVector(floatAabbSize_);
+	if (!context_.getServerMode())
+	{
+		aabbSize_.asVector(floatAabbSize_);
+		floatBoundingSize_ = floatAabbSize_.Max();
+	}
 }

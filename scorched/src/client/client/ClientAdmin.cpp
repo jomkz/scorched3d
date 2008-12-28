@@ -21,8 +21,9 @@
 #include <client/ClientAdmin.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientChannelManager.h>
+#include <client/ClientAdminResultHandler.h>
 #include <tank/TankContainer.h>
-#include <GLEXT/GLConsole.h>
+#include <console/Console.h>
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsAdminMessage.h>
 #include <common/Defines.h>
@@ -40,8 +41,120 @@ ClientAdmin *ClientAdmin::instance()
 
 ClientAdmin::ClientAdmin() 
 {
-	new GLConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::admin, "admin");
+	// Help
+	new ConsoleRuleMethodIAdapter<ClientAdmin>(
+		this, &ClientAdmin::adminHelp, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("help")));
+
+	// No Params
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminNoParams, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("killall")),
+		(unsigned int) ComsAdminMessage::AdminKillAll);
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminNoParams, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("newgame")),
+		(unsigned int) ComsAdminMessage::AdminNewGame);
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminNoParams, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("showbanned")),
+		(unsigned int) ComsAdminMessage::AdminShowBanned);
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminNoParams, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("show")),
+		(unsigned int) ComsAdminMessage::AdminShow);
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminNoParams, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("logout")),
+		(unsigned int) ComsAdminMessage::AdminLogout);
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminNoParams, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("synccheck")),
+		(unsigned int) ComsAdminMessage::AdminSyncCheck);
+
+	// One Number Param 
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminOneParam, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("kick"), 
+		ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
+		(unsigned int) ComsAdminMessage::AdminKick);
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminOneParam, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("ban"), 
+		ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
+		(unsigned int) ComsAdminMessage::AdminBan);
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminOneParam, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("flag"), 
+		ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
+		(unsigned int) ComsAdminMessage::AdminFlag);
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminOneParam, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("mute"), 
+		ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
+		(unsigned int) ComsAdminMessage::AdminMute);
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminOneParam, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("permmute"), 
+		ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
+		(unsigned int) ComsAdminMessage::AdminPermMute);
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminOneParam, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("unpermmute"), 
+		ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
+		(unsigned int) ComsAdminMessage::AdminUnPermMute);
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminOneParam, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("unmute"), 
+		ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
+		(unsigned int) ComsAdminMessage::AdminUnMute);
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminOneParam, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("poor"), 
+		ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
+		(unsigned int) ComsAdminMessage::AdminPoor);
+
+	// One String Param
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminOneParam, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("talk"), 
+		ConsoleRuleParam("text", ConsoleRuleTypeString)),
+		(unsigned int) ComsAdminMessage::AdminTalk);
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminOneParam, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("admintalk"), 
+		ConsoleRuleParam("text", ConsoleRuleTypeString)),
+		(unsigned int) ComsAdminMessage::AdminAdminTalk);
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminOneParam, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("message"), 
+		ConsoleRuleParam("text", ConsoleRuleTypeString)),
+		(unsigned int) ComsAdminMessage::AdminMessage);
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminOneParam, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("add"), 
+		ConsoleRuleParam("playertype", ConsoleRuleTypeString)),
+		(unsigned int) ComsAdminMessage::AdminAdd);
+
+	// Two Number Params
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminTwoParam, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("slap"), 
+		ConsoleRuleParam("player", ConsoleRuleTypeNumber),
+		ConsoleRuleParam("amount", ConsoleRuleTypeNumber)),
+		(unsigned int) ComsAdminMessage::AdminSlap);
+
+	// Two String Params
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminTwoParam, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("login"), 
+		ConsoleRuleParam("username", ConsoleRuleTypeString),
+		ConsoleRuleParam("password", ConsoleRuleTypeString)),
+		(unsigned int) ComsAdminMessage::AdminLogin);
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminNoParams, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("login")),
+		(unsigned int) ComsAdminMessage::AdminLogin);
 }
 
 ClientAdmin::~ClientAdmin()
@@ -49,169 +162,79 @@ ClientAdmin::~ClientAdmin()
 
 }
 
-void ClientAdmin::admin(std::list<GLConsoleRuleSplit> split, 
-	std::list<std::string> &result)
+void ClientAdmin::adminNoParams(std::vector<ConsoleRuleValue> &values, 
+	unsigned int userData)
 {
-	split.pop_front();
-	if (split.empty()) adminHelp(result);
-	else
+	ComsAdminMessage::ComsAdminMessageType type = 
+		(ComsAdminMessage::ComsAdminMessageType) userData;
+
+	unsigned int sid = ClientAdminResultHandler::instance()->getSid();
+	ComsAdminMessage message(sid, type);
+	ComsMessageSender::sendToServer(message);
+
+	if (type == ComsAdminMessage::AdminLogout)
 	{
-		GLConsoleRuleSplit firstsplit = split.front();
-		split.pop_front();
-
-		bool failed = false;
-		if (0 == stricmp(firstsplit.rule.c_str(), "help")) adminHelp(result);
-		else if (0 == stricmp(firstsplit.rule.c_str(), "killall") ||
-			0 == stricmp(firstsplit.rule.c_str(), "newgame") ||
-			0 == stricmp(firstsplit.rule.c_str(), "showbanned") ||
-			0 == stricmp(firstsplit.rule.c_str(), "show") ||
-			0 == stricmp(firstsplit.rule.c_str(), "logout") ||
-			0 == stricmp(firstsplit.rule.c_str(), "synccheck"))
-		{
-			result.push_back(S3D::formatStringBuffer("  sending %s...", 
-				firstsplit.rule.c_str()));
-
-			ComsAdminMessage::ComsAdminMessageType type = 
-				ComsAdminMessage::AdminShow;
-			if (0 == stricmp(firstsplit.rule.c_str(), "show"))
-				type = ComsAdminMessage::AdminShow;
-			else if (0 == stricmp(firstsplit.rule.c_str(), "showbanned"))
-				type = ComsAdminMessage::AdminShowBanned;
-			else if (0 == stricmp(firstsplit.rule.c_str(), "killall"))
-				type = ComsAdminMessage::AdminKillAll;
-			else if (0 == stricmp(firstsplit.rule.c_str(), "newgame"))
-				type = ComsAdminMessage::AdminNewGame;
-			else if (0 == stricmp(firstsplit.rule.c_str(), "logout"))
-				type = ComsAdminMessage::AdminLogout;
-			else if (0 == stricmp(firstsplit.rule.c_str(), "synccheck"))
-				type = ComsAdminMessage::AdminSyncCheck;
-
-			ComsAdminMessage message(type);
-			ComsMessageSender::sendToServer(message);
-
-			if (type == ComsAdminMessage::AdminLogout)
-			{
-				ClientChannelManager::instance()->removeChannel("admin");
-			}
-		}
-		else if (
-			0 == stricmp(firstsplit.rule.c_str(), "kick") ||
-			0 == stricmp(firstsplit.rule.c_str(), "ban") ||
-			0 == stricmp(firstsplit.rule.c_str(), "flag") ||
-			0 == stricmp(firstsplit.rule.c_str(), "mute") ||
-			0 == stricmp(firstsplit.rule.c_str(), "permmute") ||
-			0 == stricmp(firstsplit.rule.c_str(), "unpermmute") ||
-			0 == stricmp(firstsplit.rule.c_str(), "unmute") ||
-			0 == stricmp(firstsplit.rule.c_str(), "talk") ||
-			0 == stricmp(firstsplit.rule.c_str(), "poor") ||
-			0 == stricmp(firstsplit.rule.c_str(), "admintalk") ||
-			0 == stricmp(firstsplit.rule.c_str(), "message"))
-		{
-			if (split.empty()) failed = true;
-			else
-			{
-				GLConsoleRuleSplit secondsplit = split.front();
-				result.push_back(S3D::formatStringBuffer("  sending %s %s...", 
-					firstsplit.rule.c_str(),
-					secondsplit.rule.c_str()));
-					
-				ComsAdminMessage::ComsAdminMessageType type = 
-					ComsAdminMessage::AdminKick;
-				if (0 == stricmp(firstsplit.rule.c_str(), "kick"))
-					type = ComsAdminMessage::AdminKick;
-				else if (0 == stricmp(firstsplit.rule.c_str(), "ban"))
-					type = ComsAdminMessage::AdminBan;
-				else if (0 == stricmp(firstsplit.rule.c_str(), "flag"))
-					type = ComsAdminMessage::AdminFlag;
-				else if (0 == stricmp(firstsplit.rule.c_str(), "mute"))
-					type = ComsAdminMessage::AdminMute;
-				else if (0 == stricmp(firstsplit.rule.c_str(), "permmute"))
-					type = ComsAdminMessage::AdminPermMute;
-				else if (0 == stricmp(firstsplit.rule.c_str(), "unpermmute"))
-					type = ComsAdminMessage::AdminUnPermMute;
-				else if (0 == stricmp(firstsplit.rule.c_str(), "unmute"))
-					type = ComsAdminMessage::AdminUnMute;	
-				else if (0 == stricmp(firstsplit.rule.c_str(), "talk"))
-					type = ComsAdminMessage::AdminTalk;	
-				else if (0 == stricmp(firstsplit.rule.c_str(), "poor"))
-					type = ComsAdminMessage::AdminPoor;	
-				else if (0 == stricmp(firstsplit.rule.c_str(), "admintalk"))
-					type = ComsAdminMessage::AdminAdminTalk;	
-				else if (0 == stricmp(firstsplit.rule.c_str(), "message"))
-					type = ComsAdminMessage::AdminMessage;	
-
-				ComsAdminMessage message(type, secondsplit.rule.c_str());
-				ComsMessageSender::sendToServer(message);
-			}
-		}
-		else if (0 == stricmp(firstsplit.rule.c_str(), "slap") ||
-			0 == stricmp(firstsplit.rule.c_str(), "login"))
-		{
-			if (split.empty()) failed = true;
-			else
-			{
-				GLConsoleRuleSplit secondsplit = split.front();
-				split.pop_front();
-				if (split.empty()) failed = true;
-				else
-				{
-					GLConsoleRuleSplit thirdsplit = split.front();
-					result.push_back(S3D::formatStringBuffer("  sending %s %s %s...", 
-						firstsplit.rule.c_str(),
-						secondsplit.rule.c_str(),
-						thirdsplit.rule.c_str()));
-					
-					ComsAdminMessage::ComsAdminMessageType type = 
-						ComsAdminMessage::AdminLogin;
-					if (0 == stricmp(firstsplit.rule.c_str(), "slap"))
-						type = ComsAdminMessage::AdminSlap;
-					ComsAdminMessage message(type, 
-						secondsplit.rule.c_str(), 
-						thirdsplit.rule.c_str());
-					ComsMessageSender::sendToServer(message);
-
-					if (type == ComsAdminMessage::AdminLogin)
-					{
-						ClientChannelManager::instance()->addChannel("general", "admin");
-					}
-				}
-			}
-		}
-		else failed = true;
-
-		if (failed)
-		{
-			std::string failed;
-			GLConsoleRule::addRuleFail(failed, firstsplit.position, 
-					(int) firstsplit.rule.length());
-			result.push_back(failed);
-			result.push_back(std::string("Unrecognised admin function ") + 
-				"\"" + firstsplit.rule + "\"");
-			adminHelp(result);
-		}
+		ClientChannelManager::instance()->removeChannel("admin");
+	}
+	else if (type == ComsAdminMessage::AdminLogin)
+	{
+		ClientChannelManager::instance()->addChannel("general", "admin");
 	}
 }
 
-void ClientAdmin::adminHelp(std::list<std::string> &result)
+void ClientAdmin::adminOneParam(std::vector<ConsoleRuleValue> &values, 
+	unsigned int userData)
 {
-	result.push_back("  help - This help");
-	result.push_back("  login <username> <password> - Login as admin");
-	result.push_back("  logout - Logoff as admin");
-	result.push_back("  show - Show ids for all current players");
-	result.push_back("  showbanned - Shows all banned/perm muted players");
-	result.push_back("  killall - Kills all current players and starts next round");
-	result.push_back("  newgame - Kills all current players and starts new game");	
-	result.push_back("  kick <player id> - Kicks specified player");
-	result.push_back("  ban <player id> - Bans and kicks specified player");
-	result.push_back("  poor <player id> - Removes all money from player");
-	result.push_back("  mute <player id> - Mutes specified player for everyone");
-	result.push_back("  flag <player id> - Flags specified player for all admins");
-	result.push_back("  unmute <player id> - Un-mutes specified player for everyone");
-	result.push_back("  permmute <player id> - Mutes specified player for everyone perminantly");
-	result.push_back("  unpermmute <player id> - Un-Mutes specified player for everyone perminantly");
-	result.push_back("  slap <player id> <health> - Removes health from specified player");
-	result.push_back("  talk <text> - Admin talk to all players (white with no name)");
-	result.push_back("  admintalk <text> - Admin talk to all admin players only");
-	result.push_back("  message <text> - Message to all players (yellow in center of screen)");
-	result.push_back("  synccheck - Check client landscape is in sync with server");
+	ComsAdminMessage::ComsAdminMessageType type = 
+		(ComsAdminMessage::ComsAdminMessageType) userData;
+
+	ConsoleRuleValue param = values[2];
+
+	unsigned int sid = ClientAdminResultHandler::instance()->getSid();
+	ComsAdminMessage message(sid, type, param.valueString.c_str());
+	ComsMessageSender::sendToServer(message);
+}
+
+void ClientAdmin::adminTwoParam(std::vector<ConsoleRuleValue> &values, 
+	unsigned int userData)
+{
+	ComsAdminMessage::ComsAdminMessageType type = 
+		(ComsAdminMessage::ComsAdminMessageType) userData;
+
+	ConsoleRuleValue param1 = values[2];
+	ConsoleRuleValue param2 = values[3];
+
+	unsigned int sid = ClientAdminResultHandler::instance()->getSid();
+	ComsAdminMessage message(sid, type, 
+		param1.valueString.c_str(), param2.valueString.c_str());
+	ComsMessageSender::sendToServer(message);
+
+	if (type == ComsAdminMessage::AdminLogin)
+	{
+		ClientChannelManager::instance()->addChannel("general", "admin");
+	}
+}
+
+void ClientAdmin::adminHelp()
+{
+	Console::instance()->addLine(false, "  help - This help");
+	Console::instance()->addLine(false, "  login <username> <password> - Login as admin");
+	Console::instance()->addLine(false, "  logout - Logoff as admin");
+	Console::instance()->addLine(false, "  show - Show ids for all current players");
+	Console::instance()->addLine(false, "  showbanned - Shows all banned/perm muted players");
+	Console::instance()->addLine(false, "  killall - Kills all current players and starts next round");
+	Console::instance()->addLine(false, "  newgame - Kills all current players and starts new game");	
+	Console::instance()->addLine(false, "  kick <player id> - Kicks specified player");
+	Console::instance()->addLine(false, "  ban <player id> - Bans and kicks specified player");
+	Console::instance()->addLine(false, "  poor <player id> - Removes all money from player");
+	Console::instance()->addLine(false, "  mute <player id> - Mutes specified player for everyone");
+	Console::instance()->addLine(false, "  flag <player id> - Flags specified player for all admins");
+	Console::instance()->addLine(false, "  unmute <player id> - Un-mutes specified player for everyone");
+	Console::instance()->addLine(false, "  permmute <player id> - Mutes specified player for everyone perminantly");
+	Console::instance()->addLine(false, "  unpermmute <player id> - Un-Mutes specified player for everyone perminantly");
+	Console::instance()->addLine(false, "  slap <player id> <health> - Removes health from specified player");
+	Console::instance()->addLine(false, "  talk <text> - Admin talk to all players (white with no name)");
+	Console::instance()->addLine(false, "  admintalk <text> - Admin talk to all admin players only");
+	Console::instance()->addLine(false, "  message <text> - Message to all players (yellow in center of screen)");
+	Console::instance()->addLine(false, "  synccheck - Check client landscape is in sync with server");
 }

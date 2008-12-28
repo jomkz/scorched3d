@@ -40,9 +40,9 @@ TargetMovementEntryShips::~TargetMovementEntryShips()
 void TargetMovementEntryShips::generate(ScorchedContext &context, 
 	RandomGenerator &random, LandscapeMovementType *movementType)
 {
-	int mapWidth = context.landscapeMaps->getGroundMaps().getMapWidth();
-	int mapHeight = context.landscapeMaps->getGroundMaps().getMapHeight();
-	LandscapeTex &tex = *context.landscapeMaps->getDefinitions().getTex();
+	int mapWidth = context.getLandscapeMaps().getGroundMaps().getLandscapeWidth();
+	int mapHeight = context.getLandscapeMaps().getGroundMaps().getLandscapeHeight();
+	LandscapeTex &tex = *context.getLandscapeMaps().getDefinitions().getTex();
 
 	// Get the water height (if water is on)
 	fixed waterHeight = 0;
@@ -83,7 +83,7 @@ void TargetMovementEntryShips::generate(ScorchedContext &context,
 	path_.simulate(shipGroup->starttime);
 
 	// Find the group to move the objects in
-	groupEntry_ = context.landscapeMaps->getGroundMaps().getGroups().
+	groupEntry_ = context.getLandscapeMaps().getGroundMaps().getGroups().
 		getGroup(shipGroup->groupname.c_str());
 	if (!groupEntry_)
 	{
@@ -108,19 +108,25 @@ void TargetMovementEntryShips::generate(ScorchedContext &context,
 			S3D::dialogExit("TargetMovementEntryShips",
 				"Movement can be assigned to level targets only (no tanks)");
 		}
-
-		// Set this target as moving
-		entry->getTarget()->getTargetState().setMovement(true);
+		if (entry->getTarget()->getTargetState().getMovement())
+		{
+			S3D::dialogExit("TargetMovementEntryBoids",
+				"Only one movement can be assigned to each target");
+		}
 
 		// Generate the offsets for each target
 		fixed offX = random.getRandFixed() * 200;
 		fixed offY = random.getRandFixed() * 200;
 		FixedVector offset(offX, offY - 100, 0);
-		offsets_[playerId] = offset;
+		TargetMovementEntryShipsOffset *offsetEntry = new TargetMovementEntryShipsOffset();
+		offsetEntry->offset = offset;
+
+		// Set this target as moving
+		entry->getTarget()->getTargetState().setMovement(offsetEntry);
 	}
 }
 
-void TargetMovementEntryShips::simulate(fixed frameTime)
+void TargetMovementEntryShips::simulate(ScorchedContext &context, fixed frameTime)
 {
 	// Update the position of all of the ships along the path
 	path_.simulate(frameTime);
@@ -141,13 +147,12 @@ void TargetMovementEntryShips::simulate(fixed frameTime)
 		unsigned int playerId = (*itor).first;
 		TargetGroup *groupEntry = (*itor).second;
 		
-		// Find the offset for this player
-		std::map<unsigned int, FixedVector>::iterator findItor =
-			offsets_.find(playerId);
-		if (findItor != offsets_.end())
+		TargetMovementEntryShipsOffset *offsetEntry = (TargetMovementEntryShipsOffset *) 
+			groupEntry->getTarget()->getTargetState().getMovement();
+		if (offsetEntry)
 		{
 			// Calculate position
-			FixedVector &offset = (*findItor).second;
+			FixedVector &offset = offsetEntry->offset;
 			FixedVector shipPosition = position;
 			shipPosition += directionPerp * -offset[0];
 			shipPosition += direction * offset[1];

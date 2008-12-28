@@ -63,14 +63,14 @@ void GLWSelectorPart::calculateDimensions(float drawX, float drawY)
 	{
 		// Get height
 		GLWSelectorEntry &item = (*itor);
-		if (item.getText()[0] == '-') selectedHeight += 8.0f;
+		if (item.getSeperator()) selectedHeight += 8.0f;
 		else selectedHeight += 18.0f;
 
 		// Get width
 		float currentwidth = 10.0f;
 		if (item.getText()[0])
 		{
-			currentwidth = (float) font.getWidth(12, (char *) item.getText()) + 20.0f;
+			currentwidth = (float) font.getWidth(12, item.getText()) + 20.0f;
 		}
 		if (item.getSelected()) hasSelectedEntry_ = true;
 		if (!item.getPopups().empty()) hasPopupEntry_ = true;
@@ -161,7 +161,7 @@ void GLWSelectorPart::draw()
 		GLWSelectorEntry &item = (*itor);
 
 		// Check if the item is a seperator
-		if (item.getText()[0] == '-')
+		if (item.getSeperator())
 		{
 			// Draw a seperator
 			glBegin(GL_LINES);
@@ -262,7 +262,7 @@ void GLWSelectorPart::draw()
 					currentTop - 16.0f, 0.0f, "x");
 			}
 			font.draw(*c, 12, selectedX_ + selectedIndent_ + 10.0f, 
-				currentTop - 16.0f, 0.0f, (char *) item.getText());
+				currentTop - 16.0f, 0.0f, item.getText());
 			if (!item.getPopups().empty())
 			{
 				font.draw(*c, 12, selectedX_ + selectedWidth_ - 15.0f, 
@@ -290,7 +290,7 @@ void GLWSelectorPart::mouseDown(float mouseX, float mouseY, bool &hit)
 			GLWSelectorEntry &item = (*itor);
 		
 			// Check if the item is a seperator
-			if (item.getText()[0] == '-')
+			if (item.getSeperator())
 			{
 				position++;
 				currentTop -= 8.0f;

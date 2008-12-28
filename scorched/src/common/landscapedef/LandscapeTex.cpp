@@ -88,15 +88,12 @@ bool LandscapeTexBorderWater::readXML(XMLNode *node)
 bool LandscapeTexTextureGenerate::readXML(XMLNode *node)
 {
 	if (!node->getNamedChild("roof", roof)) return false;
-	if (!node->getNamedChild("surround", surround)) return false;
 	if (!node->getNamedChild("rockside", rockside)) return false;
 	if (!node->getNamedChild("shore", shore)) return false;
 	if (!node->getNamedChild("texture0", texture0)) return false;
 	if (!node->getNamedChild("texture1", texture1)) return false;
 	if (!node->getNamedChild("texture2", texture2)) return false;
 	if (!node->getNamedChild("texture3", texture3)) return false;
-	if (!node->getNamedChild("texture4", texture4)) return false;
-	if (!S3D::checkDataFile(surround.c_str())) return false;
 	if (!S3D::checkDataFile(roof.c_str())) return false;
 	if (!S3D::checkDataFile(rockside.c_str())) return false;
 	if (!S3D::checkDataFile(shore.c_str())) return false;
@@ -104,7 +101,6 @@ bool LandscapeTexTextureGenerate::readXML(XMLNode *node)
 	if (!S3D::checkDataFile(texture1.c_str())) return false;
 	if (!S3D::checkDataFile(texture2.c_str())) return false;
 	if (!S3D::checkDataFile(texture3.c_str())) return false;
-	if (!S3D::checkDataFile(texture4.c_str())) return false;
 	return node->failChildren();
 }
 
@@ -122,6 +118,8 @@ LandscapeTex::~LandscapeTex()
 
 bool LandscapeTex::readXML(LandscapeDefinitions *definitions, XMLNode *node)
 {
+	seed = 0;
+	node->getNamedChild("seed", seed, false);
 	skytexturestatic = "";
 	nosunfog = false; nohorizonglow = false; nosunblend = false;
 	if (!node->getNamedChild("detail", detail)) return false;
@@ -146,9 +144,6 @@ bool LandscapeTex::readXML(LandscapeDefinitions *definitions, XMLNode *node)
 	if (!node->getNamedChild("skysunyz", skysunyz)) return false;
 	if (!node->getNamedChild("skydiffuse", skydiffuse)) return false;
 	if (!node->getNamedChild("skyambience", skyambience)) return false;
-
-	float lowestlandheight;
-	node->getNamedChild("lowestlandheight", lowestlandheight, false);
 
 	if (!S3D::checkDataFile(detail.c_str())) return false;
 	if (!S3D::checkDataFile(magmasmall.c_str())) return false;

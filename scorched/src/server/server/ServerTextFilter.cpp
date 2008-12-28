@@ -34,7 +34,7 @@ ServerTextFilter::~ServerTextFilter()
 {
 }
 
-void ServerTextFilter::filterString(std::string &inputText)
+void ServerTextFilter::filterString(LangString &inputText)
 {
 	loadFile();
 
@@ -43,9 +43,9 @@ void ServerTextFilter::filterString(std::string &inputText)
 
 	// Split the string into parts (words) each seperated by the 
 	// seperating characters
-    std::string current;
-	const char *pos = 0;
-	for (const char *c = inputText.c_str(); *c; c++)
+    LangString current;
+	const unsigned int *pos = 0;
+	for (const unsigned int *c = inputText.c_str(); *c; c++)
 	{
 		if (IS_SPACE(*c))
 		{
@@ -53,10 +53,10 @@ void ServerTextFilter::filterString(std::string &inputText)
 			{
 				TextPart part;
 				part.part = current;
-				part.pos = (char *) pos;
+				part.pos = (unsigned int *) pos;
 				parts.push_back(part);
 			}
-			current = "";
+			current.clear();
 			pos = 0;
 		}
 		else
@@ -70,7 +70,7 @@ void ServerTextFilter::filterString(std::string &inputText)
 	{
 		TextPart part;
 		part.part = current;
-		part.pos = (char *) pos;
+		part.pos = (unsigned int *) pos;
 		parts.push_back(part);
 	}
 
@@ -79,21 +79,21 @@ void ServerTextFilter::filterString(std::string &inputText)
 	for (itor = parts.begin(); itor != parts.end(); itor++)
 	{
 		TextPart &part = (*itor);
-		const char *text = part.part.c_str();
+		const unsigned int *text = part.part.c_str();
 		
 		// Check that they don't contain the words
-		std::list<std::string>::iterator witor;
+		std::list<LangString>::iterator witor;
 		for (witor = words_.begin(); witor != words_.end(); witor++)
 		{
-			const char *word = (*witor).c_str();
-			char *pos = S3D::stristr(text, word);
+			const unsigned int *word = (*witor).c_str();
+			unsigned int *pos = LangStringUtil::strstr(text, word);
 			if (pos)
 			{
 				// Only filter out if the words is at the start or end of the word
-				if (pos == text || (pos - text) + strlen(word) == strlen(text))
+				if (pos == text || (pos - text) + LangStringUtil::strlen(word) == LangStringUtil::strlen(text))
 				{
 					// If they do then * out the word
-					for (int i=0; i<(int) strlen(word); i++)
+					for (int i=0; i<LangStringUtil::strlen(word); i++)
 					{
 						pos[i] = '*';
 					}
@@ -105,23 +105,23 @@ void ServerTextFilter::filterString(std::string &inputText)
 	// For each combination of parts check that they don't add up to the words
 	for (int i=0; i<(int) parts.size(); i++)
 	{
-		std::string sofar;
+		LangString sofar;
 		for (int j=i; j<(int) parts.size(); j++)
 		{
 			sofar += parts[j].part;
-			const char *text = sofar.c_str();
+			const unsigned int *text = sofar.c_str();
 
 			// Check each word against the parts so far
-			std::list<std::string>::iterator witor;
+			std::list<LangString>::iterator witor;
 			for (witor = words_.begin(); witor != words_.end(); witor++)
 			{
-				const char *word = (*witor).c_str();
-				if (stricmp(text, word) == 0)
+				const unsigned int *word = (*witor).c_str();
+				if (LangStringUtil::strcasecmp(text, word) == 0)
 				{
 					// If they match, * out all parts
 					for (int k=i; k<=j; k++)
 					{
-						for (char *pos = (char *) parts[k].part.c_str();
+						for (unsigned int *pos = (unsigned int *) parts[k].part.c_str();
 							*pos; 
 							pos++)
 						{
@@ -139,7 +139,7 @@ void ServerTextFilter::filterString(std::string &inputText)
 	for (itor = parts.begin(); itor != parts.end(); itor++)
 	{
 		TextPart &part = (*itor);
-		const char *text = part.part.c_str();
+		const unsigned int *text = part.part.c_str();
 
 		for (int i=0; i<(int) part.part.size(); i++)
 		{
@@ -171,7 +171,7 @@ void ServerTextFilter::loadFile()
 	{
 		if ((*itor).c_str()[0])
 		{
-			words_.push_back(*itor);
+			words_.push_back(LANG_STRING(*itor));
 		}
 	}
 }

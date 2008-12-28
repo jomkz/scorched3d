@@ -23,9 +23,10 @@
 #include <GLW/GLWPanel.h>
 #include <GLW/GLWWindowManager.h>
 #include <GLEXT/GLState.h>
-#include <GLEXT/GLConsole.h>
 #include <XML/XMLParser.h>
+#include <console/Console.h>
 #include <common/Defines.h>
+#include <client/ClientChannelManager.h>
 
 REGISTER_CLASS_SOURCE(GLWTalkBox);
 
@@ -90,8 +91,8 @@ void GLWTalkBox::keyDown(char *buffer, unsigned int keyState,
 {
 	for (int i=0; i<hisCount; i++)
 	{
-		char c = history[i].representedKey;
 		unsigned int dik = history[i].sdlKey;
+		unsigned int unicodeChar = history[i].representedUnicode;
 		if (dik == SDLK_BACKSPACE || dik == SDLK_DELETE)
 		{
 			if (!text_.empty())
@@ -107,38 +108,40 @@ void GLWTalkBox::keyDown(char *buffer, unsigned int keyState,
 		{
 			if (!text_.empty())
 			{
-				char *text = (char *) text_.c_str();
-				while (char *c = strchr(text, '"'))
+				for (unsigned int *text = (unsigned int *) text_.c_str();
+					*text;
+					text++)
 				{
-					*c = '\'';
+					if (*text == '#') *text = '\'';
 				}
 
-				GLConsole::instance()->addLine(true, 
-					S3D::formatStringBuffer("%s \"%s\"",
-					((mode_ == eTeamSay)?"Teamsay":"Say"),
-					text));
-				text_ = "";
+				ChannelText message("general", text_);
+				ClientChannelManager::instance()->sendText(message);
+
+				text_.clear();
 			}
 			GLWWindowManager::instance()->hideWindow(parent_->getId());
 		}
-		else if (c >= ' ')
+		else if (unicodeChar >= ' ')
 		{
 			if ((maxTextLen_==0) || ((int) text_.size() < maxTextLen_))
 			{
-				text_ += c;
+				text_ += unicodeChar;
 
 				if (text_[0] == '\\' || text_[0] == '/')
 				{
-					if (0 == stricmp(&text_[1], "say ") ||
-						0 == stricmp(&text_[1], "s "))
+					LangString part(&text_[1]);
+
+					if (part == LANG_STRING("say ") ||
+						part == LANG_STRING("s "))
 					{
-						text_ = "";
+						text_.clear();
 						mode_ = eSay;
 					}
-					else if (0 == stricmp(&text_[1], "team ") ||
-						0 == stricmp(&text_[1], "t "))
+					else if (part == LANG_STRING("team ") ||
+						part == LANG_STRING("t "))
 					{
-						text_ = "";
+						text_.clear();
 						mode_ = eTeamSay;
 					}
 				}
@@ -151,7 +154,7 @@ void GLWTalkBox::keyDown(char *buffer, unsigned int keyState,
 void GLWTalkBox::display()
 {
 	mode_ = defaultMode_;
-	text_ = "";
+	text_.clear();
 }
 
 bool GLWTalkBox::initFromXML(XMLNode *node)

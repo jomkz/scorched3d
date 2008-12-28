@@ -48,15 +48,6 @@ static LandscapeDefnType *fetchRoofMapDefnType(const char *type)
 	return 0;
 }
 
-static LandscapeDefnType *fetchSurroundDefnType(const char *type)
-{
-	if (0 == strcmp(type, "none")) return new LandscapeDefnTypeNone;
-	if (0 == strcmp(type, "generate")) return new LandscapeDefnHeightMapGenerate;
-	if (0 == strcmp(type, "file")) return new LandscapeDefnHeightMapFile;
-	S3D::dialogMessage("LandscapeDefnType", S3D::formatStringBuffer("Unknown surround type %s", type));
-	return 0;
-}
-
 static bool parseMinMax(XMLNode *parent, const char *name, 
 	fixed &min, fixed &max)
 {
@@ -146,6 +137,25 @@ bool LandscapeDefnHeightMapGenerate::readXML(XMLNode *node)
 	if (!node->getNamedChild("landsmoothing", landsmoothing)) return false;
 	if (!node->getNamedChild("levelsurround", levelsurround)) return false;
 
+	noisefactor = 1;
+	noiseheight = noisewidth = 64;
+	node->getNamedChild("noisefactor", noisefactor, false);
+	node->getNamedChild("noisewidth", noisewidth, false);
+	node->getNamedChild("noiseheight", noiseheight, false);
+
+	errosions = 0;
+	errosionlayering = 0;
+	errosionsurroundsize = 25;
+	errosionforce = fixed(1) / fixed(25);
+	errosionmaxdepth = fixed(4);
+	errosionsurroundforce = fixed(1);
+	node->getNamedChild("errosions", errosions, false);
+	node->getNamedChild("errosionlayering", errosionlayering, false);
+	node->getNamedChild("errosionforce", errosionforce, false);
+	node->getNamedChild("errosionmaxdepth", errosionmaxdepth, false);
+	node->getNamedChild("errosionsurroundforce", errosionsurroundforce, false);
+	node->getNamedChild("errosionsurroundsize", errosionsurroundsize, false);
+
 	if (!mask.empty())
 	{
 		if (!S3D::checkDataFile(mask.c_str())) return false;
@@ -154,7 +164,7 @@ bool LandscapeDefnHeightMapGenerate::readXML(XMLNode *node)
 }
 
 LandscapeDefn::LandscapeDefn() :
-	heightmap(0), tankstart(0), surround(0), roof(0)
+	heightmap(0), tankstart(0), roof(0)
 {
 }
 
@@ -168,6 +178,29 @@ bool LandscapeDefn::readXML(LandscapeDefinitions *definitions, XMLNode *node)
 	if (!node->getNamedChild("maxplayers", maxplayers)) return false;
 	if (!node->getNamedChild("landscapewidth", landscapewidth)) return false;
 	if (!node->getNamedChild("landscapeheight", landscapeheight)) return false;
+
+	if (landscapewidth % 32 != 0 ||
+		landscapeheight % 32 != 0)
+	{
+		S3D::dialogMessage("Scorched3D",
+			S3D::formatStringBuffer(
+				"ERROR: Landscape width and height must each be a multiple of 32.\n"
+				"Specified size : %ix%i", landscapewidth, landscapeheight));
+		return false;
+	}
+	if (!node->getNamedChild("arenawidth", arenawidth, false)) arenawidth = landscapewidth;
+	if (!node->getNamedChild("arenaheight", arenaheight, false)) arenaheight = landscapeheight;
+	if (arenawidth > landscapewidth ||
+		arenaheight > landscapeheight)
+	{
+		S3D::dialogMessage("Scorched3D",
+			S3D::formatStringBuffer(
+				"ERROR: Arena width and height must each be less than or equal to the landscape size.\n"
+				"Specified size : %ix%i", arenawidth, arenaheight));
+		return false;
+	}
+	arenax = (landscapewidth - arenawidth) / 2;
+	arenay = (landscapeheight - arenaheight) / 2;
 
 	{
 		XMLNode *startNode;
@@ -184,14 +217,6 @@ bool LandscapeDefn::readXML(LandscapeDefinitions *definitions, XMLNode *node)
 		if (!heightNode->getNamedParameter("type", heightmaptype)) return false;
 		if (!(heightmap = fetchHeightMapDefnType(heightmaptype.c_str()))) return false;
 		if (!heightmap->readXML(heightNode)) return false;
-	}
-	{
-		XMLNode *surroundNode;
-		std::string surroundtype;
-		if (!node->getNamedChild("surround", surroundNode)) return false;
-		if (!surroundNode->getNamedParameter("type", surroundtype)) return false;
-		if (!(surround = fetchSurroundDefnType(surroundtype.c_str()))) return false;
-		if (!surround->readXML(surroundNode)) return false;
 	}
 	{
 		XMLNode *roofNode;

@@ -27,6 +27,7 @@
 #include <common/Defines.h>
 #include <common/ChannelManager.h>
 #include <common/OptionsScorched.h>
+#include <lang/LangResource.h>
 
 TankResign::TankResign(unsigned int playerId) :
 	ActionReferenced("TankResign"),
@@ -50,14 +51,14 @@ void TankResign::simulate(fixed frameTime, bool &remove)
 	{
 		firstTime_ = false;
 		Tank *tank = 
-			context_->tankContainer->getTankById(playerId_);
+			context_->getTankContainer().getTankById(playerId_);
 		if (tank && tank->getState().getState() == TankState::sNormal)
 		{
 			// update player assists when this player resigns
 			int moneyPerAssist = 
-				context_->optionsGame->getMoneyWonPerAssistPoint() *
+				context_->getOptionsGame().getMoneyWonPerAssistPoint() *
 					5;
-			int scorePerAssist = context_->optionsGame->getScorePerAssist();
+			int scorePerAssist = context_->getOptionsGame().getScorePerAssist();
 
 			// Update assists
 			std::set<unsigned int> &hurtBy = 
@@ -69,14 +70,14 @@ void TankResign::simulate(fixed frameTime, bool &remove)
 			{
 				unsigned int hurtByPlayer = (*itor);
 				Tank *hurtByTank = 
-					context_->tankContainer->getTankById(hurtByPlayer);
+					context_->getTankContainer().getTankById(hurtByPlayer);
 				if (!hurtByTank) continue;
 
 				// Only score when the tank does not hurt itself
 				if (hurtByTank == tank) continue;
 
 				// or a team member
-				if ((context_->optionsGame->getTeams() > 1) &&
+				if ((context_->getOptionsGame().getTeams() > 1) &&
 					(hurtByTank->getTeam() == tank->getTeam())) continue;
 
 				// Update assist score
@@ -89,7 +90,7 @@ void TankResign::simulate(fixed frameTime, bool &remove)
 
 				if (hurtByTank->getTeam() > 0)
 				{
-					context_->tankTeamScore->addScore(
+					context_->getTankTeamScore().addScore(
 						scorePerAssist, hurtByTank->getTeam());
 				}
 			}
@@ -105,12 +106,13 @@ void TankResign::simulate(fixed frameTime, bool &remove)
 			}
 
 #ifndef S3D_SERVER
-			if (!context_->serverMode)
 			{
 				ChannelText text("combat",
-					S3D::formatStringBuffer("[p:%s] resigned from round", tank->getName()));
-				//info.setPlayerId(playerId_);
-				ChannelManager::showText(text);
+					LANG_RESOURCE_1(
+						"TANK_RESIGNED",
+						"[p:{0}] resigned from round", 
+						tank->getTargetName()));
+				ChannelManager::showText(*context_, text);
 			}
 #endif // #ifndef S3D_SERVER
 		}

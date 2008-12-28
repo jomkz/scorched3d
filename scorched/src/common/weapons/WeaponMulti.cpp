@@ -48,7 +48,7 @@ bool WeaponMulti::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNo
 		if (!subNode) break;
 		
 		// Check next weapon is correct type
-		AccessoryPart *accessory = context.getAccessoryStore()->
+		AccessoryPart *accessory = context.getAccessoryStore().
 			createAccessoryPart(context, parent_, subNode);
 		if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
 		{

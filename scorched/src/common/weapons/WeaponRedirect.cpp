@@ -53,7 +53,7 @@ bool WeaponRedirect::parseXML(AccessoryCreateContext &context, XMLNode *accessor
 	if (!accessoryNode->getNamedChild("nextaction", subNode)) return false;
 	
 	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore()->
+	AccessoryPart *accessory = context.getAccessoryStore().
 		createAccessoryPart(context, parent_, subNode);
 	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
 	{

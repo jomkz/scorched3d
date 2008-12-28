@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <server/ServerHaveModFilesHandler.h>
+#include <server/ServerChannelManager.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerCommon.h>
 #include <engine/ModFiles.h>
@@ -114,8 +115,12 @@ bool ServerHaveModFilesHandler::processMessage(
 	if (neededEntries_.empty())
 	{
 		// No files need downloading
-		ServerCommon::sendString(netMessage.getDestinationId(), 
-			"No mod files need downloading");
+		ServerChannelManager::instance()->sendText(
+			ChannelText("info",
+				"NO_MOD_FILES",
+				"No mod files need downloading"),
+			netMessage.getDestinationId(), 
+			false);
 	}
 #ifndef S3D_SERVER
 	else
@@ -132,12 +137,16 @@ bool ServerHaveModFilesHandler::processMessage(
 		// If this server does not allow file downloads tell the client
 		// and disconnect them
 		Logger::log("No mod and mod download disabled");
-		ServerCommon::sendString(destinationId,
-			S3D::formatStringBuffer("This server requires the \"%s\" Scorched3D mod.\n"
-			"The server does not allow in game file downloads.\n"
-			"You must download and install this mod before you\n"
-			"can connect to this server.",
-			ScorchedServer::instance()->getOptionsGame().getMod()));
+		ServerChannelManager::instance()->sendText(
+			ChannelText("info",
+				"SERVER_REQUIRES_MOD",
+				"This server requires the \"{0}\" Scorched3D mod.\n"
+				"The server does not allow in game file downloads.\n"
+				"You must download and install this mod before you\n"
+				"can connect to this server.",
+				ScorchedServer::instance()->getOptionsGame().getMod()),
+			destinationId,
+			false);
 		ServerCommon::kickDestination(destinationId);
 	}
 	else 
@@ -150,17 +159,20 @@ bool ServerHaveModFilesHandler::processMessage(
 		int timeSeconds = timeLeft % 60;
 		// This server allows file downloads
 		// The the client how much needs to be downloaded
-		ServerCommon::sendString(destinationId, 
-			S3D::formatStringBuffer("This server requires the \"%s\" Scorched3D mod.\n"
-			"This will require downloading %u bytes\n"
-			"Maximun %i bytes per second = Minimum of %i minutes, %i seconds.\n"
-			"Note: This will also depend on how many server\n"
-			"downloads and your link speed.",
-			ScorchedServer::instance()->getOptionsGame().getMod(),
-			neededLength,
-			ScorchedServer::instance()->getOptionsGame().getModDownloadSpeed(),
-			timeMinutes,
-			timeSeconds));
+		ServerChannelManager::instance()->sendText(
+			ChannelText("info",
+				"SERVER_DOWNLOAD_MOD",
+				"This server requires the \"{0}\" Scorched3D mod.\n"
+				"This will require downloading {1} bytes\n"
+				"Maximun {2} bytes per second = Minimum of {3} minutes\n"
+				"Note: This will also depend on how many server\n"
+				"downloads and your link speed.",
+				ScorchedServer::instance()->getOptionsGame().getMod(),
+				neededLength,
+				ScorchedServer::instance()->getOptionsGame().getModDownloadSpeed(),
+				timeMinutes),
+			destinationId,
+			false);
 	}
 #endif
 

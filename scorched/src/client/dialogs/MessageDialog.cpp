@@ -21,7 +21,7 @@
 #include <dialogs/MessageDialog.h>
 #include <client/ScorchedClient.h>
 #include <common/OptionsScorched.h>
-#include <GLEXT/GLConsole.h>
+#include <console/Console.h>
 #include <GLEXT/GLViewPort.h>
 #include <GLW/GLWFont.h>
 
@@ -91,7 +91,7 @@ void MessageDialog::draw()
 	float wHeight = (float) GLViewPort::getHeight();
 	float wWidth = (float) GLViewPort::getWidth();
 	float textWidth = GLWFont::instance()->getGameFont()->getWidth(
-		30, currentText_.c_str());
+		30, currentText_);
 
 	float x = (wWidth/2.0f) - (textWidth / 2) - 10.0f;
 	float y = wHeight - 60.0f;
@@ -106,5 +106,5 @@ void MessageDialog::draw()
 	GLWFont::instance()->getGameFont()->draw(
 		white, 30, 
 		x + 10.0f, y + 7.0f, 0.0f,
-		currentText_.c_str());
+		currentText_);
 }

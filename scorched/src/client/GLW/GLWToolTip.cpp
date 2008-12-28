@@ -58,7 +58,7 @@ GLWToolTip::~GLWToolTip()
 }
 
 bool GLWToolTip::addToolTip(ToolTip::ToolTipType type, 
-	const std::string &title, const std::string &text,
+	const LangString &title, const LangString &text,
 	float x, float y, float w, float h)
 {
 	if (!OptionsDisplay::instance()->getShowContextInfo() &&
@@ -127,16 +127,21 @@ void GLWToolTip::calculateTip(ToolTip *tip)
 	if (tipTextWidth_ != 0.0f) return;
 
 	tipTextHeight_ = 24.0f;
-	char *token = strtok((char *) tipText_.c_str(), "\n");
-	while(token != NULL)
+
+	int pos, startpos = 0;
+	LangString tipText = tipText_;
+	tipText.append(LANG_STRING("\n"));
+	while ((pos = tipText.find(LANG_STRING("\n"), startpos)) != LangString::npos)
 	{
-		tipTexts_.push_back(token);
+		LangString part = LangString(tipText, startpos, pos - startpos);
+		tipTexts_.push_back(part);
 		tipTextHeight_ += 10.0f;
-		token = strtok(NULL, "\n");
+
+		startpos = pos + 1;
 	}
 
-	std::list<char *>::iterator itor;
-	std::list<char *>::iterator enditor = tipTexts_.end();
+	std::list<LangString>::iterator itor;
+	std::list<LangString>::iterator enditor = tipTexts_.end();
 	for (itor = tipTexts_.begin(); itor != enditor; itor++)
 	{
 		float width = float(GLWFont::instance()->getGameFont()->
@@ -145,7 +150,7 @@ void GLWToolTip::calculateTip(ToolTip *tip)
 	}
 
 	float width = float(GLWFont::instance()->getGameFont()->
-		getWidth(11, tipTitle_.c_str())) + 10.0f; 
+		getWidth(11, tipTitle_)) + 10.0f; 
 	if (width > tipTextWidth_) tipTextWidth_ = width;
 }
 
@@ -282,11 +287,11 @@ void GLWToolTip::draw(const unsigned state)
 
 	float pos = posY + posH - 16.0f;
 	GLWFont::instance()->getGameFont()->drawA(selectedColor, alpha, 11, posX + 3.0f, 
-		pos, 0.0f, tipTitle_.c_str());
+		pos, 0.0f, tipTitle_);
 	pos -= 2.0f;
 
-	std::list<char *>::iterator itor;
-	std::list<char *>::iterator enditor = tipTexts_.end();
+	std::list<LangString>::iterator itor;
+	std::list<LangString>::iterator enditor = tipTexts_.end();
 	for (itor = tipTexts_.begin(); itor != enditor; itor++)
 	{
 		pos -= 10.0f;

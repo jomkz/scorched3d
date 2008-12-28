@@ -30,6 +30,14 @@ class StatsLogger
 public:
 	static StatsLogger *instance();
 
+	struct TankRank
+	{
+		TankRank() : rank(-1), skill(0) {}
+
+		int rank;
+		int skill;
+	};
+
 	StatsLogger();
 	virtual ~StatsLogger();
 
@@ -39,7 +47,7 @@ public:
 
 	virtual std::list<std::string> getAliases(const char *unqiueId) = 0;
 	virtual std::list<std::string> getIpAliases(const char *unqiueId) = 0;
-	virtual std::string tankRank(Tank *tank) = 0;
+	virtual TankRank tankRank(Tank *tank) = 0;
 	virtual void updateStats(Tank *tank) = 0;
 	virtual void periodicUpdate() = 0;
 	virtual std::string allocateId() = 0;
@@ -84,7 +92,7 @@ public:
 		{ std::list<std::string> result; return result; }
 	virtual std::list<std::string> getIpAliases(const char *unqiueId) 
 		{ std::list<std::string> result; return result; }
-	virtual std::string tankRank(Tank *tank) { return "-"; }
+	virtual TankRank tankRank(Tank *tank) { return TankRank(); }
 	virtual void updateStats(Tank *tank) {}
 	virtual void periodicUpdate() {}
 	virtual std::string allocateId() { return ""; }

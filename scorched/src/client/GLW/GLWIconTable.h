@@ -43,12 +43,12 @@ class GLWIconTable :
 public:
 	struct Column
 	{
-		Column(const char *name_ = "", float width_ = 0.0f) :
+		Column(const LangString &name_ = LangString(), float width_ = 0.0f) :
 			name(name_), width(width_)
 			{
 			}
 
-		std::string name;
+		LangString name;
 		float width;
 	};
 

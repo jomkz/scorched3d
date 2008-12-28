@@ -59,9 +59,9 @@ void PlacementGroupDefinition::addToGroup(
 	bool thin)
 {
 	TargetGroupsGroupEntry *group =
-		context.landscapeMaps->getGroundMaps().getGroups().getGroup(
+		context.getLandscapeMaps().getGroundMaps().getGroups().getGroup(
 			groupName, 
-			&context.landscapeMaps->getGroundMaps().getHeightMap());
+			&context.getLandscapeMaps().getGroundMaps().getHeightMap());
 	if (group)
 	{
 		group->addObject(objectEntry, thin);

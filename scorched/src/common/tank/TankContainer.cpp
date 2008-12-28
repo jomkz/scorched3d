@@ -62,7 +62,7 @@ Tank *TankContainer::getTankById(unsigned int id)
 	return 0;
 }
 
-Tank *TankContainer::getTankByName(const char *name)
+Tank *TankContainer::getTankByName(const LangString &name)
 {
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = tanks_.begin();
@@ -70,7 +70,7 @@ Tank *TankContainer::getTankByName(const char *name)
 		mainitor++)
 	{
 		Tank *tank = (*mainitor).second;
-		if (0 == strcmp(tank->getName(),name)) return tank;
+		if (tank->getTargetName() == name) return tank;
 	}
 	return 0;
 }

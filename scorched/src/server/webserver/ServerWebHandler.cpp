@@ -43,7 +43,6 @@
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
 #include <tankai/TankAIStore.h>
-#include <tankai/TankAIAdder.h>
 #include <XML/XMLParser.h>
 #include <vector>
 #include <algorithm>
@@ -64,7 +63,7 @@ static const char *getAdminUserName(std::map<std::string, std::string> &fields)
 	unsigned int sid = atoi(ServerWebServerUtil::getField(fields, "sid"));
 	ServerAdminSessions::SessionParams *session =
 		ServerAdminSessions::instance()->getSession(sid);
-	if (session) return session->userName.c_str();
+	if (session) return session->credentials.username.c_str();
 	return "Unknown";
 }
 
@@ -76,7 +75,7 @@ bool ServerWebHandler::PlayerHandler::processRequest(
 	const char *addType = ServerWebServerUtil::getField(request.getFields(), "add");
 	if (addType)
 	{
-		TankAIAdder::addTankAI(*ScorchedServer::instance(), addType);
+		ServerAdminCommon::addPlayer(request.getSession()->credentials, addType);
 	}
 
 	std::map<unsigned int, Tank *> &tanks = 
@@ -97,46 +96,49 @@ bool ServerWebHandler::PlayerHandler::processRequest(
 			{
 				if (0 == strcmp(action, "Kick"))
 				{
-					ServerAdminCommon::kickPlayer(adminName, tank->getPlayerId());
+					ServerAdminCommon::kickPlayer(request.getSession()->credentials, tank->getPlayerId());
 					break;
 				}
 				else if (0 == strcmp(action, "Mute"))
 				{
-					ServerAdminCommon::mutePlayer(adminName, tank->getPlayerId(), true);
+					ServerAdminCommon::mutePlayer(request.getSession()->credentials, tank->getPlayerId(), true);
 				}
 				else if (0 == strcmp(action, "UnMute"))
 				{
-					ServerAdminCommon::mutePlayer(adminName, tank->getPlayerId(), false);
+					ServerAdminCommon::mutePlayer(request.getSession()->credentials, tank->getPlayerId(), false);
 				}
 				else if (0 == strcmp(action, "Flag"))
 				{
-					ServerAdminCommon::flagPlayer(adminName, tank->getPlayerId(),
+					ServerAdminCommon::flagPlayer(request.getSession()->credentials, tank->getPlayerId(),
 						ServerWebServerUtil::getField(request.getFields(), "reason"));
 				}
 				else if (0 == strcmp(action, "Poor"))
 				{
-					ServerAdminCommon::poorPlayer(adminName, tank->getPlayerId());
+					ServerAdminCommon::poorPlayer(request.getSession()->credentials, tank->getPlayerId());
 				}
 				else if (0 == strcmp(action, "PermMute"))
 				{
-					ServerAdminCommon::permMutePlayer(adminName, tank->getPlayerId(),
+					ServerAdminCommon::permMutePlayer(request.getSession()->credentials, tank->getPlayerId(),
 						ServerWebServerUtil::getField(request.getFields(), "reason"));
 				}
 				else if (0 == strcmp(action, "UnPermMute"))
 				{
-					ServerAdminCommon::unpermMutePlayer(adminName, tank->getPlayerId());
+					ServerAdminCommon::unpermMutePlayer(request.getSession()->credentials, tank->getPlayerId());
 				}
 				else if (0 == strcmp(action, "Banned"))
 				{
-					ServerAdminCommon::banPlayer(adminName, tank->getPlayerId(),
+					ServerAdminCommon::banPlayer(request.getSession()->credentials, tank->getPlayerId(),
 						ServerWebServerUtil::getField(request.getFields(), "reason"));
 				}
 				else if (0 == strcmp(action, "Slap"))
 				{
-					ServerAdminCommon::slapPlayer(adminName, tank->getPlayerId(), 25.0f);
+					ServerAdminCommon::slapPlayer(request.getSession()->credentials, tank->getPlayerId(), 25.0f);
 				}
 				else if (0 == strcmp(action, "ShowAliases"))
 				{
+					if (!request.getSession()->credentials.hasPermission(
+						ServerAdminSessions::PERMISSION_ALIASPLAYER)) return true;
+
 					ServerWebServerUtil::getHtmlRedirect(
 						S3D::formatStringBuffer("/playersthreaded?sid=%s&action=%s&uniqueid=%s",
 							ServerWebServerUtil::getField(request.getFields(), "sid"),
@@ -146,6 +148,9 @@ bool ServerWebHandler::PlayerHandler::processRequest(
 				}
 				else if (0 == strcmp(action, "ShowIPAliases"))
 				{
+					if (!request.getSession()->credentials.hasPermission(
+						ServerAdminSessions::PERMISSION_ALIASPLAYER)) return true;
+
 					ServerWebServerUtil::getHtmlRedirect(
 						S3D::formatStringBuffer("/playersthreaded?sid=%s&action=%s&uniqueid=%s",
 							ServerWebServerUtil::getField(request.getFields(), "sid"),
@@ -167,7 +172,7 @@ bool ServerWebHandler::PlayerHandler::processRequest(
 	{
 		Tank *tank = (*itor).second;
 		std::string cleanName;
-		std::string dirtyName(tank->getName());
+		std::string dirtyName(LangStringUtil::convertFromLang(tank->getTargetName()));
 		XMLNode::removeSpecialChars(dirtyName, cleanName);
 		players += S3D::formatStringBuffer(
 			"<tr>"
@@ -212,13 +217,16 @@ bool ServerWebHandler::PlayerHandler::processRequest(
 	}
 	request.getFields()["ADD"] = add;
 
-	return ServerWebServerUtil::getHtmlTemplate("player.html", request.getFields(), text);
+	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "player.html", request.getFields(), text);
 }
 
 bool ServerWebHandler::PlayerHandlerThreaded::processRequest(
 	ServerWebServerIRequest &request,
 	std::string &text)
 {
+	if (!request.getSession()->credentials.hasPermission(
+		ServerAdminSessions::PERMISSION_ALIASPLAYER)) return true;
+
 	// Check for any action
 	const char *action = ServerWebServerUtil::getField(request.getFields(), "action");
 	const char *uniqueid = ServerWebServerUtil::getField(request.getFields(), "uniqueid");
@@ -230,6 +238,7 @@ bool ServerWebHandler::PlayerHandlerThreaded::processRequest(
 				StatsLogger::instance()->getAliases(uniqueid);
 			std::string lines = ServerWebServerUtil::concatLines(aliases);
 			return ServerWebServerUtil::getHtmlMessage(
+				request.getSession(), 
 				"ShowAliases", lines.c_str(), request.getFields(), text);
 		}
 		else if (0 == strcmp(action, "ShowIPAliases"))
@@ -238,17 +247,21 @@ bool ServerWebHandler::PlayerHandlerThreaded::processRequest(
 				StatsLogger::instance()->getIpAliases(uniqueid);
 			std::string lines = ServerWebServerUtil::concatLines(aliases);
 			return ServerWebServerUtil::getHtmlMessage(
+				request.getSession(), 
 				"ShowIPAliases", lines.c_str(), request.getFields(), text);
 		}
 	}
 
-	return ServerWebServerUtil::getHtmlTemplate("player.html", request.getFields(), text);
+	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "player.html", request.getFields(), text);
 }
 
 bool ServerWebHandler::LogHandler::processRequest(
 	ServerWebServerIRequest &request,
 	std::string &text)
 {
+	if (!request.getSession()->credentials.hasPermission(
+		ServerAdminSessions::PERMISSION_VIEWLOGS)) return true;
+
 	std::deque<ServerLog::ServerLogEntry> &entries = 
 		ServerLog::instance()->getEntries();
 
@@ -300,13 +313,16 @@ bool ServerWebHandler::LogHandler::processRequest(
         request.getFields()["Meta"] = S3D::formatStringBuffer("<meta  HTTP-EQUIV=\"Refresh\" CONTENT=\"%d;URL=%s?sid=%s&RefreshRate=%s\">", refreshSeconds, 
 			request.getUrl(),request.getFields()["sid"].c_str(),refreshRate);
 
-	return ServerWebServerUtil::getHtmlTemplate("log.html", request.getFields(), text);
+	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "log.html", request.getFields(), text);
 }
 
 bool ServerWebHandler::LogFileHandler::processRequest(
 	ServerWebServerIRequest &request,
 	std::string &text)
 {
+	if (!request.getSession()->credentials.hasPermission(
+		ServerAdminSessions::PERMISSION_VIEWLOGS)) return true;
+
 	std::deque<ServerLog::ServerLogEntry> &entries = 
 		ServerLog::instance()->getEntries();
 
@@ -332,7 +348,7 @@ bool ServerWebHandler::LogFileHandler::processRequest(
 		std::string file = ServerWebServerUtil::getFile(filename);
 		request.getFields()["FILE"] = file;
 
-		return ServerWebServerUtil::getTemplate("logfile.html", request.getFields(), text);
+		return ServerWebServerUtil::getTemplate(request.getSession(), "logfile.html", request.getFields(), text);
 	}
 	else
 	{
@@ -408,7 +424,7 @@ bool ServerWebHandler::LogFileHandler::processRequest(
 		}
 		request.getFields()["LOG"] = log;
 
-		return ServerWebServerUtil::getHtmlTemplate("logfiles.html", request.getFields(), text);
+		return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "logfiles.html", request.getFields(), text);
 	}
 	return false;
 }
@@ -423,13 +439,16 @@ bool ServerWebHandler::GameHandler::processRequest(
 	const char *action = ServerWebServerUtil::getField(request.getFields(), "action");
 	if (action)
 	{
+		if (!request.getSession()->credentials.hasPermission(
+			ServerAdminSessions::PERMISSION_ALTERGAME)) return true;
+
 		if (0 == strcmp(action, "NewGame"))
 		{
-			ServerAdminCommon::newGame(adminName);
+			ServerAdminCommon::newGame(request.getSession()->credentials);
 		}
 		else if (0 == strcmp(action, "KillAll"))
 		{
-			ServerAdminCommon::killAll(adminName);
+			ServerAdminCommon::killAll(request.getSession()->credentials);
 		}
 	}
 
@@ -453,7 +472,7 @@ bool ServerWebHandler::GameHandler::processRequest(
 	request.getFields()["P"] = S3D::formatStringBuffer("%u", NetInterface::getPings());
 	request.getFields()["C"] = S3D::formatStringBuffer("%u", NetInterface::getConnects());
 
-	return ServerWebServerUtil::getHtmlTemplate("game.html", request.getFields(), text);
+	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "game.html", request.getFields(), text);
 }
 
 bool ServerWebHandler::ServerHandler::processRequest(
@@ -469,6 +488,9 @@ bool ServerWebHandler::ServerHandler::processRequest(
 	const char *action = ServerWebServerUtil::getField(request.getFields(), "action");
 	if (action)
 	{
+		if (!request.getSession()->credentials.hasPermission(
+			ServerAdminSessions::PERMISSION_ALTERSERVER)) return true;
+
 		if (0 == strcmp(action, "Stop Server"))
 		{
 			exit(0);
@@ -506,13 +528,16 @@ bool ServerWebHandler::ServerHandler::processRequest(
 	request.getFields()["STARTTIME"] = S3D::getStartTime();
 	request.getFields()["EXITEMPTY"] = (ServerCommon::getExitEmpty()?"True":"False");
 
-	return ServerWebServerUtil::getHtmlTemplate("server.html", request.getFields(), text);
+	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "server.html", request.getFields(), text);
 }
 
 bool ServerWebHandler::BannedHandler::processRequest(
 	ServerWebServerIRequest &request,
 	std::string &text)
 {
+	if (!request.getSession()->credentials.hasPermission(
+		ServerAdminSessions::PERMISSION_BANPLAYER)) return true;
+
 	const char *action = ServerWebServerUtil::getField(request.getFields(), "action");
 	if (action && 0 == strcmp(action, "Load")) 
 		ScorchedServerUtil::instance()->bannedPlayers.load(true);
@@ -544,7 +569,7 @@ bool ServerWebHandler::BannedHandler::processRequest(
 			}
 
 			std::string cleanName;
-			XMLNode::removeSpecialChars(entry.name, cleanName);
+			XMLNode::removeSpecialChars(LangStringUtil::convertFromLang(entry.name), cleanName);
 			banned += S3D::formatStringBuffer("<tr><td>%s</td><td>%s</td><td>%s</td>"
 				"<td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
 				"<td><input type=\"checkbox\" name=\"selected\" value=\"%s\"></td>" // Select
@@ -564,7 +589,7 @@ bool ServerWebHandler::BannedHandler::processRequest(
 	if (action && 0 == strcmp(action, "Save")) 
 		ScorchedServerUtil::instance()->bannedPlayers.save();
 
-	return ServerWebServerUtil::getHtmlTemplate("banned.html", request.getFields(), text);
+	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "banned.html", request.getFields(), text);
 }
 
 bool ServerWebHandler::ModsHandler::processRequest(
@@ -591,7 +616,31 @@ bool ServerWebHandler::ModsHandler::processRequest(
 	}
 	request.getFields()["MODFILES"] = modfiles;
 
-	return ServerWebServerUtil::getHtmlTemplate("mods.html", request.getFields(), text);
+	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "mods.html", request.getFields(), text);
+}
+
+static void addUser(std::string &admins, ServerAdminSessions::Credential &crendential)
+{
+	std::string permissions;
+	std::set<std::string>::iterator permitor;
+	for (permitor = crendential.permissions.begin();
+		permitor != crendential.permissions.end();
+		)
+	{
+		permissions.append(*permitor);
+
+		permitor++;
+		if (permitor != crendential.permissions.end()) permissions.append(", ");
+	}
+
+	admins += S3D::formatStringBuffer(
+		"<tr>"
+		"<td>%s</td>" // Name
+		"<td>%s</td>" // Permisions
+		"</tr>\n",
+		crendential.username.c_str(),
+		permissions.c_str()
+	);
 }
 
 bool ServerWebHandler::SessionsHandler::processRequest(
@@ -616,7 +665,7 @@ bool ServerWebHandler::SessionsHandler::processRequest(
 				"<td>%s</td>" // Time
 				"<td>%s</td>" // Ip
 				"</tr>\n",
-				params.userName.c_str(),
+				params.credentials.username.c_str(),
 				timeStr,
 				params.ipAddress.c_str()
 			);
@@ -627,6 +676,7 @@ bool ServerWebHandler::SessionsHandler::processRequest(
 	// List of admins
 	{
 		std::string admins;
+		addUser(admins, ServerAdminSessions::instance()->getLocalUserCredentials());
 		std::list<ServerAdminSessions::Credential> creds;
 		std::list<ServerAdminSessions::Credential>::iterator itor;
 		ServerAdminSessions::instance()->getAllCredentials(creds);
@@ -635,17 +685,47 @@ bool ServerWebHandler::SessionsHandler::processRequest(
 			itor++)
 		{
 			ServerAdminSessions::Credential &crendential = (*itor);
-			admins += S3D::formatStringBuffer(
-				"<tr>"
-				"<td>%s</td>" // Name
-				"</tr>\n",
-				crendential.username.c_str()
-			);
+			addUser(admins, crendential);
 		}
 		request.getFields()["ADMINS"] = admins;
 	}
 
-	return ServerWebServerUtil::getHtmlTemplate("sessions.html", request.getFields(), text);
+	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "sessions.html", request.getFields(), text);
+}
+
+bool ServerWebHandler::AccountHandler::processRequest(
+	ServerWebServerIRequest &request,
+	std::string &text)
+{
+	request.getFields()["USERNAME"] = request.getSession()->credentials.username;
+
+	const char *setpassword = ServerWebServerUtil::getField(request.getFields(), "setpassword");
+	const char *oldpassword = ServerWebServerUtil::getField(request.getFields(), "oldpassword");
+	const char *newpassword = ServerWebServerUtil::getField(request.getFields(), "newpassword");
+	if (setpassword && oldpassword && newpassword)
+	{
+		if (request.getSession()->credentials.username == 
+			ServerAdminSessions::instance()->getLocalUserCredentials().username)
+		{
+			request.getFields()["MESSAGE"] = "<b>Cannot set local connection password</b><br/>";
+		}
+		else
+		{
+			if (ServerAdminSessions::instance()->setPassword(
+				request.getSession()->credentials.username.c_str(),
+				oldpassword,
+				newpassword))
+			{
+				request.getFields()["MESSAGE"] = "<b>New Password Set</b><br/>";
+			}
+			else
+			{
+				request.getFields()["MESSAGE"] = "<b>Wrong old password!</b><br/>";
+			}
+		}
+	}
+
+	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "account.html", request.getFields(), text);
 }
 
 bool ServerWebHandler::StatsHandler::processRequest(
@@ -692,5 +772,5 @@ bool ServerWebHandler::StatsHandler::processRequest(
 
 	request.getFields()["RANKS"] = message;
 
-	return ServerWebServerUtil::getHtmlTemplate("stats.html", request.getFields(), text);
+	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "stats.html", request.getFields(), text);
 }

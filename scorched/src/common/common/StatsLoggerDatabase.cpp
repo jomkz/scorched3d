@@ -762,16 +762,17 @@ void StatsLoggerDatabase::periodicUpdate()
 	}
 }
 
-std::string StatsLoggerDatabase::tankRank(Tank *tank)
+StatsLogger::TankRank StatsLoggerDatabase::tankRank(Tank *tank)
 {
-	char *retval = "-";
+	TankRank result;
+
 	createLogger();
-	if (!success_ || !displayStats_) return retval;
+	if (!success_ || !displayStats_) return result;
 
 	// Try to determine this players sql playerid
 	int kills = 0;
 	std::list<StatsLoggerDatabase::RowResult> killsRows =
-		runSelectQuery("SELECT kills FROM scorched3d_stats "
+		runSelectQuery("SELECT kills, rank FROM scorched3d_stats "
 		"WHERE playerid = %i AND prefixid = %i AND seriesid = %i;", 
 		playerId_[tank->getUniqueId()],
 		prefixid_,
@@ -785,6 +786,7 @@ std::string StatsLoggerDatabase::tankRank(Tank *tank)
 		{
 			StatsLoggerDatabase::RowResult &rowResult = (*itor);
 			kills = atoi(rowResult.columns[0].c_str());
+			result.skill = atoi(rowResult.columns[1].c_str());
 		}
 	}
 
@@ -804,14 +806,11 @@ std::string StatsLoggerDatabase::tankRank(Tank *tank)
 			StatsLoggerDatabase::RowResult &rowResult = (*itor);
 
 			int rank = atoi(rowResult.columns[0].c_str()) + 1;
-
-			char rankStr[100];
-			snprintf(rankStr, 100, "%i", rank);
-			retval = rankStr;
+			result.rank = rank;
 		}
 	}
 
-	return retval;
+	return result;
 }
 
 int StatsLoggerDatabase::getPlayerId(const char *uniqueId)
@@ -879,11 +878,11 @@ void StatsLoggerDatabase::addInfo(Tank *tank)
 	runQuery("INSERT INTO scorched3d_names (playerid, name, count) VALUES "
 		"(%i, \"%s\", 0);", 
 		playerId_[tank->getUniqueId()], 
-		tank->getName());
+		tank->getCStrName().c_str());
 	runQuery("UPDATE scorched3d_names SET count=count+1 WHERE "
 		"playerid=%i AND name=\"%s\";", 
 		playerId_[tank->getUniqueId()], 
-		tank->getName());
+		tank->getCStrName().c_str());
 
 	// Add the ipaddress (may fail if duplicates)
 	runQuery("INSERT INTO scorched3d_ipaddress (playerid, ipaddress, count) VALUES "
@@ -899,7 +898,7 @@ void StatsLoggerDatabase::addInfo(Tank *tank)
 	runQuery("UPDATE scorched3d_players SET "
 		"name=\"%s\", ipaddress=\"%s\" "
 		"WHERE playerid = %i;",
-		tank->getName(), 
+		tank->getCStrName().c_str(), 
 		NetInterface::getIpName(tank->getIpAddress()),
 		playerId_[tank->getUniqueId()]);
 }
@@ -1123,27 +1122,35 @@ void StatsLoggerDatabase::tankKilled(Tank *firedTank, Tank *deadTank, Weapon *we
 		{
 			StatsLoggerDatabase::RowResult &rowResult = (*itor);
 
-			int firedSkill = atoi(rowResult.columns[0].c_str());
-			int deadSkill = atoi(rowResult.columns[1].c_str());
-
-			float weaponMult = (float(weapon->getArmsLevel()) / 10.0f) + 1.0f;
+			firedTank->getScore().setSkill(atoi(rowResult.columns[0].c_str()));
+			deadTank->getScore().setSkill(atoi(rowResult.columns[1].c_str()));
 
 			int skillDiff = 
-				int((20.0f * weaponMult) / (1.0f + powf(10.0f, (float(firedSkill - deadSkill) / 1000.0f))));
+				TankScore::calcSkillDifference(firedTank, deadTank, weapon->getArmsLevel());
+			if (skillDiff != 0)
+			{
+				firedTank->getScore().setSkill(firedTank->getScore().getSkill() + skillDiff);
 
-			runQuery("UPDATE scorched3d_stats SET skill=skill+%i "
-				"WHERE playerid = %i AND prefixid = %i AND seriesid = %i;", 
-				skillDiff,
-				playerId_[firedTank->getUniqueId()],
-				prefixid_,
-				seriesid_);
+				runQuery("UPDATE scorched3d_stats SET skill=%i "
+					"WHERE playerid = %i AND prefixid = %i AND seriesid = %i;", 
+					firedTank->getScore().getSkill(),
+					playerId_[firedTank->getUniqueId()],
+					prefixid_,
+					seriesid_);
 
-			runQuery("UPDATE scorched3d_stats SET skill=skill-%i "
-				"WHERE playerid = %i AND prefixid = %i AND seriesid = %i;", 
-				skillDiff,
-				playerId_[deadTank->getUniqueId()],
-				prefixid_,
-				seriesid_);
+				if (firedTank != deadTank)
+				{
+					deadTank->getScore().setSkill(deadTank->getScore().getSkill() - skillDiff);
+					if (deadTank->getScore().getSkill() < 0) deadTank->getScore().setSkill(0);
+
+					runQuery("UPDATE scorched3d_stats SET skill=%i "
+						"WHERE playerid = %i AND prefixid = %i AND seriesid = %i;", 
+						deadTank->getScore().getSkill(),
+						playerId_[deadTank->getUniqueId()],
+						prefixid_,
+						seriesid_);
+				}
+			}
 		}
 	}
 

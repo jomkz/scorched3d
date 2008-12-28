@@ -22,7 +22,7 @@
 #define AFX_TankMenus_H__571BC1CA_BDBC_4F2B_9F83_4AA083520198__INCLUDED_
 
 #include <GLEXT/GLMenuI.h>
-#include <GLEXT/GLConsoleRuleMethodIAdapter.h>
+#include <console/ConsoleRule.h>
 #include <weapons/Accessory.h>
 #include <common/FileLogger.h>
 #include <vector>
@@ -67,7 +67,7 @@ protected:
 	void clearTracerLines();
 	void groupInfo();
 	void logToFile();
-	void runScriptConsole(std::list<GLConsoleRuleSplit> list);
+	void runScriptConsole(std::list<ConsoleRuleValue> list);
 
 };
 

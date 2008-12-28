@@ -51,6 +51,11 @@ int main(int argc, char *argv[])
 	}
 
 	// Load the server settings file
+	if (ServerParams::instance()->getServerCustom())
+	{
+		ServerParams::instance()->setServerFile(
+			S3D::getSettingsFile("server.xml"));
+	}
 	if (!ServerParams::instance()->getServerFile()[0])
 	{
 		aParser.showArgs();

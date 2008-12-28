@@ -43,9 +43,9 @@ ResignDialog::ResignDialog() :
 	GLWWindow("Resign", 210.0f, 80.0f, 0,
 		"Allows the player to resign from the game.")
 {
-	okId_ = addWidget(new GLWTextButton("Resign Round", 10, 45, 190, this, 
+	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("RESIGN_ROUND", "Resign Round"), 10, 45, 190, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX))->getId();
-	cancelId_ = addWidget(new GLWTextButton("Cancel", 95, 10, 105, this, 
+	cancelId_ = addWidget(new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 95, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX))->getId();
 }
 

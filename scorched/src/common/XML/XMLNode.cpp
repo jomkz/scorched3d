@@ -24,7 +24,7 @@
 #include <stdio.h>
 #include <common/NumberParser.h>
 
-void XMLNode::removeSpecialChars(std::string &content, std::string &result)
+void XMLNode::removeSpecialChars(const std::string &content, std::string &result)
 {
 	result = "";
 	for (char *c=(char *) content.c_str(); *c; c++)
@@ -42,7 +42,7 @@ void XMLNode::removeSpecialChars(std::string &content, std::string &result)
 	}
 }
 
-void XMLNode::addSpecialChars(std::string &content, std::string &result)
+void XMLNode::addSpecialChars(const std::string &content, std::string &result)
 {
 	result = "";
 	for (char *c=(char *) content.c_str(); *c; c++)
@@ -91,6 +91,15 @@ XMLNode::XMLNode(const char *name, const std::string &content, NodeType type) :
 	name_(name), parent_(0), type_(type),
 	useContentNodes_(false)
 {
+	addContent(content.c_str(), content.size());
+}
+
+XMLNode::XMLNode(const char *name, const LangString &langStringContent, NodeType type) : 
+	name_(name), parent_(0), type_(type),
+	useContentNodes_(false)
+{
+	std::string content;
+	content = LangStringUtil::convertFromLang(langStringContent);
 	addContent(content.c_str(), content.size());
 }
 
@@ -392,6 +401,24 @@ bool XMLNode::getNamedParameter(const char *name, std::string &value,
 	XMLNode *node;
 	if (!getNamedParameter(name, node, failOnError, remove)) return false;
 	value = node->getContent();
+	return true;
+}
+
+bool XMLNode::getNamedParameter(const char *name, LangString &value,
+	bool failOnError, bool remove)
+{
+	XMLNode *node;
+	if (!getNamedParameter(name, node, failOnError, remove)) return false;
+	value = LANG_STRING(node->getContent());
+	return true;
+}
+
+bool XMLNode::getNamedChild(const char *name, LangString &value,
+	bool failOnError, bool remove)
+{
+	XMLNode *node;
+	if (!getNamedChild(name, node, failOnError, remove)) return false;
+	value = LANG_STRING(node->getContent());
 	return true;
 }
 

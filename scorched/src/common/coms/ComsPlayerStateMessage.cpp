@@ -49,7 +49,7 @@ bool ComsPlayerStateMessage::writeMessage(NetBuffer &buffer)
 	buffer.addToBuffer(targets_);
 
 	// Team score
-	if (!ScorchedServer::instance()->getContext().tankTeamScore->
+	if (!ScorchedServer::instance()->getContext().getTankTeamScore().
 		writeMessage(buffer)) return false;
 
 	// Tanks
@@ -117,7 +117,7 @@ bool ComsPlayerStateMessage::readMessage(NetBufferReader &reader)
 #ifndef S3D_SERVER
 	if (!reader.getFromBuffer(targets_)) return false;
 
-	if (!ScorchedClient::instance()->getContext().tankTeamScore->
+	if (!ScorchedClient::instance()->getContext().getTankTeamScore().
 		readMessage(reader)) return false;
 
 	// Update all targets with the state from the targets on the
@@ -150,7 +150,7 @@ bool ComsPlayerStateMessage::readMessage(NetBufferReader &reader)
 			{
 				Tank *tank = itor->second;
 				Logger::log(S3D::formatStringBuffer("  Possible tank %u\"%s\"",
-					tank->getPlayerId(), tank->getName()));
+					tank->getPlayerId(), tank->getCStrName().c_str()));
 			}
 
 			return false;

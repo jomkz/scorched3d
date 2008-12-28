@@ -23,7 +23,6 @@
 
 #include <engine/GameStateI.h>
 #include <tankgraph/TankMenus.h>
-#include <tankgraph/RenderObjectLists.h>
 
 class RenderTargets
 {
@@ -32,12 +31,14 @@ public:
 
 	struct Renderer3D : public GameStateI
 	{
-		Renderer3D() : GameStateI("RenderTargets3D") {}
+		Renderer3D() : GameStateI("RenderTargets3D"), stepTime(0.0f)  {}
 
 		// Inherited from GameStateI
 		virtual void draw(const unsigned state);
 		virtual void simulate(const unsigned state, float simTime);
 		virtual void enterState(const unsigned state);
+
+		float stepTime;
 	} render3D;
 	struct Renderer2D : public GameStateI
 	{
@@ -50,18 +51,19 @@ public:
 
 	void shadowDraw();
 
+	unsigned int getTreesDrawn() { return treesDrawn_; }
+	unsigned int getTargetsDrawn() { return targetsDrawn_; }
+
 	friend struct Renderer3D;
 	friend struct Renderer2D;
 protected:
 	static RenderTargets *instance_;
 
+	unsigned int treesDrawn_, targetsDrawn_;
 	TankMenus menus_;
-	bool createLists_;
-	RenderObjectLists renderObjectLists_;
 
 	void draw2d();
 	void draw();
-	void createLists();
 
 private:
 	RenderTargets();

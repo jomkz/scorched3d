@@ -36,6 +36,13 @@ ImagePng::ImagePng() :
 
 }
 
+ImagePng::ImagePng(int startWidth, int startHeight, bool alpha, unsigned char fill) : 
+	width_(startWidth), height_(startHeight), alpha_(alpha), bits_(0),
+	owner_(true)
+{
+	createBlankInternal(startWidth, startHeight, alpha, fill);
+}
+
 bool ImagePng::loadFromFile(const std::string &filename, 
 	const std::string &alphafilename, bool invert)
 {
@@ -271,3 +278,71 @@ bool ImagePng::loadFromBuffer(NetBuffer &buffer, bool readalpha)
 	return true;
 }
 
+struct user_write_struct
+{
+	user_write_struct(NetBuffer &b) : buffer(b) {}
+
+	NetBuffer &buffer;
+};
+
+static void user_write_fn(png_structp png_ptr,
+        png_bytep data, png_size_t length)
+{
+	user_write_struct *write_io_ptr = (user_write_struct *) png_get_io_ptr(png_ptr);
+
+	write_io_ptr->buffer.addDataToBuffer(data, length);
+}
+
+bool ImagePng::writeToBuffer(NetBuffer &buffer)
+{
+	png_structp png_ptr;
+	png_infop info_ptr;
+	int y;
+
+	// Create structs
+	png_ptr = 
+		png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+	if (!png_ptr) return false;
+
+	info_ptr = 
+		png_create_info_struct(png_ptr);
+	if (!info_ptr) return false;
+
+	// Set Error Handling
+	if (setjmp(png_jmpbuf(png_ptr)))
+	{
+		png_destroy_write_struct(&png_ptr, &info_ptr);
+		return false;
+	}
+	png_set_error_fn(png_ptr, NULL, user_png_error, user_png_warning);
+
+	// Set output
+	user_read_struct read_struct(buffer);
+	png_set_read_fn(png_ptr, (void *)&read_struct, user_read_fn);
+
+	// png_init_io(png_ptr, fp);
+	user_write_struct write_struct(buffer);
+	png_set_write_fn(png_ptr, (void *)&write_struct, user_write_fn, NULL);
+
+	// Write Header
+	png_set_IHDR(png_ptr, info_ptr, 
+		width_, height_,
+		8, 
+		PNG_COLOR_TYPE_RGB, 
+		PNG_INTERLACE_NONE,
+		PNG_COMPRESSION_TYPE_DEFAULT,
+		PNG_FILTER_TYPE_DEFAULT);
+
+	// Write File
+	png_write_info(png_ptr, info_ptr);
+	for (y=0; y<height_; y++) 
+	{
+		png_write_row(png_ptr, &bits_[(height_ - y - 1) * width_ * getComponents()]);
+	}
+	png_write_end(png_ptr, NULL);
+
+	// Tidy
+	png_destroy_write_struct(&png_ptr, &info_ptr);
+
+	return true;
+}

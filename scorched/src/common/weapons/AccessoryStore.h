@@ -37,7 +37,7 @@ public:
 	AccessoryStore();
 	virtual ~AccessoryStore();
 
-	bool parseFile(OptionsScorched &context, ProgressCounter *counter = 0);
+	bool parseFile(ScorchedContext &context, ProgressCounter *counter = 0);
 	void clearAccessories();
 
 	Accessory *findByAccessoryId(unsigned int id);

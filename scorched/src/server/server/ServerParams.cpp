@@ -36,7 +36,9 @@ ServerParams::ServerParams() :
 	server_(options_, "startserver",
 		"Starts a scorched 3d server, requires the name of the server settings file e.g. data/server.xml", 0, ""),
 	hideWindow_(options_, "hidewindow",
-		"Hides the scorched3d console window (windows)", 0, false)
+		"Hides the scorched3d console window (windows)", 0, false),
+	startCustom_(options_, "startcustom",
+		"Starts a scorched 3d server, uses the last server made", 0, false)
 {
 
 }

@@ -28,8 +28,8 @@
 #include <limits.h>
 #include <SDL/SDL.h>
 
-GameStatePerfCounter::GameStatePerfCounter(GameStateI *gameStateI, const char *name) : 
-	name_(name), total_(0), gameStateI_(gameStateI)
+GameStatePerfCounter::GameStatePerfCounter(const char *name) : 
+	name_(name), total_(0), used_(false)
 {
 }
 
@@ -39,11 +39,13 @@ GameStatePerfCounter::~GameStatePerfCounter()
 
 void GameStatePerfCounter::start()
 {
+	used_ = true;
 	start_ = SDL_GetTicks();
 }
 
 void GameStatePerfCounter::end()
 {
+	used_ = true;
 	unsigned int end = SDL_GetTicks();
 	total_ += end - start_;
 }
@@ -52,6 +54,7 @@ unsigned int GameStatePerfCounter::getTotal()
 { 
 	unsigned int lastTotal = total_;
 	total_ = 0;
+	used_ = false;
 	return lastTotal; 
 }
 
@@ -65,7 +68,8 @@ GameState::GameState(const char *name) :
 	currentStateI_(0),
 	currentMouseX_(0), currentMouseY_(0),
 	mouseDoubleX_(0), mouseDoubleY_(0),
-	stateLogging_(false), stateTimeLogging_(false)
+	stateLogging_(false), 
+	stateTimeLogging_(0.0f), frameCount_(0)
 {
 	clearTimers();
 }
@@ -244,24 +248,42 @@ void GameState::mouseUpDown(MouseButton button, bool down, int x, int y)
 				currentList = &currentEntry_->subMouseDownLeftList;
 				break;
 			}
+
+			if (fakeMiddleButton_ && 
+				(MouseButtonLeft & currentMouseState_ && 
+				MouseButtonRight & currentMouseState_))
+			{
+				mouseMDragX_ = x;
+				mouseMDragY_ = y;
+			}
 		}
 		else
 		{
+			if (fakeMiddleButton_ && 
+				(MouseButtonLeft & currentMouseState_ && 
+				MouseButtonRight & currentMouseState_))
+			{
+				currentList = &currentEntry_->subMouseUpMiddleList;
+			}
+			else
+			{
+				switch(button)
+				{
+				case MouseButtonRight:
+					currentList = &currentEntry_->subMouseUpRightList;
+					break;
+				case MouseButtonMiddle:
+					currentList = &currentEntry_->subMouseUpMiddleList;
+					break;
+				default:
+					currentList = &currentEntry_->subMouseUpLeftList;
+					break;
+				}
+			}
+
 			if (button <= MouseButtonLeftDoubleClick)
 			{
 				currentMouseState_ ^= (unsigned) button;
-			}
-			switch(button)
-			{
-			case MouseButtonRight:
-				currentList = &currentEntry_->subMouseUpRightList;
-				break;
-			case MouseButtonMiddle:
-				currentList = &currentEntry_->subMouseUpMiddleList;
-				break;
-			default:
-				currentList = &currentEntry_->subMouseUpLeftList;
-				break;
 			}
 		}
 
@@ -295,8 +317,7 @@ void GameState::simulate(float simTime)
 		GameStateEntry *thisEntry = currentEntry_;
 		unsigned thisState = currentState_;
 
-		timerSimulateTime_ += simTime;
-		if (timerSimulateTime_ > 10.0f) clearTimers(true);
+		if (frameCount_ > int(stateTimeLogging_)) clearTimers(true);
 
 		timerClock_.getTicksDifference();
 		int timerCount = 0;
@@ -383,6 +404,8 @@ void GameState::draw()
 	{
 		GameStateEntry *thisEntry = currentEntry_;
 		unsigned thisState = currentState_;
+
+		frameCount_ ++;
 
 		timerClock_.getTicksDifference();
 		int timerCount = 0;
@@ -651,7 +674,7 @@ void GameState::addStateStimulus(const unsigned state,
 void GameState::clearTimers(bool printTimers)
 {
 	unsigned int sinceLastTime = overallTimerClock_.getTicksDifference();
-	if (printTimers && stateTimeLogging_)
+	if (printTimers && stateTimeLogging_ > 0.0f)
 	{
 		unsigned int simulateTotal = 0, drawTotal = 0;
 		for (int i=0; i<50; i++)
@@ -671,7 +694,7 @@ void GameState::clearTimers(bool printTimers)
 
 		Logger::log(
 			"----------------------------------------");
-		Logger::log(S3D::formatStringBuffer("%s Draw : %u (%u%%), Simulate : %u (%u%%), Other : %i (%u%%)", 
+		Logger::log(S3D::formatStringBuffer("%30s Draw : %4u (%3u%%), Simulate : %4u (%3u%%)\nOther : %4i (%3u%%)\n\n", 
 			name_.c_str(),
 			drawTotal, drawTotalPer,
 			simulateTotal, simulateTotalPer,
@@ -684,25 +707,29 @@ void GameState::clearTimers(bool printTimers)
 					(100 * timers_[i].simulateTime) / sinceLastTime;
 				unsigned int percentageDraw =
 					(100 * timers_[i].drawTime) / sinceLastTime;
-				Logger::log(S3D::formatStringBuffer("%i:%s - Draw : %u (%u%%), Simulate : %u (%u%%)", 
-					i, 
-					timers_[i].gameStateI->getGameStateIName(),
-					timers_[i].drawTime, percentageDraw,
-					timers_[i].simulateTime, percentageSimulate));
+				if (percentageSimulate > 0 || percentageDraw > 0)
+				{
+					Logger::log(S3D::formatStringBuffer("%2i:%25s - Draw : %4u (%3u%%), Simulate : %4u (%3u%%)", 
+						i, 
+						timers_[i].gameStateI->getGameStateIName(),
+						timers_[i].drawTime, percentageDraw,
+						timers_[i].simulateTime, percentageSimulate));
+				}
 
-				std::list<GameStatePerfCounter *>::iterator itor;
-				for (itor = perfCounters_.begin();
-					itor != perfCounters_.end();
+				std::vector<GameStatePerfCounter *>::iterator itor;
+				for (itor = timers_[i].gameStateI->getPerfCounters().begin();
+					itor != timers_[i].gameStateI->getPerfCounters().end();
 					itor++)
 				{
 					GameStatePerfCounter *counter = *itor;
-					const char *state1 = timers_[i].gameStateI->getGameStateIName();
-					const char *state2 = counter->getGameStateI()->getGameStateIName();
-					if (state1 == state2)
+					bool used = counter->getUsed();
+					int total = counter->getTotal();
+					if (used && total > 0 &&
+						(percentageSimulate > 0 || percentageDraw > 0))
 					{
-						Logger::log(S3D::formatStringBuffer("    %s : %u", 
+						Logger::log(S3D::formatStringBuffer("%35s +- %4u", 
 							counter->getName(),
-							counter->getTotal()));
+							total));
 					}
 				}
 			}
@@ -710,21 +737,23 @@ void GameState::clearTimers(bool printTimers)
 	}
 
 	memset(&timers_, 0, sizeof(timers_));
-	timerSimulateTime_ = 0.0f;
+	frameCount_ = 0;
 }
 
-GameStatePerfCounter *GameState::getPerfCounter(const char *name)
+int GameState::getPerfCounter(const char *name)
 {
-	std::list<GameStatePerfCounter *>::iterator itor;
-	for (itor = perfCounters_.begin();
-		itor != perfCounters_.end();
-		itor++)
-	{
-		GameStatePerfCounter *counter = *itor;
-		if (0 == strcmp(counter->getName(), name)) return counter;
-	}
+	DIALOG_ASSERT(currentStateI_);
+	return currentStateI_->getPerfCounter(name);
+}
 
-	GameStatePerfCounter *counter = new GameStatePerfCounter(currentStateI_, name);
-	perfCounters_.push_back(counter);
-	return counter;
+void GameState::startPerfCount(int counter)
+{
+	DIALOG_ASSERT(currentStateI_);
+	currentStateI_->startPerfCount(counter);
+}
+
+void GameState::endPerfCount(int counter)
+{
+	DIALOG_ASSERT(currentStateI_);
+	currentStateI_->endPerfCount(counter);
 }

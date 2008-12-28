@@ -45,12 +45,25 @@ namespace ImageModifier
 
 	void addHeightToBitmap(HeightMap &hMap,
 							Image &destBitmap, 
+							Image &destSplat1Bitmap,
+							Image &destSplat2Bitmap,
 							Image &slopeBitmap,
 							Image &shoreBitmap,
 							Image **heightBitmaps,
 							int numberSources,
 							int destBitmapScaleSize,
 							ProgressCounter *counter = 0);
+
+	void redBitmap(
+		Image &destBitmap);
+
+	void addTexturesToBitmap(
+		Image &destBitmap,
+		Image &slopeBitmap,
+		Image &shoreBitmap,
+		Image **heightBitmaps,
+		int numberSources);
+
 
 	void addWaterToBitmap(HeightMap &hMap,
 							Image &destBitmap,
@@ -64,8 +77,8 @@ namespace ImageModifier
 							float waterHeight);
 
 	void addBorderToBitmap(Image &destBitmap,
-							int borderWidth,
-							float colors[3]);
+		int borderWidth,
+		float colors[3]);
 
 	void makeBitmapTransparent(Image &output,
 		Image &input,

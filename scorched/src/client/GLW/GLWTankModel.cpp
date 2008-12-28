@@ -28,7 +28,7 @@
 #include <tank/TankPosition.h>
 #include <common/Vector4.h>
 #include <landscape/Landscape.h>
-#include <landscape/Sky.h>
+#include <sky/Sky.h>
 #include <GLW/GLWTranslate.h>
 
 REGISTER_CLASS_SOURCE(GLWTankModel);

@@ -20,8 +20,7 @@
 
 #include <server/ServerChannelAuth.h>
 #include <server/ScorchedServer.h>
-#include <tank/TankContainer.h>
-#include <tank/TankState.h>
+#include <server/ServerMessageHandler.h>
 
 ServerChannelAuth::ServerChannelAuth()
 {
@@ -34,17 +33,7 @@ ServerChannelAuth::~ServerChannelAuth()
 bool ServerChannelAuthAdmin::allowConnection(
 	const char *channel, unsigned int destination)
 {
-	std::map<unsigned int, Tank *> &tanks =
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	std::map<unsigned int, Tank *>::iterator itor;
-	for (itor = tanks.begin();
-		itor != tanks.end();
-		itor++)
-	{
-		Tank *tank = itor->second;
-		if (tank->getState().getAdmin() &&
-			tank->getDestinationId() == destination) return true;
-	}
-
-	return false;
+	ServerMessageHandler::DestinationInfo *destinationInfo =
+		ServerMessageHandler::instance()->getDestinationInfo(destination);
+	return (destinationInfo && destinationInfo->admin);
 }

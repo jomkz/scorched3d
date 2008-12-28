@@ -22,6 +22,7 @@
 #include <GLW/GLWTextButton.h>
 #include <GLW/GLWLabel.h>
 #include <GLW/GLWWindowManager.h>
+#include <lang/LangResource.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientSave.h>
 #include <common/ChannelManager.h>
@@ -49,12 +50,12 @@ SaveDialog::SaveDialog() :
 
 	GLWPanel *buttonPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
 	
-	GLWButton *cancelButton = new GLWTextButton("Cancel", 95, 10, 105, this, 
+	GLWButton *cancelButton = new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 95, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX);
 	cancelId_ = cancelButton->getId();
 	buttonPanel->addWidget(cancelButton, 0, SpaceRight, 10.0f);
 	
-	GLWButton *okButton = new GLWTextButton("Save", 10, 45, 105, this, 
+	GLWButton *okButton = new GLWTextButton(LANG_RESOURCE("SAVE", "Save"), 10, 45, 105, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX);
 	okId_ = okButton->getId();
 	buttonPanel->addWidget(okButton);
@@ -77,7 +78,7 @@ void SaveDialog::display()
 	GLWWindow::display();
 
 	std::string text = S3D::formatStringBuffer("saved-%i", time(0));
-	textBox_->setText(text);
+	textBox_->setText(LANG_STRING(text));
 }
 
 void SaveDialog::buttonDown(unsigned int id)
@@ -89,13 +90,14 @@ void SaveDialog::buttonDown(unsigned int id)
 			std::string saveFile = S3D::formatStringBuffer("%s.s3d", textBox_->getText().c_str());
 			if (ClientSave::saveClient(S3D::getSaveFile(saveFile.c_str())))
 			{
-				ChannelText text("info", S3D::formatStringBuffer("Saved as \"%s\"", saveFile.c_str()));
-				ChannelManager::showText(text);
+				ChannelText text("info", 
+					LANG_RESOURCE_1("SAVED_AS", "Saved as \"{0}\"", saveFile));
+				ChannelManager::showText(ScorchedClient::instance()->getContext(), text);
 			}
 			else
 			{
-				ChannelText text("info", "Save failed");
-				ChannelManager::showText(text);
+				ChannelText text("info", LANG_RESOURCE("SAVE_FAILED", "Save failed"));
+				ChannelManager::showText(ScorchedClient::instance()->getContext(), text);
 			}
 			GLWWindowManager::instance()->hideWindow(id_);
 		}

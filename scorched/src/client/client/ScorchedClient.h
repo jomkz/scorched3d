@@ -25,35 +25,19 @@
 
 class MainLoop;
 class ParticleEngine;
-class ScorchedClient
+class ScorchedClient : public ScorchedContext
 {
 public:
 	static ScorchedClient *instance();
 
-	AccessoryStore &getAccessoryStore() { return *context_.accessoryStore; }
 	MainLoop &getMainLoop() { return *mainLoop_; }
-	GameState &getGameState() { return *context_.gameState; }
-	TankContainer &getTankContainer() { return *context_.tankContainer; }
-	TargetContainer &getTargetContainer() { return *context_.targetContainer; }
-	TargetMovement &getTargetMovement() { return *context_.targetMovement; }
-	ActionController &getActionController() { return *context_.actionController; }
-	LandscapeMaps &getLandscapeMaps() { return *context_.landscapeMaps; }
-	ScorchedContext &getContext() { return context_; }
-	NetInterface &getNetInterface() { return *context_.netInterface; }
-	OptionsScorched &getOptionsGame() { return *context_.optionsGame; }
-	OptionsTransient &getOptionsTransient() { return *context_.optionsTransient; }
-	ComsMessageHandler &getComsMessageHandler() { return *context_.comsMessageHandler; }
-	ModFiles &getModFiles() { return *context_.modFiles; }
+	ScorchedContext &getContext() { return *this; }
 	ParticleEngine &getParticleEngine() { return *particleEngine_; }
-	LandscapeDefinitions &getLandscapes() { return *context_.landscapes; }
-	TankModelStore &getTankModels() { return *context_.tankModelStore; }
-	LUAWrapper &getLUAWrapper() { return *context_.luaWrapper; }
 
 protected:
 	static ScorchedClient *instance_;
 	MainLoop *mainLoop_;
 	ParticleEngine* particleEngine_;
-	ScorchedContext context_;
 
 private:
 	ScorchedClient();

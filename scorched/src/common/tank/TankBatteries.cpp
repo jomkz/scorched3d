@@ -21,6 +21,7 @@
 #include <tank/TankBatteries.h>
 #include <tank/Tank.h>
 #include <tank/TankAccessories.h>
+#include <weapons/Accessory.h>
 
 TankBatteries::TankBatteries(ScorchedContext &context) :
 	context_(context),
@@ -47,4 +48,18 @@ int TankBatteries::getNoBatteries()
 			AccessoryPart::AccessoryBattery);
 	if (result.empty()) return 0;
 	return tank_->getAccessories().getAccessoryCount(result.front());
+}
+
+bool TankBatteries::canUse()
+{
+	int count = getNoBatteries();
+	if (count == -1) return true;
+	if (count == 0) return false;
+
+	std::list<Accessory *> &result =
+		tank_->getAccessories().getAllAccessoriesByType(
+			AccessoryPart::AccessoryBattery);
+	if (result.empty()) return false;
+	if (count >= result.front()->getUseNumber()) return true;
+	return false;
 }

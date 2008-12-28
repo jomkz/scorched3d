@@ -23,7 +23,7 @@
 
 #include <engine/ScorchedContext.h>
 #include <common/FixedVector.h>
-#include <string>
+#include <lang/LangString.h>
 
 namespace TargetID
 {
@@ -49,7 +49,7 @@ class Target
 {
 public:
 	Target(unsigned int playerId, 
-		const char *name, 
+		const LangString &name, 
 		ScorchedContext &context);
 	virtual ~Target();
 
@@ -80,8 +80,9 @@ public:
 	void setRenderer(TargetRenderer *renderer) { renderer_ = renderer; }
 
 	// Name
-	const char *getName() { return name_.c_str(); }
-	void setName(const char *name) { name_ = name; }
+	const LangString &getTargetName() { return name_; }
+	const std::string &getCStrName();
+	void setName(const LangString &name);
 	unsigned int getNameLen() { return name_.size(); }
 
 	// Serialize the target
@@ -98,7 +99,8 @@ protected:
 	TargetRenderer *renderer_;
 	TargetState *targetState_;
 	TargetGroup *group_;
-	std::string name_;
+	LangString name_;
+	std::string cStrName_;
 	Weapon *deathAction_, *burnAction_;
 
 };

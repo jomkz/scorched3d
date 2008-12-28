@@ -48,7 +48,7 @@ void TankLib::getTanksSortedByDistance(ScorchedContext &context,
 {
 	std::list<std::pair<fixed, Tank *> > tankDistList;
 	std::map<unsigned int, Tank *> &allCurrentTanks = 
-		context.tankContainer->getAllTanks();
+		context.getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = allCurrentTanks.begin();
 		itor != allCurrentTanks.end();
@@ -90,7 +90,7 @@ bool TankLib::intersection(ScorchedContext &context,
 
 	do
 	{
-		if (position[2] < context.landscapeMaps->getGroundMaps().getInterpHeight(
+		if (position[2] < context.getLandscapeMaps().getGroundMaps().getInterpHeight(
 			position[0], position[1]))
 		{
 			return true;
@@ -114,6 +114,7 @@ bool TankLib::getSniperShotTowardsPosition(ScorchedContext &context,
 	FixedVector direction = shootAt - position;
 	fixed angleXYRads = atan2x(direction[1], direction[0]);
 	angleXYDegs = (angleXYRads / fixed::XPI) * fixed(180) - fixed(90);
+	if (angleXYDegs > 88) angleXYDegs = 0; // Fix distance rounding error
 
 	fixed distance2D = (direction[0] * direction[0] + 
 		direction[1] * direction[1]).sqrt();
@@ -174,20 +175,20 @@ void TankLib::getShotTowardsPosition(ScorchedContext &context,
 	power += (random.getRandFixed() * 200) - 100;
 	if (power < 100) power = 100;
 
-	if (context.optionsTransient->getWindOn())
+	if (context.getOptionsTransient().getWindOn())
 	{
 		// Make less adjustments for less wind
-		fixed windMag = context.optionsTransient->getWindSpeed() / 5;
+		fixed windMag = context.getOptionsTransient().getWindSpeed() / 5;
 
 		// Try to account for the wind direction
 		FixedVector ndirection = direction;
 		ndirection[2] = 0;
 		ndirection = ndirection.Normalize();
 		ndirection = ndirection.get2DPerp();
-		fixed windoffsetLR = context.optionsTransient->getWindDirection().dotP(ndirection);
+		fixed windoffsetLR = context.getOptionsTransient().getWindDirection().dotP(ndirection);
 		angleXYDegs += windoffsetLR * distance2D * (fixed(true, 1200) + random.getRandFixed()) * fixed(true, 400) * windMag;
 
-		fixed windoffsetFB = context.optionsTransient->getWindDirection().dotP(direction.Normalize());
+		fixed windoffsetFB = context.getOptionsTransient().getWindDirection().dotP(direction.Normalize());
 		windoffsetFB /= 10;
 		windoffsetFB *= windMag;
 		windoffsetFB += 1; // windowoffset FB 0.9 > 1.1

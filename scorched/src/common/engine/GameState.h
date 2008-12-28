@@ -31,25 +31,25 @@ class GameStateI;
 class GameStateStimulusI;
 class GameState;
 
-#define GAMESTATE_PERF_COUNTER_START(x, y) { static GameStatePerfCounter *__counter__ = x.getPerfCounter(y); __counter__->start(); }
-#define GAMESTATE_PERF_COUNTER_END(x, y) { static GameStatePerfCounter *__counter__ = x.getPerfCounter(y); __counter__->end(); }
+#define GAMESTATE_PERF_COUNTER_START(x, y) { static int __counter__ = x.getPerfCounter(y); x.startPerfCount(__counter__); }
+#define GAMESTATE_PERF_COUNTER_END(x, y) { static int __counter__ = x.getPerfCounter(y); x.endPerfCount(__counter__); }
 
 class GameStatePerfCounter
 {
 public:
-	GameStatePerfCounter(GameStateI *gameStateI, const char *name);
+	GameStatePerfCounter(const char *name);
 	~GameStatePerfCounter();
 
 	void start();
 	void end();
 
 	const char *getName() { return name_.c_str(); }
-	GameStateI *getGameStateI() { return gameStateI_; }
 	unsigned int getTotal();
+	bool getUsed() { return used_; }
 
 protected:
+	bool used_;
 	std::string name_;
-	GameStateI *gameStateI_;
 	unsigned int start_;
 	unsigned int total_;
 };
@@ -91,9 +91,11 @@ public:
 	int getMouseX() { return currentMouseX_; }
 	int getMouseY() { return currentMouseY_; }
 	bool &getStateLogging() { return stateLogging_; }
-	bool &getStateTimeLogging() { return stateTimeLogging_; }
+	float &getStateTimeLogging() { return stateTimeLogging_; }
 
-	GameStatePerfCounter *getPerfCounter(const char *name);
+	int getPerfCounter(const char *name);
+	void startPerfCount(int counter);
+	void endPerfCount(int counter);
 
 	// User fns to add classes to state management
 	void addStateStimulus(const unsigned state, 
@@ -125,7 +127,6 @@ protected:
 	typedef std::list<GameStateI *> StateIList;
 	typedef std::pair<GameStateStimulusI *, unsigned> SimulusIPair;
 	typedef std::list<SimulusIPair> StiulusIList;
-	typedef std::list<GameStatePerfCounter *> PerfCounterList;
 
 	struct TimerInfo
 	{
@@ -183,13 +184,13 @@ protected:
 	std::string name_;
 	unsigned pendingStimulus_;
 	bool fakeMiddleButton_;
-	bool stateLogging_, stateTimeLogging_;
-	float timerSimulateTime_;
+	bool stateLogging_;
+	float stateTimeLogging_;
+	int frameCount_;
 	Clock timerClock_;
 	Clock overallTimerClock_;
 	Clock doubleClickClock_;
 	TimerInfo timers_[50];
-	PerfCounterList perfCounters_;
 
 	// Dragging stuff
 	// Up or down for each button (bit field)

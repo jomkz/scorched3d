@@ -27,7 +27,7 @@
 #include <graph/ParticleEngine.h>
 #include <graph/OptionsDisplay.h>
 #include <common/Defines.h>
-#include <landscape/Hemisphere.h>
+#include <sky/Hemisphere.h>
 #include <weapons/ShieldRound.h>
 #include <weapons/ShieldSquare.h>
 #include <weapons/Accessory.h>
@@ -38,21 +38,97 @@
 #include <GLEXT/GLViewPort.h>
 #include <GLEXT/GLCameraFrustum.h>
 #include <GLEXT/GLCamera.h>
+#include <land/VisibilityPatchGrid.h>
 
 TargetRendererImpl::HighlightType TargetRendererImpl::highlightType_ = 
 	TargetRendererImpl::eNoHighlight;
 
-TargetRendererImpl::TargetRendererImpl() : 
-	particleMade_(false),
-	posX_(0.0f), posY_(0.0f), posZ_(0.0f)
+TargetRendererImpl::TargetRendererImpl(Target *target) : 
+	target_(target),
+	particleMade_(false), tree_(false), matrixCached_(false),
+	posX_(0.0f), posY_(0.0f), posZ_(0.0f),
+	currentVisibilityPatch_(0), patchEpoc_(-1)
 {
+
 }
 
 TargetRendererImpl::~TargetRendererImpl()
 {
+	setMovedPatch(0);
 }
 
-void TargetRendererImpl::drawShield(Target *target, float shieldHit, float totalTime)
+void TargetRendererImpl::moved()
+{
+	if (VisibilityPatchGrid::instance()->getEpocNumber() == 0) return;
+
+	TargetVisibilityPatch *newPatch = 0;
+	if (target_->getAlive())
+	{
+		FixedVector &position = target_->getLife().getTargetPosition();
+		newPatch = VisibilityPatchGrid::instance()->getTargetVisibilityPatch(
+			position[0].asInt(), position[1].asInt());
+	}
+	setMovedPatch(newPatch);
+	matrixCached_ = false;
+}
+
+void TargetRendererImpl::setMovedPatch(TargetVisibilityPatch *newPatch)
+{
+	float boundingSize = target_->getLife().getFloatBoundingSize();
+	if (boundingSize > 32.0f) // Landscape square size
+	{
+		if (newPatch) TargetVisibilityPatch::addLargeTarget(target_);
+		else TargetVisibilityPatch::removeLargeTarget(target_);
+
+		return;
+	}
+
+	if (patchEpoc_ != VisibilityPatchGrid::instance()->getEpocNumber())
+	{
+		currentVisibilityPatch_ = 0;
+		patchEpoc_ = VisibilityPatchGrid::instance()->getEpocNumber();
+	}
+	if (newPatch != currentVisibilityPatch_)
+	{
+		if (currentVisibilityPatch_)
+		{
+			if (!tree_)
+			{
+				currentVisibilityPatch_->removeTarget(target_);
+				if (!target_->getTargetName().empty()) 
+					currentVisibilityPatch_->removeTooltip(target_);
+			}
+			else 
+			{
+				currentVisibilityPatch_->removeTree(target_);
+			}
+		}
+		if (newPatch)
+		{
+			if (!tree_)
+			{
+				newPatch->addTarget(target_);
+				if (!target_->getTargetName().empty()) 
+					newPatch->addTooltip(target_);
+			}
+			else 
+			{
+				newPatch->addTree(target_);
+			}
+		}
+		currentVisibilityPatch_ = newPatch;
+	}
+}
+
+bool TargetRendererImpl::getVisible()
+{
+	if (!currentVisibilityPatch_ || !currentVisibilityPatch_->getVisible()) return false;
+	if (!target_->getAlive()) return false;
+
+	return true;
+}
+
+void TargetRendererImpl::drawShield(float shieldHit, float totalTime)
 {
 	// Create the shield textures
 	static GLTexture *shieldtexture = 0;
@@ -176,12 +252,12 @@ void TargetRendererImpl::drawShield(Target *target, float shieldHit, float total
 	}
 
 	// Draw the actual shield
-	Accessory *accessory = target->getShield().getCurrentShield();
+	Accessory *accessory = target_->getShield().getCurrentShield();
 	if (!accessory) return;
 	Shield *shield = (Shield *) accessory->getAction();
 
 	GLState state(GLState::BLEND_ON | GLState::TEXTURE_ON); 
-	Vector &position = target->getLife().getFloatPosition();
+	Vector &position = target_->getLife().getFloatPosition();
 	Vector &color = shield->getColor();
 
 	if (shield->getRound())
@@ -266,7 +342,7 @@ void TargetRendererImpl::drawShield(Target *target, float shieldHit, float total
 	}
 }
 
-void TargetRendererImpl::drawParachute(Target *target)
+void TargetRendererImpl::drawParachute()
 {
 	static GLuint listNo = 0;
 	if (!listNo)
@@ -294,15 +370,15 @@ void TargetRendererImpl::drawParachute(Target *target)
 	}
 
 	// Check this tank is falling
-	if (!target->getTargetState().getFalling()) return;
+	if (!target_->getTargetState().getFalling()) return;
 
 	// Check this tank has parachutes
-	if (!target->getTargetState().getFalling()->getParachute())
+	if (!target_->getTargetState().getFalling()->getParachute())
 	{
 		return;
 	}
 
-	Vector &position = target->getLife().getFloatPosition();
+	Vector &position = target_->getLife().getFloatPosition();
 	GLState state(GLState::TEXTURE_OFF);
 	glPushMatrix();
 		glTranslatef(position[0], position[1], position[2]);
@@ -310,7 +386,7 @@ void TargetRendererImpl::drawParachute(Target *target)
 	glPopMatrix();
 }
 
-void TargetRendererImpl::createParticle(Target *target)
+void TargetRendererImpl::createParticle()
 {
 	// Check if we have made the particle
 	// We may not have if there were not enough to create the 
@@ -319,10 +395,10 @@ void TargetRendererImpl::createParticle(Target *target)
 
 	// If this is a target we only need the particle
 	// if we have a shield or if we are falling
-	if (target->isTarget())
+	if (target_->isTarget())
 	{
-		if (!target->getShield().getCurrentShield() &&
-			!target->getTargetState().getFalling())
+		if (!target_->getShield().getCurrentShield() &&
+			(tree_ || !target_->getTargetState().getFalling()))
 		{
 			return;
 		}
@@ -351,45 +427,41 @@ void TargetRendererImpl::createParticle(Target *target)
 			particleMade_ = true;
 			particle->life_ = 1000.0f;
 			particle->renderer_ = TargetParticleRenderer::getInstance();
-			particle->userData_ = new TargetParticleUserData(target->getPlayerId());
+			particle->userData_ = new TargetParticleUserData(target_->getPlayerId());
 		}
 	}
 }
 
-float TargetRendererImpl::getTargetSize(Target *target)
+float TargetRendererImpl::getTargetSize()
 {
 	// Target size
-	float size = target->getLife().getFloatAabbSize().Max();
-	Accessory *shieldAcc = target->getShield().getCurrentShield();
-	if (shieldAcc)
-	{
-		Shield *shield = (Shield *) shieldAcc->getAction();
-		size = MAX(shield->getBoundingSize().asFloat(), size);
-	}
+	float targetSize = target_->getLife().getFloatBoundingSize();
+	float shieldSize = target_->getShield().getShieldBoundingSize().asFloat();
+	float size = MAX(targetSize, shieldSize);
 	return size;
 }
 
-float TargetRendererImpl::getTargetFade(Target *target, float distance, float size)
+float TargetRendererImpl::getTargetFade(float distance, float size)
 {
 	// Figure out the drawing distance
-	float drawDistance = OptionsDisplay::instance()->getDrawDistance() * size;
-	float drawDistanceFade =  OptionsDisplay::instance()->getDrawDistanceFade();
-	float drawDistanceFadeStart = drawDistance - drawDistanceFade;
+	float drawCullingDistance = OptionsDisplay::instance()->getDrawCullingDistance() * size;
+	float drawFadeStartDistance =  OptionsDisplay::instance()->getDrawFadeStartDistance();
+	float drawFadeDistance = drawCullingDistance - drawFadeStartDistance;
 	float fade = 1.0f;
-	if (distance > drawDistanceFadeStart)
+	if (distance > drawFadeStartDistance)
 	{
-		fade = 1.0f - ((distance - drawDistanceFadeStart) / drawDistanceFade);
+		fade = 1.0f - ((distance - drawFadeStartDistance) / drawFadeDistance);
 	}
 
 	return fade;
 }
 
-void TargetRendererImpl::storeTarget2DPos(Target *target)
+void TargetRendererImpl::storeTarget2DPos()
 {
-	if (!target->getName()[0]) return;
+	if (target_->getTargetName().empty()) return;
 
 	Vector &tankTurretPos = 
-		target->getLife().getFloatCenterPosition();
+		target_->getLife().getFloatCenterPosition();
 	Vector camDir = 
 		GLCamera::getCurrentCamera()->getLookAt() - 
 		GLCamera::getCurrentCamera()->getCurrentPos();

@@ -21,9 +21,7 @@
 #if !defined(__INCLUDE_ServerWebServerUtilh_INCLUDE__)
 #define __INCLUDE_ServerWebServerUtilh_INCLUDE__
 
-#include <string>
-#include <list>
-#include <map>
+#include <server/ServerAdminSessions.h>
 
 class NetMessage;
 class OptionEntry;
@@ -44,10 +42,12 @@ namespace ServerWebServerUtil
 
 	// HTML template functions
 	bool getTemplate(
+		ServerAdminSessions::SessionParams *session,
 		const std::string &name,
 		std::map<std::string, std::string> &fields,
 		std::string &result);
 	bool getHtmlTemplate(
+		ServerAdminSessions::SessionParams *session,
 		const std::string &name,
 		std::map<std::string, std::string> &fields,
 		std::string &result);
@@ -57,6 +57,7 @@ namespace ServerWebServerUtil
 	void getHtmlNotFound(
 		std::string &result);
 	bool getHtmlMessage(
+		ServerAdminSessions::SessionParams *session,
 		const std::string &title,
 		const std::string &text,
 		std::map<std::string, std::string> &fields,

@@ -37,6 +37,8 @@ public:
 	GLFont2d *getNormalFont() { return normalFont_; }
 	GLFont2d *getNormalShadowFont() { return normalShadowFont_; }
 
+	void displayCharacterInfo();
+
 protected:
 	static  GLWFont *instance_;
 	GLFont2d *gameFont_;

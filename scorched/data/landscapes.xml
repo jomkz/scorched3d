@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <landscapes>
-	<landscape>
+  <landscape>
 		<name>oldstyle</name>
 		<description></description>
 		<picture>oldstyle-pic.bmp</picture>
 		<weight>100</weight>
 		<defn>
 			<!--<item>data/landscapes/defntest.xml</item>-->
+      <item>data/landscapes/defnoldstyleerrosion.xml</item>
 			<item>data/landscapes/defnoldstyle.xml</item>
 			<item>data/landscapes/defnlowlands.xml</item>
 		</defn>

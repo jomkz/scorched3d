@@ -90,7 +90,7 @@ bool ClientConnectionAuthHandler::processMessage(
 
 void ClientConnectionAuthHandler::sendAuth()
 {
-	ProgressDialog::instance()->progressChange("Authenticating", 100);
+	ProgressDialog::instance()->progressChange(LANG_RESOURCE("AUTHENTICATING", "Authenticating"), 100);
 
 	const char *hostName = ConnectDialog::instance()->getHost();
 	int portNumber = ConnectDialog::instance()->getPort();

@@ -68,11 +68,9 @@ public:
 		FixedVector &position, FixedVector &velocity) = 0;
 
 	int getArmsLevel();
-	bool getUseUp() { return useUp_; }
 
 protected:
 	int armsLevel_;
-	bool useUp_;
 
 };
 

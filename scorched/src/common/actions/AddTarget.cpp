@@ -52,15 +52,16 @@ void AddTarget::simulate(fixed frameTime, bool &remove)
 	unsigned int playerId = TankAIAdder::getNextTargetId(*context_);
 
 	Target *target = addTarget_->getTargetDefinition().createTarget(
-		playerId, position_, FixedVector::getNullVector(), *context_, context_->actionController->getRandom());
-	context_->targetContainer->addTarget(target);
+		playerId, position_, FixedVector::getNullVector(), *context_, 
+		context_->getActionController().getRandom());
+	context_->getTargetContainer().addTarget(target);
 
-	if (context_->optionsGame->getActionSyncCheck())
+	if (context_->getOptionsGame().getActionSyncCheck())
 	{
-		context_->actionController->addSyncCheck(
+		context_->getActionController().addSyncCheck(
 			S3D::formatStringBuffer("AddTarget : %u %s %i,%i,%i", 
 				playerId,
-				target->getName(),
+				target->getCStrName().c_str(),
 				position_[0].getInternal(),
 				position_[1].getInternal(),
 				position_[2].getInternal()));

@@ -3,7 +3,6 @@
     <maxplayers>24</maxplayers>
 	<landscapewidth>256</landscapewidth>
 	<landscapeheight>256</landscapeheight>
-    <surround type="none"></surround>
 	<roof type="cavern">
 		<width>300</width>
 		<height>125</height>

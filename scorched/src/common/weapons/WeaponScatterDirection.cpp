@@ -47,7 +47,7 @@ bool WeaponScatterDirection::parseXML(AccessoryCreateContext &context, XMLNode *
 	if (!accessoryNode->getNamedChild("aimedweapon", subNode)) return false;
 
 	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore()->
+	AccessoryPart *accessory = context.getAccessoryStore().
 		createAccessoryPart(context, parent_, subNode);
 	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
 	{
@@ -64,7 +64,7 @@ bool WeaponScatterDirection::parseXML(AccessoryCreateContext &context, XMLNode *
 void WeaponScatterDirection::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &v)
 {
-	RandomGenerator &random = context.actionController->getRandom();
+	RandomGenerator &random = context.getActionController().getRandom();
 	FixedVector vel;
 	vel[0] += direction_[0] - directionOffset_[0] + 
 		directionOffset_[0] * 2 * random.getRandFixed();

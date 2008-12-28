@@ -93,7 +93,7 @@ bool ClientInitializeHandler::initialize()
 
 	// Load the accessory files
 	if (!ScorchedClient::instance()->getAccessoryStore().parseFile(
-		ScorchedClient::instance()->getOptionsGame(),
+		ScorchedClient::instance()->getContext(),
 		ProgressDialogSync::instance())) return false;
 
 	// Load tank models here
@@ -119,7 +119,7 @@ bool ClientInitializeHandler::initialize()
 		
 	// Load game windows
 	ProgressDialogSync::instance()->setNewPercentage(0.0f);
-	ProgressDialogSync::instance()->setNewOp("Initializing Game Windows");
+	ProgressDialogSync::instance()->setNewOp(LANG_RESOURCE("INITIALIZING_WINDOWS", "Initializing Game Windows"));
 	if (!GLWWindowSkinManager::modinstance()->loadWindows())
 	{
 		S3D::dialogExit("Scorched3D", "Failed to load windows skins");

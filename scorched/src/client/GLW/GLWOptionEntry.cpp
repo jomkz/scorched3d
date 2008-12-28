@@ -41,8 +41,14 @@ void GLWOptionEntry::createEntry(
 	std::list<GLWOptionEntry> &controls, 
 	GLWPanel *parent, OptionEntry &entry)
 {
-	GLWLabel *staticText = new GLWLabel(0.0f, 0.0f, (char *) entry.getName());
-	staticText->setToolTip(new ToolTip(ToolTip::ToolTipHelp, entry.getName(), entry.getDescription()));
+	std::string descriptionName;
+	descriptionName.append(entry.getName()).append("_description");
+
+	GLWLabel *staticText = new GLWLabel(0.0f, 0.0f, 
+		LANG_RESOURCE(entry.getName(), entry.getName()));
+	staticText->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE(entry.getName(), entry.getName()), 
+		LANG_RESOURCE(descriptionName, entry.getDescription())));
 	parent->addWidget(staticText, 0, GLWPanel::AlignRight | 
 		GLWPanel::SpaceLeft | GLWPanel::SpaceTop, 10.0f);
 
@@ -58,7 +64,8 @@ void GLWOptionEntry::createEntry(
 			itor++)
 		{
 			ModInfo &info = (*itor);
-			((GLWDropDownText *) control)->addText(info.getName());
+			((GLWDropDownText *) control)->addText(
+				LANG_RESOURCE(info.getName(), info.getName()), info.getName());
 		}
 	}
 	else
@@ -77,7 +84,8 @@ void GLWOptionEntry::createEntry(
 				i<=boundedInt.getMaxValue(); 
 				i+=boundedInt.getStepValue())
 			{
-				((GLWDropDownText *) control)->addText(S3D::formatStringBuffer("%i", i));
+				std::string value = S3D::formatStringBuffer("%i", i);
+				((GLWDropDownText *) control)->addText(LANG_STRING(value), value);
 			}
 		}
 		break;
@@ -90,7 +98,8 @@ void GLWOptionEntry::createEntry(
 			for (OptionEntryEnum::EnumEntry *current = enums; current->description[0]; current++)
 			{
 				((GLWDropDownText *) control)->addEntry(
-					GLWSelectorEntry(current->description, 0, false, 0, (void *) current->value));
+					GLWSelectorEntry(LANG_RESOURCE(current->description, current->description), 
+						0, false, 0, (void *) current->value, current->description));
 			}
 		}
 		break;
@@ -102,7 +111,8 @@ void GLWOptionEntry::createEntry(
 			OptionEntryStringEnum::EnumEntry *enums = optionEntryStringEnum.getEnums();
 			for (OptionEntryStringEnum::EnumEntry *current = enums; current->value[0]; current++)
 			{
-				((GLWDropDownText *) control)->addText(current->value);
+				((GLWDropDownText *) control)->addText(LANG_RESOURCE(current->value, current->value), 
+					current->value);
 			}
 		}
 		break;
@@ -117,7 +127,9 @@ void GLWOptionEntry::createEntry(
 			entry.getName(), entry.getEntryType()));
 	}
 
-	control->setToolTip(new ToolTip(ToolTip::ToolTipHelp, entry.getName(), entry.getDescription()));
+	control->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE(entry.getName(), entry.getName()), 
+		LANG_RESOURCE(descriptionName, entry.getDescription())));
 	parent->addWidget(control, 0, 
 		GLWPanel::SpaceRight | GLWPanel::SpaceLeft | GLWPanel::SpaceTop, 10.0f);
 
@@ -137,7 +149,8 @@ void GLWOptionEntry::updateControls(
 		if (0 == strcmp(entrySetter.getEntry()->getName(), "Mod"))
 		{
 			GLWDropDownText *control = (GLWDropDownText *) entrySetter.getControl();
-			control->setCurrentText(entrySetter.getEntry()->getValueAsString());			
+			control->setCurrentText(LANG_RESOURCE(entrySetter.getEntry()->getValueAsString(),
+				entrySetter.getEntry()->getValueAsString()));			
 		}
 		else
 		switch (entrySetter.getEntry()->getEntryType())
@@ -145,15 +158,21 @@ void GLWOptionEntry::updateControls(
 		case OptionEntry::OptionEntryStringType:
 			{
 				GLWTextBox *control = (GLWTextBox *) entrySetter.getControl();
-				control->setText(entrySetter.getEntry()->getValueAsString());
+				control->setText(LANG_STRING(entrySetter.getEntry()->getValueAsString()));
 			}
 			break;
 		case OptionEntry::OptionEntryBoundedIntType:
+			{
+				GLWDropDownText *control = (GLWDropDownText *) entrySetter.getControl();
+				control->setCurrentText(LANG_STRING(entrySetter.getEntry()->getValueAsString()));
+			}
+			break;
 		case OptionEntry::OptionEntryEnumType:
 		case OptionEntry::OptionEntryStringEnumType:
 			{
 				GLWDropDownText *control = (GLWDropDownText *) entrySetter.getControl();
-				control->setCurrentText(entrySetter.getEntry()->getValueAsString());
+				control->setCurrentText(LANG_RESOURCE(entrySetter.getEntry()->getValueAsString(),
+					entrySetter.getEntry()->getValueAsString()));
 			}
 			break;
 		case OptionEntry::OptionEntryBoolType:
@@ -180,7 +199,7 @@ void GLWOptionEntry::updateEntries(
 		if (0 == strcmp(entrySetter.getEntry()->getName(), "Mod"))
 		{
 			GLWDropDownText *control = (GLWDropDownText *) entrySetter.getControl();
-			entrySetter.getEntry()->setValueFromString(control->getCurrentText());		
+			entrySetter.getEntry()->setValueFromString(control->getCurrentDataText());		
 		}
 		else
 		switch (entrySetter.getEntry()->getEntryType())
@@ -196,7 +215,7 @@ void GLWOptionEntry::updateEntries(
 		case OptionEntry::OptionEntryStringEnumType:
 			{
 				GLWDropDownText *control = (GLWDropDownText *) entrySetter.getControl();
-				entrySetter.getEntry()->setValueFromString(control->getCurrentText());
+				entrySetter.getEntry()->setValueFromString(control->getCurrentDataText());
 			}
 			break;
 		case OptionEntry::OptionEntryBoolType:

@@ -20,6 +20,7 @@
 
 #include <common/ProgressCounter.h>
 #include <common/Logger.h>
+#include <lang/LangResource.h>
 
 ProgressCounterI::~ProgressCounterI()
 {
@@ -27,7 +28,8 @@ ProgressCounterI::~ProgressCounterI()
 }
 
 ProgressCounter::ProgressCounter(ProgressCounterI *user) : 
-	currentOp_("None"), currentPercentage_(0.0f), user_(user)
+	currentOp_(LANG_RESOURCE("NONE", "None")), 
+	currentPercentage_(0.0f), user_(user)
 {
 
 }
@@ -37,15 +39,15 @@ ProgressCounter::~ProgressCounter()
 
 }
 
-void ProgressCounter::setNewOp(const std::string &op)
+void ProgressCounter::setNewOp(const LangString &op)
 {
 	currentOp_ = op;
-	Logger::log(op);
-	if (user_) user_->progressChange(currentOp_.c_str(), currentPercentage_);
+	Logger::log(LangStringUtil::convertFromLang(op));
+	if (user_) user_->progressChange(currentOp_, currentPercentage_);
 }
 
 void ProgressCounter::setNewPercentage(float percentage)
 {
 	currentPercentage_ = percentage;
-	if (user_) user_->progressChange(currentOp_.c_str(), currentPercentage_);
+	if (user_) user_->progressChange(currentOp_, currentPercentage_);
 }

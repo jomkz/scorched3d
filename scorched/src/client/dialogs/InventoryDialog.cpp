@@ -48,16 +48,16 @@ InventoryDialog::InventoryDialog() :
 	GLWWindow("Inventory", 10.0f, 10.0f, 440.0f, 300.0f, 0,
 		"Show the current weapon inventory")
 {
-	okId_ = addWidget(new GLWTextButton("Ok", 375, 10, 55, this, 
+	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("OK", "Ok"), 375, 10, 55, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX))->getId();
 
 	sellTab_ = (GLWTab *)
-		addWidget(new GLWTab("Inventory", 10, 40, 420, 160));
+		addWidget(new GLWTab("Inv", LANG_RESOURCE("INVENTORY_TAB", "Inv"), 10, 40, 420, 160));
 	topPanel_ = (GLWPanel *)
 		addWidget(new GLWPanel(10, 265, 420, 50));
 	sortBox_ = (GLWCheckBox *) addWidget(new GLWCheckBox(10, 10));
 	sortBox_->setHandler(this);
-	addWidget(new GLWLabel(35, 7, "Sort accessories by name"));
+	addWidget(new GLWLabel(35, 7, LANG_RESOURCE("SORT_ACCESSORIES", "Sort accessories by name")));
 }
 
 InventoryDialog::~InventoryDialog()
@@ -95,20 +95,19 @@ void InventoryDialog::addPlayerName()
 	if (!tank) return;
 
 	topPanel_->addWidget(new GLWFlag(tank->getColor(), 5, 15, 60));
-	topPanel_->addWidget(new GLWLabel(75, 10, tank->getName()));
+	topPanel_->addWidget(new GLWLabel(75, 10, tank->getTargetName()));
 	topPanel_->addWidget(new GLWLabel(260, 20, 
-		S3D::formatStringBuffer("$%i", tank->getScore().getMoney())));
+		LANG_STRING(S3D::formatStringBuffer("$%i", tank->getScore().getMoney()))));
 	topPanel_->addWidget(new GLWLabel(260, 0,
-		S3D::formatStringBuffer("Round %i of %i", 
-		ScorchedClient::instance()->getOptionsTransient().getCurrentRoundNo(),
-		ScorchedClient::instance()->getOptionsGame().getNoRounds())));
+		LANG_RESOURCE_2("ROUND_OF", "Round {0} of {1}",
+		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsTransient().getCurrentRoundNo()),
+		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsGame().getNoRounds()))));
 }
 
 void InventoryDialog::addPlayerWeapons()
 {
 	sellTab_->clear();
 
-	char buffer[256];
 	int height = 10;
 
 	Tank *tank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
@@ -130,13 +129,11 @@ void InventoryDialog::addPlayerWeapons()
 		GLWPanel *newPanel = (GLWPanel *)
 			sellTab_->addWidget(new GLWPanel(10.0f, (float) height, 315.0f, 20.0f, true));
 		newPanel->setToolTip(&current->getToolTip());
-		if (count >= 0) snprintf(buffer, 256, "%i", count);
-		else snprintf(buffer, 256, "In");
-		newPanel->addWidget(new GLWLabel(0, -2, buffer));
+		newPanel->addWidget(new GLWLabel(0, -2, tank->getAccessories().getAccessoryCountString(current)));
 		newPanel->addWidget(new GLWIcon(30, 2, 16, 16, current->getTexture()));
-		newPanel->addWidget(new GLWLabel(50, -2, (char *) current->getName()));
-		snprintf(buffer, 256, "$%i/%i", current->getSellPrice(), 1);
-		newPanel->addWidget(new GLWLabel(205, -2, buffer));
+		newPanel->addWidget(new GLWLabel(50, -2, LANG_RESOURCE(current->getName(), current->getName())));
+		newPanel->addWidget(new GLWLabel(205, -2, 
+			LANG_STRING(S3D::formatStringBuffer("$%i/%i", current->getSellPrice(), 1))));
 
 		height += 24;
 	}

@@ -23,8 +23,11 @@
 #include <common/Defines.h>
 #include <common/Logger.h>
 
-NetLoopBack::NetLoopBack(unsigned int currentId) 
-	: loopback_(0), currentId_(currentId)
+static unsigned int ClientLoopBackID = 100001;
+static unsigned int ServerLoopBackID = 200002;
+
+NetLoopBack::NetLoopBack(bool server) 
+	: loopback_(0), server_(server)
 {
 }
 
@@ -34,9 +37,16 @@ NetLoopBack::~NetLoopBack()
 
 bool NetLoopBack::connect(const char *hostName, int portNo)
 {
-	NetMessage *message = NetMessagePool::instance()->
-		getFromPool(NetMessage::ConnectMessage, currentId_, 0);
-	messageHandler_.addMessage(message);
+	{
+		NetMessage *message = NetMessagePool::instance()->
+			getFromPool(NetMessage::ConnectMessage, ServerLoopBackID, 0);
+		messageHandler_.addMessage(message);
+	}
+	{
+		NetMessage *message = NetMessagePool::instance()->
+			getFromPool(NetMessage::ConnectMessage, ClientLoopBackID, 0);
+		loopback_->messageHandler_.addMessage(message);
+	}
 
 	return true;
 }
@@ -81,11 +91,12 @@ void NetLoopBack::sendMessageDest(NetBuffer &buffer,
 	unsigned int destination, unsigned int flags)
 {
 	DIALOG_ASSERT(loopback_);
-	DIALOG_ASSERT(destination == ClientLoopBackID ||
-		destination == ServerLoopBackID);
+	DIALOG_ASSERT(
+		(server_ && destination == ClientLoopBackID) || 
+		(!server_ && destination == ServerLoopBackID));
 
 	NetMessage *message = NetMessagePool::instance()->
-		getFromPool(NetMessage::BufferMessage, currentId_, 0, flags);
+		getFromPool(NetMessage::BufferMessage, server_?ServerLoopBackID:ClientLoopBackID, 0, flags);
 	message->getBuffer().reset();
 	message->getBuffer().addDataToBuffer(buffer.getBuffer(), buffer.getBufferUsed());
 	loopback_->messageHandler_.addMessage(message);

@@ -37,10 +37,11 @@
 #include <math.h>
 #include <set>
 
-Laser::Laser(WeaponLaser *weapon,
+Laser::Laser(Weapon *weapon, LaserParams *params,
 		FixedVector &position, FixedVector &direction,
 		WeaponFireContext &weaponContext) :
 	ActionReferenced("Laser"),
+	params_(params),
 	totalTime_(0),
 	drawLength_(0),
 	firstTime_(true),
@@ -53,15 +54,16 @@ Laser::Laser(WeaponLaser *weapon,
 
 Laser::~Laser()
 {
+	delete params_;
 }
 
 void Laser::init()
 {
 	fixed per = direction_.Magnitude() / 50;
-	length_ = weapon_->getMinimumDistance(*context_) + 
-		(weapon_->getMaximumDistance(*context_) - weapon_->getMinimumDistance(*context_)) * per;
-	damage_ = weapon_->getMinimumHurt(*context_) + 
-		(weapon_->getMaximumHurt(*context_) - weapon_->getMinimumHurt(*context_)) * (fixed(1) - per);
+	length_ = params_->getMinimumDistance() + 
+		(params_->getMaximumDistance() - params_->getMinimumDistance()) * per;
+	damage_ = params_->getMinimumHurt() + 
+		(params_->getMaximumHurt() - params_->getMinimumHurt()) * (fixed(1) - per);
 
 	FixedVector dir = direction_.Normalize();
 
@@ -84,8 +86,8 @@ void Laser::simulate(fixed frameTime, bool &remove)
 		firstTime_ = false;
 		
 		// preset some values from the numberparser expressions
-		laserTime_ = weapon_->getTotalTime(*context_);
-		hurtRadius_ = weapon_->getHurtRadius(*context_);
+		laserTime_ = params_->getTotalTime();
+		hurtRadius_ = params_->getHurtRadius();
 
 		if (damage_ > 0 && direction_.Magnitude() > 0)
 		{
@@ -98,8 +100,8 @@ void Laser::simulate(fixed frameTime, bool &remove)
 			while (!end)
 			{
 				std::map<unsigned int, Target *> collisionTargets;
-				context_->targetSpace->getCollisionSet(pos, 
-					fixed(weapon_->getHurtRadius(*context_)), collisionTargets);
+				context_->getTargetSpace().getCollisionSet(pos, 
+					fixed(params_->getHurtRadius()), collisionTargets);
 				std::map<unsigned int, Target *>::iterator itor;
 				for (itor = collisionTargets.begin();
 					itor != collisionTargets.end();
@@ -108,7 +110,7 @@ void Laser::simulate(fixed frameTime, bool &remove)
 					Target *current = (*itor).second;
 					if (current->getAlive() &&
 						((current->getPlayerId() != weaponContext_.getPlayerId()) ||
-						weapon_->getHurtFirer()))
+						params_->getHurtFirer()))
 					{
 						Shield::ShieldLaserProofType laserProof = Shield::ShieldLaserProofNone;
 						if (current->getShield().getCurrentShield())
@@ -121,7 +123,7 @@ void Laser::simulate(fixed frameTime, bool &remove)
 								FixedVector offset = current->getLife().getTargetPosition() - pos;
 								if (shield->inShield(offset))
 								{
-									context_->actionController->addAction(
+									context_->getActionController().addAction(
 										new ShieldHit(current->getPlayerId(), pos, 0));
 
 									end = true;
@@ -135,7 +137,7 @@ void Laser::simulate(fixed frameTime, bool &remove)
 							FixedVector offset = current->getLife().getTargetPosition() - pos;
 							fixed targetDistance = offset.Magnitude();
 
-							if (targetDistance < weapon_->getHurtRadius(*context_) + 
+							if (targetDistance < params_->getHurtRadius() + 
 								MAX(current->getLife().getSize()[0], current->getLife().getSize()[1]))
 							{
 								damagedTargets_.insert(current->getPlayerId());
@@ -159,7 +161,7 @@ void Laser::simulate(fixed frameTime, bool &remove)
 				itor++)
 			{
 				unsigned int damagedTarget = (*itor);
-				context_->actionController->addAction(
+				context_->getActionController().addAction(
 					new TankDamage(
 						weapon_, damagedTarget, weaponContext_,
 						damage_, false, false, false));
@@ -176,7 +178,7 @@ void Laser::simulate(fixed frameTime, bool &remove)
 void Laser::draw()
 {
 #ifndef S3D_SERVER
-	if (!context_->serverMode && (drawLength_ > 0))
+	if (!context_->getServerMode() && (drawLength_ > 0))
 	{
 		static GLUquadric *obj = 0;
 		if (!obj)
@@ -202,9 +204,9 @@ void Laser::draw()
 			gluCylinder(obj, radius1, radius1, drawLength_.asFloat(), 3, 1);
 
 			glColor4f(
-				weapon_->getColor()[0],
-				weapon_->getColor()[1],
-				weapon_->getColor()[2],
+				params_->getColor()[0],
+				params_->getColor()[1],
+				params_->getColor()[2],
 				timePer);
 			gluCylinder(obj, radius2, radius2, drawLength_.asFloat(), 5, 1);
 		glPopMatrix();

@@ -55,12 +55,12 @@ BuyAccessoryDialog::BuyAccessoryDialog() :
 		"weapons and other accessories."),
 	firstDrawTime_(true), sellTab_(0), flag_(0)
 {
-	okId_ = addWidget(new GLWTextButton("Ok", 400, 10, 55, this, 
+	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("OK", "Ok"), 400, 10, 55, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX))->getId();
 
 	if (!ScorchedClient::instance()->getOptionsGame().getTutorial()[0])
 	{
-		giftId_ = addWidget(new GLWTextButton("Gift", 320, 10, 70, this, 
+		giftId_ = addWidget(new GLWTextButton(LANG_RESOURCE("GIFT", "Gift"), 320, 10, 70, this, 
 			GLWButton::ButtonFlagCenterX))->getId();
 	}
 
@@ -68,7 +68,7 @@ BuyAccessoryDialog::BuyAccessoryDialog() :
 		addWidget(new GLWPanel(10, 265, 450, 50));
 
 	defaultTab_ = (GLWCheckBoxText *) 
-		addWidget(new GLWCheckBoxText(18.0f, 230.0f, "Default Tab", false, 3.0f));
+		addWidget(new GLWCheckBoxText(18.0f, 230.0f, LANG_RESOURCE("DEFAULT_TAB","Default Tab"), false, 3.0f));
 	defaultTab_->getCheckBox().setW(12);
 	defaultTab_->getCheckBox().setH(12);
 	defaultTab_->getLabel().setSize(10);
@@ -79,7 +79,7 @@ BuyAccessoryDialog::BuyAccessoryDialog() :
 	sortBox_->setW(14);
 	sortBox_->setH(14);
 	GLWLabel *label = (GLWLabel *)
-		addWidget(new GLWLabel(30, 9, "Sort by name"));
+		addWidget(new GLWLabel(30, 9, LANG_RESOURCE("NAME_SORT", "Sort by name")));
 	label->setSize(12);
 }
 
@@ -119,12 +119,14 @@ void BuyAccessoryDialog::draw()
 
 	GLWWindow::draw();
 
+	LANG_RESOURCE_VAR(BUY, "BUY", "Buy");
+	LANG_RESOURCE_VAR(SELL, "SELL", "Sell");
 	Vector red(0.7f, 0.0f, 0.0f);
 	Vector green(0.0f, 0.4f, 0.0f);
 	GLWFont::instance()->getGameFont()->draw(
-		green, 12.0f, x_ + 260.0f, y_ + topPanel_->getY() - 50.0f, 0.0f, "Buy");
+		green, 12.0f, x_ + 260.0f, y_ + topPanel_->getY() - 50.0f, 0.0f, BUY);
 	GLWFont::instance()->getGameFont()->draw(
-		red, 12.0f, x_ + 360.0f, y_ + topPanel_->getY() - 50.0f, 0.0f, "Sell");
+		red, 12.0f, x_ + 360.0f, y_ + topPanel_->getY() - 50.0f, 0.0f, SELL);
 }
 
 void BuyAccessoryDialog::addPlayerName()
@@ -137,13 +139,13 @@ void BuyAccessoryDialog::addPlayerName()
 	if (!tank) return;
 	flag_ = (GLWFlag *) topPanel_->addWidget(new GLWFlag(tank->getColor(), 5, 15, 60));
 	flag_->setOffset(flagOffset);
-	topPanel_->addWidget(new GLWLabel(75, 10, tank->getName()));
+	topPanel_->addWidget(new GLWLabel(75, 10, tank->getTargetName()));
 	topPanel_->addWidget(new GLWLabel(260, 20, 
-		S3D::formatStringBuffer("$%i", tank->getScore().getMoney())));
+		LANG_STRING(S3D::formatStringBuffer("$%i", tank->getScore().getMoney()))));
 	topPanel_->addWidget(new GLWLabel(260, 0, 
-		S3D::formatStringBuffer("Round %i of %i", 
-		ScorchedClient::instance()->getOptionsTransient().getCurrentRoundNo(),
-		ScorchedClient::instance()->getOptionsGame().getNoRounds())));
+		LANG_RESOURCE_2("ROUND_OF", "Round {0} of {1}",
+		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsTransient().getCurrentRoundNo()),
+		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsGame().getNoRounds()))));
 }
 
 void BuyAccessoryDialog::addTabs()
@@ -160,16 +162,16 @@ void BuyAccessoryDialog::addTabs()
 	{
 		std::string name = (*itor);
 		GLWTab *tab = (GLWTab *)
-			addWidget(new GLWTab((char *) name.c_str(), 10, 40, 450, 160));
+			addWidget(new GLWTab(name, LANG_RESOURCE(name, name), 10, 40, 450, 160));
 		buyTabs_[name] = tab;
 		tab->setHandler(this);
 	}
 	sellTab_ = (GLWTab *)
-		addWidget(new GLWTab("inv", 10, 40, 450, 160));
+		addWidget(new GLWTab("Inv", LANG_RESOURCE("INVENTORY_TAB", "Inv"), 10, 40, 450, 160));
 	sellTab_->setHandler(this);
 
 	favouritesTab_ = (GLWTab *)
-		addWidget(new GLWTab("fav", 10, 40, 450, 160));
+		addWidget(new GLWTab("Fav", LANG_RESOURCE("FAVOURITES_TAB", "Fav"), 10, 40, 450, 160));
 	favouritesTab_->setHandler(this);
 }
 
@@ -325,18 +327,19 @@ bool BuyAccessoryDialog::addAccessory(
 	sortBox->setHandler(this);
 	sortBox->setW(14);
 	sortBox->setH(14);
-	sortBox->setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Favorite Weapon",
-		"Set/unset this weapon as a favorite.\n"
+	sortBox->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("FAVOURITE_WEAPON", "Favorite Weapon"),
+		LANG_RESOURCE("FAVOURITE_WEAPON_TOOLTIP", "Set/unset this weapon as a favorite.\n"
 		"Favorite weapons will show in the\n"
-		"favorites tab."));
+		"favorites tab.")));
 	sortBox->setState(favorites_.find(current->getName()) != favorites_.end());
 	favMap_[sortBox->getId()] = current;
 	
 	// Others
 	newPanel->addWidget(new GLWLabel(20, 0, 
-		S3D::formatStringBuffer((currentNumber == -1?"In":"%i"), currentNumber), 12.0f));
+		tank->getAccessories().getAccessoryCountString(current), 12.0f));
 	newPanel->addWidget(new GLWIcon(45, 4, 16, 16, current->getTexture()));
-	newPanel->addWidget(new GLWLabel(65, 0, current->getName(), 12.0f));
+	newPanel->addWidget(new GLWLabel(65, 0, LANG_RESOURCE(current->getName(), current->getName()), 12.0f));
 
 	// Buy Button
 	if (tank->getAccessories().accessoryAllowed(current, current->getBundle()) && 
@@ -344,24 +347,27 @@ bool BuyAccessoryDialog::addAccessory(
 	{
 		GLWTextButton *button = (GLWTextButton *)
 			newPanel->addWidget(new GLWTextButton(
-				S3D::formatStringBuffer("$%i/%i",
-					current->getPrice(), current->getBundle()), 
+				LANG_STRING(S3D::formatStringBuffer("$%i/%i",
+					current->getPrice(), current->getBundle())), 
 					210, 2, 100, this, 
 			GLWButton::ButtonFlagCenterX, 12.0f));
 		button->setColor(Vector(0.0f, 0.4f, 0.0f));
-		button->setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Buy", 
-			S3D::formatStringBuffer("Buy %i %s(s) for $%i", 
-				current->getBundle(), current->getName(), current->getPrice())));
+		button->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+			LANG_RESOURCE("BUY", "Buy"), 
+			LANG_RESOURCE_3("BUY_TOOLTIP", "Buy {0} {1}(s) for ${2}",
+				S3D::formatStringBuffer("%i", current->getBundle()),
+				current->getName(),
+				S3D::formatStringBuffer("%i", current->getPrice()))));
 		button->setH(button->getH() - 2.0f);
 		buyMap_[button->getId()] = current;
 	}
 	else
 	{
-		std::string text = S3D::formatStringBuffer("$%i/%i",
-			current->getPrice(), current->getBundle());
 		GLWLabel *label = (GLWLabel *)
 			newPanel->addWidget(new GLWLabel(
-				260, 0, text, 12.0f));
+				260, 0, 
+				LANG_STRING(S3D::formatStringBuffer("$%i/%i",
+					current->getPrice(), current->getBundle())), 12.0f));
 		label->setX(label->getX() - label->getW() / 2);
 		label->setColor(Vector(0.4f, 0.4f, 0.4f));
 	}
@@ -371,14 +377,16 @@ bool BuyAccessoryDialog::addAccessory(
 	{
 		GLWTextButton *button = (GLWTextButton *)
 			newPanel->addWidget(new GLWTextButton(
-				S3D::formatStringBuffer("$%i/%i",
-					current->getSellPrice(), 1), 
+				LANG_STRING(S3D::formatStringBuffer("$%i/%i",
+					current->getSellPrice(), 1)), 
 					312, 2, 100, this,
 			GLWButton::ButtonFlagCenterX, 12.0f));
 		button->setColor(Vector(0.7f, 0.0f, 0.0f));
-		button->setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Sell", 
-			S3D::formatStringBuffer("Sell 1 %s for $%i", 
-				current->getName(), current->getSellPrice())));
+		button->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+			LANG_RESOURCE("SELL", "Sell"), 
+			LANG_RESOURCE_2("SELL_TOOLTIP", "Sell 1 {0} for ${1}",
+				current->getName(),
+				S3D::formatStringBuffer("%i", current->getSellPrice()))));
 		button->setH(button->getH() - 2.0f);
 		sellMap_[button->getId()] = current;
 	}
@@ -553,7 +561,7 @@ void BuyAccessoryDialog::buttonDown(unsigned int id)
 				ComsMessageSender::sendToServer(buyMessage);
 
 				// Add the accessory
-				tank->getAccessories().rm(acc);
+				tank->getAccessories().rm(acc, 1);
 				tank->getScore().setMoney(tank->getScore().getMoney() + acc->getSellPrice());
 
 				// Refresh the window

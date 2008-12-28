@@ -35,7 +35,10 @@ bool GLStateExtension::noTexSubImage_ = false;
 bool GLStateExtension::hasBlendColor_ = false;
 bool GLStateExtension::hasShaders_ = false;
 bool GLStateExtension::hasFBO_ = false;
+bool GLStateExtension::hasDrawRangeElements_ = false;
 int GLStateExtension::textureUnits_ = 0;
+int GLStateExtension::maxElementVertices_ = 0;
+int GLStateExtension::maxElementIndices_ = 0;
 
 void GLStateExtension::setup()
 {
@@ -46,14 +49,38 @@ void GLStateExtension::setup()
 	}
 	Logger::log(S3D::formatStringBuffer("GLEW VERSION:%s", glewGetString(GLEW_VERSION)));
 
+	bool vertexRangeExceeded = false;
 	if (!OptionsDisplay::instance()->getNoGLExt())
 	{
-		if (!OptionsDisplay::instance()->getNoVBO())
+		if (!OptionsDisplay::instance()->getNoGLDrawElements())
 		{
-			if (GLEW_ARB_vertex_buffer_object &&
-				GLEW_EXT_draw_range_elements)
+			if (GLEW_EXT_draw_range_elements)
 			{
-				hasVBO_ = true;
+				GLint maxElementIndices;
+				glGetIntegerv(GL_MAX_ELEMENTS_INDICES, &maxElementIndices);
+				maxElementIndices_ = maxElementIndices;
+
+				GLint maxElementVertices;
+				glGetIntegerv(GL_MAX_ELEMENTS_VERTICES, &maxElementVertices);		 
+				maxElementVertices_ = maxElementVertices;
+
+				if (maxElementIndices_ < 16000 ||
+					maxElementVertices_ < 128000)
+				{
+					vertexRangeExceeded = true;
+				}
+				else
+				{
+					hasDrawRangeElements_ = true;
+
+					if (!OptionsDisplay::instance()->getNoVBO())
+					{
+						if (GLEW_ARB_vertex_buffer_object)
+						{
+							hasVBO_ = true;
+						}
+					}
+				}
 			}
 		}
 
@@ -131,6 +158,13 @@ void GLStateExtension::setup()
 		(hasMultiTex()?"On":"Off"),textureUnits_));
 	Logger::log(S3D::formatStringBuffer("VERTEX BUFFER OBJECT:%s", 
 		(hasVBO()?"On":"Off")));
+	Logger::log(S3D::formatStringBuffer("DRAW RANGE ELEMENTS:%s%s", 
+		(hasDrawRangeElements()?"On":"Off"), 
+		(vertexRangeExceeded?" (DISABLED DUE TO MAX_ELEMENTS)":"")));
+	Logger::log(S3D::formatStringBuffer("GL_MAX_ELEMENTS_VERTICES:%i", 
+		getMaxElementVertices()));
+	Logger::log(S3D::formatStringBuffer("GL_MAX_ELEMENTS_INDICES:%i", 
+		getMaxElementIndices()));
 	Logger::log(S3D::formatStringBuffer("FRAME BUFFER OBJECT:%s", 
 		(hasFBO()?"On":"Off")));
 	Logger::log(S3D::formatStringBuffer("SHADERS:%s", 

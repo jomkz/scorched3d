@@ -30,23 +30,13 @@
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeMovement.h>
 
-TargetMovementEntryBoids::TargetMovementEntryBoids()
+TargetMovementEntryBoids::TargetMovementEntryBoids() :
+	movementNumber_(0)
 {
 }
 
 TargetMovementEntryBoids::~TargetMovementEntryBoids()
 {
-	{
-		std::map<unsigned int, Boid2 *>::iterator itor;
-		for (itor = boidsMap_.begin();
-			itor != boidsMap_.end();
-			itor++)
-		{
-			Boid2 *boid = (*itor).second;
-			delete boid;
-		}
-		boidsMap_.clear();
-	}
 }
 
 void TargetMovementEntryBoids::generate(ScorchedContext &context, 
@@ -64,7 +54,7 @@ void TargetMovementEntryBoids::generate(ScorchedContext &context,
 	maxBounds_ = boids->maxbounds;
 
 	// Find the group to move the objects in
-	groupEntry_ = context.landscapeMaps->getGroundMaps().getGroups().
+	groupEntry_ = context.getLandscapeMaps().getGroundMaps().getGroups().
 		getGroup(boids->groupname.c_str());
 	if (!groupEntry_)
 	{
@@ -89,25 +79,35 @@ void TargetMovementEntryBoids::makeBoids(ScorchedContext &context,
 	{
 		unsigned int playerId = (*itor).first;
 		TargetGroup *groupEntry = (*itor).second;
-
-		if (!groupEntry->getTarget()->isTarget() ||
-			groupEntry->getTarget()->getPlayerId() >= TargetID::MIN_TARGET_TRANSIENT_ID)
-		{
-			S3D::dialogExit("TargetMovementEntryBoids",
-				"Movement can be assigned to level targets only (no tanks)");
-		}
-
-		// Set this target as moving
-		groupEntry->getTarget()->getTargetState().setMovement(true);
-
-		// Add to world
-		Boid2 *boid = new Boid2(context, groupEntry->getTarget(), this);
-		boidsMap_[playerId] = boid;
+		makeBoid(context, groupEntry);
 	}
 }
 
-void TargetMovementEntryBoids::simulate(fixed frameTime)
+Boid2 *TargetMovementEntryBoids::makeBoid(ScorchedContext &context, TargetGroup *groupEntry)
 {
+	if (!groupEntry->getTarget()->isTarget() ||
+		groupEntry->getTarget()->getPlayerId() >= TargetID::MIN_TARGET_TRANSIENT_ID)
+	{
+		S3D::dialogExit("TargetMovementEntryBoids",
+			"Movement can be assigned to level targets only (no tanks)");
+	}
+	if (groupEntry->getTarget()->getTargetState().getMovement())
+	{
+		S3D::dialogExit("TargetMovementEntryBoids",
+			"Only one movement can be assigned to each target");
+	}
+
+	// Set this target as moving
+	Boid2 *boid = new Boid2(context, groupEntry->getTarget(), this);
+	groupEntry->getTarget()->getTargetState().setMovement(boid);
+	return boid;
+}
+
+void TargetMovementEntryBoids::simulate(ScorchedContext &context, fixed frameTime)
+{
+	movementNumber_++;
+	std::vector<Boid2*> boidSet;
+
 	// For each target set position and rotation based on its offset
 	std::map<unsigned int, TargetGroup *> &objects = groupEntry_->getObjects();
 	std::map<unsigned int, TargetGroup *>::iterator itor;
@@ -117,29 +117,44 @@ void TargetMovementEntryBoids::simulate(fixed frameTime)
 	{
 		unsigned int playerId = (*itor).first;
 		TargetGroup *groupEntry = (*itor).second;
-		
-		// Find the boid for this target
-		std::map<unsigned int, Boid2 *>::iterator findItor = boidsMap_.find(playerId);
-		if (findItor != boidsMap_.end())
+
+		Boid2 *boid = (Boid2 *) groupEntry->getTarget()->getTargetState().getMovement();
+		if (!boid) boid = makeBoid(context, groupEntry);
+
+		boidSet.push_back(boid);
+		if (boidSet.size() == 5)
 		{
-			// Update boid and target
-			Boid2 *boid = (*findItor).second;
-			boid->update(frameTime);
+			processSet(frameTime, boidSet);
+			boidSet.clear();
 		}
+	}
+
+	processSet(frameTime, boidSet);
+}
+
+void TargetMovementEntryBoids::processSet(fixed frameTime, std::vector<Boid2*> &boidSet)
+{
+	if (boidSet.empty()) return;
+
+	std::vector<Boid2*>::iterator itor;
+	for (itor = boidSet.begin();
+		itor != boidSet.end();
+		itor++)
+	{
+		Boid2 *boid = (*itor);
+		boid->update(frameTime, boidSet, (movementNumber_ % 10) == 0);
 	}
 }
 
 bool TargetMovementEntryBoids::writeMessage(NetBuffer &buffer)
 {
-	// No serialization needed as the boid movement code 
-	// contains no random factors!
+	buffer.addToBuffer(movementNumber_);
 	return true;
 }
 
 bool TargetMovementEntryBoids::readMessage(NetBufferReader &reader)
 {
-	// No serialization needed as the boid movement code 
-	// contains no random factors!
+	if (!reader.getFromBuffer(movementNumber_)) return false;
 	return true;
 }
 

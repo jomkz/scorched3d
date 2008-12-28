@@ -25,6 +25,7 @@
 #include <tank/TankScore.h>
 #include <common/Defines.h>
 #include <common/ChannelManager.h>
+#include <lang/LangResource.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponGiveMoney);
 
@@ -50,7 +51,7 @@ bool WeaponGiveMoney::parseXML(AccessoryCreateContext &context, XMLNode *accesso
 void WeaponGiveMoney::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	context.actionController->addAction(
+	context.getActionController().addAction(
 		new CallbackWeapon("WeaponGiveMoney", this, 0, 0, 
 			weaponContext, position, velocity));
 }
@@ -60,28 +61,29 @@ void WeaponGiveMoney::weaponCallback(
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 	unsigned int userData)
 {
-	Tank *tank = context.tankContainer->getTankById(weaponContext.getPlayerId());
+	Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
 	if (!tank) return;
 
 	tank->getScore().setMoney(tank->getScore().getMoney() + money_);
 
-	if (!context.serverMode)
 	{
 		if (money_ > 0)
 		{
 			ChannelText text("combat", 
-				S3D::formatStringBuffer("[p:%s] received $%i", 
-				tank->getName(), money_));
-			//info.setPlayerId(weaponContext.getPlayerId());
-			ChannelManager::showText(text);
+				LANG_RESOURCE_2("TANK_GET_MONEY",
+				"[p:{0}] received ${1}", 
+				tank->getTargetName(), 
+				S3D::formatStringBuffer("%i", money_)));
+			ChannelManager::showText(context, text);
 		}
 		else
 		{
 			ChannelText text("combat", 
-				S3D::formatStringBuffer("[p:%s] lost $%i", 
-				tank->getName(), -money_));
-			//info.setPlayerId(weaponContext.getPlayerId());
-			ChannelManager::showText(text);
+				LANG_RESOURCE_2("TANK_LOST_MONEY",
+				"[p:{0}] lost ${1}", 
+				tank->getTargetName(), 
+				S3D::formatStringBuffer("%i", -money_)));
+			ChannelManager::showText(context, text);
 		}
 	}
 }

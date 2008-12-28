@@ -161,7 +161,7 @@ void MissileActionRenderer::draw(Action *action)
 	if (shot->getWeapon()->getShowShotPath())
 	{
 		Tank *current = 
-			action->getScorchedContext()->tankContainer->
+			action->getScorchedContext()->getTankContainer().
 			getTankById(shot->getPlayerId());
 		if (current)
 		{
@@ -181,7 +181,7 @@ void MissileActionRenderer::draw(Action *action)
 	if (!mesh_)
 	{
 		Tank *currentPlayer = action->
-			getScorchedContext()->tankContainer->getTankById(
+			getScorchedContext()->getTankContainer().getTankById(
 			shot->getPlayerId());
 		mesh_ = Accessory::getWeaponMesh(
 			shot->getWeapon()->getModelID(), currentPlayer);

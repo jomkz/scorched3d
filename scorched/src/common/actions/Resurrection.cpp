@@ -27,6 +27,10 @@
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <target/TargetLife.h>
+#include <lang/LangResource.h>
+#ifndef S3D_SERVER
+	#include <land/VisibilityPatchGrid.h>
+#endif
 
 Resurrection::Resurrection(
 	unsigned int playerId,
@@ -50,24 +54,24 @@ void Resurrection::simulate(fixed frameTime, bool &remove)
 {
 	remove = true;
 
-	Tank *tank = context_->tankContainer->getTankById(playerId_);
+	Tank *tank = context_->getTankContainer().getTankById(playerId_);
 	if (tank)
 	{
 #ifndef S3D_SERVER
-		if (!context_->serverMode)
 		{
 			ChannelText text("combat",
-				S3D::formatStringBuffer("[p:%s] was resurrected, %i lives remaining",
-					tank->getName(),
-					tank->getState().getLives()));
-			//info.setPlayerId(playerId_);
-			ChannelManager::showText(text);
+				LANG_RESOURCE_2(
+					"TANK_RESURRECTED", 
+					"[p:{0}] was resurrected, {1} lives remaining",
+					tank->getTargetName(),
+					S3D::formatStringBuffer("%i", tank->getState().getLives())));
+			ChannelManager::showText(*context_, text);
 		}
 #endif
 
-		if (context_->optionsGame->getActionSyncCheck())
+		if (context_->getOptionsGame().getActionSyncCheck())
 		{
-			context_->actionController->addSyncCheck(
+			context_->getActionController().addSyncCheck(
 				S3D::formatStringBuffer("TankRez: %u %i, %i, %i", 
 					tank->getPlayerId(),
 					position_[0].getInternal(),
@@ -79,6 +83,12 @@ void Resurrection::simulate(fixed frameTime, bool &remove)
 		tank->rezTank();
 		tank->getLife().setTargetPosition(position_);
 		DeformLandscape::flattenArea(*context_, position_);
+#ifndef S3D_SERVER
+		if (!context_->getServerMode())
+		{
+			VisibilityPatchGrid::instance()->recalculateErrors(position_, 2);
+		}
+#endif
 	}
 
 	Action::simulate(frameTime, remove);

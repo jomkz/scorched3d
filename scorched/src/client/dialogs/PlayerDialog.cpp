@@ -53,7 +53,7 @@ PlayerDialog *PlayerDialog::instance()
 }
 
 PlayerDialog::PlayerDialog() : 
-	GLWWindow("Team", 10.0f, 10.0f, 465.0f, 340.0f, eSmallTitle,
+	GLWWindow("Team", 10.0f, 10.0f, 740.0f, 480.0f, eSmallTitle,
 		"Allows the player to make changes to their\n"
 		"name, their tank and to change teams."),
 	allocatedTeam_(0), cancelId_(0), viewer_(0)
@@ -61,15 +61,15 @@ PlayerDialog::PlayerDialog() :
 	needCentered_ = true;
 
 	// Add buttons
-	okId_ = addWidget(new GLWTextButton("Ok", 395, 10, 55, this, 
+	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("OK", "Ok"), 675, 10, 55, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX))->getId();
 	if (ClientParams::instance()->getConnectedToServer())
 	{
-		cancelId_ = addWidget(new GLWTextButton("Cancel", 300, 10, 85, this, 
+		cancelId_ = addWidget(new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 580, 10, 85, this, 
 			GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX))->getId();
 	}
 
-	GLWPanel *infoPanel = new GLWPanel(10.0f, 260.0f, 445.0f, 70.0f,
+	GLWPanel *infoPanel = new GLWPanel(10.0f, 390.0f, 720.0f, 75.0f,
 		false, true, true);
 	addWidget(infoPanel);
 
@@ -78,14 +78,20 @@ PlayerDialog::PlayerDialog() :
 	colorTexture_.create(map);
 
 	// Create players avatar choice
-	avatarTip1_.setText(ToolTip::ToolTipHelp, "Avatar", 
+	GLWLabel *avatarLabel = (GLWLabel *) 
+		infoPanel->addWidget(new GLWLabel(10, 25, LANG_RESOURCE("AVATAR_LABEL", "Avatar:")));
+	avatarTip1_.setText(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("AVATAR", "Avatar"), 
+		LANG_RESOURCE("AVATAR_TOOLTIP_CHANGE",
 		"The current player's avatar.\n"
-		"Click to change.\n");
-	avatarTip2_.setText(ToolTip::ToolTipHelp, "Avatar", 
+		"Click to change.\n"));
+	avatarTip2_.setText(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("AVATAR", "Avatar"), 
+		LANG_RESOURCE("AVATAR_TOOLTIP_NO_CHANGE",
 		"The current player's avatar.\n"
 		"CANNOT be changed while playing,\n"
-		"you must quit to change.");
-	imageList_ = new GLWImageList(10.0f, 20.0f);
+		"you must quit to change."));
+	imageList_ = new GLWImageList(95.0f, 20.0f);
 	imageList_->addDirectory(S3D::getSettingsFile("avatars"));
 	imageList_->addDirectory(S3D::getDataFile("data/avatars"));
 	imageList_->setCurrentShortPath("player.png");
@@ -94,60 +100,69 @@ PlayerDialog::PlayerDialog() :
 	infoPanel->addWidget(imageList_);
 
 	// Create player name choice
-	ToolTip *nameTip = new ToolTip(ToolTip::ToolTipHelp, "Player Name",
+	ToolTip *nameTip = new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("PLAYER_NAME", "Player Name"),
+		LANG_RESOURCE("PLAYER_NAME_TOOLTIP",
 		"The name of this player.\n"
 		"Use the backspace or delete key to remove this name.\n"
-		"Type in a new player name via the keyboad to change.");
+		"Type in a new player name via the keyboad to change."));
 	GLWLabel *nameLabel = (GLWLabel *) 
-		infoPanel->addWidget(new GLWLabel(50, 40, "Name:"));
+		infoPanel->addWidget(new GLWLabel(145, 40, LANG_RESOURCE("NAME_LABEL", "Name:")));
 	nameLabel->setToolTip(nameTip);
 	playerName_ = (GLWTextBox *) 
-		infoPanel->addWidget(new GLWTextBox(120, 40, 320, "Player"));
+		infoPanel->addWidget(new GLWTextBox(215, 40, 495, LANG_RESOURCE("PLAYER", "Player")));
 	playerName_->setMaxTextLen(22);
 	playerName_->setToolTip(nameTip);
 	playerName_->setName("Name");
+	playerName_->setAllowUnicode(
+		ScorchedClient::instance()->getOptionsGame().getAllowMultiLingualNames());
 	
 	// Create team choice
-	ToolTip *teamTip = new ToolTip(ToolTip::ToolTipHelp, "Team Selection",
-		"Change the team this player will join.\n"
-		"This is only available when playing team games.");
+	ToolTip *teamTip = new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("TEAM_SELECTION", "Team Selection"),
+		LANG_RESOURCE("TEAM_SELECTION_TOOLTIP", "Change the team this player will join.\n"
+		"This is only available when playing team games."));
 	teamLabel_ = (GLWLabel *) 
-		infoPanel->addWidget(new GLWLabel(250, 5, "Team:"));
+		infoPanel->addWidget(new GLWLabel(145, 8, LANG_RESOURCE("TEAM_LABEL", "Team:")));
 	teamLabel_->setToolTip(teamTip);
 	teamDropDown_ = (GLWDropDownText *) 
-		infoPanel->addWidget(new GLWDropDownText(320, 5, 120));
+		infoPanel->addWidget(new GLWDropDownText(215, 8, 120));
 	teamDropDown_->setHandler(this);
 	teamDropDown_->setToolTip(teamTip);
 	teamDropDown_->setName("Team");
 
 	// Create color choice
-	ToolTip *colorTip = new ToolTip(ToolTip::ToolTipHelp, "Color Selection",
-		"Change the color this player displayed as.\n"
-		"This is only available when playing non-team games.");
+	ToolTip *colorTip = new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("COLOR_SELECTION", "Color Selection"),
+		LANG_RESOURCE("COLOR_SELECTION_TOOLTIP", "Change the color this player displayed as.\n"
+		"This is only available when playing non-team games."));
 	colorLabel_ = (GLWLabel *) 
-		infoPanel->addWidget(new GLWLabel(250, 5, "Color:"));
+		infoPanel->addWidget(new GLWLabel(145, 8, LANG_RESOURCE("COLOR_LABEL", "Color:")));
 	colorLabel_->setToolTip(colorTip);
 	colorDropDown_ = (GLWDropDownColor *) 
-		infoPanel->addWidget(new GLWDropDownColor(320, 5, 120));
+		infoPanel->addWidget(new GLWDropDownColor(215, 8, 120));
 	colorDropDown_->setHandler(this);
 	colorDropDown_->setToolTip(colorTip);
 	colorDropDown_->setName("Color");
 
 	// Create computer type choice
-	ToolTip *typeTip = new ToolTip(ToolTip::ToolTipHelp, "Player Type",
-		"Change between human and computer controlled\n"
+	ToolTip *typeTip = new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("PLAYER_TYPE", "Player Type"),
+		LANG_RESOURCE("PLAYER_TYPE_TOOLTIP", "Change between human and computer controlled\n"
 		"players.  This is only available when playing\n"
-		"single player games.");
+		"single player games."));
 	GLWLabel *typeLabel = (GLWLabel *) 
-		infoPanel->addWidget(new GLWLabel(50, 5, "Type:"));
+		infoPanel->addWidget(new GLWLabel(520, 8, LANG_RESOURCE("TYPE_LABEL", "Type:")));
 	typeLabel->setToolTip(typeTip);
 	typeDropDown_ = (GLWDropDownText *) 
-		infoPanel->addWidget(new GLWDropDownText(120, 5, 120));
+		infoPanel->addWidget(new GLWDropDownText(590, 8, 120));
 	typeDropDown_->setHandler(this);
 	typeDropDown_->setToolTip(typeTip);
 	typeDropDown_->setName("Type");
 
-	humanToolTip_.setText(ToolTip::ToolTipHelp, "Human", "A human controlled player.");
+	humanToolTip_.setText(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("HUMAN", "Human"), 
+		LANG_RESOURCE("HUMAN_TOOLTIP", "A human controlled player."));
 }
 
 PlayerDialog::~PlayerDialog()
@@ -177,7 +192,7 @@ void PlayerDialog::select(unsigned int id, const int pos,
 {
 	if (id == typeDropDown_->getId())
 	{
-		if (0 == strcmp("Human", value.getText()))
+		if (value.getDataText() == "Human")
 		{
 			imageList_->setCurrentShortPath("player.png");
 		}
@@ -206,7 +221,7 @@ void PlayerDialog::display()
 
 	if (!viewer_)
 	{
-		GLWPanel *infoPanel = new GLWPanel(10.0f, 40.0f, 445.0f, 210.0f,
+		GLWPanel *infoPanel = new GLWPanel(10.0f, 40.0f, 720.0f, 330.0f,
 			false, true, true);
 		viewer_ = new GLWTankViewer(5.0f, 5.0f, 4, 3);
 		viewer_->setName("Tank");
@@ -226,7 +241,7 @@ void PlayerDialog::display()
 	teamDropDown_->clear();
 	if (ScorchedClient::instance()->getOptionsGame().getTeams() == 1)
 	{
-		teamDropDown_->addText("None");
+		teamDropDown_->addText(LANG_RESOURCE("NONE", "None"), "None");
 		teamDropDown_->setVisible(false);
 		teamLabel_->setVisible(false);
 	}
@@ -235,7 +250,7 @@ void PlayerDialog::display()
 		for (int i=1; i<=ScorchedClient::instance()->getOptionsGame().getTeams(); i++)
 		{
 			const char *name = TankColorGenerator::getTeamName(i);
-			GLWSelectorEntry entry(name, 0, false, &colorTexture_, 0);
+			GLWSelectorEntry entry(LANG_RESOURCE(name, name), 0, false, &colorTexture_, 0);
 			entry.getColor() = TankColorGenerator::getTeamColor(i);
 			teamDropDown_->addEntry(entry);
 		}	
@@ -245,7 +260,8 @@ void PlayerDialog::display()
 
 	// Add player types
 	typeDropDown_->clear();
-	typeDropDown_->addEntry(GLWSelectorEntry("Human", &humanToolTip_));
+	typeDropDown_->addEntry(GLWSelectorEntry(LANG_RESOURCE("HUMAN", "Human"), 
+		&humanToolTip_, false, 0, 0, "Human"));
 	if (!ClientParams::instance()->getConnectedToServer() &&
 		!ScorchedClient::instance()->getOptionsGame().getTutorial()[0])
 	{
@@ -258,8 +274,8 @@ void PlayerDialog::display()
 			if (ai->availableForPlayers())
 			{
 				typeDropDown_->addEntry(
-					GLWSelectorEntry(ai->getName(),
-						(*aiitor)->getToolTip()));
+					GLWSelectorEntry(LANG_RESOURCE(ai->getName(), ai->getName()),
+						(*aiitor)->getToolTip(), false, 0, 0, ai->getName()));
 			}
 		}
 	}
@@ -283,7 +299,7 @@ void PlayerDialog::nextPlayer()
 	{
 		// If we are connected online then use the online name
 		playerName_->setText(
-			OptionsDisplay::instance()->getOnlineUserName());
+			LANG_STRING(OptionsDisplay::instance()->getOnlineUserName()));
 		viewer_->selectModelByName(
 			OptionsDisplay::instance()->getOnlineTankModel());
 		if (!imageList_->setCurrentShortPath(
@@ -295,7 +311,7 @@ void PlayerDialog::nextPlayer()
 	else
 	{
 		// Else use the default names
-		if (tank) playerName_->setText(tank->getName());
+		if (tank) playerName_->setText(tank->getTargetName());
 	}
 		
 	if (tank->getState().getSpectator())
@@ -403,11 +419,11 @@ void PlayerDialog::buttonDown(unsigned int id)
 					getCurrentTeam(), false);
 
 			// Get the player type
-			const char *playerType = typeDropDown_->getCurrentText();
+			const char *playerType = typeDropDown_->getCurrentDataText();
 
 			// Add this player
 			ComsAddPlayerMessage message(currentPlayerId_,
-				playerName_->getText().c_str(),
+				playerName_->getLangString(),
 				colorDropDown_->getCurrentColor(),
 				model->getName(),
 				model->getTypeName(),

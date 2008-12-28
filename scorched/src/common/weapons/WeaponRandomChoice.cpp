@@ -55,7 +55,7 @@ bool WeaponRandomChoice::parseXML(AccessoryCreateContext &context, XMLNode *acce
 		// Get the weapon
 		XMLNode *weaponNode = 0;
 		if (!subNode->getNamedChild("weapon", weaponNode)) return false;
-		AccessoryPart *accessory = context.getAccessoryStore()->
+		AccessoryPart *accessory = context.getAccessoryStore().
 			createAccessoryPart(context, parent_, weaponNode);
 		if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
 		{
@@ -84,7 +84,7 @@ bool WeaponRandomChoice::parseXML(AccessoryCreateContext &context, XMLNode *acce
 void WeaponRandomChoice::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	RandomGenerator &random = context.actionController->getRandom();
+	RandomGenerator &random = context.getActionController().getRandom();
 	unsigned int randWeight = random.getRandUInt() % totalWeight_;
 	unsigned int currentWeight = 0;
 

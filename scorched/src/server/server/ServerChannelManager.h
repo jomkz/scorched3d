@@ -81,9 +81,9 @@ protected:
 
 		unsigned int getDestinationId() { return destinationId_; }
 
-		bool hasChannel(const char *channel);
-		void addChannel(const char *channel, unsigned int localId, bool current);
-		void removeChannel(const char *channel, unsigned int localId);
+		bool hasChannel(const std::string &channel);
+		void addChannel(const std::string &channel, unsigned int localId, bool current);
+		void removeChannel(const std::string &channel, unsigned int localId);
 
 		bool hasLocalId(unsigned int localId);
 		void addLocalId(unsigned int localId);
@@ -95,7 +95,7 @@ protected:
 		time_t getMuteTime() { return muteTime_; }
 		void setMuteTime(time_t t) { muteTime_ = t; }
 
-		void getLocalIds(const char *channel, std::list<unsigned int> &ids);
+		void getLocalIds(const std::string &channel, std::list<unsigned int> &ids);
 		std::map<unsigned int, DestinationLocalEntry> &getLocalEntries() { return localEntries_; }
 
 	protected:
@@ -132,7 +132,7 @@ protected:
 	std::list<ChannelEntry *> channelEntries_;
 	std::list<MessageEntry> lastMessages_;
 
-	ChannelEntry *getChannelEntryByName(const char *name);
+	ChannelEntry *getChannelEntryByName(const std::string &name);
 	DestinationEntry *getDestinationEntryById(unsigned int destinationId);
 
 	void registerClient(unsigned int destinationId, unsigned int localId,

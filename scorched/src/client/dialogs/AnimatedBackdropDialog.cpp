@@ -71,7 +71,8 @@ void AnimatedBackdropDialog::init()
 
 	if (!ScorchedClient::instance()->getLandscapes().readLandscapeDefinitions())
 	{
-		return;
+		S3D::dialogExit("Landscape Definitions",
+			"Failed to parse landscape definitions");
 	}
 
 	LandscapeDefinition definition = ScorchedClient::instance()->getLandscapes().getLandscapeDefn(
@@ -83,11 +84,9 @@ void AnimatedBackdropDialog::init()
 			definition.getName());
 
 	// Generate new landscape
-	std::list<FixedVector> tankPositions;
 	ScorchedClient::instance()->getLandscapeMaps().generateMaps(
 		ScorchedClient::instance()->getContext(),
 		definition,
-		tankPositions,
 		&progressCounter);
 
 	// Calculate all the new landscape settings (graphics)

@@ -24,6 +24,7 @@
 #include <weapons/AccessoryStore.h>
 #include <common/Defines.h>
 #include <common/OptionsScorched.h>
+#include <lang/LangResource.h>
 #include <stdlib.h>
 
 unsigned int Accessory::nextAccessoryId_ = 0;
@@ -38,12 +39,14 @@ unsigned int Accessory::nextAccessoryId_ = 0;
 
 Accessory::Accessory() :
 	accessoryId_(++nextAccessoryId_),
-	name_("NONAME"), description_("NODESC"), toolTip_(ToolTip::ToolTipHelp, "", ""),
+	name_("NONAME"), description_("NODESC"), 
+	toolTip_(ToolTip::ToolTipHelp, LangString(), LangString()),
 	price_(0), bundle_(1), armsLevel_(9), freemarketLimits_(150),
 	modelScale_(1),
 	positionSelect_(ePositionSelectNone), positionSelectLimit_(10),
 	maximumNumber_(0),
 	startingNumber_(0),
+	useNumber_(1),
 	muzzleFlash_(true),
 	aiOnly_(false),
 	botOnly_(false)
@@ -72,7 +75,7 @@ bool Accessory::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode
 
 	// Get the accessory description
 	accessoryNode->getNamedChild("description", description_, false);
-	toolTip_.setText(ToolTip::ToolTipHelp, getName(), getDescription());
+	toolTip_.setText(ToolTip::ToolTipHelp, LANG_STRING(getName()), LANG_STRING(getDescription()));
 
 	// Get the accessory icon
 	if (accessoryNode->getNamedChild("icon", iconName_, false))
@@ -102,6 +105,9 @@ bool Accessory::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode
 	// Get the starting number
 	accessoryNode->getNamedChild("startingnumber", startingNumber_, false);
 
+	// Get the number to use of firing
+	accessoryNode->getNamedChild("usenumber", useNumber_, false);
+
 	// Freemarket limits
 	accessoryNode->getNamedChild("freemarketlimits", freemarketLimits_, false);
 
@@ -121,7 +127,7 @@ bool Accessory::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode
 	// Get action
 	XMLNode *subNode = 0;
 	if (!accessoryNode->getNamedChild("accessoryaction", subNode)) return false;
-	accessoryAction_ = context.getAccessoryStore()->createAccessoryPart(context, this, subNode);
+	accessoryAction_ = context.getAccessoryStore().createAccessoryPart(context, this, subNode);
 	if (!accessoryAction_)
 	{
 		S3D::dialogMessage("Accessory", S3D::formatStringBuffer(
@@ -152,7 +158,7 @@ bool Accessory::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode
 			positionSelect_ = ePositionSelectFuel;
 
 			// Make sure there is a "WeaponMoveTank" under here somewhere
-			if (!context.getAccessoryStore()->findAccessoryPartByAccessoryId(
+			if (!context.getAccessoryStore().findAccessoryPartByAccessoryId(
 				getAccessoryId(), "WeaponMoveTank"))
 			{
 				return accessoryNode->returnError(
@@ -217,6 +223,15 @@ bool Accessory::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode
 	}
 
 	return true;
+}
+
+LangString &Accessory::getStringName()
+{
+	if (stringName_.size() == 0)
+	{
+		stringName_ = LANG_RESOURCE(getName(), getName());
+	}
+	return stringName_;
 }
 
 const char *Accessory::getActivationSound()

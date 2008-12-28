@@ -39,15 +39,21 @@
 #include <image/ImageFactory.h>
 #include <memory.h>
 
-MovementMap::MovementMap(int width, int height,
+MovementMap::MovementMap(
 	Tank *tank, 
 	ScorchedContext &context) :
-	width_(width), height_(height),
 	tank_(tank), context_(context)
 {
+	arenaX_ = context_.getLandscapeMaps().getGroundMaps().getArenaX();
+	arenaY_ = context_.getLandscapeMaps().getGroundMaps().getArenaY();
+	arenaWidth_ = context_.getLandscapeMaps().getGroundMaps().getArenaWidth();
+	arenaHeight_ = context_.getLandscapeMaps().getGroundMaps().getArenaHeight();
+	landscapeWidth_ = context_.getLandscapeMaps().getGroundMaps().getLandscapeWidth();
+	landscapeHeight_ = context_.getLandscapeMaps().getGroundMaps().getLandscapeHeight();
+
 	// Create the empty movement map
-	entries_ = new MovementMapEntry[(width + 1) * (height + 1)];
-	memset(entries_, (int) eNotInitialized, sizeof(MovementMapEntry) * (width + 1) * (height + 1));
+	entries_ = new MovementMapEntry[(landscapeWidth_ + 1) * (landscapeHeight_ + 1)];
+	memset(entries_, (int) eNotInitialized, sizeof(MovementMapEntry) * (landscapeWidth_ + 1) * (landscapeHeight_ + 1));
 
 	// Get the minimum height we are allowed to move to
 	minHeight_ = getWaterHeight();
@@ -56,7 +62,7 @@ MovementMap::MovementMap(int width, int height,
 	// to see if we are in their shields
 	std::map<unsigned int, Target *>::iterator targetItor;
 	std::map<unsigned int, Target *> &targets = 
-		context.targetContainer->getTargets();
+		context.getTargetContainer().getTargets();
 	for (targetItor = targets.begin(); 
 		targetItor != targets.end();
 		targetItor++)
@@ -82,9 +88,9 @@ unsigned int MovementMap::POINT_TO_UINT(unsigned int x, unsigned int y)
 
 MovementMap::MovementMapEntry &MovementMap::getEntry(int w, int h)
 { 
-	if (w >= 0 && h >= 0 && w<=width_ && h<=height_)
+	if (w>=arenaX_ && h>=arenaY_ && w<=arenaX_ + arenaWidth_ && h<=arenaY_ + arenaHeight_)
 	{
-		MovementMapEntry &entry = entries_[(width_+1) * h + w];
+		MovementMapEntry &entry = entries_[(landscapeWidth_+1) * h + w];
 		return entry;
 	}
 	static MovementMapEntry entry(eNoMovement, fixed(1000), 0, 0);
@@ -101,7 +107,7 @@ MovementMap::MovementMapEntry &MovementMap::getAndCheckEntry(int w, int h)
 	if (entry.type == eNotInitialized)
 	{
 		fixed height = 
-			context_.landscapeMaps->getGroundMaps().getHeight(w, h);
+			context_.getLandscapeMaps().getGroundMaps().getHeight(w, h);
 		FixedVector position(w, h, height);
 		entry.type = eNotSeen;
 
@@ -137,9 +143,10 @@ void MovementMap::addPoint(unsigned int x, unsigned int y,
 					 unsigned int epoc)
 {
 	// Check that we are not going outside the arena
-	if (x < 5 || y < 5 ||
-		x > (unsigned int) (width_ - 5) ||
-		y > (unsigned int) (height_ - 5)) return;
+	if (x < (unsigned int) (arenaX_ + 5) || 
+		y < (unsigned int) (arenaY_ + 5) ||
+		x > (unsigned int) (arenaX_ + arenaWidth_ - 5) ||
+		y > (unsigned int) (arenaY_ + arenaHeight_ - 5)) return;
 
 	// Check if we can already reach this point
 	// Through a shorted already visited path
@@ -158,7 +165,7 @@ void MovementMap::addPoint(unsigned int x, unsigned int y,
 
 	// Find how much the tank has to climb to reach this new point
 	// check that this is acceptable
-	fixed newHeight = context_.landscapeMaps->getGroundMaps().getHeight(
+	fixed newHeight = context_.getLandscapeMaps().getGroundMaps().getHeight(
 		x, y);
 
 	// Check water height 
@@ -168,7 +175,7 @@ void MovementMap::addPoint(unsigned int x, unsigned int y,
 	}
 
 	// Check climing height
-	fixed MaxTankClimbHeight = fixed(context_.optionsGame->
+	fixed MaxTankClimbHeight = fixed(context_.getOptionsGame().
 		getMaxClimbingDistance()) / fixed(10);
 	if (newHeight - height > MaxTankClimbHeight) 
 	{
@@ -226,7 +233,7 @@ bool MovementMap::movementProof(ScorchedContext &context, Target *target, Tank *
 		{
 			movementProof = false;
 		}
-		else if (context.optionsGame->getTeams() > 1 &&
+		else if (context.getOptionsGame().getTeams() > 1 &&
 			!target->isTarget())
 		{
 			Tank *targetTank = (Tank *) target;
@@ -276,7 +283,7 @@ bool MovementMap::allowedPosition(ScorchedContext &context, Tank *tank, FixedVec
 {
 	std::map<unsigned int, Target *>::iterator targetItor;
 	std::map<unsigned int, Target *> targets;
-	context.targetSpace->getCollisionSet(position, fixed(1), targets);
+	context.getTargetSpace().getCollisionSet(position, fixed(1), targets);
 	for (targetItor = targets.begin(); 
 		targetItor != targets.end();
 		targetItor++)
@@ -296,12 +303,12 @@ fixed MovementMap::getWaterHeight()
 {
 	// Calculate the water height
 	fixed waterHeight = (-10);
-	if (context_.optionsGame->getMovementRestriction() ==
+	if (context_.getOptionsGame().getMovementRestriction() ==
 		OptionsGame::MovementRestrictionLand ||
-		context_.optionsGame->getMovementRestriction() ==
+		context_.getOptionsGame().getMovementRestriction() ==
 		OptionsGame::MovementRestrictionLandOrAbove)
 	{
-		LandscapeTex &tex = *context_.landscapeMaps->getDefinitions().getTex();
+		LandscapeTex &tex = *context_.getLandscapeMaps().getDefinitions().getTex();
 		if (tex.border->getType() == LandscapeTexType::eWater)
 		{
 			LandscapeTexBorderWater *water = 
@@ -311,7 +318,7 @@ fixed MovementMap::getWaterHeight()
 		}
 	}
 
-	if (context_.optionsGame->getMovementRestriction() ==
+	if (context_.getOptionsGame().getMovementRestriction() ==
 		OptionsGame::MovementRestrictionLandOrAbove)
 	{
 		if (waterHeight > tank_->getPosition().getTankPosition()[2] - fixed(true, 1000))
@@ -339,12 +346,12 @@ fixed MovementMap::getFuel(WeaponMoveTank *weapon)
 
 bool MovementMap::tankBurried()
 {
-	fixed landscapeHeight = context_.landscapeMaps->getGroundMaps().getInterpHeight(
+	fixed landscapeHeight = context_.getLandscapeMaps().getGroundMaps().getInterpHeight(
 		tank_->getPosition().getTankPosition()[0],
 		tank_->getPosition().getTankPosition()[1]);
 	fixed tankHeight = 
 		tank_->getPosition().getTankPosition()[2];
-	fixed MaxTankClimbHeight = fixed(context_.optionsGame->
+	fixed MaxTankClimbHeight = fixed(context_.getOptionsGame().
 		getMaxClimbingDistance()) / fixed(10);
 	if (landscapeHeight > tankHeight + MaxTankClimbHeight)
 	{
@@ -376,9 +383,10 @@ void MovementMap::addPoint(unsigned int x, unsigned int y,
 	 FixedVector &position)
 {
 	// Check that we are not going outside the arena
-	if (x < 5 || y < 5 ||
-		x > (unsigned int) (width_ - 5) ||
-		y > (unsigned int) (height_ - 5)) return;
+	if (x < (unsigned int) (arenaX_ + 5) || 
+		y < (unsigned int) (arenaY_ + 5) ||
+		x > (unsigned int) (arenaX_ + arenaWidth_ - 5) ||
+		y > (unsigned int) (arenaY_ + arenaHeight_ - 5)) return;
 
 	// Check if we can already reach this point
 	// through a shorter already visited path
@@ -389,13 +397,13 @@ void MovementMap::addPoint(unsigned int x, unsigned int y,
 
 	// Find how much the tank has to climb to reach this new point
 	// check that this is acceptable
-	fixed newHeight = context_.landscapeMaps->getGroundMaps().getHeight(x, y);
+	fixed newHeight = context_.getLandscapeMaps().getGroundMaps().getHeight(x, y);
 
 	// Check water height 
 	if (newHeight < minHeight_) return; 
 
 	// Check climing height
-	fixed MaxTankClimbHeight = fixed(context_.optionsGame->
+	fixed MaxTankClimbHeight = fixed(context_.getOptionsGame().
 		getMaxClimbingDistance()) / fixed(10);
 	if (newHeight - height > MaxTankClimbHeight) return;
 
@@ -469,7 +477,7 @@ bool MovementMap::calculatePosition(FixedVector &position, fixed fuel)
 		if (dist <= fuel)
 		{
 			fixed height = 
-				context_.landscapeMaps->getGroundMaps().getHeight(x, y);
+				context_.getLandscapeMaps().getGroundMaps().getHeight(x, y);
 
 			addPoint(x+1, y, height, dist + 1, priorityQueue, pt, position);
 			addPoint(x, y+1, height, dist + 1, priorityQueue, pt, position);
@@ -537,7 +545,7 @@ void MovementMap::calculateAllPositions(fixed fuel)
 			if (dist <= fuel)
 			{
 				fixed height = 
-					context_.landscapeMaps->getGroundMaps().getHeight(x, y);
+					context_.getLandscapeMaps().getGroundMaps().getHeight(x, y);
 
 				addPoint(x+1, y, height, dist + 1, edgeList, pt, epoc);
 				addPoint(x, y+1, height, dist + 1, edgeList, pt, epoc);
@@ -562,10 +570,10 @@ void MovementMap::movementTexture()
 		Landscape::instance()->getMainMap().getWidth(),
 		Landscape::instance()->getMainMap().getHeight());
 
-	float width = (float)
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getMapWidth();
-	float height = (float)
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getMapHeight();
+	float landscapeWidth = (float)
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeWidth();
+	float landscpeHeight = (float)
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeHeight();
 
 	GLubyte *src = Landscape::instance()->getMainMap().getBits();
 	GLubyte *dest = newMap.getBits();
@@ -574,15 +582,15 @@ void MovementMap::movementTexture()
 		int y1 = y + 1;
 		if (y1 == newMap.getHeight()) y1--;
 
-		int posY = int(float(y) / float(newMap.getHeight()) * height);
-		int posY1 = int(float(y1) / float(newMap.getHeight()) * height);
+		int posY = int(float(y) / float(newMap.getHeight()) * landscpeHeight);
+		int posY1 = int(float(y1) / float(newMap.getHeight()) * landscpeHeight);
 		for (int x=0; x<newMap.getWidth(); x++)
 		{
 			int x1 = x + 1;
 			if (x1 == newMap.getWidth()) x1--;
 
-			int posX = int(float(x) / float(newMap.getWidth()) * width);
-			int posX1 = int(float(x1) / float(newMap.getWidth()) * width);
+			int posX = int(float(x) / float(newMap.getWidth()) * landscapeWidth);
+			int posX1 = int(float(x1) / float(newMap.getWidth()) * landscapeWidth);
 
 			MovementMapEntryType type1 = getEntry(posX1, posY).type;
 			MovementMapEntryType type2 = getEntry(posX, posY).type;
@@ -625,10 +633,19 @@ void MovementMap::limitTexture(FixedVector &center, int limit)
 		Landscape::instance()->getMainMap().getWidth(),
 		Landscape::instance()->getMainMap().getHeight());
 
-	float width = (float)
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getMapWidth();
-	float height = (float)
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getMapHeight();
+	float landscapeWidth = (float)
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeWidth();
+	float landscpeHeight = (float)
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeHeight();
+
+	int arenaX = 
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaX();
+	int arenaY = 
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaY();
+	int arenaWidth = 
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaWidth();
+	int arenaHeight = 
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaHeight();
 
 	GLubyte *src = Landscape::instance()->getMainMap().getBits();
 	GLubyte *dest = newMap.getBits();
@@ -637,22 +654,32 @@ void MovementMap::limitTexture(FixedVector &center, int limit)
 		int y1 = y + 1;
 		if (y1 == newMap.getHeight()) y1--;
 
-		int posY = int(float(y) / float(newMap.getHeight()) * height);
-		int posY1 = int(float(y1) / float(newMap.getHeight()) * height);
+		int posY = int(float(y) / float(newMap.getHeight()) * landscpeHeight);
+		int posY1 = int(float(y1) / float(newMap.getHeight()) * landscpeHeight);
 		for (int x=0; x<newMap.getWidth(); x++)
 		{
 			int x1 = x + 1;
 			if (x1 == newMap.getWidth()) x1--;
 
-			int posX = int(float(x) / float(newMap.getWidth()) * width);
-			int posX1 = int(float(x1) / float(newMap.getWidth()) * width);
+			int posX = int(float(x) / float(newMap.getWidth()) * landscapeWidth);
+			int posX1 = int(float(x1) / float(newMap.getWidth()) * landscapeWidth);
 
-			FixedVector position1(posX1, posY, 0);
-			FixedVector position2(posX, posY, 0);
-			FixedVector position3(posX, posY1, 0);
-			bool in1 = (position1 - center).Magnitude() < limit;
-			bool in2 = (position2 - center).Magnitude() < limit;
-			bool in3 = (position3 - center).Magnitude() < limit;
+			bool in1 = false;
+			bool in2 = false;
+			bool in3 = false;
+			if (posX > arenaX &&
+				posY > arenaY &&
+				posX > arenaX + arenaWidth &&
+				posY > arenaY + arenaHeight)
+			{
+				FixedVector position1(posX1, posY, 0);
+				FixedVector position2(posX, posY, 0);
+				FixedVector position3(posX, posY1, 0);
+
+				in1 = (position1 - center).Magnitude() < limit;
+				in2 = (position2 - center).Magnitude() < limit;
+				in3 = (position3 - center).Magnitude() < limit;
+			}
 
 			if (in1 != in2 || in2 != in3)
 			{

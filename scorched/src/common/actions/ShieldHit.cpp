@@ -25,10 +25,10 @@
 #include <weapons/Shield.h>
 #include <target/TargetContainer.h>
 #include <target/TargetShield.h>
+#include <target/TargetRenderer.h>
 #ifndef S3D_SERVER
 	#include <sound/SoundUtils.h>
 	#include <GLEXT/GLLenseFlare.h>
-	#include <tankgraph/TargetRendererImplTank.h>
 #endif
 
 ShieldHit::ShieldHit(unsigned int playerId,
@@ -57,7 +57,7 @@ void ShieldHit::simulate(fixed frameTime, bool &remove)
 		firstTime_ = false;
 
 		Target *target = 
-			context_->targetContainer->getTargetById(playerId_);
+			context_->getTargetContainer().getTargetById(playerId_);
 		if (target)
 		{
 			Accessory *accessory = 
@@ -66,7 +66,7 @@ void ShieldHit::simulate(fixed frameTime, bool &remove)
 			{
 				Shield *shield = (Shield *) accessory->getAction();
 #ifndef S3D_SERVER
-				if (!context_->serverMode) 
+				if (!context_->getServerMode()) 
 				{
 					SoundBuffer *shieldSound = 
 						Sound::instance()->fetchOrCreateBuffer(
@@ -97,7 +97,7 @@ void ShieldHit::simulate(fixed frameTime, bool &remove)
 void ShieldHit::draw()
 {
 #ifndef S3D_SERVER
-	if (!context_->serverMode)
+	if (!context_->getServerMode())
 	{
 		GLLenseFlare::instance()->draw(position_.asVector(), false, 0, 
 			1.0f, 1.0f);

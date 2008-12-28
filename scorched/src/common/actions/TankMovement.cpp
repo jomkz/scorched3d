@@ -37,6 +37,7 @@
 	#include <image/ImageStore.h>
 	#include <GLEXT/GLImageModifier.h>
 	#include <sound/Sound.h>
+	#include <land/VisibilityPatchGrid.h>
 #endif
 #include <tank/TankContainer.h>
 #include <tank/TankModelStore.h>
@@ -67,9 +68,9 @@ TankMovement::TankMovement(WeaponFireContext &weaponContext,
 
 TankMovement::~TankMovement()
 {
-	if (vPoint_) context_->viewPoints->releaseViewPoint(vPoint_);
+	if (vPoint_) context_->getViewPoints().releaseViewPoint(vPoint_);
 #ifndef S3D_SERVER
-	if (!context_->serverMode)
+	if (!context_->getServerMode())
 	{
 		delete moveSoundSource_;
 		moveSoundSource_ = 0;
@@ -79,15 +80,15 @@ TankMovement::~TankMovement()
 
 void TankMovement::init()
 {
-	Tank *tank = context_->tankContainer->getTankById(weaponContext_.getPlayerId());
+	Tank *tank = context_->getTankContainer().getTankById(weaponContext_.getPlayerId());
 	if (!tank) return;	
 
 	startPosition_ = tank->getLife().getTargetPosition();
-	vPoint_ = context_->viewPoints->getNewViewPoint(weaponContext_.getPlayerId());
+	vPoint_ = context_->getViewPoints().getNewViewPoint(weaponContext_.getPlayerId());
 	
 	// Start the tank movement sound
 #ifndef S3D_SERVER
-	if (!context_->serverMode) 
+	if (!context_->getServerMode()) 
 	{
 		SoundBuffer *moveSound = 
 			Sound::instance()->fetchOrCreateBuffer(
@@ -105,8 +106,6 @@ void TankMovement::init()
 	// Upper 32 bits = x positions
 	std::list<unsigned int> positions;
 	MovementMap mmap(
-		context_->landscapeMaps->getDefinitions().getDefn()->landscapewidth,
-		context_->landscapeMaps->getDefinitions().getDefn()->landscapeheight,
 		tank, 
 		*context_);
 	FixedVector pos(positionX_, positionY_, 0);
@@ -209,7 +208,7 @@ void TankMovement::simulate(fixed frameTime, bool &remove)
 void TankMovement::simulationMove(fixed frameTime)
 {
 	Tank *tank = 
-		context_->tankContainer->getTankById(weaponContext_.getPlayerId());
+		context_->getTankContainer().getTankById(weaponContext_.getPlayerId());
 	if (tank)
 	{
 		// Stop moving if the tank is dead
@@ -222,10 +221,10 @@ void TankMovement::simulationMove(fixed frameTime)
 				// Add a smoke trail
 				// Check if we are not on the server
 #ifndef S3D_SERVER
-				if (!context_->serverMode)
+				if (!context_->getServerMode())
 				{
 					// Check if this tank type allows smoke trails
-					TankModel *model = context_->tankModelStore->getModelByName(
+					TankModel *model = context_->getTankModels().getModelByName(
 						tank->getModelContainer().getTankModelName(),
 						tank->getTeam(),
 						tank->isTemp());
@@ -266,7 +265,7 @@ void TankMovement::simulationMove(fixed frameTime)
 	if (moving_ == false)
 	{
 		Tank *current = 
-			context_->tankContainer->getTankById(weaponContext_.getPlayerId());
+			context_->getTankContainer().getTankById(weaponContext_.getPlayerId());
 		if (current)
 		{
 			current->getLife().setRotation(0);
@@ -274,6 +273,12 @@ void TankMovement::simulationMove(fixed frameTime)
 			{
 				// Move the tank to the final position
 				DeformLandscape::flattenArea(*context_, current->getLife().getTargetPosition());
+#ifndef S3D_SERVER
+				if (!context_->getServerMode())
+				{
+					VisibilityPatchGrid::instance()->recalculateErrors(current->getLife().getTargetPosition(), 2);
+				}
+#endif
 			}
 		}
 
@@ -290,12 +295,12 @@ void TankMovement::moveTank(Tank *tank)
 
 	int firstx = expandedPositions_.front().firstX;
 	int firsty = expandedPositions_.front().firstY;
-	fixed firstz = context_->landscapeMaps->getGroundMaps().getHeight(firstx, firsty);
+	fixed firstz = context_->getLandscapeMaps().getGroundMaps().getHeight(firstx, firsty);
 
 	int secondx = expandedPositions_.front().secondX;
 	int secondy = expandedPositions_.front().secondY;
-	fixed secondz = context_->landscapeMaps->getGroundMaps().getHeight(secondx, secondy);
-	fixed z = context_->landscapeMaps->getGroundMaps().getInterpHeight(x, y);
+	fixed secondz = context_->getLandscapeMaps().getGroundMaps().getHeight(secondx, secondy);
+	fixed z = context_->getLandscapeMaps().getGroundMaps().getInterpHeight(x, y);
 	expandedPositions_.pop_front();
 
 	// Form the new tank position
@@ -303,7 +308,7 @@ void TankMovement::moveTank(Tank *tank)
 
 	// Check we are not trying to climb to high (this may be due
 	// to the landscape changing after we started move)
-	if (secondz - firstz > context_->optionsGame->getMaxClimbingDistance())
+	if (secondz - firstz > context_->getOptionsGame().getMaxClimbingDistance())
 	{
 		expandedPositions_.clear();
 		return;
@@ -311,13 +316,13 @@ void TankMovement::moveTank(Tank *tank)
 
 	// Check to see we are not moving into water with a movement restriction
 	// in place
-	if (context_->optionsGame->getMovementRestriction() ==
+	if (context_->getOptionsGame().getMovementRestriction() ==
 		OptionsGame::MovementRestrictionLand ||
-		context_->optionsGame->getMovementRestriction() ==
+		context_->getOptionsGame().getMovementRestriction() ==
 		OptionsGame::MovementRestrictionLandOrAbove)
 	{
 		fixed waterHeight = -10;
-		LandscapeTex &tex = *context_->landscapeMaps->getDefinitions().getTex();
+		LandscapeTex &tex = *context_->getLandscapeMaps().getDefinitions().getTex();
 		if (tex.border->getType() == LandscapeTexType::eWater)
 		{
 			LandscapeTexBorderWater *water = 
@@ -325,7 +330,7 @@ void TankMovement::moveTank(Tank *tank)
 			waterHeight = water->height;
 		}
 
-		if (context_->optionsGame->getMovementRestriction() ==
+		if (context_->getOptionsGame().getMovementRestriction() ==
 			OptionsGame::MovementRestrictionLandOrAbove)
 		{
 			if (waterHeight > startPosition_[2] - fixed(true, 1000))
@@ -353,7 +358,7 @@ void TankMovement::moveTank(Tank *tank)
 	// -1 means use 1 unit of fuel per movement square
 	if (useF && (weapon_->getUseFuel() == -1))
 	{
-		tank->getAccessories().rm(weapon_->getParent());
+		tank->getAccessories().rm(weapon_->getParent(), 1);
 	}
 
 	// Actually move the tank
@@ -362,7 +367,7 @@ void TankMovement::moveTank(Tank *tank)
 
 	// Remove the targets that this tank "drives over"
 	std::map<unsigned int, Target *> collisionTargets;
-	context_->targetSpace->getCollisionSet(
+	context_->getTargetSpace().getCollisionSet(
 		tank->getLife().getTargetPosition(), 3, collisionTargets, false);
 	std::map<unsigned int, Target *>::iterator itor;
 	for (itor = collisionTargets.begin();
@@ -376,14 +381,14 @@ void TankMovement::moveTank(Tank *tank)
 			target->getTargetState().getDriveOverToDestroy())
 		{
 			// Kill the target we've driven over
-			context_->actionController->addAction(
+			context_->getActionController().addAction(
 				new TankDamage(weapon_, target->getPlayerId(), weaponContext_, 
 					target->getLife().getLife(),
 					false, false, false));
 
 			// Do a small explosion where we remove this target
 			Accessory *accessory = 
-				context_->accessoryStore->findByPrimaryAccessoryName("DriveOverDestroy");
+				context_->getAccessoryStore().findByPrimaryAccessoryName("DriveOverDestroy");
 			if (accessory && accessory->getType() == AccessoryPart::AccessoryWeapon)
 			{
 				Weapon *weapon = (Weapon *) accessory->getAction();
@@ -397,12 +402,12 @@ void TankMovement::moveTank(Tank *tank)
 
 	// Add tracks
 #ifndef S3D_SERVER
-	if (!context_->serverMode)
+	if (!context_->getServerMode())
 	{
 		stepCount_++;
 		if (stepCount_ % 5 == 0)
 		{
-			TankModel *model = context_->tankModelStore->getModelByName(
+			TankModel *model = context_->getTankModels().getModelByName(
 				tank->getModelContainer().getTankModelName(),
 				tank->getTeam(),
 				tank->isTemp());

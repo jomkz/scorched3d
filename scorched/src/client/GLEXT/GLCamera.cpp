@@ -279,6 +279,7 @@ bool GLCamera::getDirectionFromPt(GLfloat winX, GLfloat winY, Line &direction)
 }
 
 void GLCamera::scroll(ScrollDir direction, 
+	float minWidth, float minHeight,
 	float maxWidth, float maxHeight)
 {
 	float x = 0.0f, y = 0.0f;
@@ -297,10 +298,11 @@ void GLCamera::scroll(ScrollDir direction,
 		y = 5.0f;
 		break;
 	}
-	scroll(x, y, maxWidth, maxHeight);
+	scroll(x, y, minWidth, minHeight, maxWidth, maxHeight);
 }
 
 void GLCamera::scroll(float x, float y,
+	float minWidth, float minHeight,
 	float maxWidth, float maxHeight)
 {
 	static Vector zvec(0.0f, 0.0f, 1.0f);
@@ -320,10 +322,10 @@ void GLCamera::scroll(float x, float y,
 	lookAt_ = wantedLookAt_;
 	currentPosition_ += left + up;
 
-	if (wantedLookAt_[0] < 0.0f) wantedLookAt_[0] = 0.0f;
+	if (wantedLookAt_[0] < minWidth) wantedLookAt_[0] = minWidth;
 	else if (wantedLookAt_[0] > maxWidth) wantedLookAt_[0] = maxWidth;
 
-	if (wantedLookAt_[1] < 0.0f) wantedLookAt_[1] = 0.0f;
+	if (wantedLookAt_[1] < minHeight) wantedLookAt_[1] = minHeight;
 	else if (wantedLookAt_[1] > maxHeight) wantedLookAt_[1] = maxHeight;
 }
 

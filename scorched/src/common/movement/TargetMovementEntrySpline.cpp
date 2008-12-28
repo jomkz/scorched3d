@@ -66,7 +66,7 @@ void TargetMovementEntrySpline::generate(ScorchedContext &context,
 			itor++)
 		{
 			FixedVector &point = (*itor);
-			point[2] = context.landscapeMaps->getGroundMaps().getInterpHeight(
+			point[2] = context.getLandscapeMaps().getGroundMaps().getInterpHeight(
 				point[0], point[1]);
 		}
 	}
@@ -76,7 +76,7 @@ void TargetMovementEntrySpline::generate(ScorchedContext &context,
 	path_.simulate(splineGroup->starttime);
 
 	// Find the group to move the objects in
-	groupEntry_ = context.landscapeMaps->getGroundMaps().getGroups().
+	groupEntry_ = context.getLandscapeMaps().getGroundMaps().getGroups().
 		getGroup(splineGroup->groupname.c_str());
 	if (!groupEntry_)
 	{
@@ -101,13 +101,18 @@ void TargetMovementEntrySpline::generate(ScorchedContext &context,
 			S3D::dialogExit("TargetMovementEntrySpline",
 				"Movement can be assigned to level targets only (no tanks)");
 		}
+		if (entry->getTarget()->getTargetState().getMovement())
+		{
+			S3D::dialogExit("TargetMovementEntryBoids",
+				"Only one movement can be assigned to each target");
+		}
 
 		// Set this target as moving
-		entry->getTarget()->getTargetState().setMovement(true);
+		entry->getTarget()->getTargetState().setMovement(new TargetStateMovement());
 	}
 }
 
-void TargetMovementEntrySpline::simulate(fixed frameTime)
+void TargetMovementEntrySpline::simulate(ScorchedContext &context, fixed frameTime)
 {
 	// Update the position of all of the targets along the path
 	path_.simulate(frameTime);
@@ -121,7 +126,7 @@ void TargetMovementEntrySpline::simulate(fixed frameTime)
 	// Move the position to the ground if set
 	if (groundOnly_)
 	{
-		position[2] = context_->landscapeMaps->getGroundMaps().getInterpHeight(
+		position[2] = context_->getLandscapeMaps().getGroundMaps().getInterpHeight(
 			position[0], position[1]);
 	}
 

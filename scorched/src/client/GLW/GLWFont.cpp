@@ -20,6 +20,8 @@
 
 #include <GLW/GLWFont.h>
 #include <common/Defines.h>
+#include <console/ConsoleRuleMethodIAdapter.h>
+#include <common/Logger.h>
 
 Vector GLWFont::widgetFontColor = Vector(0.2f, 0.2f, 0.2f);
 Vector GLWFont::disabledWidgetFontColor = Vector(0.4f, 0.4f, 0.4f);
@@ -40,29 +42,39 @@ GLWFont::GLWFont()
 {
 	gameFont_ = new GLFont2d;
 	gameFont_->createFont(
-		S3D::getDataFile("data/fonts/test.ttf"),
+		S3D::getDataFile("data/fonts/dejavusconbd.ttf"),
 		16);
 	gameShadowFont_ = new GLFont2d;
 	gameShadowFont_->createFont(
-		S3D::getDataFile("data/fonts/test.ttf"),
+		S3D::getDataFile("data/fonts/dejavusconbd.ttf"),
 		16,
 		true);
 	courierFont_ = new GLFont2d;
 	courierFont_->createFont(
-		S3D::getDataFile("data/fonts/veramobd.ttf"),
+		S3D::getDataFile("data/fonts/dejavusmobd.ttf"),
 		16);
 	normalFont_ = new GLFont2d;
 	normalFont_->createFont(
-		S3D::getDataFile("data/fonts/vera.ttf"),
+		S3D::getDataFile("data/fonts/dejavusans.ttf"),
 		16);
 	normalShadowFont_ = new GLFont2d;
 	normalShadowFont_->createFont(
-		S3D::getDataFile("data/fonts/vera.ttf"),
+		S3D::getDataFile("data/fonts/dejavusans.ttf"),
 		16,
 		true);
+
+	new ConsoleRuleMethodIAdapter<GLWFont>(
+		this, &GLWFont::displayCharacterInfo, "CharacterInfo");
 }
 
 GLWFont::~GLWFont()
 {
 
+}
+
+void GLWFont::displayCharacterInfo()
+{
+	Logger::log(S3D::formatStringBuffer("Characters : %u\nCharacter Blocks : %u\n",
+		GLFont2d::getTotalCharacters(),
+		GLFont2dStorage::getTotalCharacterBlocks()));
 }

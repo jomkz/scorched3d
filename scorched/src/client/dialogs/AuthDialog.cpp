@@ -54,7 +54,7 @@ void AuthDialog::display()
 	clear();
 
 	addWidget(
-		new GLWLabel(0.0f, 0.0f, "This server requires authentication."), 
+		new GLWLabel(0.0f, 0.0f, LANG_RESOURCE("AUTH_LINE", "This server requires authentication.")), 
 		0, SpaceAll, 10.0f);
 
 	GLWPanel *inputPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
@@ -63,16 +63,16 @@ void AuthDialog::display()
 	if (auth_ & eNameRequired)
 	{
 		username_ = new GLWTextBox(0.0f, 0.0f, 200.0f,
-			(char *) ClientParams::instance()->getUserName());
-		inputPanel->addWidget(new GLWLabel(0.0f, 0.0f, "User Name :"));
+			LANG_STRING(ClientParams::instance()->getUserName()));
+		inputPanel->addWidget(new GLWLabel(0.0f, 0.0f, LANG_RESOURCE("USER_NAME_LABEL", "User Name :")));
 		inputPanel->addWidget(username_, 0, SpaceLeft | SpaceTop, 10.0f);
 	}
 	password_ = 0;
 	if (auth_ & ePasswordRequired)
 	{
 		password_ = new GLWTextBox(0.0f, 0.0f, 200.0f, 
-			(char *) ClientParams::instance()->getPassword(), GLWTextBox::eFlagPassword);
-		inputPanel->addWidget(new GLWLabel(0.0f, 0.0f, "Password :"));
+			LANG_STRING(ClientParams::instance()->getPassword()), GLWTextBox::eFlagPassword);
+		inputPanel->addWidget(new GLWLabel(0.0f, 0.0f, LANG_RESOURCE("PASSWORD_LABEL", "Password :")));
 		inputPanel->addWidget(password_, 0, SpaceLeft | SpaceTop, 10.0f);
 	}
 	inputPanel->setGridWidth(2);
@@ -80,16 +80,17 @@ void AuthDialog::display()
 	addWidget(inputPanel, 0, SpaceAll, 10.0f);
 
 	GLWPanel *buttonPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
-	GLWButton *cancelButton = new GLWTextButton("Cancel", 95, 10, 105, this, 
+	GLWButton *cancelButton = new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 95, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX);
 	cancelId_ = cancelButton->getId();
 	buttonPanel->addWidget(cancelButton, 0, SpaceRight, 10.0f);
-	GLWButton *okButton = new GLWTextButton("Ok", 235, 10, 55, this, 
+	GLWButton *okButton = new GLWTextButton(LANG_RESOURCE("OK", "Ok"), 235, 10, 55, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX);
 	okId_ = okButton->getId();
 	buttonPanel->addWidget(okButton);
 	buttonPanel->setLayout(GLWPanel::LayoutHorizontal);
 	addWidget(buttonPanel, 0, SpaceAll, 10.0f);
+
 
 	setLayout(GLWPanel::LayoutVerticle);
 	layout();

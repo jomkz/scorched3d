@@ -64,7 +64,7 @@ void TankFired::simulate(fixed frameTime, bool &remove)
 	{
 		firstTime_ = false;
 		Tank *tank = 
-			context_->tankContainer->getTankById(playerId_);
+			context_->getTankContainer().getTankById(playerId_);
 		if (tank)
 		{
 			tank->getPosition().rotateGunXY(rotXY_, false);
@@ -76,13 +76,14 @@ void TankFired::simulate(fixed frameTime, bool &remove)
 				const char *line = TankAIStrings::instance()->getAttackLine(*context_);
 				if (line)
 				{
-					context_->actionController->addAction(
-						new TankSay(tank->getPlayerId(), line));
+					context_->getActionController().addAction(
+						new TankSay(tank->getPlayerId(), 
+						LANG_STRING(line)));
 				}
 			}
 
 #ifndef S3D_SERVER
-			if (!context_->serverMode) 
+			if (!context_->getServerMode()) 
 			{
 				TargetRenderer *renderer = tank->getRenderer();
 				if (renderer)
@@ -107,7 +108,7 @@ void TankFired::simulate(fixed frameTime, bool &remove)
 			if (weapon_->getParent()->getMuzzleFlash())
 			{
 				WeaponFireContext weaponContext(playerId_, 0);
-				Weapon *muzzleFlash = context_->accessoryStore->getMuzzelFlash();
+				Weapon *muzzleFlash = context_->getAccessoryStore().getMuzzelFlash();
 				if (muzzleFlash) muzzleFlash->fireWeapon(*context_, weaponContext, 
 					tank->getPosition().getTankGunPosition(), FixedVector::getNullVector());
 			}

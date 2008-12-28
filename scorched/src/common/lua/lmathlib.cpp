@@ -16,141 +16,106 @@
 #include "lauxlib.h"
 #include "lualib.h"
 
-/*
-#undef PI
-#define PI fixed::XPI.getInternal()
-#define RADIANS_PER_DEGREE (PI/180)
 
-
-
-static int math_abs (lua_State *L) {
-  lua_pushnumber(L, fabs(luaL_checknumber(L, 1)));
-  return 1;
+static int math_abs (lua_State *L) 
+{
+	fixed param(true, luaL_checknumber(L, 1));
+	fixed result = param.abs();
+	lua_pushnumber(L, result.getInternal());
+	return 1;
 }
 
-static int math_sin (lua_State *L) {
-  lua_pushnumber(L, sin(luaL_checknumber(L, 1)));
-  return 1;
+static int math_sin (lua_State *L) 
+{
+	fixed param(true, luaL_checknumber(L, 1));
+	fixed result = param.sin();
+	lua_pushnumber(L, result.getInternal());
+	return 1;
 }
 
-static int math_sinh (lua_State *L) {
-  lua_pushnumber(L, sinh(luaL_checknumber(L, 1)));
-  return 1;
+static int math_cos (lua_State *L) 
+{
+	fixed param(true, luaL_checknumber(L, 1));
+	fixed result = param.cos();
+	lua_pushnumber(L, result.getInternal());
+	return 1;
 }
 
-static int math_cos (lua_State *L) {
-  lua_pushnumber(L, cos(luaL_checknumber(L, 1)));
-  return 1;
+static int math_tan (lua_State *L) 
+{
+	fixed param(true, luaL_checknumber(L, 1));
+	fixed result = param.tan();
+	lua_pushnumber(L, result.getInternal());
+	return 1;
 }
 
-static int math_cosh (lua_State *L) {
-  lua_pushnumber(L, cosh(luaL_checknumber(L, 1)));
-  return 1;
+static int math_acos (lua_State *L) 
+{
+	fixed param(true, luaL_checknumber(L, 1));
+	fixed result = param.acos();
+	lua_pushnumber(L, result.getInternal());
+	return 1;
 }
 
-static int math_tan (lua_State *L) {
-  lua_pushnumber(L, tan(luaL_checknumber(L, 1)));
-  return 1;
+static int math_ceil (lua_State *L) 
+{
+	fixed param(true, luaL_checknumber(L, 1));
+	fixed result = param.ceil();
+	lua_pushnumber(L, result.getInternal());
+	return 1;
 }
 
-static int math_tanh (lua_State *L) {
-  lua_pushnumber(L, tanh(luaL_checknumber(L, 1)));
-  return 1;
+static int math_floor (lua_State *L) 
+{
+	fixed param(true, luaL_checknumber(L, 1));
+	fixed result = param.floor();
+	lua_pushnumber(L, result.getInternal());
+	return 1;
 }
 
-static int math_asin (lua_State *L) {
-  lua_pushnumber(L, asin(luaL_checknumber(L, 1)));
-  return 1;
+static int math_sqrt (lua_State *L) 
+{
+	fixed param(true, luaL_checknumber(L, 1));
+	fixed result = param.sqrt();
+	lua_pushnumber(L, result.getInternal());
+	return 1;
 }
 
-static int math_acos (lua_State *L) {
-  lua_pushnumber(L, acos(luaL_checknumber(L, 1)));
-  return 1;
+static int math_pow (lua_State *L)
+{
+	fixed param1(true, luaL_checknumber(L, 1));
+	fixed param2(true, luaL_checknumber(L, 2));
+	fixed result = param1.pow(param2);
+	lua_pushnumber(L, result.getInternal());
+	return 1;
 }
 
-static int math_atan (lua_State *L) {
-  lua_pushnumber(L, atan(luaL_checknumber(L, 1)));
-  return 1;
+static int math_log (lua_State *L) 
+{
+	fixed param(true, luaL_checknumber(L, 1));
+	fixed result = param.log();
+	lua_pushnumber(L, result.getInternal());
+	return 1;
 }
 
-static int math_atan2 (lua_State *L) {
-  lua_pushnumber(L, atan2(luaL_checknumber(L, 1), luaL_checknumber(L, 2)));
-  return 1;
+static int math_log10 (lua_State *L) 
+{
+	fixed param(true, luaL_checknumber(L, 1));
+	fixed result = param.log10();
+	lua_pushnumber(L, result.getInternal());
+	return 1;
 }
 
-static int math_ceil (lua_State *L) {
-  lua_pushnumber(L, ceil(luaL_checknumber(L, 1)));
-  return 1;
+static int math_exp (lua_State *L) 
+{
+	fixed param(true, luaL_checknumber(L, 1));
+	fixed result = param.exp();
+	lua_pushnumber(L, result.getInternal());
+	return 1;
 }
 
-static int math_floor (lua_State *L) {
-  lua_pushnumber(L, floor(luaL_checknumber(L, 1)));
-  return 1;
-}
-
-static int math_fmod (lua_State *L) {
-  lua_pushnumber(L, fmod(luaL_checknumber(L, 1), luaL_checknumber(L, 2)));
-  return 1;
-}
-
-static int math_modf (lua_State *L) {
-  double ip;
-  double fp = modf(luaL_checknumber(L, 1), &ip);
-  lua_pushnumber(L, ip);
-  lua_pushnumber(L, fp);
-  return 2;
-}
-
-static int math_sqrt (lua_State *L) {
-  lua_pushnumber(L, sqrt(luaL_checknumber(L, 1)));
-  return 1;
-}
-
-static int math_pow (lua_State *L) {
-  lua_pushnumber(L, pow(luaL_checknumber(L, 1), luaL_checknumber(L, 2)));
-  return 1;
-}
-
-static int math_log (lua_State *L) {
-  lua_pushnumber(L, log(luaL_checknumber(L, 1)));
-  return 1;
-}
-
-static int math_log10 (lua_State *L) {
-  lua_pushnumber(L, log10(luaL_checknumber(L, 1)));
-  return 1;
-}
-
-static int math_exp (lua_State *L) {
-  lua_pushnumber(L, exp(luaL_checknumber(L, 1)));
-  return 1;
-}
-
-static int math_deg (lua_State *L) {
-  lua_pushnumber(L, luaL_checknumber(L, 1)/RADIANS_PER_DEGREE);
-  return 1;
-}
-
-static int math_rad (lua_State *L) {
-  lua_pushnumber(L, luaL_checknumber(L, 1)*RADIANS_PER_DEGREE);
-  return 1;
-}
-
-static int math_frexp (lua_State *L) {
-  int e;
-  lua_pushnumber(L, frexp(luaL_checknumber(L, 1), &e));
-  lua_pushinteger(L, e);
-  return 2;
-}
-
-static int math_ldexp (lua_State *L) {
-  lua_pushnumber(L, ldexp(luaL_checknumber(L, 1), luaL_checkint(L, 2)));
-  return 1;
-}
-*/
-
-
-static int math_min (lua_State *L) {
+static int math_min (lua_State *L) 
+{
   int n = lua_gettop(L);  /* number of arguments */
   lua_Number dmin = luaL_checknumber(L, 1);
   int i;
@@ -163,8 +128,8 @@ static int math_min (lua_State *L) {
   return 1;
 }
 
-
-static int math_max (lua_State *L) {
+static int math_max (lua_State *L) 
+{
   int n = lua_gettop(L);  /* number of arguments */
   lua_Number dmax = luaL_checknumber(L, 1);
   int i;
@@ -178,59 +143,33 @@ static int math_max (lua_State *L) {
 }
 
 
-static int math_random (lua_State *L) {
-  /* the `%' avoids the (rare) case of r==1, and is needed also because on
-     some systems (SunOS!) `rand()' may return a value larger than RAND_MAX */
-
-	fixed fn = 0;
-	long r = fn.getInternal();
-
-  switch (lua_gettop(L)) {  /* check number of arguments */
-    case 0: {  /* no arguments */
-      lua_pushnumber(L, r);  /* Number between 0 and 1 */
-      break;
-    }
-    default: return luaL_error(L, "wrong number of arguments");
-  }
-  return 1;
-}
-
-/*
-static int math_randomseed (lua_State *L) {
-  srand(luaL_checkint(L, 1));
-  return 0;
-}
-*/
-
 static const luaL_Reg mathlib[] = {
-/*  {"abs",   math_abs},
+  {"abs",   math_abs},
   {"acos",  math_acos},
-  {"asin",  math_asin},
-  {"atan2", math_atan2},
-  {"atan",  math_atan},
+//  {"asin",  math_asin},
+//  {"atan2", math_atan2},
+//  {"atan",  math_atan},
   {"ceil",  math_ceil},
-  {"cosh",   math_cosh},
+//  {"cosh",   math_cosh},
   {"cos",   math_cos},
-  {"deg",   math_deg},
+//  {"deg",   math_deg},
   {"exp",   math_exp},
   {"floor", math_floor},
-  {"fmod",   math_fmod},
-  {"frexp", math_frexp},
-  {"ldexp", math_ldexp},
+//  {"fmod",   math_fmod},
+//  {"frexp", math_frexp},
+//  {"ldexp", math_ldexp},
   {"log10", math_log10},
-  {"log",   math_log},*/
+  {"log",   math_log},
   {"max",   math_max},
   {"min",   math_min},
-/*  {"modf",   math_modf},
+//  {"modf",   math_modf},
   {"pow",   math_pow},
-  {"rad",   math_rad},*/
-  {"random",     math_random},
-/*  {"randomseed", math_randomseed},
-  {"sinh",   math_sinh},
+//  {"rad",   math_rad},
+//  {"sinh",   math_sinh},
   {"sin",   math_sin},
   {"sqrt",  math_sqrt},
-  {"tanh",   math_tanh},
-  {"tan",   math_tan},*/
+//  {"tanh",   math_tanh},
+  {"tan",   math_tan},
   {NULL, NULL}
 };
 

@@ -102,9 +102,9 @@ bool LandscapeSoundPositionGroup::setPosition(VirtualSoundSource *source, unsign
 	Vector &cameraPos = 
 		MainCamera::instance()->getCamera().getCurrentPos();
 	int groundMapWidth = ScorchedClient::instance()->
-		getLandscapeMaps().getGroundMaps().getMapWidth();
+		getLandscapeMaps().getGroundMaps().getLandscapeWidth();
 	int groundMapHeight = ScorchedClient::instance()->
-		getLandscapeMaps().getGroundMaps().getMapHeight();
+		getLandscapeMaps().getGroundMaps().getLandscapeHeight();
 
 	int a = int(cameraPos[0]);
 	int b = int(cameraPos[1]);

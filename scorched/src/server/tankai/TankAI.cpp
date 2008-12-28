@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <tankai/TankAI.h>
+#include <lang/LangResource.h>
 #include <XML/XMLNode.h>
 
 TankAI::TankAI() : 
@@ -43,6 +44,7 @@ bool TankAI::parseConfig(XMLNode *node)
 
 ToolTip *TankAI::getToolTip()
 {
-	toolTip_.setText(ToolTip::ToolTipInfo, name_.c_str(), description_.c_str());
+	toolTip_.setText(ToolTip::ToolTipInfo, LANG_STRING(name_), 
+		LANG_RESOURCE(name_ + "_ai_description",  description_));
 	return &toolTip_;
 }

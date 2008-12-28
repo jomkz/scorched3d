@@ -334,6 +334,12 @@ public:
 	bool getRegisteredUserNames() { return registeredUserNames_; }
 	OptionEntryBool &getRegisteredUserNamesEntry() { return registeredUserNames_; }
 
+	bool getAllowMultiLingualChat() { return allowMultiLingualChat_; }
+	OptionEntryBool &getAllowMultiLingualChatEntry() { return allowMultiLingualChat_; }
+
+	bool getAllowMultiLingualNames() { return allowMultiLingualNames_; }
+	OptionEntryBool &getAllowMultiLingualNamesEntry() { return allowMultiLingualNames_; }
+
 	bool getDebugFeatures() { return debugFeatures_; }
 	OptionEntryBool &getDebugFeaturesEntry() { return debugFeatures_; }
 
@@ -425,6 +431,8 @@ protected:
 	OptionEntryBool randomizeBotNames_;
 	OptionEntryBool giveAllWeapons_;
 	OptionEntryBool registeredUserNames_;
+	OptionEntryBool allowMultiLingualChat_;
+	OptionEntryBool allowMultiLingualNames_;
 	OptionEntryStringEnum authHandler_;
 	OptionEntryString serverName_;
 	OptionEntryString *playerType_[24];

@@ -36,14 +36,14 @@ public:
 	void generate(LandscapeTexBorderWater *water, ProgressCounter *counter = 0);
 
 	Water2Patches &getPatch(float time);
-	Water2PatchVisibility &getVisibility() { return visibility_; }
-	Water2PatchIndexs &getIndexs() { return indexs_; }
+	MipMapPatchIndexs &getIndexs() { return indexs_; }
+	float *getIndexErrors() { return indexErrors_; }
 
 protected:
 	int generatedPatches_;
+	float indexErrors_[7];
 	Water2Patches patches_[256];
-	Water2PatchIndexs indexs_;
-	Water2PatchVisibility visibility_;
+	MipMapPatchIndexs indexs_;
 
 	void generateAOF(Water2Points &wd, ImageHandle *aofImage, float *rndtab, 
 		Water2Points *displacements, float *aof);

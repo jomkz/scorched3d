@@ -26,6 +26,7 @@
 #include <tank/TankScore.h>
 #include <common/Defines.h>
 #include <common/ChannelManager.h>
+#include <lang/LangResource.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponGiveAccessory);
 
@@ -46,7 +47,7 @@ bool WeaponGiveAccessory::parseXML(AccessoryCreateContext &context, XMLNode *acc
 	std::string giveaccessory;
 	while (accessoryNode->getNamedChild("giveaccessory", giveaccessory, false))
 	{
-		Accessory *accessory = context.getAccessoryStore()->
+		Accessory *accessory = context.getAccessoryStore().
 			findByPrimaryAccessoryName(giveaccessory.c_str());
 		if (!accessory)
 		{
@@ -65,7 +66,7 @@ bool WeaponGiveAccessory::parseXML(AccessoryCreateContext &context, XMLNode *acc
 void WeaponGiveAccessory::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	context.actionController->addAction(
+	context.getActionController().addAction(
 		new CallbackWeapon("WeaponGiveAccessory", this, 0, 0, 
 			weaponContext, position, velocity));
 }
@@ -75,7 +76,7 @@ void WeaponGiveAccessory::weaponCallback(
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 	unsigned int userData)
 {
-	Tank *tank = context.tankContainer->getTankById(weaponContext.getPlayerId());
+	Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
 	if (!tank) return;
 
 	std::vector<Accessory *>::iterator itor;
@@ -90,28 +91,27 @@ void WeaponGiveAccessory::weaponCallback(
 			if (tank->getAccessories().accessoryAllowed(accessory, number_))
 			{
 				tank->getAccessories().add(accessory, number_);
-				if (!context.serverMode)
 				{
 					ChannelText text("combat", 
-						S3D::formatStringBuffer("[p:%s] received %i * [w:%s]", 
-						tank->getName(),
-						number_, accessory->getName()));
-					//info.setPlayerId(weaponContext.getPlayerId());
-					ChannelManager::showText(text);
+						LANG_RESOURCE_3("TANK_GET_ACCESSORY",
+						"[p:{0}] received {1} * [w:{2}]", 
+						tank->getTargetName(),
+						S3D::formatStringBuffer("%i", number_), 
+						accessory->getName()));
+					ChannelManager::showText(context, text);
 				}
 			}
 			else
 			{
 				int money = accessory->getSellPrice() * number_;
 				tank->getScore().setMoney(tank->getScore().getMoney() + money);
-
-				if (!context.serverMode)
 				{
 					ChannelText text("combat", 
-						S3D::formatStringBuffer("[p:%s] received $%i", 
-						tank->getName(), money));
-					//info.setPlayerId(weaponContext.getPlayerId());
-					ChannelManager::showText(text);
+						LANG_RESOURCE_2("TANK_GET_MONEY",
+						"[p:{0}] received ${1}", 
+						tank->getTargetName(), 
+						S3D::formatStringBuffer("%i", money)));
+					ChannelManager::showText(context, text);
 				}
 			}
 		}
@@ -123,14 +123,14 @@ void WeaponGiveAccessory::weaponCallback(
 				int loose = MIN(count, -number_);
 
 				tank->getAccessories().rm(accessory, loose);
-				if (!context.serverMode)
 				{
 					ChannelText text("combat", 
-						S3D::formatStringBuffer("[p:%s] lost %i * [w:%s]", 
-						tank->getName(),
-						loose, accessory->getName()));
-					//info.setPlayerId(weaponContext.getPlayerId());
-					ChannelManager::showText(text);
+						LANG_RESOURCE_3("TANK_LOST_ACCESSORY",
+						"[p:{0}] lost {1} * [w:{2}]", 
+						tank->getTargetName(),
+						S3D::formatStringBuffer("%i", loose), 
+						accessory->getName()));
+					ChannelManager::showText(context, text);
 				}
 			}
 		}

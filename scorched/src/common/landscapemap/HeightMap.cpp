@@ -20,23 +20,20 @@
 
 #include <common/Triangle.h>
 #include <landscapemap/HeightMap.h>
+#include <landscapemap/GraphicalHeightMap.h>
 #include <common/Defines.h>
 
 static const int minMapShift = 3;
+static FixedVector nvec(fixed(0), fixed(0), fixed(1));
 
 HeightMap::HeightMap() : 
-	hMap_(0), normals_(0), minMap_(0), maxMap_(0), backupMap_(0),
-	nvec(fixed(0), fixed(0), fixed(1))
+	heightData_(0), graphicalMap_(0)
 {
 }
 
 HeightMap::~HeightMap()
 {
-	delete [] hMap_;
-	delete [] normals_;
-	delete [] minMap_;
-	delete [] maxMap_;
-	delete [] backupMap_;
+	delete [] heightData_;
 }
 
 void HeightMap::create(const int width, const int height)
@@ -44,49 +41,39 @@ void HeightMap::create(const int width, const int height)
 	width_ = width; 
 	height_ = height;
 
-	delete [] hMap_;
-	delete [] normals_;
-	delete [] backupMap_;
-	hMap_ = new fixed[(width_ + 1) * (height_ + 1)];
-	normals_ = new FixedVector[(width_ + 1) * (height_ + 1)];
-	backupMap_ = new fixed[(width_ + 1) * (height_ + 1)];
-
-    delete [] minMap_;
-	delete [] maxMap_;
-	minWidth_ = width >> minMapShift;
-	minHeight_ = height >> minMapShift;
-	minMap_ = new fixed[(minWidth_ + 1) * (minHeight_ + 1)];
-	maxMap_ = new fixed[(minWidth_ + 1) * (minHeight_ + 1)];
+	delete [] heightData_;
+	heightData_ = new HeightData[(width_ + 1) * (height_ + 1)];
 
 	reset();
-}
 
-void HeightMap::backup()
-{
-	memcpy(backupMap_, hMap_, sizeof(fixed)  * (width_ + 1) * (height_ + 1));
+	if (graphicalMap_) graphicalMap_->create(width, height);
 }
 
 void HeightMap::reset()
 {
-	memset(hMap_, 0, sizeof(fixed)  * (width_ + 1) * (height_ + 1));
-	memset(backupMap_, 0, sizeof(fixed)  * (width_ + 1) * (height_ + 1));
-	resetNormals();
-	for (int i=0; i<(minWidth_ + 1) * (minHeight_ + 1); i++) minMap_[i] = fixed::MAX_FIXED;
-	for (int i=0; i<(minWidth_ + 1) * (minHeight_ + 1); i++) maxMap_[i] = fixed(0);
-}
+	HeightData *current = heightData_;
+	for (int y=0; y<=height_; y++)
+	{
+		for (int x=0; x<=width_; x++)
+		{
+			current->position[0] = fixed(x);
+			current->position[1] = fixed(y);
+			current->position[2] = fixed(0);
 
-void HeightMap::resetNormals()
-{
-	memset(normals_, 0, sizeof(FixedVector)  * (width_ + 1) * (height_ + 1));
+			current->normal[0] = fixed(0);
+			current->normal[1] = fixed(0);
+			current->normal[2] = fixed(1);
+
+			current++;
+		}
+	}
 }
 
 bool HeightMap::getVector(FixedVector &vec, int x, int y)
 {
 	if (x < 0 || y < 0 || x>width_ || y>height_) return false;
 
-	vec[0] = fixed(x);
-	vec[1] = fixed(y);
-	vec[2] = getHeight(x,y);
+	vec = heightData_[(width_+1) * y + x].position;
 	return true;
 }
 
@@ -164,7 +151,10 @@ FixedVector &HeightMap::getNormal(int w, int h)
 	if (w >= 0 && h >= 0 && w<=width_ && h<=height_) 
 	{
 		int pos = (width_+1) * h + w;
-		FixedVector &normal = normals_[pos];
+
+		HeightMap::HeightData *heightData = &heightData_[pos];
+
+		FixedVector &normal = heightData->normal;
 		if (normal[0] == fixed(0) && 
 			normal[1] == fixed(0) && 
 			normal[2] == fixed(0))
@@ -173,7 +163,7 @@ FixedVector &HeightMap::getNormal(int w, int h)
 			int y = h;
 
 			static FixedVector C;
-			getVector(C, x, y);
+			C = heightData->position;
 
 			static FixedVector total;
 			total.zero();
@@ -181,7 +171,7 @@ FixedVector &HeightMap::getNormal(int w, int h)
 			int times = 0;
 			for (int dist=1; dist<=3; dist+=2)
 			{
-				for (int a=0, b=1; a<4; a++, b++)
+				for (int a=0, b=1; a<4; a+=2, b+=2)
 				{
 					if (b>3) b=0;
 
@@ -208,11 +198,12 @@ FixedVector &HeightMap::getNormal(int w, int h)
 			}
 
 			normal = total.Normalize();
+			if (graphicalMap_) graphicalMap_->setNormal(w, h, normal.asVector());			
 		}
 
 		return normal; 
 	}
-	nvec.zero();
+	nvec = FixedVector(fixed(0), fixed(0), fixed(1));
 	return nvec; 
 }
 
@@ -259,7 +250,10 @@ void HeightMap::getInterpNormal(fixed w, fixed h, FixedVector &normal)
 void HeightMap::setHeight(int w, int h, fixed height)
 {
 	DIALOG_ASSERT(w >= 0 && h >= 0 && w<=width_ && h<=height_);
-	hMap_[(width_+1) * h + w] = height;
+
+	HeightData &data = heightData_[(width_+1) * h + w];
+	data.position[2] = height;
+	if (graphicalMap_) graphicalMap_->setHeight(w, h, height.asFloat());
 
 	// Reset all of the normals around this position
 	for (int dist=1; dist<=3; dist++)
@@ -273,66 +267,9 @@ void HeightMap::setHeight(int w, int h, fixed height)
 			int y = h + aPosY;
 			if (x>=0 && y>=0 && x<=width_ && y<=height_)
 			{
-				normals_[(width_+1) * y + x].zero();
+				heightData_[(width_+1) * y + x].normal.zero();
 			}
 		}
 	}
-	normals_[(width_+1) * h + w].zero();
-
-	int newW = w >> minMapShift;
-	int newH = h >> minMapShift;
-	DIALOG_ASSERT(newW >= 0 && newH >= 0 && newW<=minWidth_ && newH<=minHeight_);
-	int minOffSet = (minWidth_+1) * newH + newW;
-	fixed *minHeight = &minMap_[minOffSet];
-	if (*minHeight > height)
-	{
-		*minHeight = height;
-	}
-	fixed *maxHeight = &maxMap_[minOffSet];
-	if (*maxHeight < height)
-	{
-		*maxHeight = height;
-	}
+	heightData_[(width_+1) * h + w].normal.zero();
 }
-
-void HeightMap::resetMinHeight()
-{
-	for (int i=0; i<(minWidth_ + 1) * (minHeight_ + 1); i++) minMap_[i] = fixed::MAX_FIXED;
-	for (int i=0; i<(minWidth_ + 1) * (minHeight_ + 1); i++) maxMap_[i] = fixed(0);
-	for (int h=0; h<height_; h++)
-	{
-		for (int w=0; w<width_; w++)
-		{
-			fixed height = getHeight(w, h);
-			int newW = w >> minMapShift;
-			int newH = h >> minMapShift;
-			DIALOG_ASSERT(newW >= 0 && newH >= 0 && newW<=minWidth_ && newH<=minHeight_);
-			int minOffSet = (minWidth_+1) * newH + newW;
-			fixed *minHeight = &minMap_[minOffSet];
-			if (*minHeight > height)
-			{
-				*minHeight = height;
-			}
-			fixed *maxHeight = &maxMap_[minOffSet];
-			if (*maxHeight < height)
-			{
-				*maxHeight = height;
-			}
-		}
-	}
-}
-
-fixed HeightMap::getMinHeight(int w, int h)
-{
-	DIALOG_ASSERT(w >= 0 && h >= 0 && w<=minWidth_ && h<=minHeight_);
-	fixed minHeight = minMap_[(minWidth_+1) * h + w];
-	return minHeight;
-}
-
-fixed HeightMap::getMaxHeight(int w, int h)
-{
-	DIALOG_ASSERT(w >= 0 && h >= 0 && w<=minWidth_ && h<=minHeight_);
-	fixed maxHeight = maxMap_[(minWidth_+1) * h + w];
-	return maxHeight;
-}
-

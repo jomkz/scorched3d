@@ -39,8 +39,8 @@ OptionsScorched::~OptionsScorched()
 void OptionsScorched::updateLevelOptions(ScorchedContext &context, LandscapeDefinition &defn)
 {
 	// Get the current level data
-	LandscapeTex *ltex = context.landscapes->getTex(defn.getTex());
-	LandscapeDefn *ldefn = context.landscapes->getDefn(defn.getDefn());
+	LandscapeTex *ltex = context.getLandscapes().getTex(defn.getTex());
+	LandscapeDefn *ldefn = context.getLandscapes().getDefn(defn.getDefn());
 
 	// Get all of the options specified in the current level
 	std::map<std::string, OptionEntry *> values;

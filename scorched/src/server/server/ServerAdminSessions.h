@@ -22,6 +22,7 @@
 #define __INCLUDE_ServerAdminSessionsh_INCLUDE__
 
 #include <map>
+#include <set>
 #include <list>
 #include <string>
 
@@ -30,15 +31,25 @@ class ServerAdminSessions
 public:
 	static ServerAdminSessions *instance();
 
+	static std::string PERMISSION_BANPLAYER;
+	static std::string PERMISSION_KICKPLAYER;
+	static std::string PERMISSION_ALIASPLAYER;
+	static std::string PERMISSION_ADDPLAYER;
+	static std::string PERMISSION_VIEWLOGS;
+	static std::string PERMISSION_ALTERGAME;
+	static std::string PERMISSION_ALTERSERVER;
+	static std::string PERMISSION_ALTERSETTINGS;
+
 	// Creds
 	struct Credential
 	{
 		std::string username;
 		std::string password;
-	};
+		std::set<std::string> permissions;
 
-	bool authenticate(const char *name, const char *password);
-	bool getAllCredentials(std::list<Credential> &creds);
+		bool hasPermission(const std::string &perm) 
+			{ return (permissions.find(perm) != permissions.end()); }
+	};
 
 	// Sessions
 	struct SessionParams
@@ -46,18 +57,25 @@ public:
 		unsigned int sessionTime;
 		unsigned int sid;
 		std::string ipAddress;
-		std::string userName;
+		Credential credentials;
 	};
 
-	std::map<unsigned int, SessionParams> &getAllSessions() { return sessions_; }
+	unsigned int login(const char *name, const char *password, const char *ipAddress);
+	void logout(unsigned int sid);
 
 	SessionParams *getFirstSession();
 	SessionParams *getSession(unsigned int sid);
 
-	unsigned int login(const char *userId, const char *ipAddress);
-	void logout(unsigned int sid);
+	bool setPassword(const char *name, 
+		const char *oldpassword, const char *newpassword);
+
+	Credential &getLocalUserCredentials() { return localCreds_; }
+	bool getAllCredentials(std::list<Credential> &creds);
+	bool setAllCredentials(std::list<Credential> &creds);
+	std::map<unsigned int, SessionParams> &getAllSessions() { return sessions_; }
 
 protected:
+	Credential localCreds_;
 	std::map<unsigned int, SessionParams> sessions_;
 
 private:

@@ -37,8 +37,8 @@
 #endif
 
 unsigned int S3D::ScorchedPort = 27270;
-std::string S3D::ScorchedVersion = "41.3";
-std::string S3D::ScorchedProtocolVersion = "dl";
+std::string S3D::ScorchedVersion = "42";
+std::string S3D::ScorchedProtocolVersion = "ea";
 #ifdef __DATE__
 std::string S3D::ScorchedBuildTime = __DATE__;
 #else
@@ -55,8 +55,8 @@ void S3D::showURL(const std::string &url)
 	WinExec(buffer.c_str() ,SW_SHOWDEFAULT);
 #else
 #ifdef __DARWIN__
-	std::string buffer = S3D::formatStringBuffer("open %s");
-	system(buffer.c_str(), url.c_str()));
+	std::string buffer = S3D::formatStringBuffer("open %s", url.c_str());
+	system(buffer.c_str());
 #else
 	std::string buffer = S3D::formatStringBuffer("firefox %s", url.c_str());
 	system(buffer.c_str());

@@ -22,6 +22,7 @@
 #define __INCLUDE_GLWDropDownTexth_INCLUDE__
 
 #include <GLW/GLWDropDown.h>
+#include <lang/LangString.h>
 
 class GLWDropDownText : public GLWDropDown
 {
@@ -29,9 +30,12 @@ public:
 	GLWDropDownText(float x = 0.0f, float y = 0.0f, float w = 0.0f);
 	virtual ~GLWDropDownText();
 
-	void addText(const std::string &text);
-	void setCurrentText(const std::string &text);
-	const char *getCurrentText();
+	void addText(const LangString &text, const std::string &datatext);
+	void setCurrentText(const LangString &text);
+	LangString &getCurrentText();
+	const char *getCurrentDataText();
+
+	bool isSelected(const LangString &text);
 
 	// Inherited from GLWidget
 	virtual void draw();

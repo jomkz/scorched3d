@@ -58,12 +58,17 @@ bool WeaponMoveTank::parseXML(AccessoryCreateContext &context, XMLNode *accessor
 void WeaponMoveTank::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
+	int arenaX = context.getLandscapeMaps().getDefinitions().getDefn()->getArenaX();
+	int arenaY = context.getLandscapeMaps().getDefinitions().getDefn()->getArenaY();
+	int arenaWidth = context.getLandscapeMaps().getDefinitions().getDefn()->getArenaWidth();
+	int arenaHeight = context.getLandscapeMaps().getDefinitions().getDefn()->getArenaHeight();
+
 	int posX = position[0].asInt();
 	int posY = position[1].asInt();
-	if (posX > 5 && posX < context.landscapeMaps->getDefinitions().getDefn()->landscapewidth - 5 &&
-		posY > 5 && posY < context.landscapeMaps->getDefinitions().getDefn()->landscapeheight - 5)
+	if (posX > arenaX + 5 && posX < arenaX + arenaWidth - 5 &&
+		posY > arenaY + 5 && posY < arenaY + arenaHeight - 5)
 	{
-		context.actionController->addAction(
+		context.getActionController().addAction(
 			new TankMovement(weaponContext, this, posX, posY));		
 	}
 }

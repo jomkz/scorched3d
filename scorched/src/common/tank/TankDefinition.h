@@ -48,7 +48,7 @@ protected:
 	fixed life_;
 	bool boundingsphere_;
 	bool driveovertodestroy_;
-	std::string name_;
+	LangString name_;
 	std::string parachute_;
 	std::string shield_;
 	FixedVector size_;
@@ -60,7 +60,6 @@ protected:
 	int team_;
 	std::string ai_;
 	std::string tankmodel_;
-
 
 };
 

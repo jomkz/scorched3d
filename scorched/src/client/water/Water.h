@@ -45,11 +45,14 @@ public:
 	bool getWaterOn() { return waterOn_; }
 	float getWaterHeight() { return height_; }
 	Image &getWaterBitmap() { return bitmapWater_; }
+	float *getIndexErrors();
 	float getWaveDistance(int x, int y);
 
 	void bindWaterReflection();
 	void unBindWaterReflection();
 	void drawPoints();
+
+	GLTexture &getReflectionTexture();
 
 protected:
 	bool waterOn_;

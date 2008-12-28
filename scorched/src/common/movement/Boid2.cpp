@@ -53,7 +53,7 @@ void Boid2::clearTarget()
 	target_ = 0;
 }
 
-void Boid2::update(fixed frameTime)
+void Boid2::update(fixed frameTime, std::vector<Boid2*> &boidSet, bool complexUpdate)
 {
 	// Limit Velocity
 	directionMag_ = getVelocity().Magnitude();
@@ -84,7 +84,10 @@ void Boid2::update(fixed frameTime)
 	}
 	else
 	{
-		newVelocity = checkGrouping();
+		if (complexUpdate)
+		{
+			newVelocity = checkGrouping(boidSet);
+		}
 
 		// Wander
 		{
@@ -114,24 +117,17 @@ void Boid2::update(fixed frameTime)
 	}
 }
 
-FixedVector Boid2::checkGrouping()
+FixedVector Boid2::checkGrouping(std::vector<Boid2*> &boidSet)
 {
 	FixedVector posMatch, velMatch, velDist;
 	FixedVector normalizedVelocity = direction_;
 
 	int count = 0, countDist = 0;
-	std::map<unsigned int, TargetGroup *>::iterator itor;
-	for (itor = world_->getTargets().begin();
-	  itor != world_->getTargets().end();
-	  itor++)
+	std::vector<Boid2*>::iterator itor;
+	for (itor = boidSet.begin(); itor != boidSet.end(); itor++)
 	{
-		unsigned int playerId = (*itor).first;
-		std::map<unsigned int, Boid2 *>::iterator findItor = 
-			world_->getBoidsMap().find(playerId);
-		if (findItor == world_->getBoidsMap().end()) continue;
-
-		Boid2 *other = (*findItor).second;
-		if (other == this) continue;
+		Boid2 *other = (Boid2 *) *itor;
+		if (!other || other == this) continue; 
 
 		FixedVector direction = getPosition() - other->getPosition();
 		fixed distance = direction.Magnitude();
@@ -216,11 +212,11 @@ bool Boid2::checkCollision(FixedVector &normal)
 		fixed dist = fixed(i) * 3;
 		FixedVector newPosition = position + direction_ * dist;
 
-		if (context_.landscapeMaps->getGroundMaps().getHeight(
+		if (context_.getLandscapeMaps().getGroundMaps().getHeight(
 			newPosition[0].asInt(), newPosition[1].asInt()) > newPosition[2] - fixed(5))
 		{
 			collision++;
-			normal += context_.landscapeMaps->getGroundMaps().getNormal(
+			normal += context_.getLandscapeMaps().getGroundMaps().getNormal(
 				newPosition[0].asInt(), newPosition[1].asInt());
 			break;
 		}

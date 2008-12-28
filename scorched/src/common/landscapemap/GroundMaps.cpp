@@ -20,6 +20,7 @@
 
 #include <landscapemap/GroundMaps.h>
 #include <landscapemap/HeightMapLoader.h>
+#include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeInclude.h>
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeDefinitions.h>
@@ -29,9 +30,17 @@
 #include <movement/TargetMovement.h>
 #include <common/Logger.h>
 #include <tankai/TankAIAdder.h>
+#include <lang/LangResource.h>
+#ifndef S3D_SERVER
+#include <land/VisibilityPatchGrid.h>
+#endif
 
 GroundMaps::GroundMaps(LandscapeDefinitionCache &defnCache) :
-	defnCache_(defnCache)
+	defnCache_(defnCache), 
+	arenaX_(-1),
+	arenaY_(-1),
+	arenaWidth_(-1), 
+	arenaHeight_(-1)
 {
 }
 
@@ -41,25 +50,60 @@ GroundMaps::~GroundMaps()
 
 void GroundMaps::generateMaps(
 	ScorchedContext &context,
-	std::list<FixedVector> &tankPositions,
 	ProgressCounter *counter)
 {
+	arenaWidth_ = context.getLandscapeMaps().getDefinitions().getDefn()->getArenaWidth();
+	arenaHeight_ = context.getLandscapeMaps().getDefinitions().getDefn()->getArenaHeight();
+	arenaX_ = context.getLandscapeMaps().getDefinitions().getDefn()->getArenaX();
+	arenaY_ = context.getLandscapeMaps().getDefinitions().getDefn()->getArenaY();
+
 	generateHMap(context, counter);
+#ifndef S3D_SERVER
+	if (!context.getServerMode())
+	{
+		VisibilityPatchGrid::instance()->generate();
+	}
+#endif
 	generateObjects(context, counter);
 
 	// Place the tanks after the objects and hmap
 	// This can remove objects, and flatten the hmap
-	PlacementTankPosition::flattenTankPositions(tankPositions, context);
+	PlacementTankPosition::flattenTankPositions(context);
 
 	// Create movement after targets, so we can mark 
 	// those targets that are in movement groups
-	context.targetMovement->generate(context); 
-	nmap_.create(getMapWidth(), getMapHeight());
+	context.getTargetMovement().generate(context); 
+	nmap_.create(getLandscapeWidth(), getLandscapeHeight());
+}
 
-	// Store the hmap to create the landscape diff.
-	// This must be done after all modifications are 
-	// made to the landscape height
-	saveHMap();
+int GroundMaps::getLandscapeWidth()
+{
+	return map_.getMapWidth();
+}
+
+int GroundMaps::getLandscapeHeight()
+{
+	return map_.getMapHeight();
+}
+
+int GroundMaps::getArenaWidth()
+{
+	return arenaWidth_;
+}
+
+int GroundMaps::getArenaHeight()
+{
+	return arenaHeight_;
+}
+
+int GroundMaps::getArenaX()
+{
+	return arenaX_;
+}
+
+int GroundMaps::getArenaY()
+{
+	return arenaY_;
 }
 
 void GroundMaps::generateHMap(
@@ -67,16 +111,8 @@ void GroundMaps::generateHMap(
 	ProgressCounter *counter)
 {
 	// Initialize the ground and surround maps
-	map_.create(defnCache_.getDefn()->landscapewidth, 
-		defnCache_.getDefn()->landscapeheight);
-
-	// Surround map is 640 units larger the heightmap (on each side)
-	// And each surround map square is equal to 16 heightmap units
-	int surroundWidth = defnCache_.getDefn()->landscapewidth + 640 * 2;
-	int surroundHeight = defnCache_.getDefn()->landscapeheight + 640 * 2;
-	surroundWidth /= 16;
-	surroundHeight /= 16;
-	smap_.create(surroundWidth, surroundHeight);
+	map_.create(defnCache_.getDefn()->getLandscapeWidth(), 
+		defnCache_.getDefn()->getLandscapeHeight());
 
 	// Generate the landscape
 	bool levelSurround = false;
@@ -89,31 +125,6 @@ void GroundMaps::generateHMap(
 	{
 		S3D::dialogExit("Landscape", "Failed to generate landscape");
 	}
-
-	// Generate the surround
-	if (defnCache_.getDefn()->surround->getType() != LandscapeDefnType::eNone)
-	{
-		if (!HeightMapLoader::generateTerrain(
-			defnCache_.getSeed() + 1,
-			defnCache_.getDefn()->surround,
-			smap_,
-			levelSurround,
-			counter))
-		{
-			S3D::dialogExit("Landscape", "Failed to generate surround");
-		}
-
-		if (levelSurround)
-		{
-			for (int j=40; j<=56; j++)
-			{
-				for (int i=40; i<=56; i++)
-				{
-					smap_.setHeight(i, j, 0);
-				}
-			}
-		}
-	}
 }
 
 void GroundMaps::generateObject(RandomGenerator &generator, 
@@ -122,7 +133,7 @@ void GroundMaps::generateObject(RandomGenerator &generator,
 	unsigned int &playerId,
 	ProgressCounter *counter)
 {
-	if (counter) counter->setNewOp("Populating Landscape");
+	if (counter) counter->setNewOp(LANG_RESOURCE("POPULATING_LANDSCAPE", "Populating Landscape"));
 
 	// Generate all the objects using the objects definitions
 	for (unsigned int i=0; i<place.placements.size(); i++)
@@ -194,66 +205,23 @@ void GroundMaps::generateObjects(
 	}
 }
 
-void GroundMaps::saveHMap()
-{
-	// Save this height map for later
-	map_.resetMinHeight();
-	map_.backup();
-}
-
 fixed GroundMaps::getHeight(int w, int h)
 {
-	// Check if we are in the normal heightmap
-	if (w < 0 || h < 0 || w > map_.getMapWidth() || h > map_.getMapHeight())
-	{
-		// Check for no surround
-		if (defnCache_.getDefn()->surround->getType() == LandscapeDefnType::eNone)
-		{
-			return fixed(0);
-		}
-
-		// Check if we are in the surround
-		if (w < -640.0f || h < -640.0f || 
-			w > map_.getMapWidth() + 640 || 
-			h > map_.getMapHeight() + 640)
-		{
-			return fixed(0);
-		}
-
-		// Return surround
-		int a = (w + 640) / 16;
-		int b = (h + 640) / 16;
-		return smap_.getHeight(a, b);
-	}
 	return map_.getHeight(w, h);
 }
 
 fixed GroundMaps::getInterpHeight(fixed w, fixed h)
 {
-	if (w < 0 || h < 0 || w > map_.getMapWidth() || h > map_.getMapHeight())
-	{
-		return getHeight(w.asInt(), h.asInt());
-	}
 	return map_.getInterpHeight(w, h);
 }
 
 FixedVector &GroundMaps::getNormal(int w, int h)
 {
-	if (w < 0 || h < 0 || w > map_.getMapWidth() || h > map_.getMapHeight())
-	{
-		static FixedVector up(0, 0, 1);
-		return up;
-	}
-	return  map_.getNormal(w, h);
+	return map_.getNormal(w, h);
 }
 
 void GroundMaps::getInterpNormal(fixed w, fixed h, FixedVector &normal)
 {
-	if (w < 0 || h < 0 || w > map_.getMapWidth() || h > map_.getMapHeight())
-	{
-		static FixedVector up(0, 0, 1);
-		normal = up;
-	}
 	FixedVector result;
 	map_.getInterpNormal(w, h, normal);
 }

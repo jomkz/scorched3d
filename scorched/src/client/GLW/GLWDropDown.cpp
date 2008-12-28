@@ -20,7 +20,6 @@
 
 #include <GLW/GLWDropDown.h>
 #include <GLW/GLWTranslate.h>
-#include <GLW/GLWFont.h>
 #include <GLW/GLWToolTip.h>
 #include <client/ScorchedClient.h>
 

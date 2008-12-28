@@ -34,6 +34,7 @@
 #endif
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapemap/MovementMap.h>
+#include <lang/LangResource.h>
 
 TankWeapon::TankWeapon(ScorchedContext &context) : 
 	currentWeapon_(0), context_(context),
@@ -52,27 +53,29 @@ void TankWeapon::newMatch()
 
 void TankWeapon::changed()
 {
-	int weaponCount = tank_->getAccessories().
-		getAccessoryCount(currentWeapon_);
-	if (weaponCount == 0 ||
+	if (!tank_->getAccessories().canUse(currentWeapon_) ||
 		currentWeapon_ == 0)
 	{
+		setCurrentWeapon(0);
 		std::list<Accessory *> &result =
 			tank_->getAccessories().getAllAccessoriesByGroup("weapon");
-		if (!result.empty())
+		std::list<Accessory *>::iterator itor;
+		for (itor = result.begin();
+			itor != result.end();
+			itor++)
 		{
-			setWeapon(result.front());
-		}
-		else
-		{
-			setCurrentWeapon(0);
+			if (tank_->getAccessories().canUse(*itor))
+			{
+				setWeapon(*itor);
+				break;
+			}
 		}
 	}
 }
 
 bool TankWeapon::setWeapon(Accessory *wp)
 {
-	if (tank_->getAccessories().getAccessoryCount(wp) != 0)
+	if (tank_->getAccessories().canUse(wp))
 	{
 		setCurrentWeapon(wp);
 		return true;
@@ -88,7 +91,7 @@ Accessory *TankWeapon::getCurrent()
 void TankWeapon::setCurrentWeapon(Accessory *wp)
 {
 #ifndef S3D_SERVER
-	if (!context_.serverMode)
+	if (!context_.getServerMode())
 	{
 		// Only show this information on this tanks client
 		if (ScorchedClient::instance()->getTankContainer().getCurrentDestinationId() ==
@@ -109,13 +112,11 @@ void TankWeapon::setCurrentWeapon(Accessory *wp)
 			if (wp->getPositionSelect() == Accessory::ePositionSelectFuel)
 			{
 				WeaponMoveTank *moveWeapon = (WeaponMoveTank *)
-					context_.accessoryStore->findAccessoryPartByAccessoryId(
+					context_.getAccessoryStore().findAccessoryPartByAccessoryId(
 						wp->getAccessoryId(), "WeaponMoveTank");
 				if (moveWeapon)
 				{
 					MovementMap mmap(
-						context_.landscapeMaps->getGroundMaps().getMapWidth(),
-						context_.landscapeMaps->getGroundMaps().getMapHeight(),
 						tank_, 
 						context_);
 					mmap.calculateAllPositions(mmap.getFuel(moveWeapon));
@@ -125,8 +126,6 @@ void TankWeapon::setCurrentWeapon(Accessory *wp)
 			else if (wp->getPositionSelect() == Accessory::ePositionSelectFuelLimit)
 			{
 				MovementMap mmap(
-					context_.landscapeMaps->getGroundMaps().getMapWidth(),
-					context_.landscapeMaps->getGroundMaps().getMapHeight(),
 					tank_, 
 					context_);
 				mmap.calculateAllPositions(fixed(wp->getPositionSelectLimit()));
@@ -138,8 +137,13 @@ void TankWeapon::setCurrentWeapon(Accessory *wp)
 					wp->getPositionSelectLimit());
 			}
 
-			ChannelManager::showText(
-				S3D::formatStringBuffer("Click ground to activate %s", wp->getName()));
+			ChannelText text("banner",
+				LANG_RESOURCE_1(
+					"GROUND_WEAPON_ACTIVATE", 
+					"Click ground to activate {0}",
+					wp->getName()));
+			ChannelManager::showText(ScorchedClient::instance()->getContext(), 
+				text);
 		}
 
 		}

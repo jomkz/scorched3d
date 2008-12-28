@@ -24,6 +24,7 @@
 #include <server/ServerTooFewPlayersStimulus.h>
 #include <server/ServerMessageHandler.h>
 #include <server/ServerNextShotState.h>
+#include <server/ServerChannelManager.h>
 #include <server/ServerShotState.h>
 #include <server/ServerCommon.h>
 #include <common/Logger.h>
@@ -40,6 +41,7 @@
 #include <tank/TankSort.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
+#include <lua/LUAScriptHook.h>
 
 float ServerShotFinishedState::speed_(1.0f);
 
@@ -47,6 +49,7 @@ ServerShotFinishedState::ServerShotFinishedState(ServerShotState *shotState) :
 	GameStateI("ServerShotFinishedState"),
 	shotState_(shotState)
 {
+	ScorchedServer::instance()->getLUAScriptHook().addHookProvider("server_score");
 }
 
 ServerShotFinishedState::~ServerShotFinishedState()
@@ -117,7 +120,7 @@ void ServerShotFinishedState::enterState(const unsigned state)
 			{
 				Tank *tank = (*itor).second;
 				ServerCommon::serverLog(S3D::formatStringBuffer("%s - %s",
-					tank->getName(),
+					tank->getCStrName().c_str(),
 					tank->getScore().getScoreString()));
 			}
 			ServerCommon::serverLog("--------------------");
@@ -188,18 +191,18 @@ bool ServerShotFinishedState::scoreWinners()
 
 			if (tank->getAlive())
 			{
-				ScorchedServer::instance()->getContext().tankTeamScore->addScore(
+				ScorchedServer::instance()->getContext().getTankTeamScore().addScore(
 				        scoreWonForLives * tank->getState().getLives(), tank->getTeam());
 			}
 		}
 
 		std::set<int> winningTeams;
 		int winningTeam = 
-			ScorchedServer::instance()->getContext().tankTeamScore->getWonGame();
+			ScorchedServer::instance()->getContext().getTankTeamScore().getWonGame();
 		if (winningTeam != 0)
 		{
 			winningTeams.insert(winningTeam);
-			ScorchedServer::instance()->getContext().tankTeamScore->addScore(
+			ScorchedServer::instance()->getContext().getTankTeamScore().addScore(
 				scoreWonForRound, winningTeam);
 		}
 		else
@@ -215,7 +218,7 @@ bool ServerShotFinishedState::scoreWinners()
 				{
 					if (winningTeams.find(tank->getTeam()) == winningTeams.end())
 					{
-						ScorchedServer::instance()->getContext().tankTeamScore->addScore(
+						ScorchedServer::instance()->getContext().getTankTeamScore().addScore(
 							scoreWonForRound, tank->getTeam());
 						winningTeams.insert(tank->getTeam());
 
@@ -318,6 +321,31 @@ bool ServerShotFinishedState::scoreWinners()
 		}
 	}
 
+	// Check if this is the last round that will be played
+	bool overAllWinner = false;
+	if (ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() >=
+		ScorchedServer::instance()->getOptionsGame().getNoRounds())
+	{
+		overAllWinner = true;
+	}
+	else
+	{
+		if (ServerTooFewPlayersStimulus::instance()->acceptStateChange(0, 
+			ServerState::ServerStateTooFewPlayers, 0.0f))
+		{
+			if (ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() >
+				ScorchedServer::instance()->getOptionsGame().getNoRounds() / 2 && 
+				ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() > 2)
+			{
+				overAllWinner = true;
+			}
+		}
+	}
+
+	// Tell scripts to score 
+	ScorchedServer::instance()->getLUAScriptHook().callHook("server_score", 
+		overAllWinner);
+
 	// Update the stats for the players before sending out the
 	// stats message
 	std::map<unsigned int, Tank *> &tanks = 
@@ -342,29 +370,9 @@ bool ServerShotFinishedState::scoreWinners()
 		tank->getScore().resetTotalEarnedStats();
 
 		// Get the new tanks rank
-		std::string rank = StatsLogger::instance()->tankRank(tank);
-		tank->getScore().setStatsRank(rank.c_str());
-	}
-
-	// Check if this is the last round that will be played
-	bool overAllWinner = false;
-	if (ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() >=
-		ScorchedServer::instance()->getOptionsGame().getNoRounds())
-	{
-		overAllWinner = true;
-	}
-	else
-	{
-		if (ServerTooFewPlayersStimulus::instance()->acceptStateChange(0, 
-			ServerState::ServerStateTooFewPlayers, 0.0f))
-		{
-			if (ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() >
-				ScorchedServer::instance()->getOptionsGame().getNoRounds() / 2 && 
-				ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() > 2)
-			{
-				overAllWinner = true;
-			}
-		}
+		StatsLogger::TankRank rank = StatsLogger::instance()->tankRank(tank);
+		tank->getScore().setRank(rank.rank);
+		tank->getScore().setSkill(rank.skill);
 	}
 
 	// Its the very last round, score the overall winner
@@ -404,7 +412,7 @@ void ServerShotFinishedState::scoreOverallWinner()
 		{
 			Tank *topScore = *(sortedTanks.begin());
 
-			std::string names;
+			LangString names;
 			std::list<Tank *> winners;
             std::list<Tank *>::iterator scoreitor;
 			for (scoreitor = sortedTanks.begin();
@@ -416,8 +424,8 @@ void ServerShotFinishedState::scoreOverallWinner()
 					current->getScore().getScore())
 				{
 					winners.push_back(current);
-					if (!names.empty()) names.append(",");
-					names.append(current->getName());
+					if (!names.empty()) names.append(LANG_STRING(","));
+					names.append(current->getTargetName());
 
 					// Score the winning tank as the overall winner
 					StatsLogger::instance()->tankOverallWinner(current);
@@ -426,15 +434,21 @@ void ServerShotFinishedState::scoreOverallWinner()
 
 			if (winners.size() == 1)
 			{
-				ServerCommon::sendStringMessage(0, 
-					S3D::formatStringBuffer("%s is the overall winner!", 
-					names.c_str()));
+				ServerChannelManager::instance()->sendText(
+					ChannelText("banner",
+						"PLAYER_OVERALL_WINNER",
+						"{0} is the overall winner!", 
+						names),
+					true);
 			}
 			else
 			{
-				ServerCommon::sendStringMessage(0, 
-					S3D::formatStringBuffer("%s are the overall winners!", 
-					names.c_str()));
+				ServerChannelManager::instance()->sendText(
+					ChannelText("banner",
+						"PLAYERS_OVERALL_WINNERS",
+						"{0} are the overall winners!", 
+						names),
+					true);
 			}
 		}
 	}
@@ -444,13 +458,20 @@ void ServerShotFinishedState::scoreOverallWinner()
 			ScorchedServer::instance()->getContext());
 		if (winningTeam == 0)
 		{
-			ServerCommon::sendStringMessage(0, "The game is a draw!");
+			ServerChannelManager::instance()->sendText(
+				ChannelText("banner", 
+					"GAME_DRAWN",
+					"The game is a draw!"),
+				true);
 		}
 		else
 		{
-			ServerCommon::sendStringMessage(0, 
-				S3D::formatStringBuffer("%s team is the overall winner!",
-				TankColorGenerator::getTeamName(winningTeam)));
+			ServerChannelManager::instance()->sendText(
+				ChannelText("banner",
+					"TEAM_OVERALL_WINNER",
+					"{0} team is the overall winner!",
+					TankColorGenerator::getTeamName(winningTeam)),
+				true);
 		}
 		
 		// Score all the winning tanks as overall winners

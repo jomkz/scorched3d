@@ -62,7 +62,7 @@ bool ServerAuthHandlerDefault::authenticateUser(ComsConnectAuthMessage &authMess
 }
 
 bool ServerAuthHandlerDefault::authenticateUserName(const char *uniqueId, 
-	const char *playername)
+	const LangString &playername)
 {
 	return true;
 }

@@ -23,6 +23,7 @@
 #include <server/ServerState.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerMessageHandler.h>
+#include <server/ServerChannelManager.h>
 #include <server/TurnController.h>
 #include <server/ServerCommon.h>
 #ifndef S3D_SERVER
@@ -45,11 +46,10 @@
 #include <coms/ComsNewGameMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <landscapemap/LandscapeMaps.h>
-#include <landscapemap/DeformLandscape.h>
-#include <landscapemap/HeightMapSender.h>
 #include <landscapedef/LandscapeDefn.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <placement/PlacementTankPosition.h>
+#include <lua/LUAScriptHook.h>
 #include <common/RandomGenerator.h>
 #include <common/OptionsTransient.h>
 #include <common/OptionsScorched.h>
@@ -61,11 +61,10 @@
 
 extern Clock serverTimer;
 
-std::list<FixedVector> ServerNewGameState::tankPositions_;
-
 ServerNewGameState::ServerNewGameState() :
 	GameStateI("ServerNewGameState")
 {
+	ScorchedServer::instance()->getLUAScriptHook().addHookProvider("server_newgame");
 }
 
 ServerNewGameState::~ServerNewGameState()
@@ -88,7 +87,9 @@ void ServerNewGameState::enterState(const unsigned state)
 	StatsLogger::instance()->gameStart(currentTanks);
 
 	// Tell clients a new game is starting
-	ServerCommon::sendString(0, "Next Round");
+	ServerChannelManager::instance()->sendText(
+		ChannelText("info", "NEXT_ROUND", "Next Round"),
+		true);
 
 	// Make any enconomic changes
 	EconomyStore::instance()->getEconomy()->calculatePrices();
@@ -101,21 +102,25 @@ void ServerNewGameState::enterState(const unsigned state)
 	if (ScorchedServer::instance()->getOptionsGame().commitChanges())
 	{
 		sendGameState = true;
-		ServerCommon::sendString(0, "Game options have been changed!");
+		ServerChannelManager::instance()->sendText(
+			ChannelText("info", 
+				"GAME_OPTIONS_CHANGED", 
+				"Game options have been changed!"),
+			true);
 	}
 
 	// Get a landscape definition to use
 	LandscapeDefinition defn = ScorchedServer::instance()->getLandscapes().getRandomLandscapeDefn(
-		*ScorchedServer::instance()->getContext().optionsGame,
-		*ScorchedServer::instance()->getContext().tankContainer);
+		ScorchedServer::instance()->getContext().getOptionsGame(),
+		ScorchedServer::instance()->getContext().getTankContainer());
 
 	// Load the per level options
 	ScorchedServer::instance()->getOptionsGame().updateLevelOptions(
 		ScorchedServer::instance()->getContext(), defn);
 
 	// Set all options (wind etc..)
-	ScorchedServer::instance()->getContext().optionsTransient->newGame();
-	ScorchedServer::instance()->getContext().tankTeamScore->newGame();
+	ScorchedServer::instance()->getContext().getOptionsTransient().newGame();
+	ScorchedServer::instance()->getContext().getTankTeamScore().newGame();
 
 	// Check if we can load/save a game
 #ifndef S3D_SERVER
@@ -156,15 +161,21 @@ void ServerNewGameState::enterState(const unsigned state)
 	// Check teams are even
 	checkTeams();
 
+	// Make sure all tanks that should be playing are playing
+	resetTankStates(state);
+
 	// Generate the new level
 	ScorchedServer::instance()->getLandscapeMaps().generateMaps(
-		ScorchedServer::instance()->getContext(), defn, tankPositions_);
+		ScorchedServer::instance()->getContext(), defn);
 
 	// Add pending tanks (all tanks should be pending) into the game
 	addTanksToGame(state, sendGameState);
 
 	// Create the player order for this game
 	TurnController::instance()->newGame();
+
+	// Notify scripts of a new game starting
+	ScorchedServer::instance()->getLUAScriptHook().callHook("server_newgame");
 
 	// As we have not returned to the main loop for ages the
 	// timer will have a lot of time in it
@@ -179,28 +190,8 @@ void ServerNewGameState::enterState(const unsigned state)
 int ServerNewGameState::addTanksToGame(const unsigned state,
 									   bool addState)
 {
-	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	std::map<unsigned int, Tank *>::iterator itor;
-
-	// Check if there are any tanks needing the next level
-	bool pending = false;
-	for (itor = tanks.begin();
-		itor != tanks.end();
-		itor++)
-	{
-		Tank *tank = (*itor).second;
-
-		// Check to see if any tanks are pending being added
-		if (tank->getState().getState() == TankState::sPending ||
-			(state == ServerState::ServerStateNewGame && (
-			tank->getState().getState() == TankState::sDead ||
-			tank->getState().getState() == TankState::sNormal)))
-		{
-			pending = true;
-		}
-	}
-	if (!pending) return 0;
+	std::list<Tank *> tanks = resetTankStates(state);
+	if (tanks.empty()) return 0;
 
 	// Generate the level message
 	ComsNewGameMessage newGameMessage;
@@ -242,15 +233,10 @@ int ServerNewGameState::addTanksToGame(const unsigned state,
 	}
 
 	// Add the height map info
-	newGameMessage.getLevelMessage().getTankPositions() = tankPositions_;
 	newGameMessage.getLevelMessage().createMessage(
 		ScorchedServer::instance()->getLandscapeMaps().getDefinitions().getDefinition());
-	if (!HeightMapSender::generateHMapDiff(
-		ScorchedServer::instance()->getLandscapeMaps().getGroundMaps().getHeightMap(),
-		newGameMessage.getLevelMessage().getHeightMap()))
-	{
-		Logger::log( "ERROR: Failed to generate diff");
-	}
+	newGameMessage.getLevelMessage().getDeformInfos() = 
+		DeformLandscape::getInfos();
 	LandscapeDefinitionCache &definitions =
 		ScorchedServer::instance()->getLandscapeMaps().getDefinitions();
 	ServerCommon::serverLog(
@@ -260,11 +246,16 @@ int ServerNewGameState::addTanksToGame(const unsigned state,
 		definitions.getDefinition().getTex()));
 
 	// Check if the generated landscape is too large to send to the clients
-	if (newGameMessage.getLevelMessage().getHeightMap().getLevelLen() >
-		(unsigned int) ScorchedServer::instance()->getOptionsGame().getMaxLandscapeSize())
+	int sendSize = int(newGameMessage.getLevelMessage().getDeformInfos().size()) *
+		sizeof(DeformLandscape::DeformInfo);
+	if (sendSize > ScorchedServer::instance()->getOptionsGame().getMaxLandscapeSize())
 	{
-		ServerCommon::sendString(0, S3D::formatStringBuffer("Landscape too large to send to waiting clients (%i bytes).", 
-			newGameMessage.getLevelMessage().getHeightMap().getLevelLen()));
+		ServerChannelManager::instance()->sendText(
+			ChannelText("info", 
+				"LANDSCAPE_TOO_LARGE",
+				"Landscape too large to send to waiting clients ({0} bytes).", 
+				sendSize),
+			true);
 		return 0;
 	}
 
@@ -274,8 +265,42 @@ int ServerNewGameState::addTanksToGame(const unsigned state,
 	std::set<unsigned int> destinations;
 	std::set<unsigned int>::iterator findItor;
 
+	std::list<Tank *>::iterator itor;
+	for (itor = tanks.begin();
+		itor != tanks.end();
+		itor++)
+	{
+		Tank *tank = *itor;
+
+		// We need to wait for a ready message
+		tank->getState().setNotReady();
+
+		// Add to the list of destinations to send this message to
+		// (if not already added)
+		unsigned int destination = tank->getDestinationId();
+		findItor = destinations.find(destination);
+		if (findItor == destinations.end())
+		{
+			destinations.insert(destination);
+			sendDestinations.push_back(destination);
+		}
+	}
+
+	// Send after all of the states have been set
+	// Do this after incase the message contains the new states
+	ComsMessageSender::sendToMultipleClients(newGameMessage, sendDestinations);
+
+	return (int) tanks.size();
+}
+
+std::list<Tank *> ServerNewGameState::resetTankStates(unsigned int state)
+{
+	std::list<Tank *> resultingTanks;
+
 	// Tell any pending tanks to join the game
-	int count = 0;
+	std::map<unsigned int, Tank *> &tanks = 
+		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
 		itor++)
@@ -287,7 +312,7 @@ int ServerNewGameState::addTanksToGame(const unsigned state,
 			tank->getState().getState() == TankState::sDead ||
 			tank->getState().getState() == TankState::sNormal)))
 		{
-			count++;
+			resultingTanks.push_back(tank);
 
 			// This is the very first time this tank
 			// has played the game, load it with the starting
@@ -321,27 +346,10 @@ int ServerNewGameState::addTanksToGame(const unsigned state,
 				// This tank is now playing (but dead)
 				tank->getState().setState(TankState::sDead);
 			}
-
-			// We need to wait for a ready message
-			tank->getState().setNotReady();
-
-			// Add to the list of destinations to send this message to
-			// (if not already added)
-			unsigned int destination = tank->getDestinationId();
-			findItor = destinations.find(destination);
-			if (findItor == destinations.end())
-			{
-				destinations.insert(destination);
-				sendDestinations.push_back(destination);
-			}
 		}
 	}
 
-	// Send after all of the states have been set
-	// Do this after incase the message contains the new states
-	ComsMessageSender::sendToMultipleClients(newGameMessage, sendDestinations);
-
-	return count;
+	return resultingTanks;
 }
 
 void ServerNewGameState::checkTeams()
@@ -497,16 +505,28 @@ void ServerNewGameState::checkTeamsAuto()
 		if (ScorchedServer::instance()->getOptionsGame().getTeamBallance() ==
 			OptionsGame::TeamBallanceAutoByScore)
 		{
-			ServerCommon::sendString(0, "Auto ballancing teams, by score");
+			ServerChannelManager::instance()->sendText(
+				ChannelText("info", 
+					"SCORE_AUTO_BALLANCE", 
+					"Auto ballancing teams, by score"),
+				true);
 		}
 		else if (ScorchedServer::instance()->getOptionsGame().getTeamBallance() ==
 			OptionsGame::TeamBallanceAutoByBots)
 		{
-			ServerCommon::sendString(0, "Auto ballancing teams, by bots");
+			ServerChannelManager::instance()->sendText(
+				ChannelText("info",
+					"BOTS_AUTO_BALLANCE",
+					"Auto ballancing teams, by bots"),
+				true);
 		}
 		else
 		{
-			ServerCommon::sendString(0, "Auto ballancing teams");
+			ServerChannelManager::instance()->sendText(
+				ChannelText("info",
+					"NORMAL_AUTO_BALLANCE",
+					"Auto ballancing teams"),
+				true);
 		}
 	}
 }

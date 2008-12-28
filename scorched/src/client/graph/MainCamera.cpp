@@ -28,6 +28,7 @@
 #include <landscapedef/LandscapeDefn.h>
 #include <engine/ViewPoints.h>
 #include <image/ImageFactory.h>
+#include <image/ImagePng.h>
 #include <dialogs/MainMenuDialog.h>
 #include <sound/Sound.h>
 #include <sound/SoundUtils.h>
@@ -38,6 +39,7 @@
 #include <coms/ComsMessageSender.h>
 #include <tank/TankContainer.h>
 #include <tank/TankCamera.h>
+#include <lang/LangResource.h>
 #include <math.h>
 #include <time.h>
 
@@ -62,7 +64,10 @@ MainCamera::MainCamera() :
 		false);
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->addMenu(
-		"Camera", 32, 0, this, map);
+		LANG_RESOURCE("CAMERA", "Camera"),
+		"Camera", 
+		LANG_RESOURCE("CAMERA_MENU", "Change the current camera view."),
+		32, 0, this, map);
 }
 
 MainCamera::~MainCamera()
@@ -81,7 +86,8 @@ bool MainCamera::getMenuItems(const char* menuName,
 {
 	for (int i=0; i<TargetCamera::getNoCameraNames(); i++)
 	{
-		result.push_back(GLMenuItem(TargetCamera::getCameraNames()[i], 
+		result.push_back(GLMenuItem(
+			LANG_RESOURCE(TargetCamera::getCameraNames()[i], TargetCamera::getCameraNames()[i]),
 			&TargetCamera::getCameraToolTips()[i],
 			(targetCam_.getCameraType() == 
 			(TargetCamera::CamType) i)));
@@ -122,10 +128,15 @@ void MainCamera::simulate(const unsigned state, float frameTime)
 		int mouseY = ScorchedClient::instance()->getGameState().getMouseY();
 		int windowX = Main2DCamera::instance()->getViewPort().getWidth();
 		int windowY = Main2DCamera::instance()->getViewPort().getHeight();
-		float mapWidth = (float) ScorchedClient::instance()->getLandscapeMaps().
-			getDefinitions().getDefn()->landscapewidth;
-		float mapHeight = (float) ScorchedClient::instance()->getLandscapeMaps().
-			getDefinitions().getDefn()->landscapeheight;
+
+		float arenaWidth = (float) ScorchedClient::instance()->getLandscapeMaps().
+			getGroundMaps().getArenaWidth();
+		float arenaHeight = (float) ScorchedClient::instance()->getLandscapeMaps().
+			getGroundMaps().getArenaHeight();
+		float arenaX = (float) ScorchedClient::instance()->getLandscapeMaps().
+			getGroundMaps().getArenaX();
+		float arenaY = (float) ScorchedClient::instance()->getLandscapeMaps().
+			getGroundMaps().getArenaY();
 
 		{
 			const int scrollWindow = 5;
@@ -138,7 +149,8 @@ void MainCamera::simulate(const unsigned state, float frameTime)
 				}
 				else
 				{
-					targetCam_.getCamera().scroll(GLCamera::eScrollLeft, mapWidth, mapHeight);
+					targetCam_.getCamera().scroll(GLCamera::eScrollLeft, 
+						arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight);
 				}
 			}
 			else if (mouseX > windowX - scrollWindow)
@@ -150,7 +162,8 @@ void MainCamera::simulate(const unsigned state, float frameTime)
 				}
 				else
 				{
-					targetCam_.getCamera().scroll(GLCamera::eScrollRight, mapWidth, mapHeight);
+					targetCam_.getCamera().scroll(GLCamera::eScrollRight,
+						arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight);
 				}
 			}
 		
@@ -167,7 +180,8 @@ void MainCamera::simulate(const unsigned state, float frameTime)
 				}
 				else
 				{
-					targetCam_.getCamera().scroll(GLCamera::eScrollDown, mapWidth, mapHeight);
+					targetCam_.getCamera().scroll(GLCamera::eScrollDown, 
+						arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight);
 				}
 			}
 			else if (mouseY > windowY - scrollWindow)
@@ -183,13 +197,14 @@ void MainCamera::simulate(const unsigned state, float frameTime)
 				}
 				else
 				{
-					targetCam_.getCamera().scroll(GLCamera::eScrollUp, mapWidth, mapHeight);
+					targetCam_.getCamera().scroll(GLCamera::eScrollUp, 
+						arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight);
 				}
 			}
 		}
 	}
 
-	ScorchedClient::instance()->getContext().viewPoints->simulate(
+	ScorchedClient::instance()->getContext().getViewPoints().simulate(
 		fixed::fromFloat(frameTime));
 	targetCam_.simulate(frameTime, (state == ClientState::StatePlaying));
 
@@ -270,29 +285,39 @@ void MainCamera::keyboardCheck(const unsigned state, float frameTime,
 	KEYBOARDKEY("CAMERA_SCROLL_DOWN", scrollDown);
 	KEYBOARDKEY("CAMERA_SCROLL_LEFT", scrollLeft);
 	KEYBOARDKEY("CAMERA_SCROLL_RIGHT", scrollRight);
-	float mapWidth = (float) ScorchedClient::instance()->getLandscapeMaps().
-		getDefinitions().getDefn()->landscapewidth;
-	float mapHeight = (float) ScorchedClient::instance()->getLandscapeMaps().
-		getDefinitions().getDefn()->landscapeheight;
+
+	float arenaWidth = (float) ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaWidth();
+	float arenaHeight = (float) ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaHeight();
+	float arenaX = (float) ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaX();
+	float arenaY = (float) ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaY();
+
 	if (scrollUp->keyDown(buffer, keyState)) 
 	{
 		targetCam_.setCameraType(TargetCamera::CamFree);
-		targetCam_.getCamera().scroll(GLCamera::eScrollUp, mapWidth, mapHeight);
+		targetCam_.getCamera().scroll(GLCamera::eScrollUp, 
+			arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight);
 	}
 	else if (scrollDown->keyDown(buffer, keyState)) 
 	{
 		targetCam_.setCameraType(TargetCamera::CamFree);
-		targetCam_.getCamera().scroll(GLCamera::eScrollDown, mapWidth, mapHeight);
+		targetCam_.getCamera().scroll(GLCamera::eScrollDown,
+			arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight);
 	}
 	else if (scrollLeft->keyDown(buffer, keyState)) 
 	{
 		targetCam_.setCameraType(TargetCamera::CamFree);
-		targetCam_.getCamera().scroll(GLCamera::eScrollLeft, mapWidth, mapHeight);
+		targetCam_.getCamera().scroll(GLCamera::eScrollLeft,
+			arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight);
 	}
 	else if (scrollRight->keyDown(buffer, keyState)) 
 	{
 		targetCam_.setCameraType(TargetCamera::CamFree);
-		targetCam_.getCamera().scroll(GLCamera::eScrollRight, mapWidth, mapHeight);
+		targetCam_.getCamera().scroll(GLCamera::eScrollRight,
+			arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight);
 	}
 
 	KEYBOARDKEY("HIDE_ALL_DIALOGS", hideWindows);
@@ -374,10 +399,19 @@ void MainCamera::SaveScreen::draw(const unsigned state)
 		static unsigned counter = 0;
 		time_t currentTime = time(0);
 		std::string fileName = 
-			S3D::getHomeFile(S3D::formatStringBuffer("ScreenShot-%i-%i.bmp", currentTime, counter++));
+			S3D::getHomeFile(S3D::formatStringBuffer("ScreenShot-%i-%i.png", currentTime, counter++));
 
 		ImageHandle screenMap = ImageFactory::grabScreen();
-		screenMap.writeToFile(fileName);
+
+		ImagePng png(screenMap.getWidth(), screenMap.getHeight());
+		memcpy(png.getBits(), screenMap.getBits(), screenMap.getWidth() * screenMap.getHeight() * 3);
+
+		NetBuffer buffer;
+		png.writeToBuffer(buffer);
+
+		FILE *out = fopen(fileName.c_str(), "wb");
+		fwrite(buffer.getBuffer(), 1, buffer.getBufferUsed(), out);
+		fclose(out);
 
 		// Don't print to banner otherwise this message will be in
 		// the screenshot!

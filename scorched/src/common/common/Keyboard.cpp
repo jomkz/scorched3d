@@ -36,7 +36,7 @@ Keyboard *Keyboard::instance()
 	return instance_;
 }
 
-Keyboard::Keyboard() : keybHistCnt_(0)
+Keyboard::Keyboard() : keybHistCnt_(0), mHighSurrogate(0)
 {
 
 }
@@ -76,28 +76,74 @@ KeyboardHistory::HistoryElement *Keyboard::getkeyboardhistory(unsigned int &hist
  	return keybHist_;
 }
  
-void Keyboard::processKeyboardEvent(SDL_Event &event)
+#define UTF16_IS_HIGH_SURROGATE(U) ((Uint16)((U) - 0xD800) < 0x0400)
+#define UTF16_IS_LOW_SURROGATE(U)  ((Uint16)((U) - 0xDC00) < 0x0400)
+#define UTF16_SURROGATE_PAIR_TO_UTF32(H,L) (((H) << 10) + (L) - (0xD800 << 10) - 0xDC00 + 0x00010000)
+
+void Keyboard::raiseUnicodeUTF16(Uint16 utf16, SDLKey key)
 {
 	// Check we have enough space in the array
 	if (keybHistCnt_ >= MAX_KEYBDHIST) return;
 
+	KeyboardHistory::HistoryElement newElement =
+	{
+		key,
+		utf16
+	};
+
+	// Add characater and symbol to history
+	keybHist_[keybHistCnt_++] = newElement;
+}
+
+void Keyboard::handleUnicodeUTF16(Uint16 utf16, SDLKey key)
+{
+	// Note that we could discard unpaired surrogates, but I'm
+	// following the Unicode Consortium's recommendation here;
+	// that is, to preserve those unpaired surrogates in UTF-32
+	// values.  _To_preserve_ means to pass to the callback in our
+	// context.
+
+	if (mHighSurrogate == 0)
+	{
+		if (UTF16_IS_HIGH_SURROGATE(utf16))
+		{
+			mHighSurrogate = utf16;
+		}
+		else
+		{
+			raiseUnicodeUTF16(utf16, key);
+		}
+	}
+	else
+	{
+		if (UTF16_IS_LOW_SURROGATE(utf16))
+		{
+			/* A legal surrogate pair.  */			
+			raiseUnicodeUTF16(UTF16_SURROGATE_PAIR_TO_UTF32(mHighSurrogate, utf16), key);
+			mHighSurrogate = 0;
+		}
+		else if (UTF16_IS_HIGH_SURROGATE(utf16))
+		{
+			/* Two consecutive high surrogates.  */
+			raiseUnicodeUTF16(mHighSurrogate, key);
+			mHighSurrogate = utf16;
+		}
+		else
+		{
+			/* A non-low-surrogate preceeded by a high surrogate. */
+			raiseUnicodeUTF16(mHighSurrogate, key);
+			mHighSurrogate = 0;
+			raiseUnicodeUTF16(utf16, key);
+		}
+	}
+}
+
+void Keyboard::processKeyboardEvent(SDL_Event &event)
+{
 	// Check we are adding the correct key type
 	if (event.type != SDL_KEYDOWN) return;
 
-	// Check we don't have an international character
-	if ( (event.key.keysym.unicode & 0xFF80) == 0 )
-	{
-		char ch = event.key.keysym.unicode & 0x7F;
-
-		KeyboardHistory::HistoryElement newElement =
-		{
-			event.key.keysym.sym,
-			ch
-		};
-
-		// Add characater and symbol to history
-		keybHist_[keybHistCnt_++] = newElement;
-	}
+	handleUnicodeUTF16(event.key.keysym.unicode, event.key.keysym.sym);
 }
 
 bool &Keyboard::getDvorak()
@@ -253,7 +299,7 @@ bool Keyboard::loadKeyFile(const std::string &fileName, bool masterFile)
 		 childrenItor != children.end();
 		 childrenItor++)
     {
-		// Parse the tank entry
+		// Parse the key entry
         XMLNode *currentNode = (*childrenItor);
 		if (strcmp(currentNode->getName(), "keyentry"))
 		{

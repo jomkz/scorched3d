@@ -22,6 +22,7 @@
 #include <server/ScorchedServer.h>
 #include <server/ServerShotHolder.h>
 #include <server/ServerCommon.h>
+#include <server/ServerChannelManager.h>
 #include <coms/ComsMessageSender.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
@@ -88,7 +89,11 @@ void ServerShotState::enterState(const unsigned state)
 
 		if (allAis && someAlive)
 		{
-			ServerCommon::sendString(0, "Skipping all turns due to stalemate...");
+			ServerChannelManager::instance()->sendText(
+				ChannelText("info", 
+					"TURN_SKIPPING_STALEMATE", 
+					"Skipping all turns due to stalemate..."),
+				true);
 			ScorchedServer::instance()->getOptionsTransient().startNewRound();
 		}
 	}

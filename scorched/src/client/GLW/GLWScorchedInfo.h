@@ -45,7 +45,7 @@ public:
 		eWind,
 		ePlayerName,
 		ePlayerIcon,
-		ePlayerColor,
+		ePlayerRank,
 		eAutoDefenseCount,
 		eParachuteCount,
 		eHealthCount,

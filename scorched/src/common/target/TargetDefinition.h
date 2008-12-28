@@ -52,7 +52,7 @@ protected:
 	bool displaydamage_, displayshadow_;
 	bool displayhardwareshadow_;
 	bool nofallingdamage_;
-	std::string name_;
+	LangString name_;
 	std::string parachute_;
 	std::string shield_;
 	FixedVector size_;

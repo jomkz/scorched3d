@@ -73,7 +73,7 @@ bool WeaponRoller::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 	XMLNode *subNode = 0;
 	if (!accessoryNode->getNamedChild("collisionaction", subNode)) return false;
 
-	AccessoryPart *accessory = context.getAccessoryStore()->
+	AccessoryPart *accessory = context.getAccessoryStore().
 		createAccessoryPart(context, parent_, subNode);
 	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
 	{
@@ -117,7 +117,7 @@ void WeaponRoller::fireWeapon(ScorchedContext &context,
 
 	dampenVelocity_ = dampenVelocityExp_.getValue(context, dampenVelocity_);
 
-	fixed minHeight = context.landscapeMaps->getGroundMaps().getInterpHeight(
+	fixed minHeight = context.getLandscapeMaps().getGroundMaps().getInterpHeight(
 		oldposition[0], oldposition[1]);
 
 	// Make sure position is not underground
@@ -129,7 +129,7 @@ void WeaponRoller::fireWeapon(ScorchedContext &context,
 		}
 	}
 
-	RandomGenerator &random = context.actionController->getRandom();
+	RandomGenerator &random = context.getActionController().getRandom();
 	int numberRollers = numberRollers_.getUInt(context);
 	for (int i=0; i<numberRollers; i++)
 	{
@@ -139,13 +139,13 @@ void WeaponRoller::fireWeapon(ScorchedContext &context,
 		// Make a slightly different starting position
 		position[0] += random.getRandFixed() * 2 - 1;
 		position[1] += random.getRandFixed() * 2 - 1;
-		fixed minHeight = context.landscapeMaps->getGroundMaps().getInterpHeight(
+		fixed minHeight = context.getLandscapeMaps().getGroundMaps().getInterpHeight(
 			position[0], position[1]) + 1;
 		if (position[2] < minHeight) position[2] = minHeight;
 				
 		// Check if we have hit the roof (quite litteraly)
 		{
-			fixed maxHeight = context.landscapeMaps->getRoofMaps().getInterpRoofHeight(
+			fixed maxHeight = context.getLandscapeMaps().getRoofMaps().getInterpRoofHeight(
 				position[0] / 4, position[1] / 4);
 			if (position[2] > maxHeight - 1)
 			{
@@ -159,7 +159,7 @@ void WeaponRoller::fireWeapon(ScorchedContext &context,
 		{
 			ok = true;
 			std::map<unsigned int, Target *> &targets = 
-				context.targetContainer->getTargets();
+				context.getTargetContainer().getTargets();
 			std::map<unsigned int, Target *>::iterator itor;
 			for (itor = targets.begin();
 				itor != targets.end();
@@ -191,26 +191,20 @@ void WeaponRoller::addRoller(ScorchedContext &context,
 	WeaponFireContext &weaponContext,
 	FixedVector &position, FixedVector &velocity)
 {
-	// Ensure that the Roller has not hit the walls
-	// or anything outside the landscape
-	RandomGenerator &random = context.actionController->getRandom();
-	if (position[0] > 1 && position[1] > 1 &&
-		position[0] < context.landscapeMaps->getGroundMaps().getMapWidth() - 1 &&
-		position[1] < context.landscapeMaps->getGroundMaps().getMapHeight() - 1)
+	RandomGenerator &random = context.getActionController().getRandom();
+
+	FixedVector newVelocity;
+	if (maintainVelocity_)
 	{
-		FixedVector newVelocity;
-		if (maintainVelocity_)
-		{
-			newVelocity = velocity * dampenVelocity_;
-		}
-		else
-		{
-			newVelocity[0] = random.getRandFixed() - fixed(true, 5000);
-			newVelocity[1] = random.getRandFixed() - fixed(true, 5000);
-			newVelocity[2] = random.getRandFixed() * 2;
-		}
-		
-		context.actionController->addAction(
-			new ShotBounce(this, position, newVelocity, weaponContext));
+		newVelocity = velocity * dampenVelocity_;
 	}
+	else
+	{
+		newVelocity[0] = random.getRandFixed() - fixed(true, 5000);
+		newVelocity[1] = random.getRandFixed() - fixed(true, 5000);
+		newVelocity[2] = random.getRandFixed() * 2;
+	}
+	
+	context.getActionController().addAction(
+		new ShotBounce(this, position, newVelocity, weaponContext));
 }

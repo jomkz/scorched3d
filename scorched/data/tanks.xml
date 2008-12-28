@@ -603,7 +603,7 @@
 	<tank>
 		<name>CF-104</name>
 		<catagory>High Def</catagory>
-		<model type="MilkShape">CF-104/104.txt</model>
+		<model type="MilkShape">cf-104/104.txt</model>
 	</tank>
 	<tank>
 		<name>Tux</name>

@@ -179,9 +179,12 @@ bool ServerAuthHandlerForumLogin::authenticateUser(ComsConnectAuthMessage &authM
 }
 
 bool ServerAuthHandlerForumLogin::authenticateUserName(const char *uniqueId, 
-	const char *playername)
+	const LangString &lsplayername)
 {
 	if (!connectHandler()) return false;
+
+	std::string splayername = LangStringUtil::convertFromLang(lsplayername);
+	const char *playername = splayername.c_str();
 
 	bool userResult = true;
 	{

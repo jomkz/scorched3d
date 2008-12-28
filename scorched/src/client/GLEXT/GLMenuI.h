@@ -29,27 +29,30 @@
 #include <list>
 #include <string>
 #include <GLW/GLWToolTip.h>
+#include <lang/LangString.h>
 
 class GLTexture;
 class GLMenuItem
 {
 public:
-	GLMenuItem(const char *text, 
+	GLMenuItem(const LangString &text, 
 		ToolTip *tooltip = 0, bool selected = false, 
 		GLTexture *texture = 0,
 		void *userData = 0);
 
-	const char *getText() { return menuText_.c_str(); }
+	const LangString &getText() { return menuText_; }
 	ToolTip *getToolTip() { return tip_; }
 	GLTexture *getTexture() { return texture_; }
 	bool getSelected() { return selected_; }
 	void *getUserData() { return userData_; }
+	bool getSeperator() { return seperator_; }
+	void setSeperator() { seperator_ = true; }
 
 protected:
-	std::string menuText_;
+	LangString menuText_;
 	ToolTip *tip_;
 	GLTexture *texture_;
-	bool selected_;
+	bool selected_, seperator_;
 	void *userData_;
 };
 
@@ -59,10 +62,11 @@ public:
 	virtual ~GLMenuI();
 
 	virtual void menuSelection(const char* menuName, const int position, GLMenuItem &item);
-	virtual const char *getMenuText(const char* menuName);
+	virtual LangString *getMenuText(const char* menuName);
 	virtual bool getEnabled(const char* menuName);
 	virtual bool getMenuItems(const char* menuName, std::list<GLMenuItem> &result);
 	virtual bool menuOpened(const char* menuName);
+	virtual LangStringStorage *getMenuToolTip(const char* menuName);
 };
 
 #endif // !defined(AFX_GLMENUI_H__7171A46C_8265_4A9F_A984_889EF2547CB1__INCLUDED_)

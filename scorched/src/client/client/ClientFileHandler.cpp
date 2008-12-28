@@ -29,6 +29,7 @@
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsFileMessage.h>
 #include <coms/ComsFileAkMessage.h>
+#include <lang/LangResource.h>
 
 ClientFileHandler *ClientFileHandler::instance_ = 0;
 
@@ -96,8 +97,8 @@ bool ClientFileHandler::processMessage(
 		if (strrchr(shortFileName, '/')) shortFileName = strrchr(shortFileName, '/') + 1;
 		unsigned int doneBytes = totalBytes_ - bytesLeft;
 		ProgressDialog::instance()->progressChange(
-			S3D::formatStringBuffer("Downloading %s",
-				shortFileName), float(doneBytes * 100 / totalBytes_));
+			LANG_RESOURCE_1("DOWNLOADING_FILE", "Downloading {0}", shortFileName), 
+			float(doneBytes * 100 / totalBytes_));
 
 		// Read the size
 		unsigned int maxsize = 0;

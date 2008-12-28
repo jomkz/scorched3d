@@ -76,7 +76,7 @@ bool LandscapeConditionGroupSize::fireEvent(ScorchedContext &context,
 	if (eventNumber == 1) // i.e. the first event
 	{
 		TargetGroupsGroupEntry *groupEntry =
-			context.landscapeMaps->getGroundMaps().getGroups().getGroup(
+			context.getLandscapeMaps().getGroundMaps().getGroups().getGroup(
 				groupname.c_str());
 		if (groupEntry)
 		{
@@ -104,7 +104,7 @@ fixed LandscapeConditionTime::getNextEventTime(ScorchedContext &context, int eve
 		return fixed::MAX_FIXED;
 	}
 
-	return context.actionController->getRandom().getRandFixed() * 
+	return context.getActionController().getRandom().getRandFixed() * 
 		(maxtime - mintime) + mintime;
 }
 
@@ -130,7 +130,7 @@ fixed LandscapeConditionRandom::getNextEventTime(ScorchedContext &context, int e
 		return fixed::MAX_FIXED;
 	}
 
-	if (context.actionController->getRandom().getRandFixed() < randomchance)
+	if (context.getActionController().getRandom().getRandFixed() < randomchance)
 	{
 		return randomdelay;
 	}
@@ -161,7 +161,7 @@ LandscapeAction *LandscapeAction::create(const char *type)
 void LandscapeActionFireWeapon::fireAction(ScorchedContext &context)
 {
 	Accessory *accessory = 
-		context.accessoryStore->findByPrimaryAccessoryName(
+		context.getAccessoryStore().findByPrimaryAccessoryName(
 			weapon.c_str());
 	if (!accessory) S3D::dialogExit("LandscapeActionFireWeapon",
 		S3D::formatStringBuffer("Failed to find weapon named \"%s\"", weapon.c_str()));

@@ -22,7 +22,7 @@
 #include <engine/ScorchedContext.h>
 #ifndef S3D_SERVER
 	#include <landscape/Landscape.h>
-	#include <landscape/Sky.h>
+	#include <sky/Sky.h>
 #endif
 
 SkyFlash::SkyFlash() :
@@ -41,7 +41,7 @@ void SkyFlash::init()
 void SkyFlash::simulate(fixed frameTime, bool &remove)
 {
 #ifndef S3D_SERVER
-	if (!context_->serverMode)
+	if (!context_->getServerMode())
 	{
 		Landscape::instance()->getSky().flashSky();
 	}

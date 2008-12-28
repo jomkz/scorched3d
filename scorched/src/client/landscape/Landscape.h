@@ -29,10 +29,8 @@ class Wall;
 class ShadowMap;
 class Smoke;
 class ProgressCounter;
-class PatchGrid;
 class Water;
 class LandscapePoints;
-class Surround;
 class Sky;
 class GLSLShaderSetup;
 class Landscape
@@ -47,7 +45,7 @@ public:
 	};
 
 	void generate(ProgressCounter *counter = 0);
-	void recalculate(int posX, int posY, int dist);
+	void recalculate();
 	void restoreLandscapeTexture();
 	void reset(ProgressCounter *counter = 0);
 
@@ -57,7 +55,7 @@ public:
 	Wall &getWall() { return *wall_; }
 	Sky &getSky() { return *sky_; }
 	Water &getWater() { return *water_; }
-	PatchGrid &getPatchGrid() { return *patchGrid_; }
+	LandscapePoints &getPoints() { return *points_; }
 
 	// Textures created during landscape texturing
 	Image &getMainMap() { return mainMap_; }
@@ -67,11 +65,9 @@ public:
 	GLTexture &getPlanATexture() { return planAlphaTexture_; }
 	GLTexture &getPlanTexture() { return planTexture_; }
 	GLTexture &getLandscapeTexture1() { return landTex1_; }
-	GLTexture &getSurroundTexture() { return surroundTexture_; }
 	GLTexture &getGroundTexture() { return groundTexture_; }
 	GLTexture &getDetailTexture() { return detailTexture_; }
 	GLTexture &getRoofTexture() { return roofTexture_; }
-	GLTexture &getColorDepthMap() { return colorDepthMap_; }
 
 	LandscapeTextureType getTextureType() { return textureType_; }
 	void setTextureType(LandscapeTextureType type) { textureType_ = type; }
@@ -81,6 +77,8 @@ public:
 
 	void updatePlanTexture();
 	void updatePlanATexture();
+	void drawGraphicalShadowMap();
+	void drawGraphicalReflectionMap();
 	int getPlanTexSize();
 	int getMapTexSize();
 
@@ -100,9 +98,7 @@ protected:
 
 	// All objects that are used to draw the scene
 	Wall *wall_;
-	PatchGrid *patchGrid_;
 	Sky *sky_;
-	Surround *surround_;
 	Smoke *smoke_;
 	Water *water_;
 	LandscapeTextureType textureType_;
@@ -113,12 +109,16 @@ protected:
 	GLTexture magTexture_;
 	GLTexture planTexture_;
 	GLTexture planAlphaTexture_;
-	GLTexture surroundTexture_;
 	GLTexture detailTexture_;
 	GLTexture roofTexture_;
 	GLTexture landTex1_;
 	GLTexture groundTexture_;
-	GLTexture normalTexture_;
+	GLTexture splatMaskTexture1_;
+	GLTexture splatMaskTexture2_;
+	GLTexture splatMaskTextureBorder1_;
+	GLTexture splatMaskTextureBorder2_;
+	GLTexture splatTextures_;
+	ImageHandle splatMap_;
 	ImageHandle mainMap_;
 	ImageHandle scorchMap_;
 	ImageHandle bitmapPlanAlphaAlpha_;

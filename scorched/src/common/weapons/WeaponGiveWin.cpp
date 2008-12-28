@@ -28,6 +28,7 @@
 #include <common/Defines.h>
 #include <common/ChannelManager.h>
 #include <common/OptionsScorched.h>
+#include <lang/LangResource.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponGiveWin);
 
@@ -56,7 +57,7 @@ bool WeaponGiveWin::parseXML(AccessoryCreateContext &context, XMLNode *accessory
 void WeaponGiveWin::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	context.actionController->addAction(
+	context.getActionController().addAction(
 		new CallbackWeapon("WeaponGiveWin", this, 0, 0, 
 			weaponContext, position, velocity));
 }
@@ -66,42 +67,41 @@ void WeaponGiveWin::weaponCallback(
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 	unsigned int data)
 {
-	if (context.optionsGame->getTeams() > 1)
+	if (context.getOptionsGame().getTeams() > 1)
 	{
 		int team = winningTeam_;
 		if (team == 0) 
 		{
-			Tank *tank = context.tankContainer->getTankById(weaponContext.getPlayerId());
+			Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
 			if (!tank) return;
 
 			team = tank->getTeam();
 		}
-		context.tankTeamScore->setWonGame(team);
+		context.getTankTeamScore().setWonGame(team);
 
-		if (!context.serverMode)
 		{
 			ChannelText text("combat", 
-				S3D::formatStringBuffer("%s team %s and won the game", 
+				LANG_RESOURCE_2("TANK_TEAM_WIN",
+				"{0} team {1} and won the game", 
 				TankColorGenerator::getTeamName(team), 
-				objective_.c_str()));
-			//info.setPlayerId(weaponContext.getPlayerId());
-			ChannelManager::showText(text);
+				objective_));
+			ChannelManager::showText(context, text);
 		}
 	}
 	else
 	{
-		Tank *tank = context.tankContainer->getTankById(weaponContext.getPlayerId());
+		Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
 		if (!tank) return;
 
 		tank->getScore().setWonGame();
 
-		if (!context.serverMode)
 		{
 			ChannelText text("combat", 
-				S3D::formatStringBuffer("[p:%s] %s and won the game", 
-				tank->getName(), objective_.c_str()));
-			//info.setPlayerId(weaponContext.getPlayerId());
-			ChannelManager::showText(text);
+				LANG_RESOURCE_2("TANK_SINGLE_WIN",
+				"[p:{0}] {1} and won the game", 
+				tank->getTargetName(), 
+				objective_));
+			ChannelManager::showText(context, text);
 		}
 	}
 }

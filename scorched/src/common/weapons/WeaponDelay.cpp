@@ -44,7 +44,7 @@ bool WeaponDelay::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNo
 	if (!accessoryNode->getNamedChild("delayedweapon", subNode)) return false;
 
 	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore()->
+	AccessoryPart *accessory = context.getAccessoryStore().
 		createAccessoryPart(context, parent_, subNode);
 	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
 	{
@@ -64,7 +64,7 @@ void WeaponDelay::fireWeapon(ScorchedContext &context,
 		"WeaponDelay", 
 		this, delay_.getValue(context), 0,
 		weaponContext, position, velocity);
-	context.actionController->addAction(action);
+	context.getActionController().addAction(action);
 }
 
 void WeaponDelay::weaponCallback(

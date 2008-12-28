@@ -62,6 +62,7 @@ namespace S3D
 	std::string formatStringBuffer(const char *format, ...);
 	std::string formatStringList(const char *format, va_list ap);
 	char *stristr(const char *x, const char *y);
+	void trim(std::string &value);
 }
 
 #endif // __SNPRINTF_SAMBA__

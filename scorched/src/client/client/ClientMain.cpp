@@ -32,6 +32,7 @@
 #include <client/ClientGiftMoneyHandler.h>
 #include <client/ClientLinesHandler.h>
 #include <client/ClientStartGameHandler.h>
+#include <client/ClientProcessingLoop.h>
 #include <client/ClientScoreHandler.h>
 #include <client/ClientAddPlayerHandler.h>
 #include <client/ClientNewGameHandler.h>
@@ -41,16 +42,16 @@
 #include <client/ClientRmPlayerHandler.h>
 #include <client/ClientGameStateHandler.h>
 #include <client/ClientInitializeHandler.h>
+#include <client/ClientAdminResultHandler.h>
 #include <client/ClientPlayerStateHandler.h>
 #include <client/ClientStartTimerHandler.h>
 #include <client/ClientSyncCheckHandler.h>
 #include <client/ClientFileHandler.h>
 #include <client/ClientDefenseHandler.h>
 #include <client/ClientPlayerStatusHandler.h>
-#include <client/ClientKeepAliveSender.h>
 #include <client/ClientState.h>
 #include <client/ClientWindowSetup.h>
-#include <graph/FrameLimiter.h>
+#include <lang/LangResource.h>
 #include <graph/Mouse.h>
 #include <graph/Gamma.h>
 #include <graph/OptionsDisplay.h>
@@ -62,8 +63,8 @@
 #include <dialogs/AnimatedBackdropDialog.h>
 #include <dialogs/BackdropDialog.h>
 #include <server/ScorchedServer.h>
-#include <GLEXT/GLConsoleFileReader.h>
-#include <GLEXT/GLConsole.h>
+#include <console/ConsoleFileReader.h>
+#include <console/Console.h>
 #include <GLW/GLWWindowManager.h>
 #include <GLW/GLWWindowSkinManager.h>
 #include <engine/MainLoop.h>
@@ -71,11 +72,10 @@
 #include <dialogs/ProgressDialog.h>
 #include <net/NetServerTCP.h>
 #include <net/NetServerTCP2.h>
-#include <net/NetServerUDP.h>
+#include <net/NetServerTCP3.h>
 #include <net/NetLoopBack.h>
 #include <common/ARGParser.h>
 #include <common/Keyboard.h>
-#include <common/Logger.h>
 #include <common/OptionsScorched.h>
 #include <common/Keyboard.h>
 #include <common/ProgressCounter.h>
@@ -91,7 +91,7 @@ extern char scorched3dAppName[128];
 static bool initHardware(ProgressCounter *progressCounter)
 {
 	progressCounter->setNewPercentage(0.0f);
-	progressCounter->setNewOp("Initializing Keyboard");
+	progressCounter->setNewOp(LANG_RESOURCE("INITIALIZING_KEYBOARD", "Initializing Keyboard"));
 	if (!Keyboard::instance()->init())
 	{
 		S3D::dialogMessage("Scorched3D Keyboard", 
@@ -102,7 +102,7 @@ static bool initHardware(ProgressCounter *progressCounter)
 		);
 		return false;
 	}
-	progressCounter->setNewOp("Loading Keyboard Bindings");
+	progressCounter->setNewOp(LANG_RESOURCE("LOADING_KEYBOARD", "Loading Keyboard Bindings"));
 	if (!Keyboard::instance()->loadKeyFile())
 	{
 		S3D::dialogMessage("Scorched3D Keyboard", 
@@ -112,7 +112,7 @@ static bool initHardware(ProgressCounter *progressCounter)
 
 	if (!OptionsDisplay::instance()->getNoSound())
 	{
-		progressCounter->setNewOp("Initializing Sound SW");
+		progressCounter->setNewOp(LANG_RESOURCE("INITIALIZING_SOUND", "Initializing Sound"));
 		if (!Sound::instance()->init(
 			OptionsDisplay::instance()->getSoundChannels()))
 		{
@@ -129,37 +129,38 @@ static bool initHardware(ProgressCounter *progressCounter)
 static bool initComs(ProgressCounter *progressCounter)
 {
 	progressCounter->setNewPercentage(0.0f);
-	progressCounter->setNewOp("Initializing Coms");
+	progressCounter->setNewOp(LANG_RESOURCE("INITIALIZING_COMS", "Initializing Coms"));
 	ScorchedClient::instance();
 
 	// Tidy up any existing net handlers
-	if (ScorchedClient::instance()->getContext().netInterface)
+	if (ScorchedClient::instance()->getContext().getNetInterfaceValid())
 	{
-		ScorchedClient::instance()->getContext().netInterface->stop();
-		delete ScorchedClient::instance()->getContext().netInterface;
-		ScorchedClient::instance()->getContext().netInterface = 0;
+		ScorchedClient::instance()->getContext().getNetInterface().stop();
+		delete &ScorchedClient::instance()->getContext().getNetInterface();
+		ScorchedClient::instance()->getContext().setNetInterface(0);
 	}
-	if (ScorchedServer::instance()->getContext().netInterface)
+	if (ScorchedServer::instance()->getContext().getNetInterfaceValid())
 	{
-		ScorchedServer::instance()->getContext().netInterface->stop();
-		delete ScorchedServer::instance()->getContext().netInterface;
-		ScorchedServer::instance()->getContext().netInterface = 0;
+		ScorchedServer::instance()->getContext().getNetInterface().stop();
+		delete &ScorchedServer::instance()->getContext().getNetInterface();
+		ScorchedServer::instance()->getContext().setNetInterface(0);
 	}
 
 	// Create the new net handlers
 	if (ClientParams::instance()->getConnectedToServer())
 	{
-		ScorchedClient::instance()->getContext().netInterface = 
+		ScorchedClient::instance()->getContext().setNetInterface(
 			//new NetServerTCP(new NetServerTCPScorchedProtocol());
 			//new NetServerUDP();
-			new NetServerTCP2();
+			//new NetServerTCP2();
+			new NetServerTCP3());
 	}
 	else
 	{
-		NetLoopBack *serverLoopBack = new NetLoopBack(NetLoopBack::ServerLoopBackID);
-		ScorchedServer::instance()->getContext().netInterface = serverLoopBack;
-		NetLoopBack *clientLoopBack = new NetLoopBack(NetLoopBack::ClientLoopBackID);
-		ScorchedClient::instance()->getContext().netInterface = clientLoopBack;
+		NetLoopBack *serverLoopBack = new NetLoopBack(true);
+		ScorchedServer::instance()->getContext().setNetInterface(serverLoopBack);
+		NetLoopBack *clientLoopBack = new NetLoopBack(false);
+		ScorchedClient::instance()->getContext().setNetInterface(clientLoopBack);
 		serverLoopBack->setLoopBack(clientLoopBack);
 		clientLoopBack->setLoopBack(serverLoopBack);
 	}
@@ -196,6 +197,7 @@ static bool initComsHandlers()
 	ClientDefenseHandler::instance();
 	ClientPlayerStatusHandler::instance();
 	ClientScoreHandler::instance();
+	ClientAdminResultHandler::instance();
 
 	return true;
 }
@@ -203,7 +205,7 @@ static bool initComsHandlers()
 static bool initWindows(ProgressCounter *progressCounter)
 {
 	progressCounter->setNewPercentage(0.0f);
-	progressCounter->setNewOp("Initializing Windows");
+	progressCounter->setNewOp(LANG_RESOURCE("INITIALIZING_WINDOWS", "Initializing Windows"));
 	if (!GLWWindowSkinManager::defaultinstance()->loadWindows())
 	{
 		S3D::dialogMessage("Scorched3D", "Failed to load default windows skins");
@@ -212,8 +214,9 @@ static bool initWindows(ProgressCounter *progressCounter)
 	ClientWindowSetup::setupStartWindows(GLWWindowSkinManager::defaultinstance());
 	HelpButtonDialog::instance();
 
+	Console::instance()->init();
 	std::string errorString;
-	if (!GLConsoleFileReader::loadFileIntoConsole(S3D::getDataFile("data/autoexec.xml"), errorString))
+	if (!ConsoleFileReader::loadFileIntoConsole(S3D::getDataFile("data/autoexec.xml"), errorString))
 	{
 		S3D::dialogMessage("Failed to parse data/autoexec.xml", errorString);
 		return false;
@@ -307,7 +310,6 @@ bool ClientMain::startClient()
 
 bool ClientMain::clientEventLoop(float frameTime)
 {
-	static float serverTime = 0.0f;
 	static SDL_Event event;
 	bool idle = true;
 	if (SDL_PollEvent(&event))
@@ -357,31 +359,6 @@ bool ClientMain::clientEventLoop(float frameTime)
 		}
 	}
 
-	ClientKeepAliveSender::instance()->sendKeepAlive();
-	if (!ClientParams::instance()->getConnectedToServer())
-	{
-		serverTime += frameTime;
-		if (serverTime > 0.05f)
-		{
-			serverTime = 0.0f;
-			serverLoop();
-		}
-	}
-
-	Logger::processLogEntries();
-	if (ScorchedClient::instance()->getContext().netInterface)
-	{
-		ScorchedClient::instance()->getNetInterface().processMessages();
-	}
-
-	if (ClientParams::instance()->getExitTime() > 0)
-	{
-		if (time(0) > ClientParams::instance()->getExitTime())
-		{
-			exit(0);
-		}
-	}
-
 	return idle;
 }
 
@@ -407,7 +384,6 @@ bool ClientMain::clientMain()
 
 	// Enter the SDL main loop to process SDL events
 	Clock loopClock;
-	FrameLimiter limiter;
 	for (;;)
 	{
 		float frameTime = loopClock.getTimeDifference();
@@ -417,16 +393,15 @@ bool ClientMain::clientMain()
 		if ((!paused) && (idle) )
 		{
 			ScorchedClient::instance()->getMainLoop().draw();
-			limiter.limitFrameTime(); // Make sure frame rate is not exceeded
 		}
 		else
 		{
-			limiter.dontLimitFrameTime();
+			ClientProcessingLoop::instance()->dontLimitFrameTime();
 		}
 		if (paused) SDL_Delay(100);  // Otherwise when not drawing graphics its an infinite loop	
 	}
 
-	if (ScorchedClient::instance()->getContext().netInterface)
+	if (ScorchedClient::instance()->getContext().getNetInterfaceValid())
 	{
 		ScorchedClient::instance()->getNetInterface().disconnectAllClients();
 	}
@@ -434,6 +409,7 @@ bool ClientMain::clientMain()
     SDL_Delay(1000);
 	Gamma::instance()->reset();
 	Sound::instance()->destroy();
+	Lang::instance()->saveUndefined();
 
 	return true;
 }

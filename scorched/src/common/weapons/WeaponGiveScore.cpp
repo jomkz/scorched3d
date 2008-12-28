@@ -26,6 +26,7 @@
 #include <tank/TankScore.h>
 #include <common/Defines.h>
 #include <common/ChannelManager.h>
+#include <lang/LangResource.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponGiveScore);
 
@@ -51,7 +52,7 @@ bool WeaponGiveScore::parseXML(AccessoryCreateContext &context, XMLNode *accesso
 void WeaponGiveScore::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	context.actionController->addAction(
+	context.getActionController().addAction(
 		new CallbackWeapon("WeaponGiveScore", this, 0, 0, 
 			weaponContext, position, velocity));
 }
@@ -61,32 +62,33 @@ void WeaponGiveScore::weaponCallback(
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 	unsigned int userData)
 {
-	Tank *tank = context.tankContainer->getTankById(weaponContext.getPlayerId());
+	Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
 	if (!tank) return;
 
 	tank->getScore().setScore(tank->getScore().getScore() + score_);
 	if (tank->getTeam() > 0)
 	{
-		context.tankTeamScore->addScore(score_, tank->getTeam());
+		context.getTankTeamScore().addScore(score_, tank->getTeam());
 	}
 
-	if (!context.serverMode)
 	{
 		if (score_ > 0)
 		{
 			ChannelText text("combat", 
-				S3D::formatStringBuffer("[p:%s] received %i bonus score", 
-				tank->getName(), score_));
-			//info.setPlayerId(weaponContext.getPlayerId());
-			ChannelManager::showText(text);
+				LANG_RESOURCE_2("TANK_GET_SCORE",
+				"[p:{0}] received {1} bonus score", 
+				tank->getTargetName(), 
+				S3D::formatStringBuffer("%i", score_)));
+			ChannelManager::showText(context, text);
 		}
 		else
 		{
 			ChannelText text("combat", 
-				S3D::formatStringBuffer("[p:%s] lost %i bonus score", 
-				tank->getName(), -score_));
-			//info.setPlayerId(weaponContext.getPlayerId());
-			ChannelManager::showText(text);
+				LANG_RESOURCE_2("TANK_LOST_SCORE",
+				"[p:{0}] lost {1} bonus score", 
+				tank->getTargetName(), 
+				S3D::formatStringBuffer("%i", -score_)));
+			ChannelManager::showText(context, text);
 		}
 	}
 }

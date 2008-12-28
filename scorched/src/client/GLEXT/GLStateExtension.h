@@ -30,10 +30,14 @@ public:
 
 	// Use VBO
 	static bool hasVBO() { return hasVBO_; }
+	static int getMaxElementVertices() { return maxElementVertices_; }
+	static int getMaxElementIndices() { return maxElementIndices_; }
 	// Use MultiTex
 	static bool hasMultiTex() { return hasMultiTex_; }
 	// Use framebuffers
 	static bool hasFBO() { return hasFBO_; }
+	// User drawrangeelements
+	static bool hasDrawRangeElements() { return hasDrawRangeElements_; }
 	// Use tex sub image extension?
 	static bool getNoTexSubImage() { return noTexSubImage_; }
 	// Use cube map extension?
@@ -60,6 +64,8 @@ protected:
 	static bool hasFBO_;
 	static bool hasShaders_;
 	static int textureUnits_;
+	static int maxElementVertices_;
+	static int maxElementIndices_;
 	static bool hasCubeMap_;
 	static bool hasSphereMap_;
 	static bool hasHardwareMipmaps_;
@@ -67,6 +73,7 @@ protected:
 	static bool hasHardwareShadows_;
 	static bool hasBlendColor_;
 	static bool hasMultiTex_;
+	static bool hasDrawRangeElements_;
 
 private:
 	GLStateExtension();

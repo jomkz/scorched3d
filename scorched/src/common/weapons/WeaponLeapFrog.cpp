@@ -45,7 +45,7 @@ bool WeaponLeapFrog::parseXML(AccessoryCreateContext &context, XMLNode *accessor
 	if (!accessoryNode->getNamedChild("collisionaction", subNode)) return false;
 
 	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore()->
+	AccessoryPart *accessory = context.getAccessoryStore().
 		createAccessoryPart(context, parent_, subNode);
 	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
 	{
@@ -66,7 +66,7 @@ void WeaponLeapFrog::fireWeapon(ScorchedContext &context,
 	if (newVelocity[2] < 0) newVelocity[2] *= -1;
 
 	FixedVector newPosition = position;
-	fixed minHeight = context.landscapeMaps->getGroundMaps().getInterpHeight(
+	fixed minHeight = context.getLandscapeMaps().getGroundMaps().getInterpHeight(
 		position[0], position[1]);
 
 	if (position[2] < minHeight + fixed(true, 7000))

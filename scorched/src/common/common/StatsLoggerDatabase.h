@@ -40,7 +40,7 @@ public:
 
 	virtual std::list<std::string> getAliases(const char *unqiueId);
 	virtual std::list<std::string> getIpAliases(const char *unqiueId);
-	virtual std::string tankRank(Tank *tank);
+	virtual TankRank tankRank(Tank *tank);
 	virtual void updateStats(Tank *tank);
 	virtual void periodicUpdate();
 	virtual std::string allocateId();

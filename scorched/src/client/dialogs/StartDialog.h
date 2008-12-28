@@ -22,6 +22,7 @@
 #define __INCLUDE_StartDialogh_INCLUDE__
 
 #include <GLW/GLWWindow.h>
+#include <lang/LangString.h>
 #include <vector>
 
 class StartDialog : public GLWWindow
@@ -36,7 +37,7 @@ protected:
 	static StartDialog *instance_;
 	struct OptionDefinition
 	{
-		const char *option;
+		LangString option;
 		const char *description;
 		float x, y;
 		float width;

@@ -25,6 +25,15 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_thread.h>
 
+void S3D::trim(std::string &value)
+{
+	int start = value.find_first_not_of(" \t\n");
+	int end = value.find_last_not_of(" \t\n");
+	if (start == std::string::npos) value = "";
+	else if (end == std::string::npos) value = "";
+	else value = std::string(value, start, end-start+1);
+}
+
 char *S3D::stristr(const char *x, const char *y)
 {
 	std::string newX(x);
@@ -78,7 +87,7 @@ std::string S3D::formatStringList(const char *format, va_list ap)
 	return result;
 }
 
-extern std::string S3D::formatStringBuffer(const char *format, ...)
+std::string S3D::formatStringBuffer(const char *format, ...)
 {
 	va_list ap; 
 	va_start(ap, format); 
@@ -88,29 +97,4 @@ extern std::string S3D::formatStringBuffer(const char *format, ...)
 	return result;
 }
 
-/*
-const char *S3D::formatStringBuffer(const char *format, ...)
-{
-	if (!format) return "";
-
-	static SDL_mutex *formatMutex = SDL_CreateMutex();
-
-	// A little fix to allow formatString to be used more than once in
-	// the same calling line.  Does waste memory though.
-	// Also made thread safe although the S3D::formatStringBuffer is better
-	// as thread safty is lost if the number of buffers in use is exceeded
-	SDL_LockMutex(formatMutex);
-	static std::string buffers[25];
-	static unsigned int pos = 0;
-	std::string *buffer = &buffers[pos++ % 25];
-	SDL_UnlockMutex(formatMutex);
-
-	va_list ap; 
-	va_start(ap, format); 
-	(*buffer) = S3D::formatStringList(format, ap);
-	va_end(ap); 
-
-	return buffer->c_str();
-}
-*/
 

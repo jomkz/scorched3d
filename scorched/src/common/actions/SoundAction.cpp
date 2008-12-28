@@ -44,7 +44,7 @@ void SoundAction::init()
 void SoundAction::simulate(fixed frameTime, bool &remove)
 {
 #ifndef S3D_SERVER
-	if (!context_->serverMode)
+	if (!context_->getServerMode())
 	{
 		SoundBuffer *activateSound = 
 			Sound::instance()->fetchOrCreateBuffer(

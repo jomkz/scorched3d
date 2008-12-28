@@ -23,14 +23,13 @@
 
 REGISTER_CLASS_SOURCE(GLWTextButton);
 
-GLWTextButton::GLWTextButton(const std::string &buttonText,
+GLWTextButton::GLWTextButton(const LangString &buttonText,
 	float x, float y, float w, GLWButtonI *handler,
 	unsigned flags, float size) :
 	GLWButton(x, y, w, size + 8.0f, handler, flags), 
 	label_(x, y -2, buttonText, size),
 	color_(GLWFont::widgetFontColor)
 {
-	setName(buttonText); 
 }
 
 GLWTextButton::~GLWTextButton()

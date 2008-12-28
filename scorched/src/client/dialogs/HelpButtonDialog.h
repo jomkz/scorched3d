@@ -39,8 +39,6 @@ public:
 		virtual bool getMenuItems(const char* menuName, 
 			std::list<GLMenuItem> &result);
 
-		GLTexture &getHelpTexture();
-
 	protected:
 		GLTexture helpTexture_;
 	} helpMenu_;
@@ -55,6 +53,21 @@ public:
 		GLTexture soundTexture_;
 
 	} volumeMenu_;
+
+	struct PerformanceMenu : public GLMenuI
+	{
+		PerformanceMenu();
+
+		// Inherited from GLMenuI
+		virtual void menuSelection(const char* menuName, 
+			const int position, GLMenuItem &item);
+		virtual bool getMenuItems(const char* menuName, 
+			std::list<GLMenuItem> &result);
+		virtual LangStringStorage *getMenuToolTip(const char* menuName);
+
+	protected:
+		GLTexture helpTexture_;
+	} performanceMenu_;
 
 protected:
 	static HelpButtonDialog *instance_;

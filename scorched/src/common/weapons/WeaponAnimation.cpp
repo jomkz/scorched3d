@@ -63,7 +63,7 @@ void WeaponAnimation::fireWeapon(ScorchedContext &context,
 {
 
 #ifndef S3D_SERVER
-	if (!context.serverMode)
+	if (!context.getServerMode())
 	{
 		MetaActionRenderer *renderer = (MetaActionRenderer *) 
 			MetaClassRegistration::getNewClass(rendererName_.c_str());
@@ -72,7 +72,7 @@ void WeaponAnimation::fireWeapon(ScorchedContext &context,
 		{
 			renderer->init(weaponContext.getPlayerId(), 
 				position.asVector(), velocity.asVector(), data_.c_str());
-			context.actionController->addAction(new SpriteAction(renderer));
+			context.getActionController().addAction(new SpriteAction(renderer));
 		}
 		else
 		{

@@ -38,14 +38,41 @@ class LandscapeDefinitions;
 class TankContainer;
 class TankModelStore;
 class TankTeamScore;
-class LUAWrapper;
+class LUAScriptFactory;
+class LUAScriptHook;
 
 class ScorchedContext
 {
 public:
-	ScorchedContext(const char *name);
+	ScorchedContext(const char *name, bool server);
 	virtual ~ScorchedContext();
 
+	bool getServerMode() { return serverMode; }
+
+	void setNetInterface(NetInterface *i) { netInterface = i; }
+	NetInterface &getNetInterface() { return *netInterface; }
+	bool getNetInterfaceValid() { return netInterface != 0; }
+
+	ViewPoints &getViewPoints() { return *viewPoints; }
+	TargetSpace &getTargetSpace() { return *targetSpace; }
+	AccessoryStore &getAccessoryStore() { return *accessoryStore; }
+	GameState &getGameState() { return *gameState; }
+	TankContainer &getTankContainer() { return *tankContainer; }
+	TargetContainer &getTargetContainer() { return *targetContainer; }
+	TargetMovement &getTargetMovement() { return *targetMovement; }
+	TankTeamScore &getTankTeamScore() { return *tankTeamScore; }
+	ActionController &getActionController() { return *actionController; }
+	LandscapeMaps &getLandscapeMaps() { return *landscapeMaps; }
+	OptionsScorched &getOptionsGame() { return *optionsGame; }
+	OptionsTransient &getOptionsTransient() { return *optionsTransient; }
+	ComsMessageHandler &getComsMessageHandler() { return *comsMessageHandler; }
+	ModFiles &getModFiles() { return *modFiles; }
+	LandscapeDefinitions &getLandscapes() { return *landscapes; }
+	TankModelStore &getTankModels() { return *tankModelStore; }
+	LUAScriptFactory &getLUAScriptFactory() { return *luaScriptFactory; }
+	LUAScriptHook &getLUAScriptHook() { return *luaScriptHook; }
+
+protected:
 	ActionController *actionController;
 	GameState *gameState;
 	LandscapeMaps *landscapeMaps;
@@ -63,7 +90,8 @@ public:
 	TankTeamScore *tankTeamScore;
 	TargetSpace *targetSpace;
 	TargetMovement *targetMovement;
-	LUAWrapper *luaWrapper;
+	LUAScriptFactory *luaScriptFactory;
+	LUAScriptHook *luaScriptHook;
 	bool serverMode;
 };
 

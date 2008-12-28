@@ -27,6 +27,7 @@
 #include <graph/Main2DCamera.h>
 #include <client/ClientMain.h>
 #include <client/ClientState.h>
+#include <client/ClientProcessingLoop.h>
 #include <engine/MainLoop.h>
 #include <common/Clock.h>
 #include <common/Defines.h>
@@ -34,6 +35,7 @@
 #include <GLW/GLWFont.h>
 #include <GLW/GLWWindowManager.h>
 #include <GLW/GLWColors.h>
+#include <lang/LangResource.h>
 #include <image/ImagePng.h>
 #include <image/ImageFactory.h>
 #include <math.h>
@@ -58,7 +60,7 @@ ProgressDialog::~ProgressDialog()
 {
 }
 
-void ProgressDialog::progressChange(const std::string &op, const float percentage)
+void ProgressDialog::progressChange(const LangString &op, const float percentage)
 {
 	progressText_ = op;
 	progressPercentage_ = percentage;
@@ -74,7 +76,7 @@ void ProgressDialog::changeTip()
 	char *nl = (char *) strchr(tip.c_str(), ':');
 	if (nl) *nl = ' ';
 
-	ChannelText text("announce", S3D::formatStringBuffer("[t:Tip:] %s", tip.c_str()));
+	ChannelText text("announce", LANG_RESOURCE_1("TIP_ENTRY", "[t:Tip:] {0}", tip));
 	ClientChannelManager::instance()->showText(text);
 }
 
@@ -144,13 +146,13 @@ void ProgressDialog::draw()
 			GLWFont::instance()->getGameShadowFont()->drawWidth(380.0f, 
 				GLWColors::black, 
 				14.0f, 0.0f - 2.0f, 33.0f + 2.0f, 0.0f, 
-				progressText_.c_str());
+				progressText_);
 
 			Vector white(1.0f, 1.0f, 1.0f);
 			GLWFont::instance()->getGameFont()->drawWidth(380.0f, 
 				white, 
 				14.0f, 0.0f, 33.0f, 0.0f, 
-				progressText_.c_str());
+				progressText_);
 		glPopMatrix();
 
 		// Draw the icon
@@ -208,7 +210,7 @@ ProgressDialogSync::~ProgressDialogSync()
 {
 }
 
-void ProgressDialogSync::progressChange(const std::string &op, const float percentage)
+void ProgressDialogSync::progressChange(const LangString &op, const float percentage)
 {
 	static Clock localTimer;
 	static float timeDelay = 0.0f;
@@ -218,6 +220,7 @@ void ProgressDialogSync::progressChange(const std::string &op, const float perce
 	timeDelay2 += frameTime;
 
 	ClientMain::clientEventLoop(frameTime);	
+	ClientProcessingLoop::instance()->simulate(0, frameTime);
 
 	ProgressDialog::instance()->progressChange(op, percentage);
 

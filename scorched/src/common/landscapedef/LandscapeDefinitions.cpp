@@ -210,7 +210,7 @@ LandscapeDefinition LandscapeDefinitions::getRandomLandscapeDefn(
 				defnitor++)
 			{
 				LandscapeDefn *defn = getDefn(defnitor->c_str());
-				if (players >= defn->minplayers && players <= defn->maxplayers)
+				if (players >= defn->getMinPlayers() && players <= defn->getMaxPlayers())
 				{
 					minMaxPassedLandscapes.push_back(&current);
 					break;
@@ -243,6 +243,8 @@ LandscapeDefinition LandscapeDefinitions::getRandomLandscapeDefn(
 	std::string tex = getLeastUsedFile(result->texs);
 	std::string defn = getLeastUsedFile(result->defns);
 	unsigned int seed = (unsigned int) rand();
+	LandscapeTex *landscapeTex = getTex(tex.c_str());
+	if (landscapeTex->seed != 0) seed = landscapeTex->seed;
 
 	LandscapeDefinition entry(
 		tex.c_str(), defn.c_str(), seed, result->name.c_str());

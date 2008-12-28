@@ -27,7 +27,7 @@
 class GLWTextBoxI
 {
 public:
-	virtual void textChanged(unsigned int id, const char *text) = 0;
+	virtual void textChanged(unsigned int id, const LangString &text) = 0;
 };
 
 class GLWTextBox : public GLWidget
@@ -39,7 +39,8 @@ public:
 	};
 
 	GLWTextBox(float x = 0.0f, float y = 0.0f, 
-		float w = 0.0f, char *startText = 0,
+		float w = 0.0f, 
+		const LangString &startText = LangString(),
 		unsigned int flags = 0);
 	virtual ~GLWTextBox();
 
@@ -54,9 +55,11 @@ public:
 	virtual void mouseDown(int button, float x, float y, bool &skipRest);
 
 	void setCurrent();
+	void setAllowUnicode(bool allowUnicode) { allowUnicode_ = allowUnicode; }
 
-	std::string &getText() { return text_; }
-	void setText(const std::string &text);
+	std::string &getText();
+	LangString &getLangString() { return text_; }
+	void setText(const LangString &text);
 	void setMaxTextLen(unsigned int maxLen) { maxTextLen_ = maxLen; }
 
 	REGISTER_CLASS_HEADER(GLWTextBox);
@@ -64,8 +67,9 @@ public:
 protected:
 	float ctime_;
 	bool cursor_, current_;
+	bool allowUnicode_;
 	unsigned int maxTextLen_, flags_;
-	std::string text_;
+	LangString text_;
 	GLWTextBoxI *handler_;
 
 };

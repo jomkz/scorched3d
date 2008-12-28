@@ -28,7 +28,7 @@
 
 namespace PlacementTankPosition 
 {
-	void flattenTankPositions(std::list<FixedVector> &tankPositions, 
+	void flattenTankPositions(
 		ScorchedContext & context);
 
 	FixedVector placeTank(unsigned int playerId, int team,

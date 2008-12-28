@@ -50,7 +50,7 @@ bool WeaponMessage::parseXML(AccessoryCreateContext &context, XMLNode *accessory
 void WeaponMessage::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	context.actionController->addAction(
+	context.getActionController().addAction(
 		new CallbackWeapon("WeaponMessage", this, 0, 0, 
 			weaponContext, position, velocity));
 }
@@ -60,11 +60,9 @@ void WeaponMessage::weaponCallback(
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 	unsigned int userData)
 {
-	if (!context.serverMode)
 	{
-		ChannelText text("combat", 
-			S3D::formatStringBuffer("%s",message_.c_str()));
-		ChannelManager::showText(text);
+		ChannelText text("combat", LANG_STRING(message_));
+		ChannelManager::showText(context, text);
 	}
 }
 

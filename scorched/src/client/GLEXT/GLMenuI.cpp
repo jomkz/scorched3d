@@ -20,14 +20,14 @@
 
 #include <GLEXT/GLMenuI.h>
 
-GLMenuItem::GLMenuItem(const char *text, 
+GLMenuItem::GLMenuItem(const LangString &text, 
 	ToolTip *tooltip, 
 	bool selected,
 	GLTexture *texture,
 	void *userData) : 
 	menuText_(text), tip_(tooltip), 
 	selected_(selected), texture_(texture),
-	userData_(userData)
+	userData_(userData), seperator_(false)
 {
 }
 
@@ -36,7 +36,7 @@ GLMenuI::~GLMenuI()
 
 }
 
-const char *GLMenuI::getMenuText(const char* menuName)
+LangString *GLMenuI::getMenuText(const char* menuName)
 {
 	return 0;
 }
@@ -59,4 +59,9 @@ void GLMenuI::menuSelection(const char* menuName, const int position, GLMenuItem
 bool GLMenuI::menuOpened(const char* menuName)
 {
 	return true;
+}
+
+LangStringStorage *GLMenuI::getMenuToolTip(const char* menuName)
+{
+	return 0;
 }

@@ -19,11 +19,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <client/ScorchedClient.h>
-#include <graph/MainCamera.h>
 #include <engine/MainLoop.h>
-#include <graph/ParticleEngine.h>
 #include <engine/GameState.h>
+#include <graph/MainCamera.h>
+#include <graph/ParticleEngine.h>
 #include <graph/OptionsDisplay.h>
+#include <landscapemap/LandscapeMaps.h>
+#include <landscape/GraphicalLandscapeMap.h>
 
 ScorchedClient *ScorchedClient::instance_ = 0;
 
@@ -37,12 +39,11 @@ ScorchedClient *ScorchedClient::instance()
 }
 
 ScorchedClient::ScorchedClient() : 
-	context_("Client")
+	ScorchedContext("Client", false)
 {
 	mainLoop_ = new MainLoop();
 	mainLoop_->clear();
-	mainLoop_->addMainLoop(context_.gameState);
-	context_.serverMode = false;
+	mainLoop_->addMainLoop(gameState);
 
 	// Calculate how many particles we can see
 	int numberOfBilboards = 6000;
@@ -53,6 +54,9 @@ ScorchedClient::ScorchedClient() :
 	particleEngine_ = new ParticleEngine(
 		&MainCamera::instance()->getCamera(), 
 		numberOfBilboards);
+
+	getLandscapeMaps().getGroundMaps().getHeightMap().setGraphicalMap(
+		new GraphicalLandscapeMap());
 }
 
 ScorchedClient::~ScorchedClient()

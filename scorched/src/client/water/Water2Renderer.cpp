@@ -24,15 +24,17 @@
 #include <water/WaterWaves.h>
 #include <common/Vector4.h>
 #include <image/ImageFactory.h>
-#include <GLEXT/GLStateExtension.h>
 #include <image/ImageFactory.h>
+#include <GLEXT/GLStateExtension.h>
+#include <GLEXT/GLCamera.h>
 #include <GLEXT/GLTextureCubeMap.h>
 #include <client/ScorchedClient.h>
-#include <landscape/Landscape.h>
-#include <landscape/Sky.h>
+#include <sky/Sky.h>
+#include <land/VisibilityPatchGrid.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeDefn.h>
+#include <landscape/Landscape.h>
 #include <graph/MainCamera.h>
 #include <graph/OptionsDisplay.h>
 
@@ -64,18 +66,24 @@ void Water2Renderer::draw(Water2 &water2, WaterMapPoints &points, WaterWaves &wa
 		currentPatch_ = &currentPatch;
 
 		// Set the normal map for the current water frame
-		if (GLStateExtension::hasShaders())
+		if (GLStateExtension::hasShaders() &&
+			!OptionsDisplay::instance()->getNoWaterMovement() &&
+			!OptionsDisplay::instance()->getSimpleWaterShaders())
 		{
-			normalTexture_.replace(currentPatch_->getNormalMap(), false);
+			normalTexture_.replace(currentPatch_->getNormalMap(), 
+				GLStateExtension::hasHardwareMipmaps());
 		}
 	}
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "WATER_PATCHSETUP");
 
 	// Draw waves
+	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "WATER_WAVES");
 	waves.draw(*currentPatch_);
+	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "WATER_WAVES");
 
 	// Draw Water
-	if (GLStateExtension::hasShaders())
+	if (GLStateExtension::hasShaders() &&
+		OptionsDisplay::instance()->getUseWaterTexture())
 	{
 		drawWaterShaders(water2);
 	}
@@ -103,13 +111,16 @@ void Water2Renderer::drawWaterShaders(Water2 &water2)
 
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 
-	Vector cameraPos = MainCamera::instance()->getTarget().getCamera().getCurrentPos();
+	Vector cameraPos = GLCamera::getCurrentCamera()->getCurrentPos();
 	cameraPos[2] = -waterHeight_;
 	waterShader_->use();
 	waterShader_->set_uniform("viewpos", cameraPos);
 
 	// Tex 3
-	waterShader_->set_gl_texture(currentPatch_->getAOF(), "tex_foamamount", 3);
+	if (!OptionsDisplay::instance()->getSimpleWaterShaders())
+	{
+		waterShader_->set_gl_texture(currentPatch_->getAOF(), "tex_foamamount", 3);
+	}
 
 	// Tex 2
 	if (Landscape::instance()->getShadowFrameBuffer().bufferValid())
@@ -121,12 +132,6 @@ void Water2Renderer::drawWaterShaders(Water2 &water2)
 		glMatrixMode(GL_TEXTURE);
 		glLoadMatrixf(Landscape::instance()->getShadowTextureMatrix());
 		glMatrixMode(GL_MODELVIEW);
-
-		waterShader_->set_uniform("use_shadow", 1.0);
-	}
-	else
-	{
-		waterShader_->set_uniform("use_shadow", 0.0);
 	}
 
 	// texture units / coordinates:
@@ -154,9 +159,12 @@ void Water2Renderer::drawWaterShaders(Water2 &water2)
 
 	// Tex 0
 	glActiveTextureARB(GL_TEXTURE0);
-	waterShader_->set_uniform("noise_xform_0", noise_0_pos);
-	waterShader_->set_uniform("noise_xform_1", noise_1_pos);
-	waterShader_->set_gl_texture(normalTexture_, "tex_normal", 0);
+	if (!OptionsDisplay::instance()->getSimpleWaterShaders())
+	{
+		waterShader_->set_uniform("noise_xform_0", noise_0_pos);
+		waterShader_->set_uniform("noise_xform_1", noise_1_pos);
+		waterShader_->set_gl_texture(normalTexture_, "tex_normal", 0);
+	}
 
 	const float noisetilescale = 1.0f/32.0f;//meters (128/16=8, 8tex/m).
 	glMatrixMode(GL_TEXTURE);
@@ -171,7 +179,7 @@ void Water2Renderer::drawWaterShaders(Water2 &water2)
 
 	// Draw Water
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	drawWater(water2);
+	drawWater(water2, waterShader_);
 
 	// Cleanup	
 	waterShader_->use_fixed();
@@ -204,7 +212,8 @@ void Water2Renderer::drawWaterNoShaders(Water2 &water2)
 	static float PlaneS[] = { 0.0f, 1.0f / 20.0f, 0.0f, 0.0f };
 	static float PlaneT[] = { 1.0f / 20.0f, 0.0f, 0.0f, 0.0f };
 
-	if (GLStateExtension::hasMultiTex())
+	if (GLStateExtension::hasMultiTex() &&
+		OptionsDisplay::instance()->getUseWaterTexture())
 	{
 		// Set up texture coordinate generation for base texture
 		glActiveTextureARB(GL_TEXTURE1);
@@ -252,7 +261,13 @@ void Water2Renderer::drawWaterNoShaders(Water2 &water2)
 		Landscape::instance()->getSky().getSun().setLightPosition();
 	}
 
-	if (GLStateExtension::hasCubeMap())
+	if (!OptionsDisplay::instance()->getUseWaterTexture())
+	{
+		GLState currentState(GLState::LIGHTING_OFF | GLState::TEXTURE_OFF);
+		glColor3f(0.0f, 0.3f, 1.0f);
+		drawWater(water2, 0);
+	}
+	else if (GLStateExtension::hasCubeMap())
 	{
 		GLState currentState(state | GLState::TEXTURE_OFF | GLState::BLEND_ON | GLState::CUBEMAP_ON);
 
@@ -264,7 +279,7 @@ void Water2Renderer::drawWaterNoShaders(Water2 &water2)
 		glTexGenf(GL_T, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP_EXT);
 		glTexGenf(GL_R, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP_EXT);
 
-		drawWater(water2);
+		drawWater(water2, 0);
 	}
 	else if (GLStateExtension::hasSphereMap())
 	{
@@ -279,7 +294,7 @@ void Water2Renderer::drawWaterNoShaders(Water2 &water2)
 		glTexGenf(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
 		glTexGenf(GL_R, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
 
-		drawWater(water2);
+		drawWater(water2, 0);
 	}
 	else
 	{
@@ -294,7 +309,7 @@ void Water2Renderer::drawWaterNoShaders(Water2 &water2)
 		glTexGenfv(GL_S, GL_OBJECT_PLANE, PlaneS);
 		glTexGenfv(GL_T, GL_OBJECT_PLANE, PlaneT);
 
-		drawWater(water2);
+		drawWater(water2, 0);
 	}
 
 	if (GLStateExtension::hasMultiTex())
@@ -314,13 +329,12 @@ void Water2Renderer::drawWaterNoShaders(Water2 &water2)
 	glPopAttrib();
 }
 
-void Water2Renderer::drawWater(Water2 &water2)
+void Water2Renderer::drawWater(Water2 &water2, GLSLShaderSetup *waterShader)
 {
 	// Draw Water
-	Vector &cameraPos = 
-		MainCamera::instance()->getTarget().getCamera().getCurrentPos();
-	water2.getVisibility().draw(
-		*currentPatch_, water2.getIndexs(), cameraPos, landscapeSize_, waterShader_);
+	Vector &cameraPos = GLCamera::getCurrentCamera()->getCurrentPos();
+	VisibilityPatchGrid::instance()->drawWater(
+		*currentPatch_, water2.getIndexs(), cameraPos, landscapeSize_, waterShader);
 }
 
 void Water2Renderer::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)
@@ -331,9 +345,26 @@ void Water2Renderer::generate(LandscapeTexBorderWater *water, ProgressCounter *c
 		// Load shaders
 		if (!waterShader_) 
 		{
-			waterShader_ = new GLSLShaderSetup(
-				S3D::getDataFile("data/shaders/water.vshader"),
-				S3D::getDataFile("data/shaders/water.fshader"));
+			GLSLShader::defines_list dl;
+			if (Landscape::instance()->getShadowFrameBuffer().bufferValid())
+			{
+				dl.push_back("USE_SHADOWS");
+			}
+
+			if (OptionsDisplay::instance()->getSimpleWaterShaders())
+			{
+				waterShader_ = new GLSLShaderSetup(
+					S3D::getDataFile("data/shaders/watersimple.vshader"),
+					S3D::getDataFile("data/shaders/watersimple.fshader"),
+					dl);
+			}
+			else
+			{
+				waterShader_ = new GLSLShaderSetup(
+					S3D::getDataFile("data/shaders/water.vshader"),
+					S3D::getDataFile("data/shaders/water.fshader"),
+					dl);
+			}
 		}
 	}
 
@@ -375,15 +406,14 @@ void Water2Renderer::generate(LandscapeTexBorderWater *water, ProgressCounter *c
 	}
 
 	ImageHandle map = ImageFactory::createBlank(128, 128, false, 0);
-	normalTexture_.create(map, false);
+	normalTexture_.create(map, GLStateExtension::hasHardwareMipmaps());
 
 	LandscapeDefn &defn = *ScorchedClient::instance()->getLandscapeMaps().
 		getDefinitions().getDefn();
-	landscapeSize_ = Vector(defn.landscapewidth, defn.landscapeheight);
+	landscapeSize_ = Vector(defn.getLandscapeWidth(), defn.getLandscapeHeight());
 
 	if (GLStateExtension::hasShaders())
 	{
-		Vector landfoam;
 		Vector upwelltop(wavetop[0], wavetop[1], wavetop[2]);
 		Vector upwellbot(wavebottom[0], wavebottom[1], wavebottom[2]);
 		Vector upwelltopbot = upwelltop - upwellbot;
@@ -392,8 +422,12 @@ void Water2Renderer::generate(LandscapeTexBorderWater *water, ProgressCounter *c
 		waterShader_->set_uniform("upwelltop", upwelltop);
 		waterShader_->set_uniform("upwellbot", upwellbot);
 		waterShader_->set_uniform("upwelltopbot", upwelltopbot);
-		waterShader_->set_uniform("landfoam", landfoam);
-		waterShader_->set_uniform("landscape_size", landscapeSize_);
+		if (!OptionsDisplay::instance()->getSimpleWaterShaders())
+		{
+			Vector landfoam;
+			waterShader_->set_uniform("landfoam", landfoam);
+			waterShader_->set_uniform("landscape_size", landscapeSize_);
+		}
 		waterShader_->use_fixed();
 	}
 	else

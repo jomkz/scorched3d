@@ -50,7 +50,7 @@ void OptionsDisplayConsole::addDisplayToConsole()
 	// remove existing adapters
 	while (!adapters_.empty())
 	{
-		GLConsoleRuleFnIOptionsAdapter *adapter = adapters_.front();
+		ConsoleRuleFnIOptionsAdapter *adapter = adapters_.front();
 		adapters_.pop_front();
 		delete adapter;
 	}
@@ -70,12 +70,12 @@ void OptionsDisplayConsole::addDisplayToConsole()
 		}
 		else if (!(entry->getData() & OptionEntry::DataDepricated))
 		{
-			GLConsoleRuleAccessType access = GLConsoleRuleAccessTypeRead;
-			if (entry->getData() & OptionsDisplay::RWAccess) access = GLConsoleRuleAccessTypeReadWrite;
+			bool write = false;
+			if (entry->getData() & OptionsDisplay::RWAccess) write = true;
 
-			adapters_.push_back(new GLConsoleRuleFnIOptionsAdapter(
+			adapters_.push_back(new ConsoleRuleFnIOptionsAdapter(
 				*entry,
-				access));
+				write));
 		}
 	}
 }

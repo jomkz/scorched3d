@@ -19,9 +19,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include <weapons/AccessoryCreateContext.h>
 
-AccessoryCreateContext::AccessoryCreateContext(
-	OptionsScorched &optionsGame, AccessoryStore *store) :
-	optionsGame_(optionsGame), store_(store)
+AccessoryCreateContext::AccessoryCreateContext(ScorchedContext &context) :
+	context_(context)
 {
 
 }

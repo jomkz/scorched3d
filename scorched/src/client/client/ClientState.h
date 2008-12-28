@@ -64,6 +64,7 @@ namespace ClientState
 	void setupGameState();
 	void addWindowManager(GameState &gameState, unsigned state);
 	void addStandardComponents(GameState &gameState, unsigned state);
+	void addMandatoryComponents(GameState &gameState, unsigned state);
 };
 
 #endif

@@ -46,28 +46,24 @@ public:
 	virtual void generate(ScorchedContext &context, 
 		RandomGenerator &random, 
 		LandscapeMovementType *movementType);
-	virtual void simulate(fixed frameTime);
+	virtual void simulate(ScorchedContext &context, fixed frameTime);
 	virtual void draw();
 	virtual bool writeMessage(NetBuffer &buffer);
 	virtual bool readMessage(NetBufferReader &reader);
 
-	std::map<unsigned int, TargetGroup *> &getTargets() { return groupEntry_->getObjects(); }
-	std::map<unsigned int, Boid2 *> &getBoidsMap() { return boidsMap_; }
-
 protected:
 	TargetGroupsSetEntry *groupEntry_;
 
+	unsigned int movementNumber_;
 	FixedVector minBounds_, maxBounds_;
 	fixed cruiseDistance_;
 	fixed maxVelocity_, cruiseVelocity_;
 	fixed maxAcceleration_;
 
-	// All boids have access to this list, and use it to 
-	// determine where all the other boids are. 
-	std::map<unsigned int, Boid2 *> boidsMap_;
-
 	void makeBoids(ScorchedContext &context, RandomGenerator &random,
 		FixedVector &maxBounds, FixedVector &minBounds);
+	Boid2 *makeBoid(ScorchedContext &context, TargetGroup *groupEntry);
+	void processSet(fixed frameTime, std::vector<Boid2*> &boidSet);
 };
 
 #endif // __INCLUDE_TargetMovementEntryBoidsh_INCLUDE__

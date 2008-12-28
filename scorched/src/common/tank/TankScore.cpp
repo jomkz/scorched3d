@@ -32,7 +32,7 @@ static const int maxMoney = 999999;
 TankScore::TankScore(ScorchedContext &context) : 
 	context_(context), 
 	totalMoneyEarned_(0), totalScoreEarned_(0),
-	statsRank_("-"), tank_(0)
+	rank_(-1), tank_(0), skill_(0), startSkill_(0)
 {
 	startTime_ = lastStatTime_ = time(0);
 	newMatch();
@@ -47,7 +47,7 @@ void TankScore::newMatch()
 {
 	resetTotalEarnedStats();
 	money_ = 0;
-	setMoney(context_.optionsGame->getStartMoney());
+	setMoney(context_.getOptionsGame().getStartMoney());
 	wins_ = 0;
 	kills_ = turnKills_ = 0;
 	assists_ = 0;
@@ -119,7 +119,9 @@ bool TankScore::writeMessage(NetBuffer &buffer)
 	buffer.addToBuffer(money_);
 	buffer.addToBuffer(wins_);
 	buffer.addToBuffer(score_);
-	buffer.addToBuffer(statsRank_);
+	buffer.addToBuffer(rank_);
+	buffer.addToBuffer(skill_);
+	buffer.addToBuffer(startSkill_);
 	return true;
 }
 
@@ -131,7 +133,9 @@ bool TankScore::readMessage(NetBufferReader &reader)
 	if (!reader.getFromBuffer(money_)) return false;
 	if (!reader.getFromBuffer(wins_)) return false;
 	if (!reader.getFromBuffer(score_)) return false;
-	if (!reader.getFromBuffer(statsRank_)) return false;
+	if (!reader.getFromBuffer(rank_)) return false;
+	if (!reader.getFromBuffer(skill_)) return false;
+	if (!reader.getFromBuffer(startSkill_)) return false;
 	return true;
 }
 
@@ -147,4 +151,19 @@ void TankScore::resetTotalEarnedStats()
 {
 	totalScoreEarned_ = 0;
 	totalMoneyEarned_ = 0;
+}
+
+int TankScore::calcSkillDifference(Tank *firedTank, Tank *deadTank, int weaponLevel)
+{
+	if (firedTank->getPlayerId() == 0 || deadTank->getPlayerId() == 0) return 0;
+	if (firedTank == deadTank) return -50;
+
+	float weaponMult = (float(weaponLevel) / 10.0f) + 1.0f;
+
+	int skillDiff = int(
+		(20.0f * weaponMult) / 
+		(1.0f + powf(10.0f, (
+		float(firedTank->getScore().getSkill() - deadTank->getScore().getSkill()) / 1000.0f)))
+		);
+	return skillDiff;
 }

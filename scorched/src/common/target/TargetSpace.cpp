@@ -39,6 +39,7 @@ TargetSpace::TargetSpace() :
 	spaceHSq_ = (spaceH_ / spaceSq_);
 	noSquares_ = spaceWSq_ * spaceHSq_;
 	squares_ = new Square[noSquares_];
+	for (int i=0; i<noSquares_; i++) squares_[i].squarenum = i;
 }
 
 TargetSpace::~TargetSpace()
@@ -48,15 +49,48 @@ TargetSpace::~TargetSpace()
 
 void TargetSpace::updateTarget(Target *target)
 {
-	removeTarget(target);
-	if (target->getAlive() &&
-		!target->getTargetState().getNoCollision())
+	if (!target->getAlive() ||
+		target->getTargetState().getNoCollision())
 	{
-		addTarget(target);
+		removeTarget(target);
+	}
+	else
+	{
+		static std::vector<Square*> squares;
+		squares.clear();
+		getSquares(target, squares);
+
+		bool same = false;
+		if (squares.size() == target->getLife().getSpaceContainment().squares.size())
+		{
+			same = true;
+			for (unsigned int i=0; i<squares.size(); i++)
+			{
+				if (squares[i]->squarenum != target->getLife().getSpaceContainment().squares[i])
+				{
+					same = false;
+					break;
+				}
+			}
+		}
+
+		if (!same)
+		{
+			removeTarget(target);
+			std::vector<Square*>::iterator itor;
+			for (itor = squares.begin();
+				itor != squares.end();
+				itor++)
+			{
+				Square *square = *itor;
+				target->getLife().getSpaceContainment().squares.push_back(square->squarenum);
+				square->targets.insert(std::pair<unsigned int, Target*>(target->getPlayerId(), target));
+			}
+		}
 	}
 }
 
-void TargetSpace::addTarget(Target *target)
+void TargetSpace::getSquares(Target *target, std::vector<Square*> &squares)
 {
 	// Set the bounding constaints
 	int x = target->getLife().getTargetPosition()[0].asInt();
@@ -106,25 +140,22 @@ void TargetSpace::addTarget(Target *target)
 			DIALOG_ASSERT(num >= 0 && num < noSquares_);
 
 			Square *square = &squares_[num];
-			square->targets[target->getPlayerId()] = target;
-			target->getLife().getSpaceContainment().squares.insert(num);
+			squares.push_back(square);
 		}
 	}
 }
 
 void TargetSpace::removeTarget(Target *target)
 {
-	std::set<int> &squares = target->getLife().getSpaceContainment().squares;
-	std::set<int>::iterator itor;
-	for (itor = squares.begin();
-		itor != squares.end();
-		itor++)
+	std::vector<int> &squares = target->getLife().getSpaceContainment().squares;
+	while (!squares.empty())
 	{
-		int num = (*itor);
-		Square *square = &squares_[num];
+		int squareNum = squares.back();
+		squares.pop_back();
+
+		Square *square = &squares_[squareNum];
 		square->targets.erase(target->getPlayerId());
 	}
-	squares.clear();
 }
 
 Target *TargetSpace::getCollision(FixedVector &position)
@@ -151,7 +182,7 @@ Target *TargetSpace::getCollision(FixedVector &position)
 		if (!target->getAlive())
 		{
 			Logger::log(S3D::formatStringBuffer("ERROR: Dead target %u:%s in space",
-				target->getPlayerId(), target->getName()));
+				target->getPlayerId(), target->getCStrName().c_str()));
 			continue;
 		}
 
@@ -174,7 +205,7 @@ Target *TargetSpace::getCollision(FixedVector &position)
 		}
 	}
 
-	if (context_->optionsGame->getActionSyncCheck())
+	if (context_->getOptionsGame().getActionSyncCheck())
 	{
 		std::string targets;
 		if (result)
@@ -186,7 +217,7 @@ Target *TargetSpace::getCollision(FixedVector &position)
 				result->getLife().getTargetPosition()[2].getInternal()));
 		}
 
-		context_->actionController->addSyncCheck(
+		context_->getActionController().addSyncCheck(
 			S3D::formatStringBuffer("CollisionSet : %i,%i,%i %s", 
 				position[0].getInternal(),
 				position[1].getInternal(),
@@ -239,7 +270,7 @@ void TargetSpace::getCollisionSet(FixedVector &position, fixed radius,
 				if (!target->getAlive())
 				{
 					Logger::log(S3D::formatStringBuffer("ERROR: Dead target %u:%s in space",
-						target->getPlayerId(), target->getName()));
+						target->getPlayerId(), target->getCStrName().c_str()));
 					continue;
 				}
 
@@ -258,7 +289,7 @@ void TargetSpace::getCollisionSet(FixedVector &position, fixed radius,
 		}
 	}
 
-	if (context_->optionsGame->getActionSyncCheck())
+	if (context_->getOptionsGame().getActionSyncCheck())
 	{
 		std::string targets;
 		std::map<unsigned int, Target *>::iterator itor;
@@ -273,7 +304,7 @@ void TargetSpace::getCollisionSet(FixedVector &position, fixed radius,
 				itor->second->getLife().getTargetPosition()[2].getInternal()));
 		}
 
-		context_->actionController->addSyncCheck(
+		context_->getActionController().addSyncCheck(
 			S3D::formatStringBuffer("CollisionSet : %i,%i,%i %i \"%s\"", 
 				position[0].getInternal(),
 				position[1].getInternal(),
@@ -371,9 +402,9 @@ void TargetSpace::draw()
 			Vector size(spaceSq_, spaceSq_, 20);
 
 			if (position[0] > ScorchedClient::instance()->getLandscapeMaps().
-				getGroundMaps().getMapWidth() ||
+				getGroundMaps().getLandscapeWidth() ||
 				position[1] > ScorchedClient::instance()->getLandscapeMaps().
-				getGroundMaps().getMapHeight())
+				getGroundMaps().getLandscapeHeight())
 			{
 				continue;
 			}

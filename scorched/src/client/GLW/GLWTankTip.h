@@ -87,6 +87,17 @@ protected:
 	Tank *tank_;
 };
 
+class TankRankTip : public ToolTip
+{
+public:
+	TankRankTip(Tank *tank);
+	virtual ~TankRankTip();
+
+	virtual void populate();
+protected:
+	Tank *tank_;
+};
+
 class TankParachutesTip : public ToolTip, public GLWSelectorI
 {
 public:
@@ -212,6 +223,7 @@ public:
 	TankShieldTip shieldTip;
 	TankBatteryTip batteryTip;
 	TankFuelTip fuelTip;
+	TankRankTip rankTip;
 
 private:
 	GLWTankTips(const GLWTankTips &);

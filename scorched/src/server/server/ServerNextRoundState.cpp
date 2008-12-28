@@ -31,10 +31,12 @@
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <common/StatsLogger.h>
+#include <lua/LUAScriptHook.h>
 
 ServerNextRoundState::ServerNextRoundState() :
 	GameStateI("ServerNextRoundState")
 {
+	ScorchedServer::instance()->getLUAScriptHook().addHookProvider("server_newround");
 }
 
 ServerNextRoundState::~ServerNextRoundState()
@@ -45,7 +47,7 @@ void ServerNextRoundState::enterState(const unsigned state)
 {
 	// Move all tanks into the next round
 	// Load the set of options for this next player
-	ScorchedServer::instance()->getContext().optionsTransient->nextRound();
+	ScorchedServer::instance()->getContext().getOptionsTransient().nextRound();
 
 	// Tell the stats about the start of a new round
 	bool weaponBuy = 
@@ -68,6 +70,9 @@ void ServerNextRoundState::enterState(const unsigned state)
 
 	// Setup this list of players that need to move before this round is over
 	TurnController::instance()->nextRound();
+
+	// Notify scripts of a new game starting
+	ScorchedServer::instance()->getLUAScriptHook().callHook("server_newround");
 
 	// Make sure all clients have the correct game settings
 	ComsGameStateMessage message;

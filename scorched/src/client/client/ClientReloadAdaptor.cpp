@@ -30,7 +30,7 @@
 #include <tank/TankContainer.h>
 #include <target/TargetLife.h>
 #include <tankgraph/TargetRendererImplTank.h>
-#include <GLEXT/GLConsoleRuleMethodIAdapter.h>
+#include <console/ConsoleRuleMethodIAdapter.h>
 #include <common/Logger.h>
 
 ClientReloadAdaptor *ClientReloadAdaptor::instance_ = 0;
@@ -47,11 +47,11 @@ ClientReloadAdaptor *ClientReloadAdaptor::instance()
 
 ClientReloadAdaptor::ClientReloadAdaptor()
 {
-	new GLConsoleRuleMethodIAdapter<ClientReloadAdaptor>(
+	new ConsoleRuleMethodIAdapter<ClientReloadAdaptor>(
 		this, &ClientReloadAdaptor::reloadLandscapeObjects, "ReloadLandscapeObjects");
-	new GLConsoleRuleMethodIAdapter<ClientReloadAdaptor>(
+	new ConsoleRuleMethodIAdapter<ClientReloadAdaptor>(
 		this, &ClientReloadAdaptor::showLandscapeInfo, "ShowLandscapeInfo");
-	new GLConsoleRuleMethodIAdapter<ClientReloadAdaptor>(
+	new ConsoleRuleMethodIAdapter<ClientReloadAdaptor>(
 		this, &ClientReloadAdaptor::showLandscapeAimInfo, "ShowLandscapeAimInfo");
 }
 
@@ -83,12 +83,10 @@ void ClientReloadAdaptor::reloadLandscapeObjects()
 	std::list<FixedVector> tankPositions;
 	ScorchedServer::instance()->getLandscapeMaps().generateMaps(
 		ScorchedServer::instance()->getContext(), 
-		serverDefinitions.getDefinition(), 
-		tankPositions);
+		serverDefinitions.getDefinition());
 	ScorchedClient::instance()->getLandscapeMaps().generateMaps(
 		ScorchedClient::instance()->getContext(),
-		serverDefinitions.getDefinition(),
-		tankPositions);
+		serverDefinitions.getDefinition());
 
 	// Classes that store refs to defns and texs
 	LandscapeSoundManager::instance()->addSounds();

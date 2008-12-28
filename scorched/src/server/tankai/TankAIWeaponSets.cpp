@@ -160,7 +160,7 @@ Accessory *TankAIWeaponSets::WeaponSet::
 				ScorchedServer::instance()->getOptionsTransient().getArmsLevel() ||
 				ScorchedServer::instance()->getOptionsGame().getGiveAllWeapons())
 			{
-				if (tank->getAccessories().getAccessoryCount(current.accessory) != 0)
+				if (tank->getAccessories().canUse(current.accessory))
 				{
 					if (!result ||
 						result->priorityuse < current.priorityuse)

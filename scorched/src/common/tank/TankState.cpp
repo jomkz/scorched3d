@@ -25,6 +25,7 @@
 #include <target/TargetShield.h>
 #include <target/TargetState.h>
 #include <engine/ScorchedContext.h>
+#include <lang/LangResource.h>
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
 
@@ -43,9 +44,9 @@ allowedStateTransitions[] =
 
 TankState::TankState(ScorchedContext &context, unsigned int playerId) : 
 	state_(sLoading), tank_(0),
-	readyState_(sReady), sid_(0),
+	readyState_(sReady),
 	context_(context), spectator_(false), 
-	muted_(false), adminTries_(0),
+	muted_(false),
 	skipshots_(false),
 	lives_(0), maxLives_(1), destroy_(false)
 {
@@ -66,7 +67,7 @@ void TankState::newGame()
 	setState(sNormal);
 	if (!tank_->isTemp())
 	{
-		maxLives_ = context_.optionsGame->getPlayerLives();
+		maxLives_ = context_.getOptionsGame().getPlayerLives();
 	}
 
 	lives_ = maxLives_;
@@ -139,6 +140,39 @@ const char *TankState::getSmallStateString()
 	}
 
 	return type;
+}
+
+LangString &TankState::getSmallStateLangString()
+{
+	LANG_RESOURCE_CONST_VAR(SPEC_PENDING, "SPEC_PENDING", "(Spec)Pending");
+	LANG_RESOURCE_CONST_VAR(PENDING, "PENDING", "Pending");
+	LANG_RESOURCE_CONST_VAR(SPEC_ALIVE, "SPEC_ALIVE", "(Spec)Alive");
+	LANG_RESOURCE_CONST_VAR(ALIVE, "ALIVE", "Alive");
+	LANG_RESOURCE_CONST_VAR(SPEC_INITIALIZING, "SPEC_INITIALIZING", "(Spec)Initializing");
+	LANG_RESOURCE_CONST_VAR(INITIALIZING, "INITIALIZING", "Initializing");
+	LANG_RESOURCE_CONST_VAR(SPEC_LOADING, "SPEC_LOADING", "(Spec)Loading");
+	LANG_RESOURCE_CONST_VAR(LOADING, "LOADING", "Loading");
+	LANG_RESOURCE_CONST_VAR(SPEC_DEAD, "SPEC_DEAD", "(Spec)Dead");
+	LANG_RESOURCE_CONST_VAR(DEAD, "DEAD", "Dead");
+
+
+	switch (state_)
+	{
+	case sPending:
+		return spectator_?SPEC_PENDING:PENDING;
+	case sNormal:
+		return spectator_?SPEC_ALIVE:ALIVE;
+	case sInitializing:
+		return spectator_?SPEC_INITIALIZING:INITIALIZING;
+	case sLoading:
+		return spectator_?SPEC_LOADING:LOADING;
+	case sDead:
+		return spectator_?SPEC_DEAD:DEAD;
+		break;
+	}
+
+	static LangString nullResult;
+	return nullResult;
 }
 
 bool TankState::writeMessage(NetBuffer &buffer)

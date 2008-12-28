@@ -26,13 +26,14 @@
 #include <graph/OptionsDisplay.h>
 #include <graph/ModelRendererMesh.h>
 #include <common/DefinesString.h>
+#include <lang/LangResource.h>
 #include <GLW/GLWFont.h>
 #include <GLW/GLWTranslate.h>
 
-static const float TankSquareSize = 60.0f;
+static const float TankSquareSize = 90.0f;
 static const float TankHalfSquareSize = TankSquareSize / 2.0f;
 static const float TankPadding = 20.0f;
-static const float TankInfo = 165.0f;
+static const float TankInfo = 320.0f;
 
 GLWTankViewer::GLWTankViewer(float x, float y, int numH, int numV) :
 	GLWidget(x, y, 
@@ -40,7 +41,7 @@ GLWTankViewer::GLWTankViewer(float x, float y, int numH, int numV) :
 					 TankSquareSize * numV + TankPadding),
 	scrollBar_(w_ - 12.0f, y + 2.0f, h_ - 4.0f, 0, 0, numV),
 	infoWindow_(x + TankSquareSize * numH + TankPadding + 10.0f, 
-				y + TankSquareSize * numV + TankPadding - TankInfo - 35.0f, 
+				y + TankSquareSize * numV + TankPadding - TankInfo + 30.0f, 
 				TankInfo, TankInfo, true),
 	numH_(numH), numV_(numV),
 	rot_(0.0f), selected_(0),
@@ -48,9 +49,9 @@ GLWTankViewer::GLWTankViewer(float x, float y, int numH, int numV) :
 	rotXYD_(1.0f), rotYZD_(1.0f),
 	totalTime_(0.0f),
 	team_(0),
-	catagoryChoice_(x + TankSquareSize * numH + TankPadding + 10.0f, 
-					y + TankSquareSize * numV + TankPadding - 25.0f,
-					TankInfo)
+	catagoryChoice_(x, 
+					y + TankSquareSize * numV + TankPadding + 5.0f,
+					+ TankSquareSize * numH + TankPadding)
 {
 	std::set<std::string> &catagories = 
 		ScorchedClient::instance()->getTankModels().getModelCatagories();
@@ -59,22 +60,29 @@ GLWTankViewer::GLWTankViewer(float x, float y, int numH, int numV) :
 		 catItor != catagories.end();
 		 catItor++)
 	{
-		catagoryChoice_.addText((*catItor).c_str());
+		catagoryChoice_.addText(LANG_RESOURCE(*catItor, *catItor), (*catItor));
 	}
 
 	catagoryChoice_.setHandler(this);
 	catagoryChoice_.setCurrentPosition(0);
-	select(0, 0, GLWSelectorEntry(catagoryChoice_.getCurrentText()));
+	if (catagoryChoice_.getCurrentEntry()) 
+	{
+		select(0, 0, *catagoryChoice_.getCurrentEntry());
+	}
 
-	catagoryChoice_.setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Model Catagory",
+	catagoryChoice_.setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("MODEL_CATAGORY", "Model Catagory"),
+		LANG_RESOURCE("MODEL_CATAGORY_TOOLTIP", 
 		"Displays the currently selected model catagory.\n"
 		"To make models easier to locate\n"
-		"tank models are grouped by catagory."));
-	infoWindow_.setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Current Model",
+		"tank models are grouped by catagory.")));
+	infoWindow_.setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("CURRENT_MODEL", "Current Model"),
+		LANG_RESOURCE("CURRENT_MODEL_TOOLTIP", 
 		"Displays the currently selected tank model.\n"
 		"This is the model this player will use in game.\n"
 		"Choose a new model from the selection on the\n"
-		"left."));
+		"left.")));
 }
 
 GLWTankViewer::~GLWTankViewer()
@@ -120,7 +128,7 @@ void GLWTankViewer::select(unsigned int id,
 		 modelItor++)
 	{
 		TankModel *tankModel = (*modelItor);
-		if (tankModel->isOfCatagory(value.getText()))
+		if (tankModel->isOfCatagory(value.getDataText()))
 		{
 			// Check if this tank is allowed for this team
 			if (!tankModel->isOfTeam(team_) ||
@@ -279,8 +287,8 @@ void GLWTankViewer::draw()
 						getTypeByName(models_[vectorPos].model->getTypeName());
 					toolTip_.setText(
 						ToolTip::ToolTipInfo, 
-						models_[vectorPos].model->getName(),
-						type->getDescription());	
+						LANG_STRING(models_[vectorPos].model->getName()),
+						LANG_STRING(type->getDescription()));	
 				}
 
 				float scale = 22.0f / 60.0f * TankSquareSize;
@@ -302,7 +310,7 @@ void GLWTankViewer::draw()
 		selected_ < (int) models_.size())
 	{
 		const float infoX = infoWindow_.getX() + (infoWindow_.getW() / 2.0f);
-		const float infoY = infoWindow_.getY() + (infoWindow_.getH() / 2.0f) - 15.0f;
+		const float infoY = infoWindow_.getY() + (infoWindow_.getH() / 2.0f) - 35.0f;
 		glPushMatrix();
 			glTranslatef(infoX, infoY, 0.0f);
 			glLightfv(GL_LIGHT1, GL_POSITION, sunPosition);
@@ -310,7 +318,7 @@ void GLWTankViewer::draw()
 			drawCaption(selected_);
 			glRotatef(-45.0f, 1.0f, 0.0f, 0.0f);
 			glRotatef(rot_, 0.0f, 0.0f, 1.0f);
-			glScalef(50.0f, 50.0f, 50.0f);
+			glScalef(100.0f, 100.0f, 100.0f);
 	
 			drawItem(selected_, true);
 		glPopMatrix();
@@ -369,15 +377,13 @@ void GLWTankViewer::drawCaption(int pos)
 {
 	GLState state(GLState::DEPTH_OFF);
 
+	LANG_RESOURCE_VAR_1(TANK_NAME, "TANK_NAME", "Tank Name : {0}", models_[pos].model->getName());
+
 	Vector color(0.3f, 0.3f, 0.3f);
 	GLWFont::instance()->getGameFont()->
-		drawWidth(TankSquareSize * 2 + TankPadding, 
-			color, 10.0f, -70.0f, 75.0f, 0.0f, 
-			models_[pos].model->getName());
-	/*GLWFont::instance()->getGameFont()->
-		drawWidth(TankSquareSize * 2 + TankPadding, 
-			color, 10.0f, -70.0f, 63.0f, 0.0f, 
-			S3D::formatStringBuffer("(%i Triangles)", models_[pos]->getNoTris()));*/
+		drawWidth(TankInfo - 20.0f, 
+			color, 10.0f, -150.0f, 175.0f, 0.0f, 
+			TANK_NAME);
 }
 void GLWTankViewer::drawItem(int pos, bool selected)
 {

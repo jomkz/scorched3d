@@ -22,6 +22,7 @@
 #include <server/ScorchedServer.h>
 #include <server/ScorchedServerUtil.h>
 #include <server/ServerCommon.h>
+#include <server/ServerMessageHandler.h>
 #include <coms/ComsLinesMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <tank/TankContainer.h>
@@ -68,6 +69,10 @@ bool ServerLinesHandler::processMessage(
 	// If this tank has been muted also don't allow lines
 	if (tank->getState().getMuted()) return true;
 
+	// Get destinationinfo for this tank
+	ServerMessageHandler::DestinationInfo *destinationInfo =
+		ServerMessageHandler::instance()->getDestinationInfo(netMessage.getDestinationId());
+
 	// Send all team messages to everyone in the team (or any admins)
 	// Only send to the same destination once
 	std::set<unsigned int> doneDests;
@@ -81,7 +86,7 @@ bool ServerLinesHandler::processMessage(
 	{
 		Tank *currentTank = (*itor).second;
 		if (tank->getTeam() == currentTank->getTeam() ||
-			currentTank->getState().getAdmin())
+			(destinationInfo && destinationInfo->admin))
 		{
 			if (doneDests.find(currentTank->getDestinationId()) ==
 				doneDests.end())

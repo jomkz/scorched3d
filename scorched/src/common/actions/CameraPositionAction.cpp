@@ -34,7 +34,7 @@ CameraPositionAction::CameraPositionAction(FixedVector &showPosition,
 
 CameraPositionAction::~CameraPositionAction()
 {
-	if (!context_->serverMode)
+	if (!context_->getServerMode())
 	{
 		CameraPositionActionRegistry::rmCameraPositionAction(this);
 	}
@@ -42,11 +42,11 @@ CameraPositionAction::~CameraPositionAction()
 
 void CameraPositionAction::init()
 {
-	if (!context_->serverMode)
+	if (!context_->getServerMode())
 	{
 		CameraPositionActionRegistry::addCameraPositionAction(this);
 	}
-	startTime_ = context_->actionController->getActionTime();
+	startTime_ = context_->getActionController().getActionTime();
 }
 
 void CameraPositionAction::simulate(fixed frameTime, bool &remove)
@@ -112,7 +112,7 @@ CameraPositionAction *CameraPositionActionRegistry::getCurrentBest()
 			
 			// Check that this action is near the beginning
 			fixed currentTime = action->getScorchedContext()->
-				actionController->getActionTime();
+				getActionController().getActionTime();
 			fixed actionTime = action->getStartTime();
 			if (currentTime - actionTime < 1)
 			{

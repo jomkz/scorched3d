@@ -41,6 +41,7 @@ public:
 
 protected:
 	GLTexture colorTexture_;
+	bool createdTexture_;
 };
 
 #endif

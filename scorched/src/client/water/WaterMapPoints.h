@@ -32,7 +32,7 @@ public:
 	virtual ~WaterMapPoints();
 
 	void draw(Water2Patches &currentPatch);
-	void generate(int mapWidth, int mapHeight);
+	void generate();
 
 protected:
 	std::vector<Vector> pts_;

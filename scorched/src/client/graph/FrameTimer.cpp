@@ -20,19 +20,11 @@
 
 #include <stdio.h>
 #include <graph/FrameTimer.h>
-#include <graph/OptionsDisplay.h>
-#include <graph/MainCamera.h>
-#include <graph/ParticleEngine.h>
-#include <common/Defines.h>
-#include <sound/Sound.h>
-#include <GLEXT/GLInfo.h>
-#include <GLEXT/GLState.h>
-#include <client/ScorchedClient.h>
 #include <client/ClientChannelManager.h>
-#include <engine/ActionController.h>
-#include <landscape/Landscape.h>
-#include <landscape/PatchGrid.h>
-#include <landscape/ShadowMap.h>
+#include <graph/OptionsDisplay.h>
+#include <GLEXT/GLInfo.h>
+#include <GLEXT/GLTexture.h>
+#include <lang/LangResource.h>
 
 FrameTimer *FrameTimer::instance_ = 0;
 
@@ -48,7 +40,9 @@ FrameTimer *FrameTimer::instance()
 
 FrameTimer::FrameTimer() : 
 	GameStateI("FrameTimer"),
-	totalTime_(0.0f), frameCount_(0), lastStateCount_(0)
+	totalTime_(0.0f), frameCount_(0), 
+	lastStateCount_(0), lastTris_(0), lastTextureSets_(0),
+	fps_(0.0f)
 {
 
 }
@@ -64,6 +58,12 @@ void FrameTimer::draw(const unsigned state)
 
 	lastStateCount_ = GLState::getStateSwitches();
 	GLState::resetStateSwitches();
+
+	lastTris_ = GLInfo::getNoTriangles();
+	GLInfo::resetNoTriangles();
+	
+	lastTextureSets_ = GLTexture::getTextureSets();
+	GLTexture::resetTextureSets();
 }
 
 void FrameTimer::simulate(const unsigned state, float frameTime)
@@ -72,29 +72,17 @@ void FrameTimer::simulate(const unsigned state, float frameTime)
 	if (totalTime_ > 5.0f)
 	{
 		float timeTaken = frameClock_.getTimeDifference();
-		float fps = float(frameCount_) / timeTaken;
+		fps_ = float(frameCount_) / timeTaken;
 		totalTime_ = 0.0f;
 		frameCount_ = 0;
 
-		unsigned int pOnScreen = 
-			ScorchedClient::instance()->
-				getParticleEngine().getParticlesOnScreen() +
-			MainCamera::instance()->getTarget().
-				getPrecipitationEngine().getParticlesOnScreen();
-
-		unsigned int tris = GLInfo::getNoTriangles();
 		if (OptionsDisplay::instance()->getFrameTimer())
 		{
-			ChannelText chText
-				("info",
-					S3D::formatStringBuffer("%.2f FPS (%iTRI %iPART %iSQR %iSND %uSHD %uS)", 
-					fps,
-					tris,
-					pOnScreen,
-					Landscape::instance()->getPatchGrid().getDrawnPatches(),
-					Sound::instance()->getPlayingChannels(),
-					Landscape::instance()->getShadowMap().getShadowCount(), 
-					lastStateCount_));
+			ChannelText chText("info", 
+				LANG_RESOURCE_1(
+					"X_FRAMES_PER_SECOND", 
+					"{0} frames per second.", 
+					S3D::formatStringBuffer("%.2f", fps_)));
 			chText.setFlags(ChannelText::eNoLog | ChannelText::eNoSound);
 			ClientChannelManager::instance()->showText(chText);
 		}

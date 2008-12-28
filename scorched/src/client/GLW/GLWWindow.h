@@ -43,14 +43,14 @@ public:
 		eClickTransparent = 512
 	};
 
-	GLWWindow(const char *name = "None", 
+	GLWWindow(const std::string &name = "None", 
 		float x = 0.0f, float y = 0.0f, 
 		float w = 0.0f, float h = 0.0f,
 		unsigned int states = 0, 
-		const char *description = "None");
-	GLWWindow(const char *name, float w, float h,
+		const std::string &description = "None");
+	GLWWindow(const std::string &name, float w, float h,
 		unsigned int states,
-		const char *description);
+		const std::string &description);
 	virtual ~GLWWindow();
 
 	virtual bool initFromXML(XMLNode *node);
@@ -86,7 +86,7 @@ protected:
 	} dragging_;
 
 	ToolTip toolTip_;
-	GLTexture moveTexture_;
+	static GLTexture moveTexture_;
 	bool showTitle_;
 	bool needCentered_;
 	bool disabled_;

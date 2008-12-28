@@ -27,13 +27,13 @@
 #include <common/OptionsScorched.h>
 
 int TankSort::compare(ScorchedContext &context,
-		const char *nameX, TankScore &scoreX,
-		const char *nameY, TankScore &scoreY)
+		const LangString &nameX, TankScore &scoreX,
+		const LangString &nameY, TankScore &scoreY)
 {
 	if (scoreX.getScore() > scoreY.getScore()) return 1;
 	if (scoreX.getScore() == scoreY.getScore())
 	{
-		return strcmp(nameX, nameY);
+		return LangStringUtil::strcmp(nameX, nameY);
 	}
 	return -1;
 }
@@ -48,7 +48,8 @@ bool TankSort::SortOnScore::operator()(const Tank *x, const Tank *y, ScorchedCon
 	if (tankX.getState().getSpectator() &&
 		tankY.getState().getSpectator())
 	{
-		if (strcmp(((Tank *)x)->getName(), ((Tank *)y)->getName()) < 0) return true;
+		if (LangStringUtil::strcmp(((Tank *)x)->getTargetName(), 
+			((Tank *)y)->getTargetName()) < 0) return true;
 		return false;
 	}
 	else if (tankX.getState().getSpectator())
@@ -61,23 +62,23 @@ bool TankSort::SortOnScore::operator()(const Tank *x, const Tank *y, ScorchedCon
 	}
 
 	int compareResult = compare(context, 
-		tankX.getName(), scoreX, 
-		tankY.getName(), scoreY);
+		tankX.getTargetName(), scoreX, 
+		tankY.getTargetName(), scoreY);
 	return (compareResult > 0);
 }
 
 int TankSort::getWinningTeam(ScorchedContext &context)
 {
-	for (int i=1; i<=context.optionsGame->getTeams(); i++)
+	for (int i=1; i<=context.getOptionsGame().getTeams(); i++)
 	{
-		int scorei = context.tankTeamScore->getScore(i);
+		int scorei = context.getTankTeamScore().getScore(i);
 
 		bool top = true;
-		for (int j=1; j<=context.optionsGame->getTeams(); j++)
+		for (int j=1; j<=context.getOptionsGame().getTeams(); j++)
 		{
 			if (i == j) continue;
 
-			int scorej = context.tankTeamScore->getScore(j);
+			int scorej = context.getTankTeamScore().getScore(j);
 			if (scorej >= scorei)
 			{
 				top = false;
@@ -114,8 +115,8 @@ void TankSort::getSortedTanksIds(ScorchedContext &context,
 {
 	std::list<Tank *> sortedTanks;
 	std::map<unsigned int, Tank *> tanks;
-	if (allTanks) tanks = context.tankContainer->getAllTanks();
-	else tanks = context.tankContainer->getPlayingTanks();
+	if (allTanks) tanks = context.getTankContainer().getAllTanks();
+	else tanks = context.getTankContainer().getPlayingTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();

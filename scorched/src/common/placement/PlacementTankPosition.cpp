@@ -31,21 +31,19 @@
 #include <image/ImageFactory.h>
 #include <common/Logger.h>
 
-void PlacementTankPosition::flattenTankPositions(std::list<FixedVector> &tankPositions, 
+void PlacementTankPosition::flattenTankPositions(
 	ScorchedContext &context)
 {
-	if (context.serverMode)
+	if (context.getServerMode())
 	{
-		tankPositions.clear();
-
 		LandscapeDefinitionCache &definitions = 
-			context.landscapeMaps->getDefinitions();
+			context.getLandscapeMaps().getDefinitions();
 
 		RandomGenerator generator;
 		generator.seed(definitions.getSeed());
 
 		std::map<unsigned int, Tank *> &tanks = 
-			context.tankContainer->getPlayingTanks();
+			context.getTankContainer().getPlayingTanks();
 		std::map<unsigned int, Tank *>::iterator mainitor;
 		for (mainitor = tanks.begin();
 			mainitor != tanks.end();
@@ -54,8 +52,7 @@ void PlacementTankPosition::flattenTankPositions(std::list<FixedVector> &tankPos
 			Tank *tank = (*mainitor).second;
 
 			if (!tank->getState().getSpectator() &&
-				((tank->getState().getState() == TankState::sDead) ||
-				tank->getState().getState() == TankState::sNormal))
+				tank->getState().getState() == TankState::sNormal)
 			{
 				FixedVector tankPos = PlacementTankPosition::placeTank(
 					tank->getPlayerId(), tank->getTeam(), 
@@ -63,20 +60,7 @@ void PlacementTankPosition::flattenTankPositions(std::list<FixedVector> &tankPos
 
 				tank->getLife().setTargetPosition(tankPos);
 				DeformLandscape::flattenArea(context, tankPos);
-
-				tankPositions.push_back(tankPos);
 			}
-		}
-	}
-	else
-	{
-		std::list<FixedVector>::iterator itor;
-		for (itor = tankPositions.begin();
-			itor != tankPositions.end();
-			itor++)
-		{
-			FixedVector &tankPos = *itor;
-			DeformLandscape::flattenArea(context, tankPos);
 		}
 	}
 }
@@ -86,9 +70,9 @@ static bool tankMaskCloseness(ScorchedContext &context, int team,
 {
 	// Find the mask position
 	int maskX = (tankPos[0] * fixed(tankMask->getWidth())).asInt() / 
-		context.landscapeMaps->getDefinitions().getDefn()->landscapewidth;
+		context.getLandscapeMaps().getDefinitions().getDefn()->getLandscapeWidth();
 	int maskY = (tankPos[1] * fixed(tankMask->getHeight())).asInt() / 
-		context.landscapeMaps->getDefinitions().getDefn()->landscapeheight;
+		context.getLandscapeMaps().getDefinitions().getDefn()->getLandscapeHeight();
 	unsigned char *maskPos = tankMask->getBits() +
 		maskX * 3 + maskY * tankMask->getWidth() * 3;
 		
@@ -144,7 +128,7 @@ static bool tankTargetCloseness(ScorchedContext &context, unsigned int playerId,
 	// Make sure the tank is not too close to other targets
 	std::map<unsigned int, Target *> targets;
 	std::map<unsigned int, Target *>::iterator itor;
-	context.targetSpace->getCollisionSet(tankPos, tankCloseness.asInt(), targets);
+	context.getTargetSpace().getCollisionSet(tankPos, tankCloseness.asInt(), targets);
 	for (itor = targets.begin();
 		itor != targets.end();
 		itor++)
@@ -160,7 +144,7 @@ static bool tankTargetCloseness(ScorchedContext &context, unsigned int playerId,
 	}
 
 	// Make sure the tank is not too close to other tanks
-	std::map<unsigned int, Tank *> tanks = context.tankContainer->getAllTanks();
+	std::map<unsigned int, Tank *> tanks = context.getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank *>::iterator tankItor;
 	for (tankItor = tanks.begin();
 		tankItor != tanks.end();
@@ -196,7 +180,7 @@ FixedVector PlacementTankPosition::placeTank(unsigned int playerId, int team,
 	Image *tankMask = 0;
 
 	LandscapeDefnType *defn =
-		context.landscapeMaps->getDefinitions().getDefn()->tankstart;
+		context.getLandscapeMaps().getDefinitions().getDefn()->tankstart;
 	if (defn->getType() == LandscapeDefnType::eStartHeight)
 	{
 		LandscapeDefnStartHeight *height = 
@@ -219,20 +203,23 @@ FixedVector PlacementTankPosition::placeTank(unsigned int playerId, int team,
 			defn->getType()));
 	}
     
+	int arenaX = context.getLandscapeMaps().getGroundMaps().getArenaX();
+	int arenaY = context.getLandscapeMaps().getGroundMaps().getArenaY();
+	int arenaWidth = context.getLandscapeMaps().getGroundMaps().getArenaWidth();
+	int arenaHeight = context.getLandscapeMaps().getGroundMaps().getArenaHeight();
+
 	int maxIt = 100;
 	int i;
 	for (i=maxIt; i>0; i--)
 	{
 		// Find a new position for the tank
-		fixed posX = fixed (context.landscapeMaps->getDefinitions().
-			getDefn()->landscapewidth - tankBorder * 2) * 
-			generator.getRandFixed() + fixed(tankBorder);
-		fixed posY = fixed (context.landscapeMaps->getDefinitions().
-			getDefn()->landscapeheight - tankBorder * 2) * 
-			generator.getRandFixed() + fixed(tankBorder);
-		fixed height = context.landscapeMaps->getGroundMaps().
+		fixed posX = fixed(arenaX) + (fixed(arenaWidth - tankBorder * 2) * 
+			generator.getRandFixed()) + fixed(tankBorder);
+		fixed posY = fixed(arenaY) + (fixed(arenaHeight - tankBorder * 2) * 
+			generator.getRandFixed()) + fixed(tankBorder);
+		fixed height = context.getLandscapeMaps().getGroundMaps().
 			getHeight(posX.asInt(), posY.asInt());
-		FixedVector normal = context.landscapeMaps->getGroundMaps().
+		FixedVector normal = context.getLandscapeMaps().getGroundMaps().
 			getNormal(posX.asInt(), posY.asInt());
 		tankPos = FixedVector(posX, posY, height);
 
@@ -258,7 +245,7 @@ FixedVector PlacementTankPosition::placeTank(unsigned int playerId, int team,
 	delete tankMask;
 
 	// Get the height of the tank
-	tankPos[2] = context.landscapeMaps->getGroundMaps().getInterpHeight(
+	tankPos[2] = context.getLandscapeMaps().getGroundMaps().getInterpHeight(
 		tankPos[0], tankPos[1]);
 
 	return tankPos;

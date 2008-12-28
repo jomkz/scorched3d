@@ -36,6 +36,8 @@
 #include <common/OptionsTransient.h>
 #include <common/Defines.h>
 #include <weapons/AccessoryStore.h>
+#include <lang/CachedValueString.h>
+#include <lang/LangResource.h>
 
 REGISTER_CLASS_SOURCE(GLWHudCondition);
 
@@ -67,6 +69,9 @@ GLWScorchedInfo::~GLWScorchedInfo()
 
 void GLWScorchedInfo::draw()
 {
+	LANG_RESOURCE_CONST_VAR(ON, "ON", "On");
+	LANG_RESOURCE_CONST_VAR(OFF, "OFF", "Off");
+
 	Vector *fontColor = &fontColor_;
 	int mouseX = ScorchedClient::instance()->getGameState().getMouseX();
 	int mouseY = ScorchedClient::instance()->getGameState().getMouseY();
@@ -87,27 +92,34 @@ void GLWScorchedInfo::draw()
 		{
 			static WindDialogToolTip windTip;
 			setToolTip(&windTip);
-			static char buffer[256];
-			if (ScorchedClient::instance()->
-				getOptionsTransient().getWindSpeed() == 0)
+
+			static CachedValueString windSpeed;
+			if (windSpeed.hasChanged(ScorchedClient::instance()->
+				getOptionsTransient().getWindSpeed()))
 			{
-				snprintf(buffer, 256, "No Wind");
+				if (windSpeed.cachedValue == 0)
+				{
+					windSpeed.cachedString = LANG_RESOURCE("NO_WIND", "No Wind");
+				}
+				else
+				{
+					windSpeed.cachedString = LANG_RESOURCE_1("WIND_FORCE", "Force {0}",
+						S3D::formatStringBuffer("%.0f", windSpeed.cachedValue.asFloat()));
+				}
 			}
-			else
-			{
-				snprintf(buffer, 256, "Force %.0f", 
-					ScorchedClient::instance()->
-					getOptionsTransient().getWindSpeed().asFloat());
-			}
-			float windwidth = GLWFont::instance()->
-				getGameFont()->getWidth(
-				fontSize_, buffer);
+
 			float offSet = 0.0f;
-			if (!noCenter_) offSet = w_ / 2.0f - (windwidth / 2.0f);
+			if (!noCenter_) 
+			{
+				float windwidth = GLWFont::instance()->
+					getGameFont()->getWidth(
+					fontSize_, windSpeed.cachedString);
+				offSet = w_ / 2.0f - (windwidth / 2.0f);
+			}
 			GLWFont::instance()->getGameFont()->draw(
 				*fontColor, fontSize_,
 				x_ + offSet, y_, 0.0f,
-				buffer);                    
+				windSpeed.cachedString);                    
 		}
 		break;
 	}
@@ -130,14 +142,18 @@ void GLWScorchedInfo::draw()
 		case ePlayerName:
 		{
 			setToolTip(&renderer->getTips()->nameTip);
-			float namewidth = GLWFont::instance()->getGameFont()->getWidth(
-				fontSize_, current->getName());
+
 			float offSet = 0.0f;
-			if (!noCenter_) offSet = w_ / 2.0f - (namewidth / 2.0f);
+			if (!noCenter_) 
+			{
+				float namewidth = GLWFont::instance()->getGameFont()->getWidth(
+					fontSize_, current->getTargetName());
+				offSet = w_ / 2.0f - (namewidth / 2.0f);
+			}
 			GLWFont::instance()->getGameFont()->draw(
 				current->getColor(), fontSize_,
 				x_ + offSet, y_, 0.0f,
-				current->getName());
+				current->getTargetName());
 		}
 		break;
 		case ePlayerIcon:
@@ -158,21 +174,22 @@ void GLWScorchedInfo::draw()
 			glEnd();
 		}
 		break;
-		case ePlayerColor:
-		{
-			setToolTip(&renderer->getTips()->nameTip);
-			GLWFont::instance()->getGameFont()->draw(
-				current->getColor(), fontSize_,
-				x_, y_, 0.0f,
-				current->getScore().getStatsRank());
-		}
+		case ePlayerRank:
+			setToolTip(&renderer->getTips()->rankTip);
+			if (current->getScore().getRank() > -1)
+			{
+				GLWFont::instance()->getGameFont()->draw(
+					current->getColor(), fontSize_,
+					x_, y_, 0.0f,
+					S3D::formatStringBuffer("%i", current->getScore().getRank()));
+			}
 		break;
 		case eAutoDefenseCount:
 			setToolTip(&renderer->getTips()->autodTip);
 			GLWFont::instance()->getGameFont()->draw(
 				*fontColor, fontSize_,
 				x_, y_, 0.0f,
-				(current->getAccessories().getAutoDefense().haveDefense()?"On":"Off"));
+				(current->getAccessories().getAutoDefense().haveDefense()?ON:OFF));
 		break;
 		case eParachuteCount:
 			setToolTip(&renderer->getTips()->paraTip);
@@ -181,27 +198,40 @@ void GLWScorchedInfo::draw()
 				GLWFont::instance()->getGameFont()->draw(
 					*fontColor, fontSize_,
 					x_, y_, 0.0f,
-					"Off");
+					OFF);
 			}
 			else
 			{
-				int count = current->getAccessories().getAccessoryCount(
-					current->getParachute().getCurrentParachute());
-				char buffer[128];
-				if (count >= 0) snprintf(buffer, 128, "%i", count);
-				else snprintf(buffer, 128, "In");
+				static CachedValueString paraCount;
+				if (paraCount.hasChanged(
+					current->getAccessories().getAccessoryCount(
+					current->getParachute().getCurrentParachute())))
+				{
+					paraCount.cachedString = 
+						current->getAccessories().getAccessoryCountString(
+							current->getParachute().getCurrentParachute());
+				}
 				GLWFont::instance()->getGameFont()->draw(
 					*fontColor, fontSize_,
 					x_, y_, 0.0f,
-					S3D::formatStringBuffer("%s", buffer));
+					paraCount.cachedString);
 			}
 		break;
 		case eHealthCount:
-			setToolTip(&renderer->getTips()->healthTip);
-			GLWFont::instance()->getGameFont()->draw(
-				*fontColor, fontSize_,
-				x_, y_, 0.0f,
-				S3D::formatStringBuffer("%.0f", current->getLife().getLife().asFloat()));
+			{
+				setToolTip(&renderer->getTips()->healthTip);
+
+				static CachedValueString health;
+				if (health.hasChanged(current->getLife().getLife()))
+				{
+					health.cachedString = LANG_STRING(S3D::formatStringBuffer("%.0f", 
+						health.cachedValue.asFloat()));
+				}
+				GLWFont::instance()->getGameFont()->draw(
+					*fontColor, fontSize_,
+					x_, y_, 0.0f,
+					health.cachedString);
+			}
 		break;
 		case eShieldCount:
 			setToolTip(&renderer->getTips()->shieldTip);
@@ -210,47 +240,65 @@ void GLWScorchedInfo::draw()
 				GLWFont::instance()->getGameFont()->draw(
 					*fontColor, fontSize_,
 					x_, y_, 0.0f,
-					"Off");
+					OFF);
 			}
 			else
 			{
+				static CachedValueString shieldPower;
+				if (shieldPower.hasChanged(current->getShield().getShieldPower()))
+				{
+					shieldPower.cachedString = LANG_STRING(S3D::formatStringBuffer("%.0f", 
+						shieldPower.cachedValue.asFloat()));
+				}
 				GLWFont::instance()->getGameFont()->draw(
 					*fontColor, fontSize_,
 					x_, y_, 0.0f,
-					S3D::formatStringBuffer("%.0f", current->getShield().getShieldPower().asFloat()));
+					shieldPower.cachedString);
 			}
 		break;
 		case eBatteryCount:
 			{
-			int count = current->getAccessories().getBatteries().getNoBatteries();
-			setToolTip(&renderer->getTips()->batteryTip);
-			GLWFont::instance()->getGameFont()->draw(
-				*fontColor, fontSize_,
-				x_, y_, 0.0f,
-				S3D::formatStringBuffer((count==-1?"In":"%i"),	count));
+				setToolTip(&renderer->getTips()->batteryTip);
+
+				static CachedValueString batteryCount;
+				if (batteryCount.hasChanged(current->getAccessories().getBatteries().getNoBatteries()))
+				{
+					if (batteryCount.cachedValue == -1) 
+						batteryCount.cachedString = LANG_RESOURCE("INF", "In");
+					else batteryCount.cachedString = 
+						LANG_STRING(S3D::formatStringBuffer("%i",	batteryCount.cachedValue.asInt()));
+				}
+				GLWFont::instance()->getGameFont()->draw(
+					*fontColor, fontSize_,
+					x_, y_, 0.0f,
+					batteryCount.cachedString);
 			}
 		break;
 		case eFuelCount:
 			{
-			Accessory *weapon = current->getAccessories().getWeapons().getCurrent();
-
 			setToolTip(&renderer->getTips()->fuelTip);
 
+			Accessory *weapon = current->getAccessories().getWeapons().getCurrent();
 			if (!weapon ||
 				weapon->getPositionSelect() != Accessory::ePositionSelectFuel)
 			{
 				GLWFont::instance()->getGameFont()->draw(
 					*fontColor, fontSize_,
 					x_, y_, 0.0f,
-					"Off");
+					OFF);
 			}
 			else
 			{
-				int count = current->getAccessories().getAccessoryCount(weapon);
+				static CachedValueString weaponCount;
+				if (weaponCount.hasChanged(current->getAccessories().getAccessoryCount(weapon)))
+				{
+					weaponCount.cachedString = 
+						current->getAccessories().getAccessoryCountString(weapon);
+				}
 				GLWFont::instance()->getGameFont()->draw(
 					*fontColor, fontSize_,
 					x_, y_, 0.0f,
-					S3D::formatStringBuffer((count==-1?"In":"%i"), count));
+					weaponCount.cachedString);
 			}
 			}
 		break;
@@ -260,18 +308,17 @@ void GLWScorchedInfo::draw()
 			if (!weapon) return;
 
 			setToolTip(&renderer->getTips()->weaponTip);
-
-			static char buffer[256];
-			snprintf(buffer, 256, "%s", weapon->getName());
-			float weaponWidth = (float) GLWFont::instance()->getGameFont()->
-				getWidth(fontSize_, buffer);
-
 			float offSet = 0.0f;
-			if (!noCenter_) offSet = w_ / 2.0f - (weaponWidth / 2.0f);
+			if (!noCenter_) 
+			{
+				float weaponWidth = (float) GLWFont::instance()->getGameFont()->
+					getWidth(fontSize_, weapon->getStringName());
+				offSet = w_ / 2.0f - (weaponWidth / 2.0f);
+			}
 			GLWFont::instance()->getGameFont()->draw(
 				*fontColor, fontSize_,
 				x_ + offSet, y_, 0.0f,
-				buffer);
+				weapon->getStringName());
 		}
 		break;
 		case eWeaponCount:
@@ -280,13 +327,16 @@ void GLWScorchedInfo::draw()
 			if (!weapon) return;
 
 			setToolTip(&renderer->getTips()->weaponTip);
-			int count = current->getAccessories().getAccessoryCount(weapon);
-			const char *format = "%i";
-			if (count < 0) format = "In";
+			static CachedValueString weaponCount;
+			if (weaponCount.hasChanged(current->getAccessories().getAccessoryCount(weapon)))
+			{
+				weaponCount.cachedString = current->getAccessories().
+					getAccessoryCountString(weapon);
+			}
 			GLWFont::instance()->getGameFont()->draw(
 				*fontColor, fontSize_,
 				x_, y_, 0.0f,
-				S3D::formatStringBuffer(format, count));
+				weaponCount.cachedString);
 		}
 		break;
 		case eWeaponIcon:
@@ -312,49 +362,102 @@ void GLWScorchedInfo::draw()
 		}
 		break;
 		case eRotation:
-			setToolTip(&renderer->getTips()->rotationTip);
-			GLWFont::instance()->getGameFont()->draw(
-				*fontColor, fontSize_,
-				x_, y_, 0.0f,
-				S3D::formatStringBuffer("%.1f",
-				360.0f - current->getPosition().getRotationGunXY().asFloat()));
+			{
+				setToolTip(&renderer->getTips()->rotationTip);
+				static CachedValueString rotationValue;
+				if (rotationValue.hasChanged(current->getPosition().getRotationGunXY()))
+				{
+					rotationValue.cachedString =
+						LANG_STRING(S3D::formatStringBuffer("%.1f",
+							360.0f - rotationValue.cachedValue.asFloat()));
+				}
+			
+				GLWFont::instance()->getGameFont()->draw(
+					*fontColor, fontSize_,
+					x_, y_, 0.0f,
+					rotationValue.cachedString);
+			}
 		break;
 		case eRotationDiff:
-			GLWFont::instance()->getGameFont()->draw(
-				*fontColor, fontSize_,
-				x_, y_, 0.0f,
-				S3D::formatStringBuffer("%+.1f",
-				current->getPosition().getRotationXYDiff().asFloat()));
+			{
+				static CachedValueString rotationValue;
+				if (rotationValue.hasChanged(current->getPosition().getRotationXYDiff()))
+				{
+					rotationValue.cachedString = 
+						LANG_STRING(S3D::formatStringBuffer("%+.1f",
+							rotationValue.cachedValue.asFloat()));
+				}
+
+				GLWFont::instance()->getGameFont()->draw(
+					*fontColor, fontSize_,
+					x_, y_, 0.0f,
+					rotationValue.cachedString);
+			}
 		break;
 		case eElevation:
-			setToolTip(&renderer->getTips()->elevationTip);
-			GLWFont::instance()->getGameFont()->draw(
-				*fontColor, fontSize_,
-				x_, y_, 0.0f,
-				S3D::formatStringBuffer("%.1f",
-				current->getPosition().getRotationGunYZ().asFloat()));
+			{
+				setToolTip(&renderer->getTips()->elevationTip);
+
+				static CachedValueString elevationValue;
+				if (elevationValue.hasChanged(current->getPosition().getRotationGunYZ()))
+				{
+					elevationValue.cachedString =
+						LANG_STRING(S3D::formatStringBuffer("%.1f",
+							elevationValue.cachedValue.asFloat()));
+
+				}
+				GLWFont::instance()->getGameFont()->draw(
+					*fontColor, fontSize_,
+					x_, y_, 0.0f,
+					elevationValue.cachedString);
+			}
 		break;
 		case eElevationDiff:
-			GLWFont::instance()->getGameFont()->draw(
-				*fontColor, fontSize_,
-				x_, y_, 0.0f,
-				S3D::formatStringBuffer("%+.1f",
-				current->getPosition().getRotationYZDiff().asFloat()));
+			{
+				static CachedValueString elevationValue;
+				if (elevationValue.hasChanged(current->getPosition().getRotationYZDiff()))
+				{
+					elevationValue.cachedString =
+						LANG_STRING(S3D::formatStringBuffer("%+.1f",
+							elevationValue.cachedValue.asFloat()));
+				}
+				GLWFont::instance()->getGameFont()->draw(
+					*fontColor, fontSize_,
+					x_, y_, 0.0f,
+					elevationValue.cachedString);
+			}
 		break;
 		case ePower:
-			setToolTip(&renderer->getTips()->powerTip);
-			GLWFont::instance()->getGameFont()->draw(
-				*fontColor, fontSize_,
-				x_, y_, 0.0f,
-				S3D::formatStringBuffer("%.1f",
-				current->getPosition().getPower().asFloat()));
+			{
+				setToolTip(&renderer->getTips()->powerTip);
+
+				static CachedValueString powerValue;
+				if (powerValue.hasChanged(current->getPosition().getPower()))
+				{
+					powerValue.cachedString =
+						LANG_STRING(S3D::formatStringBuffer("%.1f",
+							powerValue.cachedValue.asFloat()));
+				}
+				GLWFont::instance()->getGameFont()->draw(
+					*fontColor, fontSize_,
+					x_, y_, 0.0f,
+					powerValue.cachedString);
+			}
 		break;
 		case ePowerDiff:
-			GLWFont::instance()->getGameFont()->draw(
-				*fontColor, fontSize_,
-				x_, y_, 0.0f,
-				S3D::formatStringBuffer("%+.1f",
-				current->getPosition().getPowerDiff().asFloat()));
+			{
+				static CachedValueString powerValue;
+				if (powerValue.hasChanged(current->getPosition().getPowerDiff()))
+				{
+					powerValue.cachedString =
+						LANG_STRING(S3D::formatStringBuffer("%+.1f",
+							powerValue.cachedValue.asFloat()));
+				}
+				GLWFont::instance()->getGameFont()->draw(
+					*fontColor, fontSize_,
+					x_, y_, 0.0f,
+					powerValue.cachedString);
+			}
 		break;
 	}
 }
@@ -383,7 +486,7 @@ void GLWScorchedInfo::mouseDown(int button, float x, float y, bool &skipRest)
 			break;
 			case ePlayerIcon:
 			break;
-			case ePlayerColor:
+			case ePlayerRank:
 			break;
 			case eAutoDefenseCount:
 				tankTips->autodTip.showItems(GLWTranslate::getPosX() + x, 
@@ -449,7 +552,7 @@ bool GLWScorchedInfo::initFromXML(XMLNode *node)
 	if (0 == strcmp(typeNode->getContent(), "wind")) infoType_ = eWind;
 	else if (0 == strcmp(typeNode->getContent(), "playername")) infoType_ = ePlayerName;
 	else if (0 == strcmp(typeNode->getContent(), "playericon")) infoType_ = ePlayerIcon;
-	else if (0 == strcmp(typeNode->getContent(), "playercolor")) infoType_ = ePlayerColor;
+	else if (0 == strcmp(typeNode->getContent(), "playerrank")) infoType_ = ePlayerRank;
 	else if (0 == strcmp(typeNode->getContent(), "autodefensecount")) infoType_ = eAutoDefenseCount;
 	else if (0 == strcmp(typeNode->getContent(), "parachutecount")) infoType_ = eParachuteCount;
 	else if (0 == strcmp(typeNode->getContent(), "shieldcount")) infoType_ = eShieldCount;

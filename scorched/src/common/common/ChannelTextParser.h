@@ -21,9 +21,9 @@
 #if !defined(__INCLUDE_ChannelTextParserh_INCLUDE__)
 #define __INCLUDE_ChannelTextParserh_INCLUDE__
 
+#include <lang/LangString.h>
 #include <common/Vector.h>
 #include <vector>
-#include <string>
 
 class ScorchedContext;
 class ChannelTextParser
@@ -41,38 +41,38 @@ public:
 	{
 		ChannelTextEntryType type;
 		unsigned int data;
-		std::string text;
-		std::string part;
+		LangString text;
+		LangString part;
 		Vector color;
 	};
 
 	ChannelTextParser();
 	virtual ~ChannelTextParser();
 
-	void parseText(ScorchedContext &context, const char *text);
+	void parseText(ScorchedContext &context, const LangString &text);
 	void subset(ChannelTextParser &other, int start, int len);
 
-	const char *getText() { return text_.c_str(); }
+	const LangString &getString() { return text_; }
 
 	ChannelTextEntry *getEntry(int position);
     
 protected:
-	std::string text_;
-	std::vector<unsigned char> entryIndex_;
+	LangString text_;
+	std::vector<unsigned int> entryIndex_;
 	std::vector<ChannelTextEntry> entries_;
 
 	bool parseUrl(ScorchedContext &context, 
-		const char *url, ChannelTextEntry &entry);
+		const LangString &url, ChannelTextEntry &entry);
 	bool createPlayerEntry(ScorchedContext &context,
-		const char *part, ChannelTextEntry &entry);
+		const LangString &part, ChannelTextEntry &entry);
 	bool createWeaponEntry(ScorchedContext &context, 
-		const char *part, ChannelTextEntry &entry);
+		const LangString &partt, ChannelTextEntry &entry);
 	bool createChannelEntry(ScorchedContext &context, 
-		const char *part, ChannelTextEntry &entry);
+		const LangString &part, ChannelTextEntry &entry);
 	bool createTipEntry(ScorchedContext &context, 
-		const char *part, ChannelTextEntry &entry);
+		const LangString &part, ChannelTextEntry &entry);
 	bool createAdminEntry(ScorchedContext &context, 
-		const char *part, ChannelTextEntry &entry);
+		const LangString &part, ChannelTextEntry &entry);
 	void addIndex(int number, unsigned char index);
 };
 

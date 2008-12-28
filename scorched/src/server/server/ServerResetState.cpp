@@ -40,7 +40,7 @@ void ServerResetState::enterState(const unsigned state)
 {
 	// Reset all the tanks back to their original scores etc...
 	ScorchedServer::instance()->getTankContainer().newMatch();
-	ScorchedServer::instance()->getContext().tankTeamScore->newMatch();
+	ScorchedServer::instance()->getContext().getTankTeamScore().newMatch();
 	ScorchedServer::instance()->getTankDeadContainer().clearTanks();
 	ScorchedServer::instance()->getOptionsTransient().reset();
 

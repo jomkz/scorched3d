@@ -27,6 +27,8 @@
 #include <engine/ScorchedContext.h>
 #include <landscape/Landscape.h>
 #include <landscapemap/LandscapeMaps.h>
+#include <client/ScorchedClient.h>
+#include <lang/LangResource.h>
 #include <common/Defines.h>
 
 bool ImageModifier::findIntersection(HeightMap &hMap,
@@ -98,7 +100,7 @@ void ImageModifier::addLightMapToBitmap(Image &destBitmap,
 	const int sideFade = 16;
 	const int lightMapWidth = 256; // Resolution of the light map
 
-	if (counter) counter->setNewOp("Light Map");
+	if (counter) counter->setNewOp(LANG_RESOURCE("LIGHT_MAP", "Light Map"));
 
 	// Itterate the dest bitmap pixels
 	GLfloat *bitmap = new GLfloat[lightMapWidth * lightMapWidth * 3];
@@ -186,6 +188,8 @@ void ImageModifier::addLightMapToBitmap(Image &destBitmap,
 
 void ImageModifier::addHeightToBitmap(HeightMap &hMap,
 										 Image &destBitmap, 
+										 Image &destSplat1Bitmap,
+										 Image &destSplat2Bitmap,
 										 Image &slopeBitmap,
 										 Image &shoreBitmap,
 										 Image **origHeightBitmaps,
@@ -266,6 +270,8 @@ void ImageModifier::addHeightToBitmap(HeightMap &hMap,
 	GLfloat hdy = (GLfloat) hMap.getMapHeight() / (GLfloat) destBitmap.getHeight();
 
 	GLubyte *destBits = destBitmap.getBits();
+	GLubyte *destSplat1Bits = destSplat1Bitmap.getBits();
+	GLubyte *destSplat2Bits = destSplat2Bitmap.getBits();
 
 	GLfloat hy = 0.0f;
 	for (int by=0; by<destBitmap.getHeight(); by++, hy+=hdy)
@@ -273,7 +279,7 @@ void ImageModifier::addHeightToBitmap(HeightMap &hMap,
 		if (counter) counter->setNewPercentage((100.0f * float (by)) / float(destBitmap.getHeight()));
 
 		GLfloat hx = 0.0f;
-		for (int bx=0; bx<destBitmap.getWidth(); bx++, destBits+=3, hx+=hdx)
+		for (int bx=0; bx<destBitmap.getWidth(); bx++, destBits+=3, destSplat1Bits+=4, destSplat2Bits+=4, hx+=hdx)
 		{
 			static FixedVector fixedNormal;
 			hMap.getInterpNormal(fixed::fromFloat(hx), fixed::fromFloat(hy), fixedNormal);
@@ -357,6 +363,9 @@ void ImageModifier::addHeightToBitmap(HeightMap &hMap,
 			destBits[0] = (GLubyte) ((float) sourceBits1[0] * blendFirstAmount);
 			destBits[1] = (GLubyte) ((float) sourceBits1[1] * blendFirstAmount);
 			destBits[2] = (GLubyte) ((float) sourceBits1[2] * blendFirstAmount);
+		
+			if (heightIndex < 4) destSplat1Bits[heightIndex] = (GLubyte) (255.0f * blendFirstAmount);
+			else destSplat2Bits[heightIndex-4] = (GLubyte) (255.0f * blendFirstAmount);
 
 			if (blendSecondAmount > 0.0f)
 			{
@@ -365,6 +374,9 @@ void ImageModifier::addHeightToBitmap(HeightMap &hMap,
 				destBits[0] += (GLubyte) ((float) sourceBits2[0] * blendSecondAmount);
 				destBits[1] += (GLubyte) ((float) sourceBits2[1] * blendSecondAmount);
 				destBits[2] += (GLubyte) ((float) sourceBits2[2] * blendSecondAmount);
+
+				if (heightIndex + 1 < 4) destSplat1Bits[heightIndex + 1] = (GLubyte) (255.0f * blendSecondAmount);
+				else destSplat2Bits[heightIndex + 1 - 4] = (GLubyte) (255.0f * blendSecondAmount);
 			}
 
 			if (blendSideAmount > 0.0f)
@@ -374,6 +386,8 @@ void ImageModifier::addHeightToBitmap(HeightMap &hMap,
 				destBits[0] += (GLubyte) ((float) sourceBits3[0] * blendSideAmount);
 				destBits[1] += (GLubyte) ((float) sourceBits3[1] * blendSideAmount);
 				destBits[2] += (GLubyte) ((float) sourceBits3[2] * blendSideAmount);
+
+				destSplat2Bits[0] = (GLubyte) (255.0f * blendSideAmount);
 			}
 
 			if (blendShoreAmount > 0.0f)
@@ -383,6 +397,8 @@ void ImageModifier::addHeightToBitmap(HeightMap &hMap,
 				destBits[0] += (GLubyte) ((float) sourceBits4[0] * blendShoreAmount);
 				destBits[1] += (GLubyte) ((float) sourceBits4[1] * blendShoreAmount);
 				destBits[2] += (GLubyte) ((float) sourceBits4[2] * blendShoreAmount);
+
+				destSplat2Bits[1] = (GLubyte) (255.0f * blendShoreAmount);
 			}
 
 			for (i=0; i<numberSources+2; i++) bitmapItors[i]->incX();
@@ -405,6 +421,65 @@ void ImageModifier::addHeightToBitmap(HeightMap &hMap,
 		}
 	}
 	delete [] heightBitmaps;
+}
+
+void ImageModifier::redBitmap(
+		Image &destBitmap)
+{
+	unsigned char *destBits = destBitmap.getBits();
+	for (int y=0; y<destBitmap.getHeight(); y++)
+	{
+		for (int x=0; x<destBitmap.getWidth(); x++, destBits += 4)
+		{
+			destBits[0] = 255;
+			destBits[1] = 0;
+			destBits[2] = 0;
+			destBits[3] = 0;
+		}
+	}
+}
+
+void ImageModifier::addTexturesToBitmap(
+		Image &destBitmap,
+		Image &slopeBitmap,
+		Image &shoreBitmap,
+		Image **heightBitmaps,
+		int numberSources)
+{
+	std::vector<Image *> sources;
+	for (int i=0; i<numberSources; i++)
+	{
+		sources.push_back(heightBitmaps[i]);
+	}
+	sources.push_back(&slopeBitmap);
+	sources.push_back(&shoreBitmap);
+
+	int currentCount = sources.size();
+	for (int i=currentCount; i<9; i++)
+	{
+		sources.push_back(&shoreBitmap);
+	}
+	
+	unsigned char *destBits = destBitmap.getBits();
+	for (int y=0; y<destBitmap.getHeight(); y++)
+	{
+		for (int x=0; x<destBitmap.getWidth(); x++, destBits += 3)
+		{
+			int texx = x / (destBitmap.getWidth() / 3);
+			int texy = y / (destBitmap.getHeight() / 3);
+			texx = MIN(2, texx);
+			texy = MIN(2, texy);
+
+			Image *src = sources[texx + texy * 3];
+			int srcx = x % src->getWidth();
+			int srcy = y % src->getHeight();
+			
+			unsigned char *srcBits = &src->getBits()[srcx * 3 + srcy * src->getWidth() * 3];
+			destBits[0] = srcBits[0];
+			destBits[1] = srcBits[1];
+			destBits[2] = srcBits[2];
+		}
+	}
 }
 
 void ImageModifier::removeWaterFromBitmap(HeightMap &hMap,
@@ -511,37 +586,55 @@ void ImageModifier::addWaterToBitmap(HeightMap &hMap,
 }
 
 void ImageModifier::addBorderToBitmap(Image &destBitmap,
-										int borderWidth,
-										float colors[3])
+	int borderSize,
+	float colors[3])
 {
+	int arenaX = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaX();
+	int arenaY = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaY();
+	int arenaWidth = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaWidth();
+	int arenaHeight = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaHeight();
+	int landscapeWidth = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeWidth();
+	int landscapeHeight = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeHeight();
+
+	int borderX = int(float(arenaX) / float(landscapeWidth) * float(destBitmap.getWidth()));
+	int borderY = int(float(arenaY) / float(landscapeHeight) * float(destBitmap.getHeight()));
+	int borderWidth = int(float(arenaWidth) / float(landscapeWidth) * float(destBitmap.getWidth()));
+	int borderHeight = int(float(arenaHeight) / float(landscapeHeight) * float(destBitmap.getHeight()));
+	if (borderWidth + borderX >= destBitmap.getWidth()) borderWidth = destBitmap.getWidth() - borderX - 1;
+	if (borderHeight + borderY >= destBitmap.getHeight()) borderHeight = destBitmap.getHeight() - borderY - 1;
+
 	DIALOG_ASSERT(destBitmap.getComponents() == 3);
 
-	for (int x=0; x<destBitmap.getWidth(); x++)
+	for (int x=borderX; x<=borderX+borderWidth; x++)
 	{
-		for (int i=0; i<borderWidth; i++)
+		for (int i=0; i<borderSize; i++)
 		{
-			GLubyte *destBits = &destBitmap.getBits()[(x + i * destBitmap.getWidth()) * 3];
+			int pos = (x * 3) + ((borderY + i) * destBitmap.getWidth() * 3);
+			GLubyte *destBits = destBitmap.getBitsOffset(pos);
 			destBits[0] = GLubyte(colors[0] * 255.0f);
 			destBits[1] = GLubyte(colors[1] * 255.0f);
 			destBits[2] = GLubyte(colors[2] * 255.0f);
 
-			destBits = &destBitmap.getBits()[(x + (destBitmap.getHeight() -1 - i) * destBitmap.getWidth()) * 3];
+			pos = (x * 3) + ((borderY + borderHeight - i) * destBitmap.getWidth() * 3);
+			destBits = destBitmap.getBitsOffset(pos);
 			destBits[0] = GLubyte(colors[0] * 255.0f);
 			destBits[1] = GLubyte(colors[1] * 255.0f);
 			destBits[2] = GLubyte(colors[2] * 255.0f);
 		}
 	}
 
-	for (int y=0; y<destBitmap.getWidth(); y++)
+	for (int y=borderY; y<=borderY+borderHeight; y++)
 	{
-		for (int i=0; i<borderWidth; i++)
+		for (int i=0; i<borderSize; i++)
 		{
-			GLubyte *destBits = &destBitmap.getBits()[(i + y * destBitmap.getWidth()) * 3];
+			int pos = ((borderX + i) * 3) + (y * destBitmap.getWidth() * 3);
+			GLubyte *destBits = destBitmap.getBitsOffset(pos);
 			destBits[0] = GLubyte(colors[0] * 255.0f);
 			destBits[1] = GLubyte(colors[1] * 255.0f);
 			destBits[2] = GLubyte(colors[2] * 255.0f);
 
-			destBits = &destBitmap.getBits()[(destBitmap.getWidth() - 1 - i + y * destBitmap.getWidth()) * 3];
+			pos = ((borderX + borderWidth - i) * 3) + (y * destBitmap.getWidth() * 3);
+			destBits = destBitmap.getBitsOffset(pos);
 			destBits[0] = GLubyte(colors[0] * 255.0f);
 			destBits[1] = GLubyte(colors[1] * 255.0f);
 			destBits[2] = GLubyte(colors[2] * 255.0f);
@@ -575,9 +668,9 @@ void ImageModifier::addCircleToLandscape(
 	float sx, float sy, float sw, float opacity)
 {
 	float shadowMultWidth = (float) Landscape::instance()->getMainMap().getWidth() / 
-		context.landscapeMaps->getGroundMaps().getMapWidth();
+		context.getLandscapeMaps().getGroundMaps().getLandscapeWidth();
 	float shadowMultHeight = (float) Landscape::instance()->getMainMap().getHeight() / 
-		context.landscapeMaps->getGroundMaps().getMapHeight();
+		context.getLandscapeMaps().getGroundMaps().getLandscapeHeight();
 
 	addCircle(Landscape::instance()->getMainMap(),
 		sx * shadowMultWidth, sy * shadowMultHeight, 
@@ -640,9 +733,9 @@ void ImageModifier::addBitmapToLandscape(
 	bool commit)
 {
 	float shadowMultWidth = (float) Landscape::instance()->getMainMap().getWidth() / 
-		context.landscapeMaps->getGroundMaps().getMapWidth();
+		context.getLandscapeMaps().getGroundMaps().getLandscapeWidth();
 	float shadowMultHeight = (float) Landscape::instance()->getMainMap().getHeight() / 
-		context.landscapeMaps->getGroundMaps().getMapHeight();
+		context.getLandscapeMaps().getGroundMaps().getLandscapeHeight();
 
 	addBitmap(
 		Landscape::instance()->getMainMap(),

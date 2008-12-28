@@ -43,9 +43,9 @@ void EventContainer::initialize(ScorchedContext &context)
 	clear();
 
 	LandscapeTex &tex = 
-		*context.landscapeMaps->getDefinitions().getTex();
+		*context.getLandscapeMaps().getDefinitions().getTex();
 	LandscapeDefn &defn = 
-		*context.landscapeMaps->getDefinitions().getDefn();
+		*context.getLandscapeMaps().getDefinitions().getDefn();
 
 	addEvents(context, tex.texDefn.includes);
 	addEvents(context, defn.texDefn.includes);

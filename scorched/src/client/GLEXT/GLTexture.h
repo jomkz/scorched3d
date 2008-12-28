@@ -59,10 +59,13 @@ public:
 	int getHeight() { return height_; }
 
 	static unsigned int getTextureSpace() { return textureSpace_; }
+	static unsigned int getTextureSets() { return textureSets_; }
+	static void resetTextureSets() { textureSets_ = 0; }
 	static bool validateSize(int size);
 
 protected:
 	static unsigned int textureSpace_;
+	static unsigned int textureSets_;
 	unsigned int usedSpace_;
 	int width_, height_;
 	GLuint texNum_;

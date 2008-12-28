@@ -42,13 +42,13 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/src/client&quot;;&quot;$(SolutionDir)/src/server&quot;;&quot;$(SolutionDir)/src/common&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/zlib/zlib&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/jpg&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/SDL&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/expat/expat&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/png/png&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/al&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/fftw3&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/vorbis&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/ogg&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/freetype&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;HAVE_OGG;PNG_DLL;PNG_NO_STDIO;PNG_NO_GLOBAL_ARRAYS"
 				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
+				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -116,13 +116,15 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				WholeProgramOptimization="false"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/src/client&quot;;&quot;$(SolutionDir)/src/server&quot;;&quot;$(SolutionDir)/src/common&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/zlib/zlib&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/jpg&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/SDL&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/expat/expat&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/png/png&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/al&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/fftw3&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/vorbis&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/ogg&quot;;&quot;$(SolutionDir)/../scorched-dep-win32/include/freetype&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;HAVE_OGG;PNG_DLL;PNG_NO_STDIO;PNG_NO_GLOBAL_ARRAYS"
+				StringPooling="true"
 				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
+				EnableFunctionLevelLinking="false"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="3"
+				DebugInformationFormat="0"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -137,10 +139,12 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="Ws2_32.lib Opengl32.lib Glu32.lib $(SolutionDir)/../scorched-dep-win32/lib/jpg/jpeg.lib $(SolutionDir)/../scorched-dep-win32/lib/png/libpng13.lib $(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL.lib $(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL_net.lib $(SolutionDir)/../scorched-dep-win32/lib/SDL/SDLmain.lib $(SolutionDir)/../scorched-dep-win32/lib/zlib/zlib1.lib $(SolutionDir)/../scorched-dep-win32/lib/expat/libexpat.lib $(SolutionDir)/../scorched-dep-win32/lib/al/ALut.lib $(SolutionDir)/../scorched-dep-win32/lib/al/OpenAL32.lib $(SolutionDir)/../scorched-dep-win32/lib/fftw3/fftw3.lib $(SolutionDir)/../scorched-dep-win32/lib/ogg/ogg.lib $(SolutionDir)/../scorched-dep-win32/lib/ogg/vorbis.lib $(SolutionDir)/../scorched-dep-win32/lib/ogg/vorbisfile.lib $(SolutionDir)/../scorched-dep-win32/lib/truetype/libfreetype.lib"
 				LinkIncremental="1"
-				GenerateDebugInformation="true"
+				GenerateDebugInformation="false"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				LinkTimeCodeGeneration="0"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -385,6 +389,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\common\Matrix16.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\common\Matrix16.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\common\ModelID.cpp"
 				>
 			</File>
@@ -581,6 +593,14 @@
 			Name="actions"
 			>
 			<File
+				RelativePath="..\..\common\actions\ActionParams.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\ActionParams.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\actions\AddTarget.cpp"
 				>
 			</File>
@@ -613,11 +633,27 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\actions\ExplosionParams.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\ExplosionParams.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\actions\Laser.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\common\actions\Laser.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\LaserParams.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\LaserParams.h"
 				>
 			</File>
 			<File
@@ -634,6 +670,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\actions\Napalm.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\NapalmParams.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\NapalmParams.h"
 				>
 			</File>
 			<File
@@ -889,6 +933,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\coms\ComsAdminResultMessage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\coms\ComsAdminResultMessage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\coms\ComsBuyAccessoryMessage.cpp"
 				>
 			</File>
@@ -998,14 +1050,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\coms\ComsHaveModFilesMessage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsHeightMapMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsHeightMapMessage.h"
 				>
 			</File>
 			<File
@@ -1465,6 +1509,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\landscapemap\GraphicalHeightMap.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\landscapemap\GraphicalHeightMap.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\landscapemap\GroundMaps.cpp"
 				>
 			</File>
@@ -1494,14 +1546,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\landscapemap\HeightMapModifier.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\landscapemap\HeightMapSender.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\landscapemap\HeightMapSender.h"
 				>
 			</File>
 			<File
@@ -1749,23 +1793,55 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\lua\LUAFns.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\lua\LUAFns.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\lua\lualib.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\lua\LUAWrapper.cpp"
+				RelativePath="..\..\common\lua\LUAS3DLib.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\lua\LUAWrapper.h"
+				RelativePath="..\..\common\lua\LUAS3DLib.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAS3DWeaponLib.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAS3DWeaponLib.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAScript.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAScript.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAScriptFactory.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAScriptFactory.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAScriptHook.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAScriptHook.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAUtil.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lua\LUAUtil.h"
 				>
 			</File>
 			<File
@@ -1953,6 +2029,46 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\net\NetServerTCP3.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Coms.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Coms.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Destination.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Destination.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Recv.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Recv.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Send.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\net\NetServerTCP3Send.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\net\NetServerTCPProtocol.cpp"
 				>
 			</File>
@@ -1966,22 +2082,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\net\NetServerTCPRead.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerUDP.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerUDP.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerUDPDestination.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerUDPDestination.h"
 				>
 			</File>
 		</Filter>
@@ -2933,6 +3033,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\weapons\WeaponScript.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\weapons\WeaponScript.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\weapons\WeaponSelectPosition.cpp"
 				>
 			</File>
@@ -3074,6 +3182,14 @@
 			</File>
 			<File
 				RelativePath="..\client\ClientAdmin.h"
+				>
+			</File>
+			<File
+				RelativePath="..\client\ClientAdminResultHandler.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\client\ClientAdminResultHandler.h"
 				>
 			</File>
 			<File
@@ -3253,6 +3369,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\client\ClientProcessingLoop.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\client\ClientProcessingLoop.h"
+				>
+			</File>
+			<File
 				RelativePath="..\client\ClientReloadAdaptor.cpp"
 				>
 			</File>
@@ -3376,6 +3500,30 @@
 		<Filter
 			Name="dialogs"
 			>
+			<File
+				RelativePath="..\dialogs\AdminAuthDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\dialogs\AdminAuthDialog.h"
+				>
+			</File>
+			<File
+				RelativePath="..\dialogs\AdminCheckDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\dialogs\AdminCheckDialog.h"
+				>
+			</File>
+			<File
+				RelativePath="..\dialogs\AdminDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\dialogs\AdminDialog.h"
+				>
+			</File>
 			<File
 				RelativePath="..\dialogs\AnimatedBackdropDialog.cpp"
 				>
@@ -3677,94 +3825,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\GLEXT\GLConsole.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsole.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleFileReader.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleFileReader.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleLines.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleLines.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleMethods.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleMethods.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRule.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRule.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRuleFn.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRuleFn.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRuleFnIAdapter.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRuleFnIAdapter.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRuleMethod.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRuleMethod.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRuleMethodIAdapter.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRuleMethodIAdapter.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRules.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLConsoleRules.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLDynamicVertexArray.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLDynamicVertexArray.h"
-				>
-			</File>
-			<File
 				RelativePath="..\GLEXT\glew.c"
 				>
 			</File>
@@ -3778,6 +3838,22 @@
 			</File>
 			<File
 				RelativePath="..\GLEXT\GLFont2d.h"
+				>
+			</File>
+			<File
+				RelativePath="..\GLEXT\GLFont2dFreeType.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\GLEXT\GLFont2dFreeType.h"
+				>
+			</File>
+			<File
+				RelativePath="..\GLEXT\GLFont2dStorage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\GLEXT\GLFont2dStorage.h"
 				>
 			</File>
 			<File
@@ -3913,35 +3989,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\GLEXT\GLVertexArray.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLVertexArray.h"
-				>
-			</File>
-			<File
 				RelativePath="..\GLEXT\GLVertexBufferObject.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\GLEXT\GLVertexBufferObject.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLVertexSet.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLVertexSet.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLVertexSetGroup.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLEXT\GLVertexSetGroup.h"
 				>
 			</File>
 			<File
@@ -4458,210 +4510,6 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="graph"
-			>
-			<File
-				RelativePath="..\graph\Display.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\Display.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\FrameLimiter.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\FrameLimiter.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\FrameTimer.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\FrameTimer.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\Gamma.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\Gamma.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\GLSetup.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\GLSetup.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\Main2DCamera.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\Main2DCamera.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\MainCamera.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\MainCamera.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\ModelRenderer.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\ModelRenderer.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\ModelRendererMesh.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\ModelRendererMesh.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\ModelRendererSimulator.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\ModelRendererSimulator.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\ModelRendererStore.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\ModelRendererStore.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\ModelRendererTree.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\ModelRendererTree.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\Mouse.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\Mouse.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\OptionsDisplay.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\OptionsDisplay.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\OptionsDisplayConsole.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\OptionsDisplayConsole.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\Particle.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\Particle.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\ParticleEmitter.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\ParticleEmitter.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\ParticleEngine.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\ParticleEngine.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\ParticleRenderer.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\ParticleRenderer.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\ShotCountDown.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\ShotCountDown.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\SoftwareMouse.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\SoftwareMouse.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\SpeedChange.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\SpeedChange.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\TargetCamera.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\TargetCamera.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\TextureStore.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\TextureStore.h"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\TutorialFile.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\graph\TutorialFile.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="landscape"
 			>
 			<File
@@ -4673,19 +4521,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\landscape\HeightMapRenderer.cpp"
+				RelativePath="..\landscape\GraphicalLandscapeMap.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\landscape\HeightMapRenderer.h"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\Hemisphere.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\Hemisphere.h"
+				RelativePath="..\landscape\GraphicalLandscapeMap.h"
 				>
 			</File>
 			<File
@@ -4737,51 +4577,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\landscape\LargeHemisphere.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\LargeHemisphere.h"
-				>
-			</File>
-			<File
 				RelativePath="..\landscape\MapPoints.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\landscape\MapPoints.h"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\Patch.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\Patch.h"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\PatchGrid.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\PatchGrid.h"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\PatchSide.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\PatchSide.h"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\PatchTexCoord.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\PatchTexCoord.h"
 				>
 			</File>
 			<File
@@ -4793,99 +4593,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\landscape\Sky.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\Sky.h"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\SkyDome.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\SkyDome.h"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\SkyLine.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\SkyLine.h"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\SkyRoof.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\SkyRoof.h"
-				>
-			</File>
-			<File
 				RelativePath="..\landscape\Smoke.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\landscape\Smoke.h"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\Sun.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\Sun.h"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\Surround.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\Surround.h"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\SurroundDefault.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\SurroundDefault.h"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\SurroundLandscape.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\SurroundLandscape.h"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\TriNode.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\TriNode.h"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\TriNodePool.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\TriNodePool.h"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\Variance.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\landscape\Variance.h"
 				>
 			</File>
 			<File
@@ -5181,30 +4893,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\tankgraph\RenderObject.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\tankgraph\RenderObject.h"
-				>
-			</File>
-			<File
-				RelativePath="..\tankgraph\RenderObjectList.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\tankgraph\RenderObjectList.h"
-				>
-			</File>
-			<File
-				RelativePath="..\tankgraph\RenderObjectLists.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\tankgraph\RenderObjectLists.h"
-				>
-			</File>
-			<File
 				RelativePath="..\tankgraph\RenderTargets.cpp"
 				>
 			</File>
@@ -5334,30 +5022,6 @@
 			</File>
 			<File
 				RelativePath="..\water\Water2Patches.h"
-				>
-			</File>
-			<File
-				RelativePath="..\water\Water2PatchIndex.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\water\Water2PatchIndex.h"
-				>
-			</File>
-			<File
-				RelativePath="..\water\Water2PatchIndexs.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\water\Water2PatchIndexs.h"
-				>
-			</File>
-			<File
-				RelativePath="..\water\Water2PatchVisibility.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\water\Water2PatchVisibility.h"
 				>
 			</File>
 			<File
@@ -5950,6 +5614,518 @@
 			</File>
 			<File
 				RelativePath="..\..\server\server\TurnController.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="geomipmap"
+			>
+			<File
+				RelativePath="..\geomipmap\MipMapPatchIndex.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\geomipmap\MipMapPatchIndex.h"
+				>
+			</File>
+			<File
+				RelativePath="..\geomipmap\MipMapPatchIndexs.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\geomipmap\MipMapPatchIndexs.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="land"
+			>
+			<File
+				RelativePath="..\land\LandSurround.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\land\LandSurround.h"
+				>
+			</File>
+			<File
+				RelativePath="..\land\LandVisibilityPatch.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\land\LandVisibilityPatch.h"
+				>
+			</File>
+			<File
+				RelativePath="..\land\TargetList.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\land\TargetList.h"
+				>
+			</File>
+			<File
+				RelativePath="..\land\TargetVisibilityPatch.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\land\TargetVisibilityPatch.h"
+				>
+			</File>
+			<File
+				RelativePath="..\land\VisibilityPatchGrid.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\land\VisibilityPatchGrid.h"
+				>
+			</File>
+			<File
+				RelativePath="..\land\VisibilityPatchInfo.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\land\VisibilityPatchInfo.h"
+				>
+			</File>
+			<File
+				RelativePath="..\land\VisibilityPatchQuad.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\land\VisibilityPatchQuad.h"
+				>
+			</File>
+			<File
+				RelativePath="..\land\WaterVisibilityPatch.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\land\WaterVisibilityPatch.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="sky"
+			>
+			<File
+				RelativePath="..\sky\Hemisphere.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\sky\Hemisphere.h"
+				>
+			</File>
+			<File
+				RelativePath="..\sky\LargeHemisphere.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\sky\LargeHemisphere.h"
+				>
+			</File>
+			<File
+				RelativePath="..\sky\Sky.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\sky\Sky.h"
+				>
+			</File>
+			<File
+				RelativePath="..\sky\SkyDome.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\sky\SkyDome.h"
+				>
+			</File>
+			<File
+				RelativePath="..\sky\SkyLine.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\sky\SkyLine.h"
+				>
+			</File>
+			<File
+				RelativePath="..\sky\SkyRoof.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\sky\SkyRoof.h"
+				>
+			</File>
+			<File
+				RelativePath="..\sky\Sun.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\sky\Sun.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="graph"
+			>
+			<File
+				RelativePath="..\graph\Display.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\Display.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\FrameLimiter.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\FrameLimiter.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\FrameTimer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\FrameTimer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\Gamma.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\Gamma.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\GLSetup.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\GLSetup.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\Main2DCamera.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\Main2DCamera.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\MainCamera.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\MainCamera.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\ModelRenderer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\ModelRenderer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\ModelRendererMesh.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\ModelRendererMesh.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\ModelRendererSimulator.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\ModelRendererSimulator.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\ModelRendererStore.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\ModelRendererStore.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\ModelRendererTree.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\ModelRendererTree.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\Mouse.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\Mouse.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\OptionsDisplay.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\OptionsDisplay.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\OptionsDisplayConsole.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\OptionsDisplayConsole.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\Particle.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\Particle.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\ParticleEmitter.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\ParticleEmitter.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\ParticleEngine.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\ParticleEngine.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\ParticleRenderer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\ParticleRenderer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\ShotCountDown.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\ShotCountDown.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\SoftwareMouse.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\SoftwareMouse.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\SpeedChange.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\SpeedChange.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\TargetCamera.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\TargetCamera.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\TextureStore.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\TextureStore.h"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\TutorialFile.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\graph\TutorialFile.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="console"
+			>
+			<File
+				RelativePath="..\console\Console.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\console\Console.h"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleFileReader.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleFileReader.h"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleImpl.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleImpl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleLines.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleLines.h"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleMethods.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleMethods.h"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleRule.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleRule.h"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleRuleFn.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleRuleFn.h"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleRuleFnIAdapter.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleRuleFnIAdapter.h"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleRuleMethodIAdapter.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleRuleMethodIAdapter.h"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleRules.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\console\ConsoleRules.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="lang"
+			>
+			<File
+				RelativePath="..\..\common\lang\CachedValueString.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\CachedValueString.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\Lang.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\Lang.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\LangImpl.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\LangImpl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\LangParam.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\LangParam.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\LangResource.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\LangResource.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\LangString.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\LangString.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\ResourceBundle.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\ResourceBundle.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\ResourceBundleEntry.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\ResourceBundleEntry.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\ResourceBundleEntryImpl.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\lang\ResourceBundleEntryImpl.h"
 				>
 			</File>
 		</Filter>

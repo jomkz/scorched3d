@@ -25,9 +25,12 @@
 #include <server/ServerCommon.h>
 #include <server/ServerAdminCommon.h>
 #include <server/ServerAdminSessions.h>
+#include <server/ServerMessageHandler.h>
 #include <common/StatsLogger.h>
+#include <common/Logger.h>
 #include <common/Defines.h>
 #include <coms/ComsAdminMessage.h>
+#include <coms/ComsAdminResultMessage.h>
 #include <coms/ComsSyncCheckMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <net/NetInterface.h>
@@ -63,69 +66,95 @@ bool ServerAdminHandler::processMessage(
 
 	unsigned int destinationId = netMessage.getDestinationId();
 
-	// Find the tank for this destination
-	Tank *adminTank = 0;
-	std::map<unsigned int, Tank *>::iterator itor;
-	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->
-			getTankContainer().getPlayingTanks();
-	for (itor = tanks.begin();
-		itor != tanks.end();
-		itor++)
-	{
-		Tank *tank = (*itor).second;
-		if (tank->getDestinationId() == destinationId)
-			adminTank = tank;
-	}
-	if (!adminTank) return true;
+	ServerMessageHandler::DestinationInfo *destinationInfo =
+		ServerMessageHandler::instance()->getDestinationInfo(destinationId);
+	if (!destinationInfo) return false;
 
-	// Login if that is what is happening
-	if (message.getType() == ComsAdminMessage::AdminLogin)
-	{
-		if (ServerAdminSessions::instance()->
-			authenticate(message.getParam1(), message.getParam2()))
+	// Check if the SID is valid
+	ServerAdminSessions::SessionParams *adminSession =
+		ServerAdminSessions::instance()->getSession(message.getSid());
+
+	// Check if we are logging in
+	if (message.getType() == ComsAdminMessage::AdminLogin ||
+		message.getType() == ComsAdminMessage::AdminLoginLocal)
+	{	
+		unsigned int sid = message.getSid();
+		if (adminSession ||
+			(sid = ServerAdminSessions::instance()->
+				login(message.getParam1(), message.getParam2(),
+				NetInterface::getIpName(netMessage.getIpAddress()))) != 0)
 		{
-			ServerCommon::sendString(0,
-				S3D::formatStringBuffer("server admin \"%s\" logged in",
-				message.getParam1()));
-			ServerCommon::serverLog(
-				S3D::formatStringBuffer("\"%s\" logged in as server admin \"%s\"",
-				adminTank->getName(),
-				message.getParam1()));
+			adminSession =
+				ServerAdminSessions::instance()->getSession(sid);
 
-			unsigned int sid = 
-				ServerAdminSessions::instance()->login(message.getParam1(), 
-					NetInterface::getIpName(netMessage.getIpAddress()));
-			adminTank->getState().setAdmin(sid);
-			ServerChannelManager::instance()->refreshDestination(
-				netMessage.getDestinationId());
+			ServerChannelManager::instance()->refreshDestination(destinationId);
+
+			ServerChannelManager::instance()->sendText(
+				ChannelText("info", "ADMIN_LOGGED_IN", 
+					"Server admin \"{0}\" logged in",
+					adminSession->credentials.username),
+				true);
+			ServerCommon::serverLog(
+				S3D::formatStringBuffer(
+					"Server admin \"%s\" logged in, destination id \"%u\"",
+				adminSession->credentials.username.c_str(),
+				destinationId));
+
+			ComsAdminResultMessage resultMessage(sid, message.getType());
+			ComsMessageSender::sendToSingleClient(resultMessage, destinationId);
+			destinationInfo->admin = true;
+			destinationInfo->adminTries = 0;
+
+			return true;
 		}
 		else
 		{
-			adminTank->getState().setAdminTries(
-				adminTank->getState().getAdminTries() + 1);
-			
-			ServerCommon::sendString(destinationId,
-				S3D::formatStringBuffer("Incorrect admin password (try %i/3)", 
-				adminTank->getState().getAdminTries()));
-			if (adminTank->getState().getAdminTries() > 3)
+			if (message.getType() != ComsAdminMessage::AdminLoginLocal)
 			{
-				ServerCommon::kickPlayer(adminTank->getPlayerId());
+				destinationInfo->adminTries++;
+				
+				ServerChannelManager::instance()->sendText(
+					ChannelText("info", 
+						"INCORRECT_PASSWORD",
+						"Incorrect admin password (try {0}/3)", 
+						destinationInfo->adminTries),
+					destinationId,
+					true);
+				if (destinationInfo->adminTries > 3)
+				{
+					ServerCommon::kickDestination(destinationId);
+				}
+
+				Logger::log(S3D::formatStringBuffer(
+					"Failed login for server admin \"%s\" via console, ip \"%s\", destination id \"%u\"",
+					message.getParam1(),
+					NetInterface::getIpName(netMessage.getIpAddress()),
+					destinationId));
 			}
+
+			ComsAdminResultMessage resultMessage(0, message.getType());
+			ComsMessageSender::sendToSingleClient(resultMessage, destinationId);
+			destinationInfo->admin = false;
+
+			return true;
 		}
-		return true;
 	}
 
-	// Only allow logged in tanks (may have timed out)
-	ServerAdminSessions::SessionParams *adminSession =
-		ServerAdminSessions::instance()->getSession(adminTank->getState().getAdmin());
 	if (!adminSession)
 	{
-		ServerCommon::sendString(destinationId,
-			"You are not logged in as admin");
-		return true;		
+		ServerChannelManager::instance()->sendText(
+			ChannelText("info", "ADMIN_NOT_LOGGED_IN", 
+				"You are not logged in as admin"),
+			destinationId,
+			false);
+
+		ComsAdminResultMessage resultMessage(0, message.getType());
+		ComsMessageSender::sendToSingleClient(resultMessage, destinationId);
+		destinationInfo->admin = false;
+
+		return true;	
 	}
-	const char *adminName = adminSession->userName.c_str();
+	const char *adminName = adminSession->credentials.username.c_str();
 
 	// Do admin fn (we are logged in at this point)
 	switch (message.getType())
@@ -147,7 +176,7 @@ bool ServerAdminHandler::processMessage(
 				result += 
 					S3D::formatStringBuffer("%i \"%s\" \"%s\" \"%u\" %s \n",
 						tank->getPlayerId(), 
-						tank->getName(),
+						tank->getCStrName().c_str(),
 						NetInterface::getIpName(tank->getIpAddress()),
 						StatsLogger::instance()->getStatsId(tank->getUniqueId()),
 						(tank->getState().getMuted()?"Muted":"Not Muted"));
@@ -155,27 +184,29 @@ bool ServerAdminHandler::processMessage(
 			result +=
 				"-----------------------------------------------------\n";
 
-			ServerCommon::sendString(destinationId, result.c_str());
+			ServerChannelManager::instance()->sendText( 
+				ChannelText("info", LANG_STRING(result)),
+				destinationId,
+				false);
 		}
 		break;
 	case ComsAdminMessage::AdminLogout:
 		{
-			ServerCommon::sendString(0,
-				S3D::formatStringBuffer("server admin \"%s\" logged out",
-				adminName));
+			ServerChannelManager::instance()->sendText( 
+				ChannelText("info", "ADMIN_LOGGED_OUT", 
+					"Server admin \"{0}\" logged out",
+					adminName),
+				true);
 			ServerCommon::serverLog(
-				S3D::formatStringBuffer("\"%s\" logged out as server admin \"%s\"",
-				adminTank->getName(),
+				S3D::formatStringBuffer("Server admin \"%s\" logged out",
 				adminName));
 
-			if (adminTank->getState().getAdmin())
-			{
-				ServerAdminSessions::instance()->logout(
-					adminTank->getState().getAdmin());
-			}
-			adminTank->getState().setAdmin(0);
-			ServerChannelManager::instance()->refreshDestination(
-				netMessage.getDestinationId());
+			ServerAdminSessions::instance()->logout(message.getSid());
+			ServerChannelManager::instance()->refreshDestination(destinationId);
+
+			ComsAdminResultMessage resultMessage(0, message.getType());
+			ComsMessageSender::sendToSingleClient(resultMessage, destinationId);
+			destinationInfo->admin = false;
 		}
 		break;
 	case ComsAdminMessage::AdminShowBanned:
@@ -202,9 +233,10 @@ bool ServerAdminHandler::processMessage(
 					unsigned int ip = (*ipitor).first;
 					ServerBanned::BannedEntry &entry = (*ipitor).second;
 					std::string ipName = NetInterface::getIpName(ip);
+					std::string name = LangStringUtil::convertFromLang(entry.name);
 
 					result += S3D::formatStringBuffer("\"%s:%s:%s\" %s %s (%s) - %s",
-						entry.name.c_str(),
+						name.c_str(),
 						entry.uniqueid.c_str(),
 						entry.SUI.c_str(),
 						ServerBanned::getBannedTypeStr(entry.type),
@@ -215,46 +247,69 @@ bool ServerAdminHandler::processMessage(
 			result +=
 				"-----------------------------------------------------\n";
 
-			ServerCommon::sendString(destinationId, result.c_str());
+			ServerChannelManager::instance()->sendText( 
+				ChannelText("info", LANG_STRING(result)),
+				destinationId, 
+				false);
 		}
 		break;
 	case ComsAdminMessage::AdminBan:
 		{
 			if (!ServerAdminCommon::banPlayer(
-				adminName,
+				adminSession->credentials,
 				atoi(message.getParam1()), "<via console>"))
 			{
-				ServerCommon::sendString(destinationId, "Unknown player for ban");
+				ServerChannelManager::instance()->sendText( 
+					ChannelText("info", 
+						"UNKNOWN_PLAYER_BAN", 
+						"Unknown player for ban"),
+					destinationId,
+					false);
 			}
 		}
 		break;
 	case ComsAdminMessage::AdminFlag:
 		{
 			if (!ServerAdminCommon::flagPlayer(
-				adminName,
+				adminSession->credentials,
 				atoi(message.getParam1()), "<via console>"))
 			{
-				ServerCommon::sendString(destinationId, "Unknown player for flag");
+				ServerChannelManager::instance()->sendText( 
+					ChannelText("info",
+						"UNKNOWN_PLAYER_FLAG",
+						"Unknown player for flag"),
+					destinationId,
+					false);
 			}
 		}
 		break;
 	case ComsAdminMessage::AdminPoor:
 		{
 			if (!ServerAdminCommon::poorPlayer(
-				adminName,
+				adminSession->credentials,
 				atoi(message.getParam1())))
 			{
-				ServerCommon::sendString(destinationId, "Unknown player for poor");
+				ServerChannelManager::instance()->sendText( 
+					ChannelText("info",
+						"UNKNOWN_PLAYER_POOR",
+						"Unknown player for poor"),
+					destinationId,
+					false);
 			}
 		}
 		break;	
 	case ComsAdminMessage::AdminKick:
 		{
 			if (!ServerAdminCommon::kickPlayer(
-				adminName,
+				adminSession->credentials,
 				atoi(message.getParam1())))
 			{
-				ServerCommon::sendString(destinationId, "Unknown player for kick");
+				ServerChannelManager::instance()->sendText( 
+					ChannelText("info", 
+						"UNKNOWN_PLAYER_KICK",
+						"Unknown player for kick"),
+					destinationId,
+					false);
 			}
 		}
 		break;
@@ -263,63 +318,98 @@ bool ServerAdminHandler::processMessage(
 		{
 			bool mute = (message.getType() == ComsAdminMessage::AdminMute);
 			if (!ServerAdminCommon::mutePlayer(
-				adminName,
+				adminSession->credentials,
 				atoi(message.getParam1()), mute))
 			{
-				ServerCommon::sendString(destinationId, "Unknown player for mute");
+				ServerChannelManager::instance()->sendText( 
+					ChannelText("info",
+						"UNKNOWN_PLAYER_MUTE",
+						"Unknown player for mute"),
+					destinationId,
+					false);
 			}	
 		}
 		break;
 	case ComsAdminMessage::AdminPermMute:
 		{
 			if (!ServerAdminCommon::permMutePlayer(
-				adminName,
+				adminSession->credentials,
 				atoi(message.getParam1()), "<via console>"))
 			{
-				ServerCommon::sendString(destinationId, "Unknown player for permmute");
+				ServerChannelManager::instance()->sendText( 
+					ChannelText("info",
+						"UNKNOWN_PLAYER_PERMMUTE",
+						"Unknown player for permmute"),
+					destinationId,
+					false);
 			}	
 		}
 		break;
 	case ComsAdminMessage::AdminUnPermMute:
 		{
 			if (!ServerAdminCommon::unpermMutePlayer(
-				adminName,
+				adminSession->credentials,
 				atoi(message.getParam1())))
 			{
-				ServerCommon::sendString(destinationId, "Unknown player for inpermmute");
+				ServerChannelManager::instance()->sendText( 
+					ChannelText("info",
+						"UNKNOWN_PLAYER_UNPERMMUTE",
+						"Unknown player for unpermmute"),
+					destinationId,
+					false);
 			}
 		}
 		break;
 	case ComsAdminMessage::AdminTalk:
-		ServerAdminCommon::adminSay(adminSession, "info", message.getParam1());
+		ServerAdminCommon::adminSay(adminSession->credentials, "info", message.getParam1());
 		break;
 	case ComsAdminMessage::AdminAdminTalk:
-		ServerAdminCommon::adminSay(adminSession, "admin", message.getParam1());
+		ServerAdminCommon::adminSay(adminSession->credentials, "admin", message.getParam1());
 		break;
 	case ComsAdminMessage::AdminMessage:
-		ServerAdminCommon::adminSay(adminSession, "banner", message.getParam1());
+		ServerAdminCommon::adminSay(adminSession->credentials, "banner", message.getParam1());
 		break;
 	case ComsAdminMessage::AdminSyncCheck:
 		{
-			ServerCommon::sendString(destinationId, "sending sync...");
+			ServerChannelManager::instance()->sendText( 
+				ChannelText("info", "SENDING_SYNC", "sending sync..."),
+				destinationId, true);
 			ComsSyncCheckMessage syncCheck;
 			ComsMessageSender::sendToSingleClient(syncCheck, destinationId);
 		}
 		break;
 	case ComsAdminMessage::AdminKillAll:
-		ServerAdminCommon::killAll(adminName);
+		ServerAdminCommon::killAll(adminSession->credentials);
 		break;
 	case ComsAdminMessage::AdminNewGame:
-		ServerAdminCommon::newGame(adminName);
+		ServerAdminCommon::newGame(adminSession->credentials);
 		break;	
 	case ComsAdminMessage::AdminSlap:
 		{
 			if (!ServerAdminCommon::slapPlayer(
-				adminName,
+				adminSession->credentials,
 				atoi(message.getParam1()), (float) atof(message.getParam2())))
 			{
-				ServerCommon::sendString(destinationId, "Unknown player for slap");
+				ServerChannelManager::instance()->sendText( 
+					ChannelText("info", 
+						"UNKNOWN_PLAYER_SLAP", 
+						"Unknown player for slap"),
+					destinationId, false);
 			}
+		}
+		break;
+	case ComsAdminMessage::AdminAdd:
+		{
+			if (!ServerAdminCommon::addPlayer(
+				adminSession->credentials,
+				message.getParam1()))
+			{
+				ServerChannelManager::instance()->sendText( 
+					ChannelText("info",
+						"UNKNOWN_PLAYER_ADD",
+						"Unknown player type to add"),
+					destinationId, false);
+			}	
 		}
 		break;
 	}

@@ -45,9 +45,9 @@ SkipAllDialog::SkipAllDialog() :
 	skipAll_(false)
 {
 	label_ = (GLWLabel *) addWidget(new GLWLabel(10, 45));
-	nowId_ = addWidget(new GLWTextButton("Skip Now", 10, 10, 130, this, 
+	nowId_ = addWidget(new GLWTextButton(LANG_RESOURCE("SKIP_NOW", "Skip Now"), 10, 10, 130, this, 
 		GLWButton::ButtonFlagCenterX))->getId();
-	cancelId_ = addWidget(new GLWTextButton("Cancel", 155, 10, 105, this, 
+	cancelId_ = addWidget(new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 155, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX))->getId();
 }
 
@@ -74,7 +74,8 @@ void SkipAllDialog::simulate(float frameTime)
 		}
 		else
 		{
-			label_->setText(S3D::formatStringBuffer("Skipping move in %i...", (5 - passedTime)));
+			label_->setText(LANG_RESOURCE_1(
+				"SKIPPING_MOVE", "Skipping move in {0}...", S3D::formatStringBuffer("%i", (5 - passedTime))));
 		}
 	}
 

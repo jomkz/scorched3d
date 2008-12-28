@@ -66,10 +66,10 @@ public:
 
 	std::list<CurrentChannelEntry> &getCurrentChannels() { return currentChannels_; }
 	std::list<BaseChannelEntry> &getAvailableChannels() { return availableChannels_; }
-	CurrentChannelEntry *getChannel(const char *channelName);
+	CurrentChannelEntry *getChannel(const std::string &channelName);
 
-	void joinChannel(const char *channelName);
-	void leaveChannel(const char *channelName);
+	void joinChannel(const std::string &channelName);
+	void leaveChannel(const std::string &channelName);
 
 	void setHandler(GLWChannelViewI *handler) { handler_ = handler; };
 
@@ -110,6 +110,7 @@ protected:
 	GLWIconButton upButton_;
 	GLWIconButton downButton_;
 	GLWIconButton resetButton_;
+	bool createdTexture_;
 	GLTexture upTexture_;
 	GLTexture downTexture_;
 	GLTexture resetTexture_;
@@ -138,7 +139,7 @@ protected:
 
 	void addInfo(Vector &color, GLWChannelViewTextRenderer &text);
 	void formCurrentChannelList(std::list<std::string> &result);
-	int splitLine(const char *message);
+	int splitLine(const LangString &message);
 };
 
 #endif // __INCLUDE_GLWChannelViewh_INCLUDE__

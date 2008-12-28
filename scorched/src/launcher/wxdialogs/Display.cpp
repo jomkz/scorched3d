@@ -261,6 +261,9 @@ static void createTroubleControls(wxWindow *parent, wxSizer *sizer)
 		IDC_NOSHADERS_CTRL = 
 			new wxCheckBox(parent, -1, wxT("No GL shaders - Large Framerate Improvement"));
 		waterDetailSizer2->Add(IDC_NOSHADERS_CTRL, 0);
+		IDC_SIMPLEWATERSHADERS_CTRL = 
+			new wxCheckBox(parent, -1, wxT("Simple water shaders - Medium Framerate Improvement"));
+		waterDetailSizer2->Add(IDC_SIMPLEWATERSHADERS_CTRL, 0);
 		IDC_NOOBJECTSHADOWS_CTRL = 
 			new wxCheckBox(parent, -1, wxT("No GL shadows for objects - Medium Framerate Improvement"));
 		waterDetailSizer2->Add(IDC_NOOBJECTSHADOWS_CTRL, 0);
@@ -288,9 +291,6 @@ static void createTroubleControls(wxWindow *parent, wxSizer *sizer)
 		IDC_NOLANDSCAPESCORCH_CTRL = 
 			new wxCheckBox(parent, -1, wxT("No TexSubImaging"));
 		glDetailSizer2->Add(IDC_NOLANDSCAPESCORCH_CTRL, 0);
-		IDC_NOCOMPILEDARRAYS_CTRL = 
-			new wxCheckBox(parent, -1, wxT("No compiled arrays"));
-		glDetailSizer2->Add(IDC_NOCOMPILEDARRAYS_CTRL, 0);
 		IDC_NOENVCOMBINE_CTRL = 
 			new wxCheckBox(parent, -1, wxT("No combined textures"));
 		glDetailSizer2->Add(IDC_NOENVCOMBINE_CTRL, 0);

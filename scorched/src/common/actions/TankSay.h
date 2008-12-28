@@ -26,8 +26,7 @@
 class TankSay : public ActionReferenced
 {
 public:
-	TankSay(unsigned int playerId,
-		const char *text);
+	TankSay(unsigned int playerId, const LangString &text);
 	virtual ~TankSay();
 
 	virtual void init();
@@ -35,7 +34,7 @@ public:
 
 protected:
 	unsigned int playerId_;
-	std::string text_;
+	LangString text_;
 
 };
 

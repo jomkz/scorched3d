@@ -45,6 +45,7 @@
 #include <common/Logger.h>
 #include <common/LoggerI.h>
 #include <common/Defines.h>
+#include <lang/LangResource.h>
 #include <math.h>
 
 static const char *cameraNames[] = 
@@ -162,8 +163,9 @@ ToolTip *TargetCamera::getCameraToolTips()
 		cameraToolTips = new ToolTip[noCameraDescriptions];
 		for (int i=0; i<noCameraDescriptions; i++)
 		{
-			cameraToolTips[i].setText(ToolTip::ToolTipHelp, getCameraNames()[i],
-				cameraDescriptions[i]);
+			cameraToolTips[i].setText(ToolTip::ToolTipHelp, 
+				LANG_RESOURCE(getCameraNames()[i], getCameraNames()[i]),
+				LANG_RESOURCE(std::string(getCameraNames()[i]) + "_camera", cameraDescriptions[i]));
 		}
 	}
 	return cameraToolTips;
@@ -294,10 +296,10 @@ bool TargetCamera::moveCamera(float frameTime, bool playing)
 		}
 		break;
 	case CamGun:
-		if (ScorchedClient::instance()->getContext().viewPoints->getLookAtCount() > 0)
+		if (ScorchedClient::instance()->getContext().getViewPoints().getLookAtCount() > 0)
 		{
 			FixedVector lookatPos, lookfromPos;
-			ScorchedClient::instance()->getContext().viewPoints->
+			ScorchedClient::instance()->getContext().getViewPoints().
 				getValues(lookatPos, lookfromPos);
 
 			mainCam_.setLookAt(lookatPos.asVector(), true);
@@ -440,11 +442,16 @@ void TargetCamera::mouseDrag(GameState::MouseButton button,
 		if (dragging_)
 		{
 			cameraPos_ = CamFree;
-			float mapWidth = (float) ScorchedClient::instance()->getLandscapeMaps().
-				getGroundMaps().getMapWidth();
-			float mapHeight = (float) ScorchedClient::instance()->getLandscapeMaps().
-				getGroundMaps().getMapHeight();
-			mainCam_.scroll(float(-x / 2), float(-y / 2), mapWidth, mapHeight);
+			float arenaWidth = (float) ScorchedClient::instance()->getLandscapeMaps().
+				getGroundMaps().getArenaWidth();
+			float arenaHeight = (float) ScorchedClient::instance()->getLandscapeMaps().
+				getGroundMaps().getArenaHeight();
+			float arenaX = (float) ScorchedClient::instance()->getLandscapeMaps().
+				getGroundMaps().getArenaX();
+			float arenaY = (float) ScorchedClient::instance()->getLandscapeMaps().
+				getGroundMaps().getArenaY();
+			mainCam_.scroll(float(-x / 2), float(-y / 2), 
+				arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight);
 		}
 	}
 	else
@@ -515,24 +522,28 @@ void TargetCamera::mouseUp(GameState::MouseButton button,
 		}
 	}
 
-	// Just look at the point on the landscape
-	if (selectType == Accessory::ePositionSelectNone)
-	{
-		cameraPos_ = CamFree;
-		mainCam_.setLookAt(lastLandIntersect_);
-		return;
-	}
-
 	// Try to move the tank to the position on the landscape
-	int landWidth = ScorchedClient::instance()->
-		getLandscapeMaps().getDefinitions().getDefn()->landscapewidth;
-	int landHeight = ScorchedClient::instance()->
-		getLandscapeMaps().getDefinitions().getDefn()->landscapeheight;
+	int arenaWidth = ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaWidth();
+	int arenaHeight = ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaHeight();
+	int arenaX = ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaX();
+	int arenaY = ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaY();
 	int posX = (int) lastLandIntersect_[0];
 	int posY = (int) lastLandIntersect_[1];
-	if (posX > 0 && posX < landWidth &&
-		posY > 0 && posY < landHeight)
+	if (posX > arenaX && posX < arenaX + arenaWidth &&
+		posY > arenaY && posY < arenaY + arenaHeight)
 	{
+		// Just look at the point on the landscape
+		if (selectType == Accessory::ePositionSelectNone)
+		{
+			cameraPos_ = CamFree;
+			mainCam_.setLookAt(lastLandIntersect_);
+			return;
+		}
+
 		if (selectType == Accessory::ePositionSelectFuel)
 		{
 			WeaponMoveTank *moveWeapon = (WeaponMoveTank *)
@@ -541,7 +552,7 @@ void TargetCamera::mouseUp(GameState::MouseButton button,
 					currentWeapon->getAccessoryId(), "WeaponMoveTank");
 			if (!moveWeapon) return;
 
-			MovementMap mmap(landWidth, landHeight, 
+			MovementMap mmap(
 				currentTank,
 				ScorchedClient::instance()->getContext());
 
@@ -554,7 +565,7 @@ void TargetCamera::mouseUp(GameState::MouseButton button,
 		else if (selectType == Accessory::ePositionSelectFuelLimit)
 		{
 			int limit = currentWeapon->getPositionSelectLimit();
-			MovementMap mmap(landWidth, landHeight, 
+			MovementMap mmap(
 				currentTank,
 				ScorchedClient::instance()->getContext());
 
@@ -653,8 +664,10 @@ void TargetCamera::keyboardCheck(float frameTime,
 	{	
 		useHeightFunc_ = !useHeightFunc_;
 		ChannelManager::showText(
-			ChannelText("info", S3D::formatStringBuffer("Restricted camera movement : %s", 
-			(useHeightFunc_?"On":"Off"))));
+			ScorchedClient::instance()->getContext(), 
+			ChannelText("info", 
+				LANG_RESOURCE("RESTRICED_CAMERA_MOVEMENT", "Restricted camera movement : ") + 
+				(useHeightFunc_?LANG_RESOURCE("ON", "On"):LANG_RESOURCE("OFF", "Off"))));
 	}
 	mainCam_.setUseHeightFunc(useHeightFunc_);
 }

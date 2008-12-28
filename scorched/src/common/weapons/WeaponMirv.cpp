@@ -51,7 +51,7 @@ bool WeaponMirv::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNod
 	if (!accessoryNode->getNamedChild("aimedweapon", subNode)) return false;
 
 	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore()->
+	AccessoryPart *accessory = context.getAccessoryStore().
 		createAccessoryPart(context, parent_, subNode);
 	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
 	{
@@ -71,7 +71,7 @@ void WeaponMirv::fireWeapon(ScorchedContext &context,
 	// Add a shot that will fall where the original was aimed
 	aimedWeapon_->fireWeapon(context, weaponContext, position, velocity);
 
-	RandomGenerator &random = context.actionController->getRandom();
+	RandomGenerator &random = context.getActionController().getRandom();
 
 	// Add all of the sub warheads that have a random spread
 	fixed hspreadDist;

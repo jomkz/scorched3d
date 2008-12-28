@@ -362,12 +362,12 @@ void DisplayFrame::refreshScreen()
 	IDC_NOLANDSCAPESCORCH_CTRL->SetToolTip(wxString(OptionsDisplay::instance()->getNoGLTexSubImageEntry().getDescription(), wxConvUTF8));
 	IDC_NOMULTITEX_CTRL->SetValue(OptionsDisplay::instance()->getNoGLMultiTex());
 	IDC_NOMULTITEX_CTRL->SetToolTip(wxString(OptionsDisplay::instance()->getNoGLMultiTexEntry().getDescription(), wxConvUTF8));
-	IDC_NOCOMPILEDARRAYS_CTRL->SetValue(OptionsDisplay::instance()->getNoGLCompiledArrays());
-	IDC_NOCOMPILEDARRAYS_CTRL->SetToolTip(wxString(OptionsDisplay::instance()->getNoGLCompiledArraysEntry().getDescription(), wxConvUTF8));
 	IDC_NOENVCOMBINE_CTRL->SetValue(OptionsDisplay::instance()->getNoGLEnvCombine());
 	IDC_NOENVCOMBINE_CTRL->SetToolTip(wxString(OptionsDisplay::instance()->getNoGLEnvCombineEntry().getDescription(), wxConvUTF8));
 	IDC_NOSHADERS_CTRL->SetValue(OptionsDisplay::instance()->getNoGLShaders());
 	IDC_NOSHADERS_CTRL->SetToolTip(wxString(OptionsDisplay::instance()->getNoGLShadersEntry().getDescription(), wxConvUTF8));
+	IDC_SIMPLEWATERSHADERS_CTRL->SetValue(OptionsDisplay::instance()->getSimpleWaterShaders());
+	IDC_SIMPLEWATERSHADERS_CTRL->SetToolTip(wxString(OptionsDisplay::instance()->getSimpleWaterShadersEntry().getDescription(), wxConvUTF8));
 	IDC_NOSHADOWS_CTRL->SetValue(OptionsDisplay::instance()->getNoGLShadows());
 	IDC_NOSHADOWS_CTRL->SetToolTip(wxString(OptionsDisplay::instance()->getNoGLShadowsEntry().getDescription(), wxConvUTF8));
 	IDC_NOOBJECTSHADOWS_CTRL->SetValue(OptionsDisplay::instance()->getNoGLObjectShadows());
@@ -602,9 +602,9 @@ bool DisplayFrame::TransferDataFromWindow()
 	OptionsDisplay::instance()->getNoGLTexSubImageEntry().setValue(IDC_NOLANDSCAPESCORCH_CTRL->GetValue());
 	OptionsDisplay::instance()->getNoGLExtEntry().setValue(IDC_NOEXT_CTRL->GetValue());
 	OptionsDisplay::instance()->getNoGLMultiTexEntry().setValue(IDC_NOMULTITEX_CTRL->GetValue());
-	OptionsDisplay::instance()->getNoGLCompiledArraysEntry().setValue(IDC_NOCOMPILEDARRAYS_CTRL->GetValue());
 	OptionsDisplay::instance()->getNoGLEnvCombineEntry().setValue(IDC_NOENVCOMBINE_CTRL->GetValue());
 	OptionsDisplay::instance()->getNoGLShadersEntry().setValue(IDC_NOSHADERS_CTRL->GetValue());
+	OptionsDisplay::instance()->getSimpleWaterShadersEntry().setValue(IDC_SIMPLEWATERSHADERS_CTRL->GetValue());
 	OptionsDisplay::instance()->getNoGLShadowsEntry().setValue(IDC_NOSHADOWS_CTRL->GetValue());
 	OptionsDisplay::instance()->getNoGLObjectShadowsEntry().setValue(IDC_NOOBJECTSHADOWS_CTRL->GetValue());
 	OptionsDisplay::instance()->getNoGLCubeMapEntry().setValue(IDC_NOCUBEMAP_CTRL->GetValue());

@@ -22,18 +22,20 @@
 #define __BOID2_H
 
 #include <common/FixedVector.h>
+#include <target/TargetState.h>
+#include <vector>
 
 class ScorchedContext;
 class TargetMovementEntryBoids;
 class Target;
 
-class Boid2 
+class Boid2 : public TargetStateMovement
 {
 public:  					 
 	Boid2(ScorchedContext &context, Target *target, TargetMovementEntryBoids *world); 
 	~Boid2();
 
-	void update(fixed frameTime);  
+	void update(fixed frameTime, std::vector<Boid2*> &boidSet, bool complexUpdate);  
 	void clearTarget();
 
 protected:
@@ -41,7 +43,7 @@ protected:
 	Target *target_;
 	TargetMovementEntryBoids *world_;
 
-	FixedVector checkGrouping();
+	FixedVector checkGrouping(std::vector<Boid2*> &boidSet);
 	bool checkCollision(FixedVector &normal);
 	FixedVector &getPosition();
 	FixedVector &getVelocity();

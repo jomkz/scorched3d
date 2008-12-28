@@ -62,6 +62,9 @@
 #include <dialogs/MsgBoxDialog.h>
 #include <dialogs/SettingsSelectDialog.h>
 #include <dialogs/SettingsSubSelectDialog.h>
+#include <dialogs/AdminCheckDialog.h>
+#include <dialogs/AdminAuthDialog.h>
+#include <dialogs/AdminDialog.h>
 
 void ClientWindowSetup::addStateWindows(GLWWindowSkinManager *skinManager,
 	unsigned int state, const char *windowState)
@@ -151,6 +154,13 @@ void ClientWindowSetup::addCommonComponents(GLWWindowSkinManager *skinManager,
 	KEYBOARDKEY("SHOW_RULES_DIALOG", rulesKey);
 	GLWWindowManager::instance()->addWindow(state, 
 		RulesDialog::instance(), rulesKey, true);
+
+	GLWWindowManager::instance()->addWindow(state, 
+		AdminCheckDialog::instance(), 0, false);
+	GLWWindowManager::instance()->addWindow(state, 
+		AdminDialog::instance(), 0, false);
+	GLWWindowManager::instance()->addWindow(state, 
+		AdminAuthDialog::instance(), 0, false);
 
 	if (ScorchedClient::instance()->getOptionsGame().getTutorial()[0])
 	{
@@ -277,6 +287,12 @@ void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 		RulesDialog::instance(), rulesKey, true);
 	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
  		SoundDialog::instance(), showSoundKey, false);
+	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
+		AdminCheckDialog::instance(), 0, false);
+	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
+		AdminDialog::instance(), 0, false);
+	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
+		AdminAuthDialog::instance(), 0, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
 		QuitDialog::instance(), quitKey, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 

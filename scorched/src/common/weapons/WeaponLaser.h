@@ -22,6 +22,7 @@
 #define __INCLUDE_WeaponLaserh_INCLUDE__
 
 #include <weapons/Weapon.h>
+#include <actions/LaserParams.h>
 
 class WeaponLaser  : public Weapon
 {
@@ -32,15 +33,6 @@ public:
 	virtual bool parseXML(AccessoryCreateContext &context,
 		XMLNode *accessoryNode);
 
-	fixed getMinimumHurt(ScorchedContext &context) { return minimumHurt_.getValue(context); }
-	fixed getMaximumHurt(ScorchedContext &context) { return maximumHurt_.getValue(context); }
-	fixed getMinimumDistance(ScorchedContext &context) { return minimumDistance_.getValue(context); }
-	fixed getMaximumDistance(ScorchedContext &context) { return maximumDistance_.getValue(context); }
-	fixed getHurtRadius(ScorchedContext &context) { return hurtRadius_.getValue(context); }
-	fixed getTotalTime(ScorchedContext &context) { return totalTime_.getValue(context); }
-	bool getHurtFirer() { return hurtFirer_; }
-	Vector &getColor() { return color_; }
-
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
 		WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity);
@@ -48,16 +40,14 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponLaser, AccessoryPart::AccessoryWeapon);
 
 protected:
-	Vector color_;
-	bool hurtFirer_;
+	LaserParams laserParams_;
+
 	// Use the following to hold the NumberParser fixed expression
 	// convert to values in actions/Laser
 	NumberParser minimumHurt_, maximumHurt_;
 	NumberParser minimumDistance_, maximumDistance_;
 	NumberParser hurtRadius_;
 	NumberParser totalTime_;
-
-
 };
 
 #endif // __INCLUDE_WeaponLaserh_INCLUDE__

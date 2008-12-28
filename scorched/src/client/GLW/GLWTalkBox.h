@@ -22,7 +22,7 @@
 #define __INCLUDE_GLWTalkBoxh_INCLUDE__
 
 #include <GLW/GLWidget.h>
-#include <string>
+#include <lang/LangString.h>
 
 class GLWTalkBox : public GLWidget
 {
@@ -47,7 +47,7 @@ public:
 
 	REGISTER_CLASS_HEADER(GLWTalkBox);
 protected:
-	std::string text_;
+	LangString text_;
 	float ctime_;
 	bool cursor_;
 	int maxTextLen_;

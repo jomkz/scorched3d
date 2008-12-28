@@ -219,7 +219,8 @@ void ServerBrowserInfo::processPlayerMessage(std::list<std::string> &reply)
 		Tank *tank = (*tankItor).second;
 
 		snprintf(tmp, 128, "pn%i", i);
-		reply.push_back(addTag(tmp, tank->getName()));
+		reply.push_back(addTag(tmp, 
+			LangStringUtil::convertFromLang(tank->getTargetName())));
 
 		snprintf(tmp, 128, "ps%i", i);
 		reply.push_back(addTag(tmp, tank->getScore().getScoreString()));
@@ -234,7 +235,7 @@ void ServerBrowserInfo::processPlayerMessage(std::list<std::string> &reply)
 		reply.push_back(addTag(tmp, (tank->getTankAI()?"N":"Y")));
 
 		snprintf(tmp, 128, "pr%i", i);
-		reply.push_back(addTag(tmp, tank->getScore().getStatsRank()));
+		reply.push_back(addTag(tmp, S3D::formatStringBuffer("%i", tank->getScore().getRank())));
 	}
 
 }

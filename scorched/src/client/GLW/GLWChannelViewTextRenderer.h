@@ -39,7 +39,7 @@ public:
 	// GLFont2d
 	virtual void drawCharacter(
 		int charPosition, Vector &position, 
-		GLFont2d::CharEntry &charEntry, Vector4 &color);
+		GLFont2dStorage::CharEntry &charEntry, Vector4 &color);
 
 protected:
 	GLWChannelView *channelView_;

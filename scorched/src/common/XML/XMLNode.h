@@ -21,8 +21,8 @@
 #if !defined(__INCLUDE_XMLNodeh_INCLUDE__)
 #define __INCLUDE_XMLNodeh_INCLUDE__
 
-#include <string>
 #include <list>
+#include <lang/LangString.h>
 #include <common/Vector.h>
 #include <common/FixedVector.h>
 #include <common/FileLines.h>
@@ -42,6 +42,8 @@ public:
 	XMLNode(const char *name, const char *content = "", 
 		NodeType = XMLNode::XMLNodeType);
 	XMLNode(const char *name, const std::string &content, 
+		NodeType = XMLNode::XMLNodeType);
+	XMLNode(const char *name, const LangString &content, 
 		NodeType = XMLNode::XMLNodeType);
 	XMLNode(const char *name, NumberParser &content,
 		NodeType = XMLNode::XMLNodeType);
@@ -77,7 +79,11 @@ public:
 		bool failOnError = true, bool remove = true);
 	bool getNamedParameter(const char *name, std::string &value,
 		bool failOnError = true, bool remove = true);
+	bool getNamedParameter(const char *name, LangString &value,
+		bool failOnError = true, bool remove = true);
 	bool getNamedChild(const char *name, XMLNode *&node, 
+		bool failOnError = true, bool remove = true);
+	bool getNamedChild(const char *name, LangString &node, 
 		bool failOnError = true, bool remove = true);
 	bool getNamedChild(const char *name, std::string &value,
 		bool failOnError = true, bool remove = true);
@@ -112,9 +118,9 @@ public:
 	void addParameter(XMLNode *node);
 	void addContent(const char *data, int len);
 
-	static void removeSpecialChars(std::string &content,
+	static void removeSpecialChars(const std::string &content,
 		std::string &result);
-	static void addSpecialChars(std::string &content, 
+	static void addSpecialChars(const std::string &content, 
 		std::string &result);
 	static const char *getSpacer(int space);
 

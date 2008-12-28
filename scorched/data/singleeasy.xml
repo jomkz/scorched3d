@@ -230,7 +230,7 @@
   <!-- The first round players are allowed to buy on -->
   <option>
     <name>MoneyBuyOnRound</name>
-    <value>2</value>
+    <value>1</value>
     <defaultvalue>2</defaultvalue>
   </option>
   <!-- The money awarded for each won round -->
@@ -266,7 +266,7 @@
   <!-- The money each player starts with -->
   <option>
     <name>MoneyStarting</name>
-    <value>10000</value>
+    <value>50000</value>
     <defaultvalue>10000</defaultvalue>
   </option>
   <!-- The amount of time to give clients to respond before kicking them -->
@@ -296,8 +296,7 @@
   <!-- The player turn mode -->
   <option>
     <name>TurnType</name>
-    <value>1</value>
-    <defaultvalue>1</defaultvalue>
+    <value>TurnSimultaneous</value>
   </option>
   <!-- The force of the wind -->
   <option>

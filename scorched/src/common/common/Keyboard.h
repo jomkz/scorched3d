@@ -56,8 +56,12 @@ protected:
 	static bool dvorak_; // TODO // FIX ME NOT WORKING
 	KeyboardHistory::HistoryElement keybHist_[MAX_KEYBDHIST];
 	int keybHistCnt_;
+	Uint16 mHighSurrogate;
+
 	void clear();
 	bool loadKeyFile(const std::string &fileName, bool masterFile);
+	void handleUnicodeUTF16(Uint16 utf16, SDLKey key);
+	void raiseUnicodeUTF16(Uint16 utf16, SDLKey key);
 
 	std::map<std::string, KeyboardKey *> keyMap_;
 	std::list<KeyboardKey *> commandKeys_;

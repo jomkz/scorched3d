@@ -25,6 +25,7 @@
 #include <target/TargetLife.h>
 #include <common/Defines.h>
 #include <common/ChannelManager.h>
+#include <lang/LangResource.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponGiveLife);
 
@@ -51,7 +52,7 @@ bool WeaponGiveLife::parseXML(AccessoryCreateContext &context, XMLNode *accessor
 void WeaponGiveLife::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	context.actionController->addAction(
+	context.getActionController().addAction(
 		new CallbackWeapon("WeaponGiveLife", this, 0, 0, 
 			weaponContext, position, velocity));
 }
@@ -61,7 +62,7 @@ void WeaponGiveLife::weaponCallback(
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 	unsigned int userData)
 {
-	Tank *tank = context.tankContainer->getTankById(weaponContext.getPlayerId());
+	Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
 	if (!tank) return;
 
 	fixed life = life_.getValue(context);
@@ -75,13 +76,13 @@ void WeaponGiveLife::weaponCallback(
 		tank->getLife().setLife(
 			tank->getLife().getLife() + life);
 
-		if (!context.serverMode)
 		{
 			ChannelText text("combat", 
-				S3D::formatStringBuffer("[p:%s] received %.0f life", 
-				tank->getName(), life.asFloat()));
-			//info.setPlayerId(weaponContext.getPlayerId());
-			ChannelManager::showText(text);
+				LANG_RESOURCE_2("TANK_GET_LIFE",
+				"[p:{0}] received {1} life", 
+				tank->getTargetName(), 
+				S3D::formatStringBuffer("%.0f", life.asFloat())));
+			ChannelManager::showText(context, text);
 		}
 	}
 	else
@@ -97,13 +98,13 @@ void WeaponGiveLife::weaponCallback(
 				tank->getLife().getLife() + life);
 		}
 
-		if (!context.serverMode)
 		{
 			ChannelText text("combat", 
-				S3D::formatStringBuffer("[p:%s] lost %.0f life", 
-				tank->getName(), -life.asFloat()));
-			//info.setPlayerId(weaponContext.getPlayerId());
-			ChannelManager::showText(text);
+				LANG_RESOURCE_2("TANK_LOST_LIFE",
+				"[p:{0}] lost {1} life", 
+				tank->getTargetName(), 
+				S3D::formatStringBuffer("%.0f", -life.asFloat())));
+			ChannelManager::showText(context, text);
 		}
 	}
 }

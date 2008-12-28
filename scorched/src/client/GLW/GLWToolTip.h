@@ -31,7 +31,7 @@ public:
 	static GLWToolTip *instance();
 
 	bool addToolTip(ToolTip::ToolTipType type, 
-		const std::string &title, const std::string &text,
+		const LangString &title, const LangString &text,
 		float x, float y, float w, float h);
 	bool addToolTip(ToolTip *tip, 
 		float x, float y, float w, float h);
@@ -56,8 +56,8 @@ protected:
 	float tipOffX_, tipOffY_;
 	float tipTextWidth_;
 	float tipTextHeight_;
-	std::string tipTitle_, tipText_;
-	std::list<char *> tipTexts_;
+	LangString tipTitle_, tipText_;
+	std::list<LangString> tipTexts_;
 
 	void setupTip(ToolTip *tip);
 	void calculateTip(ToolTip *tip);

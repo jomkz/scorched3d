@@ -21,7 +21,6 @@
 #include <GLW/GLWWeaponModel.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientState.h>
-#include <graph/MainCamera.h>
 #include <tankgraph/TargetRendererImplTank.h>
 #include <tankgraph/MissileMesh.h>
 #include <tank/TankContainer.h>
@@ -31,7 +30,7 @@
 #include <weapons/AccessoryStore.h>
 #include <weapons/Accessory.h>
 #include <landscape/Landscape.h>
-#include <landscape/Sky.h>
+#include <sky/Sky.h>
 #include <common/Vector4.h>
 #include <common/Defines.h>
 

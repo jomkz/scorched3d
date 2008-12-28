@@ -134,8 +134,7 @@
   <!-- The player turn mode -->
   <option>
     <name>TurnType</name>
-    <value>1</value>
-    <defaultvalue>1</defaultvalue>
+    <value>TurnSimultaneous</value>
   </option>
   <!-- The force of the wind -->
   <option>

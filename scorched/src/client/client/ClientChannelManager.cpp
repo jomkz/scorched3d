@@ -23,7 +23,7 @@
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsChannelMessage.h>
 #include <coms/ComsChannelTextMessage.h>
-#include <GLEXT/GLConsole.h>
+#include <console/ConsoleRuleMethodIAdapter.h>
 #include <common/Logger.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
@@ -48,7 +48,7 @@ void ClientChannelManager::ChannelEntry::setChannels(std::list<ChannelDefinition
 	}
 }
 
-bool ClientChannelManager::ChannelEntry::hasChannel(const char *channel)
+bool ClientChannelManager::ChannelEntry::hasChannel(const std::string &channel)
 {
 	return (channels_.find(channel) != channels_.end());
 }
@@ -75,8 +75,11 @@ ClientChannelManager::ClientChannelManager()
 		"ComsChannelTextMessage",
 		this);
 
-	new GLConsoleRuleMethodIAdapterEx<ClientChannelManager>(
-		this, &ClientChannelManager::say, "Say");
+	new ConsoleRuleMethodIAdapterEx<ClientChannelManager>(
+		this, &ClientChannelManager::say, "Say", 
+		ConsoleUtil::formParams(
+		ConsoleRuleParam("channel", ConsoleRuleTypeString),
+		ConsoleRuleParam("text", ConsoleRuleTypeString)));
 }
 
 ClientChannelManager::~ClientChannelManager()
@@ -212,26 +215,14 @@ unsigned int ClientChannelManager::getChannelEntry(ClientChannelManagerI *reciev
 	return 0;
 }
 
-void ClientChannelManager::say(std::list<GLConsoleRuleSplit> list)
+void ClientChannelManager::say(std::vector<ConsoleRuleValue> &values)
 {
-	bool usage = false;
+	ConsoleRuleValue &channelValue = values[1];
+	ConsoleRuleValue &textValue = values[2];
 
-	list.pop_front();
-	if (!list.empty())
-	{
-		std::string channel = list.begin()->rule;
-		list.pop_front();
-		if (!list.empty())
-		{
-			std::string text = list.begin()->rule;
-			ChannelText message(channel, text);
-			sendText(message);
-		}
-		else usage = true;
-	}
-	else usage = true;
-
-	GLConsole::instance()->addLine(false, "Usage: say <channel> <text>");
+	ChannelText message(channelValue.valueString.c_str(), 
+		LANG_STRING(textValue.valueString));
+	sendText(message);
 }
 
 void ClientChannelManager::sendText(const ChannelText &constText)
@@ -271,9 +262,11 @@ void ClientChannelManager::showText(const ChannelText &constText)
 	// Add this line to the console
 	if (!(text.getFlags() & ChannelText::eNoLog))
 	{
+		std::string mes(LangStringUtil::convertFromLang(text.getMessage()));
+
 		Logger::log(S3D::formatStringBuffer("[%s] : %s",
-			text.getChannel(),
-			text.getMessage()));
+			text.getChannel().c_str(),
+			mes.c_str()));
 	}
 
 	// Send to all recievers
@@ -340,18 +333,20 @@ bool ClientChannelManager::processMessage(
 		if (tank && tank->getState().getMuted()) return true;
 
 		// Log this message
+		std::string mes(LangStringUtil::convertFromLang(
+			textMessage.getChannelText().getMessage()));
 		if (tank)
 		{
 			Logger::log(S3D::formatStringBuffer("[%s][%s] : %s",
-				textMessage.getChannelText().getChannel(),
-				tank->getName(),
-				textMessage.getChannelText().getMessage()));
+				textMessage.getChannelText().getChannel().c_str(),
+				tank->getCStrName().c_str(),
+				mes.c_str()));
 		}
 		else
 		{
 			Logger::log(S3D::formatStringBuffer("[%s] : %s",
-				textMessage.getChannelText().getChannel(),
-				textMessage.getChannelText().getMessage()));
+				textMessage.getChannelText().getChannel().c_str(),
+				mes.c_str()));
 		}
 
 		// Foreach reciever

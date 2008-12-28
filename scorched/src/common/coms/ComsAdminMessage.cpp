@@ -21,10 +21,12 @@
 #include <coms/ComsAdminMessage.h>
 
 ComsAdminMessage::ComsAdminMessage(
+	unsigned int sid,
 	ComsAdminMessageType type,
-	const char *param1,
-	const char *param2) :
+	const std::string &param1,
+	const std::string &param2) :
 	ComsMessage("ComsAdminMessage"),
+	sid_(sid),
 	type_(type),
 	param1_(param1),
 	param2_(param2)
@@ -39,6 +41,7 @@ ComsAdminMessage::~ComsAdminMessage()
 
 bool ComsAdminMessage::writeMessage(NetBuffer &buffer)
 {
+	buffer.addToBuffer(sid_);
 	buffer.addToBuffer((int) type_);
 	buffer.addToBuffer(param1_);
 	buffer.addToBuffer(param2_);
@@ -47,6 +50,7 @@ bool ComsAdminMessage::writeMessage(NetBuffer &buffer)
 
 bool ComsAdminMessage::readMessage(NetBufferReader &reader)
 {
+	if (!reader.getFromBuffer(sid_)) return false; 
 	int t = 0;
 	if (!reader.getFromBuffer(t)) return false; 
 	type_ = (ComsAdminMessageType) t;

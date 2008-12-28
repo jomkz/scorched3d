@@ -23,6 +23,7 @@
 #include <server/ServerState.h>
 #include <server/ServerShotHolder.h>
 #include <server/ScorchedServer.h>
+#include <server/ServerChannelManager.h>
 #include <server/ServerCommon.h>
 #include <common/OptionsScorched.h>
 #include <common/Logger.h>
@@ -151,9 +152,12 @@ bool ServerReadyState::acceptStateChange(const unsigned state,
 			Tank *tank = (*itor).second;
 			if (tank->getState().getReadyState() == TankState::SNotReady)
 			{
-				ServerCommon::sendString(0, 
-					S3D::formatStringBuffer("%s kicked for not responding for %.0f seconds", 
-						tank->getName(), idleTime_));
+				ServerChannelManager::instance()->sendText(
+					ChannelText("info",
+						"KICK_RESPONSE_TIMEOUTE",
+						"{0} kicked for not responding for {1} seconds", 
+						tank->getTargetName(), idleTime_),
+					true);
 				ServerCommon::kickDestination(tank->getDestinationId());
 			}
 		}

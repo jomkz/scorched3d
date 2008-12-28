@@ -259,6 +259,19 @@ void NetBuffer::addToBuffer(std::string &string)
 	addToBuffer(string.c_str());
 }
 
+void NetBuffer::addToBuffer(const LangString &string)
+{
+	for (unsigned int i=0; i<=string.size(); i++) 
+	{
+		addToBuffer(string.c_str()[i]);
+	}
+}
+
+void NetBuffer::addToBuffer(LangString &string)
+{
+	addToBuffer((const LangString &) string);
+}
+
 void NetBuffer::addToBuffer(NetBuffer &add)
 {
 	addToBuffer(add.getBufferUsed());
@@ -385,6 +398,20 @@ bool NetBufferReader::getFromBuffer(std::string &result, bool safe)
 
 	delete [] value;
 	return false;
+}
+
+bool NetBufferReader::getFromBuffer(LangString &result)
+{
+	result.clear();
+	unsigned int value = 0;
+	for (;;) 
+	{
+		if (!getFromBuffer(value)) return false;
+		if (!value) break;
+		result.push_back(value);
+	} 
+
+	return true;
 }
 
 bool NetBufferReader::getFromBuffer(NetBuffer &buffer)

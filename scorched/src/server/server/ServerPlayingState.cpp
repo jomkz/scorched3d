@@ -22,11 +22,13 @@
 #include <server/ServerShotHolder.h>
 #include <server/ServerState.h>
 #include <server/ScorchedServer.h>
+#include <server/ServerChannelManager.h>
 #include <server/TurnController.h>
 #include <server/ServerCommon.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
+#include <lua/LUAScriptHook.h>
 #include <common/OptionsScorched.h>
 #include <common/Logger.h>
 
@@ -34,6 +36,7 @@ ServerPlayingState::ServerPlayingState() :
 	GameStateI("ServerPlayingState"),
 	time_(0.0f)
 {
+	ScorchedServer::instance()->getLUAScriptHook().addHookProvider("server_playing");
 }
 
 ServerPlayingState::~ServerPlayingState()
@@ -44,6 +47,9 @@ void ServerPlayingState::enterState(const unsigned state)
 {
 	// Set the wait timer to the current time
 	time_ = 0.0f;
+
+	// Notify scripts of a new game starting
+	ScorchedServer::instance()->getLUAScriptHook().callHook("server_playing");
 }
 
 bool ServerPlayingState::acceptStateChange(const unsigned state, 
@@ -91,11 +97,26 @@ bool ServerPlayingState::acceptStateChange(const unsigned state,
 						// If the allowed missed moves has been specified
 						if (ScorchedServer::instance()->getOptionsGame().getAllowedMissedMoves() > 0)
 						{
-							ServerCommon::sendString(0, 
-								S3D::formatStringBuffer("Player \"%s\" failed to %s, allowed %i more missed move(s)",
-								tank->getName(),
-								((state == ServerState::ServerStateBuying)?"buy":"move"),
-								ScorchedServer::instance()->getOptionsGame().getAllowedMissedMoves() - movesMissed));
+							if (state == ServerState::ServerStateBuying)
+							{
+								ServerChannelManager::instance()->sendText(
+									ChannelText("info",
+										"PLAYER_MISSED_BUY",
+										"Player \"{0}\" failed to buy, allowed {1} more missed move(s)",
+										tank->getTargetName(),
+										ScorchedServer::instance()->getOptionsGame().getAllowedMissedMoves() - movesMissed),
+									true);
+							}
+							else
+							{
+								ServerChannelManager::instance()->sendText(
+									ChannelText("info",
+										"PLAYER_MISSED_SHOOT",
+										"Player \"{0}\" failed to shoot, allowed {1} more missed move(s)",
+										tank->getTargetName(),
+										ScorchedServer::instance()->getOptionsGame().getAllowedMissedMoves() - movesMissed),
+									true);
+							}
 
 							// And this player has exceeded them
 							if (movesMissed >= ScorchedServer::instance()->getOptionsGame().getAllowedMissedMoves())

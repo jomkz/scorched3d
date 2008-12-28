@@ -22,10 +22,10 @@
 #define __INCLUDE_Water2Patchesh_INCLUDE__
 
 #include <water/Water2Patch.h>
-#include <water/Water2PatchVisibility.h>
 #include <image/ImageHandle.h>
 #include <GLEXT/GLTexture.h>
 
+class GLVertexBufferObject;
 class Water2Patches
 {
 public:
@@ -36,17 +36,20 @@ public:
 		unsigned int totalSize, unsigned int patchSize,
 		float waterHeight);
 
+	Water2Patch *getPatch(int index);
 	Water2Patch *getPatch(int x, int y);
 	Water2Patch::Data *getPoint(int x, int y);
 	int getSize() { return size_; }
 	Image &getNormalMap() { return normalMap_; }
 	GLTexture &getAOF() { return aof_; }
+	GLVertexBufferObject *getBufferObject() { return bufferObject_; }
 
 protected:
 	int size_;
 	int totalSize_, patchSize_;
 	ImageHandle normalMap_;
 	GLTexture aof_;
+	GLVertexBufferObject *bufferObject_;
 	Water2Patch *patches_;
 
 	void generateNormalMap();

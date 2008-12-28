@@ -33,7 +33,7 @@ void TargetDamageCalc::explosion(ScorchedContext &context,
 							   bool shieldOnlyDamage)
 {
 	std::map<unsigned int, Target *> collisionTargets;
-	context.targetSpace->getCollisionSet(position, radius, collisionTargets, true);
+	context.getTargetSpace().getCollisionSet(position, radius, collisionTargets, true);
 	std::map<unsigned int, Target *>::iterator itor;
 	for (itor = collisionTargets.begin();
 		itor != collisionTargets.end();
@@ -83,5 +83,5 @@ void TargetDamageCalc::damageTarget(ScorchedContext &context,
 	TankDamage *tankDamage = new TankDamage(
 		weapon, target->getPlayerId(), weaponContext, 
 		damage, useShieldDamage, checkFall, shieldOnlyDamage);
-	context.actionController->addAction(tankDamage);
+	context.getActionController().addAction(tankDamage);
 }

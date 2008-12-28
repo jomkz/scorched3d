@@ -25,6 +25,7 @@
 #include <vector>
 #include <GLW/GLWidget.h>
 #include <common/Vector.h>
+#include <lang/LangResource.h>
 
 class GLWLabel : public GLWidget  
 {
@@ -35,7 +36,7 @@ public:
 	};
 
 	GLWLabel(float x = 0.0f, float y = 0.0f, 
-		const std::string &labelText = "",
+		const LangString &labelText = LangString(),
 		float size = 14.0f,
 		unsigned int flags = 0);
 	virtual ~GLWLabel();
@@ -44,8 +45,9 @@ public:
 	virtual float getH() { calcWidth(); return GLWidget::getH(); }
 	virtual void draw();
 
-	const char *getText() { return labelText_.c_str(); }
-	void setText(const std::string &text);
+	bool getEmpty() { return labelText_.empty() && labelTexts_.size() == 0; }
+
+	void setText(const LangString &text);
 	void setColor(const Vector &color);
 	void setSize(float size);
 	void calcWidth();
@@ -54,8 +56,8 @@ public:
 
 protected:
 	unsigned int flags_;
-	std::string labelText_;
-	std::vector<std::string> labelTexts_;
+	LangString labelText_;
+	std::vector<LangString> labelTexts_;
 	Vector color_;
 	float size_;
 

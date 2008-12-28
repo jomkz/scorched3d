@@ -34,7 +34,7 @@ public:
 	virtual void generate(ScorchedContext &context, 
 		RandomGenerator &random, 
 		LandscapeMovementType *movementType) = 0;
-	virtual void simulate(fixed frameTime) = 0;
+	virtual void simulate(ScorchedContext &context, fixed frameTime) = 0;
 	virtual void draw() = 0;
 
 	virtual bool writeMessage(NetBuffer &buffer) = 0;

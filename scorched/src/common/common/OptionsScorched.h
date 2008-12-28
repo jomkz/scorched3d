@@ -129,6 +129,8 @@ public:
 	OPTIONSTRING_GETTER(ServerPassword);
 	OPTIONSTRING_GETTER(PublishAddress);
 
+	OPTIONBOOL_GETTER(AllowMultiLingualChat);
+	OPTIONBOOL_GETTER(AllowMultiLingualNames);
 	OPTIONBOOL_GETTER(AllowSameIP);
 	OPTIONBOOL_GETTER(AllowSameUniqueId);
 	OPTIONBOOL_GETTER(PublishServer);

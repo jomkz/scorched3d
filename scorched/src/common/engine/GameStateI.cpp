@@ -20,6 +20,8 @@
 
 #include <engine/GameStateI.h>
 
+std::vector<std::string> GameStateI::perfCounterNames_;
+
 GameStateI::GameStateI(const char *name) :
 	gameStateIName_(name)
 {
@@ -75,4 +77,33 @@ void GameStateI::mouseWheel(const unsigned state, int x, int y, int z, bool &ski
 void GameStateI::enterState(const unsigned state)
 {
 
+}
+
+int GameStateI::getPerfCounter(const char *perfName)
+{
+	for (int i=0; i<(int) perfCounterNames_.size(); i++)
+	{
+		if (0 == strcmp(perfCounterNames_[i].c_str(), perfName)) return i;
+	}
+
+	perfCounterNames_.push_back(perfName);
+	return int(perfCounterNames_.size() - 1);
+}
+
+void GameStateI::startPerfCount(int counter)
+{
+	while (int(perfCounters_.size()) <= counter)
+	{
+		perfCounters_.push_back(new GameStatePerfCounter(perfCounterNames_[perfCounters_.size()].c_str()));
+	}
+	perfCounters_[counter]->start();
+}
+
+void GameStateI::endPerfCount(int counter)
+{
+	while (int(perfCounters_.size()) <= counter)
+	{
+		perfCounters_.push_back(new GameStatePerfCounter(perfCounterNames_[perfCounters_.size()].c_str()));
+	}
+	perfCounters_[counter]->end();
 }

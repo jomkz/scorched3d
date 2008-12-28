@@ -23,7 +23,6 @@
 #include <GLEXT/GLViewPort.h>
 #include <GLEXT/GLMenuEntry.h>
 #include <GLW/GLWWindowManager.h>
-#include <GLW/GLWFont.h>
 #include <client/ScorchedClient.h>
 #include <graph/OptionsDisplay.h>
 
@@ -48,18 +47,23 @@ GLMenuEntry *GLMenu::getMenu(char *menuItem)
 	return 0;
 }
 
-bool GLMenu::addMenu(char *menuName, 
+bool GLMenu::addMenu(
+	const LangString &menuName,
+	char *menuNameInternal, 
+	const LangString &menuDescription,
 	float width, 
 	unsigned int state,
 	GLMenuI *callback,
 	Image *icon,
 	unsigned int flags)
 {
-	if (getMenu(menuName)) return false;
+	if (getMenu(menuNameInternal)) return false;
 
-	GLMenuEntry *entry = new GLMenuEntry(menuName, width, state, 
+	GLMenuEntry *entry = new GLMenuEntry(
+		menuName, menuNameInternal, menuDescription,
+		width, state, 
 		callback, icon, flags);
-	menuList_[std::string(menuName)] = entry;
+	menuList_[std::string(menuNameInternal)] = entry;
 	return true;
 }
 
@@ -78,6 +82,8 @@ void GLMenu::draw()
 
 	float currentTop = (float) GLViewPort::getHeight();
 	setY(currentTop - h_);
+	int x = ScorchedClient::instance()->getGameState().getMouseX();
+	int y = ScorchedClient::instance()->getGameState().getMouseY();
 
 	unsigned int currentState =
 		ScorchedClient::instance()->getGameState().getState();
@@ -93,13 +99,17 @@ void GLMenu::draw()
 		{
 			selected = true;
 		}
+		else if (entry->inMenu(currentTop, x, y))
+		{
+			GLWToolTip::instance()->addToolTip(&entry->getToolTip(),
+				entry->getX() - 10.0f, entry->getY() - 75, 
+				entry->getW(), 75.0f);
+		}
 	}	
 
 	bool show = true;
 	if (OptionsDisplay::instance()->getHideMenus())
 	{
-		int x = ScorchedClient::instance()->getGameState().getMouseX();
-		int y = ScorchedClient::instance()->getGameState().getMouseY();
 		show = (selected || GLWWindowManager::instance()->getFocus(x, y) == getId());
 	}
 	if (show)
@@ -116,7 +126,7 @@ void GLMenu::draw()
 				if (entry->getState() == 0 ||
 					entry->getState() == currentState)
 				{
-					if (entry->getCallback()->getEnabled(entry->getName()))
+					if (entry->getCallback()->getEnabled(entry->getNameInternal()))
 					{
 						entry->draw(
 							currentTop - 1.0f, currentWidth);
@@ -137,7 +147,7 @@ void GLMenu::draw()
 				if (entry->getState() == 0 ||
 					entry->getState() == currentState)
 				{
-					if (entry->getCallback()->getEnabled(entry->getName()))
+					if (entry->getCallback()->getEnabled(entry->getNameInternal()))
 					{
 						currentWidth -= entry->getW() + 1.0f;
 						entry->draw(

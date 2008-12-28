@@ -37,6 +37,7 @@ public:
 	void simulate(float time);
 
 protected:
+	bool createdTexture_;
 	GLTexture texture_;
 	float fadeTime_[4];
 

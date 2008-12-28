@@ -22,6 +22,7 @@
 #include <weapons/AccessoryStore.h>
 #include <engine/GameState.h>
 #include <engine/ActionController.h>
+#include <engine/MainLoop.h>
 #include <client/ClientState.h>
 #include <client/ScorchedClient.h>
 #include <server/ScorchedServer.h>
@@ -51,49 +52,56 @@
 #include <dialogs/ResignDialog.h>
 #include <dialogs/SkipDialog.h>
 #include <sound/SoundUtils.h>
-#include <GLEXT/GLConsoleRuleFnIAdapter.h>
+#include <console/ConsoleRuleFnIAdapter.h>
+#include <console/ConsoleRuleMethodIAdapter.h>
 #include <image/ImageFactory.h>
 #include <GLEXT/GLTexture.h>
-#include <lua/LUAWrapper.h>
+#include <lua/LUAScriptFactory.h>
 
 TankMenus::TankMenus() : logger_("ClientLog")
 {
-	new GLConsoleRuleMethodIAdapter<Landscape>(
+	new ConsoleRuleMethodIAdapter<Landscape>(
 		Landscape::instance(), &Landscape::updatePlanTexture, "ResetPlan");
-	new GLConsoleRuleMethodIAdapter<Landscape>(
+	new ConsoleRuleMethodIAdapter<Landscape>(
 		Landscape::instance(), &Landscape::updatePlanATexture, "ResetAPlan");
 
-	new GLConsoleRuleMethodIAdapter<TankMenus>(
+	new ConsoleRuleMethodIAdapter<TankMenus>(
 		this, &TankMenus::resetLandscape, "ResetLandscape");
-	new GLConsoleRuleMethodIAdapter<TankMenus>(
+	new ConsoleRuleMethodIAdapter<TankMenus>(
 		this, &TankMenus::clearTracerLines, "ClearTracerLines");
-	new GLConsoleRuleMethodIAdapter<TankMenus>(
+	new ConsoleRuleMethodIAdapter<TankMenus>(
 		this, &TankMenus::showTankDetails, "TankDetails");
-	new GLConsoleRuleMethodIAdapter<TankMenus>(
+	new ConsoleRuleMethodIAdapter<TankMenus>(
 		this, &TankMenus::showTargetDetails, "TargetDetails");
-	new GLConsoleRuleMethodIAdapter<TankMenus>(
+	new ConsoleRuleMethodIAdapter<TankMenus>(
 		this, &TankMenus::showTextureDetails, "TextureDetails");
-	new GLConsoleRuleMethodIAdapter<TankMenus>(
+	new ConsoleRuleMethodIAdapter<TankMenus>(
 		this, &TankMenus::logToFile, "LogToFile");
-	new GLConsoleRuleMethodIAdapter<TankMenus>(
+	new ConsoleRuleMethodIAdapter<TankMenus>(
 		this, &TankMenus::groupInfo, "GroupInfo");
-	new GLConsoleRuleMethodIAdapterEx<TankMenus>(
-		this, &TankMenus::runScriptConsole, "RunScript");
-	new GLConsoleRuleFnIBooleanAdapter(
+	//new ConsoleRuleMethodIAdapterEx<TankMenus>(
+	//	this, &TankMenus::runScriptConsole, "RunScript");
+	new ConsoleRuleFnIBooleanAdapter(
 		"ComsMessageLogging", 
 		ScorchedClient::instance()->getComsMessageHandler().getMessageLogging());
-	new GLConsoleRuleFnIBooleanAdapter(
+	new ConsoleRuleFnIBooleanAdapter(
 		"StateLogging", 
 		ScorchedClient::instance()->getGameState().getStateLogging());
-	new GLConsoleRuleFnIBooleanAdapter(
+	new ConsoleRuleFnIBooleanAdapter(
 		"ActionLogging",
 		ScorchedClient::instance()->getActionController().getActionLogging());
-	new GLConsoleRuleFnIBooleanAdapter(
+	new ConsoleRuleFnIBooleanAdapter(
 		"ActionProfiling",
 		ScorchedServer::instance()->getActionController().getActionProfiling());
-	new GLConsoleRuleFnIBooleanAdapter(
+	new ConsoleRuleFnINumberAdapter(
 		"StateTimeLogging",
 		ScorchedClient::instance()->getGameState().getStateTimeLogging());
+	new ConsoleRuleFnINumberAdapter(
+		"ServerStateTimeLogging",
+		ScorchedServer::instance()->getGameState().getStateTimeLogging());
+	new ConsoleRuleFnIBooleanAdapter(
+		"MainLoopLogging",
+		ScorchedClient::instance()->getMainLoop().getDrawLogging());
 	
 	if (OptionsDisplay::instance()->getClientLogToFile())
 	{
@@ -143,7 +151,7 @@ void TankMenus::logToFile()
 
 void TankMenus::showTextureDetails()
 {
-	GLConsole::instance()->addLine(false,
+	Console::instance()->addLine(false,
 		S3D::formatStringBuffer("%i bytes", GLTexture::getTextureSpace()));
 }
 
@@ -167,9 +175,9 @@ void TankMenus::showInventory()
 		itor++)
 	{
 		Tank *tank = (*itor).second;
-		GLConsole::instance()->addLine(false,
+		Console::instance()->addLine(false,
 			S3D::formatStringBuffer("--%s------------------------------------",
-			tank->getName()));
+			tank->getCStrName().c_str()));
 
 		std::list<Accessory *> accessories;
 		tank->getAccessories().getAllAccessories(accessories);
@@ -182,12 +190,12 @@ void TankMenus::showInventory()
 		{
 			Accessory *accessory = (*aitor);
 
-			GLConsole::instance()->addLine(false,
+			Console::instance()->addLine(false,
 				S3D::formatStringBuffer("%s - %i", accessory->getName(), 
 				tank->getAccessories().getAccessoryCount(accessory)));
 		}
 
-		GLConsole::instance()->addLine(false,
+		Console::instance()->addLine(false,
 			"----------------------------------------------------");
 	}
 }
@@ -204,7 +212,7 @@ void TankMenus::showTargetDetails()
 	{
 		Target *target = (*itor).second;
 
-		std::string name = target->getName();
+		std::string name = target->getCStrName();
 		if (target->isTarget() &&
 			target->getRenderer() &&
 			name.empty())
@@ -219,7 +227,7 @@ void TankMenus::showTargetDetails()
 	}
 
 	char buffer[1024];
-	GLConsole::instance()->addLine(false,
+	Console::instance()->addLine(false,
 		"--Target Dump-----------------------------------------");
 	std::map<std::string, unsigned int>::iterator resultItor;
 	for (resultItor = results.begin();
@@ -227,11 +235,11 @@ void TankMenus::showTargetDetails()
 		resultItor++)
 	{
 		snprintf(buffer, 1024, "\"%s\" - %u", resultItor->first.c_str(), resultItor->second);
-		GLConsole::instance()->addLine(false, buffer);
+		Console::instance()->addLine(false, buffer);
 	}
 	snprintf(buffer, 1024, "TOTAL - %u", targets.size());
-	GLConsole::instance()->addLine(false, buffer);
-	GLConsole::instance()->addLine(false,
+	Console::instance()->addLine(false, buffer);
+	Console::instance()->addLine(false,
 		"----------------------------------------------------");
 }
 
@@ -242,7 +250,7 @@ void TankMenus::showTankDetails()
 	Tank *currentTank = 
 		ScorchedClient::instance()->getTankContainer().getCurrentTank();
 
-	GLConsole::instance()->addLine(false,
+	Console::instance()->addLine(false,
 		"--Tank Dump-----------------------------------------");
 		
 	std::map<unsigned int, Tank *>::iterator itor;
@@ -272,12 +280,12 @@ void TankMenus::showTankDetails()
 			tank->getPlayerId(),
 			currentTank == tank?'>':' ',
 			description,
-			tank->getName(), 
+			tank->getCStrName().c_str(), 
 			tank->getModelContainer().getTankModelName());
-		GLConsole::instance()->addLine(false, buffer);
+		Console::instance()->addLine(false, buffer);
 	}
 
-	GLConsole::instance()->addLine(false,
+	Console::instance()->addLine(false,
 		"----------------------------------------------------");
 }
 
@@ -290,32 +298,42 @@ TankMenus::PlayerMenu::PlayerMenu()
 		S3D::getDataFile("data/windows/settinga.bmp"),
 		false);
 	DIALOG_ASSERT(map->getBits());
-	MainMenuDialog::instance()->addMenu("Player", 32, 
+	MainMenuDialog::instance()->addMenu(LANG_RESOURCE("PLAYER", "Player"), 
+		"Player",
+		LANG_RESOURCE("PLAYER_WINDOW", "Skip move, resign, and quit"),
+		32, 
 		ClientState::StatePlaying, this, map);
 
 	MainMenuDialog::instance()->addMenuItem("Player", 
-		GLMenuItem("Skip Move",
-		new ToolTip(ToolTip::ToolTipHelp, "Skip Move", 
-			"Player forfits this move.")));
+		GLMenuItem(LANG_RESOURCE("SKIP_MOVE", "Skip Move"),
+		new ToolTip(ToolTip::ToolTipHelp, 
+			LANG_RESOURCE("SKIP_MOVE", "Skip Move"), 
+			LANG_RESOURCE("SKIP_MOVE_TOOLTIP", "Player forfits this move."))));
 	MainMenuDialog::instance()->addMenuItem("Player", 
-		GLMenuItem("Resign Round",
-		new ToolTip(ToolTip::ToolTipHelp, "Resign Round", 
+		GLMenuItem(LANG_RESOURCE("RESIGN_ROUND", "Resign Round"),
+		new ToolTip(ToolTip::ToolTipHelp, 
+			LANG_RESOURCE("RESIGN_ROUND", "Resign Round"), 
+			LANG_RESOURCE("RESIGN_ROUND_TOOLTIP", 
 			"Player resigns from this round.\n"
-			"Player takes no part in the rest of the round.")));
+			"Player takes no part in the rest of the round."))));
 	MainMenuDialog::instance()->addMenuItem("Player", 
-		GLMenuItem("Exit Game",
-		new ToolTip(ToolTip::ToolTipHelp, "Exit Game", 
-			"Stop Playing Scorched.")));
+		GLMenuItem(LANG_RESOURCE("EXIT_GAME", "Exit Game"),
+		new ToolTip(ToolTip::ToolTipHelp, 
+			LANG_RESOURCE("EXIT_GAME", "Exit Game"), 
+			LANG_RESOURCE("EXIT_GAME_TOOLTIP", "Stop Playing Scorched."))));
 	if (!ClientParams::instance()->getConnectedToServer())
 	{
 		MainMenuDialog::instance()->addMenuItem("Player",
-			GLMenuItem("Mass Tank Kill",
-			new ToolTip(ToolTip::ToolTipHelp, "Mass Tank Kill",
-				"Kill all tanks.\nStarts the next round.")));
+			GLMenuItem(LANG_RESOURCE("MASS_TANK_KILL", "Mass Tank Kill"),
+			new ToolTip(ToolTip::ToolTipHelp, 
+				LANG_RESOURCE("MASS_TANK_KILL", "Mass Tank Kill"),
+				LANG_RESOURCE("MASS_TANK_KILL_TOOLTIP", 
+				"Kill all tanks.\nStarts the next round."))));
 		MainMenuDialog::instance()->addMenuItem("Player",
-			GLMenuItem("Save",
-			new ToolTip(ToolTip::ToolTipHelp, "Save", 
-				"Save this game.")));
+			GLMenuItem(LANG_RESOURCE("SAVE", "Save"),
+			new ToolTip(ToolTip::ToolTipHelp, 
+				LANG_RESOURCE("SAVE", "Save"),
+				LANG_RESOURCE("SAVE_TOOLTIP", "Save this game."))));
 	}
 }
 
@@ -372,7 +390,10 @@ TankMenus::AccessoryMenu::AccessoryMenu()
 		S3D::getDataFile("data/windows/bomba.bmp"),
 		false);
 	DIALOG_ASSERT(map->getBits());
-	MainMenuDialog::instance()->addMenu("Weapons", 32, 
+	MainMenuDialog::instance()->addMenu(LANG_RESOURCE("WEAPONS", "Weapons"), 
+		"Weapons", 
+		LANG_RESOURCE("WEAPONS_WINDOW", "Change the current weapon and enable defenses"),
+		32, 
 		ClientState::StatePlaying, this, map);
 }
 
@@ -416,7 +437,7 @@ bool TankMenus::AccessoryMenu::getMenuItems(const char* menuName,
 			Accessory *accessory = (*itor);
 			int accessoryCount = 
 				firstTank->getAccessories().getAccessoryCount(accessory);
-			if (accessoryCount == 0) continue;
+			if (!firstTank->getAccessories().canUse(accessory)) continue;
 
 			bool sel = false;
 			switch (accessory->getType())
@@ -442,26 +463,16 @@ bool TankMenus::AccessoryMenu::getMenuItems(const char* menuName,
 			if (!firstIteration &&
 				0 != strcmp(lastGroup.c_str(), accessory->getTabGroupName()))
 			{
-				result.push_back("----------");
+				GLMenuItem bar(LANG_STRING("----------"));
+				bar.setSeperator();
+				result.push_back(bar);
 			}
 			lastGroup = accessory->getTabGroupName();
 			firstIteration = false;
 
-			char buffer[1024];
-			if (accessoryCount > 0)
-			{
-				snprintf(buffer, 1024, "%s (%i)", 
-					accessory->getName(), accessoryCount);
-			}
-			else
-			{
-				snprintf(buffer, 1024, "%s (In)", 
-					accessory->getName());
-			}
-
 			result.push_back(
 				GLMenuItem(
-					buffer, 
+					firstTank->getAccessories().getAccessoryAndCountString(accessory), 
 					&accessory->getToolTip(), 
 					sel,
 					accessory->getTexture(),
@@ -484,13 +495,25 @@ bool TankMenus::AccessoryMenu::getEnabled(const char* menuName)
 	return false;
 }
 
-void TankMenus::runScriptConsole(std::list<GLConsoleRuleSplit> list)
+void TankMenus::runScriptConsole(std::list<ConsoleRuleValue> list)
 {
+	/*
 	list.pop_front();
 	if (!list.empty())
 	{
-		const char *script = (char *) list.begin()->rule.c_str();
-		ScorchedClient::instance()->getLUAWrapper().runScript(script);
+		const char *fileName = (char *) list.begin()->rule.c_str();
+		LUAScript *script = 
+			ScorchedClient::instance()->getLUAScriptFactory().createScript();
+
+		std::string luaErrorString;
+		if (!script->loadFromFile(fileName, luaErrorString))
+		{
+			Logger::log(S3D::formatStringBuffer("Script returned an error : %s",
+				luaErrorString.c_str()));
+		}
+
+		delete script;
 	}
+	*/
 }
 

@@ -24,7 +24,6 @@
 #include <client/ClientWaitState.h>
 #include <client/ClientReloadAdaptor.h>
 #include <graph/SpeedChange.h>
-#include <graph/MainCamera.h>
 #include <graph/OptionsDisplayConsole.h>
 #include <tankgraph/RenderTracer.h>
 #include <weapons/AccessoryStore.h>
@@ -41,11 +40,12 @@
 #include <dialogs/ProgressDialog.h>
 #include <dialogs/RulesDialog.h>
 #include <landscapemap/LandscapeMaps.h>
-#include <landscapemap/HeightMapSender.h>
+#include <landscapemap/DeformLandscape.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <landscape/Landscape.h>
 #include <tank/TankContainer.h>
 #include <tank/TankCamera.h>
+#include <target/TargetRenderer.h>
 #include <tankai/TankAIAdder.h>
 
 ClientNewGameHandler *ClientNewGameHandler::instance_ = 0;
@@ -84,14 +84,14 @@ bool ClientNewGameHandler::processMessage(
 
 	if (idleTime > 0 && int(generateTime) > idleTime - 5)
 	{
-		std::string message = S3D::formatStringBuffer(
+		LangString message = LANG_RESOURCE("LEVEL_TIMEOUT_WARNING",
 			"Warning: Your PC is taking a long time to generate levels.\n"
 			"This may cause you to be kicked by some servers.\n"
 			"You can fix this by lowering your display settings");
 
-		Logger::log(message);
+		Logger::log(LangStringUtil::convertFromLang(message));
 		ChannelText text("info", message);
-		ChannelManager::showText(text);
+		ChannelManager::showText(ScorchedClient::instance()->getContext(), text);
 	}
 
 	return result;
@@ -137,15 +137,11 @@ bool ClientNewGameHandler::actualProcessMessage(
 	ScorchedClient::instance()->getLandscapeMaps().generateMaps(
 		ScorchedClient::instance()->getContext(),
 		message.getLevelMessage().getGroundMapsDefn(),
-		message.getLevelMessage().getTankPositions(),
 		ProgressDialogSync::instance());
-
-	if (!HeightMapSender::generateHMapFromDiff(
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap(),
-		message.getLevelMessage().getHeightMap()))
-	{
-		S3D::dialogExit("Scorched3D", "Failed to generate heightmap diff");
-	}
+	DeformLandscape::applyInfos(
+		ScorchedClient::instance()->getContext(),
+		message.getLevelMessage().getDeformInfos(),
+		ProgressDialogSync::instance());
 
 	// Calculate all the new landscape settings (graphics)
 	Landscape::instance()->generate(ProgressDialogSync::instance());
@@ -190,7 +186,7 @@ bool ClientNewGameHandler::actualProcessMessage(
 	{
 		Target *newTarget = new Target(
 			newTargetId, 
-			"", 
+			LangString(), 
 			ScorchedClient::instance()->getContext());
 		if (!newTarget->readMessage(newTargets))
 		{
@@ -245,6 +241,7 @@ bool ClientNewGameHandler::actualProcessMessage(
 		tankItor++)
 	{
 		Tank *current = (*tankItor).second;
+		current->getRenderer()->moved();
 		current->getCamera().setCameraType(1);
 	}
 

@@ -38,7 +38,6 @@ public:
 	// Generates the next level
 	void generateMaps(
 		ScorchedContext &context,
-		std::list<FixedVector> &tankPositions,
 		ProgressCounter *counter = 0);
 
 	// Height map functions
@@ -52,20 +51,26 @@ public:
 	fixed &getNapalmHeight(int w, int h)
 		{ return nmap_.getNapalmHeight(w, h); }
 
+	// Deformable landscape area fns
+	int getLandscapeWidth();
+	int getLandscapeHeight();
+
 	// Playable landscape area fns
-	int getMapWidth() { return map_.getMapWidth(); }
-	int getMapHeight() { return map_.getMapHeight(); }
+	int getArenaWidth();
+	int getArenaHeight();
+	int getArenaX();
+	int getArenaY();
 
 	// Objects funtions
 	TargetGroups &getGroups() { return groups_; }
 
 	// Actual heightmap
 	HeightMap &getHeightMap() { return map_; }
-	HeightMap &getSurroundMap() { return smap_; }
 
 protected:
+	int arenaX_, arenaY_;
+	int arenaWidth_, arenaHeight_;
 	HeightMap map_; // The current level's heightmap
-	HeightMap smap_; // The surround of the landscape
 	NapalmMap nmap_; // How high napalm is at certain points
 	TargetGroups groups_; // The groups in the scene
 	LandscapeDefinitionCache &defnCache_;
@@ -82,7 +87,6 @@ protected:
 		ScorchedContext &context,
 		unsigned int &playerId,
 		ProgressCounter *counter = 0);
-	void saveHMap();
 
 };
 

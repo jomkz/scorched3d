@@ -43,7 +43,7 @@ bool WeaponInvokeWeapon::parseXML(AccessoryCreateContext &context, XMLNode *acce
 
 	std::string invoke;
 	if (!accessoryNode->getNamedChild("invoke", invoke)) return false;
-	Accessory *accessory = context.getAccessoryStore()->
+	Accessory *accessory = context.getAccessoryStore().
 		findByPrimaryAccessoryName(invoke.c_str());
 	if (!accessory)
 	{

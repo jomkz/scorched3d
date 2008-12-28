@@ -24,8 +24,8 @@
 #include <weapons/AccessoryStore.h>
 #include <weapons/EconomyStore.h>
 #include <net/NetLoopBack.h>
-#include <net/NetServerTCP.h>
-#include <net/NetServerTCP2.h>
+#include <net/NetServerTCP3.h>
+#include <lua/LUAScriptHook.h>
 #include <common/Defines.h>
 #include <common/Clock.h>
 #include <common/ARGParser.h>
@@ -100,10 +100,11 @@ bool startServer(bool local, ProgressCounter *counter)
 	{
 		// Only create a net server for the actual multiplayer case
 		// A loopback is created by the client for a single player game 
-		ScorchedServer::instance()->getContext().netInterface = 
+		ScorchedServer::instance()->getContext().setNetInterface(
 			//new NetServerTCP(new NetServerTCPScorchedProtocol());
 			//new NetServerUDP();
-			new NetServerTCP2();
+			//new NetServerTCP2();
+			new NetServerTCP3());
 	}
 
 	ScorchedServer::instance()->getOptionsGame().updateChangeSet();
@@ -142,7 +143,7 @@ bool startServer(bool local, ProgressCounter *counter)
 #endif
 
 	if (!ScorchedServer::instance()->getAccessoryStore().parseFile(
-		ScorchedServer::instance()->getOptionsGame(),
+		ScorchedServer::instance()->getContext(),
 		counter)) return false;
 	if (!ScorchedServer::instance()->getTankModels().loadTankMeshes(
 		ScorchedServer::instance()->getContext(), 2, counter))
@@ -161,6 +162,9 @@ bool startServer(bool local, ProgressCounter *counter)
 
 	checkSettings();
 
+	// Load all script hooks
+	if (!ScorchedServer::instance()->getLUAScriptHook().loadHooks()) return false;
+
 	return true;
 }
 
@@ -170,7 +174,7 @@ void serverMain(ProgressCounter *counter)
 	if (!startServer(false, counter)) exit(64);
 
 	// Try to start the server
-	if (!ScorchedServer::instance()->getContext().netInterface->start(
+	if (!ScorchedServer::instance()->getContext().getNetInterface().start(
 		ScorchedServer::instance()->getOptionsGame().getPortNo()) ||
 		!ServerBrowserInfo::instance()->start())
 	{
@@ -206,7 +210,7 @@ void serverMain(ProgressCounter *counter)
 void serverLoop()
 {
 	// Main server loop:
-	if (ScorchedServer::instance()->getContext().netInterface)
+	if (ScorchedServer::instance()->getContext().getNetInterfaceValid())
 	{
 		Logger::processLogEntries();
 		ScorchedServer::instance()->getNetInterface().processMessages();
@@ -218,6 +222,7 @@ void serverLoop()
 #endif
 
 		float timeDifference = serverTimer.getTimeDifference();
+		ScorchedServer::instance()->getGameState().draw();
 		ScorchedServer::instance()->getGameState().simulate(timeDifference);
 		ServerFileServer::instance()->simulate(timeDifference);
 		ServerChannelManager::instance()->simulate(timeDifference);
@@ -235,7 +240,7 @@ void serverLoop()
 class ConsoleServerProgressCounter : public ProgressCounterI
 {
 public:
-	ConsoleServerProgressCounter() : lastOp_(""), hashes_(0) {}
+	ConsoleServerProgressCounter() : lastOp_(), hashes_(0) {}
 
 	virtual void drawHashes(int neededHashes)
 	{
@@ -254,17 +259,19 @@ public:
 		fflush(stdout);
 	}
 
-	virtual void progressChange(const std::string &op, const float percentage)
+	virtual void progressChange(const LangString &op, const float percentage)
 	{
-		if (0 != strcmp(op.c_str(), lastOp_.c_str()))
+		if (op != lastOp_)
 		{
-			if (lastOp_.c_str()[0])
+			if (!lastOp_.empty())
 			{
 				drawHashes(25);
 			}
 
-			Logger::log(op);
-			printf("%s:", op.c_str());
+			std::string opStr = LangStringUtil::convertFromLang(op);
+
+			Logger::log(opStr);
+			printf("%s:", opStr.c_str());
 			lastOp_ = op;
 			hashes_ = 0;
 		}
@@ -273,7 +280,7 @@ public:
 		drawHashes(neededHashes);
 	}
 protected:
-	std::string lastOp_;
+	LangString lastOp_;
 	int hashes_;
 };
 

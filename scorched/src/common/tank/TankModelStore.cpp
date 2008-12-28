@@ -23,6 +23,7 @@
 #include <3dsparse/Model.h>
 #include <common/Defines.h>
 #include <XML/XMLFile.h>
+#include <lang/LangResource.h>
 
 TankModelStore::TankModelStore()
 {
@@ -41,7 +42,7 @@ bool TankModelStore::loadTankMeshes(ScorchedContext &context,
 	if (!types_.loadTankTypes(context)) return false;
 
 	// Load tank definition file
-	if (counter) counter->setNewOp("Loading tanks");
+	if (counter) counter->setNewOp(LANG_RESOURCE("LOADING_TANKS", "Loading tanks"));
 	XMLFile file;
 	if (!file.readFile(S3D::getDataFile("data/tanks.xml")))
 	{
@@ -156,7 +157,6 @@ TankModel *TankModelStore::getRandomModel(int team, bool ai)
 		itor++)
 	{
 		TankModel *model = (*itor);
-
 		if (strcmp(model->getName(), "Random") != 0)
 		{
 			if (model->isOfTeam(team) && 

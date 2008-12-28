@@ -64,7 +64,7 @@ bool ServerWebAppletHandler::AppletHtmlHandler::processRequest(
 	ServerWebServerIRequest &request,
 	std::string &text)
 {
-	return ServerWebServerUtil::getHtmlTemplate("applet.html", request.getFields(), text);
+	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "applet.html", request.getFields(), text);
 }
 
 bool ServerWebAppletHandler::AppletActionHandler::processRequest(
@@ -82,7 +82,7 @@ bool ServerWebAppletHandler::AppletActionHandler::processRequest(
 			const char *channel = ServerWebServerUtil::getField(request.getFields(), "channel");
 			if (text && channel && request.getSession())
 			{
-				ServerAdminCommon::adminSay(request.getSession(), channel, text);
+				ServerAdminCommon::adminSay(request.getSession()->credentials, channel, text);
 			}
 		}
 	}

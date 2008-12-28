@@ -48,7 +48,7 @@ bool WeaponLabel::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNo
 	if (!accessoryNode->getNamedChild("nextweapon", subNode)) return false;
 
 	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore()->
+	AccessoryPart *accessory = context.getAccessoryStore().
 		createAccessoryPart(context, parent_, subNode);
 	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
 	{

@@ -40,7 +40,7 @@ public:
 	Tank(ScorchedContext &context, 
 		unsigned int playerId, 
 		unsigned int destinationId,
-		const char *name, 
+		const LangString &name, 
 		Vector &color, 
 		const char *modelName,
 		const char *typeName);

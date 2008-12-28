@@ -20,6 +20,7 @@
 
 #include <server/ServerConnectAuthHandler.h>
 #include <server/ServerConnectHandler.h>
+#include <server/ServerChannelManager.h>
 #include <server/ServerState.h>
 #include <server/ServerBanned.h>
 #include <server/ScorchedServer.h>
@@ -31,6 +32,7 @@
 #include <tank/TankModelContainer.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
+#include <tank/TankScore.h>
 #include <tankai/TankAIAdder.h>
 #include <tankai/TankAIStrings.h>
 #include <common/Defines.h>
@@ -236,7 +238,7 @@ bool ServerConnectAuthHandler::processMessage(
 
 		ComsAddPlayerMessage oldPlayerMessage(
 			tank->getPlayerId(),
-			tank->getName(),
+			tank->getTargetName(),
 			tank->getColor(),
 			tank->getModelContainer().getTankModelName(),
 			tank->getModelContainer().getTankTypeName(),
@@ -294,17 +296,17 @@ void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,
 	// The player has connected
 	Vector color;
 	unsigned int tankId = 0;
-	const char *playerName = "";
+	LangString playerName;
 
 	if (extraSpectator)
 	{
 		tankId = TargetID::SPEC_TANK_ID;
-		playerName = "Spectator";
+		playerName = LANG_STRING("Spectator");
 		color = Vector(0.7f, 0.7f, 0.7f);
 	}
 	else
 	{
-		playerName = TankAIStrings::instance()->getPlayerName();
+		playerName = LANG_STRING(TankAIStrings::instance()->getPlayerName());
 		color = TankColorGenerator::instance()->getNextColor(
 			ScorchedServer::instance()->getTankContainer().getPlayingTanks());
 		tankId = TankAIAdder::getNextTankId(
@@ -335,9 +337,15 @@ void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,
 		StatsLogger::instance()->getAliases(tank->getUniqueId());
 	if (!aliases.empty())
 	{
-		std::string alias = aliases.front();
-		tank->setName(alias.c_str());
+		LangString alias = LANG_STRING(aliases.front());
+		tank->setName(alias);
 	}
+
+	// Set the tanks rank and skill
+	StatsLogger::TankRank rank = StatsLogger::instance()->tankRank(tank);
+	tank->getScore().setRank(rank.rank);
+	tank->getScore().setSkill(rank.skill);
+	tank->getScore().setStartSkill(rank.skill);
 
 	// Add the tank to the list of tanks
 	ScorchedServer::instance()->getTankContainer().addTank(tank);
@@ -345,7 +353,7 @@ void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,
 	// Tell the clients to create this tank
 	ComsAddPlayerMessage addPlayerMessage(
 		tank->getPlayerId(),
-		tank->getName(),
+		tank->getTargetName(),
 		tank->getColor(),
 		tank->getModelContainer().getTankModelName(),
 		tank->getModelContainer().getTankTypeName(),
@@ -361,12 +369,16 @@ void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,
 		Logger::log(S3D::formatStringBuffer("Player connected dest=\"%i\" id=\"%i\" name=\"%s\" unique=[%s] SUI=[%s]",
 			tank->getDestinationId(),
 			tank->getPlayerId(),
-			tank->getName(),
+			tank->getCStrName().c_str(),
 			tank->getUniqueId(),
 			tank->getSUI()));
 
-		ServerCommon::sendString(0, S3D::formatStringBuffer("Player connected \"%s\"",
-			tank->getName()));
+		ServerChannelManager::instance()->sendText(
+			ChannelText("info", 
+				"PLAYER_CONNECTED",
+				"Player connected \"{0}\"",
+				tank->getTargetName()),
+			true);
 	}
 #endif
 
@@ -381,13 +393,21 @@ void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,
 		if (type == ServerBanned::Muted)	
 		{
 			tank->getState().setMuted(true);
-			ServerCommon::sendStringAdmin(S3D::formatStringBuffer("Player admin muted \"%s\"",
-				tank->getName()));
+			ServerChannelManager::instance()->sendText( 
+				ChannelText("admin", 
+					"PLAYER_ADMIN_MUTED", 
+					"Player admin muted \"{0}\"",
+					tank->getTargetName()),
+					true);
 		}
 		else if (type == ServerBanned::Flagged)
 		{
-			ServerCommon::sendStringAdmin(S3D::formatStringBuffer("Player admin flagged \"%s\"",
-				tank->getName()));
+			ServerChannelManager::instance()->sendText( 
+				ChannelText("admin",
+					"PLAYER_ADMIN_FLAGGED",
+					"Player admin flagged \"{0}\"",
+					tank->getTargetName()),
+					true);
 		}
 	}
 }

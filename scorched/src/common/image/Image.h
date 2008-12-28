@@ -30,6 +30,8 @@ public:
 	virtual ~Image();
 
 	virtual unsigned char *getBits() = 0;
+	virtual unsigned char *getBitsOffset(int offset);
+	virtual unsigned char *getBitsPos(int x, int y);
 	virtual int getWidth() = 0;
 	virtual int getHeight() = 0;
 

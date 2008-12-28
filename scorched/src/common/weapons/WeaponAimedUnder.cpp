@@ -53,7 +53,7 @@ bool WeaponAimedUnder::parseXML(AccessoryCreateContext &context, XMLNode *access
 	if (!accessoryNode->getNamedChild("aimedweapon", subNode)) return false;
 
 	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore()->
+	AccessoryPart *accessory = context.getAccessoryStore().
 		createAccessoryPart(context, parent_, subNode);
 	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
 	{
@@ -83,11 +83,11 @@ void WeaponAimedUnder::fireWeapon(ScorchedContext &context,
 	// except it works under ground
 	if (moveUnderground_)
 	{
-		fixed height = context.landscapeMaps->getGroundMaps().
+		fixed height = context.getLandscapeMaps().getGroundMaps().
 			getInterpHeight(position[0], position[1]);
 		if (position[2] < height + 1)
 		{
-			position[2] = context.landscapeMaps->getGroundMaps().
+			position[2] = context.getLandscapeMaps().getGroundMaps().
 				getInterpHeight(position[0], position[1]) / 2;
 		}
 	}
@@ -131,7 +131,7 @@ void WeaponAimedUnder::fireWeapon(ScorchedContext &context,
 	// Add a percetage that we will not fire at any tank
 	maxDist *= (percentageMissChance_.getValue(context)/ 100) + 1;
 
-	RandomGenerator &random = context.actionController->getRandom();
+	RandomGenerator &random = context.getActionController().getRandom();
 
 	// For each war head
 	for (int i=0; i<warHeads_; i++)

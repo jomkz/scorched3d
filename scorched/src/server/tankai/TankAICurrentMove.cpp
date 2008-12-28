@@ -564,7 +564,7 @@ bool TankAICurrentMove::makeMoveShot(Tank *tank,
 
 	ScorchedContext &context = ScorchedServer::instance()->getContext();
 	WeaponMoveTank *moveWeapon = (WeaponMoveTank *)
-		context.accessoryStore->findAccessoryPartByAccessoryId(
+		context.getAccessoryStore().findAccessoryPartByAccessoryId(
 			fuel->getAccessoryId(), "WeaponMoveTank");
 	if (moveWeapon)
 	{
@@ -577,13 +577,12 @@ bool TankAICurrentMove::makeMoveShot(Tank *tank,
 
 		// Can we move to this target at all?
 		MovementMap mmap(
-			context.landscapeMaps->getGroundMaps().getMapWidth(),
-			context.landscapeMaps->getGroundMaps().getMapHeight(),
 			tank, 
 			context);
 		if (!mmap.calculatePosition(FixedVector::fromVector(targetPos), 
 			fixed::fromFloat(totalDistance))) return false;
 		float totalFuel = mmap.getFuel(moveWeapon).asFloat();
+		if (totalFuel <= 5) return false; // Stop it from moving very small amounts
 
 		// Calculate the path
 		MovementMap::MovementMapEntry entry =
@@ -644,11 +643,20 @@ bool TankAICurrentMove::makeGroupShot(Tank *tank,
 	HeightMap &map = 
 		ScorchedServer::instance()->getLandscapeMaps().getGroundMaps().getHeightMap();
 
+	int arenaX = ScorchedServer::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaX();
+	int arenaY = ScorchedServer::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaY();
+	int arenaWidth = ScorchedServer::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaWidth();
+	int arenaHeight = ScorchedServer::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaHeight();
+
 	// Braindead way of finding groupings
 	// For each landscape square
-	for (int y=0; y<map.getMapHeight(); y+=4)
+	for (int y=arenaY; y<arenaY + arenaHeight; y+=4)
 	{
-		for (int x=0; x<map.getMapWidth(); x+=4)
+		for (int x=arenaX; x<arenaX + arenaWidth; x+=4)
 		{
 			GroupingEntry entry;
 			entry.position = Vector(float(x), float(y), map.getHeight(x, y).asFloat());
@@ -733,7 +741,7 @@ bool TankAICurrentMove::useAvailableBatteries(Tank *tank)
 	bool result = false;
 	while (tank->getLife().getLife() < 
 		tank->getLife().getMaxLife() &&
-		tank->getAccessories().getBatteries().getNoBatteries() != 0)
+		tank->getAccessories().getBatteries().canUse())
 	{
 		std::list<Accessory *> &entries =
 			tank->getAccessories().getAllAccessoriesByType(

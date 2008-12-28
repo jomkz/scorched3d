@@ -24,7 +24,7 @@
 #include <set>
 #include <map>
 #include <list>
-#include <string>
+#include <lang/LangString.h>
 #include <time.h>
 
 class ServerBanned
@@ -43,7 +43,7 @@ public:
 	struct BannedEntry
 	{
 		time_t bantime;
-		std::string name;
+		LangString name;
 		std::string uniqueid;
 		std::string SUI;
 		std::string adminname;
@@ -60,7 +60,7 @@ public:
 	BannedType getBanned(const char *unqiueid, const char *SUI);
 	BannedType getBanned(unsigned int ip);
 	void addBanned(unsigned int ip, 
-		const char *name, 
+		const LangString &name, 
 		const char *uniqueId,
 		const char *SUI,
 		BannedType type,
@@ -78,7 +78,7 @@ protected:
 	time_t lastReadTime_;
 
 	void addBannedEntry(unsigned int ip, unsigned int mask,
-		const char *name, const char *unqiueId, const char *SUid, unsigned int bantime,
+		const LangString &name, const char *unqiueId, const char *SUid, unsigned int bantime,
 		BannedType type, const char *adminname, const char *reason);
 
 };

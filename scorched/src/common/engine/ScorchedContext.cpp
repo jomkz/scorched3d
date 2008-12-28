@@ -34,10 +34,10 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <weapons/AccessoryStore.h>
-#include <lua/LUAWrapper.h>
+#include <lua/LUAScriptHook.h>
 
-ScorchedContext::ScorchedContext(const char *name) : 
-	serverMode(false)
+ScorchedContext::ScorchedContext(const char *name, bool server) : 
+	serverMode(server)
 {
 	actionController = new ActionController();
 	accessoryStore = new AccessoryStore();
@@ -56,12 +56,15 @@ ScorchedContext::ScorchedContext(const char *name) :
 	tankTeamScore = new TankTeamScore();
 	targetSpace = new TargetSpace();
 	targetMovement = new TargetMovement();
-	luaWrapper = new LUAWrapper();
+	luaScriptFactory = new LUAScriptFactory();
+	luaScriptHook = new LUAScriptHook(luaScriptFactory,
+		server?"server":"client",
+		server?S3D::getSettingsFile("serverhooks"):S3D::getSettingsFile("clienthooks"));
 
-	viewPoints->setContext(this);
-	actionController->setScorchedContext(this);
-	targetSpace->setContext(this);
-	luaWrapper->setContext(this);
+	getViewPoints().setContext(this);
+	getActionController().setScorchedContext(this);
+	getTargetSpace().setContext(this);
+	luaScriptFactory->setContext(this);
 }
 
 ScorchedContext::~ScorchedContext()

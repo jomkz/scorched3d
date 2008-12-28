@@ -40,25 +40,25 @@ HUDDialog::HUDDialog() :
 {
 	needCentered_ = true;
 
-	nameBox_ = new GLWCheckBoxText(0.0f, 0.0f, "Show Name");
+	nameBox_ = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("SHOW_NAME", "Show Name"));
 	addWidget(nameBox_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
-	sightBox_ = new GLWCheckBoxText(0.0f, 0.0f, "Show Sight");
+	sightBox_ = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("SHOW_SIGHT", "Show Sight"));
 	addWidget(sightBox_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
-	oldSightBox_  = new GLWCheckBoxText(0.0f, 0.0f, "Use Old Sight Position");
+	oldSightBox_  = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("OLD_SIGHT", "Use Old Sight Position"));
 	addWidget(oldSightBox_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
-	colorBox_ = new GLWCheckBoxText(0.0f, 0.0f, "Show Color");
+	colorBox_ = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("SHOW_COLOR", "Show Color"));
 	addWidget(colorBox_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
-	healthBox_ = new GLWCheckBoxText(0.0f, 0.0f, "Show Health");
+	healthBox_ = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("SHOW_HEALTH", "Show Health"));
 	addWidget(healthBox_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
-	iconBox_ = new GLWCheckBoxText(0.0f, 0.0f, "Show Icon");
+	iconBox_ = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("SHOW_ICON", "Show Icon"));
 	addWidget(iconBox_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
 
 	GLWPanel *buttonPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
-	GLWButton *cancelButton = new GLWTextButton("Cancel", 95, 10, 105, this, 
+	GLWButton *cancelButton = new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 95, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX);
 	cancelId_ = cancelButton->getId();
 	buttonPanel->addWidget(cancelButton, 0, SpaceRight, 10.0f);
-	GLWButton *okButton = new GLWTextButton("Ok", 235, 10, 55, this, 
+	GLWButton *okButton = new GLWTextButton(LANG_RESOURCE("OK", "Ok"), 235, 10, 55, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX);
 	okId_ = okButton->getId();
 	buttonPanel->addWidget(okButton);

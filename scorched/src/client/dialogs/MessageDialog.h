@@ -48,8 +48,8 @@ public:
 protected:
 	static MessageDialog *instance_;
 	float showTime_;
-	std::string currentText_;
-	std::list<std::string> texts_;
+	LangString currentText_;
+	std::list<LangString> texts_;
 
 private:
 	MessageDialog();

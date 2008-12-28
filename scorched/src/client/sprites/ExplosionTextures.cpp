@@ -22,6 +22,7 @@
 #include <XML/XMLFile.h>
 #include <sprites/ExplosionTextures.h>
 #include <landscape/Landscape.h>
+#include <lang/LangResource.h>
 #include <common/Defines.h>
 #include <stdio.h>
 
@@ -62,7 +63,7 @@ bool ExplosionTextures::addTextureToSet(GLTextureSet &set,
 
 bool ExplosionTextures::createTextures(ProgressCounter *counter)
 {
-	if (counter) counter->setNewOp("Explosion Textures");
+	if (counter) counter->setNewOp(LANG_RESOURCE("EXPLOSION_TEXTURES", "Explosion Textures"));
 
 	std::string file1 = S3D::getDataFile("data/textures/smoke01.bmp");
 	ImageHandle bitmap = ImageFactory::loadImageHandle(file1.c_str(), file1.c_str(), false);

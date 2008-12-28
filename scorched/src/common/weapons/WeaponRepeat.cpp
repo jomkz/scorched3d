@@ -43,7 +43,7 @@ bool WeaponRepeat::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 	if (!accessoryNode->getNamedChild("repeatweapon", subNode)) return false;
 
 	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore()->
+	AccessoryPart *accessory = context.getAccessoryStore().
 		createAccessoryPart(context, parent_, subNode);
 	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
 	{
@@ -83,7 +83,7 @@ void WeaponRepeat::weaponCallback(
 
 	if (userData > 1)
 	{
-		context.actionController->addAction(
+		context.getActionController().addAction(
 			new CallbackWeapon("WeaponRepeat", this, delay_.getValue(context), userData - 1, 
 				weaponContext, position, velocity));
 	}

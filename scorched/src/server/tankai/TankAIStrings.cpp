@@ -60,7 +60,7 @@ const char *TankAIStrings::getPlayerName()
 const char *TankAIStrings::getAIPlayerName(ScorchedContext &context)
 {
 	static unsigned int counter = 0;
-	if (context.optionsGame->getRandomizeBotNames())
+	if (context.getOptionsGame().getRandomizeBotNames())
 	{
 		counter = (int) rand();
 	}
@@ -72,10 +72,10 @@ const char *TankAIStrings::getAIPlayerName(ScorchedContext &context)
 
 const char *TankAIStrings::getDeathLine(ScorchedContext &context)
 {
-	RandomGenerator &generator = context.actionController->getRandom();
+	RandomGenerator &generator = context.getActionController().getRandom();
 	const char *deathLine = 0;
 	fixed percentage = 
-		fixed(context.optionsGame->getComputersDeathTalk());
+		fixed(context.getOptionsGame().getComputersDeathTalk());
 	fixed talkPer = generator.getRandFixed() * 100;
 	if (talkPer < percentage)
 	{
@@ -88,10 +88,10 @@ const char *TankAIStrings::getDeathLine(ScorchedContext &context)
 
 const char *TankAIStrings::getAttackLine(ScorchedContext &context)
 {
-	RandomGenerator &generator = context.actionController->getRandom();
+	RandomGenerator &generator = context.getActionController().getRandom();
 	const char *attackLine = 0;
 	fixed percentage = 
-		fixed(context.optionsGame->getComputersAttackTalk());
+		fixed(context.getOptionsGame().getComputersAttackTalk());
 	fixed talkPer = generator.getRandFixed() * 100;
 	if (talkPer < percentage)
 	{

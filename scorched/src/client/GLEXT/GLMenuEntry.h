@@ -26,10 +26,13 @@
 
 class GLTexture;
 class Image;
-class GLMenuEntry : public GLWSelectorI
+class GLMenuEntry : public GLWSelectorI, public ToolTipI
 {
 public:
-	GLMenuEntry(char *menuName, 
+	GLMenuEntry(
+		const LangString &menuName,
+		char *menuNameInternal, 
+		const LangString &menuDescription,
 		float width, 
 		unsigned int state,
 		GLMenuI *callback,
@@ -38,6 +41,7 @@ public:
 	virtual ~GLMenuEntry();
 
 	bool click(float currentTop, int x, int y);
+	bool inMenu(float currentTop, int x, int y);
 	unsigned int getState() { return state_; }
 	void draw(float currentTop, float currentLeft);
 
@@ -47,12 +51,16 @@ public:
 	float getW() { return width_; }
 	float getH() { return height_; }
 	bool getSelected() { return selected_; }
-	const char *getName() { return menuName_.c_str(); }
+	LangString &getName() { return menuName_; }
+	const char *getNameInternal() { return menuNameInternal_.c_str(); }
 	GLMenuI *getCallback() { return callback_; }
+	ToolTip &getToolTip() { return toolTip_; }
 	unsigned int getFlags() { return flags_; }
 
 	virtual void itemSelected(GLWSelectorEntry *entry, int position);
 	virtual void noItemSelected();
+
+	virtual void populateCalled(unsigned int id);
 
 protected:
 	bool selected_;
@@ -62,9 +70,11 @@ protected:
 	unsigned int flags_;
 	GLMenuI *callback_;
 	GLTexture *texture_;
+	ToolTip toolTip_;
 	Image *icon_;
 	std::list<GLMenuItem> menuItems_;
-	std::string menuName_;
+	LangString menuName_, menuDescription_;
+	std::string menuNameInternal_;
 
 	void drawText();
 	void drawIcon();

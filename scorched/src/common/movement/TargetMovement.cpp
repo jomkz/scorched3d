@@ -47,11 +47,11 @@ void TargetMovement::generate(ScorchedContext &context)
 	}
 
 	LandscapeTex &tex = 
-		*context.landscapeMaps->getDefinitions().getTex();
+		*context.getLandscapeMaps().getDefinitions().getTex();
 	LandscapeDefn &defn = 
-		*context.landscapeMaps->getDefinitions().getDefn();
+		*context.getLandscapeMaps().getDefinitions().getDefn();
 	RandomGenerator random;
-	random.seed(context.landscapeMaps->getDefinitions().getSeed());
+	random.seed(context.getLandscapeMaps().getDefinitions().getSeed());
 
 	addMovements(context, random, tex.texDefn.includes);
 	addMovements(context, random, defn.texDefn.includes);
@@ -103,7 +103,7 @@ void TargetMovement::addMovementType(ScorchedContext &context,
 	}
 }
 
-void TargetMovement::simulate(fixed frameTime)
+void TargetMovement::simulate(ScorchedContext &context, fixed frameTime)
 {
 	std::vector<TargetMovementEntry *>::iterator itor;
 	for (itor = movements_.begin();
@@ -111,7 +111,7 @@ void TargetMovement::simulate(fixed frameTime)
 		itor++)
 	{
 		TargetMovementEntry *movementEntry = *itor;
-		movementEntry->simulate(frameTime * 20);
+		movementEntry->simulate(context, frameTime * 20);
 	}
 }
 

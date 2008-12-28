@@ -22,6 +22,7 @@
 #include <water/WaterWaveDistance.h>
 #include <water/Water2Patches.h>
 #include <landscapemap/LandscapeMaps.h>
+#include <lang/LangResource.h>
 #include <client/ScorchedClient.h>
 #include <graph/OptionsDisplay.h>
 #include <common/OptionsTransient.h>
@@ -51,9 +52,9 @@ void WaterWaves::generateWaves(float waterHeight, ProgressCounter *counter)
 	if (!OptionsDisplay::instance()->getDrawWater()) return;
 
 	int mapWidth = ScorchedClient::instance()->getLandscapeMaps().
-		getGroundMaps().getMapWidth();
+		getGroundMaps().getLandscapeWidth();
 	int mapHeight = ScorchedClient::instance()->getLandscapeMaps().
-		getGroundMaps().getMapHeight();
+		getGroundMaps().getLandscapeHeight();
 
 	// Wave points
 	WaterWaveContext context;
@@ -69,11 +70,11 @@ void WaterWaves::generateWaves(float waterHeight, ProgressCounter *counter)
 		context.pointsWidth * context.pointsHeight * sizeof(bool));
 
 	// Find all of the points that are equal to a certain height (the water height)
-	if (counter) counter->setNewOp("Creating Breakers 1");
+	if (counter) counter->setNewOp(LANG_RESOURCE("CREATING_BREAKERS_1", "Creating Breakers 1"));
 	findPoints(&context, waterHeight, counter);
 
 	// Find the list of points that are next to eachother
-	if (counter) counter->setNewOp("Creating Breakers 2");
+	if (counter) counter->setNewOp(LANG_RESOURCE("CREATING_BREAKERS_2", "Creating Breakers 2"));
 	while (findNextPath(&context, waterHeight, counter)) {}
 
 	ImageHandle waves1 = ImageFactory::loadAlphaImageHandle(

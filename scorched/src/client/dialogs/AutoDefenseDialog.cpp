@@ -36,6 +36,7 @@
 #include <client/ClientState.h>
 #include <client/ClientDefenseHandler.h>
 #include <client/ScorchedClient.h>
+#include <lang/LangResource.h>
 
 AutoDefenseDialog::AutoDefenseDialog() :
 	GLWWindow("Auto Defense", 10.0f, 10.0f, 440.0f, 280.0f, 0,
@@ -51,22 +52,24 @@ AutoDefenseDialog::AutoDefenseDialog() :
 	ddpara_ = (GLWDropDownText *) addWidget(new GLWDropDownText(120, 170, 420),
 		0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
 	ddpara_->setHandler(this);
-	ddpara_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Enable Parachutes",
-		"Choose to enable parachutes before the\n"
-		"beginning of the next round."));
+	ddpara_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("ENABLE_PARACHUTES", "Enable Parachutes"),
+		LANG_RESOURCE("ENABLE_PARACHUTES_TOOLTIP", "Choose to enable parachutes before the\n"
+		"beginning of the next round.")));
 	ddshields_ = (GLWDropDownText *) addWidget(new GLWDropDownText(120, 200, 420),
 		0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
-	ddshields_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, "Choose Shields",
-		"Choose the shield to use at the beginning\n"
-		"of the next round."));
+	ddshields_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("CHOOSE_SHIELDS", "Choose Shields"),
+		LANG_RESOURCE("CHOOSE_SHIELDS_TOOLTIP", "Choose the shield to use at the beginning\n"
+		"of the next round.")));
 	ddshields_->setHandler(this);
 
 	GLWPanel *buttonPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
-	GLWButton *cancelButton = new GLWTextButton("Cancel", 95, 10, 105, this, 
+	GLWButton *cancelButton = new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 95, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX);
 	cancelId_ = cancelButton->getId();
 	buttonPanel->addWidget(cancelButton, 0, SpaceRight, 10.0f);
-	GLWButton *okButton = new GLWTextButton("Ok", 235, 10, 55, this, 
+	GLWButton *okButton = new GLWTextButton(LANG_RESOURCE("OK", "Ok"), 235, 10, 55, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX);
 	okId_ = okButton->getId();
 	buttonPanel->addWidget(okButton);
@@ -169,73 +172,51 @@ void AutoDefenseDialog::displayCurrent()
 	// Put information at the top of the dialog
 	topPanel_->clear();
 	topPanel_->addWidget(new GLWFlag(tank->getColor(), 5, 15, 60));
-	topPanel_->addWidget(new GLWLabel(75, 10, tank->getName()));
+	topPanel_->addWidget(new GLWLabel(75, 10, tank->getTargetName()));
 	topPanel_->addWidget(new GLWLabel(260, 20, 
-		S3D::formatStringBuffer("$%i", tank->getScore().getMoney())));
+		LANG_STRING(S3D::formatStringBuffer("$%i", tank->getScore().getMoney()))));
 	topPanel_->addWidget(new GLWLabel(260, 0,
-		S3D::formatStringBuffer("Round %i of %i", 
-		ScorchedClient::instance()->getOptionsTransient().getCurrentRoundNo(),
-		ScorchedClient::instance()->getOptionsGame().getNoRounds())));
+		LANG_RESOURCE_2("ROUND_OF", "Round {0} of {1}",
+		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsTransient().getCurrentRoundNo()),
+		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsGame().getNoRounds()))));
 
 	// Put shields info
-	static ToolTip shieldsOffTip(ToolTip::ToolTipHelp, "Shields Off",
-		"Turns off shields.");
+	static ToolTip shieldsOffTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("SHIELDS_OFF", "Shields Off"),
+		LANG_RESOURCE("SHIELDS_OFF_TOOLTIP", "Turns off shields."));
 	ddshields_->clear();
 	std::list<Accessory *>::iterator shieldsItor;
 	std::list<Accessory *> &shields =
 		tank->getAccessories().getAllAccessoriesByType(
 			AccessoryPart::AccessoryShield);
-	ddshields_->addEntry(GLWSelectorEntry("Shields Off", &shieldsOffTip));
+	ddshields_->addEntry(GLWSelectorEntry(LANG_RESOURCE("SHIELDS_OFF", "Shields Off"), &shieldsOffTip));
 	for (shieldsItor = shields.begin();
 		shieldsItor != shields.end();
 		shieldsItor++)
 	{
 		Accessory *shield = (*shieldsItor);
-		int shieldcount = tank->getAccessories().getAccessoryCount(shield);
-		char buffer[256];
-		if (shieldcount > 0)
-		{
-			snprintf(buffer, 256, "%s (%i)",
-				shield->getName(),
-				shieldcount);
-		}
-		else
-		{
-			snprintf(buffer, 256, "%s (In)",
-				shield->getName());
-		}
-		ddshields_->addEntry(GLWSelectorEntry(buffer,
+		ddshields_->addEntry(GLWSelectorEntry(
+			tank->getAccessories().getAccessoryAndCountString(shield),
 			&shield->getToolTip(), 0, shield->getTexture()));
 	}
 
 	// Put paras info
-	static ToolTip parachutesOffTip(ToolTip::ToolTipHelp, "Parachutes Off",
-		"Turns off parachutes.");
+	static ToolTip parachutesOffTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("PARACHUTES_OFF", "Parachutes Off"),
+		LANG_RESOURCE("PARACHUTES_OFF_TOOLTIP", "Turns off parachutes."));
 	ddpara_->clear();
 	std::list<Accessory *>::iterator parachutesItor;
 	std::list<Accessory *> &parachutes =
 		tank->getAccessories().getAllAccessoriesByType(
 			AccessoryPart::AccessoryParachute);
-	ddpara_->addEntry(GLWSelectorEntry("Parachutes Off", &parachutesOffTip));
+	ddpara_->addEntry(GLWSelectorEntry(LANG_RESOURCE("PARACHUTES_OFF", "Parachutes Off"), &parachutesOffTip));
 	for (parachutesItor = parachutes.begin();
 		parachutesItor != parachutes.end();
 		parachutesItor++)
 	{
 		Accessory *parachute = (*parachutesItor);
-		int paracount = tank->getAccessories().getAccessoryCount(parachute);
-		char buffer[256];
-		if (paracount > 0)
-		{
-			snprintf(buffer, 256, "%s (%i)",
-				parachute->getName(),
-				paracount);
-		}
-		else
-		{
-			snprintf(buffer, 256, "%s (In)",
-				parachute->getName());
-		}
-		ddpara_->addEntry(GLWSelectorEntry(buffer,
+		ddpara_->addEntry(GLWSelectorEntry(
+			tank->getAccessories().getAccessoryAndCountString(parachute),
 			&parachute->getToolTip(), 0, parachute->getTexture()));
 	}
 
@@ -243,46 +224,24 @@ void AutoDefenseDialog::displayCurrent()
 	Accessory *currentShield = tank->getShield().getCurrentShield();
 	if (currentShield)
 	{
-		char buffer[256];
-		if (tank->getAccessories().getAccessoryCount(currentShield) > 0)
-		{
-			snprintf(buffer, 256, "%s (%i)",
-				currentShield->getName(),
-				tank->getAccessories().getAccessoryCount(currentShield));
-		}
-		else
-		{
-			snprintf(buffer, 256, "%s (In)",
-				currentShield->getName());
-		}
-		ddshields_->setCurrentText(buffer);
+		ddshields_->setCurrentText(
+			tank->getAccessories().getAccessoryAndCountString(currentShield));
 	}
 	else
 	{
-		ddshields_->setCurrentText("Shields Off");
+		ddshields_->setCurrentText(LANG_RESOURCE("SHIELDS_OFF", "Shields Off"));
 	}
 
 	// Set the currently shown items
 	Accessory *currentParachute = tank->getParachute().getCurrentParachute();
 	if (currentParachute)
 	{
-		char buffer[256];
-		if (tank->getAccessories().getAccessoryCount(currentParachute) > 0)
-		{
-			snprintf(buffer, 256, "%s (%i)",
-				currentParachute->getName(),
-				tank->getAccessories().getAccessoryCount(currentParachute));
-		}
-		else
-		{
-			snprintf(buffer, 256, "%s (In)",
-				currentParachute->getName());
-		}
-		ddpara_->setCurrentText(buffer);
+		ddpara_->setCurrentText(
+			tank->getAccessories().getAccessoryAndCountString(currentParachute));
 	}
 	else
 	{
-		ddpara_->setCurrentText("Parachutes Off");
+		ddpara_->setCurrentText(LANG_RESOURCE("PARACHUTES_OFF", "Parachutes Off"));
 	}
 }
 

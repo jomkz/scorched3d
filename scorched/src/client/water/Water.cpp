@@ -104,8 +104,8 @@ void Water::generate(ProgressCounter *counter)
 	Logger::log(S3D::formatStringBuffer("Water time %.3f", timeDifference));
 
 	wTex_->generate(water, counter);
-	wMapPoints_->generate(defn.landscapewidth, defn.landscapewidth);
-	wWaveDistance_->generate(defn.landscapewidth, defn.landscapewidth, height_, counter);
+	wMapPoints_->generate();
+	wWaveDistance_->generate(defn.getLandscapeWidth(), defn.getLandscapeHeight(), height_, counter);
 
 	// Generate the water texture for the spray sprite
 	std::string sprayMaskFile = S3D::getDataFile("data/textures/smoke01.bmp");
@@ -142,6 +142,11 @@ void Water::unBindWaterReflection()
 void Water::drawPoints()
 {
 	wTex_->drawPoints(*wMapPoints_);
+}
+
+GLTexture &Water::getReflectionTexture()
+{
+	return wTex_->getReflectionTexture();
 }
 
 bool Water::explosion(Vector position, float size)
@@ -185,3 +190,7 @@ float Water::getWaveDistance(int x, int y)
 	return wWaveDistance_->getWaveDistance(x, y);
 }
 
+float *Water::getIndexErrors()
+{ 
+	return wMap_->getIndexErrors(); 
+}

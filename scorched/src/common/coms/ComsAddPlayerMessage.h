@@ -30,7 +30,7 @@ public:
 	ComsAddPlayerMessage();
 	ComsAddPlayerMessage(
 		unsigned int playerId,
-		const char *playerName,
+		const LangString &playerName,
 		Vector playerColor,
 		const char *modelName,
 		const char *typeName,
@@ -39,7 +39,7 @@ public:
 		const char *playerType);
 	virtual ~ComsAddPlayerMessage();
 
-	const char *getPlayerName() { return playerName_.c_str(); }
+	const LangString &getPlayerName() { return playerName_; }
 	const char *getPlayerType() { return playerType_.c_str(); }
 	const char *getModelName() { return modelName_.c_str(); }
 	const char *getTankType() { return typeName_.c_str(); }
@@ -60,7 +60,7 @@ protected:
 	unsigned int playerId_;
 	unsigned int destinationId_;
 	unsigned int playerTeam_;
-	std::string playerName_;
+	LangString playerName_;
 	std::string playerType_;
 	std::string modelName_;
 	std::string typeName_;

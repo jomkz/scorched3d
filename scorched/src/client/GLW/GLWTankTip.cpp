@@ -36,6 +36,7 @@
 #include <client/ClientState.h>
 #include <common/Defines.h>
 #include <graph/OptionsDisplay.h>
+#include <lang/LangResource.h>
 
 TankUndoMenu::TankUndoMenu(Tank *tank) :
 	tank_(tank)
@@ -48,9 +49,10 @@ TankUndoMenu::~TankUndoMenu()
 
 void TankUndoMenu::showItems(float x, float y)
 {
-	static ToolTip useTip(ToolTip::ToolTipHelp, "Undo", 
-		"Reverts back to the selected rotation,\n"
-		"elevtaion and power.\n");
+	static ToolTip useTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("UNDO", "Undo"), 
+		LANG_RESOURCE("UNDO_TOOLTIP", "Reverts back to the selected rotation,\n"
+		"elevtaion and power."));
 
 	std::list<GLWSelectorEntry> entries;
 	std::vector<TankPosition::ShotEntry> &oldShots =
@@ -63,7 +65,7 @@ void TankUndoMenu::showItems(float x, float y)
 			i, oldShots[i].power.asFloat(), oldShots[i].ele.asFloat(),
 			(360.0f - oldShots[i].rot.asFloat()));
 		entries.push_back(
-			GLWSelectorEntry(buffer, &useTip, 0, 0, (void *) 
+			GLWSelectorEntry(LANG_STRING(buffer), &useTip, 0, 0, (void *) 
 				((unsigned int) (oldShots.size() - 1 - i))));
 	}
 
@@ -88,36 +90,29 @@ TankFuelTip::~TankFuelTip()
 
 void TankFuelTip::populate()
 {
+	LangString fuelCount = LANG_RESOURCE("OFF", "Off");
 	Accessory *weapon = tank_->getAccessories().getWeapons().getCurrent();
 	if (weapon &&
 		weapon->getPositionSelect() == Accessory::ePositionSelectFuel)
 	{
-		char buffer[128];
-		int count = tank_->getAccessories().getAccessoryCount(weapon);
-		if (count >= 0) snprintf(buffer, 128, "%i", count);
-		else snprintf(buffer, 128, "Infinite");
+		 fuelCount = tank_->getAccessories().getAccessoryAndCountString(weapon);
+	}
 
-		setText(ToolTip::ToolTipHelp, "Fuel", S3D::formatStringBuffer(
-			"Allows the tank to move.\n"
-			"Click to toggle movement mode.\n"
-			"Current Fuel : %s (%s)",
-			weapon->getName(),
-			buffer));
-	}
-	else
-	{
-		setText(ToolTip::ToolTipHelp, "Fuel", S3D::formatStringBuffer(
-			"Allows the tank to move.\n"
-			"Click to toggle movement mode.\n"
-			"Current Fuel : Off"));
-	}
+	setText(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("FUEL", "Fuel"), 
+		LANG_RESOURCE("FUEL_TOOLTIP",
+		"Allows the tank to move.\n"
+		"Click to toggle movement mode.\n"
+		"Current Fuel : ") + fuelCount);
 }
 
 void TankFuelTip::showItems(float x, float y)
 {
-	static ToolTip offTip(ToolTip::ToolTipHelp, "Fuel Off", 
+	static ToolTip offTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("FUEL_OFF", "Fuel Off"), 
+		LANG_RESOURCE("FUEL_OFF_TOOLTIP", 
 		"Don't select fuel or\n"
-		"turn off any fuel.");
+		"turn off any fuel."));
 
 	std::list<GLWSelectorEntry> entries;
 	std::list<Accessory *> &fuels =
@@ -131,25 +126,16 @@ void TankFuelTip::showItems(float x, float y)
 		itor++)
 	{
 		Accessory *current = (*itor);
-		int count = tank_->getAccessories().getAccessoryCount(current);
-
-		char buffer[128];
-		if (count >= 0)
+		if (tank_->getAccessories().canUse(current))
 		{
-			snprintf(buffer, 128, "%s (%i)", 
-				current->getName(),
-				count);
+			entries.push_back(GLWSelectorEntry(
+				tank_->getAccessories().getAccessoryAndCountString(current), 
+				&current->getToolTip(), 
+				(tank_->getAccessories().getWeapons().getCurrent() == current), 
+				current->getTexture(), current));
 		}
-		else
-		{
-			snprintf(buffer, 128, "%s (In)",
-				current->getName());
-		}
-		entries.push_back(GLWSelectorEntry(buffer, &current->getToolTip(), 
-			(tank_->getAccessories().getWeapons().getCurrent() == current), 
-			current->getTexture(), current));
 	}
-	entries.push_back(GLWSelectorEntry("Off", &offTip, 0, 0, 0));
+	entries.push_back(GLWSelectorEntry(LANG_RESOURCE("OFF", "Off"), &offTip, 0, 0, 0));
 	GLWSelector::instance()->showSelector(this, x, y, entries,
 		ClientState::StatePlaying);
 }
@@ -187,44 +173,46 @@ TankBatteryTip::~TankBatteryTip()
 
 void TankBatteryTip::populate()
 {
+	LangString batteryCount = LANG_RESOURCE("INF", "Inf");
+
 	int count = tank_->getAccessories().getBatteries().getNoBatteries();
-	if (count < 0)
+	if (count >= 0)
 	{
-		setText(ToolTip::ToolTipHelp, "Batteries",
-			"Can be used to recharge life.\n"
-			"Each battery gives back 10 life.\n"
-			"Click to use some battery(s).\n"
-			"Batteries : In");
+		batteryCount = LANG_STRING(S3D::formatStringBuffer("%i", count));
 	}
-	else
-	{
-		setText(ToolTip::ToolTipHelp, "Batteries", S3D::formatStringBuffer(
-			"Can be used to recharge life.\n"
-			"Each battery gives back 10 life.\n"
-			"Click to use some battery(s).\n"
-			"Batteries : %i",
-			count));
-	}
+
+	setText(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("BATTERIES", "Batteries"),
+		LANG_RESOURCE("BATTERIES_TOOLTIP", 
+		"Can be used to recharge life.\n"
+		"Each battery gives back 10 life.\n"
+		"Click to use some battery(s).\n"
+		"Batteries : ") + batteryCount);
 }
 
 void TankBatteryTip::showItems(float x, float y)
 {
-	static ToolTip useTip(ToolTip::ToolTipHelp, "Battery", 
-		"Use some batteries");
-	static ToolTip offTip(ToolTip::ToolTipHelp, "Battery Cancel", 
-		"Don't use any batteries");
+	static ToolTip useTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("BATTERY", "Battery"), 
+		LANG_RESOURCE("BATTERY_TOOLTIP", "Use some batteries"));
+	static ToolTip offTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("BATTERY_CANCEL", "Battery Cancel"), 
+		LANG_RESOURCE("BATTERY_CANCEL_TOOLTIP", "Don't use any batteries"));
 	
 	int count = tank_->getAccessories().getBatteries().getNoBatteries();
 	if (count == -1) count = 10;
 
 	std::list<GLWSelectorEntry> entries;
-	for (int i=1; i<=MIN(count,10); i++)
+	if (tank_->getAccessories().getBatteries().canUse())
 	{
-		char buffer[128];
-		snprintf(buffer, 128, "Use %i", i);
-		entries.push_back(GLWSelectorEntry(buffer, &useTip, 0, 0, (void *) i));
+		for (int i=1; i<=MIN(count,10); i++)
+		{
+			entries.push_back(GLWSelectorEntry(
+				LANG_RESOURCE_1("USE_I", "Use {0}", S3D::formatStringBuffer("%i", i)), 
+				&useTip, 0, 0, (void *) i));
+		}
 	}
-	entries.push_back(GLWSelectorEntry("Cancel", &offTip, 0, 0, (void *) 0));
+	entries.push_back(GLWSelectorEntry(LANG_RESOURCE("CANCEL", "Cancel"), &offTip, 0, 0, (void *) 0));
 	GLWSelector::instance()->showSelector(this, x, y, entries,
 		ClientState::StatePlaying);		
 }
@@ -260,9 +248,11 @@ TankShieldTip::~TankShieldTip()
 
 void TankShieldTip::showItems(float x, float y)
 {
-	static ToolTip offTip(ToolTip::ToolTipHelp, "Shield Off", 
+	static ToolTip offTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("SHIELD_OFF", "Shield Off"), 
+		LANG_RESOURCE("SHIELD_OFF_TOOLTIP", 
 		"Don't select a shield or\n"
-		"turn off any current shield");
+		"turn off any current shield"));
 
 	Accessory *currentShield = 
 		tank_->getShield().getCurrentShield();
@@ -279,30 +269,23 @@ void TankShieldTip::showItems(float x, float y)
 		itor++)
 	{
 		Accessory *current = (*itor);
-		int count = tank_->getAccessories().getAccessoryCount(current);
-
-		char buffer[128];
-		if (count >= 0)
+		if (tank_->getAccessories().canUse(current))
 		{
-			snprintf(buffer, 128, "%s (%i)", 
-				current->getName(),
-				count);
+			entries.push_back(GLWSelectorEntry(
+				tank_->getAccessories().getAccessoryAndCountString(current), 
+				&current->getToolTip(), 
+				(currentShield == current), current->getTexture(), current));
 		}
-		else
-		{
-			snprintf(buffer, 128, "%s (In)",
-				current->getName());
-		}
-		entries.push_back(GLWSelectorEntry(buffer, &current->getToolTip(), 
-			(currentShield == current), current->getTexture(), current));
 	}
-	entries.push_back(GLWSelectorEntry("Off", &offTip, 0, 0, 0));
+	entries.push_back(GLWSelectorEntry(LANG_RESOURCE("OFF", "Off"), &offTip, 0, 0, 0));
 	GLWSelector::instance()->showSelector(this, x, y, entries,
 		ClientState::StatePlaying);
 }
 
 void TankShieldTip::populate()
 {
+	LangString shieldsCount = LANG_RESOURCE("OFF", "Off");
+
 	if (tank_->getShield().getCurrentShield())
 	{
 		char buffer[128];
@@ -311,26 +294,22 @@ void TankShieldTip::populate()
 		if (count >= 0) snprintf(buffer, 128, "%i", count);
 		else snprintf(buffer, 128, "Infinite");
 
-		setText(ToolTip::ToolTipHelp, "Shields", S3D::formatStringBuffer(
-			"Protect the tank from taking shot damage.\n"
-			"Shields must be enabled before they take\n"
-			"effect.\n"
-			"Click to enable/disable shields.\n"
-			"Current Shield : %s (%s)\n"
-			"Shield Power : %.0f",
-			tank_->getShield().getCurrentShield()->getName(),
-			buffer,
-			tank_->getShield().getShieldPower().asFloat()));
+		shieldsCount = tank_->getAccessories().getAccessoryAndCountString(
+			tank_->getShield().getCurrentShield());
+		shieldsCount.append(LANG_STRING("\n"));
+		shieldsCount.append(
+			LANG_RESOURCE_1("SHIELD_POWER", "Shield Power : {0}", 
+			S3D::formatStringBuffer("%.0f", tank_->getShield().getShieldPower().asFloat())));
 	}
-	else
-	{
-		setText(ToolTip::ToolTipHelp, "Shields", S3D::formatStringBuffer(
-			"Protect the tank from taking shot damage.\n"
-			"Shields must be enabled before they take\n"
-			"effect.\n"
-			"Click to enable/disable shields.\n"
-			"Current Shield : Off"));
-	}
+
+	setText(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("SHIELDS", "Shields"), 
+		LANG_RESOURCE("SHIELDS_TOOLTIP",
+		"Protect the tank from taking shot damage.\n"
+		"Shields must be enabled before they take\n"
+		"effect.\n"
+		"Click to enable/disable shields.\n"
+		"Current Shield : ") + shieldsCount);
 }
 
 void TankShieldTip::itemSelected(GLWSelectorEntry *entry, int position)
@@ -340,6 +319,23 @@ void TankShieldTip::itemSelected(GLWSelectorEntry *entry, int position)
 	else 
 		TankKeyboardControlUtil::shieldsUpDown(tank_,
 			((Accessory *)entry->getUserData())->getAccessoryId());
+}
+
+TankRankTip::TankRankTip(Tank *tank) : 
+	tank_(tank)
+{
+}
+
+TankRankTip::~TankRankTip()
+{
+}
+
+void TankRankTip::populate()
+{
+	setText(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("RANK", "Rank"),
+		LANG_RESOURCE("RANK_TOOLTIP",
+		"The current online ranking of this player"));
 }
 
 TankHealthTip::TankHealthTip(Tank *tank) : 
@@ -353,13 +349,15 @@ TankHealthTip::~TankHealthTip()
 
 void TankHealthTip::populate()
 {
-	setText(ToolTip::ToolTipHelp, "Life", S3D::formatStringBuffer(
+	setText(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("LIFE", "Life"),
+		LANG_RESOURCE_2("LIFE_TOOLTIP",
 		"The amount of life this player has.\n"
 		"The tank explodes when life reaches 0.\n"
 		"Less weapon power is available with less life.\n"
-		"Life : %.0f/%.0f",
-		tank_->getLife().getLife().asFloat(),
-		tank_->getLife().getMaxLife().asFloat()));
+		"Life : {0}/{1}",
+		S3D::formatStringBuffer("%.0f", tank_->getLife().getLife().asFloat()),
+		S3D::formatStringBuffer("%.0f", tank_->getLife().getMaxLife().asFloat())));
 }
 
 TankParachutesTip::TankParachutesTip(Tank *tank) : 
@@ -373,39 +371,31 @@ TankParachutesTip::~TankParachutesTip()
 
 void TankParachutesTip::populate()
 {
+	LangString parachuteCount = LANG_RESOURCE("OFF", "Off");
+
 	if (tank_->getParachute().getCurrentParachute())
 	{
-		char buffer[128];
-		int count = tank_->getAccessories().getAccessoryCount(
+		parachuteCount = tank_->getAccessories().getAccessoryAndCountString(
 			tank_->getParachute().getCurrentParachute());
-		if (count >= 0) snprintf(buffer, 128, "%i", count);
-		else snprintf(buffer, 128, "Infinite");
+	}
 
-		setText(ToolTip::ToolTipHelp, "Parachutes", S3D::formatStringBuffer(
-			"Prevents the tank from taking damage\n"
-			"when falling.  Must be enabled before\n"
-			"they take effect.\n"
-			"Click to enable/disable parachutes.\n"
-			"Current Parachute : %s (%s)\n",
-			tank_->getParachute().getCurrentParachute()->getName(),
-			buffer));
-	}
-	else
-	{
-		setText(ToolTip::ToolTipHelp, "Parachutes", S3D::formatStringBuffer(
-			"Prevents the tank from taking damage\n"
-			"when falling.  Must be enabled before\n"
-			"they take effect.\n"
-			"Click to enable/disable parachutes.\n"
-			"Current Parachute : Off"));
-	}
+	setText(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("PARACHUTES", "Parachutes"), 
+		LANG_RESOURCE("PARACHUTES_TOOLTIP", 
+		"Prevents the tank from taking damage\n"
+		"when falling.  Must be enabled before\n"
+		"they take effect.\n"
+		"Click to enable/disable parachutes.\n"
+		"Current Parachute : ") + parachuteCount);
 }
 
 void TankParachutesTip::showItems(float x, float y)
 {
-	static ToolTip offTip(ToolTip::ToolTipHelp, "Parachute Off", 
+	static ToolTip offTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("PARACHUTES_OFF", "Parachutes Off"), 
+		LANG_RESOURCE("PARACHUTES_OFF_TOOLTIP", 
 		"Don't select a parachute or\n"
-		"turn off any current parachute");
+		"turn off any current parachute"));
 
 	Accessory *currentParachute = 
 		tank_->getParachute().getCurrentParachute();
@@ -423,24 +413,15 @@ void TankParachutesTip::showItems(float x, float y)
 		itor++)
 	{
 		Accessory *current = (*itor);
-		int count = tank_->getAccessories().getAccessoryCount(current);
-
-		char buffer[128];
-		if (count >= 0)
+		if (tank_->getAccessories().canUse(*itor))
 		{
-			snprintf(buffer, 128, "%s (%i)", 
-				current->getName(),
-				count);
+			entries.push_back(GLWSelectorEntry(
+				tank_->getAccessories().getAccessoryAndCountString(current), 
+				&current->getToolTip(), 
+				(currentParachute == current), current->getTexture(), current));
 		}
-		else
-		{
-			snprintf(buffer, 128, "%s (In)",
-				current->getName());
-		}
-		entries.push_back(GLWSelectorEntry(buffer, &current->getToolTip(), 
-			(currentParachute == current), current->getTexture(), current));
 	}
-	entries.push_back(GLWSelectorEntry("Off", &offTip, 0, 0, 0));
+	entries.push_back(GLWSelectorEntry(LANG_RESOURCE("OFF", "Off"), &offTip, 0, 0, 0));
 	GLWSelector::instance()->showSelector(this, x, y, entries,
 		ClientState::StatePlaying);
 }
@@ -465,27 +446,35 @@ TankAutoDefenseTip::~TankAutoDefenseTip()
 
 void TankAutoDefenseTip::populate()
 {
-	setText(ToolTip::ToolTipHelp, "Auto Defense", S3D::formatStringBuffer(
-		"Allows the tank to raise shields and\n"
-		"activate parachutes before the round\n"
-		"starts.\n"
-		"Click to see auto defense status.\n"
-		"Status : %s",
-		(tank_->getAccessories().getAutoDefense().haveDefense()?
-		"On":"Off (Not Bought)")));
+	LangString status = 
+		tank_->getAccessories().getAutoDefense().haveDefense()?
+		LANG_RESOURCE("ON", "On"):
+		LANG_RESOURCE("OFF_NOT_BOUGHT", "Off (Not Bought)");
+
+
+	setText(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("AUTO_DEFENSE", "Auto Defense"), 
+		LANG_RESOURCE("AUTO_DEFENSE_TOOLTIP",
+			"Allows the tank to raise shields and\n"
+			"activate parachutes before the round\n"
+			"starts.\n"
+			"Click to see auto defense status.\n"
+			"Status : ") + status);
 }
 
 void TankAutoDefenseTip::showItems(float x, float y)
 {
-	static ToolTip useTip(ToolTip::ToolTipHelp, "Auto Defense On", 
-		"Enable the auto defense.");
-	static ToolTip offTip(ToolTip::ToolTipHelp, "Auto Defense Off", 
-		"Disable the auto defense.");
+	static ToolTip useTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("AUTO_DEFENSE_ON", "Auto Defense On"), 
+		LANG_RESOURCE("AUTO_DEFENSE_ENABLE", "Enable the auto defense."));
+	static ToolTip offTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("AUTO_DEFENSE_OFF", "Auto Defense Off"), 
+		LANG_RESOURCE("AUTO_DEFENSE_DISABLE", "Disable the auto defense."));
 	
 	std::list<GLWSelectorEntry> entries;
 	if (tank_->getAccessories().getAutoDefense().haveDefense()) 
-		entries.push_back(GLWSelectorEntry("On", &useTip));
-	else entries.push_back(GLWSelectorEntry("Off", &offTip));
+		entries.push_back(GLWSelectorEntry(LANG_RESOURCE("ON", "On"), &useTip));
+	else entries.push_back(GLWSelectorEntry(LANG_RESOURCE("OFF", "Off"), &offTip));
 	GLWSelector::instance()->showSelector(0, x, y, entries,
 		ClientState::StatePlaying);
 }
@@ -501,29 +490,22 @@ TankWeaponTip::~TankWeaponTip()
 
 void TankWeaponTip::populate()
 {
-	if (tank_->getAccessories().getAccessoryCount(
-		tank_->getAccessories().getWeapons().getCurrent()) > 0)
+	LangString weapon = LANG_RESOURCE("NONE", "None");
+	if (tank_->getAccessories().getWeapons().getCurrent())
 	{
-		setText(ToolTip::ToolTipHelp, "Weapon", S3D::formatStringBuffer(
-			"The currently selected weapon.\n"
-			"Click to change weapon.\n"
-			"Weapon : %s (%i)\n"
-			"Description :\n%s",
-			tank_->getAccessories().getWeapons().getCurrent()->getName(),
-			tank_->getAccessories().getAccessoryCount(
-			tank_->getAccessories().getWeapons().getCurrent()),
+		weapon = tank_->getAccessories().getAccessoryAndCountString(
+			tank_->getAccessories().getWeapons().getCurrent());
+		weapon.append(LANG_STRING("\n"));
+		weapon.append(LANG_RESOURCE_1("DESCRIPTION", "Description : {0}", 
 			tank_->getAccessories().getWeapons().getCurrent()->getDescription()));
 	}
-	else if (tank_->getAccessories().getWeapons().getCurrent())
-	{
-		setText(ToolTip::ToolTipHelp, "Weapon", S3D::formatStringBuffer(
-			"The currently selected weapon.\n"
-			"Click to change weapon.\n"
-			"Weapon : %s (Infinite)\n"
-			"Description :\n%s",
-			tank_->getAccessories().getWeapons().getCurrent()->getName(),
-			tank_->getAccessories().getWeapons().getCurrent()->getDescription()));
-	}
+
+	setText(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("WEAPON", "Weapon"), 
+		LANG_RESOURCE("WEAPON_TOOLTIP", 
+		"The currently selected weapon.\n"
+		"Click to change weapon.\n"
+		"Weapon : ") + weapon);
 }
 
 void TankWeaponTip::showItems(float x, float y)
@@ -543,23 +525,14 @@ void TankWeaponTip::showItems(float x, float y)
 		itor++)
 	{
 		Accessory *weapon = (*itor);
-		int count = tank_->getAccessories().getAccessoryCount(weapon);
-
-		char buffer[128];
-		if (count > 0)
+		if (tank_->getAccessories().canUse(weapon))
 		{
-			snprintf(buffer, 128, "%s (%i)", 
-				weapon->getName(),
-				count);
+			GLWSelectorEntry newEntry(
+				tank_->getAccessories().getAccessoryAndCountString(weapon), 
+				&weapon->getToolTip(), 
+				(currentWeapon == weapon), weapon->getTexture(), weapon);
+			entries.push_back(newEntry);
 		}
-		else
-		{
-			snprintf(buffer, 128, "%s (In)", 
-				weapon->getName());
-		}
-		GLWSelectorEntry newEntry(buffer, &weapon->getToolTip(), 
-			(currentWeapon == weapon), weapon->getTexture(), weapon);
-		entries.push_back(newEntry);
 	}
 	GLWSelector::instance()->showSelector(this, x, y, entries,
 		ClientState::StatePlaying);
@@ -582,12 +555,12 @@ TankPowerTip::~TankPowerTip()
 void TankPowerTip::populate()
 {
 	{
-		setText(ToolTip::ToolTipHelp, "Power", S3D::formatStringBuffer(
-			"The power used to fire the %s.\n"
+		setText(ToolTip::ToolTipHelp, 
+			LANG_RESOURCE("POWER", "Power"), 
+			LANG_RESOURCE_1("POWER_TOOLTIP", 
+			"The power used to fire the current weapon.\n"
 			"Click to revert back to previous settings.\n"
-			"Power : %s",
-			(tank_->getAccessories().getWeapons().getCurrent()?
-			tank_->getAccessories().getWeapons().getCurrent()->getName():"Current Weapon"),
+			"Power : {0}",
 			tank_->getPosition().getPowerString()));
 	}
 }
@@ -603,10 +576,12 @@ TankRotationTip::~TankRotationTip()
 
 void TankRotationTip::populate()
 {
-	setText(ToolTip::ToolTipHelp, "Rotation", S3D::formatStringBuffer(
+	setText(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("ROTATION", "Rotation"), 
+		LANG_RESOURCE_1("ROTATION_TOOLTIP", 
 		"The rotation of the current player's tank turret.\n"
 		"Click to revert back to previous settings.\n"
-		"Rotation : %s",
+		"Rotation : {0}",
 		tank_->getPosition().getRotationString()));
 }
 
@@ -621,26 +596,29 @@ TankElevationTip::~TankElevationTip()
 
 void TankElevationTip::populate()
 {
-	setText(ToolTip::ToolTipHelp, "Elevation", S3D::formatStringBuffer(
+	setText(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("ELEVATION", "Elevation"), 
+		LANG_RESOURCE_1("ELEVATION_TOOLTIP", 
 		"The elevation of the current player's gun.\n"
 		"Click to revert back to previous settings.\n"
-		"Elevation : %s",
+		"Elevation : {0}",
 		tank_->getPosition().getElevationString()));
 }
 
-static void generateTargetTip(std::string &tip, Target *target)
+static void generateTargetTip(LangString &tip, Target *target)
 {
-	tip += S3D::formatStringBuffer(
-		"Life   : %.0f/%.0f", 
-		target->getLife().getLife().asFloat(), 
-		target->getLife().getMaxLife().asFloat());
+	tip.append(LANG_RESOURCE_2("TARGET_LIFE", "Life   : {0}/{1}",
+		S3D::formatStringBuffer("%.0f", target->getLife().getLife().asFloat()),
+		S3D::formatStringBuffer("%.0f", target->getLife().getMaxLife().asFloat())));
+
 	if (target->getShield().getCurrentShield())
 	{
 		Shield *shield = (Shield*) 
 			target->getShield().getCurrentShield()->getAction();
-		tip += S3D::formatStringBuffer("\nShield : %.0f/%.0f",
-			target->getShield().getShieldPower().asFloat(),
-			shield->getPower().asFloat());
+
+		tip.append(LANG_RESOURCE_2("TARGET_SHIELD", "\nShield   : {0}/{1}",
+			S3D::formatStringBuffer("%.0f", target->getShield().getShieldPower().asFloat()),
+			S3D::formatStringBuffer("%.0f", shield->getPower().asFloat())));
 	}
 	if (!target->isTarget())
 	{
@@ -648,14 +626,17 @@ static void generateTargetTip(std::string &tip, Target *target)
 
 		if (tank->getState().getState() != TankState::sNormal)
 		{
-			tip += S3D::formatStringBuffer("\nState : %s",
-				tank->getState().getSmallStateString());
+			tip.append(LANG_RESOURCE_1("TARGET_STATE",
+				"\nState : {0}",
+				tank->getState().getSmallStateString()));;
 		}
-		tip += S3D::formatStringBuffer("\nLives : %i/%i",
-			tank->getState().getLives(),
-			tank->getState().getMaxLives());
-		tip += S3D::formatStringBuffer("\nScore  : %i",
-			tank->getScore().getScore());
+
+		tip.append(LANG_RESOURCE_2("TARGET_LIVES", "\nLives   : {0}/{1}",
+			S3D::formatStringBuffer("%i", tank->getState().getLives()),
+			S3D::formatStringBuffer("%i", tank->getState().getMaxLives())));
+
+		tip.append(LANG_RESOURCE_1("TARGET_SCORE", "\nScore   : {0}",
+			S3D::formatStringBuffer("%i", tank->getScore().getScore())));
 	}
 }
 
@@ -670,9 +651,23 @@ TankTip::~TankTip()
 
 void TankTip::populate()
 {
-	std::string tip;
+	LangString tip;
 	generateTargetTip(tip, tank_);
-	setText(ToolTip::ToolTipInfo, tank_->getName(), tip.c_str());
+
+	if (tank_->getScore().getSkill() >= 0)
+	{
+		tip.append(LANG_RESOURCE_2("TANK_SKILL", "\nSkill   : {0} ({1})",
+			S3D::formatStringBuffer("%i", tank_->getScore().getSkill()),
+			S3D::formatStringBuffer("%i", tank_->getScore().getStartSkill())));
+	}
+
+	if (tank_->getScore().getRank() >= 0) 
+	{
+		tip.append(LANG_RESOURCE_1("TANK_RANK",  "\nRank    : {0}",
+			S3D::formatStringBuffer("%i", tank_->getScore().getRank())));
+	}
+
+	setText(ToolTip::ToolTipInfo, tank_->getTargetName(), tip.c_str());
 }
 
 TargetTip::TargetTip(Target *target) : 
@@ -686,9 +681,9 @@ TargetTip::~TargetTip()
 
 void TargetTip::populate()
 {
-	std::string tip;
+	LangString tip;
 	generateTargetTip(tip, target_);
-	setText(ToolTip::ToolTipInfo, target_->getName(), tip.c_str());
+	setText(ToolTip::ToolTipInfo, target_->getTargetName(), tip);
 }
 
 GLWTargetTips::GLWTargetTips(Target *target) : 
@@ -713,9 +708,12 @@ GLWTankTips::GLWTankTips(Tank *tank) :
 	shieldTip(tank),
 	batteryTip(tank),
 	fuelTip(tank),
-	nameTip(ToolTip::ToolTipHelp, "Player Name",
+	rankTip(tank),
+	nameTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("PLAYER_NAME", "Player Name"),
+		LANG_RESOURCE("PLAYER_CURRENTLY_PLAYING", 
 		"Shows the name of the player currently\n"
-		"making their move.")
+		"making their move."))
 {
 }
 

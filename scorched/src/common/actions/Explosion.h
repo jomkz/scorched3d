@@ -26,18 +26,13 @@
 #include <weapons/Weapon.h>
 #include <common/FixedVector.h>
 
-class WeaponExplosion;
+class ExplosionParams;
 class Explosion : public ActionReferenced
 {
 public:
-	enum DeformType
-	{
-		DeformDown,
-		DeformUp,
-		DeformNone
-	};
-
-	Explosion(FixedVector &position, WeaponExplosion *weapon, 
+	Explosion(FixedVector &position, 
+		ExplosionParams *params,
+		Weapon *weapon, 
 		WeaponFireContext &weaponContext);
 	virtual ~Explosion();
 
@@ -47,10 +42,11 @@ public:
 	virtual void simulate(fixed frameTime, bool &remove);
 	virtual std::string getActionDetails();
 protected:
+	ExplosionParams *params_;
 	bool firstTime_;
 	FixedVector position_;
 	fixed totalTime_;
-	WeaponExplosion *weapon_;
+	Weapon *weapon_;
 	WeaponFireContext weaponContext_;
 	
 };
