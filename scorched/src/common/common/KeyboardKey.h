@@ -49,7 +49,7 @@ public:
 	void addKey(unsigned int position,
 		unsigned int key, unsigned int state);
 	void removeKey(unsigned int position);
-	bool hasKey(unsigned int key, unsigned int state);
+	int keyIndex(unsigned int key, unsigned int state);
 
 	std::vector<KeyEntry> &getKeys() { return keys_; }
 	const char *getName() { return name_.c_str(); }

@@ -40,3 +40,4 @@ Admin users can now change their own passwords
 Added server GUI to client to perform simple add/remove player operations.  Can be used in offline mode too.
 Changed effectiveness of some shields after playing review
 Changed rollers to be less bouncy
+Changed key duplicates to be a warning rather than halting the program

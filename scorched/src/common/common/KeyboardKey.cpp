@@ -78,18 +78,19 @@ bool KeyboardKey::addKeys(std::list<std::string> &keyNames,
 	return true;
 }
 
-bool KeyboardKey::hasKey(unsigned int key, unsigned int state)
+int KeyboardKey::keyIndex(unsigned int key, unsigned int state)
 {
+	int i=0;
 	std::vector<KeyEntry>::iterator itor;
 	for (itor = keys_.begin();
 		itor != keys_.end();
-		itor++)
+		itor++, i++)
 	{
 		KeyEntry &entry = *itor;
 		if (entry.key == key &&
-			entry.state == state) return true;
+			entry.state == state) return i;
 	}
-	return false;
+	return -1;
 }
 
 void KeyboardKey::addKey(unsigned int position,

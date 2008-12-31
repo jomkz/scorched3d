@@ -252,16 +252,18 @@ bool Keyboard::loadKeyFile(bool loadDefaults)
 				itor++)
 			{
 				KeyboardKey::KeyEntry &entry = *itor;
-				if (key->hasKey(entry.key, entry.state))
+				int keyIndex = key->keyIndex(entry.key, entry.state);
+				if (keyIndex != -1)
 				{
 					const char *keyName = "", *stateName = "";
 					KeyboardKey::translateKeyNameValue(entry.key, keyName);
 					KeyboardKey::translateKeyStateValue(entry.state, stateName);
 
 					S3D::dialogMessage("Keyboard", S3D::formatStringBuffer(
-								  "Key \"%s\" and state \"%s\" defined for \"%s\" was also defined for \"%s\"",
-								  keyName, stateName, key->getName(), dupe->getName()));
-					return false;					
+						"Warning: Key \"%s\" and state \"%s\" defined for \"%s\" was also defined for \"%s\"",
+						keyName, stateName, key->getName(), dupe->getName()));
+					
+					key->removeKey(keyIndex);
 				}
 			}
 		}
