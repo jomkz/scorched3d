@@ -52,7 +52,7 @@ protected:
 		std::list<Vector> recievepoints;
 	};
 
-	GLTexture arrowTex_;
+	GLTexture arrowTex_, tankTex_, circleTex_;
 	float arenaX_, arenaY_, arenaWidth_, arenaHeight_;
 	float landscapeWidth_, landscapeHeight_;
 	float animationTime_;

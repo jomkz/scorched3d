@@ -173,6 +173,26 @@ void GLWPlanView::drawMap()
 
 	float maxWidth = MAX(arenaWidth_, arenaHeight_);
 
+	static bool createdTexture = false;
+	if (!createdTexture)
+	{
+		createdTexture = true;
+		ImageHandle logoMap = ImageFactory::loadAlphaImageHandle(
+			S3D::getDataFile("data/windows/arrow_s.png"));
+		arrowTex_.create(logoMap);
+
+		ImageHandle circleTank = ImageFactory::loadImageHandle(
+			S3D::getDataFile("data/textures/circle.bmp"),
+			S3D::getDataFile("data/textures/circlem.bmp"),
+			true);
+		ImageHandle circleSmall = ImageFactory::loadImageHandle(
+			S3D::getDataFile("data/textures/circlew.bmp"),
+			S3D::getDataFile("data/textures/circlem.bmp"),
+			true);
+		tankTex_.create(circleTank);
+		circleTex_.create(circleSmall);
+	}
+
 	glPushMatrix();
 		glTranslatef(x_ + 10.0f, y_ + 10.0f, 0.0f);
 		glScalef((w_ - 20.0f) / maxWidth, (h_ - 20.0f) / maxWidth, 1.0f);
@@ -180,15 +200,9 @@ void GLWPlanView::drawMap()
 			(maxWidth - arenaHeight_) / 2.0f - arenaY_, 0.0f);
 
 		drawTexture();
-
-		{
-			GLState currentState2(GLState::TEXTURE_OFF);
-			drawTanks();
-			drawBuoys();
-		}
-		{
-			drawCameraPointer();
-		}
+		drawTanks();
+		drawBuoys();
+		drawCameraPointer();
 	glPopMatrix();
 
 	drawLines();
@@ -324,15 +338,6 @@ void GLWPlanView::drawCameraPointer()
 	float width = maxWidth / w_ * 10.0f;
 	float height = maxWidth / h_ * 10.0f;
 
-	static bool createdTexture = false;
-	if (!createdTexture)
-	{
-		createdTexture = true;
-		ImageHandle logoMap = ImageFactory::loadAlphaImageHandle(
-			S3D::getDataFile("data/windows/arrow_s.png"));
-		arrowTex_.create(logoMap);
-	}
-
 	arrowTex_.draw();
 
 	// Get camera positions
@@ -362,67 +367,44 @@ void GLWPlanView::drawCameraPointer()
 	glPopMatrix();
 }
 
+static void drawQuad(float x, float y, float w, float h)
+{
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex2f(x + w, y + h);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex2f(x - w, y + h);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex2f(x - w, y - h);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex2f(x + w, y - h);
+}
+
 void GLWPlanView::drawBuoys()
 {
 	//Get the wall type and set the colour accordingly
 	switch(ScorchedClient::instance()->getOptionsTransient().getWallType())
 	{
 	case OptionsTransient::wallWrapAround:
-		glColor3f(0.5f, 0.5f, 0.0f);	// Keep the colours dark on the outside
-		break;				// to try to give a look of shape
+		glColor3f(0.9f, 0.9f, 0.4f);
+		break;
 	case OptionsTransient::wallBouncy:
-		glColor3f(0.0f, 0.0f, 0.5f);
+		glColor3f(0.4f, 0.4f, 0.4f);
 		break;
 	case OptionsTransient::wallConcrete:
-		glColor3f(0.2f, 0.2f, 0.2f);
+		glColor3f(0.6f, 0.6f, 0.6f);
 		break;
-	case OptionsTransient::wallNone:
-		return;
 	default:
 		break;	// should never happen....
 	}
 
 	std::vector<Vector> &points = Landscape::instance()->getPoints().getPoints();
-
-	// Plot the dots, scaling for non-square maps
-	// Draw the dots!
-	//glEnable(GL_POINT_SMOOTH);
-	glPointSize(5.0f);
-	glBegin(GL_POINTS);
-	for (int a=0; a<2; a++)
+	circleTex_.draw();
+	glBegin(GL_QUADS);
+	for (int i=0; i<(int) points.size(); i++)
 	{
-		for (int i=0; i<(int) points.size(); i++)
-		{
-			glVertex3f(points[i][0], points[i][1], 0.0f);
-		}
-
-		if (a == 0)
-		{
-			glEnd();
-
-			switch(ScorchedClient::instance()->getOptionsTransient().getWallType())
-			{
-			case OptionsTransient::wallWrapAround:
-				glColor3f(0.9f, 0.9f, 0.4f);	// Keep the colours dark on the outside
-				break;				// to try to give a look of shape
-			case OptionsTransient::wallBouncy:
-				glColor3f(0.4f, 0.4f, 0.4f);
-				break;
-			case OptionsTransient::wallConcrete:
-				glColor3f(0.6f, 0.6f, 0.6f);
-				break;
-			default:
-				break;	// should never happen....
-			}
-
-			glPointSize(2.0f);
-			glBegin(GL_POINTS);
-		}
+		drawQuad(points[i][0], points[i][1], 6.0f, 6.0f);
 	}
 	glEnd();
-
-	//glDisable(GL_POINT_SMOOTH);
-	glPointSize(1.0f);
 }
 void GLWPlanView::drawTanks()
 {
@@ -433,23 +415,10 @@ void GLWPlanView::drawTanks()
 	if (currentTanks.empty()) return;
 
 	Vector position;
-	//glEnable(GL_POINT_SMOOTH);
 
-	Tank *currentTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
-	if (currentTank)
-	{
-		currentTank->getPosition().getTankPosition().asVector(position);
+	tankTex_.draw();
+	glBegin(GL_QUADS);
 
-		glColor3f(0.0f, 0.0f, 0.0f);
-		glPointSize(10.0f);
-		glBegin(GL_POINTS);
-		glVertex3fv(position);
-		glEnd();
-	}
-
-	glPointSize(7.0f);
-	glBegin(GL_POINTS);
-	glColor3f(0.0f, 0.0f, 0.0f);
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = currentTanks.begin();
 		itor != currentTanks.end();
@@ -458,30 +427,14 @@ void GLWPlanView::drawTanks()
 		Tank *tank = (*itor).second;
 		if (tank->getState().getState() == TankState::sNormal &&
 			!tank->getState().getSpectator())
-		{
-			tank->getPosition().getTankPosition().asVector(position);
-			glVertex3fv(position);
-		}
-	}
-	glEnd();
-
-	glPointSize(5.0f);
-	glBegin(GL_POINTS);
-	for (itor = currentTanks.begin();
-		itor != currentTanks.end();
-		itor++)
-	{
-		Tank *tank = (*itor).second;
-		if (tank->getState().getState() == TankState::sNormal &&
-			!tank->getState().getSpectator())
-		{
-			glColor3fv(tank->getColor());
-			tank->getPosition().getTankPosition().asVector(position);
+		{		
+			tank->getPosition().getTankPosition().asVector(position);			
 
 			if ((flash_ && tank->getState().getReadyState() == TankState::SNotReady) ||
 				tank->getState().getReadyState() == TankState::sReady)
 			{
-				glVertex3fv(position);
+				glColor3fv(tank->getColor());
+				drawQuad(position[0], position[1], 8.0f, 8.0f);
 			}
 
 			TargetRendererImplTank *renderer = (TargetRendererImplTank *)
@@ -498,7 +451,6 @@ void GLWPlanView::drawTanks()
 		}
 	}
 	glEnd();
-	//glDisable(GL_POINT_SMOOTH);
 }
 
 void GLWPlanView::mouseDown(int button, float x, float y, bool &skipRest)
