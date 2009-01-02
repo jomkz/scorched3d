@@ -55,7 +55,7 @@ GLWPlanView::GLWPlanView(float x, float y, float w, float h) :
 	flash_(true), dragging_(false), firstTime_(true),
 	planColor_(1.0f)
 {
-	setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+	setToolTip(new ToolTip(ToolTip::ToolTipHelp,
 		LANG_RESOURCE("PLAN_VIEW", "Plan View"),
 		LANG_RESOURCE("PLAN_VIEW_TOOLTIP", "Shows the position of the the tanks\n"
 		"on a overhead map of the island.\n"
@@ -125,7 +125,7 @@ void GLWPlanView::simulate(float frameTime)
 		{
 			Vector &v = (*recieveitor);
 			if (v[2] > 3.0f) v[2] = 3.0f;
-			v[2] -= frameTime; 
+			v[2] -= frameTime;
 		}
 
 		if (!simulateLine(info))
@@ -176,7 +176,7 @@ void GLWPlanView::drawMap()
 	glPushMatrix();
 		glTranslatef(x_ + 10.0f, y_ + 10.0f, 0.0f);
 		glScalef((w_ - 20.0f) / maxWidth, (h_ - 20.0f) / maxWidth, 1.0f);
-		glTranslatef((maxWidth - arenaWidth_) / 2.0f - arenaX_, 
+		glTranslatef((maxWidth - arenaWidth_) / 2.0f - arenaX_,
 			(maxWidth - arenaHeight_) / 2.0f - arenaY_, 0.0f);
 
 		drawTexture();
@@ -190,18 +190,20 @@ void GLWPlanView::drawMap()
 			drawCameraPointer();
 		}
 	glPopMatrix();
-	glPushMatrix();
-		glTranslatef(x_ + 2.0f, y_ + 2.0f, 0.0f);
-		glScalef(w_ - 4.0f, h_ - 4.0f, 1.0f);
-		{
-			GLState currentState2(GLState::TEXTURE_OFF);
-			drawLines();
-		}
-	glPopMatrix();
+
+	drawLines();
 }
 
 void GLWPlanView::drawLines()
 {
+	if (localPoints_.points.empty() &&
+			dragPoints_.empty()) return;
+
+	GLState currentState2(GLState::TEXTURE_OFF);
+	glPushMatrix();
+	glTranslatef(x_ + 2.0f, y_ + 2.0f, 0.0f);
+	glScalef(w_ - 4.0f, h_ - 4.0f, 1.0f);
+
 	glLineWidth(2.0f);
 	if (!localPoints_.points.empty())
 	{
@@ -222,6 +224,8 @@ void GLWPlanView::drawLines()
 		}
 	}
 	glLineWidth(1.0f);
+
+	glPopMatrix();
 }
 
 bool GLWPlanView::simulateLine(PlayerDrawnInfo &info)
@@ -248,7 +252,7 @@ bool GLWPlanView::simulateLine(PlayerDrawnInfo &info)
 
 void GLWPlanView::drawLine(PlayerDrawnInfo &info)
 {
-	Tank *current = 
+	Tank *current =
 		ScorchedClient::instance()->getTankContainer().getTankById(
 			info.playerId);
 	if (!current)
@@ -282,8 +286,8 @@ void GLWPlanView::drawLine(PlayerDrawnInfo &info)
 				time = 1.0f - (time / 3.0f);
 				glColor4f(
 					current->getColor()[0],
-					current->getColor()[1], 
-					current->getColor()[2], 
+					current->getColor()[1],
+					current->getColor()[2],
 					time);
 				glVertex2f(v[0], v[1]);
 			}
@@ -382,7 +386,7 @@ void GLWPlanView::drawBuoys()
 
 	// Plot the dots, scaling for non-square maps
 	// Draw the dots!
-	glEnable(GL_POINT_SMOOTH);
+	//glEnable(GL_POINT_SMOOTH);
 	glPointSize(5.0f);
 	glBegin(GL_POINTS);
 	for (int a=0; a<2; a++)
@@ -394,7 +398,7 @@ void GLWPlanView::drawBuoys()
 
 		if (a == 0)
 		{
-			glEnd();	
+			glEnd();
 
 			switch(ScorchedClient::instance()->getOptionsTransient().getWallType())
 			{
@@ -417,22 +421,22 @@ void GLWPlanView::drawBuoys()
 	}
 	glEnd();
 
-	glDisable(GL_POINT_SMOOTH);
+	//glDisable(GL_POINT_SMOOTH);
 	glPointSize(1.0f);
 }
 void GLWPlanView::drawTanks()
 {
 	float maxWidth = MAX(arenaWidth_, arenaHeight_);
 
-	std::map<unsigned int, Tank *> &currentTanks = 
+	std::map<unsigned int, Tank *> &currentTanks =
 		ScorchedClient::instance()->getTankContainer().getPlayingTanks();
 	if (currentTanks.empty()) return;
 
 	Vector position;
-	glEnable(GL_POINT_SMOOTH);
+	//glEnable(GL_POINT_SMOOTH);
 
 	Tank *currentTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
-	if (currentTank) 
+	if (currentTank)
 	{
 		currentTank->getPosition().getTankPosition().asVector(position);
 
@@ -442,7 +446,7 @@ void GLWPlanView::drawTanks()
 		glVertex3fv(position);
 		glEnd();
 	}
-	
+
 	glPointSize(7.0f);
 	glBegin(GL_POINTS);
 	glColor3f(0.0f, 0.0f, 0.0f);
@@ -480,21 +484,21 @@ void GLWPlanView::drawTanks()
 				glVertex3fv(position);
 			}
 
-			TargetRendererImplTank *renderer = (TargetRendererImplTank *) 
+			TargetRendererImplTank *renderer = (TargetRendererImplTank *)
 				tank->getRenderer();
 			if (renderer)
 			{
 				GLWToolTip::instance()->addToolTip(&renderer->getTips()->tankTip,
-					GLWTranslate::getPosX() + x_ + 10.0f + 
-						(position[0] - arenaX_ + (maxWidth - arenaWidth_)/2.0f) / maxWidth * (w_ - 20.0f) - 4.0f, 
-					GLWTranslate::getPosY() + y_ + 10.0f + 
-						(position[1] - arenaY_ + (maxWidth - arenaHeight_)/2.0f) / maxWidth * (h_ - 20.0f) - 4.0f, 
+					GLWTranslate::getPosX() + x_ + 10.0f +
+						(position[0] - arenaX_ + (maxWidth - arenaWidth_)/2.0f) / maxWidth * (w_ - 20.0f) - 4.0f,
+					GLWTranslate::getPosY() + y_ + 10.0f +
+						(position[1] - arenaY_ + (maxWidth - arenaHeight_)/2.0f) / maxWidth * (h_ - 20.0f) - 4.0f,
 					8.0f, 8.0f);
 			}
 		}
 	}
 	glEnd();
-	glDisable(GL_POINT_SMOOTH);
+	//glDisable(GL_POINT_SMOOTH);
 }
 
 void GLWPlanView::mouseDown(int button, float x, float y, bool &skipRest)
@@ -515,11 +519,11 @@ void GLWPlanView::mouseDown(int button, float x, float y, bool &skipRest)
 				getLandscapeMaps().getGroundMaps().getArenaHeight();
 
 			float maxWidth = (float) MAX(arenaWidth, arenaHeight);
-			float mapX = (((x - x_ - 10.0f) / (w_ - 20.0f)) * maxWidth) + arenaX_ - 
+			float mapX = (((x - x_ - 10.0f) / (w_ - 20.0f)) * maxWidth) + arenaX_ -
 				(maxWidth - arenaWidth_) / 2.0f;
-			float mapY = (((y - y_ - 10.0f) / (h_ - 20.0f)) * maxWidth) + arenaY_ - 
+			float mapY = (((y - y_ - 10.0f) / (h_ - 20.0f)) * maxWidth) + arenaY_ -
 				(maxWidth - arenaHeight_) / 2.0f;
-			
+
 			if (mapX > arenaX && mapY > arenaY &&
 				mapX < arenaX + arenaWidth &&
 				mapY < arenaY + arenaHeight)
@@ -578,7 +582,7 @@ void GLWPlanView::mouseUp(int button, float x, float y, bool &skipRest)
 	}
 }
 
-void GLWPlanView::addRecievePoints(unsigned int playerId, 
+void GLWPlanView::addRecievePoints(unsigned int playerId,
 	std::list<Vector> &recievepoints)
 {
 	PlayerDrawnInfo *foundInfo = 0;
@@ -601,7 +605,7 @@ void GLWPlanView::addRecievePoints(unsigned int playerId,
 		foundInfo = &dragPoints_.back();
 		foundInfo->playerId = playerId;
 	}
-	
+
 	foundInfo->recievepoints.insert(foundInfo->recievepoints.end(),
 		recievepoints.begin(), recievepoints.end());
 }
