@@ -22,7 +22,7 @@
 #include <GLW/GLWFont.h>
 #include <GLEXT/GLState.h>
 #include <common/Keyboard.h>
-#include <common/ToolTip.h>
+#include <common/ToolTipResource.h>
 #include <client/ScorchedClient.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
@@ -35,13 +35,13 @@ GLWTankSlider::GLWTankSlider() :
 	GLWDragger(0.0f, 0.0f, 0.0f, 100.0f)
 {
 	setHandler(this);
-	setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("POWER", "Power"),
-		LANG_RESOURCE("POWER_CHANGE_TOOLTIP", 
+	setToolTip(new ToolTipResource(ToolTip::ToolTipHelp, 
+		"POWER", "Power",
+		"POWER_CHANGE_TOOLTIP", 
 		"Change the power of the current tank\n"
 		"by clicking with the left mouse button\n"
 		"and dragging up and down.\n"
-		"Shift key decreases sensitivity.")));
+		"Shift key decreases sensitivity."));
 }
 
 GLWTankSlider::~GLWTankSlider()

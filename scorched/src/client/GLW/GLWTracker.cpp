@@ -23,6 +23,7 @@
 #include <GLW/GLWToolTip.h>
 #include <GLEXT/GLState.h>
 #include <common/Keyboard.h>
+#include <common/ToolTipResource.h>
 #include <graph/OptionsDisplay.h>
 #include <client/ScorchedClient.h>
 #include <tank/TankContainer.h>
@@ -86,14 +87,14 @@ GLWTankTracker::GLWTankTracker() :
 	GLWTracker(0.0f, 0.0f, 0.0f, 100.0f)
 {
 	setHandler(this);
-	setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("ROTATION_ELEVATION", "Rotation/Elevation"),
-		LANG_RESOURCE("ROTATION_ELEVATION_TOOLTIP", 
+	setToolTip(new ToolTipResource(ToolTip::ToolTipHelp, 
+		"ROTATION_ELEVATION", "Rotation/Elevation",
+		"ROTATION_ELEVATION_TOOLTIP", 
 		"Change the rotation and elevation of the\n"
 		"current tank by clicking with the left\n"
 		"mouse button and dragging up and down,\n"
 		"left and right.\n"
-		"Shift key decreases sensitivity.")));
+		"Shift key decreases sensitivity."));
 }
 
 GLWTankTracker::~GLWTankTracker()

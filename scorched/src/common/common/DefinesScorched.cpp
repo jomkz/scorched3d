@@ -46,7 +46,7 @@ std::string S3D::ScorchedBuildTime = "Unknown";
 #endif
 static std::string exeName;
 static std::string dataModFile = "none";
-static std::string settingsDir = ".scorched3d";
+static std::string settingsDir = "";
 
 void S3D::showURL(const std::string &url)
 {
@@ -198,6 +198,8 @@ std::string S3D::getSettingsFile(const std::string &filename)
 	static std::string homeDir;
 	if (!homeDir.c_str()[0])
 	{
+		DIALOG_ASSERT(settingsDir.c_str() && settingsDir.c_str()[0]);
+
 		std::string homeDirStr = S3D::getHomeFile(
 			S3D::formatStringBuffer("/%s", settingsDir.c_str()));
 		if (!S3D::dirExists(homeDirStr))

@@ -18,57 +18,28 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <GLW/GLWTankFire.h>
-#include <client/ScorchedClient.h>
-#include <tankgraph/TankKeyboardControlUtil.h>
 #include <common/ToolTipResource.h>
 #include <lang/LangResource.h>
-#include <tank/TankContainer.h>
-#include <tank/TankState.h>
 
-REGISTER_CLASS_SOURCE(GLWTankFire);
-
-GLWTankFire::GLWTankFire() :
-	GLWidget(0.0f, 0.0f, 0.0f, 0.0f)
+ToolTipResource::ToolTipResource(unsigned int type,
+	const std::string &titleKey, const std::string &titleValue,
+	const std::string &textKey, const std::string &textValue) :
+	ToolTip(type),
+	titleKey_(titleKey), titleValue_(titleValue),
+	textKey_(textKey), textValue_(textValue)
 {
-	setToolTip(new ToolTipResource(ToolTip::ToolTipHelp, 
-		"FIRE_CURRENT_WEAPON", "Fire Current Weapon",
-		"FIRE_CURRENT_WEAPON_TOOLTIP", 
-		"Fires the current tanks currently selected\n"
-		"weapon."));
 }
 
-GLWTankFire::~GLWTankFire()
+ToolTipResource::~ToolTipResource()
 {
-
 }
 
-void GLWTankFire::mouseDown(int button, float x, float y, bool &skipRest)
+void ToolTipResource::populate()
 {
-	if (inBox(x, y, x_, y_, w_, h_))
+	if (getText().empty())
 	{
-		dragging_ = true;
+		setText(getType(), 
+			LANG_RESOURCE(titleKey_, titleValue_), 
+			LANG_RESOURCE(textKey_, textValue_));
 	}
 }
-
-void GLWTankFire::mouseUp(int button, float x, float y, bool &skipRest)
-{
-	if (dragging_)
-	{
-		if (inBox(x, y, x_, y_, w_, h_))
-		{
-			Tank *currentTank =
-				ScorchedClient::instance()->getTankContainer().getCurrentTank();
-			if (currentTank)
-			{
-				if (currentTank->getState().getState() == 
-					TankState::sNormal)
-				{
-					TankKeyboardControlUtil::fireShot(currentTank);
-				}
-			}
-		}
-	}
-	dragging_ = false;
-}
-

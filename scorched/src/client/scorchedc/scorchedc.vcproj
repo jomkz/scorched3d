@@ -557,6 +557,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\common\ToolTipResource.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\common\ToolTipResource.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\common\Triangle.cpp"
 				>
 			</File>

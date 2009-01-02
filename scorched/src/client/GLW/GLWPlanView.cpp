@@ -38,6 +38,7 @@
 #include <common/Defines.h>
 #include <common/Logger.h>
 #include <common/OptionsTransient.h>
+#include <common/ToolTipResource.h>
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsLinesMessage.h>
 #include <graph/OptionsDisplay.h>
@@ -55,13 +56,13 @@ GLWPlanView::GLWPlanView(float x, float y, float w, float h) :
 	flash_(true), dragging_(false), firstTime_(true),
 	planColor_(1.0f)
 {
-	setToolTip(new ToolTip(ToolTip::ToolTipHelp,
-		LANG_RESOURCE("PLAN_VIEW", "Plan View"),
-		LANG_RESOURCE("PLAN_VIEW_TOOLTIP", "Shows the position of the the tanks\n"
+	setToolTip(new ToolTipResource(ToolTip::ToolTipHelp,
+		"PLAN_VIEW", "Plan View",
+		"PLAN_VIEW_TOOLTIP", "Shows the position of the the tanks\n"
 		"on a overhead map of the island.\n"
 		"Flashing tanks are still to make a move.\n"
 		"Clicking on the plan will move the camera\n"
-		"to look at that point.")));
+		"to look at that point."));
 }
 
 GLWPlanView::~GLWPlanView()
@@ -394,7 +395,8 @@ void GLWPlanView::drawBuoys()
 		glColor3f(0.6f, 0.6f, 0.6f);
 		break;
 	default:
-		break;	// should never happen....
+		// Wall none
+		return;
 	}
 
 	std::vector<Vector> &points = Landscape::instance()->getPoints().getPoints();

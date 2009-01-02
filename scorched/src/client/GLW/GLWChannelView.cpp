@@ -26,7 +26,7 @@
 #include <image/ImageFactory.h>
 #include <XML/XMLParser.h>
 #include <common/Keyboard.h>
-#include <common/ToolTip.h>
+#include <common/ToolTipResource.h>
 #include <client/ClientChannelManager.h>
 #include <client/ScorchedClient.h>
 #include <sound/SoundUtils.h>
@@ -60,19 +60,19 @@ GLWChannelView::GLWChannelView() :
 	downButton_.setHandler(this);
 	resetButton_.setHandler(this);
 
-	upButton_.setToolTip(new ToolTip(
+	upButton_.setToolTip(new ToolTipResource(
 		ToolTip::ToolTipAlignLeft | ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("CHAT_PREVIOUS", "Chat Previous"), 
-		LANG_RESOURCE("CHAT_PREVIOUS_TOOLTIP", "Show previous chat entry")));
-	downButton_.setToolTip(new ToolTip(
+		"CHAT_PREVIOUS", "Chat Previous", 
+		"CHAT_PREVIOUS_TOOLTIP", "Show previous chat entry"));
+	downButton_.setToolTip(new ToolTipResource(
 		ToolTip::ToolTipAlignLeft | ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("CHAT_NEXT", "Chat Next"), 
-		LANG_RESOURCE("CHAT_NEXT_TOOLTIP", "Show next chat entry")));
-	resetButton_.setToolTip(new ToolTip(
+		"CHAT_NEXT", "Chat Next", 
+		"CHAT_NEXT_TOOLTIP", "Show next chat entry"));
+	resetButton_.setToolTip(new ToolTipResource(
 		ToolTip::ToolTipAlignLeft | ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("CHAT_LAST", "Chat Last"), 
-		LANG_RESOURCE("CHAT_LAST_TOOLTIP", "View end of the chat log, \n"
-		"hide all elapsed entries")));
+		"CHAT_LAST", "Chat Last", 
+		"CHAT_LAST_TOOLTIP", "View end of the chat log, \n"
+		"hide all elapsed entries"));
 }
 
 GLWChannelView::~GLWChannelView()

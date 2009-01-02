@@ -31,7 +31,7 @@
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankColorGenerator.h>
-#include <common/ToolTip.h>
+#include <common/ToolTipResource.h>
 #include <common/Defines.h>
 #include <common/Keyboard.h>
 #include <common/OptionsScorched.h>
@@ -51,10 +51,10 @@ GLWChannelText::GLWChannelText() :
 {
 	view_.setHandler(this);
 	button_.setHandler(this);
-	button_.setToolTip(new ToolTip(
+	button_.setToolTip(new ToolTipResource(
 		ToolTip::ToolTipAlignLeft | ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("CHAT", "Chat"), 
-		LANG_RESOURCE("CHAT_SHOW_TOOLTIP", "Show chat menu")));
+		"CHAT", "Chat", 
+		"CHAT_SHOW_TOOLTIP", "Show chat menu"));
 	prompt_.setChannelView(&view_);
 }
 
