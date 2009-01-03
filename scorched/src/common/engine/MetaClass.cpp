@@ -31,13 +31,21 @@ MetaClass::~MetaClass()
 {
 }
 
-std::map<std::string, MetaClass *> *MetaClassRegistration::classMap = 0;
-
-void MetaClassRegistration::addMap(const char *name, MetaClass *mclass)
+MetaClassFactory::MetaClassFactory()
 {
-	if (!classMap) classMap = new std::map<std::string, MetaClass *>;
+}
 
-	std::map<std::string, MetaClass *>::iterator itor = 
+MetaClassFactory::~MetaClassFactory()
+{
+}
+
+std::map<std::string, MetaClassFactory *> *MetaClassRegistration::classMap = 0;
+
+void MetaClassRegistration::addMap(const char *name, MetaClassFactory *mclass)
+{
+	if (!classMap) classMap = new std::map<std::string, MetaClassFactory *>;
+
+	std::map<std::string, MetaClassFactory *>::iterator itor = 
 		classMap->find(name);
 	DIALOG_ASSERT(itor == classMap->end());
 
@@ -46,14 +54,14 @@ void MetaClassRegistration::addMap(const char *name, MetaClass *mclass)
 
 MetaClass *MetaClassRegistration::getNewClass(const char *name)
 {
-	MetaClass *mclass = getClassReference(name);
-	if (!mclass) return 0;
-	return mclass->getClassCopy();
+	MetaClassFactory *mclassFactory = getFactory(name);
+	if (!mclassFactory) return 0;
+	return mclassFactory->getClassCopy();
 }
 
-MetaClass *MetaClassRegistration::getClassReference(const char *name)
+MetaClassFactory *MetaClassRegistration::getFactory(const char *name)
 {
-	std::map<std::string, MetaClass *>::iterator itor = 
+	std::map<std::string, MetaClassFactory *>::iterator itor = 
 		classMap->find(name);
 	if (itor == classMap->end()) return 0;
 	return (*itor).second;
