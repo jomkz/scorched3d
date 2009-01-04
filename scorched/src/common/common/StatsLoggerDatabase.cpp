@@ -354,7 +354,7 @@ std::string StatsLoggerDatabase::getTopRanks()
 			"select %s from scorched3d_stats "
 			"left join scorched3d_players on scorched3d_stats.playerid = "
 			"scorched3d_players.playerid where seriesid=%i and prefixid=%i "
-			"order by kills desc limit 0,50",
+			"order by skill desc limit 0,50",
 			columns, seriesid_, prefixid_);
 
 	stringResult.append("<table>");
@@ -739,8 +739,8 @@ void StatsLoggerDatabase::periodicUpdate()
 		std::list<StatsLoggerDatabase::RowResult>::iterator playerItor;
 		std::list<StatsLoggerDatabase::RowResult> playerRows =
 			runSelectQuery(
-				"SELECT playerid, kills from scorched3d_stats "
-				"WHERE seriesid=%u and prefixid=%u order by kills desc",
+				"SELECT playerid, skill from scorched3d_stats "
+				"WHERE seriesid=%u and prefixid=%u order by skill desc",
 				seriesid_,
 				prefixid_);
 
@@ -770,43 +770,39 @@ StatsLogger::TankRank StatsLoggerDatabase::tankRank(Tank *tank)
 	if (!success_ || !displayStats_) return result;
 
 	// Try to determine this players sql playerid
-	int kills = 0;
-	std::list<StatsLoggerDatabase::RowResult> killsRows =
-		runSelectQuery("SELECT kills, rank FROM scorched3d_stats "
+	std::list<StatsLoggerDatabase::RowResult> skillRows =
+		runSelectQuery("SELECT skill FROM scorched3d_stats "
 		"WHERE playerid = %i AND prefixid = %i AND seriesid = %i;", 
 		playerId_[tank->getUniqueId()],
 		prefixid_,
 		seriesid_);
-	if (!killsRows.empty())
+	if (!skillRows.empty())
 	{
 		std::list<StatsLoggerDatabase::RowResult>::iterator itor;
-		for (itor = killsRows.begin();
-			itor != killsRows.end();
+		for (itor = skillRows.begin();
+			itor != skillRows.end();
 			itor++)
 		{
 			StatsLoggerDatabase::RowResult &rowResult = (*itor);
-			kills = atoi(rowResult.columns[0].c_str());
-			result.skill = atoi(rowResult.columns[1].c_str());
+			result.skill = atoi(rowResult.columns[0].c_str());
 		}
-	}
 
-	std::list<StatsLoggerDatabase::RowResult> countRows =
-		runSelectQuery("SELECT count(*) FROM scorched3d_stats "
-		"WHERE kills > \"%i\" AND prefixid = %i AND seriesid = %i;", 
-		kills,
-		prefixid_,
-		seriesid_);
-	if (!countRows.empty())
-	{
-		std::list<StatsLoggerDatabase::RowResult>::iterator itor;
-		for (itor = countRows.begin();
-			itor != countRows.end();
-			itor++)
+		std::list<StatsLoggerDatabase::RowResult> countRows =
+			runSelectQuery("SELECT count(*) FROM scorched3d_stats "
+			"WHERE skill > \"%i\" AND prefixid = %i AND seriesid = %i;", 
+			result.skill,
+			prefixid_,
+			seriesid_);
+		if (!countRows.empty())
 		{
-			StatsLoggerDatabase::RowResult &rowResult = (*itor);
-
-			int rank = atoi(rowResult.columns[0].c_str()) + 1;
-			result.rank = rank;
+			std::list<StatsLoggerDatabase::RowResult>::iterator itor;
+			for (itor = countRows.begin();
+				itor != countRows.end();
+				itor++)
+			{
+				StatsLoggerDatabase::RowResult &rowResult = (*itor);
+				result.rank = atoi(rowResult.columns[0].c_str()) + 1;
+			}
 		}
 	}
 

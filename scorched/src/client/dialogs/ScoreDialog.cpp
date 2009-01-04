@@ -26,6 +26,7 @@
 #include <tank/TankScore.h>
 #include <tank/TankState.h>
 #include <tank/TankAvatar.h>
+#include <tankgraph/TargetRendererImplTank.h>
 #include <tankai/TankAI.h>
 #include <GLW/GLWFont.h>
 #include <GLW/GLWWindowManager.h>
@@ -432,7 +433,18 @@ void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
 	float textX = x_;
 	float textY  = y_ + h_ - y - lineSpacer - 25.0f;
 	bool currentPlayer = false;
-	
+
+	TargetRendererImplTank *renderer = (TargetRendererImplTank *)
+		current->getRenderer();
+	if (renderer)
+	{
+		GLWToolTip::instance()->addToolTip(&renderer->getTips()->tankTip,
+			textX,
+			textY,
+			x_ + w_ - textX, 
+			10.0f);
+	}
+
 	// Print a highlight behind the current clients player
 	if (!current->getState().getSpectator() &&
 		current->getDestinationId() == 
