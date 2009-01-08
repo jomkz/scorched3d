@@ -4,4 +4,6 @@
 	<passwd></passwd>
 	<db>scorched3d</db>
 	<prefix></prefix>
+	<!-- Either the path to the mysql socket or the mysql port number -->
+	<port></port> 
 </mysql>

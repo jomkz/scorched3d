@@ -79,7 +79,9 @@ void StatsLoggerDatabase::createLogger()
 	if (!file.readFile(fileName) ||
 		!file.getRootNode())
 	{
-		Logger::log(S3D::formatStringBuffer("Failed to parse %s settings file. Error: %s", 
+		S3D::dialogExit("Stats Logging",
+			S3D::formatStringBuffer(
+			"Failed to parse %s settings file. Error: %s", 
 			fileName.c_str(),
 			file.getParserError()));
 		return;
@@ -92,7 +94,9 @@ void StatsLoggerDatabase::createLogger()
 		!file.getRootNode()->getNamedChild("db", db) ||
 		!file.getRootNode()->getNamedChild("prefix", prefix)) 
 	{
-		Logger::log(S3D::formatStringBuffer("Failed to parse %s settings file.", fileName.c_str()));
+		S3D::dialogExit("Stats Logging", 
+			S3D::formatStringBuffer(
+			"Failed to parse %s settings file.", fileName.c_str()));
 		return;
 	}
 
@@ -100,7 +104,12 @@ void StatsLoggerDatabase::createLogger()
 	success_ = false;
 	if (!connectDatabase(host.c_str(), port.c_str(), 
 		user.c_str(), passwd.c_str(), 
-		db.c_str())) return;
+		db.c_str()))
+	{
+		S3D::dialogExit("Stats Logging",
+			"Failed to connect to stats database");
+		return;
+	}
 	success_ = true;
 
 	// Add event types
@@ -344,7 +353,7 @@ std::string StatsLoggerDatabase::getTopRanks()
         if (!success_) return "";
 
 	const char *columns = 
-		"kills, deaths, selfkills, teamkills, shots, wins, "
+		"rank, kills, deaths, selfkills, teamkills, shots, wins, "
 		"overallwinner, resigns, gamesplayed, timeplayed, roundsplayed, "
 		"moneyearned, skill, name";
 
@@ -962,6 +971,10 @@ void StatsLoggerDatabase::tankConnected(Tank *tank)
 		playerId,
 		prefixid_,
 		seriesid_);
+
+	TankRank rank = StatsLogger::instance()->tankRank(tank);
+        tank->getScore().setRank(rank.rank);
+        tank->getScore().setSkill(rank.skill);
 }
 
 void StatsLoggerDatabase::tankJoined(Tank *tank)

@@ -341,12 +341,6 @@ void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,
 		tank->setName(alias);
 	}
 
-	// Set the tanks rank and skill
-	StatsLogger::TankRank rank = StatsLogger::instance()->tankRank(tank);
-	tank->getScore().setRank(rank.rank);
-	tank->getScore().setSkill(rank.skill);
-	tank->getScore().setStartSkill(rank.skill);
-
 	// Add the tank to the list of tanks
 	ScorchedServer::instance()->getTankContainer().addTank(tank);
 

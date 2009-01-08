@@ -43,6 +43,12 @@ TankScore::~TankScore()
 
 }
 
+void TankScore::setSkill(int skill)
+{
+	skill_ = skill;
+	if (startSkill_ == 0) startSkill_ = skill;
+}
+
 void TankScore::newMatch()
 {
 	resetTotalEarnedStats();

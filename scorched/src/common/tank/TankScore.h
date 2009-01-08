@@ -68,10 +68,9 @@ public:
 	void setRank(int rank) { rank_ = rank; }
 
 	int getSkill() { return skill_; }
-	void setSkill(int skill) { skill_ = skill; }
+	void setSkill(int skill);
 
 	int getStartSkill() { return startSkill_; }
-	void setStartSkill(int skill) { startSkill_ = skill; }
 
 	std::set<unsigned int> &getHurtBy() { return hurtBy_; }
 
