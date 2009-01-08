@@ -479,11 +479,11 @@ void TankDamage::logDeath()
 
 	if (firedTank)
 	{
-		int skillChange = TankScore::calcSkillDifference(
-			firedTank, killedTank, weapon_->getArmsLevel());
-
 		if (damagedPlayerId_ == firedPlayerId)
 		{
+			int skillChange = -50;
+			firedTank->getScore().setSkill(firedTank->getScore().getSkill() + skillChange);
+
 			StatsLogger::instance()->
 				tankSelfKilled(firedTank, weapon_);
 			StatsLogger::instance()->
@@ -502,6 +502,9 @@ void TankDamage::logDeath()
 		else if ((context_->getOptionsGame().getTeams() > 1) &&
 				(firedTank->getTeam() == killedTank->getTeam())) 
 		{
+			int skillChange = -50;
+			firedTank->getScore().setSkill(firedTank->getScore().getSkill() + skillChange);
+
 			StatsLogger::instance()->
 				tankTeamKilled(firedTank, killedTank, weapon_);
 			StatsLogger::instance()->
@@ -520,6 +523,19 @@ void TankDamage::logDeath()
 		}
 		else
 		{
+			int skillChange = 0;
+			if (firedTank->getPlayerId() != 0 && killedTank->getPlayerId() != 0) 
+			{
+				float weaponMult = (float(weapon_->getArmsLevel()) / 10.0f) + 1.0f;
+				skillChange = int(
+					(20.0f * weaponMult) / 
+					(1.0f + powf(10.0f, (
+					float(firedTank->getScore().getSkill() - killedTank->getScore().getSkill()) / 1000.0f)))
+					);
+			}
+			firedTank->getScore().setSkill(firedTank->getScore().getSkill() + skillChange);
+			killedTank->getScore().setSkill(killedTank->getScore().getSkill() - skillChange);
+
 			StatsLogger::instance()->
 				tankKilled(firedTank, killedTank, weapon_);
 			StatsLogger::instance()->

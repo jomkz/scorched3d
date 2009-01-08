@@ -91,8 +91,6 @@ public:
 	bool writeMessage(NetBuffer &buffer);
 	bool readMessage(NetBufferReader &reader);
 
-	static int calcSkillDifference(Tank *firedTank, Tank *deadTank, int weaponLevel);
-
 protected:
 	Tank *tank_;
 	std::set<unsigned int> hurtBy_;

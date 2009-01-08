@@ -45,6 +45,7 @@ TankScore::~TankScore()
 
 void TankScore::setSkill(int skill)
 {
+	if (skill < 0) skill = 0;
 	skill_ = skill;
 	if (startSkill_ == 0) startSkill_ = skill;
 }
@@ -157,19 +158,4 @@ void TankScore::resetTotalEarnedStats()
 {
 	totalScoreEarned_ = 0;
 	totalMoneyEarned_ = 0;
-}
-
-int TankScore::calcSkillDifference(Tank *firedTank, Tank *deadTank, int weaponLevel)
-{
-	if (firedTank->getPlayerId() == 0 || deadTank->getPlayerId() == 0) return 0;
-	if (firedTank == deadTank) return -50;
-
-	float weaponMult = (float(weaponLevel) / 10.0f) + 1.0f;
-
-	int skillDiff = int(
-		(20.0f * weaponMult) / 
-		(1.0f + powf(10.0f, (
-		float(firedTank->getScore().getSkill() - deadTank->getScore().getSkill()) / 1000.0f)))
-		);
-	return skillDiff;
 }

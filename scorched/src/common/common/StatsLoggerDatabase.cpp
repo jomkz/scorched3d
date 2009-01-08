@@ -973,8 +973,8 @@ void StatsLoggerDatabase::tankConnected(Tank *tank)
 		seriesid_);
 
 	TankRank rank = StatsLogger::instance()->tankRank(tank);
-        tank->getScore().setRank(rank.rank);
-        tank->getScore().setSkill(rank.skill);
+    tank->getScore().setRank(rank.rank);
+    tank->getScore().setSkill(rank.skill);
 }
 
 void StatsLoggerDatabase::tankJoined(Tank *tank)
@@ -1110,67 +1110,16 @@ void StatsLoggerDatabase::tankKilled(Tank *firedTank, Tank *deadTank, Weapon *we
 		playerId_[deadTank->getUniqueId()], 
 		weaponId_[weapon->getParent()->getName()]);
 
-	// Update both players skill points
-	std::list<StatsLoggerDatabase::RowResult> skillRows =
-		runSelectQuery("SELECT a.skill, b.skill FROM "
-		"scorched3d_stats as a, scorched3d_stats as b "
-		"WHERE a.playerid = %i AND b.playerid = %i AND a.prefixid = %i "
-		"AND a.seriesid = %i AND b.prefixid = %i AND b.seriesid = %i;",
-		playerId_[firedTank->getUniqueId()],
-		playerId_[deadTank->getUniqueId()],
-		prefixid_,
-		seriesid_,
-		prefixid_,
-		seriesid_);
-	if (!skillRows.empty())
-	{
-		std::list<StatsLoggerDatabase::RowResult>::iterator itor;
-		for (itor = skillRows.begin();
-			itor != skillRows.end();
-			itor++)
-		{
-			StatsLoggerDatabase::RowResult &rowResult = (*itor);
-
-			firedTank->getScore().setSkill(atoi(rowResult.columns[0].c_str()));
-			deadTank->getScore().setSkill(atoi(rowResult.columns[1].c_str()));
-
-			int skillDiff = 
-				TankScore::calcSkillDifference(firedTank, deadTank, weapon->getArmsLevel());
-			if (skillDiff != 0)
-			{
-				firedTank->getScore().setSkill(firedTank->getScore().getSkill() + skillDiff);
-
-				runQuery("UPDATE scorched3d_stats SET skill=%i "
-					"WHERE playerid = %i AND prefixid = %i AND seriesid = %i;", 
-					firedTank->getScore().getSkill(),
-					playerId_[firedTank->getUniqueId()],
-					prefixid_,
-					seriesid_);
-
-				if (firedTank != deadTank)
-				{
-					deadTank->getScore().setSkill(deadTank->getScore().getSkill() - skillDiff);
-					if (deadTank->getScore().getSkill() < 0) deadTank->getScore().setSkill(0);
-
-					runQuery("UPDATE scorched3d_stats SET skill=%i "
-						"WHERE playerid = %i AND prefixid = %i AND seriesid = %i;", 
-						deadTank->getScore().getSkill(),
-						playerId_[deadTank->getUniqueId()],
-						prefixid_,
-						seriesid_);
-				}
-			}
-		}
-	}
-
-	runQuery("UPDATE scorched3d_stats SET kills=kills+1 "
+	runQuery("UPDATE scorched3d_stats SET kills=kills+1, skill=%i "
 		"WHERE playerid = %i AND prefixid = %i AND seriesid = %i;", 
+		firedTank->getScore().getSkill(),
 		playerId_[firedTank->getUniqueId()],
 		prefixid_,
 		seriesid_);
 		
-	runQuery("UPDATE scorched3d_stats SET deaths=deaths+1 "
+	runQuery("UPDATE scorched3d_stats SET deaths=deaths+1, skill=%i "
 		"WHERE playerid = %i AND prefixid = %i AND seriesid = %i;", 
+		deadTank->getScore().getSkill(),
 		playerId_[deadTank->getUniqueId()],
 		prefixid_,
 		seriesid_);
@@ -1190,8 +1139,9 @@ void StatsLoggerDatabase::tankTeamKilled(Tank *firedTank, Tank *deadTank, Weapon
 		playerId_[deadTank->getUniqueId()], 
 		weaponId_[weapon->getParent()->getName()]);
 
-	runQuery("UPDATE scorched3d_stats SET teamkills=teamkills+1 "
+	runQuery("UPDATE scorched3d_stats SET teamkills=teamkills+1, skill=%i  "
 		"WHERE playerid = %i AND prefixid = %i AND seriesid = %i;", 
+		firedTank->getScore().getSkill(),
 		playerId_[firedTank->getUniqueId()],
 		prefixid_,
 		seriesid_);
@@ -1216,14 +1166,9 @@ void StatsLoggerDatabase::tankSelfKilled(Tank *firedTank, Weapon *weapon)
 		playerId_[firedTank->getUniqueId()],
 		weaponId_[weapon->getParent()->getName()]);
 
-	runQuery("UPDATE scorched3d_stats SET selfkills=selfkills+1 "
+	runQuery("UPDATE scorched3d_stats SET selfkills=selfkills+1, deaths=deaths+1, skill=%i "
 		"WHERE playerid = %i AND prefixid = %i AND seriesid = %i;", 
-		playerId_[firedTank->getUniqueId()],
-		prefixid_,
-		seriesid_);
-		
-	runQuery("UPDATE scorched3d_stats SET deaths=deaths+1 "
-		"WHERE playerid = %i AND prefixid = %i AND seriesid = %i;", 
+		firedTank->getScore().getSkill(),
 		playerId_[firedTank->getUniqueId()],
 		prefixid_,
 		seriesid_);
@@ -1241,8 +1186,9 @@ void StatsLoggerDatabase::tankWon(Tank *tank)
 		EventWon,
 		playerId_[tank->getUniqueId()]);
 
-	runQuery("UPDATE scorched3d_stats SET wins=wins+1 "
+	runQuery("UPDATE scorched3d_stats SET wins=wins+1, skill=%i  "
 		"WHERE playerid = %i AND prefixid = %i AND seriesid = %i;", 
+		tank->getScore().getSkill(),
 		playerId_[tank->getUniqueId()],
 		prefixid_,
 		seriesid_);
@@ -1260,8 +1206,9 @@ void StatsLoggerDatabase::tankOverallWinner(Tank *tank)
 		EventOverallWinner,
 		playerId_[tank->getUniqueId()]);
 
-	runQuery("UPDATE scorched3d_stats SET overallwinner=overallwinner+1 "
+	runQuery("UPDATE scorched3d_stats SET overallwinner=overallwinner+1, skill=%i "
 		"WHERE playerid = %i AND prefixid = %i AND seriesid = %i;",
+		tank->getScore().getSkill(),
 		playerId_[tank->getUniqueId()],
 		prefixid_,
 		seriesid_);
