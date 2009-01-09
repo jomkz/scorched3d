@@ -132,7 +132,9 @@ bool ComsSyncCheckMessage::readMessage(NetBufferReader &reader)
 	if (!reader.getFromBuffer(serverSyncNo)) return false;
 
 	bool printOutput = false;
-	std::string output;
+	std::string output = S3D::formatStringBuffer(
+		"SyncCheck %i - Action Diffs",
+		syncCount);
 	for (int s=0; s<MAX(serverSyncNo, clientSyncNo); s++)
 	{
 		std::string clientsync, serversync;
@@ -177,7 +179,7 @@ bool ComsSyncCheckMessage::readMessage(NetBufferReader &reader)
 			
 			if (actualheight != sentheight) 
 			{
-				syncCheckLog(S3D::formatStringBuffer("%i %i", 
+				syncCheckLog(S3D::formatStringBuffer("*** %i %i", 
 					actualheight.getInternal(), sentheight.getInternal()));
 				heightDiffs++;
 			}
@@ -264,9 +266,10 @@ bool ComsSyncCheckMessage::readMessage(NetBufferReader &reader)
 				if (reader.getReadSize() + i >= reader.getBufferSize() ||
 					tmpBuffer.getBuffer()[i] != reader.getBuffer()[reader.getReadSize() + i])
 				{
-					syncCheckLog(S3D::formatStringBuffer("SyncCheck %i - Targets values differ : %u:%s, position %i", 
-							syncCount, playerId, 
-							target->getCStrName().c_str(), i));
+					syncCheckLog(S3D::formatStringBuffer(
+						"SyncCheck %i - Targets values differ : %u:%s, position %i", 
+						syncCount, playerId, 
+						target->getCStrName().c_str(), i));
 
 					different = true;
 					Logger::addLogger(syncCheckFileLogger);

@@ -38,6 +38,7 @@ public:
 
 	// Add an action to be simulated
 	void addAction(Action *action);
+	void addLastAction(Action *action);
 	bool noReferencedActions();
 	void resetTime();
 	void clear(bool warn = false);
@@ -100,7 +101,7 @@ protected:
 	ScorchedContext *context_;
 	EventContainer events_;
 	RandomGenerator random_;
-	std::list<Action *> newActions_;
+	std::list<Action *> newActions_, newLastActions_;
 	std::vector<std::string> syncCheck_;
 	ActionList actions_;
 	std::map<std::string, int> actionProfile_;
@@ -117,6 +118,7 @@ protected:
 	bool allEvents();
 	void stepActions(fixed frameTime);
 	void addNewActions();
+	void addNewLastActions();
 
 };
 

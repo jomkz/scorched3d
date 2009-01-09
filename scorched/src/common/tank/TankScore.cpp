@@ -32,7 +32,7 @@ static const int maxMoney = 999999;
 TankScore::TankScore(ScorchedContext &context) : 
 	context_(context), 
 	totalMoneyEarned_(0), totalScoreEarned_(0),
-	rank_(-1), tank_(0), skill_(0), startSkill_(0)
+	rank_(-1), tank_(0), skill_(1000), startSkill_(1000)
 {
 	startTime_ = lastStatTime_ = time(0);
 	newMatch();

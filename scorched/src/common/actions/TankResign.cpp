@@ -27,6 +27,7 @@
 #include <common/Defines.h>
 #include <common/ChannelManager.h>
 #include <common/OptionsScorched.h>
+#include <common/StatsLogger.h>
 #include <lang/LangResource.h>
 
 TankResign::TankResign(unsigned int playerId) :
@@ -104,6 +105,8 @@ void TankResign::simulate(fixed frameTime, bool &remove)
 				tank->getState().setLives(
 					tank->getState().getLives() - 1);
 			}
+
+			StatsLogger::instance()->tankResigned(tank);
 
 #ifndef S3D_SERVER
 			{

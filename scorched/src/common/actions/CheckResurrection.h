@@ -18,25 +18,21 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ShotStateh_INCLUDE__)
-#define __INCLUDE_ShotStateh_INCLUDE__
+#if !defined(__INCLUDE_CheckResurrectionh_INCLUDE__)
+#define __INCLUDE_CheckResurrectionh_INCLUDE__
 
-#include <engine/ScorchedContext.h>
-#include <engine/PlayShots.h>
+#include <engine/ActionReferenced.h>
 
-// Sends out the new game message
-class ShotState
+class CheckResurrection : public ActionReferenced
 {
 public:
-	ShotState(ScorchedContext &context, PlayShots &playShots);
-	virtual ~ShotState();
+	CheckResurrection();
+	virtual ~CheckResurrection();
 
-	void setup();
-	bool run(float frameTime);
+	virtual void init();
+	virtual void simulate(fixed frameTime, bool &remove);
 
 protected:
-	ScorchedContext &context_;
-	PlayShots &playShots_;
 	bool firstTime_;
 
 };

@@ -32,7 +32,7 @@ public:
 
 	struct TankRank
 	{
-		TankRank() : rank(-1), skill(-1) {}
+		TankRank() : rank(-1), skill(1000) {}
 
 		int rank;
 		int skill;

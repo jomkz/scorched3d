@@ -28,6 +28,7 @@
 #include <lang/LangResource.h>
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
+#include <common/Logger.h>
 
 static struct AllowedStateTransitions
 {
@@ -187,11 +188,27 @@ bool TankState::writeMessage(NetBuffer &buffer)
 bool TankState::readMessage(NetBufferReader &reader)
 {
 	int s;
-	if (!reader.getFromBuffer(s)) return false;
+	if (!reader.getFromBuffer(s))
+	{
+		Logger::log("TankState::state_ read failed");
+		return false;
+	}
 	state_ = (TankState::State) s;
 	setState((TankState::State) s);
-	if (!reader.getFromBuffer(spectator_)) return false;
-	if (!reader.getFromBuffer(lives_)) return false;
-	if (!reader.getFromBuffer(maxLives_)) return false;
+	if (!reader.getFromBuffer(spectator_))
+	{
+		Logger::log("TankState::spectator_ read failed");
+		return false;
+	}
+	if (!reader.getFromBuffer(lives_))
+	{
+		Logger::log("TankState::lives_ read failed");
+		return false;
+	}
+	if (!reader.getFromBuffer(maxLives_))
+	{
+		Logger::log("TankState::maxLives_ read failed");
+		return false;
+	}
 	return true;
 }

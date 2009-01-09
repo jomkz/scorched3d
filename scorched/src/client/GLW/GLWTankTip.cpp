@@ -654,14 +654,14 @@ void TankTip::populate()
 	LangString tip;
 	generateTargetTip(tip, tank_);
 
-	if (tank_->getScore().getSkill() >= 0)
+	if (tank_->getScore().getSkill() > 0)
 	{
 		tip.append(LANG_RESOURCE_2("TANK_SKILL", "\nSkill   : {0} ({1})",
 			S3D::formatStringBuffer("%i", tank_->getScore().getSkill()),
 			S3D::formatStringBuffer("%i", tank_->getScore().getStartSkill())));
 	}
 
-	if (tank_->getScore().getRank() >= 0) 
+	if (tank_->getScore().getRank() > 0) 
 	{
 		tip.append(LANG_RESOURCE_1("TANK_RANK",  "\nRank    : {0}",
 			S3D::formatStringBuffer("%i", tank_->getScore().getRank())));

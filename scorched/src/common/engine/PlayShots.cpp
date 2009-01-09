@@ -82,7 +82,7 @@ bool PlayShots::haveShot(unsigned int playerId)
 	return (itor != messages_.end());
 }
 
-void PlayShots::playShots(ScorchedContext &context, bool roundStart)
+void PlayShots::playShots(ScorchedContext &context)
 {
 	std::map<unsigned int, ComsPlayedMoveMessage *>::iterator itor;
 	for (itor = messages_.begin();
@@ -101,79 +101,58 @@ void PlayShots::playShots(ScorchedContext &context, bool roundStart)
 			tank->getScore().setMissedMoves(0);
 
 			// Actually play the move
-			processPlayedMoveMessage(
-				context, *message, tank, roundStart);
+			processPlayedMoveMessage(context, *message, tank);
 		}
 	}
 }
 
 void PlayShots::processPlayedMoveMessage(ScorchedContext &context, 
-	ComsPlayedMoveMessage &message, Tank *tank, bool roundStart)
+	ComsPlayedMoveMessage &message, Tank *tank)
 {
-	if (roundStart)
+	// All actions that are done at the very START of a new round
+	switch (message.getType())
 	{
-		// All actions that are done at the very START of a new round
-		switch (message.getType())
-		{
-			case ComsPlayedMoveMessage::eShot:
-				processFiredMessage(context, message, tank);
-				break;
-			case ComsPlayedMoveMessage::eSkip:
-				// Just do nothing as the player has requested
-				// That they skip their move
-				break;
-			case ComsPlayedMoveMessage::eFinishedBuy:
-				// Just used as a notification that the player
-				// has finished buying, do nothing
-				break;
-			case ComsPlayedMoveMessage::eResign:
-				if (context.getOptionsGame().getResignMode() == OptionsGame::ResignStart)
-				{
-					processResignMessage(context, message, tank);
-				}
-				else if (context.getOptionsGame().getResignMode() == OptionsGame::ResignDueToHealth)
-				{
-					if (tank->getLife().getMaxLife() / 2 <= tank->getLife().getLife())
-					{
-						processResignMessage(context, message, tank);
-					}
-				}
-				break;
-			default:
-				// add other START round types
-				break;
-		}
-	}
-	else
-	{
-		// All actions that are done at the very END of a round
-		switch (message.getType())
-		{
-			case ComsPlayedMoveMessage::eResign:
-				if (context.getOptionsGame().getResignMode() == OptionsGame::ResignEnd ||
-					context.getOptionsGame().getResignMode() == OptionsGame::ResignDueToHealth)
-				{
-					processResignMessage(context, message, tank);
-				}
-				break;
-			default:
-				// Add other END round types
-				break;
-		}
+		case ComsPlayedMoveMessage::eShot:
+			processFiredMessage(context, message, tank);
+			break;
+		case ComsPlayedMoveMessage::eSkip:
+			// Just do nothing as the player has requested
+			// That they skip their move
+			break;
+		case ComsPlayedMoveMessage::eFinishedBuy:
+			// Just used as a notification that the player
+			// has finished buying, do nothing
+			break;
+		case ComsPlayedMoveMessage::eResign:
+			processResignMessage(context, message, tank);
+			break;
+		default:
+			break;
 	}
 }
 
 void PlayShots::processResignMessage(ScorchedContext &context, 
 	ComsPlayedMoveMessage &message, Tank *tank)
 {
-	// Check the tank is alive
-	if (tank->getState().getState() == TankState::sNormal)
-	{
-		// Tank resign action
-		TankResign *resign = new TankResign(tank->getPlayerId());
+	TankResign *resign = new TankResign(tank->getPlayerId());
+	if (context.getOptionsGame().getResignMode() == OptionsGame::ResignStart)
+	{					
 		context.getActionController().addAction(resign);
-
-		StatsLogger::instance()->tankResigned(tank);
+	}
+	else if (context.getOptionsGame().getResignMode() == OptionsGame::ResignDueToHealth)
+	{
+		if (tank->getLife().getMaxLife() / 2 <= tank->getLife().getLife())
+		{
+			context.getActionController().addAction(resign);
+		}
+		else
+		{
+			context.getActionController().addLastAction(resign);
+		}
+	}
+	else 
+	{
+		context.getActionController().addLastAction(resign);
 	}
 }
 

@@ -39,19 +39,16 @@ public:
 	void createMessage(ComsPlayMovesMessage &message);
 	void readMessage(ComsPlayMovesMessage &message);
 
-	void playShots(ScorchedContext &context, bool roundStart);
+	void playShots(ScorchedContext &context);
 
 protected:
-	static PlayShots *instance_;
-	std::map<unsigned int, ComsPlayedMoveMessage *> 
-		messages_;
+	std::map<unsigned int, ComsPlayedMoveMessage *> messages_;
 
 	void processPlayedMoveMessage(
-		ScorchedContext &context, ComsPlayedMoveMessage &message, Tank *tank,
-		bool roundStart);
-	void processResignMessage(
 		ScorchedContext &context, ComsPlayedMoveMessage &message, Tank *tank);
 	void processFiredMessage(
+		ScorchedContext &context, ComsPlayedMoveMessage &message, Tank *tank);
+	void processResignMessage(
 		ScorchedContext &context, ComsPlayedMoveMessage &message, Tank *tank);
 };
 

@@ -59,6 +59,21 @@ void ActionController::clear(bool warn)
 	}
 	newActions_.clear();
 
+	// New Last actions
+	for (newItor = newLastActions_.begin();
+		newItor != newLastActions_.end();
+		newItor++)
+	{
+		Action *act = *newItor;
+		if (warn)
+		{
+			Logger::log(S3D::formatStringBuffer("Warning: removing added timed out action %s, %s",
+				act->getActionType().c_str(), (act->getReferenced()?"Ref":"UnRef")));
+		}
+		delete act;
+	}
+	newLastActions_.clear();
+
 	// Current actions
 	for (int a=0; a<actions_.actionCount; a++)
 	{
@@ -101,9 +116,10 @@ bool ActionController::allEvents()
 
 void ActionController::logActions()
 {
-	Logger::log(S3D::formatStringBuffer("ActionLog : Time %.2f, New %i, Ref %i",
+	Logger::log(S3D::formatStringBuffer("ActionLog : Time %.2f, New %i, New Last %i, Ref %i",
 		time_.asFloat(),
 		(int) newActions_.size(), 
+		(int) newLastActions_.size(),
 		referenceCount_));
 	for (int a=0; a<actions_.actionCount; a++)
 	{
@@ -136,8 +152,10 @@ void ActionController::logProfiledActions()
 
 bool ActionController::noReferencedActions()
 {
-	bool finished = (newActions_.empty() && 
-		(referenceCount_ == 0));
+	bool finished = 
+		newActions_.empty() && 
+		newLastActions_.empty() &&
+		(referenceCount_ == 0);
 
 	if (actionTracing_)
 	{
@@ -214,6 +232,25 @@ void ActionController::addAction(Action *action)
 	}
 }
 
+void ActionController::addLastAction(Action *action)
+{
+	newLastActions_.push_back(action);
+}
+
+void ActionController::addNewLastActions()
+{
+	if (newActions_.empty() &&
+		referenceCount_ == 0)
+	{
+		while (!newLastActions_.empty())
+		{
+			Action *action = newLastActions_.front(); 
+			addAction(action);			
+			newLastActions_.pop_front();
+		}
+	}
+}
+
 void ActionController::addNewActions()
 {
 	while (!newActions_.empty())
@@ -265,6 +302,9 @@ void ActionController::simulate(const unsigned state, float ft)
 
 void ActionController::stepActions(fixed frameTime)
 {
+	// Ensure any new last actions are added
+	addNewLastActions();
+
 	// Ensure any new actions are added
 	addNewActions();
 

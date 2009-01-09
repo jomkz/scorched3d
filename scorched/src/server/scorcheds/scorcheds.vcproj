@@ -1805,6 +1805,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\actions\CheckResurrection.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\CheckResurrection.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\actions\Explosion.cpp"
 				>
 			</File>

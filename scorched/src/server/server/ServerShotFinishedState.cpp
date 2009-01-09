@@ -372,7 +372,6 @@ bool ServerShotFinishedState::scoreWinners()
 		// Get the new tanks rank
 		StatsLogger::TankRank rank = StatsLogger::instance()->tankRank(tank);
 		tank->getScore().setRank(rank.rank);
-		tank->getScore().setSkill(rank.skill);
 	}
 
 	// Its the very last round, score the overall winner

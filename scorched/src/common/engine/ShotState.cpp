@@ -20,8 +20,7 @@
 
 #include <engine/ShotState.h>
 #include <engine/ActionController.h>
-#include <actions/Resurrection.h>
-#include <placement/PlacementTankPosition.h>
+#include <actions/CheckResurrection.h>
 #include <coms/ComsMessageSender.h>
 #include <common/Logger.h>
 #include <common/RandomGenerator.h>
@@ -97,11 +96,11 @@ void ShotState::setup()
 
 	// Add all shots that should be run at the start of the round
 	// to the action controller
-	playShots_.playShots(context_, true);
+	playShots_.playShots(context_);
+	context_.getActionController().addLastAction(new CheckResurrection());
 
 	// Reset the amount of time taken
 	firstTime_ = true;
-	lastTime_ = false;
 
 	// Add all of the new events
 	context_.getActionController().getEvents().initialize(context_);
@@ -119,57 +118,14 @@ bool ShotState::run(float frameTime)
 	}
 	else
 	{
-		if (!lastTime_)
-		{
-			lastTime_ = true;
+		// We have finished all shots
+		Logger::log(S3D::formatStringBuffer(
+			"Finished playing Shots %.2f seconds", 
+				context_.getActionController().getActionTime().asFloat()));
+		context_.getActionController().getEvents().clear();
+		context_.getActionController().logProfiledActions();
 
-			// Add all the shots that should be run at the end of the round
-			// to the action controller
-			playShots_.playShots(context_, false);
-			
-			// Resurect any tanks that have more lives
-			resurectTanks();
-		}
-		else
-		{
-			// We have finished all shots
-			Logger::log(S3D::formatStringBuffer(
-				"Finished playing Shots %.2f seconds", 
-					context_.getActionController().getActionTime().asFloat()));
-			context_.getActionController().getEvents().clear();
-			context_.getActionController().logProfiledActions();
-
-			return true;
-		}
+		return true;
 	}
 	return false;
-}
-
-void ShotState::resurectTanks()
-{
-	std::map<unsigned int, Tank *> &tanks =
-		context_.getTankContainer().getPlayingTanks();
-	std::map<unsigned int, Tank *>::iterator itor;
-	for (itor = tanks.begin();
-		itor != tanks.end();
-		itor++)
-	{
-		Tank *tank = (*itor).second;
-
-		// Check for any dead tanks that can be rezed
-		if (!tank->getState().getSpectator() &&
-			tank->getState().getState() == TankState::sDead &&
-			(tank->getState().getLives() > 0 ||
-			tank->getState().getMaxLives() == 0))
-		{
-			FixedVector tankPos = PlacementTankPosition::placeTank(
-				tank->getPlayerId(), tank->getTeam(),
-				context_,
-				context_.getActionController().getRandom());
-
-			Resurrection *rez = new Resurrection(
-				tank->getPlayerId(), tankPos);
-			context_.getActionController().addAction(rez);
-		}
-	}	
 }
