@@ -24,6 +24,7 @@
 #include <engine/ScorchedContext.h>
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
+#include <common/Logger.h>
 
 // The maximum amount of money allowed by anyone
 // Range limited to 0 -> maxMoney
@@ -134,15 +135,51 @@ bool TankScore::writeMessage(NetBuffer &buffer)
 
 bool TankScore::readMessage(NetBufferReader &reader)
 {
-	if (!reader.getFromBuffer(kills_)) return false;
-	if (!reader.getFromBuffer(turnKills_)) return false;
-	if (!reader.getFromBuffer(assists_)) return false;
-	if (!reader.getFromBuffer(money_)) return false;
-	if (!reader.getFromBuffer(wins_)) return false;
-	if (!reader.getFromBuffer(score_)) return false;
-	if (!reader.getFromBuffer(rank_)) return false;
-	if (!reader.getFromBuffer(skill_)) return false;
-	if (!reader.getFromBuffer(startSkill_)) return false;
+	if (!reader.getFromBuffer(kills_))
+	{
+		Logger::log("TankScore::kills_ read failed");
+		return false;
+	}
+	if (!reader.getFromBuffer(turnKills_))
+	{
+		Logger::log("TankScore::turnKills_ read failed");
+		return false;
+	}
+	if (!reader.getFromBuffer(assists_))
+	{
+		Logger::log("TankScore::assists_ read failed");
+		return false;
+	}
+	if (!reader.getFromBuffer(money_))
+	{
+		Logger::log("TankScore::money_ read failed");
+		return false;
+	}
+	if (!reader.getFromBuffer(wins_))
+	{
+		Logger::log("TankScore::wins_ read failed");
+		return false;
+	}
+	if (!reader.getFromBuffer(score_))
+	{
+		Logger::log("TankScore::score_ read failed");
+		return false;
+	}
+	if (!reader.getFromBuffer(rank_))
+	{
+		Logger::log("TankScore::rank_ read failed");
+		return false;
+	}
+	if (!reader.getFromBuffer(skill_))
+	{
+		Logger::log("TankScore::skill_ read failed");
+		return false;
+	}
+	if (!reader.getFromBuffer(startSkill_))
+	{
+		Logger::log("TankScore::startSkill_ read failed");
+		return false;
+	}
 	return true;
 }
 
