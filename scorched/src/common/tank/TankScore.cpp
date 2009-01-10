@@ -130,6 +130,14 @@ bool TankScore::writeMessage(NetBuffer &buffer)
 	buffer.addToBuffer(rank_);
 	buffer.addToBuffer(skill_);
 	buffer.addToBuffer(startSkill_);
+	buffer.addToBuffer((int) hurtBy_.size());
+	std::set<unsigned int>::iterator itor;
+	for (itor = hurtBy_.begin();
+		itor != hurtBy_.end();
+		itor++)
+	{
+		buffer.addToBuffer(*itor);
+	}
 	return true;
 }
 
@@ -179,6 +187,23 @@ bool TankScore::readMessage(NetBufferReader &reader)
 	{
 		Logger::log("TankScore::startSkill_ read failed");
 		return false;
+	}
+	int hb = 0;
+	if (!reader.getFromBuffer(hb))
+	{
+		Logger::log("TankScore::hb read failed");
+		return false;
+	}
+	hurtBy_.clear();
+	for (int i=0; i<hb; i++)
+	{
+		int hurtBy;
+		if (!reader.getFromBuffer(hurtBy))
+		{
+			Logger::log("TankScore::hurtBy_ read failed");
+			return false;
+		}
+		hurtBy_.insert(hurtBy);
 	}
 	return true;
 }

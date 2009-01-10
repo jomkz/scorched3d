@@ -234,6 +234,20 @@ bool ComsSyncCheckMessage::readMessage(NetBufferReader &reader)
 	int numberTargetsSend = 0;
 	NetBuffer tmpBuffer;
 
+	// Create temporary target/tanks
+	static Target *tmpTarget = new Target(0, LangString(),
+		ScorchedClient::instance()->getContext());
+	tmpTarget->getLife().setLife(0); // Make sure not added to target space
+	static Tank *tmpTank = new Tank(
+		ScorchedClient::instance()->getContext(),
+		0,
+		0, 
+		LangString(),
+		Vector::getNullVector(),
+		"",
+		"");
+	tmpTank->getState().setState(TankState::sDead); // Make sure not added to target space
+
 	if (!reader.getFromBuffer(numberTargetsSend)) return false;
 	for (int i=0; i<numberTargetsSend; i++)
 	{
@@ -264,8 +278,17 @@ bool ComsSyncCheckMessage::readMessage(NetBufferReader &reader)
 		{
 			for (unsigned int i=0; i<tmpBuffer.getBufferUsed(); i++)
 			{
-				if (reader.getReadSize() + i >= reader.getBufferSize() ||
-					tmpBuffer.getBuffer()[i] != reader.getBuffer()[reader.getReadSize() + i])
+				if (reader.getReadSize() + i >= reader.getBufferSize())
+				{
+					syncCheckLog(S3D::formatStringBuffer(
+						"SyncCheck %i - Targets premature end of buffer : %u:%s, position %i", 
+						syncCount, playerId, 
+						target->getCStrName().c_str(), i));
+
+					different = true;
+					break;
+				}
+				else if(tmpBuffer.getBuffer()[i] != reader.getBuffer()[reader.getReadSize() + i])
 				{
 					syncCheckLog(S3D::formatStringBuffer(
 						"SyncCheck %i - Targets values differ : %u:%s, position %i", 
@@ -275,14 +298,22 @@ bool ComsSyncCheckMessage::readMessage(NetBufferReader &reader)
 					different = true;
 					Logger::addLogger(syncCheckFileLogger);
 
-					// Only used for step-through debugging to see where the
+					// Only used for step-through debugging and logging to see where the
 					// differences are
 					tmpBuffer.setBufferUsed(i);
 					NetBufferReader tmpReader(tmpBuffer);
-					target->readMessage(tmpReader);
+					if (target->isTarget())
+					{
+						tmpTarget->readMessage(tmpReader);
+						tmpTarget->getLife().setLife(0);// Make sure not added to target space
+					}
+					else
+					{
+						tmpTank->readMessage(tmpReader);
+						tmpTank->getState().setState(TankState::sDead);// Make sure not added to target space
+					}
 
 					Logger::remLogger(syncCheckFileLogger);
-
 					break;
 				}
 			}
@@ -290,21 +321,11 @@ bool ComsSyncCheckMessage::readMessage(NetBufferReader &reader)
 
 		if (target->isTarget())
 		{
-			static Target *tmpTarget = new Target(0, LangString(),
-				ScorchedClient::instance()->getContext());
 			if (!tmpTarget->readMessage(reader)) return false;
-			tmpTarget->getLife().setLife(0);
+			tmpTarget->getLife().setLife(0);// Make sure not added to target space
 		}
 		else
 		{
-			static Tank *tmpTank = new Tank(
-				ScorchedClient::instance()->getContext(),
-				0,
-				0, 
-				LangString(),
-				Vector::getNullVector(),
-				"",
-				"");
 			if (!tmpTank->readMessage(reader)) return false;
 
 			if (different)
@@ -316,9 +337,7 @@ bool ComsSyncCheckMessage::readMessage(NetBufferReader &reader)
 					((Tank*)target)->getScore().getScoreString()));
 			}
 
-			tmpTank->getState().setState(TankState::sDead);
-			tmpTank->getLife().setLife(0);
-			tmpTank->getState().setState(TankState::sDead);
+			tmpTank->getState().setState(TankState::sDead);// Make sure not added to target space
 		}
 	}
 	if (reader.getBufferSize() != reader.getReadSize())
