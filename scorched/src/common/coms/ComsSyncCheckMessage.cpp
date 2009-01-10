@@ -30,6 +30,7 @@
 #include <target/TargetState.h>
 #include <target/TargetLife.h>
 #include <tank/TankState.h>
+#include <tank/TankScore.h>
 #include <tank/Tank.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <set>
@@ -305,16 +306,19 @@ bool ComsSyncCheckMessage::readMessage(NetBufferReader &reader)
 				"",
 				"");
 			if (!tmpTank->readMessage(reader)) return false;
-			tmpTank->getState().setState(TankState::sDead);
-			tmpTank->getLife().setLife(0);
-			tmpTank->getState().setState(TankState::sDead);
 
 			if (different)
 			{
-				syncCheckLog(S3D::formatStringBuffer("%s %s", 
+				syncCheckLog(S3D::formatStringBuffer("%s %s %s %s", 
 					tmpTank->getState().getStateString(),
-					((Tank*)target)->getState().getStateString()));
+					((Tank*)target)->getState().getStateString(),
+					tmpTank->getScore().getScoreString(),
+					((Tank*)target)->getScore().getScoreString()));
 			}
+
+			tmpTank->getState().setState(TankState::sDead);
+			tmpTank->getLife().setLife(0);
+			tmpTank->getState().setState(TankState::sDead);
 		}
 	}
 	if (reader.getBufferSize() != reader.getReadSize())
