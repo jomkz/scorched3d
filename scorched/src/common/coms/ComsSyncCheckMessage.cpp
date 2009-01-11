@@ -330,10 +330,11 @@ bool ComsSyncCheckMessage::readMessage(NetBufferReader &reader)
 
 			if (different)
 			{
-				syncCheckLog(S3D::formatStringBuffer("%s %s %s %s", 
+				syncCheckLog(S3D::formatStringBuffer("Server : %s:%s", 
 					tmpTank->getState().getStateString(),
+					tmpTank->getScore().getScoreString()));
+				syncCheckLog(S3D::formatStringBuffer("Client : %s:%s", 
 					((Tank*)target)->getState().getStateString(),
-					tmpTank->getScore().getScoreString(),
 					((Tank*)target)->getScore().getScoreString()));
 			}
 
