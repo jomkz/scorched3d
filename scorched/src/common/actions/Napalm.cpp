@@ -444,7 +444,7 @@ void Napalm::simulateDamage()
 	// Store how much each tank is damaged
 	// Keep in a map so we don't need to create multiple
 	// damage actions.  Now we only create one per tank
-	static std::map<Target *, fixed> TargetDamageCalc;
+	static std::map<unsigned int, fixed> TargetDamageCalc;
 	TargetDamageCalc.clear();
 
 	// Add damage into the damage map for each napalm point that is near to
@@ -478,15 +478,15 @@ void Napalm::simulateDamage()
 			Target *target = (*itor).second;
 			if (target->getAlive())
 			{
-				std::map<Target *, fixed>::iterator damageItor = 
-					TargetDamageCalc.find(target);
+				std::map<unsigned int, fixed>::iterator damageItor = 
+					TargetDamageCalc.find(target->getPlayerId());
 				if (damageItor == TargetDamageCalc.end())
 				{
-					TargetDamageCalc[target] = count * params_->getHurtPerSecond();
+					TargetDamageCalc[target->getPlayerId()] = count * params_->getHurtPerSecond();
 				}
 				else
 				{
-					TargetDamageCalc[target] += count * params_->getHurtPerSecond();
+					TargetDamageCalc[target->getPlayerId()] += count * params_->getHurtPerSecond();
 				}
 			}
 		}
@@ -495,12 +495,13 @@ void Napalm::simulateDamage()
 	// Add all the damage to the tanks (if any)
 	if (!TargetDamageCalc.empty())
 	{
-		std::map<Target *, fixed>::iterator damageItor;
+		std::map<unsigned int, fixed>::iterator damageItor;
 		for (damageItor = TargetDamageCalc.begin();
 			damageItor != TargetDamageCalc.end();
 			damageItor++)
 		{
-			Target *target = (*damageItor).first;
+			Target *target = 
+				context_->getTargetContainer().getTargetById(damageItor->first);
 			fixed damage = (*damageItor).second;
 
 			// Add damage to the tank

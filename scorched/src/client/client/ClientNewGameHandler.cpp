@@ -138,10 +138,14 @@ bool ClientNewGameHandler::actualProcessMessage(
 		ScorchedClient::instance()->getContext(),
 		message.getLevelMessage().getGroundMapsDefn(),
 		ProgressDialogSync::instance());
+
+	Clock generateClock;
 	DeformLandscape::applyInfos(
 		ScorchedClient::instance()->getContext(),
 		message.getLevelMessage().getDeformInfos(),
 		ProgressDialogSync::instance());
+	float deformTime = generateClock.getTimeDifference();
+	Logger::log(S3D::formatStringBuffer("Landscape deformation time %.2f seconds", deformTime));
 
 	// Calculate all the new landscape settings (graphics)
 	Landscape::instance()->generate(ProgressDialogSync::instance());
