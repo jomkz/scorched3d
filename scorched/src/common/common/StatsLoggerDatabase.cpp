@@ -879,15 +879,20 @@ std::string StatsLoggerDatabase::allocateId()
 
 void StatsLoggerDatabase::addInfo(Tank *tank)
 {
+	char playerName[1024];
+	escapeString(playerName, 
+		tank->getCStrName().c_str(),
+		tank->getCStrName().size());
+
 	// Add the players name (may fail if duplicates)
 	runQuery("INSERT INTO scorched3d_names (playerid, name, count) VALUES "
 		"(%i, \"%s\", 0);", 
 		playerId_[tank->getUniqueId()], 
-		tank->getCStrName().c_str());
+		playerName);
 	runQuery("UPDATE scorched3d_names SET count=count+1 WHERE "
 		"playerid=%i AND name=\"%s\";", 
 		playerId_[tank->getUniqueId()], 
-		tank->getCStrName().c_str());
+		playerName);
 
 	// Add the ipaddress (may fail if duplicates)
 	runQuery("INSERT INTO scorched3d_ipaddress (playerid, ipaddress, count) VALUES "
@@ -903,7 +908,7 @@ void StatsLoggerDatabase::addInfo(Tank *tank)
 	runQuery("UPDATE scorched3d_players SET "
 		"name=\"%s\", ipaddress=\"%s\" "
 		"WHERE playerid = %i;",
-		tank->getCStrName().c_str(), 
+		playerName, 
 		NetInterface::getIpName(tank->getIpAddress()),
 		playerId_[tank->getUniqueId()]);
 }

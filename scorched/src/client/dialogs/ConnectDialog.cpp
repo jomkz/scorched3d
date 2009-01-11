@@ -94,11 +94,10 @@ void ConnectDialog::simulate(float frameTime)
 			{
 				connectionState_ = eFinished;
 
-				std::string msg = 
-					S3D::formatStringBuffer(
-						"Failed to connect to server \"%s:%i\", timeout.",
-						host_.c_str(), port_);
-				Logger::log(msg);
+				LangString msg = LANG_RESOURCE_2("FAILED_TO_CONNECT_TIMEOUT",
+					"Failed to connect to server \"{0}:{1}\", timeout.",
+					host_,
+					port_);
 				MsgBoxDialog::instance()->show(msg);
 
 				ScorchedClient::instance()->getGameState().stimulate(
@@ -131,7 +130,8 @@ void ConnectDialog::tryConnection()
 	}	
 
 	ProgressDialog::instance()->progressChange(
-		LANG_RESOURCE_3("CONNECTING_TO", "Connecting to \"{0}:{1}\" ({3})....", 
+		LANG_RESOURCE_3("CONNECTING_TO", 
+			"Connecting to \"{0}:{1}\" ({3})....", 
 			host_, 
 			S3D::formatStringBuffer("%i", port_), 
 			S3D::formatStringBuffer("%i", tryCount_)), 0);
@@ -190,11 +190,10 @@ void ConnectDialog::connected()
 	{
 		ScorchedClient::instance()->getNetInterface().stop();
 
-		std::string msg = 
-			S3D::formatStringBuffer(
-				"Failed to connect to server \"%s:%i\", send failed.",
-				host_.c_str(), port_);
-		Logger::log(msg);
+		LangString msg = LANG_RESOURCE_2("FAILED_TO_CONNECT_SEND",
+			"Failed to connect to server \"{0}:{1}\", send failed.",
+			host_,
+			port_);
 		MsgBoxDialog::instance()->show(msg);
 
 		ScorchedClient::instance()->getNetInterface().stop();

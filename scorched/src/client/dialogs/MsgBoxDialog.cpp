@@ -69,9 +69,9 @@ MsgBoxDialog::~MsgBoxDialog()
 
 }
 
-void MsgBoxDialog::show(const std::string &message)
+void MsgBoxDialog::show(const LangString &message)
 {
-	message_->setText(LANG_STRING(message));
+	message_->setText(message);
 	message_->calcWidth();
 	layout();
 

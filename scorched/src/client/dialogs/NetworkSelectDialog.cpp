@@ -442,16 +442,16 @@ void NetworkSelectDialog::rowSelectedGames(unsigned int id, int row)
 		ServerBrowser::instance()->getServerList().getEntryValue(row, "version");
 	if (!serverCompatable(protocolVersion, version))
 	{
-		MsgBoxDialog::instance()->show(
-			S3D::formatStringBuffer(
+		LangString msg = LANG_RESOURCE_4("INCOMPATIBLE_VERSION_WARNING",
 			"Warning: This server is running a incompatable version of Scorched3D.\n"
 			"You cannot connect to this server.\n\n"
-			"This server is running Scorched build %s (%s).\n"
-			"You are running Scorched build %s (%s).\n\n"					
+			"This server is running Scorched build {0} ({1}).\n"
+			"You are running Scorched build {2} ({3}).\n\n"					
 			"The latest version of Scorched3D can be downloaded from \n"
 			"http://www.scorched3d.co.uk\n",
-			version.c_str(), protocolVersion.c_str(),
-			S3D::ScorchedVersion.c_str(), S3D::ScorchedProtocolVersion.c_str()));
+			version, protocolVersion,
+			S3D::ScorchedVersion, S3D::ScorchedProtocolVersion);
+		MsgBoxDialog::instance()->show(msg);
 	}
 
 	// Set ip address for this server

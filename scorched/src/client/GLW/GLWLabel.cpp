@@ -64,6 +64,10 @@ void GLWLabel::setText(const LangString &text)
 				current.clear();
 			}
 		}
+		if (!current.empty())
+		{
+			labelTexts_.push_back(current);
+		}
 	}
 
 	w_ = 0.0f;

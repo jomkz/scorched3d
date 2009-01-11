@@ -130,11 +130,10 @@ void ClientConnectionAuthHandler::sendAuth()
 
 	if (!ComsMessageSender::sendToServer(connectMessage))
 	{
-		std::string msg = 
-			S3D::formatStringBuffer("Failed to send auth to server \"%s:%i\", send failed.",
-				hostName, portNumber);
-		Logger::log(msg);
-		MsgBoxDialog::instance()->show(msg.c_str());
+		LangString msg = LANG_RESOURCE_2("FAILED_TO_SEND_AUTH",
+			"Failed to send auth to server \"{0}:{1}\", send failed.",
+			hostName, portNumber);
+		MsgBoxDialog::instance()->show(msg);
 
 		cancelAuth();
 	}

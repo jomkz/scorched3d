@@ -31,7 +31,7 @@ class MsgBoxDialog : public GLWWindow,
 public:
 	static MsgBoxDialog *instance();
 
-	void show(const std::string &message);
+	void show(const LangString &message);
 
 	virtual void mouseDown(int button, float x, float y, bool &skipRest);
 	virtual void mouseUp(int button, float x, float y, bool &skipRest);
