@@ -163,9 +163,9 @@ AccessoryPart *AccessoryStore::createAccessoryPart(
 	return accessoryPart;
 }
 
-void AccessoryStore::sortList(std::list<Accessory *> &accList, bool alpha)
+void AccessoryStore::sortList(std::list<Accessory *> &accList, int sortKey)
 {
-	if (alpha) 
+	if (sortKey)
 	{
 		std::vector<Accessory *> accVector;
 		std::list<Accessory *>::iterator itor;
@@ -176,7 +176,7 @@ void AccessoryStore::sortList(std::list<Accessory *> &accList, bool alpha)
 			accVector.push_back(*itor);
 		}
 
-		// Crudely sort by name
+		// Crudely sort by name or price
 		// stl sort method list is broken in visual c 6
 		// bubble sort
 		bool changed = true;
@@ -185,9 +185,23 @@ void AccessoryStore::sortList(std::list<Accessory *> &accList, bool alpha)
 			changed = false;
 			for (int i=0; i<int(accVector.size())-1; i++)
 			{
-				if (strcmp(accVector[i]->getName(), accVector[i+1]->getName())<0)
+				bool swap = false;
+
+				// When sorting by price, use accessory name as a
+				// secondary sort key.
+
+				if ((sortKey == SortName) ||
+				    (sortKey == SortPrice && accVector[i]->getPrice() == accVector[i + 1]->getPrice()))
 				{
-					// swap
+					swap = strcmp(accVector[i]->getName(), accVector[i + 1]->getName()) < 0;
+				}
+				else if (sortKey == SortPrice)
+				{
+					swap = accVector[i]->getPrice() < accVector[i + 1]->getPrice();
+				}
+
+				if (swap)
+				{
 					Accessory *tmp = accVector[i];
 					accVector[i] = accVector[i+1];
 					accVector[i+1] = tmp;
@@ -231,7 +245,7 @@ void AccessoryStore::sortList(std::list<Accessory *> &accList, bool alpha)
 }
 
 std::list<Accessory *> AccessoryStore::getAllAccessoriesByTabGroup(
-	const char *tabgroup, bool sort)
+	const char *tabgroup, int sortKey)
 {
 	std::list<Accessory *> result;
 	std::list<Accessory *>::iterator itor;
@@ -246,11 +260,11 @@ std::list<Accessory *> AccessoryStore::getAllAccessoriesByTabGroup(
 		}
 	}
 
-	if (sort) sortList(result, true);
+	if (sortKey) sortList(result, sortKey);
 	return result;
 }
 
-std::list<Accessory *> AccessoryStore::getAllAccessories(bool sort)
+std::list<Accessory *> AccessoryStore::getAllAccessories(int sortKey)
 {
 	std::list<Accessory *> result;
 	std::list<Accessory *>::iterator itor;
@@ -261,7 +275,7 @@ std::list<Accessory *> AccessoryStore::getAllAccessories(bool sort)
 		result.push_back(*itor);
 	}
 
-	if (sort) sortList(result, true);
+	if (sortKey) sortList(result, sortKey);
 	return result;
 }
 

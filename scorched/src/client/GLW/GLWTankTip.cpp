@@ -119,7 +119,7 @@ void TankFuelTip::showItems(float x, float y)
 		tank_->getAccessories().getAllAccessoriesByGroup("fuel");
 	ScorchedClient::instance()->getAccessoryStore().sortList(
 		fuels,
-		OptionsDisplay::instance()->getSortAccessories());
+		OptionsDisplay::instance()->getAccessorySortKey());
 	std::list<Accessory *>::iterator itor;
 	for (itor = fuels.begin();
 		itor != fuels.end();
@@ -262,7 +262,7 @@ void TankShieldTip::showItems(float x, float y)
 			AccessoryPart::AccessoryShield);
 	ScorchedClient::instance()->getAccessoryStore().sortList(
 		shields, 
-		OptionsDisplay::instance()->getSortAccessories());
+		OptionsDisplay::instance()->getAccessorySortKey());
 	std::list<Accessory *>::iterator itor;
 	for (itor = shields.begin();
 		itor != shields.end();
@@ -405,7 +405,7 @@ void TankParachutesTip::showItems(float x, float y)
 			AccessoryPart::AccessoryParachute);
 	ScorchedClient::instance()->getAccessoryStore().sortList(
 		parachutes, 
-		OptionsDisplay::instance()->getSortAccessories());
+		OptionsDisplay::instance()->getAccessorySortKey());
 
 	std::list<Accessory *>::iterator itor;
 	for (itor = parachutes.begin();
@@ -518,7 +518,7 @@ void TankWeaponTip::showItems(float x, float y)
 		tank_->getAccessories().getAllAccessoriesByGroup("weapon");
 	ScorchedClient::instance()->getAccessoryStore().sortList(
 		weapons,
-		OptionsDisplay::instance()->getSortAccessories());
+		OptionsDisplay::instance()->getAccessorySortKey());
 	std::list<Accessory *>::iterator itor;
 	for (itor = weapons.begin();
 		itor != weapons.end();

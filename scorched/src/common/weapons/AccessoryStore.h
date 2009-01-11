@@ -34,6 +34,16 @@ class XMLNode;
 class AccessoryStore
 {
 public:
+
+	// This is mirrored by accessorySortKeyEnum in client/graph/OptionsDisplay.cpp.
+
+	enum SortKey
+	{
+		SortNothing = 0,
+		SortName = 1,
+		SortPrice = 2
+	};
+
 	AccessoryStore();
 	virtual ~AccessoryStore();
 
@@ -50,8 +60,8 @@ public:
 	Weapon *getDeathAnimation();
 	Weapon *getMuzzelFlash();
 
-	std::list<Accessory *> getAllAccessories(bool sort=false);	
-	std::list<Accessory *> getAllAccessoriesByTabGroup(const char *tabgroup, bool sort=false);
+	std::list<Accessory *> getAllAccessories(int sortKey=SortNothing);
+	std::list<Accessory *> getAllAccessoriesByTabGroup(const char *tabgroup, int sortKey=SortNothing);
 	std::map<std::string, XMLNode *> &getParsingNodes() { return parsingNodes_; }
 	std::set<std::string> &getTabGroupNames() { return tabGroups_; }
 
@@ -63,7 +73,7 @@ public:
 	bool writeEconomyToBuffer(NetBuffer &buffer);
 	bool readEconomyFromBuffer(NetBufferReader &reader);
 
-	void sortList(std::list<Accessory *> &accList, bool alpha);
+	void sortList(std::list<Accessory *> &accList, int sortKey=SortNothing);
 
 protected:
 	std::set<std::string> tabGroups_;

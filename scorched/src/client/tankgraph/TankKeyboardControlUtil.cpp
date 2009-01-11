@@ -172,7 +172,7 @@ void TankKeyboardControlUtil::nextWeapon(Tank *tank)
 		tank->getAccessories().getAllAccessoriesByType(
 			AccessoryPart::AccessoryWeapon);
 	ScorchedClient::instance()->getAccessoryStore().sortList(result,
-		OptionsDisplay::instance()->getSortAccessories());
+		OptionsDisplay::instance()->getAccessorySortKey());
 
 	std::list<Accessory *>::iterator itor;
 	for (itor = result.begin();
@@ -197,7 +197,7 @@ void TankKeyboardControlUtil::prevWeapon(Tank *tank)
 		tank->getAccessories().getAllAccessoriesByType(
 			AccessoryPart::AccessoryWeapon);
 	ScorchedClient::instance()->getAccessoryStore().sortList(result,
-		OptionsDisplay::instance()->getSortAccessories());
+		OptionsDisplay::instance()->getAccessorySortKey());
 
 	std::list<Accessory *>::iterator itor;
 	for (itor = result.begin();

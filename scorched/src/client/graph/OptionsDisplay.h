@@ -274,8 +274,8 @@ public:
 	bool getLowTreeDetail() { return lowTreeDetail_; }
 	OptionEntryBool &getLowTreeDetailEntry() { return lowTreeDetail_; }
 
-	bool getSortAccessories() { return sortAccessories_; }
-	OptionEntryBool &getSortAccessoriesEntry() { return sortAccessories_; }
+	int getAccessorySortKey() { return accessorySortKey_; }
+	OptionEntryEnum &getAccessorySortKeyEntry() { return accessorySortKey_; }
 
 	bool getNoDepthSorting() { return noDepthSorting_; }
 	OptionEntryBool &getNoDepthSortingEntry() { return noDepthSorting_; }
@@ -457,7 +457,8 @@ protected:
 	OptionEntryBool drawBoundingSpheres_;
 	OptionEntryBool noLenseFlare_;
 	OptionEntryBool noSkins_;
-	OptionEntryBool sortAccessories_;
+	OptionEntryBool deprecatedSortAccessories_;
+	OptionEntryEnum accessorySortKey_;
 	OptionEntryBool drawWater_;
 	OptionEntryBool drawLandscape_;
 	OptionEntryBool drawSurround_;

@@ -181,7 +181,7 @@ void TankMenus::showInventory()
 
 		std::list<Accessory *> accessories;
 		tank->getAccessories().getAllAccessories(accessories);
-		ScorchedClient::instance()->getAccessoryStore().sortList(accessories, true);
+		ScorchedClient::instance()->getAccessoryStore().sortList(accessories, AccessoryStore::SortName);
 
 		std::list<Accessory *>::iterator aitor;
 		for (aitor = accessories.begin();
@@ -427,7 +427,7 @@ bool TankMenus::AccessoryMenu::getMenuItems(const char* menuName,
 		std::list<Accessory *> weapons = ScorchedClient::instance()->
 			getAccessoryStore().getAllAccessoriesByTabGroup(
 				group,
-				OptionsDisplay::instance()->getSortAccessories());
+				OptionsDisplay::instance()->getAccessorySortKey());
 
 		std::list<Accessory *>::iterator itor;
 		for (itor = weapons.begin();

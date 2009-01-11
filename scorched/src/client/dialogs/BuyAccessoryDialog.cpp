@@ -74,13 +74,15 @@ BuyAccessoryDialog::BuyAccessoryDialog() :
 	defaultTab_->getLabel().setSize(10);
 	defaultTab_->getCheckBox().setHandler(this);
 
-	sortBox_ = (GLWCheckBox *) addWidget(new GLWCheckBox(10, 14));
-	sortBox_->setHandler(this);
-	sortBox_->setW(14);
-	sortBox_->setH(14);
-	GLWLabel *label = (GLWLabel *)
-		addWidget(new GLWLabel(30, 9, LANG_RESOURCE("NAME_SORT", "Sort by name")));
-	label->setSize(12);
+	addWidget(new GLWLabel(15, 9, LANG_RESOURCE("SORT_LABEL", "Sort by:")));
+
+	sortDropDown_ = (GLWDropDownText *) addWidget(new GLWDropDownText(100, 9, 100));
+
+	sortDropDown_->addText(LANG_RESOURCE("SORT_NOTHING", "Nothing"), "Nothing");
+	sortDropDown_->addText(LANG_RESOURCE("SORT_NAME", "Name"), "Name");
+	sortDropDown_->addText(LANG_RESOURCE("SORT_PRICE", "Price"), "Price");
+	sortDropDown_->setName("Sort");
+	sortDropDown_->setHandler(this);
 }
 
 BuyAccessoryDialog::~BuyAccessoryDialog()
@@ -252,7 +254,7 @@ void BuyAccessoryDialog::addPlayerFavorites()
 	std::list<Accessory *> acessories = 
 		ScorchedClient::instance()->
 			getAccessoryStore().getAllAccessories(
-				OptionsDisplay::instance()->getSortAccessories());
+				OptionsDisplay::instance()->getAccessorySortKey());
 	std::list<Accessory *>::reverse_iterator itor;
 	for (itor = acessories.rbegin();
 		itor != acessories.rend();
@@ -274,7 +276,7 @@ void BuyAccessoryDialog::addPlayerWeaponsBuy(GLWTab *tab, const char *group)
 	std::list<Accessory *> weapons = ScorchedClient::instance()->
 		getAccessoryStore().getAllAccessoriesByTabGroup(
 			group,
-			OptionsDisplay::instance()->getSortAccessories());
+			OptionsDisplay::instance()->getAccessorySortKey());
 
 	float height = 10.0f;
 	std::list<Accessory *>::reverse_iterator itor2;
@@ -296,8 +298,8 @@ void BuyAccessoryDialog::addPlayerWeaponsSell()
 	std::list<Accessory *> tankAccessories;
 	tank->getAccessories().getAllAccessories(
 		tankAccessories);
-	ScorchedClient::instance()->getAccessoryStore().sortList(tankAccessories, 
-		OptionsDisplay::instance()->getSortAccessories());
+	ScorchedClient::instance()->getAccessoryStore().sortList(tankAccessories,
+		OptionsDisplay::instance()->getAccessorySortKey());
 	std::list<Accessory *>::reverse_iterator itor;
 	for (itor = tankAccessories.rbegin();
 		itor != tankAccessories.rend();
@@ -399,7 +401,25 @@ void BuyAccessoryDialog::display()
 	addTabs();
 	loadFavorites();
 
-	sortBox_->setState(OptionsDisplay::instance()->getSortAccessories());
+	sortDropDown_->setHandler(0);
+
+	switch (OptionsDisplay::instance()->getAccessorySortKey())
+	{
+	case AccessoryStore::SortName:
+		sortDropDown_->setCurrentText(LANG_RESOURCE("SORT_NAME", "Name"));
+		break;
+
+	case AccessoryStore::SortPrice:
+		sortDropDown_->setCurrentText(LANG_RESOURCE("SORT_PRICE", "Price"));
+		break;
+
+	case AccessoryStore::SortNothing:
+		sortDropDown_->setCurrentText(LANG_RESOURCE("SORT_NOTHING", "Nothing"));
+		break;
+	}
+
+	sortDropDown_->setHandler(this);
+
 	Tank *tank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
 	if (tank)
 	{
@@ -458,15 +478,27 @@ void BuyAccessoryDialog::tabDown(unsigned int id)
 	}
 }
 
-void BuyAccessoryDialog::stateChange(bool state, unsigned int id)
+void BuyAccessoryDialog::select(unsigned int id, const int pos, GLWSelectorEntry value)
 {
-	if (id == sortBox_->getId())
+	if (id == sortDropDown_->getId())
 	{
-		// The sort accessories check box has been clicked
-		OptionsDisplay::instance()->getSortAccessoriesEntry().setValue(state);
+		OptionsDisplay *display = OptionsDisplay::instance();
+		const char *dataText = value.getDataText();
+
+		if (strcmp(dataText, "Name") == 0)
+			display->getAccessorySortKeyEntry().setValue(AccessoryStore::SortName);
+		else if (strcmp(dataText, "Price") == 0)
+			display->getAccessorySortKeyEntry().setValue(AccessoryStore::SortPrice);
+		else
+			display->getAccessorySortKeyEntry().setValue(AccessoryStore::SortNothing);
+
 		playerRefreshKeepPos();
 	}
-	else if (id == defaultTab_->getCheckBox().getId())
+}
+
+void BuyAccessoryDialog::stateChange(bool state, unsigned int id)
+{
+	if (id == defaultTab_->getCheckBox().getId())
 	{
 		if (defaultTab_->getCheckBox().getState())
 		{

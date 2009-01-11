@@ -55,9 +55,16 @@ InventoryDialog::InventoryDialog() :
 		addWidget(new GLWTab("Inv", LANG_RESOURCE("INVENTORY_TAB", "Inv"), 10, 40, 420, 160));
 	topPanel_ = (GLWPanel *)
 		addWidget(new GLWPanel(10, 265, 420, 50));
-	sortBox_ = (GLWCheckBox *) addWidget(new GLWCheckBox(10, 10));
-	sortBox_->setHandler(this);
-	addWidget(new GLWLabel(35, 7, LANG_RESOURCE("SORT_ACCESSORIES", "Sort accessories by name")));
+
+	addWidget(new GLWLabel(15, 9, LANG_RESOURCE("SORT_LABEL", "Sort by:")));
+
+	sortDropDown_ = (GLWDropDownText *) addWidget(new GLWDropDownText(100, 9, 100));
+
+	sortDropDown_->addText(LANG_RESOURCE("SORT_NOTHING", "Nothing"), "Nothing");
+	sortDropDown_->addText(LANG_RESOURCE("SORT_NAME", "Name"), "Name");
+	sortDropDown_->addText(LANG_RESOURCE("SORT_PRICE", "Price"), "Price");
+	sortDropDown_->setName("Sort");
+	sortDropDown_->setHandler(this);
 }
 
 InventoryDialog::~InventoryDialog()
@@ -65,9 +72,45 @@ InventoryDialog::~InventoryDialog()
 
 }
 
-void InventoryDialog::stateChange(bool state, unsigned int id)
+void InventoryDialog::select(unsigned int id, const int pos, GLWSelectorEntry value)
 {
-	OptionsDisplay::instance()->getSortAccessoriesEntry().setValue(state);
+	if (id == sortDropDown_->getId())
+	{
+		OptionsDisplay *display = OptionsDisplay::instance();
+		const char *dataText = value.getDataText();
+
+		if (strcmp(dataText, "Name") == 0)
+			display->getAccessorySortKeyEntry().setValue(AccessoryStore::SortName);
+		else if (strcmp(dataText, "Price") == 0)
+			display->getAccessorySortKeyEntry().setValue(AccessoryStore::SortPrice);
+		else
+			display->getAccessorySortKeyEntry().setValue(AccessoryStore::SortNothing);
+
+		playerRefresh();
+	}
+}
+
+void InventoryDialog::display()
+{
+	sortDropDown_->setHandler(0);
+
+	switch (OptionsDisplay::instance()->getAccessorySortKey())
+	{
+	case AccessoryStore::SortName:
+		sortDropDown_->setCurrentText(LANG_RESOURCE("SORT_NAME", "Name"));
+		break;
+
+	case AccessoryStore::SortPrice:
+		sortDropDown_->setCurrentText(LANG_RESOURCE("SORT_PRICE", "Price"));
+		break;
+
+	case AccessoryStore::SortNothing:
+		sortDropDown_->setCurrentText(LANG_RESOURCE("SORT_NOTHING", "Nothing"));
+		break;
+	}
+
+	sortDropDown_->setHandler(this);
+
 	playerRefresh();
 }
 
@@ -83,8 +126,6 @@ void InventoryDialog::setupWindow()
 	topPanel_->setY(240 + addition);
 
 	needCentered_ = true;
-
-	sortBox_->setState(OptionsDisplay::instance()->getSortAccessories());
 }
 
 void InventoryDialog::addPlayerName()
@@ -116,7 +157,7 @@ void InventoryDialog::addPlayerWeapons()
 	std::list<Accessory *> tankAccessories;
 	tank->getAccessories().getAllAccessories(tankAccessories);
 	ScorchedClient::instance()->getAccessoryStore().sortList(tankAccessories, 
-		OptionsDisplay::instance()->getSortAccessories());
+		OptionsDisplay::instance()->getAccessorySortKey());
 
 	std::list<Accessory *>::reverse_iterator itor;
 	for (itor = tankAccessories.rbegin();

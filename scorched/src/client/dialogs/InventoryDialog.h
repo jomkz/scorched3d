@@ -28,11 +28,11 @@
 #include <GLW/GLWButton.h>
 #include <GLW/GLWPanel.h>
 #include <GLW/GLWTab.h>
-#include <GLW/GLWCheckBox.h>
+#include <GLW/GLWDropDownText.h>
 
 class InventoryDialog : public GLWWindow,
 						public GLWButtonI,
-						public GLWCheckBoxI
+						public GLWDropDownI
 {
 public:
 	static InventoryDialog *instance();
@@ -41,8 +41,11 @@ public:
 	virtual void buttonDown(unsigned int id);
 	virtual void windowInit(const unsigned state);
 
-	// Inherited from GLWCheckBoxI
-	virtual void stateChange(bool state, unsigned int id);
+	// Inherited from GLWDropDownI
+	virtual void select(unsigned int id, const int pos, GLWSelectorEntry value);
+
+	// Inherited from GLWPanel through GLWPanel
+	virtual void display();
 
 protected:
 	static InventoryDialog *instance_;
@@ -50,7 +53,7 @@ protected:
 	unsigned int okId_;
 	GLWTab *sellTab_;
 	GLWPanel *topPanel_;
-	GLWCheckBox *sortBox_;
+	GLWDropDownText *sortDropDown_;
 
 	void setupWindow();
 	void playerRefresh();

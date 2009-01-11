@@ -22,6 +22,16 @@
 #include <common/Defines.h>
 #include <stdio.h>
 
+// This is a mirror of AccessoryStore::SortKey.
+
+static OptionEntryEnum::EnumEntry accessorySortKeyEnum[] =
+{
+	{ "SortNothing", 0 },
+	{ "SortName", 1 },
+	{ "SortPrice", 2 },
+	{ "", -1 }
+};
+
 OptionsDisplay *OptionsDisplay::instance_ = 0;
 
 OptionsDisplay *OptionsDisplay::instance()
@@ -304,8 +314,12 @@ OptionsDisplay::OptionsDisplay() :
 		"Show in game help tooltips for items that have it", RWAccess, true),
 	showContextInfo_(options_, "ShowContextInfo",
 		"Show in game information tooltips for items that have it", RWAccess, true),
-	sortAccessories_(options_, "SortAccessories",
-		"Sort accessories alphabetically by name before displaying", RWAccess, false),
+	deprecatedSortAccessories_(options_, "SortAccessories",
+		"Sort accessories alphabetically by name before displaying",
+		RWAccess | OptionEntry::DataDepricated, false),
+	accessorySortKey_(options_, "AccessorySortKey",
+		"The key to sort accessories by before displaying",
+		RWAccess, 0, accessorySortKeyEnum),
 	focusPause_(options_, "FocusPause",
 		"Pause the graphics display when mouse leaves window.", RWAccess, true)
 
