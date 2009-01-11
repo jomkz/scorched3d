@@ -86,7 +86,7 @@ bool ModFiles::loadModFiles(const std::string &mod,
 	{
 		// Get and check the user mod directory exists
 		std::string modDir = S3D::getModFile(mod);
-		if (S3D::dirExists(modDir.c_str()))
+		if (S3D::dirExists(modDir))
 		{
 			if (counter) counter->setNewOp(LANG_RESOURCE("LOADING_USER_MODS", "Loading User Mods"));
 			if (!loadModDir(modDir, mod, counter)) return false;
@@ -117,7 +117,7 @@ bool ModFiles::loadModFiles(const std::string &mod,
 
 		const char *landscapesBase = "data/landscapes";
 		std::string dir = S3D::getDataFile(landscapesBase);
-		FileList fList(dir.c_str(), "*.xml", true);
+		FileList fList(dir, "*.xml", true);
 		std::list<std::string> &files = fList.getFiles();
 		std::list<std::string>::iterator itor;
 		for (itor = files.begin();
@@ -165,7 +165,7 @@ bool ModFiles::loadLocalModFile(const std::string &local,
 	const std::string &mod)
 {
 	std::string dataFile = S3D::getDataFile(local);
-	std::string modDirStr(dataFile);
+	std::string modDirStr(dataFile.c_str());
 	char *modDir = (char *) modDirStr.c_str();
 	modDir[dataFile.size() - local.size()] = '\0';
 
@@ -176,7 +176,7 @@ bool ModFiles::loadModDir(const std::string &modDir,
 	const std::string &mod, ProgressCounter *counter)
 {
 	// Load all files contained in this directory
-	FileList allfiles(modDir.c_str(), "*", true, true);
+	FileList allfiles(modDir, "*", true, true);
 	FileList::ListType &files = allfiles.getFiles();
 	FileList::ListType::iterator itor;
 
@@ -202,7 +202,7 @@ bool ModFiles::loadModDir(const std::string &modDir,
 bool ModFiles::loadModFile(const std::string &fullFileName,
 	const std::string &modDir, const std::string &mod)
 {
-	std::string shortFileNameStr(fullFileName);
+	std::string shortFileNameStr(fullFileName.c_str());
 	S3D::fileDos2Unix(shortFileNameStr);
 	const char *shortFileName = shortFileNameStr.c_str();
 
@@ -216,7 +216,7 @@ bool ModFiles::loadModFile(const std::string &fullFileName,
 	while (shortFileName[0] == '/') shortFileName++;
 
 	// Check that all files are lower case
-	std::string oldFileName = shortFileName;
+	std::string oldFileName(shortFileName);
 	_strlwr((char *) shortFileName);
 	if (strcmp(oldFileName.c_str(), shortFileName) != 0)
 	{
