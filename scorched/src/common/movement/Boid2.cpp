@@ -20,8 +20,10 @@
 
 #include <movement/Boid2.h>
 #include <movement/TargetMovementEntryBoids.h>
+#include <common/OptionsScorched.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <engine/ScorchedContext.h>
+#include <engine/ActionController.h>
 #include <target/Target.h>
 #include <target/TargetLife.h>
 
@@ -114,6 +116,22 @@ void Boid2::update(fixed frameTime, std::vector<Boid2*> &boidSet, bool complexUp
 	{
 		newVelocity += getVelocity();
 		target_->getLife().setVelocity(newVelocity);
+
+		if (complexUpdate)
+		{
+			if (context_.getOptionsGame().getActionSyncCheck())
+			{
+				context_.getActionController().addSyncCheck(
+					S3D::formatStringBuffer("TargetMovement: %u %i, %i, %i %i, %i, %i", 
+						target_->getPlayerId(),
+						target_->getLife().getTargetPosition()[0].getInternal(),
+						target_->getLife().getTargetPosition()[1].getInternal(),
+						target_->getLife().getTargetPosition()[2].getInternal(),
+						target_->getLife().getVelocity()[0].getInternal(),
+						target_->getLife().getVelocity()[1].getInternal(),
+						target_->getLife().getVelocity()[2].getInternal()));
+			}
+		}
 	}
 }
 
