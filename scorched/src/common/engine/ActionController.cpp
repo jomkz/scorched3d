@@ -31,6 +31,7 @@ ActionController::ActionController() :
 	context_(0), lastTraceTime_(0),
 	actionTracing_(false), stepTime_(0),
 	actionEvents_(false), actionProfiling_(false),
+	stopImmediately_(false),
 	actionNumber_(0)
 {
 
@@ -290,7 +291,7 @@ void ActionController::simulate(const unsigned state, float ft)
 
 	// step size = 1.0 / physics fps = steps per second
 	const fixed stepSize = fixed(1) / fixed(context_->getOptionsGame().getPhysicsFPS());
-	while (stepTime_ >= stepSize)
+	while (stepTime_ >= stepSize && !(stopImmediately_ && noReferencedActions()))
 	{
 		time_ += stepSize;
 		stepActions(stepSize);

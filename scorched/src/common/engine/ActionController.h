@@ -42,6 +42,7 @@ public:
 	bool noReferencedActions();
 	void resetTime();
 	void clear(bool warn = false);
+	void setStopImmediately(bool stop) { stopImmediately_ = stop; }
 
 	// Turn on action tracing
 	bool &getActionLogging() { return actionTracing_; }
@@ -114,6 +115,7 @@ protected:
 	bool actionProfiling_;
 	bool actionTracing_;
 	bool actionEvents_;
+	bool stopImmediately_;
 
 	bool allEvents();
 	void stepActions(fixed frameTime);

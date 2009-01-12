@@ -104,6 +104,7 @@ void ShotState::setup()
 
 	// Add all of the new events
 	context_.getActionController().getEvents().initialize(context_);
+	context_.getActionController().setStopImmediately(true);
 }
 
 bool ShotState::run(float frameTime)
@@ -124,6 +125,7 @@ bool ShotState::run(float frameTime)
 				context_.getActionController().getActionTime().asFloat()));
 		context_.getActionController().getEvents().clear();
 		context_.getActionController().logProfiledActions();
+		context_.getActionController().setStopImmediately(false);
 
 		return true;
 	}
