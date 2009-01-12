@@ -61,6 +61,7 @@ void ShotState::setup()
 	}
 
 	// Reset the counts in the action controller
+	context_.getActionController().setStopImmediately(true);
 	context_.getActionController().resetTime();
 	context_.getActionController().clear();
 
@@ -104,7 +105,6 @@ void ShotState::setup()
 
 	// Add all of the new events
 	context_.getActionController().getEvents().initialize(context_);
-	context_.getActionController().setStopImmediately(true);
 }
 
 bool ShotState::run(float frameTime)

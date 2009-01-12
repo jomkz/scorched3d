@@ -191,6 +191,8 @@ void ActionController::setFast(fixed speedMult)
 
 void ActionController::addSyncCheck(const std::string &msg)
 {
+	if (!stopImmediately_) return;
+
 	DIALOG_ASSERT(context_->getOptionsGame().getActionSyncCheck());
 	syncCheck_.push_back(msg);
 }
