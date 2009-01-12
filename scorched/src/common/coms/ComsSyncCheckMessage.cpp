@@ -151,7 +151,7 @@ bool ComsSyncCheckMessage::readMessage(NetBufferReader &reader)
 		bool diff = (serversync != clientsync);
 		if (diff) printOutput = true;
 
-		output.append(S3D::formatStringBuffer("%i: %s %s ::: %s\n", 
+		output.append(S3D::formatStringBuffer("%i: %s \n  %s\n  %s\n", 
 			syncCount,
 			(diff?"***":""),
 			serversync.c_str(), 
