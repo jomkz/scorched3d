@@ -65,6 +65,5 @@ void PlacementGroupDefinition::addToGroup(
 	if (group)
 	{
 		group->addObject(objectEntry, thin);
-		objectEntry->getGroups().push_back(group);
 	}
 }

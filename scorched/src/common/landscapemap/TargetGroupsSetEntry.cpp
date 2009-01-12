@@ -33,11 +33,13 @@ TargetGroupsSetEntry::~TargetGroupsSetEntry()
 
 void TargetGroupsSetEntry::addObject(TargetGroup *object, bool thin)
 {
+	object->addToGroup(this);
 	objects_[object->getTarget()->getPlayerId()] = object;
 }
 
 bool TargetGroupsSetEntry::removeObject(TargetGroup *object)
 {
+	object->removeFromGroup(this);
 	return (objects_.erase(object->getTarget()->getPlayerId()) > 0);
 }
 

@@ -29,7 +29,6 @@
 #include <target/TargetGroup.h>
 #include <engine/ScorchedContext.h>
 #include <weapons/AccessoryStore.h>
-#include <landscapemap/LandscapeMaps.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
@@ -60,8 +59,6 @@ Target::Target(unsigned int playerId,
 
 Target::~Target()
 {
-	context_.getLandscapeMaps().getGroundMaps().getGroups().
-		removeFromGroups(&getGroup());
 	life_->setLife(0);
 
 	delete renderer_; renderer_ = 0;

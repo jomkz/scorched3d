@@ -22,6 +22,7 @@
 #include <target/TargetRenderer.h>
 #include <target/TargetSpace.h>
 #include <target/TargetState.h>
+#include <target/TargetGroup.h>
 #include <target/Target.h>
 #include <tank/TankType.h>
 #include <engine/ScorchedContext.h>
@@ -57,6 +58,7 @@ void TargetLife::setLife(fixed life)
 	{
 		life_ = 0;
 		setRotation(0); // Updates space too
+		target_->getGroup().removeFromAllGroups();
 	}
 	else
 	{

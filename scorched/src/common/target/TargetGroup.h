@@ -22,12 +22,12 @@
 #define __INCLUDE_TargetGrouph_INCLUDE__
 
 #include <common/FixedVector.h>
-#include <vector>
+#include <set>
 
+class TargetGroupsSetEntry;
 class ScorchedContext;
 class NetBuffer;
 class NetBufferReader;
-class TargetGroupsGroupEntry;
 class Target;
 class TargetGroup
 {
@@ -38,16 +38,23 @@ public:
 	void setTarget(Target *target) { target_ = target; }
 	Target *getTarget() { return target_; }
 
-	std::vector<TargetGroupsGroupEntry *> &getGroups() { return groups; }
 	FixedVector &getPosition();
+
+	void removeFromAllGroups();
 
 	virtual bool writeMessage(NetBuffer &buffer);
 	virtual bool readMessage(NetBufferReader &reader);
 
+private:
+	friend class TargetGroupsSetEntry;
+
+	void addToGroup(TargetGroupsSetEntry *group);
+	void removeFromGroup(TargetGroupsSetEntry *group);
+
 protected:
 	ScorchedContext &context_;
 	Target *target_;
-	std::vector<TargetGroupsGroupEntry *> groups;
+	std::set<TargetGroupsSetEntry *> groups_;
 };
 
 #endif // __INCLUDE_TargetGrouph_INCLUDE__

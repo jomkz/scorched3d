@@ -37,7 +37,6 @@ public:
 	virtual ~TargetGroups();
 
 	// Groups
-	void removeFromGroups(TargetGroup *obj);
 	TargetGroupsGroupEntry *getGroup(const char *name, HeightMap *create = 0);
 	void clearGroups();
 

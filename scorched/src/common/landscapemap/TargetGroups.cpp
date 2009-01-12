@@ -62,17 +62,3 @@ TargetGroupsGroupEntry *TargetGroups::getGroup(
 	}
 	return 0;
 }
-
-void TargetGroups::removeFromGroups(TargetGroup *obj)
-{
-	if (obj->getGroups().empty()) return;
-
-	std::vector<TargetGroupsGroupEntry *>::iterator itor;
-	for (itor = obj->getGroups().begin();
-		itor != obj->getGroups().end();
-		itor++)
-	{
-		TargetGroupsGroupEntry *entry = (*itor);
-		entry->removeObject(obj);
-	}
-}
