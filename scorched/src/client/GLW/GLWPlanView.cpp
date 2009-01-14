@@ -382,22 +382,11 @@ static void drawQuad(float x, float y, float w, float h)
 
 void GLWPlanView::drawBuoys()
 {
-	//Get the wall type and set the colour accordingly
-	switch(ScorchedClient::instance()->getOptionsTransient().getWallType())
-	{
-	case OptionsTransient::wallWrapAround:
-		glColor3f(0.9f, 0.9f, 0.4f);
-		break;
-	case OptionsTransient::wallBouncy:
-		glColor3f(0.4f, 0.4f, 0.4f);
-		break;
-	case OptionsTransient::wallConcrete:
-		glColor3f(0.6f, 0.6f, 0.6f);
-		break;
-	default:
-		// Wall none
-		return;
-	}
+	if (ScorchedClient::instance()->getOptionsTransient().getWallType() == 
+		OptionsTransient::wallNone) return;
+
+	Vector &wallColor = ScorchedClient::instance()->getOptionsTransient().getWallColor();
+	glColor3fv(wallColor);
 
 	std::vector<Vector> &points = Landscape::instance()->getPoints().getPoints();
 	circleTex_.draw();

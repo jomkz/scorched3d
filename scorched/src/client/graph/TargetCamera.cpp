@@ -252,8 +252,17 @@ void TargetCamera::drawPrecipitation()
 
 bool TargetCamera::moveCamera(float frameTime, bool playing)
 {
+	float arenaWidth = (float) ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaWidth();
+	float arenaHeight = (float) ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaHeight();
+	float arenaX = (float) ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaX();
+	float arenaY = (float) ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaY();
+
 	bool simulateCamera = true;
-	Vector position(128.0f, 128.0f, 15.0f);
+	Vector position(arenaX + arenaWidth / 2.0f, arenaY + arenaHeight / 2.0f, 15.0f);
 	float currentRotation = 0.0f;
 
 	Tank *currentTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
@@ -370,7 +379,7 @@ bool TargetCamera::moveCamera(float frameTime, bool playing)
 		break;
 	case CamSpectator:
 		{
-			Vector at(128.0f, 128.0f, 0.0f);
+			Vector at(arenaX + arenaWidth / 2.0f, arenaY + arenaHeight / 2.0f, 0.0f);
 			mainCam_.setLookAt(at);
 			mainCam_.movePosition(HALFPI, 1.1f, 200.f);
 		}

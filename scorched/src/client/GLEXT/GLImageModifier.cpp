@@ -585,6 +585,35 @@ void ImageModifier::addWaterToBitmap(HeightMap &hMap,
 	}
 }
 
+ImageHandle ImageModifier::makeArenaBitmap()
+{
+	ImageHandle handle = ImageFactory::createBlank(128, 128);
+	int arenaX = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaX();
+	int arenaY = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaY();
+	int arenaWidth = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaWidth();
+	int arenaHeight = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaHeight();
+	int landscapeWidth = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeWidth();
+	int landscapeHeight = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeHeight();
+
+	int lx = arenaX * handle.getWidth() / landscapeWidth;
+	int ly = arenaY * handle.getHeight() / landscapeHeight;
+	int lw = lx + (arenaWidth * handle.getWidth() / landscapeWidth);
+	int lh = ly + (arenaHeight * handle.getHeight() / landscapeHeight);
+
+	Vector &wallColor = ScorchedClient::instance()->getOptionsTransient().getWallColor();
+
+	unsigned char *bits = handle.getBits();
+	for (int y=0; y<handle.getHeight(); y++)
+	{
+		for (int x=0; x<handle.getWidth(); x++, bits+=3)
+		{
+			bits[0] = (unsigned char) (wallColor[0] * 256.0f);
+		}
+	}
+
+	return handle;
+}
+
 void ImageModifier::addBorderToBitmap(Image &destBitmap,
 	int borderSize,
 	float colors[3])

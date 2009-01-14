@@ -250,8 +250,11 @@ Vector &OptionsTransient::getWallColor()
 	case wallBouncy:
 		wallColor = Vector(0.0f, 0.0f, 0.5f);
 		break;
-	default:
+	case wallConcrete:
 		wallColor = Vector(0.5f, 0.5f, 0.5f);
+		break;
+	default:
+		wallColor = Vector(0.0f, 0.0f, 0.0f);
 		break;
 	}
 

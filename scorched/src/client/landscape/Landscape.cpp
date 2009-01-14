@@ -644,12 +644,6 @@ void Landscape::updatePlanTexture()
 			ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap(), 
 			bitmapPlan_, water_->getWaterBitmap(), water_->getWaterHeight());
 	}
-	if (ScorchedClient::instance()->getOptionsTransient().getWallType() !=
-		OptionsTransient::wallNone)
-	{
-		ImageModifier::addBorderToBitmap(bitmapPlan_, 3, 
-			ScorchedClient::instance()->getOptionsTransient().getWallColor());
-	}
 
 	DIALOG_ASSERT(planTexture_.replace(bitmapPlan_, false));
 }
