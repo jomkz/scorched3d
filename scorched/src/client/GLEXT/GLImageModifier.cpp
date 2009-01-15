@@ -611,12 +611,29 @@ ImageHandle ImageModifier::makeArenaBitmap()
 			if (x >= lx && x < lw &&
 				y >= ly && y < lh)
 			{
-				bits[3] = 255;
+				bits[3] = 0;
 			}
 			else 
 			{
-				bits[3] = 0;
+				bits[3] = 255;
 			}
+		}
+	}
+
+	return handle;
+}
+
+ImageHandle ImageModifier::makeArenaSurroundBitmap()
+{
+	Vector &wallColor = ScorchedClient::instance()->getOptionsTransient().getWallColor();
+	ImageHandle handle = ImageFactory::createBlank(128, 128, true, 0);
+
+	unsigned char *bits = handle.getBits();
+	for (int y=0; y<handle.getHeight(); y++)
+	{
+		for (int x=0; x<handle.getWidth(); x++, bits+=4)
+		{
+			bits[3] = 255;
 		}
 	}
 

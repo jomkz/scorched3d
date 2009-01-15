@@ -30,9 +30,9 @@ void main()
 	vec3 finalColor =
 		((groundColor.rgb * 3.5) + detailColor.rgb) / 4.0 * lightcolor.rgb;
 		
-	vec4 arenaColor = vec4(0.0, 0.0, 0.0, 1.0);
+	vec4 arenaColor = vec4(0.0, 0.0, 0.0, 0.0);
 	if (showarena != 0.0) arenaColor  = texture2D(arenamap, gl_TexCoord[0].xy);		
-	if (arenaColor.a == 0) finalColor = mix(finalColor, arenaColor.xyz, 0.5);
+	if (arenaColor.a != 0) finalColor = mix(finalColor, arenaColor.xyz, 0.5);
 			
 	gl_FragColor = vec4(mix(vec3(gl_Fog.color), finalColor, fog_factor), 1.0);
 }

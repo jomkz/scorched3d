@@ -77,6 +77,7 @@ namespace ImageModifier
 							float waterHeight);
 
 	ImageHandle makeArenaBitmap();
+	ImageHandle makeArenaSurroundBitmap();
 
 	void addBorderToBitmap(Image &destBitmap,
 		int borderWidth,

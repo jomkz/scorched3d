@@ -25,6 +25,7 @@
 #include <client/ClientReloadAdaptor.h>
 #include <graph/SpeedChange.h>
 #include <graph/OptionsDisplayConsole.h>
+#include <graph/MainCamera.h>
 #include <tankgraph/RenderTracer.h>
 #include <weapons/AccessoryStore.h>
 #include <engine/ActionController.h>
@@ -248,6 +249,7 @@ bool ClientNewGameHandler::actualProcessMessage(
 		current->getRenderer()->moved();
 		current->getCamera().setCameraType(1);
 	}
+	MainCamera::instance()->getTarget().setCameraType(TargetCamera::CamSpectator);
 
 	// Tell the server we have finished processing the landscape
 	ClientWaitState::instance()->sendClientReady();

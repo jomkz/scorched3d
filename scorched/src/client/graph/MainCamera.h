@@ -36,6 +36,7 @@ public:
 	TargetCamera &getTarget() { return targetCam_; }
 
 	bool getCameraSelected() { return mouseDown_ || keyDown_ || scrolling_; }
+	bool getShowArena() { return showArena_; }
 
 	// Inherited from GameStateI
 	virtual void simulate(const unsigned state, 
@@ -83,7 +84,7 @@ public:
 
 protected:
 	static MainCamera *instance_;
-	bool mouseDown_, keyDown_, scrolling_;
+	bool mouseDown_, keyDown_, scrolling_, showArena_;
 	TargetCamera targetCam_;
 	// Quick key settings
 	std::map<int, std::pair<Vector, Vector> > quickKeys_;

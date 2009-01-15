@@ -57,7 +57,7 @@ MainCamera *MainCamera::instance()
 
 MainCamera::MainCamera() : 
 	GameStateI("MainCamera"),
-	mouseDown_(false), keyDown_(false), scrolling_(false)
+	mouseDown_(false), keyDown_(false), scrolling_(false), showArena_(false)
 {
 	Image *map = ImageFactory::loadImage(
 		S3D::getDataFile("data/windows/camera.bmp"),
@@ -304,6 +304,9 @@ void MainCamera::keyboardCheck(const unsigned state, float frameTime,
 	{
 		saveScreen_.saveScreen_ = true;
 	}
+
+	KEYBOARDKEY("SHOW_ARENA", showArena);
+	showArena_ = showArena->keyDown(buffer, keyState);
 
 	KEYBOARDKEY("CAMERA_SCROLL_UP", scrollUp);
 	KEYBOARDKEY("CAMERA_SCROLL_DOWN", scrollDown);

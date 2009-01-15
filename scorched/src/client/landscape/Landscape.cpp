@@ -604,7 +604,12 @@ void Landscape::generate(ProgressCounter *counter)
 	// Arena
 	ImageHandle arenaBitmap = ImageModifier::makeArenaBitmap();
 	DIALOG_ASSERT(arenaMainTexture_.replace(arenaBitmap));
-	ImageHandle arenaSurroundBitmap = ImageFactory::createBlank(128, 128, true, 0);
+	arenaMainTexture_.draw();
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	ImageHandle arenaSurroundBitmap = ImageModifier::makeArenaSurroundBitmap();
 	DIALOG_ASSERT(arenaSurroundTexture_.replace(arenaSurroundBitmap));
 
 	// Magma
@@ -661,6 +666,10 @@ void Landscape::actualDrawLandTextured()
 
 	GLState glState(state);
 
+	bool showArenaArea = (!OptionsDisplay::instance()->getNoArenaMoveVisibility() &&
+		MainCamera::instance()->getCameraSelected()) ||
+		MainCamera::instance()->getShowArena();
+
 	bool useDetail = 
 		GLStateExtension::getTextureUnits() > 2 &&
 		OptionsDisplay::instance()->getDetailTexture() &&
@@ -682,7 +691,12 @@ void Landscape::actualDrawLandTextured()
 
 			glActiveTextureARB(GL_TEXTURE1_ARB);
 			glEnable(GL_TEXTURE_2D);
-			getShadowMap().setTexture();
+			if (showArenaArea) 
+			{
+				glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+				arenaMainTexture_.draw();
+			}
+			else getShadowMap().setTexture();
 
 			glActiveTextureARB(GL_TEXTURE0_ARB);
 		}
@@ -699,10 +713,23 @@ void Landscape::actualDrawLandTextured()
 		VisibilityPatchGrid::instance()->drawLandLODLevels();
 	}
 
+	if (OptionsDisplay::instance()->getUseLandscapeTexture())
+	{
+		if (GLStateExtension::hasMultiTex())
+		{
+			glActiveTextureARB(GL_TEXTURE1_ARB);
+			if (showArenaArea) arenaSurroundTexture_.draw();
+			else glEnable(GL_TEXTURE_2D);
+
+			glActiveTextureARB(GL_TEXTURE0_ARB);
+		}
+
+		groundTexture_.draw(true);
+	}
+
 	if (OptionsDisplay::instance()->getDrawSurround())
 	{
 		GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SURROUND");
-		groundTexture_.draw(true);
 		VisibilityPatchGrid::instance()->drawSurround();
 		GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SURROUND");
 	}
@@ -711,15 +738,15 @@ void Landscape::actualDrawLandTextured()
 	{
 		if (GLStateExtension::hasMultiTex())
 		{
-			if (GLStateExtension::getTextureUnits() > 2 &&
-				OptionsDisplay::instance()->getDetailTexture() &&
-				GLStateExtension::hasEnvCombine())
+			if (useDetail)
 			{
 				glActiveTextureARB(GL_TEXTURE2_ARB);
+				glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 				glDisable(GL_TEXTURE_2D);
 			}
 
 			glActiveTextureARB(GL_TEXTURE1_ARB);
+			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 			glDisable(GL_TEXTURE_2D);
 			glActiveTextureARB(GL_TEXTURE0_ARB);
 		}
@@ -816,7 +843,11 @@ void Landscape::actualDrawLandShader()
 	landShader_->set_gl_texture(texture_, "mainmap", 0);
 	landShader_->set_gl_texture(detailTexture_, "detailmap", 1);
 	landShader_->set_gl_texture(arenaMainTexture_, "arenamap", 3);
-	landShader_->set_uniform("showarena", MainCamera::instance()->getCameraSelected()?1.0f:0.0f);
+
+	bool showArenaArea = (!OptionsDisplay::instance()->getNoArenaMoveVisibility() &&
+		MainCamera::instance()->getCameraSelected()) ||
+		MainCamera::instance()->getShowArena();
+	landShader_->set_uniform("showarena", showArenaArea?1.0f:0.0f);
 
 	glActiveTextureARB(GL_TEXTURE2_ARB);
 	glEnable(GL_TEXTURE_2D);

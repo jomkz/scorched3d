@@ -216,10 +216,17 @@
 	<keyentry>
 		<name>UNDO_MOVE</name>
 		<title>Revert to last angles</title>
-		<description>Changes the tanks evelevation, power and rotation back to those used to make the last shot.</description>
+		<description>Changes the tanks elevation, power and rotation back to those used to make the last shot.</description>
 		<group>1</group>
 		<key>u</key>
 	</keyentry>
+	<keyentry>
+		<name>SHOW_ARENA</name>
+		<title>Show arena bounds</title>
+		<description>Darkens the arena outside the arena bounds to make the arena area more visible.</description>
+		<group>1</group>
+		<key>z</key>
+	</keyentry>	
 	<keyentry>
 		<name>SHOW_QUIT_DIALOG</name>
 		<title>Quit</title>
