@@ -280,22 +280,23 @@ bool GLCamera::getDirectionFromPt(GLfloat winX, GLfloat winY, Line &direction)
 
 void GLCamera::scroll(ScrollDir direction, 
 	float minWidth, float minHeight,
-	float maxWidth, float maxHeight)
+	float maxWidth, float maxHeight, 
+	float amount)
 {
 	float x = 0.0f, y = 0.0f;
 	switch (direction)
 	{
 	case eScrollLeft:
-		x = -5.0f;
+		x = -amount;
 		break;
 	case eScrollRight:
-		x = 5.0f;
+		x = amount;
 		break;
 	case eScrollUp:
-		y = -5.0f;
+		y = -amount;
 		break;
 	case eScrollDown:
-		y = 5.0f;
+		y = amount;
 		break;
 	}
 	scroll(x, y, minWidth, minHeight, maxWidth, maxHeight);

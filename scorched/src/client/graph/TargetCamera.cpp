@@ -600,12 +600,14 @@ void TargetCamera::mouseUp(GameState::MouseButton button,
 	}
 }
 
-void TargetCamera::keyboardCheck(float frameTime, 
+bool TargetCamera::keyboardCheck(float frameTime, 
 							   char *buffer, unsigned int keyState,
 							   KeyboardHistory::HistoryElement *history, 
 							   int hisCount, 
 							   bool &skipRest)
 {
+	bool keyDown = false;
+
 	KEYBOARDKEY("CAMERA_TOP_VIEW", topViewKey);
 	KEYBOARDKEY("CAMERA_BEHIND_VIEW", behindViewKey);
 	KEYBOARDKEY("CAMERA_TANK_VIEW", tankViewKey);
@@ -633,11 +635,13 @@ void TargetCamera::keyboardCheck(float frameTime,
 	KEYBOARDKEY("CAMERA_ROTATE_RIGHT", rightKey);
 	if (leftKey->keyDown(buffer, keyState))
 	{
+		keyDown = true;
 		cameraPos_ = CamFree;
 		mainCam_.movePositionDelta(QPI * frameTime, 0.0f, 0.0f);
 	}
 	else if (rightKey->keyDown(buffer, keyState))
 	{
+		keyDown = true;
 		cameraPos_ = CamFree;
 		mainCam_.movePositionDelta(-QPI * frameTime, 0.0f, 0.0f);
 	}
@@ -646,11 +650,13 @@ void TargetCamera::keyboardCheck(float frameTime,
 	KEYBOARDKEY("CAMERA_ROTATE_UP", upKey);
 	if (upKey->keyDown(buffer, keyState))
 	{
+		keyDown = true;
 		cameraPos_ = CamFree;
 		mainCam_.movePositionDelta(0.0f, -QPI * frameTime, 0.0f);
 	}
 	else if (downKey->keyDown(buffer, keyState))
 	{
+		keyDown = true;
 		cameraPos_ = CamFree;
 		mainCam_.movePositionDelta(0.0f, QPI * frameTime, 0.0f);
 	}
@@ -659,11 +665,13 @@ void TargetCamera::keyboardCheck(float frameTime,
 	KEYBOARDKEY("CAMERA_ZOOM_OUT", outKey);
 	if (inKey->keyDown(buffer, keyState))
 	{
+		keyDown = true;
 		cameraPos_ = CamFree;
 		mainCam_.movePositionDelta(0.0f, 0.0f, -100.0f * frameTime);
 	}
 	else if (outKey->keyDown(buffer, keyState))
 	{
+		keyDown = true;
 		cameraPos_ = CamFree;
 		mainCam_.movePositionDelta(0.0f, 0.0f, 100.0f * frameTime);
 	}
@@ -679,4 +687,5 @@ void TargetCamera::keyboardCheck(float frameTime,
 				(useHeightFunc_?LANG_RESOURCE("ON", "On"):LANG_RESOURCE("OFF", "Off"))));
 	}
 	mainCam_.setUseHeightFunc(useHeightFunc_);
+	return keyDown;
 }

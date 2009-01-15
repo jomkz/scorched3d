@@ -35,6 +35,8 @@ public:
 	GLCamera &getCamera() { return targetCam_.getCamera(); }
 	TargetCamera &getTarget() { return targetCam_; }
 
+	bool getCameraSelected() { return mouseDown_ || keyDown_ || scrolling_; }
+
 	// Inherited from GameStateI
 	virtual void simulate(const unsigned state, 
 		float frameTime);
@@ -81,6 +83,7 @@ public:
 
 protected:
 	static MainCamera *instance_;
+	bool mouseDown_, keyDown_, scrolling_;
 	TargetCamera targetCam_;
 	// Quick key settings
 	std::map<int, std::pair<Vector, Vector> > quickKeys_;

@@ -41,8 +41,8 @@
 #include <image/ImageBitmap.h>
 #include <GLEXT/GLImageModifier.h>
 #include <GLEXT/GLStateExtension.h>
-#include <console/ConsoleRuleMethodIAdapter.h>
 #include <GLEXT/GLCameraFrustum.h>
+#include <console/ConsoleRuleMethodIAdapter.h>
 #include <GLSL/GLSLShaderSetup.h>
 #include <common/OptionsTransient.h>
 #include <common/Defines.h>
@@ -601,6 +601,12 @@ void Landscape::generate(ProgressCounter *counter)
 	ImageModifier::makeBitmapTransparent(texture1New, scorchMap, sprayMaskBitmap);
 	landTex1_.replace(texture1New);
 
+	// Arena
+	ImageHandle arenaBitmap = ImageModifier::makeArenaBitmap();
+	DIALOG_ASSERT(arenaMainTexture_.replace(arenaBitmap));
+	ImageHandle arenaSurroundBitmap = ImageFactory::createBlank(128, 128, true, 0);
+	DIALOG_ASSERT(arenaSurroundTexture_.replace(arenaSurroundBitmap));
+
 	// Magma
 	ImageHandle bitmapMagma = 
 		ImageFactory::loadImageHandle(S3D::getDataFile(tex->magmasmall.c_str()));
@@ -809,6 +815,8 @@ void Landscape::actualDrawLandShader()
 	landShader_->use();
 	landShader_->set_gl_texture(texture_, "mainmap", 0);
 	landShader_->set_gl_texture(detailTexture_, "detailmap", 1);
+	landShader_->set_gl_texture(arenaMainTexture_, "arenamap", 3);
+	landShader_->set_uniform("showarena", MainCamera::instance()->getCameraSelected()?1.0f:0.0f);
 
 	glActiveTextureARB(GL_TEXTURE2_ARB);
 	glEnable(GL_TEXTURE_2D);
@@ -850,6 +858,7 @@ void Landscape::actualDrawLandShader()
 		else
 		{
 			landShader_->set_gl_texture(groundTexture_, "mainmap", 0);
+			landShader_->set_gl_texture(arenaSurroundTexture_, "arenamap", 3);
 		}
 #endif
 		VisibilityPatchGrid::instance()->drawSurround();

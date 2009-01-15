@@ -64,7 +64,7 @@ public:
 		int x, int y, bool &skipRest);
 	void mouseDrag(GameState::MouseButton button,
 		int mx, int my, int x, int y, bool &skipRest);
-	void keyboardCheck(
+	bool keyboardCheck(
 		float frameTime, 
 		char *buffer, unsigned int keyState,
 		KeyboardHistory::HistoryElement *history, int hisCount, 

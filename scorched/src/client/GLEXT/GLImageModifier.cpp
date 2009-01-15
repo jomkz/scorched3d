@@ -29,6 +29,7 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <client/ScorchedClient.h>
 #include <lang/LangResource.h>
+#include <common/OptionsTransient.h>
 #include <common/Defines.h>
 
 bool ImageModifier::findIntersection(HeightMap &hMap,
@@ -587,7 +588,9 @@ void ImageModifier::addWaterToBitmap(HeightMap &hMap,
 
 ImageHandle ImageModifier::makeArenaBitmap()
 {
-	ImageHandle handle = ImageFactory::createBlank(128, 128);
+	Vector &wallColor = ScorchedClient::instance()->getOptionsTransient().getWallColor();
+	ImageHandle handle = ImageFactory::createBlank(128, 128, true, 0);
+
 	int arenaX = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaX();
 	int arenaY = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaY();
 	int arenaWidth = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaWidth();
@@ -600,14 +603,20 @@ ImageHandle ImageModifier::makeArenaBitmap()
 	int lw = lx + (arenaWidth * handle.getWidth() / landscapeWidth);
 	int lh = ly + (arenaHeight * handle.getHeight() / landscapeHeight);
 
-	Vector &wallColor = ScorchedClient::instance()->getOptionsTransient().getWallColor();
-
 	unsigned char *bits = handle.getBits();
 	for (int y=0; y<handle.getHeight(); y++)
 	{
-		for (int x=0; x<handle.getWidth(); x++, bits+=3)
+		for (int x=0; x<handle.getWidth(); x++, bits+=4)
 		{
-			bits[0] = (unsigned char) (wallColor[0] * 256.0f);
+			if (x >= lx && x < lw &&
+				y >= ly && y < lh)
+			{
+				bits[3] = 255;
+			}
+			else 
+			{
+				bits[3] = 0;
+			}
 		}
 	}
 

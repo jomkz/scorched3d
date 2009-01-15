@@ -68,6 +68,7 @@ public:
 	GLTexture &getGroundTexture() { return groundTexture_; }
 	GLTexture &getDetailTexture() { return detailTexture_; }
 	GLTexture &getRoofTexture() { return roofTexture_; }
+	GLTexture &getArenaMainTexture() { return arenaMainTexture_; }
 
 	LandscapeTextureType getTextureType() { return textureType_; }
 	void setTextureType(LandscapeTextureType type) { textureType_ = type; }
@@ -118,6 +119,8 @@ protected:
 	GLTexture splatMaskTextureBorder1_;
 	GLTexture splatMaskTextureBorder2_;
 	GLTexture splatTextures_;
+	GLTexture arenaMainTexture_;
+	GLTexture arenaSurroundTexture_;
 	ImageHandle splatMap_;
 	ImageHandle mainMap_;
 	ImageHandle scorchMap_;

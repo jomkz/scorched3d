@@ -169,7 +169,7 @@ public:
 		eScrollDown
 	};
 	void scroll(ScrollDir direction, float minWidth, float minHeight, 
-		float maxWidth, float maxHeight);
+		float maxWidth, float maxHeight, float amount);
 	void scroll(float x, float y, float minWidth, float minHeight, 
 		float maxWidth, float maxHeight);
 

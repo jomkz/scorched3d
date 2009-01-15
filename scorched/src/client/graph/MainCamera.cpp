@@ -56,7 +56,8 @@ MainCamera *MainCamera::instance()
 }
 
 MainCamera::MainCamera() : 
-	GameStateI("MainCamera")
+	GameStateI("MainCamera"),
+	mouseDown_(false), keyDown_(false), scrolling_(false)
 {
 	Image *map = ImageFactory::loadImage(
 		S3D::getDataFile("data/windows/camera.bmp"),
@@ -119,6 +120,7 @@ static int getNumberOfPlayers()
 
 void MainCamera::simulate(const unsigned state, float frameTime)
 {
+	scrolling_ = false;
 	if (state != 0 &&
 		state != ClientState::StateOptions &&
 		OptionsDisplay::instance()->getFullScreen() &&
@@ -145,12 +147,15 @@ void MainCamera::simulate(const unsigned state, float frameTime)
 				targetCam_.setCameraType(TargetCamera::CamFree);
 				if (Keyboard::instance()->getKeyboardState() & KMOD_LSHIFT)
 				{
-					targetCam_.getCamera().movePositionDelta(-0.3f, 0.0f, 0.0f);
+					scrolling_ = true;
+					targetCam_.getCamera().movePositionDelta(-1.0f * frameTime, 0.0f, 0.0f);
 				}
 				else
 				{
+					scrolling_ = true;
 					targetCam_.getCamera().scroll(GLCamera::eScrollLeft, 
-						arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight);
+						arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight,
+						100.0f * frameTime);
 				}
 			}
 			else if (mouseX > windowX - scrollWindow)
@@ -158,12 +163,15 @@ void MainCamera::simulate(const unsigned state, float frameTime)
 				targetCam_.setCameraType(TargetCamera::CamFree);
 				if (Keyboard::instance()->getKeyboardState() & KMOD_LSHIFT)
 				{
-					targetCam_.getCamera().movePositionDelta(+0.3f, 0.0f, 0.0f);
+					scrolling_ = true;
+					targetCam_.getCamera().movePositionDelta(+1.0f * frameTime, 0.0f, 0.0f);
 				}
 				else
 				{
+					scrolling_ = true;
 					targetCam_.getCamera().scroll(GLCamera::eScrollRight,
-						arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight);
+						arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight,
+						100.0f * frameTime);
 				}
 			}
 		
@@ -172,16 +180,20 @@ void MainCamera::simulate(const unsigned state, float frameTime)
 				targetCam_.setCameraType(TargetCamera::CamFree);
 				if (Keyboard::instance()->getKeyboardState() & KMOD_LSHIFT)
 				{
-					targetCam_.getCamera().movePositionDelta(0.0f, 0.3f, 0.0f);
+					scrolling_ = true;
+					targetCam_.getCamera().movePositionDelta(0.0f, 1.0f * frameTime, 0.0f);
 				}
 				else if (Keyboard::instance()->getKeyboardState() & KMOD_LCTRL)
 				{
-					targetCam_.getCamera().movePositionDelta(0.0f, 0.0f, +5.0f);
+					scrolling_ = true;
+					targetCam_.getCamera().movePositionDelta(0.0f, 0.0f, +100.0f * frameTime);
 				}
 				else
 				{
+					scrolling_ = true;
 					targetCam_.getCamera().scroll(GLCamera::eScrollDown, 
-						arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight);
+						arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight,
+						100.0f * frameTime);
 				}
 			}
 			else if (mouseY > windowY - scrollWindow)
@@ -189,16 +201,20 @@ void MainCamera::simulate(const unsigned state, float frameTime)
 				targetCam_.setCameraType(TargetCamera::CamFree);
 				if (Keyboard::instance()->getKeyboardState() & KMOD_LSHIFT)
 				{
-					targetCam_.getCamera().movePositionDelta(0.0f, -0.3f, 0.0f);
+					scrolling_ = true;
+					targetCam_.getCamera().movePositionDelta(0.0f, -1.0f * frameTime, 0.0f);
 				}
 				else if (Keyboard::instance()->getKeyboardState() & KMOD_LCTRL)
 				{
-					targetCam_.getCamera().movePositionDelta(0.0f, 0.0f, -5.0f);
+					scrolling_ = true;
+					targetCam_.getCamera().movePositionDelta(0.0f, 0.0f, -100.0f * frameTime);
 				}
 				else
 				{
+					scrolling_ = true;
 					targetCam_.getCamera().scroll(GLCamera::eScrollUp, 
-						arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight);
+						arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight,
+						100.0f * frameTime);
 				}
 			}
 		}
@@ -257,13 +273,21 @@ void MainCamera::mouseWheel(const unsigned state, int x, int y, int z, bool &ski
 void MainCamera::mouseDown(const unsigned state, GameState::MouseButton button, 
 	int x, int y, bool &skipRest)
 {
-	targetCam_.mouseDown(button, x, y, skipRest);
+	mouseDown_ = true;
+	if (button == GameState::MouseButtonLeft) 
+	{
+		targetCam_.mouseDown(button, x, y, skipRest);
+	}
 }
 
 void MainCamera::mouseUp(const unsigned state, GameState::MouseButton button,
 	int x, int y, bool &skipRest)
 {
-	targetCam_.mouseUp(button, x, y, skipRest);
+	mouseDown_ = false;
+	if (button == GameState::MouseButtonLeft) 
+	{
+		targetCam_.mouseUp(button, x, y, skipRest);
+	}
 }
 
 void MainCamera::keyboardCheck(const unsigned state, float frameTime, 
@@ -272,7 +296,7 @@ void MainCamera::keyboardCheck(const unsigned state, float frameTime,
 							   int hisCount, 
 							   bool &skipRest)
 {
-	targetCam_.keyboardCheck(frameTime, buffer,
+	keyDown_ = targetCam_.keyboardCheck(frameTime, buffer,
 		keyState, history, hisCount, skipRest);
 
 	KEYBOARDKEY("SAVE_SCREEN", saveScreenKey);
@@ -297,27 +321,35 @@ void MainCamera::keyboardCheck(const unsigned state, float frameTime,
 
 	if (scrollUp->keyDown(buffer, keyState)) 
 	{
+		keyDown_ = true;
 		targetCam_.setCameraType(TargetCamera::CamFree);
 		targetCam_.getCamera().scroll(GLCamera::eScrollUp, 
-			arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight);
+			arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight,
+			100.0f * frameTime);
 	}
 	else if (scrollDown->keyDown(buffer, keyState)) 
 	{
+		keyDown_ = true;
 		targetCam_.setCameraType(TargetCamera::CamFree);
 		targetCam_.getCamera().scroll(GLCamera::eScrollDown,
-			arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight);
+			arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight,
+			100.0f * frameTime);
 	}
 	else if (scrollLeft->keyDown(buffer, keyState)) 
 	{
+		keyDown_ = true;
 		targetCam_.setCameraType(TargetCamera::CamFree);
 		targetCam_.getCamera().scroll(GLCamera::eScrollLeft,
-			arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight);
+			arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight,
+			100.0f * frameTime);
 	}
 	else if (scrollRight->keyDown(buffer, keyState)) 
 	{
+		keyDown_ = true;
 		targetCam_.setCameraType(TargetCamera::CamFree);
 		targetCam_.getCamera().scroll(GLCamera::eScrollRight,
-			arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight);
+			arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight,
+			100.0f * frameTime);
 	}
 
 	KEYBOARDKEY("HIDE_ALL_DIALOGS", hideWindows);

@@ -109,9 +109,13 @@ void ClientState::addStandardComponents(GameState &gameState, unsigned state)
 	gameState.addStateLoop(state, Main2DCamera::instance(), 
 		SoftwareMouse::instance());
 	gameState.addStateMouseDownEntry(state,
-		GameState::MouseButtonLeft, MainCamera::instance());
+		GameState::MouseButtonLeft | 
+		GameState::MouseButtonRight | 
+		GameState::MouseButtonMiddle, MainCamera::instance());
 	gameState.addStateMouseUpEntry(state,
-		GameState::MouseButtonLeft, MainCamera::instance());
+		GameState::MouseButtonLeft | 
+		GameState::MouseButtonRight | 
+		GameState::MouseButtonMiddle, MainCamera::instance());
 	gameState.addStateMouseDragEntry(state, 
 		GameState::MouseButtonLeft | 
 		GameState::MouseButtonRight | 

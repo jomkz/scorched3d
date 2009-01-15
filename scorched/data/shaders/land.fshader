@@ -1,6 +1,8 @@
 uniform sampler2DShadow shadow;
 uniform sampler2D mainmap;
 uniform sampler2D detailmap;
+uniform sampler2D arenamap;
+uniform float showarena;
 
 varying vec3 normal,lightDir;
 
@@ -25,9 +27,12 @@ void main()
     // Compute the final pixel color
 	vec4 groundColor = texture2D(mainmap, gl_TexCoord[0].xy);
 	vec4 detailColor = texture2D(detailmap, gl_TexCoord[1].xy);
-	
 	vec3 finalColor =
 		((groundColor.rgb * 3.5) + detailColor.rgb) / 4.0 * lightcolor.rgb;
 		
+	vec4 arenaColor = vec4(0.0, 0.0, 0.0, 1.0);
+	if (showarena != 0.0) arenaColor  = texture2D(arenamap, gl_TexCoord[0].xy);		
+	if (arenaColor.a == 0) finalColor = mix(finalColor, arenaColor.xyz, 0.5);
+			
 	gl_FragColor = vec4(mix(vec3(gl_Fog.color), finalColor, fog_factor), 1.0);
 }
