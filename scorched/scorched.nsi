@@ -67,10 +67,10 @@ Section "MainSection" SEC01
   File "AUTHORS"
   File "COPYING"
   File "README"
-  File "TODO"
-  File "src\scorched\Release\scorched.exe"
-  File "src\scorched\Release\scorchedc.exe"
-  File "src\scorched\Release\scorcheds.exe"
+  File "CHANGELOG"
+  File "Release\scorched.exe"
+  File "Release\scorchedc.exe"
+  File "Release\scorcheds.exe"
 SectionEnd
 
 Section -AdditionalIcons
