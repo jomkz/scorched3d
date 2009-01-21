@@ -151,7 +151,7 @@ void TankFalling::collision(PhysicsParticleObject &position,
 					Tank *currentTank = (Tank *) current;
 					currentTank->getAccessories().rm(parachute_->getParent(),
 						parachute_->getParent()->getUseNumber());
-					if (currentTank->getAccessories().canUse(parachute_->getParent()))
+					if (!currentTank->getAccessories().canUse(parachute_->getParent()))
 					{
 						current->getParachute().setCurrentParachute(0);
 					}
