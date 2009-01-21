@@ -80,11 +80,15 @@ bool ClientDefenseHandler::processMessage(
 					findByAccessoryId(message.getInfoId());
 			if (battery)
 			{
-				SoundBuffer *batSound = 
-					Sound::instance()->fetchOrCreateBuffer(
-						S3D::getDataFile(S3D::formatStringBuffer("data/wav/%s", battery->getActivationSound())));
-				SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
-					batSound, tank->getPosition().getTankPosition().asVector());
+				if (battery->getActivationSound() &&
+					0 != strcmp("none", battery->getActivationSound()))
+				{
+					SoundBuffer *batSound = 
+						Sound::instance()->fetchOrCreateBuffer(
+							S3D::getDataFile(S3D::formatStringBuffer("data/wav/%s", battery->getActivationSound())));
+					SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
+						batSound, tank->getPosition().getTankPosition().asVector());
+				}
 
 				if (tank->getDestinationId() != 
 					ScorchedClient::instance()->getTankContainer().getCurrentDestinationId())
@@ -104,11 +108,15 @@ bool ClientDefenseHandler::processMessage(
 					findByAccessoryId(message.getInfoId());
 			if (accessory->getType() == AccessoryPart::AccessoryShield)
 			{
-				SoundBuffer *activateSound = 
-					Sound::instance()->fetchOrCreateBuffer(
-						S3D::getDataFile(S3D::formatStringBuffer("data/wav/%s", accessory->getActivationSound())));
-				SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
-					activateSound, tank->getPosition().getTankPosition().asVector());
+				if (accessory->getActivationSound() &&
+					0 != strcmp("none", accessory->getActivationSound()))
+				{
+					SoundBuffer *activateSound = 
+						Sound::instance()->fetchOrCreateBuffer(
+							S3D::getDataFile(S3D::formatStringBuffer("data/wav/%s", accessory->getActivationSound())));
+					SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
+						activateSound, tank->getPosition().getTankPosition().asVector());
+				}
 
 				if (tank->getDestinationId() != 
 					ScorchedClient::instance()->getTankContainer().getCurrentDestinationId())
@@ -133,11 +141,15 @@ bool ClientDefenseHandler::processMessage(
 					findByAccessoryId(message.getInfoId());
 			if (parachute)
 			{
-				SoundBuffer *paraSound = 
-					Sound::instance()->fetchOrCreateBuffer(
-						S3D::getDataFile(S3D::formatStringBuffer("data/wav/%s", parachute->getActivationSound())));
-				SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
-					paraSound, tank->getPosition().getTankPosition().asVector());
+				if (parachute->getActivationSound() &&
+					0 != strcmp("none", parachute->getActivationSound()))
+				{
+					SoundBuffer *paraSound = 
+						Sound::instance()->fetchOrCreateBuffer(
+							S3D::getDataFile(S3D::formatStringBuffer("data/wav/%s", parachute->getActivationSound())));
+					SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
+						paraSound, tank->getPosition().getTankPosition().asVector());
+				}
 			}
 
 			tank->getParachute().setCurrentParachute(parachute);
