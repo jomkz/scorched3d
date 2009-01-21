@@ -315,6 +315,7 @@ bool BuyAccessoryDialog::addAccessory(
 	float height, Accessory *current)
 {
 	if (!tank->getAccessories().accessoryAllowed(current, 0)) return false;
+	if (current->getNoBuy()) return false;
 
 	int currentNumber = 
 		tank->getAccessories().getAccessoryCount(current);

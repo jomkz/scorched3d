@@ -131,6 +131,7 @@ bool ServerBuyAccessoryHandler::processMessage(
 	if (message.getBuy())
 	{
 		if (!tank->getAccessories().accessoryAllowed(accessory, accessory->getBundle())) return true;
+		if (accessory->getNoBuy()) return true;
 		if (tank->getScore().getMoney() < accessory->getPrice()) return true;
 
 		EconomyStore::instance()->getEconomy()->accessoryBought(

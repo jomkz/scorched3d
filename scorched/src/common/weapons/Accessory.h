@@ -66,6 +66,7 @@ public:
 	const int getUseNumber() { return useNumber_; }
 	const bool getAIOnly() { return aiOnly_; }
 	const bool getBotOnly() { return botOnly_; }
+	const bool getNoBuy() { return noBuy_; }
 	PositionSelectType getPositionSelect() { return positionSelect_; }
 	int getPositionSelectLimit() { return positionSelectLimit_; }
 
@@ -98,6 +99,7 @@ protected:
 	unsigned int accessoryId_;
 	bool aiOnly_;
 	bool botOnly_;
+	bool noBuy_;
 	AccessoryPart *accessoryAction_;
 	PositionSelectType positionSelect_;
 	ToolTip toolTip_;

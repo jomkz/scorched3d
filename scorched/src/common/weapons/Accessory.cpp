@@ -49,7 +49,8 @@ Accessory::Accessory() :
 	useNumber_(1),
 	muzzleFlash_(true),
 	aiOnly_(false),
-	botOnly_(false)
+	botOnly_(false),
+	noBuy_(false)
 {
 #ifndef S3D_SERVER
 	texture_ = 0;
@@ -97,6 +98,9 @@ bool Accessory::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode
 
 	// Get bot only (ie: only for bots, not for tank objects)
 	accessoryNode->getNamedChild("botonly", botOnly_, false);
+
+	// Get no buy 
+	accessoryNode->getNamedChild("nobuy", noBuy_, false);
 
 	// Get the maximum number
 	maximumNumber_ = context.getOptionsGame().getMaxNumberWeapons();

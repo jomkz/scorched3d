@@ -227,6 +227,8 @@ bool TankAIWeaponSets::WeaponSetEntry::checkType(const char *type)
 
 bool TankAIWeaponSets::WeaponSetEntry::weaponValid(Tank *tank, bool lastRound)
 {
+	if (accessory->getNoBuy()) return false;
+
 	int currentCount = tank->getAccessories().getAccessoryCount(accessory);
 	int currentMoney = tank->getScore().getMoney();
 
