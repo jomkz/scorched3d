@@ -91,8 +91,13 @@ bool AccessoryStore::parseFile(
 				accessory->getName()));
 		}
 
+		if (!accessory->getNoBuy() &&
+			accessory->getMaximumNumber() != 0)
+		{
+			tabGroups_.insert(accessory->getTabGroupName());
+		}
+
 		// Add the accessory
-		tabGroups_.insert(accessory->getTabGroupName());
 		accessories_.push_back(accessory);
 
 		// Add weapons to death animations, weighted by arms level
