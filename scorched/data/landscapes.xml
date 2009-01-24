@@ -116,6 +116,7 @@
 		<weight>100</weight>
 		<defn>
 			<item>data/landscapes/defncavern.xml</item>
+      <item>data/landscapes/defncavern2.xml</item>
 		</defn>
 		<tex>
 			<item>data/landscapes/texcavern.xml</item>
@@ -152,6 +153,7 @@
 		<weight>100</weight>
 		<defn>
 			<item>data/landscapes/defncanyon.xml</item>
+      <item>data/landscapes/defncanyon2.xml</item>
 		</defn>
 		<tex>
 			<item>data/landscapes/texplage.xml</item> 
@@ -164,6 +166,8 @@
 		<weight>100</weight>
 		<defn>
 			<item>data/landscapes/defndenali.xml</item>
+      <item>data/landscapes/defndenali2.xml</item>
+      <item>data/landscapes/defndenali3.xml</item>
 		</defn>
 		<tex>
 			<item>data/landscapes/texdenali.xml</item> 
@@ -176,6 +180,7 @@
 		<weight>100</weight>
 		<defn>
 			<item>data/landscapes/defnascencion.xml</item>
+      <item>data/landscapes/defnascencion2.xml</item>
 		</defn>
 		<tex>
 			<item>data/landscapes/texasianspring.xml</item> 
@@ -188,6 +193,8 @@
 		<weight>100</weight>
 		<defn>
 			<item>data/landscapes/defnglaciation.xml</item>
+      <item>data/landscapes/defnglaciation2.xml</item>
+      <item>data/landscapes/defnglaciation3.xml</item>
 		</defn>
 		<tex>
 			<item>data/landscapes/texcastle.xml</item> 
