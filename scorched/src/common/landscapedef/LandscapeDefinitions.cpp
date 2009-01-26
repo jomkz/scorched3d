@@ -108,11 +108,12 @@ bool LandscapeDefinitions::readLandscapeDefinitions()
 	return true;
 }
 
-const char *LandscapeDefinitions::getLeastUsedFile(std::vector<std::string> &files)
+const std::string LandscapeDefinitions::getLeastUsedFile(
+	OptionsScorched &context, std::vector<std::string> &files)
 {
 	DIALOG_ASSERT(!files.empty());
 
-	const char *result = "";
+	std::vector<std::string> results;
 	int usedTimes = INT_MAX;
 
 	std::vector<std::string>::iterator itor;
@@ -130,13 +131,21 @@ const char *LandscapeDefinitions::getLeastUsedFile(std::vector<std::string> &fil
 			used = (*findItor).second;
 		}
 
-		if (used < usedTimes)
+		if (used <= usedTimes)
 		{
+			if (used < usedTimes) results.clear();
 			usedTimes = used;
-			result = file.c_str();
+			results.push_back(file);
 		}
 	}
 	
+	DIALOG_ASSERT(!results.empty());
+	std::string result = results[0];
+	if (!context.getCycleMaps())
+	{
+		result = results[rand() % results.size()];
+	}
+
 	usedFiles_[result] = usedTimes + 1;
 	return result;
 }
@@ -240,8 +249,8 @@ LandscapeDefinition LandscapeDefinitions::getRandomLandscapeDefn(
 	}
 
 	// Return the chosen definition
-	std::string tex = getLeastUsedFile(result->texs);
-	std::string defn = getLeastUsedFile(result->defns);
+	std::string tex = getLeastUsedFile(context, result->texs);
+	std::string defn = getLeastUsedFile(context, result->defns);
 	unsigned int seed = (unsigned int) rand();
 	LandscapeTex *landscapeTex = getTex(tex.c_str());
 	if (landscapeTex->seed != 0) seed = landscapeTex->seed;

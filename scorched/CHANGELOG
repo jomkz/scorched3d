@@ -42,3 +42,4 @@ Changed effectiveness of some shields after playing review
 Changed rollers to be less bouncy
 Changed key duplicates to be a warning rather than halting the program
 Added nobuy tag to accessories to allow accessories that can be given but not bought
+Landscape definition and texture files are chosen at random within each landscape (if cycle maps is off)

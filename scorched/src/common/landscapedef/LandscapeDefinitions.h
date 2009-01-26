@@ -56,7 +56,8 @@ protected:
 	LandscapeDefinitionsItem<LandscapeDefn> defns_;
 	LandscapeDefinitionsItem<LandscapeInclude> include_;
 
-	const char *getLeastUsedFile(std::vector<std::string> &files);
+	const std::string getLeastUsedFile(
+		OptionsScorched &context, std::vector<std::string> &files);
 	LandscapeDefinitionsEntry *getRandomLandscapeDefnEntry(
 		OptionsScorched &context,
 		std::list<LandscapeDefinitionsEntry *> passedLandscapes);

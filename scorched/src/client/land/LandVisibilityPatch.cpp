@@ -172,10 +172,9 @@ bool LandVisibilityPatch::setVisible(float distance)
 		recalculateErrors_ = false;
 	}
 
-	float maxError = 5.0f;
-	if (distance < 32.0f) maxError = 1.0f;
-	else if (distance < 64.0f) maxError = 1.5f;
-	else if (distance < 256.0f) maxError = 3.0f;
+	float maxError = ((distance - 32.0f) / 128.0f) + 1.0f;
+	if (maxError < 1.0f) maxError = 1.0f;
+	else if (maxError > 5.0f) maxError = 5.0f;
 
 	visibilityIndex_ = 0;
 	if (!OptionsDisplay::instance()->getNoLandLOD())
