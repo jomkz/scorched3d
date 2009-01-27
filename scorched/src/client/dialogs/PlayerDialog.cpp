@@ -32,6 +32,7 @@
 #include <graph/OptionsDisplay.h>
 #include <common/OptionsTransient.h>
 #include <common/OptionsScorched.h>
+#include <common/ChannelText.h>
 #include <common/Logger.h>
 #include <common/Defines.h>
 #include <GLW/GLWWindowManager.h>
@@ -447,6 +448,11 @@ void PlayerDialog::buttonDown(unsigned int id)
 					}
 					else
 					{
+						ChannelText text("general", 
+							LANG_RESOURCE_2("AVATAR_TOO_LARGE", 
+							"Warning: Avatar too large to send to server, is {0} should be < {1}",
+							tank->getAvatar().getFile().getBufferUsed(),
+							ScorchedClient::instance()->getOptionsGame().getMaxAvatarSize()));
 						Logger::log( "Warning: Avatar too large to send to server");
 					}
 				}

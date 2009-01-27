@@ -367,6 +367,12 @@ public:
 	int getFramesPerSecondLimit() { return framesPerSecondLimit_; }
 	OptionEntryInt &getFramesPerSecondLimitEntry() { return framesPerSecondLimit_; }
 
+	int getLandDetailLevelRamp() { return landDetailLevelRamp_; }
+	OptionEntryInt &getLandDetailLevelRampEntry() { return landDetailLevelRamp_; }
+
+	int getWaterDetailLevelRamp() { return waterDetailLevelRamp_; }
+	OptionEntryInt &getWaterDetailLevelRampEntry() { return waterDetailLevelRamp_; }
+
 	bool getFocusPause() { return focusPause_; }
 	OptionEntryBool &getFocusPauseEntry() { return focusPause_; }
 
@@ -421,6 +427,8 @@ protected:
 	OptionEntryInt toolTipTime_;
 	OptionEntryInt toolTipSpeed_;
 	OptionEntryInt framesPerSecondLimit_;
+	OptionEntryInt landDetailLevelRamp_;
+	OptionEntryInt waterDetailLevelRamp_;
 	OptionEntryBool noFog_;
 	OptionEntryBool detailTexture_;
 	OptionEntryBool saveWindowPositions_;

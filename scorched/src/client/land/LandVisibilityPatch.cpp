@@ -172,7 +172,9 @@ bool LandVisibilityPatch::setVisible(float distance)
 		recalculateErrors_ = false;
 	}
 
-	float maxError = ((distance - 32.0f) / 128.0f) + 1.0f;
+	float landDetailLevelRamp = (float) 
+		OptionsDisplay::instance()->getLandDetailLevelRamp();
+	float maxError = ((distance - 32.0f) / landDetailLevelRamp) + 1.0f;
 	if (maxError < 1.0f) maxError = 1.0f;
 	else if (maxError > 5.0f) maxError = 5.0f;
 

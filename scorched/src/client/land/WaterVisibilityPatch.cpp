@@ -65,8 +65,10 @@ bool WaterVisibilityPatch::setVisible(Vector &cameraPos)
 	if (!OptionsDisplay::instance()->getNoWaterLOD())
 	{
 		float *waterIndexErrors = Landscape::instance()->getWater().getIndexErrors();
+		int waterDetailLevelRamp = 
+			OptionsDisplay::instance()->getWaterDetailLevelRamp();
 
-		visibilityIndex_ = int(distance - 50.0f) / 130;
+		visibilityIndex_ = int(distance - 50.0f) / waterDetailLevelRamp;
 		if (waterIndexErrors[6] < 1.0f) visibilityIndex_ += 3;
 		else if (waterIndexErrors[6] < 2.0f) visibilityIndex_ += 2;
 		else if (waterIndexErrors[6] < 3.0f) visibilityIndex_ += 1;
