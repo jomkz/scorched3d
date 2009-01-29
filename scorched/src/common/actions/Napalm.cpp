@@ -361,43 +361,104 @@ void Napalm::simulateAddEdge(int x, int y)
 
 	if (params_->getSingleFlow()) 
 	{
-		// Find the new point to move to (if any)
-		// This point must be lower than the current point
-		if (heightL < height &&
-			heightL < heightR &&
-			heightL < heightU &&
-			heightL < heightD)
+		fixed *heightLR = 0;
+		int LR = 0;
+		if (heightL < heightR)
 		{
-			// Move left
-			edgePoints_.insert(XY_TO_UINT(x - 1, y));
+			heightLR = &heightL;
+			LR = -1;
 		}
-		else if (heightR < height &&
-			heightR < heightL &&
-			heightR < heightU &&
-			heightR < heightD)
+		else if (heightL == heightR)
 		{
-			// Move right
-			edgePoints_.insert(XY_TO_UINT(x + 1, y));
-		}
-		else if (heightU < height &&
-			heightU < heightL &&
-			heightU < heightR &&
-			heightU < heightD)
-		{
-			// Move up
-			edgePoints_.insert(XY_TO_UINT(x, y + 1));
-		}
-		else if (heightD < height)
-		{
-			// Move down
-			edgePoints_.insert(XY_TO_UINT(x, y - 1));
+			if (random.getRandUInt() % 2 == 0)
+			{
+				heightLR = &heightL;
+				LR = -1;
+			}
+			else
+			{
+				heightLR = &heightR;
+				LR = +1;
+			}
 		}
 		else
 		{
+			heightLR = &heightR;
+			LR = +1;
+		}
+
+		fixed *heightUD = 0;
+		int UD = 0;
+		if (heightU < heightD)
+		{
+			heightUD = &heightU;	
+			UD = +1;
+		}
+		else if (heightU == heightD)
+		{
+			if (random.getRandUInt() % 2 == 0)
+			{
+				heightUD = &heightU;	
+				UD = +1;
+			}
+			else
+			{
+				heightUD = &heightD;	
+				UD = -1;
+			}
+		}
+		else 
+		{
+			heightUD = &heightD;	
+			UD = -1;
+		}
+
+		enum Direction
+		{
+			eUD,
+			eLR,
+			eNone
+		} dir = eNone;
+		if (*heightLR < *heightUD)
+		{
+			if (*heightLR < height) dir = eLR;
+		}
+		else if (*heightLR == *heightUD)
+		{
+			if (*heightLR < height) 
+			{
+				if (random.getRandUInt() % 2 == 0)
+				{
+					dir = eUD;
+				}
+				else
+				{
+					dir = eLR;
+				}				
+			}
+		}
+		else
+		{
+			if (*heightUD < height) 
+			{
+				if (*heightLR < height) dir = eUD;
+			}
+		}
+
+		switch (dir)
+		{
+		case eUD:
+			edgePoints_.insert(XY_TO_UINT(x, y + UD));
+			break;
+		case eLR:
+			edgePoints_.insert(XY_TO_UINT(x + LR, y));
+			break;
+		default:
 			// None of the landscape is currently lower than the current point
 			// Just wait, as this point will be now be covered in napalm
 			// and may get higher and higher until it is
 			edgePoints_.insert(XY_TO_UINT(x, y));
+			break;
 		}
 	}
 	else
