@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 	}
 
 	// Check if this a new version we've seen
-	if (strstr(S3D::ScorchedVersion.c_str(), "BETA"))
+	if (S3D::stristr(S3D::ScorchedVersion.c_str(), "BETA"))
 	{
 		newVersion = true;
 	}
