@@ -79,18 +79,17 @@ void run_main(int argc, char *argv[], OptionsParameters &params)
 	if (!checkfile)
 	{
 		// Perhaps we can get the directory from the executables path name
-		char path[1024];
-		snprintf(path, sizeof(path), "%s", argv[0]);
-		char *sep = strrchr(path, '/');
-		if (sep)
+		std::string path = argv[0];
+		S3D::fileDos2Unix(path);
+		size_t slashPos = path.rfind('/');
+		if (slashPos != std::string::npos)
 		{
-			// Change into this new direcotry
-			*sep = '\0';
+			path.erase(slashPos);
 #ifdef _WIN32
-			SetCurrentDirectory(path);
+			SetCurrentDirectory(path.c_str());
 #else
-			chdir(path);
-#endif // _WIN32
+			chdir(path.c_str());
+#endif // _WIN32			
 		}
 
 		// Now try again for the correct directory
@@ -98,10 +97,11 @@ void run_main(int argc, char *argv[], OptionsParameters &params)
 		checkfile = fopen(execFile.c_str(), "r");
 		if (!checkfile)
 		{	
+			static char currentDir[1024];
 #ifdef _WIN32
-			GetCurrentDirectory(sizeof(path), path);
+			GetCurrentDirectory(sizeof(currentDir), currentDir);
 #else
-			getcwd(path, sizeof(path));
+			getcwd(currentDir, sizeof(currentDir));
 #endif // _WIN32
 			std::string dataPath = S3D::getDataFile("data");
 			S3D::dialogExit(
@@ -112,7 +112,7 @@ void run_main(int argc, char *argv[], OptionsParameters &params)
 				"The data directory is set to \"%s\" which does not exist.\n"
 				"(Current working directory %s)\n\n"
 				"If Scorched3D does not run please re-install Scorched3D.",
-				dataPath.c_str(), path));
+				dataPath.c_str(), currentDir));
 		}
 	}
 	else fclose(checkfile);
