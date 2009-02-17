@@ -113,6 +113,7 @@ void ServerNextTurnState::enterState(const unsigned state)
 						"TANK'S MOVE",
 						"{0}'s Move", 
 						tank->getTargetName()),
+					tank->getDestinationId(),
 					false);
 
 				// Tell the clients to start the game

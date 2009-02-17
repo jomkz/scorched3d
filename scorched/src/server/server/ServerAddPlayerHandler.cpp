@@ -193,7 +193,8 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 					"WELCOME_BACK",
 					"Welcome back {0}, you are ranked {1}",
 					tank->getTargetName(), rank.rank),
-				true);
+				tank->getDestinationId(),
+				false);
 		}
 
 		if (tank->getState().getSpectator())
