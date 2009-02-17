@@ -64,8 +64,6 @@ Section "MainSection" SEC01
   File /r /x ".svn" /x "*.db" "documentation"
   File "*.dll"
   File "*.manifest"
-  File "AUTHORS"
-  File "COPYING"
   File "README"
   File "CHANGELOG"
   File "Release\scorched.exe"
