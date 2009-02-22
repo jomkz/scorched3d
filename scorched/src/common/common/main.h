@@ -21,6 +21,7 @@
 #define WIN32_LEAN_AND_MEAN
 
 #include <windows.h>
+#include <cstdlib>
 
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>

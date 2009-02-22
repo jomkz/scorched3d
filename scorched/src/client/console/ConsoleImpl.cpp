@@ -26,6 +26,7 @@
 #include <GLEXT/GLViewPort.h>
 #include <GLW/GLWFont.h>
 #include <GLW/GLWToolTip.h>
+#include <limits.h>
 
 ConsoleImpl::ConsoleImpl() : 
 	GameStateI("Console"),

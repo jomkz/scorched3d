@@ -22,6 +22,7 @@
 #define __INCLUDE_ResourceBundle_INCLUDE__
 
 #include <set>
+#include <string.h>
 #include <lang/ResourceBundleEntry.h>
 
 class ResourceBundle

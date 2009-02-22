@@ -20,6 +20,7 @@
 
 #include <math.h>
 #include <stdlib.h>
+#include <limits.h>
 #include <landscapemap/HeightMapModifier.h>
 #include <landscapedef/LandscapeDefn.h>
 #include <common/Defines.h>
