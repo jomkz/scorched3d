@@ -187,7 +187,8 @@ int LangStringUtil::strlen(const LangString &str1)
 
 unsigned int *LangStringUtil::strstr(const unsigned int *str1, const LangString &str2)
 {
-	unsigned int pos = LangString(str1).find(str2);
+	LangString newString(str1);
+	size_t pos = newString.find(str2);
 	if (pos == LangString::npos) return 0;
 	return (unsigned int*)(str1 + pos);
 }
@@ -198,15 +199,15 @@ unsigned int *LangStringUtil::stristr(const unsigned int *str1, const LangString
 	LangString str2l(str2);
 	lowercase(str1l);
 	lowercase(str2l);
-	unsigned int pos = str1l.find(str2l);
+	size_t pos = str1l.find(str2l);
 	if (pos == LangString::npos) return 0;
 	return (unsigned int*)(str1 + pos);
 }
 
 void LangStringUtil::trim(LangString &value)
 {
-	int start = value.find_first_not_of(LANG_STRING(" \t\n"));
-	int end = value.find_last_not_of(LANG_STRING(" \t\n"));
+	size_t start = value.find_first_not_of(LANG_STRING(" \t\n"));
+	size_t end = value.find_last_not_of(LANG_STRING(" \t\n"));
 	if (start == LangString::npos) value.clear();
 	else if (end == LangString::npos) value.clear();
 	else value = LangString(value, start, end-start+1);

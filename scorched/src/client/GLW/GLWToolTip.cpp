@@ -128,7 +128,7 @@ void GLWToolTip::calculateTip(ToolTip *tip)
 
 	tipTextHeight_ = 24.0f;
 
-	int pos, startpos = 0;
+	size_t pos, startpos = 0;
 	LangString tipText = tipText_;
 	tipText.append(LANG_STRING("\n"));
 	while ((pos = tipText.find(LANG_STRING("\n"), startpos)) != LangString::npos)

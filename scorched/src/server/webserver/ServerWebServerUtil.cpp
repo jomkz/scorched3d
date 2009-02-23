@@ -401,15 +401,16 @@ bool ServerWebServerUtil::getTemplate(
 	while (true)
 	{
 		// Find start {{permission}}
-		int start1 = result.find("{{");
+		size_t start1 = result.find("{{");
 		if (start1 == std::string::npos) break;
-		int end1 = result.find("}}", start1);
+		size_t end1 = result.find("}}", start1);
 		if (end1 == std::string::npos) break;
 		std::string perm(result, start1 + 2, end1 - start1 - 2);
 		result.replace(start1, end1 - start1 + 2, "");
 
 		// Find end {{permission}}
-		int start2 = result.find(S3D::formatStringBuffer("{{%s}}", perm.c_str()), start1);
+		size_t start2 = result.find(
+			S3D::formatStringBuffer("{{%s}}", perm.c_str()), start1);
 		if (start2 == std::string::npos) break;
 		result.replace(start2, 4 + perm.size(), "");
 

@@ -215,6 +215,11 @@ static void drawTargets(TargetVisibilityIterator &itor, float distance)
 
 void RenderTargets::draw()
 {
+	if (!OptionsDisplay::instance()->getNoFog())
+	{
+		glEnable(GL_FOG); // NOTE: Fog on
+	}
+
 	// Don't put fully transparent areas into the depth buffer
 	unsigned int wantedstate = GLState::BLEND_ON | 
 		GLState::ALPHATEST_ON | GLState::TEXTURE_ON | 
@@ -297,6 +302,8 @@ static void drawTargets2D(TargetVisibilityIterator &itor, float distance)
 			renderImpl->render2D(distance);
 		}
 	}
+
+	glDisable(GL_FOG); // NOTE: Fog off
 }
 
 void RenderTargets::draw2d()

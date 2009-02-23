@@ -27,8 +27,8 @@
 
 void S3D::trim(std::string &value)
 {
-	int start = value.find_first_not_of(" \t\n");
-	int end = value.find_last_not_of(" \t\n");
+	size_t start = value.find_first_not_of(" \t\n");
+	size_t end = value.find_last_not_of(" \t\n");
 	if (start == std::string::npos) value = "";
 	else if (end == std::string::npos) value = "";
 	else value = std::string(value, start, end-start+1);

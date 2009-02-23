@@ -77,18 +77,16 @@ public:
 	Vector Normalize()
 	{
 		float mag = Magnitude();
-		Vector v;
 		if (mag == 0.0f) mag = 0.00001f;
-		v = (*this) / mag;
+		Vector v(V[0] / mag, V[1] / mag, V[2] / mag);
 		return v;
 	}
 
 	Vector Normalize2D()
 	{
-		float mag = float(sqrt(V[0]*V[0] + V[1]*V[1]));
-		Vector v;
+		float mag = Magnitude2d();
 		if (mag == 0.0f) mag = 0.00001f;
-		v = (*this) / mag;
+		Vector v(V[0] / mag, V[1] / mag, V[2] / mag);
 		return v;
 	}
 
@@ -114,9 +112,8 @@ public:
 
 	float dotP(const Vector &Vin)
 	{
-		Vector &V1 = (*this);
 		Vector &V2 = (Vector &) Vin;
-		return (V1.V[0] * V2.V[0]) + (V1.V[1] * V2.V[1]) + (V1.V[2] * V2.V[2]);
+		return (V[0] * V2.V[0]) + (V[1] * V2.V[1]) + (V[2] * V2.V[2]);
 	}
 
 	float Max()
@@ -141,7 +138,9 @@ public:
 	{
 		float mag = Magnitude();
 		if (mag == 0.0f) mag = 0.00001f;
-		(*this) /= mag;
+		V[0] /= mag;
+		V[1] /= mag;
+		V[2] /= mag;
 	}
 
 	void zero()
@@ -271,7 +270,9 @@ public:
 
 	void operator-=(const float a)
 	{
-		(*this) += -a;
+		V[0] -= a;
+		V[1] -= a;
+		V[2] -= a;
 	}
 
 	void operator-=(const Vector &Vin)
@@ -288,7 +289,7 @@ public:
 
 	bool operator!=(const Vector &Vin1)
 	{
-		return !((*this) == Vin1);
+		return (Vin1.V[0]!=V[0] || Vin1.V[1]!=V[1] || Vin1.V[2]!=V[2]);
 	}
 
 	float &operator[](const int m) { DIALOG_ASSERT(m<=2); return V[m]; }

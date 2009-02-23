@@ -53,10 +53,9 @@ NumberParser::~NumberParser()
 bool NumberParser::getOperands()
 {
 	operands_.clear();
-        int count = 0;
-	int nextPos = 0;
+	size_t nextPos = 0;
         std::string value;
-        int pos = (int) expression_.find('(',0);
+        size_t pos = expression_.find('(',0);
 	if (pos == std::string::npos)
 	{
 		//value = expression_.substr(pos + 1, nextPos - pos + 1);
@@ -65,11 +64,11 @@ bool NumberParser::getOperands()
 	}
 
 	pos += 1;
-        while (pos < (int) expression_.length())
+        while (pos < expression_.length())
         {
-                nextPos = (int) expression_.find_first_of(",)", pos);
+                nextPos = expression_.find_first_of(",)", pos);
                 if (nextPos == std::string::npos)
-                        nextPos = (int) expression_.length() -1;
+                        nextPos = expression_.length() -1;
                 value = expression_.substr(pos, nextPos - pos);
                 operands_.push_back(fixed(value.c_str()));
                 pos = nextPos + 1;

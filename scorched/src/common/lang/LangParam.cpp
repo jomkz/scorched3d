@@ -26,18 +26,18 @@ LangParam::LangParam(const LangStringConverter &convValue)
 {
 	const LangString &value = convValue.getValue();
 
-	int valueLen = value.size();
-	int current = 0;
+	size_t valueLen = value.size();
+	size_t current = 0;
 	while (current < valueLen)
 	{
-		int bstart = value.find('{', current);
+		size_t bstart = value.find('{', current);
 		if (bstart == std::string::npos) 
 		{
 			parts_.push_back(LangString(value, current));
 			break;
 		}
 
-		int bend = value.find('}', bstart);
+		size_t bend = value.find('}', bstart);
 		if (bend == std::string::npos)
 		{
 			parts_.push_back(LangString(value, current));
@@ -45,7 +45,7 @@ LangParam::LangParam(const LangStringConverter &convValue)
 		}
 
 		static LangString numbers = LANG_STRING("0123456789");
-		int charstart = value.find_first_not_of(numbers, bstart+1);
+		size_t charstart = value.find_first_not_of(numbers, bstart+1);
 		if (charstart != bend)
 		{
 			parts_.push_back(LangString(value, current));
