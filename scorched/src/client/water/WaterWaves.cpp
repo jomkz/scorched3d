@@ -353,5 +353,5 @@ void WaterWaves::drawBoxes(Water2Patches &currentPatch,
 			glVertex3fv(ptD);
 		}
 	glEnd();
-	GLInfo::addNoTriangles(paths.size() - 2);
+	GLInfo::addNoTriangles((unsigned int) paths.size() - 2);
 }

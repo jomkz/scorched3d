@@ -249,7 +249,7 @@ void RenderTargets::draw()
 			itor.init(currentPatch->getTrees());
 			drawTargets(itor, currentPatch->getDistance());
 
-			treesDrawn_+=currentPatch->getTrees().size();
+			treesDrawn_+=(unsigned int) currentPatch->getTrees().size();
 		}
 
 		ModelRendererTree::setSkipPre(false);
@@ -272,14 +272,14 @@ void RenderTargets::draw()
 			itor.init(currentPatch->getTargets());
 			drawTargets(itor, currentPatch->getDistance());
 
-			targetsDrawn_+=currentPatch->getTargets().size();
+			targetsDrawn_+=(unsigned int) currentPatch->getTargets().size();
 		}
 
 		{
 			itor.init(TargetVisibilityPatch::getLargeTargets());
 			drawTargets(itor, 0.0f);
 
-			targetsDrawn_+=TargetVisibilityPatch::getLargeTargets().size();
+			targetsDrawn_+=(unsigned int) TargetVisibilityPatch::getLargeTargets().size();
 		}
 	}
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "TARGETS_DRAW_MODELS");

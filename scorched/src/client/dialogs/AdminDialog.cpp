@@ -58,7 +58,7 @@ AdminDialog::AdminDialog() :
 
 		std::map<unsigned int, Tank *> &tanks = 
 			ScorchedClient::instance()->getTankContainer().getPlayingTanks();
-		adminTable_->setItemCount(tanks.size());
+		adminTable_->setItemCount((int) tanks.size());
 
 		// Player Actions
 		GLWPanel *buttonPanel = new GLWPanel(10.0f, 10.0f, 600.0f, 50.0f, false, false);
@@ -125,7 +125,7 @@ void AdminDialog::drawColumn(unsigned int id, int row, int col,
 {
 	std::map<unsigned int, Tank *> &tanks = 
 		ScorchedClient::instance()->getTankContainer().getPlayingTanks();
-	adminTable_->setItemCount(tanks.size());
+	adminTable_->setItemCount((int) tanks.size());
 
 	int pos = 0;
 	std::map<unsigned int, Tank *>::iterator itor;
@@ -178,7 +178,7 @@ void AdminDialog::buttonDown(unsigned int id)
 {
 	std::map<unsigned int, Tank *> &tanks = 
 		ScorchedClient::instance()->getTankContainer().getPlayingTanks();
-	adminTable_->setItemCount(tanks.size());
+	adminTable_->setItemCount((int) tanks.size());
 
 	unsigned int sid = ClientAdminResultHandler::instance()->getSid();
 	unsigned int playerId = 0;

@@ -65,7 +65,7 @@ bool AccessoryStore::parseFile(
 	}
 
 	// Itterate all of the accessories in the file
-	int noChildren = file.getRootNode()->getChildren().size();
+	int noChildren = (int) file.getRootNode()->getChildren().size();
 	int childCount = 0;
 	XMLNode *currentNode = 0;
 	while (file.getRootNode()->getNamedChild("accessory", currentNode, false))

@@ -134,7 +134,7 @@ bool ModFileEntry::loadModFile(const std::string &filename)
 		tmpBuffer.reset();
 		do
 		{
-			newSize = fread(buffer, 
+			newSize = (int) fread(buffer, 
 				sizeof(unsigned char), 
 				sizeof(buffer), 
 				file);

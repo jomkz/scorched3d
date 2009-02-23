@@ -62,7 +62,7 @@ void GLWTime::draw()
 	glColor3f(1.0f, 0.0f, 0.0f);
 	calcWidth();
 	GLWFont::instance()->getGameFont()->drawSubStr(
-		0, strlen(timeStr) - 1,
+		0, (int) strlen(timeStr) - 1,
 		color_, size_,
 		x_, y_ + 6.0f, 0.0f, timeStr);
 }

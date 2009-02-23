@@ -200,7 +200,7 @@ void EconomyFreeMarket::accessoryBought(Tank *tank,
 	if (possibleAccessories.size() <= 1) return;
 
 	// How much should each accessory get (on average)
-	int moneyShouldAquire = boughtAccessory->getPrice() / possibleAccessories.size();
+	int moneyShouldAquire = boughtAccessory->getPrice() / (int) possibleAccessories.size();
 	
 	// Alter prices
 	{

@@ -100,7 +100,7 @@ void XMLParser::startElementHandler(const XML_Char *name,
 			atts++;
 
 			XMLNode *param = new XMLNode(name, "", XMLNode::XMLParameterType);
-			param->addContent(value, strlen(value));
+			param->addContent(value, (int) strlen(value));
 			param->setLine(XML_GetCurrentLineNumber(p_),
 				XML_GetCurrentColumnNumber(p_));
 			current_->addParameter(param);

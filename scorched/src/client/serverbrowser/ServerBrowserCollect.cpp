@@ -177,7 +177,7 @@ void ServerBrowserCollect::processMessage(NetMessage &message)
 
 		// Find the start of the XML
 		while (*buffer != '<' && *buffer != '\0') buffer++;
-		unsigned int len = strlen(buffer);
+		unsigned int len = (unsigned int) strlen(buffer);
 
 		// Parse the buffer
 		if (*buffer == '<')

@@ -122,7 +122,7 @@ void GLFont2d::drawWidthRhs(float len, Vector &color, float size,
 	float x, float y, float z, 
 	const LangString &text)
 {
-	int slen = text.size();
+	int slen = (int) text.size();
 	if (slen > 0)
 	{
 		int l = 0;

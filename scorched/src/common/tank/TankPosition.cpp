@@ -107,7 +107,7 @@ void TankPosition::revertSettings(unsigned int index)
 {
 	if (index < oldShots_.size())
 	{
-		int newIndex = (oldShots_.size() - 1) - index;
+		int newIndex = (int) (oldShots_.size() - 1) - index;
 		rotateGunXY(oldShots_[newIndex].rot, false);
 		rotateGunYZ(oldShots_[newIndex].ele, false);
 		changePower(oldShots_[newIndex].power, false);

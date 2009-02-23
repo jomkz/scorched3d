@@ -87,7 +87,7 @@ std::string ConsoleRules::matchRule(const char *line,
 
 			if (values.size() == 1)
 			{
-				unsigned int nameLen = strlen(rule->getName());
+				size_t nameLen = strlen(rule->getName());
 				if (nameLen >= nameValue.valueString.length() &&
 					_strnicmp(line, rule->getName(), nameValue.valueString.length()) == 0)
 				{

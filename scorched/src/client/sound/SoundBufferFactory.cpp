@@ -29,7 +29,7 @@ SoundBuffer *SoundBufferFactory::createBuffer(const char *fileName)
 {
 	if (Sound::instance()->getInit())
 	{
-		int len = strlen(fileName);
+		int len = (int) strlen(fileName);
 		if (len >= 3)
 		{
 			if (0 == strcmp(&fileName[len-3], "wav"))

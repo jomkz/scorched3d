@@ -132,7 +132,7 @@ const char *fixed::asString()
 	{
 		snprintf(buffer, 15, "%i", m_nVal);
 	}
-	int len = strlen(buffer);
+	int len = (int) strlen(buffer);
 
 	if (len <= 4)
 	{

@@ -125,7 +125,7 @@ bool ImagePng::loadFromFile(const std::string &filename, bool readalpha)
 	int read = 0;
 	char buffer[256];
 	NetBuffer netBuffer;
-	while (read = fread(buffer, 1, 256, file))
+	while (read = (int) fread(buffer, 1, 256, file))
 	{
 		netBuffer.addDataToBuffer(buffer, read);
 	}

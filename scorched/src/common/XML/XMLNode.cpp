@@ -84,14 +84,14 @@ XMLNode::XMLNode(const char *name, const char *content, NodeType type) :
 	name_(name), parent_(0), type_(type),
 	useContentNodes_(false)
 {
-	addContent(content, strlen(content));
+	addContent(content, (int) strlen(content));
 }
 
 XMLNode::XMLNode(const char *name, const std::string &content, NodeType type) : 
 	name_(name), parent_(0), type_(type),
 	useContentNodes_(false)
 {
-	addContent(content.c_str(), content.size());
+	addContent(content.c_str(), (int) content.size());
 }
 
 XMLNode::XMLNode(const char *name, const LangString &langStringContent, NodeType type) : 
@@ -100,7 +100,7 @@ XMLNode::XMLNode(const char *name, const LangString &langStringContent, NodeType
 {
 	std::string content;
 	content = LangStringUtil::convertFromLang(langStringContent);
-	addContent(content.c_str(), content.size());
+	addContent(content.c_str(), (int) content.size());
 }
 
 XMLNode::XMLNode(const char *name, float content, NodeType type) :
@@ -108,7 +108,7 @@ XMLNode::XMLNode(const char *name, float content, NodeType type) :
 {
 	char buffer[20];
 	snprintf(buffer, 20, "%.2f", content);
-	addContent(buffer, strlen(buffer));
+	addContent(buffer, (int) strlen(buffer));
 }
 
 XMLNode::XMLNode(const char *name, int content, NodeType type) :
@@ -116,7 +116,7 @@ XMLNode::XMLNode(const char *name, int content, NodeType type) :
 {
 	char buffer[20];
 	snprintf(buffer, 20, "%i", content);
-	addContent(buffer, strlen(buffer));
+	addContent(buffer, (int) strlen(buffer));
 }
 
 XMLNode::XMLNode(const char *name, unsigned int content, NodeType type) :
@@ -124,21 +124,21 @@ XMLNode::XMLNode(const char *name, unsigned int content, NodeType type) :
 {
 	char buffer[20];
 	snprintf(buffer, 20, "%u", content);
-	addContent(buffer, strlen(buffer));
+	addContent(buffer, (int) strlen(buffer));
 }
 
 XMLNode::XMLNode(const char *name, bool content, NodeType type) :
 	name_(name), parent_(0), type_(type), useContentNodes_(false)
 {
 	const char *buffer = content?"true":"false";
-	addContent(buffer, strlen(buffer));
+	addContent(buffer, (int) strlen(buffer));
 }
 
 XMLNode::XMLNode(const char *name, fixed content, NodeType type) :
 	name_(name), parent_(0), type_(type), useContentNodes_(false)
 {
 	const char *buffer = content.asString();
-	addContent(buffer, strlen(buffer));
+	addContent(buffer, (int) strlen(buffer));
 }
 
 XMLNode::XMLNode(const char *name, FixedVector &content, NodeType type) :
@@ -152,13 +152,13 @@ XMLNode::XMLNode(const char *name, FixedVector &content, NodeType type) :
 	addChild(nodeC);
 
 	const char *buffer = content[0].asString();
-	nodeA->addContent(buffer, strlen(buffer));
+	nodeA->addContent(buffer, (int) strlen(buffer));
 
 	buffer = content[1].asString();
-	nodeB->addContent(buffer, strlen(buffer));
+	nodeB->addContent(buffer, (int) strlen(buffer));
 
 	buffer = content[2].asString();
-	nodeC->addContent(buffer, strlen(buffer));
+	nodeC->addContent(buffer, (int) strlen(buffer));
 }
 
 XMLNode::XMLNode(const char *name, Vector &content, NodeType type) :
@@ -173,13 +173,13 @@ XMLNode::XMLNode(const char *name, Vector &content, NodeType type) :
 
 	char buffer[20];
 	snprintf(buffer, 20, "%.2f", content[0]);
-	nodeA->addContent(buffer, strlen(buffer));
+	nodeA->addContent(buffer, (int) strlen(buffer));
 
 	snprintf(buffer, 20, "%.2f", content[1]);
-	nodeB->addContent(buffer, strlen(buffer));
+	nodeB->addContent(buffer, (int) strlen(buffer));
 
 	snprintf(buffer, 20, "%.2f", content[2]);
-	nodeC->addContent(buffer, strlen(buffer));
+	nodeC->addContent(buffer, (int) strlen(buffer));
 }
 
 XMLNode::~XMLNode()

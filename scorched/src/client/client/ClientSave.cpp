@@ -100,7 +100,7 @@ bool ClientSave::saveClient(const std::string &fileName)
 	FILE *file = fopen(fileName.c_str(), "wb");
 	if (!file) return false;
 
-	int size = fwrite(saveBuffer.getBuffer(),	
+	int size = (int) fwrite(saveBuffer.getBuffer(),	
 		sizeof(char),
 		saveBuffer.getBufferUsed(),
 		file);

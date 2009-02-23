@@ -406,12 +406,12 @@ void Sound::addManaged(VirtualSoundSource *source)
 
 int Sound::getAvailableChannels()
 {
-	return availableSources_.size();
+	return (int) availableSources_.size();
 }
 
 int Sound::getPlayingChannels()
 {
-	return playingSources_.size();
+	return (int) playingSources_.size();
 }
 
 SoundListener *Sound::getDefaultListener()

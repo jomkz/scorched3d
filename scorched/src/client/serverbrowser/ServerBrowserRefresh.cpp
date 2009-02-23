@@ -72,7 +72,7 @@ void ServerBrowserRefresh::refreshList()
 		time_t theTime = time(0);
 
 		// Add a number of new entries
-		for (int i=entryMap_.size(); i<20 && !refreshEntries_.empty(); i++)
+		for (int i=(int) entryMap_.size(); i<20 && !refreshEntries_.empty(); i++)
 		{
 			ServerBrowserRefreshEntry entry = refreshEntries_.front();
 			refreshEntries_.pop_front();

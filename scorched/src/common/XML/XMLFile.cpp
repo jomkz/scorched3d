@@ -44,7 +44,7 @@ bool XMLFile::readFile(const std::string &fileName)
 		itor != lines.getLines().end();
 		itor++)
 	{
-		if (!parser_.parse((*itor).c_str(), (*itor).size(), 0)) return false;
+		if (!parser_.parse((*itor).c_str(), (int) (*itor).size(), 0)) return false;
 
 		// Hack to get it to count lines correctly :)
 		if (!parser_.parse("\n", 1, 0)) return false;

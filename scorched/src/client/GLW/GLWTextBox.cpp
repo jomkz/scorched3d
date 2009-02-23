@@ -110,7 +110,7 @@ void GLWTextBox::keyDown(char *buffer, unsigned int keyState,
 				if (entry.widget->getMetaClassId() == getMetaClassId())
 				{
 					GLWTextBox *textBox = (GLWTextBox *) entry.widget;
-					if (this == textBox) position = textBoxes.size();
+					if (this == textBox) position = (unsigned int) textBoxes.size();
 					textBoxes.push_back(textBox);
 				}
 			}

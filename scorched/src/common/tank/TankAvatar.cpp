@@ -89,7 +89,7 @@ bool TankAvatar::loadFromFile(const std::string &fileName)
 		name_ = fileName;
 		file_->reset();
 		unsigned char readBuf[512];
-		while (unsigned int size = fread(readBuf, sizeof(unsigned char), 512, in))
+		while (unsigned int size = (unsigned int) fread(readBuf, sizeof(unsigned char), 512, in))
 		{
 			file_->addDataToBuffer(readBuf, size);
 		}

@@ -256,8 +256,8 @@ void ModelRendererMesh::drawVerts(unsigned int m, Mesh *mesh, bool vertexLightin
 		Bone *bone = model_->getBones()[b];
 		BoneType *type = boneTypes_[b];
 
-		unsigned int posKeys = bone->getPositionKeys().size();
-		unsigned int rotKeys = bone->getRotationKeys().size();
+		unsigned int posKeys = (unsigned int) bone->getPositionKeys().size();
+		unsigned int rotKeys = (unsigned int) bone->getRotationKeys().size();
 		if (posKeys == 0 && rotKeys == 0)
 		{
 			memcpy(type->final_, type->absolute_, sizeof(BoneMatrixType));

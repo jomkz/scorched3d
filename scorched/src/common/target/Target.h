@@ -83,7 +83,7 @@ public:
 	const LangString &getTargetName() { return name_; }
 	const std::string &getCStrName();
 	void setName(const LangString &name);
-	unsigned int getNameLen() { return name_.size(); }
+	unsigned int getNameLen() { return (unsigned int) name_.size(); }
 
 	// Serialize the target
 	virtual bool writeMessage(NetBuffer &buffer);

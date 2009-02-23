@@ -43,8 +43,8 @@ ModFiles::~ModFiles()
 
 bool ModFiles::fileEnding(const std::string &file, const std::string &ext)
 {
-	int fileLen = file.size();
-	int extLen = ext.size();
+	int fileLen = (int) file.size();
+	int extLen = (int) ext.size();
 	if (fileLen < extLen) return false;
 
 	for (int i=0; i<extLen; i++)
@@ -211,7 +211,7 @@ bool ModFiles::loadModFile(const std::string &fullFileName,
 
 	// Turn it into a unix style path and remove the 
 	// name of the directory that contains it
-	int modDirLen = modDir.size();
+	int modDirLen = (int) modDir.size();
 	shortFileName += modDirLen;
 	while (shortFileName[0] == '/') shortFileName++;
 
@@ -337,7 +337,7 @@ bool ModFiles::importModFiles(std::string &mod, const std::string &fileName)
 	// Read Buffer
 	NetBuffer tmpBuffer;
 	unsigned char readBuf[512];
-	while (unsigned int size = fread(readBuf, sizeof(unsigned char), 512, in))
+	while (unsigned int size = (unsigned int) fread(readBuf, sizeof(unsigned char), 512, in))
 	{
 		tmpBuffer.addDataToBuffer(readBuf, size);
 	}

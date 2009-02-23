@@ -42,7 +42,7 @@ RandomGenerator::RandomGenerator() :
 		DIALOG_ASSERT(in);
 		bufferSize_= 100000;
 		unsigned int *tmpbuffer = new unsigned int[bufferSize_];
-		int size = fread(tmpbuffer, sizeof(unsigned int), bufferSize_, in);
+		int size = (int) fread(tmpbuffer, sizeof(unsigned int), bufferSize_, in);
 		fclose(in);	
 		DIALOG_ASSERT(size == bufferSize_);
 

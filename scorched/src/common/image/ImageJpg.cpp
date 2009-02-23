@@ -120,7 +120,7 @@ bool ImageJpg::loadFromFile(const char * filename, bool readalpha)
 	int read = 0;
 	char buffer[256];
 	NetBuffer netBuffer;
-	while (read = fread(buffer, 1, 256, file))
+	while (read = (int) fread(buffer, 1, 256, file))
 	{
 		netBuffer.addDataToBuffer(buffer, read);
 	}

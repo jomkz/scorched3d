@@ -882,7 +882,7 @@ void StatsLoggerDatabase::addInfo(Tank *tank)
 	char playerName[1024];
 	escapeString(playerName, 
 		tank->getCStrName().c_str(),
-		tank->getCStrName().size());
+		(unsigned long) tank->getCStrName().size());
 
 	// Add the players name (may fail if duplicates)
 	runQuery("INSERT INTO scorched3d_names (playerid, name, count) VALUES "

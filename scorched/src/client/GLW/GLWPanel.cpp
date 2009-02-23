@@ -468,7 +468,7 @@ void GLWPanel::layout()
 
 		w = 0.0f;
 		for (unsigned int i=0; i<gridWidth_; i++) w += gridW[i];
-		int rows = widgets_.size() / gridWidth_;
+		int rows = (int) widgets_.size() / gridWidth_;
 		if (widgets_.size() % gridWidth_ > 0) rows ++;
 		h *= rows;
 	}

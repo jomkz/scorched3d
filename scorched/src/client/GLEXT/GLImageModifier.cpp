@@ -455,7 +455,7 @@ void ImageModifier::addTexturesToBitmap(
 	sources.push_back(&slopeBitmap);
 	sources.push_back(&shoreBitmap);
 
-	int currentCount = sources.size();
+	int currentCount = (int) sources.size();
 	for (int i=currentCount; i<9; i++)
 	{
 		sources.push_back(&shoreBitmap);
