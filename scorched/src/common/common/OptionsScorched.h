@@ -91,6 +91,12 @@ public:
 	OPTIONINT_GETTER(ScoreWonForRound);
 	OPTIONINT_GETTER(ScoreWonForLives);
 
+	OPTIONINT_GETTER(SkillForRound);
+	OPTIONINT_GETTER(SkillForMatch);
+	OPTIONINT_GETTER(MaxSkillLost);
+	OPTIONINT_GETTER(SkillForSelfKill);
+	OPTIONINT_GETTER(SkillForTeamKill);
+
 	OPTIONINT_GETTER(StartMoney);
 	OPTIONINT_GETTER(Interest);
 	OPTIONINT_GETTER(FreeMarketAdjustment);

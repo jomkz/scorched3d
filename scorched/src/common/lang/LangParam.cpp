@@ -111,7 +111,8 @@ LangString LangParam::getParameterizedString(const LangStringConverter &param1,
 }
 
 LangString LangParam::getParameterizedString(const LangStringConverter &param1, 
-	const LangStringConverter &param2, const LangStringConverter &param3, const LangStringConverter &param4)
+	const LangStringConverter &param2, const LangStringConverter &param3, 
+	const LangStringConverter &param4)
 {
 	if (parts_.size() != 5 || positions_.size() != 4) return LangString();
 	LangString result;
@@ -124,6 +125,26 @@ LangString LangParam::getParameterizedString(const LangStringConverter &param1,
 	result.append(parts_[3]);
 	result.append(positions_[3]==0?param1.getValue():positions_[3]==1?param2.getValue():positions_[3]==2?param3.getValue():param4.getValue());
 	result.append(parts_[4]);
+	return result;
+}
+
+LangString LangParam::getParameterizedString(const LangStringConverter &param1, 
+	const LangStringConverter &param2, const LangStringConverter &param3, 
+	const LangStringConverter &param4, const LangStringConverter &param5)
+{
+	if (parts_.size() != 6 || positions_.size() != 5) return LangString();
+	LangString result;
+	result.append(parts_[0]);
+	result.append(positions_[0]==0?param1.getValue():positions_[0]==1?param2.getValue():positions_[0]==2?param3.getValue():positions_[0]==3?param4.getValue():param5.getValue());
+	result.append(parts_[1]);
+	result.append(positions_[1]==0?param1.getValue():positions_[1]==1?param2.getValue():positions_[1]==2?param3.getValue():positions_[1]==3?param4.getValue():param5.getValue());
+	result.append(parts_[2]);
+	result.append(positions_[2]==0?param1.getValue():positions_[2]==1?param2.getValue():positions_[2]==2?param3.getValue():positions_[2]==3?param4.getValue():param5.getValue());
+	result.append(parts_[3]);
+	result.append(positions_[3]==0?param1.getValue():positions_[3]==1?param2.getValue():positions_[3]==2?param3.getValue():positions_[3]==3?param4.getValue():param5.getValue());
+	result.append(parts_[4]);
+	result.append(positions_[4]==0?param1.getValue():positions_[4]==1?param2.getValue():positions_[4]==2?param3.getValue():positions_[4]==3?param4.getValue():param5.getValue());
+	result.append(parts_[5]);
 	return result;
 }
 
@@ -173,4 +194,15 @@ LangString LangParam::getKey(const LangStringConverter &value,
 {
 	LangParam parameterized(value);
 	return parameterized.getParameterizedString(param1, param2, param3, param4);
+}
+
+LangString LangParam::getKey(const LangStringConverter &value,
+	const LangStringConverter &param1,
+	const LangStringConverter &param2,
+	const LangStringConverter &param3,
+	const LangStringConverter &param4,
+	const LangStringConverter &param5)
+{
+	LangParam parameterized(value);
+	return parameterized.getParameterizedString(param1, param2, param3, param4, param5);
 }

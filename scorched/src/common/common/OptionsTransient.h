@@ -78,6 +78,8 @@ public:
 	bool writeToBuffer(NetBuffer &buffer);
 	bool readFromBuffer(NetBufferReader &reader);
 
+	std::list<OptionEntry *> &getOptions() { return options_; }
+
 protected:
 	std::list<OptionEntry *> options_;
 	OptionsScorched &optionsGame_;

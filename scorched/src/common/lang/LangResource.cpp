@@ -52,10 +52,20 @@ LangString LangResource::getKey(const std::string &key, const std::string &value
 }
 
 LangString LangResource::getKey(const std::string &key, const std::string &value, 
-	const LangStringConverter &param1, const LangStringConverter &param2, const LangStringConverter &param3, const LangStringConverter &param4)
+	const LangStringConverter &param1, const LangStringConverter &param2, const LangStringConverter &param3, 
+	const LangStringConverter &param4)
 {
 	ResourceBundleEntry *bundle = Lang::instance()->getEntry(key, value);
 	LangString result = bundle->getString(param1, param2, param3, param4);
+	return result;
+}
+
+LangString LangResource::getKey(const std::string &key, const std::string &value, 
+	const LangStringConverter &param1, const LangStringConverter &param2, const LangStringConverter &param3, 
+	const LangStringConverter &param4, const LangStringConverter &param5)
+{
+	ResourceBundleEntry *bundle = Lang::instance()->getEntry(key, value);
+	LangString result = bundle->getString(param1, param2, param3, param4, param5);
 	return result;
 }
 

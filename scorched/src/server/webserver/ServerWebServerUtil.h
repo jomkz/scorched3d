@@ -22,6 +22,7 @@
 #define __INCLUDE_ServerWebServerUtilh_INCLUDE__
 
 #include <server/ServerAdminSessions.h>
+#include <lang/LangString.h>
 
 class NetMessage;
 class OptionEntry;
@@ -39,6 +40,7 @@ namespace ServerWebServerUtil
 		const std::string &field);
 	std::string getFile(const std::string &filename);
 	std::string concatLines(std::list<std::string> &lines);
+	std::string htmlLangString(const LangString &langstring);
 
 	// HTML template functions
 	bool getTemplate(

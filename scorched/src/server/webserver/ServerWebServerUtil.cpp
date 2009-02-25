@@ -54,6 +54,25 @@ std::string ServerWebServerUtil::getFile(const std::string &filename)
 	return file;
 }
 
+std::string ServerWebServerUtil::htmlLangString(const LangString &langstring)
+{
+	std::string result;
+	for (const LangStringStorage *c=langstring.c_str();*c;c++)
+	{
+		if (*c < ' ' || *c > 'z')
+		{
+			result.append("&#");
+			result.append(S3D::formatStringBuffer("%u", *c));
+			result.append(";");
+		}
+		else
+		{
+			result.push_back((char) *c);
+		}
+	}
+	return result;
+}
+
 std::string ServerWebServerUtil::concatLines(std::list<std::string> &lines)
 {
 	std::string result;

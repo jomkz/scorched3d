@@ -23,9 +23,11 @@
 #include <lua/LUAUtil.h>
 #include <common/OptionEntry.h>
 #include <common/OptionsScorched.h>
+#include <common/OptionsTransient.h>
 #include <common/Logger.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
+#include <tank/TankScore.h>
 #include <target/TargetLife.h>
 #include <landscapemap/LandscapeMaps.h>
 
@@ -67,6 +69,26 @@ static void addTank(lua_State *L, Tank *tank)
 	lua_pushstring(L, "team");
 	lua_pushnumber(L, tank->getTeam() * FIXED_RESOLUTION);
 	lua_settable(L, -3);
+
+	lua_pushstring(L, "money");
+	lua_pushnumber(L, tank->getScore().getMoney() * FIXED_RESOLUTION);
+	lua_settable(L, -3);
+
+	lua_pushstring(L, "score");
+	lua_pushnumber(L, tank->getScore().getScore() * FIXED_RESOLUTION);
+	lua_settable(L, -3);
+
+	lua_pushstring(L, "rank");
+	lua_pushnumber(L, tank->getScore().getRank() * FIXED_RESOLUTION);
+	lua_settable(L, -3);
+
+	lua_pushstring(L, "skill");
+	lua_pushnumber(L, tank->getScore().getSkill() * FIXED_RESOLUTION);
+	lua_settable(L, -3);
+
+	lua_pushstring(L, "lives");
+	lua_pushnumber(L, tank->getState().getLives() * FIXED_RESOLUTION);
+	lua_settable(L, -3);
 }
 
 static int s3d_get_option(lua_State *L) 
@@ -77,7 +99,41 @@ static int s3d_get_option(lua_State *L)
 	OptionEntry *entry = OptionEntryHelper::getEntry(
 		wrapper->getContext()->getOptionsGame().getMainOptions().getOptions(),
 		optionName);
-	if (entry) lua_pushstring(L, entry->getValueAsString());
+	if (!entry) 
+	{
+		entry = OptionEntryHelper::getEntry(
+			wrapper->getContext()->getOptionsTransient().getOptions(),
+			optionName);
+	}
+	if (entry) 
+	{
+		if (entry->getEntryType() == OptionEntry::OptionEntryBoolType)
+		{
+			lua_pushboolean(L, ((OptionEntryBool *)entry)->getValue());
+		}
+		else if (entry->getEntryType() == OptionEntry::OptionEntryIntType ||
+			entry->getEntryType() == OptionEntry::OptionEntryBoundedIntType ||
+			entry->getEntryType() == OptionEntry::OptionEntryEnumType)
+		{
+			lua_pushnumber(L, ((OptionEntryInt *)entry)->getValue() * FIXED_RESOLUTION);
+		}
+		else if (entry->getEntryType() == OptionEntry::OptionEntryFloatType)
+		{
+			lua_pushnumber(L, (unsigned int)(((OptionEntryFloat *)entry)->getValue() * FIXED_RESOLUTION));
+		}
+		else if (entry->getEntryType() == OptionEntry::OptionEntryFixedType)
+		{
+			lua_pushnumber(L, ((OptionEntryFixed *)entry)->getValue().getInternal());
+		}
+		else if (entry->getEntryType() == OptionEntry::OptionEntryFixedVectorType)
+		{
+			LUAUtil::addVectorToStack(L, ((OptionEntryFixedVector *)entry)->getValue());
+		}
+		else
+		{
+			lua_pushstring(L, entry->getValueAsString());
+		}
+	}
 	else 
 	{
 		Logger::log(S3D::formatStringBuffer("s3d_get_option:Failed to an option named %s", optionName));
@@ -97,7 +153,7 @@ static int s3d_get_tank(lua_State *L)
 	if (tank) addTank(L, tank);
 	else
 	{
-		Logger::log(S3D::formatStringBuffer("s3d_get_option:Failed to an tank id %u", 
+		Logger::log(S3D::formatStringBuffer("s3d_get_tank:Failed to an tank id %u", 
 			(unsigned int) number));
 		lua_pushstring(L, "");
 	}

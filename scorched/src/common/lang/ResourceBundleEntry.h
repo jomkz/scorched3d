@@ -36,7 +36,11 @@ public:
 	virtual LangString getString(const LangStringConverter &param1, 
 		const LangStringConverter &param2, const LangStringConverter &param3) = 0;
 	virtual LangString getString(const LangStringConverter &param1, 
-		const LangStringConverter &param2, const LangStringConverter &param3, const LangStringConverter &param4) = 0;
+		const LangStringConverter &param2, const LangStringConverter &param3, 
+		const LangStringConverter &param4) = 0;
+	virtual LangString getString(const LangStringConverter &param1, 
+		const LangStringConverter &param2, const LangStringConverter &param3, 
+		const LangStringConverter &param4, const LangStringConverter &param5) = 0;
 };
 
 #endif // __INCLUDE_ResourceBundleEntry_INCLUDE__

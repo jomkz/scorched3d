@@ -42,7 +42,11 @@ public:
 	virtual LangString getString(const LangStringConverter &param1, 
 		const LangStringConverter &param2, const LangStringConverter &param3);
 	virtual LangString getString(const LangStringConverter &param1, 
-		const LangStringConverter &param2, const LangStringConverter &param3, const LangStringConverter &param4);
+		const LangStringConverter &param2, const LangStringConverter &param3, 
+		const LangStringConverter &param4);
+	virtual LangString getString(const LangStringConverter &param1, 
+		const LangStringConverter &param2, const LangStringConverter &param3, 
+		const LangStringConverter &param4, const LangStringConverter &param5);
 
 private:
 	LangParam parameterizedString_;

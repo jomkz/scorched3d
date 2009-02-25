@@ -481,7 +481,7 @@ void TankDamage::logDeath()
 	{
 		if (damagedPlayerId_ == firedPlayerId)
 		{
-			int skillChange = -50;
+			int skillChange = context_->getOptionsGame().getSkillForSelfKill();
 			firedTank->getScore().setSkill(firedTank->getScore().getSkill() + skillChange);
 
 			StatsLogger::instance()->
@@ -502,7 +502,7 @@ void TankDamage::logDeath()
 		else if ((context_->getOptionsGame().getTeams() > 1) &&
 				(firedTank->getTeam() == killedTank->getTeam())) 
 		{
-			int skillChange = -50;
+			int skillChange = context_->getOptionsGame().getSkillForTeamKill();
 			firedTank->getScore().setSkill(firedTank->getScore().getSkill() + skillChange);
 
 			StatsLogger::instance()->
@@ -523,18 +523,39 @@ void TankDamage::logDeath()
 		}
 		else
 		{
-			int skillChange = 0;
+			int kbonus = 0; // Killer
+			int vbonus = 0; // Victim
 			if (firedTank->getPlayerId() != 0 && killedTank->getPlayerId() != 0) 
 			{
-				float weaponMult = (float(weapon_->getArmsLevel()) / 10.0f) + 1.0f;
-				skillChange = int(
-					(20.0f * weaponMult) / 
-					(1.0f + powf(10.0f, (
-					float(firedTank->getScore().getSkill() - killedTank->getScore().getSkill()) / 1000.0f)))
-					);
+				int kskill = firedTank->getScore().getSkill();
+				int vskill = killedTank->getScore().getSkill();
+
+				if (kskill > vskill) 
+				{
+					// killer is better than the victim
+					kbonus = ((kskill + vskill)*(kskill + vskill)) / (kskill*kskill);
+					vbonus = kbonus * vskill / (vskill + kskill);
+				} 
+				else 
+				{
+					// the victim is better than the killer
+					kbonus = ((vskill + kskill)*(vskill + kskill)) / (vskill*vskill) * vskill / kskill;
+					vbonus = kbonus * (vskill + 1000) / (vskill + kskill);
+				}
+
+				if (vbonus > context_->getOptionsGame().getMaxSkillLost())
+				{
+					vbonus = context_->getOptionsGame().getMaxSkillLost();
+				}
+
+				//$vbonus = $vskill if $vbonus > $vskill;
+				//$kbonus = $kskill if $kbonus > $kskill;
+				float weight = (float(weapon_->getArmsLevel()) / 10.0f) + 1.0f;
+				kbonus = (int) (float(kbonus) * weight);
+				vbonus = (int) (float(vbonus) * weight);
 			}
-			firedTank->getScore().setSkill(firedTank->getScore().getSkill() + skillChange);
-			killedTank->getScore().setSkill(killedTank->getScore().getSkill() - skillChange);
+			firedTank->getScore().setSkill(firedTank->getScore().getSkill() + kbonus);
+			killedTank->getScore().setSkill(killedTank->getScore().getSkill() - vbonus);
 
 			StatsLogger::instance()->
 				tankKilled(firedTank, killedTank, weapon_);
@@ -544,25 +565,27 @@ void TankDamage::logDeath()
 				if (firedTank->getScore().getTurnKills() > 1)
 				{
 					ChannelText text("combat", 
-						LANG_RESOURCE_4(
+						LANG_RESOURCE_5(
 						"TANK_KILLED_MULTIOTHER",
-						"[p:{0}] multi-killed [p:{1}] with a [w:{2}] ({3} skill)",
+						"[p:{0}] multi-killed [p:{1}] with a [w:{2}] ({3}, {4} skill)",
 						firedTank->getTargetName(),
 						killedTank->getTargetName(),
 						weapon_->getParent()->getName(),
-						S3D::formatStringBuffer("%i", skillChange)));
+						S3D::formatStringBuffer("%i", kbonus),
+						S3D::formatStringBuffer("%i", -vbonus)));
 					ChannelManager::showText(*context_, text);
 				}
 				else
 				{
 					ChannelText text("combat", 
-						LANG_RESOURCE_4(
+						LANG_RESOURCE_5(
 						"TANK_KILLED_OTHER",
-						"[p:{0}] killed [p:{1}] with a [w:{2}] ({3} skill)",
+						"[p:{0}] killed [p:{1}] with a [w:{2}] ({3}, {4} skill)",
 						firedTank->getTargetName(),
 						killedTank->getTargetName(),
 						weapon_->getParent()->getName(),
-						S3D::formatStringBuffer("%i", skillChange)));
+						S3D::formatStringBuffer("%i", kbonus),
+						S3D::formatStringBuffer("%i", -vbonus)));
 					ChannelManager::showText(*context_, text);
 				}
 			}

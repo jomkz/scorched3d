@@ -32,6 +32,8 @@
 	LangParam::getKey(key, param1, param2, param3)
 #define LANG_PARAM_4(key, param1, param2, param3, param4) \
 	LangParam::getKey(key, param1, param2, param3, param4)
+#define LANG_PARAM_5(key, param1, param2, param3, param4, param5) \
+	LangParam::getKey(key, param1, param2, param3, param4, param5)
 
 class LangParam
 {
@@ -47,7 +49,11 @@ public:
 	LangString getParameterizedString(const LangStringConverter &param1, 
 		const LangStringConverter &param2, const LangStringConverter &param3);
 	LangString getParameterizedString(const LangStringConverter &param1, 
-		const LangStringConverter &param2, const LangStringConverter &param3, const LangStringConverter &param4);
+		const LangStringConverter &param2, const LangStringConverter &param3, 
+		const LangStringConverter &param4);
+	LangString getParameterizedString(const LangStringConverter &param1, 
+		const LangStringConverter &param2, const LangStringConverter &param3, 
+		const LangStringConverter &param4, const LangStringConverter &param5);
 
 	static LangString getKey(const LangStringConverter &value,
 		const LangStringConverter &param1);
@@ -63,6 +69,12 @@ public:
 		const LangStringConverter &param2,
 		const LangStringConverter &param3,
 		const LangStringConverter &param4);
+	static LangString getKey(const LangStringConverter &value,
+		const LangStringConverter &param1,
+		const LangStringConverter &param2,
+		const LangStringConverter &param3,
+		const LangStringConverter &param4,
+		const LangStringConverter &param5);
 
 private:
 	std::vector<LangString> parts_;

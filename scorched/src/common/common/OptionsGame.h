@@ -110,6 +110,21 @@ public:
 	int getScoreWonForLives() { return scoreWonForLives_; }
 	OptionEntryInt &getScoreWonForLivesEntry() { return scoreWonForLives_; }
 
+	int getSkillForRound() { return skillForRound_; }
+	OptionEntryInt &getSkillForRoundEntry() { return skillForRound_; }
+
+	int getSkillForMatch() { return skillForMatch_; }
+	OptionEntryInt &getSkillForMatchEntry() { return skillForMatch_; }
+
+	int getMaxSkillLost() { return maxSkillLost_; }
+	OptionEntryInt &getMaxSkillLostEntry() { return maxSkillLost_; }
+
+	int getSkillForSelfKill() { return skillForSelfKill_; }
+	OptionEntryInt &getSkillForSelfKillEntry() { return skillForSelfKill_; }
+
+	int getSkillForTeamKill() { return skillForTeamKill_; }
+	OptionEntryInt &getSkillForTeamKillEntry() { return skillForTeamKill_; }
+
 	int getTeams() { return teams_; }
 	OptionEntryInt &getTeamsEntry() { return teams_; }
 
@@ -398,6 +413,11 @@ protected:
 	OptionEntryInt maxLandscapeSize_;
 	OptionEntryInt freeMarketAdjustment_;
 	OptionEntryInt freeMarketLimits_;
+	OptionEntryBoundedInt skillForRound_;
+	OptionEntryBoundedInt skillForMatch_;
+	OptionEntryBoundedInt maxSkillLost_;
+	OptionEntryBoundedInt skillForSelfKill_;
+	OptionEntryBoundedInt skillForTeamKill_;
 	OptionEntryBoundedInt moneyStarting_;
 	OptionEntryBoundedInt idleKickTime_;
 	OptionEntryBoundedInt idleShotKickTime_;

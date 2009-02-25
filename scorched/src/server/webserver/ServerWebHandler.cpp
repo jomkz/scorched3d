@@ -172,7 +172,7 @@ bool ServerWebHandler::PlayerHandler::processRequest(
 	{
 		Tank *tank = (*itor).second;
 		std::string cleanName;
-		std::string dirtyName(LangStringUtil::convertFromLang(tank->getTargetName()));
+		std::string dirtyName(ServerWebServerUtil::htmlLangString(tank->getTargetName()));
 		XMLNode::removeSpecialChars(dirtyName, cleanName);
 		players += S3D::formatStringBuffer(
 			"<tr>"
@@ -569,7 +569,7 @@ bool ServerWebHandler::BannedHandler::processRequest(
 			}
 
 			std::string cleanName;
-			XMLNode::removeSpecialChars(LangStringUtil::convertFromLang(entry.name), cleanName);
+			XMLNode::removeSpecialChars(ServerWebServerUtil::htmlLangString(entry.name), cleanName);
 			banned += S3D::formatStringBuffer("<tr><td>%s</td><td>%s</td><td>%s</td>"
 				"<td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
 				"<td><input type=\"checkbox\" name=\"selected\" value=\"%s\"></td>" // Select

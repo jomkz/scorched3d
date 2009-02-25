@@ -56,9 +56,17 @@ LangString ResourceBundleEntryImpl::getString(const LangStringConverter &param1,
 }
 
 LangString ResourceBundleEntryImpl::getString(const LangStringConverter &param1, 
-	const LangStringConverter &param2, const LangStringConverter &param3, const LangStringConverter &param4)
+	const LangStringConverter &param2, const LangStringConverter &param3, 
+	const LangStringConverter &param4)
 {
 	return parameterizedString_.getParameterizedString(param1, param2, param3, param4);
+}
+
+LangString ResourceBundleEntryImpl::getString(const LangStringConverter &param1, 
+	const LangStringConverter &param2, const LangStringConverter &param3, 
+	const LangStringConverter &param4, const LangStringConverter &param5)
+{
+	return parameterizedString_.getParameterizedString(param1, param2, param3, param4, param5);
 }
 
 LangString ResourceBundleEntryImpl::getValue()

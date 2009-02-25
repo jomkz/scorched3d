@@ -162,6 +162,8 @@ bool ServerShotFinishedState::scoreWinners()
 		ScorchedServer::instance()->getOptionsGame().getScoreWonForRound();
 	int scoreWonForLives = 
 		ScorchedServer::instance()->getOptionsGame().getScoreWonForLives();
+	int skillWonForRound = 
+		ScorchedServer::instance()->getOptionsGame().getSkillForRound();
 
 	// Add score for each life left
 	std::map<unsigned int, Tank *>::iterator itor;
@@ -243,6 +245,8 @@ bool ServerShotFinishedState::scoreWinners()
 					tank->getScore().getMoney() + (moneyWonForLives * tank->getState().getLives()));
 				tank->getScore().setWins(
 					tank->getScore().getWins() + 1);
+				tank->getScore().setSkill(
+					tank->getScore().getSkill() + skillWonForRound);
 			}
 		}
 	}
@@ -269,6 +273,8 @@ bool ServerShotFinishedState::scoreWinners()
 					tank->getScore().getWins() + 1);
 				tank->getScore().setScore(
 					tank->getScore().getScore() + scoreWonForRound);
+				tank->getScore().setSkill(
+					tank->getScore().getSkill() + skillWonForRound);
 
 				tankWon = true;
 			}
@@ -294,6 +300,8 @@ bool ServerShotFinishedState::scoreWinners()
 						tank->getScore().getWins() + 1);	
 					tank->getScore().setScore(
 						tank->getScore().getScore() + scoreWonForRound);
+					tank->getScore().setSkill(
+						tank->getScore().getSkill() + skillWonForRound);
 				}
 			}
 		}
@@ -342,6 +350,12 @@ bool ServerShotFinishedState::scoreWinners()
 		}
 	}
 
+	// Its the very last round, score the overall winner
+	if (overAllWinner)
+	{
+		scoreOverallWinner();
+	}
+
 	// Tell scripts to score 
 	ScorchedServer::instance()->getLUAScriptHook().callHook("server_score", 
 		overAllWinner);
@@ -374,17 +388,14 @@ bool ServerShotFinishedState::scoreWinners()
 		tank->getScore().setRank(rank.rank);
 	}
 
-	// Its the very last round, score the overall winner
-	if (overAllWinner)
-	{
-		scoreOverallWinner();
-	}
+	StatsLogger::instance()->periodicUpdate();
 	return overAllWinner;
 }
 
 void ServerShotFinishedState::scoreOverallWinner()
 {
-	StatsLogger::instance()->periodicUpdate();
+	int skillWonForMatch = 
+		ScorchedServer::instance()->getOptionsGame().getSkillForMatch();
 
 	if (ScorchedServer::instance()->getOptionsGame().getTeams() == 1)
 	{
@@ -428,6 +439,9 @@ void ServerShotFinishedState::scoreOverallWinner()
 
 					// Score the winning tank as the overall winner
 					StatsLogger::instance()->tankOverallWinner(current);
+
+					current->getScore().setSkill(
+						current->getScore().getSkill() + skillWonForMatch);
 				}
 			}
 
@@ -492,6 +506,8 @@ void ServerShotFinishedState::scoreOverallWinner()
 						tank->getState().getState() != TankState::sLoading)
 					{
 						StatsLogger::instance()->tankOverallWinner(tank);
+						tank->getScore().setSkill(
+							tank->getScore().getSkill() + skillWonForMatch);
 					}
 				}
 			}
