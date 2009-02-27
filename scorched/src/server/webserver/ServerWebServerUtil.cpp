@@ -59,7 +59,11 @@ std::string ServerWebServerUtil::htmlLangString(const LangString &langstring)
 	std::string result;
 	for (const LangStringStorage *c=langstring.c_str();*c;c++)
 	{
-		if (*c < ' ' || *c > 'z')
+		if (*c < ' ' || 
+			(*c > ' ' && *c < '0') ||
+			(*c > '9' && *c < 'A') ||
+			(*c > 'Z' && *c < 'a') ||
+			*c > 'z')
 		{
 			result.append("&#");
 			result.append(S3D::formatStringBuffer("%u", *c));
