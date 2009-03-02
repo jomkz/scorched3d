@@ -1,45 +1,16 @@
-It's now possible to fix the price of an Accessory by setting the FreeMarketLimit of it to 0
-The price of each accessory is calculated and stored exactly with no rounding, the rounding is only applied to the visible prices.
-Removed the dependancy on returning char * from certain S3D APIs (for thread safety)
-Most S3D global APIs are now namespaced into the S3D:: namespace
-Updated directory structure to enforce server only builds (client directories are not added to server -I path)
-Changed landscape to use geomipmaps instead of ROAM
-Removed option to have border heightmap around landscape (just make larger landscape)
-Optimized indexing of water and landscape into larger VBOs
-Water LOD now depends on water mesh detail as well as distance
-Added quadtree for water/land visibility
-Started experimental splatting texture mapping for landscape
-Added LUA scripting language support
-Player dies when less than 1 HP (avoids 0 HP tanks)
-Fixed tanks being positioned in the corner when joining at round begining
-Added -startcustom option to server to start using default server.xml file
-Added errosion and noise to options for landscape generation
-Optimized collision space updates to be more efficient
-Boids are now all grouped into groups of 5 to make flocking algorithm more efficient
-New boids can be added in the middle of a round
-Added option for simpler water shaders for framerate improvement
-Optimized object visibility checks to use quadtree
-Optimized/minimized OpenGL calls during landscape/water rendering
-Added arenawidth and arenaheight options to landscape defn to allow smaller playable area to be defined
-Added weaponscript for LUA scripted weapons
-Enlarged the LAN, MOTD and Tank dialogs to fit mimimum GUI size
-Added nosingleflow attribute to napalm to make it fill the area more
-Added console enforced parsing of console commands
-Added console tab completion for console command arguments
-Added script hooks to allow LUA scripts to be called on S3D events
-Combat messages are now shown in the server log
-Fog also applied to landscape in shader mode
-Added usenumber attribute to accessories to specifiy the number to use up when fired (supported 0 or 1)
-Changed fonts to dejavu to provide a larger set of characters
-Added multi-lingual localization support for Scorched3D guis
-Added multi-lingual character support for Scorched3D chat and player names
-Fullscreen mode is now only the default on Win32 systems
-Skill and skill change now displayed on tooltips and combat messages
-Added server admin permissions
-Admin users can now change their own passwords
-Added server GUI to client to perform simple add/remove player operations.  Can be used in offline mode too.
-Changed effectiveness of some shields after playing review
-Changed rollers to be less bouncy
-Changed key duplicates to be a warning rather than halting the program
-Added nobuy tag to accessories to allow accessories that can be given but not bought
-Landscape definition and texture files are chosen at random within each landscape (if cycle maps is off)
+Fixed server web console not displaying Unicode characters correctly
+Changed skill formula to have less fluctuations
+Added possibility to grant skill based on round/match wins
+Added configuration settings for skill system
+Fixed unicode names in server web console
+Added more tank attributes to LUA tank table
+Transient options can be retrieved via the LUA get options function
+Casting of 64bit types for completeness
+Changes for 64bit compilers
+Enabled fogging for objects
+Import fixes for gcc version 3.4
+Updated configure script to remove X11 dependancies for OSX binaries
+Fixed a bug where the server may send some text messages to more than the intended client.
+Updated documentation files to remove actual information and add links to wiki 
+Changed launcher to not have S3D_SERVER #defined to allow visible dialog messages
+Fixes a bug where the working directory is not set to the binary path under win32.
