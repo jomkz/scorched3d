@@ -10,7 +10,7 @@ BuildRoot: %{_tmppath}/%{name}-buildroot
 
 BuildRequires:  SDL_net SDL_net-devel SDL SDL-devel >= 1.2.5
 BuildRequires:  fftw3-devel, libpng-devel 
-BuildRequires:  freetype freetype-devel, libexpat-devel, 
+BuildRequires:  freetype freetype-devel, expat-devel, 
 BuildRequires:  libogg libogg-devel libvorbis libvorbis-devel, libjpeg-devel
 BuildRequires:  wxGTK wxGTK-devel >= 2.4.0
 BuildRequires:  openal openal-devel freealut freealut-devel
