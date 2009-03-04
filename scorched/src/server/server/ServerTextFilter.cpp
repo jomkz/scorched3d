@@ -24,7 +24,7 @@
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
 
-#define IS_SPACE(c) ((c < '0' || (c > '9' && c < 'A') || (c > 'Z' && c < 'a') || c > 'z'))
+#define IS_SPACE(c) ((c < '0' || (c > '9' && c < 'A') || (c > 'Z' && c < 'a') || (c > 'z' && c <= 127)))
 
 ServerTextFilter::ServerTextFilter() : lastReadTime_(0)
 {
@@ -86,7 +86,7 @@ void ServerTextFilter::filterString(LangString &inputText)
 		for (witor = words_.begin(); witor != words_.end(); witor++)
 		{
 			const unsigned int *word = (*witor).c_str();
-			unsigned int *pos = LangStringUtil::strstr(text, word);
+			unsigned int *pos = LangStringUtil::stristr(text, word);
 			if (pos)
 			{
 				// Only filter out if the words is at the start or end of the word

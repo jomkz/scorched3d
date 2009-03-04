@@ -121,7 +121,7 @@ HelpButtonDialog::PerformanceMenu::PerformanceMenu()
 			false);
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->
-		addMenu(LANG_RESOURCE("PERFORMANCE", "Perofmance"),
+		addMenu(LANG_RESOURCE("PERFORMANCE", "Performance"),
 			"Performance", 
 			LANG_STRING(""),
 			32.0f, 0, this, map,

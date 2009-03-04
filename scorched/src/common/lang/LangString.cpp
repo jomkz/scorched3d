@@ -148,7 +148,7 @@ void LangStringUtil::lowercase(LangString &str1)
 {
 	for (unsigned int *c=(unsigned int *) str1.c_str(); *c; c++)
 	{
-		if (*c >= 'A' || *c <='Z') *c += 'a' - 'A';
+		if (*c >= 'A' && *c <='Z') *c += 'a' - 'A';
 	}
 }
 
