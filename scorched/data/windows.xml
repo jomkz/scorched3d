@@ -1,4 +1,32 @@
 <windows>
+  <!--
+  <window>
+    <name>Test</name>
+    <state>all</state>
+    <state>start</state>
+    <visible>true</visible>
+    <x>100</x>
+    <y>100</y>
+    <w>100</w>
+    <h>100</h>
+    <key></key>
+    <description>Test Description</description>
+    <windowlevel>50000</windowlevel>
+    <items>
+      <item>
+        <widget type="GLWScorchedInfoSpinner">
+          <type>power</type>
+          <x>0</x>
+          <y>0</y>
+          <w>150</w>
+          <h>100</h>
+          <filledimage>data/avatars/yoda.png</filledimage>
+          <unfilledimage>data/avatars/baby.png</unfilledimage>
+        </widget>
+      </item>
+    </items>
+  </window>
+  -->
 	<!--
 	<window>
 		<name>Clock</name>

@@ -4293,6 +4293,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\GLW\GLWScorchedInfoSpinner.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\GLW\GLWScorchedInfoSpinner.h"
+				>
+			</File>
+			<File
 				RelativePath="..\GLW\GLWScrollButton.cpp"
 				>
 			</File>

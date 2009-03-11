@@ -1,16 +1,1 @@
-Fixed server web console not displaying Unicode characters correctly
-Changed skill formula to have less fluctuations
-Added possibility to grant skill based on round/match wins
-Added configuration settings for skill system
-Fixed unicode names in server web console
-Added more tank attributes to LUA tank table
-Transient options can be retrieved via the LUA get options function
-Casting of 64bit types for completeness
-Changes for 64bit compilers
-Enabled fogging for objects
-Import fixes for gcc version 3.4
-Updated configure script to remove X11 dependancies for OSX binaries
-Fixed a bug where the server may send some text messages to more than the intended client.
-Updated documentation files to remove actual information and add links to wiki 
-Changed launcher to not have S3D_SERVER #defined to allow visible dialog messages
-Fixes a bug where the working directory is not set to the binary path under win32.
+Added new widget GLWScorchedInfoSpinner to allow display of rotation, power, elevation as a circular display
