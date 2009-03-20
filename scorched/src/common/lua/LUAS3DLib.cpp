@@ -25,6 +25,8 @@
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <common/Logger.h>
+#include <weapons/AccessoryStore.h>
+#include <tank/TankAccessories.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
@@ -237,10 +239,104 @@ static int s3d_get_landscapeheight(lua_State *L)
 	return 1;
 }
 
+static int s3d_set_tank_score(lua_State *L) 
+{
+	LUAScript *wrapper = getScript(L);
+
+	int number = luaL_checknumber(L, 1);
+	int score = luaL_checknumber(L, 2) / FIXED_RESOLUTION;
+
+	Tank *tank =
+		wrapper->getContext()->getTankContainer().getTankById((unsigned int) number);
+	if (!tank)
+	{
+		Logger::log(S3D::formatStringBuffer("s3d_set_tank_score:Failed to an tank id %u", 
+			(unsigned int) number));
+		return 0;
+	}
+	tank->getScore().setScore(score);
+
+	return 0;
+}
+
+static int s3d_set_tank_money(lua_State *L) 
+{
+	LUAScript *wrapper = getScript(L);
+
+	int number = luaL_checknumber(L, 1);
+	int money = luaL_checknumber(L, 2) / FIXED_RESOLUTION;
+
+	Tank *tank =
+		wrapper->getContext()->getTankContainer().getTankById((unsigned int) number);
+	if (!tank)
+	{
+		Logger::log(S3D::formatStringBuffer("s3d_set_tank_money:Failed to an tank id %u", 
+			(unsigned int) number));
+		return 0;
+	}
+	tank->getScore().setMoney(money);
+
+	return 0;
+}
+
+static int s3d_set_tank_position(lua_State *L) 
+{
+	LUAScript *wrapper = getScript(L);
+
+	int number = luaL_checknumber(L, 1);
+	FixedVector position = LUAUtil::getVectorFromStack(L, 2);
+
+	Tank *tank =
+		wrapper->getContext()->getTankContainer().getTankById((unsigned int) number);
+	if (!tank)
+	{
+		Logger::log(S3D::formatStringBuffer("s3d_set_tank_money:Failed to an tank id %u", 
+			(unsigned int) number));
+		return 0;
+	}
+	tank->getLife().setTargetPosition(position);
+
+	return 0;
+}
+
+static int s3d_give_weapon(lua_State *L) 
+{
+	LUAScript *wrapper = getScript(L);
+
+	int number = luaL_checknumber(L, 1);
+	const char *weaponName = luaL_checkstring(L, 2);
+	int count = luaL_checknumber(L, 3) / FIXED_RESOLUTION;
+
+	Tank *tank =
+		wrapper->getContext()->getTankContainer().getTankById((unsigned int) number);
+	if (!tank)
+	{
+		Logger::log(S3D::formatStringBuffer("s3d_give_weapon:Failed to an tank id %u", 
+			(unsigned int) number));
+		return 0;
+	}
+
+	Accessory *accessory =
+		wrapper->getContext()->getAccessoryStore().findByPrimaryAccessoryName(weaponName);
+	if (!accessory) 
+	{
+		Logger::log(S3D::formatStringBuffer("s3d_give_weaponFailed to find accessory named %s", weaponName));
+		return 0;
+	}
+
+	tank->getAccessories().add(accessory, count, false);
+
+	return 0;
+}
+
 static const luaL_Reg s3dlib[] = {
 	{"get_option", s3d_get_option},
 	{"get_tank", s3d_get_tank},
 	{"get_tanks", s3d_get_tanks},
+	{"set_tank_score", s3d_set_tank_score},
+	{"set_tank_money", s3d_set_tank_money},
+	{"set_tank_position", s3d_set_tank_position},
+	{"give_weapon", s3d_give_weapon},
 	{"get_height", s3d_get_height},
 	{"get_arenawidth", s3d_get_arenawidth},
 	{"get_arenaheight", s3d_get_arenaheight},

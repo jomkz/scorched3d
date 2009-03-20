@@ -443,7 +443,7 @@ void NetworkSelectDialog::rowSelectedGames(unsigned int id, int row)
 	if (!serverCompatable(protocolVersion, version))
 	{
 		LangString msg = LANG_RESOURCE_4("INCOMPATIBLE_VERSION_WARNING",
-			"Warning: This server is running a incompatable version of Scorched3D.\n"
+			"Warning: This server is running a incompatible version of Scorched3D.\n"
 			"You cannot connect to this server.\n\n"
 			"This server is running Scorched build {0} ({1}).\n"
 			"You are running Scorched build {2} ({3}).\n\n"					

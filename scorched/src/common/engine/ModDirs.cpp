@@ -153,7 +153,7 @@ bool ModDirs::loadModFile(const std::string &inputFileName, bool global)
 					"\"%s\"\n"
 					"was moved to\n"
 					"\"%s\"\n"
-					"as it may be incompatable with this version of Scorched3D",
+					"as it may be   compatibility incompatible with this version of Scorched3D",
 					src.c_str(), dest.c_str()));
 
 				return loadModFile(oldFileName.c_str(), global);

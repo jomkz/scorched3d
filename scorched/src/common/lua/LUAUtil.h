@@ -34,6 +34,9 @@ public:
 	static void addVectorToStack(lua_State *L, const FixedVector &vector);
 	static FixedVector getVectorFromStack(lua_State *L, int position);
 
+	static bool tableContains(lua_State *L, int tablePosition, 
+		const char *name);
+
 	static fixed getNumberFromTable(lua_State *L, int tablePosition, 
 		const char *name, fixed defaultResult);
 	static int getIntFromTable(lua_State *L, int tablePosition, 
@@ -41,7 +44,7 @@ public:
 	static bool getBoolFromTable(lua_State *L, int tablePosition, 
 		const char *name, bool defaultResult);
 	static std::string getStringFromTable(lua_State *L, int tablePosition, 
-		const char *name, std::string &defaultResult);
+		const char *name, const std::string &defaultResult);
 };
 
 #endif // __INCLUDE_LUAUtil_INCLUDE__

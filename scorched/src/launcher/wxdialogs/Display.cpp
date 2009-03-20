@@ -278,7 +278,7 @@ static void createTroubleControls(wxWindow *parent, wxSizer *sizer)
 	// Graphics Settings
 	{
 		wxStaticBox *glDetailBox = new wxStaticBox(parent, -1, 
-			wxT("Compatability Settings"));
+			wxT("Compatibility Settings"));
 		wxStaticBoxSizer *glDetailSizer = new wxStaticBoxSizer(glDetailBox, wxHORIZONTAL);
 		wxGridSizer *glDetailSizer2 = new wxGridSizer(3, 3, 10, 10);
 

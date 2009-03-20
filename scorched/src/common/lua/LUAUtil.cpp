@@ -63,6 +63,16 @@ FixedVector LUAUtil::getVectorFromStack(lua_State *L, int position)
 	return result;
 }
 
+bool tableContains(lua_State *L, int tablePosition, const char *name)
+{
+	lua_pushstring(L, name);
+	lua_gettable(L, tablePosition);
+	
+	bool result = !lua_isnil(L, -1);
+	lua_pop(L, 1);
+	return result;
+}
+
 fixed LUAUtil::getNumberFromTable(lua_State *L, int tablePosition, const char *name, fixed defaultResult)
 {
 	lua_pushstring(L, name);
@@ -112,7 +122,7 @@ bool LUAUtil::getBoolFromTable(lua_State *L, int tablePosition,
 }
 
 std::string LUAUtil::getStringFromTable(lua_State *L, int tablePosition, 
-	const char *name, std::string &defaultResult)
+	const char *name, const std::string &defaultResult)
 {
 	lua_pushstring(L, name);
 	lua_gettable(L, tablePosition);
