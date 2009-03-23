@@ -166,21 +166,21 @@ bool LandVisibilityPatch::setVisible(float distance)
 { 
 	visible_ = true;
 
-	if (recalculateErrors_) 
-	{
-		calculateErrors();
-		recalculateErrors_ = false;
-	}
-
-	float landDetailLevelRamp = (float) 
-		OptionsDisplay::instance()->getLandDetailLevelRamp();
-	float maxError = ((distance - 32.0f) / landDetailLevelRamp) + 1.0f;
-	if (maxError < 1.0f) maxError = 1.0f;
-	else if (maxError > 5.0f) maxError = 5.0f;
-
 	visibilityIndex_ = 0;
 	if (!OptionsDisplay::instance()->getNoLandLOD())
 	{
+		if (recalculateErrors_) 
+		{
+			calculateErrors();
+			recalculateErrors_ = false;
+		}
+
+		float landDetailLevelRamp = (float) 
+			OptionsDisplay::instance()->getLandDetailLevelRamp();
+		float maxError = ((distance - 32.0f) / landDetailLevelRamp) + 1.0f;
+		if (maxError < 1.0f) maxError = 1.0f;
+		else if (maxError > 5.0f) maxError = 5.0f;
+
 		for (int i=0; i<=5; i++)
 		{
 			if (indexErrors_[i] > maxError) break;
