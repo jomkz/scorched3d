@@ -3,7 +3,7 @@
 	<magmasmall>data/textures/landscape/default/magma-small.bmp</magmasmall>
 	<scorch>data/textures/landscape/sand/scorch.bmp</scorch>
 	<skytexture>data/textures/landscape/sand/cloud1.bmp</skytexture>
-	<skytexturemask>data/textures/landscape/default/cloud1m.bmp</skytexturemask>
+	<skytexturemask>data/textures/landscape/sand/cloud1m.bmp</skytexturemask>
 	<skycolormap>data/textures/clearsky.bmp</skycolormap>
 	<skytimeofday>3</skytimeofday>
 	<skysunxy>110</skysunxy>

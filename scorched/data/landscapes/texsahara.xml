@@ -5,7 +5,7 @@
 	<fog><A>0.8</A><B>0.8</B><C>0.8</C></fog>
 	<fogdensity>0.001</fogdensity>
 	<skytexture>data/textures/landscape/sahara/cloud1.bmp</skytexture>
-	<skytexturemask>data/textures/landscape/default/cloud1m.bmp</skytexturemask>
+	<skytexturemask>data/textures/landscape/sahara/cloud1m.bmp</skytexturemask>
 	<skycolormap>data/textures/landscape/sahara/clearsky.bmp</skycolormap>
 	<skytimeofday>3</skytimeofday>
 	<skysunxy>110</skysunxy>
