@@ -94,6 +94,12 @@ bool ModDirs::loadModFile(const std::string &inputFileName, bool global)
 	std::string modGamesFile = S3D::getDataFile("data/modinfo.xml");
 	S3D::setDataFileMod("none");
 
+	if (!S3D::fileExists(modGamesFile))
+	{
+		// This mod directory does not exist
+		return true;
+	}
+
 	bool defaultInfoFile = (noneGamesFile == modGamesFile);
 	if (newFileName != "none" && defaultInfoFile)
 	{
