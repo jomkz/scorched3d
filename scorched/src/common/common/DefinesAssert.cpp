@@ -30,26 +30,34 @@
 
 extern bool wxWindowInit;
 
-void S3D::dialogMessage(const std::string &header, const std::string &text)
+void S3D::dialogMessage(const std::string &header, const std::string &text, bool split)
 {
-	std::string newtext;
-	int count = 0;
-	for (const char *t=text.c_str(); *t; t++)
-	{
-		if (*t == '\n') count = 0;
-		else count++;
-		if (count > 75)
-		{
-			newtext.append("...\n");
-			count = 0;
-		}
-
-		newtext.push_back(*t);
-	}
-
 	// Make sure that this is logged
-	Logger::log(newtext.c_str());
+	Logger::log(S3D::formatStringBuffer("%s : %s", header.c_str(), text.c_str()));
 	Logger::instance()->processLogEntries();
+
+	std::string newtext;
+	if (split)
+	{
+		// Split into shorter lines
+		int count = 0;
+		for (const char *t=text.c_str(); *t; t++)
+		{
+			if (*t == '\n') count = 0;
+			else count++;
+			if (count > 75)
+			{
+				newtext.append("...\n");
+				count = 0;
+			}
+
+			newtext.push_back(*t);
+		}
+	}
+	else
+	{
+		newtext = text;
+	}
 
 	// Show the dialog (if any)
 #if defined(_WIN32) && !defined(S3D_SERVER)
@@ -77,8 +85,8 @@ void S3D::dialogAssert(const char *lineText, const int line, const char *file)
 	exit(64);
 }
 
-void S3D::dialogExit(const std::string &header, const std::string &text)
+void S3D::dialogExit(const std::string &header, const std::string &text, bool split)
 {
-	S3D::dialogMessage(header, text);
+	S3D::dialogMessage(header, text, split);
 	exit(64);
 }

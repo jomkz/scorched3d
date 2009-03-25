@@ -28,8 +28,8 @@ namespace S3D
 	void dialogAssert(const char *lineText, const int line, const char *file);
 	void glAssert(unsigned int e, const int line, const char *file);
 
-	void dialogMessage(const std::string &header, const std::string &text);
-	void dialogExit(const std::string &header, const std::string &text);
+	void dialogMessage(const std::string &header, const std::string &text, bool split = true);
+	void dialogExit(const std::string &header, const std::string &text, bool split = true);
 }
 
 #ifndef S3D_SERVER

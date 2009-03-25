@@ -71,6 +71,8 @@ bool ModFiles::excludeFile(const std::string &file)
 		!fileEnding(file, ".ico") &&
 		!fileEnding(file, ".ase") &&
 		!fileEnding(file, ".wav") &&
+		!fileEnding(file, ".lua") &&
+		!fileEnding(file, ".bw") &&
 		!fileEnding(file, ".ogg"))
 	{
 		Logger::log(S3D::formatStringBuffer("Excluding mod file \"%s\"", file.c_str()));
@@ -97,6 +99,7 @@ bool ModFiles::loadModFiles(const std::string &mod,
 		}
 	}
 
+	if (mod != "none")
 	{
 		// Get and check global mod directory
 		std::string modDir = S3D::getGlobalModFile(mod);
@@ -106,11 +109,10 @@ bool ModFiles::loadModFiles(const std::string &mod,
 			if (!loadModDir(modDir, mod, counter)) return false;
 		}
 	}
-
-	// For the default "none" mod load some files that can
-	// be downloaded
-	if (mod == "none")
+	else
 	{
+		// For the default "none" mod load some files that can
+		// be downloaded
 		loadLocalModFile("data/accessories.xml", mod);
 		loadLocalModFile("data/modinfo.xml", mod);
 		loadLocalModFile("data/landscapes.xml", mod);

@@ -288,7 +288,7 @@ void ARGParser::showArgs(char *topString)
 		strcat(buffer, buffer2);
 	}
 
-	S3D::dialogMessage("Arguments", buffer);
+	S3D::dialogMessage("Arguments", buffer, false);
 }
 
 void ARGParser::addEntry(char *cmd, char **destStr, char *help)
