@@ -96,7 +96,7 @@ DisplayFrame::DisplayFrame() :
 {
 #ifdef _WIN32
 	// Set the frame's icon
-	wxIcon icon(convertString(S3D::getDataFile("data/windows/tank2.ico")), wxBITMAP_TYPE_ICO);
+	wxIcon icon(convertString(S3D::getDataFile("data/images/tank2.ico")), wxBITMAP_TYPE_ICO);
 	SetIcon(icon);
 #endif
 

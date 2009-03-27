@@ -88,7 +88,7 @@ void WeaponNapalm::fireWeapon(ScorchedContext &context,
 		{
 			SoundBuffer *expSound = 
 				Sound::instance()->fetchOrCreateBuffer(
-					S3D::getDataFile(S3D::formatStringBuffer("data/wav/%s", napalmSound_.c_str())));
+					S3D::getModFile(S3D::formatStringBuffer("data/wav/%s", napalmSound_.c_str())));
 			SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
 				expSound, position.asVector());
 		}

@@ -361,8 +361,8 @@ void TargetRendererImplTank::drawArrow()
 		{
 			createdTexture = true;
 
-			std::string file1 = S3D::getDataFile("data/windows/arrow.bmp");
-			std::string file2 = S3D::getDataFile("data/windows/arrowi.bmp");
+			std::string file1 = S3D::getDataFile("data/images/arrow.bmp");
+			std::string file2 = S3D::getDataFile("data/images/arrowi.bmp");
 			ImageHandle bitmap = 
 				ImageFactory::loadImageHandle(file1.c_str(), file2.c_str(), true);
 			arrowTexture.create(bitmap);

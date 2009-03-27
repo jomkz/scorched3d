@@ -92,7 +92,7 @@ void TankMovement::init()
 	{
 		SoundBuffer *moveSound = 
 			Sound::instance()->fetchOrCreateBuffer(
-				S3D::getDataFile("data/wav/movement/tankmove.wav"));
+				S3D::getModFile("data/wav/movement/tankmove.wav"));
 		moveSoundSource_ = new VirtualSoundSource(VirtualSoundPriority::eAction, true, false);
 		moveSoundSource_->setPosition(tank->getPosition().getTankPosition().asVector());
 		moveSoundSource_->play(moveSound);

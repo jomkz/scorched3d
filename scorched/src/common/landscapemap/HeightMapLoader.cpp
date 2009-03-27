@@ -99,7 +99,7 @@ bool HeightMapLoader::generateTerrain(
 		// Load the landscape
 		levelSurround = file->levelsurround;
 		
-		std::string fileName = S3D::getDataFile(file->file.c_str());
+		std::string fileName = S3D::getModFile(file->file.c_str());
 		ImageHandle image = ImageFactory::loadImageHandle(fileName);
 		if (!image.getBits())
 		{

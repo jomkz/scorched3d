@@ -42,7 +42,7 @@ bool AccessoryStore::parseFile(
 {
 	if (counter) counter->setNewOp(LANG_RESOURCE("LOADING_WEAPONS", "Loading Weapons"));
 
-	std::string fileName = S3D::getDataFile("data/accessories.xml");
+	std::string fileName = S3D::getModFile("data/accessories.xml");
 	clearAccessories();
 
 	XMLFile file;

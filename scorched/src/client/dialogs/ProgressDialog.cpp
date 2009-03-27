@@ -96,12 +96,12 @@ void ProgressDialog::draw()
 
 		if (!icon_.textureValid())
 		{
-			setIcon(S3D::getDataFile("data/windows/tank2.bmp"));
+			setIcon(S3D::getDataFile("data/images/tank2.bmp"));
 
 			ImageHandle bar1 = 
-				ImageFactory::loadAlphaImageHandle(S3D::getDataFile("data/windows/bar1.png"));
+				ImageFactory::loadAlphaImageHandle(S3D::getDataFile("data/images/bar1.png"));
 			ImageHandle bar2 = 
-				ImageFactory::loadAlphaImageHandle(S3D::getDataFile("data/windows/bar2.png"));
+				ImageFactory::loadAlphaImageHandle(S3D::getDataFile("data/images/bar2.png"));
 			bar1_.create(bar1);
 			bar2_.create(bar2);
 

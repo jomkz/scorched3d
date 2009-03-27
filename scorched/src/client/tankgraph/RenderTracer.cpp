@@ -128,8 +128,8 @@ void RenderTracer::drawSmokeTracer(std::list<TracerLinePoint> &positions)
 	static GLTexture arrowTexture;
 	if (!arrowTexture.textureValid())
 	{
-		std::string file1 = S3D::getDataFile("data/windows/arrow.bmp");
-		std::string file2 = S3D::getDataFile("data/windows/arrowi.bmp");
+		std::string file1 = S3D::getModFile("data/windows/arrow.bmp");
+		std::string file2 = S3D::getModFile("data/windows/arrowi.bmp");
 		ImageBitmap bitmap(file1.c_str(), file2.c_str(), true);
 		arrowTexture.create(bitmap);
 	}

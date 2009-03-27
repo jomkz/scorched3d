@@ -41,7 +41,7 @@ bool createScorchedWindow()
 	bool fullscreen = OptionsDisplay::instance()->getFullScreen();
 
 	SDL_WM_SetCaption(scorched3dAppName, "tank2");
-	std::string iconFile = S3D::getDataFile("data/windows/tank2.bmp");
+	std::string iconFile = S3D::getDataFile("data/images/tank2.bmp");
 	SDL_WM_SetIcon(SDL_LoadBMP(iconFile.c_str()), NULL);
 
 	if (!Display::instance()->changeSettings(width,height,fullscreen)) 

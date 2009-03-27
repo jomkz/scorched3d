@@ -95,7 +95,7 @@ void MissileActionRenderer::simulate(Action *action, float timepassed, bool &rem
 		if (0 != strcmp("none", engineSound))
 		{
 			SoundBuffer *rocket = Sound::instance()->fetchOrCreateBuffer(
-				S3D::getDataFile(engineSound));
+				S3D::getModFile(engineSound));
 			sound_ = new VirtualSoundSource(VirtualSoundPriority::eMissile, true, false);
 			sound_->setPosition(shot->getCurrentPosition().asVector());
 			sound_->setGain(0.25f);

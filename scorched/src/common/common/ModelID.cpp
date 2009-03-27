@@ -76,7 +76,7 @@ bool ModelID::initFromNode(const char *directory, XMLNode *modelNode)
 		const char *meshNameContent = meshNode->getContent();
 		static char meshName[1024];
 		snprintf(meshName, 1024, "%s/%s", directory, meshNameContent);
-		if (!S3D::fileExists(S3D::getDataFile(meshName)))
+		if (!S3D::fileExists(S3D::getModFile(meshName)))
 		{
 			return modelNode->returnError(
 				S3D::formatStringBuffer(
@@ -91,7 +91,7 @@ bool ModelID::initFromNode(const char *directory, XMLNode *modelNode)
 		if (strcmp(skinNameContent, "none") != 0)
 		{
 			snprintf(skinName, 1024, "%s/%s", directory, skinNameContent);
-			if (!S3D::fileExists(S3D::getDataFile(skinName)))
+			if (!S3D::fileExists(S3D::getModFile(skinName)))
 			{
 				return modelNode->returnError(
 					S3D::formatStringBuffer(
@@ -113,7 +113,7 @@ bool ModelID::initFromNode(const char *directory, XMLNode *modelNode)
 		static char meshName[1024];
 		snprintf(meshName, 1024, "%s/%s", directory, meshNameContent);
 
-		if (!S3D::fileExists(S3D::getDataFile(meshName)))
+		if (!S3D::fileExists(S3D::getModFile(meshName)))
 		{
 			return modelNode->returnError(
 				S3D::formatStringBuffer(

@@ -62,7 +62,7 @@ public:
 		}
 		else if (load)
 		{
-			std::string dataFile = S3D::getDataFile(fileName);
+			std::string dataFile = S3D::getModFile(fileName);
 			if (!S3D::fileExists(dataFile.c_str()))
 			{
 				S3D::dialogMessage("Scorched Landscape", 

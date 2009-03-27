@@ -105,8 +105,8 @@ bool ClientConnectionAcceptHandler::processMessage(
 		else
 		{
 			// Use the default icon
-			std::string file1(S3D::getDataFile("data/windows/scorched.png"));
-			std::string file2(S3D::getDataFile("data/windows/scorcheda.png"));
+			std::string file1(S3D::getDataFile("data/images/scorched.png"));
+			std::string file2(S3D::getDataFile("data/images/scorcheda.png"));
 			ImageHandle map = ImageFactory::loadImageHandle(
 				file1.c_str(), file2.c_str(), false);
 

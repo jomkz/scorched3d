@@ -104,7 +104,7 @@ void GLLenseFlare::init(ProgressCounter *counter)
 	{
 		if (counter) counter->setNewPercentage(float (i) / 16.0f * 100.0f);
 
-		ImageLuminance bitmap(S3D::getDataFile(S3D::formatStringBuffer("data/textures/lensflare/shine%d.bw", i)));
+		ImageLuminance bitmap(S3D::getModFile(S3D::formatStringBuffer("data/textures/lensflare/shine%d.bw", i)));
 		shines_[i].create(bitmap);
 	}
 
@@ -112,7 +112,7 @@ void GLLenseFlare::init(ProgressCounter *counter)
 	{
 		if (counter) counter->setNewPercentage(float (i+10) / 16.0f * 100.0f);
 
-		ImageLuminance bitmap(S3D::getDataFile(S3D::formatStringBuffer("data/textures/lensflare/flare%d.bw", i)));
+		ImageLuminance bitmap(S3D::getModFile(S3D::formatStringBuffer("data/textures/lensflare/flare%d.bw", i)));
 		flares_[i].create(bitmap);
 	}
 }

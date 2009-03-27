@@ -61,7 +61,7 @@ void Sun::generate()
 	LandscapeTex &tex = *ScorchedClient::instance()->
 		getLandscapeMaps().getDefinitions().getTex();
 
-	std::string file = S3D::getDataFile(tex.suntexture.c_str());
+	std::string file = S3D::getModFile(tex.suntexture.c_str());
 	if (!tex.suntexturemask.c_str()[0])
 	{
 		ImageHandle map = ImageFactory::loadImageHandle(file.c_str(), file.c_str(), false);
@@ -69,7 +69,7 @@ void Sun::generate()
 	}
 	else
 	{
-		std::string mask = S3D::getDataFile(tex.suntexturemask.c_str());
+		std::string mask = S3D::getModFile(tex.suntexturemask.c_str());
 		ImageHandle map = ImageFactory::loadImageHandle(file.c_str(), mask.c_str(), true);
 		DIALOG_ASSERT(texture_.replace(map, true));
 	}

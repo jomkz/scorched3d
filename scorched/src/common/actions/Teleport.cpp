@@ -97,7 +97,7 @@ void Teleport::simulate(fixed frameTime, bool &remove)
 			{
 				SoundBuffer *activateSound = 
 					Sound::instance()->fetchOrCreateBuffer(
-						S3D::getDataFile(weapon_->getSound()));
+						S3D::getModFile(weapon_->getSound()));
 				SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
 					activateSound, tank->getPosition().getTankPosition().asVector());
 			}

@@ -198,7 +198,7 @@ void Water2::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)
 	LandscapeDefn &defn = *ScorchedClient::instance()->getLandscapeMaps().
 		getDefinitions().getDefn();
 	ImageHandle loadedFoam = 
-		ImageFactory::loadImageHandle(S3D::getDataFile(water->foam.c_str()));	
+		ImageFactory::loadImageHandle(S3D::getModFile(water->foam.c_str()));	
 	if (loadedFoam.getWidth() != wave_resolution ||
 		loadedFoam.getHeight() != wave_resolution)
 	{

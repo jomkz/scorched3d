@@ -49,7 +49,7 @@ void ExplosionLaserBeamRenderer::init(unsigned int playerId,
 	{
 		SoundBuffer *firedSound = 
 			Sound::instance()->fetchOrCreateBuffer(
-				S3D::getDataFile(data));
+				S3D::getModFile(data));
 		SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
 			firedSound, position);
 	}
@@ -61,7 +61,7 @@ void ExplosionLaserBeamRenderer::init(unsigned int playerId,
 	}
 	if (!_texture)
 	{
-		std::string file1 = S3D::getDataFile("data/textures/waves.bmp");
+		std::string file1 = S3D::getModFile("data/textures/waves.bmp");
 	
 		ImageHandle map = ImageFactory::loadImageHandle(file1.c_str(), file1.c_str(), false);
 		_texture = new GLTexture;

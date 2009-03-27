@@ -44,7 +44,7 @@ bool TankModelStore::loadTankMeshes(ScorchedContext &context,
 	// Load tank definition file
 	if (counter) counter->setNewOp(LANG_RESOURCE("LOADING_TANKS", "Loading tanks"));
 	XMLFile file;
-	if (!file.readFile(S3D::getDataFile("data/tanks.xml")))
+	if (!file.readFile(S3D::getModFile("data/tanks.xml")))
 	{
 		S3D::dialogMessage("Scorched Models", S3D::formatStringBuffer(
 					  "Failed to parse tanks.xml\n%s", 

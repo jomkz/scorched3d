@@ -55,18 +55,18 @@ void SkyDome::generate()
 		getLandscapeMaps().getDefinitions().getTex();	
 
 	// Sky
-	std::string ctex(S3D::getDataFile(tex->skytexture.c_str()));
-	std::string ctexm(S3D::getDataFile(tex->skytexturemask.c_str()));
+	std::string ctex(S3D::getModFile(tex->skytexture.c_str()));
+	std::string ctexm(S3D::getModFile(tex->skytexturemask.c_str()));
 	ImageHandle bitmapCloud = ImageFactory::loadImageHandle(ctex.c_str(), ctexm.c_str(), false);
 	DIALOG_ASSERT(cloudTexture_.replace(bitmapCloud));
-	skyColorsMap_ = ImageFactory::loadImageHandle(S3D::getDataFile(tex->skycolormap.c_str()));
+	skyColorsMap_ = ImageFactory::loadImageHandle(S3D::getModFile(tex->skycolormap.c_str()));
 
 	// Stars
 	useStarTexture_ = false;
 	if (!tex->skytexturestatic.empty())
 	{
 		useStarTexture_ = true;
-		std::string stex(S3D::getDataFile(tex->skytexturestatic.c_str()));
+		std::string stex(S3D::getModFile(tex->skytexturestatic.c_str()));
 		ImageHandle bitmapStars = ImageFactory::loadImageHandle(stex.c_str(), stex.c_str(), false);
 		DIALOG_ASSERT(starTexture_.replace(bitmapStars));
 	}
@@ -79,8 +79,8 @@ void SkyDome::generate()
 	if (!tex->skyline.empty())
 	{
 		useSkyLine_ = true;
-		std::string stex(S3D::getDataFile(tex->skyline.c_str()));
-		std::string stexa(S3D::getDataFile(tex->skylinemask.c_str()));
+		std::string stex(S3D::getModFile(tex->skyline.c_str()));
+		std::string stexa(S3D::getModFile(tex->skylinemask.c_str()));
 		ImageHandle bitmapSkyLine = ImageFactory::loadImageHandle(stex.c_str(), stexa.c_str());
 		DIALOG_ASSERT(skyLineTexture_.replace(bitmapSkyLine));
 	}

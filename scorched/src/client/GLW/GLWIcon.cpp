@@ -73,9 +73,9 @@ bool GLWIcon::initFromXML(XMLNode *node)
 	if (bitmapNode && bitmapANode)
 	{
 		std::string bitmapName = 
-			S3D::getDataFile(bitmapNode->getContent());
+			S3D::getModFile(bitmapNode->getContent());
 		std::string bitmapAName = 
-			S3D::getDataFile(bitmapANode->getContent());
+			S3D::getModFile(bitmapANode->getContent());
 
 		texture_ = TextureStore::instance()->loadTexture(
 			bitmapName.c_str(), bitmapAName.c_str(), invert);

@@ -66,7 +66,7 @@ bool LandscapeDefinitionsBase::readLandscapeDefinitions()
 {
 	// Load landscape definition file
 	XMLFile file;
-	if (!file.readFile(S3D::getDataFile("data/landscapes.xml")) ||
+	if (!file.readFile(S3D::getModFile("data/landscapes.xml")) ||
 		!file.getRootNode())
 	{
 		S3D::dialogMessage("Scorched Landscape", S3D::formatStringBuffer(

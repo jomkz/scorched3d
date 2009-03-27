@@ -55,8 +55,8 @@ void SoftwareMouse::draw(const unsigned currentstate)
 	if (!createdTexture)
 	{
 		createdTexture = true;
-		std::string file1 = S3D::getDataFile("data/windows/pointer.bmp");
-		std::string file2 = S3D::getDataFile("data/windows/pointera.bmp");
+		std::string file1 = S3D::getDataFile("data/images/pointer.bmp");
+		std::string file2 = S3D::getDataFile("data/images/pointera.bmp");
 		ImageHandle map = ImageFactory::loadImageHandle(file1.c_str(), file2.c_str());
 		mouseTex_.create(map, false);
 

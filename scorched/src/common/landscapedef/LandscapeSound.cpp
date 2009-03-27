@@ -235,7 +235,7 @@ bool LandscapeSoundSoundFile::play(VirtualSoundSource *source)
 	std::string &file = files[rand() % files.size()];
 	SoundBuffer *buffer = 
 		Sound::instance()->fetchOrCreateBuffer(
-			S3D::getDataFile(file.c_str()));
+			S3D::getModFile(file.c_str()));
 	if (!buffer) return false;
 
 	source->setGain(gain);

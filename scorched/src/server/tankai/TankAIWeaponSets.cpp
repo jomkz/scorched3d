@@ -46,7 +46,7 @@ TankAIWeaponSets::~TankAIWeaponSets()
 bool TankAIWeaponSets::parseConfig()
 {
 	XMLFile file;
-	std::string fileName = S3D::getDataFile("data/tankaiweaponsets.xml");
+	std::string fileName = S3D::getModFile("data/tankaiweaponsets.xml");
 	if (!file.readFile(fileName.c_str()))
 	{
 		S3D::dialogMessage("TankAIWeaponSets", S3D::formatStringBuffer(

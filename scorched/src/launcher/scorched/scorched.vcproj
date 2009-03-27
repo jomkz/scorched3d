@@ -445,6 +445,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\common\main.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\common\NumberParser.cpp"
 				>
 			</File>

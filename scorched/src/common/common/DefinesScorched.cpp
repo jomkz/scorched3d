@@ -45,7 +45,7 @@ std::string S3D::ScorchedBuildTime = __DATE__;
 std::string S3D::ScorchedBuildTime = "Unknown";
 #endif
 static std::string exeName;
-static std::string dataModFile = "none";
+static std::string currentMod = "none";
 static std::string settingsDir = "";
 
 void S3D::showURL(const std::string &url)
@@ -93,12 +93,12 @@ void S3D::setSettingsDir(const std::string &dir)
 
 void S3D::setDataFileMod(const std::string &mod)
 {
-	dataModFile = mod;
+	currentMod = mod;
 }
 
 std::string S3D::getDataFileMod()
 {
-	return dataModFile;
+	return currentMod;
 }
 
 #ifndef S3D_DATADIR
@@ -131,21 +131,34 @@ static const char *GET_DIR(const char *dir)
 	return dir;
 }
 
-std::string S3D::getDataFile(const std::string &filename)
+std::string S3D::getModFile(const std::string &filename)
 {
 	std::string buffer;
 
-	buffer = S3D::getModFile(
-		S3D::formatStringBuffer("%s/%s", dataModFile.c_str(), filename.c_str()));
+	buffer = S3D::getSettingsModFile(
+		S3D::formatStringBuffer("%s/%s", currentMod.c_str(), filename.c_str()));
 	S3D::fileDos2Unix(buffer);
 	if (S3D::fileExists(buffer)) return buffer;
 
 	buffer = S3D::getGlobalModFile(
-		S3D::formatStringBuffer("%s/%s", dataModFile.c_str(), filename.c_str()));
+		S3D::formatStringBuffer("%s/%s", currentMod.c_str(), filename.c_str()));
 	S3D::fileDos2Unix(buffer);
 	if (S3D::fileExists(buffer)) return buffer;
 
-	buffer = S3D::formatStringBuffer("%s/%s", GET_DIR(S3D_DATADIR), filename.c_str());
+	if (currentMod != "none")
+	{
+		buffer = S3D::getGlobalModFile(
+			S3D::formatStringBuffer("%s/%s", "none", filename.c_str()));
+		S3D::fileDos2Unix(buffer);
+		if (S3D::fileExists(buffer)) return buffer;
+	}
+
+	return buffer;
+}
+
+std::string S3D::getDataFile(const std::string &filename)
+{
+	std::string buffer = S3D::formatStringBuffer("%s/%s", GET_DIR(S3D_DATADIR), filename.c_str());
 	S3D::fileDos2Unix(buffer);
 
 	return buffer;
@@ -153,7 +166,7 @@ std::string S3D::getDataFile(const std::string &filename)
 
 extern bool S3D::checkDataFile(const std::string &filename)
 {
-	std::string dataFileName = S3D::getDataFile(filename);
+	std::string dataFileName = S3D::getModFile(filename);
 	if (!S3D::fileExists(dataFileName))
 	{
 		if (0 == strstr(filename.c_str(), "none"))
@@ -244,7 +257,7 @@ std::string S3D::getSaveFile(const std::string &filename)
 	return buffer;
 }
 
-std::string S3D::getModFile(const std::string &filename)
+std::string S3D::getSettingsModFile(const std::string &filename)
 {
 	static std::string modDir;
 	if (!modDir.c_str()[0])

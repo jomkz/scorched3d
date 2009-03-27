@@ -48,7 +48,7 @@ void SoundAction::simulate(fixed frameTime, bool &remove)
 	{
 		SoundBuffer *activateSound = 
 			Sound::instance()->fetchOrCreateBuffer(
-				S3D::getDataFile(weapon_->getSound()));
+				S3D::getModFile(weapon_->getSound()));
 
 		VirtualSoundSource *source = new VirtualSoundSource(
 			VirtualSoundPriority::eAction, false, true);

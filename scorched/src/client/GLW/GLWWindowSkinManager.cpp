@@ -49,7 +49,7 @@ GLWWindowSkinManager::~GLWWindowSkinManager()
 bool GLWWindowSkinManager::loadWindows()
 {
 	XMLFile file;
-	std::string fileName = S3D::getDataFile("data/windows.xml");
+	std::string fileName = S3D::getModFile("data/windows.xml");
 	if (!file.readFile(fileName) ||
 		!file.getRootNode())
 	{

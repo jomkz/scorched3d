@@ -85,7 +85,7 @@ bool ClientDefenseHandler::processMessage(
 				{
 					SoundBuffer *batSound = 
 						Sound::instance()->fetchOrCreateBuffer(
-							S3D::getDataFile(S3D::formatStringBuffer("data/wav/%s", battery->getActivationSound())));
+							S3D::getModFile(S3D::formatStringBuffer("data/wav/%s", battery->getActivationSound())));
 					SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
 						batSound, tank->getPosition().getTankPosition().asVector());
 				}
@@ -113,7 +113,7 @@ bool ClientDefenseHandler::processMessage(
 				{
 					SoundBuffer *activateSound = 
 						Sound::instance()->fetchOrCreateBuffer(
-							S3D::getDataFile(S3D::formatStringBuffer("data/wav/%s", accessory->getActivationSound())));
+							S3D::getModFile(S3D::formatStringBuffer("data/wav/%s", accessory->getActivationSound())));
 					SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
 						activateSound, tank->getPosition().getTankPosition().asVector());
 				}
@@ -146,7 +146,7 @@ bool ClientDefenseHandler::processMessage(
 				{
 					SoundBuffer *paraSound = 
 						Sound::instance()->fetchOrCreateBuffer(
-							S3D::getDataFile(S3D::formatStringBuffer("data/wav/%s", parachute->getActivationSound())));
+							S3D::getModFile(S3D::formatStringBuffer("data/wav/%s", parachute->getActivationSound())));
 					SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
 						paraSound, tank->getPosition().getTankPosition().asVector());
 				}

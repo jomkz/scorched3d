@@ -305,10 +305,10 @@ void SettingsFrame::createLandPanel()
 		LandscapeDefinitionsEntry &dfn = *itor;
 		wxBoxSizer *boxSizer = new wxBoxSizer(wxVERTICAL);
 
-		std::string fileName = S3D::getDataFile(S3D::formatStringBuffer("data/landscapes/%s", dfn.picture.c_str()));
+		std::string fileName = S3D::getModFile(S3D::formatStringBuffer("data/landscapes/%s", dfn.picture.c_str()));
 		if (!::wxFileExists(convertString(fileName)))
 		{
-			fileName = S3D::getDataFile("data/landscapes/picture-none.bmp");
+			fileName = S3D::getModFile("data/landscapes/picture-none.bmp");
 		}
 
 		wxImage image;
@@ -434,7 +434,7 @@ SettingsFrame::SettingsFrame(bool server, OptionsGame &context) :
 {
 #ifdef _WIN32
 	// Set the frame's icon
-	wxIcon icon(convertString(S3D::getDataFile("data/windows/tank2.ico")), wxBITMAP_TYPE_ICO);
+	wxIcon icon(convertString(S3D::getDataFile("data/images/tank2.ico")), wxBITMAP_TYPE_ICO);
 	SetIcon(icon);
 #endif
 

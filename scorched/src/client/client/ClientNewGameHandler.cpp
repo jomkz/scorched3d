@@ -125,7 +125,7 @@ bool ClientNewGameHandler::actualProcessMessage(
 			message.getLevelMessage().getGroundMapsDefn().getName());
 	if (landscapeDefinition)
 	{
-		std::string fileName = S3D::getDataFile(
+		std::string fileName = S3D::getModFile(
 			S3D::formatStringBuffer("data/landscapes/%s", 
 			landscapeDefinition->picture.c_str()));
 		ProgressDialog::instance()->setIcon(fileName.c_str());

@@ -305,8 +305,8 @@ void TankKeyboardControlUtil::moveLeftRight(Tank *tank,
 
 	if (LRMoving != currentLRMoving)
 	{
-		CACHE_SOUND(sound, S3D::getDataFile("data/wav/movement/movement.wav"));
-		CACHE_SOUND(turn, S3D::getDataFile("data/wav/movement/turn.wav"));
+		CACHE_SOUND(sound, S3D::getModFile("data/wav/movement/movement.wav"));
+		CACHE_SOUND(turn, S3D::getModFile("data/wav/movement/turn.wav"));
 		if (currentLRMoving)
 		{
 			startSound_->play(sound);
@@ -399,8 +399,8 @@ void TankKeyboardControlUtil::moveUpDown(Tank *tank,
 
 	if (UDMoving != currentUDMoving)
 	{
-		CACHE_SOUND(sound, S3D::getDataFile("data/wav/movement/movement.wav"));
-		CACHE_SOUND(elevate, S3D::getDataFile("data/wav/movement/elevate.wav"));
+		CACHE_SOUND(sound, S3D::getModFile("data/wav/movement/movement.wav"));
+		CACHE_SOUND(elevate, S3D::getModFile("data/wav/movement/elevate.wav"));
 		if (currentUDMoving)
 		{
 			startSound_->play(sound);
@@ -472,7 +472,7 @@ void TankKeyboardControlUtil::movePower(Tank *tank,
 
 	if (PMoving != currentPMoving)
 	{
-		CACHE_SOUND(power, S3D::getDataFile("data/wav/movement/power.wav"));
+		CACHE_SOUND(power, S3D::getModFile("data/wav/movement/power.wav"));
 		if (currentPMoving)
 		{
 			powerSound_->play(power);

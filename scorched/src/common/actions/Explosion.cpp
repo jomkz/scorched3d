@@ -238,7 +238,7 @@ void Explosion::simulate(fixed frameTime, bool &remove)
 			{
 				SoundBuffer *expSound = 
 					Sound::instance()->fetchOrCreateBuffer(
-						S3D::getDataFile(S3D::formatStringBuffer("data/wav/%s", params_->getExplosionSound())));
+						S3D::getModFile(S3D::formatStringBuffer("data/wav/%s", params_->getExplosionSound())));
 				SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
 					expSound, position_.asVector());
 			}

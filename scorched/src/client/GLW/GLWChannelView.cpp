@@ -192,7 +192,7 @@ void GLWChannelView::channelText(ChannelText &channelText)
 	if (!(channelText.getFlags() & ChannelText::eNoSound) &&
 		!textSound_.empty())
 	{
-		CACHE_SOUND(sound, S3D::getDataFile(textSound_.c_str()));
+		CACHE_SOUND(sound, S3D::getModFile(textSound_.c_str()));
 		SoundUtils::playRelativeSound(VirtualSoundPriority::eText, sound);	
 	}
 
@@ -379,11 +379,11 @@ void GLWChannelView::draw()
 	{
 		createdTexture_ = true;
 		ImageHandle upImg = ImageFactory::loadAlphaImageHandle(
-			S3D::getDataFile("data/windows/arrow_u.png"));
+			S3D::getModFile("data/windows/arrow_u.png"));
 		ImageHandle downImg = ImageFactory::loadAlphaImageHandle(
-			S3D::getDataFile("data/windows/arrow_d.png"));
+			S3D::getModFile("data/windows/arrow_d.png"));
 		ImageHandle resetImg = ImageFactory::loadAlphaImageHandle(
-			S3D::getDataFile("data/windows/arrow_s.png"));
+			S3D::getModFile("data/windows/arrow_s.png"));
 
 		upTexture_.create(upImg, false);
 		downTexture_.create(downImg, false);

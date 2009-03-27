@@ -97,7 +97,7 @@ void TankFired::simulate(fixed frameTime, bool &remove)
 				{
 					SoundBuffer *firedSound = 
 						Sound::instance()->fetchOrCreateBuffer(
-							S3D::getDataFile(S3D::formatStringBuffer("data/wav/%s", 
+							S3D::getModFile(S3D::formatStringBuffer("data/wav/%s", 
 							weapon_->getParent()->getActivationSound())));
 					SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
 						firedSound, tank->getPosition().getTankPosition().asVector());

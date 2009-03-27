@@ -39,8 +39,8 @@ MsgBoxDialog::MsgBoxDialog() :
 	GLWPanel *topPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
 
 	GLTexture *texture = TextureStore::instance()->loadTexture(
-		S3D::getDataFile("data/windows/exclaim.bmp"),
-		S3D::getDataFile("data/windows/mask.bmp"));
+		S3D::getDataFile("data/images/exclaim.bmp"),
+		S3D::getDataFile("data/images/mask.bmp"));
 	icon_ = new GLWIcon(0.0f, 0.0f, 32.0f, 32.0f, texture);
 	topPanel->addWidget(icon_, 0, SpaceLeft | SpaceTop | AlignTop, 10.0f);
 

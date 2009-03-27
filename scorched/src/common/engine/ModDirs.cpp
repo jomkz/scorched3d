@@ -36,7 +36,7 @@ bool ModDirs::loadModDirs()
 {
 	loadModFile("none", true);
 
-	std::string modFile = S3D::getModFile("");
+	std::string modFile = S3D::getSettingsModFile("");
 	std::string globalModFile = S3D::getGlobalModFile("");
 	if (!loadModDir(modFile, false)) return false;
 	if (!loadModDir(globalModFile, true)) return false;
@@ -89,9 +89,9 @@ bool ModDirs::loadModFile(const std::string &inputFileName, bool global)
 	}
 
 	// Check if there is a modinfo file for this mod
-	std::string noneGamesFile = S3D::getDataFile("data/modinfo.xml");
+	std::string noneGamesFile = S3D::getModFile("data/modinfo.xml");
 	S3D::setDataFileMod(newFileName);
-	std::string modGamesFile = S3D::getDataFile("data/modinfo.xml");
+	std::string modGamesFile = S3D::getModFile("data/modinfo.xml");
 	S3D::setDataFileMod("none");
 
 	if (!S3D::fileExists(modGamesFile))
@@ -147,7 +147,7 @@ bool ModDirs::loadModFile(const std::string &inputFileName, bool global)
 		// but also exists in the users custom mod directory.
 		// The one in the user's directory may be out of date, so it needs to be 
 		// removed incase it masks the newer one that comes with the game.
-		std::string src = S3D::getModFile(newFileName);
+		std::string src = S3D::getSettingsModFile(newFileName);
 		std::string dest = S3D::getSettingsFile(
 			S3D::formatStringBuffer("/oldmods/%s-%u", newFileName.c_str(), time(0)));
 		if (S3D::dirExists(src.c_str()))

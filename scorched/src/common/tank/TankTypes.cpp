@@ -33,7 +33,7 @@ TankTypes::~TankTypes()
 bool TankTypes::loadTankTypes(ScorchedContext &context)
 {
 	XMLFile file;
-	if (!file.readFile(S3D::getDataFile("data/tanktypes.xml")))
+	if (!file.readFile(S3D::getModFile("data/tanktypes.xml")))
 	{
 		S3D::dialogMessage("Scorched3D", 
 			S3D::formatStringBuffer("Failed to parse data/tanktypes.xml\n%s", 

@@ -108,13 +108,13 @@ void Water::generate(ProgressCounter *counter)
 	wWaveDistance_->generate(defn.getLandscapeWidth(), defn.getLandscapeHeight(), height_, counter);
 
 	// Generate the water texture for the spray sprite
-	std::string sprayMaskFile = S3D::getDataFile("data/textures/smoke01.bmp");
+	std::string sprayMaskFile = S3D::getModFile("data/textures/smoke01.bmp");
 	ImageHandle sprayMaskBitmap = 
 		ImageFactory::loadImageHandle(
 			sprayMaskFile.c_str(), sprayMaskFile.c_str(), false);
 	ImageHandle loadedBitmapWater = 
-		ImageFactory::loadImageHandle(S3D::getDataFile(water->reflection.c_str()));
-	bitmapWater_ = ImageFactory::loadImageHandle(S3D::getDataFile(water->reflection.c_str()));
+		ImageFactory::loadImageHandle(S3D::getModFile(water->reflection.c_str()));
+	bitmapWater_ = ImageFactory::loadImageHandle(S3D::getModFile(water->reflection.c_str()));
 
 	{
 		ImageHandle bitmapWater = loadedBitmapWater.createResize(
@@ -156,7 +156,7 @@ bool Water::explosion(Vector position, float size)
 
 	if (position[2] < height_)
 	{
-		CACHE_SOUND(sound, S3D::getDataFile("data/wav/misc/splash.wav"));
+		CACHE_SOUND(sound, S3D::getModFile("data/wav/misc/splash.wav"));
 		SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
 			sound, position);
 

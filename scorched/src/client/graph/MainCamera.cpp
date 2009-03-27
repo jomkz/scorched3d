@@ -60,8 +60,8 @@ MainCamera::MainCamera() :
 	mouseDown_(false), keyDown_(false), scrolling_(false), showArena_(false)
 {
 	Image *map = ImageFactory::loadImage(
-		S3D::getDataFile("data/windows/camera.bmp"),
-		S3D::getDataFile("data/windows/cameraa.bmp"),
+		S3D::getDataFile("data/images/camera.bmp"),
+		S3D::getDataFile("data/images/cameraa.bmp"),
 		false);
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->addMenu(
@@ -453,7 +453,7 @@ void MainCamera::SaveScreen::draw(const unsigned state)
 		Logger::log(S3D::formatStringBuffer("Screen shot saved as file \"%s\"", fileName.c_str()));
 
 		// snapshot sound
-		CACHE_SOUND(sound, S3D::getDataFile("data/wav/misc/camera.wav"));
+		CACHE_SOUND(sound, S3D::getModFile("data/wav/misc/camera.wav"));
 		SoundUtils::playRelativeSound(VirtualSoundPriority::eText, sound);
 	}
 	if (saveScreenTest_)

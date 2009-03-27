@@ -39,7 +39,7 @@ void GLWDropDownColor::addColor(Vector &color)
 	{
 		createdTexture_ = true;
 		ImageHandle map = ImageFactory::loadImageHandle(
-			S3D::getDataFile("data/windows/white.bmp"));
+			S3D::getDataFile("data/images/white.bmp"));
 		colorTexture_.create(map);
 	}
 

@@ -255,30 +255,30 @@ void NetworkSelectDialog::drawColumnGames(unsigned int id, int row, int col,
 		if (!okTex_)
 		{
 			okTex_ = TextureStore::instance()->loadTexture(
-				S3D::getDataFile("data/windows/ok.bmp"),
-				S3D::getDataFile("data/windows/mask.bmp"));
+				S3D::getDataFile("data/images/ok.bmp"),
+				S3D::getDataFile("data/images/mask.bmp"));
 			questionTex_ = TextureStore::instance()->loadTexture(
-				S3D::getDataFile("data/windows/question.bmp"),
-				S3D::getDataFile("data/windows/mask.bmp"));
+				S3D::getDataFile("data/images/question.bmp"),
+				S3D::getDataFile("data/images/mask.bmp"));
 			warningTex_ = TextureStore::instance()->loadTexture(
-				S3D::getDataFile("data/windows/warn.bmp"),
-				S3D::getDataFile("data/windows/mask.bmp"));
+				S3D::getDataFile("data/images/warn.bmp"),
+				S3D::getDataFile("data/images/mask.bmp"));
 			noentryTex_ = TextureStore::instance()->loadTexture(
-				S3D::getDataFile("data/windows/noentry.bmp"),
-				S3D::getDataFile("data/windows/mask.bmp"));
+				S3D::getDataFile("data/images/noentry.bmp"),
+				S3D::getDataFile("data/images/mask.bmp"));
 			exclaimTex_ = TextureStore::instance()->loadTexture(
-				S3D::getDataFile("data/windows/exclaim.bmp"),
-				S3D::getDataFile("data/windows/mask.bmp"));
+				S3D::getDataFile("data/images/exclaim.bmp"),
+				S3D::getDataFile("data/images/mask.bmp"));
 			keyTex_ = TextureStore::instance()->loadTexture(
-				S3D::getDataFile("data/windows/key.bmp"),
-				S3D::getDataFile("data/windows/keya.bmp"),
+				S3D::getDataFile("data/images/key.bmp"),
+				S3D::getDataFile("data/images/keya.bmp"),
 				true);
 			cogTex_ = TextureStore::instance()->loadTexture(
-				S3D::getDataFile("data/windows/cog.bmp"),
-				S3D::getDataFile("data/windows/coga.bmp"),
+				S3D::getDataFile("data/images/cog.bmp"),
+				S3D::getDataFile("data/images/coga.bmp"),
 				true);
 			tankTex_ = TextureStore::instance()->loadTexture(
-				S3D::getDataFile("data/windows/tank2s.bmp"));
+				S3D::getDataFile("data/images/tank2s.bmp"));
 		}
 
 		LANG_RESOURCE_CONST_VAR(NONE, "NONE", "None");

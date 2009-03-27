@@ -53,7 +53,7 @@ void ExplosionRingRenderer::simulate(Action *action, float frameTime, bool &remo
 	{
 		SoundBuffer *firedSound = 
 			Sound::instance()->fetchOrCreateBuffer(
-				S3D::getDataFile(data_.c_str()));
+				S3D::getModFile(data_.c_str()));
 		SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
 			firedSound, position_);
 	}

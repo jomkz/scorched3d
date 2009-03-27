@@ -92,7 +92,7 @@ bool ClientStartGameHandler::processMessage(
 	if (current->getDestinationId() == 
 		ScorchedClient::instance()->getTankContainer().getCurrentDestinationId())
 	{
-		CACHE_SOUND(playSound, S3D::getDataFile("data/wav/misc/play.wav"));
+		CACHE_SOUND(playSound, S3D::getModFile("data/wav/misc/play.wav"));
 		SoundUtils::playRelativeSound(VirtualSoundPriority::eText, playSound);
 	}
 

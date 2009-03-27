@@ -63,19 +63,19 @@ Model *ModelStore::getModel(ModelID &id)
 	if (0 == strcmp(id.getType(), "ase"))
 	{
 		// Load the ASEFile containing the tank definitions
-		std::string meshName(S3D::getDataFile(id.getMeshName()));
+		std::string meshName(S3D::getModFile(id.getMeshName()));
 
 		bool noSkin = 
 			(0 == strcmp("none", id.getSkinName()));
 		ASEModelFactory factory;
-		std::string skinName = S3D::getDataFile(id.getSkinName());
+		std::string skinName = S3D::getModFile(id.getSkinName());
 		model = factory.createModel(meshName.c_str(), 
 			(noSkin?"":skinName.c_str()));
 	}
 	else if (0 == strcmp(id.getType(), "MilkShape"))
 	{
 		// Load the Milkshape containing the tank definitions
-		std::string meshName(S3D::getDataFile(id.getMeshName()));
+		std::string meshName(S3D::getModFile(id.getMeshName()));
 		MSModelFactory factory;
 		model = factory.createModel(meshName.c_str());		
 	}

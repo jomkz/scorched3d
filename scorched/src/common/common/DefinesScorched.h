@@ -33,12 +33,13 @@ namespace S3D
 
 	bool checkDataFile(const std::string &filename);
 	std::string getDataFile(const std::string &filename);
+	std::string getModFile(const std::string &filename);
 	std::string getDocFile(const std::string &filename);
 	std::string getLogFile(const std::string &filename);
 	std::string getSettingsFile(const std::string &filename);
 	std::string getHomeFile(const std::string &filename);
 	std::string getSaveFile(const std::string &filename);
-	std::string getModFile(const std::string &filename);
+	std::string getSettingsModFile(const std::string &filename);
 	std::string getGlobalModFile(const std::string &filename);
 
 	extern unsigned int ScorchedPort;

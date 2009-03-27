@@ -100,7 +100,7 @@ void Lightning::simulate(fixed frameTime, bool &remove)
 			{
 				SoundBuffer *expSound =
 					Sound::instance()->fetchOrCreateBuffer(
-						S3D::getDataFile(weapon_->getSound()));
+						S3D::getModFile(weapon_->getSound()));
 				SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
 					expSound, position_.asVector());
 			}
@@ -129,7 +129,7 @@ void Lightning::draw()
 
 		if (!texture_)
 		{
-			std::string file4 = S3D::getDataFile(weapon_->getTexture());
+			std::string file4 = S3D::getModFile(weapon_->getTexture());
 			texture_ = TextureStore::instance()->loadTexture(
 				file4.c_str(), file4.c_str(), false);
 		}

@@ -39,8 +39,8 @@ void Wall::draw()
 	if (!createdTexture_)
 	{
 		createdTexture_ = true;
-		std::string file1 = S3D::getDataFile("data/textures/bordershield/grid.bmp");
-		std::string file2 = S3D::getDataFile("data/textures/bordershield/grid.bmp");
+		std::string file1 = S3D::getModFile("data/textures/bordershield/grid.bmp");
+		std::string file2 = S3D::getModFile("data/textures/bordershield/grid.bmp");
 		ImageHandle map = ImageFactory::loadImageHandle(file1.c_str(), file2.c_str(), false);
 		texture_.create(map, true);
 	}
@@ -147,7 +147,7 @@ void Wall::drawWall(Vector &cornerA, Vector &cornerB,
 void Wall::wallHit(Vector &position, OptionsTransient::WallSide side)
 {
 	fadeTime_[side] = 1.0f;
-	CACHE_SOUND(sound, S3D::getDataFile("data/wav/shield/hit2.wav"));
+	CACHE_SOUND(sound, S3D::getModFile("data/wav/shield/hit2.wav"));
 	SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
 		sound, position);
 }

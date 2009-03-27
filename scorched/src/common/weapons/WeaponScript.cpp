@@ -49,7 +49,7 @@ bool WeaponScript::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 	std::string luaErrorString;
 	script_ = context.getScorchedContext().getLUAScriptFactory().createScript();
 	script_->addWeaponFunctions();
-	if (!script_->loadFromFile(S3D::getDataFile(filename), luaErrorString))
+	if (!script_->loadFromFile(S3D::getModFile(filename), luaErrorString))
 	{
 		return accessoryNode->returnError(
 			S3D::formatStringBuffer("Failed to load lua script %s : %s", 

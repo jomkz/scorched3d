@@ -68,11 +68,11 @@ bool ModInfo::parse(const std::string &fileName)
 
 	if (S3D::checkDataFile(tmpicon.c_str()))
 	{
-		icon_ = S3D::getDataFile(tmpicon.c_str());
+		icon_ = S3D::getModFile(tmpicon.c_str());
 	}
 	else
 	{
-		icon_ = S3D::getDataFile("data/windows/tank2.bmp");
+		icon_ = S3D::getDataFile("data/images/tank2.bmp");
 	}
 
 	// Parse the mod game info
@@ -90,14 +90,14 @@ bool ModInfo::parse(const std::string &fileName)
 
 		if (S3D::checkDataFile(tmpicon.c_str())) 
 		{
-			entry.icon = S3D::getDataFile(tmpicon.c_str());
+			entry.icon = S3D::getModFile(tmpicon.c_str());
 		}
 		else
 		{
-			entry.icon = S3D::getDataFile("data/windows/tank2.bmp");
+			entry.icon = S3D::getDataFile("data/images/tank2.bmp");
 		}
 	
-		entry.gamefile = S3D::getDataFile(tmpgamefile.c_str());
+		entry.gamefile = S3D::getModFile(tmpgamefile.c_str());
 		if (!S3D::checkDataFile(tmpgamefile.c_str())) return false;
 
 		if (!gameNode->failChildren()) return false;

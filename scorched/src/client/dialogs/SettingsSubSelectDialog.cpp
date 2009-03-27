@@ -271,10 +271,10 @@ void SettingsSubSelectDialog::displayLand()
 	{
 		LandscapeDefinitionsEntry &dfn = *itor;
 
-		std::string fileName = S3D::getDataFile(S3D::formatStringBuffer("data/landscapes/%s", dfn.picture.c_str()));
+		std::string fileName = S3D::getModFile(S3D::formatStringBuffer("data/landscapes/%s", dfn.picture.c_str()));
 		if (!::S3D::fileExists(fileName))
 		{
-			fileName = S3D::getDataFile("data/landscapes/picture-none.bmp");
+			fileName = S3D::getModFile("data/landscapes/picture-none.bmp");
 		}
 		bool enabled = landscapeDefinitions.landscapeEnabled(
 			optionsGame, dfn.name.c_str());

@@ -81,7 +81,7 @@ bool ModFileEntry::writeModFile(const std::string &fileName,
 	while (dir = strchr(dir, '/'))
 	{
 		*dir = '\0';
-		std::string needdir = S3D::getModFile(S3D::formatStringBuffer("%s/%s", 
+		std::string needdir = S3D::getSettingsModFile(S3D::formatStringBuffer("%s/%s", 
 			modName.c_str(), fileName.c_str()));
 		if (!S3D::dirExists(needdir)) S3D::dirMake(needdir);
 		*dir = '/';
@@ -89,7 +89,7 @@ bool ModFileEntry::writeModFile(const std::string &fileName,
 	}
 
 	// Write the file 
-	std::string needfile = S3D::getModFile(S3D::formatStringBuffer("%s/%s", 
+	std::string needfile = S3D::getSettingsModFile(S3D::formatStringBuffer("%s/%s", 
 		modName.c_str(), fileName.c_str()));
 	FILE *file = fopen(needfile.c_str(), "wb");
 	if (!file)

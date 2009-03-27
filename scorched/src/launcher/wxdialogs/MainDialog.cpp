@@ -269,7 +269,7 @@ MainFrame::MainFrame() :
 	if (!messageMutex_) messageMutex_ = SDL_CreateMutex();
 
 	// Set the frame's icon
-	wxIcon icon(convertString(S3D::getDataFile("data/windows/tank2.ico")), wxBITMAP_TYPE_ICO);
+	wxIcon icon(convertString(S3D::getDataFile("data/images/tank2.ico")), wxBITMAP_TYPE_ICO);
 	SetIcon(icon);
 
 #if wxCHECK_VERSION(2, 6, 0)
@@ -278,7 +278,7 @@ MainFrame::MainFrame() :
 
 	// Load the backdrop bitmaps
 	if (!backdropImage_.LoadFile(
-		convertString(S3D::getDataFile("data/windows/backdrop.gif")), 
+		convertString(S3D::getDataFile("data/images/backdrop.gif")), 
 		wxBITMAP_TYPE_GIF))
 	{
 		S3D::dialogMessage("Scorched", "Failed to load backdrop");
@@ -563,7 +563,7 @@ void showMainDialog()
 	if (newVersion)
 	{
 		wxBitmap bitmap;
-		if (bitmap.LoadFile(convertString(S3D::getDataFile("data/windows/splash.gif")), 
+		if (bitmap.LoadFile(convertString(S3D::getDataFile("data/images/splash.gif")), 
 			wxBITMAP_TYPE_GIF))
 		{
 			wxSplashScreen* splash = new wxSplashScreen(bitmap,

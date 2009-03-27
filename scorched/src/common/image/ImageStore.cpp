@@ -60,14 +60,14 @@ Image *ImageStore::getImage(ImageID &id)
 	if (id.getAlphaName()[0])
 	{
 		image = ImageFactory::loadImage(
-			S3D::getDataFile(id.getImageName()),
-			S3D::getDataFile(id.getAlphaName()),
+			S3D::getModFile(id.getImageName()),
+			S3D::getModFile(id.getAlphaName()),
 			id.getInvert());
 	}
 	else
 	{
 		image = ImageFactory::loadImage(
-			S3D::getDataFile(id.getImageName()));
+			S3D::getModFile(id.getImageName()));
 	}
 
 	return image;

@@ -65,39 +65,39 @@ bool ExplosionTextures::createTextures(ProgressCounter *counter)
 {
 	if (counter) counter->setNewOp(LANG_RESOURCE("EXPLOSION_TEXTURES", "Explosion Textures"));
 
-	std::string file1 = S3D::getDataFile("data/textures/smoke01.bmp");
+	std::string file1 = S3D::getModFile("data/textures/smoke01.bmp");
 	ImageHandle bitmap = ImageFactory::loadImageHandle(file1.c_str(), file1.c_str(), false);
 	smokeTexture.create(bitmap);
 	DIALOG_ASSERT(smokeTexture.textureValid());
 
-	std::string file2 = S3D::getDataFile("data/textures/smoke02.bmp");
+	std::string file2 = S3D::getModFile("data/textures/smoke02.bmp");
 	ImageHandle bitmap2 = ImageFactory::loadImageHandle(file2.c_str(), file2.c_str(), false);
 	smokeTexture2.create(bitmap2);
 	DIALOG_ASSERT(smokeTexture2.textureValid());
 
-	std::string file3 = S3D::getDataFile("data/textures/particle.bmp");
+	std::string file3 = S3D::getModFile("data/textures/particle.bmp");
 	ImageHandle bitmap3 = ImageFactory::loadImageHandle(file3.c_str(), file3.c_str(), false);
 	particleTexture.create(bitmap3);
 	DIALOG_ASSERT(particleTexture.textureValid());
 
-	ImageHandle talkBitmap = ImageFactory::loadAlphaImageHandle(S3D::getDataFile("data/textures/talk.bmp"));
+	ImageHandle talkBitmap = ImageFactory::loadAlphaImageHandle(S3D::getModFile("data/textures/talk.bmp"));
 	talkTexture.create(talkBitmap);
 	DIALOG_ASSERT(talkTexture.textureValid());
 
-	std::string file5 = S3D::getDataFile("data/textures/rain.bmp");
-	std::string file5m = S3D::getDataFile("data/textures/rainm.bmp");
+	std::string file5 = S3D::getModFile("data/textures/rain.bmp");
+	std::string file5m = S3D::getModFile("data/textures/rainm.bmp");
 	ImageHandle bitmap5 = ImageFactory::loadImageHandle(file5m.c_str(), file5.c_str(), false);
 	rainTexture.create(bitmap5);
 	DIALOG_ASSERT(rainTexture.textureValid());
 
-	std::string file6 = S3D::getDataFile("data/textures/snow.bmp");
-	std::string file6m = S3D::getDataFile("data/textures/snowm.bmp");
+	std::string file6 = S3D::getModFile("data/textures/snow.bmp");
+	std::string file6m = S3D::getModFile("data/textures/snowm.bmp");
 	ImageHandle bitmap6 = ImageFactory::loadImageHandle(file6.c_str(), file6m.c_str(), false);
 	snowTexture.create(bitmap6);
 	DIALOG_ASSERT(snowTexture.textureValid());
 
 	XMLFile file;
-	if (!file.readFile(S3D::getDataFile("data/textureset.xml")))
+	if (!file.readFile(S3D::getModFile("data/textureset.xml")))
 	{
 		S3D::dialogMessage("ExplosionTextures", S3D::formatStringBuffer(
 					  "Failed to parse \"%s\"\n%s", 
@@ -153,7 +153,7 @@ bool ExplosionTextures::createTextures(ProgressCounter *counter)
 
 			// Load texture
 			std::string texFile = 
-				S3D::getDataFile(S3D::formatStringBuffer("data/%s", currentTexture->getContent()));
+				S3D::getModFile(S3D::formatStringBuffer("data/%s", currentTexture->getContent()));
 			if (!addTextureToSet(*set, texFile.c_str()))
 			{
 				S3D::dialogMessage("ExplosionTextures", S3D::formatStringBuffer(
@@ -192,7 +192,7 @@ Image &ExplosionTextures::getScorchBitmap(const char *name)
 			return *(*findItor).second;
 		}
 
-		std::string fileName = S3D::getDataFile(name);
+		std::string fileName = S3D::getModFile(name);
 		if (S3D::fileExists(fileName))
 		{
 			Image *map = ImageFactory::loadImage(fileName);

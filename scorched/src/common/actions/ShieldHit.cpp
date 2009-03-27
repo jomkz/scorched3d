@@ -70,7 +70,7 @@ void ShieldHit::simulate(fixed frameTime, bool &remove)
 				{
 					SoundBuffer *shieldSound = 
 						Sound::instance()->fetchOrCreateBuffer(
-							S3D::getDataFile(S3D::formatStringBuffer("data/wav/%s", shield->getCollisionSound())));
+							S3D::getModFile(S3D::formatStringBuffer("data/wav/%s", shield->getCollisionSound())));
 					SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
 						shieldSound, position_.asVector());
 

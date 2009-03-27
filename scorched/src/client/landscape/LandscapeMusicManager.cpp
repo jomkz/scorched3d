@@ -66,7 +66,7 @@ void LandscapeMusicManager::addMusics()
 
 void LandscapeMusicManager::readGlobalMusicFile()
 {
-	std::string filePath = S3D::getDataFile("data/music.xml");
+	std::string filePath = S3D::getModFile("data/music.xml");
 
 	// Parse the XML file
 	XMLFile file;
@@ -259,7 +259,7 @@ void LandscapeMusicManager::simulate(const unsigned state, float simTime)
 		// Load the next sound buffer
 		SoundBuffer *buffer = 
 			Sound::instance()->fetchOrCreateBuffer(
-				S3D::getDataFile(wantedEntry->file.c_str()));
+				S3D::getModFile(wantedEntry->file.c_str()));
 		if (buffer)
 		{
 			// Start a new sound source

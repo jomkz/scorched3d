@@ -78,9 +78,9 @@ void WaterWaves::generateWaves(float waterHeight, ProgressCounter *counter)
 	while (findNextPath(&context, waterHeight, counter)) {}
 
 	ImageHandle waves1 = ImageFactory::loadAlphaImageHandle(
-		S3D::getDataFile("data/textures/waves.bmp"));
+		S3D::getModFile("data/textures/waves.bmp"));
 	ImageHandle waves2 = ImageFactory::loadAlphaImageHandle(
-		S3D::getDataFile("data/textures/waves2.bmp"));
+		S3D::getModFile("data/textures/waves2.bmp"));
 	wavesTexture1_.create(waves1);
 	wavesTexture2_.create(waves2);
 

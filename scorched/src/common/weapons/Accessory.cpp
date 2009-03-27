@@ -255,7 +255,7 @@ GLTexture *Accessory::getTexture()
 	{
 		ImageHandle bmap =
 			ImageFactory::loadAlphaImageHandle(
-				S3D::getDataFile(S3D::formatStringBuffer("data/textures/wicons/%s", getIconName())));
+				S3D::getModFile(S3D::formatStringBuffer("data/textures/wicons/%s", getIconName())));
 		texture = new GLTexture();
 		texture->create(bmap, false);
 	}
@@ -263,7 +263,7 @@ GLTexture *Accessory::getTexture()
 	{
 		ImageHandle bmap =
 			ImageFactory::loadAlphaImageHandle(
-				S3D::getDataFile(S3D::formatStringBuffer("data/textures/wicons/%s", "tracer.bmp")));
+				S3D::getModFile(S3D::formatStringBuffer("data/textures/wicons/%s", "tracer.bmp")));
 		texture = new GLTexture();
 		texture->create(bmap, false);
 	}

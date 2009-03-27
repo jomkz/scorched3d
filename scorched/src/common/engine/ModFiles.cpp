@@ -87,7 +87,7 @@ bool ModFiles::loadModFiles(const std::string &mod,
 {
 	{
 		// Get and check the user mod directory exists
-		std::string modDir = S3D::getModFile(mod);
+		std::string modDir = S3D::getSettingsModFile(mod);
 		if (S3D::dirExists(modDir))
 		{
 			if (counter) counter->setNewOp(LANG_RESOURCE("LOADING_USER_MODS", "Loading User Mods"));
@@ -118,7 +118,7 @@ bool ModFiles::loadModFiles(const std::string &mod,
 		loadLocalModFile("data/landscapes.xml", mod);
 
 		const char *landscapesBase = "data/landscapes";
-		std::string dir = S3D::getDataFile(landscapesBase);
+		std::string dir = S3D::getModFile(landscapesBase);
 		FileList fList(dir, "*.xml", true);
 		std::list<std::string> &files = fList.getFiles();
 		std::list<std::string>::iterator itor;
@@ -149,7 +149,7 @@ bool ModFiles::loadModFiles(const std::string &mod,
 
 		if (!createDir && files_.empty())
 		{
-			std::string modFile = S3D::getModFile(mod);
+			std::string modFile = S3D::getSettingsModFile(mod);
 			std::string globalModFile = S3D::getGlobalModFile(mod);
 			S3D::dialogMessage("Mod", S3D::formatStringBuffer(
 				"Failed to find \"%s\" mod files in directories \"%s\" \"%s\"",
@@ -166,7 +166,7 @@ bool ModFiles::loadModFiles(const std::string &mod,
 bool ModFiles::loadLocalModFile(const std::string &local, 
 	const std::string &mod)
 {
-	std::string dataFile = S3D::getDataFile(local);
+	std::string dataFile = S3D::getModFile(local);
 	std::string modDirStr(dataFile.c_str());
 	char *modDir = (char *) modDirStr.c_str();
 	modDir[dataFile.size() - local.size()] = '\0';
@@ -253,7 +253,7 @@ bool ModFiles::loadModFile(const std::string &fullFileName,
 
 bool ModFiles::writeModFiles(const std::string &mod)
 {
-	std::string modDir = S3D::getModFile(mod);
+	std::string modDir = S3D::getSettingsModFile(mod);
 	if (!S3D::dirExists(modDir))
 	{
 		S3D::dirMake(modDir);

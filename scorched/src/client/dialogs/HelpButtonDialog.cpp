@@ -65,8 +65,8 @@ HelpButtonDialog::HelpMenu::HelpMenu()
 {
 	Image *map = 
 		ImageFactory::loadImage(
-			S3D::getDataFile("data/windows/help.bmp"),
-			S3D::getDataFile("data/windows/helpa.bmp"),
+			S3D::getDataFile("data/images/help.bmp"),
+			S3D::getDataFile("data/images/helpa.bmp"),
 			false);
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->
@@ -93,8 +93,8 @@ void HelpButtonDialog::HelpMenu::menuSelection(const char* menuName,
 HelpButtonDialog::VolumeMenu::VolumeMenu()
 {
 	Image *map = ImageFactory::loadImage(
-		S3D::getDataFile("data/windows/sound.bmp"),
-		S3D::getDataFile("data/windows/sounda.bmp"),
+		S3D::getDataFile("data/images/sound.bmp"),
+		S3D::getDataFile("data/images/sounda.bmp"),
 		false);
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->
@@ -116,8 +116,8 @@ HelpButtonDialog::PerformanceMenu::PerformanceMenu()
 {
 	Image *map = 
 		ImageFactory::loadImage(
-			S3D::getDataFile("data/windows/perf.bmp"),
-			S3D::getDataFile("data/windows/perfa.bmp"),
+			S3D::getDataFile("data/images/perf.bmp"),
+			S3D::getDataFile("data/images/perfa.bmp"),
 			false);
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->

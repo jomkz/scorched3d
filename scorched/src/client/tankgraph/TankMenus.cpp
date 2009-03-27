@@ -294,8 +294,8 @@ void TankMenus::showTankDetails()
 TankMenus::PlayerMenu::PlayerMenu()
 {
 	Image *map = ImageFactory::loadImage(
-		S3D::getDataFile("data/windows/setting.bmp"),
-		S3D::getDataFile("data/windows/settinga.bmp"),
+		S3D::getDataFile("data/images/setting.bmp"),
+		S3D::getDataFile("data/images/settinga.bmp"),
 		false);
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->addMenu(LANG_RESOURCE("PLAYER", "Player"), 
@@ -386,8 +386,8 @@ bool TankMenus::PlayerMenu::getEnabled(const char* menuName)
 TankMenus::AccessoryMenu::AccessoryMenu()
 {
 	Image *map = ImageFactory::loadImage(
-		S3D::getDataFile("data/windows/bomb.bmp"),
-		S3D::getDataFile("data/windows/bomba.bmp"),
+		S3D::getDataFile("data/images/bomb.bmp"),
+		S3D::getDataFile("data/images/bomba.bmp"),
 		false);
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->addMenu(LANG_RESOURCE("WEAPONS", "Weapons"), 
