@@ -41,7 +41,7 @@ SkipAllDialog *SkipAllDialog::instance()
 }
 
 SkipAllDialog::SkipAllDialog() : 
-	GLWWindow("", 270.0f, 80.0f, 0, ""),
+	GLWWindow("Skip All", 270.0f, 80.0f, eHideName, ""),
 	skipAll_(false)
 {
 	label_ = (GLWLabel *) addWidget(new GLWLabel(10, 45));

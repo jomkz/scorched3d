@@ -26,7 +26,7 @@
 #include <client/ScorchedClient.h>
 #include <graph/OptionsDisplay.h>
 
-GLMenu::GLMenu() : GLWWindow("", 0.0f, 10.0f, 10000.0f, 32.0f, 0, "")
+GLMenu::GLMenu() : GLWWindow("Menu", 0.0f, 10.0f, 10000.0f, 32.0f, eHideName, "")
 {
 	windowLevel_ = 20000;
 }

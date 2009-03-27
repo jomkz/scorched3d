@@ -267,21 +267,34 @@ To fire press the space bar.</text>
 			<name>firing</name>
 			<conditions>
 				<condition type="TankDead">
-					<next>buying</next>
+					<next>checkbuying</next>
 				</condition>
 			</conditions>
 			<text>Keep adjusting your aim and firing until you have killed one of the targets.</text>
-		</step>		
-		
-		<step>
+		</step>
+
+    <step>
+      <name>checkbuying</name>
+      <conditions>
+        <condition type="WindowWait">
+          <window>Buy</window>
+          <next>buying</next>
+        </condition>
+      </conditions>
+      <text>Well done!
+The current score is shown below.
+We are now starting the next round...</text>
+    </step>
+
+    <step>
 			<name>buying</name>
 			<conditions>
 				<condition type="WindowVisible">
-					<window></window>
+					<window>Buy</window>
 					<next>defenses</next>
 				</condition>
 			</conditions>
-			<text>Well done!  To celebrate you have been give a large amount of money to spend.
+			<text>To celebrate you have been give a large amount of money to spend.
 <a href="buying2">Click Here to Continue...</a></text>		
 		</step>	
 		
@@ -289,7 +302,7 @@ To fire press the space bar.</text>
 			<name>buying2</name>
 			<conditions>
 				<condition type="WindowVisible">
-					<window></window>
+					<window>Buy</window>
 					<next>defenses</next>
 				</condition>
 			</conditions>
@@ -301,7 +314,7 @@ To fire press the space bar.</text>
 			<name>buying3</name>
 			<conditions>
 				<condition type="WindowVisible">
-					<window></window>
+					<window>Buy</window>
 					<next>defenses</next>
 				</condition>
 			</conditions>

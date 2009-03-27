@@ -50,7 +50,7 @@ ProgressDialog *ProgressDialog::instance()
 }
 
 ProgressDialog::ProgressDialog() : 
-	GLWWindow("", 10.0f, 10.0f, 470.0f, 80.0f, eTransparent | eNoTitle, ""),
+	GLWWindow("Progress", 10.0f, 10.0f, 470.0f, 80.0f, eTransparent | eNoTitle | eHideName, ""),
 	progressPercentage_(0)
 {
 	setUser(this);

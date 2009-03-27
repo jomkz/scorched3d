@@ -78,7 +78,7 @@ ModSelectDialog *ModSelectDialog::instance()
 }
 
 ModSelectDialog::ModSelectDialog() : 
-	GLWWindow("", 300.0f, 410.0f, 0, "")
+	GLWWindow("Mod Select", 300.0f, 410.0f, eHideName, "")
 {
 	iconList_ = new GLWIconList(10.0f, 40.0f, 280.0f, 360.0f, 50.0f);
 	addWidget(iconList_);

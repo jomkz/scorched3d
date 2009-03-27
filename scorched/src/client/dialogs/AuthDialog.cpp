@@ -37,7 +37,7 @@ AuthDialog *AuthDialog::instance()
 }
 
 AuthDialog::AuthDialog() :
-	GLWWindow("", 10.0f, 10.0f, 300.0f, 70.0f, eSmallTitle, ""),
+	GLWWindow("Auth", 10.0f, 10.0f, 300.0f, 70.0f, eSmallTitle | eHideName, ""),
 	auth_(0)
 {
 	needCentered_ = true;

@@ -56,7 +56,7 @@ GLWSelector *GLWSelector::instance()
 }
 
 GLWSelector::GLWSelector() :
-	GLWWindow("", 0.0f, 0.0f, 0.0f, 0.0f, 0, ""), 
+	GLWWindow("Selector", 0.0f, 0.0f, 0.0f, 0.0f, eHideName, ""), 
 	showState_(0)
 {
 	visible_ = false;

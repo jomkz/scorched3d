@@ -25,6 +25,34 @@
 #include <tank/TankContainer.h>
 #include <server/ServerCommon.h>
 
+TutorialFileEntry *TutorialConditionWindowWait::checkCondition()
+{
+	GLWWindow *window = 
+		GLWWindowManager::instance()->getWindowByName(window_.c_str());
+
+	if (window &&
+		GLWWindowManager::instance()->windowVisible(window->getId()))
+	{
+		return next_;
+	}
+	return 0;
+}
+
+bool TutorialConditionWindowWait::parseXML(TutorialFile *file, XMLNode *node)
+{
+	std::string next;
+	if (!node->getNamedChild("window", window_)) return false;
+	if (!node->getNamedChild("next", next)) return false;
+
+	if (!(next_ = file->getEntry(next.c_str())))
+	{
+		return node->returnError(
+			"Failed to find the tutorial pointed to by next");
+	}	
+
+	return true;
+}
+
 TutorialFileEntry *TutorialConditionWindowVisible::checkCondition()
 {
 	GLWWindow *window = 
@@ -104,6 +132,7 @@ bool TutorialConditionTankDead::parseXML(TutorialFile *file, XMLNode *node)
 TutorialCondition *TutorialCondition::create(const char *type)
 {
 	if (0 == strcmp(type, "WindowVisible")) return new TutorialConditionWindowVisible;
+	else if (0 == strcmp(type, "WindowWait")) return new TutorialConditionWindowWait;
 	else if (0 == strcmp(type, "FirstMove")) return new TutorialConditionFirstMove;
 	else if (0 == strcmp(type, "TankDead")) return new TutorialConditionTankDead;
 	return 0;

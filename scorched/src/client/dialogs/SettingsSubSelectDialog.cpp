@@ -84,7 +84,7 @@ SettingsSubSelectDialog *SettingsSubSelectDialog::instance()
 }
 
 SettingsSubSelectDialog::SettingsSubSelectDialog() : 
-	GLWWindow("", 700.0f, 540.0f, 0, "")
+	GLWWindow("SettingsSubSelect", 700.0f, 540.0f, eHideName, "")
 {
 	// All the tabs are auto-layed out using a layout manager
 	// except for the land tab where a panel on the land tab is layed out

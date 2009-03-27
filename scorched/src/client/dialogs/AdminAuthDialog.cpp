@@ -38,7 +38,7 @@ AdminAuthDialog *AdminAuthDialog::instance()
 }
 
 AdminAuthDialog::AdminAuthDialog() :
-	GLWWindow("", 10.0f, 10.0f, 300.0f, 70.0f, eSmallTitle, "")
+	GLWWindow("Admin Auth", 10.0f, 10.0f, 300.0f, 70.0f, eSmallTitle | eHideName, "")
 {
 	needCentered_ = true;
 }

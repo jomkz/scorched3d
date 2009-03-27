@@ -34,8 +34,8 @@ MessageDialog *MessageDialog::instance()
 }
 
 MessageDialog::MessageDialog() :
-	showTime_(0.0f), GLWWindow("", 10.0f, 10.0f, 447.0f, 310.0f, 
-		GLWWindow::eTransparent | GLWWindow::eNoTitle,
+	showTime_(0.0f), GLWWindow("Message", 10.0f, 10.0f, 447.0f, 310.0f, 
+		eTransparent | eNoTitle | eHideName,
 		"")
 {
 	disabled_ = true;

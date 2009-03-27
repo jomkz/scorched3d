@@ -77,7 +77,7 @@ NetworkSelectDialog *NetworkSelectDialog::instance()
 }
 
 NetworkSelectDialog::NetworkSelectDialog() : 
-	GLWWindow("", 780.0f, 560.0f, 0, ""),
+	GLWWindow("Network", 780.0f, 560.0f, eHideName, ""),
 	totalTime_(0.0f), invalidateId_(0),
 	okTex_(0), questionTex_(0),
 	warningTex_(0), noentryTex_(0),

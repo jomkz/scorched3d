@@ -34,7 +34,7 @@ MsgBoxDialog *MsgBoxDialog::instance()
 }
 
 MsgBoxDialog::MsgBoxDialog() : 
-	GLWWindow("", 210.0f, 150.0f, 0, "")
+	GLWWindow("MsgBox", 210.0f, 150.0f, eHideName, "")
 {
 	GLWPanel *topPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
 

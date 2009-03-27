@@ -79,7 +79,7 @@ ModSubSelectDialog *ModSubSelectDialog::instance()
 }
 
 ModSubSelectDialog::ModSubSelectDialog() : 
-	GLWWindow("", 300.0f, 410.0f, 0, ""),
+	GLWWindow("Mod Sub Select", 300.0f, 410.0f, eHideName, ""),
 	modInfo_("None")
 {
 	iconList_ = new GLWIconList(10.0f, 40.0f, 280.0f, 360.0f, 50.0f);

@@ -49,8 +49,8 @@ TutorialDialog *TutorialDialog::instance()
 }
 
 TutorialDialog::TutorialDialog() : 
-	GLWWindow("", 155.0f, -125.0f, 
-		470.0f, 120.0f, eSemiTransparent | eNoTitle,
+	GLWWindow("Tutorial", 155.0f, -125.0f, 
+		470.0f, 120.0f, eSemiTransparent | eNoTitle | eHideName,
 		"The ingame tutorial."),
 	triangleDir_(30.0f), triangleDist_(0.0f),
 	current_(0)
@@ -59,7 +59,7 @@ TutorialDialog::TutorialDialog() :
 
 	Vector listColor(0.0f, 0.0f, 0.0f);
 	float wid = float(GLViewPort::getWidth() - 330);
-	listView_ = new GLWListView(0.0f, 0.0f, wid, 105.0f, -1, 12.0f, 24.0f);
+	listView_ = new GLWListView(0.0f, 0.0f, wid, 105.0f, -1, 12.0f, 32.0f);
 	listView_->setColor(listColor);
 	listView_->setHandler(this);
 	addWidget(listView_, 0, SpaceAll, 10.0f);

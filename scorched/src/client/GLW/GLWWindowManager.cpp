@@ -510,7 +510,7 @@ bool GLWWindowManager::getMenuItems(const char* menuName,
 			unsigned id = (*itor).first;
 			GLWWindow *window = (*itor).second;
 
-			if (window->getName()[0] != '\0' &&
+			if (!(window->getWindowState() & GLWWindow::eHideName) &&
 				windowInCurrentState(id))
 			{
 				items.push_back(
@@ -538,7 +538,7 @@ void GLWWindowManager::menuSelection(const char* menuName,
 			unsigned id = (*itor).first;
 			GLWWindow *window = (*itor).second;
 
-			if (window->getName()[0] != '\0' &&
+			if (!(window->getWindowState() & GLWWindow::eHideName) &&
 				windowInCurrentState(id))
 			{
 				if (pos++ == position) 

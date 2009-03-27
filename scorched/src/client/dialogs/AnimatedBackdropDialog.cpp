@@ -45,7 +45,7 @@ AnimatedBackdropDialog *AnimatedBackdropDialog::instance()
 }
 
 AnimatedBackdropDialog::AnimatedBackdropDialog() : 
-	GLWWindow("", 0.0f, 0.0f, 0.0f, 0.0f, 0,
+	GLWWindow("Animated Backdrop", 0.0f, 0.0f, 0.0f, 0.0f, eHideName,
 		"The backdrop dialog"),
 	rotation_(HALFPI),
 	init_(false)

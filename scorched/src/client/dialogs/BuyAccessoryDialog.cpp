@@ -50,7 +50,7 @@ BuyAccessoryDialog *BuyAccessoryDialog::instance()
 }
 
 BuyAccessoryDialog::BuyAccessoryDialog() : 
-	GLWWindow("", 10.0f, 10.0f, 465.0f, 300.0f, 0,
+	GLWWindow("Buy", 10.0f, 10.0f, 465.0f, 300.0f, eHideName,
 		"Allows the current player to buy and sell\n"
 		"weapons and other accessories."),
 	firstDrawTime_(true), sellTab_(0), flag_(0)

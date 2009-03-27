@@ -48,7 +48,7 @@ StartDialog *StartDialog::instance()
 }
 
 StartDialog::StartDialog() : 
-	GLWWindow("", 10.0f, 10.0f, 640.0f, 480.0f, eNoTitle),
+	GLWWindow("Start", 10.0f, 10.0f, 640.0f, 480.0f, eNoTitle | eHideName),
 	selected_(-1)
 {
 	OptionDefinition defs[] = 

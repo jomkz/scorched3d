@@ -38,7 +38,7 @@ BackdropDialog *BackdropDialog::instance()
 }
 
 BackdropDialog::BackdropDialog() : 
-	GLWWindow("", 0.0f, 0.0f, 0.0f, 0.0f, 0,
+	GLWWindow("Backdrop", 0.0f, 0.0f, 0.0f, 0.0f, eHideName,
 		"The backdrop dialog")
 {
 	windowLevel_ = 5000000;

@@ -39,7 +39,7 @@ SettingsSelectDialog *SettingsSelectDialog::instance()
 }
 
 SettingsSelectDialog::SettingsSelectDialog() : 
-	GLWWindow("", 700.0f, 540.0f, 0, "")
+	GLWWindow("SettingsSelect", 700.0f, 540.0f, eHideName, "")
 {
 	GLWPanel *controlPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
 

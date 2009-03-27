@@ -66,6 +66,17 @@ protected:
 	TutorialFileEntry *next_;
 };
 
+class TutorialConditionWindowWait : public TutorialCondition
+{
+public:
+	virtual TutorialFileEntry *checkCondition();
+	virtual bool parseXML(TutorialFile *file, XMLNode *node);
+
+protected:
+	std::string window_;
+	TutorialFileEntry *next_;
+};
+
 class TutorialFileEntry
 {
 public:

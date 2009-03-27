@@ -42,7 +42,7 @@ AdminDialog *AdminDialog::instance()
 }
 
 AdminDialog::AdminDialog() : 
-	GLWWindow("", 600.0f, 400.0f, 0, "")
+	GLWWindow("Admin", 600.0f, 400.0f, eHideName, "")
 {
 	{
 		playerTab_ = (GLWTab *)

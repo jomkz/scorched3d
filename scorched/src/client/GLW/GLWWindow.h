@@ -40,7 +40,8 @@ public:
 		eSavePosition = 64,
 		eSemiTransparent = 128,
 		eNoMove = 256,
-		eClickTransparent = 512
+		eClickTransparent = 512,
+		eHideName = 1024
 	};
 
 	GLWWindow(const std::string &name = "None", 

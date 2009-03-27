@@ -42,7 +42,7 @@ GiftMoneyDialog *GiftMoneyDialog::instance()
 }
 
 GiftMoneyDialog::GiftMoneyDialog() :
-	GLWWindow("", 10.0f, 10.0f, 300.0f, 70.0f, eSmallTitle,
+	GLWWindow("Gift", 10.0f, 10.0f, 300.0f, 70.0f, eSmallTitle | eHideName,
 		"Send money to other team players")
 {
 	needCentered_ = true;
