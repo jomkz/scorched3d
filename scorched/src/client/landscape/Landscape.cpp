@@ -555,8 +555,8 @@ void Landscape::generate(ProgressCounter *counter)
 		if (!landShader_) 
 		{
 			landShader_ = new GLSLShaderSetup(
-				S3D::getModFile("data/shaders/land.vshader"),
-				S3D::getModFile("data/shaders/land.fshader"));
+				S3D::getDataFile("data/shaders/land.vshader"),
+				S3D::getDataFile("data/shaders/land.fshader"));
 		}
 	}
 

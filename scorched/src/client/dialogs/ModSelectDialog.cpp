@@ -122,7 +122,7 @@ void ModSelectDialog::display()
 	// Add the info that represents a custom game
 	{
 		ModInfo customInfo("Custom");
-		customInfo.parse(S3D::getModFile("data/custominfo.xml"));
+		customInfo.parse(S3D::getDataFile("data/custominfo.xml"));
 		GLWIconListModItem *item = new GLWIconListModItem(customInfo);
 		iconList_->addItem(item);
 	}

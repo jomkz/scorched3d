@@ -31,10 +31,13 @@ public:
 
 	bool readFile(const std::string &fileName);
 
-	const char *getParserError() { return parser_.getParseError(); }
+	const char *getParserError() { 
+		return fileError_.empty()?parser_.getParseError():fileError_.c_str(); 
+	}
 	XMLNode *getRootNode() { return parser_.getRoot(); }
 
 protected:
+	std::string fileError_;
 	XMLParser parser_;
 
 };

@@ -66,9 +66,9 @@ bool ModInfo::parse(const std::string &fileName)
 	}
 	if (!mainNode->failChildren()) return false;
 
-	if (S3D::checkDataFile(tmpicon.c_str()))
+	if (S3D::fileExists(S3D::getModFile(tmpicon)))
 	{
-		icon_ = S3D::getModFile(tmpicon.c_str());
+		icon_ = S3D::getModFile(tmpicon);
 	}
 	else
 	{
@@ -88,17 +88,17 @@ bool ModInfo::parse(const std::string &fileName)
 			entry.shortdescription = entry.description;
 		}
 
-		if (S3D::checkDataFile(tmpicon.c_str())) 
+		if (S3D::fileExists(S3D::getModFile(tmpicon))) 
 		{
-			entry.icon = S3D::getModFile(tmpicon.c_str());
+			entry.icon = S3D::getModFile(tmpicon);
 		}
 		else
 		{
 			entry.icon = S3D::getDataFile("data/images/tank2.bmp");
 		}
 	
-		entry.gamefile = S3D::getModFile(tmpgamefile.c_str());
-		if (!S3D::checkDataFile(tmpgamefile.c_str())) return false;
+		entry.gamefile = S3D::getModFile(tmpgamefile);
+		if (!S3D::checkDataFile(tmpgamefile)) return false;
 
 		if (!gameNode->failChildren()) return false;
 		entries_.push_back(entry);

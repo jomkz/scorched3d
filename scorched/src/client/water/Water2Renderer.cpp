@@ -354,15 +354,15 @@ void Water2Renderer::generate(LandscapeTexBorderWater *water, ProgressCounter *c
 			if (OptionsDisplay::instance()->getSimpleWaterShaders())
 			{
 				waterShader_ = new GLSLShaderSetup(
-					S3D::getModFile("data/shaders/watersimple.vshader"),
-					S3D::getModFile("data/shaders/watersimple.fshader"),
+					S3D::getDataFile("data/shaders/watersimple.vshader"),
+					S3D::getDataFile("data/shaders/watersimple.fshader"),
 					dl);
 			}
 			else
 			{
 				waterShader_ = new GLSLShaderSetup(
-					S3D::getModFile("data/shaders/water.vshader"),
-					S3D::getModFile("data/shaders/water.fshader"),
+					S3D::getDataFile("data/shaders/water.vshader"),
+					S3D::getDataFile("data/shaders/water.fshader"),
 					dl);
 			}
 		}

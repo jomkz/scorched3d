@@ -36,7 +36,15 @@ bool XMLFile::readFile(const std::string &fileName)
 	FileLines lines;
 	// Load the file
 	// Failing to find the file is not an error
-	if (!lines.readFile(fileName)) return true;
+	if (!lines.readFile(fileName)) 
+	{
+		if (!S3D::fileExists(fileName))
+		{
+			fileError_ = std::string("Failed to find file \"") + fileName + "\"";
+		}
+
+		return true;
+	}
 
 	// Parse the file
 	std::vector<std::string>::iterator itor;
