@@ -33,7 +33,7 @@ public:
 
 	void setLocation(VisibilityPatchGrid *patchGrid, int x, int y, int size, 
 		int mapwidth, int mapheight);
-	void calculateVisibility(VisibilityPatchInfo &patchInfo, Vector &cameraPos);
+	void calculateVisibility(VisibilityPatchInfo &patchInfo, Vector &cameraPos, float C);
 
 protected:
 	int x_, y_;
@@ -47,7 +47,7 @@ protected:
 	VisibilityPatchQuad *botLeft_, *botRight_;
 
 	void setNotVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos);
-	void setVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos);
+	void setVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos, float C);
 
 };
 

@@ -211,7 +211,7 @@ void VisibilityPatchGrid::recalculateErrors(FixedVector &position, fixed size)
 	startY = MAX(0, startY);
 	endX = MIN(landWidth_ - 1, endX);
 	endY = MIN(landHeight_ - 1, endY);
-	
+
 	for (int x=startX; x<=endX; x++)
 	{
 		for (int y=startY; y<=endY; y++)
@@ -272,6 +272,14 @@ WaterVisibilityPatch *VisibilityPatchGrid::getWaterVisibilityPatch(int x, int y)
 
 void VisibilityPatchGrid::calculateVisibility()
 {
+	// Calculate C for de Boers
+	const float maxError = (float) OptionsDisplay::instance()->getLandDetailError();
+	const float vRes = (float) OptionsDisplay::instance()->getScreenHeight();
+	const float FOV = 60.0f * PI / 180.0f;
+	float T = (2.0f * maxError) / vRes;
+	float A = 1.0f / (float) tan(FOV / 2.0f);
+	float C = A / T;
+
 	Vector &cameraPos = GLCamera::getCurrentCamera()->getCurrentPos();
 
 	patchInfo_.reset();
@@ -282,7 +290,7 @@ void VisibilityPatchGrid::calculateVisibility()
 	{
 		for (int x=0; x<visibilityWidth_; x++, currentPatch++)
 		{
-			currentPatch->calculateVisibility(patchInfo_, cameraPos);
+			currentPatch->calculateVisibility(patchInfo_, cameraPos, C);
 		}
 	}
 }

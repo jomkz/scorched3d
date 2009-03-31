@@ -367,8 +367,8 @@ public:
 	int getFramesPerSecondLimit() { return framesPerSecondLimit_; }
 	OptionEntryInt &getFramesPerSecondLimitEntry() { return framesPerSecondLimit_; }
 
-	int getLandDetailLevelRamp() { return landDetailLevelRamp_; }
-	OptionEntryInt &getLandDetailLevelRampEntry() { return landDetailLevelRamp_; }
+	int getLandDetailError() { return landDetialError_; }
+	OptionEntryInt &getLandDetailErrorEntry() { return landDetialError_; }
 
 	int getWaterDetailLevelRamp() { return waterDetailLevelRamp_; }
 	OptionEntryInt &getWaterDetailLevelRampEntry() { return waterDetailLevelRamp_; }
@@ -413,6 +413,7 @@ protected:
 	OptionEntryBool depricatedNoGLCompiledArrays_;
 	OptionEntryFloat depricatedDrawDistance_;
 	OptionEntryFloat depricatedDrawDistanceFade_;
+	OptionEntryInt depricatedLandDetailLevelRamp_;
 
 	OptionEntryBoundedInt brightness_;
 	OptionEntryBoundedInt explosionParts_;
@@ -427,7 +428,7 @@ protected:
 	OptionEntryInt toolTipTime_;
 	OptionEntryInt toolTipSpeed_;
 	OptionEntryInt framesPerSecondLimit_;
-	OptionEntryInt landDetailLevelRamp_;
+	OptionEntryInt landDetialError_;
 	OptionEntryInt waterDetailLevelRamp_;
 	OptionEntryBool noFog_;
 	OptionEntryBool detailTexture_;

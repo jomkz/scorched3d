@@ -55,39 +55,6 @@ static float getHeight(int x, int y)
 	return landscapeMap->getHeightData()[x + (y * (mapWidth + 1))].floatPosition[2];
 }
 
-static float calculateError(int x1, int x2, int y1, int y2,
-	float x1y1, float x2y2, float x1y2, float x2y1)
-{
-	if (x2 - x1 <= 1) return 0.0f;
-
-	int midx = (x1 + x2) / 2;
-	int midy = (y1 + y2) / 2;
-	float actualheight = getHeight(midx, midy);
-
-	float approxheight1 = (x1y1 + x2y2) / 2.0f;
-	float approxheight2 = (x1y2 + x2y1) / 2.0f;
-	float approxheight3 = (x1y1 + x1y2) / 2.0f;
-	float approxheight4 = (x1y1 + x2y1) / 2.0f;
-	float approxheight5 = (x1y2 + x2y2) / 2.0f;
-	float approxheight6 = (x2y1 + x2y2) / 2.0f;
-
-	float heightdiff1 = fabs(approxheight1 - actualheight);
-	float heightdiff2 = fabs(approxheight2 - actualheight);
-	
-	float errorChild1 = calculateError(x1, midx, y1, midy,
-		x1y1, approxheight1, approxheight3, approxheight4);
-	float errorChild2 = calculateError(midx, x2, y1, midy,
-		approxheight4, approxheight6, approxheight1, x2y1);
-	float errorChild3 = calculateError(x1, midx, midy, y2,
-		approxheight3, approxheight5, x1y2, approxheight2);
-	float errorChild4 = calculateError(midx, x2, midy, y2,
-		approxheight2, x2y2, approxheight5, approxheight6);
-
-	float errorChildren = MAX(errorChild1, MAX(errorChild2, MAX(errorChild3, errorChild4)));
-	float totalError = MAX(errorChildren, MAX(heightdiff1, heightdiff2));
-	return totalError;
-}
-
 void LandVisibilityPatch::setLocation(int x, int y,
 	LandVisibilityPatch *leftPatch, 
 	LandVisibilityPatch *rightPatch, 
@@ -121,39 +88,115 @@ void LandVisibilityPatch::setLocation(int x, int y,
 	calculateErrors();
 }
 
+/*
+ x1y2*    xmy2~    x2y2*
+
+ x1ym~    xmym~    x2ym~
+
+ x1y1*    xmy1~    x2y1*
+
+ The * values are passed in.  
+ The ~ values are calculated from the * values.
+*/
+static float calculateError(int x1, int x2, int y1, int y2,
+	float x1y1, float x2y2, float x1y2, float x2y1)
+{
+	int xm = (x1 + x2) / 2;
+	int ym = (y1 + y2) / 2;
+
+	// Get the actual heights
+	float xmymHeight = getHeight(xm, ym);
+	float x1ymHeight = getHeight(x1, ym);
+	float x2ymHeight = getHeight(x2, ym);
+	float xmy2Height = getHeight(xm, y2);
+	float xmy1Height = getHeight(xm, y1);
+
+	// Get the heights that will be drawn
+	float xmymApprox = (x1y1 + x2y2) / 2.0f;
+	float x1ymApprox = (x1y1 + x1y2) / 2.0f;
+	float x2ymApprox = (x2y1 + x2y2) / 2.0f;
+	float xmy2Approx = (x1y2 + x2y2) / 2.0f;
+	float xmy1Approx = (x1y1 + x2y1) / 2.0f;
+
+	// Calculate the difference between the actual heights and the 
+	// heights that will be drawn i.e. the error
+	float xmymError = fabs(xmymApprox - xmymHeight);
+	float x1ymError = fabs(x1ymApprox - x1ymHeight);
+	float x2ymError = fabs(x2ymApprox - x2ymHeight);
+	float xmy2Error = fabs(xmy2Approx - xmy2Height);
+	float xmy1Error = fabs(xmy1Approx - xmy1Height);
+
+	// The error is the maximum error of the above
+	float totalError = 
+		MAX(xmymError, 
+		MAX(x1ymError, 
+		MAX(x2ymError, 
+		MAX(xmy2Error, xmy1Error))));
+
+	// Recurse to get errors for sub-squares
+	if (x1 - x2 > 2)
+	{
+		float childError1 = calculateError(x1, xm, y1, ym, x1y1, xmymApprox, x1ymApprox, xmy1Approx);
+		float childError2 = calculateError(xm, x2, y1, ym, xmy1Approx, x2ymApprox, xmymApprox, x2y1);
+		float childError3 = calculateError(x1, xm, ym, y2, x1ymApprox, xmy2Approx, x1y2, xmymApprox);
+		float childError4 = calculateError(xm, x2, ym, y2, xmymApprox, x2y2, xmy2Approx, x2ymApprox);
+		float childError = MAX(childError1, MAX(childError2, MAX(childError3, childError4)));
+		totalError = MAX(childError, totalError);
+	}
+
+	return totalError;
+}
+
+static float calculateError2(int x, int y, int width, float &minHeight, float &maxHeight)
+{
+	static float left[33], right[33];
+
+	float topleft = getHeight(x, y + width);
+	float botleft = getHeight(x, y);
+	float topright = getHeight(x + width, y + width);
+	float botright = getHeight(x + width, y);
+	for (int b=0; b<=width; b++)
+	{
+		left[b] = botleft + (topleft - botleft) * float(b) / float(width);
+		right[b] = botright + (topright - botright) * float(b) / float(width);
+
+		if (minHeight > left[b]) minHeight = left[b];
+		if (maxHeight < left[b]) maxHeight = left[b];
+	}
+
+	float maxError = 0.0f;
+	for (int b=0; b<=width; b++)
+	{
+		for (int a=0; a<=width; a++)
+		{
+			float approxPosition = left[b] + (right[b] - left[b]) * float(a) / float(width);
+			float actualPosition = getHeight(x + a, y + b);
+			float error = fabs(approxPosition - actualPosition);
+			maxError = MAX(maxError, error);
+		}
+	}
+	return maxError;
+}
+
 void LandVisibilityPatch::calculateErrors()
 {
 	maxHeight_ = 0.0f;
 	minHeight_ = 100000.0f;
-	for (int i=0; i<=5; i++)
+
+	for (int i=1; i<=5; i++)
 	{
-		float error = 0.0f;
-		if (i>0)
+		float maxError = 0.0f;
+		int skip = 1 << i;
+		for (int b=0; b<32; b+=skip)
 		{
-			int skip = 1 << i;
-			for (int y1=y_; y1<y_+32; y1+=skip)
+			for (int a=0; a<32; a+=skip)
 			{
-				for (int x1=x_; x1<x_+32; x1+=skip)
-				{
-					int x2 = x1 + skip;
-					int y2 = y1 + skip;
-
-					float x1y1 = getHeight(x1, y1);
-					float x2y2 = getHeight(x2, y2);
-					float x1y2 = getHeight(x1, y2);
-					float x2y1 = getHeight(x2, y1);
-
-					float thisError = calculateError(x1, x2, y1, y2,
-						x1y1, x2y2, x1y2, x2y1);
-					error = MAX(error, thisError);		
-
-					if (x1y1 > maxHeight_) maxHeight_ = x1y1;
-					if (x1y1 < minHeight_) minHeight_ = x1y1;
-				}
+				float currentError = calculateError2(x_ + a, y_ + b, skip, minHeight_, maxHeight_);
+				maxError = MAX(maxError, currentError);
 			}
 		}
 
-		indexErrors_[i] = error;
+		indexErrors_[i-1] = maxError;
 	}
 
 	float heightRange = maxHeight_ - minHeight_;
@@ -162,7 +205,7 @@ void LandVisibilityPatch::calculateErrors()
 		heightRange / 2.0f + minHeight_);
 }
 
-bool LandVisibilityPatch::setVisible(float distance)
+bool LandVisibilityPatch::setVisible(float distance, float C)
 { 
 	visible_ = true;
 
@@ -175,16 +218,26 @@ bool LandVisibilityPatch::setVisible(float distance)
 			recalculateErrors_ = false;
 		}
 
-		float landDetailLevelRamp = (float) 
-			OptionsDisplay::instance()->getLandDetailLevelRamp();
-		float maxError = ((distance - 32.0f) / landDetailLevelRamp) + 1.0f;
-		if (maxError < 1.0f) maxError = 1.0f;
-		else if (maxError > 5.0f) maxError = 5.0f;
-
-		for (int i=0; i<=5; i++)
+		float errorDistance = distance / C;
+		if (errorDistance >= indexErrors_[4]) 
 		{
-			if (indexErrors_[i] > maxError) break;
-			visibilityIndex_ = i;
+			visibilityIndex_ = 5;
+		}
+		else if (errorDistance >= indexErrors_[3]) 
+		{
+			visibilityIndex_ = 4;
+		}
+		else if (errorDistance >= indexErrors_[2]) 
+		{
+			visibilityIndex_ = 3;
+		}
+		else if (errorDistance >= indexErrors_[1]) 
+		{
+			visibilityIndex_ = 2;
+		}
+		else if (errorDistance >= indexErrors_[0]) 
+		{
+			visibilityIndex_ = 1;
 		}
 	}
 

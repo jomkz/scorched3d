@@ -88,12 +88,12 @@ void VisibilityPatchQuad::setNotVisible(VisibilityPatchInfo &patchInfo, Vector &
 	if (botRight_) botRight_->setNotVisible(patchInfo, cameraPos);
 }
 
-void VisibilityPatchQuad::setVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos)
+void VisibilityPatchQuad::setVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos, float C)
 {
 	if (landVisibilityPatch_)
 	{
 		float distance = (cameraPos - landVisibilityPatch_->getPosition()).Magnitude();
-		if (landVisibilityPatch_->setVisible(distance))
+		if (landVisibilityPatch_->setVisible(distance, C))
 		{
 			patchInfo.getLandVisibility().add(landVisibilityPatch_);
 		}
@@ -127,13 +127,13 @@ void VisibilityPatchQuad::setVisible(VisibilityPatchInfo &patchInfo, Vector &cam
 	}
 
 	// Update Children
-	if (topLeft_) topLeft_->calculateVisibility(patchInfo, cameraPos);
-	if (topRight_) topRight_->calculateVisibility(patchInfo, cameraPos);
-	if (botLeft_) botLeft_->calculateVisibility(patchInfo, cameraPos);
-	if (botRight_) botRight_->calculateVisibility(patchInfo, cameraPos);	
+	if (topLeft_) topLeft_->calculateVisibility(patchInfo, cameraPos, C);
+	if (topRight_) topRight_->calculateVisibility(patchInfo, cameraPos, C);
+	if (botLeft_) botLeft_->calculateVisibility(patchInfo, cameraPos, C);
+	if (botRight_) botRight_->calculateVisibility(patchInfo, cameraPos, C);	
 }
 
-void VisibilityPatchQuad::calculateVisibility(VisibilityPatchInfo &patchInfo, Vector &cameraPos)
+void VisibilityPatchQuad::calculateVisibility(VisibilityPatchInfo &patchInfo, Vector &cameraPos, float C)
 {
 	Vector *position = &position_;
 	float size = float(size_);
@@ -155,6 +155,6 @@ void VisibilityPatchQuad::calculateVisibility(VisibilityPatchInfo &patchInfo, Ve
 	}
 	else
 	{
-		setVisible(patchInfo, cameraPos);
+		setVisible(patchInfo, cameraPos, C);
 	}
 }

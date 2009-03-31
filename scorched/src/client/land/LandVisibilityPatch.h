@@ -36,7 +36,7 @@ public:
 		LandVisibilityPatch *rightPatch, 
 		LandVisibilityPatch *topPatch, 
 		LandVisibilityPatch *bottomPatch);
-	bool setVisible(float distance);
+	bool setVisible(float distance, float C);
 	void setNotVisible();
 	void setRecalculateErrors() { recalculateErrors_ = true; }
 
@@ -59,7 +59,7 @@ protected:
 	int dataSize_;
 	int visibilityIndex_;
 	bool visible_, recalculateErrors_;
-	float indexErrors_[6];
+	float indexErrors_[5];
 	Vector position_;
 	LandVisibilityPatch *leftPatch_;
 	LandVisibilityPatch *rightPatch_; 
