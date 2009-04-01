@@ -20,6 +20,7 @@
 
 #include <client/ScorchedClient.h>
 #include <client/ClientGiftMoneyHandler.h>
+#include <GLW/GLWWindowManager.h>
 #include <tank/TankContainer.h>
 #include <tank/TankScore.h>
 #include <coms/ComsGiftMoneyMessage.h>
@@ -68,7 +69,10 @@ bool ClientGiftMoneyHandler::processMessage(
 	fromTank->getScore().setMoney(fromTank->getScore().getMoney() - 
 		message.getMoney());
 
-	BuyAccessoryDialog::instance()->playerRefreshKeepPos();
+	if (GLWWindowManager::instance()->windowVisible(BuyAccessoryDialog::instance()->getId()))
+	{
+		BuyAccessoryDialog::instance()->playerRefreshKeepPos();
+	}
 
 	ChannelText text("combat", 
 		LANG_RESOURCE_3(

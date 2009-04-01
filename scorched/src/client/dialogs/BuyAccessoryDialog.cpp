@@ -185,6 +185,8 @@ void BuyAccessoryDialog::playerRefresh()
 
 void BuyAccessoryDialog::playerRefreshKeepPos()
 {
+	if (!sellTab_) return;
+
 	std::map<std::string, int> scrollPositions;
 	std::list<GLWPanel::GLWPanelEntry>::iterator itor;
 	for (itor = getWidgets().begin();
