@@ -5,4 +5,10 @@
 		<name>NoGLShaders</name>
 		<value>on</value>
 	</option>
+  <!-- The amount of error allowed for each land patch as it gains in distance (in pixels, more is more error) -->
+  <!-- (default value : "6") -->
+  <option>
+    <name>LandDetialError</name>
+    <value>9</value>
+  </option>
 </options>

@@ -207,7 +207,7 @@ static void createTroubleControls(wxWindow *parent, wxSizer *sizer)
 {
 	// Texture sizes (small med large)
 	wxStaticBox *textureBox = new wxStaticBox(parent, -1, wxT("Level of Detail settings"));
-	wxStaticBoxSizer *textureSizer = new wxStaticBoxSizer(textureBox, wxHORIZONTAL);
+	wxStaticBoxSizer *textureSizer = new wxStaticBoxSizer(textureBox, wxVERTICAL);
 	wxGridSizer *textureSizer2 = new wxGridSizer(3, 4, 10, 10);
 	wxStaticText *texSizeText = new wxStaticText(parent, -1, wxT("Texture Sizes :"));
 	textureSizer2->Add(texSizeText, 0, wxALIGN_CENTER_VERTICAL);
@@ -234,6 +234,17 @@ static void createTroubleControls(wxWindow *parent, wxSizer *sizer)
 	IDC_HIGHEFFECTS_CTRL = new wxRadioButton(parent, -1, wxT("High (slower)"));
 	textureSizer2->Add(IDC_HIGHEFFECTS_CTRL, 0);
 	textureSizer->Add(textureSizer2, 0, wxGROW);
+
+	wxFlexGridSizer *textureSizer3 = new wxFlexGridSizer(1, 2, 10, 10);
+	textureSizer3->Add(new wxStaticText(parent, -1, wxT("Land Error :")));
+	IDC_LANDLOD_CTRL = 
+		new wxSlider(parent, -1,
+		0,0,0,
+		wxDefaultPosition, wxSize(315, -1),
+		wxSL_HORIZONTAL | wxSL_AUTOTICKS);
+	textureSizer3->Add(IDC_LANDLOD_CTRL, 0, wxGROW);
+	textureSizer->Add(textureSizer3, 0, wxGROW | wxTOP, 10);
+
 	sizer->Add(textureSizer, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5);
 
 	// Detail switches 

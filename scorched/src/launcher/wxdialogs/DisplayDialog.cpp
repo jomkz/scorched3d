@@ -451,6 +451,9 @@ void DisplayFrame::refreshScreen()
 	//IDC_SWAPYAXIS_CTRL->SetToolTip(wxString(OptionsDisplay::instance()->getSwapYAxisEntry().getDescription(), wxConvUTF8));
 	IDC_LOGGING_CTRL->SetValue(OptionsDisplay::instance()->getClientLogToFile());
 	IDC_LOGGING_CTRL->SetToolTip(wxString(OptionsDisplay::instance()->getClientLogToFileEntry().getDescription(), wxConvUTF8));
+	IDC_LANDLOD_CTRL->SetRange(1, 20);
+	IDC_LANDLOD_CTRL->SetValue(OptionsDisplay::instance()->getLandDetailError());
+	IDC_LANDLOD_CTRL->SetToolTip(wxString(OptionsDisplay::instance()->getLandDetailErrorEntry().getDescription(), wxConvUTF8));
 
 	IDC_ANTIALIAS_CTRL->Clear();
 	IDC_ANTIALIAS_CTRL->Append(wxT("0"));
@@ -646,6 +649,7 @@ bool DisplayFrame::TransferDataFromWindow()
 	OptionsDisplay::instance()->getMoreResEntry().setValue(IDC_MORERES_CTRL->GetValue());
 	//OptionsDisplay::instance()->getSwapYAxisEntry().setValue(IDC_SWAPYAXIS_CTRL->GetValue());
 	OptionsDisplay::instance()->getClientLogToFileEntry().setValue(IDC_LOGGING_CTRL->GetValue());
+	OptionsDisplay::instance()->getLandDetailErrorEntry().setValue(IDC_LANDLOD_CTRL->GetValue());
 
 	OptionsDisplay::instance()->getAntiAliasEntry().setValue(
 		atoi(IDC_ANTIALIAS_CTRL->GetValue().mb_str(wxConvUTF8)));

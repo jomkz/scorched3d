@@ -86,6 +86,7 @@ static wxSlider *IDC_SLIDER1_CTRL = 0;
 static wxSlider *IDC_VOLUME_CTRL = 0;
 static wxSlider *IDC_AMBIENTVOLUME_CTRL = 0;
 static wxSlider *IDC_MUSICVOLUME_CTRL = 0;
+static wxSlider *IDC_LANDLOD_CTRL = 0;
 static wxCheckBox *IDC_SINGLESKYLAYER_CTRL = 0;
 static wxCheckBox *IDC_NOSKYANI_CTRL = 0;
 static wxCheckBox *IDC_NOWATERMOVEMENT_CTRL = 0;
