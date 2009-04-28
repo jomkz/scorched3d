@@ -72,11 +72,7 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 	// Validate player
 	unsigned int playerId = message.getPlayerId();
 	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
-	if (!tank || 
-		(tank->getState().getState() != TankState::sDead &&
-		tank->getState().getState() != TankState::sPending &&
-		tank->getState().getState() != TankState::sLoading &&
-		tank->getState().getState() != TankState::sInitializing))
+	if (!tank || tank->getState().getState() == TankState::sNormal)
 	{
 		ServerChannelManager::instance()->sendText( 
 			ChannelText("info", "CHANGE_WHEN_DEAD", 
@@ -197,7 +193,7 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 				false);
 		}
 
-		if (tank->getState().getSpectator())
+		if (tank->getState().getState() == TankState::sSpectator)
 		{
 			ServerChannelManager::instance()->sendText( 
 				ChannelText("info",
@@ -216,11 +212,6 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 		}
 	}
 #endif // #ifdef S3D_SERVER
-
-	// Make sure the tank state is as we expected
-	// This also fixes setting the state after loading 
-	// a saved game
-	tank->getState().setSpectator(false);
 
 	// Choose a team (if applicable)
 	if (ScorchedServer::instance()->getOptionsGame().getTeams() > 1)

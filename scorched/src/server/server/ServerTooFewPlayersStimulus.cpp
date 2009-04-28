@@ -93,12 +93,10 @@ bool ServerTooFewPlayersStimulus::acceptStateChange(const unsigned state,
 			 mainitor++)
 		{
 			Tank *current = (*mainitor).second;
-			if (!current->getState().getSpectator())
+			if (current->getState().getTankPlaying() &&
+				current->getTeam() > 0)
 			{
-				if (current->getTeam() > 0)
-				{
-					teamCount[current->getTeam() - 1]++;
-				}
+				teamCount[current->getTeam() - 1]++;
 			}
 		}
 		for (int i=0; i<ScorchedServer::instance()->getOptionsGame().getTeams();i++)

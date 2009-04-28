@@ -41,9 +41,7 @@ void TankDeadContainer::addTank(Tank *tank)
 {
 	// Check if we should store residual players
 	if (!ScorchedServer::instance()->getOptionsGame().getResidualPlayers() ||
-		tank->getState().getState() == TankState::sPending ||
-		tank->getState().getState() == TankState::sLoading ||
-		tank->getState().getState() == TankState::sInitializing ||
+		!tank->getState().getTankPlaying() ||
 		!tank->getUniqueId()[0] ||
 		tank->getDestinationId() == 0) return;
 

@@ -30,9 +30,10 @@ class TankState
 public:
 	enum State
 	{
-		sInitializing,
-		sLoading,
+		sInitializingMod,
+		sDownloadingMod,
 		sPending,
+		sSpectator,
 		sNormal,
 		sDead
 	};
@@ -61,8 +62,9 @@ public:
 	// State
 	void setState(State s);
 	State getState() { return state_; }
-	void setSpectator(bool s) { spectator_ = s; }
-	bool getSpectator() { return spectator_; }	
+
+	bool getTankPlaying();
+	bool getTankLoaded();
 
 	void setMuted(bool muted) { muted_ = muted; }
 	bool getMuted() { return muted_; }
@@ -88,7 +90,6 @@ protected:
 	State state_;
 	ReadyState readyState_;
 	int lives_, maxLives_;
-	bool spectator_;
 	bool muted_;
 	bool skipshots_;
 	bool destroy_;

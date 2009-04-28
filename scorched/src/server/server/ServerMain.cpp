@@ -36,6 +36,7 @@
 #include <engine/ActionController.h>
 #include <engine/ModFiles.h>
 #include <landscapedef/LandscapeDefinitions.h>
+#include <landscapemap/LandscapeMaps.h>
 #include <tankai/TankAIAdder.h>
 #include <tankai/TankAIStore.h>
 #include <tank/TankModelStore.h>
@@ -222,12 +223,18 @@ void serverLoop()
 #endif
 
 		float timeDifference = serverTimer.getTimeDifference();
+		/*
 		ScorchedServer::instance()->getGameState().draw();
 		ScorchedServer::instance()->getGameState().simulate(timeDifference);
+		ServerKeepAliveHandler::instance()->checkKeepAlives();
+		*/
+
+		ScorchedServer::instance()->getActionController().simulate(0, timeDifference);
+
 		ServerFileServer::instance()->simulate(timeDifference);
 		ServerChannelManager::instance()->simulate(timeDifference);
 		ScorchedServerUtil::instance()->timedMessage.simulate();
-		ServerKeepAliveHandler::instance()->checkKeepAlives();
+
 
 		if (timeDifference > 5.0f)
 		{
@@ -237,10 +244,10 @@ void serverLoop()
 	}
 }
 
-class ConsoleServerProgressCounter : public ProgressCounterI
+class ConsoleServerProgressCounter : public ProgressCounterI, public LoggerI
 {
 public:
-	ConsoleServerProgressCounter() : lastOp_(), hashes_(0) {}
+	ConsoleServerProgressCounter() : hashes_(25) {}
 
 	virtual void drawHashes(int neededHashes)
 	{
@@ -259,28 +266,24 @@ public:
 		fflush(stdout);
 	}
 
+	virtual void logMessage(LoggerInfo &info)
+	{
+		drawHashes(25);
+	}
+
+	virtual void operationChange(const LangString &op)
+	{
+		Logger::processLogEntries();
+		hashes_ = 0;
+	}
+
 	virtual void progressChange(const LangString &op, const float percentage)
 	{
-		if (op != lastOp_)
-		{
-			if (!lastOp_.empty())
-			{
-				drawHashes(25);
-			}
-
-			std::string opStr = LangStringUtil::convertFromLang(op);
-
-			Logger::log(opStr);
-			printf("%s:", opStr.c_str());
-			lastOp_ = op;
-			hashes_ = 0;
-		}
-
 		int neededHashes = int(percentage / 4.0f);
 		drawHashes(neededHashes);
 	}
 protected:
-	LangString lastOp_;
+	bool firstOp_;
 	int hashes_;
 };
 
@@ -301,8 +304,24 @@ void consoleServer()
 	progressCounter.setUser(&progressCounterI);
 
 	ServerCommon::startFileLogger();
+	Logger::instance()->addLogger(&progressCounterI);
 	Logger::instance()->addLogger(&consoleLogger);
 	serverMain(&progressCounter);
+
+	// Get a landscape definition to use
+	ServerCommon::serverLog("Generating landscape");
+	LandscapeDefinition defn = ScorchedServer::instance()->getLandscapes().getRandomLandscapeDefn(
+		ScorchedServer::instance()->getContext().getOptionsGame(),
+		ScorchedServer::instance()->getContext().getTankContainer());
+
+	// Set all options (wind etc..)
+	ScorchedServer::instance()->getContext().getOptionsTransient().newGame();
+
+	// Generate the new level
+	ScorchedServer::instance()->getLandscapeMaps().generateMaps(
+		ScorchedServer::instance()->getContext(), defn, 
+		&progressCounter);
+	ServerCommon::serverLog("Finished generating landscape");
 
 	for (;;)
 	{

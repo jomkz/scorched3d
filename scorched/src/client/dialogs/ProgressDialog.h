@@ -34,6 +34,7 @@ class ProgressDialog :
 public:
 	static ProgressDialog *instance();
 
+	virtual void operationChange(const LangString &op);
 	virtual void progressChange(const LangString &op, const float percentage);
 	virtual void draw();
 
@@ -61,6 +62,7 @@ class ProgressDialogSync :
 public:
 	static ProgressDialogSync *instance();
 
+	virtual void operationChange(const LangString &op);
 	virtual void progressChange(const LangString &op, const float percentage);
 
 protected:

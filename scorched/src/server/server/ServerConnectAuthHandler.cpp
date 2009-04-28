@@ -330,7 +330,6 @@ void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,
 	tank->setSUI(sentSUI);
 	tank->setIpAddress(ipAddress);
 	tank->setHostDesc(sentHostDesc);
-	tank->getState().setSpectator(true);
 
 	// Use the stats name if stats are enabled and the player has one
 	std::list<std::string> aliases  = 

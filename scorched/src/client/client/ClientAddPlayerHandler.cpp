@@ -80,7 +80,6 @@ bool ClientAddPlayerHandler::processMessage(
 			message.getPlayerIcon(),
 			true);
 		tank->setRenderer(new TargetRendererImplTank(tank));
-		tank->getState().setSpectator(true);
 		ScorchedClient::instance()->getTankContainer().addTank(tank);
 
 		if (ClientChannelManager::instance()->getMutedPlayers().find(tank->getPlayerId())

@@ -177,9 +177,7 @@ void TankContainer::setAllDead()
 		Tank *current = (*mainitor).second;
 		if (!current->isTemp())
 		{
-			if (current->getState().getState() != TankState::sPending &&
-				current->getState().getState() != TankState::sLoading &&
-				current->getState().getState() != TankState::sInitializing)
+			if (current->getState().getTankPlaying())
 			{
 				current->getState().setState(TankState::sDead);
 				current->getState().setLives(0);
@@ -200,8 +198,8 @@ bool TankContainer::allReady()
 		{
 			// current check tanks that are not pending
 			if (current->getState().getState() != TankState::sPending &&
-				current->getState().getState() != TankState::sLoading &&
-				current->getState().getState() != TankState::sInitializing)
+				current->getState().getState() != TankState::sDownloadingMod &&
+				current->getState().getState() != TankState::sInitializingMod)
 			{
 				if (current->getState().getReadyState() == 
 					TankState::SNotReady) return false;
@@ -223,8 +221,8 @@ void TankContainer::setAllNotReady()
 		{
 			// current check tanks that are not pending
 			if (current->getState().getState() != TankState::sPending &&
-				current->getState().getState() != TankState::sLoading &&
-				current->getState().getState() != TankState::sInitializing)
+				current->getState().getState() != TankState::sDownloadingMod &&
+				current->getState().getState() != TankState::sInitializingMod)
 			{
 				current->getState().setNotReady();
 			}
@@ -243,7 +241,7 @@ int TankContainer::getNoOfNonSpectatorTanks()
 		Tank *current = (*mainitor).second;
 		if (!current->isTemp())
 		{
-			if (!current->getState().getSpectator()) count++;
+			if (current->getState().getTankPlaying()) count++;
 		}
 	}
 	return count;

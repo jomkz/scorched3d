@@ -28,6 +28,7 @@ class ProgressCounterI
 public:
 	virtual ~ProgressCounterI();
 
+	virtual void operationChange(const LangString &op) = 0;
 	virtual void progressChange(const LangString &op, const float percentage) = 0;
 };
 

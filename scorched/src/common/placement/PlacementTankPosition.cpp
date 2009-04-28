@@ -51,8 +51,7 @@ void PlacementTankPosition::flattenTankPositions(
 		{
 			Tank *tank = (*mainitor).second;
 
-			if (!tank->getState().getSpectator() &&
-				tank->getState().getState() == TankState::sNormal)
+			if (tank->getState().getState() == TankState::sNormal)
 			{
 				FixedVector tankPos = PlacementTankPosition::placeTank(
 					tank->getPlayerId(), tank->getTeam(), 
@@ -153,9 +152,7 @@ static bool tankTargetCloseness(ScorchedContext &context, unsigned int playerId,
 		Tank *thisTank = (*tankItor).second;
 		if (thisTank->getPlayerId() == playerId) continue;
 
-		if (!thisTank->getState().getSpectator() &&
-			((thisTank->getState().getState() == TankState::sDead) ||
-			thisTank->getState().getState() == TankState::sNormal))
+		if (thisTank->getState().getTankPlaying())
 		{
 			if ((tankPos - thisTank->getLife().getTargetPosition()).Magnitude() < tankCloseness) 
 			{

@@ -172,7 +172,7 @@ bool ServerShotFinishedState::scoreWinners()
 		itor++)
 	{
 		Tank *tank = (*itor).second;
-		if (tank->getState().getSpectator()) continue;
+		if (!tank->getState().getTankPlaying()) continue;
 		if (tank->getAlive())
 			tank->getScore().setScore(
 	                        tank->getScore().getScore() + (scoreWonForLives * tank->getState().getLives()));
@@ -189,7 +189,7 @@ bool ServerShotFinishedState::scoreWinners()
 			itor++)
 		{
 			Tank *tank = (*itor).second;
-			if (tank->getState().getSpectator()) continue;
+			if (!tank->getState().getTankPlaying()) continue;
 
 			if (tank->getAlive())
 			{
@@ -214,7 +214,7 @@ bool ServerShotFinishedState::scoreWinners()
 				itor++)
 			{
 				Tank *tank = (*itor).second;
-				if (tank->getState().getSpectator()) continue;
+				if (!tank->getState().getTankPlaying()) continue;
 
 				if (tank->getAlive())
 				{
@@ -234,7 +234,7 @@ bool ServerShotFinishedState::scoreWinners()
 			itor++)
 		{
 			Tank *tank = (*itor).second;
-			if (tank->getState().getSpectator()) continue;
+			if (!tank->getState().getTankPlaying()) continue;
 
 			if (winningTeams.find(tank->getTeam()) != winningTeams.end())
 			{
@@ -260,7 +260,7 @@ bool ServerShotFinishedState::scoreWinners()
 			itor++)
 		{
 			Tank *tank = (*itor).second;
-			if (tank->getState().getSpectator()) continue;
+			if (!tank->getState().getTankPlaying()) continue;
 
 			if (tank->getScore().getWonGame())
 			{
@@ -287,7 +287,7 @@ bool ServerShotFinishedState::scoreWinners()
 				itor++)
 			{
 				Tank *tank = (*itor).second;
-				if (tank->getState().getSpectator()) continue;
+				if (!tank->getState().getTankPlaying()) continue;
 
 				if (tank->getAlive())
 				{
@@ -315,7 +315,7 @@ bool ServerShotFinishedState::scoreWinners()
 			itor++)
 		{
 			Tank *tank = (*itor).second;
-			if (tank->getState().getSpectator()) continue;
+			if (!tank->getState().getTankPlaying()) continue;
 
 			int addMoney = int(float(tank->getScore().getMoney()) * interest) +
 				ScorchedServer::instance()->getOptionsGame().getMoneyPerRound();
@@ -408,10 +408,7 @@ void ServerShotFinishedState::scoreOverallWinner()
 			itor++)
 		{
 			Tank *current = (*itor).second;
-			if (!current->getState().getSpectator() &&
-				current->getState().getState() != TankState::sPending &&
-				current->getState().getState() != TankState::sInitializing &&
-				current->getState().getState() != TankState::sLoading)
+			if (current->getState().getTankPlaying())
 			{
 				sortedTanks.push_back(current);
 			}
@@ -500,10 +497,7 @@ void ServerShotFinishedState::scoreOverallWinner()
 				Tank *tank = (*itor).second;
 				if (tank->getTeam() == winningTeam)
 				{
-					if (!tank->getState().getSpectator() &&
-						tank->getState().getState() != TankState::sPending &&
-						tank->getState().getState() != TankState::sInitializing &&
-						tank->getState().getState() != TankState::sLoading)
+					if (tank->getState().getTankPlaying())
 					{
 						StatsLogger::instance()->tankOverallWinner(tank);
 						tank->getScore().setSkill(

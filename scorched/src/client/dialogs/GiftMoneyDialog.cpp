@@ -124,10 +124,8 @@ void GiftMoneyDialog::display()
 	{
 		Tank *tank = itor->second;
 		if (tank->getTeam() == currentTank->getTeam() &&
-			!tank->getState().getSpectator() &&
 			tank != currentTank &&
-			(tank->getState().getState() == TankState::sDead ||
-			tank->getState().getState() == TankState::sNormal))
+			tank->getState().getTankPlaying())
 		{
 			players_->addEntry(GLWSelectorEntry(
 				tank->getTargetName(), 0, false, 0, (void *) tank->getPlayerId()));

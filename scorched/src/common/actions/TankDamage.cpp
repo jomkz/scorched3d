@@ -119,8 +119,7 @@ void TankDamage::calculateDamage()
 			TankAI *ai = tank->getTankAI();
 			if (ai)
 			{		
-				if (tank->getState().getState() == TankState::sNormal &&
-					!tank->getState().getSpectator())
+				if (tank->getState().getState() == TankState::sNormal)
 				{
 					ai->tankHurt(weapon_, damage_.asFloat(),
 						damagedTarget->getPlayerId(), 

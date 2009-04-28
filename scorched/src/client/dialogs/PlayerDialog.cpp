@@ -315,7 +315,7 @@ void PlayerDialog::nextPlayer()
 		if (tank) playerName_->setText(tank->getTargetName());
 	}
 		
-	if (tank->getState().getSpectator())
+	if (!tank->getState().getTankPlaying())
 	{
 		imageList_->setEnabled(true);
 		imageList_->setToolTip(&avatarTip1_);

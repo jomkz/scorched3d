@@ -345,7 +345,7 @@ void ScoreDialog::draw()
 			{
 				unsigned int playerId = (*itor);
 				Tank *current = ScorchedClient::instance()->getTankContainer().getTankById(playerId);
-				if (current && current->getTeam() == (i + 1) && !current->getState().getSpectator()) 
+				if (current && current->getTeam() == (i + 1) && current->getState().getTankPlaying()) 
 				{
 					someTeam = true;
 					addLine(current, y, (char *)((winningTeam==(i+1))?"1":"2"), finished);
@@ -377,7 +377,7 @@ void ScoreDialog::draw()
 		{
 			unsigned int playerId = (*itor);
 			Tank *current = ScorchedClient::instance()->getTankContainer().getTankById(playerId);
-			if (current && !current->getState().getSpectator()) 
+			if (current && current->getState().getTankPlaying()) 
 			{
 				snprintf(strrank, 10, "%i", rank);
 
@@ -398,7 +398,7 @@ void ScoreDialog::draw()
 		unsigned int playerId = (*itor);
 		Tank *current = ScorchedClient::instance()->
 			getTankContainer().getTankById(playerId);
-		if (current && current->getState().getSpectator()) 
+		if (current && !current->getState().getTankPlaying()) 
 		{
 			addLine(current, y, " ", false);
 			y+= lineSpacer;
@@ -446,7 +446,7 @@ void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
 	}
 
 	// Print a highlight behind the current clients player
-	if (!current->getState().getSpectator() &&
+	if (current->getState().getTankPlaying() &&
 		current->getDestinationId() == 
 		ScorchedClient::instance()->getTankContainer().getCurrentDestinationId())
 	{
@@ -488,7 +488,7 @@ void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
 		name.append(LANG_STRING(")"));
 	}
 
-	if (current->getState().getSpectator())
+	if (!current->getState().getTankPlaying())
 	{
 		if (name.size() > 50) name = name.substr(0, 50); // Limit length
 

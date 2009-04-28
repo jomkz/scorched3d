@@ -69,7 +69,7 @@ Tank::Tank(ScorchedContext &context,
 	state_->setTank(this);
 	accessories_->setTank(this);
 	modelContainer_->setTank(this);
-	state_->setState(TankState::sLoading);
+	state_->setState(TankState::sDownloadingMod);
 }
 
 Tank::~Tank()
@@ -133,8 +133,7 @@ void Tank::clientNewGame()
 
 bool Tank::getAlive()
 {
-	return (getState().getState() == TankState::sNormal &&
-		getState().getSpectator() == false);
+	return getState().getState() == TankState::sNormal;
 }
 
 Weapon *Tank::getDeathAction()

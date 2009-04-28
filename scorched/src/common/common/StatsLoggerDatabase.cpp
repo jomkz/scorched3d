@@ -626,7 +626,7 @@ void StatsLoggerDatabase::gameStart(std::list<Tank *> &tanks)
 		itor++)
 	{
 		Tank *tank = *itor;
-		if (!tank->getState().getSpectator())
+		if (tank->getState().getTankPlaying())
 		{
 			runQuery("UPDATE scorched3d_stats SET gamesplayed=gamesplayed+1 "
 				"WHERE playerid = %i AND prefixid = %i AND seriesid = %i;", 
@@ -652,7 +652,7 @@ void StatsLoggerDatabase::roundStart(std::list<Tank *> &tanks)
 		itor++)
 	{
 		Tank *tank = *itor;
-		if (!tank->getState().getSpectator())
+		if (tank->getState().getTankPlaying())
 		{
 			runQuery("UPDATE scorched3d_stats SET roundsplayed=roundsplayed+1 "
 				"WHERE playerid = %i AND prefixid = %i AND seriesid = %i;", 
@@ -699,7 +699,7 @@ void StatsLoggerDatabase::updateStats(Tank *tank)
 	createLogger();
 	if (!success_) return;
 
-	if (!tank->getState().getSpectator())
+	if (tank->getState().getTankPlaying())
 	{
 		unsigned int playerId = playerId_[tank->getUniqueId()];
 

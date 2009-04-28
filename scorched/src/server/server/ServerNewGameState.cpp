@@ -331,7 +331,7 @@ std::list<Tank *> ServerNewGameState::resetTankStates(unsigned int state)
 				}
 			}
 
-			if (tank->getState().getSpectator())
+			if (tank->getState().getState() == TankState::sSpectator)
 			{
 				// This tank is now playing (but dead)
 				tank->getState().setState(TankState::sDead);
@@ -363,7 +363,7 @@ void ServerNewGameState::checkTeams()
 		 mainitor++)
 	{
 		Tank *current = (*mainitor).second;
-		if (!current->getState().getSpectator())
+		if (current->getState().getTankPlaying())
 		{
 			if (ScorchedServer::instance()->getOptionsGame().getTeams() > 1 &&
 				current->getTeam() == 0) current->setTeam(1); 
@@ -397,7 +397,7 @@ void ServerNewGameState::checkTeams()
 		 mainitor++)
 	{
 		Tank *current = (*mainitor).second;
-		if (!current->getState().getSpectator())
+		if (current->getState().getTankPlaying())
 		{
 			TankModel *model = 
 				ScorchedServer::instance()->getTankModels().getModelByName(
@@ -440,7 +440,7 @@ void ServerNewGameState::checkTeamsAuto()
 		 mainitor++)
 	{
 		Tank *current = (*mainitor).second;
-		if (!current->getState().getSpectator())
+		if (current->getState().getTankPlaying())
 		{
 			if (current->getTeam() > 0)
 			{
@@ -541,7 +541,7 @@ void ServerNewGameState::checkTeamsBotsVs()
 		 mainitor++)
 	{
 		Tank *current = (*mainitor).second;
-		if (!current->getState().getSpectator())
+		if (current->getState().getTankPlaying())
 		{
 			if (current->getDestinationId() == 0) current->setTeam(1);
 			else current->setTeam(2);
@@ -572,7 +572,7 @@ void ServerNewGameState::checkBots(bool removeBots)
 		mainitor++)
 	{
 		Tank *current = (*mainitor).second;
-		if (!current->getState().getSpectator() ||
+		if (current->getState().getTankPlaying() ||
 			current->getDestinationId() == 0)
 		{
 			noPlayers++;

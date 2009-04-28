@@ -99,8 +99,7 @@ void ShotProjectile::collision(PhysicsParticleObject &position,
 			TankAI *ai = tank->getTankAI();
 			if (ai)
 			{		
-				if (tank->getState().getState() == TankState::sNormal &&
-					!tank->getState().getSpectator())
+				if (tank->getState().getState() == TankState::sNormal)
 				{
 					ai->shotLanded(collisionId, 
 						getWeapon(), getPlayerId(), 

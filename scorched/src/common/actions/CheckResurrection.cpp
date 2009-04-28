@@ -55,8 +55,7 @@ void CheckResurrection::simulate(fixed frameTime, bool &remove)
 			Tank *tank = (*itor).second;
 
 			// Check for any dead tanks that can be rezed
-			if (!tank->getState().getSpectator() &&
-				tank->getState().getState() == TankState::sDead &&
+			if (tank->getState().getState() == TankState::sDead &&
 				(tank->getState().getLives() > 0 ||
 				tank->getState().getMaxLives() == 0))
 			{

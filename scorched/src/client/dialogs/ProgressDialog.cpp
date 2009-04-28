@@ -60,6 +60,11 @@ ProgressDialog::~ProgressDialog()
 {
 }
 
+void ProgressDialog::operationChange(const LangString &op)
+{
+	progressChange(op, 0.0f);
+}
+
 void ProgressDialog::progressChange(const LangString &op, const float percentage)
 {
 	progressText_ = op;
@@ -208,6 +213,11 @@ ProgressDialogSync::ProgressDialogSync()
 
 ProgressDialogSync::~ProgressDialogSync()
 {
+}
+
+void ProgressDialogSync::operationChange(const LangString &op)
+{
+	progressChange(op, 0.0f);
 }
 
 void ProgressDialogSync::progressChange(const LangString &op, const float percentage)

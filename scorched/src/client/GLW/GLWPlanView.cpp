@@ -416,8 +416,7 @@ void GLWPlanView::drawTanks()
 		itor++)
 	{
 		Tank *tank = (*itor).second;
-		if (tank->getState().getState() == TankState::sNormal &&
-			!tank->getState().getSpectator())
+		if (tank->getState().getState() == TankState::sNormal)
 		{		
 			tank->getPosition().getTankPosition().asVector(position);			
 

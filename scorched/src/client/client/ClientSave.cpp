@@ -73,7 +73,7 @@ bool ClientSave::storeClient()
 		Tank *tank = (*itor).second;
 
 		// Remove the spectator tank
-		if (!tank->getState().getSpectator())
+		if (tank->getState().getTankPlaying())
 		{
 			// Add all other tanks
 			buffer.addToBuffer(tank->getPlayerId());
@@ -187,7 +187,7 @@ bool ClientSave::restoreClient(bool loadGameState, bool loadPlayers)
 			std::string tankAIStr;
 			if (!reader.getFromBuffer(tankAIStr)) return false;
 		
-			if (!tank.getState().getSpectator())
+			if (tank.getState().getTankPlaying())
 			{
 				ComsAddPlayerMessage message(
 					tank.getPlayerId(),
