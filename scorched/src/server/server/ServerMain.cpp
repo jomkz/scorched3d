@@ -158,7 +158,7 @@ bool startServer(bool local, ProgressCounter *counter)
 	TankAIAdder::addTankAIs(*ScorchedServer::instance());
 
 	// Start the state machine
-	ServerState::setupStates(ScorchedServer::instance()->getGameState());
+	// ServerState::setupStates(ScorchedServer::instance()->getGameState());
 	EconomyStore::instance();
 
 	checkSettings();
