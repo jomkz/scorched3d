@@ -108,7 +108,7 @@ void ServerShotState::enterState(const unsigned state)
 	ComsMessageSender::sendToAllPlayingClients(playMovesMessage);
 
 	// Play the shots
-	ScorchedServer::instance()->getTankContainer().setAllNotReady();
+	//ScorchedServer::instance()->getTankContainer().setAllNotReady();
 	ScorchedServer::instance()->getActionController().getRandom().seed(seed);
 	shotState_.setup();
 }

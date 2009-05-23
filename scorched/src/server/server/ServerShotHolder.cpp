@@ -36,7 +36,6 @@
 #include <landscapedef/LandscapeDefn.h>
 #include <weapons/AccessoryStore.h>
 #include <coms/ComsMessageSender.h>
-#include <coms/ComsPlayerStatusMessage.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <common/StatsLogger.h>
@@ -59,31 +58,6 @@ ServerShotHolder::ServerShotHolder()
 
 ServerShotHolder::~ServerShotHolder()
 {
-}
-
-void ServerShotHolder::sendWaitingMessage()
-{
-	// Tell the client who we are currently waiting on
-	ComsPlayerStatusMessage statusMessage;
-	std::list<unsigned int> &tanks = 
-		TurnController::instance()->getPlayersThisTurn();
-	std::list<unsigned int>::iterator itor;
-	for (itor = tanks.begin();
-		 itor != tanks.end();
-		 itor++)
-	{
-		unsigned int playerId = (*itor);
-		Tank *tank = 
-			ScorchedServer::instance()->getTankContainer().getTankById(playerId);
-		if (tank && tank->getState().getState() == TankState::sNormal)
-		{
-			if (!haveShot(tank->getPlayerId())) 
-			{
-				statusMessage.getWaitingPlayers().push_back(playerId);
-			}
-		}
-	}
-	ComsMessageSender::sendToAllPlayingClients(statusMessage, NetInterfaceFlags::fAsync);
 }
 
 bool ServerShotHolder::addShot(unsigned int playerId,
@@ -113,9 +87,17 @@ bool ServerShotHolder::addShot(unsigned int playerId,
 	}
 
 	messages_[playerId] = message;
-	sendWaitingMessage();
 
 	return true;
+}
+
+void ServerShotHolder::removeShot(unsigned int playerId)
+{
+	std::map<unsigned int, ComsPlayedMoveMessage *>::iterator itor =
+		messages_.find(playerId);
+	if (itor == messages_.end()) return;
+	delete itor->second;
+	messages_.erase(playerId);
 }
 
 bool ServerShotHolder::validateFiredMessage(

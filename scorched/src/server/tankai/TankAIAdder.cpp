@@ -160,7 +160,9 @@ void TankAIAdder::addTankAI(ScorchedServer &context, const char *aiName)
 		tank->setUniqueId(uniqueId);
 		tank->setTankAI(ai->createCopy(tank));
 		tank->getState().setState(TankState::sInitializingMod);
-		tank->getState().setState(TankState::sPending);
+		tank->getState().setState(TankState::sLoadingLevel);
+		tank->getState().setState(TankState::sSpectator);
+		tank->getState().setState(TankState::sDead);
 		context.getTankContainer().addTank(tank);
 
 		if (context.getOptionsGame().getTeams() > 1)
@@ -196,8 +198,8 @@ void TankAIAdder::addTankAI(ScorchedServer &context, const char *aiName)
 			ComsMessageSender::sendToAllConnectedClients(addPlayerMessage);
 		}
 
-		if (context.getGameState().getState() == ServerState::ServerStateTooFewPlayers ||
-			context.getGameState().getState() == ServerState::ServerStateStarting)
+		//if (context.getGameState().getState() == ServerState::ServerStateTooFewPlayers ||
+		//	context.getGameState().getState() == ServerState::ServerStateStarting)
 		{
 			ComsPlayerStateMessage message(false, false);
 			ComsMessageSender::sendToAllConnectedClients(message);

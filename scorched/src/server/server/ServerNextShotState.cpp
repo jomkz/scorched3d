@@ -91,12 +91,12 @@ void ServerNextShotState::enterState(const unsigned state)
 			ScorchedServer::instance()->getOptionsGame().getNoRounds())
 		{
 			// We have finished with all rounds restart
-			ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusStarting);
+			//ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusStarting);
 		}
 		else
 		{
 			// We have finished with this round, go onto the next round
-			ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusNewGame);
+			//ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusNewGame);
 		}
 	}
 	else
@@ -114,7 +114,7 @@ void ServerNextShotState::enterState(const unsigned state)
 
 			// Clear any shots that may be waiting
 			ServerShotHolder::instance()->clearShots();
-			ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusNextTurn);
+			//ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusNextTurn);
 		}
 		else
 		{
@@ -123,12 +123,12 @@ void ServerNextShotState::enterState(const unsigned state)
 			{
 				// There are no players still to have a shot
 				// The round must have finished
-				ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusNextRound);
+				//ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusNextRound);
 			}
 			else
 			{
 				// We have shots to make, lets make them
-				ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusNextTurn);
+				//ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusNextTurn);
 			}
 		}
 	}

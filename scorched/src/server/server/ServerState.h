@@ -56,8 +56,6 @@ namespace ServerState
 		ServerStimulusTooFewPlayers,
 		ServerStimulusStarting
 	};
-
-	void setupStates(GameState &gameState);
 };
 
 #endif

@@ -37,19 +37,25 @@ static struct AllowedStateTransitions
 allowedStateTransitions[] =
 {
 	TankState::sDownloadingMod, TankState::sInitializingMod,
-	TankState::sInitializingMod,TankState::sPending,
-	TankState::sPending, TankState::sDead,
+	TankState::sInitializingMod, TankState::sLoadingLevel,
+	TankState::sLoadingLevel, TankState::sSpectator,
+	TankState::sSpectator, TankState::sNormal,
+	TankState::sSpectator, TankState::sDead,
 	TankState::sDead, TankState::sNormal,
-	TankState::sNormal , TankState::sDead
+	TankState::sNormal, TankState::sDead,
+	TankState::sDead, TankState::sLoadingLevel, 
+	TankState::sNormal, TankState::sLoadingLevel, 
+	TankState::sSpectator, TankState::sLoadingLevel
 };
 
 TankState::TankState(ScorchedContext &context, unsigned int playerId) : 
 	state_(sDownloadingMod), tank_(0),
-	readyState_(sReady),
 	context_(context), 
 	muted_(false),
 	skipshots_(false),
-	lives_(0), maxLives_(1), destroy_(false)
+	lives_(0), maxLives_(1), 
+	destroy_(false),
+	levelNumber_(0)
 {
 }
 
@@ -60,7 +66,6 @@ TankState::~TankState()
 void TankState::newMatch()
 {
 	setState(sDead);
-	readyState_ = sReady;
 }
 
 void TankState::newGame()
@@ -110,8 +115,7 @@ void TankState::setState(State s)
 const char *TankState::getStateString()
 {
 	static char string[1024];
-	snprintf(string, 1024, "%s - %s %s(%i hp)",
-		((readyState_==sReady)?"Rdy":"Wait"),
+	snprintf(string, 1024, "%s %s (%i hp)",
 		getSmallStateString(),
 		(muted_?"muted ":""),
 		(int) tank_->getLife().getLife().asInt());
@@ -123,8 +127,8 @@ const char *TankState::getSmallStateString()
 	const char *type = "";
 	switch (state_)
 	{
-	case sPending:
-		type = "Pending";
+	case sLoadingLevel:
+		type = "Loading Level";
 		break;
 	case sNormal:
 		type = "Alive";
@@ -150,15 +154,15 @@ LangString &TankState::getSmallStateLangString()
 {
 	LANG_RESOURCE_CONST_VAR(INITIALIZINGMOD, "INITIALIZINGMOD", "Initializing");
 	LANG_RESOURCE_CONST_VAR(DOWNLOADINGMOD, "DOWNLOADINGMOD", "Downloading");
-	LANG_RESOURCE_CONST_VAR(PENDING, "PENDING", "Pending");
+	LANG_RESOURCE_CONST_VAR(LOADINGLEVEL, "LOADINGLEVEL", "Loading Level");
 	LANG_RESOURCE_CONST_VAR(DEAD, "DEAD", "Dead");
 	LANG_RESOURCE_CONST_VAR(ALIVE, "ALIVE", "Alive");
 	LANG_RESOURCE_CONST_VAR(SPECTATOR, "SPECTATOR", "Spectator");
 
 	switch (state_)
 	{
-	case sPending:
-		return PENDING;
+	case sLoadingLevel:
+		return LOADINGLEVEL;
 	case sNormal:
 		return ALIVE;
 	case sInitializingMod:
@@ -184,7 +188,7 @@ bool TankState::getTankPlaying()
 
 bool TankState::getTankLoaded()
 {
-	return state_ == sPending || getTankPlaying();
+	return state_ == sSpectator || getTankPlaying();
 }
 
 bool TankState::writeMessage(NetBuffer &buffer)

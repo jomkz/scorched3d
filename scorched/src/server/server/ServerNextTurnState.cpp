@@ -32,7 +32,6 @@
 #include <coms/ComsStartGameMessage.h>
 #include <coms/ComsTimerStartMessage.h>
 #include <coms/ComsMessageSender.h>
-#include <coms/ComsPlayerStatusMessage.h>
 #include <common/Logger.h>
 #include <common/OptionsTransient.h>
 #include <common/OptionsScorched.h>
@@ -56,7 +55,7 @@ void ServerNextTurnState::enterState(const unsigned state)
 		ComsMessageSender::sendToAllPlayingClients(timerMessage);
 
 		// No more turns left, play the shot
-		ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusShot);
+		//ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusShot);
 	}
 	else
 	{
@@ -68,11 +67,6 @@ void ServerNextTurnState::enterState(const unsigned state)
 		if (weaponBuy) time = ScorchedServer::instance()->getOptionsGame().getBuyingTime();
 		ComsTimerStartMessage timerMessage(time);
 		ComsMessageSender::sendToAllPlayingClients(timerMessage);
-
-		// Tell the client who we are currently waiting on
-		ComsPlayerStatusMessage statusMessage;
-		statusMessage.getWaitingPlayers() = TurnController::instance()->getPlayersThisTurn();
-		ComsMessageSender::sendToAllPlayingClients(statusMessage, NetInterfaceFlags::fAsync);
 
 		// Tell the players to play the turn
 		std::list<unsigned int>::iterator itor;
@@ -124,11 +118,11 @@ void ServerNextTurnState::enterState(const unsigned state)
 
 		if (weaponBuy)
 		{
-			ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusBuying);
+			//ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusBuying);
 		}
 		else
 		{
-			ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusPlaying);
+			//ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusPlaying);
 		}
 	}
 }

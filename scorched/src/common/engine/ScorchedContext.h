@@ -23,7 +23,6 @@
 
 class AccessoryStore;
 class ActionController;
-class GameState;
 class TargetSpace;
 class TargetContainer;
 class TargetMovement;
@@ -56,7 +55,6 @@ public:
 	ViewPoints &getViewPoints() { return *viewPoints; }
 	TargetSpace &getTargetSpace() { return *targetSpace; }
 	AccessoryStore &getAccessoryStore() { return *accessoryStore; }
-	GameState &getGameState() { return *gameState; }
 	TankContainer &getTankContainer() { return *tankContainer; }
 	TargetContainer &getTargetContainer() { return *targetContainer; }
 	TargetMovement &getTargetMovement() { return *targetMovement; }
@@ -74,7 +72,6 @@ public:
 
 protected:
 	ActionController *actionController;
-	GameState *gameState;
 	LandscapeMaps *landscapeMaps;
 	ComsMessageHandler *comsMessageHandler;
 	NetInterface *netInterface;

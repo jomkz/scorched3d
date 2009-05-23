@@ -18,33 +18,25 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerReadyStateh_INCLUDE__)
-#define __INCLUDE_ServerReadyStateh_INCLUDE__
+#include <coms/ComsInitializeModMessage.h>
 
-#include <engine/GameStateI.h>
-#include <engine/GameStateStimulusI.h>
-
-// waits until all players have started the game
-// or a maximum time limit 
-// and then starts the game
-class ServerReadyState : 
-	public GameStateI,
-	public GameStateStimulusI
+ComsInitializeModMessage::ComsInitializeModMessage() :
+	ComsMessage("ComsInitializeModMessage")
 {
-public:
-	ServerReadyState();
-	virtual ~ServerReadyState();
 
-	virtual void enterState(const unsigned state);
-	virtual bool acceptStateChange(const unsigned state, 
-		const unsigned nextState,
-		float frameTime);
+}
 
-protected:
-	float time_;
-	float idleTime_;
+ComsInitializeModMessage::~ComsInitializeModMessage()
+{
 
-	void finished();
-};
+}
 
-#endif
+bool ComsInitializeModMessage::writeMessage(NetBuffer &buffer)
+{
+	return true;
+}
+
+bool ComsInitializeModMessage::readMessage(NetBufferReader &reader)
+{
+	return true;
+}

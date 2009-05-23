@@ -18,31 +18,25 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ClientInitializeHandlerh_INCLUDE__)
-#define __INCLUDE_ClientInitializeHandlerh_INCLUDE__
+#if !defined(__INCLUDE_ComsInitializeModMessageh_INCLUDE__)
+#define __INCLUDE_ComsInitializeModMessageh_INCLUDE__
 
-#include <coms/ComsMessageHandler.h>
+#include <coms/ComsMessage.h>
 
-class ClientInitializeHandler  : 
-	public ComsMessageHandlerI
+class ComsInitializeModMessage : public ComsMessage
 {
 public:
-	static ClientInitializeHandler *instance();
+	ComsInitializeModMessage();
+	virtual ~ComsInitializeModMessage();
 
-	virtual bool processMessage(
-		NetMessage &message,
-		const char *messageType,
-		NetBufferReader &reader);
-
-protected:
-	static ClientInitializeHandler *instance_;
-	bool initialized_;
-
-	bool initialize();
+	// Inherited from ComsMessage
+	virtual bool writeMessage(NetBuffer &buffer);
+	virtual bool readMessage(NetBufferReader &reader);
 
 private:
-	ClientInitializeHandler();
-	virtual ~ClientInitializeHandler();
+	ComsInitializeModMessage(const ComsInitializeModMessage &);
+	const ComsInitializeModMessage & operator=(const ComsInitializeModMessage &);
+
 };
 
-#endif
+#endif // __INCLUDE_ComsInitializeModMessageh_INCLUDE__

@@ -25,6 +25,7 @@
 
 class MainLoop;
 class ParticleEngine;
+class GameState;
 class ScorchedClient : public ScorchedContext
 {
 public:
@@ -33,11 +34,13 @@ public:
 	MainLoop &getMainLoop() { return *mainLoop_; }
 	ScorchedContext &getContext() { return *this; }
 	ParticleEngine &getParticleEngine() { return *particleEngine_; }
+	GameState &getGameState() { return *gameState; }
 
 protected:
 	static ScorchedClient *instance_;
 	MainLoop *mainLoop_;
 	ParticleEngine* particleEngine_;
+	GameState *gameState;
 
 private:
 	ScorchedClient();

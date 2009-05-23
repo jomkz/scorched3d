@@ -420,12 +420,12 @@ void GLWPlanView::drawTanks()
 		{		
 			tank->getPosition().getTankPosition().asVector(position);			
 
-			if ((flash_ && tank->getState().getReadyState() == TankState::SNotReady) ||
+			/*if ((flash_ && tank->getState().getReadyState() == TankState::SNotReady) ||
 				tank->getState().getReadyState() == TankState::sReady)
 			{
 				glColor3fv(tank->getColor());
 				drawQuad(position[0], position[1], 8.0f, 8.0f);
-			}
+			}*/
 
 			TargetRendererImplTank *renderer = (TargetRendererImplTank *)
 				tank->getRenderer();

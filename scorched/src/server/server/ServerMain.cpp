@@ -42,7 +42,6 @@
 #include <tank/TankModelStore.h>
 #include <server/ServerLinesHandler.h>
 #include <server/ServerMessageHandler.h>
-#include <server/ServerPlayerReadyHandler.h>
 #include <server/ServerGiftMoneyHandler.h>
 #include <server/ServerDefenseHandler.h>
 #include <server/ServerPlayedMoveHandler.h>
@@ -52,7 +51,7 @@
 #include <server/ServerBuyAccessoryHandler.h>
 #include <server/ServerKeepAliveHandler.h>
 #include <server/ServerFileAkHandler.h>
-#include <server/ServerInitializeHandler.h>
+#include <server/ServerInitializeModHandler.h>
 #include <server/ServerChannelManager.h>
 #include <server/ServerConnectHandler.h>
 #include <server/ServerConnectAuthHandler.h>
@@ -118,10 +117,9 @@ bool startServer(bool local, ProgressCounter *counter)
 	ServerLinesHandler::instance();
 	ServerChannelManager::instance();
 	ServerGiftMoneyHandler::instance();
-	ServerPlayerReadyHandler::instance();
 	ServerAdminHandler::instance();
 	ServerHaveModFilesHandler::instance();
-	ServerInitializeHandler::instance();
+	ServerInitializeModHandler::instance();
 	ServerKeepAliveHandler::instance();
 	ServerPlayedMoveHandler::instance();
 	ServerFileAkHandler::instance();

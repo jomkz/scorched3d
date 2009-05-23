@@ -138,8 +138,8 @@ bool ServerShotFinishedState::acceptStateChange(const unsigned state,
 		if (ServerTooFewPlayersStimulus::instance()->acceptStateChange(state, 
 			ServerState::ServerStateTooFewPlayers, 0.0f))
 		{
-			ScorchedServer::instance()->getGameState().stimulate(
-				ServerState::ServerStimulusTooFewPlayers);
+			//ScorchedServer::instance()->getGameState().stimulate(
+			//	ServerState::ServerStimulusTooFewPlayers);
 		}
 		else return true;
 	}

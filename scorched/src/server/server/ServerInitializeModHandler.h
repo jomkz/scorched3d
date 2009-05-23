@@ -18,29 +18,26 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
+#if !defined(__INCLUDE_ServerInitializeModHandlerh_INCLUDE__)
+#define __INCLUDE_ServerInitializeModHandlerh_INCLUDE__
 
-#if !defined(__INCLUDE_ClientWaitStateh_INCLUDE__)
-#define __INCLUDE_ClientWaitStateh_INCLUDE__
+#include <coms/ComsMessageHandler.h>
 
-#include <engine/GameStateStimulusI.h>
-#include <engine/GameStateI.h>
-
-class ClientWaitState : public GameStateI
+class ServerInitializeModHandler : 
+	public ComsMessageHandlerI
 {
 public:
-	static ClientWaitState *instance();
+	static ServerInitializeModHandler *instance();
 
-	virtual void enterState(const unsigned state);
-
-	void sendClientReady();
-
-protected:
-	static ClientWaitState *instance_;
+	virtual bool processMessage(
+		NetMessage &message,
+		const char *messageType,
+		NetBufferReader &reader);
 
 private:
-	ClientWaitState();
-	virtual ~ClientWaitState();
+	ServerInitializeModHandler();
+	virtual ~ServerInitializeModHandler();
+
 };
 
-
-#endif
+#endif // __INCLUDE_ServerInitializeModHandlerh_INCLUDE__

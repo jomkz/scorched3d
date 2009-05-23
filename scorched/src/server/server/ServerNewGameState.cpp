@@ -183,8 +183,8 @@ void ServerNewGameState::enterState(const unsigned state)
 	serverTimer.getTimeDifference();
 
 	// Move into the state that waits for players to become ready
-	ScorchedServer::instance()->getTankContainer().setAllNotReady();
-	ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusNewGameReady);
+	//ScorchedServer::instance()->getTankContainer().setAllNotReady();
+	//ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusNewGameReady);
 }
 
 int ServerNewGameState::addTanksToGame(const unsigned state,
@@ -273,7 +273,7 @@ int ServerNewGameState::addTanksToGame(const unsigned state,
 		Tank *tank = *itor;
 
 		// We need to wait for a ready message
-		tank->getState().setNotReady();
+		//tank->getState().setNotReady();
 
 		// Add to the list of destinations to send this message to
 		// (if not already added)
@@ -307,7 +307,7 @@ std::list<Tank *> ServerNewGameState::resetTankStates(unsigned int state)
 	{
 		Tank *tank = (*itor).second;
 		// Check to see if any tanks are pending being added
-		if (tank->getState().getState() == TankState::sPending ||
+		/*if (tank->getState().getState() == TankState::sPending ||
 			(state == ServerState::ServerStateNewGame && (
 			tank->getState().getState() == TankState::sDead ||
 			tank->getState().getState() == TankState::sNormal)))
@@ -346,7 +346,7 @@ std::list<Tank *> ServerNewGameState::resetTankStates(unsigned int state)
 				// This tank is now playing (but dead)
 				tank->getState().setState(TankState::sDead);
 			}
-		}
+		}*/
 	}
 
 	return resultingTanks;

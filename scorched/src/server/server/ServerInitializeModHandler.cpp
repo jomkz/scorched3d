@@ -18,33 +18,38 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef _comsPlayerStatusMessage_h
-#define _comsPlayerStatusMessage_h
+#include <server/ServerInitializeModHandler.h>
+#include <server/ServerLoadLevel.h>
+#include <server/ScorchedServer.h>
+#include <coms/ComsInitializeModMessage.h>
 
-#include <coms/ComsMessage.h>
-#include <list>
-
-class ComsPlayerStatusMessage : public ComsMessage
+ServerInitializeModHandler *ServerInitializeModHandler::instance()
 {
-public:
-	ComsPlayerStatusMessage();
-	virtual ~ComsPlayerStatusMessage();
+	static ServerInitializeModHandler *instance = 
+		new ServerInitializeModHandler;
+	return instance;
+}
 
-	std::list<unsigned int> &getWaitingPlayers() { return waitingPlayers_; }
-	bool playerWaiting(unsigned int playerId);
+ServerInitializeModHandler::ServerInitializeModHandler()
+{
+	ScorchedServer::instance()->getComsMessageHandler().addHandler(
+		"ComsInitializeModMessage",
+		this);
+}
 
-	// Inherited from ComsMessage
-	virtual bool writeMessage(NetBuffer &buffer);
-	virtual bool readMessage(NetBufferReader &reader);
+ServerInitializeModHandler::~ServerInitializeModHandler()
+{
+}
 
-protected:
-	std::list<unsigned int> waitingPlayers_;
+bool ServerInitializeModHandler::processMessage(
+	NetMessage &netMessage,
+	const char *messageType,
+	NetBufferReader &reader)
+{
+	ComsInitializeModMessage message;
+	if (!message.readMessage(reader)) return false;
 
-private:
-	ComsPlayerStatusMessage(const ComsPlayerStatusMessage &);
-	const ComsPlayerStatusMessage & operator=(const ComsPlayerStatusMessage &);
+	ServerLoadLevel::destinationLoadLevel(netMessage.getDestinationId());
 
-};
-
-#endif // _comsPlayerStatusMessage_h
-
+	return true;
+}

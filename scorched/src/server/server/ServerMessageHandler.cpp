@@ -25,6 +25,7 @@
 #include <server/ServerBanned.h>
 #include <server/ServerKeepAliveHandler.h>
 #include <server/ServerChannelManager.h>
+#include <server/ServerShotHolder.h>
 #include <server/ServerState.h>
 #include <tank/TankDeadContainer.h>
 #include <tank/TankState.h>
@@ -205,8 +206,8 @@ void ServerMessageHandler::destroyPlayer(unsigned int tankId, const char *reason
 		true);
 
 	// Check if we can remove player
-	if (tank->getState().getState() == TankState::sNormal &&
-		ScorchedServer::instance()->getGameState().getState() == ServerState::ServerStateShot)
+	//if (tank->getState().getState() == TankState::sNormal &&
+	//	ScorchedServer::instance()->getGameState().getState() == ServerState::ServerStateShot)
 	{
 		// Store a residual copy, that will be over written when the player is actual deleted
 		ScorchedServer::instance()->getTankDeadContainer().addTank(tank);
@@ -223,10 +224,10 @@ void ServerMessageHandler::destroyPlayer(unsigned int tankId, const char *reason
 			tank->setKeepAlive(0);
 		}
 	}
-	else
+	//else
 	{
 		// Destroy the player straight away
-		actualDestroyPlayer(tankId);
+		//actualDestroyPlayer(tankId);
 	}
 }
 
@@ -252,6 +253,8 @@ void ServerMessageHandler::actualDestroyPlayer(unsigned int tankId)
 	// Try to remove this player
 	Tank *tank = ScorchedServer::instance()->getTankContainer().removeTank(tankId);
 	if (!tank) return;
+
+	ServerShotHolder::instance()->removeShot(tankId);
 
 	StatsLogger::instance()->tankDisconnected(tank);
 

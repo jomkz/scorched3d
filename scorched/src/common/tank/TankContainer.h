@@ -47,8 +47,6 @@ public:
 	
 	void newMatch();
 	void setAllDead();
-	void setAllNotReady();
-	bool allReady();
 	int aliveCount();
 	int teamCount();
 

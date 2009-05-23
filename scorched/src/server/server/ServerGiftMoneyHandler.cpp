@@ -66,8 +66,8 @@ bool ServerGiftMoneyHandler::processMessage(
 	unsigned int toPlayerId = message.getToPlayerId();
 
 	// Check we are at the correct time to buy anything
-	if (ScorchedServer::instance()->getGameState().getState() != 
-		ServerState::ServerStateBuying)
+	//if (ScorchedServer::instance()->getGameState().getState() != 
+	//	ServerState::ServerStateBuying)
 	{
 		Logger::log( "ERROR: Player attempted to gift money but in incorrect state");
 		return true;

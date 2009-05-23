@@ -30,18 +30,12 @@ class TankState
 public:
 	enum State
 	{
-		sInitializingMod,
 		sDownloadingMod,
-		sPending,
+		sInitializingMod,
+		sLoadingLevel,
 		sSpectator,
 		sNormal,
 		sDead
-	};
-
-	enum ReadyState
-	{
-		sReady,
-		SNotReady
 	};
 
 	TankState(ScorchedContext &context, unsigned int playerId);
@@ -53,11 +47,6 @@ public:
 	void newGame();
 	void newMatch();
 	void clientNewGame();
-	
-	// Ready State
-	void setReady() { readyState_ = sReady; }
-	void setNotReady() { readyState_ = SNotReady; }
-	ReadyState getReadyState() { return readyState_; }
 
 	// State
 	void setState(State s);
@@ -75,6 +64,9 @@ public:
 	int getMaxLives() { return maxLives_; }
 	void setDestroy(bool destroy) { destroy_ = destroy; }
 	bool getDestroy() { return destroy_; }
+
+	unsigned int getLevelNumber() { return levelNumber_; }
+	void setLevelNumber(unsigned int ln) { levelNumber_ = ln; }
 	
 	const char *getStateString();
 	const char *getSmallStateString();
@@ -88,7 +80,7 @@ protected:
 	Tank *tank_;
 	ScorchedContext &context_;
 	State state_;
-	ReadyState readyState_;
+	unsigned int levelNumber_;
 	int lives_, maxLives_;
 	bool muted_;
 	bool skipshots_;

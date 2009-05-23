@@ -18,16 +18,16 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ClientPlayerStatusHandlerh_INCLUDE__)
-#define __INCLUDE_ClientPlayerStatusHandlerh_INCLUDE__
+#if !defined(__INCLUDE_ClientInitializeModHandlerh_INCLUDE__)
+#define __INCLUDE_ClientInitializeModHandlerh_INCLUDE__
 
 #include <coms/ComsMessageHandler.h>
 
-class ClientPlayerStatusHandler : 
+class ClientInitializeModHandler  : 
 	public ComsMessageHandlerI
 {
 public:
-	static ClientPlayerStatusHandler *instance();
+	static ClientInitializeModHandler *instance();
 
 	virtual bool processMessage(
 		NetMessage &message,
@@ -35,12 +35,14 @@ public:
 		NetBufferReader &reader);
 
 protected:
-	static ClientPlayerStatusHandler *instance_;
+	static ClientInitializeModHandler *instance_;
+	bool initialized_;
+
+	bool initialize();
 
 private:
-	ClientPlayerStatusHandler();
-	virtual ~ClientPlayerStatusHandler();
-
+	ClientInitializeModHandler();
+	virtual ~ClientInitializeModHandler();
 };
 
-#endif // __INCLUDE_ClientPlayerStatusHandlerh_INCLUDE__
+#endif

@@ -21,7 +21,6 @@
 #include <client/ClientShotState.h>
 #include <client/ClientState.h>
 #include <client/ScorchedClient.h>
-#include <client/ClientWaitState.h>
 #include <client/ClientParams.h>
 #include <engine/ActionController.h>
 #include <engine/ViewPoints.h>
@@ -94,9 +93,8 @@ bool ClientShotState::acceptStateChange(const unsigned state,
 	// All the shots have finished, move to finished
 	if (shotState_.run(frameTime))
 	{
-		// Tell the server we have finished processing the landscape
 		// This will stimulate us into the wait state
-		ClientWaitState::instance()->sendClientReady();
+		ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
 		return false; // This is done by the send ready
 	}
 

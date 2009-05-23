@@ -29,13 +29,13 @@ public:
 	static ServerShotHolder *instance();
 
 	bool addShot(unsigned int playerId, ComsPlayedMoveMessage *message);
+	void removeShot(unsigned int playerId);
 	bool haveAllTurnShots();
 	bool allSkipped();
 
 protected:
 	static ServerShotHolder *instance_;
 
-	void sendWaitingMessage();
 	bool validateFiredMessage(
 		ScorchedContext &context, ComsPlayedMoveMessage &message, Tank *tank);
 

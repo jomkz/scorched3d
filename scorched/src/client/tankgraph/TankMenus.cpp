@@ -96,9 +96,6 @@ TankMenus::TankMenus() : logger_("ClientLog")
 	new ConsoleRuleFnINumberAdapter(
 		"StateTimeLogging",
 		ScorchedClient::instance()->getGameState().getStateTimeLogging());
-	new ConsoleRuleFnINumberAdapter(
-		"ServerStateTimeLogging",
-		ScorchedServer::instance()->getGameState().getStateTimeLogging());
 	new ConsoleRuleFnIBooleanAdapter(
 		"MainLoopLogging",
 		ScorchedClient::instance()->getMainLoop().getDrawLogging());
@@ -111,7 +108,6 @@ TankMenus::TankMenus() : logger_("ClientLog")
 	unsigned int logState = OptionsDisplay::instance()->getClientLogState();
 	if (logState & 0x1)
 	{
-		ScorchedServer::instance()->getGameState().getStateLogging() = true;
 		ScorchedClient::instance()->getGameState().getStateLogging() = true;
 	}
 	if (logState & 0x2)

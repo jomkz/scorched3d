@@ -69,10 +69,10 @@ bool ServerDefenseHandler::processMessage(
 	unsigned int playerId = message.getPlayerId();
 
 	// Check we are in the correct state
-	if ((ScorchedServer::instance()->getGameState().getState() != 
-		 ServerState::ServerStatePlaying) &&
-		(ScorchedServer::instance()->getGameState().getState() != 
-		 ServerState::ServerStateBuying))
+	//if ((ScorchedServer::instance()->getGameState().getState() != 
+	//	 ServerState::ServerStatePlaying) &&
+	//	(ScorchedServer::instance()->getGameState().getState() != 
+	//	 ServerState::ServerStateBuying))
 	{
 		Logger::log("ERROR: Player attempted to use defense but in incorrect state");
 		return true;

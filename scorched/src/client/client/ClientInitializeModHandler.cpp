@@ -18,7 +18,7 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <client/ClientInitializeHandler.h>
+#include <client/ClientInitializeModHandler.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientState.h>
 #include <client/ClientWindowSetup.h>
@@ -34,41 +34,41 @@
 #include <tank/TankModelStore.h>
 #include <engine/ModFiles.h>
 #include <graph/OptionsDisplay.h>
-#include <coms/ComsInitializeMessage.h>
+#include <coms/ComsInitializeModMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <GLW/GLWWindowManager.h>
 #include <GLW/GLWWindowSkinManager.h>
 #include <GLEXT/GLLenseFlare.h>
 
-ClientInitializeHandler *ClientInitializeHandler::instance_ = 0;
+ClientInitializeModHandler *ClientInitializeModHandler::instance_ = 0;
 
-ClientInitializeHandler *ClientInitializeHandler::instance()
+ClientInitializeModHandler *ClientInitializeModHandler::instance()
 {
 	if (!instance_)
 	{
-		instance_ = new ClientInitializeHandler;
+		instance_ = new ClientInitializeModHandler;
 	}
 	return instance_;
 }
 
-ClientInitializeHandler::ClientInitializeHandler() :
+ClientInitializeModHandler::ClientInitializeModHandler() :
 	initialized_(false)
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsInitializeMessage",
+		"ComsInitializeModMessage",
 		this);
 }
 
-ClientInitializeHandler::~ClientInitializeHandler()
+ClientInitializeModHandler::~ClientInitializeModHandler()
 {
 }
 
-bool ClientInitializeHandler::processMessage(
+bool ClientInitializeModHandler::processMessage(
 	NetMessage &netMessage,
 	const char *messageType,
 	NetBufferReader &reader)
 {
-	ComsInitializeMessage message;
+	ComsInitializeModMessage message;
 	if (!message.readMessage(reader)) return false;
 
 	if (!initialized_)
@@ -82,7 +82,7 @@ bool ClientInitializeHandler::processMessage(
 	return true;
 }
 
-bool ClientInitializeHandler::initialize()
+bool ClientInitializeModHandler::initialize()
 {
 	// Clear any memory used by stored mod files as they will not be required now
 	ScorchedClient::instance()->getModFiles().clearData();
@@ -125,20 +125,6 @@ bool ClientInitializeHandler::initialize()
 		S3D::dialogExit("Scorched3D", "Failed to load windows skins");
 	}
 	ClientWindowSetup::setupGameWindows(GLWWindowSkinManager::modinstance());
-	GLWWindowManager::instance()->loadPositions();		
-
-	// Move into the player setup state
-	if (ClientParams::instance()->getSaveFile()[0])
-	{
-		ScorchedClient::instance()->getGameState().stimulate(ClientState::StimLoadPlayers);
-	}
-	else
-	{
-		ScorchedClient::instance()->getGameState().stimulate(ClientState::StimGetPlayers);
-		// Show player dialog
-		GLWWindowManager::instance()->showWindow(
-			PlayerDialog::instance()->getId());	
-	}
-	ScorchedClient::instance()->getGameState().checkStimulate();
+	GLWWindowManager::instance()->loadPositions();
 	return true;
 }

@@ -27,7 +27,7 @@
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
 #include <coms/ComsMessageSender.h>
-#include <coms/ComsInitializeMessage.h>
+#include <coms/ComsInitializeModMessage.h>
 #include <engine/ModFiles.h>
 #include <time.h>
 
@@ -106,7 +106,7 @@ void ServerFileServer::simulate(float timeDifference)
 					if (allComplete)
 					{
 						// Tell this destination to start initializing
-						ComsInitializeMessage initMessage;
+						ComsInitializeModMessage initMessage;
 						ComsMessageSender::sendToSingleClient(initMessage,
 							tank->getDestinationId());
 					}

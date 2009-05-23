@@ -28,7 +28,6 @@
 #include <graph/SoftwareMouse.h>
 #include <client/ClientState.h>
 #include <client/ClientShotState.h>
-#include <client/ClientWaitState.h>
 #include <client/ClientLoadPlayersState.h>
 #include <client/ClientSaveScreenState.h>
 #include <client/ScorchedClient.h>
@@ -218,8 +217,6 @@ void ClientState::setupGameState()
 		Main2DCamera::instance(), ShotCountDown::instance());
 	gameState.addStateEntry(StateWait, 
 		TankKeyboardControl::instance());
-	gameState.addStateEntry(StateWait,
-		ClientWaitState::instance());
 	gameState.addStateStimulus(StateWait, 
 		StimGameStopped, StateGetPlayers);
 	gameState.addStateStimulus(StateWait, 

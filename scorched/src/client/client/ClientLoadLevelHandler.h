@@ -18,26 +18,37 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
+#ifndef _ClientLoadLevelHandler_h
+#define _ClientLoadLevelHandler_h
 
-#include <coms/ComsPlayerReadyMessage.h>
+#include <coms/ComsMessageHandler.h>
 
-ComsPlayerReadyMessage::ComsPlayerReadyMessage(unsigned int playerId) :
-	ComsMessage("ComsPlayerReadyMessage"), playerId_(playerId)
+class ClientLoadLevelHandler : public ComsMessageHandlerI
 {
-}
+public:
+	static ClientLoadLevelHandler* instance();
 
-ComsPlayerReadyMessage::~ComsPlayerReadyMessage()
-{
-}
+	virtual bool processMessage(
+		NetMessage &message,
+		const char *messageType,
+		NetBufferReader &reader);
 
-bool ComsPlayerReadyMessage::writeMessage(NetBuffer &buffer)
-{
-	buffer.addToBuffer(playerId_);
-	return true;
-}
+protected:
+	static ClientLoadLevelHandler* instance_;
 
-bool ComsPlayerReadyMessage::readMessage(NetBufferReader &reader)
-{
-	if (!reader.getFromBuffer(playerId_)) return false;
-	return true;
-}
+	bool actualProcessMessage(
+		NetMessage &netMessage,
+		const char *messageType,
+		NetBufferReader &reader);
+
+private:
+	ClientLoadLevelHandler();
+	virtual ~ClientLoadLevelHandler();
+
+	ClientLoadLevelHandler(const ClientLoadLevelHandler &);
+	const ClientLoadLevelHandler & operator=(const ClientLoadLevelHandler &);
+
+};
+
+#endif // _ClientLoadLevelHandler_h
+

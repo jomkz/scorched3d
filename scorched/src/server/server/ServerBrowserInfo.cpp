@@ -139,8 +139,6 @@ void ServerBrowserInfo::processStatusMessage(std::list<std::string> &reply)
 	char *serverName = (char *) ScorchedServer::instance()->getOptionsGame().getServerName();
 	char version[256];
 	snprintf(version, 256, "%s (%s)", S3D::ScorchedVersion.c_str(), S3D::ScorchedProtocolVersion.c_str());
-	unsigned currentState = ScorchedServer::instance()->getGameState().getState();
-	bool started = (currentState != ServerState::ServerStateTooFewPlayers);
 	char players[25];
 	snprintf(players, 25, "%i", ScorchedServer::instance()->getTankContainer().getNoOfTanks());
 	char maxplayers[25];
@@ -164,7 +162,6 @@ void ServerBrowserInfo::processStatusMessage(std::list<std::string> &reply)
 	}
 
 	reply.push_back(addTag("gametype", type));
-	reply.push_back(addTag("state", (started?"Started":"Waiting")));
 	reply.push_back(addTag("servername", serverName));
 	reply.push_back(addTag("fullversion", version));
 	reply.push_back(addTag("version", S3D::ScorchedVersion));

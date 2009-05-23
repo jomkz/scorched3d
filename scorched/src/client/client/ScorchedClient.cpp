@@ -41,6 +41,8 @@ ScorchedClient *ScorchedClient::instance()
 ScorchedClient::ScorchedClient() : 
 	ScorchedContext("Client", false)
 {
+	gameState = new GameState("Client");
+
 	mainLoop_ = new MainLoop();
 	mainLoop_->clear();
 	mainLoop_->addMainLoop(gameState);

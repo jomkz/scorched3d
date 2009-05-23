@@ -45,8 +45,8 @@ void ServerTimedMessage::simulate()
 	return;
 #endif
 
-	if (ScorchedServer::instance()->getGameState().getState() ==
-		ServerState::ServerStateTooFewPlayers) return;
+	//if (ScorchedServer::instance()->getGameState().getState() ==
+	//	ServerState::ServerStateTooFewPlayers) return;
 
 	time_t currentTime = time(0);
 	if (currentTime > lastCheckTime_ + 5)

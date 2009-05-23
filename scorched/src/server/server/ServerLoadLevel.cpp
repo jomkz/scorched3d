@@ -18,39 +18,32 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <server/ServerInitializeHandler.h>
+#include <server/ServerLoadLevel.h>
 #include <server/ScorchedServer.h>
+#include <landscapedef/LandscapeDefinition.h>
+#include <landscapemap/LandscapeMaps.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
-#include <coms/ComsInitializeMessage.h>
+#include <coms/ComsLoadLevelMessage.h>
+#include <coms/ComsMessageSender.h>
 
-ServerInitializeHandler *ServerInitializeHandler::instance()
-{
-	static ServerInitializeHandler *instance = 
-		new ServerInitializeHandler;
-	return instance;
-}
-
-ServerInitializeHandler::ServerInitializeHandler()
-{
-	ScorchedServer::instance()->getComsMessageHandler().addHandler(
-		"ComsInitializeMessage",
-		this);
-}
-
-ServerInitializeHandler::~ServerInitializeHandler()
+ServerLoadLevel::ServerLoadLevel()
 {
 }
 
-bool ServerInitializeHandler::processMessage(
-	NetMessage &netMessage,
-	const char *messageType,
-	NetBufferReader &reader)
+ServerLoadLevel::~ServerLoadLevel()
 {
-	ComsInitializeMessage message;
-	if (!message.readMessage(reader)) return false;
+}
 
-	// Set any tanks from this destination ready to recieve more input
+void ServerLoadLevel::destinationLoadLevel(unsigned int destinationId)
+{
+	LandscapeDefinition &landscapeDefinition =
+		ScorchedServer::instance()->getLandscapeMaps().getDefinitions().
+		getDefinition();
+
+	// Set any tanks from this destination that they are loading the level
+	// set the current version of the level (definition number) that they are loading
+	// so we can check if the level changes before we have finished loading
 	std::map<unsigned int, Tank *> &tanks = 
 		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
@@ -60,11 +53,14 @@ bool ServerInitializeHandler::processMessage(
 	{
 		// For each tank
 		Tank *tank = (*itor).second;
-		if (netMessage.getDestinationId() == tank->getDestinationId())
+		if (destinationId == tank->getDestinationId())
 		{
-			tank->getState().setState(TankState::sPending);
+			tank->getState().setState(TankState::sLoadingLevel);
+			tank->getState().setLevelNumber(landscapeDefinition.getDefinitionNumber());
 		}
 	}
 
-	return true;
+	// Tell this destination to start loading the level
+	ComsLoadLevelMessage loadLevelMessage(&landscapeDefinition);
+	ComsMessageSender::sendToSingleClient(loadLevelMessage, destinationId);
 }

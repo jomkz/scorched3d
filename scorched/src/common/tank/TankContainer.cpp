@@ -186,50 +186,6 @@ void TankContainer::setAllDead()
 	}
 }
 
-bool TankContainer::allReady()
-{
-	std::map<unsigned int, Tank *>::iterator mainitor;
-	for (mainitor = tanks_.begin();
-		mainitor != tanks_.end();
-		mainitor++)
-	{
-		Tank *current = (*mainitor).second;
-		if (!current->isTemp())
-		{
-			// current check tanks that are not pending
-			if (current->getState().getState() != TankState::sPending &&
-				current->getState().getState() != TankState::sDownloadingMod &&
-				current->getState().getState() != TankState::sInitializingMod)
-			{
-				if (current->getState().getReadyState() == 
-					TankState::SNotReady) return false;
-			}
-		}
-	}
-	return true;
-}
-
-void TankContainer::setAllNotReady()
-{
-	std::map<unsigned int, Tank *>::iterator mainitor;
-	for (mainitor = tanks_.begin();
-		mainitor != tanks_.end();
-		mainitor++)
-	{
-		Tank *current = (*mainitor).second;
-		if (!current->isTemp())
-		{
-			// current check tanks that are not pending
-			if (current->getState().getState() != TankState::sPending &&
-				current->getState().getState() != TankState::sDownloadingMod &&
-				current->getState().getState() != TankState::sInitializingMod)
-			{
-				current->getState().setNotReady();
-			}
-		}
-	}
-}
-
 int TankContainer::getNoOfNonSpectatorTanks()
 {
 	int count = 0;

@@ -31,6 +31,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+unsigned int LandscapeDefinitions::lastDefinitionNumber_(0);
+
 LandscapeDefinitions::LandscapeDefinitions() :
 	lastDefinition_(0),
 	texs_("Tex"),
@@ -256,7 +258,8 @@ LandscapeDefinition LandscapeDefinitions::getRandomLandscapeDefn(
 	if (landscapeTex->seed != 0) seed = landscapeTex->seed;
 
 	LandscapeDefinition entry(
-		tex.c_str(), defn.c_str(), seed, result->name.c_str());
+		tex.c_str(), defn.c_str(), seed, result->name.c_str(),
+		++lastDefinitionNumber_);
 	return entry;
 }
 

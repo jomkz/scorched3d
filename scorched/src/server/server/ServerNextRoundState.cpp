@@ -79,5 +79,5 @@ void ServerNextRoundState::enterState(const unsigned state)
 	ComsMessageSender::sendToAllPlayingClients(message);	
 
 	// Move into the ready state
-	ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusNextShot);
+	//ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusNextShot);
 }

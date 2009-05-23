@@ -21,7 +21,6 @@
 #include <client/ScorchedClient.h>
 #include <client/ClientNewGameHandler.h>
 #include <client/ClientState.h>
-#include <client/ClientWaitState.h>
 #include <client/ClientReloadAdaptor.h>
 #include <graph/SpeedChange.h>
 #include <graph/OptionsDisplayConsole.h>
@@ -252,7 +251,7 @@ bool ClientNewGameHandler::actualProcessMessage(
 	MainCamera::instance()->getTarget().setCameraType(TargetCamera::CamSpectator);
 
 	// Tell the server we have finished processing the landscape
-	ClientWaitState::instance()->sendClientReady();
+	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
 	ClientReloadAdaptor::instance();
 
 	// Move into the wait state

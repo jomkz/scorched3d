@@ -498,12 +498,12 @@ void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
 			10,
 			textX + nameLeft, textY, 0.0f,
 			name);
-		GLWFont::instance()->getGameFont()->draw(
+		/*GLWFont::instance()->getGameFont()->draw(
 			current->getColor(),
 			10,
 			textX + readyLeft, textY, 0.0f,
 			S3D::formatStringBuffer("%2s",
-			((current->getState().getReadyState() == TankState::SNotReady)?"*":" ")));
+			((current->getState().getReadyState() == TankState::SNotReady)?"*":" ")));*/
 	}
 	else
 	{
@@ -564,11 +564,11 @@ void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
 			10,
 			textX + assistsLeft, textY, 0.0f,
 			S3D::formatStringBuffer("%i", current->getScore().getAssists()));
-		GLWFont::instance()->getGameFont()->draw(
+		/*GLWFont::instance()->getGameFont()->draw(
 			current->getColor(),
 			10,
 			textX + readyLeft, textY, 0.0f,
-			((current->getState().getReadyState() == TankState::SNotReady)?"*":" "));
+			((current->getState().getReadyState() == TankState::SNotReady)?"*":" "));*/
 		if (current->getScore().getRank() >= 0)
 		{
 			GLWFont::instance()->getGameFont()->draw(

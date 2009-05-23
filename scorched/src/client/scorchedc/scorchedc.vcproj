@@ -1069,11 +1069,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsInitializeMessage.cpp"
+				RelativePath="..\..\common\coms\ComsInitializeModMessage.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsInitializeMessage.h"
+				RelativePath="..\..\common\coms\ComsInitializeModMessage.h"
 				>
 			</File>
 			<File
@@ -1098,6 +1098,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\coms\ComsLinesMessage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\coms\ComsLoadLevelMessage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\coms\ComsLoadLevelMessage.h"
 				>
 			</File>
 			<File
@@ -1157,27 +1165,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsPlayerReadyMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsPlayerReadyMessage.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\coms\ComsPlayerStateMessage.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\common\coms\ComsPlayerStateMessage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsPlayerStatusMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsPlayerStatusMessage.h"
 				>
 			</File>
 			<File
@@ -3297,11 +3289,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\client\ClientInitializeHandler.cpp"
+				RelativePath="..\client\ClientInitializeModHandler.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\client\ClientInitializeHandler.h"
+				RelativePath="..\client\ClientInitializeModHandler.h"
 				>
 			</File>
 			<File
@@ -3318,6 +3310,14 @@
 			</File>
 			<File
 				RelativePath="..\client\ClientLinesHandler.h"
+				>
+			</File>
+			<File
+				RelativePath="..\client\ClientLoadLevelHandler.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\client\ClientLoadLevelHandler.h"
 				>
 			</File>
 			<File
@@ -3374,14 +3374,6 @@
 			</File>
 			<File
 				RelativePath="..\client\ClientPlayerStateHandler.h"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientPlayerStatusHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientPlayerStatusHandler.h"
 				>
 			</File>
 			<File
@@ -3470,14 +3462,6 @@
 			</File>
 			<File
 				RelativePath="..\client\ClientSyncCheckHandler.h"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientWaitState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientWaitState.h"
 				>
 			</File>
 			<File
@@ -5417,11 +5401,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\server\server\ServerInitializeHandler.cpp"
+				RelativePath="..\..\server\server\ServerInitializeModHandler.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\server\server\ServerInitializeHandler.h"
+				RelativePath="..\..\server\server\ServerInitializeModHandler.h"
 				>
 			</File>
 			<File
@@ -5438,6 +5422,14 @@
 			</File>
 			<File
 				RelativePath="..\..\server\server\ServerLinesHandler.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerLoadLevel.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerLoadLevel.h"
 				>
 			</File>
 			<File
@@ -5521,27 +5513,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\server\server\ServerPlayerReadyHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerPlayerReadyHandler.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\server\server\ServerPlayingState.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\server\server\ServerPlayingState.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerReadyState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerReadyState.h"
 				>
 			</File>
 			<File
@@ -5590,10 +5566,6 @@
 			</File>
 			<File
 				RelativePath="..\..\server\server\ServerStartingState.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerState.cpp"
 				>
 			</File>
 			<File

@@ -70,15 +70,15 @@ bool ServerPlayedMoveHandler::processMessage(
 		{
 			if (TurnController::instance()->playerThisTurn(playerId))
 			{
-				if ((ScorchedServer::instance()->getGameState().getState() == 
-					ServerState::ServerStatePlaying) || ((
-					ScorchedServer::instance()->getGameState().getState() == 
-					ServerState::ServerStateBuying) && 
-					message->getType() == ComsPlayedMoveMessage::eFinishedBuy))
+				//if ((ScorchedServer::instance()->getGameState().getState() == 
+				//	ServerState::ServerStatePlaying) || ((
+				//	ScorchedServer::instance()->getGameState().getState() == 
+				//	ServerState::ServerStateBuying) && 
+				//	message->getType() == ComsPlayedMoveMessage::eFinishedBuy))
 				{
 					ServerShotHolder::instance()->addShot(playerId, message);
 				}
-				else delete message;
+				//else delete message;
 			}
 			else delete message;
 		}

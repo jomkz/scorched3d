@@ -793,11 +793,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\server\ServerInitializeHandler.cpp"
+				RelativePath="..\server\ServerInitializeModHandler.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\server\ServerInitializeHandler.h"
+				RelativePath="..\server\ServerInitializeModHandler.h"
 				>
 			</File>
 			<File
@@ -814,6 +814,14 @@
 			</File>
 			<File
 				RelativePath="..\server\ServerLinesHandler.h"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerLoadLevel.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerLoadLevel.h"
 				>
 			</File>
 			<File
@@ -897,27 +905,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\server\ServerPlayerReadyHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\server\ServerPlayerReadyHandler.h"
-				>
-			</File>
-			<File
 				RelativePath="..\server\ServerPlayingState.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\server\ServerPlayingState.h"
-				>
-			</File>
-			<File
-				RelativePath="..\server\ServerReadyState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\server\ServerReadyState.h"
 				>
 			</File>
 			<File
@@ -966,10 +958,6 @@
 			</File>
 			<File
 				RelativePath="..\server\ServerStartingState.h"
-				>
-			</File>
-			<File
-				RelativePath="..\server\ServerState.cpp"
 				>
 			</File>
 			<File
@@ -2241,11 +2229,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsInitializeMessage.cpp"
+				RelativePath="..\..\common\coms\ComsInitializeModMessage.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsInitializeMessage.h"
+				RelativePath="..\..\common\coms\ComsInitializeModMessage.h"
 				>
 			</File>
 			<File
@@ -2270,6 +2258,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\coms\ComsLinesMessage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\coms\ComsLoadLevelMessage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\coms\ComsLoadLevelMessage.h"
 				>
 			</File>
 			<File
@@ -2329,27 +2325,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsPlayerReadyMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsPlayerReadyMessage.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\coms\ComsPlayerStateMessage.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\common\coms\ComsPlayerStateMessage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsPlayerStatusMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsPlayerStatusMessage.h"
 				>
 			</File>
 			<File

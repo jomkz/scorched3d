@@ -45,5 +45,5 @@ void ServerResetState::enterState(const unsigned state)
 	ScorchedServer::instance()->getOptionsTransient().reset();
 
 	// Start the game
-	ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusNewGame);
+	//ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusNewGame);
 }

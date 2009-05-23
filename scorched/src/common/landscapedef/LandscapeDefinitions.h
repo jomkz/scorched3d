@@ -49,6 +49,7 @@ public:
 	LandscapeInclude *getInclude(const char *file, bool load = false);
 
 protected:
+	static unsigned int lastDefinitionNumber_;
 	LandscapeDefinitionsEntry* lastDefinition_;
 	std::map<std::string, int> usedFiles_;
 

@@ -39,16 +39,16 @@
 #include <client/ClientConnectionAcceptHandler.h>
 #include <client/ClientConnectionAuthHandler.h>
 #include <client/ClientOperationHandler.h>
+#include <client/ClientLoadLevelHandler.h>
 #include <client/ClientRmPlayerHandler.h>
 #include <client/ClientGameStateHandler.h>
-#include <client/ClientInitializeHandler.h>
+#include <client/ClientInitializeModHandler.h>
 #include <client/ClientAdminResultHandler.h>
 #include <client/ClientPlayerStateHandler.h>
 #include <client/ClientStartTimerHandler.h>
 #include <client/ClientSyncCheckHandler.h>
 #include <client/ClientFileHandler.h>
 #include <client/ClientDefenseHandler.h>
-#include <client/ClientPlayerStatusHandler.h>
 #include <client/ClientState.h>
 #include <client/ClientWindowSetup.h>
 #include <lang/LangResource.h>
@@ -184,7 +184,7 @@ static bool initComsHandlers()
 	ClientConnectionAuthHandler::instance();
 	ClientAddPlayerHandler::instance();
 	ClientNewGameHandler::instance();
-	ClientInitializeHandler::instance();
+	ClientInitializeModHandler::instance();
 	ClientRmPlayerHandler::instance();
 	ClientStartTimerHandler::instance();
 	ClientSyncCheckHandler::instance();
@@ -192,10 +192,10 @@ static bool initComsHandlers()
 	ClientOperationHandler::instance();
 	ClientGameStoppedHandler::instance();
 	ClientStartGameHandler::instance();
+	ClientLoadLevelHandler::instance();
 	ClientGameStateHandler::instance();
 	ClientPlayerStateHandler::instance();
 	ClientDefenseHandler::instance();
-	ClientPlayerStatusHandler::instance();
 	ClientScoreHandler::instance();
 	ClientAdminResultHandler::instance();
 

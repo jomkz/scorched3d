@@ -18,25 +18,16 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ComsInitializeMessageh_INCLUDE__)
-#define __INCLUDE_ComsInitializeMessageh_INCLUDE__
+#if !defined(__INCLUDE_ServerLoadLevelh_INCLUDE__)
+#define __INCLUDE_ServerLoadLevelh_INCLUDE__
 
-#include <coms/ComsMessage.h>
-
-class ComsInitializeMessage : public ComsMessage
+class ServerLoadLevel
 {
 public:
-	ComsInitializeMessage();
-	virtual ~ComsInitializeMessage();
+	ServerLoadLevel();
+	virtual ~ServerLoadLevel();
 
-	// Inherited from ComsMessage
-	virtual bool writeMessage(NetBuffer &buffer);
-	virtual bool readMessage(NetBufferReader &reader);
-
-private:
-	ComsInitializeMessage(const ComsInitializeMessage &);
-	const ComsInitializeMessage & operator=(const ComsInitializeMessage &);
-
+	static void destinationLoadLevel(unsigned int destinationId);
 };
 
-#endif // __INCLUDE_ComsInitializeMessageh_INCLUDE__
+#endif

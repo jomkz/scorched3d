@@ -85,8 +85,8 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 	// Add a computer player (if chosen and a single player match)
 	if (0 != strcmp(message.getPlayerType(), "Human"))
 	{
-		if (ScorchedServer::instance()->getGameState().getState() !=
-			ServerState::ServerStateTooFewPlayers)
+		//if (ScorchedServer::instance()->getGameState().getState() !=
+		//	ServerState::ServerStateTooFewPlayers)
 		{
 			ServerChannelManager::instance()->sendText( 
 				ChannelText("info", "CHANGE_WHEN_STARTED", 
@@ -202,12 +202,12 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 					tank->getTargetName()),
 				true);
 
-			if (ScorchedServer::instance()->getGameState().getState() == 
-				ServerState::ServerStateStarting)
+			//if (ScorchedServer::instance()->getGameState().getState() == 
+			//	ServerState::ServerStateStarting)
 			{
 				// Reset the starting timer
-				ScorchedServer::instance()->getGameState().stimulate(
-					ServerState::ServerStimulusStarting);
+			//	ScorchedServer::instance()->getGameState().stimulate(
+			//		ServerState::ServerStimulusStarting);
 			}
 		}
 	}
@@ -240,12 +240,12 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 
 	// If we are in a waiting for players state then we can
 	// send the state of these new players
-	if (ScorchedServer::instance()->getGameState().getState() == ServerState::ServerStateTooFewPlayers ||
-		ScorchedServer::instance()->getGameState().getState() == ServerState::ServerStateStarting)
-	{
-		ComsPlayerStateMessage message(false, false);
-		ComsMessageSender::sendToAllConnectedClients(message);
-	}
+	//if (ScorchedServer::instance()->getGameState().getState() == ServerState::ServerStateTooFewPlayers ||
+	//	ScorchedServer::instance()->getGameState().getState() == ServerState::ServerStateStarting)
+	//{
+	//	ComsPlayerStateMessage message(false, false);
+	//	ComsMessageSender::sendToAllConnectedClients(message);
+	//}
 	return true;
 }
 

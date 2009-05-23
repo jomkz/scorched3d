@@ -41,7 +41,6 @@ ScorchedContext::ScorchedContext(const char *name, bool server) :
 {
 	actionController = new ActionController();
 	accessoryStore = new AccessoryStore();
-	gameState = new GameState(name);
 	targetContainer = new TargetContainer();
 	tankContainer = new TankContainer(*targetContainer);
 	landscapeMaps = new LandscapeMaps();
