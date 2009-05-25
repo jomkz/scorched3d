@@ -27,8 +27,19 @@
 #include <coms/ComsLoadLevelMessage.h>
 #include <coms/ComsMessageSender.h>
 
+ServerLoadLevel *ServerLoadLevel::instance_ = 0;
+
+ServerLoadLevel *ServerLoadLevel::instance()
+{
+	if (!instance_) instance_ = new ServerLoadLevel();
+	return instance_;
+}
+
 ServerLoadLevel::ServerLoadLevel()
 {
+	ScorchedServer::instance()->getComsMessageHandler().addHandler(
+		"ComsLevelLoadedMessage",
+		this);
 }
 
 ServerLoadLevel::~ServerLoadLevel()
@@ -63,4 +74,49 @@ void ServerLoadLevel::destinationLoadLevel(unsigned int destinationId)
 	// Tell this destination to start loading the level
 	ComsLoadLevelMessage loadLevelMessage(&landscapeDefinition);
 	ComsMessageSender::sendToSingleClient(loadLevelMessage, destinationId);
+}
+
+bool ServerLoadLevel::destinationUsingCurrentLevel(unsigned int destinationId)
+{
+	LandscapeDefinition &landscapeDefinition =
+		ScorchedServer::instance()->getLandscapeMaps().getDefinitions().
+		getDefinition();
+
+	std::map<unsigned int, Tank *> &tanks = 
+		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+	std::map<unsigned int, Tank *>::iterator itor;
+	for (itor = tanks.begin();
+		itor != tanks.end();
+		itor++)
+	{
+		// For each tank
+		Tank *tank = (*itor).second;
+		if (destinationId == tank->getDestinationId())
+		{
+			return (tank->getState().getLevelNumber() == landscapeDefinition.getDefinitionNumber());
+		}
+	}
+	return false;
+}
+
+bool ServerLoadLevel::processMessage(
+	NetMessage &netMessage,
+	const char *messageType,
+	NetBufferReader &reader)
+{
+	unsigned int destinationId = netMessage.getDestinationId();
+
+	// Check that the destination is still using the correct level
+	// the server may have changed level during the time taken for the 
+	// client to load the level
+	if (!destinationUsingCurrentLevel(destinationId)) 
+	{
+		destinationLoadLevel(destinationId);
+		return true;
+	}
+
+	// Else the level is up to date
+	// Send the diffs to the level to bring it in sync with the server
+
+	return true;
 }

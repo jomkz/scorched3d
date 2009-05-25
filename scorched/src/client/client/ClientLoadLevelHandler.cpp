@@ -28,6 +28,8 @@
 #include <engine/MainLoop.h>
 #include <dialogs/ProgressDialog.h>
 #include <coms/ComsLoadLevelMessage.h>
+#include <coms/ComsLevelLoadedMessage.h>
+#include <coms/ComsMessageSender.h>
 #include <graph/OptionsDisplayConsole.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <landscapemap/LandscapeMaps.h>
@@ -125,6 +127,7 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	ScorchedClient::instance()->getMainLoop().getTimer().getTimeDifference();
 	
 	// Tell the server we have finished processing the landscape
-	//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
+	ComsLevelLoadedMessage levelLoadedMessage;
+	ComsMessageSender::sendToServer(levelLoadedMessage);
 	return true;
 }

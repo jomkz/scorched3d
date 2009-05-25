@@ -49,7 +49,7 @@ bool ServerInitializeModHandler::processMessage(
 	ComsInitializeModMessage message;
 	if (!message.readMessage(reader)) return false;
 
-	ServerLoadLevel::destinationLoadLevel(netMessage.getDestinationId());
+	ServerLoadLevel::instance()->destinationLoadLevel(netMessage.getDestinationId());
 
 	return true;
 }

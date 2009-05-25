@@ -57,6 +57,7 @@
 #include <server/ServerConnectAuthHandler.h>
 #include <server/ServerOperationResultHandler.h>
 #include <server/ServerFileServer.h>
+#include <server/ServerLoadLevel.h>
 #include <server/ServerRegistration.h>
 #include <server/ServerLog.h>
 #include <server/ServerBrowserInfo.h>
@@ -125,6 +126,7 @@ bool startServer(bool local, ProgressCounter *counter)
 	ServerFileAkHandler::instance();
 	ServerBuyAccessoryHandler::instance();
 	ServerAddPlayerHandler::instance();
+	ServerLoadLevel::instance();
 	ServerDefenseHandler::instance();
 	ServerOperationResultHandler::instance();
 

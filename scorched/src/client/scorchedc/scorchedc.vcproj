@@ -1085,6 +1085,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\coms\ComsLevelLoadedMessage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\coms\ComsLevelLoadedMessage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\coms\ComsLevelMessage.cpp"
 				>
 			</File>
@@ -1210,6 +1218,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\coms\ComsSyncCheckMessage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\coms\ComsSyncLevelMessage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\coms\ComsSyncLevelMessage.h"
 				>
 			</File>
 			<File

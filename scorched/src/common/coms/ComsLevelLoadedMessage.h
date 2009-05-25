@@ -18,31 +18,26 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerLoadLevelh_INCLUDE__)
-#define __INCLUDE_ServerLoadLevelh_INCLUDE__
+#ifndef _ComsLevelLoadedMessage_h
+#define _ComsLevelLoadedMessage_h
 
-#include <coms/ComsMessageHandler.h>
+#include <landscapedef/LandscapeDefinition.h>
 
-class ServerLoadLevel : public ComsMessageHandlerI
+class ComsLevelLoadedMessage : public ComsMessage
 {
 public:
-	static ServerLoadLevel *instance();
+	ComsLevelLoadedMessage();
+	virtual ~ComsLevelLoadedMessage();
 
-	void destinationLoadLevel(unsigned int destinationId);
-	bool destinationUsingCurrentLevel(unsigned int destinationId);
-
-	virtual bool processMessage(
-		NetMessage &message,
-		const char *messageType,
-		NetBufferReader &reader);
-
-protected:
-	static ServerLoadLevel *instance_;
+	// Inherited from ComsMessage
+    virtual bool writeMessage(NetBuffer &buffer);
+    virtual bool readMessage(NetBufferReader &reader);
 
 private:
-	ServerLoadLevel();
-	virtual ~ServerLoadLevel();
+	ComsLevelLoadedMessage(const ComsLevelLoadedMessage &);
+	const ComsLevelLoadedMessage & operator=(const ComsLevelLoadedMessage &);
 
 };
 
-#endif
+#endif //_ComsLevelLoadedMessage_h
+
