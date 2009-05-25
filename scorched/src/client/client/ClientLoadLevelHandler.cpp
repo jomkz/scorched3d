@@ -20,6 +20,7 @@
 
 #include <client/ClientLoadLevelHandler.h>
 #include <client/ScorchedClient.h>
+#include <client/ClientState.h>
 #include <common/Clock.h>
 #include <common/OptionsScorched.h>
 #include <common/Logger.h>
@@ -90,6 +91,10 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	const char *messageType,
 	NetBufferReader &reader)
 {
+	// Move into the load level state
+	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimLoadLevel);
+	ScorchedClient::instance()->getGameState().checkStimulate();
+
 	ComsLoadLevelMessage message;
 	if (!message.readMessage(reader)) return false;
 

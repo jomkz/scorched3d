@@ -173,20 +173,6 @@ void ScoreDialog::draw()
 		{
 			text = &FINAL_RANKINGS;
 		}
-		else if (ScorchedClient::instance()->getGameState().getState() == 
-			ClientState::StateGetPlayers)
-		{
-			finished = true;
-			if (ScorchedClient::instance()->getTankContainer().getNoOfNonSpectatorTanks() <
-				ScorchedClient::instance()->getOptionsGame().getNoMinPlayers())
-			{
-				text = &WAITING_FOR_PLAYERS;
-			}
-			else
-			{
-				text = &WAITING_TO_JOIN;
-			}
-		}
 		else if (server)
 		{
 			text = &SERVER_NAME;

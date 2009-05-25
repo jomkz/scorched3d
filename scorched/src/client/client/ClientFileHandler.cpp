@@ -62,13 +62,6 @@ bool ClientFileHandler::processMessage(
 	if (!message.readMessage(mainreader)) return false;
 	NetBufferReader reader(message.fileBuffer);
 
-	if (ScorchedClient::instance()->getGameState().getState() !=
-		ClientState::StateLoadFiles)
-	{
-		ScorchedClient::instance()->getGameState().stimulate(
-			ClientState::StimLoadFiles);
-	}
-
 	std::map<std::string, ModFileEntry *> &files = 
 		ScorchedClient::instance()->getModFiles().getFiles();
 

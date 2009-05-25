@@ -22,6 +22,9 @@
 #define _ComsSyncLevelMessage_h
 
 #include <landscapedef/LandscapeDefinition.h>
+#include <landscapemap/DeformLandscape.h>
+#include <vector>
+#include <set>
 
 class ComsSyncLevelMessage : public ComsMessage
 {
@@ -33,8 +36,10 @@ public:
     virtual bool writeMessage(NetBuffer &buffer);
     virtual bool readMessage(NetBufferReader &reader);
 
+	std::vector<DeformLandscape::DeformInfo> &getDeformInfos() { return deformInfos_; }
+
 protected:
-	ComsPlayerStateMessage playerState_;
+	std::vector<DeformLandscape::DeformInfo> deformInfos_;
 
 private:
 	ComsSyncLevelMessage(const ComsSyncLevelMessage &);

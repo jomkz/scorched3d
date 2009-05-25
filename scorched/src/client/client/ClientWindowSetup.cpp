@@ -244,10 +244,6 @@ void ClientWindowSetup::setupStartWindows(GLWWindowSkinManager *skinManager)
 	GLWWindowManager::instance()->addWindow(ClientState::StateDisconnected, 
 		MsgBoxDialog::instance(), 0, false);
 
-	// StateLoadPlayers
-	GLWWindowManager::instance()->addWindow(ClientState::StateLoadPlayers,
-		BackdropDialog::instance(), 0, true);
-
 	// StateLoadFiles
 	GLWWindowManager::instance()->addWindow(ClientState::StateLoadFiles,
 		BackdropDialog::instance(), 0, true);
@@ -274,38 +270,6 @@ void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 	addStateWindows(skinManager, ClientState::StateLoadLevel, "start");
 	GLWWindowManager::instance()->addWindow(ClientState::StateLoadLevel,
 		ProgressDialog::instance(), 0, true);
-
-	// StateGetPlayers
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
-		BackdropDialog::instance(), 0, true);
-	addStateWindows(skinManager, ClientState::StateGetPlayers, "start");
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers,
-		ScoreDialog::instance2(), 0, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
-		PlayerDialog::instance(), playerKey, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers,
-		RulesDialog::instance(), rulesKey, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
- 		SoundDialog::instance(), showSoundKey, false);
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
-		AdminCheckDialog::instance(), 0, false);
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
-		AdminDialog::instance(), 0, false);
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
-		AdminAuthDialog::instance(), 0, false);
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
-		QuitDialog::instance(), quitKey, false);
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
-		MainMenuDialog::instance(), 0, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
-		GLWSelector::instance(), 0, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
-		MsgBoxDialog::instance(), 0, false);
-	if (ScorchedClient::instance()->getOptionsGame().getTutorial()[0])
-	{
-		GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
- 			TutorialDialog::instance(), 0, true);
-	}
 
 	// StateWait
 	addCommonComponents(skinManager, ClientState::StateWait);

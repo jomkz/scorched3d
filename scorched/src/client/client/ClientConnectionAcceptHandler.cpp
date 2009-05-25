@@ -20,6 +20,7 @@
 
 #include <client/ClientConnectionAcceptHandler.h>
 #include <client/ScorchedClient.h>
+#include <client/ClientState.h>
 #include <dialogs/RulesDialog.h>
 #include <dialogs/ConnectDialog.h>
 #include <dialogs/ProgressDialog.h>
@@ -156,6 +157,10 @@ bool ClientConnectionAcceptHandler::processMessage(
 				file->getCompressedCrc()));
 	}
 	if (!ComsMessageSender::sendToServer(comsFileMessage)) return false;
+
+	// Move into the files state
+	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimLoadFiles);
+	ScorchedClient::instance()->getGameState().checkStimulate();
 
 	return true;
 }

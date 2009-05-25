@@ -240,7 +240,7 @@ void ProgressDialogSync::progressChange(const LangString &op, const float percen
 		Main2DCamera::instance()->draw(0);
 
 		unsigned int state = ScorchedClient::instance()->getGameState().getState();
-		if (state >= ClientState::StateGetPlayers)
+		if (state >= ClientState::StateLoadLevel)
 		{
 			GLWWindowManager::instance()->simulate(ClientState::StateLoadLevel, MIN(0.25f, timeDelay));
 			GLWWindowManager::instance()->draw(ClientState::StateLoadLevel);

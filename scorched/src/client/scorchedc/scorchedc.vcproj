@@ -3481,6 +3481,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\client\ClientSyncLevelHandler.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\client\ClientSyncLevelHandler.h"
+				>
+			</File>
+			<File
 				RelativePath="..\client\ClientWindowSetup.cpp"
 				>
 			</File>

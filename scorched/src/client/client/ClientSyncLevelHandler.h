@@ -18,49 +18,28 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
+#if !defined(__INCLUDE_ClientSyncLevelHandlerh_INCLUDE__)
+#define __INCLUDE_ClientSyncLevelHandlerh_INCLUDE__
 
-#if !defined(__INCLUDE_ClientStateh_INCLUDE__)
-#define __INCLUDE_ClientStateh_INCLUDE__
+#include <coms/ComsMessageHandler.h>
 
-#include <engine/GameState.h>
-
-namespace ClientState  
+class ClientSyncLevelHandler : 
+	public ComsMessageHandlerI
 {
-	enum Stimulus
-	{
-		StimOptions = 1,
-		StimConnect,
-		StimLoadFiles,
-		StimLoadLevel,
-		StimWait,
-		StimBuyWeapons,
-		StimAutoDefense,
-		StimPlaying,
-		StimDisconnected,
-		StimGameStopped,
-		StimShot,
-		StimScore
-	};
+public:
+	static ClientSyncLevelHandler *instance();
 
-	enum State
-	{
-		StateOptions = 1,
-		StateConnect,
-		StateDisconnected,
-		StateLoadFiles,
-		StateLoadLevel,
-		StateWait,
-		StateBuyWeapons,
-		StateAutoDefense,
-		StatePlaying,
-		StateShot,
-		StateScore
-	};
+	virtual bool processMessage(
+		NetMessage &message,
+		const char *messageType,
+		NetBufferReader &reader);
 
-	void setupGameState();
-	void addWindowManager(GameState &gameState, unsigned state);
-	void addStandardComponents(GameState &gameState, unsigned state);
-	void addMandatoryComponents(GameState &gameState, unsigned state);
+protected:
+	static ClientSyncLevelHandler *instance_;
+
+private:
+	ClientSyncLevelHandler();
+	virtual ~ClientSyncLevelHandler();
 };
 
-#endif
+#endif // __INCLUDE_ClientSyncLevelHandlerh_INCLUDE__

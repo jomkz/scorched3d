@@ -26,6 +26,7 @@
 #include <tank/TankState.h>
 #include <coms/ComsLoadLevelMessage.h>
 #include <coms/ComsMessageSender.h>
+#include <coms/ComsSyncLevelMessage.h>
 
 ServerLoadLevel *ServerLoadLevel::instance_ = 0;
 
@@ -117,6 +118,8 @@ bool ServerLoadLevel::processMessage(
 
 	// Else the level is up to date
 	// Send the diffs to the level to bring it in sync with the server
+	ComsSyncLevelMessage syncMessage;
+	ComsMessageSender::sendToSingleClient(syncMessage, destinationId);
 
 	return true;
 }

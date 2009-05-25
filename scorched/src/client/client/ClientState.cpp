@@ -157,25 +157,8 @@ void ClientState::setupGameState()
 	gameState.addStateStimulus(StateConnect, 
 		StimOptions, StateOptions);
 	gameState.addStateStimulus(StateConnect, 
-		StimGetPlayers, StateGetPlayers);
-	gameState.addStateStimulus(StateConnect, 
-		StimLoadPlayers, StateLoadPlayers);
-	gameState.addStateStimulus(StateConnect, 
 		StimLoadFiles, StateLoadFiles);
-
-	// StateGetPlayers
-	addWindowManager(gameState, StateGetPlayers);
-	gameState.addStateLoop(StateGetPlayers, 
-		Main2DCamera::instance(), GLWToolTip::instance());
-	gameState.addStateLoop(StateGetPlayers, 
-		Main2DCamera::instance(), SoftwareMouse::instance());
-	gameState.addStateStimulus(StateGetPlayers, 
-		StimGameStopped, StateGetPlayers);
-	gameState.addStateStimulus(StateGetPlayers, 
-		StimDisconnected, StateDisconnected);
-	gameState.addStateStimulus(StateGetPlayers, 
-		StimWait, StateWait);
-
+	
 	// StateLoadFiles
 	addWindowManager(gameState, StateLoadFiles);
 	gameState.addStateLoop(StateLoadFiles, 
@@ -183,20 +166,28 @@ void ClientState::setupGameState()
 	gameState.addStateLoop(StateLoadFiles, 
 		Main2DCamera::instance(), SoftwareMouse::instance());
 	gameState.addStateStimulus(StateLoadFiles, 
-		StimGetPlayers, StateGetPlayers);
-	gameState.addStateStimulus(StateLoadFiles, 
 		StimGameStopped, StateConnect);
 	gameState.addStateStimulus(StateLoadFiles, 
 		StimDisconnected, StateDisconnected);
 	gameState.addStateStimulus(StateLoadFiles, 
 		StimWait, StateWait);
+	gameState.addStateStimulus(StateLoadFiles, 
+		StimLoadLevel, StateLoadLevel);
 
-	// StateLoadPlayers (Single Player Only)
-	addWindowManager(gameState, StateLoadPlayers);
-	gameState.addStateEntry(StateLoadPlayers,
-		ClientLoadPlayersState::instance());
-	gameState.addStateStimulus(StateLoadPlayers,
+	// StateLoadLevel
+	addWindowManager(gameState, StateLoadLevel);
+	gameState.addStateLoop(StateLoadLevel, 
+		Main2DCamera::instance(), GLWToolTip::instance());
+	gameState.addStateLoop(StateLoadLevel, 
+		Main2DCamera::instance(), SoftwareMouse::instance());
+	gameState.addStateStimulus(StateLoadLevel, 
+		StimGameStopped, StateConnect);
+	gameState.addStateStimulus(StateLoadLevel, 
+		StimDisconnected, StateDisconnected);
+	gameState.addStateStimulus(StateLoadLevel, 
 		StimWait, StateWait);
+	gameState.addStateStimulus(StateLoadLevel, 
+		StimLoadLevel, StateLoadLevel);
 
 	// StateDisconnected
 	addWindowManager(gameState, StateDisconnected);
@@ -207,8 +198,6 @@ void ClientState::setupGameState()
 	gameState.addStateStimulus(StateDisconnected, 
 		StimGameStopped, StateDisconnected);
 	gameState.addStateStimulus(StateDisconnected, 
-		StimGetPlayers, StateDisconnected);
-	gameState.addStateStimulus(StateDisconnected, 
 		StimWait, StateDisconnected);
 
 	// StateWait
@@ -217,8 +206,6 @@ void ClientState::setupGameState()
 		Main2DCamera::instance(), ShotCountDown::instance());
 	gameState.addStateEntry(StateWait, 
 		TankKeyboardControl::instance());
-	gameState.addStateStimulus(StateWait, 
-		StimGameStopped, StateGetPlayers);
 	gameState.addStateStimulus(StateWait, 
 		StimDisconnected, StateDisconnected);
 	gameState.addStateStimulus(StateWait, 
@@ -233,8 +220,6 @@ void ClientState::setupGameState()
 		StimWait, StateWait);
 	gameState.addStateStimulus(StateWait, 
 		StimScore, StateScore);
-	gameState.addStateStimulus(StateWait, 
-		StimGetPlayers, StateGetPlayers);
 
 	// StateBuyWeapons
 	addStandardComponents(gameState, StateBuyWeapons);
@@ -242,8 +227,6 @@ void ClientState::setupGameState()
 		Main2DCamera::instance(), ShotCountDown::instance());
 	gameState.addStateStimulus(StateBuyWeapons, 
 		StimDisconnected, StateDisconnected);
-	gameState.addStateStimulus(StateBuyWeapons, 
-		StimGameStopped, StateGetPlayers);
 	gameState.addStateStimulus(StateBuyWeapons, 
 		StimAutoDefense, StateAutoDefense);
 	gameState.addStateStimulus(StateBuyWeapons, 
@@ -256,8 +239,6 @@ void ClientState::setupGameState()
 	gameState.addStateStimulus(StateAutoDefense, 
 		StimDisconnected, StateDisconnected);
 	gameState.addStateStimulus(StateAutoDefense, 
-		StimGameStopped, StateGetPlayers);
-	gameState.addStateStimulus(StateAutoDefense, 
 		StimWait, StateWait);
 
 	// StatePlaying
@@ -266,8 +247,6 @@ void ClientState::setupGameState()
 		TankKeyboardControl::instance());
 	gameState.addStateLoop(StatePlaying,
 		Main2DCamera::instance(), ShotCountDown::instance());
-	gameState.addStateStimulus(StatePlaying, 
-		StimGameStopped, StateGetPlayers);
 	gameState.addStateStimulus(StatePlaying, 
 		StimDisconnected, StateDisconnected);
 	gameState.addStateStimulus(StatePlaying, 
@@ -285,8 +264,6 @@ void ClientState::setupGameState()
 		StimDisconnected, StateDisconnected);
 	gameState.addStateStimulus(StateShot, 
 		StimWait, StateWait);
-	gameState.addStateStimulus(StateShot, 
-		StimGameStopped, StateGetPlayers);
 
 	// StateScore
 	addStandardComponents(gameState, StateScore);
@@ -294,8 +271,6 @@ void ClientState::setupGameState()
 		MainCamera::instance(), ClientSaveScreenState::instance());
 	gameState.addStateStimulus(StateScore, 
 		StimDisconnected, StateDisconnected);
-	gameState.addStateStimulus(StateScore, 
-		StimGameStopped, StateGetPlayers);
 	gameState.addStateStimulus(StateScore, 
 		StimWait, StateWait);
 }

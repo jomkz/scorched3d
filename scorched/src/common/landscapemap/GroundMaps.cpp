@@ -26,7 +26,6 @@
 #include <landscapedef/LandscapeDefinitions.h>
 #include <landscapedef/LandscapeDefinitionCache.h>
 #include <target/Target.h>
-#include <placement/PlacementTankPosition.h>
 #include <movement/TargetMovement.h>
 #include <common/Logger.h>
 #include <tankai/TankAIAdder.h>
@@ -65,10 +64,6 @@ void GroundMaps::generateMaps(
 	}
 #endif
 	generateObjects(context, counter);
-
-	// Place the tanks after the objects and hmap
-	// This can remove objects, and flatten the hmap
-	PlacementTankPosition::flattenTankPositions(context);
 
 	// Create movement after targets, so we can mark 
 	// those targets that are in movement groups
