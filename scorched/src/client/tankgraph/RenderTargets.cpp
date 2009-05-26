@@ -81,7 +81,7 @@ void RenderTargets::Renderer3D::simulate(const unsigned state, float simTime)
 	stepTime += simTime;
 
 	// step size = 1.0 / physics fps = steps per second
-	const float stepSize = 1.0f / float(ScorchedClient::instance()->getOptionsGame().getPhysicsFPS());
+	const float stepSize = 0.02f;
 	if (stepTime >= stepSize)
 	{
 		float time = stepTime * ScorchedClient::instance()->getActionController().getFast().asFloat();

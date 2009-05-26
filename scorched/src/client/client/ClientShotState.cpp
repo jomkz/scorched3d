@@ -70,8 +70,8 @@ bool ClientShotState::processMessage(
 	playShots_.readMessage(playMovesMessage);
 
 	// Play the shots
-	ScorchedClient::instance()->getActionController().
-		getRandom().seed(playMovesMessage.getSeed());
+	//ScorchedClient::instance()->getActionController().
+	//	getRandom().seed(playMovesMessage.getSeed());
 	shotState_.setup();
 
 	// Ensure and move to the shot state

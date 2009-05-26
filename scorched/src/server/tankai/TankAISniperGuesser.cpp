@@ -38,7 +38,7 @@ bool TankAISniperGuesser::guess(Tank *tank, Vector &target,
 	float distForSniper, bool checkIntersection, float offset)
 {
 	fixed angleXYDegs, angleYZDegs, power;
-	RandomGenerator generator;
+	FileRandomGenerator generator;
 	generator.seed(rand());
 
 	FixedVector shotPosition = tank->getPosition().getTankPosition();

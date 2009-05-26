@@ -39,7 +39,7 @@ void PlacementTankPosition::flattenTankPositions(
 		LandscapeDefinitionCache &definitions = 
 			context.getLandscapeMaps().getDefinitions();
 
-		RandomGenerator generator;
+		FileRandomGenerator generator;
 		generator.seed(definitions.getSeed());
 
 		std::map<unsigned int, Tank *> &tanks = 

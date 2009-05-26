@@ -160,12 +160,11 @@ void OptionsTransient::nextRound()
 		currentGameNo_.setValue(currentGameNo_.getValue() + 1);
 	}
 	newGame_ = false;
-	nextRoundWind();
 }
 
 void OptionsTransient::newGameWind()
 {
-	RandomGenerator random;
+	FileRandomGenerator random;
 	random.seed(rand());
 
 	switch(optionsGame_.getWindForce())
@@ -212,28 +211,6 @@ void OptionsTransient::newGameWind()
 		windStartAngle_.setValue(0);
 		windAngle_.setValue(0);
 		windDirection_.setValue(FixedVector::getNullVector());
-	}
-}
-
-void OptionsTransient::nextRoundWind()
-{
-	if (optionsGame_.getWindType() != OptionsGame::WindOnMove)
-	{
-		return;
-	}
-
-	if (windSpeed_.getValue() > 0)
-	{
-		RandomGenerator random;
-		random.seed(rand());
-
-		fixed winAngle = windStartAngle_.getValue() + ((random.getRandFixed() * 40) - 20);
-		windAngle_.setValue(winAngle);
-		
-		fixed windDirX = (winAngle / fixed(180) * fixed::XPI).sin();
-		fixed windDirY = (winAngle / fixed(180) * fixed::XPI).cos();
-		FixedVector windDir(windDirX, windDirY, 0);
-		windDirection_.setValue(windDir);
 	}
 }
 

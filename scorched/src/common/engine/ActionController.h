@@ -23,14 +23,12 @@
 
 #include <set>
 #include <list>
+#include <map>
 #include <vector>
-#include <engine/GameStateI.h>
 #include <engine/Action.h>
-#include <engine/EventContainer.h>
-#include <common/RandomGenerator.h>
 
 class ScorchedContext;
-class ActionController : public GameStateI
+class ActionController
 {
 public:
 	ActionController();
@@ -54,8 +52,6 @@ public:
 	void addSyncCheck(const std::string &msg);
 	std::vector<std::string> &getSyncCheck() { return syncCheck_; }
 
-	RandomGenerator &getRandom() { return random_; }
-	EventContainer &getEvents() { return events_; }
 	fixed getActionTime() { return time_; }
 
 	// Set the simulation speed
@@ -64,8 +60,8 @@ public:
 	fixed getFast() { return speed_; }
 
 	// Inherited from GameStateI
-	virtual void simulate(const unsigned state, float frameTime);
-	virtual void draw(const unsigned state);
+	void simulate(fixed frameTime);
+	void draw();
 
 protected:
 	class ActionList
@@ -100,8 +96,6 @@ protected:
 	};
 
 	ScorchedContext *context_;
-	EventContainer events_;
-	RandomGenerator random_;
 	std::list<Action *> newActions_, newLastActions_;
 	std::vector<std::string> syncCheck_;
 	ActionList actions_;
@@ -118,7 +112,6 @@ protected:
 	bool stopImmediately_;
 
 	bool allEvents();
-	void stepActions(fixed frameTime);
 	void addNewActions();
 	void addNewLastActions();
 

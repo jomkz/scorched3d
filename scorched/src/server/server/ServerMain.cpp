@@ -33,7 +33,7 @@
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
-#include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <engine/ModFiles.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <landscapemap/LandscapeMaps.h>
@@ -229,7 +229,7 @@ void serverLoop()
 		ServerKeepAliveHandler::instance()->checkKeepAlives();
 		*/
 
-		ScorchedServer::instance()->getActionController().simulate(0, timeDifference);
+		ScorchedServer::instance()->getSimulator().simulate();
 
 		ServerFileServer::instance()->simulate(timeDifference);
 		ServerChannelManager::instance()->simulate(timeDifference);

@@ -27,7 +27,7 @@
 #include <client/ClientState.h>
 #include <landscape/Landscape.h>
 #include <tankgraph/RenderTargets.h>
-#include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <lang/LangResource.h>
 
 CameraDialog *CameraDialog::instance_ = 0;
@@ -163,7 +163,7 @@ void CameraDialog::drawLandscape()
 	RenderTargets::instance()->render3D.draw(0);
 	Landscape::instance()->drawWater();
 	Landscape::instance()->drawObjects();
-	ScorchedClient::instance()->getActionController().draw(0);
+	ScorchedClient::instance()->getSimulator().draw();
 	ScorchedClient::instance()->getParticleEngine().draw(0);
 	targetCam_.drawPrecipitation();
 }

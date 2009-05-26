@@ -20,7 +20,7 @@
 
 #include <weapons/WeaponGroupSelect.h>
 #include <weapons/AccessoryStore.h>
-#include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeTex.h>
 #include <target/Target.h>
@@ -70,7 +70,7 @@ void WeaponGroupSelect::fireWeapon(ScorchedContext &context,
 	// Select the object
 	int objectCount = groupEntry->getObjectCount();
 	if (objectCount == 0) return;
-	unsigned int object = context.getActionController().getRandom().getRandUInt() % objectCount;
+	unsigned int object = context.getSimulator().getRandomGenerator().getRandUInt() % objectCount;
 	TargetGroup *entry = groupEntry->getObjectByPos(object);
 
 	FixedVector newPosition = entry->getTarget()->getLife().getTargetPosition();

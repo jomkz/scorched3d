@@ -94,7 +94,6 @@ protected:
 	bool newGame_;
 	void newGameWind();
 	void newGameWall();
-	void nextRoundWind();
 
 };
 

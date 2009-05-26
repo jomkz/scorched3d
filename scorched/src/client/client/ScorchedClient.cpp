@@ -21,6 +21,7 @@
 #include <client/ScorchedClient.h>
 #include <engine/MainLoop.h>
 #include <engine/GameState.h>
+#include <engine/Simulator.h>
 #include <graph/MainCamera.h>
 #include <graph/ParticleEngine.h>
 #include <graph/OptionsDisplay.h>
@@ -59,6 +60,8 @@ ScorchedClient::ScorchedClient() :
 
 	getLandscapeMaps().getGroundMaps().getHeightMap().setGraphicalMap(
 		new GraphicalLandscapeMap());
+
+	simulatorGameState_ = new SimulatorGameState(&getSimulator());
 }
 
 ScorchedClient::~ScorchedClient()

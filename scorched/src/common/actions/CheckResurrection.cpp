@@ -21,6 +21,7 @@
 #include <actions/CheckResurrection.h>
 #include <actions/Resurrection.h>
 #include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <placement/PlacementTankPosition.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
@@ -62,7 +63,7 @@ void CheckResurrection::simulate(fixed frameTime, bool &remove)
 				FixedVector tankPos = PlacementTankPosition::placeTank(
 					tank->getPlayerId(), tank->getTeam(),
 					*context_,
-					context_->getActionController().getRandom());
+					context_->getSimulator().getRandomGenerator());
 
 				Resurrection *rez = new Resurrection(
 					tank->getPlayerId(), tankPos);

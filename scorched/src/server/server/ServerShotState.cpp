@@ -109,8 +109,8 @@ void ServerShotState::enterState(const unsigned state)
 
 	// Play the shots
 	//ScorchedServer::instance()->getTankContainer().setAllNotReady();
-	ScorchedServer::instance()->getActionController().getRandom().seed(seed);
-	shotState_.setup();
+	//ScorchedServer::instance()->getActionController().getRandom().seed(seed);
+	//shotState_.setup();
 }
 
 bool ServerShotState::acceptStateChange(const unsigned state, 

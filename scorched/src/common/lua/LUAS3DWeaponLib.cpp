@@ -27,6 +27,7 @@
 #include <actions/Napalm.h>
 #include <actions/Laser.h>
 #include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <common/Logger.h>
 
 #define LUA_LIB
@@ -49,7 +50,7 @@ static int s3d_random(lua_State *L)
 {
 	LUAScript *wrapper = getScript(L);
 	fixed result = wrapper->getContext()->
-		getActionController().getRandom().getRandFixed();
+		getSimulator().getRandomGenerator().getRandFixed();
 
 	lua_pushnumber(L, result.getInternal());
 	return 1;

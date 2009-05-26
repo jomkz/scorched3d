@@ -162,7 +162,7 @@ void GroundMaps::generateObjects(
 			itor++)
 		{
 			LandscapeInclude *place = (*itor);
-			RandomGenerator objectsGenerator;
+			FileRandomGenerator objectsGenerator;
 			objectsGenerator.seed(defnCache_.getSeed());
 			generateObject(objectsGenerator, *place, 
 				context, playerId, counter);
@@ -176,7 +176,7 @@ void GroundMaps::generateObjects(
 			itor++)
 		{
 			LandscapeInclude *place = (*itor);
-			RandomGenerator objectsGenerator;
+			FileRandomGenerator objectsGenerator;
 			objectsGenerator.seed(defnCache_.getSeed());
 			generateObject(objectsGenerator, *place, 
 				context, playerId, counter);

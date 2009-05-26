@@ -1401,6 +1401,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\engine\Simulator.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\engine\Simulator.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\engine\ViewPoints.cpp"
 				>
 			</File>

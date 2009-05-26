@@ -104,7 +104,7 @@ void ShotState::setup()
 	firstTime_ = true;
 
 	// Add all of the new events
-	context_.getActionController().getEvents().initialize(context_);
+	//context_.getActionController().getEvents().initialize(context_);
 }
 
 bool ShotState::run(float frameTime)
@@ -123,7 +123,7 @@ bool ShotState::run(float frameTime)
 		Logger::log(S3D::formatStringBuffer(
 			"Finished playing Shots %.2f seconds", 
 				context_.getActionController().getActionTime().asFloat()));
-		context_.getActionController().getEvents().clear();
+		//context_.getActionController().getEvents().clear();
 		context_.getActionController().logProfiledActions();
 		context_.getActionController().setStopImmediately(false);
 

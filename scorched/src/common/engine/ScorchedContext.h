@@ -39,6 +39,7 @@ class TankModelStore;
 class TankTeamScore;
 class LUAScriptFactory;
 class LUAScriptHook;
+class Simulator;
 
 class ScorchedContext
 {
@@ -69,6 +70,7 @@ public:
 	TankModelStore &getTankModels() { return *tankModelStore; }
 	LUAScriptFactory &getLUAScriptFactory() { return *luaScriptFactory; }
 	LUAScriptHook &getLUAScriptHook() { return *luaScriptHook; }
+	Simulator &getSimulator() { return *simulator; }
 
 protected:
 	ActionController *actionController;
@@ -89,6 +91,7 @@ protected:
 	TargetMovement *targetMovement;
 	LUAScriptFactory *luaScriptFactory;
 	LUAScriptHook *luaScriptHook;
+	Simulator *simulator;
 	bool serverMode;
 };
 

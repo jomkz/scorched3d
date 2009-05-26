@@ -50,7 +50,7 @@ void TargetMovement::generate(ScorchedContext &context)
 		*context.getLandscapeMaps().getDefinitions().getTex();
 	LandscapeDefn &defn = 
 		*context.getLandscapeMaps().getDefinitions().getDefn();
-	RandomGenerator random;
+	FileRandomGenerator random;
 	random.seed(context.getLandscapeMaps().getDefinitions().getSeed());
 
 	addMovements(context, random, tex.texDefn.includes);

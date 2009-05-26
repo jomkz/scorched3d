@@ -26,7 +26,6 @@
 #include <list>
 
 ActionController::ActionController() : 
-	GameStateI("ActionController"),
 	speed_(1), referenceCount_(0), time_(0), 
 	context_(0), lastTraceTime_(0),
 	actionTracing_(false), stepTime_(0),
@@ -271,7 +270,7 @@ void ActionController::addNewActions()
 	}
 }
 
-void ActionController::draw(const unsigned state)
+void ActionController::draw()
 {
 	// Itterate and draw all of the actions
 	for (int a=0; a<actions_.actionCount; a++)
@@ -281,29 +280,7 @@ void ActionController::draw(const unsigned state)
 	}
 }
 
-void ActionController::simulate(const unsigned state, float ft)
-{
-	fixed frameTime = fixed::fromFloat(ft);
-
-	frameTime *= speed_;
-
-	// As this simulator gives differing results dependant on
-	// step size, always ensure step size is the same
-	stepTime_ += frameTime;
-
-	// step size = 1.0 / physics fps = steps per second
-	const fixed stepSize = fixed(1) / fixed(context_->getOptionsGame().getPhysicsFPS());
-	while (stepTime_ >= stepSize && !(stopImmediately_ && noReferencedActions()))
-	{
-		time_ += stepSize;
-		stepActions(stepSize);
-
-		// More time has passed
-		stepTime_ -= stepSize;
-	}
-}
-
-void ActionController::stepActions(fixed frameTime)
+void ActionController::simulate(fixed frameTime)
 {
 	// Ensure any new last actions are added
 	addNewLastActions();
@@ -312,12 +289,12 @@ void ActionController::stepActions(fixed frameTime)
 	addNewActions();
 
 	// Add any new events (if allowed)
-	if (time_ < 10 && !allEvents())
+	/*if (time_ < 10 && !allEvents())
 	{
 		actionEvents_ = true;
 		events_.simulate(frameTime, *context_);
 		actionEvents_ = false;
-	}
+	}*/
 
 	// Move the targets
 	context_->getTargetMovement().simulate(*context_, frameTime);

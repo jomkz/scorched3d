@@ -137,8 +137,6 @@ static OptionEntryStringEnum::EnumEntry authHandlerEnum[] =
 };
 
 OptionsGame::OptionsGame() :
-	physicsFPS_(options_, "PhysicsFPS",
-		"The speed at which the physics engine will calculate steps", 0, 66, 20, 100, 1),
 	tutorial_(options_, "Tutorial",
 		"The tutorial to load for this game", 0, ""),
 	scorePerMoney_(options_, "ScorePerMoney",

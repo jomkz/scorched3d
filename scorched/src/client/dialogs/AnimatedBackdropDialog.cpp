@@ -25,7 +25,7 @@
 #include <graph/MainCamera.h>
 #include <graph/Main2DCamera.h>
 #include <graph/OptionsDisplay.h>
-#include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <engine/MainLoop.h>
 #include <tankgraph/RenderTargets.h>
 #include <landscape/Landscape.h>
@@ -136,7 +136,7 @@ void AnimatedBackdropDialog::simulate(float frameTime)
 	Landscape::instance()->simulate(frameTime);
 	RenderTargets::instance()->render2D.simulate(0, frameTime);
 	RenderTargets::instance()->render3D.simulate(0, frameTime);
-	ScorchedClient::instance()->getActionController().simulate(0, frameTime);
+	ScorchedClient::instance()->getSimulator().simulate();
 	ScorchedClient::instance()->getParticleEngine().simulate(0, frameTime);
 
 	MainCamera::instance()->getTarget().setCameraType(TargetCamera::CamFree);

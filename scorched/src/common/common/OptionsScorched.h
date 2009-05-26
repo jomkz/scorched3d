@@ -50,7 +50,6 @@ public:
 	OPTIONINT_GETTER(ManagementPortNo);
 
 	OPTIONSTRING_GETTER(Tutorial);
-	OPTIONINT_GETTER(PhysicsFPS);
 	OPTIONINT_GETTER(Teams);
 	OPTIONINT_GETTER(StartArmsLevel);
 	OPTIONINT_GETTER(EndArmsLevel);

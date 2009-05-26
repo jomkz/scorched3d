@@ -20,6 +20,7 @@
 
 #include <engine/ScorchedContext.h>
 #include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <target/TargetContainer.h>
 #include <target/TargetDamageCalc.h>
 #include <target/TargetRenderer.h>
@@ -279,7 +280,7 @@ void Napalm::simulateAddEdge(int x, int y)
 	} 
 
 	// Add this current point to the napalm map
-	RandomGenerator &random = context_->getActionController().getRandom();
+	RandomGenerator &random = context_->getSimulator().getRandomGenerator();
 	int offset = (random.getRandFixed() * 31).asInt();
 	NapalmEntry *newEntry = new NapalmEntry(x, y, offset, particleSet_);
 	napalmPoints_.push_back(newEntry);

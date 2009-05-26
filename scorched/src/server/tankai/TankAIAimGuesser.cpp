@@ -89,7 +89,7 @@ void TankAIAimGuesser::initialShot(Tank *tank, Vector &target)
 	fixed power;
 
 	// Makes a randow powered shot towards the target
-	RandomGenerator random;
+	FileRandomGenerator random;
 	random.seed(rand());
 	TankLib::getShotTowardsPosition(
 		ScorchedServer::instance()->getContext(),
