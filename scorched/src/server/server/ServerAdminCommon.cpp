@@ -196,7 +196,7 @@ bool ServerAdminCommon::mutePlayer(ServerAdminSessions::Credential &credential, 
 
 	adminLog(ChannelText("info",
 		mute?"ADMIN_MUTE":"ADMIN_UNMUTE",
-		mute?"\"{0}\" admin mute \"{0}\"":"\"{0}\" admin unmute \"{0}\"",
+		mute?"\"{0}\" admin mute \"{1}\"":"\"{0}\" admin unmute \"{1}\"",
 		credential.username,
 		targetTank->getTargetName()));
 	targetTank->getState().setMuted(mute); 
