@@ -22,6 +22,10 @@
 #include <engine/ScorchedContext.h>
 #include <movement/TargetMovement.h>
 #include <SDL/SDL.h>
+#include <server/ScorchedServer.h>
+#ifndef S3D_SERVER
+#include <client/ScorchedClient.h>
+#endif
 
 static const fixed StepSize = fixed(true, 20);
 
@@ -86,6 +90,50 @@ void Simulator::actualSimulate(fixed frameTime)
 void Simulator::draw()
 {
 	actionController_.draw();
+}
+
+bool Simulator::writeTimeMessage(NetBuffer &buffer)
+{
+	// Simulator time
+	buffer.addToBuffer(stepTime_);
+	buffer.addToBuffer(totalTime_);
+
+	return true;
+}
+
+bool Simulator::readTimeMessage(NetBufferReader &reader)
+{
+#ifndef S3D_SERVER
+	firstItteration_ = true;
+
+	// Simulator time
+	if (!reader.getFromBuffer(stepTime_)) return false;
+	if (!reader.getFromBuffer(totalTime_)) return false;
+#endif
+	return true;
+}
+
+bool Simulator::writeSyncMessage(NetBuffer &buffer)
+{
+	// Random seeds
+	if (!random_.writeMessage(buffer)) return false;
+
+	// Target movement
+	if (!ScorchedServer::instance()->getTargetMovement().writeMessage(buffer)) return false;
+
+	return true;
+}
+
+bool Simulator::readSyncMessage(NetBufferReader &reader)
+{
+#ifndef S3D_SERVER
+	// Random seeds
+	if (!random_.readMessage(reader)) return false;
+
+	// Target Movement
+	if (!ScorchedClient::instance()->getTargetMovement().readMessage(reader)) return false;
+#endif
+	return true;
 }
 
 SimulatorGameState::SimulatorGameState(Simulator *simulator) :

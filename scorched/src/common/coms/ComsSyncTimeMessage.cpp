@@ -18,31 +18,36 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerLoadLevelh_INCLUDE__)
-#define __INCLUDE_ServerLoadLevelh_INCLUDE__
-
-#include <coms/ComsMessageHandler.h>
-
-class ServerLoadLevel : public ComsMessageHandlerI
-{
-public:
-	static ServerLoadLevel *instance();
-
-	static void destinationLoadLevel(unsigned int destinationId);
-	static bool destinationUsingCurrentLevel(unsigned int destinationId);
-
-	virtual bool processMessage(
-		NetMessage &message,
-		const char *messageType,
-		NetBufferReader &reader);
-
-protected:
-	static ServerLoadLevel *instance_;
-
-private:
-	ServerLoadLevel();
-	virtual ~ServerLoadLevel();
-
-};
-
+#include <coms/ComsSyncTimeMessage.h>
+#ifndef S3D_SERVER
+#include <client/ScorchedClient.h>
 #endif
+#include <server/ScorchedServer.h>
+#include <engine/Simulator.h>
+
+ComsSyncTimeMessage::ComsSyncTimeMessage() :
+	ComsMessage("ComsSyncTimeMessage")
+{
+}
+
+ComsSyncTimeMessage::~ComsSyncTimeMessage()
+{
+}
+
+bool ComsSyncTimeMessage::writeMessage(NetBuffer &buffer)
+{
+	// Simulator state
+	if (!ScorchedServer::instance()->getSimulator().writeTimeMessage(buffer)) return false;
+
+	return true;
+}
+
+bool ComsSyncTimeMessage::readMessage(NetBufferReader &reader)
+{
+#ifndef S3D_SERVER
+	// Simulator state
+	if (!ScorchedClient::instance()->getSimulator().readTimeMessage(reader)) return false;
+#endif
+	
+	return true;
+}

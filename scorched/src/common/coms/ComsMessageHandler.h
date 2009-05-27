@@ -49,17 +49,6 @@ public:
 		NetBufferReader &reader) = 0;
 };
 
-class ComsMessageHandlerSentI
-{
-public:
-	virtual ~ComsMessageHandlerSentI();
-
-	virtual bool processSentMessage(
-		unsigned int id,
-		const char *message,
-		NetBufferReader &reader) = 0;
-};
-
 class ComsMessageHandler : public NetMessageHandlerI
 {
 public:
@@ -72,7 +61,7 @@ public:
 	void addHandler(const char *messageType,
 		ComsMessageHandlerI *handler);
 	void addSentHandler(const char *messageType,
-		ComsMessageHandlerSentI *handler);
+		ComsMessageHandlerI *handler);
 
 	// Inherited from NetMessageHandlerI
 	virtual void processMessage(NetMessage &message);
@@ -82,7 +71,7 @@ public:
 protected:
 	std::string instanceName_;
 	std::map<std::string, ComsMessageHandlerI *> recvHandlerMap_;
-	std::map<std::string, ComsMessageHandlerSentI *> sentHandlerMap_;
+	std::map<std::string, ComsMessageHandlerI *> sentHandlerMap_;
 	ComsMessageConnectionHandlerI *connectionHandler_;
 
 	bool comsMessageLogging_;

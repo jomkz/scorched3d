@@ -18,18 +18,16 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerLoadLevelh_INCLUDE__)
-#define __INCLUDE_ServerLoadLevelh_INCLUDE__
+#if !defined(__INCLUDE_ClientSyncTimeHandlerh_INCLUDE__)
+#define __INCLUDE_ClientSyncTimeHandlerh_INCLUDE__
 
 #include <coms/ComsMessageHandler.h>
 
-class ServerLoadLevel : public ComsMessageHandlerI
+class ClientSyncTimeHandler : 
+	public ComsMessageHandlerI
 {
 public:
-	static ServerLoadLevel *instance();
-
-	static void destinationLoadLevel(unsigned int destinationId);
-	static bool destinationUsingCurrentLevel(unsigned int destinationId);
+	static ClientSyncTimeHandler *instance();
 
 	virtual bool processMessage(
 		NetMessage &message,
@@ -37,12 +35,11 @@ public:
 		NetBufferReader &reader);
 
 protected:
-	static ServerLoadLevel *instance_;
+	static ClientSyncTimeHandler *instance_;
 
 private:
-	ServerLoadLevel();
-	virtual ~ServerLoadLevel();
-
+	ClientSyncTimeHandler();
+	virtual ~ClientSyncTimeHandler();
 };
 
-#endif
+#endif // __INCLUDE_ClientSyncTimeHandlerh_INCLUDE__

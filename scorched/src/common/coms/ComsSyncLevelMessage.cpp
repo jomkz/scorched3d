@@ -26,7 +26,7 @@
 #include <tank/TankTeamScore.h>
 #include <tank/TankContainer.h>
 #include <target/TargetContainer.h>
-#include <movement/TargetMovement.h>
+#include <engine/Simulator.h>
 #include <common/Logger.h>
 #include <map>
 
@@ -62,11 +62,11 @@ bool ComsSyncLevelMessage::writeMessage(NetBuffer &buffer)
 		}
 	}
 
-	// Target movement
-	if (!ScorchedServer::instance()->getTargetMovement().writeMessage(buffer)) return false;
-
 	// Team score
 	if (!ScorchedServer::instance()->getContext().getTankTeamScore().writeMessage(buffer)) return false;
+
+	// Simulator state
+	if (!ScorchedServer::instance()->getSimulator().writeSyncMessage(buffer)) return false;
 
 	// Send landscape deforms
 	deformInfos_ = DeformLandscape::getInfos();
@@ -215,11 +215,11 @@ bool ComsSyncLevelMessage::readMessage(NetBufferReader &reader)
 		}
 	}
 
-	// Get all of the movement information
-	if (!ScorchedClient::instance()->getTargetMovement().readMessage(reader)) return false;
-
 	// Get the tank team
 	if (!ScorchedClient::instance()->getContext().getTankTeamScore().readMessage(reader)) return false;
+
+	// Simulator state
+	if (!ScorchedClient::instance()->getSimulator().readSyncMessage(reader)) return false;
 
 	// Get the landscape deforms
 	int infosSize = 0;

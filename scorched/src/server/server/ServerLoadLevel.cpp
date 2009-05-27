@@ -24,9 +24,10 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
-#include <coms/ComsLoadLevelMessage.h>
 #include <coms/ComsMessageSender.h>
+#include <coms/ComsLoadLevelMessage.h>
 #include <coms/ComsSyncLevelMessage.h>
+#include <coms/ComsSyncTimeMessage.h>
 
 ServerLoadLevel *ServerLoadLevel::instance_ = 0;
 
@@ -115,6 +116,10 @@ bool ServerLoadLevel::processMessage(
 		destinationLoadLevel(destinationId);
 		return true;
 	}
+
+	// Send the current server time to the client
+	ComsSyncTimeMessage syncTimeMessage;
+	ComsMessageSender::sendToSingleClient(syncTimeMessage, destinationId);
 
 	// Else the level is up to date
 	// Send the diffs to the level to bring it in sync with the server

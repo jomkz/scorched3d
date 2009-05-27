@@ -22,6 +22,7 @@
 #define __INCLUDE_RandomGeneratorh_INCLUDE__
 
 #include <common/fixed.h>
+#include <net/NetBuffer.h>
 
 class RandomGenerator
 {
@@ -43,6 +44,9 @@ public:
 
 	virtual unsigned int getRandUInt();
 	virtual fixed getRandFixed();
+
+	bool writeMessage(NetBuffer &buffer);
+	bool readMessage(NetBufferReader &reader);
 
 protected:
 	static unsigned int bufferSize_;

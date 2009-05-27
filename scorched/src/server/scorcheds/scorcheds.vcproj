@@ -2389,6 +2389,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\coms\ComsSyncTimeMessage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\coms\ComsSyncTimeMessage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\coms\ComsTimerStartMessage.cpp"
 				>
 			</File>

@@ -94,3 +94,15 @@ fixed FileRandomGenerator::getRandFixed()
 
 	return result;
 }
+
+bool FileRandomGenerator::writeMessage(NetBuffer &buffer)
+{
+	buffer.addToBuffer(position_);
+	return true;
+}
+
+bool FileRandomGenerator::readMessage(NetBufferReader &reader)
+{
+	if (!reader.getFromBuffer(position_)) return false;
+	return true;
+}

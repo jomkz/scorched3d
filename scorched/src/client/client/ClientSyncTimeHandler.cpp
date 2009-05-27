@@ -18,31 +18,39 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerLoadLevelh_INCLUDE__)
-#define __INCLUDE_ServerLoadLevelh_INCLUDE__
+#include <client/ClientSyncTimeHandler.h>
+#include <client/ScorchedClient.h>
+#include <coms/ComsSyncTimeMessage.h>
 
-#include <coms/ComsMessageHandler.h>
+ClientSyncTimeHandler *ClientSyncTimeHandler::instance_ = 0;
 
-class ServerLoadLevel : public ComsMessageHandlerI
+ClientSyncTimeHandler *ClientSyncTimeHandler::instance()
 {
-public:
-	static ServerLoadLevel *instance();
+	if (!instance_)
+	{
+		instance_ = new ClientSyncTimeHandler;
+	}
+	return instance_;
+}
 
-	static void destinationLoadLevel(unsigned int destinationId);
-	static bool destinationUsingCurrentLevel(unsigned int destinationId);
+ClientSyncTimeHandler::ClientSyncTimeHandler()
+{
+	ScorchedClient::instance()->getComsMessageHandler().addHandler(
+		"ComsSyncTimeMessage",
+		this);
+}
 
-	virtual bool processMessage(
-		NetMessage &message,
-		const char *messageType,
-		NetBufferReader &reader);
+ClientSyncTimeHandler::~ClientSyncTimeHandler()
+{
+}
 
-protected:
-	static ServerLoadLevel *instance_;
+bool ClientSyncTimeHandler::processMessage(
+	NetMessage &netMessage,
+	const char *messageType, 
+	NetBufferReader &reader)
+{
+	ComsSyncTimeMessage message;
+	if (!message.readMessage(reader)) return false;
 
-private:
-	ServerLoadLevel();
-	virtual ~ServerLoadLevel();
-
-};
-
-#endif
+	return true;
+}

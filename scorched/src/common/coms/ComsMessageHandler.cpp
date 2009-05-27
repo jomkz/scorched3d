@@ -30,10 +30,6 @@ ComsMessageHandlerI::~ComsMessageHandlerI()
 {
 }
 
-ComsMessageHandlerSentI::~ComsMessageHandlerSentI()
-{
-}
-
 ComsMessageHandler::ComsMessageHandler(const char *instanceName) : 
 	instanceName_(instanceName),
 	connectionHandler_(0), comsMessageLogging_(false)
@@ -61,9 +57,9 @@ void ComsMessageHandler::addHandler(const char *messageType,
 }
 
 void ComsMessageHandler::addSentHandler(const char *messageType,
-		ComsMessageHandlerSentI *handler)
+		ComsMessageHandlerI *handler)
 {
-	std::map<std::string, ComsMessageHandlerSentI *>::iterator itor =
+	std::map<std::string, ComsMessageHandlerI *>::iterator itor =
 		sentHandlerMap_.find(messageType);
 	DIALOG_ASSERT(itor == sentHandlerMap_.end());
 
@@ -200,13 +196,13 @@ void ComsMessageHandler::processSentMessage(NetMessage &message)
 			messageType.c_str(), message.getDestinationId()));
 	}
 
-	std::map<std::string, ComsMessageHandlerSentI *>::iterator itor =
+	std::map<std::string, ComsMessageHandlerI *>::iterator itor =
 		sentHandlerMap_.find(messageType);
 	if (itor == sentHandlerMap_.end()) return;
 
-	ComsMessageHandlerSentI *handler = (*itor).second;
+	ComsMessageHandlerI *handler = (*itor).second;
 	const char *messageTypeStr = messageType.c_str();
-	if (!handler->processSentMessage(message.getDestinationId(), 
+	if (!handler->processMessage(message, 
 		messageTypeStr, reader))
 	{
 		char buffer[1024];

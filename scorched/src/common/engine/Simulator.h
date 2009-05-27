@@ -25,6 +25,7 @@
 #include <engine/EventContainer.h>
 #include <common/RandomGenerator.h>
 #include <engine/GameStateI.h>
+#include <net/NetBuffer.h>
 
 class ScorchedContext;
 class Simulator
@@ -46,6 +47,12 @@ public:
 	// Inherited from GameStateI
 	void simulate();
 	void draw();
+
+	bool writeTimeMessage(NetBuffer &buffer);
+	bool readTimeMessage(NetBufferReader &reader);
+
+	bool writeSyncMessage(NetBuffer &buffer);
+	bool readSyncMessage(NetBufferReader &reader);
 
 protected:
 	bool firstItteration_;

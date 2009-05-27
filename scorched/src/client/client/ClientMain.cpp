@@ -50,6 +50,7 @@
 #include <client/ClientFileHandler.h>
 #include <client/ClientDefenseHandler.h>
 #include <client/ClientSyncLevelHandler.h>
+#include <client/ClientSyncTimeHandler.h>
 #include <client/ClientState.h>
 #include <client/ClientWindowSetup.h>
 #include <lang/LangResource.h>
@@ -199,6 +200,7 @@ static bool initComsHandlers()
 	ClientDefenseHandler::instance();
 	ClientScoreHandler::instance();
 	ClientSyncLevelHandler::instance();
+	ClientSyncTimeHandler::instance();
 	ClientAdminResultHandler::instance();
 
 	return true;
