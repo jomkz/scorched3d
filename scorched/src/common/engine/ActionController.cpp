@@ -20,7 +20,6 @@
 
 #include <engine/ActionController.h>
 #include <engine/ScorchedContext.h>
-#include <movement/TargetMovement.h>
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
 #include <list>
@@ -295,9 +294,6 @@ void ActionController::simulate(fixed frameTime)
 		events_.simulate(frameTime, *context_);
 		actionEvents_ = false;
 	}*/
-
-	// Move the targets
-	context_->getTargetMovement().simulate(*context_, frameTime);
 
 	// Itterate and draw all of the actions
 	int keepcount=0;

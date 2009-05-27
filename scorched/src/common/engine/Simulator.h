@@ -50,7 +50,7 @@ public:
 protected:
 	bool firstItteration_;
 	unsigned int lastTickTime_;
-	fixed speed_, stepTime_;
+	fixed speed_, stepTime_, totalTime_;
 	ScorchedContext *context_;
 	EventContainer events_;
 	FileRandomGenerator random_;

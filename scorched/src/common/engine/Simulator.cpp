@@ -19,12 +19,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <engine/Simulator.h>
+#include <engine/ScorchedContext.h>
+#include <movement/TargetMovement.h>
 #include <SDL/SDL.h>
 
 static const fixed StepSize = fixed(true, 20);
 
 Simulator::Simulator() : 
-	speed_(1), stepTime_(0),
+	speed_(1), stepTime_(0), totalTime_(0),
 	firstItteration_(true)
 {
 
@@ -43,12 +45,14 @@ void Simulator::setScorchedContext(ScorchedContext *context)
 
 void Simulator::simulate()
 {
-	unsigned timeDiff = 0;
+	unsigned int currentTime = SDL_GetTicks();
+	unsigned int timeDiff = 0;
 	if (!firstItteration_)
 	{
-		firstItteration_ = false;
-		timeDiff = SDL_GetTicks() - lastTickTime_;
+		timeDiff = currentTime - lastTickTime_;
 	}
+	lastTickTime_ = currentTime;
+	firstItteration_ = false;
 
 	if (timeDiff > 0)
 	{
@@ -58,20 +62,25 @@ void Simulator::simulate()
 		stepTime_ += fixedTimeDiff;
 		while (stepTime_ >= StepSize)
 		{
-			//time_ += StepSize;
 			actualSimulate(StepSize);
 
 			// More time has passed
+			totalTime_ += StepSize;
 			stepTime_ -= StepSize;
 		}
 	}
-
-	lastTickTime_ = SDL_GetTicks();
 }
 
 void Simulator::actualSimulate(fixed frameTime)
 {
+	// Move the targets
+	context_->getTargetMovement().simulate(*context_, frameTime);
+
+	// Move the actions
 	actionController_.simulate(frameTime);
+
+
+	//events_.simulate(frameTime, *context_);
 }
 
 void Simulator::draw()
