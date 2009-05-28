@@ -178,6 +178,11 @@ static bool initComsHandlers()
 	// Setup the coms handlers
 	ScorchedClient::instance()->getComsMessageHandler().setConnectionHandler(
 		ClientMessageHandler::instance());
+
+	ComsMessageHandlerIRegistration::registerHandlers(
+		ComsMessageHandlerIRegistration::eClient,
+		ScorchedClient::instance()->getComsMessageHandler());
+
 	ClientChannelManager::instance();
 	ClientConnectionRejectHandler::instance();
 	ClientGiftMoneyHandler::instance();
@@ -199,8 +204,6 @@ static bool initComsHandlers()
 	ClientPlayerStateHandler::instance();
 	ClientDefenseHandler::instance();
 	ClientScoreHandler::instance();
-	ClientSyncLevelHandler::instance();
-	ClientSyncTimeHandler::instance();
 	ClientAdminResultHandler::instance();
 
 	return true;

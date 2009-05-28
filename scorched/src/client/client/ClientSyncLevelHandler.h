@@ -23,23 +23,16 @@
 
 #include <coms/ComsMessageHandler.h>
 
-class ClientSyncLevelHandler : 
-	public ComsMessageHandlerI
+class ClientSyncLevelHandler : public ComsMessageHandlerI
 {
 public:
-	static ClientSyncLevelHandler *instance();
+	ClientSyncLevelHandler();
+	virtual ~ClientSyncLevelHandler();
 
 	virtual bool processMessage(
 		NetMessage &message,
 		const char *messageType,
 		NetBufferReader &reader);
-
-protected:
-	static ClientSyncLevelHandler *instance_;
-
-private:
-	ClientSyncLevelHandler();
-	virtual ~ClientSyncLevelHandler();
 };
 
 #endif // __INCLUDE_ClientSyncLevelHandlerh_INCLUDE__

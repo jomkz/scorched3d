@@ -80,4 +80,34 @@ protected:
 
 };
 
+// Used as in REGISTER_HANDLER(
+//	"MyComsMessage", 
+//	ComsMessageHandlerIRegistration::eClient, 
+//	new MyComsMessageHandler)
+#define REGISTER_HANDLER(x, y, z) \
+	struct HANDLER_##x { HANDLER_##x() { ComsMessageHandlerIRegistration::addHandler(y, #x , z); } }; \
+	static HANDLER_##x HANDLER_IMPL_##x ;
+
+class ComsMessageHandlerIRegistration
+{
+public:
+	enum HandlerType
+	{
+		eClient,
+		eServer
+	};
+	struct HandlerInfo
+	{
+		HandlerType type;
+		std::string messageType;
+		ComsMessageHandlerI *handler;
+	};
+
+	static void addHandler(HandlerType type,
+			const std::string &messageType,
+			ComsMessageHandlerI *handler);
+	static std::list<HandlerInfo> *handlerList;
+	static void registerHandlers(HandlerType type, ComsMessageHandler &handler);
+};
+
 #endif

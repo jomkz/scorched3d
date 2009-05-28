@@ -23,23 +23,16 @@
 
 #include <coms/ComsMessageHandler.h>
 
-class ClientSyncTimeHandler : 
-	public ComsMessageHandlerI
+class ClientSyncTimeHandler : public ComsMessageHandlerI
 {
 public:
-	static ClientSyncTimeHandler *instance();
+	ClientSyncTimeHandler();
+	virtual ~ClientSyncTimeHandler();
 
 	virtual bool processMessage(
 		NetMessage &message,
 		const char *messageType,
 		NetBufferReader &reader);
-
-protected:
-	static ClientSyncTimeHandler *instance_;
-
-private:
-	ClientSyncTimeHandler();
-	virtual ~ClientSyncTimeHandler();
 };
 
 #endif // __INCLUDE_ClientSyncTimeHandlerh_INCLUDE__

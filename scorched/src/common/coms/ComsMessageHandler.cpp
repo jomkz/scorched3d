@@ -215,3 +215,32 @@ void ComsMessageHandler::processSentMessage(NetMessage &message)
 		return;
 	}
 }
+
+std::list<ComsMessageHandlerIRegistration::HandlerInfo> 
+	*ComsMessageHandlerIRegistration::handlerList = 0;
+
+void ComsMessageHandlerIRegistration::addHandler(HandlerType type,
+		const std::string &messageType,
+		ComsMessageHandlerI *handler)
+{
+	if (!handlerList) handlerList = new std::list<HandlerInfo>();
+
+	HandlerInfo info = { type, messageType, handler };
+	handlerList->push_back(info);
+}
+
+void ComsMessageHandlerIRegistration::registerHandlers(HandlerType type, ComsMessageHandler &handler)
+{
+	if (!handlerList) return;
+
+	std::list<HandlerInfo>::iterator itor;
+	for (itor = handlerList->begin();
+		itor != handlerList->end();
+		itor++)
+	{
+		if (itor->type == type) 
+		{
+			handler.addHandler(itor->messageType.c_str(), itor->handler);
+		}
+	}
+}

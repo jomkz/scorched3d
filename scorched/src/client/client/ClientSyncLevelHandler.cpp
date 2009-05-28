@@ -37,22 +37,13 @@
 #include <tank/TankCamera.h>
 #include <target/TargetRenderer.h>
 
-ClientSyncLevelHandler *ClientSyncLevelHandler::instance_ = 0;
-
-ClientSyncLevelHandler *ClientSyncLevelHandler::instance()
-{
-	if (!instance_)
-	{
-		instance_ = new ClientSyncLevelHandler;
-	}
-	return instance_;
-}
+REGISTER_HANDLER(
+	ComsSyncLevelMessage, 
+	ComsMessageHandlerIRegistration::eClient, 
+	new ClientSyncLevelHandler());
 
 ClientSyncLevelHandler::ClientSyncLevelHandler()
 {
-	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsSyncLevelMessage",
-		this);
 }
 
 ClientSyncLevelHandler::~ClientSyncLevelHandler()

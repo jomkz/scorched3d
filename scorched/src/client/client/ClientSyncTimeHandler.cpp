@@ -22,22 +22,13 @@
 #include <client/ScorchedClient.h>
 #include <coms/ComsSyncTimeMessage.h>
 
-ClientSyncTimeHandler *ClientSyncTimeHandler::instance_ = 0;
-
-ClientSyncTimeHandler *ClientSyncTimeHandler::instance()
-{
-	if (!instance_)
-	{
-		instance_ = new ClientSyncTimeHandler;
-	}
-	return instance_;
-}
+REGISTER_HANDLER(
+	ComsSyncTimeMessage, 
+	ComsMessageHandlerIRegistration::eClient, 
+	new ClientSyncTimeHandler());
 
 ClientSyncTimeHandler::ClientSyncTimeHandler()
 {
-	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsSyncTimeMessage",
-		this);
 }
 
 ClientSyncTimeHandler::~ClientSyncTimeHandler()
