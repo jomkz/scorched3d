@@ -126,5 +126,21 @@ bool ServerLoadLevel::processMessage(
 	ComsSyncLevelMessage syncMessage;
 	ComsMessageSender::sendToSingleClient(syncMessage, destinationId);
 
+	// These tanks are now ready to play
+	std::map<unsigned int, Tank *> &tanks = 
+		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+	std::map<unsigned int, Tank *>::iterator itor;
+	for (itor = tanks.begin();
+		itor != tanks.end();
+		itor++)
+	{
+		// For each tank
+		Tank *tank = (*itor).second;
+		if (destinationId == tank->getDestinationId())
+		{
+			tank->getState().setState(TankState::sSpectator);
+		}
+	}
+
 	return true;
 }

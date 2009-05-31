@@ -129,7 +129,7 @@ bool ClientConnectionAcceptHandler::processMessage(
 	{
 		if (!ScorchedClient::instance()->getModFiles().loadModFiles(
 			ScorchedClient::instance()->getOptionsGame().getMod(), true,
-			ProgressDialogSync::instance()))
+			ProgressDialogSync::events_instance()))
 		{
 			S3D::dialogMessage("ModFiles", 
 				S3D::formatStringBuffer("Failed to load mod \"%s\"",

@@ -1205,6 +1205,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\coms\ComsSimulateMessage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\coms\ComsSimulateMessage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\coms\ComsStartGameMessage.cpp"
 				>
 			</File>
@@ -3465,6 +3473,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\client\ClientSimulator.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\client\ClientSimulator.h"
+				>
+			</File>
+			<File
 				RelativePath="..\client\ClientStartGameHandler.cpp"
 				>
 			</File>
@@ -5606,6 +5622,14 @@
 			</File>
 			<File
 				RelativePath="..\..\server\server\ServerShotState.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerSimulator.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerSimulator.h"
 				>
 			</File>
 			<File

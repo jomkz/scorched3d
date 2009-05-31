@@ -235,7 +235,7 @@ static bool initWindows(ProgressCounter *progressCounter)
 static bool initClient()
 {
 	ProgressCounter progressCounter;
-	progressCounter.setUser(ProgressDialogSync::instance());
+	progressCounter.setUser(ProgressDialogSync::events_instance());
 	progressCounter.setNewPercentage(0.0f);
 
 	// Load in all the coms
@@ -378,7 +378,7 @@ bool ClientMain::clientMain()
 	ClientState::setupGameState();
 	ProgressCounter progressCounter;
 	ProgressDialog::instance()->changeTip();
-	progressCounter.setUser(ProgressDialogSync::instance());
+	progressCounter.setUser(ProgressDialogSync::events_instance());
 	progressCounter.setNewPercentage(0.0f);
 	if (!initHardware(&progressCounter)) return false;
 	if (!initWindows(&progressCounter)) return false;

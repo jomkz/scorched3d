@@ -198,15 +198,20 @@ void ProgressDialog::draw()
 	}
 }
 
-ProgressDialogSync *ProgressDialogSync::instance_ = 0;
-
-ProgressDialogSync *ProgressDialogSync::instance()
+ProgressDialogSync *ProgressDialogSync::noevents_instance()
 {
-	if (!instance_) instance_ = new ProgressDialogSync();
-	return instance_;
+	static ProgressDialogSync *instance = new ProgressDialogSync(false);
+	return instance;
 }
 
-ProgressDialogSync::ProgressDialogSync()
+ProgressDialogSync *ProgressDialogSync::events_instance()
+{
+	static ProgressDialogSync *instance = new ProgressDialogSync(true);
+	return instance;
+}
+
+ProgressDialogSync::ProgressDialogSync(bool processEvents) :
+	processEvents_(processEvents)
 {
 	setUser(this);
 }
@@ -229,8 +234,11 @@ void ProgressDialogSync::progressChange(const LangString &op, const float percen
 	timeDelay += frameTime;
 	timeDelay2 += frameTime;
 
-	ClientMain::clientEventLoop(frameTime);	
-	ClientProcessingLoop::instance()->simulate(0, frameTime);
+	if (processEvents_)
+	{
+		ClientMain::clientEventLoop(frameTime);	
+		ClientProcessingLoop::instance()->simulate(0, frameTime);
+	}
 
 	ProgressDialog::instance()->progressChange(op, percentage);
 

@@ -118,13 +118,13 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	ScorchedClient::instance()->getLandscapeMaps().generateMaps(
 		ScorchedClient::instance()->getContext(),
 		message.getLandscapeDefinition(),
-		ProgressDialogSync::instance());
+		ProgressDialogSync::events_instance());
 
 	// Calculate all the new landscape settings (graphics)
-	Landscape::instance()->generate(ProgressDialogSync::instance());
+	Landscape::instance()->generate(ProgressDialogSync::events_instance());
 
 	// Make sure the landscape has been optimized
-	Landscape::instance()->reset(ProgressDialogSync::instance());
+	Landscape::instance()->reset(ProgressDialogSync::events_instance());
 
 	// As we have not returned to the main loop for ages the
 	// timer will have a lot of time in it

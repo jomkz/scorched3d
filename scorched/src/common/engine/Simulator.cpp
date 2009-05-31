@@ -22,23 +22,29 @@
 #include <engine/ScorchedContext.h>
 #include <movement/TargetMovement.h>
 #include <SDL/SDL.h>
-#include <server/ScorchedServer.h>
-#ifndef S3D_SERVER
-#include <client/ScorchedClient.h>
-#endif
 
-static const fixed StepSize = fixed(true, 20);
+static const fixed StepSize = fixed(true, FIXED_RESOLUTION / 50);
+static const fixed SendStepSize = fixed(true, 1 * FIXED_RESOLUTION);
 
-Simulator::Simulator() : 
-	speed_(1), stepTime_(0), totalTime_(0),
-	firstItteration_(true)
+Simulator::Simulator()
 {
-
+	reset();
 }
 
 Simulator::~Simulator()
 {
 
+}
+
+void Simulator::reset()
+{
+	speed_ = 1;
+	stepTime_ = 0;
+	totalTime_ = 0;
+	nextSendTime_ = 0;
+	nextEventTime_ = nextSendTime_ + SendStepSize + SendStepSize;
+	waitingEventTime_ = nextEventTime_;
+	firstItteration_ = true;
 }
 
 void Simulator::setScorchedContext(ScorchedContext *context)
@@ -60,12 +66,29 @@ void Simulator::simulate()
 
 	if (timeDiff > 0)
 	{
-		fixed fixedTimeDiff(true, timeDiff);
+		fixed fixedTimeDiff(true, timeDiff * 10);
 		fixedTimeDiff *= speed_;
 
 		stepTime_ += fixedTimeDiff;
 		while (stepTime_ >= StepSize)
 		{
+			if (totalTime_ == waitingEventTime_)
+			{
+				// The simulation has reached the time for the next message
+				// but we have not recieved the message
+				// Wait for it
+				break;
+			}
+
+			// Send out the message at the correct time
+			if (totalTime_ == nextSendTime_)
+			{
+				nextSendTime();
+				nextSendTime_ += SendStepSize;
+				nextEventTime_ += SendStepSize;
+			}
+
+			// Simulate
 			actualSimulate(StepSize);
 
 			// More time has passed
@@ -75,6 +98,11 @@ void Simulator::simulate()
 	}
 }
 
+void Simulator::nextSendTime()
+{
+
+}
+
 void Simulator::actualSimulate(fixed frameTime)
 {
 	// Move the targets
@@ -82,7 +110,6 @@ void Simulator::actualSimulate(fixed frameTime)
 
 	// Move the actions
 	actionController_.simulate(frameTime);
-
 
 	//events_.simulate(frameTime, *context_);
 }
@@ -97,19 +124,24 @@ bool Simulator::writeTimeMessage(NetBuffer &buffer)
 	// Simulator time
 	buffer.addToBuffer(stepTime_);
 	buffer.addToBuffer(totalTime_);
+	buffer.addToBuffer(nextSendTime_);
+	buffer.addToBuffer(nextEventTime_);
+	buffer.addToBuffer(waitingEventTime_);
 
 	return true;
 }
 
 bool Simulator::readTimeMessage(NetBufferReader &reader)
 {
-#ifndef S3D_SERVER
 	firstItteration_ = true;
 
 	// Simulator time
 	if (!reader.getFromBuffer(stepTime_)) return false;
 	if (!reader.getFromBuffer(totalTime_)) return false;
-#endif
+	if (!reader.getFromBuffer(nextSendTime_)) return false;
+	if (!reader.getFromBuffer(nextEventTime_)) return false;
+	if (!reader.getFromBuffer(waitingEventTime_)) return false;
+
 	return true;
 }
 
@@ -119,39 +151,17 @@ bool Simulator::writeSyncMessage(NetBuffer &buffer)
 	if (!random_.writeMessage(buffer)) return false;
 
 	// Target movement
-	if (!ScorchedServer::instance()->getTargetMovement().writeMessage(buffer)) return false;
+	if (!context_->getTargetMovement().writeMessage(buffer)) return false;
 
 	return true;
 }
 
 bool Simulator::readSyncMessage(NetBufferReader &reader)
 {
-#ifndef S3D_SERVER
 	// Random seeds
 	if (!random_.readMessage(reader)) return false;
 
 	// Target Movement
-	if (!ScorchedClient::instance()->getTargetMovement().readMessage(reader)) return false;
-#endif
+	if (!context_->getTargetMovement().readMessage(reader)) return false;
 	return true;
-}
-
-SimulatorGameState::SimulatorGameState(Simulator *simulator) :
-	GameStateI("Simulator"),
-	simulator_(simulator)
-{
-}
-
-SimulatorGameState::~SimulatorGameState()
-{
-}
-
-void SimulatorGameState::simulate(const unsigned state, float simTime)
-{
-	simulator_->simulate();
-}
-
-void SimulatorGameState::draw(const unsigned state)
-{
-	simulator_->draw();
 }

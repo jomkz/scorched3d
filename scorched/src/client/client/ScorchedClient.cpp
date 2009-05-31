@@ -19,9 +19,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <client/ScorchedClient.h>
+#include <client/ClientSimulator.h>
 #include <engine/MainLoop.h>
 #include <engine/GameState.h>
-#include <engine/Simulator.h>
 #include <graph/MainCamera.h>
 #include <graph/ParticleEngine.h>
 #include <graph/OptionsDisplay.h>
@@ -48,6 +48,14 @@ ScorchedClient::ScorchedClient() :
 	mainLoop_->clear();
 	mainLoop_->addMainLoop(gameState);
 
+	clientSimulator_ = new ClientSimulator();
+	simulator = clientSimulator_;
+	actionController = &simulator->getActionController();
+	simulator->setScorchedContext(this);
+	getComsMessageHandler().addHandler(
+		"ComsSimulateMessage",
+		clientSimulator_);
+
 	// Calculate how many particles we can see
 	int numberOfBilboards = 6000;
 	if (OptionsDisplay::instance()->getEffectsDetail() == 0) 
@@ -60,8 +68,6 @@ ScorchedClient::ScorchedClient() :
 
 	getLandscapeMaps().getGroundMaps().getHeightMap().setGraphicalMap(
 		new GraphicalLandscapeMap());
-
-	simulatorGameState_ = new SimulatorGameState(&getSimulator());
 }
 
 ScorchedClient::~ScorchedClient()

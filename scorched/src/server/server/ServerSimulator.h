@@ -18,37 +18,18 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ScorchedClienth_INCLUDE__)
-#define __INCLUDE_ScorchedClienth_INCLUDE__
+#if !defined(AFX_ServerSimulator_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_)
+#define AFX_ServerSimulator_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_
 
-#include <engine/ScorchedContext.h>
+#include <engine/Simulator.h>
 
-class MainLoop;
-class ParticleEngine;
-class GameState;
-class SimulatorGameState;
-class ClientSimulator;
-class ScorchedClient : public ScorchedContext
+class ServerSimulator : public Simulator
 {
 public:
-	static ScorchedClient *instance();
+	ServerSimulator();
+	virtual ~ServerSimulator();
 
-	MainLoop &getMainLoop() { return *mainLoop_; }
-	ScorchedContext &getContext() { return *this; }
-	ParticleEngine &getParticleEngine() { return *particleEngine_; }
-	GameState &getGameState() { return *gameState; }
-	ClientSimulator &getClientSimulator() { return *clientSimulator_; }
-
-protected:
-	static ScorchedClient *instance_;
-	MainLoop *mainLoop_;
-	ParticleEngine* particleEngine_;
-	GameState *gameState;
-	ClientSimulator *clientSimulator_;
-
-private:
-	ScorchedClient();
-	virtual ~ScorchedClient();
+	virtual void nextSendTime();
 };
 
-#endif
+#endif // !defined(AFX_ServerSimulator_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_)

@@ -953,6 +953,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\server\ServerSimulator.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerSimulator.h"
+				>
+			</File>
+			<File
 				RelativePath="..\server\ServerStartingState.cpp"
 				>
 			</File>
@@ -2362,6 +2370,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\coms\ComsScoreMessage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\coms\ComsSimulateMessage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\coms\ComsSimulateMessage.h"
 				>
 			</File>
 			<File

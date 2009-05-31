@@ -18,37 +18,31 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ScorchedClienth_INCLUDE__)
-#define __INCLUDE_ScorchedClienth_INCLUDE__
+#ifndef _ComsSimulateMessage_h
+#define _ComsSimulateMessage_h
 
-#include <engine/ScorchedContext.h>
+#include <coms/ComsMessage.h>
 
-class MainLoop;
-class ParticleEngine;
-class GameState;
-class SimulatorGameState;
-class ClientSimulator;
-class ScorchedClient : public ScorchedContext
+class ComsSimulateMessage : public ComsMessage
 {
 public:
-	static ScorchedClient *instance();
+	ComsSimulateMessage(fixed eventTime = 0);
+	virtual ~ComsSimulateMessage();
 
-	MainLoop &getMainLoop() { return *mainLoop_; }
-	ScorchedContext &getContext() { return *this; }
-	ParticleEngine &getParticleEngine() { return *particleEngine_; }
-	GameState &getGameState() { return *gameState; }
-	ClientSimulator &getClientSimulator() { return *clientSimulator_; }
+	// Inherited from ComsMessage
+    virtual bool writeMessage(NetBuffer &buffer);
+    virtual bool readMessage(NetBufferReader &reader);
+
+	fixed &getEventTime() { return eventTime_; }
 
 protected:
-	static ScorchedClient *instance_;
-	MainLoop *mainLoop_;
-	ParticleEngine* particleEngine_;
-	GameState *gameState;
-	ClientSimulator *clientSimulator_;
+	fixed eventTime_;
 
 private:
-	ScorchedClient();
-	virtual ~ScorchedClient();
+	ComsSimulateMessage(const ComsSimulateMessage &);
+	const ComsSimulateMessage & operator=(const ComsSimulateMessage &);
+
 };
 
-#endif
+#endif //_ComsSimulateMessage_h
+

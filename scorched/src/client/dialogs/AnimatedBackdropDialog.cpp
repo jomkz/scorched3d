@@ -63,7 +63,7 @@ void AnimatedBackdropDialog::init()
 
 	ProgressCounter progressCounter;
 	ProgressDialog::instance()->changeTip();
-	progressCounter.setUser(ProgressDialogSync::instance());
+	progressCounter.setUser(ProgressDialogSync::events_instance());
 	progressCounter.setNewPercentage(0.0f);
 
 	bool waterMove = OptionsDisplay::instance()->getNoWaterMovement();

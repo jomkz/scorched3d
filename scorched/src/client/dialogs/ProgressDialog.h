@@ -60,16 +60,16 @@ class ProgressDialogSync :
 	public ProgressCounter
 {
 public:
-	static ProgressDialogSync *instance();
+	static ProgressDialogSync *events_instance();
+	static ProgressDialogSync *noevents_instance();
 
 	virtual void operationChange(const LangString &op);
 	virtual void progressChange(const LangString &op, const float percentage);
-
 protected:
-	static ProgressDialogSync *instance_;
+	bool processEvents_;
 
 private:
-	ProgressDialogSync();
+	ProgressDialogSync(bool processEvents);
 	virtual ~ProgressDialogSync();
 };
 

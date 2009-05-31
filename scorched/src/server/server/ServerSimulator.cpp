@@ -18,37 +18,29 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ScorchedClienth_INCLUDE__)
-#define __INCLUDE_ScorchedClienth_INCLUDE__
+#include <server/ServerSimulator.h>
+#include <server/ScorchedServer.h>
+#include <coms/ComsSimulateMessage.h>
+#include <coms/ComsMessageSender.h>
+#include <common/Logger.h>
 
-#include <engine/ScorchedContext.h>
-
-class MainLoop;
-class ParticleEngine;
-class GameState;
-class SimulatorGameState;
-class ClientSimulator;
-class ScorchedClient : public ScorchedContext
+ServerSimulator::ServerSimulator()
 {
-public:
-	static ScorchedClient *instance();
+}
 
-	MainLoop &getMainLoop() { return *mainLoop_; }
-	ScorchedContext &getContext() { return *this; }
-	ParticleEngine &getParticleEngine() { return *particleEngine_; }
-	GameState &getGameState() { return *gameState; }
-	ClientSimulator &getClientSimulator() { return *clientSimulator_; }
+ServerSimulator::~ServerSimulator()
+{
+}
 
-protected:
-	static ScorchedClient *instance_;
-	MainLoop *mainLoop_;
-	ParticleEngine* particleEngine_;
-	GameState *gameState;
-	ClientSimulator *clientSimulator_;
+void ServerSimulator::nextSendTime()
+{
+	// On the server we never recieved messages
+	// so just never wait
+	waitingEventTime_ = nextEventTime_;
 
-private:
-	ScorchedClient();
-	virtual ~ScorchedClient();
-};
+	Logger::log(S3D::formatStringBuffer("Total Time %.2f, Waiting Time %.2f", 
+		totalTime_.asFloat(), waitingEventTime_.asFloat()));
 
-#endif
+	ComsSimulateMessage simulateMessage(waitingEventTime_);
+	ComsMessageSender::sendToAllLoadedClients(simulateMessage);
+}

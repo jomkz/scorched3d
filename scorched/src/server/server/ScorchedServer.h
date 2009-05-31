@@ -25,6 +25,7 @@
 
 class TankDeadContainer;
 class TankAIStore;
+class ServerSimulator;
 class ScorchedServer : public ScorchedContext
 {
 public:
@@ -33,11 +34,13 @@ public:
 	TankDeadContainer &getTankDeadContainer() { return *deadContainer_; }
 	ScorchedContext &getContext() { return *this; }
 	TankAIStore &getTankAIs() { return *tankAIStore_; }
+	ServerSimulator &getServerSimulator() { return *serverSimulator_; }
 
 protected:
 	static ScorchedServer *instance_;
 	TankDeadContainer *deadContainer_;
 	TankAIStore *tankAIStore_;
+	ServerSimulator *serverSimulator_;
 
 private:
 	ScorchedServer();

@@ -64,12 +64,12 @@ bool ClientSyncLevelHandler::processMessage(
 	DeformLandscape::applyInfos(
 		ScorchedClient::instance()->getContext(),
 		message.getDeformInfos(),
-		ProgressDialogSync::instance());
+		ProgressDialogSync::noevents_instance());
 	float deformTime = generateClock.getTimeDifference();
 	Logger::log(S3D::formatStringBuffer("Landscape sync deformation time %.2f seconds", deformTime));
 
 	// Make sure the landscape has been optimized
-	Landscape::instance()->reset(ProgressDialogSync::instance());
+	Landscape::instance()->reset(ProgressDialogSync::noevents_instance());
 
 	RenderTracer::instance()->newGame();
 	SpeedChange::instance()->resetSpeed();

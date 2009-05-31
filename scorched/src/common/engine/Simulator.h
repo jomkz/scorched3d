@@ -36,6 +36,8 @@ public:
 
 	void setScorchedContext(ScorchedContext *context);
 
+	void reset();
+
 	// Accessors
 	RandomGenerator &getRandomGenerator() { return random_; }
 	ActionController &getActionController() { return actionController_; }
@@ -48,9 +50,10 @@ public:
 	void simulate();
 	void draw();
 
+	virtual void nextSendTime();
+
 	bool writeTimeMessage(NetBuffer &buffer);
 	bool readTimeMessage(NetBufferReader &reader);
-
 	bool writeSyncMessage(NetBuffer &buffer);
 	bool readSyncMessage(NetBufferReader &reader);
 
@@ -58,25 +61,13 @@ protected:
 	bool firstItteration_;
 	unsigned int lastTickTime_;
 	fixed speed_, stepTime_, totalTime_;
+	fixed nextSendTime_, nextEventTime_, waitingEventTime_;
 	ScorchedContext *context_;
 	EventContainer events_;
 	FileRandomGenerator random_;
 	ActionController actionController_;
 
 	void actualSimulate(fixed frameTime);
-};
-
-class SimulatorGameState : public GameStateI
-{
-public:
-	SimulatorGameState(Simulator *simulator);
-	virtual ~SimulatorGameState();
-
-	virtual void simulate(const unsigned state, float simTime);
-	virtual void draw(const unsigned state);
-
-private:
-	Simulator *simulator_;
 };
 
 #endif // !defined(AFX_Simulator_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_)

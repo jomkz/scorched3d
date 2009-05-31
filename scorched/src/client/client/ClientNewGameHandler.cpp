@@ -137,18 +137,18 @@ bool ClientNewGameHandler::actualProcessMessage(
 	ScorchedClient::instance()->getLandscapeMaps().generateMaps(
 		ScorchedClient::instance()->getContext(),
 		message.getLevelMessage().getGroundMapsDefn(),
-		ProgressDialogSync::instance());
+		ProgressDialogSync::events_instance());
 
 	Clock generateClock;
 	DeformLandscape::applyInfos(
 		ScorchedClient::instance()->getContext(),
 		message.getLevelMessage().getDeformInfos(),
-		ProgressDialogSync::instance());
+		ProgressDialogSync::events_instance());
 	float deformTime = generateClock.getTimeDifference();
 	Logger::log(S3D::formatStringBuffer("Landscape deformation time %.2f seconds", deformTime));
 
 	// Calculate all the new landscape settings (graphics)
-	Landscape::instance()->generate(ProgressDialogSync::instance());
+	Landscape::instance()->generate(ProgressDialogSync::events_instance());
 
 	// Remove any targets that have been removed due to game play
 	std::map<unsigned int, Target *> targets =
@@ -222,7 +222,7 @@ bool ClientNewGameHandler::actualProcessMessage(
 	}
 
 	// Make sure the landscape has been optimized
-	Landscape::instance()->reset(ProgressDialogSync::instance());
+	Landscape::instance()->reset(ProgressDialogSync::events_instance());
 
 	RenderTracer::instance()->newGame();
 	SpeedChange::instance()->resetSpeed();

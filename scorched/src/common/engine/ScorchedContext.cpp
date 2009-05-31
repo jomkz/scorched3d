@@ -21,7 +21,6 @@
 #include <engine/ScorchedContext.h>
 #include <engine/GameState.h>
 #include <engine/ActionController.h>
-#include <engine/Simulator.h>
 #include <engine/ViewPoints.h>
 #include <engine/ModFiles.h>
 #include <net/NetInterface.h>
@@ -40,8 +39,6 @@
 ScorchedContext::ScorchedContext(const char *name, bool server) : 
 	serverMode(server)
 {
-	simulator = new Simulator();
-	actionController = &simulator->getActionController();
 	accessoryStore = new AccessoryStore();
 	targetContainer = new TargetContainer();
 	tankContainer = new TankContainer(*targetContainer);
@@ -63,7 +60,6 @@ ScorchedContext::ScorchedContext(const char *name, bool server) :
 		server?S3D::getSettingsFile("serverhooks"):S3D::getSettingsFile("clienthooks"));
 
 	getViewPoints().setContext(this);
-	getSimulator().setScorchedContext(this);
 	getTargetSpace().setContext(this);
 	luaScriptFactory->setContext(this);
 }

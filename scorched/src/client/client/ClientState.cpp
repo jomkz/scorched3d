@@ -18,7 +18,6 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <engine/Simulator.h>
 #include <graph/FrameTimer.h>
 #include <graph/ParticleEngine.h>
 #include <graph/Main2DCamera.h>
@@ -31,6 +30,7 @@
 #include <client/ClientLoadPlayersState.h>
 #include <client/ClientSaveScreenState.h>
 #include <client/ScorchedClient.h>
+#include <client/ClientSimulator.h>
 #include <client/ClientProcessingLoop.h>
 #include <sound/Sound.h>
 #include <tankgraph/RenderTargets.h>
@@ -93,7 +93,7 @@ void ClientState::addStandardComponents(GameState &gameState, unsigned state)
 	gameState.addStateLoop(state, 
 		MainCamera::instance(), new LandscapeStateObjectsHandler());
 	gameState.addStateLoop(state, MainCamera::instance(), 
-		&ScorchedClient::instance()->getSimulatorGameState());
+		&ScorchedClient::instance()->getClientSimulator());
 	gameState.addStateLoop(state, MainCamera::instance(), 
 		&ScorchedClient::instance()->getParticleEngine());
 	gameState.addStateLoop(state, 

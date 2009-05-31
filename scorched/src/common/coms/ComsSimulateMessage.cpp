@@ -18,37 +18,26 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ScorchedClienth_INCLUDE__)
-#define __INCLUDE_ScorchedClienth_INCLUDE__
+#include <coms/ComsSimulateMessage.h>
 
-#include <engine/ScorchedContext.h>
-
-class MainLoop;
-class ParticleEngine;
-class GameState;
-class SimulatorGameState;
-class ClientSimulator;
-class ScorchedClient : public ScorchedContext
+ComsSimulateMessage::ComsSimulateMessage(fixed eventTime) :
+	ComsMessage("ComsSimulateMessage"),
+	eventTime_(eventTime)
 {
-public:
-	static ScorchedClient *instance();
+}
 
-	MainLoop &getMainLoop() { return *mainLoop_; }
-	ScorchedContext &getContext() { return *this; }
-	ParticleEngine &getParticleEngine() { return *particleEngine_; }
-	GameState &getGameState() { return *gameState; }
-	ClientSimulator &getClientSimulator() { return *clientSimulator_; }
+ComsSimulateMessage::~ComsSimulateMessage()
+{
+}
 
-protected:
-	static ScorchedClient *instance_;
-	MainLoop *mainLoop_;
-	ParticleEngine* particleEngine_;
-	GameState *gameState;
-	ClientSimulator *clientSimulator_;
+bool ComsSimulateMessage::writeMessage(NetBuffer &buffer)
+{
+	buffer.addToBuffer(eventTime_);
+	return true;
+}
 
-private:
-	ScorchedClient();
-	virtual ~ScorchedClient();
-};
-
-#endif
+bool ComsSimulateMessage::readMessage(NetBufferReader &reader)
+{
+	if (!reader.getFromBuffer(eventTime_)) return false;
+	return true;
+}

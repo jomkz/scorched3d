@@ -167,3 +167,23 @@ bool ComsMessageSender::sendToAllPlayingClients(
 	}
 	return sendToMultipleClients(message, destinations, flags);
 }
+
+bool ComsMessageSender::sendToAllLoadedClients(
+	ComsMessage &message, unsigned int flags)
+{
+	std::list<unsigned int> destinations;
+	std::map<unsigned int, Tank *>::iterator itor;
+	std::map<unsigned int, Tank *> tanks = 
+		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+	for (itor = tanks.begin();
+		itor != tanks.end();
+		itor++)
+	{
+		Tank *tank = (*itor).second;
+		if (tank->getState().getTankLoaded())
+		{
+			destinations.push_back(tank->getDestinationId());
+		}
+	}
+	return sendToMultipleClients(message, destinations, flags);
+}

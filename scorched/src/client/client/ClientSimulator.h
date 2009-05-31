@@ -18,37 +18,32 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ScorchedClienth_INCLUDE__)
-#define __INCLUDE_ScorchedClienth_INCLUDE__
+#if !defined(AFX_ClientSimulator_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_)
+#define AFX_ClientSimulator_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_
 
-#include <engine/ScorchedContext.h>
+#include <engine/Simulator.h>
+#include <coms/ComsMessageHandler.h>
 
-class MainLoop;
-class ParticleEngine;
-class GameState;
-class SimulatorGameState;
-class ClientSimulator;
-class ScorchedClient : public ScorchedContext
+class ClientSimulator : 
+	public GameStateI, 
+	public Simulator,
+	public ComsMessageHandlerI
 {
 public:
-	static ScorchedClient *instance();
+	ClientSimulator();
+	virtual ~ClientSimulator();
 
-	MainLoop &getMainLoop() { return *mainLoop_; }
-	ScorchedContext &getContext() { return *this; }
-	ParticleEngine &getParticleEngine() { return *particleEngine_; }
-	GameState &getGameState() { return *gameState; }
-	ClientSimulator &getClientSimulator() { return *clientSimulator_; }
+	virtual void nextSendTime();
 
-protected:
-	static ScorchedClient *instance_;
-	MainLoop *mainLoop_;
-	ParticleEngine* particleEngine_;
-	GameState *gameState;
-	ClientSimulator *clientSimulator_;
+	// GameStateI
+	virtual void simulate(const unsigned state, float simTime);
+	virtual void draw(const unsigned state);
 
-private:
-	ScorchedClient();
-	virtual ~ScorchedClient();
+	// ComsMessageHandlerI
+	virtual bool processMessage(
+		NetMessage &message,
+		const char *messageType,
+		NetBufferReader &reader);
 };
 
-#endif
+#endif // !defined(AFX_ClientSimulator_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_)

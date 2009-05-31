@@ -18,37 +18,48 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ScorchedClienth_INCLUDE__)
-#define __INCLUDE_ScorchedClienth_INCLUDE__
+#include <client/ClientSimulator.h>
+#include <client/ScorchedClient.h>
+#include <movement/TargetMovement.h>
+#include <coms/ComsSimulateMessage.h>
+#include <common/Logger.h>
 
-#include <engine/ScorchedContext.h>
-
-class MainLoop;
-class ParticleEngine;
-class GameState;
-class SimulatorGameState;
-class ClientSimulator;
-class ScorchedClient : public ScorchedContext
+ClientSimulator::ClientSimulator() : 
+	GameStateI("ClientSimulator")
 {
-public:
-	static ScorchedClient *instance();
+}
 
-	MainLoop &getMainLoop() { return *mainLoop_; }
-	ScorchedContext &getContext() { return *this; }
-	ParticleEngine &getParticleEngine() { return *particleEngine_; }
-	GameState &getGameState() { return *gameState; }
-	ClientSimulator &getClientSimulator() { return *clientSimulator_; }
+ClientSimulator::~ClientSimulator()
+{
+}
 
-protected:
-	static ScorchedClient *instance_;
-	MainLoop *mainLoop_;
-	ParticleEngine* particleEngine_;
-	GameState *gameState;
-	ClientSimulator *clientSimulator_;
+void ClientSimulator::nextSendTime()
+{
 
-private:
-	ScorchedClient();
-	virtual ~ScorchedClient();
-};
+}
 
-#endif
+void ClientSimulator::simulate(const unsigned state, float simTime)
+{
+	Simulator::simulate();
+}
+
+void ClientSimulator::draw(const unsigned state)
+{
+	Simulator::draw();
+}
+
+bool ClientSimulator::processMessage(
+	NetMessage &netMessage,
+	const char *messageType,
+	NetBufferReader &reader)
+{
+	ComsSimulateMessage message;
+	if (!message.readMessage(reader)) return false;
+
+	waitingEventTime_ = message.getEventTime();
+
+	Logger::log(S3D::formatStringBuffer("Total Time %.2f, Waiting Time %.2f", 
+		totalTime_.asFloat(), waitingEventTime_.asFloat()));
+
+	return true;
+}
