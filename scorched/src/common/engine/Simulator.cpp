@@ -44,7 +44,7 @@ void Simulator::reset()
 	nextSendTime_ = 0;
 	nextEventTime_ = nextSendTime_ + SendStepSize + SendStepSize;
 	waitingEventTime_ = nextEventTime_;
-	firstItteration_ = true;
+	lastTickTime_ = SDL_GetTicks();
 }
 
 void Simulator::setScorchedContext(ScorchedContext *context)
@@ -56,13 +56,8 @@ void Simulator::setScorchedContext(ScorchedContext *context)
 void Simulator::simulate()
 {
 	unsigned int currentTime = SDL_GetTicks();
-	unsigned int timeDiff = 0;
-	if (!firstItteration_)
-	{
-		timeDiff = currentTime - lastTickTime_;
-	}
+	unsigned int timeDiff = currentTime - lastTickTime_;
 	lastTickTime_ = currentTime;
-	firstItteration_ = false;
 
 	if (timeDiff > 0)
 	{
@@ -133,7 +128,7 @@ bool Simulator::writeTimeMessage(NetBuffer &buffer)
 
 bool Simulator::readTimeMessage(NetBufferReader &reader)
 {
-	firstItteration_ = true;
+	reset();
 
 	// Simulator time
 	if (!reader.getFromBuffer(stepTime_)) return false;

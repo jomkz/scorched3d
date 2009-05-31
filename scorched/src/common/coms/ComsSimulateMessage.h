@@ -26,7 +26,7 @@
 class ComsSimulateMessage : public ComsMessage
 {
 public:
-	ComsSimulateMessage(fixed eventTime = 0);
+	ComsSimulateMessage(fixed eventTime = 0, fixed totalTime = 0);
 	virtual ~ComsSimulateMessage();
 
 	// Inherited from ComsMessage
@@ -34,9 +34,10 @@ public:
     virtual bool readMessage(NetBufferReader &reader);
 
 	fixed &getEventTime() { return eventTime_; }
+	fixed &getTotalTime() { return totalTime_; }
 
 protected:
-	fixed eventTime_;
+	fixed eventTime_, totalTime_;
 
 private:
 	ComsSimulateMessage(const ComsSimulateMessage &);

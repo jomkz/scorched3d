@@ -58,7 +58,6 @@ public:
 	bool readSyncMessage(NetBufferReader &reader);
 
 protected:
-	bool firstItteration_;
 	unsigned int lastTickTime_;
 	fixed speed_, stepTime_, totalTime_;
 	fixed nextSendTime_, nextEventTime_, waitingEventTime_;

@@ -321,6 +321,7 @@ void consoleServer()
 	ScorchedServer::instance()->getLandscapeMaps().generateMaps(
 		ScorchedServer::instance()->getContext(), defn, 
 		&progressCounter);
+	ScorchedServer::instance()->getSimulator().reset();
 	ServerCommon::serverLog("Finished generating landscape");
 
 	for (;;)

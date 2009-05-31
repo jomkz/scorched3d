@@ -20,9 +20,9 @@
 
 #include <coms/ComsSimulateMessage.h>
 
-ComsSimulateMessage::ComsSimulateMessage(fixed eventTime) :
+ComsSimulateMessage::ComsSimulateMessage(fixed eventTime, fixed totalTime) :
 	ComsMessage("ComsSimulateMessage"),
-	eventTime_(eventTime)
+	eventTime_(eventTime), totalTime_(totalTime)
 {
 }
 
@@ -33,11 +33,13 @@ ComsSimulateMessage::~ComsSimulateMessage()
 bool ComsSimulateMessage::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(eventTime_);
+	buffer.addToBuffer(totalTime_);
 	return true;
 }
 
 bool ComsSimulateMessage::readMessage(NetBufferReader &reader)
 {
 	if (!reader.getFromBuffer(eventTime_)) return false;
+	if (!reader.getFromBuffer(totalTime_)) return false;
 	return true;
 }

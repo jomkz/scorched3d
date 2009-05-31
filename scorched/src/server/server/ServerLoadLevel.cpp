@@ -24,6 +24,7 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
+#include <engine/Simulator.h>
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsLoadLevelMessage.h>
 #include <coms/ComsSyncLevelMessage.h>
@@ -118,6 +119,8 @@ bool ServerLoadLevel::processMessage(
 	}
 
 	// Send the current server time to the client
+	// Make sure the simulator time is up to date
+	ScorchedServer::instance()->getSimulator().simulate();
 	ComsSyncTimeMessage syncTimeMessage;
 	ComsMessageSender::sendToSingleClient(syncTimeMessage, destinationId);
 
