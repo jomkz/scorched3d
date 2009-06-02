@@ -43,7 +43,7 @@ ClientAddPlayerHandler *ClientAddPlayerHandler::instance()
 ClientAddPlayerHandler::ClientAddPlayerHandler()
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsAddPlayerMessage",
+		ComsAddPlayerMessage::ComsAddPlayerMessageType,
 		this);
 }
 

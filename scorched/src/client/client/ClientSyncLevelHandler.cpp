@@ -39,6 +39,7 @@
 
 REGISTER_HANDLER(
 	ComsSyncLevelMessage, 
+	ComsSyncLevelMessage::ComsSyncLevelMessageType,
 	ComsMessageHandlerIRegistration::eClient, 
 	new ClientSyncLevelHandler());
 

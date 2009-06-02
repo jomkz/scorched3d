@@ -20,11 +20,13 @@
 
 #include <coms/ComsOperationMessage.h>
 
+ComsMessageType ComsOperationMessage::ComsOperationMessageTyper("ComsOperationMessageType");
+
 ComsOperationMessage::ComsOperationMessage(
 	ComsOperationMessageType type,
 	const char *param1,
 	const char *param2) :
-	ComsMessage("ComsOperationMessage"),
+	ComsMessage(ComsOperationMessageTyper),
 	type_(type),
 	param1_(param1),
 	param2_(param2)

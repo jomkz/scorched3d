@@ -29,8 +29,10 @@
 #include <client/ScorchedClient.h>
 #endif
 
+ComsMessageType ComsLoadLevelMessage::ComsLoadLevelMessageType("ComsLoadLevelMessageType");
+
 ComsLoadLevelMessage::ComsLoadLevelMessage(LandscapeDefinition *landscapeDefintion) :
-	ComsMessage("ComsLoadLevelMessage")
+	ComsMessage(ComsLoadLevelMessageType)
 {
 	if (landscapeDefintion) landscapeDefinition_ = *landscapeDefintion;
 }

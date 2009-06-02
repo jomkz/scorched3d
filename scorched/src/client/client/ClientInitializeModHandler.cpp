@@ -55,7 +55,7 @@ ClientInitializeModHandler::ClientInitializeModHandler() :
 	initialized_(false)
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsInitializeModMessage",
+		ComsInitializeModMessage::ComsInitializeModMessageType,
 		this);
 }
 

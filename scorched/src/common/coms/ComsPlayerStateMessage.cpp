@@ -32,8 +32,10 @@
 #include <common/Logger.h>
 #include <set>
 
+ComsMessageType ComsPlayerStateMessage::ComsPlayerStateMessageType("ComsPlayerStateMessageType");
+
 ComsPlayerStateMessage::ComsPlayerStateMessage(bool targets, bool accessories) : 
-	ComsMessage("ComsPlayerStateMessage"),
+	ComsMessage(ComsPlayerStateMessageType),
 	targets_(targets), accessories_(accessories)
 {
 

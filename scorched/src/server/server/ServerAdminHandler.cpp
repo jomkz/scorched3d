@@ -48,7 +48,7 @@ ServerAdminHandler *ServerAdminHandler::instance()
 ServerAdminHandler::ServerAdminHandler()
 {
 	ScorchedServer::instance()->getComsMessageHandler().addHandler(
-		"ComsAdminMessage",
+		ComsAdminMessage::ComsAdminMessageTyper,
 		this);
 }
 

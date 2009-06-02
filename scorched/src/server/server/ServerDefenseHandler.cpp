@@ -48,7 +48,7 @@ ServerDefenseHandler *ServerDefenseHandler::instance()
 ServerDefenseHandler::ServerDefenseHandler()
 {
 	ScorchedServer::instance()->getComsMessageHandler().addHandler(
-		"ComsDefenseMessage",
+		ComsDefenseMessage::ComsDefenseMessageType,
 		this);
 }
 

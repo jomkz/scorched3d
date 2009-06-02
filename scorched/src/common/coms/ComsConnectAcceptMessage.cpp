@@ -26,11 +26,13 @@
 #include <weapons/AccessoryStore.h>
 #include <common/OptionsScorched.h>
 
+ComsMessageType ComsConnectAcceptMessage::ComsConnectAcceptMessageType("ComsConnectAcceptMessageType");
+
 ComsConnectAcceptMessage::ComsConnectAcceptMessage(unsigned int destinationId,
 	const char *serverName,
 	const char *publishAddress,
 	const char *uniqueId) :
-	ComsMessage("ComsConnectAcceptMessage"),
+	ComsMessage(ComsConnectAcceptMessageType),
 	destinationId_(destinationId),
 	serverName_(serverName),
 	publishAddress_(publishAddress),

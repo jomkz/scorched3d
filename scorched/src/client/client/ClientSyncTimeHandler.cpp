@@ -24,6 +24,7 @@
 
 REGISTER_HANDLER(
 	ComsSyncTimeMessage, 
+	ComsSyncTimeMessage::ComsSyncTimeMessageType,
 	ComsMessageHandlerIRegistration::eClient, 
 	new ClientSyncTimeHandler());
 

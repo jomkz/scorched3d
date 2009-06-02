@@ -20,8 +20,10 @@
 
 #include <coms/ComsGameStoppedMessage.h>
 
+ComsMessageType ComsGameStoppedMessage::ComsGameStoppedMessageType("ComsGameStoppedMessageType");
+
 ComsGameStoppedMessage::ComsGameStoppedMessage() :
-	ComsMessage("ComsGameStoppedMessage"),
+	ComsMessage(ComsGameStoppedMessageType),
 	stateMessage_(false, false)
 {
 }

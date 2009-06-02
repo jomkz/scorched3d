@@ -49,7 +49,7 @@ ServerBuyAccessoryHandler *ServerBuyAccessoryHandler::instance()
 ServerBuyAccessoryHandler::ServerBuyAccessoryHandler()
 {
 	ScorchedServer::instance()->getComsMessageHandler().addHandler(
-		"ComsBuyAccessoryMessage",
+		ComsBuyAccessoryMessage::ComsBuyAccessoryMessageType,
 		this);
 }
 

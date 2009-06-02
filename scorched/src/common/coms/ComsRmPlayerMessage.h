@@ -27,6 +27,8 @@
 class ComsRmPlayerMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsRmPlayerMessageType;
+
 	ComsRmPlayerMessage(unsigned int playerId = 0);
 	virtual ~ComsRmPlayerMessage();
 

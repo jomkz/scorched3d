@@ -25,8 +25,10 @@
 #include <server/ScorchedServer.h>
 #include <common/OptionsTransient.h>
 
+ComsMessageType ComsGameStateMessage::ComsGameStateMessageType("ComsGameStateMessageType");
+
 ComsGameStateMessage::ComsGameStateMessage() :
-	ComsMessage("ComsGameStateMessage")
+	ComsMessage(ComsGameStateMessageType)
 {
 }
 

@@ -26,6 +26,8 @@
 class ComsSyncCheckMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsSyncCheckMessageType;
+
 	ComsSyncCheckMessage();
 	virtual ~ComsSyncCheckMessage();
 

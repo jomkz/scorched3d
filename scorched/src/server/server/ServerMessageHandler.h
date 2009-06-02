@@ -42,7 +42,7 @@ public:
 	virtual void clientConnected(NetMessage &message);
 	virtual void clientDisconnected(NetMessage &message);
 	virtual void clientError(NetMessage &message,
-		const char *errorString);
+		const std::string &errorString);
 
 	virtual void messageRecv(unsigned int destinationId);
 	virtual void messageSent(unsigned int destinationId);

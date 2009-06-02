@@ -26,6 +26,8 @@
 class ComsLevelLoadedMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsLevelLoadedMessageType;
+
 	ComsLevelLoadedMessage();
 	virtual ~ComsLevelLoadedMessage();
 

@@ -41,7 +41,7 @@ ServerHaveModFilesHandler *ServerHaveModFilesHandler::instance()
 ServerHaveModFilesHandler::ServerHaveModFilesHandler()
 {
 	ScorchedServer::instance()->getComsMessageHandler().addHandler(
-		"ComsHaveModFilesMessage",
+		ComsHaveModFilesMessage::ComsHaveModFilesMessageType,
 		this);
 }
 

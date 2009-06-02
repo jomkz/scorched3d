@@ -52,7 +52,7 @@ ClientConnectionAuthHandler *ClientConnectionAuthHandler::instance()
 ClientConnectionAuthHandler::ClientConnectionAuthHandler()
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsConnectAuthMessage",
+		ComsConnectAuthMessage::ComsConnectAuthMessageType,
 		this);
 }
 

@@ -39,7 +39,7 @@ ClientRmPlayerHandler *ClientRmPlayerHandler::instance()
 ClientRmPlayerHandler::ClientRmPlayerHandler()
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsRmPlayerMessage",
+		ComsRmPlayerMessage::ComsRmPlayerMessageType,
 		this);
 }
 

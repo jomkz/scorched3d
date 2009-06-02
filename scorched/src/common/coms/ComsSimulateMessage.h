@@ -26,6 +26,8 @@
 class ComsSimulateMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsSimulateMessageType;
+
 	ComsSimulateMessage(fixed eventTime = 0, fixed totalTime = 0);
 	virtual ~ComsSimulateMessage();
 

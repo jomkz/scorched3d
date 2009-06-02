@@ -55,7 +55,7 @@ ServerAddPlayerHandler *ServerAddPlayerHandler::instance()
 ServerAddPlayerHandler::ServerAddPlayerHandler()
 {
 	ScorchedServer::instance()->getComsMessageHandler().addHandler(
-		"ComsAddPlayerMessage",
+		ComsAddPlayerMessage::ComsAddPlayerMessageType,
 		this);
 }
 

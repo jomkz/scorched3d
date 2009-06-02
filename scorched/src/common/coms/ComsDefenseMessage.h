@@ -27,6 +27,8 @@
 class ComsDefenseMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsDefenseMessageType;
+
 	enum DefenseChange
 	{
 		eNoChange,

@@ -20,12 +20,14 @@
 
 #include <coms/ComsAdminMessage.h>
 
+ComsMessageType ComsAdminMessage::ComsAdminMessageTyper("ComsAdminMessageType");
+
 ComsAdminMessage::ComsAdminMessage(
 	unsigned int sid,
 	ComsAdminMessageType type,
 	const std::string &param1,
 	const std::string &param2) :
-	ComsMessage("ComsAdminMessage"),
+	ComsMessage(ComsAdminMessageTyper),
 	sid_(sid),
 	type_(type),
 	param1_(param1),

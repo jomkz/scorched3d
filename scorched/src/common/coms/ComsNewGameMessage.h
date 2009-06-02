@@ -28,6 +28,8 @@
 class ComsNewGameMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsNewGameMessageType;
+
 	ComsNewGameMessage();
 	virtual ~ComsNewGameMessage();
 

@@ -37,7 +37,7 @@ ClientStartTimerHandler *ClientStartTimerHandler::instance()
 ClientStartTimerHandler::ClientStartTimerHandler()
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsTimerStartMessage",
+		ComsTimerStartMessage::ComsTimerStartMessageType,
 		this);
 }
 

@@ -39,7 +39,7 @@ ClientLinesHandler *ClientLinesHandler::instance()
 ClientLinesHandler::ClientLinesHandler()
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsLinesMessage",
+		ComsLinesMessage::ComsLinesMessageType,
 		this);
 }
 

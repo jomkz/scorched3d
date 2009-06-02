@@ -28,6 +28,8 @@
 class ComsBuyAccessoryMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsBuyAccessoryMessageType;
+
 	ComsBuyAccessoryMessage(
 		unsigned int playerId = 0,
 		unsigned int accessoryId = 0,

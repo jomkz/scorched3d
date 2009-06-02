@@ -46,24 +46,20 @@ void ComsMessageHandler::setConnectionHandler(
 	connectionHandler_ = handler;
 }
 
-void ComsMessageHandler::addHandler(const char *messageType,
+void ComsMessageHandler::addHandler(ComsMessageType &comsMessageType,
 		ComsMessageHandlerI *handler)
 {
-	std::map<std::string, ComsMessageHandlerI *>::iterator itor =
-		recvHandlerMap_.find(messageType);
-	DIALOG_ASSERT(itor == recvHandlerMap_.end());
-
-	recvHandlerMap_[messageType] = handler;
+	unsigned int id = comsMessageType.getId();
+	if (recvHandlers_.size() < id + 1) recvHandlers_.resize(id + 1);
+	recvHandlers_[id] = handler;
 }
 
-void ComsMessageHandler::addSentHandler(const char *messageType,
+void ComsMessageHandler::addSentHandler(ComsMessageType &comsMessageType,
 		ComsMessageHandlerI *handler)
 {
-	std::map<std::string, ComsMessageHandlerI *>::iterator itor =
-		sentHandlerMap_.find(messageType);
-	DIALOG_ASSERT(itor == sentHandlerMap_.end());
-
-	sentHandlerMap_[messageType] = handler;
+	unsigned int id = comsMessageType.getId();
+	if (sentHandlers_.size() < id + 1) sentHandlers_.resize(id + 1);
+	sentHandlers_[id] = handler;
 }
 
 void ComsMessageHandler::processMessage(NetMessage &message)
@@ -110,109 +106,82 @@ void ComsMessageHandler::processMessage(NetMessage &message)
 
 void ComsMessageHandler::processReceiveMessage(NetMessage &message)
 {
+	processMessage(message, recvHandlers_, "RECV");
+}
+
+void ComsMessageHandler::processSentMessage(NetMessage &message)
+{
+	processMessage(message, sentHandlers_, "SEND");
+}
+
+void ComsMessageHandler::processMessage(NetMessage &message,
+	std::vector<ComsMessageHandlerI *> &handlers,
+	const char *sendRecv)
+{
+	if (handlers.empty()) return;
+
 	unsigned int bufferUsed = message.getBuffer().getBufferUsed();
 	if (!message.getBuffer().uncompressBuffer())
 	{
 		if (connectionHandler_)
 			connectionHandler_->clientError(message,
-				"Failed to uncompress RECV message type");
+				S3D::formatStringBuffer("Failed to uncompress %s message", sendRecv));
 	}
 	NetBufferReader reader(message.getBuffer());
 
-	std::string messageType;
-	if (!reader.getFromBuffer(messageType))
+	unsigned char messageTypeId;
+	if (!reader.getFromBuffer(messageTypeId))
 	{
 		if (connectionHandler_)
 			connectionHandler_->clientError(message,
-				"Failed to decode RECV message type");
+				S3D::formatStringBuffer("Failed to decode %s message type", sendRecv));
 		return;
 	}
-
+	ComsMessageType *comsMessageType = ComsMessageType::getTypeForId(messageTypeId);
+	if (!comsMessageType)
+	{
+		if (connectionHandler_) 
+			connectionHandler_->clientError(message, 
+				S3D::formatStringBuffer("Failed to find %s message type %u", 
+				sendRecv, messageTypeId));
+		return;
+	}
+	const char *messageTypeStr = comsMessageType->getName().c_str();
+	
 	if (comsMessageLogging_)
 	{
-		Logger::log(S3D::formatStringBuffer("%s::process(%s, %i, %u)",
+		Logger::log(S3D::formatStringBuffer("%s::process%s(%s, %i, %u)",
 			instanceName_.c_str(),
-			messageType.c_str(), message.getDestinationId(),
+			sendRecv,
+			messageTypeStr, message.getDestinationId(),
 			bufferUsed));
 	}
-
-	std::map<std::string, ComsMessageHandlerI *>::iterator itor =
-		recvHandlerMap_.find(messageType);
-	if (itor == recvHandlerMap_.end())
+	if (messageTypeId >= handlers.size())
 	{
-		char buffer[1024];
-		snprintf(buffer, 1024, "Failed to find RECV message type handler \"%s\"",
-			messageType.c_str());
-
 		if (connectionHandler_)
-			connectionHandler_->clientError(message,
-				buffer);
+			connectionHandler_->clientError(message, 
+				S3D::formatStringBuffer("Failed to find %s message type handler \"%s\"",
+					sendRecv, messageTypeStr));
 		return;
 	}
-
-	ComsMessageHandlerI *handler = (*itor).second;
-	const char *messageTypeStr = messageType.c_str();
+	ComsMessageHandlerI *handler = handlers[messageTypeId];
+	
 	if (!handler->processMessage(
 		message, messageTypeStr, reader))
 	{
-		char buffer[1024];
-		snprintf(buffer, 1024, "Failed to handle RECV message type \"%s\"",
-			messageType.c_str());
-
 		if (connectionHandler_)
-			connectionHandler_->clientError(message,
-				buffer);
+			connectionHandler_->clientError(message, 
+				S3D::formatStringBuffer("Failed to handle %s message type handler \"%s\"",
+					sendRecv, messageTypeStr));
 		return;
 	}
 
 	if (comsMessageLogging_)
 	{
-		Logger::log(S3D::formatStringBuffer("%s::processFinished(%s, %i)",
+		Logger::log(S3D::formatStringBuffer("%s::processFinished%s(%s, %i)",
 			instanceName_.c_str(),
-			messageType.c_str(), message.getDestinationId()));
-	}
-}
-
-void ComsMessageHandler::processSentMessage(NetMessage &message)
-{
-	if (sentHandlerMap_.empty()) return;
-
-	message.getBuffer().uncompressBuffer();
-	NetBufferReader reader(message.getBuffer());
-
-	std::string messageType;
-	if (!reader.getFromBuffer(messageType))
-	{
-		if (connectionHandler_)
-			connectionHandler_->clientError(message,
-				"Failed to decode SENT message type");
-		return;
-	}
-
-	if (comsMessageLogging_)
-	{
-		Logger::log(S3D::formatStringBuffer("%s::processSentMessage(%s, %i)",
-			instanceName_.c_str(),
-			messageType.c_str(), message.getDestinationId()));
-	}
-
-	std::map<std::string, ComsMessageHandlerI *>::iterator itor =
-		sentHandlerMap_.find(messageType);
-	if (itor == sentHandlerMap_.end()) return;
-
-	ComsMessageHandlerI *handler = (*itor).second;
-	const char *messageTypeStr = messageType.c_str();
-	if (!handler->processMessage(message, 
-		messageTypeStr, reader))
-	{
-		char buffer[1024];
-		snprintf(buffer, 1024, "Failed to handle SENT message type \"%s\"",
-			messageType.c_str());
-
-		if (connectionHandler_)
-			connectionHandler_->clientError(message,
-				buffer);
-		return;
+			sendRecv,
+			messageTypeStr, message.getDestinationId()));
 	}
 }
 
@@ -220,12 +189,12 @@ std::list<ComsMessageHandlerIRegistration::HandlerInfo>
 	*ComsMessageHandlerIRegistration::handlerList = 0;
 
 void ComsMessageHandlerIRegistration::addHandler(HandlerType type,
-		const std::string &messageType,
+		ComsMessageType &messageType,
 		ComsMessageHandlerI *handler)
 {
 	if (!handlerList) handlerList = new std::list<HandlerInfo>();
 
-	HandlerInfo info = { type, messageType, handler };
+	HandlerInfo info = { type, &messageType, handler };
 	handlerList->push_back(info);
 }
 
@@ -240,7 +209,7 @@ void ComsMessageHandlerIRegistration::registerHandlers(HandlerType type, ComsMes
 	{
 		if (itor->type == type) 
 		{
-			handler.addHandler(itor->messageType.c_str(), itor->handler);
+			handler.addHandler(*itor->messageType, itor->handler);
 		}
 	}
 }

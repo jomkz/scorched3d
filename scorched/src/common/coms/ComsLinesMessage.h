@@ -28,6 +28,8 @@
 class ComsLinesMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsLinesMessageType;
+
 	ComsLinesMessage(unsigned int playerId = 0);
 	virtual ~ComsLinesMessage();
 

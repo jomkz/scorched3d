@@ -33,7 +33,7 @@ ServerInitializeModHandler *ServerInitializeModHandler::instance()
 ServerInitializeModHandler::ServerInitializeModHandler()
 {
 	ScorchedServer::instance()->getComsMessageHandler().addHandler(
-		"ComsInitializeModMessage",
+		ComsInitializeModMessage::ComsInitializeModMessageType,
 		this);
 }
 

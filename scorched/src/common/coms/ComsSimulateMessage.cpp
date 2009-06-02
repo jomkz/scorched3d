@@ -20,8 +20,10 @@
 
 #include <coms/ComsSimulateMessage.h>
 
+ComsMessageType ComsSimulateMessage::ComsSimulateMessageType("ComsSimulateMessageType");
+
 ComsSimulateMessage::ComsSimulateMessage(fixed eventTime, fixed totalTime) :
-	ComsMessage("ComsSimulateMessage"),
+	ComsMessage(ComsSimulateMessageType),
 	eventTime_(eventTime), totalTime_(totalTime)
 {
 }

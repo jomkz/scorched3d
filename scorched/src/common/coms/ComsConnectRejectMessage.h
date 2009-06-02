@@ -26,6 +26,8 @@
 class ComsConnectRejectMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsConnectRejectMessageType;
+
 	ComsConnectRejectMessage(const char *text = "");
 	virtual ~ComsConnectRejectMessage();
 

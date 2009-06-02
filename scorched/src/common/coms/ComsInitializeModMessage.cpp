@@ -20,8 +20,10 @@
 
 #include <coms/ComsInitializeModMessage.h>
 
+ComsMessageType ComsInitializeModMessage::ComsInitializeModMessageType("ComsInitializeModMessageType");
+
 ComsInitializeModMessage::ComsInitializeModMessage() :
-	ComsMessage("ComsInitializeModMessage")
+	ComsMessage(ComsInitializeModMessageType)
 {
 
 }

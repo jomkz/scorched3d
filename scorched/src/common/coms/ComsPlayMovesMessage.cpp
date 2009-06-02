@@ -20,8 +20,10 @@
 
 #include <coms/ComsPlayMovesMessage.h>
 
+ComsMessageType ComsPlayMovesMessage::ComsPlayMovesMessageType("ComsPlayMovesMessageType");
+
 ComsPlayMovesMessage::ComsPlayMovesMessage() :
-	ComsMessage("ComsPlayMovesMessage"),
+	ComsMessage(ComsPlayMovesMessageType),
 	playerState_(true, true)
 {
 }

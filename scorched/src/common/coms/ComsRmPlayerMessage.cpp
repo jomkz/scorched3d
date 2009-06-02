@@ -21,8 +21,10 @@
 
 #include <coms/ComsRmPlayerMessage.h>
 
+ComsMessageType ComsRmPlayerMessage::ComsRmPlayerMessageType("ComsRmPlayerMessageType");
+
 ComsRmPlayerMessage::ComsRmPlayerMessage(unsigned int playerId) :
-	ComsMessage("ComsRmPlayerMessage"),
+	ComsMessage(ComsRmPlayerMessageType),
 	playerId_(playerId)
 {
 }

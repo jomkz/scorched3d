@@ -52,7 +52,7 @@ ClientConnectionAcceptHandler *ClientConnectionAcceptHandler::instance()
 ClientConnectionAcceptHandler::ClientConnectionAcceptHandler()
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsConnectAcceptMessage",
+		ComsConnectAcceptMessage::ComsConnectAcceptMessageType,
 		this);
 }
 

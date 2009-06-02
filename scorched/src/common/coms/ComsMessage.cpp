@@ -18,11 +18,58 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #include <coms/ComsMessage.h>
+#include <map>
+#include <vector>
 
-ComsMessage::ComsMessage(const char *type)
-	: type_(type)
+static std::map<std::string, ComsMessageType *> *coms_message_map = 0;
+static std::vector<ComsMessageType *> *coms_message_array = 0;
+
+ComsMessageType::ComsMessageType(const std::string &name) :
+	name_(name), id_(0)
+{
+	DIALOG_ASSERT(!coms_message_array);
+	if (!coms_message_map) {
+		coms_message_map = new std::map<std::string, ComsMessageType *>();
+	}
+	(*coms_message_map)[name] = this;
+}
+
+ComsMessageType::~ComsMessageType()
+{
+}
+
+unsigned int ComsMessageType::getId()
+{
+	if (!coms_message_array) getTypeForId(1);
+	return id_; 
+}
+
+ComsMessageType *ComsMessageType::getTypeForId(unsigned int id)
+{
+	if (!coms_message_array)
+	{
+		coms_message_array = new std::vector<ComsMessageType *>();
+		coms_message_array->resize(coms_message_map->size());
+
+		int id = 0;
+		std::map<std::string, ComsMessageType *>::iterator itor;
+		for (itor = coms_message_map->begin();
+			itor != coms_message_map->end();
+			itor++, id++)
+		{
+			(*coms_message_array)[id] = itor->second;
+			itor->second->id_ = id;
+		}
+		delete coms_message_map;
+		coms_message_map = 0;
+	}
+	if (id >= coms_message_array->size()) return 0;
+	return (*coms_message_array)[id];
+}
+
+ComsMessage::ComsMessage(ComsMessageType &messageType) : 
+	messageType_(messageType)
 {
 
 }
@@ -34,12 +81,14 @@ ComsMessage::~ComsMessage()
 
 bool ComsMessage::writeTypeMessage(NetBuffer &buffer)
 {
-	buffer.addToBuffer(type_.c_str());
+	unsigned char actualId = messageType_.getId();
+	buffer.addToBuffer(actualId);
 	return true;
 }
 
 bool ComsMessage::readTypeMessage(NetBufferReader &reader)
 {
-	if (!reader.getFromBuffer(type_)) return false;
+	unsigned char type;
+	if (!reader.getFromBuffer(type)) return false;
 	return true;
 }

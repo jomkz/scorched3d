@@ -69,10 +69,10 @@ ClientChannelManager *ClientChannelManager::instance()
 ClientChannelManager::ClientChannelManager()
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsChannelMessage",
+		ComsChannelMessage::ComsChannelMessageType,
 		this);
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsChannelTextMessage",
+		ComsChannelTextMessage::ComsChannelTextMessageType,
 		this);
 
 	new ConsoleRuleMethodIAdapterEx<ClientChannelManager>(

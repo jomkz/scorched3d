@@ -20,8 +20,10 @@
 
 #include <coms/ComsLinesMessage.h>
 
+ComsMessageType ComsLinesMessage::ComsLinesMessageType("ComsLinesMessageType");
+
 ComsLinesMessage::ComsLinesMessage(unsigned int playerId) : 
-	ComsMessage("ComsLinesMessage"),
+	ComsMessage(ComsLinesMessageType),
 	playerId_(playerId)
 {
 }

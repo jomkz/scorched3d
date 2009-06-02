@@ -26,6 +26,8 @@
 class ComsTimerStartMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsTimerStartMessageType;
+
 	ComsTimerStartMessage(int timerValue = 0);
 	virtual ~ComsTimerStartMessage();
 

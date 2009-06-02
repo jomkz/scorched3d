@@ -27,6 +27,7 @@
 #include <engine/Simulator.h>
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsLoadLevelMessage.h>
+#include <coms/ComsLevelLoadedMessage.h>
 #include <coms/ComsSyncLevelMessage.h>
 #include <coms/ComsSyncTimeMessage.h>
 
@@ -41,7 +42,7 @@ ServerLoadLevel *ServerLoadLevel::instance()
 ServerLoadLevel::ServerLoadLevel()
 {
 	ScorchedServer::instance()->getComsMessageHandler().addHandler(
-		"ComsLevelLoadedMessage",
+		ComsLevelLoadedMessage::ComsLevelLoadedMessageType,
 		this);
 }
 

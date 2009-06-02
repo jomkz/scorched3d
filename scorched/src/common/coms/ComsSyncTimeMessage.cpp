@@ -25,8 +25,10 @@
 #include <server/ScorchedServer.h>
 #include <engine/Simulator.h>
 
+ComsMessageType ComsSyncTimeMessage::ComsSyncTimeMessageType("ComsSyncTimeMessageType");
+
 ComsSyncTimeMessage::ComsSyncTimeMessage() :
-	ComsMessage("ComsSyncTimeMessage")
+	ComsMessage(ComsSyncTimeMessageType)
 {
 }
 

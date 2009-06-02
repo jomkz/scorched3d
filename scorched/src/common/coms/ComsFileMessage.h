@@ -26,6 +26,8 @@
 class ComsFileMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsFileMessageType;
+
 	ComsFileMessage();
 	virtual ~ComsFileMessage();
 

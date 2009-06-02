@@ -21,11 +21,13 @@
 
 #include <coms/ComsBuyAccessoryMessage.h>
 
+ComsMessageType ComsBuyAccessoryMessage::ComsBuyAccessoryMessageType("ComsBuyAccessoryMessageType");
+
 ComsBuyAccessoryMessage::ComsBuyAccessoryMessage(
 	unsigned int playerId,
 	unsigned int accessoryId,
 	bool buy) :
-	ComsMessage("ComsBuyAccessoryMessage"),
+	ComsMessage(ComsBuyAccessoryMessageType),
 	playerId_(playerId), accessoryId_(accessoryId),
 	buy_(buy)
 {

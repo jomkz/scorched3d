@@ -42,7 +42,7 @@ ServerKeepAliveHandler *ServerKeepAliveHandler::instance()
 ServerKeepAliveHandler::ServerKeepAliveHandler()
 {
 	ScorchedServer::instance()->getComsMessageHandler().addHandler(
-		"ComsKeepAliveMessage",
+		ComsKeepAliveMessage::ComsKeepAliveMessageType,
 		this);
 }
 

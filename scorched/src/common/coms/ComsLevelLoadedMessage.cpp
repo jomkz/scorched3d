@@ -20,8 +20,10 @@
 
 #include <coms/ComsLevelLoadedMessage.h>
 
+ComsMessageType ComsLevelLoadedMessage::ComsLevelLoadedMessageType("ComsLevelLoadedMessageType");
+
 ComsLevelLoadedMessage::ComsLevelLoadedMessage() :
-	ComsMessage("ComsLevelLoadedMessage")
+	ComsMessage(ComsLevelLoadedMessageType)
 {
 }
 

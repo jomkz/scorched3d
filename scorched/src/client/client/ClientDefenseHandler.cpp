@@ -46,7 +46,7 @@ ClientDefenseHandler *ClientDefenseHandler::instance()
 ClientDefenseHandler::ClientDefenseHandler()
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsDefenseMessage",
+		ComsDefenseMessage::ComsDefenseMessageType,
 		this);
 }
 

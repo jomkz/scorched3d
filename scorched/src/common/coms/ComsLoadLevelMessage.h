@@ -26,6 +26,8 @@
 class ComsLoadLevelMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsLoadLevelMessageType;
+
 	ComsLoadLevelMessage(LandscapeDefinition *landscapeDefintion = 0);
 	virtual ~ComsLoadLevelMessage();
 

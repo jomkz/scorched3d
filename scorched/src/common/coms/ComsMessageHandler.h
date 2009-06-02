@@ -22,7 +22,8 @@
 #define __INCLUDE_ComsMessageHandlerh_INCLUDE__
 
 #include <net/NetMessageHandler.h>
-#include <map>
+#include <coms/ComsMessage.h>
+#include <vector>
 
 class ComsMessageConnectionHandlerI
 {
@@ -32,7 +33,7 @@ public:
 	virtual void clientConnected(NetMessage &message) = 0;
 	virtual void clientDisconnected(NetMessage &message) = 0;
 	virtual void clientError(NetMessage &message,
-		const char *errorString) = 0;
+		const std::string &errorString) = 0;
 
 	virtual void messageRecv(unsigned int destinationId) = 0;
 	virtual void messageSent(unsigned int destinationId) = 0;
@@ -58,9 +59,9 @@ public:
 	// Used to add a handler for a specific message type
 	void setConnectionHandler(
 		ComsMessageConnectionHandlerI *handler);
-	void addHandler(const char *messageType,
+	void addHandler(ComsMessageType &comsMessageType,
 		ComsMessageHandlerI *handler);
-	void addSentHandler(const char *messageType,
+	void addSentHandler(ComsMessageType &comsMessageType,
 		ComsMessageHandlerI *handler);
 
 	// Inherited from NetMessageHandlerI
@@ -70,23 +71,25 @@ public:
 
 protected:
 	std::string instanceName_;
-	std::map<std::string, ComsMessageHandlerI *> recvHandlerMap_;
-	std::map<std::string, ComsMessageHandlerI *> sentHandlerMap_;
+	std::vector<ComsMessageHandlerI *> recvHandlers_;
+	std::vector<ComsMessageHandlerI *> sentHandlers_;
 	ComsMessageConnectionHandlerI *connectionHandler_;
 
 	bool comsMessageLogging_;
 	void processReceiveMessage(NetMessage &message);
 	void processSentMessage(NetMessage &message);
-
+	void processMessage(NetMessage &message,
+		std::vector<ComsMessageHandlerI *> &handlers,
+		const char *sendRecv);
 };
 
 // Used as in REGISTER_HANDLER(
 //	"MyComsMessage", 
 //	ComsMessageHandlerIRegistration::eClient, 
 //	new MyComsMessageHandler)
-#define REGISTER_HANDLER(x, y, z) \
-	struct HANDLER_##x { HANDLER_##x() { ComsMessageHandlerIRegistration::addHandler(y, #x , z); } }; \
-	static HANDLER_##x HANDLER_IMPL_##x ;
+#define REGISTER_HANDLER(name, type, y, z) \
+	struct HANDLER_##name { HANDLER_##name() { ComsMessageHandlerIRegistration::addHandler(y, type, z); } }; \
+	static HANDLER_##name HANDLER_IMPL_##name;
 
 class ComsMessageHandlerIRegistration
 {
@@ -99,12 +102,12 @@ public:
 	struct HandlerInfo
 	{
 		HandlerType type;
-		std::string messageType;
+		ComsMessageType *messageType;
 		ComsMessageHandlerI *handler;
 	};
 
 	static void addHandler(HandlerType type,
-			const std::string &messageType,
+			ComsMessageType &messageType,
 			ComsMessageHandlerI *handler);
 	static std::list<HandlerInfo> *handlerList;
 	static void registerHandlers(HandlerType type, ComsMessageHandler &handler);

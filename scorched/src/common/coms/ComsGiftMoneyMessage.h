@@ -27,6 +27,8 @@
 class ComsGiftMoneyMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsGiftMoneyMessageType;
+
 	ComsGiftMoneyMessage(
 		unsigned int fromPlayerId = 0,
 		unsigned int toPlayerId = 0,

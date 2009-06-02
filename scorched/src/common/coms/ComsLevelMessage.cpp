@@ -22,8 +22,10 @@
 #include <coms/ComsLevelMessage.h>
 #include <common/Defines.h>
 
+ComsMessageType ComsLevelMessage::ComsLevelMessageType("ComsLevelMessageType");
+
 ComsLevelMessage::ComsLevelMessage() :
-	ComsMessage("ComsLevelMessage")
+	ComsMessage(ComsLevelMessageType)
 {
 
 }

@@ -27,6 +27,8 @@
 class ComsStartGameMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsStartGameMessageType;
+
 	ComsStartGameMessage(unsigned int currentPlayerId = 0,
 		bool buyWeapons = false);
 	virtual ~ComsStartGameMessage();

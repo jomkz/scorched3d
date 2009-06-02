@@ -26,6 +26,8 @@
 class ComsPlayedMoveMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsPlayedMoveMessageType;
+
 	enum MoveType
 	{
 		eNone,

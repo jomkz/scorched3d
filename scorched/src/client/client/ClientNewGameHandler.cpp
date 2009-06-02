@@ -63,7 +63,7 @@ ClientNewGameHandler *ClientNewGameHandler::instance()
 ClientNewGameHandler::ClientNewGameHandler()
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsNewGameMessage",
+		ComsNewGameMessage::ComsNewGameMessageType,
 		this);
 }
 

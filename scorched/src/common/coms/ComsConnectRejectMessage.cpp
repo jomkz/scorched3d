@@ -20,8 +20,10 @@
 
 #include <coms/ComsConnectRejectMessage.h>
 
+ComsMessageType ComsConnectRejectMessage::ComsConnectRejectMessageType("ComsConnectRejectMessageType");
+
 ComsConnectRejectMessage::ComsConnectRejectMessage(const char *text) :
-	ComsMessage("ComsConnectRejectMessage"),
+	ComsMessage(ComsConnectRejectMessageType),
 	text_(text)
 {
 }

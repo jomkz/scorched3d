@@ -27,6 +27,8 @@
 class ComsPlayerStateMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsPlayerStateMessageType;
+
 	ComsPlayerStateMessage(bool full, bool accessories);
 	virtual ~ComsPlayerStateMessage();
 

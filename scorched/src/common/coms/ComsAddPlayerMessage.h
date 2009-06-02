@@ -27,6 +27,8 @@
 class ComsAddPlayerMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsAddPlayerMessageType;
+
 	ComsAddPlayerMessage();
 	ComsAddPlayerMessage(
 		unsigned int playerId,

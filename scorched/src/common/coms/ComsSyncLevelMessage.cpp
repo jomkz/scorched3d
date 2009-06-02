@@ -30,8 +30,10 @@
 #include <common/Logger.h>
 #include <map>
 
+ComsMessageType ComsSyncLevelMessage::ComsSyncLevelMessageType("ComsSyncLevelMessageType");
+
 ComsSyncLevelMessage::ComsSyncLevelMessage() :
-	ComsMessage("ComsSyncLevelMessage")
+	ComsMessage(ComsSyncLevelMessageType)
 {
 }
 

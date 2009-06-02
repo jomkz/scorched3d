@@ -42,7 +42,7 @@ ClientScoreHandler::ClientScoreHandler() :
 	finalScore_(false)
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsScoreMessage",
+		ComsScoreMessage::ComsScoreMessageType,
 		this);
 }
 

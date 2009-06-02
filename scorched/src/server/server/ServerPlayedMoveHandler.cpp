@@ -42,7 +42,7 @@ ServerPlayedMoveHandler *ServerPlayedMoveHandler::instance()
 ServerPlayedMoveHandler::ServerPlayedMoveHandler()
 {
 	ScorchedServer::instance()->getComsMessageHandler().addHandler(
-		"ComsPlayedMoveMessage",
+		ComsPlayedMoveMessage::ComsPlayedMoveMessageType,
 		this);
 }
 

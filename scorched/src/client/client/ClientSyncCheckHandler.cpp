@@ -38,7 +38,7 @@ ClientSyncCheckHandler *ClientSyncCheckHandler::instance()
 ClientSyncCheckHandler::ClientSyncCheckHandler()
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsSyncCheckMessage",
+		ComsSyncCheckMessage::ComsSyncCheckMessageType,
 		this);
 }
 

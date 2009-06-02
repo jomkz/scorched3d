@@ -77,8 +77,8 @@ void ClientMessageHandler::clientDisconnected(NetMessage &message)
 }
 
 void ClientMessageHandler::clientError(NetMessage &message,
-		const char *errorString)
+	const std::string &errorString)
 {
-	Logger::log(S3D::formatStringBuffer("***Client Error*** \"%s\"", errorString));
+	Logger::log(S3D::formatStringBuffer("***Client Error*** \"%s\"", errorString.c_str()));
 	ScorchedClient::instance()->getNetInterface().disconnectAllClients();
 }

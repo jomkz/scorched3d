@@ -26,6 +26,8 @@
 class ComsKeepAliveMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsKeepAliveMessageType;
+
 	ComsKeepAliveMessage();
 	virtual ~ComsKeepAliveMessage();
 

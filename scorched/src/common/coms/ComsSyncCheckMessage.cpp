@@ -35,8 +35,10 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <set>
 
+ComsMessageType ComsSyncCheckMessage::ComsSyncCheckMessageType("ComsSyncCheckMessageType");
+
 ComsSyncCheckMessage::ComsSyncCheckMessage() :
-	ComsMessage("ComsSyncCheckMessage")
+	ComsMessage(ComsSyncCheckMessageType)
 {
 
 }

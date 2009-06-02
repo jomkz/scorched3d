@@ -20,8 +20,10 @@
 
 #include <coms/ComsAddPlayerMessage.h>
 
+ComsMessageType ComsAddPlayerMessage::ComsAddPlayerMessageType("ComsAddPlayerMessageType");
+
 ComsAddPlayerMessage::ComsAddPlayerMessage() :
-	ComsMessage("ComsAddPlayerMessage")
+	ComsMessage(ComsAddPlayerMessageType)
 {
 }
 
@@ -34,7 +36,7 @@ ComsAddPlayerMessage::ComsAddPlayerMessage(
 		unsigned int destinationId,
 		unsigned int playerTeam,
 		const char *playerType) :
-	ComsMessage("ComsAddPlayerMessage"),
+	ComsMessage(ComsAddPlayerMessageType),
 	playerId_(playerId),
 	playerName_(playerName),
 	playerType_(playerType),

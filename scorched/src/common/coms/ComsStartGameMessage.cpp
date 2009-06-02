@@ -20,9 +20,11 @@
 
 #include <coms/ComsStartGameMessage.h>
 
+ComsMessageType ComsStartGameMessage::ComsStartGameMessageType("ComsStartGameMessageType");
+
 ComsStartGameMessage::ComsStartGameMessage(unsigned int currentPlayerId,
 										   bool buyWeapons) :
-	ComsMessage("ComsStartGameMessage"),
+	ComsMessage(ComsStartGameMessageType),
 	currentPlayerId_(currentPlayerId),
 	buyWeapons_(buyWeapons)
 {

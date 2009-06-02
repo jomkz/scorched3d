@@ -37,7 +37,7 @@ ClientOperationHandler *ClientOperationHandler::instance()
 ClientOperationHandler::ClientOperationHandler()
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsOperationMessage",
+		ComsOperationMessage::ComsOperationMessageTyper,
 		this);
 }
 

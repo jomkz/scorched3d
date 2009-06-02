@@ -46,7 +46,7 @@ ServerGiftMoneyHandler *ServerGiftMoneyHandler::instance()
 ServerGiftMoneyHandler::ServerGiftMoneyHandler()
 {
 	ScorchedServer::instance()->getComsMessageHandler().addHandler(
-		"ComsGiftMoneyMessage",
+		ComsGiftMoneyMessage::ComsGiftMoneyMessageType,
 		this);
 }
 

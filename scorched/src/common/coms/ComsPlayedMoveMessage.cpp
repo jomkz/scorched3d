@@ -20,8 +20,10 @@
 
 #include <coms/ComsPlayedMoveMessage.h>
 
+ComsMessageType ComsPlayedMoveMessage::ComsPlayedMoveMessageType("ComsPlayedMoveMessageType");
+
 ComsPlayedMoveMessage::ComsPlayedMoveMessage(unsigned int playerId, MoveType type) :
-	ComsMessage("ComsPlayedMoveMessage"),
+	ComsMessage(ComsPlayedMoveMessageType),
 	moveType_(type),
 	weaponId_(0),
 	rotationXY_(0), rotationYZ_(0), power_(0), playerId_(playerId),

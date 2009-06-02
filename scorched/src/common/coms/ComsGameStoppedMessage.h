@@ -27,6 +27,8 @@
 class ComsGameStoppedMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsGameStoppedMessageType;
+
 	ComsGameStoppedMessage();
 	virtual ~ComsGameStoppedMessage();
 

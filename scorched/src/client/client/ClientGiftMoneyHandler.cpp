@@ -42,7 +42,7 @@ ClientGiftMoneyHandler *ClientGiftMoneyHandler::instance()
 ClientGiftMoneyHandler::ClientGiftMoneyHandler()
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsGiftMoneyMessage",
+		ComsGiftMoneyMessage::ComsGiftMoneyMessageType,
 		this);
 }
 

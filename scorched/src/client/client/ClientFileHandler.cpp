@@ -45,7 +45,7 @@ ClientFileHandler *ClientFileHandler::instance()
 ClientFileHandler::ClientFileHandler() : totalBytes_(0)
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsFileMessage",
+		ComsFileMessage::ComsFileMessageType,
 		this);
 }
 

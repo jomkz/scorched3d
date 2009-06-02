@@ -26,6 +26,8 @@
 class ComsGameStateMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsGameStateMessageType;
+
 	ComsGameStateMessage();
 	virtual ~ComsGameStateMessage();
 

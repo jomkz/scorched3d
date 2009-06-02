@@ -26,6 +26,8 @@
 class ComsSyncTimeMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsSyncTimeMessageType;
+
 	ComsSyncTimeMessage();
 	virtual ~ComsSyncTimeMessage();
 

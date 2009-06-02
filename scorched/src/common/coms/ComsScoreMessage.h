@@ -27,6 +27,8 @@
 class ComsScoreMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsScoreMessageType;
+
 	ComsScoreMessage(bool finalScore = false);
 	virtual ~ComsScoreMessage();
 

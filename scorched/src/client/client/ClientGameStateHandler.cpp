@@ -41,7 +41,7 @@ ClientGameStateHandler *ClientGameStateHandler::instance()
 ClientGameStateHandler::ClientGameStateHandler()
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsGameStateMessage",
+		ComsGameStateMessage::ComsGameStateMessageType,
 		this);
 }
 

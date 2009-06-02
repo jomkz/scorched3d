@@ -26,6 +26,8 @@
 class ComsInitializeModMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsInitializeModMessageType;
+
 	ComsInitializeModMessage();
 	virtual ~ComsInitializeModMessage();
 

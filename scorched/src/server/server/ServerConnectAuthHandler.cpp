@@ -61,7 +61,7 @@ ServerConnectAuthHandler *ServerConnectAuthHandler::instance()
 ServerConnectAuthHandler::ServerConnectAuthHandler()
 {
 	ScorchedServer::instance()->getComsMessageHandler().addHandler(
-		"ComsConnectAuthMessage",
+		ComsConnectAuthMessage::ComsConnectAuthMessageType,
 		this);
 }
 

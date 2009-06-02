@@ -20,8 +20,10 @@
 
 #include <coms/ComsKeepAliveMessage.h>
 
+ComsMessageType ComsKeepAliveMessage::ComsKeepAliveMessageType("ComsKeepAliveMessageType");
+
 ComsKeepAliveMessage::ComsKeepAliveMessage() :
-	ComsMessage("ComsKeepAliveMessage")
+	ComsMessage(ComsKeepAliveMessageType)
 {
 }
 

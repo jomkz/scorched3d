@@ -269,10 +269,10 @@ void ServerMessageHandler::actualDestroyPlayer(unsigned int tankId)
 }
 
 void ServerMessageHandler::clientError(NetMessage &message,
-		const char *errorString)
+	const std::string &errorString)
 {
 	Logger::log(S3D::formatStringBuffer("Client \"%i\", ***Server Error*** \"%s\"", 
 		message.getDestinationId(),
-		errorString));
+		errorString.c_str()));
 	ServerCommon::kickDestination(message.getDestinationId());
 }

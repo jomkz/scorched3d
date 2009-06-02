@@ -38,7 +38,7 @@ ServerOperationResultHandler *ServerOperationResultHandler::instance()
 ServerOperationResultHandler::ServerOperationResultHandler()
 {
 	ScorchedServer::instance()->getComsMessageHandler().addHandler(
-		"ComsOperationResultMessage",
+		ComsOperationResultMessage::ComsOperationResultMessageType,
 		this);
 }
 

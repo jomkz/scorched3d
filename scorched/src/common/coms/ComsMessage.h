@@ -25,10 +25,31 @@
 #include <string>
 #include <net/NetMessage.h>
 
+class ComsMessage;
+class ComsMessageType
+{
+public:
+	ComsMessageType(const std::string &name);
+	~ComsMessageType();
+	
+	const std::string &getName() { return name_; }
+	unsigned int getId();
+
+	static ComsMessageType *getTypeForId(unsigned int id);
+
+protected:
+	std::string name_;
+	unsigned int id_;
+
+private:
+	ComsMessageType(const ComsMessageType &other);
+	ComsMessageType &operator=(ComsMessageType &other);
+};
+
 class ComsMessage
 {
 public:
-	ComsMessage(const char *type);
+	ComsMessage(ComsMessageType &messageType);
 	virtual ~ComsMessage();
 
 	virtual bool writeMessage(NetBuffer &buffer) = 0;
@@ -37,10 +58,10 @@ public:
 	// The string that defines the type of coms message
 	bool writeTypeMessage(NetBuffer &buffer);
 	bool readTypeMessage(NetBufferReader &reader);
-	const char *getMessageType() { return type_.c_str(); }
+	ComsMessageType &getComsMessageType() { return messageType_; }
 
 protected:
-	std::string type_;
+	ComsMessageType &messageType_;
 
 private:
 	ComsMessage(const ComsMessage &);

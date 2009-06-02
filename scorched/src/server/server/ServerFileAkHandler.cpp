@@ -34,7 +34,7 @@ ServerFileAkHandler *ServerFileAkHandler::instance()
 ServerFileAkHandler::ServerFileAkHandler()
 {
 	ScorchedServer::instance()->getComsMessageHandler().addHandler(
-		"ComsFileAkMessage",
+		ComsFileAkMessage::ComsFileAkMessageType,
 		this);
 }
 

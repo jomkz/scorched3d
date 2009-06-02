@@ -52,7 +52,7 @@ ClientStartGameHandler *ClientStartGameHandler::instance()
 ClientStartGameHandler::ClientStartGameHandler()
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsStartGameMessage",
+		ComsStartGameMessage::ComsStartGameMessageType,
 		this);
 }
 

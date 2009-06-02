@@ -45,7 +45,7 @@ ClientShotState::ClientShotState() :
 	shotState_(ScorchedClient::instance()->getContext(), playShots_)
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsPlayMovesMessage",
+		ComsPlayMovesMessage::ComsPlayMovesMessageType,
 		this);
 }
 

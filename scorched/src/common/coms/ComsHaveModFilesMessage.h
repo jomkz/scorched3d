@@ -28,6 +28,8 @@
 class ComsHaveModFilesMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsHaveModFilesMessageType;
+
 	ComsHaveModFilesMessage();
 	virtual ~ComsHaveModFilesMessage();
 

@@ -39,7 +39,7 @@ ServerLinesHandler *ServerLinesHandler::instance()
 ServerLinesHandler::ServerLinesHandler()
 {
 	ScorchedServer::instance()->getComsMessageHandler().addHandler(
-		"ComsLinesMessage",
+		ComsLinesMessage::ComsLinesMessageType,
 		this);
 }
 

@@ -27,8 +27,10 @@
 #endif
 #include <server/ScorchedServer.h>
 
+ComsMessageType ComsNewGameMessage::ComsNewGameMessageType("ComsNewGameMessageType");
+
 ComsNewGameMessage::ComsNewGameMessage() :
-	ComsMessage("ComsNewGameMessage"),
+	ComsMessage(ComsNewGameMessageType),
 	gameStateEnclosed_(false)
 {
 

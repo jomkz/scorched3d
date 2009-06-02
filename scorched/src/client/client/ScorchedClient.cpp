@@ -25,6 +25,7 @@
 #include <graph/MainCamera.h>
 #include <graph/ParticleEngine.h>
 #include <graph/OptionsDisplay.h>
+#include <coms/ComsSimulateMessage.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscape/GraphicalLandscapeMap.h>
 
@@ -53,7 +54,7 @@ ScorchedClient::ScorchedClient() :
 	actionController = &simulator->getActionController();
 	simulator->setScorchedContext(this);
 	getComsMessageHandler().addHandler(
-		"ComsSimulateMessage",
+		ComsSimulateMessage::ComsSimulateMessageType,
 		clientSimulator_);
 
 	// Calculate how many particles we can see

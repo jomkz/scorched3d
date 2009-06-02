@@ -28,6 +28,8 @@
 class ComsPlayMovesMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsPlayMovesMessageType;
+
 	ComsPlayMovesMessage();
 	virtual ~ComsPlayMovesMessage();
 

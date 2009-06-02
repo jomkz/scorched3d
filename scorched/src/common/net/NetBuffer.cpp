@@ -232,6 +232,11 @@ void NetBuffer::addToBuffer(const bool add)
 	addDataToBuffer(&c, sizeof(char));
 }
 
+void NetBuffer::addToBuffer(const unsigned char add)
+{
+	addDataToBuffer(&add, sizeof(unsigned char));
+}
+
 void NetBuffer::addToBuffer(const char add)
 {
 	addDataToBuffer(&add, sizeof(char));
@@ -360,6 +365,12 @@ bool NetBufferReader::getFromBuffer(bool &result)
 }
 
 bool NetBufferReader::getFromBuffer(char &result)
+{
+	if (!getDataFromBuffer(&result, sizeof(result))) return false;
+	return true;
+}
+
+bool NetBufferReader::getFromBuffer(unsigned char &result)
 {
 	if (!getDataFromBuffer(&result, sizeof(result))) return false;
 	return true;

@@ -153,10 +153,10 @@ ServerChannelManager::ServerChannelManager() :
 {
 	// Register to recieve comms messages
 	ScorchedServer::instance()->getComsMessageHandler().addHandler(
-		"ComsChannelMessage",
+		ComsChannelMessage::ComsChannelMessageType,
 		this);
 	ScorchedServer::instance()->getComsMessageHandler().addHandler(
-		"ComsChannelTextMessage",
+		ComsChannelTextMessage::ComsChannelTextMessageType,
 		this);
 
 	// Create some default channels

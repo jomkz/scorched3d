@@ -20,8 +20,10 @@
 
 #include <coms/ComsScoreMessage.h>
 
+ComsMessageType ComsScoreMessage::ComsScoreMessageType("ComsScoreMessageType");
+
 ComsScoreMessage::ComsScoreMessage(bool finalScore) :
-	ComsMessage("ComsScoreMessage"),
+	ComsMessage(ComsScoreMessageType),
 	finalScore_(finalScore)
 {
 

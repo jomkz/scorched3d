@@ -20,10 +20,12 @@
 
 #include <coms/ComsAdminResultMessage.h>
 
+ComsMessageType ComsAdminResultMessage::ComsAdminResultMessageType("ComsAdminResultMessageType");
+
 ComsAdminResultMessage::ComsAdminResultMessage(
 	unsigned int sid,
 	ComsAdminMessage::ComsAdminMessageType type) :
-	ComsMessage("ComsAdminResultMessage"),
+	ComsMessage(ComsAdminResultMessageType),
 	sid_(sid), type_(type)
 {
 

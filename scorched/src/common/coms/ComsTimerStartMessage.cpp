@@ -20,8 +20,10 @@
 
 #include <coms/ComsTimerStartMessage.h>
 
+ComsMessageType ComsTimerStartMessage::ComsTimerStartMessageType("ComsTimerStartMessageType");
+
 ComsTimerStartMessage::ComsTimerStartMessage(int timerValue) :
-	ComsMessage("ComsTimerStartMessage"),
+	ComsMessage(ComsTimerStartMessageType),
 	timerValue_(timerValue)
 {
 

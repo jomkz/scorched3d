@@ -52,7 +52,7 @@ ClientLoadLevelHandler *ClientLoadLevelHandler::instance()
 ClientLoadLevelHandler::ClientLoadLevelHandler()
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsLoadLevelMessage",
+		ComsLoadLevelMessage::ComsLoadLevelMessageType,
 		this);
 }
 
