@@ -152,12 +152,14 @@ ServerChannelManager::ServerChannelManager() :
 	totalTime_(0.0f), lastMessageId_(0)
 {
 	// Register to recieve comms messages
-	ScorchedServer::instance()->getComsMessageHandler().addHandler(
+	new ComsMessageHandlerIAdapter<ServerChannelManager>(
+		this, &ServerChannelManager::processChannelMessage,
 		ComsChannelMessage::ComsChannelMessageType,
-		this);
-	ScorchedServer::instance()->getComsMessageHandler().addHandler(
+		ScorchedServer::instance()->getComsMessageHandler());
+	new ComsMessageHandlerIAdapter<ServerChannelManager>(
+		this, &ServerChannelManager::processChannelTextMessage,
 		ComsChannelTextMessage::ComsChannelTextMessageType,
-		this);
+		ScorchedServer::instance()->getComsMessageHandler());
 
 	// Create some default channels
 	channelEntries_.push_back(new ChannelEntry(
@@ -581,14 +583,10 @@ void ServerChannelManager::actualSend(const ChannelText &constText,
 	}
 }
 
-bool ServerChannelManager::processMessage(
+bool ServerChannelManager::processChannelMessage(
 	NetMessage &netNessage,
-	const char *messageType,
 	NetBufferReader &reader)
 {
-	// Check which message we have got
-	if (0 == strcmp("ComsChannelMessage", messageType))
-	{
 		// We have a ChannelMessage from the server
 		ComsChannelMessage channelMessage;
 		if (!channelMessage.readMessage(reader)) return false;
@@ -608,9 +606,14 @@ bool ServerChannelManager::processMessage(
 				channelMessage.getChannels());
 			break;
 		}
-	}
-	else if (0 == strcmp("ComsChannelTextMessage", messageType))
-	{
+
+	return true;
+}
+
+bool ServerChannelManager::processChannelTextMessage(
+	NetMessage &netNessage,
+	NetBufferReader &reader)
+{
 		// We have a ChannelTextMessage from the server
 		ComsChannelTextMessage textMessage;
 		if (!textMessage.readMessage(reader)) return false;
@@ -719,8 +722,6 @@ bool ServerChannelManager::processMessage(
 			// Send to all destinations
 			sendText(textMessage.getChannelText(), true);
 		}
-	}
-	else return false;
 
 	return true;
 }

@@ -70,8 +70,6 @@ public:
 
 	OPTIONINT_GETTER(StartTime);
 	OPTIONINT_GETTER(ShotTime);
-	OPTIONINT_GETTER(KeepAliveTime);
-	OPTIONINT_GETTER(KeepAliveTimeoutTime);
 	OPTIONINT_GETTER(BuyingTime);
 	OPTIONINT_GETTER(RoundScoreTime);
 	OPTIONINT_GETTER(ScoreTime);

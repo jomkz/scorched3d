@@ -23,7 +23,6 @@
 #include <server/ScorchedServerUtil.h>
 #include <server/ServerCommon.h>
 #include <server/ServerBanned.h>
-#include <server/ServerKeepAliveHandler.h>
 #include <server/ServerChannelManager.h>
 #include <server/ServerShotHolder.h>
 #include <server/ServerState.h>
@@ -72,7 +71,6 @@ ServerMessageHandler::~ServerMessageHandler()
 
 void ServerMessageHandler::messageRecv(unsigned int destinationId)
 {
-	ServerKeepAliveHandler::instance()->keepAlive(destinationId);
 }
 
 void ServerMessageHandler::messageSent(unsigned int destinationId)
@@ -209,6 +207,7 @@ void ServerMessageHandler::destroyPlayer(unsigned int tankId, const char *reason
 	//if (tank->getState().getState() == TankState::sNormal &&
 	//	ScorchedServer::instance()->getGameState().getState() == ServerState::ServerStateShot)
 	{
+		/*
 		// Store a residual copy, that will be over written when the player is actual deleted
 		ScorchedServer::instance()->getTankDeadContainer().addTank(tank);
 
@@ -221,13 +220,13 @@ void ServerMessageHandler::destroyPlayer(unsigned int tankId, const char *reason
 			TankAI *ai = ScorchedServer::instance()->getTankAIs().getAIByName("Random");
 			tank->setTankAI(ai->createCopy(tank));
 			tank->setDestinationId(0);
-			tank->setKeepAlive(0);
 		}
+		*/
 	}
 	//else
 	{
 		// Destroy the player straight away
-		//actualDestroyPlayer(tankId);
+		actualDestroyPlayer(tankId);
 	}
 }
 

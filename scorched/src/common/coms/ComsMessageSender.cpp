@@ -35,7 +35,7 @@
 
 static NetBuffer defaultBuffer;
 
-bool ComsMessageSender::formMessage(ComsMessage &message)
+bool ComsMessageSender::formMessage(ComsMessage &message, unsigned int flags)
 {
 	// Write the message and its type to the buffer
 	defaultBuffer.reset();
@@ -51,7 +51,17 @@ bool ComsMessageSender::formMessage(ComsMessage &message)
 	}
 
 	// Compress the message
-	defaultBuffer.compressBuffer();
+#ifdef S3D_SERVER
+	if (flags & NetInterfaceFlags::fCompress)
+	{
+		defaultBuffer.compressBuffer();
+		defaultBuffer.addToBuffer(true);
+	}
+	else
+#endif
+	{
+		defaultBuffer.addToBuffer(false);
+	}
 
 	return true;
 }
@@ -62,13 +72,14 @@ bool ComsMessageSender::sendToServer(
 {
 	if (!ScorchedClient::instance()->getNetInterfaceValid() ||
 		!ScorchedClient::instance()->getNetInterface().started()) return false;
-	if (!formMessage(message)) return false;
+	if (!formMessage(message, flags)) return false;
 
 	if (ScorchedClient::instance()->getComsMessageHandler().getMessageLogging())
 	{
-		Logger::log(S3D::formatStringBuffer("Client::send(%s, %u)", 
+		Logger::log(S3D::formatStringBuffer("Client::send(%s, %u%s)", 
 			message.getComsMessageType().getName().c_str(),
-			defaultBuffer.getBufferUsed()));
+			defaultBuffer.getBufferUsed(),
+			(flags & NetInterfaceFlags::fCompress)?", compressed":""));
 	}	
 	ScorchedClient::instance()->getNetInterface().sendMessageServer(
 		defaultBuffer, flags);
@@ -80,7 +91,7 @@ bool ComsMessageSender::sendToMultipleClients(
 	ComsMessage &message, std::list<unsigned int> sendDestinations, unsigned int flags)
 {
 	if (sendDestinations.empty()) return true;
-	if (!formMessage(message)) return false;
+	if (!formMessage(message, flags)) return false;
 
 	// Used to ensure we only send messages to each
 	// destination once
@@ -102,10 +113,11 @@ bool ComsMessageSender::sendToMultipleClients(
 
 			if (ScorchedServer::instance()->getComsMessageHandler().getMessageLogging())
 			{
-				Logger::log(S3D::formatStringBuffer("Server::send(%s, %u, %u)", 
+				Logger::log(S3D::formatStringBuffer("Server::send(%s, %u, %u%s)", 
 					message.getComsMessageType().getName().c_str(),
 					destination,
-					defaultBuffer.getBufferUsed()));
+					defaultBuffer.getBufferUsed(),
+					(flags & NetInterfaceFlags::fCompress)?", compressed":""));
 			}	
 			if (!ScorchedServer::instance()->getNetInterfaceValid() ||
 				!ScorchedServer::instance()->getNetInterface().started())

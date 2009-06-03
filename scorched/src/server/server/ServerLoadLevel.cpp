@@ -77,7 +77,7 @@ void ServerLoadLevel::destinationLoadLevel(unsigned int destinationId)
 
 	// Tell this destination to start loading the level
 	ComsLoadLevelMessage loadLevelMessage(&landscapeDefinition);
-	ComsMessageSender::sendToSingleClient(loadLevelMessage, destinationId);
+	ComsMessageSender::sendToSingleClient(loadLevelMessage, destinationId, NetInterfaceFlags::fCompress);
 }
 
 bool ServerLoadLevel::destinationUsingCurrentLevel(unsigned int destinationId)
@@ -128,7 +128,7 @@ bool ServerLoadLevel::processMessage(
 	// Else the level is up to date
 	// Send the diffs to the level to bring it in sync with the server
 	ComsSyncLevelMessage syncMessage;
-	ComsMessageSender::sendToSingleClient(syncMessage, destinationId);
+	ComsMessageSender::sendToSingleClient(syncMessage, destinationId, NetInterfaceFlags::fCompress);
 
 	// These tanks are now ready to play
 	std::map<unsigned int, Tank *> &tanks = 

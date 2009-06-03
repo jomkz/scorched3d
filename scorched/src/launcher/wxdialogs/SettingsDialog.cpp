@@ -122,9 +122,6 @@ void SettingsFrame::createMainPanel(bool server)
 			mainPanel_, sizer, context_.getTurnTypeEntry()));	
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
-			mainPanel_, sizer, context_.getKeepAliveTimeoutTimeEntry()));	
-	setters_.push_back(
-		OptionEntrySetterUtil::createOtherSetter(
 			mainPanel_, sizer, context_.getStartTimeEntry()));	
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(

@@ -1077,14 +1077,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsKeepAliveMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsKeepAliveMessage.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\coms\ComsLevelLoadedMessage.cpp"
 				>
 			</File>
@@ -3337,14 +3329,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\client\ClientKeepAliveSender.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientKeepAliveSender.h"
-				>
-			</File>
-			<File
 				RelativePath="..\client\ClientLinesHandler.cpp"
 				>
 			</File>
@@ -5470,14 +5454,6 @@
 			</File>
 			<File
 				RelativePath="..\..\server\server\ServerInitializeModHandler.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerKeepAliveHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerKeepAliveHandler.h"
 				>
 			</File>
 			<File

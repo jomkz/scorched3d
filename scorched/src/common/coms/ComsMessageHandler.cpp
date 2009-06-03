@@ -120,12 +120,26 @@ void ComsMessageHandler::processMessage(NetMessage &message,
 {
 	if (handlers.empty()) return;
 
+	// Get how big the buffer is
 	unsigned int bufferUsed = message.getBuffer().getBufferUsed();
-	if (!message.getBuffer().uncompressBuffer())
+	if (bufferUsed < 1)
 	{
 		if (connectionHandler_)
 			connectionHandler_->clientError(message,
-				S3D::formatStringBuffer("Failed to uncompress %s message", sendRecv));
+				S3D::formatStringBuffer("Failed to get %s message compression state", sendRecv));
+	}
+
+	// Check if the buffer is sent compressed
+	bool compressed = (message.getBuffer().getBuffer()[bufferUsed - 1] == '1');
+	message.getBuffer().setBufferUsed(bufferUsed - 1);
+	if (compressed)
+	{
+		if (!message.getBuffer().uncompressBuffer())
+		{
+			if (connectionHandler_)
+				connectionHandler_->clientError(message,
+					S3D::formatStringBuffer("Failed to uncompress %s message", sendRecv));
+		}
 	}
 	NetBufferReader reader(message.getBuffer());
 
@@ -150,11 +164,12 @@ void ComsMessageHandler::processMessage(NetMessage &message,
 	
 	if (comsMessageLogging_)
 	{
-		Logger::log(S3D::formatStringBuffer("%s::process%s(%s, %i, %u)",
+		Logger::log(S3D::formatStringBuffer("%s::process%s(%s, %i, %u%s)",
 			instanceName_.c_str(),
 			sendRecv,
 			messageTypeStr, message.getDestinationId(),
-			bufferUsed));
+			bufferUsed,
+			compressed?", compressed":""));
 	}
 	if (messageTypeId >= handlers.size())
 	{

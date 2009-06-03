@@ -170,12 +170,6 @@ public:
 	int getShotTime() { return shotTime_; }
 	OptionEntryInt &getShotTimeEntry() { return shotTime_; }
 
-	int getKeepAliveTime() { return keepAliveTime_; }
-	OptionEntryInt &getKeepAliveTimeEntry() { return keepAliveTime_; }
-
-	int getKeepAliveTimeoutTime() { return keepAliveTimeoutTime_; }
-	OptionEntryInt &getKeepAliveTimeoutTimeEntry() { return keepAliveTimeoutTime_; }
-
 	int getBuyingTime() { return buyingTime_; }
 	OptionEntryInt &getBuyingTimeEntry() { return buyingTime_; }
 
@@ -372,8 +366,6 @@ protected:
 	OptionEntryBoundedInt startArmsLevel_;
 	OptionEntryBoundedInt endArmsLevel_;
 	OptionEntryBoundedInt maxRoundTurns_;
-	OptionEntryBoundedInt keepAliveTime_;
-	OptionEntryBoundedInt keepAliveTimeoutTime_;
 	OptionEntryBoundedInt shotTime_;
 	OptionEntryBoundedInt startTime_;
 	OptionEntryBoundedInt buyingTime_;
@@ -462,6 +454,8 @@ protected:
 	OptionEntryBool debugFeatures_;
 
 	// Depricated (old) options
+	OptionEntryBoundedInt depricatedKeepAliveTime_;
+	OptionEntryBoundedInt depricatedKeepAliveTimeoutTime_;
 	OptionEntryEnum depricatedScoreType_;
 	OptionEntryBool depricatedAutoBallanceTeams_;
 	OptionEntryBoundedInt depricatedMaxArmsLevel_;

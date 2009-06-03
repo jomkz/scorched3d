@@ -801,14 +801,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\server\ServerKeepAliveHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\server\ServerKeepAliveHandler.h"
-				>
-			</File>
-			<File
 				RelativePath="..\server\ServerLinesHandler.cpp"
 				>
 			</File>
@@ -2242,14 +2234,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\coms\ComsInitializeModMessage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsKeepAliveMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsKeepAliveMessage.h"
 				>
 			</File>
 			<File

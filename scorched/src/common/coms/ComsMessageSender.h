@@ -44,7 +44,7 @@ public:
 protected:
 
 	static bool formMessage(
-		ComsMessage &message);
+		ComsMessage &message, unsigned int flags);
 
 private:
 	ComsMessageSender();

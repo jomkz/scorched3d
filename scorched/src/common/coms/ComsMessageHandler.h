@@ -113,4 +113,34 @@ public:
 	static void registerHandlers(HandlerType type, ComsMessageHandler &handler);
 };
 
+// Same as above but passed userdata to method
+template<class T>
+class ComsMessageHandlerIAdapter : public ComsMessageHandlerI
+{
+public:
+	ComsMessageHandlerIAdapter(T *inst, 
+		bool (T::*call)(NetMessage &message, NetBufferReader &reader), 
+		ComsMessageType &comsMessageType,
+		ComsMessageHandler &handler) :
+		inst_(inst), call_(call)
+	{
+		handler.addHandler(comsMessageType, this);
+	};
+	virtual ~ComsMessageHandlerIAdapter()
+	{
+	};
+
+	virtual bool processMessage(
+		NetMessage &message,
+		const char *messageType,
+		NetBufferReader &reader)
+	{
+		return (inst_->*call_)(message, reader);
+	}
+
+protected:
+	T *inst_;
+	bool (T::*call_)(NetMessage &message, NetBufferReader &reader);
+};
+
 #endif

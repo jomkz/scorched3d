@@ -62,8 +62,8 @@ bool ClientSimulator::processMessage(
 	// Set new waiting time
 	waitingEventTime_ = message.getEventTime();
 
-	Logger::log(S3D::formatStringBuffer("Total Time %.2f, Server Total Time %.2f, Waiting Time %.2f", 
-		totalTime_.asFloat(), message.getTotalTime().asFloat(), waitingEventTime_.asFloat()));
+	//Logger::log(S3D::formatStringBuffer("Total Time %.2f, Server Total Time %.2f, Waiting Time %.2f", 
+	//	totalTime_.asFloat(), message.getTotalTime().asFloat(), waitingEventTime_.asFloat()));
 
 	return true;
 }

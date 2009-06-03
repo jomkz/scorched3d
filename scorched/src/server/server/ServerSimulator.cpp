@@ -38,8 +38,8 @@ void ServerSimulator::nextSendTime()
 	// so just never wait
 	waitingEventTime_ = nextEventTime_;
 
-	Logger::log(S3D::formatStringBuffer("Total Time %.2f, Waiting Time %.2f", 
-		totalTime_.asFloat(), waitingEventTime_.asFloat()));
+	//Logger::log(S3D::formatStringBuffer("Total Time %.2f, Waiting Time %.2f", 
+	//	totalTime_.asFloat(), waitingEventTime_.asFloat()));
 
 	ComsSimulateMessage simulateMessage(waitingEventTime_, totalTime_);
 	ComsMessageSender::sendToAllLoadedClients(simulateMessage);

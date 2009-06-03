@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <client/ClientProcessingLoop.h>
-#include <client/ClientKeepAliveSender.h>
 #include <client/ClientParams.h>
 #include <client/ScorchedClient.h>
 #include <net/NetInterface.h>
@@ -49,7 +48,6 @@ ClientProcessingLoop::~ClientProcessingLoop()
 
 void ClientProcessingLoop::simulate(const unsigned state, float frameTime)
 {
-	ClientKeepAliveSender::instance()->sendKeepAlive();
 	if (!ClientParams::instance()->getConnectedToServer())
 	{
 		serverTime_ += frameTime;

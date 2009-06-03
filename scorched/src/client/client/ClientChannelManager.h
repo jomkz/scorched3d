@@ -26,8 +26,7 @@
 #include <console/ConsoleRule.h>
 #include <set>
 
-class ClientChannelManager : 
-	public ComsMessageHandlerI
+class ClientChannelManager 
 {
 public:
 	static ClientChannelManager *instance();
@@ -45,12 +44,6 @@ public:
 
 	void addChannel(const char *lookfor, const char *channel);
 	void removeChannel(const char *channel);
-
-	// Inherited from ComsMessageHandlerI
-	virtual bool processMessage(
-		NetMessage &message,
-		const char *messageType,
-		NetBufferReader &reader);
 
 protected:
 	static ClientChannelManager *instance_;
@@ -76,6 +69,8 @@ protected:
 	std::map<unsigned int, ChannelEntry *> recievers_;
 	unsigned int getChannelEntry(ClientChannelManagerI *reciever);
 	void say(std::vector<ConsoleRuleValue> &values);
+	bool processChannelMessage(NetMessage &message, NetBufferReader &reader);
+	bool processChannelTextMessage(NetMessage &message, NetBufferReader &reader);
 
 private:
 	ClientChannelManager();

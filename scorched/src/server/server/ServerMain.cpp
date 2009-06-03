@@ -49,7 +49,6 @@
 #include <server/ServerAdminHandler.h>
 #include <server/ServerHaveModFilesHandler.h>
 #include <server/ServerBuyAccessoryHandler.h>
-#include <server/ServerKeepAliveHandler.h>
 #include <server/ServerFileAkHandler.h>
 #include <server/ServerInitializeModHandler.h>
 #include <server/ServerChannelManager.h>
@@ -121,7 +120,6 @@ bool startServer(bool local, ProgressCounter *counter)
 	ServerAdminHandler::instance();
 	ServerHaveModFilesHandler::instance();
 	ServerInitializeModHandler::instance();
-	ServerKeepAliveHandler::instance();
 	ServerPlayedMoveHandler::instance();
 	ServerFileAkHandler::instance();
 	ServerBuyAccessoryHandler::instance();

@@ -52,8 +52,7 @@ Tank::Tank(ScorchedContext &context,
 	color_(color), 
 	tankAI_(0),
 	team_(0), 
-	ipAddress_(0), 
-	keepAlive_(0)
+	ipAddress_(0)
 {
 	accessories_ = new TankAccessories(context);
 	score_ = new TankScore(context);

@@ -28,8 +28,7 @@
 #include <set>
 #include <map>
 
-class ServerChannelManager : 
-	public ComsMessageHandlerI
+class ServerChannelManager
 {
 public:
 	static ServerChannelManager *instance();
@@ -50,12 +49,6 @@ public:
 	// Notification of when players disconnect
 	void destinationDisconnected(unsigned int destinationId);
 	void refreshDestination(unsigned int destinationId);
-
-	// Inherited from ComsMessageHandlerI
-	virtual bool processMessage(
-		NetMessage &message,
-		const char *messageType,
-		NetBufferReader &reader);
 
 protected:
 	static ServerChannelManager *instance_;
@@ -143,6 +136,9 @@ protected:
 	void actualSend(const ChannelText &constText,
 		std::map<unsigned int, DestinationEntry *> &destinations, 
 		bool serverLog, bool filter);
+
+	bool processChannelMessage(NetMessage &message, NetBufferReader &reader);
+	bool processChannelTextMessage(NetMessage &message, NetBufferReader &reader);
 
 private:
 	ServerChannelManager();

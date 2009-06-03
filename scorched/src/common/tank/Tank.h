@@ -63,8 +63,6 @@ public:
 	void setDestinationId(unsigned int id) { destinationId_ = id; }
 	unsigned int getTeam() { return team_; }
 	void setTeam(unsigned int team) { team_ = team; }
-	unsigned int getKeepAlive() { return keepAlive_; }
-	void setKeepAlive(unsigned int ka) { keepAlive_ = ka; }
 	const char *getUniqueId() { return uniqueId_.c_str(); }
 	void setUniqueId(const char *id) { uniqueId_ = id; }
 	const char *getSUI() { return SUI_.c_str(); }
@@ -108,7 +106,6 @@ protected:
 	unsigned int playerId_;
 	unsigned int destinationId_;
 	unsigned int ipAddress_;
-	unsigned int keepAlive_;
 
 };
 
