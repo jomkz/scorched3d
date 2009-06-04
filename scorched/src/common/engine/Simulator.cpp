@@ -45,6 +45,18 @@ void Simulator::reset()
 	nextEventTime_ = nextSendTime_ + SendStepSize + SendStepSize;
 	waitingEventTime_ = nextEventTime_;
 	lastTickTime_ = SDL_GetTicks();
+	while (!simActions_.empty())
+	{
+		delete simActions_.front();
+		simActions_.pop_front();
+	}
+}
+
+void Simulator::addSimulatorAction(SimAction *action)
+{
+	SimActionContainer *container = 
+		new SimActionContainer(action, nextEventTime_);
+	simActions_.push_back(container);
 }
 
 void Simulator::setScorchedContext(ScorchedContext *context)
@@ -107,6 +119,15 @@ void Simulator::actualSimulate(fixed frameTime)
 	actionController_.simulate(frameTime);
 
 	//events_.simulate(frameTime, *context_);
+
+	while (!simActions_.empty())
+	{
+		SimActionContainer *container = simActions_.front();
+		if (container->fireTime_ > frameTime) break;
+		container->action_->invokeAction(*context_);
+		delete container;
+		simActions_.pop_front();
+	}
 }
 
 void Simulator::draw()
@@ -142,6 +163,19 @@ bool Simulator::readTimeMessage(NetBufferReader &reader)
 
 bool Simulator::writeSyncMessage(NetBuffer &buffer)
 {
+	// Actions
+	buffer.addToBuffer((unsigned int) simActions_.size());
+	std::list<SimActionContainer *>::iterator itor;
+	for (itor = simActions_.begin();
+		itor != simActions_.end();
+		itor++)
+	{
+		SimActionContainer *container = *itor;
+		buffer.addToBuffer(container->fireTime_);
+		buffer.addToBuffer(container->action_->getClassName());
+		container->action_->writeMessage(buffer);
+	}
+
 	// Random seeds
 	if (!random_.writeMessage(buffer)) return false;
 
@@ -153,6 +187,24 @@ bool Simulator::writeSyncMessage(NetBuffer &buffer)
 
 bool Simulator::readSyncMessage(NetBufferReader &reader)
 {
+	// Actions
+	unsigned int numberActions;
+	if (!reader.getFromBuffer(numberActions)) return false;
+	for (unsigned int a=0; a<numberActions; a++)
+	{
+		fixed fireTime;
+		if (!reader.getFromBuffer(fireTime)) return false;
+
+		std::string className;
+		if (!reader.getFromBuffer(className)) return false;
+		SimAction *simAction = (SimAction *)
+			MetaClassRegistration::getNewClass(className.c_str());
+		if (!simAction) return false;
+
+		SimActionContainer *container = new SimActionContainer(simAction, fireTime);
+		simActions_.push_back(container);
+	}
+
 	// Random seeds
 	if (!random_.readMessage(reader)) return false;
 

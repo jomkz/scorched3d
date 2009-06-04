@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_ShieldHith_INCLUDE__)
 #define __INCLUDE_ShieldHith_INCLUDE__
 
-#include <engine/ActionReferenced.h>
+#include <actions/ActionReferenced.h>
 
 class ShieldHit : public ActionReferenced
 {

@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <dialogs/ConnectDialog.h>
-#include <dialogs/PlayerDialog.h>
 #include <dialogs/MsgBoxDialog.h>
 #include <dialogs/ProgressDialog.h>
 #include <client/ScorchedClient.h>

@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_SoundActionh_INCLUDE__)
 #define __INCLUDE_SoundActionh_INCLUDE__
 
-#include <engine/ActionReferenced.h>
+#include <actions/ActionReferenced.h>
 
 class WeaponSound;
 class SoundAction : public ActionReferenced

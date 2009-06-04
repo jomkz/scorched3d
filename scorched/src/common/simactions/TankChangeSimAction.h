@@ -18,33 +18,27 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
+#if !defined(AFX_TankChangeSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#define AFX_TankChangeSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
-#if !defined(__INCLUDE_TextActionRendererh_INCLUDE__)
-#define __INCLUDE_TextActionRendererh_INCLUDE__
+#include <simactions/SimAction.h>
+#include <tank/Tank.h>
 
-#include <actions/Action.h>
-#include <common/Vector.h>
-#include <string>
-
-class TextActionRenderer : public ActionRenderer
+class TankChangeSimAction : public SimAction
 {
 public:
-	TextActionRenderer(
-		Vector &position,
-		Vector &color,
-		const std::string &text);
-	virtual ~TextActionRenderer();
+	TankChangeSimAction();
+	TankChangeSimAction(Tank *tank);
+	virtual ~TankChangeSimAction();
 
-	virtual void simulate(Action *action, float timepassed, bool &remove);
-	virtual void draw(Action *action);
+	virtual bool invokeAction(ScorchedContext &context);
 
+	virtual bool writeMessage(NetBuffer &buffer);
+	virtual bool readMessage(NetBufferReader &reader);
+
+REGISTER_CLASS_HEADER(TankChangeSimAction);
 protected:
-	Vector position_;
-	Vector color_;
-	float frameTime_;
-	std::string text_;
-
+	NetBuffer buffer_;
 };
 
-
-#endif
+#endif // !defined(AFX_TankChangeSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

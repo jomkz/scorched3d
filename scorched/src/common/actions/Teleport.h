@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_Teleporth_INCLUDE__)
 #define __INCLUDE_Teleporth_INCLUDE__
 
-#include <engine/ActionReferenced.h>
+#include <actions/ActionReferenced.h>
 #include <engine/ViewPoints.h>
 #include <common/FixedVector.h>
 #include <weapons/WeaponTeleport.h>

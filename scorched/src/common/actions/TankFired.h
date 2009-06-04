@@ -22,7 +22,7 @@
 #if !defined(__INCLUDE_TankFiredh_INCLUDE__)
 #define __INCLUDE_TankFiredh_INCLUDE__
 
-#include <engine/ActionReferenced.h>
+#include <actions/ActionReferenced.h>
 #include <weapons/Weapon.h>
 
 class TankFired : public ActionReferenced

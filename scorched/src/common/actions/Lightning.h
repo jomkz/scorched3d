@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_Lightningh_INCLUDE__)
 #define __INCLUDE_Lightningh_INCLUDE__
 
-#include <engine/ActionReferenced.h>
+#include <actions/ActionReferenced.h>
 #include <weapons/WeaponLightning.h>
 #include <list>
 

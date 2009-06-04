@@ -35,10 +35,9 @@
 #include <common/ChannelManager.h>
 #include <common/Clock.h>
 #include <common/Logger.h>
+#include <lang/LangResource.h>
 #include <coms/ComsNewGameMessage.h>
-#include <dialogs/PlayerDialog.h>
 #include <dialogs/ProgressDialog.h>
-#include <dialogs/RulesDialog.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapemap/DeformLandscape.h>
 #include <landscapedef/LandscapeDefinitions.h>

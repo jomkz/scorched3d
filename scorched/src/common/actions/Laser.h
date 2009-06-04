@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_Laserh_INCLUDE__)
 #define __INCLUDE_Laserh_INCLUDE__
 
-#include <engine/ActionReferenced.h>
+#include <actions/ActionReferenced.h>
 #include <weapons/WeaponLaser.h>
 #include <actions/LaserParams.h>
 

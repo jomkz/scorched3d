@@ -24,7 +24,7 @@
 #include <engine/ActionController.h>
 #include <engine/EventContainer.h>
 #include <common/RandomGenerator.h>
-#include <engine/GameStateI.h>
+#include <simactions/SimAction.h>
 #include <net/NetBuffer.h>
 
 class ScorchedContext;
@@ -37,6 +37,8 @@ public:
 	void setScorchedContext(ScorchedContext *context);
 
 	void reset();
+
+	void addSimulatorAction(SimAction *action);
 
 	// Accessors
 	RandomGenerator &getRandomGenerator() { return random_; }
@@ -58,6 +60,17 @@ public:
 	bool readSyncMessage(NetBufferReader &reader);
 
 protected:
+	class SimActionContainer
+	{
+	public:
+		SimActionContainer(SimAction *action, fixed fireTime)  :
+			action_(action), fireTime_(fireTime) {}
+		~SimActionContainer() { delete action_; }
+
+		SimAction *action_;
+		fixed fireTime_;
+	};
+
 	unsigned int lastTickTime_;
 	fixed speed_, stepTime_, totalTime_;
 	fixed nextSendTime_, nextEventTime_, waitingEventTime_;
@@ -65,6 +78,7 @@ protected:
 	EventContainer events_;
 	FileRandomGenerator random_;
 	ActionController actionController_;
+	std::list<SimActionContainer *> simActions_;
 
 	void actualSimulate(fixed frameTime);
 };

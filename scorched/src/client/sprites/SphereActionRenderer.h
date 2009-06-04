@@ -21,7 +21,7 @@
 #if !defined(AFX_SphereActionRenderer_H__53C71D24_C1E9_41C2_8757_FF947E1B4425__INCLUDED_)
 #define AFX_SphereActionRenderer_H__53C71D24_C1E9_41C2_8757_FF947E1B4425__INCLUDED_
 
-#include <engine/Action.h>
+#include <actions/Action.h>
 #include <common/Vector.h>
 
 class SphereActionRenderer : public ActionRenderer

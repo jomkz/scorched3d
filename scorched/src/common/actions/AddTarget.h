@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_AddTargeth_INCLUDE__)
 #define __INCLUDE_AddTargeth_INCLUDE__
 
-#include <engine/ActionReferenced.h>
+#include <actions/ActionReferenced.h>
 
 class WeaponAddTarget;
 class AddTarget : public ActionReferenced

@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_ExplosionNukeRendererh_INCLUDE__)
 #define __INCLUDE_ExplosionNukeRendererh_INCLUDE__
 
-#include <engine/Action.h>
+#include <actions/Action.h>
 #include <graph/ParticleEmitter.h>
 #include <common/Vector.h>
 #include <list>

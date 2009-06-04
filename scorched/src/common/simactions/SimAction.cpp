@@ -18,21 +18,23 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ActionReferencedh_INCLUDE__)
-#define __INCLUDE_ActionReferencedh_INCLUDE__
+#include <simactions/SimAction.h>
 
-#include <net/NetBuffer.h>
-#include <engine/Action.h>
-#include <string>
-#include <map>
-
-class ActionReferenced : public Action
+SimAction::SimAction()
 {
-public:
-	ActionReferenced(const char *name);
-	virtual ~ActionReferenced();
+}
 
-	virtual bool getReferenced() { return true; }
-};
+SimAction::~SimAction()
+{
 
-#endif
+}
+
+bool SimAction::writeTypeMessage(NetBuffer &buffer)
+{
+	return true;
+}
+
+bool SimAction::readTypeMessage(NetBufferReader &reader)
+{
+	return true;
+}

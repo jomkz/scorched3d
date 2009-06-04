@@ -22,7 +22,7 @@
 #if !defined(__INCLUDE_TankResignh_INCLUDE__)
 #define __INCLUDE_TankResignh_INCLUDE__
 
-#include <engine/ActionReferenced.h>
+#include <actions/ActionReferenced.h>
 
 class TankResign : public ActionReferenced
 {

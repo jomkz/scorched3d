@@ -33,6 +33,7 @@
 #include <coms/ComsPlayerStateMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <net/NetLoopBack.h>
+#include <simactions/TankChangeSimAction.h>
 #include <tankai/TankAIStore.h>
 #include <tank/TankModelStore.h>
 #include <tank/TankModelContainer.h>
@@ -72,7 +73,9 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 	// Validate player
 	unsigned int playerId = message.getPlayerId();
 	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
-	if (!tank || tank->getState().getState() == TankState::sNormal)
+	if (!tank || 
+		(tank->getState().getState() != TankState::sDead &&
+		tank->getState().getState() != TankState::sSpectator))
 	{
 		ServerChannelManager::instance()->sendText( 
 			ChannelText("info", "CHANGE_WHEN_DEAD", 
@@ -238,6 +241,11 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 	tank->getModelContainer().setTankModelName(
 		tankModel->getName(), message.getModelName(), tankModel->getTypeName());
 
+	// 
+	TankChangeSimAction *tankChangeSimAction = new TankChangeSimAction(tank);
+
+
+
 	// If we are in a waiting for players state then we can
 	// send the state of these new players
 	//if (ScorchedServer::instance()->getGameState().getState() == ServerState::ServerStateTooFewPlayers ||
@@ -246,6 +254,8 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 	//	ComsPlayerStateMessage message(false, false);
 	//	ComsMessageSender::sendToAllConnectedClients(message);
 	//}
+
+
 	return true;
 }
 

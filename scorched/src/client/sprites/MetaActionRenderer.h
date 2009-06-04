@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_MetaActionRendererh_INCLUDE__)
 #define __INCLUDE_MetaActionRendererh_INCLUDE__
 
-#include <engine/Action.h>
+#include <actions/Action.h>
 #include <engine/MetaClass.h>
 #include <common/Vector.h>
 

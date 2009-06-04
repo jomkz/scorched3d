@@ -1769,6 +1769,22 @@
 			Name="actions"
 			>
 			<File
+				RelativePath="..\..\common\actions\Action.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\Action.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\ActionReferenced.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\ActionReferenced.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\actions\AddTarget.cpp"
 				>
 			</File>
@@ -2409,27 +2425,11 @@
 			Name="engine"
 			>
 			<File
-				RelativePath="..\..\common\engine\Action.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\engine\Action.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\engine\ActionController.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\common\engine\ActionController.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\engine\ActionReferenced.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\engine\ActionReferenced.h"
 				>
 			</File>
 			<File
@@ -3846,6 +3846,26 @@
 			</File>
 			<File
 				RelativePath="..\..\common\lang\ResourceBundleEntryImpl.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="simactions"
+			>
+			<File
+				RelativePath="..\..\common\simactions\SimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\SimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankChangeSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankChangeSimAction.h"
 				>
 			</File>
 		</Filter>

@@ -18,7 +18,7 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <engine/ActionReferenced.h>
+#include <actions/ActionReferenced.h>
 
 ActionReferenced::ActionReferenced(const char *name) :
 	Action(name)

@@ -18,33 +18,21 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
+#if !defined(__INCLUDE_ActionReferencedh_INCLUDE__)
+#define __INCLUDE_ActionReferencedh_INCLUDE__
 
-#if !defined(__INCLUDE_TextActionRendererh_INCLUDE__)
-#define __INCLUDE_TextActionRendererh_INCLUDE__
-
+#include <net/NetBuffer.h>
 #include <actions/Action.h>
-#include <common/Vector.h>
 #include <string>
+#include <map>
 
-class TextActionRenderer : public ActionRenderer
+class ActionReferenced : public Action
 {
 public:
-	TextActionRenderer(
-		Vector &position,
-		Vector &color,
-		const std::string &text);
-	virtual ~TextActionRenderer();
+	ActionReferenced(const char *name);
+	virtual ~ActionReferenced();
 
-	virtual void simulate(Action *action, float timepassed, bool &remove);
-	virtual void draw(Action *action);
-
-protected:
-	Vector position_;
-	Vector color_;
-	float frameTime_;
-	std::string text_;
-
+	virtual bool getReferenced() { return true; }
 };
-
 
 #endif

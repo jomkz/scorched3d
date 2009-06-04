@@ -18,33 +18,23 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
+#if !defined(AFX_SIMACTION_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#define AFX_SIMACTION_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
-#if !defined(__INCLUDE_TextActionRendererh_INCLUDE__)
-#define __INCLUDE_TextActionRendererh_INCLUDE__
+#include <engine/MetaClass.h>
+#include <engine/ScorchedContext.h>
+#include <net/NetBuffer.h>
 
-#include <actions/Action.h>
-#include <common/Vector.h>
-#include <string>
-
-class TextActionRenderer : public ActionRenderer
+class SimAction : public MetaClass
 {
 public:
-	TextActionRenderer(
-		Vector &position,
-		Vector &color,
-		const std::string &text);
-	virtual ~TextActionRenderer();
+	SimAction();
+	virtual ~SimAction();
 
-	virtual void simulate(Action *action, float timepassed, bool &remove);
-	virtual void draw(Action *action);
+	virtual bool invokeAction(ScorchedContext &context) = 0;
 
-protected:
-	Vector position_;
-	Vector color_;
-	float frameTime_;
-	std::string text_;
-
+	virtual bool writeMessage(NetBuffer &buffer);
+	virtual bool readMessage(NetBufferReader &reader);
 };
 
-
-#endif
+#endif // !defined(AFX_SIMACTION_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

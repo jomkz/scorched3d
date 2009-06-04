@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_CameraPositionActionh_INCLUDE__)
 #define __INCLUDE_CameraPositionActionh_INCLUDE__
 
-#include <engine/ActionReferenced.h>
+#include <actions/ActionReferenced.h>
 #include <common/FixedVector.h>
 #include <set>
 

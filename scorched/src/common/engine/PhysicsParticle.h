@@ -21,7 +21,7 @@
 #if !defined(AFX_PhysicsParticle_H__53A44445_C8C9_4108_B5E1_744C0AF7A1D5__INCLUDED_)
 #define AFX_PhysicsParticle_H__53A44445_C8C9_4108_B5E1_744C0AF7A1D5__INCLUDED_
 
-#include <engine/Action.h>
+#include <actions/Action.h>
 #include <engine/PhysicsParticleObject.h>
 
 class PhysicsParticle : 

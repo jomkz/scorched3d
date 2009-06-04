@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_TankMovementh_INCLUDE__)
 #define __INCLUDE_TankMovementh_INCLUDE__
 
-#include <engine/ActionReferenced.h>
+#include <actions/ActionReferenced.h>
 #include <engine/ViewPoints.h>
 #include <common/FixedVector.h>
 #include <common/Counter.h>

@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_Explosionh_INCLUDE__)
 #define __INCLUDE_Explosionh_INCLUDE__
 
-#include <engine/ActionReferenced.h>
+#include <actions/ActionReferenced.h>
 #include <engine/ViewPoints.h>
 #include <weapons/Weapon.h>
 #include <common/FixedVector.h>

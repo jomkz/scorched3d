@@ -30,7 +30,6 @@
 #include <common/OptionsScorched.h>
 #include <client/ClientParams.h>
 #include <dialogs/ProgressDialog.h>
-#include <dialogs/PlayerDialog.h>
 #include <tank/TankModelStore.h>
 #include <engine/ModFiles.h>
 #include <graph/OptionsDisplay.h>
@@ -39,6 +38,7 @@
 #include <GLW/GLWWindowManager.h>
 #include <GLW/GLWWindowSkinManager.h>
 #include <GLEXT/GLLenseFlare.h>
+#include <lang/LangResource.h>
 
 ClientInitializeModHandler *ClientInitializeModHandler::instance_ = 0;
 

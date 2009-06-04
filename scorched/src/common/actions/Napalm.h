@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_Napalmh_INCLUDE__)
 #define __INCLUDE_Napalmh_INCLUDE__
 
-#include <engine/ActionReferenced.h>
+#include <actions/ActionReferenced.h>
 #include <weapons/WeaponNapalm.h>
 #include <common/Counter.h>
 #include <landscapemap/DeformLandscape.h>

@@ -22,7 +22,7 @@
 #define __INCLUDE_CallbackWeaponh_INCLUDE__
 
 #include <weapons/Weapon.h>
-#include <engine/ActionReferenced.h>
+#include <actions/ActionReferenced.h>
 
 class WeaponCallback : public Weapon
 {
