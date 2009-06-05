@@ -29,12 +29,12 @@ SimAction::~SimAction()
 
 }
 
-bool SimAction::writeTypeMessage(NetBuffer &buffer)
+bool SimAction::writeMessage(NetBuffer &buffer)
 {
 	return true;
 }
 
-bool SimAction::readTypeMessage(NetBufferReader &reader)
+bool SimAction::readMessage(NetBufferReader &reader)
 {
 	return true;
 }
