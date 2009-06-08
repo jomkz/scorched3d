@@ -3868,6 +3868,14 @@
 				RelativePath="..\..\common\simactions\TankChangeSimAction.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankLoadedSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankLoadedSimAction.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

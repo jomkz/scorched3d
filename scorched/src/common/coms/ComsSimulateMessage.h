@@ -22,13 +22,17 @@
 #define _ComsSimulateMessage_h
 
 #include <coms/ComsMessage.h>
+#include <simactions/SimAction.h>
+#include <list>
 
 class ComsSimulateMessage : public ComsMessage
 {
 public:
 	static ComsMessageType ComsSimulateMessageType;
 
-	ComsSimulateMessage(fixed eventTime = 0, fixed totalTime = 0);
+	ComsSimulateMessage();
+	ComsSimulateMessage(fixed eventTime, fixed totalTime, 
+		std::list<SimAction *> &actions);
 	virtual ~ComsSimulateMessage();
 
 	// Inherited from ComsMessage
@@ -37,9 +41,11 @@ public:
 
 	fixed &getEventTime() { return eventTime_; }
 	fixed &getTotalTime() { return totalTime_; }
+	std::list<SimAction *> &getActions() { return actions_; }
 
 protected:
 	fixed eventTime_, totalTime_;
+	std::list<SimAction *> actions_;
 
 private:
 	ComsSimulateMessage(const ComsSimulateMessage &);

@@ -68,7 +68,7 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 
 bool TankChangeSimAction::writeMessage(NetBuffer &buffer)
 {
-	buffer_.addToBuffer(buffer_);
+	buffer.addToBuffer(buffer_);
 	return true;
 }
 

@@ -36,9 +36,7 @@ public:
 
 	void setScorchedContext(ScorchedContext *context);
 
-	void reset();
-
-	void addSimulatorAction(SimAction *action);
+	virtual void reset();
 
 	// Accessors
 	RandomGenerator &getRandomGenerator() { return random_; }

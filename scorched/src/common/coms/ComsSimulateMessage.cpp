@@ -22,10 +22,17 @@
 
 ComsMessageType ComsSimulateMessage::ComsSimulateMessageType("ComsSimulateMessageType");
 
-ComsSimulateMessage::ComsSimulateMessage(fixed eventTime, fixed totalTime) :
+ComsSimulateMessage::ComsSimulateMessage() :
+	ComsMessage(ComsSimulateMessageType)
+{
+}
+
+ComsSimulateMessage::ComsSimulateMessage(fixed eventTime, fixed totalTime,
+	std::list<SimAction *> &actions) :
 	ComsMessage(ComsSimulateMessageType),
 	eventTime_(eventTime), totalTime_(totalTime)
 {
+	actions_.swap(actions);
 }
 
 ComsSimulateMessage::~ComsSimulateMessage()
@@ -36,6 +43,16 @@ bool ComsSimulateMessage::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(eventTime_);
 	buffer.addToBuffer(totalTime_);
+	buffer.addToBuffer((unsigned int) actions_.size());
+	std::list<SimAction *>::iterator itor;
+	for (itor = actions_.begin();
+		itor != actions_.end();
+		itor++)
+	{
+		SimAction *action = *itor;
+		buffer.addToBuffer(action->getClassName());
+		action->writeMessage(buffer);
+	}
 	return true;
 }
 
@@ -43,5 +60,17 @@ bool ComsSimulateMessage::readMessage(NetBufferReader &reader)
 {
 	if (!reader.getFromBuffer(eventTime_)) return false;
 	if (!reader.getFromBuffer(totalTime_)) return false;
+	unsigned int actionCount = 0;
+	if (!reader.getFromBuffer(actionCount)) return false;
+	for (unsigned int a=0; a<actionCount; a++)
+	{
+		std::string actionName;
+		if (!reader.getFromBuffer(actionName)) return false;
+		SimAction *action = (SimAction *) MetaClassRegistration::
+			getNewClass(actionName.c_str());
+		if (!action) return false;
+		if (!action->readMessage(reader)) return false;
+		actions_.push_back(action);		
+	}
 	return true;
 }

@@ -52,13 +52,6 @@ void Simulator::reset()
 	}
 }
 
-void Simulator::addSimulatorAction(SimAction *action)
-{
-	SimActionContainer *container = 
-		new SimActionContainer(action, nextEventTime_);
-	simActions_.push_back(container);
-}
-
 void Simulator::setScorchedContext(ScorchedContext *context)
 {
 	context_ = context;
@@ -123,7 +116,7 @@ void Simulator::actualSimulate(fixed frameTime)
 	while (!simActions_.empty())
 	{
 		SimActionContainer *container = simActions_.front();
-		if (container->fireTime_ > frameTime) break;
+		if (container->fireTime_ > totalTime_) break;
 		container->action_->invokeAction(*context_);
 		delete container;
 		simActions_.pop_front();
@@ -200,6 +193,7 @@ bool Simulator::readSyncMessage(NetBufferReader &reader)
 		SimAction *simAction = (SimAction *)
 			MetaClassRegistration::getNewClass(className.c_str());
 		if (!simAction) return false;
+		if (!simAction->readMessage(reader)) return false;
 
 		SimActionContainer *container = new SimActionContainer(simAction, fireTime);
 		simActions_.push_back(container);

@@ -20,11 +20,13 @@
 
 #include <server/ServerLoadLevel.h>
 #include <server/ScorchedServer.h>
+#include <server/ServerSimulator.h>
 #include <landscapedef/LandscapeDefinition.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <engine/Simulator.h>
+#include <simactions/TankLoadedSimAction.h>
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsLoadLevelMessage.h>
 #include <coms/ComsLevelLoadedMessage.h>
@@ -131,9 +133,9 @@ bool ServerLoadLevel::processMessage(
 	ComsMessageSender::sendToSingleClient(syncMessage, destinationId, NetInterfaceFlags::fCompress);
 
 	// These tanks are now ready to play
+	std::map<unsigned int, Tank *>::iterator itor;
 	std::map<unsigned int, Tank *> &tanks = 
 		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
 		itor++)
@@ -142,7 +144,13 @@ bool ServerLoadLevel::processMessage(
 		Tank *tank = (*itor).second;
 		if (destinationId == tank->getDestinationId())
 		{
+			// Set state so we send to these destinations
 			tank->getState().setState(TankState::sSpectator);
+
+			TankLoadedSimAction *loadedAction = 
+				new TankLoadedSimAction(tank->getPlayerId());
+			ScorchedServer::instance()->getServerSimulator().
+				addSimulatorAction(loadedAction);
 		}
 	}
 

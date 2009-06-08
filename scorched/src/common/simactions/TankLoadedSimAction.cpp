@@ -18,23 +18,44 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_SIMACTION_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
-#define AFX_SIMACTION_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
+#include <simactions/TankLoadedSimAction.h>
+#include <tank/TankAvatar.h>
+#include <tank/TankState.h>
+#include <tank/TankContainer.h>
 
-#include <engine/MetaClass.h>
-#include <engine/ScorchedContext.h>
-#include <net/NetBuffer.h>
+REGISTER_CLASS_SOURCE(TankLoadedSimAction);
 
-class SimAction : public MetaClass
+TankLoadedSimAction::TankLoadedSimAction()
 {
-public:
-	SimAction();
-	virtual ~SimAction();
+}
 
-	virtual bool invokeAction(ScorchedContext &context) = 0;
+TankLoadedSimAction::TankLoadedSimAction(unsigned int playerId) :
+	playerId_(playerId)
+{
+}
 
-	virtual bool writeMessage(NetBuffer &buffer) = 0;
-	virtual bool readMessage(NetBufferReader &reader) = 0;
-};
+TankLoadedSimAction::~TankLoadedSimAction()
+{
+}
 
-#endif // !defined(AFX_SIMACTION_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+bool TankLoadedSimAction::invokeAction(ScorchedContext &context)
+{
+	Tank *tank = context.getTankContainer().getTankById(playerId_);
+	if (!tank) return false;
+
+	tank->getState().setState(TankState::sSpectator);
+
+	return true;
+}
+
+bool TankLoadedSimAction::writeMessage(NetBuffer &buffer)
+{
+	buffer.addToBuffer(playerId_);
+	return true;
+}
+
+bool TankLoadedSimAction::readMessage(NetBufferReader &reader)
+{
+	if (!reader.getFromBuffer(playerId_)) return false;
+	return true;
+}

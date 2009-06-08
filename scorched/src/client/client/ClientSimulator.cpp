@@ -62,6 +62,16 @@ bool ClientSimulator::processMessage(
 	// Set new waiting time
 	waitingEventTime_ = message.getEventTime();
 
+	// Add the new actions for this time
+	std::list<SimAction *>::iterator itor;
+	for (itor = message.getActions().begin();
+		itor != message.getActions().end();
+		itor++)
+	{
+		SimAction *action = *itor;
+		simActions_.push_back(new SimActionContainer(action, waitingEventTime_));
+	}
+
 	//Logger::log(S3D::formatStringBuffer("Total Time %.2f, Server Total Time %.2f, Waiting Time %.2f", 
 	//	totalTime_.asFloat(), message.getTotalTime().asFloat(), waitingEventTime_.asFloat()));
 

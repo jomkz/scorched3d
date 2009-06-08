@@ -24,6 +24,7 @@
 #include <server/ScorchedServerUtil.h>
 #include <server/ServerState.h>
 #include <server/ServerChannelManager.h>
+#include <server/ServerSimulator.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <common/StatsLogger.h>
@@ -241,20 +242,9 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 	tank->getModelContainer().setTankModelName(
 		tankModel->getName(), message.getModelName(), tankModel->getTypeName());
 
-	// 
+	// Set this tank 
 	TankChangeSimAction *tankChangeSimAction = new TankChangeSimAction(tank);
-
-
-
-	// If we are in a waiting for players state then we can
-	// send the state of these new players
-	//if (ScorchedServer::instance()->getGameState().getState() == ServerState::ServerStateTooFewPlayers ||
-	//	ScorchedServer::instance()->getGameState().getState() == ServerState::ServerStateStarting)
-	//{
-	//	ComsPlayerStateMessage message(false, false);
-	//	ComsMessageSender::sendToAllConnectedClients(message);
-	//}
-
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankChangeSimAction);
 
 	return true;
 }

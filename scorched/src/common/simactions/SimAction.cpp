@@ -26,15 +26,4 @@ SimAction::SimAction()
 
 SimAction::~SimAction()
 {
-
-}
-
-bool SimAction::writeMessage(NetBuffer &buffer)
-{
-	return true;
-}
-
-bool SimAction::readMessage(NetBufferReader &reader)
-{
-	return true;
 }
