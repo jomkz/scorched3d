@@ -20,6 +20,7 @@
 
 #include <server/ServerHaveModFilesHandler.h>
 #include <server/ServerChannelManager.h>
+#include <server/ServerDestinations.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerCommon.h>
 #include <engine/ModFiles.h>
@@ -27,8 +28,6 @@
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
-#include <tank/TankMod.h>
-#include <tank/TankContainer.h>
 #include <time.h>
 
 ServerHaveModFilesHandler *ServerHaveModFilesHandler::instance()
@@ -177,34 +176,26 @@ bool ServerHaveModFilesHandler::processMessage(
 #endif
 
 	// Set the files to download in this tanks profile
-	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	std::map<unsigned int, Tank *>::iterator itor;
-	for (itor = tanks.begin();
-		itor != tanks.end();
-		itor++)
-	{
-		// For each tank
-		Tank *tank = (*itor).second;
-		if (netMessage.getDestinationId() == tank->getDestinationId())
-		{
-			// and for each needed entry
-			std::list<ModFileEntry *>::iterator neededItor;
-			for (neededItor = neededEntries_.begin();
-				neededItor != neededEntries_.end();
-				neededItor ++)
-			{
-				ModFileEntry *entry = (*neededItor);
+	ServerDestination *destination =
+		ScorchedServer::instance()->getServerDestinations().getDestination(
+			netMessage.getDestinationId());
+	if (!destination) return false;
 
-				// Add the entry this tank needs to download
-				ModIdentifierEntry newEntry(entry->getFileName(),
-					0, entry->getCompressedCrc());
-				tank->getMod().addFile(newEntry);
-			}
-			tank->getMod().setInit(true);
-			tank->getMod().setTotalLeft(neededLength);
-		}
+	// and for each needed entry
+	std::list<ModFileEntry *>::iterator neededItor;
+	for (neededItor = neededEntries_.begin();
+		neededItor != neededEntries_.end();
+		neededItor ++)
+	{
+		ModFileEntry *entry = (*neededItor);
+
+		// Add the entry this tank needs to download
+		ModIdentifierEntry newEntry(entry->getFileName(),
+			0, entry->getCompressedCrc());
+		destination->getMod().addFile(newEntry);
 	}
+	destination->getMod().setInit(true);
+	destination->getMod().setTotalLeft(neededLength);
 
 	return true;
 }

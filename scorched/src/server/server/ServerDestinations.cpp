@@ -18,32 +18,35 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerFileServerh_INCLUDE__)
-#define __INCLUDE_ServerFileServerh_INCLUDE__
+#include <server/ServerDestinations.h>
 
-#include <coms/ComsFileMessage.h>
-
-class ServerDestination;
-class ServerFileServer
+ServerDestinations::ServerDestinations()
 {
-public:
-	static ServerFileServer *instance();
+}
 
-	void simulate(float timeDifference);
+ServerDestinations::~ServerDestinations()
+{
+}
 
-protected:
-	static ServerFileServer *instance_;
-	unsigned int lastTime_;
-	unsigned int bytesSent_;
+void ServerDestinations::addDestination(unsigned int destinationId, unsigned int ipAddress)
+{
+	serverDestinations_[destinationId] = new ServerDestination(destinationId, ipAddress);
+}
 
-	void sendBytes(ServerDestination *destination, unsigned int size);
-	bool sendNextFile(ComsFileMessage &message,
-		ServerDestination *destination, 
-		unsigned int size, unsigned int &sentSize);
+void ServerDestinations::removeDestination(unsigned int destinationId)
+{
+	ServerDestination *serverDestination = getDestination(destinationId);
+	if (serverDestination)
+	{
+		delete serverDestination;
+		serverDestinations_.erase(destinationId);
+	}
+}
 
-private:
-	ServerFileServer();
-	virtual ~ServerFileServer();
-};
-
-#endif // __INCLUDE_ServerFileServerh_INCLUDE__
+ServerDestination *ServerDestinations::getDestination(unsigned int destinationId)
+{
+	std::map<unsigned int, ServerDestination*>::iterator itor =
+		serverDestinations_.find(destinationId);
+	if (itor == serverDestinations_.end()) return 0;
+	return itor->second;
+}

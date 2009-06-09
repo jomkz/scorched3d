@@ -26,9 +26,9 @@
 #include <server/ServerChannelManager.h>
 #include <server/ServerShotHolder.h>
 #include <server/ServerState.h>
+#include <server/ServerDestinations.h>
 #include <tank/TankDeadContainer.h>
 #include <tank/TankState.h>
-#include <tank/TankContainer.h>
 #include <tankai/TankAIStore.h>
 #include <coms/ComsRmPlayerMessage.h>
 #include <coms/ComsMessageSender.h>
@@ -36,19 +36,6 @@
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
 #include <common/StatsLogger.h>
-
-ServerMessageHandler::DestinationInfo::DestinationInfo() :
-	adminTries(0), admin(false)
-{
-}
-
-ServerMessageHandler::DestinationInfo *ServerMessageHandler::getDestinationInfo(unsigned int destinationId)
-{
-	std::map<unsigned int, DestinationInfo>::iterator itor = 
-		destinationInfos_.find(destinationId);
-	if (itor == destinationInfos_.end()) return 0;
-	return &itor->second;
-}
 
 ServerMessageHandler *ServerMessageHandler::instance_ = 0;
 
@@ -93,15 +80,16 @@ void ServerMessageHandler::clientConnected(NetMessage &message)
 	}
 
 	// Check if a player from this destination has connected already
-	std::map<unsigned int, Tank *> &playingTanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	std::map<unsigned int, Tank *>::iterator playingItor;
-	for (playingItor = playingTanks.begin();
-		playingItor != playingTanks.end();
-		playingItor++)
+	std::map<unsigned int, ServerDestination *> &destinations =
+		ScorchedServer::instance()->getServerDestinations().getServerDestinations();
+	std::map<unsigned int, ServerDestination *>::iterator destItor;
+	for (destItor = destinations.begin();
+		destItor != destinations.end();
+		destItor++)
 	{
-		Tank *current = (*playingItor).second;
-		if (current->getDestinationId() == message.getDestinationId())
+		unsigned int serverDestinationId = destItor->first;
+		ServerDestination *serverDestination = destItor->second;
+		if (serverDestinationId == message.getDestinationId())
 		{
 			Logger::log(S3D::formatStringBuffer("Duplicate connection from destination \"%i\"", 
 				message.getDestinationId()));
@@ -113,7 +101,7 @@ void ServerMessageHandler::clientConnected(NetMessage &message)
 		if (!ScorchedServer::instance()->getOptionsGame().getAllowSameIP() &&
 			message.getIpAddress() != 0)
 		{
-			if (message.getIpAddress() == current->getIpAddress())
+			if (message.getIpAddress() == serverDestination->getIpAddress())
 			{
 				Logger::log(S3D::formatStringBuffer("Duplicate ip connection from ip address \"%s\"", 
 					NetInterface::getIpName(message.getIpAddress())));
@@ -125,7 +113,8 @@ void ServerMessageHandler::clientConnected(NetMessage &message)
 	}
 
 	// Add to list of destinations
-	destinationInfos_[message.getDestinationId()] = DestinationInfo();
+	ScorchedServer::instance()->getServerDestinations().addDestination(
+		message.getDestinationId(), message.getIpAddress());
 
 	Logger::log(S3D::formatStringBuffer("Client connected dest=\"%i\" ip=\"%s\"", 
 		message.getDestinationId(),
@@ -175,7 +164,8 @@ void ServerMessageHandler::clientDisconnected(NetMessage &message)
 	ServerChannelManager::instance()->destinationDisconnected(message.getDestinationId());
 
 	// Remove from list of destinations
-	destinationInfos_.erase(message.getDestinationId());
+	ScorchedServer::instance()->getServerDestinations().removeDestination(
+		message.getDestinationId());
 }
 
 void ServerMessageHandler::destroyPlayer(unsigned int tankId, const char *reason)

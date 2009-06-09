@@ -21,9 +21,7 @@
 #include <server/ServerFileServer.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerCommon.h>
-#include <tank/TankContainer.h>
-#include <tank/TankState.h>
-#include <tank/TankMod.h>
+#include <server/ServerDestinations.h>
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
 #include <coms/ComsMessageSender.h>
@@ -54,23 +52,21 @@ void ServerFileServer::simulate(float timeDifference)
 {
 	int downloadCount = 0;
 
-	// TODO this should really be done on a per destination id basis
-	// not on a per tank basis!!
-
 	// Check how many people are currently downloading
 	// also check for any that have finished downloading
-	std::map<unsigned int, Tank *> tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	std::map<unsigned int, Tank *>::iterator itor;
-	for (itor = tanks.begin();
-		itor != tanks.end();
+	std::map<unsigned int, ServerDestination*> &destinations =
+		ScorchedServer::instance()->getServerDestinations().getServerDestinations();
+	std::map<unsigned int, ServerDestination*>::iterator itor;
+	for (itor = destinations.begin();
+		itor != destinations.end();
 		itor++)
 	{
-		Tank *tank = (*itor).second;
-		if (tank->getState().getState() == TankState::sDownloadingMod)
+		unsigned int serverDestinationId = itor->first;
+		ServerDestination *destination = itor->second;
+		if (destination->getState() == ServerDestination::sDownloadingMod)
 		{
 			// Does this tank have any more files to send
-			if (!tank->getMod().getFiles().empty())
+			if (!destination->getMod().getFiles().empty())
 			{
 				// Yes, 1 more tank to send to
 				downloadCount++;
@@ -78,38 +74,15 @@ void ServerFileServer::simulate(float timeDifference)
 			else
 			{
 				// Check if this tank had had a chance to get its mod files
-				if (tank->getMod().getInit())
+				if (destination->getMod().getInit())
 				{
 					// Set this tank to finished
-					tank->getState().setState(TankState::sInitializingMod);
+					destination->setState(ServerDestination::sInitializingMod);
 
-					// If all tanks at this destination have finished send init message
-					bool allComplete = true;
-					std::map<unsigned int, Tank *>::iterator seconditor;
-					for (seconditor = tanks.begin();
-						seconditor != tanks.end();
-						seconditor++)
-					{
-						Tank *secondtank = (*seconditor).second;
-						if (secondtank->getDestinationId() == tank->getDestinationId())
-						{
-							if (secondtank->getState().getState() ==
-								TankState::sDownloadingMod)
-							{
-								allComplete = false;
-								break;
-							}
-						}
-					}
-
-					// If this tank is not initialized make it initialized
-					if (allComplete)
-					{
-						// Tell this destination to start initializing
-						ComsInitializeModMessage initMessage;
-						ComsMessageSender::sendToSingleClient(initMessage,
-							tank->getDestinationId());
-					}
+					// Tell this destination to start initializing
+					ComsInitializeModMessage initMessage;
+					ComsMessageSender::sendToSingleClient(initMessage,
+						serverDestinationId);
 				}
 			}
 		}
@@ -139,21 +112,21 @@ void ServerFileServer::simulate(float timeDifference)
 		bytesSent_ = 0;
 
 		// Reset the sent state for each client
-		for (itor = tanks.begin();
-			itor != tanks.end();
+		for (itor = destinations.begin();
+			itor != destinations.end();
 			itor++)
 		{
-			Tank *tank = (*itor).second;
-			if (tank->getState().getState() == TankState::sDownloadingMod)
+			ServerDestination *destination = itor->second;
+			if (destination->getState() == ServerDestination::sDownloadingMod)
 			{
-				tank->getMod().setSent(false);
+				destination->getMod().setSent(false);
 			}
 		}
 	}
 
 	// Send bytes to each ready client
-	for (itor = tanks.begin();
-		itor != tanks.end();
+	for (itor = destinations.begin();
+		itor != destinations.end();
 		itor++)
 	{
 		// Make sure we have not sent too much this second already
@@ -163,35 +136,35 @@ void ServerFileServer::simulate(float timeDifference)
 			return;
 		}
 
-		Tank *tank = (*itor).second;
-		if (tank->getState().getState() == TankState::sDownloadingMod)
+		ServerDestination *destination = itor->second;
+		if (destination->getState() == ServerDestination::sDownloadingMod)
 		{
 			// Check if the client is ready to recieve more
 			// bytes and there is some to send and
 			// we have not sent to this client this second
-			if (tank->getMod().getReadyToReceive() &&
-				!tank->getMod().getFiles().empty() &&
-				!tank->getMod().getSent())
+			if (destination->getMod().getReadyToReceive() &&
+				!destination->getMod().getFiles().empty() &&
+				!destination->getMod().getSent())
 			{
 				// Send bytes to this tank
-				tank->getMod().setSent(true);
-				tank->getMod().setReadyToReceive(false);
+				destination->getMod().setSent(true);
+				destination->getMod().setReadyToReceive(false);
 				bytesSent_ += maxDownloadPerClient;
 
-				sendBytes(tank, maxDownloadPerClient);
+				sendBytes(destination, maxDownloadPerClient);
 			}
 		}
 	}
 }
 
-void ServerFileServer::sendBytes(Tank *tank, unsigned int size)
+void ServerFileServer::sendBytes(ServerDestination *destination, unsigned int size)
 {
 	ComsFileMessage message;
 	// Fill up the message with files, until it is full
 	while (size > 0)
 	{
 		unsigned int bytesSent = 0;
-		if (!sendNextFile(message, tank, size, bytesSent)) break;
+		if (!sendNextFile(message, destination, size, bytesSent)) break;
 		size -= bytesSent;
 	}
 	// Add any empty file name to signal end of files for this message
@@ -199,17 +172,17 @@ void ServerFileServer::sendBytes(Tank *tank, unsigned int size)
 
 	// Send the message to the client
 	ComsMessageSender::sendToSingleClient(message, 
-		tank->getDestinationId());
+		destination->getDestinationId());
 
 }
 
 bool ServerFileServer::sendNextFile(ComsFileMessage &message,
-	Tank *tank, unsigned int size,
+	ServerDestination *destination, unsigned int size,
 	unsigned int &bytesSent)
 {
 	// Get the next file to send
 	std::list<ModIdentifierEntry> &files = 
-		tank->getMod().getFiles();
+		destination->getMod().getFiles();
 	if (files.empty()) return false;
 	ModIdentifierEntry &entry = files.front();
 
@@ -225,7 +198,7 @@ bool ServerFileServer::sendNextFile(ComsFileMessage &message,
 	unsigned int sizeSent = entry.length;
 	unsigned int sizeLeftToSend = modentry->getCompressedSize() - sizeSent;
 	unsigned int sizeToSend = MIN(sizeLeftToSend, size);
-	unsigned int bytesLeft = tank->getMod().getTotalLeft();
+	unsigned int bytesLeft = destination->getMod().getTotalLeft();
 	bool firstChunk = (sizeSent == 0);
 	bool lastChunk = (sizeToSend == sizeLeftToSend);
 
@@ -243,7 +216,7 @@ bool ServerFileServer::sendNextFile(ComsFileMessage &message,
 
 	// Update how much we have sent
 	entry.length += sizeToSend;
-	tank->getMod().setTotalLeft(tank->getMod().getTotalLeft() - sizeToSend);
+	destination->getMod().setTotalLeft(destination->getMod().getTotalLeft() - sizeToSend);
 
 	// Have we sent the whole file
 	if (sizeToSend == sizeLeftToSend)
@@ -251,7 +224,7 @@ bool ServerFileServer::sendNextFile(ComsFileMessage &message,
 		// If so remove the file from the list that
 		// still needs to be sent
 		std::string fileName = modentry->getFileName();
-		tank->getMod().rmFile(fileName.c_str());
+		destination->getMod().rmFile(fileName.c_str());
 	}
 
 	bytesSent = sizeToSend;

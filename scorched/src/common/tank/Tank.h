@@ -29,7 +29,6 @@ class TankScore;
 class TankState;
 class TankPosition;
 class TankModelContainer;
-class TankMod;
 class TankAvatar;
 class TankCamera;
 class Tank : public Target
@@ -82,7 +81,6 @@ public:
 	TankScore &getScore() { return *score_; }
 	TankPosition &getPosition() { return *position_; }
 	TankState &getState() { return *state_; }
-	TankMod &getMod() { return *mod_; }
 	TankAvatar &getAvatar() { return *avatar_; }
 	TankCamera &getCamera() { return *camera_; }
 	TankModelContainer &getModelContainer() { return *modelContainer_; }
@@ -94,7 +92,6 @@ protected:
 	TankScore *score_;
 	TankPosition *position_;
 	TankState *state_;
-	TankMod *mod_;
 	TankAvatar *avatar_;
 	TankCamera *camera_;
 	TankAI *tankAI_;

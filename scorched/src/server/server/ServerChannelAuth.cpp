@@ -20,7 +20,7 @@
 
 #include <server/ServerChannelAuth.h>
 #include <server/ScorchedServer.h>
-#include <server/ServerMessageHandler.h>
+#include <server/ServerDestinations.h>
 
 ServerChannelAuth::ServerChannelAuth()
 {
@@ -33,7 +33,7 @@ ServerChannelAuth::~ServerChannelAuth()
 bool ServerChannelAuthAdmin::allowConnection(
 	const char *channel, unsigned int destination)
 {
-	ServerMessageHandler::DestinationInfo *destinationInfo =
-		ServerMessageHandler::instance()->getDestinationInfo(destination);
-	return (destinationInfo && destinationInfo->admin);
+	ServerDestination *destinationInfo =
+		ScorchedServer::instance()->getServerDestinations().getDestination(destination);
+	return (destinationInfo && destinationInfo->getAdmin());
 }

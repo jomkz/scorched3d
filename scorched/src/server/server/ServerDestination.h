@@ -18,17 +18,17 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_TankModh_INCLUDE__)
-#define __INCLUDE_TankModh_INCLUDE__
+#if !defined(__INCLUDE_ServerDestinationh_INCLUDE__)
+#define __INCLUDE_ServerDestinationh_INCLUDE__
 
 #include <list>
 
 struct ModIdentifierEntry;
-class TankMod
+class ServerDestinationMod
 {
 public:
-	TankMod();
-	virtual ~TankMod();
+	ServerDestinationMod();
+	virtual ~ServerDestinationMod();
 
 	void setReadyToReceive(bool r) { readyToReceive_ = r; }
 	bool getReadyToReceive() { return readyToReceive_; }
@@ -54,6 +54,46 @@ protected:
 	unsigned int totalLeft_;
 	std::list<ModIdentifierEntry> *files_; // Ptr so we dont include ModFiles.h
 
+};
+
+class ServerDestination
+{
+public:
+	enum State
+	{
+		sDownloadingMod,
+		sInitializingMod,
+		sLoadingLevel,
+		sFinished
+	};
+
+	ServerDestination(unsigned int destinationId, unsigned int ipAddress);
+	virtual ~ServerDestination();
+
+	void setState(State s);
+	State getState() { return state_; }
+
+	unsigned int getDestinationId() { return destinationId_; }
+	unsigned int getIpAddress() { return ipAddress_; }
+
+	void setAdmin(bool admin) { admin_ = admin; }
+	bool getAdmin() { return admin_; }
+
+	int getAdminTries() { return adminTries_; }
+	void setAdminTries(int adminTries) { adminTries_ = adminTries; }
+
+	unsigned int getLevelNumber() { return levelNumber_; }
+	void setLevelNumber(unsigned int ln) { levelNumber_ = ln; }
+
+	ServerDestinationMod &getMod() { return mod_; }
+
+protected:
+	ServerDestinationMod mod_;
+	State state_;
+	unsigned int destinationId_, ipAddress_;
+	unsigned int levelNumber_;
+	int adminTries_;
+	bool admin_;
 };
 
 #endif

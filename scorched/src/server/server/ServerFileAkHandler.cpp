@@ -19,9 +19,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <server/ServerFileAkHandler.h>
+#include <server/ServerDestinations.h>
 #include <server/ScorchedServer.h>
-#include <tank/TankContainer.h>
-#include <tank/TankMod.h>
 #include <coms/ComsFileAkMessage.h>
 
 ServerFileAkHandler *ServerFileAkHandler::instance()
@@ -50,21 +49,11 @@ bool ServerFileAkHandler::processMessage(
 	ComsFileAkMessage message;
 	if (!message.readMessage(reader)) return false;
 
-	// Set any tanks from this destination ready to recieve more input
-	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	std::map<unsigned int, Tank *>::iterator itor;
-	for (itor = tanks.begin();
-		itor != tanks.end();
-		itor++)
-	{
-		// For each tank
-		Tank *tank = (*itor).second;
-		if (netMessage.getDestinationId() == tank->getDestinationId())
-		{
-			tank->getMod().setReadyToReceive(true);
-		}
-	}
+	ServerDestination *destination =
+		ScorchedServer::instance()->getServerDestinations().getDestination(
+			netMessage.getDestinationId());
+	if (!destination) return false;
+	destination->getMod().setReadyToReceive(true);
 
 	return true;
 }

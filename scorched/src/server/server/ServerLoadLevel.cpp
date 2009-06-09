@@ -21,12 +21,12 @@
 #include <server/ServerLoadLevel.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerSimulator.h>
+#include <server/ServerDestinations.h>
 #include <landscapedef/LandscapeDefinition.h>
 #include <landscapemap/LandscapeMaps.h>
-#include <tank/TankContainer.h>
-#include <tank/TankState.h>
 #include <engine/Simulator.h>
 #include <simactions/TankLoadedSimAction.h>
+#include <tank/TankContainer.h>
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsLoadLevelMessage.h>
 #include <coms/ComsLevelLoadedMessage.h>
@@ -61,20 +61,12 @@ void ServerLoadLevel::destinationLoadLevel(unsigned int destinationId)
 	// Set any tanks from this destination that they are loading the level
 	// set the current version of the level (definition number) that they are loading
 	// so we can check if the level changes before we have finished loading
-	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	std::map<unsigned int, Tank *>::iterator itor;
-	for (itor = tanks.begin();
-		itor != tanks.end();
-		itor++)
+	ServerDestination *destination =
+		ScorchedServer::instance()->getServerDestinations().getDestination(destinationId);
+	if (destination)
 	{
-		// For each tank
-		Tank *tank = (*itor).second;
-		if (destinationId == tank->getDestinationId())
-		{
-			tank->getState().setState(TankState::sLoadingLevel);
-			tank->getState().setLevelNumber(landscapeDefinition.getDefinitionNumber());
-		}
+		destination->setState(ServerDestination::sLoadingLevel);
+		destination->setLevelNumber(landscapeDefinition.getDefinitionNumber());
 	}
 
 	// Tell this destination to start loading the level
@@ -88,19 +80,11 @@ bool ServerLoadLevel::destinationUsingCurrentLevel(unsigned int destinationId)
 		ScorchedServer::instance()->getLandscapeMaps().getDefinitions().
 		getDefinition();
 
-	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	std::map<unsigned int, Tank *>::iterator itor;
-	for (itor = tanks.begin();
-		itor != tanks.end();
-		itor++)
+	ServerDestination *destination =
+		ScorchedServer::instance()->getServerDestinations().getDestination(destinationId);
+	if (destination)
 	{
-		// For each tank
-		Tank *tank = (*itor).second;
-		if (destinationId == tank->getDestinationId())
-		{
-			return (tank->getState().getLevelNumber() == landscapeDefinition.getDefinitionNumber());
-		}
+		return (destination->getLevelNumber() == landscapeDefinition.getDefinitionNumber());
 	}
 	return false;
 }
@@ -132,6 +116,14 @@ bool ServerLoadLevel::processMessage(
 	ComsSyncLevelMessage syncMessage;
 	ComsMessageSender::sendToSingleClient(syncMessage, destinationId, NetInterfaceFlags::fCompress);
 
+	// This destination has finished loading
+	ServerDestination *destination =
+		ScorchedServer::instance()->getServerDestinations().getDestination(destinationId);
+	if (destination)
+	{
+		destination->setState(ServerDestination::sFinished);
+	}
+
 	// These tanks are now ready to play
 	std::map<unsigned int, Tank *>::iterator itor;
 	std::map<unsigned int, Tank *> &tanks = 
@@ -145,8 +137,6 @@ bool ServerLoadLevel::processMessage(
 		if (destinationId == tank->getDestinationId())
 		{
 			// Set state so we send to these destinations
-			tank->getState().setState(TankState::sSpectator);
-
 			TankLoadedSimAction *loadedAction = 
 				new TankLoadedSimAction(tank->getPlayerId());
 			ScorchedServer::instance()->getServerSimulator().

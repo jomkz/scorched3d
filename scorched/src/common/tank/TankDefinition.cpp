@@ -127,8 +127,6 @@ Tank *TankDefinition::createTank(unsigned int playerId,
 	tank->getLife().setMaxLife(life_);
 	tank->getLife().setSize(size_);
 	tank->getTargetState().setDriveOverToDestroy(driveovertodestroy_);
-	tank->getState().setState(TankState::sInitializingMod);
-	tank->getState().setState(TankState::sLoadingLevel);
 	tank->getState().setState(TankState::sSpectator);
 	tank->getState().setState(TankState::sDead);
 	tank->newMatch();

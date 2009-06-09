@@ -36,26 +36,19 @@ static struct AllowedStateTransitions
 }
 allowedStateTransitions[] =
 {
-	TankState::sDownloadingMod, TankState::sInitializingMod,
-	TankState::sInitializingMod, TankState::sLoadingLevel,
-	TankState::sLoadingLevel, TankState::sSpectator,
 	TankState::sSpectator, TankState::sNormal,
 	TankState::sSpectator, TankState::sDead,
 	TankState::sDead, TankState::sNormal,
-	TankState::sNormal, TankState::sDead,
-	TankState::sDead, TankState::sLoadingLevel, 
-	TankState::sNormal, TankState::sLoadingLevel, 
-	TankState::sSpectator, TankState::sLoadingLevel
+	TankState::sNormal, TankState::sDead
 };
 
 TankState::TankState(ScorchedContext &context, unsigned int playerId) : 
-	state_(sDownloadingMod), tank_(0),
+	state_(sSpectator), tank_(0),
 	context_(context), 
 	muted_(false),
 	skipshots_(false),
 	lives_(0), maxLives_(1), 
-	destroy_(false),
-	levelNumber_(0)
+	destroy_(false)
 {
 }
 
@@ -127,17 +120,8 @@ const char *TankState::getSmallStateString()
 	const char *type = "";
 	switch (state_)
 	{
-	case sLoadingLevel:
-		type = "Loading Level";
-		break;
 	case sNormal:
 		type = "Alive";
-		break;
-	case sInitializingMod:
-		type = "Initializing";
-		break;
-	case sDownloadingMod:
-		type = "Downloading";
 		break;
 	case sDead:
 		type = "Dead";
@@ -152,23 +136,14 @@ const char *TankState::getSmallStateString()
 
 LangString &TankState::getSmallStateLangString()
 {
-	LANG_RESOURCE_CONST_VAR(INITIALIZINGMOD, "INITIALIZINGMOD", "Initializing");
-	LANG_RESOURCE_CONST_VAR(DOWNLOADINGMOD, "DOWNLOADINGMOD", "Downloading");
-	LANG_RESOURCE_CONST_VAR(LOADINGLEVEL, "LOADINGLEVEL", "Loading Level");
 	LANG_RESOURCE_CONST_VAR(DEAD, "DEAD", "Dead");
 	LANG_RESOURCE_CONST_VAR(ALIVE, "ALIVE", "Alive");
 	LANG_RESOURCE_CONST_VAR(SPECTATOR, "SPECTATOR", "Spectator");
 
 	switch (state_)
 	{
-	case sLoadingLevel:
-		return LOADINGLEVEL;
 	case sNormal:
 		return ALIVE;
-	case sInitializingMod:
-		return INITIALIZINGMOD;
-	case sDownloadingMod:
-		return DOWNLOADINGMOD;
 	case sDead:
 		return DEAD;
 		break;

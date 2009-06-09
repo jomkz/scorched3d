@@ -20,6 +20,7 @@
 
 #include <server/ScorchedServer.h>
 #include <server/ServerSimulator.h>
+#include <server/ServerDestinations.h>
 #include <tank/TankDeadContainer.h>
 #include <tank/TankContainer.h>
 #include <tankai/TankAIStore.h>
@@ -57,7 +58,7 @@ ScorchedServer::ScorchedServer() :
 	simulator = serverSimulator_;
 	actionController = &simulator->getActionController();
 	simulator->setScorchedContext(this);
-
+	serverDestinations_ = new ServerDestinations();
 	deadContainer_ = new TankDeadContainer;
 	tankAIStore_ = new TankAIStore;
 }

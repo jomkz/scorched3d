@@ -761,6 +761,22 @@
 				>
 			</File>
 			<File
+				RelativePath="..\server\ServerDestination.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerDestination.h"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerDestinations.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerDestinations.h"
+				>
+			</File>
+			<File
 				RelativePath="..\server\ServerFileAkHandler.cpp"
 				>
 			</File>
@@ -3514,14 +3530,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\tank\TankLib.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\tank\TankMod.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\tank\TankMod.h"
 				>
 			</File>
 			<File

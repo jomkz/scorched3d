@@ -18,32 +18,26 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerFileServerh_INCLUDE__)
-#define __INCLUDE_ServerFileServerh_INCLUDE__
+#if !defined(__INCLUDE_ServerDestinationsh_INCLUDE__)
+#define __INCLUDE_ServerDestinationsh_INCLUDE__
 
-#include <coms/ComsFileMessage.h>
+#include <server/ServerDestination.h>
+#include <map>
 
-class ServerDestination;
-class ServerFileServer
+class ServerDestinations
 {
 public:
-	static ServerFileServer *instance();
+	ServerDestinations();
+	virtual ~ServerDestinations();
 
-	void simulate(float timeDifference);
+	void addDestination(unsigned int destinationId, unsigned int ipAddress);
+	void removeDestination(unsigned int destinationId);
+
+	ServerDestination *getDestination(unsigned int destinationId);
+	std::map<unsigned int, ServerDestination*> &getServerDestinations() { return serverDestinations_; }
 
 protected:
-	static ServerFileServer *instance_;
-	unsigned int lastTime_;
-	unsigned int bytesSent_;
-
-	void sendBytes(ServerDestination *destination, unsigned int size);
-	bool sendNextFile(ComsFileMessage &message,
-		ServerDestination *destination, 
-		unsigned int size, unsigned int &sentSize);
-
-private:
-	ServerFileServer();
-	virtual ~ServerFileServer();
+	std::map<unsigned int, ServerDestination*> serverDestinations_;
 };
 
-#endif // __INCLUDE_ServerFileServerh_INCLUDE__
+#endif

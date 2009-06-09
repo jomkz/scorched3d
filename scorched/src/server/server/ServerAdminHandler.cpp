@@ -25,7 +25,7 @@
 #include <server/ServerCommon.h>
 #include <server/ServerAdminCommon.h>
 #include <server/ServerAdminSessions.h>
-#include <server/ServerMessageHandler.h>
+#include <server/ServerDestinations.h>
 #include <common/StatsLogger.h>
 #include <common/Logger.h>
 #include <common/Defines.h>
@@ -66,8 +66,8 @@ bool ServerAdminHandler::processMessage(
 
 	unsigned int destinationId = netMessage.getDestinationId();
 
-	ServerMessageHandler::DestinationInfo *destinationInfo =
-		ServerMessageHandler::instance()->getDestinationInfo(destinationId);
+	ServerDestination *destinationInfo =
+		ScorchedServer::instance()->getServerDestinations().getDestination(destinationId);
 	if (!destinationInfo) return false;
 
 	// Check if the SID is valid
@@ -102,8 +102,8 @@ bool ServerAdminHandler::processMessage(
 
 			ComsAdminResultMessage resultMessage(sid, message.getType());
 			ComsMessageSender::sendToSingleClient(resultMessage, destinationId);
-			destinationInfo->admin = true;
-			destinationInfo->adminTries = 0;
+			destinationInfo->setAdmin(true);
+			destinationInfo->setAdminTries(0);
 
 			return true;
 		}
@@ -111,16 +111,17 @@ bool ServerAdminHandler::processMessage(
 		{
 			if (message.getType() != ComsAdminMessage::AdminLoginLocal)
 			{
-				destinationInfo->adminTries++;
+				destinationInfo->setAdminTries(
+					destinationInfo->getAdminTries() + 1);
 				
 				ServerChannelManager::instance()->sendText(
 					ChannelText("info", 
 						"INCORRECT_PASSWORD",
 						"Incorrect admin password (try {0}/3)", 
-						destinationInfo->adminTries),
+						destinationInfo->getAdminTries()),
 					destinationId,
 					true);
-				if (destinationInfo->adminTries > 3)
+				if (destinationInfo->getAdminTries() > 3)
 				{
 					ServerCommon::kickDestination(destinationId);
 				}
@@ -134,7 +135,7 @@ bool ServerAdminHandler::processMessage(
 
 			ComsAdminResultMessage resultMessage(0, message.getType());
 			ComsMessageSender::sendToSingleClient(resultMessage, destinationId);
-			destinationInfo->admin = false;
+			destinationInfo->setAdmin(false);
 
 			return true;
 		}
@@ -150,7 +151,7 @@ bool ServerAdminHandler::processMessage(
 
 		ComsAdminResultMessage resultMessage(0, message.getType());
 		ComsMessageSender::sendToSingleClient(resultMessage, destinationId);
-		destinationInfo->admin = false;
+		destinationInfo->setAdmin(false);
 
 		return true;	
 	}
@@ -206,7 +207,7 @@ bool ServerAdminHandler::processMessage(
 
 			ComsAdminResultMessage resultMessage(0, message.getType());
 			ComsMessageSender::sendToSingleClient(resultMessage, destinationId);
-			destinationInfo->admin = false;
+			destinationInfo->setAdmin(false);
 		}
 		break;
 	case ComsAdminMessage::AdminShowBanned:

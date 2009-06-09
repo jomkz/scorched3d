@@ -30,9 +30,6 @@ class TankState
 public:
 	enum State
 	{
-		sDownloadingMod,
-		sInitializingMod,
-		sLoadingLevel,
 		sSpectator,
 		sNormal,
 		sDead
@@ -64,9 +61,6 @@ public:
 	int getMaxLives() { return maxLives_; }
 	void setDestroy(bool destroy) { destroy_ = destroy; }
 	bool getDestroy() { return destroy_; }
-
-	unsigned int getLevelNumber() { return levelNumber_; }
-	void setLevelNumber(unsigned int ln) { levelNumber_ = ln; }
 	
 	const char *getStateString();
 	const char *getSmallStateString();
@@ -80,7 +74,6 @@ protected:
 	Tank *tank_;
 	ScorchedContext &context_;
 	State state_;
-	unsigned int levelNumber_;
 	int lives_, maxLives_;
 	bool muted_;
 	bool skipshots_;

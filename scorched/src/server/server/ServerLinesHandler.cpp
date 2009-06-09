@@ -22,7 +22,7 @@
 #include <server/ScorchedServer.h>
 #include <server/ScorchedServerUtil.h>
 #include <server/ServerCommon.h>
-#include <server/ServerMessageHandler.h>
+#include <server/ServerDestinations.h>
 #include <coms/ComsLinesMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <tank/TankContainer.h>
@@ -70,8 +70,8 @@ bool ServerLinesHandler::processMessage(
 	if (tank->getState().getMuted()) return true;
 
 	// Get destinationinfo for this tank
-	ServerMessageHandler::DestinationInfo *destinationInfo =
-		ServerMessageHandler::instance()->getDestinationInfo(netMessage.getDestinationId());
+	ServerDestination *destinationInfo =
+		ScorchedServer::instance()->getServerDestinations().getDestination(netMessage.getDestinationId());
 
 	// Send all team messages to everyone in the team (or any admins)
 	// Only send to the same destination once
@@ -86,7 +86,7 @@ bool ServerLinesHandler::processMessage(
 	{
 		Tank *currentTank = (*itor).second;
 		if (tank->getTeam() == currentTank->getTeam() ||
-			(destinationInfo && destinationInfo->admin))
+			(destinationInfo && destinationInfo->getAdmin()))
 		{
 			if (doneDests.find(currentTank->getDestinationId()) ==
 				doneDests.end())

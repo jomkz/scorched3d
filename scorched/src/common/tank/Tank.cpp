@@ -28,7 +28,6 @@
 #include <tank/TankState.h>
 #include <tank/TankPosition.h>
 #include <tank/TankModelContainer.h>
-#include <tank/TankMod.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankCamera.h>
 #include <tankai/TankAI.h>
@@ -59,7 +58,6 @@ Tank::Tank(ScorchedContext &context,
 	state_ = new TankState(context, playerId);
 	position_ = new TankPosition(context);
 	modelContainer_ = new TankModelContainer(modelName, typeName);
-	mod_ = new TankMod();
 	avatar_ = new TankAvatar();
 	camera_ = new TankCamera(context);
 
@@ -68,7 +66,7 @@ Tank::Tank(ScorchedContext &context,
 	state_->setTank(this);
 	accessories_->setTank(this);
 	modelContainer_->setTank(this);
-	state_->setState(TankState::sDownloadingMod);
+	state_->setState(TankState::sSpectator);
 }
 
 Tank::~Tank()
@@ -81,7 +79,6 @@ Tank::~Tank()
 	delete state_; state_ = 0;
 	delete position_; position_ = 0;
 	delete modelContainer_; modelContainer_ = 0;
-	delete mod_; mod_ = 0;
 	delete avatar_; avatar_ = 0;
 	delete camera_; camera_ = 0;
 }
