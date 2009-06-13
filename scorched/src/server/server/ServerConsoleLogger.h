@@ -18,20 +18,27 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerTurnsh_INCLUDE__)
-#define __INCLUDE_ServerTurnsh_INCLUDE__
+#if !defined(__INCLUDE_ServerConsoleLoggerh_INCLUDE__)
+#define __INCLUDE_ServerConsoleLoggerh_INCLUDE__
 
-class Tank;
-class ServerTurns 
+#include <common/LoggerI.h>
+#include <common/ProgressCounter.h>
+
+class ServerConsoleLogger : 
+	public LoggerI
 {
 public:
-	ServerTurns();
-	virtual ~ServerTurns();
+	static ServerConsoleLogger *instance();
 
-	void simulate(unsigned int serverState);
+	virtual void logMessage(LoggerInfo &info);
 
 protected:
-	void processTank(Tank *Tank, unsigned int serverState);
+	static ServerConsoleLogger *instance_;
+
+private:
+	ServerConsoleLogger();
+	virtual ~ServerConsoleLogger();
+
 };
 
 #endif

@@ -18,36 +18,33 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <server/ServerStartingState.h>
+#include <server/ServerStateStartingMatch.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerChannelManager.h>
-#include <server/ServerCommon.h>
-#include <coms/ComsMessageSender.h>
+#include <common/OptionsGame.h>
 #include <common/OptionsScorched.h>
-#include <common/Logger.h>
 
-ServerStartingState::ServerStartingState() :
-	GameStateI("ServerStartingState")
+ServerStateStartingMatch::ServerStateStartingMatch() :
+	totalTime_(0.0f)
 {
 }
 
-ServerStartingState::~ServerStartingState()
+ServerStateStartingMatch::~ServerStateStartingMatch()
 {
 }
 
-void ServerStartingState::enterState(const unsigned state)
+void ServerStateStartingMatch::reset()
 {
-	timeLeft_ = (float) ScorchedServer::instance()->getOptionsGame().getStartTime();
+	totalTime_ = (float) ScorchedServer::instance()->
+		getOptionsGame().getStartTime();
 }
 
-bool ServerStartingState::acceptStateChange(const unsigned state, 
-		const unsigned nextState,
-		float frameTime)
+bool ServerStateStartingMatch::startingMatch(float frameTime)
 {
-	float startTime = timeLeft_;
-	timeLeft_ -= frameTime;
+	float startTime = totalTime_;
+	totalTime_ -= frameTime;
 
-	if (frameTime > 0.0f && int(timeLeft_) != int(startTime))
+	if (frameTime > 0.0f && int(totalTime_) != int(startTime))
 	{
 		if (int(startTime) % 5 == 0)
 		{
@@ -55,10 +52,32 @@ bool ServerStartingState::acceptStateChange(const unsigned state,
 				ChannelText("info", 
 					"GAME_STARTING_IN_X", 
 					"Game starting in {0} seconds...", 
-					timeLeft_),
-				false);
+					totalTime_),
+				true);
 		}
 	}
+	if (totalTime_ <= 0.0f)
+	{
+		startMatch();
+		return true;
+	}
+	return false;
+}
 
-	return (timeLeft_ < 0.0f);
+void ServerStateStartingMatch::startMatch()
+{
+	ServerChannelManager::instance()->sendText(
+		ChannelText("info", 
+			"GAME_STARTED", 
+			"Game started"),
+		true);
+}
+
+void ServerStateStartingMatch::stoppingMatch()
+{
+	ServerChannelManager::instance()->sendText(
+		ChannelText("info", 
+			"TOO_FEW_PLAYERS", 
+			"Too few players, stopping play"),
+		true);
 }

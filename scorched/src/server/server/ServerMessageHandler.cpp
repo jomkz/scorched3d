@@ -25,7 +25,6 @@
 #include <server/ServerBanned.h>
 #include <server/ServerChannelManager.h>
 #include <server/ServerShotHolder.h>
-#include <server/ServerState.h>
 #include <server/ServerDestinations.h>
 #include <tank/TankDeadContainer.h>
 #include <tank/TankState.h>

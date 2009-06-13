@@ -25,7 +25,6 @@
 #include <server/ServerChannelManager.h>
 #include <server/ServerCommon.h>
 #include <server/ScorchedServer.h>
-#include <server/ServerState.h>
 #include <engine/GameState.h>
 #include <XML/XMLFile.h>
 #include <time.h>

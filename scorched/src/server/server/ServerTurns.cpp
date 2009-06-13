@@ -21,18 +21,11 @@
 #include <server/ServerTurns.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerSimulator.h>
+#include <server/ServerState.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <simactions/TankAliveSimAction.h>
 #include <simactions/TankStartMoveSimAction.h>
-
-ServerTurns *ServerTurns::instance_ = 0;
-
-ServerTurns *ServerTurns::instance()
-{
-	if (!instance_) instance_ = new ServerTurns();
-	return instance_;
-}
 
 ServerTurns::ServerTurns()
 {
@@ -42,7 +35,7 @@ ServerTurns::~ServerTurns()
 {
 }
 
-void ServerTurns::simulate()
+void ServerTurns::simulate(unsigned int serverState)
 {
 	std::map<unsigned int, Tank *>::iterator itor;
 	std::map<unsigned int, Tank *> &tanks = 
@@ -53,12 +46,14 @@ void ServerTurns::simulate()
 	{
 		// For each tank
 		Tank *tank = (*itor).second;
-		processTank(tank);
+		processTank(tank, serverState);
 	}
 }
 
-void ServerTurns::processTank(Tank *tank)
+void ServerTurns::processTank(Tank *tank, unsigned int serverState)
 {
+	if (serverState != ServerState::ServerStatePlaying) return;
+
 	switch (tank->getState().getState())
 	{
 	case TankState::sDead:

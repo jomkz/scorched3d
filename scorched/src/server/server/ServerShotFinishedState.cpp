@@ -20,7 +20,6 @@
 
 #include <server/ServerShotFinishedState.h>
 #include <server/ScorchedServer.h>
-#include <server/ServerState.h>
 #include <server/ServerTooFewPlayersStimulus.h>
 #include <server/ServerMessageHandler.h>
 #include <server/ServerNextShotState.h>
@@ -135,13 +134,13 @@ bool ServerShotFinishedState::acceptStateChange(const unsigned state,
 	totalTime_ += frameTime * speed_;
 	if (totalTime_ > waitTime_)
 	{
-		if (ServerTooFewPlayersStimulus::instance()->acceptStateChange(state, 
-			ServerState::ServerStateTooFewPlayers, 0.0f))
+		//if (ServerTooFewPlayersStimulus::instance()->acceptStateChange(state, 
+		//	ServerState::ServerStateTooFewPlayers, 0.0f))
 		{
 			//ScorchedServer::instance()->getGameState().stimulate(
 			//	ServerState::ServerStimulusTooFewPlayers);
 		}
-		else return true;
+		//else return true;
 	}
 	return false;
 }
@@ -338,8 +337,8 @@ bool ServerShotFinishedState::scoreWinners()
 	}
 	else
 	{
-		if (ServerTooFewPlayersStimulus::instance()->acceptStateChange(0, 
-			ServerState::ServerStateTooFewPlayers, 0.0f))
+		//if (ServerTooFewPlayersStimulus::instance()->acceptStateChange(0, 
+		//	ServerState::ServerStateTooFewPlayers, 0.0f))
 		{
 			if (ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() >
 				ScorchedServer::instance()->getOptionsGame().getNoRounds() / 2 && 

@@ -20,7 +20,6 @@
 
 #include <server/ServerBrowserInfo.h>
 #include <server/ScorchedServer.h>
-#include <server/ServerState.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <common/Defines.h>

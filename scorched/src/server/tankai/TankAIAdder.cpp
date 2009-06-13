@@ -28,7 +28,6 @@
 #include <tank/TankAvatar.h>
 #include <tank/TankModelContainer.h>
 #include <tank/TankState.h>
-#include <server/ServerState.h>
 #include <coms/ComsAddPlayerMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsPlayerStateMessage.h>

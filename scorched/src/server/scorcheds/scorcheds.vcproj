@@ -753,6 +753,22 @@
 				>
 			</File>
 			<File
+				RelativePath="..\server\ServerConsoleLogger.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerConsoleLogger.h"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerConsoleProgressCounter.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerConsoleProgressCounter.h"
+				>
+			</File>
+			<File
 				RelativePath="..\server\ServerDefenseHandler.cpp"
 				>
 			</File>
@@ -977,7 +993,35 @@
 				>
 			</File>
 			<File
+				RelativePath="..\server\ServerState.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\server\ServerState.h"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerStateEnoughPlayers.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerStateEnoughPlayers.h"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerStateNewGame.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerStateNewGame.h"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerStateStartingMatch.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerStateStartingMatch.h"
 				>
 			</File>
 			<File

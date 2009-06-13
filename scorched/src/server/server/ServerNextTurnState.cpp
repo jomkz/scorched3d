@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <server/ServerNextTurnState.h>
-#include <server/ServerState.h>
 #include <server/ScorchedServer.h>
 #include <server/TurnController.h>
 #include <server/ServerChannelManager.h>

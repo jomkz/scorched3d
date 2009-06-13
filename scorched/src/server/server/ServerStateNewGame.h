@@ -18,20 +18,22 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerTurnsh_INCLUDE__)
-#define __INCLUDE_ServerTurnsh_INCLUDE__
+#if !defined(__INCLUDE_ServerStateNewGameh_INCLUDE__)
+#define __INCLUDE_ServerStateNewGameh_INCLUDE__
 
-class Tank;
-class ServerTurns 
+class ServerStateNewGame 
 {
 public:
-	ServerTurns();
-	virtual ~ServerTurns();
+	ServerStateNewGame();
+	virtual ~ServerStateNewGame();
 
-	void simulate(unsigned int serverState);
+	void newGame();
+	void checkBots(bool remove);
+	void checkTeams();
 
 protected:
-	void processTank(Tank *Tank, unsigned int serverState);
+	void checkTeamsAuto();
+	void checkTeamsBotsVs();
 };
 
 #endif

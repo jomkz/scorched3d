@@ -26,7 +26,6 @@
 #include <server/ServerCommon.h>
 #include <server/ServerAdminCommon.h>
 #include <server/ServerAdminSessions.h>
-#include <server/ServerState.h>
 #include <server/ServerParams.h>
 #include <server/ServerChannelManager.h>
 #include <landscapedef/LandscapeDefinitionsBase.h>

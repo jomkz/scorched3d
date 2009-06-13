@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <server/ServerDefenseHandler.h>
-#include <server/ServerState.h>
 #include <server/ServerShotHolder.h>
 #include <server/ScorchedServer.h>
 #include <tank/TankContainer.h>

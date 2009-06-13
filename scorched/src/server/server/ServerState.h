@@ -18,44 +18,44 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #if !defined(__INCLUDE_ServerStateh_INCLUDE__)
 #define __INCLUDE_ServerStateh_INCLUDE__
 
-#include <engine/GameState.h>
+#include <server/ServerStateEnoughPlayers.h>
+#include <server/ServerStateNewGame.h>
+#include <server/ServerStateStartingMatch.h>
+#include <server/ServerTurns.h>
 
-namespace ServerState
+class ServerState
 {
+public:
 	enum ServerStateEnum
 	{
-		ServerStateTooFewPlayers = 1,
-		ServerStateReset,
-		ServerStateStarting,
-		ServerStateNewGame,
-		ServerStateNewGameReady,
-		ServerStateNextRound,
-		ServerStateNextShot,
-		ServerStateNextTurn,
-		ServerStatePlaying,
-		ServerStateBuying,
-		ServerStateShot,
-		ServerStateShotReady,
-		ServerStateShotFinished
+		ServerStateStartup = 1,
+		ServerStateWaitingForPlayers ,
+		ServerStateMatchCountDown,
+		ServerStatePlaying
 	};
 
-	enum ServerStimulusEnum
-	{
-		ServerStimulusNewGame = 1,
-		ServerStimulusNewGameReady,
-		ServerStimulusNextTurn,
-		ServerStimulusNextRound,
-		ServerStimulusNextShot,
-		ServerStimulusPlaying,
-		ServerStimulusBuying,
-		ServerStimulusShot,
-		ServerStimulusTooFewPlayers,
-		ServerStimulusStarting
-	};
+	static ServerState *instance();
+
+	void simulate(float frameTime);
+
+	ServerStateEnum getState() { return serverState_; }
+
+protected:
+	static ServerState *instance_;
+	ServerStateEnum serverState_;
+
+	ServerStateEnoughPlayers enoughPlayers_;
+	ServerStateNewGame newGame_;
+	ServerStateStartingMatch startingMatch_;
+	ServerTurns serverTurns_;
+
+private:
+	ServerState();
+	virtual ~ServerState();
+
 };
 
 #endif

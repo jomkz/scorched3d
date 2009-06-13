@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <server/ServerResetState.h>
-#include <server/ServerState.h>
 #include <server/ScorchedServer.h>
 #include <tank/TankDeadContainer.h>
 #include <tank/TankContainer.h>

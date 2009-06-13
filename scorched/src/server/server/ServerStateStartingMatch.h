@@ -18,20 +18,23 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerTurnsh_INCLUDE__)
-#define __INCLUDE_ServerTurnsh_INCLUDE__
+#if !defined(__INCLUDE_ServerStateStartingMatchh_INCLUDE__)
+#define __INCLUDE_ServerStateStartingMatchh_INCLUDE__
 
-class Tank;
-class ServerTurns 
+class ServerStateStartingMatch 
 {
 public:
-	ServerTurns();
-	virtual ~ServerTurns();
+	ServerStateStartingMatch();
+	virtual ~ServerStateStartingMatch();
 
-	void simulate(unsigned int serverState);
+	void reset();
+	bool startingMatch(float frameTime);
+	void stoppingMatch();
 
 protected:
-	void processTank(Tank *Tank, unsigned int serverState);
+	float totalTime_;
+
+	void startMatch();
 };
 
 #endif

@@ -18,49 +18,32 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <server/ServerTooFewPlayersStimulus.h>
-#include <server/ServerNewGameState.h>
+#include <server/ServerStateEnoughPlayers.h>
+#include <server/ServerChannelManager.h>
 #include <server/ScorchedServer.h>
+#include <server/ServerNewGameState.h>
 #include <server/ServerCommon.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <common/OptionsScorched.h>
 #include <common/Logger.h>
 
-ServerTooFewPlayersStimulus *ServerTooFewPlayersStimulus::instance_ = 0;
-
-ServerTooFewPlayersStimulus *ServerTooFewPlayersStimulus::instance()
+ServerStateEnoughPlayers::ServerStateEnoughPlayers()
 {
-	if (!instance_)
-	{
-		instance_ = new ServerTooFewPlayersStimulus;
-	}
-	return instance_;
 }
 
-ServerTooFewPlayersStimulus::ServerTooFewPlayersStimulus()
+ServerStateEnoughPlayers::~ServerStateEnoughPlayers()
 {
-
 }
 
-ServerTooFewPlayersStimulus::~ServerTooFewPlayersStimulus()
+bool ServerStateEnoughPlayers::enoughPlayers()
 {
-
-}
-
-bool ServerTooFewPlayersStimulus::acceptStateChange(const unsigned state, 
-													const unsigned nextState,
-													float frameTime)
-{
-	// Check if we need to add any new bots
-	//ServerNewGameState::checkBots(false);
-
 	// Make sure we have enough players to play a game
 	if (ScorchedServer::instance()->getTankContainer().getNoOfNonSpectatorTanks() <
 		ScorchedServer::instance()->getOptionsGame().getNoMinPlayers())
 	{
 		checkExit();
-		return true;
+		return false;
 	}
 	
 	// Check we have enough team players
@@ -75,10 +58,7 @@ bool ServerTooFewPlayersStimulus::acceptStateChange(const unsigned state,
 		// If it is auto ballanced, then if there are at least two players
 		// then we are ok.  And if there are not two players then
 		// the first check will catch it.
-		
-		// Move players between teams
-		//ServerNewGameState::checkTeams();
-		
+				
 		// Check there is at least one player in each team
 		int teamCount[4];
 		for (int i=0; i<ScorchedServer::instance()->getOptionsGame().getTeams();i++)
@@ -104,15 +84,15 @@ bool ServerTooFewPlayersStimulus::acceptStateChange(const unsigned state,
 			if (teamCount[i] == 0)
 			{
 				checkExit();
-				return true;
+				return false;
 			}
 		}
 	}
 	
-	return false;
+	return true;
 }
 
-void ServerTooFewPlayersStimulus::checkExit()
+void ServerStateEnoughPlayers::checkExit()
 {
 	if (ServerCommon::getExitEmpty())
 	{

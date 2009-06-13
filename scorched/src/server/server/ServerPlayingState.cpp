@@ -20,7 +20,6 @@
 
 #include <server/ServerPlayingState.h>
 #include <server/ServerShotHolder.h>
-#include <server/ServerState.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerChannelManager.h>
 #include <server/TurnController.h>
@@ -59,11 +58,11 @@ bool ServerPlayingState::acceptStateChange(const unsigned state,
 	// Check how long we are allowed to wait
 	time_ += frameTime;
 	int shotTime = 0;
-	if (state == ServerState::ServerStateBuying)
+	//if (state == ServerState::ServerStateBuying)
 	{
 		shotTime = ScorchedServer::instance()->getOptionsGame().getBuyingTime();
 	}
-	else
+	//else
 	{
 		shotTime = ScorchedServer::instance()->getOptionsGame().getShotTime();
 	}
@@ -97,7 +96,7 @@ bool ServerPlayingState::acceptStateChange(const unsigned state,
 						// If the allowed missed moves has been specified
 						if (ScorchedServer::instance()->getOptionsGame().getAllowedMissedMoves() > 0)
 						{
-							if (state == ServerState::ServerStateBuying)
+							//if (state == ServerState::ServerStateBuying)
 							{
 								ServerChannelManager::instance()->sendText(
 									ChannelText("info",
@@ -107,7 +106,7 @@ bool ServerPlayingState::acceptStateChange(const unsigned state,
 										ScorchedServer::instance()->getOptionsGame().getAllowedMissedMoves() - movesMissed),
 									true);
 							}
-							else
+							//else
 							{
 								ServerChannelManager::instance()->sendText(
 									ChannelText("info",

@@ -18,47 +18,27 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <server/ServerStartingState.h>
-#include <server/ScorchedServer.h>
-#include <server/ServerChannelManager.h>
-#include <server/ServerCommon.h>
-#include <coms/ComsMessageSender.h>
-#include <common/OptionsScorched.h>
+#include <server/ServerConsoleLogger.h>
 #include <common/Logger.h>
 
-ServerStartingState::ServerStartingState() :
-	GameStateI("ServerStartingState")
+ServerConsoleLogger *ServerConsoleLogger::instance_ = 0;
+
+ServerConsoleLogger *ServerConsoleLogger::instance()
+{
+	if (!instance_) instance_ = new ServerConsoleLogger();
+	return instance_;
+}
+
+ServerConsoleLogger::ServerConsoleLogger()
+{
+	Logger::instance()->addLogger(this);
+}
+
+ServerConsoleLogger::~ServerConsoleLogger()
 {
 }
 
-ServerStartingState::~ServerStartingState()
+void ServerConsoleLogger::logMessage(LoggerInfo &info)
 {
-}
-
-void ServerStartingState::enterState(const unsigned state)
-{
-	timeLeft_ = (float) ScorchedServer::instance()->getOptionsGame().getStartTime();
-}
-
-bool ServerStartingState::acceptStateChange(const unsigned state, 
-		const unsigned nextState,
-		float frameTime)
-{
-	float startTime = timeLeft_;
-	timeLeft_ -= frameTime;
-
-	if (frameTime > 0.0f && int(timeLeft_) != int(startTime))
-	{
-		if (int(startTime) % 5 == 0)
-		{
-			ServerChannelManager::instance()->sendText(
-				ChannelText("info", 
-					"GAME_STARTING_IN_X", 
-					"Game starting in {0} seconds...", 
-					timeLeft_),
-				false);
-		}
-	}
-
-	return (timeLeft_ < 0.0f);
+	printf("%s - %s\n", info.getTime(), info.getMessage());
 }

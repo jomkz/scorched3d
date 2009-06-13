@@ -18,20 +18,36 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerTurnsh_INCLUDE__)
-#define __INCLUDE_ServerTurnsh_INCLUDE__
+#if !defined(__INCLUDE_ServerConsoleProgressCounterh_INCLUDE__)
+#define __INCLUDE_ServerConsoleProgressCounterh_INCLUDE__
 
-class Tank;
-class ServerTurns 
+#include <common/LoggerI.h>
+#include <common/ProgressCounter.h>
+
+class ServerConsoleProgressCounter : 
+	public ProgressCounterI, 
+	public LoggerI
 {
 public:
-	ServerTurns();
-	virtual ~ServerTurns();
+	static ServerConsoleProgressCounter *instance();
 
-	void simulate(unsigned int serverState);
+	ProgressCounter *getProgressCounter() { return &progressCounter_; }
+
+	virtual void drawHashes(int neededHashes);
+	virtual void logMessage(LoggerInfo &info);
+	virtual void operationChange(const LangString &op);
+	virtual void progressChange(const LangString &op, const float percentage);
 
 protected:
-	void processTank(Tank *Tank, unsigned int serverState);
+	static ServerConsoleProgressCounter *instance_;
+	bool firstOp_;
+	int hashes_;
+	ProgressCounter progressCounter_;
+
+private:
+	ServerConsoleProgressCounter();
+	virtual ~ServerConsoleProgressCounter();
+
 };
 
 #endif

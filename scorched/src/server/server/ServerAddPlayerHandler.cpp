@@ -22,7 +22,6 @@
 #include <server/ServerConnectHandler.h>
 #include <server/ScorchedServer.h>
 #include <server/ScorchedServerUtil.h>
-#include <server/ServerState.h>
 #include <server/ServerChannelManager.h>
 #include <server/ServerSimulator.h>
 #include <common/OptionsScorched.h>

@@ -21,7 +21,6 @@
 #include <server/ServerGiftMoneyHandler.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerShotHolder.h>
-#include <server/ServerState.h>
 #include <server/TurnController.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>

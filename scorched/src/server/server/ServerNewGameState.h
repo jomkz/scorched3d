@@ -40,8 +40,6 @@ public:
 
 	static int addTanksToGame(const unsigned state,
 		bool addState = false);
-	static void checkTeams();
-	static void checkBots(bool removeBots);
 	static void removeTargets();
 
 protected:

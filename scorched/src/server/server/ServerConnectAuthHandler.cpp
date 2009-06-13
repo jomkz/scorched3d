@@ -21,7 +21,6 @@
 #include <server/ServerConnectAuthHandler.h>
 #include <server/ServerConnectHandler.h>
 #include <server/ServerChannelManager.h>
-#include <server/ServerState.h>
 #include <server/ServerBanned.h>
 #include <server/ScorchedServer.h>
 #include <server/ScorchedServerUtil.h>

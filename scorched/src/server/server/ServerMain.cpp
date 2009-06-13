@@ -55,18 +55,21 @@
 #include <server/ServerConnectHandler.h>
 #include <server/ServerConnectAuthHandler.h>
 #include <server/ServerOperationResultHandler.h>
+#include <server/ServerConsoleProgressCounter.h>
+#include <server/ServerConsoleLogger.h>
 #include <server/ServerFileServer.h>
 #include <server/ServerLoadLevel.h>
 #include <server/ServerRegistration.h>
+#include <server/ServerConsoleProgressCounter.h>
 #include <server/ServerLog.h>
 #include <server/ServerBrowserInfo.h>
-#include <server/ServerState.h>
 #include <server/ServerCommon.h>
 #include <server/ServerBanned.h>
 #include <server/ServerMain.h>
 #include <server/ServerTurns.h>
 #include <server/ScorchedServer.h>
 #include <server/ScorchedServerUtil.h>
+#include <server/ServerState.h>
 #include <SDL/SDL.h>
 
 #ifdef S3D_SERVER
@@ -212,7 +215,10 @@ void serverLoop()
 	// Main server loop:
 	if (ScorchedServer::instance()->getContext().getNetInterfaceValid())
 	{
+		float timeDifference = serverTimer.getTimeDifference();
+
 		Logger::processLogEntries();
+		
 		ScorchedServer::instance()->getNetInterface().processMessages();
 #ifdef S3D_SERVER
 		{
@@ -221,14 +227,14 @@ void serverLoop()
 		}
 #endif
 
-		float timeDifference = serverTimer.getTimeDifference();
+		
 		/*
 		ScorchedServer::instance()->getGameState().draw();
 		ScorchedServer::instance()->getGameState().simulate(timeDifference);
 		ServerKeepAliveHandler::instance()->checkKeepAlives();
 		*/
 
-		ServerTurns::instance()->simulate();
+		ServerState::instance()->simulate(timeDifference);
 		ScorchedServer::instance()->getSimulator().simulate();
 
 		ServerFileServer::instance()->simulate(timeDifference);
@@ -243,85 +249,12 @@ void serverLoop()
 	}
 }
 
-class ConsoleServerProgressCounter : public ProgressCounterI, public LoggerI
-{
-public:
-	ConsoleServerProgressCounter() : hashes_(25) {}
-
-	virtual void drawHashes(int neededHashes)
-	{
-		if (hashes_ < neededHashes)
-		{
-			for (int h=hashes_;h<neededHashes; h++)
-			{
-				printf("#");
-				if (h == 24)
-				{
-					printf("\n");
-				}
-			}
-			hashes_ = neededHashes;
-		}
-		fflush(stdout);
-	}
-
-	virtual void logMessage(LoggerInfo &info)
-	{
-		drawHashes(25);
-	}
-
-	virtual void operationChange(const LangString &op)
-	{
-		Logger::processLogEntries();
-		hashes_ = 0;
-	}
-
-	virtual void progressChange(const LangString &op, const float percentage)
-	{
-		int neededHashes = int(percentage / 4.0f);
-		drawHashes(neededHashes);
-	}
-protected:
-	bool firstOp_;
-	int hashes_;
-};
-
-class ConsoleLogger : public LoggerI
-{
-public:
-	virtual void logMessage(LoggerInfo &info)
-	{
-		printf("%s - %s\n", info.getTime(), info.getMessage());
-	}
-};
-
 void consoleServer()
 {
-	ConsoleLogger consoleLogger;
-	ProgressCounter progressCounter;
-	ConsoleServerProgressCounter progressCounterI;
-	progressCounter.setUser(&progressCounterI);
-
+	ServerConsoleProgressCounter::instance();
+	ServerConsoleLogger::instance();
 	ServerCommon::startFileLogger();
-	Logger::instance()->addLogger(&progressCounterI);
-	Logger::instance()->addLogger(&consoleLogger);
-	serverMain(&progressCounter);
-
-	// Get a landscape definition to use
-	ServerCommon::serverLog("Generating landscape");
-	LandscapeDefinition defn = ScorchedServer::instance()->getLandscapes().getRandomLandscapeDefn(
-		ScorchedServer::instance()->getContext().getOptionsGame(),
-		ScorchedServer::instance()->getContext().getTankContainer());
-
-	// Set all options (wind etc..)
-	ScorchedServer::instance()->getContext().getOptionsTransient().newGame();
-
-	// Generate the new level
-	ScorchedServer::instance()->getLandscapeMaps().generateMaps(
-		ScorchedServer::instance()->getContext(), defn, 
-		&progressCounter);
-	ScorchedServer::instance()->getSimulator().reset();
-	ServerCommon::serverLog("Finished generating landscape");
+	serverMain(ServerConsoleProgressCounter::instance()->getProgressCounter());
 
 	for (;;)
 	{
