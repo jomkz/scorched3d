@@ -50,7 +50,6 @@ public:
 	State getState() { return state_; }
 
 	bool getTankPlaying();
-	bool getTankLoaded();
 
 	void setMuted(bool muted) { muted_ = muted; }
 	bool getMuted() { return muted_; }
@@ -61,6 +60,8 @@ public:
 	int getMaxLives() { return maxLives_; }
 	void setDestroy(bool destroy) { destroy_ = destroy; }
 	bool getDestroy() { return destroy_; }
+	void setLoading(bool loading) { loading_ = loading; }
+	bool getLoading() { return loading_; }
 	
 	const char *getStateString();
 	const char *getSmallStateString();
@@ -78,6 +79,7 @@ protected:
 	bool muted_;
 	bool skipshots_;
 	bool destroy_;
+	bool loading_;
 
 };
 

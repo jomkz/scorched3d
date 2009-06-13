@@ -104,9 +104,9 @@ void ServerShotFinishedState::enterState(const unsigned state)
 		}
 
 		ComsPlayerStateMessage playerMessage(true, true);
-		ComsMessageSender::sendToAllPlayingClients(playerMessage);
+		ComsMessageSender::sendToAllLoadedClients(playerMessage);
 		ComsScoreMessage message(finalScore);
-		ComsMessageSender::sendToAllPlayingClients(message);
+		ComsMessageSender::sendToAllLoadedClients(message);
 
 		if (finalScore)
 		{

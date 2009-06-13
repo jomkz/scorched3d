@@ -105,7 +105,7 @@ void ServerShotState::enterState(const unsigned state)
 	ComsPlayMovesMessage playMovesMessage;
 	playMovesMessage.getSeed() = seed;
 	ServerShotHolder::instance()->createMessage(playMovesMessage);
-	ComsMessageSender::sendToAllPlayingClients(playMovesMessage);
+	ComsMessageSender::sendToAllLoadedClients(playMovesMessage);
 
 	// Play the shots
 	//ScorchedServer::instance()->getTankContainer().setAllNotReady();

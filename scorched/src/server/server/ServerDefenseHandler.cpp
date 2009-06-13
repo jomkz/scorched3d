@@ -186,7 +186,7 @@ void ServerDefenseHandler::processDefenseMessage(
 			}
 			else
 			{
-				ComsMessageSender::sendToAllPlayingClients(message);
+				ComsMessageSender::sendToAllLoadedClients(message);
 			}
 	}
 }

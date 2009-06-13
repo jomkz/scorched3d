@@ -49,7 +49,7 @@ void ServerStateTooFewPlayersState::enterState(const unsigned state)
 
 	// Tell any clients why the game has been abandonded
 	ComsGameStoppedMessage gameStopped;
-	ComsMessageSender::sendToAllPlayingClients(gameStopped);
+	ComsMessageSender::sendToAllLoadedClients(gameStopped);
 
 	ServerChannelManager::instance()->sendText(
 		ChannelText("info", 

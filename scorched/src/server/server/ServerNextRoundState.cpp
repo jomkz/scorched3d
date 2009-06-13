@@ -76,7 +76,7 @@ void ServerNextRoundState::enterState(const unsigned state)
 
 	// Make sure all clients have the correct game settings
 	ComsGameStateMessage message;
-	ComsMessageSender::sendToAllPlayingClients(message);	
+	ComsMessageSender::sendToAllLoadedClients(message);	
 
 	// Move into the ready state
 	//ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusNextShot);

@@ -27,6 +27,7 @@
 #include <engine/Simulator.h>
 #include <simactions/TankLoadedSimAction.h>
 #include <tank/TankContainer.h>
+#include <tank/TankState.h>
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsLoadLevelMessage.h>
 #include <coms/ComsLevelLoadedMessage.h>
@@ -67,6 +68,20 @@ void ServerLoadLevel::destinationLoadLevel(unsigned int destinationId)
 	{
 		destination->setState(ServerDestination::sLoadingLevel);
 		destination->setLevelNumber(landscapeDefinition.getDefinitionNumber());
+	}
+	std::map<unsigned int, Tank *>::iterator itor;
+	std::map<unsigned int, Tank *> &tanks = 
+		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+	for (itor = tanks.begin();
+		itor != tanks.end();
+		itor++)
+	{
+		// For each tank
+		Tank *tank = (*itor).second;
+		if (destinationId == tank->getDestinationId())
+		{
+			tank->getState().setLoading(true);
+		}
 	}
 
 	// Tell this destination to start loading the level
@@ -136,7 +151,6 @@ bool ServerLoadLevel::processMessage(
 		Tank *tank = (*itor).second;
 		if (destinationId == tank->getDestinationId())
 		{
-			// Set state so we send to these destinations
 			TankLoadedSimAction *loadedAction = 
 				new TankLoadedSimAction(tank->getPlayerId());
 			ScorchedServer::instance()->getServerSimulator().

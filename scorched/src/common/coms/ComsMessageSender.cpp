@@ -24,12 +24,11 @@
 #include <net/NetInterface.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
-#include <tank/TankContainer.h>
-#include <tank/TankState.h>
 #ifndef S3D_SERVER
 #include <client/ScorchedClient.h>
 #endif
 #include <server/ScorchedServer.h>
+#include <server/ServerDestinations.h>
 #include <set>
 #include <zlib.h>
 
@@ -147,35 +146,15 @@ bool ComsMessageSender::sendToAllConnectedClients(
 	ComsMessage &message, unsigned int flags)
 {
 	std::list<unsigned int> destinations;
-	std::map<unsigned int, Tank *>::iterator itor;
-	std::map<unsigned int, Tank *> tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	for (itor = tanks.begin();
-		itor != tanks.end();
+	std::map<unsigned int, ServerDestination *>::iterator itor;
+	std::map<unsigned int, ServerDestination *> dests = 
+		ScorchedServer::instance()->getServerDestinations().getServerDestinations();
+	for (itor = dests.begin();
+		itor != dests.end();
 		itor++)
 	{
-		Tank *tank = (*itor).second;
-		destinations.push_back(tank->getDestinationId());
-	}
-	return sendToMultipleClients(message, destinations, flags);
-}
-
-bool ComsMessageSender::sendToAllPlayingClients(
-	ComsMessage &message, unsigned int flags)
-{
-	std::list<unsigned int> destinations;
-	std::map<unsigned int, Tank *>::iterator itor;
-	std::map<unsigned int, Tank *> tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	for (itor = tanks.begin();
-		itor != tanks.end();
-		itor++)
-	{
-		Tank *tank = (*itor).second;
-		if (tank->getState().getTankPlaying())
-		{
-			destinations.push_back(tank->getDestinationId());
-		}
+		ServerDestination *destination = (*itor).second;
+		destinations.push_back(destination->getDestinationId());
 	}
 	return sendToMultipleClients(message, destinations, flags);
 }
@@ -184,17 +163,17 @@ bool ComsMessageSender::sendToAllLoadedClients(
 	ComsMessage &message, unsigned int flags)
 {
 	std::list<unsigned int> destinations;
-	std::map<unsigned int, Tank *>::iterator itor;
-	std::map<unsigned int, Tank *> tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	for (itor = tanks.begin();
-		itor != tanks.end();
+	std::map<unsigned int, ServerDestination *>::iterator itor;
+	std::map<unsigned int, ServerDestination *> dests = 
+		ScorchedServer::instance()->getServerDestinations().getServerDestinations();
+	for (itor = dests.begin();
+		itor != dests.end();
 		itor++)
 	{
-		Tank *tank = (*itor).second;
-		if (tank->getState().getTankLoaded())
+		ServerDestination *destination = (*itor).second;
+		if (destination->getState() == ServerDestination::sFinished)
 		{
-			destinations.push_back(tank->getDestinationId());
+			destinations.push_back(destination->getDestinationId());
 		}
 	}
 	return sendToMultipleClients(message, destinations, flags);

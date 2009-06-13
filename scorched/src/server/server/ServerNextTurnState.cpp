@@ -52,7 +52,7 @@ void ServerNextTurnState::enterState(const unsigned state)
 	{
 		// Tell each client to end the shot timer
 		ComsTimerStartMessage timerMessage(0);
-		ComsMessageSender::sendToAllPlayingClients(timerMessage);
+		ComsMessageSender::sendToAllLoadedClients(timerMessage);
 
 		// No more turns left, play the shot
 		//ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusShot);
@@ -66,7 +66,7 @@ void ServerNextTurnState::enterState(const unsigned state)
 		int time = ScorchedServer::instance()->getOptionsGame().getShotTime();
 		if (weaponBuy) time = ScorchedServer::instance()->getOptionsGame().getBuyingTime();
 		ComsTimerStartMessage timerMessage(time);
-		ComsMessageSender::sendToAllPlayingClients(timerMessage);
+		ComsMessageSender::sendToAllLoadedClients(timerMessage);
 
 		// Tell the players to play the turn
 		std::list<unsigned int>::iterator itor;

@@ -140,7 +140,7 @@ bool ServerGiftMoneyHandler::processMessage(
 		toTank->getScore().getMoney() + money);
 
 	// Forward this message to the intended
-	ComsMessageSender::sendToAllPlayingClients(message);
+	ComsMessageSender::sendToAllLoadedClients(message);
 
 	return true;
 }
