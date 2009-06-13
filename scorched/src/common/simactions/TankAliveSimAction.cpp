@@ -18,41 +18,56 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <simactions/TankLoadedSimAction.h>
+#include <simactions/TankAliveSimAction.h>
+#include <placement/PlacementTankPosition.h>
+#include <landscapemap/DeformLandscape.h>
+#include <engine/Simulator.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
 #include <tank/TankContainer.h>
+#include <target/TargetLife.h>
 
-REGISTER_CLASS_SOURCE(TankLoadedSimAction);
+REGISTER_CLASS_SOURCE(TankAliveSimAction);
 
-TankLoadedSimAction::TankLoadedSimAction()
+TankAliveSimAction::TankAliveSimAction()
 {
 }
 
-TankLoadedSimAction::TankLoadedSimAction(unsigned int playerId) :
+TankAliveSimAction::TankAliveSimAction(unsigned int playerId) :
 	playerId_(playerId)
 {
 }
 
-TankLoadedSimAction::~TankLoadedSimAction()
+TankAliveSimAction::~TankAliveSimAction()
 {
 }
 
-bool TankLoadedSimAction::invokeAction(ScorchedContext &context)
+bool TankAliveSimAction::invokeAction(ScorchedContext &context)
 {
 	Tank *tank = context.getTankContainer().getTankById(playerId_);
 	if (!tank) return false;
 
+	tank->newMatch();
+
+	FixedVector tankPos = PlacementTankPosition::placeTank(
+		tank->getPlayerId(), tank->getTeam(),
+		context,
+		context.getSimulator().getRandomGenerator());
+	tank->getLife().setTargetPosition(tankPos);
+	DeformLandscape::flattenArea(context, tankPos);
+
+	tank->newGame();
+
 	return true;
 }
 
-bool TankLoadedSimAction::writeMessage(NetBuffer &buffer)
+bool TankAliveSimAction::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(playerId_);
 	return true;
 }
 
-bool TankLoadedSimAction::readMessage(NetBufferReader &reader)
+bool TankAliveSimAction::readMessage(NetBufferReader &reader)
 {
 	if (!reader.getFromBuffer(playerId_)) return false;
 	return true;

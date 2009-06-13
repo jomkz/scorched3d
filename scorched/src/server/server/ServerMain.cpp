@@ -64,6 +64,7 @@
 #include <server/ServerCommon.h>
 #include <server/ServerBanned.h>
 #include <server/ServerMain.h>
+#include <server/ServerTurns.h>
 #include <server/ScorchedServer.h>
 #include <server/ScorchedServerUtil.h>
 #include <SDL/SDL.h>
@@ -227,12 +228,12 @@ void serverLoop()
 		ServerKeepAliveHandler::instance()->checkKeepAlives();
 		*/
 
+		ServerTurns::instance()->simulate();
 		ScorchedServer::instance()->getSimulator().simulate();
 
 		ServerFileServer::instance()->simulate(timeDifference);
 		ServerChannelManager::instance()->simulate(timeDifference);
 		ScorchedServerUtil::instance()->timedMessage.simulate();
-
 
 		if (timeDifference > 5.0f)
 		{

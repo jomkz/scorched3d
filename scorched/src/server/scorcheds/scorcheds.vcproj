@@ -1013,6 +1013,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\server\ServerTurns.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerTurns.h"
+				>
+			</File>
+			<File
 				RelativePath="..\server\TurnController.cpp"
 				>
 			</File>
@@ -3869,6 +3877,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\simactions\TankAliveSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankAliveSimAction.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\simactions\TankChangeSimAction.cpp"
 				>
 			</File>
@@ -3882,6 +3898,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\simactions\TankLoadedSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankStartMoveSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankStartMoveSimAction.h"
 				>
 			</File>
 		</Filter>

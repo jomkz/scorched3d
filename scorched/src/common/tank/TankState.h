@@ -34,6 +34,12 @@ public:
 		sNormal,
 		sDead
 	};
+	enum ServerState
+	{
+		serverJoined,
+		serverNone,
+		serverMakingMove
+	};
 
 	TankState(ScorchedContext &context, unsigned int playerId);
 	virtual ~TankState();
@@ -48,6 +54,8 @@ public:
 	// State
 	void setState(State s);
 	State getState() { return state_; }
+	void setServerState(ServerState s);
+	ServerState getServerState() { return serverState_; }
 
 	bool getTankPlaying();
 
@@ -60,8 +68,6 @@ public:
 	int getMaxLives() { return maxLives_; }
 	void setDestroy(bool destroy) { destroy_ = destroy; }
 	bool getDestroy() { return destroy_; }
-	void setLoading(bool loading) { loading_ = loading; }
-	bool getLoading() { return loading_; }
 	
 	const char *getStateString();
 	const char *getSmallStateString();
@@ -75,11 +81,11 @@ protected:
 	Tank *tank_;
 	ScorchedContext &context_;
 	State state_;
+	ServerState serverState_;
 	int lives_, maxLives_;
 	bool muted_;
 	bool skipshots_;
 	bool destroy_;
-	bool loading_;
 
 };
 

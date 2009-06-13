@@ -177,30 +177,20 @@ void TankAIAdder::addTankAI(ScorchedServer &context, const char *aiName)
 		StatsLogger::instance()->tankConnected(tank);
 		StatsLogger::instance()->tankJoined(tank);
 
-		if (true) // Raise an event
-		{
-			// Tell the clients to create this tank
-			ComsAddPlayerMessage addPlayerMessage(
-				tank->getPlayerId(),
-				tank->getTargetName(),
-				tank->getColor(),
-				tank->getModelContainer().getTankModelName(),
-				tank->getModelContainer().getTankTypeName(),
-				tank->getDestinationId(),
-				tank->getTeam(),
-				""); 
-			addPlayerMessage.setPlayerIconName(tank->getAvatar().getName());
-			addPlayerMessage.getPlayerIcon().addDataToBuffer(
-				tank->getAvatar().getFile().getBuffer(),
-				tank->getAvatar().getFile().getBufferUsed());
-			ComsMessageSender::sendToAllConnectedClients(addPlayerMessage);
-		}
-
-		//if (context.getGameState().getState() == ServerState::ServerStateTooFewPlayers ||
-		//	context.getGameState().getState() == ServerState::ServerStateStarting)
-		{
-			ComsPlayerStateMessage message(false, false);
-			ComsMessageSender::sendToAllConnectedClients(message);
-		}
+		// Tell the clients to create this tank
+		ComsAddPlayerMessage addPlayerMessage(
+			tank->getPlayerId(),
+			tank->getTargetName(),
+			tank->getColor(),
+			tank->getModelContainer().getTankModelName(),
+			tank->getModelContainer().getTankTypeName(),
+			tank->getDestinationId(),
+			tank->getTeam(),
+			""); 
+		addPlayerMessage.setPlayerIconName(tank->getAvatar().getName());
+		addPlayerMessage.getPlayerIcon().addDataToBuffer(
+			tank->getAvatar().getFile().getBuffer(),
+			tank->getAvatar().getFile().getBufferUsed());
+		ComsMessageSender::sendToAllConnectedClients(addPlayerMessage);
 	}
 }

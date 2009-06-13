@@ -31,39 +31,6 @@
 #include <image/ImageFactory.h>
 #include <common/Logger.h>
 
-void PlacementTankPosition::flattenTankPositions(
-	ScorchedContext &context)
-{
-	if (context.getServerMode())
-	{
-		LandscapeDefinitionCache &definitions = 
-			context.getLandscapeMaps().getDefinitions();
-
-		FileRandomGenerator generator;
-		generator.seed(definitions.getSeed());
-
-		std::map<unsigned int, Tank *> &tanks = 
-			context.getTankContainer().getPlayingTanks();
-		std::map<unsigned int, Tank *>::iterator mainitor;
-		for (mainitor = tanks.begin();
-			mainitor != tanks.end();
-			mainitor++)
-		{
-			Tank *tank = (*mainitor).second;
-
-			if (tank->getState().getState() == TankState::sNormal)
-			{
-				FixedVector tankPos = PlacementTankPosition::placeTank(
-					tank->getPlayerId(), tank->getTeam(), 
-					context, generator);
-
-				tank->getLife().setTargetPosition(tankPos);
-				DeformLandscape::flattenArea(context, tankPos);
-			}
-		}
-	}
-}
-
 static bool tankMaskCloseness(ScorchedContext &context, int team, 
 	FixedVector &tankPos, Image *tankMask)
 {

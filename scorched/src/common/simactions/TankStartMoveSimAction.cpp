@@ -18,18 +18,49 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_PlacementTankPositionh_INCLUDE__)
-#define __INCLUDE_PlacementTankPositionh_INCLUDE__
+#include <simactions/TankStartMoveSimAction.h>
+#include <tank/TankAvatar.h>
+#include <tank/TankState.h>
+#include <tank/TankContainer.h>
+#ifndef S3D_SERVER
+#include <client/ClientStartGameHandler.h>
+#endif
 
-#include <list>
-#include <common/FixedVector.h>
-#include <common/RandomGenerator.h>
-#include <engine/ScorchedContext.h>
+REGISTER_CLASS_SOURCE(TankStartMoveSimAction);
 
-namespace PlacementTankPosition 
+TankStartMoveSimAction::TankStartMoveSimAction()
 {
-	FixedVector placeTank(unsigned int playerId, int team,
-		ScorchedContext &context, RandomGenerator &generator);
-};
+}
 
-#endif // __INCLUDE_PlacementTankPositionh_INCLUDE__
+TankStartMoveSimAction::TankStartMoveSimAction(unsigned int playerId) :
+	playerId_(playerId)
+{
+}
+
+TankStartMoveSimAction::~TankStartMoveSimAction()
+{
+}
+
+bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
+{
+	Tank *tank = context.getTankContainer().getTankById(playerId_);
+	if (!tank) return false;
+
+#ifndef S3D_SERVER
+	ClientStartGameHandler::instance()->startGame(this);
+#endif
+
+	return true;
+}
+
+bool TankStartMoveSimAction::writeMessage(NetBuffer &buffer)
+{
+	buffer.addToBuffer(playerId_);
+	return true;
+}
+
+bool TankStartMoveSimAction::readMessage(NetBufferReader &reader)
+{
+	if (!reader.getFromBuffer(playerId_)) return false;
+	return true;
+}

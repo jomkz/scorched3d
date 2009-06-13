@@ -296,9 +296,6 @@ void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 			SkipAllDialog::instance(), 0, false);
 	addCommonComponents(skinManager, ClientState::StatePlaying);
 
-	// StateShot
-	addCommonComponents(skinManager, ClientState::StateShot);
-
 	// StateScore
 	addCommonComponents(skinManager, ClientState::StateScore);
 	GLWWindowManager::instance()->addWindow(ClientState::StateScore,

@@ -51,7 +51,7 @@ TankKeyboardControl::~TankKeyboardControl()
 
 void TankKeyboardControl::enterState(const unsigned state)
 {
-	if (state == ClientState::StateShot)
+	//if (state == ClientState::StateShot)
 	{
 		Tank *currentTank =
 			ScorchedClient::instance()->getTankContainer().getCurrentTank();

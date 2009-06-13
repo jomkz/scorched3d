@@ -76,8 +76,8 @@ bool ClientShotState::processMessage(
 
 	// Ensure and move to the shot state
 	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
-	ScorchedClient::instance()->getGameState().checkStimulate();
-	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimShot);
+	//ScorchedClient::instance()->getGameState().checkStimulate();
+	//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimShot);
 	return true;
 }
 

@@ -18,18 +18,28 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_PlacementTankPositionh_INCLUDE__)
-#define __INCLUDE_PlacementTankPositionh_INCLUDE__
+#if !defined(AFX_TankStartMoveSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#define AFX_TankStartMoveSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
-#include <list>
-#include <common/FixedVector.h>
-#include <common/RandomGenerator.h>
-#include <engine/ScorchedContext.h>
+#include <simactions/SimAction.h>
 
-namespace PlacementTankPosition 
+class TankStartMoveSimAction : public SimAction
 {
-	FixedVector placeTank(unsigned int playerId, int team,
-		ScorchedContext &context, RandomGenerator &generator);
+public:
+	TankStartMoveSimAction();
+	TankStartMoveSimAction(unsigned int playerId);
+	virtual ~TankStartMoveSimAction();
+
+	unsigned int getPlayerId() { return playerId_; }
+
+	virtual bool invokeAction(ScorchedContext &context);
+
+	virtual bool writeMessage(NetBuffer &buffer);
+	virtual bool readMessage(NetBufferReader &reader);
+
+REGISTER_CLASS_HEADER(TankStartMoveSimAction);
+protected:
+	unsigned int playerId_;
 };
 
-#endif // __INCLUDE_PlacementTankPositionh_INCLUDE__
+#endif // !defined(AFX_TankStartMoveSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

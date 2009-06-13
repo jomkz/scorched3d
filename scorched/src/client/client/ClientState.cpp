@@ -215,8 +215,6 @@ void ClientState::setupGameState()
 	gameState.addStateStimulus(StateWait, 
 		StimPlaying, StatePlaying);
 	gameState.addStateStimulus(StateWait, 
-		StimShot, StateShot);
-	gameState.addStateStimulus(StateWait, 
 		StimWait, StateWait);
 	gameState.addStateStimulus(StateWait, 
 		StimScore, StateScore);
@@ -250,19 +248,6 @@ void ClientState::setupGameState()
 	gameState.addStateStimulus(StatePlaying, 
 		StimDisconnected, StateDisconnected);
 	gameState.addStateStimulus(StatePlaying, 
-		StimWait, StateWait);
-
-	// StateShot
-	addStandardComponents(gameState, StateShot);
-	gameState.addStateEntry(StateShot, 
-		TankKeyboardControl::instance());
-	gameState.addStateEntry(StateShot,
-		ClientShotState::instance());
-	gameState.addStateStimulus(StateShot,
-		ClientShotState::instance(), StateWait);
-	gameState.addStateStimulus(StateShot, 
-		StimDisconnected, StateDisconnected);
-	gameState.addStateStimulus(StateShot, 
 		StimWait, StateWait);
 
 	// StateScore

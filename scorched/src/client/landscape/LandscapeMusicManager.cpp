@@ -166,9 +166,9 @@ void LandscapeMusicManager::simulate(const unsigned state, float simTime)
 	case ClientState::StatePlaying:
 		playState = LandscapeMusicType::StatePlaying;
 		break;
-	case ClientState::StateShot:
-		playState = LandscapeMusicType::StateShot;
-		break;
+	//case ClientState::StateShot:
+	//	playState = LandscapeMusicType::StateShot;
+	//	break;
 	case ClientState::StateScore:
 		playState = LandscapeMusicType::StateScore;
 		break;

@@ -43,13 +43,12 @@ allowedStateTransitions[] =
 };
 
 TankState::TankState(ScorchedContext &context, unsigned int playerId) : 
-	state_(sSpectator), tank_(0),
+	state_(sSpectator), serverState_(serverJoined), tank_(0),
 	context_(context), 
 	muted_(false),
 	skipshots_(false),
 	lives_(0), maxLives_(1), 
-	destroy_(false),
-	loading_(true)
+	destroy_(false)
 {
 }
 
@@ -106,6 +105,11 @@ void TankState::setState(State s)
 	}
 }
 
+void TankState::setServerState(ServerState s)
+{
+	serverState_ = s;
+}
+
 const char *TankState::getStateString()
 {
 	static char string[1024];
@@ -118,8 +122,6 @@ const char *TankState::getStateString()
 
 const char *TankState::getSmallStateString()
 {
-	if (loading_) return "loading";
-
 	const char *type = "";
 	switch (state_)
 	{
@@ -142,9 +144,6 @@ LangString &TankState::getSmallStateLangString()
 	LANG_RESOURCE_CONST_VAR(DEAD, "DEAD", "Dead");
 	LANG_RESOURCE_CONST_VAR(ALIVE, "ALIVE", "Alive");
 	LANG_RESOURCE_CONST_VAR(SPECTATOR, "SPECTATOR", "Spectator");
-	LANG_RESOURCE_CONST_VAR(LOADING, "LOADING", "Loading");
-
-	if (loading_) return LOADING;
 
 	switch (state_)
 	{
@@ -172,7 +171,6 @@ bool TankState::writeMessage(NetBuffer &buffer)
 	buffer.addToBuffer((int) state_);
 	buffer.addToBuffer(lives_);
 	buffer.addToBuffer(maxLives_);
-	buffer.addToBuffer(loading_);
 	return true;
 }
 
@@ -194,11 +192,6 @@ bool TankState::readMessage(NetBufferReader &reader)
 	if (!reader.getFromBuffer(maxLives_))
 	{
 		Logger::log("TankState::maxLives_ read failed");
-		return false;
-	}
-	if (!reader.getFromBuffer(loading_))
-	{
-		Logger::log("TankState::loading_ read failed");
 		return false;
 	}
 	return true;

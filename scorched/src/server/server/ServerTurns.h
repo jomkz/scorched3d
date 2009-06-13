@@ -18,18 +18,26 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_PlacementTankPositionh_INCLUDE__)
-#define __INCLUDE_PlacementTankPositionh_INCLUDE__
+#if !defined(__INCLUDE_ServerTurnsh_INCLUDE__)
+#define __INCLUDE_ServerTurnsh_INCLUDE__
 
-#include <list>
-#include <common/FixedVector.h>
-#include <common/RandomGenerator.h>
-#include <engine/ScorchedContext.h>
-
-namespace PlacementTankPosition 
+class Tank;
+class ServerTurns 
 {
-	FixedVector placeTank(unsigned int playerId, int team,
-		ScorchedContext &context, RandomGenerator &generator);
+public:
+	static ServerTurns *instance();
+
+	void simulate();
+
+protected:
+	static ServerTurns *instance_;
+
+	void processTank(Tank *Tank);
+
+private:
+	ServerTurns();
+	virtual ~ServerTurns();
+
 };
 
-#endif // __INCLUDE_PlacementTankPositionh_INCLUDE__
+#endif

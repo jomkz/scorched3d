@@ -55,6 +55,8 @@ ServerLoadLevel::~ServerLoadLevel()
 
 void ServerLoadLevel::destinationLoadLevel(unsigned int destinationId)
 {
+	DIALOG_ASSERT(destinationId != 0);
+
 	LandscapeDefinition &landscapeDefinition =
 		ScorchedServer::instance()->getLandscapeMaps().getDefinitions().
 		getDefinition();
@@ -68,20 +70,6 @@ void ServerLoadLevel::destinationLoadLevel(unsigned int destinationId)
 	{
 		destination->setState(ServerDestination::sLoadingLevel);
 		destination->setLevelNumber(landscapeDefinition.getDefinitionNumber());
-	}
-	std::map<unsigned int, Tank *>::iterator itor;
-	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	for (itor = tanks.begin();
-		itor != tanks.end();
-		itor++)
-	{
-		// For each tank
-		Tank *tank = (*itor).second;
-		if (destinationId == tank->getDestinationId())
-		{
-			tank->getState().setLoading(true);
-		}
 	}
 
 	// Tell this destination to start loading the level

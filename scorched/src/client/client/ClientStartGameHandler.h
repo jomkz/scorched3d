@@ -22,18 +22,14 @@
 #ifndef _ClientStartGameHandler_h
 #define _ClientStartGameHandler_h
 
-#include <coms/ComsMessageHandler.h>
+#include <simactions/TankStartMoveSimAction.h>
 
-class ClientStartGameHandler : 
-	public ComsMessageHandlerI
+class ClientStartGameHandler 
 {
 public:
 	static ClientStartGameHandler* instance();
 
-	virtual bool processMessage(
-		NetMessage &message,
-		const char *messageType,
-		NetBufferReader &reader);
+	void startGame(TankStartMoveSimAction *action);
 
 protected:
 	static ClientStartGameHandler* instance_;

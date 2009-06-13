@@ -51,55 +51,50 @@ ClientStartGameHandler *ClientStartGameHandler::instance()
 
 ClientStartGameHandler::ClientStartGameHandler()
 {
-	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		ComsStartGameMessage::ComsStartGameMessageType,
-		this);
 }
 
 ClientStartGameHandler::~ClientStartGameHandler()
 {
-
 }
 
-bool ClientStartGameHandler::processMessage(
-	NetMessage &netMessage,
-	const char *messageType,
-	NetBufferReader &reader)
+void ClientStartGameHandler::startGame(TankStartMoveSimAction *action)
 {
-	ComsStartGameMessage message;
-	if (!message.readMessage(reader)) return false;
+	Tank *tank = ScorchedClient::instance()->getTankContainer().
+		getTankById(action->getPlayerId());
+	if (tank->getDestinationId() != 
+		ScorchedClient::instance()->getTankContainer().getCurrentDestinationId())
+	{
+		return;
+	}
 
 	ScorchedClient::instance()->getTankContainer().setCurrentPlayerId(
-		message.getCurrentPlayerId());
+		action->getPlayerId());
 	Tank *current = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+	if (!current) 
+	{
+		return;
+	}
 
 	// Set the camera back to this players camera position
 	if (OptionsDisplay::instance()->getStorePlayerCamera())
 	{
-		if (current)
-		{
-			MainCamera::instance()->getTarget().getCamera().setLookAt(current->getCamera().getCameraLookAt());
-			Vector rotation = current->getCamera().getCameraRotation();
-			MainCamera::instance()->getTarget().getCamera().movePosition(rotation[0], rotation[1], rotation[2]);
-			MainCamera::instance()->getTarget().setCameraType((TargetCamera::CamType) current->getCamera().getCameraType());
-		}
+		MainCamera::instance()->getTarget().getCamera().setLookAt(current->getCamera().getCameraLookAt());
+		Vector rotation = current->getCamera().getCameraRotation();
+		MainCamera::instance()->getTarget().getCamera().movePosition(rotation[0], rotation[1], rotation[2]);
+		MainCamera::instance()->getTarget().setCameraType((TargetCamera::CamType) current->getCamera().getCameraType());
 	}
 
 	// Ensure that the landscape is set to the "proper" texture
 	Landscape::instance()->restoreLandscapeTexture();
 
 	// make sound to tell client a new game is commencing
-	if (current->getDestinationId() == 
-		ScorchedClient::instance()->getTankContainer().getCurrentDestinationId())
-	{
-		CACHE_SOUND(playSound, S3D::getModFile("data/wav/misc/play.wav"));
-		SoundUtils::playRelativeSound(VirtualSoundPriority::eText, playSound);
-	}
+	CACHE_SOUND(playSound, S3D::getModFile("data/wav/misc/play.wav"));
+	SoundUtils::playRelativeSound(VirtualSoundPriority::eText, playSound);
 
 	// Stimulate into the new game state
 	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
 	ScorchedClient::instance()->getGameState().checkStimulate();
-	if (message.getBuyWeapons())
+	if (false)
 	{
 		ScorchedClient::instance()->getGameState().stimulate(
 			ClientState::StimBuyWeapons);
@@ -109,21 +104,14 @@ bool ClientStartGameHandler::processMessage(
 		ScorchedClient::instance()->getGameState().stimulate(
 			ClientState::StimPlaying);
 
-		// Set the current weapon, so any graphics are updated
-		Tank *currentTank = 
-			ScorchedClient::instance()->getTankContainer().getCurrentTank();
-		if (currentTank)
+		Accessory *currentWeapon = current->getAccessories().getWeapons().getCurrent();
+		if (currentWeapon && 
+			currentWeapon->getPositionSelect() != Accessory::ePositionSelectNone)
 		{
-			Accessory *currentWeapon = currentTank->getAccessories().getWeapons().getCurrent();
-			if (currentWeapon && 
-				currentWeapon->getPositionSelect() != Accessory::ePositionSelectNone)
-			{
-				std::list<Accessory *> &entries =
-					currentTank->getAccessories().getAllAccessoriesByGroup("weapon");
-				if (!entries.empty()) currentWeapon = entries.front();
-			}
-			currentTank->getAccessories().getWeapons().setWeapon(currentWeapon);
+			std::list<Accessory *> &entries =
+				current->getAccessories().getAllAccessoriesByGroup("weapon");
+			if (!entries.empty()) currentWeapon = entries.front();
 		}
+		current->getAccessories().getWeapons().setWeapon(currentWeapon);
 	}
-	return true;
 }
