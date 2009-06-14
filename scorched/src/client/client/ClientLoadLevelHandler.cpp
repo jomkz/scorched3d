@@ -123,9 +123,6 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	// Calculate all the new landscape settings (graphics)
 	Landscape::instance()->generate(ProgressDialogSync::events_instance());
 
-	// Make sure the landscape has been optimized
-	Landscape::instance()->reset(ProgressDialogSync::events_instance());
-
 	// As we have not returned to the main loop for ages the
 	// timer will have a lot of time in it
 	// Get rid of this time so we don't screw things up

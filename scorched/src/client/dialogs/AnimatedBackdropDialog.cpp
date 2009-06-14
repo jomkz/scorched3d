@@ -93,7 +93,7 @@ void AnimatedBackdropDialog::init()
 	Landscape::instance()->generate(&progressCounter);
 
 	// Make sure the landscape has been optimized
-	Landscape::instance()->reset(&progressCounter);
+	Landscape::instance()->recalculate();
 
 	OptionsDisplay::instance()->getNoWaterMovementEntry().setValue(waterMove);
 

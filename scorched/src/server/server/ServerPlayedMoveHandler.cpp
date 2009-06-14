@@ -22,8 +22,11 @@
 #include <server/ServerShotHolder.h>
 #include <server/ScorchedServer.h>
 #include <server/TurnController.h>
+#include <server/ServerSimulator.h>
+#include <simactions/TankFireShotSimAction.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
+#include <tank/TankScore.h>
 #include <engine/GameState.h>
 #include <coms/ComsPlayedMoveMessage.h>
 
@@ -54,36 +57,42 @@ bool ServerPlayedMoveHandler::processMessage(
 	const char *messageType,
 	NetBufferReader &reader)
 {
-	ComsPlayedMoveMessage *message = new ComsPlayedMoveMessage;
-	if (!message->readMessage(reader))
-	{
-		delete message;
-		return false;
-	}
+	ComsPlayedMoveMessage message;
+	if (!message.readMessage(reader)) return false;
 
-	unsigned int playerId = message->getPlayerId();
+	unsigned int playerId = message.getPlayerId();
 	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
 	if (tank && tank->getState().getState() == TankState::sNormal)
 	{	
 		if (tank->getDestinationId() == netMessage.getDestinationId())
 		{
-			if (TurnController::instance()->playerThisTurn(playerId))
+			if (tank->getState().getServerState() == TankState::serverMakingMove)
 			{
-				//if ((ScorchedServer::instance()->getGameState().getState() == 
-				//	ServerState::ServerStatePlaying) || ((
-				//	ScorchedServer::instance()->getGameState().getState() == 
-				//	ServerState::ServerStateBuying) && 
-				//	message->getType() == ComsPlayedMoveMessage::eFinishedBuy))
-				{
-					ServerShotHolder::instance()->addShot(playerId, message);
-				}
-				//else delete message;
+				playMove(tank, message);
 			}
-			else delete message;
 		}
-		else delete message;
 	}
-	else delete message;
 
 	return true;
+}
+
+void ServerPlayedMoveHandler::playMove(Tank *tank, ComsPlayedMoveMessage &message)
+{
+	if (message.getType() == ComsPlayedMoveMessage::eShot)
+	{
+		TankFireShotSimAction *simAction = new TankFireShotSimAction(
+			message.getPlayerId(),
+			message.getWeaponId(),
+			message.getRotationXY(),
+			message.getRotationYZ(),
+			message.getPower(),
+			message.getSelectPositionX(),
+			message.getSelectPositionY()
+			);
+		ScorchedServer::instance()->getServerSimulator().
+			addSimulatorAction(simAction);
+	}
+
+	tank->getScore().setMissedMoves(0);
+	tank->getState().setServerState(TankState::serverNone);
 }

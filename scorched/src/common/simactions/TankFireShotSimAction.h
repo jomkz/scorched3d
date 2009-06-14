@@ -18,33 +18,38 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
+#if !defined(AFX_TankFireShotSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#define AFX_TankFireShotSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
-#if !defined(__INCLUDE_ServerPlayedMoveHandlerh_INCLUDE__)
-#define __INCLUDE_ServerPlayedMoveHandlerh_INCLUDE__
+#include <simactions/SimAction.h>
 
-#include <coms/ComsMessageHandler.h>
-
-class Tank;
-class ComsPlayedMoveMessage;
-class ServerPlayedMoveHandler : 
-	public ComsMessageHandlerI
+class TankFireShotSimAction : public SimAction
 {
 public:
-	static ServerPlayedMoveHandler *instance();
+	TankFireShotSimAction();
+	TankFireShotSimAction(unsigned int playerId,
+		unsigned int weaponId,
+		fixed rotationXY,
+		fixed rotationYZ,
+		fixed power,
+		int selectPositionX,
+		int selectPositionY);
+	virtual ~TankFireShotSimAction();
 
-	virtual bool processMessage(
-		NetMessage &message,
-		const char *messageType,
-		NetBufferReader &reader);
+	virtual bool invokeAction(ScorchedContext &context);
 
+	virtual bool writeMessage(NetBuffer &buffer);
+	virtual bool readMessage(NetBufferReader &reader);
+
+REGISTER_CLASS_HEADER(TankFireShotSimAction);
 protected:
-	static ServerPlayedMoveHandler *instance_;
-	void playMove(Tank *tank, ComsPlayedMoveMessage &message);
-
-private:
-	ServerPlayedMoveHandler();
-	virtual ~ServerPlayedMoveHandler();
+	unsigned int playerId_;
+	unsigned int weaponId_;
+	fixed rotationXY_;
+	fixed rotationYZ_;
+	fixed power_;
+	int selectPositionX_;
+	int selectPositionY_;
 };
 
-
-#endif
+#endif // !defined(AFX_TankFireShotSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

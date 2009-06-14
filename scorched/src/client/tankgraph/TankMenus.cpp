@@ -153,7 +153,7 @@ void TankMenus::showTextureDetails()
 
 void TankMenus::resetLandscape()
 {
-	Landscape::instance()->reset();
+	Landscape::instance()->recalculate();
 }
 
 void TankMenus::clearTracerLines()

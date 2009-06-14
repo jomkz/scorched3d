@@ -38,6 +38,7 @@
 #include <lang/LangResource.h>
 #include <coms/ComsNewGameMessage.h>
 #include <dialogs/ProgressDialog.h>
+#include <dialogs/CameraDialog.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapemap/DeformLandscape.h>
 #include <landscapedef/LandscapeDefinitions.h>
@@ -220,9 +221,14 @@ bool ClientNewGameHandler::actualProcessMessage(
 		}
 	}
 
-	// Make sure the landscape has been optimized
-	Landscape::instance()->reset(ProgressDialogSync::events_instance());
-
+	// Recalculate all landscape objects
+	// Ensure all objects use any new landscape
+	ScorchedClient::instance()->
+		getParticleEngine().killAll();
+	MainCamera::instance()->getTarget().
+		getPrecipitationEngine().killAll();
+	CameraDialog::instance()->getCamera().
+		getPrecipitationEngine().killAll();
 	RenderTracer::instance()->newGame();
 	SpeedChange::instance()->resetSpeed();
 

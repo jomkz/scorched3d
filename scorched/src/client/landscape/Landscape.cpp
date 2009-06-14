@@ -126,20 +126,6 @@ void Landscape::recalculate()
 	}
 }
 
-void Landscape::reset(ProgressCounter *counter)
-{
-	changeCount_++;
-
-	// Recalculate all landscape objects
-	// Ensure all objects use any new landscape
-	ScorchedClient::instance()->
-		getParticleEngine().killAll();
-	MainCamera::instance()->getTarget().
-		getPrecipitationEngine().killAll();
-	CameraDialog::instance()->getCamera().
-		getPrecipitationEngine().killAll();
-}
-
 void Landscape::drawShadows()
 {	
 	if (!GLStateExtension::hasHardwareShadows()) return;

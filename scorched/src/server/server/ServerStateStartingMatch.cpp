@@ -23,6 +23,8 @@
 #include <server/ServerChannelManager.h>
 #include <common/OptionsGame.h>
 #include <common/OptionsScorched.h>
+#include <tank/TankContainer.h>
+#include <tank/TankState.h>
 
 ServerStateStartingMatch::ServerStateStartingMatch() :
 	totalTime_(0.0f)
@@ -66,6 +68,17 @@ bool ServerStateStartingMatch::startingMatch(float frameTime)
 
 void ServerStateStartingMatch::startMatch()
 {
+	std::map<unsigned int, Tank *> &tanks =
+		ScorchedServer::instance()->getTankContainer().getAllTanks();
+	std::map<unsigned int, Tank *>::iterator mainitor;
+	for (mainitor = tanks.begin();
+		mainitor != tanks.end();
+		mainitor++)
+	{
+		Tank *current = (*mainitor).second;
+		current->getState().setNewMatch(true);
+	}
+
 	ServerChannelManager::instance()->sendText(
 		ChannelText("info", 
 			"GAME_STARTED", 

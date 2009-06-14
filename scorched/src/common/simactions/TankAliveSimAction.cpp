@@ -47,7 +47,11 @@ bool TankAliveSimAction::invokeAction(ScorchedContext &context)
 	Tank *tank = context.getTankContainer().getTankById(playerId_);
 	if (!tank) return false;
 
-	tank->newMatch();
+	if (tank->getState().getNewMatch())
+	{
+		tank->newMatch();
+		tank->getState().setNewMatch(false);
+	}
 
 	FixedVector tankPos = PlacementTankPosition::placeTank(
 		tank->getPlayerId(), tank->getTeam(),
@@ -57,6 +61,7 @@ bool TankAliveSimAction::invokeAction(ScorchedContext &context)
 	DeformLandscape::flattenArea(context, tankPos);
 
 	tank->newGame();
+	if (!context.getServerMode()) tank->clientNewGame();
 
 	return true;
 }

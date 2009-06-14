@@ -27,6 +27,7 @@
 #include <coms/ComsMessageHandler.h>
 #include <coms/ComsSyncLevelMessage.h>
 #include <dialogs/ProgressDialog.h>
+#include <dialogs/CameraDialog.h>
 #include <landscape/Landscape.h>
 #include <tankgraph/RenderTracer.h>
 #include <graph/SpeedChange.h>
@@ -70,8 +71,14 @@ bool ClientSyncLevelHandler::processMessage(
 	Logger::log(S3D::formatStringBuffer("Landscape sync deformation time %.2f seconds", deformTime));
 
 	// Make sure the landscape has been optimized
-	Landscape::instance()->reset(ProgressDialogSync::noevents_instance());
+	Landscape::instance()->recalculate();
 
+	ScorchedClient::instance()->
+		getParticleEngine().killAll();
+	MainCamera::instance()->getTarget().
+		getPrecipitationEngine().killAll();
+	CameraDialog::instance()->getCamera().
+		getPrecipitationEngine().killAll();
 	RenderTracer::instance()->newGame();
 	SpeedChange::instance()->resetSpeed();
 
