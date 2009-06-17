@@ -144,12 +144,9 @@ void ClientWindowSetup::addCommonComponents(GLWWindowSkinManager *skinManager,
 	GLWWindowManager::instance()->addWindow(state,
 		MsgBoxDialog::instance(), 0, false);
 
-	if (ClientParams::instance()->getConnectedToServer())
-	{
-		KEYBOARDKEY("SHOW_TEAM_DIALOG", teamKey);
-		GLWWindowManager::instance()->addWindow(state,
-			PlayerDialog::instance(), teamKey, false);
-	}
+	KEYBOARDKEY("SHOW_TEAM_DIALOG", teamKey);
+	GLWWindowManager::instance()->addWindow(state,
+		PlayerDialog::instance(), teamKey, false);
 
 	KEYBOARDKEY("SHOW_RULES_DIALOG", rulesKey);
 	GLWWindowManager::instance()->addWindow(state, 

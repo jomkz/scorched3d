@@ -21,9 +21,10 @@
 #include <coms/ComsSyncTimeMessage.h>
 #ifndef S3D_SERVER
 #include <client/ScorchedClient.h>
+#include <client/ClientSimulator.h>
 #endif
 #include <server/ScorchedServer.h>
-#include <engine/Simulator.h>
+#include <server/ServerSimulator.h>
 
 ComsMessageType ComsSyncTimeMessage::ComsSyncTimeMessageType("ComsSyncTimeMessageType");
 
@@ -39,7 +40,7 @@ ComsSyncTimeMessage::~ComsSyncTimeMessage()
 bool ComsSyncTimeMessage::writeMessage(NetBuffer &buffer)
 {
 	// Simulator state
-	if (!ScorchedServer::instance()->getSimulator().writeTimeMessage(buffer)) return false;
+	if (!ScorchedServer::instance()->getServerSimulator().writeTimeMessage(buffer)) return false;
 
 	return true;
 }
@@ -48,7 +49,7 @@ bool ComsSyncTimeMessage::readMessage(NetBufferReader &reader)
 {
 #ifndef S3D_SERVER
 	// Simulator state
-	if (!ScorchedClient::instance()->getSimulator().readTimeMessage(reader)) return false;
+	if (!ScorchedClient::instance()->getClientSimulator().readTimeMessage(reader)) return false;
 #endif
 	
 	return true;

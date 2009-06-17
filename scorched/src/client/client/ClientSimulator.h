@@ -34,8 +34,6 @@ public:
 	ClientSimulator();
 	virtual ~ClientSimulator();
 
-	virtual void nextSendTime();
-
 	// GameStateI
 	virtual void simulate(const unsigned state, float simTime);
 	virtual void draw(const unsigned state);
@@ -45,6 +43,14 @@ public:
 		NetMessage &message,
 		const char *messageType,
 		NetBufferReader &reader);
+
+	bool readTimeMessage(NetBufferReader &reader);
+	bool readSyncMessage(NetBufferReader &reader);
+
+private:
+	fixed waitingEventTime_;
+
+	virtual bool continueToSimulate();
 };
 
 #endif // !defined(AFX_ClientSimulator_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_)

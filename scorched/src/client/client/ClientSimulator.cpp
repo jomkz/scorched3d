@@ -33,9 +33,10 @@ ClientSimulator::~ClientSimulator()
 {
 }
 
-void ClientSimulator::nextSendTime()
+bool ClientSimulator::continueToSimulate()
 {
-
+	if (totalTime_ >= waitingEventTime_) return false;
+	return true;
 }
 
 void ClientSimulator::simulate(const unsigned state, float simTime)
@@ -45,7 +46,7 @@ void ClientSimulator::simulate(const unsigned state, float simTime)
 
 void ClientSimulator::draw(const unsigned state)
 {
-	Simulator::draw();
+	actionController_.draw();
 }
 
 bool ClientSimulator::processMessage(
@@ -75,5 +76,46 @@ bool ClientSimulator::processMessage(
 	//Logger::log(S3D::formatStringBuffer("Total Time %.2f, Server Total Time %.2f, Waiting Time %.2f", 
 	//	totalTime_.asFloat(), message.getTotalTime().asFloat(), waitingEventTime_.asFloat()));
 
+	return true;
+}
+
+bool ClientSimulator::readTimeMessage(NetBufferReader &reader)
+{
+	reset();
+
+	// Simulator time
+	if (!reader.getFromBuffer(stepTime_)) return false;
+	if (!reader.getFromBuffer(totalTime_)) return false;
+	waitingEventTime_ = totalTime_;
+
+	return true;
+}
+
+bool ClientSimulator::readSyncMessage(NetBufferReader &reader)
+{
+	// Actions
+	unsigned int numberActions;
+	if (!reader.getFromBuffer(numberActions)) return false;
+	for (unsigned int a=0; a<numberActions; a++)
+	{
+		fixed fireTime;
+		if (!reader.getFromBuffer(fireTime)) return false;
+
+		std::string className;
+		if (!reader.getFromBuffer(className)) return false;
+		SimAction *simAction = (SimAction *)
+			MetaClassRegistration::getNewClass(className.c_str());
+		if (!simAction) return false;
+		if (!simAction->readMessage(reader)) return false;
+
+		SimActionContainer *container = new SimActionContainer(simAction, fireTime);
+		simActions_.push_back(container);
+	}
+
+	// Random seeds
+	if (!random_.readMessage(reader)) return false;
+
+	// Target Movement
+	if (!context_->getTargetMovement().readMessage(reader)) return false;
 	return true;
 }

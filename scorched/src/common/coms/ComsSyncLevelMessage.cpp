@@ -21,12 +21,13 @@
 #include <coms/ComsSyncLevelMessage.h>
 #ifndef S3D_SERVER
 #include <client/ScorchedClient.h>
+#include <client/ClientSimulator.h>
 #endif
 #include <server/ScorchedServer.h>
+#include <server/ServerSimulator.h>
 #include <tank/TankTeamScore.h>
 #include <tank/TankContainer.h>
 #include <target/TargetContainer.h>
-#include <engine/Simulator.h>
 #include <common/Logger.h>
 #include <map>
 
@@ -68,7 +69,7 @@ bool ComsSyncLevelMessage::writeMessage(NetBuffer &buffer)
 	if (!ScorchedServer::instance()->getContext().getTankTeamScore().writeMessage(buffer)) return false;
 
 	// Simulator state
-	if (!ScorchedServer::instance()->getSimulator().writeSyncMessage(buffer)) return false;
+	if (!ScorchedServer::instance()->getServerSimulator().writeSyncMessage(buffer)) return false;
 
 	// Send landscape deforms
 	deformInfos_ = DeformLandscape::getInfos();
@@ -221,7 +222,7 @@ bool ComsSyncLevelMessage::readMessage(NetBufferReader &reader)
 	if (!ScorchedClient::instance()->getContext().getTankTeamScore().readMessage(reader)) return false;
 
 	// Simulator state
-	if (!ScorchedClient::instance()->getSimulator().readSyncMessage(reader)) return false;
+	if (!ScorchedClient::instance()->getClientSimulator().readSyncMessage(reader)) return false;
 
 	// Get the landscape deforms
 	int infosSize = 0;

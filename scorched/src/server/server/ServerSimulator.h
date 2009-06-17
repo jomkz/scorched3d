@@ -32,10 +32,16 @@ public:
 	void addSimulatorAction(SimAction *action);
 
 	virtual void reset();
-	virtual void nextSendTime();
+
+	bool writeTimeMessage(NetBuffer &buffer);
+	bool writeSyncMessage(NetBuffer &buffer);
 
 protected:
 	std::list<SimAction *> sendActions_;
+	fixed nextSendTime_, nextEventTime_;
+
+	virtual bool continueToSimulate();
+	void nextSendTime();;
 };
 
 #endif // !defined(AFX_ServerSimulator_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_)

@@ -37,6 +37,7 @@ public:
 	void setScorchedContext(ScorchedContext *context);
 
 	virtual void reset();
+	void simulate();
 
 	// Accessors
 	RandomGenerator &getRandomGenerator() { return random_; }
@@ -45,18 +46,6 @@ public:
 	// Set the simulation speed
 	void setFast(fixed speedMult);
 	fixed getFast() { return speed_; }
-
-	// Inherited from GameStateI
-	void simulate();
-	void draw();
-
-	virtual void nextSendTime();
-
-	bool writeTimeMessage(NetBuffer &buffer);
-	bool readTimeMessage(NetBufferReader &reader);
-	bool writeSyncMessage(NetBuffer &buffer);
-	bool readSyncMessage(NetBufferReader &reader);
-
 protected:
 	class SimActionContainer
 	{
@@ -71,7 +60,6 @@ protected:
 
 	unsigned int lastTickTime_;
 	fixed speed_, stepTime_, totalTime_;
-	fixed nextSendTime_, nextEventTime_, waitingEventTime_;
 	ScorchedContext *context_;
 	EventContainer events_;
 	FileRandomGenerator random_;
@@ -79,6 +67,7 @@ protected:
 	std::list<SimActionContainer *> simActions_;
 
 	void actualSimulate(fixed frameTime);
+	virtual bool continueToSimulate() = 0;
 };
 
 #endif // !defined(AFX_Simulator_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_)

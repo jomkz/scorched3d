@@ -77,6 +77,7 @@
 #endif
 
 Clock serverTimer;
+static bool serverStarted = false;
 
 void checkSettings()
 {
@@ -168,6 +169,7 @@ bool startServer(bool local, ProgressCounter *counter)
 	// Load all script hooks
 	if (!ScorchedServer::instance()->getLUAScriptHook().loadHooks()) return false;
 
+	serverStarted = true;
 	return true;
 }
 
@@ -212,12 +214,15 @@ void serverMain(ProgressCounter *counter)
 
 void serverLoop()
 {
-	// Main server loop:
-	if (ScorchedServer::instance()->getContext().getNetInterfaceValid())
-	{
-		float timeDifference = serverTimer.getTimeDifference();
+	float timeDifference = serverTimer.getTimeDifference();
+	Logger::processLogEntries();
 
-		Logger::processLogEntries();
+	// Main server loop:
+	if (!serverStarted ||
+		!ScorchedServer::instance()->getContext().getNetInterfaceValid())
+	{
+		return;
+	}
 		
 		ScorchedServer::instance()->getNetInterface().processMessages();
 #ifdef S3D_SERVER
@@ -226,13 +231,6 @@ void serverLoop()
 			ServerWebServer::instance()->processMessages();
 		}
 #endif
-
-		
-		/*
-		ScorchedServer::instance()->getGameState().draw();
-		ScorchedServer::instance()->getGameState().simulate(timeDifference);
-		ServerKeepAliveHandler::instance()->checkKeepAlives();
-		*/
 
 		ServerState::instance()->simulate(timeDifference);
 		ScorchedServer::instance()->getSimulator().simulate();
@@ -246,7 +244,6 @@ void serverLoop()
 			Logger::log(S3D::formatStringBuffer("Warning: Server loop took %.2f seconds", 
 				timeDifference));
 		}
-	}
 }
 
 void consoleServer()

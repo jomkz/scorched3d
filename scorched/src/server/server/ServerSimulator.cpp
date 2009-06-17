@@ -22,7 +22,10 @@
 #include <server/ScorchedServer.h>
 #include <coms/ComsSimulateMessage.h>
 #include <coms/ComsMessageSender.h>
+#include <movement/TargetMovement.h>
 #include <common/Logger.h>
+
+static const fixed SendStepSize = fixed(true, 1 * FIXED_RESOLUTION);
 
 ServerSimulator::ServerSimulator()
 {
@@ -34,6 +37,8 @@ ServerSimulator::~ServerSimulator()
 
 void ServerSimulator::reset()
 {
+	nextSendTime_ = 0;
+	nextEventTime_ = nextSendTime_ + SendStepSize;
 	while (!sendActions_.empty())
 	{
 		delete sendActions_.front();
@@ -47,12 +52,21 @@ void ServerSimulator::addSimulatorAction(SimAction *action)
 	sendActions_.push_back(action);
 }
 
+bool ServerSimulator::continueToSimulate()
+{
+	// Send out the message at the correct time
+	if (totalTime_ == nextSendTime_)
+	{
+		nextSendTime();
+		nextSendTime_ += SendStepSize;
+		nextEventTime_ += SendStepSize;
+	}
+
+	return true;
+}
+
 void ServerSimulator::nextSendTime()
 {
-	// On the server we never recieved messages
-	// so just never wait
-	waitingEventTime_ = nextEventTime_;
-
 	// Add the new actions for this time
 	std::list<SimAction *>::iterator itor;
 	for (itor = sendActions_.begin();
@@ -60,16 +74,49 @@ void ServerSimulator::nextSendTime()
 		itor++)
 	{
 		SimAction *action = *itor;
-		simActions_.push_back(new SimActionContainer(action, waitingEventTime_));
+		simActions_.push_back(new SimActionContainer(action, nextEventTime_));
 	}
 
 	//Logger::log(S3D::formatStringBuffer("Total Time %.2f, Waiting Time %.2f", 
 	//	totalTime_.asFloat(), waitingEventTime_.asFloat()));
 
 	// Send the time and actions to the client
-	ComsSimulateMessage simulateMessage(waitingEventTime_, totalTime_, sendActions_);
+	ComsSimulateMessage simulateMessage(nextEventTime_, totalTime_, sendActions_);
 	ComsMessageSender::sendToAllLoadedClients(simulateMessage);
 
 	// Not needed but just to make obvious this is cleared
 	sendActions_.clear();
+}
+
+bool ServerSimulator::writeTimeMessage(NetBuffer &buffer)
+{
+	// Simulator time
+	buffer.addToBuffer(stepTime_);
+	buffer.addToBuffer(totalTime_);
+
+	return true;
+}
+
+bool ServerSimulator::writeSyncMessage(NetBuffer &buffer)
+{
+	// Actions
+	buffer.addToBuffer((unsigned int) simActions_.size());
+	std::list<SimActionContainer *>::iterator itor;
+	for (itor = simActions_.begin();
+		itor != simActions_.end();
+		itor++)
+	{
+		SimActionContainer *container = *itor;
+		buffer.addToBuffer(container->fireTime_);
+		buffer.addToBuffer(container->action_->getClassName());
+		container->action_->writeMessage(buffer);
+	}
+
+	// Random seeds
+	if (!random_.writeMessage(buffer)) return false;
+
+	// Target movement
+	if (!context_->getTargetMovement().writeMessage(buffer)) return false;
+
+	return true;
 }
