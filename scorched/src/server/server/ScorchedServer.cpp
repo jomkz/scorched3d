@@ -25,6 +25,7 @@
 #include <tank/TankContainer.h>
 #include <tankai/TankAIStore.h>
 #include <landscapedef/LandscapeDefinitions.h>
+#include <coms/ComsSimulateResultMessage.h>
 
 #ifndef S3D_SERVER
 #include <client/ClientParams.h>
@@ -61,6 +62,10 @@ ScorchedServer::ScorchedServer() :
 	serverDestinations_ = new ServerDestinations();
 	deadContainer_ = new TankDeadContainer;
 	tankAIStore_ = new TankAIStore;
+
+	getComsMessageHandler().addHandler(
+		ComsSimulateResultMessage::ComsSimulateResultMessageType,
+		serverSimulator_);
 }
 
 ScorchedServer::~ScorchedServer()

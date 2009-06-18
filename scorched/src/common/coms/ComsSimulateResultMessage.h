@@ -18,40 +18,34 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_ServerSimulator_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_)
-#define AFX_ServerSimulator_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_
+#ifndef _ComsSimulateResultMessage_h
+#define _ComsSimulateResultMessage_h
 
-#include <engine/Simulator.h>
-#include <coms/ComsMessageHandler.h>
+#include <coms/ComsMessage.h>
 
-class ServerSimulator : 
-	public Simulator, 
-	public ComsMessageHandlerI
+class ComsSimulateResultMessage : public ComsMessage
 {
 public:
-	ServerSimulator();
-	virtual ~ServerSimulator();
+	static ComsMessageType ComsSimulateResultMessageType;
 
-	void addSimulatorAction(SimAction *action);
+	ComsSimulateResultMessage();
+	ComsSimulateResultMessage(fixed totalTime);
+	virtual ~ComsSimulateResultMessage();
 
-	virtual void reset();
+	// Inherited from ComsMessage
+    virtual bool writeMessage(NetBuffer &buffer);
+    virtual bool readMessage(NetBufferReader &reader);
 
-	bool writeTimeMessage(NetBuffer &buffer);
-	bool writeSyncMessage(NetBuffer &buffer);
-
-	virtual bool processMessage(
-		NetMessage &netMessage,
-		const char *messageType,
-		NetBufferReader &reader);
+	fixed &getTotalTime() { return totalTime_; }
 
 protected:
-	std::list<SimAction *> sendActions_;
-	fixed nextSendTime_, nextEventTime_;
-	fixed sendStepSize_;
+	fixed totalTime_;
 
-	virtual bool continueToSimulate();
-	void nextSendTime();
-	fixed calcSendStepSize();
+private:
+	ComsSimulateResultMessage(const ComsSimulateResultMessage &);
+	const ComsSimulateResultMessage & operator=(const ComsSimulateResultMessage &);
+
 };
 
-#endif // !defined(AFX_ServerSimulator_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_)
+#endif //_ComsSimulateResultMessage_h
+

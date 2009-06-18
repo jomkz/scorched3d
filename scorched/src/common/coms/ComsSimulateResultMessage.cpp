@@ -18,40 +18,33 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_ServerSimulator_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_)
-#define AFX_ServerSimulator_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_
+#include <coms/ComsSimulateResultMessage.h>
 
-#include <engine/Simulator.h>
-#include <coms/ComsMessageHandler.h>
+ComsMessageType ComsSimulateResultMessage::ComsSimulateResultMessageType("ComsSimulateResultMessageType");
 
-class ServerSimulator : 
-	public Simulator, 
-	public ComsMessageHandlerI
+ComsSimulateResultMessage::ComsSimulateResultMessage() :
+	ComsMessage(ComsSimulateResultMessageType)
 {
-public:
-	ServerSimulator();
-	virtual ~ServerSimulator();
+}
 
-	void addSimulatorAction(SimAction *action);
+ComsSimulateResultMessage::ComsSimulateResultMessage(fixed totalTime) :
+	ComsMessage(ComsSimulateResultMessageType),
+	totalTime_(totalTime)
+{
+}
 
-	virtual void reset();
+ComsSimulateResultMessage::~ComsSimulateResultMessage()
+{
+}
 
-	bool writeTimeMessage(NetBuffer &buffer);
-	bool writeSyncMessage(NetBuffer &buffer);
+bool ComsSimulateResultMessage::writeMessage(NetBuffer &buffer)
+{
+	buffer.addToBuffer(totalTime_);
+	return true;
+}
 
-	virtual bool processMessage(
-		NetMessage &netMessage,
-		const char *messageType,
-		NetBufferReader &reader);
-
-protected:
-	std::list<SimAction *> sendActions_;
-	fixed nextSendTime_, nextEventTime_;
-	fixed sendStepSize_;
-
-	virtual bool continueToSimulate();
-	void nextSendTime();
-	fixed calcSendStepSize();
-};
-
-#endif // !defined(AFX_ServerSimulator_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_)
+bool ComsSimulateResultMessage::readMessage(NetBufferReader &reader)
+{
+	if (!reader.getFromBuffer(totalTime_)) return false;
+	return true;
+}

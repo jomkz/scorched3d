@@ -22,6 +22,8 @@
 #include <client/ScorchedClient.h>
 #include <movement/TargetMovement.h>
 #include <coms/ComsSimulateMessage.h>
+#include <coms/ComsSimulateResultMessage.h>
+#include <coms/ComsMessageSender.h>
 #include <common/Logger.h>
 
 ClientSimulator::ClientSimulator() : 
@@ -72,6 +74,9 @@ bool ClientSimulator::processMessage(
 		SimAction *action = *itor;
 		simActions_.push_back(new SimActionContainer(action, waitingEventTime_));
 	}
+
+	ComsSimulateResultMessage resultMessage(message.getTotalTime());
+	ComsMessageSender::sendToServer(resultMessage);
 
 	//Logger::log(S3D::formatStringBuffer("Total Time %.2f, Server Total Time %.2f, Waiting Time %.2f", 
 	//	totalTime_.asFloat(), message.getTotalTime().asFloat(), waitingEventTime_.asFloat()));

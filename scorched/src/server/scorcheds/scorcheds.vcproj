@@ -2449,6 +2449,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\coms\ComsSimulateResultMessage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\coms\ComsSimulateResultMessage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\coms\ComsStartGameMessage.cpp"
 				>
 			</File>
