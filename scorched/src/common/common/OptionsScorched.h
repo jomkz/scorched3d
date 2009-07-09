@@ -91,6 +91,7 @@ public:
 	OPTIONINT_GETTER(SkillForRound);
 	OPTIONINT_GETTER(SkillForMatch);
 	OPTIONINT_GETTER(MaxSkillLost);
+	OPTIONINT_GETTER(MaxSkillGained);
 	OPTIONINT_GETTER(SkillForSelfKill);
 	OPTIONINT_GETTER(SkillForTeamKill);
 

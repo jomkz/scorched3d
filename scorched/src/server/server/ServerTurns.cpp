@@ -52,8 +52,6 @@ void ServerTurns::simulate(unsigned int serverState)
 
 void ServerTurns::processTank(Tank *tank, unsigned int serverState)
 {
-	if (serverState != ServerState::ServerStatePlaying) return;
-
 	switch (tank->getState().getState())
 	{
 	case TankState::sDead:

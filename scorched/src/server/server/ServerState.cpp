@@ -70,7 +70,8 @@ void ServerState::simulate(float frameTime)
 			serverState_ = ServerStateWaitingForPlayers;
 		}
 		break;
+	case ServerStatePlaying:
+		serverTurns_.simulate(serverState_);
+		break;
 	}
-
-	serverTurns_.simulate(serverState_);
 }

@@ -155,6 +155,8 @@ OptionsGame::OptionsGame() :
 		"The amount of skill awarded for winning the match", 0, 0, 0, 100, 5),
 	maxSkillLost_(options_, "MaxSkillLost",
 		"The maximum amount of skill you can lose for being killed", 0, 10, 0, 100, 5),
+	maxSkillGained_(options_, "MaxSkillGained",
+		"The maximum amount of skill you can gain for killing someone", 0, 10, 0, 100, 5),
 	skillForSelfKill_(options_, "SkillForSelfKill",
 		"The amount of skill you lose for being killed by yourself", 0, -25, -50, 0, 5),
 	skillForTeamKill_(options_, "SkillForTeamKill",

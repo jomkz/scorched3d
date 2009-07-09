@@ -116,6 +116,9 @@ public:
 	int getMaxSkillLost() { return maxSkillLost_; }
 	OptionEntryInt &getMaxSkillLostEntry() { return maxSkillLost_; }
 
+	int getMaxSkillGained() { return maxSkillGained_; }
+	OptionEntryInt &getMaxSkillGainedEntry() { return maxSkillGained_; }
+
 	int getSkillForSelfKill() { return skillForSelfKill_; }
 	OptionEntryInt &getSkillForSelfKillEntry() { return skillForSelfKill_; }
 
@@ -404,6 +407,7 @@ protected:
 	OptionEntryBoundedInt skillForRound_;
 	OptionEntryBoundedInt skillForMatch_;
 	OptionEntryBoundedInt maxSkillLost_;
+	OptionEntryBoundedInt maxSkillGained_;
 	OptionEntryBoundedInt skillForSelfKill_;
 	OptionEntryBoundedInt skillForTeamKill_;
 	OptionEntryBoundedInt moneyStarting_;

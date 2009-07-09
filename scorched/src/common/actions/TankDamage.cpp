@@ -546,6 +546,10 @@ void TankDamage::logDeath()
 				{
 					vbonus = context_->getOptionsGame().getMaxSkillLost();
 				}
+				if (kbonus > context_->getOptionsGame().getMaxSkillGained())
+				{
+					kbonus = context_->getOptionsGame().getMaxSkillGained();
+				}
 
 				//$vbonus = $vskill if $vbonus > $vskill;
 				//$kbonus = $kskill if $kbonus > $kskill;
