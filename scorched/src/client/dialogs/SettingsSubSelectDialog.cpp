@@ -125,8 +125,6 @@ SettingsSubSelectDialog::SettingsSubSelectDialog() :
 	GLWOptionEntry::createEntry(
 		controls_, mainTab_, optionsGame.getNoRoundsEntry());
 	GLWOptionEntry::createEntry(
-		controls_, mainTab_, optionsGame.getNoMaxRoundTurnsEntry());
-	GLWOptionEntry::createEntry(
 		controls_, mainTab_, optionsGame.getStartTimeEntry());	
 	GLWOptionEntry::createEntry(
 		controls_, mainTab_, optionsGame.getShotTimeEntry());	

@@ -58,7 +58,6 @@ public:
 	OPTIONINT_GETTER(NoMinPlayers);
 	OPTIONINT_GETTER(NoRounds);
 	OPTIONINT_GETTER(RemoveBotsAtPlayers);
-	OPTIONINT_GETTER(NoMaxRoundTurns);
 	OPTIONINT_GETTER(MaxLandscapeSize);
 	OPTIONINT_GETTER(AllowedMissedMoves);
 	OPTIONINT_GETTER(IdleKickTime);

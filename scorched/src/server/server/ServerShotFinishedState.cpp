@@ -82,10 +82,10 @@ void ServerShotFinishedState::enterState(const unsigned state)
 	waitTime_ = 0.0f;
 
 	// Check if any player or team has won the round
-	if (ServerNextShotState::getRoundFinished() ||
-		((ScorchedServer::instance()->getOptionsTransient().getCurrentGameNo() >
-		ScorchedServer::instance()->getOptionsGame().getNoMaxRoundTurns()) &&
-		ScorchedServer::instance()->getOptionsGame().getNoMaxRoundTurns() > 0))
+	//if (ServerNextShotState::getRoundFinished() ||
+	//	((ScorchedServer::instance()->getOptionsTransient().getCurrentGameNo() >
+	//	ScorchedServer::instance()->getOptionsGame().getNoMaxRoundTurns()) &&
+	//	ScorchedServer::instance()->getOptionsGame().getNoMaxRoundTurns() > 0))
 	{
 		// The actual state transition for no tanks left is done
 		// in the next round state however

@@ -149,9 +149,6 @@ public:
 	int getRemoveBotsAtPlayers() { return removeBotsAtPlayers_; }
 	OptionEntryInt &getRemoveBotsAtPlayersEntry() { return removeBotsAtPlayers_; }
 
-	int getNoMaxRoundTurns() { return maxRoundTurns_; }
-	OptionEntryInt &getNoMaxRoundTurnsEntry() { return maxRoundTurns_; }
-
 	int getStartMoney() { return moneyStarting_; }
 	OptionEntryInt &getStartMoneyEntry() { return moneyStarting_; }
 
@@ -368,7 +365,6 @@ protected:
 
 	OptionEntryBoundedInt startArmsLevel_;
 	OptionEntryBoundedInt endArmsLevel_;
-	OptionEntryBoundedInt maxRoundTurns_;
 	OptionEntryBoundedInt shotTime_;
 	OptionEntryBoundedInt startTime_;
 	OptionEntryBoundedInt buyingTime_;
@@ -458,6 +454,7 @@ protected:
 	OptionEntryBool debugFeatures_;
 
 	// Depricated (old) options
+	OptionEntryBoundedInt depricatedMaxRoundTurns_;
 	OptionEntryBoundedInt depricatedKeepAliveTime_;
 	OptionEntryBoundedInt depricatedKeepAliveTimeoutTime_;
 	OptionEntryEnum depricatedScoreType_;

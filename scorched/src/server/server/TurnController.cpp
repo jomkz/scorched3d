@@ -116,7 +116,7 @@ void TurnController::nextShot()
 		
 	// Game number 0 is the weapons choosing round, so every one can do this
 	// concurrently
-	if (ScorchedServer::instance()->getOptionsTransient().getCurrentGameNo() == 0)
+	//if (ScorchedServer::instance()->getOptionsTransient().getCurrentGameNo() == 0)
 	{
 		turnType = OptionsGame::TurnSimultaneous;
 	}

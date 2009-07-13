@@ -30,8 +30,6 @@ OptionsTransient::OptionsTransient(OptionsScorched &optionsGame) :
 	optionsGame_(optionsGame), newGame_(false),
 	currentRoundNo_(options_, "CurrentRoundNo", 
 		"The current number of rounds played in this game", 0, 0),
-	currentGameNo_(options_, "CurrentGameNo",
-		"The current game", 0, 0),
 	windAngle_(options_, "WindAngle",
 		"The current wind angle (direction)", 0, 0),
 	windStartAngle_(options_, "WindStartAngle",
@@ -121,7 +119,6 @@ bool OptionsTransient::readFromBuffer(NetBufferReader &reader)
 
 void OptionsTransient::reset()
 {
-	currentGameNo_.setValue(0);
 	currentRoundNo_.setValue(0);
 }
 
@@ -132,34 +129,13 @@ void OptionsTransient::startNewGame()
 
 void OptionsTransient::startNewRound()
 {
-	currentGameNo_.setValue(optionsGame_.getNoMaxRoundTurns() + 1);
 }
 
 void OptionsTransient::newGame()
 {
-	newGame_ = true;
-	currentRoundNo_.setValue(currentRoundNo_.getValue() + 1);
-	if (currentRoundNo_.getValue() >= optionsGame_.getBuyOnRound() &&
-		!optionsGame_.getGiveAllWeapons())
-	{
-		currentGameNo_.setValue(0);	
-	}
-	else
-	{
-		currentGameNo_.setValue(1);
-	}
-	
+	currentRoundNo_.setValue(currentRoundNo_.getValue() + 1);	
 	newGameWind();
 	newGameWall();
-}
-
-void OptionsTransient::nextRound()
-{
-	if (!newGame_)
-	{
-		currentGameNo_.setValue(currentGameNo_.getValue() + 1);
-	}
-	newGame_ = false;
 }
 
 void OptionsTransient::newGameWind()

@@ -18,30 +18,27 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_TankStartMoveSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
-#define AFX_TankStartMoveSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
+#if !defined(__INCLUDE_ServerStateBuyingh_INCLUDE__)
+#define __INCLUDE_ServerStateBuyingh_INCLUDE__
 
-#include <simactions/SimAction.h>
+#include <server/ServerTurnsSimultaneous.h>
 
-class TankStartMoveSimAction : public SimAction
+class ServerStateBuying : public ServerTurnsSimultaneousI
 {
 public:
-	TankStartMoveSimAction();
-	TankStartMoveSimAction(unsigned int playerId, bool buying);
-	virtual ~TankStartMoveSimAction();
+	ServerStateBuying();
+	virtual ~ServerStateBuying();
 
-	unsigned int getPlayerId() { return playerId_; }
-	bool getBuying() { return buying_; }
+	void enterState();
+	bool simulate(float frameTime);
 
-	virtual bool invokeAction(ScorchedContext &context);
+	// ServerTurnsSimultaneousI
+	virtual void allPlayersFinished();
+	virtual void playerPlaying(unsigned int playerId, float timeout);
 
-	virtual bool writeMessage(NetBuffer &buffer);
-	virtual bool readMessage(NetBufferReader &reader);
-
-REGISTER_CLASS_HEADER(TankStartMoveSimAction);
 protected:
-	unsigned int playerId_;
-	bool buying_;
+	ServerTurnsSimultaneous simulTurns_;
+	bool finished_;
 };
 
-#endif // !defined(AFX_TankStartMoveSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#endif

@@ -101,9 +101,9 @@ void ServerNextShotState::enterState(const unsigned state)
 	else
 	{
 		// Check if turn limit has been exceeded
-		if (ScorchedServer::instance()->getOptionsTransient().getCurrentGameNo() >
-			ScorchedServer::instance()->getOptionsGame().getNoMaxRoundTurns() &&
-			ScorchedServer::instance()->getOptionsGame().getNoMaxRoundTurns() > 0)
+		//if (ScorchedServer::instance()->getOptionsTransient().getCurrentGameNo() >
+		//	ScorchedServer::instance()->getOptionsGame().getNoMaxRoundTurns() &&
+		//	ScorchedServer::instance()->getOptionsGame().getNoMaxRoundTurns() > 0)
 		{
 			ServerChannelManager::instance()->sendText(
 				ChannelText("info", 
@@ -115,7 +115,7 @@ void ServerNextShotState::enterState(const unsigned state)
 			ServerShotHolder::instance()->clearShots();
 			//ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusNextTurn);
 		}
-		else
+		//else
 		{
 			TurnController::instance()->nextShot();
 			if (TurnController::instance()->getPlayersThisShot().empty())

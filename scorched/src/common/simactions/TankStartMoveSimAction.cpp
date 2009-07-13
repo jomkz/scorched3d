@@ -32,8 +32,8 @@ TankStartMoveSimAction::TankStartMoveSimAction()
 {
 }
 
-TankStartMoveSimAction::TankStartMoveSimAction(unsigned int playerId) :
-	playerId_(playerId)
+TankStartMoveSimAction::TankStartMoveSimAction(unsigned int playerId, bool buying) :
+	playerId_(playerId), buying_(buying)
 {
 }
 
@@ -56,11 +56,13 @@ bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 bool TankStartMoveSimAction::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(playerId_);
+	buffer.addToBuffer(buying_);
 	return true;
 }
 
 bool TankStartMoveSimAction::readMessage(NetBufferReader &reader)
 {
 	if (!reader.getFromBuffer(playerId_)) return false;
+	if (!reader.getFromBuffer(buying_)) return false;
 	return true;
 }

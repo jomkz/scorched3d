@@ -29,7 +29,7 @@ ServerState *ServerState::instance()
 }
 
 ServerState::ServerState() :
-	serverState_(ServerStateStartup)
+	serverState_(ServerStartupState)
 {
 }
 
@@ -41,36 +41,54 @@ void ServerState::simulate(float frameTime)
 {
 	switch (serverState_)
 	{
-	case ServerStateStartup:
+	case ServerStartupState:
 		newGame_.newGame();
-		serverState_ = ServerStateWaitingForPlayers;
+		serverState_ = ServerWaitingForPlayersState;
 		break;
-	case ServerStateWaitingForPlayers:
+	case ServerWaitingForPlayersState:
 		newGame_.checkTeams();
 		newGame_.checkBots(true);
 		if (enoughPlayers_.enoughPlayers())
 		{
 			startingMatch_.reset();
-			serverState_ = ServerStateMatchCountDown;
+			serverState_ = ServerMatchCountDownState;
 		}
 		break;
-	case ServerStateMatchCountDown:
+	case ServerMatchCountDownState:
 		newGame_.checkTeams();
 		newGame_.checkBots(true);
 		if (enoughPlayers_.enoughPlayers())
 		{
 			if (startingMatch_.startingMatch(frameTime))
 			{
-				serverState_ = ServerStatePlaying;
+				serverState_ = ServerNewLevelState;
 			}
 		}
 		else
 		{
 			startingMatch_.stoppingMatch();
-			serverState_ = ServerStateWaitingForPlayers;
+			serverState_ = ServerWaitingForPlayersState;
 		}
 		break;
-	case ServerStatePlaying:
+	case ServerNewLevelState:
+		serverState_ = ServerBuyingState;
+		buying_.enterState();
+		break;
+	case ServerBuyingState:
+		if (enoughPlayers_.enoughPlayers())
+		{
+			if (buying_.simulate(frameTime))
+			{
+				serverState_ = ServerPlayingState;
+			}
+		}
+		else
+		{
+			startingMatch_.stoppingMatch();
+			serverState_ = ServerWaitingForPlayersState;
+		}
+		break;
+	case ServerPlayingState:
 		serverTurns_.simulate(serverState_);
 		break;
 	}

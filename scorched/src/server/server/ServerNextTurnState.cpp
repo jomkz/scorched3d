@@ -58,12 +58,12 @@ void ServerNextTurnState::enterState(const unsigned state)
 	}
 	else
 	{
-		bool weaponBuy = 
-			(ScorchedServer::instance()->getOptionsTransient().getCurrentGameNo() == 0);
+		//bool weaponBuy = 
+		//	(ScorchedServer::instance()->getOptionsTransient().getCurrentGameNo() == 0);
 
 		// Tell each client to start the shot timer
 		int time = ScorchedServer::instance()->getOptionsGame().getShotTime();
-		if (weaponBuy) time = ScorchedServer::instance()->getOptionsGame().getBuyingTime();
+		//if (weaponBuy) time = ScorchedServer::instance()->getOptionsGame().getBuyingTime();
 		ComsTimerStartMessage timerMessage(time);
 		ComsMessageSender::sendToAllLoadedClients(timerMessage);
 
@@ -82,7 +82,7 @@ void ServerNextTurnState::enterState(const unsigned state)
 
 			if (tank->getDestinationId() == 0) // This is a local tank
 			{
-				if (weaponBuy)
+				//if (weaponBuy)
 				{
 					// Tell the computer ai to buy weapons
 					tank->getTankAI()->buyAccessories();
@@ -93,7 +93,7 @@ void ServerNextTurnState::enterState(const unsigned state)
 						tank->getTankAI()->autoDefense();
 					}
 				}
-				else
+				//else
 				{
 					// Tell the computer ai to move
 					tank->getTankAI()->playMove();
@@ -110,16 +110,16 @@ void ServerNextTurnState::enterState(const unsigned state)
 					false);
 
 				// Tell the clients to start the game
-				ComsStartGameMessage startMessage(tank->getPlayerId(), weaponBuy);
-				ComsMessageSender::sendToSingleClient(startMessage, tank->getDestinationId());
+				//ComsStartGameMessage startMessage(tank->getPlayerId(), weaponBuy);
+				//ComsMessageSender::sendToSingleClient(startMessage, tank->getDestinationId());
 			}
 		}
 
-		if (weaponBuy)
+		//if (weaponBuy)
 		{
 			//ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusBuying);
 		}
-		else
+		//else
 		{
 			//ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusPlaying);
 		}

@@ -459,9 +459,6 @@ bool ServerWebHandler::GameHandler::processRequest(
 	request.getFields()["ROUND"] = S3D::formatStringBuffer("%i/%i",
 		ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo(),
 		ScorchedServer::instance()->getOptionsGame().getNoRounds());
-	request.getFields()["MOVE"] = S3D::formatStringBuffer("%i/%i",
-		ScorchedServer::instance()->getOptionsTransient().getCurrentGameNo(),
-		ScorchedServer::instance()->getOptionsGame().getNoMaxRoundTurns());
 	
 	request.getFields()["BI"] = S3D::formatStringBuffer("%uK", NetInterface::getBytesIn() / 1000);
 	request.getFields()["BO"] = S3D::formatStringBuffer("%uK", NetInterface::getBytesOut() / 1000);

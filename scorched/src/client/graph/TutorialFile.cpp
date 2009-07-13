@@ -83,7 +83,7 @@ bool TutorialConditionWindowVisible::parseXML(TutorialFile *file, XMLNode *node)
 
 TutorialFileEntry *TutorialConditionFirstMove::checkCondition()
 {
-	if (ScorchedClient::instance()->getOptionsTransient().getCurrentGameNo() > 1)
+	if (ScorchedClient::instance()->getOptionsTransient().getCurrentRoundNo() > 1)
 	{
 		return next_;
 	}

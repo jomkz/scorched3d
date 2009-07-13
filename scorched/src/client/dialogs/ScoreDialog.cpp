@@ -199,14 +199,6 @@ void ScoreDialog::draw()
 			S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsGame().getNoRounds()));
 		buffer.append(ROUND_OF);
 
-		if (ScorchedClient::instance()->getOptionsGame().getNoMaxRoundTurns() > 0)
-		{
-			LANG_RESOURCE_VAR_2(MOVE_OF, "MOVE_OF", ",Move {0} of {1}",
-				S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsTransient().getCurrentGameNo()),
-				S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsGame().getNoMaxRoundTurns()));
-			buffer.append(MOVE_OF);
-		}
-
 		float roundsWidth = GLWFont::instance()->getGameFont()->getWidth(
 			10, buffer);
 		GLWFont::instance()->getGameFont()->draw(

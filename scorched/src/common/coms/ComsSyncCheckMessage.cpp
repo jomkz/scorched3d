@@ -351,13 +351,6 @@ bool ComsSyncCheckMessage::readMessage(NetBufferReader &reader)
 
 	if (syncCheckFileLogger)
 	{
-		syncCheckLog(S3D::formatStringBuffer("SyncCheck : %i,%i",
-			syncCount,
-			ScorchedClient::instance()->getOptionsTransient().getCurrentGameNo()));
-	}
-
-	if (syncCheckFileLogger)
-	{
 		syncCheckLog(S3D::formatStringBuffer("SyncCheck %i checked. (%i syncs)", syncCount, serverSyncNo));
 	}
 	else

@@ -5657,6 +5657,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\server\server\ServerStateBuying.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerStateBuying.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\server\server\ServerStateEnoughPlayers.cpp"
 				>
 			</File>
@@ -5718,6 +5726,14 @@
 			</File>
 			<File
 				RelativePath="..\..\server\server\ServerTurns.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerTurnsSimultaneous.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerTurnsSimultaneous.h"
 				>
 			</File>
 			<File

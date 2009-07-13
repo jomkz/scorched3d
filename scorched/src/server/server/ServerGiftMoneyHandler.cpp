@@ -72,13 +72,6 @@ bool ServerGiftMoneyHandler::processMessage(
 		return true;
 	}
 
-	// Check we are in the correct round no to buy anything
-	if (ScorchedServer::instance()->getOptionsTransient().getCurrentGameNo() != 0)
-	{
-		Logger::log( "ERROR: Player attempted to gift money at incorrect time");
-		return true;
-	}
-
 	// Check that is player still exists
 	Tank *fromTank = ScorchedServer::instance()->
 		getTankContainer().getTankById(fromPlayerId);

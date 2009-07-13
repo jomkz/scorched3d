@@ -18,30 +18,36 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_TankStartMoveSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
-#define AFX_TankStartMoveSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
+#if !defined(__INCLUDE_ServerTurnsSimultaneoush_INCLUDE__)
+#define __INCLUDE_ServerTurnsSimultaneoush_INCLUDE__
 
-#include <simactions/SimAction.h>
+#include <map>
 
-class TankStartMoveSimAction : public SimAction
+class ServerTurnsSimultaneousI
 {
 public:
-	TankStartMoveSimAction();
-	TankStartMoveSimAction(unsigned int playerId, bool buying);
-	virtual ~TankStartMoveSimAction();
-
-	unsigned int getPlayerId() { return playerId_; }
-	bool getBuying() { return buying_; }
-
-	virtual bool invokeAction(ScorchedContext &context);
-
-	virtual bool writeMessage(NetBuffer &buffer);
-	virtual bool readMessage(NetBufferReader &reader);
-
-REGISTER_CLASS_HEADER(TankStartMoveSimAction);
-protected:
-	unsigned int playerId_;
-	bool buying_;
+	virtual void allPlayersFinished() = 0;
+	virtual void playerPlaying(unsigned int playerId, float timeout) = 0;
 };
 
-#endif // !defined(AFX_TankStartMoveSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+class ServerTurnsSimultaneous 
+{
+public:
+	ServerTurnsSimultaneous();
+	virtual ~ServerTurnsSimultaneous();
+
+	void setUser(ServerTurnsSimultaneousI *user);
+
+	void clear();
+	void addPlayer(unsigned int playerId, float timeout);
+	void playerFinished(unsigned int playerId);
+
+	void simulate(float frameTime);
+
+protected:
+	ServerTurnsSimultaneousI *user_;
+	std::map<unsigned int, float> waitingPlayers_;
+	std::map<unsigned int, float> playingPlayers_;
+};
+
+#endif

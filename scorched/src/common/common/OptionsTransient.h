@@ -52,7 +52,6 @@ public:
 
 	void reset();
 	void newGame();
-	void nextRound();
 
 	void startNewGame();
 	void startNewRound();
@@ -63,7 +62,6 @@ public:
 
 	// Rounds left
 	int getCurrentRoundNo() { return currentRoundNo_.getValue(); }
-	int getCurrentGameNo() { return currentGameNo_.getValue(); }
 
 	// Wind
 	fixed getWindAngle() { return windAngle_.getValue(); }
@@ -84,7 +82,6 @@ protected:
 	std::list<OptionEntry *> options_;
 	OptionsScorched &optionsGame_;
 	OptionEntryInt currentRoundNo_;
-	OptionEntryInt currentGameNo_;
 	OptionEntryFixed windAngle_;
 	OptionEntryFixed windStartAngle_;
 	OptionEntryFixed windSpeed_;

@@ -73,13 +73,6 @@ bool ServerBuyAccessoryHandler::processMessage(
 		return true;
 	}
 
-	// Check we are in the correct round no to buy anything
-	if (ScorchedServer::instance()->getOptionsTransient().getCurrentGameNo() != 0)
-	{
-		Logger::log( "ERROR: Player attempted to buy at incorrect time");
-		return true;
-	}
-
 	// Check that is player still exists
 	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
 	if (!tank)

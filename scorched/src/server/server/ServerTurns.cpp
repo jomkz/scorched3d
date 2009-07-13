@@ -72,7 +72,7 @@ void ServerTurns::processTank(Tank *tank, unsigned int serverState)
 		{
 		case TankState::serverNone:
 			tank->getState().setServerState(TankState::serverMakingMove);
-			TankStartMoveSimAction *tankSimAction = new TankStartMoveSimAction(tank->getPlayerId());
+			TankStartMoveSimAction *tankSimAction = new TankStartMoveSimAction(tank->getPlayerId(), false);
 			ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);
 		}
 		break;

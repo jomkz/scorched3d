@@ -24,6 +24,7 @@
 #include <server/ServerStateEnoughPlayers.h>
 #include <server/ServerStateNewGame.h>
 #include <server/ServerStateStartingMatch.h>
+#include <server/ServerStateBuying.h>
 #include <server/ServerTurns.h>
 
 class ServerState
@@ -31,10 +32,12 @@ class ServerState
 public:
 	enum ServerStateEnum
 	{
-		ServerStateStartup = 1,
-		ServerStateWaitingForPlayers ,
-		ServerStateMatchCountDown,
-		ServerStatePlaying
+		ServerStartupState = 1,
+		ServerWaitingForPlayersState ,
+		ServerMatchCountDownState,
+		ServerNewLevelState,
+		ServerBuyingState,
+		ServerPlayingState
 	};
 
 	static ServerState *instance();
@@ -50,6 +53,7 @@ protected:
 	ServerStateEnoughPlayers enoughPlayers_;
 	ServerStateNewGame newGame_;
 	ServerStateStartingMatch startingMatch_;
+	ServerStateBuying buying_;
 	ServerTurns serverTurns_;
 
 private:
