@@ -38,7 +38,8 @@ public:
 	{
 		serverJoined,
 		serverNone,
-		serverMakingMove
+		serverMakingMove,
+		serverBuying
 	};
 
 	TankState(ScorchedContext &context, unsigned int playerId);

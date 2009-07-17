@@ -37,8 +37,10 @@ public:
 		eFinishedBuy
 	};
 
-	ComsPlayedMoveMessage(unsigned int playerId = 0,
-		MoveType type = eNone);
+	ComsPlayedMoveMessage();
+	ComsPlayedMoveMessage(unsigned int playerId,
+		unsigned int moveId,
+		MoveType type);
 	virtual ~ComsPlayedMoveMessage();
 
 	void setShot(unsigned int weaponId,
@@ -49,6 +51,7 @@ public:
 		int positionY);
 
 	unsigned int getPlayerId() { return playerId_; }
+	unsigned int getMoveId() { return moveId_; }
 	unsigned int getWeaponId() { return weaponId_; }
 	fixed getRotationXY() { return rotationXY_; }
 	fixed getRotationYZ() { return rotationYZ_; }
@@ -63,6 +66,7 @@ public:
 
 protected:
 	unsigned int playerId_;
+	unsigned int moveId_;
 	unsigned int weaponId_;
 	MoveType moveType_;
 	fixed rotationXY_;

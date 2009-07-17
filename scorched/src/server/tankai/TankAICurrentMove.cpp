@@ -870,14 +870,17 @@ void TankAICurrentMove::setWeapon(Tank *tank, Accessory *accessory)
 void TankAICurrentMove::skipMove(Tank *tank)
 {
 	ComsPlayedMoveMessage *message = 
-		new ComsPlayedMoveMessage(tank->getPlayerId(), ComsPlayedMoveMessage::eSkip);
+		new ComsPlayedMoveMessage(tank->getPlayerId(), 
+			0,
+			ComsPlayedMoveMessage::eSkip);
 	ServerShotHolder::instance()->addShot(tank->getPlayerId(), message);
 }
 
 void TankAICurrentMove::resign(Tank *tank)
 {
 	ComsPlayedMoveMessage *message = 
-		new ComsPlayedMoveMessage(tank->getPlayerId(), ComsPlayedMoveMessage::eResign);
+		new ComsPlayedMoveMessage(tank->getPlayerId(), 
+			0, ComsPlayedMoveMessage::eResign);
 	ServerShotHolder::instance()->addShot(tank->getPlayerId(), message);
 }
 
@@ -888,7 +891,8 @@ void TankAICurrentMove::fireShot(Tank *tank)
 	if (currentWeapon)
 	{
 		ComsPlayedMoveMessage *message = 
-			new ComsPlayedMoveMessage(tank->getPlayerId(), ComsPlayedMoveMessage::eShot);
+			new ComsPlayedMoveMessage(tank->getPlayerId(), 
+				0, ComsPlayedMoveMessage::eShot);
 		message->setShot(
 			currentWeapon->getAccessoryId(),
 			tank->getPosition().getRotationGunXY(),

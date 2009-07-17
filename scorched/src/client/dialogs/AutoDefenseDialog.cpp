@@ -258,6 +258,7 @@ void AutoDefenseDialog::finished()
 	// send message saying we are finished with shot
 	ComsPlayedMoveMessage comsMessage(
 		ScorchedClient::instance()->getTankContainer().getCurrentPlayerId(), 
+		ScorchedClient::instance()->getTankContainer().getCurrentMoveId(),
 		ComsPlayedMoveMessage::eFinishedBuy);
 	ComsMessageSender::sendToServer(comsMessage);
 

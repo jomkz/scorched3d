@@ -23,6 +23,7 @@
 #include <server/ScorchedServer.h>
 #include <server/TurnController.h>
 #include <server/ServerSimulator.h>
+#include <server/ServerStateBuying.h>
 #include <simactions/TankFireShotSimAction.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
@@ -62,14 +63,21 @@ bool ServerPlayedMoveHandler::processMessage(
 
 	unsigned int playerId = message.getPlayerId();
 	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
-	if (tank && tank->getState().getState() == TankState::sNormal)
-	{	
-		if (tank->getDestinationId() == netMessage.getDestinationId())
+	if (!tank) return true;
+	if (tank->getDestinationId() != netMessage.getDestinationId()) return true;
+
+	if (message.getType() == ComsPlayedMoveMessage::eFinishedBuy)
+	{
+		if (tank->getState().getServerState() == TankState::serverBuying)
 		{
-			if (tank->getState().getServerState() == TankState::serverMakingMove)
-			{
-				playMove(tank, message);
-			}
+			finishedBuying(tank, message);
+		}
+	}
+	else
+	{
+		if (tank->getState().getServerState() == TankState::serverMakingMove)
+		{
+			playMove(tank, message);
 		}
 	}
 
@@ -78,6 +86,8 @@ bool ServerPlayedMoveHandler::processMessage(
 
 void ServerPlayedMoveHandler::playMove(Tank *tank, ComsPlayedMoveMessage &message)
 {
+	if (tank->getState().getState() != TankState::sNormal) return;
+	
 	if (message.getType() == ComsPlayedMoveMessage::eShot)
 	{
 		TankFireShotSimAction *simAction = new TankFireShotSimAction(
@@ -92,6 +102,16 @@ void ServerPlayedMoveHandler::playMove(Tank *tank, ComsPlayedMoveMessage &messag
 		ScorchedServer::instance()->getServerSimulator().
 			addSimulatorAction(simAction);
 	}
+
+	tank->getScore().setMissedMoves(0);
+	tank->getState().setServerState(TankState::serverNone);
+}
+
+void ServerPlayedMoveHandler::finishedBuying(Tank *tank, ComsPlayedMoveMessage &message)
+{
+	if (!tank->getState().getTankPlaying()) return;
+
+	ServerStateBuying::instance()->playerFinishedBuying(tank->getPlayerId(), message.getMoveId());
 
 	tank->getScore().setMissedMoves(0);
 	tank->getState().setServerState(TankState::serverNone);

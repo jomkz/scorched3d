@@ -67,6 +67,6 @@ void TankAICurrentWeapons::buyWeapons(Tank *tank, bool lastRound)
 
 	// Finished this buying
 	ComsPlayedMoveMessage *message = 
-		new ComsPlayedMoveMessage(tank->getPlayerId(), ComsPlayedMoveMessage::eFinishedBuy);
+		new ComsPlayedMoveMessage(tank->getPlayerId(), 0, ComsPlayedMoveMessage::eFinishedBuy);
 	ServerShotHolder::instance()->addShot(tank->getPlayerId(), message);
 }

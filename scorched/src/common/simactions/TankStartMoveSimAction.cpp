@@ -32,8 +32,10 @@ TankStartMoveSimAction::TankStartMoveSimAction()
 {
 }
 
-TankStartMoveSimAction::TankStartMoveSimAction(unsigned int playerId, bool buying) :
-	playerId_(playerId), buying_(buying)
+TankStartMoveSimAction::TankStartMoveSimAction(unsigned int playerId, unsigned int moveId,
+	float timeout, bool buying) :
+	playerId_(playerId), moveId_(moveId),
+	timeout_(timeout), buying_(buying)
 {
 }
 
@@ -43,12 +45,12 @@ TankStartMoveSimAction::~TankStartMoveSimAction()
 
 bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 {
-	Tank *tank = context.getTankContainer().getTankById(playerId_);
-	if (!tank) return false;
-
+	if (!context.getServerMode())
+	{
 #ifndef S3D_SERVER
 	ClientStartGameHandler::instance()->startGame(this);
 #endif
+	}
 
 	return true;
 }
@@ -56,13 +58,17 @@ bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 bool TankStartMoveSimAction::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(playerId_);
+	buffer.addToBuffer(moveId_);
 	buffer.addToBuffer(buying_);
+	buffer.addToBuffer(timeout_);
 	return true;
 }
 
 bool TankStartMoveSimAction::readMessage(NetBufferReader &reader)
 {
 	if (!reader.getFromBuffer(playerId_)) return false;
+	if (!reader.getFromBuffer(moveId_)) return false;
 	if (!reader.getFromBuffer(buying_)) return false;
+	if (!reader.getFromBuffer(timeout_)) return false;
 	return true;
 }

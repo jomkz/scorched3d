@@ -22,12 +22,22 @@
 #include <server/ScorchedServer.h>
 #include <server/ServerSimulator.h>
 #include <tank/TankContainer.h>
+#include <tank/TankState.h>
 #include <common/OptionsScorched.h>
 #include <simactions/TankStartMoveSimAction.h>
+
+ServerStateBuying *ServerStateBuying::instance_ = 0;
+
+ServerStateBuying *ServerStateBuying::instance()
+{
+	return instance_;
+}
 
 ServerStateBuying::ServerStateBuying() : 
 	finished_(false)
 {
+	instance_ = this;
+	simulTurns_.setUser(this);
 }
 
 ServerStateBuying::~ServerStateBuying()
@@ -36,9 +46,6 @@ ServerStateBuying::~ServerStateBuying()
 
 void ServerStateBuying::enterState()
 {
-	float buyingTime = (float)
-		ScorchedServer::instance()->getOptionsGame().getBuyingTime();	
-
 	finished_ = false;
 	simulTurns_.clear();
 	std::map<unsigned int, Tank*> &tanks = 
@@ -48,7 +55,11 @@ void ServerStateBuying::enterState()
 		itor != tanks.end();
 		itor++)
 	{
-		simulTurns_.addPlayer(itor->first, buyingTime);
+		Tank *tank = itor->second;
+		if (tank->getState().getTankPlaying())
+		{
+			simulTurns_.addPlayer(itor->first);
+		}
 	}
 	//if (ScorchedServer::instance()->getOptionsGame().getBuyOnRound() != 0)
 	// CHECK BUY ON ROUND HERE
@@ -66,8 +77,20 @@ void ServerStateBuying::allPlayersFinished()
 	finished_ = true;
 }
 
-void ServerStateBuying::playerPlaying(unsigned int playerId, float timeout)
+void ServerStateBuying::playerFinishedBuying(unsigned int playerId, unsigned int moveId)
 {
-	TankStartMoveSimAction *tankSimAction = new TankStartMoveSimAction(playerId, true);
+	simulTurns_.playerFinished(playerId, moveId);
+}
+
+void ServerStateBuying::playerPlaying(unsigned int playerId, unsigned int moveId)
+{
+	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
+	float buyingTime = (float)
+		ScorchedServer::instance()->getOptionsGame().getBuyingTime();
+
+	tank->getState().setServerState(TankState::serverBuying);
+
+	TankStartMoveSimAction *tankSimAction = 
+		new TankStartMoveSimAction(playerId, moveId, buyingTime, true);
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);
 }

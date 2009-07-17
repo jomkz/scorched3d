@@ -22,13 +22,27 @@
 
 ComsMessageType ComsPlayedMoveMessage::ComsPlayedMoveMessageType("ComsPlayedMoveMessageType");
 
-ComsPlayedMoveMessage::ComsPlayedMoveMessage(unsigned int playerId, MoveType type) :
+ComsPlayedMoveMessage::ComsPlayedMoveMessage() :
+	ComsMessage(ComsPlayedMoveMessageType),
+	moveType_(eNone),
+	weaponId_(0),
+	moveId_(0),
+	rotationXY_(0), rotationYZ_(0), power_(0), playerId_(0),
+	selectPositionX_(0), selectPositionY_(0)
+{
+}
+
+ComsPlayedMoveMessage::ComsPlayedMoveMessage(unsigned int playerId,
+	unsigned int moveId,
+	MoveType type) :
 	ComsMessage(ComsPlayedMoveMessageType),
 	moveType_(type),
 	weaponId_(0),
+	moveId_(moveId),
 	rotationXY_(0), rotationYZ_(0), power_(0), playerId_(playerId),
 	selectPositionX_(0), selectPositionY_(0)
 {
+
 }
 
 ComsPlayedMoveMessage::~ComsPlayedMoveMessage()
@@ -53,6 +67,7 @@ void ComsPlayedMoveMessage::setShot(unsigned int weaponId,
 bool ComsPlayedMoveMessage::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(playerId_);
+	buffer.addToBuffer(moveId_);
 	buffer.addToBuffer((int) moveType_);
 	if (moveType_ == eShot)
 	{
@@ -69,6 +84,7 @@ bool ComsPlayedMoveMessage::writeMessage(NetBuffer &buffer)
 bool ComsPlayedMoveMessage::readMessage(NetBufferReader &reader)
 {
 	if (!reader.getFromBuffer(playerId_)) return false;
+	if (!reader.getFromBuffer(moveId_)) return false;
 	int mt;
 	if (!reader.getFromBuffer(mt)) return false;
 	moveType_ = (MoveType) mt;

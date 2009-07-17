@@ -40,6 +40,7 @@ public:
 protected:
 	static ServerPlayedMoveHandler *instance_;
 	void playMove(Tank *tank, ComsPlayedMoveMessage &message);
+	void finishedBuying(Tank *tank, ComsPlayedMoveMessage &message);
 
 private:
 	ServerPlayedMoveHandler();

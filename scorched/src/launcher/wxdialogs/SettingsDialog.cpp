@@ -116,9 +116,6 @@ void SettingsFrame::createMainPanel(bool server)
 			mainPanel_, sizer, context_.getNoRoundsEntry()));
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
-			mainPanel_, sizer, context_.getNoMaxRoundTurnsEntry()));
-	setters_.push_back(
-		OptionEntrySetterUtil::createOtherSetter(
 			mainPanel_, sizer, context_.getTurnTypeEntry()));	
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(

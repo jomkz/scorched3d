@@ -26,6 +26,7 @@
 #include <tank/TankState.h>
 #include <simactions/TankAliveSimAction.h>
 #include <simactions/TankStartMoveSimAction.h>
+#include <common/OptionsScorched.h>
 
 ServerTurns::ServerTurns()
 {
@@ -71,9 +72,16 @@ void ServerTurns::processTank(Tank *tank, unsigned int serverState)
 		switch (tank->getState().getServerState())
 		{
 		case TankState::serverNone:
-			tank->getState().setServerState(TankState::serverMakingMove);
-			TankStartMoveSimAction *tankSimAction = new TankStartMoveSimAction(tank->getPlayerId(), false);
-			ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);
+			{
+				float shotTime = (float)
+					ScorchedServer::instance()->getOptionsGame().getShotTime();
+
+				tank->getState().setServerState(TankState::serverMakingMove);
+				TankStartMoveSimAction *tankSimAction = new TankStartMoveSimAction(
+					tank->getPlayerId(), 0, shotTime, false);
+				ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);
+			}
+			break;
 		}
 		break;
 	}

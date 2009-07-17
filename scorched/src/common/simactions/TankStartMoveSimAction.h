@@ -27,10 +27,12 @@ class TankStartMoveSimAction : public SimAction
 {
 public:
 	TankStartMoveSimAction();
-	TankStartMoveSimAction(unsigned int playerId, bool buying);
+	TankStartMoveSimAction(unsigned int playerId, unsigned int moveId, 
+		float timeout, bool buying);
 	virtual ~TankStartMoveSimAction();
 
 	unsigned int getPlayerId() { return playerId_; }
+	unsigned int getMoveId() { return moveId_; }
 	bool getBuying() { return buying_; }
 
 	virtual bool invokeAction(ScorchedContext &context);
@@ -41,6 +43,8 @@ public:
 REGISTER_CLASS_HEADER(TankStartMoveSimAction);
 protected:
 	unsigned int playerId_;
+	unsigned int moveId_;
+	float timeout_;
 	bool buying_;
 };
 

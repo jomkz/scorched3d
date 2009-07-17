@@ -26,17 +26,22 @@
 class ServerStateBuying : public ServerTurnsSimultaneousI
 {
 public:
+	static ServerStateBuying *instance();
+
 	ServerStateBuying();
 	virtual ~ServerStateBuying();
 
 	void enterState();
 	bool simulate(float frameTime);
 
+	void playerFinishedBuying(unsigned int playerId, unsigned int moveId);
+
 	// ServerTurnsSimultaneousI
 	virtual void allPlayersFinished();
-	virtual void playerPlaying(unsigned int playerId, float timeout);
+	virtual void playerPlaying(unsigned int playerId, unsigned int moveId);
 
 protected:
+	static ServerStateBuying *instance_;
 	ServerTurnsSimultaneous simulTurns_;
 	bool finished_;
 };

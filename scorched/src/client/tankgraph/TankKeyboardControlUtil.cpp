@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <tankgraph/TankKeyboardControlUtil.h>
-#include <tank/Tank.h>
+#include <tank/TankContainer.h>
 #include <tank/TankPosition.h>
 #include <tank/TankState.h>
 #include <tank/TankAccessories.h>
@@ -502,7 +502,9 @@ void TankKeyboardControlUtil::fireShot(Tank *tank)
 	if (currentWeapon)
 	{
 		// send message saying we are finished with shot
-		ComsPlayedMoveMessage comsMessage(tank->getPlayerId(), ComsPlayedMoveMessage::eShot);
+		ComsPlayedMoveMessage comsMessage(tank->getPlayerId(), 
+			ScorchedClient::instance()->getTankContainer().getCurrentMoveId(),
+			ComsPlayedMoveMessage::eShot);
 		comsMessage.setShot(
 			currentWeapon->getAccessoryId(),
 			tank->getPosition().getRotationGunXY(),
@@ -522,7 +524,9 @@ void TankKeyboardControlUtil::fireShot(Tank *tank)
 void TankKeyboardControlUtil::skipShot(Tank *tank)
 {
 	// send message saying we are finished with shot
-	ComsPlayedMoveMessage comsMessage(tank->getPlayerId(), ComsPlayedMoveMessage::eSkip);
+	ComsPlayedMoveMessage comsMessage(tank->getPlayerId(), 
+		ScorchedClient::instance()->getTankContainer().getCurrentMoveId(),
+		ComsPlayedMoveMessage::eSkip);
 
 	// Check if we are running in a NET/LAN environment
 	// If so we send this move to the server
@@ -535,7 +539,9 @@ void TankKeyboardControlUtil::skipShot(Tank *tank)
 void TankKeyboardControlUtil::resign(Tank *tank)
 {
 	// send message saying we are finished with shot
-	ComsPlayedMoveMessage comsMessage(tank->getPlayerId(), ComsPlayedMoveMessage::eResign);
+	ComsPlayedMoveMessage comsMessage(tank->getPlayerId(), 
+		ScorchedClient::instance()->getTankContainer().getCurrentMoveId(),
+		ComsPlayedMoveMessage::eResign);
 
 	// Check if we are running in a NET/LAN environment
 	// If so we send this move to the server

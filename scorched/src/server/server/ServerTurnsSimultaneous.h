@@ -27,7 +27,7 @@ class ServerTurnsSimultaneousI
 {
 public:
 	virtual void allPlayersFinished() = 0;
-	virtual void playerPlaying(unsigned int playerId, float timeout) = 0;
+	virtual void playerPlaying(unsigned int playerId, unsigned int moveId) = 0;
 };
 
 class ServerTurnsSimultaneous 
@@ -39,15 +39,15 @@ public:
 	void setUser(ServerTurnsSimultaneousI *user);
 
 	void clear();
-	void addPlayer(unsigned int playerId, float timeout);
-	void playerFinished(unsigned int playerId);
+	void addPlayer(unsigned int playerId);
+	void playerFinished(unsigned int playerId, unsigned int moveId);
 
 	void simulate(float frameTime);
 
 protected:
 	ServerTurnsSimultaneousI *user_;
-	std::map<unsigned int, float> waitingPlayers_;
-	std::map<unsigned int, float> playingPlayers_;
+	std::map<unsigned int, unsigned int> waitingPlayers_;
+	std::map<unsigned int, unsigned int> playingPlayers_;
 };
 
 #endif

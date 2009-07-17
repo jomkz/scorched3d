@@ -61,7 +61,8 @@ void ClientStartGameHandler::startGame(TankStartMoveSimAction *action)
 {
 	Tank *tank = ScorchedClient::instance()->getTankContainer().
 		getTankById(action->getPlayerId());
-	if (tank->getDestinationId() != 
+	if (!tank ||
+		tank->getDestinationId() != 
 		ScorchedClient::instance()->getTankContainer().getCurrentDestinationId())
 	{
 		return;
@@ -69,6 +70,8 @@ void ClientStartGameHandler::startGame(TankStartMoveSimAction *action)
 
 	ScorchedClient::instance()->getTankContainer().setCurrentPlayerId(
 		action->getPlayerId());
+	ScorchedClient::instance()->getTankContainer().setCurrentMoveId(
+		action->getMoveId());
 	Tank *current = ScorchedClient::instance()->getTankContainer().getCurrentTank();
 	if (!current) 
 	{
@@ -94,7 +97,7 @@ void ClientStartGameHandler::startGame(TankStartMoveSimAction *action)
 	// Stimulate into the new game state
 	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
 	ScorchedClient::instance()->getGameState().checkStimulate();
-	if (false)
+	if (action->getBuying())
 	{
 		ScorchedClient::instance()->getGameState().stimulate(
 			ClientState::StimBuyWeapons);
