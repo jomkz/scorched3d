@@ -55,19 +55,6 @@ void ServerTurns::processTank(Tank *tank, unsigned int serverState)
 {
 	switch (tank->getState().getState())
 	{
-	case TankState::sDead:
-		switch (tank->getState().getServerState())
-		{
-		case TankState::serverJoined:
-			tank->getState().setServerState(TankState::serverNone);
-			if (true) // Check that we can join game
-			{
-				TankAliveSimAction *tankAliveSimAction = new TankAliveSimAction(tank->getPlayerId());
-				ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankAliveSimAction);
-			}
-			break;
-		}
-		break;
 	case TankState::sNormal:
 		switch (tank->getState().getServerState())
 		{

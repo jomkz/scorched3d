@@ -25,6 +25,7 @@
 #include <tank/TankState.h>
 #include <common/OptionsScorched.h>
 #include <simactions/TankStartMoveSimAction.h>
+#include <simactions/TankAliveSimAction.h>
 
 ServerStateBuying *ServerStateBuying::instance_ = 0;
 
@@ -48,6 +49,14 @@ void ServerStateBuying::enterState()
 {
 	finished_ = false;
 	simulTurns_.clear();
+	//if (ScorchedServer::instance()->getOptionsGame().getBuyOnRound() != 0)
+	// CHECK BUY ON ROUND HERE
+}
+
+bool ServerStateBuying::simulate(float frameTime)
+{
+	if (finished_) return true;
+
 	std::map<unsigned int, Tank*> &tanks = 
 		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
 	std::map<unsigned int, Tank*>::iterator itor;
@@ -56,18 +65,19 @@ void ServerStateBuying::enterState()
 		itor++)
 	{
 		Tank *tank = itor->second;
-		if (tank->getState().getTankPlaying())
+		if (tank->getState().getTankPlaying() &&
+			tank->getState().getServerState() == TankState::serverJoined)
 		{
+			tank->getState().setServerState(TankState::serverNone);
+			tank->getState().setState(TankState::sNormal);
+
+			TankAliveSimAction *tankAliveSimAction = new TankAliveSimAction(tank->getPlayerId());
+			ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankAliveSimAction);
+
 			simulTurns_.addPlayer(itor->first);
 		}
 	}
-	//if (ScorchedServer::instance()->getOptionsGame().getBuyOnRound() != 0)
-	// CHECK BUY ON ROUND HERE
-}
 
-bool ServerStateBuying::simulate(float frameTime)
-{
-	if (finished_) return true;
 	simulTurns_.simulate(frameTime);
 	return false;
 }
