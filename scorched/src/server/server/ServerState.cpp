@@ -80,6 +80,7 @@ void ServerState::simulate(float frameTime)
 			if (buying_.simulate(frameTime))
 			{
 				serverState_ = ServerPlayingState;
+				playing_.enterState();
 			}
 		}
 		else
@@ -89,7 +90,22 @@ void ServerState::simulate(float frameTime)
 		}
 		break;
 	case ServerPlayingState:
-		serverTurns_.simulate(serverState_);
+		if (enoughPlayers_.enoughPlayers())
+		{
+			if (playing_.simulate(frameTime))
+			{
+				serverState_ = ServerShotsState;
+				//playing_.enterState();
+			}
+		}
+		else
+		{
+			startingMatch_.stoppingMatch();
+			serverState_ = ServerWaitingForPlayersState;
+		}
+		
+		break;
+	case ServerShotsState:
 		break;
 	}
 }

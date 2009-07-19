@@ -22,6 +22,7 @@
 #define __INCLUDE_ServerStateBuyingh_INCLUDE__
 
 #include <server/ServerTurnsSimultaneous.h>
+#include <coms/ComsPlayedMoveMessage.h>
 
 class ServerStateBuying : public ServerTurnsSimultaneousI
 {
@@ -34,7 +35,7 @@ public:
 	void enterState();
 	bool simulate(float frameTime);
 
-	void playerFinishedBuying(unsigned int playerId, unsigned int moveId);
+	void playerFinishedBuying(ComsPlayedMoveMessage &playedMessage);
 
 	// ServerTurnsSimultaneousI
 	virtual void allPlayersFinished();

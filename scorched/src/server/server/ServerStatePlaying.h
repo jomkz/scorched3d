@@ -18,30 +18,37 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerPlayedMoveHandlerh_INCLUDE__)
-#define __INCLUDE_ServerPlayedMoveHandlerh_INCLUDE__
+#if !defined(__INCLUDE_ServerStatePlayingh_INCLUDE__)
+#define __INCLUDE_ServerStatePlayingh_INCLUDE__
 
-#include <coms/ComsMessageHandler.h>
+#include <server/ServerTurnsSimultaneous.h>
+#include <coms/ComsPlayedMoveMessage.h>
+#include <map>
 
-class ComsPlayedMoveMessage;
-class ServerPlayedMoveHandler : 
-	public ComsMessageHandlerI
+class ServerStatePlaying : public ServerTurnsSimultaneousI
 {
 public:
-	static ServerPlayedMoveHandler *instance();
+	static ServerStatePlaying *instance();
 
-	virtual bool processMessage(
-		NetMessage &message,
-		const char *messageType,
-		NetBufferReader &reader);
+	ServerStatePlaying();
+	virtual ~ServerStatePlaying();
+
+	void enterState();
+	bool simulate(float frameTime);
+
+	void playerFinishedPlaying(ComsPlayedMoveMessage &playedMessage);
+
+	// ServerTurnsSimultaneousI
+	virtual void allPlayersFinished();
+	virtual void playerPlaying(unsigned int playerId, unsigned int moveId);
 
 protected:
-	static ServerPlayedMoveHandler *instance_;
+	static ServerStatePlaying *instance_;
+	ServerTurnsSimultaneous simulTurns_;
+	std::map<unsigned int, ComsPlayedMoveMessage *> messages_;
+	bool finished_;
 
-private:
-	ServerPlayedMoveHandler();
-	virtual ~ServerPlayedMoveHandler();
+	void playShots();
 };
-
 
 #endif

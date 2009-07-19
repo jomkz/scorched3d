@@ -38,6 +38,7 @@ public:
 	};
 
 	ComsPlayedMoveMessage();
+	ComsPlayedMoveMessage(const ComsPlayedMoveMessage &other);
 	ComsPlayedMoveMessage(unsigned int playerId,
 		unsigned int moveId,
 		MoveType type);
@@ -76,7 +77,6 @@ protected:
 	int selectPositionY_;
 
 private:
-	ComsPlayedMoveMessage(const ComsPlayedMoveMessage &);
 	const ComsPlayedMoveMessage & operator=(const ComsPlayedMoveMessage &);
 };
 

@@ -23,6 +23,7 @@
 #include <server/ServerSimulator.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
+#include <tank/TankScore.h>
 #include <common/OptionsScorched.h>
 #include <simactions/TankStartMoveSimAction.h>
 #include <simactions/TankAliveSimAction.h>
@@ -87,8 +88,16 @@ void ServerStateBuying::allPlayersFinished()
 	finished_ = true;
 }
 
-void ServerStateBuying::playerFinishedBuying(unsigned int playerId, unsigned int moveId)
+void ServerStateBuying::playerFinishedBuying(ComsPlayedMoveMessage &playedMessage)
 {
+	unsigned int playerId = playedMessage.getPlayerId();
+	unsigned int moveId = playedMessage.getMoveId();
+	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
+	if (!tank || !tank->getState().getTankPlaying()) return;
+
+	tank->getScore().setMissedMoves(0);
+	tank->getState().setServerState(TankState::serverNone);
+
 	simulTurns_.playerFinished(playerId, moveId);
 }
 

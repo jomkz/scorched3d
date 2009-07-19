@@ -5681,6 +5681,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\server\server\ServerStatePlaying.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerStatePlaying.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\server\server\ServerStateStartingMatch.cpp"
 				>
 			</File>

@@ -32,6 +32,17 @@ ComsPlayedMoveMessage::ComsPlayedMoveMessage() :
 {
 }
 
+ComsPlayedMoveMessage::ComsPlayedMoveMessage(const ComsPlayedMoveMessage &other) :
+	ComsMessage(ComsPlayedMoveMessageType),
+	moveType_(other.moveType_),
+	weaponId_(other.weaponId_),
+	moveId_(other.moveId_),
+	rotationXY_(other.rotationXY_), rotationYZ_(other.rotationYZ_), 
+	power_(other.power_), playerId_(other.playerId_),
+	selectPositionX_(other.selectPositionX_), selectPositionY_(other.selectPositionY_)
+{
+}
+
 ComsPlayedMoveMessage::ComsPlayedMoveMessage(unsigned int playerId,
 	unsigned int moveId,
 	MoveType type) :
