@@ -21,8 +21,8 @@
 #include <engine/PhysicsParticle.h>
 #include <engine/ScorchedContext.h>
 
-PhysicsParticle::PhysicsParticle()  : 
-	Action("PhysicsParticle"),
+PhysicsParticle::PhysicsParticle(unsigned int playerId)  : 
+	Action(playerId),
 	collision_(false), totalActionTime_(0)
 {
 
@@ -89,14 +89,6 @@ void PhysicsParticle::simulate(fixed frameTime, bool &remove)
 	if (collision_) remove = true;
 	totalActionTime_ += frameTime;
 	if (totalActionTime_ > 30) remove = true;
-}
-
-PhysicsParticleReferenced::PhysicsParticleReferenced()
-{
-}
-
-PhysicsParticleReferenced::~PhysicsParticleReferenced()
-{
 }
 
 

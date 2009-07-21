@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_TankMovementh_INCLUDE__)
 #define __INCLUDE_TankMovementh_INCLUDE__
 
-#include <actions/ActionReferenced.h>
+#include <actions/Action.h>
 #include <engine/ViewPoints.h>
 #include <common/FixedVector.h>
 #include <common/Counter.h>
@@ -32,7 +32,7 @@
 class VirtualSoundSource;
 class WeaponMoveTank;
 class Tank;
-class TankMovement : public ActionReferenced
+class TankMovement : public Action
 {
 public:
 	TankMovement(WeaponFireContext &weaponContext,
@@ -43,6 +43,7 @@ public:
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
 	virtual std::string getActionDetails();
+	virtual std::string getActionType() { return "TankMovement"; }
 
 protected:
 	// A list containing smooth positions

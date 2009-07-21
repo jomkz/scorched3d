@@ -21,11 +21,11 @@
 #if !defined(__INCLUDE_CameraPositionActionh_INCLUDE__)
 #define __INCLUDE_CameraPositionActionh_INCLUDE__
 
-#include <actions/ActionReferenced.h>
+#include <actions/Action.h>
 #include <common/FixedVector.h>
 #include <set>
 
-class CameraPositionAction : public ActionReferenced
+class CameraPositionAction : public Action
 {
 public:
 	CameraPositionAction(FixedVector &showPosition,
@@ -35,6 +35,7 @@ public:
 
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
+	virtual std::string getActionType() { return "CameraPositionAction"; }
 
 	fixed getShowTime() { return showTime_; }
 	fixed getStartTime() { return startTime_; }

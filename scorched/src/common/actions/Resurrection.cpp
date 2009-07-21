@@ -35,7 +35,7 @@
 Resurrection::Resurrection(
 	unsigned int playerId,
 	FixedVector &position) :
-	ActionReferenced("Resurrection"),
+	Action(playerId),
 	playerId_(playerId),
 	position_(position)
 {

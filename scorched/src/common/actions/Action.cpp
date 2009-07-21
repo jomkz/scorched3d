@@ -20,10 +20,10 @@
 
 #include <actions/Action.h>
 
-Action::Action(const char *name, ActionRenderer *renderer) : 
-	name_(name),
-	renderer_(renderer), context_(0), 
-	actionStartTime_(0), actionEvent_(false)
+Action::Action(unsigned int playerId) : 
+	playerId_(playerId),
+	renderer_(0), context_(0), 
+	actionStartTime_(0)
 {
 }
 
@@ -72,8 +72,9 @@ void ActionRenderer::simulate(Action *action, float frametime, bool &removeActio
 }
 
 SpriteAction::SpriteAction(ActionRenderer *render) : 
-	Action("SpriteAction", render)
+	Action(0)
 {
+	setActionRender(render);
 }
 
 SpriteAction::~SpriteAction()

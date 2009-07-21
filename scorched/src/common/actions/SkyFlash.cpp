@@ -26,7 +26,7 @@
 #endif
 
 SkyFlash::SkyFlash() :
-	ActionReferenced("SkyFlash")
+	Action(0)
 {
 }
 

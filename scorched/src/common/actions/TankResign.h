@@ -22,9 +22,9 @@
 #if !defined(__INCLUDE_TankResignh_INCLUDE__)
 #define __INCLUDE_TankResignh_INCLUDE__
 
-#include <actions/ActionReferenced.h>
+#include <actions/Action.h>
 
-class TankResign : public ActionReferenced
+class TankResign : public Action
 {
 public:
 	TankResign(unsigned int playerId);
@@ -33,6 +33,7 @@ public:
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
 	virtual std::string getActionDetails();
+	virtual std::string getActionType() { return "TankResign"; }
 
 protected:
 	bool firstTime_;

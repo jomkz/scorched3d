@@ -33,7 +33,7 @@
 
 AddTarget::AddTarget(FixedVector &position,
 	WeaponAddTarget *addTarget) :
-	ActionReferenced("AddTarget"),
+	Action(-1),
 	position_(position),
 	addTarget_(addTarget)
 {

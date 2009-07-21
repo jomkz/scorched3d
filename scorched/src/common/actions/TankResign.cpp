@@ -31,7 +31,7 @@
 #include <lang/LangResource.h>
 
 TankResign::TankResign(unsigned int playerId) :
-	ActionReferenced("TankResign"),
+	Action(playerId),
 	firstTime_(true),
 	playerId_(playerId)
 {

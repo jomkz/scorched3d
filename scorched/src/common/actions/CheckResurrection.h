@@ -21,9 +21,9 @@
 #if !defined(__INCLUDE_CheckResurrectionh_INCLUDE__)
 #define __INCLUDE_CheckResurrectionh_INCLUDE__
 
-#include <actions/ActionReferenced.h>
+#include <actions/Action.h>
 
-class CheckResurrection : public ActionReferenced
+class CheckResurrection : public Action
 {
 public:
 	CheckResurrection();
@@ -31,6 +31,7 @@ public:
 
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
+	virtual std::string getActionType() { return "CheckResurrection"; }
 
 protected:
 	bool firstTime_;

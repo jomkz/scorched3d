@@ -36,7 +36,7 @@
 TankFired::TankFired(unsigned int playerId,
 					 Weapon *weapon,
 					 fixed rotXY, fixed rotXZ) :
-	ActionReferenced("TankFired"),
+	Action(playerId),
 	playerId_(playerId), weapon_(weapon),
 	rotXY_(rotXY), rotXZ_(rotXZ), firstTime_(true)
 {

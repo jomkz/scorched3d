@@ -51,8 +51,8 @@ void ActionController::clear(bool warn)
 		Action *act = *newItor;
 		if (warn)
 		{
-			Logger::log(S3D::formatStringBuffer("Warning: removing added timed out action %s, %s",
-				act->getActionType().c_str(), (act->getReferenced()?"Ref":"UnRef")));
+			Logger::log(S3D::formatStringBuffer("Warning: removing added timed out action %s, %u",
+				act->getActionType().c_str(), act->getPlayerId()));
 		}
 		delete act;
 	}
@@ -66,8 +66,8 @@ void ActionController::clear(bool warn)
 		Action *act = *newItor;
 		if (warn)
 		{
-			Logger::log(S3D::formatStringBuffer("Warning: removing added timed out action %s, %s",
-				act->getActionType().c_str(), (act->getReferenced()?"Ref":"UnRef")));
+			Logger::log(S3D::formatStringBuffer("Warning: removing added timed out action %s, %u",
+				act->getActionType().c_str(), act->getPlayerId()));
 		}
 		delete act;
 	}
@@ -79,8 +79,8 @@ void ActionController::clear(bool warn)
 		Action *act = actions_.actions[a];
 		if (warn)
 		{
-			Logger::log(S3D::formatStringBuffer("Warning: removing added timed out action %s, %s",
-				act->getActionType().c_str(), (act->getReferenced()?"Ref":"UnRef")));
+			Logger::log(S3D::formatStringBuffer("Warning: removing added timed out action %s, %u",
+				act->getActionType().c_str(), act->getPlayerId()));
 		}
 		delete act;
 	}
@@ -101,14 +101,12 @@ bool ActionController::allEvents()
 		newItor++)
 	{
 		Action *act = *newItor;
-		if (!act->getActionEvent() &&
-			act->getReferenced()) return false;
+		if (act->getPlayerId() != 0) return false;
 	}
 	for (int a=0; a<actions_.actionCount; a++)
 	{
 		Action *act = actions_.actions[a];
-		if (!act->getActionEvent() &&
-			act->getReferenced()) return false;
+		if (act->getPlayerId() != 0) return false;
 	}
 	return true;
 }
@@ -199,11 +197,9 @@ void ActionController::addAction(Action *action)
 {
 	action->setScorchedContext(context_);
 	action->setActionStartTime(time_);
-	action->setActionEvent(actionEvents_);
 
-	if (action->getReferenced())
+	if (action->getPlayerId() != 0)
 	{
-		action->setActionNumber(++actionNumber_);
 		if (context_->getOptionsGame().getActionSyncCheck())
 		{
 			std::string actionType = action->getActionType();
@@ -260,7 +256,7 @@ void ActionController::addNewActions()
 
 		action->setScorchedContext(context_);
 		action->setActionStartTime(time_);
-		if (action->getReferenced()) referenceCount_ ++;
+		if (action->getPlayerId() != 0) referenceCount_ ++;
 
 		action->init();
 		actions_.push_back(action);
@@ -304,7 +300,7 @@ void ActionController::simulate(fixed frameTime)
 		act->simulate(frameTime, remove);
 
 		// Ensure that no referenced actions over do their time
-		if (act->getReferenced())
+		if (act->getPlayerId() != 0)
 		{
 			if ((time_ - act->getActionStartTime() > 30))
 			{
@@ -317,7 +313,7 @@ void ActionController::simulate(fixed frameTime)
 		// If this action has finished add to list to be removed
 		if (remove)
 		{
-			if (act->getReferenced())
+			if (act->getPlayerId() != 0)
 			{
 				referenceCount_--;
 				if (referenceCount_<0) referenceCount_ = 0;

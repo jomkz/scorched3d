@@ -21,10 +21,11 @@
 #if !defined(__INCLUDE_AddTargeth_INCLUDE__)
 #define __INCLUDE_AddTargeth_INCLUDE__
 
-#include <actions/ActionReferenced.h>
+#include <actions/Action.h>
+#include <common/FixedVector.h>
 
 class WeaponAddTarget;
-class AddTarget : public ActionReferenced
+class AddTarget : public Action
 {
 public:
 	AddTarget(FixedVector &position, WeaponAddTarget *addTarget);
@@ -33,6 +34,7 @@ public:
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
 	virtual std::string getActionDetails();
+	virtual std::string getActionType() { return "AddTarget"; }
 
 protected:
 	FixedVector position_;

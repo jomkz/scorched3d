@@ -29,7 +29,7 @@ class PhysicsParticle :
 	public PhysicsParticleObjectHandler
 {
 public:
-	PhysicsParticle();
+	PhysicsParticle(unsigned int playerId);
 	virtual ~PhysicsParticle();
 
 	virtual void setPhysics(
@@ -59,17 +59,6 @@ protected:
 	bool collision_;
 	fixed totalActionTime_;
 
-};
-
-
-class PhysicsParticleReferenced : 
-	public PhysicsParticle
-{
-public:
-	PhysicsParticleReferenced();
-	virtual ~PhysicsParticleReferenced();
-
-	virtual bool getReferenced() { return true; }
 };
 
 #endif // !defined(AFX_PhysicsParticle_H__53A44445_C8C9_4108_B5E1_744C0AF7A1D5__INCLUDED_)

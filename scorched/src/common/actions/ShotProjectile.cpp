@@ -38,6 +38,7 @@ ShotProjectile::ShotProjectile(FixedVector &startPosition, FixedVector &velocity
 							   WeaponProjectile *weapon, WeaponFireContext &weaponContext,
 							   unsigned int flareType,
 							   fixed spinSpeed ) :
+	PhysicsParticle(weaponContext.getPlayerId()),
 	startPosition_(startPosition), velocity_(velocity), 
 	weapon_(weapon), weaponContext_(weaponContext), 
 	flareType_(flareType), vPoint_(0),
@@ -123,7 +124,7 @@ void ShotProjectile::collision(PhysicsParticleObject &position,
 
 		if (doColl) doCollision(position.getPosition());
 	}
-	PhysicsParticleReferenced::collision(position, collisionId);
+	PhysicsParticle::collision(position, collisionId);
 }
 
 void ShotProjectile::simulate(fixed frameTime, bool &remove)
@@ -223,7 +224,7 @@ void ShotProjectile::simulate(fixed frameTime, bool &remove)
 	}
 #endif	// #ifndef S3D_SERVER
 
-	PhysicsParticleReferenced::simulate(frameTime, remove);
+	PhysicsParticle::simulate(frameTime, remove);
 }
 
 void ShotProjectile::doCollision(FixedVector &position)

@@ -23,11 +23,11 @@
 #include <actions/CameraPositionAction.h>
 
 CameraPositionAction::CameraPositionAction(FixedVector &showPosition,
-		fixed showTime,
-		unsigned int priority) : 
-		ActionReferenced("CameraPositionAction"),
-		totalTime_(0), showTime_(showTime),
-		showPosition_(showPosition), showPriority_(priority)
+	fixed showTime,
+	unsigned int priority) : 
+	Action(-1),
+	totalTime_(0), showTime_(showTime),
+	showPosition_(showPosition), showPriority_(priority)
 {
 
 }

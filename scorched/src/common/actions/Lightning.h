@@ -21,13 +21,13 @@
 #if !defined(__INCLUDE_Lightningh_INCLUDE__)
 #define __INCLUDE_Lightningh_INCLUDE__
 
-#include <actions/ActionReferenced.h>
+#include <actions/Action.h>
 #include <weapons/WeaponLightning.h>
 #include <list>
 
 class GLTexture;
 class Target;
-class Lightning : public ActionReferenced
+class Lightning : public Action
 {
 public:
 	Lightning(WeaponLightning *weapon,
@@ -39,6 +39,7 @@ public:
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
 	virtual std::string getActionDetails();
+	virtual std::string getActionType() { return "Lightning"; }
 
 protected:
 	struct Segment

@@ -1033,6 +1033,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\server\ServerStateShots.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerStateShots.h"
+				>
+			</File>
+			<File
 				RelativePath="..\server\ServerStateStartingMatch.cpp"
 				>
 			</File>
@@ -1866,14 +1874,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\actions\Action.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\actions\ActionReferenced.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\actions\ActionReferenced.h"
 				>
 			</File>
 			<File

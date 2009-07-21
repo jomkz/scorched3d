@@ -27,7 +27,7 @@
 #include <tank/TankState.h>
 
 CheckResurrection::CheckResurrection() :
-	ActionReferenced("CheckResurrection"),
+	Action(-1),
 	firstTime_(true)
 {
 }

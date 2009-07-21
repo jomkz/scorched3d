@@ -54,7 +54,7 @@ static bool deformCreated = false;
 Napalm::Napalm(int x, int y, Weapon *weapon, 
 	NapalmParams *params,
 	WeaponFireContext &weaponContext) :
-	ActionReferenced("Napalm"),
+	Action(weaponContext.getPlayerId()),
 	startX_(x), startY_(y), napalmTime_(0), 
 	weapon_(weapon), params_(params),
 	weaponContext_(weaponContext), 

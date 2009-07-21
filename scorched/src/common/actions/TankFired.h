@@ -22,10 +22,10 @@
 #if !defined(__INCLUDE_TankFiredh_INCLUDE__)
 #define __INCLUDE_TankFiredh_INCLUDE__
 
-#include <actions/ActionReferenced.h>
+#include <actions/Action.h>
 #include <weapons/Weapon.h>
 
-class TankFired : public ActionReferenced
+class TankFired : public Action
 {
 public:
 	TankFired(unsigned int playerId,
@@ -36,6 +36,7 @@ public:
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
 	virtual std::string getActionDetails();
+	virtual std::string getActionType() { return "TankFired"; }
 
 protected:
 	unsigned int playerId_;

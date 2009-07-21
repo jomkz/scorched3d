@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_Napalmh_INCLUDE__)
 #define __INCLUDE_Napalmh_INCLUDE__
 
-#include <actions/ActionReferenced.h>
+#include <actions/Action.h>
 #include <weapons/WeaponNapalm.h>
 #include <common/Counter.h>
 #include <landscapemap/DeformLandscape.h>
@@ -30,7 +30,7 @@
 #include <set>
 
 class GLTextureSet;
-class Napalm : public ActionReferenced
+class Napalm : public Action
 {
 public:
 	struct NapalmEntry 
@@ -50,6 +50,7 @@ public:
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
 	virtual std::string getActionDetails();
+	virtual std::string getActionType() { return "Napalm"; }
 
 	unsigned int getPlayerId() { return weaponContext_.getPlayerId(); }
 	NapalmParams *getParams() { return params_; }

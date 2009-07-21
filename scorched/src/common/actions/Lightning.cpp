@@ -40,7 +40,7 @@
 Lightning::Lightning(WeaponLightning *weapon,
 		WeaponFireContext &weaponContext,
 		FixedVector &position, FixedVector &velocity) :
-	ActionReferenced("Lightning"),
+	Action(weaponContext.getPlayerId()),
 	totalTime_(0),
 	weapon_(weapon),
 	weaponContext_(weaponContext),

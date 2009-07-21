@@ -57,7 +57,7 @@ static const int NoMovementTransitions = 4;
 TankMovement::TankMovement(WeaponFireContext &weaponContext,
 	WeaponMoveTank *weapon,
 	int positionX, int positionY) : 
-	ActionReferenced("TankMovement"),
+	Action(weaponContext.getPlayerId()),
 	weaponContext_(weaponContext), 
 	positionX_(positionX), positionY_(positionY),
 	timePassed_(0), vPoint_(0), weapon_(weapon),
@@ -202,7 +202,7 @@ void TankMovement::simulate(fixed frameTime, bool &remove)
 	}
 #endif // #ifndef S3D_SERVER
 	
-	ActionReferenced::simulate(frameTime, remove);
+	Action::simulate(frameTime, remove);
 }
 
 void TankMovement::simulationMove(fixed frameTime)

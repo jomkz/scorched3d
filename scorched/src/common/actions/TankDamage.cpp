@@ -51,7 +51,7 @@ TankDamage::TankDamage(Weapon *weapon,
 		unsigned int damagedPlayerId, WeaponFireContext &weaponContext,
 		fixed damage, bool useShieldDamage, bool checkFall,
 		bool shieldOnlyDamage) :
-	ActionReferenced("TankDamage"),
+	Action(weaponContext.getPlayerId()),
 	weapon_(weapon), firstTime_(true),
 	damagedPlayerId_(damagedPlayerId), weaponContext_(weaponContext),
 	damage_(damage), useShieldDamage_(useShieldDamage), checkFall_(checkFall),

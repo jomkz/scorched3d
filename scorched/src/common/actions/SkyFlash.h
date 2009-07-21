@@ -21,9 +21,9 @@
 #if !defined(__INCLUDE_SkyFlashh_INCLUDE__)
 #define __INCLUDE_SkyFlashh_INCLUDE__
 
-#include <actions/ActionReferenced.h>
+#include <actions/Action.h>
 
-class SkyFlash : public ActionReferenced
+class SkyFlash : public Action
 {
 public:
 	SkyFlash();
@@ -31,6 +31,7 @@ public:
 
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
+	virtual std::string getActionType() { return "SkyFlash"; }
 
 protected:
 };

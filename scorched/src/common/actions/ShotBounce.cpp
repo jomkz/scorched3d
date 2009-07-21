@@ -37,6 +37,7 @@
 ShotBounce::ShotBounce(WeaponRoller *weapon, 
 		FixedVector &startPosition, FixedVector &velocity,
 		WeaponFireContext &weaponContext) : 
+	PhysicsParticle(weaponContext.getPlayerId()),
 	startPosition_(startPosition),
 	velocity_(velocity), weapon_(weapon), weaponContext_(weaponContext),
 	totalTime_(0), 
@@ -83,7 +84,7 @@ void ShotBounce::collision(PhysicsParticleObject &position,
 	{
 		doCollision();
 	}
-	PhysicsParticleReferenced::collision(position, collisionId);
+	PhysicsParticle::collision(position, collisionId);
 }
 
 void ShotBounce::simulate(fixed frameTime, bool &remove)
@@ -95,7 +96,7 @@ void ShotBounce::simulate(fixed frameTime, bool &remove)
 		remove = true;
 	}
 
-	PhysicsParticleReferenced::simulate(frameTime, remove);
+	PhysicsParticle::simulate(frameTime, remove);
 }
 
 void ShotBounce::draw()

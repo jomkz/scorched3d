@@ -21,10 +21,11 @@
 #if !defined(__INCLUDE_SoundActionh_INCLUDE__)
 #define __INCLUDE_SoundActionh_INCLUDE__
 
-#include <actions/ActionReferenced.h>
+#include <actions/Action.h>
+#include <common/FixedVector.h>
 
 class WeaponSound;
-class SoundAction : public ActionReferenced
+class SoundAction : public Action
 {
 public:
 	SoundAction(FixedVector &position = FixedVector::getNullVector(), 
@@ -34,6 +35,7 @@ public:
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
 	virtual std::string getActionDetails();
+	virtual std::string getActionType() { return "SoundAction"; }
 
 protected:
 	WeaponSound *weapon_;

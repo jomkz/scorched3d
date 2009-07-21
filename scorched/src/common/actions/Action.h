@@ -42,36 +42,29 @@ public:
 class Action
 {
 public:
-	Action(const char *name, ActionRenderer *render = 0);
+	Action(unsigned int playerId);
 	virtual ~Action();
 
 	virtual void init() = 0;
 
 	virtual void draw();
-	virtual void simulate(fixed frameTime, bool &removeAction);
-
-	virtual void setActionRender(ActionRenderer *renderer);
-	virtual void setScorchedContext(ScorchedContext *context);
-	virtual ScorchedContext *getScorchedContext();
-	virtual bool getReferenced() { return false; }
-	virtual std::string getActionType() { return name_; }
+	virtual void simulate(fixed frameTime, bool &removeAction);	
+	virtual std::string getActionType() = 0;
 	virtual std::string getActionDetails() { return ""; }
 
+	void setActionRender(ActionRenderer *renderer);
+	void setScorchedContext(ScorchedContext *context);
+	ScorchedContext *getScorchedContext();
+	unsigned int getPlayerId() { return playerId_; }
 	void setActionStartTime(fixed time) { actionStartTime_ = time; }
 	fixed getActionStartTime() { return actionStartTime_; }
-	bool getActionEvent() { return actionEvent_; }
-	void setActionEvent(bool ae) { actionEvent_ = ae; }
-	unsigned int getActionNumber() { return actionNumber_; }
-	void setActionNumber(unsigned int number) { actionNumber_ = number; }
 
 protected:
 	const char *name_;
+	unsigned int playerId_;
 	ActionRenderer *renderer_;
 	ScorchedContext *context_;
 	fixed actionStartTime_;
-	unsigned int actionNumber_;
-	bool actionEvent_;
-
 };
 
 class SpriteAction : public Action
@@ -81,7 +74,7 @@ public:
 	virtual ~SpriteAction();
 
 	virtual void init();
-
+	virtual std::string getActionType() { return "SpriteAction"; }
 };
 
 #endif // !defined(AFX_ACTION_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

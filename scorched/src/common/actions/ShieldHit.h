@@ -21,9 +21,10 @@
 #if !defined(__INCLUDE_ShieldHith_INCLUDE__)
 #define __INCLUDE_ShieldHith_INCLUDE__
 
-#include <actions/ActionReferenced.h>
+#include <actions/Action.h>
+#include <common/FixedVector.h>
 
-class ShieldHit : public ActionReferenced
+class ShieldHit : public Action
 {
 public:
 	ShieldHit(unsigned int playerId,
@@ -34,6 +35,7 @@ public:
 	virtual void draw();
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
+	virtual std::string getActionType() { return "ShieldHit"; }
 
 protected:
 	bool firstTime_;

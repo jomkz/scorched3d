@@ -617,14 +617,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\actions\ActionReferenced.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\actions\ActionReferenced.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\actions\AddTarget.cpp"
 				>
 			</File>
@@ -5686,6 +5678,14 @@
 			</File>
 			<File
 				RelativePath="..\..\server\server\ServerStatePlaying.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerStateShots.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerStateShots.h"
 				>
 			</File>
 			<File
