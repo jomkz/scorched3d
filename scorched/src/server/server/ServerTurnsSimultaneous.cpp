@@ -40,6 +40,7 @@ void ServerTurnsSimultaneous::setUser(ServerTurnsI *user)
 void ServerTurnsSimultaneous::clear()
 {
 	waitingPlayers_.clear();
+	playingPlayers_.clear();
 }
 
 void ServerTurnsSimultaneous::addPlayer(unsigned int playerId)

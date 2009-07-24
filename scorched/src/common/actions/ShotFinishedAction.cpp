@@ -24,7 +24,8 @@
 #include <server/ServerStatePlaying.h>
 
 ShotFinishedAction::ShotFinishedAction(unsigned int moveId) :
-	Action(0)
+	Action(ACTION_NOT_REFERENCED),
+	moveId_(moveId)
 {
 }
 
