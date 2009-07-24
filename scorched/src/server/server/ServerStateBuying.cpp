@@ -51,7 +51,7 @@ void ServerStateBuying::enterState()
 {
 	finished_ = false;
 	moveId_++;
-	simulTurns_.clear();
+	simulTurns_.newGame();
 	//if (ScorchedServer::instance()->getOptionsGame().getBuyOnRound() != 0)
 	// CHECK BUY ON ROUND HERE
 }
@@ -85,7 +85,7 @@ bool ServerStateBuying::simulate(float frameTime)
 	return false;
 }
 
-void ServerStateBuying::allPlayersFinished()
+void ServerStateBuying::playMoves()
 {
 	finished_ = true;
 }
@@ -98,10 +98,11 @@ void ServerStateBuying::playerFinishedBuying(ComsPlayedMoveMessage &playedMessag
 	if (!tank || !tank->getState().getTankPlaying()) return;
 	if (moveId != moveId_) return;
 
-	tank->getScore().setMissedMoves(0);
-	tank->getState().setServerState(TankState::serverNone);
-
-	simulTurns_.playerFinished(playerId);
+	if (simulTurns_.playerFinished(playerId)) 
+	{
+		tank->getScore().setMissedMoves(0);
+		tank->getState().setServerState(TankState::serverNone);
+	}
 }
 
 void ServerStateBuying::playerPlaying(unsigned int playerId)

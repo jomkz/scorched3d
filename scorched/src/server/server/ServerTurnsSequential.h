@@ -18,29 +18,29 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerTurnsSimultaneoush_INCLUDE__)
-#define __INCLUDE_ServerTurnsSimultaneoush_INCLUDE__
+#if !defined(__INCLUDE_ServerTurnsSequentialh_INCLUDE__)
+#define __INCLUDE_ServerTurnsSequentialh_INCLUDE__
 
-#include <set>
+#include <list>
 #include <server/ServerTurns.h>
 
-class ServerTurnsSimultaneous : public ServerTurns
+class ServerTurnsSequential : public ServerTurns
 {
 public:
-	ServerTurnsSimultaneous();
-	virtual ~ServerTurnsSimultaneous();
+	ServerTurnsSequential();
+	virtual ~ServerTurnsSequential();
 
 	virtual void newGame();
 	virtual void nextMove();
 
-	void addPlayer(unsigned int playerId);
 	virtual bool playerFinished(unsigned int playerId);
 
 	virtual void simulate(float frameTime);
 
 protected:
-	std::set<unsigned int> waitingPlayers_;
-	std::set<unsigned int> playingPlayers_;
+	bool playerFinished_;
+	unsigned int playingPlayer_;
+	std::list<unsigned int> waitingPlayers_;
 };
 
 #endif

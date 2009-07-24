@@ -18,16 +18,38 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerTurnsIh_INCLUDE__)
-#define __INCLUDE_ServerTurnsIh_INCLUDE__
-
-#include <map>
+#if !defined(__INCLUDE_ServerTurnsh_INCLUDE__)
+#define __INCLUDE_ServerTurnsh_INCLUDE__
 
 class ServerTurnsI
 {
 public:
-	virtual void allPlayersFinished() = 0;
+	virtual void playMoves() = 0;
 	virtual void playerPlaying(unsigned int playerId) = 0;
+};
+
+class ServerTurns 
+{
+public:
+	ServerTurns();
+	virtual ~ServerTurns();
+
+	void setUser(ServerTurnsI *user) { user_ = user; }
+
+	// A new game has started reset everything
+	virtual void newGame() = 0;
+
+	// Let the next set of players play
+	virtual void nextMove() = 0;
+
+	// Signal that this player has finished making its move
+	virtual bool playerFinished(unsigned int playerId) = 0;
+
+	// Make next move decision
+	virtual void simulate(float frameTime) = 0;
+
+protected:
+	ServerTurnsI *user_;
 };
 
 #endif

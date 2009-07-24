@@ -21,6 +21,7 @@
 #if !defined(__INCLUDE_ServerStatePlayingh_INCLUDE__)
 #define __INCLUDE_ServerStatePlayingh_INCLUDE__
 
+#include <server/ServerTurnsSequential.h>
 #include <server/ServerTurnsSimultaneous.h>
 #include <coms/ComsPlayedMoveMessage.h>
 #include <map>
@@ -39,19 +40,21 @@ public:
 	void playerFinishedPlaying(ComsPlayedMoveMessage &playedMessage);
 	void shotsFinished(unsigned int moveId);
 
-	// ServerTurnsSimultaneousI
-	virtual void allPlayersFinished();
+	// ServerTurnsI
+	virtual void playMoves();
 	virtual void playerPlaying(unsigned int playerId);
 
 protected:
 	static unsigned int moveId_;
 	static ServerStatePlaying *instance_;
-	ServerTurnsSimultaneous simulTurns_;
+	ServerTurnsSequential turnsSequential_;
+	ServerTurnsSimultaneous turnsSimultaneous_;
+	ServerTurns *turns_;
 	std::map<unsigned int, ComsPlayedMoveMessage *> messages_;
 	bool simulatingShots_;
 
+	void clear();
 	void playShots();
-	void makeMoves();
 	void simulatePlaying(float frameTime);
 };
 

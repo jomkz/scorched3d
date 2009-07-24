@@ -37,8 +37,8 @@ public:
 
 	void playerFinishedBuying(ComsPlayedMoveMessage &playedMessage);
 
-	// ServerTurnsSimultaneousI
-	virtual void allPlayersFinished();
+	// ServerTurnsI
+	virtual void playMoves();
 	virtual void playerPlaying(unsigned int playerId);
 
 protected:

@@ -21,10 +21,10 @@
 #include <server/ServerTurnsSimultaneous.h>
 #include <server/ScorchedServer.h>
 #include <tank/TankContainer.h>
+#include <tank/TankState.h>
 #include <list>
 
-ServerTurnsSimultaneous::ServerTurnsSimultaneous() :
-	user_(0)
+ServerTurnsSimultaneous::ServerTurnsSimultaneous()
 {
 }
 
@@ -32,15 +32,30 @@ ServerTurnsSimultaneous::~ServerTurnsSimultaneous()
 {
 }
 
-void ServerTurnsSimultaneous::setUser(ServerTurnsI *user)
-{
-	user_ = user;
-}
 
-void ServerTurnsSimultaneous::clear()
+void ServerTurnsSimultaneous::newGame()
 {
 	waitingPlayers_.clear();
 	playingPlayers_.clear();
+
+	std::map<unsigned int, Tank*> &tanks = 
+		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+	std::map<unsigned int, Tank*>::iterator itor;
+	for (itor = tanks.begin();
+		itor != tanks.end();
+		itor++)
+	{
+		Tank *tank = itor->second;
+		if (tank->getState().getState() == TankState::sNormal)
+		{
+			addPlayer(itor->first);
+		}
+	}
+}
+
+void ServerTurnsSimultaneous::nextMove()
+{
+	newGame();
 }
 
 void ServerTurnsSimultaneous::addPlayer(unsigned int playerId)
@@ -48,20 +63,21 @@ void ServerTurnsSimultaneous::addPlayer(unsigned int playerId)
 	waitingPlayers_.insert(playerId);
 }
 
-void ServerTurnsSimultaneous::playerFinished(unsigned int playerId)
+bool ServerTurnsSimultaneous::playerFinished(unsigned int playerId)
 {
 	std::set<unsigned int>::iterator itor =
 		playingPlayers_.find(playerId);
-	if (itor == playingPlayers_.end()) return;
+	if (itor == playingPlayers_.end()) return false;
 	playingPlayers_.erase(itor);
+	return true;
 }
 
 void ServerTurnsSimultaneous::simulate(float frameTime)
 {
 	// Check if all the tanks have made their moves
-	if (waitingPlayers_.empty() &&
-		playingPlayers_.empty()) {
-		user_->allPlayersFinished();
+	if (waitingPlayers_.empty() && playingPlayers_.empty()) 
+	{
+		user_->playMoves();
 	}
 
 	// Check if any of the playing tanks have timed out
@@ -76,7 +92,7 @@ void ServerTurnsSimultaneous::simulate(float frameTime)
 		unsigned int playerId = *playItor;
 		Tank *tank =
 			ScorchedServer::instance()->getTankContainer().getTankById(playerId);
-		if (!tank)
+		if (!tank || tank->getState().getState() != TankState::sNormal)
 		{
 			removePlaying.push_back(playerId);
 		}
@@ -106,7 +122,7 @@ void ServerTurnsSimultaneous::simulate(float frameTime)
 		unsigned int playerId = *waitingItor;
 		Tank *tank =
 			ScorchedServer::instance()->getTankContainer().getTankById(playerId);
-		if (!tank)
+		if (!tank || tank->getState().getState() != TankState::sNormal)
 		{
 			removeWaiting.push_back(playerId);
 		}

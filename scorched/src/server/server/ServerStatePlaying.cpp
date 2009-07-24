@@ -40,7 +40,10 @@ ServerStatePlaying::ServerStatePlaying() :
 	simulatingShots_(false)
 {
 	instance_ = this;
-	simulTurns_.setUser(this);
+
+	turnsSequential_.setUser(this);
+	turnsSimultaneous_.setUser(this);
+	turns_ = &turnsSimultaneous_;
 }
 
 ServerStatePlaying::~ServerStatePlaying()
@@ -49,28 +52,14 @@ ServerStatePlaying::~ServerStatePlaying()
 
 void ServerStatePlaying::enterState()
 {
-	makeMoves();
+	clear();
+	turns_->newGame();
 }
 
-void ServerStatePlaying::makeMoves()
+void ServerStatePlaying::clear()
 {
 	simulatingShots_ = false;
 	moveId_++;
-	simulTurns_.clear();
-
-	std::map<unsigned int, Tank*> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	std::map<unsigned int, Tank*>::iterator itor;
-	for (itor = tanks.begin();
-		itor != tanks.end();
-		itor++)
-	{
-		Tank *tank = itor->second;
-		if (tank->getState().getState() == TankState::sNormal)
-		{
-			simulTurns_.addPlayer(itor->first);
-		}
-	}
 
 	std::map<unsigned int, ComsPlayedMoveMessage *>::iterator messageItor;
 	for (messageItor = messages_.begin();
@@ -113,7 +102,7 @@ void ServerStatePlaying::simulatePlaying(float frameTime)
 		messages_.erase(playerId);
 	}
 
-	simulTurns_.simulate(frameTime);
+	turns_->simulate(frameTime);
 }
 
 void ServerStatePlaying::playShots()
@@ -136,7 +125,7 @@ void ServerStatePlaying::playShots()
 		addSimulatorAction(movesAction);
 }
 
-void ServerStatePlaying::allPlayersFinished()
+void ServerStatePlaying::playMoves()
 {
 	playShots();
 }
@@ -145,7 +134,8 @@ void ServerStatePlaying::shotsFinished(unsigned int moveId)
 {
 	if (moveId_ != moveId) return;
 
-	makeMoves();
+	clear();
+	turns_->nextMove();
 }
 
 void ServerStatePlaying::playerFinishedPlaying(ComsPlayedMoveMessage &playedMessage)
@@ -155,16 +145,17 @@ void ServerStatePlaying::playerFinishedPlaying(ComsPlayedMoveMessage &playedMess
 	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
 	if (!tank || tank->getState().getState() != TankState::sNormal) return;
 	if (moveId_ != moveId) return;
-	
-	if (messages_.find(playerId) == messages_.end())
+
+	if (turns_->playerFinished(playerId))
 	{
-		messages_[playerId] = new ComsPlayedMoveMessage(playedMessage);
-	}
+		if (messages_.find(playerId) == messages_.end())
+		{
+			messages_[playerId] = new ComsPlayedMoveMessage(playedMessage);
+		}
 
-	tank->getScore().setMissedMoves(0);
-	tank->getState().setServerState(TankState::serverNone);
-
-	simulTurns_.playerFinished(playerId);
+		tank->getScore().setMissedMoves(0);
+		tank->getState().setServerState(TankState::serverNone);
+	}	
 }
 
 void ServerStatePlaying::playerPlaying(unsigned int playerId)

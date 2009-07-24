@@ -1073,6 +1073,22 @@
 				>
 			</File>
 			<File
+				RelativePath="..\server\ServerTurns.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerTurns.h"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerTurnsSequential.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerTurnsSequential.h"
+				>
+			</File>
+			<File
 				RelativePath="..\server\ServerTurnsSimultaneous.cpp"
 				>
 			</File>
