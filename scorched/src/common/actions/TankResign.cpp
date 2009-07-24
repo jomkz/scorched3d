@@ -109,6 +109,7 @@ void TankResign::simulate(fixed frameTime, bool &remove)
 			StatsLogger::instance()->tankResigned(tank);
 
 #ifndef S3D_SERVER
+			if (!context_->getServerMode())
 			{
 				ChannelText text("combat",
 					LANG_RESOURCE_1(

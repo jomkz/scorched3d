@@ -147,12 +147,12 @@ void PlayShots::processResignMessage(ScorchedContext &context,
 		}
 		else
 		{
-			context.getActionController().addLastAction(resign);
+			//context.getActionController().addLastAction(resign);
 		}
 	}
 	else 
 	{
-		context.getActionController().addLastAction(resign);
+		//context.getActionController().addLastAction(resign);
 	}
 }
 

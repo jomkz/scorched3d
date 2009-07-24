@@ -66,7 +66,6 @@
 #include <server/ServerCommon.h>
 #include <server/ServerBanned.h>
 #include <server/ServerMain.h>
-#include <server/ServerTurns.h>
 #include <server/ScorchedServer.h>
 #include <server/ScorchedServerUtil.h>
 #include <server/ServerState.h>

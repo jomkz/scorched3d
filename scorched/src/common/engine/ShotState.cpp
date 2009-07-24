@@ -61,7 +61,6 @@ void ShotState::setup()
 	}
 
 	// Reset the counts in the action controller
-	context_.getActionController().setStopImmediately(true);
 	context_.getActionController().resetTime();
 	context_.getActionController().clear();
 
@@ -98,7 +97,7 @@ void ShotState::setup()
 	// Add all shots that should be run at the start of the round
 	// to the action controller
 	playShots_.playShots(context_);
-	context_.getActionController().addLastAction(new CheckResurrection());
+	//context_.getActionController().addLastAction(new CheckResurrection());
 
 	// Reset the amount of time taken
 	firstTime_ = true;
@@ -125,7 +124,7 @@ bool ShotState::run(float frameTime)
 				context_.getActionController().getActionTime().asFloat()));
 		//context_.getActionController().getEvents().clear();
 		context_.getActionController().logProfiledActions();
-		context_.getActionController().setStopImmediately(false);
+		//context_.getActionController().setStopImmediately(false);
 
 		return true;
 	}

@@ -729,6 +729,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\actions\ShotFinishedAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\ShotFinishedAction.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\actions\ShotProjectile.cpp"
 				>
 			</File>
@@ -5681,14 +5689,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\server\server\ServerStateShots.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerStateShots.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\server\server\ServerStateStartingMatch.cpp"
 				>
 			</File>
@@ -5726,14 +5726,6 @@
 			</File>
 			<File
 				RelativePath="..\..\server\server\ServerTooFewPlayersStimulus.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerTurns.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerTurns.h"
 				>
 			</File>
 			<File
@@ -6269,6 +6261,14 @@
 			Name="simactions"
 			>
 			<File
+				RelativePath="..\..\common\simactions\PlayMovesSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\PlayMovesSimAction.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\simactions\SimAction.cpp"
 				>
 			</File>
@@ -6290,14 +6290,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\simactions\TankChangeSimAction.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\simactions\TankFireShotSimAction.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\simactions\TankFireShotSimAction.h"
 				>
 			</File>
 			<File

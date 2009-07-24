@@ -18,7 +18,7 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <simactions/TankFireShotSimAction.h>
+#include <simactions/PlayMovesSimAction.h>
 #include <engine/ActionController.h>
 #include <weapons/AccessoryStore.h>
 #include <tank/TankAvatar.h>
@@ -29,54 +29,69 @@
 #include <target/TargetRenderer.h>
 #include <tankai/TankAIStrings.h>
 #include <actions/TankSay.h>
+#include <actions/ShotFinishedAction.h>
 #include <common/StatsLogger.h>
 #ifndef S3D_SERVER
 	#include <sound/SoundUtils.h>
 #endif
 
-REGISTER_CLASS_SOURCE(TankFireShotSimAction);
+REGISTER_CLASS_SOURCE(PlayMovesSimAction);
 
-TankFireShotSimAction::TankFireShotSimAction()
+PlayMovesSimAction::PlayMovesSimAction() :
+	moveId_(0)
 {
 }
 
-TankFireShotSimAction::TankFireShotSimAction(
-	unsigned int playerId,
-	unsigned int weaponId,
-	fixed rotationXY,
-	fixed rotationYZ,
-	fixed power,
-	int selectPositionX,
-	int selectPositionY) :
-	playerId_(playerId),
-	weaponId_(weaponId),
-	rotationXY_(rotationXY),
-	rotationYZ_(rotationYZ),
-	power_(power),
-	selectPositionX_(selectPositionX),
-	selectPositionY_(selectPositionY)
+PlayMovesSimAction::PlayMovesSimAction(unsigned int moveId) :
+	moveId_(moveId)
 {
 }
 
-TankFireShotSimAction::~TankFireShotSimAction()
+PlayMovesSimAction::~PlayMovesSimAction()
 {
-}
-
-bool TankFireShotSimAction::invokeAction(ScorchedContext &context)
-{
-	Tank *tank = context.getTankContainer().getTankById(playerId_);
-	if (!tank) return false;
-
-	// Check the tank is alive
-	if (tank->getState().getState() != TankState::sNormal)
+	while (!messages_.empty())
 	{
-		return false;
+		delete messages_.back();
+		messages_.pop_back();
 	}
+}
 
+void PlayMovesSimAction::addMove(ComsPlayedMoveMessage *message)
+{
+	messages_.push_back(message);
+}
+
+bool PlayMovesSimAction::invokeAction(ScorchedContext &context)
+{
+	context.getActionController().addAction(new ShotFinishedAction(moveId_));
+	
+	std::list<ComsPlayedMoveMessage *>::iterator itor;
+	for (itor = messages_.begin();
+		itor != messages_.end();
+		itor++)
+	{
+		ComsPlayedMoveMessage *message = *itor;
+		Tank *tank = context.getTankContainer().getTankById(message->getPlayerId());
+		if (tank && tank->getState().getState() == TankState::sNormal)
+		{
+			switch (message->getType())
+			{
+			case ComsPlayedMoveMessage::eShot:
+				tankFired(context, tank, *message);
+				break;
+			}
+		}
+	}
+	return true;
+}
+
+void PlayMovesSimAction::tankFired(ScorchedContext &context, 
+	Tank *tank, ComsPlayedMoveMessage &message)
+{
 	// Check the weapon name exists and is a weapon
 	Accessory *accessory = 
-		context.getAccessoryStore().findByAccessoryId(weaponId_);
-	if (!accessory) return false;
+		context.getAccessoryStore().findByAccessoryId(message.getWeaponId());
+	if (!accessory) return;
 
 	Weapon *weapon = (Weapon *) accessory->getAction();
 	if (accessory->getUseNumber() > 0)
@@ -89,14 +104,14 @@ bool TankFireShotSimAction::invokeAction(ScorchedContext &context)
 
 	// Set the tank to have the correct rotation etc..
 	tank->getPosition().rotateGunXY(
-		rotationXY_, false);
+		message.getRotationXY(), false);
 	tank->getPosition().rotateGunYZ(
-		rotationYZ_, false);
+		message.getRotationYZ(), false);
 	tank->getPosition().changePower(
-		power_, false);
+		message.getPower(), false);
 	tank->getPosition().setSelectPosition(
-		selectPositionX_, 
-		selectPositionY_);
+		message.getSelectPositionX(), 
+		message.getSelectPositionY());
 	tank->getPosition().madeShot();
 
 	// Tank say
@@ -155,30 +170,34 @@ bool TankFireShotSimAction::invokeAction(ScorchedContext &context)
 	// Stats events
 	StatsLogger::instance()->tankFired(tank, weapon);
 	StatsLogger::instance()->weaponFired(weapon, false);	
+}
+
+bool PlayMovesSimAction::writeMessage(NetBuffer &buffer)
+{
+	buffer.addToBuffer(moveId_);
+	buffer.addToBuffer((unsigned int) messages_.size());
+	std::list<ComsPlayedMoveMessage *>::iterator itor;
+	for (itor = messages_.begin();
+		itor != messages_.end();
+		itor++)
+	{
+		ComsPlayedMoveMessage *message = *itor;
+		message->writeMessage(buffer);
+	}
 
 	return true;
 }
 
-bool TankFireShotSimAction::writeMessage(NetBuffer &buffer)
+bool PlayMovesSimAction::readMessage(NetBufferReader &reader)
 {
-	buffer.addToBuffer(playerId_);
-	buffer.addToBuffer(weaponId_);
-	buffer.addToBuffer(rotationXY_);
-	buffer.addToBuffer(rotationYZ_);
-	buffer.addToBuffer(power_);
-	buffer.addToBuffer(selectPositionX_);
-	buffer.addToBuffer(selectPositionY_);
-	return true;
-}
-
-bool TankFireShotSimAction::readMessage(NetBufferReader &reader)
-{
-	if (!reader.getFromBuffer(playerId_)) return false;
-	if (!reader.getFromBuffer(weaponId_)) return false;
-	if (!reader.getFromBuffer(rotationXY_)) return false;
-	if (!reader.getFromBuffer(rotationYZ_)) return false;
-	if (!reader.getFromBuffer(power_)) return false;
-	if (!reader.getFromBuffer(selectPositionX_)) return false;
-	if (!reader.getFromBuffer(selectPositionY_)) return false;
+	if (!reader.getFromBuffer(moveId_)) return false;
+	unsigned int size = 0;
+	if (!reader.getFromBuffer(size)) return false;
+	for (unsigned int s=0; s<size; s++)
+	{
+		ComsPlayedMoveMessage *message = new ComsPlayedMoveMessage();
+		if (!message->readMessage(reader)) return false;
+		messages_.push_back(message);
+	}
 	return true;
 }

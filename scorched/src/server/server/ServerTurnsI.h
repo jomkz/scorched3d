@@ -18,28 +18,16 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <server/ServerStateShots.h>
-#include <server/ScorchedServer.h>
-#include <engine/ActionController.h>
+#if !defined(__INCLUDE_ServerTurnsIh_INCLUDE__)
+#define __INCLUDE_ServerTurnsIh_INCLUDE__
 
-ServerStateShots::ServerStateShots()
+#include <map>
+
+class ServerTurnsI
 {
-}
+public:
+	virtual void allPlayersFinished() = 0;
+	virtual void playerPlaying(unsigned int playerId) = 0;
+};
 
-ServerStateShots::~ServerStateShots()
-{
-}
-
-void ServerStateShots::enterState()
-{
-}
-
-bool ServerStateShots::simulate(float frameTime)
-{
-	if (ScorchedServer::instance()->getActionController().noReferencedActions())
-	{
-		return true;
-	}
-
-	return false;
-}
+#endif

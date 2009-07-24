@@ -29,6 +29,7 @@
 #include <simactions/TankAliveSimAction.h>
 
 ServerStateBuying *ServerStateBuying::instance_ = 0;
+unsigned int ServerStateBuying::moveId_ = 0;
 
 ServerStateBuying *ServerStateBuying::instance()
 {
@@ -49,6 +50,7 @@ ServerStateBuying::~ServerStateBuying()
 void ServerStateBuying::enterState()
 {
 	finished_ = false;
+	moveId_++;
 	simulTurns_.clear();
 	//if (ScorchedServer::instance()->getOptionsGame().getBuyOnRound() != 0)
 	// CHECK BUY ON ROUND HERE
@@ -94,14 +96,15 @@ void ServerStateBuying::playerFinishedBuying(ComsPlayedMoveMessage &playedMessag
 	unsigned int moveId = playedMessage.getMoveId();
 	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
 	if (!tank || !tank->getState().getTankPlaying()) return;
+	if (moveId != moveId_) return;
 
 	tank->getScore().setMissedMoves(0);
 	tank->getState().setServerState(TankState::serverNone);
 
-	simulTurns_.playerFinished(playerId, moveId);
+	simulTurns_.playerFinished(playerId);
 }
 
-void ServerStateBuying::playerPlaying(unsigned int playerId, unsigned int moveId)
+void ServerStateBuying::playerPlaying(unsigned int playerId)
 {
 	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
 	float buyingTime = (float)
@@ -110,6 +113,6 @@ void ServerStateBuying::playerPlaying(unsigned int playerId, unsigned int moveId
 	tank->getState().setServerState(TankState::serverBuying);
 
 	TankStartMoveSimAction *tankSimAction = 
-		new TankStartMoveSimAction(playerId, moveId, buyingTime, true);
+		new TankStartMoveSimAction(playerId, moveId_, buyingTime, true);
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);
 }

@@ -24,7 +24,7 @@
 #include <server/ServerTurnsSimultaneous.h>
 #include <coms/ComsPlayedMoveMessage.h>
 
-class ServerStateBuying : public ServerTurnsSimultaneousI
+class ServerStateBuying : public ServerTurnsI
 {
 public:
 	static ServerStateBuying *instance();
@@ -39,9 +39,10 @@ public:
 
 	// ServerTurnsSimultaneousI
 	virtual void allPlayersFinished();
-	virtual void playerPlaying(unsigned int playerId, unsigned int moveId);
+	virtual void playerPlaying(unsigned int playerId);
 
 protected:
+	static unsigned int moveId_;
 	static ServerStateBuying *instance_;
 	ServerTurnsSimultaneous simulTurns_;
 	bool finished_;

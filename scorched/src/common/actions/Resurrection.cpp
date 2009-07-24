@@ -58,6 +58,7 @@ void Resurrection::simulate(fixed frameTime, bool &remove)
 	if (tank)
 	{
 #ifndef S3D_SERVER
+		if (!context_->getServerMode())
 		{
 			ChannelText text("combat",
 				LANG_RESOURCE_2(

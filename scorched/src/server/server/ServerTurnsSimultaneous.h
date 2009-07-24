@@ -21,14 +21,8 @@
 #if !defined(__INCLUDE_ServerTurnsSimultaneoush_INCLUDE__)
 #define __INCLUDE_ServerTurnsSimultaneoush_INCLUDE__
 
-#include <map>
-
-class ServerTurnsSimultaneousI
-{
-public:
-	virtual void allPlayersFinished() = 0;
-	virtual void playerPlaying(unsigned int playerId, unsigned int moveId) = 0;
-};
+#include <set>
+#include <server/ServerTurnsI.h>
 
 class ServerTurnsSimultaneous 
 {
@@ -36,18 +30,18 @@ public:
 	ServerTurnsSimultaneous();
 	virtual ~ServerTurnsSimultaneous();
 
-	void setUser(ServerTurnsSimultaneousI *user);
+	void setUser(ServerTurnsI *user);
 
 	void clear();
 	void addPlayer(unsigned int playerId);
-	void playerFinished(unsigned int playerId, unsigned int moveId);
+	void playerFinished(unsigned int playerId);
 
 	void simulate(float frameTime);
 
 protected:
-	ServerTurnsSimultaneousI *user_;
-	std::map<unsigned int, unsigned int> waitingPlayers_;
-	std::map<unsigned int, unsigned int> playingPlayers_;
+	ServerTurnsI *user_;
+	std::set<unsigned int> waitingPlayers_;
+	std::set<unsigned int> playingPlayers_;
 };
 
 #endif

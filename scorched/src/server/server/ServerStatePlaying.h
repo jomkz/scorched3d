@@ -25,7 +25,7 @@
 #include <coms/ComsPlayedMoveMessage.h>
 #include <map>
 
-class ServerStatePlaying : public ServerTurnsSimultaneousI
+class ServerStatePlaying : public ServerTurnsI
 {
 public:
 	static ServerStatePlaying *instance();
@@ -34,21 +34,25 @@ public:
 	virtual ~ServerStatePlaying();
 
 	void enterState();
-	bool simulate(float frameTime);
+	void simulate(float frameTime);
 
 	void playerFinishedPlaying(ComsPlayedMoveMessage &playedMessage);
+	void shotsFinished(unsigned int moveId);
 
 	// ServerTurnsSimultaneousI
 	virtual void allPlayersFinished();
-	virtual void playerPlaying(unsigned int playerId, unsigned int moveId);
+	virtual void playerPlaying(unsigned int playerId);
 
 protected:
+	static unsigned int moveId_;
 	static ServerStatePlaying *instance_;
 	ServerTurnsSimultaneous simulTurns_;
 	std::map<unsigned int, ComsPlayedMoveMessage *> messages_;
-	bool finished_;
+	bool simulatingShots_;
 
 	void playShots();
+	void makeMoves();
+	void simulatePlaying(float frameTime);
 };
 
 #endif

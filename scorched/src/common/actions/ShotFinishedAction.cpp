@@ -18,20 +18,34 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerTurnsh_INCLUDE__)
-#define __INCLUDE_ServerTurnsh_INCLUDE__
+#include <actions/ShotFinishedAction.h>
+#include <engine/ScorchedContext.h>
+#include <engine/ActionController.h>
+#include <server/ServerStatePlaying.h>
 
-class Tank;
-class ServerTurns 
+ShotFinishedAction::ShotFinishedAction(unsigned int moveId) :
+	Action(0)
 {
-public:
-	ServerTurns();
-	virtual ~ServerTurns();
+}
 
-	void simulate(unsigned int serverState);
+ShotFinishedAction::~ShotFinishedAction()
+{
+}
 
-protected:
-	void processTank(Tank *Tank, unsigned int serverState);
-};
+void ShotFinishedAction::init()
+{
+}
 
-#endif
+void ShotFinishedAction::simulate(fixed frameTime, bool &remove)
+{
+	if (context_->getActionController().noReferencedActions())
+	{
+		remove = true;
+		if (context_->getServerMode())
+		{
+			ServerStatePlaying::instance()->shotsFinished(moveId_);
+		}
+	}
+
+	Action::simulate(frameTime, remove);
+}

@@ -36,11 +36,9 @@ public:
 
 	// Add an action to be simulated
 	void addAction(Action *action);
-	void addLastAction(Action *action);
 	bool noReferencedActions();
 	void resetTime();
 	void clear(bool warn = false);
-	void setStopImmediately(bool stop) { stopImmediately_ = stop; }
 
 	// Turn on action tracing
 	bool &getActionLogging() { return actionTracing_; }
@@ -96,7 +94,7 @@ protected:
 	};
 
 	ScorchedContext *context_;
-	std::list<Action *> newActions_, newLastActions_;
+	std::list<Action *> newActions_;
 	std::vector<std::string> syncCheck_;
 	ActionList actions_;
 	std::map<std::string, int> actionProfile_;
@@ -109,11 +107,9 @@ protected:
 	bool actionProfiling_;
 	bool actionTracing_;
 	bool actionEvents_;
-	bool stopImmediately_;
 
 	bool allEvents();
 	void addNewActions();
-	void addNewLastActions();
 
 };
 

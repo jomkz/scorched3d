@@ -769,6 +769,9 @@ static void addWallCollisionParticle(Vector &position, ScorchedCollisionId colli
 void PhysicsParticleActionObject::shotWallHit(CollisionInfo &collision)
 {
 #ifndef S3D_SERVER
+	if (!context_->getServerMode())
+	{
 		addWallCollisionParticle(position_.asVector(), collision.collisionId);
+	}
 #endif
 }

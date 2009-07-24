@@ -26,8 +26,6 @@
 #include <server/ServerStateStartingMatch.h>
 #include <server/ServerStateBuying.h>
 #include <server/ServerStatePlaying.h>
-#include <server/ServerStateShots.h>
-#include <server/ServerTurns.h>
 
 class ServerState
 {
@@ -39,8 +37,7 @@ public:
 		ServerMatchCountDownState,
 		ServerNewLevelState,
 		ServerBuyingState,
-		ServerPlayingState,
-		ServerShotsState
+		ServerPlayingState
 	};
 
 	static ServerState *instance();
@@ -58,7 +55,6 @@ protected:
 	ServerStateStartingMatch startingMatch_;
 	ServerStateBuying buying_;
 	ServerStatePlaying playing_;
-	ServerStateShots shots_;
 
 private:
 	ServerState();

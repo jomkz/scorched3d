@@ -26,9 +26,10 @@
 #include <tank/TankScore.h>
 #include <common/OptionsScorched.h>
 #include <simactions/TankStartMoveSimAction.h>
-#include <simactions/TankFireShotSimAction.h>
+#include <simactions/PlayMovesSimAction.h>
 
 ServerStatePlaying *ServerStatePlaying::instance_ = 0;
+unsigned int ServerStatePlaying::moveId_ = 0;
 
 ServerStatePlaying *ServerStatePlaying::instance()
 {
@@ -36,7 +37,7 @@ ServerStatePlaying *ServerStatePlaying::instance()
 }
 
 ServerStatePlaying::ServerStatePlaying() : 
-	finished_(false)
+	simulatingShots_(false)
 {
 	instance_ = this;
 	simulTurns_.setUser(this);
@@ -48,7 +49,13 @@ ServerStatePlaying::~ServerStatePlaying()
 
 void ServerStatePlaying::enterState()
 {
-	finished_ = false;
+	makeMoves();
+}
+
+void ServerStatePlaying::makeMoves()
+{
+	simulatingShots_ = false;
+	moveId_++;
 	simulTurns_.clear();
 
 	std::map<unsigned int, Tank*> &tanks = 
@@ -75,14 +82,19 @@ void ServerStatePlaying::enterState()
 	messages_.clear();
 }
 
-bool ServerStatePlaying::simulate(float frameTime)
+void ServerStatePlaying::simulate(float frameTime)
 {
-	if (finished_) 
+	if (simulatingShots_)
 	{
-		playShots();
-		return true;
 	}
+	else
+	{
+		simulatePlaying(frameTime);
+	}
+}
 
+void ServerStatePlaying::simulatePlaying(float frameTime)
+{
 	std::list<unsigned int> removeIds;
 	std::map<unsigned int, ComsPlayedMoveMessage *>::iterator messageItor;
 	for (messageItor = messages_.begin();
@@ -102,40 +114,38 @@ bool ServerStatePlaying::simulate(float frameTime)
 	}
 
 	simulTurns_.simulate(frameTime);
-	return false;
 }
 
 void ServerStatePlaying::playShots()
 {
+	simulatingShots_ = true;
+
+	PlayMovesSimAction *movesAction = new PlayMovesSimAction(moveId_);
+
 	std::map<unsigned int, ComsPlayedMoveMessage *>::iterator messageItor;
 	for (messageItor = messages_.begin();
 		messageItor != messages_.end();
 		messageItor++)
 	{
 		ComsPlayedMoveMessage *playedMessage = messageItor->second;
-		if (playedMessage->getType() == ComsPlayedMoveMessage::eShot)
-		{
-			TankFireShotSimAction *simAction = new TankFireShotSimAction(
-				playedMessage->getPlayerId(),
-				playedMessage->getWeaponId(),
-				playedMessage->getRotationXY(),
-				playedMessage->getRotationYZ(),
-				playedMessage->getPower(),
-				playedMessage->getSelectPositionX(),
-				playedMessage->getSelectPositionY()
-				);
-			ScorchedServer::instance()->getServerSimulator().
-				addSimulatorAction(simAction);
-		}
-
-		delete playedMessage;
+		movesAction->addMove(playedMessage);
 	}
 	messages_.clear();
+
+	ScorchedServer::instance()->getServerSimulator().
+		addSimulatorAction(movesAction);
 }
 
 void ServerStatePlaying::allPlayersFinished()
 {
-	finished_ = true;
+	playShots();
+}
+
+void ServerStatePlaying::shotsFinished(unsigned int moveId)
+{
+	if (moveId_ != moveId) return;
+
+	makeMoves();
 }
 
 void ServerStatePlaying::playerFinishedPlaying(ComsPlayedMoveMessage &playedMessage)
@@ -144,6 +154,7 @@ void ServerStatePlaying::playerFinishedPlaying(ComsPlayedMoveMessage &playedMess
 	unsigned int moveId = playedMessage.getMoveId();
 	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
 	if (!tank || tank->getState().getState() != TankState::sNormal) return;
+	if (moveId_ != moveId) return;
 	
 	if (messages_.find(playerId) == messages_.end())
 	{
@@ -153,10 +164,10 @@ void ServerStatePlaying::playerFinishedPlaying(ComsPlayedMoveMessage &playedMess
 	tank->getScore().setMissedMoves(0);
 	tank->getState().setServerState(TankState::serverNone);
 
-	simulTurns_.playerFinished(playerId, moveId);
+	simulTurns_.playerFinished(playerId);
 }
 
-void ServerStatePlaying::playerPlaying(unsigned int playerId, unsigned int moveId)
+void ServerStatePlaying::playerPlaying(unsigned int playerId)
 {
 	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
 	float shotTime = (float)
@@ -164,6 +175,6 @@ void ServerStatePlaying::playerPlaying(unsigned int playerId, unsigned int moveI
 
 	tank->getState().setServerState(TankState::serverMakingMove);
 	TankStartMoveSimAction *tankSimAction = new TankStartMoveSimAction(
-		tank->getPlayerId(), moveId, shotTime, false);
+		tank->getPlayerId(), moveId_, shotTime, false);
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);
 }

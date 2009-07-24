@@ -18,17 +18,35 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerStateShotsh_INCLUDE__)
-#define __INCLUDE_ServerStateShotsh_INCLUDE__
+#if !defined(AFX_PlayMovesSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#define AFX_PlayMovesSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
-class ServerStateShots
+#include <simactions/SimAction.h>
+#include <coms/ComsPlayedMoveMessage.h>
+#include <list>
+
+class Tank;
+class PlayMovesSimAction : public SimAction
 {
 public:
-	ServerStateShots();
-	virtual ~ServerStateShots();
+	PlayMovesSimAction();
+	PlayMovesSimAction(unsigned int moveId);
+	virtual ~PlayMovesSimAction();
 
-	void enterState();
-	bool simulate(float frameTime);
+	void addMove(ComsPlayedMoveMessage *message);
+
+	virtual bool invokeAction(ScorchedContext &context);
+
+	virtual bool writeMessage(NetBuffer &buffer);
+	virtual bool readMessage(NetBufferReader &reader);
+
+REGISTER_CLASS_HEADER(PlayMovesSimAction);
+protected:
+	unsigned int moveId_;
+	std::list<ComsPlayedMoveMessage *> messages_;
+
+	void tankFired(ScorchedContext &context,
+		Tank *tank, ComsPlayedMoveMessage &message);
 };
 
-#endif
+#endif // !defined(AFX_PlayMovesSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

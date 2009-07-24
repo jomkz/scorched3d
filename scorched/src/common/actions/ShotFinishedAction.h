@@ -18,38 +18,24 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_TankFireShotSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
-#define AFX_TankFireShotSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
+#if !defined(__INCLUDE_ShotFinishedActionh_INCLUDE__)
+#define __INCLUDE_ShotFinishedActionh_INCLUDE__
 
-#include <simactions/SimAction.h>
+#include <actions/Action.h>
 
-class TankFireShotSimAction : public SimAction
+class ShotFinishedAction : public Action
 {
 public:
-	TankFireShotSimAction();
-	TankFireShotSimAction(unsigned int playerId,
-		unsigned int weaponId,
-		fixed rotationXY,
-		fixed rotationYZ,
-		fixed power,
-		int selectPositionX,
-		int selectPositionY);
-	virtual ~TankFireShotSimAction();
+	ShotFinishedAction(unsigned int moveId);
+	virtual ~ShotFinishedAction();
 
-	virtual bool invokeAction(ScorchedContext &context);
+	virtual void init();
+	virtual void simulate(fixed frameTime, bool &remove);
+	virtual std::string getActionType() { return "ShotFinishedAction"; }
 
-	virtual bool writeMessage(NetBuffer &buffer);
-	virtual bool readMessage(NetBufferReader &reader);
-
-REGISTER_CLASS_HEADER(TankFireShotSimAction);
 protected:
-	unsigned int playerId_;
-	unsigned int weaponId_;
-	fixed rotationXY_;
-	fixed rotationYZ_;
-	fixed power_;
-	int selectPositionX_;
-	int selectPositionY_;
+	unsigned int moveId_;
+
 };
 
-#endif // !defined(AFX_TankFireShotSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#endif // __INCLUDE_ShotFinishedActionh_INCLUDE__
