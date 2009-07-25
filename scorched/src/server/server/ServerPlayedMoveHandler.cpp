@@ -22,6 +22,7 @@
 #include <server/ServerStateBuying.h>
 #include <server/ServerStatePlaying.h>
 #include <server/ScorchedServer.h>
+#include <server/ServerState.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 
@@ -64,14 +65,14 @@ bool ServerPlayedMoveHandler::processMessage(
 	{
 		if (tank->getState().getServerState() == TankState::serverBuying)
 		{
-			ServerStateBuying::instance()->playerFinishedBuying(message);
+			ScorchedServer::instance()->getServerState().buyingFinished(message);
 		}
 	}
 	else
 	{
 		if (tank->getState().getServerState() == TankState::serverMakingMove)
 		{
-			ServerStatePlaying::instance()->playerFinishedPlaying(message);
+			ScorchedServer::instance()->getServerState().moveFinished(message);
 		}
 	}
 

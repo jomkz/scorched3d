@@ -1033,6 +1033,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\server\ServerStateScore.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerStateScore.h"
+				>
+			</File>
+			<File
 				RelativePath="..\server\ServerStateStartingMatch.cpp"
 				>
 			</File>
@@ -1094,14 +1102,6 @@
 			</File>
 			<File
 				RelativePath="..\server\ServerTurnsSimultaneous.h"
-				>
-			</File>
-			<File
-				RelativePath="..\server\TurnController.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\server\TurnController.h"
 				>
 			</File>
 		</Filter>
@@ -2005,6 +2005,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\actions\ShowScoreAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\ShowScoreAction.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\actions\SkyFlash.cpp"
 				>
 			</File>
@@ -2449,27 +2457,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsPlayMovesMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsPlayMovesMessage.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\coms\ComsRmPlayerMessage.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\common\coms\ComsRmPlayerMessage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsScoreMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsScoreMessage.h"
 				>
 			</File>
 			<File
@@ -3958,6 +3950,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\simactions\PlayMovesSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\ShowScoreSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\ShowScoreSimAction.h"
 				>
 			</File>
 			<File

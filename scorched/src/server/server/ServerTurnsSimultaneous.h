@@ -36,7 +36,7 @@ public:
 	void addPlayer(unsigned int playerId);
 	virtual bool playerFinished(unsigned int playerId);
 
-	virtual void simulate(float frameTime);
+	virtual void simulate();
 
 protected:
 	std::set<unsigned int> waitingPlayers_;

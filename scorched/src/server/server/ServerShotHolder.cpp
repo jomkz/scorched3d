@@ -20,7 +20,6 @@
 
 #include <server/ScorchedServer.h>
 #include <server/ServerShotHolder.h>
-#include <server/TurnController.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
 #include <tank/TankPosition.h>
@@ -189,7 +188,7 @@ bool ServerShotHolder::allSkipped()
 
 bool ServerShotHolder::haveAllTurnShots()
 {
-	std::list<unsigned int> &tanks = 
+	/*std::list<unsigned int> &tanks = 
 		TurnController::instance()->getPlayersThisTurn();
 	std::list<unsigned int>::iterator itor;
 	for (itor = tanks.begin();
@@ -205,6 +204,6 @@ bool ServerShotHolder::haveAllTurnShots()
 		{
 			if (!haveShot(tank->getPlayerId())) return false;
 		}
-	}
+	}*/
 	return true;
 }

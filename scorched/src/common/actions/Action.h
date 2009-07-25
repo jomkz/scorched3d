@@ -39,12 +39,12 @@ public:
 
 };
 
-#define ACTION_REFERENCED -1
-#define ACTION_NOT_REFERENCED 0
-
 class Action
 {
 public:
+	static const unsigned int ACTION_REFERENCED;
+	static const unsigned int ACTION_NOT_REFERENCED;
+
 	Action(unsigned int playerId);
 	virtual ~Action();
 

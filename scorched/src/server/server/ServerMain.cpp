@@ -231,7 +231,7 @@ void serverLoop()
 		}
 #endif
 
-		ServerState::instance()->simulate(timeDifference);
+		ScorchedServer::instance()->getServerState().simulate();
 		ScorchedServer::instance()->getSimulator().simulate();
 
 		ServerFileServer::instance()->simulate(timeDifference);

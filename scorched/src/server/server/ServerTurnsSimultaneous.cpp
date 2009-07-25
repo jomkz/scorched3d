@@ -72,7 +72,7 @@ bool ServerTurnsSimultaneous::playerFinished(unsigned int playerId)
 	return true;
 }
 
-void ServerTurnsSimultaneous::simulate(float frameTime)
+void ServerTurnsSimultaneous::simulate()
 {
 	// Check if all the tanks have made their moves
 	if (waitingPlayers_.empty() && playingPlayers_.empty()) 

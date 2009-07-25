@@ -28,18 +28,11 @@
 #include <simactions/TankStartMoveSimAction.h>
 #include <simactions/TankAliveSimAction.h>
 
-ServerStateBuying *ServerStateBuying::instance_ = 0;
 unsigned int ServerStateBuying::moveId_ = 0;
-
-ServerStateBuying *ServerStateBuying::instance()
-{
-	return instance_;
-}
 
 ServerStateBuying::ServerStateBuying() : 
 	finished_(false)
 {
-	instance_ = this;
 	simulTurns_.setUser(this);
 }
 
@@ -56,7 +49,7 @@ void ServerStateBuying::enterState()
 	// CHECK BUY ON ROUND HERE
 }
 
-bool ServerStateBuying::simulate(float frameTime)
+bool ServerStateBuying::simulate()
 {
 	if (finished_) return true;
 
@@ -81,7 +74,7 @@ bool ServerStateBuying::simulate(float frameTime)
 		}
 	}
 
-	simulTurns_.simulate(frameTime);
+	simulTurns_.simulate();
 	return false;
 }
 
@@ -90,7 +83,7 @@ void ServerStateBuying::playMoves()
 	finished_ = true;
 }
 
-void ServerStateBuying::playerFinishedBuying(ComsPlayedMoveMessage &playedMessage)
+void ServerStateBuying::buyingFinished(ComsPlayedMoveMessage &playedMessage)
 {
 	unsigned int playerId = playedMessage.getPlayerId();
 	unsigned int moveId = playedMessage.getMoveId();

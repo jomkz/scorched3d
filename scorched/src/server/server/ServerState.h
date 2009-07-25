@@ -26,10 +26,14 @@
 #include <server/ServerStateStartingMatch.h>
 #include <server/ServerStateBuying.h>
 #include <server/ServerStatePlaying.h>
+#include <server/ServerStateScore.h>
 
 class ServerState
 {
 public:
+	ServerState();
+	virtual ~ServerState();
+
 	enum ServerStateEnum
 	{
 		ServerStartupState = 1,
@@ -37,17 +41,20 @@ public:
 		ServerMatchCountDownState,
 		ServerNewLevelState,
 		ServerBuyingState,
-		ServerPlayingState
+		ServerPlayingState,
+		ServerScoreState
 	};
 
-	static ServerState *instance();
+	void simulate();
 
-	void simulate(float frameTime);
+	ServerStateEnum getState() { return serverState_; }	
 
-	ServerStateEnum getState() { return serverState_; }
+	void buyingFinished(ComsPlayedMoveMessage &message);
+	void moveFinished(ComsPlayedMoveMessage &message);
+	void shotsFinished(unsigned int moveId);
+	void scoreFinished();
 
 protected:
-	static ServerState *instance_;
 	ServerStateEnum serverState_;
 
 	ServerStateEnoughPlayers enoughPlayers_;
@@ -55,11 +62,7 @@ protected:
 	ServerStateStartingMatch startingMatch_;
 	ServerStateBuying buying_;
 	ServerStatePlaying playing_;
-
-private:
-	ServerState();
-	virtual ~ServerState();
-
+	ServerStateScore score_;
 };
 
 #endif

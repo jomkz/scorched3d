@@ -28,30 +28,56 @@
 #include <simactions/TankStartMoveSimAction.h>
 #include <simactions/PlayMovesSimAction.h>
 
-ServerStatePlaying *ServerStatePlaying::instance_ = 0;
 unsigned int ServerStatePlaying::moveId_ = 0;
 
-ServerStatePlaying *ServerStatePlaying::instance()
-{
-	return instance_;
-}
-
 ServerStatePlaying::ServerStatePlaying() : 
-	simulatingShots_(false)
+	simulatingShots_(false), turns_(0)
 {
-	instance_ = this;
-
 	turnsSequential_.setUser(this);
 	turnsSimultaneous_.setUser(this);
-	turns_ = &turnsSimultaneous_;
 }
 
 ServerStatePlaying::~ServerStatePlaying()
 {
 }
 
+bool ServerStatePlaying::showScore()
+{
+	if (!simulatingShots_)
+	{
+		int normal = 0;
+		std::map<unsigned int, Tank *> &playingTanks = 
+			ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+		std::map<unsigned int, Tank *>::iterator mainitor;
+		for (mainitor = playingTanks.begin();
+			 mainitor != playingTanks.end();
+			 mainitor++)
+		{
+			Tank *current = (*mainitor).second;
+			if (current->getState().getState() == TankState::sNormal)
+			{
+				normal++;
+			}
+		}
+		return (normal <= 1);
+	}
+
+	return false;
+}
+
 void ServerStatePlaying::enterState()
 {
+	switch (ScorchedServer::instance()->getOptionsGame().getTurnType().getValue())
+	{
+	case OptionsGame::TurnSequentialLooserFirst:
+	case OptionsGame::TurnSequentialRandom:
+		turns_ = &turnsSequential_;
+		break;
+	default:
+		turns_ = &turnsSimultaneous_;
+		break;
+	}
+
 	clear();
 	turns_->newGame();
 }
@@ -71,18 +97,18 @@ void ServerStatePlaying::clear()
 	messages_.clear();
 }
 
-void ServerStatePlaying::simulate(float frameTime)
+void ServerStatePlaying::simulate()
 {
 	if (simulatingShots_)
 	{
 	}
 	else
 	{
-		simulatePlaying(frameTime);
+		simulatePlaying();
 	}
 }
 
-void ServerStatePlaying::simulatePlaying(float frameTime)
+void ServerStatePlaying::simulatePlaying()
 {
 	std::list<unsigned int> removeIds;
 	std::map<unsigned int, ComsPlayedMoveMessage *>::iterator messageItor;
@@ -102,7 +128,7 @@ void ServerStatePlaying::simulatePlaying(float frameTime)
 		messages_.erase(playerId);
 	}
 
-	turns_->simulate(frameTime);
+	turns_->simulate();
 }
 
 void ServerStatePlaying::playShots()
@@ -138,7 +164,7 @@ void ServerStatePlaying::shotsFinished(unsigned int moveId)
 	turns_->nextMove();
 }
 
-void ServerStatePlaying::playerFinishedPlaying(ComsPlayedMoveMessage &playedMessage)
+void ServerStatePlaying::moveFinished(ComsPlayedMoveMessage &playedMessage)
 {
 	unsigned int playerId = playedMessage.getPlayerId();
 	unsigned int moveId = playedMessage.getMoveId();

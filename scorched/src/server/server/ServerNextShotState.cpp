@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <server/ServerNextShotState.h>
-#include <server/TurnController.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerCommon.h>
 #include <server/ServerShotHolder.h>
@@ -117,14 +116,14 @@ void ServerNextShotState::enterState(const unsigned state)
 		}
 		//else
 		{
-			TurnController::instance()->nextShot();
-			if (TurnController::instance()->getPlayersThisShot().empty())
+			//TurnController::instance()->nextShot();
+			//if (TurnController::instance()->getPlayersThisShot().empty())
 			{
 				// There are no players still to have a shot
 				// The round must have finished
 				//ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusNextRound);
 			}
-			else
+			//else
 			{
 				// We have shots to make, lets make them
 				//ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusNextTurn);

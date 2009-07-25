@@ -35,7 +35,7 @@ public:
 
 	virtual bool playerFinished(unsigned int playerId);
 
-	virtual void simulate(float frameTime);
+	virtual void simulate();
 
 protected:
 	bool playerFinished_;

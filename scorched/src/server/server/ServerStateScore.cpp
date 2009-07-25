@@ -18,30 +18,37 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <coms/ComsScoreMessage.h>
+#include <server/ServerStateScore.h>
+#include <server/ScorchedServer.h>
+#include <server/ServerSimulator.h>
+#include <common/OptionsScorched.h>
+#include <simactions/ShowScoreSimAction.h>
 
-ComsMessageType ComsScoreMessage::ComsScoreMessageType("ComsScoreMessageType");
-
-ComsScoreMessage::ComsScoreMessage(bool finalScore) :
-	ComsMessage(ComsScoreMessageType),
-	finalScore_(finalScore)
+ServerStateScore::ServerStateScore()
 {
-
 }
 
-ComsScoreMessage::~ComsScoreMessage()
+ServerStateScore::~ServerStateScore()
 {
-
 }
 
-bool ComsScoreMessage::writeMessage(NetBuffer &buffer)
+void ServerStateScore::enterState()
 {
-	buffer.addToBuffer(finalScore_);
-	return true;
+	finished_ = false;
+
+	bool finalScore = false;
+
+	fixed scoreTime = fixed(ScorchedServer::instance()->getOptionsGame().getScoreTime());
+	ShowScoreSimAction *showScoreAction = new ShowScoreSimAction(scoreTime, finalScore);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(showScoreAction);
 }
 
-bool ComsScoreMessage::readMessage(NetBufferReader &reader)
+void ServerStateScore::scoreFinished()
 {
-	if (!reader.getFromBuffer(finalScore_)) return false;
-	return true;
+	finished_ = true;
+}
+
+bool ServerStateScore::simulate()
+{
+	return finished_;
 }

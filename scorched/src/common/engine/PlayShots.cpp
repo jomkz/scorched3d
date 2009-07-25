@@ -40,29 +40,6 @@ PlayShots::~PlayShots()
 {
 }
 
-void PlayShots::createMessage(ComsPlayMovesMessage &message)
-{
-	std::map<unsigned int, ComsPlayedMoveMessage *>::iterator itor;
-	for (itor = messages_.begin();
-		itor != messages_.end();
-		itor++)
-	{
-		message.getMoves()[(*itor).first] = (*itor).second;
-	}
-}
-
-void PlayShots::readMessage(ComsPlayMovesMessage &message)
-{
-	clearShots();
-	std::map<unsigned int, ComsPlayedMoveMessage *>::iterator itor;
-	for (itor = message.getMoves().begin();
-		itor != message.getMoves().end();
-		itor++)
-	{
-		messages_[(*itor).first] = (*itor).second;
-	}
-}
-
 void PlayShots::clearShots()
 {
 	std::map<unsigned int, ComsPlayedMoveMessage *>::iterator itor;

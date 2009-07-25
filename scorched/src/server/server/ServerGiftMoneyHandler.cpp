@@ -21,7 +21,6 @@
 #include <server/ServerGiftMoneyHandler.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerShotHolder.h>
-#include <server/TurnController.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
@@ -90,11 +89,11 @@ bool ServerGiftMoneyHandler::processMessage(
 		Logger::log( "ERROR: Player gifting is not alive");
 		return true;
 	}
-	if (!TurnController::instance()->playerThisTurn(fromPlayerId))
+	/*if (!TurnController::instance()->playerThisTurn(fromPlayerId))
 	{
 		Logger::log( "ERROR: Player gifting should not be buying");
 		return true;		
-	}
+	}*/
 
 	// Check to player
 	Tank *toTank = ScorchedServer::instance()->

@@ -24,7 +24,6 @@
 #include <server/ServerBanned.h>
 #include <server/ScorchedServer.h>
 #include <server/ScorchedServerUtil.h>
-#include <server/TurnController.h>
 #include <server/ServerCommon.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankContainer.h>

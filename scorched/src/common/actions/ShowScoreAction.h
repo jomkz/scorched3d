@@ -18,36 +18,28 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ComsPlayMovesMessageh_INCLUDE__)
-#define __INCLUDE_ComsPlayMovesMessageh_INCLUDE__
+#if !defined(__INCLUDE_ShowScoreActionh_INCLUDE__)
+#define __INCLUDE_ShowScoreActionh_INCLUDE__
 
-#include <coms/ComsPlayedMoveMessage.h>
-#include <coms/ComsPlayerStateMessage.h>
-#include <map>
+#include <actions/Action.h>
 
-class ComsPlayMovesMessage : public ComsMessage
+class ShowScoreAction : public Action
 {
 public:
-	static ComsMessageType ComsPlayMovesMessageType;
+	ShowScoreAction(fixed scoreTime, bool finalScore);
+	virtual ~ShowScoreAction();
 
-	ComsPlayMovesMessage();
-	virtual ~ComsPlayMovesMessage();
+	static bool getFinalScore() { return finalScoreStatic_; }
 
-	std::map<unsigned int, ComsPlayedMoveMessage *> &getMoves() { return moves_; }
-	unsigned int &getSeed() { return seed_; }
-
-	// Inherited from ComsMessage
-    virtual bool writeMessage(NetBuffer &buffer);
-    virtual bool readMessage(NetBufferReader &reader);
+	virtual void init();
+	virtual void simulate(fixed frameTime, bool &remove);
+	virtual std::string getActionType() { return "ShowScoreAction"; }
 
 protected:
-	std::map<unsigned int, ComsPlayedMoveMessage *> moves_;
-	unsigned int seed_;
-	ComsPlayerStateMessage playerState_;
+	static bool finalScoreStatic_;
+	fixed scoreTime_;
+	bool finalScore_;
 
-private:
-	ComsPlayMovesMessage(const ComsPlayMovesMessage &);
-	const ComsPlayMovesMessage & operator=(const ComsPlayMovesMessage &);
 };
 
 #endif

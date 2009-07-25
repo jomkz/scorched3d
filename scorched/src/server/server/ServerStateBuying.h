@@ -27,15 +27,13 @@
 class ServerStateBuying : public ServerTurnsI
 {
 public:
-	static ServerStateBuying *instance();
-
 	ServerStateBuying();
 	virtual ~ServerStateBuying();
 
 	void enterState();
-	bool simulate(float frameTime);
+	bool simulate();
 
-	void playerFinishedBuying(ComsPlayedMoveMessage &playedMessage);
+	void buyingFinished(ComsPlayedMoveMessage &playedMessage);
 
 	// ServerTurnsI
 	virtual void playMoves();
@@ -43,7 +41,6 @@ public:
 
 protected:
 	static unsigned int moveId_;
-	static ServerStateBuying *instance_;
 	ServerTurnsSimultaneous simulTurns_;
 	bool finished_;
 };

@@ -26,8 +26,7 @@
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 
-ServerStateStartingMatch::ServerStateStartingMatch() :
-	totalTime_(0.0f)
+ServerStateStartingMatch::ServerStateStartingMatch()
 {
 }
 
@@ -37,28 +36,33 @@ ServerStateStartingMatch::~ServerStateStartingMatch()
 
 void ServerStateStartingMatch::reset()
 {
-	totalTime_ = (float) ScorchedServer::instance()->
-		getOptionsGame().getStartTime();
+	lastTime_ = 0;
+	startTime_ = time(0);
 }
 
-bool ServerStateStartingMatch::startingMatch(float frameTime)
+bool ServerStateStartingMatch::startingMatch()
 {
-	float startTime = totalTime_;
-	totalTime_ -= frameTime;
+	time_t currentTime = time(0);
+	time_t timePassed = currentTime - startTime_;
 
-	if (frameTime > 0.0f && int(totalTime_) != int(startTime))
+	int allowedTime =
+		ScorchedServer::instance()->getOptionsGame().getStartTime();
+	int timeleft = allowedTime - int(timePassed);
+
+	if (currentTime != lastTime_)
 	{
-		if (int(startTime) % 5 == 0)
+		lastTime_ = currentTime;
+		if ((timeleft % 5 == 0 || timeleft <= 5) && (timeleft != 0))
 		{
 			ServerChannelManager::instance()->sendText(
 				ChannelText("info", 
 					"GAME_STARTING_IN_X", 
 					"Game starting in {0} seconds...", 
-					totalTime_),
+					timeleft),
 				true);
 		}
 	}
-	if (totalTime_ <= 0.0f)
+	if (timeleft <= 0)
 	{
 		startMatch();
 		return true;

@@ -33,7 +33,6 @@
 #include <client/ClientLinesHandler.h>
 #include <client/ClientStartGameHandler.h>
 #include <client/ClientProcessingLoop.h>
-#include <client/ClientScoreHandler.h>
 #include <client/ClientAddPlayerHandler.h>
 #include <client/ClientNewGameHandler.h>
 #include <client/ClientConnectionAcceptHandler.h>
@@ -203,7 +202,6 @@ static bool initComsHandlers()
 	ClientGameStateHandler::instance();
 	ClientPlayerStateHandler::instance();
 	ClientDefenseHandler::instance();
-	ClientScoreHandler::instance();
 	ClientAdminResultHandler::instance();
 
 	return true;

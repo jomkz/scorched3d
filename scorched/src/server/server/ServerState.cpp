@@ -20,14 +20,6 @@
 
 #include <server/ServerState.h>
 
-ServerState *ServerState::instance_ = 0;
-
-ServerState *ServerState::instance()
-{
-	if (!instance_) instance_ = new ServerState();
-	return instance_;
-}
-
 ServerState::ServerState() :
 	serverState_(ServerStartupState)
 {
@@ -37,7 +29,7 @@ ServerState::~ServerState()
 {
 }
 
-void ServerState::simulate(float frameTime)
+void ServerState::simulate()
 {
 	switch (serverState_)
 	{
@@ -59,7 +51,7 @@ void ServerState::simulate(float frameTime)
 		newGame_.checkBots(true);
 		if (enoughPlayers_.enoughPlayers())
 		{
-			if (startingMatch_.startingMatch(frameTime))
+			if (startingMatch_.startingMatch())
 			{
 				serverState_ = ServerNewLevelState;
 			}
@@ -77,7 +69,7 @@ void ServerState::simulate(float frameTime)
 	case ServerBuyingState:
 		if (enoughPlayers_.enoughPlayers())
 		{
-			if (buying_.simulate(frameTime))
+			if (buying_.simulate())
 			{
 				serverState_ = ServerPlayingState;
 				playing_.enterState();
@@ -92,7 +84,15 @@ void ServerState::simulate(float frameTime)
 	case ServerPlayingState:
 		if (enoughPlayers_.enoughPlayers())
 		{
-			playing_.simulate(frameTime);
+			if (playing_.showScore())
+			{
+				serverState_ = ServerScoreState;
+				score_.enterState();
+			}
+			else 
+			{
+				playing_.simulate();
+			}
 		}
 		else
 		{
@@ -101,5 +101,31 @@ void ServerState::simulate(float frameTime)
 		}
 		
 		break;
+	case ServerScoreState:
+		if (score_.simulate())
+		{
+			serverState_ = ServerNewLevelState;
+		}
+		break;
 	}
+}
+
+void ServerState::buyingFinished(ComsPlayedMoveMessage &message)
+{
+	buying_.buyingFinished(message);
+}
+
+void ServerState::moveFinished(ComsPlayedMoveMessage &message)
+{
+	playing_.moveFinished(message);
+}
+
+void ServerState::shotsFinished(unsigned int moveId)
+{
+	playing_.shotsFinished(moveId);
+}
+
+void ServerState::scoreFinished()
+{
+	score_.scoreFinished();
 }

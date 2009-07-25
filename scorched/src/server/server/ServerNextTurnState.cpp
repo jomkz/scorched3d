@@ -20,7 +20,6 @@
 
 #include <server/ServerNextTurnState.h>
 #include <server/ScorchedServer.h>
-#include <server/TurnController.h>
 #include <server/ServerChannelManager.h>
 #include <server/ServerCommon.h>
 #include <tank/TankContainer.h>
@@ -46,8 +45,8 @@ ServerNextTurnState::~ServerNextTurnState()
 
 void ServerNextTurnState::enterState(const unsigned state)
 {
-	TurnController::instance()->nextTurn();
-	if (TurnController::instance()->getPlayersThisTurn().empty())
+	//TurnController::instance()->nextTurn();
+	//if (TurnController::instance()->getPlayersThisTurn().empty())
 	{
 		// Tell each client to end the shot timer
 		ComsTimerStartMessage timerMessage(0);
@@ -56,7 +55,7 @@ void ServerNextTurnState::enterState(const unsigned state)
 		// No more turns left, play the shot
 		//ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusShot);
 	}
-	else
+	//else
 	{
 		//bool weaponBuy = 
 		//	(ScorchedServer::instance()->getOptionsTransient().getCurrentGameNo() == 0);
@@ -69,11 +68,11 @@ void ServerNextTurnState::enterState(const unsigned state)
 
 		// Tell the players to play the turn
 		std::list<unsigned int>::iterator itor;
-		for (itor = TurnController::instance()->getPlayersThisTurn().begin();
+		/*for (itor = TurnController::instance()->getPlayersThisTurn().begin();
 			itor != TurnController::instance()->getPlayersThisTurn().end();
 			itor++)
 		{
-			unsigned int playerId = (*itor);
+			//unsigned int playerId = (*itor);
 
 			Tank *tank =
 				ScorchedServer::instance()->getTankContainer().getTankById(playerId);
@@ -114,7 +113,7 @@ void ServerNextTurnState::enterState(const unsigned state)
 				//ComsMessageSender::sendToSingleClient(startMessage, tank->getDestinationId());
 			}
 		}
-
+*/
 		//if (weaponBuy)
 		{
 			//ScorchedServer::instance()->getGameState().stimulate(ServerState::ServerStimulusBuying);

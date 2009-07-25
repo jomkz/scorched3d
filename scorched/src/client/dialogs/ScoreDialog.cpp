@@ -39,7 +39,7 @@
 #include <engine/GameState.h>
 #include <client/ClientState.h>
 #include <client/ScorchedClient.h>
-#include <client/ClientScoreHandler.h>
+#include <actions/ShowScoreAction.h>
 #include <server/ScorchedServer.h>
 #include <lang/LangResource.h>
 #include <stdio.h>
@@ -156,7 +156,7 @@ void ScoreDialog::draw()
 	if (ScorchedClient::instance()->getGameState().getState() == 
 		ClientState::StateScore)
 	{
-		finished = ClientScoreHandler::instance()->getFinalScore();
+		finished = ShowScoreAction::getFinalScore();
 	}
 
 	Vector white(0.9f, 0.9f, 1.0f);

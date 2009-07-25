@@ -108,7 +108,7 @@ bool ServerTurnsSequential::playerFinished(unsigned int playerId)
 	return true;
 }
 
-void ServerTurnsSequential::simulate(float frameTime)
+void ServerTurnsSequential::simulate()
 {
 	if (playerFinished_)
 	{

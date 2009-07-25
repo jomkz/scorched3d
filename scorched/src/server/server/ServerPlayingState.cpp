@@ -22,7 +22,6 @@
 #include <server/ServerShotHolder.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerChannelManager.h>
-#include <server/TurnController.h>
 #include <server/ServerCommon.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
@@ -76,7 +75,7 @@ bool ServerPlayingState::acceptStateChange(const unsigned state,
 			// Check if the tank has missed its go
 			// If so increment the missed counter
 			// Once missed counter exceeds it threshold then kick the player
-			std::list<unsigned int> &tanks = 
+			/*std::list<unsigned int> &tanks = 
 				TurnController::instance()->getPlayersThisTurn();
 			std::list<unsigned int>::iterator itor;
 			for (itor = tanks.begin();
@@ -127,7 +126,7 @@ bool ServerPlayingState::acceptStateChange(const unsigned state,
 #endif
 					}
 				}
-			}
+			}*/
 
 			return true;
 		}

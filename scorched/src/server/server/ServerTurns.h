@@ -46,7 +46,7 @@ public:
 	virtual bool playerFinished(unsigned int playerId) = 0;
 
 	// Make next move decision
-	virtual void simulate(float frameTime) = 0;
+	virtual void simulate() = 0;
 
 protected:
 	ServerTurnsI *user_;

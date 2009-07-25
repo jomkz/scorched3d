@@ -25,7 +25,6 @@
 #include <engine/ActionController.h>
 #include <engine/ViewPoints.h>
 #include <common/Logger.h>
-#include <coms/ComsPlayMovesMessage.h>
 #include <landscape/Landscape.h>
 
 ClientShotState *ClientShotState::instance_ = 0;
@@ -44,9 +43,7 @@ ClientShotState::ClientShotState() :
 	playShots_(),
 	shotState_(ScorchedClient::instance()->getContext(), playShots_)
 {
-	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		ComsPlayMovesMessage::ComsPlayMovesMessageType,
-		this);
+
 }
 
 ClientShotState::~ClientShotState()
@@ -63,11 +60,11 @@ bool ClientShotState::processMessage(
 	ScorchedClient::instance()->getContext().getViewPoints().reset();
 
 	// Read the new shots into the action controller
-	ComsPlayMovesMessage playMovesMessage;
-	if (!playMovesMessage.readMessage(reader)) return false;
+	//ComsPlayMovesMessage playMovesMessage;
+	//if (!playMovesMessage.readMessage(reader)) return false;
 
 	// Read the moves from the message
-	playShots_.readMessage(playMovesMessage);
+	//playShots_.readMessage(playMovesMessage);
 
 	// Play the shots
 	//ScorchedClient::instance()->getActionController().

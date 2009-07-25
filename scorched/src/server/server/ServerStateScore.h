@@ -18,34 +18,22 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
+#if !defined(__INCLUDE_ServerStateScoreh_INCLUDE__)
+#define __INCLUDE_ServerStateScoreh_INCLUDE__
 
-#if !defined(__INCLUDE_ClientScoreHandlerh_INCLUDE__)
-#define __INCLUDE_ClientScoreHandlerh_INCLUDE__
-
-#include <coms/ComsMessageHandler.h>
-
-class ClientScoreHandler : 
-	public ComsMessageHandlerI
+class ServerStateScore 
 {
 public:
-	static ClientScoreHandler *instance();
+	ServerStateScore();
+	virtual ~ServerStateScore();
 
-	virtual bool processMessage(
-		NetMessage &message,
-		const char *messageType,
-		NetBufferReader &reader);
+	void enterState();
+	void scoreFinished();
 
-	bool getFinalScore() { return finalScore_; }
+	bool simulate();
 
 protected:
-	static ClientScoreHandler *instance_;
-	bool finalScore_;
-
-private:
-	ClientScoreHandler();
-	virtual ~ClientScoreHandler();
-
+	bool finished_;
 };
-
 
 #endif

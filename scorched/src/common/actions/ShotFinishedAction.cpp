@@ -21,7 +21,8 @@
 #include <actions/ShotFinishedAction.h>
 #include <engine/ScorchedContext.h>
 #include <engine/ActionController.h>
-#include <server/ServerStatePlaying.h>
+#include <server/ScorchedServer.h>
+#include <server/ServerState.h>
 
 ShotFinishedAction::ShotFinishedAction(unsigned int moveId) :
 	Action(ACTION_NOT_REFERENCED),
@@ -44,7 +45,7 @@ void ShotFinishedAction::simulate(fixed frameTime, bool &remove)
 		remove = true;
 		if (context_->getServerMode())
 		{
-			ServerStatePlaying::instance()->shotsFinished(moveId_);
+			ScorchedServer::instance()->getServerState().shotsFinished(moveId_);
 		}
 	}
 

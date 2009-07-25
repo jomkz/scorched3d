@@ -21,7 +21,6 @@
 #include <server/ServerBuyAccessoryHandler.h>
 #include <server/ServerShotHolder.h>
 #include <server/ScorchedServer.h>
-#include <server/TurnController.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
@@ -101,11 +100,11 @@ bool ServerBuyAccessoryHandler::processMessage(
 		return true;
 	}
 
-	if (!TurnController::instance()->playerThisTurn(playerId))
+	/*if (!TurnController::instance()->playerThisTurn(playerId))
 	{
 		Logger::log( "ERROR: Player buying should not be buying");
 		return true;		
-	}
+	}*/
 
 	// Check that the accessory is valid
 	Accessory *accessory = 

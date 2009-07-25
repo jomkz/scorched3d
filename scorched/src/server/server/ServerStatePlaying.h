@@ -29,15 +29,15 @@
 class ServerStatePlaying : public ServerTurnsI
 {
 public:
-	static ServerStatePlaying *instance();
-
 	ServerStatePlaying();
 	virtual ~ServerStatePlaying();
 
-	void enterState();
-	void simulate(float frameTime);
+	bool showScore();
 
-	void playerFinishedPlaying(ComsPlayedMoveMessage &playedMessage);
+	void enterState();
+	void simulate();
+
+	void moveFinished(ComsPlayedMoveMessage &playedMessage);
 	void shotsFinished(unsigned int moveId);
 
 	// ServerTurnsI
@@ -46,7 +46,6 @@ public:
 
 protected:
 	static unsigned int moveId_;
-	static ServerStatePlaying *instance_;
 	ServerTurnsSequential turnsSequential_;
 	ServerTurnsSimultaneous turnsSimultaneous_;
 	ServerTurns *turns_;
@@ -55,7 +54,7 @@ protected:
 
 	void clear();
 	void playShots();
-	void simulatePlaying(float frameTime);
+	void simulatePlaying();
 };
 
 #endif

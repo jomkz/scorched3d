@@ -102,10 +102,10 @@ void ServerShotState::enterState(const unsigned state)
 	// any play is made also
 	// Send all of the shots to the client
 	unsigned int seed = rand();
-	ComsPlayMovesMessage playMovesMessage;
-	playMovesMessage.getSeed() = seed;
-	ServerShotHolder::instance()->createMessage(playMovesMessage);
-	ComsMessageSender::sendToAllLoadedClients(playMovesMessage);
+	//ComsPlayMovesMessage playMovesMessage;
+	//playMovesMessage.getSeed() = seed;
+	//ServerShotHolder::instance()->createMessage(playMovesMessage);
+	//ComsMessageSender::sendToAllLoadedClients(playMovesMessage);
 
 	// Play the shots
 	//ScorchedServer::instance()->getTankContainer().setAllNotReady();

@@ -18,32 +18,43 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <simactions/ShowScoreSimAction.h>
+#include <engine/ActionController.h>
+#include <actions/ShowScoreAction.h>
 
-#if !defined(__INCLUDE_ComsScoreMessageh_INCLUDE__)
-#define __INCLUDE_ComsScoreMessageh_INCLUDE__
+REGISTER_CLASS_SOURCE(ShowScoreSimAction);
 
-#include <coms/ComsMessage.h>
-
-class ComsScoreMessage : public ComsMessage
+ShowScoreSimAction::ShowScoreSimAction() :
+	scoreTime_(0), finalScore_(false)
 {
-public:
-	static ComsMessageType ComsScoreMessageType;
+}
 
-	ComsScoreMessage(bool finalScore = false);
-	virtual ~ComsScoreMessage();
+ShowScoreSimAction::ShowScoreSimAction(fixed scoreTime, bool finalScore) :
+	scoreTime_(scoreTime), finalScore_(finalScore)
+{
+}
 
-	bool getFinalScore() { return finalScore_; }
+ShowScoreSimAction::~ShowScoreSimAction()
+{
+}
 
-	// Inherited from ComsMessage
-    virtual bool writeMessage(NetBuffer &buffer);
-    virtual bool readMessage(NetBufferReader &reader);
+bool ShowScoreSimAction::invokeAction(ScorchedContext &context)
+{
+	context.getActionController().addAction(
+		new ShowScoreAction(scoreTime_, finalScore_));
+	return true;
+}
 
-protected:
-	bool finalScore_;
+bool ShowScoreSimAction::writeMessage(NetBuffer &buffer)
+{
+	buffer.addToBuffer(scoreTime_);
+	buffer.addToBuffer(finalScore_);
+	return true;
+}
 
-private:
-	ComsScoreMessage(const ComsScoreMessage &);
-	const ComsScoreMessage & operator=(const ComsScoreMessage &);
-};
-
-#endif
+bool ShowScoreSimAction::readMessage(NetBufferReader &reader)
+{
+	if (!reader.getFromBuffer(scoreTime_)) return false;
+	if (!reader.getFromBuffer(finalScore_)) return false;
+	return true;
+}

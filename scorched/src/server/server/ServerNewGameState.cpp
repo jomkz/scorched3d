@@ -23,7 +23,6 @@
 #include <server/ScorchedServer.h>
 #include <server/ServerMessageHandler.h>
 #include <server/ServerChannelManager.h>
-#include <server/TurnController.h>
 #include <server/ServerCommon.h>
 #ifndef S3D_SERVER
 	#include <client/ClientSave.h>
@@ -171,7 +170,7 @@ void ServerNewGameState::enterState(const unsigned state)
 	addTanksToGame(state, sendGameState);
 
 	// Create the player order for this game
-	TurnController::instance()->newGame();
+	//TurnController::instance()->newGame();
 
 	// Notify scripts of a new game starting
 	ScorchedServer::instance()->getLUAScriptHook().callHook("server_newgame");

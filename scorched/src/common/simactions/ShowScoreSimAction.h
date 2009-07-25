@@ -18,37 +18,27 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_TurnControllerh_INCLUDE__)
-#define __INCLUDE_TurnControllerh_INCLUDE__
+#if !defined(AFX_ShowScoreSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#define AFX_ShowScoreSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
-#include <list>
+#include <simactions/SimAction.h>
 
-class TurnController
+class ShowScoreSimAction : public SimAction
 {
 public:
-	static TurnController *instance();
+	ShowScoreSimAction();
+	ShowScoreSimAction(fixed scoreTime, bool finalScore);
+	virtual ~ShowScoreSimAction();
 
-	void newGame();
-	void nextRound();
-	void nextShot();
-	void nextTurn();
+	virtual bool invokeAction(ScorchedContext &context);
 
-	bool playerThisTurn(unsigned int playerId);
-	std::list<unsigned int> &getPlayersThisShot() { return playersThisShot_; }
-	std::list<unsigned int> &getPlayersThisTurn() { return playersThisTurn_; }
-	std::list<unsigned int> &getPlayersLeftToMove() { return playersLeftToMove_; }
+	virtual bool writeMessage(NetBuffer &buffer);
+	virtual bool readMessage(NetBufferReader &reader);
 
+REGISTER_CLASS_HEADER(ShowScoreSimAction);
 protected:
-	static TurnController *instance_;
-
-	std::list<unsigned int> playerOrder_; // Generated on new game
-	std::list<unsigned int> playersLeftToMove_; // Generated on next round
-	std::list<unsigned int> playersThisShot_; // Generated on next shot
-	std::list<unsigned int> playersThisTurn_; // Generated on next turn
-
-private:
-	TurnController();
-	virtual ~TurnController();
+	fixed scoreTime_;
+	bool finalScore_;
 };
 
-#endif
+#endif // !defined(AFX_ShowScoreSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

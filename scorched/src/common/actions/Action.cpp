@@ -20,6 +20,9 @@
 
 #include <actions/Action.h>
 
+const unsigned int Action::ACTION_REFERENCED = -1;
+const unsigned int Action::ACTION_NOT_REFERENCED = 0;
+
 Action::Action(unsigned int playerId) : 
 	playerId_(playerId),
 	renderer_(0), context_(0), 

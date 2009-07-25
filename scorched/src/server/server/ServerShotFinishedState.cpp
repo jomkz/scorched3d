@@ -30,7 +30,6 @@
 #include <common/StatsLogger.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
-#include <coms/ComsScoreMessage.h>
 #include <coms/ComsPlayerStateMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsSyncCheckMessage.h>
@@ -104,8 +103,8 @@ void ServerShotFinishedState::enterState(const unsigned state)
 
 		ComsPlayerStateMessage playerMessage(true, true);
 		ComsMessageSender::sendToAllLoadedClients(playerMessage);
-		ComsScoreMessage message(finalScore);
-		ComsMessageSender::sendToAllLoadedClients(message);
+		//ComsScoreMessage message(finalScore);
+		//ComsMessageSender::sendToAllLoadedClients(message);
 
 		if (finalScore)
 		{

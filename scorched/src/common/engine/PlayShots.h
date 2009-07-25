@@ -22,7 +22,6 @@
 #define __INCLUDE_PlayShotsh_INCLUDE__
 
 #include <coms/ComsPlayedMoveMessage.h>
-#include <coms/ComsPlayMovesMessage.h>
 #include <engine/ScorchedContext.h>
 #include <tank/TankContainer.h>
 #include <map>
@@ -36,8 +35,8 @@ public:
 	void clearShots();
 	bool haveShot(unsigned int playerId);
 
-	void createMessage(ComsPlayMovesMessage &message);
-	void readMessage(ComsPlayMovesMessage &message);
+	//void createMessage(ComsPlayMovesMessage &message);
+	//void readMessage(ComsPlayMovesMessage &message);
 
 	void playShots(ScorchedContext &context);
 

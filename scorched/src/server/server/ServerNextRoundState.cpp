@@ -21,7 +21,6 @@
 #include <server/ServerNextRoundState.h>
 #include <server/ServerShotHolder.h>
 #include <server/ScorchedServer.h>
-#include <server/TurnController.h>
 #include <tank/TankContainer.h>
 #include <engine/ActionController.h>
 #include <coms/ComsMessageSender.h>
@@ -68,7 +67,7 @@ void ServerNextRoundState::enterState(const unsigned state)
 	}
 
 	// Setup this list of players that need to move before this round is over
-	TurnController::instance()->nextRound();
+	//TurnController::instance()->nextRound();
 
 	// Notify scripts of a new game starting
 	ScorchedServer::instance()->getLUAScriptHook().callHook("server_newround");
