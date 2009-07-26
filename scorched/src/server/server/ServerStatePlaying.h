@@ -24,9 +24,8 @@
 #include <server/ServerTurnsSequential.h>
 #include <server/ServerTurnsSimultaneous.h>
 #include <coms/ComsPlayedMoveMessage.h>
-#include <map>
 
-class ServerStatePlaying : public ServerTurnsI
+class ServerStatePlaying
 {
 public:
 	ServerStatePlaying();
@@ -40,21 +39,10 @@ public:
 	void moveFinished(ComsPlayedMoveMessage &playedMessage);
 	void shotsFinished(unsigned int moveId);
 
-	// ServerTurnsI
-	virtual void playMoves();
-	virtual void playerPlaying(unsigned int playerId);
-
 protected:
-	static unsigned int moveId_;
+	ServerTurns *turns_;
 	ServerTurnsSequential turnsSequential_;
 	ServerTurnsSimultaneous turnsSimultaneous_;
-	ServerTurns *turns_;
-	std::map<unsigned int, ComsPlayedMoveMessage *> messages_;
-	bool simulatingShots_;
-
-	void clear();
-	void playShots();
-	void simulatePlaying();
 };
 
 #endif

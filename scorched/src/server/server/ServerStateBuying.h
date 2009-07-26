@@ -24,7 +24,7 @@
 #include <server/ServerTurnsSimultaneous.h>
 #include <coms/ComsPlayedMoveMessage.h>
 
-class ServerStateBuying : public ServerTurnsI
+class ServerStateBuying
 {
 public:
 	ServerStateBuying();
@@ -35,14 +35,12 @@ public:
 
 	void buyingFinished(ComsPlayedMoveMessage &playedMessage);
 
-	// ServerTurnsI
-	virtual void playMoves();
-	virtual void playerPlaying(unsigned int playerId);
-
 protected:
 	static unsigned int moveId_;
-	ServerTurnsSimultaneous simulTurns_;
-	bool finished_;
+	std::set<unsigned int> waitingPlayers_;
+	std::set<unsigned int> playingPlayers_;
+
+	void playerBuying(unsigned int playerId);
 };
 
 #endif

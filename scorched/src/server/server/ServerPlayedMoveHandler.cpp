@@ -63,6 +63,9 @@ bool ServerPlayedMoveHandler::processMessage(
 
 	if (message.getType() == ComsPlayedMoveMessage::eFinishedBuy)
 	{
+		if (ScorchedServer::instance()->getServerState().getState() !=
+			ServerState::ServerBuyingState) return true;
+
 		if (tank->getState().getServerState() == TankState::serverBuying)
 		{
 			ScorchedServer::instance()->getServerState().buyingFinished(message);
@@ -70,6 +73,9 @@ bool ServerPlayedMoveHandler::processMessage(
 	}
 	else
 	{
+		if (ScorchedServer::instance()->getServerState().getState() !=
+			ServerState::ServerPlayingState) return true;
+
 		if (tank->getState().getServerState() == TankState::serverMakingMove)
 		{
 			ScorchedServer::instance()->getServerState().moveFinished(message);

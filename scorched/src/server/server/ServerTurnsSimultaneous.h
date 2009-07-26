@@ -22,25 +22,33 @@
 #define __INCLUDE_ServerTurnsSimultaneoush_INCLUDE__
 
 #include <set>
+#include <map>
 #include <server/ServerTurns.h>
 
+class Tank;
+class ComsPlayedMoveMessage;
 class ServerTurnsSimultaneous : public ServerTurns
 {
 public:
 	ServerTurnsSimultaneous();
 	virtual ~ServerTurnsSimultaneous();
 
-	virtual void newGame();
-	virtual void nextMove();
-
-	void addPlayer(unsigned int playerId);
-	virtual bool playerFinished(unsigned int playerId);
-
+	virtual void enterState();
 	virtual void simulate();
+	virtual bool finished();
+
+	virtual void moveFinished(ComsPlayedMoveMessage &playedMessage);
+	virtual void shotsFinished(unsigned int moveId);
 
 protected:
+	bool playingMoves_;
+	unsigned int moveId_;
 	std::set<unsigned int> waitingPlayers_;
 	std::set<unsigned int> playingPlayers_;
+	std::map<unsigned int, ComsPlayedMoveMessage*>  moves_;
+
+	void makeMove(Tank *tank);
+	void playShots();
 };
 
 #endif

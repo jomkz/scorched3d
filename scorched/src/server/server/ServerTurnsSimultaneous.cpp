@@ -19,12 +19,19 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <server/ServerTurnsSimultaneous.h>
+#include <server/ServerSimulator.h>
 #include <server/ScorchedServer.h>
+#include <coms/ComsPlayedMoveMessage.h>
+#include <common/OptionsScorched.h>
+#include <simactions/PlayMovesSimAction.h>
+#include <simactions/TankStartMoveSimAction.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
+#include <tank/TankScore.h>
 #include <list>
 
-ServerTurnsSimultaneous::ServerTurnsSimultaneous()
+ServerTurnsSimultaneous::ServerTurnsSimultaneous() :
+	moveId_(0), playingMoves_(false)
 {
 }
 
@@ -33,51 +40,50 @@ ServerTurnsSimultaneous::~ServerTurnsSimultaneous()
 }
 
 
-void ServerTurnsSimultaneous::newGame()
+void ServerTurnsSimultaneous::enterState()
 {
+	moveId_++;
 	waitingPlayers_.clear();
 	playingPlayers_.clear();
 
-	std::map<unsigned int, Tank*> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	std::map<unsigned int, Tank*>::iterator itor;
-	for (itor = tanks.begin();
-		itor != tanks.end();
-		itor++)
 	{
-		Tank *tank = itor->second;
-		if (tank->getState().getState() == TankState::sNormal)
+		std::map<unsigned int, ComsPlayedMoveMessage*>::iterator itor;
+		for (itor = moves_.begin();
+			itor != moves_.end();
+			itor++)
 		{
-			addPlayer(itor->first);
+			ComsPlayedMoveMessage *message = itor->second;
+			delete message;
+		}
+		moves_.clear();
+	}
+
+	{
+		std::map<unsigned int, Tank*> &tanks = 
+			ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+		std::map<unsigned int, Tank*>::iterator itor;
+		for (itor = tanks.begin();
+			itor != tanks.end();
+			itor++)
+		{
+			Tank *tank = itor->second;
+			if (tank->getState().getState() == TankState::sNormal)
+			{
+				waitingPlayers_.insert(tank->getPlayerId());
+			}
 		}
 	}
 }
 
-void ServerTurnsSimultaneous::nextMove()
-{
-	newGame();
-}
-
-void ServerTurnsSimultaneous::addPlayer(unsigned int playerId)
-{
-	waitingPlayers_.insert(playerId);
-}
-
-bool ServerTurnsSimultaneous::playerFinished(unsigned int playerId)
-{
-	std::set<unsigned int>::iterator itor =
-		playingPlayers_.find(playerId);
-	if (itor == playingPlayers_.end()) return false;
-	playingPlayers_.erase(itor);
-	return true;
-}
-
 void ServerTurnsSimultaneous::simulate()
 {
+	if (playingMoves_) return;
+
 	// Check if all the tanks have made their moves
 	if (waitingPlayers_.empty() && playingPlayers_.empty()) 
 	{
-		user_->playMoves();
+		playShots();
+		return;
 	}
 
 	// Check if any of the playing tanks have timed out
@@ -130,7 +136,7 @@ void ServerTurnsSimultaneous::simulate()
 		{
 			playingDestinations.insert(tank->getDestinationId());
 			playingPlayers_.insert(playerId);
-			user_->playerPlaying(playerId);
+			makeMove(tank);
 			removeWaiting.push_back(playerId);
 		}
 	}
@@ -143,4 +149,70 @@ void ServerTurnsSimultaneous::simulate()
 		unsigned int playerId = *removeItor;
 		waitingPlayers_.erase(playerId);
 	}
+}
+
+void ServerTurnsSimultaneous::makeMove(Tank *tank)
+{
+	float shotTime = (float)
+		ScorchedServer::instance()->getOptionsGame().getShotTime();
+
+	tank->getState().setServerState(TankState::serverMakingMove);
+	TankStartMoveSimAction *tankSimAction = new TankStartMoveSimAction(
+		tank->getPlayerId(), moveId_, shotTime, false);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);
+}
+
+void ServerTurnsSimultaneous::moveFinished(ComsPlayedMoveMessage &playedMessage)
+{
+	unsigned int playerId = playedMessage.getPlayerId();
+	unsigned int moveId = playedMessage.getMoveId();
+	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
+	if (!tank || tank->getState().getState() != TankState::sNormal) return;
+	if (moveId_ != moveId) return;
+	std::set<unsigned int>::iterator itor =
+		playingPlayers_.find(playerId);
+	if (itor == playingPlayers_.end()) return;
+
+	playingPlayers_.erase(itor);
+	tank->getScore().setMissedMoves(0);
+	tank->getState().setServerState(TankState::serverNone);
+
+	if (moves_.find(playerId) == moves_.end())
+	{
+		moves_[playerId] = new ComsPlayedMoveMessage(playedMessage);
+	}
+}
+
+void ServerTurnsSimultaneous::playShots()
+{
+	PlayMovesSimAction *movesAction = new PlayMovesSimAction(moveId_);
+
+	std::map<unsigned int, ComsPlayedMoveMessage*>::iterator itor;
+	for (itor = moves_.begin();
+		itor != moves_.end();
+		itor++)
+	{
+		ComsPlayedMoveMessage *message = itor->second;
+		movesAction->addMove(message);
+	}
+	moves_.clear();
+	
+	playingMoves_ = true;
+	ScorchedServer::instance()->getServerSimulator().
+		addSimulatorAction(movesAction);
+}
+
+void ServerTurnsSimultaneous::shotsFinished(unsigned int moveId)
+{
+	if (moveId_ != moveId) return;
+	playingMoves_ = false;
+
+	enterState();
+}
+
+bool ServerTurnsSimultaneous::finished()
+{
+	if (playingMoves_) return false;
+
+	return ServerTurns::showScore();
 }

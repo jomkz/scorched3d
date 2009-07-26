@@ -30,10 +30,8 @@
 
 unsigned int ServerStateBuying::moveId_ = 0;
 
-ServerStateBuying::ServerStateBuying() : 
-	finished_(false)
+ServerStateBuying::ServerStateBuying()
 {
-	simulTurns_.setUser(this);
 }
 
 ServerStateBuying::~ServerStateBuying()
@@ -42,17 +40,15 @@ ServerStateBuying::~ServerStateBuying()
 
 void ServerStateBuying::enterState()
 {
-	finished_ = false;
 	moveId_++;
-	simulTurns_.newGame();
-	//if (ScorchedServer::instance()->getOptionsGame().getBuyOnRound() != 0)
-	// CHECK BUY ON ROUND HERE
+
+	waitingPlayers_.clear();
+	playingPlayers_.clear();
 }
 
 bool ServerStateBuying::simulate()
 {
-	if (finished_) return true;
-
+	// Add any new players that should be buying
 	std::map<unsigned int, Tank*> &tanks = 
 		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
 	std::map<unsigned int, Tank*>::iterator itor;
@@ -64,23 +60,112 @@ bool ServerStateBuying::simulate()
 		if (tank->getState().getTankPlaying() &&
 			tank->getState().getServerState() == TankState::serverJoined)
 		{
+			// Add tank to game
 			tank->getState().setServerState(TankState::serverNone);
 			tank->getState().setState(TankState::sNormal);
-
 			TankAliveSimAction *tankAliveSimAction = new TankAliveSimAction(tank->getPlayerId());
 			ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankAliveSimAction);
 
-			simulTurns_.addPlayer(itor->first);
+			// Add tank to list of tanks to get buying for
+			waitingPlayers_.insert(tank->getPlayerId());
 		}
 	}
 
-	simulTurns_.simulate();
+	// Check if all the tanks have made their moves
+	if (waitingPlayers_.empty() && playingPlayers_.empty()) 
+	{
+		return true;
+	}
+
+	// Check if any of the playing tanks have timed out
+	// or if they have left the game
+	std::set<unsigned int> playingDestinations;
+	std::list<unsigned int> removePlaying;
+	std::set<unsigned int>::iterator playItor;
+	for (playItor = playingPlayers_.begin();
+		playItor != playingPlayers_.end();
+		playItor++)
+	{
+		unsigned int playerId = *playItor;
+		Tank *tank =
+			ScorchedServer::instance()->getTankContainer().getTankById(playerId);
+		if (!tank || tank->getState().getState() != TankState::sNormal)
+		{
+			removePlaying.push_back(playerId);
+		}
+		else if (tank->getDestinationId() != 0)
+		{
+			playingDestinations.insert(tank->getDestinationId());
+		}
+	}
+
+	// Remove any that are not playing
+	std::list<unsigned int>::iterator removeItor;
+	for (removeItor = removePlaying.begin();
+		removeItor != removePlaying.end();
+		removeItor++)
+	{
+		unsigned int playerId = *removeItor;
+		playingPlayers_.erase(playerId);
+	}
+
+	// Add any waiting tanks to the game (if possible)
+	std::set<unsigned int>::iterator waitingItor;
+	std::list<unsigned int> removeWaiting;
+	for (waitingItor = waitingPlayers_.begin();
+		waitingItor != waitingPlayers_.end();
+		waitingItor++)
+	{
+		unsigned int playerId = *waitingItor;
+		Tank *tank =
+			ScorchedServer::instance()->getTankContainer().getTankById(playerId);
+		if (!tank || tank->getState().getState() != TankState::sNormal)
+		{
+			removeWaiting.push_back(playerId);
+		}
+		else if (playingDestinations.find(tank->getDestinationId()) == playingDestinations.end())
+		{
+			// There is a player waiting that has no other player playing
+			// from the same destination
+			// Let this player play
+			playingDestinations.insert(tank->getDestinationId());
+			playingPlayers_.insert(playerId);
+			removeWaiting.push_back(playerId);
+
+			playerBuying(playerId);
+		}
+	}
+
+	// Remove any that are not waiting
+	for (removeItor = removeWaiting.begin();
+		removeItor != removeWaiting.end();
+		removeItor++)
+	{
+		unsigned int playerId = *removeItor;
+		waitingPlayers_.erase(playerId);
+	}
+
 	return false;
 }
 
-void ServerStateBuying::playMoves()
+void ServerStateBuying::playerBuying(unsigned int playerId)
 {
-	finished_ = true;
+	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
+	float buyingTime = (float)
+		ScorchedServer::instance()->getOptionsGame().getBuyingTime();
+
+	tank->getState().setServerState(TankState::serverBuying);
+	if (tank->getDestinationId() != 0)
+	{
+		// Human player
+		TankStartMoveSimAction *tankSimAction = 
+			new TankStartMoveSimAction(playerId, moveId_, buyingTime, true);
+		ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);
+	}
+	else
+	{
+		// AI player
+	}
 }
 
 void ServerStateBuying::buyingFinished(ComsPlayedMoveMessage &playedMessage)
@@ -91,22 +176,13 @@ void ServerStateBuying::buyingFinished(ComsPlayedMoveMessage &playedMessage)
 	if (!tank || !tank->getState().getTankPlaying()) return;
 	if (moveId != moveId_) return;
 
-	if (simulTurns_.playerFinished(playerId)) 
-	{
-		tank->getScore().setMissedMoves(0);
-		tank->getState().setServerState(TankState::serverNone);
-	}
+	std::set<unsigned int>::iterator itor =
+		playingPlayers_.find(playerId);
+	if (itor == playingPlayers_.end()) return;
+
+	playingPlayers_.erase(itor);
+
+	tank->getScore().setMissedMoves(0);
+	tank->getState().setServerState(TankState::serverNone);
 }
 
-void ServerStateBuying::playerPlaying(unsigned int playerId)
-{
-	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
-	float buyingTime = (float)
-		ScorchedServer::instance()->getOptionsGame().getBuyingTime();
-
-	tank->getState().setServerState(TankState::serverBuying);
-
-	TankStartMoveSimAction *tankSimAction = 
-		new TankStartMoveSimAction(playerId, moveId_, buyingTime, true);
-	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);
-}

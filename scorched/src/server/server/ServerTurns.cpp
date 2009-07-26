@@ -19,12 +19,33 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <server/ServerTurns.h>
+#include <server/ScorchedServer.h>
+#include <tank/TankContainer.h>
+#include <tank/TankState.h>
 
-ServerTurns::ServerTurns() :
-	user_(0)
+ServerTurns::ServerTurns()
 {
 }
 
 ServerTurns::~ServerTurns()
 {
+}
+
+bool ServerTurns::showScore()
+{
+	int normal = 0;
+	std::map<unsigned int, Tank *> &playingTanks = 
+		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+	std::map<unsigned int, Tank *>::iterator mainitor;
+	for (mainitor = playingTanks.begin();
+		 mainitor != playingTanks.end();
+		 mainitor++)
+	{
+		Tank *current = (*mainitor).second;
+		if (current->getState().getState() == TankState::sNormal)
+		{
+			normal++;
+		}
+	}
+	return (normal <= 1);
 }

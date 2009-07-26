@@ -20,16 +20,21 @@
 
 #include <server/ServerTurnsSequential.h>
 #include <server/ScorchedServer.h>
+#include <server/ServerSimulator.h>
 #include <common/OptionsGame.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
+#include <simactions/PlayMovesSimAction.h>
+#include <simactions/TankStartMoveSimAction.h>
+#include <coms/ComsPlayedMoveMessage.h>
 #include <tank/TankSort.h>
+#include <tank/TankScore.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <list>
 
 ServerTurnsSequential::ServerTurnsSequential() :
-	playingPlayer_(0), playerFinished_(false)
+	playingPlayer_(0), moveId_(0), playingMoves_(false)
 {
 }
 
@@ -37,10 +42,10 @@ ServerTurnsSequential::~ServerTurnsSequential()
 {
 }
 
-void ServerTurnsSequential::newGame()
+void ServerTurnsSequential::enterState()
 {
+	playingMoves_ = false;
 	playingPlayer_ = 0;
-	playerFinished_ = false;
 	waitingPlayers_.clear();
 
 	OptionsGame::TurnType turnType = (OptionsGame::TurnType)
@@ -96,31 +101,14 @@ void ServerTurnsSequential::newGame()
 	}
 }
 
-void ServerTurnsSequential::nextMove()
-{
-}
-
-bool ServerTurnsSequential::playerFinished(unsigned int playerId)
-{
-	if (playerId != playingPlayer_) return false;
-	playingPlayer_ = 0;
-	playerFinished_ = true;
-	return true;
-}
-
 void ServerTurnsSequential::simulate()
 {
-	if (playerFinished_)
-	{
-		user_->playMoves();
-		playerFinished_ = false;
-		return;
-	}
+	if (playingMoves_) return;
 
 	// Check if all the tanks have made their moves
 	if (waitingPlayers_.empty() && playingPlayer_ == 0) 
 	{
-		newGame();
+		enterState();
 	}
 
 	// Check tanks are alive
@@ -144,9 +132,56 @@ void ServerTurnsSequential::simulate()
 			if (waitingTank && waitingTank->getState().getState() == TankState::sNormal)
 			{
 				playingPlayer_ = waitingPlayer;
-				user_->playerPlaying(playingPlayer_);
+				makeMove(waitingTank);
 				break;
 			}
 		}
 	}
+}
+
+void ServerTurnsSequential::makeMove(Tank *tank)
+{
+	moveId_++;
+
+	float shotTime = (float)
+		ScorchedServer::instance()->getOptionsGame().getShotTime();
+
+	tank->getState().setServerState(TankState::serverMakingMove);
+	TankStartMoveSimAction *tankSimAction = new TankStartMoveSimAction(
+		tank->getPlayerId(), moveId_, shotTime, false);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);
+}
+
+void ServerTurnsSequential::moveFinished(ComsPlayedMoveMessage &playedMessage)
+{
+	unsigned int playerId = playedMessage.getPlayerId();
+	unsigned int moveId = playedMessage.getMoveId();
+	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
+	if (!tank || tank->getState().getState() != TankState::sNormal) return;
+	if (moveId_ != moveId) return;
+	if (playerId != playingPlayer_) return;
+
+	playingMoves_ = true;
+	playingPlayer_ = 0;
+	tank->getScore().setMissedMoves(0);
+	tank->getState().setServerState(TankState::serverNone);
+
+	PlayMovesSimAction *movesAction = new PlayMovesSimAction(moveId_);
+	movesAction->addMove(new ComsPlayedMoveMessage(playedMessage));
+	ScorchedServer::instance()->getServerSimulator().
+		addSimulatorAction(movesAction);
+}
+
+void ServerTurnsSequential::shotsFinished(unsigned int moveId)
+{
+	if (moveId_ != moveId) return;
+
+	playingMoves_ = false;
+}
+
+bool ServerTurnsSequential::finished()
+{
+	if (playingMoves_) return false;
+
+	return ServerTurns::showScore();
 }

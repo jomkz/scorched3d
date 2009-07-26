@@ -24,23 +24,27 @@
 #include <list>
 #include <server/ServerTurns.h>
 
+class Tank;
 class ServerTurnsSequential : public ServerTurns
 {
 public:
 	ServerTurnsSequential();
 	virtual ~ServerTurnsSequential();
 
-	virtual void newGame();
-	virtual void nextMove();
-
-	virtual bool playerFinished(unsigned int playerId);
-
+	virtual void enterState();
 	virtual void simulate();
+	virtual bool finished();
+
+	virtual void moveFinished(ComsPlayedMoveMessage &playedMessage);
+	virtual void shotsFinished(unsigned int moveId);
 
 protected:
-	bool playerFinished_;
+	bool playingMoves_;
+	unsigned int moveId_;
 	unsigned int playingPlayer_;
 	std::list<unsigned int> waitingPlayers_;
+
+	void makeMove(Tank *tank);
 };
 
 #endif
