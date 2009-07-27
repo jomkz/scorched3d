@@ -29,8 +29,8 @@ TankLoadedSimAction::TankLoadedSimAction()
 {
 }
 
-TankLoadedSimAction::TankLoadedSimAction(unsigned int playerId) :
-	playerId_(playerId)
+TankLoadedSimAction::TankLoadedSimAction(unsigned int playerId, bool notSpectator) :
+	playerId_(playerId), notSpectator_(notSpectator)
 {
 }
 
@@ -43,17 +43,22 @@ bool TankLoadedSimAction::invokeAction(ScorchedContext &context)
 	Tank *tank = context.getTankContainer().getTankById(playerId_);
 	if (!tank) return false;
 
+	if (notSpectator_) tank->getState().setState(TankState::sDead);
+	else tank->getState().setState(TankState::sSpectator);
+
 	return true;
 }
 
 bool TankLoadedSimAction::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(playerId_);
+	buffer.addToBuffer(notSpectator_);
 	return true;
 }
 
 bool TankLoadedSimAction::readMessage(NetBufferReader &reader)
 {
 	if (!reader.getFromBuffer(playerId_)) return false;
+	if (!reader.getFromBuffer(notSpectator_)) return false;
 	return true;
 }

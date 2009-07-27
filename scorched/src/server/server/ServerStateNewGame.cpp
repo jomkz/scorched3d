@@ -25,6 +25,8 @@
 #include <server/ServerChannelManager.h>
 #include <server/ServerNewGameState.h>
 #include <server/ServerMessageHandler.h>
+#include <server/ServerLoadLevel.h>
+#include <weapons/EconomyStore.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
@@ -37,6 +39,7 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <common/OptionsTransient.h>
 #include <common/ProgressCounter.h>
+#include <common/StatsLogger.h>
 #include <common/Logger.h>
 #include <algorithm>
 
@@ -60,6 +63,10 @@ void ServerStateNewGame::newGame()
 			true);
 	}	
 
+	// Make any enconomic changes
+	EconomyStore::instance()->getEconomy()->calculatePrices();
+	EconomyStore::instance()->getEconomy()->savePrices();
+
 	// Get a landscape definition to use
 	ServerCommon::serverLog("Generating landscape");
 	LandscapeDefinition defn = ScorchedServer::instance()->getLandscapes().getRandomLandscapeDefn(
@@ -76,8 +83,38 @@ void ServerStateNewGame::newGame()
 	ScorchedServer::instance()->getSimulator().reset();
 	ServerCommon::serverLog("Finished generating landscape");
 
+	// Make sure tanks are in correct state
+	std::set<unsigned int> loadingDestinations;
+	std::map<unsigned int, Tank *> &tanks = 
+		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+	std::map<unsigned int, Tank *>::iterator tankItor;
+	for (tankItor = tanks.begin();
+		tankItor != tanks.end();
+		tankItor++)
+	{
+		Tank *tank = tankItor->second;
+		if (tank->getState().getState() != TankState::sLoading)
+		{
+			tank->getState().setState(TankState::sLoading);
+			if (tank->getDestinationId() != 0 &&
+				loadingDestinations.find(tank->getDestinationId()) == loadingDestinations.end())
+			{
+				loadingDestinations.insert(tank->getDestinationId());
+			}
+		}
+	}
+
 	// Check bots
 	checkBots(true);
+
+	// Tell all destinations to load
+	std::set<unsigned int>::iterator destItor;
+	for (destItor = loadingDestinations.begin();
+		destItor != loadingDestinations.end();
+		destItor++)
+	{
+		ServerLoadLevel::destinationLoadLevel(*destItor);
+	}
 }
 
 void ServerStateNewGame::checkTeams()

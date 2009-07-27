@@ -62,6 +62,7 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 	if (!tank->getAvatar().readMessage(reader)) return false;
 
 	tank->getState().setState(TankState::sDead);
+	tank->getState().setNotSpectator(true);
 
 	return true;
 }

@@ -218,6 +218,8 @@ void ClientState::setupGameState()
 		StimWait, StateWait);
 	gameState.addStateStimulus(StateWait, 
 		StimScore, StateScore);
+	gameState.addStateStimulus(StateWait, 
+		StimLoadLevel, StateLoadLevel);
 
 	// StateBuyWeapons
 	addStandardComponents(gameState, StateBuyWeapons);
@@ -229,6 +231,8 @@ void ClientState::setupGameState()
 		StimAutoDefense, StateAutoDefense);
 	gameState.addStateStimulus(StateBuyWeapons, 
 		StimWait, StateWait);
+	gameState.addStateStimulus(StateBuyWeapons, 
+		StimLoadLevel, StateLoadLevel);
 
 	// StateAutoDefense
 	addStandardComponents(gameState, StateAutoDefense);
@@ -238,6 +242,8 @@ void ClientState::setupGameState()
 		StimDisconnected, StateDisconnected);
 	gameState.addStateStimulus(StateAutoDefense, 
 		StimWait, StateWait);
+	gameState.addStateStimulus(StateAutoDefense, 
+		StimLoadLevel, StateLoadLevel);
 
 	// StatePlaying
 	addStandardComponents(gameState, StatePlaying);
@@ -249,6 +255,8 @@ void ClientState::setupGameState()
 		StimDisconnected, StateDisconnected);
 	gameState.addStateStimulus(StatePlaying, 
 		StimWait, StateWait);
+	gameState.addStateStimulus(StatePlaying, 
+		StimLoadLevel, StateLoadLevel);
 
 	// StateScore
 	addStandardComponents(gameState, StateScore);
@@ -258,4 +266,6 @@ void ClientState::setupGameState()
 		StimDisconnected, StateDisconnected);
 	gameState.addStateStimulus(StateScore, 
 		StimWait, StateWait);
+	gameState.addStateStimulus(StateScore, 
+		StimLoadLevel, StateLoadLevel);
 }

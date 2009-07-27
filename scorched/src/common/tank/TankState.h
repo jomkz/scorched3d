@@ -30,16 +30,10 @@ class TankState
 public:
 	enum State
 	{
+		sLoading,
 		sSpectator,
 		sNormal,
 		sDead
-	};
-	enum ServerState
-	{
-		serverJoined,
-		serverNone,
-		serverMakingMove,
-		serverBuying
 	};
 
 	TankState(ScorchedContext &context, unsigned int playerId);
@@ -55,8 +49,9 @@ public:
 	// State
 	void setState(State s);
 	State getState() { return state_; }
-	void setServerState(ServerState s);
-	ServerState getServerState() { return serverState_; }
+
+	bool getNotSpectator() { return notSpectator_; }
+	void setNotSpectator(bool notSpectator) { notSpectator_ = notSpectator; }
 
 	bool getTankPlaying();
 
@@ -84,12 +79,12 @@ protected:
 	Tank *tank_;
 	ScorchedContext &context_;
 	State state_;
-	ServerState serverState_;
 	int lives_, maxLives_;
 	bool muted_;
 	bool skipshots_;
 	bool destroy_;
 	bool newMatch_;
+	bool notSpectator_;
 
 };
 

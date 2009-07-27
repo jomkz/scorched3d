@@ -36,19 +36,24 @@ static struct AllowedStateTransitions
 }
 allowedStateTransitions[] =
 {
+	TankState::sLoading, TankState::sSpectator,
+	TankState::sLoading, TankState::sDead,
 	TankState::sSpectator, TankState::sNormal,
 	TankState::sSpectator, TankState::sDead,
 	TankState::sDead, TankState::sNormal,
-	TankState::sNormal, TankState::sDead
+	TankState::sNormal, TankState::sDead,
+	TankState::sDead, TankState::sLoading,
+	TankState::sNormal, TankState::sLoading
 };
 
 TankState::TankState(ScorchedContext &context, unsigned int playerId) : 
-	state_(sSpectator), serverState_(serverJoined), tank_(0),
+	state_(sLoading), tank_(0),
 	context_(context), 
 	muted_(false),
 	skipshots_(false),
 	lives_(0), maxLives_(1), 
-	destroy_(false), newMatch_(true)
+	destroy_(false), newMatch_(true),
+	notSpectator_(false)
 {
 }
 
@@ -105,11 +110,6 @@ void TankState::setState(State s)
 	}
 }
 
-void TankState::setServerState(ServerState s)
-{
-	serverState_ = s;
-}
-
 const char *TankState::getStateString()
 {
 	static char string[1024];
@@ -134,6 +134,9 @@ const char *TankState::getSmallStateString()
 	case sSpectator:
 		type = "Spectator";
 		break;
+	case sLoading:
+		type = "Loading";
+		break;
 	}
 
 	return type;
@@ -144,6 +147,7 @@ LangString &TankState::getSmallStateLangString()
 	LANG_RESOURCE_CONST_VAR(DEAD, "DEAD", "Dead");
 	LANG_RESOURCE_CONST_VAR(ALIVE, "ALIVE", "Alive");
 	LANG_RESOURCE_CONST_VAR(SPECTATOR, "SPECTATOR", "Spectator");
+	LANG_RESOURCE_CONST_VAR(LOADING, "LOADING", "Loading");
 
 	switch (state_)
 	{
@@ -155,6 +159,8 @@ LangString &TankState::getSmallStateLangString()
 	case sSpectator:
 		return SPECTATOR;
 		break;
+	case sLoading:
+		return LOADING;
 	}
 
 	static LangString nullResult;

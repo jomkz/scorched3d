@@ -63,22 +63,16 @@ void ServerState::simulate()
 		}
 		break;
 	case ServerNewLevelState:
+		newGame_.newGame();
+
 		serverState_ = ServerBuyingState;
 		buying_.enterState();
 		break;
 	case ServerBuyingState:
-		if (enoughPlayers_.enoughPlayers())
+		if (buying_.simulate())
 		{
-			if (buying_.simulate())
-			{
-				serverState_ = ServerPlayingState;
-				playing_.enterState();
-			}
-		}
-		else
-		{
-			startingMatch_.stoppingMatch();
-			serverState_ = ServerWaitingForPlayersState;
+			serverState_ = ServerPlayingState;
+			playing_.enterState();
 		}
 		break;
 	case ServerPlayingState:

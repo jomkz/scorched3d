@@ -49,6 +49,7 @@ void ServerStateBuying::enterState()
 bool ServerStateBuying::simulate()
 {
 	// Add any new players that should be buying
+	bool loading = false;
 	std::map<unsigned int, Tank*> &tanks = 
 		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
 	std::map<unsigned int, Tank*>::iterator itor;
@@ -57,22 +58,24 @@ bool ServerStateBuying::simulate()
 		itor++)
 	{
 		Tank *tank = itor->second;
-		if (tank->getState().getTankPlaying() &&
-			tank->getState().getServerState() == TankState::serverJoined)
-		{
+		if (tank->getState().getState() == TankState::sDead)
+		{						
 			// Add tank to game
-			tank->getState().setServerState(TankState::serverNone);
 			tank->getState().setState(TankState::sNormal);
 			TankAliveSimAction *tankAliveSimAction = new TankAliveSimAction(tank->getPlayerId());
 			ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankAliveSimAction);
 
 			// Add tank to list of tanks to get buying for
 			waitingPlayers_.insert(tank->getPlayerId());
+		} 
+		else if (tank->getState().getState() == TankState::sLoading) 
+		{
+			loading = true;
 		}
 	}
 
 	// Check if all the tanks have made their moves
-	if (waitingPlayers_.empty() && playingPlayers_.empty()) 
+	if (waitingPlayers_.empty() && playingPlayers_.empty() && !loading) 
 	{
 		return true;
 	}
@@ -154,7 +157,6 @@ void ServerStateBuying::playerBuying(unsigned int playerId)
 	float buyingTime = (float)
 		ScorchedServer::instance()->getOptionsGame().getBuyingTime();
 
-	tank->getState().setServerState(TankState::serverBuying);
 	if (tank->getDestinationId() != 0)
 	{
 		// Human player
@@ -183,6 +185,5 @@ void ServerStateBuying::buyingFinished(ComsPlayedMoveMessage &playedMessage)
 	playingPlayers_.erase(itor);
 
 	tank->getScore().setMissedMoves(0);
-	tank->getState().setServerState(TankState::serverNone);
 }
 

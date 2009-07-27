@@ -140,7 +140,8 @@ bool ServerLoadLevel::processMessage(
 		if (destinationId == tank->getDestinationId())
 		{
 			TankLoadedSimAction *loadedAction = 
-				new TankLoadedSimAction(tank->getPlayerId());
+				new TankLoadedSimAction(tank->getPlayerId(), 
+					tank->getState().getNotSpectator());
 			ScorchedServer::instance()->getServerSimulator().
 				addSimulatorAction(loadedAction);
 		}

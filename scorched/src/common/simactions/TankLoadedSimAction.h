@@ -27,7 +27,7 @@ class TankLoadedSimAction : public SimAction
 {
 public:
 	TankLoadedSimAction();
-	TankLoadedSimAction(unsigned int playerId);
+	TankLoadedSimAction(unsigned int playerId, bool notSpectator);
 	virtual ~TankLoadedSimAction();
 
 	virtual bool invokeAction(ScorchedContext &context);
@@ -38,6 +38,7 @@ public:
 REGISTER_CLASS_HEADER(TankLoadedSimAction);
 protected:
 	unsigned int playerId_;
+	bool notSpectator_;
 };
 
 #endif // !defined(AFX_TankLoadedSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

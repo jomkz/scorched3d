@@ -146,7 +146,6 @@ void ServerTurnsSequential::makeMove(Tank *tank)
 	float shotTime = (float)
 		ScorchedServer::instance()->getOptionsGame().getShotTime();
 
-	tank->getState().setServerState(TankState::serverMakingMove);
 	TankStartMoveSimAction *tankSimAction = new TankStartMoveSimAction(
 		tank->getPlayerId(), moveId_, shotTime, false);
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);
@@ -164,7 +163,6 @@ void ServerTurnsSequential::moveFinished(ComsPlayedMoveMessage &playedMessage)
 	playingMoves_ = true;
 	playingPlayer_ = 0;
 	tank->getScore().setMissedMoves(0);
-	tank->getState().setServerState(TankState::serverNone);
 
 	PlayMovesSimAction *movesAction = new PlayMovesSimAction(moveId_);
 	movesAction->addMove(new ComsPlayedMoveMessage(playedMessage));
