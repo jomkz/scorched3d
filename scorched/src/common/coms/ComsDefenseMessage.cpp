@@ -42,6 +42,14 @@ ComsDefenseMessage::ComsDefenseMessage(unsigned int playerId,
 {
 }
 
+ComsDefenseMessage::ComsDefenseMessage(ComsDefenseMessage &other) :
+	ComsMessage(ComsDefenseMessageType),
+	playerId_(other.playerId_),
+	change_(other.change_), 
+	infoId_(other.infoId_)
+{
+}
+
 ComsDefenseMessage::~ComsDefenseMessage()
 {
 }

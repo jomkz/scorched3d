@@ -25,8 +25,9 @@
 #include <coms/ComsDefenseMessage.h>
 #include <common/Logger.h>
 #include <server/ServerShotHolder.h>
-#include <server/ServerDefenseHandler.h>
 #include <server/ScorchedServer.h>
+#include <server/ServerSimulator.h>
+#include <simactions/TankDefenseSimAction.h>
 #include <tank/Tank.h>
 #include <tank/TankLib.h>
 #include <tank/TankPosition.h>
@@ -917,5 +918,6 @@ void TankAICurrentMove::useBattery(Tank *tank, unsigned int batteryId)
 		ComsDefenseMessage::eBatteryUse,
 		batteryId);
 
-	ServerDefenseHandler::instance()->processDefenseMessage(defenseMessage, tank);
+	TankDefenseSimAction *simAction = new TankDefenseSimAction(defenseMessage);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
 }

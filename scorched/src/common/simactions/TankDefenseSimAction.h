@@ -18,32 +18,27 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
+#if !defined(AFX_TankDefenseSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#define AFX_TankDefenseSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
-#if !defined(__INCLUDE_ServerDefenseHandlerh_INCLUDE__)
-#define __INCLUDE_ServerDefenseHandlerh_INCLUDE__
-
-#include <coms/ComsMessageHandler.h>
+#include <simactions/SimAction.h>
 #include <coms/ComsDefenseMessage.h>
 
-class Tank;
-class ServerDefenseHandler : 
-	public ComsMessageHandlerI
+class TankDefenseSimAction : public SimAction
 {
 public:
-	static ServerDefenseHandler *instance();
+	TankDefenseSimAction();
+	TankDefenseSimAction(ComsDefenseMessage &defenseMessage);
+	virtual ~TankDefenseSimAction();
 
-	virtual bool processMessage(
-		NetMessage &message,
-		const char *messageType,
-		NetBufferReader &reader);
+	virtual bool invokeAction(ScorchedContext &context);
 
+	virtual bool writeMessage(NetBuffer &buffer);
+	virtual bool readMessage(NetBufferReader &reader);
+
+REGISTER_CLASS_HEADER(TankDefenseSimAction);
 protected:
-	static ServerDefenseHandler *instance_;
-
-private:
-	ServerDefenseHandler();
-	virtual ~ServerDefenseHandler();
+	ComsDefenseMessage defenseMessage_;
 };
 
-
-#endif
+#endif // !defined(AFX_TankDefenseSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
