@@ -3597,6 +3597,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\dialogs\BuyAccessoryDialogTankInfo.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\dialogs\BuyAccessoryDialogTankInfo.h"
+				>
+			</File>
+			<File
 				RelativePath="..\dialogs\CameraDialog.cpp"
 				>
 			</File>
@@ -6282,6 +6290,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\simactions\SimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankAccessorySimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankAccessorySimAction.h"
 				>
 			</File>
 			<File

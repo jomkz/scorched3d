@@ -18,40 +18,27 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ComsBuyAccessoryMessageh_INCLUDE__)
-#define __INCLUDE_ComsBuyAccessoryMessageh_INCLUDE__
+#if !defined(AFX_TankAccessorySimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#define AFX_TankAccessorySimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
-#include <coms/ComsMessage.h>
-#include <string>
+#include <simactions/SimAction.h>
+#include <coms/ComsBuyAccessoryMessage.h>
 
-class ComsBuyAccessoryMessage : public ComsMessage
+class TankAccessorySimAction : public SimAction
 {
 public:
-	static ComsMessageType ComsBuyAccessoryMessageType;
+	TankAccessorySimAction();
+	TankAccessorySimAction(ComsBuyAccessoryMessage &accessoryMessage);
+	virtual ~TankAccessorySimAction();
 
-	ComsBuyAccessoryMessage();
-	ComsBuyAccessoryMessage(ComsBuyAccessoryMessage &other);
-	ComsBuyAccessoryMessage(
-		unsigned int playerId,
-		unsigned int accessoryId,
-		bool buy);
-	virtual ~ComsBuyAccessoryMessage();
+	virtual bool invokeAction(ScorchedContext &context);
 
-	unsigned int getPlayerId() { return playerId_; }
-	unsigned int getAccessoryId() { return accessoryId_; }
-	bool &getBuy() { return buy_; }
+	virtual bool writeMessage(NetBuffer &buffer);
+	virtual bool readMessage(NetBufferReader &reader);
 
-	// Inherited from ComsMessage
-    virtual bool writeMessage(NetBuffer &buffer);
-    virtual bool readMessage(NetBufferReader &reader);
-
+REGISTER_CLASS_HEADER(TankAccessorySimAction);
 protected:
-	unsigned int playerId_;
-	unsigned int accessoryId_;
-	bool buy_;
-private:
-	const ComsBuyAccessoryMessage & operator=(const ComsBuyAccessoryMessage &);
+	ComsBuyAccessoryMessage accessoryMessage_;
 };
 
-
-#endif
+#endif // !defined(AFX_TankAccessorySimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

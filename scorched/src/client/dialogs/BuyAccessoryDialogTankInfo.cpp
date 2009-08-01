@@ -18,40 +18,38 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ComsBuyAccessoryMessageh_INCLUDE__)
-#define __INCLUDE_ComsBuyAccessoryMessageh_INCLUDE__
+#include <dialogs/BuyAccessoryDialogTankInfo.h>
+#include <client/ScorchedClient.h>
+#include <tank/TankCOntainer.h>
+#include <tank/TankScore.h>
 
-#include <coms/ComsMessage.h>
-#include <string>
-
-class ComsBuyAccessoryMessage : public ComsMessage
+BuyAccessoryDialogTankInfo::BuyAccessoryDialogTankInfo() :
+	tankAccessories(ScorchedClient::instance()->getContext())
 {
-public:
-	static ComsMessageType ComsBuyAccessoryMessageType;
+}
 
-	ComsBuyAccessoryMessage();
-	ComsBuyAccessoryMessage(ComsBuyAccessoryMessage &other);
-	ComsBuyAccessoryMessage(
-		unsigned int playerId,
-		unsigned int accessoryId,
-		bool buy);
-	virtual ~ComsBuyAccessoryMessage();
-
-	unsigned int getPlayerId() { return playerId_; }
-	unsigned int getAccessoryId() { return accessoryId_; }
-	bool &getBuy() { return buy_; }
-
-	// Inherited from ComsMessage
-    virtual bool writeMessage(NetBuffer &buffer);
-    virtual bool readMessage(NetBufferReader &reader);
-
-protected:
-	unsigned int playerId_;
-	unsigned int accessoryId_;
-	bool buy_;
-private:
-	const ComsBuyAccessoryMessage & operator=(const ComsBuyAccessoryMessage &);
-};
-
-
-#endif
+void BuyAccessoryDialogTankInfo::set()
+{
+	Tank *tank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+	if (tank)
+	{
+		tankAccessories.setTank(tank);
+		NetBuffer buffer;
+		tank->getAccessories().writeMessage(buffer, true);
+		NetBufferReader reader(buffer);
+		tankAccessories.readMessage(reader);
+		tankColor = tank->getColor();
+		tankId = tank->getPlayerId();
+		tankMoney = tank->getScore().getMoney();
+		tankName = tank->getTargetName();
+	} 
+	else
+	{
+		tankAccessories.setTank(0);
+		tankAccessories.clearAccessories();
+		tankColor = Vector::getNullVector();
+		tankName = LangString();
+		tankMoney = 0;
+		tankId = 0;
+	}
+}

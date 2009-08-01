@@ -18,40 +18,24 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ComsBuyAccessoryMessageh_INCLUDE__)
-#define __INCLUDE_ComsBuyAccessoryMessageh_INCLUDE__
+#if !defined(AFX_BuyAccessoryDialogTankInfo_H__4B5E93CF_1DE2_4979_A629_AEBD725ABE65__INCLUDED_)
+#define AFX_BuyAccessoryDialogTankInfo_H__4B5E93CF_1DE2_4979_A629_AEBD725ABE65__INCLUDED_
 
-#include <coms/ComsMessage.h>
-#include <string>
+#include <tank/TankAccessories.h>
+#include <common/Vector.h>
 
-class ComsBuyAccessoryMessage : public ComsMessage
+class BuyAccessoryDialogTankInfo
 {
 public:
-	static ComsMessageType ComsBuyAccessoryMessageType;
+	BuyAccessoryDialogTankInfo();
 
-	ComsBuyAccessoryMessage();
-	ComsBuyAccessoryMessage(ComsBuyAccessoryMessage &other);
-	ComsBuyAccessoryMessage(
-		unsigned int playerId,
-		unsigned int accessoryId,
-		bool buy);
-	virtual ~ComsBuyAccessoryMessage();
+	TankAccessories tankAccessories;
+	Vector tankColor;
+	LangString tankName;
+	int tankMoney;
+	unsigned int tankId;
 
-	unsigned int getPlayerId() { return playerId_; }
-	unsigned int getAccessoryId() { return accessoryId_; }
-	bool &getBuy() { return buy_; }
-
-	// Inherited from ComsMessage
-    virtual bool writeMessage(NetBuffer &buffer);
-    virtual bool readMessage(NetBufferReader &reader);
-
-protected:
-	unsigned int playerId_;
-	unsigned int accessoryId_;
-	bool buy_;
-private:
-	const ComsBuyAccessoryMessage & operator=(const ComsBuyAccessoryMessage &);
+	void set();
 };
 
-
-#endif
+#endif // !defined(AFX_BuyAccessoryDialogTankInfo_H__4B5E93CF_1DE2_4979_A629_AEBD725ABE65__INCLUDED_)

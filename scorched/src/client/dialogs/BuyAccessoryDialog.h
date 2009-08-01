@@ -24,7 +24,7 @@
 #include <map>
 #include <set>
 #include <vector>
-#include <weapons/Weapon.h>
+#include <dialogs/BuyAccessoryDialogTankInfo.h>
 #include <GLW/GLWFlag.h>
 #include <GLW/GLWWindow.h>
 #include <GLW/GLWButton.h>
@@ -33,7 +33,6 @@
 #include <GLW/GLWCheckBoxText.h>
 #include <GLW/GLWDropDownText.h>
 
-class Tank;
 class BuyAccessoryDialog : public GLWWindow,
 						public GLWButtonI,
 						public GLWCheckBoxI,
@@ -61,6 +60,7 @@ public:
 
 protected:
 	static BuyAccessoryDialog *instance_;
+	BuyAccessoryDialogTankInfo tankInfo_;
 	unsigned int okId_, giftId_;
 	bool firstDrawTime_;
 	std::map<std::string, GLWTab *> buyTabs_;
@@ -84,7 +84,7 @@ protected:
 	void addPlayerWeaponsSell();
 	void addPlayerFavorites();
 	void addPlayerWeaponsBuy(GLWTab *tab, const char *group);
-	bool addAccessory(Tank *tank, GLWTab *tab, float height, Accessory *current);
+	bool addAccessory(GLWTab *tab, float height, Accessory *current);
 
 private:
 	BuyAccessoryDialog();
