@@ -69,7 +69,7 @@ void SkipDialog::buttonDown(unsigned int id)
 			{
 				firstTank->getState().setSkipShots(true);
 			}
-			TankKeyboardControlUtil::skipShot(firstTank);
+			TankKeyboardControlUtil::skipShot(firstTank->getPlayerId());
 		}
 
 		GLWWindowManager::instance()->hideWindow(id_);

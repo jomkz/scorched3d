@@ -36,7 +36,8 @@ public:
 	void clear();
 	void playMove(Tank *tank, 
 		TankAIWeaponSets::WeaponSet *weapons,
-		bool useBatteries);
+		bool useBatteries,
+		unsigned int moveId);
 
 	TankAICurrentTarget &getTargets() { return targets_; }
 
@@ -68,21 +69,23 @@ protected:
 	float projectileMinDistance_;
 
 	bool shootAtTank(Tank *tank, Tank *targetTank, 
-		TankAICurrentMoveWeapons &weapons);
+		TankAICurrentMoveWeapons &weapons, unsigned int moveId);
 	bool makeProjectileShot(Tank *tank, Tank *targetTank,
-		TankAICurrentMoveWeapons &weapons);
+		TankAICurrentMoveWeapons &weapons, unsigned int moveId);
 	bool makeSniperShot(Tank *tank, Tank *targetTank,
-		TankAICurrentMoveWeapons &weapons);
+		TankAICurrentMoveWeapons &weapons, unsigned int moveId);
 	bool makeLaserSniperShot(Tank *tank, Tank *targetTank, 
-		TankAICurrentMoveWeapons &weapons);
+		TankAICurrentMoveWeapons &weapons, unsigned int moveId);
 	bool makeBurriedShot(Tank *tank, Tank *targetTank, 
-		TankAICurrentMoveWeapons &weapons);
+		TankAICurrentMoveWeapons &weapons, unsigned int moveId);
 	bool makeMoveShot(Tank *tank, 
 		TankAIWeaponSets::WeaponSet *weapons,
-		std::list<Tank *> &sortedTanks);
+		std::list<Tank *> &sortedTanks,
+		unsigned int moveId);
 	bool makeGroupShot(Tank *tank, 
 		TankAIWeaponSets::WeaponSet *weapons,
-		std::list<Tank *> &sortedTanks);
+		std::list<Tank *> &sortedTanks,
+		unsigned int moveId);
 
 	bool inHole(Vector &position);
 	Vector lowestHighest(TankAICurrentMoveWeapons &weapons,
@@ -93,9 +96,9 @@ protected:
 	bool useAvailableBatteries(Tank *tank);
 	void setWeapon(Tank *tank, Accessory *accessory);
 	void useBattery(Tank *tank, unsigned int batteryId);
-	void resign(Tank *tank);
-	void skipMove(Tank *tank);
-	void fireShot(Tank *tank);
+	void resign(Tank *tank, unsigned int moveId);
+	void skipMove(Tank *tank, unsigned int moveId);
+	void fireShot(Tank *tank, unsigned int moveId);
 
 };
 

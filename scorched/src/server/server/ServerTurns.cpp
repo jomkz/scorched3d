@@ -20,8 +20,13 @@
 
 #include <server/ServerTurns.h>
 #include <server/ScorchedServer.h>
+#include <server/ServerSimulator.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
+#include <tank/TankScore.h>
+#include <tank/TankTeamScore.h>
+#include <common/OptionsScorched.h>
+#include <simactions/TankStartMoveSimAction.h>
 
 ServerTurns::ServerTurns()
 {
@@ -33,19 +38,49 @@ ServerTurns::~ServerTurns()
 
 bool ServerTurns::showScore()
 {
-	int normal = 0;
-	std::map<unsigned int, Tank *> &playingTanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	std::map<unsigned int, Tank *>::iterator mainitor;
-	for (mainitor = playingTanks.begin();
-		 mainitor != playingTanks.end();
-		 mainitor++)
+	// Check why this round has finished
+	int teamWonGame = 
+		ScorchedServer::instance()->getContext().getTankTeamScore().getWonGame();
+	if (teamWonGame > 0)
 	{
-		Tank *current = (*mainitor).second;
-		if (current->getState().getState() == TankState::sNormal)
+		// A team has won
+		return true;
+	}
+
+	std::map<unsigned int, Tank *> &tanks =
+		ScorchedServer::instance()->getTankContainer().getAllTanks();
+	std::map<unsigned int, Tank *>::iterator itor;
+	for (itor = tanks.begin();
+		itor != tanks.end();
+		itor++)
+	{
+		Tank *tank = (*itor).second;
+		if (tank->getScore().getWonGame())
 		{
-			normal++;
+			return true;
 		}
 	}
-	return (normal <= 1);
+	
+	if (ScorchedServer::instance()->getOptionsGame().getTeams() > 1 &&
+		ScorchedServer::instance()->getTankContainer().teamCount() == 1)
+	{
+		// Only one team left
+		return true;
+	}
+	else if (ScorchedServer::instance()->getTankContainer().aliveCount() < 2)
+	{
+		// Only one person left
+		return true;
+	}
+	return false;
+}
+
+void ServerTurns::playMove(Tank *tank, unsigned int moveId)
+{
+	float shotTime = (float)
+		ScorchedServer::instance()->getOptionsGame().getShotTime();
+
+	TankStartMoveSimAction *tankSimAction = new TankStartMoveSimAction(
+		tank->getPlayerId(), moveId, shotTime, false);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);
 }

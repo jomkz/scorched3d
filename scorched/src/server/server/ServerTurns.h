@@ -21,6 +21,7 @@
 #if !defined(__INCLUDE_ServerTurnsh_INCLUDE__)
 #define __INCLUDE_ServerTurnsh_INCLUDE__
 
+class Tank;
 class ComsPlayedMoveMessage;
 class ServerTurns 
 {
@@ -37,6 +38,8 @@ public:
 
 protected:
 	bool showScore();
+
+	void playMove(Tank *tank, unsigned int moveId);
 };
 
 #endif

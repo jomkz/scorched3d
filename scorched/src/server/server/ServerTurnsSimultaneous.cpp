@@ -153,12 +153,7 @@ void ServerTurnsSimultaneous::simulate()
 
 void ServerTurnsSimultaneous::makeMove(Tank *tank)
 {
-	float shotTime = (float)
-		ScorchedServer::instance()->getOptionsGame().getShotTime();
-
-	TankStartMoveSimAction *tankSimAction = new TankStartMoveSimAction(
-		tank->getPlayerId(), moveId_, shotTime, false);
-	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);
+	playMove(tank, moveId_);
 }
 
 void ServerTurnsSimultaneous::moveFinished(ComsPlayedMoveMessage &playedMessage)

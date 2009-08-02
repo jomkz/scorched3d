@@ -38,11 +38,11 @@ public:
 	// Humans can only be on a client machine so we
 	// don't need to check if we are on the server etc..
 	static void fireShot(Tank *tank);
-	static void skipShot(Tank *tank);
-	static void resign(Tank *tank);
-	static void parachutesUpDown(Tank *tank, unsigned int paraId=0);
-	static void shieldsUpDown(Tank *tank, unsigned int shieldId=0);
-	static void useBattery(Tank *tank, unsigned int batteryId);
+	static void skipShot(unsigned int playerId);
+	static void resign(unsigned int playerId);
+	static void parachutesUpDown(unsigned int playerId, unsigned int paraId=0);
+	static void shieldsUpDown(unsigned int playerId, unsigned int shieldId=0);
+	static void useBattery(unsigned int playerId, unsigned int batteryId);
 
 protected:
 	static void movePower(Tank *tank, char *buffer, unsigned int keyState, float frameTime);

@@ -38,9 +38,8 @@ public:
 	// Inherited from TankAIRandom
 	virtual void newMatch() {}
 	virtual void newGame() {}
-	virtual void playMove() {}
-	virtual void buyAccessories() {}
-	virtual void autoDefense() {}
+	virtual void playMove(unsigned int moveId) {}
+	virtual void buyAccessories(unsigned int moveId) {}
 
 	// Notification of actions happened
 	virtual void tankHurt(Weapon *weapon, float damage, 

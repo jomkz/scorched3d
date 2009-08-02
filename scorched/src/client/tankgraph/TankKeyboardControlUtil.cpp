@@ -105,7 +105,7 @@ void TankKeyboardControlUtil::keyboardCheck(
 				AccessoryPart::AccessoryParachute);
 		if (parachutes.size() == 1)
 		{
-			parachutesUpDown(tank, parachutes.front()->getAccessoryId());
+			parachutesUpDown(tank->getPlayerId(), parachutes.front()->getAccessoryId());
 		}
 	}
 
@@ -119,7 +119,7 @@ void TankKeyboardControlUtil::keyboardCheck(
 					AccessoryPart::AccessoryShield);
 			if (shields.size() == 1)
 			{
-				shieldsUpDown(tank, shields.front()->getAccessoryId());
+				shieldsUpDown(tank->getPlayerId(), shields.front()->getAccessoryId());
 			}
 		}
 	}
@@ -135,7 +135,7 @@ void TankKeyboardControlUtil::keyboardCheck(
 					AccessoryPart::AccessoryBattery);
 			if (!entries.empty())
 			{
-				useBattery(tank, entries.front()->getAccessoryId());
+				useBattery(tank->getPlayerId(), entries.front()->getAccessoryId());
 			}
 		}
 	}
@@ -521,10 +521,10 @@ void TankKeyboardControlUtil::fireShot(Tank *tank)
 	}
 }
 
-void TankKeyboardControlUtil::skipShot(Tank *tank)
+void TankKeyboardControlUtil::skipShot(unsigned int playerId)
 {
 	// send message saying we are finished with shot
-	ComsPlayedMoveMessage comsMessage(tank->getPlayerId(), 
+	ComsPlayedMoveMessage comsMessage(playerId, 
 		ScorchedClient::instance()->getTankContainer().getCurrentMoveId(),
 		ComsPlayedMoveMessage::eSkip);
 
@@ -536,10 +536,10 @@ void TankKeyboardControlUtil::skipShot(Tank *tank)
 	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
 }
 
-void TankKeyboardControlUtil::resign(Tank *tank)
+void TankKeyboardControlUtil::resign(unsigned int playerId)
 {
 	// send message saying we are finished with shot
-	ComsPlayedMoveMessage comsMessage(tank->getPlayerId(), 
+	ComsPlayedMoveMessage comsMessage(playerId, 
 		ScorchedClient::instance()->getTankContainer().getCurrentMoveId(),
 		ComsPlayedMoveMessage::eResign);
 
@@ -551,28 +551,28 @@ void TankKeyboardControlUtil::resign(Tank *tank)
 	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
 }
 
-void TankKeyboardControlUtil::parachutesUpDown(Tank *tank, unsigned int paraId)
+void TankKeyboardControlUtil::parachutesUpDown(unsigned int playerId, unsigned int paraId)
 {
 	ComsDefenseMessage defenseMessage(
-		tank->getPlayerId(),
+		playerId,
 		(paraId!=0)?ComsDefenseMessage::eParachutesUp:ComsDefenseMessage::eParachutesDown,
 		paraId);
 	ComsMessageSender::sendToServer(defenseMessage);
 }
 
-void TankKeyboardControlUtil::shieldsUpDown(Tank *tank, unsigned int shieldId)
+void TankKeyboardControlUtil::shieldsUpDown(unsigned int playerId, unsigned int shieldId)
 {
 	ComsDefenseMessage defenseMessage(
-		tank->getPlayerId(),
+		playerId,
 		(shieldId!=0)?ComsDefenseMessage::eShieldUp:ComsDefenseMessage::eShieldDown,
 		shieldId);
 	ComsMessageSender::sendToServer(defenseMessage);
 }
 
-void TankKeyboardControlUtil::useBattery(Tank *tank, unsigned int batteryId)
+void TankKeyboardControlUtil::useBattery(unsigned int playerId, unsigned int batteryId)
 {
 	ComsDefenseMessage defenseMessage(
-		tank->getPlayerId(),
+		playerId,
 		ComsDefenseMessage::eBatteryUse,
 		batteryId);
 	ComsMessageSender::sendToServer(defenseMessage);

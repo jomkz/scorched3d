@@ -24,6 +24,7 @@
 #include <GLW/GLWWindow.h>
 #include <GLW/GLWButton.h>
 #include <GLW/GLWDropDownText.h>
+#include <dialogs/BuyAccessoryDialogTankInfo.h>
 
 class AutoDefenseDialog :
 	public GLWWindow, 
@@ -44,6 +45,7 @@ public:
 	virtual void windowInit(const unsigned state);
 
 protected:
+	BuyAccessoryDialogTankInfo &tankInfo_;
 	unsigned int okId_;
 	unsigned int cancelId_;
 	GLWPanel *topPanel_;

@@ -34,6 +34,9 @@ public:
 
 protected:
 	bool finished_;
+
+	bool scoreWinners();
+	void scoreOverallWinner();
 };
 
 #endif

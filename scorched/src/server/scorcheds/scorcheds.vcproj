@@ -889,14 +889,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\server\ServerNextShotState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\server\ServerNextShotState.h"
-				>
-			</File>
-			<File
 				RelativePath="..\server\ServerNextTurnState.cpp"
 				>
 			</File>
@@ -3998,6 +3990,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\simactions\TankDefenseSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankGiftSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankGiftSimAction.h"
 				>
 			</File>
 			<File

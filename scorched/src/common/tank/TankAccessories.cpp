@@ -463,13 +463,13 @@ void TankAccessories::activate(Accessory *accessory)
 	{
 	case AccessoryPart::AccessoryParachute:
 		TankKeyboardControlUtil::parachutesUpDown(
-			tank_,
+			tank_->getPlayerId(),
 			(tank_->getParachute().getCurrentParachute()==accessory)?
 			0:accessory->getAccessoryId());
 		break;
 	case AccessoryPart::AccessoryShield:
 		TankKeyboardControlUtil::shieldsUpDown(
-			tank_,
+			tank_->getPlayerId(),
 			(tank_->getShield().getCurrentShield()==accessory)?
 			0:accessory->getAccessoryId());
 		break;
@@ -481,7 +481,8 @@ void TankAccessories::activate(Accessory *accessory)
 			tank_->getLife().getMaxLife())
 		{
 			TankKeyboardControlUtil::useBattery(
-				tank_, accessory->getAccessoryId());
+				tank_->getPlayerId(), 
+				accessory->getAccessoryId());
 		}
 		break;
 	case AccessoryPart::AccessoryAutoDefense:

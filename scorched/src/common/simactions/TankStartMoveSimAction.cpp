@@ -22,6 +22,7 @@
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
 #include <tank/TankContainer.h>
+#include <tankai/TankAI.h>
 #ifndef S3D_SERVER
 #include <client/ClientStartGameHandler.h>
 #endif
@@ -50,6 +51,24 @@ bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 #ifndef S3D_SERVER
 	ClientStartGameHandler::instance()->startGame(this);
 #endif
+	}
+	else
+	{
+		Tank *tank = context.getTankContainer().getCurrentTank();
+		if (tank && tank->getState().getState() == TankState::sNormal)
+		{
+			if (tank->getDestinationId() == 0)
+			{
+				if (buying_)
+				{
+					tank->getTankAI()->buyAccessories(moveId_);
+				}
+				else
+				{
+					tank->getTankAI()->playMove(moveId_);
+				}
+			}
+		}
 	}
 
 	return true;

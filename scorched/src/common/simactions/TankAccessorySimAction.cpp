@@ -25,9 +25,6 @@
 #include <tank/TankScore.h>
 #include <weapons/AccessoryStore.h>
 #include <weapons/EconomyStore.h>
-#include <target/TargetLife.h>
-#include <target/TargetShield.h>
-#include <target/TargetParachute.h>
 
 REGISTER_CLASS_SOURCE(TankAccessorySimAction);
 
@@ -51,12 +48,6 @@ bool TankAccessorySimAction::invokeAction(ScorchedContext &context)
 	// Check tank exists and is alive
 	Tank *tank = context.getTankContainer().getTankById(playerId);
 	if (!tank || tank->getState().getState() != TankState::sNormal)
-	{
-		return true;
-	}
-
-	// Check this player is alive
-	if (tank->getState().getState() != TankState::sNormal)
 	{
 		return true;
 	}

@@ -50,7 +50,8 @@ BuyAccessoryDialog::BuyAccessoryDialog() :
 	GLWWindow("Buy", 10.0f, 10.0f, 465.0f, 300.0f, eHideName,
 		"Allows the current player to buy and sell\n"
 		"weapons and other accessories."),
-	firstDrawTime_(true), sellTab_(0), flag_(0)
+	firstDrawTime_(true), sellTab_(0), flag_(0),
+	tankInfo_(*BuyAccessoryDialogTankInfo::instance())
 {
 	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("OK", "Ok"), 400, 10, 55, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX))->getId();
@@ -544,8 +545,6 @@ void BuyAccessoryDialog::buttonDown(unsigned int id)
 	{
 		GLWWindowManager::instance()->showWindow(
 			GiftMoneyDialog::instance()->getId());
-		GLWWindowManager::instance()->hideWindow(
-			getId());
 	}
 	else
 	{

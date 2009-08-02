@@ -29,7 +29,6 @@
 #include <client/ClientGameStoppedHandler.h>
 #include <client/ClientMessageHandler.h>
 #include <client/ClientConnectionRejectHandler.h>
-#include <client/ClientGiftMoneyHandler.h>
 #include <client/ClientLinesHandler.h>
 #include <client/ClientStartGameHandler.h>
 #include <client/ClientProcessingLoop.h>
@@ -184,7 +183,6 @@ static bool initComsHandlers()
 
 	ClientChannelManager::instance();
 	ClientConnectionRejectHandler::instance();
-	ClientGiftMoneyHandler::instance();
 	ClientLinesHandler::instance();
 	ClientConnectionAcceptHandler::instance();
 	ClientConnectionAuthHandler::instance();

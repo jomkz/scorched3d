@@ -3305,14 +3305,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\client\ClientGiftMoneyHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientGiftMoneyHandler.h"
-				>
-			</File>
-			<File
 				RelativePath="..\client\ClientInitializeModHandler.cpp"
 				>
 			</File>
@@ -5537,14 +5529,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\server\server\ServerNextShotState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerNextShotState.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\server\server\ServerNextTurnState.cpp"
 				>
 			</File>
@@ -6322,6 +6306,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\simactions\TankDefenseSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankGiftSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankGiftSimAction.h"
 				>
 			</File>
 			<File

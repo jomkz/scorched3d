@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <dialogs/GiftMoneyDialog.h>
-#include <dialogs/BuyAccessoryDialog.h>
 #include <graph/OptionsDisplay.h>
 #include <client/ScorchedClient.h>
 #include <tank/TankContainer.h>
@@ -43,7 +42,8 @@ GiftMoneyDialog *GiftMoneyDialog::instance()
 
 GiftMoneyDialog::GiftMoneyDialog() :
 	GLWWindow("Gift", 10.0f, 10.0f, 300.0f, 70.0f, eSmallTitle | eHideName,
-		"Send money to other team players")
+		"Send money to other team players"),
+	tankInfo_(*BuyAccessoryDialogTankInfo::instance())
 {
 	needCentered_ = true;
 
@@ -99,20 +99,20 @@ void GiftMoneyDialog::display()
 	}
 
 	// Add available amounts of money
-	if (currentTank->getScore().getMoney() >= 1000)
-		money_->addEntry(GLWSelectorEntry(LANG_RESOURCE("1000_DOLLARS", "$1000"), 0, false, 0, (void *) 1000));
-	if (currentTank->getScore().getMoney() >= 2500)
-		money_->addEntry(GLWSelectorEntry(LANG_RESOURCE("2500_DOLLARS", "$2500"), 0, false, 0, (void *) 2500));
-	if (currentTank->getScore().getMoney() >= 5000)
-		money_->addEntry(GLWSelectorEntry(LANG_RESOURCE("5000_DOLLARS", "$5000"), 0, false, 0, (void *) 5000));
-	if (currentTank->getScore().getMoney() >= 10000)
-		money_->addEntry(GLWSelectorEntry(LANG_RESOURCE("10000_DOLLARS", "$10000"), 0, false, 0, (void *) 10000));
-	if (currentTank->getScore().getMoney() >= 15000)
-		money_->addEntry(GLWSelectorEntry(LANG_RESOURCE("15000_DOLLARS", "$15000"), 0, false, 0, (void *) 15000));
-	if (currentTank->getScore().getMoney() >= 20000)
-		money_->addEntry(GLWSelectorEntry(LANG_RESOURCE("20000_DOLLARS", "$20000"), 0, false, 0, (void *) 20000));
-	if (currentTank->getScore().getMoney() >= 25000)
-		money_->addEntry(GLWSelectorEntry(LANG_RESOURCE("25000_DOLLARS", "$25000"), 0, false, 0, (void *) 25000));
+	int amounts [] = { 1000, 2500, 500, 10000, 15000, 20000, 25000, 50000, 100000 };
+	for (int i=0; i<sizeof(amounts)/sizeof(int); i++)
+	{
+		int amount = amounts[i];
+		if (tankInfo_.tankMoney >= amount)
+		{
+			money_->addEntry(
+				GLWSelectorEntry(
+				LANG_RESOURCE(
+					S3D::formatStringBuffer("%i_DOLLARS", amount), 
+					S3D::formatStringBuffer("$%i", amount)), 
+					0, false, 0, (void *) amount));
+		}
+	}
 
 	// Add all tanks in the same team as the current
 	std::map<unsigned int, Tank *> &tanks = 
@@ -145,17 +145,10 @@ void GiftMoneyDialog::buttonDown(unsigned int id)
 			unsigned int playerId = (unsigned int)
 				long(players_->getCurrentEntry()->getUserData());
 
-			Tank *currentTank = 
-				ScorchedClient::instance()->getTankContainer().getCurrentTank();
-			if (currentTank)
-			{
-				ComsGiftMoneyMessage message(
-					currentTank->getPlayerId(), playerId, money);
-				ComsMessageSender::sendToServer(message);
-			}
+			ComsGiftMoneyMessage message(
+				tankInfo_.tankId, playerId, money);
+			ComsMessageSender::sendToServer(message);
 		}
 	}
 	GLWWindowManager::instance()->hideWindow(getId());
-	GLWWindowManager::instance()->showWindow(
-		BuyAccessoryDialog::instance()->getId());
 }

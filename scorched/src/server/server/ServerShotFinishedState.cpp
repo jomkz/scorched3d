@@ -22,7 +22,6 @@
 #include <server/ScorchedServer.h>
 #include <server/ServerTooFewPlayersStimulus.h>
 #include <server/ServerMessageHandler.h>
-#include <server/ServerNextShotState.h>
 #include <server/ServerChannelManager.h>
 #include <server/ServerShotState.h>
 #include <server/ServerCommon.h>

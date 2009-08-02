@@ -143,12 +143,7 @@ void ServerTurnsSequential::makeMove(Tank *tank)
 {
 	moveId_++;
 
-	float shotTime = (float)
-		ScorchedServer::instance()->getOptionsGame().getShotTime();
-
-	TankStartMoveSimAction *tankSimAction = new TankStartMoveSimAction(
-		tank->getPlayerId(), moveId_, shotTime, false);
-	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);
+	playMove(tank, moveId_);
 }
 
 void ServerTurnsSequential::moveFinished(ComsPlayedMoveMessage &playedMessage)

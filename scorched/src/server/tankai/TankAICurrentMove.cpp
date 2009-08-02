@@ -24,9 +24,9 @@
 #include <coms/ComsPlayedMoveMessage.h>
 #include <coms/ComsDefenseMessage.h>
 #include <common/Logger.h>
-#include <server/ServerShotHolder.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerSimulator.h>
+#include <server/ServerState.h>
 #include <simactions/TankDefenseSimAction.h>
 #include <tank/Tank.h>
 #include <tank/TankLib.h>
@@ -132,7 +132,8 @@ void TankAICurrentMove::clear()
 }
 
 void TankAICurrentMove::playMove(Tank *tank, 
-	TankAIWeaponSets::WeaponSet *weapons, bool useBatteries)
+	TankAIWeaponSets::WeaponSet *weapons, bool useBatteries,
+	unsigned int moveId)
 {
 	std::list<Tank *> sortedTanks;	
 
@@ -155,14 +156,14 @@ void TankAICurrentMove::playMove(Tank *tank,
 		if (tank->getLife().getLife().asFloat() > movementLife_)
 		{
 			// Try to move
-			if (makeMoveShot(tank, weapons, sortedTanks)) return;
+			if (makeMoveShot(tank, weapons, sortedTanks, moveId)) return;
 		}
 	}
 
 	// Check to see if we can make a huge shot at a number of tanks
 	if (RAND <= groupShotChance_)
 	{
-		if (makeGroupShot(tank, weapons, sortedTanks)) return;
+		if (makeGroupShot(tank, weapons, sortedTanks, moveId)) return;
 	}
 
 	// Try to shoot at each tank in turn
@@ -176,7 +177,7 @@ void TankAICurrentMove::playMove(Tank *tank,
 		TankAICurrentMoveWeapons moveWeapons(tank, targetTank, weapons);
 
 		// Try to shoot at it
-		if (shootAtTank(tank, targetTank, moveWeapons)) return;
+		if (shootAtTank(tank, targetTank, moveWeapons, moveId)) return;
 
 		// Keeping trying to shoot at the tanks until we make a shot
 		// or run out of tanks
@@ -200,7 +201,7 @@ void TankAICurrentMove::playMove(Tank *tank,
 	if (tank->getLife().getLife().asFloat() > movementLife_)
 	{
 		targets_.getTargets(tank, sortedTanks);
-		if (makeMoveShot(tank, weapons, sortedTanks)) return;
+		if (makeMoveShot(tank, weapons, sortedTanks, moveId)) return;
 	}
 
 	// Is there any point in making a move
@@ -208,35 +209,35 @@ void TankAICurrentMove::playMove(Tank *tank,
 	if (useResign_ &&
 		tank->getLife().getLife().asFloat() < resignLife_) 
 	{
-		resign(tank);
+		resign(tank, moveId);
 		return;
 	}
 
 	// By default skip this move if we can't find anything to do
 	// Perhaps we are burried etc...
-	skipMove(tank);
+	skipMove(tank, moveId);
 }
 
 bool TankAICurrentMove::shootAtTank(Tank *tank, Tank *targetTank, 
-	TankAICurrentMoveWeapons &weapons)
+	TankAICurrentMoveWeapons &weapons, unsigned int moveId)
 {
 	// Try to make a sniper shot
-	if (makeSniperShot(tank, targetTank, weapons)) return true;
+	if (makeSniperShot(tank, targetTank, weapons, moveId)) return true;
 
 	// Try to make a laser shot
-	if (makeLaserSniperShot(tank, targetTank, weapons)) return true;
+	if (makeLaserSniperShot(tank, targetTank, weapons, moveId)) return true;
 
 	// Then a projectile shot
-	if (makeProjectileShot(tank, targetTank, weapons)) return true;
+	if (makeProjectileShot(tank, targetTank, weapons, moveId)) return true;
 
 	// Check if we are burried
-	if (makeBurriedShot(tank, targetTank, weapons)) return true;
+	if (makeBurriedShot(tank, targetTank, weapons, moveId)) return true;
 
 	return false;
 }
 
 bool TankAICurrentMove::makeProjectileShot(Tank *tank, Tank *targetTank, 
-	TankAICurrentMoveWeapons &weapons)
+	TankAICurrentMoveWeapons &weapons, unsigned int moveId)
 {
 	// Check we have any weapons to fire
 	if (!weapons.roller &&
@@ -349,7 +350,7 @@ bool TankAICurrentMove::makeProjectileShot(Tank *tank, Tank *targetTank,
 
 			// Fire the shot
 			shotAtTank(targetTank, true, distanceFromTarget);
-			fireShot(tank);
+			fireShot(tank, moveId);
 			return true;
 		}
 	}
@@ -358,7 +359,7 @@ bool TankAICurrentMove::makeProjectileShot(Tank *tank, Tank *targetTank,
 }
 
 bool TankAICurrentMove::makeSniperShot(Tank *tank, Tank *targetTank, 
-	TankAICurrentMoveWeapons &weapons)
+	TankAICurrentMoveWeapons &weapons, unsigned int moveId)
 {
 	// Check if we have any weapons we can use for sniper
 	if (!weapons.digger &&
@@ -402,7 +403,7 @@ bool TankAICurrentMove::makeSniperShot(Tank *tank, Tank *targetTank,
 
 			// Fire the shot
 			shotAtTank(targetTank, false, 0.0f);
-			fireShot(tank);
+			fireShot(tank, moveId);
 			return true;
 		}
 		else if (weapons.laser)
@@ -410,7 +411,7 @@ bool TankAICurrentMove::makeSniperShot(Tank *tank, Tank *targetTank,
 			// They have a reflective shield but we can use a laser
 			// Set and fire the laser
 			shotAtTank(targetTank, false, 0.0f);
-			fireShot(tank);
+			fireShot(tank, moveId);
 			return true;
 		}
 	}
@@ -419,7 +420,7 @@ bool TankAICurrentMove::makeSniperShot(Tank *tank, Tank *targetTank,
 }
 
 bool TankAICurrentMove::makeLaserSniperShot(Tank *tank, Tank *targetTank, 
-	TankAICurrentMoveWeapons &weapons)
+	TankAICurrentMoveWeapons &weapons, unsigned int moveId)
 {
 	// Check if we have any lasers to fire
 	if (!weapons.laser) return false;
@@ -438,7 +439,7 @@ bool TankAICurrentMove::makeLaserSniperShot(Tank *tank, Tank *targetTank,
 			// Set and fire the laser
 			shotAtTank(targetTank, false, 0.0f);
 			setWeapon(tank, weapons.laser);
-			fireShot(tank);
+			fireShot(tank, moveId);
 			return true;
 		}
 	}
@@ -447,7 +448,7 @@ bool TankAICurrentMove::makeLaserSniperShot(Tank *tank, Tank *targetTank,
 }
 
 bool TankAICurrentMove::makeBurriedShot(Tank *tank, Tank *targetTank, 
-	TankAICurrentMoveWeapons &weapons)
+	TankAICurrentMoveWeapons &weapons, unsigned int moveId)
 {
 	// Don't check if we can't uncover
 	if (!weapons.uncover) return false;
@@ -473,7 +474,7 @@ bool TankAICurrentMove::makeBurriedShot(Tank *tank, Tank *targetTank,
 			tank->getPosition().changePower(power, false);
 
 			setWeapon(tank, weapons.uncover);
-			fireShot(tank);
+			fireShot(tank, moveId);
 			return true;
 		}
 	}
@@ -555,7 +556,8 @@ bool TankAICurrentMove::inHole(Vector &position)
 
 bool TankAICurrentMove::makeMoveShot(Tank *tank, 
 	TankAIWeaponSets::WeaponSet *weapons,
-	std::list<Tank *> &sortedTanks)
+	std::list<Tank *> &sortedTanks,
+	unsigned int moveId)
 {
 	if (!useFuel_) return false;
 	if (sortedTanks.empty()) return false;
@@ -612,7 +614,7 @@ bool TankAICurrentMove::makeMoveShot(Tank *tank,
 					// Move
 					tank->getPosition().setSelectPosition((int) x, (int) y);
 					setWeapon(tank, fuel);
-					fireShot(tank);
+					fireShot(tank, moveId);
 
 					return true;
 				}
@@ -634,7 +636,8 @@ struct GroupingEntry
 
 bool TankAICurrentMove::makeGroupShot(Tank *tank, 
 	TankAIWeaponSets::WeaponSet *weapons,
-	std::list<Tank *> &sortedTanks)
+	std::list<Tank *> &sortedTanks,
+	unsigned int moveId)
 {
 	if (groupShotSize_ == 0) return false;
 	Accessory *explosionhuge = weapons->getTankAccessoryByType(tank, "explosionhuge");
@@ -726,7 +729,7 @@ bool TankAICurrentMove::makeGroupShot(Tank *tank,
 					degs, 15.0f, actualPosition))
 				{
 					setWeapon(tank, explosionhuge);
-					fireShot(tank);
+					fireShot(tank, moveId);
 					return true;
 				}
 			}
@@ -868,33 +871,30 @@ void TankAICurrentMove::setWeapon(Tank *tank, Accessory *accessory)
 	tank->getAccessories().getWeapons().setWeapon(accessory);
 }
 
-void TankAICurrentMove::skipMove(Tank *tank)
+void TankAICurrentMove::skipMove(Tank *tank, unsigned int moveId)
 {
-	ComsPlayedMoveMessage *message = 
-		new ComsPlayedMoveMessage(tank->getPlayerId(), 
-			0,
+	ComsPlayedMoveMessage message(tank->getPlayerId(), 
+			moveId,
 			ComsPlayedMoveMessage::eSkip);
-	ServerShotHolder::instance()->addShot(tank->getPlayerId(), message);
+	ScorchedServer::instance()->getServerState().moveFinished(message);
 }
 
-void TankAICurrentMove::resign(Tank *tank)
+void TankAICurrentMove::resign(Tank *tank, unsigned int moveId)
 {
-	ComsPlayedMoveMessage *message = 
-		new ComsPlayedMoveMessage(tank->getPlayerId(), 
-			0, ComsPlayedMoveMessage::eResign);
-	ServerShotHolder::instance()->addShot(tank->getPlayerId(), message);
+	ComsPlayedMoveMessage message(tank->getPlayerId(), 
+			moveId, ComsPlayedMoveMessage::eResign);
+	ScorchedServer::instance()->getServerState().moveFinished(message);
 }
 
-void TankAICurrentMove::fireShot(Tank *tank)
+void TankAICurrentMove::fireShot(Tank *tank, unsigned int moveId)
 {
 	Accessory *currentWeapon = 
 		tank->getAccessories().getWeapons().getCurrent();
 	if (currentWeapon)
 	{
-		ComsPlayedMoveMessage *message = 
-			new ComsPlayedMoveMessage(tank->getPlayerId(), 
-				0, ComsPlayedMoveMessage::eShot);
-		message->setShot(
+		ComsPlayedMoveMessage message(tank->getPlayerId(), 
+				moveId, ComsPlayedMoveMessage::eShot);
+		message.setShot(
 			currentWeapon->getAccessoryId(),
 			tank->getPosition().getRotationGunXY(),
 			tank->getPosition().getRotationGunYZ(),
@@ -902,12 +902,7 @@ void TankAICurrentMove::fireShot(Tank *tank)
 			tank->getPosition().getSelectPositionX(),
 			tank->getPosition().getSelectPositionY());
 	
-		if (!ServerShotHolder::instance()->addShot(tank->getPlayerId(), message))
-		{
-			Logger::log(S3D::formatStringBuffer("AI %u failed to make a shot, shot refused",
-				tank->getPlayerId()));
-			skipMove(tank);
-		}
+		ScorchedServer::instance()->getServerState().moveFinished(message);
 	}
 }
 

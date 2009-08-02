@@ -60,7 +60,7 @@ public:
 
 protected:
 	static BuyAccessoryDialog *instance_;
-	BuyAccessoryDialogTankInfo tankInfo_;
+	BuyAccessoryDialogTankInfo &tankInfo_;
 	unsigned int okId_, giftId_;
 	bool firstDrawTime_;
 	std::map<std::string, GLWTab *> buyTabs_;

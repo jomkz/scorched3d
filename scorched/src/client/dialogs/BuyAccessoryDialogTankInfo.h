@@ -27,7 +27,7 @@
 class BuyAccessoryDialogTankInfo
 {
 public:
-	BuyAccessoryDialogTankInfo();
+	static BuyAccessoryDialogTankInfo *instance();
 
 	TankAccessories tankAccessories;
 	Vector tankColor;
@@ -36,6 +36,11 @@ public:
 	unsigned int tankId;
 
 	void set();
+
+protected:
+	static BuyAccessoryDialogTankInfo *instance_;
+
+	BuyAccessoryDialogTankInfo();
 };
 
 #endif // !defined(AFX_BuyAccessoryDialogTankInfo_H__4B5E93CF_1DE2_4979_A629_AEBD725ABE65__INCLUDED_)

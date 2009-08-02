@@ -18,28 +18,27 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ClientGiftMoneyHandlerh_INCLUDE__)
-#define __INCLUDE_ClientGiftMoneyHandlerh_INCLUDE__
+#if !defined(AFX_TankGiftSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#define AFX_TankGiftSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
-#include <coms/ComsMessageHandler.h>
+#include <simactions/SimAction.h>
+#include <coms/ComsGiftMoneyMessage.h>
 
-class ClientGiftMoneyHandler  : 
-	public ComsMessageHandlerI
+class TankGiftSimAction : public SimAction
 {
 public:
-	static ClientGiftMoneyHandler *instance();
+	TankGiftSimAction();
+	TankGiftSimAction(ComsGiftMoneyMessage &giftMessage);
+	virtual ~TankGiftSimAction();
 
-	virtual bool processMessage(
-		NetMessage &message,
-		const char *messageType,
-		NetBufferReader &reader);
+	virtual bool invokeAction(ScorchedContext &context);
 
+	virtual bool writeMessage(NetBuffer &buffer);
+	virtual bool readMessage(NetBufferReader &reader);
+
+REGISTER_CLASS_HEADER(TankGiftSimAction);
 protected:
-	static ClientGiftMoneyHandler *instance_;
-
-private:
-	ClientGiftMoneyHandler();
-	virtual ~ClientGiftMoneyHandler();
+	ComsGiftMoneyMessage giftMessage_;
 };
 
-#endif
+#endif // !defined(AFX_TankGiftSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

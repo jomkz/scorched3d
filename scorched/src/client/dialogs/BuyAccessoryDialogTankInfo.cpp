@@ -23,6 +23,14 @@
 #include <tank/TankCOntainer.h>
 #include <tank/TankScore.h>
 
+BuyAccessoryDialogTankInfo *BuyAccessoryDialogTankInfo::instance_ = 0;
+
+BuyAccessoryDialogTankInfo *BuyAccessoryDialogTankInfo::instance()
+{
+	if (!instance_) instance_ = new BuyAccessoryDialogTankInfo();
+	return instance_;
+}
+
 BuyAccessoryDialogTankInfo::BuyAccessoryDialogTankInfo() :
 	tankAccessories(ScorchedClient::instance()->getContext())
 {

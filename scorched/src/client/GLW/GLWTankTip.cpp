@@ -230,7 +230,7 @@ void TankBatteryTip::itemSelected(GLWSelectorEntry *entry, int position)
 			if (!entries.empty())
 			{
 
-				TankKeyboardControlUtil::useBattery(tank_,
+				TankKeyboardControlUtil::useBattery(tank_->getPlayerId(),
 					entries.front()->getAccessoryId());
 			}
 		}
@@ -315,9 +315,9 @@ void TankShieldTip::populate()
 void TankShieldTip::itemSelected(GLWSelectorEntry *entry, int position)
 {
 	if (entry->getUserData() == 0) 
-		TankKeyboardControlUtil::shieldsUpDown(tank_, 0);
+		TankKeyboardControlUtil::shieldsUpDown(tank_->getPlayerId(), 0);
 	else 
-		TankKeyboardControlUtil::shieldsUpDown(tank_,
+		TankKeyboardControlUtil::shieldsUpDown(tank_->getPlayerId(),
 			((Accessory *)entry->getUserData())->getAccessoryId());
 }
 
@@ -429,9 +429,9 @@ void TankParachutesTip::showItems(float x, float y)
 void TankParachutesTip::itemSelected(GLWSelectorEntry *entry, int position)
 {
 	if (entry->getUserData() == 0) 
-		TankKeyboardControlUtil::parachutesUpDown(tank_, 0);
+		TankKeyboardControlUtil::parachutesUpDown(tank_->getPlayerId(), 0);
 	else 
-		TankKeyboardControlUtil::parachutesUpDown(tank_,
+		TankKeyboardControlUtil::parachutesUpDown(tank_->getPlayerId(),
 		((Accessory *)entry->getUserData())->getAccessoryId());
 }
 

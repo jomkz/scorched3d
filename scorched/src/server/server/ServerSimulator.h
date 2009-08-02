@@ -36,6 +36,8 @@ public:
 
 	virtual void reset();
 
+	bool getSendActionsEmpty() { return sendActions_.empty() && simActions_.empty(); }
+
 	bool writeTimeMessage(NetBuffer &buffer);
 	bool writeSyncMessage(NetBuffer &buffer);
 

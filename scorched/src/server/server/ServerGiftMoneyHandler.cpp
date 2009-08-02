@@ -20,14 +20,10 @@
 
 #include <server/ServerGiftMoneyHandler.h>
 #include <server/ScorchedServer.h>
-#include <server/ServerShotHolder.h>
+#include <server/ServerSimulator.h>
+#include <server/ServerState.h>
+#include <simactions/TankGiftSimAction.h>
 #include <tank/TankContainer.h>
-#include <tank/TankState.h>
-#include <tank/TankScore.h>
-#include <engine/GameState.h>
-#include <coms/ComsGiftMoneyMessage.h>
-#include <coms/ComsMessageSender.h>
-#include <common/OptionsTransient.h>
 #include <common/Logger.h>
 
 ServerGiftMoneyHandler *ServerGiftMoneyHandler::instance_ = 0;
@@ -64,8 +60,8 @@ bool ServerGiftMoneyHandler::processMessage(
 	unsigned int toPlayerId = message.getToPlayerId();
 
 	// Check we are at the correct time to buy anything
-	//if (ScorchedServer::instance()->getGameState().getState() != 
-	//	ServerState::ServerStateBuying)
+	if (ScorchedServer::instance()->getServerState().getState() != 
+		ServerState::ServerBuyingState)
 	{
 		Logger::log( "ERROR: Player attempted to gift money but in incorrect state");
 		return true;
@@ -84,54 +80,10 @@ bool ServerGiftMoneyHandler::processMessage(
 		Logger::log( "ERROR: Player gifting does not exist at this destination");
 		return true;
 	}
-	if (fromTank->getState().getState() != TankState::sNormal)
-	{
-		Logger::log( "ERROR: Player gifting is not alive");
-		return true;
-	}
-	/*if (!TurnController::instance()->playerThisTurn(fromPlayerId))
-	{
-		Logger::log( "ERROR: Player gifting should not be buying");
-		return true;		
-	}*/
 
-	// Check to player
-	Tank *toTank = ScorchedServer::instance()->
-		getTankContainer().getTankById(toPlayerId);
-	if (!toTank)
-	{
-		Logger::log( "ERROR: Player gifting to does not exist");
-		return true;
-	}
-	if (toTank->getState().getState() != TankState::sNormal &&
-		toTank->getState().getState() != TankState::sDead)
-	{
-		Logger::log( "ERROR: Player gifting to is not alive");
-		return true;
-	}
-	if (toTank->getTeam() != fromTank->getTeam())
-	{
-		Logger::log( "ERROR: Player gifting is in different teams");
-		return true;
-	}
-	if (toTank == fromTank)
-	{
-		Logger::log( "ERROR: Player gifting to/from is same");
-		return true;
-	}
-
-	// Check tank has required amount of money
-	int money = message.getMoney();
-	if (money < 0) return true;
-	if (fromTank->getScore().getMoney() < money) return true;
-
-	fromTank->getScore().setMoney(
-		fromTank->getScore().getMoney() - money);
-	toTank->getScore().setMoney(
-		toTank->getScore().getMoney() + money);
-
-	// Forward this message to the intended
-	ComsMessageSender::sendToAllLoadedClients(message);
+	// Send message
+	TankGiftSimAction *action = new TankGiftSimAction(message);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(action);
 
 	return true;
 }

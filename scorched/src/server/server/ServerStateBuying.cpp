@@ -24,6 +24,8 @@
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
+#include <tank/TankAccessories.h>
+#include <tankai/TankAI.h>
 #include <common/OptionsScorched.h>
 #include <simactions/TankStartMoveSimAction.h>
 #include <simactions/TankAliveSimAction.h>
@@ -157,17 +159,9 @@ void ServerStateBuying::playerBuying(unsigned int playerId)
 	float buyingTime = (float)
 		ScorchedServer::instance()->getOptionsGame().getBuyingTime();
 
-	if (tank->getDestinationId() != 0)
-	{
-		// Human player
-		TankStartMoveSimAction *tankSimAction = 
-			new TankStartMoveSimAction(playerId, moveId_, buyingTime, true);
-		ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);
-	}
-	else
-	{
-		// AI player
-	}
+	TankStartMoveSimAction *tankSimAction = 
+		new TankStartMoveSimAction(playerId, moveId_, buyingTime, true);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);
 }
 
 void ServerStateBuying::buyingFinished(ComsPlayedMoveMessage &playedMessage)
