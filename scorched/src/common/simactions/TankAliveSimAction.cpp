@@ -29,12 +29,13 @@
 
 REGISTER_CLASS_SOURCE(TankAliveSimAction);
 
-TankAliveSimAction::TankAliveSimAction()
+TankAliveSimAction::TankAliveSimAction() :
+	playerId_(0), newMatch_(false)
 {
 }
 
-TankAliveSimAction::TankAliveSimAction(unsigned int playerId) :
-	playerId_(playerId)
+TankAliveSimAction::TankAliveSimAction(unsigned int playerId, bool newMatch) :
+	playerId_(playerId), newMatch_(newMatch)
 {
 }
 
@@ -47,11 +48,7 @@ bool TankAliveSimAction::invokeAction(ScorchedContext &context)
 	Tank *tank = context.getTankContainer().getTankById(playerId_);
 	if (!tank) return false;
 
-	if (tank->getState().getNewMatch())
-	{
-		tank->newMatch();
-		tank->getState().setNewMatch(false);
-	}
+	if (newMatch_) tank->newMatch();
 
 	FixedVector tankPos = PlacementTankPosition::placeTank(
 		tank->getPlayerId(), tank->getTeam(),

@@ -55,26 +55,31 @@ ServerLoadLevel::~ServerLoadLevel()
 
 void ServerLoadLevel::destinationLoadLevel(unsigned int destinationId)
 {
-	DIALOG_ASSERT(destinationId != 0);
-
-	LandscapeDefinition &landscapeDefinition =
-		ScorchedServer::instance()->getLandscapeMaps().getDefinitions().
-		getDefinition();
-
-	// Set any tanks from this destination that they are loading the level
-	// set the current version of the level (definition number) that they are loading
-	// so we can check if the level changes before we have finished loading
-	ServerDestination *destination =
-		ScorchedServer::instance()->getServerDestinations().getDestination(destinationId);
-	if (destination)
+	if (destinationId == 0)
 	{
-		destination->setState(ServerDestination::sLoadingLevel);
-		destination->setLevelNumber(landscapeDefinition.getDefinitionNumber());
+		setLoaded(destinationId);
 	}
+	else
+	{
+		LandscapeDefinition &landscapeDefinition =
+			ScorchedServer::instance()->getLandscapeMaps().getDefinitions().
+			getDefinition();
 
-	// Tell this destination to start loading the level
-	ComsLoadLevelMessage loadLevelMessage(&landscapeDefinition);
-	ComsMessageSender::sendToSingleClient(loadLevelMessage, destinationId, NetInterfaceFlags::fCompress);
+		// Set any tanks from this destination that they are loading the level
+		// set the current version of the level (definition number) that they are loading
+		// so we can check if the level changes before we have finished loading
+		ServerDestination *destination =
+			ScorchedServer::instance()->getServerDestinations().getDestination(destinationId);
+		if (destination)
+		{
+			destination->setState(ServerDestination::sLoadingLevel);
+			destination->setLevelNumber(landscapeDefinition.getDefinitionNumber());
+		}
+
+		// Tell this destination to start loading the level
+		ComsLoadLevelMessage loadLevelMessage(&landscapeDefinition);
+		ComsMessageSender::sendToSingleClient(loadLevelMessage, destinationId, NetInterfaceFlags::fCompress);
+	}
 }
 
 bool ServerLoadLevel::destinationUsingCurrentLevel(unsigned int destinationId)
@@ -127,6 +132,13 @@ bool ServerLoadLevel::processMessage(
 		destination->setState(ServerDestination::sFinished);
 	}
 
+	setLoaded(destinationId);
+
+	return true;
+}
+
+void ServerLoadLevel::setLoaded(unsigned int destinationId)
+{
 	// These tanks are now ready to play
 	std::map<unsigned int, Tank *>::iterator itor;
 	std::map<unsigned int, Tank *> &tanks = 
@@ -146,6 +158,4 @@ bool ServerLoadLevel::processMessage(
 				addSimulatorAction(loadedAction);
 		}
 	}
-
-	return true;
 }

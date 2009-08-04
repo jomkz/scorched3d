@@ -27,7 +27,7 @@ class TankAliveSimAction : public SimAction
 {
 public:
 	TankAliveSimAction();
-	TankAliveSimAction(unsigned int playerId);
+	TankAliveSimAction(unsigned int playerId, bool newMatch);
 	virtual ~TankAliveSimAction();
 
 	virtual bool invokeAction(ScorchedContext &context);
@@ -38,6 +38,7 @@ public:
 REGISTER_CLASS_HEADER(TankAliveSimAction);
 protected:
 	unsigned int playerId_;
+	bool newMatch_;
 };
 
 #endif // !defined(AFX_TankAliveSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

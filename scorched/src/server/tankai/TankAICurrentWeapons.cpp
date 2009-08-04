@@ -59,7 +59,7 @@ bool TankAICurrentWeapons::parseConfig(XMLNode *node)
 	return node->failChildren();	
 }
 
-void TankAICurrentWeapons::buyWeapons(Tank *tank, bool lastRound)
+void TankAICurrentWeapons::buyWeapons(TankAIWeaponSets::WeaponSetAccessories &tankAccessories, bool lastRound)
 {
-	getCurrentWeaponSet()->buyWeapons(tank, lastRound);
+	getCurrentWeaponSet()->buyWeapons(tankAccessories, lastRound);
 }

@@ -24,6 +24,7 @@
 #include <server/ScorchedServerUtil.h>
 #include <server/ServerChannelManager.h>
 #include <server/ServerSimulator.h>
+#include <server/ServerState.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <common/StatsLogger.h>
@@ -88,8 +89,8 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 	// Add a computer player (if chosen and a single player match)
 	if (0 != strcmp(message.getPlayerType(), "Human"))
 	{
-		//if (ScorchedServer::instance()->getGameState().getState() !=
-		//	ServerState::ServerStateTooFewPlayers)
+		if (ScorchedServer::instance()->getServerState().getState() !=
+			ServerState::ServerWaitingForPlayersState)
 		{
 			ServerChannelManager::instance()->sendText( 
 				ChannelText("info", "CHANGE_WHEN_STARTED", 
@@ -204,14 +205,6 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 					"Player playing \"{0}\"",
 					tank->getTargetName()),
 				true);
-
-			//if (ScorchedServer::instance()->getGameState().getState() == 
-			//	ServerState::ServerStateStarting)
-			{
-				// Reset the starting timer
-			//	ScorchedServer::instance()->getGameState().stimulate(
-			//		ServerState::ServerStimulusStarting);
-			}
 		}
 	}
 #endif // #ifdef S3D_SERVER

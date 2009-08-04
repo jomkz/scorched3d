@@ -46,7 +46,6 @@
 #include <client/ClientStartTimerHandler.h>
 #include <client/ClientSyncCheckHandler.h>
 #include <client/ClientFileHandler.h>
-#include <client/ClientDefenseHandler.h>
 #include <client/ClientSyncLevelHandler.h>
 #include <client/ClientSyncTimeHandler.h>
 #include <client/ClientState.h>
@@ -199,7 +198,6 @@ static bool initComsHandlers()
 	ClientLoadLevelHandler::instance();
 	ClientGameStateHandler::instance();
 	ClientPlayerStateHandler::instance();
-	ClientDefenseHandler::instance();
 	ClientAdminResultHandler::instance();
 
 	return true;

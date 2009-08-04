@@ -96,8 +96,7 @@ void ServerStateNewGame::newGame()
 		if (tank->getState().getState() != TankState::sLoading)
 		{
 			tank->getState().setState(TankState::sLoading);
-			if (tank->getDestinationId() != 0 &&
-				loadingDestinations.find(tank->getDestinationId()) == loadingDestinations.end())
+			if (loadingDestinations.find(tank->getDestinationId()) == loadingDestinations.end())
 			{
 				loadingDestinations.insert(tank->getDestinationId());
 			}

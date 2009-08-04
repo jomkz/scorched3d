@@ -3265,14 +3265,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\client\ClientDefenseHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientDefenseHandler.h"
-				>
-			</File>
-			<File
 				RelativePath="..\client\ClientDialog.cpp"
 				>
 			</File>

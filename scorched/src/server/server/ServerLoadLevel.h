@@ -38,6 +38,7 @@ public:
 
 protected:
 	static ServerLoadLevel *instance_;
+	static void setLoaded(unsigned int destinationId);
 
 private:
 	ServerLoadLevel();

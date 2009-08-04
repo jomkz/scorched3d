@@ -92,7 +92,7 @@ void ServerShotState::enterState(const unsigned state)
 					"TURN_SKIPPING_STALEMATE", 
 					"Skipping all turns due to stalemate..."),
 				true);
-			ScorchedServer::instance()->getOptionsTransient().startNewRound();
+			//ScorchedServer::instance()->getOptionsTransient().startNewRound();
 		}
 	}
 

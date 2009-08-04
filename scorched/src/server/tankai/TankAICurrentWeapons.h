@@ -31,7 +31,7 @@ public:
 
 	virtual bool parseConfig(XMLNode *node);
 
-	void buyWeapons(Tank *tank, bool lastRound);
+	void buyWeapons(TankAIWeaponSets::WeaponSetAccessories &tankAccessories, bool lastRound);
 
 	TankAIWeaponSets::WeaponSet *getCurrentWeaponSet();
 

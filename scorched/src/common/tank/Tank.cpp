@@ -66,7 +66,7 @@ Tank::Tank(ScorchedContext &context,
 	state_->setTank(this);
 	accessories_->setTank(this);
 	modelContainer_->setTank(this);
-	state_->setState(TankState::sSpectator);
+	state_->setState(TankState::sLoading);
 }
 
 Tank::~Tank()

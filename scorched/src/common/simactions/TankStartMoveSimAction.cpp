@@ -54,7 +54,7 @@ bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 	}
 	else
 	{
-		Tank *tank = context.getTankContainer().getCurrentTank();
+		Tank *tank = context.getTankContainer().getTankById(playerId_);
 		if (tank && tank->getState().getState() == TankState::sNormal)
 		{
 			if (tank->getDestinationId() == 0)

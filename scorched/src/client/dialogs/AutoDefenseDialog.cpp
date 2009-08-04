@@ -32,7 +32,6 @@
 #include <coms/ComsPlayedMoveMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <client/ClientState.h>
-#include <client/ClientDefenseHandler.h>
 #include <client/ScorchedClient.h>
 #include <lang/LangResource.h>
 

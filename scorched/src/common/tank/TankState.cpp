@@ -43,7 +43,8 @@ allowedStateTransitions[] =
 	TankState::sDead, TankState::sNormal,
 	TankState::sNormal, TankState::sDead,
 	TankState::sDead, TankState::sLoading,
-	TankState::sNormal, TankState::sLoading
+	TankState::sNormal, TankState::sLoading,
+	TankState::sSpectator, TankState::sLoading
 };
 
 TankState::TankState(ScorchedContext &context, unsigned int playerId) : 
@@ -52,7 +53,7 @@ TankState::TankState(ScorchedContext &context, unsigned int playerId) :
 	muted_(false),
 	skipshots_(false),
 	lives_(0), maxLives_(1), 
-	destroy_(false), newMatch_(true),
+	destroy_(false), 
 	notSpectator_(false)
 {
 }

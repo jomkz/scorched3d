@@ -28,6 +28,7 @@
 #include <server/ServerSimulator.h>
 #include <server/ServerState.h>
 #include <simactions/TankDefenseSimAction.h>
+#include <simactions/TankStartMoveSimAction.h>
 #include <tank/Tank.h>
 #include <tank/TankLib.h>
 #include <tank/TankPosition.h>
@@ -150,7 +151,7 @@ void TankAICurrentMove::playMove(Tank *tank,
 		// Bring the health back up
 		if (useBatteries)
 		{
-			useAvailableBatteries(tank);
+			if (useAvailableBatteries(tank, moveId)) return;
 		}
 
 		if (tank->getLife().getLife().asFloat() > movementLife_)
@@ -188,11 +189,7 @@ void TankAICurrentMove::playMove(Tank *tank,
 			tank->getLife().getLife() < tank->getLife().getMaxLife())
 		{
 			// Bring the health back up
-			if (useAvailableBatteries(tank))
-			{
-				// Perhaps we can reach now so do this tank again
-				sortedTanks.push_front(targetTank);
-			}
+			if (useAvailableBatteries(tank, moveId)) return;
 		}
 	}
 
@@ -739,24 +736,29 @@ bool TankAICurrentMove::makeGroupShot(Tank *tank,
 	return false;
 }
 
-bool TankAICurrentMove::useAvailableBatteries(Tank *tank)
+bool TankAICurrentMove::useAvailableBatteries(Tank *tank, unsigned int moveId)
 {
-	// Use batteries
-	bool result = false;
-	while (tank->getLife().getLife() < 
-		tank->getLife().getMaxLife() &&
-		tank->getAccessories().getBatteries().canUse())
+	if (!tank->getAccessories().getBatteries().canUse()) return false;
+	int noBatteries = tank->getAccessories().getBatteries().getNoBatteries();
+	if (noBatteries == 0) return false;
+
+	unsigned int batteryId = 
+		tank->getAccessories().getBatteries().getBatteryAccessory()->getAccessoryId();
+
+	int lifeWanted = 
+		tank->getLife().getMaxLife().asInt() - 
+		tank->getLife().getLife().asInt();
+	int batteriesWanted = lifeWanted / 10;
+
+	int useBatteries = MIN(batteriesWanted, noBatteries);
+	for (int b=0; b<useBatteries; b++)
 	{
-		std::list<Accessory *> &entries =
-			tank->getAccessories().getAllAccessoriesByType(
-				AccessoryPart::AccessoryBattery);			
-		if (!entries.empty())
-		{
-			useBattery(tank, entries.front()->getAccessoryId());
-			result = true;
-		}
+		useBattery(tank, batteryId);
 	}
-	return result;
+
+	resheduleMove(tank, moveId);
+
+	return true;
 }
 
 Vector TankAICurrentMove::lowestHighest(TankAICurrentMoveWeapons &weapons, 
@@ -914,5 +916,12 @@ void TankAICurrentMove::useBattery(Tank *tank, unsigned int batteryId)
 		batteryId);
 
 	TankDefenseSimAction *simAction = new TankDefenseSimAction(defenseMessage);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
+}
+
+void TankAICurrentMove::resheduleMove(Tank *tank, unsigned int moveId)
+{
+	TankStartMoveSimAction *simAction = 
+		new TankStartMoveSimAction(tank->getPlayerId(), moveId, 0.0f, false);
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
 }

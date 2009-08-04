@@ -21,17 +21,27 @@
 #if !defined(__INCLUDE_TankAIWeaponSetsh_INCLUDE__)
 #define __INCLUDE_TankAIWeaponSetsh_INCLUDE__
 
+#include <tank/TankAccessories.h>
+
 #include <vector>
 #include <map>
 #include <string>
 
 class XMLNode;
-class Accessory;
-class Tank;
 class TankAIWeaponSets
 {
 public:
 	static TankAIWeaponSets *instance();
+
+	class WeaponSetAccessories 
+	{
+	public:
+		WeaponSetAccessories(Tank *tank);
+
+		int tankMoney;
+		unsigned int tankId;
+		TankAccessories tankAccessories;
+	};
 
 	class WeaponSetEntry
 	{
@@ -43,7 +53,7 @@ public:
 		std::string type;
 
 		bool parseConfig(XMLNode *node);
-		bool weaponValid(Tank *tank, bool lastRound);
+		bool weaponValid(WeaponSetAccessories &tankAccessories, bool lastRound);
 		static bool checkType(const char *type);
 	};
 
@@ -54,7 +64,7 @@ public:
 		std::vector<WeaponSetEntry> weapons;
 
 		bool parseConfig(XMLNode *node);
-		void buyWeapons(Tank *tank, bool lastRound);
+		void buyWeapons(WeaponSetAccessories &tankAccessories, bool lastRound);
 		Accessory *getTankAccessoryByType(Tank *tank, const char *type);
 	};
 

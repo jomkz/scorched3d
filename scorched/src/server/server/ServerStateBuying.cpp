@@ -27,6 +27,7 @@
 #include <tank/TankAccessories.h>
 #include <tankai/TankAI.h>
 #include <common/OptionsScorched.h>
+#include <common/OptionsTransient.h>
 #include <simactions/TankStartMoveSimAction.h>
 #include <simactions/TankAliveSimAction.h>
 
@@ -50,6 +51,9 @@ void ServerStateBuying::enterState()
 
 bool ServerStateBuying::simulate()
 {
+	bool firstRound =
+		(ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() == 1);
+
 	// Add any new players that should be buying
 	bool loading = false;
 	std::map<unsigned int, Tank*> &tanks = 
@@ -64,7 +68,8 @@ bool ServerStateBuying::simulate()
 		{						
 			// Add tank to game
 			tank->getState().setState(TankState::sNormal);
-			TankAliveSimAction *tankAliveSimAction = new TankAliveSimAction(tank->getPlayerId());
+			TankAliveSimAction *tankAliveSimAction = 
+				new TankAliveSimAction(tank->getPlayerId(), firstRound);
 			ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankAliveSimAction);
 
 			// Add tank to list of tanks to get buying for

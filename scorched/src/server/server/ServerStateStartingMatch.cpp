@@ -23,6 +23,7 @@
 #include <server/ServerChannelManager.h>
 #include <common/OptionsGame.h>
 #include <common/OptionsScorched.h>
+#include <common/OptionsTransient.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 
@@ -72,16 +73,7 @@ bool ServerStateStartingMatch::startingMatch()
 
 void ServerStateStartingMatch::startMatch()
 {
-	std::map<unsigned int, Tank *> &tanks =
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
-	std::map<unsigned int, Tank *>::iterator mainitor;
-	for (mainitor = tanks.begin();
-		mainitor != tanks.end();
-		mainitor++)
-	{
-		Tank *current = (*mainitor).second;
-		current->getState().setNewMatch(true);
-	}
+	ScorchedServer::instance()->getOptionsTransient().reset();
 
 	ServerChannelManager::instance()->sendText(
 		ChannelText("info", 

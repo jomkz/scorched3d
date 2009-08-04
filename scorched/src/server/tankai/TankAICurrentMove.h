@@ -93,12 +93,13 @@ protected:
 
 	float getShotDistance(Tank *tank, bool projectile);
 	void shotAtTank(Tank *tank, bool projectile, float newDistance);
-	bool useAvailableBatteries(Tank *tank);
+	bool useAvailableBatteries(Tank *tank, unsigned int moveId);
 	void setWeapon(Tank *tank, Accessory *accessory);
 	void useBattery(Tank *tank, unsigned int batteryId);
 	void resign(Tank *tank, unsigned int moveId);
 	void skipMove(Tank *tank, unsigned int moveId);
 	void fireShot(Tank *tank, unsigned int moveId);
+	void resheduleMove(Tank *tank, unsigned int moveId);
 
 };
 

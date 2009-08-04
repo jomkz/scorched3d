@@ -25,6 +25,7 @@
 
 class ScorchedContext;
 class Tank;
+class Accessory;
 class TankBatteries  
 {
 public:
@@ -36,6 +37,7 @@ public:
 	void newMatch();
 	void changed();
 	int getNoBatteries();
+	Accessory *getBatteryAccessory();
 	bool canUse();
 
 protected:

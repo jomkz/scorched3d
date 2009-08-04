@@ -99,8 +99,9 @@ void TankAICurrent::buyAccessories(unsigned int moveId)
 		(ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() >=
 		ScorchedServer::instance()->getOptionsGame().getNoRounds());
 
-	wantedWeapons_.buyWeapons(tank_, lastRound);
-	if (tank_->getAccessories().getAutoDefense().haveDefense())
+	TankAIWeaponSets::WeaponSetAccessories tankAccessories(tank_);
+	wantedWeapons_.buyWeapons(tankAccessories, lastRound);
+	if (tankAccessories.tankAccessories.getAutoDefense().haveDefense())
 	{
 		defenses_.raiseDefenses(tank_);
 	}
