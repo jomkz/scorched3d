@@ -31,12 +31,11 @@ public:
 	void scoreFinished();
 
 	bool simulate();
+	bool overAllWinner();
 
 protected:
 	bool finished_;
-
-	bool scoreWinners();
-	void scoreOverallWinner();
+	bool overAllWinner_;
 };
 
 #endif

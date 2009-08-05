@@ -25,6 +25,8 @@
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <tank/TankContainer.h>
+#include <tank/TankDeadContainer.h>
+#include <tank/TankTeamScore.h>
 #include <tank/TankState.h>
 
 ServerStateStartingMatch::ServerStateStartingMatch()
@@ -73,6 +75,8 @@ bool ServerStateStartingMatch::startingMatch()
 
 void ServerStateStartingMatch::startMatch()
 {
+	ScorchedServer::instance()->getContext().getTankTeamScore().newMatch();
+	ScorchedServer::instance()->getTankDeadContainer().clearTanks();
 	ScorchedServer::instance()->getOptionsTransient().reset();
 
 	ServerChannelManager::instance()->sendText(

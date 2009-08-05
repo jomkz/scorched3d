@@ -106,21 +106,6 @@ void TankContainer::clientNewGame()
 	}
 }
 
-void TankContainer::newMatch()
-{
-	std::map<unsigned int, Tank *>::iterator mainitor;
-	for (mainitor = tanks_.begin();
-		mainitor != tanks_.end();
-		mainitor++)
-	{
-		Tank *tank = (*mainitor).second;
-		if (!tank->isTemp())
-		{
-			tank->newMatch();
-		}
-	}
-}
-
 int TankContainer::teamCount()
 {
 	int team1 = 0;

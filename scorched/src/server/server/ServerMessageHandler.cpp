@@ -24,9 +24,9 @@
 #include <server/ServerCommon.h>
 #include <server/ServerBanned.h>
 #include <server/ServerChannelManager.h>
-#include <server/ServerShotHolder.h>
 #include <server/ServerDestinations.h>
 #include <tank/TankDeadContainer.h>
+#include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tankai/TankAIStore.h>
 #include <coms/ComsRmPlayerMessage.h>
@@ -241,8 +241,6 @@ void ServerMessageHandler::actualDestroyPlayer(unsigned int tankId)
 	// Try to remove this player
 	Tank *tank = ScorchedServer::instance()->getTankContainer().removeTank(tankId);
 	if (!tank) return;
-
-	ServerShotHolder::instance()->removeShot(tankId);
 
 	StatsLogger::instance()->tankDisconnected(tank);
 

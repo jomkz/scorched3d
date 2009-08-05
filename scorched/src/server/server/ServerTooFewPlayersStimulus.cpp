@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <server/ServerTooFewPlayersStimulus.h>
-#include <server/ServerNewGameState.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerCommon.h>
 #include <tank/TankContainer.h>

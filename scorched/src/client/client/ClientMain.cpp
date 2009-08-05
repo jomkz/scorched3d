@@ -33,13 +33,11 @@
 #include <client/ClientStartGameHandler.h>
 #include <client/ClientProcessingLoop.h>
 #include <client/ClientAddPlayerHandler.h>
-#include <client/ClientNewGameHandler.h>
 #include <client/ClientConnectionAcceptHandler.h>
 #include <client/ClientConnectionAuthHandler.h>
 #include <client/ClientOperationHandler.h>
 #include <client/ClientLoadLevelHandler.h>
 #include <client/ClientRmPlayerHandler.h>
-#include <client/ClientGameStateHandler.h>
 #include <client/ClientInitializeModHandler.h>
 #include <client/ClientAdminResultHandler.h>
 #include <client/ClientPlayerStateHandler.h>
@@ -186,7 +184,6 @@ static bool initComsHandlers()
 	ClientConnectionAcceptHandler::instance();
 	ClientConnectionAuthHandler::instance();
 	ClientAddPlayerHandler::instance();
-	ClientNewGameHandler::instance();
 	ClientInitializeModHandler::instance();
 	ClientRmPlayerHandler::instance();
 	ClientStartTimerHandler::instance();
@@ -196,7 +193,6 @@ static bool initComsHandlers()
 	ClientGameStoppedHandler::instance();
 	ClientStartGameHandler::instance();
 	ClientLoadLevelHandler::instance();
-	ClientGameStateHandler::instance();
 	ClientPlayerStateHandler::instance();
 	ClientAdminResultHandler::instance();
 

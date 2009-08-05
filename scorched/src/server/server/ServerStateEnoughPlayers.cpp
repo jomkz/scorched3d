@@ -21,7 +21,6 @@
 #include <server/ServerStateEnoughPlayers.h>
 #include <server/ServerChannelManager.h>
 #include <server/ScorchedServer.h>
-#include <server/ServerNewGameState.h>
 #include <server/ServerCommon.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>

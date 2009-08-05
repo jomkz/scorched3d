@@ -98,7 +98,14 @@ void ServerState::simulate()
 	case ServerScoreState:
 		if (score_.simulate())
 		{
-			serverState_ = ServerNewLevelState;
+			if (score_.overAllWinner())
+			{
+				serverState_ = ServerWaitingForPlayersState;
+			}
+			else
+			{
+				serverState_ = ServerNewLevelState;
+			}
 		}
 		break;
 	}

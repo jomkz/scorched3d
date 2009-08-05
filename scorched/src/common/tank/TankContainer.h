@@ -47,7 +47,6 @@ public:
 	
 	void clientNewGame();
 	
-	void newMatch();
 	void setAllDead();
 	int aliveCount();
 	int teamCount();

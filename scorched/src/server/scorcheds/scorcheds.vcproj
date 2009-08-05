@@ -873,30 +873,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\server\ServerNewGameState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\server\ServerNewGameState.h"
-				>
-			</File>
-			<File
-				RelativePath="..\server\ServerNextRoundState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\server\ServerNextRoundState.h"
-				>
-			</File>
-			<File
-				RelativePath="..\server\ServerNextTurnState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\server\ServerNextTurnState.h"
-				>
-			</File>
-			<File
 				RelativePath="..\server\ServerOperationResultHandler.cpp"
 				>
 			</File>
@@ -921,14 +897,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\server\ServerPlayingState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\server\ServerPlayingState.h"
-				>
-			</File>
-			<File
 				RelativePath="..\server\ServerRegistration.cpp"
 				>
 			</File>
@@ -937,51 +905,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\server\ServerResetState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\server\ServerResetState.h"
-				>
-			</File>
-			<File
-				RelativePath="..\server\ServerShotFinishedState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\server\ServerShotFinishedState.h"
-				>
-			</File>
-			<File
-				RelativePath="..\server\ServerShotHolder.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\server\ServerShotHolder.h"
-				>
-			</File>
-			<File
-				RelativePath="..\server\ServerShotState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\server\ServerShotState.h"
-				>
-			</File>
-			<File
 				RelativePath="..\server\ServerSimulator.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\server\ServerSimulator.h"
-				>
-			</File>
-			<File
-				RelativePath="..\server\ServerStartingState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\server\ServerStartingState.h"
 				>
 			</File>
 			<File
@@ -2313,14 +2241,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsGameStateMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsGameStateMessage.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\coms\ComsGameStoppedMessage.cpp"
 				>
 			</File>
@@ -2409,14 +2329,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsNewGameMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsNewGameMessage.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\coms\ComsOperationMessage.cpp"
 				>
 			</File>
@@ -2470,14 +2382,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\coms\ComsSimulateResultMessage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsStartGameMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsStartGameMessage.h"
 				>
 			</File>
 			<File
@@ -2629,14 +2533,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\engine\PlayShots.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\engine\PlayShots.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\engine\ScorchedCollisionIds.cpp"
 				>
 			</File>
@@ -2650,14 +2546,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\engine\ScorchedContext.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\engine\ShotState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\engine\ShotState.h"
 				>
 			</File>
 			<File

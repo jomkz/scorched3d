@@ -22,7 +22,6 @@
 #include <server/ServerTooFewPlayersStimulus.h>
 #include <server/ServerChannelManager.h>
 #include <server/ScorchedServer.h>
-#include <server/ServerNewGameState.h>
 #include <server/ServerCommon.h>
 #include <tank/TankContainer.h>
 #include <coms/ComsGameStoppedMessage.h>

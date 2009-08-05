@@ -21,7 +21,6 @@
 #include <graph/SpeedChange.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientParams.h>
-#include <server/ServerShotFinishedState.h>
 #include <server/ScorchedServer.h>
 #include <common/Keyboard.h>
 #include <common/Defines.h>
@@ -133,6 +132,5 @@ void SpeedChange::setSpeed(fixed speed)
 	if (!ClientParams::instance()->getConnectedToServer())
 	{
 		ScorchedServer::instance()->getActionController().setFast(speed);
-		ServerShotFinishedState::setSpeed(speed.asFloat()); // Hack!!
 	}
 }

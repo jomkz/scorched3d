@@ -39,6 +39,9 @@ REGISTER_CLASS_HEADER(ShowScoreSimAction);
 protected:
 	fixed scoreTime_;
 	bool finalScore_;
+
+	void scoreWinners(ScorchedContext &context);
+	void scoreOverallWinner(ScorchedContext &context);
 };
 
 #endif // !defined(AFX_ShowScoreSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

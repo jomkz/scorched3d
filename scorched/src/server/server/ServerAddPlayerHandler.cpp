@@ -31,7 +31,6 @@
 #include <common/Logger.h>
 #include <common/Defines.h>
 #include <coms/ComsAddPlayerMessage.h>
-#include <coms/ComsPlayerStateMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <net/NetLoopBack.h>
 #include <simactions/TankChangeSimAction.h>

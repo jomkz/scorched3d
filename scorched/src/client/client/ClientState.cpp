@@ -26,8 +26,6 @@
 #include <graph/ShotCountDown.h>
 #include <graph/SoftwareMouse.h>
 #include <client/ClientState.h>
-#include <client/ClientShotState.h>
-#include <client/ClientLoadPlayersState.h>
 #include <client/ClientSaveScreenState.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientSimulator.h>

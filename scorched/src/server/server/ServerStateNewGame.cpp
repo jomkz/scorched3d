@@ -23,7 +23,6 @@
 #include <server/ServerCommon.h>
 #include <server/ServerConsoleProgressCounter.h>
 #include <server/ServerChannelManager.h>
-#include <server/ServerNewGameState.h>
 #include <server/ServerMessageHandler.h>
 #include <server/ServerLoadLevel.h>
 #include <weapons/EconomyStore.h>

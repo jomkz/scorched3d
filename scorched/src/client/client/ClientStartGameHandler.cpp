@@ -20,7 +20,6 @@
 
 #include <client/ClientStartGameHandler.h>
 #include <client/ClientState.h>
-#include <client/ClientNewGameHandler.h>
 #include <client/ScorchedClient.h>
 #include <landscape/Landscape.h>
 #include <landscapemap/LandscapeMaps.h>
@@ -34,7 +33,6 @@
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
 #include <sound/SoundUtils.h>
-#include <coms/ComsStartGameMessage.h>
 #include <weapons/Accessory.h>
 
 ClientStartGameHandler *ClientStartGameHandler::instance_ = 0;
