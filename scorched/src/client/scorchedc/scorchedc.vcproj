@@ -3385,14 +3385,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\client\ClientSyncCheckHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientSyncCheckHandler.h"
-				>
-			</File>
-			<File
 				RelativePath="..\client\ClientSyncLevelHandler.cpp"
 				>
 			</File>
@@ -5537,6 +5529,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\server\server\ServerSyncCheck.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerSyncCheck.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\server\server\ServerTextFilter.cpp"
 				>
 			</File>
@@ -6122,6 +6122,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\simactions\SimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\SyncCheckSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\SyncCheckSimAction.h"
 				>
 			</File>
 			<File

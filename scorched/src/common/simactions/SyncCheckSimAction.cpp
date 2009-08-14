@@ -18,41 +18,54 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <client/ClientSyncCheckHandler.h>
-#include <client/ScorchedClient.h>
-#include <common/Logger.h>
-#include <coms/ComsMessageHandler.h>
+#include <simactions/SyncCheckSimAction.h>
 #include <coms/ComsSyncCheckMessage.h>
+#include <coms/ComsMessageSender.h>
+#include <server/ScorchedServer.h>
+#include <server/ServerSyncCheck.h>
 
-ClientSyncCheckHandler *ClientSyncCheckHandler::instance_ = 0;
+REGISTER_CLASS_SOURCE(SyncCheckSimAction);
 
-ClientSyncCheckHandler *ClientSyncCheckHandler::instance()
+SyncCheckSimAction::SyncCheckSimAction() :
+	syncId_(0)
 {
-	if (!instance_)
+}
+
+SyncCheckSimAction::SyncCheckSimAction(unsigned int syncId) :
+	syncId_(syncId)
+{
+}
+
+SyncCheckSimAction::~SyncCheckSimAction()
+{
+}
+
+bool SyncCheckSimAction::invokeAction(ScorchedContext &context)
+{
+	if (context.getServerMode())
 	{
-		instance_ = new ClientSyncCheckHandler;
+		ComsSyncCheckMessage *message = new ComsSyncCheckMessage(syncId_, context);
+		ServerSyncCheck::instance()->addServerSyncCheck(message);
 	}
-	return instance_;
+	else
+	{
+#ifndef S3D_SERVER
+		ComsSyncCheckMessage message(syncId_, context);
+		ComsMessageSender::sendToServer(message);
+#endif S3D_SERVER
+	}
+
+	return true;
 }
 
-ClientSyncCheckHandler::ClientSyncCheckHandler()
+bool SyncCheckSimAction::writeMessage(NetBuffer &buffer)
 {
-	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		ComsSyncCheckMessage::ComsSyncCheckMessageType,
-		this);
+	buffer.addToBuffer(syncId_);
+	return true;
 }
 
-ClientSyncCheckHandler::~ClientSyncCheckHandler()
+bool SyncCheckSimAction::readMessage(NetBufferReader &reader)
 {
-}
-
-bool ClientSyncCheckHandler::processMessage(
-	NetMessage &netMessage,
-	const char *messageType, 
-	NetBufferReader &reader)
-{
-	ComsSyncCheckMessage message;
-	if (!message.readMessage(reader)) return false;
-
+	if (!reader.getFromBuffer(syncId_)) return false;
 	return true;
 }

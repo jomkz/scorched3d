@@ -20,10 +20,12 @@
 
 #include <server/ServerSimulator.h>
 #include <server/ScorchedServer.h>
+#include <server/ServerSyncCheck.h>
 #include <server/ServerDestinations.h>
 #include <coms/ComsSimulateMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsSimulateResultMessage.h>
+#include <simactions/SyncCheckSimAction.h>
 #include <movement/TargetMovement.h>
 #include <common/Logger.h>
 
@@ -72,6 +74,8 @@ bool ServerSimulator::continueToSimulate()
 
 void ServerSimulator::nextSendTime()
 {
+	static SyncCheckSimAction syncCheckSimAction;
+
 	// Add the new actions for this time
 	std::list<SimAction *>::iterator itor;
 	for (itor = sendActions_.begin();
@@ -80,6 +84,11 @@ void ServerSimulator::nextSendTime()
 	{
 		SimAction *action = *itor;
 		simActions_.push_back(new SimActionContainer(action, nextEventTime_));
+		if (action->getMetaClassId() == syncCheckSimAction.getMetaClassId())
+		{
+			SyncCheckSimAction *syncAction = (SyncCheckSimAction *) action;
+			ServerSyncCheck::instance()->sentSyncCheck(syncAction->getSyncId());
+		}
 	}
 
 	//Logger::log(S3D::formatStringBuffer("Total Time %.2f, Waiting Time %.2f", 

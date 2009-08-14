@@ -18,53 +18,31 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <server/ServerStatePlaying.h>
-#include <server/ScorchedServer.h>
-#include <server/ServerSyncCheck.h>
-#include <common/OptionsScorched.h>
+#if !defined(AFX_SyncCheckSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#define AFX_SyncCheckSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
-ServerStatePlaying::ServerStatePlaying() : 
-	turns_(0)
+#include <simactions/SimAction.h>
+
+class SyncCheckSimAction : public SimAction
 {
-}
+public:
+	SyncCheckSimAction();
+	SyncCheckSimAction(unsigned int syncId);
+	virtual ~SyncCheckSimAction();
 
-ServerStatePlaying::~ServerStatePlaying()
-{
-}
+	unsigned int getSyncId() { return syncId_; }
 
-bool ServerStatePlaying::showScore()
-{
-	return turns_->finished();
-}
+	virtual bool invokeAction(ScorchedContext &context);
 
-void ServerStatePlaying::enterState()
-{
-	ServerSyncCheck::instance()->enterState();
-	switch (ScorchedServer::instance()->getOptionsGame().getTurnType().getValue())
-	{
-	case OptionsGame::TurnSequentialLooserFirst:
-	case OptionsGame::TurnSequentialRandom:
-		turns_ = &turnsSequential_;
-		break;
-	default:
-		turns_ = &turnsSimultaneous_;
-		break;
-	}
+	virtual bool writeMessage(NetBuffer &buffer);
+	virtual bool readMessage(NetBufferReader &reader);
 
-	turns_->enterState();
-}
+REGISTER_CLASS_HEADER(SyncCheckSimAction);
+protected:
+	unsigned int syncId_;
 
-void ServerStatePlaying::simulate()
-{
-	turns_->simulate();
-}
+	void scoreWinners(ScorchedContext &context);
+	void scoreOverallWinner(ScorchedContext &context);
+};
 
-void ServerStatePlaying::moveFinished(ComsPlayedMoveMessage &playedMessage)
-{
-	turns_->moveFinished(playedMessage);
-}
-
-void ServerStatePlaying::shotsFinished(unsigned int moveId)
-{
-	turns_->shotsFinished(moveId);
-}
+#endif // !defined(AFX_SyncCheckSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

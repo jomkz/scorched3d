@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <server/ServerState.h>
+#include <server/ServerSyncCheck.h>
 
 ServerState::ServerState() :
 	serverState_(ServerStartupState)
@@ -109,6 +110,8 @@ void ServerState::simulate()
 		}
 		break;
 	}
+
+	ServerSyncCheck::instance()->simulate();
 }
 
 void ServerState::buyingFinished(ComsPlayedMoveMessage &message)

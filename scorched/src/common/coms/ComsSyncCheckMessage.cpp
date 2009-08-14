@@ -40,18 +40,15 @@ ComsMessageType ComsSyncCheckMessage::ComsSyncCheckMessageType("ComsSyncCheckMes
 ComsSyncCheckMessage::ComsSyncCheckMessage() :
 	ComsMessage(ComsSyncCheckMessageType)
 {
-
 }
 
-ComsSyncCheckMessage::~ComsSyncCheckMessage()
-{
-
-}
-
-bool ComsSyncCheckMessage::writeMessage(NetBuffer &buffer)
+ComsSyncCheckMessage::ComsSyncCheckMessage(unsigned int syncId,
+	ScorchedContext &context) :
+	ComsMessage(ComsSyncCheckMessageType),
+	syncId_(syncId)
 {
 	// Send action sync data
-	std::vector<std::string>::iterator syncItor;
+	/*std::vector<std::string>::iterator syncItor;
 	std::vector<std::string> &syncs = 
 		ScorchedServer::instance()->getActionController().getSyncCheck();
 	buffer.addToBuffer((int) syncs.size());
@@ -60,212 +57,35 @@ bool ComsSyncCheckMessage::writeMessage(NetBuffer &buffer)
 		syncItor++)
 	{
 		buffer.addToBuffer(syncItor->c_str());
-	}
+	}*/	
 
 	// Send the height map data
-	HeightMap &map = ScorchedServer::instance()->getLandscapeMaps().
-		getGroundMaps().getHeightMap();
+	HeightMap &map = context.getLandscapeMaps().getGroundMaps().getHeightMap();
 	for (int y=0; y<map.getMapHeight(); y++)
 	{
 		for (int x=0; x<map.getMapWidth(); x++)
 		{
 			fixed height = map.getHeight(x, y);
-			buffer.addToBuffer(height);
+			landscapeBuffer_.addToBuffer(height);
 			FixedVector &normal = map.getNormal(x, y);
-			buffer.addToBuffer(normal);
+			landscapeBuffer_.addToBuffer(normal);
 		}
 	}
 
-	// Send the target data
+	// Send target data
 	std::map<unsigned int, Target *> &possibletargets =
-			ScorchedServer::instance()->getTargetContainer().getTargets();
+		context.getTargetContainer().getTargets();
 	std::map<unsigned int, Target *>::iterator itor;
-	buffer.addToBuffer((int) possibletargets.size());
+	targetsBuffer_.addToBuffer((int) possibletargets.size());
 	for (itor = possibletargets.begin();
 		itor != possibletargets.end();
 		itor++)
 	{
 		Target *target = (*itor).second;
-		buffer.addToBuffer(target->getPlayerId());
+		targetsBuffer_.addToBuffer(target->getPlayerId());
+		targetsBuffer_.addToBuffer(target->isTarget());
 
-		if (target->isTarget())
-		{
-			if (!target->writeMessage(buffer)) return false;
-		}
-		else
-		{
-			if (!((Tank*)target)->writeMessage(buffer, true)) return false;
-		}
-	}
-
-	return true;
-}
-
-#ifndef S3D_SERVER
-
-#include <common/FileLogger.h>
-#include <image/ImageFactory.h>
-#include <landscape/Landscape.h>
-
-static FileLogger *syncCheckFileLogger = 0;
-
-static int syncCount = 0;
-
-static void syncCheckLog(const std::string &message)
-{
-	if (!syncCheckFileLogger) 
-	{
-		char buffer[256];
-		snprintf(buffer, 256, "SyncCheckLog-%u-", time(0));
-		syncCheckFileLogger = new FileLogger(buffer);
-	}	
-
-	LoggerInfo info(message.c_str());
-	info.setTime();
-	syncCheckFileLogger->logMessage(info);
-}
-
-bool ComsSyncCheckMessage::readMessage(NetBufferReader &reader)
-{
-	syncCount++;
-
-	std::vector<std::string> &clientsyncs = 
-		ScorchedClient::instance()->getActionController().getSyncCheck();
-	int serverSyncNo = 0, clientSyncNo = (int) clientsyncs.size();
-	if (!reader.getFromBuffer(serverSyncNo)) return false;
-
-	bool printOutput = false;
-	std::string output = S3D::formatStringBuffer(
-		"SyncCheck %i - Action Diffs",
-		syncCount);
-	for (int s=0; s<MAX(serverSyncNo, clientSyncNo); s++)
-	{
-		std::string clientsync, serversync;
-		if (s < serverSyncNo)
-		{
-			if (!reader.getFromBuffer(serversync)) return false;
-		}
-		if (s < clientSyncNo)
-		{
-			clientsync = clientsyncs[s];
-		}
-
-		bool diff = (serversync != clientsync);
-		if (diff) printOutput = true;
-
-		output.append(S3D::formatStringBuffer("%i: %s \n  %s\n  %s\n", 
-			syncCount,
-			(diff?"***":""),
-			serversync.c_str(), 
-			clientsync.c_str()));
-	}
-	if (printOutput)
-	{
-		syncCheckLog(output.c_str());
-	}
-
-	// Read the height map data
-	HeightMap &map = ScorchedClient::instance()->getLandscapeMaps().
-		getGroundMaps().getHeightMap();
-	int heightDiffs = 0, normalDiffs = 0;
-	bool *heightDiff = new bool[map.getMapHeight() * map.getMapWidth()];
-	for (int y=0; y<map.getMapHeight(); y++)
-	{
-		for (int x=0; x<map.getMapWidth(); x++)
-		{
-			fixed actualheight = map.getHeight(x, y);
-			FixedVector actualnormal = map.getNormal(x, y);
-			fixed sentheight;
-			FixedVector sentnormal;
-			if (!reader.getFromBuffer(sentheight)) return false;
-			if (!reader.getFromBuffer(sentnormal)) return false;
-			
-			if (actualheight != sentheight) 
-			{
-				syncCheckLog(S3D::formatStringBuffer("*** %i %i", 
-					actualheight.getInternal(), sentheight.getInternal()));
-				heightDiffs++;
-			}
-			if (actualnormal != sentnormal) normalDiffs++;
-
-			heightDiff[x + y * map.getMapWidth()] = (actualheight != sentheight);
-		}
-	}
-	if (heightDiffs > 0 || normalDiffs > 0)
-	{
-		syncCheckLog(S3D::formatStringBuffer(
-			"SyncCheck %i - Height diffs %i, Normal diffs %i",
-			syncCount,
-			heightDiffs, normalDiffs));
-	
-		ImageHandle newMap = ImageFactory::createBlank(
-			Landscape::instance()->getMainMap().getWidth(),
-			Landscape::instance()->getMainMap().getHeight());
-
-		GLubyte *dest = newMap.getBits();
-		GLubyte *src = Landscape::instance()->getMainMap().getBits();
-		for (int y=0; y<newMap.getHeight(); y++)
-		{
-			for (int x=0; x<newMap.getWidth(); x++)
-			{
-				GLubyte r = src[0];
-				GLubyte g = src[1];
-				GLubyte b = src[2];
-
-				int x2 = (x * map.getMapWidth()) / newMap.getWidth();
-				int y2 = (y * map.getMapHeight()) / newMap.getHeight();
-				if (heightDiff[x2 + y2 * map.getMapWidth()])
-				{
-					r = g = b = 255;
-				}
-		
-				dest[0] = r;
-				dest[1] = g;
-				dest[2] = b;
-
-				dest+=3;
-				src+=3;
-			}
-		}
-		Landscape::instance()->getMainTexture().replace(newMap, false);
-		Landscape::instance()->setTextureType(Landscape::eOther);
-	}
-
-	// Read the target data
-	std::set<unsigned int> readTargets;
-	int numberTargetsSend = 0;
-	NetBuffer tmpBuffer;
-
-	// Create temporary target/tanks
-	static Target *tmpTarget = new Target(0, LangString(),
-		ScorchedClient::instance()->getContext());
-	tmpTarget->getLife().setLife(0); // Make sure not added to target space
-	static Tank *tmpTank = new Tank(
-		ScorchedClient::instance()->getContext(),
-		0,
-		0, 
-		LangString(),
-		Vector::getNullVector(),
-		"",
-		"");
-	tmpTank->getState().setState(TankState::sDead); // Make sure not added to target space
-
-	if (!reader.getFromBuffer(numberTargetsSend)) return false;
-	for (int i=0; i<numberTargetsSend; i++)
-	{
-		unsigned int playerId = 0;
-		if (!reader.getFromBuffer(playerId)) return false;
-		readTargets.insert(playerId);
-
-		Target *target = ScorchedClient::instance()->getTargetContainer().getTargetById(playerId);
-		if (!target)
-		{
-			syncCheckLog(S3D::formatStringBuffer(
-				"SyncCheck %i - Failed to find a client target : %u", syncCount, playerId));
-			return true;
-		}
-
-		tmpBuffer.reset();
+		NetBuffer tmpBuffer;
 		if (target->isTarget())
 		{
 			target->writeMessage(tmpBuffer);
@@ -274,98 +94,27 @@ bool ComsSyncCheckMessage::readMessage(NetBufferReader &reader)
 		{
 			((Tank*)target)->writeMessage(tmpBuffer, true);
 		}
-
-		bool different = false;
-		if (!target->getTargetState().getMovement())
-		{
-			for (unsigned int i=0; i<tmpBuffer.getBufferUsed(); i++)
-			{
-				if (reader.getReadSize() + i >= reader.getBufferSize())
-				{
-					syncCheckLog(S3D::formatStringBuffer(
-						"SyncCheck %i - Targets premature end of buffer : %u:%s, position %i", 
-						syncCount, playerId, 
-						target->getCStrName().c_str(), i));
-
-					different = true;
-					break;
-				}
-				else if(tmpBuffer.getBuffer()[i] != reader.getBuffer()[reader.getReadSize() + i])
-				{
-					syncCheckLog(S3D::formatStringBuffer(
-						"SyncCheck %i - Targets values differ : %u:%s, position %i", 
-						syncCount, playerId, 
-						target->getCStrName().c_str(), i));
-
-					different = true;
-					Logger::addLogger(syncCheckFileLogger);
-
-					// Only used for step-through debugging and logging to see where the
-					// differences are
-					tmpBuffer.setBufferUsed(i);
-					NetBufferReader tmpReader(tmpBuffer);
-					if (target->isTarget())
-					{
-						tmpTarget->readMessage(tmpReader);
-						tmpTarget->getLife().setLife(0);// Make sure not added to target space
-					}
-					else
-					{
-						tmpTank->readMessage(tmpReader);
-						tmpTank->getState().setState(TankState::sDead);// Make sure not added to target space
-					}
-
-					Logger::remLogger(syncCheckFileLogger);
-					break;
-				}
-			}
-		}
-
-		if (target->isTarget())
-		{
-			if (!tmpTarget->readMessage(reader)) return false;
-			tmpTarget->getLife().setLife(0);// Make sure not added to target space
-		}
-		else
-		{
-			if (!tmpTank->readMessage(reader)) return false;
-
-			if (different)
-			{
-				syncCheckLog(S3D::formatStringBuffer("Server : %s:%s", 
-					tmpTank->getState().getStateString(),
-					tmpTank->getScore().getScoreString()));
-				syncCheckLog(S3D::formatStringBuffer("Client : %s:%s", 
-					((Tank*)target)->getState().getStateString(),
-					((Tank*)target)->getScore().getScoreString()));
-			}
-
-			tmpTank->getState().setState(TankState::sDead);// Make sure not added to target space
-		}
+		targetsBuffer_.addToBuffer(tmpBuffer);
 	}
-	if (reader.getBufferSize() != reader.getReadSize())
-	{
-		syncCheckLog(S3D::formatStringBuffer("SyncCheck not all bytes read : %i   %i,%i",
-			syncCount, reader.getBufferSize(), reader.getReadSize()));
-	}
-
-	if (syncCheckFileLogger)
-	{
-		syncCheckLog(S3D::formatStringBuffer("SyncCheck %i checked. (%i syncs)", syncCount, serverSyncNo));
-	}
-	else
-	{
-		Logger::log(S3D::formatStringBuffer("SyncCheck %i checked. (%i syncs)", syncCount, serverSyncNo));
-	}
-
-	return true;
 }
 
-#else // #ifndef S3D_SERVER
+ComsSyncCheckMessage::~ComsSyncCheckMessage()
+{
+}
+
+bool ComsSyncCheckMessage::writeMessage(NetBuffer &buffer)
+{
+	buffer.addToBuffer(syncId_);
+	buffer.addToBuffer(landscapeBuffer_);
+	buffer.addToBuffer(targetsBuffer_);
+	return true;
+}
 
 bool ComsSyncCheckMessage::readMessage(NetBufferReader &reader)
 {
+	if (!reader.getFromBuffer(syncId_)) return false;
+	if (!reader.getFromBuffer(landscapeBuffer_)) return false;
+	if (!reader.getFromBuffer(targetsBuffer_)) return false;
 	return true;
 }
 
-#endif // #ifndef S3D_SERVER

@@ -23,6 +23,7 @@
 #include <server/ScorchedServerUtil.h>
 #include <server/ServerChannelManager.h>
 #include <server/ServerCommon.h>
+#include <server/ServerSyncCheck.h>
 #include <server/ServerAdminCommon.h>
 #include <server/ServerAdminSessions.h>
 #include <server/ServerDestinations.h>
@@ -31,7 +32,6 @@
 #include <common/Defines.h>
 #include <coms/ComsAdminMessage.h>
 #include <coms/ComsAdminResultMessage.h>
-#include <coms/ComsSyncCheckMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <net/NetInterface.h>
 #include <tank/TankContainer.h>
@@ -375,8 +375,7 @@ bool ServerAdminHandler::processMessage(
 			ServerChannelManager::instance()->sendText( 
 				ChannelText("info", "SENDING_SYNC", "sending sync..."),
 				destinationId, true);
-			ComsSyncCheckMessage syncCheck;
-			ComsMessageSender::sendToSingleClient(syncCheck, destinationId);
+			ServerSyncCheck::instance()->sendSyncCheck();
 		}
 		break;
 	case ComsAdminMessage::AdminKillAll:

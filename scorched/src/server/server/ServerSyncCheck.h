@@ -18,28 +18,55 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ClientSyncCheckHandlerh_INCLUDE__)
-#define __INCLUDE_ClientSyncCheckHandlerh_INCLUDE__
+#if !defined(__INCLUDE_ServerSyncCheckh_INCLUDE__)
+#define __INCLUDE_ServerSyncCheckh_INCLUDE__
 
+#include <time.h>
+#include <coms/ComsSyncCheckMessage.h>
 #include <coms/ComsMessageHandler.h>
+#include <map>
+#include <set>
 
-class ClientSyncCheckHandler : 
-	public ComsMessageHandlerI
+class ServerSyncCheck : public ComsMessageHandlerI 
 {
 public:
-	static ClientSyncCheckHandler *instance();
+	static ServerSyncCheck *instance();
 
+	void enterState();
+	void simulate();
+
+	void addServerSyncCheck(ComsSyncCheckMessage *message);
+	void sendSyncCheck();
+	void sentSyncCheck(unsigned int syncId);
+
+	// Inherited from ComsMessageHandlerI
 	virtual bool processMessage(
 		NetMessage &message,
 		const char *messageType,
 		NetBufferReader &reader);
 
 protected:
-	static ClientSyncCheckHandler *instance_;
+	static ServerSyncCheck *instance_;
+	time_t lastTime_;
+
+	struct SyncContext
+	{
+		SyncContext();
+		~SyncContext();
+
+		ComsSyncCheckMessage *serverMessage;
+		std::map<unsigned int, ComsSyncCheckMessage*> clientMessages;
+		std::set<unsigned int> clientDestinations;
+	};
+	std::map<unsigned int, SyncContext*> contexts_;
+
+	bool checkContext(SyncContext *context);
+	bool compareSyncChecks(ComsSyncCheckMessage *server, 
+		unsigned int destinationId, ComsSyncCheckMessage *client);
 
 private:
-	ClientSyncCheckHandler();
-	virtual ~ClientSyncCheckHandler();
+	ServerSyncCheck();
+	virtual ~ServerSyncCheck();
 };
 
-#endif // __INCLUDE_ClientSyncCheckHandlerh_INCLUDE__
+#endif
