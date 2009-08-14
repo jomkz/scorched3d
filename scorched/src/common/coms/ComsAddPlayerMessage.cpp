@@ -27,6 +27,23 @@ ComsAddPlayerMessage::ComsAddPlayerMessage() :
 {
 }
 
+ComsAddPlayerMessage::ComsAddPlayerMessage(ComsAddPlayerMessage &other) :
+	ComsMessage(ComsAddPlayerMessageType),
+	playerId_(other.playerId_),
+	playerName_(other.playerName_),
+	playerType_(other.playerType_),
+	playerColor_(other.playerColor_),
+	modelName_(other.modelName_),
+	typeName_(other.typeName_),
+	destinationId_(other.destinationId_),
+	playerTeam_(other.playerTeam_),
+	playerIconName_(other.playerIconName_)
+{
+	playerIcon_.reset();
+	playerIcon_.addDataToBuffer(other.playerIcon_.getBuffer(), 
+		other.playerIcon_.getBufferUsed());
+}
+
 ComsAddPlayerMessage::ComsAddPlayerMessage(
 		unsigned int playerId,
 		const LangString &playerName,

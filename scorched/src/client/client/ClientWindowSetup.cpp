@@ -33,7 +33,6 @@
 #include <dialogs/CameraDialog.h>
 #include <dialogs/PlayerDialog.h>
 #include <dialogs/QuitDialog.h>
-#include <dialogs/SaveDialog.h>
 #include <dialogs/LogDialog.h>
 #include <dialogs/ConnectDialog.h>
 #include <dialogs/AuthDialog.h>
@@ -116,9 +115,6 @@ void ClientWindowSetup::addCommonComponents(GLWWindowSkinManager *skinManager,
 
 	if (!ClientParams::instance()->getConnectedToServer())
 	{
-		KEYBOARDKEY("SHOW_SAVE_DIALOG", saveKey);
-		GLWWindowManager::instance()->addWindow(state, 
- 			SaveDialog::instance(), saveKey, false);
 		KEYBOARDKEY("SHOW_KILL_DIALOG", killKey);
 		GLWWindowManager::instance()->addWindow(state, 
  			QuitDialog::instance(), killKey, false);

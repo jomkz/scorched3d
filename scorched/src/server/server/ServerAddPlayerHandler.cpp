@@ -26,21 +26,14 @@
 #include <server/ServerSimulator.h>
 #include <server/ServerState.h>
 #include <common/OptionsScorched.h>
-#include <common/OptionsTransient.h>
 #include <common/StatsLogger.h>
 #include <common/Logger.h>
 #include <common/Defines.h>
 #include <coms/ComsAddPlayerMessage.h>
-#include <coms/ComsMessageSender.h>
-#include <net/NetLoopBack.h>
 #include <simactions/TankChangeSimAction.h>
 #include <tankai/TankAIStore.h>
-#include <tank/TankModelStore.h>
-#include <tank/TankModelContainer.h>
 #include <tank/TankContainer.h>
-#include <tank/TankColorGenerator.h>
 #include <tank/TankState.h>
-#include <tank/TankAvatar.h>
 
 ServerAddPlayerHandler *ServerAddPlayerHandler::instance_ = 0;
 
@@ -123,6 +116,7 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 	// Setup the new player
 	LangString name(message.getPlayerName());
 	filterName(tank, name);
+	message.setPlayerName(name);
 
 #ifdef S3D_SERVER
 	// Tell this computer that a new tank has connected
@@ -139,51 +133,7 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 				"Player \"{0}\" changed name to \"{1}\"",
 				tank->getTargetName(), name),
 			true);
-	}
-#endif // #ifdef S3D_SERVER
 
-	tank->setName(name);
-
-	// Player has set a new color
-	if (tank->getTeam() == 0 &&
-		message.getPlayerColor() != tank->getColor())
-	{
-		// Check the color is not already in use
-		std::map<unsigned int, Tank *> &tanks = 
-			ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-		if (TankColorGenerator::instance()->colorAvailable(
-			message.getPlayerColor(), tanks, tank))
-		{
-			// Set this color
-			tank->setColor(message.getPlayerColor());
-		}
-	}
-
-	bool noAvatar = !tank->getAvatar().getName()[0] 
-		&& message.getPlayerIconName()[0];
-	if (noAvatar) // Currently we can only set the avatar once
-	{
-		if (message.getPlayerIcon().getBufferUsed() <=
-			(unsigned) ScorchedServer::instance()->getOptionsGame().getMaxAvatarSize())
-		{
-			tank->getAvatar().setFromBuffer(
-				message.getPlayerIconName(),
-				message.getPlayerIcon());
-	
-			// Send a new add message to all clients (this contains the avatar)
-			// the client will not add the player but will update the avatar instead
-			// Note: this can be removed if we ever have enough bandwidth to send
-			// the avatar in each state message along with the rest of the tanks
-			// attributes.
-			ComsMessageSender::sendToAllConnectedClients(message);
-		}
-	}
-
-	// Tell the logger about a new tank
-	StatsLogger::instance()->tankJoined(tank);
-
-#ifdef S3D_SERVER
-	{
 		StatsLogger::TankRank rank = StatsLogger::instance()->tankRank(tank);
 		if (rank.rank >= 0)
 		{
@@ -208,34 +158,9 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 	}
 #endif // #ifdef S3D_SERVER
 
-	// Choose a team (if applicable)
-	if (ScorchedServer::instance()->getOptionsGame().getTeams() > 1)
-	{
-		if (message.getPlayerTeam() > 0 && message.getPlayerTeam() <=
-			(unsigned int) ScorchedServer::instance()->getOptionsGame().getTeams())
-		{
-			tank->setTeam(message.getPlayerTeam());
-		}
-		else
-		{
-			tank->setTeam(ScorchedServer::instance()->getOptionsTransient().getLeastUsedTeam(
-				ScorchedServer::instance()->getTankContainer()));
-		}
-	}
-
-	// Make sure the model is available and for the correct team
-	// Do this AFTER the team has been set
-	TankModel *tankModel = 
-		ScorchedServer::instance()->getTankModels().
-			getModelByName(message.getModelName(), 
-				tank->getTeam(),
-				tank->isTemp());
-	tank->getModelContainer().setTankModelName(
-		tankModel->getName(), message.getModelName(), tankModel->getTypeName());
-
-	// Set this tank 
-	TankChangeSimAction *tankChangeSimAction = new TankChangeSimAction(tank);
-	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankChangeSimAction);
+	// Send to client
+	TankChangeSimAction *simAction = new TankChangeSimAction(message);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
 
 	return true;
 }

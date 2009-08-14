@@ -23,7 +23,6 @@
 #include <client/ClientDialog.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientAdmin.h>
-#include <client/ClientSave.h>
 #include <client/ClientParams.h>
 #include <client/ClientChannelManager.h>
 #include <client/ClientGameStoppedHandler.h>
@@ -277,14 +276,9 @@ static bool startClientInternal()
 				"Client save file \"%s\" does not exist.",
 				ClientParams::instance()->getSaveFile()));
 		}
-		if (!ClientSave::loadClient(ClientParams::instance()->getSaveFile()) ||
-			!ClientSave::restoreClient(true, false))
-		{
-			S3D::dialogExit(scorched3dAppName, S3D::formatStringBuffer(
-				"Cannot load client save file \"%s\".",
-				ClientParams::instance()->getSaveFile()));
-		}
 
+		S3D::dialogExit(scorched3dAppName, S3D::formatStringBuffer(
+			"Client load saves yet"));
 		return initClient();
 	}
 	else

@@ -344,24 +344,27 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 				{
 					clientTank->second->setBufferUsed(u);
 
+					syncCheckLog(S3D::formatStringBuffer("**** SyncCheck %s differ %u:%s, Dest %u Sync %u",
+						isTarget?"target":"tank",
+						playerId, 
+						tmpTarget->getCStrName().c_str(), 
+						destinationId, client->getSyncId()));
+
+					Logger::addLogger(syncCheckFileLogger);
+
 					NetBufferReader reader(*clientTank->second);
 					if (isTarget)
 					{
 						tmpTarget->readMessage(reader);
 						tmpTarget->getLife().setLife(0);// Make sure not added to target space
-
-						syncCheckLog(S3D::formatStringBuffer("**** SyncCheck targets differ %u:%s, Dest %u Sync %u",
-							playerId, tmpTarget->getCStrName().c_str(), destinationId, client->getSyncId()));
 					}
 					else
 					{
 						tmpTank->readMessage(reader);
 						tmpTank->getState().setState(TankState::sDead);// Make sure not added to target space
-
-						syncCheckLog(S3D::formatStringBuffer("**** SyncCheck tanks differ %u:%s, Dest %u Sync %u",
-							playerId, tmpTank->getCStrName().c_str(), destinationId, client->getSyncId()));
 					}				
 
+					Logger::remLogger(syncCheckFileLogger);
 					break;
 				}
 			}
@@ -388,6 +391,13 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 	{
 		syncCheckLog(S3D::formatStringBuffer("SyncCheck checked, Dest %u Sync %u", 
 			destinationId, client->getSyncId()));
+	}
+	else
+	{
+#ifndef S3D_SERVER
+		Logger::log(S3D::formatStringBuffer("SyncCheck checked, Dest %u Sync %u", 
+			destinationId, client->getSyncId()));
+#endif
 	}
 
 	return true;

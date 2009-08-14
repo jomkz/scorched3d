@@ -66,11 +66,13 @@ bool TankAliveSimAction::invokeAction(ScorchedContext &context)
 bool TankAliveSimAction::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(playerId_);
+	buffer.addToBuffer(newMatch_);
 	return true;
 }
 
 bool TankAliveSimAction::readMessage(NetBufferReader &reader)
 {
 	if (!reader.getFromBuffer(playerId_)) return false;
+	if (!reader.getFromBuffer(newMatch_)) return false;
 	return true;
 }

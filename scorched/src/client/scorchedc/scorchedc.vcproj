@@ -3337,14 +3337,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\client\ClientSave.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientSave.h"
-				>
-			</File>
-			<File
 				RelativePath="..\client\ClientSaveScreenState.cpp"
 				>
 			</File>

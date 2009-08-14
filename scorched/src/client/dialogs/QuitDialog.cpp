@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <dialogs/QuitDialog.h>
-#include <dialogs/SaveDialog.h>
 #include <GLW/GLWWindowManager.h>
 #include <client/ClientParams.h>
 #include <server/ServerCommon.h>
@@ -51,14 +50,6 @@ QuitDialog::QuitDialog() :
 		"round.  Only available in single player\n"
 		"games.")));
 
-	saveButton_ = (GLWTextButton *) 
-		addWidget(new GLWTextButton(LANG_RESOURCE("SAVE_GAME", "Save Game"), 10, 80, 190, this,
-		GLWButton::ButtonFlagCenterX));
-	saveButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("SAVE_GAME", "Save Game"),
-		LANG_RESOURCE("SAVE_GAME_TOOLTIP", "Saves the games.\n"
-		"Only available in single player games.")));
-
 	quitButton_ = (GLWTextButton *) 
 		addWidget(new GLWTextButton(LANG_RESOURCE("QUIT_GAME", "Quit Game"), 10, 45, 190, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX));
@@ -87,7 +78,6 @@ void QuitDialog::display()
 	bool disable = (ClientParams::instance()->getConnectedToServer() ||
 		state == ClientState::StateOptions ||
 		state == ClientState::StateConnect);
-	saveButton_->setEnabled(!disable);
 	killButton_->setEnabled(!disable);
 }
 
@@ -95,12 +85,6 @@ void QuitDialog::buttonDown(unsigned int id)
 {
 	if (id == okButton_->getId())
 	{
-		GLWWindowManager::instance()->hideWindow(id_);
-	}
-	else if (id == saveButton_->getId())
-	{
-		GLWWindowManager::instance()->showWindow(
-			SaveDialog::instance()->getId());
 		GLWWindowManager::instance()->hideWindow(id_);
 	}
 	else if (id == killButton_->getId())

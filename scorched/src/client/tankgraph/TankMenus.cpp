@@ -48,7 +48,6 @@
 #include <tankgraph/TargetRendererImplTarget.h>
 #include <dialogs/MainMenuDialog.h>
 #include <dialogs/QuitDialog.h>
-#include <dialogs/SaveDialog.h>
 #include <dialogs/ResignDialog.h>
 #include <dialogs/SkipDialog.h>
 #include <sound/SoundUtils.h>
@@ -356,10 +355,6 @@ void TankMenus::PlayerMenu::menuSelection(const char* menuName,
 		case 3:
 			GLWWindowManager::instance()->showWindow(
 				QuitDialog::instance()->getId());
-			break;
-		case 4:
-			GLWWindowManager::instance()->showWindow(
-				SaveDialog::instance()->getId());
 			break;
 		}
 	}

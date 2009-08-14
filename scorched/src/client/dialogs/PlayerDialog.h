@@ -64,7 +64,7 @@ protected:
 	GLWTankViewer *viewer_;
 	GLWTextBox *playerName_;
 	GLWImageList *imageList_;
-	ToolTip avatarTip1_, avatarTip2_;
+	ToolTip avatarTip1_;
 	ToolTip humanToolTip_;
 	GLTexture colorTexture_;
 	unsigned int allocatedTeam_;
