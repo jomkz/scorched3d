@@ -24,7 +24,7 @@
 #include <coms/ComsPlayedMoveMessage.h>
 #include <common/OptionsScorched.h>
 #include <simactions/PlayMovesSimAction.h>
-#include <simactions/TankStartMoveSimAction.h>
+#include <simactions/TankStopMoveSimAction.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
@@ -166,6 +166,10 @@ void ServerTurnsSimultaneous::moveFinished(ComsPlayedMoveMessage &playedMessage)
 	std::set<unsigned int>::iterator itor =
 		playingPlayers_.find(playerId);
 	if (itor == playingPlayers_.end()) return;
+
+	TankStopMoveSimAction *tankSimAction = 
+		new TankStopMoveSimAction(playerId, moveId_);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);	
 
 	playingPlayers_.erase(itor);
 	tank->getScore().setMissedMoves(0);

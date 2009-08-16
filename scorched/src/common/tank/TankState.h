@@ -64,6 +64,8 @@ public:
 	int getMaxLives() { return maxLives_; }
 	void setDestroy(bool destroy) { destroy_ = destroy; }
 	bool getDestroy() { return destroy_; }
+	void setMakingMove(bool move) { makingMove_ = move; }
+	bool getMakingMove() { return makingMove_; }
 	
 	const char *getStateString();
 	const char *getSmallStateString();
@@ -82,6 +84,7 @@ protected:
 	bool skipshots_;
 	bool destroy_;
 	bool notSpectator_;
+	bool makingMove_;
 
 };
 

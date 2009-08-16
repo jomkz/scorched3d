@@ -54,7 +54,8 @@ TankState::TankState(ScorchedContext &context, unsigned int playerId) :
 	skipshots_(false),
 	lives_(0), maxLives_(1), 
 	destroy_(false), 
-	notSpectator_(false)
+	notSpectator_(false),
+	makingMove_(false)
 {
 }
 
@@ -77,6 +78,7 @@ void TankState::newGame()
 
 	lives_ = maxLives_;
 	tank_->getTargetState().setFalling(0);
+	makingMove_ = false;
 }
 
 void TankState::clientNewGame()

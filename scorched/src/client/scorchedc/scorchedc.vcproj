@@ -6180,6 +6180,14 @@
 				RelativePath="..\..\common\simactions\TankStartMoveSimAction.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankStopMoveSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankStopMoveSimAction.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

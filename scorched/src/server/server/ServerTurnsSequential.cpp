@@ -25,7 +25,7 @@
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <simactions/PlayMovesSimAction.h>
-#include <simactions/TankStartMoveSimAction.h>
+#include <simactions/TankStopMoveSimAction.h>
 #include <coms/ComsPlayedMoveMessage.h>
 #include <tank/TankSort.h>
 #include <tank/TankScore.h>
@@ -158,6 +158,10 @@ void ServerTurnsSequential::moveFinished(ComsPlayedMoveMessage &playedMessage)
 	playingMoves_ = true;
 	playingPlayer_ = 0;
 	tank->getScore().setMissedMoves(0);
+
+	TankStopMoveSimAction *tankSimAction = 
+		new TankStopMoveSimAction(playerId, moveId_);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);	
 
 	PlayMovesSimAction *movesAction = new PlayMovesSimAction(moveId_);
 	movesAction->addMove(new ComsPlayedMoveMessage(playedMessage));

@@ -46,6 +46,11 @@ TankStartMoveSimAction::~TankStartMoveSimAction()
 
 bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 {
+	Tank *tank = context.getTankContainer().getTankById(playerId_);
+	if (!tank || tank->getState().getState() != TankState::sNormal) return true;
+
+	tank->getState().setMakingMove(true);
+
 	if (!context.getServerMode())
 	{
 #ifndef S3D_SERVER
@@ -54,19 +59,15 @@ bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 	}
 	else
 	{
-		Tank *tank = context.getTankContainer().getTankById(playerId_);
-		if (tank && tank->getState().getState() == TankState::sNormal)
+		if (tank->getDestinationId() == 0)
 		{
-			if (tank->getDestinationId() == 0)
+			if (buying_)
 			{
-				if (buying_)
-				{
-					tank->getTankAI()->buyAccessories(moveId_);
-				}
-				else
-				{
-					tank->getTankAI()->playMove(moveId_);
-				}
+				tank->getTankAI()->buyAccessories(moveId_);
+			}
+			else
+			{
+				tank->getTankAI()->playMove(moveId_);
 			}
 		}
 	}

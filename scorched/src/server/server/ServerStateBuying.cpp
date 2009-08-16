@@ -29,6 +29,7 @@
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <simactions/TankStartMoveSimAction.h>
+#include <simactions/TankStopMoveSimAction.h>
 #include <simactions/TankAliveSimAction.h>
 
 unsigned int ServerStateBuying::moveId_ = 0;
@@ -176,6 +177,10 @@ void ServerStateBuying::buyingFinished(ComsPlayedMoveMessage &playedMessage)
 	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
 	if (!tank || !tank->getState().getTankPlaying()) return;
 	if (moveId != moveId_) return;
+
+	TankStopMoveSimAction *tankSimAction = 
+		new TankStopMoveSimAction(playerId, moveId_);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);	
 
 	std::set<unsigned int>::iterator itor =
 		playingPlayers_.find(playerId);
