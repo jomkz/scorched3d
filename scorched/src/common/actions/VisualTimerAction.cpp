@@ -18,31 +18,30 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ClientStartTimerHandlerh_INCLUDE__)
-#define __INCLUDE_ClientStartTimerHandlerh_INCLUDE__
+#include <actions/VisualTimerAction.h>
+#include <graph/ShotCountDown.h>
 
-#include <coms/ComsMessageHandler.h>
-
-class ClientStartTimerHandler  : 
-	public ComsMessageHandlerI
+VisualTimerAction::VisualTimerAction(unsigned int playerId, unsigned int moveId, 
+		fixed timeout, const LangString &text, bool buying) :
+	TimerAction(playerId, moveId, timeout, buying),
+	text_(text)
 {
-public:
-	static ClientStartTimerHandler* instance();
+}
 
-	virtual bool processMessage(
-		NetMessage &message,
-		const char *messageType,
-		NetBufferReader &reader);
+VisualTimerAction::~VisualTimerAction()
+{
+}
 
-protected:
-	static ClientStartTimerHandler* instance_;
+void VisualTimerAction::init()
+{
+}
 
-private:
-	ClientStartTimerHandler();
-	virtual ~ClientStartTimerHandler();
+void VisualTimerAction::simulate(fixed frameTime, bool &remove)
+{
+	TimerAction::simulate(frameTime, remove);
+}
 
-	ClientStartTimerHandler(const ClientStartTimerHandler &);
-	const ClientStartTimerHandler & operator=(const ClientStartTimerHandler &);
-};
-
-#endif
+void VisualTimerAction::draw()
+{
+	ShotCountDown::instance()->show(timeout_);
+}

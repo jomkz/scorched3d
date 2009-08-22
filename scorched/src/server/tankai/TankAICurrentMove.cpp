@@ -922,6 +922,6 @@ void TankAICurrentMove::useBattery(Tank *tank, unsigned int batteryId)
 void TankAICurrentMove::resheduleMove(Tank *tank, unsigned int moveId)
 {
 	TankStartMoveSimAction *simAction = 
-		new TankStartMoveSimAction(tank->getPlayerId(), moveId, 0.0f, false);
+		new TankStartMoveSimAction(tank->getPlayerId(), moveId, 0, false);
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
 }

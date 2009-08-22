@@ -27,7 +27,7 @@
 class TankResign : public Action
 {
 public:
-	TankResign(unsigned int playerId);
+	TankResign(unsigned int playerId, fixed resignTime);
 	virtual ~TankResign();
 
 	virtual void init();
@@ -36,7 +36,7 @@ public:
 	virtual std::string getActionType() { return "TankResign"; }
 
 protected:
-	bool firstTime_;
+	fixed resignTime_;
 	unsigned int playerId_;
 
 };

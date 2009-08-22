@@ -59,9 +59,7 @@ void ClientStartGameHandler::startGame(TankStartMoveSimAction *action)
 {
 	Tank *tank = ScorchedClient::instance()->getTankContainer().
 		getTankById(action->getPlayerId());
-	if (!tank ||
-		tank->getDestinationId() != 
-		ScorchedClient::instance()->getTankContainer().getCurrentDestinationId())
+	if (!tank)
 	{
 		return;
 	}
@@ -94,7 +92,6 @@ void ClientStartGameHandler::startGame(TankStartMoveSimAction *action)
 
 	// Stimulate into the new game state
 	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
-	ScorchedClient::instance()->getGameState().checkStimulate();
 	if (action->getBuying())
 	{
 		ScorchedClient::instance()->getGameState().stimulate(

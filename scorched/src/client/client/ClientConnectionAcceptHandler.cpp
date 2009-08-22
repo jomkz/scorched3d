@@ -160,7 +160,6 @@ bool ClientConnectionAcceptHandler::processMessage(
 
 	// Move into the files state
 	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimLoadFiles);
-	ScorchedClient::instance()->getGameState().checkStimulate();
 
 	return true;
 }

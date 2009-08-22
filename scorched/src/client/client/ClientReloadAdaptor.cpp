@@ -45,8 +45,8 @@ ClientReloadAdaptor *ClientReloadAdaptor::instance()
 
 ClientReloadAdaptor::ClientReloadAdaptor()
 {
-	new ConsoleRuleMethodIAdapter<ClientReloadAdaptor>(
-		this, &ClientReloadAdaptor::reloadLandscapeObjects, "ReloadLandscapeObjects");
+	//new ConsoleRuleMethodIAdapter<ClientReloadAdaptor>(
+	//	this, &ClientReloadAdaptor::reloadLandscapeObjects, "ReloadLandscapeObjects");
 	new ConsoleRuleMethodIAdapter<ClientReloadAdaptor>(
 		this, &ClientReloadAdaptor::showLandscapeInfo, "ShowLandscapeInfo");
 	new ConsoleRuleMethodIAdapter<ClientReloadAdaptor>(

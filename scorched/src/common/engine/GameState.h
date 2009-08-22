@@ -74,7 +74,6 @@ public:
 	virtual void simulate(float simTime);
 	virtual void draw();
 
-	bool checkStimulate();
 	void clear();
 
 	// Called by SDL subsystem 
@@ -191,6 +190,7 @@ protected:
 	Clock overallTimerClock_;
 	Clock doubleClickClock_;
 	TimerInfo timers_[50];
+	bool checkStimulate();
 
 	// Dragging stuff
 	// Up or down for each button (bit field)

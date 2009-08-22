@@ -82,8 +82,8 @@ static OptionEntryEnum::EnumEntry weapScaleEnum[] =
 static OptionEntryEnum::EnumEntry resignEnum[] =
 {
 	{ "ResignStart", 0 },
+	{ "ResignTimed", 1 },
 	{ "ResignEnd", 1 },
-	{ "ResignDueToHealth", 2 },
 	{ "", -1 }
 };
 
@@ -218,7 +218,7 @@ OptionsGame::OptionsGame() :
 	actionSyncCheck_(options_, "ActionSyncCheck",
 		"Gather enhanced action syncchecking", 0, false),
 	resignMode_(options_, "ResignMode",
-		"When does a players resign take place", 0, int(ResignEnd), resignEnum),
+		"When does a players resign take place", 0, int(ResignTimed), resignEnum),
 	movementRestriction_(options_, "MovementRestriction",
 		"Where a tank is allowed to move to", 0, int(MovementRestrictionNone), movementRestrictionEnum),
 	teamBallance_(options_, "TeamBallance",

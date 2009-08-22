@@ -31,7 +31,7 @@
 #include <list>
 
 ServerTurnsSimultaneous::ServerTurnsSimultaneous() :
-	moveId_(0), playingMoves_(false)
+	nextMoveId_(0), playingMoves_(false)
 {
 }
 
@@ -42,7 +42,7 @@ ServerTurnsSimultaneous::~ServerTurnsSimultaneous()
 
 void ServerTurnsSimultaneous::enterState()
 {
-	moveId_++;
+	nextMoveId_++;
 	waitingPlayers_.clear();
 	playingPlayers_.clear();
 
@@ -153,26 +153,18 @@ void ServerTurnsSimultaneous::simulate()
 
 void ServerTurnsSimultaneous::makeMove(Tank *tank)
 {
-	playMove(tank, moveId_);
+	playMove(tank, nextMoveId_);
 }
 
 void ServerTurnsSimultaneous::moveFinished(ComsPlayedMoveMessage &playedMessage)
 {
 	unsigned int playerId = playedMessage.getPlayerId();
-	unsigned int moveId = playedMessage.getMoveId();
-	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
-	if (!tank || tank->getState().getState() != TankState::sNormal) return;
-	if (moveId_ != moveId) return;
 	std::set<unsigned int>::iterator itor =
 		playingPlayers_.find(playerId);
 	if (itor == playingPlayers_.end()) return;
-
-	TankStopMoveSimAction *tankSimAction = 
-		new TankStopMoveSimAction(playerId, moveId_);
-	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);	
+	if (!playMoveFinished(playedMessage)) return;
 
 	playingPlayers_.erase(itor);
-	tank->getScore().setMissedMoves(0);
 
 	if (moves_.find(playerId) == moves_.end())
 	{
@@ -182,7 +174,7 @@ void ServerTurnsSimultaneous::moveFinished(ComsPlayedMoveMessage &playedMessage)
 
 void ServerTurnsSimultaneous::playShots()
 {
-	PlayMovesSimAction *movesAction = new PlayMovesSimAction(moveId_);
+	PlayMovesSimAction *movesAction = new PlayMovesSimAction(nextMoveId_);
 
 	std::map<unsigned int, ComsPlayedMoveMessage*>::iterator itor;
 	for (itor = moves_.begin();
@@ -201,7 +193,7 @@ void ServerTurnsSimultaneous::playShots()
 
 void ServerTurnsSimultaneous::shotsFinished(unsigned int moveId)
 {
-	if (moveId_ != moveId) return;
+	if (nextMoveId_ != moveId) return;
 	playingMoves_ = false;
 
 	enterState();

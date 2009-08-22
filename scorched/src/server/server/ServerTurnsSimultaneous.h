@@ -42,7 +42,7 @@ public:
 
 protected:
 	bool playingMoves_;
-	unsigned int moveId_;
+	unsigned int nextMoveId_;
 	std::set<unsigned int> waitingPlayers_;
 	std::set<unsigned int> playingPlayers_;
 	std::map<unsigned int, ComsPlayedMoveMessage*>  moves_;

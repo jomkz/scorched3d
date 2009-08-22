@@ -108,7 +108,6 @@ bool ClientSyncLevelHandler::processMessage(
 
 	// Move into the wait state
 	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
-	ScorchedClient::instance()->getGameState().checkStimulate();
 
 	return true;
 }

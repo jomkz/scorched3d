@@ -18,42 +18,27 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <client/ClientStartTimerHandler.h>
-#include <client/ScorchedClient.h>
-#include <graph/ShotCountDown.h>
-#include <coms/ComsTimerStartMessage.h>
+#if !defined(__INCLUDE_VisualTimerActionh_INCLUDE__)
+#define __INCLUDE_VisualTimerActionh_INCLUDE__
 
-ClientStartTimerHandler *ClientStartTimerHandler::instance_ = 0;
+#include <actions/TimerAction.h>
+#include <lang/LangString.h>
 
-ClientStartTimerHandler *ClientStartTimerHandler::instance()
+class VisualTimerAction : public TimerAction
 {
-	if (!instance_)
-	{
-		instance_ = new ClientStartTimerHandler;
-	}
-	return instance_;
-}
+public:
+	VisualTimerAction(unsigned int playerId, unsigned int moveId, 
+		fixed timeout, const LangString &text, bool buying);
+	virtual ~VisualTimerAction();
 
-ClientStartTimerHandler::ClientStartTimerHandler()
-{
-	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		ComsTimerStartMessage::ComsTimerStartMessageType,
-		this);
-}
+	virtual void init();
+	virtual void simulate(fixed frameTime, bool &remove);
+	virtual void draw();
 
-ClientStartTimerHandler::~ClientStartTimerHandler()
-{
-}
+	virtual std::string getActionType() { return "VisualTimerAction"; }
 
-bool ClientStartTimerHandler::processMessage(
-	NetMessage &netMessage,
-	const char *messageType,
-	NetBufferReader &reader)
-{
-	ComsTimerStartMessage message;
-	if (!message.readMessage(reader)) return false;
+protected:
+	LangString text_;
+};
 
-	ShotCountDown::instance()->reset((float) message.getTimerValue());
-	
-	return true;
-}
+#endif

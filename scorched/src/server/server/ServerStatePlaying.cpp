@@ -21,7 +21,12 @@
 #include <server/ServerStatePlaying.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerSyncCheck.h>
+#include <server/ServerChannelManager.h>
+#include <server/ServerCommon.h>
 #include <common/OptionsScorched.h>
+#include <tank/TankContainer.h>
+#include <tank/TankState.h>
+#include <tank/TankScore.h>
 
 ServerStatePlaying::ServerStatePlaying() : 
 	turns_(0)
@@ -61,6 +66,39 @@ void ServerStatePlaying::simulate()
 
 void ServerStatePlaying::moveFinished(ComsPlayedMoveMessage &playedMessage)
 {
+	Tank *tank = ScorchedServer::instance()->getTankContainer().
+		getTankById(playedMessage.getPlayerId());
+	if (playedMessage.getType() == ComsPlayedMoveMessage::eTimeout)
+	{
+		int allowedMissed = 
+			ScorchedServer::instance()->getOptionsGame().getAllowedMissedMoves();
+		if (tank && allowedMissed > 0)
+		{
+			tank->getScore().setMissedMoves(
+				tank->getScore().getMissedMoves() + 1);
+
+			ServerChannelManager::instance()->sendText(
+				ChannelText("info",
+					"PLAYER_MISSED_SHOOT",
+					"Player \"{0}\" failed to move, allowed {1} more missed move(s)",
+					tank->getTargetName(),
+					allowedMissed - tank->getScore().getMissedMoves()),
+					true);
+
+			if (tank->getScore().getMissedMoves() >= allowedMissed)
+			{
+				// Then kick this player
+				ServerCommon::kickDestination(tank->getDestinationId());
+			}
+		}
+	}
+	else
+	{
+		if (tank)
+		{
+			tank->getScore().setMissedMoves(0);
+		}
+	}
 	turns_->moveFinished(playedMessage);
 }
 

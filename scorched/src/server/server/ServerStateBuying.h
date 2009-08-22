@@ -36,7 +36,7 @@ public:
 	void buyingFinished(ComsPlayedMoveMessage &playedMessage);
 
 protected:
-	static unsigned int moveId_;
+	unsigned int nextMoveId_;
 	std::set<unsigned int> waitingPlayers_;
 	std::set<unsigned int> playingPlayers_;
 

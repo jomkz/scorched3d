@@ -64,8 +64,8 @@ public:
 	int getMaxLives() { return maxLives_; }
 	void setDestroy(bool destroy) { destroy_ = destroy; }
 	bool getDestroy() { return destroy_; }
-	void setMakingMove(bool move) { makingMove_ = move; }
-	bool getMakingMove() { return makingMove_; }
+	void setMoveId(unsigned int moveId) { moveId_ = moveId; }
+	unsigned int getMoveId() { return moveId_; }
 	
 	const char *getStateString();
 	const char *getSmallStateString();
@@ -80,11 +80,11 @@ protected:
 	ScorchedContext &context_;
 	State state_;
 	int lives_, maxLives_;
+	unsigned int moveId_;
 	bool muted_;
 	bool skipshots_;
 	bool destroy_;
 	bool notSpectator_;
-	bool makingMove_;
 
 };
 

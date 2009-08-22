@@ -101,6 +101,8 @@ void ClientState::addStandardComponents(GameState &gameState, unsigned state)
 	gameState.addStateLoop(state, 
 		Main2DCamera::instance(), SpeedChange::instance());
 	addWindowManager(gameState, state);
+	gameState.addStateLoop(state,
+		Main2DCamera::instance(), ShotCountDown::instance());
 	gameState.addStateLoop(state, Main2DCamera::instance(), 
 		GLWToolTip::instance());
 	gameState.addStateLoop(state, Main2DCamera::instance(), 
@@ -200,8 +202,6 @@ void ClientState::setupGameState()
 
 	// StateWait
 	addStandardComponents(gameState, StateWait);
-	gameState.addStateLoop(StateWait,
-		Main2DCamera::instance(), ShotCountDown::instance());
 	gameState.addStateEntry(StateWait, 
 		TankKeyboardControl::instance());
 	gameState.addStateStimulus(StateWait, 
@@ -221,8 +221,6 @@ void ClientState::setupGameState()
 
 	// StateBuyWeapons
 	addStandardComponents(gameState, StateBuyWeapons);
-	gameState.addStateLoop(StateBuyWeapons,
-		Main2DCamera::instance(), ShotCountDown::instance());
 	gameState.addStateStimulus(StateBuyWeapons, 
 		StimDisconnected, StateDisconnected);
 	gameState.addStateStimulus(StateBuyWeapons, 
@@ -234,8 +232,6 @@ void ClientState::setupGameState()
 
 	// StateAutoDefense
 	addStandardComponents(gameState, StateAutoDefense);
-	gameState.addStateLoop(StateAutoDefense,
-		Main2DCamera::instance(), ShotCountDown::instance());
 	gameState.addStateStimulus(StateAutoDefense, 
 		StimDisconnected, StateDisconnected);
 	gameState.addStateStimulus(StateAutoDefense, 
@@ -247,8 +243,6 @@ void ClientState::setupGameState()
 	addStandardComponents(gameState, StatePlaying);
 	gameState.addStateKeyEntry(StatePlaying, 
 		TankKeyboardControl::instance());
-	gameState.addStateLoop(StatePlaying,
-		Main2DCamera::instance(), ShotCountDown::instance());
 	gameState.addStateStimulus(StatePlaying, 
 		StimDisconnected, StateDisconnected);
 	gameState.addStateStimulus(StatePlaying, 

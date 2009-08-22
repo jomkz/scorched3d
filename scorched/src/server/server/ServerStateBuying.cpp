@@ -32,9 +32,8 @@
 #include <simactions/TankStopMoveSimAction.h>
 #include <simactions/TankAliveSimAction.h>
 
-unsigned int ServerStateBuying::moveId_ = 0;
-
-ServerStateBuying::ServerStateBuying()
+ServerStateBuying::ServerStateBuying() :
+	nextMoveId_(0)
 {
 }
 
@@ -44,8 +43,6 @@ ServerStateBuying::~ServerStateBuying()
 
 void ServerStateBuying::enterState()
 {
-	moveId_++;
-
 	waitingPlayers_.clear();
 	playingPlayers_.clear();
 }
@@ -161,12 +158,16 @@ bool ServerStateBuying::simulate()
 
 void ServerStateBuying::playerBuying(unsigned int playerId)
 {
+	nextMoveId_++;
+
 	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
-	float buyingTime = (float)
-		ScorchedServer::instance()->getOptionsGame().getBuyingTime();
+	tank->getState().setMoveId(nextMoveId_);
+
+	fixed buyingTime
+		(ScorchedServer::instance()->getOptionsGame().getBuyingTime());
 
 	TankStartMoveSimAction *tankSimAction = 
-		new TankStartMoveSimAction(playerId, moveId_, buyingTime, true);
+		new TankStartMoveSimAction(playerId, nextMoveId_, buyingTime, true);
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);
 }
 
@@ -176,18 +177,15 @@ void ServerStateBuying::buyingFinished(ComsPlayedMoveMessage &playedMessage)
 	unsigned int moveId = playedMessage.getMoveId();
 	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
 	if (!tank || !tank->getState().getTankPlaying()) return;
-	if (moveId != moveId_) return;
-
-	TankStopMoveSimAction *tankSimAction = 
-		new TankStopMoveSimAction(playerId, moveId_);
-	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);	
-
+	if (moveId != tank->getState().getMoveId()) return;
 	std::set<unsigned int>::iterator itor =
 		playingPlayers_.find(playerId);
 	if (itor == playingPlayers_.end()) return;
 
 	playingPlayers_.erase(itor);
+	tank->getState().setMoveId(0);
 
-	tank->getScore().setMissedMoves(0);
+	TankStopMoveSimAction *tankSimAction = 
+		new TankStopMoveSimAction(playerId, moveId);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);	
 }
-

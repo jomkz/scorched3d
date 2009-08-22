@@ -54,8 +54,6 @@ public:
 
 	// Set the simulation speed
 	void setScorchedContext(ScorchedContext *context);
-	void setFast(fixed speedMult);
-	fixed getFast() { return speed_; }
 
 	// Inherited from GameStateI
 	void simulate(fixed frameTime);
@@ -100,7 +98,6 @@ protected:
 	std::map<std::string, int> actionProfile_;
 	int referenceCount_;
 	unsigned int actionNumber_;
-	fixed speed_;
 	fixed time_;
 	fixed lastTraceTime_;
 	fixed stepTime_;

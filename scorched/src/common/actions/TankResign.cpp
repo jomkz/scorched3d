@@ -30,12 +30,11 @@
 #include <common/StatsLogger.h>
 #include <lang/LangResource.h>
 
-TankResign::TankResign(unsigned int playerId) :
+TankResign::TankResign(unsigned int playerId, fixed resignTime) :
 	Action(playerId),
-	firstTime_(true),
+	resignTime_(resignTime),
 	playerId_(playerId)
 {
-
 }
 
 TankResign::~TankResign()
@@ -48,9 +47,12 @@ void TankResign::init()
 
 void TankResign::simulate(fixed frameTime, bool &remove)
 {
-	if (firstTime_)
+	resignTime_ -= frameTime;
+
+	if (resignTime_ <= 0)
 	{
-		firstTime_ = false;
+		remove = true;
+
 		Tank *tank = 
 			context_->getTankContainer().getTankById(playerId_);
 		if (tank && tank->getState().getState() == TankState::sNormal)
@@ -122,11 +124,10 @@ void TankResign::simulate(fixed frameTime, bool &remove)
 		}
 	}
 
-	remove = true;
 	Action::simulate(frameTime, remove);
 }
 
 std::string TankResign::getActionDetails()
 {
-	return S3D::formatStringBuffer("%u", playerId_);
+	return S3D::formatStringBuffer("%u %u", playerId_, resignTime_.getInternal());
 }

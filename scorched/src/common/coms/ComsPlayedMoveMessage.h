@@ -34,7 +34,8 @@ public:
 		eShot,
 		eResign,
 		eSkip,
-		eFinishedBuy
+		eFinishedBuy,
+		eTimeout
 	};
 
 	ComsPlayedMoveMessage();

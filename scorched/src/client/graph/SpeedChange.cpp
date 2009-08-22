@@ -25,7 +25,7 @@
 #include <common/Keyboard.h>
 #include <common/Defines.h>
 #include <client/ClientParams.h>
-#include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <graph/ParticleEngine.h>
 #include <GLW/GLWFont.h>
 #include <stdio.h>
@@ -57,7 +57,7 @@ void SpeedChange::resetSpeed()
 
 void SpeedChange::draw(const unsigned state)
 {
-	float speed = ScorchedClient::instance()->getActionController().getFast().asFloat();
+	float speed = ScorchedClient::instance()->getSimulator().getFast().asFloat();
 	if (speed != 1.0f)
 	{
 		GLState state(GLState::BLEND_ON | GLState::TEXTURE_OFF); 
@@ -71,7 +71,7 @@ void SpeedChange::draw(const unsigned state)
 
 void SpeedChange::simulate(const unsigned state, float simTime)
 {
-	fixed speed = ScorchedClient::instance()->getActionController().getFast();
+	fixed speed = ScorchedClient::instance()->getSimulator().getFast();
 	float timeTaken = frameClock_.getTimeDifference();
 	if (timeTaken > 0.2f && speed > 1)
 	{
@@ -126,11 +126,11 @@ void SpeedChange::keyboardCheck(const unsigned state, float frameTime,
 
 void SpeedChange::setSpeed(fixed speed)
 {
-	ScorchedClient::instance()->getActionController().setFast(speed);
+	ScorchedClient::instance()->getSimulator().setFast(speed);
 	ParticleEngine::setFast(speed.asFloat());
 
 	if (!ClientParams::instance()->getConnectedToServer())
 	{
-		ScorchedServer::instance()->getActionController().setFast(speed);
+		ScorchedServer::instance()->getSimulator().setFast(speed);
 	}
 }

@@ -1829,14 +1829,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\actions\CheckResurrection.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\actions\CheckResurrection.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\actions\Explosion.cpp"
 				>
 			</File>
@@ -2010,6 +2002,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\actions\Teleport.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\TimerAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\TimerAction.h"
 				>
 			</File>
 		</Filter>
@@ -2414,14 +2414,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\coms\ComsSyncTimeMessage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsTimerStartMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsTimerStartMessage.h"
 				>
 			</File>
 		</Filter>

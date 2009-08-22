@@ -44,7 +44,7 @@ public:
 	ActionController &getActionController() { return actionController_; }
 
 	// Set the simulation speed
-	void setFast(fixed speedMult);
+	void setFast(fixed speedMult) { speed_ = speedMult; }
 	fixed getFast() { return speed_; }
 protected:
 	class SimActionContainer

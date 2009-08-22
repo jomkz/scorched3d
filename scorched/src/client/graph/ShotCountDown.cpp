@@ -40,8 +40,7 @@ ShotCountDown *ShotCountDown::instance()
 
 ShotCountDown::ShotCountDown() : 
 	GameStateI("ShotCountDown"),
-	counter_(0.0f), blinkTimer_(0.0f), 
-	showTime_(true), timerOff_(true)
+	show_(false)
 {
 }
 
@@ -49,86 +48,47 @@ ShotCountDown::~ShotCountDown()
 {
 }
 
-void ShotCountDown::reset(float time)
+void ShotCountDown::show(fixed timer)
 {
-	timerOff_ = (time == 0.0f);
-	counter_ = time;
-	blinkTimer_ = 0.0f;
-	showTime_ = true;
-}
-
-void ShotCountDown::simulate(const unsigned state, float simTime)
-{
-	counter_ -= simTime;
-	blinkTimer_ += simTime;
-
-	if (blinkTimer_ > 0.25f)
-	{
-		if (counter_ < 5.0f)
-		{
-			showTime_ = !showTime_;
-		}
-		blinkTimer_ = 0.0f;
-	}
+	show_ = true;
+	timer_ = timer;
 }
 
 void ShotCountDown::draw(const unsigned currentstate)
 {
-	if (timerOff_) return;
-
-	// The remaining time for this shot
-	int timeLeft = (int) counter_;
-
-	// Split into seconds and minutes
-	div_t split = div(timeLeft, 60);
+	if (!show_) return;
+	show_ = false;
 
 	GLState state(GLState::BLEND_ON | GLState::TEXTURE_OFF | GLState::DEPTH_OFF); 
 
-	static Vector fontColor;
-	fontColor = Vector(0.7f, 0.7f, 0.2f);
-	if (timeLeft <= 5)
+	static Vector yellow(0.7f, 0.7f, 0.2f);
+	static Vector red(0.7f, 0.0f, 0.0f);
+
+	std::string str;
+	Vector *fontColor = 0;
+	if (timer_ <= 5)
 	{
-		fontColor = Vector(0.7f, 0.0f, 0.0f);
+		fontColor = &red;
+
+		str = S3D::formatStringBuffer("0%.2f", 
+			timer_.asFloat());		
 	}
-
-	const char *format = "%02i:%02i";
-	if (timeLeft < 0) format = "--:--";
-
-	float width = 0.0f;
-	if (currentstate == ClientState::StateWait)
+	else
 	{
-		width = GLWFont::instance()->getGameFont()->getWidth(10,
-			S3D::formatStringBuffer(format, 
+		fontColor = &yellow;
+
+		int timeLeft = timer_.asInt();
+		div_t split = div(timeLeft, 60);
+		str = S3D::formatStringBuffer("%02i:%02i", 
 			split.quot,
-			split.rem));	
-	}
-	else 
-	{
-		width = GLWFont::instance()->getGameFont()->getWidth(20,
-			S3D::formatStringBuffer(format, 
-			split.quot,
-			split.rem));	
+			split.rem);
 	}
 
+	float width = GLWFont::instance()->getGameFont()->getWidth(20, str);	
 	float wHeight = (float) GLViewPort::getHeight();
 	float wWidth = (float) GLViewPort::getWidth();
-	if (currentstate == ClientState::StateWait)
-	{
-		static Vector green(0.2f, 0.7f, 0.2f);
-		GLWFont::instance()->getGameFont()->draw(
-			green, 10, (wWidth/2.0f) - (width / 2), 
-			wHeight - 50.0f, 0.0f, 
-			S3D::formatStringBuffer(format, 
-			split.quot,
-			split.rem));	
-	}
-	else if (showTime_)
-	{
-		GLWFont::instance()->getGameFont()->draw(
-			fontColor, 20, (wWidth/2.0f) - (width / 2),
-			wHeight - 50.0f, 0.0f, 
-			S3D::formatStringBuffer(format, 
-			split.quot,
-			split.rem));
-	}
+	GLWFont::instance()->getGameFont()->draw(
+		*fontColor, 20, (wWidth/2.0f) - (width / 2),
+		wHeight - 50.0f, 0.0f, 
+		str);
 }

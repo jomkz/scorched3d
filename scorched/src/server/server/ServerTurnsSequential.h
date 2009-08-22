@@ -40,7 +40,7 @@ public:
 
 protected:
 	bool playingMoves_;
-	unsigned int moveId_;
+	unsigned int nextMoveId_;
 	unsigned int playingPlayer_;
 	std::list<unsigned int> waitingPlayers_;
 

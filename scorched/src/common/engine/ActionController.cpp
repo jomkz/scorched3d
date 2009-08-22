@@ -25,7 +25,7 @@
 #include <list>
 
 ActionController::ActionController() : 
-	speed_(1), referenceCount_(0), time_(0), 
+	referenceCount_(0), time_(0), 
 	context_(0), lastTraceTime_(0),
 	actionTracing_(false), stepTime_(0),
 	actionEvents_(false), actionProfiling_(false),
@@ -160,11 +160,6 @@ void ActionController::resetTime()
 void ActionController::setScorchedContext(ScorchedContext *context)
 {
 	context_ = context;
-}
-
-void ActionController::setFast(fixed speedMult)
-{
-	speed_ = speedMult;
 }
 
 void ActionController::addSyncCheck(const std::string &msg)

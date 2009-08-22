@@ -22,9 +22,12 @@
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
 #include <tank/TankContainer.h>
+#include <actions/TimerAction.h>
 #include <tankai/TankAI.h>
+#include <engine/ActionController.h>
 #ifndef S3D_SERVER
 #include <client/ClientStartGameHandler.h>
+#include <actions/VisualTimerAction.h>
 #endif
 
 REGISTER_CLASS_SOURCE(TankStartMoveSimAction);
@@ -34,7 +37,7 @@ TankStartMoveSimAction::TankStartMoveSimAction()
 }
 
 TankStartMoveSimAction::TankStartMoveSimAction(unsigned int playerId, unsigned int moveId,
-	float timeout, bool buying) :
+	fixed timeout, bool buying) :
 	playerId_(playerId), moveId_(moveId),
 	timeout_(timeout), buying_(buying)
 {
@@ -49,13 +52,23 @@ bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 	Tank *tank = context.getTankContainer().getTankById(playerId_);
 	if (!tank || tank->getState().getState() != TankState::sNormal) return true;
 
-	tank->getState().setMakingMove(true);
-
 	if (!context.getServerMode())
 	{
+		tank->getState().setMoveId(moveId_);
+
+		if (tank->getDestinationId() == context.getTankContainer().getCurrentDestinationId())
+		{
 #ifndef S3D_SERVER
-	ClientStartGameHandler::instance()->startGame(this);
+			ClientStartGameHandler::instance()->startGame(this);
+
+			if (timeout_ > 0)
+			{
+				VisualTimerAction *timerAction = 
+					new VisualTimerAction(playerId_, moveId_, timeout_, LangString(), buying_);
+				context.getActionController().addAction(timerAction);
+			}
 #endif
+		}
 	}
 	else
 	{
@@ -68,6 +81,14 @@ bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 			else
 			{
 				tank->getTankAI()->playMove(moveId_);
+			}
+		}
+		else
+		{
+			if (timeout_ > 0)
+			{
+				TimerAction *timerAction = new TimerAction(playerId_, moveId_, timeout_, buying_);
+				context.getActionController().addAction(timerAction);
 			}
 		}
 	}

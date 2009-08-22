@@ -116,11 +116,13 @@ void ServerState::simulate()
 
 void ServerState::buyingFinished(ComsPlayedMoveMessage &message)
 {
+	if (getState() != ServerState::ServerBuyingState) return;
 	buying_.buyingFinished(message);
 }
 
 void ServerState::moveFinished(ComsPlayedMoveMessage &message)
 {
+	if (getState() != ServerState::ServerPlayingState) return;
 	playing_.moveFinished(message);
 }
 

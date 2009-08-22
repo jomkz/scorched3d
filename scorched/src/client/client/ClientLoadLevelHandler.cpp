@@ -93,7 +93,6 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 {
 	// Move into the load level state
 	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimLoadLevel);
-	ScorchedClient::instance()->getGameState().checkStimulate();
 
 	ComsLoadLevelMessage message;
 	if (!message.readMessage(reader)) return false;

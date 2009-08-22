@@ -546,7 +546,7 @@ void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
 			current->getColor(),
 			10,
 			textX + readyLeft, textY, 0.0f,
-			current->getState().getMakingMove()?"*":" ");
+			current->getState().getMoveId()!=0?"*":" ");
 		if (current->getScore().getRank() >= 0)
 		{
 			GLWFont::instance()->getGameFont()->draw(

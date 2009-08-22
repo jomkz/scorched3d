@@ -18,33 +18,28 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef _comsTimerStartMessage_h
-#define _comsTimerStartMessage_h
+#if !defined(__INCLUDE_TimerActionh_INCLUDE__)
+#define __INCLUDE_TimerActionh_INCLUDE__
 
-#include <coms/ComsMessage.h>
+#include <actions/Action.h>
 
-class ComsTimerStartMessage : public ComsMessage
+class TimerAction : public Action
 {
 public:
-	static ComsMessageType ComsTimerStartMessageType;
+	TimerAction(unsigned int playerId, unsigned int moveId, 
+		fixed timeout, bool buying);
+	virtual ~TimerAction();
 
-	ComsTimerStartMessage(int timerValue = 0);
-	virtual ~ComsTimerStartMessage();
+	virtual void init();
+	virtual void simulate(fixed frameTime, bool &remove);
 
-	int getTimerValue() { return timerValue_; }
-
-	// Inherited from ComsMessage
-	virtual bool writeMessage(NetBuffer &buffer);
-	virtual bool readMessage(NetBufferReader &reader);
+	virtual std::string getActionType() { return "TimerAction"; }
 
 protected:
-	int timerValue_;
-
-private:
-	ComsTimerStartMessage(const ComsTimerStartMessage &);
-	const ComsTimerStartMessage & operator=(const ComsTimerStartMessage &);
-
+	unsigned int playerId_;
+	unsigned int moveId_;
+	fixed timeout_;
+	bool buying_;
 };
 
-#endif // _comsTimerStartMessage_h
-
+#endif

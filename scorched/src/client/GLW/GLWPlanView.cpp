@@ -420,8 +420,8 @@ void GLWPlanView::drawTanks()
 		{		
 			tank->getPosition().getTankPosition().asVector(position);			
 
-			if ((flash_ && tank->getState().getMakingMove()) ||
-				!tank->getState().getMakingMove())
+			if ((flash_ && tank->getState().getMoveId() != 0) ||
+				tank->getState().getMoveId() == 0)
 			{
 				glColor3fv(tank->getColor());
 				drawQuad(position[0], position[1], 8.0f, 8.0f);

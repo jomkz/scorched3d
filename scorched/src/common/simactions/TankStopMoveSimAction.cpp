@@ -21,6 +21,10 @@
 #include <simactions/TankStopMoveSimAction.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
+#ifndef S3D_SERVER
+#include <client/ScorchedClient.h>
+#include <client/ClientState.h>
+#endif
 
 REGISTER_CLASS_SOURCE(TankStopMoveSimAction);
 
@@ -42,7 +46,17 @@ bool TankStopMoveSimAction::invokeAction(ScorchedContext &context)
 	Tank *tank = context.getTankContainer().getTankById(playerId_);
 	if (!tank) return true;
 
-	tank->getState().setMakingMove(false);
+	if (!context.getServerMode())
+	{
+		tank->getState().setMoveId(0);
+
+		if (tank->getDestinationId() == context.getTankContainer().getCurrentDestinationId())
+		{
+#ifndef S3D_SERVER
+			ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
+#endif
+		}
+	}
 
 	return true;
 }

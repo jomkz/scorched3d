@@ -34,7 +34,7 @@
 #include <list>
 
 ServerTurnsSequential::ServerTurnsSequential() :
-	playingPlayer_(0), moveId_(0), playingMoves_(false)
+	playingPlayer_(0), nextMoveId_(0), playingMoves_(false)
 {
 }
 
@@ -141,29 +141,21 @@ void ServerTurnsSequential::simulate()
 
 void ServerTurnsSequential::makeMove(Tank *tank)
 {
-	moveId_++;
-
-	playMove(tank, moveId_);
+	nextMoveId_++;
+	playMove(tank, nextMoveId_);
 }
 
 void ServerTurnsSequential::moveFinished(ComsPlayedMoveMessage &playedMessage)
 {
 	unsigned int playerId = playedMessage.getPlayerId();
 	unsigned int moveId = playedMessage.getMoveId();
-	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
-	if (!tank || tank->getState().getState() != TankState::sNormal) return;
-	if (moveId_ != moveId) return;
 	if (playerId != playingPlayer_) return;
+	if (!playMoveFinished(playedMessage)) return;
+
+	playingPlayer_ = 0;
 
 	playingMoves_ = true;
-	playingPlayer_ = 0;
-	tank->getScore().setMissedMoves(0);
-
-	TankStopMoveSimAction *tankSimAction = 
-		new TankStopMoveSimAction(playerId, moveId_);
-	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);	
-
-	PlayMovesSimAction *movesAction = new PlayMovesSimAction(moveId_);
+	PlayMovesSimAction *movesAction = new PlayMovesSimAction(moveId);
 	movesAction->addMove(new ComsPlayedMoveMessage(playedMessage));
 	ScorchedServer::instance()->getServerSimulator().
 		addSimulatorAction(movesAction);
@@ -171,7 +163,7 @@ void ServerTurnsSequential::moveFinished(ComsPlayedMoveMessage &playedMessage)
 
 void ServerTurnsSequential::shotsFinished(unsigned int moveId)
 {
-	if (moveId_ != moveId) return;
+	if (nextMoveId_ != moveId) return;
 
 	playingMoves_ = false;
 }

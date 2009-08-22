@@ -30,7 +30,9 @@
 #include <tankai/TankAIStrings.h>
 #include <actions/TankSay.h>
 #include <actions/ShotFinishedAction.h>
+#include <actions/TankResign.h>
 #include <common/StatsLogger.h>
+#include <common/OptionsScorched.h>
 #ifndef S3D_SERVER
 	#include <sound/SoundUtils.h>
 #endif
@@ -78,6 +80,9 @@ bool PlayMovesSimAction::invokeAction(ScorchedContext &context)
 			{
 			case ComsPlayedMoveMessage::eShot:
 				tankFired(context, tank, *message);
+				break;
+			case ComsPlayedMoveMessage::eResign:
+				tankResigned(context, tank, *message);
 				break;
 			}
 		}
@@ -170,6 +175,18 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 	// Stats events
 	StatsLogger::instance()->tankFired(tank, weapon);
 	StatsLogger::instance()->weaponFired(weapon, false);	
+}
+
+void PlayMovesSimAction::tankResigned(ScorchedContext &context, 
+	Tank *tank, ComsPlayedMoveMessage &message)
+{
+	fixed resignTime = 0;
+	if (context.getOptionsGame().getResignMode() == OptionsGame::ResignTimed)
+	{
+		resignTime = 10;
+	}
+	context.getActionController().addAction(
+		new TankResign(tank->getPlayerId(), resignTime));
 }
 
 bool PlayMovesSimAction::writeMessage(NetBuffer &buffer)

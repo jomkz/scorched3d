@@ -71,8 +71,7 @@ public:
 	enum ResignType
 	{
 		ResignStart = 0,
-		ResignEnd = 1,
-		ResignDueToHealth = 2
+		ResignTimed = 1
 	};
 	enum MovementRestrictionType
 	{

@@ -27,6 +27,8 @@
 #include <tank/TankTeamScore.h>
 #include <common/OptionsScorched.h>
 #include <simactions/TankStartMoveSimAction.h>
+#include <simactions/TankStopMoveSimAction.h>
+#include <coms/ComsPlayedMoveMessage.h>
 
 ServerTurns::ServerTurns()
 {
@@ -77,10 +79,27 @@ bool ServerTurns::showScore()
 
 void ServerTurns::playMove(Tank *tank, unsigned int moveId)
 {
-	float shotTime = (float)
-		ScorchedServer::instance()->getOptionsGame().getShotTime();
+	fixed shotTime = fixed(
+		ScorchedServer::instance()->getOptionsGame().getShotTime());
 
+	tank->getState().setMoveId(moveId);
 	TankStartMoveSimAction *tankSimAction = new TankStartMoveSimAction(
-		tank->getPlayerId(), moveId, shotTime, false);
+		tank->getPlayerId(), tank->getState().getMoveId(), shotTime, false);
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);
+}
+
+bool ServerTurns::playMoveFinished(ComsPlayedMoveMessage &playedMessage)
+{
+	unsigned int playerId = playedMessage.getPlayerId();
+	unsigned int moveId = playedMessage.getMoveId();
+	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
+	if (!tank || tank->getState().getState() != TankState::sNormal) return false;
+	if (tank->getState().getMoveId() != moveId) return false;
+	tank->getState().setMoveId(0);
+
+	TankStopMoveSimAction *tankSimAction = 
+		new TankStopMoveSimAction(playerId, moveId);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);	
+
+	return true;
 }

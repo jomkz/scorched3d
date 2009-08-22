@@ -40,7 +40,6 @@
 #include <client/ClientInitializeModHandler.h>
 #include <client/ClientAdminResultHandler.h>
 #include <client/ClientPlayerStateHandler.h>
-#include <client/ClientStartTimerHandler.h>
 #include <client/ClientFileHandler.h>
 #include <client/ClientSyncLevelHandler.h>
 #include <client/ClientSyncTimeHandler.h>
@@ -184,7 +183,6 @@ static bool initComsHandlers()
 	ClientAddPlayerHandler::instance();
 	ClientInitializeModHandler::instance();
 	ClientRmPlayerHandler::instance();
-	ClientStartTimerHandler::instance();
 	ClientFileHandler::instance();
 	ClientOperationHandler::instance();
 	ClientGameStoppedHandler::instance();

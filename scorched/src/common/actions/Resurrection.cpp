@@ -34,10 +34,12 @@
 
 Resurrection::Resurrection(
 	unsigned int playerId,
-	FixedVector &position) :
+	FixedVector &position,
+	fixed resignTime) :
 	Action(playerId),
 	playerId_(playerId),
-	position_(position)
+	position_(position),
+	resignTime_(resignTime)
 {
 
 }
@@ -52,44 +54,49 @@ void Resurrection::init()
 
 void Resurrection::simulate(fixed frameTime, bool &remove)
 {
-	remove = true;
+	resignTime_ -= frameTime;
 
-	Tank *tank = context_->getTankContainer().getTankById(playerId_);
-	if (tank)
+	if (resignTime_ < 0)
 	{
-#ifndef S3D_SERVER
-		if (!context_->getServerMode())
-		{
-			ChannelText text("combat",
-				LANG_RESOURCE_2(
-					"TANK_RESURRECTED", 
-					"[p:{0}] was resurrected, {1} lives remaining",
-					tank->getTargetName(),
-					S3D::formatStringBuffer("%i", tank->getState().getLives())));
-			ChannelManager::showText(*context_, text);
-		}
-#endif
+		remove = true;
 
-		if (context_->getOptionsGame().getActionSyncCheck())
+		Tank *tank = context_->getTankContainer().getTankById(playerId_);
+		if (tank)
 		{
-			context_->getActionController().addSyncCheck(
-				S3D::formatStringBuffer("TankRez: %u %i, %i, %i", 
-					tank->getPlayerId(),
-					position_[0].getInternal(),
-					position_[1].getInternal(),
-					position_[2].getInternal()));
-		}
+	#ifndef S3D_SERVER
+			if (!context_->getServerMode())
+			{
+				ChannelText text("combat",
+					LANG_RESOURCE_2(
+						"TANK_RESURRECTED", 
+						"[p:{0}] was resurrected, {1} lives remaining",
+						tank->getTargetName(),
+						S3D::formatStringBuffer("%i", tank->getState().getLives())));
+				ChannelManager::showText(*context_, text);
+			}
+	#endif
 
-		// Rez this tank
-		tank->rezTank();
-		tank->getLife().setTargetPosition(position_);
-		DeformLandscape::flattenArea(*context_, position_);
-#ifndef S3D_SERVER
-		if (!context_->getServerMode())
-		{
-			VisibilityPatchGrid::instance()->recalculateErrors(position_, 2);
+			if (context_->getOptionsGame().getActionSyncCheck())
+			{
+				context_->getActionController().addSyncCheck(
+					S3D::formatStringBuffer("TankRez: %u %i, %i, %i", 
+						tank->getPlayerId(),
+						position_[0].getInternal(),
+						position_[1].getInternal(),
+						position_[2].getInternal()));
+			}
+
+			// Rez this tank
+			tank->rezTank();
+			tank->getLife().setTargetPosition(position_);
+			DeformLandscape::flattenArea(*context_, position_);
+	#ifndef S3D_SERVER
+			if (!context_->getServerMode())
+			{
+				VisibilityPatchGrid::instance()->recalculateErrors(position_, 2);
+			}
+	#endif
 		}
-#endif
 	}
 
 	Action::simulate(frameTime, remove);

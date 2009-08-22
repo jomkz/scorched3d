@@ -56,23 +56,17 @@ bool ServerPlayedMoveHandler::processMessage(
 	ComsPlayedMoveMessage message;
 	if (!message.readMessage(reader)) return false;
 
-	unsigned int playerId = message.getPlayerId();
-	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
+	Tank *tank = ScorchedServer::instance()->getTankContainer().
+		getTankById(message.getPlayerId());
 	if (!tank) return true;
 	if (tank->getDestinationId() != netMessage.getDestinationId()) return true;
 
 	if (message.getType() == ComsPlayedMoveMessage::eFinishedBuy)
 	{
-		if (ScorchedServer::instance()->getServerState().getState() !=
-			ServerState::ServerBuyingState) return true;
-
 		ScorchedServer::instance()->getServerState().buyingFinished(message);
 	}
 	else
 	{
-		if (ScorchedServer::instance()->getServerState().getState() !=
-			ServerState::ServerPlayingState) return true;
-
 		ScorchedServer::instance()->getServerState().moveFinished(message);
 	}
 
