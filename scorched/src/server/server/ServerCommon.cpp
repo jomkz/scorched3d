@@ -129,34 +129,6 @@ void ServerCommon::kickPlayer(unsigned int playerId)
 	}
 }
 
-void ServerCommon::killAll()
-{
-	Logger::log("Killing all players");
-
-	std::map<unsigned int, Tank *>::iterator itor;
-	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
-	for (itor = tanks.begin();
-		 itor != tanks.end();
-		 itor++)
-	{
-		Tank *current = (*itor).second;
-		if (current->getState().getState() == TankState::sNormal)
-		{
-			current->getState().setState(TankState::sDead);
-			current->getState().setLives(0);
-		}
-	}
-}
-
-void ServerCommon::startNewGame()
-{
-	killAll();
-
-	Logger::log("Starting a new game");
-	ScorchedServer::instance()->getOptionsTransient().startNewGame();
-}
-
 bool &ServerCommon::getExitEmpty()
 {
 	static bool exitEmpty = false;

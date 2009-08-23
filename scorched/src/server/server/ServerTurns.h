@@ -40,7 +40,7 @@ protected:
 	bool showScore();
 
 	void playMove(Tank *tank, unsigned int moveId);
-	bool playMoveFinished(ComsPlayedMoveMessage &playedMessage);
+	void playMoveFinished(Tank *tank);
 };
 
 #endif

@@ -45,6 +45,7 @@ void ServerStateBuying::enterState()
 {
 	waitingPlayers_.clear();
 	playingPlayers_.clear();
+	startTime_ = time(0);
 }
 
 bool ServerStateBuying::simulate()
@@ -165,6 +166,15 @@ void ServerStateBuying::playerBuying(unsigned int playerId)
 
 	fixed buyingTime
 		(ScorchedServer::instance()->getOptionsGame().getBuyingTime());
+#ifdef S3D_SERVER
+	if (buyingTime != 0)
+	{
+		time_t currentTime = time(0);
+		time_t timePassed = currentTime - startTime_;
+		buyingTime = buyingTime - int(timePassed);
+		if (buyingTime < 1) buyingTime = 1;
+	}
+#endif
 
 	TankStartMoveSimAction *tankSimAction = 
 		new TankStartMoveSimAction(playerId, nextMoveId_, buyingTime, true);

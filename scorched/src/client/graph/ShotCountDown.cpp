@@ -26,6 +26,8 @@
 #include <GLEXT/GLViewPort.h>
 #include <GLW/GLWFont.h>
 #include <GLW/GLWidget.h>
+#include <tank/TankContainer.h>
+#include <lang/LangResource.h>
 
 ShotCountDown *ShotCountDown::instance_ = 0;
 
@@ -48,10 +50,12 @@ ShotCountDown::~ShotCountDown()
 {
 }
 
-void ShotCountDown::show(fixed timer)
+void ShotCountDown::show(fixed timer, TimerType type, unsigned int playerId)
 {
 	show_ = true;
 	timer_ = timer;
+	type_ = type;
+	playerId_ = playerId;
 }
 
 void ShotCountDown::draw(const unsigned currentstate)
@@ -61,7 +65,8 @@ void ShotCountDown::draw(const unsigned currentstate)
 
 	GLState state(GLState::BLEND_ON | GLState::TEXTURE_OFF | GLState::DEPTH_OFF); 
 
-	static Vector yellow(0.7f, 0.7f, 0.2f);
+	static Vector yellow(0.85f, 0.85f, 0.3f);
+	static Vector darkYellow(0.7f, 0.7f, 0.2f);
 	static Vector red(0.7f, 0.0f, 0.0f);
 
 	std::string str;
@@ -70,7 +75,7 @@ void ShotCountDown::draw(const unsigned currentstate)
 	{
 		fontColor = &red;
 
-		str = S3D::formatStringBuffer("0%.2f", 
+		str = S3D::formatStringBuffer("%.1f", 
 			timer_.asFloat());		
 	}
 	else
@@ -91,4 +96,25 @@ void ShotCountDown::draw(const unsigned currentstate)
 		*fontColor, 20, (wWidth/2.0f) - (width / 2),
 		wHeight - 50.0f, 0.0f, 
 		str);
+
+	if (playerId_ != 0)
+	{
+		Tank *tank = ScorchedClient::instance()->getTankContainer().getTankById(playerId_);
+		if (tank)
+		{
+			float playerWidth = GLWFont::instance()->getGameFont()->getWidth(14, tank->getTargetName());
+			GLWFont::instance()->getGameFont()->drawWidthRhs(
+				200.0f, darkYellow, 14, (wWidth/2.0f) - (width / 2) - playerWidth - 10.0f,
+				wHeight - 47.0f, 0.0f, 
+				tank->getTargetName());
+
+			LANG_RESOURCE_VAR(buyingString, "BUYING", "Buying");
+			LANG_RESOURCE_VAR(playingString, "PLAYING", "Playing");
+
+			GLWFont::instance()->getGameFont()->drawWidthRhs(
+				200.0f, darkYellow, 14, (wWidth/2.0f) + (width / 2) + 10.0f,
+				wHeight - 47.0f, 0.0f, 
+				type_==eBuying?buyingString:playingString);
+		}
+	}
 }

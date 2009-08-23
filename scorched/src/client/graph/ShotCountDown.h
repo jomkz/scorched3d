@@ -29,7 +29,13 @@ class ShotCountDown : public GameStateI
 public:
 	static ShotCountDown *instance();
 
-	void show(fixed timer);
+	enum TimerType
+	{
+		ePlaying,
+		eBuying
+	};
+
+	void show(fixed timer, TimerType type, unsigned int playerId);
 
 	//Inherited from GameStateI
 	virtual void draw(const unsigned state);
@@ -37,6 +43,8 @@ public:
 protected:
 	static ShotCountDown *instance_;
 	fixed timer_;
+	TimerType type_;
+	unsigned int playerId_;
 	bool show_;
 
 private:

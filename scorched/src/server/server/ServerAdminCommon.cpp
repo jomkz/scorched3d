@@ -23,6 +23,7 @@
 #include <server/ScorchedServer.h>
 #include <server/ScorchedServerUtil.h>
 #include <server/ServerChannelManager.h>
+#include <server/ServerSimulator.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
@@ -31,6 +32,7 @@
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <common/FileLogger.h>
+#include <simactions/AdminSimAction.h>
 
 static FileLogger *serverAdminFileLogger = 0;
 
@@ -162,8 +164,9 @@ bool ServerAdminCommon::slapPlayer(ServerAdminSessions::Credential &credential, 
 		credential.username,
 		targetTank->getTargetName(),
 		slap));
-	targetTank->getLife().setLife(
-		targetTank->getLife().getLife() - fixed(int(slap)));
+
+	AdminSimAction *action = new AdminSimAction(AdminSimAction::eSlap, playerId, fixed(int(slap)));
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(action);
 
 	return true;
 }
@@ -255,8 +258,9 @@ bool ServerAdminCommon::newGame(ServerAdminSessions::Credential &credential)
 		"ADMIN_NEW_GAME",
 		"\"{0}\" admin new game",
 		credential.username));
-	ServerCommon::killAll();
-	ScorchedServer::instance()->getOptionsTransient().startNewGame();	
+
+	AdminSimAction *action = new AdminSimAction(AdminSimAction::eNewGame, 0, 0);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(action);
 
 	return true;
 }
@@ -270,7 +274,9 @@ bool ServerAdminCommon::killAll(ServerAdminSessions::Credential &credential)
 		"ADMIN_KILL_ALL",
 		"\"{0}\" admin kill all",
 		credential.username));
-	ServerCommon::killAll();
+
+	AdminSimAction *action = new AdminSimAction(AdminSimAction::eKillAll, 0, 0);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(action);
 
 	return true;
 }

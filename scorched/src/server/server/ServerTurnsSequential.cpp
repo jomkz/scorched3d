@@ -116,6 +116,11 @@ void ServerTurnsSequential::simulate()
 		ScorchedServer::instance()->getTankContainer().getTankById(playingPlayer_);
 	if (!playingTank || playingTank->getState().getState() != TankState::sNormal)
 	{
+		if (playingTank && playingTank->getState().getMoveId() != 0)
+		{
+			playMoveFinished(playingTank);
+		}
+
 		playingPlayer_ = 0;
 	}
 
@@ -150,8 +155,10 @@ void ServerTurnsSequential::moveFinished(ComsPlayedMoveMessage &playedMessage)
 	unsigned int playerId = playedMessage.getPlayerId();
 	unsigned int moveId = playedMessage.getMoveId();
 	if (playerId != playingPlayer_) return;
-	if (!playMoveFinished(playedMessage)) return;
+	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
+	if (!tank || tank->getState().getMoveId() != moveId) return;
 
+	playMoveFinished(tank);
 	playingPlayer_ = 0;
 
 	playingMoves_ = true;

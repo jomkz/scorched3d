@@ -22,9 +22,8 @@
 #include <graph/ShotCountDown.h>
 
 VisualTimerAction::VisualTimerAction(unsigned int playerId, unsigned int moveId, 
-		fixed timeout, const LangString &text, bool buying) :
-	TimerAction(playerId, moveId, timeout, buying),
-	text_(text)
+		fixed timeout, bool buying) :
+	TimerAction(playerId, moveId, timeout, buying)
 {
 }
 
@@ -43,5 +42,6 @@ void VisualTimerAction::simulate(fixed frameTime, bool &remove)
 
 void VisualTimerAction::draw()
 {
-	ShotCountDown::instance()->show(timeout_);
+	ShotCountDown::instance()->show(timeout_, 
+		buying_?ShotCountDown::eBuying:ShotCountDown::ePlaying, playerId_);
 }

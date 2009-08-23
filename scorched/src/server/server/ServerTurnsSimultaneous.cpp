@@ -101,6 +101,10 @@ void ServerTurnsSimultaneous::simulate()
 		if (!tank || tank->getState().getState() != TankState::sNormal)
 		{
 			removePlaying.push_back(playerId);
+			if (tank && tank->getState().getMoveId() != 0)
+			{
+				playMoveFinished(tank);
+			}
 		}
 		else if (tank->getDestinationId() != 0)
 		{
@@ -159,11 +163,15 @@ void ServerTurnsSimultaneous::makeMove(Tank *tank)
 void ServerTurnsSimultaneous::moveFinished(ComsPlayedMoveMessage &playedMessage)
 {
 	unsigned int playerId = playedMessage.getPlayerId();
+	unsigned int moveId = playedMessage.getMoveId();
+
 	std::set<unsigned int>::iterator itor =
 		playingPlayers_.find(playerId);
 	if (itor == playingPlayers_.end()) return;
-	if (!playMoveFinished(playedMessage)) return;
-
+	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
+	if (!tank || tank->getState().getMoveId() != moveId) return;
+	
+	playMoveFinished(tank);
 	playingPlayers_.erase(itor);
 
 	if (moves_.find(playerId) == moves_.end())

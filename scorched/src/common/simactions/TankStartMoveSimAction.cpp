@@ -64,7 +64,7 @@ bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 			if (timeout_ > 0)
 			{
 				VisualTimerAction *timerAction = 
-					new VisualTimerAction(playerId_, moveId_, timeout_, LangString(), buying_);
+					new VisualTimerAction(playerId_, moveId_, timeout_, buying_);
 				context.getActionController().addAction(timerAction);
 			}
 #endif

@@ -88,18 +88,10 @@ void ServerTurns::playMove(Tank *tank, unsigned int moveId)
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);
 }
 
-bool ServerTurns::playMoveFinished(ComsPlayedMoveMessage &playedMessage)
-{
-	unsigned int playerId = playedMessage.getPlayerId();
-	unsigned int moveId = playedMessage.getMoveId();
-	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
-	if (!tank || tank->getState().getState() != TankState::sNormal) return false;
-	if (tank->getState().getMoveId() != moveId) return false;
-	tank->getState().setMoveId(0);
-
+void ServerTurns::playMoveFinished(Tank *tank)
+{	
 	TankStopMoveSimAction *tankSimAction = 
-		new TankStopMoveSimAction(playerId, moveId);
+		new TankStopMoveSimAction(tank->getPlayerId(), tank->getState().getMoveId());
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);	
-
-	return true;
+	tank->getState().setMoveId(0);
 }

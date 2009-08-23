@@ -3825,6 +3825,14 @@
 			Name="simactions"
 			>
 			<File
+				RelativePath="..\..\common\simactions\AdminSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\AdminSimAction.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\simactions\PlayMovesSimAction.cpp"
 				>
 			</File>

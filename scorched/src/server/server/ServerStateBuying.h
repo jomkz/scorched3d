@@ -23,6 +23,7 @@
 
 #include <server/ServerTurnsSimultaneous.h>
 #include <coms/ComsPlayedMoveMessage.h>
+#include <time.h>
 
 class ServerStateBuying
 {
@@ -36,6 +37,7 @@ public:
 	void buyingFinished(ComsPlayedMoveMessage &playedMessage);
 
 protected:
+	time_t startTime_;
 	unsigned int nextMoveId_;
 	std::set<unsigned int> waitingPlayers_;
 	std::set<unsigned int> playingPlayers_;

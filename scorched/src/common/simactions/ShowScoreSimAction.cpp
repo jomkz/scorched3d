@@ -96,6 +96,8 @@ void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 		itor++)
 	{
 		Tank *tank = (*itor).second;
+		tank->getState().setMoveId(0);
+
 		if (!tank->getState().getTankPlaying()) continue;
 		if (!tank->getAlive()) continue;
 

@@ -18,27 +18,39 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_VisualTimerActionh_INCLUDE__)
-#define __INCLUDE_VisualTimerActionh_INCLUDE__
+#if !defined(AFX_AdminSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#define AFX_AdminSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
-#include <actions/TimerAction.h>
-#include <lang/LangString.h>
+#include <simactions/SimAction.h>
 
-class VisualTimerAction : public TimerAction
+class AdminSimAction : public SimAction
 {
 public:
-	VisualTimerAction(unsigned int playerId, unsigned int moveId, 
-		fixed timeout, bool buying);
-	virtual ~VisualTimerAction();
+	enum AdminType
+	{
+		eKillAll,
+		eNewGame,
+		eSlap
+	};
 
-	virtual void init();
-	virtual void simulate(fixed frameTime, bool &remove);
-	virtual void draw();
+	AdminSimAction();
+	AdminSimAction(AdminType type, unsigned int playerId, fixed amount);
+	virtual ~AdminSimAction();
 
-	virtual std::string getActionType() { return "VisualTimerAction"; }
+	virtual bool invokeAction(ScorchedContext &context);
 
+	virtual bool writeMessage(NetBuffer &buffer);
+	virtual bool readMessage(NetBufferReader &reader);
+
+REGISTER_CLASS_HEADER(AdminSimAction);
 protected:
-	LangString text_;
+	AdminType type_;
+	unsigned int playerId_;
+	fixed amount_;
+
+	void killAll(ScorchedContext &context);
+	void newGame(ScorchedContext &context);
+	void slap(ScorchedContext &context);
 };
 
-#endif
+#endif // !defined(AFX_AdminSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
