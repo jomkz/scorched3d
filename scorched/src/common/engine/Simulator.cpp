@@ -25,27 +25,17 @@
 
 static const fixed StepSize = fixed(true, FIXED_RESOLUTION / 50);
 
-Simulator::Simulator()
+Simulator::Simulator() :
+	speed_(1),
+	currentTime_(0),
+	actualTime_(0)
 {
-	reset();
+	lastTickTime_ = SDL_GetTicks();
 }
 
 Simulator::~Simulator()
 {
 
-}
-
-void Simulator::reset()
-{
-	speed_ = 1;
-	stepTime_ = 0;
-	totalTime_ = 0;
-	lastTickTime_ = SDL_GetTicks();
-	while (!simActions_.empty())
-	{
-		delete simActions_.front();
-		simActions_.pop_front();
-	}
 }
 
 void Simulator::setScorchedContext(ScorchedContext *context)
@@ -65,8 +55,8 @@ void Simulator::simulate()
 		fixed fixedTimeDiff(true, timeDiff * 10);
 		fixedTimeDiff *= speed_;
 
-		stepTime_ += fixedTimeDiff;
-		while (stepTime_ >= StepSize)
+		actualTime_ += fixedTimeDiff;
+		while (actualTime_ - currentTime_ >= StepSize)
 		{
 			if (!continueToSimulate()) break;
 
@@ -74,8 +64,7 @@ void Simulator::simulate()
 			actualSimulate(StepSize);
 
 			// More time has passed
-			totalTime_ += StepSize;
-			stepTime_ -= StepSize;
+			currentTime_ += StepSize;
 		}
 	}
 }
@@ -93,7 +82,7 @@ void Simulator::actualSimulate(fixed frameTime)
 	while (!simActions_.empty())
 	{
 		SimActionContainer *container = simActions_.front();
-		if (container->fireTime_ > totalTime_) break;
+		if (container->fireTime_ > currentTime_) break;
 		container->action_->invokeAction(*context_);
 		delete container;
 		simActions_.pop_front();

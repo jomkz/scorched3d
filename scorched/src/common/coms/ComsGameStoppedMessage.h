@@ -22,7 +22,6 @@
 #define __INCLUDE_ComsGameStoppedMessageh_INCLUDE__
 
 #include <coms/ComsMessage.h>
-#include <coms/ComsPlayerStateMessage.h>
 
 class ComsGameStoppedMessage : public ComsMessage
 {
@@ -37,7 +36,6 @@ public:
 	virtual bool readMessage(NetBufferReader &reader);
 
 protected:
-	ComsPlayerStateMessage stateMessage_;
 
 };
 

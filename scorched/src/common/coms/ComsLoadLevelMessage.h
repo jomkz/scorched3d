@@ -22,15 +22,29 @@
 #define _ComsLoadLevelMessage_h
 
 #include <landscapedef/LandscapeDefinition.h>
+#include <engine/ScorchedContext.h>
+#include <simactions/SimAction.h>
+#include <coms/ComsSimulateMessage.h>
+#include <list>
 
 class ComsLoadLevelMessage : public ComsMessage
 {
 public:
 	static ComsMessageType ComsLoadLevelMessageType;
 
-	ComsLoadLevelMessage(LandscapeDefinition *landscapeDefintion = 0);
+	ComsLoadLevelMessage();
 	virtual ~ComsLoadLevelMessage();
 
+	bool saveState(ScorchedContext &context);
+	bool loadState(ScorchedContext &context);
+
+	void setActualTime(fixed t) { actualTime_ = t; }
+	fixed getActualTime() { return actualTime_; }
+
+	void addSimulation(ComsSimulateMessage &simulateMessage);
+	bool getSimulations(std::list<ComsSimulateMessage *> &simulateMessages);
+
+	void setLandscapeDefinition(LandscapeDefinition &definition) { landscapeDefinition_ = definition; }
 	LandscapeDefinition &getLandscapeDefinition() { return landscapeDefinition_; }
 
 	// Inherited from ComsMessage
@@ -39,6 +53,9 @@ public:
 
 protected:
 	LandscapeDefinition landscapeDefinition_;
+	NetBuffer stateBuffer_;
+	NetBuffer simulateBuffer_;
+	fixed actualTime_;
 
 private:
 	ComsLoadLevelMessage(const ComsLoadLevelMessage &);

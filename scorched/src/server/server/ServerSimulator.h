@@ -23,6 +23,7 @@
 
 #include <engine/Simulator.h>
 #include <coms/ComsMessageHandler.h>
+#include <coms/ComsLoadLevelMessage.h>
 
 class ServerSimulator : 
 	public Simulator, 
@@ -34,12 +35,10 @@ public:
 
 	void addSimulatorAction(SimAction *action);
 
-	virtual void reset();
-
 	bool getSendActionsEmpty() { return sendActions_.empty() && simActions_.empty(); }
 
-	bool writeTimeMessage(NetBuffer &buffer);
-	bool writeSyncMessage(NetBuffer &buffer);
+	void newLevel();
+	ComsLoadLevelMessage &getLevelMessage();
 
 	virtual bool processMessage(
 		NetMessage &netMessage,
@@ -54,6 +53,7 @@ protected:
 	virtual bool continueToSimulate();
 	void nextSendTime();
 	fixed calcSendStepSize();
+	ComsLoadLevelMessage *levelMessage_;
 };
 
 #endif // !defined(AFX_ServerSimulator_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_)

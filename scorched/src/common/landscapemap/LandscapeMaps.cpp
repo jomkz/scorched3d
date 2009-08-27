@@ -36,7 +36,6 @@ void LandscapeMaps::generateMaps(
 	LandscapeDefinition &defn,
 	ProgressCounter *counter)
 {
-	DeformLandscape::clearInfos();
 	dCache_.setDefinition(context, defn);
 	gMaps_.generateMaps(context, counter);
 	rMaps_.generateMaps(context, counter);

@@ -36,11 +36,10 @@ public:
 
 	void setScorchedContext(ScorchedContext *context);
 
-	virtual void reset();
 	void simulate();
 
 	// Accessors
-	RandomGenerator &getRandomGenerator() { return random_; }
+	FileRandomGenerator &getRandomGenerator() { return random_; }
 	ActionController &getActionController() { return actionController_; }
 
 	// Set the simulation speed
@@ -59,7 +58,8 @@ protected:
 	};
 
 	unsigned int lastTickTime_;
-	fixed speed_, stepTime_, totalTime_;
+	fixed speed_;
+	fixed currentTime_, actualTime_;
 	ScorchedContext *context_;
 	EventContainer events_;
 	FileRandomGenerator random_;

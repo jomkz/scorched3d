@@ -19,13 +19,16 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <simactions/TankStartMoveSimAction.h>
+#include <server/ScorchedServer.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
 #include <tank/TankContainer.h>
 #include <actions/TimerAction.h>
 #include <tankai/TankAI.h>
 #include <engine/ActionController.h>
+#include <weapons/AccessoryStore.h>
 #ifndef S3D_SERVER
+#include <client/ScorchedClient.h>
 #include <client/ClientStartGameHandler.h>
 #include <actions/VisualTimerAction.h>
 #endif
@@ -102,6 +105,11 @@ bool TankStartMoveSimAction::writeMessage(NetBuffer &buffer)
 	buffer.addToBuffer(moveId_);
 	buffer.addToBuffer(buying_);
 	buffer.addToBuffer(timeout_);
+	if (buying_)
+	{
+		if (!ScorchedServer::instance()->getAccessoryStore().
+			writeEconomyToBuffer(buffer)) return false;
+	}
 	return true;
 }
 
@@ -111,5 +119,12 @@ bool TankStartMoveSimAction::readMessage(NetBufferReader &reader)
 	if (!reader.getFromBuffer(moveId_)) return false;
 	if (!reader.getFromBuffer(buying_)) return false;
 	if (!reader.getFromBuffer(timeout_)) return false;
+	if (buying_)
+	{
+#ifndef S3D_SERVER
+		if (!ScorchedClient::instance()->getAccessoryStore().
+			readEconomyFromBuffer(reader)) return false;
+#endif
+	}
 	return true;
 }

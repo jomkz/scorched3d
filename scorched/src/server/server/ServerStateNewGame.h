@@ -34,6 +34,7 @@ public:
 protected:
 	void checkTeamsAuto();
 	void checkTeamsBotsVs();
+	void newGameState();
 };
 
 #endif

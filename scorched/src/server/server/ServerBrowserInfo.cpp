@@ -144,7 +144,7 @@ void ServerBrowserInfo::processStatusMessage(std::list<std::string> &reply)
 	snprintf(maxplayers, 25, "%i", ScorchedServer::instance()->getOptionsGame().getNoMaxPlayers());
 	char type[100];
 	snprintf(type, 100, "%s (%s)", 
-		ScorchedServer::instance()->getOptionsTransient().getGameType(),
+		ScorchedServer::instance()->getOptionsGame().getTurnType().getValueAsString(),
 		((ScorchedServer::instance()->getOptionsGame().getTeams() > 1)?"Teams":"No Teams"));
 	bool stats = (0 != strcmp(ScorchedServer::instance()->getOptionsGame().getStatsLogger(), "none"));
 

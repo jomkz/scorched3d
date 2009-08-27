@@ -1109,14 +1109,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsLevelMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsLevelMessage.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\coms\ComsLinesMessage.cpp"
 				>
 			</File>
@@ -1181,14 +1173,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsPlayerStateMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsPlayerStateMessage.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\coms\ComsRmPlayerMessage.cpp"
 				>
 			</File>
@@ -1218,22 +1202,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\coms\ComsSyncCheckMessage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsSyncLevelMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsSyncLevelMessage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsSyncTimeMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsSyncTimeMessage.h"
 				>
 			</File>
 		</Filter>
@@ -3161,14 +3129,6 @@
 			Name="client"
 			>
 			<File
-				RelativePath="..\client\ClientAddPlayerHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientAddPlayerHandler.h"
-				>
-			</File>
-			<File
 				RelativePath="..\client\ClientAdmin.cpp"
 				>
 			</File>
@@ -3305,14 +3265,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\client\ClientPlayerStateHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientPlayerStateHandler.h"
-				>
-			</File>
-			<File
 				RelativePath="..\client\ClientProcessingLoop.cpp"
 				>
 			</File>
@@ -3366,22 +3318,6 @@
 			</File>
 			<File
 				RelativePath="..\client\ClientState.h"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientSyncLevelHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientSyncLevelHandler.h"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientSyncTimeHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientSyncTimeHandler.h"
 				>
 			</File>
 			<File
@@ -6130,6 +6066,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\simactions\TankAccessorySimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankAddSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankAddSimAction.h"
 				>
 			</File>
 			<File

@@ -30,7 +30,6 @@
 #include <tank/TankState.h>
 #include <coms/ComsAddPlayerMessage.h>
 #include <coms/ComsMessageSender.h>
-#include <coms/ComsPlayerStateMessage.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <common/Logger.h>
@@ -53,11 +52,12 @@ unsigned int TankAIAdder::getNextTankId(const char *uniqueId, ScorchedContext &c
 
 	// Get the transient id
 	static unsigned int id = TargetID::START_TRANSIENT_TANK_ID;
-	while (context.getTargetContainer().getTargetById(id))
+	do 
 	{
 		++id;
 		if (id >= TargetID::MAX_TANK_ID) id = TargetID::START_TRANSIENT_TANK_ID;
 	}
+	while (context.getTargetContainer().getTargetById(id));
 
 	DIALOG_ASSERT(id >= TargetID::START_TRANSIENT_TANK_ID && id <= TargetID::MAX_TANK_ID);
 	return id;

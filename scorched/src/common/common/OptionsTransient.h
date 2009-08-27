@@ -32,7 +32,6 @@ public:
 	OptionsTransient(OptionsScorched &optionsGame);
 	virtual ~OptionsTransient();
 
-	const char *getGameType();
 	unsigned int getLeastUsedTeam(TankContainer &container);
 
 	enum WallType

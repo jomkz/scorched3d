@@ -33,6 +33,7 @@
 #include <GLEXT/GLMenu.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientChannelManager.h>
+#include <client/ClientSimulator.h>
 #include <tankgraph/RenderTargets.h>
 #include <engine/ActionController.h>
 #include <image/ImageFactory.h>
@@ -158,7 +159,8 @@ LangStringStorage *HelpButtonDialog::PerformanceMenu::getMenuToolTip(const char*
 		"  %i Playing Sound Channels\n"
 		"  %u Shadows Drawn\n"
 		"  %u OpenGL State Changes\n"
-		"  %u OpenGL Texture Changes\n", 
+		"  %u OpenGL Texture Changes\n"
+		"%.2f Server Time Mismatch\n", 
 
 		FrameTimer::instance()->getFPS(),
 		FrameTimer::instance()->getLastTris(),
@@ -170,7 +172,8 @@ LangStringStorage *HelpButtonDialog::PerformanceMenu::getMenuToolTip(const char*
 		Sound::instance()->getPlayingChannels(),
 		Landscape::instance()->getShadowMap().getShadowCount(), 
 		FrameTimer::instance()->getLastStateCount(),
-		FrameTimer::instance()->getLastTextureSets()));
+		FrameTimer::instance()->getLastTextureSets(),
+		ScorchedClient::instance()->getClientSimulator().getServerTimeDifference().asFloat()));
 
 	return (LangStringStorage *) result.c_str();
 }

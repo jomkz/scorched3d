@@ -181,9 +181,6 @@ public:
 	int getAllowedMissedMoves() { return allowedMissedMoves_; }
 	OptionEntryInt &getAllowedMissedMovesEntry() { return allowedMissedMoves_; }
 
-	int getIdleKickTime() { return idleKickTime_; }
-	OptionEntryInt &getIdleKickTimeEntry() { return idleKickTime_; }
-
 	int getIdleShotKickTime() { return idleShotKickTime_; }
 	OptionEntryInt &getIdleShotKickTimeEntry() { return idleShotKickTime_; }
 
@@ -406,7 +403,7 @@ protected:
 	OptionEntryBoundedInt skillForSelfKill_;
 	OptionEntryBoundedInt skillForTeamKill_;
 	OptionEntryBoundedInt moneyStarting_;
-	OptionEntryBoundedInt idleKickTime_;
+	OptionEntryBoundedInt depricatedIdleKickTime_;
 	OptionEntryBoundedInt idleShotKickTime_;
 	OptionEntryEnum teamBallance_;
 	OptionEntryBoundedInt moneyInterest_;

@@ -20,6 +20,7 @@
 
 #include <client/ClientSimulator.h>
 #include <client/ScorchedClient.h>
+#include <client/ClientState.h>
 #include <movement/TargetMovement.h>
 #include <coms/ComsSimulateMessage.h>
 #include <coms/ComsSimulateResultMessage.h>
@@ -37,12 +38,13 @@ ClientSimulator::~ClientSimulator()
 
 bool ClientSimulator::continueToSimulate()
 {
-	if (totalTime_ >= waitingEventTime_) return false;
+	if (currentTime_ >= waitingEventTime_) return false;
 	return true;
 }
 
 void ClientSimulator::simulate(const unsigned state, float simTime)
 {
+	if (state == ClientState::StateLoadLevel) return;
 	Simulator::simulate();
 }
 
@@ -59,9 +61,21 @@ bool ClientSimulator::processMessage(
 	ComsSimulateMessage message;
 	if (!message.readMessage(reader)) return false;
 
-	// Make sure simulator is up to date
-	Simulator::simulate();
+	// Actualy process message
+	processComsSimulateMessage(message);
 
+	ComsSimulateResultMessage resultMessage(message.getTotalTime());
+	ComsMessageSender::sendToServer(resultMessage);
+
+	serverTimeDifference_ = message.getTotalTime() - currentTime_;
+	//Logger::log(S3D::formatStringBuffer("Total Time %.2f, Server Total Time %.2f, Waiting Time %.2f", 
+	//	currentTime_.asFloat(), message.getTotalTime().asFloat(), waitingEventTime_.asFloat()));
+
+	return true;
+}
+
+void ClientSimulator::processComsSimulateMessage(ComsSimulateMessage &message)
+{
 	// Set new waiting time
 	waitingEventTime_ = message.getEventTime();
 
@@ -74,53 +88,31 @@ bool ClientSimulator::processMessage(
 		SimAction *action = *itor;
 		simActions_.push_back(new SimActionContainer(action, waitingEventTime_));
 	}
-
-	ComsSimulateResultMessage resultMessage(message.getTotalTime());
-	ComsMessageSender::sendToServer(resultMessage);
-
-	//Logger::log(S3D::formatStringBuffer("Total Time %.2f, Server Total Time %.2f, Waiting Time %.2f", 
-	//	totalTime_.asFloat(), message.getTotalTime().asFloat(), waitingEventTime_.asFloat()));
-
-	return true;
 }
 
-bool ClientSimulator::readTimeMessage(NetBufferReader &reader)
+void ClientSimulator::newLevel()
 {
-	reset();
-
-	// Simulator time
-	if (!reader.getFromBuffer(stepTime_)) return false;
-	if (!reader.getFromBuffer(totalTime_)) return false;
-	waitingEventTime_ = totalTime_;
-
-	return true;
-}
-
-bool ClientSimulator::readSyncMessage(NetBufferReader &reader)
-{
-	// Actions
-	unsigned int numberActions;
-	if (!reader.getFromBuffer(numberActions)) return false;
-	for (unsigned int a=0; a<numberActions; a++)
+	// Remove any remaining actions
+	while (!simActions_.empty())
 	{
-		fixed fireTime;
-		if (!reader.getFromBuffer(fireTime)) return false;
-
-		std::string className;
-		if (!reader.getFromBuffer(className)) return false;
-		SimAction *simAction = (SimAction *)
-			MetaClassRegistration::getNewClass(className.c_str());
-		if (!simAction) return false;
-		if (!simAction->readMessage(reader)) return false;
-
-		SimActionContainer *container = new SimActionContainer(simAction, fireTime);
-		simActions_.push_back(container);
+		SimActionContainer *container = simActions_.front();
+		delete container;
+		simActions_.pop_front();
 	}
 
-	// Random seeds
-	if (!random_.readMessage(reader)) return false;
+	// Clear any action controller actions
+	actionController_.clear();
 
-	// Target Movement
-	if (!context_->getTargetMovement().readMessage(reader)) return false;
-	return true;
+	// Reset times
+	currentTime_ = 0;
+	lastTickTime_ = SDL_GetTicks() - 1;
+}
+
+void ClientSimulator::setSimulationTime(fixed actualTime)
+{
+	// Set actual time
+	actualTime_ = actualTime;
+
+	// Simulate
+	Simulator::simulate();
 }

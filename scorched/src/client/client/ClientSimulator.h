@@ -24,6 +24,7 @@
 #include <engine/Simulator.h>
 #include <engine/GameStateI.h>
 #include <coms/ComsMessageHandler.h>
+#include <coms/ComsSimulateMessage.h>
 
 class ClientSimulator : 
 	public GameStateI, 
@@ -44,11 +45,15 @@ public:
 		const char *messageType,
 		NetBufferReader &reader);
 
-	bool readTimeMessage(NetBufferReader &reader);
-	bool readSyncMessage(NetBufferReader &reader);
+	void newLevel();
+	void setSimulationTime(fixed actualTime);
+	void processComsSimulateMessage(ComsSimulateMessage &message);
+
+	fixed getServerTimeDifference() { return serverTimeDifference_; }
 
 private:
 	fixed waitingEventTime_;
+	fixed serverTimeDifference_;
 
 	virtual bool continueToSimulate();
 };

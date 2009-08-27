@@ -2289,14 +2289,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsLevelMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsLevelMessage.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\coms\ComsLinesMessage.cpp"
 				>
 			</File>
@@ -2361,14 +2353,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsPlayerStateMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsPlayerStateMessage.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\coms\ComsRmPlayerMessage.cpp"
 				>
 			</File>
@@ -2398,22 +2382,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\coms\ComsSyncCheckMessage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsSyncLevelMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsSyncLevelMessage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsSyncTimeMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsSyncTimeMessage.h"
 				>
 			</File>
 		</Filter>
@@ -3870,6 +3838,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\simactions\TankAccessorySimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankAddSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankAddSimAction.h"
 				>
 			</File>
 			<File

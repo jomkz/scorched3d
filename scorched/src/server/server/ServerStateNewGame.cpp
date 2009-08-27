@@ -21,6 +21,7 @@
 #include <server/ServerStateNewGame.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerCommon.h>
+#include <server/ServerSimulator.h>
 #include <server/ServerConsoleProgressCounter.h>
 #include <server/ServerChannelManager.h>
 #include <server/ServerMessageHandler.h>
@@ -52,6 +53,43 @@ ServerStateNewGame::~ServerStateNewGame()
 
 void ServerStateNewGame::newGame()
 {
+	newGameState();
+
+	// Store this as the current level
+	ScorchedServer::instance()->getServerSimulator().newLevel();
+
+	// Make sure tanks are in correct state
+	std::set<unsigned int> loadingDestinations;
+	std::map<unsigned int, Tank *> &tanks = 
+		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+	std::map<unsigned int, Tank *>::iterator tankItor;
+	for (tankItor = tanks.begin();
+		tankItor != tanks.end();
+		tankItor++)
+	{
+		Tank *tank = tankItor->second;
+		if (tank->getState().getState() != TankState::sLoading)
+		{
+			tank->getState().setState(TankState::sLoading);
+			if (loadingDestinations.find(tank->getDestinationId()) == loadingDestinations.end())
+			{
+				loadingDestinations.insert(tank->getDestinationId());
+			}
+		}
+	}
+
+	// Tell all destinations to load
+	std::set<unsigned int>::iterator destItor;
+	for (destItor = loadingDestinations.begin();
+		destItor != loadingDestinations.end();
+		destItor++)
+	{
+		ServerLoadLevel::destinationLoadLevel(*destItor);
+	}
+}
+
+void ServerStateNewGame::newGameState()
+{
 	// Make sure options are up to date
 	if (ScorchedServer::instance()->getOptionsGame().commitChanges())
 	{
@@ -79,40 +117,11 @@ void ServerStateNewGame::newGame()
 	ScorchedServer::instance()->getLandscapeMaps().generateMaps(
 		ScorchedServer::instance()->getContext(), defn, 
 		ServerConsoleProgressCounter::instance()->getProgressCounter());
-	ScorchedServer::instance()->getSimulator().reset();
+	//ScorchedServer::instance()->getSimulator().reset();
 	ServerCommon::serverLog("Finished generating landscape");
-
-	// Make sure tanks are in correct state
-	std::set<unsigned int> loadingDestinations;
-	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	std::map<unsigned int, Tank *>::iterator tankItor;
-	for (tankItor = tanks.begin();
-		tankItor != tanks.end();
-		tankItor++)
-	{
-		Tank *tank = tankItor->second;
-		if (tank->getState().getState() != TankState::sLoading)
-		{
-			tank->getState().setState(TankState::sLoading);
-			if (loadingDestinations.find(tank->getDestinationId()) == loadingDestinations.end())
-			{
-				loadingDestinations.insert(tank->getDestinationId());
-			}
-		}
-	}
 
 	// Check bots
 	checkBots(true);
-
-	// Tell all destinations to load
-	std::set<unsigned int>::iterator destItor;
-	for (destItor = loadingDestinations.begin();
-		destItor != loadingDestinations.end();
-		destItor++)
-	{
-		ServerLoadLevel::destinationLoadLevel(*destItor);
-	}
 }
 
 void ServerStateNewGame::checkTeams()

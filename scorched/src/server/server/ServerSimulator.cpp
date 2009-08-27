@@ -26,6 +26,7 @@
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsSimulateResultMessage.h>
 #include <simactions/SyncCheckSimAction.h>
+#include <landscapemap/LandscapeMaps.h>
 #include <movement/TargetMovement.h>
 #include <common/Logger.h>
 
@@ -33,24 +34,15 @@ static fixed maxStepSize(true, 1 * FIXED_RESOLUTION);
 static fixed minStepSize(true, FIXED_RESOLUTION / 10);
 
 ServerSimulator::ServerSimulator() :
-	sendStepSize_(true, 1 * FIXED_RESOLUTION)
+	sendStepSize_(true, 1 * FIXED_RESOLUTION),
+	levelMessage_(0)
 {
+	nextSendTime_ = 0;
+	nextEventTime_ = nextSendTime_ + sendStepSize_;
 }
 
 ServerSimulator::~ServerSimulator()
 {
-}
-
-void ServerSimulator::reset()
-{
-	nextSendTime_ = 0;
-	nextEventTime_ = nextSendTime_ + sendStepSize_;
-	while (!sendActions_.empty())
-	{
-		delete sendActions_.front();
-		sendActions_.pop_front();
-	}
-	Simulator::reset();
 }
 
 void ServerSimulator::addSimulatorAction(SimAction *action)
@@ -61,7 +53,7 @@ void ServerSimulator::addSimulatorAction(SimAction *action)
 bool ServerSimulator::continueToSimulate()
 {
 	// Send out the message at the correct time
-	if (totalTime_ >= nextSendTime_)
+	if (currentTime_ >= nextSendTime_)
 	{
 		nextSendTime();
 		sendStepSize_ = calcSendStepSize();
@@ -95,8 +87,12 @@ void ServerSimulator::nextSendTime()
 	//	totalTime_.asFloat(), waitingEventTime_.asFloat()));
 
 	// Send the time and actions to the client
-	ComsSimulateMessage simulateMessage(nextEventTime_, totalTime_, sendActions_);
+	ComsSimulateMessage simulateMessage(nextEventTime_, currentTime_, sendActions_);
 	ComsMessageSender::sendToAllLoadedClients(simulateMessage);
+	if (levelMessage_)
+	{
+		levelMessage_->addSimulation(simulateMessage);
+	}
 
 	// Not needed but just to make obvious this is cleared
 	sendActions_.clear();
@@ -141,7 +137,7 @@ bool ServerSimulator::processMessage(
 		getDestination(netMessage.getDestinationId());
 	if (!destination) return true;
 
-	fixed roundTripTime = totalTime_ - message.getTotalTime();
+	fixed roundTripTime = currentTime_ - message.getTotalTime();
 	destination->getPing().addPing(roundTripTime);
 
 	//Logger::log(S3D::formatStringBuffer("Ping time %.2f (%.2f)", 
@@ -150,35 +146,37 @@ bool ServerSimulator::processMessage(
 	return true;
 }
 
-bool ServerSimulator::writeTimeMessage(NetBuffer &buffer)
+void ServerSimulator::newLevel()
 {
-	// Simulator time
-	buffer.addToBuffer(stepTime_);
-	buffer.addToBuffer(totalTime_);
-
-	return true;
-}
-
-bool ServerSimulator::writeSyncMessage(NetBuffer &buffer)
-{
-	// Actions
-	buffer.addToBuffer((unsigned int) simActions_.size());
-	std::list<SimActionContainer *>::iterator itor;
-	for (itor = simActions_.begin();
-		itor != simActions_.end();
-		itor++)
+	// Process any remaining actions
+	while (!simActions_.empty())
 	{
-		SimActionContainer *container = *itor;
-		buffer.addToBuffer(container->fireTime_);
-		buffer.addToBuffer(container->action_->getClassName());
-		container->action_->writeMessage(buffer);
+		SimActionContainer *container = simActions_.front();
+		container->action_->invokeAction(*context_);
+		delete container;
+		simActions_.pop_front();
 	}
 
-	// Random seeds
-	if (!random_.writeMessage(buffer)) return false;
+	// Clear any action controller actions
+	actionController_.clear();
 
-	// Target movement
-	if (!context_->getTargetMovement().writeMessage(buffer)) return false;
+	// Reset times
+	currentTime_ = 0;
+	actualTime_ = 0;
+	nextSendTime_ = 0;
+	nextEventTime_ = nextSendTime_ + sendStepSize_;
 
-	return true;
+	// Store the current state
+	// Tanks, options, game, random numbers, etc...
+	delete levelMessage_;
+	levelMessage_ = new ComsLoadLevelMessage();
+	levelMessage_->setLandscapeDefinition(ScorchedServer::instance()->
+		getLandscapeMaps().getDefinitions().getDefinition());
+	levelMessage_->saveState(ScorchedServer::instance()->getContext());
+}
+
+ComsLoadLevelMessage &ServerSimulator::getLevelMessage()
+{
+	levelMessage_->setActualTime(actualTime_);
+	return *levelMessage_;
 }

@@ -21,6 +21,8 @@
 #include <client/ClientLoadLevelHandler.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientState.h>
+#include <client/ClientReloadAdaptor.h>
+#include <client/ClientSimulator.h>
 #include <common/Clock.h>
 #include <common/OptionsScorched.h>
 #include <common/Logger.h>
@@ -28,14 +30,22 @@
 #include <common/ChannelManager.h>
 #include <engine/MainLoop.h>
 #include <dialogs/ProgressDialog.h>
+#include <dialogs/CameraDialog.h>
 #include <coms/ComsLoadLevelMessage.h>
 #include <coms/ComsLevelLoadedMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <graph/OptionsDisplayConsole.h>
+#include <graph/ParticleEngine.h>
+#include <graph/MainCamera.h>
+#include <graph/SpeedChange.h>
+#include <tankgraph/RenderTracer.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscape/Landscape.h>
 #include <lang/LangResource.h>
+#include <tank/TankContainer.h>
+#include <tank/TankCamera.h>
+#include <target/TargetRenderer.h>
 
 ClientLoadLevelHandler *ClientLoadLevelHandler::instance_ = 0;
 
@@ -69,7 +79,7 @@ bool ClientLoadLevelHandler::processMessage(
 	Clock generateClock;
 	bool result = actualProcessMessage(netMessage, messageType, reader);
 	float generateTime = generateClock.getTimeDifference();
-	int idleTime = ScorchedClient::instance()->getOptionsGame().getIdleKickTime();
+	int idleTime = ScorchedClient::instance()->getOptionsGame().getBuyingTime();
 
 	if (idleTime > 0 && int(generateTime) > idleTime - 5)
 	{
@@ -94,8 +104,27 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	// Move into the load level state
 	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimLoadLevel);
 
+	// Read the message
 	ComsLoadLevelMessage message;
 	if (!message.readMessage(reader)) return false;
+
+	// Read the state from the message
+	if (!message.loadState(ScorchedClient::instance()->getContext())) return false;
+
+	// Reset simulator and add all missed actions to the simulator
+	ScorchedClient::instance()->getClientSimulator().newLevel();
+	std::list<ComsSimulateMessage *> simulateMessages;
+	std::list<ComsSimulateMessage *>::iterator messageItor;
+	if (!message.getSimulations(simulateMessages)) return false;
+	for (messageItor = simulateMessages.begin();
+		messageItor != simulateMessages.end();
+		messageItor++)
+	{
+		ComsSimulateMessage *simMessage = *messageItor;
+		ScorchedClient::instance()->getClientSimulator().processComsSimulateMessage(*simMessage);
+		delete simMessage;
+	}
+	simulateMessages.clear();
 
 	// make sure we can only see the correct settings
 	OptionsDisplayConsole::instance()->addDisplayToConsole();
@@ -122,13 +151,51 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	// Calculate all the new landscape settings (graphics)
 	Landscape::instance()->generate(ProgressDialogSync::events_instance());
 
+	// Now sync the landscape
+	Clock generateClock;
+	ScorchedClient::instance()->getClientSimulator().setSimulationTime(message.getActualTime());
+	float deformTime = generateClock.getTimeDifference();
+	Logger::log(S3D::formatStringBuffer("Landscape sync event time %.2f seconds", deformTime));
+
+	// Make sure the landscape has been optimized
+	Landscape::instance()->recalculate();
+
+	// Reset stuff
+	ScorchedClient::instance()->
+		getParticleEngine().killAll();
+	MainCamera::instance()->getTarget().
+		getPrecipitationEngine().killAll();
+	CameraDialog::instance()->getCamera().
+		getPrecipitationEngine().killAll();
+	RenderTracer::instance()->newGame();
+	SpeedChange::instance()->resetSpeed();
+
+	// Tell all tanks to update transient settings
+	ScorchedClient::instance()->getTankContainer().clientNewGame();
+
 	// As we have not returned to the main loop for ages the
 	// timer will have a lot of time in it
 	// Get rid of this time so we don't screw things up
 	ScorchedClient::instance()->getMainLoop().getTimer().getTimeDifference();
-	
+
+	// Reset camera positions for each tank
+	std::map<unsigned int, Tank *>::iterator tankItor;
+	for (tankItor = ScorchedClient::instance()->getTankContainer().getAllTanks().begin();
+		tankItor != ScorchedClient::instance()->getTankContainer().getAllTanks().end();
+		tankItor++)
+	{
+		Tank *current = (*tankItor).second;
+		current->getRenderer()->moved();
+		current->getCamera().setCameraType(1);
+	}
+	MainCamera::instance()->getTarget().setCameraType(TargetCamera::CamSpectator);
+	ClientReloadAdaptor::instance();
+
 	// Tell the server we have finished processing the landscape
 	ComsLevelLoadedMessage levelLoadedMessage;
 	ComsMessageSender::sendToServer(levelLoadedMessage);
+
+	// Move into the wait state
+	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
 	return true;
 }

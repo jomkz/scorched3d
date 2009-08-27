@@ -48,24 +48,6 @@ OptionsTransient::~OptionsTransient()
 {
 }
 
-const char *OptionsTransient::getGameType()
-{
-	const char *gameType = "Unknown";
-	switch (optionsGame_.getTurnType())
-	{
-	case OptionsGame::TurnSequentialLooserFirst:
-		gameType = "Sequential (Loser)";
-		break;
-	case OptionsGame::TurnSequentialRandom:
-		gameType = "Sequential (Random)";
-		break;
-	case OptionsGame::TurnSimultaneous:
-		gameType = "Simultaneous";
-		break;
-	}
-	return gameType;
-}
-
 unsigned int OptionsTransient::getLeastUsedTeam(TankContainer &container)
 {
 	// Reset all the counts

@@ -18,28 +18,31 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef _ComsSyncTimeMessage_h
-#define _ComsSyncTimeMessage_h
+#if !defined(AFX_TankAddSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#define AFX_TankAddSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
-#include <coms/ComsMessage.h>
+#include <simactions/SimAction.h>
+#include <coms/ComsAddPlayerMessage.h>
 
-class ComsSyncTimeMessage : public ComsMessage
+class TankAddSimAction : public SimAction
 {
 public:
-	static ComsMessageType ComsSyncTimeMessageType;
+	TankAddSimAction();
+	TankAddSimAction(ComsAddPlayerMessage &message,
+		const std::string &uniqueId, const std::string &sUID, const std::string &hostDesc,
+		unsigned int ipAddress);
+	virtual ~TankAddSimAction();
 
-	ComsSyncTimeMessage();
-	virtual ~ComsSyncTimeMessage();
+	virtual bool invokeAction(ScorchedContext &context);
 
-	// Inherited from ComsMessage
-    virtual bool writeMessage(NetBuffer &buffer);
-    virtual bool readMessage(NetBufferReader &reader);
+	virtual bool writeMessage(NetBuffer &buffer);
+	virtual bool readMessage(NetBufferReader &reader);
 
-private:
-	ComsSyncTimeMessage(const ComsSyncTimeMessage &);
-	const ComsSyncTimeMessage & operator=(const ComsSyncTimeMessage &);
-
+REGISTER_CLASS_HEADER(TankAddSimAction);
+protected:
+	ComsAddPlayerMessage message_;
+	std::string uniqueId_, sUID_, hostDesc_;
+	unsigned int ipAddress_;
 };
 
-#endif //_ComsSyncTimeMessage_h
-
+#endif // !defined(AFX_TankAddSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

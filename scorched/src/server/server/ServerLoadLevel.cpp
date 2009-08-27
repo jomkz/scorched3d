@@ -31,8 +31,6 @@
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsLoadLevelMessage.h>
 #include <coms/ComsLevelLoadedMessage.h>
-#include <coms/ComsSyncLevelMessage.h>
-#include <coms/ComsSyncTimeMessage.h>
 
 ServerLoadLevel *ServerLoadLevel::instance_ = 0;
 
@@ -76,8 +74,12 @@ void ServerLoadLevel::destinationLoadLevel(unsigned int destinationId)
 			destination->setLevelNumber(landscapeDefinition.getDefinitionNumber());
 		}
 
+		// Make sure the simulator time is up to date
+		ScorchedServer::instance()->getSimulator().simulate();
+
 		// Tell this destination to start loading the level
-		ComsLoadLevelMessage loadLevelMessage(&landscapeDefinition);
+		ComsLoadLevelMessage &loadLevelMessage = 
+			ScorchedServer::instance()->getServerSimulator().getLevelMessage();
 		ComsMessageSender::sendToSingleClient(loadLevelMessage, destinationId, NetInterfaceFlags::fCompress);
 	}
 }
@@ -112,17 +114,6 @@ bool ServerLoadLevel::processMessage(
 		destinationLoadLevel(destinationId);
 		return true;
 	}
-
-	// Send the current server time to the client
-	// Make sure the simulator time is up to date
-	ScorchedServer::instance()->getSimulator().simulate();
-	ComsSyncTimeMessage syncTimeMessage;
-	ComsMessageSender::sendToSingleClient(syncTimeMessage, destinationId);
-
-	// Else the level is up to date
-	// Send the diffs to the level to bring it in sync with the server
-	ComsSyncLevelMessage syncMessage;
-	ComsMessageSender::sendToSingleClient(syncMessage, destinationId, NetInterfaceFlags::fCompress);
 
 	// This destination has finished loading
 	ServerDestination *destination =

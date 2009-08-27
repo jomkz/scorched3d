@@ -171,7 +171,8 @@ bool ComsMessageSender::sendToAllLoadedClients(
 		itor++)
 	{
 		ServerDestination *destination = (*itor).second;
-		if (destination->getState() == ServerDestination::sFinished)
+		if (destination->getState() == ServerDestination::sFinished ||
+			destination->getState() == ServerDestination::sLoadingLevel)
 		{
 			destinations.push_back(destination->getDestinationId());
 		}
