@@ -44,10 +44,7 @@ public:
 	Tank *removeTank(unsigned int playerId);
 	Tank *getTankById(unsigned int id);
 	Tank *getTankByName(const LangString &name);
-	
-	void clientNewGame();
-	
-	void setAllDead();
+		
 	int aliveCount();
 	int teamCount();
 

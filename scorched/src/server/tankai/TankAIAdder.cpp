@@ -28,6 +28,8 @@
 #include <tank/TankAvatar.h>
 #include <tank/TankModelContainer.h>
 #include <tank/TankState.h>
+#include <simactions/TankAddSimAction.h>
+#include <simactions/TankChangeSimAction.h>
 #include <coms/ComsAddPlayerMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <common/OptionsScorched.h>
@@ -35,6 +37,7 @@
 #include <common/Logger.h>
 #include <common/StatsLogger.h>
 #include <common/Defines.h>
+#include <server/ServerSimulator.h>
 
 unsigned int TankAIAdder::getNextTankId(const char *uniqueId, ScorchedContext &context)
 {
@@ -144,52 +147,29 @@ void TankAIAdder::addTankAI(ScorchedServer &context, const char *aiName)
 			context.getTankContainer().getPlayingTanks());
 		TankModel *tankModel = 
 			context.getTankModels().getRandomModel(team, false);
-
-		// Create the new tank
-		Tank *tank = new Tank(
-			context.getContext(),
-			getNextTankId(uniqueId, context.getContext()),
-			0,
-			newname,
-			color,
-			tankModel->getName(),
-			tankModel->getTypeName());
-
-		tank->getAvatar().loadFromFile(S3D::getDataFile("data/avatars/computer.png"));
-		tank->setUniqueId(uniqueId);
-		tank->setTankAI(ai->createCopy(tank));
-		tank->getState().setState(TankState::sSpectator);
-		tank->getState().setState(TankState::sDead);
-		context.getTankContainer().addTank(tank);
-
-		if (context.getOptionsGame().getTeams() > 1)
-		{
-			tank->setTeam(team);
-		}
-
-		Logger::log(S3D::formatStringBuffer("Player connected dest=\"%i\" id=\"%i\" name=\"%s\" unique=[%s]",
-			tank->getDestinationId(),
-			tank->getPlayerId(),
-			tank->getCStrName().c_str(),
-			tank->getUniqueId()));
-
-		StatsLogger::instance()->tankConnected(tank);
-		StatsLogger::instance()->tankJoined(tank);
+		unsigned int playerId = getNextTankId(uniqueId, context.getContext());
+		TankAvatar tankAvatar;
+		tankAvatar.loadFromFile(S3D::getDataFile("data/avatars/computer.png"));
 
 		// Tell the clients to create this tank
 		ComsAddPlayerMessage addPlayerMessage(
-			tank->getPlayerId(),
-			tank->getTargetName(),
-			tank->getColor(),
-			tank->getModelContainer().getTankModelName(),
-			tank->getModelContainer().getTankTypeName(),
-			tank->getDestinationId(),
-			tank->getTeam(),
+			playerId,
+			newname,
+			color,
+			tankModel->getName(),
+			tankModel->getTypeName(),
+			0,
+			team,
 			""); 
-		addPlayerMessage.setPlayerIconName(tank->getAvatar().getName());
+		addPlayerMessage.setPlayerIconName("data/avatars/computer.png");
 		addPlayerMessage.getPlayerIcon().addDataToBuffer(
-			tank->getAvatar().getFile().getBuffer(),
-			tank->getAvatar().getFile().getBufferUsed());
-		ComsMessageSender::sendToAllConnectedClients(addPlayerMessage);
+			tankAvatar.getFile().getBuffer(),
+			tankAvatar.getFile().getBufferUsed());
+
+		TankAddSimAction *simAction = new TankAddSimAction(addPlayerMessage,
+			uniqueId, "", "AI", 0, aiName);
+		context.getServerSimulator().addSimulatorAction(simAction);
+		TankChangeSimAction *changeAction = new TankChangeSimAction(addPlayerMessage);
+		context.getServerSimulator().addSimulatorAction(changeAction);
 	}
 }

@@ -128,9 +128,6 @@ void SettingsFrame::createMainPanel(bool server)
 			mainPanel_, sizer, context_.getBuyingTimeEntry()));	
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
-			mainPanel_, sizer, context_.getIdleKickTimeEntry()));	
-	setters_.push_back(
-		OptionEntrySetterUtil::createOtherSetter(
 			mainPanel_, sizer, context_.getIdleShotKickTimeEntry()));	
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(

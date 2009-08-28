@@ -26,6 +26,7 @@
 #include <engine/Simulator.h>
 #include <tank/TankContainer.h>
 #include <tank/TankTeamScore.h>
+#include <weapons/AccessoryStore.h>
 #include <set>
 #ifndef S3D_SERVER
 #include <tankgraph/TargetRendererImplTank.h>
@@ -50,6 +51,7 @@ bool ComsLoadLevelMessage::saveState(ScorchedContext &context)
 	if (!context.getOptionsTransient().writeToBuffer(stateBuffer_)) return false;
 	if (!context.getTankTeamScore().writeMessage(stateBuffer_)) return false;
 	if (!context.getSimulator().getRandomGenerator().writeMessage(stateBuffer_)) return false;
+	if (!context.getAccessoryStore().writeEconomyToBuffer(stateBuffer_)) return false;
 
 	// Tanks
 	std::map<unsigned int, Tank *> &tanks =
@@ -78,6 +80,7 @@ bool ComsLoadLevelMessage::loadState(ScorchedContext &context)
 	if (!context.getOptionsTransient().readFromBuffer(reader)) return false;
 	if (!context.getTankTeamScore().readMessage(reader)) return false;
 	if (!context.getSimulator().getRandomGenerator().readMessage(reader)) return false;
+	if (!context.getAccessoryStore().readEconomyFromBuffer(reader)) return false;
 
 	// Tanks
 	int targetCount = 0;

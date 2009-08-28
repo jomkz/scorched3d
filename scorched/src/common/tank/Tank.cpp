@@ -124,7 +124,6 @@ void Tank::clientNewGame()
 {
 	position_->clientNewGame();
 	state_->clientNewGame();
-	score_->clientNewGame();
 }
 
 bool Tank::getAlive()

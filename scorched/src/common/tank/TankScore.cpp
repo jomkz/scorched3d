@@ -57,7 +57,7 @@ void TankScore::newMatch()
 	money_ = 0;
 	setMoney(context_.getOptionsGame().getStartMoney());
 	wins_ = 0;
-	kills_ = turnKills_ = 0;
+	kills_ = 0;
 	assists_ = 0;
 	score_ = 0;
 	missedMoves_ = 0;
@@ -69,11 +69,7 @@ void TankScore::newGame()
 {
 	wonGame_ = false;
 	hurtBy_.clear();
-}
-
-void TankScore::clientNewGame()
-{
-	newGame();
+	turnKills_ = 0;
 }
 
 void TankScore::setMoney(int money)

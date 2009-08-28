@@ -49,9 +49,7 @@ static void syncCheckLog(const std::string &message)
 	LoggerInfo info(message.c_str());
 	info.setTime();
 	syncCheckFileLogger->logMessage(info);
-#ifndef S3D_SERVER
 	Logger::log(info);
-#endif
 }
 
 ServerSyncCheck::SyncContext::SyncContext() :
@@ -394,10 +392,8 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 	}
 	else
 	{
-#ifndef S3D_SERVER
 		Logger::log(S3D::formatStringBuffer("SyncCheck checked, Dest %u Sync %u", 
 			destinationId, client->getSyncId()));
-#endif
 	}
 
 	return true;

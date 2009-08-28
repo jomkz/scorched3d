@@ -22,12 +22,14 @@
 #include <tank/TankContainer.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
+#include <tankai/TankAIStore.h>
 #include <common/ChannelManager.h>
 #include <common/StatsLogger.h>
 #include <common/Logger.h>
 #include <server/ServerBanned.h>
 #include <server/ScorchedServerUtil.h>
 #include <server/ServerChannelManager.h>
+#include <server/ScorchedServer.h>
 #ifndef S3D_SERVER
 #include <client/ClientChannelManager.h>
 #include <tankgraph/TargetRendererImplTank.h>
@@ -41,10 +43,10 @@ TankAddSimAction::TankAddSimAction()
 
 TankAddSimAction::TankAddSimAction(ComsAddPlayerMessage &message, 
 	const std::string &uniqueId, const std::string &sUID, const std::string &hostDesc,
-	unsigned int ipAddress) :
+	unsigned int ipAddress, const std::string &aiName) :
 	message_(message),
 	uniqueId_(uniqueId), sUID_(sUID), hostDesc_(hostDesc),
-	ipAddress_(ipAddress)
+	ipAddress_(ipAddress), aiName_(aiName)
 {
 
 }
@@ -76,6 +78,12 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 		tank->setSUI(sUID_.c_str());
 		tank->setHostDesc(hostDesc_.c_str());
 		tank->setIpAddress(ipAddress_);
+		if (aiName_.c_str()[0])
+		{
+			TankAI *ai = ((ScorchedServer &)context).getTankAIs().
+				getAIByName(aiName_.c_str());
+			tank->setTankAI(ai->createCopy(tank));
+		}
 	}
 
 	// Add this tank 

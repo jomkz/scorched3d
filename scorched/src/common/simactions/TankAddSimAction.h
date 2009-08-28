@@ -30,7 +30,7 @@ public:
 	TankAddSimAction();
 	TankAddSimAction(ComsAddPlayerMessage &message,
 		const std::string &uniqueId, const std::string &sUID, const std::string &hostDesc,
-		unsigned int ipAddress);
+		unsigned int ipAddress, const std::string &aiName = "");
 	virtual ~TankAddSimAction();
 
 	virtual bool invokeAction(ScorchedContext &context);
@@ -41,7 +41,7 @@ public:
 REGISTER_CLASS_HEADER(TankAddSimAction);
 protected:
 	ComsAddPlayerMessage message_;
-	std::string uniqueId_, sUID_, hostDesc_;
+	std::string uniqueId_, sUID_, hostDesc_, aiName_;
 	unsigned int ipAddress_;
 };
 

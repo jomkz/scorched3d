@@ -42,9 +42,6 @@ ServerStateTooFewPlayersState::~ServerStateTooFewPlayersState()
 
 void ServerStateTooFewPlayersState::enterState(const unsigned state)
 {
-	// Make sure all tanks are dead
-	ScorchedServer::instance()->getTankContainer().setAllDead();
-
 	// Tell any clients why the game has been abandonded
 	ComsGameStoppedMessage gameStopped;
 	ComsMessageSender::sendToAllLoadedClients(gameStopped);

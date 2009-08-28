@@ -50,8 +50,26 @@ void ServerStateBuying::enterState()
 
 bool ServerStateBuying::simulate()
 {
+	// Check options
 	bool firstRound =
 		(ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() == 1);
+	bool buying =
+		(ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() >=
+		ScorchedServer::instance()->getOptionsGame().getBuyOnRound());
+	if (ScorchedServer::instance()->getOptionsGame().getGiveAllWeapons())
+	{
+		buying = false;
+	}
+	fixed buyingTime(ScorchedServer::instance()->getOptionsGame().getBuyingTime());
+	bool timeExpired = false;
+#ifdef S3D_SERVER
+	if (buyingTime != 0)
+	{
+		time_t currentTime = time(0);
+		unsigned int timePassed = unsigned int(currentTime - startTime_);
+		if (fixed(timePassed) > buyingTime) timeExpired = true;
+	}
+#endif
 
 	// Add any new players that should be buying
 	bool loading = false;
@@ -71,8 +89,11 @@ bool ServerStateBuying::simulate()
 				new TankAliveSimAction(tank->getPlayerId(), firstRound);
 			ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankAliveSimAction);
 
-			// Add tank to list of tanks to get buying for
-			waitingPlayers_.insert(tank->getPlayerId());
+			if (buying)
+			{
+				// Add tank to list of tanks to get buying for
+				waitingPlayers_.insert(tank->getPlayerId());
+			}
 		} 
 		else if (tank->getState().getState() == TankState::sLoading) 
 		{
@@ -81,9 +102,12 @@ bool ServerStateBuying::simulate()
 	}
 
 	// Check if all the tanks have made their moves
-	if (waitingPlayers_.empty() && playingPlayers_.empty() && !loading) 
+	if (waitingPlayers_.empty() && playingPlayers_.empty()) 
 	{
-		return true;
+		if (!loading || timeExpired)
+		{
+			return true;
+		}
 	}
 
 	// Check if any of the playing tanks have timed out

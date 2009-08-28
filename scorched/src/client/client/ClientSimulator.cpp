@@ -69,6 +69,10 @@ bool ClientSimulator::processMessage(
 	ComsMessageSender::sendToServer(resultMessage);
 
 	serverTimeDifference_.addValue(message.getTotalTime() - currentTime_);
+
+	fixed change = serverTimeDifference_.getAverage() / fixed(10);
+	actualTime_ += change;
+
 	//Logger::log(S3D::formatStringBuffer("Total Time %.2f, Server Total Time %.2f, Waiting Time %.2f", 
 	//	currentTime_.asFloat(), message.getTotalTime().asFloat(), waitingEventTime_.asFloat()));
 

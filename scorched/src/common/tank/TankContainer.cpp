@@ -91,21 +91,6 @@ Tank *TankContainer::getCurrentTank()
 	return 0;
 }
 
-void TankContainer::clientNewGame()
-{
-	std::map<unsigned int, Tank *>::iterator mainitor;
-	for (mainitor = tanks_.begin();
-		mainitor != tanks_.end();
-		mainitor++)
-	{
-		Tank *tank = (*mainitor).second;
-		if (!tank->isTemp())
-		{
-			tank->clientNewGame();
-		}
-	}
-}
-
 int TankContainer::teamCount()
 {
 	int team1 = 0;
@@ -151,25 +136,6 @@ int TankContainer::aliveCount()
 		}
 	}
 	return alive;
-}
-
-void TankContainer::setAllDead()
-{
-	std::map<unsigned int, Tank *>::iterator mainitor;
-	for (mainitor = tanks_.begin();
-		mainitor != tanks_.end();
-		mainitor++)
-	{
-		Tank *current = (*mainitor).second;
-		if (!current->isTemp())
-		{
-			if (current->getState().getTankPlaying())
-			{
-				current->getState().setState(TankState::sDead);
-				current->getState().setLives(0);
-			}
-		}
-	}
 }
 
 int TankContainer::getNoOfNonSpectatorTanks()

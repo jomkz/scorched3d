@@ -74,10 +74,6 @@ void TankPosition::newGame()
 
 void TankPosition::clientNewGame()
 {
-	TankType *type = context_.getTankModels().getTypeByName(
-		tank_->getModelContainer().getTankTypeName());
-
-	maxPower_ = type->getPower();
 	oldPower_ = power_ = maxPower_;
 	oldShots_.clear();
 	madeShot();

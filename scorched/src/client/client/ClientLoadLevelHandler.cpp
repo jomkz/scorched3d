@@ -170,9 +170,6 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	RenderTracer::instance()->newGame();
 	SpeedChange::instance()->resetSpeed();
 
-	// Tell all tanks to update transient settings
-	ScorchedClient::instance()->getTankContainer().clientNewGame();
-
 	// As we have not returned to the main loop for ages the
 	// timer will have a lot of time in it
 	// Get rid of this time so we don't screw things up

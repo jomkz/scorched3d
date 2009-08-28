@@ -38,7 +38,6 @@ public:
 
 	void newMatch();
 	void newGame();
-	void clientNewGame();
 
 	int getKills() { return kills_; }
 	void setKills(int kills) { kills_ = kills; }
