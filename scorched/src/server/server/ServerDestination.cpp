@@ -70,24 +70,6 @@ ModIdentifierEntry *ServerDestinationMod::getFile(const char *file)
 	return 0;
 }
 
-ServerDestinationPingTime::ServerDestinationPingTime() : 
-	time_(true, FIXED_RESOLUTION / 2), timesIndex_(0)
-{
-	for (int i=0; i<5; i++) 
-	{
-		times_[i] = fixed(true, FIXED_RESOLUTION / 2);
-	}
-}
-
-void ServerDestinationPingTime::addPing(fixed &ping)
-{
-	timesIndex_ = (++timesIndex_ % 5);
-
-	time_ -= times_[timesIndex_] / 5;
-	times_[timesIndex_] = ping;
-	time_ += times_[timesIndex_] / 5;
-}
-
 static struct AllowedStateTransitions
 {
 	ServerDestination::State from, to;
@@ -106,7 +88,8 @@ ServerDestination::ServerDestination(unsigned int destinationId,
 	adminTries_(0), 
 	admin_(false), levelNumber_(0),
 	destinationId_(destinationId),
-	ipAddress_(ipAddress)
+	ipAddress_(ipAddress),
+	ping_(5, fixed(true, FIXED_RESOLUTION / 2))
 {
 }
 

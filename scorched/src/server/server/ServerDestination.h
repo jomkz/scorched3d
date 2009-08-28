@@ -22,7 +22,7 @@
 #define __INCLUDE_ServerDestinationh_INCLUDE__
 
 #include <list>
-#include <common/fixed.h>
+#include <common/RollingAverage.h>
 
 struct ModIdentifierEntry;
 class ServerDestinationMod
@@ -57,20 +57,6 @@ protected:
 
 };
 
-class ServerDestinationPingTime
-{
-public:
-	ServerDestinationPingTime();
-
-	void addPing(fixed &ping);
-	fixed &getPing() { return time_; }
-
-protected:
-	fixed times_[5];
-	unsigned int timesIndex_;
-	fixed time_;
-};
-
 class ServerDestination
 {
 public:
@@ -101,11 +87,11 @@ public:
 	void setLevelNumber(unsigned int ln) { levelNumber_ = ln; }
 
 	ServerDestinationMod &getMod() { return mod_; }
-	ServerDestinationPingTime &getPing() { return ping_; }
+	RollingAverage &getPing() { return ping_; }
 
 protected:
 	ServerDestinationMod mod_;
-	ServerDestinationPingTime ping_;
+	RollingAverage ping_;
 	State state_;
 	unsigned int destinationId_, ipAddress_;
 	unsigned int levelNumber_;

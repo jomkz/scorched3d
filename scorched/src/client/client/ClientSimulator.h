@@ -25,6 +25,7 @@
 #include <engine/GameStateI.h>
 #include <coms/ComsMessageHandler.h>
 #include <coms/ComsSimulateMessage.h>
+#include <common/RollingAverage.h>
 
 class ClientSimulator : 
 	public GameStateI, 
@@ -49,11 +50,11 @@ public:
 	void setSimulationTime(fixed actualTime);
 	void processComsSimulateMessage(ComsSimulateMessage &message);
 
-	fixed getServerTimeDifference() { return serverTimeDifference_; }
+	fixed getServerTimeDifference() { return serverTimeDifference_.getAverage(); }
 
 private:
 	fixed waitingEventTime_;
-	fixed serverTimeDifference_;
+	RollingAverage serverTimeDifference_;
 
 	virtual bool continueToSimulate();
 };

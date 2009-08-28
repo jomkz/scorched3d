@@ -110,9 +110,9 @@ fixed ServerSimulator::calcSendStepSize()
 		destItor++)
 	{
 		ServerDestination *destination = destItor->second;
-		if (destination->getPing().getPing() > max)
+		if (destination->getPing().getAverage() > max)
 		{
-			max = destination->getPing().getPing();
+			max = destination->getPing().getAverage();
 		}
 	}
 
@@ -138,7 +138,7 @@ bool ServerSimulator::processMessage(
 	if (!destination) return true;
 
 	fixed roundTripTime = currentTime_ - message.getTotalTime();
-	destination->getPing().addPing(roundTripTime);
+	destination->getPing().addValue(roundTripTime);
 
 	//Logger::log(S3D::formatStringBuffer("Ping time %.2f (%.2f)", 
 	//	roundTripTime.asFloat(), destination->getPing().getPing().asFloat()));

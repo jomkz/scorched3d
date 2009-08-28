@@ -28,7 +28,8 @@
 #include <common/Logger.h>
 
 ClientSimulator::ClientSimulator() : 
-	GameStateI("ClientSimulator")
+	GameStateI("ClientSimulator"),
+	serverTimeDifference_(5, 0)
 {
 }
 
@@ -67,7 +68,7 @@ bool ClientSimulator::processMessage(
 	ComsSimulateResultMessage resultMessage(message.getTotalTime());
 	ComsMessageSender::sendToServer(resultMessage);
 
-	serverTimeDifference_ = message.getTotalTime() - currentTime_;
+	serverTimeDifference_.addValue(message.getTotalTime() - currentTime_);
 	//Logger::log(S3D::formatStringBuffer("Total Time %.2f, Server Total Time %.2f, Waiting Time %.2f", 
 	//	currentTime_.asFloat(), message.getTotalTime().asFloat(), waitingEventTime_.asFloat()));
 

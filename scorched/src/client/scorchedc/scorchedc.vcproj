@@ -477,6 +477,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\common\RollingAverage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\common\RollingAverage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\common\sha2.cpp"
 				>
 			</File>
