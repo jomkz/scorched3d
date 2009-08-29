@@ -38,13 +38,11 @@ public:
 	virtual std::string getActionType() { return "CameraPositionAction"; }
 
 	fixed getShowTime() { return showTime_; }
-	fixed getStartTime() { return startTime_; }
 	FixedVector &getShowPosition() { return showPosition_; }
 	unsigned int &getShowPriority() { return showPriority_; }
 
 protected:
 	fixed totalTime_;
-	fixed startTime_;
 	fixed showTime_;
 	unsigned int showPriority_;
 	FixedVector showPosition_;

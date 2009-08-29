@@ -37,26 +37,22 @@ public:
 	// Add an action to be simulated
 	void addAction(Action *action);
 	bool noReferencedActions();
-	void resetTime();
 	void clear(bool warn = false);
 
 	// Turn on action tracing
-	bool &getActionLogging() { return actionTracing_; }
-	bool &getActionProfiling() { return actionProfiling_; }
-	void logProfiledActions();
+	void startActionProfiling() { actionProfiling_ = true; }
+	void stopActionProfiling();
 	void logActions();
 
 	// SyncCheck
 	void addSyncCheck(const std::string &msg);
 	std::vector<std::string> &getSyncCheck() { return syncCheck_; }
 
-	fixed getActionTime() { return time_; }
-
 	// Set the simulation speed
 	void setScorchedContext(ScorchedContext *context);
 
 	// Inherited from GameStateI
-	void simulate(fixed frameTime);
+	void simulate(fixed frameTime, fixed time);
 	void draw();
 
 protected:
@@ -97,16 +93,10 @@ protected:
 	ActionList actions_;
 	std::map<std::string, int> actionProfile_;
 	int referenceCount_;
-	unsigned int actionNumber_;
-	fixed time_;
-	fixed lastTraceTime_;
-	fixed stepTime_;
 	bool actionProfiling_;
-	bool actionTracing_;
-	bool actionEvents_;
 
 	bool allEvents();
-	void addNewActions();
+	void addNewActions(fixed time);
 
 };
 

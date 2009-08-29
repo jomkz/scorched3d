@@ -78,6 +78,16 @@ TankMenus::TankMenus() : logger_("ClientLog")
 		this, &TankMenus::logToFile, "LogToFile");
 	new ConsoleRuleMethodIAdapter<TankMenus>(
 		this, &TankMenus::groupInfo, "GroupInfo");
+
+	new ConsoleRuleMethodIAdapter<ActionController>(
+		&ScorchedServer::instance()->getActionController(), 
+		&ActionController::logActions, "ActionsLog");
+	new ConsoleRuleMethodIAdapter<ActionController>(
+		&ScorchedServer::instance()->getActionController(), 
+		&ActionController::startActionProfiling, "ActionsProfilingStart");
+	new ConsoleRuleMethodIAdapter<ActionController>(
+		&ScorchedServer::instance()->getActionController(), 
+		&ActionController::stopActionProfiling, "ActionsProfilingStop");
 	//new ConsoleRuleMethodIAdapterEx<TankMenus>(
 	//	this, &TankMenus::runScriptConsole, "RunScript");
 	new ConsoleRuleFnIBooleanAdapter(
@@ -86,12 +96,6 @@ TankMenus::TankMenus() : logger_("ClientLog")
 	new ConsoleRuleFnIBooleanAdapter(
 		"StateLogging", 
 		ScorchedClient::instance()->getGameState().getStateLogging());
-	new ConsoleRuleFnIBooleanAdapter(
-		"ActionLogging",
-		ScorchedClient::instance()->getActionController().getActionLogging());
-	new ConsoleRuleFnIBooleanAdapter(
-		"ActionProfiling",
-		ScorchedServer::instance()->getActionController().getActionProfiling());
 	new ConsoleRuleFnINumberAdapter(
 		"StateTimeLogging",
 		ScorchedClient::instance()->getGameState().getStateTimeLogging());

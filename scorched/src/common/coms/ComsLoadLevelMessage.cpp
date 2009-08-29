@@ -35,7 +35,8 @@
 ComsMessageType ComsLoadLevelMessage::ComsLoadLevelMessageType("ComsLoadLevelMessageType");
 
 ComsLoadLevelMessage::ComsLoadLevelMessage() :
-	ComsMessage(ComsLoadLevelMessageType)
+	ComsMessage(ComsLoadLevelMessageType),
+	lastEmpty_(false)
 {
 }
 
@@ -135,6 +136,18 @@ bool ComsLoadLevelMessage::loadState(ScorchedContext &context)
 
 void ComsLoadLevelMessage::addSimulation(ComsSimulateMessage &simulateMessage)
 {
+	if (lastEmpty_)
+	{
+		simulateBuffer_.setBufferUsed(emptyPosition_);
+		lastEmpty_ = false;
+	}
+
+	if (simulateMessage.getActions().empty())
+	{
+		lastEmpty_ = true;
+		emptyPosition_ = simulateBuffer_.getBufferUsed();
+	}
+
 	simulateMessage.writeMessage(simulateBuffer_);
 }
 

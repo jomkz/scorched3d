@@ -25,11 +25,9 @@
 #include <list>
 
 ActionController::ActionController() : 
-	referenceCount_(0), time_(0), 
-	context_(0), lastTraceTime_(0),
-	actionTracing_(false), stepTime_(0),
-	actionEvents_(false), actionProfiling_(false),
-	actionNumber_(0)
+	referenceCount_(0),
+	context_(0),
+	actionProfiling_(false)
 {
 
 }
@@ -72,6 +70,7 @@ void ActionController::clear(bool warn)
 
 	// Ref count
 	referenceCount_ = 0;
+	syncCheck_.clear();
 }
 
 bool ActionController::allEvents()
@@ -97,8 +96,7 @@ bool ActionController::allEvents()
 
 void ActionController::logActions()
 {
-	Logger::log(S3D::formatStringBuffer("ActionLog : Time %.2f, New %i, Ref %i",
-		time_.asFloat(),
+	Logger::log(S3D::formatStringBuffer("ActionLog : New %i, Ref %i",
 		(int) newActions_.size(),
 		referenceCount_));
 	for (int a=0; a<actions_.actionCount; a++)
@@ -108,9 +106,10 @@ void ActionController::logActions()
 	}
 }
 
-void ActionController::logProfiledActions()
+void ActionController::stopActionProfiling()
 {
 	if (!actionProfiling_) return;
+	actionProfiling_ = false;
 
 	Logger::log("Logging Profiled Actions --------------------");
 	int totalCount = 0;
@@ -135,26 +134,7 @@ bool ActionController::noReferencedActions()
 	bool finished = 
 		newActions_.empty() && 
 		(referenceCount_ == 0);
-
-	if (actionTracing_)
-	{
-		if (time_ - lastTraceTime_ > 5)
-		{
-			lastTraceTime_ = time_;
-			logActions();
-		}
-	}
-
 	return finished;
-}
-
-void ActionController::resetTime()
-{
-	time_ = 0;
-	lastTraceTime_ = 0;
-	stepTime_ = 0;
-
-	syncCheck_.clear();
 }
 
 void ActionController::setScorchedContext(ScorchedContext *context)
@@ -170,52 +150,51 @@ void ActionController::addSyncCheck(const std::string &msg)
 
 void ActionController::addAction(Action *action)
 {
-	action->setScorchedContext(context_);
-	action->setActionStartTime(time_);
-
-	if (action->getPlayerId() != 0)
-	{
-		if (context_->getOptionsGame().getActionSyncCheck())
-		{
-			std::string actionType = action->getActionType();
-			std::string actionDetails = action->getActionDetails();
-			addSyncCheck(
-				S3D::formatStringBuffer("Add Action : %i %s:%s", 
-					time_.getInternal(), 
-					actionType.c_str(), 
-					actionDetails.c_str()));
-		}
-	}
-
 	newActions_.push_back(action);
-
-	if (actionProfiling_)
-	{
-		std::map<std::string, int>::iterator findItor =
-			actionProfile_.find(action->getActionType());
-		if (findItor == actionProfile_.end())
-		{
-			actionProfile_[action->getActionType()] = 1;
-		}
-		else
-		{
-			(*findItor).second++;
-		}	
-	}
 }
 
-void ActionController::addNewActions()
+void ActionController::addNewActions(fixed time)
 {
 	while (!newActions_.empty())
 	{
+		// Get next action
 		Action *action = newActions_.front(); 
 
+		// Initialize it
 		action->setScorchedContext(context_);
-		action->setActionStartTime(time_);
-		if (action->getPlayerId() != 0) referenceCount_ ++;
-
+		action->setActionStartTime(time);
 		action->init();
 		actions_.push_back(action);
+		
+		// Log it
+		if (action->getPlayerId() != 0)
+		{
+			if (context_->getOptionsGame().getActionSyncCheck())
+			{
+				std::string actionType = action->getActionType();
+				std::string actionDetails = action->getActionDetails();
+				addSyncCheck(
+					S3D::formatStringBuffer("Add Action : %i %s:%s", 
+						time.getInternal(), 
+						actionType.c_str(), 
+						actionDetails.c_str()));
+			}
+		}
+		if (actionProfiling_)
+		{
+			std::map<std::string, int>::iterator findItor =
+				actionProfile_.find(action->getActionType());
+			if (findItor == actionProfile_.end())
+			{
+				actionProfile_[action->getActionType()] = 1;
+			}
+			else
+			{
+				(*findItor).second++;
+			}	
+		}
+
+		if (action->getPlayerId() != 0) referenceCount_ ++;
 
 		newActions_.pop_front();
 	}
@@ -231,10 +210,10 @@ void ActionController::draw()
 	}
 }
 
-void ActionController::simulate(fixed frameTime)
+void ActionController::simulate(fixed frameTime, fixed time)
 {
 	// Ensure any new actions are added
-	addNewActions();
+	addNewActions(time);
 
 	// Add any new events (if allowed)
 	/*if (time_ < 10 && !allEvents())
@@ -255,7 +234,7 @@ void ActionController::simulate(fixed frameTime)
 		// Ensure that no referenced actions over do their time
 		if (act->getPlayerId() != 0)
 		{
-			if ((time_ - act->getActionStartTime() > 30))
+			if ((time - act->getActionStartTime() > 30))
 			{
 				Logger::log(S3D::formatStringBuffer("Warning: removing timed out action %s",
 					act->getActionType().c_str()));
@@ -277,7 +256,7 @@ void ActionController::simulate(fixed frameTime)
 					std::string actionDetails = act->getActionDetails();
 					addSyncCheck(
 						S3D::formatStringBuffer("Rm Action : %i %s:%s", 
-							time_.getInternal(), 
+							time.getInternal(), 
 							actionType.c_str(), 
 							actionDetails.c_str()));
 				}

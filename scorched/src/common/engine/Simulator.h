@@ -42,6 +42,8 @@ public:
 	FileRandomGenerator &getRandomGenerator() { return random_; }
 	ActionController &getActionController() { return actionController_; }
 
+	fixed getCurrentTime() { return currentTime_; }
+
 	// Set the simulation speed
 	void setFast(fixed speedMult) { speed_ = speedMult; }
 	fixed getFast() { return speed_; }

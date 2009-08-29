@@ -75,7 +75,7 @@ void Simulator::actualSimulate(fixed frameTime)
 	context_->getTargetMovement().simulate(*context_, frameTime);
 
 	// Move the actions
-	actionController_.simulate(frameTime);
+	actionController_.simulate(frameTime, currentTime_);
 
 	//events_.simulate(frameTime, *context_);
 

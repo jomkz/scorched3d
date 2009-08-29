@@ -52,6 +52,8 @@ public:
     virtual bool readMessage(NetBufferReader &reader);
 
 protected:
+	unsigned int emptyPosition_;
+	bool lastEmpty_;
 	LandscapeDefinition landscapeDefinition_;
 	NetBuffer stateBuffer_;
 	NetBuffer simulateBuffer_;
