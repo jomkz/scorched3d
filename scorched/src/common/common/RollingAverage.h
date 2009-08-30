@@ -29,6 +29,8 @@ public:
 	RollingAverage(int numberAverages, fixed startValue);
 	~RollingAverage();
 
+	void reset(fixed value);
+
 	void addValue(fixed value);
 	fixed getAverage() { return average_; }
 

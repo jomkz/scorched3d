@@ -29,17 +29,17 @@ public:
 	static ComsMessageType ComsSimulateResultMessageType;
 
 	ComsSimulateResultMessage();
-	ComsSimulateResultMessage(fixed totalTime);
+	ComsSimulateResultMessage(fixed actualTime);
 	virtual ~ComsSimulateResultMessage();
 
 	// Inherited from ComsMessage
     virtual bool writeMessage(NetBuffer &buffer);
     virtual bool readMessage(NetBufferReader &reader);
 
-	fixed &getTotalTime() { return totalTime_; }
+	fixed &getActualTime() { return actualTime_; }
 
 protected:
-	fixed totalTime_;
+	fixed actualTime_;
 
 private:
 	ComsSimulateResultMessage(const ComsSimulateResultMessage &);

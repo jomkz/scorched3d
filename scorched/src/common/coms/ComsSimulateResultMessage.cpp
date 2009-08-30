@@ -27,9 +27,9 @@ ComsSimulateResultMessage::ComsSimulateResultMessage() :
 {
 }
 
-ComsSimulateResultMessage::ComsSimulateResultMessage(fixed totalTime) :
+ComsSimulateResultMessage::ComsSimulateResultMessage(fixed actualTime) :
 	ComsMessage(ComsSimulateResultMessageType),
-	totalTime_(totalTime)
+	actualTime_(actualTime)
 {
 }
 
@@ -39,12 +39,12 @@ ComsSimulateResultMessage::~ComsSimulateResultMessage()
 
 bool ComsSimulateResultMessage::writeMessage(NetBuffer &buffer)
 {
-	buffer.addToBuffer(totalTime_);
+	buffer.addToBuffer(actualTime_);
 	return true;
 }
 
 bool ComsSimulateResultMessage::readMessage(NetBufferReader &reader)
 {
-	if (!reader.getFromBuffer(totalTime_)) return false;
+	if (!reader.getFromBuffer(actualTime_)) return false;
 	return true;
 }

@@ -18,40 +18,41 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef _ComsSimulateMessage_h
-#define _ComsSimulateMessage_h
+#include <coms/ComsNetStatMessage.h>
 
-#include <coms/ComsMessage.h>
-#include <simactions/SimAction.h>
-#include <list>
+ComsMessageType ComsNetStatMessage::ComsNetStatMessageType("ComsNetStatMessageType");
 
-class ComsSimulateMessage : public ComsMessage
+ComsNetStatMessage::ComsNetStatMessage() :
+	ComsMessage(ComsNetStatMessageType)
 {
-public:
-	static ComsMessageType ComsSimulateMessageType;
 
-	ComsSimulateMessage();
-	ComsSimulateMessage(fixed eventTime, fixed actualTime, 
-		std::list<SimAction *> &actions);
-	virtual ~ComsSimulateMessage();
+}
 
-	// Inherited from ComsMessage
-    virtual bool writeMessage(NetBuffer &buffer);
-    virtual bool readMessage(NetBufferReader &reader);
+ComsNetStatMessage::ComsNetStatMessage(fixed roundTripTime, fixed sendStepSize) :
+	ComsMessage(ComsNetStatMessageType),
+	roundTripTime_(roundTripTime),
+	sendStepSize_(sendStepSize)
+{
 
-	fixed &getEventTime() { return eventTime_; }
-	fixed &getActualTime() { return actualTime_; }
-	std::list<SimAction *> &getActions() { return actions_; }
+}
 
-protected:
-	fixed eventTime_, actualTime_;
-	std::list<SimAction *> actions_;
+	
+ComsNetStatMessage::~ComsNetStatMessage()
+{
 
-private:
-	ComsSimulateMessage(const ComsSimulateMessage &);
-	const ComsSimulateMessage & operator=(const ComsSimulateMessage &);
+}
 
-};
+bool ComsNetStatMessage::writeMessage(NetBuffer &buffer)
+{
+	buffer.addToBuffer(roundTripTime_);
+	buffer.addToBuffer(sendStepSize_);
+	return true;
+}
 
-#endif //_ComsSimulateMessage_h
+bool ComsNetStatMessage::readMessage(NetBufferReader &reader)
+{
+	if (!reader.getFromBuffer(roundTripTime_)) return false;
+	if (!reader.getFromBuffer(sendStepSize_)) return false;
+	return true;
+}
 

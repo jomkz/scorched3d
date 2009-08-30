@@ -66,7 +66,6 @@ int NetServerTCP3Send::sendThreadFunc(void *c)
 	while (th->running_)
 	{
 		if (!th->actualSendFunc()) break;
-		SDL_Delay(100);
 	}
 	th->stopped_ = true;
 	return 0;
@@ -76,7 +75,11 @@ bool NetServerTCP3Send::actualSendFunc()
 {
 	// Get any new messages
 	sendMessageHandler_.processMessages();
-	if (outgoingMessages_.empty()) return true;
+	if (outgoingMessages_.empty()) 
+	{
+		SDL_Delay(10);
+		return true;
+	}
 
 	// Send first message
 	NetMessage *message = outgoingMessages_.front();

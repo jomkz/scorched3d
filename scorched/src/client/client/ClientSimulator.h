@@ -29,8 +29,7 @@
 
 class ClientSimulator : 
 	public GameStateI, 
-	public Simulator,
-	public ComsMessageHandlerI
+	public Simulator
 {
 public:
 	ClientSimulator();
@@ -41,20 +40,26 @@ public:
 	virtual void draw(const unsigned state);
 
 	// ComsMessageHandlerI
-	virtual bool processMessage(
+	bool processComsSimulateMessage(
 		NetMessage &message,
-		const char *messageType,
+		NetBufferReader &reader);
+	bool processNetStatMessage(
+		NetMessage &message,
 		NetBufferReader &reader);
 
 	void newLevel();
 	void setSimulationTime(fixed actualTime);
-	void processComsSimulateMessage(ComsSimulateMessage &message);
+	void addComsSimulateMessage(ComsSimulateMessage &message);
 
+	fixed getServerStepTime() { return serverStepTime_; }
+	fixed getServerRoundTripTime() { return serverRoundTripTime_; }
 	fixed getServerTimeDifference() { return serverTimeDifference_.getAverage(); }
+	fixed getServerChoke() { return serverChoke_.getAverage(); }
 
 private:
 	fixed waitingEventTime_;
-	RollingAverage serverTimeDifference_;
+	RollingAverage serverTimeDifference_, serverChoke_;
+	fixed serverStepTime_, serverRoundTripTime_;
 
 	virtual bool continueToSimulate();
 };

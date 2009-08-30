@@ -106,8 +106,6 @@ bool startServer(bool local, ProgressCounter *counter)
 		// A loopback is created by the client for a single player game 
 		ScorchedServer::instance()->getContext().setNetInterface(
 			//new NetServerTCP(new NetServerTCPScorchedProtocol());
-			//new NetServerUDP();
-			//new NetServerTCP2();
 			new NetServerTCP3());
 	}
 

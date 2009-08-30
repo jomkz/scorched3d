@@ -2337,6 +2337,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\coms\ComsNetStatMessage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\coms\ComsNetStatMessage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\coms\ComsOperationMessage.cpp"
 				>
 			</File>
@@ -3158,22 +3166,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\net\NetServerTCP.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerTCP2.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerTCP2.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerTCP2Destination.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerTCP2Destination.h"
 				>
 			</File>
 			<File

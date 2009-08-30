@@ -57,7 +57,6 @@ int NetServerTCP3Recv::recvThreadFunc(void *c)
 	while (th->running_)
 	{
 		if (!th->actualRecvFunc()) break;
-		SDL_Delay(100);
 	}
 	th->stopped_ = true;
 	return 0;

@@ -21,20 +21,27 @@
 #include <common/RollingAverage.h>
 
 RollingAverage::RollingAverage(int numberAverages, fixed startValue) :
-	numberAverages_(numberAverages),
-	average_(startValue),
-	index_(0)
+	numberAverages_(numberAverages)
 {
 	averages_ = new fixed[numberAverages_];
-	for (int i=0; i<numberAverages_; i++)
-	{
-		averages_[i] = startValue;
-	}
+	reset(startValue);
 }
 
 RollingAverage::~RollingAverage()
 {
 	delete [] averages_;
+}
+
+void RollingAverage::reset(fixed value)
+{
+	average_ = value;
+	index_ = 0;
+	total_ = 0;
+	for (int i=0; i<numberAverages_; i++)
+	{
+		averages_[i] = value;
+		total_ += value;
+	}
 }
 
 void RollingAverage::addValue(fixed value)

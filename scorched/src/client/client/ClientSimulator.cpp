@@ -24,12 +24,14 @@
 #include <movement/TargetMovement.h>
 #include <coms/ComsSimulateMessage.h>
 #include <coms/ComsSimulateResultMessage.h>
+#include <coms/ComsNetStatMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <common/Logger.h>
 
 ClientSimulator::ClientSimulator() : 
 	GameStateI("ClientSimulator"),
-	serverTimeDifference_(5, 0)
+	serverTimeDifference_(10, 0),
+	serverChoke_(25, 0)
 {
 }
 
@@ -39,8 +41,9 @@ ClientSimulator::~ClientSimulator()
 
 bool ClientSimulator::continueToSimulate()
 {
-	if (currentTime_ >= waitingEventTime_) return false;
-	return true;
+	bool choked = (currentTime_ >= waitingEventTime_);
+	serverChoke_.addValue(choked?100:0);
+	return !choked;
 }
 
 void ClientSimulator::simulate(const unsigned state, float simTime)
@@ -54,32 +57,48 @@ void ClientSimulator::draw(const unsigned state)
 	actionController_.draw();
 }
 
-bool ClientSimulator::processMessage(
+bool ClientSimulator::processNetStatMessage(
 	NetMessage &netMessage,
-	const char *messageType,
+	NetBufferReader &reader)
+{
+	ComsNetStatMessage message;
+	if (!message.readMessage(reader)) return false;
+
+	// Store some stats
+	serverStepTime_ = message.getSendStepSize();
+	serverRoundTripTime_ = message.getRoundTripTime();
+
+	return true;
+}
+
+bool ClientSimulator::processComsSimulateMessage(
+	NetMessage &netMessage,
 	NetBufferReader &reader)
 {
 	ComsSimulateMessage message;
 	if (!message.readMessage(reader)) return false;
 
 	// Actualy process message
-	processComsSimulateMessage(message);
+	addComsSimulateMessage(message);
 
-	ComsSimulateResultMessage resultMessage(message.getTotalTime());
+	// Send back a response so ping times can be calculated
+	ComsSimulateResultMessage resultMessage(message.getActualTime());
 	ComsMessageSender::sendToServer(resultMessage);
 
-	serverTimeDifference_.addValue(message.getTotalTime() - currentTime_);
+	// Calculate the difference between the local time and the server time
+	fixed difference = (message.getActualTime() + serverRoundTripTime_ / 2) - actualTime_;
+	serverTimeDifference_.addValue(difference);
 
-	fixed change = serverTimeDifference_.getAverage() / fixed(10);
-	actualTime_ += change;
+	// Make adjustment to local time
+	actualTime_ += serverTimeDifference_.getAverage() / 20;
 
-	//Logger::log(S3D::formatStringBuffer("Total Time %.2f, Server Total Time %.2f, Waiting Time %.2f", 
-	//	currentTime_.asFloat(), message.getTotalTime().asFloat(), waitingEventTime_.asFloat()));
+	Logger::log(S3D::formatStringBuffer("Client Actual %.2f, Server Actual %.2f, Adjustment %.2f",
+		actualTime_.asFloat(), message.getActualTime().asFloat(), serverTimeDifference_.getAverage().asFloat()));
 
 	return true;
 }
 
-void ClientSimulator::processComsSimulateMessage(ComsSimulateMessage &message)
+void ClientSimulator::addComsSimulateMessage(ComsSimulateMessage &message)
 {
 	// Set new waiting time
 	waitingEventTime_ = message.getEventTime();
@@ -109,14 +128,17 @@ void ClientSimulator::newLevel()
 	actionController_.clear();
 
 	// Reset times
+	actualTime_ = 0;
 	currentTime_ = 0;
 	lastTickTime_ = SDL_GetTicks() - 1;
+	serverTimeDifference_.reset(0);
 }
 
 void ClientSimulator::setSimulationTime(fixed actualTime)
 {
 	// Set actual time
 	actualTime_ = actualTime;
+	serverTimeDifference_.reset(0);
 
 	// Simulate
 	Simulator::simulate();

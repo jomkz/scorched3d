@@ -73,6 +73,10 @@ void QuitDialog::display()
 			"round.  Only available in single player\n"
 			"games.")));
 	}
+	else
+	{
+		killButton_ = 0;
+	}
 
 	quitButton_ = new GLWTextButton(LANG_RESOURCE("QUIT_GAME", "Quit Game"), 0, 0, 190, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX);
@@ -98,7 +102,7 @@ void QuitDialog::buttonDown(unsigned int id)
 	{
 		GLWWindowManager::instance()->hideWindow(id_);
 	}
-	else if (id == killButton_->getId())
+	else if (killButton_ && id == killButton_->getId())
 	{
 		AdminSimAction *simAction = new AdminSimAction(AdminSimAction::eKillAll, 0, 0);
 		ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);

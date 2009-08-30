@@ -160,7 +160,10 @@ LangStringStorage *HelpButtonDialog::PerformanceMenu::getMenuToolTip(const char*
 		"  %u Shadows Drawn\n"
 		"  %u OpenGL State Changes\n"
 		"  %u OpenGL Texture Changes\n"
-		"%.2f Server Time Mismatch\n", 
+		"%.2f Server Ahead By\n"
+		"  %.2f Server Round Trip Time\n"
+		"  %.2f Server Simulation Step\n"
+		"  %.2f%% Server Choke\n", 
 
 		FrameTimer::instance()->getFPS(),
 		FrameTimer::instance()->getLastTris(),
@@ -173,7 +176,10 @@ LangStringStorage *HelpButtonDialog::PerformanceMenu::getMenuToolTip(const char*
 		Landscape::instance()->getShadowMap().getShadowCount(), 
 		FrameTimer::instance()->getLastStateCount(),
 		FrameTimer::instance()->getLastTextureSets(),
-		ScorchedClient::instance()->getClientSimulator().getServerTimeDifference().asFloat()));
+		ScorchedClient::instance()->getClientSimulator().getServerTimeDifference().asFloat(),
+		ScorchedClient::instance()->getClientSimulator().getServerRoundTripTime().asFloat(),
+		ScorchedClient::instance()->getClientSimulator().getServerStepTime().asFloat(),
+		ScorchedClient::instance()->getClientSimulator().getServerChoke().asFloat()));
 
 	return (LangStringStorage *) result.c_str();
 }

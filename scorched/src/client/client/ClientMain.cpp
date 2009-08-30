@@ -61,7 +61,6 @@
 #include <engine/ActionController.h>
 #include <dialogs/ProgressDialog.h>
 #include <net/NetServerTCP.h>
-#include <net/NetServerTCP2.h>
 #include <net/NetServerTCP3.h>
 #include <net/NetLoopBack.h>
 #include <common/ARGParser.h>
@@ -141,8 +140,6 @@ static bool initComs(ProgressCounter *progressCounter)
 	{
 		ScorchedClient::instance()->getContext().setNetInterface(
 			//new NetServerTCP(new NetServerTCPScorchedProtocol());
-			//new NetServerUDP();
-			//new NetServerTCP2();
 			new NetServerTCP3());
 	}
 	else

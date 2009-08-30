@@ -89,6 +89,9 @@ public:
 	ServerDestinationMod &getMod() { return mod_; }
 	RollingAverage &getPing() { return ping_; }
 
+	fixed getLastSentPingTime() { return lastSentPingTime_; }
+	void setLastSentPingTime(fixed t) { lastSentPingTime_ = t; }
+
 protected:
 	ServerDestinationMod mod_;
 	RollingAverage ping_;
@@ -97,6 +100,7 @@ protected:
 	unsigned int levelNumber_;
 	int adminTries_;
 	bool admin_;
+	fixed lastSentPingTime_;
 };
 
 #endif

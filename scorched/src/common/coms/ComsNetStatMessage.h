@@ -18,40 +18,35 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef _ComsSimulateMessage_h
-#define _ComsSimulateMessage_h
+#if !defined(__INCLUDE_ComsNetStatMessageh_INCLUDE__)
+#define __INCLUDE_ComsNetStatMessageh_INCLUDE__
 
 #include <coms/ComsMessage.h>
-#include <simactions/SimAction.h>
-#include <list>
 
-class ComsSimulateMessage : public ComsMessage
+class ComsNetStatMessage : public ComsMessage
 {
 public:
-	static ComsMessageType ComsSimulateMessageType;
+	static ComsMessageType ComsNetStatMessageType;
 
-	ComsSimulateMessage();
-	ComsSimulateMessage(fixed eventTime, fixed actualTime, 
-		std::list<SimAction *> &actions);
-	virtual ~ComsSimulateMessage();
+	ComsNetStatMessage();
+	ComsNetStatMessage(fixed roundTripTime, fixed sendStepSize);
+	virtual ~ComsNetStatMessage();
+
+	fixed getRoundTripTime() { return roundTripTime_; }
+	fixed getSendStepSize() { return sendStepSize_; }
 
 	// Inherited from ComsMessage
-    virtual bool writeMessage(NetBuffer &buffer);
-    virtual bool readMessage(NetBufferReader &reader);
-
-	fixed &getEventTime() { return eventTime_; }
-	fixed &getActualTime() { return actualTime_; }
-	std::list<SimAction *> &getActions() { return actions_; }
+	virtual bool writeMessage(NetBuffer &buffer);
+	virtual bool readMessage(NetBufferReader &reader);
 
 protected:
-	fixed eventTime_, actualTime_;
-	std::list<SimAction *> actions_;
+	fixed roundTripTime_, sendStepSize_;
 
 private:
-	ComsSimulateMessage(const ComsSimulateMessage &);
-	const ComsSimulateMessage & operator=(const ComsSimulateMessage &);
+	ComsNetStatMessage(const ComsNetStatMessage &);
+	const ComsNetStatMessage & operator=(const ComsNetStatMessage &);
 
 };
 
-#endif //_ComsSimulateMessage_h
+#endif // __INCLUDE_ComsNetStatMessageh_INCLUDE__
 

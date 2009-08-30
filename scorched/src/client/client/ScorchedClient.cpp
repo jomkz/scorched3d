@@ -26,6 +26,7 @@
 #include <graph/ParticleEngine.h>
 #include <graph/OptionsDisplay.h>
 #include <coms/ComsSimulateMessage.h>
+#include <coms/ComsNetStatMessage.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscape/GraphicalLandscapeMap.h>
 
@@ -53,9 +54,15 @@ ScorchedClient::ScorchedClient() :
 	simulator = clientSimulator_;
 	actionController = &simulator->getActionController();
 	simulator->setScorchedContext(this);
-	getComsMessageHandler().addHandler(
+
+	new ComsMessageHandlerIAdapter<ClientSimulator>(
+		clientSimulator_, &ClientSimulator::processComsSimulateMessage,
 		ComsSimulateMessage::ComsSimulateMessageType,
-		clientSimulator_);
+		getComsMessageHandler());
+	new ComsMessageHandlerIAdapter<ClientSimulator>(
+		clientSimulator_, &ClientSimulator::processNetStatMessage,
+		ComsNetStatMessage::ComsNetStatMessageType,
+		getComsMessageHandler());
 
 	// Calculate how many particles we can see
 	int numberOfBilboards = 6000;

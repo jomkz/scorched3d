@@ -25,6 +25,7 @@
 #include <coms/ComsSimulateMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsSimulateResultMessage.h>
+#include <coms/ComsNetStatMessage.h>
 #include <simactions/SyncCheckSimAction.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <movement/TargetMovement.h>
@@ -55,10 +56,19 @@ bool ServerSimulator::continueToSimulate()
 	// Send out the message at the correct time
 	if (currentTime_ >= nextSendTime_)
 	{
-		nextSendTime();
 		sendStepSize_ = calcSendStepSize();
 		nextSendTime_ = nextEventTime_;
 		nextEventTime_ += sendStepSize_;
+
+		nextSendTime();
+
+		/*
+		Logger::log(
+			S3D::formatStringBuffer(
+			"Current time %.2f, send time %.2f, event time %.2f, step size %.2f",
+			currentTime_.asFloat(), nextSendTime_.asFloat(), 
+			nextEventTime_.asFloat(), sendStepSize_.asFloat()));
+		*/
 	}
 
 	return true;
@@ -83,11 +93,8 @@ void ServerSimulator::nextSendTime()
 		}
 	}
 
-	//Logger::log(S3D::formatStringBuffer("Total Time %.2f, Waiting Time %.2f", 
-	//	totalTime_.asFloat(), waitingEventTime_.asFloat()));
-
 	// Send the time and actions to the client
-	ComsSimulateMessage simulateMessage(nextEventTime_, currentTime_, sendActions_);
+	ComsSimulateMessage simulateMessage(nextEventTime_, actualTime_, sendActions_);
 	ComsMessageSender::sendToAllLoadedClients(simulateMessage);
 	if (levelMessage_)
 	{
@@ -110,16 +117,15 @@ fixed ServerSimulator::calcSendStepSize()
 		destItor++)
 	{
 		ServerDestination *destination = destItor->second;
-		if (destination->getPing().getAverage() > max)
+		fixed value = destination->getPing().getAverage() + 
+			fixed(true, FIXED_RESOLUTION / 10);
+		if (value > max)
 		{
-			max = destination->getPing().getAverage();
+			max = value;
 		}
 	}
 
 	fixed stepSize = MAX(MIN(max, maxStepSize), minStepSize);
-
-	//Logger::log(S3D::formatStringBuffer("Average ping time %.2f (%.2f)", 
-	//	total.asFloat(), stepSize.asFloat()));
 
 	return stepSize;
 }
@@ -137,11 +143,23 @@ bool ServerSimulator::processMessage(
 		getDestination(netMessage.getDestinationId());
 	if (!destination) return true;
 
-	fixed roundTripTime = currentTime_ - message.getTotalTime();
-	destination->getPing().addValue(roundTripTime);
+	if (destination->getState() == ServerDestination::sFinished)
+	{
+		fixed roundTripTime = actualTime_ - message.getActualTime();
+		destination->getPing().addValue(roundTripTime);
 
-	//Logger::log(S3D::formatStringBuffer("Ping time %.2f (%.2f)", 
-	//	roundTripTime.asFloat(), destination->getPing().getPing().asFloat()));
+		Logger::log(S3D::formatStringBuffer("%.2f %2.f", 
+			roundTripTime.asFloat(), destination->getPing().getAverage().asFloat()));
+
+		if (currentTime_ > destination->getLastSentPingTime() + 2)
+		{
+			destination->setLastSentPingTime(currentTime_);
+			ComsNetStatMessage netStatMessage(
+				destination->getPing().getAverage(), sendStepSize_);
+			ComsMessageSender::sendToSingleClient(
+				netStatMessage, netMessage.getDestinationId());
+		}
+	}
 
 	return true;
 }

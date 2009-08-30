@@ -89,7 +89,7 @@ ServerDestination::ServerDestination(unsigned int destinationId,
 	admin_(false), levelNumber_(0),
 	destinationId_(destinationId),
 	ipAddress_(ipAddress),
-	ping_(5, fixed(true, FIXED_RESOLUTION / 2))
+	ping_(25, fixed(true, FIXED_RESOLUTION / 25))
 {
 }
 
@@ -109,4 +109,5 @@ void ServerDestination::setState(State s)
 			break;
 		}
 	}
+	if (state_ == sLoadingLevel) lastSentPingTime_ = 0;
 }
