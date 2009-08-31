@@ -47,18 +47,6 @@ ComsSyncCheckMessage::ComsSyncCheckMessage(unsigned int syncId,
 	ComsMessage(ComsSyncCheckMessageType),
 	syncId_(syncId)
 {
-	// Send action sync data
-	/*std::vector<std::string>::iterator syncItor;
-	std::vector<std::string> &syncs = 
-		ScorchedServer::instance()->getActionController().getSyncCheck();
-	buffer.addToBuffer((int) syncs.size());
-	for (syncItor = syncs.begin();
-		syncItor != syncs.end();
-		syncItor++)
-	{
-		buffer.addToBuffer(syncItor->c_str());
-	}*/	
-
 	// Send the height map data
 	HeightMap &map = context.getLandscapeMaps().getGroundMaps().getHeightMap();
 	for (int y=0; y<map.getMapHeight(); y++)
@@ -96,6 +84,9 @@ ComsSyncCheckMessage::ComsSyncCheckMessage(unsigned int syncId,
 		}
 		targetsBuffer_.addToBuffer(tmpBuffer);
 	}
+
+	// Add sync checks
+	syncChecks_ = context.getActionController().getSyncCheck();
 }
 
 ComsSyncCheckMessage::~ComsSyncCheckMessage()
@@ -107,6 +98,15 @@ bool ComsSyncCheckMessage::writeMessage(NetBuffer &buffer)
 	buffer.addToBuffer(syncId_);
 	buffer.addToBuffer(landscapeBuffer_);
 	buffer.addToBuffer(targetsBuffer_);
+	int checks = (int) syncChecks_.size();
+	buffer.addToBuffer(checks);
+	std::vector<std::string>::iterator itor;
+	for (itor = syncChecks_.begin();
+		itor != syncChecks_.end();
+		itor++)
+	{
+		buffer.addToBuffer(*itor);
+	}
 	return true;
 }
 
@@ -115,6 +115,14 @@ bool ComsSyncCheckMessage::readMessage(NetBufferReader &reader)
 	if (!reader.getFromBuffer(syncId_)) return false;
 	if (!reader.getFromBuffer(landscapeBuffer_)) return false;
 	if (!reader.getFromBuffer(targetsBuffer_)) return false;
+	int checks = 0;
+	if (!reader.getFromBuffer(checks)) return false;
+	for (int c=0; c<checks; c++)
+	{
+		std::string check;
+		if (!reader.getFromBuffer(check)) return false;
+		syncChecks_.push_back(check);
+	}
 	return true;
 }
 

@@ -26,6 +26,7 @@
 #include <actions/TimerAction.h>
 #include <tankai/TankAI.h>
 #include <engine/ActionController.h>
+#include <common/OptionsScorched.h>
 #ifndef S3D_SERVER
 #include <client/ScorchedClient.h>
 #include <client/ClientStartGameHandler.h>
@@ -82,7 +83,10 @@ bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 			}
 			else
 			{
+				bool actionSyncCheck = context.getOptionsGame().getActionSyncCheck();
+				context.getOptionsGame().getMainOptions().getActionSyncCheckEntry().setValue(false);
 				tank->getTankAI()->playMove(moveId_);
+				context.getOptionsGame().getMainOptions().getActionSyncCheckEntry().setValue(actionSyncCheck);
 			}
 		}
 		else

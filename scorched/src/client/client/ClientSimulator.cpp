@@ -92,9 +92,6 @@ bool ClientSimulator::processComsSimulateMessage(
 	// Make adjustment to local time
 	actualTime_ += serverTimeDifference_.getAverage() / 20;
 
-	Logger::log(S3D::formatStringBuffer("Client Actual %.2f, Server Actual %.2f, Adjustment %.2f",
-		actualTime_.asFloat(), message.getActualTime().asFloat(), serverTimeDifference_.getAverage().asFloat()));
-
 	return true;
 }
 

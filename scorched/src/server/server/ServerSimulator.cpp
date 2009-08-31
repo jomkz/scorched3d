@@ -148,9 +148,6 @@ bool ServerSimulator::processMessage(
 		fixed roundTripTime = actualTime_ - message.getActualTime();
 		destination->getPing().addValue(roundTripTime);
 
-		Logger::log(S3D::formatStringBuffer("%.2f %2.f", 
-			roundTripTime.asFloat(), destination->getPing().getAverage().asFloat()));
-
 		if (currentTime_ > destination->getLastSentPingTime() + 2)
 		{
 			destination->setLastSentPingTime(currentTime_);

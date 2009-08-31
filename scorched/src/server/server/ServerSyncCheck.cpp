@@ -49,7 +49,6 @@ static void syncCheckLog(const std::string &message)
 	LoggerInfo info(message.c_str());
 	info.setTime();
 	syncCheckFileLogger->logMessage(info);
-	Logger::log(info);
 }
 
 ServerSyncCheck::SyncContext::SyncContext() :
@@ -384,16 +383,43 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 		delete unfoundItor->second;
 	}
 
+	// Check syncs (if any)
+	if (server->getSyncCheck() != client->getSyncCheck())
+	{
+		syncCheckLog(S3D::formatStringBuffer("SyncCheck checked, Client %u Server %u Checks", 
+			client->getSyncCheck().size(), server->getSyncCheck().size()));
+		unsigned int syncsSize = MAX(
+			server->getSyncCheck().size(), 
+			client->getSyncCheck().size());
+		for (unsigned int s=0; s<syncsSize; s++)
+		{
+			std::string serverSync, clientSync;
+			if (s<server->getSyncCheck().size()) 
+			{
+				serverSync = server->getSyncCheck()[s];
+			}
+			if (s<client->getSyncCheck().size()) 
+			{
+				clientSync = client->getSyncCheck()[s];
+			}
+			syncCheckLog(S3D::formatStringBuffer("%s %s %s", 
+				serverSync != clientSync?"****":"    ",
+				clientSync.c_str(), serverSync.c_str()));
+		}
+	}
+
 	// Final logging
 	if (syncCheckFileLogger)
 	{
-		syncCheckLog(S3D::formatStringBuffer("SyncCheck checked, Dest %u Sync %u", 
-			destinationId, client->getSyncId()));
+		syncCheckLog(S3D::formatStringBuffer("SyncCheck checked, Dest %u Checks %u Sync %u", 
+			destinationId, client->getSyncCheck().size(), client->getSyncId()));
+		Logger::log(S3D::formatStringBuffer("**** SyncCheck checked, Dest %u Checks %u Sync %u", 
+			destinationId, client->getSyncCheck().size(), client->getSyncId()));
 	}
 	else
 	{
-		Logger::log(S3D::formatStringBuffer("SyncCheck checked, Dest %u Sync %u", 
-			destinationId, client->getSyncId()));
+		Logger::log(S3D::formatStringBuffer("SyncCheck checked, Dest %u Checks %u Sync %u", 
+			destinationId, client->getSyncCheck().size(), client->getSyncId()));
 	}
 
 	return true;
