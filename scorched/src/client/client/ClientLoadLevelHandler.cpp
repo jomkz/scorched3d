@@ -121,7 +121,8 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 		messageItor++)
 	{
 		ComsSimulateMessage *simMessage = *messageItor;
-		ScorchedClient::instance()->getClientSimulator().addComsSimulateMessage(*simMessage);
+		ScorchedClient::instance()->getClientSimulator().
+			addComsSimulateMessage(*simMessage, true);
 		delete simMessage;
 	}
 	simulateMessages.clear();

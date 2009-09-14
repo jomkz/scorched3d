@@ -79,7 +79,7 @@ bool ClientSimulator::processComsSimulateMessage(
 	if (!message.readMessage(reader)) return false;
 
 	// Actualy process message
-	addComsSimulateMessage(message);
+	addComsSimulateMessage(message, false);
 
 	// Send back a response so ping times can be calculated
 	ComsSimulateResultMessage resultMessage(message.getActualTime());
@@ -95,7 +95,8 @@ bool ClientSimulator::processComsSimulateMessage(
 	return true;
 }
 
-void ClientSimulator::addComsSimulateMessage(ComsSimulateMessage &message)
+void ClientSimulator::addComsSimulateMessage(ComsSimulateMessage &message,
+	bool replaying)
 {
 	// Set new waiting time
 	waitingEventTime_ = message.getEventTime();
@@ -107,7 +108,10 @@ void ClientSimulator::addComsSimulateMessage(ComsSimulateMessage &message)
 		itor++)
 	{
 		SimAction *action = *itor;
-		simActions_.push_back(new SimActionContainer(action, waitingEventTime_));
+		if (action->replayAction() || !replaying)
+		{
+			simActions_.push_back(new SimActionContainer(action, waitingEventTime_));
+		}
 	}
 }
 

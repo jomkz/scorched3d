@@ -49,7 +49,7 @@ public:
 
 	void newLevel();
 	void setSimulationTime(fixed actualTime);
-	void addComsSimulateMessage(ComsSimulateMessage &message);
+	void addComsSimulateMessage(ComsSimulateMessage &message, bool replaying);
 
 	fixed getServerStepTime() { return serverStepTime_; }
 	fixed getServerRoundTripTime() { return serverRoundTripTime_; }

@@ -801,6 +801,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\actions\TankRemove.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\TankRemove.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\actions\TankResign.cpp"
 				>
 			</File>
@@ -1186,14 +1194,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\coms\ComsPlayedMoveMessage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsRmPlayerMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsRmPlayerMessage.h"
 				>
 			</File>
 			<File
@@ -3281,14 +3281,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\client\ClientRmPlayerHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientRmPlayerHandler.h"
-				>
-			</File>
-			<File
 				RelativePath="..\client\ClientSaveScreenState.cpp"
 				>
 			</File>
@@ -5013,6 +5005,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\server\tankai\TankAINone.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\tankai\TankAINone.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\server\tankai\TankAIRandom.cpp"
 				>
 			</File>
@@ -5441,14 +5441,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\server\server\ServerStateTooFewPlayersState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerStateTooFewPlayersState.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\server\server\ServerSyncCheck.cpp"
 				>
 			</File>
@@ -5470,14 +5462,6 @@
 			</File>
 			<File
 				RelativePath="..\..\server\server\ServerTimedMessage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerTooFewPlayersStimulus.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerTooFewPlayersStimulus.h"
 				>
 			</File>
 			<File
@@ -6085,6 +6069,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\simactions\TankBotBallanceSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankBotBallanceSimAction.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\simactions\TankChangeSimAction.cpp"
 				>
 			</File>
@@ -6117,6 +6109,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\simactions\TankRemoveSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankRemoveSimAction.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\simactions\TankStartMoveSimAction.cpp"
 				>
 			</File>
@@ -6130,6 +6130,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\simactions\TankStopMoveSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankTeamBallanceSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankTeamBallanceSimAction.h"
 				>
 			</File>
 		</Filter>

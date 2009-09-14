@@ -35,7 +35,6 @@
 #include <client/ClientConnectionAuthHandler.h>
 #include <client/ClientOperationHandler.h>
 #include <client/ClientLoadLevelHandler.h>
-#include <client/ClientRmPlayerHandler.h>
 #include <client/ClientInitializeModHandler.h>
 #include <client/ClientAdminResultHandler.h>
 #include <client/ClientFileHandler.h>
@@ -174,7 +173,6 @@ static bool initComsHandlers()
 	ClientConnectionAcceptHandler::instance();
 	ClientConnectionAuthHandler::instance();
 	ClientInitializeModHandler::instance();
-	ClientRmPlayerHandler::instance();
 	ClientFileHandler::instance();
 	ClientOperationHandler::instance();
 	ClientGameStoppedHandler::instance();

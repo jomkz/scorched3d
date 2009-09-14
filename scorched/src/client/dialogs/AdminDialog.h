@@ -36,7 +36,7 @@ public:
 	static AdminDialog *instance();
 
 	// GLWWindow
-	virtual void display();
+	virtual void draw();
 
 	// GLWButtonI
 	virtual void buttonDown(unsigned int id);
