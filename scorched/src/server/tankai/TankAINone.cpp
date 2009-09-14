@@ -18,26 +18,31 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerStateTooFewPlayersStateh_INCLUDE__)
-#define __INCLUDE_ServerStateTooFewPlayersStateh_INCLUDE__
+#include <tankai/TankAINone.h>
+#include <server/ScorchedServer.h>
+#include <server/ServerState.h>
 
-#include <engine/GameStateI.h>
-#include <engine/GameStateStimulusI.h>
-
-class ServerStateTooFewPlayersState : 
-	public GameStateI, public GameStateStimulusI
+TankAINone::TankAINone(unsigned int playerId) :
+	playerId_(playerId)
 {
-public:
-	ServerStateTooFewPlayersState();
-	virtual ~ServerStateTooFewPlayersState();
+}
 
-	virtual void enterState(const unsigned state);
-	virtual bool acceptStateChange(const unsigned state, 
-		const unsigned nextState,
-		float frameTime);
+TankAINone::~TankAINone()
+{
+}
 
-protected:
-	float totalTime_;
-};
+void TankAINone::playMove(unsigned int moveId)
+{
+	ComsPlayedMoveMessage message(playerId_, 
+		moveId,
+		ComsPlayedMoveMessage::eSkip);
+	ScorchedServer::instance()->getServerState().moveFinished(message);
+}
 
-#endif
+void TankAINone::buyAccessories(unsigned int moveId)
+{
+	ComsPlayedMoveMessage playedMessage(playerId_, 
+		moveId, 
+		ComsPlayedMoveMessage::eFinishedBuy);
+	ScorchedServer::instance()->getServerState().buyingFinished(playedMessage);
+}

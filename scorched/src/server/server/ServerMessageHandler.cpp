@@ -25,11 +25,13 @@
 #include <server/ServerBanned.h>
 #include <server/ServerChannelManager.h>
 #include <server/ServerDestinations.h>
+#include <server/ServerSimulator.h>
+#include <server/ServerState.h>
 #include <tank/TankDeadContainer.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
-#include <tankai/TankAIStore.h>
-#include <coms/ComsRmPlayerMessage.h>
+#include <tankai/TankAINone.h>
+#include <simactions/TankRemoveSimAction.h>
 #include <coms/ComsMessageSender.h>
 #include <net/NetInterface.h>
 #include <common/Logger.h>
@@ -192,66 +194,46 @@ void ServerMessageHandler::destroyPlayer(unsigned int tankId, const char *reason
 			tank->getTargetName(), reason),
 		true);
 
+	// The time to actualy remove the tank after
+	fixed removalTime = 0;
+
 	// Check if we can remove player
-	//if (tank->getState().getState() == TankState::sNormal &&
-	//	ScorchedServer::instance()->getGameState().getState() == ServerState::ServerStateShot)
+	if (tank->getState().getState() == TankState::sNormal &&
+		ScorchedServer::instance()->getServerState().getState() == 
+		ServerState::ServerPlayingState &&
+		tank->getDestinationId() != 0)
 	{
-		/*
-		// Store a residual copy, that will be over written when the player is actual deleted
-		ScorchedServer::instance()->getTankDeadContainer().addTank(tank);
-
-		// We are in a state where we cannot remove the player straight away
-		tank->getState().setDestroy(true);
-
-		// Make this player a computer controlled player
-		if (tank->getDestinationId() != 0)
-		{
-			TankAI *ai = ScorchedServer::instance()->getTankAIs().getAIByName("Random");
-			tank->setTankAI(ai->createCopy(tank));
-			tank->setDestinationId(0);
-		}
-		*/
+		// Actualy remove the tank after a few seconds have passed
+		removalTime = ScorchedServer::instance()->getOptionsGame().getRemoveTime();
 	}
-	//else
-	{
-		// Destroy the player straight away
-		actualDestroyPlayer(tankId);
-	}
-}
 
-void ServerMessageHandler::destroyTaggedPlayers()
-{
-	std::map<unsigned int, Tank *> tanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
-	std::map<unsigned int, Tank *>::iterator itor;
-	for (itor = tanks.begin();
-		itor != tanks.end();
-		itor++)
+	// Make this player a computer controlled player
+	if (tank->getDestinationId() != 0)
 	{
-		Tank *tank = itor->second;
-		if (tank->getState().getDestroy())
+		TankAI *ai = new TankAINone(tank->getPlayerId());
+		tank->setTankAI(ai);
+		tank->setDestinationId(0);
+	}
+
+	// Add tank to tank dead container to remember its stats
+	if (!ScorchedServer::instance()->getOptionsGame().getResidualPlayers())
+	{
+		if (tank->getState().getTankPlaying() &&
+			tank->getUniqueId()[0] &&
+			tank->getDestinationId() != 0)
 		{
-			actualDestroyPlayer(tank->getPlayerId());
+			ScorchedServer::instance()->getTankDeadContainer().addDeadTank(tank);
 		}
 	}
-}
 
-void ServerMessageHandler::actualDestroyPlayer(unsigned int tankId)
-{
-	// Try to remove this player
-	Tank *tank = ScorchedServer::instance()->getTankContainer().removeTank(tankId);
-	if (!tank) return;
-
+	// Log the removal
 	StatsLogger::instance()->tankDisconnected(tank);
 
-	// Tell all the clients to remove this player
-	ComsRmPlayerMessage rmPlayerMessage(
-		tankId);
-	ComsMessageSender::sendToAllConnectedClients(rmPlayerMessage);
-
-	// Tidy player
-	ScorchedServer::instance()->getTankDeadContainer().addTank(tank);
-	delete tank;
+	// Actualy remove the tank from the client and server
+	TankRemoveSimAction *removeSimAction = 
+		new TankRemoveSimAction(tankId, removalTime);
+	ScorchedServer::instance()->getServerSimulator().
+		addSimulatorAction(removeSimAction);
 }
 
 void ServerMessageHandler::clientError(NetMessage &message,

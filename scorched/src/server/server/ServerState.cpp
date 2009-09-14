@@ -39,8 +39,6 @@ void ServerState::simulate()
 		serverState_ = ServerWaitingForPlayersState;
 		break;
 	case ServerWaitingForPlayersState:
-		newGame_.checkTeams();
-		newGame_.checkBots(true);
 		if (enoughPlayers_.enoughPlayers())
 		{
 			startingMatch_.reset();
@@ -48,8 +46,6 @@ void ServerState::simulate()
 		}
 		break;
 	case ServerMatchCountDownState:
-		newGame_.checkTeams();
-		newGame_.checkBots(true);
 		if (enoughPlayers_.enoughPlayers())
 		{
 			if (startingMatch_.startingMatch())
@@ -82,7 +78,7 @@ void ServerState::simulate()
 			if (playing_.showScore())
 			{
 				serverState_ = ServerScoreState;
-				score_.enterState();
+				score_.enterState(enoughPlayers_);
 			}
 			else 
 			{

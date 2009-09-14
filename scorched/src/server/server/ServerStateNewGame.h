@@ -28,12 +28,7 @@ public:
 	virtual ~ServerStateNewGame();
 
 	void newGame();
-	void checkBots(bool remove);
-	void checkTeams();
-
 protected:
-	void checkTeamsAuto();
-	void checkTeamsBotsVs();
 	void newGameState();
 };
 

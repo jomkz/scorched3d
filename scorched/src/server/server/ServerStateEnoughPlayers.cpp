@@ -21,7 +21,10 @@
 #include <server/ServerStateEnoughPlayers.h>
 #include <server/ServerChannelManager.h>
 #include <server/ScorchedServer.h>
+#include <server/ServerSimulator.h>
 #include <server/ServerCommon.h>
+#include <simactions/TankTeamBallanceSimAction.h>
+#include <simactions/TankBotBallanceSimAction.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <common/OptionsScorched.h>
@@ -37,6 +40,25 @@ ServerStateEnoughPlayers::~ServerStateEnoughPlayers()
 
 bool ServerStateEnoughPlayers::enoughPlayers()
 {
+	/*
+	if (TankTeamBallanceSimAction::needsTeamBallance(
+		ScorchedServer::instance()->getContext()))
+	{
+		TankTeamBallanceSimAction *teamBallance =
+			new TankTeamBallanceSimAction();
+		ScorchedServer::instance()->getServerSimulator().
+			addSimulatorAction(teamBallance);
+	}
+	if (TankBotBallanceSimAction::needsBotBallance(
+		ScorchedServer::instance()->getContext()))
+	{
+		TankBotBallanceSimAction *botBallance =
+			new TankBotBallanceSimAction();
+		ScorchedServer::instance()->getServerSimulator().
+			addSimulatorAction(botBallance);
+	}
+	*/
+
 	// Make sure we have enough players to play a game
 	if (ScorchedServer::instance()->getTankContainer().getNoOfNonSpectatorTanks() <
 		ScorchedServer::instance()->getOptionsGame().getNoMinPlayers())

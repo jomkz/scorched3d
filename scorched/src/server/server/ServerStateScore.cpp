@@ -19,9 +19,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <server/ServerStateScore.h>
+#include <server/ServerStateEnoughPlayers.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerSimulator.h>
-#include <server/ServerTooFewPlayersStimulus.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <simactions/ShowScoreSimAction.h>
@@ -35,7 +35,7 @@ ServerStateScore::~ServerStateScore()
 {
 }
 
-void ServerStateScore::enterState()
+void ServerStateScore::enterState(ServerStateEnoughPlayers &enoughPlayers)
 {
 	finished_ = false;
 	overAllWinner_ = false;
@@ -46,8 +46,7 @@ void ServerStateScore::enterState()
 	}
 	else
 	{
-		if (ServerTooFewPlayersStimulus::instance()->acceptStateChange(0, 
-			0, 0.0f))
+		if (!enoughPlayers.enoughPlayers())
 		{
 			if (ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() >
 				ScorchedServer::instance()->getOptionsGame().getNoRounds() / 2 && 
@@ -91,7 +90,8 @@ bool ServerStateScore::simulate()
 {
 	if (finished_)
 	{
-		bool actions = ScorchedServer::instance()->getServerSimulator().getSendActionsEmpty();
+		bool actions = ScorchedServer::instance()->getServerSimulator().
+			getSendActionsEmpty();
 		return actions;
 	}
 	return false;

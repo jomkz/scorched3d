@@ -21,13 +21,14 @@
 #if !defined(__INCLUDE_ServerStateScoreh_INCLUDE__)
 #define __INCLUDE_ServerStateScoreh_INCLUDE__
 
+class ServerStateEnoughPlayers;
 class ServerStateScore 
 {
 public:
 	ServerStateScore();
 	virtual ~ServerStateScore();
 
-	void enterState();
+	void enterState(ServerStateEnoughPlayers &enoughPlayers);
 	void scoreFinished();
 
 	bool simulate();
