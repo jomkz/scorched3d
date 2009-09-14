@@ -18,32 +18,27 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_SyncCheckSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
-#define AFX_SyncCheckSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
+#if !defined(AFX_TankRemoveSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#define AFX_TankRemoveSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
 #include <simactions/SimAction.h>
 
-class SyncCheckSimAction : public SimAction
+class TankRemoveSimAction : public SimAction
 {
 public:
-	SyncCheckSimAction();
-	SyncCheckSimAction(unsigned int syncId);
-	virtual ~SyncCheckSimAction();
-
-	unsigned int getSyncId() { return syncId_; }
+	TankRemoveSimAction();
+	TankRemoveSimAction(unsigned int playerId, fixed removalTime);
+	virtual ~TankRemoveSimAction();
 
 	virtual bool invokeAction(ScorchedContext &context);
-	virtual bool replayAction() { return false; }
 
 	virtual bool writeMessage(NetBuffer &buffer);
 	virtual bool readMessage(NetBufferReader &reader);
 
-REGISTER_CLASS_HEADER(SyncCheckSimAction);
+REGISTER_CLASS_HEADER(TankRemoveSimAction);
 protected:
-	unsigned int syncId_;
-
-	void scoreWinners(ScorchedContext &context);
-	void scoreOverallWinner(ScorchedContext &context);
+	fixed removalTime_;
+	unsigned int playerId_;
 };
 
-#endif // !defined(AFX_SyncCheckSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#endif // !defined(AFX_TankRemoveSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

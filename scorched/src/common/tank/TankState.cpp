@@ -53,7 +53,6 @@ TankState::TankState(ScorchedContext &context, unsigned int playerId) :
 	muted_(false),
 	skipshots_(false),
 	lives_(0), maxLives_(1), moveId_(0),
-	destroy_(false), 
 	notSpectator_(false)
 {
 }

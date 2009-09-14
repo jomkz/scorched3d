@@ -37,14 +37,8 @@ TankDeadContainer::~TankDeadContainer()
 
 }
 
-void TankDeadContainer::addTank(Tank *tank)
+void TankDeadContainer::addDeadTank(Tank *tank)
 {
-	// Check if we should store residual players
-	if (!ScorchedServer::instance()->getOptionsGame().getResidualPlayers() ||
-		!tank->getState().getTankPlaying() ||
-		!tank->getUniqueId()[0] ||
-		tank->getDestinationId() == 0) return;
-
 	// Find/create buffer
 	NetBuffer *buffer = 0;
 	std::map<std::string, NetBuffer *>::iterator finditor =
@@ -71,7 +65,7 @@ void TankDeadContainer::addTank(Tank *tank)
 	deadTanks_[tank->getUniqueId()] = buffer;
 }
 
-bool TankDeadContainer::getTank(Tank *tank)
+bool TankDeadContainer::getDeadTank(Tank *tank)
 {
 	// Get the buffer
 	std::map<std::string, NetBuffer *>::iterator finditor =

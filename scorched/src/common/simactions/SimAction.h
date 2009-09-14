@@ -32,6 +32,7 @@ public:
 	virtual ~SimAction();
 
 	virtual bool invokeAction(ScorchedContext &context) = 0;
+	virtual bool replayAction() { return true; }
 
 	virtual bool writeMessage(NetBuffer &buffer) = 0;
 	virtual bool readMessage(NetBufferReader &reader) = 0;

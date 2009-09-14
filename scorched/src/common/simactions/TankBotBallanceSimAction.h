@@ -18,32 +18,30 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_SyncCheckSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
-#define AFX_SyncCheckSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
+#if !defined(AFX_TankBotBallanceSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#define AFX_TankBotBallanceSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
 #include <simactions/SimAction.h>
 
-class SyncCheckSimAction : public SimAction
+class TankBotBallanceSimAction : public SimAction
 {
 public:
-	SyncCheckSimAction();
-	SyncCheckSimAction(unsigned int syncId);
-	virtual ~SyncCheckSimAction();
-
-	unsigned int getSyncId() { return syncId_; }
+	TankBotBallanceSimAction();
+	virtual ~TankBotBallanceSimAction();
 
 	virtual bool invokeAction(ScorchedContext &context);
-	virtual bool replayAction() { return false; }
 
 	virtual bool writeMessage(NetBuffer &buffer);
 	virtual bool readMessage(NetBufferReader &reader);
 
-REGISTER_CLASS_HEADER(SyncCheckSimAction);
-protected:
-	unsigned int syncId_;
+	static bool needsBotBallance(ScorchedContext &context);
 
-	void scoreWinners(ScorchedContext &context);
-	void scoreOverallWinner(ScorchedContext &context);
+REGISTER_CLASS_HEADER(TankBotBallanceSimAction);
+protected:
+	void removeBots(int requiredPlayers, int noPlayers);
+	void addBots(int requiredPlayers, int noPlayers);
+
+	static int countBots(ScorchedContext &context);
 };
 
-#endif // !defined(AFX_SyncCheckSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#endif // !defined(AFX_TankBotBallanceSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

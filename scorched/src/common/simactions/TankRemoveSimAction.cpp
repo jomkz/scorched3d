@@ -18,32 +18,44 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_SyncCheckSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
-#define AFX_SyncCheckSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
+#include <simactions/TankRemoveSimAction.h>
+#include <engine/ActionController.h>
+#include <actions/TankRemove.h>
 
-#include <simactions/SimAction.h>
+REGISTER_CLASS_SOURCE(TankRemoveSimAction);
 
-class SyncCheckSimAction : public SimAction
+TankRemoveSimAction::TankRemoveSimAction()
 {
-public:
-	SyncCheckSimAction();
-	SyncCheckSimAction(unsigned int syncId);
-	virtual ~SyncCheckSimAction();
+}
 
-	unsigned int getSyncId() { return syncId_; }
+TankRemoveSimAction::TankRemoveSimAction(unsigned int playerId, fixed removalTime) :
+	playerId_(playerId), removalTime_(removalTime)
+{
 
-	virtual bool invokeAction(ScorchedContext &context);
-	virtual bool replayAction() { return false; }
+}
 
-	virtual bool writeMessage(NetBuffer &buffer);
-	virtual bool readMessage(NetBufferReader &reader);
+TankRemoveSimAction::~TankRemoveSimAction()
+{
 
-REGISTER_CLASS_HEADER(SyncCheckSimAction);
-protected:
-	unsigned int syncId_;
+}
 
-	void scoreWinners(ScorchedContext &context);
-	void scoreOverallWinner(ScorchedContext &context);
-};
+bool TankRemoveSimAction::invokeAction(ScorchedContext &context)
+{
+	TankRemove *removeAction = new TankRemove(playerId_, removalTime_);
+	context.getActionController().addAction(removeAction);
+	return true;
+}
 
-#endif // !defined(AFX_SyncCheckSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+bool TankRemoveSimAction::writeMessage(NetBuffer &buffer)
+{
+	buffer.addToBuffer(playerId_);
+	buffer.addToBuffer(removalTime_);
+	return true;
+}
+
+bool TankRemoveSimAction::readMessage(NetBufferReader &reader)
+{
+	if (!reader.getFromBuffer(playerId_)) return false;
+	if (!reader.getFromBuffer(removalTime_)) return false;
+	return true;
+}

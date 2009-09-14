@@ -18,32 +18,35 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_SyncCheckSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
-#define AFX_SyncCheckSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
+#if !defined(AFX_TankTeamBallanceSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#define AFX_TankTeamBallanceSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
 #include <simactions/SimAction.h>
+#include <vector>
 
-class SyncCheckSimAction : public SimAction
+class Tank;
+class TankTeamBallanceSimAction : public SimAction
 {
 public:
-	SyncCheckSimAction();
-	SyncCheckSimAction(unsigned int syncId);
-	virtual ~SyncCheckSimAction();
-
-	unsigned int getSyncId() { return syncId_; }
+	TankTeamBallanceSimAction();
+	virtual ~TankTeamBallanceSimAction();
 
 	virtual bool invokeAction(ScorchedContext &context);
-	virtual bool replayAction() { return false; }
 
 	virtual bool writeMessage(NetBuffer &buffer);
 	virtual bool readMessage(NetBufferReader &reader);
 
-REGISTER_CLASS_HEADER(SyncCheckSimAction);
-protected:
-	unsigned int syncId_;
+	static bool needsTeamBallance(ScorchedContext &context);
 
-	void scoreWinners(ScorchedContext &context);
-	void scoreOverallWinner(ScorchedContext &context);
+REGISTER_CLASS_HEADER(TankTeamBallanceSimAction);
+protected:
+	static void minMaxTeams(ScorchedContext &context,
+		std::vector<Tank *> *teamPlayers,
+		std::vector<Tank *> *&minPlayers,
+		std::vector<Tank *> *&maxPlayers);
+
+	void checkTeamsAuto(ScorchedContext &context);
+	void checkTeamsBotsVs(ScorchedContext &context);
 };
 
-#endif // !defined(AFX_SyncCheckSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#endif // !defined(AFX_TankTeamBallanceSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

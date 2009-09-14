@@ -31,8 +31,8 @@ public:
 	virtual ~TankDeadContainer();
 
 	void clearTanks();
-	void addTank(Tank *tank);
-	bool getTank(Tank *tank);
+	void addDeadTank(Tank *tank);
+	bool getDeadTank(Tank *tank);
 
 protected:
 	static TankDeadContainer *instance_;

@@ -130,7 +130,7 @@ bool DeformLandscape::deformLandscapeInternal(
 							}
 							else
 							{
-								newHeight = newPos[2] + explosionDepth;
+								newHeight = currentHeight + explosionDepth;
 							}
 						}
 					}
