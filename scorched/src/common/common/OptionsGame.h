@@ -172,6 +172,9 @@ public:
 	int getBuyingTime() { return buyingTime_; }
 	OptionEntryInt &getBuyingTimeEntry() { return buyingTime_; }
 
+	int getRemoveTime() { return removeTime_; }
+	OptionEntryInt &getRemoveTimeEntry() { return removeTime_; }
+
 	int getRoundScoreTime() { return roundScoreTime_; }
 	OptionEntryInt &getRoundScoreTimeEntry() { return roundScoreTime_; }
 
@@ -180,9 +183,6 @@ public:
 
 	int getAllowedMissedMoves() { return allowedMissedMoves_; }
 	OptionEntryInt &getAllowedMissedMovesEntry() { return allowedMissedMoves_; }
-
-	int getIdleShotKickTime() { return idleShotKickTime_; }
-	OptionEntryInt &getIdleShotKickTimeEntry() { return idleShotKickTime_; }
 
 	int getMinFallingDistance() { return minFallingDistance_; }
 	OptionEntryInt &getMinFallingDistanceEntry() { return minFallingDistance_; }
@@ -364,6 +364,7 @@ protected:
 	OptionEntryBoundedInt shotTime_;
 	OptionEntryBoundedInt startTime_;
 	OptionEntryBoundedInt buyingTime_;
+	OptionEntryBoundedInt removeTime_;
 	OptionEntryBoundedInt roundScoreTime_;
 	OptionEntryBoundedInt scoreTime_;
 	OptionEntryBoundedInt allowedMissedMoves_;
@@ -404,7 +405,7 @@ protected:
 	OptionEntryBoundedInt skillForTeamKill_;
 	OptionEntryBoundedInt moneyStarting_;
 	OptionEntryBoundedInt depricatedIdleKickTime_;
-	OptionEntryBoundedInt idleShotKickTime_;
+	OptionEntryBoundedInt depricatedIdleShotKickTime_;
 	OptionEntryEnum teamBallance_;
 	OptionEntryBoundedInt moneyInterest_;
 	OptionEntryBool limitPowerByHealth_;

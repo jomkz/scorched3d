@@ -19,32 +19,26 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-#if !defined(__INCLUDE_ComsRmPlayerMessageh_INCLUDE__)
-#define __INCLUDE_ComsRmPlayerMessageh_INCLUDE__
+#if !defined(__INCLUDE_TankRemoveh_INCLUDE__)
+#define __INCLUDE_TankRemoveh_INCLUDE__
 
-#include <coms/ComsMessage.h>
+#include <actions/Action.h>
 
-class ComsRmPlayerMessage : public ComsMessage
+class TankRemove : public Action
 {
 public:
-	static ComsMessageType ComsRmPlayerMessageType;
+	TankRemove(unsigned int playerId, fixed removeTime);
+	virtual ~TankRemove();
 
-	ComsRmPlayerMessage(unsigned int playerId = 0);
-	virtual ~ComsRmPlayerMessage();
-
-	unsigned int getPlayerId() { return playerId_; }
-
-	// Inherited from ComsMessage
-	virtual bool writeMessage(NetBuffer &buffer);
-	virtual bool readMessage(NetBufferReader &reader);
+	virtual void init();
+	virtual void simulate(fixed frameTime, bool &remove);
+	virtual std::string getActionDetails();
+	virtual std::string getActionType() { return "TankRemove"; }
 
 protected:
+	fixed removeTime_;
 	unsigned int playerId_;
 
-private:
-	ComsRmPlayerMessage(const ComsRmPlayerMessage &);
-	const ComsRmPlayerMessage & operator=(const ComsRmPlayerMessage &);
 };
-
 
 #endif

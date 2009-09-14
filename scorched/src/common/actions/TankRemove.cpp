@@ -18,29 +18,42 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <actions/TankRemove.h>
+#include <tank/TankContainer.h>
+#include <common/Logger.h>
 
-#include <coms/ComsRmPlayerMessage.h>
-
-ComsMessageType ComsRmPlayerMessage::ComsRmPlayerMessageType("ComsRmPlayerMessageType");
-
-ComsRmPlayerMessage::ComsRmPlayerMessage(unsigned int playerId) :
-	ComsMessage(ComsRmPlayerMessageType),
+TankRemove::TankRemove(unsigned int playerId, fixed removeTime) :
+	Action(playerId),
+	removeTime_(removeTime),
 	playerId_(playerId)
 {
 }
 
-ComsRmPlayerMessage::~ComsRmPlayerMessage()
+TankRemove::~TankRemove()
 {
 }
 
-bool ComsRmPlayerMessage::writeMessage(NetBuffer &buffer)
+void TankRemove::init()
 {
-	buffer.addToBuffer(playerId_);
-	return true;
 }
 
-bool ComsRmPlayerMessage::readMessage(NetBufferReader &reader)
+void TankRemove::simulate(fixed frameTime, bool &remove)
 {
-	if (!reader.getFromBuffer(playerId_)) return false;
-	return true;
+	removeTime_ -= frameTime;
+
+	if (removeTime_ <= 0)
+	{
+		remove = true;
+
+		Tank *tank = context_->getTankContainer().removeTank(playerId_);
+		if (!tank) Logger::log("ERROR: Failed to find player to remove");
+		delete tank;
+	}
+
+	Action::simulate(frameTime, remove);
+}
+
+std::string TankRemove::getActionDetails()
+{
+	return S3D::formatStringBuffer("%u %u", playerId_, removeTime_.getInternal());
 }

@@ -60,7 +60,6 @@ public:
 	OPTIONINT_GETTER(RemoveBotsAtPlayers);
 	OPTIONINT_GETTER(MaxLandscapeSize);
 	OPTIONINT_GETTER(AllowedMissedMoves);
-	OPTIONINT_GETTER(IdleShotKickTime);
 	OPTIONINT_GETTER(MinFallingDistance);
 	OPTIONINT_GETTER(MaxClimbingDistance);
 	OPTIONINT_GETTER(PlayerLives);
@@ -69,6 +68,7 @@ public:
 	OPTIONINT_GETTER(StartTime);
 	OPTIONINT_GETTER(ShotTime);
 	OPTIONINT_GETTER(BuyingTime);
+	OPTIONINT_GETTER(RemoveTime);
 	OPTIONINT_GETTER(RoundScoreTime);
 	OPTIONINT_GETTER(ScoreTime);
 
