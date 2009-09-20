@@ -110,6 +110,7 @@
 					<channel>general</channel>
 					<channel>team</channel>
 					<channel>whisper</channel>
+          <channel>combat</channel>
 					<channelcolor>
 						<channel>announce</channel>
 						<color><A>0.8</A><B>0.8</B><C>0.8</C></color>
@@ -132,46 +133,9 @@
 						<channel>whisper</channel>
 						<color><A>0.7</A><B>0.0</B><C>0.7</C></color>
 					</channelcolor>
-				</widget>
-			</item>
-		</items>
-	</window>
-	<window>
-		<name>DeathLog</name>
-		<state>all</state>
-		<state>start</state>
-		<visible>true</visible>
-		<key></key>
-		<windowlevel>200000</windowlevel>
-		<w>-400</w>
-		<h>100</h>
-		<x>200</x>
-		<y>-110</y>
-		<description>Shows log messages</description>
-		<disabled/>
-		<items>
-			<item>
-				<widget type="GLWChannelView">
-					<x>0</x>
-					<y>0</y>
-					<w>0</w>
-					<h>0</h>
-					<displaytime>10.0</displaytime>
-					<totallines>8</totallines>
-					<visiblelines>5</visiblelines>
-					<linedepth>18</linedepth>
-					<fontsize>12</fontsize>
-					<outlinefontsize>14</outlinefontsize>
-					<textaligntop>true</textaligntop>
-					<parentsized>true</parentsized>
-					<splitlargelines>false</splitlargelines>
-					<allowscroll>false</allowscroll>
-					<showchannelname>false</showchannelname>
-					<showchannelnumber>false</showchannelnumber>
-					<channel>combat</channel>
 					<channelcolor>
 						<channel>combat</channel>
-						<color><A>1.0</A><B>1.0</B><C>1.0</C></color>
+						<color><A>0.8</A><B>0.8</B><C>0.0</C></color>
 					</channelcolor>
 				</widget>
 			</item>
