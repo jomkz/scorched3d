@@ -18,50 +18,29 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ShotCountDownh_INCLUDE__)
-#define __INCLUDE_ShotCountDownh_INCLUDE__
+#if !defined(__INCLUDE_MoveTimerActionh_INCLUDE__)
+#define __INCLUDE_MoveTimerActionh_INCLUDE__
 
-#include <engine/GameStateI.h>
-#include <common/Fixed.h>
+#include <actions/Action.h>
 
-class ShotCountDown : public GameStateI
+class MoveTimerAction : public Action
 {
 public:
-	static ShotCountDown *instance();
+	MoveTimerAction(unsigned int playerId, unsigned int moveId, 
+		fixed timeout, bool buying);
+	virtual ~MoveTimerAction();
 
-	enum TimerType
-	{
-		ePlaying,
-		eBuying
-	};
+	virtual void init();
+	virtual void simulate(fixed frameTime, bool &remove);
 
-	void showMoveTime(fixed timer, TimerType type, unsigned int playerId);
-	void showRoundTime(fixed timer);
-
-	//Inherited from GameStateI
-	virtual void draw(const unsigned state);
+	virtual std::string getActionType() { return "MoveTimerAction"; }
 
 protected:
-	static ShotCountDown *instance_;
-
-	struct MoveInfo
-	{
-		fixed timer_;
-		TimerType type_;
-		unsigned int playerId_;
-		bool show_;
-	} move;
-	struct RoundInfo
-	{
-		fixed timer_;
-		bool show_;
-	} round;
-
-	void drawMove();
-
-private:
-	ShotCountDown();
-	virtual ~ShotCountDown ();
+	unsigned int playerId_;
+	unsigned int moveId_;
+	fixed timeout_;
+	bool buying_;
+	bool performCallback_;
 };
 
 #endif

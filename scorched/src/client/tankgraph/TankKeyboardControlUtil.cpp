@@ -502,8 +502,9 @@ void TankKeyboardControlUtil::fireShot(Tank *tank)
 	if (currentWeapon)
 	{
 		// send message saying we are finished with shot
-		ComsPlayedMoveMessage comsMessage(tank->getPlayerId(), 
-			ScorchedClient::instance()->getTankContainer().getCurrentMoveId(),
+		ComsPlayedMoveMessage comsMessage(
+			tank->getPlayerId(), 
+			tank->getState().getMoveId(),
 			ComsPlayedMoveMessage::eShot);
 		comsMessage.setShot(
 			currentWeapon->getAccessoryId(),
@@ -521,11 +522,12 @@ void TankKeyboardControlUtil::fireShot(Tank *tank)
 	}
 }
 
-void TankKeyboardControlUtil::skipShot(unsigned int playerId)
+void TankKeyboardControlUtil::skipShot(Tank *tank)
 {
 	// send message saying we are finished with shot
-	ComsPlayedMoveMessage comsMessage(playerId, 
-		ScorchedClient::instance()->getTankContainer().getCurrentMoveId(),
+	ComsPlayedMoveMessage comsMessage(
+		tank->getPlayerId(), 
+		tank->getState().getMoveId(),
 		ComsPlayedMoveMessage::eSkip);
 
 	// Check if we are running in a NET/LAN environment
@@ -536,11 +538,12 @@ void TankKeyboardControlUtil::skipShot(unsigned int playerId)
 	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
 }
 
-void TankKeyboardControlUtil::resign(unsigned int playerId)
+void TankKeyboardControlUtil::resign(Tank *tank)
 {
 	// send message saying we are finished with shot
-	ComsPlayedMoveMessage comsMessage(playerId, 
-		ScorchedClient::instance()->getTankContainer().getCurrentMoveId(),
+	ComsPlayedMoveMessage comsMessage(
+		tank->getPlayerId(), 
+		tank->getState().getMoveId(),
 		ComsPlayedMoveMessage::eResign);
 
 	// Check if we are running in a NET/LAN environment

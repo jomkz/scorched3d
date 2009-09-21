@@ -18,50 +18,45 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ShotCountDownh_INCLUDE__)
-#define __INCLUDE_ShotCountDownh_INCLUDE__
+#include <simactions/RoundStopSimAction.h>
+#include <simactions/TankStopMoveSimAction.h>
+#include <tank/TankContainer.h>
 
-#include <engine/GameStateI.h>
-#include <common/Fixed.h>
+REGISTER_CLASS_SOURCE(RoundStopSimAction);
 
-class ShotCountDown : public GameStateI
+RoundStopSimAction::RoundStopSimAction()
 {
-public:
-	static ShotCountDown *instance();
+}
 
-	enum TimerType
+RoundStopSimAction::~RoundStopSimAction()
+{
+}
+
+bool RoundStopSimAction::invokeAction(ScorchedContext &context)
+{
+	// Stop the current round
+	context.getTankContainer().setCurrentRoundId(0);
+
+	// Stop any tanks from making any moves
+	std::map<unsigned int, Tank *> &tanks =
+		context.getTankContainer().getPlayingTanks();
+	std::map<unsigned int, Tank *>::iterator tankItor;
+	for (tankItor = tanks.begin();
+		tankItor != tanks.end();
+		tankItor++)
 	{
-		ePlaying,
-		eBuying
-	};
+		TankStopMoveSimAction::stopMove(context, tankItor->second);
+	}
 
-	void showMoveTime(fixed timer, TimerType type, unsigned int playerId);
-	void showRoundTime(fixed timer);
+	return true;
+}
 
-	//Inherited from GameStateI
-	virtual void draw(const unsigned state);
+bool RoundStopSimAction::writeMessage(NetBuffer &buffer)
+{
+	return true;
+}
 
-protected:
-	static ShotCountDown *instance_;
-
-	struct MoveInfo
-	{
-		fixed timer_;
-		TimerType type_;
-		unsigned int playerId_;
-		bool show_;
-	} move;
-	struct RoundInfo
-	{
-		fixed timer_;
-		bool show_;
-	} round;
-
-	void drawMove();
-
-private:
-	ShotCountDown();
-	virtual ~ShotCountDown ();
-};
-
-#endif
+bool RoundStopSimAction::readMessage(NetBufferReader &reader)
+{
+	return true;
+}

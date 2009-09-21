@@ -25,7 +25,7 @@ TankContainer::TankContainer(TargetContainer &targets) :
 	targets_(targets),
 	playerId_(0), 
 	destinationId_(0),
-	moveId_(0)
+	roundId_(0)
 {
 
 }

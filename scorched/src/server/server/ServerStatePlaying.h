@@ -38,8 +38,10 @@ public:
 
 	void moveFinished(ComsPlayedMoveMessage &playedMessage);
 	void shotsFinished(unsigned int moveId);
+	void roundFinished();
 
 protected:
+	unsigned int nextRoundId_;
 	ServerTurns *turns_;
 	ServerTurnsSequential turnsSequential_;
 	ServerTurnsSimultaneous turnsSimultaneous_;

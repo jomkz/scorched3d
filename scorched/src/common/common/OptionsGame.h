@@ -175,6 +175,9 @@ public:
 	int getRemoveTime() { return removeTime_; }
 	OptionEntryInt &getRemoveTimeEntry() { return removeTime_; }
 
+	int getRoundTime() { return roundTime_; }
+	OptionEntryInt &getRoundTimeEntry() { return roundTime_; }
+
 	int getRoundScoreTime() { return roundScoreTime_; }
 	OptionEntryInt &getRoundScoreTimeEntry() { return roundScoreTime_; }
 
@@ -365,6 +368,7 @@ protected:
 	OptionEntryBoundedInt startTime_;
 	OptionEntryBoundedInt buyingTime_;
 	OptionEntryBoundedInt removeTime_;
+	OptionEntryBoundedInt roundTime_;
 	OptionEntryBoundedInt roundScoreTime_;
 	OptionEntryBoundedInt scoreTime_;
 	OptionEntryBoundedInt allowedMissedMoves_;

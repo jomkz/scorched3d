@@ -121,7 +121,7 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 			ServerChannelManager::instance()->sendText( 
 				ChannelText("admin", 
 					"PLAYER_ADMIN_MUTED", 
-					"Player admin muted \"{0}\"",
+					"Player admin muted [p:{0}]",
 					tank->getTargetName()),
 					true);
 		}
@@ -130,7 +130,7 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 			ServerChannelManager::instance()->sendText( 
 				ChannelText("admin",
 					"PLAYER_ADMIN_FLAGGED",
-					"Player admin flagged \"{0}\"",
+					"Player admin flagged [p:{0}]",
 					tank->getTargetName()),
 					true);
 		}
@@ -141,7 +141,7 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 	{
 		ChannelText text("info", 
 			"PLAYER_CONNECTED",
-			"Player connected \"{0}\"",
+			"Player connected [p:{0}]",
 			tank->getTargetName());
 		ChannelManager::showText(context, text);
 	}

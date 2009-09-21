@@ -23,14 +23,14 @@
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
 #include <tank/TankContainer.h>
-#include <actions/TimerAction.h>
+#include <actions/MoveTimerAction.h>
 #include <tankai/TankAI.h>
 #include <engine/ActionController.h>
 #include <common/OptionsScorched.h>
 #ifndef S3D_SERVER
 #include <client/ScorchedClient.h>
 #include <client/ClientStartGameHandler.h>
-#include <actions/VisualTimerAction.h>
+#include <actions/VisualMoveTimerAction.h>
 #endif
 
 REGISTER_CLASS_SOURCE(TankStartMoveSimAction);
@@ -39,7 +39,8 @@ TankStartMoveSimAction::TankStartMoveSimAction()
 {
 }
 
-TankStartMoveSimAction::TankStartMoveSimAction(unsigned int playerId, unsigned int moveId,
+TankStartMoveSimAction::TankStartMoveSimAction(
+	unsigned int playerId, unsigned int moveId,
 	fixed timeout, bool buying) :
 	playerId_(playerId), moveId_(moveId),
 	timeout_(timeout), buying_(buying)
@@ -64,12 +65,9 @@ bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 #ifndef S3D_SERVER
 			ClientStartGameHandler::instance()->startGame(this);
 
-			if (timeout_ > 0)
-			{
-				VisualTimerAction *timerAction = 
-					new VisualTimerAction(playerId_, moveId_, timeout_, buying_);
-				context.getActionController().addAction(timerAction);
-			}
+			VisualMoveTimerAction *timerAction = 
+				new VisualMoveTimerAction(playerId_, moveId_, timeout_, buying_);
+			context.getActionController().addAction(timerAction);
 #endif
 		}
 	}
@@ -91,11 +89,9 @@ bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 		}
 		else
 		{
-			if (timeout_ > 0)
-			{
-				TimerAction *timerAction = new TimerAction(playerId_, moveId_, timeout_, buying_);
-				context.getActionController().addAction(timerAction);
-			}
+			MoveTimerAction *timerAction = 
+				new MoveTimerAction(playerId_, moveId_, timeout_, buying_);
+			context.getActionController().addAction(timerAction);
 		}
 	}
 

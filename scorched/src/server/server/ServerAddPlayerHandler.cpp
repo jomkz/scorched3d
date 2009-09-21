@@ -140,7 +140,7 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 			ServerChannelManager::instance()->sendText( 
 				ChannelText("info",
 					"WELCOME_BACK",
-					"Welcome back {0}, you are ranked {1}",
+					"Welcome back [p:{0}], you are ranked {1}",
 					tank->getTargetName(), rank.rank),
 				tank->getDestinationId(),
 				false);
@@ -151,7 +151,7 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 			ServerChannelManager::instance()->sendText( 
 				ChannelText("info",
 					"PLAYER_PLAYING",
-					"Player playing \"{0}\"",
+					"Player playing [p:{0}]",
 					tank->getTargetName()),
 				true);
 		}

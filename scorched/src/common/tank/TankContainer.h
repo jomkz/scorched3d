@@ -38,8 +38,8 @@ public:
 	void setCurrentDestinationId(unsigned int did) { destinationId_ = did; }
 	unsigned int getCurrentPlayerId() { return playerId_; }
 	void setCurrentPlayerId(unsigned int pid) { playerId_ = pid; }
-	unsigned int getCurrentMoveId() { return moveId_; }
-	void setCurrentMoveId(unsigned int mid) { moveId_ = mid; }
+	unsigned int getCurrentRoundId() { return roundId_; }
+	void setCurrentRoundId(unsigned int rid) { roundId_ = rid; }
 
 	Tank *removeTank(unsigned int playerId);
 	Tank *getTankById(unsigned int id);
@@ -56,7 +56,7 @@ public:
 protected:
 	unsigned int playerId_;
 	unsigned int destinationId_;
-	unsigned int moveId_;
+	unsigned int roundId_;
 	TargetContainer &targets_;
 	std::map<unsigned int, Tank *> tanks_;
 

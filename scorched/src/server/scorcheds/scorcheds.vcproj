@@ -1869,6 +1869,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\actions\MoveTimerAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\MoveTimerAction.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\actions\Napalm.cpp"
 				>
 			</File>
@@ -1890,6 +1898,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\actions\Resurrection.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\RoundTimerAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\RoundTimerAction.h"
 				>
 			</File>
 			<File
@@ -2010,14 +2026,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\actions\Teleport.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\actions\TimerAction.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\actions\TimerAction.h"
 				>
 			</File>
 		</Filter>
@@ -3798,6 +3806,22 @@
 			</File>
 			<File
 				RelativePath="..\..\common\simactions\PlayMovesSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\RoundStartSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\RoundStartSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\RoundStopSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\RoundStopSimAction.h"
 				>
 			</File>
 			<File

@@ -18,50 +18,24 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ShotCountDownh_INCLUDE__)
-#define __INCLUDE_ShotCountDownh_INCLUDE__
+#if !defined(AFX_RoundStopSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#define AFX_RoundStopSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
-#include <engine/GameStateI.h>
-#include <common/Fixed.h>
+#include <simactions/SimAction.h>
 
-class ShotCountDown : public GameStateI
+class RoundStopSimAction : public SimAction
 {
 public:
-	static ShotCountDown *instance();
+	RoundStopSimAction();
+	virtual ~RoundStopSimAction();
 
-	enum TimerType
-	{
-		ePlaying,
-		eBuying
-	};
+	virtual bool invokeAction(ScorchedContext &context);
 
-	void showMoveTime(fixed timer, TimerType type, unsigned int playerId);
-	void showRoundTime(fixed timer);
+	virtual bool writeMessage(NetBuffer &buffer);
+	virtual bool readMessage(NetBufferReader &reader);
 
-	//Inherited from GameStateI
-	virtual void draw(const unsigned state);
-
+REGISTER_CLASS_HEADER(RoundStopSimAction);
 protected:
-	static ShotCountDown *instance_;
-
-	struct MoveInfo
-	{
-		fixed timer_;
-		TimerType type_;
-		unsigned int playerId_;
-		bool show_;
-	} move;
-	struct RoundInfo
-	{
-		fixed timer_;
-		bool show_;
-	} round;
-
-	void drawMove();
-
-private:
-	ShotCountDown();
-	virtual ~ShotCountDown ();
 };
 
-#endif
+#endif // !defined(AFX_RoundStopSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

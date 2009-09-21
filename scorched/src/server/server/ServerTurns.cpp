@@ -91,7 +91,7 @@ void ServerTurns::playMove(Tank *tank, unsigned int moveId)
 void ServerTurns::playMoveFinished(Tank *tank)
 {	
 	TankStopMoveSimAction *tankSimAction = 
-		new TankStopMoveSimAction(tank->getPlayerId(), tank->getState().getMoveId());
+		new TankStopMoveSimAction(tank->getPlayerId());
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);	
 	tank->getState().setMoveId(0);
 }

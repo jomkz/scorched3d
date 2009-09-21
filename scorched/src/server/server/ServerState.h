@@ -53,6 +53,7 @@ public:
 	void moveFinished(ComsPlayedMoveMessage &message);
 	void shotsFinished(unsigned int moveId);
 	void scoreFinished();
+	void roundFinished();
 
 protected:
 	ServerStateEnum serverState_;

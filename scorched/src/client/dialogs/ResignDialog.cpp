@@ -61,7 +61,7 @@ void ResignDialog::buttonDown(unsigned int id)
 		Tank *firstTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
 		if (firstTank)
 		{
-			TankKeyboardControlUtil::resign(firstTank->getPlayerId());
+			TankKeyboardControlUtil::resign(firstTank);
 		}
 
 		GLWWindowManager::instance()->hideWindow(id_);

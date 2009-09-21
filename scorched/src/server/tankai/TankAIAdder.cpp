@@ -132,8 +132,16 @@ void TankAIAdder::addTankAI(ScorchedServer &context, const char *aiName)
 		int team = 0;
 		if (context.getOptionsGame().getTeams() > 1)
 		{
-			team = context.getOptionsTransient().getLeastUsedTeam(
-				context.getTankContainer());
+			if (context.getOptionsGame().getTeamBallance() ==
+				OptionsGame::TeamBallanceBotsVs)
+			{
+				team = 1;
+			}
+			else
+			{
+				team = context.getOptionsTransient().getLeastUsedTeam(
+					context.getTankContainer());
+			}
 		}
 
 		// For the tank ai's name

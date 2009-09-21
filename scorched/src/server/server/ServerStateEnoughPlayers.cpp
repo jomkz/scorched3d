@@ -23,7 +23,6 @@
 #include <server/ScorchedServer.h>
 #include <server/ServerSimulator.h>
 #include <server/ServerCommon.h>
-#include <simactions/TankTeamBallanceSimAction.h>
 #include <simactions/TankBotBallanceSimAction.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
@@ -41,14 +40,6 @@ ServerStateEnoughPlayers::~ServerStateEnoughPlayers()
 bool ServerStateEnoughPlayers::enoughPlayers()
 {
 	/*
-	if (TankTeamBallanceSimAction::needsTeamBallance(
-		ScorchedServer::instance()->getContext()))
-	{
-		TankTeamBallanceSimAction *teamBallance =
-			new TankTeamBallanceSimAction();
-		ScorchedServer::instance()->getServerSimulator().
-			addSimulatorAction(teamBallance);
-	}
 	if (TankBotBallanceSimAction::needsBotBallance(
 		ScorchedServer::instance()->getContext()))
 	{

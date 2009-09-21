@@ -18,50 +18,29 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ShotCountDownh_INCLUDE__)
-#define __INCLUDE_ShotCountDownh_INCLUDE__
+#include <actions/VisualRoundTimerAction.h>
+#include <graph/ShotCountDown.h>
 
-#include <engine/GameStateI.h>
-#include <common/Fixed.h>
-
-class ShotCountDown : public GameStateI
+VisualRoundTimerAction::VisualRoundTimerAction(
+	unsigned int roundId, fixed timeout) :
+	RoundTimerAction(roundId, timeout)
 {
-public:
-	static ShotCountDown *instance();
+}
 
-	enum TimerType
-	{
-		ePlaying,
-		eBuying
-	};
+VisualRoundTimerAction::~VisualRoundTimerAction()
+{
+}
 
-	void showMoveTime(fixed timer, TimerType type, unsigned int playerId);
-	void showRoundTime(fixed timer);
+void VisualRoundTimerAction::init()
+{
+}
 
-	//Inherited from GameStateI
-	virtual void draw(const unsigned state);
+void VisualRoundTimerAction::simulate(fixed frameTime, bool &remove)
+{
+	RoundTimerAction::simulate(frameTime, remove);
+}
 
-protected:
-	static ShotCountDown *instance_;
-
-	struct MoveInfo
-	{
-		fixed timer_;
-		TimerType type_;
-		unsigned int playerId_;
-		bool show_;
-	} move;
-	struct RoundInfo
-	{
-		fixed timer_;
-		bool show_;
-	} round;
-
-	void drawMove();
-
-private:
-	ShotCountDown();
-	virtual ~ShotCountDown ();
-};
-
-#endif
+void VisualRoundTimerAction::draw()
+{
+	ShotCountDown::instance()->showRoundTime(timeout_);
+}

@@ -68,7 +68,7 @@ void SkipAllDialog::simulate(float frameTime)
 			Tank *firstTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
 			if (firstTank)
 			{
-				TankKeyboardControlUtil::skipShot(firstTank->getPlayerId());
+				TankKeyboardControlUtil::skipShot(firstTank);
 			}
 			GLWWindowManager::instance()->hideWindow(id_);
 		}

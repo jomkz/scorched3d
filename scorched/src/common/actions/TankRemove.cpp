@@ -31,6 +31,9 @@ TankRemove::TankRemove(unsigned int playerId, fixed removeTime) :
 
 TankRemove::~TankRemove()
 {
+	Tank *tank = context_->getTankContainer().removeTank(playerId_);
+	if (!tank) Logger::log("ERROR: Failed to find player to remove");
+	delete tank;
 }
 
 void TankRemove::init()
@@ -44,10 +47,6 @@ void TankRemove::simulate(fixed frameTime, bool &remove)
 	if (removeTime_ <= 0)
 	{
 		remove = true;
-
-		Tank *tank = context_->getTankContainer().removeTank(playerId_);
-		if (!tank) Logger::log("ERROR: Failed to find player to remove");
-		delete tank;
 	}
 
 	Action::simulate(frameTime, remove);

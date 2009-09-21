@@ -26,7 +26,10 @@
 #include <GLEXT/GLViewPort.h>
 #include <GLW/GLWFont.h>
 #include <GLW/GLWidget.h>
+#include <GLW/GLWColors.h>
+#include <GLEXT/GLTexture.h>
 #include <tank/TankContainer.h>
+#include <tank/TankAvatar.h>
 #include <lang/LangResource.h>
 
 ShotCountDown *ShotCountDown::instance_ = 0;
@@ -41,80 +44,138 @@ ShotCountDown *ShotCountDown::instance()
 }
 
 ShotCountDown::ShotCountDown() : 
-	GameStateI("ShotCountDown"),
-	show_(false)
+	GameStateI("ShotCountDown")
 {
+	move.show_ = false;
+	round.show_ = false;
 }
 
 ShotCountDown::~ShotCountDown()
 {
 }
 
-void ShotCountDown::show(fixed timer, TimerType type, unsigned int playerId)
+void ShotCountDown::showMoveTime(fixed timer, TimerType type, unsigned int playerId)
 {
-	show_ = true;
-	timer_ = timer;
-	type_ = type;
-	playerId_ = playerId;
+	move.show_ = true;
+	move.timer_ = timer;
+	move.type_ = type;
+	move.playerId_ = playerId;
+	if (move.timer_ < 0) move.timer_ = 0;
+}
+
+void ShotCountDown::showRoundTime(fixed timer)
+{
+	round.show_ = true;
+	if (round.timer_ < 0) round.timer_ = 0;
 }
 
 void ShotCountDown::draw(const unsigned currentstate)
 {
-	if (!show_) return;
-	show_ = false;
+	if (move.show_) 
+	{
+		drawMove();
+		move.show_ = false;
+	}
+}
 
-	GLState state(GLState::BLEND_ON | GLState::TEXTURE_OFF | GLState::DEPTH_OFF); 
+void ShotCountDown::drawMove()
+{
+	float wHeight = (float) GLViewPort::getHeight();
+	float wWidth = (float) GLViewPort::getWidth();
+
+	GLState state(GLState::BLEND_ON | GLState::TEXTURE_ON | GLState::DEPTH_OFF); 
 
 	static Vector yellow(0.85f, 0.85f, 0.3f);
 	static Vector darkYellow(0.7f, 0.7f, 0.2f);
 	static Vector red(0.7f, 0.0f, 0.0f);
 
-	std::string str;
-	Vector *fontColor = 0;
-	if (timer_ <= 5)
-	{
-		fontColor = &red;
+	std::string str = "-";
+	Vector *fontColor = &darkYellow;
 
-		str = S3D::formatStringBuffer("%.1f", 
-			timer_.asFloat());		
-	}
-	else
+	if (move.timer_ > 0)
 	{
-		fontColor = &yellow;
+		if (move.timer_ <= 5)
+		{
+			fontColor = &red;
 
-		int timeLeft = timer_.asInt();
-		div_t split = div(timeLeft, 60);
-		str = S3D::formatStringBuffer("%02i:%02i", 
-			split.quot,
-			split.rem);
+			str = S3D::formatStringBuffer("%.1f", 
+				move.timer_.asFloat());		
+		}
+		else
+		{
+			fontColor = &yellow;
+
+			int timeLeft = move.timer_.asInt();
+			div_t split = div(timeLeft, 60);
+			str = S3D::formatStringBuffer("%02i:%02i", 
+				split.quot,
+				split.rem);
+		}
 	}
 
 	float width = GLWFont::instance()->getGameFont()->getWidth(20, str);	
-	float wHeight = (float) GLViewPort::getHeight();
-	float wWidth = (float) GLViewPort::getWidth();
+
+	GLWFont::instance()->getGameShadowFont()->draw(
+		GLWColors::black, 20, (wWidth/2.0f) - (width / 2) - 2,
+		wHeight - 50.0f + 2, 0.0f, 
+		str);
 	GLWFont::instance()->getGameFont()->draw(
 		*fontColor, 20, (wWidth/2.0f) - (width / 2),
 		wHeight - 50.0f, 0.0f, 
 		str);
 
-	if (playerId_ != 0)
+	if (move.playerId_ != 0)
 	{
-		Tank *tank = ScorchedClient::instance()->getTankContainer().getTankById(playerId_);
+		Tank *tank = ScorchedClient::instance()->getTankContainer().
+			getTankById(move.playerId_);
 		if (tank)
 		{
+			tank->getAvatar().getTexture()->draw();
+
 			float playerWidth = GLWFont::instance()->getGameFont()->getWidth(14, tank->getTargetName());
-			GLWFont::instance()->getGameFont()->drawWidthRhs(
-				200.0f, darkYellow, 14, (wWidth/2.0f) - (width / 2) - playerWidth - 10.0f,
-				wHeight - 47.0f, 0.0f, 
+			float playerLeft = (wWidth/2.0f) - (width / 2) - playerWidth - 10.0f;
+			float playerTop = wHeight - 47.0f;
+
+			glColor3f(1.0f, 1.0f, 1.0f);
+			glBegin(GL_QUADS);
+				glTexCoord2f(0.0f,1.0f); glVertex2f(playerLeft - 25.0f, playerTop + 15.0f);
+				glTexCoord2f(0.0f,0.0f); glVertex2f(playerLeft - 25.0f, playerTop - 5.0f);
+				glTexCoord2f(1.0f,0.0f); glVertex2f(playerLeft - 5.0f, playerTop - 5.0f);
+				glTexCoord2f(1.0f,1.0f); glVertex2f(playerLeft - 5.0f, playerTop + 15.0f);
+			glEnd();
+
+			{
+				GLState tState(GLState::TEXTURE_OFF);
+				glColor3f(0.0f, 0.0f, 0.0f);
+				glBegin(GL_LINE_LOOP);
+					glVertex2f(playerLeft - 25.0f, playerTop + 15.0f);
+					glVertex2f(playerLeft - 25.0f, playerTop - 5.0f);
+					glVertex2f(playerLeft - 5.0f, playerTop - 5.0f);
+					glVertex2f(playerLeft - 5.0f, playerTop + 15.0f);
+				glEnd();
+			}
+
+			GLWFont::instance()->getGameShadowFont()->draw(
+				GLWColors::black, 14, playerLeft - 1,
+				playerTop + 1, 0.0f, 
+				tank->getTargetName());
+			GLWFont::instance()->getGameFont()->draw(
+				tank->getColor(), 14, playerLeft,
+				playerTop, 0.0f, 
 				tank->getTargetName());
 
 			LANG_RESOURCE_VAR(buyingString, "BUYING", "Buying");
 			LANG_RESOURCE_VAR(playingString, "PLAYING", "Playing");
 
-			GLWFont::instance()->getGameFont()->drawWidthRhs(
-				200.0f, darkYellow, 14, (wWidth/2.0f) + (width / 2) + 10.0f,
-				wHeight - 47.0f, 0.0f, 
-				type_==eBuying?buyingString:playingString);
+			float typeLeft = (wWidth/2.0f) + (width / 2) + 10.0f;
+			GLWFont::instance()->getGameShadowFont()->draw(
+				GLWColors::black, 14, typeLeft - 1,
+				playerTop + 1, 0.0f, 
+				move.type_==eBuying?buyingString:playingString);
+			GLWFont::instance()->getGameFont()->draw(
+				darkYellow, 14, typeLeft,
+				playerTop, 0.0f, 
+				move.type_==eBuying?buyingString:playingString);
 		}
 	}
 }

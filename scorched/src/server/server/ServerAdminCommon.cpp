@@ -105,7 +105,7 @@ bool ServerAdminCommon::kickPlayer(ServerAdminSessions::Credential &credential, 
 
 	adminLog(ChannelText("info",
 		"ADMIN_KICK",
-		"\"{0}\" admin kick \"{1}\"",
+		"\"{0}\" admin kick [p:{1}]",
 		credential.username,
 		targetTank->getTargetName()));
 	ServerCommon::kickPlayer(
@@ -122,7 +122,7 @@ bool ServerAdminCommon::poorPlayer(ServerAdminSessions::Credential &credential, 
 
 	adminLog(ChannelText("info",
 		"ADMIN_POOR",
-		"\"{0}\" admin poor \"{1}\"",
+		"\"{0}\" admin poor [p:{1}]",
 		credential.username,
 		targetTank->getTargetName()));
 	targetTank->getScore().setMoney(0);
@@ -140,7 +140,7 @@ bool ServerAdminCommon::banPlayer(ServerAdminSessions::Credential &credential, u
 
 	adminLog(ChannelText("info",
 		"ADMIN_BAN",
-		"\"{0}\" admin ban \"{1}\"",
+		"\"{0}\" admin ban [p:{1}]",
 		credential.username,
 		targetTank->getTargetName()));
 	internalBanPlayer(
@@ -160,7 +160,7 @@ bool ServerAdminCommon::slapPlayer(ServerAdminSessions::Credential &credential, 
 
 	adminLog(ChannelText("info",
 		"ADMIN_SLAP",
-		"\"{0}\" admin slap \"{1}\" {2}",
+		"\"{0}\" admin slap [p:{1}] {2}",
 		credential.username,
 		targetTank->getTargetName(),
 		slap));
@@ -179,7 +179,7 @@ bool ServerAdminCommon::flagPlayer(ServerAdminSessions::Credential &credential, 
 
 	adminLog(ChannelText("info",
 		"ADMIN_FLAG",
-		"\"{0}\" admin flag \"{1}\"",
+		"\"{0}\" admin flag [p:{1}]",
 		credential.username,
 		targetTank->getTargetName()));
 	internalBanPlayer(
@@ -199,7 +199,7 @@ bool ServerAdminCommon::mutePlayer(ServerAdminSessions::Credential &credential, 
 
 	adminLog(ChannelText("info",
 		mute?"ADMIN_MUTE":"ADMIN_UNMUTE",
-		mute?"\"{0}\" admin mute \"{1}\"":"\"{0}\" admin unmute \"{1}\"",
+		mute?"\"{0}\" admin mute [p:{1}]":"\"{0}\" admin unmute [p:{1}]",
 		credential.username,
 		targetTank->getTargetName()));
 	targetTank->getState().setMuted(mute); 
@@ -215,7 +215,7 @@ bool ServerAdminCommon::permMutePlayer(ServerAdminSessions::Credential &credenti
 
 	adminLog(ChannelText("info",
 		"ADMIN_PERMMUTE",
-		"\"{0}\" admin permmute \"{1}\"",
+		"\"{0}\" admin permmute [p:{1}]",
 		credential.username,
 		targetTank->getTargetName()));
 	internalBanPlayer(
@@ -236,7 +236,7 @@ bool ServerAdminCommon::unpermMutePlayer(ServerAdminSessions::Credential &creden
 
 	adminLog(ChannelText("info",
 		"ADMIN_UNPERMMUTE",
-		"\"{0}\" admin unpermmute \"{1}\"",
+		"\"{0}\" admin unpermmute [p:{1}]",
 		credential.username,
 		targetTank->getTargetName()));
 	internalBanPlayer(

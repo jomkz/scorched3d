@@ -451,7 +451,10 @@ bool OptionEntryEnum::setValueFromString(const std::string &string)
 	}
 
 	int val;
-	if (sscanf(string.c_str(), "%i", &val) != 1) return false;
+	if (sscanf(string.c_str(), "%i", &val) != 1)
+	{
+		return setValueFromString(getDefaultValueAsString());
+	}
 	return setValue(val);
 }
 

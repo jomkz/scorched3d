@@ -23,18 +23,26 @@
 #include <server/ServerSyncCheck.h>
 #include <server/ServerChannelManager.h>
 #include <server/ServerCommon.h>
+#include <server/ServerSimulator.h>
+#include <simactions/RoundStartSimAction.h>
+#include <simactions/TankTeamBallanceSimAction.h>
 #include <common/OptionsScorched.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
 
 ServerStatePlaying::ServerStatePlaying() : 
-	turns_(0)
+	turns_(0), nextRoundId_(0)
 {
 }
 
 ServerStatePlaying::~ServerStatePlaying()
 {
+}
+
+void ServerStatePlaying::roundFinished()
+{
+
 }
 
 bool ServerStatePlaying::showScore()
@@ -44,7 +52,24 @@ bool ServerStatePlaying::showScore()
 
 void ServerStatePlaying::enterState()
 {
+	// Start the round
+	fixed roundTime = ScorchedServer::instance()->
+		getOptionsGame().getRoundTime();
+	RoundStartSimAction *roundStart =
+		new RoundStartSimAction(++nextRoundId_, roundTime);
+	ScorchedServer::instance()->getServerSimulator().
+		addSimulatorAction(roundStart);
+
+	// Ballance any teams needing ballanced
+	TankTeamBallanceSimAction *teamBallance =
+		new TankTeamBallanceSimAction();
+	ScorchedServer::instance()->getServerSimulator().
+		addSimulatorAction(teamBallance);
+
+	// Reset the auto-sync check timer
 	ServerSyncCheck::instance()->enterState();
+
+	// Setup the correct turn algorithm for the game
 	switch (ScorchedServer::instance()->getOptionsGame().getTurnType().getValue())
 	{
 	case OptionsGame::TurnSequentialLooserFirst:
@@ -56,6 +81,7 @@ void ServerStatePlaying::enterState()
 		break;
 	}
 
+	// Start the turns
 	turns_->enterState();
 }
 
@@ -80,7 +106,7 @@ void ServerStatePlaying::moveFinished(ComsPlayedMoveMessage &playedMessage)
 			ServerChannelManager::instance()->sendText(
 				ChannelText("info",
 					"PLAYER_MISSED_SHOOT",
-					"Player \"{0}\" failed to move, allowed {1} more missed move(s)",
+					"[p:{0}] failed to move, allowed {1} more missed move(s)",
 					tank->getTargetName(),
 					allowedMissed - tank->getScore().getMissedMoves()),
 					true);

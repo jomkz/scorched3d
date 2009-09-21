@@ -32,8 +32,8 @@ TankStopMoveSimAction::TankStopMoveSimAction()
 {
 }
 
-TankStopMoveSimAction::TankStopMoveSimAction(unsigned int playerId, unsigned int moveId) :
-	playerId_(playerId), moveId_(moveId)
+TankStopMoveSimAction::TankStopMoveSimAction(unsigned int playerId) :
+	playerId_(playerId)
 {
 }
 
@@ -46,6 +46,13 @@ bool TankStopMoveSimAction::invokeAction(ScorchedContext &context)
 	Tank *tank = context.getTankContainer().getTankById(playerId_);
 	if (!tank) return true;
 
+	stopMove(context, tank);
+
+	return true;
+}
+
+void TankStopMoveSimAction::stopMove(ScorchedContext &context, Tank *tank)
+{
 	if (!context.getServerMode())
 	{
 		tank->getState().setMoveId(0);
@@ -57,20 +64,16 @@ bool TankStopMoveSimAction::invokeAction(ScorchedContext &context)
 #endif
 		}
 	}
-
-	return true;
 }
 
 bool TankStopMoveSimAction::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(playerId_);
-	buffer.addToBuffer(moveId_);
 	return true;
 }
 
 bool TankStopMoveSimAction::readMessage(NetBufferReader &reader)
 {
 	if (!reader.getFromBuffer(playerId_)) return false;
-	if (!reader.getFromBuffer(moveId_)) return false;
 	return true;
 }

@@ -18,27 +18,25 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_VisualTimerActionh_INCLUDE__)
-#define __INCLUDE_VisualTimerActionh_INCLUDE__
+#if !defined(__INCLUDE_RoundTimerActionh_INCLUDE__)
+#define __INCLUDE_RoundTimerActionh_INCLUDE__
 
-#include <actions/TimerAction.h>
-#include <lang/LangString.h>
+#include <actions/Action.h>
 
-class VisualTimerAction : public TimerAction
+class RoundTimerAction : public Action
 {
 public:
-	VisualTimerAction(unsigned int playerId, unsigned int moveId, 
-		fixed timeout, bool buying);
-	virtual ~VisualTimerAction();
+	RoundTimerAction(unsigned int roundId, fixed timeout);
+	virtual ~RoundTimerAction();
 
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
-	virtual void draw();
 
-	virtual std::string getActionType() { return "VisualTimerAction"; }
+	virtual std::string getActionType() { return "RoundTimerAction"; }
 
 protected:
-	LangString text_;
+	unsigned int roundId_;
+	fixed timeout_;
 };
 
 #endif

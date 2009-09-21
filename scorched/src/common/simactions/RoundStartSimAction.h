@@ -18,30 +18,27 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <actions/VisualTimerAction.h>
-#include <graph/ShotCountDown.h>
+#if !defined(AFX_RoundStartSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#define AFX_RoundStartSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
-VisualTimerAction::VisualTimerAction(unsigned int playerId, unsigned int moveId, 
-		fixed timeout, bool buying) :
-	TimerAction(playerId, moveId, timeout, buying)
-{
-}
+#include <simactions/SimAction.h>
 
-VisualTimerAction::~VisualTimerAction()
+class RoundStartSimAction : public SimAction
 {
-}
+public:
+	RoundStartSimAction();
+	RoundStartSimAction(unsigned int roundId, fixed timeout);
+	virtual ~RoundStartSimAction();
 
-void VisualTimerAction::init()
-{
-}
+	virtual bool invokeAction(ScorchedContext &context);
 
-void VisualTimerAction::simulate(fixed frameTime, bool &remove)
-{
-	TimerAction::simulate(frameTime, remove);
-}
+	virtual bool writeMessage(NetBuffer &buffer);
+	virtual bool readMessage(NetBufferReader &reader);
 
-void VisualTimerAction::draw()
-{
-	ShotCountDown::instance()->show(timeout_, 
-		buying_?ShotCountDown::eBuying:ShotCountDown::ePlaying, playerId_);
-}
+REGISTER_CLASS_HEADER(RoundStartSimAction);
+protected:
+	unsigned int roundId_;
+	fixed timeout_;
+};
+
+#endif // !defined(AFX_RoundStartSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

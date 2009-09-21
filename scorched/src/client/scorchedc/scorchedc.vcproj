@@ -833,19 +833,19 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\actions\TimerAction.cpp"
+				RelativePath="..\..\common\actions\VisualMoveTimerAction.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\actions\TimerAction.h"
+				RelativePath="..\..\common\actions\VisualMoveTimerAction.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\actions\VisualTimerAction.cpp"
+				RelativePath="..\..\common\actions\VisualRoundTimerAction.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\actions\VisualTimerAction.h"
+				RelativePath="..\..\common\actions\VisualRoundTimerAction.h"
 				>
 			</File>
 		</Filter>
@@ -2548,6 +2548,14 @@
 				RelativePath="..\..\common\placement\PlacementTypeTree.h"
 				>
 			</File>
+			<Filter
+				Name="scorchedc"
+				>
+				<File
+					RelativePath=".\main.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="weapons"
@@ -3114,14 +3122,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\XML\XMLStringBuffer.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="scorchedc"
-			>
-			<File
-				RelativePath=".\main.cpp"
 				>
 			</File>
 		</Filter>
@@ -6018,6 +6018,22 @@
 			</File>
 			<File
 				RelativePath="..\..\common\simactions\PlayMovesSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\RoundStartSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\RoundStartSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\RoundStopSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\RoundStopSimAction.h"
 				>
 			</File>
 			<File

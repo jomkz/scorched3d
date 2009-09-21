@@ -73,24 +73,16 @@ void ServerState::simulate()
 		}
 		break;
 	case ServerPlayingState:
-		if (enoughPlayers_.enoughPlayers())
+		if (playing_.showScore() || 
+			!enoughPlayers_.enoughPlayers())
 		{
-			if (playing_.showScore())
-			{
-				serverState_ = ServerScoreState;
-				score_.enterState(enoughPlayers_);
-			}
-			else 
-			{
-				playing_.simulate();
-			}
+			serverState_ = ServerScoreState;
+			score_.enterState(enoughPlayers_);
 		}
-		else
+		else 
 		{
-			startingMatch_.stoppingMatch();
-			serverState_ = ServerWaitingForPlayersState;
-		}
-		
+			playing_.simulate();
+		}	
 		break;
 	case ServerScoreState:
 		if (score_.simulate())
@@ -124,10 +116,18 @@ void ServerState::moveFinished(ComsPlayedMoveMessage &message)
 
 void ServerState::shotsFinished(unsigned int moveId)
 {
+	if (getState() != ServerState::ServerPlayingState) return;
 	playing_.shotsFinished(moveId);
 }
 
 void ServerState::scoreFinished()
 {
+	if (getState() != ServerState::ServerScoreState) return;
 	score_.scoreFinished();
+}
+
+void ServerState::roundFinished()
+{
+	if (getState() != ServerState::ServerPlayingState) return;
+	playing_.roundFinished();
 }

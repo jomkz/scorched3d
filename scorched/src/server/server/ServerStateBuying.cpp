@@ -220,6 +220,6 @@ void ServerStateBuying::buyingFinished(ComsPlayedMoveMessage &playedMessage)
 	tank->getState().setMoveId(0);
 
 	TankStopMoveSimAction *tankSimAction = 
-		new TankStopMoveSimAction(playerId, moveId);
+		new TankStopMoveSimAction(playerId);
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);	
 }

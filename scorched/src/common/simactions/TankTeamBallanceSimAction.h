@@ -36,8 +36,6 @@ public:
 	virtual bool writeMessage(NetBuffer &buffer);
 	virtual bool readMessage(NetBufferReader &reader);
 
-	static bool needsTeamBallance(ScorchedContext &context);
-
 REGISTER_CLASS_HEADER(TankTeamBallanceSimAction);
 protected:
 	static void minMaxTeams(ScorchedContext &context,

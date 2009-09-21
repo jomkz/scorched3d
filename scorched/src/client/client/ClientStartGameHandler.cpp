@@ -66,8 +66,6 @@ void ClientStartGameHandler::startGame(TankStartMoveSimAction *action)
 
 	ScorchedClient::instance()->getTankContainer().setCurrentPlayerId(
 		action->getPlayerId());
-	ScorchedClient::instance()->getTankContainer().setCurrentMoveId(
-		action->getMoveId());
 	Tank *current = ScorchedClient::instance()->getTankContainer().getCurrentTank();
 	if (!current) 
 	{

@@ -22,6 +22,7 @@
 #include <client/ScorchedClient.h>
 #include <tank/TankCOntainer.h>
 #include <tank/TankScore.h>
+#include <tank/TankState.h>
 
 BuyAccessoryDialogTankInfo *BuyAccessoryDialogTankInfo::instance_ = 0;
 
@@ -50,6 +51,7 @@ void BuyAccessoryDialogTankInfo::set()
 		tankId = tank->getPlayerId();
 		tankMoney = tank->getScore().getMoney();
 		tankName = tank->getTargetName();
+		tankMoveId = tank->getState().getMoveId();
 	} 
 	else
 	{
@@ -59,5 +61,6 @@ void BuyAccessoryDialogTankInfo::set()
 		tankName = LangString();
 		tankMoney = 0;
 		tankId = 0;
+		tankMoveId = 0;
 	}
 }

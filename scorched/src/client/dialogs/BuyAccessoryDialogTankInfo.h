@@ -34,6 +34,7 @@ public:
 	LangString tankName;
 	int tankMoney;
 	unsigned int tankId;
+	unsigned int tankMoveId;
 
 	void set();
 

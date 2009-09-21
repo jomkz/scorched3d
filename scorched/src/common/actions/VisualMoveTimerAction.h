@@ -18,28 +18,22 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_TimerActionh_INCLUDE__)
-#define __INCLUDE_TimerActionh_INCLUDE__
+#if !defined(__INCLUDE_VisualMoveTimerActionh_INCLUDE__)
+#define __INCLUDE_VisualMoveTimerActionh_INCLUDE__
 
-#include <actions/Action.h>
-
-class TimerAction : public Action
+#include <actions/MoveTimerAction.h>
+class VisualMoveTimerAction : public MoveTimerAction
 {
 public:
-	TimerAction(unsigned int playerId, unsigned int moveId, 
+	VisualMoveTimerAction(unsigned int playerId, unsigned int moveId, 
 		fixed timeout, bool buying);
-	virtual ~TimerAction();
+	virtual ~VisualMoveTimerAction();
 
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
-
-	virtual std::string getActionType() { return "TimerAction"; }
+	virtual void draw();
 
 protected:
-	unsigned int playerId_;
-	unsigned int moveId_;
-	fixed timeout_;
-	bool buying_;
 };
 
 #endif

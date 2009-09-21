@@ -18,50 +18,22 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ShotCountDownh_INCLUDE__)
-#define __INCLUDE_ShotCountDownh_INCLUDE__
+#if !defined(__INCLUDE_VisualRoundTimerActionh_INCLUDE__)
+#define __INCLUDE_VisualRoundTimerActionh_INCLUDE__
 
-#include <engine/GameStateI.h>
-#include <common/Fixed.h>
+#include <actions/RoundTimerAction.h>
 
-class ShotCountDown : public GameStateI
+class VisualRoundTimerAction : public RoundTimerAction
 {
 public:
-	static ShotCountDown *instance();
+	VisualRoundTimerAction(unsigned int roundId, fixed timeout);
+	virtual ~VisualRoundTimerAction();
 
-	enum TimerType
-	{
-		ePlaying,
-		eBuying
-	};
-
-	void showMoveTime(fixed timer, TimerType type, unsigned int playerId);
-	void showRoundTime(fixed timer);
-
-	//Inherited from GameStateI
-	virtual void draw(const unsigned state);
+	virtual void init();
+	virtual void simulate(fixed frameTime, bool &remove);
+	virtual void draw();
 
 protected:
-	static ShotCountDown *instance_;
-
-	struct MoveInfo
-	{
-		fixed timer_;
-		TimerType type_;
-		unsigned int playerId_;
-		bool show_;
-	} move;
-	struct RoundInfo
-	{
-		fixed timer_;
-		bool show_;
-	} round;
-
-	void drawMove();
-
-private:
-	ShotCountDown();
-	virtual ~ShotCountDown ();
 };
 
 #endif

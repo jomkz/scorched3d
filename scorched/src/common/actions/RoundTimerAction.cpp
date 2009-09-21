@@ -18,36 +18,31 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <actions/TimerAction.h>
+#include <actions/RoundTimerAction.h>
 #include <engine/ScorchedContext.h>
-#include <tank/TankState.h>
 #include <tank/TankContainer.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerState.h>
-#include <coms/ComsPlayedMoveMessage.h>
 
-TimerAction::TimerAction(unsigned int playerId, unsigned int moveId, 
-	fixed timeout, bool buying) :
+RoundTimerAction::RoundTimerAction(unsigned int roundId, fixed timeout) :
 	Action(Action::ACTION_NOT_REFERENCED),
-	playerId_(playerId), moveId_(moveId), 
-	timeout_(timeout), buying_(buying)
+	roundId_(roundId), timeout_(timeout)
 {
 }
 
-TimerAction::~TimerAction()
+RoundTimerAction::~RoundTimerAction()
 {
 }
 
-void TimerAction::init()
+void RoundTimerAction::init()
 {
 }
 
-void TimerAction::simulate(fixed frameTime, bool &remove)
+void RoundTimerAction::simulate(fixed frameTime, bool &remove)
 {
 	timeout_ -= frameTime;
 
-	Tank *tank = context_->getTankContainer().getTankById(playerId_);
-	if (!tank || tank->getState().getMoveId() != moveId_)
+	if (context_->getTankContainer().getCurrentRoundId() != roundId_)
 	{
 		remove = true;
 	}
@@ -56,15 +51,7 @@ void TimerAction::simulate(fixed frameTime, bool &remove)
 		remove = true;
 		if (context_->getServerMode())
 		{
-			ComsPlayedMoveMessage message(playerId_, moveId_, ComsPlayedMoveMessage::eTimeout);
-			if (buying_)
-			{
-				ScorchedServer::instance()->getServerState().buyingFinished(message);
-			}
-			else
-			{
-				ScorchedServer::instance()->getServerState().moveFinished(message);
-			}
+			ScorchedServer::instance()->getServerState().roundFinished();
 		}
 	}	
 	Action::simulate(frameTime, remove);

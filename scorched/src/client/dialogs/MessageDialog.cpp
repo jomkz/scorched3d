@@ -94,7 +94,7 @@ void MessageDialog::draw()
 		30, currentText_);
 
 	float x = (wWidth/2.0f) - (textWidth / 2) - 10.0f;
-	float y = wHeight - 60.0f;
+	float y = wHeight - 180.0f;
 
 	setW(textWidth + 20.0f);
 	setH(40);

@@ -190,7 +190,7 @@ void ServerMessageHandler::destroyPlayer(unsigned int tankId, const char *reason
 	ServerChannelManager::instance()->sendText(
 		ChannelText("info", 
 			"PLAYER_DISCONNECTED", 
-			"Player disconnected \"{0}\" ({1})",
+			"Player disconnected [p:{0}] ({1})",
 			tank->getTargetName(), reason),
 		true);
 

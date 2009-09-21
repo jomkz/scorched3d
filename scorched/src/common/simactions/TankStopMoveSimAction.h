@@ -23,25 +23,24 @@
 
 #include <simactions/SimAction.h>
 
+class Tank;
 class TankStopMoveSimAction : public SimAction
 {
 public:
 	TankStopMoveSimAction();
-	TankStopMoveSimAction(unsigned int playerId, unsigned int moveId);
+	TankStopMoveSimAction(unsigned int playerId);
 	virtual ~TankStopMoveSimAction();
-
-	unsigned int getPlayerId() { return playerId_; }
-	unsigned int getMoveId() { return moveId_; }
 
 	virtual bool invokeAction(ScorchedContext &context);
 
 	virtual bool writeMessage(NetBuffer &buffer);
 	virtual bool readMessage(NetBufferReader &reader);
 
+	static void stopMove(ScorchedContext &context, Tank *tank);
+
 REGISTER_CLASS_HEADER(TankStopMoveSimAction);
 protected:
 	unsigned int playerId_;
-	unsigned int moveId_;
 };
 
 #endif // !defined(AFX_TankStopMoveSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
