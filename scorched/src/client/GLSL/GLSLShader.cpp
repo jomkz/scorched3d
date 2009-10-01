@@ -32,10 +32,10 @@ GLSLShader::GLSLShader(const char *filename, Type stype,
 	switch (stype) 
 	{
 	case VERTEX:
-		id_ = glCreateShader(GL_VERTEX_SHADER);
+		id_ = glCreateShaderObjectARB(GL_VERTEX_SHADER);
 		break;
 	case FRAGMENT:
-		id_ = glCreateShader(GL_FRAGMENT_SHADER);
+		id_ = glCreateShaderObjectARB(GL_FRAGMENT_SHADER);
 		break;
 	default:
 		DIALOG_ASSERT(0); // ("invalid shader type");
@@ -64,22 +64,21 @@ GLSLShader::GLSLShader(const char *filename, Type stype,
 	fclose(in);
 
 	const char* prg_cstr = prg.c_str();
-	glShaderSource(id_, 1, &prg_cstr, 0);
+	glShaderSourceARB(id_, 1, &prg_cstr, 0);
 
-	glCompileShader(id_);
+	glCompileShaderARB(id_);
 
 	GLint compiled = GL_FALSE;
-	glGetShaderiv(id_, GL_COMPILE_STATUS, &compiled);
-
-	// get compile log
-	GLint maxlength = 0;
-	glGetShaderiv(id_, GL_INFO_LOG_LENGTH, &maxlength);
-	std::string logText(maxlength+1, ' ');
-	GLsizei length = 0;
-	glGetShaderInfoLog(id_, maxlength, &length, &logText[0]);
-
+	glGetObjectParameterivARB(id_, GL_OBJECT_COMPILE_STATUS_ARB, &compiled);
 	if (compiled == GL_FALSE) 
 	{
+		// get compile log
+		GLint maxlength = 0;
+		glGetObjectParameterivARB(id_, GL_OBJECT_INFO_LOG_LENGTH_ARB, &maxlength);
+		std::string logText(maxlength+1, ' ');
+		GLsizei length = 0;
+		glGetInfoLogARB(id_, maxlength, &length, &logText[0]);		
+		
 		S3D::dialogExit("GLSLShader", 
 			S3D::formatStringBuffer("Shader compiling failed %s : %s", filename, logText.c_str()));
 	}
@@ -87,5 +86,5 @@ GLSLShader::GLSLShader(const char *filename, Type stype,
 
 GLSLShader::~GLSLShader()
 {
-	glDeleteShader(id_);
+	glDeleteObjectARB(id_);
 }

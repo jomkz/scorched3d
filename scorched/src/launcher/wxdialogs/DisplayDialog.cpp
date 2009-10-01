@@ -64,6 +64,7 @@ public:
 
 	wxNotebook *book_;
 	wxPanel *mainPanel_;
+	wxPanel *speedPanel_;
 	wxPanel *troublePanel_;
 	wxPanel *otherPanel_;
 	wxPanel *identPanel_;
@@ -132,11 +133,19 @@ DisplayFrame::DisplayFrame() :
 	mainPanel_->SetAutoLayout(TRUE);
 	mainPanel_->SetSizer(mainPanelSizer);
 	
+	// Speed Panel
+	speedPanel_ = new wxPanel(book_, -1);
+	wxSizer *speedPanelSizer = new wxBoxSizer(wxVERTICAL);
+	createSpeedControls(speedPanel_, speedPanelSizer);
+	book_->AddPage(speedPanel_, wxT("&Speed"));
+	speedPanel_->SetAutoLayout(TRUE);
+	speedPanel_->SetSizer(speedPanelSizer);
+	
 	// Trouble Panel
 	troublePanel_ = new wxPanel(book_, -1);
 	wxSizer *troublePanelSizer = new wxBoxSizer(wxVERTICAL);
 	createTroubleControls(troublePanel_, troublePanelSizer);
-	book_->AddPage(troublePanel_, wxT("&Speed/Troubleshooting"));
+	book_->AddPage(troublePanel_, wxT("&Troubleshooting"));
 	troublePanel_->SetAutoLayout(TRUE);
 	troublePanel_->SetSizer(troublePanelSizer);
 

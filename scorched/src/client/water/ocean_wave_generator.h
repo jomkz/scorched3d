@@ -26,7 +26,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include <common/Vector.h>
 #ifdef __DARWIN__
-#include <FFTW3/fftw3.h>
+#include <fftw3.h>
 #else
 #include "fftw3.h"
 #endif

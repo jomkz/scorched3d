@@ -30,7 +30,7 @@ GLSLProgram::GLSLProgram() :
 {
 	DIALOG_ASSERT(GLStateExtension::hasShaders());
 
-	id_ = glCreateProgram();
+	id_ = glCreateProgramObjectARB();
 
 	DIALOG_ASSERT(id_);// ("can't create glsl program");
 }
@@ -49,22 +49,22 @@ GLSLProgram::~GLSLProgram()
 		it != attached_shaders_.end(); 
 		it++)
 	{
-		glDetachShader(id_, (*it)->getId());
+		glDetachObjectARB(id_, (*it)->getId());
 	}
 
-	glDeleteProgram(id_);
+	glDeleteObjectARB(id_);
 }
 
 void GLSLProgram::attach(GLSLShader &s)
 {
-	glAttachShader(id_, s.getId());
+	glAttachObjectARB(id_, s.getId());
 	attached_shaders_.push_front(&s);
 	linked_ = false;
 }
 
 void GLSLProgram::detach(GLSLShader &s)
 {
-	glDetachShader(id_, s.getId());
+	glDetachObjectARB(id_, s.getId());
 
 	std::list<GLSLShader*>::iterator it;
 	for (it = attached_shaders_.begin(); 
@@ -72,7 +72,7 @@ void GLSLProgram::detach(GLSLShader &s)
 	{
 		if (*it == &s) 
 		{
-			glDetachShader(id_, (*it)->getId());
+			glDetachObjectARB(id_, (*it)->getId());
 			it = attached_shaders_.erase(it);
 		} else 
 		{
@@ -84,28 +84,30 @@ void GLSLProgram::detach(GLSLShader &s)
 
 void GLSLProgram::link()
 {
-	glLinkProgram(id_);
+	glLinkProgramARB(id_);
+	
 	GLint waslinked = GL_FALSE;
-	glGetProgramiv(id_, GL_LINK_STATUS, &waslinked);
-
-	if (!waslinked) 
+	glGetObjectParameterivARB(id_, GL_OBJECT_LINK_STATUS_ARB, &waslinked);
+	if (waslinked == GL_FALSE) 
 	{
+		// get link log
 		GLint maxlength = 0;
-		glGetProgramiv(id_, GL_INFO_LOG_LENGTH, &maxlength);
-		std::string log(maxlength+1, ' ');
+		glGetObjectParameterivARB(id_, GL_OBJECT_INFO_LOG_LENGTH_ARB, &maxlength);
+		std::string logText(maxlength+1, ' ');
 		GLsizei length = 0;
-		glGetProgramInfoLog(id_, maxlength, &length, &log[0]);
+		glGetInfoLogARB(id_, maxlength, &length, &logText[0]);		
+		
 		S3D::dialogExit("GLSLProgram", 
-			S3D::formatStringBuffer("linking of program failed : %s", log.c_str()));
+			S3D::formatStringBuffer("linking of program failed : %s", logText.c_str()));
 	}
-
+	
 	linked_ = true;
 }
 
 void GLSLProgram::use() const
 {
 	DIALOG_ASSERT(linked_);
-	glUseProgram(id_);
+	glUseProgramObjectARB(id_);
 	used_program_ = this;
 }
 
@@ -113,56 +115,56 @@ void GLSLProgram::set_gl_texture(GLTexture &tex, const char *texname, unsigned t
 {
 	DIALOG_ASSERT(used_program_ == this);
 
-	GLint uniloc = glGetUniformLocation(id_, texname);
-	glActiveTexture(GL_TEXTURE0 + texunit);
+	GLint uniloc = glGetUniformLocationARB(id_, texname);
+	glActiveTextureARB(GL_TEXTURE0 + texunit);
 	tex.draw(true);
-	glUniform1i(uniloc, texunit);
+	glUniform1iARB(uniloc, texunit);
 }
 
 void GLSLProgram::set_gl_texture(GLShadowFrameBuffer &tex, const char *texname, unsigned texunit) const
 {
 	DIALOG_ASSERT(used_program_ == this);
 
-	GLint uniloc = glGetUniformLocation(id_, texname);
-	glActiveTexture(GL_TEXTURE0 + texunit);
+	GLint uniloc = glGetUniformLocationARB(id_, texname);
+	glActiveTextureARB(GL_TEXTURE0 + texunit);
 	tex.bindDepthTexture();
-	glUniform1i(uniloc, texunit);
+	glUniform1iARB(uniloc, texunit);
 }
 
 void GLSLProgram::set_gl_texture_unit(const char *texname, unsigned texunit) const
 {
 	DIALOG_ASSERT(used_program_ == this);
 
-	GLint uniloc = glGetUniformLocation(id_, texname);
-	glActiveTexture(GL_TEXTURE0 + texunit);
-	glUniform1i(uniloc, texunit);
+	GLint uniloc = glGetUniformLocationARB(id_, texname);
+	glActiveTextureARB(GL_TEXTURE0 + texunit);
+	glUniform1iARB(uniloc, texunit);
 }
 
 void GLSLProgram::set_uniform(const char *name, const Vector& value) const
 {
 	DIALOG_ASSERT(used_program_ == this);
 
-	GLint loc = glGetUniformLocation(id_, name);
-	glUniform3f(loc, value[0], value[1], value[2]);
+	GLint loc = glGetUniformLocationARB(id_, name);
+	glUniform3fARB(loc, value[0], value[1], value[2]);
 }
 
 void GLSLProgram::set_uniform(const char *name, const float value) const
 {
 	DIALOG_ASSERT(used_program_ == this);
 
-	GLint loc = glGetUniformLocation(id_, name);
-	glUniform1f(loc, value);
+	GLint loc = glGetUniformLocationARB(id_, name);
+	glUniform1fARB(loc, value);
 }
 
 unsigned GLSLProgram::get_vertex_attrib_index(const char *name) const
 {
 	DIALOG_ASSERT(used_program_ == this);
 
-	return glGetAttribLocation(id_, name);
+	return glGetAttribLocationARB(id_, name);
 }
 
 void GLSLProgram::use_fixed()
 {
-	glUseProgram(0);
+	glUseProgramObjectARB(0);
 	used_program_ = 0;
 }

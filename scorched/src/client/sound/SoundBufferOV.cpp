@@ -24,7 +24,6 @@
 #include <sound/Sound.h>
 #ifdef __DARWIN__
 #include <OpenAL/al.h>
-#include <OpenAL/alut.h>
 #else
 #include <AL/al.h>
 #include <AL/alut.h>

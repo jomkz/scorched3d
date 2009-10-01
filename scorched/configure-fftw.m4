@@ -17,7 +17,7 @@ AC_ARG_ENABLE(fftwtest, [  --disable-fftwtest       Do not try to compile and ru
   fi
 
 if test `uname` == Darwin; then
-  FFTW_LIBS="$FFTW_LIBS -framework FFTW3"
+  FFTW_LIBS="$FFTW_LIBS -lfftw3"
 else        
   FFTW_LIBS="$FFTW_LIBS -lfftw3f"
 fi
@@ -46,11 +46,7 @@ dnl
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef __DARWIN__
-#include <fftw3/fftw3.h>
-#else
 #include <fftw3.h>
-#endif
 
 #ifdef FFTW_USE_DOUBLE
 #define FFT_COMPLEX_TYPE fftw_complex
@@ -100,11 +96,7 @@ int main ()
        LIBS="$LIBS $FFTW_LIBS"
        AC_TRY_LINK([
 #include <stdio.h>
-#ifdef __DARWIN__
-#include <fftw3/fftw3.h>
-#else
 #include <fftw3.h>
-#endif
 ],     [ return 0; ],
        [ echo "*** The test program compiled, but did not run. This usually means"
        echo "*** that the run-time linker is not finding FFTW or finding the wrong"
