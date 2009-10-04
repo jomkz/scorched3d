@@ -157,7 +157,9 @@ void ServerTurnsSimultaneous::simulate()
 
 void ServerTurnsSimultaneous::makeMove(Tank *tank)
 {
-	playMove(tank, nextMoveId_);
+	fixed shotTime = fixed(
+		ScorchedServer::instance()->getOptionsGame().getShotTime());
+	playMove(tank, nextMoveId_, shotTime);
 }
 
 void ServerTurnsSimultaneous::moveFinished(ComsPlayedMoveMessage &playedMessage)
@@ -182,7 +184,7 @@ void ServerTurnsSimultaneous::moveFinished(ComsPlayedMoveMessage &playedMessage)
 
 void ServerTurnsSimultaneous::playShots()
 {
-	PlayMovesSimAction *movesAction = new PlayMovesSimAction(nextMoveId_);
+	PlayMovesSimAction *movesAction = new PlayMovesSimAction(nextMoveId_, true, true);
 
 	std::map<unsigned int, ComsPlayedMoveMessage*>::iterator itor;
 	for (itor = moves_.begin();
@@ -209,7 +211,5 @@ void ServerTurnsSimultaneous::shotsFinished(unsigned int moveId)
 
 bool ServerTurnsSimultaneous::finished()
 {
-	if (playingMoves_) return false;
-
 	return ServerTurns::showScore();
 }

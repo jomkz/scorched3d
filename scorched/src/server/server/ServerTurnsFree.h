@@ -18,30 +18,31 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerTurnsh_INCLUDE__)
-#define __INCLUDE_ServerTurnsh_INCLUDE__
+#if !defined(__INCLUDE_ServerTurnsFreeh_INCLUDE__)
+#define __INCLUDE_ServerTurnsFreeh_INCLUDE__
+
+#include <set>
+#include <list>
+#include <server/ServerTurns.h>
 
 class Tank;
 class ComsPlayedMoveMessage;
-class fixed;
-class ServerTurns 
+class ServerTurnsFree : public ServerTurns
 {
 public:
-	ServerTurns();
-	virtual ~ServerTurns();
+	ServerTurnsFree();
+	virtual ~ServerTurnsFree();
 
-	virtual void enterState() = 0;
-	virtual void simulate() = 0;
-	virtual bool finished() = 0;
+	virtual void enterState();
+	virtual void simulate();
+	virtual bool finished();
 
-	virtual void moveFinished(ComsPlayedMoveMessage &playedMessage) = 0;
-	virtual void shotsFinished(unsigned int moveId) = 0;
+	virtual void moveFinished(ComsPlayedMoveMessage &playedMessage);
+	virtual void shotsFinished(unsigned int moveId);
 
 protected:
-	bool showScore();
-
-	void playMove(Tank *tank, unsigned int moveId, fixed shotTime);
-	void playMoveFinished(Tank *tank);
+	unsigned int nextMoveId_;
+	std::list<unsigned int> waitingPlayers_;
 };
 
 #endif

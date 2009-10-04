@@ -58,6 +58,7 @@ protected:
 	} round;
 
 	void drawMove();
+	void drawRound();
 
 private:
 	ShotCountDown();

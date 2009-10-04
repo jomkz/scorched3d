@@ -32,9 +32,11 @@ static OptionEntryEnum::EnumEntry scoreEnum[] =
 
 static OptionEntryEnum::EnumEntry turnEnum[] =
 {
-	{ "TurnSimultaneous", 0 },
-	{ "TurnSequentialLooserFirst", 1 },
-	{ "TurnSequentialRandom", 2 },
+	{ "TurnSimultaneous", OptionsGame::TurnSimultaneous },
+	{ "TurnSequentialLooserFirst", OptionsGame::TurnSequentialLooserFirst },
+	{ "TurnSequentialRandom", OptionsGame::TurnSequentialRandom },
+	{ "TurnFree", OptionsGame::TurnFree },
+	{ "TurnTimes", OptionsGame::TurnTimed },
 	{ "", -1 }
 };
 
@@ -179,7 +181,7 @@ OptionsGame::OptionsGame() :
 	removeTime_(options_, "RemoveTime", 
 		"The amount of time each player has before being removed when disconected", 0, 10, 0, 90, 5),
 	allowedMissedMoves_(options_, "AllowedMissedMoves",
-		"The number of moves a player is allowed to miss (due to the shot timer)", 0, 3, 0, 10, 1),
+		"The number of moves a player is allowed to miss (due to the shot timer)", 0, 0, 0, 10, 1),
 	roundScoreTime_(options_, "RoundScoreTime", 
 		"The amount of time to show the end of each round for", 0, 5, 0, 30, 1),
 	scoreTime_(options_, "ScoreTime", 

@@ -81,10 +81,7 @@ bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 			}
 			else
 			{
-				bool actionSyncCheck = context.getOptionsGame().getActionSyncCheck();
-				context.getOptionsGame().getMainOptions().getActionSyncCheckEntry().setValue(false);
 				tank->getTankAI()->playMove(moveId_);
-				context.getOptionsGame().getMainOptions().getActionSyncCheckEntry().setValue(actionSyncCheck);
 			}
 		}
 		else

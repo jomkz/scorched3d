@@ -21,8 +21,6 @@
 #include <server/ServerStatePlaying.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerSyncCheck.h>
-#include <server/ServerChannelManager.h>
-#include <server/ServerCommon.h>
 #include <server/ServerSimulator.h>
 #include <simactions/RoundStartSimAction.h>
 #include <simactions/TankTeamBallanceSimAction.h>
@@ -32,7 +30,7 @@
 #include <tank/TankScore.h>
 
 ServerStatePlaying::ServerStatePlaying() : 
-	turns_(0), nextRoundId_(0)
+	turns_(0), nextRoundId_(0), roundFinished_(false)
 {
 }
 
@@ -42,16 +40,18 @@ ServerStatePlaying::~ServerStatePlaying()
 
 void ServerStatePlaying::roundFinished()
 {
-
+	roundFinished_ = true;
 }
 
 bool ServerStatePlaying::showScore()
 {
-	return turns_->finished();
+	return roundFinished_ || turns_->finished();
 }
 
 void ServerStatePlaying::enterState()
 {
+	roundFinished_ = false;
+
 	// Start the round
 	fixed roundTime = ScorchedServer::instance()->
 		getOptionsGame().getRoundTime();
@@ -76,6 +76,9 @@ void ServerStatePlaying::enterState()
 	case OptionsGame::TurnSequentialRandom:
 		turns_ = &turnsSequential_;
 		break;
+	case OptionsGame::TurnFree:
+		turns_ = &turnsFree_;
+		break;
 	default:
 		turns_ = &turnsSimultaneous_;
 		break;
@@ -92,39 +95,6 @@ void ServerStatePlaying::simulate()
 
 void ServerStatePlaying::moveFinished(ComsPlayedMoveMessage &playedMessage)
 {
-	Tank *tank = ScorchedServer::instance()->getTankContainer().
-		getTankById(playedMessage.getPlayerId());
-	if (playedMessage.getType() == ComsPlayedMoveMessage::eTimeout)
-	{
-		int allowedMissed = 
-			ScorchedServer::instance()->getOptionsGame().getAllowedMissedMoves();
-		if (tank && allowedMissed > 0)
-		{
-			tank->getScore().setMissedMoves(
-				tank->getScore().getMissedMoves() + 1);
-
-			ServerChannelManager::instance()->sendText(
-				ChannelText("info",
-					"PLAYER_MISSED_SHOOT",
-					"[p:{0}] failed to move, allowed {1} more missed move(s)",
-					tank->getTargetName(),
-					allowedMissed - tank->getScore().getMissedMoves()),
-					true);
-
-			if (tank->getScore().getMissedMoves() >= allowedMissed)
-			{
-				// Then kick this player
-				ServerCommon::kickDestination(tank->getDestinationId());
-			}
-		}
-	}
-	else
-	{
-		if (tank)
-		{
-			tank->getScore().setMissedMoves(0);
-		}
-	}
 	turns_->moveFinished(playedMessage);
 }
 

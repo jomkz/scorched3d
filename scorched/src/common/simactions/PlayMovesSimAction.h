@@ -30,7 +30,7 @@ class PlayMovesSimAction : public SimAction
 {
 public:
 	PlayMovesSimAction();
-	PlayMovesSimAction(unsigned int moveId);
+	PlayMovesSimAction(unsigned int moveId, bool finishedNotify, bool timeoutPlayers);
 	virtual ~PlayMovesSimAction();
 
 	void addMove(ComsPlayedMoveMessage *message);
@@ -43,8 +43,11 @@ public:
 REGISTER_CLASS_HEADER(PlayMovesSimAction);
 protected:
 	unsigned int moveId_;
+	bool finishedNotify_, timeoutPlayers_;
 	std::list<ComsPlayedMoveMessage *> messages_;
 
+	void tankTimedOut(ScorchedContext &context, 
+		Tank *tank);
 	void tankFired(ScorchedContext &context,
 		Tank *tank, ComsPlayedMoveMessage &message);
 	void tankResigned(ScorchedContext &context,

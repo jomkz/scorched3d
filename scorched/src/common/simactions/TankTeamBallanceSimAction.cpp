@@ -24,6 +24,7 @@
 #include <tank/TankState.h>
 #include <tank/TankModelStore.h>
 #include <tank/TankModelContainer.h>
+#include <tank/TankColorGenerator.h>
 #include <common/OptionsScorched.h>
 #include <common/ChannelManager.h>
 #include <algorithm>
@@ -50,12 +51,6 @@ TankTeamBallanceSimAction::~TankTeamBallanceSimAction()
 
 bool TankTeamBallanceSimAction::invokeAction(ScorchedContext &context)
 {
-	// Tell people whats going on
-	ChannelText text("info",
-		"AUTO_BALLANCE_TEAMS",
-		"Auto ballancing teams");
-	ChannelManager::showText(context, text);
-
 	// Make sure everyone is in a team if they should be
 	std::map<unsigned int, Tank *> &playingTanks = 
 		context.getTankContainer().getPlayingTanks();
@@ -68,9 +63,15 @@ bool TankTeamBallanceSimAction::invokeAction(ScorchedContext &context)
 		if (current->getState().getTankPlaying())
 		{
 			if (context.getOptionsGame().getTeams() > 1 &&
-				current->getTeam() == 0) current->setTeam(1); 
+				current->getTeam() == 0) 
+			{
+				current->setTeam(1); 
+			}
 			if (context.getOptionsGame().getTeams() == 1 &&
-				current->getTeam() > 0) current->setTeam(0); 
+				current->getTeam() > 0) 
+			{
+				current->setTeam(0); 
+			}
 		}
 	}
 
@@ -201,7 +202,7 @@ void TankTeamBallanceSimAction::checkTeamsAuto(ScorchedContext &context)
 			{
 				// Ballance the teams
 				Tank *tank = maxPlayers->back();
-				tank->setTeam(i+1);
+				setTeam(context, tank, i+1);
 			}
 		}
 	}
@@ -219,8 +220,24 @@ void TankTeamBallanceSimAction::checkTeamsBotsVs(ScorchedContext &context)
 		Tank *current = (*mainitor).second;
 		if (current->getState().getTankPlaying())
 		{
-			if (current->getDestinationId() == 0) current->setTeam(1);
-			else current->setTeam(2);
+			if (current->getDestinationId() == 0) setTeam(context, current, 1);
+			else setTeam(context, current, 2);
 		}
+	}
+}
+
+void TankTeamBallanceSimAction::setTeam(ScorchedContext &context, Tank *tank, unsigned int team)
+{
+	if (tank->getTeam() != team)
+	{
+		// Tell people whats going on
+		ChannelText text("info",
+			"MOVING_PLAYER",
+			"Moving player [p:{0}] to team {1}",
+			tank->getTargetName(), 
+			TankColorGenerator::getTeamName(tank->getTeam()));
+		ChannelManager::showText(context, text);
+
+		tank->setTeam(team);
 	}
 }

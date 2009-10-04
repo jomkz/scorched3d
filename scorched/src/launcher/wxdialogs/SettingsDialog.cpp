@@ -128,6 +128,9 @@ void SettingsFrame::createMainPanel(bool server)
 			mainPanel_, sizer, context_.getBuyingTimeEntry()));	
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
+			mainPanel_, sizer, context_.getRoundTimeEntry()));	
+	setters_.push_back(
+		OptionEntrySetterUtil::createOtherSetter(
 			mainPanel_, sizer, context_.getModDownloadSpeedEntry()));	
 
 	if (server) // Server only

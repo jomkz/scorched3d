@@ -23,6 +23,7 @@
 
 #include <server/ServerTurnsSequential.h>
 #include <server/ServerTurnsSimultaneous.h>
+#include <server/ServerTurnsFree.h>
 #include <coms/ComsPlayedMoveMessage.h>
 
 class ServerStatePlaying
@@ -41,10 +42,12 @@ public:
 	void roundFinished();
 
 protected:
+	bool roundFinished_;
 	unsigned int nextRoundId_;
 	ServerTurns *turns_;
 	ServerTurnsSequential turnsSequential_;
 	ServerTurnsSimultaneous turnsSimultaneous_;
+	ServerTurnsFree turnsFree_;
 };
 
 #endif

@@ -689,6 +689,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\actions\MoveTimerAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\MoveTimerAction.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\actions\Napalm.cpp"
 				>
 			</File>
@@ -710,6 +718,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\actions\Resurrection.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\RoundTimerAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\RoundTimerAction.h"
 				>
 			</File>
 			<File
@@ -5470,6 +5486,14 @@
 			</File>
 			<File
 				RelativePath="..\..\server\server\ServerTurns.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerTurnsFree.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerTurnsFree.h"
 				>
 			</File>
 			<File

@@ -147,7 +147,10 @@ void ServerTurnsSequential::simulate()
 void ServerTurnsSequential::makeMove(Tank *tank)
 {
 	nextMoveId_++;
-	playMove(tank, nextMoveId_);
+
+	fixed shotTime = fixed(
+		ScorchedServer::instance()->getOptionsGame().getShotTime());
+	playMove(tank, nextMoveId_, shotTime);
 }
 
 void ServerTurnsSequential::moveFinished(ComsPlayedMoveMessage &playedMessage)
@@ -162,7 +165,7 @@ void ServerTurnsSequential::moveFinished(ComsPlayedMoveMessage &playedMessage)
 	playingPlayer_ = 0;
 
 	playingMoves_ = true;
-	PlayMovesSimAction *movesAction = new PlayMovesSimAction(moveId);
+	PlayMovesSimAction *movesAction = new PlayMovesSimAction(moveId, true, true);
 	movesAction->addMove(new ComsPlayedMoveMessage(playedMessage));
 	ScorchedServer::instance()->getServerSimulator().
 		addSimulatorAction(movesAction);
@@ -177,7 +180,5 @@ void ServerTurnsSequential::shotsFinished(unsigned int moveId)
 
 bool ServerTurnsSequential::finished()
 {
-	if (playingMoves_) return false;
-
 	return ServerTurns::showScore();
 }

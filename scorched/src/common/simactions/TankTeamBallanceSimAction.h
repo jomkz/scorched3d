@@ -45,6 +45,7 @@ protected:
 
 	void checkTeamsAuto(ScorchedContext &context);
 	void checkTeamsBotsVs(ScorchedContext &context);
+	void setTeam(ScorchedContext &context, Tank *tank, unsigned int team);
 };
 
 #endif // !defined(AFX_TankTeamBallanceSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

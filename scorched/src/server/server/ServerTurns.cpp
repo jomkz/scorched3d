@@ -77,11 +77,8 @@ bool ServerTurns::showScore()
 	return false;
 }
 
-void ServerTurns::playMove(Tank *tank, unsigned int moveId)
+void ServerTurns::playMove(Tank *tank, unsigned int moveId, fixed shotTime)
 {
-	fixed shotTime = fixed(
-		ScorchedServer::instance()->getOptionsGame().getShotTime());
-
 	tank->getState().setMoveId(moveId);
 	TankStartMoveSimAction *tankSimAction = new TankStartMoveSimAction(
 		tank->getPlayerId(), tank->getState().getMoveId(), shotTime, false);

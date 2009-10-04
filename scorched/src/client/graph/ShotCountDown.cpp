@@ -66,6 +66,7 @@ void ShotCountDown::showMoveTime(fixed timer, TimerType type, unsigned int playe
 void ShotCountDown::showRoundTime(fixed timer)
 {
 	round.show_ = true;
+	round.timer_ = timer;
 	if (round.timer_ < 0) round.timer_ = 0;
 }
 
@@ -75,6 +76,11 @@ void ShotCountDown::draw(const unsigned currentstate)
 	{
 		drawMove();
 		move.show_ = false;
+	}
+	if (round.show_)
+	{
+		drawRound();
+		round.show_ = false;
 	}
 }
 
@@ -178,4 +184,50 @@ void ShotCountDown::drawMove()
 				move.type_==eBuying?buyingString:playingString);
 		}
 	}
+}
+
+void ShotCountDown::drawRound()
+{
+	float wHeight = (float) GLViewPort::getHeight();
+	float wWidth = (float) GLViewPort::getWidth();
+
+	GLState state(GLState::BLEND_ON | GLState::TEXTURE_ON | GLState::DEPTH_OFF); 
+
+	static Vector darkYellow(0.5f, 0.5f, 0.1f);
+	static Vector red(0.7f, 0.0f, 0.0f);
+
+	std::string str = "-";
+	Vector *fontColor = &darkYellow;
+
+	if (round.timer_ > 0)
+	{
+		if (round.timer_ <= 5)
+		{
+			fontColor = &red;
+
+			str = S3D::formatStringBuffer("%.1f", 
+				round.timer_.asFloat());		
+		}
+		else
+		{
+			fontColor = &darkYellow;
+
+			int timeLeft = round.timer_.asInt();
+			div_t split = div(timeLeft, 60);
+			str = S3D::formatStringBuffer("%02i:%02i", 
+				split.quot,
+				split.rem);
+		}
+	}
+
+	float width = GLWFont::instance()->getGameFont()->getWidth(15, str);	
+
+	GLWFont::instance()->getGameShadowFont()->draw(
+		GLWColors::black, 15, (wWidth/2.0f) - (width / 2) - 2,
+		wHeight - 20.0f + 2, 0.0f, 
+		str);
+	GLWFont::instance()->getGameFont()->draw(
+		*fontColor, 15, (wWidth/2.0f) - (width / 2),
+		wHeight - 20.0f, 0.0f, 
+		str);
 }

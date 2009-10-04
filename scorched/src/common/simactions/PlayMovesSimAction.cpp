@@ -26,6 +26,7 @@
 #include <tank/TankPosition.h>
 #include <tank/TankAccessories.h>
 #include <tank/TankContainer.h>
+#include <tank/TankScore.h>
 #include <target/TargetRenderer.h>
 #include <tankai/TankAIStrings.h>
 #include <actions/TankSay.h>
@@ -33,6 +34,8 @@
 #include <actions/TankResign.h>
 #include <common/StatsLogger.h>
 #include <common/OptionsScorched.h>
+#include <server/ServerCommon.h>
+#include <server/ServerChannelManager.h>
 #ifndef S3D_SERVER
 	#include <sound/SoundUtils.h>
 #endif
@@ -44,8 +47,8 @@ PlayMovesSimAction::PlayMovesSimAction() :
 {
 }
 
-PlayMovesSimAction::PlayMovesSimAction(unsigned int moveId) :
-	moveId_(moveId)
+PlayMovesSimAction::PlayMovesSimAction(unsigned int moveId, bool finishedNotify, bool timeoutPlayers) :
+	moveId_(moveId), finishedNotify_(finishedNotify), timeoutPlayers_(timeoutPlayers)
 {
 }
 
@@ -65,7 +68,11 @@ void PlayMovesSimAction::addMove(ComsPlayedMoveMessage *message)
 
 bool PlayMovesSimAction::invokeAction(ScorchedContext &context)
 {
-	context.getActionController().addAction(new ShotFinishedAction(moveId_));
+	if (finishedNotify_)
+	{
+		// Notify the server when all of these shots have finished
+		context.getActionController().addAction(new ShotFinishedAction(moveId_));
+	}
 	
 	std::list<ComsPlayedMoveMessage *>::iterator itor;
 	for (itor = messages_.begin();
@@ -85,9 +92,45 @@ bool PlayMovesSimAction::invokeAction(ScorchedContext &context)
 				tankResigned(context, tank, *message);
 				break;
 			}
+
+			if (timeoutPlayers_ &&
+				message->getType() == ComsPlayedMoveMessage::eTimeout)
+			{
+				tankTimedOut(context, tank);
+			}
+			else
+			{
+				tank->getScore().setMissedMoves(0);
+			}
 		}
 	}
 	return true;
+}
+
+void PlayMovesSimAction::tankTimedOut(ScorchedContext &context, Tank *tank)
+{
+	if (!context.getServerMode()) return;
+
+	int allowedMissed = 
+		context.getOptionsGame().getAllowedMissedMoves();
+	if (allowedMissed > 0)
+	{
+		tank->getScore().setMissedMoves(
+			tank->getScore().getMissedMoves() + 1);
+
+		ServerChannelManager::instance()->sendText(
+			ChannelText("info",
+				"PLAYER_MISSED_SHOOT",
+				"[p:{0}] failed to move, allowed {1} more missed move(s)",
+				tank->getTargetName(),
+				allowedMissed - tank->getScore().getMissedMoves()),
+				true);
+		if (tank->getScore().getMissedMoves() >= allowedMissed)
+		{
+			// Then kick this player
+			ServerCommon::kickDestination(tank->getDestinationId());
+		}
+	}
 }
 
 void PlayMovesSimAction::tankFired(ScorchedContext &context, 
@@ -192,6 +235,8 @@ void PlayMovesSimAction::tankResigned(ScorchedContext &context,
 bool PlayMovesSimAction::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(moveId_);
+	buffer.addToBuffer(finishedNotify_);
+	buffer.addToBuffer(timeoutPlayers_);
 	buffer.addToBuffer((unsigned int) messages_.size());
 	std::list<ComsPlayedMoveMessage *>::iterator itor;
 	for (itor = messages_.begin();
@@ -208,6 +253,8 @@ bool PlayMovesSimAction::writeMessage(NetBuffer &buffer)
 bool PlayMovesSimAction::readMessage(NetBufferReader &reader)
 {
 	if (!reader.getFromBuffer(moveId_)) return false;
+	if (!reader.getFromBuffer(finishedNotify_)) return false;
+	if (!reader.getFromBuffer(timeoutPlayers_)) return false;
 	unsigned int size = 0;
 	if (!reader.getFromBuffer(size)) return false;
 	for (unsigned int s=0; s<size; s++)
