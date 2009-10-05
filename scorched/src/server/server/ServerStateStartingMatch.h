@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_ServerStateStartingMatchh_INCLUDE__)
 #define __INCLUDE_ServerStateStartingMatchh_INCLUDE__
 
-#include <time.h>
+#include <common/fixed.h>
 
 class ServerStateStartingMatch 
 {
@@ -30,11 +30,11 @@ public:
 	virtual ~ServerStateStartingMatch();
 
 	void reset();
-	bool startingMatch();
+	bool startingMatch(fixed frameTime);
 	void stoppingMatch();
 
 protected:
-	time_t startTime_, lastTime_;
+	fixed totalTime_;
 
 	void startMatch();
 };

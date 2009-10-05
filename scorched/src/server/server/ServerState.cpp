@@ -30,7 +30,7 @@ ServerState::~ServerState()
 {
 }
 
-void ServerState::simulate()
+void ServerState::simulate(fixed frameTime)
 {
 	switch (serverState_)
 	{
@@ -48,7 +48,7 @@ void ServerState::simulate()
 	case ServerMatchCountDownState:
 		if (enoughPlayers_.enoughPlayers())
 		{
-			if (startingMatch_.startingMatch())
+			if (startingMatch_.startingMatch(frameTime))
 			{
 				serverState_ = ServerNewLevelState;
 			}
@@ -66,7 +66,7 @@ void ServerState::simulate()
 		buying_.enterState();
 		break;
 	case ServerBuyingState:
-		if (buying_.simulate())
+		if (buying_.simulate(frameTime))
 		{
 			serverState_ = ServerPlayingState;
 			playing_.enterState();
@@ -81,7 +81,7 @@ void ServerState::simulate()
 		}
 		else 
 		{
-			playing_.simulate();
+			playing_.simulate(frameTime);
 		}	
 		break;
 	case ServerScoreState:

@@ -45,6 +45,7 @@ void ServerTurnsFree::enterState()
 	nextMoveId_++;
 
 	waitingPlayers_.clear();
+	thinkingAIs_.clear();
 
 	std::map<unsigned int, Tank*> &tanks = 
 		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
@@ -62,7 +63,7 @@ void ServerTurnsFree::enterState()
 	}	
 }
 
-void ServerTurnsFree::simulate()
+void ServerTurnsFree::simulate(fixed frameTime)
 {
 	// Build list of currently playing destinations
 	std::set<unsigned int> playingDestinations;
@@ -97,11 +98,18 @@ void ServerTurnsFree::simulate()
 			if (playingDestinations.find(tank->getDestinationId()) == 
 				playingDestinations.end())
 			{
-				playMove(tank, ++nextMoveId_, 0);
-
 				if (tank->getDestinationId() != 0)
 				{
+					playMove(tank, ++nextMoveId_, 0);
 					playingDestinations.insert(tank->getDestinationId());
+				}
+				else
+				{
+					int shotTime = ScorchedServer::instance()->getOptionsGame().getShotTime();
+					int thinkingTime = (shotTime / 3) + (rand() % (shotTime / 2));
+
+					tank->getState().setMoveId(++nextMoveId_);
+					thinkingAIs_[tank->getPlayerId()] = fixed(thinkingTime);
 				}
 				waitingPlayers_.erase(waitingItor);
 				waitingPlayers_.push_back(playerId);
@@ -109,6 +117,28 @@ void ServerTurnsFree::simulate()
 			}
 		}
 	}
+
+	// Let the AIs play
+	std::map<unsigned int, fixed>::iterator thinkingItor;
+	for (thinkingItor = thinkingAIs_.begin();
+		thinkingItor != thinkingAIs_.end();
+		thinkingItor++)
+	{
+		unsigned int playerId = thinkingItor->first;
+
+		Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
+		if (tank && 
+			tank->getState().getState() == TankState::sNormal)
+		{
+			thinkingItor->second -= frameTime;
+			if (thinkingItor->second <= 0)
+			{
+				playMove(tank, ++nextMoveId_, 0);
+				thinkingAIs_.erase(thinkingItor);
+				break;
+			}
+		}
+	}	
 }
 
 void ServerTurnsFree::moveFinished(ComsPlayedMoveMessage &playedMessage)

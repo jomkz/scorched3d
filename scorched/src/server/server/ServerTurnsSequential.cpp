@@ -101,7 +101,7 @@ void ServerTurnsSequential::enterState()
 	}
 }
 
-void ServerTurnsSequential::simulate()
+void ServerTurnsSequential::simulate(fixed frameTime)
 {
 	if (playingMoves_) return;
 

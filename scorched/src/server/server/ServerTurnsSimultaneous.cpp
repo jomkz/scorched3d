@@ -75,7 +75,7 @@ void ServerTurnsSimultaneous::enterState()
 	}
 }
 
-void ServerTurnsSimultaneous::simulate()
+void ServerTurnsSimultaneous::simulate(fixed frameTime)
 {
 	if (playingMoves_) return;
 

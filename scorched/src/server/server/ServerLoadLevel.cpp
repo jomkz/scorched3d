@@ -74,9 +74,6 @@ void ServerLoadLevel::destinationLoadLevel(unsigned int destinationId)
 			destination->setLevelNumber(landscapeDefinition.getDefinitionNumber());
 		}
 
-		// Make sure the simulator time is up to date
-		ScorchedServer::instance()->getSimulator().simulate();
-
 		// Tell this destination to start loading the level
 		ComsLoadLevelMessage &loadLevelMessage = 
 			ScorchedServer::instance()->getServerSimulator().getLevelMessage();

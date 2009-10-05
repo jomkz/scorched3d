@@ -88,9 +88,9 @@ void ServerStatePlaying::enterState()
 	turns_->enterState();
 }
 
-void ServerStatePlaying::simulate()
+void ServerStatePlaying::simulate(fixed frameTime)
 {
-	turns_->simulate();
+	turns_->simulate(frameTime);
 }
 
 void ServerStatePlaying::moveFinished(ComsPlayedMoveMessage &playedMessage)

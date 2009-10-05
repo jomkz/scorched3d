@@ -82,7 +82,7 @@ bool ClientSimulator::processComsSimulateMessage(
 	addComsSimulateMessage(message, false);
 
 	// Send back a response so ping times can be calculated
-	ComsSimulateResultMessage resultMessage(message.getActualTime());
+	ComsSimulateResultMessage resultMessage(message.getServerTime());
 	ComsMessageSender::sendToServer(resultMessage);
 
 	// Calculate the difference between the local time and the server time

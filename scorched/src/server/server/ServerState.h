@@ -45,7 +45,7 @@ public:
 		ServerScoreState
 	};
 
-	void simulate();
+	void simulate(fixed frameTime);
 
 	ServerStateEnum getState() { return serverState_; }	
 

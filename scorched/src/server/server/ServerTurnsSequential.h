@@ -32,7 +32,7 @@ public:
 	virtual ~ServerTurnsSequential();
 
 	virtual void enterState();
-	virtual void simulate();
+	virtual void simulate(fixed frameTime);
 	virtual bool finished();
 
 	virtual void moveFinished(ComsPlayedMoveMessage &playedMessage);

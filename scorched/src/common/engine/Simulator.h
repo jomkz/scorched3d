@@ -68,7 +68,7 @@ protected:
 	ActionController actionController_;
 	std::list<SimActionContainer *> simActions_;
 
-	void actualSimulate(fixed frameTime);
+	virtual void actualSimulate(fixed frameTime);
 	virtual bool continueToSimulate() = 0;
 };
 

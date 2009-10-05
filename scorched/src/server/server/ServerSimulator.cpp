@@ -22,6 +22,7 @@
 #include <server/ScorchedServer.h>
 #include <server/ServerSyncCheck.h>
 #include <server/ServerDestinations.h>
+#include <server/ServerState.h>
 #include <coms/ComsSimulateMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsSimulateResultMessage.h>
@@ -94,7 +95,8 @@ void ServerSimulator::nextSendTime()
 	}
 
 	// Send the time and actions to the client
-	ComsSimulateMessage simulateMessage(nextEventTime_, actualTime_, sendActions_);
+	unsigned int serverTime = SDL_GetTicks();
+	ComsSimulateMessage simulateMessage(nextEventTime_, actualTime_, serverTime, sendActions_);
 	ComsMessageSender::sendToAllLoadedClients(simulateMessage);
 	if (levelMessage_)
 	{
@@ -145,9 +147,11 @@ bool ServerSimulator::processMessage(
 
 	if (destination->getState() == ServerDestination::sFinished)
 	{
-		fixed roundTripTime = actualTime_ - message.getActualTime();
-		destination->getPing().addValue(roundTripTime);
+		unsigned int serverTime = SDL_GetTicks();
+		unsigned int roundTripTime = serverTime - message.getServerTime();
+		fixed fixedRoundTripTime(true, roundTripTime * 10);
 
+		destination->getPing().addValue(fixedRoundTripTime);
 		if (currentTime_ > destination->getLastSentPingTime() + 2)
 		{
 			destination->setLastSentPingTime(currentTime_);
@@ -194,4 +198,10 @@ ComsLoadLevelMessage &ServerSimulator::getLevelMessage()
 {
 	levelMessage_->setActualTime(actualTime_);
 	return *levelMessage_;
+}
+
+void ServerSimulator::actualSimulate(fixed frameTime)
+{
+	Simulator::actualSimulate(frameTime);
+	ScorchedServer::instance()->getServerState().simulate(frameTime);
 }

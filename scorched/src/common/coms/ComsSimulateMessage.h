@@ -32,6 +32,7 @@ public:
 
 	ComsSimulateMessage();
 	ComsSimulateMessage(fixed eventTime, fixed actualTime, 
+		unsigned int serverTime,
 		std::list<SimAction *> &actions);
 	virtual ~ComsSimulateMessage();
 
@@ -41,10 +42,12 @@ public:
 
 	fixed &getEventTime() { return eventTime_; }
 	fixed &getActualTime() { return actualTime_; }
+	unsigned int getServerTime() { return serverTime_; }
 	std::list<SimAction *> &getActions() { return actions_; }
 
 protected:
 	fixed eventTime_, actualTime_;
+	unsigned int serverTime_;
 	std::list<SimAction *> actions_;
 
 private:

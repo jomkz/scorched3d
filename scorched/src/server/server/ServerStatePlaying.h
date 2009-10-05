@@ -35,7 +35,7 @@ public:
 	bool showScore();
 
 	void enterState();
-	void simulate();
+	void simulate(fixed frameTime);
 
 	void moveFinished(ComsPlayedMoveMessage &playedMessage);
 	void shotsFinished(unsigned int moveId);

@@ -39,29 +39,27 @@ ServerStateStartingMatch::~ServerStateStartingMatch()
 
 void ServerStateStartingMatch::reset()
 {
-	lastTime_ = 0;
-	startTime_ = time(0);
+	totalTime_ = 0;
 }
 
-bool ServerStateStartingMatch::startingMatch()
+bool ServerStateStartingMatch::startingMatch(fixed frameTime)
 {
-	time_t currentTime = time(0);
-	time_t timePassed = currentTime - startTime_;
+	fixed lastTime = totalTime_;
+	totalTime_ += frameTime;
 
-	int allowedTime =
-		ScorchedServer::instance()->getOptionsGame().getStartTime();
-	int timeleft = allowedTime - int(timePassed);
+	fixed allowedTime(
+		ScorchedServer::instance()->getOptionsGame().getStartTime());
+	fixed timeleft = allowedTime - totalTime_;
 
-	if (currentTime != lastTime_)
+	if (lastTime.asInt() != totalTime_.asInt())
 	{
-		lastTime_ = currentTime;
-		if ((timeleft % 5 == 0 || timeleft <= 5) && (timeleft != 0))
+		if ((timeleft.asInt() % 5 == 0 || timeleft.asInt() <= 5) && (timeleft.asInt() != 0))
 		{
 			ServerChannelManager::instance()->sendText(
 				ChannelText("info", 
 					"GAME_STARTING_IN_X", 
 					"Game starting in {0} seconds...", 
-					timeleft),
+					timeleft.asInt()),
 				true);
 		}
 	}

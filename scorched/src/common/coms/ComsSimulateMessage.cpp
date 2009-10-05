@@ -28,9 +28,10 @@ ComsSimulateMessage::ComsSimulateMessage() :
 }
 
 ComsSimulateMessage::ComsSimulateMessage(fixed eventTime, fixed actualTime,
+	unsigned int serverTime,
 	std::list<SimAction *> &actions) :
 	ComsMessage(ComsSimulateMessageType),
-	eventTime_(eventTime), actualTime_(actualTime)
+	eventTime_(eventTime), actualTime_(actualTime), serverTime_(serverTime)
 {
 	actions_.swap(actions);
 }
@@ -43,6 +44,7 @@ bool ComsSimulateMessage::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(eventTime_);
 	buffer.addToBuffer(actualTime_);
+	buffer.addToBuffer(serverTime_);
 	buffer.addToBuffer((unsigned int) actions_.size());
 	std::list<SimAction *>::iterator itor;
 	for (itor = actions_.begin();
@@ -60,6 +62,7 @@ bool ComsSimulateMessage::readMessage(NetBufferReader &reader)
 {
 	if (!reader.getFromBuffer(eventTime_)) return false;
 	if (!reader.getFromBuffer(actualTime_)) return false;
+	if (!reader.getFromBuffer(serverTime_)) return false;
 	unsigned int actionCount = 0;
 	if (!reader.getFromBuffer(actionCount)) return false;
 	for (unsigned int a=0; a<actionCount; a++)

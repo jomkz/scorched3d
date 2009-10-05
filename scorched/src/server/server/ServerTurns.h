@@ -31,7 +31,7 @@ public:
 	virtual ~ServerTurns();
 
 	virtual void enterState() = 0;
-	virtual void simulate() = 0;
+	virtual void simulate(fixed frameTime) = 0;
 	virtual bool finished() = 0;
 
 	virtual void moveFinished(ComsPlayedMoveMessage &playedMessage) = 0;

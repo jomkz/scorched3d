@@ -23,7 +23,6 @@
 
 #include <server/ServerTurnsSimultaneous.h>
 #include <coms/ComsPlayedMoveMessage.h>
-#include <time.h>
 
 class ServerStateBuying
 {
@@ -32,12 +31,12 @@ public:
 	virtual ~ServerStateBuying();
 
 	void enterState();
-	bool simulate();
+	bool simulate(fixed frameTime);
 
 	void buyingFinished(ComsPlayedMoveMessage &playedMessage);
 
 protected:
-	time_t startTime_;
+	fixed totalTime_;
 	unsigned int nextMoveId_;
 	std::set<unsigned int> waitingPlayers_;
 	std::set<unsigned int> playingPlayers_;

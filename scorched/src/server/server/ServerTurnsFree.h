@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_ServerTurnsFreeh_INCLUDE__)
 #define __INCLUDE_ServerTurnsFreeh_INCLUDE__
 
-#include <set>
+#include <map>
 #include <list>
 #include <server/ServerTurns.h>
 
@@ -34,7 +34,7 @@ public:
 	virtual ~ServerTurnsFree();
 
 	virtual void enterState();
-	virtual void simulate();
+	virtual void simulate(fixed frameTime);
 	virtual bool finished();
 
 	virtual void moveFinished(ComsPlayedMoveMessage &playedMessage);
@@ -43,6 +43,7 @@ public:
 protected:
 	unsigned int nextMoveId_;
 	std::list<unsigned int> waitingPlayers_;
+	std::map<unsigned int, fixed> thinkingAIs_;
 };
 
 #endif

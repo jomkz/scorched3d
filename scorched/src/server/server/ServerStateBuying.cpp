@@ -45,10 +45,10 @@ void ServerStateBuying::enterState()
 {
 	waitingPlayers_.clear();
 	playingPlayers_.clear();
-	startTime_ = time(0);
+	totalTime_ = 0;
 }
 
-bool ServerStateBuying::simulate()
+bool ServerStateBuying::simulate(fixed frameTime)
 {
 	// Check options
 	bool firstRound =
@@ -65,9 +65,8 @@ bool ServerStateBuying::simulate()
 #ifdef S3D_SERVER
 	if (buyingTime != 0)
 	{
-		time_t currentTime = time(0);
-		unsigned int timePassed = unsigned int(currentTime - startTime_);
-		if (fixed(timePassed) > buyingTime) timeExpired = true;
+		totalTime_ += frameTime;
+		if (totalTime_ > buyingTime) timeExpired = true;
 	}
 #endif
 
@@ -193,9 +192,7 @@ void ServerStateBuying::playerBuying(unsigned int playerId)
 #ifdef S3D_SERVER
 	if (buyingTime != 0)
 	{
-		time_t currentTime = time(0);
-		time_t timePassed = currentTime - startTime_;
-		buyingTime = buyingTime - int(timePassed);
+		buyingTime = buyingTime - totalTime_;
 		if (buyingTime < 1) buyingTime = 1;
 	}
 #endif
