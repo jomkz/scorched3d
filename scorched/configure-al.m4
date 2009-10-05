@@ -54,7 +54,6 @@ if test "x$enable_openaltest" = "xyes" ; then
 	AC_TRY_COMPILE([
 #ifdef __APPLE__
 		#include <OpenAL/al.h>
-		#include <OpenAL/alut.h>
 		#include <OpenAL/alc.h>
 #else
 		#include <AL/al.h>
@@ -74,7 +73,6 @@ if test "x$enable_openaltest" = "xyes" ; then
 	AC_TRY_LINK([
 #ifdef __APPLE__
 		#include <OpenAL/al.h>
-		#include <OpenAL/alut.h>
 		#include <OpenAL/alc.h>
 #else
 		#include <AL/al.h>

@@ -75,7 +75,7 @@ AC_CHECK_HEADERS(unistd.h iconv.h)
 # FIXEME
 dnl Checking for Zlib Png Jpeg
 if test `uname` == Darwin; then
-LIBS="$LIBS /usr/X11R6/lib/libexpat.a -lz -framework UnixImageIO"
+LIBS="$LIBS /usr/local/lib/libexpat.a -lz -framework UnixImageIO"
 else
 LIBS="$LIBS -lexpat -lz -lpng -ljpeg"
 fi

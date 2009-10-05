@@ -203,7 +203,7 @@ static void createOtherControls(wxWindow *parent, wxSizer *sizer)
 	}
 }
 
-static void createTroubleControls(wxWindow *parent, wxSizer *sizer)
+static void createSpeedControls(wxWindow *parent, wxSizer *sizer)
 {
 	// Texture sizes (small med large)
 	wxStaticBox *textureBox = new wxStaticBox(parent, -1, wxT("Level of Detail settings"));
@@ -234,58 +234,61 @@ static void createTroubleControls(wxWindow *parent, wxSizer *sizer)
 	IDC_HIGHEFFECTS_CTRL = new wxRadioButton(parent, -1, wxT("High (slower)"));
 	textureSizer2->Add(IDC_HIGHEFFECTS_CTRL, 0);
 	textureSizer->Add(textureSizer2, 0, wxGROW);
-
+	
 	wxFlexGridSizer *textureSizer3 = new wxFlexGridSizer(1, 2, 10, 10);
 	textureSizer3->Add(new wxStaticText(parent, -1, wxT("Land Error :")));
 	IDC_LANDLOD_CTRL = 
-		new wxSlider(parent, -1,
-		0,0,0,
-		wxDefaultPosition, wxSize(315, -1),
-		wxSL_HORIZONTAL | wxSL_AUTOTICKS);
+	new wxSlider(parent, -1,
+				 0,0,0,
+				 wxDefaultPosition, wxSize(315, -1),
+				 wxSL_HORIZONTAL | wxSL_AUTOTICKS);
 	textureSizer3->Add(IDC_LANDLOD_CTRL, 0, wxGROW);
 	textureSizer->Add(textureSizer3, 0, wxGROW | wxTOP, 10);
-
+	
 	sizer->Add(textureSizer, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5);
-
+	
 	// Detail switches 
 	{
 		wxStaticBox *waterDetailBox = new wxStaticBox(parent, -1, 
-			wxT("Graphics Detail"));
+													  wxT("Graphics Detail"));
 		wxStaticBoxSizer *waterDetailSizer = new wxStaticBoxSizer(waterDetailBox, wxHORIZONTAL);
 		wxGridSizer *waterDetailSizer2 = new wxGridSizer(3, 1, 10, 10);
-
+		
 		IDC_NOWATERREF_CTRL = 
-			new wxCheckBox(parent, -1, wxT("Don't draw water reflections - Large Framerate Improvement"));
+		new wxCheckBox(parent, -1, wxT("Don't draw water reflections - Large Framerate Improvement"));
 		waterDetailSizer2->Add(IDC_NOWATERREF_CTRL, 0);
 		IDC_NOWATERMOVEMENT_CTRL = 
-			new wxCheckBox(parent, -1, wxT("Don't draw water movement - Large Framerate Improvement"));
+		new wxCheckBox(parent, -1, wxT("Don't draw water movement - Large Framerate Improvement"));
 		waterDetailSizer2->Add(IDC_NOWATERMOVEMENT_CTRL, 0);
 		IDC_NOWATER_CTRL = 
-			new wxCheckBox(parent, -1, wxT("Don't draw water - Large Framerate Improvement"));
+		new wxCheckBox(parent, -1, wxT("Don't draw water - Large Framerate Improvement"));
 		waterDetailSizer2->Add(IDC_NOWATER_CTRL, 0);
 		IDC_NOWATERWAVES_CTRL = 
-			new wxCheckBox(parent, -1, wxT("Don't draw water breakers - Small Loading Speed Improvement"));
+		new wxCheckBox(parent, -1, wxT("Don't draw water breakers - Small Loading Speed Improvement"));
 		waterDetailSizer2->Add(IDC_NOWATERWAVES_CTRL, 0);
 		IDC_NOWATERLOD_CTRL = 
-			new wxCheckBox(parent, -1, wxT("Draw simplistic water - Medium Framerate Improvement"));
+		new wxCheckBox(parent, -1, wxT("Draw simplistic water - Medium Framerate Improvement"));
 		waterDetailSizer2->Add(IDC_NOWATERLOD_CTRL, 0);
 		IDC_NOSHADERS_CTRL = 
-			new wxCheckBox(parent, -1, wxT("No GL shaders - Large Framerate Improvement"));
+		new wxCheckBox(parent, -1, wxT("No GL shaders - Large Framerate Improvement"));
 		waterDetailSizer2->Add(IDC_NOSHADERS_CTRL, 0);
 		IDC_SIMPLEWATERSHADERS_CTRL = 
-			new wxCheckBox(parent, -1, wxT("Simple water shaders - Medium Framerate Improvement"));
+		new wxCheckBox(parent, -1, wxT("Simple water shaders - Medium Framerate Improvement"));
 		waterDetailSizer2->Add(IDC_SIMPLEWATERSHADERS_CTRL, 0);
 		IDC_NOOBJECTSHADOWS_CTRL = 
-			new wxCheckBox(parent, -1, wxT("No GL shadows for objects - Medium Framerate Improvement"));
+		new wxCheckBox(parent, -1, wxT("No GL shadows for objects - Medium Framerate Improvement"));
 		waterDetailSizer2->Add(IDC_NOOBJECTSHADOWS_CTRL, 0);
 		IDC_NOSHADOWS_CTRL = 
-			new wxCheckBox(parent, -1, wxT("No GL shadows - Large Framerate Improvement"));
+		new wxCheckBox(parent, -1, wxT("No GL shadows - Large Framerate Improvement"));
 		waterDetailSizer2->Add(IDC_NOSHADOWS_CTRL, 0);
-
+		
 		waterDetailSizer->Add(waterDetailSizer2, 0, wxGROW);
 		sizer->Add(waterDetailSizer, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5);
 	}
+}
 
+static void createTroubleControls(wxWindow *parent, wxSizer *sizer)
+{
 	// Graphics Settings
 	{
 		wxStaticBox *glDetailBox = new wxStaticBox(parent, -1, 

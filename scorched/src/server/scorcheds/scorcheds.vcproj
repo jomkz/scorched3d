@@ -1009,6 +1009,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\server\ServerTurnsFree.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerTurnsFree.h"
+				>
+			</File>
+			<File
 				RelativePath="..\server\ServerTurnsSequential.cpp"
 				>
 			</File>

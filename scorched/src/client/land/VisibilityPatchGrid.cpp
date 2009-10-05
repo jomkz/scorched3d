@@ -545,7 +545,7 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 				Landscape::instance()->getSky().getSun().setLightPosition(true);
 
 				// Setup the texture matrix for texture 1
-				glActiveTexture(GL_TEXTURE1);
+				glActiveTextureARB(GL_TEXTURE1);
 				glMatrixMode(GL_TEXTURE);
 				glLoadIdentity();
 				glTranslatef(0.5f,0.5f,0.0f);
@@ -559,7 +559,7 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 				glMatrixMode(GL_MODELVIEW);
 
 				// Reset to texture 0
-				glActiveTexture(GL_TEXTURE0);
+				glActiveTextureARB(GL_TEXTURE0);
 			}
 
 			MipMapPatchIndex *patchIndex = 

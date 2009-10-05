@@ -12,8 +12,10 @@ have_SDLnet=yes
 if test "x$enable_sdltest" = "xyes" ; then
 
 	ac_save_CFLAGS="$CFLAGS"
+	ac_save_CXXFLAGS="$CXXFLAGS"
 	ac_save_LIBS="$LIBS"
 	CFLAGS="$CFLAGS $SDL_CFLAGS"
+	CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
 	LIBS="$SDL_LIBS $LIBS"
 
 	AC_TRY_COMPILE([
@@ -36,6 +38,7 @@ if test "x$enable_sdltest" = "xyes" ; then
 		])
 
 	CFLAGS="$ac_save_CFLAGS"
+	CXXFLAGS="$ac_save_CXXFLAGS"
 	LIBS="$ac_save_LIBS"
 fi
 
