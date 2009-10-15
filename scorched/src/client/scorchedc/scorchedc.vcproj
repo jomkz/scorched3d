@@ -5512,6 +5512,14 @@
 				RelativePath="..\..\server\server\ServerTurnsSimultaneous.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\server\server\ServerTurnsSimultaneousNoWait.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerTurnsSimultaneousNoWait.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="geomipmap"

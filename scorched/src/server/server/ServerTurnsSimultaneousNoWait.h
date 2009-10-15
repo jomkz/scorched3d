@@ -18,38 +18,31 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerStatePlayingh_INCLUDE__)
-#define __INCLUDE_ServerStatePlayingh_INCLUDE__
+#if !defined(__INCLUDE_ServerTurnsSimultaneousNoWaith_INCLUDE__)
+#define __INCLUDE_ServerTurnsSimultaneousNoWaith_INCLUDE__
 
-#include <server/ServerTurnsSequential.h>
-#include <server/ServerTurnsSimultaneous.h>
-#include <server/ServerTurnsSimultaneousNoWait.h>
-#include <server/ServerTurnsFree.h>
-#include <coms/ComsPlayedMoveMessage.h>
+#include <map>
+#include <list>
+#include <server/ServerTurns.h>
 
-class ServerStatePlaying
+class Tank;
+class ComsPlayedMoveMessage;
+class ServerTurnsSimultaneousNoWait : public ServerTurns
 {
 public:
-	ServerStatePlaying();
-	virtual ~ServerStatePlaying();
+	ServerTurnsSimultaneousNoWait();
+	virtual ~ServerTurnsSimultaneousNoWait();
 
-	bool showScore();
+	virtual void enterState();
+	virtual void simulate(fixed frameTime);
+	virtual bool finished();
 
-	void enterState();
-	void simulate(fixed frameTime);
-
-	void moveFinished(ComsPlayedMoveMessage &playedMessage);
-	void shotsFinished(unsigned int moveId);
-	void roundFinished();
+	virtual void moveFinished(ComsPlayedMoveMessage &playedMessage);
+	virtual void shotsFinished(unsigned int moveId);
 
 protected:
-	bool roundFinished_;
-	unsigned int nextRoundId_;
-	ServerTurns *turns_;
-	ServerTurnsSequential turnsSequential_;
-	ServerTurnsSimultaneous turnsSimultaneous_;
-	ServerTurnsSimultaneousNoWait turnsSimultaneousNoWait_;
-	ServerTurnsFree turnsFree_;
+	unsigned int nextMoveId_;
+	std::map<unsigned int, ComsPlayedMoveMessage*>  moves_;
 };
 
 #endif

@@ -34,8 +34,9 @@ public:
 		TurnSimultaneous = 0,
 		TurnSequentialLooserFirst = 1,
 		TurnSequentialRandom = 2,
-		TurnFree = 3,
-		TurnTimed = 4
+		TurnSimultaneousNoWait = 3,
+		TurnFree = 4,
+		TurnFreeTimed = 5
 	};
 	enum WindForce
 	{

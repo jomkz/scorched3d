@@ -76,7 +76,8 @@ void ServerTurnsFree::simulate(fixed frameTime)
 	{
 		Tank *tank = itor->second;
 		if (tank->getState().getState() == TankState::sNormal &&
-			tank->getState().getMoveId() != 0)
+			tank->getState().getMoveId() != 0 &&
+			tank->getDestinationId() != 0)
 		{
 			playingDestinations.insert(tank->getDestinationId());
 		}

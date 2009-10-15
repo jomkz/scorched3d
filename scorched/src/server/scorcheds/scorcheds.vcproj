@@ -1032,6 +1032,14 @@
 				RelativePath="..\server\ServerTurnsSimultaneous.h"
 				>
 			</File>
+			<File
+				RelativePath="..\server\ServerTurnsSimultaneousNoWait.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerTurnsSimultaneousNoWait.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="tankai"

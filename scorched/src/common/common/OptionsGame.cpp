@@ -33,10 +33,11 @@ static OptionEntryEnum::EnumEntry scoreEnum[] =
 static OptionEntryEnum::EnumEntry turnEnum[] =
 {
 	{ "TurnSimultaneous", OptionsGame::TurnSimultaneous },
+	{ "TurnSimultaneousNoWait", OptionsGame::TurnSimultaneousNoWait },
 	{ "TurnSequentialLooserFirst", OptionsGame::TurnSequentialLooserFirst },
 	{ "TurnSequentialRandom", OptionsGame::TurnSequentialRandom },
 	{ "TurnFree", OptionsGame::TurnFree },
-	{ "TurnTimes", OptionsGame::TurnTimed },
+	{ "TurnFeedTimed", OptionsGame::TurnFreeTimed },
 	{ "", -1 }
 };
 
