@@ -77,6 +77,7 @@ void ServerStatePlaying::enterState()
 		turns_ = &turnsSequential_;
 		break;
 	case OptionsGame::TurnFree:
+	case OptionsGame::TurnFreeTimed:
 		turns_ = &turnsFree_;
 		break;
 	case OptionsGame::TurnSimultaneousNoWait:

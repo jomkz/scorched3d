@@ -79,13 +79,23 @@ void ServerTurnsSimultaneousNoWait::simulate(fixed frameTime)
 		itor++)
 	{
 		Tank *tank = itor->second;
+		if (tank->getState().getMoveId() != 0)
+		{
+			if (tank->getState().getState() == TankState::sNormal)
+			{
+				if (tank->getDestinationId() != 0)
+				{
+					playingDestinations.insert(tank->getDestinationId());
+				}
+			}
+			else
+			{
+				playMoveFinished(tank);
+			}
+		}
+
 		if (tank->getState().getState() == TankState::sNormal)
 		{
-			if (tank->getState().getMoveId() != 0 &&
-				tank->getDestinationId() != 0)
-			{
-				playingDestinations.insert(tank->getDestinationId());
-			}
 			if (moves_.find(tank->getPlayerId()) == moves_.end())
 			{
 				finished = false;
@@ -127,7 +137,19 @@ void ServerTurnsSimultaneousNoWait::simulate(fixed frameTime)
 			movesItor != moves_.end();
 			movesItor++)
 		{
-			movesAction->addMove(movesItor->second);
+			unsigned int playerId = movesItor->first;
+			ComsPlayedMoveMessage *message = movesItor->second;
+
+			Tank *tank = ScorchedServer::instance()->
+				getTankContainer().getTankById(playerId);
+			if (tank && tank->getState().getState() == TankState::sNormal)
+			{
+				movesAction->addMove(message);
+			}
+			else
+			{
+				delete message;
+			}
 		}
 		moves_.clear();
 		

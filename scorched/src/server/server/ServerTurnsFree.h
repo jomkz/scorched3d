@@ -43,7 +43,7 @@ public:
 protected:
 	unsigned int nextMoveId_;
 	std::list<unsigned int> waitingPlayers_;
-	std::map<unsigned int, fixed> thinkingAIs_;
+	std::map<unsigned int, fixed> timedPlayers_;
 };
 
 #endif

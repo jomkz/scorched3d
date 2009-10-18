@@ -164,11 +164,14 @@ void ServerTurnsSequential::moveFinished(ComsPlayedMoveMessage &playedMessage)
 	playMoveFinished(tank);
 	playingPlayer_ = 0;
 
-	playingMoves_ = true;
-	PlayMovesSimAction *movesAction = new PlayMovesSimAction(moveId, true, true);
-	movesAction->addMove(new ComsPlayedMoveMessage(playedMessage));
-	ScorchedServer::instance()->getServerSimulator().
-		addSimulatorAction(movesAction);
+	if (tank->getState().getState() == TankState::sNormal)
+	{
+		playingMoves_ = true;
+		PlayMovesSimAction *movesAction = new PlayMovesSimAction(moveId, true, true);
+		movesAction->addMove(new ComsPlayedMoveMessage(playedMessage));
+		ScorchedServer::instance()->getServerSimulator().
+			addSimulatorAction(movesAction);
+	}
 }
 
 void ServerTurnsSequential::shotsFinished(unsigned int moveId)

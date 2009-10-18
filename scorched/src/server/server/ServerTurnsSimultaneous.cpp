@@ -191,8 +191,19 @@ void ServerTurnsSimultaneous::playShots()
 		itor != moves_.end();
 		itor++)
 	{
+		unsigned int playerId = itor->first;
 		ComsPlayedMoveMessage *message = itor->second;
-		movesAction->addMove(message);
+
+		Tank *tank = ScorchedServer::instance()->
+			getTankContainer().getTankById(playerId);
+		if (tank && tank->getState().getState() == TankState::sNormal)
+		{
+			movesAction->addMove(message);
+		}
+		else
+		{
+			delete message;
+		}
 	}
 	moves_.clear();
 	

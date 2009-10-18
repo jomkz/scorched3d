@@ -45,7 +45,7 @@ void ServerTurnsFree::enterState()
 	nextMoveId_++;
 
 	waitingPlayers_.clear();
-	thinkingAIs_.clear();
+	timedPlayers_.clear();
 
 	std::map<unsigned int, Tank*> &tanks = 
 		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
@@ -55,9 +55,9 @@ void ServerTurnsFree::enterState()
 		itor++)
 	{
 		Tank *tank = itor->second;
+		tank->getState().setMoveId(0);
 		if (tank->getState().getState() == TankState::sNormal)
 		{
-			tank->getState().setMoveId(0);
 			waitingPlayers_.push_back(tank->getPlayerId());
 		}
 	}	
@@ -75,11 +75,19 @@ void ServerTurnsFree::simulate(fixed frameTime)
 		itor++)
 	{
 		Tank *tank = itor->second;
-		if (tank->getState().getState() == TankState::sNormal &&
-			tank->getState().getMoveId() != 0 &&
-			tank->getDestinationId() != 0)
+		if (tank->getState().getMoveId() != 0)
 		{
-			playingDestinations.insert(tank->getDestinationId());
+			if (tank->getState().getState() == TankState::sNormal)
+			{
+				if (tank->getDestinationId() != 0)
+				{
+					playingDestinations.insert(tank->getDestinationId());
+				}
+			}
+			else
+			{
+				playMoveFinished(tank);
+			}
 		}
 	}
 
@@ -97,21 +105,17 @@ void ServerTurnsFree::simulate(fixed frameTime)
 			tank->getState().getMoveId() == 0)
 		{
 			if (playingDestinations.find(tank->getDestinationId()) == 
-				playingDestinations.end())
+				playingDestinations.end() &&
+				timedPlayers_.find(tank->getPlayerId()) ==
+				timedPlayers_.end())
 			{
 				if (tank->getDestinationId() != 0)
 				{
-					playMove(tank, ++nextMoveId_, 0);
 					playingDestinations.insert(tank->getDestinationId());
 				}
-				else
-				{
-					int shotTime = ScorchedServer::instance()->getOptionsGame().getShotTime();
-					int thinkingTime = (shotTime / 3) + (rand() % (shotTime / 2));
 
-					tank->getState().setMoveId(++nextMoveId_);
-					thinkingAIs_[tank->getPlayerId()] = fixed(thinkingTime);
-				}
+				playMove(tank, ++nextMoveId_, 0);
+
 				waitingPlayers_.erase(waitingItor);
 				waitingPlayers_.push_back(playerId);
 				break;
@@ -120,24 +124,18 @@ void ServerTurnsFree::simulate(fixed frameTime)
 	}
 
 	// Let the AIs play
-	std::map<unsigned int, fixed>::iterator thinkingItor;
-	for (thinkingItor = thinkingAIs_.begin();
-		thinkingItor != thinkingAIs_.end();
-		thinkingItor++)
+	std::map<unsigned int, fixed>::iterator timedItor;
+	for (timedItor = timedPlayers_.begin();
+		timedItor != timedPlayers_.end();
+		timedItor++)
 	{
-		unsigned int playerId = thinkingItor->first;
+		unsigned int playerId = timedItor->first;
 
-		Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
-		if (tank && 
-			tank->getState().getState() == TankState::sNormal)
+		timedItor->second -= frameTime;
+		if (timedItor->second <= 0)
 		{
-			thinkingItor->second -= frameTime;
-			if (thinkingItor->second <= 0)
-			{
-				playMove(tank, ++nextMoveId_, 0);
-				thinkingAIs_.erase(thinkingItor);
-				break;
-			}
+			timedPlayers_.erase(timedItor);
+			break;
 		}
 	}	
 }
@@ -152,11 +150,35 @@ void ServerTurnsFree::moveFinished(ComsPlayedMoveMessage &playedMessage)
 	
 	playMoveFinished(tank);
 
-	PlayMovesSimAction *movesAction = new PlayMovesSimAction(nextMoveId_, false, false);
-	movesAction->addMove(new ComsPlayedMoveMessage(playedMessage));
+	int thinkingTime = 0;
+	int shotTime = ScorchedServer::instance()->getOptionsGame().getShotTime();
+	if (ScorchedServer::instance()->getOptionsGame().getTurnType() ==
+		OptionsGame::TurnFreeTimed)
+	{
+		thinkingTime = shotTime;
+	}
+	else
+	{
+		if (tank->getDestinationId() == 0)
+		{
+			thinkingTime = (shotTime / 3) + (rand() % (shotTime / 2));
+		}
+	}
 	
-	ScorchedServer::instance()->getServerSimulator().
-		addSimulatorAction(movesAction);
+	if (thinkingTime > 0)
+	{
+		timedPlayers_[tank->getPlayerId()] = fixed(thinkingTime);
+	}
+
+	if (tank->getState().getState() == TankState::sNormal)
+	{
+		PlayMovesSimAction *movesAction = 
+			new PlayMovesSimAction(nextMoveId_, false, false);
+		movesAction->addMove(new ComsPlayedMoveMessage(playedMessage));
+		
+		ScorchedServer::instance()->getServerSimulator().
+			addSimulatorAction(movesAction);
+	}
 }
 
 void ServerTurnsFree::shotsFinished(unsigned int moveId)
