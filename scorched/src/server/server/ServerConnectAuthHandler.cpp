@@ -72,20 +72,47 @@ bool ServerConnectAuthHandler::processMessage(
 	NetMessage &netMessage,
 	const char *messageType, NetBufferReader &reader)
 {
-	unsigned int destinationId = netMessage.getDestinationId();
-	unsigned int ipAddress = netMessage.getIpAddress();
-
-	// Check for acceptance bassed on standard checks
-	if (!ServerConnectHandler::instance()->checkStandardParams(destinationId, ipAddress)) return true;
-
 	// Decode the auth connect message
-	ComsConnectAuthMessage message;
-	if (!message.readMessage(reader))
+	AuthMessage *authMessage = new AuthMessage();
+	authMessage->destinationId = netMessage.getDestinationId();
+	authMessage->ipAddress = netMessage.getIpAddress();
+	if (!authMessage->message.readMessage(reader))
 	{
 		ServerCommon::serverLog("Invalid auth message format");
-		ServerCommon::kickDestination(destinationId);
+		ServerCommon::kickDestination(netMessage.getDestinationId());
+		delete authMessage;
 		return true;
 	}
+
+	// Record the auth message till later
+	authMessages_.push_back(authMessage);
+	return true;
+}
+
+void ServerConnectAuthHandler::processMessages()
+{
+	// Check that there are no outstanding tank addition requests
+	if (TankAddSimAction::TankAddSimActionCount > 0) return;
+
+	// Only process the new auth requests once there are no more outstanding
+	// tank addition requests
+	// Just makes some of the checks easier
+	while (!authMessages_.empty())
+	{
+		AuthMessage *message = authMessages_.back();
+		processMessageInternal(message->destinationId, message->ipAddress, message->message);
+		authMessages_.pop_back();
+		delete message;
+	}
+}
+
+void ServerConnectAuthHandler::processMessageInternal(
+	unsigned int destinationId,
+	unsigned int ipAddress,
+	ComsConnectAuthMessage &message)
+{
+	// Check for acceptance bassed on standard checks
+	if (!ServerConnectHandler::instance()->checkStandardParams(destinationId, ipAddress)) return;
 
 	// Check player availability
 	if (message.getNoPlayers() > 
@@ -100,7 +127,7 @@ bool ServerConnectAuthHandler::processMessage(
 			"--------------------------------------------------");
 		ServerCommon::serverLog("Server full, kicking");
 		ServerCommon::kickDestination(destinationId, kickMessage);
-		return true;
+		return;
 	}
 
 	// Auth handler, make sure that only prefered players can connect
@@ -123,7 +150,7 @@ bool ServerConnectAuthHandler::processMessage(
 				message.getUserName()));
 
 			ServerCommon::kickDestination(destinationId, kickMessage);			
-			return true;
+			return;
 		}
 	}
 
@@ -153,7 +180,7 @@ bool ServerConnectAuthHandler::processMessage(
 		Logger::log(S3D::formatStringBuffer("Banned uniqueid/suid connection from destination \"%i\"", 
 			destinationId));
 		ServerCommon::kickDestination(destinationId);
-		return true;
+		return;
 	}
 
 	// Check that this unique id has not already connected (if unique ids are in use)
@@ -175,7 +202,7 @@ bool ServerConnectAuthHandler::processMessage(
 					Logger::log(S3D::formatStringBuffer("Duplicate uniqueid connection from destination \"%i\"", 
 						destinationId));
 					ServerCommon::kickDestination(destinationId);
-					return true;
+					return;
 				}
 			}
 			if (SUid.c_str()[0])
@@ -185,7 +212,7 @@ bool ServerConnectAuthHandler::processMessage(
 					Logger::log(S3D::formatStringBuffer("Duplicate SUI connection from destination \"%i\"", 
 						destinationId));
 					ServerCommon::kickDestination(destinationId);
-					return true;
+					return;
 				}
 			}
 		}
@@ -222,7 +249,7 @@ bool ServerConnectAuthHandler::processMessage(
 			"Failed to send accept to client \"%i\"",
 			destinationId));
 		ServerCommon::kickDestination(destinationId);
-		return true;
+		return;
 	}
 
 	// Add all the new tanks
@@ -250,8 +277,6 @@ bool ServerConnectAuthHandler::processMessage(
 			true);
 	}
 #endif
-
-	return true;
 }
 
 void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,

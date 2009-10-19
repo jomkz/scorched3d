@@ -144,8 +144,7 @@ Vector &TankColorGenerator::getNextColor(std::map<unsigned int, Tank *> &tanks)
 	std::vector<Vector *> leftColors = getAvailableColors(tanks);
 	if (!leftColors.empty())
 	{
-		Vector *color = leftColors[rand() % leftColors.size()];
-		return *color;
+		return *leftColors[0];
 	}
 
 	static Vector defaultColor(0.8f, 0.8f, 0.8f);

@@ -206,30 +206,6 @@ bool ServerAddPlayerHandler::filterName(Tank *tank,
 	if (sentname.size() == 0) sentname = LANG_STRING("NoName");
 	if (sentname.size() > 22) sentname = sentname.substr(0, 22);
 
-	// Make sure no-one has the same name
-	for (;;)
-	{
-		bool found = false;
-		std::map<unsigned int, Tank *>::iterator mainitor;
-		std::map<unsigned int, Tank *> tanks = 
-			ScorchedServer::instance()->getTankContainer().getAllTanks();
-		for (mainitor = tanks.begin();
-			mainitor != tanks.end();
-			mainitor++)
-		{
-			Tank *currentTank = (*mainitor).second;
-			if (currentTank->getTargetName() == sentname &&
-				tank != currentTank) 
-			{
-				found = true;
-				break;
-			}
-		}
-
-		if (!found) break;
-		sentname += LANG_STRING("(2)");
-	}
-
 	// Make sure that no-one else has the same registered name
 	// except the prefered user that has this name
 	if (ScorchedServer::instance()->getOptionsGame().getRegisteredUserNames())

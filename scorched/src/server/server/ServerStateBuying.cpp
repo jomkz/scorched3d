@@ -25,6 +25,7 @@
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
 #include <tank/TankAccessories.h>
+#include <tank/TankDeadContainer.h>
 #include <tankai/TankAI.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
@@ -86,6 +87,7 @@ bool ServerStateBuying::simulate(fixed frameTime)
 			tank->getState().setState(TankState::sNormal);
 			TankAliveSimAction *tankAliveSimAction = 
 				new TankAliveSimAction(tank->getPlayerId(), firstRound);
+			ScorchedServer::instance()->getTankDeadContainer().getDeadTank(tank, tankAliveSimAction);
 			ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankAliveSimAction);
 
 			if (buying)

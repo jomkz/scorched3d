@@ -22,6 +22,7 @@
 #include <tank/TankContainer.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
+#include <tank/TankColorGenerator.h>
 #include <tankai/TankAIStore.h>
 #include <common/ChannelManager.h>
 #include <common/StatsLogger.h>
@@ -35,10 +36,13 @@
 #include <tankgraph/TargetRendererImplTank.h>
 #endif
 
+unsigned int TankAddSimAction::TankAddSimActionCount = 0;
+
 REGISTER_CLASS_SOURCE(TankAddSimAction);
 
 TankAddSimAction::TankAddSimAction()
 {
+	TankAddSimActionCount++;
 }
 
 TankAddSimAction::TankAddSimAction(ComsAddPlayerMessage &message, 
@@ -48,23 +52,32 @@ TankAddSimAction::TankAddSimAction(ComsAddPlayerMessage &message,
 	uniqueId_(uniqueId), sUID_(sUID), hostDesc_(hostDesc),
 	ipAddress_(ipAddress), aiName_(aiName)
 {
-
+	TankAddSimActionCount++;
 }
 
 TankAddSimAction::~TankAddSimAction()
 {
-
+	TankAddSimActionCount--;
 }
 
 bool TankAddSimAction::invokeAction(ScorchedContext &context)
 {
+	// Check color is available
+	Vector color = message_.getPlayerColor();
+	if (!TankColorGenerator::instance()->colorAvailable(color, 
+		context.getTankContainer().getPlayingTanks()))
+	{
+		color = TankColorGenerator::instance()->getNextColor(
+			context.getTankContainer().getPlayingTanks());
+	}
+
 	// Create tank
 	Tank *tank = new Tank(
 		context,
 		message_.getPlayerId(),
 		message_.getDestinationId(),
 		message_.getPlayerName(),
-		message_.getPlayerColor(),
+		color,
 		message_.getModelName(),
 		message_.getTankType());
 	tank->setTeam(message_.getPlayerTeam());

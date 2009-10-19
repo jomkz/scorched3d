@@ -25,7 +25,10 @@
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
 #include <tank/TankContainer.h>
+#include <tank/TankAccessories.h>
+#include <tank/TankScore.h>
 #include <target/TargetLife.h>
+#include <common/Logger.h>
 
 REGISTER_CLASS_SOURCE(TankAliveSimAction);
 
@@ -60,6 +63,19 @@ bool TankAliveSimAction::invokeAction(ScorchedContext &context)
 	tank->newGame();
 	if (!context.getServerMode()) tank->clientNewGame();
 
+	if (scoreNetBuffer_.getBufferUsed() > 0)
+	{
+		NetBufferReader reader(scoreNetBuffer_);
+		if (!tank->getAccessories().readMessage(reader) ||
+			!tank->getScore().readMessage(reader))
+		{
+			Logger::log("ERROR: Failed to update residual player info (read)");
+		}
+
+		// Don't get credited for the new game stats
+		tank->getScore().resetTotalEarnedStats();
+	}
+
 	return true;
 }
 
@@ -67,6 +83,7 @@ bool TankAliveSimAction::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(playerId_);
 	buffer.addToBuffer(newMatch_);
+	buffer.addToBuffer(scoreNetBuffer_);
 	return true;
 }
 
@@ -74,5 +91,6 @@ bool TankAliveSimAction::readMessage(NetBufferReader &reader)
 {
 	if (!reader.getFromBuffer(playerId_)) return false;
 	if (!reader.getFromBuffer(newMatch_)) return false;
+	if (!reader.getFromBuffer(scoreNetBuffer_)) return false;
 	return true;
 }

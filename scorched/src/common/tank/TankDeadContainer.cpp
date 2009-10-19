@@ -65,31 +65,19 @@ void TankDeadContainer::addDeadTank(Tank *tank)
 	deadTanks_[tank->getUniqueId()] = buffer;
 }
 
-bool TankDeadContainer::getDeadTank(Tank *tank)
+void TankDeadContainer::getDeadTank(Tank *tank, TankAliveSimAction *simAction)
 {
 	// Get the buffer
 	std::map<std::string, NetBuffer *>::iterator finditor =
 		deadTanks_.find(tank->getUniqueId());
-	if (finditor == deadTanks_.end()) return false;
+	if (finditor == deadTanks_.end()) return;
 	NetBuffer *buffer = finditor->second;
 
-	// Read from the buffer
-	NetBufferReader reader(*buffer);
-	if (!tank->getAccessories().readMessage(reader) ||
-		!tank->getScore().readMessage(reader))
-	{
-		Logger::log("ERROR: Failed to update residual player info (read)");
-		return false;
-	}
+	simAction->getScoreNetBuffer().reset();
+	simAction->getScoreNetBuffer().addDataToBuffer(buffer->getBuffer(), buffer->getBufferUsed());
 
-	// Don't get credited for the new game stats
-	tank->getScore().resetTotalEarnedStats();
-
-	// Tidy
-	delete buffer;
 	deadTanks_.erase(finditor);
-
-	return true;
+	delete buffer;
 }
 
 void TankDeadContainer::clearTanks()

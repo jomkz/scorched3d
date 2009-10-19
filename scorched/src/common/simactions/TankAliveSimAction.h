@@ -35,10 +35,13 @@ public:
 	virtual bool writeMessage(NetBuffer &buffer);
 	virtual bool readMessage(NetBufferReader &reader);
 
+	NetBuffer &getScoreNetBuffer() { return scoreNetBuffer_; }
+
 REGISTER_CLASS_HEADER(TankAliveSimAction);
 protected:
 	unsigned int playerId_;
 	bool newMatch_;
+	NetBuffer scoreNetBuffer_;
 };
 
 #endif // !defined(AFX_TankAliveSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

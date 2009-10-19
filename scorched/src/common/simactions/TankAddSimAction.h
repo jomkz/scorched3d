@@ -38,6 +38,8 @@ public:
 	virtual bool writeMessage(NetBuffer &buffer);
 	virtual bool readMessage(NetBufferReader &reader);
 
+	static unsigned int TankAddSimActionCount;
+
 REGISTER_CLASS_HEADER(TankAddSimAction);
 protected:
 	ComsAddPlayerMessage message_;

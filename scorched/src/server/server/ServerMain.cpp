@@ -231,6 +231,7 @@ void serverLoop()
 
 		ScorchedServer::instance()->getSimulator().simulate();
 
+		ServerConnectAuthHandler::instance()->processMessages();
 		ServerFileServer::instance()->simulate(timeDifference);
 		ServerChannelManager::instance()->simulate(timeDifference);
 		ScorchedServerUtil::instance()->timedMessage.simulate();

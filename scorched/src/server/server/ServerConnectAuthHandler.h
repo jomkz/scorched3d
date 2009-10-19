@@ -23,6 +23,7 @@
 #define __INCLUDE_ServerConnectAuthHandlerh_INCLUDE__
 
 #include <coms/ComsMessageHandler.h>
+#include <coms/ComsConnectAuthMessage.h>
 
 class ServerConnectAuthHandler : 
 	public ComsMessageHandlerI
@@ -30,14 +31,27 @@ class ServerConnectAuthHandler :
 public:
 	static ServerConnectAuthHandler *instance();
 
+	void processMessages();
+
 	virtual bool processMessage(
 		NetMessage &message,
 		const char *messageType,
 		NetBufferReader &reader);
 
 protected:
-	static ServerConnectAuthHandler *instance_;
+	struct AuthMessage
+	{
+		unsigned int ipAddress, destinationId;
+		ComsConnectAuthMessage message;
+	};
 
+	static ServerConnectAuthHandler *instance_;
+	std::list<AuthMessage *> authMessages_;
+
+	void processMessageInternal(
+		unsigned int destinationId,
+		unsigned int ipAddress,
+		ComsConnectAuthMessage &message);
 	void addNextTank(unsigned int destinationId,
 		unsigned int ipAddress,
 		const char *uniqueId,

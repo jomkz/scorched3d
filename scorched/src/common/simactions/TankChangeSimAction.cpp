@@ -53,8 +53,35 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 	Tank *tank = context.getTankContainer().getTankById(playerId);
 	if (!tank) return true;
 
+	// Make sure no-one has the same name
+	LangString postFix = LANG_STRING("");
+	LangString sentname = message_.getPlayerName();
+	for (int p=1;;p++)
+	{
+		bool found = false;
+		std::map<unsigned int, Tank *>::iterator mainitor;
+		std::map<unsigned int, Tank *> tanks = 
+			context.getTankContainer().getAllTanks();
+		for (mainitor = tanks.begin();
+			mainitor != tanks.end();
+			mainitor++)
+		{
+			Tank *currentTank = (*mainitor).second;
+			if (currentTank->getTargetName() == (sentname + postFix) &&
+				tank != currentTank) 
+			{
+				found = true;
+				break;
+			}
+		}
+
+		if (!found) break;
+		postFix = LANG_STRING(S3D::formatStringBuffer("(%i)", p));
+	}
+	sentname += postFix;
+
 	// Setup the new player
-	tank->setName(message_.getPlayerName());
+	tank->setName(sentname);
 
 	// Player has set a new color
 	if (tank->getTeam() == 0 &&

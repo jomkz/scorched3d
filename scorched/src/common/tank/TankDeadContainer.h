@@ -23,6 +23,7 @@
 
 #include <map>
 #include <tank/Tank.h>
+#include <simactions/TankAliveSimAction.h>
 
 class TankDeadContainer  
 {
@@ -32,10 +33,9 @@ public:
 
 	void clearTanks();
 	void addDeadTank(Tank *tank);
-	bool getDeadTank(Tank *tank);
+	void getDeadTank(Tank *tank, TankAliveSimAction *simAction);
 
 protected:
-	static TankDeadContainer *instance_;
 	std::map<std::string, NetBuffer *> deadTanks_;
 
 };
