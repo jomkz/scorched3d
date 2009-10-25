@@ -18,47 +18,24 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
+#if !defined(__INCLUDE_WaterAndTargetVisibilityPatchh_INCLUDE__)
+#define __INCLUDE_WaterAndTargetVisibilityPatchh_INCLUDE__
+
+#include <land/WaterVisibilityPatch.h>
 #include <land/TargetVisibilityPatch.h>
-#include <client/ScorchedClient.h>
-#include <landscapemap/LandscapeMaps.h>
-#include <graph/OptionsDisplay.h>
 
-std::set<void *> TargetVisibilityPatch::largeTargets_;
-
-TargetVisibilityPatch::TargetVisibilityPatch() : 
-	visible_(false), distance_(0.0f)
+class WaterAndTargetVisibilityPatch
 {
-}
+public:
+	WaterAndTargetVisibilityPatch();
+	~WaterAndTargetVisibilityPatch();
 
-TargetVisibilityPatch::~TargetVisibilityPatch()
-{
-}
+	WaterVisibilityPatch &getWaterVisibilityPatch() { return waterVisibilityPatch_; }
+	TargetVisibilityPatch &getTargetVisibilityPatch() { return targetVisibilityPatch_; }
 
-void TargetVisibilityPatch::setLocation(int x, int y, int w, int h)
-{
-	// Set location and neighbors
-	x_ = x; y_ = y;
-	float heightRange = 0.0f;
-	float minHeight = 0.0f;
-	position_ = Vector(float(x_ + w / 2), float(y_ + h / 2), 
-		heightRange / 2.0f + minHeight);
-}
+protected:
+	WaterVisibilityPatch waterVisibilityPatch_;
+	TargetVisibilityPatch targetVisibilityPatch_;
+};
 
-bool TargetVisibilityPatch::setVisible(float distance)
-{ 
-	//if (distance < OptionsDisplay::instance()->getDrawCullingDistance() + 100.0f)
-	{
-		distance_ = distance;
-		visible_ = true;
-	}
-	//else
-	{
-		//visible_ = false;
-	}
-	return visible_;
-}
-
-void TargetVisibilityPatch::setNotVisible()
-{
-	visible_ = false;
-}
+#endif // __INCLUDE_WaterAndTargetVisibilityPatchh_INCLUDE__

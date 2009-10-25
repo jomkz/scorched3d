@@ -18,47 +18,12 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <land/TargetVisibilityPatch.h>
-#include <client/ScorchedClient.h>
-#include <landscapemap/LandscapeMaps.h>
-#include <graph/OptionsDisplay.h>
+#include <land/LandAndTargetVisibilityPatch.h>
 
-std::set<void *> TargetVisibilityPatch::largeTargets_;
-
-TargetVisibilityPatch::TargetVisibilityPatch() : 
-	visible_(false), distance_(0.0f)
+LandAndTargetVisibilityPatch::LandAndTargetVisibilityPatch()
 {
 }
 
-TargetVisibilityPatch::~TargetVisibilityPatch()
+LandAndTargetVisibilityPatch::~LandAndTargetVisibilityPatch()
 {
-}
-
-void TargetVisibilityPatch::setLocation(int x, int y, int w, int h)
-{
-	// Set location and neighbors
-	x_ = x; y_ = y;
-	float heightRange = 0.0f;
-	float minHeight = 0.0f;
-	position_ = Vector(float(x_ + w / 2), float(y_ + h / 2), 
-		heightRange / 2.0f + minHeight);
-}
-
-bool TargetVisibilityPatch::setVisible(float distance)
-{ 
-	//if (distance < OptionsDisplay::instance()->getDrawCullingDistance() + 100.0f)
-	{
-		distance_ = distance;
-		visible_ = true;
-	}
-	//else
-	{
-		//visible_ = false;
-	}
-	return visible_;
-}
-
-void TargetVisibilityPatch::setNotVisible()
-{
-	visible_ = false;
 }

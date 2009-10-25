@@ -32,6 +32,9 @@ public:
 	VisibilityPatchInfo();
 	~VisibilityPatchInfo();
 
+	unsigned int &getPatchesVisitedCount() {
+		return patchesVisited_; }
+
 	int getVisibleLandPatchesCount() { 
 		return landVisibility_.getObjectCount(); }
 	int getVisibleWaterPatchesCount() { 
@@ -65,6 +68,7 @@ public:
 	}
 
 protected:
+	unsigned int patchesVisited_;
 	TargetList waterVisibility_[4];
 	TargetList landVisibility_;
 	TargetList treeVisibility_;

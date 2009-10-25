@@ -5545,6 +5545,14 @@
 			Name="land"
 			>
 			<File
+				RelativePath="..\land\LandAndTargetVisibilityPatch.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\land\LandAndTargetVisibilityPatch.h"
+				>
+			</File>
+			<File
 				RelativePath="..\land\LandSurround.cpp"
 				>
 			</File>
@@ -5598,6 +5606,14 @@
 			</File>
 			<File
 				RelativePath="..\land\VisibilityPatchQuad.h"
+				>
+			</File>
+			<File
+				RelativePath="..\land\WaterAndTargetVisibilityPatch.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\land\WaterAndTargetVisibilityPatch.h"
 				>
 			</File>
 			<File

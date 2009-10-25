@@ -43,7 +43,36 @@ void VisibilityPatchQuad::setLocation(VisibilityPatchGrid *patchGrid, int x, int
 	x_ = x; y_ = y; size_ = size;
 	position_ = Vector(x_ + size_ / 2, y_ + size_ / 2);
 
-	if (size > 32)
+	int endSize = 512;
+	if ((x + size_) > 0 && 
+		(y + size_) > 0 &&
+		x < mapwidth && y < mapheight) 
+	{
+		endSize = 32;
+		if (size == 32)
+		{
+			// Land, Target
+			landVisibilityPatch_ = patchGrid->getLandVisibilityPatch(x, y);
+			targetVisibilityPatch_ = patchGrid->getTargetVisibilityPatch(x, y);
+		}
+		if (size == 128)
+		{
+			// Water
+			waterVisibilityPatch_ = patchGrid->getWaterVisibilityPatch(x, y);
+		}
+	}
+	else 
+	{
+		endSize = 128;
+		if (size == 128)
+		{
+			// Water, Target
+			waterVisibilityPatch_ = patchGrid->getWaterVisibilityPatch(x, y);
+			targetVisibilityPatch_ = patchGrid->getTargetVisibilityPatch(x, y);
+		}
+	}
+
+	if (size > endSize)
 	{
 		topLeft_ = new VisibilityPatchQuad();
 		topRight_ = new VisibilityPatchQuad();
@@ -55,28 +84,12 @@ void VisibilityPatchQuad::setLocation(VisibilityPatchGrid *patchGrid, int x, int
 		botLeft_->setLocation(patchGrid, x, y + size / 2, size / 2, mapwidth, mapheight);
 		botRight_->setLocation(patchGrid, x + size / 2, y + size / 2, size / 2, mapwidth, mapheight);
 	}
-
-	if (size == 32)
-	{
-		if ((x + size_) > 0 && 
-			(y + size_) > 0 &&
-			x < mapwidth && y < mapheight) 
-		{
-			// Land
-			landVisibilityPatch_ = patchGrid->getLandVisibilityPatch(x, y);
-		}
-		// Targets
-		targetVisibilityPatch_ = patchGrid->getTargetVisibilityPatch(x, y);
-	}
-	else if (size == 128)
-	{
-		// Water
-		waterVisibilityPatch_ = patchGrid->getWaterVisibilityPatch(x, y);
-	}
 }
 
 void VisibilityPatchQuad::setNotVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos)
 {
+	patchInfo.getPatchesVisitedCount()++;
+
 	if (landVisibilityPatch_) landVisibilityPatch_->setNotVisible();
 	if (targetVisibilityPatch_) targetVisibilityPatch_->setNotVisible();
 	if (waterVisibilityPatch_) waterVisibilityPatch_->setNotVisible();
@@ -90,6 +103,8 @@ void VisibilityPatchQuad::setNotVisible(VisibilityPatchInfo &patchInfo, Vector &
 
 void VisibilityPatchQuad::setVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos, float C)
 {
+	patchInfo.getPatchesVisitedCount()++;
+
 	if (landVisibilityPatch_)
 	{
 		float distance = (cameraPos - landVisibilityPatch_->getPosition()).Magnitude();

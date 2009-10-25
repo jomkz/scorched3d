@@ -31,7 +31,7 @@ public:
 	TargetVisibilityPatch();
 	~TargetVisibilityPatch();
 
-	void setLocation(int x, int y);
+	void setLocation(int x, int y, int w, int h);
 	bool setVisible(float distance);
 	void setNotVisible();
 

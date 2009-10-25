@@ -29,6 +29,8 @@
 class Target;
 class GLSLShaderSetup;
 class WaterVisibilityPatch;
+class LandAndTargetVisibilityPatch;
+class WaterAndTargetVisibilityPatch;
 class Water2Patches;
 class VisibilityPatchGrid
 {
@@ -53,6 +55,8 @@ public:
 		return patchInfo_.getVisibleLandPatchesCount(); }
 	int getVisibleWaterPatchesCount() {
 		return patchInfo_.getVisibleWaterPatchesCount(); }
+	int getPatchesVisitedCount() {
+		return patchInfo_.getPatchesVisitedCount(); }
 
 	VisibilityPatchInfo &getPatchInfo() { return patchInfo_; }
 
@@ -66,9 +70,8 @@ protected:
 
 	// All the visibility patches
 	VisibilityPatchInfo patchInfo_;
-	LandVisibilityPatch *landPatches_;
-	TargetVisibilityPatch *targetPatches_;
-	WaterVisibilityPatch *waterPatches_;
+	LandAndTargetVisibilityPatch *landPatches_;
+	WaterAndTargetVisibilityPatch *waterPatches_;
 
 	// The visibility data that decides if a visibility patch is visible or not
 	VisibilityPatchQuad *visibilityPatches_;
@@ -77,7 +80,6 @@ protected:
 	int midX_, midY_;
 	int landWidth_, landHeight_;
 	int waterWidth_, waterHeight_;
-	int targetWidth_, targetHeight_;
 	int visibilityWidth_, visibilityHeight_;
 
 	void clear();
