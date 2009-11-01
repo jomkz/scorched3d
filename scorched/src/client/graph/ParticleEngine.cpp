@@ -20,7 +20,7 @@
 
 #include <graph/ParticleEngine.h>
 #include <graph/OptionsDisplay.h>
-#include <common/OptionsTransient.h>
+#include <engine/Simulator.h>
 #include <client/ScorchedClient.h>
 #include <GLEXT/GLState.h>
 #include <GLEXT/GLCamera.h>
@@ -171,8 +171,10 @@ void ParticleEngine::normalizedSimulate(float time)
 			// Wind
 			if (particle->windAffect_)
 			{
-				particle->velocity_ += ScorchedClient::instance()->getOptionsTransient().getWindDirection().asVector() * 
-					ScorchedClient::instance()->getOptionsTransient().getWindSpeed().asFloat() * 80.0f * time * time;
+				particle->velocity_ += ScorchedClient::instance()->getSimulator().getWind().
+						getWindDirection().asVector() * 
+					ScorchedClient::instance()->getSimulator().getWind().
+						getWindSpeed().asFloat() * 80.0f * time * time;
 			}
 
 			// Simulate the particle

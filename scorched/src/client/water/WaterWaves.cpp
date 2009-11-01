@@ -21,11 +21,11 @@
 #include <water/WaterWaves.h>
 #include <water/WaterWaveDistance.h>
 #include <water/Water2Patches.h>
+#include <engine/Simulator.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <lang/LangResource.h>
 #include <client/ScorchedClient.h>
 #include <graph/OptionsDisplay.h>
-#include <common/OptionsTransient.h>
 #include <common/Defines.h>
 #include <GLEXT/GLStateExtension.h>
 #include <GLEXT/GLInfo.h>
@@ -273,7 +273,7 @@ void WaterWaves::draw(Water2Patches &currentPatch)
 	//if (OptionsDisplay::instance()->getNoWaves()) return;
 
 	Vector windDir = 
-		ScorchedClient::instance()->getOptionsTransient().getWindDirection().asVector();
+		ScorchedClient::instance()->getSimulator().getWind().getWindDirection().asVector();
 	Vector windDirPerp = windDir.Normalize();
 
 	GLState state(GLState::TEXTURE_ON | GLState::BLEND_ON); 

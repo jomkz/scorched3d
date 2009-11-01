@@ -52,8 +52,11 @@ public:
 	};
 	enum WindType
 	{
-		WindOnRound = 0,
-		WindOnMove = 1
+		WindChangeNever = 0,
+		WindChangeSomeTimes = 1,
+		WindChangeFrequently = 2,
+		WindChangeConstantly = 3,
+		WindChangeAlways = 4
 	};
 	enum WallType
 	{

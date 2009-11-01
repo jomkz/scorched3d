@@ -35,6 +35,7 @@
 #include <target/TargetShield.h>
 #include <common/OptionsTransient.h>
 #include <common/Defines.h>
+#include <engine/Simulator.h>
 #include <weapons/AccessoryStore.h>
 #include <lang/CachedValueString.h>
 #include <lang/LangResource.h>
@@ -95,7 +96,7 @@ void GLWScorchedInfo::draw()
 
 			static CachedValueString windSpeed;
 			if (windSpeed.hasChanged(ScorchedClient::instance()->
-				getOptionsTransient().getWindSpeed()))
+				getSimulator().getWind().getWindSpeed()))
 			{
 				if (windSpeed.cachedValue == 0)
 				{

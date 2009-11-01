@@ -23,6 +23,7 @@
 
 #include <engine/ActionController.h>
 #include <engine/EventContainer.h>
+#include <engine/Wind.h>
 #include <common/RandomGenerator.h>
 #include <simactions/SimAction.h>
 #include <net/NetBuffer.h>
@@ -41,6 +42,7 @@ public:
 	// Accessors
 	FileRandomGenerator &getRandomGenerator() { return random_; }
 	ActionController &getActionController() { return actionController_; }
+	Wind &getWind() { return wind_; }
 
 	fixed getCurrentTime() { return currentTime_; }
 
@@ -64,6 +66,7 @@ protected:
 	fixed currentTime_, actualTime_;
 	ScorchedContext *context_;
 	EventContainer events_;
+	Wind wind_;
 	FileRandomGenerator random_;
 	ActionController actionController_;
 	std::list<SimActionContainer *> simActions_;

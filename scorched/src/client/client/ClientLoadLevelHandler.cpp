@@ -133,11 +133,13 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 		message.getLandscapeDefinition(),
 		ProgressDialogSync::events_instance());
 
+	// Reset and initialize simulator and
+	ScorchedClient::instance()->getClientSimulator().newLevel();
+
 	// Calculate all the new landscape settings (graphics)
 	Landscape::instance()->generate(ProgressDialogSync::events_instance());
 
-	// Reset simulator and add all missed actions to the simulator
-	ScorchedClient::instance()->getClientSimulator().newLevel();
+	// Add all missed actions to the simulator and sync the simulator
 	std::list<ComsSimulateMessage *> simulateMessages;
 	std::list<ComsSimulateMessage *>::iterator messageItor;
 	if (!message.getSimulations(simulateMessages)) return false;
@@ -151,8 +153,6 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 		delete simMessage;
 	}
 	simulateMessages.clear();
-
-	// Now sync the landscape
 	Clock generateClock;
 	ScorchedClient::instance()->getClientSimulator().setSimulationTime(message.getActualTime());
 	float deformTime = generateClock.getTimeDifference();

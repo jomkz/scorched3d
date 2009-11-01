@@ -21,6 +21,7 @@
 #include <engine/PhysicsParticleObject.h>
 #include <engine/ScorchedContext.h>
 #include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <target/TargetSpace.h>
 #include <target/TargetShield.h>
@@ -35,9 +36,9 @@
 #include <actions/ShotBounce.h>
 #include <actions/ShotProjectile.h>
 #include <actions/ShieldHit.h>
+#include <common/OptionsTransient.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
-#include <common/OptionsTransient.h>
 
 PhysicsParticleObject::PhysicsParticleObject() : 
 	handler_(0), context_(0), underGroundCollision_(false), iterations_(0),
@@ -72,8 +73,8 @@ void PhysicsParticleObject::setPhysics(
 	position_ = position;
 	velocity_ = velocity;
 	windFactor_ = 
-		context_->getOptionsTransient().getWindDirection() * 
-		context_->getOptionsTransient().getWindSpeed() / 
+		context_->getSimulator().getWind().getWindDirection() * 
+		context_->getSimulator().getWind().getWindSpeed() / 
 		fixed(true, 25000) * windFactor;
 
 	FixedVector gravity(0, 0, context_->getOptionsGame().getGravity());

@@ -57,8 +57,11 @@ static OptionEntryEnum::EnumEntry windForceEnum[] =
 
 static OptionEntryEnum::EnumEntry windTypeEnum[] =
 {
-	{ "WindOnRound", 0 },
-	{ "WindOnMove", 1 },
+	{ "WindChangeNever", OptionsGame::WindChangeNever },
+	{ "WindChangeSomeTimes", OptionsGame::WindChangeSomeTimes },
+	{ "WindChangeFrequently", OptionsGame::WindChangeFrequently },
+	{ "WindChangeConstantly", OptionsGame::WindChangeConstantly },
+	{ "WindChangeAlways", OptionsGame::WindChangeAlways },
 	{ "", -1 }
 };
 
@@ -260,7 +263,7 @@ OptionsGame::OptionsGame() :
 	windForce_(options_, "WindForce", 
 		"The force of the wind", 0, int(WindRandom), windForceEnum),
 	windType_(options_, "WindType", 
-		"When the wind changes", 0, int(WindOnRound), windTypeEnum),
+		"When the wind changes", 0, int(WindChangeNever), windTypeEnum),
 	wallType_(options_, "WallType", 
 		"The type of walls allowed", 0, int(WallRandom), wallEnum),
 	weapScale_(options_, "WeaponScale", 

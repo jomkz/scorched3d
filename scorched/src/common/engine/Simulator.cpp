@@ -43,6 +43,7 @@ void Simulator::setScorchedContext(ScorchedContext *context)
 {
 	context_ = context;
 	actionController_.setScorchedContext(context);
+	wind_.setScorchedContext(context);
 }
 
 void Simulator::simulate()
@@ -79,6 +80,7 @@ void Simulator::actualSimulate(fixed frameTime)
 	actionController_.simulate(frameTime, currentTime_);
 
 	events_.simulate(frameTime, *context_);
+	wind_.simulate(frameTime);
 
 	while (!simActions_.empty())
 	{
@@ -101,4 +103,5 @@ void Simulator::newLevel()
 
 	// Reset events
 	events_.initialize(*context_);
+	wind_.newLevel();
 }

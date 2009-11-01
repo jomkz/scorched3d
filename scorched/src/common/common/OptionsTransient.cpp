@@ -30,14 +30,6 @@ OptionsTransient::OptionsTransient(OptionsScorched &optionsGame) :
 	optionsGame_(optionsGame), newGame_(false),
 	currentRoundNo_(options_, "CurrentRoundNo", 
 		"The current number of rounds played in this game", 0, 0),
-	windAngle_(options_, "WindAngle",
-		"The current wind angle (direction)", 0, 0),
-	windStartAngle_(options_, "WindStartAngle",
-		"The angle (direction) the wind started the round on", 0, 0),
-	windSpeed_(options_, "WindSpeed",
-		"The current speed of the wind", 0, 0),	
-	windDirection_(options_, "WindDirection",
-		"The current wind direction vector", 0, FixedVector::getNullVector()),
 	wallType_(options_, "WallType",
 		"The current wall type", 0, 0)
 {
@@ -112,60 +104,7 @@ void OptionsTransient::startNewGame()
 void OptionsTransient::newGame()
 {
 	currentRoundNo_.setValue(currentRoundNo_.getValue() + 1);	
-	newGameWind();
 	newGameWall();
-}
-
-void OptionsTransient::newGameWind()
-{
-	FileRandomGenerator random;
-	random.seed(rand());
-
-	switch(optionsGame_.getWindForce())
-	{
-		case OptionsGame::WindRandom:
-			windSpeed_.setValue(
-				(random.getRandFixed() * fixed(true, 59000)).asInt()); // ie range 0->5
-			break;
-		case OptionsGame::Wind1:
-		case OptionsGame::Wind2:
-		case OptionsGame::Wind3:
-		case OptionsGame::Wind4:
-		case OptionsGame::Wind5:
-			windSpeed_.setValue(
-				fixed(int(optionsGame_.getWindForce()) - 1));
-			break;
-		case OptionsGame::WindBreezy:
-			windSpeed_.setValue(
-				(random.getRandFixed() * fixed(true, 29000)).asInt());// ie range 0->2);
-			break;
-		case OptionsGame::WindGale:
-			windSpeed_.setValue(
-				(random.getRandFixed() * fixed(true, 29000)).asInt() + 3); // ie range 3->5);
-			break;
-		case OptionsGame::WindNone:
-		default:
-			windSpeed_.setValue(0);
-			break;
-	}
-
-	if (windSpeed_.getValue() > 0)
-	{
-		fixed winAngle = random.getRandFixed() * 360;
-		windStartAngle_.setValue(winAngle);
-		windAngle_.setValue(winAngle);
-		
-		fixed windDirX = (winAngle / fixed(180) * fixed::XPI).sin();
-		fixed windDirY = (winAngle / fixed(180) * fixed::XPI).cos();
-		FixedVector windDir(windDirX, windDirY, 0);
-		windDirection_.setValue(windDir);
-	}
-	else
-	{
-		windStartAngle_.setValue(0);
-		windAngle_.setValue(0);
-		windDirection_.setValue(FixedVector::getNullVector());
-	}
 }
 
 Vector &OptionsTransient::getWallColor()

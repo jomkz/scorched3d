@@ -22,8 +22,8 @@
 #include <tank/TankContainer.h>
 #include <tank/TankPosition.h>
 #include <tank/TankState.h>
+#include <engine/Simulator.h>
 #include <common/RandomGenerator.h>
-#include <common/OptionsTransient.h>
 #include <common/Defines.h>
 #include <landscapemap/LandscapeMaps.h>
 #ifndef S3D_SERVER
@@ -175,20 +175,20 @@ void TankLib::getShotTowardsPosition(ScorchedContext &context,
 	power += (random.getRandFixed() * 200) - 100;
 	if (power < 100) power = 100;
 
-	if (context.getOptionsTransient().getWindOn())
+	if (context.getSimulator().getWind().getWindOn())
 	{
 		// Make less adjustments for less wind
-		fixed windMag = context.getOptionsTransient().getWindSpeed() / 5;
+		fixed windMag = context.getSimulator().getWind().getWindSpeed() / 5;
 
 		// Try to account for the wind direction
 		FixedVector ndirection = direction;
 		ndirection[2] = 0;
 		ndirection = ndirection.Normalize();
 		ndirection = ndirection.get2DPerp();
-		fixed windoffsetLR = context.getOptionsTransient().getWindDirection().dotP(ndirection);
+		fixed windoffsetLR = context.getSimulator().getWind().getWindDirection().dotP(ndirection);
 		angleXYDegs += windoffsetLR * distance2D * (fixed(true, 1200) + random.getRandFixed()) * fixed(true, 400) * windMag;
 
-		fixed windoffsetFB = context.getOptionsTransient().getWindDirection().dotP(direction.Normalize());
+		fixed windoffsetFB = context.getSimulator().getWind().getWindDirection().dotP(direction.Normalize());
 		windoffsetFB /= 10;
 		windoffsetFB *= windMag;
 		windoffsetFB += 1; // windowoffset FB 0.9 > 1.1

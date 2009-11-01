@@ -21,6 +21,7 @@
 #include <sky/SkyDome.h>
 #include <sky/Sky.h>
 #include <sky/Hemisphere.h>
+#include <engine/Simulator.h>
 #include <landscape/Landscape.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeTex.h>
@@ -30,7 +31,6 @@
 #include <image/ImageFactory.h>
 #include <client/ScorchedClient.h>
 #include <graph/OptionsDisplay.h>
-#include <common/OptionsTransient.h>
 #include <common/Defines.h>
 
 SkyDome::SkyDome() : 
@@ -95,13 +95,12 @@ void SkyDome::simulate(float frameTime)
 
 	float fastSpeed = 100;
 	float slowSpeed = 500;
-	float currentSpeed = ScorchedClient::instance()->getOptionsTransient().getWindSpeed().asFloat();
-	float wantedAngle = ScorchedClient::instance()->getOptionsTransient().getWindAngle().asFloat();
+	float currentSpeed = ScorchedClient::instance()->getSimulator().getWind().getWindSpeed().asFloat();
 	float wantedSpeed = (((5.0f - currentSpeed) / 5.0f) * (slowSpeed - fastSpeed)) + fastSpeed;
 
 	// Move the cloud layer
 	cloudSpeed_ = wantedSpeed;
-	cloudDirection_ = -ScorchedClient::instance()->getOptionsTransient().getWindDirection().asVector();
+	cloudDirection_ = -ScorchedClient::instance()->getSimulator().getWind().getWindDirection().asVector();
 	xy_ += frameTime / cloudSpeed_;
 
 	// The sky flash
@@ -116,8 +115,6 @@ void SkyDome::drawBackdrop()
 	LandscapeTex &tex =
 		*ScorchedClient::instance()->getLandscapeMaps().getDefinitions().getTex();
 
-	// Cannot use a display list for heimisphere as we change texture
-	// coordinates all the time
 	glPushMatrix();
 		// Translate scene so it is in the middle of the camera
 		glTranslatef(pos[0], pos[1], -15.0f);
@@ -148,6 +145,16 @@ void SkyDome::drawBackdrop()
 			glMatrixMode(GL_TEXTURE);
 			glLoadIdentity();
 			glMatrixMode(GL_MODELVIEW);
+		}
+
+		if (flashTime_ > 0.0f) 
+		{
+			glDisable(GL_FOG); 
+
+			GLState currentState(GLState::TEXTURE_OFF | GLState::BLEND_ON);
+
+			glColor4f(1.0f, 1.0f, 1.0f, flashTime_);
+			flash_.draw(1985, 220, Hemisphere::eWidthTexture);
 		}
 
 	glPopMatrix();

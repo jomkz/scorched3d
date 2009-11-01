@@ -61,12 +61,6 @@ public:
 	// Rounds left
 	int getCurrentRoundNo() { return currentRoundNo_.getValue(); }
 
-	// Wind
-	fixed getWindAngle() { return windAngle_.getValue(); }
-	fixed getWindSpeed() { return windSpeed_.getValue(); }
-	FixedVector &getWindDirection() { return windDirection_.getValue(); }
-	bool getWindOn() { return (windSpeed_.getValue() > fixed(0)); }
-
 	// Arms Level
 	int getArmsLevel();
 
@@ -80,14 +74,9 @@ protected:
 	std::list<OptionEntry *> options_;
 	OptionsScorched &optionsGame_;
 	OptionEntryInt currentRoundNo_;
-	OptionEntryFixed windAngle_;
-	OptionEntryFixed windStartAngle_;
-	OptionEntryFixed windSpeed_;
-	OptionEntryFixedVector windDirection_;
 	OptionEntryInt wallType_;
 
 	bool newGame_;
-	void newGameWind();
 	void newGameWall();
 
 };

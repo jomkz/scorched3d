@@ -22,8 +22,8 @@
 #include <client/ScorchedClient.h>
 #include <graph/MainCamera.h>
 #include <GLEXT/GLViewPort.h>
-#include <common/OptionsTransient.h>
 #include <common/Defines.h>
+#include <engine/Simulator.h>
 #include <3dsparse/ModelStore.h>
 #include <graph/ModelRenderer.h>
 #include <graph/ModelRendererStore.h>
@@ -63,7 +63,7 @@ void WindDialogToolTip::populate()
 	}
 
 	if (ScorchedClient::instance()->
-		getOptionsTransient().getWindSpeed() == 0)
+		getSimulator().getWind().getWindSpeed() == 0)
 	{
 		setText(ToolTip::ToolTipHelp, 
 			LANG_RESOURCE("WIND", "Wind"), 
@@ -81,7 +81,7 @@ void WindDialogToolTip::populate()
 			"and speed, and the wall type.\n"
 			"Current Wind Force : {0} (out of 5)\n",
 			S3D::formatStringBuffer("%i", (int) ScorchedClient::instance()->
-			getOptionsTransient().getWindSpeed().asFloat())) +
+			getSimulator().getWind().getWindSpeed().asFloat())) +
 			wallTypeStr);
 	}
 }
@@ -153,7 +153,7 @@ void GLWWindView::drawDisplay()
 
 		// Draw the wind arrow for direction
 		GLState texState(GLState::TEXTURE_OFF);
-		if (ScorchedClient::instance()->getOptionsTransient().getWindOn())
+		if (ScorchedClient::instance()->getSimulator().getWind().getWindOn())
 		{
 			Vector4 sunPosition(-100.0f, 100.0f, 400.0f, 1.0f);
 			Vector4 sunDiffuse(0.9f, 0.9f, 0.9f, 1.0f);
@@ -165,7 +165,7 @@ void GLWWindView::drawDisplay()
 			glTranslatef(0.0f, 0.0f, 20.0f);
 			glScalef(0.1f, 0.1f, 0.1f);
 
-			glRotatef(-ScorchedClient::instance()->getOptionsTransient().getWindAngle().asFloat(), 
+			glRotatef(-ScorchedClient::instance()->getSimulator().getWind().getWindAngle().asFloat(), 
 				0.0f, 0.0f, 1.0f);
 			drawArrow();
 		}

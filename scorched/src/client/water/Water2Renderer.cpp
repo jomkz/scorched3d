@@ -25,6 +25,7 @@
 #include <common/Vector4.h>
 #include <image/ImageFactory.h>
 #include <image/ImageFactory.h>
+#include <engine/Simulator.h>
 #include <GLEXT/GLStateExtension.h>
 #include <GLEXT/GLCamera.h>
 #include <GLEXT/GLTextureCubeMap.h>
@@ -454,9 +455,9 @@ void Water2Renderer::generate(LandscapeTexBorderWater *water, ProgressCounter *c
 
 	// Setup wind dir/speed
 	windSpeed1_ = ScorchedClient::instance()->
-		getOptionsTransient().getWindSpeed().asFloat() * 2.0f + 3.0f;
+		getSimulator().getWind().getWindSpeed().asFloat() * 2.0f + 3.0f;
 	windDir1_ = ScorchedClient::instance()->
-		getOptionsTransient().getWindDirection().asVector();
+		getSimulator().getWind().getWindDirection().asVector();
 	windDir1_[2] = 0.0f;
 	windSpeed2_ = MAX(0.0f, RAND * 2.0f - 1.0f + windSpeed1_);
 	windDir2_ = Vector(windDir1_[0] + RAND * 0.4f - 0.2f,

@@ -57,6 +57,7 @@ protected:
 	LargeHemisphere clouds2_;
 	LargeHemisphere colors_;
 	LargeHemisphere stars_;
+	LargeHemisphere flash_;
 };
 
 #endif // __INCLUDE_SkyDomeh_INCLUDE__

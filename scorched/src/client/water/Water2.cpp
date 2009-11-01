@@ -24,6 +24,7 @@
 #include <common/Logger.h>
 #include <common/ProgressCounter.h>
 #include <common/OptionsTransient.h>
+#include <engine/Simulator.h>
 #include <client/ScorchedClient.h>
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeDefn.h>
@@ -97,9 +98,9 @@ void Water2::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)
 
 	// Calculate water for position n
 	float windSpeed = ScorchedClient::instance()->
-		getOptionsTransient().getWindSpeed().asFloat() * 2.0f + 3.0f;
+		getSimulator().getWind().getWindSpeed().asFloat() * 2.0f + 3.0f;
 	Vector windDir = ScorchedClient::instance()->
-		getOptionsTransient().getWindDirection().asVector();
+		getSimulator().getWind().getWindDirection().asVector();
 	if (windDir == Vector::getNullVector())
 	{
 		windDir = Vector(0.8f, 0.8f);
