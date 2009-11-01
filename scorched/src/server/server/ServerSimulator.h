@@ -37,7 +37,7 @@ public:
 
 	bool getSendActionsEmpty() { return sendActions_.empty() && simActions_.empty(); }
 
-	void newLevel();
+	virtual void newLevel();
 	ComsLoadLevelMessage &getLevelMessage();
 
 	virtual bool processMessage(

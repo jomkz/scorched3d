@@ -70,6 +70,7 @@ protected:
 
 	virtual void actualSimulate(fixed frameTime);
 	virtual bool continueToSimulate() = 0;
+	virtual void newLevel();
 };
 
 #endif // !defined(AFX_Simulator_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_)

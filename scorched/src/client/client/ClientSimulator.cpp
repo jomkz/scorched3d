@@ -125,12 +125,9 @@ void ClientSimulator::newLevel()
 		simActions_.pop_front();
 	}
 
-	// Clear any action controller actions
-	actionController_.clear();
+	Simulator::newLevel();
 
 	// Reset times
-	actualTime_ = 0;
-	currentTime_ = 0;
 	lastTickTime_ = SDL_GetTicks() - 1;
 	serverTimeDifference_.reset(0);
 }

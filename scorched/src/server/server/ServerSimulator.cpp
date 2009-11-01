@@ -176,12 +176,8 @@ void ServerSimulator::newLevel()
 		simActions_.pop_front();
 	}
 
-	// Clear any action controller actions
-	actionController_.clear();
+	Simulator::newLevel();
 
-	// Reset times
-	currentTime_ = 0;
-	actualTime_ = 0;
 	nextSendTime_ = 0;
 	nextEventTime_ = nextSendTime_ + sendStepSize_;
 

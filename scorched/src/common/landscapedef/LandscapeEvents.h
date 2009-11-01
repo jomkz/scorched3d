@@ -98,6 +98,7 @@ public:
 class LandscapeEvent
 {
 public:
+	LandscapeEvent();
 	virtual ~LandscapeEvent();
 
 	LandscapeCondition *condition;

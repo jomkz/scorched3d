@@ -28,7 +28,8 @@ static const fixed StepSize = fixed(true, FIXED_RESOLUTION / 50);
 Simulator::Simulator() :
 	speed_(1),
 	currentTime_(0),
-	actualTime_(0)
+	actualTime_(0),
+	context_(0)
 {
 	lastTickTime_ = SDL_GetTicks();
 }
@@ -77,7 +78,7 @@ void Simulator::actualSimulate(fixed frameTime)
 	// Move the actions
 	actionController_.simulate(frameTime, currentTime_);
 
-	//events_.simulate(frameTime, *context_);
+	events_.simulate(frameTime, *context_);
 
 	while (!simActions_.empty())
 	{
@@ -87,4 +88,17 @@ void Simulator::actualSimulate(fixed frameTime)
 		delete container;
 		simActions_.pop_front();
 	}
+}
+
+void Simulator::newLevel()
+{
+	// Clear any action controller actions
+	actionController_.clear();
+
+	// Reset times
+	currentTime_ = 0;
+	actualTime_ = 0;
+
+	// Reset events
+	events_.initialize(*context_);
 }

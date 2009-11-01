@@ -47,7 +47,7 @@ public:
 		NetMessage &message,
 		NetBufferReader &reader);
 
-	void newLevel();
+	virtual void newLevel();
 	void setSimulationTime(fixed actualTime);
 	void addComsSimulateMessage(ComsSimulateMessage &message, bool replaying);
 

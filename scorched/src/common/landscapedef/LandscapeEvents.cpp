@@ -27,6 +27,11 @@
 #include <XML/XMLNode.h>
 
 // LandscapeEvent
+LandscapeEvent::LandscapeEvent() :
+	condition(0), action(0)
+{
+}
+
 LandscapeEvent::~LandscapeEvent()
 {
 	delete condition;

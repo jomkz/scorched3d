@@ -111,22 +111,6 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	// Read the state from the message
 	if (!message.loadState(ScorchedClient::instance()->getContext())) return false;
 
-	// Reset simulator and add all missed actions to the simulator
-	ScorchedClient::instance()->getClientSimulator().newLevel();
-	std::list<ComsSimulateMessage *> simulateMessages;
-	std::list<ComsSimulateMessage *>::iterator messageItor;
-	if (!message.getSimulations(simulateMessages)) return false;
-	for (messageItor = simulateMessages.begin();
-		messageItor != simulateMessages.end();
-		messageItor++)
-	{
-		ComsSimulateMessage *simMessage = *messageItor;
-		ScorchedClient::instance()->getClientSimulator().
-			addComsSimulateMessage(*simMessage, true);
-		delete simMessage;
-	}
-	simulateMessages.clear();
-
 	// make sure we can only see the correct settings
 	OptionsDisplayConsole::instance()->addDisplayToConsole();
 
@@ -151,6 +135,22 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 
 	// Calculate all the new landscape settings (graphics)
 	Landscape::instance()->generate(ProgressDialogSync::events_instance());
+
+	// Reset simulator and add all missed actions to the simulator
+	ScorchedClient::instance()->getClientSimulator().newLevel();
+	std::list<ComsSimulateMessage *> simulateMessages;
+	std::list<ComsSimulateMessage *>::iterator messageItor;
+	if (!message.getSimulations(simulateMessages)) return false;
+	for (messageItor = simulateMessages.begin();
+		messageItor != simulateMessages.end();
+		messageItor++)
+	{
+		ComsSimulateMessage *simMessage = *messageItor;
+		ScorchedClient::instance()->getClientSimulator().
+			addComsSimulateMessage(*simMessage, true);
+		delete simMessage;
+	}
+	simulateMessages.clear();
 
 	// Now sync the landscape
 	Clock generateClock;
