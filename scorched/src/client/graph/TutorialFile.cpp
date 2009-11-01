@@ -23,7 +23,9 @@
 #include <client/ScorchedClient.h>
 #include <common/OptionsTransient.h>
 #include <tank/TankContainer.h>
-#include <server/ServerCommon.h>
+#include <server/ServerSimulator.h>
+#include <server/ScorchedServer.h>
+#include <simactions/AdminSimAction.h>
 
 TutorialFileEntry *TutorialConditionWindowWait::checkCondition()
 {
@@ -83,7 +85,7 @@ bool TutorialConditionWindowVisible::parseXML(TutorialFile *file, XMLNode *node)
 
 TutorialFileEntry *TutorialConditionFirstMove::checkCondition()
 {
-	if (ScorchedClient::instance()->getOptionsTransient().getCurrentGameNo() > 1)
+	if (ScorchedClient::instance()->getOptionsTransient().getCurrentRoundNo() > 1)
 	{
 		return next_;
 	}
@@ -109,7 +111,8 @@ TutorialFileEntry *TutorialConditionTankDead::checkCondition()
 	if (ScorchedClient::instance()->getTankContainer().getNoOfTanks() -
 		ScorchedClient::instance()->getTankContainer().aliveCount() > 1)
 	{
-		ServerCommon::killAll();
+		AdminSimAction *simAction = new AdminSimAction(AdminSimAction::eKillAll, 0, 0);
+		ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
 		return next_;
 	}
 	return 0;

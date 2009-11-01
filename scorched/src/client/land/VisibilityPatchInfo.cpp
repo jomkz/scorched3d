@@ -50,6 +50,7 @@ void VisibilityPatchInfo::generate(int maxLandPatches, int maxWaterPatches, int 
 
 void VisibilityPatchInfo::reset()
 {
+	patchesVisited_ = 0;
 	landVisibility_.reset();
 	treeVisibility_.reset();
 	targetVisibility_.reset();

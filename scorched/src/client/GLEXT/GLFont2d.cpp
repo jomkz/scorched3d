@@ -284,10 +284,11 @@ bool GLFont2d::drawStringHandler(unsigned length,
 			acolor[3] = alpha;
 
 			GLFont2dStorage::CharEntry *charEntry = getCharacter(*string);
-			handler->drawCharacter(pos, position, *charEntry, acolor);
-
-			glColor4fv(acolor);
-			glCallList(charEntry->displaylist);
+			if (handler->drawCharacter(*string, pos, position, *charEntry, acolor))
+			{
+				glColor4fv(acolor);
+				glCallList(charEntry->displaylist);
+			}
 
 			position[0] += float(charEntry->advances) * size / height_;
 		}

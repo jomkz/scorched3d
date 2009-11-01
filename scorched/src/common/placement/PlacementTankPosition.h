@@ -28,9 +28,6 @@
 
 namespace PlacementTankPosition 
 {
-	void flattenTankPositions(
-		ScorchedContext & context);
-
 	FixedVector placeTank(unsigned int playerId, int team,
 		ScorchedContext &context, RandomGenerator &generator);
 };

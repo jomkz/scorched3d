@@ -72,13 +72,12 @@ void ClientMessageHandler::clientDisconnected(NetMessage &message)
 
 	Logger::log(S3D::formatStringBuffer("Disconnected %s", type));
 	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimDisconnected);
-	ScorchedClient::instance()->getGameState().checkStimulate();
 	ScorchedClient::instance()->getTankContainer().setCurrentDestinationId(0);
 }
 
 void ClientMessageHandler::clientError(NetMessage &message,
-		const char *errorString)
+	const std::string &errorString)
 {
-	Logger::log(S3D::formatStringBuffer("***Client Error*** \"%s\"", errorString));
+	Logger::log(S3D::formatStringBuffer("***Client Error*** \"%s\"", errorString.c_str()));
 	ScorchedClient::instance()->getNetInterface().disconnectAllClients();
 }

@@ -22,18 +22,32 @@
 #define _ComsSyncCheckMessage_h
 
 #include <coms/ComsMessage.h>
+#include <engine/ScorchedContext.h>
+#include <vector>
 
 class ComsSyncCheckMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsSyncCheckMessageType;
+
 	ComsSyncCheckMessage();
+	ComsSyncCheckMessage(unsigned int syncId, ScorchedContext &context);
 	virtual ~ComsSyncCheckMessage();
+
+	unsigned int getSyncId() { return syncId_; }
+	NetBuffer &getLandscapeBuffer() { return landscapeBuffer_; }
+	NetBuffer &getTargetsBuffer() { return targetsBuffer_; }
+	std::vector<std::string> &getSyncCheck() { return syncChecks_; }
 
 	// Inherited from ComsMessage
     virtual bool writeMessage(NetBuffer &buffer);
     virtual bool readMessage(NetBufferReader &reader);
 
 protected:
+	std::vector<std::string> syncChecks_;
+	unsigned int syncId_;
+	NetBuffer landscapeBuffer_;
+	NetBuffer targetsBuffer_;
 
 private:
 	ComsSyncCheckMessage(const ComsSyncCheckMessage &);

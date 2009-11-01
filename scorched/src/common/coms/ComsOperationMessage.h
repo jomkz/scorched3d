@@ -32,6 +32,8 @@ public:
 		OperationTestSave = 1
 	};
 
+	static ComsMessageType ComsOperationMessageTyper;
+
 	ComsOperationMessage(
 		ComsOperationMessageType type = OperationNone, 
 		const char *param1_ = "",

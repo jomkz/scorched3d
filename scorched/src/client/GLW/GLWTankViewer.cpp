@@ -104,7 +104,10 @@ void GLWTankViewer::setTeam(int team)
 	}
 
 	// Show new team models
-	select(0, 0, GLWSelectorEntry(catagoryChoice_.getCurrentText()));
+	if (catagoryChoice_.getCurrentEntry())
+	{
+		select(0, 0, *catagoryChoice_.getCurrentEntry());
+	}
 
 	// Select old model
 	scrollBar_.setCurrent(scrollCurrent);

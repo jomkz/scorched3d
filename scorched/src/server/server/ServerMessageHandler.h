@@ -31,31 +31,18 @@ class ServerMessageHandler :
 public:
 	static ServerMessageHandler *instance();
 
-	struct DestinationInfo
-	{
-		DestinationInfo();
-
-		int adminTries;
-		bool admin;
-	};
-
 	virtual void clientConnected(NetMessage &message);
 	virtual void clientDisconnected(NetMessage &message);
 	virtual void clientError(NetMessage &message,
-		const char *errorString);
+		const std::string &errorString);
 
 	virtual void messageRecv(unsigned int destinationId);
 	virtual void messageSent(unsigned int destinationId);
 
-	DestinationInfo *getDestinationInfo(unsigned int destinationId);
-
 	void destroyPlayer(unsigned int playerId, const char *reason);
-	void destroyTaggedPlayers();
 
 protected:
 	static ServerMessageHandler *instance_;
-	void actualDestroyPlayer(unsigned int tankId);
-	std::map<unsigned int, DestinationInfo> destinationInfos_;
 
 private:
 	ServerMessageHandler();

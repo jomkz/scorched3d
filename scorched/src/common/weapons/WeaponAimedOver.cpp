@@ -20,7 +20,7 @@
 
 #include <weapons/WeaponAimedOver.h>
 #include <weapons/AccessoryStore.h>
-#include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <tank/Tank.h>
 #include <tank/TankLib.h>
@@ -136,7 +136,7 @@ void WeaponAimedOver::fireWeapon(ScorchedContext &context,
 		}
 	}
 
-	RandomGenerator &random = context.getActionController().getRandom();
+	RandomGenerator &random = context.getSimulator().getRandomGenerator();
 	
 	// Add a percetage that we will not fire at any tank
 	maxDist *= (percentageMissChance_.getValue(context) / 100) + 1;

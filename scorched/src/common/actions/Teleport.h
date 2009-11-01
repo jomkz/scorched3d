@@ -21,12 +21,12 @@
 #if !defined(__INCLUDE_Teleporth_INCLUDE__)
 #define __INCLUDE_Teleporth_INCLUDE__
 
-#include <engine/ActionReferenced.h>
+#include <actions/Action.h>
 #include <engine/ViewPoints.h>
 #include <common/FixedVector.h>
 #include <weapons/WeaponTeleport.h>
 
-class Teleport : public ActionReferenced
+class Teleport : public Action
 {
 public:
 	Teleport(
@@ -38,6 +38,7 @@ public:
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
 	virtual std::string getActionDetails();
+	virtual std::string getActionType() { return "Teleport"; }
 
 protected:
 	ViewPoints::ViewPoint *vPoint_;

@@ -27,8 +27,7 @@
 #include <weapons/WeaponRoller.h>
 
 class ModelRendererSimulator;
-class ShotBounce : 
-	public PhysicsParticleReferenced
+class ShotBounce : public PhysicsParticle
 {
 public:
 	ShotBounce(
@@ -43,6 +42,7 @@ public:
 	virtual void collision(PhysicsParticleObject &position, 
 		ScorchedCollisionId collisionId);
 	virtual std::string getActionDetails();
+	virtual std::string getActionType() { return "ShotBounce"; }
 
 	unsigned int getPlayerId() { return weaponContext_.getPlayerId(); }
 	WeaponRoller *getWeapon() { return weapon_; }

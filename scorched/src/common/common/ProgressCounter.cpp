@@ -43,7 +43,7 @@ void ProgressCounter::setNewOp(const LangString &op)
 {
 	currentOp_ = op;
 	Logger::log(LangStringUtil::convertFromLang(op));
-	if (user_) user_->progressChange(currentOp_, currentPercentage_);
+	if (user_) user_->operationChange(currentOp_);
 }
 
 void ProgressCounter::setNewPercentage(float percentage)

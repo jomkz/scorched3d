@@ -26,7 +26,9 @@
 #include <target/TargetShield.h>
 #include <target/TargetParachute.h>
 #include <coms/ComsDefenseMessage.h>
-#include <server/ServerDefenseHandler.h>
+#include <simactions/TankDefenseSimAction.h>
+#include <server/ScorchedServer.h>
+#include <server/ServerSimulator.h>
 #include <XML/XMLNode.h>
 #include <stdlib.h>
 
@@ -91,7 +93,8 @@ void TankAICurrentDefenses::parachutesUpDown(Tank *tank, unsigned int paraId)
 		(paraId!=0)?ComsDefenseMessage::eParachutesUp:ComsDefenseMessage::eParachutesDown,
 		paraId);
 
-	ServerDefenseHandler::instance()->processDefenseMessage(defenseMessage, tank);
+	TankDefenseSimAction *simAction = new TankDefenseSimAction(defenseMessage);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
 }
 
 void TankAICurrentDefenses::shieldsUpDown(Tank *tank, unsigned int shieldId)
@@ -101,5 +104,6 @@ void TankAICurrentDefenses::shieldsUpDown(Tank *tank, unsigned int shieldId)
 		(shieldId!=0)?ComsDefenseMessage::eShieldUp:ComsDefenseMessage::eShieldDown,
 		shieldId);
 
-	ServerDefenseHandler::instance()->processDefenseMessage(defenseMessage, tank);
+	TankDefenseSimAction *simAction = new TankDefenseSimAction(defenseMessage);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
 }

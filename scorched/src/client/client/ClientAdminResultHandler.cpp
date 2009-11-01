@@ -34,7 +34,7 @@ ClientAdminResultHandler *ClientAdminResultHandler::instance()
 ClientAdminResultHandler::ClientAdminResultHandler() : sid_(0)
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsAdminResultMessage",
+		ComsAdminResultMessage::ComsAdminResultMessageType,
 		this);
 }
 

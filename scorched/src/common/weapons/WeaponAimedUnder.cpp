@@ -20,7 +20,7 @@
 
 #include <weapons/WeaponAimedUnder.h>
 #include <weapons/AccessoryStore.h>
-#include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <tank/TankLib.h>
 #include <tank/Tank.h>
@@ -131,7 +131,7 @@ void WeaponAimedUnder::fireWeapon(ScorchedContext &context,
 	// Add a percetage that we will not fire at any tank
 	maxDist *= (percentageMissChance_.getValue(context)/ 100) + 1;
 
-	RandomGenerator &random = context.getActionController().getRandom();
+	RandomGenerator &random = context.getSimulator().getRandomGenerator();
 
 	// For each war head
 	for (int i=0; i<warHeads_; i++)

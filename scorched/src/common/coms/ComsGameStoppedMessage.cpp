@@ -20,9 +20,10 @@
 
 #include <coms/ComsGameStoppedMessage.h>
 
+ComsMessageType ComsGameStoppedMessage::ComsGameStoppedMessageType("ComsGameStoppedMessageType");
+
 ComsGameStoppedMessage::ComsGameStoppedMessage() :
-	ComsMessage("ComsGameStoppedMessage"),
-	stateMessage_(false, false)
+	ComsMessage(ComsGameStoppedMessageType)
 {
 }
 
@@ -32,10 +33,10 @@ ComsGameStoppedMessage::~ComsGameStoppedMessage()
 
 bool ComsGameStoppedMessage::writeMessage(NetBuffer &buffer)
 {
-	return stateMessage_.writeMessage(buffer);
+	return true;
 }
 
 bool ComsGameStoppedMessage::readMessage(NetBufferReader &reader)
 {
-	return stateMessage_.readMessage(reader);
+	return true;
 }

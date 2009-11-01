@@ -20,13 +20,15 @@
 
 #include <coms/ComsChannelMessage.h>
 
+ComsMessageType ComsChannelMessage::ComsChannelMessageType("ComsChannelMessageType");
+
 ComsChannelMessage::ComsChannelMessage() :
-	ComsMessage("ComsChannelMessage")
+	ComsMessage(ComsChannelMessageType)
 {
 }
 
 ComsChannelMessage::ComsChannelMessage(RequestType type, unsigned int id) :
-	ComsMessage("ComsChannelMessage"),
+	ComsMessage(ComsChannelMessageType),
 	type_(type), id_(id)
 {
 }

@@ -477,6 +477,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\common\RollingAverage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\common\RollingAverage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\common\sha2.cpp"
 				>
 			</File>
@@ -601,6 +609,14 @@
 			Name="actions"
 			>
 			<File
+				RelativePath="..\..\common\actions\Action.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\Action.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\actions\ActionParams.cpp"
 				>
 			</File>
@@ -630,14 +646,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\actions\CameraPositionAction.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\actions\CheckResurrection.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\actions\CheckResurrection.h"
 				>
 			</File>
 			<File
@@ -681,6 +689,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\actions\MoveTimerAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\MoveTimerAction.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\actions\Napalm.cpp"
 				>
 			</File>
@@ -705,6 +721,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\actions\RoundTimerAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\RoundTimerAction.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\actions\ShieldHit.cpp"
 				>
 			</File>
@@ -721,11 +745,27 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\actions\ShotFinishedAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\ShotFinishedAction.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\actions\ShotProjectile.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\common\actions\ShotProjectile.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\ShowScoreAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\ShowScoreAction.h"
 				>
 			</File>
 			<File
@@ -777,6 +817,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\actions\TankRemove.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\TankRemove.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\actions\TankResign.cpp"
 				>
 			</File>
@@ -798,6 +846,22 @@
 			</File>
 			<File
 				RelativePath="..\..\common\actions\Teleport.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\VisualMoveTimerAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\VisualMoveTimerAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\VisualRoundTimerAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\actions\VisualRoundTimerAction.h"
 				>
 			</File>
 		</Filter>
@@ -1037,14 +1101,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsGameStateMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsGameStateMessage.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\coms\ComsGameStoppedMessage.cpp"
 				>
 			</File>
@@ -1069,27 +1125,19 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsInitializeMessage.cpp"
+				RelativePath="..\..\common\coms\ComsInitializeModMessage.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsInitializeMessage.h"
+				RelativePath="..\..\common\coms\ComsInitializeModMessage.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsKeepAliveMessage.cpp"
+				RelativePath="..\..\common\coms\ComsLevelLoadedMessage.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsKeepAliveMessage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsLevelMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsLevelMessage.h"
+				RelativePath="..\..\common\coms\ComsLevelLoadedMessage.h"
 				>
 			</File>
 			<File
@@ -1098,6 +1146,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\coms\ComsLinesMessage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\coms\ComsLoadLevelMessage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\coms\ComsLoadLevelMessage.h"
 				>
 			</File>
 			<File
@@ -1125,11 +1181,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsNewGameMessage.cpp"
+				RelativePath="..\..\common\coms\ComsNetStatMessage.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsNewGameMessage.h"
+				RelativePath="..\..\common\coms\ComsNetStatMessage.h"
 				>
 			</File>
 			<File
@@ -1157,59 +1213,19 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsPlayerReadyMessage.cpp"
+				RelativePath="..\..\common\coms\ComsSimulateMessage.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsPlayerReadyMessage.h"
+				RelativePath="..\..\common\coms\ComsSimulateMessage.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsPlayerStateMessage.cpp"
+				RelativePath="..\..\common\coms\ComsSimulateResultMessage.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\coms\ComsPlayerStateMessage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsPlayerStatusMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsPlayerStatusMessage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsPlayMovesMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsPlayMovesMessage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsRmPlayerMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsRmPlayerMessage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsScoreMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsScoreMessage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsStartGameMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsStartGameMessage.h"
+				RelativePath="..\..\common\coms\ComsSimulateResultMessage.h"
 				>
 			</File>
 			<File
@@ -1220,40 +1236,16 @@
 				RelativePath="..\..\common\coms\ComsSyncCheckMessage.h"
 				>
 			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsTimerStartMessage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\coms\ComsTimerStartMessage.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="engine"
 			>
-			<File
-				RelativePath="..\..\common\engine\Action.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\engine\Action.h"
-				>
-			</File>
 			<File
 				RelativePath="..\..\common\engine\ActionController.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\common\engine\ActionController.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\engine\ActionReferenced.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\engine\ActionReferenced.h"
 				>
 			</File>
 			<File
@@ -1361,14 +1353,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\engine\PlayShots.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\engine\PlayShots.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\engine\ScorchedCollisionIds.cpp"
 				>
 			</File>
@@ -1385,11 +1369,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\engine\ShotState.cpp"
+				RelativePath="..\..\common\engine\Simulator.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\engine\ShotState.h"
+				RelativePath="..\..\common\engine\Simulator.h"
 				>
 			</File>
 			<File
@@ -2029,22 +2013,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\net\NetServerTCP2.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerTCP2.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerTCP2Destination.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetServerTCP2Destination.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\net\NetServerTCP3.cpp"
 				>
 			</File>
@@ -2361,14 +2329,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\tank\TankMod.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\tank\TankMod.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\tank\TankModel.cpp"
 				>
 			</File>
@@ -2604,6 +2564,14 @@
 				RelativePath="..\..\common\placement\PlacementTypeTree.h"
 				>
 			</File>
+			<Filter
+				Name="scorchedc"
+				>
+				<File
+					RelativePath=".\main.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="weapons"
@@ -3174,24 +3142,8 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="scorchedc"
-			>
-			<File
-				RelativePath=".\main.cpp"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="client"
 			>
-			<File
-				RelativePath="..\client\ClientAddPlayerHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientAddPlayerHandler.h"
-				>
-			</File>
 			<File
 				RelativePath="..\client\ClientAdmin.cpp"
 				>
@@ -3249,14 +3201,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\client\ClientDefenseHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientDefenseHandler.h"
-				>
-			</File>
-			<File
 				RelativePath="..\client\ClientDialog.cpp"
 				>
 			</File>
@@ -3273,14 +3217,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\client\ClientGameStateHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientGameStateHandler.h"
-				>
-			</File>
-			<File
 				RelativePath="..\client\ClientGameStoppedHandler.cpp"
 				>
 			</File>
@@ -3289,27 +3225,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\client\ClientGiftMoneyHandler.cpp"
+				RelativePath="..\client\ClientInitializeModHandler.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\client\ClientGiftMoneyHandler.h"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientInitializeHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientInitializeHandler.h"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientKeepAliveSender.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientKeepAliveSender.h"
+				RelativePath="..\client\ClientInitializeModHandler.h"
 				>
 			</File>
 			<File
@@ -3321,11 +3241,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\client\ClientLoadPlayersState.cpp"
+				RelativePath="..\client\ClientLoadLevelHandler.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\client\ClientLoadPlayersState.h"
+				RelativePath="..\client\ClientLoadLevelHandler.h"
 				>
 			</File>
 			<File
@@ -3345,14 +3265,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\client\ClientNewGameHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientNewGameHandler.h"
-				>
-			</File>
-			<File
 				RelativePath="..\client\ClientOperationHandler.cpp"
 				>
 			</File>
@@ -3366,22 +3278,6 @@
 			</File>
 			<File
 				RelativePath="..\client\ClientParams.h"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientPlayerStateHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientPlayerStateHandler.h"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientPlayerStatusHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientPlayerStatusHandler.h"
 				>
 			</File>
 			<File
@@ -3401,22 +3297,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\client\ClientRmPlayerHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientRmPlayerHandler.h"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientSave.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientSave.h"
-				>
-			</File>
-			<File
 				RelativePath="..\client\ClientSaveScreenState.cpp"
 				>
 			</File>
@@ -3425,19 +3305,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\client\ClientScoreHandler.cpp"
+				RelativePath="..\client\ClientSimulator.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\client\ClientScoreHandler.h"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientShotState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientShotState.h"
+				RelativePath="..\client\ClientSimulator.h"
 				>
 			</File>
 			<File
@@ -3449,35 +3321,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\client\ClientStartTimerHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientStartTimerHandler.h"
-				>
-			</File>
-			<File
 				RelativePath="..\client\ClientState.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\client\ClientState.h"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientSyncCheckHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientSyncCheckHandler.h"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientWaitState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\client\ClientWaitState.h"
 				>
 			</File>
 			<File
@@ -3578,6 +3426,14 @@
 			</File>
 			<File
 				RelativePath="..\dialogs\BuyAccessoryDialog.h"
+				>
+			</File>
+			<File
+				RelativePath="..\dialogs\BuyAccessoryDialogTankInfo.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\dialogs\BuyAccessoryDialogTankInfo.h"
 				>
 			</File>
 			<File
@@ -5165,6 +5021,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\server\tankai\TankAINone.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\tankai\TankAINone.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\server\tankai\TankAIRandom.cpp"
 				>
 			</File>
@@ -5377,11 +5241,43 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\server\server\ServerConsoleLogger.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerConsoleLogger.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerConsoleProgressCounter.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerConsoleProgressCounter.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\server\server\ServerDefenseHandler.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\server\server\ServerDefenseHandler.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerDestination.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerDestination.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerDestinations.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerDestinations.h"
 				>
 			</File>
 			<File
@@ -5417,19 +5313,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\server\server\ServerInitializeHandler.cpp"
+				RelativePath="..\..\server\server\ServerInitializeModHandler.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\server\server\ServerInitializeHandler.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerKeepAliveHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerKeepAliveHandler.h"
+				RelativePath="..\..\server\server\ServerInitializeModHandler.h"
 				>
 			</File>
 			<File
@@ -5438,6 +5326,14 @@
 			</File>
 			<File
 				RelativePath="..\..\server\server\ServerLinesHandler.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerLoadLevel.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerLoadLevel.h"
 				>
 			</File>
 			<File
@@ -5465,38 +5361,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\server\server\ServerNewGameState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerNewGameState.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerNextRoundState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerNextRoundState.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerNextShotState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerNextShotState.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerNextTurnState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerNextTurnState.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\server\server\ServerOperationResultHandler.cpp"
 				>
 			</File>
@@ -5521,30 +5385,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\server\server\ServerPlayerReadyHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerPlayerReadyHandler.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerPlayingState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerPlayingState.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerReadyState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerReadyState.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\server\server\ServerRegistration.cpp"
 				>
 			</File>
@@ -5553,43 +5393,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\server\server\ServerResetState.cpp"
+				RelativePath="..\..\server\server\ServerSimulator.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\server\server\ServerResetState.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerShotFinishedState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerShotFinishedState.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerShotHolder.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerShotHolder.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerShotState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerShotState.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerStartingState.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\server\server\ServerStartingState.h"
+				RelativePath="..\..\server\server\ServerSimulator.h"
 				>
 			</File>
 			<File
@@ -5601,11 +5409,59 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\server\server\ServerStateTooFewPlayersState.cpp"
+				RelativePath="..\..\server\server\ServerStateBuying.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\server\server\ServerStateTooFewPlayersState.h"
+				RelativePath="..\..\server\server\ServerStateBuying.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerStateEnoughPlayers.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerStateEnoughPlayers.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerStateNewGame.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerStateNewGame.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerStatePlaying.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerStatePlaying.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerStateScore.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerStateScore.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerStateStartingMatch.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerStateStartingMatch.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerSyncCheck.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerSyncCheck.h"
 				>
 			</File>
 			<File
@@ -5625,19 +5481,43 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\server\server\ServerTooFewPlayersStimulus.cpp"
+				RelativePath="..\..\server\server\ServerTurns.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\server\server\ServerTooFewPlayersStimulus.h"
+				RelativePath="..\..\server\server\ServerTurns.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\server\server\TurnController.cpp"
+				RelativePath="..\..\server\server\ServerTurnsFree.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\server\server\TurnController.h"
+				RelativePath="..\..\server\server\ServerTurnsFree.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerTurnsSequential.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerTurnsSequential.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerTurnsSimultaneous.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerTurnsSimultaneous.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerTurnsSimultaneousNoWait.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerTurnsSimultaneousNoWait.h"
 				>
 			</File>
 		</Filter>
@@ -5664,6 +5544,14 @@
 		<Filter
 			Name="land"
 			>
+			<File
+				RelativePath="..\land\LandAndTargetVisibilityPatch.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\land\LandAndTargetVisibilityPatch.h"
+				>
+			</File>
 			<File
 				RelativePath="..\land\LandSurround.cpp"
 				>
@@ -5718,6 +5606,14 @@
 			</File>
 			<File
 				RelativePath="..\land\VisibilityPatchQuad.h"
+				>
+			</File>
+			<File
+				RelativePath="..\land\WaterAndTargetVisibilityPatch.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\land\WaterAndTargetVisibilityPatch.h"
 				>
 			</File>
 			<File
@@ -6150,6 +6046,162 @@
 			</File>
 			<File
 				RelativePath="..\..\common\lang\ResourceBundleEntryImpl.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="simactions"
+			>
+			<File
+				RelativePath="..\..\common\simactions\AdminSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\AdminSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\PlayMovesSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\PlayMovesSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\RoundStartSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\RoundStartSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\RoundStopSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\RoundStopSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\ShowScoreSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\ShowScoreSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\SimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\SimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\SyncCheckSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\SyncCheckSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankAccessorySimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankAccessorySimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankAddSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankAddSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankAliveSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankAliveSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankBotBallanceSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankBotBallanceSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankChangeSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankChangeSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankDefenseSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankDefenseSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankGiftSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankGiftSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankLoadedSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankLoadedSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankRemoveSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankRemoveSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankStartMoveSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankStartMoveSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankStopMoveSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankStopMoveSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankTeamBallanceSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankTeamBallanceSimAction.h"
 				>
 			</File>
 		</Filter>

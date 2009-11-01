@@ -22,7 +22,8 @@
 #define __INCLUDE_ComsMessageHandlerh_INCLUDE__
 
 #include <net/NetMessageHandler.h>
-#include <map>
+#include <coms/ComsMessage.h>
+#include <vector>
 
 class ComsMessageConnectionHandlerI
 {
@@ -32,7 +33,7 @@ public:
 	virtual void clientConnected(NetMessage &message) = 0;
 	virtual void clientDisconnected(NetMessage &message) = 0;
 	virtual void clientError(NetMessage &message,
-		const char *errorString) = 0;
+		const std::string &errorString) = 0;
 
 	virtual void messageRecv(unsigned int destinationId) = 0;
 	virtual void messageSent(unsigned int destinationId) = 0;
@@ -49,17 +50,6 @@ public:
 		NetBufferReader &reader) = 0;
 };
 
-class ComsMessageHandlerSentI
-{
-public:
-	virtual ~ComsMessageHandlerSentI();
-
-	virtual bool processSentMessage(
-		unsigned int id,
-		const char *message,
-		NetBufferReader &reader) = 0;
-};
-
 class ComsMessageHandler : public NetMessageHandlerI
 {
 public:
@@ -69,10 +59,10 @@ public:
 	// Used to add a handler for a specific message type
 	void setConnectionHandler(
 		ComsMessageConnectionHandlerI *handler);
-	void addHandler(const char *messageType,
+	void addHandler(ComsMessageType &comsMessageType,
 		ComsMessageHandlerI *handler);
-	void addSentHandler(const char *messageType,
-		ComsMessageHandlerSentI *handler);
+	void addSentHandler(ComsMessageType &comsMessageType,
+		ComsMessageHandlerI *handler);
 
 	// Inherited from NetMessageHandlerI
 	virtual void processMessage(NetMessage &message);
@@ -81,14 +71,76 @@ public:
 
 protected:
 	std::string instanceName_;
-	std::map<std::string, ComsMessageHandlerI *> recvHandlerMap_;
-	std::map<std::string, ComsMessageHandlerSentI *> sentHandlerMap_;
+	std::vector<ComsMessageHandlerI *> recvHandlers_;
+	std::vector<ComsMessageHandlerI *> sentHandlers_;
 	ComsMessageConnectionHandlerI *connectionHandler_;
 
 	bool comsMessageLogging_;
 	void processReceiveMessage(NetMessage &message);
 	void processSentMessage(NetMessage &message);
+	void processMessage(NetMessage &message,
+		std::vector<ComsMessageHandlerI *> &handlers,
+		const char *sendRecv);
+};
 
+// Used as in REGISTER_HANDLER(
+//	"MyComsMessage", 
+//	ComsMessageHandlerIRegistration::eClient, 
+//	new MyComsMessageHandler)
+#define REGISTER_HANDLER(name, type, y, z) \
+	struct HANDLER_##name { HANDLER_##name() { ComsMessageHandlerIRegistration::addHandler(y, type, z); } }; \
+	static HANDLER_##name HANDLER_IMPL_##name;
+
+class ComsMessageHandlerIRegistration
+{
+public:
+	enum HandlerType
+	{
+		eClient,
+		eServer
+	};
+	struct HandlerInfo
+	{
+		HandlerType type;
+		ComsMessageType *messageType;
+		ComsMessageHandlerI *handler;
+	};
+
+	static void addHandler(HandlerType type,
+			ComsMessageType &messageType,
+			ComsMessageHandlerI *handler);
+	static std::list<HandlerInfo> *handlerList;
+	static void registerHandlers(HandlerType type, ComsMessageHandler &handler);
+};
+
+// Same as above but passed userdata to method
+template<class T>
+class ComsMessageHandlerIAdapter : public ComsMessageHandlerI
+{
+public:
+	ComsMessageHandlerIAdapter(T *inst, 
+		bool (T::*call)(NetMessage &message, NetBufferReader &reader), 
+		ComsMessageType &comsMessageType,
+		ComsMessageHandler &handler) :
+		inst_(inst), call_(call)
+	{
+		handler.addHandler(comsMessageType, this);
+	};
+	virtual ~ComsMessageHandlerIAdapter()
+	{
+	};
+
+	virtual bool processMessage(
+		NetMessage &message,
+		const char *messageType,
+		NetBufferReader &reader)
+	{
+		return (inst_->*call_)(message, reader);
+	}
+
+protected:
+	T *inst_;
+	bool (T::*call_)(NetMessage &message, NetBufferReader &reader);
 };
 
 #endif

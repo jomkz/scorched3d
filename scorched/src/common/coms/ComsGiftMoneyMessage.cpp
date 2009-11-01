@@ -20,14 +20,33 @@
 
 #include <coms/ComsGiftMoneyMessage.h>
 
+ComsMessageType ComsGiftMoneyMessage::ComsGiftMoneyMessageType("ComsGiftMoneyMessageType");
+
+ComsGiftMoneyMessage::ComsGiftMoneyMessage() :
+	ComsMessage(ComsGiftMoneyMessageType),
+	fromPlayerId_(0), 
+	toPlayerId_(0),
+	money_(0)
+{
+}
+
 ComsGiftMoneyMessage::ComsGiftMoneyMessage(
 	unsigned int fromPlayerId,
 	unsigned int toPlayerId,
 	int money) :
-	ComsMessage("ComsGiftMoneyMessage"),
+	ComsMessage(ComsGiftMoneyMessageType),
 	fromPlayerId_(fromPlayerId), 
 	toPlayerId_(toPlayerId),
 	money_(money)
+{
+}
+
+ComsGiftMoneyMessage::ComsGiftMoneyMessage(
+	ComsGiftMoneyMessage &other) :
+	ComsMessage(ComsGiftMoneyMessageType),
+	fromPlayerId_(other.fromPlayerId_), 
+	toPlayerId_(other.toPlayerId_),
+	money_(other.money_)
 {
 }
 

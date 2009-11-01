@@ -24,18 +24,17 @@
 #include <net/NetInterface.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
-#include <tank/TankContainer.h>
-#include <tank/TankState.h>
 #ifndef S3D_SERVER
 #include <client/ScorchedClient.h>
 #endif
 #include <server/ScorchedServer.h>
+#include <server/ServerDestinations.h>
 #include <set>
 #include <zlib.h>
 
 static NetBuffer defaultBuffer;
 
-bool ComsMessageSender::formMessage(ComsMessage &message)
+bool ComsMessageSender::formMessage(ComsMessage &message, unsigned int flags)
 {
 	// Write the message and its type to the buffer
 	defaultBuffer.reset();
@@ -51,7 +50,17 @@ bool ComsMessageSender::formMessage(ComsMessage &message)
 	}
 
 	// Compress the message
-	defaultBuffer.compressBuffer();
+#ifdef S3D_SERVER
+	if (flags & NetInterfaceFlags::fCompress)
+	{
+		defaultBuffer.compressBuffer();
+		defaultBuffer.addToBuffer(true);
+	}
+	else
+#endif
+	{
+		defaultBuffer.addToBuffer(false);
+	}
 
 	return true;
 }
@@ -62,13 +71,14 @@ bool ComsMessageSender::sendToServer(
 {
 	if (!ScorchedClient::instance()->getNetInterfaceValid() ||
 		!ScorchedClient::instance()->getNetInterface().started()) return false;
-	if (!formMessage(message)) return false;
+	if (!formMessage(message, flags)) return false;
 
 	if (ScorchedClient::instance()->getComsMessageHandler().getMessageLogging())
 	{
-		Logger::log(S3D::formatStringBuffer("Client::send(%s, %u)", 
-			message.getMessageType(),
-			defaultBuffer.getBufferUsed()));
+		Logger::log(S3D::formatStringBuffer("Client::send(%s, %u%s)", 
+			message.getComsMessageType().getName().c_str(),
+			defaultBuffer.getBufferUsed(),
+			(flags & NetInterfaceFlags::fCompress)?", compressed":""));
 	}	
 	ScorchedClient::instance()->getNetInterface().sendMessageServer(
 		defaultBuffer, flags);
@@ -80,7 +90,7 @@ bool ComsMessageSender::sendToMultipleClients(
 	ComsMessage &message, std::list<unsigned int> sendDestinations, unsigned int flags)
 {
 	if (sendDestinations.empty()) return true;
-	if (!formMessage(message)) return false;
+	if (!formMessage(message, flags)) return false;
 
 	// Used to ensure we only send messages to each
 	// destination once
@@ -102,10 +112,11 @@ bool ComsMessageSender::sendToMultipleClients(
 
 			if (ScorchedServer::instance()->getComsMessageHandler().getMessageLogging())
 			{
-				Logger::log(S3D::formatStringBuffer("Server::send(%s, %u, %u)", 
-					message.getMessageType(),
+				Logger::log(S3D::formatStringBuffer("Server::send(%s, %u, %u%s)", 
+					message.getComsMessageType().getName().c_str(),
 					destination,
-					defaultBuffer.getBufferUsed()));
+					defaultBuffer.getBufferUsed(),
+					(flags & NetInterfaceFlags::fCompress)?", compressed":""));
 			}	
 			if (!ScorchedServer::instance()->getNetInterfaceValid() ||
 				!ScorchedServer::instance()->getNetInterface().started())
@@ -135,36 +146,35 @@ bool ComsMessageSender::sendToAllConnectedClients(
 	ComsMessage &message, unsigned int flags)
 {
 	std::list<unsigned int> destinations;
-	std::map<unsigned int, Tank *>::iterator itor;
-	std::map<unsigned int, Tank *> tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	for (itor = tanks.begin();
-		itor != tanks.end();
+	std::map<unsigned int, ServerDestination *>::iterator itor;
+	std::map<unsigned int, ServerDestination *> dests = 
+		ScorchedServer::instance()->getServerDestinations().getServerDestinations();
+	for (itor = dests.begin();
+		itor != dests.end();
 		itor++)
 	{
-		Tank *tank = (*itor).second;
-		destinations.push_back(tank->getDestinationId());
+		ServerDestination *destination = (*itor).second;
+		destinations.push_back(destination->getDestinationId());
 	}
 	return sendToMultipleClients(message, destinations, flags);
 }
 
-bool ComsMessageSender::sendToAllPlayingClients(
+bool ComsMessageSender::sendToAllLoadedClients(
 	ComsMessage &message, unsigned int flags)
 {
 	std::list<unsigned int> destinations;
-	std::map<unsigned int, Tank *>::iterator itor;
-	std::map<unsigned int, Tank *> tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	for (itor = tanks.begin();
-		itor != tanks.end();
+	std::map<unsigned int, ServerDestination *>::iterator itor;
+	std::map<unsigned int, ServerDestination *> dests = 
+		ScorchedServer::instance()->getServerDestinations().getServerDestinations();
+	for (itor = dests.begin();
+		itor != dests.end();
 		itor++)
 	{
-		Tank *tank = (*itor).second;
-		if (tank->getState().getState() != TankState::sPending &&
-			tank->getState().getState() != TankState::sLoading &&
-			tank->getState().getState() != TankState::sInitializing)
+		ServerDestination *destination = (*itor).second;
+		if (destination->getState() == ServerDestination::sFinished ||
+			destination->getState() == ServerDestination::sLoadingLevel)
 		{
-			destinations.push_back(tank->getDestinationId());
+			destinations.push_back(destination->getDestinationId());
 		}
 	}
 	return sendToMultipleClients(message, destinations, flags);

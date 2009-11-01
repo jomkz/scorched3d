@@ -21,9 +21,10 @@
 #if !defined(__INCLUDE_TankSayh_INCLUDE__)
 #define __INCLUDE_TankSayh_INCLUDE__
 
-#include <engine/ActionReferenced.h>
+#include <actions/Action.h>
+#include <lang/LangString.h>
 
-class TankSay : public ActionReferenced
+class TankSay : public Action
 {
 public:
 	TankSay(unsigned int playerId, const LangString &text);
@@ -31,6 +32,7 @@ public:
 
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
+	virtual std::string getActionType() { return "TankSay"; }
 
 protected:
 	unsigned int playerId_;

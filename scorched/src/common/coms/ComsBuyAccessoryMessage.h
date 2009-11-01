@@ -18,7 +18,6 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #if !defined(__INCLUDE_ComsBuyAccessoryMessageh_INCLUDE__)
 #define __INCLUDE_ComsBuyAccessoryMessageh_INCLUDE__
 
@@ -28,10 +27,14 @@
 class ComsBuyAccessoryMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsBuyAccessoryMessageType;
+
+	ComsBuyAccessoryMessage();
+	ComsBuyAccessoryMessage(ComsBuyAccessoryMessage &other);
 	ComsBuyAccessoryMessage(
-		unsigned int playerId = 0,
-		unsigned int accessoryId = 0,
-		bool buy = true);
+		unsigned int playerId,
+		unsigned int accessoryId,
+		bool buy);
 	virtual ~ComsBuyAccessoryMessage();
 
 	unsigned int getPlayerId() { return playerId_; }
@@ -46,6 +49,8 @@ protected:
 	unsigned int playerId_;
 	unsigned int accessoryId_;
 	bool buy_;
+private:
+	const ComsBuyAccessoryMessage & operator=(const ComsBuyAccessoryMessage &);
 };
 
 

@@ -45,18 +45,18 @@ bool TankSort::SortOnScore::operator()(const Tank *x, const Tank *y, ScorchedCon
 	TankScore &scoreX = tankX.getScore();
 	TankScore &scoreY = tankY.getScore();
 
-	if (tankX.getState().getSpectator() &&
-		tankY.getState().getSpectator())
+	if (!tankX.getState().getTankPlaying() &&
+		!tankY.getState().getTankPlaying())
 	{
 		if (LangStringUtil::strcmp(((Tank *)x)->getTargetName(), 
 			((Tank *)y)->getTargetName()) < 0) return true;
 		return false;
 	}
-	else if (tankX.getState().getSpectator())
+	else if (!tankX.getState().getTankPlaying())
 	{
 		return false;
 	}
-	else if (tankY.getState().getSpectator())
+	else if (!tankY.getState().getTankPlaying())
 	{
 		return true;
 	}

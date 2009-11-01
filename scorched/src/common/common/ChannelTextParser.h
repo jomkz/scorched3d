@@ -39,8 +39,10 @@ public:
 	};
 	struct ChannelTextEntry
 	{
+		ChannelTextEntry() : data(0) {}
+
 		ChannelTextEntryType type;
-		unsigned int data;
+		unsigned int data; // Not a pointer incase for e.g. the tank disconects 
 		LangString text;
 		LangString part;
 		Vector color;

@@ -19,21 +19,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <server/ServerBuyAccessoryHandler.h>
-#include <server/ServerShotHolder.h>
-#include <server/ServerState.h>
 #include <server/ScorchedServer.h>
-#include <server/TurnController.h>
-#include <tank/TankContainer.h>
-#include <tank/TankState.h>
-#include <tank/TankScore.h>
-#include <tank/TankAccessories.h>
-#include <coms/ComsBuyAccessoryMessage.h>
-#include <coms/ComsMessageSender.h>
-#include <common/OptionsTransient.h>
-#include <common/OptionsScorched.h>
+#include <server/ServerState.h>
+#include <server/ServerSimulator.h>
+#include <simactions/TankAccessorySimAction.h>
 #include <common/Logger.h>
-#include <weapons/AccessoryStore.h>
-#include <weapons/EconomyStore.h>
+#include <tank/TankContainer.h>
 
 ServerBuyAccessoryHandler *ServerBuyAccessoryHandler::instance_ = 0;
 
@@ -49,7 +40,7 @@ ServerBuyAccessoryHandler *ServerBuyAccessoryHandler::instance()
 ServerBuyAccessoryHandler::ServerBuyAccessoryHandler()
 {
 	ScorchedServer::instance()->getComsMessageHandler().addHandler(
-		"ComsBuyAccessoryMessage",
+		ComsBuyAccessoryMessage::ComsBuyAccessoryMessageType,
 		this);
 }
 
@@ -67,17 +58,10 @@ bool ServerBuyAccessoryHandler::processMessage(
 	unsigned int playerId = message.getPlayerId();
 
 	// Check we are at the correct time to buy anything
-	if (ScorchedServer::instance()->getGameState().getState() != 
-		ServerState::ServerStateBuying)
+	if (ScorchedServer::instance()->getServerState().getState() != 
+		ServerState::ServerBuyingState)
 	{
 		Logger::log( "ERROR: Player attempted to buy accessory but in incorrect state");
-		return true;
-	}
-
-	// Check we are in the correct round no to buy anything
-	if (ScorchedServer::instance()->getOptionsTransient().getCurrentGameNo() != 0)
-	{
-		Logger::log( "ERROR: Player attempted to buy at incorrect time");
 		return true;
 	}
 
@@ -89,70 +73,16 @@ bool ServerBuyAccessoryHandler::processMessage(
 		return true;
 	}
 
+	// Check that the message comes from the right destination
 	if (tank->getDestinationId() != netMessage.getDestinationId())
 	{
 		Logger::log( "ERROR: Player buying does not exist at this destination");
 		return true;
 	}
 
-	// Check this player is alive
-	if (tank->getState().getState() != TankState::sNormal)
-	{
-		Logger::log( "ERROR: Player buying is not alive");
-		return true;
-	}
+	// Add/rm accessory to the tanks
+	TankAccessorySimAction *simAction = new TankAccessorySimAction(message);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
 
-	// Check this player has not already given a move
-	if (ServerShotHolder::instance()->haveShot(playerId))
-	{
-		Logger::log( "ERROR: Player buying has made move");
-		return true;
-	}
-
-	if (!TurnController::instance()->playerThisTurn(playerId))
-	{
-		Logger::log( "ERROR: Player buying should not be buying");
-		return true;		
-	}
-
-	// Check that the accessory is valid
-	Accessory *accessory = 
-		ScorchedServer::instance()->getAccessoryStore().
-		findByAccessoryId(message.getAccessoryId());
-	if (!accessory)
-	{
-		Logger::log(S3D::formatStringBuffer("ERROR: Player buying not-existant weapon \"%i\"", 
-			message.getAccessoryId()));
-		return true;
-	}
-
-	// The game state and everything is correct
-	// Perform the actual add or remove of accessory
-	if (message.getBuy())
-	{
-		if (!tank->getAccessories().accessoryAllowed(accessory, accessory->getBundle())) return true;
-		if (accessory->getNoBuy()) return true;
-		if (tank->getScore().getMoney() < accessory->getPrice()) return true;
-
-		EconomyStore::instance()->getEconomy()->accessoryBought(
-			tank, accessory->getName());
-
-		// Add the accessory
-		tank->getAccessories().add(accessory, accessory->getBundle());
-		tank->getScore().setMoney(
-			tank->getScore().getMoney() - accessory->getPrice());
-	}
-	else
-	{
-		if (tank->getAccessories().getAccessoryCount(accessory) <= 0) return true;
-
-		EconomyStore::instance()->getEconomy()->accessorySold(
-			tank, accessory->getName());
-
-		// Remove the accessory
-		tank->getAccessories().rm(accessory, 1);
-		tank->getScore().setMoney(
-			tank->getScore().getMoney() + accessory->getSellPrice());
-	}
 	return true;
 }

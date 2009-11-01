@@ -20,9 +20,28 @@
 
 #include <coms/ComsAddPlayerMessage.h>
 
+ComsMessageType ComsAddPlayerMessage::ComsAddPlayerMessageType("ComsAddPlayerMessageType");
+
 ComsAddPlayerMessage::ComsAddPlayerMessage() :
-	ComsMessage("ComsAddPlayerMessage")
+	ComsMessage(ComsAddPlayerMessageType)
 {
+}
+
+ComsAddPlayerMessage::ComsAddPlayerMessage(ComsAddPlayerMessage &other) :
+	ComsMessage(ComsAddPlayerMessageType),
+	playerId_(other.playerId_),
+	playerName_(other.playerName_),
+	playerType_(other.playerType_),
+	playerColor_(other.playerColor_),
+	modelName_(other.modelName_),
+	typeName_(other.typeName_),
+	destinationId_(other.destinationId_),
+	playerTeam_(other.playerTeam_),
+	playerIconName_(other.playerIconName_)
+{
+	playerIcon_.reset();
+	playerIcon_.addDataToBuffer(other.playerIcon_.getBuffer(), 
+		other.playerIcon_.getBufferUsed());
 }
 
 ComsAddPlayerMessage::ComsAddPlayerMessage(
@@ -34,7 +53,7 @@ ComsAddPlayerMessage::ComsAddPlayerMessage(
 		unsigned int destinationId,
 		unsigned int playerTeam,
 		const char *playerType) :
-	ComsMessage("ComsAddPlayerMessage"),
+	ComsMessage(ComsAddPlayerMessageType),
 	playerId_(playerId),
 	playerName_(playerName),
 	playerType_(playerType),

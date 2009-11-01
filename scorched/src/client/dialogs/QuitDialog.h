@@ -35,7 +35,7 @@ public:
 
 protected:
 	GLWTextButton *okButton_, *quitButton_;
-	GLWTextButton *killButton_, *saveButton_;
+	GLWTextButton *killButton_;
 	static QuitDialog *instance_;
 
 private:

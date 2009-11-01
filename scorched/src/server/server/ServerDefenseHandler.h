@@ -37,9 +37,6 @@ public:
 		const char *messageType,
 		NetBufferReader &reader);
 
-	void processDefenseMessage(
-		ComsDefenseMessage &message, Tank *tank);
-
 protected:
 	static ServerDefenseHandler *instance_;
 

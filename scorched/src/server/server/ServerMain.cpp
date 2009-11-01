@@ -33,15 +33,15 @@
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
-#include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <engine/ModFiles.h>
 #include <landscapedef/LandscapeDefinitions.h>
+#include <landscapemap/LandscapeMaps.h>
 #include <tankai/TankAIAdder.h>
 #include <tankai/TankAIStore.h>
 #include <tank/TankModelStore.h>
 #include <server/ServerLinesHandler.h>
 #include <server/ServerMessageHandler.h>
-#include <server/ServerPlayerReadyHandler.h>
 #include <server/ServerGiftMoneyHandler.h>
 #include <server/ServerDefenseHandler.h>
 #include <server/ServerPlayedMoveHandler.h>
@@ -49,23 +49,26 @@
 #include <server/ServerAdminHandler.h>
 #include <server/ServerHaveModFilesHandler.h>
 #include <server/ServerBuyAccessoryHandler.h>
-#include <server/ServerKeepAliveHandler.h>
 #include <server/ServerFileAkHandler.h>
-#include <server/ServerInitializeHandler.h>
+#include <server/ServerInitializeModHandler.h>
 #include <server/ServerChannelManager.h>
 #include <server/ServerConnectHandler.h>
 #include <server/ServerConnectAuthHandler.h>
 #include <server/ServerOperationResultHandler.h>
+#include <server/ServerConsoleProgressCounter.h>
+#include <server/ServerConsoleLogger.h>
 #include <server/ServerFileServer.h>
+#include <server/ServerLoadLevel.h>
 #include <server/ServerRegistration.h>
+#include <server/ServerConsoleProgressCounter.h>
 #include <server/ServerLog.h>
 #include <server/ServerBrowserInfo.h>
-#include <server/ServerState.h>
 #include <server/ServerCommon.h>
 #include <server/ServerBanned.h>
 #include <server/ServerMain.h>
 #include <server/ScorchedServer.h>
 #include <server/ScorchedServerUtil.h>
+#include <server/ServerState.h>
 #include <SDL/SDL.h>
 
 #ifdef S3D_SERVER
@@ -73,6 +76,7 @@
 #endif
 
 Clock serverTimer;
+static bool serverStarted = false;
 
 void checkSettings()
 {
@@ -102,8 +106,6 @@ bool startServer(bool local, ProgressCounter *counter)
 		// A loopback is created by the client for a single player game 
 		ScorchedServer::instance()->getContext().setNetInterface(
 			//new NetServerTCP(new NetServerTCPScorchedProtocol());
-			//new NetServerUDP();
-			//new NetServerTCP2();
 			new NetServerTCP3());
 	}
 
@@ -117,15 +119,14 @@ bool startServer(bool local, ProgressCounter *counter)
 	ServerLinesHandler::instance();
 	ServerChannelManager::instance();
 	ServerGiftMoneyHandler::instance();
-	ServerPlayerReadyHandler::instance();
 	ServerAdminHandler::instance();
 	ServerHaveModFilesHandler::instance();
-	ServerInitializeHandler::instance();
-	ServerKeepAliveHandler::instance();
+	ServerInitializeModHandler::instance();
 	ServerPlayedMoveHandler::instance();
 	ServerFileAkHandler::instance();
 	ServerBuyAccessoryHandler::instance();
 	ServerAddPlayerHandler::instance();
+	ServerLoadLevel::instance();
 	ServerDefenseHandler::instance();
 	ServerOperationResultHandler::instance();
 
@@ -157,7 +158,7 @@ bool startServer(bool local, ProgressCounter *counter)
 	TankAIAdder::addTankAIs(*ScorchedServer::instance());
 
 	// Start the state machine
-	ServerState::setupStates(ScorchedServer::instance()->getGameState());
+	// ServerState::setupStates(ScorchedServer::instance()->getGameState());
 	EconomyStore::instance();
 
 	checkSettings();
@@ -165,6 +166,7 @@ bool startServer(bool local, ProgressCounter *counter)
 	// Load all script hooks
 	if (!ScorchedServer::instance()->getLUAScriptHook().loadHooks()) return false;
 
+	serverStarted = true;
 	return true;
 }
 
@@ -209,10 +211,16 @@ void serverMain(ProgressCounter *counter)
 
 void serverLoop()
 {
+	float timeDifference = serverTimer.getTimeDifference();
+	Logger::processLogEntries();
+
 	// Main server loop:
-	if (ScorchedServer::instance()->getContext().getNetInterfaceValid())
+	if (!serverStarted ||
+		!ScorchedServer::instance()->getContext().getNetInterfaceValid())
 	{
-		Logger::processLogEntries();
+		return;
+	}
+		
 		ScorchedServer::instance()->getNetInterface().processMessages();
 #ifdef S3D_SERVER
 		{
@@ -221,88 +229,26 @@ void serverLoop()
 		}
 #endif
 
-		float timeDifference = serverTimer.getTimeDifference();
-		ScorchedServer::instance()->getGameState().draw();
-		ScorchedServer::instance()->getGameState().simulate(timeDifference);
+		ScorchedServer::instance()->getSimulator().simulate();
+
+		ServerConnectAuthHandler::instance()->processMessages();
 		ServerFileServer::instance()->simulate(timeDifference);
 		ServerChannelManager::instance()->simulate(timeDifference);
 		ScorchedServerUtil::instance()->timedMessage.simulate();
-		ServerKeepAliveHandler::instance()->checkKeepAlives();
 
 		if (timeDifference > 5.0f)
 		{
 			Logger::log(S3D::formatStringBuffer("Warning: Server loop took %.2f seconds", 
 				timeDifference));
 		}
-	}
 }
-
-class ConsoleServerProgressCounter : public ProgressCounterI
-{
-public:
-	ConsoleServerProgressCounter() : lastOp_(), hashes_(0) {}
-
-	virtual void drawHashes(int neededHashes)
-	{
-		if (hashes_ < neededHashes)
-		{
-			for (int h=hashes_;h<neededHashes; h++)
-			{
-				printf("#");
-				if (h == 24)
-				{
-					printf("\n");
-				}
-			}
-			hashes_ = neededHashes;
-		}
-		fflush(stdout);
-	}
-
-	virtual void progressChange(const LangString &op, const float percentage)
-	{
-		if (op != lastOp_)
-		{
-			if (!lastOp_.empty())
-			{
-				drawHashes(25);
-			}
-
-			std::string opStr = LangStringUtil::convertFromLang(op);
-
-			Logger::log(opStr);
-			printf("%s:", opStr.c_str());
-			lastOp_ = op;
-			hashes_ = 0;
-		}
-
-		int neededHashes = int(percentage / 4.0f);
-		drawHashes(neededHashes);
-	}
-protected:
-	LangString lastOp_;
-	int hashes_;
-};
-
-class ConsoleLogger : public LoggerI
-{
-public:
-	virtual void logMessage(LoggerInfo &info)
-	{
-		printf("%s - %s\n", info.getTime(), info.getMessage());
-	}
-};
 
 void consoleServer()
 {
-	ConsoleLogger consoleLogger;
-	ProgressCounter progressCounter;
-	ConsoleServerProgressCounter progressCounterI;
-	progressCounter.setUser(&progressCounterI);
-
+	ServerConsoleProgressCounter::instance();
+	ServerConsoleLogger::instance();
 	ServerCommon::startFileLogger();
-	Logger::instance()->addLogger(&consoleLogger);
-	serverMain(&progressCounter);
+	serverMain(ServerConsoleProgressCounter::instance()->getProgressCounter());
 
 	for (;;)
 	{

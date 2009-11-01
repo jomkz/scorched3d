@@ -30,8 +30,6 @@ OptionsTransient::OptionsTransient(OptionsScorched &optionsGame) :
 	optionsGame_(optionsGame), newGame_(false),
 	currentRoundNo_(options_, "CurrentRoundNo", 
 		"The current number of rounds played in this game", 0, 0),
-	currentGameNo_(options_, "CurrentGameNo",
-		"The current game", 0, 0),
 	windAngle_(options_, "WindAngle",
 		"The current wind angle (direction)", 0, 0),
 	windStartAngle_(options_, "WindStartAngle",
@@ -48,24 +46,6 @@ OptionsTransient::OptionsTransient(OptionsScorched &optionsGame) :
 
 OptionsTransient::~OptionsTransient()
 {
-}
-
-const char *OptionsTransient::getGameType()
-{
-	const char *gameType = "Unknown";
-	switch (optionsGame_.getTurnType())
-	{
-	case OptionsGame::TurnSequentialLooserFirst:
-		gameType = "Sequential (Loser)";
-		break;
-	case OptionsGame::TurnSequentialRandom:
-		gameType = "Sequential (Random)";
-		break;
-	case OptionsGame::TurnSimultaneous:
-		gameType = "Simultaneous";
-		break;
-	}
-	return gameType;
 }
 
 unsigned int OptionsTransient::getLeastUsedTeam(TankContainer &container)
@@ -86,12 +66,10 @@ unsigned int OptionsTransient::getLeastUsedTeam(TankContainer &container)
 		itor++)
 	{
 		Tank *tank = (*itor).second;
-		if (!tank->getState().getSpectator())
+		if (tank->getTeam() > 0 &&
+			tank->getState().getTankPlaying())
 		{
-			if (tank->getTeam() > 0)
-			{
-				counts[tank->getTeam()] ++;
-			}
+			counts[tank->getTeam()] ++;
 		}
 	}
 
@@ -123,7 +101,6 @@ bool OptionsTransient::readFromBuffer(NetBufferReader &reader)
 
 void OptionsTransient::reset()
 {
-	currentGameNo_.setValue(0);
 	currentRoundNo_.setValue(0);
 }
 
@@ -132,42 +109,16 @@ void OptionsTransient::startNewGame()
 	currentRoundNo_.setValue(optionsGame_.getNoRounds()+1);
 }
 
-void OptionsTransient::startNewRound()
-{
-	currentGameNo_.setValue(optionsGame_.getNoMaxRoundTurns() + 1);
-}
-
 void OptionsTransient::newGame()
 {
-	newGame_ = true;
-	currentRoundNo_.setValue(currentRoundNo_.getValue() + 1);
-	if (currentRoundNo_.getValue() >= optionsGame_.getBuyOnRound() &&
-		!optionsGame_.getGiveAllWeapons())
-	{
-		currentGameNo_.setValue(0);	
-	}
-	else
-	{
-		currentGameNo_.setValue(1);
-	}
-	
+	currentRoundNo_.setValue(currentRoundNo_.getValue() + 1);	
 	newGameWind();
 	newGameWall();
 }
 
-void OptionsTransient::nextRound()
-{
-	if (!newGame_)
-	{
-		currentGameNo_.setValue(currentGameNo_.getValue() + 1);
-	}
-	newGame_ = false;
-	nextRoundWind();
-}
-
 void OptionsTransient::newGameWind()
 {
-	RandomGenerator random;
+	FileRandomGenerator random;
 	random.seed(rand());
 
 	switch(optionsGame_.getWindForce())
@@ -214,28 +165,6 @@ void OptionsTransient::newGameWind()
 		windStartAngle_.setValue(0);
 		windAngle_.setValue(0);
 		windDirection_.setValue(FixedVector::getNullVector());
-	}
-}
-
-void OptionsTransient::nextRoundWind()
-{
-	if (optionsGame_.getWindType() != OptionsGame::WindOnMove)
-	{
-		return;
-	}
-
-	if (windSpeed_.getValue() > 0)
-	{
-		RandomGenerator random;
-		random.seed(rand());
-
-		fixed winAngle = windStartAngle_.getValue() + ((random.getRandFixed() * 40) - 20);
-		windAngle_.setValue(winAngle);
-		
-		fixed windDirX = (winAngle / fixed(180) * fixed::XPI).sin();
-		fixed windDirY = (winAngle / fixed(180) * fixed::XPI).cos();
-		FixedVector windDir(windDirX, windDirY, 0);
-		windDirection_.setValue(windDir);
 	}
 }
 

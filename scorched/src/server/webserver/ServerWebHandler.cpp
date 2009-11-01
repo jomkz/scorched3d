@@ -26,7 +26,6 @@
 #include <server/ServerCommon.h>
 #include <server/ServerAdminCommon.h>
 #include <server/ServerAdminSessions.h>
-#include <server/ServerState.h>
 #include <server/ServerParams.h>
 #include <server/ServerChannelManager.h>
 #include <landscapedef/LandscapeDefinitionsBase.h>
@@ -455,15 +454,11 @@ bool ServerWebHandler::GameHandler::processRequest(
 	request.getFields()["PLAYERS"] = S3D::formatStringBuffer("%i/%i", tanks.size(), 
 		ScorchedServer::instance()->getOptionsGame().getNoMaxPlayers());
 
-	unsigned int state = ScorchedServer::instance()->getGameState().getState();
-	request.getFields()["STATE"] = ((state == ServerState::ServerStateTooFewPlayers)?"Not Playing":"Playing");
+	request.getFields()["STATE"] = "Playing";
 
 	request.getFields()["ROUND"] = S3D::formatStringBuffer("%i/%i",
 		ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo(),
 		ScorchedServer::instance()->getOptionsGame().getNoRounds());
-	request.getFields()["MOVE"] = S3D::formatStringBuffer("%i/%i",
-		ScorchedServer::instance()->getOptionsTransient().getCurrentGameNo(),
-		ScorchedServer::instance()->getOptionsGame().getNoMaxRoundTurns());
 	
 	request.getFields()["BI"] = S3D::formatStringBuffer("%uK", NetInterface::getBytesIn() / 1000);
 	request.getFields()["BO"] = S3D::formatStringBuffer("%uK", NetInterface::getBytesOut() / 1000);
@@ -479,8 +474,6 @@ bool ServerWebHandler::ServerHandler::processRequest(
 {
 	bool &messageLogging = ScorchedServer::instance()->
 		getComsMessageHandler().getMessageLogging();
-	bool &stateLogging = ScorchedServer::instance()->
-		getGameState().getStateLogging();
 
 	// Check for any action
 	const char *action = ServerWebServerUtil::getField(request.getFields(), "action");
@@ -500,7 +493,6 @@ bool ServerWebHandler::ServerHandler::processRequest(
 		else if (0 == strcmp(action, "Set Logging"))
 		{
 			messageLogging = (0 == strcmp(request.getFields()["MessageLogging"].c_str(), "on"));
-			stateLogging = (0 == strcmp(request.getFields()["StateLogging"].c_str(), "on"));
 		}
 	}
 
@@ -510,15 +502,9 @@ bool ServerWebHandler::ServerHandler::processRequest(
 			"<input type='radio' name='MessageLogging' %s value='off'>Off</input>",
 			(messageLogging?"checked":""),
 			(!messageLogging?"checked":""));
-		request.getFields()["STATELOGGING"] =  S3D::formatStringBuffer(
-			"<input type='radio' name='StateLogging' %s value='on'>On</input>"
-			"<input type='radio' name='StateLogging' %s value='off'>Off</input>",
-			(stateLogging?"checked":""),
-			(!stateLogging?"checked":""));
 	}
 
-	unsigned int state = ScorchedServer::instance()->getGameState().getState();
-	request.getFields()["STATE"] = ((state == ServerState::ServerStateTooFewPlayers)?"Not Playing":"Playing");
+	request.getFields()["STATE"] = "Playing";
 	request.getFields()["VERSION"] = S3D::formatStringBuffer("%s (%s) - Built %s", 
 		S3D::ScorchedVersion.c_str(), 
 		S3D::ScorchedProtocolVersion.c_str(), 

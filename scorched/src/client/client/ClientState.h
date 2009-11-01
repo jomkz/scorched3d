@@ -29,19 +29,16 @@ namespace ClientState
 	enum Stimulus
 	{
 		StimOptions = 1,
-		StimNextPlayerDialog,
-		StimGetPlayers,
-		StimLoadPlayers,
+		StimConnect,
 		StimLoadFiles,
+		StimLoadLevel,
 		StimWait,
 		StimBuyWeapons,
 		StimAutoDefense,
 		StimPlaying,
 		StimDisconnected,
 		StimGameStopped,
-		StimShot,
-		StimScore,
-		StimConnect
+		StimScore
 	};
 
 	enum State
@@ -50,14 +47,11 @@ namespace ClientState
 		StateConnect,
 		StateDisconnected,
 		StateLoadFiles,
-		StateGetPlayers,
-		StateLoadPlayers,
 		StateLoadLevel,
 		StateWait,
 		StateBuyWeapons,
 		StateAutoDefense,
 		StatePlaying,
-		StateShot,
 		StateScore
 	};
 

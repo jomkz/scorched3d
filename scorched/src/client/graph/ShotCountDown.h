@@ -22,31 +22,47 @@
 #define __INCLUDE_ShotCountDownh_INCLUDE__
 
 #include <engine/GameStateI.h>
+#include <common/Fixed.h>
 
-class ShotCountDown : 
-	public GameStateI
+class ShotCountDown : public GameStateI
 {
 public:
 	static ShotCountDown *instance();
 
-	void reset(float time);
+	enum TimerType
+	{
+		ePlaying,
+		eBuying
+	};
+
+	void showMoveTime(fixed timer, TimerType type, unsigned int playerId);
+	void showRoundTime(fixed timer);
 
 	//Inherited from GameStateI
-	virtual void simulate(const unsigned state, float simTime);
 	virtual void draw(const unsigned state);
 
 protected:
 	static ShotCountDown *instance_;
-	float counter_;
-	float blinkTimer_;
-	bool showTime_;
-	bool timerOff_;
+
+	struct MoveInfo
+	{
+		fixed timer_;
+		TimerType type_;
+		unsigned int playerId_;
+		bool show_;
+	} move;
+	struct RoundInfo
+	{
+		fixed timer_;
+		bool show_;
+	} round;
+
+	void drawMove();
+	void drawRound();
 
 private:
 	ShotCountDown();
 	virtual ~ShotCountDown ();
-
-
 };
 
 #endif

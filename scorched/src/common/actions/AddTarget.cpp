@@ -21,6 +21,7 @@
 #include <actions/AddTarget.h>
 #include <engine/ActionController.h>
 #include <engine/ScorchedContext.h>
+#include <engine/Simulator.h>
 #include <target/TargetContainer.h>
 #include <target/TargetDamageCalc.h>
 #include <tankai/TankAIAdder.h>
@@ -32,7 +33,7 @@
 
 AddTarget::AddTarget(FixedVector &position,
 	WeaponAddTarget *addTarget) :
-	ActionReferenced("AddTarget"),
+	Action(-1),
 	position_(position),
 	addTarget_(addTarget)
 {
@@ -53,7 +54,7 @@ void AddTarget::simulate(fixed frameTime, bool &remove)
 
 	Target *target = addTarget_->getTargetDefinition().createTarget(
 		playerId, position_, FixedVector::getNullVector(), *context_, 
-		context_->getActionController().getRandom());
+		context_->getSimulator().getRandomGenerator());
 	context_->getTargetContainer().addTarget(target);
 
 	if (context_->getOptionsGame().getActionSyncCheck())

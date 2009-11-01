@@ -34,7 +34,7 @@
 ShieldHit::ShieldHit(unsigned int playerId,
 	FixedVector &position,
 	fixed hitPercentage) :
-	ActionReferenced("ShieldHit"),
+	Action(playerId),
 	totalTime_(0),
 	firstTime_(true), playerId_(playerId),
 	hitPercentage_(hitPercentage),

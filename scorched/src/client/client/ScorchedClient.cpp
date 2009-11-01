@@ -19,11 +19,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <client/ScorchedClient.h>
+#include <client/ClientSimulator.h>
 #include <engine/MainLoop.h>
 #include <engine/GameState.h>
 #include <graph/MainCamera.h>
 #include <graph/ParticleEngine.h>
 #include <graph/OptionsDisplay.h>
+#include <coms/ComsSimulateMessage.h>
+#include <coms/ComsNetStatMessage.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscape/GraphicalLandscapeMap.h>
 
@@ -41,9 +44,25 @@ ScorchedClient *ScorchedClient::instance()
 ScorchedClient::ScorchedClient() : 
 	ScorchedContext("Client", false)
 {
+	gameState = new GameState("Client");
+
 	mainLoop_ = new MainLoop();
 	mainLoop_->clear();
 	mainLoop_->addMainLoop(gameState);
+
+	clientSimulator_ = new ClientSimulator();
+	simulator = clientSimulator_;
+	actionController = &simulator->getActionController();
+	simulator->setScorchedContext(this);
+
+	new ComsMessageHandlerIAdapter<ClientSimulator>(
+		clientSimulator_, &ClientSimulator::processComsSimulateMessage,
+		ComsSimulateMessage::ComsSimulateMessageType,
+		getComsMessageHandler());
+	new ComsMessageHandlerIAdapter<ClientSimulator>(
+		clientSimulator_, &ClientSimulator::processNetStatMessage,
+		ComsNetStatMessage::ComsNetStatMessageType,
+		getComsMessageHandler());
 
 	// Calculate how many particles we can see
 	int numberOfBilboards = 6000;

@@ -37,16 +37,8 @@ TankDeadContainer::~TankDeadContainer()
 
 }
 
-void TankDeadContainer::addTank(Tank *tank)
+void TankDeadContainer::addDeadTank(Tank *tank)
 {
-	// Check if we should store residual players
-	if (!ScorchedServer::instance()->getOptionsGame().getResidualPlayers() ||
-		tank->getState().getState() == TankState::sPending ||
-		tank->getState().getState() == TankState::sLoading ||
-		tank->getState().getState() == TankState::sInitializing ||
-		!tank->getUniqueId()[0] ||
-		tank->getDestinationId() == 0) return;
-
 	// Find/create buffer
 	NetBuffer *buffer = 0;
 	std::map<std::string, NetBuffer *>::iterator finditor =
@@ -73,31 +65,19 @@ void TankDeadContainer::addTank(Tank *tank)
 	deadTanks_[tank->getUniqueId()] = buffer;
 }
 
-bool TankDeadContainer::getTank(Tank *tank)
+void TankDeadContainer::getDeadTank(Tank *tank, TankAliveSimAction *simAction)
 {
 	// Get the buffer
 	std::map<std::string, NetBuffer *>::iterator finditor =
 		deadTanks_.find(tank->getUniqueId());
-	if (finditor == deadTanks_.end()) return false;
+	if (finditor == deadTanks_.end()) return;
 	NetBuffer *buffer = finditor->second;
 
-	// Read from the buffer
-	NetBufferReader reader(*buffer);
-	if (!tank->getAccessories().readMessage(reader) ||
-		!tank->getScore().readMessage(reader))
-	{
-		Logger::log("ERROR: Failed to update residual player info (read)");
-		return false;
-	}
+	simAction->getScoreNetBuffer().reset();
+	simAction->getScoreNetBuffer().addDataToBuffer(buffer->getBuffer(), buffer->getBufferUsed());
 
-	// Don't get credited for the new game stats
-	tank->getScore().resetTotalEarnedStats();
-
-	// Tidy
-	delete buffer;
 	deadTanks_.erase(finditor);
-
-	return true;
+	delete buffer;
 }
 
 void TankDeadContainer::clearTanks()

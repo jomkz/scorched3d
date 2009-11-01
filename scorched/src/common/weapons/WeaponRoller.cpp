@@ -24,6 +24,7 @@
 #include <actions/ShotBounce.h>
 #include <common/Defines.h>
 #include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <target/TargetContainer.h>
 #include <target/TargetShield.h>
 #include <target/TargetLife.h>
@@ -129,7 +130,7 @@ void WeaponRoller::fireWeapon(ScorchedContext &context,
 		}
 	}
 
-	RandomGenerator &random = context.getActionController().getRandom();
+	RandomGenerator &random = context.getSimulator().getRandomGenerator();
 	int numberRollers = numberRollers_.getUInt(context);
 	for (int i=0; i<numberRollers; i++)
 	{
@@ -191,7 +192,7 @@ void WeaponRoller::addRoller(ScorchedContext &context,
 	WeaponFireContext &weaponContext,
 	FixedVector &position, FixedVector &velocity)
 {
-	RandomGenerator &random = context.getActionController().getRandom();
+	RandomGenerator &random = context.getSimulator().getRandomGenerator();
 
 	FixedVector newVelocity;
 	if (maintainVelocity_)

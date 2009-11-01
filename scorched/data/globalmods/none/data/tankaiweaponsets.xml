@@ -146,8 +146,8 @@
 				<name>Fuel</name>
 				<buymin>1</buymin>
 				<buymax>4</buymax>
-				<moneymin>15000</moneymin>
-				<moneymax>20000</moneymax>
+				<moneymin>30000</moneymin>
+				<moneymax>0</moneymax>
 				<prioritybuy>2</prioritybuy>
 				<priorityuse>1</priorityuse>
 				<type>fuel</type>

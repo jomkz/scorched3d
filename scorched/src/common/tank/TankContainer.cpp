@@ -24,7 +24,8 @@
 TankContainer::TankContainer(TargetContainer &targets) : 
 	targets_(targets),
 	playerId_(0), 
-	destinationId_(0)
+	destinationId_(0),
+	roundId_(0)
 {
 
 }
@@ -90,36 +91,6 @@ Tank *TankContainer::getCurrentTank()
 	return 0;
 }
 
-void TankContainer::clientNewGame()
-{
-	std::map<unsigned int, Tank *>::iterator mainitor;
-	for (mainitor = tanks_.begin();
-		mainitor != tanks_.end();
-		mainitor++)
-	{
-		Tank *tank = (*mainitor).second;
-		if (!tank->isTemp())
-		{
-			tank->clientNewGame();
-		}
-	}
-}
-
-void TankContainer::newMatch()
-{
-	std::map<unsigned int, Tank *>::iterator mainitor;
-	for (mainitor = tanks_.begin();
-		mainitor != tanks_.end();
-		mainitor++)
-	{
-		Tank *tank = (*mainitor).second;
-		if (!tank->isTemp())
-		{
-			tank->newMatch();
-		}
-	}
-}
-
 int TankContainer::teamCount()
 {
 	int team1 = 0;
@@ -167,71 +138,6 @@ int TankContainer::aliveCount()
 	return alive;
 }
 
-void TankContainer::setAllDead()
-{
-	std::map<unsigned int, Tank *>::iterator mainitor;
-	for (mainitor = tanks_.begin();
-		mainitor != tanks_.end();
-		mainitor++)
-	{
-		Tank *current = (*mainitor).second;
-		if (!current->isTemp())
-		{
-			if (current->getState().getState() != TankState::sPending &&
-				current->getState().getState() != TankState::sLoading &&
-				current->getState().getState() != TankState::sInitializing)
-			{
-				current->getState().setState(TankState::sDead);
-				current->getState().setLives(0);
-			}
-		}
-	}
-}
-
-bool TankContainer::allReady()
-{
-	std::map<unsigned int, Tank *>::iterator mainitor;
-	for (mainitor = tanks_.begin();
-		mainitor != tanks_.end();
-		mainitor++)
-	{
-		Tank *current = (*mainitor).second;
-		if (!current->isTemp())
-		{
-			// current check tanks that are not pending
-			if (current->getState().getState() != TankState::sPending &&
-				current->getState().getState() != TankState::sLoading &&
-				current->getState().getState() != TankState::sInitializing)
-			{
-				if (current->getState().getReadyState() == 
-					TankState::SNotReady) return false;
-			}
-		}
-	}
-	return true;
-}
-
-void TankContainer::setAllNotReady()
-{
-	std::map<unsigned int, Tank *>::iterator mainitor;
-	for (mainitor = tanks_.begin();
-		mainitor != tanks_.end();
-		mainitor++)
-	{
-		Tank *current = (*mainitor).second;
-		if (!current->isTemp())
-		{
-			// current check tanks that are not pending
-			if (current->getState().getState() != TankState::sPending &&
-				current->getState().getState() != TankState::sLoading &&
-				current->getState().getState() != TankState::sInitializing)
-			{
-				current->getState().setNotReady();
-			}
-		}
-	}
-}
-
 int TankContainer::getNoOfNonSpectatorTanks()
 {
 	int count = 0;
@@ -243,7 +149,7 @@ int TankContainer::getNoOfNonSpectatorTanks()
 		Tank *current = (*mainitor).second;
 		if (!current->isTemp())
 		{
-			if (!current->getState().getSpectator()) count++;
+			if (current->getState().getTankPlaying()) count++;
 		}
 	}
 	return count;

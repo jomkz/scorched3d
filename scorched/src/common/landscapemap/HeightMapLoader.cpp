@@ -124,8 +124,8 @@ bool HeightMapLoader::generateTerrain(
 
 		// Seed the generator and generate the landscape
 		levelSurround = generate->levelsurround;
-		RandomGenerator generator;
-		RandomGenerator offsetGenerator;
+		FileRandomGenerator generator;
+		FileRandomGenerator offsetGenerator;
 		generator.seed(seed);
 		offsetGenerator.seed(seed);
 

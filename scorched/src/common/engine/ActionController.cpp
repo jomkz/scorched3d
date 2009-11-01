@@ -20,19 +20,14 @@
 
 #include <engine/ActionController.h>
 #include <engine/ScorchedContext.h>
-#include <movement/TargetMovement.h>
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
 #include <list>
 
 ActionController::ActionController() : 
-	GameStateI("ActionController"),
-	speed_(1), referenceCount_(0), time_(0), 
-	context_(0), lastTraceTime_(0),
-	actionTracing_(false), stepTime_(0),
-	actionEvents_(false), actionProfiling_(false),
-	stopImmediately_(false),
-	actionNumber_(0)
+	referenceCount_(0),
+	context_(0),
+	actionProfiling_(false)
 {
 
 }
@@ -53,27 +48,12 @@ void ActionController::clear(bool warn)
 		Action *act = *newItor;
 		if (warn)
 		{
-			Logger::log(S3D::formatStringBuffer("Warning: removing added timed out action %s, %s",
-				act->getActionType().c_str(), (act->getReferenced()?"Ref":"UnRef")));
+			Logger::log(S3D::formatStringBuffer("Warning: removing added timed out action %s, %u",
+				act->getActionType().c_str(), act->getPlayerId()));
 		}
 		delete act;
 	}
 	newActions_.clear();
-
-	// New Last actions
-	for (newItor = newLastActions_.begin();
-		newItor != newLastActions_.end();
-		newItor++)
-	{
-		Action *act = *newItor;
-		if (warn)
-		{
-			Logger::log(S3D::formatStringBuffer("Warning: removing added timed out action %s, %s",
-				act->getActionType().c_str(), (act->getReferenced()?"Ref":"UnRef")));
-		}
-		delete act;
-	}
-	newLastActions_.clear();
 
 	// Current actions
 	for (int a=0; a<actions_.actionCount; a++)
@@ -81,8 +61,8 @@ void ActionController::clear(bool warn)
 		Action *act = actions_.actions[a];
 		if (warn)
 		{
-			Logger::log(S3D::formatStringBuffer("Warning: removing added timed out action %s, %s",
-				act->getActionType().c_str(), (act->getReferenced()?"Ref":"UnRef")));
+			Logger::log(S3D::formatStringBuffer("Warning: removing added timed out action %s, %u",
+				act->getActionType().c_str(), act->getPlayerId()));
 		}
 		delete act;
 	}
@@ -90,6 +70,7 @@ void ActionController::clear(bool warn)
 
 	// Ref count
 	referenceCount_ = 0;
+	syncCheck_.clear();
 }
 
 bool ActionController::allEvents()
@@ -103,24 +84,20 @@ bool ActionController::allEvents()
 		newItor++)
 	{
 		Action *act = *newItor;
-		if (!act->getActionEvent() &&
-			act->getReferenced()) return false;
+		if (act->getPlayerId() != 0) return false;
 	}
 	for (int a=0; a<actions_.actionCount; a++)
 	{
 		Action *act = actions_.actions[a];
-		if (!act->getActionEvent() &&
-			act->getReferenced()) return false;
+		if (act->getPlayerId() != 0) return false;
 	}
 	return true;
 }
 
 void ActionController::logActions()
 {
-	Logger::log(S3D::formatStringBuffer("ActionLog : Time %.2f, New %i, New Last %i, Ref %i",
-		time_.asFloat(),
-		(int) newActions_.size(), 
-		(int) newLastActions_.size(),
+	Logger::log(S3D::formatStringBuffer("ActionLog : New %i, Ref %i",
+		(int) newActions_.size(),
 		referenceCount_));
 	for (int a=0; a<actions_.actionCount; a++)
 	{
@@ -129,9 +106,10 @@ void ActionController::logActions()
 	}
 }
 
-void ActionController::logProfiledActions()
+void ActionController::stopActionProfiling()
 {
 	if (!actionProfiling_) return;
+	actionProfiling_ = false;
 
 	Logger::log("Logging Profiled Actions --------------------");
 	int totalCount = 0;
@@ -155,28 +133,8 @@ bool ActionController::noReferencedActions()
 {
 	bool finished = 
 		newActions_.empty() && 
-		newLastActions_.empty() &&
 		(referenceCount_ == 0);
-
-	if (actionTracing_)
-	{
-		if (time_ - lastTraceTime_ > 5)
-		{
-			lastTraceTime_ = time_;
-			logActions();
-		}
-	}
-
 	return finished;
-}
-
-void ActionController::resetTime()
-{
-	time_ = 0;
-	lastTraceTime_ = 0;
-	stepTime_ = 0;
-
-	syncCheck_.clear();
 }
 
 void ActionController::setScorchedContext(ScorchedContext *context)
@@ -184,94 +142,65 @@ void ActionController::setScorchedContext(ScorchedContext *context)
 	context_ = context;
 }
 
-void ActionController::setFast(fixed speedMult)
-{
-	speed_ = speedMult;
-}
-
 void ActionController::addSyncCheck(const std::string &msg)
 {
-	if (!stopImmediately_) return;
-
 	DIALOG_ASSERT(context_->getOptionsGame().getActionSyncCheck());
 	syncCheck_.push_back(msg);
 }
 
 void ActionController::addAction(Action *action)
 {
-	action->setScorchedContext(context_);
-	action->setActionStartTime(time_);
-	action->setActionEvent(actionEvents_);
-
-	if (action->getReferenced())
-	{
-		action->setActionNumber(++actionNumber_);
-		if (context_->getOptionsGame().getActionSyncCheck())
-		{
-			std::string actionType = action->getActionType();
-			std::string actionDetails = action->getActionDetails();
-			addSyncCheck(
-				S3D::formatStringBuffer("Add Action : %i %s:%s", 
-					time_.getInternal(), 
-					actionType.c_str(), 
-					actionDetails.c_str()));
-		}
-	}
-
 	newActions_.push_back(action);
-
-	if (actionProfiling_)
-	{
-		std::map<std::string, int>::iterator findItor =
-			actionProfile_.find(action->getActionType());
-		if (findItor == actionProfile_.end())
-		{
-			actionProfile_[action->getActionType()] = 1;
-		}
-		else
-		{
-			(*findItor).second++;
-		}	
-	}
 }
 
-void ActionController::addLastAction(Action *action)
-{
-	newLastActions_.push_back(action);
-}
-
-void ActionController::addNewLastActions()
-{
-	if (newActions_.empty() &&
-		referenceCount_ == 0)
-	{
-		while (!newLastActions_.empty())
-		{
-			Action *action = newLastActions_.front(); 
-			addAction(action);			
-			newLastActions_.pop_front();
-		}
-	}
-}
-
-void ActionController::addNewActions()
+void ActionController::addNewActions(fixed time)
 {
 	while (!newActions_.empty())
 	{
+		// Get next action
 		Action *action = newActions_.front(); 
 
+		// Initialize it
 		action->setScorchedContext(context_);
-		action->setActionStartTime(time_);
-		if (action->getReferenced()) referenceCount_ ++;
-
+		action->setActionStartTime(time);
 		action->init();
 		actions_.push_back(action);
+		
+		// Log it
+		if (action->getPlayerId() != 0)
+		{
+			if (context_->getOptionsGame().getActionSyncCheck())
+			{
+				std::string actionType = action->getActionType();
+				std::string actionDetails = action->getActionDetails();
+				addSyncCheck(
+					S3D::formatStringBuffer("Add Action : %i %s:%s", 
+						time.getInternal(), 
+						actionType.c_str(), 
+						actionDetails.c_str()));
+			}
+		}
+		if (actionProfiling_)
+		{
+			std::map<std::string, int>::iterator findItor =
+				actionProfile_.find(action->getActionType());
+			if (findItor == actionProfile_.end())
+			{
+				actionProfile_[action->getActionType()] = 1;
+			}
+			else
+			{
+				(*findItor).second++;
+			}	
+		}
+
+		if (action->getPlayerId() != 0) referenceCount_ ++;
 
 		newActions_.pop_front();
 	}
 }
 
-void ActionController::draw(const unsigned state)
+void ActionController::draw()
 {
 	// Itterate and draw all of the actions
 	for (int a=0; a<actions_.actionCount; a++)
@@ -281,46 +210,18 @@ void ActionController::draw(const unsigned state)
 	}
 }
 
-void ActionController::simulate(const unsigned state, float ft)
+void ActionController::simulate(fixed frameTime, fixed time)
 {
-	fixed frameTime = fixed::fromFloat(ft);
-
-	frameTime *= speed_;
-
-	// As this simulator gives differing results dependant on
-	// step size, always ensure step size is the same
-	stepTime_ += frameTime;
-
-	// step size = 1.0 / physics fps = steps per second
-	const fixed stepSize = fixed(1) / fixed(context_->getOptionsGame().getPhysicsFPS());
-	while (stepTime_ >= stepSize && !(stopImmediately_ && noReferencedActions()))
-	{
-		time_ += stepSize;
-		stepActions(stepSize);
-
-		// More time has passed
-		stepTime_ -= stepSize;
-	}
-}
-
-void ActionController::stepActions(fixed frameTime)
-{
-	// Ensure any new last actions are added
-	addNewLastActions();
-
 	// Ensure any new actions are added
-	addNewActions();
+	addNewActions(time);
 
 	// Add any new events (if allowed)
-	if (time_ < 10 && !allEvents())
+	/*if (time_ < 10 && !allEvents())
 	{
 		actionEvents_ = true;
 		events_.simulate(frameTime, *context_);
 		actionEvents_ = false;
-	}
-
-	// Move the targets
-	context_->getTargetMovement().simulate(*context_, frameTime);
+	}*/
 
 	// Itterate and draw all of the actions
 	int keepcount=0;
@@ -331,9 +232,9 @@ void ActionController::stepActions(fixed frameTime)
 		act->simulate(frameTime, remove);
 
 		// Ensure that no referenced actions over do their time
-		if (act->getReferenced())
+		if (act->getPlayerId() != 0)
 		{
-			if ((time_ - act->getActionStartTime() > 30))
+			if ((time - act->getActionStartTime() > 30))
 			{
 				Logger::log(S3D::formatStringBuffer("Warning: removing timed out action %s",
 					act->getActionType().c_str()));
@@ -344,7 +245,7 @@ void ActionController::stepActions(fixed frameTime)
 		// If this action has finished add to list to be removed
 		if (remove)
 		{
-			if (act->getReferenced())
+			if (act->getPlayerId() != 0)
 			{
 				referenceCount_--;
 				if (referenceCount_<0) referenceCount_ = 0;
@@ -355,7 +256,7 @@ void ActionController::stepActions(fixed frameTime)
 					std::string actionDetails = act->getActionDetails();
 					addSyncCheck(
 						S3D::formatStringBuffer("Rm Action : %i %s:%s", 
-							time_.getInternal(), 
+							time.getInternal(), 
 							actionType.c_str(), 
 							actionDetails.c_str()));
 				}

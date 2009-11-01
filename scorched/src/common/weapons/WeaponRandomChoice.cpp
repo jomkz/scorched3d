@@ -20,7 +20,7 @@
 
 #include <weapons/WeaponRandomChoice.h>
 #include <weapons/AccessoryStore.h>
-#include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <common/Defines.h>
 #include <stdlib.h>
 
@@ -84,7 +84,7 @@ bool WeaponRandomChoice::parseXML(AccessoryCreateContext &context, XMLNode *acce
 void WeaponRandomChoice::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	RandomGenerator &random = context.getActionController().getRandom();
+	RandomGenerator &random = context.getSimulator().getRandomGenerator();
 	unsigned int randWeight = random.getRandUInt() % totalWeight_;
 	unsigned int currentWeight = 0;
 

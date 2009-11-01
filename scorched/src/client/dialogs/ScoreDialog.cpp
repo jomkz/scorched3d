@@ -39,7 +39,7 @@
 #include <engine/GameState.h>
 #include <client/ClientState.h>
 #include <client/ScorchedClient.h>
-#include <client/ClientScoreHandler.h>
+#include <actions/ShowScoreAction.h>
 #include <server/ScorchedServer.h>
 #include <lang/LangResource.h>
 #include <stdio.h>
@@ -156,7 +156,7 @@ void ScoreDialog::draw()
 	if (ScorchedClient::instance()->getGameState().getState() == 
 		ClientState::StateScore)
 	{
-		finished = ClientScoreHandler::instance()->getFinalScore();
+		finished = ShowScoreAction::getFinalScore();
 	}
 
 	Vector white(0.9f, 0.9f, 1.0f);
@@ -172,20 +172,6 @@ void ScoreDialog::draw()
 		if (finished)
 		{
 			text = &FINAL_RANKINGS;
-		}
-		else if (ScorchedClient::instance()->getGameState().getState() == 
-			ClientState::StateGetPlayers)
-		{
-			finished = true;
-			if (ScorchedClient::instance()->getTankContainer().getNoOfNonSpectatorTanks() <
-				ScorchedClient::instance()->getOptionsGame().getNoMinPlayers())
-			{
-				text = &WAITING_FOR_PLAYERS;
-			}
-			else
-			{
-				text = &WAITING_TO_JOIN;
-			}
 		}
 		else if (server)
 		{
@@ -212,14 +198,6 @@ void ScoreDialog::draw()
 			S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsTransient().getCurrentRoundNo()),
 			S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsGame().getNoRounds()));
 		buffer.append(ROUND_OF);
-
-		if (ScorchedClient::instance()->getOptionsGame().getNoMaxRoundTurns() > 0)
-		{
-			LANG_RESOURCE_VAR_2(MOVE_OF, "MOVE_OF", ",Move {0} of {1}",
-				S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsTransient().getCurrentGameNo()),
-				S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsGame().getNoMaxRoundTurns()));
-			buffer.append(MOVE_OF);
-		}
 
 		float roundsWidth = GLWFont::instance()->getGameFont()->getWidth(
 			10, buffer);
@@ -345,7 +323,7 @@ void ScoreDialog::draw()
 			{
 				unsigned int playerId = (*itor);
 				Tank *current = ScorchedClient::instance()->getTankContainer().getTankById(playerId);
-				if (current && current->getTeam() == (i + 1) && !current->getState().getSpectator()) 
+				if (current && current->getTeam() == (i + 1) && current->getState().getTankPlaying()) 
 				{
 					someTeam = true;
 					addLine(current, y, (char *)((winningTeam==(i+1))?"1":"2"), finished);
@@ -377,7 +355,7 @@ void ScoreDialog::draw()
 		{
 			unsigned int playerId = (*itor);
 			Tank *current = ScorchedClient::instance()->getTankContainer().getTankById(playerId);
-			if (current && !current->getState().getSpectator()) 
+			if (current && current->getState().getTankPlaying()) 
 			{
 				snprintf(strrank, 10, "%i", rank);
 
@@ -398,7 +376,7 @@ void ScoreDialog::draw()
 		unsigned int playerId = (*itor);
 		Tank *current = ScorchedClient::instance()->
 			getTankContainer().getTankById(playerId);
-		if (current && current->getState().getSpectator()) 
+		if (current && !current->getState().getTankPlaying()) 
 		{
 			addLine(current, y, " ", false);
 			y+= lineSpacer;
@@ -446,7 +424,7 @@ void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
 	}
 
 	// Print a highlight behind the current clients player
-	if (!current->getState().getSpectator() &&
+	if (current->getState().getTankPlaying() &&
 		current->getDestinationId() == 
 		ScorchedClient::instance()->getTankContainer().getCurrentDestinationId())
 	{
@@ -488,7 +466,7 @@ void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
 		name.append(LANG_STRING(")"));
 	}
 
-	if (current->getState().getSpectator())
+	if (!current->getState().getTankPlaying())
 	{
 		if (name.size() > 50) name = name.substr(0, 50); // Limit length
 
@@ -498,12 +476,12 @@ void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
 			10,
 			textX + nameLeft, textY, 0.0f,
 			name);
-		GLWFont::instance()->getGameFont()->draw(
+		/*GLWFont::instance()->getGameFont()->draw(
 			current->getColor(),
 			10,
 			textX + readyLeft, textY, 0.0f,
 			S3D::formatStringBuffer("%2s",
-			((current->getState().getReadyState() == TankState::SNotReady)?"*":" ")));
+			((current->getState().getReadyState() == TankState::SNotReady)?"*":" ")));*/
 	}
 	else
 	{
@@ -568,7 +546,7 @@ void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
 			current->getColor(),
 			10,
 			textX + readyLeft, textY, 0.0f,
-			((current->getState().getReadyState() == TankState::SNotReady)?"*":" "));
+			current->getState().getMoveId()!=0?"*":" ");
 		if (current->getScore().getRank() >= 0)
 		{
 			GLWFont::instance()->getGameFont()->draw(

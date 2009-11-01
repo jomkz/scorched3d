@@ -20,8 +20,11 @@
 
 #include <tankai/TankAICurrent.h>
 #include <tank/TankContainer.h>
+#include <tank/TankAccessories.h>
 #include <server/ScorchedServer.h>
+#include <server/ServerState.h>
 #include <common/OptionsTransient.h>
+#include <coms/ComsPlayedMoveMessage.h>
 #include <XML/XMLNode.h>
 
 TankAICurrent::TankAICurrent() : tank_(0)
@@ -78,7 +81,7 @@ void TankAICurrent::newGame()
 	move_.clear();
 }
 
-void TankAICurrent::playMove()
+void TankAICurrent::playMove(unsigned int moveId)
 {
 	// Raise any defenses
 	defenses_.raiseDefenses(tank_);
@@ -86,21 +89,28 @@ void TankAICurrent::playMove()
 	// Make the move
 	move_.playMove(tank_, 
 		wantedWeapons_.getCurrentWeaponSet(),
-		defenses_.getUseBatteries());
+		defenses_.getUseBatteries(),
+		moveId);
 }
 
-void TankAICurrent::autoDefense()
-{
-	defenses_.raiseDefenses(tank_);
-}
-
-void TankAICurrent::buyAccessories()
+void TankAICurrent::buyAccessories(unsigned int moveId)
 {
 	bool lastRound = 
 		(ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() >=
 		ScorchedServer::instance()->getOptionsGame().getNoRounds());
 
-	wantedWeapons_.buyWeapons(tank_, lastRound);
+	TankAIWeaponSets::WeaponSetAccessories tankAccessories(tank_);
+	wantedWeapons_.buyWeapons(tankAccessories, lastRound);
+	if (tankAccessories.tankAccessories.getAutoDefense().haveDefense())
+	{
+		defenses_.raiseDefenses(tank_);
+	}
+
+	// This AI has finished buying
+	ComsPlayedMoveMessage playedMessage(tank_->getPlayerId(), 
+		moveId, 
+		ComsPlayedMoveMessage::eFinishedBuy);
+	ScorchedServer::instance()->getServerState().buyingFinished(playedMessage);
 }
 
 void TankAICurrent::tankHurt(Weapon *weapon, float damage, 

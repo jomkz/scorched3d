@@ -32,7 +32,6 @@ public:
 	OptionsTransient(OptionsScorched &optionsGame);
 	virtual ~OptionsTransient();
 
-	const char *getGameType();
 	unsigned int getLeastUsedTeam(TankContainer &container);
 
 	enum WallType
@@ -52,10 +51,8 @@ public:
 
 	void reset();
 	void newGame();
-	void nextRound();
 
 	void startNewGame();
-	void startNewRound();
 
 	// Walls
 	WallType getWallType() { return (WallType) wallType_.getValue(); }
@@ -63,7 +60,6 @@ public:
 
 	// Rounds left
 	int getCurrentRoundNo() { return currentRoundNo_.getValue(); }
-	int getCurrentGameNo() { return currentGameNo_.getValue(); }
 
 	// Wind
 	fixed getWindAngle() { return windAngle_.getValue(); }
@@ -84,7 +80,6 @@ protected:
 	std::list<OptionEntry *> options_;
 	OptionsScorched &optionsGame_;
 	OptionEntryInt currentRoundNo_;
-	OptionEntryInt currentGameNo_;
 	OptionEntryFixed windAngle_;
 	OptionEntryFixed windStartAngle_;
 	OptionEntryFixed windSpeed_;
@@ -94,7 +89,6 @@ protected:
 	bool newGame_;
 	void newGameWind();
 	void newGameWall();
-	void nextRoundWind();
 
 };
 

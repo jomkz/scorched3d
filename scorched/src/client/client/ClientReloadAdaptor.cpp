@@ -19,9 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <client/ClientReloadAdaptor.h>
-#include <client/ClientNewGameHandler.h>
 #include <client/ScorchedClient.h>
-#include <server/ServerNewGameState.h>
 #include <server/ScorchedServer.h>
 #include <landscape/LandscapeSoundManager.h>
 #include <landscape/LandscapeMusicManager.h>
@@ -47,8 +45,8 @@ ClientReloadAdaptor *ClientReloadAdaptor::instance()
 
 ClientReloadAdaptor::ClientReloadAdaptor()
 {
-	new ConsoleRuleMethodIAdapter<ClientReloadAdaptor>(
-		this, &ClientReloadAdaptor::reloadLandscapeObjects, "ReloadLandscapeObjects");
+	//new ConsoleRuleMethodIAdapter<ClientReloadAdaptor>(
+	//	this, &ClientReloadAdaptor::reloadLandscapeObjects, "ReloadLandscapeObjects");
 	new ConsoleRuleMethodIAdapter<ClientReloadAdaptor>(
 		this, &ClientReloadAdaptor::showLandscapeInfo, "ShowLandscapeInfo");
 	new ConsoleRuleMethodIAdapter<ClientReloadAdaptor>(
@@ -63,9 +61,6 @@ ClientReloadAdaptor::~ClientReloadAdaptor()
 void ClientReloadAdaptor::reloadLandscapeObjects()
 {
 	// Remove any old targets
-	ServerNewGameState::removeTargets();
-	ClientNewGameHandler::instance()->removeTargets();
-
 	LandscapeDefinitionCache &serverDefinitions =
 		ScorchedServer::instance()->getLandscapeMaps().getDefinitions();
 	LandscapeDefinitionCache &clientDefinitions =

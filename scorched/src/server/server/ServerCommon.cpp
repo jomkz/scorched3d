@@ -107,7 +107,7 @@ void ServerCommon::kickPlayer(unsigned int playerId)
 	{
 		ServerChannelManager::instance()->sendText(ChannelText("info", 
 			"ADMIN_PLAYER_KICKED", 
-			"Player \"{0}\" has been kicked from the server",
+			"[p:{0}] has been kicked from the server",
 			tank->getTargetName()), true);
 		Logger::log(S3D::formatStringBuffer("Kicking client \"%s\" \"%i\"", 
 			tank->getCStrName().c_str(), tank->getPlayerId()));
@@ -127,34 +127,6 @@ void ServerCommon::kickPlayer(unsigned int playerId)
 			ScorchedServer::instance()->getNetInterface().processMessages();
 		}
 	}
-}
-
-void ServerCommon::killAll()
-{
-	Logger::log("Killing all players");
-
-	std::map<unsigned int, Tank *>::iterator itor;
-	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
-	for (itor = tanks.begin();
-		 itor != tanks.end();
-		 itor++)
-	{
-		Tank *current = (*itor).second;
-		if (current->getState().getState() == TankState::sNormal)
-		{
-			current->getState().setState(TankState::sDead);
-			current->getState().setLives(0);
-		}
-	}
-}
-
-void ServerCommon::startNewGame()
-{
-	killAll();
-
-	Logger::log("Starting a new game");
-	ScorchedServer::instance()->getOptionsTransient().startNewGame();
 }
 
 bool &ServerCommon::getExitEmpty()

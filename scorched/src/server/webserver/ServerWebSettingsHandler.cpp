@@ -24,7 +24,6 @@
 #include <server/ScorchedServer.h>
 #include <server/ScorchedServerUtil.h>
 #include <server/ServerCommon.h>
-#include <server/ServerState.h>
 #include <server/ServerParams.h>
 #include <landscapedef/LandscapeDefinitionsBase.h>
 #include <common/Defines.h>

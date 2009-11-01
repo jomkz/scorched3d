@@ -25,7 +25,7 @@
 #include <graph/MainCamera.h>
 #include <graph/Main2DCamera.h>
 #include <graph/OptionsDisplay.h>
-#include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <engine/MainLoop.h>
 #include <tankgraph/RenderTargets.h>
 #include <landscape/Landscape.h>
@@ -63,7 +63,7 @@ void AnimatedBackdropDialog::init()
 
 	ProgressCounter progressCounter;
 	ProgressDialog::instance()->changeTip();
-	progressCounter.setUser(ProgressDialogSync::instance());
+	progressCounter.setUser(ProgressDialogSync::events_instance());
 	progressCounter.setNewPercentage(0.0f);
 
 	bool waterMove = OptionsDisplay::instance()->getNoWaterMovement();
@@ -93,7 +93,7 @@ void AnimatedBackdropDialog::init()
 	Landscape::instance()->generate(&progressCounter);
 
 	// Make sure the landscape has been optimized
-	Landscape::instance()->reset(&progressCounter);
+	Landscape::instance()->recalculate();
 
 	OptionsDisplay::instance()->getNoWaterMovementEntry().setValue(waterMove);
 
@@ -136,7 +136,7 @@ void AnimatedBackdropDialog::simulate(float frameTime)
 	Landscape::instance()->simulate(frameTime);
 	RenderTargets::instance()->render2D.simulate(0, frameTime);
 	RenderTargets::instance()->render3D.simulate(0, frameTime);
-	ScorchedClient::instance()->getActionController().simulate(0, frameTime);
+	ScorchedClient::instance()->getSimulator().simulate();
 	ScorchedClient::instance()->getParticleEngine().simulate(0, frameTime);
 
 	MainCamera::instance()->getTarget().setCameraType(TargetCamera::CamFree);

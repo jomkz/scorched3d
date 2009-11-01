@@ -168,7 +168,7 @@ void RulesDialog::drawRules()
 		MOD_LABEL);
 
 	LANG_RESOURCE_VAR_1(GAME_TYPE_LABEL, "GAME_TYPE_LABEL", "Game type : {0}", 
-		ScorchedClient::instance()->getOptionsTransient().getGameType());
+		ScorchedClient::instance()->getOptionsGame().getTurnType().getValueAsString());
 	GLWFont::instance()->getGameFont()->draw(
 		yellow,
 		12,

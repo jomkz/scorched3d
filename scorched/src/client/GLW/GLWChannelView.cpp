@@ -219,7 +219,7 @@ void GLWChannelView::channelText(ChannelText &channelText)
 	}
 	if (showChannelName_)
 	{
-		channelName.append(LANG_PARAM_1("[c:{0}]", channel->channel));
+		channelName.append(LANG_PARAM_1("[c:{0}]. ", channel->channel));
 	}
 	if (tank)
 	{
@@ -229,7 +229,7 @@ void GLWChannelView::channelText(ChannelText &channelText)
 	{
 		channelName.append(LANG_PARAM_1("[a:{0}]", channelText.getAdminPlayer()));
 	}
-	if (!channelName.empty())
+	if (tank || channelText.getAdminPlayer()[0])
 	{
 		channelName.append(LANG_STRING(" : "));
 	}

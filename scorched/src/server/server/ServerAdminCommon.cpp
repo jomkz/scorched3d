@@ -23,6 +23,7 @@
 #include <server/ScorchedServer.h>
 #include <server/ScorchedServerUtil.h>
 #include <server/ServerChannelManager.h>
+#include <server/ServerSimulator.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
@@ -31,6 +32,7 @@
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <common/FileLogger.h>
+#include <simactions/AdminSimAction.h>
 
 static FileLogger *serverAdminFileLogger = 0;
 
@@ -103,7 +105,7 @@ bool ServerAdminCommon::kickPlayer(ServerAdminSessions::Credential &credential, 
 
 	adminLog(ChannelText("info",
 		"ADMIN_KICK",
-		"\"{0}\" admin kick \"{1}\"",
+		"\"{0}\" admin kick [p:{1}]",
 		credential.username,
 		targetTank->getTargetName()));
 	ServerCommon::kickPlayer(
@@ -120,7 +122,7 @@ bool ServerAdminCommon::poorPlayer(ServerAdminSessions::Credential &credential, 
 
 	adminLog(ChannelText("info",
 		"ADMIN_POOR",
-		"\"{0}\" admin poor \"{1}\"",
+		"\"{0}\" admin poor [p:{1}]",
 		credential.username,
 		targetTank->getTargetName()));
 	targetTank->getScore().setMoney(0);
@@ -138,7 +140,7 @@ bool ServerAdminCommon::banPlayer(ServerAdminSessions::Credential &credential, u
 
 	adminLog(ChannelText("info",
 		"ADMIN_BAN",
-		"\"{0}\" admin ban \"{1}\"",
+		"\"{0}\" admin ban [p:{1}]",
 		credential.username,
 		targetTank->getTargetName()));
 	internalBanPlayer(
@@ -158,12 +160,13 @@ bool ServerAdminCommon::slapPlayer(ServerAdminSessions::Credential &credential, 
 
 	adminLog(ChannelText("info",
 		"ADMIN_SLAP",
-		"\"{0}\" admin slap \"{1}\" {2}",
+		"\"{0}\" admin slap [p:{1}] {2}",
 		credential.username,
 		targetTank->getTargetName(),
 		slap));
-	targetTank->getLife().setLife(
-		targetTank->getLife().getLife() - fixed(int(slap)));
+
+	AdminSimAction *action = new AdminSimAction(AdminSimAction::eSlap, playerId, fixed(int(slap)));
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(action);
 
 	return true;
 }
@@ -176,7 +179,7 @@ bool ServerAdminCommon::flagPlayer(ServerAdminSessions::Credential &credential, 
 
 	adminLog(ChannelText("info",
 		"ADMIN_FLAG",
-		"\"{0}\" admin flag \"{1}\"",
+		"\"{0}\" admin flag [p:{1}]",
 		credential.username,
 		targetTank->getTargetName()));
 	internalBanPlayer(
@@ -196,7 +199,7 @@ bool ServerAdminCommon::mutePlayer(ServerAdminSessions::Credential &credential, 
 
 	adminLog(ChannelText("info",
 		mute?"ADMIN_MUTE":"ADMIN_UNMUTE",
-		mute?"\"{0}\" admin mute \"{0}\"":"\"{0}\" admin unmute \"{0}\"",
+		mute?"\"{0}\" admin mute [p:{1}]":"\"{0}\" admin unmute [p:{1}]",
 		credential.username,
 		targetTank->getTargetName()));
 	targetTank->getState().setMuted(mute); 
@@ -212,7 +215,7 @@ bool ServerAdminCommon::permMutePlayer(ServerAdminSessions::Credential &credenti
 
 	adminLog(ChannelText("info",
 		"ADMIN_PERMMUTE",
-		"\"{0}\" admin permmute \"{1}\"",
+		"\"{0}\" admin permmute [p:{1}]",
 		credential.username,
 		targetTank->getTargetName()));
 	internalBanPlayer(
@@ -233,7 +236,7 @@ bool ServerAdminCommon::unpermMutePlayer(ServerAdminSessions::Credential &creden
 
 	adminLog(ChannelText("info",
 		"ADMIN_UNPERMMUTE",
-		"\"{0}\" admin unpermmute \"{1}\"",
+		"\"{0}\" admin unpermmute [p:{1}]",
 		credential.username,
 		targetTank->getTargetName()));
 	internalBanPlayer(
@@ -255,8 +258,9 @@ bool ServerAdminCommon::newGame(ServerAdminSessions::Credential &credential)
 		"ADMIN_NEW_GAME",
 		"\"{0}\" admin new game",
 		credential.username));
-	ServerCommon::killAll();
-	ScorchedServer::instance()->getOptionsTransient().startNewGame();	
+
+	AdminSimAction *action = new AdminSimAction(AdminSimAction::eNewGame, 0, 0);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(action);
 
 	return true;
 }
@@ -270,7 +274,9 @@ bool ServerAdminCommon::killAll(ServerAdminSessions::Credential &credential)
 		"ADMIN_KILL_ALL",
 		"\"{0}\" admin kill all",
 		credential.username));
-	ServerCommon::killAll();
+
+	AdminSimAction *action = new AdminSimAction(AdminSimAction::eKillAll, 0, 0);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(action);
 
 	return true;
 }

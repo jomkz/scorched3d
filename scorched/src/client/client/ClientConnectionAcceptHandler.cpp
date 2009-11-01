@@ -20,6 +20,7 @@
 
 #include <client/ClientConnectionAcceptHandler.h>
 #include <client/ScorchedClient.h>
+#include <client/ClientState.h>
 #include <dialogs/RulesDialog.h>
 #include <dialogs/ConnectDialog.h>
 #include <dialogs/ProgressDialog.h>
@@ -51,7 +52,7 @@ ClientConnectionAcceptHandler *ClientConnectionAcceptHandler::instance()
 ClientConnectionAcceptHandler::ClientConnectionAcceptHandler()
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsConnectAcceptMessage",
+		ComsConnectAcceptMessage::ComsConnectAcceptMessageType,
 		this);
 }
 
@@ -128,7 +129,7 @@ bool ClientConnectionAcceptHandler::processMessage(
 	{
 		if (!ScorchedClient::instance()->getModFiles().loadModFiles(
 			ScorchedClient::instance()->getOptionsGame().getMod(), true,
-			ProgressDialogSync::instance()))
+			ProgressDialogSync::events_instance()))
 		{
 			S3D::dialogMessage("ModFiles", 
 				S3D::formatStringBuffer("Failed to load mod \"%s\"",
@@ -156,6 +157,9 @@ bool ClientConnectionAcceptHandler::processMessage(
 				file->getCompressedCrc()));
 	}
 	if (!ComsMessageSender::sendToServer(comsFileMessage)) return false;
+
+	// Move into the files state
+	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimLoadFiles);
 
 	return true;
 }

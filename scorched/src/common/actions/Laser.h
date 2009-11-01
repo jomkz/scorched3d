@@ -21,11 +21,11 @@
 #if !defined(__INCLUDE_Laserh_INCLUDE__)
 #define __INCLUDE_Laserh_INCLUDE__
 
-#include <engine/ActionReferenced.h>
+#include <actions/Action.h>
 #include <weapons/WeaponLaser.h>
 #include <actions/LaserParams.h>
 
-class Laser : public ActionReferenced
+class Laser : public Action
 {
 public:
 	Laser(Weapon *weapon, LaserParams *params,
@@ -37,6 +37,7 @@ public:
 	virtual void simulate(fixed frameTime, bool &remove);
 	virtual void draw();
 	virtual std::string getActionDetails();
+	virtual std::string getActionType() { return "Laser"; }
 
 protected:
 	LaserParams *params_;

@@ -20,8 +20,10 @@
 
 #include <coms/ComsHaveModFilesMessage.h>
 
+ComsMessageType ComsHaveModFilesMessage::ComsHaveModFilesMessageType("ComsHaveModFilesMessageType");
+
 ComsHaveModFilesMessage::ComsHaveModFilesMessage() :
-	ComsMessage("ComsHaveModFilesMessage")
+	ComsMessage(ComsHaveModFilesMessageType)
 {
 }
 

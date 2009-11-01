@@ -19,8 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <tankai/TankAICurrentWeapons.h>
-#include <server/ServerShotHolder.h>
-#include <coms/ComsPlayedMoveMessage.h>
 #include <XML/XMLNode.h>
 #include <stdlib.h>
 
@@ -61,12 +59,7 @@ bool TankAICurrentWeapons::parseConfig(XMLNode *node)
 	return node->failChildren();	
 }
 
-void TankAICurrentWeapons::buyWeapons(Tank *tank, bool lastRound)
+void TankAICurrentWeapons::buyWeapons(TankAIWeaponSets::WeaponSetAccessories &tankAccessories, bool lastRound)
 {
-	getCurrentWeaponSet()->buyWeapons(tank, lastRound);
-
-	// Finished this buying
-	ComsPlayedMoveMessage *message = 
-		new ComsPlayedMoveMessage(tank->getPlayerId(), ComsPlayedMoveMessage::eFinishedBuy);
-	ServerShotHolder::instance()->addShot(tank->getPlayerId(), message);
+	getCurrentWeaponSet()->buyWeapons(tankAccessories, lastRound);
 }

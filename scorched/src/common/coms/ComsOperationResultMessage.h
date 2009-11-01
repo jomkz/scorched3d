@@ -26,6 +26,8 @@
 class ComsOperationResultMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsOperationResultMessageType;
+
 	ComsOperationResultMessage();
 	virtual ~ComsOperationResultMessage();
 

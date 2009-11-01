@@ -21,7 +21,7 @@
 #include <landscapedef/LandscapeEvents.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <engine/ScorchedContext.h>
-#include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <weapons/AccessoryStore.h>
 #include <common/Logger.h>
 #include <XML/XMLNode.h>
@@ -104,7 +104,7 @@ fixed LandscapeConditionTime::getNextEventTime(ScorchedContext &context, int eve
 		return fixed::MAX_FIXED;
 	}
 
-	return context.getActionController().getRandom().getRandFixed() * 
+	return context.getSimulator().getRandomGenerator().getRandFixed() * 
 		(maxtime - mintime) + mintime;
 }
 
@@ -130,7 +130,7 @@ fixed LandscapeConditionRandom::getNextEventTime(ScorchedContext &context, int e
 		return fixed::MAX_FIXED;
 	}
 
-	if (context.getActionController().getRandom().getRandFixed() < randomchance)
+	if (context.getSimulator().getRandomGenerator().getRandFixed() < randomchance)
 	{
 		return randomdelay;
 	}

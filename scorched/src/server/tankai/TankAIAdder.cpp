@@ -28,15 +28,16 @@
 #include <tank/TankAvatar.h>
 #include <tank/TankModelContainer.h>
 #include <tank/TankState.h>
-#include <server/ServerState.h>
+#include <simactions/TankAddSimAction.h>
+#include <simactions/TankChangeSimAction.h>
 #include <coms/ComsAddPlayerMessage.h>
 #include <coms/ComsMessageSender.h>
-#include <coms/ComsPlayerStateMessage.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <common/Logger.h>
 #include <common/StatsLogger.h>
 #include <common/Defines.h>
+#include <server/ServerSimulator.h>
 
 unsigned int TankAIAdder::getNextTankId(const char *uniqueId, ScorchedContext &context)
 {
@@ -54,11 +55,12 @@ unsigned int TankAIAdder::getNextTankId(const char *uniqueId, ScorchedContext &c
 
 	// Get the transient id
 	static unsigned int id = TargetID::START_TRANSIENT_TANK_ID;
-	while (context.getTargetContainer().getTargetById(id))
+	do 
 	{
 		++id;
 		if (id >= TargetID::MAX_TANK_ID) id = TargetID::START_TRANSIENT_TANK_ID;
 	}
+	while (context.getTargetContainer().getTargetById(id));
 
 	DIALOG_ASSERT(id >= TargetID::START_TRANSIENT_TANK_ID && id <= TargetID::MAX_TANK_ID);
 	return id;
@@ -130,8 +132,16 @@ void TankAIAdder::addTankAI(ScorchedServer &context, const char *aiName)
 		int team = 0;
 		if (context.getOptionsGame().getTeams() > 1)
 		{
-			team = context.getOptionsTransient().getLeastUsedTeam(
-				context.getTankContainer());
+			if (context.getOptionsGame().getTeamBallance() ==
+				OptionsGame::TeamBallanceBotsVs)
+			{
+				team = 1;
+			}
+			else
+			{
+				team = context.getOptionsTransient().getLeastUsedTeam(
+					context.getTankContainer());
+			}
 		}
 
 		// For the tank ai's name
@@ -145,62 +155,29 @@ void TankAIAdder::addTankAI(ScorchedServer &context, const char *aiName)
 			context.getTankContainer().getPlayingTanks());
 		TankModel *tankModel = 
 			context.getTankModels().getRandomModel(team, false);
+		unsigned int playerId = getNextTankId(uniqueId, context.getContext());
+		TankAvatar tankAvatar;
+		tankAvatar.loadFromFile(S3D::getDataFile("data/avatars/computer.png"));
 
-		// Create the new tank
-		Tank *tank = new Tank(
-			context.getContext(),
-			getNextTankId(uniqueId, context.getContext()),
-			0,
+		// Tell the clients to create this tank
+		ComsAddPlayerMessage addPlayerMessage(
+			playerId,
 			newname,
 			color,
 			tankModel->getName(),
-			tankModel->getTypeName());
+			tankModel->getTypeName(),
+			0,
+			team,
+			""); 
+		addPlayerMessage.setPlayerIconName("data/avatars/computer.png");
+		addPlayerMessage.getPlayerIcon().addDataToBuffer(
+			tankAvatar.getFile().getBuffer(),
+			tankAvatar.getFile().getBufferUsed());
 
-		tank->getAvatar().loadFromFile(S3D::getDataFile("data/avatars/computer.png"));
-		tank->setUniqueId(uniqueId);
-		tank->setTankAI(ai->createCopy(tank));
-		tank->getState().setState(TankState::sInitializing);
-		tank->getState().setState(TankState::sPending);
-		context.getTankContainer().addTank(tank);
-
-		if (context.getOptionsGame().getTeams() > 1)
-		{
-			tank->setTeam(team);
-		}
-
-		Logger::log(S3D::formatStringBuffer("Player connected dest=\"%i\" id=\"%i\" name=\"%s\" unique=[%s]",
-			tank->getDestinationId(),
-			tank->getPlayerId(),
-			tank->getCStrName().c_str(),
-			tank->getUniqueId()));
-
-		StatsLogger::instance()->tankConnected(tank);
-		StatsLogger::instance()->tankJoined(tank);
-
-		if (true) // Raise an event
-		{
-			// Tell the clients to create this tank
-			ComsAddPlayerMessage addPlayerMessage(
-				tank->getPlayerId(),
-				tank->getTargetName(),
-				tank->getColor(),
-				tank->getModelContainer().getTankModelName(),
-				tank->getModelContainer().getTankTypeName(),
-				tank->getDestinationId(),
-				tank->getTeam(),
-				""); 
-			addPlayerMessage.setPlayerIconName(tank->getAvatar().getName());
-			addPlayerMessage.getPlayerIcon().addDataToBuffer(
-				tank->getAvatar().getFile().getBuffer(),
-				tank->getAvatar().getFile().getBufferUsed());
-			ComsMessageSender::sendToAllConnectedClients(addPlayerMessage);
-		}
-
-		if (context.getGameState().getState() == ServerState::ServerStateTooFewPlayers ||
-			context.getGameState().getState() == ServerState::ServerStateStarting)
-		{
-			ComsPlayerStateMessage message(false, false);
-			ComsMessageSender::sendToAllConnectedClients(message);
-		}
+		TankAddSimAction *simAction = new TankAddSimAction(addPlayerMessage,
+			uniqueId, "", "AI", 0, aiName);
+		context.getServerSimulator().addSimulatorAction(simAction);
+		TankChangeSimAction *changeAction = new TankChangeSimAction(addPlayerMessage);
+		context.getServerSimulator().addSimulatorAction(changeAction);
 	}
 }

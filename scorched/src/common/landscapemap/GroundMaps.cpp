@@ -25,8 +25,8 @@
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <landscapedef/LandscapeDefinitionCache.h>
-#include <target/Target.h>
-#include <placement/PlacementTankPosition.h>
+#include <target/TargetContainer.h>
+#include <tank/TankContainer.h>
 #include <movement/TargetMovement.h>
 #include <common/Logger.h>
 #include <tankai/TankAIAdder.h>
@@ -65,10 +65,6 @@ void GroundMaps::generateMaps(
 	}
 #endif
 	generateObjects(context, counter);
-
-	// Place the tanks after the objects and hmap
-	// This can remove objects, and flatten the hmap
-	PlacementTankPosition::flattenTankPositions(context);
 
 	// Create movement after targets, so we can mark 
 	// those targets that are in movement groups
@@ -150,6 +146,33 @@ void GroundMaps::generateObjects(
 	LandscapeTex *tex = defnCache_.getTex();
 	LandscapeDefn *defn = defnCache_.getDefn();
 
+	// Remove any existing objects
+	std::map<unsigned int, Target *> targets = // Note copy
+		context.getTargetContainer().getTargets();
+	std::map<unsigned int, Target *>::iterator itor;
+	for (itor = targets.begin();
+		itor != targets.end();
+		itor++)
+	{
+		unsigned int playerId = (*itor).first;
+		Target *target = (*itor).second;
+		if (target->isTemp())
+		{
+			if (target->isTarget())
+			{
+				Target *removedTarget = 
+					context.getTargetContainer().removeTarget(playerId);
+				delete removedTarget;
+			}
+			else
+			{
+				Tank *removedTank = 
+					context.getTankContainer().removeTank(playerId);
+				delete removedTank;
+			}
+		}
+	}
+
 	// Remove any existing shadows
 	groups_.getShadows().clear();
 
@@ -167,7 +190,7 @@ void GroundMaps::generateObjects(
 			itor++)
 		{
 			LandscapeInclude *place = (*itor);
-			RandomGenerator objectsGenerator;
+			FileRandomGenerator objectsGenerator;
 			objectsGenerator.seed(defnCache_.getSeed());
 			generateObject(objectsGenerator, *place, 
 				context, playerId, counter);
@@ -181,7 +204,7 @@ void GroundMaps::generateObjects(
 			itor++)
 		{
 			LandscapeInclude *place = (*itor);
-			RandomGenerator objectsGenerator;
+			FileRandomGenerator objectsGenerator;
 			objectsGenerator.seed(defnCache_.getSeed());
 			generateObject(objectsGenerator, *place, 
 				context, playerId, counter);

@@ -30,10 +30,6 @@ ComsMessageHandlerI::~ComsMessageHandlerI()
 {
 }
 
-ComsMessageHandlerSentI::~ComsMessageHandlerSentI()
-{
-}
-
 ComsMessageHandler::ComsMessageHandler(const char *instanceName) : 
 	instanceName_(instanceName),
 	connectionHandler_(0), comsMessageLogging_(false)
@@ -50,24 +46,20 @@ void ComsMessageHandler::setConnectionHandler(
 	connectionHandler_ = handler;
 }
 
-void ComsMessageHandler::addHandler(const char *messageType,
+void ComsMessageHandler::addHandler(ComsMessageType &comsMessageType,
 		ComsMessageHandlerI *handler)
 {
-	std::map<std::string, ComsMessageHandlerI *>::iterator itor =
-		recvHandlerMap_.find(messageType);
-	DIALOG_ASSERT(itor == recvHandlerMap_.end());
-
-	recvHandlerMap_[messageType] = handler;
+	unsigned int id = comsMessageType.getId();
+	if (recvHandlers_.size() < id + 1) recvHandlers_.resize(id + 1);
+	recvHandlers_[id] = handler;
 }
 
-void ComsMessageHandler::addSentHandler(const char *messageType,
-		ComsMessageHandlerSentI *handler)
+void ComsMessageHandler::addSentHandler(ComsMessageType &comsMessageType,
+		ComsMessageHandlerI *handler)
 {
-	std::map<std::string, ComsMessageHandlerSentI *>::iterator itor =
-		sentHandlerMap_.find(messageType);
-	DIALOG_ASSERT(itor == sentHandlerMap_.end());
-
-	sentHandlerMap_[messageType] = handler;
+	unsigned int id = comsMessageType.getId();
+	if (sentHandlers_.size() < id + 1) sentHandlers_.resize(id + 1);
+	sentHandlers_[id] = handler;
 }
 
 void ComsMessageHandler::processMessage(NetMessage &message)
@@ -114,108 +106,125 @@ void ComsMessageHandler::processMessage(NetMessage &message)
 
 void ComsMessageHandler::processReceiveMessage(NetMessage &message)
 {
-	unsigned int bufferUsed = message.getBuffer().getBufferUsed();
-	if (!message.getBuffer().uncompressBuffer())
-	{
-		if (connectionHandler_)
-			connectionHandler_->clientError(message,
-				"Failed to uncompress RECV message type");
-	}
-	NetBufferReader reader(message.getBuffer());
-
-	std::string messageType;
-	if (!reader.getFromBuffer(messageType))
-	{
-		if (connectionHandler_)
-			connectionHandler_->clientError(message,
-				"Failed to decode RECV message type");
-		return;
-	}
-
-	if (comsMessageLogging_)
-	{
-		Logger::log(S3D::formatStringBuffer("%s::process(%s, %i, %u)",
-			instanceName_.c_str(),
-			messageType.c_str(), message.getDestinationId(),
-			bufferUsed));
-	}
-
-	std::map<std::string, ComsMessageHandlerI *>::iterator itor =
-		recvHandlerMap_.find(messageType);
-	if (itor == recvHandlerMap_.end())
-	{
-		char buffer[1024];
-		snprintf(buffer, 1024, "Failed to find RECV message type handler \"%s\"",
-			messageType.c_str());
-
-		if (connectionHandler_)
-			connectionHandler_->clientError(message,
-				buffer);
-		return;
-	}
-
-	ComsMessageHandlerI *handler = (*itor).second;
-	const char *messageTypeStr = messageType.c_str();
-	if (!handler->processMessage(
-		message, messageTypeStr, reader))
-	{
-		char buffer[1024];
-		snprintf(buffer, 1024, "Failed to handle RECV message type \"%s\"",
-			messageType.c_str());
-
-		if (connectionHandler_)
-			connectionHandler_->clientError(message,
-				buffer);
-		return;
-	}
-
-	if (comsMessageLogging_)
-	{
-		Logger::log(S3D::formatStringBuffer("%s::processFinished(%s, %i)",
-			instanceName_.c_str(),
-			messageType.c_str(), message.getDestinationId()));
-	}
+	processMessage(message, recvHandlers_, "RECV");
 }
 
 void ComsMessageHandler::processSentMessage(NetMessage &message)
 {
-	if (sentHandlerMap_.empty()) return;
+	processMessage(message, sentHandlers_, "SEND");
+}
 
-	message.getBuffer().uncompressBuffer();
-	NetBufferReader reader(message.getBuffer());
+void ComsMessageHandler::processMessage(NetMessage &message,
+	std::vector<ComsMessageHandlerI *> &handlers,
+	const char *sendRecv)
+{
+	if (handlers.empty()) return;
 
-	std::string messageType;
-	if (!reader.getFromBuffer(messageType))
+	// Get how big the buffer is
+	unsigned int bufferUsed = message.getBuffer().getBufferUsed();
+	if (bufferUsed < 1)
 	{
 		if (connectionHandler_)
 			connectionHandler_->clientError(message,
-				"Failed to decode SENT message type");
+				S3D::formatStringBuffer("Failed to get %s message compression state", sendRecv));
+	}
+
+	// Check if the buffer is sent compressed
+	bool compressed = (message.getBuffer().getBuffer()[bufferUsed - 1] == '1');
+	message.getBuffer().setBufferUsed(bufferUsed - 1);
+	if (compressed)
+	{
+		if (!message.getBuffer().uncompressBuffer())
+		{
+			if (connectionHandler_)
+				connectionHandler_->clientError(message,
+					S3D::formatStringBuffer("Failed to uncompress %s message", sendRecv));
+		}
+	}
+	NetBufferReader reader(message.getBuffer());
+
+	unsigned char messageTypeId;
+	if (!reader.getFromBuffer(messageTypeId))
+	{
+		if (connectionHandler_)
+			connectionHandler_->clientError(message,
+				S3D::formatStringBuffer("Failed to decode %s message type", sendRecv));
+		return;
+	}
+	ComsMessageType *comsMessageType = ComsMessageType::getTypeForId(messageTypeId);
+	if (!comsMessageType)
+	{
+		if (connectionHandler_) 
+			connectionHandler_->clientError(message, 
+				S3D::formatStringBuffer("Failed to find %s message type %u", 
+				sendRecv, messageTypeId));
+		return;
+	}
+	const char *messageTypeStr = comsMessageType->getName().c_str();
+	
+	if (comsMessageLogging_)
+	{
+		Logger::log(S3D::formatStringBuffer("%s::process%s(%s, %i, %u%s)",
+			instanceName_.c_str(),
+			sendRecv,
+			messageTypeStr, message.getDestinationId(),
+			bufferUsed,
+			compressed?", compressed":""));
+	}
+	if (messageTypeId >= handlers.size())
+	{
+		if (connectionHandler_)
+			connectionHandler_->clientError(message, 
+				S3D::formatStringBuffer("Failed to find %s message type handler \"%s\"",
+					sendRecv, messageTypeStr));
+		return;
+	}
+	ComsMessageHandlerI *handler = handlers[messageTypeId];
+	
+	if (!handler->processMessage(
+		message, messageTypeStr, reader))
+	{
+		if (connectionHandler_)
+			connectionHandler_->clientError(message, 
+				S3D::formatStringBuffer("Failed to handle %s message type handler \"%s\"",
+					sendRecv, messageTypeStr));
 		return;
 	}
 
 	if (comsMessageLogging_)
 	{
-		Logger::log(S3D::formatStringBuffer("%s::processSentMessage(%s, %i)",
+		Logger::log(S3D::formatStringBuffer("%s::processFinished%s(%s, %i)",
 			instanceName_.c_str(),
-			messageType.c_str(), message.getDestinationId()));
+			sendRecv,
+			messageTypeStr, message.getDestinationId()));
 	}
+}
 
-	std::map<std::string, ComsMessageHandlerSentI *>::iterator itor =
-		sentHandlerMap_.find(messageType);
-	if (itor == sentHandlerMap_.end()) return;
+std::list<ComsMessageHandlerIRegistration::HandlerInfo> 
+	*ComsMessageHandlerIRegistration::handlerList = 0;
 
-	ComsMessageHandlerSentI *handler = (*itor).second;
-	const char *messageTypeStr = messageType.c_str();
-	if (!handler->processSentMessage(message.getDestinationId(), 
-		messageTypeStr, reader))
+void ComsMessageHandlerIRegistration::addHandler(HandlerType type,
+		ComsMessageType &messageType,
+		ComsMessageHandlerI *handler)
+{
+	if (!handlerList) handlerList = new std::list<HandlerInfo>();
+
+	HandlerInfo info = { type, &messageType, handler };
+	handlerList->push_back(info);
+}
+
+void ComsMessageHandlerIRegistration::registerHandlers(HandlerType type, ComsMessageHandler &handler)
+{
+	if (!handlerList) return;
+
+	std::list<HandlerInfo>::iterator itor;
+	for (itor = handlerList->begin();
+		itor != handlerList->end();
+		itor++)
 	{
-		char buffer[1024];
-		snprintf(buffer, 1024, "Failed to handle SENT message type \"%s\"",
-			messageType.c_str());
-
-		if (connectionHandler_)
-			connectionHandler_->clientError(message,
-				buffer);
-		return;
+		if (itor->type == type) 
+		{
+			handler.addHandler(*itor->messageType, itor->handler);
+		}
 	}
 }

@@ -130,7 +130,8 @@ protected:
 class GLFont2dI
 {
 public:
-	virtual void drawCharacter(
+	virtual bool drawCharacter(
+		unsigned int character,
 		int charPosition, Vector &position, 
 		GLFont2dStorage::CharEntry &charEntry, Vector4 &color) = 0;
 };

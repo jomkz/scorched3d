@@ -19,13 +19,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <dialogs/QuitDialog.h>
-#include <dialogs/SaveDialog.h>
 #include <GLW/GLWWindowManager.h>
 #include <client/ClientParams.h>
-#include <server/ServerCommon.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientState.h>
 #include <engine/MainLoop.h>
+#include <server/ScorchedServer.h>
+#include <server/ServerSimulator.h>
+#include <simactions/AdminSimAction.h>
 
 QuitDialog *QuitDialog::instance_ = 0;
 
@@ -42,36 +43,7 @@ QuitDialog::QuitDialog() :
 	GLWWindow("Quit", 210.0f, 150.0f, 0,
 		"Allows the player to quit the game.")
 {
-	killButton_ = (GLWTextButton *) 
-		addWidget(new GLWTextButton(LANG_RESOURCE("MASS_TANK_KILL", "Mass Tank Kill"), 10, 115, 190, this, 
-		GLWButton::ButtonFlagCenterX));
-	killButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("MASS_TANK_KILL", "Mass tank kill"),
-		LANG_RESOURCE("MADD_TANK_KILL_TOOLTIP", "Kills all the tanks and starts the next\n"
-		"round.  Only available in single player\n"
-		"games.")));
 
-	saveButton_ = (GLWTextButton *) 
-		addWidget(new GLWTextButton(LANG_RESOURCE("SAVE_GAME", "Save Game"), 10, 80, 190, this,
-		GLWButton::ButtonFlagCenterX));
-	saveButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("SAVE_GAME", "Save Game"),
-		LANG_RESOURCE("SAVE_GAME_TOOLTIP", "Saves the games.\n"
-		"Only available in single player games.")));
-
-	quitButton_ = (GLWTextButton *) 
-		addWidget(new GLWTextButton(LANG_RESOURCE("QUIT_GAME", "Quit Game"), 10, 45, 190, this, 
-		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX));
-	quitButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("QUIT_GAME", "Quit Game"),
-		LANG_RESOURCE("QUIT_GAME_TOOLTIP", "Quits Scorched3D")));
-
-	okButton_ = (GLWTextButton *) 
-		addWidget(new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 95, 10, 105, this, 
-		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX));
-	okButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("CANCEL", "Cancel"),
-		LANG_RESOURCE("CANCEL_TOOLTIP", "Return to the game.")));
 }
 
 QuitDialog::~QuitDialog()
@@ -83,14 +55,45 @@ void QuitDialog::display()
 {
 	GLWWindow::display();
 
+	needCentered_ = true;
+	clear();
+
 	unsigned int state = ScorchedClient::instance()->getGameState().getState();
 	bool disable = (ClientParams::instance()->getConnectedToServer() ||
 		state == ClientState::StateOptions ||
-		state == ClientState::StateConnect ||
-		state == ClientState::StateGetPlayers ||
-		state == ClientState::StateLoadPlayers);
-	saveButton_->setEnabled(!disable);
-	killButton_->setEnabled(!disable);
+		state == ClientState::StateConnect);
+	if (!disable)
+	{
+		killButton_ = new GLWTextButton(LANG_RESOURCE("MASS_TANK_KILL", "Mass Tank Kill"), 0, 0, 190, this, 
+			GLWButton::ButtonFlagCenterX);
+		addWidget(killButton_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
+		killButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+			LANG_RESOURCE("MASS_TANK_KILL", "Mass tank kill"),
+			LANG_RESOURCE("MADD_TANK_KILL_TOOLTIP", "Kills all the tanks and starts the next\n"
+			"round.  Only available in single player\n"
+			"games.")));
+	}
+	else
+	{
+		killButton_ = 0;
+	}
+
+	quitButton_ = new GLWTextButton(LANG_RESOURCE("QUIT_GAME", "Quit Game"), 0, 0, 190, this, 
+		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX);
+	addWidget(quitButton_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
+	quitButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("QUIT_GAME", "Quit Game"),
+		LANG_RESOURCE("QUIT_GAME_TOOLTIP", "Quits Scorched3D")));
+
+	okButton_ = new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 0, 0, 190, this, 
+		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX);
+	addWidget(okButton_, 0, SpaceLeft | SpaceRight | SpaceTop | SpaceBottom, 10.0f);
+	okButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("CANCEL", "Cancel"),
+		LANG_RESOURCE("CANCEL_TOOLTIP", "Return to the game.")));
+
+	setLayout(GLWPanel::LayoutVerticle);
+	layout();
 }
 
 void QuitDialog::buttonDown(unsigned int id)
@@ -99,15 +102,11 @@ void QuitDialog::buttonDown(unsigned int id)
 	{
 		GLWWindowManager::instance()->hideWindow(id_);
 	}
-	else if (id == saveButton_->getId())
+	else if (killButton_ && id == killButton_->getId())
 	{
-		GLWWindowManager::instance()->showWindow(
-			SaveDialog::instance()->getId());
-		GLWWindowManager::instance()->hideWindow(id_);
-	}
-	else if (id == killButton_->getId())
-	{
-		ServerCommon::killAll();
+		AdminSimAction *simAction = new AdminSimAction(AdminSimAction::eKillAll, 0, 0);
+		ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
+
 		GLWWindowManager::instance()->hideWindow(id_);
 	}
 	else if (id == quitButton_->getId())

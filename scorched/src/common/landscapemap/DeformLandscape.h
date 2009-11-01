@@ -34,18 +34,6 @@ public:
 	{
 		fixed map[100][100];
 	};
-	enum DeformType
-	{
-		eDeformLandscapeUp = 1,
-		eDeformLandscapeDown = 2,
-		eFlattenArea = 3,
-	};
-	struct DeformInfo
-	{
-		int type;
-		FixedVector pos;
-		fixed radius;
-	};
 
 	static bool deformLandscape(
 		ScorchedContext &context,
@@ -57,15 +45,7 @@ public:
 		bool removeObjects = true,
 		fixed size = 2);
 
-	static void clearInfos();
-	static std::vector<DeformInfo> &getInfos() { return deformInfos_; }
-	static void applyInfos(ScorchedContext &context, 
-		std::vector<DeformInfo> &infos,
-		ProgressCounter *counter = 0);
-
 private:
-	static std::vector<DeformInfo> deformInfos_;
-
 	static bool deformLandscapeInternal(
 		ScorchedContext &context,
 		FixedVector &pos, fixed radius, 

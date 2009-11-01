@@ -19,14 +19,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <server/ServerPlayedMoveHandler.h>
-#include <server/ServerShotHolder.h>
-#include <server/ServerState.h>
+#include <server/ServerStateBuying.h>
+#include <server/ServerStatePlaying.h>
 #include <server/ScorchedServer.h>
-#include <server/TurnController.h>
+#include <server/ServerState.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
-#include <engine/GameState.h>
-#include <coms/ComsPlayedMoveMessage.h>
 
 ServerPlayedMoveHandler *ServerPlayedMoveHandler::instance_ = 0;
 
@@ -42,7 +40,7 @@ ServerPlayedMoveHandler *ServerPlayedMoveHandler::instance()
 ServerPlayedMoveHandler::ServerPlayedMoveHandler()
 {
 	ScorchedServer::instance()->getComsMessageHandler().addHandler(
-		"ComsPlayedMoveMessage",
+		ComsPlayedMoveMessage::ComsPlayedMoveMessageType,
 		this);
 }
 
@@ -55,36 +53,22 @@ bool ServerPlayedMoveHandler::processMessage(
 	const char *messageType,
 	NetBufferReader &reader)
 {
-	ComsPlayedMoveMessage *message = new ComsPlayedMoveMessage;
-	if (!message->readMessage(reader))
-	{
-		delete message;
-		return false;
-	}
+	ComsPlayedMoveMessage message;
+	if (!message.readMessage(reader)) return false;
 
-	unsigned int playerId = message->getPlayerId();
-	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
-	if (tank && tank->getState().getState() == TankState::sNormal)
-	{	
-		if (tank->getDestinationId() == netMessage.getDestinationId())
-		{
-			if (TurnController::instance()->playerThisTurn(playerId))
-			{
-				if ((ScorchedServer::instance()->getGameState().getState() == 
-					ServerState::ServerStatePlaying) || ((
-					ScorchedServer::instance()->getGameState().getState() == 
-					ServerState::ServerStateBuying) && 
-					message->getType() == ComsPlayedMoveMessage::eFinishedBuy))
-				{
-					ServerShotHolder::instance()->addShot(playerId, message);
-				}
-				else delete message;
-			}
-			else delete message;
-		}
-		else delete message;
+	Tank *tank = ScorchedServer::instance()->getTankContainer().
+		getTankById(message.getPlayerId());
+	if (!tank) return true;
+	if (tank->getDestinationId() != netMessage.getDestinationId()) return true;
+
+	if (message.getType() == ComsPlayedMoveMessage::eFinishedBuy)
+	{
+		ScorchedServer::instance()->getServerState().buyingFinished(message);
 	}
-	else delete message;
+	else
+	{
+		ScorchedServer::instance()->getServerState().moveFinished(message);
+	}
 
 	return true;
 }

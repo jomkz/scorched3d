@@ -20,7 +20,7 @@
 
 #include <weapons/WeaponPosition.h>
 #include <weapons/AccessoryStore.h>
-#include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <landscapemap/LandscapeMaps.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponPosition);
@@ -69,7 +69,7 @@ void WeaponPosition::fireWeapon(ScorchedContext &context,
 {
 	// Position the fired weapon at the desired position, 
 	// +/- optional random offset
-	RandomGenerator &random = context.getActionController().getRandom();
+	RandomGenerator &random = context.getSimulator().getRandomGenerator();
 
 	if(onGround_)
 	{

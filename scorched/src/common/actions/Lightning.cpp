@@ -33,13 +33,14 @@
 #include <target/TargetLife.h>
 #include <target/TargetSpace.h>
 #include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <weapons/AccessoryStore.h>
 #include <math.h>
 
 Lightning::Lightning(WeaponLightning *weapon,
 		WeaponFireContext &weaponContext,
 		FixedVector &position, FixedVector &velocity) :
-	ActionReferenced("Lightning"),
+	Action(weaponContext.getPlayerId()),
 	totalTime_(0),
 	weapon_(weapon),
 	weaponContext_(weaponContext),
@@ -182,7 +183,7 @@ void Lightning::draw()
 void Lightning::dispaceDirection(FixedVector &direction, 
 	FixedVector &originalDirection, fixed angle)
 {
-	RandomGenerator &generator = context_->getActionController().getRandom();
+	RandomGenerator &generator = context_->getSimulator().getRandomGenerator();
 
 	int breakCount = 0;
 
@@ -217,7 +218,7 @@ void Lightning::generateLightning(int id, int depth, fixed size,
 {
 	if (id > 100) return;
 
-	RandomGenerator &generator = context_->getActionController().getRandom();
+	RandomGenerator &generator = context_->getSimulator().getRandomGenerator();
 	fixed length = weapon_->getSegLength() + 
 		weapon_->getSegVar() * generator.getRandFixed();
 	FixedVector end = start + direction * length;

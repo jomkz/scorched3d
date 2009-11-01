@@ -41,6 +41,7 @@
 TankFalling::TankFalling(Weapon *weapon, unsigned int fallingPlayerId,
 				   WeaponFireContext &weaponContext,
 				   Parachute *parachute) :
+	PhysicsParticle(weaponContext.getPlayerId()),
 	weapon_(weapon),
 	fallingPlayerId_(fallingPlayerId),
 	weaponContext_(weaponContext), parachute_(parachute)
@@ -112,7 +113,7 @@ void TankFalling::simulate(fixed frameTime, bool &remove)
 		else collision_ = true;
 	}
 
-	PhysicsParticleReferenced::simulate(frameTime, remove);
+	PhysicsParticle::simulate(frameTime, remove);
 }
 
 void TankFalling::collision(PhysicsParticleObject &position, 
@@ -232,5 +233,5 @@ void TankFalling::collision(PhysicsParticleObject &position,
 		}
 	}
 
-	PhysicsParticleReferenced::collision(position, collisionId);
+	PhysicsParticle::collision(position, collisionId);
 }

@@ -40,7 +40,7 @@
 Laser::Laser(Weapon *weapon, LaserParams *params,
 		FixedVector &position, FixedVector &direction,
 		WeaponFireContext &weaponContext) :
-	ActionReferenced("Laser"),
+	Action(weaponContext.getPlayerId()),
 	params_(params),
 	totalTime_(0),
 	drawLength_(0),

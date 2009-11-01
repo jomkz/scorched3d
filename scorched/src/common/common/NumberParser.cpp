@@ -18,21 +18,12 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-
-// NumberParser.cpp: implementation of the NumberParser class.
-//
-//////////////////////////////////////////////////////////////////////
-
 #include <common/RandomGenerator.h>
-#include <engine/ActionController.h>
 #include <common/NumberParser.h>
+#include <engine/Simulator.h>
 #include <string>
 #include <list>
 #include <sstream>
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
 NumberParser::NumberParser()
 {
@@ -105,7 +96,7 @@ fixed NumberParser::getValue(ScorchedContext &context) //RandomGenerator &genera
         step_ = 0;
         std::list<fixed>::iterator itor;
         itor = operands_.begin();
-		RandomGenerator &random = context.getActionController().getRandom();
+		RandomGenerator &random = context.getSimulator().getRandomGenerator();
 
         if (expression_.find("RANGE",0) != std::string::npos)
         {

@@ -34,7 +34,7 @@ public:
 		ComsMessage &message, unsigned int destination, unsigned int flags = 0);
 	static bool sendToMultipleClients(
 		ComsMessage &message, std::list<unsigned int> destinations, unsigned int flags = 0);
-	static bool sendToAllPlayingClients(
+	static bool sendToAllLoadedClients(
 		ComsMessage &message, unsigned int flags = 0);
 	static bool sendToAllConnectedClients(
 		ComsMessage &message, unsigned int flags = 0);
@@ -42,7 +42,7 @@ public:
 protected:
 
 	static bool formMessage(
-		ComsMessage &message);
+		ComsMessage &message, unsigned int flags);
 
 private:
 	ComsMessageSender();

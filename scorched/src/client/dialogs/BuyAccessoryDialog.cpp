@@ -26,16 +26,13 @@
 #include <GLEXT/GLViewPort.h>
 #include <client/ClientState.h>
 #include <client/ScorchedClient.h>
-#include <common/OptionsScorched.h>
 #include <graph/OptionsDisplay.h>
+#include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <common/Defines.h>
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsBuyAccessoryMessage.h>
 #include <weapons/AccessoryStore.h>
-#include <tank/TankContainer.h>
-#include <tank/TankScore.h>
-#include <tank/TankAccessories.h>
 #include <stdio.h>
 
 BuyAccessoryDialog *BuyAccessoryDialog::instance_ = 0;
@@ -53,7 +50,8 @@ BuyAccessoryDialog::BuyAccessoryDialog() :
 	GLWWindow("Buy", 10.0f, 10.0f, 465.0f, 300.0f, eHideName,
 		"Allows the current player to buy and sell\n"
 		"weapons and other accessories."),
-	firstDrawTime_(true), sellTab_(0), flag_(0)
+	firstDrawTime_(true), sellTab_(0), flag_(0),
+	tankInfo_(*BuyAccessoryDialogTankInfo::instance())
 {
 	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("OK", "Ok"), 400, 10, 55, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX))->getId();
@@ -137,13 +135,11 @@ void BuyAccessoryDialog::addPlayerName()
 	if (flag_) flagOffset = flag_->getOffset();
 	topPanel_->clear();
 
-	Tank *tank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
-	if (!tank) return;
-	flag_ = (GLWFlag *) topPanel_->addWidget(new GLWFlag(tank->getColor(), 5, 15, 60));
+	flag_ = (GLWFlag *) topPanel_->addWidget(new GLWFlag(tankInfo_.tankColor, 5, 15, 60));
 	flag_->setOffset(flagOffset);
-	topPanel_->addWidget(new GLWLabel(75, 10, tank->getTargetName()));
+	topPanel_->addWidget(new GLWLabel(75, 10, tankInfo_.tankName));
 	topPanel_->addWidget(new GLWLabel(260, 20, 
-		LANG_STRING(S3D::formatStringBuffer("$%i", tank->getScore().getMoney()))));
+		LANG_STRING(S3D::formatStringBuffer("$%i", tankInfo_.tankMoney))));
 	topPanel_->addWidget(new GLWLabel(260, 0, 
 		LANG_RESOURCE_2("ROUND_OF", "Round {0} of {1}",
 		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsTransient().getCurrentRoundNo()),
@@ -249,9 +245,6 @@ void BuyAccessoryDialog::addPlayerWeapons()
 
 void BuyAccessoryDialog::addPlayerFavorites()
 {
-	Tank *tank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
-	if (!tank) return;
-
 	float height = 10.0f;
 	std::list<Accessory *> acessories = 
 		ScorchedClient::instance()->
@@ -265,16 +258,13 @@ void BuyAccessoryDialog::addPlayerFavorites()
 		Accessory *current = *itor;
 		if (favorites_.find(current->getName()) != favorites_.end())
 		{
-			if (addAccessory(tank, favouritesTab_, height, current)) height += 24.0f;
+			if (addAccessory(favouritesTab_, height, current)) height += 24.0f;
 		}
 	}
 }
 
 void BuyAccessoryDialog::addPlayerWeaponsBuy(GLWTab *tab, const char *group)
 {
-	Tank *tank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
-	if (!tank) return;
-
 	std::list<Accessory *> weapons = ScorchedClient::instance()->
 		getAccessoryStore().getAllAccessoriesByTabGroup(
 			group,
@@ -287,18 +277,15 @@ void BuyAccessoryDialog::addPlayerWeaponsBuy(GLWTab *tab, const char *group)
 		itor2++)
 	{
 		Accessory *current = (*itor2);
-		if (addAccessory(tank, tab, height, current)) height += 24.0f;
+		if (addAccessory(tab, height, current)) height += 24.0f;
 	}
 }
 
 void BuyAccessoryDialog::addPlayerWeaponsSell()
 {
-	Tank *tank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
-	if (!tank) return;
-
 	float height = 10.0f;
 	std::list<Accessory *> tankAccessories;
-	tank->getAccessories().getAllAccessories(
+	tankInfo_.tankAccessories.getAllAccessories(
 		tankAccessories);
 	ScorchedClient::instance()->getAccessoryStore().sortList(tankAccessories,
 		OptionsDisplay::instance()->getAccessorySortKey());
@@ -308,19 +295,18 @@ void BuyAccessoryDialog::addPlayerWeaponsSell()
 		itor++)
 	{
 		Accessory *current = *itor;
-		if (addAccessory(tank, sellTab_, height, current)) height += 24.0f;
+		if (addAccessory(sellTab_, height, current)) height += 24.0f;
 	}
 }
 
 bool BuyAccessoryDialog::addAccessory(
-	Tank *tank, GLWTab *tab, 
-	float height, Accessory *current)
+	GLWTab *tab, float height, Accessory *current)
 {
-	if (!tank->getAccessories().accessoryAllowed(current, 0)) return false;
+	if (!tankInfo_.tankAccessories.accessoryAllowed(current, 0)) return false;
 	if (current->getNoBuy()) return false;
 
 	int currentNumber = 
-		tank->getAccessories().getAccessoryCount(current);
+		tankInfo_.tankAccessories.getAccessoryCount(current);
 
 	// Panel
 	GLWPanel *newPanel = (GLWPanel *)
@@ -342,13 +328,13 @@ bool BuyAccessoryDialog::addAccessory(
 	
 	// Others
 	newPanel->addWidget(new GLWLabel(20, 0, 
-		tank->getAccessories().getAccessoryCountString(current), 12.0f));
+		tankInfo_.tankAccessories.getAccessoryCountString(current), 12.0f));
 	newPanel->addWidget(new GLWIcon(45, 4, 16, 16, current->getTexture()));
 	newPanel->addWidget(new GLWLabel(65, 0, LANG_RESOURCE(current->getName(), current->getName()), 12.0f));
 
 	// Buy Button
-	if (tank->getAccessories().accessoryAllowed(current, current->getBundle()) && 
-		current->getPrice() <= tank->getScore().getMoney())
+	if (tankInfo_.tankAccessories.accessoryAllowed(current, current->getBundle()) && 
+		current->getPrice() <= tankInfo_.tankMoney)
 	{
 		GLWTextButton *button = (GLWTextButton *)
 			newPanel->addWidget(new GLWTextButton(
@@ -423,34 +409,32 @@ void BuyAccessoryDialog::display()
 
 	sortDropDown_->setHandler(this);
 
-	Tank *tank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
-	if (tank)
+	tankInfo_.set();
+
+	if (buyTabs_.find("weapon") != buyTabs_.end())
 	{
-		if (buyTabs_.find("weapon") != buyTabs_.end())
+		buyTabs_["weapon"]->setDepressed();
+	}
+	const char *buyTab = OptionsDisplay::instance()->getBuyTab();
+	std::list<GLWPanel::GLWPanelEntry>::iterator itor;
+	for (itor = getWidgets().begin();
+		itor != getWidgets().end();
+		itor++)
+	{
+		GLWPanel::GLWPanelEntry &entry = (*itor);
+		if (entry.widget->getMetaClassId() == sellTab_->getMetaClassId())
 		{
-			buyTabs_["weapon"]->setDepressed();
-		}
-		const char *buyTab = OptionsDisplay::instance()->getBuyTab();
-		std::list<GLWPanel::GLWPanelEntry>::iterator itor;
-		for (itor = getWidgets().begin();
-			itor != getWidgets().end();
-			itor++)
-		{
-			GLWPanel::GLWPanelEntry &entry = (*itor);
-			if (entry.widget->getMetaClassId() == sellTab_->getMetaClassId())
+			GLWTab *tab = (GLWTab *) entry.widget;
+			if (0 == strcmp(buyTab, tab->getName()))
 			{
-				GLWTab *tab = (GLWTab *) entry.widget;
-				if (0 == strcmp(buyTab, tab->getName()))
-				{
-					tab->setDepressed();
-					break;
-				}
+				tab->setDepressed();
+				break;
 			}
 		}
-		tabDown(0);
-	
-		playerRefresh();
 	}
+	tabDown(0);
+	
+	playerRefresh();
 }
 
 void BuyAccessoryDialog::tabDown(unsigned int id)
@@ -561,26 +545,22 @@ void BuyAccessoryDialog::buttonDown(unsigned int id)
 	{
 		GLWWindowManager::instance()->showWindow(
 			GiftMoneyDialog::instance()->getId());
-		GLWWindowManager::instance()->hideWindow(
-			getId());
 	}
 	else
 	{
-		Tank *tank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
-		if (!tank) return;
-
 		std::map<unsigned int, Accessory *>::iterator itor;
 		itor = buyMap_.find(id);
 		if (itor != buyMap_.end())
 		{
 			// Tell the server to add the accessory
 			Accessory *acc = itor->second;
-			ComsBuyAccessoryMessage buyMessage(tank->getPlayerId(), acc->getAccessoryId());
+			ComsBuyAccessoryMessage buyMessage(tankInfo_.tankId, acc->getAccessoryId(), true);
 			ComsMessageSender::sendToServer(buyMessage);
 
 			// Add the accessory
-			tank->getAccessories().add(acc, acc->getBundle());
-			tank->getScore().setMoney(tank->getScore().getMoney() - acc->getPrice());
+			tankInfo_.tankAccessories.add(acc, acc->getBundle());
+			tankInfo_.tankMoney -= acc->getPrice();
+			if (tankInfo_.tankMoney < 0) tankInfo_.tankMoney = 0;
 
 			// Refresh the window
 			playerRefreshKeepPos();
@@ -592,12 +572,12 @@ void BuyAccessoryDialog::buttonDown(unsigned int id)
 			{
 				// Tell the server to add the accessory
 				Accessory *acc = itor->second;
-				ComsBuyAccessoryMessage buyMessage(tank->getPlayerId(), acc->getAccessoryId(), false);
+				ComsBuyAccessoryMessage buyMessage(tankInfo_.tankId, acc->getAccessoryId(), false);
 				ComsMessageSender::sendToServer(buyMessage);
 
 				// Add the accessory
-				tank->getAccessories().rm(acc, 1);
-				tank->getScore().setMoney(tank->getScore().getMoney() + acc->getSellPrice());
+				tankInfo_.tankAccessories.rm(acc, 1);
+				tankInfo_.tankMoney += acc->getSellPrice();
 
 				// Refresh the window
 				playerRefreshKeepPos();

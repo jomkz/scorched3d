@@ -21,23 +21,26 @@
 #if !defined(__INCLUDE_Resurrectionh_INCLUDE__)
 #define __INCLUDE_Resurrectionh_INCLUDE__
 
-#include <engine/ActionReferenced.h>
+#include <actions/Action.h>
 #include <common/FixedVector.h>
 
-class Resurrection : public ActionReferenced
+class Resurrection : public Action
 {
 public:
 	Resurrection(
 		unsigned int playerId,
-		FixedVector &position);
+		FixedVector &position,
+		fixed resignTime);
 	virtual ~Resurrection();
 
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
+	virtual std::string getActionType() { return "Resurrection"; }
 
 protected:
 	unsigned int playerId_;
 	FixedVector position_;
+	fixed resignTime_;
 
 };
 

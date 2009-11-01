@@ -21,7 +21,7 @@
 #include <tankai/TankAIStrings.h>
 #include <common/Defines.h>
 #include <common/OptionsScorched.h>
-#include <engine/ActionController.h>
+#include <engine/Simulator.h>
 
 TankAIStrings *TankAIStrings::instance_ = 0;
 
@@ -72,7 +72,7 @@ const char *TankAIStrings::getAIPlayerName(ScorchedContext &context)
 
 const char *TankAIStrings::getDeathLine(ScorchedContext &context)
 {
-	RandomGenerator &generator = context.getActionController().getRandom();
+	RandomGenerator &generator = context.getSimulator().getRandomGenerator();
 	const char *deathLine = 0;
 	fixed percentage = 
 		fixed(context.getOptionsGame().getComputersDeathTalk());
@@ -88,7 +88,7 @@ const char *TankAIStrings::getDeathLine(ScorchedContext &context)
 
 const char *TankAIStrings::getAttackLine(ScorchedContext &context)
 {
-	RandomGenerator &generator = context.getActionController().getRandom();
+	RandomGenerator &generator = context.getSimulator().getRandomGenerator();
 	const char *attackLine = 0;
 	fixed percentage = 
 		fixed(context.getOptionsGame().getComputersAttackTalk());

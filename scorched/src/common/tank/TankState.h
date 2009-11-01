@@ -30,17 +30,10 @@ class TankState
 public:
 	enum State
 	{
-		sInitializing,
 		sLoading,
-		sPending,
+		sSpectator,
 		sNormal,
 		sDead
-	};
-
-	enum ReadyState
-	{
-		sReady,
-		SNotReady
 	};
 
 	TankState(ScorchedContext &context, unsigned int playerId);
@@ -52,17 +45,15 @@ public:
 	void newGame();
 	void newMatch();
 	void clientNewGame();
-	
-	// Ready State
-	void setReady() { readyState_ = sReady; }
-	void setNotReady() { readyState_ = SNotReady; }
-	ReadyState getReadyState() { return readyState_; }
 
 	// State
 	void setState(State s);
 	State getState() { return state_; }
-	void setSpectator(bool s) { spectator_ = s; }
-	bool getSpectator() { return spectator_; }	
+
+	bool getNotSpectator() { return notSpectator_; }
+	void setNotSpectator(bool notSpectator) { notSpectator_ = notSpectator; }
+
+	bool getTankPlaying();
 
 	void setMuted(bool muted) { muted_ = muted; }
 	bool getMuted() { return muted_; }
@@ -71,8 +62,8 @@ public:
 	int getLives() { return lives_; }
 	void setLives(int lives) { lives_ = lives; }
 	int getMaxLives() { return maxLives_; }
-	void setDestroy(bool destroy) { destroy_ = destroy; }
-	bool getDestroy() { return destroy_; }
+	void setMoveId(unsigned int moveId) { moveId_ = moveId; }
+	unsigned int getMoveId() { return moveId_; }
 	
 	const char *getStateString();
 	const char *getSmallStateString();
@@ -86,12 +77,11 @@ protected:
 	Tank *tank_;
 	ScorchedContext &context_;
 	State state_;
-	ReadyState readyState_;
 	int lives_, maxLives_;
-	bool spectator_;
+	unsigned int moveId_;
 	bool muted_;
 	bool skipshots_;
-	bool destroy_;
+	bool notSpectator_;
 
 };
 

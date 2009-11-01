@@ -33,7 +33,10 @@ public:
 	{
 		TurnSimultaneous = 0,
 		TurnSequentialLooserFirst = 1,
-		TurnSequentialRandom = 2
+		TurnSequentialRandom = 2,
+		TurnSimultaneousNoWait = 3,
+		TurnFree = 4,
+		TurnFreeTimed = 5
 	};
 	enum WindForce
 	{
@@ -71,8 +74,7 @@ public:
 	enum ResignType
 	{
 		ResignStart = 0,
-		ResignEnd = 1,
-		ResignDueToHealth = 2
+		ResignTimed = 1
 	};
 	enum MovementRestrictionType
 	{
@@ -91,9 +93,6 @@ public:
 	
 	const char *getTutorial() { return tutorial_; }
 	OptionEntryString &getTutorialEntry() { return tutorial_; }
-
-	int getPhysicsFPS() { return physicsFPS_; }
-	OptionEntryInt &getPhysicsFPSEntry() { return physicsFPS_; }
 
 	int getScorePerMoney() { return scorePerMoney_; }
 	OptionEntryInt &getScorePerMoneyEntry() { return scorePerMoney_; }
@@ -118,6 +117,9 @@ public:
 
 	int getMaxSkillLost() { return maxSkillLost_; }
 	OptionEntryInt &getMaxSkillLostEntry() { return maxSkillLost_; }
+
+	int getMaxSkillGained() { return maxSkillGained_; }
+	OptionEntryInt &getMaxSkillGainedEntry() { return maxSkillGained_; }
 
 	int getSkillForSelfKill() { return skillForSelfKill_; }
 	OptionEntryInt &getSkillForSelfKillEntry() { return skillForSelfKill_; }
@@ -149,9 +151,6 @@ public:
 	int getRemoveBotsAtPlayers() { return removeBotsAtPlayers_; }
 	OptionEntryInt &getRemoveBotsAtPlayersEntry() { return removeBotsAtPlayers_; }
 
-	int getNoMaxRoundTurns() { return maxRoundTurns_; }
-	OptionEntryInt &getNoMaxRoundTurnsEntry() { return maxRoundTurns_; }
-
 	int getStartMoney() { return moneyStarting_; }
 	OptionEntryInt &getStartMoneyEntry() { return moneyStarting_; }
 
@@ -173,14 +172,14 @@ public:
 	int getShotTime() { return shotTime_; }
 	OptionEntryInt &getShotTimeEntry() { return shotTime_; }
 
-	int getKeepAliveTime() { return keepAliveTime_; }
-	OptionEntryInt &getKeepAliveTimeEntry() { return keepAliveTime_; }
-
-	int getKeepAliveTimeoutTime() { return keepAliveTimeoutTime_; }
-	OptionEntryInt &getKeepAliveTimeoutTimeEntry() { return keepAliveTimeoutTime_; }
-
 	int getBuyingTime() { return buyingTime_; }
 	OptionEntryInt &getBuyingTimeEntry() { return buyingTime_; }
+
+	int getRemoveTime() { return removeTime_; }
+	OptionEntryInt &getRemoveTimeEntry() { return removeTime_; }
+
+	int getRoundTime() { return roundTime_; }
+	OptionEntryInt &getRoundTimeEntry() { return roundTime_; }
 
 	int getRoundScoreTime() { return roundScoreTime_; }
 	OptionEntryInt &getRoundScoreTimeEntry() { return roundScoreTime_; }
@@ -190,12 +189,6 @@ public:
 
 	int getAllowedMissedMoves() { return allowedMissedMoves_; }
 	OptionEntryInt &getAllowedMissedMovesEntry() { return allowedMissedMoves_; }
-
-	int getIdleKickTime() { return idleKickTime_; }
-	OptionEntryInt &getIdleKickTimeEntry() { return idleKickTime_; }
-
-	int getIdleShotKickTime() { return idleShotKickTime_; }
-	OptionEntryInt &getIdleShotKickTimeEntry() { return idleShotKickTime_; }
 
 	int getMinFallingDistance() { return minFallingDistance_; }
 	OptionEntryInt &getMinFallingDistanceEntry() { return minFallingDistance_; }
@@ -372,15 +365,13 @@ protected:
 	std::list<OptionEntry *> options_;
 	std::list<OptionEntry *> playerTypeOptions_;
 
-	OptionEntryBoundedInt physicsFPS_;
 	OptionEntryBoundedInt startArmsLevel_;
 	OptionEntryBoundedInt endArmsLevel_;
-	OptionEntryBoundedInt maxRoundTurns_;
-	OptionEntryBoundedInt keepAliveTime_;
-	OptionEntryBoundedInt keepAliveTimeoutTime_;
 	OptionEntryBoundedInt shotTime_;
 	OptionEntryBoundedInt startTime_;
 	OptionEntryBoundedInt buyingTime_;
+	OptionEntryBoundedInt removeTime_;
+	OptionEntryBoundedInt roundTime_;
 	OptionEntryBoundedInt roundScoreTime_;
 	OptionEntryBoundedInt scoreTime_;
 	OptionEntryBoundedInt allowedMissedMoves_;
@@ -416,11 +407,12 @@ protected:
 	OptionEntryBoundedInt skillForRound_;
 	OptionEntryBoundedInt skillForMatch_;
 	OptionEntryBoundedInt maxSkillLost_;
+	OptionEntryBoundedInt maxSkillGained_;
 	OptionEntryBoundedInt skillForSelfKill_;
 	OptionEntryBoundedInt skillForTeamKill_;
 	OptionEntryBoundedInt moneyStarting_;
-	OptionEntryBoundedInt idleKickTime_;
-	OptionEntryBoundedInt idleShotKickTime_;
+	OptionEntryBoundedInt depricatedIdleKickTime_;
+	OptionEntryBoundedInt depricatedIdleShotKickTime_;
 	OptionEntryEnum teamBallance_;
 	OptionEntryBoundedInt moneyInterest_;
 	OptionEntryBool limitPowerByHealth_;
@@ -466,6 +458,9 @@ protected:
 	OptionEntryBool debugFeatures_;
 
 	// Depricated (old) options
+	OptionEntryBoundedInt depricatedMaxRoundTurns_;
+	OptionEntryBoundedInt depricatedKeepAliveTime_;
+	OptionEntryBoundedInt depricatedKeepAliveTimeoutTime_;
 	OptionEntryEnum depricatedScoreType_;
 	OptionEntryBool depricatedAutoBallanceTeams_;
 	OptionEntryBoundedInt depricatedMaxArmsLevel_;

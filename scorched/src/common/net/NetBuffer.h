@@ -54,6 +54,7 @@ public:
 	void addToBuffer(LangString &string);
 	void addToBuffer(const LangString &string);
 	void addToBuffer(const char add);
+	void addToBuffer(const unsigned char add);
 	void addToBuffer(const int add);
 	void addToBuffer(const float add);
 	void addToBuffer(const bool add);
@@ -102,6 +103,7 @@ public:
 	bool getFromBuffer(FixedVector4 &result);
 	bool getFromBuffer(fixed &result);
 	bool getFromBuffer(char &result);
+	bool getFromBuffer(unsigned char &result);
 	bool getFromBuffer(int &result);
 	bool getFromBuffer(float &result);
 	bool getFromBuffer(bool &result);

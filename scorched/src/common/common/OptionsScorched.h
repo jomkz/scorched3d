@@ -50,7 +50,6 @@ public:
 	OPTIONINT_GETTER(ManagementPortNo);
 
 	OPTIONSTRING_GETTER(Tutorial);
-	OPTIONINT_GETTER(PhysicsFPS);
 	OPTIONINT_GETTER(Teams);
 	OPTIONINT_GETTER(StartArmsLevel);
 	OPTIONINT_GETTER(EndArmsLevel);
@@ -59,11 +58,8 @@ public:
 	OPTIONINT_GETTER(NoMinPlayers);
 	OPTIONINT_GETTER(NoRounds);
 	OPTIONINT_GETTER(RemoveBotsAtPlayers);
-	OPTIONINT_GETTER(NoMaxRoundTurns);
 	OPTIONINT_GETTER(MaxLandscapeSize);
 	OPTIONINT_GETTER(AllowedMissedMoves);
-	OPTIONINT_GETTER(IdleKickTime);
-	OPTIONINT_GETTER(IdleShotKickTime);
 	OPTIONINT_GETTER(MinFallingDistance);
 	OPTIONINT_GETTER(MaxClimbingDistance);
 	OPTIONINT_GETTER(PlayerLives);
@@ -71,9 +67,9 @@ public:
 
 	OPTIONINT_GETTER(StartTime);
 	OPTIONINT_GETTER(ShotTime);
-	OPTIONINT_GETTER(KeepAliveTime);
-	OPTIONINT_GETTER(KeepAliveTimeoutTime);
 	OPTIONINT_GETTER(BuyingTime);
+	OPTIONINT_GETTER(RoundTime);
+	OPTIONINT_GETTER(RemoveTime);
 	OPTIONINT_GETTER(RoundScoreTime);
 	OPTIONINT_GETTER(ScoreTime);
 
@@ -94,6 +90,7 @@ public:
 	OPTIONINT_GETTER(SkillForRound);
 	OPTIONINT_GETTER(SkillForMatch);
 	OPTIONINT_GETTER(MaxSkillLost);
+	OPTIONINT_GETTER(MaxSkillGained);
 	OPTIONINT_GETTER(SkillForSelfKill);
 	OPTIONINT_GETTER(SkillForTeamKill);
 

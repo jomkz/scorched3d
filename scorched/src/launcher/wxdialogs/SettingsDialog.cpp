@@ -116,13 +116,7 @@ void SettingsFrame::createMainPanel(bool server)
 			mainPanel_, sizer, context_.getNoRoundsEntry()));
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
-			mainPanel_, sizer, context_.getNoMaxRoundTurnsEntry()));
-	setters_.push_back(
-		OptionEntrySetterUtil::createOtherSetter(
 			mainPanel_, sizer, context_.getTurnTypeEntry()));	
-	setters_.push_back(
-		OptionEntrySetterUtil::createOtherSetter(
-			mainPanel_, sizer, context_.getKeepAliveTimeoutTimeEntry()));	
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
 			mainPanel_, sizer, context_.getStartTimeEntry()));	
@@ -134,10 +128,7 @@ void SettingsFrame::createMainPanel(bool server)
 			mainPanel_, sizer, context_.getBuyingTimeEntry()));	
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
-			mainPanel_, sizer, context_.getIdleKickTimeEntry()));	
-	setters_.push_back(
-		OptionEntrySetterUtil::createOtherSetter(
-			mainPanel_, sizer, context_.getIdleShotKickTimeEntry()));	
+			mainPanel_, sizer, context_.getRoundTimeEntry()));	
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
 			mainPanel_, sizer, context_.getModDownloadSpeedEntry()));	

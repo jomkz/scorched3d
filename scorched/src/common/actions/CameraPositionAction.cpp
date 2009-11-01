@@ -19,15 +19,15 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <engine/ScorchedContext.h>
-#include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <actions/CameraPositionAction.h>
 
 CameraPositionAction::CameraPositionAction(FixedVector &showPosition,
-		fixed showTime,
-		unsigned int priority) : 
-		ActionReferenced("CameraPositionAction"),
-		totalTime_(0), showTime_(showTime),
-		showPosition_(showPosition), showPriority_(priority)
+	fixed showTime,
+	unsigned int priority) : 
+	Action(-1),
+	totalTime_(0), showTime_(showTime),
+	showPosition_(showPosition), showPriority_(priority)
 {
 
 }
@@ -46,7 +46,6 @@ void CameraPositionAction::init()
 	{
 		CameraPositionActionRegistry::addCameraPositionAction(this);
 	}
-	startTime_ = context_->getActionController().getActionTime();
 }
 
 void CameraPositionAction::simulate(fixed frameTime, bool &remove)
@@ -112,8 +111,8 @@ CameraPositionAction *CameraPositionActionRegistry::getCurrentBest()
 			
 			// Check that this action is near the beginning
 			fixed currentTime = action->getScorchedContext()->
-				getActionController().getActionTime();
-			fixed actionTime = action->getStartTime();
+				getSimulator().getCurrentTime();
+			fixed actionTime = action->getActionStartTime();
 			if (currentTime - actionTime < 1)
 			{
 				// Is there an action to beat

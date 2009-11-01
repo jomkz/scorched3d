@@ -28,6 +28,8 @@
 class ComsChannelTextMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsChannelTextMessageType;
+
 	ComsChannelTextMessage();
 	ComsChannelTextMessage(ChannelText &text);
 	virtual ~ComsChannelTextMessage();

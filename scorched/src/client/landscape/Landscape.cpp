@@ -48,6 +48,7 @@
 #include <common/Defines.h>
 #include <graph/OptionsDisplay.h>
 #include <graph/MainCamera.h>
+#include <engine/Simulator.h>
 #include <sound/Sound.h>
 #include <client/ScorchedClient.h>
 #include <dialogs/CameraDialog.h>
@@ -110,7 +111,7 @@ void Landscape::simulate(float frameTime)
 	}
 
 	float speedMult = ScorchedClient::instance()->
-		getActionController().getFast().asFloat();
+		getSimulator().getFast().asFloat();
 	water_->simulate(frameTime * speedMult);
 	sky_->simulate(frameTime * speedMult);
 	wall_->simulate(frameTime * speedMult);
@@ -124,20 +125,6 @@ void Landscape::recalculate()
 		resetLandscape_ = true;
 		resetLandscapeTimer_ = 1.0f; // Recalculate the water in x seconds
 	}
-}
-
-void Landscape::reset(ProgressCounter *counter)
-{
-	changeCount_++;
-
-	// Recalculate all landscape objects
-	// Ensure all objects use any new landscape
-	ScorchedClient::instance()->
-		getParticleEngine().killAll();
-	MainCamera::instance()->getTarget().
-		getPrecipitationEngine().killAll();
-	CameraDialog::instance()->getCamera().
-		getPrecipitationEngine().killAll();
 }
 
 void Landscape::drawShadows()

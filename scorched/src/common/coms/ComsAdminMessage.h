@@ -26,6 +26,8 @@
 class ComsAdminMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsAdminMessageTyper;
+
 	enum ComsAdminMessageType
 	{
 		AdminNone,

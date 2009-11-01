@@ -23,14 +23,12 @@
 
 #include <set>
 #include <list>
+#include <map>
 #include <vector>
-#include <engine/GameStateI.h>
-#include <engine/Action.h>
-#include <engine/EventContainer.h>
-#include <common/RandomGenerator.h>
+#include <actions/Action.h>
 
 class ScorchedContext;
-class ActionController : public GameStateI
+class ActionController
 {
 public:
 	ActionController();
@@ -38,34 +36,24 @@ public:
 
 	// Add an action to be simulated
 	void addAction(Action *action);
-	void addLastAction(Action *action);
 	bool noReferencedActions();
-	void resetTime();
 	void clear(bool warn = false);
-	void setStopImmediately(bool stop) { stopImmediately_ = stop; }
 
 	// Turn on action tracing
-	bool &getActionLogging() { return actionTracing_; }
-	bool &getActionProfiling() { return actionProfiling_; }
-	void logProfiledActions();
+	void startActionProfiling() { actionProfiling_ = true; }
+	void stopActionProfiling();
 	void logActions();
 
 	// SyncCheck
 	void addSyncCheck(const std::string &msg);
 	std::vector<std::string> &getSyncCheck() { return syncCheck_; }
 
-	RandomGenerator &getRandom() { return random_; }
-	EventContainer &getEvents() { return events_; }
-	fixed getActionTime() { return time_; }
-
 	// Set the simulation speed
 	void setScorchedContext(ScorchedContext *context);
-	void setFast(fixed speedMult);
-	fixed getFast() { return speed_; }
 
 	// Inherited from GameStateI
-	virtual void simulate(const unsigned state, float frameTime);
-	virtual void draw(const unsigned state);
+	void simulate(fixed frameTime, fixed time);
+	void draw();
 
 protected:
 	class ActionList
@@ -100,27 +88,15 @@ protected:
 	};
 
 	ScorchedContext *context_;
-	EventContainer events_;
-	RandomGenerator random_;
-	std::list<Action *> newActions_, newLastActions_;
+	std::list<Action *> newActions_;
 	std::vector<std::string> syncCheck_;
 	ActionList actions_;
 	std::map<std::string, int> actionProfile_;
 	int referenceCount_;
-	unsigned int actionNumber_;
-	fixed speed_;
-	fixed time_;
-	fixed lastTraceTime_;
-	fixed stepTime_;
 	bool actionProfiling_;
-	bool actionTracing_;
-	bool actionEvents_;
-	bool stopImmediately_;
 
 	bool allEvents();
-	void stepActions(fixed frameTime);
-	void addNewActions();
-	void addNewLastActions();
+	void addNewActions(fixed time);
 
 };
 

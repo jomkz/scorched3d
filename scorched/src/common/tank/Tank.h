@@ -29,7 +29,6 @@ class TankScore;
 class TankState;
 class TankPosition;
 class TankModelContainer;
-class TankMod;
 class TankAvatar;
 class TankCamera;
 class Tank : public Target
@@ -63,8 +62,6 @@ public:
 	void setDestinationId(unsigned int id) { destinationId_ = id; }
 	unsigned int getTeam() { return team_; }
 	void setTeam(unsigned int team) { team_ = team; }
-	unsigned int getKeepAlive() { return keepAlive_; }
-	void setKeepAlive(unsigned int ka) { keepAlive_ = ka; }
 	const char *getUniqueId() { return uniqueId_.c_str(); }
 	void setUniqueId(const char *id) { uniqueId_ = id; }
 	const char *getSUI() { return SUI_.c_str(); }
@@ -84,7 +81,6 @@ public:
 	TankScore &getScore() { return *score_; }
 	TankPosition &getPosition() { return *position_; }
 	TankState &getState() { return *state_; }
-	TankMod &getMod() { return *mod_; }
 	TankAvatar &getAvatar() { return *avatar_; }
 	TankCamera &getCamera() { return *camera_; }
 	TankModelContainer &getModelContainer() { return *modelContainer_; }
@@ -96,7 +92,6 @@ protected:
 	TankScore *score_;
 	TankPosition *position_;
 	TankState *state_;
-	TankMod *mod_;
 	TankAvatar *avatar_;
 	TankCamera *camera_;
 	TankAI *tankAI_;
@@ -108,7 +103,6 @@ protected:
 	unsigned int playerId_;
 	unsigned int destinationId_;
 	unsigned int ipAddress_;
-	unsigned int keepAlive_;
 
 };
 

@@ -23,6 +23,7 @@
 #include <tank/TankLib.h>
 #include <tank/TankPosition.h>
 #include <server/ScorchedServer.h>
+#include <common/OptionsScorched.h>
 #include <common/Logger.h>
 #include <common/RandomGenerator.h>
 #include <math.h>
@@ -89,7 +90,7 @@ void TankAIAimGuesser::initialShot(Tank *tank, Vector &target)
 	fixed power;
 
 	// Makes a randow powered shot towards the target
-	RandomGenerator random;
+	FileRandomGenerator random;
 	random.seed(rand());
 	TankLib::getShotTowardsPosition(
 		ScorchedServer::instance()->getContext(),
@@ -115,8 +116,8 @@ void TankAIAimGuesser::refineShot(Tank *tank,
 	Vector missedBy = wantedPos - currentPos;
 	
 	// Adjust velocity to take this into account
-	shotVelocity[0] += fixed::fromFloat(missedBy[0]) * fixed(true, 400);
-	shotVelocity[1] += fixed::fromFloat(missedBy[1]) * fixed(true, 400);
+	shotVelocity[0] += fixed::fromFloat(missedBy[0]) * fixed(true, rand() % 200 + 200);
+	shotVelocity[1] += fixed::fromFloat(missedBy[1]) * fixed(true, rand() % 200 + 200);
 
 	// Figure out a new XY angle based on these
 	fixed angleXYRads = atan2x(shotVelocity[1], shotVelocity[0]);
@@ -155,6 +156,11 @@ void TankAIAimGuesser::wallCollision(PhysicsParticleObject &position,
 
 void TankAIAimGuesser::getCurrentGuess(Tank *tank)
 {
+	bool actionSyncCheck = ScorchedServer::instance()->getOptionsGame().
+		getMainOptions().getActionSyncCheck();
+	ScorchedServer::instance()->getOptionsGame().getMainOptions().
+		getActionSyncCheckEntry().setValue(false);
+
 	FixedVector shotVelocity = tank->getPosition().getVelocityVector() *
 		(tank->getPosition().getPower() + 1);
 	FixedVector shotPosition = tank->getPosition().getTankGunPosition();
@@ -170,4 +176,7 @@ void TankAIAimGuesser::getCurrentGuess(Tank *tank)
 	{
 		particleObject.simulate(1);
 	}
+
+	ScorchedServer::instance()->getOptionsGame().getMainOptions().
+		getActionSyncCheckEntry().setValue(actionSyncCheck);
 }

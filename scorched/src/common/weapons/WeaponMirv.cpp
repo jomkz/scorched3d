@@ -20,7 +20,7 @@
 
 #include <weapons/WeaponMirv.h>
 #include <weapons/AccessoryStore.h>
-#include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <common/Defines.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponMirv);
@@ -71,7 +71,7 @@ void WeaponMirv::fireWeapon(ScorchedContext &context,
 	// Add a shot that will fall where the original was aimed
 	aimedWeapon_->fireWeapon(context, weaponContext, position, velocity);
 
-	RandomGenerator &random = context.getActionController().getRandom();
+	RandomGenerator &random = context.getSimulator().getRandomGenerator();
 
 	// Add all of the sub warheads that have a random spread
 	fixed hspreadDist;

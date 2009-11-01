@@ -34,13 +34,13 @@ TargetVisibilityPatch::~TargetVisibilityPatch()
 {
 }
 
-void TargetVisibilityPatch::setLocation(int x, int y)
+void TargetVisibilityPatch::setLocation(int x, int y, int w, int h)
 {
 	// Set location and neighbors
 	x_ = x; y_ = y;
 	float heightRange = 0.0f;
 	float minHeight = 0.0f;
-	position_ = Vector(float(x_ + 16), float(y_ + 16), 
+	position_ = Vector(float(x_ + w / 2), float(y_ + h / 2), 
 		heightRange / 2.0f + minHeight);
 }
 

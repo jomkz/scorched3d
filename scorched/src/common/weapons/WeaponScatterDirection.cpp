@@ -20,7 +20,7 @@
 
 #include <weapons/WeaponScatterDirection.h>
 #include <weapons/AccessoryStore.h>
-#include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeTex.h>
 #include <common/Defines.h>
@@ -64,7 +64,7 @@ bool WeaponScatterDirection::parseXML(AccessoryCreateContext &context, XMLNode *
 void WeaponScatterDirection::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &v)
 {
-	RandomGenerator &random = context.getActionController().getRandom();
+	RandomGenerator &random = context.getSimulator().getRandomGenerator();
 	FixedVector vel;
 	vel[0] += direction_[0] - directionOffset_[0] + 
 		directionOffset_[0] * 2 * random.getRandFixed();

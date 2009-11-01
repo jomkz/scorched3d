@@ -25,7 +25,6 @@
 #include <server/ServerChannelManager.h>
 #include <server/ServerCommon.h>
 #include <server/ScorchedServer.h>
-#include <server/ServerState.h>
 #include <engine/GameState.h>
 #include <XML/XMLFile.h>
 #include <time.h>
@@ -45,8 +44,8 @@ void ServerTimedMessage::simulate()
 	return;
 #endif
 
-	if (ScorchedServer::instance()->getGameState().getState() ==
-		ServerState::ServerStateTooFewPlayers) return;
+	//if (ScorchedServer::instance()->getGameState().getState() ==
+	//	ServerState::ServerStateTooFewPlayers) return;
 
 	time_t currentTime = time(0);
 	if (currentTime > lastCheckTime_ + 5)

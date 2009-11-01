@@ -39,9 +39,7 @@
 ScorchedContext::ScorchedContext(const char *name, bool server) : 
 	serverMode(server)
 {
-	actionController = new ActionController();
 	accessoryStore = new AccessoryStore();
-	gameState = new GameState(name);
 	targetContainer = new TargetContainer();
 	tankContainer = new TankContainer(*targetContainer);
 	landscapeMaps = new LandscapeMaps();
@@ -62,7 +60,6 @@ ScorchedContext::ScorchedContext(const char *name, bool server) :
 		server?S3D::getSettingsFile("serverhooks"):S3D::getSettingsFile("clienthooks"));
 
 	getViewPoints().setContext(this);
-	getActionController().setScorchedContext(this);
 	getTargetSpace().setContext(this);
 	luaScriptFactory->setContext(this);
 }

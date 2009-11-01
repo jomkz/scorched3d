@@ -60,6 +60,11 @@ ProgressDialog::~ProgressDialog()
 {
 }
 
+void ProgressDialog::operationChange(const LangString &op)
+{
+	progressChange(op, 0.0f);
+}
+
 void ProgressDialog::progressChange(const LangString &op, const float percentage)
 {
 	progressText_ = op;
@@ -193,21 +198,31 @@ void ProgressDialog::draw()
 	}
 }
 
-ProgressDialogSync *ProgressDialogSync::instance_ = 0;
-
-ProgressDialogSync *ProgressDialogSync::instance()
+ProgressDialogSync *ProgressDialogSync::noevents_instance()
 {
-	if (!instance_) instance_ = new ProgressDialogSync();
-	return instance_;
+	static ProgressDialogSync *instance = new ProgressDialogSync(false);
+	return instance;
 }
 
-ProgressDialogSync::ProgressDialogSync()
+ProgressDialogSync *ProgressDialogSync::events_instance()
+{
+	static ProgressDialogSync *instance = new ProgressDialogSync(true);
+	return instance;
+}
+
+ProgressDialogSync::ProgressDialogSync(bool processEvents) :
+	processEvents_(processEvents)
 {
 	setUser(this);
 }
 
 ProgressDialogSync::~ProgressDialogSync()
 {
+}
+
+void ProgressDialogSync::operationChange(const LangString &op)
+{
+	progressChange(op, 0.0f);
 }
 
 void ProgressDialogSync::progressChange(const LangString &op, const float percentage)
@@ -219,8 +234,11 @@ void ProgressDialogSync::progressChange(const LangString &op, const float percen
 	timeDelay += frameTime;
 	timeDelay2 += frameTime;
 
-	ClientMain::clientEventLoop(frameTime);	
-	ClientProcessingLoop::instance()->simulate(0, frameTime);
+	if (processEvents_)
+	{
+		ClientMain::clientEventLoop(frameTime);	
+		ClientProcessingLoop::instance()->simulate(0, frameTime);
+	}
 
 	ProgressDialog::instance()->progressChange(op, percentage);
 
@@ -230,7 +248,7 @@ void ProgressDialogSync::progressChange(const LangString &op, const float percen
 		Main2DCamera::instance()->draw(0);
 
 		unsigned int state = ScorchedClient::instance()->getGameState().getState();
-		if (state >= ClientState::StateGetPlayers)
+		if (state >= ClientState::StateLoadLevel)
 		{
 			GLWWindowManager::instance()->simulate(ClientState::StateLoadLevel, MIN(0.25f, timeDelay));
 			GLWWindowManager::instance()->draw(ClientState::StateLoadLevel);

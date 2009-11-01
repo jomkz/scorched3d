@@ -44,7 +44,7 @@ ServerConnectHandler *ServerConnectHandler::instance()
 ServerConnectHandler::ServerConnectHandler()
 {
 	ScorchedServer::instance()->getComsMessageHandler().addHandler(
-		"ComsConnectMessage",
+		ComsConnectMessage::ComsConnectMessageType,
 		this);
 }
 

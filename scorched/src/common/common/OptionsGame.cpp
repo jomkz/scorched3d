@@ -32,9 +32,12 @@ static OptionEntryEnum::EnumEntry scoreEnum[] =
 
 static OptionEntryEnum::EnumEntry turnEnum[] =
 {
-	{ "TurnSimultaneous", 0 },
-	{ "TurnSequentialLooserFirst", 1 },
-	{ "TurnSequentialRandom", 2 },
+	{ "TurnSimultaneous", OptionsGame::TurnSimultaneous },
+	{ "TurnSimultaneousNoWait", OptionsGame::TurnSimultaneousNoWait },
+	{ "TurnSequentialLooserFirst", OptionsGame::TurnSequentialLooserFirst },
+	{ "TurnSequentialRandom", OptionsGame::TurnSequentialRandom },
+	{ "TurnFree", OptionsGame::TurnFree },
+	{ "TurnFeedTimed", OptionsGame::TurnFreeTimed },
 	{ "", -1 }
 };
 
@@ -82,8 +85,7 @@ static OptionEntryEnum::EnumEntry weapScaleEnum[] =
 static OptionEntryEnum::EnumEntry resignEnum[] =
 {
 	{ "ResignStart", 0 },
-	{ "ResignEnd", 1 },
-	{ "ResignDueToHealth", 2 },
+	{ "ResignTimed", 1 },
 	{ "", -1 }
 };
 
@@ -137,8 +139,6 @@ static OptionEntryStringEnum::EnumEntry authHandlerEnum[] =
 };
 
 OptionsGame::OptionsGame() :
-	physicsFPS_(options_, "PhysicsFPS",
-		"The speed at which the physics engine will calculate steps", 0, 66, 20, 100, 1),
 	tutorial_(options_, "Tutorial",
 		"The tutorial to load for this game", 0, ""),
 	scorePerMoney_(options_, "ScorePerMoney",
@@ -157,6 +157,8 @@ OptionsGame::OptionsGame() :
 		"The amount of skill awarded for winning the match", 0, 0, 0, 100, 5),
 	maxSkillLost_(options_, "MaxSkillLost",
 		"The maximum amount of skill you can lose for being killed", 0, 10, 0, 100, 5),
+	maxSkillGained_(options_, "MaxSkillGained",
+		"The maximum amount of skill you can gain for killing someone", 0, 10, 0, 100, 5),
 	skillForSelfKill_(options_, "SkillForSelfKill",
 		"The amount of skill you lose for being killed by yourself", 0, -25, -50, 0, 5),
 	skillForTeamKill_(options_, "SkillForTeamKill",
@@ -177,19 +179,23 @@ OptionsGame::OptionsGame() :
 		"The amount of time each player has for each shot", 0, 0, 0, 90, 5),
 	buyingTime_(options_, "BuyingTime", 
 		"The amount of time each player has to buy weapons and use auto defense", 0, 0, 0, 90, 5),
+	removeTime_(options_, "RemoveTime", 
+		"The amount of time each player has before being removed when disconected", 0, 10, 0, 90, 5),
 	allowedMissedMoves_(options_, "AllowedMissedMoves",
-		"The number of moves a player is allowed to miss (due to the shot timer)", 0, 3, 0, 10, 1),
+		"The number of moves a player is allowed to miss (due to the shot timer)", 0, 0, 0, 10, 1),
 	roundScoreTime_(options_, "RoundScoreTime", 
 		"The amount of time to show the end of each round for", 0, 5, 0, 30, 1),
 	scoreTime_(options_, "ScoreTime", 
 		"The amount of time to show the end of match scores for", 0, 15, 0, 90, 5),
-	keepAliveTime_(options_, "KeepAliveTime",
-		"The amount of time between each client keep alive message", 0, 2, 0, 30, 1),
-	keepAliveTimeoutTime_(options_, "KeepAliveTimeoutTIme",
-		"The amount of time the server will allow without receiving a keep alive message", 0, 0, 0, 90, 5),
-	idleKickTime_(options_, "IdleKickTime",
-		"The amount of time to give clients to respond after level loading before kicking them", 0, 60, 0, 90, 5),
-	idleShotKickTime_(options_, "IdleShotKickTime",
+	roundTime_(options_, "RoundTime", 
+		"The amount of time for each round", 0, 0, 0, 900, 30),
+	depricatedKeepAliveTime_(options_, "KeepAliveTime",
+		"The amount of time between each client keep alive message", OptionEntry::DataDepricated, 2, 0, 30, 1),
+	depricatedKeepAliveTimeoutTime_(options_, "KeepAliveTimeoutTIme",
+		"The amount of time the server will allow without receiving a keep alive message", OptionEntry::DataDepricated, 0, 0, 90, 5),
+	depricatedIdleKickTime_(options_, "IdleKickTime",
+		"The amount of time to give clients to respond after level loading before kicking them", OptionEntry::DataDepricated, 60, 0, 90, 5),
+	depricatedIdleShotKickTime_(options_, "IdleShotKickTime",
 		"The amount of time to give clients to respond after shots before kicking them", 0, 45, 0, 90, 5),
 	minFallingDistance_(options_, "MinFallingDistance",
 		"The minimum distance that can be made with no damage (value is divided by 10)", 0, 5, 0, 100, 5),
@@ -199,8 +205,8 @@ OptionsGame::OptionsGame() :
 		"The number of lives that each player tank has", 0, 1, 0, 10, 1),
 	gravity_(options_, "Gravity",
 		"The gravity used by the physics engine", 0, -10, -25, 0, 1),
-	maxRoundTurns_(options_, "MaxNumberOfRoundTurns",
-		"The maximum number of turns all players are allowed in each round (0 = infinite)", 0, 15, 0, 50, 1),
+	depricatedMaxRoundTurns_(options_, "MaxNumberOfRoundTurns",
+		"The maximum number of turns all players are allowed in each round (0 = infinite)", OptionEntry::DataDepricated, 15, 0, 50, 1),
 	numberOfRounds_(options_, "NumberOfRounds", 
 		"The number of rounds to play in each game", 0, 5, 1, 50, 1),
 	numberOfPlayers_(options_, "NumberOfPlayers", 
@@ -218,7 +224,7 @@ OptionsGame::OptionsGame() :
 	actionSyncCheck_(options_, "ActionSyncCheck",
 		"Gather enhanced action syncchecking", 0, false),
 	resignMode_(options_, "ResignMode",
-		"When does a players resign take place", 0, int(ResignEnd), resignEnum),
+		"When does a players resign take place", 0, int(ResignTimed), resignEnum),
 	movementRestriction_(options_, "MovementRestriction",
 		"Where a tank is allowed to move to", 0, int(MovementRestrictionNone), movementRestrictionEnum),
 	teamBallance_(options_, "TeamBallance",
@@ -273,7 +279,7 @@ OptionsGame::OptionsGame() :
 		"The name of currently running Scorched3D mod", 0, "none"),
 	motd_(options_, "MOTD",
 		"The message of the day", 0, 
-		"Scorched3D : Copyright 2004 Gavin Camp\n"
+		"Scorched3D : Copyright 2009 Gavin Camp\n"
 		"For updates and news visit:\n"
 		"http://www.scorched3d.co.uk",
 		true),

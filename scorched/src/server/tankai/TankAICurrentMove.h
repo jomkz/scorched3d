@@ -36,7 +36,8 @@ public:
 	void clear();
 	void playMove(Tank *tank, 
 		TankAIWeaponSets::WeaponSet *weapons,
-		bool useBatteries);
+		bool useBatteries,
+		unsigned int moveId);
 
 	TankAICurrentTarget &getTargets() { return targets_; }
 
@@ -46,6 +47,12 @@ protected:
 		Vector position;
 		float projectileCurrentDistance;
 		float sniperCurrentDistance;
+	};
+	struct MoveData
+	{
+		unsigned int moveId;
+		bool madeMove;
+		bool usedBatteries;
 	};
 
 	std::map<Tank *, ShotRecord> shotRecords_;
@@ -67,22 +74,28 @@ protected:
 	float projectileMovementFactor_;
 	float projectileMinDistance_;
 
+	void playMove(Tank *tank, 
+		TankAIWeaponSets::WeaponSet *weapons,
+		bool useBatteries,
+		MoveData &moveData);
 	bool shootAtTank(Tank *tank, Tank *targetTank, 
-		TankAICurrentMoveWeapons &weapons);
+		TankAICurrentMoveWeapons &weapons, MoveData &moveData);
 	bool makeProjectileShot(Tank *tank, Tank *targetTank,
-		TankAICurrentMoveWeapons &weapons);
+		TankAICurrentMoveWeapons &weapons, MoveData &moveData);
 	bool makeSniperShot(Tank *tank, Tank *targetTank,
-		TankAICurrentMoveWeapons &weapons);
+		TankAICurrentMoveWeapons &weapons, MoveData &moveData);
 	bool makeLaserSniperShot(Tank *tank, Tank *targetTank, 
-		TankAICurrentMoveWeapons &weapons);
+		TankAICurrentMoveWeapons &weapons, MoveData &moveData);
 	bool makeBurriedShot(Tank *tank, Tank *targetTank, 
-		TankAICurrentMoveWeapons &weapons);
+		TankAICurrentMoveWeapons &weapons, MoveData &moveData);
 	bool makeMoveShot(Tank *tank, 
 		TankAIWeaponSets::WeaponSet *weapons,
-		std::list<Tank *> &sortedTanks);
+		std::list<Tank *> &sortedTanks,
+		MoveData &moveData);
 	bool makeGroupShot(Tank *tank, 
 		TankAIWeaponSets::WeaponSet *weapons,
-		std::list<Tank *> &sortedTanks);
+		std::list<Tank *> &sortedTanks,
+		MoveData &moveData);
 
 	bool inHole(Vector &position);
 	Vector lowestHighest(TankAICurrentMoveWeapons &weapons,
@@ -90,12 +103,12 @@ protected:
 
 	float getShotDistance(Tank *tank, bool projectile);
 	void shotAtTank(Tank *tank, bool projectile, float newDistance);
-	bool useAvailableBatteries(Tank *tank);
+	bool useAvailableBatteries(Tank *tank, MoveData &moveData);
 	void setWeapon(Tank *tank, Accessory *accessory);
-	void useBattery(Tank *tank, unsigned int batteryId);
-	void resign(Tank *tank);
-	void skipMove(Tank *tank);
-	void fireShot(Tank *tank);
+	void useBattery(Tank *tank, unsigned int batteryId, MoveData &moveData);
+	void resign(Tank *tank, MoveData &moveData);
+	void skipMove(Tank *tank, MoveData &moveData);
+	void fireShot(Tank *tank, MoveData &moveData);
 
 };
 

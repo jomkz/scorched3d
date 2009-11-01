@@ -26,6 +26,8 @@
 class ComsConnectAcceptMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsConnectAcceptMessageType;
+
 	ComsConnectAcceptMessage(unsigned int destinationId = 0,
 		const char *serverName = "",
 		const char *publishAddress = "",

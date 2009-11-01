@@ -23,7 +23,7 @@
 
 #include <coms/ComsFileMessage.h>
 
-class Tank;
+class ServerDestination;
 class ServerFileServer
 {
 public:
@@ -36,9 +36,10 @@ protected:
 	unsigned int lastTime_;
 	unsigned int bytesSent_;
 
-	void sendBytes(Tank *tank, unsigned int size);
+	void sendBytes(ServerDestination *destination, unsigned int size);
 	bool sendNextFile(ComsFileMessage &message,
-		Tank *tank, unsigned int size, unsigned int &sentSize);
+		ServerDestination *destination, 
+		unsigned int size, unsigned int &sentSize);
 
 private:
 	ServerFileServer();

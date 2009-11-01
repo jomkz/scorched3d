@@ -39,7 +39,7 @@ ClientGameStoppedHandler *ClientGameStoppedHandler::instance()
 ClientGameStoppedHandler::ClientGameStoppedHandler()
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsGameStoppedMessage",
+		ComsGameStoppedMessage::ComsGameStoppedMessageType,
 		this);
 }
 

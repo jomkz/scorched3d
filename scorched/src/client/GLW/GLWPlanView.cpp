@@ -416,13 +416,12 @@ void GLWPlanView::drawTanks()
 		itor++)
 	{
 		Tank *tank = (*itor).second;
-		if (tank->getState().getState() == TankState::sNormal &&
-			!tank->getState().getSpectator())
+		if (tank->getState().getState() == TankState::sNormal)
 		{		
 			tank->getPosition().getTankPosition().asVector(position);			
 
-			if ((flash_ && tank->getState().getReadyState() == TankState::SNotReady) ||
-				tank->getState().getReadyState() == TankState::sReady)
+			if ((flash_ && tank->getState().getMoveId() != 0) ||
+				tank->getState().getMoveId() == 0)
 			{
 				glColor3fv(tank->getColor());
 				drawQuad(position[0], position[1], 8.0f, 8.0f);

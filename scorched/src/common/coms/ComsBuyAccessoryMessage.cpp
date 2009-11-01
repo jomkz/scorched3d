@@ -18,14 +18,29 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #include <coms/ComsBuyAccessoryMessage.h>
+
+ComsMessageType ComsBuyAccessoryMessage::ComsBuyAccessoryMessageType("ComsBuyAccessoryMessageType");
+
+ComsBuyAccessoryMessage::ComsBuyAccessoryMessage() :
+	ComsMessage(ComsBuyAccessoryMessageType),
+	playerId_(0), accessoryId_(0),
+	buy_(false)	
+{
+}
+
+ComsBuyAccessoryMessage::ComsBuyAccessoryMessage(ComsBuyAccessoryMessage &other) :
+	ComsMessage(ComsBuyAccessoryMessageType),
+	playerId_(other.playerId_), accessoryId_(other.accessoryId_),
+	buy_(other.buy_)	
+{
+}
 
 ComsBuyAccessoryMessage::ComsBuyAccessoryMessage(
 	unsigned int playerId,
 	unsigned int accessoryId,
 	bool buy) :
-	ComsMessage("ComsBuyAccessoryMessage"),
+	ComsMessage(ComsBuyAccessoryMessageType),
 	playerId_(playerId), accessoryId_(accessoryId),
 	buy_(buy)
 {

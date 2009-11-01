@@ -31,17 +31,20 @@ public:
 		const char *tex = "", 
 		const char *defn = "",
 		unsigned int seed = 0,
-		const char *name = "");
+		const char *name = "",
+		unsigned int definitionNumber = 0);
 
 	const char *getTex() { return tex_.c_str(); }
 	const char *getDefn() { return defn_.c_str(); }
 	const char *getName() { return name_.c_str(); }
 	unsigned int getSeed() { return seed_; }
+	unsigned int getDefinitionNumber() { return definitionNumber_; }
 
 	bool writeMessage(NetBuffer &buffer);
 	bool readMessage(NetBufferReader &reader);
 
 protected:
+	unsigned int definitionNumber_;
 	std::string tex_;
 	std::string defn_;
 	std::string name_;

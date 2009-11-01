@@ -18,12 +18,12 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #if !defined(__INCLUDE_ServerPlayedMoveHandlerh_INCLUDE__)
 #define __INCLUDE_ServerPlayedMoveHandlerh_INCLUDE__
 
 #include <coms/ComsMessageHandler.h>
 
+class ComsPlayedMoveMessage;
 class ServerPlayedMoveHandler : 
 	public ComsMessageHandlerI
 {

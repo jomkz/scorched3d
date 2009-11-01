@@ -41,13 +41,20 @@ void TankBatteries::changed()
 {
 }
 
-int TankBatteries::getNoBatteries()
+Accessory *TankBatteries::getBatteryAccessory()
 {
 	std::list<Accessory *> &result =
 		tank_->getAccessories().getAllAccessoriesByType(
 			AccessoryPart::AccessoryBattery);
 	if (result.empty()) return 0;
-	return tank_->getAccessories().getAccessoryCount(result.front());
+	return result.front();
+}
+
+int TankBatteries::getNoBatteries()
+{
+	Accessory *battery = getBatteryAccessory();
+	if (!battery) return 0;
+	return tank_->getAccessories().getAccessoryCount(battery);
 }
 
 bool TankBatteries::canUse()

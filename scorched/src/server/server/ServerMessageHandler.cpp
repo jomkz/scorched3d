@@ -23,32 +23,20 @@
 #include <server/ScorchedServerUtil.h>
 #include <server/ServerCommon.h>
 #include <server/ServerBanned.h>
-#include <server/ServerKeepAliveHandler.h>
 #include <server/ServerChannelManager.h>
+#include <server/ServerDestinations.h>
+#include <server/ServerSimulator.h>
 #include <server/ServerState.h>
 #include <tank/TankDeadContainer.h>
-#include <tank/TankState.h>
 #include <tank/TankContainer.h>
-#include <tankai/TankAIStore.h>
-#include <coms/ComsRmPlayerMessage.h>
+#include <tank/TankState.h>
+#include <tankai/TankAINone.h>
+#include <simactions/TankRemoveSimAction.h>
 #include <coms/ComsMessageSender.h>
 #include <net/NetInterface.h>
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
 #include <common/StatsLogger.h>
-
-ServerMessageHandler::DestinationInfo::DestinationInfo() :
-	adminTries(0), admin(false)
-{
-}
-
-ServerMessageHandler::DestinationInfo *ServerMessageHandler::getDestinationInfo(unsigned int destinationId)
-{
-	std::map<unsigned int, DestinationInfo>::iterator itor = 
-		destinationInfos_.find(destinationId);
-	if (itor == destinationInfos_.end()) return 0;
-	return &itor->second;
-}
 
 ServerMessageHandler *ServerMessageHandler::instance_ = 0;
 
@@ -71,7 +59,6 @@ ServerMessageHandler::~ServerMessageHandler()
 
 void ServerMessageHandler::messageRecv(unsigned int destinationId)
 {
-	ServerKeepAliveHandler::instance()->keepAlive(destinationId);
 }
 
 void ServerMessageHandler::messageSent(unsigned int destinationId)
@@ -94,15 +81,16 @@ void ServerMessageHandler::clientConnected(NetMessage &message)
 	}
 
 	// Check if a player from this destination has connected already
-	std::map<unsigned int, Tank *> &playingTanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	std::map<unsigned int, Tank *>::iterator playingItor;
-	for (playingItor = playingTanks.begin();
-		playingItor != playingTanks.end();
-		playingItor++)
+	std::map<unsigned int, ServerDestination *> &destinations =
+		ScorchedServer::instance()->getServerDestinations().getServerDestinations();
+	std::map<unsigned int, ServerDestination *>::iterator destItor;
+	for (destItor = destinations.begin();
+		destItor != destinations.end();
+		destItor++)
 	{
-		Tank *current = (*playingItor).second;
-		if (current->getDestinationId() == message.getDestinationId())
+		unsigned int serverDestinationId = destItor->first;
+		ServerDestination *serverDestination = destItor->second;
+		if (serverDestinationId == message.getDestinationId())
 		{
 			Logger::log(S3D::formatStringBuffer("Duplicate connection from destination \"%i\"", 
 				message.getDestinationId()));
@@ -114,7 +102,7 @@ void ServerMessageHandler::clientConnected(NetMessage &message)
 		if (!ScorchedServer::instance()->getOptionsGame().getAllowSameIP() &&
 			message.getIpAddress() != 0)
 		{
-			if (message.getIpAddress() == current->getIpAddress())
+			if (message.getIpAddress() == serverDestination->getIpAddress())
 			{
 				Logger::log(S3D::formatStringBuffer("Duplicate ip connection from ip address \"%s\"", 
 					NetInterface::getIpName(message.getIpAddress())));
@@ -126,7 +114,8 @@ void ServerMessageHandler::clientConnected(NetMessage &message)
 	}
 
 	// Add to list of destinations
-	destinationInfos_[message.getDestinationId()] = DestinationInfo();
+	ScorchedServer::instance()->getServerDestinations().addDestination(
+		message.getDestinationId(), message.getIpAddress());
 
 	Logger::log(S3D::formatStringBuffer("Client connected dest=\"%i\" ip=\"%s\"", 
 		message.getDestinationId(),
@@ -176,7 +165,8 @@ void ServerMessageHandler::clientDisconnected(NetMessage &message)
 	ServerChannelManager::instance()->destinationDisconnected(message.getDestinationId());
 
 	// Remove from list of destinations
-	destinationInfos_.erase(message.getDestinationId());
+	ScorchedServer::instance()->getServerDestinations().removeDestination(
+		message.getDestinationId());
 }
 
 void ServerMessageHandler::destroyPlayer(unsigned int tankId, const char *reason)
@@ -200,76 +190,57 @@ void ServerMessageHandler::destroyPlayer(unsigned int tankId, const char *reason
 	ServerChannelManager::instance()->sendText(
 		ChannelText("info", 
 			"PLAYER_DISCONNECTED", 
-			"Player disconnected \"{0}\" ({1})",
+			"Player disconnected [p:{0}] ({1})",
 			tank->getTargetName(), reason),
 		true);
 
+	// The time to actualy remove the tank after
+	fixed removalTime = 0;
+
 	// Check if we can remove player
 	if (tank->getState().getState() == TankState::sNormal &&
-		ScorchedServer::instance()->getGameState().getState() == ServerState::ServerStateShot)
+		ScorchedServer::instance()->getServerState().getState() == 
+		ServerState::ServerPlayingState &&
+		tank->getDestinationId() != 0)
 	{
-		// Store a residual copy, that will be over written when the player is actual deleted
-		ScorchedServer::instance()->getTankDeadContainer().addTank(tank);
+		// Actualy remove the tank after a few seconds have passed
+		removalTime = ScorchedServer::instance()->getOptionsGame().getRemoveTime();
+	}
 
-		// We are in a state where we cannot remove the player straight away
-		tank->getState().setDestroy(true);
+	// Make this player a computer controlled player
+	if (tank->getDestinationId() != 0)
+	{
+		TankAI *ai = new TankAINone(tank->getPlayerId());
+		tank->setTankAI(ai);
+		tank->setDestinationId(0);
+	}
 
-		// Make this player a computer controlled player
-		if (tank->getDestinationId() != 0)
+	// Add tank to tank dead container to remember its stats
+	if (!ScorchedServer::instance()->getOptionsGame().getResidualPlayers())
+	{
+		if (tank->getState().getTankPlaying() &&
+			tank->getUniqueId()[0] &&
+			tank->getDestinationId() != 0)
 		{
-			TankAI *ai = ScorchedServer::instance()->getTankAIs().getAIByName("Random");
-			tank->setTankAI(ai->createCopy(tank));
-			tank->setDestinationId(0);
-			tank->setKeepAlive(0);
+			ScorchedServer::instance()->getTankDeadContainer().addDeadTank(tank);
 		}
 	}
-	else
-	{
-		// Destroy the player straight away
-		actualDestroyPlayer(tankId);
-	}
-}
 
-void ServerMessageHandler::destroyTaggedPlayers()
-{
-	std::map<unsigned int, Tank *> tanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
-	std::map<unsigned int, Tank *>::iterator itor;
-	for (itor = tanks.begin();
-		itor != tanks.end();
-		itor++)
-	{
-		Tank *tank = itor->second;
-		if (tank->getState().getDestroy())
-		{
-			actualDestroyPlayer(tank->getPlayerId());
-		}
-	}
-}
-
-void ServerMessageHandler::actualDestroyPlayer(unsigned int tankId)
-{
-	// Try to remove this player
-	Tank *tank = ScorchedServer::instance()->getTankContainer().removeTank(tankId);
-	if (!tank) return;
-
+	// Log the removal
 	StatsLogger::instance()->tankDisconnected(tank);
 
-	// Tell all the clients to remove this player
-	ComsRmPlayerMessage rmPlayerMessage(
-		tankId);
-	ComsMessageSender::sendToAllConnectedClients(rmPlayerMessage);
-
-	// Tidy player
-	ScorchedServer::instance()->getTankDeadContainer().addTank(tank);
-	delete tank;
+	// Actualy remove the tank from the client and server
+	TankRemoveSimAction *removeSimAction = 
+		new TankRemoveSimAction(tankId, removalTime);
+	ScorchedServer::instance()->getServerSimulator().
+		addSimulatorAction(removeSimAction);
 }
 
 void ServerMessageHandler::clientError(NetMessage &message,
-		const char *errorString)
+	const std::string &errorString)
 {
 	Logger::log(S3D::formatStringBuffer("Client \"%i\", ***Server Error*** \"%s\"", 
 		message.getDestinationId(),
-		errorString));
+		errorString.c_str()));
 	ServerCommon::kickDestination(message.getDestinationId());
 }

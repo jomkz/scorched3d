@@ -37,7 +37,8 @@ public:
 	void setChannelView(GLWChannelView *channelView) { channelView_ = channelView; }
     
 	// GLFont2d
-	virtual void drawCharacter(
+	virtual bool drawCharacter(
+		unsigned int character,
 		int charPosition, Vector &position, 
 		GLFont2dStorage::CharEntry &charEntry, Vector4 &color);
 

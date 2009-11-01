@@ -87,7 +87,7 @@ bool NetBuffer::compressBuffer()
 {
 	NetBuffer *newBuffer = NetBufferPool::instance()->getFromPool();
 
-	unsigned long destLen = getBufferUsed() * 2;
+	unsigned long destLen = getBufferUsed() * 2 + 64;
 	unsigned long srcLen = getBufferUsed();
 
 	// Compress the message into the new buffer
@@ -115,7 +115,11 @@ bool NetBuffer::uncompressBuffer()
 	// Get the size of the uncompressed data
 	NetBufferReader reader(*this);
 	unsigned int dLen = 0;
-	if (!reader.getFromBuffer(dLen)) return false;
+	if (!reader.getFromBuffer(dLen)) 
+	{
+		Logger::log(S3D::formatStringBuffer("ERROR: Failed to get dest len from buffer"));
+		return false;
+	}
 
 	// Create a new buffer for the uncompressed data
 	unsigned long srcLen = getBufferUsed() - 4;
@@ -230,6 +234,11 @@ void NetBuffer::addToBuffer(const bool add)
 {
 	char c = (add?'1':'0');
 	addDataToBuffer(&c, sizeof(char));
+}
+
+void NetBuffer::addToBuffer(const unsigned char add)
+{
+	addDataToBuffer(&add, sizeof(unsigned char));
 }
 
 void NetBuffer::addToBuffer(const char add)
@@ -360,6 +369,12 @@ bool NetBufferReader::getFromBuffer(bool &result)
 }
 
 bool NetBufferReader::getFromBuffer(char &result)
+{
+	if (!getDataFromBuffer(&result, sizeof(result))) return false;
+	return true;
+}
+
+bool NetBufferReader::getFromBuffer(unsigned char &result)
 {
 	if (!getDataFromBuffer(&result, sizeof(result))) return false;
 	return true;

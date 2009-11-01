@@ -30,8 +30,7 @@
 #include <weapons/WeaponProjectile.h>
 #include <list>
 
-class ShotProjectile : 
-	public PhysicsParticleReferenced
+class ShotProjectile : public PhysicsParticle
 {
 public:
 	ShotProjectile(
@@ -45,6 +44,7 @@ public:
 	virtual void collision(PhysicsParticleObject &position, 
 		ScorchedCollisionId collisionId);
 	virtual std::string getActionDetails();
+	virtual std::string getActionType() { return "ShotProjectile"; }
 
 	unsigned int getPlayerId() { return weaponContext_.getPlayerId(); }
 	WeaponProjectile *getWeapon() { return weapon_; }

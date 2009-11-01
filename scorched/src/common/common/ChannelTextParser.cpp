@@ -20,6 +20,7 @@
 
 #include <common/ChannelTextParser.h>
 #include <engine/ScorchedContext.h>
+#include <weapons/AccessoryStore.h>
 #include <tank/TankContainer.h>
 #include <lang/LangResource.h>
 
@@ -159,6 +160,7 @@ bool ChannelTextParser::createPlayerEntry(ScorchedContext &context,
 {
 	entry.type = ePlayerEntry;
 	entry.text.push_back('[');
+	entry.text.push_back('@');
 	entry.text.append(part);
 	entry.text.push_back(']');
 	entry.data = 0;
@@ -181,6 +183,10 @@ bool ChannelTextParser::createWeaponEntry(ScorchedContext &context,
 	entry.text.append(part);
 	entry.text.push_back(']');
 	entry.color = Vector(1.0f, 1.0f, 1.0f);
+	std::string accessoryName(LangStringUtil::convertFromLang(part));
+	Accessory *accessory = context.getAccessoryStore().
+		findByPrimaryAccessoryName(accessoryName.c_str());
+	entry.data = accessory?accessory->getAccessoryId():0;
 
 	return true;
 }

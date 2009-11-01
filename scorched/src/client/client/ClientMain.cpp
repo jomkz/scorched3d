@@ -23,32 +23,21 @@
 #include <client/ClientDialog.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientAdmin.h>
-#include <client/ClientSave.h>
 #include <client/ClientParams.h>
 #include <client/ClientChannelManager.h>
 #include <client/ClientGameStoppedHandler.h>
 #include <client/ClientMessageHandler.h>
 #include <client/ClientConnectionRejectHandler.h>
-#include <client/ClientGiftMoneyHandler.h>
 #include <client/ClientLinesHandler.h>
 #include <client/ClientStartGameHandler.h>
 #include <client/ClientProcessingLoop.h>
-#include <client/ClientScoreHandler.h>
-#include <client/ClientAddPlayerHandler.h>
-#include <client/ClientNewGameHandler.h>
 #include <client/ClientConnectionAcceptHandler.h>
 #include <client/ClientConnectionAuthHandler.h>
 #include <client/ClientOperationHandler.h>
-#include <client/ClientRmPlayerHandler.h>
-#include <client/ClientGameStateHandler.h>
-#include <client/ClientInitializeHandler.h>
+#include <client/ClientLoadLevelHandler.h>
+#include <client/ClientInitializeModHandler.h>
 #include <client/ClientAdminResultHandler.h>
-#include <client/ClientPlayerStateHandler.h>
-#include <client/ClientStartTimerHandler.h>
-#include <client/ClientSyncCheckHandler.h>
 #include <client/ClientFileHandler.h>
-#include <client/ClientDefenseHandler.h>
-#include <client/ClientPlayerStatusHandler.h>
 #include <client/ClientState.h>
 #include <client/ClientWindowSetup.h>
 #include <lang/LangResource.h>
@@ -71,7 +60,6 @@
 #include <engine/ActionController.h>
 #include <dialogs/ProgressDialog.h>
 #include <net/NetServerTCP.h>
-#include <net/NetServerTCP2.h>
 #include <net/NetServerTCP3.h>
 #include <net/NetLoopBack.h>
 #include <common/ARGParser.h>
@@ -151,8 +139,6 @@ static bool initComs(ProgressCounter *progressCounter)
 	{
 		ScorchedClient::instance()->getContext().setNetInterface(
 			//new NetServerTCP(new NetServerTCPScorchedProtocol());
-			//new NetServerUDP();
-			//new NetServerTCP2();
 			new NetServerTCP3());
 	}
 	else
@@ -176,27 +162,22 @@ static bool initComsHandlers()
 	// Setup the coms handlers
 	ScorchedClient::instance()->getComsMessageHandler().setConnectionHandler(
 		ClientMessageHandler::instance());
+
+	ComsMessageHandlerIRegistration::registerHandlers(
+		ComsMessageHandlerIRegistration::eClient,
+		ScorchedClient::instance()->getComsMessageHandler());
+
 	ClientChannelManager::instance();
 	ClientConnectionRejectHandler::instance();
-	ClientGiftMoneyHandler::instance();
 	ClientLinesHandler::instance();
 	ClientConnectionAcceptHandler::instance();
 	ClientConnectionAuthHandler::instance();
-	ClientAddPlayerHandler::instance();
-	ClientNewGameHandler::instance();
-	ClientInitializeHandler::instance();
-	ClientRmPlayerHandler::instance();
-	ClientStartTimerHandler::instance();
-	ClientSyncCheckHandler::instance();
+	ClientInitializeModHandler::instance();
 	ClientFileHandler::instance();
 	ClientOperationHandler::instance();
 	ClientGameStoppedHandler::instance();
 	ClientStartGameHandler::instance();
-	ClientGameStateHandler::instance();
-	ClientPlayerStateHandler::instance();
-	ClientDefenseHandler::instance();
-	ClientPlayerStatusHandler::instance();
-	ClientScoreHandler::instance();
+	ClientLoadLevelHandler::instance();
 	ClientAdminResultHandler::instance();
 
 	return true;
@@ -228,7 +209,7 @@ static bool initWindows(ProgressCounter *progressCounter)
 static bool initClient()
 {
 	ProgressCounter progressCounter;
-	progressCounter.setUser(ProgressDialogSync::instance());
+	progressCounter.setUser(ProgressDialogSync::events_instance());
 	progressCounter.setNewPercentage(0.0f);
 
 	// Load in all the coms
@@ -282,14 +263,9 @@ static bool startClientInternal()
 				"Client save file \"%s\" does not exist.",
 				ClientParams::instance()->getSaveFile()));
 		}
-		if (!ClientSave::loadClient(ClientParams::instance()->getSaveFile()) ||
-			!ClientSave::restoreClient(true, false))
-		{
-			S3D::dialogExit(scorched3dAppName, S3D::formatStringBuffer(
-				"Cannot load client save file \"%s\".",
-				ClientParams::instance()->getSaveFile()));
-		}
 
+		S3D::dialogExit(scorched3dAppName, S3D::formatStringBuffer(
+			"Client load saves yet"));
 		return initClient();
 	}
 	else
@@ -371,7 +347,7 @@ bool ClientMain::clientMain()
 	ClientState::setupGameState();
 	ProgressCounter progressCounter;
 	ProgressDialog::instance()->changeTip();
-	progressCounter.setUser(ProgressDialogSync::instance());
+	progressCounter.setUser(ProgressDialogSync::events_instance());
 	progressCounter.setNewPercentage(0.0f);
 	if (!initHardware(&progressCounter)) return false;
 	if (!initWindows(&progressCounter)) return false;

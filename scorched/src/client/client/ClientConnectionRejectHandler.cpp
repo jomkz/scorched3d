@@ -37,7 +37,7 @@ ClientConnectionRejectHandler *ClientConnectionRejectHandler::instance()
 ClientConnectionRejectHandler::ClientConnectionRejectHandler()
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsConnectRejectMessage",
+		ComsConnectRejectMessage::ComsConnectRejectMessageType,
 		this);
 }
 

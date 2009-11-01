@@ -28,6 +28,8 @@
 class ComsChannelMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsChannelMessageType;
+
 	enum RequestType
 	{
 		eNoRequest = 0,

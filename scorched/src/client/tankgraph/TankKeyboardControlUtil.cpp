@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <tankgraph/TankKeyboardControlUtil.h>
-#include <tank/Tank.h>
+#include <tank/TankContainer.h>
 #include <tank/TankPosition.h>
 #include <tank/TankState.h>
 #include <tank/TankAccessories.h>
@@ -105,7 +105,7 @@ void TankKeyboardControlUtil::keyboardCheck(
 				AccessoryPart::AccessoryParachute);
 		if (parachutes.size() == 1)
 		{
-			parachutesUpDown(tank, parachutes.front()->getAccessoryId());
+			parachutesUpDown(tank->getPlayerId(), parachutes.front()->getAccessoryId());
 		}
 	}
 
@@ -119,7 +119,7 @@ void TankKeyboardControlUtil::keyboardCheck(
 					AccessoryPart::AccessoryShield);
 			if (shields.size() == 1)
 			{
-				shieldsUpDown(tank, shields.front()->getAccessoryId());
+				shieldsUpDown(tank->getPlayerId(), shields.front()->getAccessoryId());
 			}
 		}
 	}
@@ -135,7 +135,7 @@ void TankKeyboardControlUtil::keyboardCheck(
 					AccessoryPart::AccessoryBattery);
 			if (!entries.empty())
 			{
-				useBattery(tank, entries.front()->getAccessoryId());
+				useBattery(tank->getPlayerId(), entries.front()->getAccessoryId());
 			}
 		}
 	}
@@ -502,7 +502,10 @@ void TankKeyboardControlUtil::fireShot(Tank *tank)
 	if (currentWeapon)
 	{
 		// send message saying we are finished with shot
-		ComsPlayedMoveMessage comsMessage(tank->getPlayerId(), ComsPlayedMoveMessage::eShot);
+		ComsPlayedMoveMessage comsMessage(
+			tank->getPlayerId(), 
+			tank->getState().getMoveId(),
+			ComsPlayedMoveMessage::eShot);
 		comsMessage.setShot(
 			currentWeapon->getAccessoryId(),
 			tank->getPosition().getRotationGunXY(),
@@ -522,7 +525,10 @@ void TankKeyboardControlUtil::fireShot(Tank *tank)
 void TankKeyboardControlUtil::skipShot(Tank *tank)
 {
 	// send message saying we are finished with shot
-	ComsPlayedMoveMessage comsMessage(tank->getPlayerId(), ComsPlayedMoveMessage::eSkip);
+	ComsPlayedMoveMessage comsMessage(
+		tank->getPlayerId(), 
+		tank->getState().getMoveId(),
+		ComsPlayedMoveMessage::eSkip);
 
 	// Check if we are running in a NET/LAN environment
 	// If so we send this move to the server
@@ -535,7 +541,10 @@ void TankKeyboardControlUtil::skipShot(Tank *tank)
 void TankKeyboardControlUtil::resign(Tank *tank)
 {
 	// send message saying we are finished with shot
-	ComsPlayedMoveMessage comsMessage(tank->getPlayerId(), ComsPlayedMoveMessage::eResign);
+	ComsPlayedMoveMessage comsMessage(
+		tank->getPlayerId(), 
+		tank->getState().getMoveId(),
+		ComsPlayedMoveMessage::eResign);
 
 	// Check if we are running in a NET/LAN environment
 	// If so we send this move to the server
@@ -545,28 +554,28 @@ void TankKeyboardControlUtil::resign(Tank *tank)
 	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
 }
 
-void TankKeyboardControlUtil::parachutesUpDown(Tank *tank, unsigned int paraId)
+void TankKeyboardControlUtil::parachutesUpDown(unsigned int playerId, unsigned int paraId)
 {
 	ComsDefenseMessage defenseMessage(
-		tank->getPlayerId(),
+		playerId,
 		(paraId!=0)?ComsDefenseMessage::eParachutesUp:ComsDefenseMessage::eParachutesDown,
 		paraId);
 	ComsMessageSender::sendToServer(defenseMessage);
 }
 
-void TankKeyboardControlUtil::shieldsUpDown(Tank *tank, unsigned int shieldId)
+void TankKeyboardControlUtil::shieldsUpDown(unsigned int playerId, unsigned int shieldId)
 {
 	ComsDefenseMessage defenseMessage(
-		tank->getPlayerId(),
+		playerId,
 		(shieldId!=0)?ComsDefenseMessage::eShieldUp:ComsDefenseMessage::eShieldDown,
 		shieldId);
 	ComsMessageSender::sendToServer(defenseMessage);
 }
 
-void TankKeyboardControlUtil::useBattery(Tank *tank, unsigned int batteryId)
+void TankKeyboardControlUtil::useBattery(unsigned int playerId, unsigned int batteryId)
 {
 	ComsDefenseMessage defenseMessage(
-		tank->getPlayerId(),
+		playerId,
 		ComsDefenseMessage::eBatteryUse,
 		batteryId);
 	ComsMessageSender::sendToServer(defenseMessage);

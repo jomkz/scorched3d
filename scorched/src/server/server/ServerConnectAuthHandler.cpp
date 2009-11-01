@@ -21,12 +21,11 @@
 #include <server/ServerConnectAuthHandler.h>
 #include <server/ServerConnectHandler.h>
 #include <server/ServerChannelManager.h>
-#include <server/ServerState.h>
 #include <server/ServerBanned.h>
 #include <server/ScorchedServer.h>
 #include <server/ScorchedServerUtil.h>
-#include <server/TurnController.h>
 #include <server/ServerCommon.h>
+#include <server/ServerSimulator.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankContainer.h>
 #include <tank/TankModelContainer.h>
@@ -41,7 +40,7 @@
 #include <common/StatsLogger.h>
 #include <common/Logger.h>
 #include <net/NetInterface.h>
-#include <coms/ComsPlayerStateMessage.h>
+#include <simactions/TankAddSimAction.h>
 #include <coms/ComsAddPlayerMessage.h>
 #include <coms/ComsConnectAcceptMessage.h>
 #include <coms/ComsConnectMessage.h>
@@ -61,7 +60,7 @@ ServerConnectAuthHandler *ServerConnectAuthHandler::instance()
 ServerConnectAuthHandler::ServerConnectAuthHandler()
 {
 	ScorchedServer::instance()->getComsMessageHandler().addHandler(
-		"ComsConnectAuthMessage",
+		ComsConnectAuthMessage::ComsConnectAuthMessageType,
 		this);
 }
 
@@ -73,20 +72,47 @@ bool ServerConnectAuthHandler::processMessage(
 	NetMessage &netMessage,
 	const char *messageType, NetBufferReader &reader)
 {
-	unsigned int destinationId = netMessage.getDestinationId();
-	unsigned int ipAddress = netMessage.getIpAddress();
-
-	// Check for acceptance bassed on standard checks
-	if (!ServerConnectHandler::instance()->checkStandardParams(destinationId, ipAddress)) return true;
-
 	// Decode the auth connect message
-	ComsConnectAuthMessage message;
-	if (!message.readMessage(reader))
+	AuthMessage *authMessage = new AuthMessage();
+	authMessage->destinationId = netMessage.getDestinationId();
+	authMessage->ipAddress = netMessage.getIpAddress();
+	if (!authMessage->message.readMessage(reader))
 	{
 		ServerCommon::serverLog("Invalid auth message format");
-		ServerCommon::kickDestination(destinationId);
+		ServerCommon::kickDestination(netMessage.getDestinationId());
+		delete authMessage;
 		return true;
 	}
+
+	// Record the auth message till later
+	authMessages_.push_back(authMessage);
+	return true;
+}
+
+void ServerConnectAuthHandler::processMessages()
+{
+	// Check that there are no outstanding tank addition requests
+	if (TankAddSimAction::TankAddSimActionCount > 0) return;
+
+	// Only process the new auth requests once there are no more outstanding
+	// tank addition requests
+	// Just makes some of the checks easier
+	while (!authMessages_.empty())
+	{
+		AuthMessage *message = authMessages_.back();
+		processMessageInternal(message->destinationId, message->ipAddress, message->message);
+		authMessages_.pop_back();
+		delete message;
+	}
+}
+
+void ServerConnectAuthHandler::processMessageInternal(
+	unsigned int destinationId,
+	unsigned int ipAddress,
+	ComsConnectAuthMessage &message)
+{
+	// Check for acceptance bassed on standard checks
+	if (!ServerConnectHandler::instance()->checkStandardParams(destinationId, ipAddress)) return;
 
 	// Check player availability
 	if (message.getNoPlayers() > 
@@ -101,7 +127,7 @@ bool ServerConnectAuthHandler::processMessage(
 			"--------------------------------------------------");
 		ServerCommon::serverLog("Server full, kicking");
 		ServerCommon::kickDestination(destinationId, kickMessage);
-		return true;
+		return;
 	}
 
 	// Auth handler, make sure that only prefered players can connect
@@ -124,7 +150,7 @@ bool ServerConnectAuthHandler::processMessage(
 				message.getUserName()));
 
 			ServerCommon::kickDestination(destinationId, kickMessage);			
-			return true;
+			return;
 		}
 	}
 
@@ -154,7 +180,7 @@ bool ServerConnectAuthHandler::processMessage(
 		Logger::log(S3D::formatStringBuffer("Banned uniqueid/suid connection from destination \"%i\"", 
 			destinationId));
 		ServerCommon::kickDestination(destinationId);
-		return true;
+		return;
 	}
 
 	// Check that this unique id has not already connected (if unique ids are in use)
@@ -176,7 +202,7 @@ bool ServerConnectAuthHandler::processMessage(
 					Logger::log(S3D::formatStringBuffer("Duplicate uniqueid connection from destination \"%i\"", 
 						destinationId));
 					ServerCommon::kickDestination(destinationId);
-					return true;
+					return;
 				}
 			}
 			if (SUid.c_str()[0])
@@ -186,7 +212,7 @@ bool ServerConnectAuthHandler::processMessage(
 					Logger::log(S3D::formatStringBuffer("Duplicate SUI connection from destination \"%i\"", 
 						destinationId));
 					ServerCommon::kickDestination(destinationId);
-					return true;
+					return;
 				}
 			}
 		}
@@ -223,33 +249,7 @@ bool ServerConnectAuthHandler::processMessage(
 			"Failed to send accept to client \"%i\"",
 			destinationId));
 		ServerCommon::kickDestination(destinationId);
-		return true;
-	}
-
-	// Send all current tanks to the new client
-	std::map<unsigned int, Tank *>::iterator itor;
-	std::map<unsigned int, Tank *> &tankList = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	for (itor = tankList.begin();
-		itor != tankList.end();
-		itor++)
-	{
-		Tank *tank = (*itor).second;
-
-		ComsAddPlayerMessage oldPlayerMessage(
-			tank->getPlayerId(),
-			tank->getTargetName(),
-			tank->getColor(),
-			tank->getModelContainer().getTankModelName(),
-			tank->getModelContainer().getTankTypeName(),
-			tank->getDestinationId(),
-			tank->getTeam(),
-			""); 
-		oldPlayerMessage.setPlayerIconName(tank->getAvatar().getName());
-		oldPlayerMessage.getPlayerIcon().addDataToBuffer(
-			tank->getAvatar().getFile().getBuffer(),
-			tank->getAvatar().getFile().getBufferUsed());
-		ComsMessageSender::sendToSingleClient(oldPlayerMessage, destinationId);
+		return;
 	}
 
 	// Add all the new tanks
@@ -277,13 +277,6 @@ bool ServerConnectAuthHandler::processMessage(
 			true);
 	}
 #endif
-
-	// Send the state of all the currently connect clients
-	ComsPlayerStateMessage comsPlayerStateMessage(false, false);
-	if (!ComsMessageSender::sendToSingleClient(
-		comsPlayerStateMessage, destinationId)) return false;
-
-	return true;
 }
 
 void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,
@@ -316,92 +309,27 @@ void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,
 
 	// Make sure host desc does not contain \"
 	for (char *h=(char *)sentHostDesc; *h; h++) if (*h == '\"') *h=' ';
-	
-	// Create the new tank 
-	Tank *tank = new Tank(
-		ScorchedServer::instance()->getContext(),
-		tankId,
-		destinationId,
-		playerName,
-		color,
-		"Random",
-		"none"); // The model, this will be turned into a "proper" model in the player choice dialog
-	tank->setUniqueId(sentUniqueId);
-	tank->setSUI(sentSUI);
-	tank->setIpAddress(ipAddress);
-	tank->setHostDesc(sentHostDesc);
-	tank->getState().setSpectator(true);
 
 	// Use the stats name if stats are enabled and the player has one
 	std::list<std::string> aliases  = 
-		StatsLogger::instance()->getAliases(tank->getUniqueId());
+		StatsLogger::instance()->getAliases(sentUniqueId);
 	if (!aliases.empty())
 	{
 		LangString alias = LANG_STRING(aliases.front());
-		tank->setName(alias);
+		playerName = alias;
 	}
 
-	// Add the tank to the list of tanks
-	ScorchedServer::instance()->getTankContainer().addTank(tank);
-
-	// Tell the clients to create this tank
+	// Create this tank
 	ComsAddPlayerMessage addPlayerMessage(
-		tank->getPlayerId(),
-		tank->getTargetName(),
-		tank->getColor(),
-		tank->getModelContainer().getTankModelName(),
-		tank->getModelContainer().getTankTypeName(),
-		tank->getDestinationId(),
-		tank->getTeam(),
+		tankId,
+		playerName,
+		color,
+		"Random",
+		"none",
+		destinationId,
+		0,
 		"");
-	ComsMessageSender::sendToAllConnectedClients(addPlayerMessage);
-
-	// Tell this computer that a new tank has connected
-#ifdef S3D_SERVER
-	{
-		// Add to dialog
-		Logger::log(S3D::formatStringBuffer("Player connected dest=\"%i\" id=\"%i\" name=\"%s\" unique=[%s] SUI=[%s]",
-			tank->getDestinationId(),
-			tank->getPlayerId(),
-			tank->getCStrName().c_str(),
-			tank->getUniqueId(),
-			tank->getSUI()));
-
-		ServerChannelManager::instance()->sendText(
-			ChannelText("info", 
-				"PLAYER_CONNECTED",
-				"Player connected \"{0}\"",
-				tank->getTargetName()),
-			true);
-	}
-#endif
-
-	// Add this tank to stats
-	StatsLogger::instance()->tankConnected(tank);
-	
-	// Check if admin muted
-	if (ipAddress != 0)
-	{
-		ServerBanned::BannedType type = 
-			ScorchedServerUtil::instance()->bannedPlayers.getBanned(tank->getUniqueId(), tank->getSUI());
-		if (type == ServerBanned::Muted)	
-		{
-			tank->getState().setMuted(true);
-			ServerChannelManager::instance()->sendText( 
-				ChannelText("admin", 
-					"PLAYER_ADMIN_MUTED", 
-					"Player admin muted \"{0}\"",
-					tank->getTargetName()),
-					true);
-		}
-		else if (type == ServerBanned::Flagged)
-		{
-			ServerChannelManager::instance()->sendText( 
-				ChannelText("admin",
-					"PLAYER_ADMIN_FLAGGED",
-					"Player admin flagged \"{0}\"",
-					tank->getTargetName()),
-					true);
-		}
-	}
+	TankAddSimAction *simAction = new TankAddSimAction(addPlayerMessage,
+		sentUniqueId, sentSUI, sentHostDesc, ipAddress);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
 }

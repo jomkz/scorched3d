@@ -33,7 +33,6 @@
 #include <dialogs/CameraDialog.h>
 #include <dialogs/PlayerDialog.h>
 #include <dialogs/QuitDialog.h>
-#include <dialogs/SaveDialog.h>
 #include <dialogs/LogDialog.h>
 #include <dialogs/ConnectDialog.h>
 #include <dialogs/AuthDialog.h>
@@ -116,9 +115,6 @@ void ClientWindowSetup::addCommonComponents(GLWWindowSkinManager *skinManager,
 
 	if (!ClientParams::instance()->getConnectedToServer())
 	{
-		KEYBOARDKEY("SHOW_SAVE_DIALOG", saveKey);
-		GLWWindowManager::instance()->addWindow(state, 
- 			SaveDialog::instance(), saveKey, false);
 		KEYBOARDKEY("SHOW_KILL_DIALOG", killKey);
 		GLWWindowManager::instance()->addWindow(state, 
  			QuitDialog::instance(), killKey, false);
@@ -144,12 +140,9 @@ void ClientWindowSetup::addCommonComponents(GLWWindowSkinManager *skinManager,
 	GLWWindowManager::instance()->addWindow(state,
 		MsgBoxDialog::instance(), 0, false);
 
-	if (ClientParams::instance()->getConnectedToServer())
-	{
-		KEYBOARDKEY("SHOW_TEAM_DIALOG", teamKey);
-		GLWWindowManager::instance()->addWindow(state,
-			PlayerDialog::instance(), teamKey, false);
-	}
+	KEYBOARDKEY("SHOW_TEAM_DIALOG", teamKey);
+	GLWWindowManager::instance()->addWindow(state,
+		PlayerDialog::instance(), teamKey, false);
 
 	KEYBOARDKEY("SHOW_RULES_DIALOG", rulesKey);
 	GLWWindowManager::instance()->addWindow(state, 
@@ -244,10 +237,6 @@ void ClientWindowSetup::setupStartWindows(GLWWindowSkinManager *skinManager)
 	GLWWindowManager::instance()->addWindow(ClientState::StateDisconnected, 
 		MsgBoxDialog::instance(), 0, false);
 
-	// StateLoadPlayers
-	GLWWindowManager::instance()->addWindow(ClientState::StateLoadPlayers,
-		BackdropDialog::instance(), 0, true);
-
 	// StateLoadFiles
 	GLWWindowManager::instance()->addWindow(ClientState::StateLoadFiles,
 		BackdropDialog::instance(), 0, true);
@@ -275,38 +264,6 @@ void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 	GLWWindowManager::instance()->addWindow(ClientState::StateLoadLevel,
 		ProgressDialog::instance(), 0, true);
 
-	// StateGetPlayers
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
-		BackdropDialog::instance(), 0, true);
-	addStateWindows(skinManager, ClientState::StateGetPlayers, "start");
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers,
-		ScoreDialog::instance2(), 0, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
-		PlayerDialog::instance(), playerKey, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers,
-		RulesDialog::instance(), rulesKey, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
- 		SoundDialog::instance(), showSoundKey, false);
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
-		AdminCheckDialog::instance(), 0, false);
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
-		AdminDialog::instance(), 0, false);
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
-		AdminAuthDialog::instance(), 0, false);
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
-		QuitDialog::instance(), quitKey, false);
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
-		MainMenuDialog::instance(), 0, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
-		GLWSelector::instance(), 0, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
-		MsgBoxDialog::instance(), 0, false);
-	if (ScorchedClient::instance()->getOptionsGame().getTutorial()[0])
-	{
-		GLWWindowManager::instance()->addWindow(ClientState::StateGetPlayers, 
- 			TutorialDialog::instance(), 0, true);
-	}
-
 	// StateWait
 	addCommonComponents(skinManager, ClientState::StateWait);
 
@@ -331,9 +288,6 @@ void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 	GLWWindowManager::instance()->addWindow(ClientState::StatePlaying, 
 			SkipAllDialog::instance(), 0, false);
 	addCommonComponents(skinManager, ClientState::StatePlaying);
-
-	// StateShot
-	addCommonComponents(skinManager, ClientState::StateShot);
 
 	// StateScore
 	addCommonComponents(skinManager, ClientState::StateScore);

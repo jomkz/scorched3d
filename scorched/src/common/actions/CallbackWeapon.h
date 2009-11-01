@@ -22,7 +22,7 @@
 #define __INCLUDE_CallbackWeaponh_INCLUDE__
 
 #include <weapons/Weapon.h>
-#include <engine/ActionReferenced.h>
+#include <actions/Action.h>
 
 class WeaponCallback : public Weapon
 {
@@ -33,7 +33,7 @@ public:
 		unsigned int userData) = 0;
 };
 
-class CallbackWeapon : public ActionReferenced
+class CallbackWeapon : public Action
 {
 public:
 	CallbackWeapon(const char *name,
@@ -45,6 +45,7 @@ public:
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
 	virtual std::string getActionDetails();
+	virtual std::string getActionType() { return "CallbackWeapon"; }
 
 protected:
 	fixed totalTime_;

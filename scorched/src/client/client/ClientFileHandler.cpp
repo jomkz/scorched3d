@@ -45,7 +45,7 @@ ClientFileHandler *ClientFileHandler::instance()
 ClientFileHandler::ClientFileHandler() : totalBytes_(0)
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsFileMessage",
+		ComsFileMessage::ComsFileMessageType,
 		this);
 }
 
@@ -61,13 +61,6 @@ bool ClientFileHandler::processMessage(
 	ComsFileMessage message;
 	if (!message.readMessage(mainreader)) return false;
 	NetBufferReader reader(message.fileBuffer);
-
-	if (ScorchedClient::instance()->getGameState().getState() !=
-		ClientState::StateLoadFiles)
-	{
-		ScorchedClient::instance()->getGameState().stimulate(
-			ClientState::StimLoadFiles);
-	}
 
 	std::map<std::string, ModFileEntry *> &files = 
 		ScorchedClient::instance()->getModFiles().getFiles();

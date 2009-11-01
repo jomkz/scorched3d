@@ -48,7 +48,6 @@
 #include <tankgraph/TargetRendererImplTarget.h>
 #include <dialogs/MainMenuDialog.h>
 #include <dialogs/QuitDialog.h>
-#include <dialogs/SaveDialog.h>
 #include <dialogs/ResignDialog.h>
 #include <dialogs/SkipDialog.h>
 #include <sound/SoundUtils.h>
@@ -79,6 +78,16 @@ TankMenus::TankMenus() : logger_("ClientLog")
 		this, &TankMenus::logToFile, "LogToFile");
 	new ConsoleRuleMethodIAdapter<TankMenus>(
 		this, &TankMenus::groupInfo, "GroupInfo");
+
+	new ConsoleRuleMethodIAdapter<ActionController>(
+		&ScorchedServer::instance()->getActionController(), 
+		&ActionController::logActions, "ActionsLog");
+	new ConsoleRuleMethodIAdapter<ActionController>(
+		&ScorchedServer::instance()->getActionController(), 
+		&ActionController::startActionProfiling, "ActionsProfilingStart");
+	new ConsoleRuleMethodIAdapter<ActionController>(
+		&ScorchedServer::instance()->getActionController(), 
+		&ActionController::stopActionProfiling, "ActionsProfilingStop");
 	//new ConsoleRuleMethodIAdapterEx<TankMenus>(
 	//	this, &TankMenus::runScriptConsole, "RunScript");
 	new ConsoleRuleFnIBooleanAdapter(
@@ -87,18 +96,9 @@ TankMenus::TankMenus() : logger_("ClientLog")
 	new ConsoleRuleFnIBooleanAdapter(
 		"StateLogging", 
 		ScorchedClient::instance()->getGameState().getStateLogging());
-	new ConsoleRuleFnIBooleanAdapter(
-		"ActionLogging",
-		ScorchedClient::instance()->getActionController().getActionLogging());
-	new ConsoleRuleFnIBooleanAdapter(
-		"ActionProfiling",
-		ScorchedServer::instance()->getActionController().getActionProfiling());
 	new ConsoleRuleFnINumberAdapter(
 		"StateTimeLogging",
 		ScorchedClient::instance()->getGameState().getStateTimeLogging());
-	new ConsoleRuleFnINumberAdapter(
-		"ServerStateTimeLogging",
-		ScorchedServer::instance()->getGameState().getStateTimeLogging());
 	new ConsoleRuleFnIBooleanAdapter(
 		"MainLoopLogging",
 		ScorchedClient::instance()->getMainLoop().getDrawLogging());
@@ -111,7 +111,6 @@ TankMenus::TankMenus() : logger_("ClientLog")
 	unsigned int logState = OptionsDisplay::instance()->getClientLogState();
 	if (logState & 0x1)
 	{
-		ScorchedServer::instance()->getGameState().getStateLogging() = true;
 		ScorchedClient::instance()->getGameState().getStateLogging() = true;
 	}
 	if (logState & 0x2)
@@ -157,7 +156,7 @@ void TankMenus::showTextureDetails()
 
 void TankMenus::resetLandscape()
 {
-	Landscape::instance()->reset();
+	Landscape::instance()->recalculate();
 }
 
 void TankMenus::clearTracerLines()
@@ -360,10 +359,6 @@ void TankMenus::PlayerMenu::menuSelection(const char* menuName,
 		case 3:
 			GLWWindowManager::instance()->showWindow(
 				QuitDialog::instance()->getId());
-			break;
-		case 4:
-			GLWWindowManager::instance()->showWindow(
-				SaveDialog::instance()->getId());
 			break;
 		}
 	}

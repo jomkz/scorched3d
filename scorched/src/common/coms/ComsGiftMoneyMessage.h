@@ -27,10 +27,15 @@
 class ComsGiftMoneyMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsGiftMoneyMessageType;
+
+	ComsGiftMoneyMessage();
 	ComsGiftMoneyMessage(
-		unsigned int fromPlayerId = 0,
-		unsigned int toPlayerId = 0,
-		int money = 0);
+		unsigned int fromPlayerId,
+		unsigned int toPlayerId,
+		int money);
+	ComsGiftMoneyMessage(
+		ComsGiftMoneyMessage &other);
 	virtual ~ComsGiftMoneyMessage();
 
 	unsigned int getFromPlayerId() { return fromPlayerId_; }

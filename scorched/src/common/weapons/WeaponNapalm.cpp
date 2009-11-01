@@ -25,6 +25,7 @@
 	#include <sound/SoundUtils.h>
 #endif
 #include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <landscapemap/LandscapeMaps.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponNapalm);
@@ -72,7 +73,7 @@ void WeaponNapalm::fireWeapon(ScorchedContext &context,
 		}
 	}
 
-	RandomGenerator &random = context.getActionController().getRandom();
+	RandomGenerator &random = context.getSimulator().getRandomGenerator();
 	for (int i=0; i<numberStreams_; i++)
 	{
 		int x = (position[0] + random.getRandFixed() * 4 - 2).asInt();

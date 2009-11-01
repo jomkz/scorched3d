@@ -26,6 +26,8 @@
 class ComsAdminResultMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsAdminResultMessageType;
+
 	ComsAdminResultMessage(unsigned int sid = 0,
 		ComsAdminMessage::ComsAdminMessageType type = ComsAdminMessage::AdminNone);
 	virtual ~ComsAdminResultMessage();

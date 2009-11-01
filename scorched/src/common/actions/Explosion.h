@@ -21,13 +21,13 @@
 #if !defined(__INCLUDE_Explosionh_INCLUDE__)
 #define __INCLUDE_Explosionh_INCLUDE__
 
-#include <engine/ActionReferenced.h>
+#include <actions/Action.h>
 #include <engine/ViewPoints.h>
 #include <weapons/Weapon.h>
 #include <common/FixedVector.h>
 
 class ExplosionParams;
-class Explosion : public ActionReferenced
+class Explosion : public Action
 {
 public:
 	Explosion(FixedVector &position, 
@@ -41,6 +41,7 @@ public:
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
 	virtual std::string getActionDetails();
+	virtual std::string getActionType() { return "Explosion"; }
 protected:
 	ExplosionParams *params_;
 	bool firstTime_;

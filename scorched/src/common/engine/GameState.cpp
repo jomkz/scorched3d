@@ -515,6 +515,7 @@ void GameState::stimulate(const unsigned stimulus)
 	}
 
 	pendingStimulus_ = stimulus;
+	checkStimulate();
 }
 
 GameState::GameStateEntry* GameState::getEntry(const unsigned state)

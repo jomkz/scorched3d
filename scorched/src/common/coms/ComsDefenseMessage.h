@@ -27,6 +27,8 @@
 class ComsDefenseMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsDefenseMessageType;
+
 	enum DefenseChange
 	{
 		eNoChange,
@@ -41,6 +43,7 @@ public:
 	ComsDefenseMessage(unsigned int playerId,
 		DefenseChange change,
 		unsigned int infoId);
+	ComsDefenseMessage(ComsDefenseMessage &other);
 	virtual ~ComsDefenseMessage();
 
 	void setPlayerId(unsigned int id) { playerId_ = id; }
@@ -59,7 +62,6 @@ protected:
 	DefenseChange change_;
 
 private:
-	ComsDefenseMessage(const ComsDefenseMessage &);
 	const ComsDefenseMessage & operator=(const ComsDefenseMessage &);
 };
 

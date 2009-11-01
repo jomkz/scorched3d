@@ -125,13 +125,13 @@ SettingsSubSelectDialog::SettingsSubSelectDialog() :
 	GLWOptionEntry::createEntry(
 		controls_, mainTab_, optionsGame.getNoRoundsEntry());
 	GLWOptionEntry::createEntry(
-		controls_, mainTab_, optionsGame.getNoMaxRoundTurnsEntry());
-	GLWOptionEntry::createEntry(
 		controls_, mainTab_, optionsGame.getStartTimeEntry());	
 	GLWOptionEntry::createEntry(
 		controls_, mainTab_, optionsGame.getShotTimeEntry());	
 	GLWOptionEntry::createEntry(
 		controls_, mainTab_, optionsGame.getBuyingTimeEntry());	
+	GLWOptionEntry::createEntry(
+		controls_, mainTab_, optionsGame.getRoundTimeEntry());	
 	mainTab_->addWidget(new GLWSpacer(0.0f, 20.0f));
 
 	GLWOptionEntry::createEntry(

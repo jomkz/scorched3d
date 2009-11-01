@@ -29,8 +29,6 @@ namespace ServerCommon
 	void serverLog(const std::string &text);
 	void kickDestination(unsigned int destinationId, const std::string &message = "");
 	void kickPlayer(unsigned int playerId);
-	void killAll();
-	void startNewGame();
 	bool &getExitEmpty();
 }
 

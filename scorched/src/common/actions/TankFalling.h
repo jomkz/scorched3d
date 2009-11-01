@@ -29,8 +29,7 @@
 #include <list>
 
 class Parachute;
-class TankFalling : 
-	public PhysicsParticleReferenced
+class TankFalling : public PhysicsParticle
 {
 public:
 	TankFalling(Weapon *weapon, unsigned int fallingPlayerId,
@@ -40,6 +39,7 @@ public:
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
 	virtual std::string getActionDetails();
+	virtual std::string getActionType() { return "TankFalling"; }
 
 	virtual void collision(PhysicsParticleObject &position, 
 		ScorchedCollisionId collisionId);

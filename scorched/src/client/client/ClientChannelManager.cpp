@@ -68,13 +68,14 @@ ClientChannelManager *ClientChannelManager::instance()
 
 ClientChannelManager::ClientChannelManager()
 {
-	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsChannelMessage",
-		this);
-	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		"ComsChannelTextMessage",
-		this);
-
+	new ComsMessageHandlerIAdapter<ClientChannelManager>(
+		this, &ClientChannelManager::processChannelMessage,
+		ComsChannelMessage::ComsChannelMessageType,
+		ScorchedClient::instance()->getComsMessageHandler());
+	new ComsMessageHandlerIAdapter<ClientChannelManager>(
+		this, &ClientChannelManager::processChannelTextMessage,
+		ComsChannelTextMessage::ComsChannelTextMessageType,
+		ScorchedClient::instance()->getComsMessageHandler());
 	new ConsoleRuleMethodIAdapterEx<ClientChannelManager>(
 		this, &ClientChannelManager::say, "Say", 
 		ConsoleUtil::formParams(
@@ -283,14 +284,9 @@ void ClientChannelManager::showText(const ChannelText &constText)
 	}
 }
 
-bool ClientChannelManager::processMessage(
-	NetMessage &netNessage,
-	const char *messageType,
+bool ClientChannelManager::processChannelMessage(NetMessage &message, 
 	NetBufferReader &reader)
 {
-	// Check which message we have got
-	if (0 == strcmp("ComsChannelMessage", messageType))
-	{
 		// We have a ChannelMessage from the server
 		ComsChannelMessage channelMessage;
 		if (!channelMessage.readMessage(reader)) return false;
@@ -310,9 +306,12 @@ bool ClientChannelManager::processMessage(
 			reciever->registeredForChannels(channelMessage.getChannels(),
 				channelMessage.getAvailableChannels());
 		}
-	}
-	else if (0 == strcmp("ComsChannelTextMessage", messageType))
-	{
+	return true;
+}
+
+bool ClientChannelManager::processChannelTextMessage(NetMessage &message, 
+	NetBufferReader &reader)
+{
 		// We have a ChannelTextMessage from the server
 		ComsChannelTextMessage textMessage;
 		if (!textMessage.readMessage(reader)) return false;
@@ -366,8 +365,5 @@ bool ClientChannelManager::processMessage(
 				reciever->channelText(textMessage.getChannelText());
 			}
 		}
-	}
-	else return false;
-
 	return true;
 }

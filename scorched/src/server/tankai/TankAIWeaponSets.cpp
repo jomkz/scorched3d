@@ -21,12 +21,25 @@
 #include <tankai/TankAIWeaponSets.h>
 #include <tank/Tank.h>
 #include <tank/TankScore.h>
-#include <tank/TankAccessories.h>
 #include <server/ScorchedServer.h>
+#include <server/ServerSimulator.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <weapons/AccessoryStore.h>
+#include <simactions/TankAccessorySimAction.h>
 #include <XML/XMLFile.h>
+
+TankAIWeaponSets::WeaponSetAccessories::WeaponSetAccessories(Tank *tank) :
+	tankAccessories(ScorchedServer::instance()->getContext())
+{
+	tankAccessories.setTank(tank);
+	NetBuffer buffer;
+	tank->getAccessories().writeMessage(buffer, true);
+	NetBufferReader reader(buffer);
+	tankAccessories.readMessage(reader);
+	tankMoney = tank->getScore().getMoney();
+	tankId = tank->getPlayerId();
+}
 
 TankAIWeaponSets *TankAIWeaponSets::instance()
 {
@@ -98,7 +111,7 @@ bool TankAIWeaponSets::WeaponSet::parseConfig(XMLNode *node)
 	return node->failChildren();
 }
 
-void TankAIWeaponSets::WeaponSet::buyWeapons(Tank *tank, bool lastRound)
+void TankAIWeaponSets::WeaponSet::buyWeapons(WeaponSetAccessories &tankAccessories, bool lastRound)
 {
 	for (;;)
 	{
@@ -110,7 +123,7 @@ void TankAIWeaponSets::WeaponSet::buyWeapons(Tank *tank, bool lastRound)
 			itor++)
 		{
 			WeaponSetEntry &weapon = *itor;
-			if (weapon.weaponValid(tank, lastRound))
+			if (weapon.weaponValid(tankAccessories, lastRound))
 			{
 				potentialWeapons.insert(
 					std::pair<unsigned int, WeaponSetEntry *>
@@ -135,14 +148,19 @@ void TankAIWeaponSets::WeaponSet::buyWeapons(Tank *tank, bool lastRound)
 		Accessory *choosenAccessory = choosenWeapon->accessory;
 
 		// Buy this weapon
-		tank->getAccessories().add(choosenAccessory, choosenAccessory->getBundle());
-		tank->getScore().setMoney(tank->getScore().getMoney() - 
-			choosenAccessory->getPrice());
+		tankAccessories.tankAccessories.add(choosenAccessory, choosenAccessory->getBundle());
+		tankAccessories.tankMoney -= choosenAccessory->getPrice();
+		if (tankAccessories.tankMoney < 0) tankAccessories.tankMoney = 0;
+
+		ComsBuyAccessoryMessage buyMessage(
+			tankAccessories.tankId, choosenAccessory->getAccessoryId(), true);
+		TankAccessorySimAction *buyAction = new TankAccessorySimAction(buyMessage);
+		ScorchedServer::instance()->getServerSimulator().addSimulatorAction(buyAction);
 	}
 }
 
-Accessory *TankAIWeaponSets::WeaponSet::
-	getTankAccessoryByType(Tank *tank, const char *getType)
+Accessory *TankAIWeaponSets::WeaponSet::getTankAccessoryByType(
+	Tank *tank, const char *getType)
 {
 	DIALOG_ASSERT(WeaponSetEntry::checkType(getType));
 
@@ -225,12 +243,13 @@ bool TankAIWeaponSets::WeaponSetEntry::checkType(const char *type)
 	return true;
 }
 
-bool TankAIWeaponSets::WeaponSetEntry::weaponValid(Tank *tank, bool lastRound)
+bool TankAIWeaponSets::WeaponSetEntry::weaponValid(
+	WeaponSetAccessories &tankAccessories, bool lastRound)
 {
 	if (accessory->getNoBuy()) return false;
 
-	int currentCount = tank->getAccessories().getAccessoryCount(accessory);
-	int currentMoney = tank->getScore().getMoney();
+	int currentCount = tankAccessories.tankAccessories.getAccessoryCount(accessory);
+	int currentMoney = tankAccessories.tankMoney;
 
 	int maxCount = accessory->getMaximumNumber();
 	if (currentCount >= maxCount) return false;

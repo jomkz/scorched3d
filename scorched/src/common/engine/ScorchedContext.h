@@ -23,7 +23,6 @@
 
 class AccessoryStore;
 class ActionController;
-class GameState;
 class TargetSpace;
 class TargetContainer;
 class TargetMovement;
@@ -40,6 +39,7 @@ class TankModelStore;
 class TankTeamScore;
 class LUAScriptFactory;
 class LUAScriptHook;
+class Simulator;
 
 class ScorchedContext
 {
@@ -56,7 +56,6 @@ public:
 	ViewPoints &getViewPoints() { return *viewPoints; }
 	TargetSpace &getTargetSpace() { return *targetSpace; }
 	AccessoryStore &getAccessoryStore() { return *accessoryStore; }
-	GameState &getGameState() { return *gameState; }
 	TankContainer &getTankContainer() { return *tankContainer; }
 	TargetContainer &getTargetContainer() { return *targetContainer; }
 	TargetMovement &getTargetMovement() { return *targetMovement; }
@@ -71,10 +70,10 @@ public:
 	TankModelStore &getTankModels() { return *tankModelStore; }
 	LUAScriptFactory &getLUAScriptFactory() { return *luaScriptFactory; }
 	LUAScriptHook &getLUAScriptHook() { return *luaScriptHook; }
+	Simulator &getSimulator() { return *simulator; }
 
 protected:
 	ActionController *actionController;
-	GameState *gameState;
 	LandscapeMaps *landscapeMaps;
 	ComsMessageHandler *comsMessageHandler;
 	NetInterface *netInterface;
@@ -92,6 +91,7 @@ protected:
 	TargetMovement *targetMovement;
 	LUAScriptFactory *luaScriptFactory;
 	LUAScriptHook *luaScriptHook;
+	Simulator *simulator;
 	bool serverMode;
 };
 

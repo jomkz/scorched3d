@@ -27,7 +27,10 @@
 class ComsAddPlayerMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsAddPlayerMessageType;
+
 	ComsAddPlayerMessage();
+	ComsAddPlayerMessage(ComsAddPlayerMessage &other);
 	ComsAddPlayerMessage(
 		unsigned int playerId,
 		const LangString &playerName,
@@ -40,6 +43,7 @@ public:
 	virtual ~ComsAddPlayerMessage();
 
 	const LangString &getPlayerName() { return playerName_; }
+	void setPlayerName(const LangString &name) { playerName_ = name; }
 	const char *getPlayerType() { return playerType_.c_str(); }
 	const char *getModelName() { return modelName_.c_str(); }
 	const char *getTankType() { return typeName_.c_str(); }
@@ -69,7 +73,6 @@ protected:
 	NetBuffer playerIcon_;
 
 private:
-	ComsAddPlayerMessage(const ComsAddPlayerMessage &);
 	const ComsAddPlayerMessage & operator=(const ComsAddPlayerMessage &);
 
 };

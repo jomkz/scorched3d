@@ -22,19 +22,31 @@
 #define __INCLUDE_RandomGeneratorh_INCLUDE__
 
 #include <common/fixed.h>
+#include <net/NetBuffer.h>
 
 class RandomGenerator
 {
 public:
-	RandomGenerator();
 	virtual ~RandomGenerator();
+
+	virtual unsigned int getRandUInt() = 0;
+	virtual fixed getRandFixed() = 0;
+};
+
+class FileRandomGenerator : public RandomGenerator
+{
+public:
+	FileRandomGenerator();
+	virtual ~FileRandomGenerator();
 
 	void seed(unsigned int seed);
 	unsigned int getSeed();
 
-	unsigned int getRandUInt();
-	//float getRandFloat();
-	fixed getRandFixed();
+	virtual unsigned int getRandUInt();
+	virtual fixed getRandFixed();
+
+	bool writeMessage(NetBuffer &buffer);
+	bool readMessage(NetBufferReader &reader);
 
 protected:
 	static unsigned int bufferSize_;
@@ -42,8 +54,8 @@ protected:
 	unsigned int position_;
 
 private:
-	RandomGenerator(const RandomGenerator &other);
-	RandomGenerator &operator=(const RandomGenerator &other);
+	FileRandomGenerator(const FileRandomGenerator &other);
+	FileRandomGenerator &operator=(const FileRandomGenerator &other);
 
 };
 

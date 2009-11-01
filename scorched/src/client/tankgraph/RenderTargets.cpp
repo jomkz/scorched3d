@@ -29,7 +29,7 @@
 #include <target/TargetState.h>
 #include <client/ScorchedClient.h>
 #include <common/OptionsScorched.h>
-#include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <GLEXT/GLGlobalState.h>
 #include <landscape/Landscape.h>
 #include <land/VisibilityPatchGrid.h>
@@ -81,10 +81,10 @@ void RenderTargets::Renderer3D::simulate(const unsigned state, float simTime)
 	stepTime += simTime;
 
 	// step size = 1.0 / physics fps = steps per second
-	const float stepSize = 1.0f / float(ScorchedClient::instance()->getOptionsGame().getPhysicsFPS());
+	const float stepSize = 0.02f;
 	if (stepTime >= stepSize)
 	{
-		float time = stepTime * ScorchedClient::instance()->getActionController().getFast().asFloat();
+		float time = stepTime * ScorchedClient::instance()->getSimulator().getFast().asFloat();
 
 		void *currentPatchPtr = 0, *currentObject = 0;
 		TargetListIterator patchItor(patchInfo.getTargetVisibility());

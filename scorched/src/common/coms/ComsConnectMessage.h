@@ -37,6 +37,8 @@
 class ComsConnectMessage : public ComsMessage
 {
 public:
+	static ComsMessageType ComsConnectMessageType;
+
 	ComsConnectMessage();
 	virtual ~ComsConnectMessage();
 

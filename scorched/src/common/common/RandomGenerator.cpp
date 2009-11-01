@@ -24,13 +24,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+RandomGenerator::~RandomGenerator()
+{
+}
+
 // Yes you guessed it, a really sucky way to create cross platform
 // random numbers.  Store them in a file and read them in each system!
 
-unsigned int RandomGenerator::bufferSize_ = 0;
-unsigned int *RandomGenerator::buffer_ = 0;
+unsigned int FileRandomGenerator::bufferSize_ = 0;
+unsigned int *FileRandomGenerator::buffer_ = 0;
 
-RandomGenerator::RandomGenerator() :
+FileRandomGenerator::FileRandomGenerator() :
 	position_(0)
 {
 	// Cache the buffer so we only read it once
@@ -56,21 +60,21 @@ RandomGenerator::RandomGenerator() :
 	}
 }
 
-RandomGenerator::~RandomGenerator()
+FileRandomGenerator::~FileRandomGenerator()
 {
 }
 
-void RandomGenerator::seed(unsigned int seed)
+void FileRandomGenerator::seed(unsigned int seed)
 {
 	position_ = seed;
 }
 
-unsigned int RandomGenerator::getSeed()
+unsigned int FileRandomGenerator::getSeed()
 {
 	return position_;
 }
 
-unsigned int RandomGenerator::getRandUInt()
+unsigned int FileRandomGenerator::getRandUInt()
 {
 	unsigned int pos = position_ % bufferSize_;
 	position_++;
@@ -82,11 +86,23 @@ unsigned int RandomGenerator::getRandUInt()
 	return lvalue | rvalue;
 }
 
-fixed RandomGenerator::getRandFixed()
+fixed FileRandomGenerator::getRandFixed()
 {
 	unsigned int rd = getRandUInt();
 	unsigned int fract = rd % 10000;
 	fixed result(true, fract);
 
 	return result;
+}
+
+bool FileRandomGenerator::writeMessage(NetBuffer &buffer)
+{
+	buffer.addToBuffer(position_);
+	return true;
+}
+
+bool FileRandomGenerator::readMessage(NetBufferReader &reader)
+{
+	if (!reader.getFromBuffer(position_)) return false;
+	return true;
 }

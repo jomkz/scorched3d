@@ -62,11 +62,11 @@ PlayerDialog::PlayerDialog() :
 	needCentered_ = true;
 
 	// Add buttons
-	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("OK", "Ok"), 675, 10, 55, this, 
+	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("PLAY", "Play"), 665, 10, 65, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX))->getId();
 	if (ClientParams::instance()->getConnectedToServer())
 	{
-		cancelId_ = addWidget(new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 580, 10, 85, this, 
+		cancelId_ = addWidget(new GLWTextButton(LANG_RESOURCE("SPECTATE", "Spectate"), 550, 10, 105, this, 
 			GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX))->getId();
 	}
 
@@ -86,12 +86,6 @@ PlayerDialog::PlayerDialog() :
 		LANG_RESOURCE("AVATAR_TOOLTIP_CHANGE",
 		"The current player's avatar.\n"
 		"Click to change.\n"));
-	avatarTip2_.setText(ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("AVATAR", "Avatar"), 
-		LANG_RESOURCE("AVATAR_TOOLTIP_NO_CHANGE",
-		"The current player's avatar.\n"
-		"CANNOT be changed while playing,\n"
-		"you must quit to change."));
 	imageList_ = new GLWImageList(95.0f, 20.0f);
 	imageList_->addDirectory(S3D::getSettingsFile("avatars"));
 	imageList_->addDirectory(S3D::getDataFile("data/avatars"));
@@ -315,16 +309,8 @@ void PlayerDialog::nextPlayer()
 		if (tank) playerName_->setText(tank->getTargetName());
 	}
 		
-	if (tank->getState().getSpectator())
-	{
-		imageList_->setEnabled(true);
-		imageList_->setToolTip(&avatarTip1_);
-	}
-	else
-	{
-		imageList_->setEnabled(false);
-		imageList_->setToolTip(&avatarTip2_);
-	}
+	imageList_->setEnabled(true);
+	imageList_->setToolTip(&avatarTip1_);
 
 	// Add colors
 	colorDropDown_->clear();
@@ -434,7 +420,8 @@ void PlayerDialog::buttonDown(unsigned int id)
 			// Add avatar (if not one)
 			Tank *tank = ScorchedClient::instance()->getTankContainer().
 				getTankById(currentPlayerId_);
-			if (tank && !tank->getAvatar().getName()[0])
+			if (tank && 
+				strcmp(tank->getAvatar().getName(), imageList_->getCurrentShortPath()) != 0)
 			{
 				if (tank->getAvatar().loadFromFile(imageList_->getCurrentLongPath()))
 				{

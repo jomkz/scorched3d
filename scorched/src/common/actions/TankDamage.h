@@ -22,10 +22,10 @@
 #if !defined(__INCLUDE_TankDamageh_INCLUDE__)
 #define __INCLUDE_TankDamageh_INCLUDE__
 
-#include <engine/ActionReferenced.h>
+#include <actions/Action.h>
 #include <weapons/Weapon.h>
 
-class TankDamage : public ActionReferenced
+class TankDamage : public Action
 {
 public:
 	TankDamage(Weapon *weapon, 
@@ -37,6 +37,7 @@ public:
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
 	virtual std::string getActionDetails();
+	virtual std::string getActionType() { return "TankDamage"; }
 
 protected:
 	bool firstTime_;

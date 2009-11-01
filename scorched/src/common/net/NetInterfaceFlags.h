@@ -25,7 +25,8 @@ namespace NetInterfaceFlags
 {
 	enum Flags
 	{
-		fAsync = 1 // Send message async (no ack) if supported
+		fAsync = 1, // Send message async (no ack) if supported
+		fCompress = 2 // Compress message if supported
 	};
 };
 

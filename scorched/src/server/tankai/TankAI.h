@@ -49,9 +49,8 @@ public:
 	// Notification of actions to perform
 	virtual void newMatch() = 0;
 	virtual void newGame() = 0;
-	virtual void playMove() = 0;
-	virtual void buyAccessories() = 0;
-	virtual void autoDefense() = 0;
+	virtual void playMove(unsigned int moveId) = 0;
+	virtual void buyAccessories(unsigned int moveId) = 0;
 
 	// Notification of actions happened
 	virtual void tankHurt(Weapon *weapon, float damage, 

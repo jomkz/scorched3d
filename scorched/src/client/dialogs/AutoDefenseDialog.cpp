@@ -25,8 +25,6 @@
 #include <GLW/GLWWindowManager.h>
 #include <tankgraph/TankKeyboardControlUtil.h>
 #include <tank/TankContainer.h>
-#include <tank/TankAccessories.h>
-#include <tank/TankScore.h>
 #include <target/TargetShield.h>
 #include <target/TargetParachute.h>
 #include <common/OptionsTransient.h>
@@ -34,14 +32,14 @@
 #include <coms/ComsPlayedMoveMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <client/ClientState.h>
-#include <client/ClientDefenseHandler.h>
 #include <client/ScorchedClient.h>
 #include <lang/LangResource.h>
 
 AutoDefenseDialog::AutoDefenseDialog() :
 	GLWWindow("Auto Defense", 10.0f, 10.0f, 440.0f, 280.0f, 0,
 		"Allows the current player to raise and\n"
-		"lower defenses before the round starts")
+		"lower defenses before the round starts"),
+	tankInfo_(*BuyAccessoryDialogTankInfo::instance())
 {
 	needCentered_ = true;
 
@@ -87,23 +85,13 @@ AutoDefenseDialog::~AutoDefenseDialog()
 
 void AutoDefenseDialog::windowInit(const unsigned state)
 {
-	Tank *current = ScorchedClient::instance()->getTankContainer().getCurrentTank();
-	if (!current) 
+	if (tankInfo_.tankAccessories.getAutoDefense().haveDefense())
 	{
-		finished();
+		displayCurrent();
 	}
 	else
 	{
-		if (current->getDestinationId() == 
-			ScorchedClient::instance()->getTankContainer().getCurrentDestinationId() &&
-			current->getAccessories().getAutoDefense().haveDefense())
-		{
-			displayCurrent();
-		}
-		else
-		{
-			finished();
-		}
+		finished();
 	}
 }
 
@@ -111,47 +99,43 @@ void AutoDefenseDialog::buttonDown(unsigned int butid)
 {
 	if (butid == okId_)
 	{
-		Tank *tank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
-		if (tank)
+		// Set Parachutes on/off
+		if (ddpara_->getCurrentPosition() == 0)
 		{
-			// Set Parachutes on/off
-			if (ddpara_->getCurrentPosition() == 0)
+			TankKeyboardControlUtil::parachutesUpDown(tankInfo_.tankId, 0);
+		}
+		else
+		{
+			std::list<Accessory *> &paras =
+				tankInfo_.tankAccessories.getAllAccessoriesByType(
+					AccessoryPart::AccessoryParachute);
+			std::list<Accessory *>::iterator parasItor = paras.begin();
+			for (int i=1; i<ddpara_->getCurrentPosition() && parasItor != paras.end(); i++) parasItor++;
+			
+			if (parasItor != paras.end())
 			{
-				TankKeyboardControlUtil::parachutesUpDown(tank, 0);
+				TankKeyboardControlUtil::parachutesUpDown(tankInfo_.tankId, 
+					(*parasItor)->getAccessoryId());
 			}
-			else
-			{
-				std::list<Accessory *> &paras =
-					tank->getAccessories().getAllAccessoriesByType(
-						AccessoryPart::AccessoryParachute);
-				std::list<Accessory *>::iterator parasItor = paras.begin();
-				for (int i=1; i<ddpara_->getCurrentPosition() && parasItor != paras.end(); i++) parasItor++;
-				
-				if (parasItor != paras.end())
-				{
-					TankKeyboardControlUtil::parachutesUpDown(tank, 
-						(*parasItor)->getAccessoryId());
-				}
-			}
+		}
 
-			// Set shields on/off
-			if (ddshields_->getCurrentPosition() == 0)
+		// Set shields on/off
+		if (ddshields_->getCurrentPosition() == 0)
+		{
+			TankKeyboardControlUtil::shieldsUpDown(tankInfo_.tankId, 0);
+		}
+		else
+		{
+			std::list<Accessory *> &shields =
+				tankInfo_.tankAccessories.getAllAccessoriesByType(
+					AccessoryPart::AccessoryShield);
+			std::list<Accessory *>::iterator shieldsItor = shields.begin();
+			for (int i=1; i<ddshields_->getCurrentPosition() && shieldsItor != shields.end(); i++) shieldsItor++;
+			
+			if (shieldsItor != shields.end())
 			{
-				TankKeyboardControlUtil::shieldsUpDown(tank, 0);
-			}
-			else
-			{
-				std::list<Accessory *> &shields =
-					tank->getAccessories().getAllAccessoriesByType(
-						AccessoryPart::AccessoryShield);
-				std::list<Accessory *>::iterator shieldsItor = shields.begin();
-				for (int i=1; i<ddshields_->getCurrentPosition() && shieldsItor != shields.end(); i++) shieldsItor++;
-				
-				if (shieldsItor != shields.end())
-				{
-					TankKeyboardControlUtil::shieldsUpDown(tank,
-						(*shieldsItor)->getAccessoryId());
-				}
+				TankKeyboardControlUtil::shieldsUpDown(tankInfo_.tankId,
+					(*shieldsItor)->getAccessoryId());
 			}
 		}
 
@@ -166,15 +150,13 @@ void AutoDefenseDialog::buttonDown(unsigned int butid)
 void AutoDefenseDialog::displayCurrent()
 {
 	GLWWindowManager::instance()->showWindow(getId());
-	Tank *tank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
-	if (!tank) return;
 
 	// Put information at the top of the dialog
 	topPanel_->clear();
-	topPanel_->addWidget(new GLWFlag(tank->getColor(), 5, 15, 60));
-	topPanel_->addWidget(new GLWLabel(75, 10, tank->getTargetName()));
+	topPanel_->addWidget(new GLWFlag(tankInfo_.tankColor, 5, 15, 60));
+	topPanel_->addWidget(new GLWLabel(75, 10, tankInfo_.tankName));
 	topPanel_->addWidget(new GLWLabel(260, 20, 
-		LANG_STRING(S3D::formatStringBuffer("$%i", tank->getScore().getMoney()))));
+		LANG_STRING(S3D::formatStringBuffer("$%i", tankInfo_.tankMoney))));
 	topPanel_->addWidget(new GLWLabel(260, 0,
 		LANG_RESOURCE_2("ROUND_OF", "Round {0} of {1}",
 		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsTransient().getCurrentRoundNo()),
@@ -187,7 +169,7 @@ void AutoDefenseDialog::displayCurrent()
 	ddshields_->clear();
 	std::list<Accessory *>::iterator shieldsItor;
 	std::list<Accessory *> &shields =
-		tank->getAccessories().getAllAccessoriesByType(
+		tankInfo_.tankAccessories.getAllAccessoriesByType(
 			AccessoryPart::AccessoryShield);
 	ddshields_->addEntry(GLWSelectorEntry(LANG_RESOURCE("SHIELDS_OFF", "Shields Off"), &shieldsOffTip));
 	for (shieldsItor = shields.begin();
@@ -196,7 +178,7 @@ void AutoDefenseDialog::displayCurrent()
 	{
 		Accessory *shield = (*shieldsItor);
 		ddshields_->addEntry(GLWSelectorEntry(
-			tank->getAccessories().getAccessoryAndCountString(shield),
+			tankInfo_.tankAccessories.getAccessoryAndCountString(shield),
 			&shield->getToolTip(), 0, shield->getTexture()));
 	}
 
@@ -207,7 +189,7 @@ void AutoDefenseDialog::displayCurrent()
 	ddpara_->clear();
 	std::list<Accessory *>::iterator parachutesItor;
 	std::list<Accessory *> &parachutes =
-		tank->getAccessories().getAllAccessoriesByType(
+		tankInfo_.tankAccessories.getAllAccessoriesByType(
 			AccessoryPart::AccessoryParachute);
 	ddpara_->addEntry(GLWSelectorEntry(LANG_RESOURCE("PARACHUTES_OFF", "Parachutes Off"), &parachutesOffTip));
 	for (parachutesItor = parachutes.begin();
@@ -216,33 +198,15 @@ void AutoDefenseDialog::displayCurrent()
 	{
 		Accessory *parachute = (*parachutesItor);
 		ddpara_->addEntry(GLWSelectorEntry(
-			tank->getAccessories().getAccessoryAndCountString(parachute),
+			tankInfo_.tankAccessories.getAccessoryAndCountString(parachute),
 			&parachute->getToolTip(), 0, parachute->getTexture()));
 	}
 
 	// Set the currently shown items
-	Accessory *currentShield = tank->getShield().getCurrentShield();
-	if (currentShield)
-	{
-		ddshields_->setCurrentText(
-			tank->getAccessories().getAccessoryAndCountString(currentShield));
-	}
-	else
-	{
-		ddshields_->setCurrentText(LANG_RESOURCE("SHIELDS_OFF", "Shields Off"));
-	}
+	ddshields_->setCurrentText(LANG_RESOURCE("SHIELDS_OFF", "Shields Off"));
 
 	// Set the currently shown items
-	Accessory *currentParachute = tank->getParachute().getCurrentParachute();
-	if (currentParachute)
-	{
-		ddpara_->setCurrentText(
-			tank->getAccessories().getAccessoryAndCountString(currentParachute));
-	}
-	else
-	{
-		ddpara_->setCurrentText(LANG_RESOURCE("PARACHUTES_OFF", "Parachutes Off"));
-	}
+	ddpara_->setCurrentText(LANG_RESOURCE("PARACHUTES_OFF", "Parachutes Off"));
 }
 
 void AutoDefenseDialog::select(unsigned int id, 
@@ -257,7 +221,8 @@ void AutoDefenseDialog::finished()
 {
 	// send message saying we are finished with shot
 	ComsPlayedMoveMessage comsMessage(
-		ScorchedClient::instance()->getTankContainer().getCurrentPlayerId(), 
+		tankInfo_.tankId, 
+		tankInfo_.tankMoveId,
 		ComsPlayedMoveMessage::eFinishedBuy);
 	ComsMessageSender::sendToServer(comsMessage);
 

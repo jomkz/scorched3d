@@ -18,46 +18,52 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #if !defined(__INCLUDE_ServerStateh_INCLUDE__)
 #define __INCLUDE_ServerStateh_INCLUDE__
 
-#include <engine/GameState.h>
+#include <server/ServerStateEnoughPlayers.h>
+#include <server/ServerStateNewGame.h>
+#include <server/ServerStateStartingMatch.h>
+#include <server/ServerStateBuying.h>
+#include <server/ServerStatePlaying.h>
+#include <server/ServerStateScore.h>
 
-namespace ServerState
+class ServerState
 {
+public:
+	ServerState();
+	virtual ~ServerState();
+
 	enum ServerStateEnum
 	{
-		ServerStateTooFewPlayers = 1,
-		ServerStateReset,
-		ServerStateStarting,
-		ServerStateNewGame,
-		ServerStateNewGameReady,
-		ServerStateNextRound,
-		ServerStateNextShot,
-		ServerStateNextTurn,
-		ServerStatePlaying,
-		ServerStateBuying,
-		ServerStateShot,
-		ServerStateShotReady,
-		ServerStateShotFinished
+		ServerStartupState = 1,
+		ServerWaitingForPlayersState ,
+		ServerMatchCountDownState,
+		ServerNewLevelState,
+		ServerBuyingState,
+		ServerPlayingState,
+		ServerScoreState
 	};
 
-	enum ServerStimulusEnum
-	{
-		ServerStimulusNewGame = 1,
-		ServerStimulusNewGameReady,
-		ServerStimulusNextTurn,
-		ServerStimulusNextRound,
-		ServerStimulusNextShot,
-		ServerStimulusPlaying,
-		ServerStimulusBuying,
-		ServerStimulusShot,
-		ServerStimulusTooFewPlayers,
-		ServerStimulusStarting
-	};
+	void simulate(fixed frameTime);
 
-	void setupStates(GameState &gameState);
+	ServerStateEnum getState() { return serverState_; }	
+
+	void buyingFinished(ComsPlayedMoveMessage &message);
+	void moveFinished(ComsPlayedMoveMessage &message);
+	void shotsFinished(unsigned int moveId);
+	void scoreFinished();
+	void roundFinished();
+
+protected:
+	ServerStateEnum serverState_;
+
+	ServerStateEnoughPlayers enoughPlayers_;
+	ServerStateNewGame newGame_;
+	ServerStateStartingMatch startingMatch_;
+	ServerStateBuying buying_;
+	ServerStatePlaying playing_;
+	ServerStateScore score_;
 };
 
 #endif

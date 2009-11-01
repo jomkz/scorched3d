@@ -47,7 +47,6 @@ public:
 	void generate(ProgressCounter *counter = 0);
 	void recalculate();
 	void restoreLandscapeTexture();
-	void reset(ProgressCounter *counter = 0);
 
 	// Access to internal objects
 	Smoke &getSmoke() { return *smoke_; }

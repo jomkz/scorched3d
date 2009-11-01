@@ -18,171 +18,116 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <engine/GameState.h>
-#include <engine/ActionController.h>
 #include <server/ServerState.h>
-#include <server/ServerNewGameState.h>
-#include <server/ServerNextRoundState.h>
-#include <server/ServerNextTurnState.h>
-#include <server/ServerNextShotState.h>
-#include <server/ServerReadyState.h>
-#include <server/ServerResetState.h>
-#include <server/ServerTooFewPlayersStimulus.h>
-#include <server/ServerStateTooFewPlayersState.h>
-#include <server/ServerPlayingState.h>
-#include <server/ServerStartingState.h>
-#include <server/ServerShotState.h>
-#include <server/ServerShotFinishedState.h>
-#include <server/ScorchedServer.h>
+#include <server/ServerSyncCheck.h>
 
-void ServerState::setupStates(GameState &gameState)
+ServerState::ServerState() :
+	serverState_(ServerStartupState)
 {
-	static class DummyLoop : public GameStateI
+}
+
+ServerState::~ServerState()
+{
+}
+
+void ServerState::simulate(fixed frameTime)
+{
+	switch (serverState_)
 	{
-	public:
-		DummyLoop() : GameStateI("DummyLoop") {}
-	} dummyLoop_;
+	case ServerStartupState:
+		newGame_.newGame();
+		serverState_ = ServerWaitingForPlayersState;
+		break;
+	case ServerWaitingForPlayersState:
+		if (enoughPlayers_.enoughPlayers())
+		{
+			startingMatch_.reset();
+			serverState_ = ServerMatchCountDownState;
+		}
+		break;
+	case ServerMatchCountDownState:
+		if (enoughPlayers_.enoughPlayers())
+		{
+			if (startingMatch_.startingMatch(frameTime))
+			{
+				serverState_ = ServerNewLevelState;
+			}
+		}
+		else
+		{
+			startingMatch_.stoppingMatch();
+			serverState_ = ServerWaitingForPlayersState;
+		}
+		break;
+	case ServerNewLevelState:
+		newGame_.newGame();
 
-	gameState.clear();
+		serverState_ = ServerBuyingState;
+		buying_.enterState();
+		break;
+	case ServerBuyingState:
+		if (buying_.simulate(frameTime))
+		{
+			serverState_ = ServerPlayingState;
+			playing_.enterState();
+		}
+		break;
+	case ServerPlayingState:
+		if (playing_.showScore() || 
+			!enoughPlayers_.enoughPlayers())
+		{
+			serverState_ = ServerScoreState;
+			score_.enterState(enoughPlayers_);
+		}
+		else 
+		{
+			playing_.simulate(frameTime);
+		}	
+		break;
+	case ServerScoreState:
+		if (score_.simulate())
+		{
+			if (score_.overAllWinner())
+			{
+				serverState_ = ServerWaitingForPlayersState;
+			}
+			else
+			{
+				serverState_ = ServerNewLevelState;
+			}
+		}
+		break;
+	}
 
-	// ServerStateTooFewPlayers (Start State)
-	ServerStateTooFewPlayersState *serverTooFewPlayers = 
-		new ServerStateTooFewPlayersState();
-	gameState.addStateEntry(ServerStateTooFewPlayers,
-		serverTooFewPlayers);
-	gameState.addStateStimulus(ServerStateTooFewPlayers, 
-		serverTooFewPlayers, ServerStateStarting);
+	ServerSyncCheck::instance()->simulate();
+}
 
-	// ServerStateStarting
-	ServerStartingState *serverStarting = 
-		new ServerStartingState();
-	gameState.addStateEntry(ServerStateStarting,
-		serverStarting);
-	gameState.addStateStimulus(ServerStateStarting, 
-		ServerStimulusStarting, ServerStateStarting);	
-	gameState.addStateStimulus(ServerStateStarting, 
-		ServerTooFewPlayersStimulus::instance(), ServerStateTooFewPlayers);	
-	gameState.addStateStimulus(ServerStateStarting, 
-		serverStarting, ServerStateReset);
+void ServerState::buyingFinished(ComsPlayedMoveMessage &message)
+{
+	if (getState() != ServerState::ServerBuyingState) return;
+	buying_.buyingFinished(message);
+}
 
-	// ServerStateReset 
-	ServerResetState *serverReset = new ServerResetState();
-	gameState.addStateEntry(ServerStateReset,
-		serverReset);
-	gameState.addStateStimulus(ServerStateReset, 
-		ServerStimulusNewGame, ServerStateNewGame);
+void ServerState::moveFinished(ComsPlayedMoveMessage &message)
+{
+	if (getState() != ServerState::ServerPlayingState) return;
+	playing_.moveFinished(message);
+}
 
-	// ServerStateNewGame
-	ServerNewGameState *serverNewGame = new ServerNewGameState;
-	gameState.addStateEntry(ServerStateNewGame,
-		serverNewGame);
-	gameState.addStateStimulus(ServerStateNewGame, 
-		ServerStimulusNewGameReady, ServerStateNewGameReady);
+void ServerState::shotsFinished(unsigned int moveId)
+{
+	if (getState() != ServerState::ServerPlayingState) return;
+	playing_.shotsFinished(moveId);
+}
 
-	// ServerStateNewGameReady
-	ServerReadyState *serverNewGameReady = new ServerReadyState();
-#ifdef S3D_SERVER
-	// Only required on the server.
-	// For client games, there will only be one client waiting
-	// so the server and client will start simulating in sync anyway
-	// The server starts simulating after this state (and will exit this
-	// state as soon as the only client is ready).
-	gameState.addStateLoop(ServerStateNewGameReady, &dummyLoop_, 
-		&ScorchedServer::instance()->getActionController());
-#endif
-	gameState.addStateEntry(ServerStateNewGameReady,
-		serverNewGameReady);
-	gameState.addStateStimulus(ServerStateNewGameReady, 
-		serverNewGameReady, ServerStateNextRound);
+void ServerState::scoreFinished()
+{
+	if (getState() != ServerState::ServerScoreState) return;
+	score_.scoreFinished();
+}
 
-	// ServerStateNextRound
-	ServerNextRoundState *serverNextRound = new ServerNextRoundState();
-	gameState.addStateLoop(ServerStateNextRound, &dummyLoop_, 
-		&ScorchedServer::instance()->getActionController());
-	gameState.addStateEntry(ServerStateNextRound,
-		serverNextRound);
-	gameState.addStateStimulus(ServerStateNextRound, 
-		ServerStimulusNextShot, ServerStateNextShot);
-
-	// ServerStateNextShot
-	ServerNextShotState *serverNextShot = new ServerNextShotState;
-	gameState.addStateLoop(ServerStateNextShot, &dummyLoop_, 
-		&ScorchedServer::instance()->getActionController());
-	gameState.addStateEntry(ServerStateNextShot,
-		serverNextShot);
-	gameState.addStateStimulus(ServerStateNextShot, 
-		ServerStimulusNextTurn, ServerStateNextTurn);
-	gameState.addStateStimulus(ServerStateNextShot,
-		ServerStimulusNewGame, ServerStateNewGame);	
-	gameState.addStateStimulus(ServerStateNextShot,
-		ServerStimulusStarting, ServerStateStarting);	
-	gameState.addStateStimulus(ServerStateNextShot, 
-		ServerStimulusNextRound, ServerStateNextRound);
-
-	// ServerStateNextTurn
-	ServerNextTurnState *serverNextTurn = new ServerNextTurnState;
-	gameState.addStateLoop(ServerStateNextTurn, &dummyLoop_, 
-		&ScorchedServer::instance()->getActionController());
-	gameState.addStateEntry(ServerStateNextTurn,
-		serverNextTurn);
-	gameState.addStateStimulus(ServerStateNextTurn,
-		ServerStimulusBuying, ServerStateBuying);	
-	gameState.addStateStimulus(ServerStateNextTurn,
-		ServerStimulusPlaying, ServerStatePlaying);	
-	gameState.addStateStimulus(ServerStateNextTurn,
-		ServerStimulusShot, ServerStateShot);	
-
-	// ServerStatePlaying
-	ServerPlayingState *serverPlaying = new ServerPlayingState;
-	gameState.addStateLoop(ServerStatePlaying, &dummyLoop_, 
-		&ScorchedServer::instance()->getActionController());
-	gameState.addStateEntry(ServerStatePlaying,
-		serverPlaying);
-	gameState.addStateStimulus(ServerStatePlaying,
-		ServerTooFewPlayersStimulus::instance(), ServerStateShot);	
-	gameState.addStateStimulus(ServerStatePlaying,
-		serverPlaying, ServerStateNextTurn);
-
-	// ServerStateBuying
-	ServerPlayingState *serverBuying = new ServerPlayingState;
-	gameState.addStateLoop(ServerStateBuying, &dummyLoop_, 
-		&ScorchedServer::instance()->getActionController());
-	gameState.addStateEntry(ServerStateBuying,
-		serverBuying);
-	gameState.addStateStimulus(ServerStateBuying,
-		ServerTooFewPlayersStimulus::instance(), ServerStateShot);	
-	gameState.addStateStimulus(ServerStateBuying,
-		serverBuying, ServerStateNextTurn);
-
-	// ServerStateShot
-	ServerShotState *serverShot = new ServerShotState();
-	gameState.addStateLoop(ServerStateShot, &dummyLoop_, 
-		&ScorchedServer::instance()->getActionController());
-	gameState.addStateEntry(ServerStateShot,
-		serverShot);
-	gameState.addStateStimulus(ServerStateShot,
-		serverShot, ServerStateShotReady);
-
-	// ServerStateShotReady
-	ServerReadyState *serverShotReady = new ServerReadyState();
-	gameState.addStateLoop(ServerStateShotReady, &dummyLoop_, 
-		&ScorchedServer::instance()->getActionController());
-	gameState.addStateEntry(ServerStateShotReady,
-		serverShotReady);
-	gameState.addStateStimulus(ServerStateShotReady, 
-		serverShotReady, ServerStateShotFinished);
-
-	// ServerStateShotFinished
-	ServerShotFinishedState *serverShotFinished = new ServerShotFinishedState(serverShot);
-	gameState.addStateLoop(ServerStateShotFinished, &dummyLoop_, 
-		&ScorchedServer::instance()->getActionController());
-	gameState.addStateEntry(ServerStateShotFinished,
-		serverShotFinished);
-	gameState.addStateStimulus(ServerStateShotFinished, 
-		ServerStimulusTooFewPlayers, ServerStateTooFewPlayers);
-	gameState.addStateStimulus(ServerStateShotFinished, 
-		serverShotFinished, ServerStateNextShot);
-
-	// Set the start state
-	gameState.setState(ServerStateTooFewPlayers);
+void ServerState::roundFinished()
+{
+	if (getState() != ServerState::ServerPlayingState) return;
+	playing_.roundFinished();
 }

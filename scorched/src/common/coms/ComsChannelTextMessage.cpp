@@ -20,13 +20,15 @@
 
 #include <coms/ComsChannelTextMessage.h>
 
+ComsMessageType ComsChannelTextMessage::ComsChannelTextMessageType("ComsChannelTextMessageType");
+
 ComsChannelTextMessage::ComsChannelTextMessage() :
-	ComsMessage("ComsChannelTextMessage")
+	ComsMessage(ComsChannelTextMessageType)
 {
 }
 
 ComsChannelTextMessage::ComsChannelTextMessage(ChannelText &text) :
-	ComsMessage("ComsChannelTextMessage"),
+	ComsMessage(ComsChannelTextMessageType),
 	channelText_(text)
 {
 }

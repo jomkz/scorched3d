@@ -20,7 +20,6 @@
 
 #include <server/ServerBrowserInfo.h>
 #include <server/ScorchedServer.h>
-#include <server/ServerState.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <common/Defines.h>
@@ -139,15 +138,13 @@ void ServerBrowserInfo::processStatusMessage(std::list<std::string> &reply)
 	char *serverName = (char *) ScorchedServer::instance()->getOptionsGame().getServerName();
 	char version[256];
 	snprintf(version, 256, "%s (%s)", S3D::ScorchedVersion.c_str(), S3D::ScorchedProtocolVersion.c_str());
-	unsigned currentState = ScorchedServer::instance()->getGameState().getState();
-	bool started = (currentState != ServerState::ServerStateTooFewPlayers);
 	char players[25];
 	snprintf(players, 25, "%i", ScorchedServer::instance()->getTankContainer().getNoOfTanks());
 	char maxplayers[25];
 	snprintf(maxplayers, 25, "%i", ScorchedServer::instance()->getOptionsGame().getNoMaxPlayers());
 	char type[100];
 	snprintf(type, 100, "%s (%s)", 
-		ScorchedServer::instance()->getOptionsTransient().getGameType(),
+		ScorchedServer::instance()->getOptionsGame().getTurnType().getValueAsString(),
 		((ScorchedServer::instance()->getOptionsGame().getTeams() > 1)?"Teams":"No Teams"));
 	bool stats = (0 != strcmp(ScorchedServer::instance()->getOptionsGame().getStatsLogger(), "none"));
 
@@ -164,7 +161,6 @@ void ServerBrowserInfo::processStatusMessage(std::list<std::string> &reply)
 	}
 
 	reply.push_back(addTag("gametype", type));
-	reply.push_back(addTag("state", (started?"Started":"Waiting")));
 	reply.push_back(addTag("servername", serverName));
 	reply.push_back(addTag("fullversion", version));
 	reply.push_back(addTag("version", S3D::ScorchedVersion));

@@ -22,6 +22,7 @@
 #include <actions/TankFalling.h>
 #include <actions/TankSay.h>
 #include <actions/CameraPositionAction.h>
+#include <actions/Resurrection.h>
 #ifndef S3D_SERVER
 	#include <sprites/TextActionRenderer.h>
 #endif
@@ -32,8 +33,10 @@
 #include <weapons/AccessoryStore.h>
 #include <weapons/Shield.h>
 #include <landscapemap/LandscapeMaps.h>
+#include <placement/PlacementTankPosition.h>
 #include <engine/ScorchedContext.h>
 #include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <tank/TankContainer.h>
 #include <tank/TankTeamScore.h>
 #include <tank/TankScore.h>
@@ -51,7 +54,7 @@ TankDamage::TankDamage(Weapon *weapon,
 		unsigned int damagedPlayerId, WeaponFireContext &weaponContext,
 		fixed damage, bool useShieldDamage, bool checkFall,
 		bool shieldOnlyDamage) :
-	ActionReferenced("TankDamage"),
+	Action(weaponContext.getPlayerId()),
 	weapon_(weapon), firstTime_(true),
 	damagedPlayerId_(damagedPlayerId), weaponContext_(weaponContext),
 	damage_(damage), useShieldDamage_(useShieldDamage), checkFall_(checkFall),
@@ -119,8 +122,7 @@ void TankDamage::calculateDamage()
 			TankAI *ai = tank->getTankAI();
 			if (ai)
 			{		
-				if (tank->getState().getState() == TankState::sNormal &&
-					!tank->getState().getSpectator())
+				if (tank->getState().getState() == TankState::sNormal)
 				{
 					ai->tankHurt(weapon_, damage_.asFloat(),
 						damagedTarget->getPlayerId(), 
@@ -346,6 +348,20 @@ void TankDamage::calculateDamage()
 					damagedTank->getState().setLives(
 						damagedTank->getState().getLives() - 1);
 				}
+
+				// Check if we can ressurect
+				if (damagedTank->getState().getLives() > 0 ||
+					damagedTank->getState().getMaxLives() == 0)
+				{
+					FixedVector tankPos = PlacementTankPosition::placeTank(
+						damagedTank->getPlayerId(), damagedTank->getTeam(),
+						*context_,
+						context_->getSimulator().getRandomGenerator());
+
+					Resurrection *rez = new Resurrection(
+						damagedTank->getPlayerId(), tankPos, 5);
+					context_->getActionController().addAction(rez);					
+				}
 			}
 		}
 	}
@@ -546,6 +562,10 @@ void TankDamage::logDeath()
 				if (vbonus > context_->getOptionsGame().getMaxSkillLost())
 				{
 					vbonus = context_->getOptionsGame().getMaxSkillLost();
+				}
+				if (kbonus > context_->getOptionsGame().getMaxSkillGained())
+				{
+					kbonus = context_->getOptionsGame().getMaxSkillGained();
 				}
 
 				//$vbonus = $vskill if $vbonus > $vskill;
