@@ -131,13 +131,13 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	ScorchedClient::instance()->getLandscapeMaps().generateMaps(
 		ScorchedClient::instance()->getContext(),
 		message.getLandscapeDefinition(),
-		ProgressDialogSync::events_instance());
+		ProgressDialogSync::noevents_instance());
 
 	// Reset and initialize simulator and
 	ScorchedClient::instance()->getClientSimulator().newLevel();
 
 	// Calculate all the new landscape settings (graphics)
-	Landscape::instance()->generate(ProgressDialogSync::events_instance());
+	Landscape::instance()->generate(ProgressDialogSync::noevents_instance());
 
 	// Add all missed actions to the simulator and sync the simulator
 	std::list<ComsSimulateMessage *> simulateMessages;
