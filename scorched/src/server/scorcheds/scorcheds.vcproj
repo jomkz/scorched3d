@@ -2564,6 +2564,14 @@
 				RelativePath="..\..\common\engine\ViewPoints.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\common\engine\Wind.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\engine\Wind.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="landscapedef"
