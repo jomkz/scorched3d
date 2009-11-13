@@ -80,6 +80,7 @@ void Wind::newLevel()
 
 	updateDirection();
 	updateChangeTime();
+	windStartingDirection_ = windDirection_;
 }
 
 void Wind::updateDirection()

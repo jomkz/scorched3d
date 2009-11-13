@@ -68,6 +68,13 @@ void ServerState::simulate(fixed frameTime)
 	case ServerBuyingState:
 		if (buying_.simulate(frameTime))
 		{
+			serverState_ = ServerTankNewGameState;
+			tankNewGame_.enterState();
+		}
+		break;
+	case ServerTankNewGameState:
+		if (tankNewGame_.simulate())
+		{
 			serverState_ = ServerPlayingState;
 			playing_.enterState();
 		}

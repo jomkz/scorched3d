@@ -977,6 +977,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\server\ServerStateTankNewGame.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerStateTankNewGame.h"
+				>
+			</File>
+			<File
 				RelativePath="..\server\ServerSyncCheck.cpp"
 				>
 			</File>
@@ -3889,14 +3897,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\simactions\TankAliveSimAction.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\simactions\TankAliveSimAction.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\simactions\TankBotBallanceSimAction.cpp"
 				>
 			</File>
@@ -3934,6 +3934,22 @@
 			</File>
 			<File
 				RelativePath="..\..\common\simactions\TankLoadedSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankNewGameSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankNewGameSimAction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankNewMatchSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankNewMatchSimAction.h"
 				>
 			</File>
 			<File

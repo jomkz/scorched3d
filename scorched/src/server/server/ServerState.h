@@ -23,6 +23,7 @@
 
 #include <server/ServerStateEnoughPlayers.h>
 #include <server/ServerStateNewGame.h>
+#include <server/ServerStateTankNewGame.h>
 #include <server/ServerStateStartingMatch.h>
 #include <server/ServerStateBuying.h>
 #include <server/ServerStatePlaying.h>
@@ -41,6 +42,7 @@ public:
 		ServerMatchCountDownState,
 		ServerNewLevelState,
 		ServerBuyingState,
+		ServerTankNewGameState,
 		ServerPlayingState,
 		ServerScoreState
 	};
@@ -64,6 +66,7 @@ protected:
 	ServerStateBuying buying_;
 	ServerStatePlaying playing_;
 	ServerStateScore score_;
+	ServerStateTankNewGame tankNewGame_;
 };
 
 #endif

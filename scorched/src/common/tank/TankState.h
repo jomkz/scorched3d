@@ -64,6 +64,8 @@ public:
 	int getMaxLives() { return maxLives_; }
 	void setMoveId(unsigned int moveId) { moveId_ = moveId; }
 	unsigned int getMoveId() { return moveId_; }
+	bool getNewlyJoined() { return newlyJoined_; }
+	void setNewlyJoined(bool n) { newlyJoined_ = n; }
 	
 	const char *getStateString();
 	const char *getSmallStateString();
@@ -82,6 +84,7 @@ protected:
 	bool muted_;
 	bool skipshots_;
 	bool notSpectator_;
+	bool newlyJoined_;
 
 };
 

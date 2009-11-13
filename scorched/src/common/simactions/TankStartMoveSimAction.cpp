@@ -54,7 +54,10 @@ TankStartMoveSimAction::~TankStartMoveSimAction()
 bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 {
 	Tank *tank = context.getTankContainer().getTankById(playerId_);
-	if (!tank || tank->getState().getState() != TankState::sNormal) return true;
+	if (!tank) return true;
+
+	if (tank->getState().getState() != TankState::sNormal && !buying_) return true;
+	if (tank->getState().getState() != TankState::sDead && buying_) return true;
 
 	if (!context.getServerMode())
 	{

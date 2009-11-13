@@ -100,7 +100,8 @@ void SkyDome::simulate(float frameTime)
 
 	// Move the cloud layer
 	cloudSpeed_ = wantedSpeed;
-	cloudDirection_ = -ScorchedClient::instance()->getSimulator().getWind().getWindDirection().asVector();
+	cloudDirection_ = -ScorchedClient::instance()->getSimulator().getWind().
+		getWindStartingDirection().asVector();
 	xy_ += frameTime / cloudSpeed_;
 
 	// The sky flash

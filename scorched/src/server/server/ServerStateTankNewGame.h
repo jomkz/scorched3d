@@ -18,30 +18,17 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerStateBuyingh_INCLUDE__)
-#define __INCLUDE_ServerStateBuyingh_INCLUDE__
+#if !defined(__INCLUDE_ServerStateTankNewGameh_INCLUDE__)
+#define __INCLUDE_ServerStateTankNewGameh_INCLUDE__
 
-#include <server/ServerTurnsSimultaneous.h>
-#include <coms/ComsPlayedMoveMessage.h>
-
-class ServerStateBuying
+class ServerStateTankNewGame 
 {
 public:
-	ServerStateBuying();
-	virtual ~ServerStateBuying();
+	ServerStateTankNewGame();
+	virtual ~ServerStateTankNewGame();
 
 	void enterState();
-	bool simulate(fixed frameTime);
-
-	void buyingFinished(ComsPlayedMoveMessage &playedMessage);
-
-protected:
-	fixed totalTime_;
-	unsigned int nextMoveId_;
-	std::set<unsigned int> joinedPlayers_;
-	std::set<unsigned int> boughtPlayers_;
-
-	void playerBuying(unsigned int playerId);
+	bool simulate();
 };
 
 #endif

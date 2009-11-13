@@ -18,40 +18,34 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <simactions/TankAliveSimAction.h>
+#include <simactions/TankNewGameSimAction.h>
 #include <placement/PlacementTankPosition.h>
 #include <landscapemap/DeformLandscape.h>
 #include <engine/Simulator.h>
-#include <tank/TankAvatar.h>
 #include <tank/TankState.h>
 #include <tank/TankContainer.h>
-#include <tank/TankAccessories.h>
-#include <tank/TankScore.h>
 #include <target/TargetLife.h>
-#include <common/Logger.h>
 
-REGISTER_CLASS_SOURCE(TankAliveSimAction);
+REGISTER_CLASS_SOURCE(TankNewGameSimAction);
 
-TankAliveSimAction::TankAliveSimAction() :
-	playerId_(0), newMatch_(false)
+TankNewGameSimAction::TankNewGameSimAction() :
+	playerId_(0)
 {
 }
 
-TankAliveSimAction::TankAliveSimAction(unsigned int playerId, bool newMatch) :
-	playerId_(playerId), newMatch_(newMatch)
+TankNewGameSimAction::TankNewGameSimAction(unsigned int playerId) :
+	playerId_(playerId)
 {
 }
 
-TankAliveSimAction::~TankAliveSimAction()
+TankNewGameSimAction::~TankNewGameSimAction()
 {
 }
 
-bool TankAliveSimAction::invokeAction(ScorchedContext &context)
+bool TankNewGameSimAction::invokeAction(ScorchedContext &context)
 {
 	Tank *tank = context.getTankContainer().getTankById(playerId_);
 	if (!tank) return false;
-
-	if (newMatch_) tank->newMatch();
 
 	FixedVector tankPos = PlacementTankPosition::placeTank(
 		tank->getPlayerId(), tank->getTeam(),
@@ -63,34 +57,17 @@ bool TankAliveSimAction::invokeAction(ScorchedContext &context)
 	tank->newGame();
 	if (!context.getServerMode()) tank->clientNewGame();
 
-	if (scoreNetBuffer_.getBufferUsed() > 0)
-	{
-		NetBufferReader reader(scoreNetBuffer_);
-		if (!tank->getAccessories().readMessage(reader) ||
-			!tank->getScore().readMessage(reader))
-		{
-			Logger::log("ERROR: Failed to update residual player info (read)");
-		}
-
-		// Don't get credited for the new game stats
-		tank->getScore().resetTotalEarnedStats();
-	}
-
 	return true;
 }
 
-bool TankAliveSimAction::writeMessage(NetBuffer &buffer)
+bool TankNewGameSimAction::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(playerId_);
-	buffer.addToBuffer(newMatch_);
-	buffer.addToBuffer(scoreNetBuffer_);
 	return true;
 }
 
-bool TankAliveSimAction::readMessage(NetBufferReader &reader)
+bool TankNewGameSimAction::readMessage(NetBufferReader &reader)
 {
 	if (!reader.getFromBuffer(playerId_)) return false;
-	if (!reader.getFromBuffer(newMatch_)) return false;
-	if (!reader.getFromBuffer(scoreNetBuffer_)) return false;
 	return true;
 }

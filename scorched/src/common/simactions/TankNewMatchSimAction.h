@@ -18,17 +18,17 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_TankAliveSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
-#define AFX_TankAliveSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
+#if !defined(AFX_TankNewMatchSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#define AFX_TankNewMatchSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
 #include <simactions/SimAction.h>
 
-class TankAliveSimAction : public SimAction
+class TankNewMatchSimAction : public SimAction
 {
 public:
-	TankAliveSimAction();
-	TankAliveSimAction(unsigned int playerId, bool newMatch);
-	virtual ~TankAliveSimAction();
+	TankNewMatchSimAction();
+	TankNewMatchSimAction(unsigned int playerId);
+	virtual ~TankNewMatchSimAction();
 
 	virtual bool invokeAction(ScorchedContext &context);
 
@@ -37,11 +37,10 @@ public:
 
 	NetBuffer &getScoreNetBuffer() { return scoreNetBuffer_; }
 
-REGISTER_CLASS_HEADER(TankAliveSimAction);
+REGISTER_CLASS_HEADER(TankNewMatchSimAction);
 protected:
 	unsigned int playerId_;
-	bool newMatch_;
 	NetBuffer scoreNetBuffer_;
 };
 
-#endif // !defined(AFX_TankAliveSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#endif // !defined(AFX_TankNewMatchSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

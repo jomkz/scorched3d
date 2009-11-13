@@ -65,7 +65,7 @@ void TankDeadContainer::addDeadTank(Tank *tank)
 	deadTanks_[tank->getUniqueId()] = buffer;
 }
 
-void TankDeadContainer::getDeadTank(Tank *tank, TankAliveSimAction *simAction)
+void TankDeadContainer::getDeadTank(Tank *tank, TankNewMatchSimAction *simAction)
 {
 	// Get the buffer
 	std::map<std::string, NetBuffer *>::iterator finditor =

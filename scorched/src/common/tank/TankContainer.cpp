@@ -106,7 +106,7 @@ int TankContainer::teamCount()
 		Tank *current = (*mainitor).second;
 		if (!current->isTemp())
 		{
-			if (current->getState().getState() == TankState::sNormal)
+			if (current->getState().getLives() > 0)
 			{
 				if (current->getTeam() == 1) team1=1;
 				if (current->getTeam() == 2) team2=1;
@@ -129,7 +129,7 @@ int TankContainer::aliveCount()
 		Tank *current = (*mainitor).second;
 		if (!current->isTemp())
 		{
-			if (current->getState().getState() == TankState::sNormal)
+			if (current->getState().getLives() > 0)
 			{
 				alive++;
 			}

@@ -18,30 +18,26 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerStateBuyingh_INCLUDE__)
-#define __INCLUDE_ServerStateBuyingh_INCLUDE__
+#if !defined(AFX_TankNewGameSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#define AFX_TankNewGameSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
-#include <server/ServerTurnsSimultaneous.h>
-#include <coms/ComsPlayedMoveMessage.h>
+#include <simactions/SimAction.h>
 
-class ServerStateBuying
+class TankNewGameSimAction : public SimAction
 {
 public:
-	ServerStateBuying();
-	virtual ~ServerStateBuying();
+	TankNewGameSimAction();
+	TankNewGameSimAction(unsigned int playerId);
+	virtual ~TankNewGameSimAction();
 
-	void enterState();
-	bool simulate(fixed frameTime);
+	virtual bool invokeAction(ScorchedContext &context);
 
-	void buyingFinished(ComsPlayedMoveMessage &playedMessage);
+	virtual bool writeMessage(NetBuffer &buffer);
+	virtual bool readMessage(NetBufferReader &reader);
 
+REGISTER_CLASS_HEADER(TankNewGameSimAction);
 protected:
-	fixed totalTime_;
-	unsigned int nextMoveId_;
-	std::set<unsigned int> joinedPlayers_;
-	std::set<unsigned int> boughtPlayers_;
-
-	void playerBuying(unsigned int playerId);
+	unsigned int playerId_;
 };
 
-#endif
+#endif // !defined(AFX_TankNewGameSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

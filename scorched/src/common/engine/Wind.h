@@ -37,13 +37,14 @@ public:
 	fixed getWindAngle() { return windAngle_; }
 	fixed getWindSpeed() { return windSpeed_; }
 	FixedVector &getWindDirection() { return windDirection_; }
+	FixedVector &getWindStartingDirection() { return windStartingDirection_; }
 	bool getWindOn() { return (windSpeed_ > fixed(0)); }
 
 protected:
 	ScorchedContext *context_;
 	fixed windAngle_, windStartAngle_, windSpeed_;
 	fixed windChangeTime_;
-	FixedVector windDirection_;
+	FixedVector windDirection_, windStartingDirection_;
 
 	void updateDirection();
 	void updateChangeTime();

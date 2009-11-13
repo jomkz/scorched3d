@@ -47,7 +47,7 @@ bool TankAccessorySimAction::invokeAction(ScorchedContext &context)
 
 	// Check tank exists and is alive
 	Tank *tank = context.getTankContainer().getTankById(playerId);
-	if (!tank || tank->getState().getState() != TankState::sNormal)
+	if (!tank)
 	{
 		return true;
 	}

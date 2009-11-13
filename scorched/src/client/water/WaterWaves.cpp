@@ -273,7 +273,7 @@ void WaterWaves::draw(Water2Patches &currentPatch)
 	//if (OptionsDisplay::instance()->getNoWaves()) return;
 
 	Vector windDir = 
-		ScorchedClient::instance()->getSimulator().getWind().getWindDirection().asVector();
+		ScorchedClient::instance()->getSimulator().getWind().getWindStartingDirection().asVector();
 	Vector windDirPerp = windDir.Normalize();
 
 	GLState state(GLState::TEXTURE_ON | GLState::BLEND_ON); 
