@@ -498,6 +498,9 @@ void TankDamage::logDeath()
 		if (damagedPlayerId_ == firedPlayerId)
 		{
 			int skillChange = context_->getOptionsGame().getSkillForSelfKill();
+			float weight = (float(weapon_->getArmsLevel()) / 10.0f) + 1.0f;
+			skillChange = (int) (float(skillChange) * weight);
+
 			firedTank->getScore().setSkill(firedTank->getScore().getSkill() + skillChange);
 
 			StatsLogger::instance()->
@@ -519,6 +522,9 @@ void TankDamage::logDeath()
 				(firedTank->getTeam() == killedTank->getTeam())) 
 		{
 			int skillChange = context_->getOptionsGame().getSkillForTeamKill();
+			float weight = (float(weapon_->getArmsLevel()) / 10.0f) + 1.0f;
+			skillChange = (int) (float(skillChange) * weight);
+
 			firedTank->getScore().setSkill(firedTank->getScore().getSkill() + skillChange);
 
 			StatsLogger::instance()->
