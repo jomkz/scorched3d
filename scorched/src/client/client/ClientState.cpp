@@ -187,6 +187,8 @@ void ClientState::setupGameState()
 	gameState.addStateStimulus(StateLoadLevel, 
 		StimWait, StateWait);
 	gameState.addStateStimulus(StateLoadLevel, 
+		StimWaitNoLandscape, StateWaitNoLandscape);
+	gameState.addStateStimulus(StateLoadLevel, 
 		StimLoadLevel, StateLoadLevel);
 
 	// StateDisconnected
@@ -199,6 +201,19 @@ void ClientState::setupGameState()
 		StimGameStopped, StateDisconnected);
 	gameState.addStateStimulus(StateDisconnected, 
 		StimWait, StateDisconnected);
+
+	// StateWaitNoLandscape
+	addWindowManager(gameState, StateWaitNoLandscape);
+	gameState.addStateLoop(StateWaitNoLandscape, 
+		Main2DCamera::instance(), GLWToolTip::instance());
+	gameState.addStateLoop(StateWaitNoLandscape, 
+		Main2DCamera::instance(), SoftwareMouse::instance());
+	gameState.addStateStimulus(StateWaitNoLandscape, 
+		StimWait, StateWait);
+	gameState.addStateStimulus(StateWaitNoLandscape, 
+		StimLoadLevel, StateLoadLevel);
+	gameState.addStateStimulus(StateWaitNoLandscape, 
+		StimDisconnected, StateDisconnected);
 
 	// StateWait
 	addStandardComponents(gameState, StateWait);

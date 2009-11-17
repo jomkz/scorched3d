@@ -69,6 +69,32 @@ LandscapeDefn *LandscapeDefinitions::getDefn(const char *file, bool load)
 	return defns_.getItem(this, file, load, true);
 }
 
+bool LandscapeDefinitions::readLandscapeDefinitionsEntry(LandscapeDefinitionsEntry &entry)
+{
+	std::vector<std::string>::iterator itor2;
+
+	std::vector<std::string> &defns = entry.defns;
+	for (itor2 = defns.begin();
+		itor2 != defns.end();
+		itor2++)
+	{
+		const char *landscapeDefnFile = (*itor2).c_str();
+		LandscapeDefn *landscapeDefn = getDefn(landscapeDefnFile, true);
+		if (!landscapeDefn) return false;
+	}
+
+	std::vector<std::string> &texs = entry.texs;
+	for (itor2 = texs.begin();
+		itor2 != texs.end();
+		itor2++)
+	{
+		const char *landscapeTexFile = (*itor2).c_str();
+		LandscapeTex *landscapeTex = getTex(landscapeTexFile, true);
+		if (!landscapeTex) return false;
+	}
+	return true;
+}
+
 bool LandscapeDefinitions::readLandscapeDefinitions()
 {
 	// Clear existing landscapes
@@ -84,27 +110,22 @@ bool LandscapeDefinitions::readLandscapeDefinitions()
 		itor++)
 	{
 		LandscapeDefinitionsEntry &entry = (*itor);
-		std::vector<std::string>::iterator itor2;
+		if (!readLandscapeDefinitionsEntry(entry)) return false;
+	}
 
-		std::vector<std::string> &defns = entry.defns;
-		for (itor2 = defns.begin();
-			itor2 != defns.end();
-			itor2++)
+	// Read blank landscape definiton
+	{
+		XMLFile file;
+		if (!file.readFile(S3D::getModFile("data/landscapeblank.xml")) ||
+			!file.getRootNode())
 		{
-			const char *landscapeDefnFile = (*itor2).c_str();
-			LandscapeDefn *landscapeDefn = getDefn(landscapeDefnFile, true);
-			if (!landscapeDefn) return false;
+			S3D::dialogMessage("Scorched Landscape", S3D::formatStringBuffer(
+						  "Failed to parse \"data/landscapeblank.xml\"\n%s", 
+						  file.getParserError()));
+			return false;
 		}
-
-		std::vector<std::string> &texs = entry.texs;
-		for (itor2 = texs.begin();
-			itor2 != texs.end();
-			itor2++)
-		{
-			const char *landscapeTexFile = (*itor2).c_str();
-			LandscapeTex *landscapeTex = getTex(landscapeTexFile, true);
-			if (!landscapeTex) return false;
-		}
+		if (!blankDefinition_.readXML(file.getRootNode())) return false;
+		if (!readLandscapeDefinitionsEntry(blankDefinition_)) return false;
 	}
 
 	return true;
@@ -172,6 +193,21 @@ void LandscapeDefinitions::checkEnabled(OptionsScorched &context)
 		context.getLandscapes()));
 }
 
+LandscapeDefinition LandscapeDefinitions::getBlankLandscapeDefn()
+{
+	LandscapeDefinitionsEntry *result = &blankDefinition_;
+
+	// Return the chosen definition
+	std::string tex = result->texs[rand() % result->texs.size()];
+	std::string defn = result->defns[rand() % result->defns.size()];
+	unsigned int seed = (unsigned int) rand();
+
+	LandscapeDefinition entry(
+		tex.c_str(), defn.c_str(), seed, result->name.c_str(), 
+		++lastDefinitionNumber_);
+	return entry;
+}
+
 LandscapeDefinition LandscapeDefinitions::getLandscapeDefn(
 	const char *name)
 {
@@ -193,7 +229,7 @@ LandscapeDefinition LandscapeDefinitions::getLandscapeDefn(
 	unsigned int seed = 33;//(unsigned int) rand();
 
 	LandscapeDefinition entry(
-		tex.c_str(), defn.c_str(), seed, result->name.c_str());
+		tex.c_str(), defn.c_str(), seed, result->name.c_str(), 0);
 	return entry;
 }
 

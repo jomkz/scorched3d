@@ -39,6 +39,7 @@ static LandscapeTexType *fetchBorderTexType(const char *type)
 static LandscapeTexType *fetchTextureTexType(const char *type)
 {
 	if (0 == strcmp(type, "generate")) return new LandscapeTexTextureGenerate;
+	if (0 == strcmp(type, "file")) return new LandscapeTexTextureFile;
 	S3D::dialogMessage("LandscapeTexType", S3D::formatStringBuffer("Unknown texture type %s", type));
 	return 0;
 }
@@ -101,6 +102,14 @@ bool LandscapeTexTextureGenerate::readXML(XMLNode *node)
 	if (!S3D::checkDataFile(texture1.c_str())) return false;
 	if (!S3D::checkDataFile(texture2.c_str())) return false;
 	if (!S3D::checkDataFile(texture3.c_str())) return false;
+	return node->failChildren();
+}
+
+// LandscapeTexTextureFile
+bool LandscapeTexTextureFile::readXML(XMLNode *node)
+{
+	if (!node->getNamedChild("texture", texture)) return false;
+	if (!S3D::checkDataFile(texture.c_str())) return false;
 	return node->failChildren();
 }
 

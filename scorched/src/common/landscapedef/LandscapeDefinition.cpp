@@ -26,6 +26,12 @@
 #include <stdlib.h>
 #include <time.h>
 
+LandscapeDefinition::LandscapeDefinition() :
+	definitionNumber_(0),
+	seed_(0)
+{
+}
+
 LandscapeDefinition::LandscapeDefinition(
 	const char *tex,
 	const char *defn,

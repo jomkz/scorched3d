@@ -62,22 +62,24 @@ void ServerLoadLevel::destinationLoadLevel(unsigned int destinationId)
 		LandscapeDefinition &landscapeDefinition =
 			ScorchedServer::instance()->getLandscapeMaps().getDefinitions().
 			getDefinition();
-
-		// Set any tanks from this destination that they are loading the level
-		// set the current version of the level (definition number) that they are loading
-		// so we can check if the level changes before we have finished loading
-		ServerDestination *destination =
-			ScorchedServer::instance()->getServerDestinations().getDestination(destinationId);
-		if (destination)
+		if (landscapeDefinition.getDefinitionNumber() != 0)
 		{
-			destination->setState(ServerDestination::sLoadingLevel);
-			destination->setLevelNumber(landscapeDefinition.getDefinitionNumber());
-		}
+			// Set any tanks from this destination that they are loading the level
+			// set the current version of the level (definition number) that they are loading
+			// so we can check if the level changes before we have finished loading
+			ServerDestination *destination =
+				ScorchedServer::instance()->getServerDestinations().getDestination(destinationId);
+			if (destination)
+			{
+				destination->setState(ServerDestination::sLoadingLevel);
+				destination->setLevelNumber(landscapeDefinition.getDefinitionNumber());
+			}
 
-		// Tell this destination to start loading the level
-		ComsLoadLevelMessage &loadLevelMessage = 
-			ScorchedServer::instance()->getServerSimulator().getLevelMessage();
-		ComsMessageSender::sendToSingleClient(loadLevelMessage, destinationId, NetInterfaceFlags::fCompress);
+			// Tell this destination to start loading the level
+			ComsLoadLevelMessage &loadLevelMessage = 
+				ScorchedServer::instance()->getServerSimulator().getLevelMessage();
+			ComsMessageSender::sendToSingleClient(loadLevelMessage, destinationId, NetInterfaceFlags::fCompress);
+		}
 	}
 }
 

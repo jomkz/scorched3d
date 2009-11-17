@@ -27,12 +27,13 @@
 class LandscapeDefinition
 {
 public:
+	LandscapeDefinition();
 	LandscapeDefinition(
-		const char *tex = "", 
-		const char *defn = "",
-		unsigned int seed = 0,
-		const char *name = "",
-		unsigned int definitionNumber = 0);
+		const char *tex, 
+		const char *defn,
+		unsigned int seed,
+		const char *name,
+		unsigned int definitionNumber);
 
 	const char *getTex() { return tex_.c_str(); }
 	const char *getDefn() { return defn_.c_str(); }

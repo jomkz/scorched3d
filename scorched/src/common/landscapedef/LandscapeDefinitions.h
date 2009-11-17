@@ -42,6 +42,7 @@ public:
 	virtual void clearLandscapeDefinitions();
 
 	void checkEnabled(OptionsScorched &context);
+	LandscapeDefinition getBlankLandscapeDefn();
 	LandscapeDefinition getLandscapeDefn(const char *name);
 	LandscapeDefinition getRandomLandscapeDefn(OptionsScorched &context, TankContainer &tankContainer);
 	LandscapeTex *getTex(const char *file, bool load = false);
@@ -51,6 +52,7 @@ public:
 protected:
 	static unsigned int lastDefinitionNumber_;
 	LandscapeDefinitionsEntry* lastDefinition_;
+	LandscapeDefinitionsEntry blankDefinition_;
 	std::map<std::string, int> usedFiles_;
 
 	LandscapeDefinitionsItem<LandscapeTex> texs_;
@@ -62,6 +64,7 @@ protected:
 	LandscapeDefinitionsEntry *getRandomLandscapeDefnEntry(
 		OptionsScorched &context,
 		std::list<LandscapeDefinitionsEntry *> passedLandscapes);
+	bool readLandscapeDefinitionsEntry(LandscapeDefinitionsEntry &entry);
 };
 
 #endif

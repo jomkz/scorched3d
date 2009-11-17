@@ -517,6 +517,20 @@ void Landscape::generate(ProgressCounter *counter)
 		groundTexture_.replace(texture0, false);
 		roofTexture_.replace(bitmapRoof, true);
 	}
+	else if (tex->texture->getType() == LandscapeTexType::eTextureFile)
+	{
+		LandscapeTexTextureFile *generate = 
+			(LandscapeTexTextureFile *) tex->texture;
+
+		if (counter) counter->setNewOp(LANG_RESOURCE("LANDSCAPE_MAP", "Landscape Map"));
+		ImageHandle texture = 
+			ImageFactory::loadImageHandle(S3D::getModFile(generate->texture.c_str()));
+		mainMap_ = texture.createResize(1024, 1024);
+
+		// Set the general surround and roof texture
+		groundTexture_.replace(texture, false);
+		roofTexture_.replace(texture, true);
+	}
 	else
 	{
 		S3D::dialogExit("Landscape", S3D::formatStringBuffer(

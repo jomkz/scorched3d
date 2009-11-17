@@ -256,7 +256,18 @@ void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 	KEYBOARDKEY("SHOW_SKIP_DIALOG", skipKey);
 	KEYBOARDKEY("SHOW_RULES_DIALOG", rulesKey);
 	KEYBOARDKEY("SHOW_SOUND_DIALOG", showSoundKey);
-	
+
+	// StateWaitNoLandscape
+	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape,
+		BackdropDialog::instance(), 0, true);
+	addStateWindows(skinManager, ClientState::StateWaitNoLandscape, "start");
+	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape, 
+		ScoreDialog::instance2(), 0, true);
+	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape, 
+		RulesDialog::instance(), 0, true);
+	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape,
+		PlayerDialog::instance(), 0, false);
+
 	// StateLoadLevel
 	GLWWindowManager::instance()->addWindow(ClientState::StateLoadLevel,
 		BackdropDialog::instance(), 0, true);

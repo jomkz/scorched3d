@@ -37,7 +37,8 @@ public:
 		ePrecipitationRain,
 		ePrecipitationSnow,
 		eWater,
-		eTextureGenerate
+		eTextureGenerate,
+		eTextureFile
 	};
 
 	virtual bool readXML(XMLNode *node) = 0;
@@ -106,6 +107,15 @@ public:
 
 	virtual bool readXML(XMLNode *node);
 	virtual TexType getType() { return eTextureGenerate; }
+};
+
+class LandscapeTexTextureFile : public LandscapeTexType
+{
+public:
+	std::string texture;
+
+	virtual bool readXML(XMLNode *node);
+	virtual TexType getType() { return eTextureFile; }
 };
 
 class LandscapeTex

@@ -96,9 +96,18 @@ void ServerStateNewGame::newGameState()
 
 	// Get a landscape definition to use
 	ServerCommon::serverLog("Generating landscape");
-	LandscapeDefinition defn = ScorchedServer::instance()->getLandscapes().getRandomLandscapeDefn(
-		ScorchedServer::instance()->getContext().getOptionsGame(),
-		ScorchedServer::instance()->getContext().getTankContainer());
+	LandscapeDefinition defn;
+	if (ScorchedServer::instance()->getLandscapeMaps().getDefinitions().
+		getDefinition().getDefinitionNumber() == 0)
+	{
+		defn = ScorchedServer::instance()->getLandscapes().getBlankLandscapeDefn();
+	}
+	else
+	{
+		defn = ScorchedServer::instance()->getLandscapes().getRandomLandscapeDefn(
+			ScorchedServer::instance()->getContext().getOptionsGame(),
+			ScorchedServer::instance()->getContext().getTankContainer());
+	}
 
 	// Set all options (wind etc..)
 	ScorchedServer::instance()->getContext().getOptionsTransient().newGame();
