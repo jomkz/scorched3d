@@ -47,13 +47,13 @@ public:
 		TimeoutDisconnect = 4
 	};
 
-	unsigned int &getDestinationId() { return destinationId_; }
-	unsigned int &getIpAddress() { return ipAddress_; }
+	unsigned int getDestinationId() { return destinationId_; }
+	unsigned int getIpAddress() { return ipAddress_; }
 	unsigned int getFlags() { return flags_; }
+	unsigned int getRecvTime() { return recvTime_; }
 	MessageType getMessageType() { return type_; }
 	NetBuffer &getBuffer() { return messageBuffer_; }
 	void setType(MessageType type) { type_ = type; }
-	void setFlags(unsigned int flags) { flags_ = flags; }
 
 protected:
 	NetBuffer messageBuffer_;
@@ -61,9 +61,12 @@ protected:
 	unsigned int destinationId_;
 	unsigned int ipAddress_;
 	unsigned int flags_;
+	unsigned int recvTime_;
 
 	void setDestinationId(unsigned int destinationId) { destinationId_ = destinationId; }
 	void setIpAddress(unsigned int ipAddress) { ipAddress_ = ipAddress; }
+	void setRecvTime(unsigned int recvTime) { recvTime_ = recvTime; }
+	void setFlags(unsigned int flags) { flags_ = flags; }
 
 	NetMessage(MessageType type = NetMessage::NoMessage,
 			   unsigned int destinationId = 0,

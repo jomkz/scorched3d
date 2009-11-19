@@ -48,6 +48,11 @@ ClientProcessingLoop::~ClientProcessingLoop()
 
 void ClientProcessingLoop::simulate(const unsigned state, float frameTime)
 {
+	process(frameTime, true);
+}
+
+void ClientProcessingLoop::process(float frameTime, bool processClientMessages)
+{
 	if (!ClientParams::instance()->getConnectedToServer())
 	{
 		serverTime_ += frameTime;
@@ -59,7 +64,8 @@ void ClientProcessingLoop::simulate(const unsigned state, float frameTime)
 	}
 
 	Logger::processLogEntries();
-	if (ScorchedClient::instance()->getContext().getNetInterfaceValid())
+	if (processClientMessages &&
+		ScorchedClient::instance()->getContext().getNetInterfaceValid())
 	{
 		ScorchedClient::instance()->getNetInterface().processMessages();
 	}

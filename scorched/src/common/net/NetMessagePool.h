@@ -35,7 +35,8 @@ public:
 	NetMessage *getFromPool(NetMessage::MessageType type,
 		unsigned int destinationId,
 		unsigned int ipAddress,
-		unsigned int flags = 0);
+		unsigned int flags = 0,
+		unsigned int recvTime = 0);
 
 protected:
 	static NetMessagePool *instance_;

@@ -95,8 +95,11 @@ void NetLoopBack::sendMessageDest(NetBuffer &buffer,
 		(server_ && destination == ClientLoopBackID) || 
 		(!server_ && destination == ServerLoopBackID));
 
+	unsigned int recvTime = (unsigned int) SDL_GetTicks();
 	NetMessage *message = NetMessagePool::instance()->
-		getFromPool(NetMessage::BufferMessage, server_?ServerLoopBackID:ClientLoopBackID, 0, flags);
+		getFromPool(NetMessage::BufferMessage, 
+			server_?ServerLoopBackID:ClientLoopBackID, 
+			0, flags, recvTime);
 	message->getBuffer().reset();
 	message->getBuffer().addDataToBuffer(buffer.getBuffer(), buffer.getBufferUsed());
 	loopback_->messageHandler_.addMessage(message);

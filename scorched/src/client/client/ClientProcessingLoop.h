@@ -34,6 +34,8 @@ public:
 	virtual void simulate(const unsigned state, float simTime);
 	virtual void draw(const unsigned state);
 
+	void process(float frameTime, bool processClientMessages);
+
 	void dontLimitFrameTime() { limiter_.dontLimitFrameTime(); }
 
 protected:

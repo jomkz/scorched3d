@@ -46,6 +46,7 @@
 #include <tank/TankContainer.h>
 #include <tank/TankCamera.h>
 #include <target/TargetRenderer.h>
+#include <net/NetInterface.h>
 
 ClientLoadLevelHandler *ClientLoadLevelHandler::instance_ = 0;
 
@@ -91,6 +92,11 @@ bool ClientLoadLevelHandler::processMessage(
 		Logger::log(LangStringUtil::convertFromLang(message));
 		ChannelText text("info", message);
 		ChannelManager::showText(ScorchedClient::instance()->getContext(), text);
+	} 
+	else
+	{
+		Logger::log(S3D::formatStringBuffer(
+			"Finished loading landscape %.2f seconds", generateTime));
 	}
 
 	return result;
@@ -139,7 +145,7 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	// Calculate all the new landscape settings (graphics)
 	Landscape::instance()->generate(ProgressDialogSync::noevents_instance());
 
-	// Add all missed actions to the simulator and sync the simulator
+	// Add all missed actions to the simulator
 	std::list<ComsSimulateMessage *> simulateMessages;
 	std::list<ComsSimulateMessage *>::iterator messageItor;
 	if (!message.getSimulations(simulateMessages)) return false;
@@ -153,6 +159,8 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 		delete simMessage;
 	}
 	simulateMessages.clear();
+
+	// Sync the simulator
 	Clock generateClock;
 	ScorchedClient::instance()->getClientSimulator().setSimulationTime(message.getActualTime());
 	float deformTime = generateClock.getTimeDifference();
@@ -170,6 +178,9 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 		getPrecipitationEngine().killAll();
 	RenderTracer::instance()->newGame();
 	SpeedChange::instance()->resetSpeed();
+
+	// Process any outstanding coms messages
+	ScorchedClient::instance()->getNetInterface().processMessages();
 
 	// As we have not returned to the main loop for ages the
 	// timer will have a lot of time in it

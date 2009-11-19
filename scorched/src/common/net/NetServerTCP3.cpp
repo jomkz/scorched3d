@@ -385,8 +385,8 @@ void NetServerTCP3::destroyDestination(unsigned int destinationId,
 	// Get a new buffer from the pool (with the discconect type set)
 	NetMessage *message = NetMessagePool::instance()->
 		getFromPool(NetMessage::DisconnectMessage, 
-			destinationId, destination->getIpAddress());
-	message->setFlags((unsigned int) type);
+			destinationId, destination->getIpAddress(), 
+			(unsigned int) type);
 
 	destinations_.erase(itor);
 	destination->printStats();

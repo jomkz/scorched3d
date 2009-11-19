@@ -52,7 +52,8 @@ void NetMessagePool::addToPool(NetMessage *message)
 NetMessage *NetMessagePool::getFromPool(NetMessage::MessageType type,
 	unsigned int destinationId,
 	unsigned int ipAddress,
-	unsigned int flags)
+	unsigned int flags,
+	unsigned int recvTime)
 {
 	SDL_LockMutex(messagePoolMutex_);
 
@@ -71,6 +72,7 @@ NetMessage *NetMessagePool::getFromPool(NetMessage::MessageType type,
 	result->setType(type);
 	result->getBuffer().reset();
 	result->setFlags(flags);
+	result->setRecvTime(recvTime);
 
 	SDL_UnlockMutex(messagePoolMutex_);
 

@@ -81,16 +81,25 @@ bool ClientSimulator::processComsSimulateMessage(
 	// Actualy process message
 	addComsSimulateMessage(message, false);
 
-	// Send back a response so ping times can be calculated
-	ComsSimulateResultMessage resultMessage(message.getServerTime());
-	ComsMessageSender::sendToServer(resultMessage);
+	if (ScorchedClient::instance()->getGameState().getState() != ClientState::StateLoadFiles &&
+		ScorchedClient::instance()->getGameState().getState() != ClientState::StateLoadLevel)
+	{
+		// Send back a response so ping times can be calculated
+		ComsSimulateResultMessage resultMessage(message.getServerTime());
+		ComsMessageSender::sendToServer(resultMessage);
 
-	// Calculate the difference between the local time and the server time
-	fixed difference = (message.getActualTime() + serverRoundTripTime_ / 2) - actualTime_;
-	serverTimeDifference_.addValue(difference);
+		// Calculate the difference between the local time and the server time
+		fixed difference = (message.getActualTime() + serverRoundTripTime_ / 2) - actualTime_;
+		serverTimeDifference_.addValue(difference);
 
-	// Make adjustment to local time
-	actualTime_ += serverTimeDifference_.getAverage() / 20;
+		// Make adjustment to local time
+		actualTime_ += serverTimeDifference_.getAverage() / 20;
+	}
+	else
+	{
+		// Set the current time to the time in the message
+		setSimulationTime(waitingEventTime_);
+	}
 
 	return true;
 }

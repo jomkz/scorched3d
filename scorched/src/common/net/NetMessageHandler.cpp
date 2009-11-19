@@ -56,7 +56,17 @@ void NetMessageHandler::addMessage(NetMessage *message)
 
 int NetMessageHandler::processMessages()
 {
-	if (!messagesWaiting_) return 0;
+	int result = 0;
+	while (processSingleMessage())
+	{
+		result++;
+	}
+	return result;
+}
+
+bool NetMessageHandler::processSingleMessage()
+{
+	if (!messagesWaiting_) return false;
 
 	// Get the list of messages that should be processed
 	// Process one at a time, incase this method is called re-entrantly
@@ -70,18 +80,15 @@ int NetMessageHandler::processMessages()
 	messagesWaiting_ = !messages_.empty();
 	SDL_UnlockMutex(messagesMutex_);
 
-	int result = 0;
 	if (message)
 	{
-		result ++;
-
 		// Call user to process message
 		if (handler_) handler_->processMessage(*message);
 		
 		// Delete message
 		NetMessagePool::instance()->addToPool(message);
 	}
-	return result;
+	return (message != 0);
 }
 
 void NetMessageHandler::setMessageHandler(NetMessageHandlerI *handler)

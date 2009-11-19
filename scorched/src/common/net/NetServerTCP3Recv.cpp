@@ -89,9 +89,10 @@ bool NetServerTCP3Recv::actualRecvFunc()
 	}
 
 	// allocate the buffer memory
+	unsigned int recvTime = (unsigned int) SDL_GetTicks();
 	NetMessage *buffer = NetMessagePool::instance()->
 		getFromPool(NetMessage::BufferMessage, 
-				destinationId_, ipAddress_);
+		destinationId_, ipAddress_, 0, recvTime);
 	buffer->getBuffer().allocate(len);
 	buffer->getBuffer().setBufferUsed(len);
 
