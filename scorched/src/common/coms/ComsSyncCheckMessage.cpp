@@ -21,7 +21,7 @@
 #include <coms/ComsSyncCheckMessage.h>
 #include <common/Logger.h>
 #include <common/OptionsTransient.h>
-#include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #ifndef S3D_SERVER
 	#include <client/ScorchedClient.h>
 #endif
@@ -86,7 +86,7 @@ ComsSyncCheckMessage::ComsSyncCheckMessage(unsigned int syncId,
 	}
 
 	// Add sync checks
-	syncChecks_ = context.getActionController().getSyncCheck();
+	syncChecks_ = context.getSimulator().getSyncCheck();
 }
 
 ComsSyncCheckMessage::~ComsSyncCheckMessage()

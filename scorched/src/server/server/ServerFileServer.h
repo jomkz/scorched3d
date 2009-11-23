@@ -29,7 +29,7 @@ class ServerFileServer
 public:
 	static ServerFileServer *instance();
 
-	void simulate(float timeDifference);
+	void simulate();
 
 protected:
 	static ServerFileServer *instance_;

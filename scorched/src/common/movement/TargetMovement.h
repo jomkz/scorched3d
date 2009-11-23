@@ -35,10 +35,7 @@ public:
 	void generate(ScorchedContext &context);
 	void simulate(ScorchedContext &context, fixed frameTime);
 	void draw();
-
-	// Serialize the movement data (if any)
-	bool writeMessage(NetBuffer &buffer);
-	bool readMessage(NetBufferReader &reader);
+	void reset();
 
 protected:
 	std::vector<TargetMovementEntry *> movements_;

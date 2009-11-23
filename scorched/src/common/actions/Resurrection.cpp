@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <actions/Resurrection.h>
-#include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <engine/ScorchedContext.h>
 #include <landscapemap/DeformLandscape.h>
 #include <common/ChannelManager.h>
@@ -78,7 +78,7 @@ void Resurrection::simulate(fixed frameTime, bool &remove)
 
 			if (context_->getOptionsGame().getActionSyncCheck())
 			{
-				context_->getActionController().addSyncCheck(
+				context_->getSimulator().addSyncCheck(
 					S3D::formatStringBuffer("TankRez: %u %i, %i, %i", 
 						tank->getPlayerId(),
 						position_[0].getInternal(),

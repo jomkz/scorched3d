@@ -41,9 +41,7 @@ static void syncCheckLog(const std::string &message)
 {
 	if (!syncCheckFileLogger) 
 	{
-		char buffer[256];
-		snprintf(buffer, 256, "SyncCheckLog-%u-", time(0));
-		syncCheckFileLogger = new FileLogger(buffer);
+		syncCheckFileLogger = new FileLogger("SyncCheckLog-");
 	}	
 
 	LoggerInfo info(message.c_str());
@@ -114,7 +112,7 @@ void ServerSyncCheck::simulate()
 	if (ScorchedServer::instance()->getServerState().getState() != ServerState::ServerPlayingState) return;
 	if (!ScorchedServer::instance()->getOptionsGame().getAutoSendSyncCheck()) return;
 	time_t currentTime = time(0);
-	if (currentTime - lastTime_ >= 10)
+	if (currentTime - lastTime_ >= 20)
 	{
 		// Auto send sync checks
 		lastTime_ = currentTime;
@@ -341,11 +339,21 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 				{
 					clientTank->second->setBufferUsed(u);
 
-					syncCheckLog(S3D::formatStringBuffer("**** SyncCheck %s differ %u:%s, Dest %u Sync %u",
+					std::string groupnames = "";
+					std::set<TargetGroupsSetEntry *> &groups = tmpTarget->getGroup().getAllGroups();
+					std::set<TargetGroupsSetEntry *>::iterator groupItor;
+					for (groupItor = groups.begin();
+						groupItor != groups.end();
+						groupItor++)
+					{
+						TargetGroupsSetEntry *group = *groupItor;
+						groupnames.append(group->getName()).append(" ");
+					}
+					syncCheckLog(S3D::formatStringBuffer("**** SyncCheck %s differ %u:%s, Dest %u Sync %u Groups %s",
 						isTarget?"target":"tank",
 						playerId, 
 						tmpTarget->getCStrName().c_str(), 
-						destinationId, client->getSyncId()));
+						destinationId, client->getSyncId(), groupnames.c_str()));
 
 					Logger::addLogger(syncCheckFileLogger);
 
@@ -402,7 +410,8 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 			{
 				clientSync = client->getSyncCheck()[s];
 			}
-			syncCheckLog(S3D::formatStringBuffer("%s %s %s", 
+			syncCheckLog(S3D::formatStringBuffer("%u %s %s %s", 
+				s,
 				serverSync != clientSync?"****":"    ",
 				clientSync.c_str(), serverSync.c_str()));
 		}

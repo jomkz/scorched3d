@@ -45,8 +45,7 @@ public:
 		LandscapeMovementType *movementType);
 	virtual void simulate(ScorchedContext &context, fixed frameTime);
 	virtual void draw();
-	virtual bool writeMessage(NetBuffer &buffer);
-	virtual bool readMessage(NetBufferReader &reader);
+	virtual void reset();
 
 protected:
 	SplinePath path_;

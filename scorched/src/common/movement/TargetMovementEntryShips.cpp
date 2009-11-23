@@ -167,19 +167,8 @@ void TargetMovementEntryShips::simulate(ScorchedContext &context, fixed frameTim
 	}
 }
 
-bool TargetMovementEntryShips::writeMessage(NetBuffer &buffer)
+void TargetMovementEntryShips::reset()
 {
-	fixed pathTime = path_.getPathTime();
-	buffer.addToBuffer(pathTime);
-	return true;
-}
-
-bool TargetMovementEntryShips::readMessage(NetBufferReader &reader)
-{
-	fixed pathTime = 0;
-	if (!reader.getFromBuffer(pathTime)) return false;
-	path_.setPathTime(pathTime);
-	return true;
 }
 
 void TargetMovementEntryShips::draw()

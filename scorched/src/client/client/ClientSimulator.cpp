@@ -21,7 +21,6 @@
 #include <client/ClientSimulator.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientState.h>
-#include <movement/TargetMovement.h>
 #include <coms/ComsSimulateMessage.h>
 #include <coms/ComsSimulateResultMessage.h>
 #include <coms/ComsNetStatMessage.h>

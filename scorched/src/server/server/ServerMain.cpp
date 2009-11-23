@@ -211,7 +211,8 @@ void serverMain(ProgressCounter *counter)
 
 void serverLoop()
 {
-	float timeDifference = serverTimer.getTimeDifference();
+	unsigned int ticksDifference = serverTimer.getTicksDifference();
+	fixed timeDifference(true, ticksDifference * 10);
 	Logger::processLogEntries();
 
 	// Main server loop:
@@ -230,16 +231,17 @@ void serverLoop()
 #endif
 
 		ScorchedServer::instance()->getSimulator().simulate();
+		ScorchedServer::instance()->getServerState().simulate(timeDifference);
 
 		ServerConnectAuthHandler::instance()->processMessages();
-		ServerFileServer::instance()->simulate(timeDifference);
+		ServerFileServer::instance()->simulate();
 		ServerChannelManager::instance()->simulate(timeDifference);
 		ScorchedServerUtil::instance()->timedMessage.simulate();
 
-		if (timeDifference > 5.0f)
+		if (timeDifference > 5)
 		{
 			Logger::log(S3D::formatStringBuffer("Warning: Server loop took %.2f seconds", 
-				timeDifference));
+				timeDifference.asFloat()));
 		}
 }
 

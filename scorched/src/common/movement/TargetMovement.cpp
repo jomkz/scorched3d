@@ -127,7 +127,7 @@ void TargetMovement::draw()
 	}
 }
 
-bool TargetMovement::writeMessage(NetBuffer &buffer)
+void TargetMovement::reset()
 {
 	std::vector<TargetMovementEntry *>::iterator itor;
 	for (itor = movements_.begin();
@@ -135,20 +135,6 @@ bool TargetMovement::writeMessage(NetBuffer &buffer)
 		itor++)
 	{
 		TargetMovementEntry *movementEntry = *itor;
-		if (!movementEntry->writeMessage(buffer)) return false;
+		movementEntry->reset();
 	}
-	return true;
-}
-
-bool TargetMovement::readMessage(NetBufferReader &reader)
-{
-	std::vector<TargetMovementEntry *>::iterator itor;
-	for (itor = movements_.begin();
-		itor != movements_.end();
-		itor++)
-	{
-		TargetMovementEntry *movementEntry = *itor;
-		if (!movementEntry->readMessage(reader)) return false;
-	}
-	return true;
 }

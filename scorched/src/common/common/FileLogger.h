@@ -34,6 +34,7 @@ public:
 
 protected:
 	std::string fileName_;
+	unsigned int fileCount_;
 	FILE *logFile_;
 	unsigned int size_;
 

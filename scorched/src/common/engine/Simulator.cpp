@@ -21,6 +21,8 @@
 #include <engine/Simulator.h>
 #include <engine/ScorchedContext.h>
 #include <movement/TargetMovement.h>
+#include <common/OptionsScorched.h>
+#include <landscapemap/LandscapeMaps.h>
 #include <SDL/SDL.h>
 
 static const fixed StepSize = fixed(true, FIXED_RESOLUTION / 50);
@@ -86,22 +88,41 @@ void Simulator::actualSimulate(fixed frameTime)
 	{
 		SimActionContainer *container = simActions_.front();
 		if (container->fireTime_ > currentTime_) break;
+		simActions_.pop_front();
+
+		if (context_->getOptionsGame().getActionSyncCheck())
+		{
+			context_->getSimulator().addSyncCheck(
+				S3D::formatStringBuffer("Invoking sim action : %s", 
+				container->action_->getClassName()));
+		}
+
 		container->action_->invokeAction(*context_);
 		delete container;
-		simActions_.pop_front();
 	}
+}
+
+void Simulator::addSyncCheck(const std::string &msg)
+{
+	DIALOG_ASSERT(context_->getOptionsGame().getActionSyncCheck());
+	syncCheck_.push_back(
+		S3D::formatStringBuffer(
+			">%u %s<", currentTime_.getInternal(), msg.c_str()));
 }
 
 void Simulator::newLevel()
 {
 	// Clear any action controller actions
 	actionController_.clear();
+	syncCheck_.clear();
+	context_->getTargetMovement().reset();
 
 	// Reset times
 	currentTime_ = 0;
 	actualTime_ = 0;
 
 	// Reset events
+	random_.seed(context_->getLandscapeMaps().getDefinitions().getSeed());
 	events_.initialize(*context_);
 	wind_.newLevel();
 }

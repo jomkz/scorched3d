@@ -28,6 +28,7 @@
 #include <target/TargetDamageCalc.h>
 #include <target/TargetLife.h>
 #include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <engine/ScorchedContext.h>
 #include <weapons/AccessoryStore.h>
 #include <landscapemap/DeformLandscape.h>
@@ -120,7 +121,7 @@ void Teleport::simulate(fixed frameTime, bool &remove)
 
 				if (context_->getOptionsGame().getActionSyncCheck())
 				{
-					context_->getActionController().addSyncCheck(
+					context_->getSimulator().addSyncCheck(
 						S3D::formatStringBuffer("Telport: %u %i, %i, %i", 
 							tank->getPlayerId(),
 							position_[0].getInternal(),
@@ -142,7 +143,7 @@ void Teleport::simulate(fixed frameTime, bool &remove)
 			{
 				if (context_->getOptionsGame().getActionSyncCheck())
 				{
-					context_->getActionController().addSyncCheck(
+					context_->getSimulator().addSyncCheck(
 						S3D::formatStringBuffer("Telport: %u %i, %i, %i", 
 							tank->getPlayerId(),
 							position_[0].getInternal(),

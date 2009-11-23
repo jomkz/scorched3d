@@ -27,7 +27,7 @@
 #include <target/TargetSpace.h>
 #include <target/TargetState.h>
 #include <engine/ScorchedContext.h>
-#include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
 #include <common/ProgressCounter.h>
@@ -40,7 +40,7 @@ bool DeformLandscape::deformLandscape(
 {
 	if (context.getOptionsGame().getActionSyncCheck())
 	{
-		context.getActionController().addSyncCheck(
+		context.getSimulator().addSyncCheck(
 			S3D::formatStringBuffer("Deform : %i,%i,%i %i %s", 
 				pos[0].getInternal(), pos[1].getInternal(), pos[2].getInternal(), 
 				radius.getInternal(), (down?"Down":"Up")));
@@ -172,7 +172,7 @@ void DeformLandscape::flattenArea(
 {
 	if (context.getOptionsGame().getActionSyncCheck())
 	{
-		context.getActionController().addSyncCheck(
+		context.getSimulator().addSyncCheck(
 			S3D::formatStringBuffer("Flatten : %i,%i,%i %i", 
 			tankPos[0].getInternal(), tankPos[1].getInternal(), tankPos[2].getInternal(), 
 			size.getInternal()));

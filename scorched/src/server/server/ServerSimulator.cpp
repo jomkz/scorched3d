@@ -29,7 +29,6 @@
 #include <coms/ComsNetStatMessage.h>
 #include <simactions/SyncCheckSimAction.h>
 #include <landscapemap/LandscapeMaps.h>
-#include <movement/TargetMovement.h>
 #include <common/Logger.h>
 
 static fixed maxStepSize(true, 1 * FIXED_RESOLUTION);
@@ -182,7 +181,7 @@ void ServerSimulator::newLevel()
 	nextEventTime_ = nextSendTime_ + sendStepSize_;
 
 	// Store the current state
-	// Tanks, options, game, random numbers, etc...
+	// Tanks, options, game, etc...
 	delete levelMessage_;
 	levelMessage_ = new ComsLoadLevelMessage();
 	levelMessage_->setLandscapeDefinition(ScorchedServer::instance()->
@@ -194,10 +193,4 @@ ComsLoadLevelMessage &ServerSimulator::getLevelMessage()
 {
 	levelMessage_->setActualTime(actualTime_);
 	return *levelMessage_;
-}
-
-void ServerSimulator::actualSimulate(fixed frameTime)
-{
-	Simulator::actualSimulate(frameTime);
-	ScorchedServer::instance()->getServerState().simulate(frameTime);
 }

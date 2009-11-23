@@ -150,19 +150,8 @@ void TargetMovementEntrySpline::simulate(ScorchedContext &context, fixed frameTi
 	}
 }
 
-bool TargetMovementEntrySpline::writeMessage(NetBuffer &buffer)
+void TargetMovementEntrySpline::reset()
 {
-	fixed pathTime = path_.getPathTime();
-	buffer.addToBuffer(pathTime);
-	return true;
-}
-
-bool TargetMovementEntrySpline::readMessage(NetBufferReader &reader)
-{
-	fixed pathTime = 0;
-	if (!reader.getFromBuffer(pathTime)) return false;
-	path_.setPathTime(pathTime);
-	return true;
 }
 
 void TargetMovementEntrySpline::draw()

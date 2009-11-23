@@ -20,6 +20,7 @@
 
 #include <engine/ActionController.h>
 #include <engine/ScorchedContext.h>
+#include <engine/Simulator.h>
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
 #include <list>
@@ -70,7 +71,6 @@ void ActionController::clear(bool warn)
 
 	// Ref count
 	referenceCount_ = 0;
-	syncCheck_.clear();
 }
 
 bool ActionController::allEvents()
@@ -142,12 +142,6 @@ void ActionController::setScorchedContext(ScorchedContext *context)
 	context_ = context;
 }
 
-void ActionController::addSyncCheck(const std::string &msg)
-{
-	DIALOG_ASSERT(context_->getOptionsGame().getActionSyncCheck());
-	syncCheck_.push_back(msg);
-}
-
 void ActionController::addAction(Action *action)
 {
 	newActions_.push_back(action);
@@ -173,9 +167,8 @@ void ActionController::addNewActions(fixed time)
 			{
 				std::string actionType = action->getActionType();
 				std::string actionDetails = action->getActionDetails();
-				addSyncCheck(
-					S3D::formatStringBuffer("Add Action : %i %s:%s", 
-						time.getInternal(), 
+				context_->getSimulator().addSyncCheck(
+					S3D::formatStringBuffer("Add Action : %s:%s", 
 						actionType.c_str(), 
 						actionDetails.c_str()));
 			}
@@ -215,14 +208,6 @@ void ActionController::simulate(fixed frameTime, fixed time)
 	// Ensure any new actions are added
 	addNewActions(time);
 
-	// Add any new events (if allowed)
-	/*if (time_ < 10 && !allEvents())
-	{
-		actionEvents_ = true;
-		events_.simulate(frameTime, *context_);
-		actionEvents_ = false;
-	}*/
-
 	// Itterate and draw all of the actions
 	int keepcount=0;
 	for (int a=0; a<actions_.actionCount; a++)
@@ -254,9 +239,8 @@ void ActionController::simulate(fixed frameTime, fixed time)
 				{
 					std::string actionType = act->getActionType();
 					std::string actionDetails = act->getActionDetails();
-					addSyncCheck(
-						S3D::formatStringBuffer("Rm Action : %i %s:%s", 
-							time.getInternal(), 
+					context_->getSimulator().addSyncCheck(
+						S3D::formatStringBuffer("Rm Action : %s:%s", 
 							actionType.c_str(), 
 							actionDetails.c_str()));
 				}

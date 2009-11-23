@@ -51,7 +51,6 @@ bool ComsLoadLevelMessage::saveState(ScorchedContext &context)
 		writeToBuffer(stateBuffer_, false, false)) return false;
 	if (!context.getOptionsTransient().writeToBuffer(stateBuffer_)) return false;
 	if (!context.getTankTeamScore().writeMessage(stateBuffer_)) return false;
-	if (!context.getSimulator().getRandomGenerator().writeMessage(stateBuffer_)) return false;
 	if (!context.getAccessoryStore().writeEconomyToBuffer(stateBuffer_)) return false;
 
 	// Tanks
@@ -80,7 +79,6 @@ bool ComsLoadLevelMessage::loadState(ScorchedContext &context)
 		readFromBuffer(reader, false, false)) return false;
 	if (!context.getOptionsTransient().readFromBuffer(reader)) return false;
 	if (!context.getTankTeamScore().readMessage(reader)) return false;
-	if (!context.getSimulator().getRandomGenerator().readMessage(reader)) return false;
 	if (!context.getAccessoryStore().readEconomyFromBuffer(reader)) return false;
 
 	// Tanks

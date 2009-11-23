@@ -35,7 +35,7 @@ Wind::~Wind()
 
 void Wind::newLevel()
 {
-	FileRandomGenerator &random =
+	RandomGenerator &random =
 		context_->getSimulator().getRandomGenerator();
 
 	switch(context_->getOptionsGame().getWindForce())
@@ -104,7 +104,7 @@ void Wind::updateChangeTime()
 	if (context_->getOptionsGame().getWindType().getValue() ==
 		OptionsGame::WindChangeNever) return;
 
-	FileRandomGenerator &random =
+	RandomGenerator &random =
 		context_->getSimulator().getRandomGenerator();
 
 	switch (context_->getOptionsGame().getWindType().getValue()) 
@@ -133,7 +133,7 @@ void Wind::simulate(fixed frameTime)
 	windChangeTime_ -= frameTime;
 	if (windChangeTime_ < 0)
 	{
-		FileRandomGenerator &random =
+		RandomGenerator &random =
 			context_->getSimulator().getRandomGenerator();
 
 		fixed winAngle = random.getRandFixed() * 180 - 90;

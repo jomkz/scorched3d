@@ -26,7 +26,7 @@
 #include <weapons/ShieldRound.h>
 #include <weapons/ShieldSquare.h>
 #include <engine/ScorchedContext.h>
-#include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <common/OptionsScorched.h>
 #include <common/Logger.h>
 
@@ -217,7 +217,7 @@ Target *TargetSpace::getCollision(FixedVector &position)
 				result->getLife().getTargetPosition()[2].getInternal()));
 		}
 
-		context_->getActionController().addSyncCheck(
+		context_->getSimulator().addSyncCheck(
 			S3D::formatStringBuffer("CollisionSet : %i,%i,%i %s", 
 				position[0].getInternal(),
 				position[1].getInternal(),
@@ -304,7 +304,7 @@ void TargetSpace::getCollisionSet(FixedVector &position, fixed radius,
 				itor->second->getLife().getTargetPosition()[2].getInternal()));
 		}
 
-		context_->getActionController().addSyncCheck(
+		context_->getSimulator().addSyncCheck(
 			S3D::formatStringBuffer("CollisionSet : %i,%i,%i %i \"%s\"", 
 				position[0].getInternal(),
 				position[1].getInternal(),

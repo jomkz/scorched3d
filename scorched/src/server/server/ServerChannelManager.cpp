@@ -149,7 +149,7 @@ ServerChannelManager *ServerChannelManager::instance()
 }
 
 ServerChannelManager::ServerChannelManager() :
-	totalTime_(0.0f), lastMessageId_(0)
+	totalTime_(0), lastMessageId_(0)
 {
 	// Register to recieve comms messages
 	new ComsMessageHandlerIAdapter<ServerChannelManager>(
@@ -189,15 +189,15 @@ ServerChannelManager::~ServerChannelManager()
 {
 }
 
-void ServerChannelManager::simulate(float frameTime)
+void ServerChannelManager::simulate(fixed frameTime)
 {
 	const int MuteTime = 60;
 	const int MuteThreshold = 10;
 
 	totalTime_ += frameTime;
-	if (totalTime_ > 10.0f)
+	if (totalTime_ > 10)
 	{
-		totalTime_ = 0.0f;
+		totalTime_ = 0;
 
 		// Check each destination for the amount of messages they have
 		// sent recently

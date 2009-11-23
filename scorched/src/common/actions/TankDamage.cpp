@@ -195,7 +195,7 @@ void TankDamage::calculateDamage()
 
 		if (context_->getOptionsGame().getActionSyncCheck())
 		{
-			context_->getActionController().addSyncCheck(
+			context_->getSimulator().addSyncCheck(
 				S3D::formatStringBuffer("TankDamage: %u %i", 
 					damagedTarget->getPlayerId(),
 					damagedTarget->getLife().getLife().getInternal()));
@@ -403,7 +403,7 @@ void TankDamage::calculateDamage()
 				removeTarget(damagedTarget->getPlayerId());
 		if (context_->getOptionsGame().getActionSyncCheck())
 		{
-			context_->getActionController().addSyncCheck(
+			context_->getSimulator().addSyncCheck(
 				S3D::formatStringBuffer("RemoveTarget : %u %s", 
 					removedTarget->getPlayerId(),
 					removedTarget->getCStrName().c_str()));
@@ -429,7 +429,7 @@ void TankDamage::calculateDeath()
 	{
 		if (context_->getOptionsGame().getActionSyncCheck())
 		{
-			context_->getActionController().addSyncCheck(
+			context_->getSimulator().addSyncCheck(
 				S3D::formatStringBuffer("DeathAction: %s", 
 					weapon->getParent()->getName()));
 		}

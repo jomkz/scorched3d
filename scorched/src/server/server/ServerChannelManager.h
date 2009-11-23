@@ -44,7 +44,7 @@ public:
 	std::list<MessageEntry> &getLastMessages() { return lastMessages_; }
 	std::list<std::string> getAllChannels();
 
-	void simulate(float frameTime);
+	void simulate(fixed frameTime);
 
 	// Notification of when players disconnect
 	void destinationDisconnected(unsigned int destinationId);
@@ -120,7 +120,7 @@ protected:
 	};
 
 	unsigned int lastMessageId_;
-	float totalTime_;
+	fixed totalTime_;
 	std::map<unsigned int, DestinationEntry *> destinationEntries_;
 	std::list<ChannelEntry *> channelEntries_;
 	std::list<MessageEntry> lastMessages_;

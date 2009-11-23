@@ -44,10 +44,6 @@ public:
 	void stopActionProfiling();
 	void logActions();
 
-	// SyncCheck
-	void addSyncCheck(const std::string &msg);
-	std::vector<std::string> &getSyncCheck() { return syncCheck_; }
-
 	// Set the simulation speed
 	void setScorchedContext(ScorchedContext *context);
 
@@ -89,7 +85,6 @@ protected:
 
 	ScorchedContext *context_;
 	std::list<Action *> newActions_;
-	std::vector<std::string> syncCheck_;
 	ActionList actions_;
 	std::map<std::string, int> actionProfile_;
 	int referenceCount_;

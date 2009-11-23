@@ -48,7 +48,7 @@ ServerFileServer::~ServerFileServer()
 {
 }
 
-void ServerFileServer::simulate(float timeDifference)
+void ServerFileServer::simulate()
 {
 	int downloadCount = 0;
 

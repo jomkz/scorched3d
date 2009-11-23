@@ -36,9 +36,7 @@ public:
 		LandscapeMovementType *movementType) = 0;
 	virtual void simulate(ScorchedContext &context, fixed frameTime) = 0;
 	virtual void draw() = 0;
-
-	virtual bool writeMessage(NetBuffer &buffer) = 0;
-	virtual bool readMessage(NetBufferReader &reader) = 0;
+	virtual void reset() = 0;
 };
 
 #endif // __INCLUDE_TargetMovementEntryh_INCLUDE__

@@ -146,16 +146,9 @@ void TargetMovementEntryBoids::processSet(fixed frameTime, std::vector<Boid2*> &
 	}
 }
 
-bool TargetMovementEntryBoids::writeMessage(NetBuffer &buffer)
+void TargetMovementEntryBoids::reset()
 {
-	buffer.addToBuffer(movementNumber_);
-	return true;
-}
-
-bool TargetMovementEntryBoids::readMessage(NetBufferReader &reader)
-{
-	if (!reader.getFromBuffer(movementNumber_)) return false;
-	return true;
+	movementNumber_ = 0;
 }
 
 void TargetMovementEntryBoids::draw()

@@ -23,7 +23,7 @@
 #include <common/OptionsScorched.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <engine/ScorchedContext.h>
-#include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <target/Target.h>
 #include <target/TargetLife.h>
 
@@ -121,7 +121,7 @@ void Boid2::update(fixed frameTime, std::vector<Boid2*> &boidSet, bool complexUp
 		{
 			if (context_.getOptionsGame().getActionSyncCheck())
 			{
-				context_.getActionController().addSyncCheck(
+				context_.getSimulator().addSyncCheck(
 					S3D::formatStringBuffer("TargetMovement: %u %i, %i, %i %i, %i, %i", 
 						target_->getPlayerId(),
 						target_->getLife().getTargetPosition()[0].getInternal(),

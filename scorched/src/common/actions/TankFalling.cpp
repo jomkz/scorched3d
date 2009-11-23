@@ -30,6 +30,7 @@
 #include <tank/TankAccessories.h>
 #include <engine/ScorchedContext.h>
 #include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <weapons/AccessoryStore.h>
 #include <weapons/Parachute.h>
 #include <common/OptionsScorched.h>
@@ -162,7 +163,7 @@ void TankFalling::collision(PhysicsParticleObject &position,
 
 		if (context_->getOptionsGame().getActionSyncCheck())
 		{
-			context_->getActionController().addSyncCheck(
+			context_->getSimulator().addSyncCheck(
 				S3D::formatStringBuffer("TankFalling: %u %i, %i, %i", 
 					current->getPlayerId(),
 					position.getPosition()[0].getInternal(),

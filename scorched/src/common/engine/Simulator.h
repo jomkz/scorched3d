@@ -40,11 +40,15 @@ public:
 	void simulate();
 
 	// Accessors
-	FileRandomGenerator &getRandomGenerator() { return random_; }
+	RandomGenerator &getRandomGenerator() { return random_; }
 	ActionController &getActionController() { return actionController_; }
 	Wind &getWind() { return wind_; }
 
 	fixed getCurrentTime() { return currentTime_; }
+
+	// SyncCheck
+	void addSyncCheck(const std::string &msg);
+	std::vector<std::string> &getSyncCheck() { return syncCheck_; }
 
 	// Set the simulation speed
 	void setFast(fixed speedMult) { speed_ = speedMult; }
@@ -70,6 +74,7 @@ protected:
 	FileRandomGenerator random_;
 	ActionController actionController_;
 	std::list<SimActionContainer *> simActions_;
+	std::vector<std::string> syncCheck_;
 
 	virtual void actualSimulate(fixed frameTime);
 	virtual bool continueToSimulate() = 0;

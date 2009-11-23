@@ -50,7 +50,6 @@ protected:
 	fixed nextSendTime_, nextEventTime_;
 	fixed sendStepSize_;
 
-	virtual void actualSimulate(fixed frameTime);
 	virtual bool continueToSimulate();
 	void nextSendTime();
 	fixed calcSendStepSize();

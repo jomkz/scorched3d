@@ -38,6 +38,7 @@ public:
 	void setTarget(Target *target) { target_ = target; }
 	Target *getTarget() { return target_; }
 
+	std::set<TargetGroupsSetEntry *> &getAllGroups() { return groups_; }
 	FixedVector &getPosition();
 
 	void removeFromAllGroups();

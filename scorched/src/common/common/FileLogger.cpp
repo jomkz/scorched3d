@@ -23,7 +23,7 @@
 #include <time.h>
 
 FileLogger::FileLogger(const std::string &fileName) : 
-	size_(0), logFile_(0), fileName_(fileName)
+	size_(0), logFile_(0), fileName_(fileName), fileCount_(0)
 {
 
 }
@@ -53,9 +53,11 @@ void FileLogger::openFile(const char *fileName)
 	struct tm *newtime = localtime(&theTime); 
 
 	std::string logFileName = 
-		S3D::formatStringBuffer("%s-%i%02i%02i-%02i%02i%02i.log", fileName,
+		S3D::formatStringBuffer("%s-%i%02i%02i-%02i%02i%02i-%u.log", fileName,
 			newtime->tm_year + 1900, newtime->tm_mon + 1, newtime->tm_mday,
-			newtime->tm_hour, newtime->tm_min, newtime->tm_sec);
+			newtime->tm_hour, newtime->tm_min, newtime->tm_sec, fileCount_);
+	fileCount_++;		
+
 	std::string fullLogFileName = S3D::getLogFile(logFileName.c_str());
 	logFile_ = fopen(fullLogFileName.c_str(), "w");
 }

@@ -59,7 +59,7 @@ void AddTarget::simulate(fixed frameTime, bool &remove)
 
 	if (context_->getOptionsGame().getActionSyncCheck())
 	{
-		context_->getActionController().addSyncCheck(
+		context_->getSimulator().addSyncCheck(
 			S3D::formatStringBuffer("AddTarget : %u %s %i,%i,%i", 
 				playerId,
 				target->getCStrName().c_str(),
