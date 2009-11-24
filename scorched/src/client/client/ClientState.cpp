@@ -50,6 +50,8 @@ void ClientState::addMandatoryComponents(GameState &gameState, unsigned state)
 		LandscapeMusicManager::instance()); // MUSIC
 	gameState.addStateLoop(state, Main2DCamera::instance(), 
 		FrameTimer::instance());
+	gameState.addStateLoop(state, Main2DCamera::instance(), 
+		&ScorchedClient::instance()->getClientSimulator());
 }
 
 void ClientState::addWindowManager(GameState &gameState, unsigned state)
@@ -90,8 +92,6 @@ void ClientState::addStandardComponents(GameState &gameState, unsigned state)
 		MainCamera::instance(), new LandscapeStateWaterHandler());
 	gameState.addStateLoop(state, 
 		MainCamera::instance(), new LandscapeStateObjectsHandler());
-	gameState.addStateLoop(state, MainCamera::instance(), 
-		&ScorchedClient::instance()->getClientSimulator());
 	gameState.addStateLoop(state, MainCamera::instance(), 
 		&ScorchedClient::instance()->getParticleEngine());
 	gameState.addStateLoop(state, 

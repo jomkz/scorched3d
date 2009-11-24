@@ -60,16 +60,21 @@ void Simulator::simulate()
 		fixedTimeDiff *= speed_;
 
 		actualTime_ += fixedTimeDiff;
-		while (actualTime_ - currentTime_ >= StepSize)
-		{
-			if (!continueToSimulate()) break;
+		simulateTime();
+	}
+}
 
-			// Simulate
-			actualSimulate(StepSize);
+void Simulator::simulateTime()
+{
+	while (actualTime_ - currentTime_ >= StepSize)
+	{
+		if (!continueToSimulate()) break;
 
-			// More time has passed
-			currentTime_ += StepSize;
-		}
+		// Simulate
+		actualSimulate(StepSize);
+
+		// More time has passed
+		currentTime_ += StepSize;
 	}
 }
 
@@ -93,7 +98,8 @@ void Simulator::actualSimulate(fixed frameTime)
 		if (context_->getOptionsGame().getActionSyncCheck())
 		{
 			context_->getSimulator().addSyncCheck(
-				S3D::formatStringBuffer("Invoking sim action : %s", 
+				S3D::formatStringBuffer("Invoking sim action : %u:%s", 
+				container->fireTime_.getInternal(),
 				container->action_->getClassName()));
 		}
 
@@ -120,6 +126,7 @@ void Simulator::newLevel()
 	// Reset times
 	currentTime_ = 0;
 	actualTime_ = 0;
+	lastTickTime_ = SDL_GetTicks();
 
 	// Reset events
 	random_.seed(context_->getLandscapeMaps().getDefinitions().getSeed());

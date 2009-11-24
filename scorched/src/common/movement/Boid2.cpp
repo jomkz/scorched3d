@@ -119,7 +119,8 @@ void Boid2::update(fixed frameTime, std::vector<Boid2*> &boidSet, bool complexUp
 
 		if (complexUpdate)
 		{
-			if (context_.getOptionsGame().getActionSyncCheck())
+			if (context_.getOptionsGame().getActionSyncCheck() &&
+				context_.getOptionsGame().getActionMovementSyncCheck())
 			{
 				context_.getSimulator().addSyncCheck(
 					S3D::formatStringBuffer("TargetMovement: %u %i, %i, %i %i, %i, %i", 

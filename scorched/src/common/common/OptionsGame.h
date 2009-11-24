@@ -339,6 +339,12 @@ public:
 	bool getActionSyncCheck() { return actionSyncCheck_; }
 	OptionEntryBool &getActionSyncCheckEntry() { return actionSyncCheck_; }
 
+	bool getActionMovementSyncCheck() { return actionMovementSyncCheck_; }
+	OptionEntryBool &getActionMovementSyncCheckEntry() { return actionMovementSyncCheck_; }
+
+	bool getActionCollisionSyncCheck() { return actionCollisionSyncCheck_; }
+	OptionEntryBool &getActionCollisionSyncCheckEntry() { return actionCollisionSyncCheck_; }
+
 	const char * getAuthHandler() { return authHandler_; }
 	OptionEntryStringEnum &getAuthHandlerEntry() { return authHandler_; }
 
@@ -441,6 +447,8 @@ protected:
 	// Server only options
 	OptionEntryString botNamePrefix_;
 	OptionEntryBool actionSyncCheck_;
+	OptionEntryBool actionMovementSyncCheck_;
+	OptionEntryBool actionCollisionSyncCheck_;
 	OptionEntryBool autoSendSyncCheck_;
 	OptionEntryBool residualPlayers_;
 	OptionEntryBool randomizeBotNames_;

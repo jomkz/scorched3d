@@ -205,7 +205,8 @@ Target *TargetSpace::getCollision(FixedVector &position)
 		}
 	}
 
-	if (context_->getOptionsGame().getActionSyncCheck())
+	if (context_->getOptionsGame().getActionSyncCheck() &&
+		context_->getOptionsGame().getActionCollisionSyncCheck())
 	{
 		std::string targets;
 		if (result)
@@ -289,7 +290,8 @@ void TargetSpace::getCollisionSet(FixedVector &position, fixed radius,
 		}
 	}
 
-	if (context_->getOptionsGame().getActionSyncCheck())
+	if (context_->getOptionsGame().getActionSyncCheck() &&
+		context_->getOptionsGame().getActionCollisionSyncCheck())
 	{
 		std::string targets;
 		std::map<unsigned int, Target *>::iterator itor;

@@ -143,9 +143,10 @@ void ClientSimulator::newLevel()
 void ClientSimulator::setSimulationTime(fixed actualTime)
 {
 	// Set actual time
+	lastTickTime_ = SDL_GetTicks();
 	actualTime_ = actualTime;
 	serverTimeDifference_.reset(0);
 
 	// Simulate
-	Simulator::simulate();
+	Simulator::simulateTime();
 }

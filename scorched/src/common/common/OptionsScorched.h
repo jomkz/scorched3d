@@ -140,6 +140,8 @@ public:
 	OPTIONBOOL_GETTER(ResidualPlayers);
 	OPTIONBOOL_GETTER(AutoSendSyncCheck);
 	OPTIONBOOL_GETTER(ActionSyncCheck);
+	OPTIONBOOL_GETTER(ActionMovementSyncCheck);
+	OPTIONBOOL_GETTER(ActionCollisionSyncCheck);
 
 	OPTIONSTRING_GETTER(AuthHandler);
 	OPTIONBOOL_GETTER(RegisteredUserNames);

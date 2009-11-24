@@ -76,6 +76,7 @@ protected:
 	std::list<SimActionContainer *> simActions_;
 	std::vector<std::string> syncCheck_;
 
+	virtual void simulateTime();
 	virtual void actualSimulate(fixed frameTime);
 	virtual bool continueToSimulate() = 0;
 	virtual void newLevel();

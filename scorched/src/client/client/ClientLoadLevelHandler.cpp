@@ -205,13 +205,16 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	ComsMessageSender::sendToServer(levelLoadedMessage);
 
 	// Move into the wait state
-	if (strcmp(message.getLandscapeDefinition().getName(), "blank") == 0)
+	if (ScorchedClient::instance()->getGameState().getState() == ClientState::StateLoadLevel)
 	{
-		ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWaitNoLandscape);
-	}
-	else
-	{
-		ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
+		if (strcmp(message.getLandscapeDefinition().getName(), "blank") == 0)
+		{
+			ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWaitNoLandscape);
+		}
+		else
+		{
+			ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
+		}
 	}
 	return true;
 }
