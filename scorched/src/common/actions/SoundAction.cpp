@@ -27,7 +27,7 @@
 #include <common/Defines.h>
 
 SoundAction::SoundAction(FixedVector &position, WeaponSound *weapon) :
-	Action(-1),
+	Action(ACTION_NOT_REFERENCED),
 	weapon_(weapon), position_(position)
 {
 

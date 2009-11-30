@@ -121,12 +121,6 @@ void ServerState::moveFinished(ComsPlayedMoveMessage &message)
 	playing_.moveFinished(message);
 }
 
-void ServerState::shotsFinished(unsigned int moveId)
-{
-	if (getState() != ServerState::ServerPlayingState) return;
-	playing_.shotsFinished(moveId);
-}
-
 void ServerState::scoreFinished()
 {
 	if (getState() != ServerState::ServerScoreState) return;

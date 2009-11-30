@@ -30,7 +30,6 @@
 #include <target/TargetRenderer.h>
 #include <tankai/TankAIStrings.h>
 #include <actions/TankSay.h>
-#include <actions/ShotFinishedAction.h>
 #include <actions/TankResign.h>
 #include <common/StatsLogger.h>
 #include <common/OptionsScorched.h>
@@ -47,8 +46,8 @@ PlayMovesSimAction::PlayMovesSimAction() :
 {
 }
 
-PlayMovesSimAction::PlayMovesSimAction(unsigned int moveId, bool finishedNotify, bool timeoutPlayers) :
-	moveId_(moveId), finishedNotify_(finishedNotify), timeoutPlayers_(timeoutPlayers)
+PlayMovesSimAction::PlayMovesSimAction(unsigned int moveId, bool timeoutPlayers) :
+	moveId_(moveId), timeoutPlayers_(timeoutPlayers)
 {
 }
 
@@ -68,12 +67,6 @@ void PlayMovesSimAction::addMove(ComsPlayedMoveMessage *message)
 
 bool PlayMovesSimAction::invokeAction(ScorchedContext &context)
 {
-	if (finishedNotify_)
-	{
-		// Notify the server when all of these shots have finished
-		context.getActionController().addAction(new ShotFinishedAction(moveId_));
-	}
-	
 	std::list<ComsPlayedMoveMessage *>::iterator itor;
 	for (itor = messages_.begin();
 		itor != messages_.end();
@@ -235,7 +228,6 @@ void PlayMovesSimAction::tankResigned(ScorchedContext &context,
 bool PlayMovesSimAction::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(moveId_);
-	buffer.addToBuffer(finishedNotify_);
 	buffer.addToBuffer(timeoutPlayers_);
 	buffer.addToBuffer((unsigned int) messages_.size());
 	std::list<ComsPlayedMoveMessage *>::iterator itor;
@@ -253,7 +245,6 @@ bool PlayMovesSimAction::writeMessage(NetBuffer &buffer)
 bool PlayMovesSimAction::readMessage(NetBufferReader &reader)
 {
 	if (!reader.getFromBuffer(moveId_)) return false;
-	if (!reader.getFromBuffer(finishedNotify_)) return false;
 	if (!reader.getFromBuffer(timeoutPlayers_)) return false;
 	unsigned int size = 0;
 	if (!reader.getFromBuffer(size)) return false;

@@ -33,12 +33,9 @@ public:
 	ServerTurnsFree();
 	virtual ~ServerTurnsFree();
 
-	virtual void enterState();
-	virtual void simulate(fixed frameTime);
-	virtual bool finished();
-
-	virtual void moveFinished(ComsPlayedMoveMessage &playedMessage);
-	virtual void shotsFinished(unsigned int moveId);
+	virtual void internalEnterState();
+	virtual void internalSimulate(fixed frameTime);
+	virtual void internalMoveFinished(ComsPlayedMoveMessage &playedMessage);
 
 protected:
 	unsigned int nextMoveId_;

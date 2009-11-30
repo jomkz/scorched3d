@@ -23,7 +23,6 @@
 
 #include <server/ServerTurnsSequential.h>
 #include <server/ServerTurnsSimultaneous.h>
-#include <server/ServerTurnsSimultaneousNoWait.h>
 #include <server/ServerTurnsFree.h>
 #include <coms/ComsPlayedMoveMessage.h>
 
@@ -39,7 +38,6 @@ public:
 	void simulate(fixed frameTime);
 
 	void moveFinished(ComsPlayedMoveMessage &playedMessage);
-	void shotsFinished(unsigned int moveId);
 	void roundFinished();
 
 protected:
@@ -48,7 +46,7 @@ protected:
 	ServerTurns *turns_;
 	ServerTurnsSequential turnsSequential_;
 	ServerTurnsSimultaneous turnsSimultaneous_;
-	ServerTurnsSimultaneousNoWait turnsSimultaneousNoWait_;
+	ServerTurnsSimultaneous turnsSimultaneousNoWait_;
 	ServerTurnsFree turnsFree_;
 };
 

@@ -21,6 +21,7 @@
 #if !defined(__INCLUDE_ServerStateBuyingh_INCLUDE__)
 #define __INCLUDE_ServerStateBuyingh_INCLUDE__
 
+#include <set>
 #include <server/ServerTurnsSimultaneous.h>
 #include <coms/ComsPlayedMoveMessage.h>
 

@@ -1040,14 +1040,6 @@
 				RelativePath="..\server\ServerTurnsSimultaneous.h"
 				>
 			</File>
-			<File
-				RelativePath="..\server\ServerTurnsSimultaneousNoWait.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\server\ServerTurnsSimultaneousNoWait.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="tankai"
@@ -1949,14 +1941,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\actions\ShotFinishedAction.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\actions\ShotFinishedAction.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\actions\ShotProjectile.cpp"
 				>
 			</File>
@@ -2562,6 +2546,10 @@
 			</File>
 			<File
 				RelativePath="..\..\common\engine\Simulator.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\engine\SimulatorI.h"
 				>
 			</File>
 			<File

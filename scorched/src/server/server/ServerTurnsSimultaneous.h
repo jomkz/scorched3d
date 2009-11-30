@@ -21,34 +21,27 @@
 #if !defined(__INCLUDE_ServerTurnsSimultaneoush_INCLUDE__)
 #define __INCLUDE_ServerTurnsSimultaneoush_INCLUDE__
 
-#include <set>
 #include <map>
+#include <list>
 #include <server/ServerTurns.h>
+#include <engine/SimulatorI.h>
 
 class Tank;
 class ComsPlayedMoveMessage;
 class ServerTurnsSimultaneous : public ServerTurns
 {
 public:
-	ServerTurnsSimultaneous();
+	ServerTurnsSimultaneous(bool waitForShots);
 	virtual ~ServerTurnsSimultaneous();
 
-	virtual void enterState();
-	virtual void simulate(fixed frameTime);
-	virtual bool finished();
-
-	virtual void moveFinished(ComsPlayedMoveMessage &playedMessage);
-	virtual void shotsFinished(unsigned int moveId);
+	virtual void internalEnterState();
+	virtual void internalSimulate(fixed frameTime);
+	virtual void internalMoveFinished(ComsPlayedMoveMessage &playedMessage);
 
 protected:
-	bool playingMoves_;
+	ShotsState shotsState_;
 	unsigned int nextMoveId_;
-	std::set<unsigned int> waitingPlayers_;
-	std::set<unsigned int> playingPlayers_;
 	std::map<unsigned int, ComsPlayedMoveMessage*>  moves_;
-
-	void makeMove(Tank *tank);
-	void playShots();
 };
 
 #endif

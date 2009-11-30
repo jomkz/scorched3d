@@ -30,7 +30,8 @@
 #include <tank/TankScore.h>
 
 ServerStatePlaying::ServerStatePlaying() : 
-	turns_(0), nextRoundId_(0), roundFinished_(false)
+	turns_(0), nextRoundId_(0), roundFinished_(false),
+	turnsSimultaneous_(true), turnsSimultaneousNoWait_(false)
 {
 }
 
@@ -100,9 +101,4 @@ void ServerStatePlaying::simulate(fixed frameTime)
 void ServerStatePlaying::moveFinished(ComsPlayedMoveMessage &playedMessage)
 {
 	turns_->moveFinished(playedMessage);
-}
-
-void ServerStatePlaying::shotsFinished(unsigned int moveId)
-{
-	turns_->shotsFinished(moveId);
 }

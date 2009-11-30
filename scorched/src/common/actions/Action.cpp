@@ -75,7 +75,7 @@ void ActionRenderer::simulate(Action *action, float frametime, bool &removeActio
 }
 
 SpriteAction::SpriteAction(ActionRenderer *render) : 
-	Action(0)
+	Action(ACTION_NOT_REFERENCED)
 {
 	setActionRender(render);
 }

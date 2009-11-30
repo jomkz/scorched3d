@@ -32,7 +32,7 @@
 #include <common/ChannelManager.h>
 
 TankSay::TankSay(unsigned int playerId, const LangString &text) :
-	Action(0),
+	Action(ACTION_NOT_REFERENCED),
 	playerId_(playerId), text_(text)
 {
 

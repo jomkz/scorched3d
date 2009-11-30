@@ -18,24 +18,38 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ShotFinishedActionh_INCLUDE__)
-#define __INCLUDE_ShotFinishedActionh_INCLUDE__
+#if !defined(AFX_SimulatorI_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_)
+#define AFX_SimulatorI_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_
 
-#include <actions/Action.h>
+#include <simactions/SimAction.h>
 
-class ShotFinishedAction : public Action
+class SimulatorI
 {
 public:
-	ShotFinishedAction(unsigned int moveId);
-	virtual ~ShotFinishedAction();
-
-	virtual void init();
-	virtual void simulate(fixed frameTime, bool &remove);
-	virtual std::string getActionType() { return "ShotFinishedAction"; }
-
-protected:
-	unsigned int moveId_;
-
+	virtual void actionInvoked(fixed actionTime, SimAction *action) = 0;
 };
 
-#endif // __INCLUDE_ShotFinishedActionh_INCLUDE__
+template<class T>
+class SimulatorIAdapter : public SimulatorI
+{
+public:
+	SimulatorIAdapter(T *inst, 
+		void (T::*call)(fixed actionTime, SimAction *action)) :
+		inst_(inst), call_(call)
+	{
+	};
+	virtual ~SimulatorIAdapter()
+	{
+	};
+
+	virtual void actionInvoked(fixed actionTime, SimAction *action)
+	{
+		return (inst_->*call_)(actionTime, action);
+	}
+
+protected:
+	T *inst_;
+	void (T::*call_)(fixed actionTime, SimAction *action);
+};
+
+#endif // !defined(AFX_SimulatorI_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_)

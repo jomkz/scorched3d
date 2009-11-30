@@ -25,7 +25,7 @@
 CameraPositionAction::CameraPositionAction(FixedVector &showPosition,
 	fixed showTime,
 	unsigned int priority) : 
-	Action(-1),
+	Action(ACTION_NOT_REFERENCED),
 	totalTime_(0), showTime_(showTime),
 	showPosition_(showPosition), showPriority_(priority)
 {

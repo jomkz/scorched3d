@@ -33,7 +33,7 @@ public:
 	ServerSimulator();
 	virtual ~ServerSimulator();
 
-	void addSimulatorAction(SimAction *action);
+	void addSimulatorAction(SimAction *action, SimulatorI *callback = 0);
 
 	bool getSendActionsEmpty() { return sendActions_.empty() && simActions_.empty(); }
 
@@ -46,7 +46,13 @@ public:
 		NetBufferReader &reader);
 
 protected:
-	std::list<SimAction *> sendActions_;
+	struct SendAction
+	{
+		SimAction *action;
+		SimulatorI *callback;
+	};
+
+	std::list<SendAction> sendActions_;
 	fixed nextSendTime_, nextEventTime_;
 	fixed sendStepSize_;
 

@@ -420,15 +420,15 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 	// Final logging
 	if (syncCheckFileLogger)
 	{
-		syncCheckLog(S3D::formatStringBuffer("SyncCheck checked, Dest %u Checks %u Sync %u", 
-			destinationId, client->getSyncCheck().size(), client->getSyncId()));
-		Logger::log(S3D::formatStringBuffer("**** SyncCheck checked, Dest %u Checks %u Sync %u", 
-			destinationId, client->getSyncCheck().size(), client->getSyncId()));
+		syncCheckLog(S3D::formatStringBuffer("SyncCheck checked, Dest %u Checks %u Targets %u Sync %u", 
+			destinationId, client->getSyncCheck().size(), noServerTanks, client->getSyncId()));
+		Logger::log(S3D::formatStringBuffer("**** SyncCheck checked, Dest %u Checks %u Targets %u Sync %u", 
+			destinationId, client->getSyncCheck().size(), noServerTanks, client->getSyncId()));
 	}
 	else
 	{
-		Logger::log(S3D::formatStringBuffer("SyncCheck checked, Dest %u Checks %u Sync %u", 
-			destinationId, client->getSyncCheck().size(), client->getSyncId()));
+		Logger::log(S3D::formatStringBuffer("SyncCheck checked, Dest %u Checks %u Targets %u Sync %u", 
+			destinationId, client->getSyncCheck().size(), noServerTanks, client->getSyncId()));
 	}
 
 	return true;

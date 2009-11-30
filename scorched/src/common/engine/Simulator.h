@@ -24,8 +24,8 @@
 #include <engine/ActionController.h>
 #include <engine/EventContainer.h>
 #include <engine/Wind.h>
+#include <engine/SimulatorI.h>
 #include <common/RandomGenerator.h>
-#include <simactions/SimAction.h>
 #include <net/NetBuffer.h>
 
 class ScorchedContext;
@@ -57,10 +57,11 @@ protected:
 	class SimActionContainer
 	{
 	public:
-		SimActionContainer(SimAction *action, fixed fireTime)  :
-			action_(action), fireTime_(fireTime) {}
+		SimActionContainer(SimAction *action, fixed fireTime, SimulatorI *callback = 0)  :
+			action_(action), fireTime_(fireTime), callback_(callback) {}
 		~SimActionContainer() { delete action_; }
 
+		SimulatorI *callback_;
 		SimAction *action_;
 		fixed fireTime_;
 	};

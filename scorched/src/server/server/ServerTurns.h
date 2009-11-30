@@ -21,27 +21,46 @@
 #if !defined(__INCLUDE_ServerTurnsh_INCLUDE__)
 #define __INCLUDE_ServerTurnsh_INCLUDE__
 
+#include <engine/SimulatorI.h>
+#include <list>
+
 class Tank;
 class ComsPlayedMoveMessage;
 class fixed;
 class ServerTurns 
 {
 public:
-	ServerTurns();
+	ServerTurns(bool waitForShots);
 	virtual ~ServerTurns();
 
-	virtual void enterState() = 0;
-	virtual void simulate(fixed frameTime) = 0;
-	virtual bool finished() = 0;
+	// Called by ServerState
+	virtual void enterState();
+	virtual void simulate(fixed frameTime);
+	virtual bool finished();
+	virtual void moveFinished(ComsPlayedMoveMessage &playedMessage);
+	void shotsStarted(fixed simulationTime, SimAction *action);
 
-	virtual void moveFinished(ComsPlayedMoveMessage &playedMessage) = 0;
-	virtual void shotsFinished(unsigned int moveId) = 0;
+	// Called by This Class
+	virtual void internalEnterState() = 0;
+	virtual void internalSimulate(fixed frameTime) = 0;
+	virtual bool internalFinished();
+	virtual void internalMoveFinished(ComsPlayedMoveMessage &playedMessage) = 0;
 
 protected:
-	bool showScore();
+	enum ShotsState
+	{
+		eNone,
+		eWaitingStart,
+		eWaitingEnd
+	};
+	bool waitForShots_;
+	ShotsState shotsState_;
+	SimulatorIAdapter<ServerTurns> *shotsStarted_;
 
+	bool showScore();
 	void playMove(Tank *tank, unsigned int moveId, fixed shotTime);
 	void playMoveFinished(Tank *tank);
+	void playShots(std::list<ComsPlayedMoveMessage *> messages, unsigned int moveId, bool timeOutPlayers);
 };
 
 #endif

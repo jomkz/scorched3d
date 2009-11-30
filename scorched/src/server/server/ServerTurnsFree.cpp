@@ -31,6 +31,7 @@
 #include <list>
 
 ServerTurnsFree::ServerTurnsFree() :
+	ServerTurns(false),
 	nextMoveId_(0)
 {
 }
@@ -40,7 +41,7 @@ ServerTurnsFree::~ServerTurnsFree()
 }
 
 
-void ServerTurnsFree::enterState()
+void ServerTurnsFree::internalEnterState()
 {
 	nextMoveId_++;
 
@@ -63,7 +64,7 @@ void ServerTurnsFree::enterState()
 	}	
 }
 
-void ServerTurnsFree::simulate(fixed frameTime)
+void ServerTurnsFree::internalSimulate(fixed frameTime)
 {
 	// Build list of currently playing destinations
 	std::set<unsigned int> playingDestinations;
@@ -140,7 +141,7 @@ void ServerTurnsFree::simulate(fixed frameTime)
 	}	
 }
 
-void ServerTurnsFree::moveFinished(ComsPlayedMoveMessage &playedMessage)
+void ServerTurnsFree::internalMoveFinished(ComsPlayedMoveMessage &playedMessage)
 {
 	unsigned int playerId = playedMessage.getPlayerId();
 	unsigned int moveId = playedMessage.getMoveId();
@@ -172,21 +173,8 @@ void ServerTurnsFree::moveFinished(ComsPlayedMoveMessage &playedMessage)
 
 	if (tank->getState().getState() == TankState::sNormal)
 	{
-		PlayMovesSimAction *movesAction = 
-			new PlayMovesSimAction(nextMoveId_, false, false);
-		movesAction->addMove(new ComsPlayedMoveMessage(playedMessage));
-		
-		ScorchedServer::instance()->getServerSimulator().
-			addSimulatorAction(movesAction);
+		std::list<ComsPlayedMoveMessage*> messages;
+		messages.push_back(new ComsPlayedMoveMessage(playedMessage));
+		playShots(messages, nextMoveId_, false);
 	}
-}
-
-void ServerTurnsFree::shotsFinished(unsigned int moveId)
-{
-
-}
-
-bool ServerTurnsFree::finished()
-{
-	return ServerTurns::showScore();
 }

@@ -104,6 +104,10 @@ void Simulator::actualSimulate(fixed frameTime)
 		}
 
 		container->action_->invokeAction(*context_);
+		if (container->callback_) 
+		{
+			container->callback_->actionInvoked(currentTime_, container->action_);
+		}
 		delete container;
 	}
 }

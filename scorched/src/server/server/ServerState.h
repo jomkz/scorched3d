@@ -53,7 +53,6 @@ public:
 
 	void buyingFinished(ComsPlayedMoveMessage &message);
 	void moveFinished(ComsPlayedMoveMessage &message);
-	void shotsFinished(unsigned int moveId);
 	void scoreFinished();
 	void roundFinished();
 

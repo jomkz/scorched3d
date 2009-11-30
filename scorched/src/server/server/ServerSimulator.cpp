@@ -46,9 +46,10 @@ ServerSimulator::~ServerSimulator()
 {
 }
 
-void ServerSimulator::addSimulatorAction(SimAction *action)
+void ServerSimulator::addSimulatorAction(SimAction *action, SimulatorI *callback)
 {
-	sendActions_.push_back(action);
+	SendAction sendAction = { action, callback };
+	sendActions_.push_back(sendAction);
 }
 
 bool ServerSimulator::continueToSimulate()
@@ -79,23 +80,28 @@ void ServerSimulator::nextSendTime()
 	static SyncCheckSimAction syncCheckSimAction;
 
 	// Add the new actions for this time
-	std::list<SimAction *>::iterator itor;
+	std::list<SimAction *> actions;
+	std::list<SendAction>::iterator itor;
 	for (itor = sendActions_.begin();
 		itor != sendActions_.end();
 		itor++)
 	{
-		SimAction *action = *itor;
-		simActions_.push_back(new SimActionContainer(action, nextEventTime_));
+		SimAction *action = itor->action;
+		SimulatorI *callback = itor->callback;
+
+		actions.push_back(action);
+		simActions_.push_back(new SimActionContainer(action, nextEventTime_, callback));
 		if (action->getMetaClassId() == syncCheckSimAction.getMetaClassId())
 		{
 			SyncCheckSimAction *syncAction = (SyncCheckSimAction *) action;
 			ServerSyncCheck::instance()->sentSyncCheck(syncAction->getSyncId());
 		}
 	}
+	sendActions_.clear();
 
 	// Send the time and actions to the client
 	unsigned int serverTime = SDL_GetTicks();
-	ComsSimulateMessage simulateMessage(nextEventTime_, actualTime_, serverTime, sendActions_);
+	ComsSimulateMessage simulateMessage(nextEventTime_, actualTime_, serverTime, actions);
 	ComsMessageSender::sendToAllLoadedClients(simulateMessage);
 	if (levelMessage_)
 	{

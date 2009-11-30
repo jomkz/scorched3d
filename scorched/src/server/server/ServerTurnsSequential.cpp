@@ -34,7 +34,8 @@
 #include <list>
 
 ServerTurnsSequential::ServerTurnsSequential() :
-	playingPlayer_(0), nextMoveId_(0), playingMoves_(false)
+	ServerTurns(true),
+	playingPlayer_(0), nextMoveId_(0)
 {
 }
 
@@ -42,9 +43,8 @@ ServerTurnsSequential::~ServerTurnsSequential()
 {
 }
 
-void ServerTurnsSequential::enterState()
+void ServerTurnsSequential::internalEnterState()
 {
-	playingMoves_ = false;
 	playingPlayer_ = 0;
 	waitingPlayers_.clear();
 
@@ -101,9 +101,21 @@ void ServerTurnsSequential::enterState()
 	}
 }
 
-void ServerTurnsSequential::simulate(fixed frameTime)
+void ServerTurnsSequential::internalSimulate(fixed frameTime)
 {
-	if (playingMoves_) return;
+	// Check what we are allowed to do
+	if (shotsState_ == eWaitingStart) return;
+	if (shotsState_ == eWaitingEnd)
+	{
+		if (ScorchedServer::instance()->getActionController().noReferencedActions())
+		{
+			shotsState_ = eNone;
+		}
+		else
+		{
+			return;
+		}
+	}
 
 	// Check if all the tanks have made their moves
 	if (waitingPlayers_.empty() && playingPlayer_ == 0) 
@@ -153,7 +165,7 @@ void ServerTurnsSequential::makeMove(Tank *tank)
 	playMove(tank, nextMoveId_, shotTime);
 }
 
-void ServerTurnsSequential::moveFinished(ComsPlayedMoveMessage &playedMessage)
+void ServerTurnsSequential::internalMoveFinished(ComsPlayedMoveMessage &playedMessage)
 {
 	unsigned int playerId = playedMessage.getPlayerId();
 	unsigned int moveId = playedMessage.getMoveId();
@@ -166,22 +178,8 @@ void ServerTurnsSequential::moveFinished(ComsPlayedMoveMessage &playedMessage)
 
 	if (tank->getState().getState() == TankState::sNormal)
 	{
-		playingMoves_ = true;
-		PlayMovesSimAction *movesAction = new PlayMovesSimAction(moveId, true, true);
-		movesAction->addMove(new ComsPlayedMoveMessage(playedMessage));
-		ScorchedServer::instance()->getServerSimulator().
-			addSimulatorAction(movesAction);
+		std::list<ComsPlayedMoveMessage*> messages;
+		messages.push_back(new ComsPlayedMoveMessage(playedMessage));
+		playShots(messages, moveId, true);
 	}
-}
-
-void ServerTurnsSequential::shotsFinished(unsigned int moveId)
-{
-	if (nextMoveId_ != moveId) return;
-
-	playingMoves_ = false;
-}
-
-bool ServerTurnsSequential::finished()
-{
-	return ServerTurns::showScore();
 }

@@ -28,14 +28,64 @@
 #include <common/OptionsScorched.h>
 #include <simactions/TankStartMoveSimAction.h>
 #include <simactions/TankStopMoveSimAction.h>
+#include <simactions/PlayMovesSimAction.h>
 #include <coms/ComsPlayedMoveMessage.h>
 
-ServerTurns::ServerTurns()
+ServerTurns::ServerTurns(bool waitForShots) : 
+	shotsState_(eNone),
+	waitForShots_(waitForShots)
 {
+	shotsStarted_ = new SimulatorIAdapter<ServerTurns>(this,  &ServerTurns::shotsStarted);
 }
 
 ServerTurns::~ServerTurns()
 {
+}
+
+void ServerTurns::enterState()
+{
+	shotsState_ = eNone;
+	internalEnterState();
+}
+
+void ServerTurns::simulate(fixed frameTime)
+{
+	// Check what we are allowed to do
+	if (shotsState_ == eWaitingStart) return;
+	if (shotsState_ == eWaitingEnd)
+	{
+		if (ScorchedServer::instance()->getActionController().noReferencedActions())
+		{
+			shotsState_ = eNone;
+		}
+		else
+		{
+			return;
+		}
+	}
+
+	// Do other stuff
+	internalSimulate(frameTime);
+}
+
+void  ServerTurns::shotsStarted(fixed simulationTime, SimAction *action)
+{
+	shotsState_ = eWaitingEnd;
+}
+
+void ServerTurns::moveFinished(ComsPlayedMoveMessage &playedMessage)
+{
+	internalMoveFinished(playedMessage);
+}
+
+bool ServerTurns::finished()
+{
+	return internalFinished();
+}
+
+bool ServerTurns::internalFinished()
+{
+	return ServerTurns::showScore();
 }
 
 bool ServerTurns::showScore()
@@ -91,4 +141,26 @@ void ServerTurns::playMoveFinished(Tank *tank)
 		new TankStopMoveSimAction(tank->getPlayerId());
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);	
 	tank->getState().setMoveId(0);
+}
+
+void ServerTurns::playShots(std::list<ComsPlayedMoveMessage *> messages, unsigned int moveId, bool timeOutPlayers)
+{
+	PlayMovesSimAction *movesAction = 
+		new PlayMovesSimAction(moveId, timeOutPlayers);
+	std::list<ComsPlayedMoveMessage *>::iterator itor;
+	for (itor = messages.begin();
+		itor != messages.end();
+		itor++)
+	{
+		movesAction->addMove(*itor);
+	}
+	
+	SimulatorI *callback = 0;
+	if (waitForShots_)
+	{
+		callback = shotsStarted_;
+		shotsState_ = eWaitingStart;
+	}
+	ScorchedServer::instance()->getServerSimulator().
+		addSimulatorAction(movesAction, callback);
 }

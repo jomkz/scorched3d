@@ -33,7 +33,7 @@ ComsSimulateMessage::ComsSimulateMessage(fixed eventTime, fixed actualTime,
 	ComsMessage(ComsSimulateMessageType),
 	eventTime_(eventTime), actualTime_(actualTime), serverTime_(serverTime)
 {
-	actions_.swap(actions);
+	actions_.insert(actions_.begin(), actions.begin(), actions.end());
 }
 
 ComsSimulateMessage::~ComsSimulateMessage()

@@ -23,6 +23,7 @@
 
 #include <list>
 #include <server/ServerTurns.h>
+#include <engine/SimulatorI.h>
 
 class Tank;
 class ServerTurnsSequential : public ServerTurns
@@ -31,15 +32,11 @@ public:
 	ServerTurnsSequential();
 	virtual ~ServerTurnsSequential();
 
-	virtual void enterState();
-	virtual void simulate(fixed frameTime);
-	virtual bool finished();
-
-	virtual void moveFinished(ComsPlayedMoveMessage &playedMessage);
-	virtual void shotsFinished(unsigned int moveId);
+	virtual void internalEnterState();
+	virtual void internalSimulate(fixed frameTime);
+	virtual void internalMoveFinished(ComsPlayedMoveMessage &playedMessage);
 
 protected:
-	bool playingMoves_;
 	unsigned int nextMoveId_;
 	unsigned int playingPlayer_;
 	std::list<unsigned int> waitingPlayers_;

@@ -30,8 +30,9 @@
 #include <tank/TankScore.h>
 #include <list>
 
-ServerTurnsSimultaneous::ServerTurnsSimultaneous() :
-	nextMoveId_(0), playingMoves_(false)
+ServerTurnsSimultaneous::ServerTurnsSimultaneous(bool waitForShots) :
+	ServerTurns(waitForShots),
+	nextMoveId_(0)
 {
 }
 
@@ -40,187 +41,132 @@ ServerTurnsSimultaneous::~ServerTurnsSimultaneous()
 }
 
 
-void ServerTurnsSimultaneous::enterState()
+void ServerTurnsSimultaneous::internalEnterState()
 {
 	nextMoveId_++;
-	waitingPlayers_.clear();
-	playingPlayers_.clear();
 
+	std::map<unsigned int, ComsPlayedMoveMessage*>::iterator movesItor;
+	for (movesItor = moves_.begin();
+		movesItor != moves_.end();
+		movesItor++)
 	{
-		std::map<unsigned int, ComsPlayedMoveMessage*>::iterator itor;
-		for (itor = moves_.begin();
-			itor != moves_.end();
-			itor++)
-		{
-			ComsPlayedMoveMessage *message = itor->second;
-			delete message;
-		}
-		moves_.clear();
+		delete movesItor->second;
 	}
+	moves_.clear();
 
+	std::map<unsigned int, Tank*> &tanks = 
+		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+	std::map<unsigned int, Tank*>::iterator itor;
+	for (itor = tanks.begin();
+		itor != tanks.end();
+		itor++)
 	{
-		std::map<unsigned int, Tank*> &tanks = 
-			ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-		std::map<unsigned int, Tank*>::iterator itor;
-		for (itor = tanks.begin();
-			itor != tanks.end();
-			itor++)
-		{
-			Tank *tank = itor->second;
-			if (tank->getState().getState() == TankState::sNormal)
-			{
-				waitingPlayers_.insert(tank->getPlayerId());
-			}
-		}
-	}
+		Tank *tank = itor->second;
+		tank->getState().setMoveId(0);
+	}	
 }
 
-void ServerTurnsSimultaneous::simulate(fixed frameTime)
+void ServerTurnsSimultaneous::internalSimulate(fixed frameTime)
 {
-	if (playingMoves_) return;
-
-	// Check if all the tanks have made their moves
-	if (waitingPlayers_.empty() && playingPlayers_.empty()) 
-	{
-		playShots();
-		return;
-	}
-
-	// Check if any of the playing tanks have timed out
-	// or if they have left the game
+	// Build list of currently playing destinations
 	std::set<unsigned int> playingDestinations;
-	std::list<unsigned int> removePlaying;
-	std::set<unsigned int>::iterator playItor;
-	for (playItor = playingPlayers_.begin();
-		playItor != playingPlayers_.end();
-		playItor++)
+	std::map<unsigned int, Tank*> &tanks = 
+		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+	std::map<unsigned int, Tank*>::iterator itor;
+
+	bool finished = true;
+	for (itor = tanks.begin();
+		itor != tanks.end();
+		itor++)
 	{
-		unsigned int playerId = *playItor;
-		Tank *tank =
-			ScorchedServer::instance()->getTankContainer().getTankById(playerId);
-		if (!tank || tank->getState().getState() != TankState::sNormal)
+		Tank *tank = itor->second;
+		if (tank->getState().getMoveId() != 0)
 		{
-			removePlaying.push_back(playerId);
-			if (tank && tank->getState().getMoveId() != 0)
+			if (tank->getState().getState() == TankState::sNormal)
+			{
+				if (tank->getDestinationId() != 0)
+				{
+					playingDestinations.insert(tank->getDestinationId());
+				}
+			}
+			else
 			{
 				playMoveFinished(tank);
 			}
 		}
-		else if (tank->getDestinationId() != 0)
+
+		if (tank->getState().getState() == TankState::sNormal)
 		{
-			playingDestinations.insert(tank->getDestinationId());
+			if (moves_.find(tank->getPlayerId()) == moves_.end())
+			{
+				finished = false;
+			}
+		}
+	}
+	
+	for (itor = tanks.begin();
+		itor != tanks.end();
+		itor++)
+	{
+		Tank *tank = itor->second;
+		if (tank->getState().getState() == TankState::sNormal &&
+			tank->getState().getMoveId() == 0)
+		{
+			if (moves_.find(tank->getPlayerId()) == moves_.end())
+			{
+				if (playingDestinations.find(tank->getDestinationId()) == 
+					playingDestinations.end())
+				{
+					if (tank->getDestinationId() != 0)
+					{
+						playingDestinations.insert(tank->getDestinationId());
+					}
+
+					fixed shotTime = fixed(
+						ScorchedServer::instance()->getOptionsGame().getShotTime());
+					playMove(tank, ++nextMoveId_, shotTime);
+				}
+			}
 		}
 	}
 
-	// Remove any that are not playing
-	std::list<unsigned int>::iterator removeItor;
-	for (removeItor = removePlaying.begin();
-		removeItor != removePlaying.end();
-		removeItor++)
+	if (finished)
 	{
-		unsigned int playerId = *removeItor;
-		playingPlayers_.erase(playerId);
-	}
-
-	// Add any waiting tanks to the game (if possible)
-	std::set<unsigned int>::iterator waitingItor;
-	std::list<unsigned int> removeWaiting;
-	for (waitingItor = waitingPlayers_.begin();
-		waitingItor != waitingPlayers_.end();
-		waitingItor++)
-	{
-		unsigned int playerId = *waitingItor;
-		Tank *tank =
-			ScorchedServer::instance()->getTankContainer().getTankById(playerId);
-		if (!tank || tank->getState().getState() != TankState::sNormal)
+		std::list<ComsPlayedMoveMessage*> messages;
+		std::map<unsigned int, ComsPlayedMoveMessage*>::iterator movesItor;
+		for (movesItor = moves_.begin();
+			movesItor != moves_.end();
+			movesItor++)
 		{
-			removeWaiting.push_back(playerId);
-		}
-		else if (playingDestinations.find(tank->getDestinationId()) == playingDestinations.end())
-		{
-			playingDestinations.insert(tank->getDestinationId());
-			playingPlayers_.insert(playerId);
-			makeMove(tank);
-			removeWaiting.push_back(playerId);
-		}
-	}
+			unsigned int playerId = movesItor->first;
+			ComsPlayedMoveMessage *message = movesItor->second;
 
-	// Remove any that are not waiting
-	for (removeItor = removeWaiting.begin();
-		removeItor != removeWaiting.end();
-		removeItor++)
-	{
-		unsigned int playerId = *removeItor;
-		waitingPlayers_.erase(playerId);
+			Tank *tank = ScorchedServer::instance()->
+				getTankContainer().getTankById(playerId);
+			if (tank && tank->getState().getState() == TankState::sNormal)
+			{
+				messages.push_back(message);
+			}
+			else
+			{
+				delete message;
+			}
+		}
+		moves_.clear();
+		playShots(messages, nextMoveId_, true);
 	}
 }
 
-void ServerTurnsSimultaneous::makeMove(Tank *tank)
-{
-	fixed shotTime = fixed(
-		ScorchedServer::instance()->getOptionsGame().getShotTime());
-	playMove(tank, nextMoveId_, shotTime);
-}
-
-void ServerTurnsSimultaneous::moveFinished(ComsPlayedMoveMessage &playedMessage)
+void ServerTurnsSimultaneous::internalMoveFinished(ComsPlayedMoveMessage &playedMessage)
 {
 	unsigned int playerId = playedMessage.getPlayerId();
 	unsigned int moveId = playedMessage.getMoveId();
 
-	std::set<unsigned int>::iterator itor =
-		playingPlayers_.find(playerId);
-	if (itor == playingPlayers_.end()) return;
 	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
 	if (!tank || tank->getState().getMoveId() != moveId) return;
+	if (moves_.find(playerId) != moves_.end()) return;
 	
 	playMoveFinished(tank);
-	playingPlayers_.erase(itor);
-
-	if (moves_.find(playerId) == moves_.end())
-	{
-		moves_[playerId] = new ComsPlayedMoveMessage(playedMessage);
-	}
-}
-
-void ServerTurnsSimultaneous::playShots()
-{
-	PlayMovesSimAction *movesAction = new PlayMovesSimAction(nextMoveId_, true, true);
-
-	std::map<unsigned int, ComsPlayedMoveMessage*>::iterator itor;
-	for (itor = moves_.begin();
-		itor != moves_.end();
-		itor++)
-	{
-		unsigned int playerId = itor->first;
-		ComsPlayedMoveMessage *message = itor->second;
-
-		Tank *tank = ScorchedServer::instance()->
-			getTankContainer().getTankById(playerId);
-		if (tank && tank->getState().getState() == TankState::sNormal)
-		{
-			movesAction->addMove(message);
-		}
-		else
-		{
-			delete message;
-		}
-	}
-	moves_.clear();
 	
-	playingMoves_ = true;
-	ScorchedServer::instance()->getServerSimulator().
-		addSimulatorAction(movesAction);
-}
-
-void ServerTurnsSimultaneous::shotsFinished(unsigned int moveId)
-{
-	if (nextMoveId_ != moveId) return;
-	playingMoves_ = false;
-
-	enterState();
-}
-
-bool ServerTurnsSimultaneous::finished()
-{
-	return ServerTurns::showScore();
+	moves_[playerId] = new ComsPlayedMoveMessage(playedMessage);
 }
