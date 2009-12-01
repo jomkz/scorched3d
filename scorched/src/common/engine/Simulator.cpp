@@ -95,7 +95,8 @@ void Simulator::actualSimulate(fixed frameTime)
 		if (container->fireTime_ > currentTime_) break;
 		simActions_.pop_front();
 
-		if (context_->getOptionsGame().getActionSyncCheck())
+		if (context_->getOptionsGame().getActionSyncCheck() &&
+			container->action_->replayAction())
 		{
 			context_->getSimulator().addSyncCheck(
 				S3D::formatStringBuffer("Invoking sim action : %u:%s", 

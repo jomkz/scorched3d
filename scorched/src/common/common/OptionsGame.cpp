@@ -180,6 +180,8 @@ OptionsGame::OptionsGame() :
 		"The amount of time before a new game starts", 0, 0, 0, 90, 5),
 	shotTime_(options_, "ShotTime", 
 		"The amount of time each player has for each shot", 0, 0, 0, 90, 5),
+	aiShotTime_(options_, "AIShotTime", 
+		"The amount of time each computer controller player has for each shot", 0, 10, 0, 90, 5),
 	buyingTime_(options_, "BuyingTime", 
 		"The amount of time each player has to buy weapons and use auto defense", 0, 0, 0, 90, 5),
 	removeTime_(options_, "RemoveTime", 

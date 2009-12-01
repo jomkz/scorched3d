@@ -115,7 +115,7 @@ void ServerTurnsFree::internalSimulate(fixed frameTime)
 					playingDestinations.insert(tank->getDestinationId());
 				}
 
-				playMove(tank, ++nextMoveId_, 0);
+				playMove(tank, ++nextMoveId_);
 
 				waitingPlayers_.erase(waitingItor);
 				waitingPlayers_.push_back(playerId);

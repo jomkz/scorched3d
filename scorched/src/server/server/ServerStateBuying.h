@@ -21,7 +21,9 @@
 #if !defined(__INCLUDE_ServerStateBuyingh_INCLUDE__)
 #define __INCLUDE_ServerStateBuyingh_INCLUDE__
 
+#include <engine/SimulatorI.h>
 #include <set>
+#include <map>
 #include <server/ServerTurnsSimultaneous.h>
 #include <coms/ComsPlayedMoveMessage.h>
 
@@ -37,12 +39,31 @@ public:
 	void buyingFinished(ComsPlayedMoveMessage &playedMessage);
 
 protected:
+	struct BuyingPlayer
+	{
+		BuyingPlayer(
+			unsigned int moveId,
+			fixed moveTime) :
+			startedMove_(false),
+			moveId_(moveId),
+			moveTime_(moveTime)
+		{
+		}
+
+		unsigned int moveId_;
+		bool startedMove_;
+		fixed moveTime_;
+	};
+
 	fixed totalTime_;
 	unsigned int nextMoveId_;
 	std::set<unsigned int> joinedPlayers_;
 	std::set<unsigned int> boughtPlayers_;
+	SimulatorIAdapter<ServerStateBuying> *buyingStarted_;
+	std::map<unsigned int, BuyingPlayer*> buyingPlayers_;
 
 	void playerBuying(unsigned int playerId);
+	void buyingStarted(fixed simulationTime, SimAction *action);
 };
 
 #endif

@@ -175,6 +175,9 @@ public:
 	int getShotTime() { return shotTime_; }
 	OptionEntryInt &getShotTimeEntry() { return shotTime_; }
 
+	int getAIShotTime() { return aiShotTime_; }
+	OptionEntryInt &getAIShotTimeEntry() { return aiShotTime_; }
+
 	int getBuyingTime() { return buyingTime_; }
 	OptionEntryInt &getBuyingTimeEntry() { return buyingTime_; }
 
@@ -377,6 +380,7 @@ protected:
 	OptionEntryBoundedInt startArmsLevel_;
 	OptionEntryBoundedInt endArmsLevel_;
 	OptionEntryBoundedInt shotTime_;
+	OptionEntryBoundedInt aiShotTime_;
 	OptionEntryBoundedInt startTime_;
 	OptionEntryBoundedInt buyingTime_;
 	OptionEntryBoundedInt removeTime_;

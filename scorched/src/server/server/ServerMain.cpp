@@ -250,13 +250,14 @@ void consoleServer()
 	ServerCommon::startFileLogger();
 	serverMain(ServerConsoleProgressCounter::instance()->getProgressCounter());
 
+	serverTimer.getTicksDifference();
 	for (;;)
 	{
 		SDL_Delay(10);
 
 		unsigned int ticksDifference = serverTimer.getTicksDifference();
 		fixed timeDifference(true, ticksDifference * 10);
-		serverLoop(ticksDifference);
+		serverLoop(timeDifference);
 	}
 }
 
