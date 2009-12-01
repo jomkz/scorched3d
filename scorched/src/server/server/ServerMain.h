@@ -21,10 +21,12 @@
 #if !defined(__INCLUDE_ServerMainh_INCLUDE__)
 #define __INCLUDE_ServerMainh_INCLUDE__
 
+#include <common/fixed.h>
+
 class ProgressCounter;
 bool startServer(bool local, ProgressCounter *counter = 0);
 void serverMain(ProgressCounter *counter = 0);
-void serverLoop();
+void serverLoop(fixed timeDifference);
 void consoleServer();
 
 #endif

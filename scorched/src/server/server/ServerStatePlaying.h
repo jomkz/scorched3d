@@ -25,6 +25,7 @@
 #include <server/ServerTurnsSimultaneous.h>
 #include <server/ServerTurnsFree.h>
 #include <coms/ComsPlayedMoveMessage.h>
+#include <engine/SimulatorI.h>
 
 class ServerStatePlaying
 {
@@ -38,16 +39,26 @@ public:
 	void simulate(fixed frameTime);
 
 	void moveFinished(ComsPlayedMoveMessage &playedMessage);
-	void roundFinished();
 
 protected:
-	bool roundFinished_;
+	enum RoundState
+	{
+		eNone,
+		eCountingDown,
+		eFinished
+	};
+
+	fixed roundTime_;
+	RoundState roundState_;
 	unsigned int nextRoundId_;
 	ServerTurns *turns_;
 	ServerTurnsSequential turnsSequential_;
 	ServerTurnsSimultaneous turnsSimultaneous_;
 	ServerTurnsSimultaneous turnsSimultaneousNoWait_;
 	ServerTurnsFree turnsFree_;
+	SimulatorIAdapter<ServerStatePlaying> *roundStarted_;
+
+	void roundStarted(fixed simulationTime, SimAction *action);
 };
 
 #endif

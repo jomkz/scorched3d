@@ -21,6 +21,7 @@
 #include <client/ClientSimulator.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientState.h>
+#include <graph/ShotCountDown.h>
 #include <coms/ComsSimulateMessage.h>
 #include <coms/ComsSimulateResultMessage.h>
 #include <coms/ComsNetStatMessage.h>
@@ -49,6 +50,12 @@ void ClientSimulator::simulate(const unsigned state, float simTime)
 {
 	if (state == ClientState::StateLoadLevel) return;
 	Simulator::simulate();
+}
+
+void ClientSimulator::actualSimulate(fixed frameTime)
+{
+	Simulator::actualSimulate(frameTime);
+	ShotCountDown::instance()->simulateTime(frameTime);
 }
 
 void ClientSimulator::draw(const unsigned state)

@@ -75,7 +75,7 @@
 #include <webserver/ServerWebServer.h>
 #endif
 
-Clock serverTimer;
+static Clock serverTimer;
 static bool serverStarted = false;
 
 void checkSettings()
@@ -209,10 +209,8 @@ void serverMain(ProgressCounter *counter)
 	Logger::log(S3D::formatStringBuffer("Server started : %s", startTime.c_str()));
 }
 
-void serverLoop()
+void serverLoop(fixed timeDifference)
 {
-	unsigned int ticksDifference = serverTimer.getTicksDifference();
-	fixed timeDifference(true, ticksDifference * 10);
 	Logger::processLogEntries();
 
 	// Main server loop:
@@ -255,7 +253,10 @@ void consoleServer()
 	for (;;)
 	{
 		SDL_Delay(10);
-		serverLoop();
+
+		unsigned int ticksDifference = serverTimer.getTicksDifference();
+		fixed timeDifference(true, ticksDifference * 10);
+		serverLoop(ticksDifference);
 	}
 }
 

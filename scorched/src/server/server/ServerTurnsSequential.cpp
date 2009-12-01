@@ -103,24 +103,10 @@ void ServerTurnsSequential::internalEnterState()
 
 void ServerTurnsSequential::internalSimulate(fixed frameTime)
 {
-	// Check what we are allowed to do
-	if (shotsState_ == eWaitingStart) return;
-	if (shotsState_ == eWaitingEnd)
-	{
-		if (ScorchedServer::instance()->getActionController().noReferencedActions())
-		{
-			shotsState_ = eNone;
-		}
-		else
-		{
-			return;
-		}
-	}
-
 	// Check if all the tanks have made their moves
 	if (waitingPlayers_.empty() && playingPlayer_ == 0) 
 	{
-		enterState();
+		internalEnterState();
 	}
 
 	// Check tanks are alive

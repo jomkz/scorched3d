@@ -54,7 +54,6 @@ public:
 	void buyingFinished(ComsPlayedMoveMessage &message);
 	void moveFinished(ComsPlayedMoveMessage &message);
 	void scoreFinished();
-	void roundFinished();
 
 protected:
 	ServerStateEnum serverState_;

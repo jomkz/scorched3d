@@ -20,10 +20,8 @@
 
 #include <simactions/RoundStartSimAction.h>
 #include <tank/TankContainer.h>
-#include <engine/ActionController.h>
-#include <actions/RoundTimerAction.h>
 #ifndef S3D_SERVER
-#include <actions/VisualRoundTimerAction.h>
+#include <graph/ShotCountDown.h>
 #endif
 
 REGISTER_CLASS_SOURCE(RoundStartSimAction);
@@ -51,16 +49,8 @@ bool RoundStartSimAction::invokeAction(ScorchedContext &context)
 		if (!context.getServerMode())
 		{
 #ifndef S3D_SERVER
-			VisualRoundTimerAction *timerAction = 
-				new VisualRoundTimerAction(roundId_, timeout_);
-			context.getActionController().addAction(timerAction);
+		ShotCountDown::instance()->showRoundTime(timeout_);
 #endif
-		}
-		else
-		{
-			RoundTimerAction *timerAction = 
-				new RoundTimerAction(roundId_, timeout_);
-			context.getActionController().addAction(timerAction);
 		}
 	}
 

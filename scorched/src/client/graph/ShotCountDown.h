@@ -38,6 +38,11 @@ public:
 	void showMoveTime(fixed timer, TimerType type, unsigned int playerId);
 	void showRoundTime(fixed timer);
 
+	void hideMoveTime();
+	void hideRoundTime();
+
+	void simulateTime(fixed simTime);
+
 	//Inherited from GameStateI
 	virtual void draw(const unsigned state);
 

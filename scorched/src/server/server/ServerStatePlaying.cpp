@@ -30,36 +30,31 @@
 #include <tank/TankScore.h>
 
 ServerStatePlaying::ServerStatePlaying() : 
-	turns_(0), nextRoundId_(0), roundFinished_(false),
+	turns_(0), nextRoundId_(0), roundState_(eNone),
 	turnsSimultaneous_(true), turnsSimultaneousNoWait_(false)
 {
+	roundStarted_ = new SimulatorIAdapter<ServerStatePlaying>(this,  &ServerStatePlaying::roundStarted);
 }
 
 ServerStatePlaying::~ServerStatePlaying()
 {
 }
 
-void ServerStatePlaying::roundFinished()
-{
-	roundFinished_ = true;
-}
-
 bool ServerStatePlaying::showScore()
 {
-	return roundFinished_ || turns_->finished();
+	return (roundState_ == eFinished) || turns_->finished();
 }
 
 void ServerStatePlaying::enterState()
 {
-	roundFinished_ = false;
-
 	// Start the round
-	fixed roundTime = ScorchedServer::instance()->
+	roundState_ = eNone;
+	roundTime_ = ScorchedServer::instance()->
 		getOptionsGame().getRoundTime();
 	RoundStartSimAction *roundStart =
-		new RoundStartSimAction(++nextRoundId_, roundTime);
+		new RoundStartSimAction(++nextRoundId_, roundTime_);
 	ScorchedServer::instance()->getServerSimulator().
-		addSimulatorAction(roundStart);
+		addSimulatorAction(roundStart, roundTime_>0?roundStarted_:0);
 
 	// Ballance any teams needing ballanced
 	TankTeamBallanceSimAction *teamBallance =
@@ -93,9 +88,20 @@ void ServerStatePlaying::enterState()
 	turns_->enterState();
 }
 
+void ServerStatePlaying::roundStarted(fixed simulationTime, SimAction *action)
+{
+	roundState_ = eCountingDown;
+}
+
 void ServerStatePlaying::simulate(fixed frameTime)
 {
 	turns_->simulate(frameTime);
+
+	if (roundState_ == eCountingDown)
+	{
+		roundTime_ -= frameTime;
+		if (roundTime_ < 0) roundState_ = eFinished;
+	}
 }
 
 void ServerStatePlaying::moveFinished(ComsPlayedMoveMessage &playedMessage)

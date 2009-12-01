@@ -24,6 +24,7 @@
 #include <net/NetInterface.h>
 #include <common/Logger.h>
 #include <server/ServerMain.h>
+#include <engine/Simulator.h>
 
 ClientProcessingLoop *ClientProcessingLoop::instance_ = 0;
 
@@ -58,8 +59,10 @@ void ClientProcessingLoop::process(float frameTime, bool processClientMessages)
 		serverTime_ += frameTime;
 		if (serverTime_ > 0.05f)
 		{
+			fixed timeDifference = fixed::fromFloat(serverTime_);
+			timeDifference *= ScorchedClient::instance()->getSimulator().getFast();
+			serverLoop(timeDifference);
 			serverTime_ = 0.0f;
-			serverLoop();
 		}
 	}
 

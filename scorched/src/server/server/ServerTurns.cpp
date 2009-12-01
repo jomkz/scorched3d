@@ -32,10 +32,11 @@
 #include <coms/ComsPlayedMoveMessage.h>
 
 ServerTurns::ServerTurns(bool waitForShots) : 
-	shotsState_(eNone),
+	shotsState_(eShotsNone),
 	waitForShots_(waitForShots)
 {
 	shotsStarted_ = new SimulatorIAdapter<ServerTurns>(this,  &ServerTurns::shotsStarted);
+	moveStarted_ = new SimulatorIAdapter<ServerTurns>(this,  &ServerTurns::moveStarted);
 }
 
 ServerTurns::~ServerTurns()
@@ -44,19 +45,27 @@ ServerTurns::~ServerTurns()
 
 void ServerTurns::enterState()
 {
-	shotsState_ = eNone;
+	shotsState_ = eShotsNone;
+	std::map<unsigned int, PlayingPlayer*>::iterator playingItor;
+	for (playingItor = playingPlayers_.begin();
+		playingItor != playingPlayers_.end();
+		playingItor++)
+	{
+		delete playingItor->second;
+	}
+	playingPlayers_.clear();
 	internalEnterState();
 }
 
 void ServerTurns::simulate(fixed frameTime)
 {
 	// Check what we are allowed to do
-	if (shotsState_ == eWaitingStart) return;
-	if (shotsState_ == eWaitingEnd)
+	if (shotsState_ == eShotsWaitingStart) return;
+	if (shotsState_ == eShotsWaitingEnd)
 	{
 		if (ScorchedServer::instance()->getActionController().noReferencedActions())
 		{
-			shotsState_ = eNone;
+			shotsState_ = eShotsNone;
 		}
 		else
 		{
@@ -64,13 +73,47 @@ void ServerTurns::simulate(fixed frameTime)
 		}
 	}
 
+	// Check if any players have timed out
+	std::map<unsigned int, PlayingPlayer*>::iterator playingItor;
+	for (playingItor = playingPlayers_.begin();
+		playingItor != playingPlayers_.end();
+		playingItor++)
+	{
+		unsigned int playerId = playingItor->first;
+		PlayingPlayer *playing = playingItor->second;
+		if (playing->startedMove_)
+		{
+			playing->moveTime_ -= frameTime;
+			if (playing->moveTime_ < 0)
+			{
+				// Player has timed out
+				ComsPlayedMoveMessage timedOutMessage(
+					playerId, playing->moveId_, ComsPlayedMoveMessage::eTimeout);
+				moveFinished(timedOutMessage);
+				break;
+			}
+		}
+	}
+
 	// Do other stuff
 	internalSimulate(frameTime);
 }
 
-void  ServerTurns::shotsStarted(fixed simulationTime, SimAction *action)
+void ServerTurns::shotsStarted(fixed simulationTime, SimAction *action)
 {
-	shotsState_ = eWaitingEnd;
+	shotsState_ = eShotsWaitingEnd;
+}
+
+void ServerTurns::moveStarted(fixed simulationTime, SimAction *action)
+{
+	TankStartMoveSimAction *startMove = (TankStartMoveSimAction *) action;
+	
+	std::map<unsigned int, PlayingPlayer*>::iterator findItor =
+		playingPlayers_.find(startMove->getPlayerId());
+	if (findItor != playingPlayers_.end())
+	{
+		findItor->second->startedMove_ = true;
+	}
 }
 
 void ServerTurns::moveFinished(ComsPlayedMoveMessage &playedMessage)
@@ -132,11 +175,32 @@ void ServerTurns::playMove(Tank *tank, unsigned int moveId, fixed shotTime)
 	tank->getState().setMoveId(moveId);
 	TankStartMoveSimAction *tankSimAction = new TankStartMoveSimAction(
 		tank->getPlayerId(), tank->getState().getMoveId(), shotTime, false);
-	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);
+
+	if (shotTime > 0)
+	{
+		PlayingPlayer *playingPlayer = new PlayingPlayer(moveId, shotTime);
+		playingPlayers_[tank->getPlayerId()] = playingPlayer;
+
+		ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction, moveStarted_);
+	}
+	else
+	{
+		ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);
+	}
 }
 
 void ServerTurns::playMoveFinished(Tank *tank)
 {	
+	// Remove timeout check for this player
+	std::map<unsigned int, PlayingPlayer*>::iterator findItor =
+		playingPlayers_.find(tank->getPlayerId());
+	if (findItor != playingPlayers_.end())
+	{
+		delete findItor->second;
+		playingPlayers_.erase(findItor);
+	}
+
+	// Send stop move action
 	TankStopMoveSimAction *tankSimAction = 
 		new TankStopMoveSimAction(tank->getPlayerId());
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);	
@@ -159,7 +223,7 @@ void ServerTurns::playShots(std::list<ComsPlayedMoveMessage *> messages, unsigne
 	if (waitForShots_)
 	{
 		callback = shotsStarted_;
-		shotsState_ = eWaitingStart;
+		shotsState_ = eShotsWaitingStart;
 	}
 	ScorchedServer::instance()->getServerSimulator().
 		addSimulatorAction(movesAction, callback);

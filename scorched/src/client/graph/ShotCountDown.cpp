@@ -70,17 +70,31 @@ void ShotCountDown::showRoundTime(fixed timer)
 	if (round.timer_ < 0) round.timer_ = 0;
 }
 
+void ShotCountDown::simulateTime(fixed simTime)
+{
+	round.timer_ -= simTime;
+	move.timer_ -= simTime;
+}
+
+void ShotCountDown::hideMoveTime()
+{
+	move.show_ = false;
+}
+
+void ShotCountDown::hideRoundTime()
+{
+	round.show_ = false;
+}
+
 void ShotCountDown::draw(const unsigned currentstate)
 {
 	if (move.show_) 
 	{
 		drawMove();
-		move.show_ = false;
 	}
 	if (round.show_)
 	{
 		drawRound();
-		round.show_ = false;
 	}
 }
 

@@ -23,6 +23,7 @@
 
 #include <engine/SimulatorI.h>
 #include <list>
+#include <map>
 
 class Tank;
 class ComsPlayedMoveMessage;
@@ -38,7 +39,6 @@ public:
 	virtual void simulate(fixed frameTime);
 	virtual bool finished();
 	virtual void moveFinished(ComsPlayedMoveMessage &playedMessage);
-	void shotsStarted(fixed simulationTime, SimAction *action);
 
 	// Called by This Class
 	virtual void internalEnterState() = 0;
@@ -49,18 +49,37 @@ public:
 protected:
 	enum ShotsState
 	{
-		eNone,
-		eWaitingStart,
-		eWaitingEnd
+		eShotsNone,
+		eShotsWaitingStart,
+		eShotsWaitingEnd
 	};
+	struct PlayingPlayer
+	{
+		PlayingPlayer(
+			unsigned int moveId,
+			fixed moveTime) :
+			startedMove_(false),
+			moveId_(moveId),
+			moveTime_(moveTime)
+		{
+		}
+
+		unsigned int moveId_;
+		bool startedMove_;
+		fixed moveTime_;
+	};
+
 	bool waitForShots_;
 	ShotsState shotsState_;
-	SimulatorIAdapter<ServerTurns> *shotsStarted_;
+	SimulatorIAdapter<ServerTurns> *shotsStarted_, *moveStarted_;
+	std::map<unsigned int, PlayingPlayer*> playingPlayers_;
 
 	bool showScore();
 	void playMove(Tank *tank, unsigned int moveId, fixed shotTime);
 	void playMoveFinished(Tank *tank);
 	void playShots(std::list<ComsPlayedMoveMessage *> messages, unsigned int moveId, bool timeOutPlayers);
+	void shotsStarted(fixed simulationTime, SimAction *action);
+	void moveStarted(fixed simulationTime, SimAction *action);
 };
 
 #endif

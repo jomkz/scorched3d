@@ -126,9 +126,3 @@ void ServerState::scoreFinished()
 	if (getState() != ServerState::ServerScoreState) return;
 	score_.scoreFinished();
 }
-
-void ServerState::roundFinished()
-{
-	if (getState() != ServerState::ServerPlayingState) return;
-	playing_.roundFinished();
-}

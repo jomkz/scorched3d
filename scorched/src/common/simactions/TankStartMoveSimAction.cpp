@@ -23,14 +23,13 @@
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
 #include <tank/TankContainer.h>
-#include <actions/MoveTimerAction.h>
 #include <tankai/TankAI.h>
 #include <engine/ActionController.h>
 #include <common/OptionsScorched.h>
 #ifndef S3D_SERVER
+#include <graph/ShotCountDown.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientStartGameHandler.h>
-#include <actions/VisualMoveTimerAction.h>
 #endif
 
 REGISTER_CLASS_SOURCE(TankStartMoveSimAction);
@@ -67,10 +66,10 @@ bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 		{
 #ifndef S3D_SERVER
 			ClientStartGameHandler::instance()->startGame(this);
-
-			VisualMoveTimerAction *timerAction = 
-				new VisualMoveTimerAction(playerId_, moveId_, timeout_, buying_);
-			context.getActionController().addAction(timerAction);
+			ShotCountDown::instance()->showMoveTime(
+				timeout_, 
+				buying_?ShotCountDown::eBuying:ShotCountDown::ePlaying,
+				playerId_);
 #endif
 		}
 	}
@@ -86,12 +85,6 @@ bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 			{
 				tank->getTankAI()->playMove(moveId_);
 			}
-		}
-		else
-		{
-			MoveTimerAction *timerAction = 
-				new MoveTimerAction(playerId_, moveId_, timeout_, buying_);
-			context.getActionController().addAction(timerAction);
 		}
 	}
 

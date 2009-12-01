@@ -24,6 +24,7 @@
 #ifndef S3D_SERVER
 #include <client/ScorchedClient.h>
 #include <client/ClientState.h>
+#include <graph/ShotCountDown.h>
 #endif
 
 REGISTER_CLASS_SOURCE(TankStopMoveSimAction);
@@ -61,6 +62,7 @@ void TankStopMoveSimAction::stopMove(ScorchedContext &context, Tank *tank)
 		{
 #ifndef S3D_SERVER
 			ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
+			ShotCountDown::instance()->hideMoveTime();
 #endif
 		}
 	}
