@@ -37,7 +37,6 @@ public:
 
 	// GameStateI
 	virtual void simulate(const unsigned state, float simTime);
-	virtual void draw(const unsigned state);
 
 	// ComsMessageHandlerI
 	bool processComsSimulateMessage(
@@ -55,6 +54,14 @@ public:
 	fixed getServerRoundTripTime() { return serverRoundTripTime_; }
 	fixed getServerTimeDifference() { return serverTimeDifference_.getAverage(); }
 	fixed getServerChoke() { return serverChoke_.getAverage(); }
+
+	class ActionControllerGameState : public GameStateI
+	{
+	public:
+		ActionControllerGameState();
+
+		virtual void draw(const unsigned state);
+	} actionControllerGameState;
 
 private:
 	fixed waitingEventTime_;

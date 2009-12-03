@@ -92,6 +92,8 @@ void ClientState::addStandardComponents(GameState &gameState, unsigned state)
 		MainCamera::instance(), new LandscapeStateWaterHandler());
 	gameState.addStateLoop(state, 
 		MainCamera::instance(), new LandscapeStateObjectsHandler());
+	gameState.addStateLoop(state, MainCamera::instance(),
+		&ScorchedClient::instance()->getClientSimulator().actionControllerGameState);
 	gameState.addStateLoop(state, MainCamera::instance(), 
 		&ScorchedClient::instance()->getParticleEngine());
 	gameState.addStateLoop(state, 

@@ -58,11 +58,6 @@ void ClientSimulator::actualSimulate(fixed frameTime)
 	ShotCountDown::instance()->simulateTime(frameTime);
 }
 
-void ClientSimulator::draw(const unsigned state)
-{
-	actionController_.draw();
-}
-
 bool ClientSimulator::processNetStatMessage(
 	NetMessage &netMessage,
 	NetBufferReader &reader)
@@ -156,4 +151,14 @@ void ClientSimulator::setSimulationTime(fixed actualTime)
 
 	// Simulate
 	Simulator::simulateTime();
+}
+
+ClientSimulator::ActionControllerGameState::ActionControllerGameState() :
+	GameStateI("ActionControllerGameState")
+{
+}
+
+void ClientSimulator::ActionControllerGameState::draw(const unsigned int state)
+{
+	ScorchedClient::instance()->getClientSimulator().getActionController().draw();
 }
