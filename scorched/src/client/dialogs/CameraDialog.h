@@ -35,8 +35,8 @@ public:
 	virtual void draw();
 	virtual void simulate(float frameTime);
 	virtual void mouseDown(int button, float x, float y, bool &skipRest);
-	virtual void savePosition(XMLNode *node);
-	virtual void loadPosition(XMLNode *node);
+	virtual void saveSettings(XMLNode *node);
+	virtual void loadSettings(XMLNode *node, bool resetPositions);
 
 protected:
 	static CameraDialog *instance_;

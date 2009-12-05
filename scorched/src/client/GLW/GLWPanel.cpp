@@ -415,6 +415,32 @@ bool GLWPanel::initFromXML(XMLNode *node)
 	return true;
 }
 
+void GLWPanel::saveSettings(XMLNode *node)
+{
+	GLWidget::saveSettings(node);
+
+	std::list<GLWPanelEntry>::iterator itor;
+	for (itor = widgets_.begin();
+		itor != widgets_.end();
+		itor++)
+	{
+		itor->widget->saveSettings(node);
+	}
+}
+
+void GLWPanel::loadSettings(XMLNode *node, bool resetPositions)
+{
+	GLWidget::loadSettings(node, resetPositions);
+
+	std::list<GLWPanelEntry>::iterator itor;
+	for (itor = widgets_.begin();
+		itor != widgets_.end();
+		itor++)
+	{
+		itor->widget->loadSettings(node, resetPositions);
+	}
+}
+
 void GLWPanel::layout()
 {
 	if (layout_ == LayoutNone) return;

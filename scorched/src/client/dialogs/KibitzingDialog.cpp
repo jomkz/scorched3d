@@ -23,6 +23,14 @@
 #include <GLW/GLWLabel.h>
 #include <GLW/GLWWindowManager.h>
 
+KibitzingDialog *KibitzingDialog::instance_(0);
+
+KibitzingDialog *KibitzingDialog::instance()
+{
+	if (!instance_) instance_ = new KibitzingDialog();
+	return instance_;
+}
+
 KibitzingDialog::KibitzingDialog() : 
 	GLWWindow("Kibitzing", 280.0f, 80.0f, 0,
 		"Shows a message saying\n\"No kibitzing, please.\"")

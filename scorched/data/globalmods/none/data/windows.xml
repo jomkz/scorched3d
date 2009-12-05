@@ -110,7 +110,7 @@
 					<channel>general</channel>
 					<channel>team</channel>
 					<channel>whisper</channel>
-          <channel>combat</channel>
+					<channel>combat</channel>
 					<channelcolor>
 						<channel>announce</channel>
 						<color><A>0.8</A><B>0.8</B><C>0.8</C></color>

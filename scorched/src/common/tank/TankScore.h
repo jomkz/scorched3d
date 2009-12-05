@@ -54,9 +54,6 @@ public:
 	int getScore() { return score_; }
 	void setScore(int score);
 
-	int getTurnKills() { return turnKills_; }
-	void setTurnKills(int kills) { turnKills_ = kills; }
-
 	int getMissedMoves() { return missedMoves_; }
 	void setMissedMoves(int miss) { missedMoves_ = miss; }
 
@@ -95,7 +92,7 @@ protected:
 	std::set<unsigned int> hurtBy_;
 	ScorchedContext &context_;
 	int rank_, skill_, startSkill_;
-	int kills_, turnKills_;
+	int kills_;
 	int assists_;
 	int money_;
 	int totalMoneyEarned_, totalScoreEarned_;

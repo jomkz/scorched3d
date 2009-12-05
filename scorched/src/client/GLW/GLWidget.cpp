@@ -144,6 +144,14 @@ bool GLWidget::initFromXML(XMLNode *node)
 	return true;
 }
 
+void GLWidget::saveSettings(XMLNode *node)
+{
+}
+
+void GLWidget::loadSettings(XMLNode *node, bool resetPositions)
+{
+}
+
 void GLWidget::drawWholeCircle(bool cap)
 {
 	glCallList(listNo);

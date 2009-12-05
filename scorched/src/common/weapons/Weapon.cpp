@@ -21,21 +21,46 @@
 #include <weapons/Weapon.h>
 #include <weapons/AccessoryStore.h>
 
+WeaponFireContextInternal::WeaponFireContextInternal() :
+	killCount_(0), referenceCount_(0)
+{
+}
+
+WeaponFireContextInternal::~WeaponFireContextInternal()
+{
+}
+
+void WeaponFireContextInternal::incrementReference()
+{
+	referenceCount_++;
+}
+
+void WeaponFireContextInternal::decrementReference()
+{
+	referenceCount_--;
+	if (referenceCount_ == 0) delete this;
+}
+
 WeaponFireContext::WeaponFireContext(unsigned int playerId, unsigned int data) :
 	playerId_(playerId),
 	data_(data)
 {
+	internalContext_ = new WeaponFireContextInternal();
+	internalContext_->incrementReference();
 }
 
 WeaponFireContext::WeaponFireContext(WeaponFireContext &other) :
 	playerId_(other.playerId_),
 	data_(other.data_),
-	labelCount_(other.labelCount_)
+	labelCount_(other.labelCount_),
+	internalContext_(other.internalContext_)
 {
+	internalContext_->incrementReference();
 }
 
 WeaponFireContext::~WeaponFireContext()
 {
+	internalContext_->decrementReference();
 }
 
 int WeaponFireContext::getIncLabelCount(unsigned int label)

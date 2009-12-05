@@ -69,7 +69,6 @@ void TankScore::newGame()
 {
 	wonGame_ = false;
 	hurtBy_.clear();
-	turnKills_ = 0;
 }
 
 void TankScore::setMoney(int money)
@@ -119,7 +118,6 @@ const char *TankScore::getScoreString()
 bool TankScore::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(kills_);
-	buffer.addToBuffer(turnKills_);
 	buffer.addToBuffer(assists_);
 	buffer.addToBuffer(money_);
 	buffer.addToBuffer(wins_);
@@ -143,11 +141,6 @@ bool TankScore::readMessage(NetBufferReader &reader)
 	if (!reader.getFromBuffer(kills_))
 	{
 		Logger::log("TankScore::kills_ read failed");
-		return false;
-	}
-	if (!reader.getFromBuffer(turnKills_))
-	{
-		Logger::log("TankScore::turnKills_ read failed");
 		return false;
 	}
 	if (!reader.getFromBuffer(assists_))

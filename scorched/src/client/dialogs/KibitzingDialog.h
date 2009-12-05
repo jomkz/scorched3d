@@ -24,17 +24,20 @@
 #include <GLW/GLWWindow.h>
 #include <GLW/GLWButton.h>
 
-class KibitzingDialog : public GLWWindow,
-				public GLWButtonI
+class KibitzingDialog : public GLWWindow, public GLWButtonI
 {
 public:
-	KibitzingDialog();
-	virtual ~KibitzingDialog();
+	static KibitzingDialog *instance();
 
 	virtual void buttonDown(unsigned int id);
 
 protected:
+	static KibitzingDialog *instance_;
 	unsigned int okId_;
+
+private:
+	KibitzingDialog();
+	virtual ~KibitzingDialog();
 };
 
 

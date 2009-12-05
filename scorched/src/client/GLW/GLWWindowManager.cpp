@@ -558,10 +558,10 @@ void GLWWindowManager::menuSelection(const char* menuName,
 	}
 }
 
-void GLWWindowManager::loadPositions()
+void GLWWindowManager::loadSettings()
 {
 	XMLFile file;
-	std::string fileName = S3D::getSettingsFile("windowpositions.xml");
+	std::string fileName = S3D::getSettingsFile("windowsettings.xml");
 	if (!file.readFile(fileName))
 	{
 		S3D::dialogMessage("GLWWindowManager", S3D::formatStringBuffer(
@@ -573,9 +573,9 @@ void GLWWindowManager::loadPositions()
 	if (!file.getRootNode()) return;
 
 	// Get root nodes
-	XMLNode *display = 0, *positions = 0;
+	XMLNode *display = 0, *settings = 0;
 	if (!file.getRootNode()->getNamedChild("display", display)) return;
-	if (!file.getRootNode()->getNamedChild("positions", positions)) return;
+	if (!file.getRootNode()->getNamedChild("settings", settings)) return;
 
 	// Get display size
 	int width, height;
@@ -584,15 +584,13 @@ void GLWWindowManager::loadPositions()
 
 	// Check display size is the same as the current size
 	// if not then discard the windows size changes
-	if (width != GLViewPort::getWidth() ||
-		height != GLViewPort::getHeight())
-	{
-		return;
-	}
+	bool resetPositions = 
+		(width != GLViewPort::getWidth() ||
+		height != GLViewPort::getHeight());
 
 	// Itterate all of the positions in the file
     std::list<XMLNode *>::iterator childrenItor;
-	std::list<XMLNode *> &children = positions->getChildren();
+	std::list<XMLNode *> &children = settings->getChildren();
     for (childrenItor = children.begin();
         childrenItor != children.end();
         childrenItor++)
@@ -612,21 +610,21 @@ void GLWWindowManager::loadPositions()
 			GLWWindow *w = (*winitor).second;
 			if (0 == strcmp(w->getName(), window.c_str()))
 			{
-				w->loadPosition(node);
+				w->loadSettings(node, resetPositions);
 				break;
 			}
 		}
 	}
 }
 
-void GLWWindowManager::savePositions()
+void GLWWindowManager::saveSettings()
 {
-	XMLNode node("positions");
+	XMLNode node("settings");
 
 	XMLNode *display = new XMLNode("display");
-	XMLNode *positions = new XMLNode("positions");
+	XMLNode *settings = new XMLNode("settings");
 	node.addChild(display);
-	node.addChild(positions);
+	node.addChild(settings);
 
 	// Add display
 	display->addChild(new XMLNode("width", GLViewPort::getWidth()));
@@ -642,17 +640,13 @@ void GLWWindowManager::savePositions()
 		{
 			GLWWindow *w = (*winitor).second;
 
-			if ((w->getWindowState() & GLWWindow::eSavePosition) &&
-				w->getX() >= 0 && w->getY() >= 0)
-			{
-				XMLNode *position = new XMLNode("position");
-				positions->addChild(position);
-				position->addChild(new XMLNode("window", w->getName()));
-				w->savePosition(position);
-			}
+			XMLNode *setting = new XMLNode("setting");
+			settings->addChild(setting);
+			setting->addChild(new XMLNode("window", w->getName()));
+			w->saveSettings(setting);
 		}
 	}
 
-	std::string fileName = S3D::getSettingsFile("windowpositions.xml");
+	std::string fileName = S3D::getSettingsFile("windowsettings.xml");
 	node.writeToFile(fileName);
 }

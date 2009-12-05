@@ -27,6 +27,23 @@
 #include <engine/ScorchedContext.h>
 #include <common/NumberParser.h>
 
+class WeaponFireContextInternal
+{
+public:
+	WeaponFireContextInternal();
+	virtual ~WeaponFireContextInternal();
+
+	int getKillCount() { return killCount_; }
+	void setKillCount(int killCount) { killCount_ = killCount; }
+
+	void incrementReference();
+	void decrementReference();
+
+protected:
+	int killCount_;
+	unsigned int referenceCount_;
+};
+
 class WeaponFireContext
 {
 public:
@@ -38,11 +55,13 @@ public:
 	void setPlayerId(unsigned int playerId) { playerId_ = playerId; }
 	unsigned int getData() { return data_; }
 	int getIncLabelCount(unsigned int label);
+	WeaponFireContextInternal &getInternalContext() { return *internalContext_; }
 
 protected:
 	unsigned int playerId_;
 	unsigned int data_;
 	std::map<unsigned int, int> labelCount_;
+	WeaponFireContextInternal *internalContext_;
 
 private:
 	WeaponFireContext &operator=(WeaponFireContext &other);

@@ -55,9 +55,9 @@ CameraDialog::~CameraDialog()
 {
 }
 
-void CameraDialog::savePosition(XMLNode *node)
+void CameraDialog::saveSettings(XMLNode *node)
 {
-	GLWWindow::savePosition(node);
+	GLWWindow::saveSettings(node);
 
 	node->addChild(new XMLNode("w", int(getW())));
 	node->addChild(new XMLNode("h", int(getH())));
@@ -65,18 +65,22 @@ void CameraDialog::savePosition(XMLNode *node)
 	
 }
 
-void CameraDialog::loadPosition(XMLNode *node)
+void CameraDialog::loadSettings(XMLNode *node, bool resetPositions)
 {
-	GLWWindow::loadPosition(node);
+	GLWWindow::loadSettings(node, resetPositions);
 
-	int w, h, type;
-	if (!node->getNamedChild("w", w)) return;
-	if (!node->getNamedChild("h", h)) return;
-	if (!node->getNamedChild("type", type)) return;
+	if (!resetPositions)
+	{
+		int w, h;
+		if (node->getNamedChild("w", w, false)) setW(float(w));
+		if (node->getNamedChild("h", h, false)) setH(float(h));
+	}
 
-	setW(float(w));
-	setH(float(h));
-	targetCam_.setCameraType((TargetCamera::CamType) type);
+	int type;
+	if (node->getNamedChild("type", type, false))
+	{
+		targetCam_.setCameraType((TargetCamera::CamType) type);
+	}
 }
 
 void CameraDialog::draw()

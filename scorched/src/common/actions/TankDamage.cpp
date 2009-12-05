@@ -245,8 +245,8 @@ void TankDamage::calculateDamage()
 					// i.e. no multikill bonus for 1st kill
 					moneyPerKill +=
 						context_->getOptionsGame().getMoneyWonPerMultiKillPoint() *
-							weapon_->getArmsLevel() *
-							firedTank->getScore().getTurnKills();
+						weapon_->getArmsLevel() *
+						weaponContext_.getInternalContext().getKillCount();
 				}
 				if (context_->getOptionsGame().getMoneyPerHealthPoint()) 
 					moneyPerKill = (moneyPerKill * damage_.asInt()) / 100;
@@ -277,12 +277,13 @@ void TankDamage::calculateDamage()
 				{
 					firedTank->getScore().setKills(
 						firedTank->getScore().getKills() + 1);
-					firedTank->getScore().setTurnKills(
-						firedTank->getScore().getTurnKills() + 1);
 					firedTank->getScore().setMoney(
 						firedTank->getScore().getMoney() + moneyPerKill);
 					firedTank->getScore().setScore(
 						firedTank->getScore().getScore() + scorePerKill);
+
+					weaponContext_.getInternalContext().setKillCount(
+						weaponContext_.getInternalContext().getKillCount() + 1);
 
 					if (firedTank->getTeam() > 0)
 					{
@@ -588,7 +589,7 @@ void TankDamage::logDeath()
 			StatsLogger::instance()->
 				weaponKilled(weapon_, (weaponContext_.getData() & Weapon::eDataDeathAnimation));
 			{
-				if (firedTank->getScore().getTurnKills() > 1)
+				if (weaponContext_.getInternalContext().getKillCount() > 1)
 				{
 					ChannelText text("combat", 
 						LANG_RESOURCE_5(

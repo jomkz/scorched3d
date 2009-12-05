@@ -504,25 +504,36 @@ bool GLWWindow::initFromXML(XMLNode *node)
 	return true;
 }
 
-void GLWWindow::savePosition(XMLNode *node)
+void GLWWindow::saveSettings(XMLNode *node)
 {
-	bool visible = GLWWindowManager::instance()->windowVisible(getId());
+	GLWPanel::saveSettings(node);
 
-	node->addChild(new XMLNode("x", int(getX())));
-	node->addChild(new XMLNode("y", int(getY())));
-	node->addChild(new XMLNode("visible", visible));
+	if (getWindowState() & GLWWindow::eSavePosition &&
+		getX() >= 0 && getY() >= 0)
+	{
+		bool visible = GLWWindowManager::instance()->windowVisible(getId());
+
+		node->addChild(new XMLNode("x", int(getX())));
+		node->addChild(new XMLNode("y", int(getY())));
+		node->addChild(new XMLNode("visible", visible));
+	}
 }
 
-void GLWWindow::loadPosition(XMLNode *node)
+void GLWWindow::loadSettings(XMLNode *node, bool resetPositions)
 {
-	int x, y;
-	bool visible;
-	if (!node->getNamedChild("x", x)) return;
-	if (!node->getNamedChild("y", y)) return;
-	if (!node->getNamedChild("visible", visible)) return;
+	GLWPanel::loadSettings(node, resetPositions);
 
-	setX(float(x));
-	setY(float(y));
-	if (!visible) GLWWindowManager::instance()->hideWindow(getId());
-	else GLWWindowManager::instance()->showWindow(getId());
+	if (getWindowState() & GLWWindow::eSavePosition &&
+		!resetPositions)
+	{
+		int x, y;
+		bool visible;
+		if (node->getNamedChild("x", x, false)) setX(float(x));
+		if (node->getNamedChild("y", y, false)) setY(float(y));
+		if (node->getNamedChild("visible", visible, false))
+		{
+			if (!visible) GLWWindowManager::instance()->hideWindow(getId());
+			else GLWWindowManager::instance()->showWindow(getId());
+		}
+	}
 }

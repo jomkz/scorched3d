@@ -87,6 +87,8 @@ public:
 	virtual void hide();
 
 	virtual bool initFromXML(XMLNode *node);
+	virtual void saveSettings(XMLNode *node);
+	virtual void loadSettings(XMLNode *node, bool resetPositions);
 	virtual void clear();
 	virtual void layout();
 

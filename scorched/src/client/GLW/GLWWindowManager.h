@@ -45,8 +45,8 @@ public:
 	void sortWindowLevels();
 	unsigned int getFocus(int x, int y);
 
-	void loadPositions();
-	void savePositions();
+	void saveSettings();
+	void loadSettings();
 	void clear();
 
 	GLWWindow *getWindowByName(const char *name);

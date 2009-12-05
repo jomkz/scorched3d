@@ -65,8 +65,8 @@ public:
 		bool &skipRest);
 	virtual void mouseWheel(float x, float y, float z, bool &skipRest);
 
-	virtual void savePosition(XMLNode *node);
-	virtual void loadPosition(XMLNode *node);
+	virtual void saveSettings(XMLNode *node);
+	virtual void loadSettings(XMLNode *node, bool resetPositions);
 
 	const char *getDescription() { return description_.c_str(); }
 	ToolTip &getToolTip() { return toolTip_; }

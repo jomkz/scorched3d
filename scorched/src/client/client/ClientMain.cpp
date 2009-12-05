@@ -381,7 +381,7 @@ bool ClientMain::clientMain()
 	{
 		ScorchedClient::instance()->getNetInterface().disconnectAllClients();
 	}
-	GLWWindowManager::instance()->savePositions();
+	GLWWindowManager::instance()->saveSettings();
     SDL_Delay(1000);
 	Gamma::instance()->reset();
 	Sound::instance()->destroy();

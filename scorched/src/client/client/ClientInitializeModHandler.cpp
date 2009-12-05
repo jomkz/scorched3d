@@ -125,6 +125,6 @@ bool ClientInitializeModHandler::initialize()
 		S3D::dialogExit("Scorched3D", "Failed to load windows skins");
 	}
 	ClientWindowSetup::setupGameWindows(GLWWindowSkinManager::modinstance());
-	GLWWindowManager::instance()->loadPositions();
+	GLWWindowManager::instance()->loadSettings();
 	return true;
 }

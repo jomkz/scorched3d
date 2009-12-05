@@ -111,7 +111,7 @@ void ClientWindowSetup::addCommonComponents(GLWWindowSkinManager *skinManager,
 
 	KEYBOARDKEY("SHOW_KIBITZ_DIALOG", kibitzKey);
 	GLWWindowManager::instance()->addWindow(state, 
-		new KibitzingDialog, kibitzKey, false);
+		KibitzingDialog::instance(), kibitzKey, false);
 
 	if (!ClientParams::instance()->getConnectedToServer())
 	{

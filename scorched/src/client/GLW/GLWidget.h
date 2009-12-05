@@ -55,6 +55,8 @@ public:
 	// Accessors
 	unsigned int getId() { return id_; }
 	virtual bool initFromXML(XMLNode *node);
+	virtual void saveSettings(XMLNode *node);
+	virtual void loadSettings(XMLNode *node, bool resetPositions);
 	virtual void setToolTip(ToolTip *tooltip) { tooltip_ = tooltip; }
 	virtual void setParent(GLWPanel *parent);
 	virtual GLWPanel *getParent() { return parent_; }
