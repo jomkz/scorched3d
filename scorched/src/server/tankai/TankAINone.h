@@ -51,6 +51,7 @@ public:
 
 	virtual bool availableForRandom() { return false; }
 	virtual bool availableForPlayers() { return false; }
+	virtual bool removedPlayer() { return true; }
 
 protected:
 	unsigned int playerId_;

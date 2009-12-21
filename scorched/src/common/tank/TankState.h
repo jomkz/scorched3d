@@ -59,6 +59,8 @@ public:
 	bool getMuted() { return muted_; }
 	void setSkipShots(bool skip) { skipshots_ = skip; }
 	bool getSkipShots() { return skipshots_; }
+	void setSkippedShots(int skipped) { skippedShots_ = skipped; }
+	int getSkippedShots() { return skippedShots_; }
 	int getLives() { return lives_; }
 	void setLives(int lives) { lives_ = lives; }
 	int getMaxLives() { return maxLives_; }
@@ -85,6 +87,7 @@ protected:
 	bool skipshots_;
 	bool notSpectator_;
 	bool newlyJoined_;
+	int skippedShots_;
 
 };
 

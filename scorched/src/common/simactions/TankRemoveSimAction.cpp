@@ -22,21 +22,24 @@
 #include <engine/ActionController.h>
 #include <actions/TankRemove.h>
 
+unsigned int TankRemoveSimAction::TankRemoveSimActionCount = 0;
+
 REGISTER_CLASS_SOURCE(TankRemoveSimAction);
 
 TankRemoveSimAction::TankRemoveSimAction()
 {
+	TankRemoveSimActionCount++;
 }
 
 TankRemoveSimAction::TankRemoveSimAction(unsigned int playerId, fixed removalTime) :
 	playerId_(playerId), removalTime_(removalTime)
 {
-
+	TankRemoveSimActionCount++;
 }
 
 TankRemoveSimAction::~TankRemoveSimAction()
 {
-
+	TankRemoveSimActionCount--;
 }
 
 bool TankRemoveSimAction::invokeAction(ScorchedContext &context)

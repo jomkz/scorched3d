@@ -63,6 +63,7 @@ public:
 	// the random tank ai type
 	virtual bool availableForRandom() { return availableForRandom_; }
 	virtual bool availableForPlayers() { return availableForPlayers_; }
+	virtual bool removedPlayer() { return false; }
 
 protected:
 	std::string name_, description_;

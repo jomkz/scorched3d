@@ -35,6 +35,8 @@ public:
 	virtual bool writeMessage(NetBuffer &buffer);
 	virtual bool readMessage(NetBufferReader &reader);
 
+	static unsigned int TankRemoveSimActionCount;
+
 REGISTER_CLASS_HEADER(TankRemoveSimAction);
 protected:
 	fixed removalTime_;

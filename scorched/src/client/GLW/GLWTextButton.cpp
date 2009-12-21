@@ -30,6 +30,7 @@ GLWTextButton::GLWTextButton(const LangString &buttonText,
 	label_(x, y -2, buttonText, size),
 	color_(GLWFont::widgetFontColor)
 {
+	setName(LangStringUtil::convertFromLang(buttonText));
 }
 
 GLWTextButton::~GLWTextButton()

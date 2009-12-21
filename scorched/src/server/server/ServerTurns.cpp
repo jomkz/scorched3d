@@ -186,6 +186,7 @@ bool ServerTurns::showScore()
 		return true;
 	}
 
+	bool allSkipped = true;
 	std::map<unsigned int, Tank *> &tanks =
 		ScorchedServer::instance()->getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
@@ -198,6 +199,17 @@ bool ServerTurns::showScore()
 		{
 			return true;
 		}
+
+		if (tank->getState().getLives() > 0 &&
+			tank->getState().getTankPlaying() &&
+			tank->getState().getSkippedShots() == 0)
+		{
+			allSkipped = false;
+		}
+	}
+	if (allSkipped) 
+	{
+		return true;
 	}
 	
 	if (ScorchedServer::instance()->getOptionsGame().getTeams() > 1 &&

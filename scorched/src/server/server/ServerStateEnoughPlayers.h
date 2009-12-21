@@ -21,6 +21,7 @@
 #if !defined(__INCLUDE_ServerStateEnoughPlayersh_INCLUDE__)
 #define __INCLUDE_ServerStateEnoughPlayersh_INCLUDE__
 
+class ScorchedContext;
 class ServerStateEnoughPlayers 
 {
 public:
@@ -30,6 +31,11 @@ public:
 	bool enoughPlayers();
 protected:
 	void checkExit();
+	bool needsBotBallance(ScorchedContext &context);
+	void ballanceBots(ScorchedContext &context);
+	int countBots(ScorchedContext &context);
+	void removeBots(int requiredPlayers, int noPlayers);
+	void addBots(int requiredPlayers, int noPlayers);
 };
 
 #endif

@@ -273,6 +273,11 @@ void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 		GLWSelector::instance(), 0, true);
 	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape, 
 		MsgBoxDialog::instance(), 0, false);
+	if (ScorchedClient::instance()->getOptionsGame().getTutorial()[0])
+	{
+		GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape, 
+ 			TutorialDialog::instance(), 0, true);
+	}
 
 	// StateLoadLevel
 	GLWWindowManager::instance()->addWindow(ClientState::StateLoadLevel,

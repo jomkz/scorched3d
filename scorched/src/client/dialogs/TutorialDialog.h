@@ -37,6 +37,9 @@ public:
 	virtual void simulate(float frameTime);
 	virtual void draw();
 
+	virtual void mouseDown(int button, float x, float y, bool &skipRest);
+	virtual void mouseUp(int button, float x, float y, bool &skipRest);
+
 	virtual void url(const char *url);
 	virtual void event(std::map<std::string, std::string> &event);
 
@@ -44,6 +47,7 @@ public:
 protected:
 	static TutorialDialog *instance_;
 	float triangleDist_, triangleDir_;
+	float speed_;
 	GLWListView *listView_;
 	GLTexture triangleTex_;
 	TutorialFile file_;

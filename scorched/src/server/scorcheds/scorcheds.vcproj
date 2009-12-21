@@ -3869,14 +3869,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\simactions\TankBotBallanceSimAction.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\simactions\TankBotBallanceSimAction.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\simactions\TankChangeSimAction.cpp"
 				>
 			</File>

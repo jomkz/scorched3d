@@ -53,7 +53,7 @@ TutorialDialog::TutorialDialog() :
 		470.0f, 120.0f, eSemiTransparent | eNoTitle | eHideName,
 		"The ingame tutorial."),
 	triangleDir_(30.0f), triangleDist_(0.0f),
-	current_(0)
+	current_(0), speed_(1.0f)
 {
 	windowLevel_ = 75000;
 
@@ -85,6 +85,18 @@ void TutorialDialog::showPage(TutorialFileEntry *entry)
 
 	listView_->clear();
 	listView_->addXML(entry->text_);
+}
+
+void TutorialDialog::mouseDown(int button, float x, float y, bool &skipRest)
+{
+	GLWWindow::mouseDown(button, x, y, skipRest);
+	speed_ = 3.0f;
+}
+
+void TutorialDialog::mouseUp(int button, float x, float y, bool &skipRest)
+{
+	GLWWindow::mouseUp(button, x, y, skipRest);
+	speed_ = 1.0f;
 }
 
 void TutorialDialog::display()
@@ -208,7 +220,7 @@ void TutorialDialog::processHighlight(bool log)
 
 void TutorialDialog::simulate(float frameTime)
 {
-	GLWWindow::simulate(frameTime);
+	GLWWindow::simulate(frameTime * speed_);
 
 	triangleDist_ += frameTime * triangleDir_;
 	if (triangleDist_ < 0.0f)

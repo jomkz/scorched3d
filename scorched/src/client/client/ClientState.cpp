@@ -102,9 +102,9 @@ void ClientState::addStandardComponents(GameState &gameState, unsigned state)
 		Main2DCamera::instance(), &RenderTargets::instance()->render2D);
 	gameState.addStateLoop(state, 
 		Main2DCamera::instance(), SpeedChange::instance());
-	addWindowManager(gameState, state);
 	gameState.addStateLoop(state,
 		Main2DCamera::instance(), ShotCountDown::instance());
+	addWindowManager(gameState, state);
 	gameState.addStateLoop(state, Main2DCamera::instance(), 
 		GLWToolTip::instance());
 	gameState.addStateLoop(state, Main2DCamera::instance(), 

@@ -53,6 +53,7 @@ TankState::TankState(ScorchedContext &context, unsigned int playerId) :
 	muted_(false),
 	skipshots_(false),
 	lives_(0), maxLives_(1), moveId_(0),
+	skippedShots_(0),
 	notSpectator_(false),
 	newlyJoined_(true)
 {
@@ -69,6 +70,7 @@ void TankState::newMatch()
 
 void TankState::newGame()
 {
+	skippedShots_ = 0;
 	setState(sNormal);
 	if (!tank_->isTemp())
 	{

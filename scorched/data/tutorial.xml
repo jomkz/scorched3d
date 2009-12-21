@@ -103,7 +103,7 @@ Although each tank looks very different they all share the same weapons and attr
 					<next>game</next>
 				</condition>
 			</conditions>
-			<text>Once you have given your player a name, color and a tank click the <event action="highlight" window="Team" control="Ok">Ok</event> button to continue.</text>
+			<text>Once you have given your player a name, color and a tank click the <event action="highlight" window="Team" control="Play">Play</event> button to continue.</text>
 		</step>		
 		
 		<!-- Game -->
@@ -161,7 +161,7 @@ The number keys, 0 to 9 on the keyboard, can be used to choose from a set of cam
 				</condition>
 			</conditions>
 			<text>The other way to move the camera is with the mouse.
-Clicking with the left mouse button on the landscape will move the camera to look at that position.
+Clicking (or dragging) with the left mouse button on the landscape will move the camera to look at that position.
 Clicking and dragging with the right mouse button will rotate the camera.
 The mouse wheel controls the zoom of the camera.
 <a href="game4a">Click Here to Continue...</a></text>
@@ -247,22 +247,9 @@ This will only rotate the tank, the power and elevation adjustments still need t
 			</conditions>
 			<text>When aiming it is always a good idea to take the <event action="highlight" window="Wind" control="Wind">wind</event> (if any) into account.
 The wind will blow all shots off target.
-<a href="game8">Click Here to Continue...</a></text>
+<a href="firing">Click Here to Continue...</a></text>
 		</step>			
 	
-		<step>
-			<name>game8</name>
-			<conditions>
-				<condition type="FirstMove">
-					<next>firing</next>
-				</condition>
-			</conditions>
-			<text>Once you have finished aiming it is time to fire the weapon.  
-Usually all players get a turn, however in this tutorial the other tanks will not fire back.
-
-To fire press the space bar.</text>
-		</step>		
-		
 		<step>
 			<name>firing</name>
 			<conditions>
@@ -270,8 +257,13 @@ To fire press the space bar.</text>
 					<next>checkbuying</next>
 				</condition>
 			</conditions>
-			<text>Keep adjusting your aim and firing until you have killed one of the targets.</text>
-		</step>
+			<text>Once you have finished aiming it is time to fire the weapon.  
+Usually all players get a turn, however in this tutorial the other tanks will not fire back.
+
+To fire press the space bar.
+
+Keep adjusting your aim and firing until you have killed one of the targets.</text>
+		</step>		
 
     <step>
       <name>checkbuying</name>

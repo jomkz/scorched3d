@@ -23,9 +23,14 @@
 #include <server/ScorchedServer.h>
 #include <server/ServerSimulator.h>
 #include <server/ServerCommon.h>
-#include <simactions/TankBotBallanceSimAction.h>
+#include <server/ServerMessageHandler.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
+#include <tank/TankScore.h>
+#include <tankai/TankAI.h>
+#include <tankai/TankAIAdder.h>
+#include <simactions/TankAddSimAction.h>
+#include <simactions/TankRemoveSimAction.h>
 #include <common/OptionsScorched.h>
 #include <common/Logger.h>
 
@@ -39,16 +44,14 @@ ServerStateEnoughPlayers::~ServerStateEnoughPlayers()
 
 bool ServerStateEnoughPlayers::enoughPlayers()
 {
-	/*
-	if (TankBotBallanceSimAction::needsBotBallance(
-		ScorchedServer::instance()->getContext()))
+	// Check if we need to add or remove bots to keep game going
+	if (needsBotBallance(ScorchedServer::instance()->getContext()) &&
+		TankAddSimAction::TankAddSimActionCount == 0 &&
+		TankRemoveSimAction::TankRemoveSimActionCount == 0)
 	{
-		TankBotBallanceSimAction *botBallance =
-			new TankBotBallanceSimAction();
-		ScorchedServer::instance()->getServerSimulator().
-			addSimulatorAction(botBallance);
+		// Any bots added won't join until the next round anyway
+		ballanceBots(ScorchedServer::instance()->getContext());
 	}
-	*/
 
 	// Make sure we have enough players to play a game
 	if (ScorchedServer::instance()->getTankContainer().getNoOfNonSpectatorTanks() <
@@ -102,6 +105,187 @@ bool ServerStateEnoughPlayers::enoughPlayers()
 	}
 	
 	return true;
+}
+
+bool ServerStateEnoughPlayers::needsBotBallance(ScorchedContext &context)
+{
+	// Get the number of players we require
+	int requiredPlayers =
+		context.getOptionsGame().getRemoveBotsAtPlayers();
+	if (requiredPlayers == 0) return false;
+
+	// Get the number of players we have
+	int noPlayers = countBots(context);
+	return (noPlayers != requiredPlayers);
+}
+
+void ServerStateEnoughPlayers::ballanceBots(ScorchedContext &context)
+{
+	// Get the number of players we require
+	int requiredPlayers =
+		context.getOptionsGame().getRemoveBotsAtPlayers();
+	if (requiredPlayers == 0) return;
+
+	// Get the number of players we have
+	int noPlayers = countBots(context);
+	if (noPlayers != requiredPlayers)
+	{
+		// Tell people whats going on
+		ChannelText text("info",
+			"AUTO_BALLANCE_BOTS",
+			"Auto ballancing bots");
+		ServerChannelManager::instance()->sendText(text, true, false);
+	}
+
+	// Check if we need to gain or lose players
+	if (noPlayers > requiredPlayers)
+	{
+		removeBots(requiredPlayers, noPlayers);
+	}
+	else if (noPlayers < requiredPlayers)
+	{
+		addBots(requiredPlayers, noPlayers);
+	}
+}
+
+int ServerStateEnoughPlayers::countBots(ScorchedContext &context)
+{
+	// Add up the number of tanks that are either
+	// human and not spectators
+	// or an ai
+	int noPlayers = 0;
+	std::map<unsigned int, Tank *> &playingTanks = 
+		context.getTankContainer().getPlayingTanks();
+	std::map<unsigned int, Tank *>::iterator mainitor;
+	for (mainitor = playingTanks.begin();
+		mainitor != playingTanks.end();
+		mainitor++)
+	{
+		Tank *current = (*mainitor).second;
+		if ((current->getDestinationId() != 0 && current->getState().getState() != TankState::sSpectator) ||
+			(current->getDestinationId() == 0 && !current->getTankAI()->removedPlayer()))
+		{
+			noPlayers++;
+		}
+	}
+	return noPlayers;
+}
+
+void ServerStateEnoughPlayers::removeBots(int requiredPlayers, int noPlayers)
+{
+	std::multimap<unsigned int, unsigned int> ais_;
+
+	// Get this list of computer players and sort them
+	// by the time they have been playing for
+	std::map<unsigned int, Tank *> &playingTanks = 
+		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+	std::map<unsigned int, Tank *>::iterator mainitor;
+	for (mainitor = playingTanks.begin();
+		mainitor != playingTanks.end();
+		mainitor++)
+	{
+		Tank *current = (*mainitor).second;
+		if (current->getDestinationId() == 0 &&
+			!current->getTankAI()->removedPlayer())
+		{
+			unsigned int startTime = (unsigned int)
+				current->getScore().getStartTime();
+			ais_.insert(std::pair<unsigned int, unsigned int>
+				(startTime, current->getPlayerId()));
+		}
+	}
+
+	// Kick the ais that have been on the server the longest
+	std::multimap<unsigned int, unsigned int>::reverse_iterator
+		aiItor = ais_.rbegin();
+	while (noPlayers > requiredPlayers)
+	{
+		if (aiItor != ais_.rend())
+		{
+			std::pair<unsigned int, unsigned int> item = *aiItor;
+			ServerMessageHandler::instance()->destroyPlayer(
+				item.second, "Auto-kick");
+			aiItor++;
+		}
+		noPlayers--;
+	}
+}
+
+void ServerStateEnoughPlayers::addBots(int requiredPlayers, int noPlayers)
+{
+	std::multimap<std::string, unsigned int> ais_;
+
+	// Get this list of computer players and sort them
+	// by ai name
+	std::map<unsigned int, Tank *> &playingTanks = 
+		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+	std::map<unsigned int, Tank *>::iterator mainitor;
+	for (mainitor = playingTanks.begin();
+		mainitor != playingTanks.end();
+		mainitor++)
+	{
+		Tank *current = (*mainitor).second;
+		if (current->getDestinationId() == 0 &&
+			!current->getTankAI()->removedPlayer())
+		{
+			ais_.insert(std::pair<std::string, unsigned int>
+				(current->getTankAI()->getName(), 
+				current->getPlayerId()));
+		}
+	}
+
+	// Add any computer players that should be playing 
+	// and that are not in the list of currently playing
+	int maxComputerAIs = 
+		ScorchedServer::instance()->getOptionsGame().getNoMaxPlayers();
+	for (int i=0; i<maxComputerAIs; i++)
+	{
+		const char *playerType = 
+			ScorchedServer::instance()->getOptionsGame().getPlayerType(i);
+		if (0 != stricmp(playerType, "Human") &&
+			0 != stricmp(playerType, "Random"))
+		{
+			std::multimap<std::string, unsigned int>::iterator findItor =
+				ais_.find(playerType);
+			if (findItor == ais_.end())
+			{
+				if (noPlayers < requiredPlayers)
+				{
+					// This player does not exist add them
+					TankAIAdder::addTankAI(*ScorchedServer::instance(), playerType);
+					noPlayers++;
+				}
+			}
+			else
+			{
+				// This player does exist dont add them
+				ais_.erase(findItor);
+			}
+		}
+	}
+	for (int i=0; i<maxComputerAIs; i++)
+	{
+		const char *playerType = 
+			ScorchedServer::instance()->getOptionsGame().getPlayerType(i);
+		if (0 != stricmp(playerType, "Human") &&
+			0 == stricmp(playerType, "Random"))
+		{
+			if (ais_.empty())
+			{
+				if (noPlayers < requiredPlayers)
+				{
+					// This player does not exist add them
+					TankAIAdder::addTankAI(*ScorchedServer::instance(), playerType);
+					noPlayers++;
+				}										
+			}
+			else
+			{
+				// This player does exist dont add them
+				ais_.erase(ais_.begin());
+			}
+		}
+	}
 }
 
 void ServerStateEnoughPlayers::checkExit()
