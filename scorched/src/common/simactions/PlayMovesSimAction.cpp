@@ -84,9 +84,6 @@ bool PlayMovesSimAction::invokeAction(ScorchedContext &context)
 			case ComsPlayedMoveMessage::eResign:
 				tankResigned(context, tank, *message);
 				break;
-			case ComsPlayedMoveMessage::eSkip:
-				tankSkipped(context, tank, *message);
-				break;
 			}
 
 			if (timeoutPlayers_ &&
@@ -97,6 +94,16 @@ bool PlayMovesSimAction::invokeAction(ScorchedContext &context)
 			else
 			{
 				tank->getScore().setMissedMoves(0);
+			}
+
+			if (message->getType() == ComsPlayedMoveMessage::eTimeout ||
+				message->getType() == ComsPlayedMoveMessage::eSkip)
+			{
+				tank->getState().setSkippedShots(tank->getState().getSkippedShots() + 1);
+			}
+			else
+			{
+				tank->getState().setSkippedShots(0);
 			}
 		}
 	}
@@ -226,12 +233,6 @@ void PlayMovesSimAction::tankResigned(ScorchedContext &context,
 	}
 	context.getActionController().addAction(
 		new TankResign(tank->getPlayerId(), resignTime));
-}
-
-void PlayMovesSimAction::tankSkipped(ScorchedContext &context, 
-	Tank *tank, ComsPlayedMoveMessage &message)
-{
-	tank->getState().setSkippedShots(tank->getState().getSkippedShots() + 1);
 }
 
 bool PlayMovesSimAction::writeMessage(NetBuffer &buffer)
