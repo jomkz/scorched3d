@@ -113,8 +113,13 @@ void ServerStateNewGame::newGameState()
 	ScorchedServer::instance()->getContext().getOptionsTransient().newGame();
 
 	// Generate the new level
+	ProgressCounter *progressCounter = 0;
+#ifdef S3D_SERVER
+	progressCounter = ServerConsoleProgressCounter::instance()->getProgressCounter();
+#endif
+
 	ScorchedServer::instance()->getLandscapeMaps().generateMaps(
-		ScorchedServer::instance()->getContext(), defn, 
-		ServerConsoleProgressCounter::instance()->getProgressCounter());
+		ScorchedServer::instance()->getContext(), defn,
+		progressCounter);
 	ServerCommon::serverLog("Finished generating landscape");
 }
