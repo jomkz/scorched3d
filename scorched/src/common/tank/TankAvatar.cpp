@@ -67,16 +67,19 @@ void TankAvatar::clear()
 
 bool TankAvatar::readMessage(NetBufferReader &reader)
 {
+	static NetBuffer buffer;
+	std::string name;
 	unsigned int used = 0;
-	if (!reader.getFromBuffer(name_)) return false;
+	if (!reader.getFromBuffer(name)) return false;
 	if (!reader.getFromBuffer(used)) return false;
 	if (used > 0)
 	{
-		file_->allocate(used);
-		file_->reset();
-		file_->setBufferUsed(used);
-		reader.getDataFromBuffer(file_->getBuffer(),
-			used);
+		buffer.allocate(used);
+		buffer.reset();
+		buffer.setBufferUsed(used);
+		reader.getDataFromBuffer(buffer.getBuffer(), used);
+
+		setFromBuffer(name, buffer);
 	}
 	return true;
 }
@@ -107,8 +110,7 @@ unsigned int TankAvatar::getCrc()
 	return crc;
 }
 
-bool TankAvatar::setFromBuffer(const std::string &fileName,
-	NetBuffer &buffer, bool createTexture)
+bool TankAvatar::setFromBuffer(const std::string &fileName, NetBuffer &buffer)
 {
 	ImagePng png;
 	if (!png.loadFromBuffer(buffer)) return false;
@@ -121,7 +123,6 @@ bool TankAvatar::setFromBuffer(const std::string &fileName,
 		buffer.getBufferUsed());
 
 #ifndef S3D_SERVER
-	if (createTexture)
 	{
 		texture_ = 0;
 		unsigned int crc = getCrc();

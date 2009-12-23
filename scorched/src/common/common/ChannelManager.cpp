@@ -39,9 +39,6 @@ void ChannelManager::showText(ScorchedContext &context, const ChannelText &text)
 	}
 #else
 	ChannelText &nonConst = (ChannelText &) text;
-	if (nonConst.getChannel() == "combat")
-	{
-		Logger::log(LangStringUtil::convertFromLang(nonConst.getMessage()));
-	}
+	Logger::log(LangStringUtil::convertFromLang(nonConst.getMessage()));
 #endif
 }

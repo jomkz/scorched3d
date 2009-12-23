@@ -22,7 +22,7 @@
 #define __INCLUDE_PlayerDialogh_INCLUDE__
 
 #include <GLW/GLWWindow.h>
-#include <GLW/GLWButton.h>
+#include <GLW/GLWTextButton.h>
 #include <GLW/GLWTextBox.h>
 #include <GLW/GLWImageList.h>
 #include <GLW/GLWLabel.h>
@@ -67,8 +67,9 @@ protected:
 	ToolTip avatarTip1_;
 	ToolTip humanToolTip_;
 	GLTexture colorTexture_;
+	GLWTextButton *cancelButton_;
 	unsigned int allocatedTeam_;
-	unsigned int okId_, cancelId_;
+	unsigned int okId_;
 	unsigned int currentPlayerId_;
 
 	void nextPlayer();

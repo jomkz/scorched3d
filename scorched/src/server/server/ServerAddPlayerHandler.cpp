@@ -118,46 +118,6 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 	filterName(tank, name);
 	message.setPlayerName(name);
 
-#ifdef S3D_SERVER
-	// Tell this computer that a new tank has connected
-	if (name != tank->getTargetName())
-	{
-		Logger::log(S3D::formatStringBuffer(
-			"Player playing dest=\"%i\" id=\"%i\" \"%s\"->\"%s\"",
-			tank->getDestinationId(), tank->getPlayerId(),
-			tank->getCStrName().c_str(), name.c_str()));
-
-		ServerChannelManager::instance()->sendText( 
-			ChannelText("info",
-				"PLAYER_NAME_CHANGE",
-				"Player \"{0}\" changed name to \"{1}\"",
-				tank->getTargetName(), name),
-			true);
-
-		StatsLogger::TankRank rank = StatsLogger::instance()->tankRank(tank);
-		if (rank.rank >= 0)
-		{
-			ServerChannelManager::instance()->sendText( 
-				ChannelText("info",
-					"WELCOME_BACK",
-					"Welcome back [p:{0}], you are ranked {1}",
-					tank->getTargetName(), rank.rank),
-				tank->getDestinationId(),
-				false);
-		}
-
-		if (tank->getState().getState() == TankState::sSpectator)
-		{
-			ServerChannelManager::instance()->sendText( 
-				ChannelText("info",
-					"PLAYER_PLAYING",
-					"Player playing [p:{0}]",
-					tank->getTargetName()),
-				true);
-		}
-	}
-#endif // #ifdef S3D_SERVER
-
 	// Send to client
 	TankChangeSimAction *simAction = new TankChangeSimAction(message);
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);

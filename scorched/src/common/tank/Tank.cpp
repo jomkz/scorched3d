@@ -154,6 +154,7 @@ bool Tank::writeMessage(NetBuffer &buffer, bool writeAccessories)
 	if (!score_->writeMessage(buffer)) return false;
 	if (!position_->writeMessage(buffer)) return false;
 	if (!modelContainer_->writeMessage(buffer)) return false;
+	if (!avatar_->writeMessage(buffer)) return false;
 	return true;
 }
 
@@ -202,6 +203,11 @@ bool Tank::readMessage(NetBufferReader &reader)
 	if (!modelContainer_->readMessage(reader))
 	{
 		Logger::log("Tank::modelContainer_ read failed");
+		return false;
+	}
+	if (!avatar_->readMessage(reader))
+	{
+		Logger::log("Tank::avatar_ read failed");
 		return false;
 	}
 

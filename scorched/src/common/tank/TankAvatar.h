@@ -37,9 +37,7 @@ public:
 
 	void clear();
 	bool loadFromFile(const std::string &fileName);
-	bool setFromBuffer(const std::string &fileName,
-		NetBuffer &buffer,
-		bool createTexture = false);
+	bool setFromBuffer(const std::string &fileName, NetBuffer &buffer);
 
 #ifndef S3D_SERVER
 	GLTexture *getTexture();

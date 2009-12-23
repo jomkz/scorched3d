@@ -22,6 +22,8 @@
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <common/StatsLogger.h>
+#include <common/Logger.h>
+#include <common/ChannelManager.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
 #include <tank/TankContainer.h>
@@ -51,7 +53,10 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 	// Validate player
 	unsigned int playerId = message_.getPlayerId();
 	Tank *tank = context.getTankContainer().getTankById(playerId);
-	if (!tank) return true;
+	if (!tank || tank->getState().getState() == TankState::sNormal)
+	{
+		return true;
+	}
 
 	// Make sure no-one has the same name
 	LangString postFix = LANG_STRING("");
@@ -81,6 +86,7 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 	sentname += postFix;
 
 	// Setup the new player
+	LangString oldName = tank->getTargetName();
 	tank->setName(sentname);
 
 	// Player has set a new color
@@ -106,8 +112,7 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 		{
 			tank->getAvatar().setFromBuffer(
 				message_.getPlayerIconName(),
-				message_.getPlayerIcon(),
-				!context.getServerMode());
+				message_.getPlayerIcon());
 		}
 	}
 
@@ -138,6 +143,33 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 				tank->isTemp());
 	tank->getModelContainer().setTankModelName(
 		tankModel->getName(), message_.getModelName(), tankModel->getTypeName());
+
+	// Show some infor
+	if (!tank->getState().getNotSpectator())
+	{
+#ifdef S3D_SERVER
+	Logger::log(S3D::formatStringBuffer(
+		"Player playing dest=\"%i\" id=\"%i\" \"%s\"",
+		tank->getDestinationId(), tank->getPlayerId(),
+		tank->getCStrName().c_str()));
+#endif // #ifdef S3D_SERVER
+
+		ChannelManager::showText(
+			context,
+			ChannelText("info",
+				"PLAYER_PLAYING",
+				"Player playing [p:{0}]",
+				sentname));
+	} 
+	else if (oldName != tank->getTargetName())
+	{
+		ChannelManager::showText(
+			context,
+			ChannelText("info",
+				"PLAYER_NAME_CHANGE",
+				"Player \"{0}\" changed name to \"[p:{1}]\"",
+				oldName, tank->getTargetName()));
+	}
 
 	// Set state
 	tank->getState().setState(TankState::sDead);

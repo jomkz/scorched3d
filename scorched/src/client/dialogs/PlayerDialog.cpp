@@ -57,7 +57,7 @@ PlayerDialog::PlayerDialog() :
 	GLWWindow("Team", 10.0f, 10.0f, 740.0f, 480.0f, eSmallTitle,
 		"Allows the player to make changes to their\n"
 		"name, their tank and to change teams."),
-	allocatedTeam_(0), cancelId_(0), viewer_(0)
+	allocatedTeam_(0), cancelButton_(0), viewer_(0)
 {
 	needCentered_ = true;
 
@@ -66,8 +66,8 @@ PlayerDialog::PlayerDialog() :
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX))->getId();
 	if (ClientParams::instance()->getConnectedToServer())
 	{
-		cancelId_ = addWidget(new GLWTextButton(LANG_RESOURCE("SPECTATE", "Spectate"), 550, 10, 105, this, 
-			GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX))->getId();
+		cancelButton_ = (GLWTextButton *) addWidget(new GLWTextButton(LANG_RESOURCE("SPECTATE", "Spectate"), 550, 10, 105, this, 
+			GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX));
 	}
 
 	GLWPanel *infoPanel = new GLWPanel(10.0f, 390.0f, 720.0f, 75.0f,
@@ -302,6 +302,18 @@ void PlayerDialog::nextPlayer()
 		{
 			imageList_->setCurrentShortPath("player.png");
 		}
+
+		if (cancelButton_)
+		{
+			if (tank && tank->getState().getState() == TankState::sDead)
+			{
+				cancelButton_->setText(LANG_RESOURCE("CANCEL", "Cancel"));
+			}
+			else
+			{
+				cancelButton_->setText(LANG_RESOURCE("SPECTATE", "Spectate"));
+			}
+		}
 	}
 	else
 	{
@@ -449,7 +461,8 @@ void PlayerDialog::buttonDown(unsigned int id)
 			nextPlayer();
 		}
 	}
-	else if (id == cancelId_)
+	else if (cancelButton_ &&
+		id == cancelButton_->getId())
 	{
 		GLWWindowManager::instance()->hideWindow(getId());
 	}

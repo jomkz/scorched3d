@@ -83,8 +83,7 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 	tank->setTeam(message_.getPlayerTeam());
 	tank->getAvatar().setFromBuffer(
 		message_.getPlayerIconName(),
-		message_.getPlayerIcon(),
-		true);
+		message_.getPlayerIcon());
 	if (context.getServerMode())
 	{
 		tank->setUniqueId(uniqueId_.c_str());
@@ -150,14 +149,11 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 	}
 #endif
 
-	if (!context.getServerMode())
-	{
-		ChannelText text("info", 
-			"PLAYER_CONNECTED",
-			"Player connected [p:{0}]",
-			tank->getTargetName());
-		ChannelManager::showText(context, text);
-	}
+	ChannelText text("info", 
+		"PLAYER_CONNECTED",
+		"Player connected [p:{0}]",
+		tank->getTargetName());
+	ChannelManager::showText(context, text);
 
 	return true;
 }

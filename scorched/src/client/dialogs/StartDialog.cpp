@@ -168,16 +168,16 @@ void StartDialog::mouseDown(int button, float x, float y, bool &skipRest)
 		GLWWindowManager::instance()->showWindow(
 			NetworkSelectDialog::instance()->getId());
 		break;
-	case 3:
+	/*case 3:
 		GLWWindowManager::instance()->showWindow(
 			SaveSelectDialog::instance()->getId());
-		break;
-	case 4:
+		break;*/
+	case 3:
 		{
 		S3D::showURL("http://www.scorched3d.co.uk/wiki");
 		}
 		break;
-	case 5:
+	case 4:
 		{
 		const char *exec = 
 			"\"https://www.paypal.com/xclick/business=donations%40"
@@ -185,7 +185,7 @@ void StartDialog::mouseDown(int button, float x, float y, bool &skipRest)
 		S3D::showURL(exec);
 		}
 		break;
-	case 6:
+	case 5:
 		ScorchedClient::instance()->getMainLoop().exitLoop();
 		break;
 	}
