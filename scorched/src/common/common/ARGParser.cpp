@@ -275,6 +275,7 @@ void ARGParser::showArgs(char *topString)
 		itor++)
 	{
 		char buffer2[255];
+		buffer2[0] = '\0';
 		strcat(buffer2, "\t[");
 		strcat(buffer2, itor->first.c_str());
 		strcat(buffer2, "]");

@@ -45,8 +45,10 @@ protected:
 	OptionsGame &context_;
 	wxNotebook *book_;
 	wxPanel *mainPanel_;
-	wxPanel *ecoPanel_;
+	wxPanel *moneyPanel_;
+	wxPanel *scorePanel_;
 	wxPanel *envPanel_;
+	wxPanel *weaponsPanel_;
 	wxPanel *landPanel_;
 	wxPanel *playersPanel_;
 	wxPanel *motdPanel_;
@@ -77,9 +79,11 @@ private:
 	wxCheckBox *IDC_SERVER_RESIDUAL_CTRL;
 
 	void createMainPanel(bool server);
-	void createEcoPanel();
+	void createMoneyPanel();
+	void createScorePanel();
 	void createEnvPanel();
 	void createMotdPanel();
+	void createWeaponsPanel();
 	void createLandPanel();
 	void createPlayersPanel();
 };
@@ -107,10 +111,10 @@ void SettingsFrame::createMainPanel(bool server)
 
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
-			mainPanel_, sizer, context_.getTeamBallanceEntry()));
+			mainPanel_, sizer, context_.getTeamsEntry()));
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
-			mainPanel_, sizer, context_.getTeamsEntry()));
+			mainPanel_, sizer, context_.getTeamBallanceEntry()));
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
 			mainPanel_, sizer, context_.getNoRoundsEntry()));
@@ -125,6 +129,9 @@ void SettingsFrame::createMainPanel(bool server)
 			mainPanel_, sizer, context_.getShotTimeEntry()));	
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
+			mainPanel_, sizer, context_.getAIShotTimeEntry()));	
+	setters_.push_back(
+		OptionEntrySetterUtil::createOtherSetter(
 			mainPanel_, sizer, context_.getBuyingTimeEntry()));	
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
@@ -132,6 +139,12 @@ void SettingsFrame::createMainPanel(bool server)
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
 			mainPanel_, sizer, context_.getModDownloadSpeedEntry()));	
+	setters_.push_back(
+		OptionEntrySetterUtil::createOtherSetter(
+			mainPanel_, sizer, context_.getResignModeEntry()));
+	setters_.push_back(
+		OptionEntrySetterUtil::createOtherSetter(
+			mainPanel_, sizer, context_.getPlayerLivesEntry()));
 
 	if (server) // Server only
 	{
@@ -144,71 +157,112 @@ void SettingsFrame::createMainPanel(bool server)
 	mainPanel_->SetSizer(mainPanelSizer);
 }
 
-void SettingsFrame::createEcoPanel()
+void SettingsFrame::createMoneyPanel()
 {
-	ecoPanel_ = new wxPanel(book_, -1);
+	moneyPanel_ = new wxPanel(book_, -1);
 	wxSizer *ecoPanelSizer = new wxBoxSizer(wxVERTICAL);
 	wxSizer *sizer = new wxFlexGridSizer(2, 2);
 	ecoPanelSizer->Add(sizer, 0, wxALL | wxALIGN_CENTER, 10);
 
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
-			ecoPanel_, sizer, context_.getBuyOnRoundEntry()));
+			moneyPanel_, sizer, context_.getBuyOnRoundEntry()));
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
-			ecoPanel_, sizer, context_.getEconomyEntry()));
+			moneyPanel_, sizer, context_.getEconomyEntry()));
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
-			ecoPanel_, sizer, context_.getMoneyWonPerAssistPointEntry()));
+			moneyPanel_, sizer, context_.getMoneyWonPerAssistPointEntry()));
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
-			ecoPanel_, sizer, context_.getMoneyWonPerKillPointEntry()));
+			moneyPanel_, sizer, context_.getMoneyWonPerKillPointEntry()));
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
-			ecoPanel_, sizer, context_.getMoneyWonPerMultiKillPointEntry()));
+			moneyPanel_, sizer, context_.getMoneyWonPerMultiKillPointEntry()));
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
-			ecoPanel_, sizer, context_.getMoneyWonPerHitPointEntry()));
+			moneyPanel_, sizer, context_.getMoneyWonPerHitPointEntry()));
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
-			ecoPanel_, sizer, context_.getStartMoneyEntry()));
+			moneyPanel_, sizer, context_.getStartMoneyEntry()));
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
-			ecoPanel_, sizer, context_.getMoneyWonForRoundEntry()));
+			moneyPanel_, sizer, context_.getMoneyWonForRoundEntry()));
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
-			ecoPanel_, sizer, context_.getMoneyPerRoundEntry()));
+			moneyPanel_, sizer, context_.getMoneyPerRoundEntry()));
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
-			ecoPanel_, sizer, context_.getInterestEntry()));
+			moneyPanel_, sizer, context_.getInterestEntry()));
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
-			ecoPanel_, sizer, context_.getScoreWonForRoundEntry()));
+			moneyPanel_, sizer, context_.getMoneyWonForLivesEntry()));
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
-			ecoPanel_, sizer, context_.getScoreWonForLivesEntry()));
-	setters_.push_back(
-		OptionEntrySetterUtil::createOtherSetter(
-			ecoPanel_, sizer, context_.getMoneyWonForLivesEntry()));
-	setters_.push_back(
-		OptionEntrySetterUtil::createOtherSetter(
-			ecoPanel_, sizer, context_.getScorePerKillEntry()));
-	setters_.push_back(
-		OptionEntrySetterUtil::createOtherSetter(
-			ecoPanel_, sizer, context_.getScorePerAssistEntry()));
-	setters_.push_back(
-		OptionEntrySetterUtil::createOtherSetter(
-			ecoPanel_, sizer, context_.getScorePerMoneyEntry()));
-	setters_.push_back(
-		OptionEntrySetterUtil::createOtherSetter(
-			ecoPanel_, sizer, context_.getMoneyPerHealthPointEntry()));
-	setters_.push_back(
-		OptionEntrySetterUtil::createOtherSetter(
-			ecoPanel_, sizer, context_.getGiveAllWeaponsEntry()));
+			moneyPanel_, sizer, context_.getMoneyPerHealthPointEntry()));
 
-	book_->AddPage(ecoPanel_, wxT("Eco"));
-	ecoPanel_->SetAutoLayout(TRUE);
-	ecoPanel_->SetSizer(ecoPanelSizer);
+	book_->AddPage(moneyPanel_, wxT("Money"));
+	moneyPanel_->SetAutoLayout(TRUE);
+	moneyPanel_->SetSizer(ecoPanelSizer);
+}
+
+void SettingsFrame::createScorePanel()
+{
+	scorePanel_ = new wxPanel(book_, -1);
+	wxSizer *ecoPanelSizer = new wxBoxSizer(wxVERTICAL);
+	wxSizer *sizer = new wxFlexGridSizer(2, 2);
+	ecoPanelSizer->Add(sizer, 0, wxALL | wxALIGN_CENTER, 10);
+
+	setters_.push_back(
+		OptionEntrySetterUtil::createOtherSetter(
+			scorePanel_, sizer, context_.getScoreWonForRoundEntry()));
+	setters_.push_back(
+		OptionEntrySetterUtil::createOtherSetter(
+			scorePanel_, sizer, context_.getScoreWonForLivesEntry()));
+	setters_.push_back(
+		OptionEntrySetterUtil::createOtherSetter(
+			scorePanel_, sizer, context_.getScorePerKillEntry()));
+	setters_.push_back(
+		OptionEntrySetterUtil::createOtherSetter(
+			scorePanel_, sizer, context_.getScorePerAssistEntry()));
+	setters_.push_back(
+		OptionEntrySetterUtil::createOtherSetter(
+			scorePanel_, sizer, context_.getScorePerMoneyEntry()));
+
+	book_->AddPage(scorePanel_, wxT("Score"));
+	scorePanel_->SetAutoLayout(TRUE);
+	scorePanel_->SetSizer(ecoPanelSizer);
+}
+
+void SettingsFrame::createWeaponsPanel()
+{
+	weaponsPanel_ = new wxPanel(book_, -1);
+	wxSizer *ecoPanelSizer = new wxBoxSizer(wxVERTICAL);
+	wxSizer *sizer = new wxFlexGridSizer(2, 2);
+	ecoPanelSizer->Add(sizer, 0, wxALL | wxALIGN_CENTER, 10);
+
+	setters_.push_back(
+		OptionEntrySetterUtil::createOtherSetter(
+			weaponsPanel_, sizer, context_.getWeapScaleEntry()));
+	setters_.push_back(
+		OptionEntrySetterUtil::createOtherSetter(
+			weaponsPanel_, sizer, context_.getStartArmsLevelEntry()));
+	setters_.push_back(
+		OptionEntrySetterUtil::createOtherSetter(
+			weaponsPanel_, sizer, context_.getEndArmsLevelEntry()));
+	setters_.push_back(
+		OptionEntrySetterUtil::createOtherSetter(
+			weaponsPanel_, sizer, context_.getMovementRestrictionEntry()));
+	setters_.push_back(
+		OptionEntrySetterUtil::createOtherSetter(
+			weaponsPanel_, sizer, context_.getGiveAllWeaponsEntry()));
+	setters_.push_back(
+		OptionEntrySetterUtil::createOtherSetter(
+			weaponsPanel_, sizer, context_.getDelayedDefenseActivationEntry()));
+
+	book_->AddPage(weaponsPanel_, wxT("Weapons"));
+	weaponsPanel_->SetAutoLayout(TRUE);
+	weaponsPanel_->SetSizer(ecoPanelSizer);
 }
 
 void SettingsFrame::createEnvPanel()
@@ -229,31 +283,11 @@ void SettingsFrame::createEnvPanel()
 			envPanel_, sizer, context_.getWallTypeEntry()));
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
-			envPanel_, sizer, context_.getWeapScaleEntry()));
-	setters_.push_back(
-		OptionEntrySetterUtil::createOtherSetter(
-			envPanel_, sizer, context_.getStartArmsLevelEntry()));
-	setters_.push_back(
-		OptionEntrySetterUtil::createOtherSetter(
-			envPanel_, sizer, context_.getEndArmsLevelEntry()));
-	setters_.push_back(
-		OptionEntrySetterUtil::createOtherSetter(
 			envPanel_, sizer, context_.getMinFallingDistanceEntry()));
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
 			envPanel_, sizer, context_.getMaxClimbingDistanceEntry()));
-	setters_.push_back(
-		OptionEntrySetterUtil::createOtherSetter(
-			envPanel_, sizer, context_.getResignModeEntry()));
-	setters_.push_back(
-		OptionEntrySetterUtil::createOtherSetter(
-			envPanel_, sizer, context_.getMovementRestrictionEntry()));
-	setters_.push_back(
-		OptionEntrySetterUtil::createOtherSetter(
-			envPanel_, sizer, context_.getPlayerLivesEntry()));
-	setters_.push_back(
-		OptionEntrySetterUtil::createOtherSetter(
-			envPanel_, sizer, context_.getDelayedDefenseActivationEntry()));
+
 
 	book_->AddPage(envPanel_, wxT("Env"));
 	envPanel_->SetAutoLayout(TRUE);
@@ -447,8 +481,10 @@ SettingsFrame::SettingsFrame(bool server, OptionsGame &context) :
 	DIALOG_ASSERT(tankAIStore.loadAIs());
 
 	createMainPanel(server);
-	createEcoPanel();
+	createMoneyPanel();
+	createScorePanel();
 	createEnvPanel();
+	createWeaponsPanel();
 	if (server) createPlayersPanel();
 	createMotdPanel();
 	createLandPanel();

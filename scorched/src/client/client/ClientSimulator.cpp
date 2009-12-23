@@ -79,12 +79,12 @@ bool ClientSimulator::processComsSimulateMessage(
 	ComsSimulateMessage message;
 	if (!message.readMessage(reader)) return false;
 
-	// Actualy process message
-	addComsSimulateMessage(message, false);
-
 	if (ScorchedClient::instance()->getGameState().getState() != ClientState::StateLoadFiles &&
 		ScorchedClient::instance()->getGameState().getState() != ClientState::StateLoadLevel)
 	{
+		// Actualy process message
+		addComsSimulateMessage(message, false);
+
 		// Send back a response so ping times can be calculated
 		ComsSimulateResultMessage resultMessage(message.getServerTime());
 		ComsMessageSender::sendToServer(resultMessage);
@@ -98,6 +98,9 @@ bool ClientSimulator::processComsSimulateMessage(
 	}
 	else
 	{
+		// Actualy process message
+		addComsSimulateMessage(message, true);
+
 		// Set the current time to the time in the message
 		setSimulationTime(waitingEventTime_);
 	}

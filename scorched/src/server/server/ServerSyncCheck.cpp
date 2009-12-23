@@ -109,15 +109,24 @@ void ServerSyncCheck::simulate()
 		}
 	}
 
-	if (ScorchedServer::instance()->getServerState().getState() != ServerState::ServerPlayingState) return;
-	if (!ScorchedServer::instance()->getOptionsGame().getAutoSendSyncCheck()) return;
-	time_t currentTime = time(0);
-	if (currentTime - lastTime_ >= 20)
+	if (ScorchedServer::instance()->getServerState().getState() == 
+		ServerState::ServerPlayingState) 
 	{
-		// Auto send sync checks
-		lastTime_ = currentTime;
-		sendSyncCheck();
+		time_t currentTime = time(0);
+		if (currentTime - lastTime_ >= 20)
+		{
+			// Auto send sync checks
+			sendAutoSyncCheck();
+		}
 	}
+}
+
+void ServerSyncCheck::sendAutoSyncCheck()
+{
+	time_t currentTime = time(0);
+	lastTime_ = currentTime;
+	if (!ScorchedServer::instance()->getOptionsGame().getAutoSendSyncCheck()) return;
+	sendSyncCheck();
 }
 
 void ServerSyncCheck::sendSyncCheck()

@@ -114,26 +114,27 @@ bool GLWChannelViewTextRenderer::drawCharacter(
 		character == '@' &&
 		textEntry->data)
 	{
-		Tank *tank = ScorchedClient::instance()->getTankContainer().
-			getTankById(textEntry->data);
-		if (tank)
+		glColor4f(1.0f, 1.0f, 1.0f, color[3]);
+
 		{
-			glColor4f(1.0f, 1.0f, 1.0f, color[3]);
-			tank->getAvatar().getTexture()->draw(true);
-			
-			glPushMatrix();
-				glTranslatef((float) charEntry.left, 0.0f, 0.0f);
-				glTranslatef(0.0f, (float) charEntry.rows, 0.0f);
-				glBegin(GL_QUADS);
-					glTexCoord2f(0.0f,1.0f); glVertex2f(0.0f,(float)charEntry.height);
-					glTexCoord2f(0.0f,0.0f); glVertex2f(0.0f,0.0f);
-					glTexCoord2f(1.0f,0.0f); glVertex2f((float)charEntry.width,0.0f);
-					glTexCoord2f(1.0f,1.0f); glVertex2f((float)charEntry.width,(float)charEntry.height);
-				glEnd();
-			glPopMatrix();
-			glTranslatef((float)charEntry.advances ,0.0f ,0.0f);
-			return false;
+			Tank *tank = ScorchedClient::instance()->getTankContainer().
+				getTankById(textEntry->data);
+			if (tank) tank->getAvatar().getTexture()->draw(true);
+			else TankAvatar::getDefaultTexture()->draw(true);
 		}
+			
+		glPushMatrix();
+			glTranslatef((float) charEntry.left, 0.0f, 0.0f);
+			glTranslatef(0.0f, (float) charEntry.rows, 0.0f);
+			glBegin(GL_QUADS);
+				glTexCoord2f(0.0f,1.0f); glVertex2f(0.0f,(float)charEntry.height);
+				glTexCoord2f(0.0f,0.0f); glVertex2f(0.0f,0.0f);
+				glTexCoord2f(1.0f,0.0f); glVertex2f((float)charEntry.width,0.0f);
+				glTexCoord2f(1.0f,1.0f); glVertex2f((float)charEntry.width,(float)charEntry.height);
+			glEnd();
+		glPopMatrix();
+		glTranslatef((float)charEntry.advances ,0.0f ,0.0f);
+		return false;
 	}
 
 	// Set the appropriate text colours etc.

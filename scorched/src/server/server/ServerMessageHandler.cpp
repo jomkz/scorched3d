@@ -208,7 +208,6 @@ void ServerMessageHandler::destroyPlayer(unsigned int tankId, const char *reason
 	}
 
 	// Make this player a computer controlled player
-	if (tank->getDestinationId() != 0)
 	{
 		TankAI *ai = new TankAINone(tank->getPlayerId());
 		tank->setTankAI(ai);

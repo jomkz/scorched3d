@@ -45,8 +45,7 @@ ServerStateEnoughPlayers::~ServerStateEnoughPlayers()
 bool ServerStateEnoughPlayers::enoughPlayers()
 {
 	// Check if we need to add or remove bots to keep game going
-	if (needsBotBallance(ScorchedServer::instance()->getContext()) &&
-		TankAddSimAction::TankAddSimActionCount == 0 &&
+	if (TankAddSimAction::TankAddSimActionCount == 0 &&
 		TankRemoveSimAction::TankRemoveSimActionCount == 0)
 	{
 		// Any bots added won't join until the next round anyway
@@ -107,18 +106,6 @@ bool ServerStateEnoughPlayers::enoughPlayers()
 	return true;
 }
 
-bool ServerStateEnoughPlayers::needsBotBallance(ScorchedContext &context)
-{
-	// Get the number of players we require
-	int requiredPlayers =
-		context.getOptionsGame().getRemoveBotsAtPlayers();
-	if (requiredPlayers == 0) return false;
-
-	// Get the number of players we have
-	int noPlayers = countBots(context);
-	return (noPlayers != requiredPlayers);
-}
-
 void ServerStateEnoughPlayers::ballanceBots(ScorchedContext &context)
 {
 	// Get the number of players we require
@@ -128,14 +115,6 @@ void ServerStateEnoughPlayers::ballanceBots(ScorchedContext &context)
 
 	// Get the number of players we have
 	int noPlayers = countBots(context);
-	if (noPlayers != requiredPlayers)
-	{
-		// Tell people whats going on
-		ChannelText text("info",
-			"AUTO_BALLANCE_BOTS",
-			"Auto ballancing bots");
-		ServerChannelManager::instance()->sendText(text, true, false);
-	}
 
 	// Check if we need to gain or lose players
 	if (noPlayers > requiredPlayers)
@@ -162,7 +141,7 @@ int ServerStateEnoughPlayers::countBots(ScorchedContext &context)
 		mainitor++)
 	{
 		Tank *current = (*mainitor).second;
-		if ((current->getDestinationId() != 0 && current->getState().getState() != TankState::sSpectator) ||
+		if ((current->getDestinationId() != 0 && current->getState().getTankPlaying()) ||
 			(current->getDestinationId() == 0 && !current->getTankAI()->removedPlayer()))
 		{
 			noPlayers++;
@@ -196,18 +175,14 @@ void ServerStateEnoughPlayers::removeBots(int requiredPlayers, int noPlayers)
 	}
 
 	// Kick the ais that have been on the server the longest
-	std::multimap<unsigned int, unsigned int>::reverse_iterator
-		aiItor = ais_.rbegin();
-	while (noPlayers > requiredPlayers)
+	std::multimap<unsigned int, unsigned int>::reverse_iterator aiItor;
+	for (aiItor = ais_.rbegin(); 
+		noPlayers > requiredPlayers && aiItor != ais_.rend(); 
+		aiItor++, noPlayers--)
 	{
-		if (aiItor != ais_.rend())
-		{
-			std::pair<unsigned int, unsigned int> item = *aiItor;
-			ServerMessageHandler::instance()->destroyPlayer(
-				item.second, "Auto-kick");
-			aiItor++;
-		}
-		noPlayers--;
+		std::pair<unsigned int, unsigned int> item = *aiItor;
+		ServerMessageHandler::instance()->destroyPlayer(
+			item.second, "Auto-kick");
 	}
 }
 

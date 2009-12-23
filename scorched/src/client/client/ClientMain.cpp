@@ -254,7 +254,7 @@ static bool startClientInternal()
 
 		return initClient();
 	}
-	else if (ClientParams::instance()->getSaveFile()[0])
+	/*else if (ClientParams::instance()->getSaveFile()[0])
 	{
 		// Or the client saved game
 		if (!S3D::fileExists(ClientParams::instance()->getSaveFile()))
@@ -268,7 +268,7 @@ static bool startClientInternal()
 			"Client load saves yet"));
 		return initClient();
 	}
-	else
+	else*/
 	{
 		// Do nothing
 	}

@@ -155,21 +155,22 @@ bool TankAvatar::setFromBuffer(const std::string &fileName,
 }
 
 #ifndef S3D_SERVER
+GLTexture *TankAvatar::getDefaultTexture()
+{
+	if (!defaultTexture_)
+	{
+		defaultTexture_ = new GLTexture();
+		ImagePng png;
+		png.loadFromFile(
+			S3D::getDataFile("data/avatars/player.png"));
+		defaultTexture_->create(png);
+	}
+	return defaultTexture_;
+}
+
 GLTexture *TankAvatar::getTexture()
 {
-	if (!texture_)
-	{
-		if (!defaultTexture_)
-		{
-			defaultTexture_ = new GLTexture();
-			ImagePng png;
-			png.loadFromFile(
-				S3D::getDataFile("data/avatars/player.png"));
-			defaultTexture_->create(png);
-		}
-		return defaultTexture_;
-	}
-
+	if (!texture_) return getDefaultTexture();
 	return texture_; 
 }
 #endif

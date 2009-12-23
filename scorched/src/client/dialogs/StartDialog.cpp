@@ -56,7 +56,7 @@ StartDialog::StartDialog() :
 		LANG_RESOURCE("TUTORIAL", "Tutorial"), "- Start the tutorial to learn how to play.", 50.0f, 60.0f, 0.0f,
 		LANG_RESOURCE("LOCAL_GAME", "Local Game"), "- Play a game against the computer or other local players.", 50.0f, 100.0f, 0.0f,
 		LANG_RESOURCE("Network Game", "Network Game"), "- Play an online game against remote players.", 50.0f, 140.0f, 0.0f,
-		LANG_RESOURCE("LOAD SAVE", "Load Save"), "- Continue playing a saved game.", 50.0f, 180.0f, 0.0f,
+		//LANG_RESOURCE("LOAD SAVE", "Load Save"), "- Continue playing a saved game.", 50.0f, 180.0f, 0.0f,
 		LANG_RESOURCE("HELP", "Help"), "- View the online help.", 50.0f, 250.0f, 0.0f,
 		LANG_RESOURCE("DONATE", "Donate"), "- Show support for Scorched3D.", 50.0f, 290.0f, 0.0f,
 		LANG_RESOURCE("QUIT", "Quit"), "- Exit the game.", 50.0f, 360.0f, 0.0f

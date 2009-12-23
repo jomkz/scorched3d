@@ -36,6 +36,7 @@ public:
 	void simulate();
 
 	void addServerSyncCheck(ComsSyncCheckMessage *message);
+	void sendAutoSyncCheck();
 	void sendSyncCheck();
 	void sentSyncCheck(unsigned int syncId);
 

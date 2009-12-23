@@ -22,6 +22,7 @@
 #include <server/ServerStateEnoughPlayers.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerSimulator.h>
+#include <server/ServerSyncCheck.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <simactions/ShowScoreSimAction.h>
@@ -82,6 +83,9 @@ void ServerStateScore::enterState(ServerStateEnoughPlayers &enoughPlayers)
 	fixed(ScorchedServer::instance()->getOptionsGame().getScoreTime());
 	ShowScoreSimAction *showScoreAction = new ShowScoreSimAction(scoreTime, overAllWinner_);
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(showScoreAction);
+
+	// Force clients to check (if enabled)
+	ServerSyncCheck::instance()->sendAutoSyncCheck();
 }
 
 void ServerStateScore::scoreFinished()

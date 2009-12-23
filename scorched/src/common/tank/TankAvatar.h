@@ -43,6 +43,7 @@ public:
 
 #ifndef S3D_SERVER
 	GLTexture *getTexture();
+	static GLTexture *getDefaultTexture();
 #endif
 
 	const char *getName() { return name_.c_str(); }
