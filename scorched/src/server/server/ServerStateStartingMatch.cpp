@@ -49,7 +49,7 @@ bool ServerStateStartingMatch::startingMatch(fixed frameTime)
 
 	fixed allowedTime(
 		ScorchedServer::instance()->getOptionsGame().getStartTime());
-	fixed timeleft = allowedTime - totalTime_;
+	fixed timeleft = allowedTime - totalTime_ + fixed(true, 500);
 
 	if (lastTime.asInt() != totalTime_.asInt())
 	{

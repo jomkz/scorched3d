@@ -39,7 +39,7 @@ public:
 
 	void killAll();
 
-	Particle *getNextAliveParticle();
+	Particle *getNextAliveParticle(unsigned int type);
 
 	static void setFast(float speedMult) { speed_ = speedMult; }
 	static float getFast() { return speed_; }

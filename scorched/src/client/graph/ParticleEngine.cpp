@@ -214,7 +214,7 @@ void ParticleEngine::normalizedSimulate(float time)
 	}
 }
 
-Particle *ParticleEngine::getNextAliveParticle()
+Particle *ParticleEngine::getNextAliveParticle(unsigned int type)
 {
 	Particle *particle = 0;
 	if (particlesOnScreen_ < maxParticles_)
@@ -222,6 +222,7 @@ Particle *ParticleEngine::getNextAliveParticle()
 		particle = freeParticles_[particlesOnScreen_];
 		usedParticles_[particlesOnScreen_] = particle;
 		particlesOnScreen_ ++;	
+		particle->type_ = type;
 	}
 
 	return particle;

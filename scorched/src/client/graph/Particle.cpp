@@ -25,7 +25,7 @@ Particle::Particle() :
 	distance_(0.0f), texture_(0), shadow_(false),
 	textureCoord_(0), simulated_(false),
 	windAffect_(true), textureSet_(0),
-	engine_(0)
+	engine_(0), type_(0)
 {
 }
 
@@ -35,7 +35,7 @@ Particle::~Particle()
 
 void Particle::setParticle(
 	float life, float mass, float friction,
-    Vector &velocity, Vector &gravity,
+	Vector &velocity, Vector &gravity,
 	Vector &color, Vector &colorCounter,
 	Vector &size, Vector &sizeCounter,
 	float alpha, float alphaCounter,
@@ -58,6 +58,8 @@ void Particle::unsetParticle()
 	userData_ = 0;
 	texture_ = 0;
 	textureSet_ = 0;
+	renderer_ = 0;
+	type_ = 0;
 	shadow_ = false;
 	simulated_ = false;
 }

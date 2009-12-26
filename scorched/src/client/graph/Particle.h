@@ -40,7 +40,7 @@ public:
 
 	void setParticle(
 		float life, float mass, float friction,
-        Vector &velocity, Vector &gravity,
+		Vector &velocity, Vector &gravity,
 		Vector &color, Vector &colorCounter,
 		Vector &size, Vector &sizeCounter,
 		float alpha, float alphaCounter,
@@ -60,6 +60,7 @@ public:
 	float alpha_, alphaCounter_;
 	bool windAffect_;
 	ParticleEngine *engine_;
+	unsigned int type_;
 
 	// Used for texturing
 	bool additiveTexture_;

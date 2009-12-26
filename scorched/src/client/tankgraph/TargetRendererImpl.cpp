@@ -25,6 +25,7 @@
 #include <target/TargetLife.h>
 #include <client/ScorchedClient.h>
 #include <graph/ParticleEngine.h>
+#include <graph/ParticleTypes.h>
 #include <graph/OptionsDisplay.h>
 #include <common/Defines.h>
 #include <sky/Hemisphere.h>
@@ -412,7 +413,7 @@ void TargetRendererImpl::createParticle()
 		// and using the correct z ordering
 		Particle *particle = 
 			ScorchedClient::instance()->getParticleEngine().
-				getNextAliveParticle();
+				getNextAliveParticle(ParticleTarget);
 		if (particle)
 		{
 			particle->setParticle(

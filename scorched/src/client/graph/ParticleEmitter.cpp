@@ -20,6 +20,7 @@
 
 #include <common/Defines.h>
 #include <graph/ParticleEmitter.h>
+#include <graph/ParticleTypes.h>
 #include <sprites/DebrisActionRenderer.h>
 #include <sprites/SmokeActionRenderer.h>
 #include <sprites/ExplosionTextures.h>
@@ -205,7 +206,7 @@ void ParticleEmitter::emitLinear(int number,
 {
 	for (int i=0; i<number; i++)
 	{
-		Particle *particle = engine.getNextAliveParticle();
+		Particle *particle = engine.getNextAliveParticle(ParticleLinear);
 		if (!particle) return;
 
 		Vector position;
@@ -225,7 +226,7 @@ void ParticleEmitter::emitExplosionRing(int number,
 {
 	for (int i=0; i<number; i++)
 	{
-		Particle *particle = engine.getNextAliveParticle();
+		Particle *particle = engine.getNextAliveParticle(ParticleRing);
 		if (!particle) return;
 
 		createDefaultParticle(*particle);
@@ -250,7 +251,7 @@ void ParticleEmitter::emitDebris(int number,
 {
 	for (int i=0; i<number; i++)
 	{
-		Particle *particle = engine.getNextAliveParticle();
+		Particle *particle = engine.getNextAliveParticle(ParticleDebris);
 		if (!particle) return;
 
 		createDefaultParticle(*particle);
@@ -286,7 +287,7 @@ void ParticleEmitter::emitSmoke(int number,
 {
 	for (int i=0; i<number; i++)
 	{
-		Particle *particle = engine.getNextAliveParticle();
+		Particle *particle = engine.getNextAliveParticle(ParticleSmoke);
 		if (!particle) return;
 
 		createDefaultParticle(*particle);
@@ -304,7 +305,7 @@ void ParticleEmitter::emitNapalm(
 	ParticleEngine &engine,
 	GLTextureSet *set)
 {
-	Particle *particle = engine.getNextAliveParticle();
+	Particle *particle = engine.getNextAliveParticle(ParticleNapalm);
 	if (!particle) return;
 
 	createDefaultParticle(*particle);
@@ -323,7 +324,7 @@ void ParticleEmitter::emitSpray(
 {
 	for (int i=0; i<6 + int(width) * 2; i++)
 	{
-		Particle *particle = engine.getNextAliveParticle();
+		Particle *particle = engine.getNextAliveParticle(ParticleSpray);
 		if (!particle) return;
 
 		createDefaultParticle(*particle);
@@ -351,7 +352,7 @@ void ParticleEmitter::emitTalk(
 	Vector &position,
 	ParticleEngine &engine)
 {
-	Particle *particle = engine.getNextAliveParticle();
+	Particle *particle = engine.getNextAliveParticle(ParticleTalk);
 	if (!particle) return;
 
 	createDefaultParticle(*particle);
@@ -367,7 +368,7 @@ void ParticleEmitter::emitWallHit(
 	ParticleEngine &engine,
 	OptionsTransient::WallSide type)
 {
-	Particle *particle = engine.getNextAliveParticle();
+	Particle *particle = engine.getNextAliveParticle(ParticleWall);
 	if (!particle) return;
 
 	createDefaultParticle(*particle);
@@ -382,7 +383,7 @@ void ParticleEmitter::emitTransport(
 	ParticleEngine &engine,
 	GLTextureSet *set)
 {
-	Particle *particle = engine.getNextAliveParticle();
+	Particle *particle = engine.getNextAliveParticle(ParticleTransport);
 	if (!particle) return;
 
 	Vector velocity;
@@ -403,7 +404,7 @@ void ParticleEmitter::emitExplosion(
 {
 	for (int i=0; i<int(width) * 4; i++)
 	{
-		Particle *particle = engine.getNextAliveParticle();
+		Particle *particle = engine.getNextAliveParticle(ParticleExplosion);
 		if (!particle) return;
 
 		float randRotXY = (RAND * TWOPI);
@@ -445,7 +446,7 @@ void ParticleEmitter::emitMushroom(
 {
 	for (int i=0; i<number; i++)
 	{
-		Particle *particle = engine.getNextAliveParticle();
+		Particle *particle = engine.getNextAliveParticle(ParticleMushroom);
 		if (!particle) return;
 
 		createDefaultParticle(*particle);
@@ -467,7 +468,7 @@ void ParticleEmitter::emitPrecipitation(
 {
 	for (int i=0; i<number; i++)
 	{
-		Particle *particle = engine.getNextAliveParticle();
+		Particle *particle = engine.getNextAliveParticle(ParticlePrecipitation);
 		if (!particle) return;
 
 		createDefaultParticle(*particle);
