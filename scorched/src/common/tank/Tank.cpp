@@ -143,6 +143,11 @@ Vector &Tank::getColor()
 	return color_;
 }
 
+void Tank::toString(std::string &str)
+{
+	modelContainer_->toString(str);
+}
+
 bool Tank::writeMessage(NetBuffer &buffer, bool writeAccessories)
 {
 	if (!Target::writeMessage(buffer)) return false;  // Base class 1st

@@ -85,6 +85,8 @@ public:
 	void setName(const LangString &name);
 	unsigned int getNameLen() { return (unsigned int) name_.size(); }
 
+	virtual void toString(std::string &str);
+
 	// Serialize the target
 	virtual bool writeMessage(NetBuffer &buffer);
 	virtual bool readMessage(NetBufferReader &reader);

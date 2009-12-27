@@ -80,3 +80,11 @@ bool TankModelContainer::readMessage(NetBufferReader &reader)
 		newTypeName.c_str());
 	return true;
 }
+
+void TankModelContainer::toString(std::string &str)
+{
+	str.append("  ModelContainer:\n");
+	str.append("    Model : ").append(getTankModelName()).append("\n");
+	str.append("    Original : ").append(getTankOriginalModelName()).append("\n");
+	str.append("    Type : ").append(getTankTypeName()).append("\n");
+}

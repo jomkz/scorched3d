@@ -49,6 +49,8 @@ public:
     bool writeMessage(NetBuffer &buffer);
     bool readMessage(NetBufferReader &reader);
 
+	void toString(std::string &str);
+
 protected:
 	Tank *tank_;
 	std::string tankModelName_; // Model for tank (this is the one the server also has)

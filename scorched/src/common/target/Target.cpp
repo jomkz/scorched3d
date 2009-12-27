@@ -109,6 +109,10 @@ const std::string &Target::getCStrName()
 	return cStrName_;
 }
 
+void Target::toString(std::string &str)
+{
+}
+
 bool Target::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(name_);
