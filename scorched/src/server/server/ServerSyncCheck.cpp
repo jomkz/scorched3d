@@ -346,10 +346,43 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 			{
 				if (tmpBuffer.getBuffer()[u] != clientTank->second->getBuffer()[u])
 				{
-					clientTank->second->setBufferUsed(u);
+					// Read the two tank information
+					Target *target = 0;
+					std::string clientToString, serverToString;
+					{
+						if (isTarget)
+						{
+							target = tmpTarget;
 
+							NetBufferReader clientReader(*clientTank->second);
+							tmpTarget->readMessage(clientReader);
+							tmpTarget->toString(clientToString);
+							tmpTarget->getLife().setLife(0);// Make sure not added to target space
+
+							NetBufferReader serverReader(tmpBuffer);
+							tmpTarget->readMessage(serverReader);
+							tmpTarget->toString(serverToString);
+							tmpTarget->getLife().setLife(0);// Make sure not added to target space
+						}
+						else
+						{
+							target = tmpTank;
+
+							NetBufferReader clientReader(*clientTank->second);
+							tmpTank->readMessage(clientReader);
+							tmpTank->toString(clientToString);
+							tmpTank->getState().setState(TankState::sDead);// Make sure not added to target space
+
+							NetBufferReader serverReader(tmpBuffer);
+							tmpTank->readMessage(serverReader);
+							tmpTank->toString(serverToString);
+							tmpTank->getState().setState(TankState::sDead);// Make sure not added to target space
+						}				
+					}				
+
+					// Output information
 					std::string groupnames = "";
-					std::set<TargetGroupsSetEntry *> &groups = tmpTarget->getGroup().getAllGroups();
+					std::set<TargetGroupsSetEntry *> &groups = target->getGroup().getAllGroups();
 					std::set<TargetGroupsSetEntry *>::iterator groupItor;
 					for (groupItor = groups.begin();
 						groupItor != groups.end();
@@ -358,27 +391,35 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 						TargetGroupsSetEntry *group = *groupItor;
 						groupnames.append(group->getName()).append(" ");
 					}
-					syncCheckLog(S3D::formatStringBuffer("**** SyncCheck %s differ %u:%s, Dest %u Sync %u Groups %s",
+					syncCheckLog(S3D::formatStringBuffer(
+						"**** SyncCheck %s differ %u:%s, Dest %u Sync %u Groups %s",
 						isTarget?"target":"tank",
 						playerId, 
-						tmpTarget->getCStrName().c_str(), 
+						target->getCStrName().c_str(), 
 						destinationId, client->getSyncId(), groupnames.c_str()));
+					syncCheckLog(S3D::formatStringBuffer("Server : %s",
+						serverToString.c_str()));
+					syncCheckLog(S3D::formatStringBuffer("Client : %s",
+						clientToString.c_str()));
 
-					Logger::addLogger(syncCheckFileLogger);
-
-					NetBufferReader reader(*clientTank->second);
-					if (isTarget)
+					// Check which part of the tank is failing
 					{
-						tmpTarget->readMessage(reader);
-						tmpTarget->getLife().setLife(0);// Make sure not added to target space
+						clientTank->second->setBufferUsed(u);
+						Logger::addLogger(syncCheckFileLogger);
+						if (isTarget)
+						{
+							NetBufferReader reader(*clientTank->second);
+							tmpTarget->readMessage(reader);
+							tmpTarget->getLife().setLife(0);// Make sure not added to target space
+						}
+						else
+						{
+							NetBufferReader reader(*clientTank->second);
+							tmpTank->readMessage(reader);
+							tmpTank->getState().setState(TankState::sDead);// Make sure not added to target space
+						}				
+						Logger::remLogger(syncCheckFileLogger);
 					}
-					else
-					{
-						tmpTank->readMessage(reader);
-						tmpTank->getState().setState(TankState::sDead);// Make sure not added to target space
-					}				
-
-					Logger::remLogger(syncCheckFileLogger);
 					break;
 				}
 			}
