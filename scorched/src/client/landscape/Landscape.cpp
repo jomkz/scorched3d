@@ -434,14 +434,7 @@ void Landscape::generate(ProgressCounter *counter)
 		bitmapPlanAlpha_ = ImageFactory::createBlank(planTexSize, planTexSize, true);
 		bitmapPlan_ = ImageFactory::createBlank(planTexSize, planTexSize);
 		bitmapPlanAlphaAlpha_ = ImageFactory::createBlank(planTexSize, planTexSize, false, 0);
-		splatMap_ = ImageFactory::createBlank(1024, 1024);
 	}
-
-	ImageHandle splatMask1 = ImageFactory::createBlank(mapTexSize, mapTexSize, true, 0);
-	ImageHandle splatMask2 = ImageFactory::createBlank(mapTexSize, mapTexSize, true, 0);
-	ImageHandle splatMaskBorder1 = ImageFactory::createBlank(64, 64, true, 0);
-	ImageHandle splatMaskBorder2 = ImageFactory::createBlank(64, 64, true, 0);
-	ImageModifier::redBitmap(splatMaskBorder1);
 
 	if (GLStateExtension::hasHardwareShadows())
 	{
@@ -496,22 +489,8 @@ void Landscape::generate(ProgressCounter *counter)
 		if (counter) counter->setNewOp(LANG_RESOURCE("LANDSCAPE_MAP", "Landscape Map"));
 		ImageModifier::addHeightToBitmap(
 			ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap(),
-			mainMap_, splatMask1, splatMask2,
+			mainMap_, 
 			bitmapRock, bitmapShore, bitmaps, 4, 1024, counter);
-
-#ifdef SPLAT_MAP
-		// Generate splat texture maps
-		ImageModifier::addTexturesToBitmap(
-			splatMap_,
-			bitmapRock, bitmapShore, bitmaps, 4);
-		splatTextures_.create(splatMap_, false);
-
-		// Set up the splat textures
-		splatMaskTexture1_.replace(splatMask1, false);
-		splatMaskTexture2_.replace(splatMask2, false);
-		splatMaskTextureBorder1_.replace(splatMaskBorder1, false);
-		splatMaskTextureBorder2_.replace(splatMaskBorder2, false);
-#endif
 
 		// Set the general surround and roof texture
 		groundTexture_.replace(texture0, false);
@@ -833,13 +812,6 @@ void Landscape::actualDrawLandShader()
 
 	getSky().getSun().setLightPosition(false);
 
-#ifdef SPLAT_MAP
-	landShader_->use();
-	landShader_->set_gl_texture(splatMaskTexture1_, "splat1map", 0);
-	landShader_->set_gl_texture(splatMaskTexture2_, "splat2map", 1);
-	landShader_->set_gl_texture(splatTextures_, "splattex", 2);
-	landShader_->set_gl_texture(shadowFrameBuffer_, "shadow", 3);
-#else
 	landShader_->use();
 	landShader_->set_gl_texture(texture_, "mainmap", 0);
 	landShader_->set_gl_texture(detailTexture_, "detailmap", 1);
@@ -857,7 +829,6 @@ void Landscape::actualDrawLandShader()
 	createShadowMatrix();
 	glMatrixMode(GL_MODELVIEW);
 	glActiveTextureARB(GL_TEXTURE0_ARB);
-#endif
 
 	glColor3f(1.0f, 1.0f, 1.0f);
 
@@ -870,10 +841,6 @@ void Landscape::actualDrawLandShader()
 	if (OptionsDisplay::instance()->getDrawSurround())
 	{
 		GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SURROUND");
-#ifdef SPLAT_MAP
-		landShader_->set_gl_texture(splatMaskTextureBorder1_, "splat1map", 0);
-		landShader_->set_gl_texture(splatMaskTextureBorder2_, "splat2map", 1);
-#else
 		if (OptionsDisplay::instance()->getDrawWater())
 		{
 			// Disable Tex
@@ -892,7 +859,7 @@ void Landscape::actualDrawLandShader()
 			landShader_->set_gl_texture(groundTexture_, "mainmap", 0);
 			landShader_->set_gl_texture(arenaSurroundTexture_, "arenamap", 3);
 		}
-#endif
+
 		VisibilityPatchGrid::instance()->drawSurround();
 		GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SURROUND");
 	}

@@ -136,11 +136,7 @@ void LandSurround::generateList(HeightMap &map, bool detail, bool lightMap)
 			float texX = hMapBoxVerts_[dataOfs[i][j]][0] / width;
 			float texY = hMapBoxVerts_[dataOfs[i][j]][1] / height;
 
-#ifdef SPLAT_MAP
-			glMultiTexCoord2fARB(GL_TEXTURE0_ARB, texX, texY);
-#else
 			glMultiTexCoord2fARB(GL_TEXTURE0_ARB, texX * texTileX / 4.0f, texY * texTileY / 4.0f);
-#endif
 			if (GLStateExtension::hasMultiTex())
 			{
 				glMultiTexCoord2fARB(GL_TEXTURE1_ARB, texX, texY);

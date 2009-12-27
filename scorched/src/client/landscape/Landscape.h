@@ -113,14 +113,8 @@ protected:
 	GLTexture roofTexture_;
 	GLTexture landTex1_;
 	GLTexture groundTexture_;
-	GLTexture splatMaskTexture1_;
-	GLTexture splatMaskTexture2_;
-	GLTexture splatMaskTextureBorder1_;
-	GLTexture splatMaskTextureBorder2_;
-	GLTexture splatTextures_;
 	GLTexture arenaMainTexture_;
 	GLTexture arenaSurroundTexture_;
-	ImageHandle splatMap_;
 	ImageHandle mainMap_;
 	ImageHandle scorchMap_;
 	ImageHandle bitmapPlanAlphaAlpha_;

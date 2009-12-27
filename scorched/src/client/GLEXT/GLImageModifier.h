@@ -45,8 +45,6 @@ namespace ImageModifier
 
 	void addHeightToBitmap(HeightMap &hMap,
 							Image &destBitmap, 
-							Image &destSplat1Bitmap,
-							Image &destSplat2Bitmap,
 							Image &slopeBitmap,
 							Image &shoreBitmap,
 							Image **heightBitmaps,
