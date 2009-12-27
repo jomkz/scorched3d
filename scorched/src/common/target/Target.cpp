@@ -111,6 +111,9 @@ const std::string &Target::getCStrName()
 
 void Target::toString(std::string &str)
 {
+	str.append("Target : ").append(getCStrName()).append(":");
+	str.append(S3D::formatStringBuffer("%u", playerId_));
+	str.append("\n");
 }
 
 bool Target::writeMessage(NetBuffer &buffer)

@@ -145,6 +145,8 @@ Vector &Tank::getColor()
 
 void Tank::toString(std::string &str)
 {
+	Target::toString(str);
+
 	modelContainer_->toString(str);
 }
 
