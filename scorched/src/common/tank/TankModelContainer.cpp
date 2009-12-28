@@ -37,35 +37,40 @@ TankModelContainer::~TankModelContainer()
 {
 }
 
+TankModel *TankModelContainer::getTankModel() 
+{ 
+	if (!tankModel_)
+	{
+	#ifndef S3D_SERVER
+		if (tank_->getRenderer())
+		{
+			TargetRendererImplTank *renderer = (TargetRendererImplTank *)
+				tank_->getRenderer();
+			renderer->resetModel();
+		}
+	#endif
+
+		tankModel_ = context_.getTankModels().getModelByName(customModelName_.c_str());
+		if (!tankModel_ || !tankModel_->availableForTank(tank_) && serverModelName_.size() > 0)
+		{
+			tankModel_ = context_.getTankModels().getModelByName(serverModelName_.c_str());
+			DIALOG_ASSERT(tankModel_);
+		}
+	}
+
+	return tankModel_; 
+}
+
 void TankModelContainer::setServerTankModelName(const char *serverModelName)
 {
 	serverModelName_ = serverModelName;
-	setTankModel();
+	tankModel_ = 0;
 }
 
 void TankModelContainer::setCustomTankModelName(const char *customModelName)
 {
 	customModelName_ = customModelName;
-	setTankModel();
-}
-
-void TankModelContainer::setTankModel()
-{
-#ifndef S3D_SERVER
-	if (tank_->getRenderer())
-	{
-		TargetRendererImplTank *renderer = (TargetRendererImplTank *)
-			tank_->getRenderer();
-		renderer->resetModel();
-	}
-#endif
-
-	tankModel_ = context_.getTankModels().getModelByName(customModelName_.c_str());
-	if (!tankModel_ || !tankModel_->availableForTank(tank_))
-	{
-		tankModel_ = context_.getTankModels().getModelByName(serverModelName_.c_str());
-		DIALOG_ASSERT(tankModel_);
-	}
+	tankModel_ = 0;
 }
 
 bool TankModelContainer::writeMessage(NetBuffer &buffer)

@@ -36,7 +36,7 @@ public:
 
 	void setTank(Tank *tank) { tank_ = tank; }
 
-	TankModel *getTankModel() { return tankModel_; }
+	TankModel *getTankModel();
 
 	void setServerTankModelName(const char *serverModelName);
 	void setCustomTankModelName(const char *customModelName);
@@ -53,8 +53,6 @@ protected:
 	std::string customModelName_;
 	std::string serverModelName_;
 	TankModel *tankModel_;
-
-	void setTankModel();
 };
 
 #endif // _TankModelContainer_h

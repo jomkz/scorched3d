@@ -101,7 +101,8 @@ bool TankTeamBallanceSimAction::invokeAction(ScorchedContext &context)
 		 mainitor++)
 	{
 		Tank *current = (*mainitor).second;
-		if (current->getState().getTankPlaying())
+		if (current->getState().getTankPlaying() &&
+			current->getModelContainer().getTankModel())
 		{
 			// Check if this model is allowed for this team
 			if (!current->getModelContainer().getTankModel()->availableForTank(current))
