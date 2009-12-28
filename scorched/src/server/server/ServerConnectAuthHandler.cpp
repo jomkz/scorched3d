@@ -322,7 +322,7 @@ void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,
 
 	// Chose a random model for this tank
 	TankModel *tankModel = 
-		ScorchedServer::instance()->getTankModels().getRandomModel(0, false, rand());
+		ScorchedServer::instance()->getTankModels().getRandomModel(0, false);
 
 	// Create this tank
 	ComsAddPlayerMessage addPlayerMessage(

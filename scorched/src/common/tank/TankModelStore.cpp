@@ -148,7 +148,7 @@ void TankModelStore::killModels(std::vector<TankModel *> &src)
 	}
 }
 
-TankModel *TankModelStore::getRandomModel(int team, bool ai, unsigned int randomNumber)
+TankModel *TankModelStore::getRandomModel(int team, bool ai)
 {
 	std::vector<TankModel *> models;
 	std::vector<TankModel *>::iterator itor;
@@ -165,6 +165,7 @@ TankModel *TankModelStore::getRandomModel(int team, bool ai, unsigned int random
 	}
 
 	DIALOG_ASSERT(models.size());
+	unsigned int randomNumber = rand();
 	TankModel *model = models[randomNumber % models.size()];
 	return model;
 }

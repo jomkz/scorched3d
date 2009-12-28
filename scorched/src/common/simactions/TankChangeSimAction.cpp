@@ -136,7 +136,7 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 
 	// Make sure the model is available and for the correct team
 	// Do this AFTER the team has been set
-	tank->getModelContainer().setCustomTankModelName(message_.getModelName());
+	tank->getModelContainer().setTankModelName(message_.getModelName());
 
 	// Show some infor
 	if (!tank->getState().getNotSpectator())

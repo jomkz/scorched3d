@@ -418,7 +418,7 @@ void PlayerDialog::buttonDown(unsigned int id)
 			if (!model)
 			{
 				model = ScorchedClient::instance()->getTankModels().
-					getRandomModel(getCurrentTeam(), false, rand());
+					getRandomModel(getCurrentTeam(), false);
 			}
 
 			// Get the player type

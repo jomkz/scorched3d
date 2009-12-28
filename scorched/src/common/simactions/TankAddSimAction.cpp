@@ -83,7 +83,7 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 	tank->getAvatar().setFromBuffer(
 		message_.getPlayerIconName(),
 		message_.getPlayerIcon());
-	tank->getModelContainer().setServerTankModelName(
+	tank->getModelContainer().setTankModelName(
 		message_.getModelName());
 	if (context.getServerMode())
 	{

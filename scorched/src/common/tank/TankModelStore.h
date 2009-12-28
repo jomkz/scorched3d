@@ -38,7 +38,7 @@ public:
 		ProgressCounter *counter = 0);
 
 	TankModel *getModelByName(const char *name);
-	TankModel *getRandomModel(int team, bool ai, unsigned int randomNumber);
+	TankModel *getRandomModel(int team, bool ai);
 
 	TankType *getTypeByName(const char *name);
 

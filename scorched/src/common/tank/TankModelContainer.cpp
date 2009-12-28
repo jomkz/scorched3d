@@ -50,49 +50,38 @@ TankModel *TankModelContainer::getTankModel()
 		}
 	#endif
 
-		tankModel_ = context_.getTankModels().getModelByName(customModelName_.c_str());
-		if (!tankModel_ || !tankModel_->availableForTank(tank_) && serverModelName_.size() > 0)
+		tankModel_ = context_.getTankModels().getModelByName(modelName_.c_str());
+		if (!tankModel_)
 		{
-			tankModel_ = context_.getTankModels().getModelByName(serverModelName_.c_str());
-			DIALOG_ASSERT(tankModel_);
+			tankModel_ = context_.getTankModels().getRandomModel(
+				tank_->getTeam(), tank_->getDestinationId() == 0);
 		}
 	}
 
 	return tankModel_; 
 }
 
-void TankModelContainer::setServerTankModelName(const char *serverModelName)
+void TankModelContainer::setTankModelName(const char *modelName)
 {
-	serverModelName_ = serverModelName;
-	tankModel_ = 0;
-}
-
-void TankModelContainer::setCustomTankModelName(const char *customModelName)
-{
-	customModelName_ = customModelName;
+	modelName_ = modelName;
 	tankModel_ = 0;
 }
 
 bool TankModelContainer::writeMessage(NetBuffer &buffer)
 {
-	buffer.addToBuffer(customModelName_);
-	buffer.addToBuffer(serverModelName_);
+	buffer.addToBuffer(modelName_);
 	return true;
 }
 
 bool TankModelContainer::readMessage(NetBufferReader &reader)
 {
-	std::string customModelName, serverModelName;
-	if (!reader.getFromBuffer(customModelName)) return false;
-	if (!reader.getFromBuffer(serverModelName)) return false;
-	setCustomTankModelName(customModelName.c_str());
-	setServerTankModelName(serverModelName.c_str());
+	std::string modelName;
+	if (!reader.getFromBuffer(modelName)) return false;
+	setTankModelName(modelName.c_str());
 	return true;
 }
 
 void TankModelContainer::toString(std::string &str)
 {
-	str.append("  ModelContainer:\n");
-	str.append("    Custom : ").append(customModelName_).append("\n");
-	str.append("    Server : ").append(serverModelName_).append("\n");
+	str.append("  Model Name: ").append(modelName_).append("\n");
 }

@@ -38,8 +38,7 @@ public:
 
 	TankModel *getTankModel();
 
-	void setServerTankModelName(const char *serverModelName);
-	void setCustomTankModelName(const char *customModelName);
+	void setTankModelName(const char *modelName);
 
 	// Serialize the modelid
     bool writeMessage(NetBuffer &buffer);
@@ -50,8 +49,7 @@ public:
 protected:
 	ScorchedContext &context_;
 	Tank *tank_;
-	std::string customModelName_;
-	std::string serverModelName_;
+	std::string modelName_;
 	TankModel *tankModel_;
 };
 

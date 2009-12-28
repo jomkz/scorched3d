@@ -108,9 +108,8 @@ bool TankTeamBallanceSimAction::invokeAction(ScorchedContext &context)
 			if (!current->getModelContainer().getTankModel()->availableForTank(current))
 			{
 				TankModel *model = context.getTankModels().getRandomModel(
-					current->getTeam(), current->getDestinationId() == 0, 
-					context.getSimulator().getRandomGenerator().getRandUInt());
-				current->getModelContainer().setServerTankModelName(model->getName());
+					current->getTeam(), current->getDestinationId() == 0);
+				current->getModelContainer().setTankModelName(model->getName());
 			}
 		}
 	}
