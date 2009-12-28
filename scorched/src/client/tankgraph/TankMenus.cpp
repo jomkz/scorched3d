@@ -30,6 +30,7 @@
 #include <tank/TankAccessories.h>
 #include <tank/TankModelContainer.h>
 #include <tank/TankState.h>
+#include <tank/TankModel.h>
 #include <tankai/TankAI.h>
 #include <target/TargetParachute.h>
 #include <target/TargetShield.h>
@@ -280,7 +281,7 @@ void TankMenus::showTankDetails()
 			currentTank == tank?'>':' ',
 			description,
 			tank->getCStrName().c_str(), 
-			tank->getModelContainer().getTankModelName());
+			tank->getModelContainer().getTankModel()->getName());
 		Console::instance()->addLine(false, buffer);
 	}
 

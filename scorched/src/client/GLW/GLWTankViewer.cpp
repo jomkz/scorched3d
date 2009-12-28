@@ -287,7 +287,7 @@ void GLWTankViewer::draw()
 					TankSquareSize))
 				{
 					TankType *type = ScorchedClient::instance()->getTankModels().
-						getTypeByName(models_[vectorPos].model->getTypeName());
+						getTypeByName("none");
 					toolTip_.setText(
 						ToolTip::ToolTipInfo, 
 						LANG_STRING(models_[vectorPos].model->getName()),

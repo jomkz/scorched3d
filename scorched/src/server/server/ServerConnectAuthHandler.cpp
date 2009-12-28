@@ -26,6 +26,7 @@
 #include <server/ScorchedServerUtil.h>
 #include <server/ServerCommon.h>
 #include <server/ServerSimulator.h>
+#include <tank/TankModelStore.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankContainer.h>
 #include <tank/TankModelContainer.h>
@@ -319,13 +320,16 @@ void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,
 		playerName = alias;
 	}
 
+	// Chose a random model for this tank
+	TankModel *tankModel = 
+		ScorchedServer::instance()->getTankModels().getRandomModel(0, false, rand());
+
 	// Create this tank
 	ComsAddPlayerMessage addPlayerMessage(
 		tankId,
 		playerName,
 		color,
-		"Random",
-		"none",
+		tankModel->getName(),
 		destinationId,
 		0,
 		"");

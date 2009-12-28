@@ -2285,14 +2285,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\tank\TankDefinition.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\tank\TankDefinition.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\tank\TankLib.cpp"
 				>
 			</File>
@@ -2449,14 +2441,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\placement\PlacementObjectTank.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\placement\PlacementObjectTank.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\placement\PlacementObjectTarget.cpp"
 				>
 			</File>
@@ -2536,14 +2520,6 @@
 				RelativePath="..\..\common\placement\PlacementTypeTree.h"
 				>
 			</File>
-			<Filter
-				Name="scorchedc"
-				>
-				<File
-					RelativePath=".\main.cpp"
-					>
-				</File>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="weapons"
@@ -6174,6 +6150,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\simactions\TankTeamBallanceSimAction.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="scorchedc"
+			>
+			<File
+				RelativePath=".\main.cpp"
 				>
 			</File>
 		</Filter>

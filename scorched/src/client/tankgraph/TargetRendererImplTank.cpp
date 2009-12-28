@@ -76,7 +76,7 @@ ModelRendererSimulator *TargetRendererImplTankAIM::getAutoAimModel()
 TargetRendererImplTank::TargetRendererImplTank(Tank *tank) :
 	TargetRendererImpl(tank),
 	tank_(tank), tankTips_(tank),
-	model_(0), mesh_(0), 
+	mesh_(0), 
 	smokeTime_(0.0f), smokeWaitForTime_(0.0f),
 	fireOffSet_(0.0f), shieldHit_(0.0f),
 	totalTime_(0.0f)
@@ -90,24 +90,7 @@ TargetRendererImplTank::~TargetRendererImplTank()
 
 TankModel *TargetRendererImplTank::getModel()
 {
-	if (!model_)
-	{
-		// Try the user's specified tank 1st
-		model_ = ScorchedClient::instance()->getTankModels().getModelByName(
-			tank_->getModelContainer().getTankOriginalModelName(), 
-			tank_->getTeam(),
-			tank_->isTemp());
-		if (0 != strcmp(model_->getName(), 
-			tank_->getModelContainer().getTankOriginalModelName()))
-		{
-			// If this fails use the one the server chose
-			model_ = ScorchedClient::instance()->getTankModels().getModelByName(
-				tank_->getModelContainer().getTankModelName(), 
-				tank_->getTeam(),
-				tank_->isTemp());
-		}
-	}
-	return model_;
+	return tank_->getModelContainer().getTankModel();
 }
 
 TankMesh *TargetRendererImplTank::getMesh()
@@ -209,8 +192,7 @@ void TargetRendererImplTank::drawParticle(float distance)
 	
 	drawParachute();
 	drawShield(shieldHit_, totalTime_);
-	
-	if (!tank_->isTemp()) drawInfo();
+	drawInfo();
 }
 
 void TargetRendererImplTank::drawInfo()

@@ -72,10 +72,8 @@ void TankState::newGame()
 {
 	skippedShots_ = 0;
 	setState(sNormal);
-	if (!tank_->isTemp())
-	{
-		maxLives_ = context_.getOptionsGame().getPlayerLives();
-	}
+
+	maxLives_ = context_.getOptionsGame().getPlayerLives();
 
 	lives_ = maxLives_;
 	tank_->getTargetState().setFalling(0);

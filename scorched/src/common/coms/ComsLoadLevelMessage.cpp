@@ -99,9 +99,7 @@ bool ComsLoadLevelMessage::loadState(ScorchedContext &context)
 				playerId,
 				0, 
 				LangString(),
-				Vector::getNullVector(),
-				"",
-				"");
+				Vector::getNullVector());
 #ifndef S3D_SERVER
 			tank->setRenderer(new TargetRendererImplTank(tank));
 #endif

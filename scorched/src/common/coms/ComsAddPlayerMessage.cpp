@@ -34,7 +34,6 @@ ComsAddPlayerMessage::ComsAddPlayerMessage(ComsAddPlayerMessage &other) :
 	playerType_(other.playerType_),
 	playerColor_(other.playerColor_),
 	modelName_(other.modelName_),
-	typeName_(other.typeName_),
 	destinationId_(other.destinationId_),
 	playerTeam_(other.playerTeam_),
 	playerIconName_(other.playerIconName_)
@@ -49,7 +48,6 @@ ComsAddPlayerMessage::ComsAddPlayerMessage(
 		const LangString &playerName,
 		Vector playerColor,
 		const char *modelName,
-		const char *typeName,
 		unsigned int destinationId,
 		unsigned int playerTeam,
 		const char *playerType) :
@@ -59,7 +57,6 @@ ComsAddPlayerMessage::ComsAddPlayerMessage(
 	playerType_(playerType),
 	playerColor_(playerColor),
 	modelName_(modelName),
-	typeName_(typeName),
 	destinationId_(destinationId),
 	playerTeam_(playerTeam)
 {
@@ -74,7 +71,6 @@ bool ComsAddPlayerMessage::writeMessage(NetBuffer &buffer)
 	buffer.addToBuffer(playerName_);
 	buffer.addToBuffer(playerType_);
 	buffer.addToBuffer(modelName_);
-	buffer.addToBuffer(typeName_);
 	buffer.addToBuffer(playerId_);
 	buffer.addToBuffer(destinationId_);
 	buffer.addToBuffer(playerTeam_);
@@ -94,7 +90,6 @@ bool ComsAddPlayerMessage::readMessage(NetBufferReader &reader)
 	if (!reader.getFromBuffer(playerName_)) return false;
 	if (!reader.getFromBuffer(playerType_)) return false;
 	if (!reader.getFromBuffer(modelName_)) return false;
-	if (!reader.getFromBuffer(typeName_)) return false;
 	if (!reader.getFromBuffer(playerId_)) return false;
 	if (!reader.getFromBuffer(destinationId_)) return false;
 	if (!reader.getFromBuffer(playerTeam_)) return false;

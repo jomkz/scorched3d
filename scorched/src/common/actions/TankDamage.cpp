@@ -488,8 +488,7 @@ void TankDamage::logDeath()
 		Vector white(1.0f, 1.0f, 1.0f);
 		static Tank envTank(*context_, 0, 0, 
 			LANG_STRING("Environment"), 
-			white, 
-			"", "");
+			white);
 		envTank.setUniqueId("Environment");
 		firedTank = &envTank;
 	}

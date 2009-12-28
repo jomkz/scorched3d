@@ -224,10 +224,7 @@ void TankMovement::simulationMove(fixed frameTime)
 				if (!context_->getServerMode())
 				{
 					// Check if this tank type allows smoke trails
-					TankModel *model = context_->getTankModels().getModelByName(
-						tank->getModelContainer().getTankModelName(),
-						tank->getTeam(),
-						tank->isTemp());
+					TankModel *model = tank->getModelContainer().getTankModel();
 					if (model && model->getMovementSmoke())
 					{
 						if (smokeCounter_.nextDraw(frameTime.asFloat()))
@@ -407,10 +404,7 @@ void TankMovement::moveTank(Tank *tank)
 		stepCount_++;
 		if (stepCount_ % 5 == 0)
 		{
-			TankModel *model = context_->getTankModels().getModelByName(
-				tank->getModelContainer().getTankModelName(),
-				tank->getTeam(),
-				tank->isTemp());
+			TankModel *model = tank->getModelContainer().getTankModel();
 			if (model)
 			{
 				Image *image = 0;

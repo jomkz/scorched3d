@@ -42,9 +42,7 @@ Tank::Tank(ScorchedContext &context,
 		unsigned int playerId, 
 		unsigned int destinationId,
 		const LangString &name, 
-		Vector &color, 
-		const char *modelName,
-		const char *typeName) :
+		Vector &color) :
 	Target(playerId, name, context), 
 	context_(context),
 	destinationId_(destinationId),
@@ -53,11 +51,14 @@ Tank::Tank(ScorchedContext &context,
 	team_(0), 
 	ipAddress_(0)
 {
+	tankType_ = 
+		context_.getTankModels().getTypeByName("none");
+
 	accessories_ = new TankAccessories(context);
 	score_ = new TankScore(context);
 	state_ = new TankState(context, playerId);
 	position_ = new TankPosition(context);
-	modelContainer_ = new TankModelContainer(modelName, typeName);
+	modelContainer_ = new TankModelContainer(context_);
 	avatar_ = new TankAvatar();
 	camera_ = new TankCamera(context);
 
@@ -99,10 +100,7 @@ void Tank::newMatch()
 
 void Tank::newGame()
 {
-	TankType *tankType = 
-		context_.getTankModels().getTypeByName(
-			getModelContainer().getTankTypeName());
-	getLife().setMaxLife(tankType->getLife());
+	getLife().setMaxLife(tankType_->getLife());
 
 	Target::newGame();
 

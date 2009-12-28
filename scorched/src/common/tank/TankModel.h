@@ -29,6 +29,7 @@
 
 class ScorchedContext;
 class TankType;
+class Tank;
 class TankModel
 {
 public:
@@ -41,7 +42,6 @@ public:
 	void clear();
 
 	const char *getName() { return tankName_.c_str(); }
-	const char *getTypeName() { return typeName_.c_str(); }
 	ModelID &getTankModelID() { return modelId_; }
 	ModelID &getProjectileModelID() { return projectileModelId_; }
 	ImageID &getTracksVId() { return tracksVId_; }
@@ -56,12 +56,13 @@ public:
 	bool isOfCatagory(const char *catagory);
 	bool isOfTeam(int team);
 
+	bool availableForTank(Tank *tank);
+
 protected:
 	bool init_;
 	bool aiOnly_;
 	bool movementSmoke_;
 	std::string tankName_;
-	std::string typeName_;
 	ModelID modelId_;
 	ModelID projectileModelId_;
 	ImageID tracksVId_;

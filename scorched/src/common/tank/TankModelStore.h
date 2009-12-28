@@ -37,8 +37,8 @@ public:
 	bool loadTankMeshes(ScorchedContext &context, int detailLevel,
 		ProgressCounter *counter = 0);
 
-	TankModel *getModelByName(const char *name, int team, bool ai);
-	TankModel *getRandomModel(int team, bool ai);
+	TankModel *getModelByName(const char *name);
+	TankModel *getRandomModel(int team, bool ai, unsigned int randomNumber);
 
 	TankType *getTypeByName(const char *name);
 

@@ -154,7 +154,7 @@ void TankAIAdder::addTankAI(ScorchedServer &context, const char *aiName)
 		Vector color = TankColorGenerator::instance()->getNextColor(
 			context.getTankContainer().getPlayingTanks());
 		TankModel *tankModel = 
-			context.getTankModels().getRandomModel(team, false);
+			context.getTankModels().getRandomModel(team, false, rand());
 		unsigned int playerId = getNextTankId(uniqueId, context.getContext());
 		TankAvatar tankAvatar;
 		tankAvatar.loadFromFile(S3D::getDataFile("data/avatars/computer.png"));
@@ -165,7 +165,6 @@ void TankAIAdder::addTankAI(ScorchedServer &context, const char *aiName)
 			newname,
 			color,
 			tankModel->getName(),
-			tankModel->getTypeName(),
 			0,
 			team,
 			""); 

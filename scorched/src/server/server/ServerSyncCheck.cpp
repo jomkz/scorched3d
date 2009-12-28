@@ -298,9 +298,7 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 		0,
 		0, 
 		LangString(),
-		Vector::getNullVector(),
-		"",
-		"");
+		Vector::getNullVector());
 	tmpTank->getState().setState(TankState::sDead); // Make sure not added to target space
 
 	// Load client targets

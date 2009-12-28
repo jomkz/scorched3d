@@ -25,6 +25,7 @@
 #include <tank/TankModelStore.h>
 #include <tank/TankModelContainer.h>
 #include <tank/TankColorGenerator.h>
+#include <engine/Simulator.h>
 #include <common/OptionsScorched.h>
 #include <common/ChannelManager.h>
 #include <algorithm>
@@ -102,20 +103,13 @@ bool TankTeamBallanceSimAction::invokeAction(ScorchedContext &context)
 		Tank *current = (*mainitor).second;
 		if (current->getState().getTankPlaying())
 		{
-			TankModel *model = 
-				context.getTankModels().getModelByName(
-					current->getModelContainer().getTankModelName(),
-					current->getTeam(),
-					current->isTemp());
-			if (0 != strcmp(model->getName(),
-				current->getModelContainer().getTankModelName()))
+			// Check if this model is allowed for this team
+			if (!current->getModelContainer().getTankModel()->availableForTank(current))
 			{
-				// The model is not allowed for this team,
-				// use the correct model
-				current->getModelContainer().setTankModelName(
-					model->getName(), 
-					model->getName(),
-					model->getTypeName());
+				TankModel *model = context.getTankModels().getRandomModel(
+					current->getTeam(), current->getDestinationId() == 0, 
+					context.getSimulator().getRandomGenerator().getRandUInt());
+				current->getModelContainer().setServerTankModelName(model->getName());
 			}
 		}
 	}

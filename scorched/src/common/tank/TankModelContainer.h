@@ -26,24 +26,20 @@
 // The model used for this tank
 class ScorchedContext;
 class TankType;
+class TankModel;
 class Tank;
 class TankModelContainer
 {
 public:
-	TankModelContainer(const char *modelName, 
-		const char *typeName);
+	TankModelContainer(ScorchedContext &context);
 	virtual ~TankModelContainer();
 
 	void setTank(Tank *tank) { tank_ = tank; }
 
-	// The name of the model that should be used for this tank
-	const char *getTankModelName() { return tankModelName_.c_str(); }
-	const char *getTankOriginalModelName() { return tankOriginalModelName_.c_str(); }
-	const char *getTankTypeName() { return tankTypeName_.c_str(); }
-	void setTankModelName(
-		const char *modelName, 
-		const char *originalModelName,
-		const char *typeName);
+	TankModel *getTankModel() { return tankModel_; }
+
+	void setServerTankModelName(const char *serverModelName);
+	void setCustomTankModelName(const char *customModelName);
 
 	// Serialize the modelid
     bool writeMessage(NetBuffer &buffer);
@@ -52,11 +48,13 @@ public:
 	void toString(std::string &str);
 
 protected:
+	ScorchedContext &context_;
 	Tank *tank_;
-	std::string tankModelName_; // Model for tank (this is the one the server also has)
-	std::string tankOriginalModelName_; // The original tank model sent from the client
-	std::string tankTypeName_;
+	std::string customModelName_;
+	std::string serverModelName_;
+	TankModel *tankModel_;
 
+	void setTankModel();
 };
 
 #endif // _TankModelContainer_h

@@ -23,6 +23,7 @@
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
 #include <tank/TankColorGenerator.h>
+#include <tank/TankModelContainer.h>
 #include <tankai/TankAIStore.h>
 #include <common/ChannelManager.h>
 #include <common/StatsLogger.h>
@@ -77,13 +78,13 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 		message_.getPlayerId(),
 		message_.getDestinationId(),
 		message_.getPlayerName(),
-		color,
-		message_.getModelName(),
-		message_.getTankType());
+		color);
 	tank->setTeam(message_.getPlayerTeam());
 	tank->getAvatar().setFromBuffer(
 		message_.getPlayerIconName(),
 		message_.getPlayerIcon());
+	tank->getModelContainer().setServerTankModelName(
+		message_.getModelName());
 	if (context.getServerMode())
 	{
 		tank->setUniqueId(uniqueId_.c_str());

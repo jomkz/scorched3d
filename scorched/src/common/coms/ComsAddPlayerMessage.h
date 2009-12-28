@@ -36,7 +36,6 @@ public:
 		const LangString &playerName,
 		Vector playerColor,
 		const char *modelName,
-		const char *typeName,
 		unsigned int destinationId,
 		unsigned int playerTeam,
 		const char *playerType);
@@ -46,7 +45,6 @@ public:
 	void setPlayerName(const LangString &name) { playerName_ = name; }
 	const char *getPlayerType() { return playerType_.c_str(); }
 	const char *getModelName() { return modelName_.c_str(); }
-	const char *getTankType() { return typeName_.c_str(); }
 	unsigned int getPlayerId() { return playerId_; }
 	Vector &getPlayerColor() { return playerColor_; }
 	unsigned int getDestinationId() { return destinationId_; }
@@ -67,7 +65,6 @@ protected:
 	LangString playerName_;
 	std::string playerType_;
 	std::string modelName_;
-	std::string typeName_;
 	std::string playerIconName_;
 	Vector playerColor_;
 	NetBuffer playerIcon_;

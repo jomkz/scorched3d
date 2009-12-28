@@ -84,14 +84,13 @@ public:
 	virtual void shieldHit();
 	virtual void targetBurnt() {}
 
-	void resetModel() { model_ = 0; mesh_ = 0; }
+	void resetModel() { mesh_ = 0; }
 	TankModel *getModel();
 	TankMesh *getMesh();
 	GLWTankTips *getTips() { return &tankTips_; }
 
 protected:
 	Tank *tank_;
-	TankModel *model_;
 	TankMesh *mesh_;
 	GLWTankTips tankTips_;
 	float fireOffSet_;

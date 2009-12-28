@@ -156,20 +156,11 @@ void GroundMaps::generateObjects(
 	{
 		unsigned int playerId = (*itor).first;
 		Target *target = (*itor).second;
-		if (target->isTemp())
+		if (target->isTarget())
 		{
-			if (target->isTarget())
-			{
-				Target *removedTarget = 
-					context.getTargetContainer().removeTarget(playerId);
-				delete removedTarget;
-			}
-			else
-			{
-				Tank *removedTank = 
-					context.getTankContainer().removeTank(playerId);
-				delete removedTank;
-			}
+			Target *removedTarget = 
+				context.getTargetContainer().removeTarget(playerId);
+			delete removedTarget;
 		}
 	}
 

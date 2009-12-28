@@ -23,6 +23,7 @@
 #include <engine/ActionController.h>
 #include <tank/TankContainer.h>
 #include <tank/TankModelContainer.h>
+#include <tank/TankType.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponTypeAction);
 
@@ -84,7 +85,7 @@ void WeaponTypeAction::weaponCallback(
 	if (!tank) return;
 
 	std::map<std::string, Weapon *>::iterator itor = 
-		actions_.find(tank->getModelContainer().getTankTypeName());
+		actions_.find(tank->getTankType()->getName());
 	if (itor == actions_.end()) return;
 
 	Weapon *action = (*itor).second;

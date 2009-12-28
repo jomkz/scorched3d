@@ -148,7 +148,7 @@ void TankModelStore::killModels(std::vector<TankModel *> &src)
 	}
 }
 
-TankModel *TankModelStore::getRandomModel(int team, bool ai)
+TankModel *TankModelStore::getRandomModel(int team, bool ai, unsigned int randomNumber)
 {
 	std::vector<TankModel *> models;
 	std::vector<TankModel *>::iterator itor;
@@ -165,16 +165,15 @@ TankModel *TankModelStore::getRandomModel(int team, bool ai)
 	}
 
 	DIALOG_ASSERT(models.size());
-	TankModel *model = models[rand() % models.size()];
+	TankModel *model = models[randomNumber % models.size()];
 	return model;
 }
 
-TankModel *TankModelStore::getModelByName(const char *name, int team, bool ai)
+TankModel *TankModelStore::getModelByName(const char *name)
 {
 	DIALOG_ASSERT(models_.size());
 
-	// A hack to allow the random model
-	if (strcmp(name, "Random") == 0) return getRandomModel(team, ai);
+	if (strcmp(name, "Random") == 0) return 0;
 
 	std::vector<TankModel *>::iterator itor;
 	for (itor = models_.begin();
@@ -182,15 +181,13 @@ TankModel *TankModelStore::getModelByName(const char *name, int team, bool ai)
 		 itor++)
 	{
 		TankModel *current = (*itor);
-		if (0 == strcmp(current->getName(), name) &&
-			current->isOfTeam(team) &&
-			current->isOfAi(ai))
+		if (0 == strcmp(current->getName(), name))
 		{
 			return current;
 		}
 	}
 
-	return getRandomModel(team, ai);
+	return 0;
 }
 
 TankType *TankModelStore::getTypeByName(const char *name)

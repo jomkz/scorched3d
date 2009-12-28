@@ -23,6 +23,7 @@
 
 #include <target/Target.h>
 
+class TankType;
 class TankAI;
 class TankAccessories;
 class TankScore;
@@ -40,9 +41,7 @@ public:
 		unsigned int playerId, 
 		unsigned int destinationId,
 		const LangString &name, 
-		Vector &color, 
-		const char *modelName,
-		const char *typeName);
+		Vector &color);
 	virtual ~Tank();
 
 	// Called when the state changes
@@ -71,6 +70,7 @@ public:
 	const char *getHostDesc() { return hostDesc_.c_str(); }
 	void setHostDesc(const char *id) { hostDesc_ = id; }
 	TankAI *getTankAI() { return tankAI_; }
+	TankType *getTankType() { return tankType_; }
 	void setTankAI(TankAI *ai);
 	Vector &getColor();
 	void setColor(Vector &color) { color_ = color; }
@@ -97,6 +97,7 @@ protected:
 	TankAvatar *avatar_;
 	TankCamera *camera_;
 	TankAI *tankAI_;
+	TankType *tankType_;
 	Vector color_;
 	std::string uniqueId_;
 	std::string SUI_;

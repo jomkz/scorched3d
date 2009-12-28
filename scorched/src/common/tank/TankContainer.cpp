@@ -104,15 +104,12 @@ int TankContainer::teamCount()
 		mainitor++)
 	{
 		Tank *current = (*mainitor).second;
-		if (!current->isTemp())
+		if (current->getState().getLives() > 0)
 		{
-			if (current->getState().getLives() > 0)
-			{
-				if (current->getTeam() == 1) team1=1;
-				if (current->getTeam() == 2) team2=1;
-				if (current->getTeam() == 3) team3=1;
-				if (current->getTeam() == 4) team4=1;
-			}
+			if (current->getTeam() == 1) team1=1;
+			if (current->getTeam() == 2) team2=1;
+			if (current->getTeam() == 3) team3=1;
+			if (current->getTeam() == 4) team4=1;
 		}
 	}
 	return team1 + team2 + team3 + team4;
@@ -127,12 +124,9 @@ int TankContainer::aliveCount()
 		mainitor++)
 	{
 		Tank *current = (*mainitor).second;
-		if (!current->isTemp())
+		if (current->getState().getLives() > 0)
 		{
-			if (current->getState().getLives() > 0)
-			{
-				alive++;
-			}
+			alive++;
 		}
 	}
 	return alive;
@@ -147,10 +141,7 @@ int TankContainer::getNoOfNonSpectatorTanks()
 		mainitor++)
 	{
 		Tank *current = (*mainitor).second;
-		if (!current->isTemp())
-		{
-			if (current->getState().getTankPlaying()) count++;
-		}
+		if (current->getState().getTankPlaying()) count++;
 	}
 	return count;
 }
@@ -166,10 +157,7 @@ std::map<unsigned int, Tank *> &TankContainer::getPlayingTanks()
 		mainitor++)
 	{
 		Tank *current = (*mainitor).second;
-		if (!current->isTemp())
-		{
-			tanks[current->getPlayerId()] = current;
-		}
+		tanks[current->getPlayerId()] = current;
 	}	
 
 	return tanks;
@@ -189,10 +177,7 @@ int TankContainer::getNoOfTanks()
 		mainitor++)
 	{
 		Tank *current = (*mainitor).second;
-		if (!current->isTemp())
-		{
-			count++;
-		}
+		count++;
 	}	
 	return count;
 }

@@ -411,11 +411,15 @@ void PlayerDialog::buttonDown(unsigned int id)
 				}
 			}
 
-			// Get the model type (turns a "Random" choice into a proper name)
+			// Check the current model exists or get a random one
 			TankModel *model = 
 				ScorchedClient::instance()->getTankModels().
-					getModelByName(viewer_->getModelName(), 
-					getCurrentTeam(), false);
+					getModelByName(viewer_->getModelName());
+			if (!model)
+			{
+				model = ScorchedClient::instance()->getTankModels().
+					getRandomModel(getCurrentTeam(), false, rand());
+			}
 
 			// Get the player type
 			const char *playerType = typeDropDown_->getCurrentDataText();
@@ -425,7 +429,6 @@ void PlayerDialog::buttonDown(unsigned int id)
 				playerName_->getLangString(),
 				colorDropDown_->getCurrentColor(),
 				model->getName(),
-				model->getTypeName(),
 				ScorchedClient::instance()->getTankContainer().getCurrentDestinationId(),
 				getCurrentTeam(),
 				playerType);

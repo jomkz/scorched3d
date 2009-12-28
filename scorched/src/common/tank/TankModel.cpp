@@ -20,6 +20,7 @@
 
 #include <tank/TankModel.h>
 #include <tank/TankType.h>
+#include <tank/Tank.h>
 #include <tank/TankModelStore.h>
 #include <XML/XMLNode.h>
 #include <engine/ScorchedContext.h>
@@ -42,17 +43,8 @@ bool TankModel::initFromXML(ScorchedContext &context, XMLNode *node)
 	if (!node->getNamedChild("name", tankName_)) return false;
 
 	// Get the tank type (if any)
-	typeName_ = "none";
-	node->getNamedChild("type", typeName_, false);
-	TankType *type = context.getTankModels().getTypeByName(typeName_.c_str());
-	if (!type)
-	{
-		return node->returnError(
-			S3D::formatStringBuffer(
-			"Failed to find tank type \"%s\" for tank \"%s\"",
-			typeName_.c_str(),
-			tankName_.c_str()));
-	}
+	std::string typeName;
+	node->getNamedChild("type", typeName, false);
 
 	// Get the model node
 	XMLNode *modelNode;
@@ -163,4 +155,15 @@ bool TankModel::isOfTeam(int team)
 	std::set<int>::iterator itor =
 		teams_.find(team);
 	return (itor != teams_.end());
+}
+
+bool TankModel::availableForTank(Tank *tank)
+{
+	if (isOfTeam(tank->getTeam()) &&
+		isOfAi(tank->getDestinationId() == 0))
+	{
+		return true;
+	}
+
+	return false;
 }

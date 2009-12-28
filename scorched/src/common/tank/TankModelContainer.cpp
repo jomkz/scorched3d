@@ -20,18 +20,16 @@
 
 #include <tank/TankModelContainer.h>
 #include <tank/TankModelStore.h>
+#include <tank/Tank.h>
 #ifndef S3D_SERVER
 	#include <tankgraph/TargetRendererImplTank.h>
 #endif
 #include <engine/ScorchedContext.h>
 #include <common/DefinesString.h>
 
-TankModelContainer::TankModelContainer(
-	const char *modelName, 
-	const char *typeName) :
-	tankModelName_(modelName), 
-	tankTypeName_(typeName),
-	tankOriginalModelName_(modelName)
+TankModelContainer::TankModelContainer(ScorchedContext &context) :
+	context_(context),
+	tankModel_(0), tank_(0)
 {
 }
 
@@ -39,52 +37,57 @@ TankModelContainer::~TankModelContainer()
 {
 }
 
-void TankModelContainer::setTankModelName(
-	const char *modelName, const char *originalModelName, const char *typeName)
+void TankModelContainer::setServerTankModelName(const char *serverModelName)
 {
-	if (0 != strcmp(modelName, tankModelName_.c_str()) ||
-		0 != strcmp(originalModelName, tankOriginalModelName_.c_str()))
-	{
-#ifndef S3D_SERVER
-		if (tank_->getRenderer())
-		{
-			TargetRendererImplTank *renderer = (TargetRendererImplTank *)
-				tank_->getRenderer();
-			renderer->resetModel();
-		}
-#endif
-	}
+	serverModelName_ = serverModelName;
+	setTankModel();
+}
 
-	tankModelName_ = modelName;
-	tankOriginalModelName_ = originalModelName;
-	tankTypeName_ = typeName;
+void TankModelContainer::setCustomTankModelName(const char *customModelName)
+{
+	customModelName_ = customModelName;
+	setTankModel();
+}
+
+void TankModelContainer::setTankModel()
+{
+#ifndef S3D_SERVER
+	if (tank_->getRenderer())
+	{
+		TargetRendererImplTank *renderer = (TargetRendererImplTank *)
+			tank_->getRenderer();
+		renderer->resetModel();
+	}
+#endif
+
+	tankModel_ = context_.getTankModels().getModelByName(customModelName_.c_str());
+	if (!tankModel_ || !tankModel_->availableForTank(tank_))
+	{
+		tankModel_ = context_.getTankModels().getModelByName(serverModelName_.c_str());
+		DIALOG_ASSERT(tankModel_);
+	}
 }
 
 bool TankModelContainer::writeMessage(NetBuffer &buffer)
 {
-	buffer.addToBuffer(tankModelName_);
-	buffer.addToBuffer(tankOriginalModelName_);
-	buffer.addToBuffer(tankTypeName_);
+	buffer.addToBuffer(customModelName_);
+	buffer.addToBuffer(serverModelName_);
 	return true;
 }
 
 bool TankModelContainer::readMessage(NetBufferReader &reader)
 {
-	std::string newModelName, newTypeName, newOrignalName;
-	if (!reader.getFromBuffer(newModelName)) return false;
-	if (!reader.getFromBuffer(newOrignalName)) return false;
-	if (!reader.getFromBuffer(newTypeName)) return false;
-	setTankModelName(
-		newModelName.c_str(), 
-		newOrignalName.c_str(), 
-		newTypeName.c_str());
+	std::string customModelName, serverModelName;
+	if (!reader.getFromBuffer(customModelName)) return false;
+	if (!reader.getFromBuffer(serverModelName)) return false;
+	setCustomTankModelName(customModelName.c_str());
+	setServerTankModelName(serverModelName.c_str());
 	return true;
 }
 
 void TankModelContainer::toString(std::string &str)
 {
 	str.append("  ModelContainer:\n");
-	str.append("    Model : ").append(getTankModelName()).append("\n");
-	str.append("    Original : ").append(getTankOriginalModelName()).append("\n");
-	str.append("    Type : ").append(getTankTypeName()).append("\n");
+	str.append("    Custom : ").append(customModelName_).append("\n");
+	str.append("    Server : ").append(serverModelName_).append("\n");
 }

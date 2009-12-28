@@ -77,12 +77,6 @@ void Target::newGame()
 	parachute_->newGame();
 }
 
-bool Target::isTemp()
-{
-	return (isTarget() || 
-		getPlayerId() >= TargetID::MIN_TARGET_ID);
-}
-
 bool Target::getAlive()
 {
 	return (life_->getLife() > 0);

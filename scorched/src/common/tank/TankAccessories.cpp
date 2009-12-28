@@ -92,8 +92,7 @@ void TankAccessories::newMatch()
 
 	// Add all of the accessories that come from the tank's type
 	{
-		TankType *type = context_.getTankModels().getTypeByName(
-			tank_->getModelContainer().getTankTypeName());
+		TankType *type = tank_->getTankType();
 		std::map<Accessory *, int> accessories = type->getAccessories();
 		std::map<Accessory *, int>::iterator itor;
 		for (itor = accessories.begin();
@@ -197,8 +196,7 @@ int TankAccessories::getAccessoryCount(Accessory *accessory)
 bool TankAccessories::accessoryAllowed(Accessory *accessory, int count)
 {
 	// Check if this tank type allows this accessory
-	TankType *type = context_.getTankModels().getTypeByName(
-		tank_->getModelContainer().getTankTypeName());
+	TankType *type = tank_->getTankType();
 	if (type->getAccessoryDisabled(accessory)) return false;
 
 	// Check if this accessory is allowed at all
@@ -226,10 +224,7 @@ bool TankAccessories::accessoryAllowed(Accessory *accessory, int count)
 	// Check if this is an ai only weapon
 	if (accessory->getAIOnly())
 	{
-		if (!tank_->isTemp())
-		{
-			return false;
-		}
+		return false;
 	}
 	
 	// Check if this is a bot only weapon
