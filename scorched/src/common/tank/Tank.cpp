@@ -145,6 +145,7 @@ void Tank::toString(std::string &str)
 {
 	Target::toString(str);
 
+	str.append("DestinationId : ").append(S3D::formatStringBuffer("%u", destinationId_)).append("\n");
 	modelContainer_->toString(str);
 }
 

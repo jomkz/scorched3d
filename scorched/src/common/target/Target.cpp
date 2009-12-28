@@ -162,8 +162,16 @@ bool Target::readMessage(NetBufferReader &reader)
 		Logger::log("Target::border read failed");
 		return false;
 	}
-	deathAction_ = context_.getAccessoryStore().readWeapon(reader);
-	burnAction_ = context_.getAccessoryStore().readWeapon(reader);
+	if (!context_.getAccessoryStore().readWeapon(reader, deathAction_))
+	{
+		Logger::log("Target::deathAction read failed");
+		return false;
+	}
+	if (!context_.getAccessoryStore().readWeapon(reader, burnAction_))
+	{
+		Logger::log("Target::burnAction read failed");
+		return false;
+	}
 
 	return true;
 }

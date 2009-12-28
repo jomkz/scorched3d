@@ -384,15 +384,19 @@ bool AccessoryStore::writeWeapon(NetBuffer &buffer, Weapon *weapon)
 	return writeAccessoryPart(buffer, weapon);
 }
 
-Weapon *AccessoryStore::readWeapon(NetBufferReader &reader)
+bool AccessoryStore::readWeapon(NetBufferReader &reader, Weapon *&weapon)
 {
-	AccessoryPart *accessoryPart = readAccessoryPart(reader);
-	if (accessoryPart &&
-		accessoryPart->getType() == AccessoryPart::AccessoryWeapon)
+	weapon = 0;
+
+	AccessoryPart *accessoryPart;
+	if (!readAccessoryPart(reader, accessoryPart)) return false;
+	if (!accessoryPart) return true;
+	if (accessoryPart->getType() == AccessoryPart::AccessoryWeapon)
 	{
-		return ((Weapon *) accessoryPart);
+		weapon = ((Weapon *) accessoryPart);
+		return true;
 	}
-	return 0;
+	return false;
 }
 
 bool AccessoryStore::writeAccessoryPart(NetBuffer &buffer, AccessoryPart *part)
@@ -402,17 +406,22 @@ bool AccessoryStore::writeAccessoryPart(NetBuffer &buffer, AccessoryPart *part)
 	return true;
 }
 
-AccessoryPart *AccessoryStore::readAccessoryPart(NetBufferReader &reader)
+bool AccessoryStore::readAccessoryPart(NetBufferReader &reader, AccessoryPart *&part)
 {
+	part = 0;
+
 	unsigned int partId;
-	if (!reader.getFromBuffer(partId)) return 0;
+	if (!reader.getFromBuffer(partId)) return false;
+	if (partId == 0) return true;
+
 	AccessoryPart *accessoryPart = findByAccessoryPartId(partId);
 	if (accessoryPart &&
 		accessoryPart->getAccessoryPartId() == partId)
 	{
-		return accessoryPart;
+		part = accessoryPart;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
 bool AccessoryStore::writeEconomyToBuffer(NetBuffer &buffer)

@@ -144,6 +144,7 @@ void ActionController::setScorchedContext(ScorchedContext *context)
 
 void ActionController::addAction(Action *action)
 {
+	action->setScorchedContext(context_);
 	newActions_.push_back(action);
 }
 

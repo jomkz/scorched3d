@@ -66,9 +66,9 @@ public:
 	std::set<std::string> &getTabGroupNames() { return tabGroups_; }
 
 	bool writeWeapon(NetBuffer &buffer, Weapon *weapon);
-	Weapon *readWeapon(NetBufferReader &reader);
+	bool readWeapon(NetBufferReader &reader, Weapon *&weapon);
 	bool writeAccessoryPart(NetBuffer &buffer, AccessoryPart *weapon);
-	AccessoryPart *readAccessoryPart(NetBufferReader &reader);
+	bool readAccessoryPart(NetBufferReader &reader, AccessoryPart *&part);
 
 	bool writeEconomyToBuffer(NetBuffer &buffer);
 	bool readEconomyFromBuffer(NetBufferReader &reader);
