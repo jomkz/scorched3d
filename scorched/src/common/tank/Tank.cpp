@@ -90,6 +90,12 @@ void Tank::setTankAI(TankAI *ai)
 	tankAI_ = ai;
 }
 
+unsigned int Tank::getDestinationId() 
+{ 
+	if (tankAI_) return 0;
+	return destinationId_; 
+}
+
 void Tank::newMatch()
 {
 	accessories_->newMatch();

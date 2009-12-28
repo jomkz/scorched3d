@@ -210,8 +210,7 @@ void ServerMessageHandler::destroyPlayer(unsigned int tankId, const char *reason
 	// Make this player a computer controlled player
 	{
 		TankAI *ai = new TankAINone(tank->getPlayerId());
-		tank->setTankAI(ai);
-		tank->setDestinationId(0);
+		tank->setTankAI(ai); // Will automaticaly set the destinationId to 0
 	}
 
 	// Add tank to tank dead container to remember its stats
