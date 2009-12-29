@@ -31,6 +31,7 @@
 #include <common/ProgressCounter.h>
 
 class XMLNode;
+class NamedNetBuffer;
 class AccessoryStore
 {
 public:
@@ -65,9 +66,9 @@ public:
 	std::map<std::string, XMLNode *> &getParsingNodes() { return parsingNodes_; }
 	std::set<std::string> &getTabGroupNames() { return tabGroups_; }
 
-	bool writeWeapon(NetBuffer &buffer, Weapon *weapon);
+	bool writeWeapon(NamedNetBuffer &buffer, Weapon *weapon);
 	bool readWeapon(NetBufferReader &reader, Weapon *&weapon);
-	bool writeAccessoryPart(NetBuffer &buffer, AccessoryPart *weapon);
+	bool writeAccessoryPart(NamedNetBuffer &buffer, AccessoryPart *weapon);
 	bool readAccessoryPart(NetBufferReader &reader, AccessoryPart *&part);
 
 	bool writeEconomyToBuffer(NetBuffer &buffer);

@@ -84,7 +84,7 @@ public:
 	const char *getScoreString();
 
 	// Serialize the tank
-	bool writeMessage(NetBuffer &buffer);
+	bool writeMessage(NamedNetBuffer &buffer);
 	bool readMessage(NetBufferReader &reader);
 
 protected:

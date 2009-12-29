@@ -22,7 +22,7 @@
 #define __INCLUDE_TargetStateh_INCLUDE__
 
 class TankFalling;
-class NetBuffer;
+class NamedNetBuffer;
 class NetBufferReader;
 
 class TargetStateMovement
@@ -71,7 +71,7 @@ public:
 	void setFlattenDestroy(bool d) { flattenDestroy_ = d; }
 	bool getFlattenDestroy() { return flattenDestroy_; }
 
-    bool writeMessage(NetBuffer &buffer);
+    bool writeMessage(NamedNetBuffer &buffer);
     bool readMessage(NetBufferReader &reader);
 
 protected:

@@ -42,9 +42,12 @@ void TargetParachute::setCurrentParachute(Accessory *para)
 	currentParachute_ = para;
 }
 
-bool TargetParachute::writeMessage(NetBuffer &buffer)
+bool TargetParachute::writeMessage(NamedNetBuffer &buffer)
 {
-	buffer.addToBuffer((unsigned int)(currentParachute_?currentParachute_->getAccessoryId():0));
+	NamedNetBufferSection section(buffer, "TargetParachute");
+
+	buffer.addToBufferNamed("id",
+		(unsigned int)(currentParachute_?currentParachute_->getAccessoryId():0));
 	return true;
 }
 

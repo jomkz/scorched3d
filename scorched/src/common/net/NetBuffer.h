@@ -31,7 +31,43 @@
 #include <SDL/SDL_net.h>
 #endif
 
-class NetBuffer
+class NetBuffer;
+class NamedNetBuffer
+{
+public:
+	virtual void startSection(const char *name) {}
+	virtual void stopSection(const char *name) {}
+
+	virtual void addToBufferNamed(const char *name, Vector &vector) = 0;
+	virtual void addToBufferNamed(const char *name, FixedVector &vector) = 0;
+	virtual void addToBufferNamed(const char *name, FixedVector4 &vector) = 0;
+	virtual void addToBufferNamed(const char *name, const char *add) = 0;
+	virtual void addToBufferNamed(const char *name, std::string &string) = 0;
+	virtual void addToBufferNamed(const char *name, const std::string &string) = 0;
+	virtual void addToBufferNamed(const char *name, LangString &string) = 0;
+	virtual void addToBufferNamed(const char *name, const LangString &string) = 0;
+	virtual void addToBufferNamed(const char *name, const char add) = 0;
+	virtual void addToBufferNamed(const char *name, const unsigned char add) = 0;
+	virtual void addToBufferNamed(const char *name, const int add) = 0;
+	virtual void addToBufferNamed(const char *name, const float add) = 0;
+	virtual void addToBufferNamed(const char *name, const bool add) = 0;
+	virtual void addToBufferNamed(const char *name, const unsigned int add) = 0;
+	virtual void addToBufferNamed(const char *name, const fixed add) = 0;
+	virtual void addToBufferNamed(const char *name, NetBuffer &add) = 0;
+};
+
+class NamedNetBufferSection
+{
+public:
+	NamedNetBufferSection(NamedNetBuffer &buffer, const char *name);
+	virtual ~NamedNetBufferSection();
+
+protected:
+	NamedNetBuffer &buffer_;
+	const char *name_;
+};
+
+class NetBuffer : public NamedNetBuffer
 {
 public:
 	NetBuffer();
@@ -44,6 +80,23 @@ public:
 	void resize(unsigned newBufferSize);
 	void allocate(unsigned size);
 	void setBufferUsed(unsigned size) { usedSize_ = size; }
+
+	virtual void addToBufferNamed(const char *name, Vector &vector);
+	virtual void addToBufferNamed(const char *name, FixedVector &vector);
+	virtual void addToBufferNamed(const char *name, FixedVector4 &vector);
+	virtual void addToBufferNamed(const char *name, const char *add);
+	virtual void addToBufferNamed(const char *name, std::string &string);
+	virtual void addToBufferNamed(const char *name, const std::string &string);
+	virtual void addToBufferNamed(const char *name, LangString &string);
+	virtual void addToBufferNamed(const char *name, const LangString &string);
+	virtual void addToBufferNamed(const char *name, const char add);
+	virtual void addToBufferNamed(const char *name, const unsigned char add);
+	virtual void addToBufferNamed(const char *name, const int add);
+	virtual void addToBufferNamed(const char *name, const float add);
+	virtual void addToBufferNamed(const char *name, const bool add);
+	virtual void addToBufferNamed(const char *name, const unsigned int add);
+	virtual void addToBufferNamed(const char *name, const fixed add);
+	virtual void addToBufferNamed(const char *name, NetBuffer &add);
 
 	void addToBuffer(Vector &vector);
 	void addToBuffer(FixedVector &vector);
@@ -78,7 +131,6 @@ protected:
 	char *buffer_;
 	unsigned usedSize_;
 	unsigned bufferSize_;
-
 };
 
 class NetBufferReader

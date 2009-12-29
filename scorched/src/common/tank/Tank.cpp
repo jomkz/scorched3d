@@ -147,22 +147,16 @@ Vector &Tank::getColor()
 	return color_;
 }
 
-void Tank::toString(std::string &str)
+bool Tank::writeMessage(NamedNetBuffer &buffer)
 {
-	Target::toString(str);
+	NamedNetBufferSection section(buffer, "Tank");
 
-	str.append("DestinationId : ").append(S3D::formatStringBuffer("%u", destinationId_)).append("\n");
-	modelContainer_->toString(str);
-}
-
-bool Tank::writeMessage(NetBuffer &buffer, bool writeAccessories)
-{
 	if (!Target::writeMessage(buffer)) return false;  // Base class 1st
-	buffer.addToBuffer(destinationId_);
-	buffer.addToBuffer(team_);
-	buffer.addToBuffer(color_);
+	buffer.addToBufferNamed("destinationId", destinationId_);
+	buffer.addToBufferNamed("team", team_);
+	buffer.addToBufferNamed("color", color_);
 	if (!state_->writeMessage(buffer)) return false;
-	if (!accessories_->writeMessage(buffer, writeAccessories)) return false;
+	if (!accessories_->writeMessage(buffer, true)) return false;
 	if (!score_->writeMessage(buffer)) return false;
 	if (!position_->writeMessage(buffer)) return false;
 	if (!modelContainer_->writeMessage(buffer)) return false;

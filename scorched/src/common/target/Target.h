@@ -36,7 +36,7 @@ namespace TargetID
 	const int MAX_TARGET_ID = 40000000;
 };
 
-class NetBuffer;
+class NamedNetBuffer;
 class NetBufferReader;
 class TargetState;
 class TargetLife;
@@ -87,7 +87,7 @@ public:
 	virtual void toString(std::string &str);
 
 	// Serialize the target
-	virtual bool writeMessage(NetBuffer &buffer);
+	virtual bool writeMessage(NamedNetBuffer &buffer);
 	virtual bool readMessage(NetBufferReader &reader);
 
 protected:

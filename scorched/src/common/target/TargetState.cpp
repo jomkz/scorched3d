@@ -44,8 +44,9 @@ TargetState::~TargetState()
 	delete movement_;
 }
 
-bool TargetState::writeMessage(NetBuffer &buffer)
+bool TargetState::writeMessage(NamedNetBuffer &buffer)
 {
+	NamedNetBufferSection section(buffer, "TargetState");
 	unsigned int value =
 		(displayDamage_?1:0) |
 		(displayShadow_?2:0) |
@@ -56,7 +57,7 @@ bool TargetState::writeMessage(NetBuffer &buffer)
 		(noFallingDamage_?64:0) |
 		(driveOverToDestroy_?128:0) |
 		(flattenDestroy_?256:0);
-	buffer.addToBuffer(value);
+	buffer.addToBufferNamed("state", value);
 	return true;
 }
 

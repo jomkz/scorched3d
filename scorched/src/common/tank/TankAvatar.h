@@ -32,7 +32,7 @@ public:
 	TankAvatar();
 	virtual ~TankAvatar();
 	
-	bool writeMessage(NetBuffer &buffer);
+	bool writeMessage(NamedNetBuffer &buffer);
 	bool readMessage(NetBufferReader &reader);
 
 	void clear();

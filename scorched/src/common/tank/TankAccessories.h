@@ -61,7 +61,7 @@ public:
 	LangString getAccessoryAndCountString(Accessory *accessory);
 
 	// Serialize the tank accessories
-	bool writeMessage(NetBuffer &buffer, bool writeAccessories);
+	bool writeMessage(NamedNetBuffer &buffer, bool writeAccessories);
 	bool readMessage(NetBufferReader &reader);
 
 protected:

@@ -69,11 +69,12 @@ int TankTeamScore::getWonGame()
 	return wonGame_;
 }
 
-bool TankTeamScore::writeMessage(NetBuffer &buffer)
+bool TankTeamScore::writeMessage(NamedNetBuffer &buffer)
 {
+	NamedNetBufferSection section(buffer, "TankTeamScore");
 	for (int i=1; i<5; i++)
 	{
-		buffer.addToBuffer(scores_[i]);
+		buffer.addToBufferNamed("score", scores_[i]);
 	}
 	return true;
 }

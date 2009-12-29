@@ -72,7 +72,7 @@ public:
 	void setMaxLife(fixed life) { maxLife_ = life; }
 
 	// Serialize the tank
-	bool writeMessage(NetBuffer &buffer);
+	bool writeMessage(NamedNetBuffer &buffer);
 	bool readMessage(NetBufferReader &reader);
 
 protected:

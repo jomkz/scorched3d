@@ -239,9 +239,11 @@ const char *TankPosition::getPowerString()
 	return messageBuffer;
 }
 
-bool TankPosition::writeMessage(NetBuffer &buffer)
+bool TankPosition::writeMessage(NamedNetBuffer &buffer)
 {
-	buffer.addToBuffer(maxPower_);
+	NamedNetBufferSection section(buffer, "TankPosition");
+
+	buffer.addToBufferNamed("maxPower", maxPower_);
 	return true;
 }
 

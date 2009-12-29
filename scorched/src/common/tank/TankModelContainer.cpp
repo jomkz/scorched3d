@@ -67,9 +67,11 @@ void TankModelContainer::setTankModelName(const char *modelName)
 	tankModel_ = 0;
 }
 
-bool TankModelContainer::writeMessage(NetBuffer &buffer)
+bool TankModelContainer::writeMessage(NamedNetBuffer &buffer)
 {
-	buffer.addToBuffer(modelName_);
+	NamedNetBufferSection section(buffer, "TankModelContainer");
+
+	buffer.addToBufferNamed("modelName", modelName_);
 	return true;
 }
 
@@ -79,9 +81,4 @@ bool TankModelContainer::readMessage(NetBufferReader &reader)
 	if (!reader.getFromBuffer(modelName)) return false;
 	setTankModelName(modelName.c_str());
 	return true;
-}
-
-void TankModelContainer::toString(std::string &str)
-{
-	str.append("  Model Name: ").append(modelName_).append("\n");
 }

@@ -64,7 +64,7 @@ bool ComsLoadLevelMessage::saveState(ScorchedContext &context)
 	{
 		Tank *tank = targetItor->second;
 		stateBuffer_.addToBuffer(tank->getPlayerId());
-		if (!tank->writeMessage(stateBuffer_, true)) return false;
+		if (!tank->writeMessage(stateBuffer_)) return false;
 	}
 
 	return false;

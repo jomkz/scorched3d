@@ -115,23 +115,25 @@ const char *TankScore::getScoreString()
 	return score;
 }
 
-bool TankScore::writeMessage(NetBuffer &buffer)
+bool TankScore::writeMessage(NamedNetBuffer &buffer)
 {
-	buffer.addToBuffer(kills_);
-	buffer.addToBuffer(assists_);
-	buffer.addToBuffer(money_);
-	buffer.addToBuffer(wins_);
-	buffer.addToBuffer(score_);
-	buffer.addToBuffer(rank_);
-	buffer.addToBuffer(skill_);
-	buffer.addToBuffer(startSkill_);
-	buffer.addToBuffer((int) hurtBy_.size());
+	NamedNetBufferSection section(buffer, "TankScore");
+
+	buffer.addToBufferNamed("kills", kills_);
+	buffer.addToBufferNamed("assists", assists_);
+	buffer.addToBufferNamed("money", money_);
+	buffer.addToBufferNamed("wins", wins_);
+	buffer.addToBufferNamed("score", score_);
+	buffer.addToBufferNamed("rank", rank_);
+	buffer.addToBufferNamed("skill", skill_);
+	buffer.addToBufferNamed("startSkill", startSkill_);
+	buffer.addToBufferNamed("hurtBySize", (int) hurtBy_.size());
 	std::set<unsigned int>::iterator itor;
 	for (itor = hurtBy_.begin();
 		itor != hurtBy_.end();
 		itor++)
 	{
-		buffer.addToBuffer(*itor);
+		buffer.addToBufferNamed("hurtBy", *itor);
 	}
 	return true;
 }

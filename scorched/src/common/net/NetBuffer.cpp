@@ -26,6 +26,17 @@
 
 static const unsigned startSize = 1024 * 10;
 
+NamedNetBufferSection::NamedNetBufferSection(NamedNetBuffer &buffer, const char *name) :
+	buffer_(buffer), name_(name)
+{
+	buffer_.startSection(name_);
+}
+
+NamedNetBufferSection::~NamedNetBufferSection()
+{
+	buffer_.stopSection(name_);
+}
+
 NetBuffer::NetBuffer() : 
 	buffer_(0),
 	usedSize_(0),
@@ -183,6 +194,86 @@ void NetBuffer::addDataToBuffer(const void *add, unsigned len)
 
 	memcpy(&buffer_[usedSize_], add, len);
 	usedSize_ += len;
+}
+
+void NetBuffer::addToBufferNamed(const char *name, Vector &vector) 
+{ 
+	addToBuffer(vector); 
+}
+
+void NetBuffer::addToBufferNamed(const char *name, FixedVector &vector)
+{ 
+	addToBuffer(vector); 
+}
+
+void NetBuffer::addToBufferNamed(const char *name, FixedVector4 &vector)
+{ 
+	addToBuffer(vector); 
+}
+
+void NetBuffer::addToBufferNamed(const char *name, const char *add)
+{ 
+	addToBuffer(add); 
+}
+
+void NetBuffer::addToBufferNamed(const char *name, std::string &string)
+{ 
+	addToBuffer(string); 
+}
+
+void NetBuffer::addToBufferNamed(const char *name, const std::string &string)
+{ 
+	addToBuffer(string); 
+}
+
+void NetBuffer::addToBufferNamed(const char *name, LangString &string)
+{ 
+	addToBuffer(string); 
+}
+
+void NetBuffer::addToBufferNamed(const char *name, const LangString &string)
+{ 
+	addToBuffer(string); 
+}
+
+void NetBuffer::addToBufferNamed(const char *name, const char add)
+{ 
+	addToBuffer(add); 
+}
+
+void NetBuffer::addToBufferNamed(const char *name, const unsigned char add)
+{ 
+	addToBuffer(add); 
+}
+
+void NetBuffer::addToBufferNamed(const char *name, const int add)
+{ 
+	addToBuffer(add); 
+}
+
+void NetBuffer::addToBufferNamed(const char *name, const float add)
+{ 
+	addToBuffer(add); 
+}
+
+void NetBuffer::addToBufferNamed(const char *name, const bool add)
+{ 
+	addToBuffer(add); 
+}
+
+void NetBuffer::addToBufferNamed(const char *name, const unsigned int add)
+{ 
+	addToBuffer(add); 
+}
+
+void NetBuffer::addToBufferNamed(const char *name, const fixed add)
+{ 
+	addToBuffer(add); 
+}
+
+void NetBuffer::addToBufferNamed(const char *name, NetBuffer &add)
+{ 
+	addToBuffer(add); 
 }
 
 void NetBuffer::addToBuffer(Vector &add)

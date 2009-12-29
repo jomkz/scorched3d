@@ -392,7 +392,7 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 					syncCheckLog(S3D::formatStringBuffer(
 						"**** SyncCheck %s differ %u Dest %u Sync %u Groups %s",
 						isTarget?"target":"tank",
-						target->getPlayerId(),
+						playerId,
 						destinationId, client->getSyncId(), groupnames.c_str()));
 					syncCheckLog(S3D::formatStringBuffer("Server : %s",
 						serverToString.c_str()));

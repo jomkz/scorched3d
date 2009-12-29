@@ -45,7 +45,7 @@ public:
 	void setShieldPower(fixed power);
 
 	// Serialize
-    bool writeMessage(NetBuffer &buffer);
+    bool writeMessage(NamedNetBuffer &buffer);
     bool readMessage(NetBufferReader &reader);
 
 protected:

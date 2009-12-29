@@ -1253,6 +1253,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\XML\XmlNamedNetBuffer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\XML\XmlNamedNetBuffer.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\XML\XMLNode.cpp"
 				>
 			</File>

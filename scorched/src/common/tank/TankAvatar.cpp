@@ -31,6 +31,8 @@ GLTexture *TankAvatar::defaultTexture_ = 0;
 std::list<TankAvatar::AvatarStore> TankAvatar::storeEntries_;
 #endif
 
+static NetBuffer tmpBuffer;
+
 TankAvatar::TankAvatar()
 {
 #ifndef S3D_SERVER
@@ -44,15 +46,12 @@ TankAvatar::~TankAvatar()
 	delete file_;
 }
 
-bool TankAvatar::writeMessage(NetBuffer &buffer)
+bool TankAvatar::writeMessage(NamedNetBuffer &buffer)
 {
-	buffer.addToBuffer(name_);
-	buffer.addToBuffer(file_->getBufferUsed());
-	if (file_->getBufferUsed() > 0)
-	{
-		buffer.addDataToBuffer(file_->getBuffer(),
-			file_->getBufferUsed());
-	}
+	NamedNetBufferSection section(buffer, "TankAvatar");
+
+	buffer.addToBufferNamed("name", name_);
+	buffer.addToBufferNamed("file", *file_);
 	return true;
 }
 
@@ -67,20 +66,11 @@ void TankAvatar::clear()
 
 bool TankAvatar::readMessage(NetBufferReader &reader)
 {
-	static NetBuffer buffer;
 	std::string name;
 	unsigned int used = 0;
 	if (!reader.getFromBuffer(name)) return false;
-	if (!reader.getFromBuffer(used)) return false;
-	if (used > 0)
-	{
-		buffer.allocate(used);
-		buffer.reset();
-		buffer.setBufferUsed(used);
-		reader.getDataFromBuffer(buffer.getBuffer(), used);
-
-		setFromBuffer(name, buffer);
-	}
+	if (!reader.getFromBuffer(tmpBuffer)) return false;
+	setFromBuffer(name, tmpBuffer);
 	return true;
 }
 
@@ -90,14 +80,14 @@ bool TankAvatar::loadFromFile(const std::string &fileName)
 	if (in)
 	{
 		name_ = fileName;
-		file_->reset();
+		tmpBuffer.reset();
 		unsigned char readBuf[512];
 		while (unsigned int size = (unsigned int) fread(readBuf, sizeof(unsigned char), 512, in))
 		{
-			file_->addDataToBuffer(readBuf, size);
+			tmpBuffer.addDataToBuffer(readBuf, size);
 		}
 		fclose(in);
-		return true;
+		return setFromBuffer(fileName, tmpBuffer);
 	}
 	return false;
 }
@@ -112,6 +102,8 @@ unsigned int TankAvatar::getCrc()
 
 bool TankAvatar::setFromBuffer(const std::string &fileName, NetBuffer &buffer)
 {
+	if (buffer.getBufferUsed() == 0) return false;
+
 	ImagePng png;
 	if (!png.loadFromBuffer(buffer)) return false;
 	if (png.getWidth() != 32 || 

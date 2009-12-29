@@ -174,11 +174,13 @@ bool TankState::getTankPlaying()
 	return state_ == sNormal || state_ == sDead;
 }
 
-bool TankState::writeMessage(NetBuffer &buffer)
+bool TankState::writeMessage(NamedNetBuffer &buffer)
 {
-	buffer.addToBuffer((int) state_);
-	buffer.addToBuffer(lives_);
-	buffer.addToBuffer(maxLives_);
+	NamedNetBufferSection section(buffer, "TankState");
+
+	buffer.addToBufferNamed("state", (int) state_);
+	buffer.addToBufferNamed("lives", lives_);
+	buffer.addToBufferNamed("maxLives", maxLives_);
 	return true;
 }
 

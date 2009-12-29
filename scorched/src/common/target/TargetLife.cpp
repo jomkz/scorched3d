@@ -248,14 +248,16 @@ void TargetLife::updateSpace()
 	context_.getTargetSpace().updateTarget(target_);
 }
 
-bool TargetLife::writeMessage(NetBuffer &buffer)
+bool TargetLife::writeMessage(NamedNetBuffer &buffer)
 {
-	buffer.addToBuffer(maxLife_);
-	buffer.addToBuffer(life_);
-	buffer.addToBuffer(size_);
-	buffer.addToBuffer(velocity_);
-	buffer.addToBuffer(targetPosition_);
-	buffer.addToBuffer(quaternion_);
+	NamedNetBufferSection section(buffer, "TargetLife");
+
+	buffer.addToBufferNamed("maxLife", maxLife_);
+	buffer.addToBufferNamed("life", life_);
+	buffer.addToBufferNamed("size", size_);
+	buffer.addToBufferNamed("velocity", velocity_);
+	buffer.addToBufferNamed("targetPosition", targetPosition_);
+	buffer.addToBufferNamed("quaternion", quaternion_);
 	return true;
 }
 

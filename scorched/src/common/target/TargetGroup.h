@@ -26,7 +26,7 @@
 
 class TargetGroupsSetEntry;
 class ScorchedContext;
-class NetBuffer;
+class NamedNetBuffer;
 class NetBufferReader;
 class Target;
 class TargetGroup
@@ -43,7 +43,7 @@ public:
 
 	void removeFromAllGroups();
 
-	virtual bool writeMessage(NetBuffer &buffer);
+	virtual bool writeMessage(NamedNetBuffer &buffer);
 	virtual bool readMessage(NetBufferReader &reader);
 
 private:

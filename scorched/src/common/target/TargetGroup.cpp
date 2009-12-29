@@ -41,16 +41,17 @@ FixedVector &TargetGroup::getPosition()
 	return target_->getLife().getTargetPosition();
 }
 
-bool TargetGroup::writeMessage(NetBuffer &buffer)
+bool TargetGroup::writeMessage(NamedNetBuffer &buffer)
 {
-	buffer.addToBuffer((int) groups_.size());
+	NamedNetBufferSection section(buffer, "TargetGroup");
+	buffer.addToBufferNamed("size", (int) groups_.size());
 	std::set<TargetGroupsSetEntry *>::iterator itor;
 	for (itor = groups_.begin();
 		itor != groups_.end();
 		itor++)
 	{
 		TargetGroupsSetEntry *group = *itor;
-		buffer.addToBuffer(group->getName());
+		buffer.addToBufferNamed("name", group->getName());
 	}	
 	return true;
 }

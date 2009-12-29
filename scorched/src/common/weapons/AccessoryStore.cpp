@@ -379,7 +379,7 @@ void AccessoryStore::clearAccessories()
 	}
 }
 
-bool AccessoryStore::writeWeapon(NetBuffer &buffer, Weapon *weapon)
+bool AccessoryStore::writeWeapon(NamedNetBuffer &buffer, Weapon *weapon)
 {
 	return writeAccessoryPart(buffer, weapon);
 }
@@ -399,10 +399,10 @@ bool AccessoryStore::readWeapon(NetBufferReader &reader, Weapon *&weapon)
 	return false;
 }
 
-bool AccessoryStore::writeAccessoryPart(NetBuffer &buffer, AccessoryPart *part)
+bool AccessoryStore::writeAccessoryPart(NamedNetBuffer &buffer, AccessoryPart *part)
 {
-	if (part) buffer.addToBuffer(part->getAccessoryPartId());
-	else buffer.addToBuffer((unsigned int) 0);
+	if (part) buffer.addToBufferNamed("accessoryId", part->getAccessoryPartId());
+	else buffer.addToBufferNamed("accessoryId", (unsigned int) 0);
 	return true;
 }
 

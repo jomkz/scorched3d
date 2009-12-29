@@ -24,7 +24,7 @@
 #include <list>
 #include <lang/LangString.h>
 #include <common/Vector.h>
-#include <common/FixedVector.h>
+#include <common/FixedVector4.h>
 #include <common/FileLines.h>
 #include <common/NumberParser.h>
 
@@ -61,10 +61,13 @@ public:
 		NodeType = XMLNode::XMLNodeType);
 	XMLNode(const char *name, FixedVector &content, 
 		NodeType = XMLNode::XMLNodeType);
+	XMLNode(const char *name, FixedVector4 &content, 
+		NodeType = XMLNode::XMLNodeType);
 
 	virtual ~XMLNode();
 
 	bool writeToFile(const std::string &fileName);
+	void addNodeToFile(FileLines &lines, int spacing);
 
 	NodeType getType() { return type_; }
 	const char *getName() { return name_.c_str(); }
@@ -118,6 +121,8 @@ public:
 	void addParameter(XMLNode *node);
 	void addContent(const char *data, int len);
 
+	void clear();
+
 	static void removeSpecialChars(const std::string &content,
 		std::string &result);
 	static void addSpecialChars(const std::string &content, 
@@ -136,9 +141,6 @@ protected:
 	std::string content_;
 	std::string source_;
 	int line_, col_;
-
-	void addNodeToFile(FileLines &lines, int spacing);
-
 };
 
 #endif

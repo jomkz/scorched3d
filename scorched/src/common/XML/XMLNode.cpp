@@ -161,6 +161,31 @@ XMLNode::XMLNode(const char *name, FixedVector &content, NodeType type) :
 	nodeC->addContent(buffer, (int) strlen(buffer));
 }
 
+XMLNode::XMLNode(const char *name, FixedVector4 &content, NodeType type) :
+	name_(name), parent_(0), type_(type), useContentNodes_(false)
+{
+	XMLNode *nodeA = new XMLNode("a");
+	addChild(nodeA);
+	XMLNode *nodeB = new XMLNode("b");
+	addChild(nodeB);
+	XMLNode *nodeC = new XMLNode("c");
+	addChild(nodeC);
+	XMLNode *nodeD = new XMLNode("d");
+	addChild(nodeD);
+
+	const char *buffer = content[0].asString();
+	nodeA->addContent(buffer, (int) strlen(buffer));
+
+	buffer = content[1].asString();
+	nodeB->addContent(buffer, (int) strlen(buffer));
+
+	buffer = content[2].asString();
+	nodeC->addContent(buffer, (int) strlen(buffer));
+
+	buffer = content[3].asString();
+	nodeD->addContent(buffer, (int) strlen(buffer));
+}
+
 XMLNode::XMLNode(const char *name, Vector &content, NodeType type) :
 	name_(name), parent_(0), type_(type), useContentNodes_(false)
 {
@@ -183,6 +208,11 @@ XMLNode::XMLNode(const char *name, Vector &content, NodeType type) :
 }
 
 XMLNode::~XMLNode()
+{
+	clear();
+}
+
+void XMLNode::clear()
 {
 	while (!children_.empty())
 	{

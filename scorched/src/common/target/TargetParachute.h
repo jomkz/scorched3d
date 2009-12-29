@@ -36,7 +36,7 @@ public:
 	Accessory *getCurrentParachute() { return currentParachute_; }
 	void setCurrentParachute(Accessory *para);
 
-    bool writeMessage(NetBuffer &buffer);
+    bool writeMessage(NamedNetBuffer &buffer);
     bool readMessage(NetBufferReader &reader);
 
 protected:

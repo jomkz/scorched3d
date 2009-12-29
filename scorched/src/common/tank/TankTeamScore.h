@@ -38,7 +38,7 @@ public:
 	void setWonGame(int team);
 	int getWonGame();
 
-	bool writeMessage(NetBuffer &buffer);
+	bool writeMessage(NamedNetBuffer &buffer);
 	bool readMessage(NetBufferReader &reader);
 
 protected:

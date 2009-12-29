@@ -50,10 +50,8 @@ public:
 	virtual void clientNewGame();
 	void rezTank();
 
-	virtual void toString(std::string &str);
-
 	// Serialize the tank
-	virtual bool writeMessage(NetBuffer &buffer, bool writeAccessories);
+	virtual bool writeMessage(NamedNetBuffer &buffer);
 	virtual bool readMessage(NetBufferReader &reader);
 
 	// The base attributes of the tank

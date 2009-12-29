@@ -380,12 +380,14 @@ void TankAccessories::changed()
 	tankBatteries_.changed();
 }
 
-bool TankAccessories::writeMessage(NetBuffer &buffer, bool writeAccessories)
+bool TankAccessories::writeMessage(NamedNetBuffer &buffer, bool writeAccessories)
 {
+	NamedNetBufferSection section(buffer, "TankAccessories");
+
 	// Send the fact we are not sending any accessories
 	if (!writeAccessories)
 	{
-		buffer.addToBuffer((int) -1);
+		buffer.addToBufferNamed("noAccessories", (int) -1);
 		return true;
 	}
 
@@ -401,13 +403,13 @@ bool TankAccessories::writeMessage(NetBuffer &buffer, bool writeAccessories)
 	}
 
 	// Add all the accessories that are sent to the client
-	buffer.addToBuffer((int) ordered.size());
+	buffer.addToBufferNamed("noAccessories", (int) ordered.size());
 	for (itor2 = ordered.begin();
 		itor2 != ordered.end();
 		itor2++)
 	{
-		buffer.addToBuffer(itor2->first);
-		buffer.addToBuffer(itor2->second);
+		buffer.addToBufferNamed("accessory", itor2->first);
+		buffer.addToBufferNamed("count", itor2->second);
 	}
 
 	return true;

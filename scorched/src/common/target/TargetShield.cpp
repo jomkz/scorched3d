@@ -75,11 +75,13 @@ void TargetShield::setShieldPower(fixed power)
 	}
 }
 
-bool TargetShield::writeMessage(NetBuffer &buffer)
+bool TargetShield::writeMessage(NamedNetBuffer &buffer)
 {
+	NamedNetBufferSection section(buffer, "TargetShield");
+
 	unsigned int shieldId = (currentShield_?currentShield_->getAccessoryId():0);
-	buffer.addToBuffer(shieldId);
-	if (shieldId != 0) buffer.addToBuffer(power_);
+	buffer.addToBufferNamed("id", shieldId);
+	if (shieldId != 0) buffer.addToBufferNamed("power", power_);
 	return true;
 }
 

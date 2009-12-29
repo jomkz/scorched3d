@@ -27,6 +27,7 @@
 #include <target/TargetShield.h>
 #include <target/TargetParachute.h>
 #include <target/TargetGroup.h>
+#include <XML/XmlNamedNetBuffer.h>
 #include <engine/ScorchedContext.h>
 #include <weapons/AccessoryStore.h>
 #include <common/Defines.h>
@@ -105,20 +106,24 @@ const std::string &Target::getCStrName()
 
 void Target::toString(std::string &str)
 {
-	str.append("Target : ").append(getCStrName()).append(":");
-	str.append(S3D::formatStringBuffer("%u", playerId_));
-	str.append("\n");
+	XmlNamedNetBuffer buffer;
+	writeMessage(buffer);
+	FileLines fileLines;
+	buffer.getBuffer().addNodeToFile(fileLines, 4);
+	fileLines.getAsOneLine(str);
 }
 
-bool Target::writeMessage(NetBuffer &buffer)
+bool Target::writeMessage(NamedNetBuffer &buffer)
 {
-	buffer.addToBuffer(name_);
+	NamedNetBufferSection section(buffer, "Target");
+
+	buffer.addToBufferNamed("name", name_);
 	if (!shield_->writeMessage(buffer)) return false;
 	if (!life_->writeMessage(buffer)) return false;
 	if (!parachute_->writeMessage(buffer)) return false;
 	if (!targetState_->writeMessage(buffer)) return false;
 	if (!group_->writeMessage(buffer)) return false;
-	buffer.addToBuffer(border_);
+	buffer.addToBufferNamed("border", border_);
 	if (!context_.getAccessoryStore().writeWeapon(buffer, deathAction_)) return false;
 	if (!context_.getAccessoryStore().writeWeapon(buffer, burnAction_)) return false;
 

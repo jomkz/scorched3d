@@ -74,14 +74,7 @@ ComsSyncCheckMessage::ComsSyncCheckMessage(unsigned int syncId,
 		targetsBuffer_.addToBuffer(target->isTarget());
 
 		NetBuffer tmpBuffer;
-		if (target->isTarget())
-		{
-			target->writeMessage(tmpBuffer);
-		}
-		else
-		{
-			((Tank*)target)->writeMessage(tmpBuffer, true);
-		}
+		target->writeMessage(tmpBuffer);
 		targetsBuffer_.addToBuffer(tmpBuffer);
 	}
 

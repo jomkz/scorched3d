@@ -41,10 +41,8 @@ public:
 	void setTankModelName(const char *modelName);
 
 	// Serialize the modelid
-    bool writeMessage(NetBuffer &buffer);
+    bool writeMessage(NamedNetBuffer &buffer);
     bool readMessage(NetBufferReader &reader);
-
-	void toString(std::string &str);
 
 protected:
 	ScorchedContext &context_;
