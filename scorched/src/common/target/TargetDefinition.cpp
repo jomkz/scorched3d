@@ -129,8 +129,7 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 	if (finalSize == FixedVector::getNullVector())
 	{
 		Model *model = ModelStore::instance()->loadModel(modelId_);
-		Vector size = model->getMax() - model->getMin();
-		finalSize = FixedVector::fromVector(size);
+		finalSize = model->getMax() - model->getMin();
 		finalSize *= finalModelScale;
 	}
 

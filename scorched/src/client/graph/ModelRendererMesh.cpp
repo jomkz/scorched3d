@@ -86,7 +86,7 @@ void ModelRendererMesh::drawBottomAligned(float currentFrame,
 	float distance, float fade, bool setState)
 {
 	glPushMatrix();
-		glTranslatef(0.0f, 0.0f, -model_->getMin()[2]);
+		glTranslatef(0.0f, 0.0f, -model_->getMin()[2].asFloat());
 		draw(currentFrame, distance, fade, setState);
 	glPopMatrix();
 }
@@ -169,19 +169,19 @@ void ModelRendererMesh::drawMesh(unsigned int m, Mesh *mesh, float currentFrame,
 
 			if (useTextures)
 			{
-				glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mesh->getAmbientColor());
-				glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mesh->getDiffuseColor());
-				glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mesh->getSpecularColor());
-				glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, mesh->getEmissiveColor());
-				glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mesh->getShininessColor());
+				glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mesh->getAmbientColor().asVector4());
+				glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mesh->getDiffuseColor().asVector4());
+				glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mesh->getSpecularColor().asVector4());
+				glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, mesh->getEmissiveColor().asVector4());
+				glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mesh->getShininessColor().asFloat());
 			}
 			else
 			{
-				glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mesh->getAmbientNoTexColor());
-				glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mesh->getDiffuseNoTexColor());
-				glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mesh->getSpecularNoTexColor());
-				glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, mesh->getEmissiveNoTexColor());
-				glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mesh->getShininessColor());
+				glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mesh->getAmbientNoTexColor().asVector4());
+				glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mesh->getDiffuseNoTexColor().asVector4());
+				glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mesh->getSpecularNoTexColor().asVector4());
+				glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, mesh->getEmissiveNoTexColor().asVector4());
+				glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mesh->getShininessColor().asFloat());
 			}
 		}
 		else
@@ -265,9 +265,9 @@ void ModelRendererMesh::drawVerts(unsigned int m, Mesh *mesh, bool vertexLightin
 		}
 
 		BoneMatrixType m;
-		bone->getRotationAtTime(float(frame), m);
+		bone->getRotationAtTime(fixed(frame), m);
 				
-		Vector &pos = bone->getPositionAtTime(float(frame));
+		FixedVector &pos = bone->getPositionAtTime(fixed(frame));
 		m[0][3] = pos[0];
 		m[1][3] = pos[1];
 		m[2][3] = pos[2];
@@ -285,7 +285,7 @@ void ModelRendererMesh::drawVerts(unsigned int m, Mesh *mesh, bool vertexLightin
 	}
 
 	// Draw the vertices
-	Vector vec;
+	FixedVector vec;
 	glBegin(GL_TRIANGLES);
 
 	int faceVerts[3];
@@ -317,25 +317,25 @@ void ModelRendererMesh::drawVerts(unsigned int m, Mesh *mesh, bool vertexLightin
 					if (GLState::getState() & GLState::TEXTURE_OFF) 
 					{
 						glColor3f(
-							mesh->getDiffuseNoTexColor()[0] * vertex->lightintense[0],
-							mesh->getDiffuseNoTexColor()[1] * vertex->lightintense[1],
-							mesh->getDiffuseNoTexColor()[2] * vertex->lightintense[2]);
+							(mesh->getDiffuseNoTexColor()[0] * vertex->lightintense[0]).asFloat(),
+							(mesh->getDiffuseNoTexColor()[1] * vertex->lightintense[1]).asFloat(),
+							(mesh->getDiffuseNoTexColor()[2] * vertex->lightintense[2]).asFloat());
 					}
 					else
 					{
-						glColor3fv(vertex->lightintense);
+						glColor3fv(vertex->lightintense.asVector());
 					}
 				}
 
-				glTexCoord2f(face->tcoord[i][0], face->tcoord[i][1]);
-				glNormal3fv(face->normal[i]);
+				glTexCoord2f(face->tcoord[i][0].asFloat(), face->tcoord[i][1].asFloat());
+				glNormal3fv(face->normal[i].asVector());
 
 				if (vertex->boneIndex != -1)
 				{
 					BoneType *type = boneTypes_[vertex->boneIndex];
 
 					// Note: Translation of MS to S3D coords
-					Vector newPos, newVec;
+					FixedVector newPos, newVec;
 					newPos[0] = vertex->position[0];
 					newPos[1] = vertex->position[2];
 					newPos[2] = vertex->position[1];
@@ -357,7 +357,7 @@ void ModelRendererMesh::drawVerts(unsigned int m, Mesh *mesh, bool vertexLightin
 					vec[2] = vertex->position[2] + vertexTranslation_[2];
 				}
 
-				glVertex3fv(vec);
+				glVertex3fv(vec.asVector());
 			}
 		}
 	}

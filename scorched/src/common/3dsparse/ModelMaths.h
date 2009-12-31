@@ -21,32 +21,32 @@
 #if !defined(__INCLUDE_ModelMathsh_INCLUDE__)
 #define __INCLUDE_ModelMathsh_INCLUDE__
 
-#include <common/Vector.h>
+#include <common/FixedVector.h>
 
 class ModelMaths
 {
 public:
-	static void angleQuaternion(const Vector &angles, 
-		float quaternion[4]);
-	static void quaternionSlerp(float p[4], 
-		float q[4], float t, float qt[4]);
+	static void angleQuaternion(FixedVector &angles, 
+		fixed quaternion[4]);
+	static void quaternionSlerp(fixed p[4], 
+		fixed q[4], fixed t, fixed qt[4]);
 
 	static void angleMatrix(
-		const Vector &angles, float matrix[3][4]);
+		FixedVector &angles, fixed matrix[3][4]);
 	static void quaternionMatrix(
-		float quaternion[4], float matrix[3][4]);
+		fixed quaternion[4], fixed matrix[3][4]);
 
-	static void concatTransforms(const float in1[3][4],
-		const float in2[3][4], float out[3][4]);
-	static void vectorIRotate(const Vector &in1, 
-		const float in2[3][4], Vector &out);
-	static float dotProduct(const Vector &v1, 
-		const Vector &v2)
+	static void concatTransforms(fixed in1[3][4],
+		fixed in2[3][4], fixed out[3][4]);
+	static void vectorIRotate(FixedVector &in1, 
+		fixed in2[3][4], FixedVector &out);
+	static fixed dotProduct(FixedVector &v1, 
+		const FixedVector &v2)
 	{
 		return v1[0]*v2[0] + v1[1]*v2[1] + v1[2]*v2[2];
 	}
-	static void vectorRotate(const Vector &in1, 
-		const float in2[3][4], Vector &out)
+	static void vectorRotate(FixedVector &in1, 
+		fixed in2[3][4], FixedVector &out)
 	{
 		out[0] = dotProduct(in1, in2[0]);
 		out[1] = dotProduct(in1, in2[1]);

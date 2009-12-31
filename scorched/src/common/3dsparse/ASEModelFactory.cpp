@@ -88,28 +88,28 @@ Mesh *ASEModelFactory::getCurrentMesh()
 	return mesh;
 }
 
-Vector ASEModelFactory::getTexCoord(Vector &tri, MaxMag mag, Vector &max, Vector &min)
+FixedVector ASEModelFactory::getTexCoord(FixedVector &tri, MaxMag mag, FixedVector &max, FixedVector &min)
 {
-	Vector newTri = tri;
+	FixedVector newTri = tri;
 	newTri -= min;
 	newTri /= (max - min);
 
 	switch(mag)
 	{
 	case MagX:
-		newTri /= 2.0f;
-		newTri[0] = newTri[1] * 2.0f;
+		newTri /= 2;
+		newTri[0] = newTri[1] * 2;
 		newTri[1] = newTri[2];
 		break;
 	case MagY:
-		newTri /= 2.0f;
+		newTri /= 2;
 		newTri[0] = newTri[0];
-		newTri[1] = newTri[2] + 0.5f;
+		newTri[1] = newTri[2] + fixed(true, 5000);
 		break;
 	case MagZ:
-		newTri /= 2.0f;
-		newTri[0] += 0.5f;
-		newTri[1] += 0.5f;
+		newTri /= 2;
+		newTri[0] += fixed(true, 5000);
+		newTri[1] += fixed(true, 5000);
 		break;
 	}
 
@@ -133,19 +133,19 @@ void ASEModelFactory::calculateTexCoords(const char *texName)
 		{
 			Face &face = *(*fitor);
 
-			Vector &triA = mesh->getVertex(face.v[0])->position;
-			Vector &triB = mesh->getVertex(face.v[1])->position;
-			Vector &triC = mesh->getVertex(face.v[2])->position;
+			FixedVector &triA = mesh->getVertex(face.v[0])->position;
+			FixedVector &triB = mesh->getVertex(face.v[1])->position;
+			FixedVector &triC = mesh->getVertex(face.v[2])->position;
 
 			MaxMag maxMag = MagZ;
-			Vector faceNormal = (face.normal[0] + face.normal[1] + face.normal[2]).Normalize();
-			if (fabs(faceNormal[0]) >= fabs(faceNormal[1]) &&
-				fabs(faceNormal[0]) >= fabs(faceNormal[2]))
+			FixedVector faceNormal = (face.normal[0] + face.normal[1] + face.normal[2]).Normalize();
+			if (faceNormal[0].abs() >= faceNormal[1].abs() &&
+				faceNormal[0].abs() >= faceNormal[2].abs())
 			{
 				maxMag = MagX;
 			}
-			else if (fabs(faceNormal[1]) >= fabs(faceNormal[0]) &&
-				fabs(faceNormal[1]) >= fabs(faceNormal[2]))
+			else if (faceNormal[1].abs() >= faceNormal[0].abs() &&
+				faceNormal[1].abs() >= faceNormal[2].abs())
 			{
 				maxMag = MagY;
 			}

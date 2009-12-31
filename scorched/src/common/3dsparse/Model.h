@@ -30,8 +30,8 @@ public:
 	Model();
 	virtual ~Model();
 
-	Vector &getMin() { return min_; }
-	Vector &getMax() { return max_; }
+	FixedVector &getMin() { return min_; }
+	FixedVector &getMax() { return max_; }
 	std::vector<Mesh *> &getMeshes() { return meshes_; }
 	std::vector<BoneType *> &getBaseBoneTypes() { return baseBoneTypes_; }
 	std::vector<Bone *> &getBones() { return bones_; }
@@ -50,7 +50,7 @@ protected:
 	std::vector<Mesh *> meshes_;
 	std::vector<Bone *> bones_;
 	std::vector<BoneType *> baseBoneTypes_;
-	Vector min_, max_;
+	FixedVector min_, max_;
 
 	int startFrame_;
 	int totalFrames_;

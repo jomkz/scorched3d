@@ -23,9 +23,9 @@
 
 #include <string>
 #include <vector>
-#include <common/Vector.h>
+#include <common/FixedVector.h>
 
-typedef float BoneMatrixType[3][4];
+typedef fixed BoneMatrixType[3][4];
 class BoneType
 {
 public:
@@ -41,19 +41,19 @@ public:
 class BonePositionKey
 {
 public:
-	BonePositionKey(float time, Vector &pos);
+	BonePositionKey(fixed time, FixedVector &pos);
 
-	float time;
-	Vector position;
+	fixed time;
+	FixedVector position;
 };
 
 class BoneRotationKey
 {
 public:
-	BoneRotationKey(float time, Vector &rot);
+	BoneRotationKey(fixed time, FixedVector &rot);
 
-	float time;
-	Vector rotation;
+	fixed time;
+	FixedVector rotation;
 };
 
 class Bone
@@ -64,15 +64,15 @@ public:
 
 	const char *getName() { return name_.c_str(); }
 	const char *getParentName() { return parentName_.c_str(); }
-	Vector &getPosition() { return position_; }
-	Vector &getRotation() { return rotation_; }
+	FixedVector &getPosition() { return position_; }
+	FixedVector &getRotation() { return rotation_; }
 	std::vector<BonePositionKey *> &getPositionKeys() 
 		{ return  positionKeys_; }
 	std::vector<BoneRotationKey *> &getRotationKeys()
 		{ return rotationKeys_; }
 
-	Vector &getPositionAtTime(float currentTime);
-	void getRotationAtTime(float currentTime, BoneMatrixType &m);
+	FixedVector &getPositionAtTime(fixed currentTime);
+	void getRotationAtTime(fixed currentTime, BoneMatrixType &m);
 
 	void addPositionKey(BonePositionKey *key) 
 		{ positionKeys_.push_back(key); }
@@ -80,15 +80,15 @@ public:
 		{ rotationKeys_.push_back(key); }
 	void setParentName(const char *parentName) 
 		{ parentName_ = parentName; }
-	void setPosition(Vector &pos)
+	void setPosition(FixedVector &pos)
 		{ position_ = pos; }	
-	void setRotation(Vector &rot)
+	void setRotation(FixedVector &rot)
 		{ rotation_ = rot; }	
 
 protected:
 	std::string name_;
 	std::string parentName_;
-	Vector position_, rotation_;
+	FixedVector position_, rotation_;
 	std::vector<BonePositionKey *> positionKeys_;
 	std::vector<BoneRotationKey *> rotationKeys_;
 

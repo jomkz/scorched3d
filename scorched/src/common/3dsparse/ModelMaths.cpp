@@ -22,14 +22,14 @@
 #include <common/Defines.h>
 #include <math.h>
 
-void ModelMaths::quaternionSlerp(float p[4], float q[4], float t, float qt[4])
+void ModelMaths::quaternionSlerp(fixed p[4], fixed q[4], fixed t, fixed qt[4])
 {
 	int i;
-	float omega, cosom, sinom, sclp, sclq;
+	fixed omega, cosom, sinom, sclp, sclq;
 
 	// decide if one of the quaternions is backwards
-	float a = 0;
-	float b = 0;
+	fixed a = 0;
+	fixed b = 0;
 	for (i = 0; i < 4; i++) {
 		a += (p[i]-q[i])*(p[i]-q[i]);
 		b += (p[i]+q[i])*(p[i]+q[i]);
@@ -42,15 +42,15 @@ void ModelMaths::quaternionSlerp(float p[4], float q[4], float t, float qt[4])
 
 	cosom = p[0]*q[0] + p[1]*q[1] + p[2]*q[2] + p[3]*q[3];
 
-	if ((1.0 + cosom) > 0.00000001) {
-		if ((1.0 - cosom) > 0.00000001) {
-			omega = (float) acos( cosom );
-			sinom = sinf( omega );
-			sclp = sinf( (1.0f - t)*omega) / sinom;
-			sclq = sinf( t*omega ) / sinom;
+	if ((fixed(1) + cosom) > fixed(true, 1)) {
+		if ((fixed(1) - cosom) > fixed(true, 1)) {
+			omega = acosx( cosom );
+			sinom = sinx( omega );
+			sclp = sinx( (fixed(1) - t)*omega) / sinom;
+			sclq = sinx( t*omega ) / sinom;
 		}
 		else {
-			sclp = 1.0f - t;
+			sclp = fixed(1) - t;
 			sclq = t;
 		}
 		for (i = 0; i < 4; i++) {
@@ -62,45 +62,45 @@ void ModelMaths::quaternionSlerp(float p[4], float q[4], float t, float qt[4])
 		qt[1] = p[0];
 		qt[2] = -p[3];
 		qt[3] = p[2];
-		const float Q_PI = 3.14f;
-		sclp = sinf( (1.0f - t) * 0.5f * Q_PI);
-		sclq = sinf( t * 0.5f * Q_PI);
+		
+		sclp = sinx( (fixed(1) - t) * fixed::XPIO2);
+		sclq = sinx( t * fixed::XPIO2);
 		for (i = 0; i < 3; i++) {
 			qt[i] = sclp * p[i] + sclq * qt[i];
 		}
 	}
 }
 
-void ModelMaths::quaternionMatrix(float quaternion[4], float matrix[3][4])
+void ModelMaths::quaternionMatrix(fixed quaternion[4], fixed matrix[3][4])
 {
-	matrix[0][0] = 1.0f - 2.0f * quaternion[1] * quaternion[1] - 2.0f * quaternion[2] * quaternion[2];
-	matrix[1][0] = 2.0f * quaternion[0] * quaternion[1] + 2.0f * quaternion[3] * quaternion[2];
-	matrix[2][0] = 2.0f * quaternion[0] * quaternion[2] - 2.0f * quaternion[3] * quaternion[1];
+	matrix[0][0] = fixed(1) - fixed(2) * quaternion[1] * quaternion[1] - fixed(2) * quaternion[2] * quaternion[2];
+	matrix[1][0] = fixed(2) * quaternion[0] * quaternion[1] + fixed(2) * quaternion[3] * quaternion[2];
+	matrix[2][0] = fixed(2) * quaternion[0] * quaternion[2] - fixed(2) * quaternion[3] * quaternion[1];
 
-	matrix[0][1] = 2.0f * quaternion[0] * quaternion[1] - 2.0f * quaternion[3] * quaternion[2];
-	matrix[1][1] = 1.0f - 2.0f * quaternion[0] * quaternion[0] - 2.0f * quaternion[2] * quaternion[2];
-	matrix[2][1] = 2.0f * quaternion[1] * quaternion[2] + 2.0f * quaternion[3] * quaternion[0];
+	matrix[0][1] = fixed(2) * quaternion[0] * quaternion[1] - fixed(2) * quaternion[3] * quaternion[2];
+	matrix[1][1] = fixed(1) - fixed(2) * quaternion[0] * quaternion[0] - fixed(2) * quaternion[2] * quaternion[2];
+	matrix[2][1] = fixed(2) * quaternion[1] * quaternion[2] + fixed(2) * quaternion[3] * quaternion[0];
 
-	matrix[0][2] = 2.0f * quaternion[0] * quaternion[2] + 2.0f * quaternion[3] * quaternion[1];
-	matrix[1][2] = 2.0f * quaternion[1] * quaternion[2] - 2.0f * quaternion[3] * quaternion[0];
-	matrix[2][2] = 1.0f - 2.0f * quaternion[0] * quaternion[0] - 2.0f * quaternion[1] * quaternion[1];
+	matrix[0][2] = fixed(2) * quaternion[0] * quaternion[2] + fixed(2) * quaternion[3] * quaternion[1];
+	matrix[1][2] = fixed(2) * quaternion[1] * quaternion[2] - fixed(2) * quaternion[3] * quaternion[0];
+	matrix[2][2] = fixed(1) - fixed(2) * quaternion[0] * quaternion[0] - fixed(2) * quaternion[1] * quaternion[1];
 }
 
-void ModelMaths::angleQuaternion(const Vector &angles, float quaternion[4])
+void ModelMaths::angleQuaternion(FixedVector &angles, fixed quaternion[4])
 {
-	float		angle;
-	float		sr, sp, sy, cr, cp, cy;
+	fixed		angle;
+	fixed		sr, sp, sy, cr, cp, cy;
 
 	// FIXME: rescale the inputs to 1/2 angle
-	angle = angles[2] * 0.5f;
-	sy = sinf(angle);
-	cy = cosf(angle);
-	angle = angles[1] * 0.5f;
-	sp = sinf(angle);
-	cp = cosf(angle);
-	angle = angles[0] * 0.5f;
-	sr = sinf(angle);
-	cr = cosf(angle);
+	angle = angles[2] * fixed(true, 5000);
+	sy = angle.sin();
+	cy = angle.cos();
+	angle = angles[1] * fixed(true, 5000);
+	sp = angle.sin();
+	cp = angle.cos();
+	angle = angles[0] * fixed(true, 5000);
+	sr = angle.sin();
+	cr = angle.cos();
 
 	quaternion[0] = sr*cp*cy-cr*sp*sy; // X
 	quaternion[1] = cr*sp*cy+sr*cp*sy; // Y
@@ -108,20 +108,20 @@ void ModelMaths::angleQuaternion(const Vector &angles, float quaternion[4])
 	quaternion[3] = cr*cp*cy+sr*sp*sy; // W
 }
 
-void ModelMaths::angleMatrix(const Vector &angles, float matrix[3][4])
+void ModelMaths::angleMatrix(FixedVector &angles, fixed matrix[3][4])
 {
-	float		angle;
-	float		sr, sp, sy, cr, cp, cy;
+	fixed		angle;
+	fixed		sr, sp, sy, cr, cp, cy;
 	
-	angle = angles[2] * (PI*2 / 360);
-	sy = sinf(angle);
-	cy = cosf(angle);
-	angle = angles[1] * (PI*2 / 360);
-	sp = sinf(angle);
-	cp = cosf(angle);
-	angle = angles[0] * (PI*2 / 360);
-	sr = sinf(angle);
-	cr = cosf(angle);
+	angle = angles[2] * (fixed::X2PI / 360);
+	sy = angle.sin();
+	cy = angle.cos();
+	angle = angles[1] * (fixed::X2PI / 360);
+	sp = angle.sin();
+	cp = angle.cos();
+	angle = angles[0] * (fixed::X2PI / 360);
+	sr = angle.sin();
+	cr = angle.cos();
 
 	// matrix = (Z * Y) * X
 	matrix[0][0] = cp*cy;
@@ -133,12 +133,12 @@ void ModelMaths::angleMatrix(const Vector &angles, float matrix[3][4])
 	matrix[0][2] = (cr*sp*cy+-sr*-sy);
 	matrix[1][2] = (cr*sp*sy+-sr*cy);
 	matrix[2][2] = cr*cp;
-	matrix[0][3] = 0.0;
-	matrix[1][3] = 0.0;
-	matrix[2][3] = 0.0;
+	matrix[0][3] = 0;
+	matrix[1][3] = 0;
+	matrix[2][3] = 0;
 }
 
-void ModelMaths::concatTransforms(const float in1[3][4], const float in2[3][4], float out[3][4])
+void ModelMaths::concatTransforms(fixed in1[3][4], fixed in2[3][4], fixed out[3][4])
 {
 	out[0][0] = in1[0][0] * in2[0][0] + in1[0][1] * in2[1][0] +
 				in1[0][2] * in2[2][0];
@@ -166,7 +166,7 @@ void ModelMaths::concatTransforms(const float in1[3][4], const float in2[3][4], 
 				in1[2][2] * in2[2][3] + in1[2][3];
 }
 
-void ModelMaths::vectorIRotate(const Vector &in1, const float in2[3][4], Vector &out)
+void ModelMaths::vectorIRotate(FixedVector &in1, fixed in2[3][4], FixedVector &out)
 {
 	out[0] = in1[0]*in2[0][0] + in1[1]*in2[1][0] + in1[2]*in2[2][0];
 	out[1] = in1[0]*in2[0][1] + in1[1]*in2[1][1] + in1[2]*in2[2][1];

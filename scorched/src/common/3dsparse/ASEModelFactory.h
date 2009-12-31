@@ -47,7 +47,7 @@ protected:
 
 	bool loadFile(const char *fileName);
 	void calculateTexCoords(const char *texName);
-	Vector getTexCoord(Vector &tri, MaxMag mag, Vector &max, Vector &min);
+	FixedVector getTexCoord(FixedVector &tri, MaxMag mag, FixedVector &max, FixedVector &min);
 };
 
 #endif // __INCLUDE_ASEModelFactoryh_INCLUDE__

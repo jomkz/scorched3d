@@ -82,6 +82,8 @@ void MSModelFactory::loadFile(FILE *in, const char *fileName, Model *model)
 {
 	char filePath[256];
 	snprintf(filePath, sizeof(filePath), "%s", fileName);
+	char fixed1[20], fixed2[20], fixed3[20];
+	char fixed4[20], fixed5[20], fixed6[20];
 
 	char *sep;
 	while (sep=strchr(filePath, '\\')) *sep = '/';
@@ -130,28 +132,33 @@ void MSModelFactory::loadFile(FILE *in, const char *fileName, Model *model)
 			returnError(fileName, "Incorrect num vertices format");
 
 		int j;
-		std::vector<Vector> tcoords;
+		std::vector<FixedVector> tcoords;
 		for (j=0; j<noVertices; j++)
 		{
 			// Read the current vertex
 			int vertexFlags;
-			Vector texCoord;
+			FixedVector texCoord;
 			Vertex vertex;
 			if (!getNextLine(buffer, in)) 
 				returnError(fileName, "No vertices");
-			if (sscanf(buffer, "%i %f %f %f %f %f %i",
+			if (sscanf(buffer, "%i %s %s %s %s %s %i",
 				&vertexFlags,
-				&vertex.position[0], &vertex.position[2], &vertex.position[1], 
-				&texCoord[0], &texCoord[1], &vertex.boneIndex) != 7)
+				fixed1, fixed2, fixed3,
+				fixed4, fixed5, &vertex.boneIndex) != 7)
 				returnError(fileName, "Incorrect vertices format");
-			texCoord[1]=1.0f-texCoord[1];
+
+			vertex.position[0] = fixed(fixed1);
+			vertex.position[2] = fixed(fixed2);
+			vertex.position[1] = fixed(fixed3);
+			texCoord[0] = fixed(fixed4);
+			texCoord[1] = fixed(1)-fixed(fixed5);
 
 			tcoords.push_back(texCoord);
 			mesh->insertVertex(vertex);
 		}
 
 		// Read no normals
-		std::vector<Vector> normals;
+		std::vector<FixedVector> normals;
 		int noNormals = 0;
 		if (!getNextLine(buffer, in)) 
 				returnError(fileName, "No num normals");
@@ -160,12 +167,16 @@ void MSModelFactory::loadFile(FILE *in, const char *fileName, Model *model)
 		for (j=0; j<noNormals; j++)
 		{
 			// Read the current normal
-			Vector normal;
+			FixedVector normal;
 			if (!getNextLine(buffer, in))
 				returnError(fileName, "No normal");
-			if (sscanf(buffer, "%f %f %f",
-				&normal[0], &normal[2], &normal[1]) != 3)
+			if (sscanf(buffer, "%s %s %s",
+				fixed1, fixed2, fixed3) != 3)
 				returnError(fileName, "Incorrect normal format");
+
+			normal[0] = fixed(fixed1);
+			normal[2] = fixed(fixed2);
+			normal[1] = fixed(fixed3);
 
 			normals.push_back(normal.Normalize());
 		}
@@ -225,50 +236,68 @@ void MSModelFactory::loadFile(FILE *in, const char *fileName, Model *model)
 			returnError(fileName, "Incorrect material name format");
 
 		// ambient
-		Vector4 ambient;
+		FixedVector4 ambient;
 		if (!getNextLine(buffer, in))
 			returnError(fileName, "No material ambient");
-		if (sscanf(buffer, "%f %f %f %f", 
-			&ambient[0], &ambient[1], &ambient[2], &ambient[3]) != 4) 
+		if (sscanf(buffer, "%s %s %s %s", 
+			fixed1, fixed2, fixed3, fixed4) != 4) 
 			returnError(fileName, "Incorrect material ambient format");
+		ambient[0] = fixed(fixed1);
+		ambient[1] = fixed(fixed2);
+		ambient[2] = fixed(fixed3);
+		ambient[3] = fixed(fixed4);
 
 		// diffuse
-		Vector4 diffuse;
+		FixedVector4 diffuse;
 		if (!getNextLine(buffer, in))
 			returnError(fileName, "No material diffuse");
-		if (sscanf(buffer, "%f %f %f %f", 
-			&diffuse[0], &diffuse[1], &diffuse[2], &diffuse[3]) != 4)
+		if (sscanf(buffer, "%s %s %s %s", 
+			fixed1, fixed2, fixed3, fixed4) != 4)
 			returnError(fileName, "Incorrect material diffuse format");
+		diffuse[0] = fixed(fixed1);
+		diffuse[1] = fixed(fixed2);
+		diffuse[2] = fixed(fixed3);
+		diffuse[3] = fixed(fixed4);
 
 		// specular
-		Vector4 specular;
+		FixedVector4 specular;
 		if (!getNextLine(buffer, in))
 			returnError(fileName, "No material specular");
-		if (sscanf(buffer, "%f %f %f %f", 
-			&specular[0], &specular[1], &specular[2], &specular[3]) != 4)
+		if (sscanf(buffer, "%s %s %s %s", 
+			fixed1, fixed2, fixed3, fixed4) != 4)
 			returnError(fileName, "Incorrect material specular format");
+		specular[0] = fixed(fixed1);
+		specular[1] = fixed(fixed2);
+		specular[2] = fixed(fixed3);
+		specular[3] = fixed(fixed4);
 
 		// emissive
-		Vector4 emissive;
+		FixedVector4 emissive;
 		if (!getNextLine(buffer, in))
 			returnError(fileName, "No material emissive");
-		if (sscanf(buffer, "%f %f %f %f", 
-			&emissive[0], &emissive[1], &emissive[2], &emissive[3]) != 4)
+		if (sscanf(buffer, "%s %s %s %s", 
+			fixed1, fixed2, fixed3, fixed4) != 4)
 			returnError(fileName, "Incorrect material emissive format");
+		emissive[0] = fixed(fixed1);
+		emissive[1] = fixed(fixed2);
+		emissive[2] = fixed(fixed3);
+		emissive[3] = fixed(fixed4);
 
 		// shininess
-		float shininess;
+		fixed shininess;
 		if (!getNextLine(buffer, in)) 
 			returnError(fileName, "No material shininess");
-		if (sscanf(buffer, "%f", &shininess) != 1)
+		if (sscanf(buffer, "%s", fixed1) != 1)
 			returnError(fileName, "Incorrect material shininess format");
+		shininess = fixed(fixed1);
 
 		// transparency
-		float transparency;
+		fixed transparency;
 		if (!getNextLine(buffer, in)) 
 			returnError(fileName, "No material transparency");
-		if (sscanf(buffer, "%f", &transparency) != 1)
+		if (sscanf(buffer, "%s", &fixed1) != 1)
 			returnError(fileName, "Incorrect material transparency format");
+		transparency = fixed(fixed1);
 
 		// color map
 		char textureName[256];
@@ -347,19 +376,19 @@ void MSModelFactory::loadFile(FILE *in, const char *fileName, Model *model)
 		{
 			Mesh *mesh = *mitor;
 
-			Vector4 ambientColor(0.3f, 0.3f, 0.3f, 1.0f);
-			Vector4 diffuseColor(0.8f, 0.8f, 0.8f, 1.0f);
+			FixedVector4 ambientColor(fixed(true, 3000), fixed(true, 3000), fixed(true, 3000), 1);
+			FixedVector4 diffuseColor(fixed(true, 8000), fixed(true, 8000), fixed(true, 8000), 1);
 			mesh->getAmbientColor() = ambientColor;
 			mesh->getDiffuseColor() = diffuseColor;
-			mesh->getEmissiveColor() = Vector::getNullVector();
-			mesh->getSpecularColor() = Vector::getNullVector();
+			mesh->getEmissiveColor() = FixedVector4::getNullVector();
+			mesh->getSpecularColor() = FixedVector4::getNullVector();
 
 			mesh->getAmbientNoTexColor() = ambientColor;
 			mesh->getDiffuseNoTexColor() = diffuseColor;
-			mesh->getEmissiveNoTexColor() = Vector::getNullVector();
-			mesh->getSpecularNoTexColor() = Vector::getNullVector();
+			mesh->getEmissiveNoTexColor() = FixedVector4::getNullVector();
+			mesh->getSpecularNoTexColor() = FixedVector4::getNullVector();
 
-			mesh->getShininessColor() = 0.0f;
+			mesh->getShininessColor() = 0;
 		}
 	}
 
@@ -395,14 +424,20 @@ void MSModelFactory::loadFile(FILE *in, const char *fileName, Model *model)
 
 		// flags, position, rotation
 		int boneFlags;
-		Vector bonePos, boneRot;
+		FixedVector bonePos, boneRot;
 		if (!getNextLine(buffer, in)) 
 			returnError(fileName, "No bone pos/rot");
-		if (sscanf(buffer, "%i %f %f %f %f %f %f",
+		if (sscanf(buffer, "%i %s %s %s %s %s %s",
 			&boneFlags,
-			&bonePos[0], &bonePos[1], &bonePos[2], 
-			&boneRot[0], &boneRot[1], &boneRot[2]) != 7)
+			fixed1, fixed2, fixed3,
+			fixed4, fixed5, fixed6) != 7)
 			returnError(fileName, "Incorrect bone pos/rot format");
+		bonePos[0] = fixed(fixed1);
+		bonePos[1] = fixed(fixed2);
+		bonePos[2] = fixed(fixed3);
+		boneRot[0] = fixed(fixed4);
+		boneRot[1] = fixed(fixed5);
+		boneRot[2] = fixed(fixed6);
 
 		Bone *bone = new Bone(boneName);
 		bone->setParentName(boneParentName);
@@ -418,14 +453,19 @@ void MSModelFactory::loadFile(FILE *in, const char *fileName, Model *model)
 
 		for (int p=0; p<noPositionKeys; p++)
 		{
-			float time;
-			Vector position;
+			fixed time;
+			FixedVector position;
 			if (!getNextLine(buffer, in)) 
 				returnError(fileName, "No bone position key");
-			if (sscanf(buffer, "%f %f %f %f",
-				&time,
-				&position[0], &position[1], &position[2]) != 4)
+			if (sscanf(buffer, "%s %s %s %s",
+				fixed1,
+				fixed2, fixed3, fixed4) != 4)
 				returnError(fileName, "Incorrect bone position key");
+
+			time = fixed(fixed1);
+			position[0] = fixed(fixed2);
+			position[1] = fixed(fixed3);
+			position[2] = fixed(fixed4);
 
 			BonePositionKey *key = new BonePositionKey(time, position);
 			bone->addPositionKey(key);
@@ -440,14 +480,18 @@ void MSModelFactory::loadFile(FILE *in, const char *fileName, Model *model)
 
 		for (int r=0; r<noRotationKeys; r++)
 		{
-			float time;
-			Vector rotation;
+			fixed time;
+			FixedVector rotation;
 			if (!getNextLine(buffer, in)) 
 				returnError(fileName, "No bone position key");
-			if (sscanf(buffer, "%f %f %f %f",
-				&time,
-				&rotation[0], &rotation[1], &rotation[2]) != 4)
+			if (sscanf(buffer, "%s %s %s %s",
+				fixed1,
+				fixed2, fixed3, fixed4) != 4)
 				returnError(fileName, "Incorrect bone position key");
+			time = fixed(fixed1);
+			rotation[0] = fixed(fixed2);
+			rotation[1] = fixed(fixed3);
+			rotation[2] = fixed(fixed4);
 
 			BoneRotationKey *key = new BoneRotationKey(time, rotation);
 			bone->addRotationKey(key);

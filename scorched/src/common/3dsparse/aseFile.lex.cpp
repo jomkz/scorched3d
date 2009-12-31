@@ -49,6 +49,7 @@
 
 #include <stdio.h>
 #include <common/DefinesString.h>
+#include <common/fixed.h>
 
 
 /* cfront 1.2 defines "c_plusplus" instead of "__cplusplus" */
@@ -615,10 +616,10 @@ char *yytext;
 #define INITIAL 0
 
 #include <string.h>
-#include <common/Vector.h>
+#include <common/FixedVector.h>
 #include <3dsparse/aseFile.tab.cpp.h>
 
-Vector aseVector;
+FixedVector aseVector;
 
 int aselineno = 1;
 char aseString[1024];
@@ -866,7 +867,7 @@ YY_RULE_SETUP
 case 4:
 YY_RULE_SETUP
 { aseVector[0] = aseVector[1]; aseVector[1] = aseVector[2];
-						  aseVector[2] = (float) atof(asetext); return MAX_FLOAT; }
+						  aseVector[2] = fixed(asetext); return MAX_FLOAT; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP

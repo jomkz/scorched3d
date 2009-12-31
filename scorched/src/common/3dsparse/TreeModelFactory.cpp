@@ -35,8 +35,8 @@ Model *TreeModelFactory::createModel(const char *fileName,
 	const char *texName)
 {
 	Model *model = new Model();
-	model->getMin() = Vector(-0.5f, -0.5f, -0.5f);
-	model->getMax() = Vector(+0.5f, +0.5f, +0.5f);
+	model->getMin() = FixedVector(fixed(true, -5000), fixed(true, -5000), fixed(true, -5000));
+	model->getMax() = FixedVector(fixed(true, +5000), fixed(true, +5000), fixed(true, +5000));
 	return model;
 }
 

@@ -173,7 +173,9 @@ public:
 	fixed cos();
 	fixed sin();
 	fixed tan();
+	fixed asin();
 	fixed acos();
+	fixed atan();
 
 	fixed abs()
 	{
@@ -220,7 +222,9 @@ fixed log10x(fixed fixedVal);
 fixed logx(fixed fixedVal);
 fixed expx(fixed fixedVal);
 fixed sinx(fixed x);
+fixed asinx(fixed x);
 fixed cosx(fixed x);
+fixed acosx(fixed x);
 fixed tanx(fixed x);
 fixed atanx(fixed x);
 fixed atan2x(fixed x, fixed y);

@@ -127,7 +127,7 @@ void ShotBounce::draw()
 				getCurrentPosition()[0].asFloat(), 
 				getCurrentPosition()[1].asFloat(), 
 				getCurrentPosition()[2].asFloat() -
-				model_->getRenderer()->getModel()->getMin()[2] * 0.08f);
+				model_->getRenderer()->getModel()->getMin()[2].asFloat() * 0.08f);
 
 			glMultMatrixf(rotMatrix);
 			glScalef(0.08f, 0.08f, 0.08f);

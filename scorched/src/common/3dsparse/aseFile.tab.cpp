@@ -58,12 +58,12 @@
 #include <common/Defines.h>
 #include <3dsparse/ASEModelFactory.h>
 
-static Vector tmRow[3];
+static FixedVector tmRow[3];
 
 Face aseFace;
 int aseFaceNo;
 
-extern Vector aseVector;
+extern FixedVector aseVector;
 extern char aseString[1024];
 extern float aseFloat;
 extern int aseDigit;
@@ -793,21 +793,21 @@ yyreduce:
 
 case 9:
 { 
-	Vector4 ambientColor(0.6f, 0.6f, 0.6f, 1.0f);
-	Vector4 diffuseColor(0.8f, 0.8f, 0.8f, 1.0f);
+	FixedVector4 ambientColor(fixed(true, 6000), fixed(true, 6000), fixed(true, 6000), 1);
+	FixedVector4 diffuseColor(fixed(true, 8000), fixed(true, 8000), fixed(true, 8000), 1);
 	ASEModelFactory::getCurrent()->getCurrentMesh()->getAmbientColor() = ambientColor;
 	ASEModelFactory::getCurrent()->getCurrentMesh()->getDiffuseColor() = diffuseColor;
-	ASEModelFactory::getCurrent()->getCurrentMesh()->getEmissiveColor() = Vector::getNullVector();
-	ASEModelFactory::getCurrent()->getCurrentMesh()->getSpecularColor() = Vector::getNullVector();
+	ASEModelFactory::getCurrent()->getCurrentMesh()->getEmissiveColor() = FixedVector4::getNullVector();
+	ASEModelFactory::getCurrent()->getCurrentMesh()->getSpecularColor() = FixedVector4::getNullVector();
 
-	Vector ambientNoTexColor = aseVector * 0.6f;
-	Vector diffuseNoTexColor = aseVector * 0.8f;
+	FixedVector ambientNoTexColor = aseVector * fixed(true, 6000);
+	FixedVector diffuseNoTexColor = aseVector * fixed(true, 8000);
 	ASEModelFactory::getCurrent()->getCurrentMesh()->getAmbientNoTexColor() = ambientNoTexColor;
 	ASEModelFactory::getCurrent()->getCurrentMesh()->getDiffuseNoTexColor() = diffuseNoTexColor;
-	ASEModelFactory::getCurrent()->getCurrentMesh()->getEmissiveNoTexColor() = Vector::getNullVector();
-	ASEModelFactory::getCurrent()->getCurrentMesh()->getSpecularNoTexColor() = Vector::getNullVector();
+	ASEModelFactory::getCurrent()->getCurrentMesh()->getEmissiveNoTexColor() = FixedVector4::getNullVector();
+	ASEModelFactory::getCurrent()->getCurrentMesh()->getSpecularNoTexColor() = FixedVector4::getNullVector();
 
-	ASEModelFactory::getCurrent()->getCurrentMesh()->getShininessColor() = 0.0f;
+	ASEModelFactory::getCurrent()->getCurrentMesh()->getShininessColor() = 0;
 
 	break;
 }
@@ -847,7 +847,7 @@ case 28:
     break;}
 case 29:
 { 
-	Vector n(
+	FixedVector n(
 		aseVector[0] * tmRow[0][0] + aseVector[1] * tmRow[1][0] + aseVector[2] * tmRow[2][0],
 		aseVector[0] * tmRow[0][1] + aseVector[1] * tmRow[1][1] + aseVector[2] * tmRow[2][1],
 		aseVector[0] * tmRow[0][2] + aseVector[1] * tmRow[1][2] + aseVector[2] * tmRow[2][2]);
@@ -856,7 +856,7 @@ case 29:
     break;}
 case 30:
 { 
-	Vector n(
+	FixedVector n(
 		aseVector[0] * tmRow[0][0] + aseVector[1] * tmRow[1][0] + aseVector[2] * tmRow[2][0],
 		aseVector[0] * tmRow[0][1] + aseVector[1] * tmRow[1][1] + aseVector[2] * tmRow[2][1],
 		aseVector[0] * tmRow[0][2] + aseVector[1] * tmRow[1][2] + aseVector[2] * tmRow[2][2]);
@@ -865,7 +865,7 @@ case 30:
     break;}
 case 31:
 { 
-	Vector n(
+	FixedVector n(
 		aseVector[0] * tmRow[0][0] + aseVector[1] * tmRow[1][0] + aseVector[2] * tmRow[2][0],
 		aseVector[0] * tmRow[0][1] + aseVector[1] * tmRow[1][1] + aseVector[2] * tmRow[2][1],
 		aseVector[0] * tmRow[0][2] + aseVector[1] * tmRow[1][2] + aseVector[2] * tmRow[2][2]);

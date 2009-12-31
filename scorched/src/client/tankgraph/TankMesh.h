@@ -22,6 +22,7 @@
 #define AFX_TANKMESH_H__CB857C65_A22F_4FBC_9344_EFF22F8A4EEA__INCLUDED_
 
 #include <common/Vector4.h>
+#include <common/FixedVector.h>
 #include <graph/ModelRendererMesh.h>
 #include <list>
 
@@ -51,8 +52,8 @@ protected:
 	float scale_;
 	float rotXY_;
 	float rotXZ_;
-	Vector gunOffset_;
-	Vector turretCenter_;
+	FixedVector gunOffset_;
+	FixedVector turretCenter_;
 	std::vector<MeshType> meshTypes_;
 
 	virtual void drawMesh(unsigned int m, Mesh *mesh, float currentFrame, bool setState);

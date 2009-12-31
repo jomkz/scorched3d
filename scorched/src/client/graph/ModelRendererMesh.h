@@ -58,7 +58,7 @@ protected:
 	Model *model_;
 	std::vector<BoneType *> boneTypes_;
 	std::vector<MeshInfo> meshInfos_;
-	Vector vertexTranslation_;
+	FixedVector vertexTranslation_;
 
 	virtual void drawMesh(unsigned int m, Mesh *mesh, float currentFrame, bool setState);
 	virtual void drawVerts(unsigned int m, Mesh *mesh, bool vertexLighting, int frame);

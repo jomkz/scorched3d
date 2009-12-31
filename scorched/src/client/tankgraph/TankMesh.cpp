@@ -45,8 +45,8 @@ void TankMesh::setupTankMesh()
 {
 	// Make sure the tank is not too large
 	const float maxSize = 3.0f;
-	Vector &min = model_->getMin();
-	Vector &max = model_->getMax();
+	Vector min = model_->getMin().asVector();
+	Vector max = model_->getMax().asVector();
 	float size = (max - min).Magnitude();
 	if (size > maxSize) scale_ = 2.2f / size;
 
@@ -74,7 +74,7 @@ void TankMesh::setupTankMesh()
 			{
 				// Find the center that the tank should rotate around
 				turretCount++;
-				turretCenter_ += (mesh->getMax() + mesh->getMin()) / 2.0f;
+				turretCenter_ += (mesh->getMax() + mesh->getMin()) / 2;
 			}
 
 			meshTypes_.push_back(eTurret);
@@ -99,19 +99,19 @@ void TankMesh::setupTankMesh()
 	// Find the center of rotation for the turret
 	if (turretPivot)
 	{
-		turretCenter_ = (turretPivot->getMax() + turretPivot->getMin()) / 2.0f;
+		turretCenter_ = (turretPivot->getMax() + turretPivot->getMin()) / 2;
 	}
 	else
 	{
-		turretCenter_ /= float(turretCount);
+		turretCenter_ /= turretCount;
 	}
-	Vector gunCenter = turretCenter_;
-	turretCenter_[2] = 0.0f;
+	FixedVector gunCenter = turretCenter_;
+	turretCenter_[2] = 0;
 
 	// Find the center of rotation for the gun
 	if (gunPivot)
 	{
-		gunCenter = (gunPivot->getMax() + gunPivot->getMin()) / 2.0f;
+		gunCenter = (gunPivot->getMax() + gunPivot->getMin()) / 2;
 	}
 	gunOffset_ = gunCenter - turretCenter_;
 }
@@ -146,7 +146,7 @@ void TankMesh::drawMesh(unsigned int m, Mesh *mesh, float currentFrame, bool set
 			glRotatef(rotXY_, 0.0f, 0.0f, 1.0f);
 			if (type == eGun)
 			{
-				glTranslatef(gunOffset_[0], gunOffset_[1], gunOffset_[2]);
+				glTranslatef(gunOffset_[0].asFloat(), gunOffset_[1].asFloat(), gunOffset_[2].asFloat());
 				vertexTranslation_ -= gunOffset_;
 				glRotatef(rotXZ_, 1.0f, 0.0f, 0.0f);
 

@@ -37,8 +37,8 @@ MissileMesh::MissileMesh(ModelID &missile) :
 
 	// Make sure the missile is not too large
 	const float maxSize = 2.0f;
-	Vector min = model_->getModel()->getMin();
-	Vector max = model_->getModel()->getMax();
+	Vector min = model_->getModel()->getMin().asVector();
+	Vector max = model_->getModel()->getMax().asVector();
 	float size = (max - min).Magnitude();
 	if (size > maxSize) innerScale_ = 2.2f / size;
 
@@ -56,8 +56,8 @@ MissileMesh::MissileMesh(ModelID &missile) :
 			FlareInfo info;
 
 			// Find the center that the flare should be eminated from
-			info.position = (mesh->getMax() + mesh->getMin()) / 2.0f;
-			info.size = MAX(1.0f, (mesh->getMax() - mesh->getMin()).Magnitude());
+			info.position = (mesh->getMax() + mesh->getMin()).asVector() / 2.0f;
+			info.size = MAX(1.0f, (mesh->getMax() - mesh->getMin()).asVector().Magnitude());
 
 			flares_.push_back(info);
 		}

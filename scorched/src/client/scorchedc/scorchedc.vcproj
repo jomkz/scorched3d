@@ -873,43 +873,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\3dsparse\MeshLOD.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\3dsparse\MeshLOD.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\3dsparse\MeshLODTri.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\3dsparse\MeshLODTri.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\3dsparse\MeshLODVector.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\3dsparse\MeshLODVector.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\3dsparse\Model.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\common\3dsparse\Model.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\3dsparse\ModelDefn.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\3dsparse\ModelDefn.h"
 				>
 			</File>
 			<File

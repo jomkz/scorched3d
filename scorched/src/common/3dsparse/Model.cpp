@@ -68,7 +68,7 @@ void Model::centre()
 		min_[2] = MIN(min_[2], (*itor)->getMin()[2]);
 	}
 
-	Vector centre = (max_ + min_) / -2.0f;
+	FixedVector centre = (max_ + min_) / -2;
 	for (itor = meshes_.begin();
 		itor != meshes_.end();
 		itor++)
@@ -102,7 +102,7 @@ void Model::setup()
 
 void Model::setupColor()
 {
-	Vector lightpos(-0.3f, -0.2f, 1.0f);
+	FixedVector lightpos(fixed(true, -3000), fixed(true, -2000), 1);
 	lightpos.StoreNormalize();
 
 	std::vector<Mesh *>::iterator itor;
@@ -121,14 +121,14 @@ void Model::setupColor()
 			for (int i=0; i<3; i++)
 			{
 				Vertex *vertex = mesh->getVertex(face->v[i]);
-				Vector &normal = face->normal[i];
+				FixedVector &normal = face->normal[i];
 
-				const float ambientLight = 0.2f;
-				const float diffuseLight = 0.8f;
-				float diffuseLightMult = 
-					(((lightpos.dotP(normal.Normalize())) / 2.0f) + 0.5f);
-				float intense = diffuseLightMult * diffuseLight + ambientLight;
-				if (intense > 1.0f) intense = 1.0f; 
+				const fixed ambientLight = fixed(true, 2000);
+				const fixed diffuseLight = fixed(true, 8000);
+				fixed diffuseLightMult = 
+					(((lightpos.dotP(normal.Normalize())) / 2) + fixed(true, 5000));
+				fixed intense = diffuseLightMult * diffuseLight + ambientLight;
+				if (intense > 1) intense = 1; 
 				vertex->lightintense[0] = intense;
 				vertex->lightintense[1] = intense;
 				vertex->lightintense[2] = intense;
@@ -161,10 +161,10 @@ void Model::setupBones()
 		}
 
 		// Set rotation and position
-		Vector rot;
-		rot[0] = bone->getRotation()[0] * 180.0f / PI;
-		rot[1] = bone->getRotation()[1] * 180.0f / PI;
-		rot[2] = bone->getRotation()[2] * 180.0f / PI;
+		FixedVector rot;
+		rot[0] = bone->getRotation()[0] * 180 / fixed::XPI;
+		rot[1] = bone->getRotation()[1] * 180 / fixed::XPI;
+		rot[2] = bone->getRotation()[2] * 180 / fixed::XPI;
 
 		ModelMaths::angleMatrix(rot, type->relative_);
 		type->relative_[0][3] = bone->getPosition()[0];
@@ -208,12 +208,12 @@ void Model::setupBones()
 				vertex->position[2] -= type->absolute_[1][3];
 
 				// Rotation
-				Vector tmpPos;
+				FixedVector tmpPos;
 				tmpPos[0] = vertex->position[0];
 				tmpPos[1] = vertex->position[2];
 				tmpPos[2] = vertex->position[1];
 
-				Vector tmp;
+				FixedVector tmp;
 				ModelMaths::vectorIRotate(tmpPos, type->absolute_, tmp);
 				vertex->position[0] = tmp[0];
 				vertex->position[1] = tmp[2];

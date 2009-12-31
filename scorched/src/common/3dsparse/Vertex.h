@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_Vertexh_INCLUDE__)
 #define __INCLUDE_Vertexh_INCLUDE__
 
-#include <common/Vector.h>
+#include <common/FixedVector.h>
 
 class BoneType;
 class Vertex
@@ -30,8 +30,8 @@ public:
 	Vertex();
 	virtual ~Vertex();
 
-	Vector position;
-	Vector lightintense;
+	FixedVector position;
+	FixedVector lightintense;
 	int boneIndex;
 };
 

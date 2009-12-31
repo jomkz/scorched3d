@@ -76,14 +76,6 @@ inline int fixed_internal_div(int a, int b)
 
 fixed::fixed(const char *nVal)
 {
-	if (strlen(nVal) > 12)
-	{
-		Logger::log(S3D::formatStringBuffer("Warning: Ignoring fixed string conversion of %s", nVal));
-
-		m_nVal = 0;
-		return;
-	}
-
 	char i[15];
 	char f[15];
 
@@ -107,8 +99,7 @@ fixed::fixed(const char *nVal)
 		f[fp] = '0';
 	}
 	i[ip] = '\0';
-	f[fp] = '\0';
-	DIALOG_ASSERT(ip < 15 && fp < 15);
+	f[4] = '\0';
 
 	int ipa = atoi(i);
 	int fpa = atoi(f);
@@ -441,9 +432,44 @@ fixed sinx(fixed x)
 	return x.sin();
 }
 
+fixed fixed::atan()
+{
+	return atanx(*this);
+}
+
 fixed fixed::acos()
 {
-	return fixed(0);
+	return acosx(*this);
+}
+
+fixed fixed::asin()
+{
+	return asinx(*this);
+}
+
+fixed asinx(fixed arg)
+{
+	fixed temp;
+	int sign;
+
+	sign = 0;
+	if(arg < 0)
+	{
+		arg = -arg;
+		sign++;
+	}
+	if(arg > 1) fixed(0);
+	temp = sqrtx(fixed(1) - arg*arg);
+	if(arg > fixed(true, 7000)) temp = fixed::XPIO2 - atanx(temp/arg);
+	else temp = atanx(arg/temp);
+	if(sign > 0) temp = -temp;
+	return temp;
+}
+
+fixed acosx(fixed arg)
+{
+	if(arg > 1 || arg < -1) return fixed(0);
+	return fixed::XPIO2 - asinx(arg);
 }
 
 fixed fixed::cos()

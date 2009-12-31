@@ -20,7 +20,6 @@
 
 #include <3dsparse/Mesh.h>
 #include <3dsparse/ModelStore.h>
-#include <3dsparse/MeshLOD.h>
 #include <common/Defines.h>
 
 Mesh::Mesh(const char *name) : name_(name),
@@ -65,7 +64,7 @@ void Mesh::insertVertex(Vertex &vertex)
 	vertexes_.push_back(new Vertex(vertex)); 
 }
 
-void Mesh::move(Vector &movement)
+void Mesh::move(FixedVector &movement)
 {
 	std::vector<Vertex *>::iterator itor;
 	for (itor = vertexes_.begin();
@@ -85,9 +84,4 @@ void Mesh::setTextureName(const char *t)
 		sphereMap_ = (strstr(t, "/sphere_") != 0);
 		textureName_ = t; 
 	}
-}
-
-void Mesh::setupCollapse()
-{
-	MeshLOD::progressiveMesh(vertexes_, faces_, collapseMap_);
 }

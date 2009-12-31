@@ -22,7 +22,7 @@
 #define __INCLUDE_Meshh_INCLUDE__
 
 #include <common/DefinesAssert.h>
-#include <common/Vector4.h>
+#include <common/FixedVector4.h>
 #include <3dsparse/Face.h>
 #include <3dsparse/Vertex.h>
 #include <vector>
@@ -37,24 +37,22 @@ public:
 	// Accessors
 	const char *getName() { return name_.c_str(); }
 	bool getSphereMap() { return sphereMap_; }
-	Vector &getMin() { return min_; }
-	Vector &getMax() { return max_; }
-	Vector4 &getAmbientColor() { return ambientColor_; }
-	Vector4 &getDiffuseColor() { return diffuseColor_; }
-	Vector4 &getSpecularColor() { return specularColor_; }
-	Vector4 &getEmissiveColor() { return emissiveColor_; }
-	Vector4 &getAmbientNoTexColor() { return ambientNoTexColor_; }
-	Vector4 &getDiffuseNoTexColor() { return diffuseNoTexColor_; }
-	Vector4 &getSpecularNoTexColor() { return specularNoTexColor_; }
-	Vector4 &getEmissiveNoTexColor() { return emissiveNoTexColor_; }
-	float &getShininessColor() { return shininessColor_; }
+	FixedVector &getMin() { return min_; }
+	FixedVector &getMax() { return max_; }
+	FixedVector4 &getAmbientColor() { return ambientColor_; }
+	FixedVector4 &getDiffuseColor() { return diffuseColor_; }
+	FixedVector4 &getSpecularColor() { return specularColor_; }
+	FixedVector4 &getEmissiveColor() { return emissiveColor_; }
+	FixedVector4 &getAmbientNoTexColor() { return ambientNoTexColor_; }
+	FixedVector4 &getDiffuseNoTexColor() { return diffuseNoTexColor_; }
+	FixedVector4 &getSpecularNoTexColor() { return specularNoTexColor_; }
+	FixedVector4 &getEmissiveNoTexColor() { return emissiveNoTexColor_; }
+	fixed &getShininessColor() { return shininessColor_; }
 	const char *getTextureName() 
 		{ return textureName_.c_str(); }
 	const char *getATextureName() 
 		{ return aTextureName_.c_str(); }
 
-	std::vector<int> &getCollapseMap()
-		{ return collapseMap_; }
 	std::vector<Face *> &getFaces() 
 		{ return faces_; }
 	Face *getFace(int faceIndex)
@@ -68,19 +66,18 @@ public:
 	bool &getReferencesBones() { return referencesBones_; }
 
 	// Modification
-	void move(Vector &movement);
+	void move(FixedVector &movement);
 
 	// Creation
-	void setupCollapse();
 	void insertFace(Face &face) 
 		{ faces_.push_back(new Face(face)); }
 	void insertVertex(Vertex &vertex);
 	void setTextureName(const char *t);
 	void setATextureName(const char *t) { aTextureName_ = t; }
-	void setFaceNormal(Vector &normal, int faceIndex, int normalIndex)
+	void setFaceNormal(FixedVector &normal, int faceIndex, int normalIndex)
 		{ DIALOG_ASSERT(faceIndex < (int) faces_.size()); 
 		faces_[faceIndex]->normal[normalIndex] = normal; }
-	void setFaceTCoord(Vector &coord, int faceIndex, int coordIndex)
+	void setFaceTCoord(FixedVector &coord, int faceIndex, int coordIndex)
 		{ DIALOG_ASSERT(faceIndex < (int) faces_.size()); 
 		faces_[faceIndex]->tcoord[coordIndex] = coord; }
 
@@ -89,15 +86,14 @@ protected:
 	std::string textureName_, aTextureName_;
 	std::vector<Face *> faces_;
 	std::vector<Vertex *> vertexes_;
-	std::vector<int> collapseMap_;
 	bool referencesBones_;
 	bool sphereMap_;
-	float shininessColor_;
-	Vector4 diffuseColor_, specularColor_;
-	Vector4 ambientColor_, emissiveColor_;
-	Vector4 diffuseNoTexColor_, specularNoTexColor_;
-	Vector4 ambientNoTexColor_, emissiveNoTexColor_;
-	Vector min_, max_;
+	fixed shininessColor_;
+	FixedVector4 diffuseColor_, specularColor_;
+	FixedVector4 ambientColor_, emissiveColor_;
+	FixedVector4 diffuseNoTexColor_, specularNoTexColor_;
+	FixedVector4 ambientNoTexColor_, emissiveNoTexColor_;
+	FixedVector min_, max_;
 };
 
 #endif // __INCLUDE_Meshh_INCLUDE__

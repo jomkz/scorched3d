@@ -40,6 +40,13 @@ public:
 		V[2] = c;
 	}
 
+	FixedVector(const fixed Pt[3])
+	{
+		V[0] = Pt[0];
+		V[1] = Pt[1];
+		V[2] = Pt[2];
+	}
+
 	FixedVector(const FixedVector &v)
 	{
 		V[0] = ((FixedVector &) v)[0];
@@ -206,6 +213,21 @@ public:
 		V[0] /= b;
 		V[1] /= b;
 		V[2] /= b;
+	}
+
+	void operator/=(const FixedVector &Vin)
+	{
+		fixed a = ((FixedVector &)Vin)[0];
+		fixed b = ((FixedVector &)Vin)[1];
+		fixed c = ((FixedVector &)Vin)[2];
+
+		const fixed a2 = (a==0?fixed(true, 1):a);
+		const fixed b2 = (b==0?fixed(true, 1):b);
+		const fixed c2 = (c==0?fixed(true, 1):c);
+
+		V[0] /= a2;
+		V[1] /= b2;
+		V[2] /= c2;
 	}
 
 	void operator+=(const fixed a)
