@@ -70,7 +70,7 @@ bool EconomyFreeMarket::loadPrices()
 	}
 
 	// If there are entries in the file
-	economyPrices_.clear();
+	accessoryPrice_.clear();
 	XMLNode *rootnode = file.getRootNode();
 	if (rootnode)
 	{
@@ -81,12 +81,14 @@ bool EconomyFreeMarket::loadPrices()
 			itor++)
 		{
 			XMLNode *node = *itor;
-			XMLNode *nameNode, *buyNode;
-			if (!node->getNamedChild("name", nameNode)) return false;
-			if (!node->getNamedChild("buyprice", buyNode)) return false;
+			std::string name;
+			float price;
+
+			if (!node->getNamedChild("name", name)) return false;
+			if (!node->getNamedChild("buyprice", price)) return false;
 
 			Accessory *accessory = ScorchedServer::instance()->getAccessoryStore().
-				findByPrimaryAccessoryName(nameNode->getContent());
+				findByPrimaryAccessoryName(name.c_str());
 			if (accessory)
 			{	
 				// Check that this accessory is still valid
@@ -94,8 +96,7 @@ bool EconomyFreeMarket::loadPrices()
 				if (validAccessory(accessory))
 				{
 					// Set the actual accessory price (based on the last used market prices)
-					int price = atoi(buyNode->getContent());
-					economyPrices_[accessory->getAccessoryId()] = price;
+					accessoryPrice_[accessory->getAccessoryId()] = price;
 				}
 			}
 		}
@@ -109,13 +110,13 @@ bool EconomyFreeMarket::savePrices()
 {
 	FileLines file;
 	file.addLine("<prices source=\"Scorched3D\">");
-	std::map<unsigned int, int>::iterator itor;
-	for (itor = economyPrices_.begin();
-		itor != economyPrices_.end();
+	std::map<unsigned int, float>::iterator itor;
+	for (itor = accessoryPrice_.begin();
+		itor != accessoryPrice_.end();
 		itor++)
 	{
 		unsigned int accessoryId = itor->first;
-		int price = itor->second;
+		float price = itor->second;
 
 		Accessory *accessory = 
 			ScorchedServer::instance()->getAccessoryStore().findByAccessoryId(accessoryId);
@@ -128,7 +129,7 @@ bool EconomyFreeMarket::savePrices()
 			file.addLine(S3D::formatStringBuffer("    <!-- %s, original Price %i -->", 
 				cleanName.c_str(), accessory->getOriginalPrice()));
 			file.addLine(S3D::formatStringBuffer("    <name>%s</name>", cleanName.c_str()));
-			file.addLine(S3D::formatStringBuffer("    <buyprice>%i</buyprice>", price));
+			file.addLine(S3D::formatStringBuffer("    <buyprice>%.4f</buyprice>", price));
 			file.addLine("  </accessory>");
 		}
 	}
@@ -141,19 +142,19 @@ bool EconomyFreeMarket::savePrices()
 
 void EconomyFreeMarket::calculatePrices()
 {
-	std::map<unsigned int, int>::iterator itor;
-	for (itor = economyPrices_.begin();
-		itor != economyPrices_.end();
+	std::map<unsigned int, float>::iterator itor;
+	for (itor = accessoryPrice_.begin();
+		itor != accessoryPrice_.end();
 		itor++)
 	{
 		unsigned int accessoryId = itor->first;
-		int price = itor->second;
+		float price = itor->second;
 
 		Accessory *accessory = 
 			ScorchedServer::instance()->getAccessoryStore().findByAccessoryId(accessoryId);
 		if (accessory && validAccessory(accessory))
 		{
-			setPrice(accessory, price);
+			setPrice(accessory, int(price));
 		}
 	}
 }
@@ -200,7 +201,7 @@ void EconomyFreeMarket::accessoryBought(Tank *tank,
 	if (possibleAccessories.size() <= 1) return;
 
 	// How much should each accessory get (on average)
-	int moneyShouldAquire = boughtAccessory->getPrice() / (int) possibleAccessories.size();
+	float moneyShouldAquire = float(boughtAccessory->getPrice()) / float(possibleAccessories.size());
 	
 	// Alter prices
 	{
@@ -212,40 +213,40 @@ void EconomyFreeMarket::accessoryBought(Tank *tank,
 			Accessory *accessory = (*itor);
 
 			// Figure out how much money was spent on this weapon
-			int moneyDidAquire = 0;
+			float moneyDidAquire = 0.0f;
 			if (accessory == boughtAccessory) moneyDidAquire = 
-				boughtAccessory->getPrice();
+				float(boughtAccessory->getPrice());
 
 			// Figure out if this is more or less money than on average
 			// should be spent on this weapon
-			int adjustment = 
-				ScorchedServer::instance()->getOptionsGame().
-				getFreeMarketAdjustment();
-			int priceDiff = 0;
+			float adjustment = 
+				float(ScorchedServer::instance()->getOptionsGame().
+				getFreeMarketAdjustment());
+			float priceDiff = 0.0f;
 			if (moneyDidAquire < moneyShouldAquire)
 			{
 				// This weapon was not bought, decrease its price
-				priceDiff = -adjustment / int(possibleAccessories.size());
+				priceDiff = -adjustment / float(possibleAccessories.size());
 				//priceDiff /= 2;
 			}
 			else if (moneyDidAquire >= moneyShouldAquire)
 			{
 				// This weapon was bought, increase its price
-				priceDiff = int((float(adjustment) * (float(possibleAccessories.size()) - 1.0f))
-					/ float(possibleAccessories.size()));
+				priceDiff = adjustment * (float(possibleAccessories.size()) - 1.0f)
+					/ float(possibleAccessories.size());
 			}
 
 			// Update the price difference for this weapon
-			std::map<unsigned int, int>::iterator findItor = 
-				economyPrices_.find(accessory->getAccessoryId());
-			if (findItor == economyPrices_.end()) 
+			std::map<unsigned int, float>::iterator findItor = 
+				accessoryPrice_.find(accessory->getAccessoryId());
+			if (findItor == accessoryPrice_.end()) 
 			{
-				economyPrices_[accessory->getAccessoryId()] = 
-					accessory->getOriginalPrice() + priceDiff;
+				accessoryPrice_[accessory->getAccessoryId()] = 
+					float(accessory->getOriginalPrice()) + priceDiff;
 			}
 			else 
 			{
-				economyPrices_[accessory->getAccessoryId()] += 
+				accessoryPrice_[accessory->getAccessoryId()] += 
 					priceDiff;
 			}
 		}
