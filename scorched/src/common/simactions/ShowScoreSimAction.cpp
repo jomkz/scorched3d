@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <simactions/ShowScoreSimAction.h>
+#include <simactions/TankRankSimAction.h>
 #include <engine/ActionController.h>
 #include <actions/ShowScoreAction.h>
 #include <common/OptionsScorched.h>
@@ -30,6 +31,8 @@
 #include <tank/TankScore.h>
 #include <tank/TankState.h>
 #include <tank/TankSort.h>
+#include <server/ScorchedServer.h>
+#include <server/ServerSimulator.h>
 
 REGISTER_CLASS_SOURCE(ShowScoreSimAction);
 
@@ -73,8 +76,6 @@ bool ShowScoreSimAction::readMessage(NetBufferReader &reader)
 void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 {
 	// Calculate all the tanks interest
-	float interest = float(context.
-		getOptionsGame().getInterest()) / 100.0f;
 	std::map<unsigned int, Tank *> &playingTank = 
 		context.getTankContainer().getPlayingTanks();
 
@@ -223,6 +224,8 @@ void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 
 	// Give interest and round played money to all tanks
 	{
+		fixed interest = fixed(context.getOptionsGame().getInterest()) / 100;
+
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = playingTank.begin();
 			itor != playingTank.end();
@@ -231,7 +234,7 @@ void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 			Tank *tank = (*itor).second;
 			if (!tank->getState().getTankPlaying()) continue;
 
-			int addMoney = int(float(tank->getScore().getMoney()) * interest) +
+			int addMoney = (fixed(tank->getScore().getMoney()) * interest).asInt() +
 				context.getOptionsGame().getMoneyPerRound();
 			tank->getScore().setMoney(tank->getScore().getMoney() + addMoney);
 
@@ -248,6 +251,8 @@ void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 	{
 		scoreOverallWinner(context);
 	}
+
+	TankRankSimAction *rankSimAction = new TankRankSimAction();
 
 	// Update the stats for the players before sending out the
 	// stats message
@@ -272,12 +277,17 @@ void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 		// Reset the totaled stats
 		tank->getScore().resetTotalEarnedStats();
 
-		if (context.getServerMode())
-		{
-			// Get the new tanks rank
-			StatsLogger::TankRank rank = StatsLogger::instance()->tankRank(tank);
-			tank->getScore().setRank(rank.rank);
-		}
+		// Get the new rank
+		StatsLogger::TankRank rank = StatsLogger::instance()->tankRank(tank);
+		rankSimAction->addRank(rank);
+	}
+	if (context.getServerMode())
+	{
+		((ScorchedServer &)context).getServerSimulator().addSimulatorAction(rankSimAction);
+	}
+	else
+	{
+		delete rankSimAction;
 	}
 
 	StatsLogger::instance()->periodicUpdate();

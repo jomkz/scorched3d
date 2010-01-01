@@ -498,8 +498,8 @@ void TankDamage::logDeath()
 		if (damagedPlayerId_ == firedPlayerId)
 		{
 			int skillChange = context_->getOptionsGame().getSkillForSelfKill();
-			float weight = (float(weapon_->getArmsLevel()) / 10.0f) + 1.0f;
-			skillChange = (int) (float(skillChange) * weight);
+			fixed weight = (fixed(weapon_->getArmsLevel()) / 10) + 1;
+			skillChange = (fixed(skillChange) * weight).asInt();
 
 			firedTank->getScore().setSkill(firedTank->getScore().getSkill() + skillChange);
 
@@ -522,8 +522,8 @@ void TankDamage::logDeath()
 				(firedTank->getTeam() == killedTank->getTeam())) 
 		{
 			int skillChange = context_->getOptionsGame().getSkillForTeamKill();
-			float weight = (float(weapon_->getArmsLevel()) / 10.0f) + 1.0f;
-			skillChange = (int) (float(skillChange) * weight);
+			fixed weight = (fixed(weapon_->getArmsLevel()) / 10) + 1;
+			skillChange = (fixed(skillChange) * weight).asInt();
 
 			firedTank->getScore().setSkill(firedTank->getScore().getSkill() + skillChange);
 
@@ -576,9 +576,9 @@ void TankDamage::logDeath()
 
 				//$vbonus = $vskill if $vbonus > $vskill;
 				//$kbonus = $kskill if $kbonus > $kskill;
-				float weight = (float(weapon_->getArmsLevel()) / 10.0f) + 1.0f;
-				kbonus = (int) (float(kbonus) * weight);
-				vbonus = (int) (float(vbonus) * weight);
+				fixed weight = (fixed(weapon_->getArmsLevel()) / 10) + 1;
+				kbonus = (fixed(kbonus) * weight).asInt();
+				vbonus = (fixed(vbonus) * weight).asInt();
 			}
 			firedTank->getScore().setSkill(firedTank->getScore().getSkill() + kbonus);
 			killedTank->getScore().setSkill(killedTank->getScore().getSkill() - vbonus);

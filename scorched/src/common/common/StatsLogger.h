@@ -32,10 +32,23 @@ public:
 
 	struct TankRank
 	{
-		TankRank() : rank(-1), skill(1000) {}
+		TankRank(unsigned int playerId) : 
+			playerId_(playerId), rank_(-1), skill_(-1) {}
+		TankRank(unsigned int playerId, int rank, int skill) : 
+			playerId_(playerId), rank_(rank), skill_(skill) {}
 
-		int rank;
-		int skill;
+		int getRank() { return rank_; }
+		int getSkill() { return skill_; }
+		unsigned int getPlayerId() { return playerId_; }
+
+		void setRank(int rank) { rank_ = rank; }
+		void setSkill(int skill) { skill_ = skill; }
+		void setPlayerId(int playerId) { playerId_ = playerId; }
+
+	protected:
+		unsigned int playerId_;
+		int rank_;
+		int skill_;
 	};
 
 	StatsLogger();
@@ -92,7 +105,7 @@ public:
 		{ std::list<std::string> result; return result; }
 	virtual std::list<std::string> getIpAliases(const char *unqiueId) 
 		{ std::list<std::string> result; return result; }
-	virtual TankRank tankRank(Tank *tank) { return TankRank(); }
+	virtual TankRank tankRank(Tank *tank) { return TankRank(tank->getPlayerId()); }
 	virtual void updateStats(Tank *tank) {}
 	virtual void periodicUpdate() {}
 	virtual std::string allocateId() { return ""; }

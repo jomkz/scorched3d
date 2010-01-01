@@ -773,7 +773,7 @@ void StatsLoggerDatabase::periodicUpdate()
 
 StatsLogger::TankRank StatsLoggerDatabase::tankRank(Tank *tank)
 {
-	TankRank result;
+	TankRank result(tank->getPlayerId());
 
 	createLogger();
 	if (!success_ || !displayStats_) return result;
@@ -793,13 +793,13 @@ StatsLogger::TankRank StatsLoggerDatabase::tankRank(Tank *tank)
 			itor++)
 		{
 			StatsLoggerDatabase::RowResult &rowResult = (*itor);
-			result.skill = atoi(rowResult.columns[0].c_str());
+			result.setSkill(atoi(rowResult.columns[0].c_str()));
 		}
 
 		std::list<StatsLoggerDatabase::RowResult> countRows =
 			runSelectQuery("SELECT count(*) FROM scorched3d_stats "
 			"WHERE skill > \"%i\" AND prefixid = %i AND seriesid = %i;", 
-			result.skill,
+			result.getSkill(),
 			prefixid_,
 			seriesid_);
 		if (!countRows.empty())
@@ -810,7 +810,7 @@ StatsLogger::TankRank StatsLoggerDatabase::tankRank(Tank *tank)
 				itor++)
 			{
 				StatsLoggerDatabase::RowResult &rowResult = (*itor);
-				result.rank = atoi(rowResult.columns[0].c_str()) + 1;
+				result.setRank(atoi(rowResult.columns[0].c_str()) + 1);
 			}
 		}
 	}
@@ -976,10 +976,6 @@ void StatsLoggerDatabase::tankConnected(Tank *tank)
 		playerId,
 		prefixid_,
 		seriesid_);
-
-	TankRank rank = StatsLogger::instance()->tankRank(tank);
-    tank->getScore().setRank(rank.rank);
-    tank->getScore().setSkill(rank.skill);
 }
 
 void StatsLoggerDatabase::tankJoined(Tank *tank)

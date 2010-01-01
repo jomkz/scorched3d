@@ -6097,6 +6097,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\simactions\TankRankSimAction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\simactions\TankRankSimAction.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\simactions\TankRemoveSimAction.cpp"
 				>
 			</File>

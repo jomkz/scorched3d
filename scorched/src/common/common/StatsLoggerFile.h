@@ -36,7 +36,7 @@ public:
 	virtual int getKillCount(const char *uniqueId);
 	virtual std::list<std::string> getAliases(const char *unqiueId);
 	virtual std::list<std::string> getIpAliases(const char *unqiueId);
-	virtual TankRank tankRank(Tank *tank) { return TankRank(); }
+	virtual TankRank tankRank(Tank *tank) { return TankRank(tank->getPlayerId()); }
 	virtual void updateStats(Tank *tank);
 	virtual void periodicUpdate();
 	virtual std::string allocateId();

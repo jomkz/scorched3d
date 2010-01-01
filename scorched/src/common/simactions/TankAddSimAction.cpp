@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <simactions/TankAddSimAction.h>
+#include <simactions/TankRankSimAction.h>
 #include <tank/TankContainer.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
@@ -32,6 +33,7 @@
 #include <server/ScorchedServerUtil.h>
 #include <server/ServerChannelManager.h>
 #include <server/ScorchedServer.h>
+#include <server/ServerSimulator.h>
 #ifndef S3D_SERVER
 #include <client/ClientChannelManager.h>
 #include <tankgraph/TargetRendererImplTank.h>
@@ -102,6 +104,14 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 	// Add this tank 
 	context.getTankContainer().addTank(tank);
 	StatsLogger::instance()->tankConnected(tank);
+
+	if (context.getServerMode())
+	{
+		StatsLogger::TankRank rank = StatsLogger::instance()->tankRank(tank);
+		TankRankSimAction *rankSimAction = new TankRankSimAction();
+		rankSimAction->addRank(rank);
+		((ScorchedServer &)context).getServerSimulator().addSimulatorAction(rankSimAction);
+	}
 
 #ifndef S3D_SERVER
 	if (!context.getServerMode())
