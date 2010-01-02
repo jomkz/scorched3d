@@ -122,7 +122,9 @@ void ServerTurnsSimultaneous::internalSimulate(fixed frameTime)
 						playingDestinations.insert(tank->getDestinationId());
 					}
 
-					playMove(tank, ++nextMoveId_);
+					fixed shotTime = fixed(
+						ScorchedServer::instance()->getOptionsGame().getShotTime());
+					playMove(tank, ++nextMoveId_, shotTime);
 				}
 			}
 		}

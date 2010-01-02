@@ -145,7 +145,9 @@ void ServerTurnsSequential::internalSimulate(fixed frameTime)
 void ServerTurnsSequential::makeMove(Tank *tank)
 {
 	nextMoveId_++;
-	playMove(tank, nextMoveId_);
+	fixed shotTime = fixed(
+		ScorchedServer::instance()->getOptionsGame().getShotTime());
+	playMove(tank, nextMoveId_, shotTime);
 }
 
 void ServerTurnsSequential::internalMoveFinished(ComsPlayedMoveMessage &playedMessage)

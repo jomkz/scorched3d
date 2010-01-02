@@ -21,6 +21,7 @@
 #include <server/ServerTurns.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerSimulator.h>
+#include <server/ServerChannelManager.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
@@ -183,6 +184,10 @@ bool ServerTurns::showScore()
 	if (teamWonGame > 0)
 	{
 		// A team has won
+		ChannelText text("info",
+			"ROUND_FINISHED_TEAM_WON",
+			"Round finished due to team obtaining an objective.");
+		ServerChannelManager::instance()->sendText(text, true);
 		return true;
 	}
 
@@ -197,6 +202,10 @@ bool ServerTurns::showScore()
 		Tank *tank = (*itor).second;
 		if (tank->getScore().getWonGame())
 		{
+			ChannelText text("info",
+				"ROUND_FINISHED_TANK_WON",
+				"Round finished due to player obtaining an objective.");
+			ServerChannelManager::instance()->sendText(text, true);
 			return true;
 		}
 
@@ -209,6 +218,10 @@ bool ServerTurns::showScore()
 	}
 	if (allSkipped) 
 	{
+		ChannelText text("info",
+			"ROUND_FINISHED_SKIP",
+			"Round finished due to all players skipping moves.");
+		ServerChannelManager::instance()->sendText(text, true);
 		return true;
 	}
 	
@@ -216,27 +229,50 @@ bool ServerTurns::showScore()
 		ScorchedServer::instance()->getTankContainer().teamCount() == 1)
 	{
 		// Only one team left
+		ChannelText text("info",
+			"ROUND_FINISHED_TEAM",
+			"Round finished due to last team standing.");
+		ServerChannelManager::instance()->sendText(text, true);
 		return true;
 	}
-	else if (ScorchedServer::instance()->getTankContainer().aliveCount() < 2)
+	else if (ScorchedServer::instance()->getTankContainer().aliveCount() == 0)
 	{
 		// Only one person left
+		ChannelText text("info",
+			"ROUND_FINISHED_DEAD",
+			"Round finished due to annihilation.");
+		ServerChannelManager::instance()->sendText(text, true);
+		return true;
+	}
+	else if (ScorchedServer::instance()->getTankContainer().aliveCount() <= 1)
+	{
+		// Only one person left
+		ChannelText text("info",
+			"ROUND_FINISHED_PLAYER",
+			"Round finished due to last man standing.");
+		ServerChannelManager::instance()->sendText(text, true);
 		return true;
 	}
 	return false;
 }
 
-void ServerTurns::playMove(Tank *tank, unsigned int moveId)
+void ServerTurns::playMove(Tank *tank, unsigned int moveId, fixed shotTime)
 {
 	// Figure out how long shots should be allowed to take
-	fixed shotTime = fixed(
-		ScorchedServer::instance()->getOptionsGame().getShotTime());
 	fixed delayShotTime = 0;
 	if (tank->getDestinationId() == 0)
 	{
+		// Add some thinking time on the AIs shots
 		delayShotTime = fixed(ScorchedServer::instance()->getOptionsGame().getAIShotTime());
-		if (delayShotTime > shotTime - 5) delayShotTime = shotTime - 5;
-		if (delayShotTime < 0) delayShotTime = 0;
+		delayShotTime += fixed(true, (rand() % 60000) - 30000);
+
+		// If there is a maximum shot time make sure the AIs dont think longer
+		// than the allowed time
+		if (shotTime > 0)
+		{
+			if (delayShotTime > shotTime - 5) delayShotTime = shotTime - 5;
+			if (delayShotTime < 0) delayShotTime = 0;
+		}
 	}
 
 	// Create the move action

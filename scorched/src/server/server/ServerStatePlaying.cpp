@@ -22,6 +22,7 @@
 #include <server/ScorchedServer.h>
 #include <server/ServerSyncCheck.h>
 #include <server/ServerSimulator.h>
+#include <server/ServerChannelManager.h>
 #include <simactions/RoundStartSimAction.h>
 #include <simactions/TankTeamBallanceSimAction.h>
 #include <common/OptionsScorched.h>
@@ -100,7 +101,15 @@ void ServerStatePlaying::simulate(fixed frameTime)
 	if (roundState_ == eCountingDown)
 	{
 		roundTime_ -= frameTime;
-		if (roundTime_ < 0) roundState_ = eFinished;
+		if (roundTime_ < 0) 
+		{
+			ChannelText text("info",
+				"ROUND_FINISHED_TIME",
+				"Round finished due to round time out");
+			ServerChannelManager::instance()->sendText(text, true);
+
+			roundState_ = eFinished;
+		}
 	}
 }
 

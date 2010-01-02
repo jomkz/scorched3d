@@ -115,7 +115,7 @@ void ServerTurnsFree::internalSimulate(fixed frameTime)
 					playingDestinations.insert(tank->getDestinationId());
 				}
 
-				playMove(tank, ++nextMoveId_);
+				playMove(tank, ++nextMoveId_, fixed(0));
 
 				waitingPlayers_.erase(waitingItor);
 				waitingPlayers_.push_back(playerId);
@@ -151,24 +151,14 @@ void ServerTurnsFree::internalMoveFinished(ComsPlayedMoveMessage &playedMessage)
 	
 	playMoveFinished(tank);
 
-	int thinkingTime = 0;
 	int shotTime = ScorchedServer::instance()->getOptionsGame().getShotTime();
 	if (ScorchedServer::instance()->getOptionsGame().getTurnType() ==
 		OptionsGame::TurnFreeTimed)
 	{
-		thinkingTime = shotTime;
-	}
-	else
-	{
-		if (tank->getDestinationId() == 0)
+		if (shotTime > 0)
 		{
-			thinkingTime = (shotTime / 3) + (rand() % (shotTime / 2));
+			timedPlayers_[tank->getPlayerId()] = fixed(shotTime);
 		}
-	}
-	
-	if (thinkingTime > 0)
-	{
-		timedPlayers_[tank->getPlayerId()] = fixed(thinkingTime);
 	}
 
 	if (tank->getState().getState() == TankState::sNormal)
