@@ -25,6 +25,7 @@
 #include <list>
 #include <map>
 #include <vector>
+#include <string.h>
 #include <actions/Action.h>
 
 class ScorchedContext;

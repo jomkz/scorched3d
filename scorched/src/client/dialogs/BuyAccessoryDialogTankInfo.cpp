@@ -20,7 +20,7 @@
 
 #include <dialogs/BuyAccessoryDialogTankInfo.h>
 #include <client/ScorchedClient.h>
-#include <tank/TankCOntainer.h>
+#include <tank/TankContainer.h>
 #include <tank/TankScore.h>
 #include <tank/TankState.h>
 

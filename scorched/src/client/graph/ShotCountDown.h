@@ -22,7 +22,7 @@
 #define __INCLUDE_ShotCountDownh_INCLUDE__
 
 #include <engine/GameStateI.h>
-#include <common/Fixed.h>
+#include <common/fixed.h>
 
 class ShotCountDown : public GameStateI
 {

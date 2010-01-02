@@ -27,7 +27,7 @@
 #include <common/OptionsTransient.h>
 #include <simactions/ShowScoreSimAction.h>
 #include <simactions/RoundStopSimAction.h>
-#include <LUA/LUAScriptHook.h>
+#include <lua/LUAScriptHook.h>
 
 ServerStateScore::ServerStateScore()
 {
