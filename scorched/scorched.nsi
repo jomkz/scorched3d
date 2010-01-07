@@ -1,6 +1,6 @@
 ; Helper defines
 !define PRODUCT_NAME "Scorched3D"
-!define PRODUCT_VERSION "42.1"
+!define PRODUCT_VERSION "43beta"
 !define PRODUCT_PUBLISHER "Scorched"
 !define PRODUCT_WEB_SITE "http://www.scorched3d.co.uk"
 !define PRODUCT_DONATE_WEB_SITE "https://www.paypal.com/xclick/business=donations%40scorched3d.co.uk&item_name=Scorched3D&no_note=1&tax=0&currency_code=GBP"
@@ -14,8 +14,8 @@ SetCompressor lzma
 
 ; MUI Settings
 !define MUI_ABORTWARNING
-!define MUI_ICON "data\windows\tank2.ico"
-!define MUI_UNICON "data\windows\tank2.ico"
+!define MUI_ICON "data\images\tank2.ico"
+!define MUI_UNICON "data\images\tank2.ico"
 
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
@@ -79,7 +79,7 @@ Section -AdditionalIcons
   CreateDirectory "$SMPROGRAMS\Scorched3D"
   
   CreateShortCut "$SMPROGRAMS\Scorched3D\Uninstall Scorched3D.lnk" "$INSTDIR\uninst.exe"
-  CreateShortCut "$SMPROGRAMS\Scorched3D\Scorched3D.lnk" "$INSTDIR\scorched.exe" "" "$INSTDIR\data\windows\tank2.ico"
+  CreateShortCut "$SMPROGRAMS\Scorched3D\Scorched3D.lnk" "$INSTDIR\scorched.exe" "" "$INSTDIR\data\images\tank2.ico"
   CreateShortCut "$SMPROGRAMS\Scorched3D\Scorched3D Documentation.lnk" "$INSTDIR\${PRODUCT_NAME}-docs.url"
   CreateShortCut "$SMPROGRAMS\Scorched3D\Scorched3D Homepage.lnk" "$INSTDIR\${PRODUCT_NAME}.url"
   CreateShortCut "$SMPROGRAMS\Scorched3D\Scorched3D Donations.lnk" "$INSTDIR\${PRODUCT_NAME}-donate.url"

@@ -329,8 +329,9 @@ OptionsDisplay::OptionsDisplay() :
 		"The key to sort accessories by before displaying",
 		RWAccess, 0, accessorySortKeyEnum),
 	focusPause_(options_, "FocusPause",
-		"Pause the graphics display when mouse leaves window.", RWAccess, true)
-
+		"Pause the graphics display when mouse leaves window.", RWAccess, true),
+	openGLWarnings_(options_, "OpenGLWarnings",
+		"Display any OpenGL warnings when the game starts", RWAccess, true)
 {
 }
 

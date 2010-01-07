@@ -56,6 +56,8 @@ public:
 	static bool hasBlendColor() { return hasBlendColor_; }
 	// Use shaders
 	static bool hasShaders() { return hasShaders_; }
+	// Is this a software implementation
+	static bool isSoftwareOpenGL() { return isSoftwareOpenGL_; }
 
 protected:
 	static bool envCombine_;
@@ -74,6 +76,7 @@ protected:
 	static bool hasBlendColor_;
 	static bool hasMultiTex_;
 	static bool hasDrawRangeElements_;
+	static bool isSoftwareOpenGL_;
 
 private:
 	GLStateExtension();

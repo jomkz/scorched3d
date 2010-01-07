@@ -376,6 +376,9 @@ public:
 	bool getFocusPause() { return focusPause_; }
 	OptionEntryBool &getFocusPauseEntry() { return focusPause_; }
 
+	bool getOpenGLWarnings() { return openGLWarnings_; }
+	OptionEntryBool &getOpenGLWarningsEntry() { return openGLWarnings_; }
+
 	void loadSafeValues();
 	void loadDefaultValues();
 	void loadMediumValues();
@@ -530,6 +533,7 @@ protected:
 	OptionEntryString buyTab_;
 	OptionEntryString lastVersionPlayed_;
 	OptionEntryBool focusPause_;
+	OptionEntryBool openGLWarnings_;
 
 private:
 	OptionsDisplay();

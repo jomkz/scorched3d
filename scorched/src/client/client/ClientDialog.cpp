@@ -26,6 +26,7 @@
 #include <graph/Display.h>
 #include <graph/Gamma.h>
 #include <client/ClientParams.h>
+#include <GLEXT/GLStateExtension.h>
 #include <common/OptionsTransient.h>
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
@@ -77,6 +78,18 @@ bool createScorchedWindow()
 	Gamma::instance()->set();
 
 	GLSetup::setup();
+
+	if (OptionsDisplay::instance()->getOpenGLWarnings() &&
+		GLStateExtension::isSoftwareOpenGL())
+	{
+		S3D::dialogMessage("Scorched 3D Display", 
+			S3D::formatStringBuffer(
+			"Warning: This computer is not using the graphics card to renderer OpenGL.\n"
+			"This may cause the game to play very slowly!\n\n"
+			"Please update your graphics drivers from the appropriate website.\n\n"
+			"OpenGL Vendor : %s\nOpenGL Renderer : %s",
+			glGetString(GL_VENDOR), glGetString(GL_RENDERER)));
+	}
 
 	return true;
 }

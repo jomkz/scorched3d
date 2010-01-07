@@ -7,7 +7,7 @@ Choose a custom game for more options or to play with
 more than one human player.</description>
 		<icon>data/windows/nuke.bmp</icon>
 		<url>http://apochq.handwired.net/</url>
-		<protocolversion>eh</protocolversion>
+		<protocolversion>ei</protocolversion>
 	</main>
 	<game>
 		<shortdescription>Apocalypse Target practice</shortdescription>

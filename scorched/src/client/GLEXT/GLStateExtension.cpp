@@ -36,6 +36,7 @@ bool GLStateExtension::hasBlendColor_ = false;
 bool GLStateExtension::hasShaders_ = false;
 bool GLStateExtension::hasFBO_ = false;
 bool GLStateExtension::hasDrawRangeElements_ = false;
+bool GLStateExtension::isSoftwareOpenGL_ = false;
 int GLStateExtension::textureUnits_ = 0;
 int GLStateExtension::maxElementVertices_ = 0;
 int GLStateExtension::maxElementIndices_ = 0;
@@ -146,6 +147,10 @@ void GLStateExtension::setup()
 				hasHardwareShadows_ = true;
 			}
 		}
+	}
+	if (strstr((const char *) glGetString(GL_RENDERER), "GDI Generic") != 0)
+	{
+		isSoftwareOpenGL_ = true;
 	}
 
 	noTexSubImage_ = OptionsDisplay::instance()->getNoGLTexSubImage();
