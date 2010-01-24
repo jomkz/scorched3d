@@ -156,6 +156,7 @@ void LandscapeMusicManager::simulate(const unsigned state, float simTime)
 	case ClientState::StateConnect:
 		playState = LandscapeMusicType::StateLoading;
 		break;
+	case ClientState::StateWaitNoLandscape:
 	case ClientState::StateWait:
 		playState = LandscapeMusicType::StateWait;
 		break;

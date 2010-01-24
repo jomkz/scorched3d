@@ -180,6 +180,7 @@ bool ServerWebHandler::PlayerHandler::processRequest(
 			"<td>%s</td>" // Score
 			"<td>%s</td>" // State
 			"<td>%s</td>" // Team
+			"<td>%i</td>" // Ping
 			"<td><input type=\"checkbox\" name=\"player-%u\"></td>" // Select
 			"</tr>\n",
 			tank->getDestinationId(), NetInterface::getIpName(tank->getIpAddress()), tank->getPlayerId(),
@@ -189,6 +190,7 @@ bool ServerWebHandler::PlayerHandler::processRequest(
 			tank->getScore().getScoreString(),
 			tank->getState().getStateString(),
 			TankColorGenerator::getTeamName(tank->getTeam()),
+			tank->getScore().getPing(),
 			tank->getPlayerId()
 		);
 	}

@@ -109,6 +109,10 @@ void ServerStateNewGame::newGameState()
 			ScorchedServer::instance()->getContext().getTankContainer());
 	}
 
+	// Load the per level options
+	ScorchedServer::instance()->getOptionsGame().updateLevelOptions(
+		ScorchedServer::instance()->getContext(), defn);
+
 	// Set all options (wind etc..)
 	ScorchedServer::instance()->getContext().getOptionsTransient().newGame();
 

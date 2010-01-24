@@ -76,7 +76,7 @@ void AnimatedBackdropDialog::init()
 	}
 
 	LandscapeDefinition definition = ScorchedClient::instance()->getLandscapes().getLandscapeDefn(
-		"oldstyle");
+		"peak");
 
 	// Set the progress dialog nicities
 	LandscapeDefinitionsEntry *landscapeDefinition =

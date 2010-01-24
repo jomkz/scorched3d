@@ -75,7 +75,7 @@ public:
 protected:
 	static SettingsSubSelectDialog *instance_;
 
-	GLWTab *mainTab_, *ecoTab_;
+	GLWTab *mainTab_, *moneyTab_, *weaponsTab_;
 	GLWTab *scoreTab_, *envTab_, *landTab_;
 	GLWIconList *landList_;
 	std::list<GLWOptionEntry> controls_;

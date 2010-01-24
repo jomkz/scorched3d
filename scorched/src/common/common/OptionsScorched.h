@@ -110,7 +110,6 @@ public:
 	OPTIONBOOL_GETTER(MoneyPerHealthPoint);
 	OPTIONBOOL_GETTER(LimitPowerByHealth);
 	OPTIONBOOL_GETTER(GiveAllWeapons);
-	OPTIONBOOL_GETTER(DelayedDefenseActivation);
 	OPTIONSTRINGENUM_GETTER(Economy);
 	OPTIONINT_GETTER(ResignMode);
 

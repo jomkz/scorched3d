@@ -61,7 +61,8 @@ void QuitDialog::display()
 	unsigned int state = ScorchedClient::instance()->getGameState().getState();
 	bool disable = (ClientParams::instance()->getConnectedToServer() ||
 		state == ClientState::StateOptions ||
-		state == ClientState::StateConnect);
+		state == ClientState::StateConnect ||
+		state == ClientState::StateWaitNoLandscape);
 	if (!disable)
 	{
 		killButton_ = new GLWTextButton(LANG_RESOURCE("MASS_TANK_KILL", "Mass Tank Kill"), 0, 0, 190, this, 

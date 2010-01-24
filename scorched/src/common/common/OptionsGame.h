@@ -280,9 +280,6 @@ public:
 	bool getGiveAllWeapons() { return giveAllWeapons_; }
 	OptionEntryBool &getGiveAllWeaponsEntry() { return giveAllWeapons_; }
 
-	bool getDelayedDefenseActivation() { return delayedDefenseActivation_; }
-	OptionEntryBool &getDelayedDefenseActivationEntry() { return delayedDefenseActivation_; }
-
 	bool getCycleMaps() { return cycleMaps_; }
 	OptionEntryBool &getCycleMapsEntry() { return cycleMaps_; }
 
@@ -431,7 +428,6 @@ protected:
 	OptionEntryBool limitPowerByHealth_;
 	OptionEntryString tutorial_;
 	OptionEntryBool cycleMaps_;
-	OptionEntryBool delayedDefenseActivation_;
 	OptionEntryEnum resignMode_;
 	OptionEntryEnum movementRestriction_;
 	OptionEntryEnum turnType_;
@@ -473,6 +469,7 @@ protected:
 	OptionEntryBool debugFeatures_;
 
 	// Depricated (old) options
+	OptionEntryBool depricatedDelayedDefenseActivation_;
 	OptionEntryBoundedInt depricatedMaxRoundTurns_;
 	OptionEntryBoundedInt depricatedKeepAliveTime_;
 	OptionEntryBoundedInt depricatedKeepAliveTimeoutTime_;

@@ -28,7 +28,7 @@ class TankStartMoveSimAction : public SimAction
 public:
 	TankStartMoveSimAction();
 	TankStartMoveSimAction(unsigned int playerId, unsigned int moveId, 
-		fixed timeout, bool buying);
+		fixed timeout, bool buying, fixed ping);
 	virtual ~TankStartMoveSimAction();
 
 	unsigned int getPlayerId() { return playerId_; }
@@ -44,7 +44,7 @@ REGISTER_CLASS_HEADER(TankStartMoveSimAction);
 protected:
 	unsigned int playerId_;
 	unsigned int moveId_;
-	fixed timeout_;
+	fixed timeout_, ping_;
 	bool buying_;
 };
 

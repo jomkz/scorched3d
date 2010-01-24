@@ -324,8 +324,6 @@ OptionsGame::OptionsGame() :
 		"Only allow authenticated players to connect", 0, "none", authHandlerEnum),
 	cycleMaps_(options_, "CycleMaps",
 		"Cycle through the maps instead of choosing them using a random probablity", 0, false),
-	delayedDefenseActivation_(options_, "DelayedDefenseActivation",
-		"Changes to shields and parachutes are only seen after the aiming phase", 0, false),
 	randomizeBotNames_(options_, "RandomizeBotNames",
 		"Choose random bot names instread of sequential names", 0, false),
 	computersDeathTalk_(options_, "ComputersDeathTalk",
@@ -335,8 +333,9 @@ OptionsGame::OptionsGame() :
 	debugFeatures_(options_, "DebugFeatures",
 		"Set to \"true\" to enable debugging features such as InfoGrid", 0, false),
 
-
 	// Deprecated options
+	depricatedDelayedDefenseActivation_(options_, "DelayedDefenseActivation",
+		"Changes to shields and parachutes are only seen after the aiming phase", OptionEntry::DataDepricated, false),
 	depricatedMasterListServer_(options_, "MasterListServer",
 		"The master list server for scorched3d", OptionEntry::DataDepricated, "scorched3d.sourceforge.net"),
 	depricatedMasterListServerURI_(options_, "MasterListServerURI",

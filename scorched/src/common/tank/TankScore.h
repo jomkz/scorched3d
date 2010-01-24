@@ -66,6 +66,9 @@ public:
 	int getSkill() { return skill_; }
 	void setSkill(int skill);
 
+	int getPing() { return ping_; }
+	void setPing(int ping) { ping_ = ping; }
+
 	int getStartSkill() { return startSkill_; }
 
 	std::set<unsigned int> &getHurtBy() { return hurtBy_; }
@@ -93,6 +96,7 @@ protected:
 	ScorchedContext &context_;
 	int rank_, skill_, startSkill_;
 	int kills_;
+	int ping_;
 	int assists_;
 	int money_;
 	int totalMoneyEarned_, totalScoreEarned_;

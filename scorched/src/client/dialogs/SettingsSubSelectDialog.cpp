@@ -96,10 +96,10 @@ SettingsSubSelectDialog::SettingsSubSelectDialog() :
 		tabPanel->addWidget(new GLWTab("Main", LANG_RESOURCE("MAIN_TAB", "Main"), 10, 40, 520, 315));
 	mainTab_->setGridWidth(2);
 	mainTab_->setLayout(GLWPanel::LayoutGrid);
-	ecoTab_ = (GLWTab *)
-		tabPanel->addWidget(new GLWTab("Eco", LANG_RESOURCE("ECONOMY_TAB", "Eco"), 10, 40, 520, 315));
-	ecoTab_->setGridWidth(2);
-	ecoTab_->setLayout(GLWPanel::LayoutGrid);
+	moneyTab_ = (GLWTab *)
+		tabPanel->addWidget(new GLWTab("Money", LANG_RESOURCE("ECONOMY_TAB", "Money"), 10, 40, 520, 315));
+	moneyTab_->setGridWidth(2);
+	moneyTab_->setLayout(GLWPanel::LayoutGrid);
 	scoreTab_ = (GLWTab *)
 		tabPanel->addWidget(new GLWTab("Score", LANG_RESOURCE("SCORE_TAB", "Score"), 10, 40, 520, 315));
 	scoreTab_->setGridWidth(2);
@@ -108,6 +108,10 @@ SettingsSubSelectDialog::SettingsSubSelectDialog() :
 		tabPanel->addWidget(new GLWTab("Env", LANG_RESOURCE("ENVIRONMENT_TAB", "Env"), 10, 40, 520, 315));
 	envTab_->setGridWidth(2);
 	envTab_->setLayout(GLWPanel::LayoutGrid);
+	weaponsTab_ = (GLWTab *)
+		tabPanel->addWidget(new GLWTab("Weapon", LANG_RESOURCE("WEAPON_TAB", "Weapon"), 10, 40, 520, 315));
+	weaponsTab_->setGridWidth(2);
+	weaponsTab_->setLayout(GLWPanel::LayoutGrid);
 	landTab_ = (GLWTab *)
 		tabPanel->addWidget(new GLWTab("Land", LANG_RESOURCE("LANDSCAPE_TAB", "Land"), 10, 40, 520, 315));
 
@@ -120,6 +124,7 @@ SettingsSubSelectDialog::SettingsSubSelectDialog() :
 	OptionsGame &optionsGame = SettingsSelectDialog::instance()->getOptions();
 
 	// Add Options
+	// Main Tab
 	GLWOptionEntry::createEntry(
 		controls_, mainTab_, optionsGame.getTeamBallanceEntry());
 	GLWOptionEntry::createEntry(
@@ -134,36 +139,40 @@ SettingsSubSelectDialog::SettingsSubSelectDialog() :
 		controls_, mainTab_, optionsGame.getBuyingTimeEntry());	
 	GLWOptionEntry::createEntry(
 		controls_, mainTab_, optionsGame.getRoundTimeEntry());	
+	GLWOptionEntry::createEntry(
+		controls_, mainTab_, optionsGame.getResignModeEntry());
+	GLWOptionEntry::createEntry(
+		controls_, mainTab_, optionsGame.getPlayerLivesEntry());
 	mainTab_->addWidget(new GLWSpacer(0.0f, 20.0f));
 
+	// Eco Tab
 	GLWOptionEntry::createEntry(
-		controls_, ecoTab_, optionsGame.getBuyOnRoundEntry());
+		controls_, moneyTab_, optionsGame.getBuyOnRoundEntry());
 	GLWOptionEntry::createEntry(
-		controls_, ecoTab_, optionsGame.getStartMoneyEntry());
+		controls_, moneyTab_, optionsGame.getEconomyEntry());
 	GLWOptionEntry::createEntry(
-		controls_, ecoTab_, optionsGame.getInterestEntry());
+		controls_, moneyTab_, optionsGame.getStartMoneyEntry());
 	GLWOptionEntry::createEntry(
-		controls_, ecoTab_, optionsGame.getMoneyPerRoundEntry());
+		controls_, moneyTab_, optionsGame.getInterestEntry());
 	GLWOptionEntry::createEntry(
-		controls_, ecoTab_, optionsGame.getEconomyEntry());
+		controls_, moneyTab_, optionsGame.getMoneyPerRoundEntry());
 	GLWOptionEntry::createEntry(
-		controls_, ecoTab_, optionsGame.getMoneyWonPerAssistPointEntry());
+		controls_, moneyTab_, optionsGame.getMoneyWonPerAssistPointEntry());
 	GLWOptionEntry::createEntry(
-		controls_, ecoTab_, optionsGame.getMoneyWonPerKillPointEntry());
+		controls_, moneyTab_, optionsGame.getMoneyWonPerKillPointEntry());
 	GLWOptionEntry::createEntry(
-		controls_, ecoTab_, optionsGame.getMoneyWonPerMultiKillPointEntry());
+		controls_, moneyTab_, optionsGame.getMoneyWonPerMultiKillPointEntry());
 	GLWOptionEntry::createEntry(
-		controls_, ecoTab_, optionsGame.getMoneyWonPerHitPointEntry());
+		controls_, moneyTab_, optionsGame.getMoneyWonPerHitPointEntry());
 	GLWOptionEntry::createEntry(
-		controls_, ecoTab_, optionsGame.getMoneyWonForRoundEntry());
+		controls_, moneyTab_, optionsGame.getMoneyWonForRoundEntry());
 	GLWOptionEntry::createEntry(
-		controls_, ecoTab_, optionsGame.getMoneyWonForLivesEntry());
+		controls_, moneyTab_, optionsGame.getMoneyWonForLivesEntry());
 	GLWOptionEntry::createEntry(
-		controls_, ecoTab_, optionsGame.getMoneyPerHealthPointEntry());
-	GLWOptionEntry::createEntry(
-		controls_, ecoTab_, optionsGame.getGiveAllWeaponsEntry());
-	ecoTab_->addWidget(new GLWSpacer(0.0f, 10.0f));
+		controls_, moneyTab_, optionsGame.getMoneyPerHealthPointEntry());
+	moneyTab_->addWidget(new GLWSpacer(0.0f, 10.0f));
 
+	// Score tab
 	GLWOptionEntry::createEntry(
 		controls_, scoreTab_, optionsGame.getScoreWonForRoundEntry());
 	GLWOptionEntry::createEntry(
@@ -176,6 +185,7 @@ SettingsSubSelectDialog::SettingsSubSelectDialog() :
 		controls_, scoreTab_, optionsGame.getScorePerMoneyEntry());
 	scoreTab_->addWidget(new GLWSpacer(0.0f, 20.0f));
 
+	// Env Tab
 	GLWOptionEntry::createEntry(
 		controls_, envTab_, optionsGame.getWindForceEntry());
 	GLWOptionEntry::createEntry(
@@ -183,24 +193,23 @@ SettingsSubSelectDialog::SettingsSubSelectDialog() :
 	GLWOptionEntry::createEntry(
 		controls_, envTab_, optionsGame.getWallTypeEntry());
 	GLWOptionEntry::createEntry(
-		controls_, envTab_, optionsGame.getWeapScaleEntry());
-	GLWOptionEntry::createEntry(
-		controls_, envTab_, optionsGame.getStartArmsLevelEntry());
-	GLWOptionEntry::createEntry(
-		controls_, envTab_, optionsGame.getEndArmsLevelEntry());
-	GLWOptionEntry::createEntry(
 		controls_, envTab_, optionsGame.getMinFallingDistanceEntry());
 	GLWOptionEntry::createEntry(
 		controls_, envTab_, optionsGame.getMaxClimbingDistanceEntry());
+	envTab_->addWidget(new GLWSpacer(0.0f, 20.0f));
+
+	// Weapons Tab
 	GLWOptionEntry::createEntry(
-		controls_, envTab_, optionsGame.getResignModeEntry());
+		controls_, weaponsTab_, optionsGame.getWeapScaleEntry());
 	GLWOptionEntry::createEntry(
-		controls_, envTab_, optionsGame.getMovementRestrictionEntry());
+		controls_, weaponsTab_, optionsGame.getStartArmsLevelEntry());
 	GLWOptionEntry::createEntry(
-		controls_, envTab_, optionsGame.getPlayerLivesEntry());
+		controls_, weaponsTab_, optionsGame.getEndArmsLevelEntry());
 	GLWOptionEntry::createEntry(
-		controls_, envTab_, optionsGame.getDelayedDefenseActivationEntry());
-	envTab_->addWidget(new GLWSpacer(0.0f, 10.0f));
+		controls_, weaponsTab_, optionsGame.getMovementRestrictionEntry());
+	GLWOptionEntry::createEntry(
+		controls_, weaponsTab_, optionsGame.getGiveAllWeaponsEntry());
+	weaponsTab_->addWidget(new GLWSpacer(0.0f, 20.0f));
 
 	GLWOptionEntry::createEntry(
 		controls_, landSettingsPanel, optionsGame.getCycleMapsEntry());

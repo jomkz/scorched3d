@@ -147,7 +147,7 @@ void TankAICurrentMove::playMove(Tank *tank,
 		if (moveData.usedBatteries)
 		{
 			TankStartMoveSimAction *simAction = 
-				new TankStartMoveSimAction(tank->getPlayerId(), moveId, 0, false);
+				new TankStartMoveSimAction(tank->getPlayerId(), moveId, 0, false, 0);
 			ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
 		}
 		else

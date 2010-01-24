@@ -77,6 +77,8 @@ bool ComsLoadLevelMessage::loadState(ScorchedContext &context)
 	// State
 	if (!context.getOptionsGame().getMainOptions().
 		readFromBuffer(reader, false, false)) return false;
+	context.getOptionsGame().updateLevelOptions(
+		context, landscapeDefinition_);
 	if (!context.getOptionsTransient().readFromBuffer(reader)) return false;
 	if (!context.getTankTeamScore().readMessage(reader)) return false;
 	if (!context.getAccessoryStore().readEconomyFromBuffer(reader)) return false;

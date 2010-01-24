@@ -174,13 +174,20 @@ bool ServerAdminHandler::processMessage(
 			{
 				Tank *tank = (*itor).second;
 
+				fixed ping = 0;
+				ServerDestination *destination = 
+					ScorchedServer::instance()->getServerDestinations().
+					getDestination(tank->getDestinationId());
+				if (destination) ping = destination->getPing().getAverage();
+
 				result += 
-					S3D::formatStringBuffer("%i \"%s\" \"%s\" \"%u\" %s \n",
+					S3D::formatStringBuffer("%i \"%s\" \"%s\" \"%u\" %s Ping %i\n",
 						tank->getPlayerId(), 
 						tank->getCStrName().c_str(),
 						NetInterface::getIpName(tank->getIpAddress()),
 						StatsLogger::instance()->getStatsId(tank->getUniqueId()),
-						(tank->getState().getMuted()?"Muted":"Not Muted"));
+						(tank->getState().getMuted()?"Muted":"Not Muted"),
+						(ping * 1000).asInt());
 			}
 			result +=
 				"-----------------------------------------------------\n";

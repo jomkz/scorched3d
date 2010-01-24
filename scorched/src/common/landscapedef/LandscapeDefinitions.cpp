@@ -224,8 +224,8 @@ LandscapeDefinition LandscapeDefinitions::getLandscapeDefn(
 	}
 
 	// Return the chosen definition
-	std::string tex = result->texs[rand() % result->texs.size()];
-	std::string defn = result->defns[rand() % result->defns.size()];
+	std::string tex = result->texs[0];
+	std::string defn = result->defns[0];
 	unsigned int seed = 33;//(unsigned int) rand();
 
 	LandscapeDefinition entry(

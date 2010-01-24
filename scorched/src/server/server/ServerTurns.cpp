@@ -22,6 +22,7 @@
 #include <server/ScorchedServer.h>
 #include <server/ServerSimulator.h>
 #include <server/ServerChannelManager.h>
+#include <server/ServerDestinations.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
@@ -191,6 +192,36 @@ bool ServerTurns::showScore()
 		return true;
 	}
 
+	if (ScorchedServer::instance()->getOptionsGame().getTeams() > 1 &&
+		ScorchedServer::instance()->getTankContainer().teamCount() == 1)
+	{
+		// Only one team left
+		ChannelText text("info",
+			"ROUND_FINISHED_TEAM",
+			"Round finished due to last team standing.");
+		ServerChannelManager::instance()->sendText(text, true);
+		return true;
+	}
+	else if (ScorchedServer::instance()->getTankContainer().aliveCount() == 0)
+	{
+		// Only one person left
+		ChannelText text("info",
+			"ROUND_FINISHED_DEAD",
+			"Round finished due to annihilation.");
+		ServerChannelManager::instance()->sendText(text, true);
+		return true;
+	}
+	else if (ScorchedServer::instance()->getTankContainer().aliveCount() <= 1)
+	{
+		// Only one person left
+		ChannelText text("info",
+			"ROUND_FINISHED_PLAYER",
+			"Round finished due to last man standing.");
+		ServerChannelManager::instance()->sendText(text, true);
+		return true;
+	}
+
+	// Check for tanks skiping turns
 	bool allSkipped = true;
 	std::map<unsigned int, Tank *> &tanks =
 		ScorchedServer::instance()->getTankContainer().getAllTanks();
@@ -224,35 +255,7 @@ bool ServerTurns::showScore()
 		ServerChannelManager::instance()->sendText(text, true);
 		return true;
 	}
-	
-	if (ScorchedServer::instance()->getOptionsGame().getTeams() > 1 &&
-		ScorchedServer::instance()->getTankContainer().teamCount() == 1)
-	{
-		// Only one team left
-		ChannelText text("info",
-			"ROUND_FINISHED_TEAM",
-			"Round finished due to last team standing.");
-		ServerChannelManager::instance()->sendText(text, true);
-		return true;
-	}
-	else if (ScorchedServer::instance()->getTankContainer().aliveCount() == 0)
-	{
-		// Only one person left
-		ChannelText text("info",
-			"ROUND_FINISHED_DEAD",
-			"Round finished due to annihilation.");
-		ServerChannelManager::instance()->sendText(text, true);
-		return true;
-	}
-	else if (ScorchedServer::instance()->getTankContainer().aliveCount() <= 1)
-	{
-		// Only one person left
-		ChannelText text("info",
-			"ROUND_FINISHED_PLAYER",
-			"Round finished due to last man standing.");
-		ServerChannelManager::instance()->sendText(text, true);
-		return true;
-	}
+
 	return false;
 }
 
@@ -275,10 +278,16 @@ void ServerTurns::playMove(Tank *tank, unsigned int moveId, fixed shotTime)
 		}
 	}
 
+	// Get the ping
+	fixed ping = 0;
+	ServerDestination *destination = 
+		ScorchedServer::instance()->getServerDestinations().getDestination(tank->getDestinationId());
+	if (destination) ping = destination->getPing().getAverage();
+
 	// Create the move action
 	tank->getState().setMoveId(moveId);
 	TankStartMoveSimAction *tankSimAction = new TankStartMoveSimAction(
-		tank->getPlayerId(), tank->getState().getMoveId(), shotTime, false);
+		tank->getPlayerId(), tank->getState().getMoveId(), shotTime, false, ping);
 
 	// If shotTime > 0 then add to the list of playing players so they can be timed out
 	SimulatorI *callback = 0;

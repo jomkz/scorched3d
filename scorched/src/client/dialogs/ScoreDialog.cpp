@@ -54,7 +54,8 @@ static const float winsLeft = 305.0f;
 static const float moneyLeft = 325.0f;
 static const float scoreLeft = 405.0f;
 static const float statsLeft = 475.0f;
-static const float readyLeft = 515.0f;
+static const float pingLeft = 525.0f;
+static const float readyLeft = 565.0f;
 static const float lineSpacer = 10.0f;
 
 ScoreDialog *ScoreDialog::instance_ = 0;
@@ -81,7 +82,7 @@ ScoreDialog *ScoreDialog::instance2()
 }
 
 ScoreDialog::ScoreDialog() :
-	GLWWindow("Score", 10.0f, 10.0f, 525.0f, 310.0f, eTransparent |eSmallTitle,
+	GLWWindow("Score", 10.0f, 10.0f, 575.0f, 310.0f, eTransparent |eSmallTitle,
 		"Shows the current score for all players."),
 	lastScoreValue_(0), lastMoneyValue_(0), lastNoPlayers_(0)
 {
@@ -214,7 +215,40 @@ void ScoreDialog::draw()
 	LANG_RESOURCE_VAR(SCORE_A, "SCORE_A", "A");
 	LANG_RESOURCE_VAR(SCORE_SCORE, "SCORE_SCORE", "Score");
 	LANG_RESOURCE_VAR(SCORE_RANK, "SCORE_RANK", "Rank");
+	LANG_RESOURCE_VAR(SCORE_PING, "SCORE_PING", "Ping");
 	LANG_RESOURCE_VAR(SCORE_L, "SCORE_L", "L");
+
+	LANG_RESOURCE_VAR(SCORE_NAME_TOOLTIP_TITLE, "NAME", "Name");
+	LANG_RESOURCE_VAR(SCORE_NAME_TOOLTIP, "NAME_TOOLTIP", "The name of the player");
+	LANG_RESOURCE_VAR(SCORE_KILLS_TOOLTIP_TITLE, "KILLS", "Kills");
+	LANG_RESOURCE_VAR_1(SCORE_KILLS_TOOLTIP, "KILL_TOOLTIP", 
+		"The number of players this player has killed.\n{0} score awarded per kill.",
+		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsGame().getScorePerKill()));
+	LANG_RESOURCE_VAR(SCORE_WINS_TOOLTIP_TITLE, "WINS", "Wins");
+	LANG_RESOURCE_VAR_1(SCORE_WINS_TOOLTIP, "WINS_TOOLTIP", 
+		"The number of rounds this player has won.\n{0} score awarded per round won.",
+		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsGame().getScoreWonForRound()));
+	LANG_RESOURCE_VAR(SCORE_ASSISTS_TOOLTIP_TITLE, "ASSISTS", "Assists");
+	LANG_RESOURCE_VAR_1(SCORE_ASSISTS_TOOLTIP, "ASSISTS_TOOLTIP", 
+		"The number of kills this player has assisted in.\n{0} score awarded per assist.",
+		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsGame().getScorePerAssist()));
+	LANG_RESOURCE_VAR(SCORE_MONEY_TOOLTIP_TITLE, "MONEY", "Money");
+	LANG_RESOURCE_VAR_1(SCORE_MONEY_TOOLTIP, "MONEY_TOOLTIP", 
+		"The amount of money this player has.\n%{0} score awarded per dollar.",
+		S3D::formatStringBuffer("%.1f", float(ScorchedClient::instance()->getOptionsGame().getScorePerMoney()) / 1000.0f));
+	LANG_RESOURCE_VAR(SCORE_SCORE_TOOLTIP_TITLE, "SCORE", "Score");
+	LANG_RESOURCE_VAR(SCORE_SCORE_TOOLTIP, "SCORE_TOOLTIP", 
+		"The current score for this player.\nCalculated from the number of kills, wins, money and bonus score awards.");
+	LANG_RESOURCE_VAR(SCORE_RANK_TOOLTIP_TITLE, "RANK", "Rank");
+	LANG_RESOURCE_VAR(SCORE_RANK_TOOLTIP, "RANK_TOOLTIP", 
+		"The current online ranking for this player.");
+	LANG_RESOURCE_VAR(SCORE_PING_TOOLTIP_TITLE, "PING", "Ping");
+	LANG_RESOURCE_VAR(SCORE_PING_TOOLTIP, "PING_TOOLTIP", 
+		"The current online ping this player.");
+	LANG_RESOURCE_VAR(SCORE_LIVES_TOOLTIP_TITLE, "LIVES", "Lives");
+	LANG_RESOURCE_VAR_1(SCORE_LIVES_TOOLTIP, "LIVES_TOOLTIP", 
+		"The current number of lives this player has left.\n{0} score awarded for each life remaining.",
+		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsGame().getScoreWonForLives()));
 
 	float y = lineSpacer + 10.0f;
 	GLWFont::instance()->getGameFont()->draw(
@@ -223,8 +257,8 @@ void ScoreDialog::draw()
 			x_ + nameLeft, y_ + h_ - y - lineSpacer - 26.0f, 0.0f,
 			SCORE_NAME);
 	GLWToolTip::instance()->addToolTip(ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("NAME", "Name"), 
-		LANG_RESOURCE("NAME_TOOLTIP", "The name of the player"),
+		SCORE_NAME_TOOLTIP_TITLE, 
+		SCORE_NAME_TOOLTIP,
 		x_ + nameLeft, y_ + h_ - y - lineSpacer - 26.0f, 100.0f, 16.0f);
 
 	GLWFont::instance()->getGameFont()->draw(
@@ -233,10 +267,8 @@ void ScoreDialog::draw()
 			x_ + killsLeft, y_ + h_ - y - lineSpacer - 26.0f, 0.0f,
 			SCORE_K);
 	GLWToolTip::instance()->addToolTip(ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("KILLS", "Kills"), 
-		LANG_RESOURCE_1("KILL_TOOLTIP", 
-		"The number of players this player has killed.\n{0} score awarded per kill.",
-		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsGame().getScorePerKill())),
+		SCORE_KILLS_TOOLTIP_TITLE, 
+		SCORE_KILLS_TOOLTIP,
 		x_ + killsLeft, y_ + h_ - y - lineSpacer - 26.0f, 20.0f, 16.0f);
 
 	GLWFont::instance()->getGameFont()->draw(
@@ -245,10 +277,8 @@ void ScoreDialog::draw()
 			x_ + winsLeft, y_ + h_ - y - lineSpacer - 26.0f, 0.0f,
 			SCORE_W);
 	GLWToolTip::instance()->addToolTip(ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("WINS", "Wins"), 
-		LANG_RESOURCE_1("WINS_TOOLTIP", 
-		"The number of rounds this player has won.\n{0} score awarded per round won.",
-		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsGame().getScoreWonForRound())),
+		SCORE_WINS_TOOLTIP_TITLE, 
+		SCORE_WINS_TOOLTIP,
 		x_ + winsLeft, y_ + h_ - y - lineSpacer - 26.0f, 20.0f, 16.0f);
 
 	GLWFont::instance()->getGameFont()->draw(
@@ -257,10 +287,8 @@ void ScoreDialog::draw()
 			x_ + assistsLeft, y_ + h_ - y - lineSpacer - 26.0f, 0.0f,
 			SCORE_A);
 	GLWToolTip::instance()->addToolTip(ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("ASSISTS", "Assists"), 
-		LANG_RESOURCE_1("ASSISTS_TOOLTIP", 
-		"The number of kills this player has assisted in.\n{0} score awarded per assist.",
-		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsGame().getScorePerAssist())),
+		SCORE_ASSISTS_TOOLTIP_TITLE, 
+		SCORE_ASSISTS_TOOLTIP,
 		x_ + assistsLeft, y_ + h_ - y - lineSpacer - 26.0f, 20.0f, 16.0f);
 
 	GLWFont::instance()->getGameFont()->draw(
@@ -269,9 +297,8 @@ void ScoreDialog::draw()
 			x_ + moneyLeft + 10, y_ + h_ - y - lineSpacer - 26.0f, 0.0f,
 			"$");
 	GLWToolTip::instance()->addToolTip(ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("MONEY", "Money"), 
-		LANG_RESOURCE_1("MONEY_TOOLTIP", "The amount of money this player has.\n%{0} score awarded per dollar.",
-		S3D::formatStringBuffer("%.1f", float(ScorchedClient::instance()->getOptionsGame().getScorePerMoney()) / 1000.0f)),
+		SCORE_MONEY_TOOLTIP_TITLE, 
+		SCORE_MONEY_TOOLTIP,
 		x_ + moneyLeft, y_ + h_ - y - lineSpacer - 26.0f, 20.0f, 16.0f);
 
 	GLWFont::instance()->getGameFont()->draw(
@@ -280,8 +307,8 @@ void ScoreDialog::draw()
 			x_ + scoreLeft, y_ + h_ - y - lineSpacer - 26.0f, 0.0f,
 			SCORE_SCORE);
 	GLWToolTip::instance()->addToolTip(ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("SCORE", "Score"),
-		LANG_RESOURCE("SCORE_TOOLTIP", "The current score for this player.\nCalculated from the number of kills, wins, money and bonus score awards."),
+		SCORE_SCORE_TOOLTIP_TITLE,
+		SCORE_SCORE_TOOLTIP,
 		x_ + scoreLeft, y_ + h_ - y - lineSpacer - 26.0f, 80.0f, 16.0f);
 
 	GLWFont::instance()->getGameFont()->draw(
@@ -290,9 +317,19 @@ void ScoreDialog::draw()
 			x_ + statsLeft, y_ + h_ - y - lineSpacer - 26.0f, 0.0f,
 			SCORE_RANK);
 	GLWToolTip::instance()->addToolTip(ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("RANK", "Rank"), 
-		LANG_RESOURCE("RANK_TOOLTIP", "The current online ranking for this player."),
+		SCORE_RANK_TOOLTIP_TITLE, 
+		SCORE_RANK_TOOLTIP,
 		x_ + statsLeft, y_ + h_ - y - lineSpacer - 26.0f, 40.0f, 16.0f);
+
+	GLWFont::instance()->getGameFont()->draw(
+			white,
+			12,
+			x_ + pingLeft, y_ + h_ - y - lineSpacer - 26.0f, 0.0f,
+			SCORE_PING);
+	GLWToolTip::instance()->addToolTip(ToolTip::ToolTipHelp, 
+		SCORE_PING_TOOLTIP_TITLE, 
+		SCORE_PING_TOOLTIP,
+		x_ + pingLeft, y_ + h_ - y - lineSpacer - 26.0f, 40.0f, 16.0f);
 
 	GLWFont::instance()->getGameFont()->draw(
 		white,
@@ -300,9 +337,8 @@ void ScoreDialog::draw()
 		x_ + livesLeft, y_ + h_ - y - lineSpacer - 26.0f, 0.0f,
 		SCORE_L);
 	GLWToolTip::instance()->addToolTip(ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("LIVES", "Lives"), 
-		LANG_RESOURCE_1("LIVES_TOOLTIP", "The current number of lives this player has left.\n{0} score awarded for each life remaining.",
-		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsGame().getScoreWonForLives())),
+		SCORE_LIVES_TOOLTIP_TITLE,
+		SCORE_LIVES_TOOLTIP,
 		x_ + livesLeft, y_ + h_ - y - lineSpacer - 26.0f, 20.0f, 16.0f);
 	y+= lineSpacer + lineSpacer;
 
@@ -560,5 +596,13 @@ void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
 			10,
 			textX + livesLeft, textY, 0.0f,
 			S3D::formatStringBuffer("%i", current->getState().getLives()));
+		if (current->getScore().getPing() >= 0)
+		{
+			GLWFont::instance()->getGameFont()->draw(
+				current->getColor(),
+				10,
+				textX + pingLeft, textY, 0.0f,
+				S3D::formatStringBuffer("%i", current->getScore().getPing()));
+		}
 	}
 }

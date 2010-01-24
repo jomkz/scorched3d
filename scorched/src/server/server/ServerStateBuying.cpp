@@ -21,6 +21,7 @@
 #include <server/ServerStateBuying.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerSimulator.h>
+#include <server/ServerDestinations.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
@@ -204,8 +205,13 @@ void ServerStateBuying::playerBuying(unsigned int playerId)
 	}
 #endif
 
+	fixed ping = 0;
+	ServerDestination *destination = 
+		ScorchedServer::instance()->getServerDestinations().getDestination(tank->getDestinationId());
+	if (destination) ping = destination->getPing().getAverage();
+
 	TankStartMoveSimAction *tankSimAction = 
-		new TankStartMoveSimAction(playerId, nextMoveId_, buyingTime, true);
+		new TankStartMoveSimAction(playerId, nextMoveId_, buyingTime, true, ping);
 	SimulatorI *callback = 0;
 	if (buyingTime > 0)
 	{

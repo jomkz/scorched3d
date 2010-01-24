@@ -22,6 +22,7 @@
 #include <server/ScorchedServer.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
+#include <tank/TankScore.h>
 #include <tank/TankContainer.h>
 #include <tankai/TankAI.h>
 #include <engine/ActionController.h>
@@ -40,9 +41,9 @@ TankStartMoveSimAction::TankStartMoveSimAction()
 
 TankStartMoveSimAction::TankStartMoveSimAction(
 	unsigned int playerId, unsigned int moveId,
-	fixed timeout, bool buying) :
+	fixed timeout, bool buying, fixed ping) :
 	playerId_(playerId), moveId_(moveId),
-	timeout_(timeout), buying_(buying)
+	timeout_(timeout), buying_(buying), ping_(ping)
 {
 }
 
@@ -54,6 +55,8 @@ bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 {
 	Tank *tank = context.getTankContainer().getTankById(playerId_);
 	if (!tank) return true;
+
+	tank->getScore().setPing((ping_ * 1000).asInt());
 
 	if (tank->getState().getState() != TankState::sNormal && !buying_) return true;
 	if (tank->getState().getState() != TankState::sDead && buying_) return true;
@@ -97,6 +100,7 @@ bool TankStartMoveSimAction::writeMessage(NetBuffer &buffer)
 	buffer.addToBuffer(moveId_);
 	buffer.addToBuffer(buying_);
 	buffer.addToBuffer(timeout_);
+	buffer.addToBuffer(ping_);
 	return true;
 }
 
@@ -106,5 +110,6 @@ bool TankStartMoveSimAction::readMessage(NetBufferReader &reader)
 	if (!reader.getFromBuffer(moveId_)) return false;
 	if (!reader.getFromBuffer(buying_)) return false;
 	if (!reader.getFromBuffer(timeout_)) return false;
+	if (!reader.getFromBuffer(ping_)) return false;
 	return true;
 }
