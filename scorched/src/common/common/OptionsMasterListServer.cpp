@@ -50,7 +50,7 @@ OptionsMasterListServer::~OptionsMasterListServer()
 bool OptionsMasterListServer::writeOptionsToFile()
 {
 	std::string filePath = S3D::getSettingsFile("masterlistservers.xml");
-	if (!OptionEntryHelper::writeToFile(options_, filePath)) return false;
+	if (!OptionEntryHelper::writeToFile(options_, filePath, true)) return false;
 	return true;
 }
 

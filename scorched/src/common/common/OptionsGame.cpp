@@ -405,19 +405,7 @@ bool OptionsGame::readFromBuffer(NetBufferReader &reader,
 	return true;
 }
 
-bool OptionsGame::writeOptionsToXML(XMLNode *node)
-{
-	if (!OptionEntryHelper::writeToXML(options_, node)) return false;
-	return true;
-}
-
-bool OptionsGame::readOptionsFromXML(XMLNode *node)
-{
-	if (!OptionEntryHelper::readFromXML(options_, node)) return false;
-	return true;
-}
-
-bool OptionsGame::writeOptionsToFile(const std::string &filePath)
+bool OptionsGame::writeOptionsToFile(const std::string &filePath, bool allOptions)
 {
 	std::list<OptionEntry *> saveOptions = 
 		playerTypeOptions_; // Note: The players are also saved
@@ -430,7 +418,7 @@ bool OptionsGame::writeOptionsToFile(const std::string &filePath)
 		saveOptions.push_back(entry);
 	} 
 
-	if (!OptionEntryHelper::writeToFile(saveOptions, filePath)) return false;
+	if (!OptionEntryHelper::writeToFile(saveOptions, filePath, allOptions)) return false;
 	return true;
 }
 

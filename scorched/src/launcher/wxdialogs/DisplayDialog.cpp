@@ -29,6 +29,7 @@
 #include <common/Keyboard.h>
 #include <common/KeyTranslateWx.h>
 #include <client/UniqueIdStore.h>
+#include <scorched/ScorchedParams.h>
 #include <wx/wx.h>
 #include <wx/image.h>
 #include <wx/notebook.h>
@@ -697,7 +698,7 @@ bool DisplayFrame::TransferDataFromWindow()
 	OptionsDisplay::instance()->getTankDetailEntry().setValue(tankDetail);
 
 	// Save display options to file
-	OptionsDisplay::instance()->writeOptionsToFile();
+	OptionsDisplay::instance()->writeOptionsToFile(ScorchedParams::instance()->getWriteFullOptions());
 
 	// Save keyboard keys to file
 	Keyboard::instance()->saveKeyFile();

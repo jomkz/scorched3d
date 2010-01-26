@@ -680,14 +680,6 @@
 				RelativePath="..\..\common\net\NetMessagePool.h"
 				>
 			</File>
-			<File
-				RelativePath="..\..\common\net\NetOptions.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\net\NetOptions.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="client"

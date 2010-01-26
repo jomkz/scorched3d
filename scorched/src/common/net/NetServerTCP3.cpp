@@ -20,7 +20,6 @@
 
 #include <net/NetServerTCP3.h>
 #include <net/NetMessagePool.h>
-#include <net/NetOptions.h>
 #include <common/Logger.h>
 #include <common/Clock.h>
 #include <limits.h>
@@ -31,9 +30,6 @@ NetServerTCP3::NetServerTCP3() :
 	serverSock_(0), serverSockSet_(0),
 	stopped_(false)
 {
-	NetOptions::instance()->readOptionsFromFile();
-	NetOptions::instance()->writeOptionsToFile();
-
 	serverSockSet_ = SDLNet_AllocSocketSet(1);
 }
 

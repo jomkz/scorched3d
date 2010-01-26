@@ -2,10 +2,8 @@
 	<accessory>
 		<name>Parachute</name>
 		<armslevel>7</armslevel>
-		<description>Deployed when the tank falls.  
-Prevents the tank from taking falling damage.
-Parachutes must be enabled before they are
-effective.</description>
+		<description>When activated, automatically prevents
+damage to the tank from falling.</description>
 		<icon>para.bmp</icon>
 		<activationsound>misc/para.wav</activationsound>
 		<bundlesize>8</bundlesize>
@@ -18,20 +16,19 @@ effective.</description>
 	<accessory>
 		<name>Battery</name>
 		<armslevel>7</armslevel>
-		<description>Used to re-charge tank life.
-Giving more health and longer shots.</description>
+		<description>Recharges tank health and power.</description>
 		<icon>battery.bmp</icon>
 		<activationsound>battery/battery.wav</activationsound>
 		<bundlesize>10</bundlesize>
 		<cost>5000</cost>
 		<accessoryaction type='Battery'></accessoryaction>
+		<freemarketlimits>0</freemarketlimits>
 	</accessory>
 	<accessory>
 		<name>Fuel</name>
 		<armslevel>7</armslevel>
-		<description>Allows the tank to move.
-When it is the players turn the tank may choose 
-to move rather than fire.  Maximum range is 50.</description>
+		<description>Allows the tank to move instead of shoot.  
+Maximum range is 50.</description>
 		<icon>fuel.bmp</icon>
 		<activationsound>battery/battery.wav</activationsound>
 		<bundlesize>40</bundlesize>
@@ -51,9 +48,9 @@ to move rather than fire.  Maximum range is 50.</description>
 	<accessory>
 		<name>Rocket Fuel</name>
 		<armslevel>7</armslevel>
-		<description>Allows the tank to move very fast.
-When it is the players turn the tank may choose 
-to move rather than fire.  Maximum range is 75.</description>
+		<description>Allows the tank to move twice
+as fast as normal Fuel.
+Maximum range is 75.</description>
 		<icon>fuel.bmp</icon>
 		<activationsound>battery/battery.wav</activationsound>
 		<bundlesize>30</bundlesize>
@@ -73,16 +70,15 @@ to move rather than fire.  Maximum range is 75.</description>
 	<accessory>
 		<name>Shield</name>
 		<armslevel>8</armslevel>
-		<description>A small defensive shield that protects 
-the tank from small amounts of damage. 
-Shields must be activated before they 
-work.</description>
+		<description>A defensive shield that protects 
+the tank by absorbing damage. 
+Shields must be activated to work.</description>
 		<icon>shield.bmp</icon>
 		<activationsound>shield/activate.wav</activationsound>
 		<bundlesize>3</bundlesize>
-		<cost>20000</cost>
+		<cost>25000</cost>
 		<accessoryaction type='ShieldRound'>
-			<radius>3.0</radius>
+			<radius>4</radius>
 			<halfshield>false</halfshield>
 			<color>
 				<r>1.0</r>
@@ -90,7 +86,7 @@ work.</description>
 				<b>1.0</b>
 			</color>
 			<collisionsound>shield/hit.wav</collisionsound>
-			<removepower>20</removepower>
+			<removepower>10</removepower>
 			<penetration>0.7</penetration>
 			<power>100</power>
 		</accessoryaction>
@@ -98,13 +94,13 @@ work.</description>
 	<accessory>
 		<name>Heavy Shield</name>
 		<armslevel>7</armslevel>
-		<description>A large defensive shield that protects
-the tank.  Shields must be activated before they 
-work.</description>
+		<description>A very strong defensive shield that 
+protects the tank by absorbing damage.  
+Shields must be activated to work.</description>
 		<icon>hshield.bmp</icon>
 		<activationsound>shield/activate.wav</activationsound>
 		<bundlesize>2</bundlesize>
-		<cost>25000</cost>
+		<cost>45000</cost>
 		<accessoryaction type='ShieldRound'>
 			<radius>5.0</radius>
 			<halfshield>false</halfshield>
@@ -114,9 +110,9 @@ work.</description>
 				<b>1.0</b>
 			</color>
 			<collisionsound>shield/hit.wav</collisionsound>
-			<removepower>15</removepower>
-			<penetration>0.8</penetration>
-			<power>100</power>
+			<removepower>8</removepower>
+			<penetration>0.7</penetration>
+			<power>200</power>
 		</accessoryaction>
 	</accessory>
 	<accessory>
@@ -128,9 +124,9 @@ be activated before they work.</description>
 		<icon>fshield.bmp</icon>
 		<activationsound>shield/activateforce.wav</activationsound>
 		<bundlesize>2</bundlesize>
-		<cost>30000</cost>
+		<cost>40000</cost>
 		<accessoryaction type='ShieldRoundReflective'>
-			<radius>5.0</radius>
+			<radius>4</radius>
 			<halfshield>false</halfshield>
 			<deflectfactor>1.0</deflectfactor>
 			<color>
@@ -139,19 +135,17 @@ be activated before they work.</description>
 				<b>1.0</b>
 			</color>
 			<collisionsound>shield/hit2.wav</collisionsound>
-			<removepower>20</removepower>
-			<penetration>1.0</penetration>
+			<removepower>10</removepower>
+			<penetration>0.7</penetration>
 			<power>100</power>
 		</accessoryaction>
 	</accessory>
 	<accessory>
 		<name>Mag Deflect</name>
 		<armslevel>8</armslevel>
-		<description>A small reflective shield that protects
-the tank from small amounts of damage. 
-Mag shields reflect any shots that hit
-them in a small area above the tank.
-Shields must be activated before they work.</description>
+		<description>An energy field that reduces 
+damage and deflects overhead missiles 
+before they can directly hit the tank.</description>
 		<icon>mag.bmp</icon>
 		<activationsound>shield/activmag.wav</activationsound>
 		<bundlesize>2</bundlesize>
@@ -167,26 +161,24 @@ Shields must be activated before they work.</description>
 			</color>
 			<collisionsound>shield/hit2.wav</collisionsound>
 			<removepower>4</removepower>
-			<penetration>0.7</penetration>
+			<penetration>1.0</penetration>
 			<power>100</power>
 		</accessoryaction>
 	</accessory>
 	<accessory>
 		<name>Heavy Mag</name>
 		<armslevel>6</armslevel>
-		<description>A large reflective shield that protects
-the tank from small amounts of damage.
-Reflects shots away in a wide area 
-above the tank.  Shields must be 
-activated before they work.</description>
+		<description>A strong energy field that reduces 
+damage and deflects overhead missiles 
+before they can directly hit the tank.</description>
 		<icon>smag.bmp</icon>
 		<activationsound>shield/activmag.wav</activationsound>
 		<bundlesize>2</bundlesize>
-		<cost>20000</cost>
+		<cost>17000</cost>
 		<accessoryaction type='ShieldRoundMag'>
 			<radius>6.0</radius>
 			<halfshield>true</halfshield>
-			<deflectpower>100</deflectpower>
+			<deflectpower>120</deflectpower>
 			<color>
 				<r>1.0</r>
 				<g>0.0</g>
@@ -201,9 +193,8 @@ activated before they work.</description>
 	<accessory>
 		<name>Auto Defense</name>
 		<armslevel>7</armslevel>
-		<description>Allows the tank to raise shields and 
-activate parachutes before the tanks 
-main move.</description>
+		<description>Allows the tank to activate shields and 
+parachutes before the round begins.</description>
 		<icon>autod.bmp</icon>
 		<bundlesize>1</bundlesize>
 		<cost>3000</cost>
@@ -242,7 +233,7 @@ near the flames will lose life.</description>
 		<name>Hot Napalm</name>
 		<armslevel>3</armslevel>
 		<description>A projectile weapon that explodes 
-into three very hot streams of flame. 
+into three very hot streams of flame 
 Any tanks near the flames will lose life.</description>
 		<icon>hnapalm.bmp</icon>
 		<bundlesize>3</bundlesize>
@@ -268,13 +259,13 @@ Any tanks near the flames will lose life.</description>
 	<accessory>
 		<name>Baby Roller</name>
 		<armslevel>8</armslevel>
-		<description>A projectile weapon that explodes 
-into a number of rolling bombs. These 
-bombs roll downhill exploding on 
-contact with any tank.</description>
+		<description>A projectile weapon that releases 
+a number of rolling bombs that 
+deliver small explosions on contact
+with any tank.</description>
 		<icon>broller.bmp</icon>
 		<bundlesize>10</bundlesize>
-		<cost>5000</cost>
+		<cost>7500</cost>
 		<activationsound>shoot/small.wav</activationsound>
 		<accessoryaction type='WeaponProjectile'>
 			<collisionaction type='WeaponRoller'>
@@ -295,17 +286,18 @@ contact with any tank.</description>
 	<accessory>
 		<name>Roller</name>
 		<armslevel>8</armslevel>
-		<description>A projectile weapon that explodes 
-into a number of rolling bombs.  These
-bombs roll downhill exploding on contact 
-with any tank.</description>
+		<description>A projectile weapon that releases 
+a number of rolling bombs that 
+deliver mid-size explosions on
+contact with any tank.</description>
 		<icon>roller.bmp</icon>
 		<bundlesize>5</bundlesize>
-		<cost>6000</cost>
+		<cost>10000</cost>
 		<activationsound>shoot/medium.wav</activationsound>
 		<accessoryaction type='WeaponProjectile'>
+		<projectilescale>1.2</projectilescale>
 			<collisionaction type='WeaponRoller'>
-				<numberrollers>8</numberrollers>
+				<numberrollers>6</numberrollers>
 				<time>RANGE(7,9)</time>
 				<rollermodel type='MilkShape'>roller/roller.txt</rollermodel>
 				<collisionaction type='WeaponExplosion'>
@@ -321,15 +313,16 @@ with any tank.</description>
 	<accessory>
 		<name>Heavy Roller</name>
 		<armslevel>8</armslevel>
-		<description>A projectile weapon that explodes 
-into a number of rolling bombs.  These
-bombs roll downhill exploding on contact 
+		<description>A projectile weapon that releases 
+a number of rolling bombs that 
+deliver large explosions on contact 
 with any tank.</description>
 		<icon>hroller.bmp</icon>
 		<bundlesize>2</bundlesize>
-		<cost>7500</cost>
+		<cost>8000</cost>
 		<activationsound>shoot/large.wav</activationsound>
 		<accessoryaction type='WeaponProjectile'>
+		<projectilescale>1.5</projectilescale>
 			<collisionaction type='WeaponRoller'>
 				<numberrollers>6</numberrollers>
 				<time>RANGE(7,9)</time>
@@ -347,20 +340,21 @@ with any tank.</description>
 	<accessory>
 		<name>Baby Missile</name>
 		<armslevel>10</armslevel>
-		<description>A small explosive projectile weapon</description>
+		<description>A small explosive projectile weapon.</description>
 		<icon>bmissile.bmp</icon>
 		<startingnumber>-1</startingnumber>
 		<activationsound>shoot/small.wav</activationsound>
 		<modelscale>0.5</modelscale>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilescale>0.5</projectilescale>
+			<shieldhurtfactor>0.4</shieldhurtfactor>
 			<spinspeed>1.0</spinspeed>
 			<!--<thrusttime>4.0</thrusttime>
 			<thrustamount>1.0</thrustamount>-->
 			<collisionaction type='WeaponExplosion'>
 				<hurtamount>1.0</hurtamount>
 				<deform>down</deform>
-				<size>4</size>
+				<size>3.5</size>
 				<explosiontexture>exp00</explosiontexture>
 				<explosionsound>explosions/small.wav</explosionsound>
 			</collisionaction>
@@ -369,14 +363,15 @@ with any tank.</description>
 	<accessory>
 		<name>Missile</name>
 		<armslevel>9</armslevel>
-		<description>A mid-size explosive projectile weapon</description>
+		<description>A mid-size explosive projectile weapon.</description>
 		<icon>missile.bmp</icon>
 		<bundlesize>5</bundlesize>
-		<cost>1875</cost>
+		<cost>2000</cost>
 		<activationsound>shoot/medium.wav</activationsound>
 		<modelscale>0.75</modelscale>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilescale>0.75</projectilescale>
+			<shieldhurtfactor>0.6</shieldhurtfactor>
 			<collisionaction type='WeaponExplosion'>
 				<hurtamount>1.0</hurtamount>
 				<deform>down</deform>
@@ -389,10 +384,10 @@ with any tank.</description>
 	<accessory>
 		<name>Baby Nuke</name>
 		<armslevel>6</armslevel>
-		<description>A large explosive projectile weapon</description>
+		<description>A large explosive projectile weapon.</description>
 		<icon>bnuke.bmp</icon>
 		<bundlesize>3</bundlesize>
-		<cost>6000</cost>
+		<cost>8000</cost>
 		<activationsound>shoot/large.wav</activationsound>
 		<model type='MilkShape'>littleboy/littleboy.txt</model>
 		<accessoryaction type='WeaponProjectile'>
@@ -410,13 +405,14 @@ with any tank.</description>
 	<accessory>
 		<name>Nuke</name>
 		<armslevel>4</armslevel>
-		<description>A very large explosive projectile weapon</description>
+		<description>A very large explosive projectile weapon.</description>
 		<icon>nuke.bmp</icon>
 		<bundlesize>2</bundlesize>
-		<cost>10000</cost>
+		<cost>12000</cost>
 		<activationsound>shoot/xlarge.wav</activationsound>
 		<model type='MilkShape'>fatman/fatman.txt</model>
 		<accessoryaction type='WeaponProjectile'>
+			<shieldhurtfactor>1.2</shieldhurtfactor>
 			<projectilemodel type='MilkShape'>fatman/fatman.txt</projectilemodel>
 			<collisionaction type='WeaponExplosion'>
 				<hurtamount>1.0</hurtamount>
@@ -436,15 +432,16 @@ with any tank.</description>
 		<armslevel>10</armslevel>
 		<description>A projectile weapon that explodes making 
 a small mound of earth. The explosion 
-does not  harm tanks but can be used 
+does not harm tanks but can be used 
 to cover them.</description>
 		<icon>dclod.bmp</icon>
 		<bundlesize>10</bundlesize>
-		<cost>5000</cost>
+		<cost>3000</cost>
 		<activationsound>shoot/small.wav</activationsound>
 		<model type='MilkShape'>dirt/dirt.txt</model>
 		<modelscale>0.6</modelscale>
 		<accessoryaction type='WeaponProjectile'>
+			<shieldhurtfactor>0.5</shieldhurtfactor>
 			<projectilemodel type='MilkShape'>dirt/dirt.txt</projectilemodel>
 			<projectilescale>0.6</projectilescale>
 			<collisionaction type='WeaponExplosion'>
@@ -467,13 +464,14 @@ does not harm tanks but can be used to
 cover them.</description>
 		<icon>dball.bmp</icon>
 		<bundlesize>5</bundlesize>
-		<cost>5000</cost>
+		<cost>5750</cost>
 		<activationsound>shoot/small.wav</activationsound>
 		<model type='MilkShape'>dirt/dirt.txt</model>
 		<modelscale>0.8</modelscale>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilemodel type='MilkShape'>dirt/dirt.txt</projectilemodel>
 			<projectilescale>0.8</projectilescale>
+			<shieldhurtfactor>0.8</shieldhurtfactor>
 			<collisionaction type='WeaponExplosion'>
 				<deform>up</deform>
 				<hurtamount>0.0</hurtamount>
@@ -515,7 +513,8 @@ cover them.</description>
 		<description>A projectile weapon that throws many
 small dirt clods in all directions.</description>
 		<icon>dcharge.bmp</icon>
-		<bundlesize>3</bundlesize><cost>5000</cost>
+		<bundlesize>3</bundlesize>
+		<cost>6250</cost>
 		<activationsound>shoot/flare.wav</activationsound>
 		<model type='MilkShape'>dirt/dirt.txt</model>
 		<accessoryaction type='WeaponProjectile'>
@@ -599,7 +598,7 @@ small dirt clods in all directions.</description>
 															<nocreateflame/>
 															<nocreatesmoke/>
 															<projectilescale>0.5</projectilescale>
-															<shieldhurtfactor>0.5</shieldhurtfactor>
+															<shieldhurtfactor>0.3</shieldhurtfactor>
 															<projectilemodel type='ase'>
 																<mesh>roller.ase</mesh><skin>white.bmp</skin>
 																 </projectilemodel>
@@ -634,12 +633,13 @@ a small amount of earth. The explosion
 does not harm tanks but can be used to 
 remove earth from under them.</description>
 		<icon>rbomb.bmp</icon>
-		<bundlesize>5</bundlesize>
-		<cost>5000</cost>
+		<bundlesize>8</bundlesize>
+		<cost>1750</cost>
 		<activationsound>shoot/small.wav</activationsound>
 		<model type='MilkShape'>riot/riot.txt</model>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilemodel type='MilkShape'>riot/riot.txt</projectilemodel>
+<shieldhurtfactor>0.5</shieldhurtfactor>
 			<collisionaction type='WeaponExplosion'>
 				<deform>down</deform>
 				<hurtamount>0.0</hurtamount>
@@ -658,8 +658,8 @@ a large amount of earth. The explosion
 does not harm tanks but can be used to 
 remove earth from under them.</description>
 		<icon>hrbomb.bmp</icon>
-		<bundlesize>2</bundlesize>
-		<cost>4750</cost>
+		<bundlesize>3</bundlesize>
+		<cost>4250</cost>
 		<activationsound>shoot/small.wav</activationsound>
 		<model type='MilkShape'>riot/riot.txt</model>
 		<accessoryaction type='WeaponProjectile'>
@@ -668,7 +668,7 @@ remove earth from under them.</description>
 				<deform>down</deform>
 				<hurtamount>0.0</hurtamount>
 				<nocreatedebris></nocreatedebris>
-				<size>12</size>
+				<size>13</size>
 				<explosiontexture>exp03</explosiontexture>
 				<explosionsound>explosions/crunch.wav</explosionsound>
 			</collisionaction>
@@ -677,13 +677,13 @@ remove earth from under them.</description>
 	<accessory>
 		<name>Riot Charge</name>
 		<armslevel>8</armslevel>
-		<description>Riot Charges destroy a wedge-shaped section of
-dirt from around your turret.  This weapon's
-primary use is to unbury yourself when you get
-covered with dirt.</description>
+		<description>Destroys a cone-shaped section of
+dirt directly in front of the tank in
+the direction you aim.  Safely unburys 
+your tank when covered by dirt.</description>
 		<icon>rcharge.bmp</icon>
 		<bundlesize>10</bundlesize>
-		<cost>2000</cost>
+		<cost>1800</cost>
 		<model type='MilkShape'>riot/riot.txt</model>
 		<accessoryaction type='WeaponTranslate'>
 			<translatedist>2.0</translatedist>
@@ -726,12 +726,13 @@ covered with dirt.</description>
 	<accessory>
 		<name>Riot Blast</name>
 		<armslevel>7</armslevel>
-		<description>Riot Blasts are a larger version of the Riot
-Charge.  The destroy a wider angle of dirt, and
-the thickness of the wedge destroyed is also greater.</description>
+		<description>Destroys a large cone-shaped section of
+dirt directly in front of the tank in
+the direction you aim.  Safely unburys 
+your tank when covered by dirt.</description>
 		<icon>rblast.bmp</icon>
 		<bundlesize>5</bundlesize>
-		<cost>5000</cost>
+		<cost>4200</cost>
 		<model type='MilkShape'>riot/riot.txt</model>
 		<accessoryaction type='WeaponTranslate'>
 			<translatedist>2.0</translatedist>
@@ -776,8 +777,8 @@ the thickness of the wedge destroyed is also greater.</description>
 		<armslevel>7</armslevel>
 		<description>An explosive projectile weapon.  When the 
 warhead explodes it creates other
-small warheads that continue in the 
-same direction as the original.</description>
+smaller warheads that launch themselves
+in the same direction.</description>
 		<icon>lfrog.bmp</icon>
 		<bundlesize>2</bundlesize>
 		<cost>10000</cost>
@@ -828,11 +829,11 @@ same direction as the original.</description>
 		<name>Baby Digger</name>
 		<armslevel>8</armslevel>
 		<description>A projectile weapon that explodes 
-creating a few underground 
+creating three underground 
 tank-seeking riot bombs.</description>
 		<icon>bdigger.bmp</icon>
 		<bundlesize>10</bundlesize>
-		<cost>3000</cost>
+		<cost>6000</cost>
 		<activationsound>shoot/flare.wav</activationsound>
 		<model type='MilkShape'>digger/digger.txt</model>
 		<modelscale>0.5</modelscale>
@@ -847,6 +848,7 @@ tank-seeking riot bombs.</description>
 				<aimedweapon type='WeaponProjectile'>
 					<under></under>
 					<projectilescale>0.5</projectilescale>
+					<shieldhurtfactor>0.6</shieldhurtfactor>
 					<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
@@ -864,11 +866,11 @@ tank-seeking riot bombs.</description>
 		<name>Digger</name>
 		<armslevel>7</armslevel>
 		<description>A projectile weapon that explodes 
-creating several underground 
+creating five underground 
 tank-seeking riot bombs.</description>
 		<icon>digger.bmp</icon>
 		<bundlesize>5</bundlesize>
-		<cost>2500</cost>
+		<cost>7500</cost>
 		<activationsound>shoot/flare.wav</activationsound>
 		<model type='MilkShape'>digger/digger.txt</model>
 		<accessoryaction type='WeaponProjectile'>
@@ -879,6 +881,7 @@ tank-seeking riot bombs.</description>
 				<percentagemiss>20</percentagemiss>
 				<maxaimdistance>75</maxaimdistance>
 				<aimedweapon type='WeaponProjectile'>
+				<shieldhurtfactor>0.6</shieldhurtfactor>
 					<under></under>
 					<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
 					<collisionaction type='WeaponExplosion'>
@@ -915,6 +918,7 @@ tank-seeking riot bombs.</description>
 				<maxaimdistance>75</maxaimdistance>
 				<aimedweapon type='WeaponProjectile'>
 					<projectilescale>2</projectilescale>
+					<shieldhurtfactor>0.6</shieldhurtfactor>
 					<under></under>
 					<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
 					<collisionaction type='WeaponExplosion'>
@@ -932,12 +936,12 @@ tank-seeking riot bombs.</description>
 	<accessory>
 		<name>Baby Sandhog</name>
 		<armslevel>8</armslevel>
-		<description>A projectile weapon that explodes creating
-some small burrowing missiles. These 
-missiles target nearby tanks.</description>
+		<description>A projectile weapon that explodes creating 
+two small missiles that seek nearby
+tanks from underground.</description>
 		<icon>bshog.bmp</icon>
 		<bundlesize>7</bundlesize>
-		<cost>14000</cost>
+		<cost>24000</cost>
 		<activationsound>shoot/flare.wav</activationsound>
 		<model type='MilkShape'>digger/digger.txt</model>
 		<modelscale>0.5</modelscale>
@@ -951,6 +955,7 @@ missiles target nearby tanks.</description>
 				<maxaimdistance>40</maxaimdistance>
 				<aimedweapon type='WeaponProjectile'>
 					<projectilescale>0.5</projectilescale>
+					<shieldhurtfactor>0.6</shieldhurtfactor>
 					<under></under>
 					<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
 					<collisionaction type='WeaponExplosion'>
@@ -967,22 +972,23 @@ missiles target nearby tanks.</description>
 	<accessory>
 		<name>Sandhog</name>
 		<armslevel>5</armslevel>
-		<description>A projectile weapon that explodes
-creating some burrowing missiles. These 
-missiles target nearby tanks.</description>
+		<description>A projectile weapon that explodes creating 
+several small missiles that seek nearby
+tanks from underground.</description>
 		<icon>shog.bmp</icon>
 		<bundlesize>5</bundlesize>
-		<cost>20000</cost>
+		<cost>31000</cost>
 		<activationsound>shoot/flare.wav</activationsound>
 		<model type='MilkShape'>digger/digger.txt</model>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
-				<nowarheads>5</nowarheads>
-				<inaccuracy>20</inaccuracy>
+				<nowarheads>6</nowarheads>
+				<inaccuracy>30</inaccuracy>
 				<percentagemiss>20</percentagemiss>
 				<maxaimdistance>50</maxaimdistance>
 				<aimedweapon type='WeaponProjectile'>
+				<shieldhurtfactor>0.6</shieldhurtfactor>
 					<under></under>
 					<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
 					<collisionaction type='WeaponExplosion'>
@@ -999,12 +1005,12 @@ missiles target nearby tanks.</description>
 	<accessory>
 		<name>Heavy Sandhog</name>
 		<armslevel>3</armslevel>
-		<description>A projectile weapon that explodes
-creating many burrowing missiles. These 
-missiles target nearby tanks.</description>
+		<description>A projectile weapon that explodes creating 
+many small missiles that seek nearby
+tanks from underground.</description>
 		<icon>hshog.bmp</icon>
 		<bundlesize>2</bundlesize>
-		<cost>25000</cost>
+		<cost>37000</cost>
 		<activationsound>shoot/flare.wav</activationsound>
 		<model type='MilkShape'>digger/digger.txt</model>
 		<modelscale>2</modelscale>
@@ -1012,12 +1018,13 @@ missiles target nearby tanks.</description>
 			<projectilescale>2</projectilescale>
 			<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
-				<nowarheads>16</nowarheads>
-				<inaccuracy>20</inaccuracy>
-				<percentagemiss>10</percentagemiss>
+				<nowarheads>15</nowarheads>
+				<inaccuracy>30</inaccuracy>
+				<percentagemiss>20</percentagemiss>
 				<maxaimdistance>120</maxaimdistance>
 				<aimedweapon type='WeaponProjectile'>
 					<projectilescale>2</projectilescale>
+					<shieldhurtfactor>0.6</shieldhurtfactor>
 					<under></under>
 					<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
 					<collisionaction type='WeaponExplosion'>
@@ -1036,12 +1043,11 @@ missiles target nearby tanks.</description>
 		<armslevel>6</armslevel>
 		<description>A projectile weapon that on 
 reaching its highest point releases 
-several small warheads. These warheads 
-fan out in a straight line from the 
-direction of the firer.</description>
+several small warheads that fan out
+in a straight path.</description>
 		<icon>mirv.bmp</icon>
 		<bundlesize>3</bundlesize>
-		<cost>10000</cost>
+		<cost>16000</cost>
 		<activationsound>shoot/large.wav</activationsound>
 		<model type='ase'>
 			<mesh>clusterbomb.ase</mesh>
@@ -1055,7 +1061,7 @@ direction of the firer.</description>
 			</projectilemodel>
 			<collisionaction type='WeaponMirv'>
 				<nowarheads>5</nowarheads>
-				<hspreaddist>0.0</hspreaddist>
+				<hspreaddist>0.1</hspreaddist>
 				<vspreaddist>5.0</vspreaddist>
 				<aimedweapon type='WeaponProjectile'>
 					<projectilescale>0.2</projectilescale>
@@ -1076,11 +1082,11 @@ direction of the firer.</description>
 		<armslevel>6</armslevel>
 		<description>A projectile weapon that on reaching
 its highest point releases several 
-small warheads. These warheads fan out 
-in a random direction.</description>
+small warheads that fan out in a 
+random direction.</description>
 		<icon>mirv.bmp</icon>
 		<bundlesize>4</bundlesize>
-		<cost>10000</cost>
+		<cost>16000</cost>
 		<activationsound>shoot/large.wav</activationsound>
 		<model type='ase'>
 			<mesh>clusterbomb.ase</mesh>
@@ -1115,11 +1121,11 @@ in a random direction.</description>
 		<armslevel>2</armslevel>
 		<description>A projectile weapon that on
 reaching its highest point releases 
-many large warheads. These warheads fan 
-out in a random direction.</description>
+many large warheads that fan out
+in a random direction.</description>
 		<icon>dhead.bmp</icon>
 		<bundlesize>1</bundlesize>
-		<cost>20000</cost>
+		<cost>48000</cost>
 		<activationsound>shoot/launch.wav</activationsound>
 		<model type='MilkShape'>icbm/icbm.txt</model>
 		<modelscale>5</modelscale>
@@ -1152,11 +1158,11 @@ out in a random direction.</description>
 		<armslevel>3</armslevel>
 		<description>A projectile weapon that on 
 exploding releases many small 
-missiles that automatically 
-target nearby tanks.</description>
+bombs that are lauched toward
+any nearby tanks.</description>
 		<icon>fbomb.bmp</icon>
 		<bundlesize>2</bundlesize>
-		<cost>15000</cost>
+		<cost>39000</cost>
 		<activationsound>shoot/large.wav</activationsound>
 		<model type='MilkShape'>icbm/icbm.txt</model>
 		<accessoryaction type='WeaponProjectile'>
@@ -1177,9 +1183,9 @@ target nearby tanks.</description>
 					<maxaimdistance>RANGE(40,55)</maxaimdistance>
 					<inaccuracy>12</inaccuracy>
 						<aimedweapon type='WeaponDelay'>
-							<delay>RANGE(0.4,8)</delay>
+						<delay>RANGE(0.4,8)</delay>
 							<delayedweapon type='WeaponVelocity'>
-							<velocitychange>RANGE(0.8,1.05)</velocitychange>
+							<velocitychange>RANGE(0.8,1.1)</velocitychange>
 							<aimedweapon type='WeaponProjectile'>
 							<shieldhurtfactor>0.85</shieldhurtfactor>
 							<projectilemodel type='MilkShape'>bomb/bomb.txt</projectilemodel>
@@ -1247,19 +1253,19 @@ target nearby tanks.</description>
 	<accessory>
 		<name>Tracer</name>
 		<armslevel>10</armslevel>
-		<description>A projectile weapon that 
-causes no damage. Can be used to 
-determine range without wasting 
-other weapons.  Leaves a marker at the 
-final position.</description>
+		<description>A projectile that leaves a marker at the 
+final position.  Has no explosion,
+can be used to determine range 
+without wasting weapons.</description>
 		<icon>tracer.bmp</icon>
 		<bundlesize>20</bundlesize>
-		<cost>10</cost>
+		<cost>100</cost>
 		<activationsound>shoot/flare.wav</activationsound>
 		<model type='MilkShape'>flare.txt</model>
 		<accessoryaction type='WeaponProjectile'>
 			<nocreateflame></nocreateflame>
 			<projectilemodel type='MilkShape'>flare.txt</projectilemodel>
+			<shieldhurtfactor>0.2</shieldhurtfactor>
 			<showendpoint></showendpoint>
 			<collisionaction type='WeaponNull'></collisionaction>
 		</accessoryaction>
@@ -1267,11 +1273,10 @@ final position.</description>
 	<accessory>
 		<name>Smoke Tracer</name>
 		<armslevel>9</armslevel>
-		<description>A projectile weapon that
-causes no damage.  Can be used to 
-determine range without wasting 
-other weapons.  Leaves a colored 
-trace of the shot path.</description>
+		<description>A projectile that marks its flight path
+and leaves a marker at the final position.
+Has no explosion, can be used to determine
+range without wasting weapons.  </description>
 		<icon>stracer.bmp</icon>
 		<bundlesize>10</bundlesize>
 		<cost>500</cost>
@@ -1279,6 +1284,7 @@ trace of the shot path.</description>
 		<model type='MilkShape'>flare.txt</model>
 		<accessoryaction type='WeaponProjectile'>
 			<nocreateflame></nocreateflame>
+			<shieldhurtfactor>0.3</shieldhurtfactor>
 			<projectilemodel type='MilkShape'>flare.txt</projectilemodel>
 			<showendpoint></showendpoint>
 			<showshotpath></showshotpath>
@@ -1456,10 +1462,10 @@ and shields damaging the tank directly.</description>
 		<description>A teleport moves you to a random location on the map.</description>
 		<icon>teleport.bmp</icon>
 		<activationsound>none</activationsound>
-		<bundlesize>1</bundlesize>
+		<bundlesize>2</bundlesize>
 		<model type="MilkShape">teleport/teleport.txt</model>
 		<nomuzzleflash/>
-		<cost>15000</cost>
+		<cost>18000</cost>
 		<accessoryaction type="WeaponCenterPosition">
 			<height>0</height>
 			<nextaction type="WeaponScatterPosition">

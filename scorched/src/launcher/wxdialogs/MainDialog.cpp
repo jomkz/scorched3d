@@ -507,7 +507,7 @@ void MainFrame::onTimer(wxTimerEvent &event)
 			if (answer == wxYES)
 			{
 				OptionsDisplay::instance()->loadSafeValues();
-				OptionsDisplay::instance()->writeOptionsToFile();
+				OptionsDisplay::instance()->writeOptionsToFile(ScorchedParams::instance()->getWriteFullOptions());
 			}
 		}
 		else

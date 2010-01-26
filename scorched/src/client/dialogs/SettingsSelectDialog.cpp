@@ -125,7 +125,7 @@ void SettingsSelectDialog::buttonDown(unsigned int id)
 		options_.getNoMinPlayersEntry().setValue(options_.getNoMaxPlayers());
 
 		std::string singlecustom = S3D::getSettingsFile("singlecustom.xml");
-		options_.writeOptionsToFile(singlecustom);
+		options_.writeOptionsToFile(singlecustom, ClientParams::instance()->getWriteFullOptions());
 
 		ClientParams::instance()->reset();
 		ClientParams::instance()->setStartCustom(true);

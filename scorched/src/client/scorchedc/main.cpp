@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
 	}
 
 	// Write the new options back the the file
-	OptionsDisplay::instance()->writeOptionsToFile();
+	OptionsDisplay::instance()->writeOptionsToFile(ClientParams::instance()->getWriteFullOptions());
 
 	// Init SDL
 	unsigned int initFlags = SDL_INIT_VIDEO;
@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
 
 	// Write display options back to the file
 	// in case they have been changed by this client (in game by the console)
-	OptionsDisplay::instance()->writeOptionsToFile();
+	OptionsDisplay::instance()->writeOptionsToFile(ClientParams::instance()->getWriteFullOptions());
 
 	SDL_Quit();
 	return 0; // exit(0)

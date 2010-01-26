@@ -139,7 +139,7 @@ bool OptionEntryHelper::readFromBuffer(std::list<OptionEntry *> &options,
 }
 
 bool OptionEntryHelper::writeToXML(std::list<OptionEntry *> &options,
-	XMLNode *node)
+	XMLNode *node, bool allOptions)
 {
 	std::list<OptionEntry *>::iterator itor;
 	for (itor = options.begin();
@@ -148,8 +148,10 @@ bool OptionEntryHelper::writeToXML(std::list<OptionEntry *> &options,
 	{
 		OptionEntry *entry = (*itor);
 
-		if (!(entry->getData() & OptionEntry::DataDepricated))
+		if (!(entry->getData() & OptionEntry::DataDepricated) &&
+			(!entry->isDefaultValue() || allOptions))
 		{
+
 			// Add the comments for this node
 			node->addChild(new XMLNode("", 
 				entry->getDescription(), XMLNode::XMLCommentType));
@@ -172,12 +174,13 @@ bool OptionEntryHelper::writeToXML(std::list<OptionEntry *> &options,
 }
 
 bool OptionEntryHelper::writeToFile(std::list<OptionEntry *> &options,
-									const std::string &filePath)
+									const std::string &filePath, 
+									bool allOptions)
 {
 	XMLNode optionsNode("options");
 	optionsNode.addParameter(
 		new XMLNode("source", "Scorched3D", XMLNode::XMLParameterType));
-	writeToXML(options, &optionsNode);
+	writeToXML(options, &optionsNode, allOptions);
 
 	if (!optionsNode.writeToFile(filePath.c_str())) return false;
 

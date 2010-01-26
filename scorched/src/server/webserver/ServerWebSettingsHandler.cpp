@@ -150,7 +150,8 @@ bool ServerWebSettingsHandler::SettingsPlayersHandler::processRequest(
 	if (action && 0 == strcmp(action, "Save"))
 	{
 		ScorchedServer::instance()->getOptionsGame().getChangedOptions().
-			writeOptionsToFile((char *) ServerParams::instance()->getServerFile());
+			writeOptionsToFile((char *) ServerParams::instance()->getServerFile(), 
+				ServerParams::instance()->getWriteFullOptions());
 	}
 
 	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "settingsplayers.html", request.getFields(), text);
@@ -239,7 +240,8 @@ bool ServerWebSettingsHandler::SettingsLandscapeHandler::processRequest(
 	if (action && 0 == strcmp(action, "Save"))
 	{
 		ScorchedServer::instance()->getOptionsGame().getChangedOptions().
-			writeOptionsToFile((char *) ServerParams::instance()->getServerFile());
+			writeOptionsToFile((char *) ServerParams::instance()->getServerFile(),
+				ServerParams::instance()->getWriteFullOptions());
 	}
 
 	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "settingslandscape.html", request.getFields(), text);
@@ -303,7 +305,8 @@ bool ServerWebSettingsHandler::SettingsAllHandler::processRequest(
 	if (action && 0 == strcmp(action, "Save"))
 	{
 		ScorchedServer::instance()->getOptionsGame().getChangedOptions().
-			writeOptionsToFile((char *) ServerParams::instance()->getServerFile());
+			writeOptionsToFile((char *) ServerParams::instance()->getServerFile(),
+				ServerParams::instance()->getWriteFullOptions());
 	}
 
 	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "settingsall.html", request.getFields(), text);
@@ -336,7 +339,8 @@ bool ServerWebSettingsHandler::SettingsMainHandler::processRequest(
 	if (action && 0 == strcmp(action, "Save"))
 	{
 		ScorchedServer::instance()->getOptionsGame().getChangedOptions().
-			writeOptionsToFile((char *) ServerParams::instance()->getServerFile());
+			writeOptionsToFile((char *) ServerParams::instance()->getServerFile(),
+				ServerParams::instance()->getWriteFullOptions());
 	}
 
 	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "settingsmain.html", request.getFields(), text);
@@ -436,7 +440,8 @@ bool ServerWebSettingsHandler::SettingsModHandler::processRequest(
 	if (action && 0 == strcmp(action, "Save"))
 	{
 		ScorchedServer::instance()->getOptionsGame().getChangedOptions().
-			writeOptionsToFile((char *) ServerParams::instance()->getServerFile());
+			writeOptionsToFile((char *) ServerParams::instance()->getServerFile(),
+				ServerParams::instance()->getWriteFullOptions());
 	}
 
 	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "settingsmod.html", request.getFields(), text);

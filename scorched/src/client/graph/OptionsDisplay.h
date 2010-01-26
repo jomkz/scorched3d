@@ -383,7 +383,7 @@ public:
 	void loadDefaultValues();
 	void loadMediumValues();
 	void loadFastestValues();
-	bool writeOptionsToFile();
+	bool writeOptionsToFile(bool allOptions);
 	bool readOptionsFromFile();
 
 	std::list<OptionEntry *> &getOptions() { return options_; }

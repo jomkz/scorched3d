@@ -93,12 +93,12 @@ public:
 							   bool useprotected);
 
 	static bool writeToXML(std::list<OptionEntry *> &options,
-								XMLNode *node);
+								XMLNode *node, bool allOptions);
 	static bool readFromXML(std::list<OptionEntry *> &options,
 								XMLNode *node);
 
 	static bool writeToFile(std::list<OptionEntry *> &options,
-		const std::string &fileName);
+		const std::string &fileName, bool allOptions);
 	static bool readFromFile(std::list<OptionEntry *> &options,
 		const std::string &fileName);
 

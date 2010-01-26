@@ -339,7 +339,7 @@ OptionsDisplay::~OptionsDisplay()
 {	
 }
 
-bool OptionsDisplay::writeOptionsToFile()
+bool OptionsDisplay::writeOptionsToFile(bool allOptions)
 {
 	std::string path = S3D::getSettingsFile("display.xml");
 
@@ -356,7 +356,7 @@ bool OptionsDisplay::writeOptionsToFile()
 	}
 	else fclose(checkfile);
 
-	if (!OptionEntryHelper::writeToFile(options_, path)) return false;
+	if (!OptionEntryHelper::writeToFile(options_, path, allOptions)) return false;
 	return true;
 }
 

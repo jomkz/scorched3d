@@ -410,6 +410,20 @@
 		<group>3</group>
 		<key>KP4</key>
 	</keyentry>
+  <keyentry>
+    <name>CAMERA_ROTATE_LEFT_SLOW</name>
+    <title>Camera rotate left (slowly)</title>
+    <description>Rotates the camara left</description>
+    <group>3</group>
+    <key state='LSHIFT'>KP4</key>
+  </keyentry>
+  <keyentry>
+    <name>CAMERA_ROTATE_LEFT_VSLOW</name>
+    <title>Camera rotate left (very slowly)</title>
+    <description>Rotates the camara left</description>
+    <group>3</group>
+    <key state='LSHIFTCTRL'>KP4</key>
+  </keyentry>
 	<keyentry>
 		<name>CAMERA_ROTATE_RIGHT</name>
 		<title>Camera rotate right</title>
@@ -417,6 +431,20 @@
 		<group>3</group>
 		<key>KP6</key>
 	</keyentry>
+  <keyentry>
+    <name>CAMERA_ROTATE_RIGHT_SLOW</name>
+    <title>Camera rotate right (slowly)</title>
+    <description>Rotates the camara right</description>
+    <group>3</group>
+    <key state='LSHIFT'>KP6</key>
+  </keyentry>
+  <keyentry>
+    <name>CAMERA_ROTATE_RIGHT_VSLOW</name>
+    <title>Camera rotate right (very slowly)</title>
+    <description>Rotates the camara right</description>
+    <group>3</group>
+    <key state='LSHIFTCTRL'>KP6</key>
+  </keyentry>
 	<keyentry>
 		<name>CAMERA_ROTATE_UP</name>
 		<title>Camera rotate up</title>
@@ -424,6 +452,20 @@
 		<group>3</group>
 		<key>KP8</key>
 	</keyentry>
+  <keyentry>
+    <name>CAMERA_ROTATE_UP_SLOW</name>
+    <title>Camera rotate up (slowly)</title>
+    <description>Rotates the camara up</description>
+    <group>3</group>
+    <key state='LSHIFT'>KP8</key>
+  </keyentry>
+  <keyentry>
+    <name>CAMERA_ROTATE_UP_VSLOW</name>
+    <title>Camera rotate up (very slowly)</title>
+    <description>Rotates the camara up</description>
+    <group>3</group>
+    <key state='LSHIFTCTRL'>KP8</key>
+  </keyentry>
 	<keyentry>
 		<name>CAMERA_ROTATE_DOWN</name>
 		<title>Camera rotate down</title>
@@ -431,6 +473,20 @@
 		<group>3</group>
 		<key>KP2</key>
 	</keyentry>
+  <keyentry>
+    <name>CAMERA_ROTATE_DOWN_SLOW</name>
+    <title>Camera rotate down (slowly)</title>
+    <description>Rotates the camara down</description>
+    <group>3</group>
+    <key state='LSHIFT'>KP2</key>
+  </keyentry>
+  <keyentry>
+    <name>CAMERA_ROTATE_DOWN_VSLOW</name>
+    <title>Camera rotate down (very slowly)</title>
+    <description>Rotates the camara down</description>
+    <group>3</group>
+    <key state='LSHIFTCTRL'>KP2</key>
+  </keyentry>
 	<keyentry>
 		<name>CAMERA_ZOOM_IN</name>
 		<title>Camera zoom in</title>
@@ -438,6 +494,20 @@
 		<group>3</group>
 		<key>KP9</key>
 	</keyentry>
+  <keyentry>
+    <name>CAMERA_ZOOM_IN_SLOW</name>
+    <title>Camera zoom in (slowly)</title>
+    <description>Zoom the camrea in</description>
+    <group>3</group>
+    <key state='LSHIFT'>KP9</key>
+  </keyentry>
+  <keyentry>
+    <name>CAMERA_ZOOM_IN_VSLOW</name>
+    <title>Camera zoom in (very slowly)</title>
+    <description>Zoom the camrea in</description>
+    <group>3</group>
+    <key state='LSHIFTCTRL'>KP9</key>
+  </keyentry>
 	<keyentry>
 		<name>CAMERA_ZOOM_OUT</name>
 		<title>Camera zoom out</title>
@@ -445,6 +515,20 @@
 		<group>3</group>
 		<key>KP3</key>
 	</keyentry>
+  <keyentry>
+    <name>CAMERA_ZOOM_OUT_SLOW</name>
+    <title>Camera zoom out (slowly)</title>
+    <description>Zoom the camrea in</description>
+    <group>3</group>
+    <key state='LSHIFT'>KP3</key>
+  </keyentry>
+  <keyentry>
+    <name>CAMERA_ZOOM_OUT_VSLOW</name>
+    <title>Camera zoom out (very slowly)</title>
+    <description>Zoom the camrea in</description>
+    <group>3</group>
+    <key state='LSHIFTCTRL'>KP3</key>
+  </keyentry>
 	<keyentry>
 		<name>CAMERA_NOLIMIT</name>
 		<title>Camera no restrict</title>

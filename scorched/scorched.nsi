@@ -7,6 +7,8 @@
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 
+RequestExecutionLevel admin
+
 SetCompressor lzma
 
 ; MUI 1.67 compatible ------
@@ -33,9 +35,11 @@ SetCompressor lzma
 
 ; Language files
 !insertmacro MUI_LANGUAGE "English"
+!insertmacro MUI_LANGUAGE "Russian"
 
 ; Reserve files
 !insertmacro MUI_RESERVEFILE_INSTALLOPTIONS
+!insertmacro MUI_RESERVEFILE_LANGDLL
 
 ; MUI end ------
 
@@ -46,12 +50,27 @@ ShowInstDetails show
 ShowUnInstDetails show
 
 Function .onInit
+	;Language selection dialog
+	Push ""
+	Push ${LANG_ENGLISH}
+	Push English
+	Push ${LANG_RUSSIAN}
+	Push Russian
+	Push A ; A means auto count languages
+	       ; for the auto count to work the first empty push (Push "") must remain
+	LangDLL::LangDialog "Installer Language" "Please select the language of the installer"
+
+	Pop $LANGUAGE
+	StrCmp $LANGUAGE "cancel" 0 +2
+		Abort
+
   ReadRegStr $R0 ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString"
   StrCmp $R0 "" done
 
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(^Name) is already installed, do you wish to re-install?" IDOK done
   Abort
 done:
+
 FunctionEnd
 
 Section "MainSection" SEC01
@@ -69,6 +88,13 @@ Section "MainSection" SEC01
   File "Release\scorched.exe"
   File "Release\scorchedc.exe"
   File "Release\scorcheds.exe"
+    
+  FileOpen $9 "$INSTDIR\data\lang\language.ini" w
+  StrCmp $LANGUAGE ${LANG_ENGLISH} 0 +2
+    FileWrite $9 "EN"
+  StrCmp $LANGUAGE ${LANG_RUSSIAN} 0 +2
+    FileWrite $9 "RU"
+  FileClose $9
 SectionEnd
 
 Section -AdditionalIcons

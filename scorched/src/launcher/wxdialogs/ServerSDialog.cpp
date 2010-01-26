@@ -20,6 +20,7 @@
 
 #include <wxdialogs/MainDialog.h>
 #include <wxdialogs/SettingsDialog.h>
+#include <scorched/ScorchedParams.h>
 #include <common/Defines.h>
 #include <common/OptionsGame.h>
 #include <engine/ModDirs.h>
@@ -171,7 +172,7 @@ bool showServerSDialog()
 	ServerSFrame frame(tmpOptions);
 	if (frame.ShowModal() == wxID_OK)
 	{
-		tmpOptions.writeOptionsToFile((char *) serverFileDest.c_str());
+		tmpOptions.writeOptionsToFile((char *) serverFileDest.c_str(), ScorchedParams::instance()->getWriteFullOptions());
 		std::string fileName = S3D::formatStringBuffer("-startserver \"%s\"", serverFileDest.c_str());
 		runScorched3D(fileName.c_str(), true);
 		return true;

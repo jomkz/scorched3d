@@ -632,27 +632,72 @@ bool TargetCamera::keyboardCheck(float frameTime,
 
 	const float QPI = 3.14f / 4.0f;
 	KEYBOARDKEY("CAMERA_ROTATE_LEFT", leftKey);
+	KEYBOARDKEY("CAMERA_ROTATE_LEFT_SLOW", leftKeySlow);
+	KEYBOARDKEY("CAMERA_ROTATE_LEFT_VSLOW", leftKeyVSlow);
 	KEYBOARDKEY("CAMERA_ROTATE_RIGHT", rightKey);
+	KEYBOARDKEY("CAMERA_ROTATE_RIGHT_SLOW", rightKeySlow);
+	KEYBOARDKEY("CAMERA_ROTATE_RIGHT_VSLOW", rightKeyVSlow);
 	if (leftKey->keyDown(buffer, keyState))
 	{
 		keyDown = true;
 		cameraPos_ = CamFree;
 		mainCam_.movePositionDelta(QPI * frameTime, 0.0f, 0.0f);
 	}
+	else if (leftKeySlow->keyDown(buffer, keyState))
+	{
+		keyDown = true;
+		cameraPos_ = CamFree;
+		mainCam_.movePositionDelta(QPI * frameTime * 0.5f, 0.0f, 0.0f);
+	}
+	else if (leftKeyVSlow->keyDown(buffer, keyState))
+	{
+		keyDown = true;
+		cameraPos_ = CamFree;
+		mainCam_.movePositionDelta(QPI * frameTime * 0.25f, 0.0f, 0.0f);
+	}
 	else if (rightKey->keyDown(buffer, keyState))
 	{
 		keyDown = true;
 		cameraPos_ = CamFree;
 		mainCam_.movePositionDelta(-QPI * frameTime, 0.0f, 0.0f);
-	}
+	} 
+	else if (rightKeySlow->keyDown(buffer, keyState))
+	{
+		keyDown = true;
+		cameraPos_ = CamFree;
+		mainCam_.movePositionDelta(-QPI * frameTime * 0.5f, 0.0f, 0.0f);
+	} 
+	else if (rightKeyVSlow->keyDown(buffer, keyState))
+	{
+		keyDown = true;
+		cameraPos_ = CamFree;
+		mainCam_.movePositionDelta(-QPI * frameTime * 0.25f, 0.0f, 0.0f);
+	} 
+
 
 	KEYBOARDKEY("CAMERA_ROTATE_DOWN", downKey);
+	KEYBOARDKEY("CAMERA_ROTATE_DOWN_SLOW", downKeySlow);
+	KEYBOARDKEY("CAMERA_ROTATE_DOWN_VSLOW", downKeyVSlow);
 	KEYBOARDKEY("CAMERA_ROTATE_UP", upKey);
+	KEYBOARDKEY("CAMERA_ROTATE_UP_SLOW", upKeySlow);
+	KEYBOARDKEY("CAMERA_ROTATE_UP_VSLOW", upKeyVSlow);
 	if (upKey->keyDown(buffer, keyState))
 	{
 		keyDown = true;
 		cameraPos_ = CamFree;
 		mainCam_.movePositionDelta(0.0f, -QPI * frameTime, 0.0f);
+	}
+	else if (upKeySlow->keyDown(buffer, keyState))
+	{
+		keyDown = true;
+		cameraPos_ = CamFree;
+		mainCam_.movePositionDelta(0.0f, -QPI * frameTime * 0.5f, 0.0f);
+	}
+	else if (upKeyVSlow->keyDown(buffer, keyState))
+	{
+		keyDown = true;
+		cameraPos_ = CamFree;
+		mainCam_.movePositionDelta(0.0f, -QPI * frameTime * 0.25f, 0.0f);
 	}
 	else if (downKey->keyDown(buffer, keyState))
 	{
@@ -660,20 +705,60 @@ bool TargetCamera::keyboardCheck(float frameTime,
 		cameraPos_ = CamFree;
 		mainCam_.movePositionDelta(0.0f, QPI * frameTime, 0.0f);
 	}
+	else if (downKeySlow->keyDown(buffer, keyState))
+	{
+		keyDown = true;
+		cameraPos_ = CamFree;
+		mainCam_.movePositionDelta(0.0f, QPI * frameTime * 0.5f, 0.0f);
+	}
+	else if (downKeyVSlow->keyDown(buffer, keyState))
+	{
+		keyDown = true;
+		cameraPos_ = CamFree;
+		mainCam_.movePositionDelta(0.0f, QPI * frameTime * 0.25f, 0.0f);
+	}
 
 	KEYBOARDKEY("CAMERA_ZOOM_IN", inKey);
+	KEYBOARDKEY("CAMERA_ZOOM_IN_SLOW", inKeySlow);
+	KEYBOARDKEY("CAMERA_ZOOM_IN_VSLOW", inKeyVSlow);
 	KEYBOARDKEY("CAMERA_ZOOM_OUT", outKey);
+	KEYBOARDKEY("CAMERA_ZOOM_OUT_SLOW", outKeySlow);
+	KEYBOARDKEY("CAMERA_ZOOM_OUT_VSLOW", outKeyVSlow);
 	if (inKey->keyDown(buffer, keyState))
 	{
 		keyDown = true;
 		cameraPos_ = CamFree;
 		mainCam_.movePositionDelta(0.0f, 0.0f, -100.0f * frameTime);
 	}
+	else if (inKeySlow->keyDown(buffer, keyState))
+	{
+		keyDown = true;
+		cameraPos_ = CamFree;
+		mainCam_.movePositionDelta(0.0f, 0.0f, -100.0f * frameTime * 0.5f);
+	}
+	else if (inKeyVSlow->keyDown(buffer, keyState))
+	{
+		keyDown = true;
+		cameraPos_ = CamFree;
+		mainCam_.movePositionDelta(0.0f, 0.0f, -100.0f * frameTime * 0.25f);
+	}
 	else if (outKey->keyDown(buffer, keyState))
 	{
 		keyDown = true;
 		cameraPos_ = CamFree;
 		mainCam_.movePositionDelta(0.0f, 0.0f, 100.0f * frameTime);
+	}
+	else if (outKeySlow->keyDown(buffer, keyState))
+	{
+		keyDown = true;
+		cameraPos_ = CamFree;
+		mainCam_.movePositionDelta(0.0f, 0.0f, 100.0f * frameTime * 0.5f);
+	}
+	else if (outKeyVSlow->keyDown(buffer, keyState))
+	{
+		keyDown = true;
+		cameraPos_ = CamFree;
+		mainCam_.movePositionDelta(0.0f, 0.0f, 100.0f * frameTime * 0.25f);
 	}
 
 	KEYBOARDKEY("CAMERA_NOLIMIT", limitKey);

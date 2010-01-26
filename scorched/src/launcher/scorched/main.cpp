@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 	}
 
 	// Write the new options back the the file
-	OptionsDisplay::instance()->writeOptionsToFile();
+	OptionsDisplay::instance()->writeOptionsToFile(ScorchedParams::instance()->getWriteFullOptions());
 
 	// Init SDL
 	unsigned int initFlags = SDL_INIT_VIDEO;
