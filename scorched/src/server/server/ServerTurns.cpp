@@ -242,7 +242,7 @@ bool ServerTurns::showScore()
 
 		if (tank->getState().getLives() > 0 &&
 			tank->getState().getTankPlaying() &&
-			tank->getState().getSkippedShots() == 0)
+			tank->getState().getSkippedShots() < 3)
 		{
 			allSkipped = false;
 		}

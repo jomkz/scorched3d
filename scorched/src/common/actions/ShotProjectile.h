@@ -60,12 +60,12 @@ protected:
 	unsigned int flareType_;
 	bool up_;
 	fixed snapTime_;
-	fixed totalTime_;
+	fixed totalTime_, simulateTime_;
 	// 	things like thrusttime etc should have their 
 	// 	values set ONCE per projectile
 	fixed thrustTime_;
 	fixed thrustAmount_;
-	fixed drag_;
+	fixed drag_, stepSize_;
 	fixed timedCollision_;
 	fixed spinSpeed_;
 #ifndef S3D_SERVER

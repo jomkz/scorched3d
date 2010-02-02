@@ -49,7 +49,7 @@ to move rather than fire.</description>
 		<cost>2000</cost>
 		<accessoryaction type='WeaponSelectPosition'>
 			<aimedweapon type='WeaponMoveTank'>
-				<steptime>0.05</steptime>
+				<steptime>0.1</steptime>
 			</aimedweapon>
 		</accessoryaction>
 		<nomuzzleflash/>
@@ -68,7 +68,7 @@ accelerated rate.</description>
 		<cost>4000</cost>
 		<accessoryaction type='WeaponSelectPosition'>
 			<aimedweapon type='WeaponMoveTank'>
-				<steptime>0.025</steptime>
+				<steptime>0.05</steptime>
 			</aimedweapon>
 		</accessoryaction>
 		<nomuzzleflash/>
@@ -431,10 +431,10 @@ Capacity: 200 dmg | Collision Damage: Timed</description>
 				<subweapon1 type='WeaponNapalm'>
 					<noobjectdamage/>
 					<allowunderwater>false</allowunderwater>
-					<napalmtime>6.0</napalmtime>
+					<napalmtime>3.0</napalmtime>
 					<napalmheight>6.0</napalmheight>
-					<steptime>1.2</steptime>
-					<hurtsteptime>4.0</hurtsteptime>
+					<steptime>0.6</steptime>
+					<hurtsteptime>2.0</hurtsteptime>
 					<hurtpersecond>0.1</hurtpersecond>
 					<numberstreams>1</numberstreams>
 					<effectradius>5</effectradius>
@@ -551,10 +551,10 @@ Capacity: 200 dmg | Collision Damage: Timed</description>
 				<subweapon1 type='WeaponNapalm'>
 					<noobjectdamage/>
 					<allowunderwater>false</allowunderwater>
-					<napalmtime>6.0</napalmtime>
+					<napalmtime>3.0</napalmtime>
 					<napalmheight>8.0</napalmheight>
-					<steptime>1.2</steptime>
-					<hurtsteptime>4.0</hurtsteptime>
+					<steptime>0.6</steptime>
+					<hurtsteptime>2.0</hurtsteptime>
 					<hurtpersecond>0.1</hurtpersecond>
 					<numberstreams>2</numberstreams>
 					<effectradius>5</effectradius>
@@ -1691,10 +1691,10 @@ radioactive fallout which travels downwind.</description>
 				<subweapon1 type='WeaponNapalm'>
 					<noobjectdamage/>
 					<allowunderwater>false</allowunderwater>
-					<napalmtime>6.0</napalmtime>
+					<napalmtime>3.0</napalmtime>
 					<napalmheight>8.0</napalmheight>
-					<steptime>1.2</steptime>
-					<hurtsteptime>4.0</hurtsteptime>
+					<steptime>0.6</steptime>
+					<hurtsteptime>2.0</hurtsteptime>
 					<hurtpersecond>0.1</hurtpersecond>
 					<numberstreams>2</numberstreams>
 					<effectradius>5</effectradius>
@@ -6175,10 +6175,10 @@ near the flames will lose life.</description>
 			<projectilemodel type='MilkShape'>napalm/napalm.txt</projectilemodel>
 			<collisionaction type='WeaponNapalm'>
 				<allowunderwater>false</allowunderwater>
-				<napalmtime>6.0</napalmtime>
+				<napalmtime>3.0</napalmtime>
 				<napalmheight>1.5</napalmheight>
-				<steptime>0.2</steptime>
-				<hurtsteptime>2.0</hurtsteptime>
+				<steptime>0.1</steptime>
+				<hurtsteptime>1.0</hurtsteptime>
 				<hurtpersecond>0.9</hurtpersecond>
 				<numberstreams>1</numberstreams>
 				<effectradius>5</effectradius>
@@ -6422,10 +6422,10 @@ near the flames will lose life.</description>
 			<projectilemodel type='MilkShape'>napalm/napalm.txt</projectilemodel>
 			<collisionaction type='WeaponNapalm'>
 				<allowunderwater>false</allowunderwater>
-				<napalmtime>8.0</napalmtime>
+				<napalmtime>4.0</napalmtime>
 				<napalmheight>1.75</napalmheight>
-				<steptime>0.1</steptime>
-				<hurtsteptime>2.0</hurtsteptime>
+				<steptime>0.05</steptime>
+				<hurtsteptime>1.0</hurtsteptime>
 				<hurtpersecond>0.75</hurtpersecond>
 				<numberstreams>2</numberstreams>
 				<effectradius>5</effectradius>
@@ -6445,10 +6445,10 @@ near the flames will lose life.</description>
 			<projectilemodel type='MilkShape'>bomblet/bomblet.txt</projectilemodel>
 			<collisionaction type='WeaponNapalm'>
 				<allowunderwater>false</allowunderwater>
-				<napalmtime>8.0</napalmtime>
+				<napalmtime>4.0</napalmtime>
 				<napalmheight>1.75</napalmheight>
-				<steptime>0.2</steptime>
-				<hurtsteptime>2.0</hurtsteptime>
+				<steptime>0.1</steptime>
+				<hurtsteptime>1.0</hurtsteptime>
 				<hurtpersecond>0.75</hurtpersecond>
 				<numberstreams>1</numberstreams>
 				<effectradius>5</effectradius>
@@ -6641,7 +6641,7 @@ the ground and explodes/burns on contact.</description>
 													<weapon type='WeaponRoller'>
 														<shieldhurtfactor>0.05</shieldhurtfactor>
 														<numberrollers>1</numberrollers>
-														<time>3</time>
+														<time>1</time>
 														<rollermodel type='ase'>
 															<mesh>roller.ase</mesh>
 															<skin>none</skin>
@@ -6656,7 +6656,7 @@ the ground and explodes/burns on contact.</description>
 													<weapon type='WeaponRoller'>
 														<shieldhurtfactor>0.05</shieldhurtfactor>
 														<numberrollers>2</numberrollers>
-														<time>3</time>
+														<time>1</time>
 														<rollermodel type='ase'>
 															<mesh>roller.ase</mesh>
 															<skin>none</skin>
@@ -6708,10 +6708,10 @@ aimed at enemy tanks.</description>
 							</projectilemodel>
 							<collisionaction type='WeaponNapalm'>
 								<allowunderwater>false</allowunderwater>
-								<napalmtime>8.0</napalmtime>
+								<napalmtime>4.0</napalmtime>
 								<napalmheight>2.0</napalmheight>
-								<steptime>0.15</steptime>
-								<hurtsteptime>2.0</hurtsteptime>
+								<steptime>0.075</steptime>
+								<hurtsteptime>1.0</hurtsteptime>
 								<hurtpersecond>1.0</hurtpersecond>
 								<numberstreams>2</numberstreams>
 								<effectradius>5</effectradius>
@@ -6731,10 +6731,10 @@ aimed at enemy tanks.</description>
 				</subweapon2>
 				<subweapon3 type='WeaponNapalm'>
 					<allowunderwater>false</allowunderwater>
-					<napalmtime>8.0</napalmtime>
+					<napalmtime>4.0</napalmtime>
 					<napalmheight>1.75</napalmheight>
-					<steptime>0.2</steptime>
-					<hurtsteptime>2.0</hurtsteptime>
+					<steptime>0.1</steptime>
+					<hurtsteptime>1.0</hurtsteptime>
 					<hurtpersecond>0.75</hurtpersecond>
 					<numberstreams>1</numberstreams>
 					<effectradius>5</effectradius>
@@ -7274,9 +7274,9 @@ the thickness of the wedge destroyed is also greater.</description>
 			</subweapon1>
 			<subweapon2 type='WeaponNapalm'>
 				<allowunderwater>true</allowunderwater>
-				<napalmtime>6.0</napalmtime>
+				<napalmtime>3.0</napalmtime>
 				<napalmheight>1.5</napalmheight>
-				<steptime>0.5</steptime>
+				<steptime>0.25</steptime>
 				<hurtsteptime>1.0</hurtsteptime>
 				<hurtpersecond>1.0</hurtpersecond>
 				<numberstreams>1</numberstreams>
@@ -8344,10 +8344,10 @@ burning chunks of earth about the area.</description>
 															</subweapon1>
 															<subweapon2 type='WeaponNapalm'>
 																<allowunderwater>true</allowunderwater>
-																<napalmtime>8.0</napalmtime>
+																<napalmtime>4.0</napalmtime>
 																<napalmheight>1.75</napalmheight>
-																<steptime>2</steptime>
-																<hurtsteptime>1.25</hurtsteptime>
+																<steptime>1</steptime>
+																<hurtsteptime>0.625</hurtsteptime>
 																<hurtpersecond>1.0</hurtpersecond>
 																<numberstreams>2</numberstreams>
 																<effectradius>6.5</effectradius>
@@ -8460,10 +8460,10 @@ burning chunks of earth about the area.</description>
 														</subweapon1>
 														<subweapon2 type='WeaponNapalm'>
 															<allowunderwater>true</allowunderwater>
-															<napalmtime>8.0</napalmtime>
+															<napalmtime>4.0</napalmtime>
 															<napalmheight>2.0</napalmheight>
-															<steptime>2</steptime>
-															<hurtsteptime>1.0</hurtsteptime>
+															<steptime>1</steptime>
+															<hurtsteptime>0.5</hurtsteptime>
 															<hurtpersecond>1.0</hurtpersecond>
 															<numberstreams>2</numberstreams>
 															<effectradius>8</effectradius>
@@ -8558,10 +8558,10 @@ burning chunks of earth about the area.</description>
 								</subweapon1>
 								<subweapon2 type='WeaponNapalm'>
 									<allowunderwater>true</allowunderwater>
-									<napalmtime>6.0</napalmtime>
+									<napalmtime>3.0</napalmtime>
 									<napalmheight>1.4</napalmheight>
-									<steptime>2</steptime>
-									<hurtsteptime>1.5</hurtsteptime>
+									<steptime>1</steptime>
+									<hurtsteptime>0.75</hurtsteptime>
 									<hurtpersecond>1.0</hurtpersecond>
 									<numberstreams>1</numberstreams>
 									<effectradius>5</effectradius>
@@ -8619,10 +8619,10 @@ burning chunks of earth about the area.</description>
 								</subweapon1>
 								<subweapon2 type='WeaponNapalm'>
 									<allowunderwater>true</allowunderwater>
-									<napalmtime>7.5</napalmtime>
+									<napalmtime>4.0</napalmtime>
 									<napalmheight>1.6</napalmheight>
-									<steptime>1.75</steptime>
-									<hurtsteptime>1.25</hurtsteptime>
+									<steptime>0.9</steptime>
+									<hurtsteptime>0.625</hurtsteptime>
 									<hurtpersecond>1.0</hurtpersecond>
 									<numberstreams>2</numberstreams>
 									<effectradius>5</effectradius>
@@ -8680,10 +8680,10 @@ burning chunks of earth about the area.</description>
 								</subweapon1>
 								<subweapon2 type='WeaponNapalm'>
 									<allowunderwater>true</allowunderwater>
-									<napalmtime>8.0</napalmtime>
+									<napalmtime>4.0</napalmtime>
 									<napalmheight>1.8</napalmheight>
-									<steptime>1.5</steptime>
-									<hurtsteptime>1.0</hurtsteptime>
+									<steptime>0.75</steptime>
+									<hurtsteptime>0.5</hurtsteptime>
 									<hurtpersecond>1.0</hurtpersecond>
 									<numberstreams>2</numberstreams>
 									<effectradius>6</effectradius>
@@ -9516,10 +9516,10 @@ YOU CANNOT AIM THIS WEAPON!</description>
 										</subweapon4>
 										<subweapon5 type='WeaponNapalm'>
 											<allowunderwater>true</allowunderwater>
-											<napalmtime>12.0</napalmtime>
+											<napalmtime>6.0</napalmtime>
 											<napalmheight>1.8</napalmheight>
-											<steptime>0.2</steptime>
-											<hurtsteptime>1.0</hurtsteptime>
+											<steptime>0.1</steptime>
+											<hurtsteptime>0.5</hurtsteptime>
 											<hurtpersecond>1.0</hurtpersecond>
 											<numberstreams>4</numberstreams>
 											<effectradius>6</effectradius>
@@ -10576,7 +10576,7 @@ contact with any tank.</description>
 					<nextaction type='WeaponRoller'>
 						<shieldhurtfactor>0.02</shieldhurtfactor>
 						<numberrollers>8</numberrollers>
-						<time>RANGE(7,9)</time>
+						<time>RANGE(1,2)</time>
 						<rollermodel type='MilkShape'>roller/roller.txt</rollermodel>
 						<collisionaction type='WeaponExplosion'>
 							<hurtamount>1.0</hurtamount>
@@ -10612,7 +10612,7 @@ with any tank.</description>
 					<nextaction type='WeaponRoller'>
 					    <shieldhurtfactor>0.035</shieldhurtfactor>
 						<numberrollers>8</numberrollers>
-						<time>RANGE(7,9)</time>
+						<time>RANGE(1,2)</time>
 						<rollermodel type='MilkShape'>roller/roller.txt</rollermodel>
 						<collisionaction type='WeaponExplosion'>
 							<hurtamount>1.0</hurtamount>
@@ -15036,4 +15036,37 @@ release lethal clouds of gas when destroyed.</description>
 			</subweapon2>
 		</accessoryaction>
 	</accessory>
+
+  <accessory>
+    <name>Fire At Tank</name>
+    <activationsound>shoot/flare.wav</activationsound>
+    <maximumnumber>0</maximumnumber>
+    <accessoryaction type='WeaponAimedOver'>
+      <nowarheads>2</nowarheads>
+      <percentagemiss>1</percentagemiss>
+      <maxaimdistance>512</maxaimdistance>
+      <inaccuracy>5</inaccuracy>
+      <aimedweapon type='WeaponVelocity'>
+        <velocitychange>2.0</velocitychange>
+        <aimedweapon type='WeaponProjectile'>
+          <shieldhurtfactor>0.2</shieldhurtfactor>
+          <nowallcollision/>
+          <collisionaction type='WeaponNull'></collisionaction>
+        </aimedweapon>
+      </aimedweapon>
+    </accessoryaction>
+  </accessory>
+
+  <accessory>
+    <name>Bomb At Tank</name>
+    <activationsound>shoot/flare.wav</activationsound>
+    <maximumnumber>0</maximumnumber>
+    <accessoryaction type='WeaponProjectile'>
+      <projectilemodel type='MilkShape'>littleboy/littleboy.txt</projectilemodel>
+      <shieldhurtfactor>0.2</shieldhurtfactor>
+      <nocreateflame/>
+      <nowallcollision/>
+      <collisionaction type='WeaponNull'></collisionaction>
+    </accessoryaction>
+  </accessory>
 </accessories>

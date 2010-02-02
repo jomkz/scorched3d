@@ -53,7 +53,7 @@ protected:
 	FixedVector lookFrom_;
 	WeaponRoller *weapon_;
 	WeaponFireContext weaponContext_;
-	fixed totalTime_;
+	fixed totalTime_, simulateTime_, stepSize_;
 	ModelRendererSimulator *model_;
 
 	void doCollision();

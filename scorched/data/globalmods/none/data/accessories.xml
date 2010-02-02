@@ -35,7 +35,7 @@ Maximum range is 50.</description>
 		<cost>6000</cost>
 		<accessoryaction type='WeaponSelectPosition'>
 			<aimedweapon type='WeaponMoveTank'>
-				<steptime>0.05</steptime>
+				<steptime>0.1</steptime>
 				<maximumrange>50</maximumrange>
 			</aimedweapon>
 		</accessoryaction>
@@ -57,7 +57,7 @@ Maximum range is 75.</description>
 		<cost>10000</cost>
 		<accessoryaction type='WeaponSelectPosition'>
 			<aimedweapon type='WeaponMoveTank'>
-				<steptime>0.025</steptime>
+				<steptime>0.05</steptime>
 				<maximumrange>75</maximumrange>
 			</aimedweapon>
 		</accessoryaction>
@@ -215,10 +215,10 @@ near the flames will lose life.</description>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilemodel type='MilkShape'>napalm/napalm.txt</projectilemodel>
 			<collisionaction type='WeaponNapalm'>
-				<napalmtime>8.0</napalmtime>
+				<napalmtime>4.0</napalmtime>
 				<napalmheight>0.2</napalmheight>
-				<steptime>0.1</steptime>
-				<hurtsteptime>2.0</hurtsteptime>
+				<steptime>0.05</steptime>
+				<hurtsteptime>1.0</hurtsteptime>
 				<hurtpersecond>1.0</hurtpersecond>
 				<numberstreams>1</numberstreams>
 				<effectradius>5</effectradius>
@@ -243,10 +243,10 @@ Any tanks near the flames will lose life.</description>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilemodel type='MilkShape'>napalm/napalm.txt</projectilemodel>
 			<collisionaction type='WeaponNapalm'>
-				<napalmtime>8.0</napalmtime>
+				<napalmtime>4.0</napalmtime>
 				<napalmheight>0.2</napalmheight>
-				<steptime>0.1</steptime>
-				<hurtsteptime>2.0</hurtsteptime>
+				<steptime>0.05</steptime>
+				<hurtsteptime>1.0</hurtsteptime>
 				<hurtpersecond>2.0</hurtpersecond>
 				<numberstreams>3</numberstreams>
 				<effectradius>5</effectradius>
@@ -270,7 +270,7 @@ with any tank.</description>
 		<accessoryaction type='WeaponProjectile'>
 			<collisionaction type='WeaponRoller'>
 				<numberrollers>8</numberrollers>
-				<time>RANGE(7,9)</time>
+				<time>RANGE(3,4)</time>
 				<rollermodel type='MilkShape'>roller/roller.txt</rollermodel>
 				<!--<maintainvelocity>true</maintainvelocity>-->
 				<collisionaction type='WeaponExplosion'>
@@ -298,7 +298,7 @@ contact with any tank.</description>
 		<projectilescale>1.2</projectilescale>
 			<collisionaction type='WeaponRoller'>
 				<numberrollers>6</numberrollers>
-				<time>RANGE(7,9)</time>
+				<time>RANGE(3,4)</time>
 				<rollermodel type='MilkShape'>roller/roller.txt</rollermodel>
 				<collisionaction type='WeaponExplosion'>
 					<hurtamount>1.0</hurtamount>
@@ -325,7 +325,7 @@ with any tank.</description>
 		<projectilescale>1.5</projectilescale>
 			<collisionaction type='WeaponRoller'>
 				<numberrollers>6</numberrollers>
-				<time>RANGE(7,9)</time>
+				<time>RANGE(3,4)</time>
 				<rollermodel type='MilkShape'>roller/roller.txt</rollermodel>
 				<collisionaction type='WeaponExplosion'>
 					<hurtamount>1.0</hurtamount>
@@ -1554,11 +1554,41 @@ and shields damaging the tank directly.</description>
 			</collisionaction>
 		</accessoryaction>
 	</accessory>
-	
-	
-	
-	
-	<accessory>
+
+  <accessory>
+    <name>Fire At Tank</name>
+    <activationsound>shoot/flare.wav</activationsound>
+    <maximumnumber>0</maximumnumber>
+    <accessoryaction type='WeaponAimedOver'>
+      <nowarheads>2</nowarheads>
+      <percentagemiss>1</percentagemiss>
+      <maxaimdistance>1024</maxaimdistance>
+      <inaccuracy>5</inaccuracy>
+      <aimedweapon type='WeaponVelocity'>
+        <velocitychange>2.0</velocitychange>
+        <aimedweapon type='WeaponProjectile'>
+          <shieldhurtfactor>0.2</shieldhurtfactor>
+          <nowallcollision/>
+          <collisionaction type='WeaponNull'></collisionaction>
+        </aimedweapon>
+      </aimedweapon>
+    </accessoryaction>
+  </accessory>
+
+  <accessory>
+    <name>Bomb At Tank</name>
+    <activationsound>shoot/flare.wav</activationsound>
+    <maximumnumber>0</maximumnumber>
+    <accessoryaction type='WeaponProjectile'>
+      <projectilemodel type='MilkShape'>littleboy/littleboy.txt</projectilemodel>
+      <shieldhurtfactor>0.2</shieldhurtfactor>
+      <nocreateflame/>
+      <nowallcollision/>
+      <collisionaction type='WeaponNull'></collisionaction>
+    </accessoryaction>
+  </accessory>
+
+      <accessory>
 		<name>TreeExplode</name>
 		<armslevel>9</armslevel>
 		<maximumnumber>0</maximumnumber>

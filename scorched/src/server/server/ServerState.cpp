@@ -20,6 +20,9 @@
 
 #include <server/ServerState.h>
 #include <server/ServerSyncCheck.h>
+#include <server/ServerSimulator.h>
+#include <server/ScorchedServer.h>
+#include <common/OptionsScorched.h>
 
 ServerState::ServerState() :
 	serverState_(ServerStartupState)
@@ -43,6 +46,14 @@ void ServerState::simulate(fixed frameTime)
 		{
 			startingMatch_.reset();
 			serverState_ = ServerMatchCountDownState;
+		}
+		else 
+		{
+			fixed cycleTime = ScorchedServer::instance()->getOptionsGame().getIdleCycleTime();
+			if (ScorchedServer::instance()->getServerSimulator().getCurrentTime() > cycleTime)
+			{
+				serverState_ = ServerStartupState;
+			}
 		}
 		break;
 	case ServerMatchCountDownState:

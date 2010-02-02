@@ -43,6 +43,22 @@ TankResign::~TankResign()
 
 void TankResign::init()
 {
+#ifndef S3D_SERVER
+	if (!context_->getServerMode())
+	{
+		Tank *tank = context_->getTankContainer().getTankById(playerId_);
+		if (tank && resignTime_ > 0)
+		{
+			ChannelText text("combat",
+				LANG_RESOURCE_2(
+					"TANK_RESIGNED_TIMED",
+					"[p:{0}] resigning from round in {1} seconds", 
+					tank->getTargetName(),
+					resignTime_.asString()));
+			ChannelManager::showText(*context_, text);
+		}
+	}
+#endif // #ifndef S3D_SERVER
 }
 
 void TankResign::simulate(fixed frameTime, bool &remove)

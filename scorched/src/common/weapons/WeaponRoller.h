@@ -40,6 +40,7 @@ public:
 	fixed getShieldHurtFactor(ScorchedContext &context);
 	fixed getTime(ScorchedContext &context);
 	fixed getWindFactor(ScorchedContext &context);
+	fixed getStepSize() { return stepSize_; }
 
 	// Inherited from Weapon
 	virtual void fireWeapon(ScorchedContext &context,
@@ -56,7 +57,7 @@ protected:
 	NumberParser timeExp_;
 	fixed shieldHurtFactor_;
 	fixed windFactor_;
-	fixed time_;
+	fixed time_, stepSize_;
 	bool roll_;
 
 	bool maintainVelocity_;

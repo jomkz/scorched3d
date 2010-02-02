@@ -36,7 +36,7 @@ REGISTER_ACCESSORY_SOURCE(WeaponRoller);
 WeaponRoller::WeaponRoller() : 
 	shieldHurtFactor_(0), windFactor_(1), 
 	maintainVelocity_(false), roll_(true),
-	dampenVelocityExp_(1)
+	dampenVelocityExp_(1), stepSize_(true, 100)
 {
 
 }
@@ -55,6 +55,7 @@ bool WeaponRoller::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 
 	// Get life time
 	if (!accessoryNode->getNamedChild("time", timeExp_)) return false;
+	accessoryNode->getNamedChild("stepsize", stepSize_, false);
 
     // Get the hurt factor (if any)
     accessoryNode->getNamedChild("shieldhurtfactor", shieldHurtFactorExp_, false);

@@ -18,4 +18,15 @@
 		<starttime>600</starttime>
 		<groupname>ships-sub</groupname>
 	</movement>
+  <event>
+    <condition type="time">
+      <mintime>10.0</mintime>
+      <maxtime>25.0</maxtime>
+      <singletimeonly>false</singletimeonly>
+    </condition>
+    <action type="fireweaponfromgroup">
+      <weapon>Fire At Tank</weapon>
+      <groupname>ships-sub</groupname>
+    </action>
+  </event>
 </shipgroups>

@@ -28,4 +28,15 @@
 		<starttime>600</starttime>
 		<groupname>ships-destroyer2</groupname>
 	</movement>
+  <event>
+    <condition type="time">
+      <mintime>10.0</mintime>
+      <maxtime>25.0</maxtime>
+      <singletimeonly>false</singletimeonly>
+    </condition>
+    <action type="fireweaponfromgroup">
+      <weapon>Fire At Tank</weapon>
+      <groupname>ships-destroyer2</groupname>
+    </action>
+  </event>
 </shipgroups>

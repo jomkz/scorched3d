@@ -40,7 +40,7 @@ ShotBounce::ShotBounce(WeaponRoller *weapon,
 	PhysicsParticle(weaponContext.getPlayerId()),
 	startPosition_(startPosition),
 	velocity_(velocity), weapon_(weapon), weaponContext_(weaponContext),
-	totalTime_(0), 
+	totalTime_(0), simulateTime_(0),
 	vPoint_(0), model_(0)
 {
 }
@@ -50,6 +50,7 @@ void ShotBounce::init()
 	PhysicsParticleInfo info(ParticleTypeBounce, weaponContext_.getPlayerId(), this);
 	setPhysics(info, startPosition_, velocity_, 
 		1, 5, weapon_->getWindFactor(*context_), false, weapon_->getRoll());
+	stepSize_ = weapon_->getStepSize();
 
 	FixedVector lookatPos;
 	vPoint_ = context_->getViewPoints().getNewViewPoint(weaponContext_.getPlayerId());
@@ -96,7 +97,12 @@ void ShotBounce::simulate(fixed frameTime, bool &remove)
 		remove = true;
 	}
 
-	PhysicsParticle::simulate(frameTime, remove);
+	simulateTime_ += frameTime;
+	while (simulateTime_ > stepSize_)
+	{
+		PhysicsParticle::simulate(stepSize_, remove);
+		simulateTime_ -= stepSize_;
+	}
 }
 
 void ShotBounce::draw()

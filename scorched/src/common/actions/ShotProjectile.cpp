@@ -43,9 +43,8 @@ ShotProjectile::ShotProjectile(FixedVector &startPosition, FixedVector &velocity
 	weapon_(weapon), weaponContext_(weaponContext), 
 	flareType_(flareType), vPoint_(0),
 	snapTime_(fixed(true, 2000)), up_(false),
-	totalTime_(0), spinSpeed_(spinSpeed)
+	totalTime_(0), simulateTime_(0), spinSpeed_(spinSpeed)
 {
-
 }
 
 void ShotProjectile::init()
@@ -68,6 +67,7 @@ void ShotProjectile::init()
 	thrustAmount_ = getWeapon()->getThrustAmount(*context_);
 	timedCollision_ = getWeapon()->getTimedCollision(*context_);
 	drag_ = getWeapon()->getDrag(*context_);
+	stepSize_ = getWeapon()->getStepSize();
 }
 
 std::string ShotProjectile::getActionDetails()
@@ -224,7 +224,12 @@ void ShotProjectile::simulate(fixed frameTime, bool &remove)
 	}
 #endif	// #ifndef S3D_SERVER
 
-	PhysicsParticle::simulate(frameTime, remove);
+	simulateTime_ += frameTime;
+	while (simulateTime_ > stepSize_)
+	{
+		PhysicsParticle::simulate(stepSize_, remove);
+		simulateTime_ -= stepSize_;
+	}
 }
 
 void ShotProjectile::doCollision(FixedVector &position)

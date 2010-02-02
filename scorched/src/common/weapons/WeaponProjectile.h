@@ -55,6 +55,7 @@ public:
 	fixed getShieldHurtFactor(ScorchedContext &context);
 	fixed getTimedCollision(ScorchedContext &context) { return timedCollision_.getValue(context); }
 	fixed getSpinSpeed(ScorchedContext &context) { return spinSpeed_.getValue(context); }
+	fixed getStepSize() { return stepSize_; }
 	float getFlameLife() { return flameLife_; }
 	float getFlameStartSize() { return flameStartSize_; }
 	float getFlameEndSize() { return flameEndSize_; }
@@ -90,6 +91,7 @@ protected:
 	NumberParser scale_;
 	NumberParser windFactor_;
 	NumberParser drag_;
+	fixed stepSize_;
 	Vector flameStartColor1_, flameStartColor2_;
 	Vector flameEndColor1_, flameEndColor2_;
 	std::string engineSound_;

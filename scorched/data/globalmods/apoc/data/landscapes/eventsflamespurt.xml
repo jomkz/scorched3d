@@ -1,8 +1,8 @@
 <events>
 	<event>
 		<condition type="time">
-			<mintime>2.0</mintime>
-			<maxtime>4.0</maxtime>
+			<mintime>15.0</mintime>
+			<maxtime>30.0</maxtime>
 			<singletimeonly>false</singletimeonly>
 		</condition>
 		<action type="fireweapon">

@@ -95,6 +95,16 @@ public:
 	virtual bool readXML(XMLNode *node);
 };
 
+class LandscapeActionFireWeaponFromGroup : public LandscapeAction
+{
+public:
+	std::string weapon;
+	std::string groupname;
+
+	virtual void fireAction(ScorchedContext &context);
+	virtual bool readXML(XMLNode *node);
+};
+
 class LandscapeEvent
 {
 public:

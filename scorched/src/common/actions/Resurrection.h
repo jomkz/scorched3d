@@ -30,7 +30,7 @@ public:
 	Resurrection(
 		unsigned int playerId,
 		FixedVector &position,
-		fixed resignTime);
+		fixed resurrectTime);
 	virtual ~Resurrection();
 
 	virtual void init();
@@ -40,7 +40,7 @@ public:
 protected:
 	unsigned int playerId_;
 	FixedVector position_;
-	fixed resignTime_;
+	fixed resurrectTime_;
 
 };
 

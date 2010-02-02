@@ -35,8 +35,35 @@ LangImpl::LangImpl()
 void LangImpl::init()
 {
 	SDL_LockMutex(langMutex);
+
+	// Read the platform default language from the language file
+	std::string currentLang = "EN";
+	std::string langIniFile = S3D::getDataFile("data/lang/language.ini");
+	FILE *in = fopen(langIniFile.c_str(), "r");
+	if (in)
+	{
+		char buffer[256];
+		if (fgets(buffer, 256, in)) 
+		{
+			for (int i=0; i<256; i++)
+			{
+				if (buffer[i] < ' ') buffer[i] = '\0';
+			}
+			currentLang = buffer;
+		}
+		fclose(in);
+	}
+
+	// Load the resource bundle for this language
+	std::string langResourceFile =
+		S3D::getDataFile(S3D::formatStringBuffer("data/lang/lang_%s.resource", 
+			currentLang.c_str()));
+	if (!S3D::fileExists(langResourceFile))
+	{
+		langResourceFile = S3D::getDataFile("data/lang/lang.resource");
+	}
 	ResourceBundle *langBundle = new ResourceBundle();
-	langBundle->loadFromFile(S3D::getDataFile("data/lang/lang.resource"));
+	langBundle->loadFromFile(langResourceFile);
 	bundles_.push_back(langBundle);
 
 	bundles_.push_back(&undefinedBundle_);

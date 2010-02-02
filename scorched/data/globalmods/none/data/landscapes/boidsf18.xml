@@ -34,4 +34,15 @@
 			<gain>0.25</gain>
 		</sound>
 	</sound>
+  <event>
+    <condition type="time">
+      <mintime>15.0</mintime>
+      <maxtime>35.0</maxtime>
+      <singletimeonly>false</singletimeonly>
+    </condition>
+    <action type="fireweaponfromgroup">
+      <weapon>Bomb At Tank</weapon>
+      <groupname>boids-f18</groupname>
+    </action>
+  </event>
 </boids>

@@ -22,6 +22,8 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <engine/ScorchedContext.h>
 #include <engine/Simulator.h>
+#include <target/Target.h>
+#include <target/TargetLife.h>
 #include <weapons/AccessoryStore.h>
 #include <common/Logger.h>
 #include <XML/XMLNode.h>
@@ -158,6 +160,7 @@ bool LandscapeConditionRandom::readXML(XMLNode *node)
 LandscapeAction *LandscapeAction::create(const char *type)
 {
 	if (0 == strcmp(type, "fireweapon")) return new LandscapeActionFireWeapon;
+	if (0 == strcmp(type, "fireweaponfromgroup")) return new LandscapeActionFireWeaponFromGroup;
 	S3D::dialogMessage("LandscapeAction", S3D::formatStringBuffer("Unknown action type %s", type));
 	return 0;
 }
@@ -183,5 +186,43 @@ void LandscapeActionFireWeapon::fireAction(ScorchedContext &context)
 bool LandscapeActionFireWeapon::readXML(XMLNode *node)
 {
 	if (!node->getNamedChild("weapon", weapon)) return false;
+	return node->failChildren();
+}
+
+// LandscapeActionFireWeaponFromGroup
+void LandscapeActionFireWeaponFromGroup::fireAction(ScorchedContext &context)
+{
+	Accessory *accessory = 
+		context.getAccessoryStore().findByPrimaryAccessoryName(
+			weapon.c_str());
+	if (!accessory) S3D::dialogExit("LandscapeActionFireWeaponFromGroup",
+		S3D::formatStringBuffer("Failed to find weapon named \"%s\"", weapon.c_str()));
+	if (accessory->getType() != AccessoryPart::AccessoryWeapon) 
+		S3D::dialogExit("LandscapeActionFireWeaponFromGroup",
+			S3D::formatStringBuffer("Accessory named \"%s\" is not a weapon", weapon.c_str()));
+	Weapon *weapon = (Weapon *) accessory->getAction();
+
+	// Find the group to select the objects in
+	TargetGroupsSetEntry *groupEntry = context.getLandscapeMaps().getGroundMaps().getGroups().
+		getGroup(groupname.c_str());
+	if (!groupEntry) return;
+
+	// Select the object
+	int objectCount = groupEntry->getObjectCount();
+	if (objectCount == 0) return;
+	unsigned int object = context.getSimulator().getRandomGenerator().getRandUInt() % objectCount;
+	TargetGroup *entry = groupEntry->getObjectByPos(object);
+
+	FixedVector newPosition = entry->getTarget()->getLife().getTargetPosition();
+	FixedVector newVelocity = entry->getTarget()->getLife().getVelocity();
+
+	WeaponFireContext weaponContext(0, Weapon::eDataDeathAnimation);
+	weapon->fireWeapon(context, weaponContext, newPosition, newVelocity);
+}
+
+bool LandscapeActionFireWeaponFromGroup::readXML(XMLNode *node)
+{
+	if (!node->getNamedChild("weapon", weapon)) return false;
+	if (!node->getNamedChild("groupname", groupname)) return false;
 	return node->failChildren();
 }

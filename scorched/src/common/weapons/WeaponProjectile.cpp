@@ -39,7 +39,7 @@ WeaponProjectile::WeaponProjectile() :
 	flameStartSize_(0.5f), flameEndSize_(3.0f),
 	smokeStartSize_(0.5f), smokeEndSize_(4.0f),
 	thrustAmount_(0), thrustTime_(0),
-	drag_(0),
+	drag_(0), stepSize_(true, 75),
 	engineSound_("data/wav/misc/rocket.wav"),
 	scale_(1), flareType_(0)
 {
@@ -89,6 +89,7 @@ bool WeaponProjectile::parseXML(AccessoryCreateContext &context, XMLNode *access
 
 	// Drag
 	accessoryNode->getNamedChild("drag", drag_, false);
+	accessoryNode->getNamedChild("stepsize", stepSize_, false);
 
 	// Thrust
 	accessoryNode->getNamedChild("thrusttime", thrustTime_, false);

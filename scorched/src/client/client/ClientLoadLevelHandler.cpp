@@ -146,13 +146,19 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	Landscape::instance()->generate(ProgressDialogSync::noevents_instance());
 
 	// Add all missed actions to the simulator
+	ProgressDialogSync::noevents_instance()->setNewOp(
+		LANG_RESOURCE("EXECUTING_EVENTS", "Executing Events"));
 	std::list<ComsSimulateMessage *> simulateMessages;
 	std::list<ComsSimulateMessage *>::iterator messageItor;
 	if (!message.getSimulations(simulateMessages)) return false;
+	int i=0;
 	for (messageItor = simulateMessages.begin();
 		messageItor != simulateMessages.end();
-		messageItor++)
+		messageItor++, i++)
 	{
+		ProgressDialogSync::noevents_instance()->
+			setNewPercentage(100.0f * float(i) / float(simulateMessages.size()));
+
 		ComsSimulateMessage *simMessage = *messageItor;
 		ScorchedClient::instance()->getClientSimulator().
 			addComsSimulateMessage(*simMessage, true);
@@ -161,10 +167,32 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	simulateMessages.clear();
 
 	// Sync the simulator
+	ProgressDialogSync::noevents_instance()->setNewOp(
+		LANG_RESOURCE("SYNCING_SIMULATOR", "Syncing Simulator"));
 	Clock generateClock;
-	ScorchedClient::instance()->getClientSimulator().setSimulationTime(message.getActualTime());
+	fixed actualTime = message.getActualTime();
+	fixed actualTimeCurrent = 0;
+	for (;;) 
+	{
+		actualTimeCurrent += fixed(1);
+		if (actualTimeCurrent >= actualTime) 
+		{
+			ScorchedClient::instance()->getClientSimulator().
+				setSimulationTime(actualTime);
+			break;
+		}
+
+		float percentage = 100.0f * 
+			float(actualTimeCurrent.asInt()) / float(actualTime.asInt());
+		ProgressDialogSync::noevents_instance()->setNewPercentage(percentage);
+		ScorchedClient::instance()->getClientSimulator().
+			setSimulationTime(actualTimeCurrent);
+	}
 	float deformTime = generateClock.getTimeDifference();
 	Logger::log(S3D::formatStringBuffer("Landscape sync event time %.2f seconds", deformTime));
+
+	ProgressDialogSync::noevents_instance()->setNewOp(
+		LANG_RESOURCE("PROCESSING_MESSAGES", "Processing Messages"));
 
 	// Make sure the landscape has been optimized
 	Landscape::instance()->recalculate();

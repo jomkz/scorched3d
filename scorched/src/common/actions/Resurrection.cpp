@@ -35,11 +35,11 @@
 Resurrection::Resurrection(
 	unsigned int playerId,
 	FixedVector &position,
-	fixed resignTime) :
+	fixed resurrectTime) :
 	Action(playerId),
 	playerId_(playerId),
 	position_(position),
-	resignTime_(resignTime)
+	resurrectTime_(resurrectTime)
 {
 
 }
@@ -54,9 +54,9 @@ void Resurrection::init()
 
 void Resurrection::simulate(fixed frameTime, bool &remove)
 {
-	resignTime_ -= frameTime;
+	resurrectTime_ -= frameTime;
 
-	if (resignTime_ < 0)
+	if (resurrectTime_ < 0)
 	{
 		remove = true;
 

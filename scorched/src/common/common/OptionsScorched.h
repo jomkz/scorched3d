@@ -73,6 +73,7 @@ public:
 	OPTIONINT_GETTER(RemoveTime);
 	OPTIONINT_GETTER(RoundScoreTime);
 	OPTIONINT_GETTER(ScoreTime);
+	OPTIONINT_GETTER(IdleCycleTime);
 
 	OPTIONENUM_GETTER(WindForce);
 	OPTIONENUM_GETTER(WindType);

@@ -142,7 +142,11 @@ void PhysicsParticleObject::checkCollision()
 			action = checkBounceCollision(collision, target);
 
 			velocity_[2] = MIN(velocity_[2], 1);
-			bounceFactor = fixed(true, 1750);
+
+			if (collision.collisionId != CollisionIdShield)
+			{
+				bounceFactor = fixed(true, 1750);
+			}
 		}
 		break;
 	case ParticleTypeFalling:

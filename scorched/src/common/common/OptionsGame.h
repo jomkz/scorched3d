@@ -193,6 +193,9 @@ public:
 	int getScoreTime() { return scoreTime_; }
 	OptionEntryInt &getScoreTimeEntry() { return scoreTime_; }
 
+	int getIdleCycleTime() { return idleCycleTime_; }
+	OptionEntryInt &getIdleCycleTimeEntry() { return idleCycleTime_; }
+
 	int getAllowedMissedMoves() { return allowedMissedMoves_; }
 	OptionEntryInt &getAllowedMissedMovesEntry() { return allowedMissedMoves_; }
 
@@ -382,6 +385,7 @@ protected:
 	OptionEntryBoundedInt roundTime_;
 	OptionEntryBoundedInt roundScoreTime_;
 	OptionEntryBoundedInt scoreTime_;
+	OptionEntryBoundedInt idleCycleTime_;
 	OptionEntryBoundedInt allowedMissedMoves_;
 	OptionEntryBoundedInt numberOfRounds_;
 	OptionEntryBoundedInt maxNumberWeapons_;
