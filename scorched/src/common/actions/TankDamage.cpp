@@ -82,8 +82,8 @@ void TankDamage::init()
 
 std::string TankDamage::getActionDetails()
 {
-	return S3D::formatStringBuffer("%u %i %s",
-		damagedPlayerId_, damage_.getInternal(), weapon_->getParent()->getName());
+	return S3D::formatStringBuffer("%u %s %s",
+		damagedPlayerId_, damage_.asQuickString(), weapon_->getParent()->getName());
 }
 
 void TankDamage::simulate(fixed frameTime, bool &remove)
@@ -196,9 +196,9 @@ void TankDamage::calculateDamage()
 		if (context_->getOptionsGame().getActionSyncCheck())
 		{
 			context_->getSimulator().addSyncCheck(
-				S3D::formatStringBuffer("TankDamage: %u %i", 
+				S3D::formatStringBuffer("TankDamage: %u %s", 
 					damagedTarget->getPlayerId(),
-					damagedTarget->getLife().getLife().getInternal()));
+					damagedTarget->getLife().getLife().asQuickString()));
 		}
 
 		// Check if the tank is dead

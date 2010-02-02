@@ -129,5 +129,5 @@ void TankResign::simulate(fixed frameTime, bool &remove)
 
 std::string TankResign::getActionDetails()
 {
-	return S3D::formatStringBuffer("%u %u", playerId_, resignTime_.getInternal());
+	return S3D::formatStringBuffer("%u %s", playerId_, resignTime_.asQuickString());
 }

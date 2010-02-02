@@ -79,11 +79,9 @@ void Resurrection::simulate(fixed frameTime, bool &remove)
 			if (context_->getOptionsGame().getActionSyncCheck())
 			{
 				context_->getSimulator().addSyncCheck(
-					S3D::formatStringBuffer("TankRez: %u %i, %i, %i", 
+					S3D::formatStringBuffer("TankRez: %u %s", 
 						tank->getPlayerId(),
-						position_[0].getInternal(),
-						position_[1].getInternal(),
-						position_[2].getInternal()));
+						position_.asQuickString()));
 			}
 
 			// Rez this tank

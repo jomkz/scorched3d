@@ -123,14 +123,10 @@ void Boid2::update(fixed frameTime, std::vector<Boid2*> &boidSet, bool complexUp
 				context_.getOptionsGame().getActionMovementSyncCheck())
 			{
 				context_.getSimulator().addSyncCheck(
-					S3D::formatStringBuffer("TargetMovement: %u %i, %i, %i %i, %i, %i", 
+					S3D::formatStringBuffer("TargetMovement: %u %s %s", 
 						target_->getPlayerId(),
-						target_->getLife().getTargetPosition()[0].getInternal(),
-						target_->getLife().getTargetPosition()[1].getInternal(),
-						target_->getLife().getTargetPosition()[2].getInternal(),
-						target_->getLife().getVelocity()[0].getInternal(),
-						target_->getLife().getVelocity()[1].getInternal(),
-						target_->getLife().getVelocity()[2].getInternal()));
+						target_->getLife().getTargetPosition().asQuickString(),
+						target_->getLife().getVelocity().asQuickString()));
 			}
 		}
 	}

@@ -60,12 +60,10 @@ void AddTarget::simulate(fixed frameTime, bool &remove)
 	if (context_->getOptionsGame().getActionSyncCheck())
 	{
 		context_->getSimulator().addSyncCheck(
-			S3D::formatStringBuffer("AddTarget : %u %s %i,%i,%i", 
+			S3D::formatStringBuffer("AddTarget : %u %s %s", 
 				playerId,
 				target->getCStrName().c_str(),
-				position_[0].getInternal(),
-				position_[1].getInternal(),
-				position_[2].getInternal()));
+				position_.asQuickString()));
 	}
 
 	// Check if this new target can fall

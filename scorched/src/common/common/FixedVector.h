@@ -272,6 +272,8 @@ public:
 	fixed &operator[](const int m) { DIALOG_ASSERT(m<=2); return V[m]; }
 	fixed const &operator[](const int m) const { DIALOG_ASSERT(m<=2); return V[m]; }
 
+	const char *asQuickString();
+
 	operator fixed*() { return V; }
 	static FixedVector &getNullVector();
 

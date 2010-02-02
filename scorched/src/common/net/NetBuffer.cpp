@@ -300,9 +300,8 @@ void NetBuffer::addToBuffer(FixedVector4 &add)
 
 void NetBuffer::addToBuffer(const fixed add)
 {
-	Uint32 value = 0;
-	SDLNet_Write32(fixed(add).getInternal(), &value);
-	addDataToBuffer(&value, sizeof(Uint32));
+	Sint64 value = SDL_SwapBE64(fixed(add).getInternalData());
+	addDataToBuffer(&value, sizeof(Sint64));
 }
 
 void NetBuffer::addToBuffer(const int add)
@@ -436,9 +435,9 @@ bool NetBufferReader::getFromBuffer(int &result)
 
 bool NetBufferReader::getFromBuffer(fixed &result)
 {
-	Uint32 value = 0;
+	Sint64 value = 0;
 	if (!getDataFromBuffer(&value, sizeof(value))) return false;
-	result = fixed(true, SDLNet_Read32(&value));
+	result = fixed(true, SDL_SwapBE64(value));
 	return true;
 }
 

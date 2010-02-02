@@ -164,11 +164,9 @@ void TankFalling::collision(PhysicsParticleObject &position,
 		if (context_->getOptionsGame().getActionSyncCheck())
 		{
 			context_->getSimulator().addSyncCheck(
-				S3D::formatStringBuffer("TankFalling: %u %i, %i, %i", 
+				S3D::formatStringBuffer("TankFalling: %u %s", 
 					current->getPlayerId(),
-					position.getPosition()[0].getInternal(),
-					position.getPosition()[1].getInternal(),
-					position.getPosition()[2].getInternal()));
+					position.getPosition().asQuickString()));
 		}
 
 		// Move the tank to the final position

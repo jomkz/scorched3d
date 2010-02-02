@@ -27,15 +27,15 @@ void LUAUtil::addVectorToStack(lua_State *L, const FixedVector &vector)
 
 	lua_newtable(L);
 	lua_pushstring(L, "x");
-	lua_pushnumber(L, vec[0].getInternal());
+	lua_pushnumber(L, (int) vec[0].getInternalData());
 	lua_settable(L, -3);
 
 	lua_pushstring(L, "y");
-	lua_pushnumber(L, vec[1].getInternal());
+	lua_pushnumber(L, (int) vec[1].getInternalData());
 	lua_settable(L, -3);
 
 	lua_pushstring(L, "z");
-	lua_pushnumber(L, vec[2].getInternal());
+	lua_pushnumber(L, (int) vec[2].getInternalData());
 	lua_settable(L, -3);
 }
 

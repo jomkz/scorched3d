@@ -125,7 +125,7 @@ static int s3d_get_option(lua_State *L)
 		}
 		else if (entry->getEntryType() == OptionEntry::OptionEntryFixedType)
 		{
-			lua_pushnumber(L, ((OptionEntryFixed *)entry)->getValue().getInternal());
+			lua_pushnumber(L, (int) ((OptionEntryFixed *)entry)->getValue().getInternalData());
 		}
 		else if (entry->getEntryType() == OptionEntry::OptionEntryFixedVectorType)
 		{
@@ -194,7 +194,7 @@ static int s3d_get_height(lua_State *L)
 
 	fixed result = wrapper->getContext()->getLandscapeMaps().getGroundMaps().getHeight(
 		x.asInt(), y.asInt());
-	lua_pushnumber(L, result.getInternal());
+	lua_pushnumber(L, (int) result.getInternalData());
 
 	return 1;
 }
@@ -204,7 +204,7 @@ static int s3d_get_arenawidth(lua_State *L)
 	LUAScript *wrapper = getScript(L);
 
 	fixed result(wrapper->getContext()->getLandscapeMaps().getGroundMaps().getArenaWidth());
-	lua_pushnumber(L, result.getInternal());
+	lua_pushnumber(L, (int) result.getInternalData());
 
 	return 1;
 }
@@ -214,7 +214,7 @@ static int s3d_get_arenaheight(lua_State *L)
 	LUAScript *wrapper = getScript(L);
 
 	fixed result(wrapper->getContext()->getLandscapeMaps().getGroundMaps().getArenaHeight());
-	lua_pushnumber(L, result.getInternal());
+	lua_pushnumber(L, (int) result.getInternalData());
 
 	return 1;
 }
@@ -224,7 +224,7 @@ static int s3d_get_landscapewidth(lua_State *L)
 	LUAScript *wrapper = getScript(L);
 
 	fixed result(wrapper->getContext()->getLandscapeMaps().getGroundMaps().getLandscapeWidth());
-	lua_pushnumber(L, result.getInternal());
+	lua_pushnumber(L, (int) result.getInternalData());
 
 	return 1;
 }
@@ -234,7 +234,7 @@ static int s3d_get_landscapeheight(lua_State *L)
 	LUAScript *wrapper = getScript(L);
 
 	fixed result(wrapper->getContext()->getLandscapeMaps().getGroundMaps().getLandscapeHeight());
-	lua_pushnumber(L, result.getInternal());
+	lua_pushnumber(L, (int) result.getInternalData());
 
 	return 1;
 }

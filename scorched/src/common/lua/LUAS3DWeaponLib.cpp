@@ -52,7 +52,7 @@ static int s3d_random(lua_State *L)
 	fixed result = wrapper->getContext()->
 		getSimulator().getRandomGenerator().getRandFixed();
 
-	lua_pushnumber(L, result.getInternal());
+	lua_pushnumber(L, (int) result.getInternalData());
 	return 1;
 }
 

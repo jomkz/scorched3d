@@ -28,10 +28,12 @@
 #define	FIXED_RESOLUTION		10000
 #define	FIXED_RESOLUTION_FLOAT	10000.0f
 
+#include <SDL/SDL.h>
+
 class fixed
 {
 private:
-	int	m_nVal;
+	Sint64 m_nVal;
 public:
 	fixed()
 	{
@@ -43,7 +45,7 @@ public:
 		m_nVal = fixedVal.m_nVal;
 	}
 
-	fixed(bool bInternal, int nVal)
+	fixed(bool bInternal, Sint64 nVal)
 	{
 		m_nVal = nVal;
 	}
@@ -54,6 +56,11 @@ public:
 	}
 
 	fixed(int nVal)
+	{
+		m_nVal = nVal*FIXED_RESOLUTION;
+	}
+
+	fixed(Sint64 nVal)
 	{
 		m_nVal = nVal*FIXED_RESOLUTION;
 	}
@@ -118,6 +125,7 @@ public:
 	}
 
 	const char *asString();
+	const char *asQuickString();
 
 	float asFloat()
 	{
@@ -129,14 +137,9 @@ public:
 		return (int)(m_nVal/FIXED_RESOLUTION);
 	}
 
-	int getInternal() 
+	Sint64 getInternalData() 
 	{ 
 		return m_nVal; 
-	}
-
-	int	*getInternalData() 
-	{
-		return &m_nVal;
 	}
 
 	fixed floor()
@@ -206,6 +209,7 @@ public:
 	}
 
 	static fixed MAX_FIXED;
+	static fixed MIN_FIXED;
 	static fixed XPI;
 	static fixed X2PI;
 	static fixed XPIO2;

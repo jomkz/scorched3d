@@ -27,6 +27,7 @@
 #include <server/ServerAdminCommon.h>
 #include <server/ServerAdminSessions.h>
 #include <server/ServerParams.h>
+#include <server/ServerState.h>
 #include <server/ServerChannelManager.h>
 #include <landscapedef/LandscapeDefinitionsBase.h>
 #include <engine/ModFiles.h>
@@ -506,7 +507,7 @@ bool ServerWebHandler::ServerHandler::processRequest(
 			(!messageLogging?"checked":""));
 	}
 
-	request.getFields()["STATE"] = "Playing";
+	request.getFields()["STATE"] = (ScorchedServer::instance()->getServerState().getState() == ServerState::ServerPlayingState)?"Playing":"Waiting";
 	request.getFields()["VERSION"] = S3D::formatStringBuffer("%s (%s) - Built %s", 
 		S3D::ScorchedVersion.c_str(), 
 		S3D::ScorchedProtocolVersion.c_str(), 

@@ -77,7 +77,7 @@ bool LUAScript::loadFromFile(const std::string &filename, std::string &error)
 
 bool LUAScript::setGlobal(const std::string &name, fixed value)
 {
-	lua_pushnumber(L_, value.getInternal());
+	lua_pushnumber(L_, (int) value.getInternalData());
 	lua_setglobal(L_, name.c_str());
 	return true;
 }
@@ -116,7 +116,7 @@ bool LUAScript::addStringParameter(const std::string &str)
 
 bool LUAScript::addNumberParameter(fixed number)
 {
-	lua_pushnumber(L_, number.getInternal());
+	lua_pushnumber(L_, (int) number.getInternalData());
 	return true;
 }
 

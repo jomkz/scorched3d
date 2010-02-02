@@ -99,8 +99,8 @@ void Simulator::actualSimulate(fixed frameTime)
 			container->action_->replayAction())
 		{
 			context_->getSimulator().addSyncCheck(
-				S3D::formatStringBuffer("Invoking sim action : %u:%s", 
-				container->fireTime_.getInternal(),
+				S3D::formatStringBuffer("Invoking sim action : %s:%s", 
+				container->fireTime_.asQuickString(),
 				container->action_->getClassName()));
 		}
 
@@ -118,7 +118,7 @@ void Simulator::addSyncCheck(const std::string &msg)
 	DIALOG_ASSERT(context_->getOptionsGame().getActionSyncCheck());
 	syncCheck_.push_back(
 		S3D::formatStringBuffer(
-			">%u %s<", currentTime_.getInternal(), msg.c_str()));
+			">%s %s<", currentTime_.asQuickString(), msg.c_str()));
 }
 
 void Simulator::newLevel()

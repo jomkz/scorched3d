@@ -263,7 +263,7 @@ static int read_number (lua_State *L, FILE *f) {
 
 		fixed fn(number);
 
-		lua_pushnumber(L, fn.getInternal());
+		lua_pushnumber(L, (int) fn.getInternalData());
     return 1;
   }
   else return 0;  /* read fails */

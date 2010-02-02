@@ -22,6 +22,17 @@
 
 static FixedVector nullVector;
 
+const char *FixedVector::asQuickString()
+{
+	static int i=0;
+	static char buffer[5][75];
+
+	char *result = buffer[++i % 5];
+	snprintf(result, 75, "%s,%s,%s", 
+		V[0].asQuickString(), V[1].asQuickString(), V[2].asQuickString());
+	return result;
+}
+
 FixedVector &FixedVector::getNullVector()
 {
 	nullVector.zero();
@@ -39,40 +50,9 @@ FixedVector &FixedVector::getNullVector()
         root = root >> 1;                               \
     }
 
-static long long iSqrtLL(long long value)
+static Sint64 iSqrtLL(Sint64 value)
 {
-    long long root = 0;
-
-    sqrt_step( 0);
-    sqrt_step( 2);
-    sqrt_step( 4);
-    sqrt_step( 6);
-    sqrt_step( 8);
-    sqrt_step(10);
-    sqrt_step(12);
-    sqrt_step(14);
-    sqrt_step(16);
-    sqrt_step(18);
-    sqrt_step(20);
-    sqrt_step(22);
-    sqrt_step(24);
-    sqrt_step(26);
-    sqrt_step(28);
-    sqrt_step(30);
-
-    // round to the nearest integer, cuts max error in half
-
-    if(root < value)
-    {
-        ++root;
-    }
-
-    return root;
-}
-
-static long iSqrtL(long value)
-{
-    long root = 0;
+    Sint64 root = 0;
 
     sqrt_step( 0);
     sqrt_step( 2);
@@ -103,29 +83,12 @@ static long iSqrtL(long value)
 
 fixed FixedVector::Magnitude()
 {
-	if (sizeof(long) == 8)
-	{
-		long a = ((long)V[0].getInternal()*V[0].getInternal())/FIXED_RESOLUTION;
-		long b = ((long)V[1].getInternal()*V[1].getInternal())/FIXED_RESOLUTION;
-		long c = ((long)V[2].getInternal()*V[2].getInternal())/FIXED_RESOLUTION;
+	Sint64 a = V[0].getInternalData()*V[0].getInternalData()/FIXED_RESOLUTION;
+	Sint64 b = V[1].getInternalData()*V[1].getInternalData()/FIXED_RESOLUTION;
+	Sint64 c = V[2].getInternalData()*V[2].getInternalData()/FIXED_RESOLUTION;
+	Sint64 res = a + b + c;
+	Sint64 result = iSqrtLL(res);
+	result *= 100;
 
-		long res = a + b + c;
-		long result = iSqrtL(res);
-		result *= 100;
-
-		return fixed(true, (int) result);
-	}
-	else if (sizeof(long long) == 8)
-	{
-		long long a = ((long long)V[0].getInternal()*V[0].getInternal())/FIXED_RESOLUTION;
-		long long b = ((long long)V[1].getInternal()*V[1].getInternal())/FIXED_RESOLUTION;
-		long long c = ((long long)V[2].getInternal()*V[2].getInternal())/FIXED_RESOLUTION;
-
-		long long res = a + b + c;
-		long long result = iSqrtLL(res);
-		result *= 100;
-
-		return fixed(true, (int) result);
-	}
-	return fixed(0);
+	return fixed(true, result);
 }

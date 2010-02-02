@@ -211,18 +211,14 @@ Target *TargetSpace::getCollision(FixedVector &position)
 		std::string targets;
 		if (result)
 		{
-			targets.append(S3D::formatStringBuffer("%u:%i,%i,%i ", 
+			targets.append(S3D::formatStringBuffer("%u:%s ", 
 				result->getPlayerId(),
-				result->getLife().getTargetPosition()[0].getInternal(),
-				result->getLife().getTargetPosition()[1].getInternal(),
-				result->getLife().getTargetPosition()[2].getInternal()));
+				result->getLife().getTargetPosition().asQuickString()));
 		}
 
 		context_->getSimulator().addSyncCheck(
-			S3D::formatStringBuffer("CollisionSet : %i,%i,%i %s", 
-				position[0].getInternal(),
-				position[1].getInternal(),
-				position[2].getInternal(),
+			S3D::formatStringBuffer("CollisionSet : %s %s", 
+				position.asQuickString(),
 				targets.c_str()));
 	}
 
@@ -299,19 +295,15 @@ void TargetSpace::getCollisionSet(FixedVector &position, fixed radius,
 			itor != collisionTargets.end();
 			itor++)
 		{
-			targets.append(S3D::formatStringBuffer("%u:%i,%i,%i ", 
+			targets.append(S3D::formatStringBuffer("%u:%s ", 
 				itor->second->getPlayerId(),
-				itor->second->getLife().getTargetPosition()[0].getInternal(),
-				itor->second->getLife().getTargetPosition()[1].getInternal(),
-				itor->second->getLife().getTargetPosition()[2].getInternal()));
+				itor->second->getLife().getTargetPosition().asQuickString()));
 		}
 
 		context_->getSimulator().addSyncCheck(
-			S3D::formatStringBuffer("CollisionSet : %i,%i,%i %i \"%s\"", 
-				position[0].getInternal(),
-				position[1].getInternal(),
-				position[2].getInternal(),
-				radius.getInternal(),
+			S3D::formatStringBuffer("CollisionSet : %s %s \"%s\"", 
+				position.asQuickString(),
+				radius.asQuickString(),
 				targets.c_str()));
 	}
 }

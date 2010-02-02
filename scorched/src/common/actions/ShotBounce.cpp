@@ -71,9 +71,9 @@ ShotBounce::~ShotBounce()
 
 std::string ShotBounce::getActionDetails()
 {
-	return S3D::formatStringBuffer("%i,%i,%i %i,%i,%i %s",
-		startPosition_[0].getInternal(), startPosition_[1].getInternal(), startPosition_[2].getInternal(),
-		velocity_[0].getInternal(), velocity_[1].getInternal(), velocity_[2].getInternal(),
+	return S3D::formatStringBuffer("%s %s %s",
+		startPosition_.asQuickString(),
+		velocity_.asQuickString(),
 		weapon_->getParent()->getName());
 }
 

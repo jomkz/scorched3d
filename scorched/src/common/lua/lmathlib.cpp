@@ -21,7 +21,7 @@ static int math_abs (lua_State *L)
 {
 	fixed param(true, luaL_checknumber(L, 1));
 	fixed result = param.abs();
-	lua_pushnumber(L, result.getInternal());
+	lua_pushnumber(L, (int) result.getInternalData());
 	return 1;
 }
 
@@ -29,7 +29,7 @@ static int math_sin (lua_State *L)
 {
 	fixed param(true, luaL_checknumber(L, 1));
 	fixed result = param.sin();
-	lua_pushnumber(L, result.getInternal());
+	lua_pushnumber(L,(int)  result.getInternalData());
 	return 1;
 }
 
@@ -37,7 +37,7 @@ static int math_cos (lua_State *L)
 {
 	fixed param(true, luaL_checknumber(L, 1));
 	fixed result = param.cos();
-	lua_pushnumber(L, result.getInternal());
+	lua_pushnumber(L, (int) result.getInternalData());
 	return 1;
 }
 
@@ -45,7 +45,7 @@ static int math_tan (lua_State *L)
 {
 	fixed param(true, luaL_checknumber(L, 1));
 	fixed result = param.tan();
-	lua_pushnumber(L, result.getInternal());
+	lua_pushnumber(L, (int) result.getInternalData());
 	return 1;
 }
 
@@ -53,7 +53,7 @@ static int math_acos (lua_State *L)
 {
 	fixed param(true, luaL_checknumber(L, 1));
 	fixed result = param.acos();
-	lua_pushnumber(L, result.getInternal());
+	lua_pushnumber(L, (int) result.getInternalData());
 	return 1;
 }
 
@@ -61,7 +61,7 @@ static int math_ceil (lua_State *L)
 {
 	fixed param(true, luaL_checknumber(L, 1));
 	fixed result = param.ceil();
-	lua_pushnumber(L, result.getInternal());
+	lua_pushnumber(L, (int) result.getInternalData());
 	return 1;
 }
 
@@ -69,7 +69,7 @@ static int math_floor (lua_State *L)
 {
 	fixed param(true, luaL_checknumber(L, 1));
 	fixed result = param.floor();
-	lua_pushnumber(L, result.getInternal());
+	lua_pushnumber(L, (int) result.getInternalData());
 	return 1;
 }
 
@@ -77,7 +77,7 @@ static int math_sqrt (lua_State *L)
 {
 	fixed param(true, luaL_checknumber(L, 1));
 	fixed result = param.sqrt();
-	lua_pushnumber(L, result.getInternal());
+	lua_pushnumber(L, (int) result.getInternalData());
 	return 1;
 }
 
@@ -86,7 +86,7 @@ static int math_pow (lua_State *L)
 	fixed param1(true, luaL_checknumber(L, 1));
 	fixed param2(true, luaL_checknumber(L, 2));
 	fixed result = param1.pow(param2);
-	lua_pushnumber(L, result.getInternal());
+	lua_pushnumber(L, (int) result.getInternalData());
 	return 1;
 }
 
@@ -94,7 +94,7 @@ static int math_log (lua_State *L)
 {
 	fixed param(true, luaL_checknumber(L, 1));
 	fixed result = param.log();
-	lua_pushnumber(L, result.getInternal());
+	lua_pushnumber(L, (int) result.getInternalData());
 	return 1;
 }
 
@@ -102,7 +102,7 @@ static int math_log10 (lua_State *L)
 {
 	fixed param(true, luaL_checknumber(L, 1));
 	fixed result = param.log10();
-	lua_pushnumber(L, result.getInternal());
+	lua_pushnumber(L, (int) result.getInternalData());
 	return 1;
 }
 
@@ -110,7 +110,7 @@ static int math_exp (lua_State *L)
 {
 	fixed param(true, luaL_checknumber(L, 1));
 	fixed result = param.exp();
-	lua_pushnumber(L, result.getInternal());
+	lua_pushnumber(L, (int) result.getInternalData());
 	return 1;
 }
 

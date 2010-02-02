@@ -280,8 +280,8 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 					if (serverHeight != clientHeight ||
 						serverNormal != clientNormal) 
 					{
-						syncCheckLog(S3D::formatStringBuffer("*** %i %i %s", 
-							serverHeight.getInternal(), clientHeight.getInternal(),
+						syncCheckLog(S3D::formatStringBuffer("*** %s %s %s", 
+							serverHeight.asQuickString(), clientHeight.asQuickString(),
 							(serverNormal != clientNormal?"Normal":"")));
 					}					
 				}

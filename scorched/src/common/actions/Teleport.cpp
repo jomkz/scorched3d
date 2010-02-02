@@ -122,11 +122,9 @@ void Teleport::simulate(fixed frameTime, bool &remove)
 				if (context_->getOptionsGame().getActionSyncCheck())
 				{
 					context_->getSimulator().addSyncCheck(
-						S3D::formatStringBuffer("Telport: %u %i, %i, %i", 
+						S3D::formatStringBuffer("Telport: %u %s", 
 							tank->getPlayerId(),
-							position_[0].getInternal(),
-							position_[1].getInternal(),
-							position_[2].getInternal()));
+							position_.asQuickString()));
 				}
 
 				// Set this position and flatten the landscape
@@ -144,11 +142,9 @@ void Teleport::simulate(fixed frameTime, bool &remove)
 				if (context_->getOptionsGame().getActionSyncCheck())
 				{
 					context_->getSimulator().addSyncCheck(
-						S3D::formatStringBuffer("Telport: %u %i, %i, %i", 
+						S3D::formatStringBuffer("Telport: %u %s", 
 							tank->getPlayerId(),
-							position_[0].getInternal(),
-							position_[1].getInternal(),
-							position_[2].getInternal()));
+							position_.asQuickString()));
 				}
 
 				// Set the position, what ever this is
@@ -168,10 +164,8 @@ void Teleport::simulate(fixed frameTime, bool &remove)
 
 std::string Teleport::getActionDetails()
 {
-	return S3D::formatStringBuffer("%u %i,%i,%i %s", 
+	return S3D::formatStringBuffer("%u %s %s", 
 		weaponContext_.getPlayerId(), 
-		position_[0].getInternal(),
-		position_[1].getInternal(),
-		position_[2].getInternal(),
+		position_.asQuickString(),
 		weapon_->getParent()->getName());
 }

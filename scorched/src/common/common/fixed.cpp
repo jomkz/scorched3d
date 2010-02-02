@@ -42,37 +42,8 @@ fixed fixed::XPIO2 =   fixed(true,_XPIO2);
 #define _XLN_10   23025 // 2.30258509299404568402
 #define XLN_10   fixed(true,_XLN_10)
 
-fixed fixed::MAX_FIXED(true, INT_MAX); // 32 bit
-
-inline int fixed_internal_mult(int a, int b)
-{
-	int c = 0;
-	if (sizeof(long) == 8)
-	{
-		c = (int)((((long)a)*((long)b))/FIXED_RESOLUTION);
-	}
-	else if (sizeof(long long) == 8)
-	{
-		c = (int)((((long long)a)*((long long)b))/FIXED_RESOLUTION);
-	}
-	return c;
-}
-
-inline int fixed_internal_div(int a, int b)
-{
-	if(b == 0) return 0xFFFFFFF;
-
-	int c = 0;
-	if (sizeof(long) == 8)
-	{
-		c = (int)((((long)a)*((long)FIXED_RESOLUTION))/b);
-	}
-	else if (sizeof(long long) == 8)
-	{
-		c = (int)((((long long)a)*((long long)FIXED_RESOLUTION))/b);
-	}
-	return c;
-}
+fixed fixed::MAX_FIXED(true, LLONG_MAX); // 64 bit
+fixed fixed::MIN_FIXED(true, LLONG_MIN); // 64 bit
 
 fixed::fixed(const char *nVal)
 {
@@ -101,8 +72,8 @@ fixed::fixed(const char *nVal)
 	i[ip] = '\0';
 	f[4] = '\0';
 
-	int ipa = atoi(i);
-	int fpa = atoi(f);
+	long ipa = atol(i);
+	long fpa = atol(f);
 
 	m_nVal = ipa * FIXED_RESOLUTION + fpa;
 	if (neg) m_nVal =- m_nVal;
@@ -116,12 +87,12 @@ const char *fixed::asString()
 	char buffer[15];
 	if (m_nVal < 0) 
 	{
-		snprintf(buffer, 15, "%i", -m_nVal);
+		snprintf(buffer, 15, "%lli", -m_nVal);
 		result[r++] = '-';
 	}
 	else 
 	{
-		snprintf(buffer, 15, "%i", m_nVal);
+		snprintf(buffer, 15, "%lli", m_nVal);
 	}
 	int len = (int) strlen(buffer);
 
@@ -157,25 +128,35 @@ const char *fixed::asString()
 	return result;
 }
 
+const char *fixed::asQuickString()
+{
+	static int i=0;
+	static char buffer[5][25];
+
+	char *result = buffer[++i % 5];
+	snprintf(result, 25, "%lli", m_nVal);
+	return result;
+}
+
 fixed fixed::operator*(fixed b)
 {
-	return fixed(true, fixed_internal_mult(m_nVal, b.m_nVal));
+	return fixed(true, m_nVal * b.m_nVal / FIXED_RESOLUTION);
 }
 
 fixed fixed::operator/(fixed b)
 {
-	return fixed(true, fixed_internal_div(m_nVal, b.m_nVal));
+	return fixed(true, m_nVal * FIXED_RESOLUTION / b.m_nVal);
 }
 
 fixed fixed::operator*=(fixed b)
 {
-	m_nVal = fixed_internal_mult(m_nVal, b.m_nVal);
+	m_nVal = m_nVal * b.m_nVal /FIXED_RESOLUTION;
 	return *this;
 }
 
 fixed fixed::operator/=(fixed b)
 {
-	m_nVal = fixed_internal_div(m_nVal, b.m_nVal);
+	m_nVal = m_nVal * FIXED_RESOLUTION / b.m_nVal;
 	return *this;
 }
 
@@ -190,9 +171,9 @@ fixed fixed::operator/=(fixed b)
         root = root >> 1;                               \
     }
 
-static int iSqrt(int value)
+static Sint64 iSqrt(Sint64 value)
 {
-    int root = 0;
+    Sint64 root = 0;
 
     sqrt_step( 0);
     sqrt_step( 2);
@@ -294,7 +275,7 @@ static fixed ilog10( fixed p_Base )
 
 fixed fixed::sqrt()
 {
-	int val = iSqrt(m_nVal);
+	Sint64 val = iSqrt(m_nVal);
 	val *= 100;
 	return fixed(true, val);
 }
@@ -519,7 +500,7 @@ fixed tanx(fixed x)
 fixed fixed::fromFloat(float flt)
 {
 	fixed result;
-	result.m_nVal = int(flt * FIXED_RESOLUTION_FLOAT);
+	result.m_nVal = Sint64(flt * FIXED_RESOLUTION_FLOAT);
 	return result;
 }
 

@@ -82,9 +82,9 @@ void Lightning::init()
 
 std::string Lightning::getActionDetails()
 {
-	return S3D::formatStringBuffer("%i,%i,%i %i,%i,%i %s",
-		position_[0].getInternal(), position_[1].getInternal(), position_[2].getInternal(),
-		velocity_[0].getInternal(), velocity_[1].getInternal(), velocity_[2].getInternal(),
+	return S3D::formatStringBuffer("%s %s %s",
+		position_.asQuickString(),
+		velocity_.asQuickString(),
 		weapon_->getParent()->getName());
 }
 

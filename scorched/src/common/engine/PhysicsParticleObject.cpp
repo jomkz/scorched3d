@@ -124,12 +124,10 @@ void PhysicsParticleObject::checkCollision()
 				if (context_->getOptionsGame().getActionSyncCheck())
 				{
 					context_->getSimulator().addSyncCheck(
-						S3D::formatStringBuffer("Shot Collision : %i %i %i,%i,%i", 
+						S3D::formatStringBuffer("Shot Collision : %i %i %s", 
 							(int) action,
 							(int) collision.collisionId,
-							position_[0].getInternal(),
-							position_[1].getInternal(),
-							position_[2].getInternal()));
+							position_.asQuickString()));
 				}
 			}
 		}
