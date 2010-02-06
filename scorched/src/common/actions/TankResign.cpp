@@ -114,6 +114,16 @@ void TankResign::simulate(fixed frameTime, bool &remove)
 				}
 			}
 
+			// Update score
+			int scorePerResign = context_->getOptionsGame().getScorePerResign();
+			tank->getScore().setScore(
+				tank->getScore().getScore() + scorePerResign);
+
+			// Update skill
+			int skillPerResign = context_->getOptionsGame().getSkillForResign();
+			tank->getScore().setSkill(
+				tank->getScore().getSkill() + skillPerResign);
+
 			// tank is dead
 			tank->getState().setState(TankState::sDead);
 

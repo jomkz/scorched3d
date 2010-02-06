@@ -183,6 +183,8 @@ SettingsSubSelectDialog::SettingsSubSelectDialog() :
 		controls_, scoreTab_, optionsGame.getScorePerAssistEntry());
 	GLWOptionEntry::createEntry(
 		controls_, scoreTab_, optionsGame.getScorePerMoneyEntry());
+	GLWOptionEntry::createEntry(
+		controls_, scoreTab_, optionsGame.getScorePerResignEntry());
 	scoreTab_->addWidget(new GLWSpacer(0.0f, 20.0f));
 
 	// Env Tab

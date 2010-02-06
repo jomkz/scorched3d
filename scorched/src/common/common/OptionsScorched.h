@@ -86,11 +86,13 @@ public:
 	OPTIONINT_GETTER(ScorePerMoney);
 	OPTIONINT_GETTER(ScorePerAssist);
 	OPTIONINT_GETTER(ScorePerKill);
+	OPTIONINT_GETTER(ScorePerResign);
 	OPTIONINT_GETTER(ScoreWonForRound);
 	OPTIONINT_GETTER(ScoreWonForLives);
 
 	OPTIONINT_GETTER(SkillForRound);
 	OPTIONINT_GETTER(SkillForMatch);
+	OPTIONINT_GETTER(SkillForResign);
 	OPTIONINT_GETTER(MaxSkillLost);
 	OPTIONINT_GETTER(MaxSkillGained);
 	OPTIONINT_GETTER(SkillForSelfKill);

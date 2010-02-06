@@ -106,6 +106,9 @@ public:
 	int getScorePerKill() { return scorePerKill_; }
 	OptionEntryInt &getScorePerKillEntry() { return scorePerKill_; }
 
+	int getScorePerResign() { return scorePerResign_; }
+	OptionEntryInt &getScorePerResignEntry() { return scorePerResign_; }
+
 	int getScoreWonForRound() { return scoreWonForRound_; }
 	OptionEntryInt &getScoreWonForRoundEntry() { return scoreWonForRound_; }
 
@@ -117,6 +120,9 @@ public:
 
 	int getSkillForMatch() { return skillForMatch_; }
 	OptionEntryInt &getSkillForMatchEntry() { return skillForMatch_; }
+
+	int getSkillForResign() { return skillForResign_; }
+	OptionEntryInt &getSkillForResignEntry() { return skillForResign_; }
 
 	int getMaxSkillLost() { return maxSkillLost_; }
 	OptionEntryInt &getMaxSkillLostEntry() { return maxSkillLost_; }
@@ -411,6 +417,7 @@ protected:
 	OptionEntryBoundedInt scorePerMoney_;
 	OptionEntryBoundedInt scorePerAssist_;
 	OptionEntryBoundedInt scorePerKill_;
+	OptionEntryBoundedInt scorePerResign_;
 	OptionEntryBoundedInt scoreWonForRound_;
 	OptionEntryBoundedInt scoreWonForLives_;
 	OptionEntryInt maxLandscapeSize_;
@@ -418,6 +425,7 @@ protected:
 	OptionEntryInt freeMarketLimits_;
 	OptionEntryBoundedInt skillForRound_;
 	OptionEntryBoundedInt skillForMatch_;
+	OptionEntryBoundedInt skillForResign_;
 	OptionEntryBoundedInt maxSkillLost_;
 	OptionEntryBoundedInt maxSkillGained_;
 	OptionEntryBoundedInt skillForSelfKill_;
