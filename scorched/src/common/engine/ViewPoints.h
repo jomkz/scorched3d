@@ -51,8 +51,7 @@ public:
 	ViewPoints();
 	virtual ~ViewPoints();
 
-	void reset() { finished_ = false; }
-	void explosion(unsigned int playerId);
+	void explosion(unsigned int playerId, FixedVector &position);
 
 	void simulate(fixed frameTime);
 	void getValues(FixedVector &lookAt, 
@@ -64,15 +63,16 @@ public:
 	ViewPoints::ViewPoint *getNewViewPoint(unsigned int playerId);
 	void releaseViewPoint(ViewPoints::ViewPoint *point);
 
+	FixedVector &getExplosionPosition() { return explosionPosition_; }
+
 	void setContext(ScorchedContext *context) { context_ = context; }
 
 protected:
 	std::list<ViewPoint *> points_;
 	ScorchedContext *context_;
 	FixedVector lookAt_, lookFrom_;
+	FixedVector explosionPosition_;
 	fixed totalTime_;
-	bool finished_;
-
 };
 
 #endif

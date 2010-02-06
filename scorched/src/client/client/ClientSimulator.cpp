@@ -31,7 +31,8 @@
 ClientSimulator::ClientSimulator() : 
 	GameStateI("ClientSimulator"),
 	serverTimeDifference_(10, 0),
-	serverChoke_(25, 0)
+	serverChoke_(25, 0),
+	loadingLevel_(false)
 {
 }
 
@@ -48,7 +49,7 @@ bool ClientSimulator::continueToSimulate()
 
 void ClientSimulator::simulate(const unsigned state, float simTime)
 {
-	if (state == ClientState::StateLoadLevel) return;
+	if (loadingLevel_) return;
 	Simulator::simulate();
 }
 
@@ -79,11 +80,10 @@ bool ClientSimulator::processComsSimulateMessage(
 	ComsSimulateMessage message;
 	if (!message.readMessage(reader)) return false;
 
-	if (ScorchedClient::instance()->getGameState().getState() != ClientState::StateLoadFiles &&
-		ScorchedClient::instance()->getGameState().getState() != ClientState::StateLoadLevel)
+	if (!loadingLevel_)
 	{
 		// Actualy process message
-		addComsSimulateMessage(message, false);
+		addComsSimulateMessage(message);
 
 		// Send back a response so ping times can be calculated
 		ComsSimulateResultMessage resultMessage(message.getServerTime());
@@ -99,7 +99,7 @@ bool ClientSimulator::processComsSimulateMessage(
 	else
 	{
 		// Actualy process message
-		addComsSimulateMessage(message, true);
+		addComsSimulateMessage(message);
 
 		// Set the current time to the time in the message
 		setSimulationTime(waitingEventTime_);
@@ -108,8 +108,7 @@ bool ClientSimulator::processComsSimulateMessage(
 	return true;
 }
 
-void ClientSimulator::addComsSimulateMessage(ComsSimulateMessage &message,
-	bool replaying)
+void ClientSimulator::addComsSimulateMessage(ComsSimulateMessage &message)
 {
 	// Set new waiting time
 	waitingEventTime_ = message.getEventTime();
@@ -121,7 +120,7 @@ void ClientSimulator::addComsSimulateMessage(ComsSimulateMessage &message,
 		itor++)
 	{
 		SimAction *action = *itor;
-		if (action->replayAction() || !replaying)
+		if (action->replayAction() || !loadingLevel_)
 		{
 			simActions_.push_back(new SimActionContainer(action, waitingEventTime_));
 		}

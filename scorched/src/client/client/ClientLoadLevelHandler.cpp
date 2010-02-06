@@ -107,6 +107,9 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	const char *messageType,
 	NetBufferReader &reader)
 {
+	// Make sure simulator knows we are loading a level
+	ScorchedClient::instance()->getClientSimulator().setLoadingLevel(true);
+
 	// Move into the load level state
 	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimLoadLevel);
 
@@ -161,10 +164,20 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 
 		ComsSimulateMessage *simMessage = *messageItor;
 		ScorchedClient::instance()->getClientSimulator().
-			addComsSimulateMessage(*simMessage, true);
+			addComsSimulateMessage(*simMessage);
 		delete simMessage;
 	}
 	simulateMessages.clear();
+
+	// Move into the next state
+	if (strcmp(message.getLandscapeDefinition().getName(), "blank") == 0)
+	{
+		ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWaitNoLandscape);
+	}
+	else
+	{
+		ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
+	}
 
 	// Sync the simulator
 	ProgressDialogSync::noevents_instance()->setNewOp(
@@ -228,21 +241,12 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	MainCamera::instance()->getTarget().setCameraType(TargetCamera::CamSpectator);
 	ClientReloadAdaptor::instance();
 
+	// Make sure simulator knows we are not loading a level
+	ScorchedClient::instance()->getClientSimulator().setLoadingLevel(false);
+
 	// Tell the server we have finished processing the landscape
 	ComsLevelLoadedMessage levelLoadedMessage;
 	ComsMessageSender::sendToServer(levelLoadedMessage);
 
-	// Move into the wait state
-	if (ScorchedClient::instance()->getGameState().getState() == ClientState::StateLoadLevel)
-	{
-		if (strcmp(message.getLandscapeDefinition().getName(), "blank") == 0)
-		{
-			ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWaitNoLandscape);
-		}
-		else
-		{
-			ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
-		}
-	}
 	return true;
 }

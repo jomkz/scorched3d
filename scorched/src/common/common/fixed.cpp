@@ -145,6 +145,7 @@ fixed fixed::operator*(fixed b)
 
 fixed fixed::operator/(fixed b)
 {
+	if (b == 0) b = fixed(true, 1);
 	return fixed(true, m_nVal * FIXED_RESOLUTION / b.m_nVal);
 }
 
@@ -156,6 +157,7 @@ fixed fixed::operator*=(fixed b)
 
 fixed fixed::operator/=(fixed b)
 {
+	if (b == 0) b = fixed(true, 1);
 	m_nVal = m_nVal * FIXED_RESOLUTION / b.m_nVal;
 	return *this;
 }

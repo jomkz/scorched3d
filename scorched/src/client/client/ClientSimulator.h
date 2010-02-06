@@ -48,12 +48,14 @@ public:
 
 	virtual void newLevel();
 	void setSimulationTime(fixed actualTime);
-	void addComsSimulateMessage(ComsSimulateMessage &message, bool replaying);
+	void addComsSimulateMessage(ComsSimulateMessage &message);
 
 	fixed getServerStepTime() { return serverStepTime_; }
 	fixed getServerRoundTripTime() { return serverRoundTripTime_; }
 	fixed getServerTimeDifference() { return serverTimeDifference_.getAverage(); }
 	fixed getServerChoke() { return serverChoke_.getAverage(); }
+
+	void setLoadingLevel(bool loadingLevel) { loadingLevel_ = loadingLevel; }
 
 	class ActionControllerGameState : public GameStateI
 	{
@@ -67,6 +69,7 @@ private:
 	fixed waitingEventTime_;
 	RollingAverage serverTimeDifference_, serverChoke_;
 	fixed serverStepTime_, serverRoundTripTime_;
+	bool loadingLevel_;
 
 	virtual bool continueToSimulate();
 	virtual void actualSimulate(fixed frameTime);

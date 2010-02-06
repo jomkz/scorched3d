@@ -24,7 +24,7 @@
 #include <common/OptionsScorched.h>
 #include <tank/TankContainer.h>
 
-ViewPoints::ViewPoints() : context_(0), totalTime_(0), finished_(false)
+ViewPoints::ViewPoints() : context_(0), totalTime_(0)
 {
 }
 
@@ -105,7 +105,6 @@ void ViewPoints::simulate(fixed frameTime)
 
 int ViewPoints::getLookAtCount()
 {
-	if (finished_) return 0;
 	return (int) points_.size();
 }
 
@@ -114,8 +113,7 @@ ViewPoints::ViewPoint *ViewPoints::getNewViewPoint(unsigned int playerId)
 	if (context_->getServerMode()) return 0;
 	if (playerId == 0) return 0;
 
-	if (context_->getTankContainer().getCurrentPlayerId() != playerId &&
-		context_->getOptionsGame().getTurnType() == OptionsGame::TurnSimultaneous)
+	if (context_->getTankContainer().getCurrentPlayerId() != playerId)
 	{
 		return 0;
 	}
@@ -125,17 +123,16 @@ ViewPoints::ViewPoint *ViewPoints::getNewViewPoint(unsigned int playerId)
 	return viewpoint;
 }
 
-void ViewPoints::explosion(unsigned int playerId)
+void ViewPoints::explosion(unsigned int playerId, FixedVector &position)
 {
 	if (context_->getServerMode()) return;
 
-	if (context_->getTankContainer().getCurrentPlayerId() != playerId &&
-		context_->getOptionsGame().getTurnType() == OptionsGame::TurnSimultaneous)
+	if (context_->getTankContainer().getCurrentPlayerId() != playerId)
 	{
 		return;
 	}
 
-	finished_ = true;
+	explosionPosition_ = position;
 }
 
 void ViewPoints::releaseViewPoint(ViewPoint *point)

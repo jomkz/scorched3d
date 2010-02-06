@@ -20,6 +20,8 @@
 
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsMessageHandler.h>
+#include <landscapedef/LandscapeDefinition.h>
+#include <landscapemap/LandscapeMaps.h>
 #include <net/NetBuffer.h>
 #include <net/NetInterface.h>
 #include <common/Defines.h>
@@ -162,6 +164,10 @@ bool ComsMessageSender::sendToAllConnectedClients(
 bool ComsMessageSender::sendToAllLoadedClients(
 	ComsMessage &message, unsigned int flags)
 {
+	LandscapeDefinition &landscapeDefinition =
+		ScorchedServer::instance()->getLandscapeMaps().getDefinitions().
+		getDefinition();
+
 	std::list<unsigned int> destinations;
 	std::map<unsigned int, ServerDestination *>::iterator itor;
 	std::map<unsigned int, ServerDestination *> dests = 
@@ -170,9 +176,11 @@ bool ComsMessageSender::sendToAllLoadedClients(
 		itor != dests.end();
 		itor++)
 	{
-		ServerDestination *destination = (*itor).second;
+		unsigned int destinionId = itor->first;
+		ServerDestination *destination = itor->second;
 		if (destination->getState() == ServerDestination::sFinished ||
-			destination->getState() == ServerDestination::sLoadingLevel)
+			(destination->getState() == ServerDestination::sLoadingLevel &&
+			destination->getLevelNumber() == landscapeDefinition.getDefinitionNumber()))
 		{
 			destinations.push_back(destination->getDestinationId());
 		}

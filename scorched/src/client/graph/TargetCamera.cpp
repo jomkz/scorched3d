@@ -54,6 +54,7 @@ static const char *cameraNames[] =
 	"AboveTank",
 	"Tank",
 	"Shot",
+	"Explosion",
 	"Action",
 	"Left",
 	"Right",
@@ -76,6 +77,7 @@ static const char *cameraDescriptions[] =
 	"Look from the current tanks gun turret.\n"
 	"Follows any shots the current tank makes.\n"
 	"Tracks the current tanks rotation.",
+	"Shows the last explosion from the tank.",
 	"Automaticaly tracks any action around the\n"
 	"island by moving to view any explosions\n"
 	"and deaths.",
@@ -313,7 +315,18 @@ bool TargetCamera::moveCamera(float frameTime, bool playing)
 
 			mainCam_.setLookAt(lookatPos.asVector(), true);
 			mainCam_.setOffSet(lookfromPos.asVector(), true);
-			//simulateCamera = false;
+		}
+		else viewFromBehindTank = true;
+		break;
+	case CamShot:
+		if (ScorchedClient::instance()->getContext().getViewPoints().getExplosionPosition() != 
+			FixedVector::getNullVector())
+		{
+			FixedVector v = ScorchedClient::instance()->getContext().
+				getViewPoints().getExplosionPosition();
+			FixedVector lookfromPos(5, 5, 25);
+			mainCam_.setLookAt(v.asVector(), true);
+			mainCam_.setOffSet(lookfromPos.asVector(), true);
 		}
 		else viewFromBehindTank = true;
 		break;

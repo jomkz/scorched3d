@@ -163,7 +163,7 @@ void Explosion::init()
 		}
 		else
 		{
-			context_->getViewPoints().explosion(weaponContext_.getPlayerId());
+			context_->getViewPoints().explosion(weaponContext_.getPlayerId(), position_);
 		}
 
 		{
