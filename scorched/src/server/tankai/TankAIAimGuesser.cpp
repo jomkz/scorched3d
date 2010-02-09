@@ -126,14 +126,13 @@ void TankAIAimGuesser::refineShot(Tank *tank,
 	tank->getPosition().rotateGunXY(angleXYDegs, false);
 
 	// And the new best power
-	FixedVector resultingVelocity = tank->getPosition().getVelocityVector();
-	fixed resultingDistance = (
-		resultingVelocity[0] * resultingVelocity[0] +
-		resultingVelocity[1] * resultingVelocity[1]).sqrt();
-	fixed wantedDistance = (
-		shotVelocity[0] * shotVelocity[0] +
-		shotVelocity[1] * shotVelocity[1]).sqrt();
-	fixed power = wantedDistance / resultingDistance - 1;
+	float dist = (currentPos - tank->getPosition().getTankPosition().asVector()).Magnitude2d();
+	float wanteddist = (wantedPos - tank->getPosition().getTankPosition().asVector()).Magnitude2d();
+	float currentPower = (float) (log(dist) / log(2.0));
+	float wantedPower = (float) (log(wanteddist) / log(2.0));
+
+	fixed power = tank->getPosition().getPower() * fixed::fromFloat(wantedPower) / 
+		fixed::fromFloat(currentPower);
 
 	tank->getPosition().changePower(power, false);
 }
