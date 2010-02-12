@@ -77,6 +77,7 @@ void TankState::newGame()
 
 	lives_ = maxLives_;
 	tank_->getTargetState().setFalling(0);
+	tank_->getTargetState().setMoving(0);
 	if (!context_.getServerMode()) moveId_ = 0;
 }
 

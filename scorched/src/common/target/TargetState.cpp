@@ -30,7 +30,7 @@ TargetStateMovement::~TargetStateMovement()
 }
 
 TargetState::TargetState() :
-	falling_(0),
+	falling_(0), moving_(0),
 	displayDamage_(true), displayShadow_(true),
 	noDamageBurn_(false), noCollision_(false), noFalling_(false),
 	movement_(0), noFallingDamage_(false), 

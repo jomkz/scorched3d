@@ -83,6 +83,8 @@ void TankMovement::init()
 	Tank *tank = context_->getTankContainer().getTankById(weaponContext_.getPlayerId());
 	if (!tank) return;	
 
+	tank->getTargetState().setMoving(this);
+
 	startPosition_ = tank->getLife().getTargetPosition();
 	vPoint_ = context_->getViewPoints().getNewViewPoint(weaponContext_.getPlayerId());
 	
@@ -216,7 +218,8 @@ void TankMovement::simulationMove(fixed frameTime)
 		{
 			// Check to see if this tank is falling
 			// If it is then we wait until the fall is over
-			if (!tank->getTargetState().getFalling())
+			if (!tank->getTargetState().getFalling() &&
+				tank->getTargetState().getMoving() == this)
 			{
 				// Add a smoke trail
 				// Check if we are not on the server
@@ -261,19 +264,21 @@ void TankMovement::simulationMove(fixed frameTime)
 
 	if (moving_ == false)
 	{
-		Tank *current = 
-			context_->getTankContainer().getTankById(weaponContext_.getPlayerId());
-		if (current)
+		if (tank)
 		{
-			current->getLife().setRotation(0);
-			if (current->getState().getState() == TankState::sNormal)
+			if (tank->getTargetState().getMoving() == this) 
+			{
+				tank->getTargetState().setMoving(0);
+			}
+			tank->getLife().setRotation(0);
+			if (tank->getState().getState() == TankState::sNormal)
 			{
 				// Move the tank to the final position
-				DeformLandscape::flattenArea(*context_, current->getLife().getTargetPosition());
+				DeformLandscape::flattenArea(*context_, tank->getLife().getTargetPosition());
 #ifndef S3D_SERVER
 				if (!context_->getServerMode())
 				{
-					VisibilityPatchGrid::instance()->recalculateErrors(current->getLife().getTargetPosition(), 2);
+					VisibilityPatchGrid::instance()->recalculateErrors(tank->getLife().getTargetPosition(), 2);
 				}
 #endif
 			}

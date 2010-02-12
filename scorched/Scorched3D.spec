@@ -1,5 +1,5 @@
 Name: scorched3d
-Version: 43beta
+Version: 43beta2
 Release: 1
 License: GPL
 Group: Amusements/Games/3D/Other
