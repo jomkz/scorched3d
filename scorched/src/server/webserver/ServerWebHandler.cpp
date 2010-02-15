@@ -134,6 +134,10 @@ bool ServerWebHandler::PlayerHandler::processRequest(
 				{
 					ServerAdminCommon::slapPlayer(request.getSession()->credentials, tank->getPlayerId(), 25.0f);
 				}
+				else if (0 == strcmp(action, "Kill"))
+				{
+					ServerAdminCommon::killPlayer(request.getSession()->credentials, tank->getPlayerId());
+				}
 				else if (0 == strcmp(action, "ShowAliases"))
 				{
 					if (!request.getSession()->credentials.hasPermission(
@@ -457,7 +461,8 @@ bool ServerWebHandler::GameHandler::processRequest(
 	request.getFields()["PLAYERS"] = S3D::formatStringBuffer("%i/%i", tanks.size(), 
 		ScorchedServer::instance()->getOptionsGame().getNoMaxPlayers());
 
-	request.getFields()["STATE"] = "Playing";
+	request.getFields()["STATE"] = (ScorchedServer::instance()->getServerState().getState() > 
+		ServerState::ServerMatchCountDownState)?"Playing":"Waiting";
 
 	request.getFields()["ROUND"] = S3D::formatStringBuffer("%i/%i",
 		ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo(),
@@ -507,7 +512,8 @@ bool ServerWebHandler::ServerHandler::processRequest(
 			(!messageLogging?"checked":""));
 	}
 
-	request.getFields()["STATE"] = (ScorchedServer::instance()->getServerState().getState() == ServerState::ServerPlayingState)?"Playing":"Waiting";
+	request.getFields()["STATE"] = (ScorchedServer::instance()->getServerState().getState() > 
+		ServerState::ServerMatchCountDownState)?"Playing":"Waiting";
 	request.getFields()["VERSION"] = S3D::formatStringBuffer("%s (%s) - Built %s", 
 		S3D::ScorchedVersion.c_str(), 
 		S3D::ScorchedProtocolVersion.c_str(), 

@@ -53,6 +53,9 @@ bool AdminSimAction::invokeAction(ScorchedContext &context)
 	case eSlap:
 		slap(context);
 		break;
+	case eKill:
+		kill(context);
+		break;
 	}
 
 	return true;
@@ -110,4 +113,14 @@ void AdminSimAction::slap(ScorchedContext &context)
 
 	targetTank->getLife().setLife(
 		targetTank->getLife().getLife() -  amount_);
+}
+
+void AdminSimAction::kill(ScorchedContext &context)
+{
+	Tank *targetTank = context.
+		getTankContainer().getTankById(playerId_);
+	if (!targetTank) return;
+
+	targetTank->getState().setState(TankState::sDead);
+	targetTank->getState().setLives(0);
 }

@@ -30,7 +30,8 @@ public:
 	{
 		eKillAll,
 		eNewGame,
-		eSlap
+		eSlap,
+		eKill
 	};
 
 	AdminSimAction();
@@ -51,6 +52,7 @@ protected:
 	void killAll(ScorchedContext &context);
 	void newGame(ScorchedContext &context);
 	void slap(ScorchedContext &context);
+	void kill(ScorchedContext &context);
 };
 
 #endif // !defined(AFX_AdminSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

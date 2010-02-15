@@ -294,7 +294,7 @@ OptionsGame::OptionsGame() :
 		"The name of currently running Scorched3D mod", 0, "none"),
 	motd_(options_, "MOTD",
 		"The message of the day", 0, 
-		"Scorched3D : Copyright 2009 Gavin Camp\n"
+		"Scorched3D : Copyright 2010 Gavin Camp\n"
 		"For updates and news visit:\n"
 		"http://www.scorched3d.co.uk",
 		true),

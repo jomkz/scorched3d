@@ -29,6 +29,7 @@ namespace ServerAdminCommon
 	bool addPlayer(ServerAdminSessions::Credential &credential, const char *playerType);
 	bool kickPlayer(ServerAdminSessions::Credential &credential, unsigned int playerId);
 	bool poorPlayer(ServerAdminSessions::Credential &credential, unsigned int playerId);
+	bool killPlayer(ServerAdminSessions::Credential &credential, unsigned int playerId);
 	bool banPlayer(ServerAdminSessions::Credential &credential, unsigned int playerId, const char *reason);
 	bool flagPlayer(ServerAdminSessions::Credential &credential, unsigned int playerId, const char *reason);
 	bool slapPlayer(ServerAdminSessions::Credential &credential, unsigned int playerId, float slap);

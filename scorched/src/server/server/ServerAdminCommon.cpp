@@ -171,6 +171,24 @@ bool ServerAdminCommon::slapPlayer(ServerAdminSessions::Credential &credential, 
 	return true;
 }
 
+bool ServerAdminCommon::killPlayer(ServerAdminSessions::Credential &credential, unsigned int playerId)
+{
+	Tank *targetTank = ScorchedServer::instance()->
+		getTankContainer().getTankById(playerId);
+	if (!targetTank) return false;
+
+	adminLog(ChannelText("info",
+		"ADMIN_KILL",
+		"\"{0}\" admin kill [p:{1}]",
+		credential.username,
+		targetTank->getTargetName()));
+
+	AdminSimAction *action = new AdminSimAction(AdminSimAction::eKill, playerId, 0);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(action);
+
+	return true;
+}
+
 bool ServerAdminCommon::flagPlayer(ServerAdminSessions::Credential &credential, unsigned int playerId, const char *reason)
 {
 	Tank *targetTank = ScorchedServer::instance()->

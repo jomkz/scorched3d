@@ -51,7 +51,8 @@ public:
 		AdminTalk,
 		AdminMessage,
 		AdminNewGame,
-		AdminAdd
+		AdminAdd,
+		AdminKill
 	};
 
 	ComsAdminMessage(

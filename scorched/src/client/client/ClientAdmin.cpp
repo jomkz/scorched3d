@@ -80,6 +80,11 @@ ClientAdmin::ClientAdmin()
 		(unsigned int) ComsAdminMessage::AdminKick);
 	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
 		this, &ClientAdmin::adminOneParam, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("kill"), 
+		ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
+		(unsigned int) ComsAdminMessage::AdminKill);
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminOneParam, "admin", 
 		ConsoleUtil::formParams(ConsoleRuleParam("ban"), 
 		ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
 		(unsigned int) ComsAdminMessage::AdminBan);
@@ -227,6 +232,7 @@ void ClientAdmin::adminHelp()
 	Console::instance()->addLine(false, "  kick <player id> - Kicks specified player");
 	Console::instance()->addLine(false, "  ban <player id> - Bans and kicks specified player");
 	Console::instance()->addLine(false, "  poor <player id> - Removes all money from player");
+	Console::instance()->addLine(false, "  kill <player id> - Kill specified player");
 	Console::instance()->addLine(false, "  mute <player id> - Mutes specified player for everyone");
 	Console::instance()->addLine(false, "  flag <player id> - Flags specified player for all admins");
 	Console::instance()->addLine(false, "  unmute <player id> - Un-mutes specified player for everyone");

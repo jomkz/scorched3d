@@ -20,6 +20,7 @@
 
 #include <server/ServerBrowserInfo.h>
 #include <server/ScorchedServer.h>
+#include <server/ServerState.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <common/Defines.h>
@@ -147,6 +148,8 @@ void ServerBrowserInfo::processStatusMessage(std::list<std::string> &reply)
 		ScorchedServer::instance()->getOptionsGame().getTurnType().getValueAsString(),
 		((ScorchedServer::instance()->getOptionsGame().getTeams() > 1)?"Teams":"No Teams"));
 	bool stats = (0 != strcmp(ScorchedServer::instance()->getOptionsGame().getStatsLogger(), "none"));
+	unsigned currentState = ScorchedServer::instance()->getServerState().getState();
+	bool started = (currentState > ServerState::ServerMatchCountDownState);
 
 	int compplayers = 0;
 	std::map<unsigned int, Tank *> &tanks =
@@ -161,6 +164,7 @@ void ServerBrowserInfo::processStatusMessage(std::list<std::string> &reply)
 	}
 
 	reply.push_back(addTag("gametype", type));
+	reply.push_back(addTag("state", (started?"Started":"Waiting")));
 	reply.push_back(addTag("servername", serverName));
 	reply.push_back(addTag("fullversion", version));
 	reply.push_back(addTag("version", S3D::ScorchedVersion));
