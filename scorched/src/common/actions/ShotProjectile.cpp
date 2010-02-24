@@ -29,6 +29,7 @@
 #include <tank/TankState.h>
 #include <tankai/TankAI.h>
 #include <common/Defines.h>
+#include <common/OptionsScorched.h>
 #include <engine/ScorchedContext.h>
 #include <engine/ViewPoints.h>
 #include <weapons/AccessoryStore.h>
@@ -67,7 +68,8 @@ void ShotProjectile::init()
 	thrustAmount_ = getWeapon()->getThrustAmount(*context_);
 	timedCollision_ = getWeapon()->getTimedCollision(*context_);
 	drag_ = getWeapon()->getDrag(*context_);
-	stepSize_ = getWeapon()->getStepSize();
+	stepSize_ = getWeapon()->getStepSize() * 
+		fixed(true, context_->getOptionsGame().getWeaponSpeed());
 }
 
 std::string ShotProjectile::getActionDetails()

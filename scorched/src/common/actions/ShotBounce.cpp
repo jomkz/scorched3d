@@ -24,6 +24,7 @@
 #include <engine/ActionController.h>
 #include <weapons/WeaponRoller.h>
 #include <weapons/AccessoryStore.h>
+#include <common/OptionsScorched.h>
 #ifndef S3D_SERVER
 	#include <GLEXT/GLState.h>
 	#include <graph/ModelRenderer.h>
@@ -50,7 +51,8 @@ void ShotBounce::init()
 	PhysicsParticleInfo info(ParticleTypeBounce, weaponContext_.getPlayerId(), this);
 	setPhysics(info, startPosition_, velocity_, 
 		1, 5, weapon_->getWindFactor(*context_), false, weapon_->getRoll());
-	stepSize_ = weapon_->getStepSize();
+	stepSize_ = weapon_->getStepSize() * 
+		fixed(true, context_->getOptionsGame().getWeaponSpeed());
 
 	FixedVector lookatPos;
 	vPoint_ = context_->getViewPoints().getNewViewPoint(weaponContext_.getPlayerId());

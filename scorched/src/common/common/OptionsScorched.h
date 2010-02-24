@@ -51,6 +51,8 @@ public:
 
 	OPTIONSTRING_GETTER(Tutorial);
 	OPTIONINT_GETTER(Teams);
+	OPTIONINT_GETTER(MinimumLandHeight);
+	OPTIONINT_GETTER(WeaponSpeed);
 	OPTIONINT_GETTER(StartArmsLevel);
 	OPTIONINT_GETTER(EndArmsLevel);
 	OPTIONINT_GETTER(MaxNumberWeapons);

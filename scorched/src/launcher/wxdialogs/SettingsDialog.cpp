@@ -249,6 +249,9 @@ void SettingsFrame::createWeaponsPanel()
 			weaponsPanel_, sizer, context_.getWeapScaleEntry()));
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
+			weaponsPanel_, sizer, context_.getWeaponSpeedEntry()));
+	setters_.push_back(
+		OptionEntrySetterUtil::createOtherSetter(
 			weaponsPanel_, sizer, context_.getStartArmsLevelEntry()));
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(

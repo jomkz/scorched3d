@@ -204,6 +204,8 @@ SettingsSubSelectDialog::SettingsSubSelectDialog() :
 	GLWOptionEntry::createEntry(
 		controls_, weaponsTab_, optionsGame.getWeapScaleEntry());
 	GLWOptionEntry::createEntry(
+		controls_, weaponsTab_, optionsGame.getWeaponSpeedEntry());
+	GLWOptionEntry::createEntry(
 		controls_, weaponsTab_, optionsGame.getStartArmsLevelEntry());
 	GLWOptionEntry::createEntry(
 		controls_, weaponsTab_, optionsGame.getEndArmsLevelEntry());

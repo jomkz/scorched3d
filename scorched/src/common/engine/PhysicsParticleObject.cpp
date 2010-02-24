@@ -415,7 +415,7 @@ bool PhysicsParticleObject::getLandscapeCollision(CollisionInfo &collision)
 			getInterpHeight(position_[0], position_[1]);
 	if (underGroundCollision_)
 	{
-		if (position_[2] <= 0) 
+		if (position_[2] <= context_->getOptionsGame().getMinimumLandHeight()) 
 		{
 			collision.collisionId = CollisionIdLandscape;
 			collision.deflectFactor = 1;
@@ -434,7 +434,7 @@ bool PhysicsParticleObject::getLandscapeCollision(CollisionInfo &collision)
 	}
 	else
 	{
-		if (position_[2] <= 0)
+		if (position_[2] <= context_->getOptionsGame().getMinimumLandHeight())
 		{
 			collision.collisionId = CollisionIdLandscape;
 			collision.deflectFactor = 1;

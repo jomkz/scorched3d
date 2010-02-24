@@ -139,6 +139,12 @@ public:
 	int getTeams() { return teams_; }
 	OptionEntryInt &getTeamsEntry() { return teams_; }
 
+	int getMinimumLandHeight() { return minimumLandHeight_; }
+	OptionEntryInt &getMinimumLandHeightEntry() { return minimumLandHeight_; }
+
+	int getWeaponSpeed() { return weaponSpeed_; }
+	OptionEntryInt &getWeaponSpeedEntry() { return weaponSpeed_; }
+
 	int getStartArmsLevel() { return startArmsLevel_; }
 	OptionEntryInt &getStartArmsLevelEntry() { return startArmsLevel_; }
 
@@ -381,6 +387,7 @@ protected:
 	std::list<OptionEntry *> options_;
 	std::list<OptionEntry *> playerTypeOptions_;
 
+	OptionEntryBoundedInt weaponSpeed_;
 	OptionEntryBoundedInt startArmsLevel_;
 	OptionEntryBoundedInt endArmsLevel_;
 	OptionEntryBoundedInt shotTime_;
@@ -423,6 +430,7 @@ protected:
 	OptionEntryInt maxLandscapeSize_;
 	OptionEntryInt freeMarketAdjustment_;
 	OptionEntryInt freeMarketLimits_;
+	OptionEntryInt minimumLandHeight_;
 	OptionEntryBoundedInt skillForRound_;
 	OptionEntryBoundedInt skillForMatch_;
 	OptionEntryBoundedInt skillForResign_;

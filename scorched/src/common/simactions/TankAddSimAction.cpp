@@ -29,6 +29,8 @@
 #include <common/ChannelManager.h>
 #include <common/StatsLogger.h>
 #include <common/Logger.h>
+#include <common/OptionsScorched.h>
+#include <common/OptionsTransient.h>
 #include <server/ServerBanned.h>
 #include <server/ScorchedServerUtil.h>
 #include <server/ServerChannelManager.h>
@@ -81,7 +83,14 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 		message_.getDestinationId(),
 		message_.getPlayerName(),
 		color);
-	tank->setTeam(message_.getPlayerTeam());
+	int team = message_.getPlayerTeam();
+	if (context.getOptionsGame().getTeams() > 1 &&
+		team == 0)
+	{
+		team = context.getOptionsTransient().getLeastUsedTeam(
+			context.getTankContainer());
+	}
+	tank->setTeam(team);
 	tank->getAvatar().setFromBuffer(
 		message_.getPlayerIconName(),
 		message_.getPlayerIcon());

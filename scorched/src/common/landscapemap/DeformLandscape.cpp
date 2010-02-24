@@ -61,7 +61,7 @@ bool DeformLandscape::deformLandscapeInternal(
 	int iradius = (int) radius.asInt() + 1;
 	if (iradius > 49) iradius = 49;
 
-	fixed lowestHeight = fixed(0);
+	fixed lowestHeight = fixed(context.getOptionsGame().getMinimumLandHeight());
 
 	// Take out or add a chunk into the landsacpe
 	for (int x=-iradius; x<=iradius; x++)
