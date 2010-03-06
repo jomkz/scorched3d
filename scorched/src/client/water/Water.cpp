@@ -39,7 +39,8 @@
 #include <GLEXT/GLImageModifier.h>
 
 Water::Water() :
-	height_(25.0f), waterOn_(false)
+	height_(25.0f), transparency_(1.0f), 
+	waterOn_(false)
 {
 	wTex_ = new Water2Renderer();
 	wMap_ = new Water2();
@@ -52,12 +53,17 @@ Water::~Water()
 {
 }
 
+void Water::setTransparency(float transparency)
+{
+	transparency_ = transparency;
+}
+
 void Water::draw()
 {
 	if (!waterOn_ ||
 		!OptionsDisplay::instance()->getDrawWater()) return;
 
-	wTex_->draw(*wMap_, *wMapPoints_, *waves_);
+	wTex_->draw(*wMap_, *wMapPoints_, *waves_, transparency_);
 }
 
 void Water::simulate(float frameTime)

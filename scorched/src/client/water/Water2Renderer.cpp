@@ -57,7 +57,8 @@ void Water2Renderer::simulate(float frameTime)
 	totalTime_ += frameTime * 24.0f;
 }
 
-void Water2Renderer::draw(Water2 &water2, WaterMapPoints &points, WaterWaves &waves)
+void Water2Renderer::draw(Water2 &water2, WaterMapPoints &points, 
+	WaterWaves &waves, float transparency)
 {
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "WATER_PATCHSETUP");
 	// Choose correct water frame
@@ -86,11 +87,11 @@ void Water2Renderer::draw(Water2 &water2, WaterMapPoints &points, WaterWaves &wa
 	if (GLStateExtension::hasShaders() &&
 		OptionsDisplay::instance()->getUseWaterTexture())
 	{
-		drawWaterShaders(water2);
+		drawWaterShaders(water2, transparency);
 	}
 	else
 	{
-		drawWaterNoShaders(water2);
+		drawWaterNoShaders(water2, transparency);
 	}
 
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "WATER_DRAWPOINTS");
@@ -106,7 +107,7 @@ void Water2Renderer::drawPoints(WaterMapPoints &points)
 	points.draw(*currentPatch_);
 }
 
-void Water2Renderer::drawWaterShaders(Water2 &water2)
+void Water2Renderer::drawWaterShaders(Water2 &water2, float transparency)
 {
 	GLState state(GLState::LIGHTING_OFF | GLState::TEXTURE_ON | GLState::BLEND_ON);
 
@@ -116,6 +117,7 @@ void Water2Renderer::drawWaterShaders(Water2 &water2)
 	cameraPos[2] = -waterHeight_;
 	waterShader_->use();
 	waterShader_->set_uniform("viewpos", cameraPos);
+	waterShader_->set_uniform("transparency", transparency);
 
 	// Tex 3
 	if (!OptionsDisplay::instance()->getSimpleWaterShaders())
@@ -205,7 +207,7 @@ void Water2Renderer::drawWaterShaders(Water2 &water2)
 	glPopAttrib();
 }
 
-void Water2Renderer::drawWaterNoShaders(Water2 &water2)
+void Water2Renderer::drawWaterNoShaders(Water2 &water2, float transparency)
 {
 	glPushAttrib(GL_TEXTURE_BIT);
 
@@ -233,11 +235,11 @@ void Water2Renderer::drawWaterNoShaders(Water2 &water2)
 		glActiveTextureARB(GL_TEXTURE0);
 
 
-		glColor4f(0.3f, 0.3f, 0.3f, 0.8f);
+		glColor4f(0.3f, 0.3f, 0.3f, 0.8f * transparency);
 	}
 	else
 	{
-		glColor4f(0.7f, 0.7f, 0.7f, 0.8f);
+		glColor4f(0.7f, 0.7f, 0.7f, 0.8f * transparency);
 	}
 
 	// Turn lighting on (if enabled)
@@ -248,10 +250,10 @@ void Water2Renderer::drawWaterNoShaders(Water2 &water2)
 			GLState::LIGHTING_ON | 
 			GLState::LIGHT1_ON;
 
-		Vector4 ambientColor(0.2f, 0.2f, 0.2f, 0.8f);
-		Vector4 diffuseColor(0.8f, 0.8f, 0.8f, 0.8f);
-		Vector4 specularColor(1.0f, 1.0f, 1.0f, 0.8f);
-		Vector4 emissiveColor(0.0f, 0.0f, 0.0f, 0.8f);
+		Vector4 ambientColor(0.2f, 0.2f, 0.2f, 0.8f * transparency);
+		Vector4 diffuseColor(0.8f, 0.8f, 0.8f, 0.8f * transparency);
+		Vector4 specularColor(1.0f, 1.0f, 1.0f, 0.8f * transparency);
+		Vector4 emissiveColor(0.0f, 0.0f, 0.0f, 0.8f * transparency);
 		float shininess = 100.0f;
 		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambientColor);
 		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuseColor);

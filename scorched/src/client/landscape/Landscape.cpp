@@ -646,9 +646,7 @@ void Landscape::actualDrawLandTextured()
 
 	GLState glState(state);
 
-	bool showArenaArea = (!OptionsDisplay::instance()->getNoArenaMoveVisibility() &&
-		MainCamera::instance()->getCameraSelected()) ||
-		MainCamera::instance()->getShowArena();
+	bool showArenaArea = MainCamera::instance()->getShowArena();
 
 	bool useDetail = 
 		GLStateExtension::getTextureUnits() > 2 &&
@@ -817,9 +815,7 @@ void Landscape::actualDrawLandShader()
 	landShader_->set_gl_texture(detailTexture_, "detailmap", 1);
 	landShader_->set_gl_texture(arenaMainTexture_, "arenamap", 3);
 
-	bool showArenaArea = (!OptionsDisplay::instance()->getNoArenaMoveVisibility() &&
-		MainCamera::instance()->getCameraSelected()) ||
-		MainCamera::instance()->getShowArena();
+	bool showArenaArea = MainCamera::instance()->getShowArena();
 	landShader_->set_uniform("showarena", showArenaArea?1.0f:0.0f);
 
 	glActiveTextureARB(GL_TEXTURE2_ARB);
@@ -841,7 +837,8 @@ void Landscape::actualDrawLandShader()
 	if (OptionsDisplay::instance()->getDrawSurround())
 	{
 		GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SURROUND");
-		if (OptionsDisplay::instance()->getDrawWater())
+		if (OptionsDisplay::instance()->getDrawWater() &&
+			Landscape::instance()->getWater().getTransparency() == 1.0f)
 		{
 			// Disable Tex
 			glActiveTextureARB(GL_TEXTURE2_ARB);

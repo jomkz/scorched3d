@@ -70,9 +70,6 @@ public:
 	bool getFrameTimer() { return frameTimer_; }
 	OptionEntryBool &getFrameTimerEntry() { return frameTimer_; }
 
-	bool getNoArenaMoveVisibility() { return noArenaMoveVisibility_; }
-	OptionEntryBool &getNoArenaMoveVisibilityEntry() { return noArenaMoveVisibility_; }
-
 	bool getNoLenseFlare() { return noLenseFlare_; }
 	OptionEntryBool &getNoLenseFlareEntry() { return noLenseFlare_; }
 
@@ -472,7 +469,7 @@ protected:
 	OptionEntryBool drawBoundingSpheres_;
 	OptionEntryBool noLenseFlare_;
 	OptionEntryBool noSkins_;
-	OptionEntryBool noArenaMoveVisibility_;
+	OptionEntryBool depricatedNoArenaMoveVisibility_;
 	OptionEntryBool deprecatedSortAccessories_;
 	OptionEntryEnum accessorySortKey_;
 	OptionEntryBool drawWater_;

@@ -29,6 +29,8 @@
 #include <image/ImageFactory.h>
 #include <image/ImagePng.h>
 #include <dialogs/MainMenuDialog.h>
+#include <landscape/Landscape.h>
+#include <water/Water.h>
 #include <sound/Sound.h>
 #include <sound/SoundUtils.h>
 #include <common/Keyboard.h>
@@ -56,7 +58,8 @@ MainCamera *MainCamera::instance()
 
 MainCamera::MainCamera() : 
 	GameStateI("MainCamera"),
-	mouseDown_(false), keyDown_(false), scrolling_(false), showArena_(false)
+	mouseDown_(false), keyDown_(false), scrolling_(false), showArena_(false),
+	waterTransparency_(1.0f)
 {
 	Image *map = ImageFactory::loadImage(
 		S3D::getDataFile("data/images/camera.bmp"),
@@ -295,6 +298,20 @@ void MainCamera::keyboardCheck(const unsigned state, float frameTime,
 {
 	keyDown_ = targetCam_.keyboardCheck(frameTime, buffer,
 		keyState, history, hisCount, skipRest);
+
+	KEYBOARDKEY("HIDE_WATER", hideWaterKey);
+	if (hideWaterKey->keyDown(buffer, keyState, true))
+	{
+		waterTransparency_ -= frameTime * 2.0f;
+		if (waterTransparency_ < 0.4f) waterTransparency_ = 0.4f;
+		Landscape::instance()->getWater().setTransparency(waterTransparency_);
+	}
+	else if (waterTransparency_ < 1.0f)
+	{
+		waterTransparency_ += frameTime * 2.0f;
+		if (waterTransparency_ > 1.0f) waterTransparency_ = 1.0f;
+		Landscape::instance()->getWater().setTransparency(waterTransparency_);
+	}
 
 	KEYBOARDKEY("SAVE_SCREEN", saveScreenKey);
 	if (saveScreenKey->keyDown(buffer, keyState, false))

@@ -38,7 +38,7 @@ public:
 	Water2Renderer();
 	~Water2Renderer();
 
-	void draw(Water2 &water2, WaterMapPoints &points, WaterWaves &waves);
+	void draw(Water2 &water2, WaterMapPoints &points, WaterWaves &waves, float transparency);
 	void simulate(float frameTime);
 	void generate(LandscapeTexBorderWater *water, ProgressCounter *counter = 0);
 
@@ -61,8 +61,8 @@ protected:
 	Water2Patches *currentPatch_;
 	GLSLShaderSetup *waterShader_;
 
-	void drawWaterShaders(Water2 &water2);
-	void drawWaterNoShaders(Water2 &water2);
+	void drawWaterShaders(Water2 &water2, float transparency);
+	void drawWaterNoShaders(Water2 &water2, float transparency);
 	void drawWater(Water2 &water2, GLSLShaderSetup *waterShader);
 };
 

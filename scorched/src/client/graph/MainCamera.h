@@ -84,6 +84,7 @@ public:
 
 protected:
 	static MainCamera *instance_;
+	float waterTransparency_;
 	bool mouseDown_, keyDown_, scrolling_, showArena_;
 	TargetCamera targetCam_;
 	// Quick key settings

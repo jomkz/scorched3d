@@ -47,6 +47,8 @@ public:
 	Image &getWaterBitmap() { return bitmapWater_; }
 	float *getIndexErrors();
 	float getWaveDistance(int x, int y);
+	void setTransparency(float transparency);
+	float getTransparency() { return transparency_; }
 
 	void bindWaterReflection();
 	void unBindWaterReflection();
@@ -56,7 +58,7 @@ public:
 
 protected:
 	bool waterOn_;
-	float height_;
+	float height_, transparency_;
 	Water2 *wMap_;
 	Water2Renderer *wTex_;
 	WaterMapPoints *wMapPoints_;

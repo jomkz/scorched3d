@@ -15,6 +15,7 @@ uniform vec3 landscape_size;
 #ifdef USE_SHADOWS
 uniform sampler2DShadow tex_shadow;	// shadow map DEPTH_COMPONENT
 #endif
+uniform float transparency;
 
 const float water_shininess = 120.0;
 
@@ -94,7 +95,7 @@ void main()
 		
 	// foam due to breakers at the shore
 	float landfoam = 0.0;
-	float trans = 1.0;
+	float trans = transparency;//1.0;
 	float aoflandxper = aoftexcoord.x / landscape_size.x;
 	float aoflandyper = aoftexcoord.y / landscape_size.y;
 	float aoflandxclamp = clamp(aoflandxper, 0.0, 1.0);
@@ -104,7 +105,7 @@ void main()
 		aoftexcoord.z > 0.0)
 	{
 		float aofland = texture2D(tex_foamamount, vec2(aoflandxper, aoflandyper)).y;
-		trans = min(1.0, 0.4 + aofland * 1.8);
+		trans = min(1.0, 0.4 + aofland * 1.8) * transparency;
 		//if (trans < 0.25) 
 		//{
 		//	landfoam = (0.25 - trans) * 20;

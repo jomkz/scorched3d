@@ -213,6 +213,13 @@
 		<group>1</group>
 		<key>a</key>
 	</keyentry>
+  <keyentry>
+    <name>HIDE_WATER</name>
+    <title>Temporarily hide the water</title>
+    <description>Temporarily makes the water transparent so you can see through it</description>
+    <group>1</group>
+    <key>w</key>
+  </keyentry> 
 	<keyentry>
 		<name>UNDO_MOVE</name>
 		<title>Revert to last angles</title>
