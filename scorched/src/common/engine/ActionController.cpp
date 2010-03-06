@@ -162,7 +162,8 @@ void ActionController::addNewActions(fixed time)
 		actions_.push_back(action);
 		
 		// Log it
-		if (action->getPlayerId() != 0)
+		if (action->getPlayerId() != Action::ACTION_NOT_REFERENCED &&
+			action->getActionSyncCheck())
 		{
 			if (context_->getOptionsGame().getActionSyncCheck())
 			{
@@ -222,7 +223,8 @@ void ActionController::simulate(fixed frameTime, fixed time)
 		{
 			if ((time - act->getActionStartTime() > 30))
 			{
-				Logger::log(S3D::formatStringBuffer("Warning: removing timed out action %s",
+				Logger::log(S3D::formatStringBuffer(
+					"Warning: removing timed out action %s",
 					act->getActionType().c_str()));
 				remove = true;
 			}
@@ -231,7 +233,8 @@ void ActionController::simulate(fixed frameTime, fixed time)
 		// If this action has finished add to list to be removed
 		if (remove)
 		{
-			if (act->getPlayerId() != 0)
+			if (act->getPlayerId() != Action::ACTION_NOT_REFERENCED &&
+				act->getActionSyncCheck())
 			{
 				referenceCount_--;
 				if (referenceCount_<0) referenceCount_ = 0;

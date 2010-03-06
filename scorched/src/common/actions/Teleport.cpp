@@ -25,6 +25,7 @@
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankPosition.h>
+#include <tank/TankViewPoints.h>
 #include <target/TargetDamageCalc.h>
 #include <target/TargetLife.h>
 #include <engine/ActionController.h>
@@ -47,21 +48,17 @@ Teleport::Teleport(FixedVector position,
 	weaponContext_(weaponContext),
 	weapon_(weapon),
 	totalTime_(0),
-	firstTime_(true),
-	vPoint_(0)
+	firstTime_(true)
 {
 
 }
 
 Teleport::~Teleport()
 {
-	if (vPoint_) context_->getViewPoints().releaseViewPoint(vPoint_);
 }
 
 void Teleport::init()
 {
-	vPoint_ = context_->getViewPoints().getNewViewPoint(weaponContext_.getPlayerId());
-
 #ifndef S3D_SERVER
 	if (!context_->getServerMode())
 	{
@@ -74,18 +71,19 @@ void Teleport::init()
 				white);
 			context_->getActionController().addAction(new SpriteAction(teleport));
 		}
+
+		TankViewPointProvider *vPoint = new TankViewPointProvider();
+		vPoint->setValues(position_);
+		CameraPositionAction *pos = new CameraPositionAction(
+			weaponContext_.getPlayerId(),
+			vPoint, 5, 5, false);
+		context_->getActionController().addAction(pos);
 	}
 #endif
-
-	CameraPositionAction *pos = new CameraPositionAction(
-		position_, 5, 5);
-	context_->getActionController().addAction(pos);
 }
 
 void Teleport::simulate(fixed frameTime, bool &remove)
 {
-	if (vPoint_) vPoint_->setPosition(position_);
-
 	if (firstTime_)
 	{
 		firstTime_ = false;

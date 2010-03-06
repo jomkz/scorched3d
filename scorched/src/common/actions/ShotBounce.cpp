@@ -25,6 +25,7 @@
 #include <weapons/WeaponRoller.h>
 #include <weapons/AccessoryStore.h>
 #include <common/OptionsScorched.h>
+#include <tank/TankViewPoints.h>
 #ifndef S3D_SERVER
 	#include <GLEXT/GLState.h>
 	#include <graph/ModelRenderer.h>
@@ -42,7 +43,7 @@ ShotBounce::ShotBounce(WeaponRoller *weapon,
 	startPosition_(startPosition),
 	velocity_(velocity), weapon_(weapon), weaponContext_(weaponContext),
 	totalTime_(0), simulateTime_(0),
-	vPoint_(0), model_(0)
+	model_(0), vPoint_(0)
 {
 }
 
@@ -54,14 +55,17 @@ void ShotBounce::init()
 	stepSize_ = weapon_->getStepSize() * 
 		fixed(true, context_->getOptionsGame().getWeaponSpeed());
 
-	FixedVector lookatPos;
-	vPoint_ = context_->getViewPoints().getNewViewPoint(weaponContext_.getPlayerId());
-	context_->getViewPoints().getValues(lookatPos, lookFrom_);
+	if (!context_->getServerMode()) 
+	{
+		vPoint_ = new TankViewPointProvider();
+		vPoint_->incrementReference();
+		vPoint_->setValues(startPosition_);
 
-	// Point the action camera at this event
-	CameraPositionAction *pos = new CameraPositionAction(
-		startPosition_, 5, 5);
-	context_->getActionController().addAction(pos);
+		// Point the action camera at this event
+		CameraPositionAction *pos = new CameraPositionAction(
+			weaponContext_.getPlayerId(), vPoint_, 5, 5, false);
+		context_->getActionController().addAction(pos);
+	}
 }
 
 ShotBounce::~ShotBounce()
@@ -69,7 +73,7 @@ ShotBounce::~ShotBounce()
 #ifndef S3D_SERVER
 	delete model_;
 #endif
-	if (vPoint_) context_->getViewPoints().releaseViewPoint(vPoint_);
+	if (vPoint_) vPoint_->decrementReference();
 }
 
 std::string ShotBounce::getActionDetails()
@@ -125,8 +129,7 @@ void ShotBounce::draw()
 
 		if (vPoint_)
 		{
-			vPoint_->setPosition(getCurrentPosition());
-			vPoint_->setLookFrom(lookFrom_);
+			vPoint_->setValues(getCurrentPosition(), lookFrom_);
 		}
 
 		GLState state(GLState::TEXTURE_OFF);

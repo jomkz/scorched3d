@@ -27,6 +27,7 @@
 #include <graph/ParticleEmitter.h>
 #include <common/Keyboard.h>
 
+class Tank;
 class TargetCamera 
 {
 public:
@@ -91,7 +92,8 @@ protected:
 
 	bool moveCamera(float frameTime, bool playing);
 	bool getLandIntersect(int x, int y, Vector &intersect);
-
+	void viewBehindTank(Tank *tank);
+	void viewSpectator();
 };
 
 #endif // !defined(AFX_TARGETCAMERA_H__97593EBB_5901_4D81_BAEB_8ADC76CFB627__INCLUDED_)

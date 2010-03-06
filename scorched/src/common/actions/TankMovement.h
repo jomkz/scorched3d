@@ -22,13 +22,13 @@
 #define __INCLUDE_TankMovementh_INCLUDE__
 
 #include <actions/Action.h>
-#include <engine/ViewPoints.h>
 #include <common/FixedVector.h>
 #include <common/Counter.h>
 #include <weapons/Weapon.h>
 #include <list>
 #include <map>
 
+class TankViewPointProvider;
 class VirtualSoundSource;
 class WeaponMoveTank;
 class Tank;
@@ -69,7 +69,7 @@ protected:
 	WeaponMoveTank *weapon_;
 	std::list<PositionEntry> expandedPositions_;
 	fixed timePassed_;
-	ViewPoints::ViewPoint *vPoint_;
+	TankViewPointProvider *vPoint_;
 	VirtualSoundSource *moveSoundSource_;
 	Counter smokeCounter_;
 

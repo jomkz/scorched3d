@@ -21,6 +21,7 @@
 #include <common/FixedVector.h>
 
 static FixedVector nullVector;
+static FixedVector minVector, maxVector;
 
 const char *FixedVector::asQuickString()
 {
@@ -37,6 +38,18 @@ FixedVector &FixedVector::getNullVector()
 {
 	nullVector.zero();
 	return nullVector;
+}
+
+FixedVector &FixedVector::getMaxVector()
+{
+	maxVector = FixedVector(fixed::MAX_FIXED, fixed::MAX_FIXED, fixed::MAX_FIXED);
+	return maxVector;
+}
+
+FixedVector &FixedVector::getMinVector()
+{
+	minVector = FixedVector(fixed::MIN_FIXED, fixed::MIN_FIXED, fixed::MIN_FIXED);
+	return minVector;	
 }
 
 #define sqrt_step(shift) \

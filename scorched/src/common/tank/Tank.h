@@ -32,6 +32,7 @@ class TankPosition;
 class TankModelContainer;
 class TankAvatar;
 class TankCamera;
+class TankViewPointsCollection;
 class Tank : public Target
 {
 public:
@@ -84,9 +85,11 @@ public:
 	TankAvatar &getAvatar() { return *avatar_; }
 	TankCamera &getCamera() { return *camera_; }
 	TankModelContainer &getModelContainer() { return *modelContainer_; }
+	TankViewPointsCollection &getViewPoints() { return *viewPoints_; }
 
 protected:
 	ScorchedContext &context_;
+	TankViewPointsCollection *viewPoints_;
 	TankModelContainer *modelContainer_;
 	TankAccessories *accessories_;
 	TankScore *score_;

@@ -29,6 +29,7 @@
 #include <vector>
 #include <set>
 
+class TankViewPointProvider;
 class GLTextureSet;
 class Napalm : public Action
 {
@@ -56,6 +57,7 @@ public:
 	NapalmParams *getParams() { return params_; }
 
 protected:
+	TankViewPointProvider *vPoint_;
 	WeaponFireContext weaponContext_;
 	NapalmParams *params_;
 	Weapon *weapon_;

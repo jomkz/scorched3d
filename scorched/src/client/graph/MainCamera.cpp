@@ -26,7 +26,6 @@
 #include <graph/OptionsDisplay.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeDefn.h>
-#include <engine/ViewPoints.h>
 #include <image/ImageFactory.h>
 #include <image/ImagePng.h>
 #include <dialogs/MainMenuDialog.h>
@@ -220,8 +219,6 @@ void MainCamera::simulate(const unsigned state, float frameTime)
 		}
 	}
 
-	ScorchedClient::instance()->getContext().getViewPoints().simulate(
-		fixed::fromFloat(frameTime));
 	targetCam_.simulate(frameTime, (state == ClientState::StatePlaying));
 
 	Sound::instance()->getDefaultListener()->setPosition(

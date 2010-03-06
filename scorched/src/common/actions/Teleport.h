@@ -22,7 +22,6 @@
 #define __INCLUDE_Teleporth_INCLUDE__
 
 #include <actions/Action.h>
-#include <engine/ViewPoints.h>
 #include <common/FixedVector.h>
 #include <weapons/WeaponTeleport.h>
 
@@ -41,7 +40,6 @@ public:
 	virtual std::string getActionType() { return "Teleport"; }
 
 protected:
-	ViewPoints::ViewPoint *vPoint_;
 	bool firstTime_;
 	FixedVector position_;
 	WeaponFireContext weaponContext_;

@@ -21,15 +21,21 @@
 #include <engine/ScorchedContext.h>
 #include <engine/Simulator.h>
 #include <actions/CameraPositionAction.h>
+#include <tank/TankContainer.h>
 
-CameraPositionAction::CameraPositionAction(FixedVector &showPosition,
+CameraPositionAction::CameraPositionAction(
+	unsigned int playerId,
+	TankViewPointProvider *provider,
 	fixed showTime,
-	unsigned int priority) : 
+	unsigned int priority,
+	bool explosion) : 
 	Action(ACTION_NOT_REFERENCED),
+	playerId_(playerId),
 	totalTime_(0), showTime_(showTime),
-	showPosition_(showPosition), showPriority_(priority)
+	provider_(provider), showPriority_(priority),
+	explosion_(explosion)
 {
-
+	provider_->incrementReference();
 }
 
 CameraPositionAction::~CameraPositionAction()
@@ -37,7 +43,26 @@ CameraPositionAction::~CameraPositionAction()
 	if (!context_->getServerMode())
 	{
 		CameraPositionActionRegistry::rmCameraPositionAction(this);
+		Tank *tank = context_->getTankContainer().getTankById(playerId_);
+		if (tank) 
+		{
+			// Remove projectile
+			tank->getViewPoints().getProjectileViewPoints().removeViewPoint(provider_);
+
+			// Remove explosion
+			if (explosion_)
+			{
+				tank->getViewPoints().getExplosionViewPoints().removeViewPoint(provider_);
+			}
+		}
+
+		// Tidy any tank references
+		if (!tank || !tank->getViewPoints().getProjectileViewPoints().hasViewPoints()) 
+		{
+			TankViewPointsCollection::TankViewPointsTanks.erase(playerId_);
+		}
 	}
+	provider_->decrementReference();
 }
 
 void CameraPositionAction::init()
@@ -45,15 +70,34 @@ void CameraPositionAction::init()
 	if (!context_->getServerMode())
 	{
 		CameraPositionActionRegistry::addCameraPositionAction(this);
+		Tank *tank = context_->getTankContainer().getTankById(playerId_);
+		if (tank) 
+		{
+			// Add projectile
+			if (!tank->getViewPoints().getProjectileViewPoints().hasViewPoints())
+			{
+				TankViewPointsCollection::TankViewPointsTanks.insert(tank->getPlayerId());
+			}
+			tank->getViewPoints().getProjectileViewPoints().addViewPoint(provider_);
+
+			// Add explosion
+			if (explosion_)
+			{
+				tank->getViewPoints().getExplosionViewPoints().addViewPoint(provider_);
+			}
+		}
 	}
 }
 
 void CameraPositionAction::simulate(fixed frameTime, bool &remove)
 {
-	totalTime_ += frameTime;
-	if (totalTime_ > showTime_)
+	if (provider_->getReferenceCount() == 1)
 	{
-		remove = true;
+		totalTime_ += frameTime;
+		if (totalTime_ > showTime_)
+		{
+			remove = true;
+		}
 	}
 
 	Action::simulate(frameTime, remove);

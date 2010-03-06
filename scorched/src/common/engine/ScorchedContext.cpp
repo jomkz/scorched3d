@@ -21,7 +21,6 @@
 #include <engine/ScorchedContext.h>
 #include <engine/GameState.h>
 #include <engine/ActionController.h>
-#include <engine/ViewPoints.h>
 #include <engine/ModFiles.h>
 #include <net/NetInterface.h>
 #include <coms/ComsMessageHandler.h>
@@ -47,7 +46,6 @@ ScorchedContext::ScorchedContext(const char *name, bool server) :
 	netInterface = (NetInterface *) 0;
 	optionsGame = new OptionsScorched();
 	optionsTransient = new OptionsTransient(*optionsGame);
-	viewPoints = new ViewPoints();
 	modFiles = new ModFiles();
 	landscapes = new LandscapeDefinitions();
 	tankModelStore = new TankModelStore();
@@ -59,7 +57,6 @@ ScorchedContext::ScorchedContext(const char *name, bool server) :
 		server?"server":"client",
 		server?S3D::getSettingsFile("serverhooks"):S3D::getSettingsFile("clienthooks"));
 
-	getViewPoints().setContext(this);
 	getTargetSpace().setContext(this);
 	luaScriptFactory->setContext(this);
 }

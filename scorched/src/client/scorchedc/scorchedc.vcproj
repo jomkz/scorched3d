@@ -1309,14 +1309,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\engine\ViewPoints.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\engine\ViewPoints.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\engine\Wind.cpp"
 				>
 			</File>
@@ -2330,6 +2322,14 @@
 			</File>
 			<File
 				RelativePath="..\..\common\tank\TankTypes.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\tank\TankViewPoints.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\tank\TankViewPoints.h"
 				>
 			</File>
 			<File

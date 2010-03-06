@@ -22,30 +22,35 @@
 #define __INCLUDE_CameraPositionActionh_INCLUDE__
 
 #include <actions/Action.h>
-#include <common/FixedVector.h>
-#include <set>
+#include <tank/TankViewPoints.h>
 
 class CameraPositionAction : public Action
 {
 public:
-	CameraPositionAction(FixedVector &showPosition,
+	CameraPositionAction(
+		unsigned int playerId,
+		TankViewPointProvider *provider,
 		fixed showTime,
-		unsigned int priority);
+		unsigned int priority,
+		bool explosion);
 	virtual ~CameraPositionAction();
 
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
 	virtual std::string getActionType() { return "CameraPositionAction"; }
+	virtual bool getActionSyncCheck() { return false; }
 
 	fixed getShowTime() { return showTime_; }
-	FixedVector &getShowPosition() { return showPosition_; }
+	TankViewPointProvider *getProvider() { return provider_; }
 	unsigned int &getShowPriority() { return showPriority_; }
 
 protected:
 	fixed totalTime_;
 	fixed showTime_;
+	TankViewPointProvider *provider_;
+	unsigned int playerId_;
 	unsigned int showPriority_;
-	FixedVector showPosition_;
+	bool explosion_;
 };
 
 class CameraPositionActionRegistry

@@ -31,7 +31,6 @@ class ComsMessageHandler;
 class NetInterface;
 class OptionsScorched;
 class OptionsTransient;
-class ViewPoints;
 class ModFiles;
 class LandscapeDefinitions;
 class TankContainer;
@@ -53,7 +52,6 @@ public:
 	NetInterface &getNetInterface() { return *netInterface; }
 	bool getNetInterfaceValid() { return netInterface != 0; }
 
-	ViewPoints &getViewPoints() { return *viewPoints; }
 	TargetSpace &getTargetSpace() { return *targetSpace; }
 	AccessoryStore &getAccessoryStore() { return *accessoryStore; }
 	TankContainer &getTankContainer() { return *tankContainer; }
@@ -79,7 +77,6 @@ protected:
 	NetInterface *netInterface;
 	OptionsScorched *optionsGame;
 	OptionsTransient *optionsTransient;
-	ViewPoints *viewPoints;
 	ModFiles *modFiles;
 	AccessoryStore *accessoryStore;
 	LandscapeDefinitions *landscapes;

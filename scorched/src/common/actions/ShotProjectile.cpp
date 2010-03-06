@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <actions/ShotProjectile.h>
+#include <actions/CameraPositionAction.h>
 #ifndef S3D_SERVER
 	#include <sprites/MissileActionRenderer.h>
 	#include <tankgraph/RenderTracer.h>
@@ -27,11 +28,12 @@
 #include <landscapedef/LandscapeTex.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
+#include <tank/TankViewPoints.h>
 #include <tankai/TankAI.h>
 #include <common/Defines.h>
 #include <common/OptionsScorched.h>
 #include <engine/ScorchedContext.h>
-#include <engine/ViewPoints.h>
+#include <engine/ActionController.h>
 #include <weapons/AccessoryStore.h>
 #include <math.h>
 
@@ -56,10 +58,23 @@ void ShotProjectile::init()
 		setActionRender(new MissileActionRenderer(flareType_, 
 				weapon_->getScale(*context_).asFloat(),
 				spinSpeed_.asFloat()));
+
+		vPoint_ = new TankViewPointProvider();
+		vPoint_->incrementReference();
+		FixedVector velocity = velocity_;
+		velocity[2] = 10;
+		vPoint_->setValues(startPosition_, velocity);
+		
+		CameraPositionAction *positionAction = new CameraPositionAction(
+			weaponContext_.getPlayerId(),
+			vPoint_,
+			5,
+			10,
+			false);
+		context_->getActionController().addAction(positionAction);
 	}
 #endif // #ifndef S3D_SERVER
 
-	vPoint_ = context_->getViewPoints().getNewViewPoint(weaponContext_.getPlayerId());
 	PhysicsParticleInfo info(ParticleTypeShot, weaponContext_.getPlayerId(), this);
 	setPhysics(info, startPosition_, velocity_, 
 		0, 0, weapon_->getWindFactor(*context_), getWeapon()->getUnder(), 
@@ -82,7 +97,7 @@ std::string ShotProjectile::getActionDetails()
 
 ShotProjectile::~ShotProjectile()
 {
-	if (vPoint_) context_->getViewPoints().releaseViewPoint(vPoint_);
+	if (vPoint_) vPoint_->decrementReference();
 }
 
 void ShotProjectile::collision(PhysicsParticleObject &position, 
@@ -134,11 +149,9 @@ void ShotProjectile::simulate(fixed frameTime, bool &remove)
 	totalTime_ += frameTime;
 	if (vPoint_)
 	{
-		vPoint_->setPosition(getCurrentPosition());
-
 		FixedVector velocity = -getCurrentVelocity();
 		velocity[2] = 10;
-		vPoint_->setLookFrom(velocity);
+		vPoint_->setValues(getCurrentPosition(), velocity);
 	}
 
 	// Water collision

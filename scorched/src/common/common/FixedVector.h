@@ -276,6 +276,8 @@ public:
 
 	operator fixed*() { return V; }
 	static FixedVector &getNullVector();
+	static FixedVector &getMaxVector();
+	static FixedVector &getMinVector();
 
 protected:
 	fixed V[3];

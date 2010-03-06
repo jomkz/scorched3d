@@ -18,63 +18,45 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <engine/ViewPoints.h>
-#include <engine/ScorchedContext.h>
 #include <common/Defines.h>
 #include <common/OptionsScorched.h>
+#include <tank/TankViewPoints.h>
 #include <tank/TankContainer.h>
 
-ViewPoints::ViewPoints() : context_(0), totalTime_(0)
+std::set<unsigned int> TankViewPointsCollection::TankViewPointsTanks;
+
+FixedVector TankViewPointProvider::defaultLookFrom(5, 5, 25);
+
+TankViewPoints::TankViewPoints(ScorchedContext &context) : 
+	context_(context)
 {
 }
 
-ViewPoints::~ViewPoints()
+TankViewPoints::~TankViewPoints()
 {
 }
 
-void ViewPoints::getValues(FixedVector &lookAt, 
-						   FixedVector &lookFrom)
+bool TankViewPoints::getValues(FixedVector &lookAt, FixedVector &lookFrom)
 {
-	lookAt = lookAt_;
-	lookFrom = lookFrom_;
-}
-
-void ViewPoints::setValues(FixedVector &lookAt, 
-						   FixedVector &lookFrom)
-{
-	lookAt_ = lookAt;
-	lookFrom_ = lookFrom;
-}
-
-void ViewPoints::simulate(fixed frameTime)
-{
-	if (getLookAtCount() == 0) return;
-
-	FixedVector max, min;
-	bool firstItor = true;
+	FixedVector 
+		max = FixedVector::getMaxVector(), 
+		min = FixedVector::getMinVector();
 	fixed count = 0;
 
-	static FixedVector lookAt;
-	static FixedVector lookFrom;
 	lookAt.zero();
 	lookFrom.zero();
 
-	std::list<ViewPoint *>::iterator itor =
+	std::set<TankViewPointProvider *>::iterator itor =
 		points_.begin();
-	std::list<ViewPoint *>::iterator enditor =
+	std::set<TankViewPointProvider *>::iterator enditor =
 		points_.end();
 	for (; itor != enditor; itor++)
 	{
-		FixedVector &itorPosition = (*itor)->getPosition();
-		FixedVector &itorLookAt = (*itor)->getLookFrom();
-		fixed itorRadius = (*itor)->getRadius();
+		TankViewPointProvider *provider = *itor;
 
-		if (firstItor)
-		{
-			firstItor = false;
-			min = itorPosition;
-			max = itorPosition;
-		}
+		FixedVector &itorPosition = provider->getPosition();
+		FixedVector &itorLookAt = provider->getLookFrom();
+		fixed itorRadius = provider->getRadius();
 
 		min[0] = MIN(min[0], itorPosition[0] - itorRadius);
 		min[1] = MIN(min[1], itorPosition[1] - itorRadius);
@@ -99,43 +81,21 @@ void ViewPoints::simulate(fixed frameTime)
 	lookAt /= count;
 	lookFrom *= dist;
 
-	lookAt_ = lookAt;
-	lookFrom_ = lookFrom;
+	return !points_.empty();
 }
 
-int ViewPoints::getLookAtCount()
+void TankViewPoints::addViewPoint(TankViewPointProvider *provider)
 {
-	return (int) points_.size();
+	points_.insert(provider);
+}
+	
+void TankViewPoints::removeViewPoint(TankViewPointProvider *provider)
+{
+	points_.erase(provider);
 }
 
-ViewPoints::ViewPoint *ViewPoints::getNewViewPoint(unsigned int playerId)
+TankViewPointsCollection::TankViewPointsCollection(ScorchedContext &context) :
+	explosionViewPoints_(context),
+	projectileViewPonts_(context)
 {
-	if (context_->getServerMode()) return 0;
-	if (playerId == 0) return 0;
-
-	if (context_->getTankContainer().getCurrentPlayerId() != playerId)
-	{
-		return 0;
-	}
-
-	ViewPoint *viewpoint = new ViewPoint();
-	points_.push_back(viewpoint);
-	return viewpoint;
-}
-
-void ViewPoints::explosion(unsigned int playerId, FixedVector &position)
-{
-	if (context_->getServerMode()) return;
-
-	if (context_->getTankContainer().getCurrentPlayerId() != playerId)
-	{
-		return;
-	}
-
-	explosionPosition_ = position;
-}
-
-void ViewPoints::releaseViewPoint(ViewPoint *point)
-{
-	points_.remove(point);
 }

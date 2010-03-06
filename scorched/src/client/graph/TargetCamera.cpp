@@ -32,7 +32,6 @@
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeDefn.h>
 #include <water/Water.h>
-#include <engine/ViewPoints.h>
 #include <engine/GameState.h>
 #include <tankgraph/TankKeyboardControlUtil.h>
 #include <tank/TankContainer.h>
@@ -268,14 +267,12 @@ bool TargetCamera::moveCamera(float frameTime, bool playing)
 	float currentRotation = 0.0f;
 
 	Tank *currentTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
-	if (currentTank && 
-		currentTank->getState().getState() == TankState::sNormal)
+	if (currentTank && currentTank->getAlive())
 	{
 		position = currentTank->getPosition().getTankTurretPosition().asVector();
 		currentRotation = (180.0f - currentTank->getPosition().getRotationGunXY().asFloat()) / 57.32f;
 	}
 
-	bool viewFromBehindTank = false;
 	switch (cameraPos_)
 	{
 	case CamAction:
@@ -284,10 +281,17 @@ bool TargetCamera::moveCamera(float frameTime, bool playing)
 				CameraPositionActionRegistry::getCurrentAction();
 			if (action)
 			{
-				mainCam_.setLookAt(action->getShowPosition().asVector());
+				mainCam_.setLookAt(action->getProvider()->getPosition().asVector());
 				mainCam_.movePosition(currentRotation + 0.3f, 0.7f, 80.0f);
 			}
-			else viewFromBehindTank = true;
+			else if (currentTank && currentTank->getAlive())
+			{
+				viewBehindTank(currentTank);
+			} 
+			else
+			{	
+				viewSpectator();
+			}
 		}
 		break;
 	case CamTop:
@@ -307,28 +311,71 @@ bool TargetCamera::moveCamera(float frameTime, bool playing)
 		}
 		break;
 	case CamGun:
-		if (ScorchedClient::instance()->getContext().getViewPoints().getLookAtCount() > 0)
 		{
-			FixedVector lookatPos, lookfromPos;
-			ScorchedClient::instance()->getContext().getViewPoints().
-				getValues(lookatPos, lookfromPos);
+			if (currentTank &&
+				currentTank->getState().getMoveId() != 0)
+			{
+				viewBehindTank(currentTank);
+			}
+			else if (currentTank &&
+				currentTank->getViewPoints().getProjectileViewPoints().hasViewPoints())
+			{
+				FixedVector lookatPos, lookfromPos;
+				if (currentTank->getViewPoints().getProjectileViewPoints().
+					getValues(lookatPos, lookfromPos))
+				{
+					mainCam_.setLookAt(lookatPos.asVector(), true);
+					mainCam_.setOffSet(lookfromPos.asVector(), true);
+				}
+			}
+			else if (currentTank && currentTank->getAlive())
+			{
+				viewBehindTank(currentTank);
+			}
+			else if (!TankViewPointsCollection::TankViewPointsTanks.empty())
+			{
+				// Else get another tank to look at
+				unsigned int tankId = *
+					TankViewPointsCollection::TankViewPointsTanks.begin();
+				Tank *viewTank = ScorchedClient::instance()->
+					getTankContainer().getTankById(tankId);
 
-			mainCam_.setLookAt(lookatPos.asVector(), true);
-			mainCam_.setOffSet(lookfromPos.asVector(), true);
+				FixedVector lookatPos, lookfromPos;
+				if (viewTank->getViewPoints().getProjectileViewPoints().
+					getValues(lookatPos, lookfromPos))
+				{
+					mainCam_.setLookAt(lookatPos.asVector(), true);
+					mainCam_.setOffSet(lookfromPos.asVector(), true);
+				}
+			}
+			else
+			{
+				viewSpectator();
+			}
 		}
-		else viewFromBehindTank = true;
 		break;
 	case CamShot:
-		if (ScorchedClient::instance()->getContext().getViewPoints().getExplosionPosition() != 
-			FixedVector::getNullVector())
 		{
-			FixedVector v = ScorchedClient::instance()->getContext().
-				getViewPoints().getExplosionPosition();
-			FixedVector lookfromPos(5, 5, 25);
-			mainCam_.setLookAt(v.asVector(), true);
-			mainCam_.setOffSet(lookfromPos.asVector(), true);
+			if (currentTank &&
+				currentTank->getViewPoints().getExplosionViewPoints().hasViewPoints())
+			{
+				FixedVector lookatPos, lookfromPos;
+				if (currentTank->getViewPoints().getExplosionViewPoints().
+					getValues(lookatPos, lookfromPos))
+				{
+					mainCam_.setLookAt(lookatPos.asVector(), true);
+					mainCam_.setOffSet(lookfromPos.asVector(), true);
+				}
+			}
+			else if (currentTank && currentTank->getAlive())
+			{
+				viewBehindTank(currentTank);
+			}
+			else
+			{
+				viewSpectator();
+			}
 		}
-		else viewFromBehindTank = true;
 		break;
 	case CamBehind:
 		{
@@ -391,33 +438,43 @@ bool TargetCamera::moveCamera(float frameTime, bool playing)
 		}
 		break;
 	case CamSpectator:
-		{
-			Vector at(arenaX + arenaWidth / 2.0f, arenaY + arenaHeight / 2.0f, 0.0f);
-			mainCam_.setLookAt(at);
-			mainCam_.movePosition(HALFPI, 1.1f, 200.f);
-		}
+		viewSpectator();
 		break;
 	default:
 		break;
 	}
 	
-	if (viewFromBehindTank)
-	{
-			if (playing &&
-				currentTank && currentTank->getState().getState() == TankState::sNormal)
-			{
-				float currentElevation = (currentTank->getPosition().getRotationGunYZ().asFloat()) / 160.0f;
-				Vector newPos = currentTank->getPosition().getTankGunPosition().asVector();
-				Vector diff = newPos - position;
-				Vector newPos2 = position + (diff);
-				newPos2[2] += 0.5f;
-
-				mainCam_.setLookAt(newPos2);
-				mainCam_.movePosition(currentRotation, currentElevation + 1.57f, 3.0f);
-			}
-	}
-
 	return simulateCamera;
+}
+
+void TargetCamera::viewBehindTank(Tank *tank)
+{
+	Vector position = tank->getPosition().getTankTurretPosition().asVector();
+	float currentRotation = (180.0f - tank->getPosition().getRotationGunXY().asFloat()) / 57.32f;
+	float currentElevation = (tank->getPosition().getRotationGunYZ().asFloat()) / 160.0f;
+	Vector newPos = tank->getPosition().getTankGunPosition().asVector();
+	Vector diff = newPos - position;
+	Vector newPos2 = position + (diff);
+	newPos2[2] += 0.5f;
+
+	mainCam_.setLookAt(newPos2);
+	mainCam_.movePosition(currentRotation, currentElevation + 1.57f, 3.0f);
+}
+
+void TargetCamera::viewSpectator()
+{
+	float arenaWidth = (float) ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaWidth();
+	float arenaHeight = (float) ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaHeight();
+	float arenaX = (float) ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaX();
+	float arenaY = (float) ScorchedClient::instance()->getLandscapeMaps().
+		getGroundMaps().getArenaY();
+
+	Vector at(arenaX + arenaWidth / 2.0f, arenaY + arenaHeight / 2.0f, 0.0f);
+	mainCam_.setLookAt(at);
+	mainCam_.movePosition(HALFPI, 1.1f, 200.f);
 }
 
 bool TargetCamera::getLandIntersect(int x, int y, Vector &intersect)

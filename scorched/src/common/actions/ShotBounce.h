@@ -23,9 +23,9 @@
 
 #include <engine/PhysicsParticle.h>
 #include <engine/ScorchedCollisionIds.h>
-#include <engine/ViewPoints.h>
 #include <weapons/WeaponRoller.h>
 
+class TankViewPointProvider;
 class ModelRendererSimulator;
 class ShotBounce : public PhysicsParticle
 {
@@ -48,7 +48,7 @@ public:
 	WeaponRoller *getWeapon() { return weapon_; }
 
 protected:
-	ViewPoints::ViewPoint *vPoint_;
+	TankViewPointProvider *vPoint_;
 	FixedVector startPosition_, velocity_;
 	FixedVector lookFrom_;
 	WeaponRoller *weapon_;

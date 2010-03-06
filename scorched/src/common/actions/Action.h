@@ -52,6 +52,7 @@ public:
 
 	virtual void draw();
 	virtual void simulate(fixed frameTime, bool &removeAction);	
+	virtual bool getActionSyncCheck() { return true; }
 	virtual std::string getActionType() = 0;
 	virtual std::string getActionDetails() { return ""; }
 

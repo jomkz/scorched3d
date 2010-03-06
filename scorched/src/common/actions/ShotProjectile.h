@@ -23,13 +23,13 @@
 
 #include <engine/PhysicsParticle.h>
 #include <engine/ScorchedCollisionIds.h>
-#include <engine/ViewPoints.h>
 #ifndef	S3D_SERVER
 	#include <tankgraph/RenderTracer.h>
 #endif
 #include <weapons/WeaponProjectile.h>
 #include <list>
 
+class TankViewPointProvider;
 class ShotProjectile : public PhysicsParticle
 {
 public:
@@ -55,7 +55,7 @@ public:
 protected:
 	FixedVector startPosition_, velocity_;
 	WeaponProjectile *weapon_;
-	ViewPoints::ViewPoint *vPoint_;
+	TankViewPointProvider *vPoint_;
 	WeaponFireContext weaponContext_;
 	unsigned int flareType_;
 	bool up_;

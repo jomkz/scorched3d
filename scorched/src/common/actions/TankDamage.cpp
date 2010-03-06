@@ -68,15 +68,22 @@ TankDamage::~TankDamage()
 
 void TankDamage::init()
 {
-	Target *damagedTarget = 
-		context_->getTargetContainer().getTargetById(damagedPlayerId_);
-	if (damagedTarget && !damagedTarget->isTarget())
+	if (!context_->getServerMode()) 
 	{
-		CameraPositionAction *pos = new CameraPositionAction(
-			damagedTarget->getLife().getTargetPosition(), 
-			4,
-			15);
-		context_->getActionController().addAction(pos);
+		Target *damagedTarget = 
+			context_->getTargetContainer().getTargetById(damagedPlayerId_);
+		if (damagedTarget && !damagedTarget->isTarget())
+		{
+			TankViewPointProvider *vPoint = new TankViewPointProvider();
+			vPoint->setValues(damagedTarget->getLife().getTargetPosition());
+			CameraPositionAction *pos = new CameraPositionAction(
+				weaponContext_.getPlayerId(),
+				vPoint,
+				4,
+				15,
+				false);
+			context_->getActionController().addAction(pos);
+		}
 	}
 }
 

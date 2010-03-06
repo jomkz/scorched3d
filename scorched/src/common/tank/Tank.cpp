@@ -28,6 +28,7 @@
 #include <tank/TankState.h>
 #include <tank/TankPosition.h>
 #include <tank/TankModelContainer.h>
+#include <tank/TankViewPoints.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankCamera.h>
 #include <tankai/TankAI.h>
@@ -61,6 +62,7 @@ Tank::Tank(ScorchedContext &context,
 	modelContainer_ = new TankModelContainer(context_);
 	avatar_ = new TankAvatar();
 	camera_ = new TankCamera(context);
+	viewPoints_ = new TankViewPointsCollection(context_);
 
 	position_->setTank(this);
 	score_->setTank(this);
@@ -82,6 +84,7 @@ Tank::~Tank()
 	delete modelContainer_; modelContainer_ = 0;
 	delete avatar_; avatar_ = 0;
 	delete camera_; camera_ = 0;
+	delete viewPoints_; viewPoints_ = 0;
 }
 
 void Tank::setTankAI(TankAI *ai)

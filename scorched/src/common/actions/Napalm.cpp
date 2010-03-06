@@ -26,6 +26,7 @@
 #include <target/TargetRenderer.h>
 #include <target/TargetState.h>
 #include <target/TargetSpace.h>
+#include <tank/TankViewPoints.h>
 #include <actions/Napalm.h>
 #include <actions/CameraPositionAction.h>
 #ifndef S3D_SERVER
@@ -60,13 +61,14 @@ Napalm::Napalm(int x, int y, Weapon *weapon,
 	weaponContext_(weaponContext), 
 	totalTime_(0), hurtTime_(0),
 	counter_(0.1f, 0.1f), set_(0),
-	particleSet_(0)
+	particleSet_(0), vPoint_(0)
 {
 }
 
 Napalm::~Napalm()
 {
 	delete params_;
+	if (vPoint_) vPoint_->decrementReference();
 }
 
 void Napalm::init()
@@ -91,18 +93,23 @@ void Napalm::init()
 		}
 	}
 
-	fixed ShowTime = 5;
-	FixedVector position(fixed(startX_), fixed(startY_), context_->getLandscapeMaps().
-		getGroundMaps().getHeight(startX_, startY_));
-	CameraPositionAction *pos = new CameraPositionAction(
-		position, ShowTime, 5);
-	context_->getActionController().addAction(pos);
-
 	edgePoints_.insert(XY_TO_UINT(startX_, startY_));
 
 #ifndef S3D_SERVER
 	if (!context_->getServerMode()) 
 	{
+		FixedVector position(fixed(startX_), fixed(startY_), context_->getLandscapeMaps().
+			getGroundMaps().getHeight(startX_, startY_));
+		vPoint_ = new TankViewPointProvider();
+		vPoint_->setValues(position);
+		vPoint_->incrementReference();
+
+		CameraPositionAction *pos = new CameraPositionAction(
+			weaponContext_.getPlayerId(),
+			vPoint_,
+			5, 5, true);
+		context_->getActionController().addAction(pos);
+
 		set_ = ExplosionTextures::instance()->getTextureSetByName(
 			params_->getNapalmTexture());
 	}
@@ -331,6 +338,8 @@ void Napalm::simulateAddEdge(int x, int y)
 			position3, 
 			ScorchedClient::instance()->getParticleEngine(),
 			set_);
+
+		if (vPoint_) vPoint_->setValues(FixedVector::fromVector(position1));
 
 		// Add the ground scorch
 		if (!GLStateExtension::getNoTexSubImage())

@@ -22,6 +22,7 @@
 #include <actions/TankFalling.h>
 #include <actions/TankDamage.h>
 #include <actions/ShotProjectile.h>
+#include <actions/CameraPositionAction.h>
 #include <engine/ScorchedContext.h>
 #include <engine/ActionController.h>
 #include <weapons/WeaponMoveTank.h>
@@ -45,6 +46,7 @@
 #include <tank/TankState.h>
 #include <tank/TankModelContainer.h>
 #include <tank/TankAccessories.h>
+#include <Tank/TankViewPoints.h>
 #include <target/TargetLife.h>
 #include <target/TargetState.h>
 #include <target/TargetSpace.h>
@@ -60,15 +62,15 @@ TankMovement::TankMovement(WeaponFireContext &weaponContext,
 	Action(weaponContext.getPlayerId()),
 	weaponContext_(weaponContext), 
 	positionX_(positionX), positionY_(positionY),
-	timePassed_(0), vPoint_(0), weapon_(weapon),
+	timePassed_(0), weapon_(weapon),
 	remove_(false), moving_(true), moveSoundSource_(0),
-	smokeCounter_(0.1f, 0.1f), stepCount_(0)
+	smokeCounter_(0.1f, 0.1f), stepCount_(0),
+	vPoint_(0)
 {
 }
 
 TankMovement::~TankMovement()
 {
-	if (vPoint_) context_->getViewPoints().releaseViewPoint(vPoint_);
 #ifndef S3D_SERVER
 	if (!context_->getServerMode())
 	{
@@ -76,6 +78,7 @@ TankMovement::~TankMovement()
 		moveSoundSource_ = 0;
 	}
 #endif
+	if (vPoint_) vPoint_->decrementReference();
 }
 
 void TankMovement::init()
@@ -86,12 +89,23 @@ void TankMovement::init()
 	tank->getTargetState().setMoving(this);
 
 	startPosition_ = tank->getLife().getTargetPosition();
-	vPoint_ = context_->getViewPoints().getNewViewPoint(weaponContext_.getPlayerId());
-	
+
 	// Start the tank movement sound
 #ifndef S3D_SERVER
 	if (!context_->getServerMode()) 
 	{
+		vPoint_ = new TankViewPointProvider();
+		vPoint_->setValues(startPosition_);
+		vPoint_->incrementReference();
+
+		CameraPositionAction *positionAction = new CameraPositionAction(
+			weaponContext_.getPlayerId(),
+			vPoint_,
+			5,
+			10, 
+			false);
+		context_->getActionController().addAction(positionAction);
+
 		SoundBuffer *moveSound = 
 			Sound::instance()->fetchOrCreateBuffer(
 				S3D::getModFile("data/wav/movement/tankmove.wav"));
@@ -443,12 +457,11 @@ void TankMovement::moveTank(Tank *tank)
 					true);
 			}
 		}
+
+		if (vPoint_) vPoint_->setValues(newPos);
 	}
 
 	if (moveSoundSource_) moveSoundSource_->setPosition(newPos.asVector());
 
 #endif // #ifndef S3D_SERVER
-
-	// Set viewpoints
-	if (vPoint_) vPoint_->setPosition(newPos);
 }

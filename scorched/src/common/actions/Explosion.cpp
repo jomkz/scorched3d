@@ -66,11 +66,6 @@ Explosion::~Explosion()
 
 void Explosion::init()
 {
-	fixed ShowTime = 4;
-	CameraPositionAction *pos = new CameraPositionAction(
-		position_, ShowTime, 10);
-	context_->getActionController().addAction(pos);
-
 	fixed multiplier = fixed(((int) context_->getOptionsGame().getWeapScale()) - 
 							 OptionsGame::ScaleMedium);
 	multiplier *= fixed(true, 5000);
@@ -163,7 +158,13 @@ void Explosion::init()
 		}
 		else
 		{
-			context_->getViewPoints().explosion(weaponContext_.getPlayerId(), position_);
+			TankViewPointProvider *vPoint = new TankViewPointProvider();
+			vPoint->setValues(position_, TankViewPointProvider::defaultLookFrom, explosionSize);
+			CameraPositionAction *pos = new CameraPositionAction(
+				weaponContext_.getPlayerId(),
+				vPoint,
+				4, 10, true);
+			context_->getActionController().addAction(pos);
 		}
 
 		{

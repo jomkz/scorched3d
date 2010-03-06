@@ -22,7 +22,6 @@
 #define __INCLUDE_Explosionh_INCLUDE__
 
 #include <actions/Action.h>
-#include <engine/ViewPoints.h>
 #include <weapons/Weapon.h>
 #include <common/FixedVector.h>
 
