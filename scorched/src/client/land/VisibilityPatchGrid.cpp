@@ -288,6 +288,9 @@ void VisibilityPatchGrid::calculateVisibility()
 	}
 }
 
+#define PATCH_INDEX_NORMAL(p) (p?p->getVisibilityIndex():-1)
+#define PATCH_INDEX_SHADOW(p,l) (p?(p->getVisibilityIndex()==-1?l:p->getVisibilityIndex()):-1)
+
 void VisibilityPatchGrid::drawLand(int addIndex, bool simple)
 {
 	GraphicalLandscapeMap *landscapeMap = (GraphicalLandscapeMap *)
@@ -330,13 +333,26 @@ void VisibilityPatchGrid::drawLand(int addIndex, bool simple)
 
 	if (simple)
 	{
-		LandAndTargetVisibilityPatch *currentPatch = landPatches_;
+		int shadowLOD = OptionsDisplay::instance()->getLandShadowsLOD();
+		LandAndTargetVisibilityPatch *landAndTargetCurrentPatch = landPatches_;
 		for (int y=0; y<landHeight_; y++)
 		{
-			for (int x=0; x<landWidth_; x++, currentPatch++)
+			for (int x=0; x<landWidth_; x++, landAndTargetCurrentPatch++)
 			{
-				MipMapPatchIndex *landIndex = landIndexs_.getIndex(4, 0);
-				if (landIndex) currentPatch->getLandVisibilityPatch().draw(*landIndex, true);
+				LandVisibilityPatch *currentPatch = &landAndTargetCurrentPatch->getLandVisibilityPatch();
+
+				unsigned int index = currentPatch->getVisibilityIndex();
+				if (index == -1) index = shadowLOD;
+
+				unsigned int borders = 0;
+				int leftIndex = PATCH_INDEX_SHADOW(currentPatch->getLeftPatch(), shadowLOD);
+				int rightIndex = PATCH_INDEX_SHADOW(currentPatch->getRightPatch(), shadowLOD);
+				int topIndex = PATCH_INDEX_SHADOW(currentPatch->getTopPatch(), shadowLOD);
+				int bottomIndex = PATCH_INDEX_SHADOW(currentPatch->getBottomPatch(), shadowLOD);
+
+				MipMapPatchIndex *landIndex = 
+					landIndexs_.getIndex(index, leftIndex, rightIndex, topIndex, bottomIndex, addIndex);
+				if (landIndex) currentPatch->draw(*landIndex, true);
 			}
 		}
 	}
@@ -348,20 +364,13 @@ void VisibilityPatchGrid::drawLand(int addIndex, bool simple)
 		{
 			LandVisibilityPatch *currentPatch = (LandVisibilityPatch *) currentPatchPtr;
 			unsigned int index = currentPatch->getVisibilityIndex();
-			if (index == -1) 
-			{
-				continue;
-			}
+			if (index == -1) continue;
 
 			unsigned int borders = 0;
-			int leftIndex = currentPatch->getLeftPatch()?
-				currentPatch->getLeftPatch()->getVisibilityIndex():-1;
-			int rightIndex = currentPatch->getRightPatch()?
-				currentPatch->getRightPatch()->getVisibilityIndex():-1;
-			int topIndex = currentPatch->getTopPatch()?
-				currentPatch->getTopPatch()->getVisibilityIndex():-1;
-			int bottomIndex = currentPatch->getBottomPatch()?
-				currentPatch->getBottomPatch()->getVisibilityIndex():-1;
+			int leftIndex = PATCH_INDEX_NORMAL(currentPatch->getLeftPatch());
+			int rightIndex = PATCH_INDEX_NORMAL(currentPatch->getRightPatch());
+			int topIndex = PATCH_INDEX_NORMAL(currentPatch->getTopPatch());
+			int bottomIndex = PATCH_INDEX_NORMAL(currentPatch->getBottomPatch());
 
 			MipMapPatchIndex *landIndex = 
 				landIndexs_.getIndex(index, leftIndex, rightIndex, topIndex, bottomIndex, addIndex);

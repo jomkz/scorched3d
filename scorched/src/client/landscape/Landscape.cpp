@@ -302,11 +302,11 @@ void Landscape::drawLand()
 
 	if (OptionsDisplay::instance()->getDrawGraphicalShadowMap())
 	{
-		drawGraphicalShadowMap();
+		drawGraphicalTextureMap(colorDepthMap_);
 	}
 	if (OptionsDisplay::instance()->getDrawGraphicalReflectionMap())
 	{
-		drawGraphicalReflectionMap();
+		drawGraphicalTextureMap(water_->getReflectionTexture());
 	}
 
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_POINTS");
@@ -871,7 +871,7 @@ void Landscape::actualDrawLandShader()
 	landShader_->use_fixed();
 }
 
-void Landscape::drawGraphicalShadowMap()
+void Landscape::drawGraphicalTextureMap(GLTexture &texture)
 {
 	GLState state(GLState::TEXTURE_ON);
 
@@ -886,41 +886,7 @@ void Landscape::drawGraphicalShadowMap()
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
-	colorDepthMap_.draw(true);
-	glBegin(GL_QUADS);
-		glTexCoord2f(0.f,   0.f);
-		glVertex2i  (0,   0);
-		glTexCoord2f(1.f, 0.f);
-		glVertex2i  (300, 0);
-		glTexCoord2f(1.f, 1.f);
-		glVertex2i  (300, 300);
-		glTexCoord2f(0.f,   1.f);
-		glVertex2i  (0,   300);
-	glEnd();  
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-	glMatrixMode( GL_TEXTURE );
-	glPopMatrix();
-	glMatrixMode( GL_MODELVIEW );
-	glPopMatrix();
-}
-
-void Landscape::drawGraphicalReflectionMap()
-{
-	GLState state(GLState::TEXTURE_ON);
-
-	glColor3f( 1.f, 1.f, 1.f );
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	gluOrtho2D(0, 800, 0, 600);
-	glMatrixMode(GL_TEXTURE);
-	glPushMatrix();
-	glLoadIdentity();
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glLoadIdentity();
-	water_->getReflectionTexture().draw(true);
+	texture.draw(true);
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.f,   0.f);
 		glVertex2i  (0,   0);

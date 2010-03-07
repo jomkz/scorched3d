@@ -77,8 +77,6 @@ public:
 
 	void updatePlanTexture();
 	void updatePlanATexture();
-	void drawGraphicalShadowMap();
-	void drawGraphicalReflectionMap();
 	int getPlanTexSize();
 	int getMapTexSize();
 
@@ -139,6 +137,7 @@ protected:
 	void actualDrawLandReflection();
 	void actualDrawLandShader();
 	void createShadowMatrix();
+	void drawGraphicalTextureMap(GLTexture &texture);
 
 	// Nasty, we really need some kind of viewport/rendering context
 	// that the current rendering state for the scene can be stored.

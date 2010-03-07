@@ -76,6 +76,9 @@ public:
 	bool getNoShadows() { return noShadows_; }
 	OptionEntryBool &getNoShadowsEntry() { return noShadows_; }
 
+	int getLandShadowsLOD() { return landShadowsLOD_; }
+	OptionEntryInt &getLandShadowsLODEntry() { return landShadowsLOD_; }
+
 	bool getNoGLObjectShadows() { return noGLObjectShadows_; }
 	OptionEntryBool &getNoGLObjectShadowsEntry() { return noGLObjectShadows_; }
 
@@ -90,9 +93,6 @@ public:
 
 	bool getNoSimulateParticles() { return noSimulateParticles_; }
 	OptionEntryBool &getNoSimulateParticlesEntry() { return noSimulateParticles_; }
-
-	bool getNoModelLOD() { return noModelLOD_; }
-	OptionEntryBool &getNoModelLODEntry() { return noModelLOD_; }
 
 	bool getNoModelLighting() { return noModelLighting_; }
 	OptionEntryBool &getNoModelLightingEntry() { return noModelLighting_; }
@@ -430,6 +430,7 @@ protected:
 	OptionEntryInt framesPerSecondLimit_;
 	OptionEntryInt landDetialError_;
 	OptionEntryInt waterDetailLevelRamp_;
+	OptionEntryInt landShadowsLOD_;
 	OptionEntryBool noFog_;
 	OptionEntryBool detailTexture_;
 	OptionEntryBool saveWindowPositions_;
@@ -486,7 +487,7 @@ protected:
 	OptionEntryBool hideFinalScore_;
 	OptionEntryBool hideMenus_;
 	OptionEntryBool noVBO_;
-	OptionEntryBool noModelLOD_;
+	OptionEntryBool depricatedNoModelLOD_;
 	OptionEntryBool noModelLighting_;
 	OptionEntryBool useLandscapeTexture_;
 	OptionEntryBool useWaterTexture_;
