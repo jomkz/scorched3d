@@ -242,6 +242,7 @@ void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 			if (tank->getState().getState() == TankState::sNormal)
 			{
 				tank->getState().setState(TankState::sDead);
+				tank->getState().setLives(0);
 			}
 		}
 	}

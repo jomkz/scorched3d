@@ -368,7 +368,51 @@ void GLWWindow::mouseUp(int button, float x, float y, bool &skipRest)
 	if (disabled_) return;
 
 	dragging_ = NoDrag;
-	GLWPanel::mouseUp(button, x, y, skipRest);
+	if (x > x_ && x < x_ + w_)
+	{
+		if (windowState_ & eCircle ||
+			windowState_ & eNoDraw)
+		{
+			float sizeX = w_ / 5.6f;
+			float sizeY = w_ / 5.6f;
+			if (x < x_ + sizeX &&
+				y < y_ + h_ &&
+				y > y_ + h_ - sizeY &&
+				!(eNoMove & windowState_))
+			{
+				skipRest = !(eClickTransparent & windowState_) || skipRest;
+			}
+			else if (y > y_ && y < y_ + h_)
+			{
+				// There is a mouse up in the actual window
+				GLWPanel::mouseUp(button, x, y, skipRest);
+				skipRest = !(eClickTransparent & windowState_) || skipRest;
+			}
+		}
+		else
+		{
+			float th = titleHeight;
+			if (windowState_ & eSmallTitle) th = smallTitleHeight;
+			if (y > y_ + h_ && y < y_ + h_ + th && showTitle_ && x < x_ + titleWidth &&
+				!(eNoMove & windowState_))
+			{
+				skipRest = !(eClickTransparent & windowState_) || skipRest;
+			}
+			else
+			{
+				if ((windowState_ & eResizeable) && 
+					inBox(x, y, x_ + w_ - 12.0f, y_, 12.0f, 12.0f))
+				{
+					skipRest = !(eClickTransparent & windowState_) || skipRest;
+				}
+				else if (y > y_ && y < y_ + h_)
+				{
+					GLWPanel::mouseUp(button, x, y, skipRest);
+					skipRest = !(eClickTransparent & windowState_) || skipRest;
+				}
+			}	
+		}
+	}
 }
 
 void GLWWindow::mouseDrag(int button, float mx, float my, float x, float y, bool &skipRest)

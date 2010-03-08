@@ -22,6 +22,7 @@
 #include <engine/Simulator.h>
 #include <engine/ScorchedContext.h>
 #include <landscapemap/DeformLandscape.h>
+#include <placement/PlacementTankPosition.h>
 #include <common/ChannelManager.h>
 #include <common/OptionsScorched.h>
 #include <tank/TankContainer.h>
@@ -98,4 +99,21 @@ void Resurrection::simulate(fixed frameTime, bool &remove)
 	}
 
 	Action::simulate(frameTime, remove);
+}
+
+void Resurrection::checkResurection(ScorchedContext *context, Tank *tank)
+{
+	// Check if we can ressurect
+	if (tank->getState().getLives() > 0 ||
+		tank->getState().getMaxLives() == 0)
+	{
+		FixedVector tankPos = PlacementTankPosition::placeTank(
+			tank->getPlayerId(), tank->getTeam(),
+			*context,
+			context->getSimulator().getRandomGenerator());
+
+		Resurrection *rez = new Resurrection(
+			tank->getPlayerId(), tankPos, 5);
+		context->getActionController().addAction(rez);					
+	}
 }

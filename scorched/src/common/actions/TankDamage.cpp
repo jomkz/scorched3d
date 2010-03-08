@@ -33,7 +33,6 @@
 #include <weapons/AccessoryStore.h>
 #include <weapons/Shield.h>
 #include <landscapemap/LandscapeMaps.h>
-#include <placement/PlacementTankPosition.h>
 #include <engine/ScorchedContext.h>
 #include <engine/ActionController.h>
 #include <engine/Simulator.h>
@@ -356,20 +355,7 @@ void TankDamage::calculateDamage()
 					damagedTank->getState().setLives(
 						damagedTank->getState().getLives() - 1);
 				}
-
-				// Check if we can ressurect
-				if (damagedTank->getState().getLives() > 0 ||
-					damagedTank->getState().getMaxLives() == 0)
-				{
-					FixedVector tankPos = PlacementTankPosition::placeTank(
-						damagedTank->getPlayerId(), damagedTank->getTeam(),
-						*context_,
-						context_->getSimulator().getRandomGenerator());
-
-					Resurrection *rez = new Resurrection(
-						damagedTank->getPlayerId(), tankPos, 5);
-					context_->getActionController().addAction(rez);					
-				}
+				Resurrection::checkResurection(context_, damagedTank);
 			}
 		}
 	}

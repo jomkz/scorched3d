@@ -37,7 +37,7 @@ static OptionEntryEnum::EnumEntry turnEnum[] =
 	{ "TurnSequentialLooserFirst", OptionsGame::TurnSequentialLooserFirst },
 	{ "TurnSequentialRandom", OptionsGame::TurnSequentialRandom },
 	{ "TurnFree", OptionsGame::TurnFree },
-	{ "TurnFeedTimed", OptionsGame::TurnFreeTimed },
+	{ "TurnFreeTimed", OptionsGame::TurnFreeTimed },
 	{ "", -1 }
 };
 

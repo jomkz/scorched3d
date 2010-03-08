@@ -24,6 +24,7 @@
 #include <actions/Action.h>
 #include <common/FixedVector.h>
 
+class Tank;
 class Resurrection : public Action
 {
 public:
@@ -36,6 +37,8 @@ public:
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
 	virtual std::string getActionType() { return "Resurrection"; }
+
+	static void checkResurection(ScorchedContext *context, Tank *tank);
 
 protected:
 	unsigned int playerId_;

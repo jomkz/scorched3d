@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <actions/TankResign.h>
+#include <actions/Resurrection.h>
 #include <engine/ScorchedContext.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
@@ -133,6 +134,7 @@ void TankResign::simulate(fixed frameTime, bool &remove)
 				tank->getState().setLives(
 					tank->getState().getLives() - 1);
 			}
+			Resurrection::checkResurection(context_, tank);
 
 			StatsLogger::instance()->tankResigned(tank);
 
