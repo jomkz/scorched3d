@@ -52,6 +52,7 @@
 #include <dialogs/AnimatedBackdropDialog.h>
 #include <dialogs/BackdropDialog.h>
 #include <server/ScorchedServer.h>
+#include <engine/SaveGame.h>
 #include <console/ConsoleFileReader.h>
 #include <console/Console.h>
 #include <GLW/GLWWindowManager.h>
@@ -251,24 +252,38 @@ static bool startClientInternal()
 		}
 		ScorchedServer::instance()->getOptionsGame().getMainOptions().readOptionsFromFile(
 			(char *) clientFile.c_str());
+		if (ClientParams::instance()->getRewriteOptions())
+		{
+			ScorchedServer::instance()->getOptionsGame().getMainOptions().writeOptionsToFile(
+				(char *) clientFile.c_str(),
+				ClientParams::instance()->getWriteFullOptions());
+		}
 
 		return initClient();
 	}
-	/*else if (ClientParams::instance()->getSaveFile()[0])
+	else if (ClientParams::instance()->getSaveFile()[0])
 	{
 		// Or the client saved game
 		if (!S3D::fileExists(ClientParams::instance()->getSaveFile()))
 		{
 			S3D::dialogExit(scorched3dAppName, S3D::formatStringBuffer(
-				"Client save file \"%s\" does not exist.",
-				ClientParams::instance()->getSaveFile()));
+				"Client read saved game file \"%s\" does not exist.",
+				ClientParams::instance()->getSaveFile()),
+				false);
 		}
 
-		S3D::dialogExit(scorched3dAppName, S3D::formatStringBuffer(
-			"Client load saves yet"));
+		// Load the saved game state (settings)
+		if (!SaveGame::loadState(ClientParams::instance()->getSaveFile()))
+		{
+			S3D::dialogExit(scorched3dAppName, S3D::formatStringBuffer(
+				"Cannot load save file \"%s\".",
+				ClientParams::instance()->getSaveFile()), 
+				false);			
+		}
+
 		return initClient();
 	}
-	else*/
+	else
 	{
 		// Do nothing
 	}

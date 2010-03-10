@@ -2485,6 +2485,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\engine\SaveGame.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\engine\SaveGame.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\engine\ScorchedCollisionIds.cpp"
 				>
 			</File>

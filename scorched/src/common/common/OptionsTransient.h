@@ -60,6 +60,7 @@ public:
 
 	// Rounds left
 	int getCurrentRoundNo() { return currentRoundNo_.getValue(); }
+	void setCurrentRoundNo(int round) { currentRoundNo_.setValue(round); }
 
 	// Arms Level
 	int getArmsLevel();

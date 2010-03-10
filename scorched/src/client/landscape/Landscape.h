@@ -88,6 +88,7 @@ public:
 	void drawWater();
 	void drawObjects();
 	void drawShadows();
+	void calculateVisibility();
 
 	void simulate(float frameTime);
 

@@ -182,6 +182,8 @@ bool TankState::writeMessage(NamedNetBuffer &buffer)
 	buffer.addToBufferNamed("state", (int) state_);
 	buffer.addToBufferNamed("lives", lives_);
 	buffer.addToBufferNamed("maxLives", maxLives_);
+	buffer.addToBufferNamed("newlyjoined", newlyJoined_);
+	buffer.addToBufferNamed("notspectator", notSpectator_);
 	return true;
 }
 
@@ -203,6 +205,16 @@ bool TankState::readMessage(NetBufferReader &reader)
 	if (!reader.getFromBuffer(maxLives_))
 	{
 		Logger::log("TankState::maxLives_ read failed");
+		return false;
+	}
+	if (!reader.getFromBuffer(newlyJoined_))
+	{
+		Logger::log("TankState::newlyJoined_ read failed");
+		return false;
+	}
+	if (!reader.getFromBuffer(notSpectator_))
+	{
+		Logger::log("TankState::notSpectator_ read failed");
 		return false;
 	}
 	return true;

@@ -37,6 +37,7 @@
 #include <landscapemap/DeformLandscape.h>
 #ifndef S3D_SERVER
 	#include <land/VisibilityPatchGrid.h>
+	#include <landscape/Landscape.h>
 #endif
 
 TankFalling::TankFalling(Weapon *weapon, unsigned int fallingPlayerId,
@@ -179,6 +180,7 @@ void TankFalling::collision(PhysicsParticleObject &position,
 #ifndef S3D_SERVER
 			if (!context_->getServerMode())
 			{
+				Landscape::instance()->recalculate();
 				VisibilityPatchGrid::instance()->recalculateErrors(position.getPosition(), 2);
 			}
 #endif

@@ -26,6 +26,8 @@
 #include <server/ScorchedServerUtil.h>
 #include <server/ServerCommon.h>
 #include <server/ServerSimulator.h>
+#include <server/ServerState.h>
+#include <engine/SaveGame.h>
 #include <tank/TankModelStore.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankContainer.h>
@@ -46,6 +48,9 @@
 #include <coms/ComsConnectAcceptMessage.h>
 #include <coms/ComsConnectMessage.h>
 #include <coms/ComsMessageSender.h>
+#ifndef S3D_SERVER
+#include <client/ClientParams.h>
+#endif
 
 ServerConnectAuthHandler *ServerConnectAuthHandler::instance_ = 0;
 
@@ -253,31 +258,44 @@ void ServerConnectAuthHandler::processMessageInternal(
 		return;
 	}
 
-	// Add all the new tanks
-	for (unsigned int i=0; i<message.getNoPlayers(); i++)
-	{
-		addNextTank(destinationId,
-			ipAddress,	
-			uniqueId.c_str(),
-			SUid.c_str(),
-			message.getHostDesc(),
-			false);
-	}
-
-	// For the single player game
-	// Add a spectator that will always remain a spectator
-	// this is so if we only have computer players we still
-	// send messages to them
+	const char *savedGame = "";
 #ifndef S3D_SERVER
-	{
-		addNextTank(destinationId,
-			ipAddress,
-			uniqueId.c_str(),
-			SUid.c_str(),
-			message.getHostDesc(),
-			true);
-	}
+	savedGame = ClientParams::instance()->getSaveFile();
 #endif
+
+	if (savedGame[0])
+	{
+		SaveGame::loadTargets(savedGame);
+		ScorchedServer::instance()->getServerState().setState(ServerState::ServerNewLevelState);
+	}
+	else
+	{
+		// Add all the new tanks
+		for (unsigned int i=0; i<message.getNoPlayers(); i++)
+		{
+			addNextTank(destinationId,
+				ipAddress,	
+				uniqueId.c_str(),
+				SUid.c_str(),
+				message.getHostDesc(),
+				false);
+		}
+
+		// For the single player game
+		// Add a spectator that will always remain a spectator
+		// this is so if we only have computer players we still
+		// send messages to them
+	#ifndef S3D_SERVER
+		{
+			addNextTank(destinationId,
+				ipAddress,
+				uniqueId.c_str(),
+				SUid.c_str(),
+				message.getHostDesc(),
+				true);
+		}
+	#endif
+	}
 }
 
 void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,

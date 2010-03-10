@@ -56,7 +56,7 @@ StartDialog::StartDialog() :
 		LANG_RESOURCE("TUTORIAL", "Tutorial"), "- Start the tutorial to learn how to play.", 50.0f, 60.0f, 0.0f,
 		LANG_RESOURCE("PLAY_GAME", "Play Game"), "- Play a game against the computer or other local players.", 50.0f, 100.0f, 0.0f,
 		LANG_RESOURCE("PLAY_ONLINE", "Play Online"), "- Play online game against other players, gain stats and win awards.", 50.0f, 140.0f, 0.0f,
-		//LANG_RESOURCE("LOAD SAVE", "Load Save"), "- Continue playing a saved game.", 50.0f, 180.0f, 0.0f,
+		LANG_RESOURCE("LOAD SAVE", "Load Save"), "- Continue playing a saved game.", 50.0f, 180.0f, 0.0f,
 		LANG_RESOURCE("HELP", "Help"), "- View the online help.", 50.0f, 250.0f, 0.0f,
 		LANG_RESOURCE("DONATE", "Donate"), "- Show support for Scorched3D.", 50.0f, 290.0f, 0.0f,
 		LANG_RESOURCE("QUIT", "Quit"), "- Exit the game.", 50.0f, 360.0f, 0.0f
@@ -168,16 +168,16 @@ void StartDialog::mouseDown(int button, float x, float y, bool &skipRest)
 		GLWWindowManager::instance()->showWindow(
 			NetworkSelectDialog::instance()->getId());
 		break;
-	/*case 3:
+	case 3:
 		GLWWindowManager::instance()->showWindow(
 			SaveSelectDialog::instance()->getId());
-		break;*/
-	case 3:
+		break;
+	case 4:
 		{
 		S3D::showURL("http://www.scorched3d.co.uk/wiki");
 		}
 		break;
-	case 4:
+	case 5:
 		{
 		const char *exec = 
 			"\"https://www.paypal.com/xclick/business=donations%40"
@@ -185,7 +185,7 @@ void StartDialog::mouseDown(int button, float x, float y, bool &skipRest)
 		S3D::showURL(exec);
 		}
 		break;
-	case 5:
+	case 6:
 		ScorchedClient::instance()->getMainLoop().exitLoop();
 		break;
 	}

@@ -38,10 +38,7 @@ MsgBoxDialog::MsgBoxDialog() :
 {
 	GLWPanel *topPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
 
-	GLTexture *texture = TextureStore::instance()->loadTexture(
-		S3D::getDataFile("data/images/exclaim.bmp"),
-		S3D::getDataFile("data/images/mask.bmp"));
-	icon_ = new GLWIcon(0.0f, 0.0f, 32.0f, 32.0f, texture);
+	icon_ = new GLWIcon(0.0f, 0.0f, 32.0f, 32.0f);
 	topPanel->addWidget(icon_, 0, SpaceLeft | SpaceTop | AlignTop, 10.0f);
 
 	message_ = new GLWLabel(0.0f, 0.0f, LANG_STRING(""), 8.0f, GLWLabel::eMultiLine);
@@ -69,13 +66,28 @@ MsgBoxDialog::~MsgBoxDialog()
 
 }
 
-void MsgBoxDialog::show(const LangString &message)
+void MsgBoxDialog::show(const LangString &message, ShowType type)
 {
-	message_->setText(message);
-	message_->calcWidth();
-	layout();
+	if (type == eError)
+	{
+		GLTexture *texture = TextureStore::instance()->loadTexture(
+			S3D::getDataFile("data/images/exclaim.bmp"),
+			S3D::getDataFile("data/images/mask.bmp"));
+		instance()->icon_->setTexture(texture);
+	}
+	else
+	{
+		GLTexture *texture = TextureStore::instance()->loadTexture(
+			S3D::getDataFile("data/images/ok.bmp"),
+			S3D::getDataFile("data/images/mask.bmp"));
+		instance()->icon_->setTexture(texture);
+	}
 
-	GLWWindowManager::instance()->showWindow(id_);
+	instance()->message_->setText(message);
+	instance()->message_->calcWidth();
+	instance()->layout();
+
+	GLWWindowManager::instance()->showWindow(instance()->getId());
 }
 
 void MsgBoxDialog::buttonDown(unsigned int id)

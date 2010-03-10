@@ -50,6 +50,7 @@ public:
 	void simulate(fixed frameTime);
 
 	ServerStateEnum getState() { return serverState_; }	
+	void setState(ServerStateEnum state) { serverState_ = state; }
 
 	void buyingFinished(ComsPlayedMoveMessage &message);
 	void moveFinished(ComsPlayedMoveMessage &message);

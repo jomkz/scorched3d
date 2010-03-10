@@ -31,7 +31,12 @@ class MsgBoxDialog : public GLWWindow,
 public:
 	static MsgBoxDialog *instance();
 
-	void show(const LangString &message);
+	enum ShowType
+	{
+		eError = 1,
+		eOk = 2
+	};
+	static void show(const LangString &message, ShowType type = MsgBoxDialog::eError);
 
 	virtual void mouseDown(int button, float x, float y, bool &skipRest);
 	virtual void mouseUp(int button, float x, float y, bool &skipRest);

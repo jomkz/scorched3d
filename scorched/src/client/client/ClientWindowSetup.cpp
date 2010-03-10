@@ -42,6 +42,7 @@
 #include <dialogs/BuyAccessoryDialog.h>
 #include <dialogs/RulesDialog.h>
 #include <dialogs/ScoreDialog.h>
+#include <dialogs/SaveDialog.h>
 #include <dialogs/KibitzingDialog.h>
 #include <dialogs/InventoryDialog.h>
 #include <dialogs/ResignDialog.h>
@@ -118,6 +119,9 @@ void ClientWindowSetup::addCommonComponents(GLWWindowSkinManager *skinManager,
 		KEYBOARDKEY("SHOW_KILL_DIALOG", killKey);
 		GLWWindowManager::instance()->addWindow(state, 
  			QuitDialog::instance(), killKey, false);
+		KEYBOARDKEY("SHOW_SAVE_DIALOG", saveKey);
+		GLWWindowManager::instance()->addWindow(state, 
+ 			SaveDialog::instance(), saveKey, false);
 	}
 
 	KEYBOARDKEY("SHOW_CAMERA_DIALOG", cameraKey);

@@ -95,7 +95,7 @@ void SettingsSelectDialog::display()
 	{
 		if (!options_.readOptionsFromFile(singlecustom))
 		{
-			MsgBoxDialog::instance()->show(
+			MsgBoxDialog::show(
 				LANG_RESOURCE("FAILED_T0_LOAD_OPTIONS", "Failed to load custom options"));
 		}
 	}

@@ -90,6 +90,7 @@ bool ClientConnectionAuthHandler::processMessage(
 
 void ClientConnectionAuthHandler::sendAuth()
 {
+	Logger::log("Authenticating");
 	ProgressDialog::instance()->progressChange(LANG_RESOURCE("AUTHENTICATING", "Authenticating"), 100);
 
 	const char *hostName = ConnectDialog::instance()->getHost();
@@ -112,14 +113,15 @@ void ClientConnectionAuthHandler::sendAuth()
 
 	// Check the number of players that are connecting
 	unsigned int noPlayers = 1;
-	if (!ClientParams::instance()->getConnectedToServer())
+	const char *savedGame = "";
+	if (!ClientParams::instance()->getConnectedToServer() &&
+		!ClientParams::instance()->getSaveFile()[0])
 	{
 		noPlayers = ScorchedServer::instance()->getOptionsGame().getNoMaxPlayers() -
 			ScorchedServer::instance()->getTankContainer().getNoOfTanks();
 	}
 
 	ComsConnectAuthMessage connectMessage;
-
 	connectMessage.setUserName(ClientParams::instance()->getUserName());
 	connectMessage.setPassword(ClientParams::instance()->getPassword());
 	connectMessage.setUniqueId(uniqueId.c_str());
@@ -133,7 +135,7 @@ void ClientConnectionAuthHandler::sendAuth()
 		LangString msg = LANG_RESOURCE_2("FAILED_TO_SEND_AUTH",
 			"Failed to send auth to server \"{0}:{1}\", send failed.",
 			hostName, portNumber);
-		MsgBoxDialog::instance()->show(msg);
+		MsgBoxDialog::show(msg);
 
 		cancelAuth();
 	}

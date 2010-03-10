@@ -161,6 +161,8 @@ void GLWWindowManager::addWindow(const unsigned state, GLWWindow *window, Keyboa
 
 bool GLWWindowManager::showWindow(unsigned id)
 {
+	if (!windowInCurrentState(id)) return false;
+
 	std::map<unsigned, bool>::iterator itor =
 		windowVisibility_.find(id);
 	if (itor != windowVisibility_.end())

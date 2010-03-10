@@ -33,6 +33,7 @@ public:
 
 	virtual void buttonDown(unsigned int id);
 	virtual void display();
+
 protected:
 	unsigned int okId_, cancelId_;
 	static SaveDialog *instance_;

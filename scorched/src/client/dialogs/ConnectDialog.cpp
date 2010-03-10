@@ -97,7 +97,7 @@ void ConnectDialog::simulate(float frameTime)
 					"Failed to connect to server \"{0}:{1}\", timeout.",
 					host_,
 					port_);
-				MsgBoxDialog::instance()->show(msg);
+				MsgBoxDialog::show(msg);
 
 				ScorchedClient::instance()->getGameState().stimulate(
 					ClientState::StimOptions);
@@ -193,7 +193,7 @@ void ConnectDialog::connected()
 			"Failed to connect to server \"{0}:{1}\", send failed.",
 			host_,
 			port_);
-		MsgBoxDialog::instance()->show(msg);
+		MsgBoxDialog::show(msg);
 
 		ScorchedClient::instance()->getNetInterface().stop();
 		ScorchedClient::instance()->getGameState().stimulate(

@@ -116,6 +116,7 @@ void AnimatedBackdropDialog::drawBackground()
 	MainCamera::instance()->draw(0);
 
 	GLCameraFrustum::instance()->draw(0);
+	Landscape::instance()->calculateVisibility();
 	Landscape::instance()->drawShadows();
 	Landscape::instance()->drawLand();
 	RenderTargets::instance()->render3D.draw(0);

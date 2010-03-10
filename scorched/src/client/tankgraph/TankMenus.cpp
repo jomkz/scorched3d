@@ -51,6 +51,7 @@
 #include <dialogs/QuitDialog.h>
 #include <dialogs/ResignDialog.h>
 #include <dialogs/SkipDialog.h>
+#include <dialogs/SaveDialog.h>
 #include <sound/SoundUtils.h>
 #include <console/ConsoleRuleFnIAdapter.h>
 #include <console/ConsoleRuleMethodIAdapter.h>
@@ -360,6 +361,10 @@ void TankMenus::PlayerMenu::menuSelection(const char* menuName,
 		case 3:
 			GLWWindowManager::instance()->showWindow(
 				QuitDialog::instance()->getId());
+			break;
+		case 4:
+			GLWWindowManager::instance()->showWindow(
+				SaveDialog::instance()->getId());
 			break;
 		}
 	}

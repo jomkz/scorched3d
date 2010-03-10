@@ -451,7 +451,7 @@ void NetworkSelectDialog::rowSelectedGames(unsigned int id, int row)
 			"http://www.scorched3d.co.uk\n",
 			version, protocolVersion,
 			S3D::ScorchedVersion, S3D::ScorchedProtocolVersion);
-		MsgBoxDialog::instance()->show(msg);
+		MsgBoxDialog::show(msg);
 	}
 
 	// Set ip address for this server

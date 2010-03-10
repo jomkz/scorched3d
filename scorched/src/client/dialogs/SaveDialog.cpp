@@ -19,13 +19,19 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <dialogs/SaveDialog.h>
+#include <dialogs/MsgBoxDialog.h>
 #include <GLW/GLWTextButton.h>
 #include <GLW/GLWLabel.h>
 #include <GLW/GLWWindowManager.h>
 #include <lang/LangResource.h>
 #include <client/ScorchedClient.h>
+#include <server/ScorchedServer.h>
+#include <server/ServerSimulator.h>
+#include <server/ServerState.h>
+#include <engine/SaveGame.h>
 #include <common/ChannelManager.h>
 #include <common/Defines.h>
+#include <common/Logger.h>
 #include <time.h>
 
 SaveDialog *SaveDialog::instance_ = 0;
@@ -76,8 +82,20 @@ void SaveDialog::display()
 {
 	GLWWindow::display();
 
-	std::string text = S3D::formatStringBuffer("saved-%i", time(0));
-	textBox_->setText(LANG_STRING(text));
+	unsigned int serverState = ScorchedServer::instance()->getServerState().getState();
+	if (serverState != ServerState::ServerPlayingState &&
+		serverState != ServerState::ServerScoreState)
+	{
+		GLWWindowManager::instance()->hideWindow(getId());
+		MsgBoxDialog::show(
+			LANG_RESOURCE("SAVE_GAME_ERROR",
+			"Can only save game during play"));
+	}
+	else
+	{
+		std::string text = S3D::formatStringBuffer("saved-%i", time(0));
+		textBox_->setText(LANG_STRING(text));
+	}		
 }
 
 void SaveDialog::buttonDown(unsigned int id)
@@ -86,24 +104,25 @@ void SaveDialog::buttonDown(unsigned int id)
 	{
 		if (textBox_->getText()[0])
 		{
-			std::string saveFile = S3D::formatStringBuffer("%s.s3d", textBox_->getText().c_str());
-			//if (ClientSave::saveClient(S3D::getSaveFile(saveFile.c_str())))
+			std::string shortFileName = S3D::formatStringBuffer("%s.s3d", 
+				textBox_->getText().c_str());
+			std::string fileName = S3D::getSaveFile(shortFileName);
+			if (SaveGame::saveFile(fileName))
 			{
-				ChannelText text("info", 
-					LANG_RESOURCE_1("SAVED_AS", "Saved as \"{0}\"", saveFile));
-				ChannelManager::showText(ScorchedClient::instance()->getContext(), text);
+				MsgBoxDialog::show(
+					LANG_RESOURCE_1("SAVED_AS", "Successfully saved game as file \"{0}\"", shortFileName), 
+					MsgBoxDialog::eOk);
 			}
-			//else
+			else
 			{
-				ChannelText text("info", LANG_RESOURCE("SAVE_FAILED", "Save failed"));
-				ChannelManager::showText(ScorchedClient::instance()->getContext(), text);
+				MsgBoxDialog::show(
+					LANG_RESOURCE("SAVE_FAILED", "Save failed"));
 			}
 			GLWWindowManager::instance()->hideWindow(id_);
 		}
 	}
-	else if (id == cancelId_)
+	else
 	{
 		GLWWindowManager::instance()->hideWindow(id_);
 	}
 }
-

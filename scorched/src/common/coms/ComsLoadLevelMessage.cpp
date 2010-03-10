@@ -53,35 +53,50 @@ bool ComsLoadLevelMessage::saveState(ScorchedContext &context)
 	if (!context.getTankTeamScore().writeMessage(stateBuffer_)) return false;
 	if (!context.getAccessoryStore().writeEconomyToBuffer(stateBuffer_)) return false;
 
+	return false;
+}
+
+bool ComsLoadLevelMessage::saveTargets(ScorchedContext &context)
+{
 	// Tanks
 	std::map<unsigned int, Tank *> &tanks =
 		context.getTankContainer().getPlayingTanks();
-	stateBuffer_.addToBuffer((int) tanks.size());
+	targetsBuffer_.addToBuffer((int) tanks.size());
 	std::map<unsigned int, Tank *>::iterator targetItor;
 	for (targetItor = tanks.begin();
 		targetItor != tanks.end();
 		targetItor++)
 	{
 		Tank *tank = targetItor->second;
-		stateBuffer_.addToBuffer(tank->getPlayerId());
-		if (!tank->writeMessage(stateBuffer_)) return false;
+		targetsBuffer_.addToBuffer(tank->getPlayerId());
+		if (!tank->writeMessage(targetsBuffer_)) return false;
 	}
 
 	return false;
 }
 
-bool ComsLoadLevelMessage::loadState(ScorchedContext &context)
+bool ComsLoadLevelMessage::loadState(ScorchedContext &context, bool fullState)
 {
 	NetBufferReader reader(stateBuffer_);
 
 	// State
 	if (!context.getOptionsGame().getMainOptions().
 		readFromBuffer(reader, false, false)) return false;
-	context.getOptionsGame().updateLevelOptions(
-		context, landscapeDefinition_);
-	if (!context.getOptionsTransient().readFromBuffer(reader)) return false;
-	if (!context.getTankTeamScore().readMessage(reader)) return false;
-	if (!context.getAccessoryStore().readEconomyFromBuffer(reader)) return false;
+	if (fullState)
+	{
+		context.getOptionsGame().updateLevelOptions(
+			context, landscapeDefinition_);
+		if (!context.getOptionsTransient().readFromBuffer(reader)) return false;
+		if (!context.getTankTeamScore().readMessage(reader)) return false;
+		if (!context.getAccessoryStore().readEconomyFromBuffer(reader)) return false;
+	}
+
+	return true;
+}
+
+bool ComsLoadLevelMessage::loadTargets(ScorchedContext &context)
+{
+	NetBufferReader reader(targetsBuffer_);
 
 	// Tanks
 	int targetCount = 0;
@@ -103,7 +118,10 @@ bool ComsLoadLevelMessage::loadState(ScorchedContext &context)
 				LangString(),
 				Vector::getNullVector());
 #ifndef S3D_SERVER
-			tank->setRenderer(new TargetRendererImplTank(tank));
+			if (!context.getServerMode())
+			{
+				tank->setRenderer(new TargetRendererImplTank(tank));
+			}
 #endif
 			context.getTankContainer().addTank(tank);
 		}
@@ -167,6 +185,7 @@ bool ComsLoadLevelMessage::writeMessage(NetBuffer &buffer)
 	if (!landscapeDefinition_.writeMessage(buffer)) return false;
 	buffer.addToBuffer(stateBuffer_);
 	buffer.addToBuffer(actualTime_);
+	buffer.addToBuffer(targetsBuffer_);
 	buffer.addToBuffer(simulateBuffer_);
 
 	return true;
@@ -177,6 +196,7 @@ bool ComsLoadLevelMessage::readMessage(NetBufferReader &reader)
 	if (!landscapeDefinition_.readMessage(reader)) return false;
 	if (!reader.getFromBuffer(stateBuffer_)) return false;
 	if (!reader.getFromBuffer(actualTime_)) return false;
+	if (!reader.getFromBuffer(targetsBuffer_)) return false;
 	if (!reader.getFromBuffer(simulateBuffer_)) return false;
 
 	return true;

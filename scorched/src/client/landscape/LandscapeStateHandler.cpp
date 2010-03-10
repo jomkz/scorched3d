@@ -32,6 +32,7 @@ LandscapeStateLandHandler::~LandscapeStateLandHandler()
 
 void LandscapeStateLandHandler::draw(const unsigned state)
 {
+	Landscape::instance()->calculateVisibility();
 	Landscape::instance()->drawShadows();
 	Landscape::instance()->drawLand();
 }

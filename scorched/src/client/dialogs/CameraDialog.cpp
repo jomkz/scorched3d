@@ -163,6 +163,7 @@ void CameraDialog::simulate(float frameTime)
 void CameraDialog::drawLandscape()
 {
 	GLCameraFrustum::instance()->draw(0);
+	Landscape::instance()->calculateVisibility();
 	Landscape::instance()->drawLand();
 	RenderTargets::instance()->render3D.draw(0);
 	Landscape::instance()->drawWater();

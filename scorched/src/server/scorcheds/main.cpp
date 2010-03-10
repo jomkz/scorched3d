@@ -69,6 +69,12 @@ int main(int argc, char *argv[])
 	}
 	ScorchedServer::instance()->getOptionsGame().getMainOptions().readOptionsFromFile(
 		(char *) ServerParams::instance()->getServerFile());
+	if (ServerParams::instance()->getRewriteOptions())
+	{
+		ScorchedServer::instance()->getOptionsGame().getMainOptions().writeOptionsToFile(
+			(char *) ServerParams::instance()->getServerFile(),
+			ServerParams::instance()->getWriteFullOptions());
+	}
 
 #ifdef WIN32
 	if (ServerParams::instance()->getHideWindow())

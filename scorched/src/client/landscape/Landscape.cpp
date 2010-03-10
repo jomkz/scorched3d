@@ -257,6 +257,13 @@ void Landscape::drawShadows()
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_POST");
 }
 
+void Landscape::calculateVisibility()
+{
+	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LOD");
+	VisibilityPatchGrid::instance()->calculateVisibility();
+	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LOD");
+}
+
 void Landscape::drawSetup()
 {
 	if (OptionsDisplay::instance()->getDrawLines()) glPolygonMode(GL_FRONT, GL_LINE);
@@ -278,10 +285,6 @@ void Landscape::drawTearDown()
 void Landscape::drawLand()
 {
 	drawSetup();
-
-	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LOD");
-	VisibilityPatchGrid::instance()->calculateVisibility();
-	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LOD");	
 
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SKY");
 	sky_->drawBackdrop();

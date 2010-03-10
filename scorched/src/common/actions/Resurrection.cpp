@@ -30,6 +30,7 @@
 #include <target/TargetLife.h>
 #include <lang/LangResource.h>
 #ifndef S3D_SERVER
+	#include <landscape/Landscape.h>
 	#include <land/VisibilityPatchGrid.h>
 #endif
 
@@ -92,6 +93,7 @@ void Resurrection::simulate(fixed frameTime, bool &remove)
 	#ifndef S3D_SERVER
 			if (!context_->getServerMode())
 			{
+				Landscape::instance()->recalculate();
 				VisibilityPatchGrid::instance()->recalculateErrors(position_, 2);
 			}
 	#endif

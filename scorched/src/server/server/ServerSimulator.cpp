@@ -193,6 +193,7 @@ void ServerSimulator::newLevel()
 	levelMessage_->setLandscapeDefinition(ScorchedServer::instance()->
 		getLandscapeMaps().getDefinitions().getDefinition());
 	levelMessage_->saveState(ScorchedServer::instance()->getContext());
+	levelMessage_->saveTargets(ScorchedServer::instance()->getContext());
 }
 
 ComsLoadLevelMessage &ServerSimulator::getLevelMessage()

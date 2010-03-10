@@ -292,6 +292,7 @@ void TankMovement::simulationMove(fixed frameTime)
 #ifndef S3D_SERVER
 				if (!context_->getServerMode())
 				{
+					Landscape::instance()->recalculate();
 					VisibilityPatchGrid::instance()->recalculateErrors(tank->getLife().getTargetPosition(), 2);
 				}
 #endif

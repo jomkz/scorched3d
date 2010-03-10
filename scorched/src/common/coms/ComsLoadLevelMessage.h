@@ -36,7 +36,10 @@ public:
 	virtual ~ComsLoadLevelMessage();
 
 	bool saveState(ScorchedContext &context);
-	bool loadState(ScorchedContext &context);
+	bool loadState(ScorchedContext &context, bool fullState = true);
+
+	bool saveTargets(ScorchedContext &context);
+	bool loadTargets(ScorchedContext &context);
 
 	void setActualTime(fixed t) { actualTime_ = t; }
 	fixed getActualTime() { return actualTime_; }
@@ -57,6 +60,7 @@ protected:
 	LandscapeDefinition landscapeDefinition_;
 	NetBuffer stateBuffer_;
 	NetBuffer simulateBuffer_;
+	NetBuffer targetsBuffer_;
 	fixed actualTime_;
 
 private:

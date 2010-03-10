@@ -52,6 +52,10 @@ protected:
 		unsigned int destinationId,
 		unsigned int ipAddress,
 		ComsConnectAuthMessage &message);
+	bool checkAuthSettings(
+		unsigned int destinationId,
+		unsigned int ipAddress,
+		ComsConnectAuthMessage &message);
 	void addNextTank(unsigned int destinationId,
 		unsigned int ipAddress,
 		const char *uniqueId,
