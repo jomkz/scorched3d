@@ -98,12 +98,9 @@ TankMenus::TankMenus() : logger_("ClientLog")
 	new ConsoleRuleFnIBooleanAdapter(
 		"StateLogging", 
 		ScorchedClient::instance()->getGameState().getStateLogging());
-	new ConsoleRuleFnINumberAdapter(
+	new ConsoleRuleFnIBooleanAdapter(
 		"StateTimeLogging",
 		ScorchedClient::instance()->getGameState().getStateTimeLogging());
-	new ConsoleRuleFnIBooleanAdapter(
-		"MainLoopLogging",
-		ScorchedClient::instance()->getMainLoop().getDrawLogging());
 	
 	if (OptionsDisplay::instance()->getClientLogToFile())
 	{

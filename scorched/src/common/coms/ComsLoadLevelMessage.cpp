@@ -26,7 +26,9 @@
 #include <engine/Simulator.h>
 #include <tank/TankContainer.h>
 #include <tank/TankTeamScore.h>
+#include <tankai/TankAIStore.h>
 #include <weapons/AccessoryStore.h>
+#include <server/ScorchedServer.h>
 #include <set>
 #ifndef S3D_SERVER
 #include <tankgraph/TargetRendererImplTank.h>
@@ -70,6 +72,15 @@ bool ComsLoadLevelMessage::saveTargets(ScorchedContext &context)
 		Tank *tank = targetItor->second;
 		targetsBuffer_.addToBuffer(tank->getPlayerId());
 		if (!tank->writeMessage(targetsBuffer_)) return false;
+
+		if (tank->getTankAI())
+		{
+			targetsBuffer_.addToBuffer(tank->getTankAI()->getName());
+		}
+		else
+		{
+			targetsBuffer_.addToBuffer("Human");
+		}
 	}
 
 	return false;
@@ -127,6 +138,17 @@ bool ComsLoadLevelMessage::loadTargets(ScorchedContext &context)
 		}
 
 		if (!tank->readMessage(reader)) return false;
+
+		std::string aiName;
+		if (!reader.getFromBuffer(aiName)) return false;
+		if (context.getServerMode() &&
+			aiName != "Human")
+		{
+			TankAI *ai = ((ScorchedServer &)context).getTankAIs().
+				getAIByName(aiName.c_str());
+			if (!ai) return false;
+			tank->setTankAI(ai->createCopy(tank));
+		}
 	}
 
 	// Remove any targets that have been removed due to game play

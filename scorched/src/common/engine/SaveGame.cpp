@@ -111,7 +111,10 @@ bool SaveGame::loadTargets(const std::string &fileName)
 		itor++)
 	{
 		Tank *tank = (*itor).second;
-		tank->getState().setState(TankState::sLoading);
+		if (tank->getDestinationId() != 0)
+		{
+			tank->getState().setState(TankState::sLoading);
+		}
 	}
 
 	OptionsTransient &options = ScorchedServer::instance()->getOptionsTransient();

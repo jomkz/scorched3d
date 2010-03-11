@@ -54,6 +54,7 @@ protected:
 	unsigned int total_;
 };
 
+class MainLoop;
 class GameState : public MainLoopI
 {
 public:
@@ -67,7 +68,7 @@ public:
 		MouseButtonRightDoubleClick = 0x32
 	};
 
-	GameState(const char *name);
+	GameState(MainLoop *mainLoop, const char *name);
 	virtual ~GameState();
 
 	// Called by the simulator
@@ -90,7 +91,7 @@ public:
 	int getMouseX() { return currentMouseX_; }
 	int getMouseY() { return currentMouseY_; }
 	bool &getStateLogging() { return stateLogging_; }
-	float &getStateTimeLogging() { return stateTimeLogging_; }
+	bool &getStateTimeLogging() { return stateTimeLogging_; }
 
 	int getPerfCounter(const char *name);
 	void startPerfCount(int counter);
@@ -184,12 +185,14 @@ protected:
 	unsigned pendingStimulus_;
 	bool fakeMiddleButton_;
 	bool stateLogging_;
-	float stateTimeLogging_;
+	bool stateTimeLogging_;
+	float frameTime_;
 	int frameCount_;
 	Clock timerClock_;
 	Clock overallTimerClock_;
 	Clock doubleClickClock_;
 	TimerInfo timers_[50];
+	MainLoop *mainLoop_;
 	bool checkStimulate();
 
 	// Dragging stuff

@@ -44,10 +44,10 @@ ScorchedClient *ScorchedClient::instance()
 ScorchedClient::ScorchedClient() : 
 	ScorchedContext("Client", false)
 {
-	gameState = new GameState("Client");
-
 	mainLoop_ = new MainLoop();
 	mainLoop_->clear();
+
+	gameState = new GameState(mainLoop_, "Client");
 	mainLoop_->addMainLoop(gameState);
 
 	clientSimulator_ = new ClientSimulator();

@@ -28,9 +28,8 @@
 #endif
 
 MainLoop::MainLoop() : 
-	exitLoop_(false), drawLogging_(false),
-	drawTime_(0.0f), clearTime_(0.0f),
-	totalTime_(0.0f)
+	exitLoop_(false), 
+	drawTime_(0.0f), clearTime_(0.0f), totalTime_(0.0f)
 {
 
 }
@@ -126,15 +125,5 @@ void MainLoop::draw()
 		glGetBooleanv(GL_BLEND, &result);
 	}
 	clearTime_ += dTimer_.getTimeDifference();
-
-	if (drawLogging_ &&
-		totalTime_ > 10.0f)
-	{
-		Logger::log(S3D::formatStringBuffer("Total %.2f = Draw %.2f + Clear %.2f",
-			totalTime_, drawTime_, clearTime_));
-		totalTime_ = 0.0f;
-		drawTime_ = 0.0f;
-		clearTime_ = 0.0f;
-	}
 #endif
 }

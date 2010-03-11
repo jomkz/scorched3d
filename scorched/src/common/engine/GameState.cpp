@@ -21,6 +21,7 @@
 #include <engine/GameState.h>
 #include <engine/GameStateI.h>
 #include <engine/GameStateStimulusI.h>
+#include <engine/MainLoop.h>
 #include <common/Keyboard.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
@@ -58,7 +59,7 @@ unsigned int GameStatePerfCounter::getTotal()
 	return lastTotal; 
 }
 
-GameState::GameState(const char *name) :
+GameState::GameState(MainLoop *mainLoop, const char *name) :
 	name_(name),
 	fakeMiddleButton_(true),
 	currentMouseState_(0),
@@ -69,7 +70,9 @@ GameState::GameState(const char *name) :
 	currentMouseX_(0), currentMouseY_(0),
 	mouseDoubleX_(0), mouseDoubleY_(0),
 	stateLogging_(false), 
-	stateTimeLogging_(0.0f), frameCount_(0)
+	stateTimeLogging_(false), 
+	frameTime_(0.0f), frameCount_(0),
+	mainLoop_(mainLoop)
 {
 	clearTimers();
 }
@@ -317,7 +320,11 @@ void GameState::simulate(float simTime)
 		GameStateEntry *thisEntry = currentEntry_;
 		unsigned thisState = currentState_;
 
-		if (frameCount_ > int(stateTimeLogging_)) clearTimers(true);
+		if (stateTimeLogging_)
+		{
+			frameTime_ += simTime;
+			if (frameTime_ > 10.0f) clearTimers(true);
+		}
 
 		timerClock_.getTicksDifference();
 		int timerCount = 0;
@@ -400,12 +407,11 @@ void GameState::simulate(float simTime)
 
 void GameState::draw()
 {
+	frameCount_++;
 	if (currentEntry_)
 	{
 		GameStateEntry *thisEntry = currentEntry_;
 		unsigned thisState = currentState_;
-
-		frameCount_ ++;
 
 		timerClock_.getTicksDifference();
 		int timerCount = 0;
@@ -675,7 +681,7 @@ void GameState::addStateStimulus(const unsigned state,
 void GameState::clearTimers(bool printTimers)
 {
 	unsigned int sinceLastTime = overallTimerClock_.getTicksDifference();
-	if (printTimers && stateTimeLogging_ > 0.0f)
+	if (printTimers && stateTimeLogging_)
 	{
 		unsigned int simulateTotal = 0, drawTotal = 0;
 		for (int i=0; i<50; i++)
@@ -695,11 +701,19 @@ void GameState::clearTimers(bool printTimers)
 
 		Logger::log(
 			"----------------------------------------");
-		Logger::log(S3D::formatStringBuffer("%30s Draw : %4u (%3u%%), Simulate : %4u (%3u%%)\nOther : %4i (%3u%%)\n\n", 
-			name_.c_str(),
+
+		Logger::log(S3D::formatStringBuffer("FPS %.2f  Time Total %.2f = Draw %.2f + Clear %.2f",
+			float(frameCount_) / mainLoop_->getTotalTime(),
+			mainLoop_->getTotalTime(), mainLoop_->getDrawTime(), mainLoop_->getClearTime()));
+		mainLoop_->getTotalTime() = 0.0f;
+		mainLoop_->getDrawTime() = 0.0f;
+		mainLoop_->getClearTime() = 0.0f;
+
+		Logger::log(S3D::formatStringBuffer("%10s Other : %4i (%3u%%) Draw : %4u (%3u%%), Simulate : %4u (%3u%%)\n\n", 
+			"",
+			timeLeft, timeLeftPer,
 			drawTotal, drawTotalPer,
-			simulateTotal, simulateTotalPer,
-			timeLeft, timeLeftPer));
+			simulateTotal, simulateTotalPer));
 		for (int i=0; i<50; i++)
 		{
 			if (timers_[i].gameStateI)
@@ -738,6 +752,7 @@ void GameState::clearTimers(bool printTimers)
 	}
 
 	memset(&timers_, 0, sizeof(timers_));
+	frameTime_ = 0.0f;
 	frameCount_ = 0;
 }
 

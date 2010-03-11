@@ -43,17 +43,18 @@ public:
 	Clock &getTimer() { return fTimer_; }
 
 	void exitLoop() { exitLoop_ = true; }
-	bool &getDrawLogging() { return drawLogging_; }
+	
+	float &getDrawTime() { return drawTime_; }
+	float &getClearTime() { return clearTime_; }
+	float &getTotalTime() { return totalTime_; }
 
 protected:
 	std::list<MainLoopI *> newMainLoops_;
 	std::set<MainLoopI *> mainLoops_;
 	Clock fTimer_; // Frame/simulation timer
 	Clock dTimer_; // Draw timer
-	float drawTime_, clearTime_;
-	float totalTime_;
+	float drawTime_, clearTime_, totalTime_;
 	bool exitLoop_;
-	bool drawLogging_;
 
 	void simulate(float frameTime);
 	void addNew();
