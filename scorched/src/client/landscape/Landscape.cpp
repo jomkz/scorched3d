@@ -178,6 +178,7 @@ void Landscape::drawShadows()
 	// Set poly offset so that the shadows dont get precision artifacts
     glPolygonOffset(10.0f, 10.0f);
     glEnable(GL_POLYGON_OFFSET_FILL);
+	glCullFace(GL_FRONT);
 
 	//Disable color writes, and use flat shading for speed
     glColorMask(0, 0, 0, 0); 
@@ -246,6 +247,7 @@ void Landscape::drawShadows()
 
 	// Reset offset
 	glDisable(GL_POLYGON_OFFSET_FILL);
+	glCullFace(GL_BACK);
 
 	// Stop drawing to frame buffer
 	shadowFrameBuffer_.unBind();
@@ -534,12 +536,19 @@ void Landscape::generate(ProgressCounter *counter)
 	}
 	else
 	{
+		GLSLShader::defines_list dl;
+		if (getShadowFrameBuffer().bufferValid())
+		{
+			dl.push_back("USE_SHADOWS");
+		}
+
 		// Load shader
 		if (!landShader_) 
 		{
 			landShader_ = new GLSLShaderSetup(
 				S3D::getDataFile("data/shaders/land.vshader"),
-				S3D::getDataFile("data/shaders/land.fshader"));
+				S3D::getDataFile("data/shaders/land.fshader"),
+				dl);
 		}
 	}
 
@@ -821,14 +830,17 @@ void Landscape::actualDrawLandShader()
 	bool showArenaArea = MainCamera::instance()->getShowArena();
 	landShader_->set_uniform("showarena", showArenaArea?1.0f:0.0f);
 
-	glActiveTextureARB(GL_TEXTURE2_ARB);
-	glEnable(GL_TEXTURE_2D);
-	landShader_->set_gl_texture(shadowFrameBuffer_, "shadow", 2);
-	glMatrixMode(GL_TEXTURE);
-	createShadowMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	glActiveTextureARB(GL_TEXTURE0_ARB);
+	if (getShadowFrameBuffer().bufferValid())
+	{
+		glActiveTextureARB(GL_TEXTURE2_ARB);
+		glEnable(GL_TEXTURE_2D);
+		landShader_->set_gl_texture(shadowFrameBuffer_, "shadow", 2);
+		glMatrixMode(GL_TEXTURE);
+		createShadowMatrix();
+		glMatrixMode(GL_MODELVIEW);
+	}
 
+	glActiveTextureARB(GL_TEXTURE0_ARB);
 	glColor3f(1.0f, 1.0f, 1.0f);
 
 	// Draw Land

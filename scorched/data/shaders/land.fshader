@@ -1,4 +1,6 @@
-uniform sampler2DShadow shadow;
+#ifdef USE_SHADOWS
+uniform sampler2DShadow shadow;	// shadow map DEPTH_COMPONENT
+#endif
 uniform sampler2D mainmap;
 uniform sampler2D detailmap;
 uniform sampler2D arenamap;
@@ -13,7 +15,10 @@ void main()
 	float fog_factor = clamp(fog, 0.0, 1.0);
 
     // Look up the diffuse color and shadow states for each light source.
-    float s0 = shadow2DProj(shadow, gl_TexCoord[2]).r;
+	float s0 = 1.0;
+#ifdef USE_SHADOWS
+	s0 = shadow2DProj(shadow, gl_TexCoord[2]).r;
+#endif
 
 	// compute the dot product between normal and normalized lightdir
 	vec3 n = normalize(normal);

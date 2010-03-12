@@ -34,6 +34,75 @@
 #include <lang/LangResource.h>
 #include <math.h>
 
+class DeformLandscapeCache
+{
+public:
+	class DeformLandscapeCacheItem
+	{
+	public:
+		DeformLandscapeCacheItem(int radius)
+		{
+			int diameter = radius * 2 + 1;
+			explosionDepth_ = new fixed[diameter * diameter];
+			explosionDistance_ = new fixed[diameter * diameter];
+
+			for (int x=-radius; x<=radius; x++)
+			{
+				for (int y=-radius; y<=radius; y++)
+				{
+					DIALOG_ASSERT(x+radius<diameter && y+radius<diameter);
+					fixed explosionDepth = fixed(0), explosionDistance = fixed(-1);
+
+					FixedVector newPos(x, y, 0);
+					fixed dist = newPos.Magnitude();
+					if (dist < radius)
+					{
+						fixed distToRadius = fixed(radius) - dist;
+						explosionDepth = ((distToRadius / radius) * fixed::XPIO2).sin() * radius;
+
+						explosionDistance = fixed(1) - (dist / radius);
+						explosionDistance *= fixed(3);
+						if (explosionDistance > fixed(1)) explosionDistance = fixed(1);						
+					}
+
+					explosionDepth_[(y+radius) * diameter + (x+radius)] = explosionDepth;
+					explosionDistance_[(y+radius) * diameter + (x+radius)] = explosionDistance;
+				}
+			}
+		}
+		~DeformLandscapeCacheItem()
+		{
+			delete [] explosionDepth_;
+			delete [] explosionDistance_;
+		}
+
+		fixed *explosionDepth_;
+		fixed *explosionDistance_;
+	};
+
+	DeformLandscapeCache() 
+	{ 
+		for (int i=0;i<100;i++) landscapeCacheItems[i] = 0; 
+	}
+	~DeformLandscapeCache() {}
+
+	DeformLandscapeCacheItem &getItem(int size)
+	{
+		DIALOG_ASSERT(size > 0 && size < 50);
+		DeformLandscapeCacheItem *landscapeCacheItem = landscapeCacheItems[size];
+		if (!landscapeCacheItem)
+		{
+			landscapeCacheItem = new DeformLandscapeCacheItem(size);
+			landscapeCacheItems[size] = landscapeCacheItem;
+		}
+		return *landscapeCacheItem;
+	}
+
+private:
+	DeformLandscapeCacheItem *landscapeCacheItems[100];
+};
+static DeformLandscapeCache deformCache;
+
 bool DeformLandscape::deformLandscape(
 	ScorchedContext &context,
 	FixedVector &pos, fixed radius, bool down, DeformPoints &map)
@@ -62,44 +131,36 @@ bool DeformLandscape::deformLandscapeInternal(
 	if (iradius > 49) iradius = 49;
 
 	fixed lowestHeight = fixed(context.getOptionsGame().getMinimumLandHeight());
+	DeformLandscapeCache::DeformLandscapeCacheItem &deformItem = deformCache.getItem(iradius);
+	fixed *explosionDepth = deformItem.explosionDepth_;
+	fixed *explosionDistance = deformItem.explosionDistance_;
 
 	// Take out or add a chunk into the landsacpe
-	for (int x=-iradius; x<=iradius; x++)
+	for (int y=-iradius; y<=iradius; y++)
 	{
-		for (int y=-iradius; y<=iradius; y++)
+		for (int x=-iradius; x<=iradius; x++, explosionDepth++, explosionDistance++)	
 		{
 			DIALOG_ASSERT(x+iradius<100 && y+iradius<100);
-			map.map[x+iradius][y+iradius] = fixed(-1);
-
-			FixedVector newPos(pos[0] + x, pos[1] + y, pos[2]);
-			if ((newPos[0] >= fixed(0)) && (newPos[0] < hmap.getMapWidth()) &&
-				(newPos[1] >= fixed(0)) && (newPos[1] < hmap.getMapHeight()))
+			if (*explosionDistance != fixed(-1))
 			{
-				fixed dist = (pos - newPos).Magnitude();
-
-				if (dist < radius)
+				int absx = pos[0].asInt() + x;
+				int absy = pos[1].asInt() + y;
+				if (absx >= 0 && absx < hmap.getMapWidth() &&
+					absy >= 0 && absy < hmap.getMapHeight())
 				{
-					fixed distToRadius = radius - dist;
-					fixed currentHeight = hmap.getHeight(newPos[0].asInt(), newPos[1].asInt());
-					fixed explosionDepth = ((distToRadius / radius) * fixed::XPIO2).sin() * radius;
-
+					fixed currentHeight = hmap.getHeight(absx, absy);
 					fixed newHeight = currentHeight;
-					fixed newMap = fixed(-1);
 					if (down)
 					{
-						if (currentHeight > newPos[2] - explosionDepth)
+						if (currentHeight > pos[2] - *explosionDepth)
 						{
-							newMap = fixed(1) - (dist / radius);
-							newMap *= fixed(3);
-							if (newMap > fixed(1)) newMap = fixed(1);
-
-							if (currentHeight > newPos[2] + explosionDepth)
+							if (currentHeight > pos[2] + *explosionDepth)
 							{
-								newHeight -= explosionDepth + explosionDepth;
+								newHeight -= *explosionDepth + *explosionDepth;
 							}
 							else
 							{
-								newHeight = newPos[2] - explosionDepth;
+								newHeight = pos[2] - *explosionDepth;
 							}
 
 							if (newHeight < lowestHeight)
@@ -117,20 +178,13 @@ bool DeformLandscape::deformLandscapeInternal(
 					}
 					else
 					{
-						newMap = fixed(1) - (dist / radius);
-						newMap *= fixed(3);
-						if (newMap > fixed(1)) newMap = fixed(1);
-
-						if (currentHeight < newPos[2] + explosionDepth)
+						if (currentHeight < pos[2] + *explosionDepth)
 						{
-							if (newPos[0] == 0 || newPos[1] == 0 ||
-								newPos[0] == hmap.getMapWidth() -1 ||
-								newPos[1] == hmap.getMapHeight() -1)
+							if (!(absx == 0 || absy == 0 ||
+								absx == hmap.getMapWidth() - 1 ||
+								absy == hmap.getMapHeight() - 1))
 							{
-							}
-							else
-							{
-								newHeight = currentHeight + explosionDepth;
+								newHeight = currentHeight + *explosionDepth;
 							}
 						}
 					}
@@ -138,11 +192,12 @@ bool DeformLandscape::deformLandscapeInternal(
 					if (newHeight != currentHeight)
 					{
 						hits = true;
-						hmap.setHeight(newPos[0].asInt(), newPos[1].asInt(), newHeight);
+						hmap.setHeight(absx, absy, newHeight);
 					}
-					map.map[x+iradius][y+iradius] = newMap;
 				}
 			}
+
+			map.map[x+iradius][y+iradius] = *explosionDistance;
 		}
 	}
 
@@ -153,11 +208,12 @@ bool DeformLandscape::deformLandscapeInternal(
 		{
 			for (int y=-iradius-3; y<=iradius+3; y++)
 			{
-				FixedVector newPos(pos[0] + x, pos[1] + y, pos[2]);
-				if ((newPos[0] >= fixed(0)) && (newPos[0] < hmap.getMapWidth()) &&
-					(newPos[1] >= fixed(0)) && (newPos[1] < hmap.getMapHeight()))
+				int absx = pos[0].asInt() + x;
+				int absy = pos[1].asInt() + y;
+				if (absx >= 0 && absx < hmap.getMapWidth() &&
+					absy >= 0 && absy < hmap.getMapHeight())
 				{
-					hmap.getNormal(newPos[0].asInt(), newPos[1].asInt());
+					hmap.getNormal(absx, absy);
 				}
 			}
 		}
