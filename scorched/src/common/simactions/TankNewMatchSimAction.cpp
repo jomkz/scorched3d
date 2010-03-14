@@ -60,6 +60,7 @@ bool TankNewMatchSimAction::invokeAction(ScorchedContext &context)
 		// Don't get credited for the new game stats
 		tank->getScore().resetTotalEarnedStats();
 	}
+	tank->getState().setNewlyJoined(false);
 
 	return true;
 }
