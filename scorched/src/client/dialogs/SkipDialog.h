@@ -31,8 +31,10 @@ public:
 	static SkipDialog *instance();
 
 	virtual void buttonDown(unsigned int id);
+	virtual void display();
 protected:
-	unsigned int okId_, allId_, cancelId_;
+	GLWButton *resignButton_;
+	unsigned int okId_, allId_, cancelId_, resignId_;
 	static SkipDialog *instance_;
 
 private:

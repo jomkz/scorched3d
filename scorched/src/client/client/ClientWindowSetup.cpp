@@ -45,7 +45,6 @@
 #include <dialogs/SaveDialog.h>
 #include <dialogs/KibitzingDialog.h>
 #include <dialogs/InventoryDialog.h>
-#include <dialogs/ResignDialog.h>
 #include <dialogs/SkipDialog.h>
 #include <dialogs/SkipAllDialog.h>
 #include <dialogs/HUDDialog.h>
@@ -177,7 +176,6 @@ void ClientWindowSetup::setupStartWindows(GLWWindowSkinManager *skinManager)
 	KEYBOARDKEY("SHOW_PLAYER_DIALOG", playerKey);
 	KEYBOARDKEY("SHOW_AIM_DIALOG", aimKey);
 	KEYBOARDKEY("SHOW_WEAPON_DIALOG", weaponKey);
-	KEYBOARDKEY("SHOW_RESIGN_DIALOG", resignKey);
 	KEYBOARDKEY("SHOW_SKIP_DIALOG", skipKey);
 	KEYBOARDKEY("SHOW_SOUND_DIALOG", showSoundKey);
 
@@ -260,7 +258,6 @@ void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 	KEYBOARDKEY("SHOW_PLAYER_DIALOG", playerKey);
 	KEYBOARDKEY("SHOW_AIM_DIALOG", aimKey);
 	KEYBOARDKEY("SHOW_WEAPON_DIALOG", weaponKey);
-	KEYBOARDKEY("SHOW_RESIGN_DIALOG", resignKey);
 	KEYBOARDKEY("SHOW_SKIP_DIALOG", skipKey);
 	KEYBOARDKEY("SHOW_RULES_DIALOG", rulesKey);
 	KEYBOARDKEY("SHOW_SOUND_DIALOG", showSoundKey);
@@ -313,8 +310,6 @@ void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 
 	// StatePlaying
 	addStateWindows(skinManager, ClientState::StatePlaying, "playing");
-	GLWWindowManager::instance()->addWindow(ClientState::StatePlaying, 
-			ResignDialog::instance(), resignKey, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StatePlaying, 
 			SkipDialog::instance(), skipKey, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StatePlaying, 

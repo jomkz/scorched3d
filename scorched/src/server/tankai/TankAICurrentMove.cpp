@@ -24,6 +24,7 @@
 #include <coms/ComsPlayedMoveMessage.h>
 #include <coms/ComsDefenseMessage.h>
 #include <common/Logger.h>
+#include <common/OptionsScorched.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerSimulator.h>
 #include <server/ServerState.h>
@@ -230,6 +231,7 @@ void TankAICurrentMove::playMove(Tank *tank,
 	// Is there any point in making a move
 	// Done after select weapons to allow shields to be raised
 	if (useResign_ &&
+		ScorchedServer::instance()->getOptionsGame().getResignMode() != OptionsGame::ResignNone &&
 		tank->getLife().getLife().asFloat() < resignLife_) 
 	{
 		resign(tank, moveData);
@@ -940,7 +942,7 @@ void TankAICurrentMove::fireShot(Tank *tank, MoveData &moveData)
 	}
 	else
 	{
-		resign(tank, moveData);
+		skipMove(tank, moveData);
 	}
 }
 

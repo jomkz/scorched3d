@@ -226,6 +226,11 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 void PlayMovesSimAction::tankResigned(ScorchedContext &context, 
 	Tank *tank, ComsPlayedMoveMessage &message)
 {
+	if (context.getOptionsGame().getResignMode() == OptionsGame::ResignNone)
+	{
+		return;
+	}
+
 	fixed resignTime = 0;
 	if (context.getOptionsGame().getResignMode() == OptionsGame::ResignTimed)
 	{

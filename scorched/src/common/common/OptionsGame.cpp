@@ -24,9 +24,9 @@
 
 static OptionEntryEnum::EnumEntry scoreEnum[] =
 {
-	{ "ScoreWins", 0 },
-	{ "ScoreKills", 1 },
-	{ "ScoreMoney", 2 },
+	{ "ScoreWins", OptionsGame::ScoreWins },
+	{ "ScoreKills", OptionsGame::ScoreKills },
+	{ "ScoreMoney", OptionsGame::ScoreMoney },
 	{ "", -1 }
 };
 
@@ -43,15 +43,15 @@ static OptionEntryEnum::EnumEntry turnEnum[] =
 
 static OptionEntryEnum::EnumEntry windForceEnum[] =
 {
-	{ "WindRandom", 0 },
-	{ "WindNone", 1 },
-	{ "Wind1", 2 },
-	{ "Wind2", 3 },
-	{ "Wind3", 4 },
-	{ "Wind4", 5 },
-	{ "Wind5", 6 },
-	{ "WindBreezy", 7 },
-	{ "WindGale", 8 },
+	{ "WindRandom", OptionsGame::WindRandom },
+	{ "WindNone", OptionsGame::WindNone },
+	{ "Wind1", OptionsGame::Wind1 },
+	{ "Wind2", OptionsGame::Wind2 },
+	{ "Wind3", OptionsGame::Wind3 },
+	{ "Wind4", OptionsGame::Wind4 },
+	{ "Wind5", OptionsGame::Wind5 },
+	{ "WindBreezy", OptionsGame::WindBreezy },
+	{ "WindGale", OptionsGame::WindGale },
 	{ "", -1 }
 };
 
@@ -67,46 +67,47 @@ static OptionEntryEnum::EnumEntry windTypeEnum[] =
 
 static OptionEntryEnum::EnumEntry wallEnum[] =
 {
-	{ "WallRandom", 0 },
-	{ "WallConcrete", 1 },
-	{ "WallBouncy", 2 },
-	{ "WallWrapAround", 3 },
-	{ "WallNone", 4 },
-	{ "WallActive", 5 },
-	{ "WallInactive", 6},
+	{ "WallRandom", OptionsGame::WallRandom },
+	{ "WallConcrete", OptionsGame::WallConcrete },
+	{ "WallBouncy", OptionsGame::WallBouncy },
+	{ "WallWrapAround", OptionsGame::WallWrapAround },
+	{ "WallNone", OptionsGame::WallNone },
+	{ "WallActive", OptionsGame::WallActive },
+	{ "WallInactive", OptionsGame::WallInactive },
 	{ "", -1 }
 };
 
 static OptionEntryEnum::EnumEntry weapScaleEnum[] =
 {
-	{ "ScaleSmall", 0 },
-	{ "ScaleMedium", 1 },
-	{ "ScaleLarge", 2 },
+	{ "ScaleSmall", OptionsGame::ScaleSmall },
+	{ "ScaleMedium", OptionsGame::ScaleMedium },
+	{ "ScaleLarge", OptionsGame::ScaleLarge },
 	{ "", -1 }
 };
 
 static OptionEntryEnum::EnumEntry resignEnum[] =
 {
-	{ "ResignStart", 0 },
-	{ "ResignTimed", 1 },
+	{ "ResignStart", OptionsGame::ResignStart },
+	{ "ResignTimed", OptionsGame::ResignTimed },
+	{ "ResignNone", OptionsGame::ResignNone },
 	{ "", -1 }
 };
 
 static OptionEntryEnum::EnumEntry movementRestrictionEnum[] =
 {
-	{ "MovementRestrictionNone", 0 },
-	{ "MovementRestrictionLand", 1 },
-	{ "MovementRestrictionLandOrAbove", 2 },
+	{ "MovementRestrictionNone", OptionsGame::MovementRestrictionNone },
+	{ "MovementRestrictionLand", OptionsGame::MovementRestrictionLand },
+	{ "MovementRestrictionLandOrAbove", OptionsGame::MovementRestrictionLandOrAbove },
 	{ "", -1 }
 };
 
 static OptionEntryEnum::EnumEntry teamBallanceEnum[] =
 {
-	{ "TeamBallanceNone", 0 },
-	{ "TeamBallanceAuto", 1 },
-	{ "TeamBallanceBotsVs", 2 },
-	{ "TeamBallanceAutoByScore", 3 },
-	{ "TeamBallanceAutoByBots", 4 },
+	{ "TeamBallanceNone", OptionsGame::TeamBallanceNone },
+	{ "TeamBallanceAuto", OptionsGame::TeamBallanceAuto },
+	{ "TeamBallanceBotsVs", OptionsGame::TeamBallanceBotsVs },
+	{ "TeamBallanceAutoByScore", OptionsGame::TeamBallanceAutoByScore },
+	{ "TeamBallanceAutoByBots", OptionsGame::TeamBallanceAutoByBots },
 	{ "", -1 }
 };
 

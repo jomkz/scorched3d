@@ -27,6 +27,7 @@
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <common/Defines.h>
+#include <common/OptionsScorched.h>
 #include <time.h>
 
 SkipDialog *SkipDialog::instance_ = 0;
@@ -41,13 +42,18 @@ SkipDialog *SkipDialog::instance()
 }
 
 SkipDialog::SkipDialog() : 
-	GLWWindow("Skip", 210.0f, 115.0f, 0,
-		"Allows the player to skip the current move.")
+	GLWWindow("Skip/Resign", 210.0f, 150.0f, 0,
+		"Allows the player to skip or resign the current move.")
 {
-	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("SKIP MOVE", "Skip Move"), 10, 80, 190, this, 
+	resignButton_ =
+		new GLWTextButton(LANG_RESOURCE("RESIGN_ROUND", "Resign Round"), 10, 45, 190, this, 
+			GLWButton::ButtonFlagCenterX);
+
+	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("SKIP MOVE", "Skip Move"), 10, 115, 190, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX))->getId();
-	allId_ = addWidget(new GLWTextButton(LANG_RESOURCE("SKIP ALL MOVES", "Skip All Moves"), 10, 45, 190, this, 
+	allId_ = addWidget(new GLWTextButton(LANG_RESOURCE("SKIP ALL MOVES", "Skip All Moves"), 10, 80, 190, this, 
 		GLWButton::ButtonFlagCenterX))->getId();
+	resignId_ = addWidget(resignButton_)->getId();
 	cancelId_ = addWidget(new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 95, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX))->getId();
 }
@@ -55,6 +61,15 @@ SkipDialog::SkipDialog() :
 SkipDialog::~SkipDialog()
 {
 
+}
+
+void SkipDialog::display()
+{
+	GLWWindow::display();
+
+	resignButton_->setEnabled(
+		ScorchedClient::instance()->getOptionsGame().getResignMode() !=
+		OptionsGame::ResignNone);
 }
 
 void SkipDialog::buttonDown(unsigned int id)
@@ -70,6 +85,16 @@ void SkipDialog::buttonDown(unsigned int id)
 				firstTank->getState().setSkipShots(true);
 			}
 			TankKeyboardControlUtil::skipShot(firstTank);
+		}
+
+		GLWWindowManager::instance()->hideWindow(id_);
+	}
+	else if (id == resignId_)
+	{
+		Tank *firstTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+		if (firstTank)
+		{
+			TankKeyboardControlUtil::resign(firstTank);
 		}
 
 		GLWWindowManager::instance()->hideWindow(id_);

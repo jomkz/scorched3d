@@ -49,7 +49,6 @@
 #include <tankgraph/TargetRendererImplTarget.h>
 #include <dialogs/MainMenuDialog.h>
 #include <dialogs/QuitDialog.h>
-#include <dialogs/ResignDialog.h>
 #include <dialogs/SkipDialog.h>
 #include <dialogs/SaveDialog.h>
 #include <sound/SoundUtils.h>
@@ -291,43 +290,60 @@ void TankMenus::showTankDetails()
 
 TankMenus::PlayerMenu::PlayerMenu()
 {
+	GLMenuItem bar(LANG_STRING("----------"));
+	bar.setSeperator();
+
 	Image *map = ImageFactory::loadImage(
 		S3D::getDataFile("data/images/setting.bmp"),
 		S3D::getDataFile("data/images/settinga.bmp"),
 		false);
 	DIALOG_ASSERT(map->getBits());
-	MainMenuDialog::instance()->addMenu(LANG_RESOURCE("PLAYER", "Player"), 
-		"Player",
-		LANG_RESOURCE("PLAYER_WINDOW", "Skip move, resign, and quit"),
+	MainMenuDialog::instance()->addMenu(LANG_RESOURCE("GAME", "Game"), 
+		"Game",
+		LANG_RESOURCE("GAME_MENU", "Options affecting the game"),
 		32, 
 		ClientState::StatePlaying, this, map);
 
-	MainMenuDialog::instance()->addMenuItem("Player", 
+	MainMenuDialog::instance()->addMenuItem("Game", 
+		GLMenuItem(LANG_RESOURCE("CLEAR_TRACERS", "Clear Tracers"),
+		new ToolTip(ToolTip::ToolTipHelp, 
+			LANG_RESOURCE("CLEAR_TRACERS", "Clear Tracers"), 
+			LANG_RESOURCE("CLEAR_TRACERS_TOOLTIP", "Remove all tracer lines."))));
+
+	MainMenuDialog::instance()->addMenuItem("Game", bar);
+
+	MainMenuDialog::instance()->addMenuItem("Game", 
 		GLMenuItem(LANG_RESOURCE("SKIP_MOVE", "Skip Move"),
 		new ToolTip(ToolTip::ToolTipHelp, 
 			LANG_RESOURCE("SKIP_MOVE", "Skip Move"), 
 			LANG_RESOURCE("SKIP_MOVE_TOOLTIP", "Player forfits this move."))));
-	MainMenuDialog::instance()->addMenuItem("Player", 
+	MainMenuDialog::instance()->addMenuItem("Game", 
 		GLMenuItem(LANG_RESOURCE("RESIGN_ROUND", "Resign Round"),
 		new ToolTip(ToolTip::ToolTipHelp, 
 			LANG_RESOURCE("RESIGN_ROUND", "Resign Round"), 
 			LANG_RESOURCE("RESIGN_ROUND_TOOLTIP", 
 			"Player resigns from this round.\n"
 			"Player takes no part in the rest of the round."))));
-	MainMenuDialog::instance()->addMenuItem("Player", 
+
+	MainMenuDialog::instance()->addMenuItem("Game", bar);
+
+	MainMenuDialog::instance()->addMenuItem("Game", 
 		GLMenuItem(LANG_RESOURCE("EXIT_GAME", "Exit Game"),
 		new ToolTip(ToolTip::ToolTipHelp, 
 			LANG_RESOURCE("EXIT_GAME", "Exit Game"), 
 			LANG_RESOURCE("EXIT_GAME_TOOLTIP", "Stop Playing Scorched."))));
 	if (!ClientParams::instance()->getConnectedToServer())
 	{
-		MainMenuDialog::instance()->addMenuItem("Player",
+		MainMenuDialog::instance()->addMenuItem("Game",
 			GLMenuItem(LANG_RESOURCE("MASS_TANK_KILL", "Mass Tank Kill"),
 			new ToolTip(ToolTip::ToolTipHelp, 
 				LANG_RESOURCE("MASS_TANK_KILL", "Mass Tank Kill"),
 				LANG_RESOURCE("MASS_TANK_KILL_TOOLTIP", 
 				"Kill all tanks.\nStarts the next round."))));
-		MainMenuDialog::instance()->addMenuItem("Player",
+
+		MainMenuDialog::instance()->addMenuItem("Game", bar);
+
+		MainMenuDialog::instance()->addMenuItem("Game",
 			GLMenuItem(LANG_RESOURCE("SAVE", "Save"),
 			new ToolTip(ToolTip::ToolTipHelp, 
 				LANG_RESOURCE("SAVE", "Save"),
@@ -344,22 +360,26 @@ void TankMenus::PlayerMenu::menuSelection(const char* menuName,
 		switch (position)
 		{
 		case 0:
-			GLWWindowManager::instance()->showWindow(
-				SkipDialog::instance()->getId());
-			break;
-		case 1:
-			GLWWindowManager::instance()->showWindow(
-				ResignDialog::instance()->getId());
+			RenderTracer::instance()->clearTracerLines();
+			RenderTracer::instance()->clearTracers();
 			break;
 		case 2:
 			GLWWindowManager::instance()->showWindow(
-				QuitDialog::instance()->getId());
+				SkipDialog::instance()->getId());
 			break;
 		case 3:
 			GLWWindowManager::instance()->showWindow(
+				SkipDialog::instance()->getId());
+			break;
+		case 5:
+			GLWWindowManager::instance()->showWindow(
 				QuitDialog::instance()->getId());
 			break;
-		case 4:
+		case 6:
+			GLWWindowManager::instance()->showWindow(
+				QuitDialog::instance()->getId());
+			break;
+		case 8:
 			GLWWindowManager::instance()->showWindow(
 				SaveDialog::instance()->getId());
 			break;

@@ -3497,14 +3497,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\dialogs\ResignDialog.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\dialogs\ResignDialog.h"
-				>
-			</File>
-			<File
 				RelativePath="..\dialogs\RulesDialog.cpp"
 				>
 			</File>

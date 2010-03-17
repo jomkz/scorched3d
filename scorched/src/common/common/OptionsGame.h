@@ -29,6 +29,12 @@ public:
 	OptionsGame();
 	virtual ~OptionsGame();
 
+	enum ScoreType
+	{
+		ScoreWins = 0,
+		ScoreKills = 1,
+		ScoreMoney = 2
+	};
 	enum TurnType
 	{
 		TurnSimultaneous = 0,
@@ -77,7 +83,8 @@ public:
 	enum ResignType
 	{
 		ResignStart = 0,
-		ResignTimed = 1
+		ResignTimed = 1,
+		ResignNone = 2
 	};
 	enum MovementRestrictionType
 	{
@@ -87,11 +94,11 @@ public:
 	};
 	enum TeamBallanceType
 	{
-		TeamBallanceNone,
-		TeamBallanceAuto,
-		TeamBallanceBotsVs,
-		TeamBallanceAutoByScore,
-		TeamBallanceAutoByBots
+		TeamBallanceNone = 0,
+		TeamBallanceAuto = 1,
+		TeamBallanceBotsVs = 2,
+		TeamBallanceAutoByScore = 3,
+		TeamBallanceAutoByBots = 4
 	};
 	
 	const char *getTutorial() { return tutorial_; }
