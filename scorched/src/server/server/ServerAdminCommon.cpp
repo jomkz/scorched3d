@@ -36,7 +36,7 @@
 
 static FileLogger *serverAdminFileLogger = 0;
 
-static void adminLog(const ChannelText &message)
+void ServerAdminCommon::adminLog(const ChannelText &message)
 {
 	if (!serverAdminFileLogger) 
 	{
@@ -295,6 +295,51 @@ bool ServerAdminCommon::killAll(ServerAdminSessions::Credential &credential)
 
 	AdminSimAction *action = new AdminSimAction(AdminSimAction::eKillAll, 0, 0);
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(action);
+
+	return true;
+}
+
+bool ServerAdminCommon::stopServer(ServerAdminSessions::Credential &credential)
+{
+	if (!credential.hasPermission(
+		ServerAdminSessions::PERMISSION_ALTERSERVER)) return false;
+
+	adminLog(ChannelText("info",
+		"ADMIN_STOP_SERVER",
+		"\"{0}\" admin stop server",
+		credential.username));
+
+	exit(0);
+
+	return true;
+}
+
+bool ServerAdminCommon::stopServerWhenEmpty(ServerAdminSessions::Credential &credential)
+{
+	if (!credential.hasPermission(
+		ServerAdminSessions::PERMISSION_ALTERSERVER)) return false;
+
+	adminLog(ChannelText("info",
+		"ADMIN_STOP_SERVER_WHEN_EMPTY",
+		"\"{0}\" admin stop server when empty",
+		credential.username));
+
+	ServerCommon::getExitEmpty() = true;
+
+	return true;
+}
+
+bool ServerAdminCommon::setLogging(ServerAdminSessions::Credential &credential, bool logging)
+{
+	if (!credential.hasPermission(
+		ServerAdminSessions::PERMISSION_ALTERSERVER)) return false;
+
+	adminLog(ChannelText("info",
+		"SET_LOGGING",
+		"\"{0}\" set logging",
+		credential.username));
+
+	ScorchedServer::instance()->getComsMessageHandler().getMessageLogging() = logging;
 
 	return true;
 }

@@ -22,6 +22,7 @@
 #define __INCLUDE_ServerAdminCommonh_INCLUDE__
 
 #include <common/DefinesString.h>
+#include <common/ChannelText.h>
 #include <server/ServerAdminSessions.h>
 
 namespace ServerAdminCommon
@@ -38,7 +39,11 @@ namespace ServerAdminCommon
 	bool unpermMutePlayer(ServerAdminSessions::Credential &credential, unsigned int playerId);
 	bool newGame(ServerAdminSessions::Credential &credential);
 	bool killAll(ServerAdminSessions::Credential &credential);
+	bool stopServer(ServerAdminSessions::Credential &credential);
+	bool stopServerWhenEmpty(ServerAdminSessions::Credential &credential);
+	bool setLogging(ServerAdminSessions::Credential &credential, bool logging);
 
+	void adminLog(const ChannelText &message);
 	bool adminSay(ServerAdminSessions::Credential &credential,
 		const char *channel, const char *text);
 }

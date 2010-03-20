@@ -24,6 +24,7 @@
 #include <server/ScorchedServer.h>
 #include <server/ScorchedServerUtil.h>
 #include <server/ServerCommon.h>
+#include <server/ServerAdminCommon.h>
 #include <server/ServerParams.h>
 #include <landscapedef/LandscapeDefinitionsBase.h>
 #include <common/Defines.h>
@@ -49,7 +50,8 @@ static const char *getField(std::map<std::string, std::string> &fields, const ch
 	return 0;
 }
 
-static void setValues(std::map<std::string, std::string> &fields)
+static void setValues(ServerAdminSessions::Credential &credential,
+	std::map<std::string, std::string> &fields)
 {
 	std::list<OptionEntry *>::iterator itor;
 	{
@@ -66,7 +68,20 @@ static void setValues(std::map<std::string, std::string> &fields)
 			if (findItor != fields.end())
 			{
 				const char *value = (*findItor).second.c_str();
-				entry->setValueFromString(value);
+				if (0 != strcmp(entry->getValueAsString(), value))
+				{
+					entry->setValueFromString(value);
+
+					if (!(entry->getData() & OptionEntry::DataProtected))
+					{
+						ServerAdminCommon::adminLog(ChannelText("info",
+							"CHANGE_SETTING",
+							"\"{0}\" settings change {1}=\"{2}\"",
+							credential.username,
+							entry->getName(),
+							entry->getValueAsString()));
+					}
+				}
 			}
 		}	
 	}
@@ -84,10 +99,43 @@ static void setValues(std::map<std::string, std::string> &fields)
 			if (findItor != fields.end())
 			{
 				const char *value = (*findItor).second.c_str();
-				entry->setValueFromString(value);
+				if (0 != strcmp(entry->getValueAsString(), value))
+				{
+					entry->setValueFromString(value);
+
+					ServerAdminCommon::adminLog(ChannelText("info",
+						"CHANGE_SETTING",
+						"\"{0}\" settings change {1}=\"{2}\"",
+						credential.username,
+						entry->getName(),
+						entry->getValueAsString()));
+				}
 			}
 		}	
 	}
+}
+
+static void loadSettings(ServerAdminSessions::Credential &credential)
+{
+	ScorchedServer::instance()->getOptionsGame().getChangedOptions().
+		readOptionsFromFile((char *) ServerParams::instance()->getServerFile());
+
+	ServerAdminCommon::adminLog(ChannelText("info",
+		"LOAD_SETTING",
+		"\"{0}\" load settings",
+		credential.username));
+}
+
+static void saveSettings(ServerAdminSessions::Credential &credential)
+{
+	ScorchedServer::instance()->getOptionsGame().getChangedOptions().
+		writeOptionsToFile((char *) ServerParams::instance()->getServerFile(), 
+			ServerParams::instance()->getWriteFullOptions());
+
+	ServerAdminCommon::adminLog(ChannelText("info",
+		"SAVE_SETTING",
+		"\"{0}\" save settings",
+		credential.username));
 }
 
 bool ServerWebSettingsHandler::SettingsPlayersHandler::processRequest(
@@ -100,12 +148,11 @@ bool ServerWebSettingsHandler::SettingsPlayersHandler::processRequest(
 	const char *action = getField(request.getFields(), "action");
 	if (action && 0 == strcmp(action, "Load"))
 	{
-		ScorchedServer::instance()->getOptionsGame().getChangedOptions().
-			readOptionsFromFile((char *) ServerParams::instance()->getServerFile());
+		loadSettings(request.getSession()->credentials);
 	}
 	else
 	{
-		setValues(request.getFields());
+		setValues(request.getSession()->credentials, request.getFields());
 	}
 
 	{
@@ -149,9 +196,7 @@ bool ServerWebSettingsHandler::SettingsPlayersHandler::processRequest(
 
 	if (action && 0 == strcmp(action, "Save"))
 	{
-		ScorchedServer::instance()->getOptionsGame().getChangedOptions().
-			writeOptionsToFile((char *) ServerParams::instance()->getServerFile(), 
-				ServerParams::instance()->getWriteFullOptions());
+		saveSettings(request.getSession()->credentials);
 	}
 
 	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "settingsplayers.html", request.getFields(), text);
@@ -167,8 +212,7 @@ bool ServerWebSettingsHandler::SettingsLandscapeHandler::processRequest(
 	const char *action = getField(request.getFields(), "action");
 	if (action && 0 == strcmp(action, "Load"))
 	{
-		ScorchedServer::instance()->getOptionsGame().getChangedOptions().
-			readOptionsFromFile((char *) ServerParams::instance()->getServerFile());
+		loadSettings(request.getSession()->credentials);
 	}
 
 	LandscapeDefinitionsBase landscapeDefinitions;
@@ -211,6 +255,13 @@ bool ServerWebSettingsHandler::SettingsLandscapeHandler::processRequest(
 			landscapesString = " ";
 		}
 		optionsGame.getLandscapesEntry().setValue(landscapesString.c_str());
+
+		ServerAdminCommon::adminLog(ChannelText("info",
+			"CHANGE_SETTING",
+			"\"{0}\" settings change {1}=\"{2}\"",
+			request.getSession()->credentials.username,
+			optionsGame.getLandscapesEntry().getName(),
+			optionsGame.getLandscapesEntry().getValueAsString()));
 	}
 
 	// Read the current options
@@ -239,9 +290,7 @@ bool ServerWebSettingsHandler::SettingsLandscapeHandler::processRequest(
 
 	if (action && 0 == strcmp(action, "Save"))
 	{
-		ScorchedServer::instance()->getOptionsGame().getChangedOptions().
-			writeOptionsToFile((char *) ServerParams::instance()->getServerFile(),
-				ServerParams::instance()->getWriteFullOptions());
+		saveSettings(request.getSession()->credentials);
 	}
 
 	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "settingslandscape.html", request.getFields(), text);
@@ -262,13 +311,12 @@ bool ServerWebSettingsHandler::SettingsAllHandler::processRequest(
 	const char *action = getField(request.getFields(), "action");
 	if (action && 0 == strcmp(action, "Load"))
 	{
-		ScorchedServer::instance()->getOptionsGame().getChangedOptions().
-			readOptionsFromFile((char *) ServerParams::instance()->getServerFile());
+		loadSettings(request.getSession()->credentials);
 	}
 	else
 	{
 		// Check if any changes have been made
-		setValues(request.getFields());
+		setValues(request.getSession()->credentials, request.getFields());
 	}
 
 	// Show the current settings
@@ -304,9 +352,7 @@ bool ServerWebSettingsHandler::SettingsAllHandler::processRequest(
 
 	if (action && 0 == strcmp(action, "Save"))
 	{
-		ScorchedServer::instance()->getOptionsGame().getChangedOptions().
-			writeOptionsToFile((char *) ServerParams::instance()->getServerFile(),
-				ServerParams::instance()->getWriteFullOptions());
+		saveSettings(request.getSession()->credentials);
 	}
 
 	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "settingsall.html", request.getFields(), text);
@@ -327,20 +373,17 @@ bool ServerWebSettingsHandler::SettingsMainHandler::processRequest(
 	const char *action = getField(request.getFields(), "action");
 	if (action && 0 == strcmp(action, "Load"))
 	{
-		ScorchedServer::instance()->getOptionsGame().getChangedOptions().
-			readOptionsFromFile((char *) ServerParams::instance()->getServerFile());
+		loadSettings(request.getSession()->credentials);
 	}
 	else
 	{
 		// Check if any changes have been made
-		setValues(request.getFields());
+		setValues(request.getSession()->credentials, request.getFields());
 	}
 
 	if (action && 0 == strcmp(action, "Save"))
 	{
-		ScorchedServer::instance()->getOptionsGame().getChangedOptions().
-			writeOptionsToFile((char *) ServerParams::instance()->getServerFile(),
-				ServerParams::instance()->getWriteFullOptions());
+		saveSettings(request.getSession()->credentials);
 	}
 
 	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "settingsmain.html", request.getFields(), text);
@@ -361,13 +404,12 @@ bool ServerWebSettingsHandler::SettingsModHandler::processRequest(
 	const char *action = getField(request.getFields(), "action");
 	if (action && 0 == strcmp(action, "Load"))
 	{
-		ScorchedServer::instance()->getOptionsGame().getChangedOptions().
-			readOptionsFromFile((char *) ServerParams::instance()->getServerFile());
+		loadSettings(request.getSession()->credentials);
 	}
 	else
 	{
 		// Check if any changes have been made
-		setValues(request.getFields());
+		setValues(request.getSession()->credentials, request.getFields());
 	}
 
 	// Import/upload a mod (if specified)
@@ -439,9 +481,7 @@ bool ServerWebSettingsHandler::SettingsModHandler::processRequest(
 
 	if (action && 0 == strcmp(action, "Save"))
 	{
-		ScorchedServer::instance()->getOptionsGame().getChangedOptions().
-			writeOptionsToFile((char *) ServerParams::instance()->getServerFile(),
-				ServerParams::instance()->getWriteFullOptions());
+		saveSettings(request.getSession()->credentials);
 	}
 
 	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "settingsmod.html", request.getFields(), text);

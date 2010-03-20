@@ -443,9 +443,6 @@ bool ServerWebHandler::GameHandler::processRequest(
 	const char *action = ServerWebServerUtil::getField(request.getFields(), "action");
 	if (action)
 	{
-		if (!request.getSession()->credentials.hasPermission(
-			ServerAdminSessions::PERMISSION_ALTERGAME)) return true;
-
 		if (0 == strcmp(action, "NewGame"))
 		{
 			ServerAdminCommon::newGame(request.getSession()->credentials);
@@ -480,30 +477,27 @@ bool ServerWebHandler::ServerHandler::processRequest(
 	ServerWebServerIRequest &request,
 	std::string &text)
 {
-	bool &messageLogging = ScorchedServer::instance()->
-		getComsMessageHandler().getMessageLogging();
-
 	// Check for any action
 	const char *action = ServerWebServerUtil::getField(request.getFields(), "action");
 	if (action)
 	{
-		if (!request.getSession()->credentials.hasPermission(
-			ServerAdminSessions::PERMISSION_ALTERSERVER)) return true;
-
 		if (0 == strcmp(action, "Stop Server"))
 		{
-			exit(0);
+			ServerAdminCommon::stopServer(request.getSession()->credentials);
 		}
 		else if (0 == strcmp(action, "Stop Server When Empty"))
 		{
-			ServerCommon::getExitEmpty() = true;
+			ServerAdminCommon::stopServerWhenEmpty(request.getSession()->credentials);
 		}
 		else if (0 == strcmp(action, "Set Logging"))
 		{
-			messageLogging = (0 == strcmp(request.getFields()["MessageLogging"].c_str(), "on"));
+			ServerAdminCommon::setLogging(request.getSession()->credentials,
+				(0 == strcmp(request.getFields()["MessageLogging"].c_str(), "on")));
 		}
 	}
 
+	bool &messageLogging = ScorchedServer::instance()->
+		getComsMessageHandler().getMessageLogging();
 	{
 		request.getFields()["MESSAGELOGGING"] = S3D::formatStringBuffer(
 			"<input type='radio' name='MessageLogging' %s value='on'>On</input>"
