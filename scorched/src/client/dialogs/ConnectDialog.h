@@ -52,6 +52,7 @@ protected:
 	std::string host_;
 	int port_;
 	static ConnectDialog *instance_;
+	SDL_Thread *remoteConnectionThread_;
 	UniqueIdStore *idStore_;
 	int tryCount_;
 	ConnectState connectionState_;
@@ -61,6 +62,7 @@ protected:
 	static int tryRemoteConnection(void *);
 	void tryLocalConnection();
 	void finishedTryingConnection();
+	void finished();
 
 private:
 	ConnectDialog();

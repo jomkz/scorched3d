@@ -44,11 +44,9 @@ ConnectDialog::ConnectDialog() :
 	GLWWindow("Connect", -100.0f, 10.0f, 20.0f, 20.0f, eNoDraw | eNoTitle,
 		"Connection dialog"),
 	connectionState_(eWaiting),
-	tryCount_(0), lastTime_(0), idStore_(0)
+	tryCount_(0), lastTime_(0), idStore_(0),
+	remoteConnectionThread_(0)
 {
-	connectionState_ = eWaiting;
-	tryCount_ = 0;
-	lastTime_ = 0;
 }
 
 ConnectDialog::~ConnectDialog()
@@ -71,7 +69,9 @@ UniqueIdStore &ConnectDialog::getIdStore()
 
 void ConnectDialog::windowInit(const unsigned state)
 {
-
+	connectionState_ = eWaiting;
+	tryCount_ = 0;
+	lastTime_ = 0;
 }
 
 void ConnectDialog::simulate(float frameTime)
@@ -91,7 +91,7 @@ void ConnectDialog::simulate(float frameTime)
 			}
 			else
 			{
-				connectionState_ = eFinished;
+				finished();
 
 				LangString msg = LANG_RESOURCE_2("FAILED_TO_CONNECT_TIMEOUT",
 					"Failed to connect to server \"{0}:{1}\", timeout.",
@@ -139,7 +139,7 @@ void ConnectDialog::tryConnection()
 	if (ClientParams::instance()->getConnectedToServer())
 	{
 		// Do in a thread so connect can block if it wants!
-		SDL_CreateThread(ConnectDialog::tryRemoteConnection, 0);
+		remoteConnectionThread_ = SDL_CreateThread(ConnectDialog::tryRemoteConnection, 0);
 	}
 	else
 	{
@@ -199,6 +199,16 @@ void ConnectDialog::connected()
 		ScorchedClient::instance()->getGameState().stimulate(
 			ClientState::StimOptions);
 	}
+	finished();
+}
 
+void ConnectDialog::finished()
+{
+	if (remoteConnectionThread_)
+	{
+		int status = 0;
+		SDL_WaitThread(remoteConnectionThread_, &status);
+		remoteConnectionThread_ = 0;
+	}
 	connectionState_ = eFinished;
 }

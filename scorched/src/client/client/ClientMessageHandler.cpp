@@ -20,9 +20,12 @@
 
 #include <client/ClientMessageHandler.h>
 #include <client/ClientState.h>
+#include <client/ClientParams.h>
 #include <client/ScorchedClient.h>
 #include <dialogs/ConnectDialog.h>
+#include <dialogs/MsgBoxDialog.h>
 #include <tank/TankContainer.h>
+#include <lang/LangResource.h>
 #include <common/Logger.h>
 #include <net/NetInterface.h>
 
@@ -70,7 +73,13 @@ void ClientMessageHandler::clientDisconnected(NetMessage &message)
 		type = "User";
 	}
 
-	Logger::log(S3D::formatStringBuffer("Disconnected %s", type));
+	ClientParams::instance()->reset();
+
+	LangString msg = LANG_RESOURCE_1("DISCONNECTED",
+		"Disconnected : {0}", type);
+	MsgBoxDialog::show(msg);
+
+	Logger::log(S3D::formatStringBuffer("Disconnected : %s", type));
 	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimDisconnected);
 	ScorchedClient::instance()->getTankContainer().setCurrentDestinationId(0);
 }

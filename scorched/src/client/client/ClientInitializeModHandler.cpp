@@ -51,8 +51,7 @@ ClientInitializeModHandler *ClientInitializeModHandler::instance()
 	return instance_;
 }
 
-ClientInitializeModHandler::ClientInitializeModHandler() :
-	initialized_(false)
+ClientInitializeModHandler::ClientInitializeModHandler()
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
 		ComsInitializeModMessage::ComsInitializeModMessageType,
@@ -71,11 +70,7 @@ bool ClientInitializeModHandler::processMessage(
 	ComsInitializeModMessage message;
 	if (!message.readMessage(reader)) return false;
 
-	if (!initialized_)
-	{
-		if (!initialize()) return false;
-		else initialized_ = true;
-	}
+	if (!initialize()) return false;
 
 	// Tell the server we are initialized
 	ComsMessageSender::sendToServer(message);

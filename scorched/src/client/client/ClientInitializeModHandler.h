@@ -36,7 +36,6 @@ public:
 
 protected:
 	static ClientInitializeModHandler *instance_;
-	bool initialized_;
 
 	bool initialize();
 
