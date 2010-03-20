@@ -367,8 +367,14 @@ public:
 	bool getActionCollisionSyncCheck() { return actionCollisionSyncCheck_; }
 	OptionEntryBool &getActionCollisionSyncCheckEntry() { return actionCollisionSyncCheck_; }
 
-	const char * getAuthHandler() { return authHandler_; }
+	const char *getAuthHandler() { return authHandler_; }
 	OptionEntryStringEnum &getAuthHandlerEntry() { return authHandler_; }
+
+	const char *getAuthHandlerParam1() { return authHandlerParam1_; }
+	OptionEntryString &getAuthHandlerParam1Entry() { return authHandlerParam1_; }
+
+	const char *getAuthHandlerParam2() { return authHandlerParam2_; }
+	OptionEntryString &getAuthHandlerParam2Entry() { return authHandlerParam2_; }
 
 	bool getRegisteredUserNames() { return registeredUserNames_; }
 	OptionEntryBool &getRegisteredUserNamesEntry() { return registeredUserNames_; }
@@ -482,6 +488,8 @@ protected:
 	OptionEntryBool allowMultiLingualChat_;
 	OptionEntryBool allowMultiLingualNames_;
 	OptionEntryStringEnum authHandler_;
+	OptionEntryString authHandlerParam1_;
+	OptionEntryString authHandlerParam2_;
 	OptionEntryString serverName_;
 	OptionEntryString *playerType_[24];
 	OptionEntryString serverPassword_;

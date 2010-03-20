@@ -82,25 +82,9 @@ void ServerAuthHandlerMinKills::setup()
 {
 	if (minKills_ != -1) return;
 
-	XMLFile file;
-	std::string fileName = S3D::getSettingsFile(S3D::formatStringBuffer("minkills-%i.xml",
-		ScorchedServer::instance()->getOptionsGame().getPortNo()));
+	minKills_ = atoi(ScorchedServer::instance()->getOptionsGame().getAuthHandlerParam1());
+	maxKills_ = atoi(ScorchedServer::instance()->getOptionsGame().getAuthHandlerParam2());
 
-	if (!file.readFile(fileName) ||
-		!file.getRootNode())
-	{
-		Logger::log(S3D::formatStringBuffer("Failed to parse %s settings file. Error: %s", 
-			fileName.c_str(),
-			file.getParserError()));
-		return;
-	}
-
-	if (!file.getRootNode()->getNamedChild("minkills", minKills_) ||
-		!file.getRootNode()->getNamedChild("maxkills", maxKills_)) 
-	{
-		Logger::log(S3D::formatStringBuffer("Failed to parse %s settings file.", fileName.c_str()));
-		return;
-	}
 	Logger::log(S3D::formatStringBuffer("ServerAuthHandlerMinKills : minkills=%i, maxkills=%i",
 		minKills_, maxKills_));
 }

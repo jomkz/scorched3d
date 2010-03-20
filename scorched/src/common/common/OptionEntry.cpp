@@ -148,26 +148,25 @@ bool OptionEntryHelper::writeToXML(std::list<OptionEntry *> &options,
 	{
 		OptionEntry *entry = (*itor);
 
-		if (!(entry->getData() & OptionEntry::DataDepricated) &&
-			(!entry->isDefaultValue() || allOptions))
+		if (!(entry->getData() & OptionEntry::DataDepricated))
 		{
 
 			// Add the comments for this node
 			node->addChild(new XMLNode("", 
-				entry->getDescription(), XMLNode::XMLCommentType));
-			std::string defaultValue = "(default value : \"";
-			defaultValue += entry->getDefaultValueAsString();
-			defaultValue += "\")";
-			node->addChild(new XMLNode("", 
-				defaultValue.c_str(), XMLNode::XMLCommentType));
+				S3D::formatStringBuffer("%s: %s (default value : \"%s\")", 
+				entry->getName(), entry->getDescription(), entry->getDefaultValueAsString()), 
+				XMLNode::XMLCommentType));
 			
-			// Add the name and value
-			XMLNode *optionNode = new XMLNode("option");
-			node->addChild(optionNode);
-			optionNode->addChild(
-				new XMLNode("name", entry->getName()));
-			optionNode->addChild(
-				new XMLNode("value",entry->getValueAsString()));
+			if (!entry->isDefaultValue() || allOptions)
+			{
+				// Add the name and value
+				XMLNode *optionNode = new XMLNode("option");
+				node->addChild(optionNode);
+				optionNode->addChild(
+					new XMLNode("name", entry->getName()));
+				optionNode->addChild(
+					new XMLNode("value",entry->getValueAsString()));
+			}
 		}
 	}
 	return true;

@@ -153,7 +153,7 @@ void ServerConnectAuthHandler::processMessageInternal(
 				"--------------------------------------------------",
 				resultMessage.c_str());
 			Logger::log(S3D::formatStringBuffer("User failed authentication \"%s\"",
-				message.getUserName()));
+				resultMessage.c_str()));
 
 			ServerCommon::kickDestination(destinationId, kickMessage);			
 			return;

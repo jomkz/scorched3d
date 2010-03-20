@@ -149,6 +149,8 @@ public:
 	OPTIONBOOL_GETTER(ActionCollisionSyncCheck);
 
 	OPTIONSTRING_GETTER(AuthHandler);
+	OPTIONSTRING_GETTER(AuthHandlerParam1);
+	OPTIONSTRING_GETTER(AuthHandlerParam2);
 	OPTIONBOOL_GETTER(RegisteredUserNames);
 	OPTIONBOOL_GETTER(DebugFeatures);
 
