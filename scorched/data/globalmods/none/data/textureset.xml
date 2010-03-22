@@ -1,4 +1,7 @@
 <texturesets>
+	<textureset name="particle">
+		<texture>textures/particle.bmp</texture>
+	</textureset>
 	<textureset name="smoke">
 		<texture>textures/smoke01.bmp</texture>
 		<texture>textures/smoke01.bmp</texture>

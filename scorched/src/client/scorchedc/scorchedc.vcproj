@@ -4581,14 +4581,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\sprites\ExplosionRingRenderer.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\sprites\ExplosionRingRenderer.h"
-				>
-			</File>
-			<File
 				RelativePath="..\sprites\ExplosionTextures.cpp"
 				>
 			</File>
@@ -5338,6 +5330,14 @@
 			</File>
 			<File
 				RelativePath="..\..\server\server\ServerStateEnoughPlayers.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerStateFinishWait.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\server\server\ServerStateFinishWait.h"
 				>
 			</File>
 			<File

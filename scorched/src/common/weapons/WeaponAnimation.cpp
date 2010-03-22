@@ -45,8 +45,7 @@ bool WeaponAnimation::parseXML(AccessoryCreateContext &context, XMLNode *accesso
 	if (!accessoryNode->getNamedChild("data", data_)) return false;
 	if (!accessoryNode->getNamedChild("animation", rendererName_)) return false;
 
-	if (0 != strcmp(rendererName_.c_str(), "ExplosionLaserBeamRenderer") &&
-		0 != strcmp(rendererName_.c_str(), "ExplosionRingRenderer"))
+	if (0 != strcmp(rendererName_.c_str(), "ExplosionLaserBeamRenderer"))
 	{
 		S3D::dialogMessage("Accessory", S3D::formatStringBuffer(
 			"Failed to find animation named \"%s\" in accessory \"%s\"",

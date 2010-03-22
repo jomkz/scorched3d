@@ -18,29 +18,41 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ExplosionRingRendererh_INCLUDE__)
-#define __INCLUDE_ExplosionRingRendererh_INCLUDE__
+#include <server/ServerStateFinishWait.h>
+#include <server/ScorchedServer.h>
+#include <server/ServerSimulator.h>
+#include <engine/ActionController.h>
+#include <common/OptionsScorched.h>
+#include <simactions/RoundStopSimAction.h>
 
-#include <sprites/MetaActionRenderer.h>
-#include <GLEXT/GLTexture.h>
-
-class ExplosionRingRenderer : public MetaActionRenderer
+ServerStateFinishWait::ServerStateFinishWait()
 {
-public:
-	ExplosionRingRenderer();
-	virtual ~ExplosionRingRenderer();
+}
 
-	virtual void init(unsigned int playerId,
-		Vector &position, Vector &velocity,
-		const char *data);
+ServerStateFinishWait::~ServerStateFinishWait()
+{
+}
 
-	virtual void draw(Action *action);
-	virtual void simulate(Action *action, float frameTime, bool &remove);
+void ServerStateFinishWait::enterState()
+{
+	// End the round
+	RoundStopSimAction *roundStop = new RoundStopSimAction();
+	ScorchedServer::instance()->getServerSimulator().
+		addSimulatorAction(roundStop);
+}
 
-	REGISTER_CLASS_HEADER(ExplosionRingRenderer);
-private:
-	Vector position_;
-	std::string data_;
-};
+bool ServerStateFinishWait::simulate()
+{
+	if (!ScorchedServer::instance()->getOptionsGame().
+		getWaitForShotsBeforeShowingScore())
+	{
+		return true;		
+	}
+	else if (ScorchedServer::instance()->getServerSimulator().
+		getActionController().noReferencedActions())
+	{
+		return true;
+	}
 
-#endif
+	return false;
+}

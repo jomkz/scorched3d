@@ -1485,10 +1485,16 @@ and shields damaging the tank directly.</description>
 		<description>The tank explosion weapon</description>
 		<maximumnumber>0</maximumnumber>
 		<accessoryaction type='WeaponMulti'>
-			<subweapon1 type='WeaponAnimation'>
-				<animation>ExplosionRingRenderer</animation>
-				<data>data/wav/explosions/tank.wav</data>
-			</subweapon1>
+      <subweapon1 type='WeaponExplosion'>
+        <hurtamount>0.0</hurtamount>
+        <nocreatedebris></nocreatedebris>
+        <nocreatesplash></nocreatesplash>
+        <deform>none</deform>
+        <size>6</size>
+        <explosiontexture>particle</explosiontexture>
+        <explosionsound>explosions/tank.wav</explosionsound>
+        <explosiontype>ring</explosiontype>
+      </subweapon1>
 			<subweapon2 type='WeaponRandomChoice'>
 				<weaponchoice1>
 					<weight>60</weight>

@@ -51,6 +51,7 @@
 #include <dialogs/HelpButtonDialog.h>
 #include <dialogs/AnimatedBackdropDialog.h>
 #include <dialogs/BackdropDialog.h>
+#include <dialogs/ConnectDialog.h>
 #include <server/ScorchedServer.h>
 #include <engine/SaveGame.h>
 #include <console/ConsoleFileReader.h>
@@ -222,6 +223,7 @@ static bool initClient()
 		if (!startServer(true, &progressCounter)) return false;
 	}
 
+	ConnectDialog::instance()->start();
 	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimConnect);
 
 	return true;

@@ -30,6 +30,7 @@ class ConnectDialog : public GLWWindow
 public:
 	static ConnectDialog *instance();
 
+	void start();
 	void connected();
 
 	virtual void windowInit(const unsigned state);

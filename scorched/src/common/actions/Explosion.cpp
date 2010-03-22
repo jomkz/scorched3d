@@ -179,26 +179,53 @@ void Explosion::init()
 			{
 				Vector expColor = params_->getExplosionColor().asVector();
 
-				ParticleEmitter exploemitter;
-				exploemitter.setAttributes(
-					params_->getMinLife().asFloat(), params_->getMaxLife().asFloat(), // Life
-					0.2f, 0.5f, // Mass
-					0.01f, 0.02f, // Friction
-					Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, 0.0f, 0.0f), // Velocity
-					expColor, 0.8f, // StartColor1
-					expColor, 0.9f, // StartColor2
-					expColor, 0.0f, // EndColor1
-					expColor, 0.1f, // EndColor2
-					0.2f, 0.2f, 0.5f, 0.5f, // Start Size
-					2.2f, 2.2f, 4.0f, 4.0f, // EndSize
-					Vector(0.0f, 0.0f, 0.0f), // Gravity
-					params_->getLuminance(),
-					params_->getWindAffected());
-				exploemitter.emitExplosion(position_.asVector(),
-					ScorchedClient::instance()->getParticleEngine(),
-					explosionSize.asFloat(),
-					texture,
-					params_->getAnimate());
+				if (params_->getExplosionType() == ExplosionParams::ExplosionNormal)
+				{
+					ParticleEmitter exploemitter;
+					exploemitter.setAttributes(
+						params_->getMinLife().asFloat(), params_->getMaxLife().asFloat(), // Life
+						0.2f, 0.5f, // Mass
+						0.01f, 0.02f, // Friction
+						Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, 0.0f, 0.0f), // Velocity
+						expColor, 0.8f, // StartColor1
+						expColor, 0.9f, // StartColor2
+						expColor, 0.0f, // EndColor1
+						expColor, 0.1f, // EndColor2
+						0.2f, 0.2f, 0.5f, 0.5f, // Start Size
+						2.2f, 2.2f, 4.0f, 4.0f, // EndSize
+						Vector(0.0f, 0.0f, 0.0f), // Gravity
+						params_->getLuminance(),
+						params_->getWindAffected());
+					exploemitter.emitExplosion(position_.asVector(),
+						ScorchedClient::instance()->getParticleEngine(),
+						explosionSize.asFloat(),
+						texture,
+						params_->getAnimate());
+				}
+				else
+				{
+					// Emmit explosion ring
+					ParticleEmitter emmiter;
+					emmiter.setAttributes(
+						params_->getMinLife().asFloat(), params_->getMaxLife().asFloat(), // Life
+						0.5f, 0.5f, // Mass
+						0.0f, 0.0f, // Friction
+						Vector(), Vector(), // Velocity
+						Vector(0.0f, 0.0f, 0.8f), 0.9f, // StartColor1
+						Vector(0.2f, 0.2f, 0.9f), 1.0f, // StartColor2
+						Vector(0.6f, 0.6f, 0.95f), 0.0f, // EndColor1
+						Vector(0.8f, 0.8f, 1.0f), 0.1f, // EndColor2
+						0.2f, 0.2f, 0.5f, 0.5f, // Start Size
+						1.5f, 1.5f, 3.0f, 3.0f, // EndSize
+						Vector(0.0f, 0.0f, 0.0f), // Gravity
+						params_->getLuminance(),
+						params_->getWindAffected());
+					emmiter.emitExplosionRing(400, position_.asVector(),
+						ScorchedClient::instance()->getParticleEngine(),
+						explosionSize.asFloat(),
+						texture,
+						params_->getAnimate());
+				}
 			}
 		}
 

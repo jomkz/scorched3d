@@ -347,6 +347,8 @@ OptionsGame::OptionsGame() :
 		"The percentage chance the computers will say something when shooting", 0, 25, 0, 100, 10),
 	debugFeatures_(options_, "DebugFeatures",
 		"Set to \"true\" to enable debugging features such as InfoGrid", 0, false),
+	waitForShotsBeforeShowingScore_(options_, "WaitForShotsBeforeShowingScore",
+		"Wait for all shots to be played out before showing the score dialog", 0, true),
 
 	// Deprecated options
 	depricatedDelayedDefenseActivation_(options_, "DelayedDefenseActivation",

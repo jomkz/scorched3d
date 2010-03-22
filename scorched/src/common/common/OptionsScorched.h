@@ -122,6 +122,7 @@ public:
 	OPTIONINT_GETTER(ComputersAttackTalk);
 	OPTIONSTRING_GETTER(BotNamePrefix);
 	OPTIONBOOL_GETTER(RandomizeBotNames);
+	OPTIONBOOL_GETTER(WaitForShotsBeforeShowingScore);
 
 	OPTIONBOOL_GETTER(CycleMaps);
 	OPTIONSTRING_GETTER(Landscapes);

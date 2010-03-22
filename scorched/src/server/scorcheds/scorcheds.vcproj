@@ -945,6 +945,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\server\ServerStateFinishWait.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\server\ServerStateFinishWait.h"
+				>
+			</File>
+			<File
 				RelativePath="..\server\ServerStateNewGame.cpp"
 				>
 			</File>

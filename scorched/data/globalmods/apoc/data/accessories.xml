@@ -12521,20 +12521,32 @@ on the map after a short delay.</description>
 						</subweapon2>
 						<subweapon3 type='WeaponDelay'>
 							<delay>2.5</delay>
-							<delayedweapon type='WeaponAnimation'>
-								<animation>ExplosionRingRenderer</animation>
-								<data>none</data>
-							</delayedweapon>
+              <delayedweapon type='WeaponExplosion'>
+                <hurtamount>0.0</hurtamount>
+                <nocreatedebris></nocreatedebris>
+                <nocreatesplash></nocreatesplash>
+                <deform>none</deform>
+                <size>6</size>
+                <explosiontexture>particle</explosiontexture>
+                <explosionsound>explosions/tank.wav</explosionsound>
+                <explosiontype>ring</explosiontype>
+              </delayedweapon>
 						</subweapon3>
 					</aimedweapon>
 				</nextaction>
 			</subweapon1>
 			<subweapon2 type='WeaponDelay'>
 				<delay>2.0</delay>
-				<delayedweapon type='WeaponAnimation'>
-					<animation>ExplosionRingRenderer</animation>
-					<data>none</data>
-				</delayedweapon>
+        <delayedweapon type='WeaponExplosion'>
+          <hurtamount>0.0</hurtamount>
+          <nocreatedebris></nocreatedebris>
+          <nocreatesplash></nocreatesplash>
+          <deform>none</deform>
+          <size>6</size>
+          <explosiontexture>particle</explosiontexture>
+          <explosionsound>explosions/tank.wav</explosionsound>
+          <explosiontype>ring</explosiontype>
+        </delayedweapon>
 			</subweapon2>
 		</accessoryaction>
 	</accessory>
@@ -12553,10 +12565,16 @@ yourself to any spot on the landscape.</description>
 				<subweapon1 type='WeaponTankPosition'>
 					<aimedweapon type='WeaponDelay'>
 						<delay>2.0</delay>
-						<delayedweapon type='WeaponAnimation'>
-							<animation>ExplosionRingRenderer</animation>
-							<data>none</data>
-						</delayedweapon>
+            <delayedweapon type='WeaponExplosion'>
+              <hurtamount>0.0</hurtamount>
+              <nocreatedebris></nocreatedebris>
+              <nocreatesplash></nocreatesplash>
+              <deform>none</deform>
+              <size>6</size>
+              <explosiontexture>particle</explosiontexture>
+              <explosionsound>explosions/tank.wav</explosionsound>
+              <explosiontype>ring</explosiontype>
+            </delayedweapon>
 					</aimedweapon>
 				</subweapon1>
 				<subweapon2 type='WeaponTeleport'>
@@ -12565,10 +12583,16 @@ yourself to any spot on the landscape.</description>
 				</subweapon2>
 				<subweapon3 type='WeaponDelay'>
 					<delay>2.5</delay>
-					<delayedweapon type='WeaponAnimation'>
-						<animation>ExplosionRingRenderer</animation>
-						<data>none</data>
-					</delayedweapon>
+          <delayedweapon type='WeaponExplosion'>
+            <hurtamount>0.0</hurtamount>
+            <nocreatedebris></nocreatedebris>
+            <nocreatesplash></nocreatesplash>
+            <deform>none</deform>
+            <size>6</size>
+            <explosiontexture>particle</explosiontexture>
+            <explosionsound>explosions/tank.wav</explosionsound>
+            <explosiontype>ring</explosiontype>
+          </delayedweapon>
 				</subweapon3>
 			</aimedweapon>
 		</accessoryaction>
@@ -12596,10 +12620,16 @@ yourself to any spot on the landscape.</description>
 						<subweapon2 type='WeaponRepeat'>
 							<repeat>2</repeat>
 							<delay>1.0</delay>
-							<repeatweapon type='WeaponAnimation'>
-								<animation>ExplosionRingRenderer</animation>
-								<data>none</data>
-							</repeatweapon>
+              <repeatweapon type='WeaponExplosion'>
+                <hurtamount>0.0</hurtamount>
+                <nocreatedebris></nocreatedebris>
+                <nocreatesplash></nocreatesplash>
+                <deform>none</deform>
+                <size>6</size>
+                <explosiontexture>particle</explosiontexture>
+                <explosionsound>explosions/tank.wav</explosionsound>
+                <explosiontype>ring</explosiontype>
+              </repeatweapon>
 						</subweapon2>
 					</delayedweapon>
 				</subweapon1>
@@ -12622,10 +12652,16 @@ yourself to any spot on the landscape.</description>
 							<subweapon1 type='WeaponReference'>
 								<weapon>Spark Burst3</weapon>
 							</subweapon1>
-							<subweapon2 type='WeaponAnimation'>
-								<animation>ExplosionRingRenderer</animation>
-								<data>none</data>
-							</subweapon2>
+              <subweapon2 type='WeaponExplosion'>
+                <hurtamount>0.0</hurtamount>
+                <nocreatedebris></nocreatedebris>
+                <nocreatesplash></nocreatesplash>
+                <deform>none</deform>
+                <size>6</size>
+                <explosiontexture>particle</explosiontexture>
+                <explosionsound>explosions/tank.wav</explosionsound>
+                <explosiontype>ring</explosiontype>
+              </subweapon2>
 						</repeatweapon>
 					</delayedweapon>
 				</subweapon3>
@@ -12816,10 +12852,16 @@ violently on one or both sides of the portal.</description>
 		<nomuzzleflash/>
 		<cost>20000</cost>
 		<accessoryaction type='WeaponMulti'>
-			<subweapon1 type='WeaponAnimation'>
-				<animation>ExplosionRingRenderer</animation>
-				<data>none</data>
-			</subweapon1>
+      <subweapon1 type='WeaponExplosion'>
+        <hurtamount>0.0</hurtamount>
+        <nocreatedebris></nocreatedebris>
+        <nocreatesplash></nocreatesplash>
+        <deform>none</deform>
+        <size>6</size>
+        <explosiontexture>particle</explosiontexture>
+        <explosionsound>explosions/tank.wav</explosionsound>
+        <explosiontype>ring</explosiontype>
+      </subweapon1>
 			<!-- Rift collapses at teleport origin -->
 			<subweapon2 type='WeaponRandomChoice'>
 				<weaponchoice1>
@@ -12846,10 +12888,16 @@ violently on one or both sides of the portal.</description>
 						</subweapon1>
 						<subweapon2 type='WeaponDelay'>
 							<delay>0.5</delay>
-							<delayedweapon type='WeaponAnimation'>
-								<animation>ExplosionRingRenderer</animation>
-								<data>none</data>
-							</delayedweapon>
+              <delayedweapon type='WeaponExplosion'>
+                <hurtamount>0.0</hurtamount>
+                <nocreatedebris></nocreatedebris>
+                <nocreatesplash></nocreatesplash>
+                <deform>none</deform>
+                <size>6</size>
+                <explosiontexture>particle</explosiontexture>
+                <explosionsound>explosions/tank.wav</explosionsound>
+                <explosiontype>ring</explosiontype>
+              </delayedweapon>
 						</subweapon2>
 						<!-- Rift collapses at teleport destination -->
 						<subweapon3 type='WeaponRandomChoice'>
@@ -14955,10 +15003,16 @@ release lethal clouds of gas when destroyed.</description>
 		<description>The tank explosion weapon</description>
 		<maximumnumber>0</maximumnumber>
 		<accessoryaction type='WeaponMulti'>
-			<subweapon1 type='WeaponAnimation'>
-				<animation>ExplosionRingRenderer</animation>
-				<data>data/wav/explosions/tank.wav</data>
-			</subweapon1>
+      <subweapon1 type='WeaponExplosion'>
+        <hurtamount>0.0</hurtamount>
+        <nocreatedebris></nocreatedebris>
+        <nocreatesplash></nocreatesplash>
+        <deform>none</deform>
+        <size>6</size>
+        <explosiontexture>particle</explosiontexture>
+        <explosionsound>explosions/tank.wav</explosionsound>
+        <explosiontype>ring</explosiontype>
+      </subweapon1>
 			<subweapon2 type='WeaponRandomChoice'>
 				<weaponchoice1>
 					<weight>24</weight>

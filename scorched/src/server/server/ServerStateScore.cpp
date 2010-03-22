@@ -26,7 +26,6 @@
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <simactions/ShowScoreSimAction.h>
-#include <simactions/RoundStopSimAction.h>
 #include <lua/LUAScriptHook.h>
 
 ServerStateScore::ServerStateScore()
@@ -39,12 +38,6 @@ ServerStateScore::~ServerStateScore()
 
 void ServerStateScore::enterState(ServerStateEnoughPlayers &enoughPlayers)
 {
-	// End the round
-	RoundStopSimAction *roundStop =
-		new RoundStopSimAction();
-	ScorchedServer::instance()->getServerSimulator().
-		addSimulatorAction(roundStop);
-
 	// Check if we've finished all the rounds
 	finished_ = false;
 	overAllWinner_ = false;

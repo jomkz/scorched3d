@@ -34,6 +34,11 @@ public:
 		DeformDown = 1,
 		DeformUp = 2,
 	};
+	enum ExplosionType
+	{
+		ExplosionNormal = 0,
+		ExplosionRing = 1
+	};
 
 	ExplosionParams();
 	~ExplosionParams();
@@ -60,6 +65,7 @@ public:
 	fixed getCreateMushroomAmount() { return createMushroomAmount_; }
 
 	DeformType getDeformType() { return deform_; }
+	ExplosionType getExplosionType() { return explosionType_; }
 	bool getCreateDebris() { return createDebris_; }
 	bool getCreateSplash() { return createSplash_; }
 	bool getWindAffected() { return windAffected_; }
@@ -89,6 +95,7 @@ protected:
 	std::string explosionTexture_;
 	std::string explosionSound_;
 	DeformType deform_;
+	ExplosionType explosionType_;
 	
 };
 

@@ -222,7 +222,9 @@ void ParticleEmitter::emitLinear(int number,
 void ParticleEmitter::emitExplosionRing(int number,
 	Vector &position,
 	ParticleEngine &engine,
-	ParticleRenderer *renderer)
+	float width,
+	GLTextureSet *set,
+	bool animate)
 {
 	for (int i=0; i<number; i++)
 	{
@@ -233,15 +235,24 @@ void ParticleEmitter::emitExplosionRing(int number,
 
 		Vector velocity;
 		float ang = RAND * 2.0f * 3.14f;
-		float speed = 45.0f;
+		float speed = width * 4.0f;
 		velocity[0] = getFastSin(ang) * speed;
 		velocity[1] = getFastCos(ang) * speed;
 		velocity[2] = 0.0f;
 
-		particle->texture_ = &ExplosionTextures::instance()->particleTexture;
 		particle->velocity_ = velocity;
 		particle->position_ = position;
-		particle->renderer_ = renderer;
+		particle->renderer_ = ParticleRendererQuads::getInstance();
+		particle->textureCoord_ = int(RAND * 4.0f);
+		if (animate)
+		{
+			particle->textureSet_ = set;
+		}
+		else
+		{
+			int index = MIN(int(RAND * (set->getNoTextures() - 1)), set->getNoTextures() - 1);
+			particle->texture_ = set->getTexture(index);
+		}
 	}
 }
 

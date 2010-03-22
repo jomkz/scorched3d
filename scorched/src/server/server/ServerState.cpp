@@ -94,13 +94,20 @@ void ServerState::simulate(fixed frameTime)
 		if (playing_.showScore() || 
 			!enoughPlayers_.enoughPlayers())
 		{
-			serverState_ = ServerScoreState;
-			score_.enterState(enoughPlayers_);
+			serverState_ = ServerFinishWaitState;
+			finishWait_.enterState();
 		}
 		else 
 		{
 			playing_.simulate(frameTime);
 		}	
+		break;
+	case ServerFinishWaitState:
+		if (finishWait_.simulate())
+		{
+			serverState_ = ServerScoreState;
+			score_.enterState(enoughPlayers_);
+		}
 		break;
 	case ServerScoreState:
 		if (score_.simulate())

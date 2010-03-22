@@ -25,7 +25,7 @@
 ExplosionParams::ExplosionParams() :
 	size_(1), 
 	multiColored_(false), hurtAmount_(0),
-	deform_(DeformDown),
+	deform_(DeformDown), explosionType_(ExplosionNormal),
 	createDebris_(true), createMushroomAmount_(0),
 	createSplash_(true), windAffected_(true),
 	luminance_(true), animate_(true),
@@ -140,6 +140,19 @@ bool ExplosionParams::parseXML(XMLNode *accessoryNode)
 		S3D::formatStringBuffer("Unknown deform type \"%s\" should be up, down or none",
 		deformNode->getContent()));
 
+	std::string explosionType = "normal";
+	if (accessoryNode->getNamedChild("explosiontype", explosionType, false))
+	{
+		if (explosionType == "normal") explosionType_ = ExplosionNormal;
+		else if (explosionType == "ring") explosionType_ = ExplosionRing;
+		else 
+		{	
+			return accessoryNode->returnError(
+				S3D::formatStringBuffer("Unknown explosion type \"%s\" should be normal or ring",
+				explosionType.c_str()));
+		}
+	}
+
 	return true;
 }
 
@@ -170,4 +183,6 @@ void ExplosionParams::parseLUA(lua_State *L, int position)
 
 	fixed deform = LUAUtil::getNumberFromTable(L, position, "deform", int(deform_));
 	deform_ = (DeformType) deform.asInt();
+	fixed explosiontype = LUAUtil::getNumberFromTable(L, position, "explosiontype", int(explosionType_));
+	explosionType_ = (ExplosionType) explosiontype.asInt();
 }

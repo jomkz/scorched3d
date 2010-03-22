@@ -69,6 +69,10 @@ UniqueIdStore &ConnectDialog::getIdStore()
 
 void ConnectDialog::windowInit(const unsigned state)
 {
+}
+
+void ConnectDialog::start()
+{
 	connectionState_ = eWaiting;
 	tryCount_ = 0;
 	lastTime_ = 0;

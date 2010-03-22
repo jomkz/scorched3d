@@ -358,6 +358,9 @@ public:
 	bool getAutoSendSyncCheck() { return autoSendSyncCheck_; }
 	OptionEntryBool &getAutoSendSyncCheckEntry() { return autoSendSyncCheck_; }
 
+	bool getWaitForShotsBeforeShowingScore() { return waitForShotsBeforeShowingScore_; }
+	OptionEntryBool &getWaitForShotsBeforeShowingScoreEntry() { return waitForShotsBeforeShowingScore_; }
+
 	bool getActionSyncCheck() { return actionSyncCheck_; }
 	OptionEntryBool &getActionSyncCheckEntry() { return actionSyncCheck_; }
 
@@ -474,6 +477,7 @@ protected:
 	OptionEntryString landscapes_;
 	OptionEntryStringEnum statsLogger_;
 	OptionEntryStringEnum serverFileLogger_;
+	OptionEntryBool waitForShotsBeforeShowingScore_;
 
 	// Server only options
 	OptionEntryString botNamePrefix_;

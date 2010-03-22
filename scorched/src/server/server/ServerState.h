@@ -28,6 +28,7 @@
 #include <server/ServerStateBuying.h>
 #include <server/ServerStatePlaying.h>
 #include <server/ServerStateScore.h>
+#include <server/ServerStateFinishWait.h>
 
 class ServerState
 {
@@ -44,6 +45,7 @@ public:
 		ServerBuyingState,
 		ServerTankNewGameState,
 		ServerPlayingState,
+		ServerFinishWaitState,
 		ServerScoreState
 	};
 
@@ -65,6 +67,7 @@ protected:
 	ServerStateBuying buying_;
 	ServerStatePlaying playing_;
 	ServerStateScore score_;
+	ServerStateFinishWait finishWait_;
 	ServerStateTankNewGame tankNewGame_;
 };
 

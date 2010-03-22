@@ -92,7 +92,9 @@ public:
 	void emitExplosionRing(int number,
 		Vector &position,
 		ParticleEngine &engine,
-		ParticleRenderer *renderer = 0);
+		float width,
+		GLTextureSet *set,
+		bool animate);
 	void emitDebris(int number,
 		Vector &position,
 		ParticleEngine &engine);
