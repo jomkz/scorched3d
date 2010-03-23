@@ -23,6 +23,9 @@
 #include <GLEXT/GLState.h>
 #include <graph/ModelRenderer.h>
 #include <graph/OptionsDisplay.h>
+#include <graph/ModelRenderer.h>
+#include <graph/ModelRendererStore.h>
+#include <graph/ModelRendererSimulator.h>
 #include <common/Defines.h>
 
 TankMesh::TankMesh(Model &tank) : 
@@ -174,6 +177,25 @@ void TankMesh::drawMesh(unsigned int m, Mesh *mesh, float currentFrame, bool set
 void TankMesh::drawSight()
 {
 	GLState sightState(GLState::BLEND_OFF | GLState::TEXTURE_OFF | GLState::LIGHTING_OFF);
+
+	/*
+	static ModelRendererSimulator *aimModel = 0;
+	if (aimModel == 0)
+	{
+		ModelID id;
+		id.initFromString("MilkShape", "data/meshes/aim/aim.txt", "none");
+		aimModel = new ModelRendererSimulator(
+			ModelRendererStore::instance()->loadModel(id));
+	}
+
+	glPushMatrix();
+		Model *model = aimModel->getRenderer()->getModel();
+		glRotatef(-90.0f, 0.0f, 0.0f, 1.0f);
+		glTranslatef(-model->getMax()[0].asFloat() / 2.0f, 0.0f, 0.0f);
+		glScalef(0.3f, 0.3f, 0.3f);
+		aimModel->draw();
+	glPopMatrix();
+	*/
 
 	static GLuint sightList_ = 0;
 	if (!sightList_)

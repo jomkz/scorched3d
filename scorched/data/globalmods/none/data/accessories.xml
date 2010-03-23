@@ -349,8 +349,8 @@ with any tank.</description>
 			<projectilescale>0.5</projectilescale>
 			<shieldhurtfactor>0.4</shieldhurtfactor>
 			<spinspeed>1.0</spinspeed>
-			<!--<thrusttime>4.0</thrusttime>
-			<thrustamount>1.0</thrustamount>-->
+      <!--<flametexture>trans</flametexture>
+      <animateflametexture/>-->
 			<collisionaction type='WeaponExplosion'>
 				<hurtamount>1.0</hurtamount>
 				<deform>down</deform>

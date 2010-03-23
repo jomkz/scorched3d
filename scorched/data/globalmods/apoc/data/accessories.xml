@@ -12528,7 +12528,7 @@ on the map after a short delay.</description>
                 <deform>none</deform>
                 <size>6</size>
                 <explosiontexture>particle</explosiontexture>
-                <explosionsound>explosions/tank.wav</explosionsound>
+                <explosionsound>none</explosionsound>
                 <explosiontype>ring</explosiontype>
               </delayedweapon>
 						</subweapon3>
@@ -12544,7 +12544,7 @@ on the map after a short delay.</description>
           <deform>none</deform>
           <size>6</size>
           <explosiontexture>particle</explosiontexture>
-          <explosionsound>explosions/tank.wav</explosionsound>
+          <explosionsound>none</explosionsound>
           <explosiontype>ring</explosiontype>
         </delayedweapon>
 			</subweapon2>
@@ -12572,7 +12572,7 @@ yourself to any spot on the landscape.</description>
               <deform>none</deform>
               <size>6</size>
               <explosiontexture>particle</explosiontexture>
-              <explosionsound>explosions/tank.wav</explosionsound>
+              <explosionsound>none</explosionsound>
               <explosiontype>ring</explosiontype>
             </delayedweapon>
 					</aimedweapon>
@@ -12590,7 +12590,7 @@ yourself to any spot on the landscape.</description>
             <deform>none</deform>
             <size>6</size>
             <explosiontexture>particle</explosiontexture>
-            <explosionsound>explosions/tank.wav</explosionsound>
+            <explosionsound>none</explosionsound>
             <explosiontype>ring</explosiontype>
           </delayedweapon>
 				</subweapon3>
@@ -12627,7 +12627,7 @@ yourself to any spot on the landscape.</description>
                 <deform>none</deform>
                 <size>6</size>
                 <explosiontexture>particle</explosiontexture>
-                <explosionsound>explosions/tank.wav</explosionsound>
+                <explosionsound>none</explosionsound>
                 <explosiontype>ring</explosiontype>
               </repeatweapon>
 						</subweapon2>
@@ -12659,7 +12659,7 @@ yourself to any spot on the landscape.</description>
                 <deform>none</deform>
                 <size>6</size>
                 <explosiontexture>particle</explosiontexture>
-                <explosionsound>explosions/tank.wav</explosionsound>
+                <explosionsound>none</explosionsound>
                 <explosiontype>ring</explosiontype>
               </subweapon2>
 						</repeatweapon>
@@ -12859,7 +12859,7 @@ violently on one or both sides of the portal.</description>
         <deform>none</deform>
         <size>6</size>
         <explosiontexture>particle</explosiontexture>
-        <explosionsound>explosions/tank.wav</explosionsound>
+        <explosionsound>none</explosionsound>
         <explosiontype>ring</explosiontype>
       </subweapon1>
 			<!-- Rift collapses at teleport origin -->
@@ -12895,7 +12895,7 @@ violently on one or both sides of the portal.</description>
                 <deform>none</deform>
                 <size>6</size>
                 <explosiontexture>particle</explosiontexture>
-                <explosionsound>explosions/tank.wav</explosionsound>
+                <explosionsound>none</explosionsound>
                 <explosiontype>ring</explosiontype>
               </delayedweapon>
 						</subweapon2>

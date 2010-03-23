@@ -55,6 +55,8 @@ void MissileActionRenderer::simulate(Action *action, float timepassed, bool &rem
 	ShotProjectile *shot = (ShotProjectile *) action;
 	if (!flameemitter_)
 	{
+		flameTextureSet_ = ExplosionTextures::instance()->getTextureSetByName(
+			shot->getWeapon()->getFlameTexture());
 		flameemitter_ = new ParticleEmitter;
 		flameemitter_->setAttributes(
 			shot->getWeapon()->getFlameLife() / 2.0f, shot->getWeapon()->getFlameLife(), // Life
@@ -73,6 +75,8 @@ void MissileActionRenderer::simulate(Action *action, float timepassed, bool &rem
 	}
 	if (!smokeemitter_)
 	{
+		smokeTextureSet_ = ExplosionTextures::instance()->getTextureSetByName(
+			shot->getWeapon()->getSmokeTexture());
 		smokeemitter_ = new ParticleEmitter;
 		smokeemitter_->setAttributes(
 			shot->getWeapon()->getSmokeLife() / 2.0f, shot->getWeapon()->getSmokeLife(), // Life
@@ -128,7 +132,9 @@ void MissileActionRenderer::simulate(Action *action, float timepassed, bool &rem
 	{
 		flameemitter_->emitLinear(2, actualPos1, actualPos2, 
 			ScorchedClient::instance()->getParticleEngine(), 
-			ParticleRendererQuads::getInstance());
+			ParticleRendererQuads::getInstance(),
+			flameTextureSet_,
+			shot->getWeapon()->getAnimateFlameTexture());
 	}
 
 	// Add the smoke trail
@@ -147,7 +153,9 @@ void MissileActionRenderer::simulate(Action *action, float timepassed, bool &rem
 			smokeemitter_->setVelocity(vel1, vel2);
 			smokeemitter_->emitLinear(3, actualPos1, actualPos2, 
 				ScorchedClient::instance()->getParticleEngine(), 
-				ParticleRendererQuads::getInstance());
+				ParticleRendererQuads::getInstance(),
+				smokeTextureSet_,
+				shot->getWeapon()->getAnimateSmokeTexture());
 		}
 	}
 }

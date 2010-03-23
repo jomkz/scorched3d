@@ -41,6 +41,8 @@ WeaponProjectile::WeaponProjectile() :
 	thrustAmount_(0), thrustTime_(0),
 	drag_(0), stepSize_(true, 75),
 	engineSound_("data/wav/misc/rocket.wav"),
+	flameTexture_("particle"), smokeTexture_("particle"),
+	animateFlameTexture_(false), animateSmokeTexture_(false),
 	scale_(1), flareType_(0)
 {
 
@@ -86,6 +88,15 @@ bool WeaponProjectile::parseXML(AccessoryCreateContext &context, XMLNode *access
 	accessoryNode->getNamedChild("flamestartcolor2", flameStartColor2_, false);
 	accessoryNode->getNamedChild("flameendcolor1", flameEndColor1_, false);
 	accessoryNode->getNamedChild("flameendcolor2", flameEndColor2_, false);
+	accessoryNode->getNamedChild("flametexture", flameTexture_, false);
+
+
+	// Get the no smoke node
+	XMLNode *animateFlameTexture = 0, *animateSmokeTexture = 0;
+	accessoryNode->getNamedChild("animateflametexture", animateFlameTexture, false);
+	accessoryNode->getNamedChild("animatesmoketexture", animateSmokeTexture, false);
+	if (animateFlameTexture) animateFlameTexture_ = true;
+	if (animateSmokeTexture) animateSmokeTexture_ = true;
 
 	// Drag
 	accessoryNode->getNamedChild("drag", drag_, false);

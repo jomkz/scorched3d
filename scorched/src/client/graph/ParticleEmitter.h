@@ -88,7 +88,9 @@ public:
 	void emitLinear(int number, 
 		Vector &position1, Vector &position2,
 		ParticleEngine &engine,
-		ParticleRenderer *renderer = 0);
+		ParticleRenderer *renderer,
+		GLTextureSet *set,
+		bool animate);
 	void emitExplosionRing(int number,
 		Vector &position,
 		ParticleEngine &engine,

@@ -202,7 +202,9 @@ void ParticleEmitter::createDefaultParticle(Particle &particle)
 void ParticleEmitter::emitLinear(int number, 
 	Vector &position1, Vector &position2,
 	ParticleEngine &engine,
-	ParticleRenderer *renderer)
+	ParticleRenderer *renderer,
+	GLTextureSet *set,
+	bool animate)
 {
 	for (int i=0; i<number; i++)
 	{
@@ -213,9 +215,18 @@ void ParticleEmitter::emitLinear(int number,
 		randomVector(position, position1, position2);
 
 		createDefaultParticle(*particle);
-		particle->texture_ = &ExplosionTextures::instance()->particleTexture;
 		particle->position_ = position;
 		particle->renderer_ = renderer;
+		particle->textureCoord_ = int(RAND * 4.0f);
+		if (animate)
+		{
+			particle->textureSet_ = set;
+		}
+		else
+		{
+			int index = MIN(int(RAND * (set->getNoTextures() - 1)), set->getNoTextures() - 1);
+			particle->texture_ = set->getTexture(index);
+		}
 	}
 }
 

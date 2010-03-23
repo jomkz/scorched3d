@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <sprites/ExplosionLaserBeamRenderer.h>
+#include <sprites/ExplosionTextures.h>
 #include <common/Defines.h>
 #include <console/Console.h>
 #include <image/ImageFactory.h>
@@ -26,7 +27,6 @@
 #include <client/ScorchedClient.h>
 #include <graph/ParticleEmitter.h>
 #include <graph/ParticleEngine.h>
-
 
 REGISTER_CLASS_SOURCE(ExplosionLaserBeamRenderer);
 
@@ -88,9 +88,12 @@ void ExplosionLaserBeamRenderer::init(unsigned int playerId,
 
 		Vector newPos1 = position_ + Vector(-4.0f, -4.0f, 0.0f);
 		Vector newPos2 = position_ + Vector(4.0f, 4.0f, 0.0f);
+		GLTextureSet *texture = ExplosionTextures::instance()->getTextureSetByName("particle");
 		emmiter.emitLinear(800, newPos1, newPos2, 
 			ScorchedClient::instance()->getParticleEngine(), 
-			ParticleRendererQuads::getInstance());		
+			ParticleRendererQuads::getInstance(),
+			texture,
+			false);		
 }
 
 void ExplosionLaserBeamRenderer::draw(Action *action)

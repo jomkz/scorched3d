@@ -24,6 +24,7 @@
 #include <actions/Action.h>
 #include <graph/ParticleEmitter.h>
 #include <tankgraph/MissileMesh.h>
+#include <GLEXT/GLTextureSet.h>
 #include <common/Counter.h>
 #include <string>
 #include <map>
@@ -44,6 +45,8 @@ protected:
 	Counter counter_;
 	ParticleEmitter *flameemitter_;
 	ParticleEmitter *smokeemitter_;
+	GLTextureSet *flameTextureSet_;
+	GLTextureSet *smokeTextureSet_;
 	MissileMesh *mesh_;
 	float rotation_;
 	float scale_;

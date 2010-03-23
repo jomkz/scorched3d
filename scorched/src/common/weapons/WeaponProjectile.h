@@ -70,6 +70,10 @@ public:
 	Vector &getFlameEndColor1() { return flameEndColor1_; }
 	Vector &getFlameEndColor2() { return flameEndColor2_; }
 	const char *getEngineSound() { return engineSound_.c_str(); }
+	const char *getFlameTexture() { return flameTexture_.c_str(); }
+	const char *getSmokeTexture() { return smokeTexture_.c_str(); }
+	bool getAnimateFlameTexture() { return animateFlameTexture_; }
+	bool getAnimateSmokeTexture() { return animateSmokeTexture_; }
 	fixed getScale(ScorchedContext &context) { return scale_.getValue(context); }
 	ModelID &getModelID() { return modelId_; }
 
@@ -94,7 +98,8 @@ protected:
 	fixed stepSize_;
 	Vector flameStartColor1_, flameStartColor2_;
 	Vector flameEndColor1_, flameEndColor2_;
-	std::string engineSound_;
+	std::string engineSound_, flameTexture_, smokeTexture_;
+	bool animateFlameTexture_, animateSmokeTexture_;
 	Weapon *collisionAction_;
 	ModelID modelId_;
 	int flareType_;
