@@ -404,12 +404,12 @@ void GLWTankViewer::drawItem(int pos, bool selected)
 	Vector tankPos;
 	if (selected)
 	{
-		mesh->draw(totalTime_ * 20.0f, false, 
+		mesh->draw(totalTime_ * 20.0f, 
 			matrix, tankPos, 0.0f, rotXY_, rotYZ_);
 	}
 	else
 	{
-		mesh->draw(totalTime_ * 20.0f, false, 
+		mesh->draw(totalTime_ * 20.0f, 
 			matrix, tankPos, 0.0f, 45.0f, 45.0f);
 	}
 

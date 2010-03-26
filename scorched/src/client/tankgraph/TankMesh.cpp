@@ -119,13 +119,12 @@ void TankMesh::setupTankMesh()
 	gunOffset_ = gunCenter - turretCenter_;
 }
 
-void TankMesh::draw(float frame, bool drawS, float *rotMatrix, Vector &position, 
+void TankMesh::draw(float frame, float *rotMatrix, Vector &position, 
 					float fireOffset, float rotXY, float rotXZ,
 					bool absCenter, float scale, float fade, bool setState)
 {
 	rotXY_ = rotXY;
 	rotXZ_ = rotXZ;
-	drawS_ = drawS;
 	fireOffSet_ = fireOffset;
 
 	glPushMatrix();
@@ -153,17 +152,6 @@ void TankMesh::drawMesh(unsigned int m, Mesh *mesh, float currentFrame, bool set
 				vertexTranslation_ -= gunOffset_;
 				glRotatef(rotXZ_, 1.0f, 0.0f, 0.0f);
 
-				// Draw the sight
-				if (drawS_ &&
-					OptionsDisplay::instance()->getDrawPlayerSight() &&
-					OptionsDisplay::instance()->getOldSightPosition())
-				{
-					glPushMatrix();
-						glScalef(1.0f / scale_, 1.0f / scale_, 1.0f / scale_);
-						drawSight();
-					glPopMatrix();
-				}
-
 				if (fireOffSet_ != 0.0f) glTranslatef(0.0f, fireOffSet_, 0.0f);
 			}
 		}
@@ -172,59 +160,4 @@ void TankMesh::drawMesh(unsigned int m, Mesh *mesh, float currentFrame, bool set
 	glPopMatrix();
 
 	vertexTranslation_.zero();
-}
-
-void TankMesh::drawSight()
-{
-	GLState sightState(GLState::BLEND_OFF | GLState::TEXTURE_OFF | GLState::LIGHTING_OFF);
-
-	/*
-	static ModelRendererSimulator *aimModel = 0;
-	if (aimModel == 0)
-	{
-		ModelID id;
-		id.initFromString("MilkShape", "data/meshes/aim/aim.txt", "none");
-		aimModel = new ModelRendererSimulator(
-			ModelRendererStore::instance()->loadModel(id));
-	}
-
-	glPushMatrix();
-		Model *model = aimModel->getRenderer()->getModel();
-		glRotatef(-90.0f, 0.0f, 0.0f, 1.0f);
-		glTranslatef(-model->getMax()[0].asFloat() / 2.0f, 0.0f, 0.0f);
-		glScalef(0.3f, 0.3f, 0.3f);
-		aimModel->draw();
-	glPopMatrix();
-	*/
-
-	static GLuint sightList_ = 0;
-	if (!sightList_)
-	{
-		glNewList(sightList_ = glGenLists(1), GL_COMPILE);
-			glBegin(GL_QUAD_STRIP);
-				float x;
-				for (x=126.0f; x>=90.0f; x-=9.0f)
-				{
-					const float deg = 3.14f / 180.0f;
-					float dx = x * deg;
-					float color = 1.0f - fabsf(90.0f - x) / 45.0f;
-
-					glColor3f(1.0f * color, 0.5f * color, 0.5f * color);
-					glVertex3f(+0.03f * color, 2.0f * sinf(dx), 2.0f * cosf(dx));
-					glVertex3f(+0.03f * color, 10.0f * sinf(dx), 10.0f * cosf(dx));
-				}
-				for (x=90.0f; x<135.0f; x+=9.0f)
-				{
-					const float deg = 3.14f / 180.0f;
-					float dx = x * deg;
-					float color = 1.0f - fabsf(90.0f - x) / 45.0f;
-
-					glColor3f(1.0f * color, 0.5f * color, 0.5f * color);
-					glVertex3f(-0.03f * color, 2.0f * sinf(dx), 2.0f * cosf(dx));
-					glVertex3f(-0.03f * color, 10.0f * sinf(dx), 10.0f * cosf(dx));
-				}
-			glEnd();
-		glEndList();
-	}
-	glCallList(sightList_);
 }

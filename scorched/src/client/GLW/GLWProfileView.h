@@ -18,39 +18,24 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_HUDDialogh_INCLUDE__)
-#define __INCLUDE_HUDDialogh_INCLUDE__
+#if !defined(__INCLUDE_GLWProfileViewh_INCLUDE__)
+#define __INCLUDE_GLWProfileViewh_INCLUDE__
 
-#include <GLW/GLWWindow.h>
-#include <GLW/GLWButton.h>
-#include <GLW/GLWCheckBoxText.h>
+#include <GLW/GLWidget.h>
+#include <GLW/GLWToolTip.h>
 
-class HUDDialog : public GLWWindow ,
-	public GLWButtonI
+class GLWProfileView : public GLWidget
 {
 public:
-	static HUDDialog *instance();
+	GLWProfileView(float x = 0.0f, float y = 0.0f,
+		float w = 0.0f, float h = 0.0f);
+	virtual ~GLWProfileView();
 
-	// Inherited from GLWButtonI
-	virtual void buttonDown(unsigned int id);
+	virtual void draw();
 
-	// Inherited from GLWWindow
-	virtual void display();
-
+	REGISTER_CLASS_HEADER(GLWProfileView);
 protected:
-	static HUDDialog *instance_;
-	unsigned int okId_, cancelId_;
-	GLWCheckBoxText *nameBox_;
-	GLWCheckBoxText *sightBox_;
-	GLWCheckBoxText *oldSightBox_;
-	GLWCheckBoxText *largeSightBox_;
-	GLWCheckBoxText *colorBox_;
-	GLWCheckBoxText *healthBox_;
-	GLWCheckBoxText *iconBox_;
 
-private:
-	HUDDialog();
-	virtual ~HUDDialog();
 };
 
 #endif

@@ -46,6 +46,8 @@ HUDDialog::HUDDialog() :
 	addWidget(sightBox_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
 	oldSightBox_  = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("OLD_SIGHT", "Use Old Sight Position"));
 	addWidget(oldSightBox_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
+	largeSightBox_  = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("LARGE_SIGHT", "Use Large Sight"));
+	addWidget(largeSightBox_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
 	colorBox_ = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("SHOW_COLOR", "Show Color"));
 	addWidget(colorBox_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
 	healthBox_ = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("SHOW_HEALTH", "Show Health"));
@@ -89,6 +91,8 @@ void HUDDialog::display()
 		OptionsDisplay::instance()->getDrawPlayerHealth());
 	iconBox_->getCheckBox().setState(
 		OptionsDisplay::instance()->getDrawPlayerIcons());
+	largeSightBox_->getCheckBox().setState(
+		OptionsDisplay::instance()->getLargeSight());
 }
 
 void HUDDialog::buttonDown(unsigned int id)
@@ -107,6 +111,8 @@ void HUDDialog::buttonDown(unsigned int id)
 			healthBox_->getCheckBox().getState());
 		OptionsDisplay::instance()->getDrawPlayerIconsEntry().setValue(
 			iconBox_->getCheckBox().getState());
+		OptionsDisplay::instance()->getLargeSightEntry().setValue(
+			largeSightBox_->getCheckBox().getState());
 	}
 	GLWWindowManager::instance()->hideWindow(getId());
 }

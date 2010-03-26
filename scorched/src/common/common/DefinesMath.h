@@ -24,6 +24,7 @@
 #define PI 3.14159f
 #define TWOPI 6.28318f
 #define HALFPI 1.570795f
+#define PIO180 0.017453278f
 
 #define RAND ((float) rand() / (float) RAND_MAX)
 #define MAX(x,y) ((x)>(y)?(x):(y))

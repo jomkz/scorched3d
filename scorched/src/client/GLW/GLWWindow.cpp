@@ -39,6 +39,7 @@ static const float titleHeight = 20.0f;
 static const float shadowWidth = 10.0f;
 
 GLTexture GLWWindow::moveTexture_;
+GLTexture GLWWindow::resizeTexture_;
 
 GLWWindow::GLWWindow(const std::string &name, float x, float y, 
 					 float w, float h,
@@ -184,6 +185,9 @@ void GLWWindow::drawMaximizedWindow()
 			ImageHandle moveMap = ImageFactory::loadAlphaImageHandle(
 				S3D::getModFile("data/windows/move.bmp"));
 			moveTexture_.create(moveMap, false);
+			ImageHandle resizeMap = ImageFactory::loadAlphaImageHandle(
+				S3D::getModFile("data/windows/resize.bmp"));
+			resizeTexture_.create(resizeMap, false);
 		}
 
 		if (windowState_ & eCircle)
@@ -221,6 +225,26 @@ void GLWWindow::drawMaximizedWindow()
 				glColor4f(0.8f, 0.0f, 0.0f, 0.8f);
 				glPushMatrix();
 					glTranslatef(x_, y_ + h_ - sizeY, 0.0f);
+					glScalef(sizeX / 16.0f, sizeY / 16.0f, 1.0f);
+					drawIconBox(0.0f, 0.0f);
+				glPopMatrix();
+			}
+			if ((windowState_ & eResizeable) && !disabled_)
+			{
+				float sizeX = 12.0f;
+				float sizeY = 12.0f;
+
+				static ToolTip moveTip(ToolTip::ToolTipHelp, 
+					LANG_RESOURCE("WINDOW_RESIZE", "Resize Window"),
+					LANG_RESOURCE("WINDOW_RESIZE_TOOLTIP", "Left click and drag to resize the window."));
+				GLWToolTip::instance()->addToolTip(&moveTip, 
+					x_ + w_ - sizeX, y_, sizeX, sizeY);
+
+				GLState currentStateBlend(GLState::BLEND_ON | GLState::TEXTURE_ON);
+				resizeTexture_.draw();
+				glColor4f(0.8f, 0.0f, 0.0f, 0.8f);
+				glPushMatrix();
+					glTranslatef(x_ + w_ - sizeX, y_, 0.0f);
 					glScalef(sizeX / 16.0f, sizeY / 16.0f, 1.0f);
 					drawIconBox(0.0f, 0.0f);
 				glPopMatrix();
@@ -327,9 +351,19 @@ void GLWWindow::mouseDown(int button, float x, float y, bool &skipRest)
 			}
 			else if (y > y_ && y < y_ + h_)
 			{
-				// There is a mouse down in the actual window
-				GLWPanel::mouseDown(button, x, y, skipRest);
-				skipRest = !(eClickTransparent & windowState_) || skipRest;
+				if ((windowState_ & eResizeable) && 
+					inBox(x, y, x_ + w_ - 12.0f, y_, 12.0f, 12.0f))
+				{
+					// Start resize window drag
+					dragging_ = SizeDrag;
+					skipRest = !(eClickTransparent & windowState_) || skipRest;
+				}
+				else if (y > y_ && y < y_ + h_)
+				{
+					// There is a mouse down in the actual window
+					GLWPanel::mouseDown(button, x, y, skipRest);
+					skipRest = !(eClickTransparent & windowState_) || skipRest;
+				}
 			}
 		}
 		else

@@ -32,13 +32,14 @@ public:
 	TankMesh(Model &tank);
 	virtual ~TankMesh();
 
-	void draw(float frame, bool drawS, float *rotMatrix, Vector &position, 
+	void draw(float frame, float *rotMatrix, Vector &position, 
 		float fireOffSet, float rotXY, float rotXZ,
 		bool absCenter = false, float scale = 1.0f, float fade = 1.0f, 
 		bool setState = true);
 	int getNoTris();
 
-	static void drawSight();
+	FixedVector &getGunOffSet() { return gunOffset_; }
+	float getScale() { return scale_; }
 protected:
 	enum MeshType
 	{
@@ -47,7 +48,6 @@ protected:
 		eGun
 	};
 
-	bool drawS_;
 	float fireOffSet_;
 	float scale_;
 	float rotXY_;

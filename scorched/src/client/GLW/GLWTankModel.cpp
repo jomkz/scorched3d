@@ -96,7 +96,7 @@ void GLWTankModel::draw()
 
 			mesh->draw(
 				totalTime_ * 20.0f,
-				false, matrix, position, 0.0f,
+				matrix, position, 0.0f,
 				current->getPosition().getRotationGunXY().asFloat(),
 				current->getPosition().getRotationGunYZ().asFloat(),
 				true);

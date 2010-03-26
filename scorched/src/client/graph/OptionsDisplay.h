@@ -223,6 +223,9 @@ public:
 	bool getOldSightPosition() { return oldSightPosition_; }
 	OptionEntryBool &getOldSightPositionEntry() { return oldSightPosition_; }
 
+	bool getLargeSight() { return largeSight_; }
+	OptionEntryBool &getLargeSightEntry() { return largeSight_; }
+
 	bool getDrawPlayerHealth() { return drawPlayerHealth_; }
 	OptionEntryBool &getDrawPlayerHealthEntry() { return drawPlayerHealth_; }
 
@@ -480,6 +483,7 @@ protected:
 	OptionEntryBool drawPlayerIcons_;
 	OptionEntryBool drawPlayerSight_;
 	OptionEntryBool oldSightPosition_;
+	OptionEntryBool largeSight_;
 	OptionEntryBool drawPlayerColor_;
 	OptionEntryBool drawPlayerHealth_;
 	OptionEntryBool noTrees_;

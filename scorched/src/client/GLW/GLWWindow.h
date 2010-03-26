@@ -87,7 +87,7 @@ protected:
 	} dragging_;
 
 	ToolTip toolTip_;
-	static GLTexture moveTexture_;
+	static GLTexture moveTexture_, resizeTexture_;
 	bool showTitle_;
 	bool needCentered_;
 	bool disabled_;

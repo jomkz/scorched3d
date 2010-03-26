@@ -145,7 +145,6 @@ void TargetRendererImplTank::render(float distance)
 		{
 			float modelSize = float(OptionsDisplay::instance()->getTankModelSize()) / 100.0f;
 			mesh->draw(frame_,
-				currentTank, 
 				tank_->getLife().getFloatRotMatrix(),
 				tank_->getLife().getFloatPosition(), 
 				fireOffSet_, 
@@ -156,14 +155,6 @@ void TargetRendererImplTank::render(float distance)
 	}
 
 	GLState lightingOff(GLState::LIGHTING_OFF);
-
-	// Draw the tank sight
-	if (currentTank &&
-		OptionsDisplay::instance()->getDrawPlayerSight() &&
-		!OptionsDisplay::instance()->getOldSightPosition())
-	{
-		drawSight();
-	}
 
 	// Draw the life bars
 	drawLife();
@@ -176,7 +167,6 @@ void TargetRendererImplTank::renderShadow(float distance)
 	{
 		float modelSize = float(OptionsDisplay::instance()->getTankModelSize()) / 100.0f;
 		mesh->draw(frame_,
-			false, 
 			tank_->getLife().getFloatRotMatrix(),
 			tank_->getLife().getFloatPosition(), 
 			fireOffSet_, 
@@ -193,6 +183,24 @@ void TargetRendererImplTank::drawParticle(float distance)
 	drawParachute();
 	drawShield(shieldHit_, totalTime_);
 	drawInfo();
+
+	bool currentTank = 
+		(tank_ == ScorchedClient::instance()->getTankContainer().getCurrentTank() &&
+		ScorchedClient::instance()->getGameState().getState() == ClientState::StatePlaying);
+
+	// Draw the tank sight
+	if (currentTank &&
+		OptionsDisplay::instance()->getDrawPlayerSight())
+	{
+		if (OptionsDisplay::instance()->getLargeSight())
+		{
+			drawSight();
+		}
+		else
+		{
+			drawOldSight();
+		}
+	}
 }
 
 void TargetRendererImplTank::drawInfo()
@@ -253,18 +261,206 @@ void TargetRendererImplTank::drawInfo()
 
 void TargetRendererImplTank::drawSight()
 {
-	glPushMatrix();
-		glTranslatef(
-			tank_->getPosition().getTankGunPosition()[0].asFloat(),
-			tank_->getPosition().getTankGunPosition()[1].asFloat(),
-			tank_->getPosition().getTankGunPosition()[2].asFloat());
+	GLState sightState(GLState::BLEND_ON | GLState::TEXTURE_OFF | GLState::LIGHTING_OFF);
 
-		glRotatef(tank_->getPosition().getRotationGunXY().asFloat(), 
-			0.0f, 0.0f, 1.0f);
+	Vector tankPositon = tank_->getPosition().getTankTurretPosition().asVector();
+	float tankRotationDeg = tank_->getPosition().getRotationGunXY().asFloat();
+	float tankRotation = tankRotationDeg * PIO180;
+	float tankElevationDeg = tank_->getPosition().getRotationGunYZ().asFloat();
+	float tankElevation = tankElevationDeg * PIO180;
+
+	glPushMatrix();
+	glTranslatef(tankPositon[0], tankPositon[1], tankPositon[2]);
+	
+		// Blue segments round bottom
+		glBegin(GL_QUADS);
+		glColor4f(0.08f, 0.08f, 0.8f, 0.3f);
+		for (float a=0.0f; a<=TWOPI-0.25f; a+=0.25f)
+		{
+			{
+				float x = getFastSin(a);
+				float y = getFastCos(a);
+				glVertex3f(x * 15.0f, y * 15.0f, 0.0f);
+				glVertex3f(x * 10.0f, y * 10.0f, 0.0f);
+			}
+			{
+				float x = getFastSin(a + 0.125f);
+				float y = getFastCos(a + 0.125f);
+				glVertex3f(x * 10.0f, y * 10.0f, 0.0f);
+				glVertex3f(x * 15.0f, y * 15.0f, 0.0f);
+			}
+		}
+		glEnd();
+
+		glRotatef(tankRotationDeg, 0.0f, 0.0f, 1.0f);
+
+		glBegin(GL_QUADS);
+
+		// Elevation segements
+		glColor4f(0.08f, 0.08f, 0.8f, 0.3f);
+		for (float a=0.0f; a<=tankElevation - 0.125f; a+=0.25f)
+		{
+			float x1 = getFastCos(a);
+			float y1 = getFastSin(a);
+			float x2 = getFastCos(a + 0.125f);
+			float y2 = getFastSin(a + 0.125f);
+
+			glVertex3f(0.0f, x1 * 15.0f, y1 * 15.0f);
+			glVertex3f(0.0f, x1 * 10.0f, y1 * 10.0f);
+			glVertex3f(0.0f, x2 * 10.0f, y2 * 10.0f);
+			glVertex3f(0.0f, x2 * 15.0f, y2 * 15.0f);
+
+			glVertex3f(0.0f, x1 * 10.0f, y1 * 10.0f);
+			glVertex3f(0.0f, x1 * 15.0f, y1 * 15.0f);
+			glVertex3f(0.0f, x2 * 15.0f, y2 * 15.0f);
+			glVertex3f(0.0f, x2 * 10.0f, y2 * 10.0f);
+		}
+
+		// Elevation marker
+		glColor4f(1.0f, 0.0f, 0.0f, 0.8f);
+		{
+			float a = tankElevation - 0.0625f;
+			float x1 = getFastCos(a);
+			float y1 = getFastSin(a);
+			float x2 = getFastCos(tankElevation);
+			float y2 = getFastSin(tankElevation);
+			glVertex3f(-0.01f, x1 * 15.0f, y1 * 15.0f + 0.02f);
+			glVertex3f(-0.01f, x1 * 3.0f, y1 * 3.0f + 0.02f);
+			glVertex3f(-0.01f, x2 * 3.0f, y2 * 3.0f + 0.02f);
+			glVertex3f(-0.01f, x2 * 15.0f, y2 * 15.0f + 0.02f);
+
+			glVertex3f(0.01f, x1 * 3.0f, y1 * 3.0f + 0.02f);
+			glVertex3f(0.01f, x1 * 15.0f, y1 * 15.0f + 0.02f);
+			glVertex3f(0.01f, x2 * 15.0f, y2 * 15.0f + 0.02f);
+			glVertex3f(0.01f, x2 * 3.0f, y2 * 3.0f + 0.02f);
+		}
+
+		// Rotation marker
+		glColor4f(0.08f, 0.08f, 0.8f, 0.3f);
+		{
+			float a = -0.03125f;
+			float x1 = getFastSin(a);
+			float y1 = getFastCos(a);
+			float x2 = getFastSin(a + 0.0625f);
+			float y2 = getFastCos(a + 0.0625f);
+
+			glVertex3f(x1 * 15.0f, y1 * 15.0f, 0.01f);
+			glVertex3f(x1 * 3.0f, y1 * 3.0f, 0.01f);
+			glVertex3f(x2 * 3.0f, y2 * 3.0f, 0.01f);
+			glVertex3f(x2 * 15.0f, y2 * 15.0f, 0.01f);
+		}
+		glEnd();
+
+		glRotatef(tankElevationDeg, 1.0f, 0.0f, 0.0f);
+
+		// Elevation Marker
+		glBegin(GL_QUADS);
+		glColor4f(1.0f, 0.0f, 0.0f, 0.8f);
+		{
+			float a = -0.03125f;
+			float x1 = getFastSin(a);
+			float y1 = getFastCos(a);
+			float x2 = getFastSin(a + 0.0625f);
+			float y2 = getFastCos(a + 0.0625f);
+
+			glVertex3f(x1 * 15.0f, y1 * 15.0f, 0.02f);
+			glVertex3f(x1 * 3.0f, y1 * 3.0f, 0.02f);
+			glVertex3f(x2 * 3.0f, y2 * 3.0f, 0.02f);
+			glVertex3f(x2 * 15.0f, y2 * 15.0f, 0.02f);
+
+			glVertex3f(x1 * 3.0f, y1 * 3.0f, 0.02f);
+			glVertex3f(x1 * 15.0f, y1 * 15.0f, 0.02f);
+			glVertex3f(x2 * 15.0f, y2 * 15.0f, 0.02f);
+			glVertex3f(x2 * 3.0f, y2 * 3.0f, 0.02f);
+		}
+		glEnd();
+
+	glPopMatrix();
+}
+
+void TargetRendererImplTank::drawOldSight()
+{
+	GLState sightState(GLState::BLEND_OFF | GLState::TEXTURE_OFF | GLState::LIGHTING_OFF);
+
+	/*
+	static ModelRendererSimulator *aimModel = 0;
+	if (aimModel == 0)
+	{
+		ModelID id;
+		id.initFromString("MilkShape", "data/meshes/aim/aim.txt", "none");
+		aimModel = new ModelRendererSimulator(
+			ModelRendererStore::instance()->loadModel(id));
+	}
+
+	glPushMatrix();
+		Model *model = aimModel->getRenderer()->getModel();
+		glRotatef(-90.0f, 0.0f, 0.0f, 1.0f);
+		glTranslatef(-model->getMax()[0].asFloat() / 2.0f, 0.0f, 0.0f);
+		glScalef(0.3f, 0.3f, 0.3f);
+		aimModel->draw();
+	glPopMatrix();
+	*/
+
+	static GLuint sightList_ = 0;
+	if (!sightList_)
+	{
+		glNewList(sightList_ = glGenLists(1), GL_COMPILE);
+			glBegin(GL_QUAD_STRIP);
+				float x;
+				for (x=126.0f; x>=90.0f; x-=9.0f)
+				{
+					const float deg = 3.14f / 180.0f;
+					float dx = x * deg;
+					float color = 1.0f - fabsf(90.0f - x) / 45.0f;
+
+					glColor3f(1.0f * color, 0.5f * color, 0.5f * color);
+					glVertex3f(+0.03f * color, 2.0f * sinf(dx), 2.0f * cosf(dx));
+					glVertex3f(+0.03f * color, 10.0f * sinf(dx), 10.0f * cosf(dx));
+				}
+				for (x=90.0f; x<135.0f; x+=9.0f)
+				{
+					const float deg = 3.14f / 180.0f;
+					float dx = x * deg;
+					float color = 1.0f - fabsf(90.0f - x) / 45.0f;
+
+					glColor3f(1.0f * color, 0.5f * color, 0.5f * color);
+					glVertex3f(-0.03f * color, 2.0f * sinf(dx), 2.0f * cosf(dx));
+					glVertex3f(-0.03f * color, 10.0f * sinf(dx), 10.0f * cosf(dx));
+				}
+			glEnd();
+		glEndList();
+	}
+
+	glPushMatrix();
+
+ 		if (OptionsDisplay::instance()->getOldSightPosition())
+		{
+			glTranslatef(
+				tank_->getPosition().getTankPosition()[0].asFloat(),
+				tank_->getPosition().getTankPosition()[1].asFloat(),
+				tank_->getPosition().getTankPosition()[2].asFloat());
+			glRotatef(tank_->getPosition().getRotationGunXY().asFloat(), 
+				0.0f, 0.0f, 1.0f);
+
+			FixedVector &gunOffSet = getMesh()->getGunOffSet();
+			glTranslatef(
+				gunOffSet[0].asFloat() * getMesh()->getScale(), 
+				gunOffSet[1].asFloat() * getMesh()->getScale(), 
+				gunOffSet[2].asFloat() * getMesh()->getScale());
+		}
+		else
+		{
+			glTranslatef(
+				tank_->getPosition().getTankGunPosition()[0].asFloat(),
+				tank_->getPosition().getTankGunPosition()[1].asFloat(),
+				tank_->getPosition().getTankGunPosition()[2].asFloat());
+			glRotatef(tank_->getPosition().getRotationGunXY().asFloat(), 
+				0.0f, 0.0f, 1.0f);
+		}
+
 		glRotatef(tank_->getPosition().getRotationGunYZ().asFloat(), 
 			1.0f, 0.0f, 0.0f);
-
-		TankMesh::drawSight();
+		glCallList(sightList_);
 	glPopMatrix();
 }
 
@@ -348,6 +544,8 @@ void TargetRendererImplTank::drawArrow()
 			ImageHandle bitmap = 
 				ImageFactory::loadImageHandle(file1.c_str(), file2.c_str(), true);
 			arrowTexture.create(bitmap);
+			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
+			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
 		}
 
 		GLState currentState(GLState::TEXTURE_ON | GLState::BLEND_ON);
