@@ -81,6 +81,11 @@ void NetLoopBack::disconnectClient(unsigned int client)
 	Logger::log(S3D::formatStringBuffer("Cannot disconnect client %i, they are local!", client));
 }
 
+void NetLoopBack::disconnectClient(NetBuffer &buffer, unsigned int client)
+{
+	disconnectClient(client);
+}
+
 void NetLoopBack::sendMessageServer(NetBuffer &buffer, 
 	unsigned int flags)
 {

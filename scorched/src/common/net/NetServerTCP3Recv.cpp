@@ -73,8 +73,6 @@ bool NetServerTCP3Recv::actualRecvFunc()
 	char lenbuf[4];
 	if (!NetServerTCP3Coms::SDLNet_TCP_Recv_Full(socket_, lenbuf, 4))
 	{
-		Logger::log(S3D::formatStringBuffer(
-			"NetServerTCP3Recv: Read failed for length"));
 		return false;
 	}
 	Uint32 len = SDLNet_Read32(lenbuf);

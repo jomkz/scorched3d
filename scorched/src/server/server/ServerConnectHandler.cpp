@@ -131,9 +131,8 @@ bool ServerConnectHandler::checkStandardParams(unsigned int destinationId, unsig
 		ScorchedServerUtil::instance()->bannedPlayers.getBanned(ipAddress);
 	if (type == ServerBanned::Banned)
 	{
-		Logger::log(S3D::formatStringBuffer("Banned ipaddress connection from destination \"%i\"", 
-			destinationId));
-		ServerCommon::kickDestination(destinationId);
+		ServerCommon::kickDestination(destinationId,
+			"Banned ipaddress connection from destination");
 		return false;
 	}
 

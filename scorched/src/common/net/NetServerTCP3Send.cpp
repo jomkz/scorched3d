@@ -63,7 +63,7 @@ int NetServerTCP3Send::sendThreadFunc(void *c)
 {
 	// Call a non-static class thread to do the processing in (just for convienience)
 	NetServerTCP3Send *th = (NetServerTCP3Send*) c;
-	while (th->running_)
+	while (true)
 	{
 		if (!th->actualSendFunc()) break;
 	}
@@ -77,6 +77,8 @@ bool NetServerTCP3Send::actualSendFunc()
 	sendMessageHandler_.processMessages();
 	if (outgoingMessages_.empty()) 
 	{
+		if (!running_) return false;
+
 		SDL_Delay(10);
 		return true;
 	}
@@ -112,7 +114,14 @@ bool NetServerTCP3Send::actualSendFunc()
 	
 	// Notify that this message has been sent
 	outgoingMessages_.pop_front();
-	recieveMessageHandler_->addMessage(message);
+	if (message->getMessageType() == NetMessage::DisconnectMessage)
+	{
+		NetMessagePool::instance()->addToPool(message);
+	}
+	else
+	{
+		recieveMessageHandler_->addMessage(message);
+	}
 	NetInterface::getBytesOut() += len;
 	bytesOut_ += len;
 	messagesSent_++;
@@ -122,6 +131,23 @@ bool NetServerTCP3Send::actualSendFunc()
 
 void NetServerTCP3Send::processMessage(NetMessage &oldmessage)
 {
+	// Check if we are being disconnected
+	if (oldmessage.getMessageType() == NetMessage::DisconnectMessage)
+	{
+		running_ = false;
+
+		while (!outgoingMessages_.empty())
+		{
+
+			NetMessagePool::instance()->addToPool(outgoingMessages_.back());
+			outgoingMessages_.pop_back();
+		}
+		if (oldmessage.getBuffer().getBufferUsed() == 0)
+		{
+			return;
+		}
+	}
+
 	// Get a new buffer from the pool
 	NetMessage *message = NetMessagePool::instance()->
 		getFromPool(NetMessage::SentMessage, 

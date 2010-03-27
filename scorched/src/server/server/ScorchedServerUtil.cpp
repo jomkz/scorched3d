@@ -35,7 +35,7 @@ ScorchedServerUtil *ScorchedServerUtil::instance()
 	return instance_;
 }
 
-ScorchedServerUtil::ScorchedServerUtil() : authHandler_(0)
+ScorchedServerUtil::ScorchedServerUtil()
 {
 }
 
@@ -45,33 +45,33 @@ ScorchedServerUtil::~ScorchedServerUtil()
 
 ServerAuthHandler *ScorchedServerUtil::getAuthHandler()
 {
-	if (authHandler_) return authHandler_;
-
 	const char *handler = ScorchedServer::instance()->getOptionsGame().getAuthHandler();
 	if (0 == strcmp("none", handler))
 	{
-		authHandler_ = new ServerAuthHandlerDefault;
+		static ServerAuthHandlerDefault *authHandler = new ServerAuthHandlerDefault();
+		return authHandler;
 	} 
 	else if (0 == strcmp("prefered", handler))
 	{
-		authHandler_ = new ServerAuthHandlerPrefered;
+		static ServerAuthHandlerPrefered *authHandler = new ServerAuthHandlerPrefered();
+		return authHandler;
 	}
 #ifdef HAVE_MYSQL
 	else if (0 == strcmp("forumlogin", handler))
 	{
-		authHandler_ = new ServerAuthHandlerForumLogin;
+		static ServerAuthHandlerForumLogin *authHandler = new ServerAuthHandlerForumLogin();
+		return authHandler;
 	}
 #endif
 	else if (0 == strcmp("minkills", handler))
 	{
-		authHandler_ = new ServerAuthHandlerMinKills;
+		static ServerAuthHandlerMinKills *authHandler = new ServerAuthHandlerMinKills();
+		return authHandler;
 	}
 	else 
 	{
 		S3D::dialogExit("ServerAuthHandler", 
 			S3D::formatStringBuffer("Unknown auth handler \"%s\"", handler));
 	}
-	
-	Logger::log(S3D::formatStringBuffer("Using \"%s\" authentication handler.", handler));
-	return authHandler_;
+	return 0;
 }

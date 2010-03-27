@@ -135,18 +135,13 @@ bool ServerHaveModFilesHandler::processMessage(
 	{
 		// If this server does not allow file downloads tell the client
 		// and disconnect them
-		Logger::log("No mod and mod download disabled");
-		ServerChannelManager::instance()->sendText(
-			ChannelText("info",
-				"SERVER_REQUIRES_MOD",
-				"This server requires the \"{0}\" Scorched3D mod.\n"
+		std::string reason = S3D::formatStringBuffer(
+				"This server requires the \"%s\" Scorched3D mod.\n"
 				"The server does not allow in game file downloads.\n"
 				"You must download and install this mod before you\n"
 				"can connect to this server.",
-				ScorchedServer::instance()->getOptionsGame().getMod()),
-			destinationId,
-			false);
-		ServerCommon::kickDestination(destinationId);
+				ScorchedServer::instance()->getOptionsGame().getMod());
+		ServerCommon::kickDestination(destinationId, reason);
 	}
 	else 
 	{

@@ -33,7 +33,6 @@ public:
 	virtual ~NetServerTCP3Send();
 
 	bool getStopped() { return stopped_; }
-	void stop() { running_ = false; }
 	void wait();
 
 	unsigned int getMessagesSent() { return messagesSent_; }

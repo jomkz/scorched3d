@@ -84,8 +84,8 @@ bool ServerConnectAuthHandler::processMessage(
 	authMessage->ipAddress = netMessage.getIpAddress();
 	if (!authMessage->message.readMessage(reader))
 	{
-		ServerCommon::serverLog("Invalid auth message format");
-		ServerCommon::kickDestination(netMessage.getDestinationId());
+		ServerCommon::kickDestination(netMessage.getDestinationId(),
+			"Invalid auth message format");
 		delete authMessage;
 		return true;
 	}
@@ -152,9 +152,6 @@ void ServerConnectAuthHandler::processMessageInternal(
 				"Connection failed.\n"
 				"--------------------------------------------------",
 				resultMessage.c_str());
-			Logger::log(S3D::formatStringBuffer("User failed authentication \"%s\"",
-				resultMessage.c_str()));
-
 			ServerCommon::kickDestination(destinationId, kickMessage);			
 			return;
 		}
@@ -183,9 +180,8 @@ void ServerConnectAuthHandler::processMessageInternal(
 		ScorchedServerUtil::instance()->bannedPlayers.getBanned(uniqueId.c_str(), SUid.c_str());
 	if (type == ServerBanned::Banned)
 	{
-		Logger::log(S3D::formatStringBuffer("Banned uniqueid/suid connection from destination \"%i\"", 
-			destinationId));
-		ServerCommon::kickDestination(destinationId);
+		ServerCommon::kickDestination(destinationId, 
+			"Banned uniqueid/suid connection from destination");
 		return;
 	}
 
@@ -205,9 +201,8 @@ void ServerConnectAuthHandler::processMessageInternal(
 			{
 				if (0 == strcmp(current->getUniqueId(), uniqueId.c_str()))
 				{
-					Logger::log(S3D::formatStringBuffer("Duplicate uniqueid connection from destination \"%i\"", 
-						destinationId));
-					ServerCommon::kickDestination(destinationId);
+					ServerCommon::kickDestination(destinationId,
+						"Duplicate uniqueid connection from destination");
 					return;
 				}
 			}
@@ -215,9 +210,8 @@ void ServerConnectAuthHandler::processMessageInternal(
 			{
 				if (0 == strcmp(current->getSUI(), SUid.c_str()))
 				{
-					Logger::log(S3D::formatStringBuffer("Duplicate SUI connection from destination \"%i\"", 
-						destinationId));
-					ServerCommon::kickDestination(destinationId);
+					ServerCommon::kickDestination(destinationId,
+						"Duplicate SUI connection from destination");
 					return;
 				}
 			}
@@ -251,10 +245,8 @@ void ServerConnectAuthHandler::processMessageInternal(
 #endif
 	if (!ComsMessageSender::sendToSingleClient(acceptMessage, destinationId))
 	{
-		Logger::log(S3D::formatStringBuffer(
-			"Failed to send accept to client \"%i\"",
-			destinationId));
-		ServerCommon::kickDestination(destinationId);
+		ServerCommon::kickDestination(destinationId,
+			"Failed to send accept to client");
 		return;
 	}
 

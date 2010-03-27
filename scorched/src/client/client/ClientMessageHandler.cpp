@@ -63,23 +63,9 @@ void ClientMessageHandler::clientConnected(NetMessage &message)
 
 void ClientMessageHandler::clientDisconnected(NetMessage &message)
 {
-	const char *type = "";
-	if (message.getFlags() == NetMessage::TimeoutDisconnect)
-	{
-		type = "Timeout";
-	}
-	else if (message.getFlags() == NetMessage::UserDisconnect)
-	{
-		type = "User";
-	}
-
 	ClientParams::instance()->reset();
 
-	LangString msg = LANG_RESOURCE_1("DISCONNECTED",
-		"Disconnected : {0}", type);
-	MsgBoxDialog::show(msg);
-
-	Logger::log(S3D::formatStringBuffer("Disconnected : %s", type));
+	Logger::log(S3D::formatStringBuffer("Disconnected"));
 	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimDisconnected);
 	ScorchedClient::instance()->getTankContainer().setCurrentDestinationId(0);
 }

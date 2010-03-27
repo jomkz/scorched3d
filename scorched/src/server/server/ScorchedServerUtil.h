@@ -38,7 +38,6 @@ public:
 
 protected:
 	static ScorchedServerUtil *instance_;
-	ServerAuthHandler *authHandler_;
 
 private:
 	ScorchedServerUtil();

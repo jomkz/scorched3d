@@ -42,7 +42,9 @@ public:
 	virtual void setMessageHandler(NetMessageHandlerI *handler);
 
 	virtual void disconnectAllClients();
-	virtual void disconnectClient(unsigned int client);
+	virtual void disconnectClient(unsigned int destination);
+	virtual void disconnectClient(NetBuffer &buffer, 
+		unsigned int destination);
 	virtual void sendMessageServer(NetBuffer &buffer, 
 		unsigned int flags = 0);
 	virtual void sendMessageDest(NetBuffer &buffer, 
@@ -72,7 +74,11 @@ protected:
 	void actualSendRecvFunc();
 	static int sendRecvThreadFunc(void *);
 
-	void destroyDestination(unsigned int destinationId, 
+	void sendMessageTypeDest(NetBuffer &buffer, 
+		unsigned int destination, unsigned int flags, 
+		NetMessage::MessageType type);
+	void destroyDestination(NetBuffer &disconectMessage,
+		unsigned int destinationId, 
 		NetMessage::DisconnectFlags type);
 	unsigned int addDestination(TCPsocket &socket);
 };

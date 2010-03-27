@@ -65,9 +65,10 @@ void NetServerTCP3Destination::sendMessage(NetMessage *message)
 	send_.sendMessage(message);
 }
 
-void NetServerTCP3Destination::close()
+void NetServerTCP3Destination::close(NetMessage *message)
 {
-	send_.stop();
+	DIALOG_ASSERT(message->getMessageType() == NetMessage::DisconnectMessage);
+	send_.sendMessage(message);
 	recv_.stop();
 	running_ = false;
 }

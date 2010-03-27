@@ -235,6 +235,11 @@ void NetServerTCP::disconnectAllClients()
 	SDL_UnlockMutex(setMutex_);
 }
 
+void NetServerTCP::disconnectClient(NetBuffer &buffer, unsigned int dest)
+{
+	disconnectClient(dest);
+}
+
 void NetServerTCP::disconnectClient(unsigned int dest)
 {
 	NetMessage *message = NetMessagePool::instance()->

@@ -131,7 +131,8 @@ void PlayMovesSimAction::tankTimedOut(ScorchedContext &context, Tank *tank)
 		if (tank->getScore().getMissedMoves() >= allowedMissed)
 		{
 			// Then kick this player
-			ServerCommon::kickDestination(tank->getDestinationId());
+			ServerCommon::kickDestination(tank->getDestinationId(),
+				"Missed too many moves");
 		}
 	}
 }

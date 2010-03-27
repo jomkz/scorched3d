@@ -34,7 +34,7 @@ public:
 	void sendMessage(NetMessage *message);
 	void printStats();
 
-	void close();
+	void close(NetMessage *message);
 	bool allFinished();
 	bool anyFinished();
 

@@ -40,6 +40,8 @@ public:
 
 	virtual void disconnectAllClients() = 0;
 	virtual void disconnectClient(unsigned int client) = 0;
+	virtual void disconnectClient(NetBuffer &buffer, 
+		unsigned int client) = 0;
 	virtual void sendMessageServer(NetBuffer &buffer, 
 		unsigned int flags = 0) = 0;
 	virtual void sendMessageDest(NetBuffer &buffer, 

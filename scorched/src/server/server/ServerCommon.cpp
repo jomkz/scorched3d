@@ -63,15 +63,8 @@ void ServerCommon::startFileLogger()
 void ServerCommon::kickDestination(unsigned int destinationId, 
 	const std::string &message)
 {
-	Logger::log(S3D::formatStringBuffer("Kicking destination \"%i\"", 
-		destinationId));
-
-	if (message[0])
-	{
-		ComsConnectRejectMessage rejectMessage(message.c_str());
-		ComsMessageSender::sendToSingleClient(rejectMessage, destinationId);
-		ScorchedServer::instance()->getNetInterface().processMessages();
-	}
+	Logger::log(S3D::formatStringBuffer("Kicking destination \"%i\" %s", 
+		destinationId, message.c_str()));
 
 	bool kickedPlayers = false;
 	std::map<unsigned int, Tank *>::iterator itor;
@@ -85,21 +78,31 @@ void ServerCommon::kickDestination(unsigned int destinationId,
 		if (tank->getDestinationId() == destinationId)
 		{
 			kickedPlayers = true;
-			kickPlayer(tank->getPlayerId());
+			kickPlayer(tank->getPlayerId(), message);
 		}
 	}
 	
 	// Make sure we disconnect even if a player has not been created yet
 	if (!kickedPlayers)
 	{
+		// Form the disconnect reason
+		ComsConnectRejectMessage rejectMessage(message.c_str());
+		NetBuffer netBuffer;
+		rejectMessage.writeTypeMessage(netBuffer);
+		rejectMessage.writeMessage(netBuffer);
+		netBuffer.addToBuffer(false);
+
+		// Disconnect client
 		ScorchedServer::instance()->getNetInterface().
-			disconnectClient(destinationId);
+			disconnectClient(netBuffer, destinationId);
+		ScorchedServer::instance()->getNetInterface().processMessages();
 	}
 }
 
-void ServerCommon::kickPlayer(unsigned int playerId)
+void ServerCommon::kickPlayer(unsigned int playerId,
+	const std::string &message)
 {
-	Logger::log(S3D::formatStringBuffer("Kicking player \"%i\"", playerId));
+	Logger::log(S3D::formatStringBuffer("Kicking player \"%i\" %s", playerId, message.c_str()));
 
 	Tank *tank = ScorchedServer::instance()->
 		getTankContainer().getTankById(playerId);
@@ -119,11 +122,16 @@ void ServerCommon::kickPlayer(unsigned int playerId)
 		}
 		else
 		{
-			// Cannot delay kick a player as the rest of the code
-			// may expect him to have gone (when he is still there delayed)
-			// and try to send messages to him
+			// Form the disconnect reason
+			ComsConnectRejectMessage rejectMessage(message.c_str());
+			NetBuffer netBuffer;
+			rejectMessage.writeTypeMessage(netBuffer);
+			rejectMessage.writeMessage(netBuffer);
+			netBuffer.addToBuffer(false);
+
+			// Disconnect Client
 			ScorchedServer::instance()->getNetInterface().
-				disconnectClient(tank->getDestinationId());
+				disconnectClient(netBuffer, tank->getDestinationId());
 			ScorchedServer::instance()->getNetInterface().processMessages();
 		}
 	}

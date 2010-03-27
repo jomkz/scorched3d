@@ -240,5 +240,6 @@ void ServerMessageHandler::clientError(NetMessage &message,
 	Logger::log(S3D::formatStringBuffer("Client \"%i\", ***Server Error*** \"%s\"", 
 		message.getDestinationId(),
 		errorString.c_str()));
-	ServerCommon::kickDestination(message.getDestinationId());
+	ServerCommon::kickDestination(message.getDestinationId(), 
+		"Coms message error");
 }

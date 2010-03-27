@@ -75,7 +75,7 @@ static void internalBanPlayer(ServerAdminSessions::Credential &credential,
 					type, credential.username.c_str(), reason);
 			if (type == ServerBanned::Banned)
 			{
-				ServerCommon::kickPlayer(playerId);
+				ServerCommon::kickPlayer(playerId, "Due to player ban");
 
 				ServerAuthHandler *authHandler =
 					ScorchedServerUtil::instance()->getAuthHandler();
@@ -109,7 +109,8 @@ bool ServerAdminCommon::kickPlayer(ServerAdminSessions::Credential &credential, 
 		credential.username,
 		targetTank->getTargetName()));
 	ServerCommon::kickPlayer(
-		targetTank->getPlayerId());
+		targetTank->getPlayerId(),
+		"Kicked by admin");
 
 	return true;
 }

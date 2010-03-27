@@ -123,7 +123,8 @@ bool ServerAdminHandler::processMessage(
 					true);
 				if (destinationInfo->getAdminTries() > 3)
 				{
-					ServerCommon::kickDestination(destinationId);
+					ServerCommon::kickDestination(destinationId,
+						"Due to incorrect admin passwords");
 				}
 
 				Logger::log(S3D::formatStringBuffer(

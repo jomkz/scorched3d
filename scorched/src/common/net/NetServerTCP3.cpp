@@ -232,7 +232,8 @@ void NetServerTCP3::checkClients()
 		NetServerTCP3Destination *destination = itor->second;
 		if (destination->anyFinished())
 		{
-			destroyDestination(itor->first, NetMessage::UserDisconnect);
+			NetBuffer buffer;
+			destroyDestination(buffer, itor->first, NetMessage::UserDisconnect);
 			break;
 		}
 	}
@@ -265,7 +266,7 @@ void NetServerTCP3::processMessage(NetMessage &message)
 			NetServerTCP3Destination *destination = (*itor).second;
 
 			// This is a message telling us to kick the client, do so
-			destroyDestination(destinationId, NetMessage::KickDisconnect);
+			destroyDestination(message.getBuffer(), destinationId, NetMessage::KickDisconnect);
 		}
 
 		stopped_ = true;
@@ -284,7 +285,7 @@ void NetServerTCP3::processMessage(NetMessage &message)
 	if (message.getMessageType() == NetMessage::DisconnectMessage)
 	{
 		// This is a message telling us to kick the client, do so
-		destroyDestination(message.getDestinationId(), NetMessage::KickDisconnect);
+		destroyDestination(message.getBuffer(), message.getDestinationId(), NetMessage::KickDisconnect);
 	}
 	else
 	{
@@ -304,22 +305,20 @@ void NetServerTCP3::processMessage(NetMessage &message)
 
 void NetServerTCP3::disconnectAllClients()
 {
-	// Get a new buffer from the pool (with the discconect type set)
-	NetMessage *message = NetMessagePool::instance()->
-		getFromPool(NetMessage::DisconnectAllMessage, 0, 0);
-
-	// Send Mesage
-	outgoingMessageHandler_.addMessage(message);
+	NetBuffer buffer;
+	sendMessageTypeDest(buffer, 0, 0, NetMessage::DisconnectAllMessage);
 }
 
 void NetServerTCP3::disconnectClient(unsigned int destination)
 {
-	// Get a new buffer from the pool (with the discconect type set)
-	NetMessage *message = NetMessagePool::instance()->
-		getFromPool(NetMessage::DisconnectMessage, destination, 0);
+	NetBuffer buffer;
+	disconnectClient(buffer, destination);
+}
 
-	// Send Mesage
-	outgoingMessageHandler_.addMessage(message);
+void NetServerTCP3::disconnectClient(NetBuffer &buffer, 
+	unsigned int destination)
+{
+	sendMessageTypeDest(buffer, destination, 0, NetMessage::DisconnectMessage);
 }
 
 void NetServerTCP3::sendMessageServer(NetBuffer &buffer, 
@@ -332,19 +331,8 @@ void NetServerTCP3::sendMessageServer(NetBuffer &buffer,
 void NetServerTCP3::sendMessageDest(NetBuffer &buffer, 
 	unsigned int destination, unsigned int flags)
 {
-	// Get a new buffer from the pool
-	NetMessage *message = NetMessagePool::instance()->
-		getFromPool(NetMessage::BufferMessage, 
-				destination, 0, flags);
-
-	// Add message to new buffer
-	message->getBuffer().allocate(buffer.getBufferUsed());
-	memcpy(message->getBuffer().getBuffer(), 
-		buffer.getBuffer(), buffer.getBufferUsed());
-	message->getBuffer().setBufferUsed(buffer.getBufferUsed());
-
-	// Send Mesage
-	outgoingMessageHandler_.addMessage(message);
+	// Send a message to the client
+	sendMessageTypeDest(buffer, destination, flags, NetMessage::BufferMessage);
 }
 
 int NetServerTCP3::processMessages()
@@ -359,7 +347,27 @@ void NetServerTCP3::setMessageHandler(NetMessageHandlerI *handler)
 	incomingMessageHandler_.setMessageHandler(handler);
 }
 
-void NetServerTCP3::destroyDestination(unsigned int destinationId,
+void NetServerTCP3::sendMessageTypeDest(NetBuffer &buffer, 
+	unsigned int destination, unsigned int flags, 
+	NetMessage::MessageType type)
+{
+	// Get a new buffer from the pool
+	NetMessage *message = NetMessagePool::instance()->
+		getFromPool(type, 
+				destination, 0, flags);
+
+	// Add message to new buffer
+	message->getBuffer().allocate(buffer.getBufferUsed());
+	memcpy(message->getBuffer().getBuffer(), 
+		buffer.getBuffer(), buffer.getBufferUsed());
+	message->getBuffer().setBufferUsed(buffer.getBufferUsed());
+
+	// Send Mesage
+	outgoingMessageHandler_.addMessage(message);
+}
+
+void NetServerTCP3::destroyDestination(NetBuffer &disconectMessage,
+	unsigned int destinationId,
 	NetMessage::DisconnectFlags type)
 {
 	// Destroy this destination
@@ -376,20 +384,35 @@ void NetServerTCP3::destroyDestination(unsigned int destinationId,
 		serverDestinationId_ = UINT_MAX;
 	}
 
+	// Get the destination and remove it from the set
 	NetServerTCP3Destination *destination = (*itor).second;
+	destinations_.erase(itor);
+	destination->printStats();
 
-	// Get a new buffer from the pool (with the discconect type set)
+	// Send a message to the destination telling it to shut
+	// and optionaly containing the disconnect reason
 	NetMessage *message = NetMessagePool::instance()->
 		getFromPool(NetMessage::DisconnectMessage, 
 			destinationId, destination->getIpAddress(), 
 			(unsigned int) type);
+	if (disconectMessage.getBuffer() && disconectMessage.getBufferUsed())
+	{
+		message->getBuffer().allocate(disconectMessage.getBufferUsed());
+		memcpy(message->getBuffer().getBuffer(), 
+			disconectMessage.getBuffer(), disconectMessage.getBufferUsed());
+		message->getBuffer().setBufferUsed(disconectMessage.getBufferUsed());
+	}
+	destination->close(message);
 
-	destinations_.erase(itor);
-	destination->printStats();
-	destination->close();
+	// Add this destination to the list of destintions that need deleted
 	finishedDestinations_.push_back(destination);
 
+	// Get a new buffer from the pool (with the discconect type set)
 	// Add to outgoing message pool
+	message = NetMessagePool::instance()->
+		getFromPool(NetMessage::DisconnectMessage, 
+			destinationId, destination->getIpAddress(), 
+			(unsigned int) type);
 	incomingMessageHandler_.addMessage(message);
 }
 
