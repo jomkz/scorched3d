@@ -261,120 +261,145 @@ void TargetRendererImplTank::drawInfo()
 
 void TargetRendererImplTank::drawSight()
 {
-	GLState sightState(GLState::BLEND_ON | GLState::TEXTURE_OFF | GLState::LIGHTING_OFF);
+	static bool texturesCreated = false;
+	static GLTexture aimTopTexture, aimBotTexture, aimSideTexture, aimRotationTexture;
+	if (!texturesCreated)
+	{
+		texturesCreated = true;
+
+		ImageHandle aimTopMap = ImageFactory::loadAlphaImageHandle(S3D::getModFile("data/windows/aimtop.png"));
+		aimTopTexture.create(aimTopMap);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+		ImageHandle aimBotMap = ImageFactory::loadAlphaImageHandle(S3D::getModFile("data/windows/aimbot.png"));
+		aimBotTexture.create(aimBotMap);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+		ImageHandle aimSideMap = ImageFactory::loadAlphaImageHandle(S3D::getModFile("data/windows/aimside.png"));
+		aimSideTexture.create(aimSideMap);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+		ImageHandle aimRotationMap = ImageFactory::loadAlphaImageHandle(S3D::getModFile("data/windows/aimrotation.png"));
+		aimRotationTexture.create(aimRotationMap);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+	}
 
 	Vector tankPositon = tank_->getPosition().getTankTurretPosition().asVector();
 	float tankRotationDeg = tank_->getPosition().getRotationGunXY().asFloat();
-	float tankRotation = tankRotationDeg * PIO180;
 	float tankElevationDeg = tank_->getPosition().getRotationGunYZ().asFloat();
-	float tankElevation = tankElevationDeg * PIO180;
 
 	glPushMatrix();
 	glTranslatef(tankPositon[0], tankPositon[1], tankPositon[2]);
 	
+		GLState sightState1(GLState::BLEND_ON | GLState::TEXTURE_ON | GLState::LIGHTING_OFF | GLState::ALPHATEST_ON);
+		
 		// Blue segments round bottom
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		aimRotationTexture.draw();
 		glBegin(GL_QUADS);
-		glColor4f(0.08f, 0.08f, 0.8f, 0.3f);
-		for (float a=0.0f; a<=TWOPI-0.25f; a+=0.25f)
 		{
-			{
-				float x = getFastSin(a);
-				float y = getFastCos(a);
-				glVertex3f(x * 15.0f, y * 15.0f, 0.0f);
-				glVertex3f(x * 10.0f, y * 10.0f, 0.0f);
-			}
-			{
-				float x = getFastSin(a + 0.125f);
-				float y = getFastCos(a + 0.125f);
-				glVertex3f(x * 10.0f, y * 10.0f, 0.0f);
-				glVertex3f(x * 15.0f, y * 15.0f, 0.0f);
-			}
-		}
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex3f(15.0f, 15.0f, -0.02f);
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex3f(-15.0f, 15.0f, -0.02f);
+			glTexCoord2f(0.0f, 0.0f);
+			glVertex3f(-15.0f, -15.0f, -0.02f);	
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex3f(15.0f, -15.0f, -0.02f);
+		}		
 		glEnd();
 
 		glRotatef(tankRotationDeg, 0.0f, 0.0f, 1.0f);
 
-		glBegin(GL_QUADS);
-
-		// Elevation segements
-		glColor4f(0.08f, 0.08f, 0.8f, 0.3f);
-		for (float a=0.0f; a<=tankElevation - 0.125f; a+=0.25f)
-		{
-			float x1 = getFastCos(a);
-			float y1 = getFastSin(a);
-			float x2 = getFastCos(a + 0.125f);
-			float y2 = getFastSin(a + 0.125f);
-
-			glVertex3f(0.0f, x1 * 15.0f, y1 * 15.0f);
-			glVertex3f(0.0f, x1 * 10.0f, y1 * 10.0f);
-			glVertex3f(0.0f, x2 * 10.0f, y2 * 10.0f);
-			glVertex3f(0.0f, x2 * 15.0f, y2 * 15.0f);
-
-			glVertex3f(0.0f, x1 * 10.0f, y1 * 10.0f);
-			glVertex3f(0.0f, x1 * 15.0f, y1 * 15.0f);
-			glVertex3f(0.0f, x2 * 15.0f, y2 * 15.0f);
-			glVertex3f(0.0f, x2 * 10.0f, y2 * 10.0f);
-		}
-
-		// Elevation marker
-		glColor4f(1.0f, 0.0f, 0.0f, 0.8f);
-		{
-			float a = tankElevation - 0.0625f;
-			float x1 = getFastCos(a);
-			float y1 = getFastSin(a);
-			float x2 = getFastCos(tankElevation);
-			float y2 = getFastSin(tankElevation);
-			glVertex3f(-0.01f, x1 * 15.0f, y1 * 15.0f + 0.02f);
-			glVertex3f(-0.01f, x1 * 3.0f, y1 * 3.0f + 0.02f);
-			glVertex3f(-0.01f, x2 * 3.0f, y2 * 3.0f + 0.02f);
-			glVertex3f(-0.01f, x2 * 15.0f, y2 * 15.0f + 0.02f);
-
-			glVertex3f(0.01f, x1 * 3.0f, y1 * 3.0f + 0.02f);
-			glVertex3f(0.01f, x1 * 15.0f, y1 * 15.0f + 0.02f);
-			glVertex3f(0.01f, x2 * 15.0f, y2 * 15.0f + 0.02f);
-			glVertex3f(0.01f, x2 * 3.0f, y2 * 3.0f + 0.02f);
-		}
-
 		// Rotation marker
-		glColor4f(0.08f, 0.08f, 0.8f, 0.3f);
+		aimBotTexture.draw();
+		glBegin(GL_QUADS);
 		{
-			float a = -0.03125f;
-			float x1 = getFastSin(a);
-			float y1 = getFastCos(a);
-			float x2 = getFastSin(a + 0.0625f);
-			float y2 = getFastCos(a + 0.0625f);
-
-			glVertex3f(x1 * 15.0f, y1 * 15.0f, 0.01f);
-			glVertex3f(x1 * 3.0f, y1 * 3.0f, 0.01f);
-			glVertex3f(x2 * 3.0f, y2 * 3.0f, 0.01f);
-			glVertex3f(x2 * 15.0f, y2 * 15.0f, 0.01f);
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex3f(-1.0f, 15.0f, -0.01f);
+			glTexCoord2f(0.0f, 0.0f);
+			glVertex3f(-1.0f, 3.0f, -0.01f);
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex3f(1.0f, 3.0f, -0.01f);	
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex3f(1.0f, 15.0f, -0.01f);
 		}
 		glEnd();
 
 		glRotatef(tankElevationDeg, 1.0f, 0.0f, 0.0f);
 
-		// Elevation Marker
+		// Elevation segements
+		aimRotationTexture.draw();
 		glBegin(GL_QUADS);
-		glColor4f(1.0f, 0.0f, 0.0f, 0.8f);
 		{
-			float a = -0.03125f;
-			float x1 = getFastSin(a);
-			float y1 = getFastCos(a);
-			float x2 = getFastSin(a + 0.0625f);
-			float y2 = getFastCos(a + 0.0625f);
+			glTexCoord2f(0.5f, 0.5f);
+			glVertex3f(0.0f, 0.0f, 0.0f);
+			glTexCoord2f(0.5f, 0.0f);
+			glVertex3f(0.0f, 0.0f, -15.0f);
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex3f(0.0f, 15.0f, -15.0f);
+			glTexCoord2f(1.0f, 0.5f);
+			glVertex3f(0.0f, 15.0f, 0.0f);
 
-			glVertex3f(x1 * 15.0f, y1 * 15.0f, 0.02f);
-			glVertex3f(x1 * 3.0f, y1 * 3.0f, 0.02f);
-			glVertex3f(x2 * 3.0f, y2 * 3.0f, 0.02f);
-			glVertex3f(x2 * 15.0f, y2 * 15.0f, 0.02f);
-
-			glVertex3f(x1 * 3.0f, y1 * 3.0f, 0.02f);
-			glVertex3f(x1 * 15.0f, y1 * 15.0f, 0.02f);
-			glVertex3f(x2 * 15.0f, y2 * 15.0f, 0.02f);
-			glVertex3f(x2 * 3.0f, y2 * 3.0f, 0.02f);
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex3f(0.0f, 15.0f, -15.0f);
+			glTexCoord2f(0.5f, 0.0f);
+			glVertex3f(0.0f, 0.0f, -15.0f);
+			glTexCoord2f(0.5f, 0.5f);
+			glVertex3f(0.0f, 0.0f, 0.0f);
+			glTexCoord2f(1.0f, 0.5f);
+			glVertex3f(0.0f, 15.0f, 0.0f);
 		}
 		glEnd();
 
+		// Elevation side marker
+		aimSideTexture.draw();
+		glBegin(GL_QUADS);
+		{
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex3f(-0.01f, 15.0f, -1.0f);
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex3f(-0.01f, 3.0f, -1.0f);
+			glTexCoord2f(0.0f, 0.0f);
+			glVertex3f(-0.01f, 3.0f, 0.0f);
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex3f(-0.01f, 15.0f, 0.0f);
+
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex3f(0.01f, 3.0f, -1.0f);
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex3f(0.01f, 15.0f, -1.0f);
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex3f(0.01f, 15.0f, 0.0f);
+			glTexCoord2f(0.0f, 0.0f);
+			glVertex3f(0.01f, 3.0f, 0.0f);
+		}
+		glEnd();
+
+		// Elevation top marker
+		aimTopTexture.draw();
+		glBegin(GL_QUADS);
+		{
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex3f(-1.0f, 15.0f, 0.0f);
+			glTexCoord2f(0.0f, 0.0f);
+			glVertex3f(-1.0f, 3.0f, 0.0f);
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex3f(1.0f, 3.0f, 0.0f);	
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex3f(1.0f, 15.0f, 0.0f);
+
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex3f(1.0f, 3.0f, 0.0f);	
+			glTexCoord2f(0.0f, 0.0f);
+			glVertex3f(-1.0f, 3.0f, 0.0f);
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex3f(-1.0f, 15.0f, 0.0f);
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex3f(1.0f, 15.0f, 0.0f);
+		}
+		glEnd();
 	glPopMatrix();
 }
 
