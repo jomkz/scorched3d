@@ -44,6 +44,33 @@ GLWProfileView::~GLWProfileView()
 
 void GLWProfileView::draw()
 {
+	static GLTexture tankTexture;
+	static GLTexture arrowTexture;
+	static bool createdTexture = false;
+	if (!createdTexture)
+	{
+		createdTexture = true;
+
+		{
+			std::string file1 = S3D::getDataFile("data/images/arrow.bmp");
+			std::string file2 = S3D::getDataFile("data/images/arrowi.bmp");
+			ImageHandle bitmap = 
+				ImageFactory::loadImageHandle(file1.c_str(), file2.c_str(), true);
+			arrowTexture.create(bitmap);
+			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
+			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+		}
+		{
+			std::string file1 = S3D::getDataFile("data/images/tank2s.bmp");
+			ImageHandle bitmap = 
+				ImageFactory::loadImageHandle(file1.c_str());
+			tankTexture.create(bitmap);
+			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
+			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+		}
+	}
+
+
 	if (parent_)
 	{
 		w_ = parent_->getW();
@@ -54,46 +81,44 @@ void GLWProfileView::draw()
 
 	Tank *currentTank =
 		ScorchedClient::instance()->getTankContainer().getCurrentTank();
-	if (!currentTank) return;
+	if (!currentTank || !currentTank->getAlive()) return;
 
 	FixedVector tankPosition = currentTank->getPosition().getTankPosition();
 	fixed tankRotation = -currentTank->getPosition().getRotationGunXY() / 180 * fixed::XPI;
 	FixedVector tankDirection(tankRotation.sin(), tankRotation.cos(), 0);
 	tankPosition -= tankDirection * 2;
-	FixedVector tankPerpDirection = tankDirection.get2DPerp();
-	tankPerpDirection *= 2;
 
-	int landscapeWidth = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeWidth();
-	int landscapeHeight = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeHeight(); 
+	GLState state1(GLState::TEXTURE_OFF | GLState::BLEND_ON);
 
-	GLState state1(GLState::TEXTURE_ON | GLState::BLEND_ON);
-	Landscape::instance()->getMainTexture().draw();
+	glColor4f(0.13f, 0.56f, 0.91f, 0.6f);
+	glBegin(GL_QUADS);
+		glVertex2f(0.0f, 0.0f);
+		glVertex2f(w_, 0.0f);
+		glVertex2f(w_, h_);
+		glVertex2f(0.0f, h_);
+	glEnd();
+
+	glColor4f(0.0f, 0.7f, 0.0f, 1.0f);
 
 	glBegin(GL_QUAD_STRIP);
 	FixedVector position = tankPosition;
 	float x = 0.0f;
 	for (int i=0; i<=100; i++, x+=w_ / 100.0f)
 	{
-		fixed height =
+		float height =
 			ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getInterpHeight(
-			position[0], position[1]) * 5;
+			position[0], position[1]).asFloat() * 5.0f;
+		if (height > h_) height = h_;
+		else if (height < 1.0f) height = 1.0f;
 
-		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		glTexCoord2f(((position[0] - tankPerpDirection[0]) / landscapeWidth).asFloat(),
-					((position[1] - tankPerpDirection[1]) / landscapeHeight).asFloat());
-		glVertex2f(x, height.asFloat());
-		glColor4f(1.0f, 1.0f, 1.0f, 0.0f);
-		glTexCoord2f(((position[0] + tankPerpDirection[0]) / landscapeWidth).asFloat(),
-					((position[1] + tankPerpDirection[1]) / landscapeHeight).asFloat());
-		glVertex2f(x, height.asFloat() - 10.0f);
+		glVertex2f(x, height);
+		glVertex2f(x, 0.0f);
 
 		position += tankDirection;
-		if (position[0] > landscapeWidth ||
-			position[1] > landscapeHeight ||
-			position[0] < 0 ||
-			position[1] < 0) break;
 	}
 	glEnd();
+
+	GLState state2(GLState::TEXTURE_ON | GLState::BLEND_ON);
 
 	FixedVector tankWindowPos;
 	std::map<unsigned int, Tank *> &tanks =
@@ -133,32 +158,6 @@ void GLWProfileView::draw()
 				landheight = tankheight + 15;
 			}
 
-			static GLTexture tankTexture;
-			static GLTexture arrowTexture;
-			static bool createdTexture = false;
-			if (!createdTexture)
-			{
-				createdTexture = true;
-
-				{
-					std::string file1 = S3D::getDataFile("data/images/arrow.bmp");
-					std::string file2 = S3D::getDataFile("data/images/arrowi.bmp");
-					ImageHandle bitmap = 
-						ImageFactory::loadImageHandle(file1.c_str(), file2.c_str(), true);
-					arrowTexture.create(bitmap);
-					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
-					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
-				}
-				{
-					std::string file1 = S3D::getDataFile("data/images/tank2s.bmp");
-					ImageHandle bitmap = 
-						ImageFactory::loadImageHandle(file1.c_str());
-					tankTexture.create(bitmap);
-					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
-					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
-				}
-			}
-
 			TargetRendererImplTank *renderer = (TargetRendererImplTank *) 
 				tank->getRenderer();
 			if (renderer)
@@ -190,22 +189,7 @@ void GLWProfileView::draw()
 					}
 				glPopMatrix();
 			}
-			
-			/*
-			tankTexture.draw();
-			glColor3fv(tank->getColor());
-			glBegin(GL_QUADS);
-				glTexCoord2f(0.0f, 1.0f);
-				glVertex2f(x.asFloat() - 5.0f, tankheight.asFloat() + 10.0f);
-				glTexCoord2f(0.0f, 0.0f);
-				glVertex2f(x.asFloat() - 5.0f, tankheight.asFloat() + 0.0f);
-				glTexCoord2f(1.0f, 0.0f);
-				glVertex2f(x.asFloat() + 5.0f, tankheight.asFloat() + 0.0f);
-				glTexCoord2f(1.0f, 1.0f);
-				glVertex2f(x.asFloat() + 5.0f, tankheight.asFloat() + 10.0f);
-			glEnd();
-			*/
-			
+						
 			arrowTexture.draw();
 			glColor3fv(tank->getColor());
 			glBegin(GL_QUADS);
@@ -255,4 +239,14 @@ void GLWProfileView::draw()
 		glVertex2f(aimPos1[0].asFloat(), aimPos1[1].asFloat());
 		glVertex2f(aimPos3[0].asFloat(), aimPos3[1].asFloat());
 	glEnd();
+
+	glLineWidth(2.0f);
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	glBegin(GL_LINE_LOOP);
+		glVertex2f(0.0f, 0.0f);
+		glVertex2f(w_, 0.0f);
+		glVertex2f(w_, h_);
+		glVertex2f(0.0f, h_);
+	glEnd();
+	glLineWidth(1.0f);
 }

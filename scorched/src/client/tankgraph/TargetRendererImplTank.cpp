@@ -182,7 +182,6 @@ void TargetRendererImplTank::drawParticle(float distance)
 	
 	drawParachute();
 	drawShield(shieldHit_, totalTime_);
-	drawInfo();
 
 	bool currentTank = 
 		(tank_ == ScorchedClient::instance()->getTankContainer().getCurrentTank() &&
@@ -201,6 +200,8 @@ void TargetRendererImplTank::drawParticle(float distance)
 			drawOldSight();
 		}
 	}
+
+	drawInfo();
 }
 
 void TargetRendererImplTank::drawInfo()

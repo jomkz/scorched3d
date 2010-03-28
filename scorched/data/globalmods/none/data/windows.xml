@@ -174,7 +174,7 @@ on a overhead map of the island.</description>
     <name>Profile</name>
     <description>Shows a side of view of the direction the
 current tank is aiming.</description>
-    <state>all</state>
+    <state>playing</state>
     <visible>true</visible>
     <windowstate>104</windowstate>
     <key></key>
