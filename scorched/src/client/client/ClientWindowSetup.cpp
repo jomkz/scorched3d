@@ -31,6 +31,7 @@
 #include <dialogs/AutoDefenseDialog.h>
 #include <dialogs/MainMenuDialog.h>
 #include <dialogs/CameraDialog.h>
+#include <dialogs/ProfileDialog.h>
 #include <dialogs/PlayerDialog.h>
 #include <dialogs/QuitDialog.h>
 #include <dialogs/LogDialog.h>
@@ -310,6 +311,9 @@ void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 
 	// StatePlaying
 	addStateWindows(skinManager, ClientState::StatePlaying, "playing");
+	KEYBOARDKEY("SHOW_PROFILE_DIALOG", profileKey);
+	GLWWindowManager::instance()->addWindow(ClientState::StatePlaying, 
+		ProfileDialog::instance(), profileKey, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StatePlaying, 
 			SkipDialog::instance(), skipKey, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StatePlaying, 

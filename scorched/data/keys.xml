@@ -291,7 +291,14 @@
 		<group>2</group>
 		<key>c</key>
 	</keyentry>
-	<keyentry>
+  <keyentry>
+    <name>SHOW_PROFILE_DIALOG</name>
+    <title>Show 2D profile dialog</title>
+    <description>Shows or hides the profile dialog</description>
+    <group>2</group>
+    <key state='LSHIFT'>p</key>
+  </keyentry>
+  <keyentry>
 		<name>HUD_ITEMS</name>
 		<title>Change HUD</title>
 		<description>Toggles the various HUD items on and off</description>

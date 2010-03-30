@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <tankgraph/TargetRendererImplTank.h>
+#include <sprites/ExplosionTextures.h>
 #include <tank/TankLib.h>
 #include <tank/TankContainer.h>
 #include <tank/TankModelStore.h>
@@ -32,23 +33,23 @@
 #include <tankgraph/TankMesh.h>
 #include <tankgraph/TankMeshStore.h>
 #include <landscape/Landscape.h>
-#include <landscapemap/LandscapeMaps.h>
 #include <landscape/ShadowMap.h>
 #include <landscape/Smoke.h>
+#include <landscapemap/LandscapeMaps.h>
 #include <actions/TankFalling.h>
 #include <engine/ActionController.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientState.h>
 #include <graph/OptionsDisplay.h>
 #include <graph/ModelRenderer.h>
-#include <common/Defines.h>
 #include <graph/ModelRendererStore.h>
 #include <graph/ModelRendererSimulator.h>
+#include <common/Defines.h>
 #include <weapons/Shield.h>
 #include <weapons/Accessory.h>
 #include <dialogs/TutorialDialog.h>
-#include <GLEXT/GLCameraFrustum.h>
 #include <image/ImageFactory.h>
+#include <GLEXT/GLCameraFrustum.h>
 #include <GLEXT/GLTexture.h>
 #include <GLW/GLWFont.h>
 
@@ -559,23 +560,8 @@ void TargetRendererImplTank::drawArrow()
 
 	// Arrow over tank	
 	{
-		static GLTexture arrowTexture;
-		static bool createdTexture = false;
-		if (!createdTexture)
-		{
-			createdTexture = true;
-
-			std::string file1 = S3D::getDataFile("data/images/arrow.bmp");
-			std::string file2 = S3D::getDataFile("data/images/arrowi.bmp");
-			ImageHandle bitmap = 
-				ImageFactory::loadImageHandle(file1.c_str(), file2.c_str(), true);
-			arrowTexture.create(bitmap);
-			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
-			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
-		}
-
 		GLState currentState(GLState::TEXTURE_ON | GLState::BLEND_ON);
-		arrowTexture.draw(true);
+		ExplosionTextures::instance()->arrowTexture.draw(true);
 
 		glDepthMask(GL_FALSE);
 		glColor3fv(tank_->getColor());

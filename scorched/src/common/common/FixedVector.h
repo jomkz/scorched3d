@@ -83,6 +83,13 @@ public:
 		return (V1.V[0] * V2.V[0]) + (V1.V[1] * V2.V[1]) + (V1.V[2] * V2.V[2]);
 	}
 
+	fixed dotP2D(const FixedVector &Vin)
+	{
+		FixedVector &V1 = (*this);
+		FixedVector &V2 = (FixedVector &) Vin;
+		return (V1.V[0] * V2.V[0]) + (V1.V[1] * V2.V[1]);
+	}
+
 	void StoreInvert()
 	{
 		V[0] = -V[0];

@@ -3481,6 +3481,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\dialogs\ProfileDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\dialogs\ProfileDialog.h"
+				>
+			</File>
+			<File
 				RelativePath="..\dialogs\ProgressDialog.cpp"
 				>
 			</File>
@@ -4038,14 +4046,6 @@
 			</File>
 			<File
 				RelativePath="..\GLW\GLWPlanView.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GLW\GLWProfileView.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GLW\GLWProfileView.h"
 				>
 			</File>
 			<File

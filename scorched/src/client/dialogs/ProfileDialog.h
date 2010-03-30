@@ -18,24 +18,38 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_GLWProfileViewh_INCLUDE__)
-#define __INCLUDE_GLWProfileViewh_INCLUDE__
+#if !defined(__INCLUDE_ProfileDialogh_INCLUDE__)
+#define __INCLUDE_ProfileDialogh_INCLUDE__
 
-#include <GLW/GLWidget.h>
-#include <GLW/GLWToolTip.h>
+#include <GLW/GLWWindow.h>
 
-class GLWProfileView : public GLWidget
+class Tank;
+class ProfileDialog : public GLWWindow 
 {
 public:
-	GLWProfileView(float x = 0.0f, float y = 0.0f,
-		float w = 0.0f, float h = 0.0f);
-	virtual ~GLWProfileView();
+	static ProfileDialog *instance();
 
+	// Inherited from GLWWindow
 	virtual void draw();
+	virtual void simulate(float frameTime);
+	virtual void mouseDown(int button, float x, float y, bool &skipRest);
+	virtual void mouseUp(int button, float x, float y, bool &skipRest);
+	virtual void saveSettings(XMLNode *node);
+	virtual void loadSettings(XMLNode *node, bool resetPositions);
 
-	REGISTER_CLASS_HEADER(GLWProfileView);
 protected:
+	static ProfileDialog *instance_;
+	float profileZoom_, zoomX_, zoomY_;
+	bool zooming_;
 
+	void drawLandscape(Tank *currentTank);
+	void drawTanks(Tank *currentTank);
+	void drawAiming(Tank *currentTank);
+
+private:
+	ProfileDialog();
+	virtual ~ProfileDialog();
 };
 
 #endif
+

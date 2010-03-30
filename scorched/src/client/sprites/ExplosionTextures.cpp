@@ -65,6 +65,16 @@ bool ExplosionTextures::createTextures(ProgressCounter *counter)
 {
 	if (counter) counter->setNewOp(LANG_RESOURCE("EXPLOSION_TEXTURES", "Explosion Textures"));
 
+	{
+		std::string file1 = S3D::getDataFile("data/images/arrow.bmp");
+		std::string file2 = S3D::getDataFile("data/images/arrowi.bmp");
+		ImageHandle bitmap = 
+			ImageFactory::loadImageHandle(file1.c_str(), file2.c_str(), true);
+		arrowTexture.create(bitmap);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+	}
+
 	std::string file1 = S3D::getModFile("data/textures/smoke01.bmp");
 	ImageHandle bitmap = ImageFactory::loadImageHandle(file1.c_str(), file1.c_str(), false);
 	smokeTexture.create(bitmap);

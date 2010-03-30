@@ -46,7 +46,7 @@ HUDDialog::HUDDialog() :
 	addWidget(sightBox_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
 	oldSightBox_  = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("OLD_SIGHT", "Use Old Sight Position"));
 	addWidget(oldSightBox_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
-	largeSightBox_  = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("LARGE_SIGHT", "Use Large Sight"));
+	largeSightBox_  = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("LARGE_SIGHT", "Use Visible Sight"));
 	addWidget(largeSightBox_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
 	colorBox_ = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("SHOW_COLOR", "Show Color"));
 	addWidget(colorBox_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);

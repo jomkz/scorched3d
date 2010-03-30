@@ -171,27 +171,6 @@ on a overhead map of the island.</description>
 		</items>
 	</window>
   <window>
-    <name>Profile</name>
-    <description>Shows a side of view of the direction the
-current tank is aiming.</description>
-    <state>playing</state>
-    <visible>true</visible>
-    <windowstate>104</windowstate>
-    <key></key>
-    <w>-400</w>
-    <h>128</h>
-    <x>200</x>
-    <y>-300</y>
-    <items>
-      <item>
-        <widget type="GLWProfileView">
-					<x>0</x><y>0</y>
-					<w>0</w><h>0</h>
-        </widget>
-      </item>
-    </items>
-  </window>
-  <window>
 		<name>Wind</name>
 		<state>all</state>
 		<visible>true</visible>
