@@ -25,12 +25,15 @@
 #include <client/ScorchedClient.h>
 #include <client/ClientState.h>
 #include <graph/Main2DCamera.h>
+#include <graph/OptionsDisplay.h>
 #include <tank/TankContainer.h>
 #include <tank/TankPosition.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <tankgraph/TargetRendererImplTank.h>
 #include <sprites/ExplosionTextures.h>
 #include <XML/XMLNode.h>
+
+const int INSET = 8;
 
 ProfileDialog *ProfileDialog::instance_ = 0;
 
@@ -82,33 +85,32 @@ void ProfileDialog::draw()
 	GLWWindow::draw();
 	
 	// Set the new viewport
-	const int inset = 8;
-	int windowWidth = int(float(w_ - inset - inset) / GLViewPort::getWidthMult());
-	int windowHeight = int(float(h_ - inset - inset) / GLViewPort::getHeightMult()); 
-	int windowX = int(float(x_ + inset) / GLViewPort::getWidthMult()); 
-	int windowY = int(float(y_ + inset) / GLViewPort::getHeightMult());
+	int windowWidth = int(float(w_ - INSET - INSET) / GLViewPort::getWidthMult());
+	int windowHeight = int(float(h_ - INSET - INSET) / GLViewPort::getHeightMult()); 
+	int windowX = int(float(x_ + INSET) / GLViewPort::getWidthMult()); 
+	int windowY = int(float(y_ + INSET) / GLViewPort::getHeightMult());
 	
-	float ox = 0.0f;
-	float oy = 0.0f;
-	float ow = w_ / 2.0f;
-	float oh = h_ / 2.0f;
+	ox_ = 0.0f;
+	oy_ = 0.0f;
+	ow_ = w_ / 2.0f;
+	oh_ = h_ / 2.0f;
 
 	if (profileZoom_ > 1.0f)
 	{
-		float xper = (zoomX_ - (x_ + inset)) / (w_ - inset - inset);
-		float yper = (zoomY_ - (y_ + inset)) / (h_ - inset - inset);
-		float x = xper * ow;
-		float y = yper * oh;
-		ox = (ox - x) / profileZoom_ + x;
-		oy = (oy - y) / profileZoom_ + y;
-		ow = (ow - x) / profileZoom_ + x;
-		oh = (oh - y) / profileZoom_ + y;
+		float xper = (zoomX_ - (x_ + INSET)) / (w_ - INSET - INSET);
+		float yper = (zoomY_ - (y_ + INSET)) / (h_ - INSET - INSET);
+		float x = xper * ow_;
+		float y = yper * oh_;
+		ox_ = (ox_ - x) / profileZoom_ + x;
+		oy_ = (oy_ - y) / profileZoom_ + y;
+		ow_ = (ow_ - x) / profileZoom_ + x;
+		oh_ = (oh_ - y) / profileZoom_ + y;
 	}
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();	
 	glViewport(windowX, windowY, windowWidth, windowHeight);
-	glOrtho(ox, ow, oy, oh, -100.0, 100.0);
+	glOrtho(ox_, ow_, oy_, oh_, -100.0, 100.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	
@@ -173,9 +175,8 @@ void ProfileDialog::drawTanks(Tank *currentTank)
 	FixedVector tankDirection(tankRotation.sin(), tankRotation.cos(), 0);
 	FixedVector startPosition = tankPosition - tankDirection * 25;
 
-	GLState state2(GLState::TEXTURE_ON | GLState::BLEND_ON);
+	GLState state2(GLState::TEXTURE_ON | GLState::BLEND_ON | GLState::ALPHATEST_ON);
 
-	FixedVector tankWindowPos;
 	std::map<unsigned int, Tank *> &tanks =
 		ScorchedClient::instance()->getTankContainer().getPlayingTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
@@ -219,10 +220,23 @@ void ProfileDialog::drawTanks(Tank *currentTank)
 				tank->getRenderer();
 			if (renderer)
 			{
+				float xf = x.asFloat();
+				float yf = tankheight.asFloat();
+				if (xf > ox_ && yf > oy_ &&
+					xf < ow_ && yf < oh_)
+				{
+					float posX = (xf - ox_) / (ow_ - ox_) * (w_ - INSET - INSET) + x_ + INSET;
+					float posY = (yf - oy_) / (oh_ - oy_) * (h_ - INSET - INSET) + y_ + INSET;
+
+					// Add the tooltip that displays the tank info
+					GLWToolTip::instance()->addToolTip(&renderer->getTips()->tankTip,
+						float(posX) - 10.0f, float(posY) - 10.0f, 20.0f, 20.0f);
+				}
+
 				// Draw the tank
 				glPushMatrix();
 					// Set the tank angle
-					glTranslatef(x.asFloat(), tankheight.asFloat(), 0.0f);
+					glTranslatef(xf, yf, 0.0f);
 					glScalef(10.0f, 10.0f, 10.0f);
 
 					Vector position;
@@ -233,7 +247,7 @@ void ProfileDialog::drawTanks(Tank *currentTank)
 						Vector4 rotation;
 						Vector axis(1.0f, 0.0f, 0.0f);
 						rotation.setQuatFromAxisAndAngle(axis, 0.0f);
-						glScalef(0.5f, 0.5f, 0.5f);
+						glScalef(0.35f, 0.35f, 0.35f);
 
 						float matrix[16];
 						rotation.getOpenGLRotationMatrix(matrix);
@@ -247,20 +261,26 @@ void ProfileDialog::drawTanks(Tank *currentTank)
 					}
 				glPopMatrix();
 			}
-						
-			ExplosionTextures::instance()->arrowTexture.draw();
-			glColor3fv(tank->getColor());
-			glBegin(GL_QUADS);
-				glTexCoord2f(0.0f, 1.0f);
-				glVertex2f(x.asFloat() - 2.5f, landheight.asFloat() + 10.0f);
-				glTexCoord2f(0.0f, 0.0f);
-				glVertex2f(x.asFloat() - 2.5f, landheight.asFloat() + 0.0f);
-				glTexCoord2f(1.0f, 0.0f);
-				glVertex2f(x.asFloat() + 2.5f, landheight.asFloat() + 0.0f);
-				glTexCoord2f(1.0f, 1.0f);
-				glVertex2f(x.asFloat() + 2.5f, landheight.asFloat() + 10.0f);
-			glEnd();
 
+			if (OptionsDisplay::instance()->getDrawPlayerColor())
+			{			
+				ExplosionTextures::instance()->arrowTexture.draw();
+				glColor3fv(tank->getColor());
+				glBegin(GL_QUADS);
+					glTexCoord2f(0.0f, 1.0f);
+					glVertex2f(x.asFloat() - 2.5f, landheight.asFloat() + 10.0f);
+					glTexCoord2f(0.0f, 0.0f);
+					glVertex2f(x.asFloat() - 2.5f, landheight.asFloat() + 0.0f);
+					glTexCoord2f(1.0f, 0.0f);
+					glVertex2f(x.asFloat() + 2.5f, landheight.asFloat() + 0.0f);
+					glTexCoord2f(1.0f, 1.0f);
+					glVertex2f(x.asFloat() + 2.5f, landheight.asFloat() + 10.0f);
+				glEnd();
+			}
+
+			//if (OptionsDisplay::instance()->getDrawPlayerName())
+			//{
+			/*
 			glDepthMask(GL_FALSE);
 			float textWidth =
 				GLWFont::instance()->getGameFont()->getWidth(5.0f,
@@ -272,8 +292,7 @@ void ProfileDialog::drawTanks(Tank *currentTank)
 				0.0f,
 				tank->getTargetName());
 			glDepthMask(GL_TRUE);
-
-			if (tank == currentTank) tankWindowPos = FixedVector(x, tankheight, 0);
+			*/
 		}
 	}
 }
@@ -308,14 +327,17 @@ void ProfileDialog::drawAiming(Tank *currentTank)
 void ProfileDialog::mouseDown(int button, float x, float y, bool &skipRest)
 {
 	GLWWindow::mouseDown(button, x, y, skipRest);
-	if (x > x_ && x < x_ + w_ && y > y_ && y < y_ + h_)
+	if (!inBox(x, y, x_ + w_ - 12.0f, y_, 12.0f, 12.0f))
 	{
-		zooming_ = !zooming_;
-
-		if (profileZoom_ == 1.0f)
+		if (x > x_ && x < x_ + w_ && y > y_ && y < y_ + h_)
 		{
-			zoomX_ = x;
-			zoomY_ = y;
+			zooming_ = !zooming_;
+
+			if (profileZoom_ == 1.0f)
+			{
+				zoomX_ = x;
+				zoomY_ = y;
+			}
 		}
 	}
 }
@@ -323,8 +345,11 @@ void ProfileDialog::mouseDown(int button, float x, float y, bool &skipRest)
 void ProfileDialog::mouseUp(int button, float x, float y, bool &skipRest)
 {
 	GLWWindow::mouseUp(button, x, y, skipRest);
-	if (x > x_ && x < x_ + w_ && y > y_ && y < y_ + h_)
+	if (!inBox(x, y, x_ + w_ - 12.0f, y_, 12.0f, 12.0f))
 	{
-		//zooming_ = false;
+		if (x > x_ && x < x_ + w_ && y > y_ && y < y_ + h_)
+		{
+			//zooming_ = false;
+		}
 	}
 }

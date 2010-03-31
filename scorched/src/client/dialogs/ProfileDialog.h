@@ -41,6 +41,7 @@ protected:
 	static ProfileDialog *instance_;
 	float profileZoom_, zoomX_, zoomY_;
 	bool zooming_;
+	float ox_, oy_, ow_, oh_;
 
 	void drawLandscape(Tank *currentTank);
 	void drawTanks(Tank *currentTank);
