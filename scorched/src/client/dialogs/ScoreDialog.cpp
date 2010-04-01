@@ -464,15 +464,19 @@ void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
 		current->getDestinationId() == 
 		ScorchedClient::instance()->getTankContainer().getCurrentDestinationId())
 	{
-		GLState state(GLState::BLEND_ON); 
+		Tank *currentTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+		if (!currentTank || current == currentTank)
+		{
+			GLState state(GLState::BLEND_ON); 
 
-		glColor4f(0.0f, 0.0f, 0.0f, 0.4f);
-		glBegin(GL_QUADS);
-			glVertex2f(x_ + w_ - 3.0f, textY + lineSpacer - 1.0f);
-			glVertex2f(x_ + 3.0f, textY + lineSpacer - 1.0f);
-			glVertex2f(x_ + 3.0f, textY - 1.0f);
-			glVertex2f(x_ + w_ - 3.0f, textY - 1.0f);
-		glEnd();
+			glColor4f(0.0f, 0.0f, 0.0f, 0.4f);
+			glBegin(GL_QUADS);
+				glVertex2f(x_ + w_ - 3.0f, textY + lineSpacer - 1.0f);
+				glVertex2f(x_ + 3.0f, textY + lineSpacer - 1.0f);
+				glVertex2f(x_ + 3.0f, textY - 1.0f);
+				glVertex2f(x_ + w_ - 3.0f, textY - 1.0f);
+			glEnd();
+		}
 	}
 
 	// Form the name

@@ -26,6 +26,7 @@
 #include <client/ClientState.h>
 #include <graph/Main2DCamera.h>
 #include <graph/OptionsDisplay.h>
+#include <graph/ModelRendererSimulator.h>
 #include <tank/TankContainer.h>
 #include <tank/TankPosition.h>
 #include <landscapemap/LandscapeMaps.h>
@@ -119,6 +120,7 @@ void ProfileDialog::draw()
 		ScorchedClient::instance()->getTankContainer().getCurrentTank();
 	if (currentTank && currentTank->getAlive())
 	{
+		drawAIM(currentTank);
 		drawAiming(currentTank);
 		drawLandscape(currentTank);
 		drawTanks(currentTank);
@@ -167,6 +169,36 @@ void ProfileDialog::drawLandscape(Tank *currentTank)
 	glEnd();
 }
 
+void ProfileDialog::drawAIM(Tank *currentTank)
+{
+	GLState state1(GLState::TEXTURE_OFF | GLState::DEPTH_OFF);
+
+	if (TargetRendererImplTankAIM::drawAim())
+	{
+		FixedVector tankPosition = currentTank->getPosition().getTankPosition();
+		float distance = (tankPosition.asVector() - 
+			TargetRendererImplTankAIM::getAimPosition()).Magnitude2d();
+
+		glPushMatrix();
+			glTranslatef(distance + 25.0f, 
+				TargetRendererImplTankAIM::getAimPosition()[2],
+				0.0f);
+
+			glColor3f(0.7f, 0.7f, 0.0f);
+			glBegin(GL_QUADS);
+				glTexCoord2f(0.0f, 1.0f);
+				glVertex3f(-0.8f, +15.0f, 0.0f);
+				glTexCoord2f(0.0f, 0.0f);
+				glVertex3f(-0.8f, -10.0f, 0.0f);
+				glTexCoord2f(1.0f, 0.0f);
+				glVertex3f(+0.8f, -10.0f, 0.0f);
+				glTexCoord2f(1.0f, 1.0f);
+				glVertex3f(+0.8f, +15.0f, 0.0f);
+			glEnd();
+		glPopMatrix();
+	}
+}
+
 void ProfileDialog::drawTanks(Tank *currentTank)
 {
 	// Get tank attributes
@@ -175,8 +207,9 @@ void ProfileDialog::drawTanks(Tank *currentTank)
 	FixedVector tankDirection(tankRotation.sin(), tankRotation.cos(), 0);
 	FixedVector startPosition = tankPosition - tankDirection * 25;
 
-	GLState state2(GLState::TEXTURE_ON | GLState::BLEND_ON | GLState::ALPHATEST_ON);
+	GLState state2(GLState::TEXTURE_ON | GLState::BLEND_ON | GLState::ALPHATEST_ON | GLState::DEPTH_ON);
 
+	bool showingToolTip = false;
 	std::map<unsigned int, Tank *> &tanks =
 		ScorchedClient::instance()->getTankContainer().getPlayingTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
@@ -216,21 +249,24 @@ void ProfileDialog::drawTanks(Tank *currentTank)
 				landheight = tankheight + 10;
 			}
 
+			bool toolTipAdded = false;
 			TargetRendererImplTank *renderer = (TargetRendererImplTank *) 
 				tank->getRenderer();
 			if (renderer)
 			{
 				float xf = x.asFloat();
 				float yf = tankheight.asFloat();
-				if (xf > ox_ && yf > oy_ &&
+				if (!showingToolTip &&
+					xf > ox_ && yf > oy_ &&
 					xf < ow_ && yf < oh_)
 				{
 					float posX = (xf - ox_) / (ow_ - ox_) * (w_ - INSET - INSET) + x_ + INSET;
 					float posY = (yf - oy_) / (oh_ - oy_) * (h_ - INSET - INSET) + y_ + INSET;
 
 					// Add the tooltip that displays the tank info
-					GLWToolTip::instance()->addToolTip(&renderer->getTips()->tankTip,
+					toolTipAdded = GLWToolTip::instance()->addToolTip(&renderer->getTips()->tankTip,
 						float(posX) - 10.0f, float(posY) - 10.0f, 20.0f, 20.0f);
+					showingToolTip = toolTipAdded;
 				}
 
 				// Draw the tank
@@ -262,37 +298,38 @@ void ProfileDialog::drawTanks(Tank *currentTank)
 				glPopMatrix();
 			}
 
+			bool bringToFront = (tank == currentTank || toolTipAdded);
+			float depth = bringToFront?90.0f:0.0f;
+
 			if (OptionsDisplay::instance()->getDrawPlayerColor())
 			{			
 				ExplosionTextures::instance()->arrowTexture.draw();
 				glColor3fv(tank->getColor());
 				glBegin(GL_QUADS);
 					glTexCoord2f(0.0f, 1.0f);
-					glVertex2f(x.asFloat() - 2.5f, landheight.asFloat() + 10.0f);
+					glVertex3f(x.asFloat() - 2.5f, landheight.asFloat() + 10.0f, depth);
 					glTexCoord2f(0.0f, 0.0f);
-					glVertex2f(x.asFloat() - 2.5f, landheight.asFloat() + 0.0f);
+					glVertex3f(x.asFloat() - 2.5f, landheight.asFloat() + 0.0f, depth);
 					glTexCoord2f(1.0f, 0.0f);
-					glVertex2f(x.asFloat() + 2.5f, landheight.asFloat() + 0.0f);
+					glVertex3f(x.asFloat() + 2.5f, landheight.asFloat() + 0.0f, depth);
 					glTexCoord2f(1.0f, 1.0f);
-					glVertex2f(x.asFloat() + 2.5f, landheight.asFloat() + 10.0f);
+					glVertex3f(x.asFloat() + 2.5f, landheight.asFloat() + 10.0f, depth);
 				glEnd();
 			}
 
-			//if (OptionsDisplay::instance()->getDrawPlayerName())
-			//{
-			/*
-			glDepthMask(GL_FALSE);
-			float textWidth =
-				GLWFont::instance()->getGameFont()->getWidth(5.0f,
+			if (OptionsDisplay::instance()->getDrawPlayerNames() &&
+				bringToFront)
+			{
+				float textWidth =
+					GLWFont::instance()->getGameFont()->getWidth(5.0f,
+						tank->getTargetName());
+				GLWFont::instance()->getGameFont()->draw(
+					tank->getColor(), 5.0f, 
+					x.asFloat() - textWidth / 2.0f, 
+					landheight.asFloat() + 12.0f, 
+					depth,
 					tank->getTargetName());
-			GLWFont::instance()->getGameFont()->draw(
-				tank->getColor(), 5.0f, 
-				x.asFloat() - textWidth / 2.0f, 
-				landheight.asFloat() + 12.0f, 
-				0.0f,
-				tank->getTargetName());
-			glDepthMask(GL_TRUE);
-			*/
+			}
 		}
 	}
 }

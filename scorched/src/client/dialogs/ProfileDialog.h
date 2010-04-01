@@ -46,6 +46,7 @@ protected:
 	void drawLandscape(Tank *currentTank);
 	void drawTanks(Tank *currentTank);
 	void drawAiming(Tank *currentTank);
+	void drawAIM(Tank *currentTank);
 
 private:
 	ProfileDialog();

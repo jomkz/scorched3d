@@ -130,7 +130,7 @@ void ModelRendererMesh::drawMesh(unsigned int m, Mesh *mesh, float currentFrame,
 		mesh->getTextureName()[0]);
 	unsigned state = 0;
 	
-	//if (setState)
+	if (setState)
 	{
 		if (useTextures)
 		{
