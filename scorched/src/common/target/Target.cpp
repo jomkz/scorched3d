@@ -71,11 +71,15 @@ Target::~Target()
 	playerId_ = 0;
 }
 
+void Target::loaded()
+{
+	shield_->loaded();
+	parachute_->loaded();
+}
+
 void Target::newGame()
 {
 	life_->newGame();
-	shield_->newGame();
-	parachute_->newGame();
 }
 
 bool Target::getAlive()

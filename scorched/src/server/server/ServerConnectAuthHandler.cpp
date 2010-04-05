@@ -37,6 +37,7 @@
 #include <tank/TankScore.h>
 #include <tankai/TankAIAdder.h>
 #include <tankai/TankAIStrings.h>
+#include <tankai/TankAIStore.h>
 #include <common/Defines.h>
 #include <common/FileLines.h>
 #include <common/OptionsScorched.h>
@@ -97,18 +98,29 @@ bool ServerConnectAuthHandler::processMessage(
 
 void ServerConnectAuthHandler::processMessages()
 {
-	// Check that there are no outstanding tank addition requests
-	if (TankAddSimAction::TankAddSimActionCount > 0) return;
-
 	// Only process the new auth requests once there are no more outstanding
 	// tank addition requests
 	// Just makes some of the checks easier
 	while (!authMessages_.empty())
 	{
+		// Check that there are no outstanding tank addition requests
+		if (TankAddSimAction::TankAddSimActionCount > 0) break;
+
+		// Otherwise process the message
 		AuthMessage *message = authMessages_.back();
 		processMessageInternal(message->destinationId, message->ipAddress, message->message);
 		authMessages_.pop_back();
 		delete message;
+	}
+
+	while (!aiAdditions_.empty())
+	{
+		// Check that there are no outstanding tank addition requests
+		if (TankAddSimAction::TankAddSimActionCount > 0) break;
+
+		std::string aiName = aiAdditions_.back();
+		processAIInternal(aiName);
+		aiAdditions_.pop_back();
 	}
 }
 
@@ -298,21 +310,16 @@ void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,
 	bool extraSpectator)
 {
 	// The player has connected
-	Vector color;
 	unsigned int tankId = 0;
 	LangString playerName;
-
 	if (extraSpectator)
 	{
 		tankId = TargetID::SPEC_TANK_ID;
 		playerName = LANG_STRING("Spectator");
-		color = Vector(0.7f, 0.7f, 0.7f);
 	}
 	else
 	{
 		playerName = LANG_STRING(TankAIStrings::instance()->getPlayerName());
-		color = TankColorGenerator::instance()->getNextColor(
-			ScorchedServer::instance()->getTankContainer().getPlayingTanks());
 		tankId = TankAIAdder::getNextTankId(
 			sentUniqueId,
 			ScorchedServer::instance()->getContext());
@@ -330,20 +337,58 @@ void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,
 		playerName = alias;
 	}
 
-	// Chose a random model for this tank
-	TankModel *tankModel = 
-		ScorchedServer::instance()->getTankModels().getRandomModel(0, false);
-
-	// Create this tank
-	ComsAddPlayerMessage addPlayerMessage(
-		tankId,
-		playerName,
-		color,
-		tankModel->getName(),
-		destinationId,
-		0,
-		"");
-	TankAddSimAction *simAction = new TankAddSimAction(addPlayerMessage,
-		sentUniqueId, sentSUI, sentHostDesc, ipAddress);
+	// Add this tank
+	TankAddSimAction *simAction = new TankAddSimAction(tankId, destinationId,
+		sentUniqueId, sentSUI, sentHostDesc, ipAddress, playerName, "");
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
+}
+
+void ServerConnectAuthHandler::processAIInternal(const std::string &aiName)
+{
+	TankAI *ai = ScorchedServer::instance()->getTankAIs().getAIByName(aiName.c_str());
+	if (!ai)
+	{
+		Logger::log(S3D::formatStringBuffer("Failed to find a tank ai called \"%s\"",
+			aiName.c_str()));
+		return;
+	}
+
+	// Tank Name
+	LangString newname = 
+		LANG_STRING(ScorchedServer::instance()->getOptionsGame().getBotNamePrefix());
+	newname += LANG_STRING(TankAIStrings::instance()->getAIPlayerName(
+		ScorchedServer::instance()->getContext()));
+
+	// Unique Id
+	char uniqueId[256];
+	for (int i=1;;i++)
+	{
+		snprintf(uniqueId, 256, "%s - computer - %i", aiName.c_str(), i);
+		if (!uniqueIdTaken(uniqueId)) break;
+	}
+	unsigned int playerId = TankAIAdder::getNextTankId(
+		uniqueId, ScorchedServer::instance()->getContext());
+
+	// Add this new tank
+	TankAddSimAction *simAction = new TankAddSimAction(playerId, 0,
+		uniqueId, "", "AI", 0, newname, aiName);
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
+}
+
+bool ServerConnectAuthHandler::uniqueIdTaken(const std::string &uniqueId)
+{
+	std::map<unsigned int, Tank *> &playingTanks = 
+		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+	std::map<unsigned int, Tank *>::iterator playingItor;
+	for (playingItor = playingTanks.begin();
+		playingItor != playingTanks.end();
+		playingItor++)
+	{
+		Tank *current = (*playingItor).second;
+		if (0 == strcmp(current->getUniqueId(), uniqueId.c_str()))
+		{
+			return true;
+		}
+	}
+	return false;
 }

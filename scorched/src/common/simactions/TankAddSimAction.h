@@ -22,15 +22,16 @@
 #define AFX_TankAddSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
 #include <simactions/SimAction.h>
-#include <coms/ComsAddPlayerMessage.h>
 
 class TankAddSimAction : public SimAction
 {
 public:
 	TankAddSimAction();
-	TankAddSimAction(ComsAddPlayerMessage &message,
+	TankAddSimAction(
+		unsigned int playerId, unsigned int destinationId,
 		const std::string &uniqueId, const std::string &sUID, const std::string &hostDesc,
-		unsigned int ipAddress, const std::string &aiName = "");
+		unsigned int ipAddress, 
+		const LangString &playerName, const std::string &aiName);
 	virtual ~TankAddSimAction();
 
 	virtual bool invokeAction(ScorchedContext &context);
@@ -42,8 +43,9 @@ public:
 
 REGISTER_CLASS_HEADER(TankAddSimAction);
 protected:
-	ComsAddPlayerMessage message_;
+	unsigned int playerId_, destinationId_;
 	std::string uniqueId_, sUID_, hostDesc_, aiName_;
+	LangString playerName_;
 	unsigned int ipAddress_;
 };
 

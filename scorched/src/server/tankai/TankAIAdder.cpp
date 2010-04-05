@@ -18,26 +18,11 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <set>
 #include <tankai/TankAIAdder.h>
-#include <tankai/TankAIStore.h>
-#include <tankai/TankAIStrings.h>
-#include <tank/TankColorGenerator.h>
-#include <tank/TankContainer.h>
-#include <tank/TankModelStore.h>
-#include <tank/TankAvatar.h>
-#include <tank/TankModelContainer.h>
-#include <tank/TankState.h>
-#include <simactions/TankAddSimAction.h>
-#include <simactions/TankChangeSimAction.h>
-#include <coms/ComsAddPlayerMessage.h>
-#include <coms/ComsMessageSender.h>
-#include <common/OptionsScorched.h>
-#include <common/OptionsTransient.h>
-#include <common/Logger.h>
 #include <common/StatsLogger.h>
-#include <common/Defines.h>
-#include <server/ServerSimulator.h>
+#include <common/OptionsScorched.h>
+#include <target/TargetContainer.h>
+#include <server/ServerConnectAuthHandler.h>
 
 unsigned int TankAIAdder::getNextTankId(const char *uniqueId, ScorchedContext &context)
 {
@@ -96,82 +81,5 @@ void TankAIAdder::addTankAIs(ScorchedServer &context)
 
 void TankAIAdder::addTankAI(ScorchedServer &context, const char *aiName)
 {
-	TankAI *ai = context.getTankAIs().getAIByName(aiName);
-	if (ai)
-	{
-		// Create our uniqueid
-		char uniqueId[256];
-		{
-			std::set<int> usedIds;
-			snprintf(uniqueId, 256, "%s - computer - %%i", aiName);
-			std::map<unsigned int, Tank *> &playingTanks = 
-				context.getTankContainer().getPlayingTanks();
-			std::map<unsigned int, Tank *>::iterator playingItor;
-			for (playingItor = playingTanks.begin();
-				playingItor != playingTanks.end();
-				playingItor++)
-			{
-				Tank *current = (*playingItor).second;
-				if (current->getDestinationId() == 0)
-				{
-					int id = 1;
-					if (sscanf(current->getUniqueId(), uniqueId, &id) == 1)
-					{
-						usedIds.insert(id);
-					}
-				}
-			}
-
-			int uniqueIdCount = 1;
-			while (usedIds.find(uniqueIdCount) != usedIds.end()) uniqueIdCount++;
-
-			snprintf(uniqueId, 256, "%s - computer - %i", aiName, uniqueIdCount);
-		}
-
-		// Chose this tanks team
-		int team = 0;
-		if (context.getOptionsGame().getTeams() > 1)
-		{
-			if (context.getOptionsGame().getTeamBallance() ==
-				OptionsGame::TeamBallanceBotsVs)
-			{
-				team = 1;
-			}
-		}
-
-		// For the tank ai's name
-		LangString newname = 
-			LANG_STRING(context.getOptionsGame().getBotNamePrefix());
-		newname += LANG_STRING(TankAIStrings::instance()->getAIPlayerName(
-			ScorchedServer::instance()->getContext()));
-
-		// Form the tank ai model
-		Vector color = TankColorGenerator::instance()->getNextColor(
-			context.getTankContainer().getPlayingTanks());
-		TankModel *tankModel = 
-			context.getTankModels().getRandomModel(team, false);
-		unsigned int playerId = getNextTankId(uniqueId, context.getContext());
-		TankAvatar tankAvatar;
-		tankAvatar.loadFromFile(S3D::getDataFile("data/avatars/computer.png"));
-
-		// Tell the clients to create this tank
-		ComsAddPlayerMessage addPlayerMessage(
-			playerId,
-			newname,
-			color,
-			tankModel->getName(),
-			0,
-			team,
-			""); 
-		addPlayerMessage.setPlayerIconName("data/avatars/computer.png");
-		addPlayerMessage.getPlayerIcon().addDataToBuffer(
-			tankAvatar.getFile().getBuffer(),
-			tankAvatar.getFile().getBufferUsed());
-
-		TankAddSimAction *simAction = new TankAddSimAction(addPlayerMessage,
-			uniqueId, "", "AI", 0, aiName);
-		context.getServerSimulator().addSimulatorAction(simAction);
-		TankChangeSimAction *changeAction = new TankChangeSimAction(addPlayerMessage);
-		context.getServerSimulator().addSimulatorAction(changeAction);
-	}
+	ServerConnectAuthHandler::instance()->addTankAI(aiName);
 }

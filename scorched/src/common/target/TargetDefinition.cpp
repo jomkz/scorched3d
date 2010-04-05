@@ -147,6 +147,7 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 	target->getLife().setVelocity(velocity);
 	target->getLife().setRotation(rotation);
 	target->setBorder(border_);
+	target->loaded();
 	target->newGame();
 
 	if (shield_.c_str()[0] && 0 != strcmp(shield_.c_str(), "none"))

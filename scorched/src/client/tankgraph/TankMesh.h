@@ -39,6 +39,7 @@ public:
 	int getNoTris();
 
 	FixedVector &getGunOffSet() { return gunOffset_; }
+	FixedVector &getTurretCenter() { return turretCenter_; }
 	float getScale() { return scale_; }
 protected:
 	enum MeshType

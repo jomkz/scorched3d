@@ -53,6 +53,7 @@ public:
 		ScorchedContext &context);
 	virtual ~Target();
 
+	virtual void loaded();
 	virtual void newGame();
 
 	virtual bool getAlive();

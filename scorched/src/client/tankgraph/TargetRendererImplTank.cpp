@@ -287,12 +287,28 @@ void TargetRendererImplTank::drawSight()
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
 	}
 
-	Vector tankPositon = tank_->getPosition().getTankTurretPosition().asVector();
 	float tankRotationDeg = tank_->getPosition().getRotationGunXY().asFloat();
 	float tankElevationDeg = tank_->getPosition().getRotationGunYZ().asFloat();
 
 	glPushMatrix();
-	glTranslatef(tankPositon[0], tankPositon[1], tankPositon[2]);
+ 		if (OptionsDisplay::instance()->getOldSightPosition())
+		{
+			FixedVector &turretCenter = getMesh()->getTurretCenter();
+			glTranslatef(
+				tank_->getPosition().getTankPosition()[0].asFloat() +
+				turretCenter[0].asFloat() * getMesh()->getScale(),
+				tank_->getPosition().getTankPosition()[1].asFloat() +
+				turretCenter[1].asFloat() * getMesh()->getScale(),
+				tank_->getPosition().getTankPosition()[2].asFloat() +
+				(turretCenter[2].asFloat() - getMesh()->getModel()->getMin()[2].asFloat()) * getMesh()->getScale());
+		}
+		else
+		{
+			glTranslatef(
+				tank_->getPosition().getTankGunPosition()[0].asFloat(),
+				tank_->getPosition().getTankGunPosition()[1].asFloat(),
+				tank_->getPosition().getTankGunPosition()[2].asFloat());
+		}
 	
 		GLState sightState1(GLState::BLEND_ON | GLState::TEXTURE_ON | GLState::LIGHTING_OFF | GLState::ALPHATEST_ON);
 		
@@ -309,10 +325,28 @@ void TargetRendererImplTank::drawSight()
 			glVertex3f(-15.0f, -15.0f, -0.02f);	
 			glTexCoord2f(1.0f, 0.0f);
 			glVertex3f(15.0f, -15.0f, -0.02f);
+
+			glTexCoord2f(0.0f, 0.0f);
+			glVertex3f(-15.0f, -15.0f, -0.02f);	
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex3f(-15.0f, 15.0f, -0.02f);
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex3f(15.0f, 15.0f, -0.02f);
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex3f(15.0f, -15.0f, -0.02f);
 		}		
 		glEnd();
 
 		glRotatef(tankRotationDeg, 0.0f, 0.0f, 1.0f);
+
+		if (OptionsDisplay::instance()->getOldSightPosition())
+		{
+			FixedVector &gunOffSet = getMesh()->getGunOffSet();
+			glTranslatef(
+				gunOffSet[0].asFloat() * getMesh()->getScale(), 
+				gunOffSet[1].asFloat() * getMesh()->getScale(), 
+				gunOffSet[2].asFloat() * getMesh()->getScale());
+		}
 
 		// Rotation marker
 		aimBotTexture.draw();
@@ -324,6 +358,15 @@ void TargetRendererImplTank::drawSight()
 			glVertex3f(-1.0f, 3.0f, -0.01f);
 			glTexCoord2f(1.0f, 0.0f);
 			glVertex3f(1.0f, 3.0f, -0.01f);	
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex3f(1.0f, 15.0f, -0.01f);
+
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex3f(1.0f, 3.0f, -0.01f);	
+			glTexCoord2f(0.0f, 0.0f);
+			glVertex3f(-1.0f, 3.0f, -0.01f);
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex3f(-1.0f, 15.0f, -0.01f);
 			glTexCoord2f(1.0f, 1.0f);
 			glVertex3f(1.0f, 15.0f, -0.01f);
 		}
@@ -461,14 +504,18 @@ void TargetRendererImplTank::drawOldSight()
 	glPushMatrix();
 
  		if (OptionsDisplay::instance()->getOldSightPosition())
-		{
+		{		
+			FixedVector &turretCenter = getMesh()->getTurretCenter();
 			glTranslatef(
-				tank_->getPosition().getTankPosition()[0].asFloat(),
-				tank_->getPosition().getTankPosition()[1].asFloat(),
-				tank_->getPosition().getTankPosition()[2].asFloat());
+				tank_->getPosition().getTankPosition()[0].asFloat() +
+				turretCenter[0].asFloat() * getMesh()->getScale(),
+				tank_->getPosition().getTankPosition()[1].asFloat() +
+				turretCenter[1].asFloat() * getMesh()->getScale(),
+				tank_->getPosition().getTankPosition()[2].asFloat() +
+				(turretCenter[2].asFloat() - getMesh()->getModel()->getMin()[2].asFloat()) * getMesh()->getScale());
 			glRotatef(tank_->getPosition().getRotationGunXY().asFloat(), 
 				0.0f, 0.0f, 1.0f);
-
+			
 			FixedVector &gunOffSet = getMesh()->getGunOffSet();
 			glTranslatef(
 				gunOffSet[0].asFloat() * getMesh()->getScale(), 

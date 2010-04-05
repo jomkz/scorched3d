@@ -31,7 +31,7 @@ public:
 	TargetParachute(ScorchedContext &context);
 	virtual ~TargetParachute();
 
-	void newGame();
+	void loaded();
 
 	Accessory *getCurrentParachute() { return currentParachute_; }
 	void setCurrentParachute(Accessory *para);

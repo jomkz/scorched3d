@@ -32,7 +32,7 @@ TargetParachute::~TargetParachute()
 {
 }
 
-void TargetParachute::newGame()
+void TargetParachute::loaded()
 {
 	setCurrentParachute(0);
 }

@@ -19,10 +19,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <simactions/TankAddSimAction.h>
+#include <simactions/TankChangeSimAction.h>
 #include <simactions/TankRankSimAction.h>
 #include <tank/TankContainer.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
+#include <tank/TankModelStore.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankModelContainer.h>
 #include <tankai/TankAIStore.h>
@@ -31,6 +33,7 @@
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
+#include <coms/ComsAddPlayerMessage.h>
 #include <server/ServerBanned.h>
 #include <server/ScorchedServerUtil.h>
 #include <server/ServerChannelManager.h>
@@ -50,12 +53,14 @@ TankAddSimAction::TankAddSimAction()
 	TankAddSimActionCount++;
 }
 
-TankAddSimAction::TankAddSimAction(ComsAddPlayerMessage &message, 
+TankAddSimAction::TankAddSimAction(
+	unsigned int playerId, unsigned int destinationId,
 	const std::string &uniqueId, const std::string &sUID, const std::string &hostDesc,
-	unsigned int ipAddress, const std::string &aiName) :
-	message_(message),
+	unsigned int ipAddress, 
+	const LangString &playerName, const std::string &aiName) :
+	playerId_(playerId), destinationId_(destinationId),
 	uniqueId_(uniqueId), sUID_(sUID), hostDesc_(hostDesc),
-	ipAddress_(ipAddress), aiName_(aiName)
+	ipAddress_(ipAddress), aiName_(aiName), playerName_(playerName)
 {
 	TankAddSimActionCount++;
 }
@@ -67,35 +72,41 @@ TankAddSimAction::~TankAddSimAction()
 
 bool TankAddSimAction::invokeAction(ScorchedContext &context)
 {
-	// Check color is available
-	Vector color = message_.getPlayerColor();
-	if (!TankColorGenerator::instance()->colorAvailable(color, 
-		context.getTankContainer().getPlayingTanks()))
+	// Alocate new color
+	Vector color = TankColorGenerator::instance()->getNextColor(
+		context.getTankContainer().getPlayingTanks());
+	if (playerId_ == TargetID::SPEC_TANK_ID)
 	{
-		color = TankColorGenerator::instance()->getNextColor(
-			context.getTankContainer().getPlayingTanks());
+		color = Vector(0.7f, 0.7f, 0.7f);
 	}
 
 	// Create tank
 	Tank *tank = new Tank(
 		context,
-		message_.getPlayerId(),
-		message_.getDestinationId(),
-		message_.getPlayerName(),
+		playerId_,
+		destinationId_,
+		playerName_,
 		color);
-	int team = message_.getPlayerTeam();
-	if (context.getOptionsGame().getTeams() > 1 &&
-		team == 0)
+
+	// Choose team
+	int team = 0;
+	if (context.getOptionsGame().getTeams() > 1)
 	{
-		team = context.getOptionsTransient().getLeastUsedTeam(
-			context.getTankContainer());
+		if (destinationId_ == 0 && 
+			context.getOptionsGame().getTeamBallance() ==
+			OptionsGame::TeamBallanceBotsVs)
+		{
+			team = 1;
+		}
+		else
+		{
+			team = context.getOptionsTransient().getLeastUsedTeam(
+				context.getTankContainer());
+		}
 	}
 	tank->setTeam(team);
-	tank->getAvatar().setFromBuffer(
-		message_.getPlayerIconName(),
-		message_.getPlayerIcon());
-	tank->getModelContainer().setTankModelName(
-		message_.getModelName());
+
+	// Setup server stuff
 	if (context.getServerMode())
 	{
 		tank->setUniqueId(uniqueId_.c_str());
@@ -120,6 +131,32 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 		TankRankSimAction *rankSimAction = new TankRankSimAction();
 		rankSimAction->addRank(rank);
 		((ScorchedServer &)context).getServerSimulator().addSimulatorAction(rankSimAction);
+
+		if (destinationId_ == 0)
+		{
+			// Form the tank ai model
+			TankModel *tankModel = 
+				context.getTankModels().getRandomModel(team, true);
+			TankAvatar tankAvatar;
+			tankAvatar.loadFromFile(S3D::getDataFile("data/avatars/computer.png"));
+
+			// Tell the clients to create this tank
+			ComsAddPlayerMessage addPlayerMessage(
+				playerId_,
+				playerName_,
+				color,
+				tankModel->getName(),
+				0,
+				team,
+				""); 
+			addPlayerMessage.setPlayerIconName("data/avatars/computer.png");
+			addPlayerMessage.getPlayerIcon().addDataToBuffer(
+				tankAvatar.getFile().getBuffer(),
+				tankAvatar.getFile().getBufferUsed());
+
+			TankChangeSimAction *changeAction = new TankChangeSimAction(addPlayerMessage);
+			((ScorchedServer &)context).getServerSimulator().addSimulatorAction(changeAction);
+		}
 	}
 
 #ifndef S3D_SERVER
@@ -180,12 +217,18 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 
 bool TankAddSimAction::writeMessage(NetBuffer &buffer)
 {
-	message_.writeMessage(buffer);
+	buffer.addToBuffer(playerId_);
+	buffer.addToBuffer(destinationId_);
+	buffer.addToBuffer(playerName_);
+
 	return true;
 }
 
 bool TankAddSimAction::readMessage(NetBufferReader &reader)
 {
-	if (!message_.readMessage(reader)) return false;
+	if (!reader.getFromBuffer(playerId_)) return false;
+	if (!reader.getFromBuffer(destinationId_)) return false;
+	if (!reader.getFromBuffer(playerName_)) return false;
+	
 	return true;
 }

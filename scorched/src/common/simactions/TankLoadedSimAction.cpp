@@ -43,6 +43,7 @@ bool TankLoadedSimAction::invokeAction(ScorchedContext &context)
 	Tank *tank = context.getTankContainer().getTankById(playerId_);
 	if (!tank) return false;
 
+	tank->loaded();
 	if (notSpectator_) tank->getState().setState(TankState::sDead);
 	else tank->getState().setState(TankState::sSpectator);
 

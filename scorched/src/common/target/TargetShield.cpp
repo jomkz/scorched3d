@@ -40,7 +40,7 @@ TargetShield::~TargetShield()
 {
 }
 
-void TargetShield::newGame()
+void TargetShield::loaded()
 {
 	setCurrentShield(0);
 }

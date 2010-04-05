@@ -33,6 +33,8 @@ public:
 
 	void processMessages();
 
+	void addTankAI(std::string tankAi) { aiAdditions_.push_back(tankAi); }
+
 	virtual bool processMessage(
 		NetMessage &message,
 		const char *messageType,
@@ -47,7 +49,10 @@ protected:
 
 	static ServerConnectAuthHandler *instance_;
 	std::list<AuthMessage *> authMessages_;
+	std::list<std::string> aiAdditions_;
 
+	void processAIInternal(
+		const std::string &aiName);
 	void processMessageInternal(
 		unsigned int destinationId,
 		unsigned int ipAddress,
@@ -62,6 +67,8 @@ protected:
 		const char *SUI,
 		const char *hostDesc,
 		bool extraSpectator);
+
+	bool uniqueIdTaken(const std::string &uniqueId);
 
 private:
 	ServerConnectAuthHandler();

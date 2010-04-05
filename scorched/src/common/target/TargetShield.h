@@ -34,7 +34,7 @@ public:
 		unsigned int playerId);
 	virtual ~TargetShield();
 
-	virtual void newGame();
+	virtual void loaded();
 	void setTarget(Target *target) { target_ = target; }
 
 	Accessory *getCurrentShield() { return currentShield_; }
