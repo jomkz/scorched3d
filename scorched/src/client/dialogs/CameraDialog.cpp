@@ -48,7 +48,7 @@ CameraDialog::CameraDialog() :
 	"Shows a view from behind the current tank\n"
 	"or its shots in a different window")
 {
-	targetCam_.setCameraType(TargetCamera::CamGun);
+	targetCam_.setCameraType(TargetCamera::CamShot);
 }
 
 CameraDialog::~CameraDialog()

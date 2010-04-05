@@ -341,9 +341,9 @@
 		<key>3</key>
 	</keyentry>
 	<keyentry>
-		<name>CAMERA_GUN_VIEW</name>
-		<title>Camera gun view</title>
-		<description>Changes the camera angle to the gun view</description>
+		<name>CAMERA_SHOT_VIEW</name>
+		<title>Camera shot view</title>
+		<description>Changes the camera angle to the shot view</description>
 		<group>3</group>
 		<key>4</key>
 	</keyentry>
@@ -389,6 +389,18 @@
 		<group>3</group>
 		<key>0</key>
 	</keyentry>
+  <keyentry>
+    <name>CAMERA_EXPLOSION_VIEW</name>
+    <title>Camera explosion view</title>
+    <description>Changes the camera angle to the explosion view</description>
+    <group>3</group>
+  </keyentry>
+  <keyentry>
+    <name>CAMERA_AIM_VIEW</name>
+    <title>Camera explosion view</title>
+    <description>Changes the camera angle to the explosion view</description>
+    <group>3</group>
+  </keyentry>
 	<keyentry>
 		<name>CAMERA_SCROLL_LEFT</name>
 		<title>Camera scroll left</title>

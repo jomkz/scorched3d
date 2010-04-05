@@ -53,6 +53,7 @@ static const char *cameraNames[] =
 	"AboveTank",
 	"Tank",
 	"Shot",
+	"Aim",
 	"Explosion",
 	"Action",
 	"Left",
@@ -76,7 +77,10 @@ static const char *cameraDescriptions[] =
 	"Look from the current tanks gun turret.\n"
 	"Follows any shots the current tank makes.\n"
 	"Tracks the current tanks rotation.",
-	"Shows the last explosion from the tank.",
+	"Look from the current tanks gun turret.\n"
+	"Tracks the current tanks rotation.",
+	"Shows the finishing position of the last\n"
+	"shot this tank made.",
 	"Automaticaly tracks any action around the\n"
 	"island by moving to view any explosions\n"
 	"and deaths.",
@@ -180,7 +184,10 @@ int TargetCamera::getNoCameraNames()
 float TargetCamera::minHeightFunc(int x, int y, void *data)
 {
 	TargetCamera *instance = (TargetCamera *) data;
-	if (instance->cameraPos_ == CamGun)
+	if (instance->cameraPos_ == CamShot ||
+		instance->cameraPos_ == CamExplosion ||
+		instance->cameraPos_ == CamAction ||
+		instance->cameraPos_ == CamAim)
 	{
 		if ((instance->mainCam_.getCurrentPos() - 
 			instance->mainCam_.getLookAt()).Magnitude() < 5.0f) return 0.0f;
@@ -310,14 +317,9 @@ bool TargetCamera::moveCamera(float frameTime, bool playing)
 			mainCam_.movePosition(currentRotation, 1.48f, 15.f);
 		}
 		break;
-	case CamGun:
+	case CamShot:
 		{
 			if (currentTank &&
-				currentTank->getState().getMoveId() != 0)
-			{
-				viewBehindTank(currentTank);
-			}
-			else if (currentTank &&
 				currentTank->getViewPoints().getProjectileViewPoints().hasViewPoints())
 			{
 				FixedVector lookatPos, lookfromPos;
@@ -354,7 +356,19 @@ bool TargetCamera::moveCamera(float frameTime, bool playing)
 			}
 		}
 		break;
-	case CamShot:
+	case CamAim:
+		{
+			if (currentTank && currentTank->getAlive())
+			{
+				viewBehindTank(currentTank);
+			}
+			else
+			{
+				viewSpectator();
+			}
+		}
+		break;
+	case CamExplosion:
 		{
 			if (currentTank &&
 				currentTank->getViewPoints().getExplosionViewPoints().hasViewPoints())
@@ -681,24 +695,28 @@ bool TargetCamera::keyboardCheck(float frameTime,
 	KEYBOARDKEY("CAMERA_TOP_VIEW", topViewKey);
 	KEYBOARDKEY("CAMERA_BEHIND_VIEW", behindViewKey);
 	KEYBOARDKEY("CAMERA_TANK_VIEW", tankViewKey);
-	KEYBOARDKEY("CAMERA_GUN_VIEW", gunViewKey);
+	KEYBOARDKEY("CAMERA_SHOT_VIEW", shotViewKey);
 	KEYBOARDKEY("CAMERA_ACTION_VIEW", actionViewKey);
 	KEYBOARDKEY("CAMERA_LEFT_VIEW", leftViewKey);
 	KEYBOARDKEY("CAMERA_RIGHT_VIEW", rightViewKey);
 	KEYBOARDKEY("CAMERA_LEFTFAR_VIEW", leftFarViewKey);
 	KEYBOARDKEY("CAMERA_RIGHTFAR_VIEW", rightFarViewKey);
 	KEYBOARDKEY("CAMERA_SPECTATOR_VIEW", spectatorViewKey);
+	KEYBOARDKEY("CAMERA_EXPLOSION_VIEW", explosionViewKey);
+	KEYBOARDKEY("CAMERA_AIM_VIEW", aimViewKey);
 
 	if (topViewKey->keyDown(buffer, keyState)) cameraPos_ = CamTop;
 	else if (behindViewKey->keyDown(buffer, keyState)) cameraPos_ = CamBehind;
 	else if (tankViewKey->keyDown(buffer, keyState)) cameraPos_ = CamTank;
-	else if (gunViewKey->keyDown(buffer, keyState)) cameraPos_ = CamGun;
+	else if (shotViewKey->keyDown(buffer, keyState)) cameraPos_ = CamShot;
 	else if (leftViewKey->keyDown(buffer, keyState)) cameraPos_ = CamLeft;
 	else if (rightViewKey->keyDown(buffer, keyState)) cameraPos_ = CamRight;
 	else if (leftFarViewKey->keyDown(buffer, keyState)) cameraPos_ = CamLeftFar;
 	else if (rightFarViewKey->keyDown(buffer, keyState)) cameraPos_ = CamRightFar;
 	else if (spectatorViewKey->keyDown(buffer, keyState)) cameraPos_ = CamSpectator;
 	else if (actionViewKey->keyDown(buffer, keyState)) cameraPos_ = CamAction;
+	else if (explosionViewKey->keyDown(buffer, keyState)) cameraPos_ = CamExplosion;
+	else if (aimViewKey->keyDown(buffer, keyState)) cameraPos_ = CamAim;
 
 	const float QPI = 3.14f / 4.0f;
 	KEYBOARDKEY("CAMERA_ROTATE_LEFT", leftKey);

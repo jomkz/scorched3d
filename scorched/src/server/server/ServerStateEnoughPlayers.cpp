@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <server/ServerStateEnoughPlayers.h>
+#include <server/ServerConnectAuthHandler.h>
 #include <server/ServerChannelManager.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerSimulator.h>
@@ -46,7 +47,8 @@ bool ServerStateEnoughPlayers::enoughPlayers()
 {
 	// Check if we need to add or remove bots to keep game going
 	if (TankAddSimAction::TankAddSimActionCount == 0 &&
-		TankRemoveSimAction::TankRemoveSimActionCount == 0)
+		TankRemoveSimAction::TankRemoveSimActionCount == 0 &&
+		!ServerConnectAuthHandler::instance()->outstandingRequests())
 	{
 		// Any bots added won't join until the next round anyway
 		ballanceBots(ScorchedServer::instance()->getContext());

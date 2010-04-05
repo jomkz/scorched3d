@@ -289,7 +289,7 @@ OptionsDisplay::OptionsDisplay() :
 	soundVolume_(options_, "SoundVolume",
 		"The master volume. Max = 128, Min = 0", RAccess | NoRestore, 128, 0, 128, 1),
 	ambientSoundVolume_(options_, "AmbientSoundVolume",
-		"The ambient sound effect volume. Max = 128, Min = 0", RAccess | NoRestore, 128, 0, 128, 1),
+		"The ambient sound effect volume. Max = 128, Min = 0", RAccess | NoRestore, 64, 0, 128, 1),
 	musicVolume_(options_, "MusicVolume",
 		"The music effect volume. Max = 128, Min = 0", RAccess | NoRestore, 128, 0, 128, 1),
 	antiAlias_(options_, "AntiAlias",

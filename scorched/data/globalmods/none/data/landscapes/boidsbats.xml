@@ -25,14 +25,14 @@
 			<name>boids-bats</name>
 		</position>
 		<timing type='repeat'>
-			<min>4</min>
-			<max>20</max>
+			<min>15</min>
+			<max>30</max>
 		</timing>
 		<sound type='file'>
 			<file>data/wav/misc/bats1.wav</file>
 			<file>data/wav/misc/bats2.wav</file>
 			<file>data/wav/misc/bats3.wav</file>
-			<gain>0.25</gain>
+			<gain>0.1</gain>
 		</sound>
 	</sound>
 </boids>

@@ -34,6 +34,7 @@ public:
 	void processMessages();
 
 	void addTankAI(std::string tankAi) { aiAdditions_.push_back(tankAi); }
+	bool outstandingRequests() { return (!authMessages_.empty() || !aiAdditions_.empty()); }
 
 	virtual bool processMessage(
 		NetMessage &message,
