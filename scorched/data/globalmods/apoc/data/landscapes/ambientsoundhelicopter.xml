@@ -13,7 +13,7 @@
 			</timing>
 			<sound type='file'>
 				<file>data/wav/misc/helicopter.wav</file>
-				<gain>1.0</gain>
+				<gain>0.3</gain>
 			</sound>
 		</sound>
 </ambientsound>

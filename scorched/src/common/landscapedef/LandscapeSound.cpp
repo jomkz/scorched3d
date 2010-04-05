@@ -229,7 +229,7 @@ bool LandscapeSoundSoundFile::readXML(XMLNode *node)
 	return node->failChildren();
 }
 
-bool LandscapeSoundSoundFile::play(VirtualSoundSource *source)
+bool LandscapeSoundSoundFile::play(VirtualSoundSource *source, float ambientGain)
 {
 #ifndef S3D_SERVER
 	std::string &file = files[rand() % files.size()];
@@ -238,7 +238,7 @@ bool LandscapeSoundSoundFile::play(VirtualSoundSource *source)
 			S3D::getModFile(file.c_str()));
 	if (!buffer) return false;
 
-	source->setGain(gain);
+	source->setGain(gain * ambientGain);
 	source->setRolloff(rolloff);
 	source->setReferenceDistance(referencedistance);
 	source->play(buffer);

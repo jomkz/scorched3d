@@ -78,6 +78,7 @@ void LandscapeSoundManager::addSounds()
 
 void LandscapeSoundManager::loadSound(std::vector<LandscapeInclude *> &sounds)
 {
+	float ambientGain = float(OptionsDisplay::instance()->getAmbientSoundVolume()) / 128.0f;
 	std::vector<LandscapeInclude *>::iterator itor;
 	for (itor = sounds.begin();
 		itor != sounds.end();
@@ -110,7 +111,7 @@ void LandscapeSoundManager::loadSound(std::vector<LandscapeInclude *> &sounds)
 					if (entry.soundType->position->setPosition(
 						entry.soundSource, entry.initData))
 					{
-						entry.soundType->sound->play(entry.soundSource);
+						entry.soundType->sound->play(entry.soundSource, ambientGain);
 					}
 					else
 					{
@@ -137,6 +138,7 @@ void LandscapeSoundManager::simulate(float frameTime)
 	lastTime_ += frameTime;
 	if (lastTime_ < 0.1f) return;
 
+	float ambientGain = float(OptionsDisplay::instance()->getAmbientSoundVolume()) / 128.0f;
 	std::list<LandscapeSoundManagerEntry>::iterator itor;
 	for (itor = entries_.begin();
 		itor != entries_.end();
@@ -160,8 +162,7 @@ void LandscapeSoundManager::simulate(float frameTime)
 			// Set the volume
 			if (entry.soundSource)
 			{
-				entry.soundSource->setGain(
-					(float)OptionsDisplay::instance()->getAmbientSoundVolume() / 128.0f);
+				entry.soundSource->setGain(entry.soundType->sound->getGain() * ambientGain);
 			}
 
 			// Check if looped
@@ -174,7 +175,7 @@ void LandscapeSoundManager::simulate(float frameTime)
 				{
 					// Play again
 					entry.timeLeft = entry.soundType->timing->getNextEventTime();
-					entry.soundType->sound->play(entry.soundSource);
+					entry.soundType->sound->play(entry.soundSource, ambientGain);
 				}
 			}
 		}

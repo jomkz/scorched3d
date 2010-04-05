@@ -45,6 +45,7 @@ public:
 	SoundBuffer *getBuffer() { return buffer_; }
 	PlayingSoundSource *getPlayingSource() { return playingSource_; }
 	float getDistance() { return distance_; }
+	float getGain() { return gain_; }
 
 	void setRelative();
 	void setPosition(Vector &position);

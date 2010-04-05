@@ -116,14 +116,16 @@ class LandscapeSoundSound
 {
 public:
 	virtual bool readXML(XMLNode *node) = 0;
-	virtual bool play(VirtualSoundSource *source) = 0;
+	virtual bool play(VirtualSoundSource *source, float ambientGain) = 0;
+	virtual float getGain() = 0;
 };
 
 class LandscapeSoundSoundFile : public LandscapeSoundSound
 {
 public:
 	virtual bool readXML(XMLNode *node);
-	virtual bool play(VirtualSoundSource *source);
+	virtual bool play(VirtualSoundSource *source, float ambientGain);
+	virtual float getGain() { return gain; }
 
 protected:
 	std::vector<std::string> files;
