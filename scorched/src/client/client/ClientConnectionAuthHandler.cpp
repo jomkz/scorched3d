@@ -117,8 +117,16 @@ void ClientConnectionAuthHandler::sendAuth()
 	if (!ClientParams::instance()->getConnectedToServer() &&
 		!ClientParams::instance()->getSaveFile()[0])
 	{
-		noPlayers = ScorchedServer::instance()->getOptionsGame().getNoMaxPlayers() -
-			ScorchedServer::instance()->getTankContainer().getNoOfTanks();
+		int maxComputerAIs = ScorchedServer::instance()->getOptionsGame().getNoMaxPlayers();
+		noPlayers = 0;
+		for (int i=0; i<maxComputerAIs; i++)
+		{
+			const char *playerType = ScorchedServer::instance()->getOptionsGame().getPlayerType(i);
+			if (0 == stricmp(playerType, "Human"))
+			{
+				noPlayers++;
+			}
+		}
 	}
 
 	ComsConnectAuthMessage connectMessage;

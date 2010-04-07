@@ -179,7 +179,7 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 	}
 
 #ifndef S3D_SERVER
-	if (context.getServerMode()) 
+	if (!context.getServerMode()) 
 	{
 		TargetRenderer *renderer = tank->getRenderer();
 		if (renderer)

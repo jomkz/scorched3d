@@ -777,14 +777,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\actions\TankFired.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\common\actions\TankFired.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\common\actions\TankMovement.cpp"
 				>
 			</File>
