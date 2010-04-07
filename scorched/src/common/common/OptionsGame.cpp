@@ -200,7 +200,7 @@ OptionsGame::OptionsGame() :
 	roundScoreTime_(options_, "RoundScoreTime", 
 		"The amount of time to show the end of each round for", 0, 5, 0, 30, 1),
 	idleCycleTime_(options_, "IdleCycleTime", 
-		"The time before a new map is loaded when no one is playing", 0, 900, 60, 18000, 450),
+		"The time before a new map is loaded when no one is playing", 0, 900, 45, 1800, 45),
 	scoreTime_(options_, "ScoreTime", 
 		"The amount of time to show the end of match scores for", 0, 15, 0, 90, 5),
 	roundTime_(options_, "RoundTime", 
