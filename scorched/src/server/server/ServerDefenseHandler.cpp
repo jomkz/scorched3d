@@ -64,7 +64,9 @@ bool ServerDefenseHandler::processMessage(
 	if ((ScorchedServer::instance()->getServerState().getState() != 
 		ServerState::ServerPlayingState) &&
 		(ScorchedServer::instance()->getServerState().getState() != 
-		ServerState::ServerBuyingState))
+		ServerState::ServerBuyingState) &&
+		(ScorchedServer::instance()->getServerState().getState() != 
+		ServerState::ServerTankNewGameState))
 	{
 		Logger::log("ERROR: Player attempted to use defense but in incorrect state");
 		return true;

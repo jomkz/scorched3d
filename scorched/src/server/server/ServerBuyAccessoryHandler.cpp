@@ -58,8 +58,10 @@ bool ServerBuyAccessoryHandler::processMessage(
 	unsigned int playerId = message.getPlayerId();
 
 	// Check we are at the correct time to buy anything
-	if (ScorchedServer::instance()->getServerState().getState() != 
-		ServerState::ServerBuyingState)
+	if ((ScorchedServer::instance()->getServerState().getState() != 
+		ServerState::ServerBuyingState) &&
+		(ScorchedServer::instance()->getServerState().getState() != 
+		ServerState::ServerTankNewGameState))
 	{
 		Logger::log( "ERROR: Player attempted to buy accessory but in incorrect state");
 		return true;

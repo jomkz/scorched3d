@@ -134,6 +134,8 @@ SettingsSubSelectDialog::SettingsSubSelectDialog() :
 	GLWOptionEntry::createEntry(
 		controls_, mainTab_, optionsGame.getShotTimeEntry());	
 	GLWOptionEntry::createEntry(
+		controls_, mainTab_, optionsGame.getRemoveTimeEntry());	
+	GLWOptionEntry::createEntry(
 		controls_, mainTab_, optionsGame.getAIShotTimeEntry());	
 	GLWOptionEntry::createEntry(
 		controls_, mainTab_, optionsGame.getBuyingTimeEntry());	

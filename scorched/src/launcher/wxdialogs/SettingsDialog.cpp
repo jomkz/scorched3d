@@ -129,6 +129,9 @@ void SettingsFrame::createMainPanel(bool server)
 			mainPanel_, sizer, context_.getShotTimeEntry()));	
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
+			mainPanel_, sizer, context_.getRemoveTimeEntry()));	
+	setters_.push_back(
+		OptionEntrySetterUtil::createOtherSetter(
 			mainPanel_, sizer, context_.getAIShotTimeEntry()));	
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(

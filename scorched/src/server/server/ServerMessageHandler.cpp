@@ -182,8 +182,9 @@ void ServerMessageHandler::destroyPlayer(unsigned int tankId, const char *reason
 
 	// Log disconnect
 	Logger::log( 
-		S3D::formatStringBuffer("Player disconnected dest=\"%i\" id=\"%i\" name=\"%s\" reason=\"%s\"", 
+		S3D::formatStringBuffer("Player disconnected dest=\"%i\" ip=\"%s\" id=\"%i\" name=\"%s\" reason=\"%s\"", 
 		tank->getDestinationId(),
+		NetInterface::getIpName(tank->getIpAddress()),
 		tankId, 
 		tank->getCStrName().c_str(),
 		reason));
@@ -214,7 +215,7 @@ void ServerMessageHandler::destroyPlayer(unsigned int tankId, const char *reason
 	}
 
 	// Add tank to tank dead container to remember its stats
-	if (!ScorchedServer::instance()->getOptionsGame().getResidualPlayers())
+	if (ScorchedServer::instance()->getOptionsGame().getResidualPlayers())
 	{
 		if (tank->getState().getTankPlaying() &&
 			tank->getUniqueId()[0] &&

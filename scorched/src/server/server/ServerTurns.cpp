@@ -174,7 +174,7 @@ bool ServerTurns::finished()
 
 bool ServerTurns::internalFinished()
 {
-	return ServerTurns::showScore();
+	return showScore();
 }
 
 bool ServerTurns::showScore()

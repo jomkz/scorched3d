@@ -50,12 +50,7 @@ void ServerStateScore::enterState(ServerStateEnoughPlayers &enoughPlayers)
 	{
 		if (!enoughPlayers.enoughPlayers())
 		{
-			if (ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() >
-				ScorchedServer::instance()->getOptionsGame().getNoRounds() / 2 && 
-				ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() > 2)
-			{
-				overAllWinner_ = true;
-			}
+			overAllWinner_ = true;
 		}
 	}
 

@@ -208,23 +208,25 @@ void ServerConnectAuthHandler::processMessageInternal(
 			playingItor++)
 		{
 			Tank *current = (*playingItor).second;
-
-			if (uniqueId.c_str()[0])
+			if (current->getDestinationId() != 0)
 			{
-				if (0 == strcmp(current->getUniqueId(), uniqueId.c_str()))
+				if (uniqueId.c_str()[0])
 				{
-					ServerCommon::kickDestination(destinationId,
-						"Duplicate uniqueid connection from destination");
-					return;
+					if (0 == strcmp(current->getUniqueId(), uniqueId.c_str()))
+					{
+						ServerCommon::kickDestination(destinationId,
+							"Duplicate uniqueid connection from destination");
+						return;
+					}
 				}
-			}
-			if (SUid.c_str()[0])
-			{
-				if (0 == strcmp(current->getSUI(), SUid.c_str()))
+				if (SUid.c_str()[0])
 				{
-					ServerCommon::kickDestination(destinationId,
-						"Duplicate SUI connection from destination");
-					return;
+					if (0 == strcmp(current->getSUI(), SUid.c_str()))
+					{
+						ServerCommon::kickDestination(destinationId,
+							"Duplicate SUI connection from destination");
+						return;
+					}
 				}
 			}
 		}
