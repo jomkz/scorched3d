@@ -32,8 +32,8 @@ public:
 	virtual ~TankDeadContainer();
 
 	void clearTanks();
-	void addDeadTank(Tank *tank);
-	void getDeadTank(Tank *tank, TankNewMatchSimAction *simAction);
+	void addDeadTank(Tank *tank, const std::string &storedName);
+	void getDeadTank(Tank *tank, TankNewMatchSimAction *simAction, const std::string &storedName);
 
 protected:
 	std::map<std::string, NetBuffer *> deadTanks_;

@@ -37,12 +37,12 @@ TankDeadContainer::~TankDeadContainer()
 
 }
 
-void TankDeadContainer::addDeadTank(Tank *tank)
+void TankDeadContainer::addDeadTank(Tank *tank, const std::string &storedName)
 {
 	// Find/create buffer
 	NetBuffer *buffer = 0;
 	std::map<std::string, NetBuffer *>::iterator finditor =
-		deadTanks_.find(tank->getUniqueId());
+		deadTanks_.find(storedName);
 	if (finditor != deadTanks_.end())
 	{
 		buffer = finditor->second;
@@ -62,14 +62,14 @@ void TankDeadContainer::addDeadTank(Tank *tank)
 	}
 
 	// Save buffer
-	deadTanks_[tank->getUniqueId()] = buffer;
+	deadTanks_[storedName] = buffer;
 }
 
-void TankDeadContainer::getDeadTank(Tank *tank, TankNewMatchSimAction *simAction)
+void TankDeadContainer::getDeadTank(Tank *tank, TankNewMatchSimAction *simAction, const std::string &storedName)
 {
 	// Get the buffer
 	std::map<std::string, NetBuffer *>::iterator finditor =
-		deadTanks_.find(tank->getUniqueId());
+		deadTanks_.find(storedName);
 	if (finditor == deadTanks_.end()) return;
 	NetBuffer *buffer = finditor->second;
 

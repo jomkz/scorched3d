@@ -116,7 +116,17 @@ bool ServerStateBuying::simulate(fixed frameTime)
 
 					TankNewMatchSimAction *tankNewMatchAction = 
 						new TankNewMatchSimAction(tank->getPlayerId());
-					ScorchedServer::instance()->getTankDeadContainer().getDeadTank(tank, tankNewMatchAction);
+					if (tank->getUniqueId()[0])
+					{
+						ScorchedServer::instance()->getTankDeadContainer().getDeadTank(
+							tank, tankNewMatchAction, tank->getUniqueId());
+					}
+					else if (tank->getSUI()[0])
+					{
+						ScorchedServer::instance()->getTankDeadContainer().getDeadTank(
+							tank, tankNewMatchAction, tank->getSUI());
+					}
+					
 					ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankNewMatchAction);
 				}
 			}

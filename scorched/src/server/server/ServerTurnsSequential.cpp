@@ -147,7 +147,7 @@ void ServerTurnsSequential::makeMove(Tank *tank)
 	nextMoveId_++;
 	fixed shotTime = fixed(
 		ScorchedServer::instance()->getOptionsGame().getShotTime());
-	playMove(tank, nextMoveId_, shotTime);
+	playMove(tank, nextMoveId_, shotTime, 0);
 }
 
 void ServerTurnsSequential::internalMoveFinished(ComsPlayedMoveMessage &playedMessage)

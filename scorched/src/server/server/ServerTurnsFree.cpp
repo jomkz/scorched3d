@@ -110,12 +110,20 @@ void ServerTurnsFree::internalSimulate(fixed frameTime)
 				timedPlayers_.find(tank->getPlayerId()) ==
 				timedPlayers_.end())
 			{
+				fixed delayShotTime = 0;
 				if (tank->getDestinationId() != 0)
 				{
 					playingDestinations.insert(tank->getDestinationId());
+				} 
+				else
+				{
+					// Add some thinking time on the AIs shots
+					delayShotTime = fixed(ScorchedServer::instance()->getOptionsGame().getAIShotTime());
+					delayShotTime -= fixed(true, rand() % 50000);
+					if (delayShotTime < 0) delayShotTime = 0;
 				}
 
-				playMove(tank, ++nextMoveId_, fixed(0));
+				playMove(tank, ++nextMoveId_, fixed(0), delayShotTime);
 
 				waitingPlayers_.erase(waitingItor);
 				waitingPlayers_.push_back(playerId);

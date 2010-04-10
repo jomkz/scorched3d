@@ -215,6 +215,8 @@ SettingsSubSelectDialog::SettingsSubSelectDialog() :
 		controls_, weaponsTab_, optionsGame.getMovementRestrictionEntry());
 	GLWOptionEntry::createEntry(
 		controls_, weaponsTab_, optionsGame.getGiveAllWeaponsEntry());
+	GLWOptionEntry::createEntry(
+		controls_, weaponsTab_, optionsGame.getResidualPlayersEntry());
 	weaponsTab_->addWidget(new GLWSpacer(0.0f, 20.0f));
 
 	GLWOptionEntry::createEntry(

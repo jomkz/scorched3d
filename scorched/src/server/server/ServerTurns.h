@@ -92,7 +92,7 @@ protected:
 	std::map<unsigned int, WaitingPlayer*> waitingPlayers_;
 
 	bool showScore();
-	void playMove(Tank *tank, unsigned int moveId, fixed shotTime);
+	void playMove(Tank *tank, unsigned int moveId, fixed maximumShotTime, fixed delayStartMoveTime);
 	void playMoveFinished(Tank *tank);
 	void playShots(std::list<ComsPlayedMoveMessage *> messages, unsigned int moveId, bool timeOutPlayers);
 	void shotsStarted(fixed simulationTime, SimAction *action);

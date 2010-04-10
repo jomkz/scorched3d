@@ -259,23 +259,14 @@ bool ServerTurns::showScore()
 	return false;
 }
 
-void ServerTurns::playMove(Tank *tank, unsigned int moveId, fixed shotTime)
+void ServerTurns::playMove(Tank *tank, unsigned int moveId, fixed maximumShotTime, fixed delayStartMoveTime)
 {
-	// Figure out how long shots should be allowed to take
-	fixed delayShotTime = 0;
-	if (tank->getDestinationId() == 0)
+	// If there is a maximum shot time make sure the AIs dont think longer
+	// than the allowed time
+	if (maximumShotTime > 0)
 	{
-		// Add some thinking time on the AIs shots
-		delayShotTime = fixed(ScorchedServer::instance()->getOptionsGame().getAIShotTime());
-		delayShotTime += fixed(true, (rand() % 60000) - 30000);
-
-		// If there is a maximum shot time make sure the AIs dont think longer
-		// than the allowed time
-		if (shotTime > 0)
-		{
-			if (delayShotTime > shotTime - 5) delayShotTime = shotTime - 5;
-			if (delayShotTime < 0) delayShotTime = 0;
-		}
+		if (delayStartMoveTime > maximumShotTime - 5) delayStartMoveTime = maximumShotTime - 5;
+		if (delayStartMoveTime < 0) delayStartMoveTime = 0;
 	}
 
 	// Get the ping
@@ -287,21 +278,21 @@ void ServerTurns::playMove(Tank *tank, unsigned int moveId, fixed shotTime)
 	// Create the move action
 	tank->getState().setMoveId(moveId);
 	TankStartMoveSimAction *tankSimAction = new TankStartMoveSimAction(
-		tank->getPlayerId(), tank->getState().getMoveId(), shotTime, false, ping);
+		tank->getPlayerId(), tank->getState().getMoveId(), maximumShotTime, false, ping);
 
 	// If shotTime > 0 then add to the list of playing players so they can be timed out
 	SimulatorI *callback = 0;
-	if (shotTime > 0)
+	if (maximumShotTime > 0)
 	{
-		PlayingPlayer *playingPlayer = new PlayingPlayer(moveId, shotTime);
+		PlayingPlayer *playingPlayer = new PlayingPlayer(moveId, maximumShotTime);
 		playingPlayers_[tank->getPlayerId()] = playingPlayer;
 		callback = moveStarted_;
 	}
 
 	// Delay players that need delayed
-	if (delayShotTime > 0)
+	if (delayStartMoveTime > 0)
 	{
-		WaitingPlayer *waitingPlayer = new WaitingPlayer(delayShotTime, tankSimAction, callback);
+		WaitingPlayer *waitingPlayer = new WaitingPlayer(delayStartMoveTime, tankSimAction, callback);
 		waitingPlayers_[tank->getPlayerId()] = waitingPlayer;
 	}
 	else

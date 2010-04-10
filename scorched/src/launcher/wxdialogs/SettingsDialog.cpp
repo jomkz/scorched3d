@@ -265,6 +265,9 @@ void SettingsFrame::createWeaponsPanel()
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
 			weaponsPanel_, sizer, context_.getGiveAllWeaponsEntry()));
+	setters_.push_back(
+		OptionEntrySetterUtil::createOtherSetter(
+			weaponsPanel_, sizer, context_.getResidualPlayersEntry()));
 
 	book_->AddPage(weaponsPanel_, wxT("Weapons"));
 	weaponsPanel_->SetAutoLayout(TRUE);

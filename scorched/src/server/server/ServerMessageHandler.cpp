@@ -195,6 +195,23 @@ void ServerMessageHandler::destroyPlayer(unsigned int tankId, const char *reason
 			tank->getTargetName(), reason),
 		true);
 
+	// Add tank to tank dead container to remember its stats
+	if (ScorchedServer::instance()->getOptionsGame().getResidualPlayers())
+	{
+		if (tank->getState().getTankPlaying() && 
+			tank->getDestinationId() != 0) 
+		{
+			if (tank->getUniqueId()[0])
+			{
+				ScorchedServer::instance()->getTankDeadContainer().addDeadTank(tank, tank->getUniqueId());
+			}
+			else if (tank->getSUI()[0])
+			{
+				ScorchedServer::instance()->getTankDeadContainer().addDeadTank(tank, tank->getSUI());
+			}		
+		}
+	}
+
 	// The time to actualy remove the tank after
 	fixed removalTime = 0;
 
@@ -212,17 +229,6 @@ void ServerMessageHandler::destroyPlayer(unsigned int tankId, const char *reason
 	{
 		TankAI *ai = new TankAINone(tank->getPlayerId());
 		tank->setTankAI(ai); // Will automaticaly set the destinationId to 0
-	}
-
-	// Add tank to tank dead container to remember its stats
-	if (ScorchedServer::instance()->getOptionsGame().getResidualPlayers())
-	{
-		if (tank->getState().getTankPlaying() &&
-			tank->getUniqueId()[0] &&
-			tank->getDestinationId() != 0)
-		{
-			ScorchedServer::instance()->getTankDeadContainer().addDeadTank(tank);
-		}
 	}
 
 	// Log the removal
