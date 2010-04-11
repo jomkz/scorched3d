@@ -20,6 +20,7 @@
 
 #include <server/ServerStateNewGame.h>
 #include <server/ScorchedServer.h>
+#include <server/ServerState.h>
 #include <server/ServerCommon.h>
 #include <server/ServerSimulator.h>
 #include <server/ServerConsoleProgressCounter.h>
@@ -114,6 +115,10 @@ void ServerStateNewGame::newGameState()
 		ScorchedServer::instance()->getContext(), defn);
 
 	// Set all options (wind etc..)
+	if (ScorchedServer::instance()->getServerState().getState() == ServerState::ServerStartupState)
+	{
+		ScorchedServer::instance()->getContext().getOptionsTransient().reset();
+	}
 	ScorchedServer::instance()->getContext().getOptionsTransient().newGame();
 
 	// Generate the new level
