@@ -352,12 +352,19 @@ void ShowScoreSimAction::scoreOverallWinner(ScorchedContext &context)
 					names);
 				ChannelManager::showText(context, text);
 			}
-			else
+			else if (winners.size() < 3)
 			{
 				ChannelText text("banner",
 					"PLAYERS_OVERALL_WINNERS",
 					"{0} are the overall winners!", 
 					names);
+				ChannelManager::showText(context, text);
+			}
+			else
+			{
+				ChannelText text("banner", 
+					"GAME_DRAWN",
+					"The game is a draw!");
 				ChannelManager::showText(context, text);
 			}
 		}
