@@ -21,7 +21,6 @@
 #include <GLW/GLWTankModel.h>
 #include <client/ScorchedClient.h>
 #include <graph/MainCamera.h>
-#include <graph/ModelRendererMesh.h>
 #include <client/ClientState.h>
 #include <tankgraph/TargetRendererImplTank.h>
 #include <tank/TankContainer.h>
@@ -87,7 +86,7 @@ void GLWTankModel::draw()
 		glScalef(w_ / 4.0f, w_ / 4.0f, w_ / 4.0f);
 		GLState tankState(GLState::TEXTURE_OFF | GLState::DEPTH_ON); // For no tank skins
 		Vector position;
-		TankMesh *mesh = renderer->getMesh();
+		ModelRendererTank *mesh = renderer->getMesh();
 		if (mesh)
 		{
 			Vector4 rotation(1.0f, 0.0f, 0.0f, 0.0f);

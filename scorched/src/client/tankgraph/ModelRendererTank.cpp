@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <math.h>
-#include <tankgraph/TankMesh.h>
+#include <tankgraph/ModelRendererTank.h>
 #include <GLEXT/GLState.h>
 #include <graph/ModelRenderer.h>
 #include <graph/OptionsDisplay.h>
@@ -28,23 +28,25 @@
 #include <graph/ModelRendererSimulator.h>
 #include <common/Defines.h>
 
-TankMesh::TankMesh(Model &tank) : 
-	ModelRendererMesh(&tank),
+ModelRendererTank::ModelRendererTank(Model *model) : 
+	model_(model),
+	normalRenderer_(model),
+	gunRenderer_(model), turretRenderer_(model),
 	scale_(1.0f)
 {
-	setupTankMesh();
+	setupModelRendererTank();
 }
 
-TankMesh::~TankMesh()
+ModelRendererTank::~ModelRendererTank()
 {
 }
 
-int TankMesh::getNoTris()
+int ModelRendererTank::getNoTris()
 {
 	return (model_?model_->getNumberTriangles():0);
 }
 
-void TankMesh::setupTankMesh()
+void ModelRendererTank::setupModelRendererTank()
 {
 	// Make sure the tank is not too large
 	const float maxSize = 3.0f;
@@ -80,7 +82,7 @@ void TankMesh::setupTankMesh()
 				turretCenter_ += (mesh->getMax() + mesh->getMin()) / 2;
 			}
 
-			meshTypes_.push_back(eTurret);
+			turretMeshes_.push_back(mesh);
 		}
 		else if (strstr(name, "\"Gun") == name ||
 			strstr(name, "\"gun") == name)
@@ -91,11 +93,11 @@ void TankMesh::setupTankMesh()
 				gunPivot = mesh;
 			}
 
-			meshTypes_.push_back(eGun);
+			gunMeshes_.push_back(mesh);
 		}
 		else
 		{
-			meshTypes_.push_back(eNone);
+			normalMeshes_.push_back(mesh);
 		}
 	}
 
@@ -117,9 +119,15 @@ void TankMesh::setupTankMesh()
 		gunCenter = (gunPivot->getMax() + gunPivot->getMin()) / 2;
 	}
 	gunOffset_ = gunCenter - turretCenter_;
+
+	FixedVector vertexTranslation = -turretCenter_;
+	normalRenderer_.setVertexTranslation(vertexTranslation);
+	turretRenderer_.setVertexTranslation(vertexTranslation);
+	vertexTranslation -= gunOffset_;
+	gunRenderer_.setVertexTranslation(vertexTranslation);
 }
 
-void TankMesh::draw(float frame, float *rotMatrix, Vector &position, 
+void ModelRendererTank::draw(float frame, float *rotMatrix, Vector &position, 
 					float fireOffset, float rotXY, float rotXZ,
 					bool absCenter, float scale, float fade, bool setState)
 {
@@ -132,32 +140,31 @@ void TankMesh::draw(float frame, float *rotMatrix, Vector &position,
 		glMultMatrixf(rotMatrix);
 		glScalef(scale * scale_, scale * scale_, scale * scale_);
 
-		if (absCenter) ModelRendererMesh::draw(frame, 0.0f, fade, setState);
-		else ModelRendererMesh::drawBottomAligned(frame, 0.0f, fade, setState);
+		if (absCenter) draw(frame, 0.0f, fade, setState);
+		else drawBottomAligned(frame, 0.0f, fade, setState);
 	glPopMatrix();
 }
 
-void TankMesh::drawMesh(unsigned int m, Mesh *mesh, float currentFrame, bool setState)
+void ModelRendererTank::drawBottomAligned(float currentFrame, 
+	float distance, float fade, bool setState)
 {
 	glPushMatrix();
-		MeshType type = meshTypes_[m];
-		vertexTranslation_ = -turretCenter_;
-
-		if (type == eTurret || type == eGun)
-		{
-			glRotatef(rotXY_, 0.0f, 0.0f, 1.0f);
-			if (type == eGun)
-			{
-				glTranslatef(gunOffset_[0].asFloat(), gunOffset_[1].asFloat(), gunOffset_[2].asFloat());
-				vertexTranslation_ -= gunOffset_;
-				glRotatef(rotXZ_, 1.0f, 0.0f, 0.0f);
-
-				if (fireOffSet_ != 0.0f) glTranslatef(0.0f, fireOffSet_, 0.0f);
-			}
-		}
-
-		ModelRendererMesh::drawMesh(m, mesh, currentFrame, setState);
+		glTranslatef(0.0f, 0.0f, -model_->getMin()[2].asFloat());
+		draw(currentFrame, distance, fade, setState);
 	glPopMatrix();
+}
 
-	vertexTranslation_.zero();
+void ModelRendererTank::draw(float currentFrame, 
+	float distance, float fade, bool setState)
+{
+	Mesh *lastMesh = 0;
+	lastMesh = normalRenderer_.drawModel(currentFrame, distance, fade, setState, normalMeshes_, lastMesh);
+
+	glRotatef(rotXY_, 0.0f, 0.0f, 1.0f);
+	lastMesh = turretRenderer_.drawModel(currentFrame, distance, fade, setState, turretMeshes_, lastMesh);
+
+	glTranslatef(gunOffset_[0].asFloat(), gunOffset_[1].asFloat(), gunOffset_[2].asFloat());
+	glRotatef(rotXZ_, 1.0f, 0.0f, 0.0f);
+	if (fireOffSet_ != 0.0f) glTranslatef(0.0f, fireOffSet_, 0.0f);
+	lastMesh = gunRenderer_.drawModel(currentFrame, distance, fade, setState, gunMeshes_, lastMesh);
 }

@@ -53,6 +53,9 @@ public:
 	const char *getATextureName() 
 		{ return aTextureName_.c_str(); }
 
+	void *getTexture() { return texture_; }
+	void setTexture(void *texture) { texture_ = texture; }
+
 	std::vector<Face *> &getFaces() 
 		{ return faces_; }
 	Face *getFace(int faceIndex)
@@ -63,7 +66,6 @@ public:
 	Vertex *getVertex(int vertexIndex)
 		{ DIALOG_ASSERT(vertexIndex < (int) vertexes_.size()); 
 		return vertexes_[vertexIndex]; }
-	bool &getReferencesBones() { return referencesBones_; }
 
 	// Modification
 	void move(FixedVector &movement);
@@ -82,11 +84,11 @@ public:
 		faces_[faceIndex]->tcoord[coordIndex] = coord; }
 
 protected:
+	void *texture_;
 	std::string name_;
 	std::string textureName_, aTextureName_;
 	std::vector<Face *> faces_;
 	std::vector<Vertex *> vertexes_;
-	bool referencesBones_;
 	bool sphereMap_;
 	fixed shininessColor_;
 	FixedVector4 diffuseColor_, specularColor_;

@@ -142,13 +142,13 @@ void GLWWindView::drawDisplay()
 		// Draw the minature landscape
 		glScalef(scale2, scale2, scale2);
 		glPushMatrix();
-			if (listNo_) glCallList(listNo_);
-			else
+			if (!listNo_)
 			{
-				glNewList(listNo_ = glGenLists(1), GL_COMPILE_AND_EXECUTE);
+				glNewList(listNo_ = glGenLists(1), GL_COMPILE);
 					drawScene();
 				glEndList();
 			}
+			glCallList(listNo_);
 		glPopMatrix();
 
 		// Draw the wind arrow for direction

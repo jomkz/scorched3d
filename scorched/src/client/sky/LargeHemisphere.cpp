@@ -52,7 +52,7 @@ void LargeHemisphere::draw(float radius, float radius2,
 			for (int j=0; j<10; j+=2)
 			{
 				Entry entry;
-				glNewList(entry.listNo_ = glGenLists(1), GL_COMPILE_AND_EXECUTE);
+				glNewList(entry.listNo_ = glGenLists(1), GL_COMPILE);
 					Hemisphere::draw(radius, radius2, 10, 10, i, j, i+2, j+2, 
 						false, flags);
 				glEndList();
@@ -60,7 +60,7 @@ void LargeHemisphere::draw(float radius, float radius2,
 			}
 		}
 	}
-	else
+
 	{
 		std::list<Entry>::iterator itor;
 		for (itor = entries_.begin();
@@ -85,7 +85,7 @@ void LargeHemisphere::drawColored(float radius, float radius2,
 			for (int j=0; j<10; j+=2)
 			{
 				Entry entry;
-				glNewList(entry.listNo_ = glGenLists(1), GL_COMPILE_AND_EXECUTE);
+				glNewList(entry.listNo_ = glGenLists(1), GL_COMPILE);
 					Hemisphere::drawColored(radius, radius2, 10, 10, i, j, i+2, j+2, 
 						false, colors, sunDir, daytime, horizonGlow);
 				glEndList();
@@ -93,7 +93,8 @@ void LargeHemisphere::drawColored(float radius, float radius2,
 			}
 		}
 	}
-	else
+
+
 	{
 		std::list<Entry>::iterator itor;
 		for (itor = entries_.begin();

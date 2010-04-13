@@ -26,7 +26,7 @@
 #include <GLW/GLWDropDownText.h>
 #include <GLW/GLWToolTip.h>
 #include <tank/TankModel.h>
-#include <tankgraph/TankMesh.h>
+#include <tankgraph/ModelRendererTank.h>
 #include <vector>
 
 class GLWTankViewer : public GLWidget,
@@ -58,7 +58,7 @@ protected:
 	struct ModelEntry
 	{
 		TankModel *model;
-		TankMesh *mesh;
+		ModelRendererTank *mesh;
 	};
 
 	GLWDropDownText catagoryChoice_;

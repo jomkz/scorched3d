@@ -35,9 +35,10 @@ public:
 	std::vector<Mesh *> &getMeshes() { return meshes_; }
 	std::vector<BoneType *> &getBaseBoneTypes() { return baseBoneTypes_; }
 	std::vector<Bone *> &getBones() { return bones_; }
-	int getNumberTriangles();
+	int getNumberTriangles() { return noTriangles_; }
 	int getStartFrame() { return startFrame_; }
 	int getTotalFrames() { return totalFrames_; }
+	bool getTexturesUsed() { return texturesUsed_; }
 
 	// Used during building
 	void setup();
@@ -45,13 +46,15 @@ public:
 	void addBone(Bone *bone) { bones_.push_back(bone); }
 	void setStartFrame(int frame) { startFrame_ = frame; }
 	void setTotalFrames(int frames) { totalFrames_ = frames; }
-	
+
 protected:
+	bool texturesUsed_;
 	std::vector<Mesh *> meshes_;
 	std::vector<Bone *> bones_;
 	std::vector<BoneType *> baseBoneTypes_;
 	FixedVector min_, max_;
 
+	int noTriangles_;
 	int startFrame_;
 	int totalFrames_;
 

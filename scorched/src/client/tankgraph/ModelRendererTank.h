@@ -18,19 +18,23 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_TANKMESH_H__CB857C65_A22F_4FBC_9344_EFF22F8A4EEA__INCLUDED_)
-#define AFX_TANKMESH_H__CB857C65_A22F_4FBC_9344_EFF22F8A4EEA__INCLUDED_
+#if !defined(AFX_ModelRendererTank_H__CB857C65_A22F_4FBC_9344_EFF22F8A4EEA__INCLUDED_)
+#define AFX_ModelRendererTank_H__CB857C65_A22F_4FBC_9344_EFF22F8A4EEA__INCLUDED_
 
-#include <common/Vector4.h>
-#include <common/FixedVector.h>
 #include <graph/ModelRendererMesh.h>
-#include <list>
 
-class TankMesh : public ModelRendererMesh
+class ModelRendererTank : public ModelRenderer
 {
 public:
-	TankMesh(Model &tank);
-	virtual ~TankMesh();
+	ModelRendererTank(Model *tank);
+	virtual ~ModelRendererTank();
+
+	virtual void draw(float currentFrame, 
+		float distance, float fade, bool setState);
+	virtual void drawBottomAligned(float currentFrame, 
+		float distance, float fade, bool setState);
+
+	virtual Model *getModel() { return model_; }
 
 	void draw(float frame, float *rotMatrix, Vector &position, 
 		float fireOffSet, float rotXY, float rotXZ,
@@ -42,23 +46,20 @@ public:
 	FixedVector &getTurretCenter() { return turretCenter_; }
 	float getScale() { return scale_; }
 protected:
-	enum MeshType
-	{
-		eNone,
-		eTurret,
-		eGun
-	};
-
+	Model *model_;
 	float fireOffSet_;
 	float scale_;
 	float rotXY_;
 	float rotXZ_;
 	FixedVector gunOffset_;
 	FixedVector turretCenter_;
-	std::vector<MeshType> meshTypes_;
 
-	virtual void drawMesh(unsigned int m, Mesh *mesh, float currentFrame, bool setState);
-	void setupTankMesh();
+	void setupModelRendererTank();
+
+	std::vector<Mesh *> normalMeshes_;
+	std::vector<Mesh *> turretMeshes_, gunMeshes_;
+	ModelRendererMesh normalRenderer_;
+	ModelRendererMesh turretRenderer_, gunRenderer_;
 };
 
-#endif // !defined(AFX_TANKMESH_H__CB857C65_A22F_4FBC_9344_EFF22F8A4EEA__INCLUDED_)
+#endif // !defined(AFX_ModelRendererTank_H__CB857C65_A22F_4FBC_9344_EFF22F8A4EEA__INCLUDED_)

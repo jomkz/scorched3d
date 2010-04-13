@@ -23,7 +23,8 @@
 #include <common/Defines.h>
 
 Mesh::Mesh(const char *name) : name_(name),
-	referencesBones_(false), sphereMap_(false)
+	sphereMap_(false),
+	texture_(0)
 {
 }
 

@@ -30,8 +30,7 @@
 #include <target/TargetLife.h>
 #include <target/TargetShield.h>
 #include <target/TargetState.h>
-#include <tankgraph/TankMesh.h>
-#include <tankgraph/TankMeshStore.h>
+#include <tankgraph/ModelRendererTankStore.h>
 #include <landscape/Landscape.h>
 #include <landscape/ShadowMap.h>
 #include <landscape/Smoke.h>
@@ -94,11 +93,11 @@ TankModel *TargetRendererImplTank::getModel()
 	return tank_->getModelContainer().getTankModel();
 }
 
-TankMesh *TargetRendererImplTank::getMesh()
+ModelRendererTank *TargetRendererImplTank::getMesh()
 {
 	if (!mesh_)
 	{
-		mesh_ = TankMeshStore::instance()->getMesh(getModel()->getTankModelID());
+		mesh_ = ModelRendererTankStore::instance()->getMesh(getModel()->getTankModelID());
 	}
 	return mesh_;
 }
@@ -141,7 +140,7 @@ void TargetRendererImplTank::render(float distance)
 		}
 
 		// Draw the tank model
-		TankMesh *mesh = getMesh();
+		ModelRendererTank *mesh = getMesh();
 		if (mesh)
 		{
 			float modelSize = float(OptionsDisplay::instance()->getTankModelSize()) / 100.0f;
@@ -163,7 +162,7 @@ void TargetRendererImplTank::render(float distance)
 
 void TargetRendererImplTank::renderShadow(float distance)
 {
-	TankMesh *mesh = getMesh();
+	ModelRendererTank *mesh = getMesh();
 	if (mesh)
 	{
 		float modelSize = float(OptionsDisplay::instance()->getTankModelSize()) / 100.0f;

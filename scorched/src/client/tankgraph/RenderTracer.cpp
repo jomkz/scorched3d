@@ -109,14 +109,11 @@ void RenderTracer::drawTracerEnd(Vector &position)
 		glTranslatef(position[0], position[1], position[2]);
 		if (!listNo_)
 		{
-			glNewList(listNo_ = glGenLists(1), GL_COMPILE_AND_EXECUTE);
+			glNewList(listNo_ = glGenLists(1), GL_COMPILE);
 				gluSphere(obj_, 0.5f, 4, 2);
 			glEndList();
 		}
-		else
-		{
-			glCallList(listNo_);
-		}
+		glCallList(listNo_);
 	glPopMatrix();
 }
 

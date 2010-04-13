@@ -23,7 +23,7 @@
 
 #include <tank/Tank.h>
 #include <tank/TankModel.h>
-#include <tankgraph/TankMesh.h>
+#include <tankgraph/ModelRendererTank.h>
 #include <tankgraph/TargetRendererImpl.h>
 #include <GLW/GLWTankTip.h>
 #include <GLEXT/GLState.h>
@@ -86,12 +86,12 @@ public:
 
 	void resetModel() { mesh_ = 0; }
 	TankModel *getModel();
-	TankMesh *getMesh();
+	ModelRendererTank *getMesh();
 	GLWTankTips *getTips() { return &tankTips_; }
 
 protected:
 	Tank *tank_;
-	TankMesh *mesh_;
+	ModelRendererTank *mesh_;
 	GLWTankTips tankTips_;
 	float fireOffSet_;
 	float shieldHit_;

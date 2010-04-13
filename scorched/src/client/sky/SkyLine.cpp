@@ -41,16 +41,14 @@ void SkyLine::clear()
 
 void SkyLine::draw(float radius, float radius2, float height)
 {
-	if (listNo_)
+	if (!listNo_)
 	{
-		glCallList(listNo_);
-	}
-	else
-	{
-		glNewList(listNo_ = glGenLists(1), GL_COMPILE_AND_EXECUTE);
+		glNewList(listNo_ = glGenLists(1), GL_COMPILE);
 			actualDraw(radius, radius2, height);
 		glEndList();
 	}
+
+	glCallList(listNo_);
 }
 
 void SkyLine::actualDraw(float radius, float radius2, float height)

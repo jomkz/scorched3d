@@ -38,30 +38,36 @@ public:
 
 	virtual Model *getModel() { return model_; }
 
+	virtual Mesh *drawModel(float currentFrame, 
+		float distance, float fade, bool setState, 
+		std::vector<Mesh *> &meshes, Mesh *lastMesh);
+
+	void setVertexTranslation(FixedVector &translation) { vertexTranslation_ = translation; }
+
 protected:
 	struct MeshFrameInfo
 	{
-		MeshFrameInfo() : displayList(0), lastCachedState(0) {}
+		MeshFrameInfo() : displayList(0) {}
 
 		unsigned int displayList;
-		unsigned int lastCachedState;
-	};
-
-	struct MeshInfo
-	{
-		MeshInfo() : texture(0) {}
-
-		GLTexture *texture;
-		std::vector<MeshFrameInfo> frameInfos_;
 	};
 
 	Model *model_;
 	std::vector<BoneType *> boneTypes_;
-	std::vector<MeshInfo> meshInfos_;
+	std::vector<MeshFrameInfo> frameInfos_;
 	FixedVector vertexTranslation_;
 
-	virtual void drawMesh(unsigned int m, Mesh *mesh, float currentFrame, bool setState);
-	virtual void drawVerts(unsigned int m, Mesh *mesh, bool vertexLighting, int frame);
+	struct TriangleInfo
+	{
+		Vector position;
+		Vector normal;
+		Vector color;
+		float texCoordx, texCoordy;
+	};
+
+	virtual void drawMesh(Mesh *mesh, Mesh *lastMesh,
+		int frame, bool useTextures, bool vertexLighting);
+	virtual void drawVerts(Mesh *mesh, bool vertexLighting, int frame);
 	virtual void setup();
 };
 

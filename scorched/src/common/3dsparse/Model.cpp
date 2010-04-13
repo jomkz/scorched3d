@@ -22,7 +22,10 @@
 #include <3dsparse/ModelMaths.h>
 #include <common/Defines.h>
 
-Model::Model() : startFrame_(0), totalFrames_(0)
+Model::Model() : 
+	startFrame_(0), totalFrames_(0), 
+	noTriangles_(0),
+	texturesUsed_(false)
 {
 }
 
@@ -79,25 +82,31 @@ void Model::centre()
 	max_ += centre;
 }
 
-int Model::getNumberTriangles()
+void Model::setup()
 {
-	int tris = 0;
+	centre();
+	setupBones();
+	setupColor();
+
+	unsigned int texturesUsed = 0;
 	std::vector<Mesh *>::iterator itor;
 	for (itor = meshes_.begin();
 		itor != meshes_.end();
 		itor++)
 	{
 		Mesh *mesh = *itor;
-		tris += (int) mesh->getFaces().size();
+		if (mesh->getTextureName()[0]) 
+		{
+			texturesUsed++;
+		}
+		else if (strstr("pivot", mesh->getName()) == 0)
+		{
+			texturesUsed++;
+		}
+		noTriangles_ += (int) mesh->getFaces().size();
 	}
-	return tris;
-}
-
-void Model::setup()
-{
-	centre();
-	setupBones();
-	setupColor();
+	DIALOG_ASSERT(texturesUsed == meshes_.size());
+	texturesUsed_ = (texturesUsed > 0);
 }
 
 void Model::setupColor()
@@ -187,6 +196,7 @@ void Model::setupBones()
 	}
 
 	// Move vertexes to align with the bones
+	bool referenceBones = false;
 	for (unsigned int i=0; i<meshes_.size(); i++)
 	{
 		Mesh *mesh = meshes_[i];
@@ -198,7 +208,7 @@ void Model::setupBones()
 				DIALOG_ASSERT(vertex->boneIndex < int(bones_.size()));
 
 				BoneType *type = baseBoneTypes_[vertex->boneIndex];
-				mesh->getReferencesBones() = true;
+				referenceBones = true;
 
 				// Note: Translation of MS to S3D coords
 
@@ -221,4 +231,6 @@ void Model::setupBones()
 			}
 		}
 	}
+
+	if (!referenceBones) totalFrames_ = 1;
 }

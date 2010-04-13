@@ -20,11 +20,10 @@
 
 #include <GLW/GLWTankViewer.h>
 #include <tank/TankModelStore.h>
-#include <tankgraph/TankMeshStore.h>
+#include <tankgraph/ModelRendererTankStore.h>
 #include <3dsparse/ModelStore.h>
 #include <client/ScorchedClient.h>
 #include <graph/OptionsDisplay.h>
-#include <graph/ModelRendererMesh.h>
 #include <common/DefinesString.h>
 #include <lang/LangResource.h>
 #include <GLW/GLWFont.h>
@@ -388,10 +387,10 @@ void GLWTankViewer::drawCaption(int pos)
 }
 void GLWTankViewer::drawItem(int pos, bool selected)
 {
-	TankMesh *mesh = models_[pos].mesh;
+	ModelRendererTank *mesh = models_[pos].mesh;
 	if (!mesh)
 	{
-		mesh = TankMeshStore::instance()->getMesh(
+		mesh = ModelRendererTankStore::instance()->getMesh(
 			models_[pos].model->getTankModelID());
 		models_[pos].mesh = mesh;
 	}

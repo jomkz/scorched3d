@@ -4673,6 +4673,22 @@
 				>
 			</File>
 			<File
+				RelativePath="..\tankgraph\ModelRendererTank.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\tankgraph\ModelRendererTank.h"
+				>
+			</File>
+			<File
+				RelativePath="..\tankgraph\ModelRendererTankStore.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\tankgraph\ModelRendererTankStore.h"
+				>
+			</File>
+			<File
 				RelativePath="..\tankgraph\RenderGeoms.cpp"
 				>
 			</File>
@@ -4718,22 +4734,6 @@
 			</File>
 			<File
 				RelativePath="..\tankgraph\TankMenus.h"
-				>
-			</File>
-			<File
-				RelativePath="..\tankgraph\TankMesh.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\tankgraph\TankMesh.h"
-				>
-			</File>
-			<File
-				RelativePath="..\tankgraph\TankMeshStore.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\tankgraph\TankMeshStore.h"
 				>
 			</File>
 			<File

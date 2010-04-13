@@ -41,19 +41,13 @@ ModelRendererMesh::~ModelRendererMesh()
 		boneTypes_.pop_back();
 		delete type;
 	}
-	while (!meshInfos_.empty())
+	while (!frameInfos_.empty())
 	{
-		MeshInfo info = meshInfos_.back();
-		meshInfos_.pop_back();
-
-		while (!info.frameInfos_.empty())
+		MeshFrameInfo frameInfo = frameInfos_.back();
+		frameInfos_.pop_back();
+		if (frameInfo.displayList != 0)
 		{
-			MeshFrameInfo frameInfo = info.frameInfos_.back();
-			info.frameInfos_.pop_back();
-			if (frameInfo.displayList != 0)
-			{
-				glDeleteLists(frameInfo.displayList, 1);
-			}
+			glDeleteLists(frameInfo.displayList, 1);
 		}
 	}
 }
@@ -69,16 +63,22 @@ void ModelRendererMesh::setup()
 		boneTypes_.push_back(new BoneType(*(*itor)));
 	}
 
-	MeshInfo info;
 	MeshFrameInfo frameInfo;
 	for (int f=0; f<=model_->getTotalFrames(); f++)
 	{
-		info.frameInfos_.push_back(frameInfo);
+		frameInfos_.push_back(frameInfo);
 	}
 	
 	for (unsigned int m=0; m<model_->getMeshes().size(); m++)
 	{
-		meshInfos_.push_back(info);
+		Mesh *mesh = model_->getMeshes()[m];
+		if (mesh->getTextureName()[0])
+		{
+			GLTexture *texture =
+				TextureStore::instance()->loadTexture(
+					mesh->getTextureName(), mesh->getATextureName());
+			mesh->setTexture(texture);
+		}
 	}
 }
 
@@ -94,147 +94,176 @@ void ModelRendererMesh::drawBottomAligned(float currentFrame,
 void ModelRendererMesh::draw(float currentFrame, 
 	float distance, float fade, bool setState)
 {
-	GLGlobalState globalState(GLState::BLEND_ON | GLState::ALPHATEST_ON);
-
-	// Set transparency on
-	// Fade the model (make it transparent)
-	bool useBlendColor = (GLStateExtension::hasBlendColor() && fade < 1.0f);
-	if (useBlendColor)
-	{
-		fade = MIN(1.0f, MAX(fade, 0.2f));
-		glBlendColorEXT(0.0f, 0.0f, 0.0f, fade);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA_EXT);
-	}
-
-	// Draw the model
-	for (unsigned int m=0; m<model_->getMeshes().size(); m++)
-	{
-		Mesh *mesh = model_->getMeshes()[m];
-		drawMesh(m, mesh, currentFrame, setState);
-	}
-
-	// Turn off fading
-	if (useBlendColor)
-	{
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	}
+	drawModel(currentFrame, distance, fade, setState, model_->getMeshes(), 0);
 }
 
-void ModelRendererMesh::drawMesh(unsigned int m, Mesh *mesh, float currentFrame, bool setState)
+Mesh *ModelRendererMesh::drawModel(float currentFrame, 
+	float distance, float fade, bool setState, 
+	std::vector<Mesh *> &meshes, Mesh *lastMesh)
 {
-	MeshInfo &meshInfo = meshInfos_[m];
+	GLGlobalState globalState(GLState::BLEND_ON | GLState::ALPHATEST_ON);
 
+	// Get the current frame for the animation
+	// If we have no bones, when we only have one frame
+	// Make sure the frame falls within the accepted bounds
+	int frame = model_->getStartFrame();
+	if (model_->getTotalFrames() > 1)
+	{
+		frame = ((unsigned int)(currentFrame)) % model_->getTotalFrames();
+		if (frame < 0) frame = 0;
+	}
+
+	// Check settings
+	bool useTextures = (!OptionsDisplay::instance()->getNoSkins() && model_->getTexturesUsed());
 	bool vertexLighting = OptionsDisplay::instance()->getNoModelLighting();
-	bool useTextures =
-		(!OptionsDisplay::instance()->getNoSkins() &&
-		mesh->getTextureName()[0]);
-	unsigned state = 0;
-	
+
+	// Draw the model
+	DIALOG_ASSERT(frame >= 0 && frame < (int) frameInfos_.size());
+	unsigned int displayList = frameInfos_[frame].displayList;
+	if (!displayList)
+	{
+		// Move the bones into position
+		for (unsigned int b=0; b<boneTypes_.size(); b++)
+		{
+			Bone *bone = model_->getBones()[b];
+			BoneType *type = boneTypes_[b];
+
+			unsigned int posKeys = (unsigned int) bone->getPositionKeys().size();
+			unsigned int rotKeys = (unsigned int) bone->getRotationKeys().size();
+			if (posKeys == 0 && rotKeys == 0)
+			{
+				memcpy(type->final_, type->absolute_, sizeof(BoneMatrixType));
+				continue;
+			}
+
+			BoneMatrixType m;
+			bone->getRotationAtTime(fixed(frame), m);
+					
+			FixedVector &pos = bone->getPositionAtTime(fixed(frame));
+			m[0][3] = pos[0];
+			m[1][3] = pos[1];
+			m[2][3] = pos[2];
+
+			ModelMaths::concatTransforms(type->relative_, m, type->relativeFinal_);
+			if (type->parent_ == -1)
+			{
+				memcpy(type->final_, type->relativeFinal_, sizeof(BoneMatrixType));
+			}
+			else
+			{
+				BoneType *parent = boneTypes_[type->parent_];
+				ModelMaths::concatTransforms(parent->final_, type->relativeFinal_, type->final_);
+			}
+		}
+
+		glNewList(displayList = glGenLists(1), GL_COMPILE);
+			for (unsigned int m=0; m<meshes.size(); m++)
+			{
+				Mesh *mesh = meshes[m];
+				drawMesh(mesh, lastMesh, frame, useTextures, vertexLighting);
+				lastMesh = mesh;
+			}
+		glEndList();
+
+		frameInfos_[frame].displayList = displayList;
+	}
+
 	if (setState)
 	{
+		unsigned state = GLState::NORMALIZE_ON;
 		if (useTextures)
 		{
 			state |= GLState::TEXTURE_ON;
-			if (!meshInfo.texture)
-			{
-				meshInfo.texture = 
-					TextureStore::instance()->loadTexture(
- 						mesh->getTextureName(), mesh->getATextureName());
-			}
-			if (meshInfo.texture) meshInfo.texture->draw();
-			
-			if (mesh->getSphereMap())
-			{
-				state |= GLState::NORMALIZE_ON;
-
-				glEnable(GL_TEXTURE_GEN_S);						
-				glEnable(GL_TEXTURE_GEN_T);	
-				glEnable(GL_TEXTURE_GEN_R);
-				glTexGenf(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
-				glTexGenf(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
-				glTexGenf(GL_R, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
-			}
 		}
 		else
 		{
 			state |= GLState::TEXTURE_OFF;
 		}
 
-		if (!vertexLighting)
+		if (vertexLighting)
 		{
-			state |= 
-				GLState::NORMALIZE_ON | 
-				GLState::LIGHTING_ON | 
-				GLState::LIGHT1_ON;
-
-			if (useTextures)
-			{
-				glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mesh->getAmbientColor().asVector4());
-				glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mesh->getDiffuseColor().asVector4());
-				glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mesh->getSpecularColor().asVector4());
-				glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, mesh->getEmissiveColor().asVector4());
-				glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mesh->getShininessColor().asFloat());
-			}
-			else
-			{
-				glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mesh->getAmbientNoTexColor().asVector4());
-				glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mesh->getDiffuseNoTexColor().asVector4());
-				glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mesh->getSpecularNoTexColor().asVector4());
-				glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, mesh->getEmissiveNoTexColor().asVector4());
-				glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mesh->getShininessColor().asFloat());
-			}
+			state |= GLState::LIGHTING_OFF | GLState::LIGHT1_OFF;
 		}
 		else
 		{
-			state |= 
-				GLState::NORMALIZE_OFF | 
-				GLState::LIGHTING_OFF | 
-				GLState::LIGHT1_OFF;
+			state |= GLState::LIGHTING_ON | GLState::LIGHT1_ON;
 		}
+		GLGlobalState globalState(state);
 	}
 
-	// Get the current frame for the animation
-	// If we have no bones, when we only have one frame
-	int frame = model_->getStartFrame();
-	if (mesh->getReferencesBones())
+	glCallList(displayList);
+	GLInfo::addNoTriangles(model_->getNumberTriangles());
+
+	return lastMesh;
+}
+
+void ModelRendererMesh::drawMesh(Mesh *mesh, Mesh *lastMesh, 
+	int frame, bool useTextures, bool vertexLighting)
+{
+	if (useTextures)
 	{
-		// If we have bones, make sure the frame falls within the accepted bounds
-		if (model_->getTotalFrames() > 1)
+		if (mesh->getTexture() &&
+			(!lastMesh || mesh->getTexture() != lastMesh->getTexture()))
 		{
-			frame = ((unsigned int)(currentFrame)) % model_->getTotalFrames();
-			if (frame < 0) frame = 0;
+			((GLTexture *) mesh->getTexture())->draw(true);
+		}
+		if (mesh->getSphereMap())
+		{
+			glEnable(GL_TEXTURE_GEN_S);						
+			glEnable(GL_TEXTURE_GEN_T);	
+			glEnable(GL_TEXTURE_GEN_R);
+			glTexGenf(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+			glTexGenf(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+			glTexGenf(GL_R, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+		}
+
+		if (!lastMesh || lastMesh->getAmbientColor() != mesh->getAmbientColor())
+		{
+			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mesh->getAmbientColor().asVector4());
+		}
+		if (!lastMesh || lastMesh->getDiffuseColor() != mesh->getDiffuseColor())
+		{
+			glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mesh->getDiffuseColor().asVector4());
+		}
+		if (!lastMesh || lastMesh->getSpecularColor() != mesh->getSpecularColor())
+		{
+			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mesh->getSpecularColor().asVector4());
+		}
+		if (!lastMesh || lastMesh->getEmissiveColor() != mesh->getEmissiveColor())
+		{
+			glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, mesh->getEmissiveColor().asVector4());
+		}
+		if (!lastMesh || lastMesh->getShininessColor() != mesh->getShininessColor())
+		{
+			glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mesh->getShininessColor().asFloat());
 		}
 	}
-
-	GLGlobalState globalState(state);
-
+	else
 	{
-		int frameNo = frame;
-		DIALOG_ASSERT(frameNo >= 0 && frameNo < (int) meshInfo.frameInfos_.size());
-		
-		unsigned int lastState = meshInfo.frameInfos_[frameNo].lastCachedState;
-		unsigned int displayList = meshInfo.frameInfos_[frameNo].displayList;
-		if (lastState != state)
+		if (!lastMesh || lastMesh->getAmbientNoTexColor() != mesh->getAmbientNoTexColor())
 		{
-			if (displayList != 0)
-			{
-				glDeleteLists(displayList, 1);
-				displayList = 0;
-			}
-			meshInfo.frameInfos_[frameNo].lastCachedState = state;
+			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mesh->getAmbientNoTexColor().asVector4());
 		}
-
-		if (!displayList)
+		if (!lastMesh || lastMesh->getDiffuseNoTexColor() != mesh->getDiffuseNoTexColor())
 		{
-			glNewList(displayList = glGenLists(1), GL_COMPILE);
-				drawVerts(m, mesh, vertexLighting, frame);
-			glEndList();
-
-			meshInfo.frameInfos_[frameNo].displayList = displayList;
+			glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mesh->getDiffuseNoTexColor().asVector4());
 		}
-
-		glCallList(displayList);
-		GLInfo::addNoTriangles((int) mesh->getFaces().size());
+		if (!lastMesh || lastMesh->getSpecularNoTexColor() != mesh->getSpecularNoTexColor())
+		{
+			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mesh->getSpecularNoTexColor().asVector4());
+		}
+		if (!lastMesh || lastMesh->getEmissiveNoTexColor() != mesh->getEmissiveNoTexColor())
+		{
+			glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, mesh->getEmissiveNoTexColor().asVector4());
+		}
+		if (!lastMesh || lastMesh->getShininessColor() != mesh->getShininessColor())
+		{
+			glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mesh->getShininessColor().asFloat());
+		}
+	}
+	
+	{
+		drawVerts(mesh, vertexLighting, frame);
 	}
 
 	if (useTextures)
@@ -248,42 +277,8 @@ void ModelRendererMesh::drawMesh(unsigned int m, Mesh *mesh, float currentFrame,
 	}
 }
 
-void ModelRendererMesh::drawVerts(unsigned int m, Mesh *mesh, bool vertexLighting, int frame)
+void ModelRendererMesh::drawVerts(Mesh *mesh, bool vertexLighting, int frame)
 {
-	// Move the bones into position
-	for (unsigned int b=0; b<boneTypes_.size(); b++)
-	{
-		Bone *bone = model_->getBones()[b];
-		BoneType *type = boneTypes_[b];
-
-		unsigned int posKeys = (unsigned int) bone->getPositionKeys().size();
-		unsigned int rotKeys = (unsigned int) bone->getRotationKeys().size();
-		if (posKeys == 0 && rotKeys == 0)
-		{
-			memcpy(type->final_, type->absolute_, sizeof(BoneMatrixType));
-			continue;
-		}
-
-		BoneMatrixType m;
-		bone->getRotationAtTime(fixed(frame), m);
-				
-		FixedVector &pos = bone->getPositionAtTime(fixed(frame));
-		m[0][3] = pos[0];
-		m[1][3] = pos[1];
-		m[2][3] = pos[2];
-
-		ModelMaths::concatTransforms(type->relative_, m, type->relativeFinal_);
-		if (type->parent_ == -1)
-		{
-			memcpy(type->final_, type->relativeFinal_, sizeof(BoneMatrixType));
-		}
-		else
-		{
-			BoneType *parent = boneTypes_[type->parent_];
-			ModelMaths::concatTransforms(parent->final_, type->relativeFinal_, type->final_);
-		}
-	}
-
 	// Draw the vertices
 	FixedVector vec;
 	glBegin(GL_TRIANGLES);
@@ -307,7 +302,6 @@ void ModelRendererMesh::drawVerts(unsigned int m, Mesh *mesh, bool vertexLightin
 			faceVerts[1] != faceVerts[2] &&
 			faceVerts[0] != faceVerts[2])
 		{
-			GLInfo::addNoTriangles(1);
 			for (int i=0; i<3; i++)
 			{
 				Vertex *vertex = mesh->getVertex(faceVerts[i]);

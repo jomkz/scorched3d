@@ -276,7 +276,7 @@ void ProfileDialog::drawTanks(Tank *currentTank)
 					glScalef(10.0f, 10.0f, 10.0f);
 
 					Vector position;
-					TankMesh *mesh = renderer->getMesh();
+					ModelRendererTank *mesh = renderer->getMesh();
 					if (mesh)
 					{
 						glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);

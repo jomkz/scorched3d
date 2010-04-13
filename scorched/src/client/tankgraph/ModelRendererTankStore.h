@@ -18,44 +18,27 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <tankgraph/TankMeshStore.h>
-#include <3dsparse/ModelStore.h>
+#if !defined(AFX_ModelRendererTankSTORE_H__CB857C65_A22F_4FBC_9344_EFF22F8A4EEA__INCLUDED_)
+#define AFX_ModelRendererTankSTORE_H__CB857C65_A22F_4FBC_9344_EFF22F8A4EEA__INCLUDED_
 
-TankMeshStore *TankMeshStore::instance_ = 0;
+#include <tankgraph/ModelRendererTank.h>
+#include <common/ModelID.h>
+#include <map>
 
-TankMeshStore *TankMeshStore::instance()
+class ModelRendererTankStore
 {
-	if (!instance_) instance_ = new TankMeshStore();
-	return instance_;
-}
+public:
+	static ModelRendererTankStore *instance();
 
-TankMeshStore::TankMeshStore()
-{
-}
+	ModelRendererTank *getMesh(ModelID modelId);
 
-TankMeshStore::~TankMeshStore()
-{
-}
+protected:
+	static ModelRendererTankStore *instance_;
+	std::map<std::string, ModelRendererTank*> meshes_;
 
-TankMesh *TankMeshStore::getMesh(ModelID modelId)
-{
-	std::map<std::string, TankMesh*>::iterator findItor = 
-		meshes_.find(modelId.getStringHash());
+private:
+	ModelRendererTankStore();
+	virtual ~ModelRendererTankStore();
+};
 
-	TankMesh *mesh = 0;
-	if (findItor == meshes_.end())
-	{
-		Model *newFile = ModelStore::instance()->loadModel(modelId);
-		if (!newFile) return 0;
-
-		// Create tank mesh
-		mesh = new TankMesh(*newFile);
-		meshes_[modelId.getStringHash()] = mesh;
-	}
-	else
-	{
-		mesh = (*findItor).second;
-	}
-	
-	return mesh;
-}
+#endif // !defined(AFX_ModelRendererTankSTORE_H__CB857C65_A22F_4FBC_9344_EFF22F8A4EEA__INCLUDED_)
