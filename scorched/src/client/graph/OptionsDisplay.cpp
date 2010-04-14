@@ -200,6 +200,8 @@ OptionsDisplay::OptionsDisplay() :
 		"Do not draw any particles.", RWAccess, false), 
 	noTrees_(options_, "NoTrees",
 		"Do not draw any trees", RWAccess, false),
+	noTargets_(options_, "NoTargets",
+		"Do not draw any targets/tanks (non-trees)", RWAccess, false),
 	lowTreeDetail_(options_, "LowTreeDetail",
 		"Only use low detail trees.  Faster.", RWAccess, false),
 	depricatedNoWaves_(options_, "NoWaves",

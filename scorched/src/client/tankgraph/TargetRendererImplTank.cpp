@@ -153,11 +153,6 @@ void TargetRendererImplTank::render(float distance)
 				false, modelSize, fade, true);
 		}
 	}
-
-	GLState lightingOff(GLState::LIGHTING_OFF);
-
-	// Draw the life bars
-	drawLife();
 }
 
 void TargetRendererImplTank::renderShadow(float distance)
@@ -208,6 +203,7 @@ void TargetRendererImplTank::drawInfo()
 {
 	// Draw the arrow
 	drawArrow();
+	drawLife();
 
 	Vector &position = tank_->getPosition().getTankPosition().asVector();
 	float height = position[2];

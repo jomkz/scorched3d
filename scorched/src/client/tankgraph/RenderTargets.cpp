@@ -259,6 +259,7 @@ void RenderTargets::draw()
 	// Models
 	targetsDrawn_ = 0;
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "TARGETS_DRAW_MODELS");
+	if (!OptionsDisplay::instance()->getNoTargets())
 	{
 		GLGlobalState globalState(0);
 

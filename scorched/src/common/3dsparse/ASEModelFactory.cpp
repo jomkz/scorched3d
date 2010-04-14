@@ -44,8 +44,16 @@ Model *ASEModelFactory::createModel(const char *fileName,
 	model_ = new Model();
 	if (loadFile(fileName))
 	{
+		std::vector<Mesh *>::iterator itor;
+		for (itor = model_->getMeshes().begin();
+			itor != model_->getMeshes().end();
+			itor++)
+		{
+			Mesh *mesh = *itor;
+			mesh->setTextureName(texName);
+		}
 		model_->setup();
-		calculateTexCoords(texName);
+		calculateTexCoords();
 	}
 	else
 	{
@@ -116,7 +124,7 @@ FixedVector ASEModelFactory::getTexCoord(FixedVector &tri, MaxMag mag, FixedVect
 	return newTri;
 }
 
-void ASEModelFactory::calculateTexCoords(const char *texName)
+void ASEModelFactory::calculateTexCoords()
 {
 	std::vector<Mesh *>::iterator itor;
 	for (itor = model_->getMeshes().begin();
@@ -124,8 +132,6 @@ void ASEModelFactory::calculateTexCoords(const char *texName)
 		itor++)
 	{
 		Mesh *mesh = *itor;
-		mesh->setTextureName(texName);
-
 		std::vector<Face*>::iterator fitor;
 		for (fitor = mesh->getFaces().begin();
 			fitor != mesh->getFaces().end();

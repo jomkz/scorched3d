@@ -76,15 +76,11 @@ void TargetRendererImplTarget::simulate(float frameTime)
 void TargetRendererImplTarget::render(float distance)
 {
 	createParticle();
-
 	float size = 2.0f;
-	float fade = 1.0f;
 	if (!tree_)
 	{
 		storeTarget2DPos();
-
 		size = getTargetSize();
-		fade = getTargetFade(distance, size * 2.0f);
 
 		// Draw texture shadows (if hardware shadows aren't on)
 		if (target_->getTargetState().getDisplayShadow() &&
@@ -94,32 +90,35 @@ void TargetRendererImplTarget::render(float distance)
 				target_->getLife().getFloatPosition()[0], 
 				target_->getLife().getFloatPosition()[1], 
 				target_->getLife().getSize().Max().asFloat() + 2.0f,
-				fade);
+				1.0f);
+		}
+	}
+
+	// Draw the target model
+	float drawCullingDistance = OptionsDisplay::instance()->getDrawCullingDistance() * size;
+	if (distance < drawCullingDistance)
+	{
+		// Generate and cache the OpenGL transform matrix
+		if (!matrixCached_)
+		{
+			cachedMatrix_.identity();
+			cachedMatrix_.translate(
+				target_->getLife().getFloatPosition()[0], 
+				target_->getLife().getFloatPosition()[1], 
+				target_->getLife().getFloatPosition()[2]);
+			cachedMatrix_.multiply(target_->getLife().getFloatRotMatrix());
+			cachedMatrix_.scale(scale_, scale_, scale_);
+
+			matrixCached_ = true;
 		}
 
-		// Draw the target model
-		glColor4f(color_, color_, color_, fade);
+		glColor3f(color_, color_, color_);
+		glPushMatrix();
+			glMultMatrixf(cachedMatrix_);
+			if (burnt_) burntModelRenderer_->drawBottomAligned(distance, 1.0f);
+			else modelRenderer_->drawBottomAligned(distance, 1.0f);
+		glPopMatrix();
 	}
-
-	// Generate and cache the OpenGL transform matrix
-	if (!matrixCached_)
-	{
-		cachedMatrix_.identity();
-		cachedMatrix_.translate(
-			target_->getLife().getFloatPosition()[0], 
-			target_->getLife().getFloatPosition()[1], 
-			target_->getLife().getFloatPosition()[2]);
-		cachedMatrix_.multiply(target_->getLife().getFloatRotMatrix());
-		cachedMatrix_.scale(scale_, scale_, scale_);
-
-		matrixCached_ = true;
-	}
-
-	glPushMatrix();
-		glMultMatrixf(cachedMatrix_);
-		if (burnt_) burntModelRenderer_->drawBottomAligned(distance, fade);
-		else modelRenderer_->drawBottomAligned(distance, fade);
-	glPopMatrix();
 }
 
 void TargetRendererImplTarget::render2D(float distance)
@@ -131,23 +130,10 @@ void TargetRendererImplTarget::render2D(float distance)
 
 void TargetRendererImplTarget::renderShadow(float distance)
 {
-	if (!GLCameraFrustum::instance()->
-		sphereInFrustum(target_->getLife().getFloatPosition(), 
-		4.0f / 2.0f,
-		GLCameraFrustum::FrustrumRed))
-	{
-		return;
-	}
-
 	glPushMatrix();
-		glTranslatef(
-			target_->getLife().getFloatPosition()[0], 
-			target_->getLife().getFloatPosition()[1], 
-			target_->getLife().getFloatPosition()[2]);
-		glMultMatrixf(target_->getLife().getFloatRotMatrix());
-		glScalef(scale_, scale_, scale_);
-		if (burnt_) burntModelRenderer_->drawBottomAligned(FLT_MAX, 1.0f, false);
-		else modelRenderer_->drawBottomAligned(FLT_MAX, 1.0f, false);
+		glMultMatrixf(cachedMatrix_);
+		if (burnt_) burntModelRenderer_->drawBottomAligned(distance, 1.0f, false);
+		else modelRenderer_->drawBottomAligned(distance, 1.0f, false);
 	glPopMatrix();
 }
 

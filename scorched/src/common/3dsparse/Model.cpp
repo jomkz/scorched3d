@@ -87,7 +87,11 @@ void Model::setup()
 	centre();
 	setupBones();
 	setupColor();
+	countTextures();
+}
 
+void Model::countTextures()
+{
 	unsigned int texturesUsed = 0;
 	std::vector<Mesh *>::iterator itor;
 	for (itor = meshes_.begin();
@@ -99,13 +103,9 @@ void Model::setup()
 		{
 			texturesUsed++;
 		}
-		else if (strstr("pivot", mesh->getName()) == 0)
-		{
-			texturesUsed++;
-		}
 		noTriangles_ += (int) mesh->getFaces().size();
 	}
-	DIALOG_ASSERT(texturesUsed == meshes_.size());
+	//DIALOG_ASSERT(texturesUsed == meshes_.size());
 	texturesUsed_ = (texturesUsed > 0);
 }
 

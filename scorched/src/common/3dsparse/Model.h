@@ -59,6 +59,7 @@ protected:
 	int totalFrames_;
 
 	void centre();
+	void countTextures();
 	void setupBones();
 	void setupColor();
 };

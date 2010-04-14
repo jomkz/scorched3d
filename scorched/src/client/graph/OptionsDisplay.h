@@ -271,6 +271,9 @@ public:
 	bool getNoTrees() { return noTrees_; }
 	OptionEntryBool &getNoTreesEntry() { return noTrees_; }
 
+	bool getNoTargets() { return noTargets_; }
+	OptionEntryBool &getNoTargetsEntry() { return noTargets_; }
+
 	bool getNoPrecipitation() { return noPrecipitation_; }
 	OptionEntryBool &getNoPrecipitationEntry() { return noPrecipitation_; }
 
@@ -487,6 +490,7 @@ protected:
 	OptionEntryBool drawPlayerColor_;
 	OptionEntryBool drawPlayerHealth_;
 	OptionEntryBool noTrees_;
+	OptionEntryBool noTargets_;
 	OptionEntryBool noDepthSorting_;
 	OptionEntryBool hideFinalScore_;
 	OptionEntryBool hideMenus_;

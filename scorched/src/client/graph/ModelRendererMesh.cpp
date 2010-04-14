@@ -101,8 +101,6 @@ Mesh *ModelRendererMesh::drawModel(float currentFrame,
 	float distance, float fade, bool setState, 
 	std::vector<Mesh *> &meshes, Mesh *lastMesh)
 {
-	GLGlobalState globalState(GLState::BLEND_ON | GLState::ALPHATEST_ON);
-
 	// Get the current frame for the animation
 	// If we have no bones, when we only have one frame
 	// Make sure the frame falls within the accepted bounds
@@ -168,9 +166,10 @@ Mesh *ModelRendererMesh::drawModel(float currentFrame,
 		frameInfos_[frame].displayList = displayList;
 	}
 
+	unsigned int state = 0;
 	if (setState)
 	{
-		unsigned state = GLState::NORMALIZE_ON;
+		state = GLState::BLEND_ON | GLState::ALPHATEST_ON | GLState::NORMALIZE_ON;
 		if (useTextures)
 		{
 			state |= GLState::TEXTURE_ON;
@@ -188,8 +187,8 @@ Mesh *ModelRendererMesh::drawModel(float currentFrame,
 		{
 			state |= GLState::LIGHTING_ON | GLState::LIGHT1_ON;
 		}
-		GLGlobalState globalState(state);
 	}
+	GLGlobalState globalState(state);
 
 	glCallList(displayList);
 	GLInfo::addNoTriangles(model_->getNumberTriangles());

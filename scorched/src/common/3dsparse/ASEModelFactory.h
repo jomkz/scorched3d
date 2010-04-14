@@ -46,7 +46,7 @@ protected:
 	};
 
 	bool loadFile(const char *fileName);
-	void calculateTexCoords(const char *texName);
+	void calculateTexCoords();
 	FixedVector getTexCoord(FixedVector &tri, MaxMag mag, FixedVector &max, FixedVector &min);
 };
 
