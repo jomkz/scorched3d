@@ -49,7 +49,7 @@ public:
 		Vector &color, float size, 
 		float x, float y, float z, 
 		const LangString &text);
-	void drawWidthRhs(float width, 
+	float drawWidthRhs(float width, 
 		Vector &color, float size, 
 		float x, float y, float z, 
 		const LangString &text);
@@ -65,6 +65,7 @@ public:
 		float x, float y, float z, 
 		const LangString &text);
 
+	float getWidth(float size, const unsigned int c);
 	float getWidth(float size, const LangString &text, int len = 0);
 	int getChars(float size, const LangString &text, float width);
 

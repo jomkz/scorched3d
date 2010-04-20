@@ -75,18 +75,19 @@ protected:
 	float ctime_;
 	bool cursor_, visible_;
 	bool createdTexture_;
-	int maxTextLen_;
+	int maxTextLen_, cursorPosition_, historyPosition_;
 	unsigned int whisperDest_;
 	LangString whisperDestStr_;
 
 	void processNotVisibleKey(unsigned int unicode, unsigned int dik, bool &skipRest);
-	void processVisibleKey(unsigned int unicode, unsigned int dik);
+	void processVisibleKey(unsigned int keystate, unsigned int unicode, unsigned int dik);
 	void processSpecialText();
 	void processNormalText();
 	bool checkCurrentChannel();
 	bool channelValid(const char *channelName);
 	void setVisible(bool visible);
 	void setChannelEntry(GLWChannelView::CurrentChannelEntry &entry);
+	void setHistoryText();
 };
 
 #endif // __INCLUDE_GLWChannelTexth_INCLUDE__

@@ -37,6 +37,12 @@ GLFont2d::~GLFont2d()
 	delete freetype_;
 }
 
+float GLFont2d::getWidth(float size, const unsigned int c)
+{
+	float width = float(getCharacter(c)->advances) * size / height_;
+	return width;
+}
+
 float GLFont2d::getWidth(float size, const LangString &text, int len)
 {
 	float width = 0.0f;
@@ -96,18 +102,7 @@ void GLFont2d::drawSubStrA(int start, int len,
 	float x, float y, float z, 
 	const LangString &text)
 {
-	int s = start;
-	float width = 0.0f;
-	for (const unsigned int *a=text.c_str(); *a; a++)
-	{
-		if (--s < 0) break;
-		width += float(getCharacter(*a)->advances) * size / height_;
-	}
-
-	if (len - start > 0)
-	{
-		drawString(len - start, color, alpha, size, x + width, y, z, text.c_str() + start, false);
-	}
+	drawString(len, color, alpha, size, x, y, z, text.c_str() + start, false);
 }
 
 void GLFont2d::drawWidth(float len, Vector &color, float size, 
@@ -118,25 +113,31 @@ void GLFont2d::drawWidth(float len, Vector &color, float size,
 	drawString(l, color, 1.0f, size, x, y, z, text.c_str(), false);
 }
 
-void GLFont2d::drawWidthRhs(float len, Vector &color, float size, 
+float GLFont2d::drawWidthRhs(float len, Vector &color, float size, 
 	float x, float y, float z, 
 	const LangString &text)
 {
+	float width = 0.0f;
 	int slen = (int) text.size();
 	if (slen > 0)
 	{
 		int l = 0;
-		float width = 0.0f;
 		const unsigned int *a=& (text.c_str())[slen-1];
 		for (; a >= text.c_str(); a--, l++)
 		{
-			width += float(getCharacter(*a)->advances) * size / height_;
-			if (width > len) break;
+			float charWidth = float(getCharacter(*a)->advances) * size / height_;
+			width += charWidth;
+			if (width > len) 
+			{
+				width -= charWidth;
+				break;
+			}
 		}
 		a++;
 
 		drawString(l, color, 1.0f, size, x, y, z, a, false);
 	}
+	return width;
 }
 
 void GLFont2d::drawBilboard(Vector &color, float alpha, float size, 

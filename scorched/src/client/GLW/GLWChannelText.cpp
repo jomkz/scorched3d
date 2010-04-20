@@ -47,7 +47,8 @@ GLWChannelText::GLWChannelText() :
 	visible_(false),
 	button_(x_ + 2.0f, y_ + 4.0f, 12.0f, 12.0f),
 	fontSize_(12.0f), outlineFontSize_(14.0f),
-	whisperDest_(0), createdTexture_(false)
+	whisperDest_(0), createdTexture_(false),
+	historyPosition_(0), cursorPosition_(0)
 {
 	view_.setHandler(this);
 	button_.setHandler(this);
@@ -102,6 +103,39 @@ void GLWChannelText::draw()
 
 	if (!visible_) return;
 
+	// Get the width of the prompt
+	float promptWidth = GLWFont::instance()->getGameFont()->getWidth(
+		fontSize_, prompt_.getString());
+
+	// Get the width of the text
+	int textStart = 0, textLength = 0;
+	float textWidth = 0.0f;
+	float cursorWidth = 0.0f;
+	for (int i=int(text_.size()) - cursorPosition_; i>0; i--)
+	{
+		float charWidth = GLWFont::instance()->getGameFont()->
+			getWidth(fontSize_, text_[i]);
+		if (textWidth + charWidth > w_ - 55.0f - promptWidth)
+		{
+			break;
+		}
+		textStart = i - 1;
+		textWidth += charWidth;
+		textLength++;
+	}
+	cursorWidth = textWidth;
+	for (int i=int(text_.size()) - cursorPosition_; i<int(text_.size()); i++)
+	{
+		float charWidth = GLWFont::instance()->getGameFont()->
+			getWidth(fontSize_, text_[i]);
+		if (textWidth + charWidth > w_ - 25.0f - promptWidth)
+		{
+			break;
+		}	
+		textWidth += charWidth;
+		textLength++;
+	}
+
 	GLWidget::draw();
 	glColor4f(0.4f, 0.6f, 0.8f, 0.6f);
 
@@ -120,10 +154,6 @@ void GLWChannelText::draw()
 		drawRoundBox(x_ + 15.0f, y_, w_ - 15.0f, h_, 10.0f);
 	glEnd();
 
-	// Get the width of the prompt
-	float promptWidth = GLWFont::instance()->getGameFont()->getWidth(
-		fontSize_, prompt_.getString());
-
 	// Draw prompt black outline
 	GLWFont::instance()->getGameShadowFont()->
 		drawA(GLWColors::black, 1.0f, fontSize_,
@@ -131,10 +161,12 @@ void GLWChannelText::draw()
 			prompt_.getString());
 	
 	// Draw text black outline
-	GLWFont::instance()->getGameShadowFont()->drawWidthRhs(
-		w_ - 25.0f - promptWidth,
-		GLWColors::black, fontSize_,
-		x_ + 20.0f + promptWidth - 1.0f, y_ + 5.0f + 1.0f, 0.0f, 
+	GLWFont::instance()->getGameShadowFont()->drawSubStrA(
+		textStart, textLength,
+		GLWColors::black,
+		1.0f,
+		fontSize_,
+		x_ + 20.0f + promptWidth - 1.0f, y_ + 5.0f + 1.0f, 0.0f,
 		text_);
 
 	// Draw the prompt
@@ -144,11 +176,21 @@ void GLWChannelText::draw()
 			prompt_.getString());
 
 	// Draw the text
-	GLWFont::instance()->getGameFont()->drawWidthRhs(
-		w_ - 25.0f - promptWidth,
-		channelEntry_.color, fontSize_,
-		x_ + 20.0f + promptWidth, y_ + 5.0f, 0.0f, 
+	GLWFont::instance()->getGameFont()->drawSubStrA(
+		textStart, textLength,
+		channelEntry_.color,
+		1.0f,
+		fontSize_,
+		x_ + 20.0f + promptWidth, y_ + 5.0f, 0.0f,
 		text_);
+	if (cursor_)
+	{
+		glColor3f(0.0f, 0.0f, 0.0f);
+			GLWFont::instance()->getGameFont()->draw(
+				GLWColors::black, fontSize_,
+				x_ + 20.0f + promptWidth + cursorWidth, y_ + 5.0f, 0.0f, 
+				"_");
+	}
 }
 
 void GLWChannelText::keyDown(char *buffer, unsigned int keyState, 
@@ -167,11 +209,14 @@ void GLWChannelText::keyDown(char *buffer, unsigned int keyState,
 		}
 		else
 		{
-			processVisibleKey(unicode, dik);
+			processVisibleKey(keyState, unicode, dik);
 		}
 	}
 	if (visible_) skipRest = true;
 	else view_.keyDown(buffer, keyState, history, hisCount, skipRest);
+
+	if (cursorPosition_ > (int) text_.size()) cursorPosition_ = (int) text_.size();
+	else if (cursorPosition_ < 0) cursorPosition_ = 0;
 }
 
 void GLWChannelText::processNotVisibleKey(unsigned int unicode, unsigned int dik, bool &skipRest)
@@ -220,13 +265,39 @@ void GLWChannelText::processNotVisibleKey(unsigned int unicode, unsigned int dik
 	}
 }
 
-void GLWChannelText::processVisibleKey(unsigned int unicode, unsigned int dik)
+void GLWChannelText::processVisibleKey(unsigned int keystate, unsigned int unicode, unsigned int dik)
 {
 	if (dik == SDLK_BACKSPACE || dik == SDLK_DELETE)
 	{
-		if (!text_.empty())
+		if (!text_.empty() && (int(text_.size()) - cursorPosition_ > 0))
 		{
-			text_ = text_.substr(0, text_.length() - 1);
+			if (keystate & KMOD_LCTRL ||
+				keystate & KMOD_RCTRL) 
+			{
+				int p;
+				for (p=int(text_.size()) - cursorPosition_ - 1; p>=0; p--) 
+				{
+					if (text_[p] != ' ') 
+					{
+						break;
+					}
+				}
+				for (; p>=0; p--) 
+				{
+					if (text_[p] == ' ') 
+					{
+						p++;
+						break;
+					}
+				}
+				if (p < 0) p = 0;
+				else if (p > int(text_.size())) p = int(text_.size());
+				text_.replace(p, int(text_.size()) - cursorPosition_ - p, LangString());
+			}
+			else
+			{
+				text_.replace(int(text_.size()) - cursorPosition_ - 1, 1, LangString());
+			}
 		}
 	}
 	else if (dik == SDLK_ESCAPE)
@@ -256,6 +327,89 @@ void GLWChannelText::processVisibleKey(unsigned int unicode, unsigned int dik)
 		setVisible(false);
 		text_.clear();
 	}
+	else if (dik == SDLK_UP)
+	{
+		historyPosition_++;
+		if (historyPosition_ > (int) lastMessages_.size())
+		{
+			historyPosition_ = (int) lastMessages_.size();
+		}
+		setHistoryText();
+	}
+	else if (dik == SDLK_DOWN)
+	{
+		historyPosition_--;
+		if (historyPosition_ < 0) 
+		{
+			historyPosition_= 0;
+		}
+		setHistoryText();
+	}
+	else if (dik == SDLK_LEFT)
+	{
+		if (keystate & KMOD_LCTRL ||
+			keystate & KMOD_RCTRL) 
+		{
+			for (;cursorPosition_<(int) text_.size(); cursorPosition_++)
+			{
+				if (text_[text_.size() - cursorPosition_ - 1] != ' ') break;
+			}
+			for (;cursorPosition_<(int) text_.size(); cursorPosition_++)
+			{
+				if (text_[text_.size() - cursorPosition_ - 1] == ' ')
+				{
+					break;
+				}
+			}
+		} 
+		else
+		{
+			cursorPosition_++;
+		}
+		
+		if (cursorPosition_ > (int) text_.size())
+		{
+			cursorPosition_ = (int) text_.size();
+		}
+	}
+	else if (dik == SDLK_RIGHT)
+	{
+		if (keystate & KMOD_LCTRL ||
+			keystate & KMOD_RCTRL) 
+		{
+			if ((int) text_.size() - cursorPosition_ <= 0 && text_.size() > 0)
+			{
+				cursorPosition_--;
+			}
+			for (;(int) text_.size() - cursorPosition_ > 0 && cursorPosition_ > 0; cursorPosition_--)
+			{
+				if (text_[text_.size() - cursorPosition_ - 1] != ' ') break;
+			}
+			for (;(int) text_.size() - cursorPosition_ > 0 && cursorPosition_ > 0; cursorPosition_--)
+			{
+				if (text_[text_.size() - cursorPosition_ - 1] == ' ')
+				{
+					break;
+				}
+			}
+		} 
+		else
+		{
+			cursorPosition_--;
+		}
+		if (cursorPosition_ < 0)
+		{
+			cursorPosition_ = 0;
+		}
+	}
+	else if (dik == SDLK_END)
+	{
+		cursorPosition_ = 0;
+	}
+	else if (dik == SDLK_HOME)
+	{
+		cursorPosition_ = (int) text_.size();
+	}
 	else if (unicode >= ' ')
 	{
 		if (ScorchedClient::instance()->getOptionsGame().getAllowMultiLingualChat() ||
@@ -263,14 +417,40 @@ void GLWChannelText::processVisibleKey(unsigned int unicode, unsigned int dik)
 		{
 			if ((maxTextLen_==0) || ((int) text_.size() < maxTextLen_))
 			{
-				if ((text_[0] == '\\' || text_[0] == '/') && unicode == ' ')
+				if (int(text_.size()) > 0 && (text_[0] == '\\' || text_[0] == '/') && unicode == ' ')
 				{
 					processSpecialText();
 				}
 				else
 				{
-					text_ += unicode;
+					text_.insert(text_.size() - cursorPosition_, LangString(1, unicode));
 				}
+			}
+		}
+
+		ctime_ = 0.0f;
+		cursor_ = true;
+	}
+}
+
+void GLWChannelText::setHistoryText()
+{
+	if (historyPosition_ == 0)
+	{
+		text_.clear();
+	}
+	else
+	{
+		int p = 1;
+		std::list<ChannelText>::reverse_iterator itor;
+		for (itor = lastMessages_.rbegin();
+			itor != lastMessages_.rend();
+			itor++, p++)
+		{
+			if (p == historyPosition_)
+			{
+				text_ = itor->getMessage();
+				break;
 			}
 		}
 	}
@@ -279,6 +459,8 @@ void GLWChannelText::processVisibleKey(unsigned int unicode, unsigned int dik)
 void GLWChannelText::setVisible(bool visible)
 {
 	visible_ = visible;
+	cursorPosition_ = 0;
+	historyPosition_ = 0;
 
 	if (0 == strcmp("GLWWindow", getParent()->getClassName()))
 	{
