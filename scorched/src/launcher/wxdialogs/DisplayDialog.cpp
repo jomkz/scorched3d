@@ -382,6 +382,10 @@ void DisplayFrame::refreshScreen()
 	IDC_NOSHADOWS_CTRL->SetToolTip(wxString(OptionsDisplay::instance()->getNoGLShadowsEntry().getDescription(), wxConvUTF8));
 	IDC_NOOBJECTSHADOWS_CTRL->SetValue(OptionsDisplay::instance()->getNoGLObjectShadows());
 	IDC_NOOBJECTSHADOWS_CTRL->SetToolTip(wxString(OptionsDisplay::instance()->getNoGLObjectShadowsEntry().getDescription(), wxConvUTF8));
+	IDC_NOOBJECTREFLECTIONS_CTRL->SetValue(OptionsDisplay::instance()->getNoObjectReflections());
+	IDC_NOOBJECTREFLECTIONS_CTRL->SetToolTip(wxString(OptionsDisplay::instance()->getNoObjectReflectionsEntry().getDescription(), wxConvUTF8));
+	IDC_NOPARTICLEREFLECTIONS_CTRL->SetValue(OptionsDisplay::instance()->getNoParticleReflections());
+	IDC_NOPARTICLEREFLECTIONS_CTRL->SetToolTip(wxString(OptionsDisplay::instance()->getNoParticleReflectionsEntry().getDescription(), wxConvUTF8));
 	IDC_NOVBO_CTRL->SetValue(OptionsDisplay::instance()->getNoVBO());
 	IDC_NOVBO_CTRL->SetToolTip(wxString(OptionsDisplay::instance()->getNoVBOEntry().getDescription(), wxConvUTF8));
 	IDC_NOMIPMAPS_CTRL->SetValue(OptionsDisplay::instance()->getNoGLHardwareMipmaps());
@@ -620,6 +624,8 @@ bool DisplayFrame::TransferDataFromWindow()
 	OptionsDisplay::instance()->getSimpleWaterShadersEntry().setValue(IDC_SIMPLEWATERSHADERS_CTRL->GetValue());
 	OptionsDisplay::instance()->getNoGLShadowsEntry().setValue(IDC_NOSHADOWS_CTRL->GetValue());
 	OptionsDisplay::instance()->getNoGLObjectShadowsEntry().setValue(IDC_NOOBJECTSHADOWS_CTRL->GetValue());
+	OptionsDisplay::instance()->getNoObjectReflectionsEntry().setValue(IDC_NOOBJECTREFLECTIONS_CTRL->GetValue());
+	OptionsDisplay::instance()->getNoParticleReflectionsEntry().setValue(IDC_NOPARTICLEREFLECTIONS_CTRL->GetValue());
 	OptionsDisplay::instance()->getNoGLCubeMapEntry().setValue(IDC_NOCUBEMAP_CTRL->GetValue());
 	OptionsDisplay::instance()->getNoGLSphereMapEntry().setValue(IDC_NOSPHEREMAP_CTRL->GetValue());
 	OptionsDisplay::instance()->getNoVBOEntry().setValue(IDC_NOVBO_CTRL->GetValue());

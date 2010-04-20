@@ -103,7 +103,6 @@ TargetCamera::TargetCamera() :
 	cameraPos_(CamSpectator), 
 	totalTime_(0.0f),
 	particleEngine_(&mainCam_, 6000),
-	useHeightFunc_(true),
 	dragging_(false),
 	lastLandIntersectValid_(false)
 {
@@ -679,6 +678,7 @@ void TargetCamera::mouseUp(GameState::MouseButton button,
 			}
 		}
 
+		Landscape::instance()->restoreLandscapeTexture();
 		currentTank->getPosition().setSelectPosition(posX, posY);
 		TankKeyboardControlUtil::fireShot(currentTank);
 	}
@@ -852,13 +852,16 @@ bool TargetCamera::keyboardCheck(float frameTime,
 	KEYBOARDKEY("CAMERA_NOLIMIT", limitKey);
 	if (limitKey->keyDown(buffer, keyState, false))
 	{	
-		useHeightFunc_ = !useHeightFunc_;
+		OptionsDisplay::instance()->getRestrictedCameraMovementEntry().setValue(
+			!OptionsDisplay::instance()->getRestrictedCameraMovement());
+
 		ChannelManager::showText(
 			ScorchedClient::instance()->getContext(), 
 			ChannelText("info", 
 				LANG_RESOURCE("RESTRICED_CAMERA_MOVEMENT", "Restricted camera movement : ") + 
-				(useHeightFunc_?LANG_RESOURCE("ON", "On"):LANG_RESOURCE("OFF", "Off"))));
+				(OptionsDisplay::instance()->getRestrictedCameraMovement()?
+				LANG_RESOURCE("ON", "On"):LANG_RESOURCE("OFF", "Off"))));
 	}
-	mainCam_.setUseHeightFunc(useHeightFunc_);
+	mainCam_.setUseHeightFunc(OptionsDisplay::instance()->getRestrictedCameraMovement());
 	return keyDown;
 }

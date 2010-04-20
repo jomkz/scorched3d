@@ -193,6 +193,8 @@ Mesh *ModelRendererMesh::drawModel(float currentFrame,
 	glCallList(displayList);
 	GLInfo::addNoTriangles(model_->getNumberTriangles());
 
+	GLTexture::setLastBind(0);
+
 	return lastMesh;
 }
 

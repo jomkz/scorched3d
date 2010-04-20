@@ -284,7 +284,8 @@ void ServerTurns::playMove(Tank *tank, unsigned int moveId, fixed maximumShotTim
 	SimulatorI *callback = 0;
 	if (maximumShotTime > 0)
 	{
-		PlayingPlayer *playingPlayer = new PlayingPlayer(moveId, maximumShotTime);
+		fixed simulationTime(ScorchedServer::instance()->getServerSimulator().getSendStepSize());
+		PlayingPlayer *playingPlayer = new PlayingPlayer(moveId, maximumShotTime + simulationTime * 2);
 		playingPlayers_[tank->getPlayerId()] = playingPlayer;
 		callback = moveStarted_;
 	}

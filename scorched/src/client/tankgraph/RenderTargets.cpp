@@ -27,11 +27,13 @@
 #include <graph/ModelRendererTree.h>
 #include <tank/TankContainer.h>
 #include <target/TargetState.h>
+#include <target/TargetLife.h>
 #include <client/ScorchedClient.h>
 #include <common/OptionsScorched.h>
 #include <engine/Simulator.h>
 #include <GLEXT/GLGlobalState.h>
 #include <landscape/Landscape.h>
+#include <water/Water.h>
 #include <land/VisibilityPatchGrid.h>
 #include <sky/Sky.h>
 #include <algorithm>
@@ -72,7 +74,7 @@ void RenderTargets::Renderer3D::draw(const unsigned state)
 {
 	RenderTracer::instance()->draw(state);
 	RenderGeoms::instance()->draw(state);
-	RenderTargets::instance()->draw();
+	RenderTargets::instance()->draw(false);
 }
 
 void RenderTargets::Renderer3D::simulate(const unsigned state, float simTime)
@@ -194,12 +196,20 @@ void RenderTargets::shadowDraw()
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_DRAW_OBJ");
 }
 
-static void drawTargets(TargetVisibilityIterator &itor, float distance)
+static void drawTargets(TargetVisibilityIterator &itor, float distance, bool reflection, fixed waterHeight)
 {
 	void *currentObject = 0;
 	while (currentObject = itor.getNext())
 	{
 		Target *target = (Target *) currentObject;
+		if (reflection)
+		{
+			if (target->getLife().getTargetPosition()[2] < waterHeight)
+			{
+				continue;
+			}
+		}
+
 		if (target->isTarget())
 		{
 			TargetRendererImplTarget *renderImpl = (TargetRendererImplTarget *) target->getRenderer();
@@ -213,11 +223,20 @@ static void drawTargets(TargetVisibilityIterator &itor, float distance)
 	}
 }
 
-void RenderTargets::draw()
+void RenderTargets::draw(bool reflection)
 {
-	if (!OptionsDisplay::instance()->getNoFog())
+	fixed waterHeight = -100;
+	if (Landscape::instance()->getWater().getWaterOn())
 	{
-		glEnable(GL_FOG); // NOTE: Fog on
+		waterHeight = fixed::fromFloat(Landscape::instance()->getWater().getWaterHeight());
+	}
+
+	if (!reflection)
+	{
+		if (!OptionsDisplay::instance()->getNoFog())
+		{
+			glEnable(GL_FOG); // NOTE: Fog on
+		}
 	}
 
 	// Don't put fully transparent areas into the depth buffer
@@ -232,9 +251,13 @@ void RenderTargets::draw()
 
 	// Trees
 	treesDrawn_ = 0;
-	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "TARGETS_DRAW_TREES");
 	if (!OptionsDisplay::instance()->getNoTrees())
 	{
+		if (!reflection)
+		{
+			GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "TARGETS_DRAW_TREES");
+		}
+
 		GLGlobalState globalState(0);
 		ModelRendererTree::setSkipPre(true);
 		ModelRendererTree::drawInternalPre(true);
@@ -247,20 +270,28 @@ void RenderTargets::draw()
 			TargetVisibilityPatch *currentPatch = (TargetVisibilityPatch *) currentPatchPtr;
 
 			itor.init(currentPatch->getTrees());
-			drawTargets(itor, currentPatch->getDistance());
+			drawTargets(itor, currentPatch->getDistance(), reflection, waterHeight);
 
 			treesDrawn_+=(unsigned int) currentPatch->getTrees().size();
 		}
 
 		ModelRendererTree::setSkipPre(false);
+
+		if (!reflection)
+		{
+			GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "TARGETS_DRAW_TREES");
+		}
 	}
-	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "TARGETS_DRAW_TREES");
 
 	// Models
 	targetsDrawn_ = 0;
-	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "TARGETS_DRAW_MODELS");
 	if (!OptionsDisplay::instance()->getNoTargets())
 	{
+		if (!reflection)
+		{
+			GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "TARGETS_DRAW_MODELS");
+		}
+
 		GLGlobalState globalState(0);
 
 		void *currentPatchPtr = 0, *currentObject = 0;
@@ -271,19 +302,23 @@ void RenderTargets::draw()
 			TargetVisibilityPatch *currentPatch = (TargetVisibilityPatch *) currentPatchPtr;
 
 			itor.init(currentPatch->getTargets());
-			drawTargets(itor, currentPatch->getDistance());
+			drawTargets(itor, currentPatch->getDistance(), reflection, waterHeight);
 
 			targetsDrawn_+=(unsigned int) currentPatch->getTargets().size();
 		}
 
 		{
 			itor.init(TargetVisibilityPatch::getLargeTargets());
-			drawTargets(itor, 0.0f);
+			drawTargets(itor, 0.0f, reflection, waterHeight);
 
 			targetsDrawn_+=(unsigned int) TargetVisibilityPatch::getLargeTargets().size();
 		}
+
+		if (!reflection)
+		{
+			GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "TARGETS_DRAW_MODELS");
+		}
 	}
-	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "TARGETS_DRAW_MODELS");
 }
 
 static void drawTargets2D(TargetVisibilityIterator &itor, float distance)

@@ -73,6 +73,12 @@ public:
 	bool getNoLenseFlare() { return noLenseFlare_; }
 	OptionEntryBool &getNoLenseFlareEntry() { return noLenseFlare_; }
 
+	bool getNoObjectReflections() { return noObjectReflections_; }
+	OptionEntryBool &getNoObjectReflectionsEntry() { return noObjectReflections_; }
+
+	bool getNoParticleReflections() { return noParticleReflections_; }
+	OptionEntryBool &getNoParticleReflectionsEntry() { return noParticleReflections_; }
+
 	bool getNoShadows() { return noShadows_; }
 	OptionEntryBool &getNoShadowsEntry() { return noShadows_; }
 
@@ -138,6 +144,9 @@ public:
 
 	bool getStorePlayerCamera() { return storePlayerCamera_; }
 	OptionEntryBool &getStorePlayerCameraEntry() { return storePlayerCamera_; }
+
+	bool getRestrictedCameraMovement() { return restricedCameraMovement_; }
+	OptionEntryBool &getRestrictedCameraMovementEntry() { return restricedCameraMovement_; }
 
 	bool getNoGLExt() { return noGLExt_; }
 	OptionEntryBool &getNoGLExtEntry() { return noGLExt_; }
@@ -462,6 +471,8 @@ protected:
 	OptionEntryBool noShadows_;
 	OptionEntryBool noGLShadows_;
 	OptionEntryBool noGLObjectShadows_;
+	OptionEntryBool noObjectReflections_;
+	OptionEntryBool noParticleReflections_;
 	OptionEntryBool noDrawParticles_;
 	OptionEntryBool noSimulateParticles_;
 	OptionEntryBool drawNormals_;
@@ -516,6 +527,7 @@ protected:
 	OptionEntryBool softwareMouse_;
 	OptionEntryBool sideScroll_;
 	OptionEntryBool storePlayerCamera_;
+	OptionEntryBool restricedCameraMovement_;
 	OptionEntryBool swapYAxis_;
 	OptionEntryBool clientLogToFile_;
 	OptionEntryInt clientLogState_;

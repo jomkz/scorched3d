@@ -85,7 +85,6 @@ protected:
 	ParticleEmitter rainEmitter_, snowEmitter_;
 	ParticleEngine particleEngine_;
 	float totalTime_;
-	bool useHeightFunc_;
 	int dragXStart_, dragYStart_;
 	bool dragging_;
 	bool lastLandIntersectValid_;

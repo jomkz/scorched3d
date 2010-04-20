@@ -50,6 +50,8 @@ public:
 	} render2D;
 
 	void shadowDraw();
+	void draw2d();
+	void draw(bool reflection);
 
 	unsigned int getTreesDrawn() { return treesDrawn_; }
 	unsigned int getTargetsDrawn() { return targetsDrawn_; }
@@ -61,9 +63,6 @@ protected:
 
 	unsigned int treesDrawn_, targetsDrawn_;
 	TankMenus menus_;
-
-	void draw2d();
-	void draw();
 
 private:
 	RenderTargets();

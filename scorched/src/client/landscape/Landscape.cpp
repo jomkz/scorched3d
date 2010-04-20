@@ -336,8 +336,6 @@ void Landscape::drawWater()
 		OptionsDisplay::instance()->getDrawWater() &&
 		water_->getWaterOn())
 	{
-		GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "WATER_REFLECTIONS");
-
 		water_->bindWaterReflection();
 
 		glClearColor(0, 1.0f/16.0f, 1.0f/8.0f, 0);
@@ -352,9 +350,23 @@ void Landscape::drawWater()
 		glCullFace(GL_FRONT);
 
 		drawSetup();
+		GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LAND_REFLECTIONS");
 		sky_->drawBackdrop();
 		sky_->drawLayers();
 		actualDrawLandReflection();
+		GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LAND_REFLECTIONS");
+		if (!OptionsDisplay::instance()->getNoObjectReflections())
+		{
+			GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "TARGET_REFLECTIONS");
+			RenderTargets::instance()->draw(true);
+			GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "TARGET_REFLECTIONS");
+		}
+		if (!OptionsDisplay::instance()->getNoParticleReflections())
+		{
+			GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "PARTICLE_REFLECTIONS");
+			ScorchedClient::instance()->getParticleEngine().draw(0);
+			GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "PARTICLE_REFLECTIONS");
+		}
 		drawTearDown();
 
 		//water_->drawPoints(); // Bad reflections in large wind
@@ -363,8 +375,6 @@ void Landscape::drawWater()
 		glPopMatrix();
 
 		water_->unBindWaterReflection();
-
-		GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "WATER_REFLECTIONS");
 	}
 
 	drawSetup();

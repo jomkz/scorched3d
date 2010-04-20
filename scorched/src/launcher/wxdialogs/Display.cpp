@@ -278,6 +278,12 @@ static void createSpeedControls(wxWindow *parent, wxSizer *sizer)
 		IDC_NOOBJECTSHADOWS_CTRL = 
 		new wxCheckBox(parent, -1, wxT("No GL shadows for objects - Medium Framerate Improvement"));
 		waterDetailSizer2->Add(IDC_NOOBJECTSHADOWS_CTRL, 0);
+		IDC_NOOBJECTREFLECTIONS_CTRL = 
+		new wxCheckBox(parent, -1, wxT("No water reflections for objects - Medium Framerate Improvement"));
+		waterDetailSizer2->Add(IDC_NOOBJECTREFLECTIONS_CTRL, 0);
+		IDC_NOPARTICLEREFLECTIONS_CTRL = 
+		new wxCheckBox(parent, -1, wxT("No water reflections for particles - Small Framerate Improvement"));
+		waterDetailSizer2->Add(IDC_NOPARTICLEREFLECTIONS_CTRL, 0);
 		IDC_NOSHADOWS_CTRL = 
 		new wxCheckBox(parent, -1, wxT("No GL shadows - Large Framerate Improvement"));
 		waterDetailSizer2->Add(IDC_NOSHADOWS_CTRL, 0);
