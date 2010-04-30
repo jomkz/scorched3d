@@ -54,6 +54,8 @@ HUDDialog::HUDDialog() :
 	addWidget(healthBox_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
 	iconBox_ = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("SHOW_ICON", "Show Icon"));
 	addWidget(iconBox_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
+	countDownBox_ = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("COUNTDOWN_SOUND", "No Count Down Sound"));
+	addWidget(countDownBox_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
 
 	GLWPanel *buttonPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
 	GLWButton *cancelButton = new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 95, 10, 105, this, 
@@ -93,6 +95,8 @@ void HUDDialog::display()
 		OptionsDisplay::instance()->getDrawPlayerIcons());
 	largeSightBox_->getCheckBox().setState(
 		OptionsDisplay::instance()->getLargeSight());
+	countDownBox_->getCheckBox().setState(
+		OptionsDisplay::instance()->getNoCountDownSound());
 }
 
 void HUDDialog::buttonDown(unsigned int id)
@@ -113,6 +117,8 @@ void HUDDialog::buttonDown(unsigned int id)
 			iconBox_->getCheckBox().getState());
 		OptionsDisplay::instance()->getLargeSightEntry().setValue(
 			largeSightBox_->getCheckBox().getState());
+		OptionsDisplay::instance()->getNoCountDownSoundEntry().setValue(
+			countDownBox_->getCheckBox().getState());
 	}
 	GLWWindowManager::instance()->hideWindow(getId());
 }

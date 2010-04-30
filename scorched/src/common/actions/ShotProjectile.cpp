@@ -147,12 +147,6 @@ void ShotProjectile::collision(PhysicsParticleObject &position,
 void ShotProjectile::simulate(fixed frameTime, bool &remove)
 {
 	totalTime_ += frameTime;
-	if (vPoint_)
-	{
-		FixedVector velocity = -getCurrentVelocity();
-		velocity[2] = 10;
-		vPoint_->setValues(getCurrentPosition(), velocity);
-	}
 
 	// Water collision
 	if (!remove &&
@@ -244,6 +238,13 @@ void ShotProjectile::simulate(fixed frameTime, bool &remove)
 	{
 		PhysicsParticle::simulate(stepSize_, remove);
 		simulateTime_ -= stepSize_;
+	}
+
+	if (vPoint_)
+	{
+		FixedVector velocity = -getCurrentVelocity();
+		velocity[2] = 10;
+		vPoint_->setValues(getCurrentPosition(), velocity);
 	}
 }
 

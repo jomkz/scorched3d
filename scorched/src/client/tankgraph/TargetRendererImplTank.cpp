@@ -43,6 +43,7 @@
 #include <graph/ModelRenderer.h>
 #include <graph/ModelRendererStore.h>
 #include <graph/ModelRendererSimulator.h>
+#include <graph/MainCamera.h>
 #include <common/Defines.h>
 #include <weapons/Shield.h>
 #include <weapons/Accessory.h>
@@ -196,7 +197,16 @@ void TargetRendererImplTank::drawParticle(float distance)
 		}
 	}
 
-	drawInfo();
+	TargetCamera::CamType camType = MainCamera::instance()->getTarget().getCameraType();
+	if (!currentTank ||
+		(camType != TargetCamera::CamAim &&
+		camType != TargetCamera::CamShot &&
+		camType != TargetCamera::CamTank &&
+		camType != TargetCamera::CamAction &&
+		camType != TargetCamera::CamExplosion))
+	{	
+		drawInfo();
+	}
 }
 
 void TargetRendererImplTank::drawInfo()
@@ -290,10 +300,8 @@ void TargetRendererImplTank::drawSight()
 		{
 			FixedVector &turretCenter = getMesh()->getTurretCenter();
 			glTranslatef(
-				tank_->getPosition().getTankPosition()[0].asFloat() +
-				turretCenter[0].asFloat() * getMesh()->getScale(),
-				tank_->getPosition().getTankPosition()[1].asFloat() +
-				turretCenter[1].asFloat() * getMesh()->getScale(),
+				tank_->getPosition().getTankPosition()[0].asFloat(),
+				tank_->getPosition().getTankPosition()[1].asFloat(),
 				tank_->getPosition().getTankPosition()[2].asFloat() +
 				(turretCenter[2].asFloat() - getMesh()->getModel()->getMin()[2].asFloat()) * getMesh()->getScale());
 		}
@@ -497,15 +505,12 @@ void TargetRendererImplTank::drawOldSight()
 	}
 
 	glPushMatrix();
-
  		if (OptionsDisplay::instance()->getOldSightPosition())
 		{		
 			FixedVector &turretCenter = getMesh()->getTurretCenter();
 			glTranslatef(
-				tank_->getPosition().getTankPosition()[0].asFloat() +
-				turretCenter[0].asFloat() * getMesh()->getScale(),
-				tank_->getPosition().getTankPosition()[1].asFloat() +
-				turretCenter[1].asFloat() * getMesh()->getScale(),
+				tank_->getPosition().getTankPosition()[0].asFloat(),
+				tank_->getPosition().getTankPosition()[1].asFloat(),
 				tank_->getPosition().getTankPosition()[2].asFloat() +
 				(turretCenter[2].asFloat() - getMesh()->getModel()->getMin()[2].asFloat()) * getMesh()->getScale());
 			glRotatef(tank_->getPosition().getRotationGunXY().asFloat(), 

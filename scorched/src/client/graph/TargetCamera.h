@@ -90,7 +90,7 @@ protected:
 	bool lastLandIntersectValid_;
 	Vector lastLandIntersect_;
 
-	bool moveCamera(float frameTime, bool playing);
+	void moveCamera();
 	bool getLandIntersect(int x, int y, Vector &intersect);
 	void viewBehindTank(Tank *tank);
 	void viewSpectator();

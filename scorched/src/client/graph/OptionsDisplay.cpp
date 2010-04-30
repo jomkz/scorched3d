@@ -178,6 +178,8 @@ OptionsDisplay::OptionsDisplay() :
 		"Generate texture LOD in software only.", RAccess, false),
 	soundChannels_(options_, "SoundChannels", 
 		"Number of sound channels to mix.", RAccess, 8),
+	noCountDownSound_(options_, "NoCountDownSound", 
+		"Do not play the count down beep sound.", RWAccess, false),
 	noSound_(options_, "NoSound", 
 		"Do not play any sound.", RWAccess, false),
 	noMusic_(options_, "NoMusic", 

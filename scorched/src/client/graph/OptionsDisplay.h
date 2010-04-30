@@ -181,6 +181,9 @@ public:
 	int getSoundChannels() { return soundChannels_; }
 	OptionEntryInt &getSoundChannelsEntry() { return soundChannels_; }
 
+	bool getNoCountDownSound() { return noCountDownSound_; }
+	OptionEntryBool &getNoCountDownSoundEntry() { return noCountDownSound_; }
+
 	bool getNoSound() { return noSound_; }
 	OptionEntryBool &getNoSoundEntry() { return noSound_; }
 
@@ -467,6 +470,7 @@ protected:
 	OptionEntryBool invertElevation_;
 	OptionEntryBool invertMouse_;
 	OptionEntryBool noSound_;
+	OptionEntryBool noCountDownSound_;
 	OptionEntryBool noMusic_;
 	OptionEntryBool noShadows_;
 	OptionEntryBool noGLShadows_;

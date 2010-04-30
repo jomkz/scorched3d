@@ -23,11 +23,14 @@
 #include <client/ClientState.h>
 #include <common/OptionsScorched.h>
 #include <common/DefinesString.h>
+#include <graph/OptionsDisplay.h>
 #include <GLEXT/GLViewPort.h>
 #include <GLW/GLWFont.h>
 #include <GLW/GLWidget.h>
 #include <GLW/GLWColors.h>
 #include <GLEXT/GLTexture.h>
+#include <sound/Sound.h>
+#include <sound/SoundUtils.h>
 #include <tank/TankContainer.h>
 #include <tank/TankAvatar.h>
 #include <lang/LangResource.h>
@@ -72,6 +75,23 @@ void ShotCountDown::showRoundTime(fixed timer)
 
 void ShotCountDown::simulateTime(fixed simTime)
 {
+	if (!OptionsDisplay::instance()->getNoCountDownSound())
+	{
+		if (move.timer_ > 0 && move.timer_.asInt() <= 6)
+		{
+			if ((move.timer_ - simTime) <= 0)
+			{
+				CACHE_SOUND(sound, S3D::getModFile("data/wav/misc/beep2.wav"));
+				SoundUtils::playRelativeSound(VirtualSoundPriority::eText, sound);
+			}
+			else if ((move.timer_.asInt() > (move.timer_ - simTime).asInt()))
+			{
+				CACHE_SOUND(sound, S3D::getModFile("data/wav/misc/beep.wav"));
+				SoundUtils::playRelativeSound(VirtualSoundPriority::eText, sound);
+			}
+		}
+	}
+
 	round.timer_ -= simTime;
 	move.timer_ -= simTime;
 }

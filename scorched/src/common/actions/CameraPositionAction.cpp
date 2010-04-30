@@ -42,7 +42,10 @@ CameraPositionAction::~CameraPositionAction()
 {
 	if (!context_->getServerMode())
 	{
-		CameraPositionActionRegistry::rmCameraPositionAction(this);
+		if (playerId_ != 0)
+		{
+			CameraPositionActionRegistry::rmCameraPositionAction(this);
+		}
 		Tank *tank = context_->getTankContainer().getTankById(playerId_);
 		if (tank) 
 		{
@@ -69,7 +72,10 @@ void CameraPositionAction::init()
 {
 	if (!context_->getServerMode())
 	{
-		CameraPositionActionRegistry::addCameraPositionAction(this);
+		if (playerId_ != 0)
+		{
+			CameraPositionActionRegistry::addCameraPositionAction(this);
+		}
 		Tank *tank = context_->getTankContainer().getTankById(playerId_);
 		if (tank) 
 		{

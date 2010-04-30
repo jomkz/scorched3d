@@ -241,14 +241,12 @@ void TargetCamera::simulate(float frameTime, bool playing)
 	}
 
 	particleEngine_.simulate(0, frameTime);
-	if (moveCamera(frameTime, playing))
-	{
-		mainCam_.simulate(frameTime);
-	}
+	mainCam_.simulate(frameTime);
 }
 
 void TargetCamera::draw()
 {
+	moveCamera();
 	mainCam_.draw();
 }
 
@@ -257,7 +255,7 @@ void TargetCamera::drawPrecipitation()
 	particleEngine_.draw(0);
 }
 
-bool TargetCamera::moveCamera(float frameTime, bool playing)
+void TargetCamera::moveCamera()
 {
 	float arenaWidth = (float) ScorchedClient::instance()->getLandscapeMaps().
 		getGroundMaps().getArenaWidth();
@@ -456,8 +454,6 @@ bool TargetCamera::moveCamera(float frameTime, bool playing)
 	default:
 		break;
 	}
-	
-	return simulateCamera;
 }
 
 void TargetCamera::viewBehindTank(Tank *tank)
