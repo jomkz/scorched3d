@@ -566,7 +566,7 @@ void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
 			current->getColor(),
 			10,
 			textX + moneyLeft, textY, 0.0f,
-			S3D::formatStringBuffer("$%i", current->getScore().getMoney()));
+			S3D::formatMoney(current->getScore().getMoney()));
 		GLWFont::instance()->getGameFont()->draw(
 			current->getColor(),
 			10,

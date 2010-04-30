@@ -22,6 +22,8 @@
 #include <lang/LangResource.h>
 #include <XML/XMLNode.h>
 
+bool TankAI::tankAILogging_ = false;
+
 TankAI::TankAI() : 
 	availableForRandom_(true),
 	availableForPlayers_(true)

@@ -97,4 +97,16 @@ std::string S3D::formatStringBuffer(const char *format, ...)
 	return result;
 }
 
-
+std::string S3D::formatMoney(int amount)
+{
+	if (abs(amount) < 1000)
+	{
+		return S3D::formatStringBuffer("$%i", amount);
+	}
+	else
+	{
+		int thou = amount / 1000;
+		amount = abs(amount) - abs(thou * 1000);
+		return S3D::formatStringBuffer("$%i,%03i", thou, amount);
+	}
+}

@@ -100,6 +100,9 @@ TankMenus::TankMenus() : logger_("ClientLog")
 	new ConsoleRuleFnIBooleanAdapter(
 		"StateTimeLogging",
 		ScorchedClient::instance()->getGameState().getStateTimeLogging());
+	new ConsoleRuleFnIBooleanAdapter(
+		"AILogging",
+		TankAI::getTankAILogging());
 	
 	if (OptionsDisplay::instance()->getClientLogToFile())
 	{

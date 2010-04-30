@@ -230,6 +230,7 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	ScorchedClient::instance()->getMainLoop().getTimer().getTimeDifference();
 
 	// Reset camera positions for each tank
+	bool playerTanks = false;
 	std::map<unsigned int, Tank *>::iterator tankItor;
 	for (tankItor = ScorchedClient::instance()->getTankContainer().getAllTanks().begin();
 		tankItor != ScorchedClient::instance()->getTankContainer().getAllTanks().end();
@@ -238,8 +239,16 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 		Tank *current = (*tankItor).second;
 		current->getRenderer()->moved();
 		current->getCamera().setCameraType(1);
+		if (current->getDestinationId() != 0 &&
+			current->getPlayerId() != TargetID::SPEC_TANK_ID)
+		{
+			playerTanks = true;
+		}
 	}
-	MainCamera::instance()->getTarget().setCameraType(TargetCamera::CamSpectator);
+	if (playerTanks)
+	{
+		MainCamera::instance()->getTarget().setCameraType(TargetCamera::CamSpectator);
+	}
 	ClientReloadAdaptor::instance();
 
 	// Make sure simulator knows we are not loading a level

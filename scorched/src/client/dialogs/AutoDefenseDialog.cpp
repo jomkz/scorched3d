@@ -156,7 +156,7 @@ void AutoDefenseDialog::displayCurrent()
 	topPanel_->addWidget(new GLWFlag(tankInfo_.tankColor, 5, 15, 60));
 	topPanel_->addWidget(new GLWLabel(75, 10, tankInfo_.tankName));
 	topPanel_->addWidget(new GLWLabel(260, 20, 
-		LANG_STRING(S3D::formatStringBuffer("$%i", tankInfo_.tankMoney))));
+		LANG_STRING(S3D::formatMoney(tankInfo_.tankMoney))));
 	topPanel_->addWidget(new GLWLabel(260, 0,
 		LANG_RESOURCE_2("ROUND_OF", "Round {0} of {1}",
 		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsTransient().getCurrentRoundNo()),

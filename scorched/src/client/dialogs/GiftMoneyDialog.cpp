@@ -109,7 +109,7 @@ void GiftMoneyDialog::display()
 				GLWSelectorEntry(
 				LANG_RESOURCE(
 					S3D::formatStringBuffer("%i_DOLLARS", amount), 
-					S3D::formatStringBuffer("$%i", amount)), 
+					S3D::formatMoney(amount)), 
 					0, false, 0, (void *) amount));
 		}
 	}

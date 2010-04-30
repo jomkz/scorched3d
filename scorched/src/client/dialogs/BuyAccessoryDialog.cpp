@@ -139,7 +139,7 @@ void BuyAccessoryDialog::addPlayerName()
 	flag_->setOffset(flagOffset);
 	topPanel_->addWidget(new GLWLabel(75, 10, tankInfo_.tankName));
 	topPanel_->addWidget(new GLWLabel(260, 20, 
-		LANG_STRING(S3D::formatStringBuffer("$%i", tankInfo_.tankMoney))));
+		LANG_STRING(S3D::formatMoney(tankInfo_.tankMoney))));
 	topPanel_->addWidget(new GLWLabel(260, 0, 
 		LANG_RESOURCE_2("ROUND_OF", "Round {0} of {1}",
 		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsTransient().getCurrentRoundNo()),
@@ -333,22 +333,23 @@ bool BuyAccessoryDialog::addAccessory(
 	newPanel->addWidget(new GLWLabel(65, 0, LANG_RESOURCE(current->getName(), current->getName()), 12.0f));
 
 	// Buy Button
+	std::string price = S3D::formatMoney(current->getPrice());
 	if (tankInfo_.tankAccessories.accessoryAllowed(current, current->getBundle()) && 
 		current->getPrice() <= tankInfo_.tankMoney)
 	{
 		GLWTextButton *button = (GLWTextButton *)
 			newPanel->addWidget(new GLWTextButton(
-				LANG_STRING(S3D::formatStringBuffer("$%i/%i",
-					current->getPrice(), current->getBundle())), 
+				LANG_STRING(S3D::formatStringBuffer("%s/%i",
+					price.c_str(), current->getBundle())), 
 					210, 2, 100, this, 
 			GLWButton::ButtonFlagCenterX, 12.0f));
 		button->setColor(Vector(0.0f, 0.4f, 0.0f));
 		button->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
 			LANG_RESOURCE("BUY", "Buy"), 
-			LANG_RESOURCE_3("BUY_TOOLTIP", "Buy {0} {1}(s) for ${2}",
+			LANG_RESOURCE_3("BUY_TOOLTIP", "Buy {0} {1}(s) for {2}",
 				S3D::formatStringBuffer("%i", current->getBundle()),
 				current->getName(),
-				S3D::formatStringBuffer("%i", current->getPrice()))));
+				price)));
 		button->setH(button->getH() - 2.0f);
 		buyMap_[button->getId()] = current;
 	}
@@ -357,8 +358,8 @@ bool BuyAccessoryDialog::addAccessory(
 		GLWLabel *label = (GLWLabel *)
 			newPanel->addWidget(new GLWLabel(
 				260, 0, 
-				LANG_STRING(S3D::formatStringBuffer("$%i/%i",
-					current->getPrice(), current->getBundle())), 12.0f));
+				LANG_STRING(S3D::formatStringBuffer("%s/%i",
+					price.c_str(), current->getBundle())), 12.0f));
 		label->setX(label->getX() - label->getW() / 2);
 		label->setColor(Vector(0.4f, 0.4f, 0.4f));
 	}
@@ -366,18 +367,19 @@ bool BuyAccessoryDialog::addAccessory(
 	// Sell Button
 	if (currentNumber > 0)
 	{
+		std::string sellprice = S3D::formatMoney(current->getSellPrice());
 		GLWTextButton *button = (GLWTextButton *)
 			newPanel->addWidget(new GLWTextButton(
-				LANG_STRING(S3D::formatStringBuffer("$%i/%i",
-					current->getSellPrice(), 1)), 
+				LANG_STRING(S3D::formatStringBuffer("%s/%i",
+					sellprice.c_str(), 1)), 
 					312, 2, 100, this,
 			GLWButton::ButtonFlagCenterX, 12.0f));
 		button->setColor(Vector(0.7f, 0.0f, 0.0f));
 		button->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
 			LANG_RESOURCE("SELL", "Sell"), 
-			LANG_RESOURCE_2("SELL_TOOLTIP", "Sell 1 {0} for ${1}",
+			LANG_RESOURCE_2("SELL_TOOLTIP", "Sell 1 {0} for {1}",
 				current->getName(),
-				S3D::formatStringBuffer("%i", current->getSellPrice()))));
+				sellprice)));
 		button->setH(button->getH() - 2.0f);
 		sellMap_[button->getId()] = current;
 	}

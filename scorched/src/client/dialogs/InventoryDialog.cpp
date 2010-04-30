@@ -138,7 +138,7 @@ void InventoryDialog::addPlayerName()
 	topPanel_->addWidget(new GLWFlag(tank->getColor(), 5, 15, 60));
 	topPanel_->addWidget(new GLWLabel(75, 10, tank->getTargetName()));
 	topPanel_->addWidget(new GLWLabel(260, 20, 
-		LANG_STRING(S3D::formatStringBuffer("$%i", tank->getScore().getMoney()))));
+		LANG_STRING(S3D::formatMoney(tank->getScore().getMoney()))));
 	topPanel_->addWidget(new GLWLabel(260, 0,
 		LANG_RESOURCE_2("ROUND_OF", "Round {0} of {1}",
 		S3D::formatStringBuffer("%i", ScorchedClient::instance()->getOptionsTransient().getCurrentRoundNo()),
@@ -173,8 +173,9 @@ void InventoryDialog::addPlayerWeapons()
 		newPanel->addWidget(new GLWLabel(0, -2, tank->getAccessories().getAccessoryCountString(current)));
 		newPanel->addWidget(new GLWIcon(30, 2, 16, 16, current->getTexture()));
 		newPanel->addWidget(new GLWLabel(50, -2, LANG_RESOURCE(current->getName(), current->getName())));
+		std::string sellPrice(S3D::formatMoney(current->getSellPrice()));
 		newPanel->addWidget(new GLWLabel(205, -2, 
-			LANG_STRING(S3D::formatStringBuffer("$%i/%i", current->getSellPrice(), 1))));
+			LANG_STRING(S3D::formatStringBuffer("%s/%i", sellPrice.c_str(), 1))));
 
 		height += 24;
 	}

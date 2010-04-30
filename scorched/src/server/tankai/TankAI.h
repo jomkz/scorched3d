@@ -65,7 +65,10 @@ public:
 	virtual bool availableForPlayers() { return availableForPlayers_; }
 	virtual bool removedPlayer() { return false; }
 
+	static bool &getTankAILogging() { return tankAILogging_; }
+
 protected:
+	static bool tankAILogging_;
 	std::string name_, description_;
 	bool availableForRandom_;
 	bool availableForPlayers_;

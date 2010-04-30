@@ -30,6 +30,7 @@
 #include <server/ServerState.h>
 #include <simactions/TankDefenseSimAction.h>
 #include <simactions/TankStartMoveSimAction.h>
+#include <tankai/TankAI.h>
 #include <tank/Tank.h>
 #include <tank/TankLib.h>
 #include <tank/TankPosition.h>
@@ -163,11 +164,21 @@ void TankAICurrentMove::playMove(Tank *tank,
 	TankAIWeaponSets::WeaponSet *weapons, bool useBatteries,
 	MoveData &moveData)
 {
+	if (TankAI::getTankAILogging())
+	{
+		Logger::log(S3D::formatStringBuffer("----- TankAI %u %s ----------------",
+			tank->getPlayerId(), tank->getCStrName().c_str()));
+	}
+
 	std::list<Tank *> sortedTanks;	
 
 	// Find the list of tanks we can shoot at 
 	// In the order we want to shoot at them
 	targets_.getTargets(tank, sortedTanks);
+	if (TankAI::getTankAILogging())
+	{
+		Logger::log(S3D::formatStringBuffer("TankAI - Found %u tanks to shoot at", sortedTanks.size()));
+	}
 
 	// Check if we have taken a lot of damage and we can move
 	float totalDamage = 
@@ -201,6 +212,12 @@ void TankAICurrentMove::playMove(Tank *tank,
 		Tank *targetTank = sortedTanks.front();
 		sortedTanks.pop_front();
 
+		if (TankAI::getTankAILogging())
+		{
+			Logger::log(S3D::formatStringBuffer("TankAI - Checking target %u %s", 
+				targetTank->getPlayerId(), targetTank->getCStrName().c_str()));
+		}
+
 		// Get the list of weapons that might make sense here
 		TankAICurrentMoveWeapons moveWeapons(tank, targetTank, weapons);
 
@@ -218,6 +235,11 @@ void TankAICurrentMove::playMove(Tank *tank,
 			// Bring the health back up
 			if (useAvailableBatteries(tank, moveData)) return;
 		}
+	}
+
+	if (TankAI::getTankAILogging())
+	{
+		Logger::log(S3D::formatStringBuffer("TankAI - no targets can be shot at"));
 	}
 
 	// Try to move so we can get a better shot at the targets
@@ -264,12 +286,24 @@ bool TankAICurrentMove::shootAtTank(Tank *tank, Tank *targetTank,
 bool TankAICurrentMove::makeProjectileShot(Tank *tank, Tank *targetTank, 
 	TankAICurrentMoveWeapons &weapons, MoveData &moveData)
 {
+	if (TankAI::getTankAILogging())
+	{
+		Logger::log(S3D::formatStringBuffer("TankAI - check for projectile shot"));
+	}
+
 	// Check we have any weapons to fire
 	if (!weapons.roller &&
 		!weapons.digger &&
 		!weapons.napalm &&
 		!weapons.large &&
-		!weapons.small) return false;
+		!weapons.small) 
+	{
+		if (TankAI::getTankAILogging())
+		{
+			Logger::log(S3D::formatStringBuffer("TankAI - no projectile weapons suitable"));
+		}
+		return false;
+	}
 
 	// Get the place we want to shoot at
 	Vector directTarget = targetTank->getPosition().getTankPosition().asVector();
@@ -330,17 +364,33 @@ bool TankAICurrentMove::makeProjectileShot(Tank *tank, Tank *targetTank,
 				(actualPosition - directTarget).Magnitude();
 			float distanceFromUs = 
 				(actualPosition - tank->getPosition().getTankPosition().asVector()).Magnitude();
-			if (distanceFromUs < projectileMinDistance_) continue;
+			if (distanceFromUs < projectileMinDistance_)
+			{
+				if (TankAI::getTankAILogging())
+				{
+					Logger::log(S3D::formatStringBuffer("TankAI - target too close"));
+				}
+				continue;
+			}
 
 			// We can fire at this tank
 			// ...
 			// Check how close we are
 			if (distanceFromTarget < largeWeaponUseDistance_)
 			{
+				if (TankAI::getTankAILogging())
+				{
+					Logger::log(S3D::formatStringBuffer("TankAI - close distance to target"));
+				}
+
 				// Check if the tank is in a hole
 				if (inhole)
 				{
 					setWeapon(tank, weapons.roller);
+					if (TankAI::getTankAILogging())
+					{
+						Logger::log(S3D::formatStringBuffer("TankAI - in hole roller used"));
+					}
 				}
 				else
 				{
@@ -352,31 +402,63 @@ bool TankAICurrentMove::makeProjectileShot(Tank *tank, Tank *targetTank,
 						if (weapons.digger) setWeapon(tank, weapons.digger);
 						else if (weapons.napalm) setWeapon(tank, weapons.napalm);
 						else if (weapons.large) setWeapon(tank, weapons.large);
-						else return false;
+						else 
+						{
+							if (TankAI::getTankAILogging())
+							{
+								Logger::log(S3D::formatStringBuffer("TankAI - no projectile shield weapons found"));
+							}
+							return false;
+						}
 					}
 					else
 					{
-						
 						// A normal weapon
 						if (weapons.digger) setWeapon(tank, weapons.digger);
 						else if (weapons.large) setWeapon(tank, weapons.large);		
 						else if (weapons.small) setWeapon(tank, weapons.small);					
-						else return false;
+						else 
+						{
+							if (TankAI::getTankAILogging())
+							{
+								Logger::log(S3D::formatStringBuffer("TankAI - no projectile normal weapons found"));
+							}
+							return false;
+						}
 					}
 				}
 			}
 			else
 			{
+				if (TankAI::getTankAILogging())
+				{
+					Logger::log(S3D::formatStringBuffer("TankAI - far distance to target"));
+				}
+
 				// We are not close, choose a cheap weapon
 				if (weapons.small) setWeapon(tank, weapons.small);	
 				else if (weapons.large) setWeapon(tank, weapons.large);
-				else return false;
+				else 
+				{
+					if (TankAI::getTankAILogging())
+					{
+						Logger::log(S3D::formatStringBuffer("TankAI - no normal weapons found"));
+					}
+					return false;
+				}
 			}
 
 			// Fire the shot
 			shotAtTank(targetTank, true, distanceFromTarget);
 			fireShot(tank, moveData);
 			return true;
+		}
+		else
+		{
+			if (TankAI::getTankAILogging())
+			{
+				Logger::log(S3D::formatStringBuffer("TankAI - failed to find a shot at %.2f degrees", degs));
+			}
 		}
 	}
 
@@ -386,11 +468,23 @@ bool TankAICurrentMove::makeProjectileShot(Tank *tank, Tank *targetTank,
 bool TankAICurrentMove::makeSniperShot(Tank *tank, Tank *targetTank, 
 	TankAICurrentMoveWeapons &weapons, MoveData &moveData)
 {
+	if (TankAI::getTankAILogging())
+	{
+		Logger::log(S3D::formatStringBuffer("TankAI - check for sniper shot"));
+	}
+
 	// Check if we have any weapons we can use for sniper
 	if (!weapons.digger &&
 		!weapons.laser &&
 		!weapons.large &&
-		!weapons.small) return false;
+		!weapons.small) 
+	{
+		if (TankAI::getTankAILogging())
+		{
+			Logger::log(S3D::formatStringBuffer("TankAI - no sniper weapons suitable"));
+		}
+		return false;
+	}
 
 	// Get the place we want to shoot at
 	Vector directTarget = targetTank->getPosition().getTankPosition().asVector();
@@ -402,6 +496,10 @@ bool TankAICurrentMove::makeSniperShot(Tank *tank, Tank *targetTank,
 	if (sniperGuesser.guess(tank, directTarget, sniperUseDistance_, true, offset))
 	{
 		// We can make a ordinary sniper shot
+		if (TankAI::getTankAILogging())
+		{
+			Logger::log(S3D::formatStringBuffer("TankAI - sniper target in range"));
+		}
 
 		// Does this target have a bouncy shield
 		if (!weapons.shield ||
@@ -415,7 +513,14 @@ bool TankAICurrentMove::makeSniperShot(Tank *tank, Tank *targetTank,
 				if (weapons.digger) setWeapon(tank, weapons.digger);
 				else if (weapons.laser) setWeapon(tank, weapons.laser);
 				else if (weapons.large) setWeapon(tank, weapons.large);
-				else return false;
+				else 
+				{
+					if (TankAI::getTankAILogging())
+					{
+						Logger::log(S3D::formatStringBuffer("TankAI - no sniper shield weapons"));
+					}
+					return false;
+				}
 			}
 			else
 			{
@@ -423,7 +528,14 @@ bool TankAICurrentMove::makeSniperShot(Tank *tank, Tank *targetTank,
 				if (weapons.digger) setWeapon(tank, weapons.digger);
 				else if (weapons.large) setWeapon(tank, weapons.large);
 				else if (weapons.small) setWeapon(tank, weapons.small);
-				else return false;
+				else 
+				{
+					if (TankAI::getTankAILogging())
+					{
+						Logger::log(S3D::formatStringBuffer("TankAI - no sniper weapons"));
+					}
+					return false;
+				}
 			}
 
 			// Fire the shot
@@ -447,8 +559,20 @@ bool TankAICurrentMove::makeSniperShot(Tank *tank, Tank *targetTank,
 bool TankAICurrentMove::makeLaserSniperShot(Tank *tank, Tank *targetTank, 
 	TankAICurrentMoveWeapons &weapons, MoveData &moveData)
 {
+	if (TankAI::getTankAILogging())
+	{
+		Logger::log(S3D::formatStringBuffer("TankAI - check for laser sniper shot"));
+	}
+
 	// Check if we have any lasers to fire
-	if (!weapons.laser) return false;
+	if (!weapons.laser)
+	{
+		if (TankAI::getTankAILogging())
+		{
+			Logger::log(S3D::formatStringBuffer("TankAI - no laser sniper weapons suitable"));
+		}
+		return false;
+	}
 
 	// Get the place we want to shoot at
 	Vector directTarget = targetTank->getPosition().getTankPosition().asVector();
@@ -459,14 +583,16 @@ bool TankAICurrentMove::makeLaserSniperShot(Tank *tank, Tank *targetTank,
 	TankAISniperGuesser sniperGuesser;
 	if (sniperGuesser.guess(tank, directTarget, sniperUseDistance_, false, offset))
 	{
-		if (weapons.laser)
+		if (TankAI::getTankAILogging())
 		{
-			// Set and fire the laser
-			shotAtTank(targetTank, false, 0.0f);
-			setWeapon(tank, weapons.laser);
-			fireShot(tank, moveData);
-			return true;
+			Logger::log(S3D::formatStringBuffer("TankAI - sniper target in range"));
 		}
+
+		// Set and fire the laser
+		shotAtTank(targetTank, false, 0.0f);
+		setWeapon(tank, weapons.laser);
+		fireShot(tank, moveData);
+		return true;
 	}
 
 	return false;
@@ -475,8 +601,21 @@ bool TankAICurrentMove::makeLaserSniperShot(Tank *tank, Tank *targetTank,
 bool TankAICurrentMove::makeBurriedShot(Tank *tank, Tank *targetTank, 
 	TankAICurrentMoveWeapons &weapons, MoveData &moveData)
 {
+	if (TankAI::getTankAILogging())
+	{
+		Logger::log(S3D::formatStringBuffer("TankAI - check for burried shot"));
+	}
+
 	// Don't check if we can't uncover
-	if (!weapons.uncover) return false;
+	if (!weapons.uncover)
+	{
+		if (TankAI::getTankAILogging())
+		{
+			Logger::log(S3D::formatStringBuffer("TankAI - no burried shot weapons"));
+		}
+
+		return false;
+	}
 
 	// Find a shot towards a target
 	fixed xy, yz, power;
@@ -491,17 +630,19 @@ bool TankAICurrentMove::makeBurriedShot(Tank *tank, Tank *targetTank,
 		tank->getPosition().getTankGunPosition(), 
 		xy, yz, power, 2))
 	{
-		// Try to uncover the tank
-		if (weapons.uncover)
+		if (TankAI::getTankAILogging())
 		{
-			tank->getPosition().rotateGunXY(xy, false);
-			tank->getPosition().rotateGunYZ(yz, false);
-			tank->getPosition().changePower(power, false);
-
-			setWeapon(tank, weapons.uncover);
-			fireShot(tank, moveData);
-			return true;
+			Logger::log(S3D::formatStringBuffer("TankAI - tank burried"));
 		}
+
+		// Try to uncover the tank
+		tank->getPosition().rotateGunXY(xy, false);
+		tank->getPosition().rotateGunYZ(yz, false);
+		tank->getPosition().changePower(power, false);
+
+		setWeapon(tank, weapons.uncover);
+		fireShot(tank, moveData);
+		return true;
 	}
 
 	return false;
@@ -584,6 +725,11 @@ bool TankAICurrentMove::makeMoveShot(Tank *tank,
 	std::list<Tank *> &sortedTanks,
 	MoveData &moveData)
 {
+	if (TankAI::getTankAILogging())
+	{
+		Logger::log(S3D::formatStringBuffer("TankAI - Checking movement"));
+	}
+
 	if (!useFuel_) return false;
 	if (sortedTanks.empty()) return false;
 
@@ -664,6 +810,11 @@ bool TankAICurrentMove::makeGroupShot(Tank *tank,
 	std::list<Tank *> &sortedTanks,
 	MoveData &moveData)
 {
+	if (TankAI::getTankAILogging())
+	{
+		Logger::log(S3D::formatStringBuffer("TankAI - Checking group shot"));
+	}
+
 	if (groupShotSize_ == 0) return false;
 	Accessory *explosionhuge = weapons->getTankAccessoryByType(tank, "explosionhuge");
 	if (!explosionhuge) return false;
@@ -899,11 +1050,21 @@ void TankAICurrentMove::shotAtTank(Tank *tank, bool projectile, float newDistanc
 
 void TankAICurrentMove::setWeapon(Tank *tank, Accessory *accessory)
 {
+	if (TankAI::getTankAILogging())
+	{
+		Logger::log(S3D::formatStringBuffer("TankAI - setting weapon %s", accessory->getName()));
+	}
+
 	tank->getAccessories().getWeapons().setWeapon(accessory);
 }
 
 void TankAICurrentMove::skipMove(Tank *tank, MoveData &moveData)
 {
+	if (TankAI::getTankAILogging())
+	{
+		Logger::log(S3D::formatStringBuffer("TankAI - skipping"));
+	}
+
 	ComsPlayedMoveMessage message(tank->getPlayerId(), 
 		moveData.moveId,
 		ComsPlayedMoveMessage::eSkip);
@@ -913,6 +1074,11 @@ void TankAICurrentMove::skipMove(Tank *tank, MoveData &moveData)
 
 void TankAICurrentMove::resign(Tank *tank, MoveData &moveData)
 {
+	if (TankAI::getTankAILogging())
+	{
+		Logger::log(S3D::formatStringBuffer("TankAI - resigning"));
+	}
+
 	ComsPlayedMoveMessage message(tank->getPlayerId(), 
 		moveData.moveId, 
 		ComsPlayedMoveMessage::eResign);
@@ -922,10 +1088,20 @@ void TankAICurrentMove::resign(Tank *tank, MoveData &moveData)
 
 void TankAICurrentMove::fireShot(Tank *tank, MoveData &moveData)
 {
+	if (TankAI::getTankAILogging())
+	{
+		Logger::log(S3D::formatStringBuffer("TankAI - shooting at tank %s", tank->getCStrName().c_str()));
+	}
+
 	Accessory *currentWeapon = 
 		tank->getAccessories().getWeapons().getCurrent();
 	if (currentWeapon)
 	{
+		if (TankAI::getTankAILogging())
+		{
+			Logger::log(S3D::formatStringBuffer("TankAI - firing shot"));
+		}
+
 		ComsPlayedMoveMessage message(tank->getPlayerId(), 
 			moveData.moveId, 
 			ComsPlayedMoveMessage::eShot);
@@ -942,6 +1118,11 @@ void TankAICurrentMove::fireShot(Tank *tank, MoveData &moveData)
 	}
 	else
 	{
+		if (TankAI::getTankAILogging())
+		{
+			Logger::log(S3D::formatStringBuffer("TankAI - skipping due to no weapon"));
+		}
+
 		skipMove(tank, moveData);
 	}
 }
@@ -949,6 +1130,11 @@ void TankAICurrentMove::fireShot(Tank *tank, MoveData &moveData)
 void TankAICurrentMove::useBattery(Tank *tank, unsigned int batteryId, 
 	MoveData &moveData)
 {
+	if (TankAI::getTankAILogging())
+	{
+		Logger::log(S3D::formatStringBuffer("TankAI - using battery"));
+	}
+
 	ComsDefenseMessage defenseMessage(
 		tank->getPlayerId(),
 		ComsDefenseMessage::eBatteryUse,

@@ -102,9 +102,9 @@ bool TankGiftSimAction::invokeAction(ScorchedContext &context)
 	ChannelText text("combat", 
 		LANG_RESOURCE_3(
 			"TANK_GIFT_MESSAGE", 
-			"[p:{0}] gifts ${1} to [p:{2}]", 
+			"[p:{0}] gifts {1} to [p:{2}]", 
 			fromTank->getTargetName(), 
-			money, 
+			S3D::formatMoney(money), 
 			toTank->getTargetName()));
 	ChannelManager::showText(context, text);
 

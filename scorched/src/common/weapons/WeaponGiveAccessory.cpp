@@ -108,9 +108,9 @@ void WeaponGiveAccessory::weaponCallback(
 				{
 					ChannelText text("combat", 
 						LANG_RESOURCE_2("TANK_GET_MONEY",
-						"[p:{0}] received ${1}", 
+						"[p:{0}] received {1}", 
 						tank->getTargetName(), 
-						S3D::formatStringBuffer("%i", money)));
+						S3D::formatMoney(money)));
 					ChannelManager::showText(context, text);
 				}
 			}
