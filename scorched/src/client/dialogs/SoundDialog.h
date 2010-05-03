@@ -43,6 +43,8 @@ protected:
 	unsigned int okId_, cancelId_, applyId_;
 	GLWCheckBoxText *noSoundBox_;
 	GLWCheckBoxText *noMusicBox_;
+	GLWCheckBoxText *noCountDownSoundBox_;
+	GLWCheckBoxText *noChannelTextSoundBox_;
 	GLWSlider *soundVolume_;
 	GLWSlider *ambientSoundVolume_;
 	GLWSlider *musicVolume_;

@@ -23,6 +23,7 @@
 #include <GLW/GLWPanel.h>
 #include <GLW/GLWColors.h>
 #include <GLEXT/GLState.h>
+#include <graph/OptionsDisplay.h>
 #include <image/ImageFactory.h>
 #include <XML/XMLParser.h>
 #include <common/Keyboard.h>
@@ -189,11 +190,14 @@ void GLWChannelView::leaveChannel(const std::string &channelName)
 
 void GLWChannelView::channelText(ChannelText &channelText)
 {
-	if (!(channelText.getFlags() & ChannelText::eNoSound) &&
-		!textSound_.empty())
+	if (!OptionsDisplay::instance()->getNoChannelTextSound())
 	{
-		CACHE_SOUND(sound, S3D::getModFile(textSound_.c_str()));
-		SoundUtils::playRelativeSound(VirtualSoundPriority::eText, sound);	
+		if (!(channelText.getFlags() & ChannelText::eNoSound) &&
+			!textSound_.empty())
+		{
+			CACHE_SOUND(sound, S3D::getModFile(textSound_.c_str()));
+			SoundUtils::playRelativeSound(VirtualSoundPriority::eText, sound);	
+		}
 	}
 
 	CurrentChannelEntry *channel = getChannel(channelText.getChannel());

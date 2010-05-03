@@ -184,6 +184,9 @@ public:
 	bool getNoCountDownSound() { return noCountDownSound_; }
 	OptionEntryBool &getNoCountDownSoundEntry() { return noCountDownSound_; }
 
+	bool getNoChannelTextSound() { return noChannelTextSound_; }
+	OptionEntryBool &getNoChannelTextSoundEntry() { return noChannelTextSound_; }
+
 	bool getNoSound() { return noSound_; }
 	OptionEntryBool &getNoSoundEntry() { return noSound_; }
 
@@ -471,6 +474,7 @@ protected:
 	OptionEntryBool invertMouse_;
 	OptionEntryBool noSound_;
 	OptionEntryBool noCountDownSound_;
+	OptionEntryBool noChannelTextSound_;
 	OptionEntryBool noMusic_;
 	OptionEntryBool noShadows_;
 	OptionEntryBool noGLShadows_;

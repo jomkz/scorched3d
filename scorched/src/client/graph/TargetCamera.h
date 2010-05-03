@@ -79,7 +79,10 @@ public:
 	static float minHeightFunc(int x, int y, void *heightData);
 	static float maxHeightFunc(int x, int y, void *heightData);
 
+	static TargetCamera *getCurrentTargetCamera() { return currentTargetCamera_; }
+
 protected:
+	static TargetCamera *currentTargetCamera_;
 	GLCamera mainCam_;
 	CamType cameraPos_;
 	ParticleEmitter rainEmitter_, snowEmitter_;

@@ -47,7 +47,6 @@ protected:
 	GLWCheckBoxText *colorBox_;
 	GLWCheckBoxText *healthBox_;
 	GLWCheckBoxText *iconBox_;
-	GLWCheckBoxText *countDownBox_;
 
 private:
 	HUDDialog();

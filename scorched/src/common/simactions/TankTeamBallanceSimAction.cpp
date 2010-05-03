@@ -37,7 +37,7 @@ static inline bool lt_score(const Tank *o1, const Tank *o2)
 
 static inline bool lt_bots(const Tank *o1, const Tank *o2) 
 { 
-	return ((Tank*)o1)->getTankAI() < ((Tank *)o2)->getTankAI();
+	return ((Tank*)o1)->getDestinationId() > ((Tank *)o2)->getDestinationId();
 }
 
 REGISTER_CLASS_SOURCE(TankTeamBallanceSimAction);
@@ -229,7 +229,7 @@ void TankTeamBallanceSimAction::setTeam(ScorchedContext &context, Tank *tank, un
 			"MOVING_PLAYER",
 			"Moving player [p:{0}] to team {1}",
 			tank->getTargetName(), 
-			TankColorGenerator::getTeamName(tank->getTeam()));
+			TankColorGenerator::getTeamName(team));
 		ChannelManager::showText(context, text);
 
 		tank->setTeam(team);

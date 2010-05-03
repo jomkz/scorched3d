@@ -47,6 +47,8 @@
 #include <lang/LangResource.h>
 #include <math.h>
 
+TargetCamera *TargetCamera::currentTargetCamera_ = 0;
+
 static const char *cameraNames[] = 
 {
 	"Top",
@@ -246,6 +248,7 @@ void TargetCamera::simulate(float frameTime, bool playing)
 
 void TargetCamera::draw()
 {
+	currentTargetCamera_ = this;
 	moveCamera();
 	mainCam_.draw();
 }

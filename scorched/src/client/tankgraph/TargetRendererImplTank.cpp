@@ -197,15 +197,18 @@ void TargetRendererImplTank::drawParticle(float distance)
 		}
 	}
 
-	TargetCamera::CamType camType = MainCamera::instance()->getTarget().getCameraType();
-	if (!currentTank ||
-		(camType != TargetCamera::CamAim &&
-		camType != TargetCamera::CamShot &&
-		camType != TargetCamera::CamTank &&
-		camType != TargetCamera::CamAction &&
-		camType != TargetCamera::CamExplosion))
-	{	
-		drawInfo();
+	if (TargetCamera::getCurrentTargetCamera())
+	{
+		TargetCamera::CamType camType = TargetCamera::getCurrentTargetCamera()->getCameraType();
+		if (!currentTank ||
+			(camType != TargetCamera::CamAim &&
+			camType != TargetCamera::CamShot &&
+			camType != TargetCamera::CamTank &&
+			camType != TargetCamera::CamAction &&
+			camType != TargetCamera::CamExplosion))
+		{	
+			drawInfo();
+		}
 	}
 }
 

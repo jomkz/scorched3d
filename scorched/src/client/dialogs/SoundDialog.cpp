@@ -69,13 +69,25 @@ SoundDialog::SoundDialog() :
 	addWidget(musicVolumePanel, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
 	}
 
+	{
 	GLWPanel *checkPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
 	noSoundBox_ = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("NO_SOUND", "No Sound"));
 	checkPanel->addWidget(noSoundBox_, 0, SpaceRight, 10.0f);
-	noMusicBox_ = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("NO MUSIC", "No Music"));
+	noMusicBox_ = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("NO_MUSIC", "No Music"));
 	checkPanel->addWidget(noMusicBox_);
 	checkPanel->setLayout(GLWPanel::LayoutHorizontal);
 	addWidget(checkPanel, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
+	}
+
+	{
+	GLWPanel *optionPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
+	noCountDownSoundBox_ = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("NO_COUNT_DOWN_SOUND", "No Count Down Sound"));
+	optionPanel->addWidget(noCountDownSoundBox_);
+	noChannelTextSoundBox_ = new GLWCheckBoxText(0.0f, 0.0f, LANG_RESOURCE("NO_CHANNEL_TEXT_SOUND", "No Channel Text Sound"));
+	optionPanel->addWidget(noChannelTextSoundBox_, 0, SpaceTop, 10.0f);
+	optionPanel->setLayout(GLWPanel::LayoutVerticle);
+	addWidget(optionPanel, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
+	}
 
 	GLWPanel *buttonPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
 	GLWButton *cancelButton = new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 95, 10, 105, this, 
@@ -115,6 +127,10 @@ void SoundDialog::display()
 		OptionsDisplay::instance()->getNoSound());
 	noMusicBox_->getCheckBox().setState(
 		OptionsDisplay::instance()->getNoMusic());
+	noCountDownSoundBox_->getCheckBox().setState(
+		OptionsDisplay::instance()->getNoCountDownSound());
+	noChannelTextSoundBox_->getCheckBox().setState(
+		OptionsDisplay::instance()->getNoChannelTextSound());
 }
 
 void SoundDialog::buttonDown(unsigned int id)
@@ -125,6 +141,10 @@ void SoundDialog::buttonDown(unsigned int id)
 			noSoundBox_->getCheckBox().getState());
 		OptionsDisplay::instance()->getNoMusicEntry().setValue(
 			noMusicBox_->getCheckBox().getState());
+		OptionsDisplay::instance()->getNoCountDownSoundEntry().setValue(
+			noCountDownSoundBox_->getCheckBox().getState());
+		OptionsDisplay::instance()->getNoChannelTextSoundEntry().setValue(
+			noChannelTextSoundBox_->getCheckBox().getState());
 
 		int volume = int(soundVolume_->getCurrent() * 1.28f);
 		OptionsDisplay::instance()->getSoundVolumeEntry().setValue(volume);
