@@ -26,6 +26,7 @@ VisibilityPatchQuad::VisibilityPatchQuad() :
 	topLeft_(0), topRight_(0),
 	botLeft_(0), botRight_(0),
 	landVisibilityPatch_(0),
+	roofVisibilityPatch_(0),
 	waterVisibilityPatch_(0),
 	targetVisibilityPatch_(0)
 {
@@ -38,10 +39,11 @@ VisibilityPatchQuad::~VisibilityPatchQuad()
 }
 
 void VisibilityPatchQuad::setLocation(VisibilityPatchGrid *patchGrid, int x, int y, int size,
-	int mapwidth, int mapheight)
+	int mapwidth, int mapheight, int roofBaseHeight)
 {
 	x_ = x; y_ = y; size_ = size;
 	position_ = Vector(x_ + size_ / 2, y_ + size_ / 2);
+	roofPosition_ = Vector(x_ + size_ / 2, y_ + size_ / 2, roofBaseHeight);
 
 	int endSize = 512;
 	if ((x + size_) > 0 && 
@@ -51,8 +53,9 @@ void VisibilityPatchQuad::setLocation(VisibilityPatchGrid *patchGrid, int x, int
 		endSize = 32;
 		if (size == 32)
 		{
-			// Land, Target
+			// Land, Roof, Target
 			landVisibilityPatch_ = patchGrid->getLandVisibilityPatch(x, y);
+			roofVisibilityPatch_ = patchGrid->getRoofVisibilityPatch(x, y);
 			targetVisibilityPatch_ = patchGrid->getTargetVisibilityPatch(x, y);
 		}
 		if (size == 128)
@@ -79,14 +82,14 @@ void VisibilityPatchQuad::setLocation(VisibilityPatchGrid *patchGrid, int x, int
 		botLeft_ = new VisibilityPatchQuad();
 		botRight_ = new VisibilityPatchQuad();
 
-		topLeft_->setLocation(patchGrid, x, y, size / 2, mapwidth, mapheight);
-		topRight_->setLocation(patchGrid, x + size / 2, y, size / 2, mapwidth, mapheight);
-		botLeft_->setLocation(patchGrid, x, y + size / 2, size / 2, mapwidth, mapheight);
-		botRight_->setLocation(patchGrid, x + size / 2, y + size / 2, size / 2, mapwidth, mapheight);
+		topLeft_->setLocation(patchGrid, x, y, size / 2, mapwidth, mapheight, roofBaseHeight);
+		topRight_->setLocation(patchGrid, x + size / 2, y, size / 2, mapwidth, mapheight, roofBaseHeight);
+		botLeft_->setLocation(patchGrid, x, y + size / 2, size / 2, mapwidth, mapheight, roofBaseHeight);
+		botRight_->setLocation(patchGrid, x + size / 2, y + size / 2, size / 2, mapwidth, mapheight, roofBaseHeight);
 	}
 }
 
-void VisibilityPatchQuad::setNotVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos)
+void VisibilityPatchQuad::setGroundNotVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos)
 {
 	patchInfo.getPatchesVisitedCount()++;
 
@@ -95,13 +98,13 @@ void VisibilityPatchQuad::setNotVisible(VisibilityPatchInfo &patchInfo, Vector &
 	if (waterVisibilityPatch_) waterVisibilityPatch_->setNotVisible();
 
 	// Update Children
-	if (topLeft_) topLeft_->setNotVisible(patchInfo, cameraPos);
-	if (topRight_) topRight_->setNotVisible(patchInfo, cameraPos);
-	if (botLeft_) botLeft_->setNotVisible(patchInfo, cameraPos);
-	if (botRight_) botRight_->setNotVisible(patchInfo, cameraPos);
+	if (topLeft_) topLeft_->setGroundNotVisible(patchInfo, cameraPos);
+	if (topRight_) topRight_->setGroundNotVisible(patchInfo, cameraPos);
+	if (botLeft_) botLeft_->setGroundNotVisible(patchInfo, cameraPos);
+	if (botRight_) botRight_->setGroundNotVisible(patchInfo, cameraPos);
 }
 
-void VisibilityPatchQuad::setVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos, float C)
+void VisibilityPatchQuad::setGroundVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos, float C)
 {
 	patchInfo.getPatchesVisitedCount()++;
 
@@ -142,13 +145,13 @@ void VisibilityPatchQuad::setVisible(VisibilityPatchInfo &patchInfo, Vector &cam
 	}
 
 	// Update Children
-	if (topLeft_) topLeft_->calculateVisibility(patchInfo, cameraPos, C);
-	if (topRight_) topRight_->calculateVisibility(patchInfo, cameraPos, C);
-	if (botLeft_) botLeft_->calculateVisibility(patchInfo, cameraPos, C);
-	if (botRight_) botRight_->calculateVisibility(patchInfo, cameraPos, C);	
+	if (topLeft_) topLeft_->calculateGroundVisibility(patchInfo, cameraPos, C);
+	if (topRight_) topRight_->calculateGroundVisibility(patchInfo, cameraPos, C);
+	if (botLeft_) botLeft_->calculateGroundVisibility(patchInfo, cameraPos, C);
+	if (botRight_) botRight_->calculateGroundVisibility(patchInfo, cameraPos, C);	
 }
 
-void VisibilityPatchQuad::calculateVisibility(VisibilityPatchInfo &patchInfo, Vector &cameraPos, float C)
+void VisibilityPatchQuad::calculateGroundVisibility(VisibilityPatchInfo &patchInfo, Vector &cameraPos, float C)
 {
 	Vector *position = &position_;
 	float size = float(size_);
@@ -166,10 +169,70 @@ void VisibilityPatchQuad::calculateVisibility(VisibilityPatchInfo &patchInfo, Ve
 
 	if (!visible)
 	{
-		setNotVisible(patchInfo, cameraPos);
+		setGroundNotVisible(patchInfo, cameraPos);
 	}
 	else
 	{
-		setVisible(patchInfo, cameraPos, C);
+		setGroundVisible(patchInfo, cameraPos, C);
+	}
+}
+
+
+void VisibilityPatchQuad::setRoofNotVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos)
+{
+	patchInfo.getPatchesVisitedCount()++;
+
+	if (roofVisibilityPatch_) roofVisibilityPatch_->setNotVisible();
+
+	// Update Children
+	if (topLeft_) topLeft_->setRoofNotVisible(patchInfo, cameraPos);
+	if (topRight_) topRight_->setRoofNotVisible(patchInfo, cameraPos);
+	if (botLeft_) botLeft_->setRoofNotVisible(patchInfo, cameraPos);
+	if (botRight_) botRight_->setRoofNotVisible(patchInfo, cameraPos);
+}
+
+void VisibilityPatchQuad::setRoofVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos, float C)
+{
+	patchInfo.getPatchesVisitedCount()++;
+
+	if (roofVisibilityPatch_)
+	{
+		float distance = (cameraPos - roofVisibilityPatch_->getPosition()).Magnitude();
+		if (roofVisibilityPatch_->setVisible(distance, C))
+		{
+			patchInfo.getRoofVisibility().add(roofVisibilityPatch_);
+		}
+	}
+
+	// Update Children
+	if (topLeft_) topLeft_->calculateRoofVisibility(patchInfo, cameraPos, C);
+	if (topRight_) topRight_->calculateRoofVisibility(patchInfo, cameraPos, C);
+	if (botLeft_) botLeft_->calculateRoofVisibility(patchInfo, cameraPos, C);
+	if (botRight_) botRight_->calculateRoofVisibility(patchInfo, cameraPos, C);	
+}
+
+void VisibilityPatchQuad::calculateRoofVisibility(VisibilityPatchInfo &patchInfo, Vector &cameraPos, float C)
+{
+	Vector *position = &roofPosition_;
+	float size = float(size_);
+	if (roofVisibilityPatch_)
+	{
+		position = &roofVisibilityPatch_->getPosition();
+		size = roofVisibilityPatch_->getBoundingSize();
+	}
+
+	bool visible = true;
+	if (size_ == 32 || size_ == 128 || size_ == 512)
+	{
+		visible = GLCameraFrustum::instance()->sphereInFrustum(*position, size);
+	}
+
+	if (!visible)
+	{
+		setRoofNotVisible(patchInfo, cameraPos);
+	}
+	else
+	{
+		setRoofVisible(patchInfo, cameraPos, C);
 	}
 }

@@ -23,6 +23,7 @@
 
 #include <land/LandVisibilityPatch.h>
 #include <land/WaterVisibilityPatch.h>
+#include <land/RoofVisibilityPatch.h>
 #include <land/TargetVisibilityPatch.h>
 #include <land/TargetList.h>
 
@@ -37,6 +38,8 @@ public:
 
 	int getVisibleLandPatchesCount() { 
 		return landVisibility_.getObjectCount(); }
+	int getVisibleRoofPatchesCount() { 
+		return roofVisibility_.getObjectCount(); }
 	int getVisibleWaterPatchesCount() { 
 		return waterVisibility_[0].getObjectCount() +
 			waterVisibility_[1].getObjectCount() +
@@ -49,6 +52,11 @@ public:
 	TargetList &getLandVisibility() 
 	{
 		return landVisibility_;
+	}
+
+	TargetList &getRoofVisibility() 
+	{
+		return roofVisibility_;
 	}
 
 	TargetList &getWaterVisibility(int index) 
@@ -71,6 +79,7 @@ protected:
 	unsigned int patchesVisited_;
 	TargetList waterVisibility_[4];
 	TargetList landVisibility_;
+	TargetList roofVisibility_;
 	TargetList treeVisibility_;
 	TargetList targetVisibility_;
 

@@ -18,27 +18,19 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_LandAndTargetVisibilityPatchh_INCLUDE__)
-#define __INCLUDE_LandAndTargetVisibilityPatchh_INCLUDE__
+#if !defined(__INCLUDE_RoofVisibilityPatchh_INCLUDE__)
+#define __INCLUDE_RoofVisibilityPatchh_INCLUDE__
 
-#include <land/LandVisibilityPatch.h>
-#include <land/RoofVisibilityPatch.h>
-#include <land/TargetVisibilityPatch.h>
+#include <land/HeightMapVisibilityPatch.h>
 
-class LandAndTargetVisibilityPatch
+class RoofVisibilityPatch : public HeightMapVisibilityPatch
 {
 public:
-	LandAndTargetVisibilityPatch();
-	~LandAndTargetVisibilityPatch();
-
-	LandVisibilityPatch &getLandVisibilityPatch() { return landVisibilityPatch_; }
-	RoofVisibilityPatch &getRoofVisibilityPatch() { return roofVisibilityPatch_; }
-	TargetVisibilityPatch &getTargetVisibilityPatch() { return targetVisibilityPatch_; }
+	RoofVisibilityPatch();
+	virtual ~RoofVisibilityPatch();
 
 protected:
-	LandVisibilityPatch landVisibilityPatch_;
-	TargetVisibilityPatch targetVisibilityPatch_;
-	RoofVisibilityPatch roofVisibilityPatch_;
+	virtual void calculateErrors();
 };
 
-#endif // __INCLUDE_LandAndTargetVisibilityPatchh_INCLUDE__
+#endif // __INCLUDE_RoofVisibilityPatchh_INCLUDE__

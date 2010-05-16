@@ -21,6 +21,7 @@
 #include <sky/SkyRoof.h>
 #include <sky/Sky.h>
 #include <sky/Sun.h>
+#include <land/VisibilityPatchGrid.h>
 #include <landscape/Landscape.h>
 #include <landscapedef/LandscapeDefinition.h>
 #include <landscapedef/LandscapeTex.h>
@@ -29,6 +30,8 @@
 #include <client/ScorchedClient.h>
 #include <engine/ScorchedContext.h>
 #include <GLEXT/GLInfo.h>
+#include <GLEXT/GLStateExtension.h>
+#include <graph/OptionsDisplay.h>
 #include <common/Defines.h>
 #include <math.h>
 
@@ -76,26 +79,6 @@ void SkyRoof::makeList()
 	float multHeight = float(hmap.getMapHeight()) / float(rmap.getMapHeight());
 	
 	glNewList(list_ = glGenLists(1), GL_COMPILE);
-		for (int j=0; j<rmap.getMapHeight(); j++)
-		{
-			glBegin(GL_QUAD_STRIP);
-			for (int i=0; i<=rmap.getMapWidth(); i++)
-			{
-				Vector a(i * multWidth, j * multHeight, rmap.getHeight(i, j).asFloat());
-				makeNormal(a, rmap.getNormal(i, j).asVector());
-				glTexCoord2f(a[0] / float(rmap.getMapWidth()), a[1] / float(rmap.getMapHeight()));
-				glVertex3fv(a);
-				
-				Vector b(i * multWidth, (j + 1) * multHeight, rmap.getHeight(i, j + 1).asFloat());
-				makeNormal(b, rmap.getNormal(i, j + 1).asVector());
-				glTexCoord2f(b[0] / float(rmap.getMapWidth()), b[1] / float(rmap.getMapHeight()));
-				glVertex3fv(b);
-
-				tris_ += 2;
-			}
-			glEnd();
-		}
-
 		for (int i=0; i<rmap.getMapWidth(); i++)
 		{
 			{
@@ -206,8 +189,54 @@ void SkyRoof::drawSegment(Vector &a, Vector &b, Vector &na, Vector &nb)
 void SkyRoof::draw()
 {
 	if (!list_) makeList();
+
+	unsigned int state = 0;
+	if (!OptionsDisplay::instance()->getUseLandscapeTexture()) state |= GLState::TEXTURE_OFF;
+
+	GLState glState(state);
+	bool useDetail = 
+		GLStateExtension::getTextureUnits() > 2 &&
+		OptionsDisplay::instance()->getDetailTexture() &&
+		GLStateExtension::hasEnvCombine();
+	if (OptionsDisplay::instance()->getUseLandscapeTexture())
+	{
+		if (GLStateExtension::hasMultiTex())
+		{
+			if (useDetail)
+			{
+				glActiveTextureARB(GL_TEXTURE2_ARB);
+				glEnable(GL_TEXTURE_2D);
+				glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_ARB);
+				glTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE_ARB, 2);
+
+				Landscape::instance()->getDetailTexture().draw(true);
+			}
+
+			glActiveTextureARB(GL_TEXTURE0_ARB);
+		}
+
+		Landscape::instance()->getRoofTexture().draw(true);
+	}
 	
+	glColor3f(1.0f, 1.0f, 1.0f);
+
+	// Draw Sides
 	GLInfo::addNoTriangles(tris_);
-	Landscape::instance()->getRoofTexture().draw(true);
 	glCallList(list_);
-}
+
+	// Draw Roof
+	VisibilityPatchGrid::instance()->drawRoof();
+
+	if (OptionsDisplay::instance()->getUseLandscapeTexture())
+	{
+		if (GLStateExtension::hasMultiTex())
+		{
+			if (useDetail)
+			{
+				glActiveTextureARB(GL_TEXTURE2_ARB);
+				glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+				glDisable(GL_TEXTURE_2D);
+			}
+			glActiveTextureARB(GL_TEXTURE0_ARB);
+		}
+	}}

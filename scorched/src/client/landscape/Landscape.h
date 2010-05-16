@@ -45,7 +45,8 @@ public:
 	};
 
 	void generate(ProgressCounter *counter = 0);
-	void recalculate();
+	void recalculateLandscape();
+	void recalculateRoof();
 	void restoreLandscapeTexture();
 
 	// Access to internal objects
@@ -129,8 +130,8 @@ protected:
 	GLTexture colorDepthMap_;
 
 	// Variables used to set when the water is refreshed
-	bool resetLandscape_;
-	float resetLandscapeTimer_;
+	bool resetLandscape_, resetRoof_;
+	float resetLandscapeTimer_, resetRoofTimer_;
 	unsigned int changeCount_;
 
 	void savePlan();

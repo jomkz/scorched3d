@@ -92,7 +92,7 @@ void WeaponAimedOver::fireWeapon(ScorchedContext &context,
 	{
 		// This will return MAX_FLT when there is no roof
 		fixed maxHeight = context.getLandscapeMaps().getRoofMaps().getInterpRoofHeight(
-			position[0] / 4, position[1] / 4);
+			position[0], position[1]);
 		if (position[2] > maxHeight - 1)
 		{
 			ceiling = true;

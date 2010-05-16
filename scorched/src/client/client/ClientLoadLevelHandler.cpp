@@ -209,7 +209,8 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 		LANG_RESOURCE("PROCESSING_MESSAGES", "Processing Messages"));
 
 	// Make sure the landscape has been optimized
-	Landscape::instance()->recalculate();
+	Landscape::instance()->recalculateLandscape();
+	Landscape::instance()->recalculateRoof();
 
 	// Reset stuff
 	ScorchedClient::instance()->

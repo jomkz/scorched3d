@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="common">
@@ -2046,9 +2046,6 @@
     <ClCompile Include="..\land\LandSurround.cpp">
       <Filter>land</Filter>
     </ClCompile>
-    <ClCompile Include="..\land\LandVisibilityPatch.cpp">
-      <Filter>land</Filter>
-    </ClCompile>
     <ClCompile Include="..\land\TargetList.cpp">
       <Filter>land</Filter>
     </ClCompile>
@@ -2285,6 +2282,15 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>scorchedc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\land\HeightMapVisibilityPatch.cpp">
+      <Filter>land</Filter>
+    </ClCompile>
+    <ClCompile Include="..\land\LandVisibilityPatch.cpp">
+      <Filter>land</Filter>
+    </ClCompile>
+    <ClCompile Include="..\land\RoofVisibilityPatch.cpp">
+      <Filter>land</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4238,9 +4244,6 @@
     <ClInclude Include="..\land\LandSurround.h">
       <Filter>land</Filter>
     </ClInclude>
-    <ClInclude Include="..\land\LandVisibilityPatch.h">
-      <Filter>land</Filter>
-    </ClInclude>
     <ClInclude Include="..\land\TargetList.h">
       <Filter>land</Filter>
     </ClInclude>
@@ -4474,6 +4477,12 @@
     </ClInclude>
     <ClInclude Include="..\..\common\simactions\TankTeamBallanceSimAction.h">
       <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\land\LandVisibilityPatch.h">
+      <Filter>land</Filter>
+    </ClInclude>
+    <ClInclude Include="..\land\RoofVisibilityPatch.h">
+      <Filter>land</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

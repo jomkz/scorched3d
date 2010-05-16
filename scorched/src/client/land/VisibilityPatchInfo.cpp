@@ -31,6 +31,7 @@ VisibilityPatchInfo::~VisibilityPatchInfo()
 void VisibilityPatchInfo::clear()
 {
 	landVisibility_.clear();
+	roofVisibility_.clear();
 	treeVisibility_.clear();
 	targetVisibility_.clear();
 	for (int i=0; i<4; i++) waterVisibility_[i].clear();
@@ -41,6 +42,7 @@ void VisibilityPatchInfo::generate(int maxLandPatches, int maxWaterPatches, int 
 	clear();
 
 	landVisibility_.setCapacity(maxLandPatches);
+	roofVisibility_.setCapacity(maxLandPatches);
 	treeVisibility_.setCapacity(maxTargetPatches);
 	targetVisibility_.setCapacity(maxTargetPatches);
 	for (int i=0; i<4; i++) waterVisibility_[i].setCapacity(maxWaterPatches);
@@ -52,6 +54,7 @@ void VisibilityPatchInfo::reset()
 {
 	patchesVisited_ = 0;
 	landVisibility_.reset();
+	roofVisibility_.reset();
 	treeVisibility_.reset();
 	targetVisibility_.reset();
 	for (int i=0; i<4; i++) waterVisibility_[i].reset();

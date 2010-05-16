@@ -27,6 +27,7 @@ static const int minMapShift = 3;
 static FixedVector nvec(fixed(0), fixed(0), fixed(1));
 
 HeightMap::HeightMap() : 
+	width_(0), height_(0),
 	heightData_(0), graphicalMap_(0)
 {
 }

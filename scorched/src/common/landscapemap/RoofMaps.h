@@ -38,6 +38,9 @@ public:
 	fixed getRoofHeight(int x, int y);
 	fixed getInterpRoofHeight(fixed x, fixed y);
 
+	bool getRoofOn();
+	fixed getRoofBaseHeight() { return roofBaseHeight_; }
+
 	HeightMap &getRoofMap() { return rmap_; }
 
 protected:
@@ -45,6 +48,7 @@ protected:
 
 	// The roof of the landscape
 	HeightMap rmap_;
+	fixed roofBaseHeight_;
 
 	void generateRMap(
 		ScorchedContext &context,

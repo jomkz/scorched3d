@@ -35,10 +35,11 @@ public:
 		fixed map[100][100];
 	};
 
-	static bool deformLandscape(
+	static void deformLandscape(
 		ScorchedContext &context,
 		FixedVector &pos, fixed radius, 
-		bool down, DeformPoints &map);
+		bool down,
+		const char *deformTexture);
 	static void flattenArea(
 		ScorchedContext &context, 
 		FixedVector &tankPos,

@@ -32,23 +32,26 @@ public:
 	~VisibilityPatchQuad();
 
 	void setLocation(VisibilityPatchGrid *patchGrid, int x, int y, int size, 
-		int mapwidth, int mapheight);
-	void calculateVisibility(VisibilityPatchInfo &patchInfo, Vector &cameraPos, float C);
+		int mapwidth, int mapheight, int roofBaseHeight);
+	void calculateGroundVisibility(VisibilityPatchInfo &patchInfo, Vector &cameraPos, float C);
+	void calculateRoofVisibility(VisibilityPatchInfo &patchInfo, Vector &cameraPos, float C);
 
 protected:
 	int x_, y_;
 	int size_;
-	Vector position_;
+	Vector position_, roofPosition_;
 
 	WaterVisibilityPatch *waterVisibilityPatch_;
 	LandVisibilityPatch *landVisibilityPatch_;
+	RoofVisibilityPatch *roofVisibilityPatch_;
 	TargetVisibilityPatch *targetVisibilityPatch_;
 	VisibilityPatchQuad *topLeft_, *topRight_;
 	VisibilityPatchQuad *botLeft_, *botRight_;
 
-	void setNotVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos);
-	void setVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos, float C);
-
+	void setGroundNotVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos);
+	void setGroundVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos, float C);
+	void setRoofNotVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos);
+	void setRoofVisible(VisibilityPatchInfo &patchInfo, Vector &cameraPos, float C);
 };
 
 #endif // __INCLUDE_VisibilityPatchQuadh_INCLUDE__

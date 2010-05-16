@@ -101,15 +101,29 @@ void VisibilityPatchGrid::generate()
 		{
 			for (int x=0; x<landWidth_; x++, currentPatch++)
 			{
-				LandVisibilityPatch *leftPatch = (x==0?0:&(currentPatch-1)->getLandVisibilityPatch());
-				LandVisibilityPatch *rightPatch = (x==landWidth_-1?0:&(currentPatch+1)->getLandVisibilityPatch());
-				LandVisibilityPatch *topPatch = (y==0?0:&(currentPatch-landWidth_)->getLandVisibilityPatch());
-				LandVisibilityPatch *bottomPatch = (y==landHeight_-1?0:&(currentPatch+landWidth_)->getLandVisibilityPatch());
+				{
+					LandVisibilityPatch *leftPatch = (x==0?0:&(currentPatch-1)->getLandVisibilityPatch());
+					LandVisibilityPatch *rightPatch = (x==landWidth_-1?0:&(currentPatch+1)->getLandVisibilityPatch());
+					LandVisibilityPatch *topPatch = (y==0?0:&(currentPatch-landWidth_)->getLandVisibilityPatch());
+					LandVisibilityPatch *bottomPatch = (y==landHeight_-1?0:&(currentPatch+landWidth_)->getLandVisibilityPatch());
 
-				currentPatch->getLandVisibilityPatch().setLocation(x * 32, y * 32,
-					leftPatch, rightPatch, topPatch, bottomPatch);
-				currentPatch->getTargetVisibilityPatch().setLocation(x * 32, y * 32, 
-					32, 32);
+					currentPatch->getLandVisibilityPatch().setLocation(x * 32, y * 32,
+						leftPatch, rightPatch, topPatch, bottomPatch);
+				}
+				if (ScorchedClient::instance()->getLandscapeMaps().getRoofMaps().getRoofOn())
+				{
+					RoofVisibilityPatch *leftPatch = (x==0?0:&(currentPatch-1)->getRoofVisibilityPatch());
+					RoofVisibilityPatch *rightPatch = (x==landWidth_-1?0:&(currentPatch+1)->getRoofVisibilityPatch());
+					RoofVisibilityPatch *topPatch = (y==0?0:&(currentPatch-landWidth_)->getRoofVisibilityPatch());
+					RoofVisibilityPatch *bottomPatch = (y==landHeight_-1?0:&(currentPatch+landWidth_)->getRoofVisibilityPatch());
+
+					currentPatch->getRoofVisibilityPatch().setLocation(x * 32, y * 32,
+						leftPatch, rightPatch, topPatch, bottomPatch);
+				}
+				{
+					currentPatch->getTargetVisibilityPatch().setLocation(x * 32, y * 32, 
+						32, 32);
+				}
 			}
 		}
 	}
@@ -143,6 +157,8 @@ void VisibilityPatchGrid::generate()
 	}
 
 	{
+		int roofBaseHeight = ScorchedClient::instance()->getLandscapeMaps().getRoofMaps().getRoofBaseHeight().asInt();
+
 		// Devide this visible area into a set of visibility test patches
 		visibilityWidth_ = actualWidth / 512;
 		visibilityHeight_ = actualHeight / 512;
@@ -157,7 +173,7 @@ void VisibilityPatchGrid::generate()
 			for (int x=0; x<visibilityWidth_; x++, currentPatch++)
 			{
 				currentPatch->setLocation(this, x * 512 + midX_, y * 512 + midY_, 512,
-					mapWidth, mapHeight);
+					mapWidth, mapHeight, roofBaseHeight);
 			}
 		}
 	}
@@ -172,7 +188,17 @@ void VisibilityPatchGrid::generate()
 	surround_.generate();
 }
 
-void VisibilityPatchGrid::recalculateErrors(FixedVector &position, fixed size)
+void VisibilityPatchGrid::recalculateLandscapeErrors(FixedVector &position, fixed size)
+{
+	recalculateErrors(position, size, false);
+}
+
+void VisibilityPatchGrid::recalculateRoofErrors(FixedVector &position, fixed size)
+{
+	recalculateErrors(position, size, true);
+}
+
+void VisibilityPatchGrid::recalculateErrors(FixedVector &position, fixed size, bool roof)
 {
 	int sizei = size.asInt();
 	int midX = position[0].asInt();
@@ -201,7 +227,8 @@ void VisibilityPatchGrid::recalculateErrors(FixedVector &position, fixed size)
 		for (int y=startY; y<=endY; y++)
 		{
 			LandAndTargetVisibilityPatch &patch = landPatches_[x + y * landWidth_];
-			patch.getLandVisibilityPatch().setRecalculateErrors();
+			if (roof) patch.getRoofVisibilityPatch().setRecalculateErrors();
+			else patch.getLandVisibilityPatch().setRecalculateErrors();
 		}
 	}
 }
@@ -220,6 +247,22 @@ LandVisibilityPatch *VisibilityPatchGrid::getLandVisibilityPatch(int x, int y)
 	}
 
 	return &landPatches_[realX + realY * landWidth_].getLandVisibilityPatch();
+}
+
+RoofVisibilityPatch *VisibilityPatchGrid::getRoofVisibilityPatch(int x, int y)
+{
+	DIALOG_ASSERT(epoc_);
+
+	int realX = x / 32;
+	int realY = y / 32;
+
+	if (realX < 0 || realY < 0 ||
+		realX >= landWidth_ || realY >= landHeight_) 
+	{
+		return 0;
+	}
+
+	return &landPatches_[realX + realY * landWidth_].getRoofVisibilityPatch();
 }
 
 TargetVisibilityPatch *VisibilityPatchGrid::getTargetVisibilityPatch(int x, int y)
@@ -278,12 +321,14 @@ void VisibilityPatchGrid::calculateVisibility()
 	patchInfo_.reset();
 
 	// Calculate visibility
+	bool roofOn = ScorchedClient::instance()->getLandscapeMaps().getRoofMaps().getRoofOn();
 	VisibilityPatchQuad *currentPatch = visibilityPatches_;
 	for (int y=0; y<visibilityHeight_; y++)
 	{
 		for (int x=0; x<visibilityWidth_; x++, currentPatch++)
 		{
-			currentPatch->calculateVisibility(patchInfo_, cameraPos, C);
+			currentPatch->calculateGroundVisibility(patchInfo_, cameraPos, C);
+			if (roofOn) currentPatch->calculateRoofVisibility(patchInfo_, cameraPos, C);
 		}
 	}
 }
@@ -296,7 +341,21 @@ void VisibilityPatchGrid::drawLand(int addIndex, bool simple)
 	GraphicalLandscapeMap *landscapeMap = (GraphicalLandscapeMap *)
 		ScorchedClient::instance()->getLandscapeMaps().
 			getGroundMaps().getHeightMap().getGraphicalMap();
+	drawHeightMap(landscapeMap, addIndex, simple, false);
+}
 
+void VisibilityPatchGrid::drawRoof(int addIndex, bool simple)
+{
+	glCullFace(GL_FRONT);
+	GraphicalLandscapeMap *landscapeMap = (GraphicalLandscapeMap *)
+		ScorchedClient::instance()->getLandscapeMaps().
+			getRoofMaps().getRoofMap().getGraphicalMap();
+	drawHeightMap(landscapeMap, addIndex, simple, true);
+	glCullFace(GL_BACK);
+}
+
+void VisibilityPatchGrid::drawHeightMap(GraphicalLandscapeMap *landscapeMap, int addIndex, bool simple, bool roof) 
+{
 	if (!OptionsDisplay::instance()->getNoGLDrawElements() &&
 		GLStateExtension::hasDrawRangeElements())
 	{
@@ -339,7 +398,9 @@ void VisibilityPatchGrid::drawLand(int addIndex, bool simple)
 		{
 			for (int x=0; x<landWidth_; x++, landAndTargetCurrentPatch++)
 			{
-				LandVisibilityPatch *currentPatch = &landAndTargetCurrentPatch->getLandVisibilityPatch();
+				HeightMapVisibilityPatch *currentPatch = 0;
+				if (roof) currentPatch = &landAndTargetCurrentPatch->getRoofVisibilityPatch();
+				else currentPatch = &landAndTargetCurrentPatch->getLandVisibilityPatch();
 
 				unsigned int index = currentPatch->getVisibilityIndex();
 				if (index == -1) index = shadowLOD;
@@ -359,10 +420,12 @@ void VisibilityPatchGrid::drawLand(int addIndex, bool simple)
 	else
 	{
 		void *currentPatchPtr = 0;
-		TargetListIterator patchItor(patchInfo_.getLandVisibility());
+		TargetListIterator patchItor;
+		if (roof) patchItor.init(patchInfo_.getRoofVisibility());
+		else patchItor.init(patchInfo_.getLandVisibility());
 		while (currentPatchPtr = patchItor.getNext())
 		{
-			LandVisibilityPatch *currentPatch = (LandVisibilityPatch *) currentPatchPtr;
+			HeightMapVisibilityPatch *currentPatch = (HeightMapVisibilityPatch *) currentPatchPtr;
 			unsigned int index = currentPatch->getVisibilityIndex();
 			if (index == -1) continue;
 

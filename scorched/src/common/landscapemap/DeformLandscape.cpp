@@ -33,6 +33,12 @@
 #include <common/ProgressCounter.h>
 #include <lang/LangResource.h>
 #include <math.h>
+#ifndef S3D_SERVER
+	#include <landscape/Landscape.h>
+	#include <landscape/DeformTextures.h>
+	#include <land/VisibilityPatchGrid.h>
+	#include <sprites/ExplosionTextures.h>
+#endif
 
 class DeformLandscapeCache
 {
@@ -103,9 +109,10 @@ private:
 };
 static DeformLandscapeCache deformCache;
 
-bool DeformLandscape::deformLandscape(
+void DeformLandscape::deformLandscape(
 	ScorchedContext &context,
-	FixedVector &pos, fixed radius, bool down, DeformPoints &map)
+	FixedVector &pos, fixed radius, bool down,
+	const char *deformTexture)
 {
 	if (context.getOptionsGame().getActionSyncCheck())
 	{
@@ -115,8 +122,21 @@ bool DeformLandscape::deformLandscape(
 				radius.asQuickString(), (down?"Down":"Up")));
 	}
 
-	bool hits = deformLandscapeInternal(context, pos, radius, down, map, true);
-	return hits;
+	static DeformPoints deformMap;
+	bool hits = deformLandscapeInternal(context, pos, radius, down, deformMap, true);
+#ifndef S3D_SERVER
+	if (hits && !context.getServerMode())
+	{
+		Landscape::instance()->recalculateLandscape();
+		VisibilityPatchGrid::instance()->recalculateLandscapeErrors(pos, radius);
+
+		DeformTextures::deformLandscape(
+			pos.asVector(), 
+			radius.asFloat(),  
+			ExplosionTextures::instance()->getScorchBitmap(deformTexture),
+			deformMap);
+	}
+#endif
 }
 
 bool DeformLandscape::deformLandscapeInternal(
@@ -254,6 +274,14 @@ void DeformLandscape::flattenArea(
 				delete removedTarget;
 			}
 		}
+
+#ifndef S3D_SERVER
+		if (!context.getServerMode())
+		{
+			Landscape::instance()->recalculateLandscape();
+			VisibilityPatchGrid::instance()->recalculateLandscapeErrors(tankPos, size);
+		}
+#endif
 	}
 }
 

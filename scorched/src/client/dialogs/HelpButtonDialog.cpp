@@ -153,7 +153,7 @@ LangStringStorage *HelpButtonDialog::PerformanceMenu::getMenuToolTip(const char*
 		"%.2f Frames Per Second\n"
 		"  %i Triangles Drawn\n"
 		"  %i Particles Drawn\n"
-		"  %i %i %i Land, Water, Total Patches\n"
+		"  %i %i %i %i Land, Water, Roof, Total Patches\n"
 		"  %i Trees Drawn\n"
 		"  %i Targets Drawn\n"
 		"  %i Playing Sound Channels\n"
@@ -170,6 +170,7 @@ LangStringStorage *HelpButtonDialog::PerformanceMenu::getMenuToolTip(const char*
 		pOnScreen,
 		VisibilityPatchGrid::instance()->getVisibleLandPatchesCount(),
 		VisibilityPatchGrid::instance()->getVisibleWaterPatchesCount(),
+		VisibilityPatchGrid::instance()->getVisibleRoofPatchesCount(),
 		VisibilityPatchGrid::instance()->getPatchesVisitedCount(),
 		RenderTargets::instance()->getTreesDrawn(),
 		RenderTargets::instance()->getTargetsDrawn(),

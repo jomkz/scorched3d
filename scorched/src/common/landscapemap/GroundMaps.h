@@ -39,6 +39,9 @@ public:
 	void generateMaps(
 		ScorchedContext &context,
 		ProgressCounter *counter = 0);
+	void generateObjects(
+		ScorchedContext &context,
+		ProgressCounter *counter = 0);
 
 	// Height map functions
 	fixed getHeight(int w, int h);
@@ -77,9 +80,6 @@ protected:
 
 	// Generate levels
 	void generateHMap(
-		ScorchedContext &context,
-		ProgressCounter *counter = 0);
-	void generateObjects(
 		ScorchedContext &context,
 		ProgressCounter *counter = 0);
 	void generateObject(RandomGenerator &generator, 

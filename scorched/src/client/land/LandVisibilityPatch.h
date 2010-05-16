@@ -21,52 +21,15 @@
 #if !defined(__INCLUDE_LandVisibilityPatchh_INCLUDE__)
 #define __INCLUDE_LandVisibilityPatchh_INCLUDE__
 
-#include <common/Vector.h>
+#include <land/HeightMapVisibilityPatch.h>
 
-class MipMapPatchIndex;
-
-class LandVisibilityPatch
+class LandVisibilityPatch : public HeightMapVisibilityPatch
 {
 public:
 	LandVisibilityPatch();
-	~LandVisibilityPatch();
-
-	void setLocation(int x, int y,
-		LandVisibilityPatch *leftPatch, 
-		LandVisibilityPatch *rightPatch, 
-		LandVisibilityPatch *topPatch, 
-		LandVisibilityPatch *bottomPatch);
-	bool setVisible(float distance, float C);
-	void setNotVisible();
-	void setRecalculateErrors() { recalculateErrors_ = true; }
-
-	int getVisibilityIndex() { return visible_?visibilityIndex_:-1; }
-	Vector &getPosition() { return position_; }
-	float getBoundingSize() { return boundingSize_; }
-
-	LandVisibilityPatch *getLeftPatch() { return leftPatch_; }
-	LandVisibilityPatch *getRightPatch() { return rightPatch_; }
-	LandVisibilityPatch *getTopPatch() { return topPatch_; }
-	LandVisibilityPatch *getBottomPatch() { return bottomPatch_; }
-
-	void draw(MipMapPatchIndex &index, bool simple);
-	void drawLODLevel(MipMapPatchIndex &index);
+	virtual ~LandVisibilityPatch();
 
 protected:
-	int x_, y_;
-	int dataOffSet_;
-	float maxHeight_, minHeight_, boundingSize_;
-	int dataSize_;
-	int visibilityIndex_;
-	bool visible_, recalculateErrors_;
-	float indexErrors_[5];
-	Vector position_;
-	LandVisibilityPatch *leftPatch_;
-	LandVisibilityPatch *rightPatch_; 
-	LandVisibilityPatch *topPatch_;
-	LandVisibilityPatch *bottomPatch_;
-
-	void calculateErrors();
 };
 
 #endif // __INCLUDE_LandVisibilityPatchh_INCLUDE__

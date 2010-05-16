@@ -18,27 +18,28 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_LandAndTargetVisibilityPatchh_INCLUDE__)
-#define __INCLUDE_LandAndTargetVisibilityPatchh_INCLUDE__
-
-#include <land/LandVisibilityPatch.h>
 #include <land/RoofVisibilityPatch.h>
-#include <land/TargetVisibilityPatch.h>
+#include <client/ScorchedClient.h>
+#include <landscapemap/LandscapeMaps.h>
 
-class LandAndTargetVisibilityPatch
+RoofVisibilityPatch::RoofVisibilityPatch() :
+	HeightMapVisibilityPatch(&ScorchedClient::instance()->getLandscapeMaps().
+		getRoofMaps().getRoofMap())
 {
-public:
-	LandAndTargetVisibilityPatch();
-	~LandAndTargetVisibilityPatch();
+}
 
-	LandVisibilityPatch &getLandVisibilityPatch() { return landVisibilityPatch_; }
-	RoofVisibilityPatch &getRoofVisibilityPatch() { return roofVisibilityPatch_; }
-	TargetVisibilityPatch &getTargetVisibilityPatch() { return targetVisibilityPatch_; }
+RoofVisibilityPatch::~RoofVisibilityPatch()
+{
+}
 
-protected:
-	LandVisibilityPatch landVisibilityPatch_;
-	TargetVisibilityPatch targetVisibilityPatch_;
-	RoofVisibilityPatch roofVisibilityPatch_;
-};
+void RoofVisibilityPatch::calculateErrors()
+{
+	HeightMapVisibilityPatch::calculateErrors();
 
-#endif // __INCLUDE_LandAndTargetVisibilityPatchh_INCLUDE__
+	// Make sure edge patches are at their highest settings
+	// so they blend in with the cavern border
+	if (!leftPatch_ || !rightPatch_ || !topPatch_ || !bottomPatch_)
+	{
+		for (int i=0;i<5; i++) indexErrors_[i] = 10000.0f;
+	}
+}

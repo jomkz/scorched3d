@@ -157,7 +157,8 @@ void TankMenus::showTextureDetails()
 
 void TankMenus::resetLandscape()
 {
-	Landscape::instance()->recalculate();
+	Landscape::instance()->recalculateLandscape();
+	Landscape::instance()->recalculateRoof();
 }
 
 void TankMenus::clearTracerLines()

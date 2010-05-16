@@ -34,12 +34,10 @@
 	#include <graph/MainCamera.h>
 	#include <client/ScorchedClient.h>
 	#include <sound/SoundUtils.h>
-	#include <land/VisibilityPatchGrid.h>
 #endif
 #include <landscapemap/DeformLandscape.h>
 #include <landscapemap/LandscapeMaps.h>
 #ifndef S3D_SERVER
-	#include <landscape/DeformTextures.h>
 	#include <landscape/Landscape.h>
 	#include <water/Water.h>
 	#include <landscape/Smoke.h>
@@ -306,27 +304,11 @@ void Explosion::simulate(fixed frameTime, bool &remove)
 			// Remove areas from the height map
 			if (explosionSize > 0)
 			{
-				static DeformLandscape::DeformPoints map;
-
-				if (DeformLandscape::deformLandscape(
+				DeformLandscape::deformLandscape(
 					*context_,
 					newPosition, explosionSize, 
-					(params_->getDeformType() == ExplosionParams::DeformDown), map))
-				{
-#ifndef S3D_SERVER
-					if (!context_->getServerMode()) 
-					{
-						Landscape::instance()->recalculate();
-						VisibilityPatchGrid::instance()->recalculateErrors(newPosition, explosionSize);
-
-						DeformTextures::deformLandscape(
-							newPosition.asVector(), 
-							explosionSize.asFloat(),  
-							ExplosionTextures::instance()->getScorchBitmap(params_->getDeformTexture()),
-							map);
-					}
-#endif // #ifndef S3D_SERVER
-				}
+					(params_->getDeformType() == ExplosionParams::DeformDown),
+					params_->getDeformTexture());
 			}
 		}
 

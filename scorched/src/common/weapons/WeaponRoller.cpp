@@ -148,7 +148,7 @@ void WeaponRoller::fireWeapon(ScorchedContext &context,
 		// Check if we have hit the roof (quite litteraly)
 		{
 			fixed maxHeight = context.getLandscapeMaps().getRoofMaps().getInterpRoofHeight(
-				position[0] / 4, position[1] / 4);
+				position[0], position[1]);
 			if (position[2] > maxHeight - 1)
 			{
 				position[2] = maxHeight - 1;

@@ -69,6 +69,7 @@ Landscape *Landscape::instance()
 
 Landscape::Landscape() : 
 	resetLandscape_(false), resetLandscapeTimer_(0.0f), 
+	resetRoof_(false), resetRoofTimer_(0.0f),
 	textureType_(eDefault),
 	changeCount_(1),
 	landShader_(0)
@@ -109,6 +110,26 @@ void Landscape::simulate(float frameTime)
 			resetLandscape_ = false;
 		}
 	}
+	if (resetRoof_)
+	{
+		resetRoofTimer_ -= frameTime;
+		if (resetRoofTimer_ < 0.0f)
+		{
+			if (ScorchedClient::instance()->getLandscapeMaps().getRoofMaps().getRoofOn())
+			{
+				// Update the landscape
+				GraphicalLandscapeMap *roofMap = (GraphicalLandscapeMap *)
+					ScorchedClient::instance()->getLandscapeMaps().
+						getRoofMaps().getRoofMap().getGraphicalMap();
+				roofMap->updateWholeBuffer();
+
+				// Re-calculate the landsacpe on the wind indicator
+				changeCount_++;
+			}
+
+			resetRoof_ = false;
+		}
+	}
 
 	float speedMult = ScorchedClient::instance()->
 		getSimulator().getFast().asFloat();
@@ -118,12 +139,21 @@ void Landscape::simulate(float frameTime)
 	LandscapeSoundManager::instance()->simulate(frameTime * speedMult);
 }
 
-void Landscape::recalculate()
+void Landscape::recalculateLandscape()
 {
 	if (!resetLandscape_)
 	{
 		resetLandscape_ = true;
 		resetLandscapeTimer_ = 1.0f; // Recalculate the water in x seconds
+	}
+}
+
+void Landscape::recalculateRoof()
+{
+	if (!resetRoof_)
+	{
+		resetRoof_ = true;
+		resetRoofTimer_ = 1.0f; // Recalculate the water in x seconds
 	}
 }
 
@@ -268,7 +298,7 @@ void Landscape::calculateVisibility()
 
 void Landscape::drawSetup()
 {
-	if (OptionsDisplay::instance()->getDrawLines()) glPolygonMode(GL_FRONT, GL_LINE);
+	if (OptionsDisplay::instance()->getDrawLines()) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	// NOTE: The following code is drawn with fog on
 	// Be carefull as this we "dull" bilboard textures
@@ -281,7 +311,7 @@ void Landscape::drawSetup()
 void Landscape::drawTearDown()
 {
 	glDisable(GL_FOG); // NOTE: Fog off
-	if (OptionsDisplay::instance()->getDrawLines()) glPolygonMode(GL_FRONT, GL_FILL);
+	if (OptionsDisplay::instance()->getDrawLines()) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void Landscape::drawLand()
@@ -434,6 +464,14 @@ void Landscape::generate(ProgressCounter *counter)
 		ScorchedClient::instance()->getLandscapeMaps().
 			getGroundMaps().getHeightMap().getGraphicalMap();
 	landscapeMap->updateWholeBuffer();
+
+	if (ScorchedClient::instance()->getLandscapeMaps().getRoofMaps().getRoofOn())
+	{
+		GraphicalLandscapeMap *roofMap = (GraphicalLandscapeMap *)
+			ScorchedClient::instance()->getLandscapeMaps().
+				getRoofMaps().getRoofMap().getGraphicalMap();
+		roofMap->updateWholeBuffer();
+	}
 
 	textureType_ = eDefault;
 	InfoMap::instance()->addAdapters();
@@ -708,6 +746,7 @@ void Landscape::actualDrawLandTextured()
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LAND");
 	VisibilityPatchGrid::instance()->drawLand();
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LAND");
+
 	if (OptionsDisplay::instance()->getDrawLandLOD())
 	{
 		VisibilityPatchGrid::instance()->drawLandLODLevels();

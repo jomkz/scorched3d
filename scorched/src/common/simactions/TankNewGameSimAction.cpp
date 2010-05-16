@@ -25,10 +25,6 @@
 #include <tank/TankState.h>
 #include <tank/TankContainer.h>
 #include <target/TargetLife.h>
-#ifndef S3D_SERVER
-	#include <landscape/Landscape.h>
-	#include <land/VisibilityPatchGrid.h>
-#endif
 
 REGISTER_CLASS_SOURCE(TankNewGameSimAction);
 
@@ -57,13 +53,6 @@ bool TankNewGameSimAction::invokeAction(ScorchedContext &context)
 		context.getSimulator().getRandomGenerator());
 	tank->getLife().setTargetPosition(tankPos);
 	DeformLandscape::flattenArea(context, tankPos);
-#ifndef S3D_SERVER
-	if (!context.getServerMode())
-	{
-		Landscape::instance()->recalculate();
-		VisibilityPatchGrid::instance()->recalculateErrors(tankPos, 2);
-	}
-#endif
 
 	tank->newGame();
 	if (!context.getServerMode()) tank->clientNewGame();

@@ -613,6 +613,9 @@
     <ClCompile Include="..\landscape\ShadowMap.cpp" />
     <ClCompile Include="..\landscape\Smoke.cpp" />
     <ClCompile Include="..\landscape\Wall.cpp" />
+    <ClCompile Include="..\land\HeightMapVisibilityPatch.cpp" />
+    <ClCompile Include="..\land\LandVisibilityPatch.cpp" />
+    <ClCompile Include="..\land\RoofVisibilityPatch.cpp" />
     <ClCompile Include="..\serverbrowser\ServerBrowser.cpp" />
     <ClCompile Include="..\serverbrowser\ServerBrowserCollect.cpp" />
     <ClCompile Include="..\serverbrowser\ServerBrowserRefresh.cpp" />
@@ -741,7 +744,6 @@
     <ClCompile Include="..\geomipmap\MipMapPatchIndexs.cpp" />
     <ClCompile Include="..\land\LandAndTargetVisibilityPatch.cpp" />
     <ClCompile Include="..\land\LandSurround.cpp" />
-    <ClCompile Include="..\land\LandVisibilityPatch.cpp" />
     <ClCompile Include="..\land\TargetList.cpp" />
     <ClCompile Include="..\land\TargetVisibilityPatch.cpp" />
     <ClCompile Include="..\land\VisibilityPatchGrid.cpp" />
@@ -1342,6 +1344,9 @@
     <ClInclude Include="..\landscape\ShadowMap.h" />
     <ClInclude Include="..\landscape\Smoke.h" />
     <ClInclude Include="..\landscape\Wall.h" />
+    <ClInclude Include="..\land\HeightMapVisibilityPatch.h" />
+    <ClInclude Include="..\land\LandVisibilityPatch.h" />
+    <ClInclude Include="..\land\RoofVisibilityPatch.h" />
     <ClInclude Include="..\serverbrowser\ServerBrowser.h" />
     <ClInclude Include="..\serverbrowser\ServerBrowserCollect.h" />
     <ClInclude Include="..\serverbrowser\ServerBrowserRefresh.h" />
@@ -1473,7 +1478,6 @@
     <ClInclude Include="..\geomipmap\MipMapPatchIndexs.h" />
     <ClInclude Include="..\land\LandAndTargetVisibilityPatch.h" />
     <ClInclude Include="..\land\LandSurround.h" />
-    <ClInclude Include="..\land\LandVisibilityPatch.h" />
     <ClInclude Include="..\land\TargetList.h" />
     <ClInclude Include="..\land\TargetVisibilityPatch.h" />
     <ClInclude Include="..\land\VisibilityPatchGrid.h" />

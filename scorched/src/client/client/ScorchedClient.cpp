@@ -76,6 +76,8 @@ ScorchedClient::ScorchedClient() :
 
 	getLandscapeMaps().getGroundMaps().getHeightMap().setGraphicalMap(
 		new GraphicalLandscapeMap());
+	getLandscapeMaps().getRoofMaps().getRoofMap().setGraphicalMap(
+		new GraphicalLandscapeMap());
 }
 
 ScorchedClient::~ScorchedClient()

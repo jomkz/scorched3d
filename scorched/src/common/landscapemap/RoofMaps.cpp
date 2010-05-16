@@ -26,7 +26,7 @@
 #include <landscapedef/LandscapeDefn.h>
 
 RoofMaps::RoofMaps(LandscapeDefinitionCache &defnCache) :
-	defnCache_(defnCache)
+	defnCache_(defnCache), roofBaseHeight_(0)
 {
 }
 
@@ -41,50 +41,37 @@ void RoofMaps::generateMaps(
 	generateRMap(context, counter);
 }
 
+bool RoofMaps::getRoofOn()
+{
+	return (defnCache_.getDefn()->roof->getType() == LandscapeDefnType::eRoofCavern);
+}
+
 fixed RoofMaps::getRoofHeight(int x, int y)
 {
-	if (defnCache_.getDefn()->roof->getType() != LandscapeDefnType::eRoofCavern)
+	if (!getRoofOn())
 	{
 		return fixed::MAX_FIXED;
 	}
 
-	// Factors should be caclculated from hmap height/width
-	int const xFactor = defnCache_.getDefn()->getLandscapeWidth() / rmap_.getMapWidth();
-	int const yFactor = defnCache_.getDefn()->getLandscapeHeight() / rmap_.getMapHeight();
-
-	x /= xFactor;
-	y /= yFactor;
-	if (x < 0 || y < 0)
+	if (x >= 0 && y >= 0 && x<=rmap_.getMapWidth() && y<=rmap_.getMapHeight())
 	{
-		return rmap_.getHeight(0, 0);
+		return rmap_.getHeight(x, y);
 	}
-	else if (x > rmap_.getMapWidth() || y > rmap_.getMapHeight())
-	{
-		return rmap_.getHeight(
-			rmap_.getMapWidth(), rmap_.getMapHeight());
-	}
-
-	return rmap_.getHeight(x, y);
+	return roofBaseHeight_;
 }
 
 fixed RoofMaps::getInterpRoofHeight(fixed x, fixed y)
 {
-	if (defnCache_.getDefn()->roof->getType() != LandscapeDefnType::eRoofCavern)
+	if (!getRoofOn())
 	{
 		return fixed::MAX_FIXED;
 	}
 
-	// Factors should be caclculated from hmap height/width
-	int const xFactor = defnCache_.getDefn()->getLandscapeWidth() / rmap_.getMapWidth();
-	int const yFactor = defnCache_.getDefn()->getLandscapeHeight() / rmap_.getMapHeight();
-
-	x /= xFactor;
-	y /= yFactor;
-	if (x < 0 || y < 0 || x > rmap_.getMapWidth() || y > rmap_.getMapHeight())
+	if (x >= 0 && y >= 0 && x<=rmap_.getMapWidth() && y<=rmap_.getMapHeight())
 	{
-		return fixed::MAX_FIXED;
+		return rmap_.getInterpHeight(x, y);
 	}
-	return rmap_.getInterpHeight(x, y);
+	return roofBaseHeight_;
 }
 
 void RoofMaps::generateRMap(
@@ -92,15 +79,18 @@ void RoofMaps::generateRMap(
 	ProgressCounter *counter)
 {
 	// calculate roof size and set it
-	int mapWidth = defnCache_.getDefn()->getLandscapeWidth() / 4;
-	int mapHeight = defnCache_.getDefn()->getLandscapeHeight() / 4;
+	int mapWidth = defnCache_.getDefn()->getLandscapeWidth();
+	int mapHeight = defnCache_.getDefn()->getLandscapeHeight();
 	rmap_.create(mapWidth, mapHeight);
+	roofBaseHeight_ = 0;
 
 	// Generate the roof
-	if (defnCache_.getDefn()->roof->getType() == LandscapeDefnType::eRoofCavern)
+	if (getRoofOn())
 	{
 		LandscapeDefnRoofCavern *cavern = 
 			(LandscapeDefnRoofCavern *) defnCache_.getDefn()->roof;
+
+		roofBaseHeight_ = fixed(cavern->height);
 
 		bool smooth = false;
 		if (!HeightMapLoader::generateTerrain(
@@ -112,7 +102,8 @@ void RoofMaps::generateRMap(
 		{
 			S3D::dialogExit("Landscape", "Failed to generate roof");
 		}
-		
+
+		// Reverse heights (up-side-down)
 		for (int j=0; j<=rmap_.getMapHeight(); j++)
 		{
 			for (int i=0; i<=rmap_.getMapWidth(); i++)

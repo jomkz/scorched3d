@@ -32,6 +32,7 @@ class WaterVisibilityPatch;
 class LandAndTargetVisibilityPatch;
 class WaterAndTargetVisibilityPatch;
 class Water2Patches;
+class GraphicalLandscapeMap;
 class VisibilityPatchGrid
 {
 public:
@@ -40,9 +41,11 @@ public:
 	void generate();
 
 	void calculateVisibility();
-	void recalculateErrors(FixedVector &position, fixed size);
+	void recalculateLandscapeErrors(FixedVector &position, fixed size);
+	void recalculateRoofErrors(FixedVector &position, fixed size);
 
 	void drawLand(int addIndex = 0, bool simple = false);
+	void drawRoof(int addIndex = 0, bool simple = false);
 	void drawLandLODLevels();
 	void drawSurround();
 	void drawWater(Water2Patches &patches, 
@@ -55,12 +58,15 @@ public:
 		return patchInfo_.getVisibleLandPatchesCount(); }
 	int getVisibleWaterPatchesCount() {
 		return patchInfo_.getVisibleWaterPatchesCount(); }
+	int getVisibleRoofPatchesCount() {
+		return patchInfo_.getVisibleRoofPatchesCount(); }
 	int getPatchesVisitedCount() {
 		return patchInfo_.getPatchesVisitedCount(); }
 
 	VisibilityPatchInfo &getPatchInfo() { return patchInfo_; }
 
 	LandVisibilityPatch *getLandVisibilityPatch(int x, int y);
+	RoofVisibilityPatch *getRoofVisibilityPatch(int x, int y);
 	TargetVisibilityPatch *getTargetVisibilityPatch(int x, int y);
 	WaterVisibilityPatch *getWaterVisibilityPatch(int x, int y);
 protected:
@@ -83,7 +89,8 @@ protected:
 	int visibilityWidth_, visibilityHeight_;
 
 	void clear();
-	void drawLandPatches();
+	void drawHeightMap(GraphicalLandscapeMap *landscapeMap, int addIndex, bool simple, bool roof);
+	void recalculateErrors(FixedVector &position, fixed size, bool roof);
 
 private:
 	VisibilityPatchGrid();

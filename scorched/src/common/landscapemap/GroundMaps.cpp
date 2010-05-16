@@ -27,13 +27,9 @@
 #include <landscapedef/LandscapeDefinitionCache.h>
 #include <target/TargetContainer.h>
 #include <tank/TankContainer.h>
-#include <movement/TargetMovement.h>
 #include <common/Logger.h>
 #include <tankai/TankAIAdder.h>
 #include <lang/LangResource.h>
-#ifndef S3D_SERVER
-#include <land/VisibilityPatchGrid.h>
-#endif
 
 GroundMaps::GroundMaps(LandscapeDefinitionCache &defnCache) :
 	defnCache_(defnCache), 
@@ -58,18 +54,7 @@ void GroundMaps::generateMaps(
 	arenaY_ = context.getLandscapeMaps().getDefinitions().getDefn()->getArenaY();
 
 	generateHMap(context, counter);
-#ifndef S3D_SERVER
-	if (!context.getServerMode())
-	{
-		VisibilityPatchGrid::instance()->generate();
-	}
-#endif
-	generateObjects(context, counter);
-
-	// Create movement after targets, so we can mark 
-	// those targets that are in movement groups
-	context.getTargetMovement().generate(context); 
-	nmap_.create(getLandscapeWidth(), getLandscapeHeight());
+	nmap_.create(getLandscapeWidth(), getLandscapeHeight());	
 }
 
 int GroundMaps::getLandscapeWidth()
