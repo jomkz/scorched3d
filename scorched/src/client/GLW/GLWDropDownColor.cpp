@@ -93,13 +93,9 @@ void GLWDropDownColor::draw()
 		float x = x_ + 12.0f;
 		float y = y_ + 6.0f;
 		glBegin(GL_QUADS);
-			glTexCoord2f(0.0f, 0.0f);
 			glVertex2f(x, y);
-			glTexCoord2f(1.0f, 0.0f);
 			glVertex2f(x + w_ - 44.0f, y);
-			glTexCoord2f(1.0f, 1.0f);
 			glVertex2f(x + w_ - 44.0f, y + 14.0f);
-			glTexCoord2f(0.0f, 1.0f);
 			glVertex2f(x, y + 14.0f);
 		glEnd();
 	}

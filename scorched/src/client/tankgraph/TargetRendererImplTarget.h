@@ -40,6 +40,7 @@ public:
 	virtual void simulate(float frameTime);
 
 	void render(float distance);
+	void renderReflection(float distance);
 	void renderShadow(float distance);
 	void render2D(float distance);
 
@@ -60,6 +61,8 @@ protected:
 	float shieldHit_, totalTime_;
 	float scale_, color_;
 	GLWTargetTips targetTips_;
+
+	void cacheMatrix();
 };
 
 #endif // __INCLUDE_TargetRendererImplTargeth_INCLUDE__

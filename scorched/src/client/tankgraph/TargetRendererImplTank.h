@@ -76,6 +76,7 @@ public:
 	virtual void drawParticle(float distance);
 
 	void render(float distance);
+	void renderReflection(float distance);
 	void renderShadow(float distance);
 	void render2D(float distance);
 

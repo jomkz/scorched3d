@@ -213,12 +213,14 @@ static void drawTargets(TargetVisibilityIterator &itor, float distance, bool ref
 		if (target->isTarget())
 		{
 			TargetRendererImplTarget *renderImpl = (TargetRendererImplTarget *) target->getRenderer();
-			renderImpl->render(distance);
+			if (reflection)	renderImpl->renderReflection(distance);
+			else renderImpl->render(distance);
 		}
 		else
 		{
 			TargetRendererImplTank *renderImpl = (TargetRendererImplTank *) target->getRenderer();
-			renderImpl->render(distance);
+			if (reflection)	renderImpl->renderReflection(distance);
+			else renderImpl->render(distance);
 		}
 	}
 }

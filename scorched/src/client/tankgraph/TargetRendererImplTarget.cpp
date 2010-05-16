@@ -73,6 +73,23 @@ void TargetRendererImplTarget::simulate(float frameTime)
 	else modelRenderer_->simulate(frameTime * 20.0f);
 }
 
+void TargetRendererImplTarget::cacheMatrix()
+{
+	// Generate and cache the OpenGL transform matrix
+	if (!matrixCached_)
+	{
+		cachedMatrix_.identity();
+		cachedMatrix_.translate(
+			target_->getLife().getFloatPosition()[0], 
+			target_->getLife().getFloatPosition()[1], 
+			target_->getLife().getFloatPosition()[2]);
+		cachedMatrix_.multiply(target_->getLife().getFloatRotMatrix());
+		cachedMatrix_.scale(scale_, scale_, scale_);
+
+		matrixCached_ = true;
+	}
+}
+
 void TargetRendererImplTarget::render(float distance)
 {
 	createParticle();
@@ -98,20 +115,24 @@ void TargetRendererImplTarget::render(float distance)
 	float drawCullingDistance = OptionsDisplay::instance()->getDrawCullingDistance() * size;
 	if (distance < drawCullingDistance)
 	{
-		// Generate and cache the OpenGL transform matrix
-		if (!matrixCached_)
-		{
-			cachedMatrix_.identity();
-			cachedMatrix_.translate(
-				target_->getLife().getFloatPosition()[0], 
-				target_->getLife().getFloatPosition()[1], 
-				target_->getLife().getFloatPosition()[2]);
-			cachedMatrix_.multiply(target_->getLife().getFloatRotMatrix());
-			cachedMatrix_.scale(scale_, scale_, scale_);
+		cacheMatrix();
 
-			matrixCached_ = true;
-		}
+		glColor3f(color_, color_, color_);
+		glPushMatrix();
+			glMultMatrixf(cachedMatrix_);
+			if (burnt_) burntModelRenderer_->drawBottomAligned(distance, 1.0f);
+			else modelRenderer_->drawBottomAligned(distance, 1.0f);
+		glPopMatrix();
+	}
+}
 
+void TargetRendererImplTarget::renderReflection(float distance)
+{
+	// Draw the target model
+	float drawCullingDistance = OptionsDisplay::instance()->getDrawCullingDistance() * 2.0f;
+	if (distance < drawCullingDistance)
+	{
+		cacheMatrix();
 		glColor3f(color_, color_, color_);
 		glPushMatrix();
 			glMultMatrixf(cachedMatrix_);

@@ -156,6 +156,30 @@ void TargetRendererImplTank::render(float distance)
 	}
 }
 
+void TargetRendererImplTank::renderReflection(float distance)
+{
+	float size = getTargetSize();
+	float fade = getTargetFade(distance, 
+		size * 2.5f * float(OptionsDisplay::instance()->getTankModelSize()) / 100.0f);
+
+	if (fade > 0.0f)
+	{
+		// Draw the tank model
+		ModelRendererTank *mesh = getMesh();
+		if (mesh)
+		{
+			float modelSize = float(OptionsDisplay::instance()->getTankModelSize()) / 100.0f;
+			mesh->draw(frame_,
+				tank_->getLife().getFloatRotMatrix(),
+				tank_->getLife().getFloatPosition(), 
+				fireOffSet_, 
+				tank_->getPosition().getRotationGunXY().asFloat(), 
+				tank_->getPosition().getRotationGunYZ().asFloat(),
+				false, modelSize, fade, true);
+		}
+	}
+}
+
 void TargetRendererImplTank::renderShadow(float distance)
 {
 	ModelRendererTank *mesh = getMesh();

@@ -68,7 +68,7 @@ void GLWSelectorPart::calculateDimensions(float drawX, float drawY)
 
 		// Get width
 		float currentwidth = 10.0f;
-		if (item.getText()[0])
+		if (!item.getText().empty())
 		{
 			currentwidth = (float) font.getWidth(12, item.getText()) + 20.0f;
 		}
