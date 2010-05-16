@@ -359,7 +359,7 @@ void NetworkSelectDialog::drawColumnGames(unsigned int id, int row, int col,
 	else
 	{
 		tipValue = value = ServerBrowser::instance()->getServerList().getEntryValue(row, getGamesCols()[col].dataName);
-		if (value[0] == '\0' && col == 1)
+		if (value.empty() && col == 1)
 		{
 			tipValue = value = ServerBrowser::instance()->getServerList().getEntryValue(row, "address");
 		}
