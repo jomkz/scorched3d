@@ -243,29 +243,30 @@ bool ServerSyncCheck::checkContext(SyncContext *context)
 	return true;
 }
 
-bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server, 
-	unsigned int destinationId, ComsSyncCheckMessage *client)
+bool ServerSyncCheck::compareHeightMaps(unsigned int destinationId, unsigned int syncId,
+	const char *mapName, 
+	NetBuffer &serverBuffer, NetBuffer &clientBuffer)
 {
 	// Check landscape
-	if (server->getLandscapeBuffer().getBufferUsed() !=
-		client->getLandscapeBuffer().getBufferUsed())
+	if (serverBuffer.getBufferUsed() !=
+		clientBuffer.getBufferUsed())
 	{
-		syncCheckLog(S3D::formatStringBuffer("**** SyncCheck landscape sizes differ, Dest %u Sync %u",
-			destinationId, client->getSyncId()));
+		syncCheckLog(S3D::formatStringBuffer("**** SyncCheck %s sizes differ, Dest %u Sync %u",
+			mapName, destinationId, syncId));
 	}
 	else
 	{
-		if (memcmp(server->getLandscapeBuffer().getBuffer(),
-			client->getLandscapeBuffer().getBuffer(),
-			server->getLandscapeBuffer().getBufferUsed()) != 0)
+		if (memcmp(serverBuffer.getBuffer(),
+			clientBuffer.getBuffer(),
+			serverBuffer.getBufferUsed()) != 0)
 		{
-			syncCheckLog(S3D::formatStringBuffer("**** SyncCheck landscapes differ, Dest %u Sync %u",
-				destinationId, client->getSyncId()));
+			syncCheckLog(S3D::formatStringBuffer("**** SyncCheck %s differ, Dest %u Sync %u",
+				mapName, destinationId, syncId));
 
 			HeightMap &map = ScorchedServer::instance()->getLandscapeMaps().
 				getGroundMaps().getHeightMap();			
-			NetBufferReader serverReader(server->getLandscapeBuffer());
-			NetBufferReader clientReader(client->getLandscapeBuffer());
+			NetBufferReader serverReader(serverBuffer);
+			NetBufferReader clientReader(clientBuffer);
 			for (int y=0; y<map.getMapHeight(); y++)
 			{
 				for (int x=0; x<map.getMapWidth(); x++)
@@ -288,6 +289,17 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 			}
 		}
 	}
+	return true;
+}
+
+bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server, 
+	unsigned int destinationId, ComsSyncCheckMessage *client)
+{
+	// Compare heightmaps
+	compareHeightMaps(destinationId, client->getSyncId(), "landscape", 
+		server->getLandscapeBuffer(), client->getLandscapeBuffer());
+	compareHeightMaps(destinationId, client->getSyncId(), "roof", 
+		server->getRoofBuffer(), client->getRoofBuffer());
 
 	// Create temporary target/tanks
 	static Target *tmpTarget = new Target(0, LangString(),

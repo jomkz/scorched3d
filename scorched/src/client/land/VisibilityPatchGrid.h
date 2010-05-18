@@ -44,8 +44,8 @@ public:
 	void recalculateLandscapeErrors(FixedVector &position, fixed size);
 	void recalculateRoofErrors(FixedVector &position, fixed size);
 
-	void drawLand(int addIndex = 0, bool simple = false);
-	void drawRoof(int addIndex = 0, bool simple = false);
+	void drawLand(int addIndex, bool verticesOnly, bool allPatches);
+	void drawRoof(int addIndex, bool verticesOnly, bool allPatches);
 	void drawLandLODLevels();
 	void drawSurround();
 	void drawWater(Water2Patches &patches, 
@@ -89,7 +89,7 @@ protected:
 	int visibilityWidth_, visibilityHeight_;
 
 	void clear();
-	void drawHeightMap(GraphicalLandscapeMap *landscapeMap, int addIndex, bool simple, bool roof);
+	void drawHeightMap(GraphicalLandscapeMap *landscapeMap, int addIndex, bool verticesOnly, bool allPatches, bool roof);
 	void recalculateErrors(FixedVector &position, fixed size, bool roof);
 
 private:

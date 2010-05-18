@@ -31,7 +31,7 @@ public:
 	Sky();
 	virtual ~Sky();
 
-	void drawBackdrop();
+	void drawBackdrop(bool asShadow);
 	void drawLayers();
 	void simulate(float frameTime);
 	void generate();

@@ -217,7 +217,7 @@ void Landscape::drawShadows()
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_PRE");
 
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_DRAW_LAND");
-	VisibilityPatchGrid::instance()->drawLand(0, true);
+	VisibilityPatchGrid::instance()->drawLand(0, true, true);
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_DRAW_LAND");
 
 	if (!OptionsDisplay::instance()->getNoGLObjectShadows())
@@ -319,7 +319,7 @@ void Landscape::drawLand()
 	drawSetup();
 
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SKY");
-	sky_->drawBackdrop();
+	sky_->drawBackdrop(false);
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SKY");
 
 	if (OptionsDisplay::instance()->getDrawLandscape())
@@ -381,7 +381,7 @@ void Landscape::drawWater()
 
 		drawSetup();
 		GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LAND_REFLECTIONS");
-		sky_->drawBackdrop();
+		sky_->drawBackdrop(true);
 		sky_->drawLayers();
 		actualDrawLandReflection();
 		GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LAND_REFLECTIONS");
@@ -744,7 +744,7 @@ void Landscape::actualDrawLandTextured()
 	
 	glColor3f(1.0f, 1.0f, 1.0f);
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LAND");
-	VisibilityPatchGrid::instance()->drawLand();
+	VisibilityPatchGrid::instance()->drawLand(0, false, false);
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LAND");
 
 	if (OptionsDisplay::instance()->getDrawLandLOD())
@@ -817,7 +817,7 @@ void Landscape::actualDrawLandReflection()
 	}
 	
 	glColor3f(1.0f, 1.0f, 1.0f);
-	VisibilityPatchGrid::instance()->drawLand(2);
+	VisibilityPatchGrid::instance()->drawLand(2, false, false);
 }
 
 void Landscape::createShadowMatrix()
@@ -894,7 +894,7 @@ void Landscape::actualDrawLandShader()
 
 	// Draw Land
 	GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LAND");
-	VisibilityPatchGrid::instance()->drawLand();
+	VisibilityPatchGrid::instance()->drawLand(0, false, false);
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_LAND");
 
 	// Draw Surround

@@ -81,7 +81,7 @@ void RoofMaps::generateRMap(
 	// calculate roof size and set it
 	int mapWidth = defnCache_.getDefn()->getLandscapeWidth();
 	int mapHeight = defnCache_.getDefn()->getLandscapeHeight();
-	rmap_.create(mapWidth, mapHeight);
+	rmap_.create(mapWidth, mapHeight, true);
 	roofBaseHeight_ = 0;
 
 	// Generate the roof
@@ -111,7 +111,6 @@ void RoofMaps::generateRMap(
 				fixed height = rmap_.getHeight(i, j);
 				height = fixed(cavern->height) - height;
 				rmap_.setHeight(i, j, height);
-				rmap_.getNormal(i, j)[2] = -rmap_.getNormal(i, j)[2];
 			}
 		}
 	}

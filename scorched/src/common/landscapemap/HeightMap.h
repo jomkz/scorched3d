@@ -34,7 +34,7 @@ public:
 	HeightMap();
 	virtual ~HeightMap();
 
-	void create(int width, int height);
+	void create(int width, int height, bool invertedNormals);
 	void reset();
 
 	// Height map size fns
@@ -67,6 +67,7 @@ protected:
 		FixedVector normal;
 	};
 
+	bool invertedNormals_;
 	int width_, height_;
 	HeightData *heightData_;
 	GraphicalHeightMap *graphicalMap_;

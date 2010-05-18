@@ -36,6 +36,7 @@ public:
 
 	unsigned int getSyncId() { return syncId_; }
 	NetBuffer &getLandscapeBuffer() { return landscapeBuffer_; }
+	NetBuffer &getRoofBuffer() { return roofBuffer_; }
 	NetBuffer &getTargetsBuffer() { return targetsBuffer_; }
 	std::vector<std::string> &getSyncCheck() { return syncChecks_; }
 
@@ -46,7 +47,7 @@ public:
 protected:
 	std::vector<std::string> syncChecks_;
 	unsigned int syncId_;
-	NetBuffer landscapeBuffer_;
+	NetBuffer landscapeBuffer_, roofBuffer_;
 	NetBuffer targetsBuffer_;
 
 private:

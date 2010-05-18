@@ -48,15 +48,31 @@ ComsSyncCheckMessage::ComsSyncCheckMessage(unsigned int syncId,
 	syncId_(syncId)
 {
 	// Send the height map data
-	HeightMap &map = context.getLandscapeMaps().getGroundMaps().getHeightMap();
-	for (int y=0; y<map.getMapHeight(); y++)
 	{
-		for (int x=0; x<map.getMapWidth(); x++)
+		HeightMap &map = context.getLandscapeMaps().getGroundMaps().getHeightMap();
+		for (int y=0; y<map.getMapHeight(); y++)
 		{
-			fixed height = map.getHeight(x, y);
-			landscapeBuffer_.addToBuffer(height);
-			FixedVector &normal = map.getNormal(x, y);
-			landscapeBuffer_.addToBuffer(normal);
+			for (int x=0; x<map.getMapWidth(); x++)
+			{
+				fixed height = map.getHeight(x, y);
+				landscapeBuffer_.addToBuffer(height);
+				FixedVector &normal = map.getNormal(x, y);
+				landscapeBuffer_.addToBuffer(normal);
+			}
+		}
+	}
+	if (context.getLandscapeMaps().getRoofMaps().getRoofOn())
+	{
+		HeightMap &map = context.getLandscapeMaps().getRoofMaps().getRoofMap();
+		for (int y=0; y<map.getMapHeight(); y++)
+		{
+			for (int x=0; x<map.getMapWidth(); x++)
+			{
+				fixed height = map.getHeight(x, y);
+				roofBuffer_.addToBuffer(height);
+				FixedVector &normal = map.getNormal(x, y);
+				roofBuffer_.addToBuffer(normal);
+			}
 		}
 	}
 
@@ -90,6 +106,7 @@ bool ComsSyncCheckMessage::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(syncId_);
 	buffer.addToBuffer(landscapeBuffer_);
+	buffer.addToBuffer(roofBuffer_);
 	buffer.addToBuffer(targetsBuffer_);
 	int checks = (int) syncChecks_.size();
 	buffer.addToBuffer(checks);
@@ -107,6 +124,7 @@ bool ComsSyncCheckMessage::readMessage(NetBufferReader &reader)
 {
 	if (!reader.getFromBuffer(syncId_)) return false;
 	if (!reader.getFromBuffer(landscapeBuffer_)) return false;
+	if (!reader.getFromBuffer(roofBuffer_)) return false;
 	if (!reader.getFromBuffer(targetsBuffer_)) return false;
 	int checks = 0;
 	if (!reader.getFromBuffer(checks)) return false;

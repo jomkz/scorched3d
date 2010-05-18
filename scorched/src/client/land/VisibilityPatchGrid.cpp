@@ -336,25 +336,25 @@ void VisibilityPatchGrid::calculateVisibility()
 #define PATCH_INDEX_NORMAL(p) (p?p->getVisibilityIndex():-1)
 #define PATCH_INDEX_SHADOW(p,l) (p?(p->getVisibilityIndex()==-1?l:p->getVisibilityIndex()):-1)
 
-void VisibilityPatchGrid::drawLand(int addIndex, bool simple)
+void VisibilityPatchGrid::drawLand(int addIndex, bool verticesOnly, bool allPatches)
 {
 	GraphicalLandscapeMap *landscapeMap = (GraphicalLandscapeMap *)
 		ScorchedClient::instance()->getLandscapeMaps().
 			getGroundMaps().getHeightMap().getGraphicalMap();
-	drawHeightMap(landscapeMap, addIndex, simple, false);
+	drawHeightMap(landscapeMap, addIndex, verticesOnly, allPatches, false);
 }
 
-void VisibilityPatchGrid::drawRoof(int addIndex, bool simple)
+void VisibilityPatchGrid::drawRoof(int addIndex, bool verticesOnly, bool allPatches)
 {
-	glCullFace(GL_FRONT);
+	glFrontFace(GL_CW);
 	GraphicalLandscapeMap *landscapeMap = (GraphicalLandscapeMap *)
 		ScorchedClient::instance()->getLandscapeMaps().
 			getRoofMaps().getRoofMap().getGraphicalMap();
-	drawHeightMap(landscapeMap, addIndex, simple, true);
-	glCullFace(GL_BACK);
+	drawHeightMap(landscapeMap, addIndex, verticesOnly, allPatches, true);
+	glFrontFace(GL_CCW);
 }
 
-void VisibilityPatchGrid::drawHeightMap(GraphicalLandscapeMap *landscapeMap, int addIndex, bool simple, bool roof) 
+void VisibilityPatchGrid::drawHeightMap(GraphicalLandscapeMap *landscapeMap, int addIndex, bool verticesOnly, bool allPatches, bool roof) 
 {
 	if (!OptionsDisplay::instance()->getNoGLDrawElements() &&
 		GLStateExtension::hasDrawRangeElements())
@@ -372,7 +372,7 @@ void VisibilityPatchGrid::drawHeightMap(GraphicalLandscapeMap *landscapeMap, int
 		}
 
 		glEnableClientState(GL_VERTEX_ARRAY);
-		if (!simple)
+		if (!verticesOnly)
 		{
 			glEnableClientState(GL_NORMAL_ARRAY);
 			if (GLStateExtension::hasMultiTex())
@@ -390,7 +390,7 @@ void VisibilityPatchGrid::drawHeightMap(GraphicalLandscapeMap *landscapeMap, int
 		}
 	}
 
-	if (simple)
+	if (allPatches)
 	{
 		int shadowLOD = OptionsDisplay::instance()->getLandShadowsLOD();
 		LandAndTargetVisibilityPatch *landAndTargetCurrentPatch = landPatches_;
@@ -445,7 +445,7 @@ void VisibilityPatchGrid::drawHeightMap(GraphicalLandscapeMap *landscapeMap, int
 		GLStateExtension::hasDrawRangeElements())
 	{
 		glDisableClientState(GL_VERTEX_ARRAY);
-		if (!simple)
+		if (!verticesOnly)
 		{
 			glDisableClientState(GL_NORMAL_ARRAY);
 			if (GLStateExtension::hasMultiTex())

@@ -186,7 +186,7 @@ void SkyRoof::drawSegment(Vector &a, Vector &b, Vector &na, Vector &nb)
 	glEnd();
 }
 
-void SkyRoof::draw()
+void SkyRoof::draw(bool asShadow)
 {
 	if (!list_) makeList();
 
@@ -225,7 +225,7 @@ void SkyRoof::draw()
 	glCallList(list_);
 
 	// Draw Roof
-	VisibilityPatchGrid::instance()->drawRoof();
+	VisibilityPatchGrid::instance()->drawRoof(0, false, asShadow);
 
 	if (OptionsDisplay::instance()->getUseLandscapeTexture())
 	{
@@ -239,4 +239,5 @@ void SkyRoof::draw()
 			}
 			glActiveTextureARB(GL_TEXTURE0_ARB);
 		}
-	}}
+	}
+}

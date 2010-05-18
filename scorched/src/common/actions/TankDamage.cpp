@@ -569,7 +569,7 @@ void TankDamage::logDeath()
 
 				//$vbonus = $vskill if $vbonus > $vskill;
 				//$kbonus = $kskill if $kbonus > $kskill;
-				fixed weight = (fixed(weapon_->getArmsLevel()) / 10) + 1;
+				fixed weight = (fixed(weapon_->getArmsLevel()) / 10) + 5;
 				kbonus = (fixed(kbonus) * weight).asInt();
 				vbonus = (fixed(vbonus) * weight).asInt();
 			}

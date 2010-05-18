@@ -93,7 +93,8 @@ void GroundMaps::generateHMap(
 {
 	// Initialize the ground and surround maps
 	map_.create(defnCache_.getDefn()->getLandscapeWidth(), 
-		defnCache_.getDefn()->getLandscapeHeight());
+		defnCache_.getDefn()->getLandscapeHeight(), 
+		false);
 
 	// Generate the landscape
 	bool levelSurround = false;

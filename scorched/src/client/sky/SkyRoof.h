@@ -30,7 +30,7 @@ public:
 	SkyRoof();
 	virtual ~SkyRoof();
 
-	void draw();
+	void draw(bool asShadow);
 	void generate();
 
 protected:

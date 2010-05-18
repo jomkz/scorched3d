@@ -543,7 +543,7 @@ void ServerChannelManager::actualSend(const ChannelText &constText,
 				logMessage.c_str());
 		}
 	}
-	if (logtext[0])
+	if (!logtext.empty())
 	{
 		ServerCommon::serverLog(logtext);
 		MessageEntry messageEntry;

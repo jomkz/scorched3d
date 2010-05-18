@@ -28,7 +28,8 @@ static FixedVector nvec(fixed(0), fixed(0), fixed(1));
 
 HeightMap::HeightMap() : 
 	width_(0), height_(0),
-	heightData_(0), graphicalMap_(0)
+	heightData_(0), graphicalMap_(0),
+	invertedNormals_(false)
 {
 }
 
@@ -37,8 +38,9 @@ HeightMap::~HeightMap()
 	delete [] heightData_;
 }
 
-void HeightMap::create(const int width, const int height)
+void HeightMap::create(const int width, const int height, bool invertedNormals)
 {
+	invertedNormals_ = invertedNormals;
 	width_ = width; 
 	height_ = height;
 
@@ -63,7 +65,7 @@ void HeightMap::reset()
 
 			current->normal[0] = fixed(0);
 			current->normal[1] = fixed(0);
-			current->normal[2] = fixed(1);
+			current->normal[2] = invertedNormals_?fixed(-1):fixed(1);
 
 			current++;
 		}
@@ -199,12 +201,13 @@ FixedVector &HeightMap::getNormal(int w, int h)
 			}
 
 			normal = total.Normalize();
+			if (invertedNormals_) normal.StoreInvert();
 			if (graphicalMap_) graphicalMap_->setNormal(w, h, normal.asVector());			
 		}
 
 		return normal; 
 	}
-	nvec = FixedVector(fixed(0), fixed(0), fixed(1));
+	nvec = FixedVector(fixed(0), fixed(0), invertedNormals_?fixed(-1):fixed(1));
 	return nvec; 
 }
 

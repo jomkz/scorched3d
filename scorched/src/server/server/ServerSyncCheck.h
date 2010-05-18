@@ -64,6 +64,9 @@ protected:
 	bool checkContext(SyncContext *context);
 	bool compareSyncChecks(ComsSyncCheckMessage *server, 
 		unsigned int destinationId, ComsSyncCheckMessage *client);
+	bool compareHeightMaps(unsigned int destinationId, unsigned int syncId,
+		const char *mapName,
+		NetBuffer &serverBuffer, NetBuffer &clientBuffer);
 
 private:
 	ServerSyncCheck();
