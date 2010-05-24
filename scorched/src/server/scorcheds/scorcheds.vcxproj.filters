@@ -1440,6 +1440,9 @@
     <ClCompile Include="..\..\common\simactions\TankTeamBallanceSimAction.cpp">
       <Filter>simactions</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\simactions\TankBuyingSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -2808,6 +2811,9 @@
       <Filter>simactions</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\simactions\TankTeamBallanceSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\TankBuyingSimAction.h">
       <Filter>simactions</Filter>
     </ClInclude>
   </ItemGroup>

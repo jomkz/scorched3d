@@ -105,6 +105,10 @@ ModelRendererTank *TargetRendererImplTank::getMesh()
 
 void TargetRendererImplTank::render(float distance)
 {
+	createParticle();
+	storeTarget2DPos();
+	if (tank_->getState().getState() != TankState::sNormal) return;
+
 	if (TargetRendererImplTankAIM::drawAim())
 	{
 		GLState texState(GLState::TEXTURE_OFF);
@@ -119,9 +123,6 @@ void TargetRendererImplTank::render(float distance)
 	float size = getTargetSize();
 	float fade = getTargetFade(distance, 
 		size * 2.5f * float(OptionsDisplay::instance()->getTankModelSize()) / 100.0f);
-
-	createParticle();
-	storeTarget2DPos();
 
 	bool currentTank = 
 		(tank_ == ScorchedClient::instance()->getTankContainer().getCurrentTank() &&
@@ -158,6 +159,8 @@ void TargetRendererImplTank::render(float distance)
 
 void TargetRendererImplTank::renderReflection(float distance)
 {
+	if (tank_->getState().getState() != TankState::sNormal) return;
+
 	float size = getTargetSize();
 	float fade = getTargetFade(distance, 
 		size * 2.5f * float(OptionsDisplay::instance()->getTankModelSize()) / 100.0f);
@@ -182,6 +185,8 @@ void TargetRendererImplTank::renderReflection(float distance)
 
 void TargetRendererImplTank::renderShadow(float distance)
 {
+	if (tank_->getState().getState() != TankState::sNormal) return;
+
 	ModelRendererTank *mesh = getMesh();
 	if (mesh)
 	{
@@ -200,6 +205,13 @@ void TargetRendererImplTank::drawParticle(float distance)
 {
 	if (!getVisible()) return;
 	
+	if (tank_->getState().getState() != TankState::sNormal) 
+	{
+		drawArrow();
+		drawNames();
+		return;
+	}
+
 	drawParachute();
 	drawShield(shieldHit_, totalTime_);
 
@@ -231,17 +243,15 @@ void TargetRendererImplTank::drawParticle(float distance)
 			camType != TargetCamera::CamAction &&
 			camType != TargetCamera::CamExplosion))
 		{	
-			drawInfo();
+			drawArrow();
+			drawLife();
+			drawNames();
 		}
 	}
 }
 
-void TargetRendererImplTank::drawInfo()
+void TargetRendererImplTank::drawNames()
 {
-	// Draw the arrow
-	drawArrow();
-	drawLife();
-
 	Vector &position = tank_->getPosition().getTankPosition().asVector();
 	float height = position[2];
 	float groundHeight = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().
@@ -577,6 +587,8 @@ void TargetRendererImplTank::shieldHit()
 
 void TargetRendererImplTank::simulate(float frameTime)
 {
+	if (tank_->getState().getState() != TankState::sNormal) return;
+
 	totalTime_ += frameTime;
 	frame_ += frameTime * 20.0f;
 

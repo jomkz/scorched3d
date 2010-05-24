@@ -327,6 +327,7 @@
     <ClCompile Include="..\..\common\image\ImageLuminance.cpp" />
     <ClCompile Include="..\..\common\image\ImagePng.cpp" />
     <ClCompile Include="..\..\common\image\ImageStore.cpp" />
+    <ClCompile Include="..\..\common\simactions\TankBuyingSimAction.cpp" />
     <ClCompile Include="..\..\common\target\Target.cpp" />
     <ClCompile Include="..\..\common\target\TargetContainer.cpp" />
     <ClCompile Include="..\..\common\target\TargetDamageCalc.cpp" />
@@ -1055,6 +1056,7 @@
     <ClInclude Include="..\..\common\image\ImageLuminance.h" />
     <ClInclude Include="..\..\common\image\ImagePng.h" />
     <ClInclude Include="..\..\common\image\ImageStore.h" />
+    <ClInclude Include="..\..\common\simactions\TankBuyingSimAction.h" />
     <ClInclude Include="..\..\common\target\Target.h" />
     <ClInclude Include="..\..\common\target\TargetContainer.h" />
     <ClInclude Include="..\..\common\target\TargetDamageCalc.h" />

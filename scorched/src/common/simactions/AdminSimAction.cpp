@@ -92,7 +92,8 @@ void AdminSimAction::killAll(ScorchedContext &context)
 	{
 		Tank *current = (*itor).second;
 		if (current->getState().getState() == TankState::sNormal ||
-			current->getState().getState() == TankState::sDead)
+			current->getState().getState() == TankState::sDead ||
+			current->getState().getState() == TankState::sBuying)
 		{
 			current->getState().setState(TankState::sDead);
 			current->getState().setLives(0);

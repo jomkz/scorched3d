@@ -138,6 +138,11 @@ bool Tank::getAlive()
 	return getState().getState() == TankState::sNormal;
 }
 
+bool Tank::getVisible()
+{
+	return getAlive() || getState().getState() == TankState::sBuying;
+}
+
 Weapon *Tank::getDeathAction()
 {
 	setDeathAction(context_.getAccessoryStore().getDeathAnimation());

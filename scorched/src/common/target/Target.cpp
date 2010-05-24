@@ -82,6 +82,11 @@ void Target::newGame()
 	life_->newGame();
 }
 
+bool Target::getVisible()
+{
+	return getAlive();
+}
+
 bool Target::getAlive()
 {
 	return (life_->getLife() > 0);

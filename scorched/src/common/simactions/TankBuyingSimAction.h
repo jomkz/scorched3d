@@ -18,29 +18,31 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_TankNewGameSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
-#define AFX_TankNewGameSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
+#if !defined(AFX_TankBuyingSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#define AFX_TankBuyingSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
 #include <simactions/SimAction.h>
+#include <set>
 
-class TankNewGameSimAction : public SimAction
+class TankBuyingSimAction : public SimAction
 {
 public:
-	TankNewGameSimAction();
-	TankNewGameSimAction(unsigned int playerId);
-	virtual ~TankNewGameSimAction();
+	TankBuyingSimAction();
+	TankBuyingSimAction(unsigned int playerId);
+	virtual ~TankBuyingSimAction();
 
-	static unsigned int getInstanceCount() { return instanceCount_; }
-
+	static std::set<unsigned int> &getRunningPlayerIds() { return runningPlayerIds_; }
+	
 	virtual bool invokeAction(ScorchedContext &context);
 
 	virtual bool writeMessage(NetBuffer &buffer);
 	virtual bool readMessage(NetBufferReader &reader);
 
-REGISTER_CLASS_HEADER(TankNewGameSimAction);
+REGISTER_CLASS_HEADER(TankBuyingSimAction);
 protected:
-	static unsigned int instanceCount_;
+	static std::set<unsigned int> runningPlayerIds_;
+	bool server_;
 	unsigned int playerId_;
 };
 
-#endif // !defined(AFX_TankNewGameSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#endif // !defined(AFX_TankBuyingSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

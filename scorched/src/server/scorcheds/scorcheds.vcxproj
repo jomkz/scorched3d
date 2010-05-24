@@ -97,6 +97,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\common\simactions\TankBuyingSimAction.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="..\..\common\common\ARGParser.cpp" />
     <ClCompile Include="..\..\common\common\ChannelManager.cpp" />
@@ -610,6 +611,7 @@
     <ClInclude Include="..\..\common\common\Vector.h" />
     <ClInclude Include="..\..\common\common\Vector4.h" />
     <ClInclude Include="..\..\common\common\VectorLib.h" />
+    <ClInclude Include="..\..\common\simactions\TankBuyingSimAction.h" />
     <ClInclude Include="..\server\ScorchedServer.h" />
     <ClInclude Include="..\server\ScorchedServerUtil.h" />
     <ClInclude Include="..\server\ServerAddPlayerHandler.h" />

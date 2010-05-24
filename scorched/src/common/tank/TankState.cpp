@@ -41,10 +41,14 @@ allowedStateTransitions[] =
 	TankState::sSpectator, TankState::sNormal,
 	TankState::sSpectator, TankState::sDead,
 	TankState::sDead, TankState::sNormal,
+	TankState::sDead, TankState::sBuying,
 	TankState::sNormal, TankState::sDead,
 	TankState::sDead, TankState::sLoading,
 	TankState::sNormal, TankState::sLoading,
-	TankState::sSpectator, TankState::sLoading
+	TankState::sSpectator, TankState::sLoading,
+	TankState::sBuying, TankState::sSpectator,
+	TankState::sBuying, TankState::sLoading,
+	TankState::sBuying, TankState::sNormal
 };
 
 TankState::TankState(ScorchedContext &context, unsigned int playerId) : 
@@ -99,7 +103,7 @@ void TankState::setState(State s)
 		}
 	}
 
- 	if (state_ != sNormal)
+ 	if (state_ != sNormal && state_ != sBuying)
 	{
 		// Make sure the target and shield physics
 		// are disabled
@@ -140,6 +144,9 @@ const char *TankState::getSmallStateString()
 	case sLoading:
 		type = "Loading";
 		break;
+	case sBuying:
+		type = "Buying";
+		break;
 	}
 
 	return type;
@@ -151,6 +158,7 @@ LangString &TankState::getSmallStateLangString()
 	LANG_RESOURCE_CONST_VAR(ALIVE, "ALIVE", "Alive");
 	LANG_RESOURCE_CONST_VAR(SPECTATOR, "SPECTATOR", "Spectator");
 	LANG_RESOURCE_CONST_VAR(LOADING, "LOADING", "Loading");
+	LANG_RESOURCE_CONST_VAR(BUYING, "BUYING", "Buying");
 
 	switch (state_)
 	{
@@ -158,12 +166,12 @@ LangString &TankState::getSmallStateLangString()
 		return ALIVE;
 	case sDead:
 		return DEAD;
-		break;
 	case sSpectator:
 		return SPECTATOR;
-		break;
 	case sLoading:
 		return LOADING;
+	case sBuying:
+		return BUYING;
 	}
 
 	static LangString nullResult;
@@ -172,7 +180,7 @@ LangString &TankState::getSmallStateLangString()
 
 bool TankState::getTankPlaying()
 {
-	return state_ == sNormal || state_ == sDead;
+	return state_ == sNormal || state_ == sDead || state_ == sBuying;
 }
 
 bool TankState::writeMessage(NamedNetBuffer &buffer)

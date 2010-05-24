@@ -107,9 +107,6 @@ void ServerSimulator::nextSendTime()
 	{
 		levelMessage_->addSimulation(simulateMessage);
 	}
-
-	// Not needed but just to make obvious this is cleared
-	sendActions_.clear();
 }
 
 fixed ServerSimulator::calcSendStepSize()

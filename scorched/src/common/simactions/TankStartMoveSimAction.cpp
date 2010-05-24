@@ -59,7 +59,7 @@ bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 	tank->getScore().setPing((ping_ * 1000).asInt());
 
 	if (tank->getState().getState() != TankState::sNormal && !buying_) return true;
-	if (tank->getState().getState() != TankState::sDead && buying_) return true;
+	if (tank->getState().getState() != TankState::sBuying && buying_) return true;
 
 	if (!context.getServerMode())
 	{

@@ -56,6 +56,7 @@ public:
 	virtual bool readMessage(NetBufferReader &reader);
 
 	// The base attributes of the tank
+	virtual bool getVisible();
 	virtual bool getAlive();
 	virtual bool isTarget() { return false; }
 	unsigned int getDestinationId();

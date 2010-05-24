@@ -32,6 +32,7 @@
 #include <common/OptionsTransient.h>
 #include <simactions/TankStartMoveSimAction.h>
 #include <simactions/TankStopMoveSimAction.h>
+#include <simactions/TankBuyingSimAction.h>
 
 ServerStateBuying::ServerStateBuying() :
 	nextMoveId_(0)
@@ -45,7 +46,8 @@ ServerStateBuying::~ServerStateBuying()
 
 void ServerStateBuying::enterState()
 {
-	joinedPlayers_.clear();
+	bool firstRound =
+		(ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() == 1);
 	boughtPlayers_.clear();
 	totalTime_ = 0;
 
@@ -66,14 +68,13 @@ void ServerStateBuying::enterState()
 	{
 		Tank *tank = itor->second;
 		tank->getState().setMoveId(0);
+		if (firstRound) tank->getState().setNewlyJoined(true);
 	}
 }
 
 bool ServerStateBuying::simulate(fixed frameTime)
 {
 	// Check options
-	bool firstRound =
-		(ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() == 1);
 	bool buying =
 		(ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() >=
 		ScorchedServer::instance()->getOptionsGame().getBuyOnRound());
@@ -95,6 +96,7 @@ bool ServerStateBuying::simulate(fixed frameTime)
 	// Add any new players that should be buying
 	std::set<unsigned int> playingDestinations;
 	bool loading = false;
+	bool dead = false;
 	std::map<unsigned int, Tank*> &tanks = 
 		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
 	std::map<unsigned int, Tank*>::iterator itor;
@@ -105,33 +107,42 @@ bool ServerStateBuying::simulate(fixed frameTime)
 		Tank *tank = itor->second;
 		if (tank->getState().getState() == TankState::sDead)
 		{
-			// Check if this a new match for the tank
-			if (firstRound || tank->getState().getNewlyJoined())
-			{
-				if (tank->getState().getNewlyJoined() ||
-					joinedPlayers_.find(tank->getPlayerId()) == joinedPlayers_.end()) 
-				{	
-					joinedPlayers_.insert(tank->getPlayerId());
-					boughtPlayers_.erase(tank->getPlayerId());
-					tank->getState().setNewlyJoined(false);
+			dead = true;
 
-					TankNewMatchSimAction *tankNewMatchAction = 
-						new TankNewMatchSimAction(tank->getPlayerId());
-					if (tank->getUniqueId()[0])
-					{
-						ScorchedServer::instance()->getTankDeadContainer().getDeadTank(
-							tank, tankNewMatchAction, tank->getUniqueId());
-					}
-					else if (tank->getSUI()[0])
-					{
-						ScorchedServer::instance()->getTankDeadContainer().getDeadTank(
-							tank, tankNewMatchAction, tank->getSUI());
-					}
-					
-					ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankNewMatchAction);
+			// Check if this a new match for the tank
+			if (tank->getState().getNewlyJoined())
+			{ 
+				boughtPlayers_.erase(tank->getPlayerId());
+				tank->getState().setNewlyJoined(false);
+
+				TankNewMatchSimAction *tankNewMatchAction = 
+					new TankNewMatchSimAction(tank->getPlayerId());
+				if (tank->getUniqueId()[0])
+				{
+					ScorchedServer::instance()->getTankDeadContainer().getDeadTank(
+						tank, tankNewMatchAction, tank->getUniqueId());
 				}
+				else if (tank->getSUI()[0])
+				{
+					ScorchedServer::instance()->getTankDeadContainer().getDeadTank(
+						tank, tankNewMatchAction, tank->getSUI());
+				}
+					
+				ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankNewMatchAction);
 			}
 
+			if (TankBuyingSimAction::getRunningPlayerIds().find(tank->getPlayerId()) ==
+				TankBuyingSimAction::getRunningPlayerIds().end())
+			{
+				boughtPlayers_.erase(tank->getPlayerId());
+
+				TankBuyingSimAction *tankBuyingAction = 
+					new TankBuyingSimAction(tank->getPlayerId());
+				ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankBuyingAction);
+			}
+		}
+		else if (tank->getState().getState() == TankState::sBuying) 
+		{
 			// Check if this tank should buy
 			if (buying)
 			{
@@ -188,11 +199,14 @@ bool ServerStateBuying::simulate(fixed frameTime)
 	}
 
 	// Check if all the tanks have made their moves
-	if (playingDestinations.empty()) 
+	if (!dead)
 	{
-		if (!loading || timeExpired)
+		if (playingDestinations.empty()) 
 		{
-			return true;
+			if (!loading || timeExpired)
+			{
+				return true;
+			}
 		}
 	}
 

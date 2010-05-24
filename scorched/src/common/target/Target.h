@@ -57,6 +57,7 @@ public:
 	virtual void newGame();
 
 	virtual bool getAlive();
+	virtual bool getVisible();
 	virtual bool isTarget() { return true; }
 	unsigned int getPlayerId() { return playerId_; }
 

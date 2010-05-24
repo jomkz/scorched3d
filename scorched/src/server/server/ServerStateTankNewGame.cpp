@@ -43,42 +43,13 @@ void ServerStateTankNewGame::enterState()
 		itor++)
 	{
 		Tank *tank = itor->second;
-		tank->getState().setMoveId(0);
-		if (tank->getState().getState() == TankState::sDead)
-		{
-			tank->getState().setMoveId(1);
-			TankNewGameSimAction *tankNewGameAction = 
-				new TankNewGameSimAction(tank->getPlayerId());
-			ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankNewGameAction);
-		}
+		TankNewGameSimAction *tankNewGameAction = 
+			new TankNewGameSimAction(tank->getPlayerId());
+		ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankNewGameAction);
 	}
 }
 
 bool ServerStateTankNewGame::simulate()
 {
-	bool finished = true;
-	std::map<unsigned int, Tank*> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
-	std::map<unsigned int, Tank*>::iterator itor;
-	for (itor = tanks.begin();
-		itor != tanks.end();
-		itor++)
-	{
-		Tank *tank = itor->second;
-		if (tank->getState().getMoveId() != 0)
-		{
-			if (tank->getState().getState() == TankState::sNormal)
-			{
-				tank->getState().setMoveId(0);
-			}
-			else
-			{
-				finished = false;
-			}
-		}
-	}
-
-	return finished;
+	return (TankNewGameSimAction::getInstanceCount() == 0);
 }
-
-

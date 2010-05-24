@@ -18,62 +18,59 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <simactions/TankNewGameSimAction.h>
+#include <simactions/TankBuyingSimAction.h>
 #include <placement/PlacementTankPosition.h>
-#include <landscapemap/DeformLandscape.h>
-#include <landscapemap/LandscapeMaps.h>
 #include <engine/Simulator.h>
-#include <engine/ScorchedContext.h>
 #include <tank/TankState.h>
 #include <tank/TankContainer.h>
 #include <target/TargetLife.h>
 
-unsigned int TankNewGameSimAction::instanceCount_(0);
+std::set<unsigned int> TankBuyingSimAction::runningPlayerIds_;
 
-REGISTER_CLASS_SOURCE(TankNewGameSimAction);
+REGISTER_CLASS_SOURCE(TankBuyingSimAction);
 
-TankNewGameSimAction::TankNewGameSimAction() :
-	playerId_(0)
+TankBuyingSimAction::TankBuyingSimAction() :
+	playerId_(0),
+	server_(false)
 {
-	instanceCount_++;
 }
 
-TankNewGameSimAction::TankNewGameSimAction(unsigned int playerId) :
-	playerId_(playerId)
+TankBuyingSimAction::TankBuyingSimAction(unsigned int playerId) :
+	playerId_(playerId),
+	server_(true)
 {
-	instanceCount_++;
+	runningPlayerIds_.insert(playerId);
 }
 
-TankNewGameSimAction::~TankNewGameSimAction()
+TankBuyingSimAction::~TankBuyingSimAction()
 {
-	instanceCount_--;
+	if (server_) runningPlayerIds_.erase(playerId_);
 }
 
-bool TankNewGameSimAction::invokeAction(ScorchedContext &context)
+bool TankBuyingSimAction::invokeAction(ScorchedContext &context)
 {
 	Tank *tank = context.getTankContainer().getTankById(playerId_);
 	if (!tank) return false;
 
-	if (tank->getState().getState() != TankState::sBuying) return true;
+	if (tank->getState().getState() != TankState::sDead) return true;
+	tank->getState().setState(TankState::sBuying);
 
-	FixedVector tankPos = tank->getLife().getTargetPosition();
-	tankPos[2] = context.getLandscapeMaps().getGroundMaps().getInterpHeight(tankPos[0], tankPos[1]);
-
-	DeformLandscape::flattenArea(context, tankPos);
-
-	tank->newGame();
-	if (!context.getServerMode()) tank->clientNewGame();
+	FixedVector tankPos = PlacementTankPosition::placeTank(
+		tank->getPlayerId(), tank->getTeam(),
+		context,
+		context.getSimulator().getRandomGenerator());
+	tank->getLife().setTargetPosition(tankPos);
 
 	return true;
 }
 
-bool TankNewGameSimAction::writeMessage(NetBuffer &buffer)
+bool TankBuyingSimAction::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(playerId_);
 	return true;
 }
 
-bool TankNewGameSimAction::readMessage(NetBufferReader &reader)
+bool TankBuyingSimAction::readMessage(NetBufferReader &reader)
 {
 	if (!reader.getFromBuffer(playerId_)) return false;
 	return true;

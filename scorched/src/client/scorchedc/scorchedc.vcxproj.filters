@@ -2292,6 +2292,9 @@
     <ClCompile Include="..\land\RoofVisibilityPatch.cpp">
       <Filter>land</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\simactions\TankBuyingSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -4486,6 +4489,9 @@
     </ClInclude>
     <ClInclude Include="..\land\HeightMapVisibilityPatch.h">
       <Filter>land</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\TankBuyingSimAction.h">
+      <Filter>simactions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -100,7 +100,7 @@ protected:
 	float totalTime_;
 	float frame_;
 
-	void drawInfo();
+	void drawNames();
 	void drawLife();
 	void drawLifeBar(Vector &bilX, float value, float height, float barheight);
 	void drawSight();

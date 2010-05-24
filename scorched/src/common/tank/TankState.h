@@ -32,6 +32,7 @@ public:
 	{
 		sLoading,
 		sSpectator,
+		sBuying,
 		sNormal,
 		sDead
 	};

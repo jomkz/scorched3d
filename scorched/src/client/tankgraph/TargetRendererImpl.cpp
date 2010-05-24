@@ -63,7 +63,7 @@ void TargetRendererImpl::moved()
 	if (VisibilityPatchGrid::instance()->getEpocNumber() == 0) return;
 
 	TargetVisibilityPatch *newPatch = 0;
-	if (target_->getAlive())
+	if (target_->getVisible())
 	{
 		FixedVector &position = target_->getLife().getTargetPosition();
 		newPatch = VisibilityPatchGrid::instance()->getTargetVisibilityPatch(
@@ -124,7 +124,7 @@ void TargetRendererImpl::setMovedPatch(TargetVisibilityPatch *newPatch)
 bool TargetRendererImpl::getVisible()
 {
 	if (!currentVisibilityPatch_ || !currentVisibilityPatch_->getVisible()) return false;
-	if (!target_->getAlive()) return false;
+	if (!target_->getVisible()) return false;
 
 	return true;
 }

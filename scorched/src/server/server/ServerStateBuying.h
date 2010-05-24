@@ -57,7 +57,6 @@ protected:
 
 	fixed totalTime_;
 	unsigned int nextMoveId_;
-	std::set<unsigned int> joinedPlayers_;
 	std::set<unsigned int> boughtPlayers_;
 	SimulatorIAdapter<ServerStateBuying> *buyingStarted_;
 	std::map<unsigned int, BuyingPlayer*> buyingPlayers_;
