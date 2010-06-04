@@ -20,7 +20,6 @@
 
 #include <landscapemap/HeightMapLoader.h>
 #include <image/ImageFactory.h>
-#include <image/ImageBitmap.h>
 #include <common/RandomGenerator.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
@@ -100,7 +99,7 @@ bool HeightMapLoader::generateTerrain(
 		levelSurround = file->levelsurround;
 		
 		std::string fileName = S3D::getModFile(file->file.c_str());
-		ImageHandle image = ImageFactory::loadImageHandle(fileName);
+		Image image = ImageFactory::loadImage(fileName);
 		if (!image.getBits())
 		{
 			S3D::dialogMessage("HeightMapLoader", S3D::formatStringBuffer(

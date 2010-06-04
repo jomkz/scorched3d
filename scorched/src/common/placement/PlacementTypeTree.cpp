@@ -25,7 +25,6 @@
 #include <common/RandomGenerator.h>
 #include <common/Defines.h>
 #include <XML/XMLParser.h>
-#include <image/ImageBitmap.h>
 #include <image/ImageFactory.h>
 
 PlacementTypeTree::PlacementTypeTree() : 
@@ -54,11 +53,11 @@ void PlacementTypeTree::getPositions(ScorchedContext &context,
 	std::list<Position> &returnPositions,
 	ProgressCounter *counter)
 {
-	ImageBitmap bmap(256, 256);
-	ImageHandle map = bmap;
+	Image bmap(256, 256);
+	Image map = bmap;
 	if (mask.c_str()[0])
 	{	
-		map = ImageFactory::loadImageHandle(S3D::getModFile(mask.c_str()));
+		map = ImageFactory::loadImage(S3D::getModFile(mask.c_str()));
 		if (!map.getBits())
 		{
 			S3D::dialogExit("PlacementTypeTree",

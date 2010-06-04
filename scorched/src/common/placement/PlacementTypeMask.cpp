@@ -56,7 +56,7 @@ void PlacementTypeMask::getPositions(ScorchedContext &context,
 	int groundMapWidth = context.getLandscapeMaps().getGroundMaps().getLandscapeWidth();
 	int groundMapHeight = context.getLandscapeMaps().getGroundMaps().getLandscapeHeight();
 
-	ImageHandle map = ImageFactory::loadImageHandle(S3D::getModFile(mask.c_str()));
+	Image map = ImageFactory::loadImage(S3D::getModFile(mask.c_str()));
 	if (!map.getBits())
 	{
 		S3D::dialogExit("PlacementTypeMask",

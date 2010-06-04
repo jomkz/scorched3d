@@ -61,11 +61,11 @@ GLTexture *TextureStore::loadTexture(const std::string &name,
 	}
 
 	// Load tank skin as bitmap
-	Image *map = 0;
+	Image map;
 	if (aname[0])
 	{
 		map = ImageFactory::loadImage(name, aname, invert);
-		if (!map->getBits())
+		if (!map.getBits())
 		{
 			S3D::dialogMessage("Scorched3D load texture", S3D::formatStringBuffer(
 						  "Failed to load texture file \"%s\",\n"
@@ -78,7 +78,7 @@ GLTexture *TextureStore::loadTexture(const std::string &name,
 	else
 	{
 		map = ImageFactory::loadImage(name);
-		if (!map->getBits())
+		if (!map.getBits())
 		{
 			S3D::dialogMessage("Scorched3D load texture", S3D::formatStringBuffer(
 						  "Failed to load texture file \"%s\"",
@@ -100,15 +100,13 @@ GLTexture *TextureStore::loadTexture(const std::string &name,
 
 	// Create skin texture from bitmap
 	GLTexture *texture = new GLTexture;
-	if (!texture->create(*map))
+	if (!texture->create(map))
 	{
-		delete map;
 		S3D::dialogMessage("Scorched3D create texture", S3D::formatStringBuffer(
 					  "Failed to create texture \"%s\"",
 					  name.c_str()));
 		return 0;
 	}
-	delete map;
 
 	skins_[wholeName] = texture;
 	return texture;

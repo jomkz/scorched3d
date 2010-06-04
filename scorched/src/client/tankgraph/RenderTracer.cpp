@@ -21,7 +21,6 @@
 #include <tankgraph/RenderTracer.h>
 #include <tank/TankContainer.h>
 #include <GLEXT/GLTexture.h>
-#include <image/ImageBitmap.h>
 #include <client/ScorchedClient.h>
 
 RenderTracer *RenderTracer::instance_ = 0;

@@ -41,22 +41,22 @@ ImageStore::~ImageStore()
 {
 }
 
-Image *ImageStore::loadImage(ImageID &imageId)
+Image ImageStore::loadImage(ImageID &imageId)
 {
 	std::map<std::string, Image *>::iterator findItor =
 		imageMap_.find(imageId.getStringHash());
 	if (findItor == imageMap_.end())
 	{
-		Image *image = getImage(imageId);
-		imageMap_[imageId.getStringHash()] = image;
+		Image image = getImage(imageId);
+		imageMap_[imageId.getStringHash()] = new Image(image);
 		return image;
 	}
-	return (*findItor).second;
+	return *findItor->second;
 }
 
-Image *ImageStore::getImage(ImageID &id)
+Image ImageStore::getImage(ImageID &id)
 {
-	Image *image = 0;
+	Image image;
 	if (id.getAlphaName()[0])
 	{
 		image = ImageFactory::loadImage(

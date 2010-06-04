@@ -22,45 +22,28 @@
 #include <math.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
-#include <image/ImagePng.h>
+#include <image/ImagePngFactory.h>
 #ifdef __DARWIN__
 #include <UnixImageIO/png.h>
 #else
 #include <png.h>
 #endif
 
-ImagePng::ImagePng() :
-	width_(0), height_(0), bits_(0), alpha_(false),
-	owner_(true)
+Image ImagePngFactory::loadFromFile(const char *filename, const char *alphafilename, bool invert)
 {
-
-}
-
-ImagePng::ImagePng(int startWidth, int startHeight, bool alpha, unsigned char fill) : 
-	width_(startWidth), height_(startHeight), alpha_(alpha), bits_(0),
-	owner_(true)
-{
-	createBlankInternal(startWidth, startHeight, alpha, fill);
-}
-
-bool ImagePng::loadFromFile(const std::string &filename, 
-	const std::string &alphafilename, bool invert)
-{
-	ImagePng bitmap;
-	if (!bitmap.loadFromFile(filename)) return false;
-	ImagePng alpha;
-	if (!alpha.loadFromFile(alphafilename)) return false;
+	Image result;
+	Image bitmap = loadFromFile(filename, false);
+	Image alpha = loadFromFile(alphafilename, false);
 
 	if (bitmap.getBits() && alpha.getBits() && 
 		bitmap.getWidth() == alpha.getWidth() &&
-		bitmap.getHeight() == alpha.getHeight() &&
-		bitmap.getComponents() == alpha.getComponents() &&
-		bitmap.getComponents() == 3)
+		bitmap.getHeight() == alpha.getHeight())
 	{
-		createBlankInternal(bitmap.getWidth(), bitmap.getHeight(), true);
+		result = Image(bitmap.getWidth(), bitmap.getHeight(), true);
+
 		unsigned char *bbits = bitmap.getBits();
 		unsigned char *abits = alpha.getBits();
-		unsigned char *bits = getBits();
+		unsigned char *bits = result.getBits();
 		for (int y=0; y<bitmap.getHeight(); y++)
 		{
 			for (int x=0; x<bitmap.getWidth(); x++)
@@ -69,11 +52,7 @@ bool ImagePng::loadFromFile(const std::string &filename,
 				bits[1] = bbits[1];
 				bits[2] = bbits[2];
 
-				unsigned char avg = (unsigned char)
-					((
-					int(abits[0]) + 
-					int(abits[1]) + 
-					int(abits[2])) / 3);
+				unsigned char avg = (unsigned char)(int(abits[0] + abits[1] + abits[2]) / 3);
 				if (invert)
 				{
 					bits[3] = (unsigned char)(255 - avg);
@@ -89,38 +68,13 @@ bool ImagePng::loadFromFile(const std::string &filename,
 			}
 		}
 	}
-	return true;
+
+	return result;
 }
-
-ImagePng::~ImagePng()
+Image ImagePngFactory::loadFromFile(const char *filename, bool readalpha)
 {
-	clear();
-}
-
-void ImagePng::clear()
-{
-	if (owner_) delete [] bits_;
-	bits_ = 0;
-	width_ = 0;
-	height_ = 0;
-}
-
-void ImagePng::createBlankInternal(int width, int height, bool alpha, unsigned char fill)
-{
-	clear();
-	width_ = width;
-	height_ = height;
-	alpha_ = alpha;
-	int bitsize = getComponents() * width * height;
-
-	bits_ = new unsigned char[bitsize];
-	memset(bits_, fill, bitsize);
-}
-
-bool ImagePng::loadFromFile(const std::string &filename, bool readalpha)
-{
-	FILE *file = fopen(filename.c_str(), "rb");
-	if (!file) return false;
+	FILE *file = fopen(filename, "rb");
+	if (!file) return Image();
 
 	int read = 0;
 	char buffer[256];
@@ -131,13 +85,13 @@ bool ImagePng::loadFromFile(const std::string &filename, bool readalpha)
 	}
 	fclose(file);
 
-	if (!loadFromBuffer(netBuffer, readalpha))
+	Image result = loadFromBuffer(netBuffer, readalpha);
+	if (!result.getBits())
 	{
 		Logger::log(
-			S3D::formatStringBuffer("Failed to load PNG file \"%s\"", filename.c_str()));
-		return false;
+			S3D::formatStringBuffer("Failed to load PNG file \"%s\"", filename));
 	}
-	return true;
+	return result;
 }
 
 struct user_read_struct
@@ -168,7 +122,7 @@ static void user_read_fn(png_structp png_ptr,
 }
 
 // CODE TAKEN FROM PNG SUPPLIED example.c
-bool ImagePng::loadFromBuffer(NetBuffer &buffer, bool readalpha)
+Image ImagePngFactory::loadFromBuffer(NetBuffer &buffer, bool readalpha)
 {
 	png_structp png_ptr;
 	png_infop info_ptr;
@@ -182,7 +136,7 @@ bool ImagePng::loadFromBuffer(NetBuffer &buffer, bool readalpha)
 	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
 	if (png_ptr == NULL)
 	{
-	   return false;
+	   return Image();
 	}
 
 	/* Allocate/initialize the memory for image information.  REQUIRED. */
@@ -190,7 +144,7 @@ bool ImagePng::loadFromBuffer(NetBuffer &buffer, bool readalpha)
 	if (info_ptr == NULL)
 	{
 	  png_destroy_read_struct(&png_ptr, png_infopp_NULL, png_infopp_NULL);
-	  return false;
+	  return Image();
 	}
 
 	/* Set error handling if you are using the setjmp/longjmp method (this is
@@ -202,7 +156,7 @@ bool ImagePng::loadFromBuffer(NetBuffer &buffer, bool readalpha)
 	  /* Free all of the memory associated with the png_ptr and info_ptr */
 	  png_destroy_read_struct(&png_ptr, &info_ptr, png_infopp_NULL);
 	  /* If we get here, we had a problem reading the file */
-	  return false;
+	  return Image();
 	}
 	png_set_error_fn(png_ptr, NULL, user_png_error, user_png_warning);
 
@@ -239,21 +193,19 @@ bool ImagePng::loadFromBuffer(NetBuffer &buffer, bool readalpha)
 	png_uint_32 coltype = png_get_color_type(png_ptr, info_ptr);
 	png_byte channels = png_get_channels(png_ptr, info_ptr);
 
+	Image result;
 	if (coltype == (readalpha?PNG_COLOR_TYPE_RGB_ALPHA:PNG_COLOR_TYPE_RGB) &&
 		bitdepth == 8 &&
 		channels == (readalpha?4:3) &&
 		(bytes / width) == (readalpha?4:3))
 	{
 		png_bytepp row_pointers = png_get_rows(png_ptr, info_ptr);
-		width_ = width;
-		height_ = height;
-		alpha_ = readalpha;
 
-		createBlankInternal(width, height, readalpha);
+		result = Image(width, height, readalpha);
 
 		for (unsigned int h=0; h<height; h++)
 		{
-			memcpy(bits_ + bytes * (height - 1 - h), row_pointers[h], bytes);
+			memcpy(result.getBits() + bytes * (height - 1 - h), row_pointers[h], bytes);
 		}
 	}
 	else
@@ -266,7 +218,7 @@ bool ImagePng::loadFromBuffer(NetBuffer &buffer, bool readalpha)
 			"colt %d, channels %d\n",
             (int)width,(int)height,(int)bytes,(int)bitdepth,
             (int)coltype,(int)channels));
-		return false;
+		return Image();
 	}
 
 	// END NEW CODE
@@ -275,7 +227,7 @@ bool ImagePng::loadFromBuffer(NetBuffer &buffer, bool readalpha)
 	png_destroy_read_struct(&png_ptr, &info_ptr, png_infopp_NULL);
 
 	/* that's it */
-	return true;
+	return result;
 }
 
 struct user_write_struct
@@ -293,7 +245,7 @@ static void user_write_fn(png_structp png_ptr,
 	write_io_ptr->buffer.addDataToBuffer(data, length);
 }
 
-bool ImagePng::writeToBuffer(NetBuffer &buffer)
+bool ImagePngFactory::writeToBuffer(Image image, NetBuffer &buffer)
 {
 	png_structp png_ptr;
 	png_infop info_ptr;
@@ -326,7 +278,7 @@ bool ImagePng::writeToBuffer(NetBuffer &buffer)
 
 	// Write Header
 	png_set_IHDR(png_ptr, info_ptr, 
-		width_, height_,
+		image.getWidth(), image.getHeight(),
 		8, 
 		PNG_COLOR_TYPE_RGB, 
 		PNG_INTERLACE_NONE,
@@ -335,9 +287,9 @@ bool ImagePng::writeToBuffer(NetBuffer &buffer)
 
 	// Write File
 	png_write_info(png_ptr, info_ptr);
-	for (y=0; y<height_; y++) 
+	for (y=0; y<image.getHeight(); y++) 
 	{
-		png_write_row(png_ptr, &bits_[(height_ - y - 1) * width_ * getComponents()]);
+		png_write_row(png_ptr, &image.getBits()[(image.getHeight() - y - 1) * image.getWidth() * image.getComponents()]);
 	}
 	png_write_end(png_ptr, NULL);
 

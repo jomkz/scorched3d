@@ -27,7 +27,7 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeDefn.h>
 #include <image/ImageFactory.h>
-#include <image/ImagePng.h>
+#include <image/ImagePngFactory.h>
 #include <dialogs/MainMenuDialog.h>
 #include <landscape/Landscape.h>
 #include <water/Water.h>
@@ -61,10 +61,10 @@ MainCamera::MainCamera() :
 	mouseDown_(false), keyDown_(false), scrolling_(false), showArena_(false),
 	waterTransparency_(1.0f)
 {
-	Image *map = ImageFactory::loadImage(
+	Image *map = new Image(ImageFactory::loadImage(
 		S3D::getDataFile("data/images/camera.bmp"),
 		S3D::getDataFile("data/images/cameraa.bmp"),
-		false);
+		false));
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->addMenu(
 		LANG_RESOURCE("CAMERA", "Camera"),
@@ -450,13 +450,9 @@ void MainCamera::SaveScreen::draw(const unsigned state)
 		std::string fileName = 
 			S3D::getHomeFile(S3D::formatStringBuffer("ScreenShot-%i-%i.png", currentTime, counter++));
 
-		ImageHandle screenMap = ImageFactory::grabScreen();
-
-		ImagePng png(screenMap.getWidth(), screenMap.getHeight());
-		memcpy(png.getBits(), screenMap.getBits(), screenMap.getWidth() * screenMap.getHeight() * 3);
-
+		Image screenMap = ImageFactory::grabScreen();
 		NetBuffer buffer;
-		png.writeToBuffer(buffer);
+		ImagePngFactory::writeToBuffer(screenMap, buffer);
 
 		FILE *out = fopen(fileName.c_str(), "wb");
 		fwrite(buffer.getBuffer(), 1, buffer.getBufferUsed(), out);
@@ -474,7 +470,7 @@ void MainCamera::SaveScreen::draw(const unsigned state)
 	{
 		saveScreenTest_ = false;
 
-		ImageHandle screenMap = ImageFactory::grabScreen();
+		Image screenMap = ImageFactory::grabScreen();
 		ComsOperationResultMessage resultMessage;
 		resultMessage.getResultBuffer().addDataToBuffer(
 			screenMap.getBits(), 

@@ -53,7 +53,7 @@ void GLWImageList::addDirectory(const std::string &directory)
 		itor++)
 	{
 		const char *filename = (*itor).c_str();
-		ImageHandle png = ImageFactory::loadImageHandle(filename);
+		Image png = ImageFactory::loadImage(filename);
 		if (png.getBits() &&
 			png.getWidth() == 32 &&
 			png.getHeight() == 32)

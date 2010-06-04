@@ -20,49 +20,10 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include <image/ImageLuminance.h>
+#include <image/ImageLuminanceFactory.h>
 #include <common/Defines.h>
 
-ImageLuminance::ImageLuminance(const std::string &filename) : base_(NULL)
-{
-	loadFromFile(filename);
-}
-
-ImageLuminance::~ImageLuminance()
-{
-	free(base_);
-}
-
-void ImageLuminance::removeOwnership()
-{
-}
-
-unsigned char *ImageLuminance::getBits()
-{
-	return base_;
-}
-
-int ImageLuminance::getWidth()
-{
-	return image.xsize;
-}
-
-int ImageLuminance::getHeight()
-{
-	return image.ysize;
-}
-
-int ImageLuminance::getComponents()
-{
-	return image.zsize;
-}
-
-int ImageLuminance::getAlignment()
-{
-	return image.zsize;
-}
-
-void ImageLuminance::convertShort(unsigned short *array, unsigned int length)
+void ImageLuminanceFactory::convertShort(unsigned short *array, unsigned int length)
 {
 	unsigned short b1, b2;
 	unsigned char *ptr;
@@ -76,7 +37,7 @@ void ImageLuminance::convertShort(unsigned short *array, unsigned int length)
 	}
 }
 
-void ImageLuminance::convertUint(unsigned *array, unsigned int length)
+void ImageLuminanceFactory::convertUint(unsigned *array, unsigned int length)
 {
 	unsigned int b1, b2, b3, b4;
 	unsigned char *ptr;
@@ -92,7 +53,7 @@ void ImageLuminance::convertUint(unsigned *array, unsigned int length)
 	}
 }
 
-void ImageLuminance::imageGetRow(FILE *file, unsigned char *buf, int y, int z, unsigned int *rowStart, int *rowSize)
+void ImageLuminanceFactory::imageGetRow(FILE *file, ImageRec &image, unsigned char *buf, int y, int z, unsigned int *rowStart, int *rowSize)
 {
 	if ((image.type & 0xFF00) == 0x0100) 
 	{
@@ -129,7 +90,7 @@ void ImageLuminance::imageGetRow(FILE *file, unsigned char *buf, int y, int z, u
 	}
 }
 
-bool ImageLuminance::loadFromFile(const std::string &fileName)
+Image ImageLuminanceFactory::loadFromFile(const std::string &fileName)
 {
 	union 
 	{
@@ -142,18 +103,18 @@ bool ImageLuminance::loadFromFile(const std::string &fileName)
 	int swapFlag = 0;
 	if (endianTest.testByte[0] == 1) swapFlag = 1;
 
+	Image result;
 	FILE *file = fopen(fileName.c_str(), "rb");
 	if (file)
 	{
+		ImageRec image;
 		memset(&image, 0, sizeof(image));
 		fread(&image, 1, 12, file);
 
 		if (swapFlag) convertShort(&image.imagic, 6);
 
-		base_ = (unsigned char *)
-			malloc(image.xsize * image.ysize * sizeof(unsigned char));
-
-		if (base_)
+		unsigned char *base = new unsigned char[image.xsize * image.ysize];
+		if (base)
 		{
 			if ((image.type & 0xFF00) == 0x0100) 
 			{
@@ -173,10 +134,10 @@ bool ImageLuminance::loadFromFile(const std::string &fileName)
 						convertUint((unsigned *) rowSize, x / (int) sizeof(int));
 					}
 
-					unsigned char *lptr = base_;
+					unsigned char *lptr = base;
 					for (int y = 0; y < image.ysize; y++) 
 					{
-						imageGetRow(file, lptr, y, 0, rowStart, rowSize);
+						imageGetRow(file, image, lptr, y, 0, rowStart, rowSize);
 						lptr += image.xsize;
 					}
 
@@ -186,17 +147,23 @@ bool ImageLuminance::loadFromFile(const std::string &fileName)
 			}
 			else
 			{
-				unsigned char *lptr = base_;
+				unsigned char *lptr = base;
 				for (int y = 0; y < image.ysize; y++) 
 				{
-					imageGetRow(file, lptr, y, 0, 0, 0);
+					imageGetRow(file, image, lptr, y, 0, 0, 0);
 					lptr += image.xsize;
 				}
 			}
 		}
 
 		fclose(file);
+
+		result.setBits(base);
+		result.setWidth(image.xsize);
+		result.setHeight(image.ysize);
+		result.setComponents(image.zsize);
+		result.setAlignment(image.zsize);
 	}
 
-	return true;
+	return result;
 }

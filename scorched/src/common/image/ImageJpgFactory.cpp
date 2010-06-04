@@ -36,30 +36,23 @@ extern "C" {
 #endif
 
 #include <common/Defines.h>
-#include <image/ImageJpg.h>
+#include <image/ImageJpgFactory.h>
 
-ImageJpg::ImageJpg() :
-	width_(0), height_(0), bits_(0), alpha_(false),
-	owner_(true)
+Image ImageJpgFactory::loadFromFile(const char *filename, const char *alphafilename, bool invert)
 {
-
-}
-
-bool ImageJpg::loadFromFile(const char * filename, const char *alphafilename, bool invert)
-{
-	ImageJpg bitmap;
-	if (!bitmap.loadFromFile(filename)) return false;
-	ImageJpg alpha;
-	if (!alpha.loadFromFile(alphafilename)) return false;
+	Image result;
+	Image bitmap = loadFromFile(filename, false);
+	Image alpha = loadFromFile(alphafilename, false);
 
 	if (bitmap.getBits() && alpha.getBits() && 
 		bitmap.getWidth() == alpha.getWidth() &&
 		bitmap.getHeight() == alpha.getHeight())
 	{
-		createBlankInternal(bitmap.getWidth(), bitmap.getHeight(), true);
+		result = Image(bitmap.getWidth(), bitmap.getHeight(), true);
+
 		unsigned char *bbits = bitmap.getBits();
 		unsigned char *abits = alpha.getBits();
-		unsigned char *bits = getBits();
+		unsigned char *bits = result.getBits();
 		for (int y=0; y<bitmap.getHeight(); y++)
 		{
 			for (int x=0; x<bitmap.getWidth(); x++)
@@ -84,38 +77,14 @@ bool ImageJpg::loadFromFile(const char * filename, const char *alphafilename, bo
 			}
 		}
 	}
-	return true;
+
+	return result;
 }
 
-ImageJpg::~ImageJpg()
-{
-	clear();
-}
-
-void ImageJpg::clear()
-{
-	if (owner_) delete [] bits_;
-	bits_ = 0;
-	width_ = 0;
-	height_ = 0;
-}
-
-void ImageJpg::createBlankInternal(int width, int height, bool alpha, unsigned char fill)
-{
-	clear();
-	width_ = width;
-	height_ = height;
-	alpha_ = alpha;
-	int bitsize = getComponents() * width * height;
-
-	bits_ = new unsigned char[bitsize];
-	memset(bits_, fill, bitsize);
-}
-
-bool ImageJpg::loadFromFile(const char * filename, bool readalpha)
+Image ImageJpgFactory::loadFromFile(const char * filename, bool readalpha)
 {
 	FILE *file = fopen(filename, "rb");
-	if (!file) return false;
+	if (!file) return Image();
 
 	int read = 0;
 	char buffer[256];
@@ -168,7 +137,7 @@ term_source (j_decompress_ptr cinfo)
   /* no work necessary here */
 }
 
-bool ImageJpg::loadFromBuffer(NetBuffer &buffer, bool readalpha)
+Image ImageJpgFactory::loadFromBuffer(NetBuffer &buffer, bool readalpha)
 {
 	struct jpeg_decompress_struct cinfo;
 	struct jpeg_error_mgr jerr;
@@ -199,14 +168,11 @@ bool ImageJpg::loadFromBuffer(NetBuffer &buffer, bool readalpha)
 	jpeg_read_header(&cinfo, TRUE);
 	jpeg_start_decompress(&cinfo);
 
-	bool result = false;
+	Image result;
 	if ((cinfo.output_components == 3 && !readalpha) ||
 		(cinfo.output_components == 4 && readalpha))
 	{
-		width_ = cinfo.output_width;
-		height_ = cinfo.output_height;
-		alpha_ = readalpha;
-		createBlankInternal(width_, height_, readalpha);
+		result = Image(cinfo.output_width, cinfo.output_height, readalpha);
 
 		JSAMPARRAY buffer = (*cinfo.mem->alloc_sarray)
 			((j_common_ptr) &cinfo, JPOOL_IMAGE, 
@@ -222,7 +188,7 @@ bool ImageJpg::loadFromBuffer(NetBuffer &buffer, bool readalpha)
 				int destPos = cinfo.output_width * cinfo.output_components * 
 					(cinfo.output_height - currentLine - 1);
 				JSAMPLE *src = buffer[0];
-				unsigned char *dest = &bits_[destPos];
+				unsigned char *dest = &result.getBits()[destPos];
 
 				for (unsigned int i = 0; i < cinfo.output_width; ++i, 
 					dest+=cinfo.output_components, src+=cinfo.output_components)
@@ -234,8 +200,6 @@ bool ImageJpg::loadFromBuffer(NetBuffer &buffer, bool readalpha)
 				}
 			}
 		}
-
-		result = true;
 	}
 
 	jpeg_finish_decompress(&cinfo);

@@ -419,7 +419,7 @@ void TankMovement::moveTank(Tank *tank)
 			TankModel *model = tank->getModelContainer().getTankModel();
 			if (model)
 			{
-				Image *image = 0;
+				Image image;
 				if (firstx == secondx)
 				{
 					image = ImageStore::instance()->
@@ -443,7 +443,7 @@ void TankMovement::moveTank(Tank *tank)
 
 				ImageModifier::addBitmapToLandscape(
 					*context_,
-					*image,
+					image,
 					newPos[0].asFloat(), 
 					newPos[1].asFloat(),
 					0.04f, 0.04f,

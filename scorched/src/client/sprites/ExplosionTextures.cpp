@@ -51,8 +51,8 @@ ExplosionTextures::~ExplosionTextures()
 bool ExplosionTextures::addTextureToSet(GLTextureSet &set,
 										const char *texPath)
 {
-	ImageHandle bitmap =
-		ImageFactory::loadImageHandle(
+	Image bitmap =
+		ImageFactory::loadImage(
 			(char *) texPath, (char *) texPath, false);
 	GLTexture *texture = new GLTexture;
 
@@ -68,41 +68,41 @@ bool ExplosionTextures::createTextures(ProgressCounter *counter)
 	{
 		std::string file1 = S3D::getDataFile("data/images/arrow.bmp");
 		std::string file2 = S3D::getDataFile("data/images/arrowi.bmp");
-		ImageHandle bitmap = 
-			ImageFactory::loadImageHandle(file1.c_str(), file2.c_str(), true);
+		Image bitmap = 
+			ImageFactory::loadImage(file1.c_str(), file2.c_str(), true);
 		arrowTexture.create(bitmap);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
 	}
 
 	std::string file1 = S3D::getModFile("data/textures/smoke01.bmp");
-	ImageHandle bitmap = ImageFactory::loadImageHandle(file1.c_str(), file1.c_str(), false);
+	Image bitmap = ImageFactory::loadImage(file1.c_str(), file1.c_str(), false);
 	smokeTexture.create(bitmap);
 	DIALOG_ASSERT(smokeTexture.textureValid());
 
 	std::string file2 = S3D::getModFile("data/textures/smoke02.bmp");
-	ImageHandle bitmap2 = ImageFactory::loadImageHandle(file2.c_str(), file2.c_str(), false);
+	Image bitmap2 = ImageFactory::loadImage(file2.c_str(), file2.c_str(), false);
 	smokeTexture2.create(bitmap2);
 	DIALOG_ASSERT(smokeTexture2.textureValid());
 
 	std::string file3 = S3D::getModFile("data/textures/particle.bmp");
-	ImageHandle bitmap3 = ImageFactory::loadImageHandle(file3.c_str(), file3.c_str(), false);
+	Image bitmap3 = ImageFactory::loadImage(file3.c_str(), file3.c_str(), false);
 	particleTexture.create(bitmap3);
 	DIALOG_ASSERT(particleTexture.textureValid());
 
-	ImageHandle talkBitmap = ImageFactory::loadAlphaImageHandle(S3D::getModFile("data/textures/talk.bmp"));
+	Image talkBitmap = ImageFactory::loadAlphaImage(S3D::getModFile("data/textures/talk.bmp"));
 	talkTexture.create(talkBitmap);
 	DIALOG_ASSERT(talkTexture.textureValid());
 
 	std::string file5 = S3D::getModFile("data/textures/rain.bmp");
 	std::string file5m = S3D::getModFile("data/textures/rainm.bmp");
-	ImageHandle bitmap5 = ImageFactory::loadImageHandle(file5m.c_str(), file5.c_str(), false);
+	Image bitmap5 = ImageFactory::loadImage(file5m.c_str(), file5.c_str(), false);
 	rainTexture.create(bitmap5);
 	DIALOG_ASSERT(rainTexture.textureValid());
 
 	std::string file6 = S3D::getModFile("data/textures/snow.bmp");
 	std::string file6m = S3D::getModFile("data/textures/snowm.bmp");
-	ImageHandle bitmap6 = ImageFactory::loadImageHandle(file6.c_str(), file6m.c_str(), false);
+	Image bitmap6 = ImageFactory::loadImage(file6.c_str(), file6m.c_str(), false);
 	snowTexture.create(bitmap6);
 	DIALOG_ASSERT(snowTexture.textureValid());
 
@@ -205,7 +205,7 @@ Image &ExplosionTextures::getScorchBitmap(const char *name)
 		std::string fileName = S3D::getModFile(name);
 		if (S3D::fileExists(fileName))
 		{
-			Image *map = ImageFactory::loadImage(fileName);
+			Image *map = new Image(ImageFactory::loadImage(fileName));
 			scorchedBitmaps[name] = map;
 			return *map;
 		}

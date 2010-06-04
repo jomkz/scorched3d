@@ -21,31 +21,23 @@
 #if !defined(AFX_ImageFactory_H__0EBAA0E7_3103_43A4_90C0_5708ECE6DB43__INCLUDED_)
 #define AFX_ImageFactory_H__0EBAA0E7_3103_43A4_90C0_5708ECE6DB43__INCLUDED_
 
-#include <image/ImageHandle.h>
 #include <string>
+#include <image/Image.h>
 
 class ImageFactory  
 {
 public:
-	static Image *loadImage(
+	static Image loadImage(
 		const std::string &filename, 
 		const std::string &alphafilename = "", 
 		bool invert = true);
-	static Image *loadAlphaImage(
+	static Image loadAlphaImage(
 		const std::string &filename);
-
-	static ImageHandle loadImageHandle(
-		const std::string &filename, 
-		const std::string &alphafilename = "", 
-		bool invert = true);
-	static ImageHandle loadAlphaImageHandle(
-		const std::string &filename);
-
-	static ImageHandle createBlank(int width, int height, 
+	static Image createBlank(int width, int height, 
 		bool alpha = false, unsigned char fill = 255);
 
 #ifndef S3D_SERVER
-	static ImageHandle grabScreen();
+	static Image grabScreen();
 #endif
 
 private:

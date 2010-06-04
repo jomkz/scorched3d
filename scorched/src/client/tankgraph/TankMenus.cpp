@@ -297,10 +297,10 @@ TankMenus::PlayerMenu::PlayerMenu()
 	GLMenuItem bar(LANG_STRING("----------"));
 	bar.setSeperator();
 
-	Image *map = ImageFactory::loadImage(
+	Image *map = new Image(ImageFactory::loadImage(
 		S3D::getDataFile("data/images/setting.bmp"),
 		S3D::getDataFile("data/images/settinga.bmp"),
-		false);
+		false));
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->addMenu(LANG_RESOURCE("GAME", "Game"), 
 		"Game",
@@ -407,10 +407,10 @@ bool TankMenus::PlayerMenu::getEnabled(const char* menuName)
 // Accessory Menus
 TankMenus::AccessoryMenu::AccessoryMenu()
 {
-	Image *map = ImageFactory::loadImage(
+	Image *map = new Image(ImageFactory::loadImage(
 		S3D::getDataFile("data/images/bomb.bmp"),
 		S3D::getDataFile("data/images/bomba.bmp"),
-		false);
+		false));
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->addMenu(LANG_RESOURCE("WEAPONS", "Weapons"), 
 		"Weapons", 

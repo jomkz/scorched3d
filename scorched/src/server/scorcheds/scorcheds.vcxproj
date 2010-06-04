@@ -97,6 +97,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\common\image\Image.cpp" />
+    <ClCompile Include="..\..\common\image\ImageBitmapFactory.cpp" />
+    <ClCompile Include="..\..\common\image\ImageData.cpp" />
+    <ClCompile Include="..\..\common\image\ImageFactory.cpp" />
+    <ClCompile Include="..\..\common\image\ImageJpgFactory.cpp" />
+    <ClCompile Include="..\..\common\image\ImageLuminanceFactory.cpp" />
+    <ClCompile Include="..\..\common\image\ImagePngFactory.cpp" />
+    <ClCompile Include="..\..\common\image\ImageStore.cpp" />
     <ClCompile Include="..\..\common\simactions\TankBuyingSimAction.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="..\..\common\common\ARGParser.cpp" />
@@ -519,14 +527,6 @@
     <ClCompile Include="..\..\common\target\TargetSpace.cpp" />
     <ClCompile Include="..\..\common\target\TargetSpaceContainment.cpp" />
     <ClCompile Include="..\..\common\target\TargetState.cpp" />
-    <ClCompile Include="..\..\common\image\Image.cpp" />
-    <ClCompile Include="..\..\common\image\ImageBitmap.cpp" />
-    <ClCompile Include="..\..\common\image\ImageFactory.cpp" />
-    <ClCompile Include="..\..\common\image\ImageHandle.cpp" />
-    <ClCompile Include="..\..\common\image\ImageJpg.cpp" />
-    <ClCompile Include="..\..\common\image\ImageLuminance.cpp" />
-    <ClCompile Include="..\..\common\image\ImagePng.cpp" />
-    <ClCompile Include="..\..\common\image\ImageStore.cpp" />
     <ClCompile Include="..\..\common\lang\Lang.cpp" />
     <ClCompile Include="..\..\common\lang\LangImpl.cpp" />
     <ClCompile Include="..\..\common\lang\LangParam.cpp" />
@@ -611,6 +611,14 @@
     <ClInclude Include="..\..\common\common\Vector.h" />
     <ClInclude Include="..\..\common\common\Vector4.h" />
     <ClInclude Include="..\..\common\common\VectorLib.h" />
+    <ClInclude Include="..\..\common\image\Image.h" />
+    <ClInclude Include="..\..\common\image\ImageBitmapFactory.h" />
+    <ClInclude Include="..\..\common\image\ImageData.h" />
+    <ClInclude Include="..\..\common\image\ImageFactory.h" />
+    <ClInclude Include="..\..\common\image\ImageJpgFactory.h" />
+    <ClInclude Include="..\..\common\image\ImageLuminanceFactory.h" />
+    <ClInclude Include="..\..\common\image\ImagePngFactory.h" />
+    <ClInclude Include="..\..\common\image\ImageStore.h" />
     <ClInclude Include="..\..\common\simactions\TankBuyingSimAction.h" />
     <ClInclude Include="..\server\ScorchedServer.h" />
     <ClInclude Include="..\server\ScorchedServerUtil.h" />
@@ -978,14 +986,6 @@
     <ClInclude Include="..\..\common\target\TargetSpace.h" />
     <ClInclude Include="..\..\common\target\TargetSpaceContainment.h" />
     <ClInclude Include="..\..\common\target\TargetState.h" />
-    <ClInclude Include="..\..\common\image\Image.h" />
-    <ClInclude Include="..\..\common\image\ImageBitmap.h" />
-    <ClInclude Include="..\..\common\image\ImageFactory.h" />
-    <ClInclude Include="..\..\common\image\ImageHandle.h" />
-    <ClInclude Include="..\..\common\image\ImageJpg.h" />
-    <ClInclude Include="..\..\common\image\ImageLuminance.h" />
-    <ClInclude Include="..\..\common\image\ImagePng.h" />
-    <ClInclude Include="..\..\common\image\ImageStore.h" />
     <ClInclude Include="..\..\common\lang\Lang.h" />
     <ClInclude Include="..\..\common\lang\LangImpl.h" />
     <ClInclude Include="..\..\common\lang\LangParam.h" />

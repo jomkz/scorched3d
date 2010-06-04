@@ -20,14 +20,40 @@
 
 #include <image/Image.h>
 #include <image/ImageFactory.h>
-#include <image/ImageHandle.h>
 #include <common/DefinesAssert.h>
 #include <SDL/SDL.h>
 #include "string.h"
 
+Image::Image()
+{
+	data_ = new ImageData();
+	data_->reference();
+}
+
+Image::Image(int width, int height, bool alpha, unsigned char fill)
+{
+	data_ = new ImageData(width, height, alpha, fill);
+	data_->reference();
+}
+
+Image::Image(const Image &other)
+{
+	data_ = other.data_;
+	data_->reference();
+}
+
 Image::~Image()
 {
+	data_->dereference();
+}
 
+Image &Image::operator=(const Image &other)
+{
+	data_->dereference();
+	data_ = other.data_;
+	data_->reference();
+
+	return *this;
 }
 
 unsigned char *Image::getBitsPos(int x, int y)
@@ -97,11 +123,11 @@ bool Image::writeToFile(const std::string &filename)
 #include <GLEXT/GLState.h>
 #include <common/Defines.h>
 
-ImageHandle Image::createAlphaMult(float mult)
+Image Image::createAlphaMult(float mult)
 {
-	if (getComponents() != 4) return ImageHandle();
+	if (getComponents() != 4) return Image();
 	
-	ImageHandle map = ImageFactory::createBlank(getWidth(), getHeight(), true);
+	Image map = ImageFactory::createBlank(getWidth(), getHeight(), true);
 
 	unsigned char *srcBits = getBits();
 	unsigned char *destBits = map.getBits();
@@ -120,17 +146,16 @@ ImageHandle Image::createAlphaMult(float mult)
 		}
 	}
 
-	return ImageHandle(map);
+	return map;
 }
 
-ImageHandle Image::createResize(int newWidth, int newHeight)
+Image Image::createResize(int newWidth, int newHeight)
 {
-	if (!getBits()) return ImageHandle();
+	if (!getBits()) return Image();
 
-	ImageHandle map = ImageFactory::createBlank(newWidth, newHeight);
+	Image map = ImageFactory::createBlank(newWidth, newHeight);
 
 	// Odd hack to fix a seeming memory corruption with gluScaleImage
-	delete [] map.getBits();
 	map.setBits(new unsigned char[newWidth * 2 * newHeight * map.getComponents()]);
 
 	if (getWidth() != newWidth || getHeight() != newHeight)
@@ -152,6 +177,6 @@ ImageHandle Image::createResize(int newWidth, int newHeight)
 		memcpy(map.getBits(), getBits(), getComponents() * getWidth() * getHeight());
 	}
 
-	return ImageHandle(map);
+	return map;
 }
 #endif

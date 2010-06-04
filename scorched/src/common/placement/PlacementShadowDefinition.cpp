@@ -74,10 +74,10 @@ void PlacementShadowDefinition::updateLandscapeTexture(
 {
 	if (groundMap_.imageValid())
 	{
-		Image *image = ImageStore::instance()->loadImage(groundMap_);
+		Image image = ImageStore::instance()->loadImage(groundMap_);
 		ImageModifier::addBitmapToLandscape(
 			context,
-			*image,
+			image,
 			position[0].asFloat(), 
 			position[1].asFloat(),
 			0.25f, 0.25f);

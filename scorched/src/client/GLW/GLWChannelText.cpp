@@ -90,11 +90,11 @@ void GLWChannelText::draw()
 	if (!createdTexture_)
 	{
 		createdTexture_ = true;
-		ImageHandle buttonImg = ImageFactory::loadAlphaImageHandle(
+		Image buttonImg = ImageFactory::loadAlphaImage(
 			S3D::getModFile("data/windows/arrow_r.png"));
 		buttonTexture_.create(buttonImg, false);
 		button_.setTexture(&buttonTexture_);
-		ImageHandle map = ImageFactory::loadImageHandle(
+		Image map = ImageFactory::loadImage(
 			S3D::getDataFile("data/images/white.bmp"));
 		colorTexture_.create(map);
 	}

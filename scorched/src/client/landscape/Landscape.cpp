@@ -38,7 +38,6 @@
 #include <land/VisibilityPatchGrid.h>
 #include <movement/TargetMovement.h>
 #include <image/ImageFactory.h>
-#include <image/ImageBitmap.h>
 #include <GLEXT/GLImageModifier.h>
 #include <GLEXT/GLStateExtension.h>
 #include <GLEXT/GLCameraFrustum.h>
@@ -236,7 +235,7 @@ void Landscape::drawShadows()
 
 			static float *depthResult = 
 				new float[shadowFrameBuffer_.getWidth() * shadowFrameBuffer_.getHeight()];
-			static ImageHandle depthImage =
+			static Image depthImage =
 				ImageFactory::createBlank(shadowFrameBuffer_.getWidth(),
 					shadowFrameBuffer_.getHeight());
 
@@ -503,7 +502,7 @@ void Landscape::generate(ProgressCounter *counter)
 
 	// Removed for now as plan is square
 	// If (when) re-instated need to scale alpha map by playable arena, not full map size
-	/*ImageHandle plana = ImageFactory::loadImageHandle(S3D::getModFile("data/windows/planaa.bmp"));
+	/*Image plana = ImageFactory::loadImage(S3D::getModFile("data/windows/planaa.bmp"));
 	ImageModifier::scalePlanBitmap(bitmapPlanAlphaAlpha_, plana,
 		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeWidth(),
 	ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeHeight());*/
@@ -518,20 +517,20 @@ void Landscape::generate(ProgressCounter *counter)
 		LandscapeTexTextureGenerate *generate = 
 			(LandscapeTexTextureGenerate *) tex->texture;
 
-		ImageHandle texture0 = 
-			ImageFactory::loadImageHandle(S3D::getModFile(generate->texture0.c_str()));
-		ImageHandle texture1 = 
-			ImageFactory::loadImageHandle(S3D::getModFile(generate->texture1.c_str()));
-		ImageHandle texture2 = 
-			ImageFactory::loadImageHandle(S3D::getModFile(generate->texture2.c_str()));
-		ImageHandle texture3 = 
-			ImageFactory::loadImageHandle(S3D::getModFile(generate->texture3.c_str()));
-		ImageHandle bitmapShore = 
-			ImageFactory::loadImageHandle(S3D::getModFile(generate->shore.c_str()));
-		ImageHandle bitmapRock = 
-			ImageFactory::loadImageHandle(S3D::getModFile(generate->rockside.c_str()));
-		ImageHandle bitmapRoof = 
-			ImageFactory::loadImageHandle(S3D::getModFile(generate->roof.c_str()));
+		Image texture0 = 
+			ImageFactory::loadImage(S3D::getModFile(generate->texture0.c_str()));
+		Image texture1 = 
+			ImageFactory::loadImage(S3D::getModFile(generate->texture1.c_str()));
+		Image texture2 = 
+			ImageFactory::loadImage(S3D::getModFile(generate->texture2.c_str()));
+		Image texture3 = 
+			ImageFactory::loadImage(S3D::getModFile(generate->texture3.c_str()));
+		Image bitmapShore = 
+			ImageFactory::loadImage(S3D::getModFile(generate->shore.c_str()));
+		Image bitmapRock = 
+			ImageFactory::loadImage(S3D::getModFile(generate->rockside.c_str()));
+		Image bitmapRoof = 
+			ImageFactory::loadImage(S3D::getModFile(generate->roof.c_str()));
 		Image *bitmaps[4];
 		bitmaps[0] = &texture0;
 		bitmaps[1] = &texture1;
@@ -555,8 +554,8 @@ void Landscape::generate(ProgressCounter *counter)
 			(LandscapeTexTextureFile *) tex->texture;
 
 		if (counter) counter->setNewOp(LANG_RESOURCE("LANDSCAPE_MAP", "Landscape Map"));
-		ImageHandle texture = 
-			ImageFactory::loadImageHandle(S3D::getModFile(generate->texture.c_str()));
+		Image texture = 
+			ImageFactory::loadImage(S3D::getModFile(generate->texture.c_str()));
 		mainMap_ = texture.createResize(1024, 1024);
 
 		// Set the general surround and roof texture
@@ -631,35 +630,35 @@ void Landscape::generate(ProgressCounter *counter)
 
 	// Generate the scorch map for the landscape
 	std::string sprayMaskFile = S3D::getModFile("data/textures/smoke01.bmp");
-	ImageHandle sprayMaskBitmap = 
-		ImageFactory::loadImageHandle(sprayMaskFile.c_str(), sprayMaskFile.c_str(), false);
+	Image sprayMaskBitmap = 
+		ImageFactory::loadImage(sprayMaskFile.c_str(), sprayMaskFile.c_str(), false);
 	scorchMap_ = 
-		ImageFactory::loadImageHandle(S3D::getModFile(tex->scorch.c_str()));
-	ImageHandle scorchMap = scorchMap_.createResize(
+		ImageFactory::loadImage(S3D::getModFile(tex->scorch.c_str()));
+	Image scorchMap = scorchMap_.createResize(
 		sprayMaskBitmap.getWidth(), sprayMaskBitmap.getHeight());
-	ImageHandle texture1New = ImageFactory::createBlank(sprayMaskBitmap.getWidth(), sprayMaskBitmap.getHeight(), true);
+	Image texture1New = ImageFactory::createBlank(sprayMaskBitmap.getWidth(), sprayMaskBitmap.getHeight(), true);
 	ImageModifier::makeBitmapTransparent(texture1New, scorchMap, sprayMaskBitmap);
 	landTex1_.replace(texture1New);
 
 	// Arena
-	ImageHandle arenaBitmap = ImageModifier::makeArenaBitmap();
+	Image arenaBitmap = ImageModifier::makeArenaBitmap();
 	DIALOG_ASSERT(arenaMainTexture_.replace(arenaBitmap));
 	arenaMainTexture_.draw();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	ImageHandle arenaSurroundBitmap = ImageModifier::makeArenaSurroundBitmap();
+	Image arenaSurroundBitmap = ImageModifier::makeArenaSurroundBitmap();
 	DIALOG_ASSERT(arenaSurroundTexture_.replace(arenaSurroundBitmap));
 
 	// Magma
-	ImageHandle bitmapMagma = 
-		ImageFactory::loadImageHandle(S3D::getModFile(tex->magmasmall.c_str()));
+	Image bitmapMagma = 
+		ImageFactory::loadImage(S3D::getModFile(tex->magmasmall.c_str()));
 	DIALOG_ASSERT(magTexture_.replace(bitmapMagma));
 
 	// Detail
-	ImageHandle bitmapDetail = 
-		ImageFactory::loadImageHandle(S3D::getModFile(tex->detail.c_str()));
+	Image bitmapDetail = 
+		ImageFactory::loadImage(S3D::getModFile(tex->detail.c_str()));
 	DIALOG_ASSERT(detailTexture_.replace(bitmapDetail, true));
 
 	// Set the fog color

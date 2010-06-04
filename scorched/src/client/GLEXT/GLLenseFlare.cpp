@@ -21,7 +21,7 @@
 #include <math.h>
 #include <GLEXT/GLState.h>
 #include <GLEXT/GLCamera.h>
-#include <image/ImageLuminance.h>
+#include <image/ImageLuminanceFactory.h>
 #include <GLEXT/GLLenseFlare.h>
 #include <GLEXT/GLCameraFrustum.h>
 #include <common/Defines.h>
@@ -104,7 +104,7 @@ void GLLenseFlare::init(ProgressCounter *counter)
 	{
 		if (counter) counter->setNewPercentage(float (i) / 16.0f * 100.0f);
 
-		ImageLuminance bitmap(S3D::getModFile(S3D::formatStringBuffer("data/textures/lensflare/shine%d.bw", i)));
+		Image bitmap = ImageLuminanceFactory::loadFromFile(S3D::getModFile(S3D::formatStringBuffer("data/textures/lensflare/shine%d.bw", i)));
 		shines_[i].create(bitmap);
 	}
 
@@ -112,7 +112,7 @@ void GLLenseFlare::init(ProgressCounter *counter)
 	{
 		if (counter) counter->setNewPercentage(float (i+10) / 16.0f * 100.0f);
 
-		ImageLuminance bitmap(S3D::getModFile(S3D::formatStringBuffer("data/textures/lensflare/flare%d.bw", i)));
+		Image bitmap = ImageLuminanceFactory::loadFromFile(S3D::getModFile(S3D::formatStringBuffer("data/textures/lensflare/flare%d.bw", i)));
 		flares_[i].create(bitmap);
 	}
 }

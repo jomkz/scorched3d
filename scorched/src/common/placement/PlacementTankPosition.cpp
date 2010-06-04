@@ -32,15 +32,15 @@
 #include <common/Logger.h>
 
 static bool tankMaskCloseness(ScorchedContext &context, int team, 
-	FixedVector &tankPos, Image *tankMask)
+	FixedVector &tankPos, Image &tankMask)
 {
 	// Find the mask position
-	int maskX = (tankPos[0] * fixed(tankMask->getWidth())).asInt() / 
+	int maskX = (tankPos[0] * fixed(tankMask.getWidth())).asInt() / 
 		context.getLandscapeMaps().getDefinitions().getDefn()->getLandscapeWidth();
-	int maskY = (tankPos[1] * fixed(tankMask->getHeight())).asInt() / 
+	int maskY = (tankPos[1] * fixed(tankMask.getHeight())).asInt() / 
 		context.getLandscapeMaps().getDefinitions().getDefn()->getLandscapeHeight();
-	unsigned char *maskPos = tankMask->getBits() +
-		maskX * 3 + maskY * tankMask->getWidth() * 3;
+	unsigned char *maskPos = tankMask.getBits() +
+		maskX * 3 + maskY * tankMask.getWidth() * 3;
 		
 	if (maskPos[0] == 0 && maskPos[1] == 0 && maskPos[2] == 0)
 	{
@@ -141,7 +141,7 @@ FixedVector PlacementTankPosition::placeTank(unsigned int playerId, int team,
 	fixed maxHeight = 1000;
 	fixed tankCloseness = 0;
 	fixed flatness = 0;
-	Image *tankMask = 0;
+	Image tankMask;
 
 	LandscapeDefnType *defn =
 		context.getLandscapeMaps().getDefinitions().getDefn()->tankstart;
@@ -157,7 +157,7 @@ FixedVector PlacementTankPosition::placeTank(unsigned int playerId, int team,
 		{
 			tankMask = ImageFactory::loadImage(
 				S3D::getModFile(height->startmask.c_str()));
-			DIALOG_ASSERT(tankMask->getBits());
+			DIALOG_ASSERT(tankMask.getBits());
 		}
 	}
 	else
@@ -194,7 +194,7 @@ FixedVector PlacementTankPosition::placeTank(unsigned int playerId, int team,
 		if (normal[2] < flatness) continue;
 
 		// Make sure the mask allows the tank
-		if (tankMask && 
+		if (tankMask.getBits() && 
 			!tankMaskCloseness(context, team, tankPos, tankMask)) continue;
 
 		// Check tanks are not too close to others or targets
@@ -205,8 +205,6 @@ FixedVector PlacementTankPosition::placeTank(unsigned int playerId, int team,
 		break;
 	}
 	if (i == 0) Logger::log("Tank closeness exceeded");
-
-	delete tankMask;
 
 	// Get the height of the tank
 	tankPos[2] = context.getLandscapeMaps().getGroundMaps().getInterpHeight(

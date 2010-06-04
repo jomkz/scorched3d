@@ -198,8 +198,8 @@ void Water2::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)
 	// compute amount of foam per vertex sample
 	LandscapeDefn &defn = *ScorchedClient::instance()->getLandscapeMaps().
 		getDefinitions().getDefn();
-	ImageHandle loadedFoam = 
-		ImageFactory::loadImageHandle(S3D::getModFile(water->foam.c_str()));	
+	Image loadedFoam = 
+		ImageFactory::loadImage(S3D::getModFile(water->foam.c_str()));	
 	if (loadedFoam.getWidth() != wave_resolution ||
 		loadedFoam.getHeight() != wave_resolution)
 	{
@@ -236,7 +236,7 @@ void Water2::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)
 		if (counter) counter->setNewPercentage(float(k * 50) / float(wave_phases));
 		Water2Points &wd = displacements[k % wave_phases];
 
-		ImageHandle aofImage = 
+		Image aofImage = 
 			ImageFactory::createBlank(wave_resolution, wave_resolution, false, 0);
 		memcpy(aofImage.getBits(), loadedFoam.getBits(), wave_resolution * wave_resolution * 3);
 
@@ -270,7 +270,7 @@ void Water2::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)
 	}
 }
 
-void Water2::generateAOF(Water2Points &wd, ImageHandle *aofImage, float *rndtab, 
+void Water2::generateAOF(Water2Points &wd, Image *aofImage, float *rndtab, 
 						 Water2Points *displacements, float *aof)
 {
 	// factor to build derivatives correctly
@@ -334,7 +334,7 @@ void Water2::generateAOF(Water2Points &wd, ImageHandle *aofImage, float *rndtab,
 }
 
 void Water2::generateTransparency(Water2Points &wd, 
-								  ImageHandle &aofImage, LandscapeDefn &defn)
+								  Image &aofImage, LandscapeDefn &defn)
 {
 	unsigned ptr = 0;
 	for (unsigned y = 0; y < wave_resolution; ++y) 

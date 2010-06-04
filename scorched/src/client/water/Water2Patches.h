@@ -22,7 +22,7 @@
 #define __INCLUDE_Water2Patchesh_INCLUDE__
 
 #include <water/Water2Patch.h>
-#include <image/ImageHandle.h>
+#include <image/Image.h>
 #include <GLEXT/GLTexture.h>
 
 class GLVertexBufferObject;
@@ -47,7 +47,7 @@ public:
 protected:
 	int size_;
 	int totalSize_, patchSize_;
-	ImageHandle normalMap_;
+	Image normalMap_;
 	GLTexture aof_;
 	GLVertexBufferObject *bufferObject_;
 	Water2Patch *patches_;

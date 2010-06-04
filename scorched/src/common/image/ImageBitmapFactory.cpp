@@ -18,55 +18,25 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <stdio.h>
-#include <math.h>
-#include <string.h>
-#include <image/ImageBitmap.h>
+#include <image/ImageBitmapFactory.h>
 #include <common/Defines.h>
 #include <SDL/SDL.h>
 
-ImageBitmap::ImageBitmap() :
-	width_(0), height_(0), alpha_(false), newbits_(0),
-	owner_(true)
+Image ImageBitmapFactory::loadFromFile(const char *filename, const char *alphafilename, bool invert)
 {
-
-}
-
-ImageBitmap::ImageBitmap(int startWidth, int startHeight, bool alpha, unsigned char fill) : 
-	width_(startWidth), height_(startHeight), alpha_(alpha), newbits_(0),
-	owner_(true)
-{
-	createBlankInternal(startWidth, startHeight, alpha, fill);
-}
-
-ImageBitmap::~ImageBitmap()
-{
-	clear();
-}
-
-void ImageBitmap::clear()
-{
-	if (owner_) delete [] newbits_;
-	newbits_ = 0;
-	width_ = 0;
-	height_ = 0;
-}
-
-bool ImageBitmap::loadFromFile(const char * filename, const char *alphafilename, bool invert)
-{
-	ImageBitmap bitmap;
-	if (!bitmap.loadFromFile(filename, false)) return false;
-	ImageBitmap alpha;
-	if (!alpha.loadFromFile(alphafilename, false)) return false;
+	Image result;
+	Image bitmap = loadFromFile(filename, false);
+	Image alpha = loadFromFile(alphafilename, false);
 
 	if (bitmap.getBits() && alpha.getBits() && 
 		bitmap.getWidth() == alpha.getWidth() &&
 		bitmap.getHeight() == alpha.getHeight())
 	{
-		createBlankInternal(bitmap.getWidth(), bitmap.getHeight(), true);
+		result = Image(bitmap.getWidth(), bitmap.getHeight(), true);
+
 		unsigned char *bbits = bitmap.getBits();
 		unsigned char *abits = alpha.getBits();
-		unsigned char *bits = getBits();
+		unsigned char *bits = result.getBits();
 		for (int y=0; y<bitmap.getHeight(); y++)
 		{
 			for (int x=0; x<bitmap.getWidth(); x++)
@@ -92,13 +62,13 @@ bool ImageBitmap::loadFromFile(const char * filename, const char *alphafilename,
 		}
 	}
 
-	return true;
+	return result;
 }
 
-bool ImageBitmap::loadFromFile(const char * filename, bool alpha)
+Image ImageBitmapFactory::loadFromFile(const char * filename, bool alpha)
 {
 	SDL_Surface *image = SDL_LoadBMP(filename);
-	if (!image) return false;
+	if (!image) return Image();
 
 	if (image->format->BitsPerPixel != 24)
 	{
@@ -108,17 +78,18 @@ bool ImageBitmap::loadFromFile(const char * filename, bool alpha)
 	}
 
 	// Create the internal byte array
-	createBlankInternal(image->w, image->h, alpha);
+	Image result(image->w, image->h, alpha);
 
 	// Convert the returned bits from BGR to RGB
 	// and flip the verticle scan lines
 	unsigned char *from = (unsigned char *) image->pixels;
-	for (int i=0; i<height_; i ++)
+	for (int i=0; i<result.getHeight(); i ++)
 	{
-		unsigned char *destRow = ((unsigned char *) newbits_) + ((height_ - i - 1) * (width_ * getComponents()));
-		for (int j=0; j<width_; j++)
+		unsigned char *destRow = ((unsigned char *) result.getBits()) + 
+			((result.getHeight() - i - 1) * (result.getWidth() * result.getComponents()));
+		for (int j=0; j<result.getWidth(); j++)
 		{
-			unsigned char *dest = destRow + (j * getComponents());
+			unsigned char *dest = destRow + (j * result.getComponents());
 
 			dest[0] = from[2];
 			dest[1] = from[1];
@@ -133,17 +104,5 @@ bool ImageBitmap::loadFromFile(const char * filename, bool alpha)
 	}
 	
 	SDL_FreeSurface(image);
-	return true;
-}
-
-void ImageBitmap::createBlankInternal(int width, int height, bool alpha, unsigned char fill)
-{
-	clear();
-	width_ = width;
-	height_ = height;
-	alpha_ = alpha;
-	int bitsize = getComponents() * width * height;
-
-	newbits_ = new unsigned char[bitsize];
-	memset(newbits_, fill, bitsize);
+	return result;
 }

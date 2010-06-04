@@ -64,11 +64,11 @@ HelpButtonDialog::~HelpButtonDialog()
 
 HelpButtonDialog::HelpMenu::HelpMenu()
 {
-	Image *map = 
+	Image *map = new Image(
 		ImageFactory::loadImage(
 			S3D::getDataFile("data/images/help.bmp"),
 			S3D::getDataFile("data/images/helpa.bmp"),
-			false);
+			false));
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->
 		addMenu(LANG_RESOURCE("HELP", "Help"), 
@@ -93,10 +93,10 @@ void HelpButtonDialog::HelpMenu::menuSelection(const char* menuName,
 
 HelpButtonDialog::VolumeMenu::VolumeMenu()
 {
-	Image *map = ImageFactory::loadImage(
+	Image *map = new Image(ImageFactory::loadImage(
 		S3D::getDataFile("data/images/sound.bmp"),
 		S3D::getDataFile("data/images/sounda.bmp"),
-		false);
+		false));
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->
 		addMenu(LANG_RESOURCE("VOLUME", "Volume"), 
@@ -115,11 +115,10 @@ bool HelpButtonDialog::VolumeMenu::menuOpened(const char* menuName)
 
 HelpButtonDialog::PerformanceMenu::PerformanceMenu()
 {
-	Image *map = 
-		ImageFactory::loadImage(
-			S3D::getDataFile("data/images/perf.bmp"),
-			S3D::getDataFile("data/images/perfa.bmp"),
-			false);
+	Image *map = new Image(ImageFactory::loadImage(
+		S3D::getDataFile("data/images/perf.bmp"),
+		S3D::getDataFile("data/images/perfa.bmp"),
+		false));
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->
 		addMenu(LANG_RESOURCE("PERFORMANCE", "Performance"),

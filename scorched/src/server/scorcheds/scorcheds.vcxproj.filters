@@ -1332,30 +1332,6 @@
     <ClCompile Include="..\..\common\target\TargetState.cpp">
       <Filter>target</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\image\Image.cpp">
-      <Filter>image</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\image\ImageBitmap.cpp">
-      <Filter>image</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\image\ImageFactory.cpp">
-      <Filter>image</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\image\ImageHandle.cpp">
-      <Filter>image</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\image\ImageJpg.cpp">
-      <Filter>image</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\image\ImageLuminance.cpp">
-      <Filter>image</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\image\ImagePng.cpp">
-      <Filter>image</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\image\ImageStore.cpp">
-      <Filter>image</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\lang\Lang.cpp">
       <Filter>lang</Filter>
     </ClCompile>
@@ -1442,6 +1418,30 @@
     </ClCompile>
     <ClCompile Include="..\..\common\simactions\TankBuyingSimAction.cpp">
       <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\image\Image.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\image\ImageBitmapFactory.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\image\ImageData.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\image\ImageFactory.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\image\ImageJpgFactory.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\image\ImageLuminanceFactory.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\image\ImagePngFactory.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\image\ImageStore.cpp">
+      <Filter>image</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2705,30 +2705,6 @@
     <ClInclude Include="..\..\common\target\TargetState.h">
       <Filter>target</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\common\image\Image.h">
-      <Filter>image</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\image\ImageBitmap.h">
-      <Filter>image</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\image\ImageFactory.h">
-      <Filter>image</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\image\ImageHandle.h">
-      <Filter>image</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\image\ImageJpg.h">
-      <Filter>image</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\image\ImageLuminance.h">
-      <Filter>image</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\image\ImagePng.h">
-      <Filter>image</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\image\ImageStore.h">
-      <Filter>image</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\common\lang\Lang.h">
       <Filter>lang</Filter>
     </ClInclude>
@@ -2815,6 +2791,30 @@
     </ClInclude>
     <ClInclude Include="..\..\common\simactions\TankBuyingSimAction.h">
       <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\image\Image.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\image\ImageBitmapFactory.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\image\ImageData.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\image\ImageFactory.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\image\ImageJpgFactory.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\image\ImageLuminanceFactory.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\image\ImagePngFactory.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\image\ImageStore.h">
+      <Filter>image</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

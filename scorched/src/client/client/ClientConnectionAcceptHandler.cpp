@@ -26,7 +26,7 @@
 #include <dialogs/ProgressDialog.h>
 #include <engine/ModFiles.h>
 #include <image/ImageFactory.h>
-#include <image/ImagePng.h>
+#include <image/ImagePngFactory.h>
 #include <tank/TankContainer.h>
 #include <net/NetInterface.h>
 #include <coms/ComsConnectAcceptMessage.h>
@@ -96,8 +96,7 @@ bool ClientConnectionAcceptHandler::processMessage(
 		if (message.getServerPng().getBufferUsed() > 0)
 		{
 			// Use a custom icon
-			ImagePng map;
-			map.loadFromBuffer(message.getServerPng());
+			Image map = ImagePngFactory::loadFromBuffer(message.getServerPng());
 
 			// Set the texture
 			texture = new GLTexture;
@@ -108,7 +107,7 @@ bool ClientConnectionAcceptHandler::processMessage(
 			// Use the default icon
 			std::string file1(S3D::getDataFile("data/images/scorched.png"));
 			std::string file2(S3D::getDataFile("data/images/scorcheda.png"));
-			ImageHandle map = ImageFactory::loadImageHandle(
+			Image map = ImageFactory::loadImage(
 				file1.c_str(), file2.c_str(), false);
 
 			// Set the texture

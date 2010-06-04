@@ -22,7 +22,7 @@
 #define AFX_EXPLOSIONTEXTURES_H__F2BC42E7_B2FB_4C0D_ACF0_0B91D8DC84D3__INCLUDED_
 
 #include <GLEXT/GLTextureSet.h>
-#include <image/ImageBitmap.h>
+#include <image/Image.h>
 #include <common/ProgressCounter.h>
 #include <string>
 #include <map>

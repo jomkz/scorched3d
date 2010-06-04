@@ -18,30 +18,63 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ImageStoreh_INCLUDE__)
-#define __INCLUDE_ImageStoreh_INCLUDE__
+#include <image/ImageData.h>
 
-#include <common/ImageID.h>
-#include <map>
-#include <string>
-
-class Image;
-class ImageStore
+ImageData::ImageData() :
+	referenceCount_(0),
+	bits_(0),
+	width_(0),
+	height_(0),
+	alignment_(0),
+	components_(0)
 {
-public:
-	static ImageStore *instance();
+}
 
-	Image loadImage(ImageID &imageId);
+ImageData::ImageData(int width, int height, bool alpha, unsigned char fill) :
+	referenceCount_(0),
+	bits_(0),
+	width_(0),
+	height_(0),
+	alignment_(0),
+	components_(0)
+{
+	createBlankInternal(width, height, alpha, fill);
+}
 
-protected:
-	static ImageStore *instance_;
-	std::map<std::string, Image *> imageMap_;
+ImageData::~ImageData()
+{
+	clear();
+}
 
-	Image getImage(ImageID &id);
+void ImageData::reference()
+{
+	referenceCount_++;
+}
 
-private:
-	ImageStore();
-	virtual ~ImageStore();
-};
+void ImageData::dereference()
+{
+	referenceCount_--;
+	if (referenceCount_ <= 0) delete this;
+}
 
-#endif
+void ImageData::clear()
+{
+	delete [] bits_;
+	bits_ = 0;
+	width_ = 0;
+	height_ = 0;
+	alignment_ = 0;
+	components_ = 0;
+}
+
+void ImageData::createBlankInternal(int width, int height, bool alpha, unsigned char fill)
+{
+	clear();
+	width_ = width;
+	height_ = height;
+	components_ = alpha?4:3;
+	int bitsize = components_ * width * height;
+
+	bits_ = new unsigned char[bitsize];
+	memset(bits_, fill, bitsize);
+}

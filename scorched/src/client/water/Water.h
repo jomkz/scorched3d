@@ -23,7 +23,7 @@
 
 #include <common/ProgressCounter.h>
 #include <common/Vector.h>
-#include <image/ImageHandle.h>
+#include <image/Image.h>
 #include <GLEXT/GLTexture.h>
 
 class Water2;
@@ -65,7 +65,7 @@ protected:
 	WaterWaveDistance *wWaveDistance_;
 	WaterWaves *waves_;
 	GLTexture landTexWater_;
-	ImageHandle bitmapWater_;
+	Image bitmapWater_;
 
 };
 

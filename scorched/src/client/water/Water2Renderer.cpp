@@ -402,13 +402,13 @@ void Water2Renderer::generate(LandscapeTexBorderWater *water, ProgressCounter *c
 	}
 	else
 	{
-		ImageHandle loadedBitmapWater = 
-			ImageFactory::loadImageHandle(S3D::getModFile(water->texture.c_str()));
-		ImageHandle bitmapWater2 = loadedBitmapWater.createResize(128, 128);
+		Image loadedBitmapWater = 
+			ImageFactory::loadImage(S3D::getModFile(water->texture.c_str()));
+		Image bitmapWater2 = loadedBitmapWater.createResize(128, 128);
 		reflectionTexture_.create(bitmapWater2, true); // Not the reflection in this case
 	}
 
-	ImageHandle map = ImageFactory::createBlank(128, 128, false, 0);
+	Image map = ImageFactory::createBlank(128, 128, false, 0);
 	normalTexture_.create(map, GLStateExtension::hasHardwareMipmaps());
 
 	LandscapeDefn &defn = *ScorchedClient::instance()->getLandscapeMaps().
@@ -437,9 +437,9 @@ void Water2Renderer::generate(LandscapeTexBorderWater *water, ProgressCounter *c
 	{
 		// Load the water reflection bitmap
 		// Create water cubemap texture
-		ImageHandle loadedBitmapWater = 
-			ImageFactory::loadImageHandle(S3D::getModFile(water->reflection.c_str()));
-		ImageHandle bitmapWater2 = loadedBitmapWater.createResize(256, 256);
+		Image loadedBitmapWater = 
+			ImageFactory::loadImage(S3D::getModFile(water->reflection.c_str()));
+		Image bitmapWater2 = loadedBitmapWater.createResize(256, 256);
 		delete noShaderWaterTexture_;
 		if (GLStateExtension::hasCubeMap())
 		{

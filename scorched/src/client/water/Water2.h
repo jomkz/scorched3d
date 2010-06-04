@@ -24,7 +24,7 @@
 #include <water/Water2Patches.h>
 
 class LandscapeDefn;
-class ImageHandle;
+class Image;
 class LandscapeTexBorderWater;
 class ProgressCounter;
 class Water2
@@ -45,9 +45,9 @@ protected:
 	Water2Patches patches_[256];
 	MipMapPatchIndexs indexs_;
 
-	void generateAOF(Water2Points &wd, ImageHandle *aofImage, float *rndtab, 
+	void generateAOF(Water2Points &wd, Image *aofImage, float *rndtab, 
 		Water2Points *displacements, float *aof);
-	void generateTransparency(Water2Points &wd, ImageHandle &oafImage, 
+	void generateTransparency(Water2Points &wd, Image &oafImage, 
 		LandscapeDefn &defn);
 };
 

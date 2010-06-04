@@ -77,9 +77,9 @@ void WaterWaves::generateWaves(float waterHeight, ProgressCounter *counter)
 	if (counter) counter->setNewOp(LANG_RESOURCE("CREATING_BREAKERS_2", "Creating Breakers 2"));
 	while (findNextPath(&context, waterHeight, counter)) {}
 
-	ImageHandle waves1 = ImageFactory::loadAlphaImageHandle(
+	Image waves1 = ImageFactory::loadAlphaImage(
 		S3D::getModFile("data/textures/waves.bmp"));
-	ImageHandle waves2 = ImageFactory::loadAlphaImageHandle(
+	Image waves2 = ImageFactory::loadAlphaImage(
 		S3D::getModFile("data/textures/waves2.bmp"));
 	wavesTexture1_.create(waves1);
 	wavesTexture2_.create(waves2);

@@ -24,7 +24,6 @@
 #include <GLW/GLWToolTip.h>
 #include <GLEXT/GLState.h>
 #include <GLEXT/GLViewPort.h>
-#include <image/ImageBitmap.h>
 #include <client/ScorchedClient.h>
 
 GLWWindowSkin::GLWWindowSkin() : 

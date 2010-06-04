@@ -311,19 +311,19 @@ void TargetRendererImplTank::drawSight()
 	{
 		texturesCreated = true;
 
-		ImageHandle aimTopMap = ImageFactory::loadAlphaImageHandle(S3D::getModFile("data/windows/aimtop.png"));
+		Image aimTopMap = ImageFactory::loadAlphaImage(S3D::getModFile("data/windows/aimtop.png"));
 		aimTopTexture.create(aimTopMap);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
-		ImageHandle aimBotMap = ImageFactory::loadAlphaImageHandle(S3D::getModFile("data/windows/aimbot.png"));
+		Image aimBotMap = ImageFactory::loadAlphaImage(S3D::getModFile("data/windows/aimbot.png"));
 		aimBotTexture.create(aimBotMap);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
-		ImageHandle aimSideMap = ImageFactory::loadAlphaImageHandle(S3D::getModFile("data/windows/aimside.png"));
+		Image aimSideMap = ImageFactory::loadAlphaImage(S3D::getModFile("data/windows/aimside.png"));
 		aimSideTexture.create(aimSideMap);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
-		ImageHandle aimRotationMap = ImageFactory::loadAlphaImageHandle(S3D::getModFile("data/windows/aimrotation.png"));
+		Image aimRotationMap = ImageFactory::loadAlphaImage(S3D::getModFile("data/windows/aimrotation.png"));
 		aimRotationTexture.create(aimRotationMap);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);

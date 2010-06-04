@@ -21,7 +21,6 @@
 #if !defined(__INCLUDE_Landscapeh_INCLUDE__)
 #define __INCLUDE_Landscapeh_INCLUDE__
 
-#include <image/ImageHandle.h>
 #include <GLEXT/GLTexture.h>
 #include <GLEXT/GLShadowFrameBuffer.h>
 
@@ -115,11 +114,11 @@ protected:
 	GLTexture groundTexture_;
 	GLTexture arenaMainTexture_;
 	GLTexture arenaSurroundTexture_;
-	ImageHandle mainMap_;
-	ImageHandle scorchMap_;
-	ImageHandle bitmapPlanAlphaAlpha_;
-	ImageHandle bitmapPlanAlpha_;
-	ImageHandle bitmapPlan_;
+	Image mainMap_;
+	Image scorchMap_;
+	Image bitmapPlanAlphaAlpha_;
+	Image bitmapPlanAlpha_;
+	Image bitmapPlan_;
 
 	// Shadow map
 	float shadowTextureMatrix_[16];

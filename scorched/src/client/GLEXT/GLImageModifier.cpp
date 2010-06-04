@@ -22,7 +22,7 @@
 #include <math.h>
 #include <GLEXT/GLImageItterator.h>
 #include <GLEXT/GLImageModifier.h>
-#include <image/ImageHandle.h>
+#include <image/Image.h>
 #include <image/ImageFactory.h>
 #include <engine/ScorchedContext.h>
 #include <landscape/Landscape.h>
@@ -227,7 +227,7 @@ void ImageModifier::addHeightToBitmap(HeightMap &hMap,
 		if (bitmapScale != 1.0f)
 		{
 			// Create the newly scaled bitmaps
-			heightBitmaps[i] = new ImageHandle(ImageFactory::createBlank(
+			heightBitmaps[i] = new Image(ImageFactory::createBlank(
 				int(bitmapScale * origHeightBitmaps[i]->getWidth()),
 				int(bitmapScale * origHeightBitmaps[i]->getHeight())));
 
@@ -572,10 +572,10 @@ void ImageModifier::addWaterToBitmap(HeightMap &hMap,
 	}
 }
 
-ImageHandle ImageModifier::makeArenaBitmap()
+Image ImageModifier::makeArenaBitmap()
 {
 	Vector &wallColor = ScorchedClient::instance()->getOptionsTransient().getWallColor();
-	ImageHandle handle = ImageFactory::createBlank(128, 128, true, 0);
+	Image handle = ImageFactory::createBlank(128, 128, true, 0);
 
 	int arenaX = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaX();
 	int arenaY = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaY();
@@ -609,10 +609,10 @@ ImageHandle ImageModifier::makeArenaBitmap()
 	return handle;
 }
 
-ImageHandle ImageModifier::makeArenaSurroundBitmap()
+Image ImageModifier::makeArenaSurroundBitmap()
 {
 	Vector &wallColor = ScorchedClient::instance()->getOptionsTransient().getWallColor();
-	ImageHandle handle = ImageFactory::createBlank(128, 128, true, 0);
+	Image handle = ImageFactory::createBlank(128, 128, true, 0);
 
 	unsigned char *bits = handle.getBits();
 	for (int y=0; y<handle.getHeight(); y++)
@@ -882,7 +882,7 @@ void ImageModifier::scalePlanBitmap(Image &destBitmap,
 	int offsetX = (newX - destBitmap.getWidth()) / 2;
 	int offsetY = (newY - destBitmap.getHeight()) / 2;
 
-	ImageHandle srcBitmap = 
+	Image srcBitmap = 
 		srcIncBitmap.createResize(newX, newY);
 
 	GLubyte *dest = destBitmap.getBits();

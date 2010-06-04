@@ -19,40 +19,37 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <image/ImageFactory.h>
-#include <image/ImageBitmap.h>
-#include <image/ImageJpg.h>
-#include <image/ImagePng.h>
+#include <image/ImageBitmapFactory.h>
+#include <image/ImageJpgFactory.h>
+#include <image/ImagePngFactory.h>
 #include <string>
 
 ImageFactory::ImageFactory()
 {
 }
 
-Image *ImageFactory::loadAlphaImage(
+Image ImageFactory::loadAlphaImage(
 	const std::string &filename)
 {
 	std::string extension(filename);
 	_strlwr((char *) extension.c_str());
 
+	Image result;
 	if (strstr(extension.c_str(), ".png"))
 	{
-		ImagePng *png = new ImagePng();
-		png->loadFromFile(filename.c_str(), true);
-		return png;
+		result = ImagePngFactory::loadFromFile(filename.c_str(), true);
 	}
 	else if (strstr(extension.c_str(), ".jpg"))
 	{
-		ImageJpg *jpg = new ImageJpg();
-		jpg->loadFromFile(filename.c_str(), true);
-		return jpg;
+		result = ImageJpgFactory::loadFromFile(filename.c_str(), true);
 	}
-
-	// Failsafe !!
-	ImageBitmap *bitmap = new ImageBitmap();
-	bitmap->loadFromFile(filename.c_str(), true);
-	return bitmap;
+	else
+	{
+		result = ImageBitmapFactory::loadFromFile(filename.c_str(), true);
+	}
+	return result;
 }
-Image *ImageFactory::loadImage(
+Image ImageFactory::loadImage(
 	const std::string &filename, 
 	const std::string &alphafilename, 
 	bool invert)
@@ -60,68 +57,48 @@ Image *ImageFactory::loadImage(
 	std::string extension(filename);
 	_strlwr((char *) extension.c_str());
 
+	Image result;
 	if (strstr(extension.c_str(), ".png"))
 	{
 		if (!alphafilename.empty())
 		{
-			ImagePng *png = new ImagePng();
-			png->loadFromFile(filename.c_str(), alphafilename.c_str(), invert);
-			return png;
+			result = ImagePngFactory::loadFromFile(filename.c_str(), alphafilename.c_str(), invert);
 		}
-		ImagePng *png = new ImagePng();
-		png->loadFromFile(filename.c_str());
-		return png;
-	} else if (strstr(extension.c_str(), ".jpg"))
+		else
+		{
+			result = ImagePngFactory::loadFromFile(filename.c_str());
+		}
+	} 
+	else if (strstr(extension.c_str(), ".jpg"))
 	{
 		if (!alphafilename.empty())
 		{
-			ImageJpg *jpg = new ImageJpg();
-			jpg->loadFromFile(filename.c_str(), alphafilename.c_str(), invert);
-			return jpg;
+			result = ImageJpgFactory::loadFromFile(filename.c_str(), alphafilename.c_str(), invert);
 		}
-		ImageJpg *jpg = new ImageJpg();
-		jpg->loadFromFile(filename.c_str());
-		return jpg;
+		else
+		{
+			result = ImageJpgFactory::loadFromFile(filename.c_str());
+		}
 	} 
-
-	// Failsafe !!
-	if (!alphafilename.empty())
+	else
 	{
-		ImageBitmap *bitmap = new ImageBitmap();
-		bitmap->loadFromFile(filename.c_str(), alphafilename.c_str(), invert);
-		return bitmap;
+		// Failsafe !!
+		if (!alphafilename.empty())
+		{
+			result = ImageBitmapFactory::loadFromFile(filename.c_str(), alphafilename.c_str(), invert);
+		}
+		else
+		{
+			result = ImageBitmapFactory::loadFromFile(filename.c_str());
+		}
 	}
-	ImageBitmap *bitmap = new ImageBitmap();
-	bitmap->loadFromFile(filename.c_str());
-	return bitmap;
+	return result;
 }
 
-ImageHandle ImageFactory::loadImageHandle(
-	const std::string &filename, 
-	const std::string &alphafilename, 
-	bool invert)
+Image ImageFactory::createBlank(int width, int height, bool alpha, unsigned char fill)
 {
-	Image *image = loadImage(filename, alphafilename, invert);
-
-	ImageHandle handle(*image);
-	delete image;
-	return handle;
-}
-
-ImageHandle ImageFactory::loadAlphaImageHandle(
-	const std::string &filename)
-{
-	Image *image = loadAlphaImage(filename);
-
-	ImageHandle handle(*image);
-	delete image;
-	return handle;
-}
-
-ImageHandle ImageFactory::createBlank(int width, int height, bool alpha, unsigned char fill)
-{
-	ImageBitmap result(width, height, alpha, fill);
-	return ImageHandle(result);
+	Image result(width, height, alpha, fill);
+	return result;
 }
 
 #ifndef S3D_SERVER
@@ -129,12 +106,12 @@ ImageHandle ImageFactory::createBlank(int width, int height, bool alpha, unsigne
 #include <GLEXT/GLState.h>
 #include <common/Defines.h>
 
-ImageHandle ImageFactory::grabScreen()
+Image ImageFactory::grabScreen()
 {
 	GLint		viewport[4];		/* Current viewport */
 	glGetIntegerv(GL_VIEWPORT, viewport);
 
-	ImageHandle map = ImageFactory::createBlank(viewport[2], viewport[3], false);
+	Image map = ImageFactory::createBlank(viewport[2], viewport[3], false);
 
 	glFinish();				/* Finish all OpenGL commands */
 	glPixelStorei(GL_PACK_ALIGNMENT, 4);	/* Force 4-byte alignment */
@@ -145,6 +122,6 @@ ImageHandle ImageFactory::grabScreen()
 	glReadPixels(0, 0, map.getWidth(), map.getHeight(), 
 		GL_RGB, GL_UNSIGNED_BYTE, map.getBits());
 
-	return ImageHandle(map);
+	return map;
 }
 #endif

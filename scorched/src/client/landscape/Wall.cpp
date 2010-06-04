@@ -41,7 +41,7 @@ void Wall::draw()
 		createdTexture_ = true;
 		std::string file1 = S3D::getModFile("data/textures/bordershield/grid.bmp");
 		std::string file2 = S3D::getModFile("data/textures/bordershield/grid.bmp");
-		ImageHandle map = ImageFactory::loadImageHandle(file1.c_str(), file2.c_str(), false);
+		Image map = ImageFactory::loadImage(file1.c_str(), file2.c_str(), false);
 		texture_.create(map, true);
 	}
 

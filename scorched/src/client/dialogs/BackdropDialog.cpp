@@ -61,7 +61,7 @@ void BackdropDialog::drawBackground()
 	if (!createdTexture)
 	{
 		createdTexture = true;
-		ImageHandle originalBackMap = ImageFactory::loadImageHandle(
+		Image originalBackMap = ImageFactory::loadImage(
 			S3D::getDataFile("data/images/backdrop.jpg"));
 		int w = originalBackMap.getWidth();
 		int h = originalBackMap.getHeight();
@@ -71,7 +71,7 @@ void BackdropDialog::drawBackground()
 			h /= 2;
 		}
 
-		ImageHandle backMap = originalBackMap.createResize(w, h);
+		Image backMap = originalBackMap.createResize(w, h);
 		backTex_.create(backMap, false);
 	}
 
@@ -102,7 +102,7 @@ void BackdropDialog::drawLogo()
 	{
 		lastMod_ = S3D::getDataFileMod();
 
-		ImageHandle logoMap = ImageFactory::loadImageHandle(
+		Image logoMap = ImageFactory::loadImage(
 			S3D::getModFile("data/windows/scorched.jpg"),
 			S3D::getModFile("data/windows/scorcheda.jpg"),
 			false);
@@ -144,7 +144,7 @@ void BackdropDialog::drawFooter()
 	if (!createdTexture)
 	{
 		createdTexture = true;
-		ImageHandle logoMap = ImageFactory::loadAlphaImageHandle(
+		Image logoMap = ImageFactory::loadAlphaImage(
 			S3D::getDataFile("data/images/hiscore.png"));
 		footerTex_.create(logoMap, false);
 	}
@@ -195,7 +195,7 @@ void BackdropDialog::capture()
 	glReadPixels(0, 0, GLViewPort::getActualWidth(), GLViewPort::getActualHeight(), 
 		GL_RGB, GL_UNSIGNED_BYTE, screenpixels);
 
-	ImageHandle handle = ImageFactory::createBlank(
+	Image handle = ImageFactory::createBlank(
 		backTex_.getWidth(), backTex_.getHeight());
 
 	unsigned char *src = screenpixels;

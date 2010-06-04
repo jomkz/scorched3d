@@ -20,7 +20,7 @@
 
 #include <tank/TankAvatar.h>
 #include <common/Defines.h>
-#include <image/ImagePng.h>
+#include <image/ImagePngFactory.h>
 #include <stdio.h>
 #include <zlib.h>
 
@@ -104,8 +104,8 @@ bool TankAvatar::setFromBuffer(const std::string &fileName, NetBuffer &buffer)
 {
 	if (buffer.getBufferUsed() == 0) return false;
 
-	ImagePng png;
-	if (!png.loadFromBuffer(buffer)) return false;
+	Image png = ImagePngFactory::loadFromBuffer(buffer);
+	if (!png.getBits()) return false;
 	if (png.getWidth() != 32 || 
 		png.getHeight() != 32) return false;
 
@@ -153,9 +153,8 @@ GLTexture *TankAvatar::getDefaultTexture()
 	if (!defaultTexture_)
 	{
 		defaultTexture_ = new GLTexture();
-		ImagePng png;
-		png.loadFromFile(
-			S3D::getDataFile("data/avatars/player.png"));
+		std::string file = S3D::getDataFile("data/avatars/player.png");
+		Image png = ImagePngFactory::loadFromFile(file.c_str());
 		defaultTexture_->create(png);
 	}
 	return defaultTexture_;

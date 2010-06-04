@@ -22,30 +22,41 @@
 #define AFX_Image_H__0EBAA0E7_3103_43A4_90C0_5708ECE6DB43__INCLUDED_
 
 #include <string>
+#include <image/ImageData.h>
 
-class ImageHandle;
 class Image  
 {
 public:
+	Image();
+	Image(int width, int height, bool alpha = false, unsigned char fill = 255);
+	Image(const Image &other);
 	virtual ~Image();
 
-	virtual unsigned char *getBits() = 0;
-	virtual unsigned char *getBitsOffset(int offset);
-	virtual unsigned char *getBitsPos(int x, int y);
-	virtual int getWidth() = 0;
-	virtual int getHeight() = 0;
+	Image &operator=(const Image &other);
 
-	virtual void removeOwnership() = 0;
+	unsigned char *getBits() { return data_->getBits(); }
+	unsigned char *getBitsOffset(int offset);
+	unsigned char *getBitsPos(int x, int y);
 
-	virtual int getAlignment() = 0;
-	virtual int getComponents() = 0;
+	int getWidth() { return data_->getWidth(); }
+	int getHeight() { return data_->getHeight(); }
+	int getAlignment() { return data_->getAlignment(); }
+	int getComponents() { return data_->getComponents(); }
+
+	void setBits(unsigned char *bits) { data_->setBits(bits); }
+	void setWidth(int width) { data_->setWidth(width); }
+	void setHeight(int height) { data_->setHeight(height); }
+	void setAlignment(int alignment) { data_->setAlignment(alignment); }
+	void setComponents(int components) { data_->setComponents(components); }
 
 	virtual bool writeToFile(const std::string &filename);
 
 #ifndef S3D_SERVER
-	ImageHandle createAlphaMult(float mult);
-	ImageHandle createResize(int newWidth, int newHeight);
+	Image createAlphaMult(float mult);
+	Image createResize(int newWidth, int newHeight);
 #endif
+private:
+	ImageData *data_;
 };
 
 #endif // !defined(AFX_Image_H__0EBAA0E7_3103_43A4_90C0_5708ECE6DB43__INCLUDED_)

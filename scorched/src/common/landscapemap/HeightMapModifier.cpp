@@ -24,7 +24,6 @@
 #include <landscapemap/HeightMapModifier.h>
 #include <landscapedef/LandscapeDefn.h>
 #include <common/Defines.h>
-#include <image/ImageBitmap.h>
 #include <image/ImageFactory.h>
 #include <lang/LangResource.h>
 
@@ -459,14 +458,14 @@ void HeightMapModifier::generateTerrain(HeightMap &hmap,
 	if (counter) counter->setNewOp(LANG_RESOURCE("TERAFORM_LANDSCAPE", "Teraform Landscape"));
 
 	// Create a default mask that allows everything
-	ImageBitmap bmap(256, 256);
-	ImageHandle maskMap = bmap;
+	Image bmap(256, 256);
+	Image maskMap = bmap;
 
 	// Check if we need to load a new mask
 	if (!defn.mask.empty())
 	{
 		std::string fileName = S3D::getModFile(defn.mask.c_str());
-		maskMap = ImageFactory::loadImageHandle(fileName);
+		maskMap = ImageFactory::loadImage(fileName);
 		if (!maskMap.getBits())
 		{
 			S3D::dialogExit("Landscape", S3D::formatStringBuffer(

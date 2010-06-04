@@ -115,17 +115,17 @@ void Water::generate(ProgressCounter *counter)
 
 	// Generate the water texture for the spray sprite
 	std::string sprayMaskFile = S3D::getModFile("data/textures/smoke01.bmp");
-	ImageHandle sprayMaskBitmap = 
-		ImageFactory::loadImageHandle(
+	Image sprayMaskBitmap = 
+		ImageFactory::loadImage(
 			sprayMaskFile.c_str(), sprayMaskFile.c_str(), false);
-	ImageHandle loadedBitmapWater = 
-		ImageFactory::loadImageHandle(S3D::getModFile(water->reflection.c_str()));
-	bitmapWater_ = ImageFactory::loadImageHandle(S3D::getModFile(water->reflection.c_str()));
+	Image loadedBitmapWater = 
+		ImageFactory::loadImage(S3D::getModFile(water->reflection.c_str()));
+	bitmapWater_ = ImageFactory::loadImage(S3D::getModFile(water->reflection.c_str()));
 
 	{
-		ImageHandle bitmapWater = loadedBitmapWater.createResize(
+		Image bitmapWater = loadedBitmapWater.createResize(
 			sprayMaskBitmap.getWidth(), sprayMaskBitmap.getHeight());
-		ImageHandle textureWaterNew = ImageFactory::createBlank(
+		Image textureWaterNew = ImageFactory::createBlank(
 			sprayMaskBitmap.getWidth(), sprayMaskBitmap.getHeight(), true);
 		ImageModifier::makeBitmapTransparent(textureWaterNew, 
 			bitmapWater, sprayMaskBitmap);

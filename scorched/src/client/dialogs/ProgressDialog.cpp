@@ -36,7 +36,7 @@
 #include <GLW/GLWWindowManager.h>
 #include <GLW/GLWColors.h>
 #include <lang/LangResource.h>
-#include <image/ImagePng.h>
+#include <image/ImagePngFactory.h>
 #include <image/ImageFactory.h>
 #include <math.h>
 #include <string.h>
@@ -87,8 +87,8 @@ void ProgressDialog::changeTip()
 
 void ProgressDialog::setIcon(const std::string &iconName)
 {
-	ImageHandle map = ImageFactory::loadImageHandle(iconName);
-	ImageHandle newMap = map.createResize(64, 64);
+	Image map = ImageFactory::loadImage(iconName);
+	Image newMap = map.createResize(64, 64);
 	icon_.create(newMap);
 }
 
@@ -103,10 +103,10 @@ void ProgressDialog::draw()
 		{
 			setIcon(S3D::getDataFile("data/images/tank2.bmp"));
 
-			ImageHandle bar1 = 
-				ImageFactory::loadAlphaImageHandle(S3D::getDataFile("data/images/bar1.png"));
-			ImageHandle bar2 = 
-				ImageFactory::loadAlphaImageHandle(S3D::getDataFile("data/images/bar2.png"));
+			Image bar1 = 
+				ImageFactory::loadAlphaImage(S3D::getDataFile("data/images/bar1.png"));
+			Image bar2 = 
+				ImageFactory::loadAlphaImage(S3D::getDataFile("data/images/bar2.png"));
 			bar1_.create(bar1);
 			bar2_.create(bar2);
 

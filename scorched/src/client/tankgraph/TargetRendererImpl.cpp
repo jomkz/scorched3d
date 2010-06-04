@@ -140,23 +140,23 @@ void TargetRendererImpl::drawShield(float shieldHit, float totalTime)
 	if (!texture)
 	{
 		std::string file1 = S3D::getModFile("data/textures/bordershield/grid2.bmp");
-		ImageHandle map = ImageFactory::loadImageHandle(file1.c_str(), file1.c_str(), false);
+		Image map = ImageFactory::loadImage(file1.c_str(), file1.c_str(), false);
 		texture = new GLTexture;
 		texture->create(map, true);
 
 		std::string file2 = S3D::getModFile("data/textures/bordershield/grid22.bmp");
-		ImageHandle map2 = ImageFactory::loadImageHandle(file2.c_str(), file2.c_str(), false);
+		Image map2 = ImageFactory::loadImage(file2.c_str(), file2.c_str(), false);
 		texture2 = new GLTexture;
 		texture2->create(map2, true);
 
 		std::string file3 = S3D::getModFile("data/textures/shield2.bmp");
-		ImageHandle map3 = ImageFactory::loadImageHandle(file3.c_str(), file3.c_str(), false);
+		Image map3 = ImageFactory::loadImage(file3.c_str(), file3.c_str(), false);
 		magtexture = new GLTexture;
 		magtexture->create(map3, true);
 
 		std::string file4 = S3D::getModFile("data/textures/shield.bmp");
 		std::string file5 = S3D::getModFile("data/textures/shielda.bmp");
-		ImageHandle map4 = ImageFactory::loadImageHandle(file4.c_str(), file5.c_str(), false);
+		Image map4 = ImageFactory::loadImage(file4.c_str(), file5.c_str(), false);
 		//map4.alphaMult(4.0f);
 		shieldtexture = new GLTexture;
 		shieldtexture->create(map4, true);

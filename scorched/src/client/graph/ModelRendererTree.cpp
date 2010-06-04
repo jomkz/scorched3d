@@ -379,35 +379,35 @@ void ModelRendererTree::drawInternalPre(bool setState)
 		{
 			std::string file1 = S3D::getModFile("data/textures/pine2.bmp");
 			std::string file2 = S3D::getModFile("data/textures/pine2a.bmp");
-			ImageHandle map = ImageFactory::loadImageHandle(file1.c_str(), file2.c_str(), false);
+			Image map = ImageFactory::loadImage(file1.c_str(), file2.c_str(), false);
 			DIALOG_ASSERT(map.getBits());
 			pineTextureA_.create(map, true);
 		}
 		{
 			std::string file1 = S3D::getModFile("data/textures/pine3.bmp");
 			std::string file2 = S3D::getModFile("data/textures/pine3a.bmp");
-			ImageHandle map = ImageFactory::loadImageHandle(file1.c_str(), file2.c_str(), false);
+			Image map = ImageFactory::loadImage(file1.c_str(), file2.c_str(), false);
 			DIALOG_ASSERT(map.getBits());
 			pineTextureB_.create(map, true);
 		}
 		{
 			std::string file1 = S3D::getModFile("data/textures/pine.bmp");
 			std::string file2 = S3D::getModFile("data/textures/pinea.bmp");
-			ImageHandle map = ImageFactory::loadImageHandle(file1.c_str(), file2.c_str(), false);
+			Image map = ImageFactory::loadImage(file1.c_str(), file2.c_str(), false);
 			DIALOG_ASSERT(map.getBits());
 			palmTextureA_.create(map, true);
 		}
 		{
 			std::string file1 = S3D::getModFile("data/textures/palm2.bmp");
 			std::string file2 = S3D::getModFile("data/textures/palm2a.bmp");
-			ImageHandle map = ImageFactory::loadImageHandle(file1.c_str(), file2.c_str(), false);
+			Image map = ImageFactory::loadImage(file1.c_str(), file2.c_str(), false);
 			DIALOG_ASSERT(map.getBits());
 			palmTextureB_.create(map, true);
 		}
 		{
 			std::string file1 = S3D::getModFile("data/textures/oak.bmp");
 			std::string file2 = S3D::getModFile("data/textures/oaka.bmp");
-			ImageHandle map = ImageFactory::loadImageHandle(file1.c_str(), file2.c_str(), false);
+			Image map = ImageFactory::loadImage(file1.c_str(), file2.c_str(), false);
 			DIALOG_ASSERT(map.getBits());
 			oakTextureA_.create(map, true);
 		}

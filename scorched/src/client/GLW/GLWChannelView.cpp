@@ -382,11 +382,11 @@ void GLWChannelView::draw()
 	if (!createdTexture_)
 	{
 		createdTexture_ = true;
-		ImageHandle upImg = ImageFactory::loadAlphaImageHandle(
+		Image upImg = ImageFactory::loadAlphaImage(
 			S3D::getModFile("data/windows/arrow_u.png"));
-		ImageHandle downImg = ImageFactory::loadAlphaImageHandle(
+		Image downImg = ImageFactory::loadAlphaImage(
 			S3D::getModFile("data/windows/arrow_d.png"));
-		ImageHandle resetImg = ImageFactory::loadAlphaImageHandle(
+		Image resetImg = ImageFactory::loadAlphaImage(
 			S3D::getModFile("data/windows/arrow_s.png"));
 
 		upTexture_.create(upImg, false);

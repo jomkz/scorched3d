@@ -24,7 +24,7 @@
 #include <sky/LargeHemisphere.h>
 #include <sky/SkyLine.h>
 #include <GLEXT/GLTexture.h>
-#include <image/ImageHandle.h>
+#include <image/Image.h>
 
 class SkyDome
 {
@@ -46,7 +46,7 @@ protected:
 	GLTexture cloudTexture_;
 	GLTexture starTexture_;
 	GLTexture skyLineTexture_;
-	ImageHandle skyColorsMap_;
+	Image skyColorsMap_;
 	bool useStarTexture_;
 	bool noSunFog_;
 	bool horizonGlow_;

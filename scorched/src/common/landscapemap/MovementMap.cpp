@@ -566,7 +566,7 @@ void MovementMap::calculateAllPositions(fixed fuel)
 
 void MovementMap::movementTexture()
 {
-	ImageHandle newMap = ImageFactory::createBlank(
+	Image newMap = ImageFactory::createBlank(
 		Landscape::instance()->getMainMap().getWidth(),
 		Landscape::instance()->getMainMap().getHeight());
 
@@ -629,7 +629,7 @@ void MovementMap::movementTexture()
 
 void MovementMap::limitTexture(FixedVector &center, int limit)
 {
-	ImageHandle newMap = ImageFactory::createBlank(
+	Image newMap = ImageFactory::createBlank(
 		Landscape::instance()->getMainMap().getWidth(),
 		Landscape::instance()->getMainMap().getHeight());
 
