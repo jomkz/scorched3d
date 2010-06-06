@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_ImageStoreh_INCLUDE__)
 #define __INCLUDE_ImageStoreh_INCLUDE__
 
-#include <common/ImageID.h>
+#include <image/ImageID.h>
 #include <map>
 #include <string>
 
@@ -36,8 +36,6 @@ public:
 protected:
 	static ImageStore *instance_;
 	std::map<std::string, Image *> imageMap_;
-
-	Image getImage(ImageID &id);
 
 private:
 	ImageStore();

@@ -39,7 +39,7 @@ public:
 	virtual void draw();
 
 	void changeTip();
-	void setIcon(const std::string &iconName);
+	void setIcon(Image iconName);
 
 protected:
 	static ProgressDialog *instance_;

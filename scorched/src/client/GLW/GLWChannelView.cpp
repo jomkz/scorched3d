@@ -383,11 +383,14 @@ void GLWChannelView::draw()
 	{
 		createdTexture_ = true;
 		Image upImg = ImageFactory::loadAlphaImage(
-			S3D::getModFile("data/windows/arrow_u.png"));
+			ImageID::eModLocation,
+			"data/windows/arrow_u.png");
 		Image downImg = ImageFactory::loadAlphaImage(
-			S3D::getModFile("data/windows/arrow_d.png"));
+			ImageID::eModLocation,
+			"data/windows/arrow_d.png");
 		Image resetImg = ImageFactory::loadAlphaImage(
-			S3D::getModFile("data/windows/arrow_s.png"));
+			ImageID::eModLocation,
+			"data/windows/arrow_s.png");
 
 		upTexture_.create(upImg, false);
 		downTexture_.create(downImg, false);

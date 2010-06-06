@@ -22,16 +22,21 @@
 #define AFX_ImageFactory_H__0EBAA0E7_3103_43A4_90C0_5708ECE6DB43__INCLUDED_
 
 #include <string>
+#include <image/ImageID.h>
 #include <image/Image.h>
 
 class ImageFactory  
 {
 public:
+	static Image loadImageID(
+		const ImageID &imageId);
 	static Image loadImage(
+		ImageID::ImageLocation imageLocation,
 		const std::string &filename, 
 		const std::string &alphafilename = "", 
 		bool invert = true);
 	static Image loadAlphaImage(
+		ImageID::ImageLocation imageLocation,
 		const std::string &filename);
 	static Image createBlank(int width, int height, 
 		bool alpha = false, unsigned char fill = 255);
@@ -39,6 +44,10 @@ public:
 #ifndef S3D_SERVER
 	static Image grabScreen();
 #endif
+
+protected:
+	static Image loadImageInternal(ImageID::ImageLocation imageLocation, const std::string &filename, bool alphaName);
+	static Image combineImage(Image file, Image alphaFile, bool invert);
 
 private:
 	ImageFactory();

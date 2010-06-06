@@ -34,7 +34,7 @@ PlacementShadowDefinition::~PlacementShadowDefinition()
 {
 }
 
-bool PlacementShadowDefinition::readXML(XMLNode *node, const char *base)
+bool PlacementShadowDefinition::readXML(XMLNode *node)
 {
 	node->getNamedChild("drawshadow", drawShadow_, false);
 	node->getNamedChild("flattenarea", flattenArea_, false);
@@ -42,7 +42,7 @@ bool PlacementShadowDefinition::readXML(XMLNode *node, const char *base)
 	XMLNode *groundMap = 0;
 	if (node->getNamedChild("groundmap", groundMap, false))
 	{
-		if (!groundMap_.initFromNode(base, groundMap)) return false;
+		if (!groundMap_.initFromNode(groundMap)) return false;
 	}
 
 	return true;
@@ -72,7 +72,7 @@ void PlacementShadowDefinition::updateLandscapeTexture(
 	ScorchedContext &context,
 	FixedVector &position, FixedVector &size)
 {
-	if (groundMap_.imageValid())
+	if (!groundMap_.getImageName().empty())
 	{
 		Image image = ImageStore::instance()->loadImage(groundMap_);
 		ImageModifier::addBitmapToLandscape(

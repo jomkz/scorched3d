@@ -78,7 +78,10 @@ bool GLWIcon::initFromXML(XMLNode *node)
 			S3D::getModFile(bitmapANode->getContent());
 
 		texture_ = TextureStore::instance()->loadTexture(
-			bitmapName.c_str(), bitmapAName.c_str(), invert);
+			ImageID(ImageID::eModLocation, 
+			bitmapNode->getContent(),
+			bitmapANode->getContent(), 
+			invert));
 		if (!texture_) return false;
 
 		texture_->draw();

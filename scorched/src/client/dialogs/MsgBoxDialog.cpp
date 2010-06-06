@@ -71,15 +71,17 @@ void MsgBoxDialog::show(const LangString &message, ShowType type)
 	if (type == eError)
 	{
 		GLTexture *texture = TextureStore::instance()->loadTexture(
-			S3D::getDataFile("data/images/exclaim.bmp"),
-			S3D::getDataFile("data/images/mask.bmp"));
+			ImageID(ImageID::eDataLocation,
+			"data/images/exclaim.bmp",
+			"data/images/mask.bmp"));
 		instance()->icon_->setTexture(texture);
 	}
 	else
 	{
 		GLTexture *texture = TextureStore::instance()->loadTexture(
-			S3D::getDataFile("data/images/ok.bmp"),
-			S3D::getDataFile("data/images/mask.bmp"));
+			ImageID(ImageID::eDataLocation,
+			"data/images/ok.bmp",
+			"data/images/mask.bmp"));
 		instance()->icon_->setTexture(texture);
 	}
 

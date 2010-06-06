@@ -105,10 +105,11 @@ bool ClientConnectionAcceptHandler::processMessage(
 		else
 		{
 			// Use the default icon
-			std::string file1(S3D::getDataFile("data/images/scorched.png"));
-			std::string file2(S3D::getDataFile("data/images/scorcheda.png"));
 			Image map = ImageFactory::loadImage(
-				file1.c_str(), file2.c_str(), false);
+				ImageID::eDataLocation,
+				"data/images/scorched.png", 
+				"data/images/scorcheda.png", 
+				false);
 
 			// Set the texture
 			texture = new GLTexture;

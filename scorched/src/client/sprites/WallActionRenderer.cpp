@@ -50,8 +50,11 @@ void WallActionRenderer::init()
 
 	if (!texture_.textureValid())
 	{
-		std::string file = S3D::getModFile("data/textures/bordershield/hit.bmp");
-		Image map = ImageFactory::loadImage(file.c_str(), file.c_str(), false);
+		Image map = ImageFactory::loadImage(
+			ImageID::eModLocation,
+			"data/textures/bordershield/hit.bmp",
+			"data/textures/bordershield/hit.bmp",
+			false);
 		texture_.create(map, true);
 	}
 

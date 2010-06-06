@@ -51,7 +51,7 @@ TargetDefinition::~TargetDefinition()
 {
 }
 
-bool TargetDefinition::readXML(XMLNode *node, const char *base)
+bool TargetDefinition::readXML(XMLNode *node)
 {
 	node->getNamedChild("name", name_, false);
 	node->getNamedChild("life", life_, false);
@@ -76,15 +76,15 @@ bool TargetDefinition::readXML(XMLNode *node, const char *base)
 
 	XMLNode *modelnode, *burntmodelnode;
 	if (!node->getNamedChild("model", modelnode)) return false;
-	if (!modelId_.initFromNode(base, modelnode)) return false;
+	if (!modelId_.initFromNode(modelnode)) return false;
 	if (node->getNamedChild("modelburnt", burntmodelnode, false))
 	{
-		if (!modelburntId_.initFromNode(base, burntmodelnode)) return false;
+		if (!modelburntId_.initFromNode(burntmodelnode)) return false;
 	}
 	else
 	{
 		modelnode->resurrectRemovedChildren();
-		if (!modelburntId_.initFromNode(base, modelnode)) return false;
+		if (!modelburntId_.initFromNode(modelnode)) return false;
 	}
 
 	node->getNamedChild("flattendestroy", flattendestroy_, false);
@@ -92,7 +92,7 @@ bool TargetDefinition::readXML(XMLNode *node, const char *base)
 	node->getNamedChild("removeaction", removeaction_, false);
 	node->getNamedChild("burnaction", burnaction_, false);
 
-	if (!shadow_.readXML(node, base)) return false;
+	if (!shadow_.readXML(node)) return false;
 	if (!groups_.readXML(node)) return false;
 
 	return node->failChildren();

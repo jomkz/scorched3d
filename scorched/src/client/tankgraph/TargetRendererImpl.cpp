@@ -139,24 +139,35 @@ void TargetRendererImpl::drawShield(float shieldHit, float totalTime)
 	static GLUquadric *obj = 0;
 	if (!texture)
 	{
-		std::string file1 = S3D::getModFile("data/textures/bordershield/grid2.bmp");
-		Image map = ImageFactory::loadImage(file1.c_str(), file1.c_str(), false);
+		Image map = ImageFactory::loadImage(
+			ImageID::eModLocation, 
+			"data/textures/bordershield/grid2.bmp",
+			"data/textures/bordershield/grid2.bmp",
+			false);
 		texture = new GLTexture;
 		texture->create(map, true);
 
-		std::string file2 = S3D::getModFile("data/textures/bordershield/grid22.bmp");
-		Image map2 = ImageFactory::loadImage(file2.c_str(), file2.c_str(), false);
+		Image map2 = ImageFactory::loadImage(
+			ImageID::eModLocation,
+			"data/textures/bordershield/grid22.bmp",
+			"data/textures/bordershield/grid22.bmp",
+			false);
 		texture2 = new GLTexture;
 		texture2->create(map2, true);
 
-		std::string file3 = S3D::getModFile("data/textures/shield2.bmp");
-		Image map3 = ImageFactory::loadImage(file3.c_str(), file3.c_str(), false);
+		Image map3 = ImageFactory::loadImage(
+			ImageID::eModLocation,
+			"data/textures/shield2.bmp",
+			"data/textures/shield2.bmp", 
+			false);
 		magtexture = new GLTexture;
 		magtexture->create(map3, true);
 
-		std::string file4 = S3D::getModFile("data/textures/shield.bmp");
-		std::string file5 = S3D::getModFile("data/textures/shielda.bmp");
-		Image map4 = ImageFactory::loadImage(file4.c_str(), file5.c_str(), false);
+		Image map4 = ImageFactory::loadImage(
+			ImageID::eModLocation,
+			"data/textures/shield.bmp",
+			"data/textures/shielda.bmp", 
+			false);
 		//map4.alphaMult(4.0f);
 		shieldtexture = new GLTexture;
 		shieldtexture->create(map4, true);

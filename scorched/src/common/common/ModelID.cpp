@@ -59,7 +59,7 @@ bool ModelID::initFromString(
 }
 
 
-bool ModelID::initFromNode(const char *directory, XMLNode *modelNode)
+bool ModelID::initFromNode(XMLNode *modelNode)
 {
 	XMLNode *typeNode = 0;
 	if (!modelNode->getNamedParameter("type", typeNode)) return false;
@@ -74,54 +74,43 @@ bool ModelID::initFromNode(const char *directory, XMLNode *modelNode)
 		XMLNode *meshNode, *skinNode;
 		if (!modelNode->getNamedChild("mesh", meshNode)) return false;
 		const char *meshNameContent = meshNode->getContent();
-		static char meshName[1024];
-		snprintf(meshName, 1024, "%s/%s", directory, meshNameContent);
-		if (!S3D::fileExists(S3D::getModFile(meshName)))
+		if (!S3D::fileExists(S3D::getModFile(meshNameContent)))
 		{
 			return modelNode->returnError(
 				S3D::formatStringBuffer(
 					"Mesg file \"%s\" does not exist",
-					meshName));
+					meshNameContent));
 			return false;
 		}
 
 		if (!modelNode->getNamedChild("skin", skinNode)) return false;
 		const char *skinNameContent = skinNode->getContent();
-		static char skinName[1024];
 		if (strcmp(skinNameContent, "none") != 0)
 		{
-			snprintf(skinName, 1024, "%s/%s", directory, skinNameContent);
-			if (!S3D::fileExists(S3D::getModFile(skinName)))
+			if (!S3D::fileExists(S3D::getModFile(skinNameContent)))
 			{
 				return modelNode->returnError(
 					S3D::formatStringBuffer(
 						"Skin file \"%s\" does not exist",
-						skinName));
+						skinNameContent));
 			}
 		}
-		else
-		{
-			snprintf(skinName, 1024, "%s", skinNameContent);
-		}
 
-		meshName_ = meshName;
-		skinName_ = skinName;
+		meshName_ = meshNameContent;
+		skinName_ = skinNameContent;
 	}
 	else if (strcmp(typeNode->getContent(), "MilkShape") == 0)
 	{
 		const char *meshNameContent = modelNode->getContent();
-		static char meshName[1024];
-		snprintf(meshName, 1024, "%s/%s", directory, meshNameContent);
-
-		if (!S3D::fileExists(S3D::getModFile(meshName)))
+		if (!S3D::fileExists(S3D::getModFile(meshNameContent)))
 		{
 			return modelNode->returnError(
 				S3D::formatStringBuffer(
 					"Mesh file \"%s\" does not exist",
-					meshName));
+					meshNameContent));
 		}
 
-		meshName_ = meshName;
+		meshName_ = meshNameContent;
 	}
 	else if (strcmp(typeNode->getContent(), "Tree") == 0)
 	{

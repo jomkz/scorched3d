@@ -23,6 +23,7 @@
 
 #include <map>
 #include <string>
+#include <image/ImageID.h>
 
 class GLTexture;
 class TextureStore
@@ -30,10 +31,7 @@ class TextureStore
 public:
 	static TextureStore *instance();
 
-	GLTexture *loadTexture(
-		const std::string &name, 
-		const std::string &aname = "", 
-		bool invert = false);
+	GLTexture *loadTexture(const ImageID &imageID);
 
 protected:
 	static TextureStore *instance_;

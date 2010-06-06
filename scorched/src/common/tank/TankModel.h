@@ -22,8 +22,8 @@
 #define __INCLUDE_TankModelh_INCLUDE__
 
 #include <common/ModelID.h>
-#include <common/ImageID.h>
 #include <common/Vector.h>
+#include <image/ImageID.h>
 #include <set>
 #include <string>
 

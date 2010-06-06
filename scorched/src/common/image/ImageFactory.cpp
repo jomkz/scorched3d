@@ -28,71 +28,43 @@ ImageFactory::ImageFactory()
 {
 }
 
+Image ImageFactory::loadImageID(
+	const ImageID &imageId)
+{
+	ImageID &otherId = (ImageID &) imageId;
+	if (otherId.getImageName()[0] && !otherId.getAlphaName()[0])
+	{
+		return loadImageInternal(otherId.getImageLocation(), otherId.getImageName(), false);
+	}
+	else if (!otherId.getImageName()[0] && otherId.getAlphaName()[0])
+	{
+		return loadImageInternal(otherId.getImageLocation(), otherId.getAlphaName(), true);
+	}
+	else if (otherId.getImageName()[0] && otherId.getAlphaName()[0])
+	{
+		Image bitmap = loadImageInternal(otherId.getImageLocation(), otherId.getImageName(), false);
+		Image alpha = loadImageInternal(otherId.getImageLocation(), otherId.getAlphaName(), false);
+		return combineImage(bitmap, alpha, otherId.getInvert());
+	}
+	return Image();
+}
+
 Image ImageFactory::loadAlphaImage(
+	ImageID::ImageLocation imageLocation,
 	const std::string &filename)
 {
-	std::string extension(filename);
-	_strlwr((char *) extension.c_str());
-
-	Image result;
-	if (strstr(extension.c_str(), ".png"))
-	{
-		result = ImagePngFactory::loadFromFile(filename.c_str(), true);
-	}
-	else if (strstr(extension.c_str(), ".jpg"))
-	{
-		result = ImageJpgFactory::loadFromFile(filename.c_str(), true);
-	}
-	else
-	{
-		result = ImageBitmapFactory::loadFromFile(filename.c_str(), true);
-	}
-	return result;
+	ImageID imageId(imageLocation, "", filename);
+	return loadImageID(imageId);
 }
+
 Image ImageFactory::loadImage(
+	ImageID::ImageLocation imageLocation,
 	const std::string &filename, 
 	const std::string &alphafilename, 
 	bool invert)
 {
-	std::string extension(filename);
-	_strlwr((char *) extension.c_str());
-
-	Image result;
-	if (strstr(extension.c_str(), ".png"))
-	{
-		if (!alphafilename.empty())
-		{
-			result = ImagePngFactory::loadFromFile(filename.c_str(), alphafilename.c_str(), invert);
-		}
-		else
-		{
-			result = ImagePngFactory::loadFromFile(filename.c_str());
-		}
-	} 
-	else if (strstr(extension.c_str(), ".jpg"))
-	{
-		if (!alphafilename.empty())
-		{
-			result = ImageJpgFactory::loadFromFile(filename.c_str(), alphafilename.c_str(), invert);
-		}
-		else
-		{
-			result = ImageJpgFactory::loadFromFile(filename.c_str());
-		}
-	} 
-	else
-	{
-		// Failsafe !!
-		if (!alphafilename.empty())
-		{
-			result = ImageBitmapFactory::loadFromFile(filename.c_str(), alphafilename.c_str(), invert);
-		}
-		else
-		{
-			result = ImageBitmapFactory::loadFromFile(filename.c_str());
-		}
-	}
-	return result;
+	ImageID imageId(imageLocation, filename, alphafilename, invert);
+	return loadImageID(imageId);
 }
 
 Image ImageFactory::createBlank(int width, int height, bool alpha, unsigned char fill)
@@ -125,3 +97,60 @@ Image ImageFactory::grabScreen()
 	return map;
 }
 #endif
+
+Image ImageFactory::loadImageInternal(ImageID::ImageLocation imageLocation, const std::string &filename, bool loadAlpha)
+{
+	std::string expandedFilename = ImageID::getLocation(imageLocation, filename);
+	if (strstr(filename.c_str(), ".png"))
+	{
+		return ImagePngFactory::loadFromFile(expandedFilename.c_str(), loadAlpha);
+	}
+	else if (strstr(filename.c_str(), ".jpg"))
+	{
+		return ImageJpgFactory::loadFromFile(expandedFilename.c_str(), loadAlpha);
+	}
+	else
+	{
+		return ImageBitmapFactory::loadFromFile(expandedFilename.c_str(), loadAlpha);
+	}
+}
+
+Image ImageFactory::combineImage(Image bitmap, Image alpha, bool invert)
+{
+	Image result;
+	if (bitmap.getBits() && alpha.getBits() && 
+		bitmap.getWidth() == alpha.getWidth() &&
+		bitmap.getHeight() == alpha.getHeight())
+	{
+		result = Image(bitmap.getWidth(), bitmap.getHeight(), true);
+
+		unsigned char *bbits = bitmap.getBits();
+		unsigned char *abits = alpha.getBits();
+		unsigned char *bits = result.getBits();
+		for (int y=0; y<bitmap.getHeight(); y++)
+		{
+			for (int x=0; x<bitmap.getWidth(); x++)
+			{
+				bits[0] = bbits[0];
+				bits[1] = bbits[1];
+				bits[2] = bbits[2];
+
+				unsigned char avg = (unsigned char)(int(abits[0] + abits[1] + abits[2]) / 3);
+				if (invert)
+				{
+					bits[3] = (unsigned char)(255 - avg);
+				}
+				else
+				{
+					bits[3] = avg;
+				}
+
+				bbits += 3;
+				abits += 3;
+				bits += 4;
+			}
+		}
+	}
+
+	return result;
+}

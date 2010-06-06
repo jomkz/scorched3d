@@ -83,7 +83,7 @@ Model *ModelStore::getModel(ModelID &id)
 	{
 		// Create a model for the tree
 		TreeModelFactory factory;
-		model = factory.createModel(id.getMeshName(), id.getSkinName());		
+		model = factory.createModel(id.getMeshName());		
 	}
 	else
 	{

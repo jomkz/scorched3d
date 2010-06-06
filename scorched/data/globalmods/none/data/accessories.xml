@@ -211,9 +211,9 @@ near the flames will lose life.</description>
 		<bundlesize>10</bundlesize>
 		<cost>10000</cost>
 		<activationsound>shoot/small.wav</activationsound>
-		<model type='MilkShape'>napalm/napalm.txt</model>
+		<model type='MilkShape'>data/accessories/napalm/napalm.txt</model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>napalm/napalm.txt</projectilemodel>
+			<projectilemodel type='MilkShape'>data/accessories/napalm/napalm.txt</projectilemodel>
 			<collisionaction type='WeaponNapalm'>
 				<napalmtime>4.0</napalmtime>
 				<napalmheight>0.2</napalmheight>
@@ -239,9 +239,9 @@ Any tanks near the flames will lose life.</description>
 		<bundlesize>3</bundlesize>
 		<cost>20000</cost>
 		<activationsound>shoot/small.wav</activationsound>
-		<model type='MilkShape'>napalm/napalm.txt</model>
+		<model type='MilkShape'>data/accessories/napalm/napalm.txt</model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>napalm/napalm.txt</projectilemodel>
+			<projectilemodel type='MilkShape'>data/accessories/napalm/napalm.txt</projectilemodel>
 			<collisionaction type='WeaponNapalm'>
 				<napalmtime>4.0</napalmtime>
 				<napalmheight>0.2</napalmheight>
@@ -271,7 +271,7 @@ with any tank.</description>
 			<collisionaction type='WeaponRoller'>
 				<numberrollers>8</numberrollers>
 				<time>RANGE(3,4)</time>
-				<rollermodel type='MilkShape'>roller/roller.txt</rollermodel>
+				<rollermodel type='MilkShape'>data/accessories/roller/roller.txt</rollermodel>
 				<!--<maintainvelocity>true</maintainvelocity>-->
 				<collisionaction type='WeaponExplosion'>
 					<hurtamount>1.0</hurtamount>
@@ -299,7 +299,7 @@ contact with any tank.</description>
 			<collisionaction type='WeaponRoller'>
 				<numberrollers>6</numberrollers>
 				<time>RANGE(3,4)</time>
-				<rollermodel type='MilkShape'>roller/roller.txt</rollermodel>
+				<rollermodel type='MilkShape'>data/accessories/roller/roller.txt</rollermodel>
 				<collisionaction type='WeaponExplosion'>
 					<hurtamount>1.0</hurtamount>
 					<deform>down</deform>
@@ -326,7 +326,7 @@ with any tank.</description>
 			<collisionaction type='WeaponRoller'>
 				<numberrollers>6</numberrollers>
 				<time>RANGE(3,4)</time>
-				<rollermodel type='MilkShape'>roller/roller.txt</rollermodel>
+				<rollermodel type='MilkShape'>data/accessories/roller/roller.txt</rollermodel>
 				<collisionaction type='WeaponExplosion'>
 					<hurtamount>1.0</hurtamount>
 					<deform>down</deform>
@@ -389,9 +389,9 @@ with any tank.</description>
 		<bundlesize>3</bundlesize>
 		<cost>8000</cost>
 		<activationsound>shoot/large.wav</activationsound>
-		<model type='MilkShape'>littleboy/littleboy.txt</model>
+		<model type='MilkShape'>data/accessories/littleboy/littleboy.txt</model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>littleboy/littleboy.txt</projectilemodel>
+			<projectilemodel type='MilkShape'>data/accessories/littleboy/littleboy.txt</projectilemodel>
 			<collisionaction type='WeaponExplosion'>
 				<hurtamount>1.0</hurtamount>
 				<deform>down</deform>
@@ -410,10 +410,10 @@ with any tank.</description>
 		<bundlesize>2</bundlesize>
 		<cost>12000</cost>
 		<activationsound>shoot/xlarge.wav</activationsound>
-		<model type='MilkShape'>fatman/fatman.txt</model>
+		<model type='MilkShape'>data/accessories/fatman/fatman.txt</model>
 		<accessoryaction type='WeaponProjectile'>
 			<shieldhurtfactor>1.2</shieldhurtfactor>
-			<projectilemodel type='MilkShape'>fatman/fatman.txt</projectilemodel>
+			<projectilemodel type='MilkShape'>data/accessories/fatman/fatman.txt</projectilemodel>
 			<collisionaction type='WeaponExplosion'>
 				<hurtamount>1.0</hurtamount>
 				<deform>down</deform>
@@ -438,11 +438,11 @@ to cover them.</description>
 		<bundlesize>10</bundlesize>
 		<cost>3000</cost>
 		<activationsound>shoot/small.wav</activationsound>
-		<model type='MilkShape'>dirt/dirt.txt</model>
+		<model type='MilkShape'>data/accessories/dirt/dirt.txt</model>
 		<modelscale>0.6</modelscale>
 		<accessoryaction type='WeaponProjectile'>
 			<shieldhurtfactor>0.5</shieldhurtfactor>
-			<projectilemodel type='MilkShape'>dirt/dirt.txt</projectilemodel>
+			<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
 			<projectilescale>0.6</projectilescale>
 			<collisionaction type='WeaponExplosion'>
 				<hurtamount>0.0</hurtamount>
@@ -466,10 +466,10 @@ cover them.</description>
 		<bundlesize>5</bundlesize>
 		<cost>5750</cost>
 		<activationsound>shoot/small.wav</activationsound>
-		<model type='MilkShape'>dirt/dirt.txt</model>
+		<model type='MilkShape'>data/accessories/dirt/dirt.txt</model>
 		<modelscale>0.8</modelscale>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>dirt/dirt.txt</projectilemodel>
+			<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
 			<projectilescale>0.8</projectilescale>
 			<shieldhurtfactor>0.8</shieldhurtfactor>
 			<collisionaction type='WeaponExplosion'>
@@ -494,9 +494,9 @@ cover them.</description>
 		<bundlesize>2</bundlesize>
 		<cost>6750</cost>
 		<activationsound>shoot/small.wav</activationsound>
-		<model type='MilkShape'>dirt/dirt.txt</model>
+		<model type='MilkShape'>data/accessories/dirt/dirt.txt</model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>dirt/dirt.txt</projectilemodel>
+			<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
 			<collisionaction type='WeaponExplosion'>
 				<deform>up</deform>
 				<hurtamount>0.0</hurtamount>
@@ -516,9 +516,9 @@ small dirt clods in all directions.</description>
 		<bundlesize>3</bundlesize>
 		<cost>6250</cost>
 		<activationsound>shoot/flare.wav</activationsound>
-		<model type='MilkShape'>dirt/dirt.txt</model>
+		<model type='MilkShape'>data/accessories/dirt/dirt.txt</model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>dirt/dirt.txt</projectilemodel>
+			<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
 			<collisionaction type='WeaponMulti'>
 				<subweapon1 type='WeaponExplosion'>
 					<hurtamount>0</hurtamount>
@@ -535,7 +535,7 @@ small dirt clods in all directions.</description>
 						<nocreateflame/><nocreatesmoke/>
 						<timedcollision>0.6</timedcollision>
 						<projectilescale>0.8</projectilescale>
-						<projectilemodel type='MilkShape'>dirt/dirt.txt</projectilemodel>
+						<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
 						<collisionaction type='WeaponMulti'>
 							<subweapon1 type='WeaponExplosion'>
 								<hurtamount>0</hurtamount>
@@ -555,7 +555,7 @@ small dirt clods in all directions.</description>
 									<nocreatesmoke/>
 									<timedcollision>0.8</timedcollision>
 									<projectilescale>0.6</projectilescale>
-									<projectilemodel type='MilkShape'>dirt/dirt.txt</projectilemodel>
+									<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
 									<collisionaction type='WeaponMulti'>
 										<subweapon1 type='WeaponExplosion'>
 											<hurtamount>0</hurtamount>
@@ -577,7 +577,7 @@ small dirt clods in all directions.</description>
 												<nocreatesmoke/>
 												<timedcollision>0.8</timedcollision>
 												<projectilescale>0.5</projectilescale>
-												<projectilemodel type='MilkShape'>dirt/dirt.txt</projectilemodel>
+												<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
 												<collisionaction type='WeaponMulti'>
 													<subweapon1 type='WeaponExplosion'>
 														<hurtamount>0</hurtamount>
@@ -600,7 +600,7 @@ small dirt clods in all directions.</description>
 															<projectilescale>0.5</projectilescale>
 															<shieldhurtfactor>0.3</shieldhurtfactor>
 															<projectilemodel type='ase'>
-																<mesh>roller.ase</mesh><skin>white.bmp</skin>
+																<mesh>data/accessories/roller.ase</mesh><skin>data/accessories/white.bmp</skin>
 																 </projectilemodel>
 																<collisionaction type='WeaponExplosion'>
 																	<hurtamount>0</hurtamount>
@@ -636,9 +636,9 @@ remove earth from under them.</description>
 		<bundlesize>8</bundlesize>
 		<cost>1750</cost>
 		<activationsound>shoot/small.wav</activationsound>
-		<model type='MilkShape'>riot/riot.txt</model>
+		<model type='MilkShape'>data/accessories/riot/riot.txt</model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>riot/riot.txt</projectilemodel>
+			<projectilemodel type='MilkShape'>data/accessories/riot/riot.txt</projectilemodel>
 <shieldhurtfactor>0.5</shieldhurtfactor>
 			<collisionaction type='WeaponExplosion'>
 				<deform>down</deform>
@@ -661,9 +661,9 @@ remove earth from under them.</description>
 		<bundlesize>3</bundlesize>
 		<cost>4250</cost>
 		<activationsound>shoot/small.wav</activationsound>
-		<model type='MilkShape'>riot/riot.txt</model>
+		<model type='MilkShape'>data/accessories/riot/riot.txt</model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>riot/riot.txt</projectilemodel>
+			<projectilemodel type='MilkShape'>data/accessories/riot/riot.txt</projectilemodel>
 			<collisionaction type='WeaponExplosion'>
 				<deform>down</deform>
 				<hurtamount>0.0</hurtamount>
@@ -684,7 +684,7 @@ your tank when covered by dirt.</description>
 		<icon>rcharge.bmp</icon>
 		<bundlesize>10</bundlesize>
 		<cost>1800</cost>
-		<model type='MilkShape'>riot/riot.txt</model>
+		<model type='MilkShape'>data/accessories/riot/riot.txt</model>
 		<accessoryaction type='WeaponTranslate'>
 			<translatedist>2.0</translatedist>
 			<nextaction type='WeaponMulti'>
@@ -733,7 +733,7 @@ your tank when covered by dirt.</description>
 		<icon>rblast.bmp</icon>
 		<bundlesize>5</bundlesize>
 		<cost>4200</cost>
-		<model type='MilkShape'>riot/riot.txt</model>
+		<model type='MilkShape'>data/accessories/riot/riot.txt</model>
 		<accessoryaction type='WeaponTranslate'>
 			<translatedist>2.0</translatedist>
 			<nextaction type='WeaponMulti'>
@@ -783,9 +783,9 @@ in the same direction.</description>
 		<bundlesize>2</bundlesize>
 		<cost>10000</cost>
 		<activationsound>shoot/medium.wav</activationsound>
-		<model type='MilkShape'>bouncingbetty/bouncingbetty.txt</model>
+		<model type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>bouncingbetty/bouncingbetty.txt</projectilemodel>
+			<projectilemodel type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</projectilemodel>
 			<collisionaction type='WeaponMulti'>
 				<subweapon1 type='WeaponExplosion'>
 					<hurtamount>1.0</hurtamount>
@@ -797,7 +797,7 @@ in the same direction.</description>
 				<subweapon2 type='WeaponLeapFrog'>
 					<bounce>0.6</bounce>
 					<collisionaction type='WeaponProjectile'>
-						<projectilemodel type='MilkShape'>bouncingbetty/bouncingbetty.txt</projectilemodel>
+						<projectilemodel type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</projectilemodel>
 						<collisionaction type='WeaponMulti'>
 							<subweapon1 type='WeaponExplosion'>
 								<hurtamount>1.0</hurtamount>
@@ -809,7 +809,7 @@ in the same direction.</description>
 							<subweapon2 type='WeaponLeapFrog'>
 								<bounce>0.6</bounce>
 								<collisionaction type='WeaponProjectile'>
-									<projectilemodel type='MilkShape'>bouncingbetty/bouncingbetty.txt</projectilemodel>
+									<projectilemodel type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</projectilemodel>
 									<collisionaction type='WeaponExplosion'>
 										<hurtamount>1.0</hurtamount>
 										<deform>down</deform>
@@ -835,11 +835,11 @@ tank-seeking riot bombs.</description>
 		<bundlesize>10</bundlesize>
 		<cost>6000</cost>
 		<activationsound>shoot/flare.wav</activationsound>
-		<model type='MilkShape'>digger/digger.txt</model>
+		<model type='MilkShape'>data/accessories/digger/digger.txt</model>
 		<modelscale>0.5</modelscale>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilescale>0.5</projectilescale>
-			<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+			<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<nowarheads>3</nowarheads>
 				<inaccuracy>40</inaccuracy>
@@ -849,7 +849,7 @@ tank-seeking riot bombs.</description>
 					<under></under>
 					<projectilescale>0.5</projectilescale>
 					<shieldhurtfactor>0.6</shieldhurtfactor>
-					<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+					<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
 						<hurtamount>0.0</hurtamount>
@@ -872,9 +872,9 @@ tank-seeking riot bombs.</description>
 		<bundlesize>5</bundlesize>
 		<cost>7500</cost>
 		<activationsound>shoot/flare.wav</activationsound>
-		<model type='MilkShape'>digger/digger.txt</model>
+		<model type='MilkShape'>data/accessories/digger/digger.txt</model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+			<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<nowarheads>5</nowarheads>
 				<inaccuracy>40</inaccuracy>
@@ -883,7 +883,7 @@ tank-seeking riot bombs.</description>
 				<aimedweapon type='WeaponProjectile'>
 				<shieldhurtfactor>0.6</shieldhurtfactor>
 					<under></under>
-					<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+					<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
 						<hurtamount>0.0</hurtamount>
@@ -906,11 +906,11 @@ tank-seeking riot bombs.</description>
 		<bundlesize>2</bundlesize>
 		<cost>6750</cost>
 		<activationsound>shoot/flare.wav</activationsound>
-		<model type='MilkShape'>digger/digger.txt</model>
+		<model type='MilkShape'>data/accessories/digger/digger.txt</model>
 		<modelscale>2</modelscale>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilescale>2</projectilescale>
-			<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+			<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<nowarheads>10</nowarheads>
 				<inaccuracy>40</inaccuracy>
@@ -920,7 +920,7 @@ tank-seeking riot bombs.</description>
 					<projectilescale>2</projectilescale>
 					<shieldhurtfactor>0.6</shieldhurtfactor>
 					<under></under>
-					<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+					<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
 						<hurtamount>0.0</hurtamount>
@@ -943,11 +943,11 @@ tanks from underground.</description>
 		<bundlesize>7</bundlesize>
 		<cost>24000</cost>
 		<activationsound>shoot/flare.wav</activationsound>
-		<model type='MilkShape'>digger/digger.txt</model>
+		<model type='MilkShape'>data/accessories/digger/digger.txt</model>
 		<modelscale>0.5</modelscale>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilescale>0.5</projectilescale>
-			<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+			<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<nowarheads>2</nowarheads>
 				<inaccuracy>30</inaccuracy>
@@ -957,7 +957,7 @@ tanks from underground.</description>
 					<projectilescale>0.5</projectilescale>
 					<shieldhurtfactor>0.6</shieldhurtfactor>
 					<under></under>
-					<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+					<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<hurtamount>1.0</hurtamount>
 						<deform>down</deform>
@@ -979,9 +979,9 @@ tanks from underground.</description>
 		<bundlesize>5</bundlesize>
 		<cost>31000</cost>
 		<activationsound>shoot/flare.wav</activationsound>
-		<model type='MilkShape'>digger/digger.txt</model>
+		<model type='MilkShape'>data/accessories/digger/digger.txt</model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+			<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<nowarheads>6</nowarheads>
 				<inaccuracy>30</inaccuracy>
@@ -990,7 +990,7 @@ tanks from underground.</description>
 				<aimedweapon type='WeaponProjectile'>
 				<shieldhurtfactor>0.6</shieldhurtfactor>
 					<under></under>
-					<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+					<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<hurtamount>1.0</hurtamount>
 						<deform>down</deform>
@@ -1012,11 +1012,11 @@ tanks from underground.</description>
 		<bundlesize>2</bundlesize>
 		<cost>37000</cost>
 		<activationsound>shoot/flare.wav</activationsound>
-		<model type='MilkShape'>digger/digger.txt</model>
+		<model type='MilkShape'>data/accessories/digger/digger.txt</model>
 		<modelscale>2</modelscale>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilescale>2</projectilescale>
-			<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+			<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<nowarheads>15</nowarheads>
 				<inaccuracy>30</inaccuracy>
@@ -1026,7 +1026,7 @@ tanks from underground.</description>
 					<projectilescale>2</projectilescale>
 					<shieldhurtfactor>0.6</shieldhurtfactor>
 					<under></under>
-					<projectilemodel type='MilkShape'>digger/digger.txt</projectilemodel>
+					<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<hurtamount>1.0</hurtamount>
 						<deform>down</deform>
@@ -1050,14 +1050,14 @@ in a straight path.</description>
 		<cost>16000</cost>
 		<activationsound>shoot/large.wav</activationsound>
 		<model type='ase'>
-			<mesh>clusterbomb.ase</mesh>
-			<skin>white.bmp</skin>
+			<mesh>data/accessories/clusterbomb.ase</mesh>
+			<skin>data/accessories/white.bmp</skin>
 		</model>
 		<accessoryaction type='WeaponProjectile'>
 			<apexcollision></apexcollision>
 			<projectilemodel type='ase'>
-				<mesh>clusterbomb.ase</mesh>
-				<skin>white.bmp</skin>
+				<mesh>data/accessories/clusterbomb.ase</mesh>
+				<skin>data/accessories/white.bmp</skin>
 			</projectilemodel>
 			<collisionaction type='WeaponMirv'>
 				<nowarheads>5</nowarheads>
@@ -1065,7 +1065,7 @@ in a straight path.</description>
 				<vspreaddist>5.0</vspreaddist>
 				<aimedweapon type='WeaponProjectile'>
 					<projectilescale>0.2</projectilescale>
-					<projectilemodel type='MilkShape'>bomblet/bomblet.txt</projectilemodel>
+					<projectilemodel type='MilkShape'>data/accessories/bomblet/bomblet.txt</projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
 						<hurtamount>1.0</hurtamount>
@@ -1089,14 +1089,14 @@ random direction.</description>
 		<cost>16000</cost>
 		<activationsound>shoot/large.wav</activationsound>
 		<model type='ase'>
-			<mesh>clusterbomb.ase</mesh>
-			<skin>white.bmp</skin>
+			<mesh>data/accessories/clusterbomb.ase</mesh>
+			<skin>data/accessories/white.bmp</skin>
 		</model>
 		<accessoryaction type='WeaponProjectile'>
 			<apexcollision></apexcollision>
 			<projectilemodel type='ase'>
-				<mesh>clusterbomb.ase</mesh>
-				<skin>white.bmp</skin>
+				<mesh>data/accessories/clusterbomb.ase</mesh>
+				<skin>data/accessories/white.bmp</skin>
 			</projectilemodel>
 			<collisionaction type='WeaponMirv'>
 				<nowarheads>5</nowarheads>
@@ -1104,7 +1104,7 @@ random direction.</description>
 				<vspreaddist>5.0</vspreaddist>
 				<aimedweapon type='WeaponProjectile'>
 					<projectilescale>0.2</projectilescale>
-					<projectilemodel type='MilkShape'>bomblet/bomblet.txt</projectilemodel>
+					<projectilemodel type='MilkShape'>data/accessories/bomblet/bomblet.txt</projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
 						<hurtamount>1.0</hurtamount>
@@ -1127,19 +1127,19 @@ in a random direction.</description>
 		<bundlesize>1</bundlesize>
 		<cost>48000</cost>
 		<activationsound>shoot/launch.wav</activationsound>
-		<model type='MilkShape'>icbm/icbm.txt</model>
+		<model type='MilkShape'>data/accessories/icbm/icbm.txt</model>
 		<modelscale>5</modelscale>
 		<accessoryaction type='WeaponProjectile'>
 			<apexcollision></apexcollision>
 			<projectilescale>5</projectilescale>
-			<projectilemodel type='MilkShape'>icbm/icbm.txt</projectilemodel>
+			<projectilemodel type='MilkShape'>data/accessories/icbm/icbm.txt</projectilemodel>
 			<collisionaction type='WeaponMirv'>
 				<nowarheads>20</nowarheads>
 				<hspreaddist>1.0</hspreaddist>
 				<vspreaddist>5.0</vspreaddist>
 				<aimedweapon type='WeaponProjectile'>
 					<projectilescale>0.5</projectilescale>
-					<projectilemodel type='MilkShape'>mirvwarhead/mirvwarhead.txt</projectilemodel>
+					<projectilemodel type='MilkShape'>data/accessories/mirvwarhead/mirvwarhead.txt</projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
 						<hurtamount>1.0</hurtamount>
@@ -1164,9 +1164,9 @@ any nearby tanks.</description>
 		<bundlesize>2</bundlesize>
 		<cost>39000</cost>
 		<activationsound>shoot/large.wav</activationsound>
-		<model type='MilkShape'>icbm/icbm.txt</model>
+		<model type='MilkShape'>data/accessories/icbm/icbm.txt</model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>icbm/icbm.txt</projectilemodel>
+			<projectilemodel type='MilkShape'>data/accessories/icbm/icbm.txt</projectilemodel>
 			<collisionaction type='WeaponMulti'>
 				<subweapon1 type='WeaponExplosion'>
 					<hurtamount>1.0</hurtamount>
@@ -1188,7 +1188,7 @@ any nearby tanks.</description>
 							<velocitychange>RANGE(0.8,1.1)</velocitychange>
 							<aimedweapon type='WeaponProjectile'>
 							<shieldhurtfactor>0.85</shieldhurtfactor>
-							<projectilemodel type='MilkShape'>bomb/bomb.txt</projectilemodel>
+							<projectilemodel type='MilkShape'>data/accessories/bomb/bomb.txt</projectilemodel>
 								<collisionaction type='WeaponRandomChoice'>
 									<weaponchoice1>
 										<weight>6</weight>
@@ -1261,10 +1261,10 @@ without wasting weapons.</description>
 		<bundlesize>20</bundlesize>
 		<cost>100</cost>
 		<activationsound>shoot/flare.wav</activationsound>
-		<model type='MilkShape'>flare.txt</model>
+		<model type='MilkShape'>data/accessories/flare.txt</model>
 		<accessoryaction type='WeaponProjectile'>
 			<nocreateflame></nocreateflame>
-			<projectilemodel type='MilkShape'>flare.txt</projectilemodel>
+			<projectilemodel type='MilkShape'>data/accessories/flare.txt</projectilemodel>
 			<shieldhurtfactor>0.2</shieldhurtfactor>
 			<showendpoint></showendpoint>
 			<collisionaction type='WeaponNull'></collisionaction>
@@ -1281,11 +1281,11 @@ range without wasting weapons.  </description>
 		<bundlesize>10</bundlesize>
 		<cost>500</cost>
 		<activationsound>shoot/flare.wav</activationsound>
-		<model type='MilkShape'>flare.txt</model>
+		<model type='MilkShape'>data/accessories/flare.txt</model>
 		<accessoryaction type='WeaponProjectile'>
 			<nocreateflame></nocreateflame>
 			<shieldhurtfactor>0.3</shieldhurtfactor>
-			<projectilemodel type='MilkShape'>flare.txt</projectilemodel>
+			<projectilemodel type='MilkShape'>data/accessories/flare.txt</projectilemodel>
 			<showendpoint></showendpoint>
 			<showshotpath></showshotpath>
 			<collisionaction type='WeaponNull'></collisionaction>
@@ -1390,8 +1390,8 @@ range without wasting weapons.  </description>
 						<inaccuracy>10</inaccuracy>
 						<aimedweapon type='WeaponProjectile'>
 							<projectilemodel type='ase'>
-								<mesh>roller.ase</mesh>
-								<skin>magma.bmp</skin>
+								<mesh>data/accessories/roller.ase</mesh>
+								<skin>data/accessories/magma.bmp</skin>
 							</projectilemodel>
 							<collisionaction type='WeaponExplosion'>
 								<hurtamount>0.0</hurtamount>
@@ -1411,7 +1411,7 @@ range without wasting weapons.  </description>
 		<armslevel>10</armslevel>
 		<bundlesize>4</bundlesize>
 		<icon>laser.bmp</icon>
-		<model type="MilkShape">laser/laser.txt</model>
+		<model type="MilkShape">data/accessories/laser/laser.txt</model>
 		<description>Fires a laser that cuts through hills 
 and shields damaging the tank directly.</description>
 		<cost>8000</cost>
@@ -1436,7 +1436,7 @@ and shields damaging the tank directly.</description>
 		<armslevel>6</armslevel>
 		<bundlesize>2</bundlesize>
 		<icon>hlaser.bmp</icon>
-		<model type="MilkShape">laser/hlaser.txt</model>
+		<model type="MilkShape">data/accessories/laser/hlaser.txt</model>
 		<description>Fires a powerful laser that cuts through hills 
 and shields damaging the tank directly.</description>
 		<cost>10000</cost>
@@ -1463,7 +1463,7 @@ and shields damaging the tank directly.</description>
 		<icon>teleport.bmp</icon>
 		<activationsound>none</activationsound>
 		<bundlesize>2</bundlesize>
-		<model type="MilkShape">teleport/teleport.txt</model>
+		<model type="MilkShape">data/accessories/teleport/teleport.txt</model>
 		<nomuzzleflash/>
 		<cost>18000</cost>
 		<accessoryaction type="WeaponCenterPosition">
@@ -1586,7 +1586,7 @@ and shields damaging the tank directly.</description>
     <activationsound>shoot/flare.wav</activationsound>
     <maximumnumber>0</maximumnumber>
     <accessoryaction type='WeaponProjectile'>
-      <projectilemodel type='MilkShape'>littleboy/littleboy.txt</projectilemodel>
+      <projectilemodel type='MilkShape'>data/accessories/littleboy/littleboy.txt</projectilemodel>
       <shieldhurtfactor>0.2</shieldhurtfactor>
       <nocreateflame/>
       <nowallcollision/>
@@ -1653,7 +1653,7 @@ and shields damaging the tank directly.</description>
 					<scatterpercentage>75</scatterpercentage>
 					<aimedweapon type='WeaponAddTarget'>
 						<name>Bannana</name>
-						<model type="MilkShape">banana/banana.txt</model>
+						<model type="MilkShape">data/accessories/banana/banana.txt</model>
 						<modelscale>0.01</modelscale>
 						<shield>Shield</shield>
 						<parachute>Parachute</parachute>
@@ -1689,11 +1689,11 @@ and shields damaging the tank directly.</description>
 		<maximumnumber>0</maximumnumber>
 		<bundlesize>2</bundlesize>
 		<cost>10000</cost>
-		<model type='MilkShape'>bouncingbetty/bouncingbetty.txt</model>
+		<model type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</model>
 		<accessoryaction type='WeaponLabel'>
 			<label>label1</label>
 			<nextweapon type='WeaponProjectile'>
-				<projectilemodel type='MilkShape'>bouncingbetty/bouncingbetty.txt</projectilemodel>
+				<projectilemodel type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</projectilemodel>
 				<collisionaction type='WeaponMulti'>
 					<subweapon1 type='WeaponExplosion'>
 						<hurtamount>1.0</hurtamount>
@@ -1718,11 +1718,11 @@ and shields damaging the tank directly.</description>
 		<bundlesize>2</bundlesize>
 		<cost>10000</cost>
 		<activationsound>shoot/medium.wav</activationsound>
-		<model type='MilkShape'>bouncingbetty/bouncingbetty.txt</model>
+		<model type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</model>
 		<accessoryaction type='WeaponLabel'>
 			<label>label1</label>
 			<nextweapon type='WeaponProjectile'>
-				<projectilemodel type='MilkShape'>bouncingbetty/bouncingbetty.txt</projectilemodel>
+				<projectilemodel type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</projectilemodel>
 				<collisionaction type='WeaponMulti'>
 					<subweapon1 type='WeaponExplosion'>
 						<hurtamount>1.0</hurtamount>
@@ -1747,7 +1747,7 @@ and shields damaging the tank directly.</description>
 		<name>Teleport Test</name>
 		<maximumnumber>0</maximumnumber>
 		<bundlesize>1</bundlesize>
-		<model type="MilkShape">teleport/teleport.txt</model>
+		<model type="MilkShape">data/accessories/teleport/teleport.txt</model>
 		<nomuzzleflash/>
 		<cost>15000</cost>
 		<accessoryaction type='WeaponSelectPosition'>

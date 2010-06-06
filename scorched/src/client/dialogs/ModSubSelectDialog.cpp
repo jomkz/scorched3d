@@ -41,7 +41,7 @@ GLWIconListSubModItem::GLWIconListSubModItem(ModInfo::MenuEntry &modInfoEntry) :
 	if (S3D::fileExists(modInfoEntry_.icon.c_str()))
 	{
 		GLTexture *texture = TextureStore::instance()->loadTexture(
-			modInfoEntry_.icon.c_str());
+			ImageID(ImageID::eAbsLocation, modInfoEntry_.icon));
 		icon_.setTexture(texture);
 	}
 }

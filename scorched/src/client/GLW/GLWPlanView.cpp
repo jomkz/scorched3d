@@ -179,16 +179,19 @@ void GLWPlanView::drawMap()
 	{
 		createdTexture = true;
 		Image logoMap = ImageFactory::loadAlphaImage(
-			S3D::getModFile("data/windows/arrow_s.png"));
+			ImageID::eModLocation,
+			"data/windows/arrow_s.png");
 		arrowTex_.create(logoMap);
 
 		Image circleTank = ImageFactory::loadImage(
-			S3D::getModFile("data/textures/circle.bmp"),
-			S3D::getModFile("data/textures/circlem.bmp"),
+			ImageID::eModLocation,
+			"data/textures/circle.bmp",
+			"data/textures/circlem.bmp",
 			true);
 		Image circleSmall = ImageFactory::loadImage(
-			S3D::getModFile("data/textures/circlew.bmp"),
-			S3D::getModFile("data/textures/circlem.bmp"),
+			ImageID::eModLocation,
+			"data/textures/circlew.bmp",
+			"data/textures/circlem.bmp",
 			true);
 		tankTex_.create(circleTank);
 		circleTex_.create(circleSmall);

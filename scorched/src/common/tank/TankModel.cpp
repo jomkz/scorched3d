@@ -53,7 +53,7 @@ bool TankModel::initFromXML(ScorchedContext &context, XMLNode *node)
 	// Parse the modelId which tells us which files and
 	// 3d type the model actuall is
 	// The model files are not parsed until later
-	if (!modelId_.initFromNode("data/tanks", modelNode))
+	if (!modelId_.initFromNode(modelNode))
 	{
 		return modelNode->returnError(
 			S3D::formatStringBuffer("Failed to load mesh for tank \"%s\"",
@@ -64,7 +64,7 @@ bool TankModel::initFromXML(ScorchedContext &context, XMLNode *node)
 	XMLNode *projectileModelNode;
 	if (node->getNamedChild("projectilemodel", projectileModelNode, false))
 	{
-		if (!projectileModelId_.initFromNode("data/accessories", projectileModelNode))
+		if (!projectileModelId_.initFromNode(projectileModelNode))
 		{
 			return projectileModelNode->returnError(
 				S3D::formatStringBuffer("Failed to load projectile mesh for tank \"%s\"",
@@ -107,20 +107,7 @@ bool TankModel::initFromXML(ScorchedContext &context, XMLNode *node)
 bool TankModel::loadImage(XMLNode *node, const char *nodeName, 
 	ImageID &image, const char *backupImage)
 {
-	XMLNode *imageNode;
-	if (node->getNamedChild(nodeName, imageNode, false))
-	{
-		if (!image.initFromNode("data/tanks", imageNode))
-		{
-			return imageNode->returnError(
-				S3D::formatStringBuffer("Failed to load tracks image for tank \"%s\"",
-				tankName_.c_str()));
-		}
-	}
-	else
-	{
-		image.initFromString("bmp", backupImage, backupImage, true);
-	}
+	image.initFromString(ImageID::eModLocation, backupImage, backupImage, true);
 	return true;
 }
 

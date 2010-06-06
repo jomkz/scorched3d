@@ -31,8 +31,7 @@ TreeModelFactory::~TreeModelFactory()
 {
 }
 
-Model *TreeModelFactory::createModel(const char *fileName,
-	const char *texName)
+Model *TreeModelFactory::createModel(const char *fileName)
 {
 	Model *model = new Model();
 	model->getMin() = FixedVector(fixed(true, -5000), fixed(true, -5000), fixed(true, -5000));

@@ -115,7 +115,6 @@
     <ClCompile Include="..\..\common\common\fixed.cpp" />
     <ClCompile Include="..\..\common\common\FixedVector.cpp" />
     <ClCompile Include="..\..\common\common\FixedVector4.cpp" />
-    <ClCompile Include="..\..\common\common\ImageID.cpp" />
     <ClCompile Include="..\..\common\common\Keyboard.cpp" />
     <ClCompile Include="..\..\common\common\KeyboardKey.cpp" />
     <ClCompile Include="..\..\common\common\Line.cpp" />
@@ -239,6 +238,7 @@
     <ClCompile Include="..\..\common\image\ImageBitmapFactory.cpp" />
     <ClCompile Include="..\..\common\image\ImageData.cpp" />
     <ClCompile Include="..\..\common\image\ImageFactory.cpp" />
+    <ClCompile Include="..\..\common\image\ImageID.cpp" />
     <ClCompile Include="..\..\common\image\ImageJpgFactory.cpp" />
     <ClCompile Include="..\..\common\image\ImageLuminanceFactory.cpp" />
     <ClCompile Include="..\..\common\image\ImagePngFactory.cpp" />
@@ -844,7 +844,6 @@
     <ClInclude Include="..\..\common\common\fixed.h" />
     <ClInclude Include="..\..\common\common\FixedVector.h" />
     <ClInclude Include="..\..\common\common\FixedVector4.h" />
-    <ClInclude Include="..\..\common\common\ImageID.h" />
     <ClInclude Include="..\..\common\common\Keyboard.h" />
     <ClInclude Include="..\..\common\common\KeyboardHistory.h" />
     <ClInclude Include="..\..\common\common\KeyboardKey.h" />
@@ -973,6 +972,7 @@
     <ClInclude Include="..\..\common\image\ImageBitmapFactory.h" />
     <ClInclude Include="..\..\common\image\ImageData.h" />
     <ClInclude Include="..\..\common\image\ImageFactory.h" />
+    <ClInclude Include="..\..\common\image\ImageID.h" />
     <ClInclude Include="..\..\common\image\ImageJpgFactory.h" />
     <ClInclude Include="..\..\common\image\ImageLuminanceFactory.h" />
     <ClInclude Include="..\..\common\image\ImagePngFactory.h" />

@@ -62,8 +62,9 @@ MainCamera::MainCamera() :
 	waterTransparency_(1.0f)
 {
 	Image *map = new Image(ImageFactory::loadImage(
-		S3D::getDataFile("data/images/camera.bmp"),
-		S3D::getDataFile("data/images/cameraa.bmp"),
+		ImageID::eDataLocation,
+		"data/images/camera.bmp",
+		"data/images/cameraa.bmp",
 		false));
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->addMenu(

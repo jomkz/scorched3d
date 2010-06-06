@@ -265,8 +265,11 @@ void TutorialDialog::drawHighlight(float x, float y, float w, float h)
 {
 	if (!triangleTex_.textureValid())
 	{
-		std::string file = S3D::getDataFile("data/images/triangle.bmp");
-		Image maps = ImageFactory::loadImage(file.c_str(), file.c_str(), false);
+		Image maps = ImageFactory::loadImage(
+			ImageID::eDataLocation,
+			"data/images/triangle.bmp"
+			"data/images/triangle.bmp",
+			false);
 		triangleTex_.create(maps, true);
 	}
 

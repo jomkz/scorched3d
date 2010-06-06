@@ -27,28 +27,38 @@ class XMLNode;
 class ImageID
 {
 public:
+	enum ImageLocation
+	{
+		eAbsLocation,
+		eDataLocation,
+		eModLocation
+	};
+
 	ImageID();
+	ImageID(ImageLocation imageLocation,
+		const std::string &imageName,
+		const std::string &alphaName = "",
+		bool invert = false);
 	virtual ~ImageID();
 
-	bool initFromNode(const char *directory,
-		XMLNode *imageNode);
+	bool initFromNode(XMLNode *imageNode);
 
 	bool initFromString(
-		const char *type,
-		const char *imageName,
-		const char *alphaName = "",
+		ImageLocation imageLocation,
+		const std::string &imageName,
+		const std::string &alphaName = "",
 		bool invert = false);
 
-	// Not very generic but it will do for now!!
-	const char *getStringHash();
-	const char *getImageName() { return imageName_.c_str(); }
-	const char *getAlphaName() { return alphaName_.c_str(); }
-	const char *getType() { return type_.c_str(); }
+	ImageLocation getImageLocation() { return imageLocation_; }
+	const std::string &getStringHash();
+	const std::string &getImageName() { return imageName_; }
+	const std::string &getAlphaName() { return alphaName_; }
 	bool getInvert() { return invert_; }
-	bool imageValid() { return !type_.empty(); }
+
+	static const std::string getLocation(ImageLocation imageLocation, const std::string &filename);
 
 protected:
-	std::string type_;
+	ImageLocation imageLocation_;
 	std::string imageName_;
 	std::string alphaName_;
 	std::string hash_;

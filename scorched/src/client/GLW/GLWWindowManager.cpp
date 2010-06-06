@@ -49,8 +49,9 @@ GLWWindowManager::GLWWindowManager() :
 	setCurrentEntry(UINT_MAX);
 
 	Image *map = new Image(ImageFactory::loadImage(
-		S3D::getDataFile("data/images/screen.bmp"),
-		S3D::getDataFile("data/images/screena.bmp"),
+		ImageID::eDataLocation,
+		"data/images/screen.bmp",
+		"data/images/screena.bmp",
 		false));
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->

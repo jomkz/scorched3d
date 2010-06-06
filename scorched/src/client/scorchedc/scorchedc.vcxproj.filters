@@ -168,9 +168,6 @@
     <ClCompile Include="..\..\common\common\FixedVector4.cpp">
       <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\common\ImageID.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\common\Keyboard.cpp">
       <Filter>common</Filter>
     </ClCompile>
@@ -2295,6 +2292,9 @@
     <ClCompile Include="..\..\common\image\ImageStore.cpp">
       <Filter>image</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\image\ImageID.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -2349,9 +2349,6 @@
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\common\FixedVector4.h">
-      <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\common\ImageID.h">
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\common\Keyboard.h">
@@ -4491,6 +4488,9 @@
       <Filter>image</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\image\ImageStore.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\image\ImageID.h">
       <Filter>image</Filter>
     </ClInclude>
   </ItemGroup>

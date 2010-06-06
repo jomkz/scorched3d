@@ -464,13 +464,12 @@ void HeightMapModifier::generateTerrain(HeightMap &hmap,
 	// Check if we need to load a new mask
 	if (!defn.mask.empty())
 	{
-		std::string fileName = S3D::getModFile(defn.mask.c_str());
-		maskMap = ImageFactory::loadImage(fileName);
+		maskMap = ImageFactory::loadImage(ImageID::eModLocation, defn.mask);
 		if (!maskMap.getBits())
 		{
 			S3D::dialogExit("Landscape", S3D::formatStringBuffer(
 				"Error: Failed to find mask map \"%s\"",
-				fileName.c_str()));
+				defn.mask.c_str()));
 		}
 	}
 

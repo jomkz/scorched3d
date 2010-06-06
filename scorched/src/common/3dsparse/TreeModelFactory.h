@@ -61,8 +61,7 @@ public:
 	TreeModelFactory();
 	virtual ~TreeModelFactory();
 
-	Model *createModel(const char *fileName,
-		const char *texName);
+	Model *createModel(const char *fileName);
 
 	static bool getTypes(const char *type, bool snow, 
 		TreeType &normalType, TreeType &burntType);

@@ -35,8 +35,7 @@ public:
 
 	ModelID &operator=(const ModelID &other);
 
-	bool initFromNode(const char *directory,
-		XMLNode *modelNode);
+	bool initFromNode(XMLNode *modelNode);
 
 	bool initFromString(
 		const char *type,

@@ -403,7 +403,9 @@ void Water2Renderer::generate(LandscapeTexBorderWater *water, ProgressCounter *c
 	else
 	{
 		Image loadedBitmapWater = 
-			ImageFactory::loadImage(S3D::getModFile(water->texture.c_str()));
+			ImageFactory::loadImage(
+				ImageID::eModLocation, 
+				water->texture);
 		Image bitmapWater2 = loadedBitmapWater.createResize(128, 128);
 		reflectionTexture_.create(bitmapWater2, true); // Not the reflection in this case
 	}
@@ -438,7 +440,9 @@ void Water2Renderer::generate(LandscapeTexBorderWater *water, ProgressCounter *c
 		// Load the water reflection bitmap
 		// Create water cubemap texture
 		Image loadedBitmapWater = 
-			ImageFactory::loadImage(S3D::getModFile(water->reflection.c_str()));
+			ImageFactory::loadImage(
+				ImageID::eModLocation, 
+				water->reflection);
 		Image bitmapWater2 = loadedBitmapWater.createResize(256, 256);
 		delete noShaderWaterTexture_;
 		if (GLStateExtension::hasCubeMap())

@@ -85,10 +85,9 @@ void ProgressDialog::changeTip()
 	ClientChannelManager::instance()->showText(text);
 }
 
-void ProgressDialog::setIcon(const std::string &iconName)
+void ProgressDialog::setIcon(Image image)
 {
-	Image map = ImageFactory::loadImage(iconName);
-	Image newMap = map.createResize(64, 64);
+	Image newMap = image.createResize(64, 64);
 	icon_.create(newMap);
 }
 
@@ -101,12 +100,11 @@ void ProgressDialog::draw()
 
 		if (!icon_.textureValid())
 		{
-			setIcon(S3D::getDataFile("data/images/tank2.bmp"));
+			Image image = ImageFactory::loadImage(ImageID::eDataLocation, "data/images/tank2.bmp");
+			setIcon(image);
 
-			Image bar1 = 
-				ImageFactory::loadAlphaImage(S3D::getDataFile("data/images/bar1.png"));
-			Image bar2 = 
-				ImageFactory::loadAlphaImage(S3D::getDataFile("data/images/bar2.png"));
+			Image bar1 = ImageFactory::loadAlphaImage(ImageID::eDataLocation, "data/images/bar1.png");
+			Image bar2 = ImageFactory::loadAlphaImage(ImageID::eDataLocation, "data/images/bar2.png");
 			bar1_.create(bar1);
 			bar2_.create(bar2);
 

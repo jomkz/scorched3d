@@ -114,13 +114,19 @@ void Water::generate(ProgressCounter *counter)
 	wWaveDistance_->generate(defn.getLandscapeWidth(), defn.getLandscapeHeight(), height_, counter);
 
 	// Generate the water texture for the spray sprite
-	std::string sprayMaskFile = S3D::getModFile("data/textures/smoke01.bmp");
 	Image sprayMaskBitmap = 
 		ImageFactory::loadImage(
-			sprayMaskFile.c_str(), sprayMaskFile.c_str(), false);
+			ImageID::eModLocation,
+			"data/textures/smoke01.bmp",
+			"data/textures/smoke01.bmp", 
+			false);
 	Image loadedBitmapWater = 
-		ImageFactory::loadImage(S3D::getModFile(water->reflection.c_str()));
-	bitmapWater_ = ImageFactory::loadImage(S3D::getModFile(water->reflection.c_str()));
+		ImageFactory::loadImage(
+			ImageID::eModLocation, 
+			water->reflection);
+	bitmapWater_ = ImageFactory::loadImage(
+		ImageID::eModLocation, 
+		water->reflection);
 
 	{
 		Image bitmapWater = loadedBitmapWater.createResize(

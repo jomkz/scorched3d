@@ -43,48 +43,26 @@ TextureStore::~TextureStore()
 {
 }
 
-GLTexture *TextureStore::loadTexture(const std::string &name, 
-									 const std::string &aname, 
-									 bool invert)
+GLTexture *TextureStore::loadTexture(const ImageID &imageID)
 {
-	std::string wholeName;
-	wholeName += name;
-	wholeName += "::";
-	wholeName += aname;
-
 	// Try to find the texture in the cache first
 	std::map<std::string, GLTexture *>::iterator itor =
-		skins_.find(wholeName);
+		skins_.find(((ImageID &) imageID).getStringHash());
 	if (itor != skins_.end())
 	{
 		return (*itor).second;
 	}
 
 	// Load tank skin as bitmap
-	Image map;
-	if (aname[0])
+	Image map = ImageFactory::loadImageID(imageID);
+	if (!map.getBits())
 	{
-		map = ImageFactory::loadImage(name, aname, invert);
-		if (!map.getBits())
-		{
-			S3D::dialogMessage("Scorched3D load texture", S3D::formatStringBuffer(
-						  "Failed to load texture file \"%s\",\n"
-						  "alpha file \"%s\"",
-						  name.c_str(),
-						  aname.c_str()));
-			return 0;
-		}
-	}
-	else
-	{
-		map = ImageFactory::loadImage(name);
-		if (!map.getBits())
-		{
-			S3D::dialogMessage("Scorched3D load texture", S3D::formatStringBuffer(
-						  "Failed to load texture file \"%s\"",
-						  name.c_str()));
-			return 0;
-		}
+		S3D::dialogMessage("Scorched3D load texture", S3D::formatStringBuffer(
+			"Failed to load texture file \"%s\",\n"
+			"alpha file \"%s\"",
+			((ImageID &) imageID).getImageName().c_str(),
+			((ImageID &) imageID).getAlphaName().c_str()));
+		return 0;
 	}
 
 	// HACK for skin creator
@@ -103,12 +81,11 @@ GLTexture *TextureStore::loadTexture(const std::string &name,
 	if (!texture->create(map))
 	{
 		S3D::dialogMessage("Scorched3D create texture", S3D::formatStringBuffer(
-					  "Failed to create texture \"%s\"",
-					  name.c_str()));
+			"Failed to create texture \"%s\"",
+			((ImageID &) imageID).getImageName().c_str()));
 		return 0;
 	}
 
-	skins_[wholeName] = texture;
+	skins_[((ImageID &) imageID).getStringHash()] = texture;
 	return texture;
 }
-

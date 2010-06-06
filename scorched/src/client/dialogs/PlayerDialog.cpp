@@ -75,7 +75,7 @@ PlayerDialog::PlayerDialog() :
 	addWidget(infoPanel);
 
 	// Create a texture to display the player color selector
-	Image map = ImageFactory::loadImage(S3D::getDataFile("data/images/white.bmp"));
+	Image map = ImageFactory::loadImage(ImageID::eDataLocation, "data/images/white.bmp");
 	colorTexture_.create(map);
 
 	// Create players avatar choice

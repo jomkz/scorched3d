@@ -62,7 +62,8 @@ void BackdropDialog::drawBackground()
 	{
 		createdTexture = true;
 		Image originalBackMap = ImageFactory::loadImage(
-			S3D::getDataFile("data/images/backdrop.jpg"));
+			ImageID::eDataLocation,
+			"data/images/backdrop.jpg");
 		int w = originalBackMap.getWidth();
 		int h = originalBackMap.getHeight();
 		while (w > GLViewPort::getActualWidth() || h > GLViewPort::getActualHeight())
@@ -103,8 +104,9 @@ void BackdropDialog::drawLogo()
 		lastMod_ = S3D::getDataFileMod();
 
 		Image logoMap = ImageFactory::loadImage(
-			S3D::getModFile("data/windows/scorched.jpg"),
-			S3D::getModFile("data/windows/scorcheda.jpg"),
+			ImageID::eModLocation,
+			"data/windows/scorched.jpg",
+			"data/windows/scorcheda.jpg",
 			false);
 		logoTex_.create(logoMap, false);
 	}
@@ -145,7 +147,8 @@ void BackdropDialog::drawFooter()
 	{
 		createdTexture = true;
 		Image logoMap = ImageFactory::loadAlphaImage(
-			S3D::getDataFile("data/images/hiscore.png"));
+			ImageID::eDataLocation,
+			"data/images/hiscore.png");
 		footerTex_.create(logoMap, false);
 	}
 

@@ -33,7 +33,7 @@ PlacementObjectShadow::~PlacementObjectShadow()
 bool PlacementObjectShadow::readXML(XMLNode *node)
 {
 	shadowDef_.setDrawShadow(false);
-	shadowDef_.readXML(node, ".");
+	shadowDef_.readXML(node);
 	size_ = FixedVector(1, 1, 1);
 	node->getNamedChild("size", size_, false);
 

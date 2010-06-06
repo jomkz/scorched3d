@@ -72,7 +72,7 @@ bool WeaponProjectile::parseXML(AccessoryCreateContext &context, XMLNode *access
 	XMLNode *modelNode = 0;
 	if (accessoryNode->getNamedChild("projectilemodel", modelNode, false))
 	{
-		if (!modelId_.initFromNode("data/accessories", modelNode)) return false;
+		if (!modelId_.initFromNode(modelNode)) return false;
 	}
 
 	// Get smoke life

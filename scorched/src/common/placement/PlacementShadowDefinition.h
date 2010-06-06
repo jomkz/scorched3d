@@ -22,7 +22,7 @@
 #define __INCLUDE_PlacementShadowDefinitionh_INCLUDE__
 
 #include <XML/XMLNode.h>
-#include <common/ImageID.h>
+#include <image/ImageID.h>
 
 class ScorchedContext;
 class PlacementShadowDefinition
@@ -44,7 +44,7 @@ public:
 	PlacementShadowDefinition();
 	virtual ~PlacementShadowDefinition();
 
-	virtual bool readXML(XMLNode *node, const char *base);
+	virtual bool readXML(XMLNode *node);
 
 	void updateLandscapeHeight(ScorchedContext &context,
 		FixedVector &position, FixedVector &size);

@@ -518,19 +518,19 @@ void Landscape::generate(ProgressCounter *counter)
 			(LandscapeTexTextureGenerate *) tex->texture;
 
 		Image texture0 = 
-			ImageFactory::loadImage(S3D::getModFile(generate->texture0.c_str()));
+			ImageFactory::loadImage(ImageID::eModLocation, generate->texture0.c_str());
 		Image texture1 = 
-			ImageFactory::loadImage(S3D::getModFile(generate->texture1.c_str()));
+			ImageFactory::loadImage(ImageID::eModLocation, generate->texture1.c_str());
 		Image texture2 = 
-			ImageFactory::loadImage(S3D::getModFile(generate->texture2.c_str()));
+			ImageFactory::loadImage(ImageID::eModLocation, generate->texture2.c_str());
 		Image texture3 = 
-			ImageFactory::loadImage(S3D::getModFile(generate->texture3.c_str()));
+			ImageFactory::loadImage(ImageID::eModLocation, generate->texture3.c_str());
 		Image bitmapShore = 
-			ImageFactory::loadImage(S3D::getModFile(generate->shore.c_str()));
+			ImageFactory::loadImage(ImageID::eModLocation, generate->shore.c_str());
 		Image bitmapRock = 
-			ImageFactory::loadImage(S3D::getModFile(generate->rockside.c_str()));
+			ImageFactory::loadImage(ImageID::eModLocation, generate->rockside.c_str());
 		Image bitmapRoof = 
-			ImageFactory::loadImage(S3D::getModFile(generate->roof.c_str()));
+			ImageFactory::loadImage(ImageID::eModLocation, generate->roof.c_str());
 		Image *bitmaps[4];
 		bitmaps[0] = &texture0;
 		bitmaps[1] = &texture1;
@@ -555,7 +555,7 @@ void Landscape::generate(ProgressCounter *counter)
 
 		if (counter) counter->setNewOp(LANG_RESOURCE("LANDSCAPE_MAP", "Landscape Map"));
 		Image texture = 
-			ImageFactory::loadImage(S3D::getModFile(generate->texture.c_str()));
+			ImageFactory::loadImage(ImageID::eModLocation, generate->texture.c_str());
 		mainMap_ = texture.createResize(1024, 1024);
 
 		// Set the general surround and roof texture
@@ -629,11 +629,16 @@ void Landscape::generate(ProgressCounter *counter)
 		GL_UNSIGNED_BYTE, bitmapPlan_.getBits());
 
 	// Generate the scorch map for the landscape
-	std::string sprayMaskFile = S3D::getModFile("data/textures/smoke01.bmp");
 	Image sprayMaskBitmap = 
-		ImageFactory::loadImage(sprayMaskFile.c_str(), sprayMaskFile.c_str(), false);
+		ImageFactory::loadImage(
+			ImageID::eModLocation, 
+			"data/textures/smoke01.bmp", 
+			"data/textures/smoke01.bmp", 
+			false);
 	scorchMap_ = 
-		ImageFactory::loadImage(S3D::getModFile(tex->scorch.c_str()));
+		ImageFactory::loadImage(
+			ImageID::eModLocation, 
+			tex->scorch);
 	Image scorchMap = scorchMap_.createResize(
 		sprayMaskBitmap.getWidth(), sprayMaskBitmap.getHeight());
 	Image texture1New = ImageFactory::createBlank(sprayMaskBitmap.getWidth(), sprayMaskBitmap.getHeight(), true);
@@ -653,12 +658,16 @@ void Landscape::generate(ProgressCounter *counter)
 
 	// Magma
 	Image bitmapMagma = 
-		ImageFactory::loadImage(S3D::getModFile(tex->magmasmall.c_str()));
+		ImageFactory::loadImage(
+			ImageID::eModLocation, 
+			tex->magmasmall);
 	DIALOG_ASSERT(magTexture_.replace(bitmapMagma));
 
 	// Detail
 	Image bitmapDetail = 
-		ImageFactory::loadImage(S3D::getModFile(tex->detail.c_str()));
+		ImageFactory::loadImage(
+			ImageID::eModLocation, 
+			tex->detail);
 	DIALOG_ASSERT(detailTexture_.replace(bitmapDetail, true));
 
 	// Set the fog color

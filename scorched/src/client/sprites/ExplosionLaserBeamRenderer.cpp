@@ -61,9 +61,11 @@ void ExplosionLaserBeamRenderer::init(unsigned int playerId,
 	}
 	if (!_texture)
 	{
-		std::string file1 = S3D::getModFile("data/textures/waves.bmp");
-	
-		Image map = ImageFactory::loadImage(file1.c_str(), file1.c_str(), false);
+		Image map = ImageFactory::loadImage(
+			ImageID::eModLocation,
+			"data/textures/waves.bmp",
+			"data/textures/waves.bmp",
+			false);
 		_texture = new GLTexture;
 		_texture->create(map, true);
 	}

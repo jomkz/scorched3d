@@ -64,13 +64,20 @@ void Sun::generate()
 	std::string file = S3D::getModFile(tex.suntexture.c_str());
 	if (!tex.suntexturemask.c_str()[0])
 	{
-		Image map = ImageFactory::loadImage(file.c_str(), file.c_str(), false);
+		Image map = ImageFactory::loadImage(
+			ImageID::eModLocation,
+			tex.suntexture,
+			tex.suntexture,
+			false);
 		DIALOG_ASSERT(texture_.replace(map, true));
 	}
 	else
 	{
-		std::string mask = S3D::getModFile(tex.suntexturemask.c_str());
-		Image map = ImageFactory::loadImage(file.c_str(), mask.c_str(), true);
+		Image map = ImageFactory::loadImage(
+			ImageID::eModLocation,
+			tex.suntexture,
+			tex.suntexturemask,
+			true);
 		DIALOG_ASSERT(texture_.replace(map, true));
 	}
 }

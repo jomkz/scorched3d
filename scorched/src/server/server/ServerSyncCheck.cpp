@@ -24,7 +24,6 @@
 #include <server/ServerDestinations.h>
 #include <server/ScorchedServer.h>
 #include <simactions/SyncCheckSimAction.h>
-#include <image/ImageFactory.h>
 #include <landscapemap/GroundMaps.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <common/OptionsScorched.h>

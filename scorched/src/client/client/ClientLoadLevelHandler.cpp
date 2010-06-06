@@ -47,6 +47,7 @@
 #include <tank/TankCamera.h>
 #include <target/TargetRenderer.h>
 #include <net/NetInterface.h>
+#include <image/ImageFactory.h>
 
 ClientLoadLevelHandler *ClientLoadLevelHandler::instance_ = 0;
 
@@ -131,10 +132,10 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 		message.getLandscapeDefinition().getName());
 	if (landscapeDefinition)
 	{
-		std::string fileName = S3D::getModFile(
+		Image image = ImageFactory::loadImage(ImageID::eModLocation,
 			S3D::formatStringBuffer("data/landscapes/%s", 
 			landscapeDefinition->picture.c_str()));
-		ProgressDialog::instance()->setIcon(fileName.c_str());
+		ProgressDialog::instance()->setIcon(image);
 	}
 
 	// Generate new landscape

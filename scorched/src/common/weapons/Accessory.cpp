@@ -125,7 +125,7 @@ bool Accessory::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode
 	XMLNode *modelNode = 0;
 	if (accessoryNode->getNamedChild("model", modelNode, false))
 	{
-		if (!modelId_.initFromNode("data/accessories", modelNode)) return false;
+		if (!modelId_.initFromNode(modelNode)) return false;
 	}
 
 	// Get action
@@ -255,7 +255,8 @@ GLTexture *Accessory::getTexture()
 	{
 		Image bmap =
 			ImageFactory::loadAlphaImage(
-				S3D::getModFile(S3D::formatStringBuffer("data/textures/wicons/%s", getIconName())));
+				ImageID::eModLocation,
+				S3D::formatStringBuffer("data/textures/wicons/%s", getIconName()));
 		texture = new GLTexture();
 		texture->create(bmap, false);
 	}
@@ -263,7 +264,8 @@ GLTexture *Accessory::getTexture()
 	{
 		Image bmap =
 			ImageFactory::loadAlphaImage(
-				S3D::getModFile(S3D::formatStringBuffer("data/textures/wicons/%s", "tracer.bmp")));
+				ImageID::eModLocation,
+				S3D::formatStringBuffer("data/textures/wicons/%s", "tracer.bmp"));
 		texture = new GLTexture();
 		texture->create(bmap, false);
 	}

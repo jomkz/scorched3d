@@ -255,30 +255,38 @@ void NetworkSelectDialog::drawColumnGames(unsigned int id, int row, int col,
 		if (!okTex_)
 		{
 			okTex_ = TextureStore::instance()->loadTexture(
-				S3D::getDataFile("data/images/ok.bmp"),
-				S3D::getDataFile("data/images/mask.bmp"));
+				ImageID(ImageID::eDataLocation,
+					"data/images/ok.bmp",
+					"data/images/mask.bmp"));
 			questionTex_ = TextureStore::instance()->loadTexture(
-				S3D::getDataFile("data/images/question.bmp"),
-				S3D::getDataFile("data/images/mask.bmp"));
+				ImageID(ImageID::eDataLocation,
+					"data/images/question.bmp",
+					"data/images/mask.bmp"));
 			warningTex_ = TextureStore::instance()->loadTexture(
-				S3D::getDataFile("data/images/warn.bmp"),
-				S3D::getDataFile("data/images/mask.bmp"));
+				ImageID(ImageID::eDataLocation,
+					"data/images/warn.bmp",
+					"data/images/mask.bmp"));
 			noentryTex_ = TextureStore::instance()->loadTexture(
-				S3D::getDataFile("data/images/noentry.bmp"),
-				S3D::getDataFile("data/images/mask.bmp"));
+				ImageID(ImageID::eDataLocation,
+					"data/images/noentry.bmp",
+					"data/images/mask.bmp"));
 			exclaimTex_ = TextureStore::instance()->loadTexture(
-				S3D::getDataFile("data/images/exclaim.bmp"),
-				S3D::getDataFile("data/images/mask.bmp"));
+				ImageID(ImageID::eDataLocation,
+					"data/images/exclaim.bmp",
+					"data/images/mask.bmp"));
 			keyTex_ = TextureStore::instance()->loadTexture(
-				S3D::getDataFile("data/images/key.bmp"),
-				S3D::getDataFile("data/images/keya.bmp"),
-				true);
+				ImageID(ImageID::eDataLocation,
+					"data/images/key.bmp",
+					"data/images/keya.bmp",
+					true));
 			cogTex_ = TextureStore::instance()->loadTexture(
-				S3D::getDataFile("data/images/cog.bmp"),
-				S3D::getDataFile("data/images/coga.bmp"),
-				true);
+				ImageID(ImageID::eDataLocation,
+					"data/images/cog.bmp",
+					"data/images/coga.bmp",
+					true));
 			tankTex_ = TextureStore::instance()->loadTexture(
-				S3D::getDataFile("data/images/tank2s.bmp"));
+				ImageID(ImageID::eDataLocation,
+				"data/images/tank2s.bmp"));
 		}
 
 		LANG_RESOURCE_CONST_VAR(NONE, "NONE", "None");

@@ -47,28 +47,9 @@ Image ImageStore::loadImage(ImageID &imageId)
 		imageMap_.find(imageId.getStringHash());
 	if (findItor == imageMap_.end())
 	{
-		Image image = getImage(imageId);
+		Image image = ImageFactory::loadImageID(imageId);
 		imageMap_[imageId.getStringHash()] = new Image(image);
 		return image;
 	}
 	return *findItor->second;
-}
-
-Image ImageStore::getImage(ImageID &id)
-{
-	Image image;
-	if (id.getAlphaName()[0])
-	{
-		image = ImageFactory::loadImage(
-			S3D::getModFile(id.getImageName()),
-			S3D::getModFile(id.getAlphaName()),
-			id.getInvert());
-	}
-	else
-	{
-		image = ImageFactory::loadImage(
-			S3D::getModFile(id.getImageName()));
-	}
-
-	return image;
 }

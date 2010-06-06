@@ -98,13 +98,12 @@ bool HeightMapLoader::generateTerrain(
 		// Load the landscape
 		levelSurround = file->levelsurround;
 		
-		std::string fileName = S3D::getModFile(file->file.c_str());
-		Image image = ImageFactory::loadImage(fileName);
+		Image image = ImageFactory::loadImage(ImageID::eModLocation, file->file);
 		if (!image.getBits())
 		{
 			S3D::dialogMessage("HeightMapLoader", S3D::formatStringBuffer(
 				"Error: Unable to find landscape map \"%s\"",
-				fileName.c_str()));
+				file->file.c_str()));
 			return false;
 		}
 		else

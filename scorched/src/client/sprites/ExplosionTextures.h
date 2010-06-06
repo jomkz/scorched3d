@@ -49,9 +49,6 @@ public:
 
 protected:
 	static ExplosionTextures *instance_;
-
-	bool addTextureToSet(GLTextureSet &set,
-						const char *texPath);
 private:
 	ExplosionTextures();
 	virtual ~ExplosionTextures();

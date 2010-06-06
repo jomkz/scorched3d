@@ -377,37 +377,47 @@ void ModelRendererTree::drawInternalPre(bool setState)
 	{
 		listsCreated = true;
 		{
-			std::string file1 = S3D::getModFile("data/textures/pine2.bmp");
-			std::string file2 = S3D::getModFile("data/textures/pine2a.bmp");
-			Image map = ImageFactory::loadImage(file1.c_str(), file2.c_str(), false);
+			Image map = ImageFactory::loadImage(
+				ImageID::eModLocation,
+				"data/textures/pine2.bmp",
+				"data/textures/pine2.bmp",
+				false);
 			DIALOG_ASSERT(map.getBits());
 			pineTextureA_.create(map, true);
 		}
 		{
-			std::string file1 = S3D::getModFile("data/textures/pine3.bmp");
-			std::string file2 = S3D::getModFile("data/textures/pine3a.bmp");
-			Image map = ImageFactory::loadImage(file1.c_str(), file2.c_str(), false);
+			Image map = ImageFactory::loadImage(
+				ImageID::eModLocation,
+				"data/textures/pine3.bmp",
+				"data/textures/pine3a.bmp", 
+				false);
 			DIALOG_ASSERT(map.getBits());
 			pineTextureB_.create(map, true);
 		}
 		{
-			std::string file1 = S3D::getModFile("data/textures/pine.bmp");
-			std::string file2 = S3D::getModFile("data/textures/pinea.bmp");
-			Image map = ImageFactory::loadImage(file1.c_str(), file2.c_str(), false);
+			Image map = ImageFactory::loadImage(
+				ImageID::eModLocation,
+				"data/textures/pine.bmp",
+				"data/textures/pinea.bmp",
+				false);
 			DIALOG_ASSERT(map.getBits());
 			palmTextureA_.create(map, true);
 		}
 		{
-			std::string file1 = S3D::getModFile("data/textures/palm2.bmp");
-			std::string file2 = S3D::getModFile("data/textures/palm2a.bmp");
-			Image map = ImageFactory::loadImage(file1.c_str(), file2.c_str(), false);
+			Image map = ImageFactory::loadImage(
+				ImageID::eModLocation,
+				"data/textures/palm2.bmp",
+				"data/textures/palm2a.bmp",
+				false);
 			DIALOG_ASSERT(map.getBits());
 			palmTextureB_.create(map, true);
 		}
 		{
-			std::string file1 = S3D::getModFile("data/textures/oak.bmp");
-			std::string file2 = S3D::getModFile("data/textures/oaka.bmp");
-			Image map = ImageFactory::loadImage(file1.c_str(), file2.c_str(), false);
+			Image map = ImageFactory::loadImage(
+				ImageID::eModLocation,
+				"data/textures/oak.bmp",
+				"data/textures/oaka.bmp",
+				false);
 			DIALOG_ASSERT(map.getBits());
 			oakTextureA_.create(map, true);
 		}

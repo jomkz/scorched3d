@@ -298,8 +298,9 @@ TankMenus::PlayerMenu::PlayerMenu()
 	bar.setSeperator();
 
 	Image *map = new Image(ImageFactory::loadImage(
-		S3D::getDataFile("data/images/setting.bmp"),
-		S3D::getDataFile("data/images/settinga.bmp"),
+		ImageID::eDataLocation,
+		"data/images/setting.bmp",
+		"data/images/settinga.bmp",
 		false));
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->addMenu(LANG_RESOURCE("GAME", "Game"), 
@@ -408,8 +409,9 @@ bool TankMenus::PlayerMenu::getEnabled(const char* menuName)
 TankMenus::AccessoryMenu::AccessoryMenu()
 {
 	Image *map = new Image(ImageFactory::loadImage(
-		S3D::getDataFile("data/images/bomb.bmp"),
-		S3D::getDataFile("data/images/bomba.bmp"),
+		ImageID::eDataLocation,
+		"data/images/bomb.bmp",
+		"data/images/bomba.bmp",
 		false));
 	DIALOG_ASSERT(map->getBits());
 	MainMenuDialog::instance()->addMenu(LANG_RESOURCE("WEAPONS", "Weapons"), 

@@ -183,10 +183,12 @@ void GLWWindow::drawMaximizedWindow()
 			createdTexture = true;
 
 			Image moveMap = ImageFactory::loadAlphaImage(
-				S3D::getModFile("data/windows/move.bmp"));
+				ImageID::eModLocation,
+				"data/windows/move.bmp");
 			moveTexture_.create(moveMap, false);
 			Image resizeMap = ImageFactory::loadAlphaImage(
-				S3D::getModFile("data/windows/resize.bmp"));
+				ImageID::eModLocation,
+				"data/windows/resize.bmp");
 			resizeTexture_.create(resizeMap, false);
 		}
 
