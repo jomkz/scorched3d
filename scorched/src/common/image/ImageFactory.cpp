@@ -50,7 +50,7 @@ Image ImageFactory::loadImageID(
 }
 
 Image ImageFactory::loadAlphaImage(
-	ImageID::ImageLocation imageLocation,
+	S3D::FileLocation imageLocation,
 	const std::string &filename)
 {
 	ImageID imageId(imageLocation, "", filename);
@@ -58,7 +58,7 @@ Image ImageFactory::loadAlphaImage(
 }
 
 Image ImageFactory::loadImage(
-	ImageID::ImageLocation imageLocation,
+	S3D::FileLocation imageLocation,
 	const std::string &filename, 
 	const std::string &alphafilename, 
 	bool invert)
@@ -98,9 +98,9 @@ Image ImageFactory::grabScreen()
 }
 #endif
 
-Image ImageFactory::loadImageInternal(ImageID::ImageLocation imageLocation, const std::string &filename, bool loadAlpha)
+Image ImageFactory::loadImageInternal(S3D::FileLocation imageLocation, const std::string &filename, bool loadAlpha)
 {
-	std::string expandedFilename = ImageID::getLocation(imageLocation, filename);
+	std::string expandedFilename = S3D::getLocation(imageLocation, filename);
 	if (strstr(filename.c_str(), ".png"))
 	{
 		return ImagePngFactory::loadFromFile(expandedFilename.c_str(), loadAlpha);

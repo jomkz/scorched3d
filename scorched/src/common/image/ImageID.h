@@ -22,20 +22,14 @@
 #define __INCLUDE_ImageIDh_INCLUDE__
 
 #include <string>
+#include <common/DefinesFile.h>
 
 class XMLNode;
 class ImageID
 {
 public:
-	enum ImageLocation
-	{
-		eAbsLocation,
-		eDataLocation,
-		eModLocation
-	};
-
 	ImageID();
-	ImageID(ImageLocation imageLocation,
+	ImageID(S3D::FileLocation imageLocation,
 		const std::string &imageName,
 		const std::string &alphaName = "",
 		bool invert = false);
@@ -44,21 +38,19 @@ public:
 	bool initFromNode(XMLNode *imageNode);
 
 	bool initFromString(
-		ImageLocation imageLocation,
+		S3D::FileLocation imageLocation,
 		const std::string &imageName,
 		const std::string &alphaName = "",
 		bool invert = false);
 
-	ImageLocation getImageLocation() { return imageLocation_; }
+	S3D::FileLocation getImageLocation() { return imageLocation_; }
 	const std::string &getStringHash();
 	const std::string &getImageName() { return imageName_; }
 	const std::string &getAlphaName() { return alphaName_; }
 	bool getInvert() { return invert_; }
 
-	static const std::string getLocation(ImageLocation imageLocation, const std::string &filename);
-
 protected:
-	ImageLocation imageLocation_;
+	S3D::FileLocation imageLocation_;
 	std::string imageName_;
 	std::string alphaName_;
 	std::string hash_;

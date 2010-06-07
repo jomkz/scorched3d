@@ -106,7 +106,7 @@ bool ClientConnectionAcceptHandler::processMessage(
 		{
 			// Use the default icon
 			Image map = ImageFactory::loadImage(
-				ImageID::eDataLocation,
+				S3D::eDataLocation,
 				"data/images/scorched.png", 
 				"data/images/scorcheda.png", 
 				false);

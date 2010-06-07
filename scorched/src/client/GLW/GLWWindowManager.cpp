@@ -49,7 +49,7 @@ GLWWindowManager::GLWWindowManager() :
 	setCurrentEntry(UINT_MAX);
 
 	Image *map = new Image(ImageFactory::loadImage(
-		ImageID::eDataLocation,
+		S3D::eDataLocation,
 		"data/images/screen.bmp",
 		"data/images/screena.bmp",
 		false));

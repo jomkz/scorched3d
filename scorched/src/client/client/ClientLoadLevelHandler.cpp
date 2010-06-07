@@ -132,7 +132,7 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 		message.getLandscapeDefinition().getName());
 	if (landscapeDefinition)
 	{
-		Image image = ImageFactory::loadImage(ImageID::eModLocation,
+		Image image = ImageFactory::loadImage(S3D::eModLocation,
 			S3D::formatStringBuffer("data/landscapes/%s", 
 			landscapeDefinition->picture.c_str()));
 		ProgressDialog::instance()->setIcon(image);

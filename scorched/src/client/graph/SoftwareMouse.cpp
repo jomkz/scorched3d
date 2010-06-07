@@ -56,7 +56,7 @@ void SoftwareMouse::draw(const unsigned currentstate)
 	{
 		createdTexture = true;
 		Image map = ImageFactory::loadImage(
-			ImageID::eDataLocation,
+			S3D::eDataLocation,
 			"data/images/pointer.bmp",
 			"data/images/pointera.bmp");
 		mouseTex_.create(map, false);

@@ -252,11 +252,11 @@ bool GLWScorchedInfoSpinner::initFromXML(XMLNode *node)
 	if (!node->getNamedChild("unfilledimage", unfilledImageName)) return false;
 
 	Image filledImage = ImageFactory::loadImage(
-		ImageID::eModLocation,
+		S3D::eModLocation,
 		filledImageName);
 	filledTex_.create(filledImage);
 	Image unfilledImage = ImageFactory::loadImage(
-		ImageID::eModLocation,
+		S3D::eModLocation,
 		unfilledImageName);
 	unfilledTex_.create(unfilledImage);
 

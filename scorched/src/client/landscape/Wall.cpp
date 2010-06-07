@@ -40,7 +40,7 @@ void Wall::draw()
 	{
 		createdTexture_ = true;
 		Image map = ImageFactory::loadImage(
-			ImageID::eModLocation,
+			S3D::eModLocation,
 			"data/textures/bordershield/grid.bmp",
 			"data/textures/bordershield/grid.bmp",
 			false);

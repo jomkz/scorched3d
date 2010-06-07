@@ -57,7 +57,7 @@ void PlacementTypeTree::getPositions(ScorchedContext &context,
 	Image map = bmap;
 	if (mask.c_str()[0])
 	{	
-		map = ImageFactory::loadImage(ImageID::eModLocation, mask);
+		map = ImageFactory::loadImage(S3D::eModLocation, mask);
 		if (!map.getBits())
 		{
 			S3D::dialogExit("PlacementTypeTree",

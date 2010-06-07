@@ -98,7 +98,7 @@ bool HeightMapLoader::generateTerrain(
 		// Load the landscape
 		levelSurround = file->levelsurround;
 		
-		Image image = ImageFactory::loadImage(ImageID::eModLocation, file->file);
+		Image image = ImageFactory::loadImage(S3D::eModLocation, file->file);
 		if (!image.getBits())
 		{
 			S3D::dialogMessage("HeightMapLoader", S3D::formatStringBuffer(

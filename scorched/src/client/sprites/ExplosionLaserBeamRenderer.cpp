@@ -62,7 +62,7 @@ void ExplosionLaserBeamRenderer::init(unsigned int playerId,
 	if (!_texture)
 	{
 		Image map = ImageFactory::loadImage(
-			ImageID::eModLocation,
+			S3D::eModLocation,
 			"data/textures/waves.bmp",
 			"data/textures/waves.bmp",
 			false);

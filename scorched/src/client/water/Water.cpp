@@ -116,16 +116,16 @@ void Water::generate(ProgressCounter *counter)
 	// Generate the water texture for the spray sprite
 	Image sprayMaskBitmap = 
 		ImageFactory::loadImage(
-			ImageID::eModLocation,
+			S3D::eModLocation,
 			"data/textures/smoke01.bmp",
 			"data/textures/smoke01.bmp", 
 			false);
 	Image loadedBitmapWater = 
 		ImageFactory::loadImage(
-			ImageID::eModLocation, 
+			S3D::eModLocation, 
 			water->reflection);
 	bitmapWater_ = ImageFactory::loadImage(
-		ImageID::eModLocation, 
+		S3D::eModLocation, 
 		water->reflection);
 
 	{

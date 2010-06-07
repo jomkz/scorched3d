@@ -26,7 +26,7 @@ ImageID::ImageID()
 {
 }
 
-ImageID::ImageID(ImageLocation imageLocation,
+ImageID::ImageID(S3D::FileLocation imageLocation,
 	const std::string &imageName,
 	const std::string &alphaName,
 	bool invert) :
@@ -42,7 +42,7 @@ ImageID::~ImageID()
 }
 
 bool ImageID::initFromString(
-	ImageLocation imageLocation,
+	S3D::FileLocation imageLocation,
 	const std::string &imageName,
 	const std::string &alphaName,
 	bool invert)
@@ -51,6 +51,26 @@ bool ImageID::initFromString(
 	imageName_ = imageName;
 	alphaName_ = alphaName;
 	invert_ = invert;
+
+	return true;
+}
+
+bool ImageID::initFromNode(XMLNode *imageNode)
+{
+	bool invertTmp = false;
+	std::string imageNameTmp, alphaNameTmp;
+	imageNode->getNamedChild("image", imageNameTmp, false);
+	imageNode->getNamedChild("alpha", alphaNameTmp, false);
+	imageNode->getNamedChild("invert", invertTmp, false);
+
+	S3D::FileLocation imageLocationTmp = S3D::eModLocation;
+	std::string location = "mod";
+	imageNode->getNamedChild("location", location, false);
+	if (location == "mod") imageLocationTmp = S3D::eModLocation;
+	else if (location == "data") imageLocationTmp = S3D::eDataLocation;
+	else S3D::dialogExit("ImageID", S3D::formatStringBuffer("Unknown location %s", location.c_str()));
+
+	initFromString(imageLocationTmp, imageNameTmp, alphaNameTmp, invertTmp);
 
 	if (!imageName_.empty()) 
 	{
@@ -75,48 +95,7 @@ bool ImageID::initFromString(
 		}
 	}
 
-	return true;
-}
-
-bool ImageID::initFromNode(XMLNode *imageNode)
-{
-	bool invertTmp = false;
-	std::string imageNameTmp, alphaNameTmp;
-	imageNode->getNamedChild("image", imageNameTmp, false);
-	imageNode->getNamedChild("alpha", alphaNameTmp, false);
-	imageNode->getNamedChild("invert", invertTmp, false);
-
-	ImageLocation imageLocationTmp = ImageID::eModLocation;
-	std::string location = "mod";
-	imageNode->getNamedChild("location", location, false);
-	if (location == "mod") imageLocationTmp = eModLocation;
-	else if (location == "data") imageLocationTmp = eDataLocation;
-	else S3D::dialogExit("ImageID", S3D::formatStringBuffer("Unknown location %s", location.c_str()));
-
-	initFromString(imageLocationTmp, imageNameTmp, alphaNameTmp, invertTmp);
-
 	return imageNode->failChildren();
-}
-
-const std::string ImageID::getLocation(ImageLocation imageLocation, const std::string &filename)
-{
-	std::string expandedFilename;
-	switch (imageLocation)
-	{
-	case ImageID::eDataLocation:
-		expandedFilename = S3D::getDataFile(filename);
-		break;
-	case ImageID::eModLocation:
-		expandedFilename = S3D::getModFile(filename);
-		break;
-	case ImageID::eAbsLocation:
-		expandedFilename = filename;
-		break;
-	default:
-		S3D::dialogExit("ImageFactory", S3D::formatStringBuffer("Unknown imagelocation %u", imageLocation));
-		break;
-	}
-	return expandedFilename;
 }
 
 const std::string &ImageID::getStringHash()

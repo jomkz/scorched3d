@@ -31,12 +31,12 @@ public:
 	static Image loadImageID(
 		const ImageID &imageId);
 	static Image loadImage(
-		ImageID::ImageLocation imageLocation,
+		S3D::FileLocation imageLocation,
 		const std::string &filename, 
 		const std::string &alphafilename = "", 
 		bool invert = true);
 	static Image loadAlphaImage(
-		ImageID::ImageLocation imageLocation,
+		S3D::FileLocation imageLocation,
 		const std::string &filename);
 	static Image createBlank(int width, int height, 
 		bool alpha = false, unsigned char fill = 255);
@@ -46,7 +46,7 @@ public:
 #endif
 
 protected:
-	static Image loadImageInternal(ImageID::ImageLocation imageLocation, const std::string &filename, bool alphaName);
+	static Image loadImageInternal(S3D::FileLocation imageLocation, const std::string &filename, bool alphaName);
 	static Image combineImage(Image file, Image alphaFile, bool invert);
 
 private:

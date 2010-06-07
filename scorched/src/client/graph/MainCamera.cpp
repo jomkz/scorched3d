@@ -62,7 +62,7 @@ MainCamera::MainCamera() :
 	waterTransparency_(1.0f)
 {
 	Image *map = new Image(ImageFactory::loadImage(
-		ImageID::eDataLocation,
+		S3D::eDataLocation,
 		"data/images/camera.bmp",
 		"data/images/cameraa.bmp",
 		false));

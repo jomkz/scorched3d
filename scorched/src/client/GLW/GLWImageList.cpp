@@ -53,7 +53,7 @@ void GLWImageList::addDirectory(const std::string &directory)
 		itor++)
 	{
 		const char *filename = (*itor).c_str();
-		Image png = ImageFactory::loadImage(ImageID::eAbsLocation, filename);
+		Image png = ImageFactory::loadImage(S3D::eAbsLocation, filename);
 		if (png.getBits() &&
 			png.getWidth() == 32 &&
 			png.getHeight() == 32)

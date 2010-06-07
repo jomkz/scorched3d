@@ -39,7 +39,7 @@ GLWIconListSaveItem::GLWIconListSaveItem(
 	file_(file), time_(time)
 {
 	GLTexture *texture = TextureStore::instance()->loadTexture(
-		ImageID(ImageID::eDataLocation, "data/images/save.bmp"));
+		ImageID(S3D::eDataLocation, "data/images/save.bmp"));
 	icon_.setTexture(texture);
 }
 

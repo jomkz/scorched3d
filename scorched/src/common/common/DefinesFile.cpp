@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <string>
 #include <string.h>
-#include <common/DefinesFile.h>
+#include <common/Defines.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -102,4 +102,26 @@ std::string S3D::getOSDesc()
 	return "Unix";
 #endif
 #endif
+}
+
+const std::string S3D::getLocation(FileLocation imageLocation, const std::string &filename)
+{
+	std::string expandedFilename;
+	switch (imageLocation)
+	{
+	case eDataLocation:
+		expandedFilename = S3D::getDataFile(filename);
+		break;
+	case eModLocation:
+		expandedFilename = S3D::getModFile(filename);
+		break;
+	case eAbsLocation:
+		expandedFilename = filename;
+		break;
+	default:
+		S3D::dialogExit("S3D::getLocation", 
+			S3D::formatStringBuffer("Unknown imagelocation %u", imageLocation));
+		break;
+	}
+	return expandedFilename;
 }

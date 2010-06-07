@@ -55,7 +55,7 @@ bool ExplosionTextures::createTextures(ProgressCounter *counter)
 	{
 		Image bitmap = 
 			ImageFactory::loadImage(
-				ImageID::eDataLocation, 
+				S3D::eDataLocation, 
 				"data/images/arrow.bmp",
 				"data/images/arrowi.bmp",
 				true);
@@ -65,7 +65,7 @@ bool ExplosionTextures::createTextures(ProgressCounter *counter)
 	}
 
 	Image bitmap = ImageFactory::loadImage(
-		ImageID::eModLocation, 
+		S3D::eModLocation, 
 		"data/textures/smoke01.bmp",
 		"data/textures/smoke01.bmp",
 		false);
@@ -73,7 +73,7 @@ bool ExplosionTextures::createTextures(ProgressCounter *counter)
 	DIALOG_ASSERT(smokeTexture.textureValid());
 
 	Image bitmap2 = ImageFactory::loadImage(
-		ImageID::eModLocation,
+		S3D::eModLocation,
 		"data/textures/smoke02.bmp",
 		"data/textures/smoke02.bmp", 
 		false);
@@ -81,7 +81,7 @@ bool ExplosionTextures::createTextures(ProgressCounter *counter)
 	DIALOG_ASSERT(smokeTexture2.textureValid());
 
 	Image bitmap3 = ImageFactory::loadImage(
-		ImageID::eModLocation,
+		S3D::eModLocation,
 		"data/textures/particle.bmp",
 		"data/textures/particle.bmp",
 		false);
@@ -89,13 +89,13 @@ bool ExplosionTextures::createTextures(ProgressCounter *counter)
 	DIALOG_ASSERT(particleTexture.textureValid());
 
 	Image talkBitmap = ImageFactory::loadAlphaImage(
-		ImageID::eModLocation,
+		S3D::eModLocation,
 		"data/textures/talk.bmp");
 	talkTexture.create(talkBitmap);
 	DIALOG_ASSERT(talkTexture.textureValid());
 
 	Image bitmap5 = ImageFactory::loadImage(
-		ImageID::eModLocation, 
+		S3D::eModLocation, 
 		"data/textures/rain.bmp",
 		"data/textures/rainm.bmp",
 		false);
@@ -103,7 +103,7 @@ bool ExplosionTextures::createTextures(ProgressCounter *counter)
 	DIALOG_ASSERT(rainTexture.textureValid());
 
 	Image bitmap6 = ImageFactory::loadImage(
-		ImageID::eModLocation,
+		S3D::eModLocation,
 		"data/textures/snow.bmp",
 		"data/textures/snowm.bmp",
 		false);
@@ -170,7 +170,7 @@ bool ExplosionTextures::createTextures(ProgressCounter *counter)
 				S3D::formatStringBuffer("data/%s", currentTexture->getContent());
 			Image bitmap =
 				ImageFactory::loadImage(
-					ImageID::eModLocation,
+					S3D::eModLocation,
 					texFile, 
 					texFile, 
 					false);
@@ -216,7 +216,7 @@ Image &ExplosionTextures::getScorchBitmap(const char *name)
 
 		if (S3D::fileExists(S3D::getModFile(name)))
 		{
-			Image *map = new Image(ImageFactory::loadImage(ImageID::eModLocation, name));
+			Image *map = new Image(ImageFactory::loadImage(S3D::eModLocation, name));
 			scorchedBitmaps[name] = map;
 			return *map;
 		}

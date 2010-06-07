@@ -132,7 +132,7 @@ void Lightning::draw()
 		{
 			std::string file4 = S3D::getModFile(weapon_->getTexture());
 			texture_ = TextureStore::instance()->loadTexture(
-				ImageID(ImageID::eModLocation, 
+				ImageID(S3D::eModLocation, 
 				weapon_->getTexture(), 
 				weapon_->getTexture(), 
 				false));

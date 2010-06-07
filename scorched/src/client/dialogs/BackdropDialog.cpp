@@ -62,7 +62,7 @@ void BackdropDialog::drawBackground()
 	{
 		createdTexture = true;
 		Image originalBackMap = ImageFactory::loadImage(
-			ImageID::eDataLocation,
+			S3D::eDataLocation,
 			"data/images/backdrop.jpg");
 		int w = originalBackMap.getWidth();
 		int h = originalBackMap.getHeight();
@@ -104,7 +104,7 @@ void BackdropDialog::drawLogo()
 		lastMod_ = S3D::getDataFileMod();
 
 		Image logoMap = ImageFactory::loadImage(
-			ImageID::eModLocation,
+			S3D::eModLocation,
 			"data/windows/scorched.jpg",
 			"data/windows/scorcheda.jpg",
 			false);
@@ -147,7 +147,7 @@ void BackdropDialog::drawFooter()
 	{
 		createdTexture = true;
 		Image logoMap = ImageFactory::loadAlphaImage(
-			ImageID::eDataLocation,
+			S3D::eDataLocation,
 			"data/images/hiscore.png");
 		footerTex_.create(logoMap, false);
 	}

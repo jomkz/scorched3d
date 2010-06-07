@@ -298,7 +298,7 @@ TankMenus::PlayerMenu::PlayerMenu()
 	bar.setSeperator();
 
 	Image *map = new Image(ImageFactory::loadImage(
-		ImageID::eDataLocation,
+		S3D::eDataLocation,
 		"data/images/setting.bmp",
 		"data/images/settinga.bmp",
 		false));
@@ -409,7 +409,7 @@ bool TankMenus::PlayerMenu::getEnabled(const char* menuName)
 TankMenus::AccessoryMenu::AccessoryMenu()
 {
 	Image *map = new Image(ImageFactory::loadImage(
-		ImageID::eDataLocation,
+		S3D::eDataLocation,
 		"data/images/bomb.bmp",
 		"data/images/bomba.bmp",
 		false));

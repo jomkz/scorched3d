@@ -140,7 +140,7 @@ void TargetRendererImpl::drawShield(float shieldHit, float totalTime)
 	if (!texture)
 	{
 		Image map = ImageFactory::loadImage(
-			ImageID::eModLocation, 
+			S3D::eModLocation, 
 			"data/textures/bordershield/grid2.bmp",
 			"data/textures/bordershield/grid2.bmp",
 			false);
@@ -148,7 +148,7 @@ void TargetRendererImpl::drawShield(float shieldHit, float totalTime)
 		texture->create(map, true);
 
 		Image map2 = ImageFactory::loadImage(
-			ImageID::eModLocation,
+			S3D::eModLocation,
 			"data/textures/bordershield/grid22.bmp",
 			"data/textures/bordershield/grid22.bmp",
 			false);
@@ -156,7 +156,7 @@ void TargetRendererImpl::drawShield(float shieldHit, float totalTime)
 		texture2->create(map2, true);
 
 		Image map3 = ImageFactory::loadImage(
-			ImageID::eModLocation,
+			S3D::eModLocation,
 			"data/textures/shield2.bmp",
 			"data/textures/shield2.bmp", 
 			false);
@@ -164,7 +164,7 @@ void TargetRendererImpl::drawShield(float shieldHit, float totalTime)
 		magtexture->create(map3, true);
 
 		Image map4 = ImageFactory::loadImage(
-			ImageID::eModLocation,
+			S3D::eModLocation,
 			"data/textures/shield.bmp",
 			"data/textures/shielda.bmp", 
 			false);

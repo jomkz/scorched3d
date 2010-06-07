@@ -43,7 +43,7 @@ SettingsSubSelectDialogListItem::SettingsSubSelectDialogListItem(
 	if (S3D::fileExists(icon))
 	{
 		GLTexture *texture = TextureStore::instance()->loadTexture(
-			ImageID(ImageID::eAbsLocation, icon));
+			ImageID(S3D::eAbsLocation, icon));
 		icon_.setTexture(texture);
 	}
 }

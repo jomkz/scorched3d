@@ -51,7 +51,7 @@ void WallActionRenderer::init()
 	if (!texture_.textureValid())
 	{
 		Image map = ImageFactory::loadImage(
-			ImageID::eModLocation,
+			S3D::eModLocation,
 			"data/textures/bordershield/hit.bmp",
 			"data/textures/bordershield/hit.bmp",
 			false);

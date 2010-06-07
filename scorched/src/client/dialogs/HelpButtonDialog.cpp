@@ -66,7 +66,7 @@ HelpButtonDialog::HelpMenu::HelpMenu()
 {
 	Image *map = new Image(
 		ImageFactory::loadImage(
-		ImageID::eDataLocation,
+		S3D::eDataLocation,
 			"data/images/help.bmp",
 			"data/images/helpa.bmp",
 			false));
@@ -95,7 +95,7 @@ void HelpButtonDialog::HelpMenu::menuSelection(const char* menuName,
 HelpButtonDialog::VolumeMenu::VolumeMenu()
 {
 	Image *map = new Image(ImageFactory::loadImage(
-		ImageID::eDataLocation,
+		S3D::eDataLocation,
 		"data/images/sound.bmp",
 		"data/images/sounda.bmp",
 		false));
@@ -118,7 +118,7 @@ bool HelpButtonDialog::VolumeMenu::menuOpened(const char* menuName)
 HelpButtonDialog::PerformanceMenu::PerformanceMenu()
 {
 	Image *map = new Image(ImageFactory::loadImage(
-		ImageID::eDataLocation,
+		S3D::eDataLocation,
 		"data/images/perf.bmp",
 		"data/images/perfa.bmp",
 		false));

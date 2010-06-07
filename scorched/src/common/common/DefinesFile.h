@@ -26,10 +26,18 @@
 
 namespace S3D
 {
+	enum FileLocation
+	{
+		eAbsLocation,
+		eDataLocation,
+		eModLocation
+	};
+
 	void fileDos2Unix(std::string &file);
 	bool fileExists(const std::string &file);
 	bool dirExists(const std::string &file);
 	bool dirMake(const std::string &file);
+	const std::string getLocation(FileLocation imageLocation, const std::string &filename);
 	time_t fileModTime(const std::string &file);
 	std::string getHomeDir();
 	std::string getOSDesc();

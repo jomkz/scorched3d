@@ -255,37 +255,37 @@ void NetworkSelectDialog::drawColumnGames(unsigned int id, int row, int col,
 		if (!okTex_)
 		{
 			okTex_ = TextureStore::instance()->loadTexture(
-				ImageID(ImageID::eDataLocation,
+				ImageID(S3D::eDataLocation,
 					"data/images/ok.bmp",
 					"data/images/mask.bmp"));
 			questionTex_ = TextureStore::instance()->loadTexture(
-				ImageID(ImageID::eDataLocation,
+				ImageID(S3D::eDataLocation,
 					"data/images/question.bmp",
 					"data/images/mask.bmp"));
 			warningTex_ = TextureStore::instance()->loadTexture(
-				ImageID(ImageID::eDataLocation,
+				ImageID(S3D::eDataLocation,
 					"data/images/warn.bmp",
 					"data/images/mask.bmp"));
 			noentryTex_ = TextureStore::instance()->loadTexture(
-				ImageID(ImageID::eDataLocation,
+				ImageID(S3D::eDataLocation,
 					"data/images/noentry.bmp",
 					"data/images/mask.bmp"));
 			exclaimTex_ = TextureStore::instance()->loadTexture(
-				ImageID(ImageID::eDataLocation,
+				ImageID(S3D::eDataLocation,
 					"data/images/exclaim.bmp",
 					"data/images/mask.bmp"));
 			keyTex_ = TextureStore::instance()->loadTexture(
-				ImageID(ImageID::eDataLocation,
+				ImageID(S3D::eDataLocation,
 					"data/images/key.bmp",
 					"data/images/keya.bmp",
 					true));
 			cogTex_ = TextureStore::instance()->loadTexture(
-				ImageID(ImageID::eDataLocation,
+				ImageID(S3D::eDataLocation,
 					"data/images/cog.bmp",
 					"data/images/coga.bmp",
 					true));
 			tankTex_ = TextureStore::instance()->loadTexture(
-				ImageID(ImageID::eDataLocation,
+				ImageID(S3D::eDataLocation,
 				"data/images/tank2s.bmp"));
 		}
 

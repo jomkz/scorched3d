@@ -464,7 +464,7 @@ void HeightMapModifier::generateTerrain(HeightMap &hmap,
 	// Check if we need to load a new mask
 	if (!defn.mask.empty())
 	{
-		maskMap = ImageFactory::loadImage(ImageID::eModLocation, defn.mask);
+		maskMap = ImageFactory::loadImage(S3D::eModLocation, defn.mask);
 		if (!maskMap.getBits())
 		{
 			S3D::dialogExit("Landscape", S3D::formatStringBuffer(

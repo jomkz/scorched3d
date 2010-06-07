@@ -65,7 +65,7 @@ void Sun::generate()
 	if (!tex.suntexturemask.c_str()[0])
 	{
 		Image map = ImageFactory::loadImage(
-			ImageID::eModLocation,
+			S3D::eModLocation,
 			tex.suntexture,
 			tex.suntexture,
 			false);
@@ -74,7 +74,7 @@ void Sun::generate()
 	else
 	{
 		Image map = ImageFactory::loadImage(
-			ImageID::eModLocation,
+			S3D::eModLocation,
 			tex.suntexture,
 			tex.suntexturemask,
 			true);

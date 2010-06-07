@@ -200,7 +200,7 @@ void Water2::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)
 		getDefinitions().getDefn();
 	Image loadedFoam = 
 		ImageFactory::loadImage(
-			ImageID::eModLocation, 
+			S3D::eModLocation, 
 			water->foam);	
 	if (loadedFoam.getWidth() != wave_resolution ||
 		loadedFoam.getHeight() != wave_resolution)

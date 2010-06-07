@@ -156,7 +156,7 @@ FixedVector PlacementTankPosition::placeTank(unsigned int playerId, int team,
 		if (!height->startmask.empty())
 		{
 			tankMask = ImageFactory::loadImage(
-				ImageID::eModLocation, height->startmask.c_str());
+				S3D::eModLocation, height->startmask.c_str());
 			DIALOG_ASSERT(tankMask.getBits());
 		}
 	}

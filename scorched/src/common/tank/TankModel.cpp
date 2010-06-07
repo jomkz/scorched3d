@@ -107,7 +107,7 @@ bool TankModel::initFromXML(ScorchedContext &context, XMLNode *node)
 bool TankModel::loadImage(XMLNode *node, const char *nodeName, 
 	ImageID &image, const char *backupImage)
 {
-	image.initFromString(ImageID::eModLocation, backupImage, backupImage, true);
+	image.initFromString(S3D::eModLocation, backupImage, backupImage, true);
 	return true;
 }
 

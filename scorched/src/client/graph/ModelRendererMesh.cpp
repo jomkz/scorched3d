@@ -77,7 +77,7 @@ void ModelRendererMesh::setup()
 			GLTexture *texture =
 				TextureStore::instance()->loadTexture(
 					ImageID(
-						ImageID::eAbsLocation,
+						S3D::eAbsLocation,
 						mesh->getTextureName(), 
 						mesh->getATextureName()));
 			mesh->setTexture(texture);

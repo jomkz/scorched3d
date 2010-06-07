@@ -56,13 +56,13 @@ void SkyDome::generate()
 
 	// Sky
 	Image bitmapCloud = ImageFactory::loadImage(
-		ImageID::eModLocation,
+		S3D::eModLocation,
 		tex->skytexture, 
 		tex->skytexturemask,
 		false);
 	DIALOG_ASSERT(cloudTexture_.replace(bitmapCloud));
 	skyColorsMap_ = ImageFactory::loadImage(
-		ImageID::eModLocation, 
+		S3D::eModLocation, 
 		tex->skycolormap);
 
 	// Stars
@@ -71,7 +71,7 @@ void SkyDome::generate()
 	{
 		useStarTexture_ = true;
 		Image bitmapStars = ImageFactory::loadImage(
-			ImageID::eModLocation,
+			S3D::eModLocation,
 			tex->skytexturestatic,
 			tex->skytexturestatic,
 			false);
@@ -87,7 +87,7 @@ void SkyDome::generate()
 	{
 		useSkyLine_ = true;
 		Image bitmapSkyLine = ImageFactory::loadImage(
-			ImageID::eModLocation,
+			S3D::eModLocation,
 			tex->skyline,
 			tex->skylinemask);
 		DIALOG_ASSERT(skyLineTexture_.replace(bitmapSkyLine));

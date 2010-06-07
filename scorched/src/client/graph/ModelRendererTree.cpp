@@ -378,7 +378,7 @@ void ModelRendererTree::drawInternalPre(bool setState)
 		listsCreated = true;
 		{
 			Image map = ImageFactory::loadImage(
-				ImageID::eModLocation,
+				S3D::eModLocation,
 				"data/textures/pine2.bmp",
 				"data/textures/pine2.bmp",
 				false);
@@ -387,7 +387,7 @@ void ModelRendererTree::drawInternalPre(bool setState)
 		}
 		{
 			Image map = ImageFactory::loadImage(
-				ImageID::eModLocation,
+				S3D::eModLocation,
 				"data/textures/pine3.bmp",
 				"data/textures/pine3a.bmp", 
 				false);
@@ -396,7 +396,7 @@ void ModelRendererTree::drawInternalPre(bool setState)
 		}
 		{
 			Image map = ImageFactory::loadImage(
-				ImageID::eModLocation,
+				S3D::eModLocation,
 				"data/textures/pine.bmp",
 				"data/textures/pinea.bmp",
 				false);
@@ -405,7 +405,7 @@ void ModelRendererTree::drawInternalPre(bool setState)
 		}
 		{
 			Image map = ImageFactory::loadImage(
-				ImageID::eModLocation,
+				S3D::eModLocation,
 				"data/textures/palm2.bmp",
 				"data/textures/palm2a.bmp",
 				false);
@@ -414,7 +414,7 @@ void ModelRendererTree::drawInternalPre(bool setState)
 		}
 		{
 			Image map = ImageFactory::loadImage(
-				ImageID::eModLocation,
+				S3D::eModLocation,
 				"data/textures/oak.bmp",
 				"data/textures/oaka.bmp",
 				false);
