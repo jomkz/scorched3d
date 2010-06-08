@@ -26,7 +26,7 @@
 #include <GLW/GLWWindowManager.h>
 #include <GLW/GLWFont.h>
 #include <GLW/GLWTranslate.h>
-#include <graph/TextureStore.h>
+#include <GLEXT/GLTextureStore.h>
 #include <engine/ModDirs.h>
 #include <common/Defines.h>
 
@@ -39,7 +39,7 @@ GLWIconListModItem::GLWIconListModItem(ModInfo &modInfo) :
 {
 	if (S3D::fileExists(modInfo_.getIcon()))
 	{
-		GLTexture *texture = TextureStore::instance()->loadTexture(
+		GLTexture *texture = GLTextureStore::instance()->loadTexture(
 			ImageID(S3D::eAbsLocation, modInfo_.getIcon()));
 		icon_.setTexture(texture);
 	}

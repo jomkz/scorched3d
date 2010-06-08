@@ -20,8 +20,8 @@
 
 #include <graph/ModelRendererMesh.h>
 #include <graph/OptionsDisplay.h>
-#include <graph/TextureStore.h>
 #include <3dsparse/ModelMaths.h>
+#include <GLEXT/GLTextureStore.h>
 #include <GLEXT/GLGlobalState.h>
 #include <GLEXT/GLStateExtension.h>
 #include <GLEXT/GLTexture.h>
@@ -75,7 +75,7 @@ void ModelRendererMesh::setup()
 		if (mesh->getTextureName()[0])
 		{
 			GLTexture *texture =
-				TextureStore::instance()->loadTexture(
+				GLTextureStore::instance()->loadTexture(
 					ImageID(
 						S3D::eAbsLocation,
 						mesh->getTextureName(), 

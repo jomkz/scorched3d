@@ -28,7 +28,7 @@
 #include <GLW/GLWSpacer.h>
 #include <GLW/GLWTranslate.h>
 #include <GLW/GLWFont.h>
-#include <graph/TextureStore.h>
+#include <GLEXT/GLTextureStore.h>
 #include <client/ClientParams.h>
 #include <client/ClientMain.h>
 
@@ -42,7 +42,7 @@ SettingsSubSelectDialogListItem::SettingsSubSelectDialogListItem(
 {
 	if (S3D::fileExists(icon))
 	{
-		GLTexture *texture = TextureStore::instance()->loadTexture(
+		GLTexture *texture = GLTextureStore::instance()->loadTexture(
 			ImageID(S3D::eAbsLocation, icon));
 		icon_.setTexture(texture);
 	}

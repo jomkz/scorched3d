@@ -26,7 +26,7 @@
 #include <GLW/GLWTranslate.h>
 #include <client/ClientParams.h>
 #include <client/ClientMain.h>
-#include <graph/TextureStore.h>
+#include <GLEXT/GLTextureStore.h>
 #include <common/Defines.h>
 #include <common/FileList.h>
 
@@ -38,7 +38,7 @@ GLWIconListSaveItem::GLWIconListSaveItem(
 	icon_(0.0f, 0.0f, 40.0f, 40.0f),
 	file_(file), time_(time)
 {
-	GLTexture *texture = TextureStore::instance()->loadTexture(
+	GLTexture *texture = GLTextureStore::instance()->loadTexture(
 		ImageID(S3D::eDataLocation, "data/images/save.bmp"));
 	icon_.setTexture(texture);
 }

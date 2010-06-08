@@ -18,32 +18,42 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <graph/TextureStore.h>
 #include <graph/OptionsDisplay.h>
 #include <image/ImageFactory.h>
+#include <GLEXT/GLTextureStore.h>
 #include <GLEXT/GLTexture.h>
 #include <common/Defines.h>
 
-TextureStore *TextureStore::instance_ = 0;
+GLTextureStore *GLTextureStore::instance_ = 0;
 
-TextureStore *TextureStore::instance()
+GLTextureStore *GLTextureStore::instance()
 {
 	if (!instance_)
 	{
-		instance_ = new TextureStore;
+		instance_ = new GLTextureStore;
 	}
 	return instance_;
 }
 
-TextureStore::TextureStore()
+GLTextureStore::GLTextureStore()
 {
 }
 
-TextureStore::~TextureStore()
+GLTextureStore::~GLTextureStore()
 {
 }
 
-GLTexture *TextureStore::loadTexture(const ImageID &imageID)
+void GLTextureStore::addTextureReference(GLTextureReference &textureReference)
+{
+	references_.insert(&textureReference);
+}
+
+void GLTextureStore::removeTextureReference(GLTextureReference &textureReference)
+{
+	references_.erase(&textureReference);
+}
+
+GLTexture *GLTextureStore::loadTexture(const ImageID &imageID)
 {
 	// Try to find the texture in the cache first
 	std::map<std::string, GLTexture *>::iterator itor =

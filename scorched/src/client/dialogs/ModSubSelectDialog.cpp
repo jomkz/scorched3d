@@ -27,7 +27,7 @@
 #include <GLW/GLWTranslate.h>
 #include <client/ClientParams.h>
 #include <client/ClientMain.h>
-#include <graph/TextureStore.h>
+#include <GLEXT/GLTextureStore.h>
 #include <engine/ModDirs.h>
 #include <common/Defines.h>
 
@@ -40,7 +40,7 @@ GLWIconListSubModItem::GLWIconListSubModItem(ModInfo::MenuEntry &modInfoEntry) :
 {
 	if (S3D::fileExists(modInfoEntry_.icon.c_str()))
 	{
-		GLTexture *texture = TextureStore::instance()->loadTexture(
+		GLTexture *texture = GLTextureStore::instance()->loadTexture(
 			ImageID(S3D::eAbsLocation, modInfoEntry_.icon));
 		icon_.setTexture(texture);
 	}

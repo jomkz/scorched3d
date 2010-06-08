@@ -54,7 +54,13 @@ GLWPlanView::GLWPlanView(float x, float y, float w, float h) :
 	GLWidget(x, y, w, h),
 	animationTime_(0.0f), flashTime_(0.0f), totalTime_(0.0f), pointTime_(0.0f),
 	flash_(true), dragging_(false), firstTime_(true),
-	planColor_(1.0f)
+	planColor_(1.0f),
+	arrowTex_(ImageID(S3D::eModLocation, 
+		"", "data/windows/arrow_s.png")),
+	tankTex_(ImageID(S3D::eModLocation,	
+		"data/textures/circle.bmp",	"data/textures/circlem.bmp", true)),
+	circleTex_(ImageID(S3D::eModLocation, 
+		"data/textures/circlew.bmp", "data/textures/circlem.bmp", true))
 {
 	setToolTip(new ToolTipResource(ToolTip::ToolTipHelp,
 		"PLAN_VIEW", "Plan View",
@@ -173,29 +179,6 @@ void GLWPlanView::drawMap()
 	GLState currentState(GLState::DEPTH_OFF | GLState::BLEND_ON | GLState::TEXTURE_ON);
 
 	float maxWidth = MAX(arenaWidth_, arenaHeight_);
-
-	static bool createdTexture = false;
-	if (!createdTexture)
-	{
-		createdTexture = true;
-		Image logoMap = ImageFactory::loadAlphaImage(
-			S3D::eModLocation,
-			"data/windows/arrow_s.png");
-		arrowTex_.create(logoMap);
-
-		Image circleTank = ImageFactory::loadImage(
-			S3D::eModLocation,
-			"data/textures/circle.bmp",
-			"data/textures/circlem.bmp",
-			true);
-		Image circleSmall = ImageFactory::loadImage(
-			S3D::eModLocation,
-			"data/textures/circlew.bmp",
-			"data/textures/circlem.bmp",
-			true);
-		tankTex_.create(circleTank);
-		circleTex_.create(circleSmall);
-	}
 
 	glPushMatrix();
 		glTranslatef(x_ + 10.0f, y_ + 10.0f, 0.0f);

@@ -2130,9 +2130,6 @@
     <ClCompile Include="..\graph\TargetCamera.cpp">
       <Filter>graph</Filter>
     </ClCompile>
-    <ClCompile Include="..\graph\TextureStore.cpp">
-      <Filter>graph</Filter>
-    </ClCompile>
     <ClCompile Include="..\graph\TutorialFile.cpp">
       <Filter>graph</Filter>
     </ClCompile>
@@ -2294,6 +2291,12 @@
     </ClCompile>
     <ClCompile Include="..\..\common\image\ImageID.cpp">
       <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GLEXT\GLTextureReference.cpp">
+      <Filter>GLEXT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GLEXT\GLTextureStore.cpp">
+      <Filter>GLEXT</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4331,9 +4334,6 @@
     <ClInclude Include="..\graph\TargetCamera.h">
       <Filter>graph</Filter>
     </ClInclude>
-    <ClInclude Include="..\graph\TextureStore.h">
-      <Filter>graph</Filter>
-    </ClInclude>
     <ClInclude Include="..\graph\TutorialFile.h">
       <Filter>graph</Filter>
     </ClInclude>
@@ -4492,6 +4492,12 @@
     </ClInclude>
     <ClInclude Include="..\..\common\image\ImageID.h">
       <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GLEXT\GLTextureStore.h">
+      <Filter>GLEXT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GLEXT\GLTextureReference.h">
+      <Filter>GLEXT</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

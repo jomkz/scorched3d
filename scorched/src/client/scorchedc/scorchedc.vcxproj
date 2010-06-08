@@ -537,7 +537,9 @@
     <ClCompile Include="..\GLEXT\GLTexture.cpp" />
     <ClCompile Include="..\GLEXT\GLTextureBase.cpp" />
     <ClCompile Include="..\GLEXT\GLTextureCubeMap.cpp" />
+    <ClCompile Include="..\GLEXT\GLTextureReference.cpp" />
     <ClCompile Include="..\GLEXT\GLTextureSet.cpp" />
+    <ClCompile Include="..\GLEXT\GLTextureStore.cpp" />
     <ClCompile Include="..\GLEXT\GLVertexBufferObject.cpp" />
     <ClCompile Include="..\GLEXT\GLViewPort.cpp" />
     <ClCompile Include="..\GLSL\GLSLProgram.cpp" />
@@ -782,7 +784,6 @@
     <ClCompile Include="..\graph\SoftwareMouse.cpp" />
     <ClCompile Include="..\graph\SpeedChange.cpp" />
     <ClCompile Include="..\graph\TargetCamera.cpp" />
-    <ClCompile Include="..\graph\TextureStore.cpp" />
     <ClCompile Include="..\graph\TutorialFile.cpp" />
     <ClCompile Include="..\console\Console.cpp" />
     <ClCompile Include="..\console\ConsoleFileReader.cpp" />
@@ -1267,7 +1268,9 @@
     <ClInclude Include="..\GLEXT\GLTexture.h" />
     <ClInclude Include="..\GLEXT\GLTextureBase.h" />
     <ClInclude Include="..\GLEXT\GLTextureCubeMap.h" />
+    <ClInclude Include="..\GLEXT\GLTextureReference.h" />
     <ClInclude Include="..\GLEXT\GLTextureSet.h" />
+    <ClInclude Include="..\GLEXT\GLTextureStore.h" />
     <ClInclude Include="..\GLEXT\GLVertexBufferObject.h" />
     <ClInclude Include="..\GLEXT\GLViewPort.h" />
     <ClInclude Include="..\GLEXT\glxew.h" />
@@ -1517,7 +1520,6 @@
     <ClInclude Include="..\graph\SoftwareMouse.h" />
     <ClInclude Include="..\graph\SpeedChange.h" />
     <ClInclude Include="..\graph\TargetCamera.h" />
-    <ClInclude Include="..\graph\TextureStore.h" />
     <ClInclude Include="..\graph\TutorialFile.h" />
     <ClInclude Include="..\console\Console.h" />
     <ClInclude Include="..\console\ConsoleFileReader.h" />

@@ -24,7 +24,7 @@
 #include <GLW/GLWWindowManager.h>
 #include <GLW/GLWFont.h>
 #include <GLW/GLWTranslate.h>
-#include <graph/TextureStore.h>
+#include <GLEXT/GLTextureStore.h>
 #include <serverbrowser/ServerBrowser.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientParams.h>
@@ -254,37 +254,37 @@ void NetworkSelectDialog::drawColumnGames(unsigned int id, int row, int col,
 	{
 		if (!okTex_)
 		{
-			okTex_ = TextureStore::instance()->loadTexture(
+			okTex_ = GLTextureStore::instance()->loadTexture(
 				ImageID(S3D::eDataLocation,
 					"data/images/ok.bmp",
 					"data/images/mask.bmp"));
-			questionTex_ = TextureStore::instance()->loadTexture(
+			questionTex_ = GLTextureStore::instance()->loadTexture(
 				ImageID(S3D::eDataLocation,
 					"data/images/question.bmp",
 					"data/images/mask.bmp"));
-			warningTex_ = TextureStore::instance()->loadTexture(
+			warningTex_ = GLTextureStore::instance()->loadTexture(
 				ImageID(S3D::eDataLocation,
 					"data/images/warn.bmp",
 					"data/images/mask.bmp"));
-			noentryTex_ = TextureStore::instance()->loadTexture(
+			noentryTex_ = GLTextureStore::instance()->loadTexture(
 				ImageID(S3D::eDataLocation,
 					"data/images/noentry.bmp",
 					"data/images/mask.bmp"));
-			exclaimTex_ = TextureStore::instance()->loadTexture(
+			exclaimTex_ = GLTextureStore::instance()->loadTexture(
 				ImageID(S3D::eDataLocation,
 					"data/images/exclaim.bmp",
 					"data/images/mask.bmp"));
-			keyTex_ = TextureStore::instance()->loadTexture(
+			keyTex_ = GLTextureStore::instance()->loadTexture(
 				ImageID(S3D::eDataLocation,
 					"data/images/key.bmp",
 					"data/images/keya.bmp",
 					true));
-			cogTex_ = TextureStore::instance()->loadTexture(
+			cogTex_ = GLTextureStore::instance()->loadTexture(
 				ImageID(S3D::eDataLocation,
 					"data/images/cog.bmp",
 					"data/images/coga.bmp",
 					true));
-			tankTex_ = TextureStore::instance()->loadTexture(
+			tankTex_ = GLTextureStore::instance()->loadTexture(
 				ImageID(S3D::eDataLocation,
 				"data/images/tank2s.bmp"));
 		}

@@ -22,7 +22,7 @@
 #define __INCLUDE_GLWPlanViewh_INCLUDE__
 
 #include <GLW/GLWidget.h>
-#include <GLEXT/GLTexture.h>
+#include <GLEXT/GLTextureReference.h>
 #include <common/Vector.h>
 #include <list>
 #include <map>
@@ -52,7 +52,7 @@ protected:
 		std::list<Vector> recievepoints;
 	};
 
-	GLTexture arrowTex_, tankTex_, circleTex_;
+	GLTextureReference arrowTex_, tankTex_, circleTex_;
 	float arenaX_, arenaY_, arenaWidth_, arenaHeight_;
 	float landscapeWidth_, landscapeHeight_;
 	float animationTime_;

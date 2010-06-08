@@ -23,7 +23,7 @@
 #include <common/RandomGenerator.h>
 #ifndef S3D_SERVER
 	#include <sound/SoundUtils.h>
-	#include <graph/TextureStore.h>
+	#include <GLEXT/GLTextureStore.h>
 	#include <GLEXT/GLState.h>
 	#include <GLEXT/GLCamera.h>
 	#include <sprites/ExplosionTextures.h>
@@ -131,7 +131,7 @@ void Lightning::draw()
 		if (!texture_)
 		{
 			std::string file4 = S3D::getModFile(weapon_->getTexture());
-			texture_ = TextureStore::instance()->loadTexture(
+			texture_ = GLTextureStore::instance()->loadTexture(
 				ImageID(S3D::eModLocation, 
 				weapon_->getTexture(), 
 				weapon_->getTexture(), 

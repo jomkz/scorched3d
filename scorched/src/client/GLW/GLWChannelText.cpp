@@ -48,7 +48,9 @@ GLWChannelText::GLWChannelText() :
 	button_(x_ + 2.0f, y_ + 4.0f, 12.0f, 12.0f),
 	fontSize_(12.0f), outlineFontSize_(14.0f),
 	whisperDest_(0), createdTexture_(false),
-	historyPosition_(0), cursorPosition_(0)
+	historyPosition_(0), cursorPosition_(0),
+	buttonTexture_(ImageID(S3D::eModLocation, "data/windows/arrow_r.png"), false),
+	colorTexture_(ImageID(S3D::eDataLocation, "data/images/white.bmp"))
 {
 	view_.setHandler(this);
 	button_.setHandler(this);
@@ -85,20 +87,6 @@ void GLWChannelText::draw()
 	{
 		setW(view_.getW());
 		setH(view_.getH());
-	}
-
-	if (!createdTexture_)
-	{
-		createdTexture_ = true;
-		Image buttonImg = ImageFactory::loadAlphaImage(
-			S3D::eModLocation,
-			"data/windows/arrow_r.png");
-		buttonTexture_.create(buttonImg, false);
-		button_.setTexture(&buttonTexture_);
-		Image map = ImageFactory::loadImage(
-			S3D::eDataLocation,
-			"data/images/white.bmp");
-		colorTexture_.create(map);
 	}
 
 	button_.draw();
@@ -740,7 +728,7 @@ void GLWChannelText::buttonDown(unsigned int id)
 		Vector *color = *colorItor;
 
 		// Add an entry allowing the user to change channel color
-		GLWSelectorEntry entry(LANG_STRING(""), 0, false, &colorTexture_, (void *) eColorSelectorStart);
+		GLWSelectorEntry entry(LANG_STRING(""), 0, false, colorTexture_.getTexture(), (void *) eColorSelectorStart);
 		entry.getColor() = *color;
 		entry.getTextureWidth() = 32;
 		colorChannel.getPopups().push_back(entry);

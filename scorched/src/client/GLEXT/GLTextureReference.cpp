@@ -18,28 +18,43 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_TextureStoreh_INCLUDE__)
-#define __INCLUDE_TextureStoreh_INCLUDE__
+#include <GLEXT/GLTextureReference.h>
+#include <GLEXT/GLTextureStore.h>
+#include <image/ImageFactory.h>
+#include <GLEXT/GLTexture.h>
 
-#include <map>
-#include <string>
-#include <image/ImageID.h>
-
-class GLTexture;
-class TextureStore
+GLTextureReference::GLTextureReference(const ImageID &imageId, bool mipmap) :
+	imageId_(imageId),
+	mipmap_(mipmap),
+	texture_(0)
 {
-public:
-	static TextureStore *instance();
+	GLTextureStore::instance()->addTextureReference(*this);
+}
 
-	GLTexture *loadTexture(const ImageID &imageID);
+GLTextureReference::~GLTextureReference()
+{
+	GLTextureStore::instance()->removeTextureReference(*this);
+	reset();
+}
 
-protected:
-	static TextureStore *instance_;
-	std::map<std::string, GLTexture *> skins_;
+void GLTextureReference::reset()
+{
+	delete texture_;
+	texture_ = 0;
+}
 
-private:
-	TextureStore();
-	virtual ~TextureStore();
-};
+GLTexture *GLTextureReference::getTexture()
+{
+	if (!texture_)
+	{
+		Image image = ImageFactory::loadImageID(imageId_);
+		texture_ = new GLTexture();
+		texture_->create(image, mipmap_);
+	}
+	return texture_;
+}
 
-#endif
+void GLTextureReference::draw(bool force)
+{
+	getTexture()->draw(force);
+}

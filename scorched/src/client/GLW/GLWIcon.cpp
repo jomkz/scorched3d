@@ -20,8 +20,8 @@
 
 #include <GLW/GLWIcon.h>
 #include <GLEXT/GLState.h>
+#include <GLEXT/GLTextureStore.h>
 #include <XML/XMLParser.h>
-#include <graph/TextureStore.h>
 #include <common/Defines.h>
 
 REGISTER_CLASS_SOURCE(GLWIcon);
@@ -77,7 +77,7 @@ bool GLWIcon::initFromXML(XMLNode *node)
 		std::string bitmapAName = 
 			S3D::getModFile(bitmapANode->getContent());
 
-		texture_ = TextureStore::instance()->loadTexture(
+		texture_ = GLTextureStore::instance()->loadTexture(
 			ImageID(S3D::eModLocation, 
 			bitmapNode->getContent(),
 			bitmapANode->getContent(), 

@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <dialogs/MsgBoxDialog.h>
-#include <graph/TextureStore.h>
+#include <GLEXT/GLTextureStore.h>
 #include <GLW/GLWWindowManager.h>
 
 MsgBoxDialog *MsgBoxDialog::instance_ = 0;
@@ -70,7 +70,7 @@ void MsgBoxDialog::show(const LangString &message, ShowType type)
 {
 	if (type == eError)
 	{
-		GLTexture *texture = TextureStore::instance()->loadTexture(
+		GLTexture *texture = GLTextureStore::instance()->loadTexture(
 			ImageID(S3D::eDataLocation,
 			"data/images/exclaim.bmp",
 			"data/images/mask.bmp"));
@@ -78,7 +78,7 @@ void MsgBoxDialog::show(const LangString &message, ShowType type)
 	}
 	else
 	{
-		GLTexture *texture = TextureStore::instance()->loadTexture(
+		GLTexture *texture = GLTextureStore::instance()->loadTexture(
 			ImageID(S3D::eDataLocation,
 			"data/images/ok.bmp",
 			"data/images/mask.bmp"));

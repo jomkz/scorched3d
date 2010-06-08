@@ -24,6 +24,7 @@
 #include <GLW/GLWChannelView.h>
 #include <GLW/GLWIconButton.h>
 #include <GLW/GLWSelector.h>
+#include <GLEXT/GLTextureReference.h>
 #include <string>
 
 class GLWChannelText : 
@@ -64,7 +65,7 @@ public:
 	REGISTER_CLASS_HEADER(GLWChannelText);
 protected:
 	static std::list<ChannelText> lastMessages_;
-	GLTexture buttonTexture_, colorTexture_;
+	GLTextureReference buttonTexture_, colorTexture_;
 	GLWChannelViewTextRenderer prompt_;
 	GLWChannelView::CurrentChannelEntry channelEntry_;
 	GLWIconButton button_;
