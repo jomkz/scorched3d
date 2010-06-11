@@ -30,8 +30,14 @@
 bool ModelRendererTree::skipPre_ = false;
 
 // Pine
-GLTexture ModelRendererTree::pineTextureA_;
-GLTexture ModelRendererTree::pineTextureB_;
+GLTextureReference ModelRendererTree::pineTextureA_(ImageID(S3D::eModLocation,
+				"data/textures/pine2.bmp",
+				"data/textures/pine2.bmp",
+				false));
+GLTextureReference ModelRendererTree::pineTextureB_(ImageID(S3D::eModLocation,
+				"data/textures/pine3.bmp",
+				"data/textures/pine3a.bmp", 
+				false));
 GLuint ModelRendererTree::treePineList = 0;
 GLuint ModelRendererTree::treePineSmallList = 0;
 GLuint ModelRendererTree::treePineSnowList = 0;
@@ -56,8 +62,14 @@ GLuint ModelRendererTree::treePineLightList = 0;
 GLuint ModelRendererTree::treePineLightSmallList = 0;
 
 // Palm
-GLTexture ModelRendererTree::palmTextureA_;
-GLTexture ModelRendererTree::palmTextureB_;
+GLTextureReference ModelRendererTree::palmTextureA_(ImageID(S3D::eModLocation,
+				"data/textures/pine.bmp",
+				"data/textures/pinea.bmp",
+				false));
+GLTextureReference ModelRendererTree::palmTextureB_(ImageID(S3D::eModLocation,
+				"data/textures/palm2.bmp",
+				"data/textures/palm2a.bmp",
+				false));
 GLuint ModelRendererTree::treePalmList = 0;
 GLuint ModelRendererTree::treePalmSmallList = 0;
 GLuint ModelRendererTree::treePalm2List = 0;
@@ -77,7 +89,10 @@ GLuint ModelRendererTree::treePalmBurntList = 0;
 GLuint ModelRendererTree::treePalmBurntSmallList = 0;
 
 // Oak
-GLTexture ModelRendererTree::oakTextureA_;
+GLTextureReference ModelRendererTree::oakTextureA_(ImageID(S3D::eModLocation,
+				"data/textures/oak.bmp",
+				"data/textures/oaka.bmp",
+				false));
 GLuint ModelRendererTree::treeOakList = 0;
 GLuint ModelRendererTree::treeOakSmallList = 0;
 GLuint ModelRendererTree::treeOak2List = 0;
@@ -376,51 +391,6 @@ void ModelRendererTree::drawInternalPre(bool setState)
 	if (!listsCreated)
 	{
 		listsCreated = true;
-		{
-			Image map = ImageFactory::loadImage(
-				S3D::eModLocation,
-				"data/textures/pine2.bmp",
-				"data/textures/pine2.bmp",
-				false);
-			DIALOG_ASSERT(map.getBits());
-			pineTextureA_.create(map, true);
-		}
-		{
-			Image map = ImageFactory::loadImage(
-				S3D::eModLocation,
-				"data/textures/pine3.bmp",
-				"data/textures/pine3a.bmp", 
-				false);
-			DIALOG_ASSERT(map.getBits());
-			pineTextureB_.create(map, true);
-		}
-		{
-			Image map = ImageFactory::loadImage(
-				S3D::eModLocation,
-				"data/textures/pine.bmp",
-				"data/textures/pinea.bmp",
-				false);
-			DIALOG_ASSERT(map.getBits());
-			palmTextureA_.create(map, true);
-		}
-		{
-			Image map = ImageFactory::loadImage(
-				S3D::eModLocation,
-				"data/textures/palm2.bmp",
-				"data/textures/palm2a.bmp",
-				false);
-			DIALOG_ASSERT(map.getBits());
-			palmTextureB_.create(map, true);
-		}
-		{
-			Image map = ImageFactory::loadImage(
-				S3D::eModLocation,
-				"data/textures/oak.bmp",
-				"data/textures/oaka.bmp",
-				false);
-			DIALOG_ASSERT(map.getBits());
-			oakTextureA_.create(map, true);
-		}
 
 		glNewList(treePineList = glGenLists(1), GL_COMPILE);
 			drawPineTrunc(0.1f, 1.1f, 0.0f);
@@ -706,137 +676,137 @@ void ModelRendererTree::drawInternal(float distance, float fade, bool setState)
 	switch(treeType_)
 	{
 	case TreeModelFactory::ePineNormal:
-		texture = &pineTextureA_;
+		texture = pineTextureA_.getTexture();
 		treeList = treePineList;
 		smallTreeList = treePineSmallList;
 		break;
 	case TreeModelFactory::ePine2:
-		texture = &pineTextureB_;
+		texture = pineTextureB_.getTexture();
 		treeList = treePine2List;
 		smallTreeList = treePine2SmallList;
 		break;
 	case TreeModelFactory::ePine3:
-		texture = &pineTextureB_;
+		texture = pineTextureB_.getTexture();
 		treeList = treePine3List;
 		smallTreeList = treePine3SmallList;
 		break;
 	case TreeModelFactory::ePine4:
-		texture = &pineTextureB_;
+		texture = pineTextureB_.getTexture();
 		treeList = treePine4List;
 		smallTreeList = treePine4SmallList;
 		break;
 	case TreeModelFactory::ePine2Snow:
-		texture = &pineTextureB_;
+		texture = pineTextureB_.getTexture();
 		treeList = treePine2SnowList;
 		smallTreeList = treePine2SnowSmallList;
 		break;
 	case TreeModelFactory::ePine3Snow:
-		texture = &pineTextureB_;
+		texture = pineTextureB_.getTexture();
 		treeList = treePine3SnowList;
 		smallTreeList = treePine3SnowSmallList;
 		break;
 	case TreeModelFactory::ePine4Snow:
-		texture = &pineTextureB_;
+		texture = pineTextureB_.getTexture();
 		treeList = treePine4SnowList;
 		smallTreeList = treePine4SnowSmallList;
 		break;
 	case TreeModelFactory::ePineBurnt:
-		texture = &pineTextureA_;
+		texture = pineTextureA_.getTexture();
 		treeList = treePineBurntList;
 		smallTreeList = treePineBurntSmallList;
 		break;
 	case TreeModelFactory::ePineSnow:
-		texture = &pineTextureA_;
+		texture = pineTextureA_.getTexture();
 		treeList = treePineSnowList;
 		smallTreeList = treePineSnowSmallList;
 		break;
 	case TreeModelFactory::ePineYellow:
-		texture = &pineTextureA_;
+		texture = pineTextureA_.getTexture();
 		treeList = treePineYellowList;
 		smallTreeList = treePineYellowSmallList;
 		break;
 	case TreeModelFactory::ePineLight:
-		texture = &pineTextureA_;
+		texture = pineTextureA_.getTexture();
 		treeList = treePineLightList;
 		smallTreeList = treePineLightSmallList;
 		break;
 	case TreeModelFactory::ePalmNormal:
-		texture = &palmTextureA_;
+		texture = palmTextureA_.getTexture();
 		treeList = treePalmList;
 		smallTreeList = treePalmSmallList;
 		break;
 	case TreeModelFactory::ePalm2:
-		texture = &palmTextureA_;
+		texture = palmTextureA_.getTexture();
 		treeList = treePalm2List;
 		smallTreeList = treePalm2SmallList;
 		break;
 	case TreeModelFactory::ePalm3:
-		texture = &palmTextureA_;
+		texture = palmTextureA_.getTexture();
 		treeList = treePalm3List;
 		smallTreeList = treePalm3SmallList;
 		break;
 	case TreeModelFactory::ePalm4:
-		texture = &palmTextureA_;
+		texture = palmTextureA_.getTexture();
 		treeList = treePalm4List;
 		smallTreeList = treePalm4SmallList;
 		break;
 	case TreeModelFactory::ePalmB:
-		texture = &palmTextureB_;
+		texture = palmTextureB_.getTexture();
 		treeList = treePalmBList;
 		smallTreeList = treePalmBList;
 		break;
 	case TreeModelFactory::ePalmB2:
-		texture = &palmTextureB_;
+		texture = palmTextureB_.getTexture();
 		treeList = treePalmB2List;
 		smallTreeList = treePalmB2List;
 		break;
 	case TreeModelFactory::ePalmB3:
-		texture = &palmTextureB_;
+		texture = palmTextureB_.getTexture();
 		treeList = treePalmB3List;
 		smallTreeList = treePalmB3List;
 		break;
 	case TreeModelFactory::ePalmB4:
-		texture = &palmTextureB_;
+		texture = palmTextureB_.getTexture();
 		treeList = treePalmB4List;
 		smallTreeList = treePalmB4List;
 		break;
 	case TreeModelFactory::ePalmB5:
-		texture = &palmTextureB_;
+		texture = palmTextureB_.getTexture();
 		treeList = treePalmB5List;
 		smallTreeList = treePalmB5List;
 		break;
 	case TreeModelFactory::ePalmB6:
-		texture = &palmTextureB_;
+		texture = palmTextureB_.getTexture();
 		treeList = treePalmB6List;
 		smallTreeList = treePalmB6List;
 		break;
 	case TreeModelFactory::ePalmB7:
-		texture = &palmTextureB_;
+		texture = palmTextureB_.getTexture();
 		treeList = treePalmB7List;
 		smallTreeList = treePalmB7List;
 		break;
 	case TreeModelFactory::ePalmBurnt:
-		texture = &palmTextureA_;
+		texture = palmTextureA_.getTexture();
 		treeList = treePalmBurntList;
 		smallTreeList = treePalmBurntSmallList;
 		break;
 	case TreeModelFactory::eOak:
-		texture = &oakTextureA_;
+		texture = oakTextureA_.getTexture();
 		treeList = treeOakList;
 		smallTreeList = treeOakSmallList;
 		break;
 	case TreeModelFactory::eOak2:
-		texture = &oakTextureA_;
+		texture = oakTextureA_.getTexture();
 		treeList = treeOak2List;
 		smallTreeList = treeOak2SmallList;
 		break;
 	case TreeModelFactory::eOak3:
-		texture = &oakTextureA_;
+		texture = oakTextureA_.getTexture();
 		treeList = treeOak3List;
 		smallTreeList = treeOak3SmallList;
 		break;
 	case TreeModelFactory::eOak4:
-		texture = &oakTextureA_;
+		texture = oakTextureA_.getTexture();
 		treeList = treeOak4List;
 		smallTreeList = treeOak4SmallList;
 		break;

@@ -179,7 +179,7 @@ void AutoDefenseDialog::displayCurrent()
 		Accessory *shield = (*shieldsItor);
 		ddshields_->addEntry(GLWSelectorEntry(
 			tankInfo_.tankAccessories.getAccessoryAndCountString(shield),
-			&shield->getToolTip(), 0, shield->getTexture()));
+			&shield->getToolTip(), 0, &shield->getTexture()));
 	}
 
 	// Put paras info
@@ -199,7 +199,7 @@ void AutoDefenseDialog::displayCurrent()
 		Accessory *parachute = (*parachutesItor);
 		ddpara_->addEntry(GLWSelectorEntry(
 			tankInfo_.tankAccessories.getAccessoryAndCountString(parachute),
-			&parachute->getToolTip(), 0, parachute->getTexture()));
+			&parachute->getToolTip(), 0, &parachute->getTexture()));
 	}
 
 	// Set the currently shown items

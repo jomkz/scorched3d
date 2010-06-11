@@ -22,7 +22,8 @@
 #include <common/Defines.h>
 #include <XML/XMLParser.h>
 
-ImageID::ImageID()
+ImageID::ImageID() :
+	imageLocation_(S3D::eInvalidLocation)
 {
 }
 

@@ -54,8 +54,7 @@ GLWChannelView::GLWChannelView() :
 	downButton_(x_ + 2.0f, y_ + 1.0f, 12.0f, 12.0f),
 	resetButton_(x_ + 2.0f, y_ + 1.0f, 14.0f, 14.0f),
 	scrollUpKey_(0), scrollDownKey_(0), scrollResetKey_(0),
-	handler_(0),
-	createdTexture_(false)
+	handler_(0)
 {
 	upButton_.setHandler(this);
 	downButton_.setHandler(this);
@@ -74,6 +73,10 @@ GLWChannelView::GLWChannelView() :
 		"CHAT_LAST", "Chat Last", 
 		"CHAT_LAST_TOOLTIP", "View end of the chat log, \n"
 		"hide all elapsed entries"));
+
+	upButton_.setTextureImage(ImageID(S3D::eModLocation,"", "data/windows/arrow_u.png"));
+	downButton_.setTextureImage(ImageID(S3D::eModLocation,"", "data/windows/arrow_d.png"));
+	resetButton_.setTextureImage(ImageID(S3D::eModLocation,"", "data/windows/arrow_s.png"));
 }
 
 GLWChannelView::~GLWChannelView()
@@ -379,27 +382,6 @@ void GLWChannelView::setY(float y)
 void GLWChannelView::draw()
 {
 	GLWidget::draw();
-	if (!createdTexture_)
-	{
-		createdTexture_ = true;
-		Image upImg = ImageFactory::loadAlphaImage(
-			S3D::eModLocation,
-			"data/windows/arrow_u.png");
-		Image downImg = ImageFactory::loadAlphaImage(
-			S3D::eModLocation,
-			"data/windows/arrow_d.png");
-		Image resetImg = ImageFactory::loadAlphaImage(
-			S3D::eModLocation,
-			"data/windows/arrow_s.png");
-
-		upTexture_.create(upImg, false);
-		downTexture_.create(downImg, false);
-		resetTexture_.create(resetImg, false);
-
-		upButton_.setTexture(&upTexture_);
-		downButton_.setTexture(&downTexture_);
-		resetButton_.setTexture(&resetTexture_);
-	}
 
 	if (allowScroll_)
 	{

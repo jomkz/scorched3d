@@ -28,6 +28,7 @@ namespace S3D
 {
 	enum FileLocation
 	{
+		eInvalidLocation = 0,
 		eAbsLocation,
 		eDataLocation,
 		eModLocation

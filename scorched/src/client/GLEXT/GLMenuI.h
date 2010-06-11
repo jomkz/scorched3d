@@ -31,18 +31,18 @@
 #include <GLW/GLWToolTip.h>
 #include <lang/LangString.h>
 
-class GLTexture;
+class GLTextureBase;
 class GLMenuItem
 {
 public:
 	GLMenuItem(const LangString &text, 
 		ToolTip *tooltip = 0, bool selected = false, 
-		GLTexture *texture = 0,
+		GLTextureBase *texture = 0,
 		void *userData = 0);
 
 	const LangString &getText() { return menuText_; }
 	ToolTip *getToolTip() { return tip_; }
-	GLTexture *getTexture() { return texture_; }
+	GLTextureBase *getTexture() { return texture_; }
 	bool getSelected() { return selected_; }
 	void *getUserData() { return userData_; }
 	bool getSeperator() { return seperator_; }
@@ -51,7 +51,7 @@ public:
 protected:
 	LangString menuText_;
 	ToolTip *tip_;
-	GLTexture *texture_;
+	GLTextureBase *texture_;
 	bool selected_, seperator_;
 	void *userData_;
 };

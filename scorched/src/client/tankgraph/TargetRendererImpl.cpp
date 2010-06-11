@@ -132,46 +132,29 @@ bool TargetRendererImpl::getVisible()
 void TargetRendererImpl::drawShield(float shieldHit, float totalTime)
 {
 	// Create the shield textures
-	static GLTexture *shieldtexture = 0;
-	static GLTexture *texture = 0;
-	static GLTexture *texture2 = 0;
-	static GLTexture *magtexture = 0;
+	static GLTextureReference shieldtexture(ImageID(
+		S3D::eModLocation,
+		"data/textures/shield.bmp",
+		"data/textures/shielda.bmp", 
+		false));
+	static GLTextureReference texture(ImageID(
+		S3D::eModLocation, 
+		"data/textures/bordershield/grid2.bmp",
+		"data/textures/bordershield/grid2.bmp",
+		false));
+	static GLTextureReference texture2(ImageID(
+		S3D::eModLocation,
+		"data/textures/bordershield/grid22.bmp",
+		"data/textures/bordershield/grid22.bmp",
+		false));
+	static GLTextureReference magtexture(ImageID(
+		S3D::eModLocation,
+		"data/textures/shield2.bmp",
+		"data/textures/shield2.bmp", 
+		false));
 	static GLUquadric *obj = 0;
-	if (!texture)
+	if (!obj)
 	{
-		Image map = ImageFactory::loadImage(
-			S3D::eModLocation, 
-			"data/textures/bordershield/grid2.bmp",
-			"data/textures/bordershield/grid2.bmp",
-			false);
-		texture = new GLTexture;
-		texture->create(map, true);
-
-		Image map2 = ImageFactory::loadImage(
-			S3D::eModLocation,
-			"data/textures/bordershield/grid22.bmp",
-			"data/textures/bordershield/grid22.bmp",
-			false);
-		texture2 = new GLTexture;
-		texture2->create(map2, true);
-
-		Image map3 = ImageFactory::loadImage(
-			S3D::eModLocation,
-			"data/textures/shield2.bmp",
-			"data/textures/shield2.bmp", 
-			false);
-		magtexture = new GLTexture;
-		magtexture->create(map3, true);
-
-		Image map4 = ImageFactory::loadImage(
-			S3D::eModLocation,
-			"data/textures/shield.bmp",
-			"data/textures/shielda.bmp", 
-			false);
-		//map4.alphaMult(4.0f);
-		shieldtexture = new GLTexture;
-		shieldtexture->create(map4, true);
-
 		obj = gluNewQuadric();
 		gluQuadricTexture(obj, GL_TRUE);
 	}
@@ -277,7 +260,7 @@ void TargetRendererImpl::drawShield(float shieldHit, float totalTime)
 		ShieldRound *round = (ShieldRound *) shield;
 		if (shield->getShieldType() == Shield::ShieldTypeRoundMag)
 		{
-			magtexture->draw();
+			magtexture.draw();
 
 			glDepthMask(GL_FALSE);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
@@ -299,7 +282,7 @@ void TargetRendererImpl::drawShield(float shieldHit, float totalTime)
 		}
 		else if (round->getHalfShield())
 		{
-			texture->draw();
+			texture.draw();
 			glPushMatrix();
 				glColor4f(color[0], color[1], color[2], 0.5f + shieldHit);
 				glTranslatef(position[0], position[1], position[2]);
@@ -312,7 +295,7 @@ void TargetRendererImpl::drawShield(float shieldHit, float totalTime)
 		}
 		else
 		{
-			texture->draw();
+			texture.draw();
 			glPushMatrix();
 				glColor4f(color[0], color[1], color[2], 0.5f + shieldHit);
 				glTranslatef(position[0], position[1], position[2]);
@@ -325,7 +308,7 @@ void TargetRendererImpl::drawShield(float shieldHit, float totalTime)
 
 			if (round->getGlow())
 			{
-				shieldtexture->draw();
+				shieldtexture.draw();
 				GLCameraFrustum::instance()->drawBilboard(
 					position,
 					color,
@@ -341,7 +324,7 @@ void TargetRendererImpl::drawShield(float shieldHit, float totalTime)
 	{
 		ShieldSquare *square = (ShieldSquare *) shield;
 
-		texture->draw();
+		texture.draw();
 		glPushMatrix();
 			glColor4f(color[0], color[1], color[2], 0.5f + shieldHit);
 			glTranslatef(position[0], position[1], position[2]);

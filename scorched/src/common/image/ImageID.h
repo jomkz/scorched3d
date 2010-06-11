@@ -43,6 +43,7 @@ public:
 		const std::string &alphaName = "",
 		bool invert = false);
 
+	bool isValid() { return imageLocation_ != S3D::eInvalidLocation; }
 	S3D::FileLocation getImageLocation() { return imageLocation_; }
 	const std::string &getStringHash();
 	const std::string &getImageName() { return imageName_; }

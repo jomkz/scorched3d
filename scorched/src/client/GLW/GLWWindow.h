@@ -24,7 +24,7 @@
 #include <string>
 #include <GLW/GLWPanel.h>
 #include <GLW/GLWToolTip.h>
-#include <GLEXT/GLTexture.h>
+#include <GLEXT/GLTextureReference.h>
 
 class GLWWindow : public GLWPanel
 {
@@ -87,7 +87,7 @@ protected:
 	} dragging_;
 
 	ToolTip toolTip_;
-	static GLTexture moveTexture_, resizeTexture_;
+	static GLTextureReference moveTexture_, resizeTexture_;
 	bool showTitle_;
 	bool needCentered_;
 	bool disabled_;

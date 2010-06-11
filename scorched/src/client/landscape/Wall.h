@@ -24,7 +24,7 @@
 
 #include <common/Vector.h>
 #include <common/OptionsTransient.h>
-#include <GLEXT/GLTexture.h>
+#include <GLEXT/GLTextureReference.h>
 
 class Wall
 {
@@ -37,8 +37,7 @@ public:
 	void simulate(float time);
 
 protected:
-	bool createdTexture_;
-	GLTexture texture_;
+	GLTextureReference texture_;
 	float fadeTime_[4];
 
 	void drawWall(Vector &cornerA, Vector &cornerB, 

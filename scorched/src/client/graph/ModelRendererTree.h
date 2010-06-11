@@ -22,7 +22,7 @@
 #define __INCLUDE_ModelRendererTreeh_INCLUDE__
 
 #include <graph/ModelRenderer.h>
-#include <GLEXT/GLTexture.h>
+#include <GLEXT/GLTextureReference.h>
 #include <3dsparse/Model.h>
 #include <common/ModelID.h>
 
@@ -76,11 +76,11 @@ protected:
 	static GLuint treeOak3List, treeOak3SmallList;
 	static GLuint treeOak4List, treeOak4SmallList;
 
-	static GLTexture pineTextureA_;
-	static GLTexture pineTextureB_;
-	static GLTexture palmTextureA_;
-	static GLTexture palmTextureB_;
-	static GLTexture oakTextureA_;
+	static GLTextureReference pineTextureA_;
+	static GLTextureReference pineTextureB_;
+	static GLTextureReference palmTextureA_;
+	static GLTextureReference palmTextureB_;
+	static GLTextureReference oakTextureA_;
 };
 
 #endif // __INCLUDE_ModelRendererTreeh_INCLUDE__

@@ -27,17 +27,27 @@
 class GLTextureReference : public GLTextureBase
 {
 public:
-	GLTextureReference(const ImageID &imageId, bool mipmap = true);
+	enum TextureState 
+	{
+		eMipMap = 1,
+		eTextureClamped = 2
+	};
+
+	GLTextureReference();
+	GLTextureReference(const ImageID &imageId, unsigned texState = eMipMap);
 	~GLTextureReference();
+
+	void setImageID(const ImageID &imageId, unsigned texState = eMipMap);
 
 	virtual void draw(bool force = false); 
 	
+	ImageID &getImageID() { return imageId_; }
 	GLTexture *getTexture();
 	void reset();
 protected:
 	GLTexture *texture_;
 	ImageID imageId_;
-	bool mipmap_;
+	unsigned texState_;
 private:
 	GLTextureReference(const GLTextureReference &other);
 	GLTextureReference &operator=(const GLTextureReference &other);

@@ -38,8 +38,8 @@ static const float titleWidth = 100.0f;
 static const float titleHeight = 20.0f;
 static const float shadowWidth = 10.0f;
 
-GLTexture GLWWindow::moveTexture_;
-GLTexture GLWWindow::resizeTexture_;
+GLTextureReference GLWWindow::moveTexture_(ImageID(S3D::eModLocation,"", "data/windows/move.bmp"));
+GLTextureReference GLWWindow::resizeTexture_(ImageID(S3D::eModLocation, "", "data/windows/resize.bmp"));
 
 GLWWindow::GLWWindow(const std::string &name, float x, float y, 
 					 float w, float h,
@@ -177,21 +177,6 @@ void GLWWindow::drawMaximizedWindow()
 	if (windowState_ & eCircle ||
 		windowState_ & eNoDraw)
 	{
-		static bool createdTexture = false;
-		if (!createdTexture)
-		{
-			createdTexture = true;
-
-			Image moveMap = ImageFactory::loadAlphaImage(
-				S3D::eModLocation,
-				"data/windows/move.bmp");
-			moveTexture_.create(moveMap, false);
-			Image resizeMap = ImageFactory::loadAlphaImage(
-				S3D::eModLocation,
-				"data/windows/resize.bmp");
-			resizeTexture_.create(resizeMap, false);
-		}
-
 		if (windowState_ & eCircle)
 		{
 			GLState state(GLState::BLEND_ON);

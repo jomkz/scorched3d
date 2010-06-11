@@ -92,31 +92,21 @@ bool ClientConnectionAcceptHandler::processMessage(
 
 	// Set the server specific png for the current server
 	{
-		GLTexture *texture = 0;
 		if (message.getServerPng().getBufferUsed() > 0)
 		{
 			// Use a custom icon
 			Image map = ImagePngFactory::loadFromBuffer(message.getServerPng());
 
 			// Set the texture
-			texture = new GLTexture;
-			texture->create(map, false);
-		}
-		else
-		{
-			// Use the default icon
-			Image map = ImageFactory::loadImage(
-				S3D::eDataLocation,
-				"data/images/scorched.png", 
-				"data/images/scorcheda.png", 
-				false);
-
-			// Set the texture
-			texture = new GLTexture;
-			texture->create(map, false);
+			//texture = new GLTexture;
+			//texture->create(map, false);
 		}
 		
-		RulesDialog::instance()->addIcon(texture);
+		RulesDialog::instance()->addIcon(
+			ImageID(S3D::eDataLocation,
+				"data/images/scorched.png", 
+				"data/images/scorcheda.png", 
+				false));
 	}
 
 	// Set the mod

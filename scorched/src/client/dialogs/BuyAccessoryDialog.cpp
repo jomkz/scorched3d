@@ -329,7 +329,7 @@ bool BuyAccessoryDialog::addAccessory(
 	// Others
 	newPanel->addWidget(new GLWLabel(20, 0, 
 		tankInfo_.tankAccessories.getAccessoryCountString(current), 12.0f));
-	newPanel->addWidget(new GLWIcon(45, 4, 16, 16, current->getTexture()));
+	newPanel->addWidget(new GLWIcon(45, 4, 16, 16, current->getTexture().getImageID()));
 	newPanel->addWidget(new GLWLabel(65, 0, LANG_RESOURCE(current->getName(), current->getName()), 12.0f));
 
 	// Buy Button

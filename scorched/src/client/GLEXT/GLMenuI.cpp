@@ -23,7 +23,7 @@
 GLMenuItem::GLMenuItem(const LangString &text, 
 	ToolTip *tooltip, 
 	bool selected,
-	GLTexture *texture,
+	GLTextureBase *texture,
 	void *userData) : 
 	menuText_(text), tip_(tooltip), 
 	selected_(selected), texture_(texture),

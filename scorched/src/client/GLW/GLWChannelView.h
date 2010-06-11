@@ -24,6 +24,7 @@
 #include <GLW/GLWidget.h>
 #include <GLW/GLWIconButton.h>
 #include <GLW/GLWChannelViewTextRenderer.h>
+#include <GLEXT/GLTextureReference.h>
 #include <client/ClientChannelManagerI.h>
 #include <common/KeyboardKey.h>
 #include <common/Vector.h>
@@ -110,10 +111,6 @@ protected:
 	GLWIconButton upButton_;
 	GLWIconButton downButton_;
 	GLWIconButton resetButton_;
-	bool createdTexture_;
-	GLTexture upTexture_;
-	GLTexture downTexture_;
-	GLTexture resetTexture_;
 
 	unsigned int lastChannelId_;
 	unsigned int lastWhisperSrc_;

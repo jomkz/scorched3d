@@ -132,7 +132,7 @@ void TankFuelTip::showItems(float x, float y)
 				tank_->getAccessories().getAccessoryAndCountString(current), 
 				&current->getToolTip(), 
 				(tank_->getAccessories().getWeapons().getCurrent() == current), 
-				current->getTexture(), current));
+				&current->getTexture(), current));
 		}
 	}
 	entries.push_back(GLWSelectorEntry(LANG_RESOURCE("OFF", "Off"), &offTip, 0, 0, 0));
@@ -274,7 +274,7 @@ void TankShieldTip::showItems(float x, float y)
 			entries.push_back(GLWSelectorEntry(
 				tank_->getAccessories().getAccessoryAndCountString(current), 
 				&current->getToolTip(), 
-				(currentShield == current), current->getTexture(), current));
+				(currentShield == current), &current->getTexture(), current));
 		}
 	}
 	entries.push_back(GLWSelectorEntry(LANG_RESOURCE("OFF", "Off"), &offTip, 0, 0, 0));
@@ -418,7 +418,7 @@ void TankParachutesTip::showItems(float x, float y)
 			entries.push_back(GLWSelectorEntry(
 				tank_->getAccessories().getAccessoryAndCountString(current), 
 				&current->getToolTip(), 
-				(currentParachute == current), current->getTexture(), current));
+				(currentParachute == current), &current->getTexture(), current));
 		}
 	}
 	entries.push_back(GLWSelectorEntry(LANG_RESOURCE("OFF", "Off"), &offTip, 0, 0, 0));
@@ -530,7 +530,7 @@ void TankWeaponTip::showItems(float x, float y)
 			GLWSelectorEntry newEntry(
 				tank_->getAccessories().getAccessoryAndCountString(weapon), 
 				&weapon->getToolTip(), 
-				(currentWeapon == weapon), weapon->getTexture(), weapon);
+				(currentWeapon == weapon), &weapon->getTexture(), weapon);
 			entries.push_back(newEntry);
 		}
 	}

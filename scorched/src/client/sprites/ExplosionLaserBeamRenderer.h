@@ -22,7 +22,7 @@
 #define __INCLUDE_ExplosionLaserRendererh_INCLUDE__
 
 #include <sprites/MetaActionRenderer.h>
-#include <GLEXT/GLTexture.h>
+#include <GLEXT/GLTextureReference.h>
 
 #define sides 8
 #define layers 5
@@ -50,7 +50,7 @@ private:
 	float totalTime_;
 	Vector points[layers][sides];
 	float angle_;
-	static GLTexture *_texture;
+	static GLTextureReference _texture;
 
 };
 #endif

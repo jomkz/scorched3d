@@ -23,10 +23,17 @@
 #include <image/ImageFactory.h>
 #include <GLEXT/GLTexture.h>
 
-GLTextureReference::GLTextureReference(const ImageID &imageId, bool mipmap) :
+GLTextureReference::GLTextureReference(const ImageID &imageId, unsigned texState) :
 	imageId_(imageId),
-	mipmap_(mipmap),
+	texState_(texState),
 	texture_(0)
+{
+	GLTextureStore::instance()->addTextureReference(*this);
+}
+
+GLTextureReference::GLTextureReference() :
+	texture_(0),
+	texState_(eMipMap)
 {
 	GLTextureStore::instance()->addTextureReference(*this);
 }
@@ -35,6 +42,13 @@ GLTextureReference::~GLTextureReference()
 {
 	GLTextureStore::instance()->removeTextureReference(*this);
 	reset();
+}
+
+void GLTextureReference::setImageID(const ImageID &imageId, unsigned texState) 
+{
+	reset();
+	imageId_ = imageId;
+	texState_ = texState;
 }
 
 void GLTextureReference::reset()
@@ -49,7 +63,12 @@ GLTexture *GLTextureReference::getTexture()
 	{
 		Image image = ImageFactory::loadImageID(imageId_);
 		texture_ = new GLTexture();
-		texture_->create(image, mipmap_);
+		texture_->create(image, texState_ & eMipMap);
+		if (texState_ & eTextureClamped)
+		{
+			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
+			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+		}
 	}
 	return texture_;
 }

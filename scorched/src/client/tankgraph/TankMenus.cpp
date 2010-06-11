@@ -499,7 +499,7 @@ bool TankMenus::AccessoryMenu::getMenuItems(const char* menuName,
 					firstTank->getAccessories().getAccessoryAndCountString(accessory), 
 					&accessory->getToolTip(), 
 					sel,
-					accessory->getTexture(),
+					&accessory->getTexture(),
 					accessory));
 		}
 	}

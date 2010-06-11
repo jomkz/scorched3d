@@ -446,21 +446,6 @@ void TankDamage::logDeath()
 		context_->getTargetContainer().getTargetById(damagedPlayerId_);
 	if (killedTarget->isTarget()) return;
 
-	// Print the banner on who killed who
-	GLTexture *weaponTexture = 0;
-#ifndef S3D_SERVER
-	if (!context_->getServerMode())
-	{
-		Accessory *accessory = 
-			context_->getAccessoryStore().
-			findByAccessoryId(weapon_->getParent()->getAccessoryId());
-		if (accessory)
-		{
-			weaponTexture = accessory->getTexture();
-		}
-	}
-#endif // #ifndef S3D_SERVER
-
 	Tank *killedTank = (Tank *) killedTarget;
 
 	if (killedTank->getDestinationId() == 0)

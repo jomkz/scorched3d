@@ -30,7 +30,10 @@
 
 REGISTER_CLASS_SOURCE(ExplosionLaserBeamRenderer);
 
-GLTexture *ExplosionLaserBeamRenderer::_texture = 0;
+GLTextureReference ExplosionLaserBeamRenderer::_texture(ImageID(S3D::eModLocation,
+			"data/textures/waves.bmp",
+			"data/textures/waves.bmp",
+			false));
 
 ExplosionLaserBeamRenderer::~ExplosionLaserBeamRenderer()
 {
@@ -58,16 +61,6 @@ void ExplosionLaserBeamRenderer::init(unsigned int playerId,
 		for(int i=0;i<sides;i++){
 			points[j][i]=Vector((float)(360/sides)*i,(double)((size_/(layers+1))*(j+1)));
 		}
-	}
-	if (!_texture)
-	{
-		Image map = ImageFactory::loadImage(
-			S3D::eModLocation,
-			"data/textures/waves.bmp",
-			"data/textures/waves.bmp",
-			false);
-		_texture = new GLTexture;
-		_texture->create(map, true);
 	}
 
 	position_ = position;
@@ -101,7 +94,7 @@ void ExplosionLaserBeamRenderer::init(unsigned int playerId,
 void ExplosionLaserBeamRenderer::draw(Action *action)
 {
 	GLState currentState(GLState::TEXTURE_ON | GLState::BLEND_ON);
-	_texture->draw();
+	_texture.draw();
 
 	glPushMatrix();	
 	glTranslatef(position_[0],position_[1],0.0f);

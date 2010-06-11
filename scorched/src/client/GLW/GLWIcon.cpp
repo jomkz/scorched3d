@@ -26,7 +26,12 @@
 
 REGISTER_CLASS_SOURCE(GLWIcon);
 
-GLWIcon::GLWIcon(float x, float y, float w, float h, GLTexture *texture) : 
+GLWIcon::GLWIcon(float x, float y, float w, float h) : 
+	GLWidget(x, y, w, h)
+{
+}
+
+GLWIcon::GLWIcon(float x, float y, float w, float h, const ImageID &texture) : 
 	GLWidget(x, y, w, h),
 	texture_(texture)
 {
@@ -39,11 +44,11 @@ GLWIcon::~GLWIcon()
 
 void GLWIcon::draw()
 {
-	if (texture_)
+	if (texture_.getImageID().isValid())
 	{
 		GLState state(GLState::TEXTURE_ON | GLState::BLEND_ON);
 		glColor3f(1.0f, 1.0f, 1.0f);
-		texture_->draw();
+		texture_.draw();
 
 		glBegin(GL_QUADS);
 			glTexCoord2f(0.0f, 0.0f);
@@ -58,6 +63,11 @@ void GLWIcon::draw()
 	}
 
 	GLWidget::draw();
+}
+
+void GLWIcon::setTextureImage(const ImageID &imageId) 
+{ 
+	texture_.setImageID(imageId, GLTextureReference::eMipMap | GLTextureReference::eTextureClamped); 
 }
 
 bool GLWIcon::initFromXML(XMLNode *node)
@@ -77,16 +87,11 @@ bool GLWIcon::initFromXML(XMLNode *node)
 		std::string bitmapAName = 
 			S3D::getModFile(bitmapANode->getContent());
 
-		texture_ = GLTextureStore::instance()->loadTexture(
+		setTextureImage(
 			ImageID(S3D::eModLocation, 
 			bitmapNode->getContent(),
 			bitmapANode->getContent(), 
 			invert));
-		if (!texture_) return false;
-
-		texture_->draw();
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
 	}
 	return true;
 }

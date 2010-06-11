@@ -67,10 +67,9 @@ RulesDialog::~RulesDialog()
 {
 }
 
-void RulesDialog::addIcon(GLTexture *texture)
+void RulesDialog::addIcon(const ImageID &imageID)
 {
-	delete icon_->getTexture();
-	icon_->setTexture(texture);
+	icon_->setTextureImage(imageID);
 }
 
 void RulesDialog::addMOTD(const char *text)

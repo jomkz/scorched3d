@@ -38,14 +38,14 @@ public:
 	GLWSelectorEntry(const LangString &text = LangString(), 
 		ToolTip *tooltip = 0, 
 		bool selected = false,
-		GLTexture *icon = 0,
+		GLTextureBase *icon = 0,
 		void *userData = 0,
 		const std::string &dataText = "");
 	
 	LangString &getText() { return text_; }
 	const char *getDataText() { return dataText_.c_str(); }
 	ToolTip *getToolTip() { return tip_; }
-	GLTexture *getIcon() { return icon_; }
+	GLTextureBase *getIcon() { return icon_; }
 	bool getSelected() { return selected_; }
 	bool getSeperator() { return seperator_; }
 	void setSeperator() { seperator_ = true; }
@@ -58,7 +58,7 @@ public:
 protected:
 	LangString text_;
 	std::string dataText_;
-	GLTexture *icon_;
+	GLTextureBase *icon_;
 	int textureWidth_;
 	ToolTip *tip_;
 	Vector color_;

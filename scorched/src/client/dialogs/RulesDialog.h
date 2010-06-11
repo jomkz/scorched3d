@@ -38,7 +38,7 @@ public:
 	virtual void buttonDown(unsigned int id);
 	virtual void draw();
 
-	void addIcon(GLTexture *texture);
+	void addIcon(const ImageID &imageId);
 
 protected:
 	static RulesDialog *instance_;

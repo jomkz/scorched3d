@@ -349,7 +349,7 @@ void GLWScorchedInfo::draw()
 
 			GLState state(GLState::TEXTURE_ON | GLState::BLEND_ON);
 			glColor3f((*fontColor)[0], (*fontColor)[1], (*fontColor)[2]);
-			weapon->getTexture()->draw();
+			weapon->getTexture().draw();
 			glBegin(GL_QUADS);
 				glTexCoord2f(0.0f, 0.0f);
 				glVertex2f(x_, y_);

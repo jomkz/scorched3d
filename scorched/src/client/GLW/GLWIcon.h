@@ -21,27 +21,27 @@
 #if !defined(__INCLUDE_GLWIconh_INCLUDE__)
 #define __INCLUDE_GLWIconh_INCLUDE__
 
-#include <GLEXT/GLTexture.h>
+#include <GLEXT/GLTextureReference.h>
 #include <GLW/GLWidget.h>
 
 class GLWIcon : public GLWidget
 {
 public:
 	GLWIcon(float x = 0.0f, float y = 0.0f, 
-		float w = 0.0f, float h = 0.0f, 
-		GLTexture *texture = 0);
+		float w = 0.0f, float h = 0.0f);
+	GLWIcon(float x, float y, 
+		float w, float h, 
+		const ImageID &imageId);
 	virtual ~GLWIcon();
 
 	virtual void draw();
 	virtual bool initFromXML(XMLNode *node);
 
-	GLTexture *getTexture() { return texture_; }
-	void setTexture(GLTexture *texture) { texture_ = texture; }
+	void setTextureImage(const ImageID &imageId);
 
 	REGISTER_CLASS_HEADER(GLWIcon);
 protected:
-	GLTexture *texture_;
-
+	GLTextureReference texture_;
 };
 
 #endif

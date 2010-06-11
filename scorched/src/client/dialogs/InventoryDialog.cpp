@@ -171,7 +171,7 @@ void InventoryDialog::addPlayerWeapons()
 			sellTab_->addWidget(new GLWPanel(10.0f, (float) height, 315.0f, 20.0f, true));
 		newPanel->setToolTip(&current->getToolTip());
 		newPanel->addWidget(new GLWLabel(0, -2, tank->getAccessories().getAccessoryCountString(current)));
-		newPanel->addWidget(new GLWIcon(30, 2, 16, 16, current->getTexture()));
+		newPanel->addWidget(new GLWIcon(30, 2, 16, 16, current->getTexture().getImageID()));
 		newPanel->addWidget(new GLWLabel(50, -2, LANG_RESOURCE(current->getName(), current->getName())));
 		std::string sellPrice(S3D::formatMoney(current->getSellPrice()));
 		newPanel->addWidget(new GLWLabel(205, -2, 

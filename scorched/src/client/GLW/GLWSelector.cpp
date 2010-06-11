@@ -28,7 +28,7 @@
 GLWSelectorEntry::GLWSelectorEntry(const LangString &text, 
 	ToolTip *tooltip, 
 	bool selected,
-	GLTexture *icon,
+	GLTextureBase *icon,
 	void *userData,
 	const std::string &dataText) : 
 	text_(text),

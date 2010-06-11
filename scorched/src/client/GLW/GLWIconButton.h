@@ -39,8 +39,7 @@ public:
 	virtual void setW(float w);
 	virtual void setH(float h);
 
-	GLTexture *getTexture() { return icon_.getTexture(); }
-	void setTexture(GLTexture *texture) { icon_.setTexture(texture); }
+	void setTextureImage(const ImageID &imageId) { icon_.setTextureImage(imageId); }
 
 	REGISTER_CLASS_HEADER(GLWIconButton);
 

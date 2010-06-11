@@ -25,7 +25,10 @@
 #include <image/ImageFactory.h>
 #include <common/Defines.h>
 
-Wall::Wall() : createdTexture_(false)
+Wall::Wall() : texture_(ImageID(S3D::eModLocation,
+	"data/textures/bordershield/grid.bmp",
+	"data/textures/bordershield/grid.bmp",
+	false))
 {
 	for (int i=0; i<4; i++) fadeTime_[i] = 0.0f;
 }
@@ -36,17 +39,6 @@ Wall::~Wall()
 
 void Wall::draw()
 {
-	if (!createdTexture_)
-	{
-		createdTexture_ = true;
-		Image map = ImageFactory::loadImage(
-			S3D::eModLocation,
-			"data/textures/bordershield/grid.bmp",
-			"data/textures/bordershield/grid.bmp",
-			false);
-		texture_.create(map, true);
-	}
-
 	float arenaX = (float) ScorchedClient::instance()->getLandscapeMaps().
 			getGroundMaps().getArenaX();
 	float arenaY = (float) ScorchedClient::instance()->getLandscapeMaps().

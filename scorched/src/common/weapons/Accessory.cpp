@@ -52,9 +52,6 @@ Accessory::Accessory() :
 	botOnly_(false),
 	noBuy_(false)
 {
-#ifndef S3D_SERVER
-	texture_ = 0;
-#endif
 }
 
 Accessory::~Accessory()
@@ -83,6 +80,23 @@ bool Accessory::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode
 	{
 		if (!S3D::checkDataFile(S3D::formatStringBuffer("data/textures/wicons/%s", getIconName()))) return false;
 	}
+
+#ifndef S3D_SERVER
+	if (getIconName()[0])
+	{
+		texture_.setImageID(ImageID(
+			S3D::eModLocation,
+			"",
+			S3D::formatStringBuffer("data/textures/wicons/%s", getIconName())));
+	}
+	else
+	{
+		texture_.setImageID(ImageID(
+			S3D::eModLocation,
+			"",
+			S3D::formatStringBuffer("data/textures/wicons/%s", "tracer.bmp")));
+	}
+#endif
 
 	// Get the accessory sound 
 	if (accessoryNode->getNamedChild("activationsound", activationSound_, false))
@@ -245,34 +259,6 @@ const char *Accessory::getActivationSound()
 }
 
 #ifndef S3D_SERVER
-
-GLTexture *Accessory::getTexture()
-{
-	if (texture_) return texture_;
-
-	GLTexture *texture = 0;
-	if (getIconName()[0])
-	{
-		Image bmap =
-			ImageFactory::loadAlphaImage(
-				S3D::eModLocation,
-				S3D::formatStringBuffer("data/textures/wicons/%s", getIconName()));
-		texture = new GLTexture();
-		texture->create(bmap, false);
-	}
-	else
-	{
-		Image bmap =
-			ImageFactory::loadAlphaImage(
-				S3D::eModLocation,
-				S3D::formatStringBuffer("data/textures/wicons/%s", "tracer.bmp"));
-		texture = new GLTexture();
-		texture->create(bmap, false);
-	}
-	texture_ = texture;
-	return texture;
-}
-
 
 std::map<std::string, MissileMesh *> Accessory::loadedMeshes_;
 
