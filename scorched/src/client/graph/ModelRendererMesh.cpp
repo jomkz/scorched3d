@@ -21,7 +21,6 @@
 #include <graph/ModelRendererMesh.h>
 #include <graph/OptionsDisplay.h>
 #include <3dsparse/ModelMaths.h>
-#include <GLEXT/GLTextureStore.h>
 #include <GLEXT/GLGlobalState.h>
 #include <GLEXT/GLStateExtension.h>
 #include <GLEXT/GLTexture.h>
@@ -67,21 +66,6 @@ void ModelRendererMesh::setup()
 	for (int f=0; f<=model_->getTotalFrames(); f++)
 	{
 		frameInfos_.push_back(frameInfo);
-	}
-	
-	for (unsigned int m=0; m<model_->getMeshes().size(); m++)
-	{
-		Mesh *mesh = model_->getMeshes()[m];
-		if (mesh->getTextureName()[0])
-		{
-			GLTexture *texture =
-				GLTextureStore::instance()->loadTexture(
-					ImageID(
-						S3D::eAbsLocation,
-						mesh->getTextureName(), 
-						mesh->getATextureName()));
-			mesh->setTexture(texture);
-		}
 	}
 }
 
@@ -206,10 +190,10 @@ void ModelRendererMesh::drawMesh(Mesh *mesh, Mesh *lastMesh,
 {
 	if (useTextures)
 	{
-		if (mesh->getTexture() &&
-			(!lastMesh || mesh->getTexture() != lastMesh->getTexture()))
+		if (mesh->getTexture().getData() &&
+			(!lastMesh || mesh->getTexture().getData() != lastMesh->getTexture().getData()))
 		{
-			((GLTexture *) mesh->getTexture())->draw(true);
+			mesh->getTexture().draw(true);
 		}
 		if (mesh->getSphereMap())
 		{

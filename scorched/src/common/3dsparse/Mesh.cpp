@@ -24,7 +24,7 @@
 
 Mesh::Mesh(const char *name) : name_(name),
 	sphereMap_(false),
-	texture_(0)
+	textureSet_(false)
 {
 }
 
@@ -84,5 +84,22 @@ void Mesh::setTextureName(const char *t)
 	{
 		sphereMap_ = (strstr(t, "/sphere_") != 0);
 		textureName_ = t; 
+
+		textureSet_ = true;
+		texture_.setImageID(
+			ImageID(S3D::eAbsLocation,
+				textureName_, 
+				aTextureName_));
 	}
+}
+
+void  Mesh::setATextureName(const char *t) 
+{
+	aTextureName_ = t; 
+
+	textureSet_ = true;
+	texture_.setImageID(
+		ImageID(S3D::eAbsLocation,
+			textureName_, 
+			aTextureName_));
 }

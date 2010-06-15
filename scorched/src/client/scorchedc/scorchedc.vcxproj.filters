@@ -2298,6 +2298,9 @@
     <ClCompile Include="..\GLEXT\GLTextureStore.cpp">
       <Filter>GLEXT</Filter>
     </ClCompile>
+    <ClCompile Include="..\GLEXT\GLTextureReferenceData.cpp">
+      <Filter>GLEXT</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -4497,6 +4500,9 @@
       <Filter>GLEXT</Filter>
     </ClInclude>
     <ClInclude Include="..\GLEXT\GLTextureReference.h">
+      <Filter>GLEXT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GLEXT\GLTextureReferenceData.h">
       <Filter>GLEXT</Filter>
     </ClInclude>
   </ItemGroup>

@@ -18,11 +18,7 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <graph/OptionsDisplay.h>
-#include <image/ImageFactory.h>
 #include <GLEXT/GLTextureStore.h>
-#include <GLEXT/GLTexture.h>
-#include <common/Defines.h>
 
 GLTextureStore *GLTextureStore::instance_ = 0;
 
@@ -43,59 +39,27 @@ GLTextureStore::~GLTextureStore()
 {
 }
 
-void GLTextureStore::addTextureReference(GLTextureReference &textureReference)
+GLTextureReferenceData *GLTextureStore::getTextureReference(const ImageID &imageId, unsigned texState)
 {
-	references_.insert(&textureReference);
+	std::string hash = ((ImageID &)imageId).getStringHash() + char(texState);
+	std::map<std::string, GLTextureReferenceData *>::iterator itor = references_.find(hash);
+	if (itor != references_.end())
+	{
+		return itor->second;
+	}
+
+	GLTextureReferenceData *result = new GLTextureReferenceData(imageId, texState);
+	result->incrementReferenceCount();
+	references_[hash] = result;
+	return result;
 }
 
-void GLTextureStore::removeTextureReference(GLTextureReference &textureReference)
+void GLTextureStore::removeTextureReference(GLTextureReferenceData *reference)
 {
-	references_.erase(&textureReference);
-}
-
-GLTexture *GLTextureStore::loadTexture(const ImageID &imageID)
-{
-	// Try to find the texture in the cache first
-	std::map<std::string, GLTexture *>::iterator itor =
-		skins_.find(((ImageID &) imageID).getStringHash());
-	if (itor != skins_.end())
+	if (reference->incrementReferenceCount() <= 0)
 	{
-		return (*itor).second;
+		std::string hash = ((ImageID &)reference->getImageID()).getStringHash() + char(reference->getTexState());
+		references_.erase(hash);
+		delete reference;
 	}
-
-	// Load tank skin as bitmap
-	Image map = ImageFactory::loadImageID(imageID);
-	if (!map.getBits())
-	{
-		S3D::dialogMessage("Scorched3D load texture", S3D::formatStringBuffer(
-			"Failed to load texture file \"%s\",\n"
-			"alpha file \"%s\"",
-			((ImageID &) imageID).getImageName().c_str(),
-			((ImageID &) imageID).getAlphaName().c_str()));
-		return 0;
-	}
-
-	// HACK for skin creator
-#ifdef dDOUBLE
-	// Use smaller tank skins for texture size 0
-	// Resize the bitmap
-	if (OptionsDisplay::instance()->getTexSize() == 0)
-	{
-		map->resize(map->getWidth() / 2, 
-				   map->getHeight() / 2);
-	}
-#endif
-
-	// Create skin texture from bitmap
-	GLTexture *texture = new GLTexture;
-	if (!texture->create(map))
-	{
-		S3D::dialogMessage("Scorched3D create texture", S3D::formatStringBuffer(
-			"Failed to create texture \"%s\"",
-			((ImageID &) imageID).getImageName().c_str()));
-		return 0;
-	}
-
-	skins_[((ImageID &) imageID).getStringHash()] = texture;
-	return texture;
 }

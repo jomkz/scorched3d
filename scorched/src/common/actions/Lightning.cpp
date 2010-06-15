@@ -23,8 +23,6 @@
 #include <common/RandomGenerator.h>
 #ifndef S3D_SERVER
 	#include <sound/SoundUtils.h>
-	#include <GLEXT/GLTextureStore.h>
-	#include <GLEXT/GLState.h>
 	#include <GLEXT/GLCamera.h>
 	#include <sprites/ExplosionTextures.h>
 #endif
@@ -44,8 +42,7 @@ Lightning::Lightning(WeaponLightning *weapon,
 	totalTime_(0),
 	weapon_(weapon),
 	weaponContext_(weaponContext),
-	position_(position), velocity_(velocity),
-	texture_(0)
+	position_(position), velocity_(velocity)
 {
 }
 
@@ -78,6 +75,14 @@ void Lightning::init()
 				damage, true, false, false);
 		}
 	}
+
+#ifndef S3D_SERVER
+	texture_.setImageID(
+		ImageID(S3D::eModLocation, 
+		weapon_->getTexture(), 
+		weapon_->getTexture(), 
+		false));
+#endif
 }
 
 std::string Lightning::getActionDetails()
@@ -127,17 +132,7 @@ void Lightning::draw()
 		glDepthMask(GL_FALSE);
 		glColor4f(1.0f, 1.0f, 1.0f, 
 			1.0f - totalTime_.asFloat() / weapon_->getTotalTime().asFloat());
-
-		if (!texture_)
-		{
-			std::string file4 = S3D::getModFile(weapon_->getTexture());
-			texture_ = GLTextureStore::instance()->loadTexture(
-				ImageID(S3D::eModLocation, 
-				weapon_->getTexture(), 
-				weapon_->getTexture(), 
-				false));
-		}
-		texture_->draw();
+		texture_.draw();
 		
 		Vector offset(0.0f, 0.0f, 0.5f);
 		bool began = false; 

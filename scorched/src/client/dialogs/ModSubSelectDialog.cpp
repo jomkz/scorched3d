@@ -27,7 +27,6 @@
 #include <GLW/GLWTranslate.h>
 #include <client/ClientParams.h>
 #include <client/ClientMain.h>
-#include <GLEXT/GLTextureStore.h>
 #include <engine/ModDirs.h>
 #include <common/Defines.h>
 

@@ -63,10 +63,10 @@ protected:
 	static NetworkSelectDialog *instance_;
 
 	float totalTime_;
-	GLTexture *okTex_, *questionTex_;
-	GLTexture *warningTex_, *noentryTex_;
-	GLTexture *tankTex_, *exclaimTex_;
-	GLTexture *keyTex_, *cogTex_;
+	GLTextureReference okTex_, questionTex_;
+	GLTextureReference warningTex_, noentryTex_;
+	GLTextureReference tankTex_, exclaimTex_;
+	GLTextureReference keyTex_, cogTex_;
 	GLWIconTable *gamesIconTable_;
 	GLWIconTable *playersIconTable_;
 	GLWTextButton *ok_, *refresh_, *favourites_;

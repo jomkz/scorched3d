@@ -26,7 +26,6 @@
 #include <GLW/GLWWindowManager.h>
 #include <GLW/GLWFont.h>
 #include <GLW/GLWTranslate.h>
-#include <GLEXT/GLTextureStore.h>
 #include <engine/ModDirs.h>
 #include <common/Defines.h>
 

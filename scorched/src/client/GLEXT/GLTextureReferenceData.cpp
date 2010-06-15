@@ -18,36 +18,42 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <common/Defines.h>
-#include <GLEXT/GLTextureSet.h>
+#include <GLEXT/GLTextureReferenceData.h>
+#include <GLEXT/GLTextureReference.h>
+#include <image/ImageFactory.h>
+#include <GLEXT/GLTexture.h>
 
-GLTextureSet::GLTextureSet()
+GLTextureReferenceData::GLTextureReferenceData(const ImageID &imageId, unsigned texState) :
+	imageId_(imageId),
+	texState_(texState),
+	texture_(0),
+	referenceCount_(0)
 {
 }
 
-GLTextureSet::~GLTextureSet()
+GLTextureReferenceData::~GLTextureReferenceData()
 {
-	while (!textures_.empty())
+	reset();
+}
+
+void GLTextureReferenceData::reset()
+{
+	delete texture_;
+	texture_ = 0;
+}
+
+GLTexture *GLTextureReferenceData::getTexture()
+{
+	if (!texture_)
 	{
-		GLTexture *texture = textures_.back();
-		delete texture;
-		textures_.pop_back();
+		Image image = ImageFactory::loadImageID(imageId_);
+		texture_ = new GLTexture();
+		texture_->create(image, texState_ & GLTextureReference::eMipMap);
+		if (texState_ & GLTextureReference::eTextureClamped)
+		{
+			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
+			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+		}
 	}
-}
-
-const int GLTextureSet::getNoTextures()
-{
-	return (int) textures_.size();
-}
-
-GLTexture *GLTextureSet::getTexture(int index)
-{
-	DIALOG_ASSERT(index >= 0 && index < getNoTextures());
-
-	return textures_[index];
-}
-
-void GLTextureSet::addTexture(GLTexture *texture)
-{
-	textures_.push_back(texture);
+	return texture_;
 }

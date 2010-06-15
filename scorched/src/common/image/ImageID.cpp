@@ -101,6 +101,6 @@ bool ImageID::initFromNode(XMLNode *imageNode)
 
 const std::string &ImageID::getStringHash()
 { 
-	hash_ = imageName_ + "-" + alphaName_ + (invert_?"A":"B");
+	hash_ = imageName_ + "-" + alphaName_ + (invert_?"A":"B") + char(imageLocation_);
 	return hash_; 
 }

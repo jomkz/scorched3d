@@ -21,8 +21,7 @@
 #if !defined(__INCLUDE_TextureReferenceh_INCLUDE__)
 #define __INCLUDE_TextureReferenceh_INCLUDE__
 
-#include <image/ImageID.h>
-#include <GLEXT/GLTexture.h>
+#include <GLEXT/GLTextureReferenceData.h>
 
 class GLTextureReference : public GLTextureBase
 {
@@ -34,23 +33,22 @@ public:
 	};
 
 	GLTextureReference();
+	GLTextureReference(const GLTextureReference &other);
 	GLTextureReference(const ImageID &imageId, unsigned texState = eMipMap);
 	~GLTextureReference();
 
+	GLTextureReference &operator=(const GLTextureReference &other);
 	void setImageID(const ImageID &imageId, unsigned texState = eMipMap);
 
-	virtual void draw(bool force = false); 
+	virtual void draw(bool force = false) { data_->getTexture()->draw(force); }
 	
-	ImageID &getImageID() { return imageId_; }
-	GLTexture *getTexture();
-	void reset();
+	GLTextureReferenceData *getData() { return data_; }
+	bool isValid() { return data_ != 0; }
+	ImageID &getImageID() { return data_->getImageID(); }
+	unsigned int getTexState() { return data_->getTexState(); }
+	GLTexture *getTexture() { return data_->getTexture(); }
 protected:
-	GLTexture *texture_;
-	ImageID imageId_;
-	unsigned texState_;
-private:
-	GLTextureReference(const GLTextureReference &other);
-	GLTextureReference &operator=(const GLTextureReference &other);
+	GLTextureReferenceData *data_;
 };
 
 #endif

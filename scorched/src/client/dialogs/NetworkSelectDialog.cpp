@@ -79,9 +79,31 @@ NetworkSelectDialog *NetworkSelectDialog::instance()
 NetworkSelectDialog::NetworkSelectDialog() : 
 	GLWWindow("Network", 780.0f, 560.0f, eHideName, ""),
 	totalTime_(0.0f), invalidateId_(0),
-	okTex_(0), questionTex_(0),
-	warningTex_(0), noentryTex_(0),
-	tankTex_(0)
+	okTex_(ImageID(S3D::eDataLocation,
+		"data/images/ok.bmp",
+		"data/images/mask.bmp")),
+	questionTex_(ImageID(S3D::eDataLocation,
+		"data/images/question.bmp",
+		"data/images/mask.bmp")),
+	warningTex_(ImageID(S3D::eDataLocation,
+		"data/images/warn.bmp",
+		"data/images/mask.bmp")),
+	noentryTex_(ImageID(S3D::eDataLocation,
+		"data/images/noentry.bmp",
+		"data/images/mask.bmp")),
+	exclaimTex_(ImageID(S3D::eDataLocation,
+		"data/images/exclaim.bmp",
+		"data/images/mask.bmp")),
+	keyTex_(ImageID(S3D::eDataLocation,
+		"data/images/key.bmp",
+		"data/images/keya.bmp",
+		true)),
+	cogTex_(ImageID(S3D::eDataLocation,
+		"data/images/cog.bmp",
+		"data/images/coga.bmp",
+		true)),
+	tankTex_(ImageID(S3D::eDataLocation,
+		"data/images/tank2s.bmp"))
 {
 	std::list<GLWIconTable::Column> gamescolumns, playerscolumns;
 	for (int i=0;; i++)
@@ -192,7 +214,7 @@ GLTexture *NetworkSelectDialog::getTexture(int row, LangString *&message)
 		LANG_RESOURCE_CONST_VAR(INCOMPATIBLE, 
 			"INCOMPATIBLE_VERSION", "Incompatible version.");
 		message = &INCOMPATIBLE;
-		return noentryTex_;
+		return noentryTex_.getTexture();
 	}
 
 	std::string clients = 
@@ -207,7 +229,7 @@ GLTexture *NetworkSelectDialog::getTexture(int row, LangString *&message)
 		LANG_RESOURCE_CONST_VAR(SERVER_FULL, 
 			"SERVER_FULL", "Server is full.");
 		message = &SERVER_FULL;
-		return exclaimTex_;
+		return exclaimTex_.getTexture();
 	}
 	
 	std::string state = 
@@ -218,20 +240,20 @@ GLTexture *NetworkSelectDialog::getTexture(int row, LangString *&message)
 		LANG_RESOURCE_CONST_VAR(NOT_STARTED, 
 			"GAME_NOT_STARTED", "Game has not started.");
 		message = &NOT_STARTED;
-		return warningTex_;
+		return warningTex_.getTexture();
 	}
 	if (0 == strcmp(state.c_str(), "Started"))
 	{
 		LANG_RESOURCE_CONST_VAR(GAME_PROGESS, 
 			"GAME_IN_PROGRESS", "Game in progress and spaces on server.");
 		message = &GAME_PROGESS;
-		return okTex_;
+		return okTex_.getTexture();
 	}
 
 	LANG_RESOURCE_CONST_VAR(CANNOT_CONTACT_SERVER, 
 		"CANNOT_CONTACT_SERVER", "Cannot contact server.");
 	message = &CANNOT_CONTACT_SERVER;
-	return questionTex_;
+	return questionTex_.getTexture();
 }
 
 void NetworkSelectDialog::drawColumn(unsigned int id, int row, int col,
@@ -252,43 +274,6 @@ void NetworkSelectDialog::drawColumnGames(unsigned int id, int row, int col,
 	std::string value, tipValue;
 	if (col == 0)
 	{
-		if (!okTex_)
-		{
-			okTex_ = GLTextureStore::instance()->loadTexture(
-				ImageID(S3D::eDataLocation,
-					"data/images/ok.bmp",
-					"data/images/mask.bmp"));
-			questionTex_ = GLTextureStore::instance()->loadTexture(
-				ImageID(S3D::eDataLocation,
-					"data/images/question.bmp",
-					"data/images/mask.bmp"));
-			warningTex_ = GLTextureStore::instance()->loadTexture(
-				ImageID(S3D::eDataLocation,
-					"data/images/warn.bmp",
-					"data/images/mask.bmp"));
-			noentryTex_ = GLTextureStore::instance()->loadTexture(
-				ImageID(S3D::eDataLocation,
-					"data/images/noentry.bmp",
-					"data/images/mask.bmp"));
-			exclaimTex_ = GLTextureStore::instance()->loadTexture(
-				ImageID(S3D::eDataLocation,
-					"data/images/exclaim.bmp",
-					"data/images/mask.bmp"));
-			keyTex_ = GLTextureStore::instance()->loadTexture(
-				ImageID(S3D::eDataLocation,
-					"data/images/key.bmp",
-					"data/images/keya.bmp",
-					true));
-			cogTex_ = GLTextureStore::instance()->loadTexture(
-				ImageID(S3D::eDataLocation,
-					"data/images/cog.bmp",
-					"data/images/coga.bmp",
-					true));
-			tankTex_ = GLTextureStore::instance()->loadTexture(
-				ImageID(S3D::eDataLocation,
-				"data/images/tank2s.bmp"));
-		}
-
 		LANG_RESOURCE_CONST_VAR(NONE, "NONE", "None");
 
 		{
@@ -304,7 +289,7 @@ void NetworkSelectDialog::drawColumnGames(unsigned int id, int row, int col,
 		{
 			LANG_RESOURCE_CONST_VAR(
 				PASSWORD_PROTECTED, "PASSWORD_PROTECTED", "Password protected.");
-			drawIcon(keyTex_, x, y, PASSWORD_PROTECTED);
+			drawIcon(keyTex_.getTexture(), x, y, PASSWORD_PROTECTED);
 		}
 
 		std::string officialStr = 
@@ -314,13 +299,13 @@ void NetworkSelectDialog::drawColumnGames(unsigned int id, int row, int col,
 		{
 			LANG_RESOURCE_CONST_VAR(
 				OFFICAL_SERVER, "OFFICAL_SERVER", "An offical server.");
-			drawIcon(tankTex_, x, y, OFFICAL_SERVER);
+			drawIcon(tankTex_.getTexture(), x, y, OFFICAL_SERVER);
 		}
 		else if (officialStr == "mod")
 		{
 			LANG_RESOURCE_CONST_VAR(
 				MOD_SERVER, "MOD_SERVER", "Home of mod server.");
-			drawIcon(cogTex_, x, y, MOD_SERVER);
+			drawIcon(cogTex_.getTexture(), x, y, MOD_SERVER);
 		}
 	}
 	else if (col == 2)

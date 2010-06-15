@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <dialogs/MsgBoxDialog.h>
-#include <GLEXT/GLTextureStore.h>
 #include <GLW/GLWWindowManager.h>
 
 MsgBoxDialog *MsgBoxDialog::instance_ = 0;

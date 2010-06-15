@@ -50,6 +50,30 @@ ExplosionTextures::~ExplosionTextures()
 
 bool ExplosionTextures::createTextures(ProgressCounter *counter)
 {
+	// Tidy
+	{
+		std::map<std::string, GLTextureSet*>::iterator itor;
+		for (itor = textureSets.begin();
+			itor != textureSets.end();
+			itor++)
+		{
+			delete itor->second;
+		}
+		textureSets.clear();
+	}
+
+	// Tidy
+	{
+		std::map<std::string, Image*>::iterator itor;
+		for (itor = scorchedBitmaps.begin();
+			itor != scorchedBitmaps.end();
+			itor++)
+		{
+			delete itor->second;
+		}
+		scorchedBitmaps.clear();
+	}
+
 	if (counter) counter->setNewOp(LANG_RESOURCE("EXPLOSION_TEXTURES", "Explosion Textures"));
 
 	{

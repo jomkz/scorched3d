@@ -18,36 +18,34 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <common/Defines.h>
-#include <GLEXT/GLTextureSet.h>
+#if !defined(__INCLUDE_TextureReferenceDatah_INCLUDE__)
+#define __INCLUDE_TextureReferenceDatah_INCLUDE__
 
-GLTextureSet::GLTextureSet()
+#include <image/ImageID.h>
+#include <GLEXT/GLTexture.h>
+
+class GLTextureReferenceData
 {
-}
+public:
+	GLTextureReferenceData(const ImageID &imageId, unsigned texState);
+	~GLTextureReferenceData();
+	
+	void reset();
 
-GLTextureSet::~GLTextureSet()
-{
-	while (!textures_.empty())
-	{
-		GLTexture *texture = textures_.back();
-		delete texture;
-		textures_.pop_back();
-	}
-}
+	int incrementReferenceCount() { return ++referenceCount_; }
+	int decrementReferenceCount() { return --referenceCount_; }
 
-const int GLTextureSet::getNoTextures()
-{
-	return (int) textures_.size();
-}
+	ImageID &getImageID() { return imageId_; }
+	unsigned int getTexState() { return texState_; }
+	GLTexture *getTexture();
+protected:
+	int referenceCount_;
+	GLTexture *texture_;
+	ImageID imageId_;
+	unsigned texState_;
+private:
+	GLTextureReferenceData(const GLTextureReferenceData &other);
+	GLTextureReferenceData &operator=(const GLTextureReferenceData &other);
+};
 
-GLTexture *GLTextureSet::getTexture(int index)
-{
-	DIALOG_ASSERT(index >= 0 && index < getNoTextures());
-
-	return textures_[index];
-}
-
-void GLTextureSet::addTexture(GLTexture *texture)
-{
-	textures_.push_back(texture);
-}
+#endif

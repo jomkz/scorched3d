@@ -23,57 +23,38 @@
 #include <image/ImageFactory.h>
 #include <GLEXT/GLTexture.h>
 
-GLTextureReference::GLTextureReference(const ImageID &imageId, unsigned texState) :
-	imageId_(imageId),
-	texState_(texState),
-	texture_(0)
+GLTextureReference::GLTextureReference() :
+	data_(0)
 {
-	GLTextureStore::instance()->addTextureReference(*this);
 }
 
-GLTextureReference::GLTextureReference() :
-	texture_(0),
-	texState_(eMipMap)
+GLTextureReference::GLTextureReference(const ImageID &imageId, unsigned texState)
 {
-	GLTextureStore::instance()->addTextureReference(*this);
+	data_ = GLTextureStore::instance()->getTextureReference(imageId, texState);
+}
+
+GLTextureReference::GLTextureReference(const GLTextureReference &other)
+{
+	data_ = other.data_;
+	if (data_) data_->incrementReferenceCount();
 }
 
 GLTextureReference::~GLTextureReference()
 {
-	GLTextureStore::instance()->removeTextureReference(*this);
-	reset();
+	if (data_) GLTextureStore::instance()->removeTextureReference(data_);
+	data_ = 0;
+}
+
+GLTextureReference &GLTextureReference::operator=(const GLTextureReference &other)
+{
+	if (data_) GLTextureStore::instance()->removeTextureReference(data_);
+	data_ = other.data_;
+	if (data_) data_->incrementReferenceCount();
+	return *this;
 }
 
 void GLTextureReference::setImageID(const ImageID &imageId, unsigned texState) 
 {
-	reset();
-	imageId_ = imageId;
-	texState_ = texState;
-}
-
-void GLTextureReference::reset()
-{
-	delete texture_;
-	texture_ = 0;
-}
-
-GLTexture *GLTextureReference::getTexture()
-{
-	if (!texture_)
-	{
-		Image image = ImageFactory::loadImageID(imageId_);
-		texture_ = new GLTexture();
-		texture_->create(image, texState_ & eMipMap);
-		if (texState_ & eTextureClamped)
-		{
-			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
-			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
-		}
-	}
-	return texture_;
-}
-
-void GLTextureReference::draw(bool force)
-{
-	getTexture()->draw(force);
+	if (data_) GLTextureStore::instance()->removeTextureReference(data_);
+	data_ = GLTextureStore::instance()->getTextureReference(imageId, texState);
 }

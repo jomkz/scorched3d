@@ -538,6 +538,7 @@
     <ClCompile Include="..\GLEXT\GLTextureBase.cpp" />
     <ClCompile Include="..\GLEXT\GLTextureCubeMap.cpp" />
     <ClCompile Include="..\GLEXT\GLTextureReference.cpp" />
+    <ClCompile Include="..\GLEXT\GLTextureReferenceData.cpp" />
     <ClCompile Include="..\GLEXT\GLTextureSet.cpp" />
     <ClCompile Include="..\GLEXT\GLTextureStore.cpp" />
     <ClCompile Include="..\GLEXT\GLVertexBufferObject.cpp" />
@@ -1269,6 +1270,7 @@
     <ClInclude Include="..\GLEXT\GLTextureBase.h" />
     <ClInclude Include="..\GLEXT\GLTextureCubeMap.h" />
     <ClInclude Include="..\GLEXT\GLTextureReference.h" />
+    <ClInclude Include="..\GLEXT\GLTextureReferenceData.h" />
     <ClInclude Include="..\GLEXT\GLTextureSet.h" />
     <ClInclude Include="..\GLEXT\GLTextureStore.h" />
     <ClInclude Include="..\GLEXT\GLVertexBufferObject.h" />

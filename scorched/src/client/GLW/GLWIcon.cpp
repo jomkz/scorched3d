@@ -44,7 +44,7 @@ GLWIcon::~GLWIcon()
 
 void GLWIcon::draw()
 {
-	if (texture_.getImageID().isValid())
+	if (texture_.isValid())
 	{
 		GLState state(GLState::TEXTURE_ON | GLState::BLEND_ON);
 		glColor3f(1.0f, 1.0f, 1.0f);

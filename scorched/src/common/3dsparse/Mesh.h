@@ -28,6 +28,10 @@
 #include <vector>
 #include <string>
 
+#ifndef S3D_SERVER
+#include <GLEXT/GLTextureReference.h>
+#endif
+
 class Mesh
 {
 public:
@@ -53,8 +57,10 @@ public:
 	const char *getATextureName() 
 		{ return aTextureName_.c_str(); }
 
-	void *getTexture() { return texture_; }
-	void setTexture(void *texture) { texture_ = texture; }
+#ifndef S3D_SERVER
+	bool getTextureSet() { return textureSet_; }
+	GLTextureReference &getTexture() { return texture_; }
+#endif
 
 	std::vector<Face *> &getFaces() 
 		{ return faces_; }
@@ -75,7 +81,7 @@ public:
 		{ faces_.push_back(new Face(face)); }
 	void insertVertex(Vertex &vertex);
 	void setTextureName(const char *t);
-	void setATextureName(const char *t) { aTextureName_ = t; }
+	void setATextureName(const char *t);
 	void setFaceNormal(FixedVector &normal, int faceIndex, int normalIndex)
 		{ DIALOG_ASSERT(faceIndex < (int) faces_.size()); 
 		faces_[faceIndex]->normal[normalIndex] = normal; }
@@ -84,7 +90,10 @@ public:
 		faces_[faceIndex]->tcoord[coordIndex] = coord; }
 
 protected:
-	void *texture_;
+#ifndef S3D_SERVER
+	bool textureSet_;
+	GLTextureReference texture_;
+#endif
 	std::string name_;
 	std::string textureName_, aTextureName_;
 	std::vector<Face *> faces_;

@@ -22,25 +22,19 @@
 #define __INCLUDE_GLTextureStoreh_INCLUDE__
 
 #include <map>
-#include <set>
-#include <string>
-#include <GLEXT/GLTextureReference.h>
+#include <GLEXT/GLTextureReferenceData.h>
 
-class GLTexture;
 class GLTextureStore
 {
 public:
 	static GLTextureStore *instance();
 
-	GLTexture *loadTexture(const ImageID &imageID);
-
-	void addTextureReference(GLTextureReference &textureReference);
-	void removeTextureReference(GLTextureReference &textureReference);
+	GLTextureReferenceData *getTextureReference(const ImageID &imageId, unsigned texState);
+	void removeTextureReference(GLTextureReferenceData *reference);
 
 protected:
 	static GLTextureStore *instance_;
-	std::map<std::string, GLTexture *> skins_;
-	std::set<GLTextureReference *> references_;
+	std::map<std::string, GLTextureReferenceData *> references_;
 
 private:
 	GLTextureStore();
