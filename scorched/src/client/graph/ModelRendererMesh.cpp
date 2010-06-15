@@ -67,6 +67,16 @@ void ModelRendererMesh::setup()
 	{
 		frameInfos_.push_back(frameInfo);
 	}
+
+	for (unsigned int m=0; m<model_->getMeshes().size(); m++)
+	{
+		Mesh *mesh = model_->getMeshes()[m];
+		if (mesh->getTexture().getData())
+		{
+			// Force loading of texture outside of display list
+			mesh->getTexture().draw(true);
+		}
+	}
 }
 
 void ModelRendererMesh::drawBottomAligned(float currentFrame, 
