@@ -48,6 +48,7 @@ MessageDialog::MessageDialog() :
 
 MessageDialog::~MessageDialog()
 {
+	ClientChannelManager::instance()->deregisterClient(this);
 }
 
 void MessageDialog::channelText(ChannelText &text)

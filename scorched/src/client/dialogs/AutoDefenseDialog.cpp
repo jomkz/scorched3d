@@ -35,6 +35,12 @@
 #include <client/ScorchedClient.h>
 #include <lang/LangResource.h>
 
+AutoDefenseDialog *AutoDefenseDialog::instance()
+{
+	static AutoDefenseDialog instance;
+	return &instance;
+}
+
 AutoDefenseDialog::AutoDefenseDialog() :
 	GLWWindow("Auto Defense", 10.0f, 10.0f, 440.0f, 280.0f, 0,
 		"Allows the current player to raise and\n"

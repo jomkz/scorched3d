@@ -181,6 +181,7 @@ void ClientWindowSetup::setupStartWindows(GLWWindowSkinManager *skinManager)
 	KEYBOARDKEY("SHOW_SOUND_DIALOG", showSoundKey);
 
 	// StateOptions
+	GLWWindowManager::instance()->removeState(ClientState::StateOptions);
 	GLWWindowManager::instance()->addWindow(ClientState::StateOptions, 
 		AnimatedBackdropDialog::instance(), 0, true);
 	GLWWindowManager::instance()->addWindow(ClientState::StateOptions, 
@@ -209,6 +210,7 @@ void ClientWindowSetup::setupStartWindows(GLWWindowSkinManager *skinManager)
 		MsgBoxDialog::instance(), 0, false);
 
 	// StateConnect
+	GLWWindowManager::instance()->removeState(ClientState::StateConnect);
 	GLWWindowManager::instance()->addWindow(ClientState::StateConnect, 
 		BackdropDialog::instance(), 0, true);
 	GLWWindowManager::instance()->addWindow(ClientState::StateConnect, 
@@ -229,6 +231,7 @@ void ClientWindowSetup::setupStartWindows(GLWWindowSkinManager *skinManager)
 		MsgBoxDialog::instance(), 0, false);
 
 	// StateDisconnected
+	GLWWindowManager::instance()->removeState(ClientState::StateDisconnected);
 	GLWWindowManager::instance()->addWindow(ClientState::StateDisconnected, 
 		BackdropDialog::instance(), 0, true);
 	GLWWindowManager::instance()->addWindow(ClientState::StateDisconnected, 
@@ -245,6 +248,7 @@ void ClientWindowSetup::setupStartWindows(GLWWindowSkinManager *skinManager)
 		MsgBoxDialog::instance(), 0, false);
 
 	// StateLoadFiles
+	GLWWindowManager::instance()->removeState(ClientState::StateLoadFiles);
 	GLWWindowManager::instance()->addWindow(ClientState::StateLoadFiles,
 		BackdropDialog::instance(), 0, true);
 	addStateWindows(skinManager, ClientState::StateLoadFiles, "start");
@@ -264,6 +268,7 @@ void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 	KEYBOARDKEY("SHOW_SOUND_DIALOG", showSoundKey);
 
 	// StateWaitNoLandscape
+	GLWWindowManager::instance()->removeState(ClientState::StateWaitNoLandscape);
 	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape,
 		BackdropDialog::instance(), 0, true);
 	addStateWindows(skinManager, ClientState::StateWaitNoLandscape, "start");
@@ -288,6 +293,7 @@ void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 	}
 
 	// StateLoadLevel
+	GLWWindowManager::instance()->removeState(ClientState::StateLoadLevel);
 	GLWWindowManager::instance()->addWindow(ClientState::StateLoadLevel,
 		BackdropDialog::instance(), 0, true);
 	addStateWindows(skinManager, ClientState::StateLoadLevel, "start");
@@ -295,9 +301,11 @@ void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 		ProgressDialog::instance(), 0, true);
 
 	// StateWait
+	GLWWindowManager::instance()->removeState(ClientState::StateWait);
 	addCommonComponents(skinManager, ClientState::StateWait);
 
 	// StateBuyWeapons
+	GLWWindowManager::instance()->removeState(ClientState::StateBuyWeapons);
 	addCommonComponents(skinManager, ClientState::StateBuyWeapons);
 	GLWWindowManager::instance()->addWindow(ClientState::StateBuyWeapons, 
 		BuyAccessoryDialog::instance(), 0, true);
@@ -305,11 +313,13 @@ void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 		GiftMoneyDialog::instance(), 0, false);
 
 	// StateAutoDefense
+	GLWWindowManager::instance()->removeState(ClientState::StateAutoDefense);
 	addCommonComponents(skinManager, ClientState::StateAutoDefense);
 	GLWWindowManager::instance()->addWindow(ClientState::StateAutoDefense, 
-		new AutoDefenseDialog, 0, false);
+		AutoDefenseDialog::instance(), 0, false);
 
 	// StatePlaying
+	GLWWindowManager::instance()->removeState(ClientState::StatePlaying);
 	addStateWindows(skinManager, ClientState::StatePlaying, "playing");
 	KEYBOARDKEY("SHOW_PROFILE_DIALOG", profileKey);
 	GLWWindowManager::instance()->addWindow(ClientState::StatePlaying, 
@@ -321,6 +331,7 @@ void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 	addCommonComponents(skinManager, ClientState::StatePlaying);
 
 	// StateScore
+	GLWWindowManager::instance()->removeState(ClientState::StateScore);
 	addCommonComponents(skinManager, ClientState::StateScore);
 	GLWWindowManager::instance()->addWindow(ClientState::StateScore,
 		ScoreDialog::instance2(), 0, true);

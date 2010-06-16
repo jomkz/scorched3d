@@ -20,6 +20,7 @@
 
 #include <image/ImageFactory.h>
 #include <XML/XMLFile.h>
+#include <GLEXT/GLTextureStore.h>
 #include <sprites/ExplosionTextures.h>
 #include <landscape/Landscape.h>
 #include <lang/LangResource.h>
@@ -73,6 +74,9 @@ bool ExplosionTextures::createTextures(ProgressCounter *counter)
 		}
 		scorchedBitmaps.clear();
 	}
+
+	// Tidy
+	GLTextureStore::instance()->resetModFiles();
 
 	if (counter) counter->setNewOp(LANG_RESOURCE("EXPLOSION_TEXTURES", "Explosion Textures"));
 

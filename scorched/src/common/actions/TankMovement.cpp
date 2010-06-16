@@ -49,7 +49,6 @@
 #include <target/TargetLife.h>
 #include <target/TargetState.h>
 #include <target/TargetSpace.h>
-#include <image/ImageStore.h>
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
 

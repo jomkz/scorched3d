@@ -160,6 +160,52 @@ void GLWWindowManager::addWindow(const unsigned state, GLWWindow *window, Keyboa
 		std::pair<KeyboardKey *, GLWWindow *>(key, window));
 }
 
+void GLWWindowManager::removeWindow(GLWWindow *removeWindow)
+{
+	windowVisibility_.erase(removeWindow->getId());
+	idToWindow_.erase(removeWindow->getId());
+	std::map<unsigned, StateEntry>::iterator itor;
+	for (itor = stateEntrys_.begin();
+		itor != stateEntrys_.end();
+		itor++)
+	{
+		{
+			std::list<std::pair<KeyboardKey *, GLWWindow *> > tmpList;
+			std::list<std::pair<KeyboardKey *, GLWWindow *> >::iterator keyItor;
+			for (keyItor = itor->second.windowKeys_.begin();
+				keyItor != itor->second.windowKeys_.end();
+				keyItor++)
+			{
+				if (keyItor->second != removeWindow) 
+				{
+					tmpList.push_back(*keyItor);
+				}
+			}
+			itor->second.windowKeys_ = tmpList;
+		}
+
+		{
+			std::deque<GLWWindow *> tmpList;
+			while (!itor->second.windows_.empty())
+			{
+				GLWWindow *tmpWindow = itor->second.windows_.front();
+				itor->second.windows_.pop_front();
+				if (removeWindow != tmpWindow) tmpList.push_back(tmpWindow);
+			}
+			itor->second.windows_ = tmpList;
+		}
+	}
+}
+
+void GLWWindowManager::removeState(unsigned int state)
+{
+	stateEntrys_.erase(state);
+
+	static StateEntry defaultStateEntry;
+	defaultStateEntry.state_ = UINT_MAX;
+	currentStateEntry_ = &defaultStateEntry;
+}
+
 bool GLWWindowManager::showWindow(unsigned id)
 {
 	if (!windowInCurrentState(id)) return false;

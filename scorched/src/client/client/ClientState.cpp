@@ -141,7 +141,7 @@ void ClientState::setupGameState()
 	gameState.addStateLoop(StateOptions, 
 		Main2DCamera::instance(), SoftwareMouse::instance());
 	gameState.addStateStimulus(StateOptions, 
-		StimDisconnected, StateDisconnected);
+		StimDisconnected, StateOptions);
 	gameState.addStateStimulus(StateOptions, 
 		StimConnect, StateConnect);
 
@@ -153,7 +153,7 @@ void ClientState::setupGameState()
 	gameState.addStateLoop(StateConnect, 
 		Main2DCamera::instance(), SoftwareMouse::instance());
 	gameState.addStateStimulus(StateConnect, 
-		StimDisconnected, StateDisconnected);
+		StimDisconnected, StateOptions);
 	gameState.addStateStimulus(StateConnect, 
 		StimGameStopped, StateConnect);
 	gameState.addStateStimulus(StateConnect, 
@@ -170,7 +170,7 @@ void ClientState::setupGameState()
 	gameState.addStateStimulus(StateLoadFiles, 
 		StimGameStopped, StateConnect);
 	gameState.addStateStimulus(StateLoadFiles, 
-		StimDisconnected, StateDisconnected);
+		StimDisconnected, StateOptions);
 	gameState.addStateStimulus(StateLoadFiles, 
 		StimWait, StateWait);
 	gameState.addStateStimulus(StateLoadFiles, 
@@ -185,24 +185,13 @@ void ClientState::setupGameState()
 	gameState.addStateStimulus(StateLoadLevel, 
 		StimGameStopped, StateConnect);
 	gameState.addStateStimulus(StateLoadLevel, 
-		StimDisconnected, StateDisconnected);
+		StimDisconnected, StateOptions);
 	gameState.addStateStimulus(StateLoadLevel, 
 		StimWait, StateWait);
 	gameState.addStateStimulus(StateLoadLevel, 
 		StimWaitNoLandscape, StateWaitNoLandscape);
 	gameState.addStateStimulus(StateLoadLevel, 
 		StimLoadLevel, StateLoadLevel);
-
-	// StateDisconnected
-	addWindowManager(gameState, StateDisconnected);
-	gameState.addStateLoop(StateDisconnected, 
-		Main2DCamera::instance(), SoftwareMouse::instance());
-	gameState.addStateStimulus(StateDisconnected, 
-		StimDisconnected, StateDisconnected);
-	gameState.addStateStimulus(StateDisconnected, 
-		StimGameStopped, StateDisconnected);
-	gameState.addStateStimulus(StateDisconnected, 
-		StimWait, StateDisconnected);
 
 	// StateWaitNoLandscape
 	addWindowManager(gameState, StateWaitNoLandscape);
@@ -215,14 +204,14 @@ void ClientState::setupGameState()
 	gameState.addStateStimulus(StateWaitNoLandscape, 
 		StimLoadLevel, StateLoadLevel);
 	gameState.addStateStimulus(StateWaitNoLandscape, 
-		StimDisconnected, StateDisconnected);
+		StimDisconnected, StateOptions);
 
 	// StateWait
 	addStandardComponents(gameState, StateWait);
 	gameState.addStateEntry(StateWait, 
 		TankKeyboardControl::instance());
 	gameState.addStateStimulus(StateWait, 
-		StimDisconnected, StateDisconnected);
+		StimDisconnected, StateOptions);
 	gameState.addStateStimulus(StateWait, 
 		StimAutoDefense, StateWait);
 	gameState.addStateStimulus(StateWait, 
@@ -239,7 +228,7 @@ void ClientState::setupGameState()
 	// StateBuyWeapons
 	addStandardComponents(gameState, StateBuyWeapons);
 	gameState.addStateStimulus(StateBuyWeapons, 
-		StimDisconnected, StateDisconnected);
+		StimDisconnected, StateOptions);
 	gameState.addStateStimulus(StateBuyWeapons, 
 		StimAutoDefense, StateAutoDefense);
 	gameState.addStateStimulus(StateBuyWeapons, 
@@ -250,7 +239,7 @@ void ClientState::setupGameState()
 	// StateAutoDefense
 	addStandardComponents(gameState, StateAutoDefense);
 	gameState.addStateStimulus(StateAutoDefense, 
-		StimDisconnected, StateDisconnected);
+		StimDisconnected, StateOptions);
 	gameState.addStateStimulus(StateAutoDefense, 
 		StimWait, StateWait);
 	gameState.addStateStimulus(StateAutoDefense, 
@@ -261,7 +250,7 @@ void ClientState::setupGameState()
 	gameState.addStateKeyEntry(StatePlaying, 
 		TankKeyboardControl::instance());
 	gameState.addStateStimulus(StatePlaying, 
-		StimDisconnected, StateDisconnected);
+		StimDisconnected, StateOptions);
 	gameState.addStateStimulus(StatePlaying, 
 		StimWait, StateWait);
 	gameState.addStateStimulus(StatePlaying, 
@@ -272,7 +261,7 @@ void ClientState::setupGameState()
 	gameState.addStateLoop(StateScore,
 		MainCamera::instance(), ClientSaveScreenState::instance());
 	gameState.addStateStimulus(StateScore, 
-		StimDisconnected, StateDisconnected);
+		StimDisconnected, StateOptions);
 	gameState.addStateStimulus(StateScore, 
 		StimWait, StateWait);
 	gameState.addStateStimulus(StateScore, 

@@ -49,7 +49,6 @@ GLWChannelText::GLWChannelText() :
 	fontSize_(12.0f), outlineFontSize_(14.0f),
 	whisperDest_(0), createdTexture_(false),
 	historyPosition_(0), cursorPosition_(0),
-	buttonTexture_(ImageID(S3D::eModLocation, "data/windows/arrow_r.png"), false),
 	colorTexture_(ImageID(S3D::eDataLocation, "data/images/white.bmp"))
 {
 	view_.setHandler(this);
@@ -58,6 +57,7 @@ GLWChannelText::GLWChannelText() :
 		ToolTip::ToolTipAlignLeft | ToolTip::ToolTipHelp, 
 		"CHAT", "Chat", 
 		"CHAT_SHOW_TOOLTIP", "Show chat menu"));
+	button_.setTextureImage(ImageID(S3D::eModLocation, "", "data/windows/arrow_r.png"));
 	prompt_.setChannelView(&view_);
 }
 
@@ -103,8 +103,14 @@ void GLWChannelText::draw()
 	float cursorWidth = 0.0f;
 	for (int i=int(text_.size()) - cursorPosition_; i>0; i--)
 	{
+		unsigned int ch = '_';
+		if (i >=0 && i < int(text_.size()))
+		{
+			ch = text_[i];
+		}
+
 		float charWidth = GLWFont::instance()->getGameFont()->
-			getWidth(fontSize_, text_[i]);
+			getWidth(fontSize_, ch);
 		if (textWidth + charWidth > w_ - 55.0f - promptWidth)
 		{
 			break;
@@ -116,8 +122,14 @@ void GLWChannelText::draw()
 	cursorWidth = textWidth;
 	for (int i=int(text_.size()) - cursorPosition_; i<int(text_.size()); i++)
 	{
+		unsigned int ch = '_';
+		if (i >=0 && i < int(text_.size()))
+		{
+			ch = text_[i];
+		}
+
 		float charWidth = GLWFont::instance()->getGameFont()->
-			getWidth(fontSize_, text_[i]);
+			getWidth(fontSize_, ch);
 		if (textWidth + charWidth > w_ - 25.0f - promptWidth)
 		{
 			break;

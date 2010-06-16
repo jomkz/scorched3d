@@ -48,6 +48,14 @@ GLWWindowSkinManager::~GLWWindowSkinManager()
 
 bool GLWWindowSkinManager::loadWindows()
 {
+	while (!windows_.empty())
+	{
+		GLWWindowSkin *window = windows_.back();
+		GLWWindowManager::instance()->removeWindow(window);
+		delete window;
+		windows_.pop_back();
+	}
+
 	XMLFile file;
 	std::string fileName = S3D::getModFile("data/windows.xml");
 	if (!file.readFile(fileName) ||

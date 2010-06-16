@@ -37,6 +37,8 @@ public:
 
 	void addWindow(const unsigned state, GLWWindow *window, 
 		KeyboardKey *key = 0, bool visible = false);
+	void removeState(unsigned int state);
+	void removeWindow(GLWWindow *window);
 	bool showWindow(unsigned id);
 	bool hideWindow(unsigned id);
 	bool windowVisible(unsigned id);

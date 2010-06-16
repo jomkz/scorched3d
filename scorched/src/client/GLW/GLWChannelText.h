@@ -65,7 +65,7 @@ public:
 	REGISTER_CLASS_HEADER(GLWChannelText);
 protected:
 	static std::list<ChannelText> lastMessages_;
-	GLTextureReference buttonTexture_, colorTexture_;
+	GLTextureReference colorTexture_;
 	GLWChannelViewTextRenderer prompt_;
 	GLWChannelView::CurrentChannelEntry channelEntry_;
 	GLWIconButton button_;

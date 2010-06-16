@@ -81,6 +81,7 @@ GLWChannelView::GLWChannelView() :
 
 GLWChannelView::~GLWChannelView()
 {
+	ClientChannelManager::instance()->deregisterClient(this);
 }
 
 GLWChannelView::CurrentChannelEntry *GLWChannelView::getChannel(const std::string &channelName)

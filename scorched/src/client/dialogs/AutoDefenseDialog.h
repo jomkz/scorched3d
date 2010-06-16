@@ -32,8 +32,7 @@ class AutoDefenseDialog :
 	public GLWDropDownI
 {
 public:
-	AutoDefenseDialog();
-	virtual ~AutoDefenseDialog();
+	static AutoDefenseDialog *instance();
 
 	// Inherited from GLWButtonI
 	virtual void buttonDown(unsigned int id);
@@ -55,6 +54,9 @@ protected:
 	void finished();
 	void displayCurrent();
 
+private:
+	AutoDefenseDialog();
+	virtual ~AutoDefenseDialog();
 };
 
 

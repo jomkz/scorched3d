@@ -39,6 +39,20 @@ GLTextureStore::~GLTextureStore()
 {
 }
 
+void GLTextureStore::resetModFiles()
+{
+	std::map<std::string, GLTextureReferenceData *>::iterator itor;
+	for (itor = references_.begin();
+		itor != references_.end();
+		itor++)
+	{
+		if (itor->second->getImageID().getImageLocation() == S3D::eModLocation)
+		{
+			itor->second->reset();
+		}
+	}
+}
+
 GLTextureReferenceData *GLTextureStore::getTextureReference(const ImageID &imageId, unsigned texState)
 {
 	std::string hash = ((ImageID &)imageId).getStringHash() + char(texState);

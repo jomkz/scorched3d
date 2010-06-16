@@ -29,6 +29,8 @@ class GLTextureStore
 public:
 	static GLTextureStore *instance();
 
+	void resetModFiles();
+
 	GLTextureReferenceData *getTextureReference(const ImageID &imageId, unsigned texState);
 	void removeTextureReference(GLTextureReferenceData *reference);
 

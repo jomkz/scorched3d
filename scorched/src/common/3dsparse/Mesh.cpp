@@ -23,9 +23,12 @@
 #include <common/Defines.h>
 
 Mesh::Mesh(const char *name) : name_(name),
-	sphereMap_(false),
-	textureSet_(false)
+	sphereMap_(false)
+	
 {
+#ifndef S3D_SERVER
+	textureSet_ = false;
+#endif
 }
 
 Mesh::~Mesh()
@@ -85,11 +88,13 @@ void Mesh::setTextureName(const char *t)
 		sphereMap_ = (strstr(t, "/sphere_") != 0);
 		textureName_ = t; 
 
+#ifndef S3D_SERVER
 		textureSet_ = true;
 		texture_.setImageID(
 			ImageID(S3D::eAbsLocation,
 				textureName_, 
 				aTextureName_));
+#endif
 	}
 }
 
@@ -97,9 +102,11 @@ void  Mesh::setATextureName(const char *t)
 {
 	aTextureName_ = t; 
 
+#ifndef S3D_SERVER
 	textureSet_ = true;
 	texture_.setImageID(
 		ImageID(S3D::eAbsLocation,
 			textureName_, 
 			aTextureName_));
+#endif
 }
