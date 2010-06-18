@@ -34,7 +34,7 @@ public:
 	virtual void display();
 
 protected:
-	GLWTextButton *okButton_, *quitButton_;
+	GLWTextButton *okButton_, *quitButton_, *disconnectButton_;
 	GLWTextButton *killButton_;
 	static QuitDialog *instance_;
 

@@ -50,6 +50,7 @@ public:
 		unsigned int destination, unsigned int flags = 0);
 
 protected:
+	bool started_;
 	bool server_;
 	NetMessageHandler messageHandler_;
 	NetLoopBack *loopback_;

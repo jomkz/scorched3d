@@ -27,7 +27,7 @@ static unsigned int ClientLoopBackID = 100001;
 static unsigned int ServerLoopBackID = 200002;
 
 NetLoopBack::NetLoopBack(bool server) 
-	: loopback_(0), server_(server)
+	: loopback_(0), server_(server), started_(true)
 {
 }
 
@@ -47,7 +47,6 @@ bool NetLoopBack::connect(const char *hostName, int portNo)
 			getFromPool(NetMessage::ConnectMessage, ClientLoopBackID, 0);
 		loopback_->messageHandler_.addMessage(message);
 	}
-
 	return true;
 }
 
@@ -58,7 +57,7 @@ void NetLoopBack::setLoopBack(NetLoopBack *loopback)
 
 bool NetLoopBack::started()
 {
-	return true;
+	return started_;
 }
 
 void NetLoopBack::setMessageHandler(NetMessageHandlerI *handler) 
@@ -73,7 +72,20 @@ int NetLoopBack::processMessages()
 
 void NetLoopBack::disconnectAllClients()
 {
-	Logger::log("Cannot disconnect all clients, they are local!");
+	{
+		NetMessage *message = NetMessagePool::instance()->
+			getFromPool(NetMessage::DisconnectMessage, 
+				server_?ServerLoopBackID:ClientLoopBackID, 0, 
+				(unsigned int) 0);
+		loopback_->messageHandler_.addMessage(message);
+	}
+	{
+		NetMessage *message = NetMessagePool::instance()->
+			getFromPool(NetMessage::DisconnectMessage, 
+				server_?ClientLoopBackID:ServerLoopBackID, 0, 
+				(unsigned int) 0);
+		messageHandler_.addMessage(message);
+	}
 }
 
 void NetLoopBack::disconnectClient(unsigned int client)

@@ -40,6 +40,7 @@
 #include <tankai/TankAIAdder.h>
 #include <tankai/TankAIStore.h>
 #include <tank/TankModelStore.h>
+#include <tank/TankContainer.h>
 #include <server/ServerLinesHandler.h>
 #include <server/ServerMessageHandler.h>
 #include <server/ServerGiftMoneyHandler.h>
@@ -143,6 +144,10 @@ bool startServer(bool local, ProgressCounter *counter)
 	}
 #endif
 
+	// Reset server state
+	ScorchedServer::instance()->getServerState().setState(ServerState::ServerStartupState);
+	
+	// Parse config
 	if (!ScorchedServer::instance()->getAccessoryStore().parseFile(
 		ScorchedServer::instance()->getContext(),
 		counter)) return false;
@@ -154,6 +159,15 @@ bool startServer(bool local, ProgressCounter *counter)
 
 	// Add the server side bots
 	// Add any new AIs
+	std::map<unsigned int, Tank *> serverTanks = 
+		ScorchedServer::instance()->getTankContainer().getAllTanks();
+	std::map<unsigned int, Tank *>::iterator serverTanksIterator;
+	for (serverTanksIterator = serverTanks.begin();
+		serverTanksIterator != serverTanks.end();
+		serverTanksIterator++)
+	{
+		delete ScorchedServer::instance()->getTankContainer().removeTank(serverTanksIterator->first);
+	}
 	if (!ScorchedServer::instance()->getTankAIs().loadAIs()) return false;
 	TankAIAdder::addTankAIs(*ScorchedServer::instance());
 

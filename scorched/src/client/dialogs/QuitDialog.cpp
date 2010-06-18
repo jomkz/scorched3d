@@ -24,6 +24,7 @@
 #include <client/ScorchedClient.h>
 #include <client/ClientState.h>
 #include <engine/MainLoop.h>
+#include <net/NetInterface.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerSimulator.h>
 #include <simactions/AdminSimAction.h>
@@ -65,7 +66,7 @@ void QuitDialog::display()
 		state == ClientState::StateWaitNoLandscape);
 	if (!disable)
 	{
-		killButton_ = new GLWTextButton(LANG_RESOURCE("MASS_TANK_KILL", "Mass Tank Kill"), 0, 0, 190, this, 
+		killButton_ = new GLWTextButton(LANG_RESOURCE("MASS_TANK_KILL", "Mass Tank Kill"), 0, 0, 225, this, 
 			GLWButton::ButtonFlagCenterX);
 		addWidget(killButton_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
 		killButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
@@ -79,14 +80,30 @@ void QuitDialog::display()
 		killButton_ = 0;
 	}
 
-	quitButton_ = new GLWTextButton(LANG_RESOURCE("QUIT_GAME", "Quit Game"), 0, 0, 190, this, 
+	disable = (state == ClientState::StateOptions || 
+		state == ClientState::StateConnect);
+	if (!disable)
+	{
+		disconnectButton_  = new GLWTextButton(LANG_RESOURCE("DISCONNECT_GAME", "Disconnect from Game"), 0, 0, 225, this, 
+			GLWButton::ButtonFlagCenterX);
+		addWidget(disconnectButton_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
+		disconnectButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+			LANG_RESOURCE("DISCONNECT_GAME", "Disconnect from Game"),
+			LANG_RESOURCE("DISCONNECT_GAME_TOOLKIT", "Disconnect from current server back to main menu")));
+	}
+	else
+	{
+		disconnectButton_ = 0;
+	}
+
+	quitButton_ = new GLWTextButton(LANG_RESOURCE("QUIT_GAME", "Quit Game"), 0, 0, 225, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX);
 	addWidget(quitButton_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
 	quitButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
 		LANG_RESOURCE("QUIT_GAME", "Quit Game"),
 		LANG_RESOURCE("QUIT_GAME_TOOLTIP", "Quits Scorched3D")));
 
-	okButton_ = new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 0, 0, 190, this, 
+	okButton_ = new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 0, 0, 225, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX);
 	addWidget(okButton_, 0, SpaceLeft | SpaceRight | SpaceTop | SpaceBottom, 10.0f);
 	okButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
@@ -107,6 +124,12 @@ void QuitDialog::buttonDown(unsigned int id)
 	{
 		AdminSimAction *simAction = new AdminSimAction(AdminSimAction::eKillAll, 0, 0);
 		ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
+
+		GLWWindowManager::instance()->hideWindow(id_);
+	}
+	else if (disconnectButton_ && id == disconnectButton_->getId())
+	{
+		ScorchedClient::instance()->getNetInterface().disconnectAllClients();
 
 		GLWWindowManager::instance()->hideWindow(id_);
 	}
