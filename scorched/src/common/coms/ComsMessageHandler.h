@@ -83,36 +83,6 @@ protected:
 		const char *sendRecv);
 };
 
-// Used as in REGISTER_HANDLER(
-//	"MyComsMessage", 
-//	ComsMessageHandlerIRegistration::eClient, 
-//	new MyComsMessageHandler)
-#define REGISTER_HANDLER(name, type, y, z) \
-	struct HANDLER_##name { HANDLER_##name() { ComsMessageHandlerIRegistration::addHandler(y, type, z); } }; \
-	static HANDLER_##name HANDLER_IMPL_##name;
-
-class ComsMessageHandlerIRegistration
-{
-public:
-	enum HandlerType
-	{
-		eClient,
-		eServer
-	};
-	struct HandlerInfo
-	{
-		HandlerType type;
-		ComsMessageType *messageType;
-		ComsMessageHandlerI *handler;
-	};
-
-	static void addHandler(HandlerType type,
-			ComsMessageType &messageType,
-			ComsMessageHandlerI *handler);
-	static std::list<HandlerInfo> *handlerList;
-	static void registerHandlers(HandlerType type, ComsMessageHandler &handler);
-};
-
 // Same as above but passed userdata to method
 template<class T>
 class ComsMessageHandlerIAdapter : public ComsMessageHandlerI
