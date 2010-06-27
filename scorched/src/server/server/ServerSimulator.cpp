@@ -46,6 +46,19 @@ ServerSimulator::~ServerSimulator()
 {
 }
 
+void ServerSimulator::clear()
+{
+	Simulator::clear();
+	delete levelMessage_;
+	levelMessage_ = 0;
+	while (!sendActions_.empty())
+	{
+		SendAction action = sendActions_.back();
+		delete action.action;
+		sendActions_.pop_back();
+	}
+}
+
 void ServerSimulator::addSimulatorAction(SimAction *action, SimulatorI *callback)
 {
 	SendAction sendAction = { action, callback };

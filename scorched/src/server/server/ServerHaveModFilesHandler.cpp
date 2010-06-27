@@ -30,16 +30,9 @@
 #include <common/Logger.h>
 #include <time.h>
 
-ServerHaveModFilesHandler *ServerHaveModFilesHandler::instance()
+ServerHaveModFilesHandler::ServerHaveModFilesHandler(ComsMessageHandler &comsMessageHandler)
 {
-	static ServerHaveModFilesHandler *instance = 
-		new ServerHaveModFilesHandler;
-	return instance;
-}
-
-ServerHaveModFilesHandler::ServerHaveModFilesHandler()
-{
-	ScorchedServer::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsHaveModFilesMessage::ComsHaveModFilesMessageType,
 		this);
 }
@@ -114,7 +107,7 @@ bool ServerHaveModFilesHandler::processMessage(
 	if (neededEntries_.empty())
 	{
 		// No files need downloading
-		ServerChannelManager::instance()->sendText(
+		ScorchedServer::instance()->getServerChannelManager().sendText(
 			ChannelText("info",
 				"NO_MOD_FILES",
 				"No mod files need downloading"),
@@ -153,7 +146,7 @@ bool ServerHaveModFilesHandler::processMessage(
 		int timeSeconds = timeLeft % 60;
 		// This server allows file downloads
 		// The the client how much needs to be downloaded
-		ServerChannelManager::instance()->sendText(
+		ScorchedServer::instance()->getServerChannelManager().sendText(
 			ChannelText("info",
 				"SERVER_DOWNLOAD_MOD",
 				"This server requires the \"{0}\" Scorched3D mod.\n"

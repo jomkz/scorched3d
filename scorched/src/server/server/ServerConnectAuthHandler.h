@@ -25,11 +25,11 @@
 #include <coms/ComsMessageHandler.h>
 #include <coms/ComsConnectAuthMessage.h>
 
-class ServerConnectAuthHandler : 
-	public ComsMessageHandlerI
+class ServerConnectAuthHandler : public ComsMessageHandlerI
 {
 public:
-	static ServerConnectAuthHandler *instance();
+	ServerConnectAuthHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ServerConnectAuthHandler();
 
 	void processMessages();
 
@@ -70,11 +70,6 @@ protected:
 		bool extraSpectator);
 
 	bool uniqueIdTaken(const std::string &uniqueId);
-
-private:
-	ServerConnectAuthHandler();
-	virtual ~ServerConnectAuthHandler();
-
 };
 
 

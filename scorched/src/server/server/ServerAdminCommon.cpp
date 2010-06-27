@@ -21,9 +21,10 @@
 #include <server/ServerAdminCommon.h>
 #include <server/ServerCommon.h>
 #include <server/ScorchedServer.h>
-#include <server/ScorchedServerUtil.h>
 #include <server/ServerChannelManager.h>
 #include <server/ServerSimulator.h>
+#include <server/ServerBanned.h>
+#include <server/ServerAuthHandler.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
@@ -46,7 +47,7 @@ void ServerAdminCommon::adminLog(const ChannelText &message)
 		serverAdminFileLogger = new FileLogger(buffer);
 	}	
 
-	ServerChannelManager::instance()->sendText(message, true);
+	ScorchedServer::instance()->getServerChannelManager().sendText(message, true);
 
 	LangString str = ((ChannelText &)message).getMessage();
 	LoggerInfo info(LangStringUtil::convertFromLang(str));
@@ -69,7 +70,7 @@ static void internalBanPlayer(ServerAdminSessions::Credential &credential,
 		unsigned int ipAddress = tank->getIpAddress();
 		if (ipAddress != 0)
 		{	
-			ScorchedServerUtil::instance()->bannedPlayers.
+			ScorchedServer::instance()->getBannedPlayers().
 				addBanned(ipAddress, tank->getTargetName(), 
 					tank->getUniqueId(), tank->getSUI(), 
 					type, credential.username.c_str(), reason);
@@ -78,7 +79,7 @@ static void internalBanPlayer(ServerAdminSessions::Credential &credential,
 				ServerCommon::kickPlayer(playerId, "Due to player ban");
 
 				ServerAuthHandler *authHandler =
-					ScorchedServerUtil::instance()->getAuthHandler();
+					ScorchedServer::instance()->getAuthHandler();
 				if (authHandler)
 				{
 					authHandler->banUser(tank->getUniqueId());
@@ -352,7 +353,7 @@ bool ServerAdminCommon::adminSay(ServerAdminSessions::Credential &credential,
 
 	ChannelText channelText(channel, langString);
 	channelText.setAdminPlayer(credential.username.c_str());
-	ServerChannelManager::instance()->sendText(channelText, true);
+	ScorchedServer::instance()->getServerChannelManager().sendText(channelText, true);
 
 	return true;
 }

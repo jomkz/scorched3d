@@ -18,35 +18,24 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <tankai/TankAI.h>
-#include <lang/LangResource.h>
-#include <XML/XMLNode.h>
+#include <server/ServerHandlers.h>
 
-bool TankAI::tankAILogging_ = false;
-
-TankAI::TankAI() : 
-	availableForRandom_(true),
-	availableForPlayers_(true)
+ServerHandlers::ServerHandlers(ComsMessageHandler &comsMessageHandler) :
+	serverAddPlayerHandler_(comsMessageHandler),
+	serverAdminHandler_(comsMessageHandler),
+	serverBuyAccessoryHandler_(comsMessageHandler),
+	serverConnectAuthHandler_(comsMessageHandler),
+	serverConnectHandler_(comsMessageHandler),
+	serverDefenseHandler_(comsMessageHandler),
+	serverFileAkHandler_(comsMessageHandler),
+	serverGiftMoneyHandler_(comsMessageHandler),
+	serverHaveModFileHandler_(comsMessageHandler),
+	serverInitializeModHandler_(comsMessageHandler),
+	serverLinesHandler_(comsMessageHandler),
+	serverPlayedMoveHandler_(comsMessageHandler)
 {
 }
 
-TankAI::~TankAI()
+ServerHandlers::~ServerHandlers()
 {
-}
-
-bool TankAI::parseConfig(TankAIWeaponSets &sets, XMLNode *node)
-{
-	if (!node->getNamedChild("name", name_)) return false;
-	if (!node->getNamedChild("description", description_)) return false;
-	if (!node->getNamedChild("availableforrandom", availableForRandom_)) return false;
-	if (!node->getNamedChild("availableforplayers", availableForPlayers_)) return false;
-
-	return true;
-}
-
-ToolTip *TankAI::getToolTip()
-{
-	toolTip_.setText(ToolTip::ToolTipInfo, LANG_STRING(name_), 
-		LANG_RESOURCE(name_ + "_ai_description",  description_));
-	return &toolTip_;
 }

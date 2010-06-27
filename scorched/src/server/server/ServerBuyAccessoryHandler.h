@@ -24,24 +24,16 @@
 
 #include <coms/ComsMessageHandler.h>
 
-class ServerBuyAccessoryHandler : 
-	public ComsMessageHandlerI
+class ServerBuyAccessoryHandler : public ComsMessageHandlerI
 {
 public:
-	static ServerBuyAccessoryHandler *instance();
+	ServerBuyAccessoryHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ServerBuyAccessoryHandler();
 
 	virtual bool processMessage(
 		NetMessage &message,
 		const char *messageType,
 		NetBufferReader &reader);
-
-protected:
-	static ServerBuyAccessoryHandler *instance_;
-
-private:
-	ServerBuyAccessoryHandler();
-	virtual ~ServerBuyAccessoryHandler();
 };
-
 
 #endif

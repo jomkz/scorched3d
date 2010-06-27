@@ -44,6 +44,7 @@ TankAccessories::TankAccessories(ScorchedContext &context) :
 
 TankAccessories::~TankAccessories()
 {
+	clearAccessories();
 }
 
 void TankAccessories::setTank(Tank *tank)

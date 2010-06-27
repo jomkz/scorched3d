@@ -35,7 +35,6 @@
 #include <common/OptionsTransient.h>
 #include <coms/ComsAddPlayerMessage.h>
 #include <server/ServerBanned.h>
-#include <server/ScorchedServerUtil.h>
 #include <server/ServerChannelManager.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerSimulator.h>
@@ -183,11 +182,11 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 	if (ipAddress_ != 0)
 	{
 		ServerBanned::BannedType type = 
-			ScorchedServerUtil::instance()->bannedPlayers.getBanned(tank->getUniqueId(), tank->getSUI());
+			ScorchedServer::instance()->getBannedPlayers().getBanned(tank->getUniqueId(), tank->getSUI());
 		if (type == ServerBanned::Muted)	
 		{
 			tank->getState().setMuted(true);
-			ServerChannelManager::instance()->sendText( 
+			ScorchedServer::instance()->getServerChannelManager().sendText( 
 				ChannelText("admin", 
 					"PLAYER_ADMIN_MUTED", 
 					"Player admin muted [p:{0}]",
@@ -196,7 +195,7 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 		}
 		else if (type == ServerBanned::Flagged)
 		{
-			ServerChannelManager::instance()->sendText( 
+			ScorchedServer::instance()->getServerChannelManager().sendText( 
 				ChannelText("admin",
 					"PLAYER_ADMIN_FLAGGED",
 					"Player admin flagged [p:{0}]",

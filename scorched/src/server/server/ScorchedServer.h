@@ -28,10 +28,22 @@ class TankAIStore;
 class ServerSimulator;
 class ServerDestinations;
 class ServerState;
+class ServerAuthHandler;
+class ServerAuthHandlerStore;
+class ServerTimedMessage;
+class ServerBanned;
+class ServerTextFilter;
+class ServerHandlers;
+class ServerLoadLevel;
+class ServerConnectAuthHandler;
+class ServerChannelManager;
+
 class ScorchedServer : public ScorchedContext
 {
 public:
 	static ScorchedServer *instance();
+
+	virtual bool getServerMode() { return true; }
 
 	TankDeadContainer &getTankDeadContainer() { return *deadContainer_; }
 	ScorchedContext &getContext() { return *this; }
@@ -39,6 +51,16 @@ public:
 	ServerSimulator &getServerSimulator() { return *serverSimulator_; }
 	ServerDestinations &getServerDestinations() { return *serverDestinations_; }
 	ServerState &getServerState() { return *serverState_; }
+	virtual Simulator &getSimulator();
+
+	ServerAuthHandler *getAuthHandler();
+	ServerTimedMessage &getTimedMessage() { return *timedMessage_; }
+	ServerBanned &getBannedPlayers() { return *bannedPlayers_; }
+	ServerTextFilter &getTextFilter() { return *textFilter_; }
+	ServerHandlers &getServerHandlers() { return *serverHandlers_; }
+	ServerLoadLevel &getServerLoadLevel() { return *serverLoadLevel_; }
+	ServerConnectAuthHandler &getServerConnectAuthHandler();
+	ServerChannelManager &getServerChannelManager() { return *serverChannelManager_; }
 
 protected:
 	static ScorchedServer *instance_;
@@ -47,6 +69,13 @@ protected:
 	ServerSimulator *serverSimulator_;
 	ServerDestinations *serverDestinations_;
 	ServerState *serverState_;
+	ServerAuthHandlerStore *authHandler_;
+	ServerTimedMessage *timedMessage_;
+	ServerBanned *bannedPlayers_;
+	ServerTextFilter *textFilter_;
+	ServerHandlers *serverHandlers_;
+	ServerLoadLevel *serverLoadLevel_;
+	ServerChannelManager *serverChannelManager_;	
 
 private:
 	ScorchedServer();

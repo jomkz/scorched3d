@@ -48,7 +48,7 @@ bool ServerStateEnoughPlayers::enoughPlayers()
 	// Check if we need to add or remove bots to keep game going
 	if (TankAddSimAction::TankAddSimActionCount == 0 &&
 		TankRemoveSimAction::TankRemoveSimActionCount == 0 &&
-		!ServerConnectAuthHandler::instance()->outstandingRequests())
+		!ScorchedServer::instance()->getServerConnectAuthHandler().outstandingRequests())
 	{
 		// Any bots added won't join until the next round anyway
 		ballanceBots(ScorchedServer::instance()->getContext());

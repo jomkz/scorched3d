@@ -33,11 +33,14 @@ class ScorchedClient : public ScorchedContext
 public:
 	static ScorchedClient *instance();
 
+	virtual bool getServerMode() { return false; }
+
 	MainLoop &getMainLoop() { return *mainLoop_; }
 	ScorchedContext &getContext() { return *this; }
 	ParticleEngine &getParticleEngine() { return *particleEngine_; }
 	GameState &getGameState() { return *gameState; }
 	ClientSimulator &getClientSimulator() { return *clientSimulator_; }
+	virtual Simulator &getSimulator();
 
 protected:
 	static ScorchedClient *instance_;

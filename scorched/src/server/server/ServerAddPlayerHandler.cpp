@@ -21,10 +21,11 @@
 #include <server/ServerAddPlayerHandler.h>
 #include <server/ServerConnectHandler.h>
 #include <server/ScorchedServer.h>
-#include <server/ScorchedServerUtil.h>
 #include <server/ServerChannelManager.h>
 #include <server/ServerSimulator.h>
 #include <server/ServerState.h>
+#include <server/ServerTextFilter.h>
+#include <server/ServerAuthHandler.h>
 #include <common/OptionsScorched.h>
 #include <common/StatsLogger.h>
 #include <common/Logger.h>
@@ -35,20 +36,9 @@
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 
-ServerAddPlayerHandler *ServerAddPlayerHandler::instance_ = 0;
-
-ServerAddPlayerHandler *ServerAddPlayerHandler::instance()
+ServerAddPlayerHandler::ServerAddPlayerHandler(ComsMessageHandler &comsMessageHandler)
 {
-	if (!instance_)
-	{
-		instance_ = new ServerAddPlayerHandler;
-	}
-	return instance_;
-}
-
-ServerAddPlayerHandler::ServerAddPlayerHandler()
-{
-	ScorchedServer::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsAddPlayerMessage::ComsAddPlayerMessageType,
 		this);
 }
@@ -70,7 +60,7 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 		(tank->getState().getState() != TankState::sDead &&
 		tank->getState().getState() != TankState::sSpectator))
 	{
-		ServerChannelManager::instance()->sendText( 
+		ScorchedServer::instance()->getServerChannelManager().sendText( 
 			ChannelText("info", "CHANGE_WHEN_DEAD", 
 			"Can only change tank when dead."),
 			netMessage.getDestinationId(), 
@@ -84,7 +74,7 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 		if (ScorchedServer::instance()->getServerState().getState() !=
 			ServerState::ServerWaitingForPlayersState)
 		{
-			ServerChannelManager::instance()->sendText( 
+			ScorchedServer::instance()->getServerChannelManager().sendText( 
 				ChannelText("info", "CHANGE_WHEN_STARTED", 
 					"Can only change type before game starts."),
 					netMessage.getDestinationId(),
@@ -134,7 +124,7 @@ bool ServerAddPlayerHandler::filterName(Tank *tank,
 	LangStringUtil::trim(sentname);
 
 	// Ensure this name does not have any "bad" words in it
-	ScorchedServerUtil::instance()->textFilter.filterString(sentname);
+	ScorchedServer::instance()->getTextFilter().filterString(sentname);
 
 	// Remove unwanted characters from middle
 	for (unsigned int *c = (unsigned int *) sentname.c_str(); *c;  c++)
@@ -171,7 +161,7 @@ bool ServerAddPlayerHandler::filterName(Tank *tank,
 	if (ScorchedServer::instance()->getOptionsGame().getRegisteredUserNames())
 	{
 		ServerAuthHandler *authHandler =
-			ScorchedServerUtil::instance()->getAuthHandler();
+			ScorchedServer::instance()->getAuthHandler();
 		if (authHandler)
 		{
 			while (!authHandler->authenticateUserName(tank->getUniqueId(),

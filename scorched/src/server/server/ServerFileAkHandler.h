@@ -23,21 +23,16 @@
 
 #include <coms/ComsMessageHandler.h>
 
-class ServerFileAkHandler : 
-	public ComsMessageHandlerI
+class ServerFileAkHandler : public ComsMessageHandlerI
 {
 public:
-	static ServerFileAkHandler *instance();
+	ServerFileAkHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ServerFileAkHandler();
 
 	virtual bool processMessage(
 		NetMessage &message,
 		const char *messageType,
 		NetBufferReader &reader);
-
-private:
-	ServerFileAkHandler();
-	virtual ~ServerFileAkHandler();
-
 };
 
 #endif // __INCLUDE_ServerFileAkHandlerh_INCLUDE__

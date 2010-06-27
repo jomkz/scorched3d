@@ -20,8 +20,9 @@
 
 #include <server/ServerChannelManager.h>
 #include <server/ScorchedServer.h>
-#include <server/ScorchedServerUtil.h>
+#include <server/ScorchedServer.h>
 #include <server/ServerCommon.h>
+#include <server/ServerTextFilter.h>
 #include <lua/LUAScriptHook.h>
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsChannelMessage.h>
@@ -39,7 +40,6 @@ ServerChannelManager::ChannelEntry::ChannelEntry(
 	filter_(filter),
 	auth_(auth)
 {
-	ScorchedServer::instance()->getLUAScriptHook().addHookProvider("server_channeltext");
 }
 
 ServerChannelManager::ChannelEntry::~ChannelEntry()
@@ -137,29 +137,18 @@ void ServerChannelManager::DestinationEntry::updateChannels()
 	}
 }
 
-ServerChannelManager *ServerChannelManager::instance_ = 0;
-
-ServerChannelManager *ServerChannelManager::instance()
-{
-	if (!instance_)
-	{
-		instance_ = new ServerChannelManager;
-	}
-	return instance_;
-}
-
-ServerChannelManager::ServerChannelManager() :
+ServerChannelManager::ServerChannelManager(ComsMessageHandler &comsMessageHandler) :
 	totalTime_(0), lastMessageId_(0)
 {
 	// Register to recieve comms messages
 	new ComsMessageHandlerIAdapter<ServerChannelManager>(
 		this, &ServerChannelManager::processChannelMessage,
 		ComsChannelMessage::ComsChannelMessageType,
-		ScorchedServer::instance()->getComsMessageHandler());
+		comsMessageHandler);
 	new ComsMessageHandlerIAdapter<ServerChannelManager>(
 		this, &ServerChannelManager::processChannelTextMessage,
 		ComsChannelTextMessage::ComsChannelTextMessageType,
-		ScorchedServer::instance()->getComsMessageHandler());
+		comsMessageHandler);
 
 	// Create some default channels
 	channelEntries_.push_back(new ChannelEntry(
@@ -499,7 +488,7 @@ void ServerChannelManager::actualSend(const ChannelText &constText,
 	if (filter)
 	{
 		// Filter the string for bad language
-		ScorchedServerUtil::instance()->textFilter.filterString(filteredText);
+		ScorchedServer::instance()->getTextFilter().filterString(filteredText);
 
 		// Remove any bad characters
 		for (unsigned int *r = (unsigned int *) filteredText.c_str(); *r; r++)

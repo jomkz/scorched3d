@@ -23,21 +23,16 @@
 
 #include <coms/ComsMessageHandler.h>
 
-class ServerInitializeModHandler : 
-	public ComsMessageHandlerI
+class ServerInitializeModHandler : public ComsMessageHandlerI
 {
 public:
-	static ServerInitializeModHandler *instance();
+	ServerInitializeModHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ServerInitializeModHandler();
 
 	virtual bool processMessage(
 		NetMessage &message,
 		const char *messageType,
 		NetBufferReader &reader);
-
-private:
-	ServerInitializeModHandler();
-	virtual ~ServerInitializeModHandler();
-
 };
 
 #endif // __INCLUDE_ServerInitializeModHandlerh_INCLUDE__

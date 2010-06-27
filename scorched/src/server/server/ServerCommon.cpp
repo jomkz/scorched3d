@@ -20,7 +20,6 @@
 
 #include <server/ServerCommon.h>
 #include <server/ScorchedServer.h>
-#include <server/ScorchedServerUtil.h>
 #include <server/ServerMessageHandler.h>
 #include <server/ServerChannelManager.h>
 #include <tank/TankContainer.h>
@@ -108,7 +107,7 @@ void ServerCommon::kickPlayer(unsigned int playerId,
 		getTankContainer().getTankById(playerId);
 	if (tank)
 	{
-		ServerChannelManager::instance()->sendText(ChannelText("info", 
+		ScorchedServer::instance()->getServerChannelManager().sendText(ChannelText("info", 
 			"ADMIN_PLAYER_KICKED", 
 			"[p:{0}] has been kicked from the server",
 			tank->getTargetName()), true);

@@ -23,21 +23,16 @@
 
 #include <coms/ComsMessageHandler.h>
 
-class ServerHaveModFilesHandler : 
-	public ComsMessageHandlerI
+class ServerHaveModFilesHandler : public ComsMessageHandlerI
 {
 public:
-	static ServerHaveModFilesHandler *instance();
+	ServerHaveModFilesHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ServerHaveModFilesHandler();
 
 	virtual bool processMessage(
 		NetMessage &message,
 		const char *messageType,
 		NetBufferReader &reader);
-
-private:
-	ServerHaveModFilesHandler();
-	virtual ~ServerHaveModFilesHandler();
-
 };
 
 #endif // __INCLUDE_ServerHaveModFilesHandlerh_INCLUDE__

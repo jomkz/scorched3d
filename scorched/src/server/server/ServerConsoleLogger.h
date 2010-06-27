@@ -24,21 +24,13 @@
 #include <common/LoggerI.h>
 #include <common/ProgressCounter.h>
 
-class ServerConsoleLogger : 
-	public LoggerI
+class ServerConsoleLogger : public LoggerI
 {
 public:
-	static ServerConsoleLogger *instance();
-
-	virtual void logMessage(LoggerInfo &info);
-
-protected:
-	static ServerConsoleLogger *instance_;
-
-private:
 	ServerConsoleLogger();
 	virtual ~ServerConsoleLogger();
 
+	virtual void logMessage(LoggerInfo &info);
 };
 
 #endif

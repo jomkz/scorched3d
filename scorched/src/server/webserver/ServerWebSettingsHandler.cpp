@@ -22,7 +22,6 @@
 #include <webserver/ServerWebServerUtil.h>
 #include <server/ServerLog.h>
 #include <server/ScorchedServer.h>
-#include <server/ScorchedServerUtil.h>
 #include <server/ServerCommon.h>
 #include <server/ServerAdminCommon.h>
 #include <server/ServerParams.h>
@@ -156,8 +155,8 @@ bool ServerWebSettingsHandler::SettingsPlayersHandler::processRequest(
 	}
 
 	{
-		TankAINames tankAIStore;
-		tankAIStore.loadAIs();
+		std::list<std::string> ais;
+		TankAINames::loadAIs(ais);
 		
 		std::string players;
 		std::list<OptionEntry *>::iterator itor;
@@ -176,7 +175,6 @@ bool ServerWebSettingsHandler::SettingsPlayersHandler::processRequest(
 			value.append(entry->getName());
 			value.append("</td><td>");
 			value.append(S3D::formatStringBuffer("<select name='%s'>", entry->getName()));
-			std::list<std::string> &ais = tankAIStore.getAis();
 			std::list<std::string>::iterator aiitor;
 			for (aiitor = ais.begin(); aiitor != ais.end(); aiitor++)
 			{

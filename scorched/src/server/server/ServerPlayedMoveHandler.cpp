@@ -26,20 +26,9 @@
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 
-ServerPlayedMoveHandler *ServerPlayedMoveHandler::instance_ = 0;
-
-ServerPlayedMoveHandler *ServerPlayedMoveHandler::instance()
+ServerPlayedMoveHandler::ServerPlayedMoveHandler(ComsMessageHandler &comsMessageHandler)
 {
-	if (!instance_)
-	{
-		instance_ = new ServerPlayedMoveHandler;
-	}
-	return instance_;
-}
-
-ServerPlayedMoveHandler::ServerPlayedMoveHandler()
-{
-	ScorchedServer::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsPlayedMoveMessage::ComsPlayedMoveMessageType,
 		this);
 }

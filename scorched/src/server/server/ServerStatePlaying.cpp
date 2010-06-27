@@ -106,7 +106,7 @@ void ServerStatePlaying::simulate(fixed frameTime)
 			ChannelText text("info",
 				"ROUND_FINISHED_TIME",
 				"Round finished due to round time out");
-			ServerChannelManager::instance()->sendText(text, true);
+			ScorchedServer::instance()->getServerChannelManager().sendText(text, true);
 
 			roundState_ = eFinished;
 		}

@@ -23,23 +23,16 @@
 
 #include <coms/ComsMessageHandler.h>
 
-class ServerGiftMoneyHandler : 
-	public ComsMessageHandlerI
+class ServerGiftMoneyHandler : public ComsMessageHandlerI
 {
 public:
-	static ServerGiftMoneyHandler *instance();
+	ServerGiftMoneyHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ServerGiftMoneyHandler();
 
 	virtual bool processMessage(
 		NetMessage &message,
 		const char *messageType,
 		NetBufferReader &reader);
-
-protected:
-	static ServerGiftMoneyHandler *instance_;
-
-private:
-	ServerGiftMoneyHandler();
-	virtual ~ServerGiftMoneyHandler();
 };
 
 #endif

@@ -55,7 +55,7 @@ bool ServerStateStartingMatch::startingMatch(fixed frameTime)
 	{
 		if ((timeleft.asInt() % 5 == 0 || timeleft.asInt() <= 5) && (timeleft.asInt() != 0))
 		{
-			ServerChannelManager::instance()->sendText(
+			ScorchedServer::instance()->getServerChannelManager().sendText(
 				ChannelText("info", 
 					"GAME_STARTING_IN_X", 
 					"Game starting in {0} seconds...", 
@@ -77,7 +77,7 @@ void ServerStateStartingMatch::startMatch()
 	ScorchedServer::instance()->getTankDeadContainer().clearTanks();
 	ScorchedServer::instance()->getOptionsTransient().reset();
 
-	ServerChannelManager::instance()->sendText(
+	ScorchedServer::instance()->getServerChannelManager().sendText(
 		ChannelText("info", 
 			"GAME_STARTED", 
 			"Game started"),
@@ -86,7 +86,7 @@ void ServerStateStartingMatch::startMatch()
 
 void ServerStateStartingMatch::stoppingMatch()
 {
-	ServerChannelManager::instance()->sendText(
+	ScorchedServer::instance()->getServerChannelManager().sendText(
 		ChannelText("info", 
 			"TOO_FEW_PLAYERS", 
 			"Too few players, stopping play"),

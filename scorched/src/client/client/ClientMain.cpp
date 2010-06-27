@@ -165,10 +165,6 @@ static bool initComsHandlers()
 	ScorchedClient::instance()->getComsMessageHandler().setConnectionHandler(
 		ClientMessageHandler::instance());
 
-	ComsMessageHandlerIRegistration::registerHandlers(
-		ComsMessageHandlerIRegistration::eClient,
-		ScorchedClient::instance()->getComsMessageHandler());
-
 	ClientChannelManager::instance();
 	ClientConnectionRejectHandler::instance();
 	ClientLinesHandler::instance();

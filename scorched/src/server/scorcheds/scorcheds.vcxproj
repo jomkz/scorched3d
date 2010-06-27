@@ -107,6 +107,8 @@
     <ClCompile Include="..\..\common\image\ImagePngFactory.cpp" />
     <ClCompile Include="..\..\common\image\ImageStore.cpp" />
     <ClCompile Include="..\..\common\simactions\TankBuyingSimAction.cpp" />
+    <ClCompile Include="..\server\ServerAuthHandlerStore.cpp" />
+    <ClCompile Include="..\server\ServerHandlers.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="..\..\common\common\ARGParser.cpp" />
     <ClCompile Include="..\..\common\common\ChannelManager.cpp" />
@@ -157,7 +159,6 @@
     <ClCompile Include="..\..\common\common\Vector4.cpp" />
     <ClCompile Include="..\..\common\common\VectorLib.cpp" />
     <ClCompile Include="..\server\ScorchedServer.cpp" />
-    <ClCompile Include="..\server\ScorchedServerUtil.cpp" />
     <ClCompile Include="..\server\ServerAddPlayerHandler.cpp" />
     <ClCompile Include="..\server\ServerAdminCommon.cpp" />
     <ClCompile Include="..\server\ServerAdminHandler.cpp" />
@@ -621,7 +622,6 @@
     <ClInclude Include="..\..\common\image\ImageStore.h" />
     <ClInclude Include="..\..\common\simactions\TankBuyingSimAction.h" />
     <ClInclude Include="..\server\ScorchedServer.h" />
-    <ClInclude Include="..\server\ScorchedServerUtil.h" />
     <ClInclude Include="..\server\ServerAddPlayerHandler.h" />
     <ClInclude Include="..\server\ServerAdminCommon.h" />
     <ClInclude Include="..\server\ServerAdminHandler.h" />
@@ -631,6 +631,7 @@
     <ClInclude Include="..\server\ServerAuthHandlerForumLogin.h" />
     <ClInclude Include="..\server\ServerAuthHandlerMinKills.h" />
     <ClInclude Include="..\server\ServerAuthHandlerPrefered.h" />
+    <ClInclude Include="..\server\ServerAuthHandlerStore.h" />
     <ClInclude Include="..\server\ServerBanned.h" />
     <ClInclude Include="..\server\ServerBrowserInfo.h" />
     <ClInclude Include="..\server\ServerBuyAccessoryHandler.h" />
@@ -648,6 +649,7 @@
     <ClInclude Include="..\server\ServerFileAkHandler.h" />
     <ClInclude Include="..\server\ServerFileServer.h" />
     <ClInclude Include="..\server\ServerGiftMoneyHandler.h" />
+    <ClInclude Include="..\server\ServerHandlers.h" />
     <ClInclude Include="..\server\ServerHaveModFilesHandler.h" />
     <ClInclude Include="..\server\ServerInitializeModHandler.h" />
     <ClInclude Include="..\server\ServerLinesHandler.h" />

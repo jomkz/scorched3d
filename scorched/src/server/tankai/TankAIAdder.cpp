@@ -81,5 +81,5 @@ void TankAIAdder::addTankAIs(ScorchedServer &context)
 
 void TankAIAdder::addTankAI(ScorchedServer &context, const char *aiName)
 {
-	ServerConnectAuthHandler::instance()->addTankAI(aiName);
+	ScorchedServer::instance()->getServerConnectAuthHandler().addTankAI(aiName);
 }

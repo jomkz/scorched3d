@@ -33,6 +33,8 @@ public:
 	ServerSimulator();
 	virtual ~ServerSimulator();
 
+	virtual void clear();
+
 	void addSimulatorAction(SimAction *action, SimulatorI *callback = 0);
 
 	bool getSendActionsEmpty() { return sendActions_.empty() && simActions_.empty(); }

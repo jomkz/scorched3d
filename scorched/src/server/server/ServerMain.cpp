@@ -61,15 +61,14 @@
 #include <server/ServerFileServer.h>
 #include <server/ServerLoadLevel.h>
 #include <server/ServerRegistration.h>
-#include <server/ServerConsoleProgressCounter.h>
 #include <server/ServerLog.h>
 #include <server/ServerBrowserInfo.h>
 #include <server/ServerCommon.h>
 #include <server/ServerBanned.h>
 #include <server/ServerMain.h>
 #include <server/ScorchedServer.h>
-#include <server/ScorchedServerUtil.h>
 #include <server/ServerState.h>
+#include <server/ServerTimedMessage.h>
 #include <SDL/SDL.h>
 
 #ifdef S3D_SERVER
@@ -115,21 +114,6 @@ bool startServer(bool local, ProgressCounter *counter)
 		&ScorchedServer::instance()->getComsMessageHandler());
 	ScorchedServer::instance()->getComsMessageHandler().setConnectionHandler(
 		ServerMessageHandler::instance());
-	ServerConnectHandler::instance();
-	ServerConnectAuthHandler::instance();
-	ServerLinesHandler::instance();
-	ServerChannelManager::instance();
-	ServerGiftMoneyHandler::instance();
-	ServerAdminHandler::instance();
-	ServerHaveModFilesHandler::instance();
-	ServerInitializeModHandler::instance();
-	ServerPlayedMoveHandler::instance();
-	ServerFileAkHandler::instance();
-	ServerBuyAccessoryHandler::instance();
-	ServerAddPlayerHandler::instance();
-	ServerLoadLevel::instance();
-	ServerDefenseHandler::instance();
-	ServerOperationResultHandler::instance();
 
 	// Set the mod
 	S3D::setDataFileMod(
@@ -245,10 +229,10 @@ void serverLoop(fixed timeDifference)
 		ScorchedServer::instance()->getSimulator().simulate();
 		ScorchedServer::instance()->getServerState().simulate(timeDifference);
 
-		ServerConnectAuthHandler::instance()->processMessages();
+		ScorchedServer::instance()->getServerConnectAuthHandler().processMessages();
 		ServerFileServer::instance()->simulate();
-		ServerChannelManager::instance()->simulate(timeDifference);
-		ScorchedServerUtil::instance()->timedMessage.simulate();
+		ScorchedServer::instance()->getServerChannelManager().simulate(timeDifference);
+		ScorchedServer::instance()->getTimedMessage().simulate();
 
 		if (timeDifference > 5)
 		{
@@ -259,8 +243,8 @@ void serverLoop(fixed timeDifference)
 
 void consoleServer()
 {
+	ServerConsoleLogger serverConsoleLogger;
 	ServerConsoleProgressCounter::instance();
-	ServerConsoleLogger::instance();
 	ServerCommon::startFileLogger();
 	serverMain(ServerConsoleProgressCounter::instance()->getProgressCounter());
 
@@ -274,4 +258,3 @@ void consoleServer()
 		serverLoop(timeDifference);
 	}
 }
-

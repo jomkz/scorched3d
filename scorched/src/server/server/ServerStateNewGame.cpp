@@ -84,7 +84,7 @@ void ServerStateNewGame::newGameState()
 	// Make sure options are up to date
 	if (ScorchedServer::instance()->getOptionsGame().commitChanges())
 	{
-		ServerChannelManager::instance()->sendText(
+		ScorchedServer::instance()->getServerChannelManager().sendText(
 			ChannelText("info", 
 				"GAME_OPTIONS_CHANGED", 
 				"Game options have been changed!"),

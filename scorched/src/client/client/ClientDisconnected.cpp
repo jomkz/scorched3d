@@ -18,35 +18,25 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <tankai/TankAI.h>
-#include <lang/LangResource.h>
-#include <XML/XMLNode.h>
+#include <client/ClientDisconnected.h>
+#include <client/ScorchedClient.h>
+#include <client/ClientState.h>
+#include <client/ScorchedClient.h>
+#include <client/ClientSimulator.h>
+#include <engine/GameState.h>
 
-bool TankAI::tankAILogging_ = false;
-
-TankAI::TankAI() : 
-	availableForRandom_(true),
-	availableForPlayers_(true)
+ClientDisconnected::ClientDisconnected() : GameStateI("ClientDisconnected")
 {
 }
 
-TankAI::~TankAI()
+ClientDisconnected::~ClientDisconnected()
 {
 }
 
-bool TankAI::parseConfig(TankAIWeaponSets &sets, XMLNode *node)
+void ClientDisconnected::enterState(const unsigned state)
 {
-	if (!node->getNamedChild("name", name_)) return false;
-	if (!node->getNamedChild("description", description_)) return false;
-	if (!node->getNamedChild("availableforrandom", availableForRandom_)) return false;
-	if (!node->getNamedChild("availableforplayers", availableForPlayers_)) return false;
+	ScorchedClient::instance()->getClientSimulator().clear();
 
-	return true;
-}
-
-ToolTip *TankAI::getToolTip()
-{
-	toolTip_.setText(ToolTip::ToolTipInfo, LANG_STRING(name_), 
-		LANG_RESOURCE(name_ + "_ai_description",  description_));
-	return &toolTip_;
+	ScorchedClient::instance()->getGameState().stimulate(
+		ClientState::StimOptions);
 }

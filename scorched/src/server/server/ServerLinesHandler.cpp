@@ -20,7 +20,6 @@
 
 #include <server/ServerLinesHandler.h>
 #include <server/ScorchedServer.h>
-#include <server/ScorchedServerUtil.h>
 #include <server/ServerCommon.h>
 #include <server/ServerDestinations.h>
 #include <coms/ComsLinesMessage.h>
@@ -28,17 +27,11 @@
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <common/Logger.h>
+#include <set>
 
-ServerLinesHandler *ServerLinesHandler::instance()
+ServerLinesHandler::ServerLinesHandler(ComsMessageHandler &comsMessageHandler)
 {
-	static ServerLinesHandler *instance = 
-		new ServerLinesHandler;
-	return instance;
-}
-
-ServerLinesHandler::ServerLinesHandler()
-{
-	ScorchedServer::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsLinesMessage::ComsLinesMessageType,
 		this);
 }

@@ -21,13 +21,13 @@
 #include <webserver/ServerWebHandler.h>
 #include <server/ServerLog.h>
 #include <server/ScorchedServer.h>
-#include <server/ScorchedServerUtil.h>
 #include <webserver/ServerWebServerUtil.h>
 #include <server/ServerCommon.h>
 #include <server/ServerAdminCommon.h>
 #include <server/ServerAdminSessions.h>
 #include <server/ServerParams.h>
 #include <server/ServerState.h>
+#include <server/ServerBanned.h>
 #include <server/ServerChannelManager.h>
 #include <landscapedef/LandscapeDefinitionsBase.h>
 #include <engine/ModFiles.h>
@@ -527,12 +527,12 @@ bool ServerWebHandler::BannedHandler::processRequest(
 
 	const char *action = ServerWebServerUtil::getField(request.getFields(), "action");
 	if (action && 0 == strcmp(action, "Load")) 
-		ScorchedServerUtil::instance()->bannedPlayers.load(true);
+		ScorchedServer::instance()->getBannedPlayers().load(true);
 
 	const char *selected = ServerWebServerUtil::getField(request.getFields(), "selected");
 	std::string banned;
 	std::list<ServerBanned::BannedRange> &bannedIps = 
-		ScorchedServerUtil::instance()->bannedPlayers.getBannedIps();
+		ScorchedServer::instance()->getBannedPlayers().getBannedIps();
 	std::list<ServerBanned::BannedRange>::iterator itor;
 	for (itor = bannedIps.begin();
 		itor != bannedIps.end();
@@ -573,7 +573,7 @@ bool ServerWebHandler::BannedHandler::processRequest(
 	request.getFields()["BANNED"] = banned;
 
 	if (action && 0 == strcmp(action, "Save")) 
-		ScorchedServerUtil::instance()->bannedPlayers.save();
+		ScorchedServer::instance()->getBannedPlayers().save();
 
 	return ServerWebServerUtil::getHtmlTemplate(request.getSession(), "banned.html", request.getFields(), text);
 }

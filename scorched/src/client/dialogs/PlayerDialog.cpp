@@ -224,13 +224,8 @@ void PlayerDialog::display()
 		addWidget(infoPanel);
 	}
 
-	static TankAIStore tankAIStore;
-	static bool init = false;
-	if (!init)
-	{
-		init = true;
-		tankAIStore.loadAIs(true);
-	}
+	TankAIStore tankAIStore;
+	tankAIStore.loadAIs(true);
 
 	// Add teams
 	teamDropDown_->clear();

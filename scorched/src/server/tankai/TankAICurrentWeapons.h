@@ -29,7 +29,7 @@ public:
 	TankAICurrentWeapons();
 	virtual ~TankAICurrentWeapons();
 
-	virtual bool parseConfig(XMLNode *node);
+	virtual bool parseConfig(TankAIWeaponSets &sets, XMLNode *node);
 
 	void buyWeapons(TankAIWeaponSets::WeaponSetAccessories &tankAccessories, bool lastRound);
 

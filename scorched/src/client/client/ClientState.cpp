@@ -30,6 +30,7 @@
 #include <client/ScorchedClient.h>
 #include <client/ClientSimulator.h>
 #include <client/ClientProcessingLoop.h>
+#include <client/ClientDisconnected.h>
 #include <sound/Sound.h>
 #include <tankgraph/RenderTargets.h>
 #include <tankgraph/TankKeyboardControl.h>
@@ -141,7 +142,7 @@ void ClientState::setupGameState()
 	gameState.addStateLoop(StateOptions, 
 		Main2DCamera::instance(), SoftwareMouse::instance());
 	gameState.addStateStimulus(StateOptions, 
-		StimDisconnected, StateOptions);
+		StimDisconnected, StateDisconnected);
 	gameState.addStateStimulus(StateOptions, 
 		StimConnect, StateConnect);
 
@@ -153,7 +154,7 @@ void ClientState::setupGameState()
 	gameState.addStateLoop(StateConnect, 
 		Main2DCamera::instance(), SoftwareMouse::instance());
 	gameState.addStateStimulus(StateConnect, 
-		StimDisconnected, StateOptions);
+		StimDisconnected, StateDisconnected);
 	gameState.addStateStimulus(StateConnect, 
 		StimGameStopped, StateConnect);
 	gameState.addStateStimulus(StateConnect, 
@@ -170,7 +171,7 @@ void ClientState::setupGameState()
 	gameState.addStateStimulus(StateLoadFiles, 
 		StimGameStopped, StateConnect);
 	gameState.addStateStimulus(StateLoadFiles, 
-		StimDisconnected, StateOptions);
+		StimDisconnected, StateDisconnected);
 	gameState.addStateStimulus(StateLoadFiles, 
 		StimWait, StateWait);
 	gameState.addStateStimulus(StateLoadFiles, 
@@ -185,7 +186,7 @@ void ClientState::setupGameState()
 	gameState.addStateStimulus(StateLoadLevel, 
 		StimGameStopped, StateConnect);
 	gameState.addStateStimulus(StateLoadLevel, 
-		StimDisconnected, StateOptions);
+		StimDisconnected, StateDisconnected);
 	gameState.addStateStimulus(StateLoadLevel, 
 		StimWait, StateWait);
 	gameState.addStateStimulus(StateLoadLevel, 
@@ -204,14 +205,14 @@ void ClientState::setupGameState()
 	gameState.addStateStimulus(StateWaitNoLandscape, 
 		StimLoadLevel, StateLoadLevel);
 	gameState.addStateStimulus(StateWaitNoLandscape, 
-		StimDisconnected, StateOptions);
+		StimDisconnected, StateDisconnected);
 
 	// StateWait
 	addStandardComponents(gameState, StateWait);
 	gameState.addStateEntry(StateWait, 
 		TankKeyboardControl::instance());
 	gameState.addStateStimulus(StateWait, 
-		StimDisconnected, StateOptions);
+		StimDisconnected, StateDisconnected);
 	gameState.addStateStimulus(StateWait, 
 		StimAutoDefense, StateWait);
 	gameState.addStateStimulus(StateWait, 
@@ -228,7 +229,7 @@ void ClientState::setupGameState()
 	// StateBuyWeapons
 	addStandardComponents(gameState, StateBuyWeapons);
 	gameState.addStateStimulus(StateBuyWeapons, 
-		StimDisconnected, StateOptions);
+		StimDisconnected, StateDisconnected);
 	gameState.addStateStimulus(StateBuyWeapons, 
 		StimAutoDefense, StateAutoDefense);
 	gameState.addStateStimulus(StateBuyWeapons, 
@@ -239,7 +240,7 @@ void ClientState::setupGameState()
 	// StateAutoDefense
 	addStandardComponents(gameState, StateAutoDefense);
 	gameState.addStateStimulus(StateAutoDefense, 
-		StimDisconnected, StateOptions);
+		StimDisconnected, StateDisconnected);
 	gameState.addStateStimulus(StateAutoDefense, 
 		StimWait, StateWait);
 	gameState.addStateStimulus(StateAutoDefense, 
@@ -250,7 +251,7 @@ void ClientState::setupGameState()
 	gameState.addStateKeyEntry(StatePlaying, 
 		TankKeyboardControl::instance());
 	gameState.addStateStimulus(StatePlaying, 
-		StimDisconnected, StateOptions);
+		StimDisconnected, StateDisconnected);
 	gameState.addStateStimulus(StatePlaying, 
 		StimWait, StateWait);
 	gameState.addStateStimulus(StatePlaying, 
@@ -261,9 +262,14 @@ void ClientState::setupGameState()
 	gameState.addStateLoop(StateScore,
 		MainCamera::instance(), ClientSaveScreenState::instance());
 	gameState.addStateStimulus(StateScore, 
-		StimDisconnected, StateOptions);
+		StimDisconnected, StateDisconnected);
 	gameState.addStateStimulus(StateScore, 
 		StimWait, StateWait);
 	gameState.addStateStimulus(StateScore, 
 		StimLoadLevel, StateLoadLevel);
+
+	// StateDisconnected
+	gameState.addStateEntry(StateDisconnected, new ClientDisconnected());
+	gameState.addStateStimulus(StateDisconnected, 
+		StimOptions, StateOptions);
 }

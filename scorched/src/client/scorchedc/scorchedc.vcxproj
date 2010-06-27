@@ -450,6 +450,8 @@
     <ClCompile Include="..\..\common\XML\XMLNode.cpp" />
     <ClCompile Include="..\..\common\XML\XMLParser.cpp" />
     <ClCompile Include="..\..\common\XML\XMLStringBuffer.cpp" />
+    <ClCompile Include="..\..\server\server\ServerAuthHandlerStore.cpp" />
+    <ClCompile Include="..\..\server\server\ServerHandlers.cpp" />
     <ClCompile Include="..\client\ClientAdmin.cpp" />
     <ClCompile Include="..\client\ClientAdminResultHandler.cpp" />
     <ClCompile Include="..\client\ClientChannelManager.cpp" />
@@ -458,6 +460,7 @@
     <ClCompile Include="..\client\ClientConnectionAuthHandler.cpp" />
     <ClCompile Include="..\client\ClientConnectionRejectHandler.cpp" />
     <ClCompile Include="..\client\ClientDialog.cpp" />
+    <ClCompile Include="..\client\ClientDisconnected.cpp" />
     <ClCompile Include="..\client\ClientFileHandler.cpp" />
     <ClCompile Include="..\client\ClientGameStoppedHandler.cpp" />
     <ClCompile Include="..\client\ClientInitializeModHandler.cpp" />
@@ -689,7 +692,6 @@
     <ClCompile Include="..\..\server\tankai\TankAIStrings.cpp" />
     <ClCompile Include="..\..\server\tankai\TankAIWeaponSets.cpp" />
     <ClCompile Include="..\..\server\server\ScorchedServer.cpp" />
-    <ClCompile Include="..\..\server\server\ScorchedServerUtil.cpp" />
     <ClCompile Include="..\..\server\server\ServerAddPlayerHandler.cpp" />
     <ClCompile Include="..\..\server\server\ServerAdminCommon.cpp" />
     <ClCompile Include="..\..\server\server\ServerAdminHandler.cpp" />
@@ -1181,6 +1183,8 @@
     <ClInclude Include="..\..\common\XML\XMLNode.h" />
     <ClInclude Include="..\..\common\XML\XMLParser.h" />
     <ClInclude Include="..\..\common\XML\XMLStringBuffer.h" />
+    <ClInclude Include="..\..\server\server\ServerAuthHandlerStore.h" />
+    <ClInclude Include="..\..\server\server\ServerHandlers.h" />
     <ClInclude Include="..\client\ClientAdmin.h" />
     <ClInclude Include="..\client\ClientAdminResultHandler.h" />
     <ClInclude Include="..\client\ClientChannelManager.h" />
@@ -1189,6 +1193,7 @@
     <ClInclude Include="..\client\ClientConnectionAuthHandler.h" />
     <ClInclude Include="..\client\ClientConnectionRejectHandler.h" />
     <ClInclude Include="..\client\ClientDialog.h" />
+    <ClInclude Include="..\client\ClientDisconnected.h" />
     <ClInclude Include="..\client\ClientFileHandler.h" />
     <ClInclude Include="..\client\ClientGameStoppedHandler.h" />
     <ClInclude Include="..\client\ClientInitializeModHandler.h" />
@@ -1426,7 +1431,6 @@
     <ClInclude Include="..\..\server\tankai\TankAIStrings.h" />
     <ClInclude Include="..\..\server\tankai\TankAIWeaponSets.h" />
     <ClInclude Include="..\..\server\server\ScorchedServer.h" />
-    <ClInclude Include="..\..\server\server\ScorchedServerUtil.h" />
     <ClInclude Include="..\..\server\server\ServerAddPlayerHandler.h" />
     <ClInclude Include="..\..\server\server\ServerAdminCommon.h" />
     <ClInclude Include="..\..\server\server\ServerAdminHandler.h" />

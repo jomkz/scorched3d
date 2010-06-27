@@ -47,14 +47,14 @@ void TankAICurrent::setTank(Tank *tank)
 	tank_ = tank;
 }
 
-bool TankAICurrent::parseConfig(XMLNode *node)
+bool TankAICurrent::parseConfig(TankAIWeaponSets &sets, XMLNode *node)
 {
-	if (!TankAI::parseConfig(node)) return false;
+	if (!TankAI::parseConfig(sets, node)) return false;
 
 	{
 		XMLNode *weapons = 0;
 		if (!node->getNamedChild("weapons", weapons)) return false;
-		if (!wantedWeapons_.parseConfig(weapons)) return false;
+		if (!wantedWeapons_.parseConfig(sets, weapons)) return false;
 	}
 	{
 		XMLNode *defense = 0;

@@ -23,16 +23,9 @@
 #include <server/ScorchedServer.h>
 #include <coms/ComsFileAkMessage.h>
 
-ServerFileAkHandler *ServerFileAkHandler::instance()
+ServerFileAkHandler::ServerFileAkHandler(ComsMessageHandler &comsMessageHandler)
 {
-	static ServerFileAkHandler *instance = 
-		new ServerFileAkHandler;
-	return instance;
-}
-
-ServerFileAkHandler::ServerFileAkHandler()
-{
-	ScorchedServer::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsFileAkMessage::ComsFileAkMessageType,
 		this);
 }

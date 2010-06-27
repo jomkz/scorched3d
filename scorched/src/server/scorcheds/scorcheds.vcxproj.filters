@@ -219,9 +219,6 @@
     <ClCompile Include="..\server\ScorchedServer.cpp">
       <Filter>server</Filter>
     </ClCompile>
-    <ClCompile Include="..\server\ScorchedServerUtil.cpp">
-      <Filter>server</Filter>
-    </ClCompile>
     <ClCompile Include="..\server\ServerAddPlayerHandler.cpp">
       <Filter>server</Filter>
     </ClCompile>
@@ -1443,6 +1440,12 @@
     <ClCompile Include="..\..\common\image\ImageID.cpp">
       <Filter>image</Filter>
     </ClCompile>
+    <ClCompile Include="..\server\ServerAuthHandlerStore.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\server\ServerHandlers.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -1605,9 +1608,6 @@
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="..\server\ScorchedServer.h">
-      <Filter>server</Filter>
-    </ClInclude>
-    <ClInclude Include="..\server\ScorchedServerUtil.h">
       <Filter>server</Filter>
     </ClInclude>
     <ClInclude Include="..\server\ServerAddPlayerHandler.h">
@@ -2815,6 +2815,12 @@
     </ClInclude>
     <ClInclude Include="..\..\common\image\ImageID.h">
       <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\server\ServerAuthHandlerStore.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\server\ServerHandlers.h">
+      <Filter>server</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

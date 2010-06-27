@@ -31,7 +31,8 @@
 class ServerChannelManager
 {
 public:
-	static ServerChannelManager *instance();
+	ServerChannelManager(ComsMessageHandler &comsMessageHandler);
+	virtual ~ServerChannelManager();
 
 	struct MessageEntry
 	{
@@ -139,10 +140,6 @@ protected:
 
 	bool processChannelMessage(NetMessage &message, NetBufferReader &reader);
 	bool processChannelTextMessage(NetMessage &message, NetBufferReader &reader);
-
-private:
-	ServerChannelManager();
-	virtual ~ServerChannelManager();
 
 };
 

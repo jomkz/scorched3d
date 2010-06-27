@@ -20,7 +20,6 @@
 
 #include <server/ServerMessageHandler.h>
 #include <server/ScorchedServer.h>
-#include <server/ScorchedServerUtil.h>
 #include <server/ServerCommon.h>
 #include <server/ServerBanned.h>
 #include <server/ServerChannelManager.h>
@@ -69,7 +68,7 @@ void ServerMessageHandler::clientConnected(NetMessage &message)
 {
 	// Check if this destination has been banned
 	if (message.getIpAddress() != 0 &&
-		ScorchedServerUtil::instance()->bannedPlayers.getBanned(message.getIpAddress()) == 
+		ScorchedServer::instance()->getBannedPlayers().getBanned(message.getIpAddress()) == 
 		ServerBanned::Banned)
 	{
 		Logger::log(S3D::formatStringBuffer("Banned client connected dest=\"%i\" ip=\"%s\"", 
@@ -162,7 +161,7 @@ void ServerMessageHandler::clientDisconnected(NetMessage &message)
 	}
 
 	// Inform the channel manager
-	ServerChannelManager::instance()->destinationDisconnected(message.getDestinationId());
+	ScorchedServer::instance()->getServerChannelManager().destinationDisconnected(message.getDestinationId());
 
 	// Remove from list of destinations
 	ScorchedServer::instance()->getServerDestinations().removeDestination(
@@ -188,7 +187,7 @@ void ServerMessageHandler::destroyPlayer(unsigned int tankId, const char *reason
 		tankId, 
 		tank->getCStrName().c_str(),
 		reason));
-	ServerChannelManager::instance()->sendText(
+	ScorchedServer::instance()->getServerChannelManager().sendText(
 		ChannelText("info", 
 			"PLAYER_DISCONNECTED", 
 			"Player disconnected [p:{0}] ({1})",

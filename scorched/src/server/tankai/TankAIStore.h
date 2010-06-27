@@ -23,6 +23,7 @@
 
 #include <list>
 #include <tankai/TankAI.h>
+#include <tankai/TankAIWeaponSets.h>
 
 class TankAIStore
 {
@@ -37,6 +38,7 @@ public:
 	TankAI *getAIByName(const char *name);
 
 protected:
+	TankAIWeaponSets tankAiWeaponSets_;
 	std::list<TankAI *> ais_;
 
 	void addAI(TankAI *ai);

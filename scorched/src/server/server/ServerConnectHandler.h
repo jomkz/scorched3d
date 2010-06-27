@@ -24,26 +24,18 @@
 
 #include <coms/ComsMessageHandler.h>
 
-class ServerConnectHandler : 
-	public ComsMessageHandlerI
+class ServerConnectHandler : public ComsMessageHandlerI
 {
 public:
-	static ServerConnectHandler *instance();
+	ServerConnectHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ServerConnectHandler();
 
 	virtual bool processMessage(
 		NetMessage &message,
 		const char *messageType,
 		NetBufferReader &reader);
 
-	bool checkStandardParams(unsigned int destinationId, unsigned int ipAddress);
-
-protected:
-	static ServerConnectHandler *instance_;
-
-private:
-	ServerConnectHandler();
-	virtual ~ServerConnectHandler();
-
+	static bool checkStandardParams(unsigned int destinationId, unsigned int ipAddress);
 };
 
 

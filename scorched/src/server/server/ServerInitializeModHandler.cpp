@@ -23,16 +23,9 @@
 #include <server/ScorchedServer.h>
 #include <coms/ComsInitializeModMessage.h>
 
-ServerInitializeModHandler *ServerInitializeModHandler::instance()
+ServerInitializeModHandler::ServerInitializeModHandler(ComsMessageHandler &comsMessageHandler)
 {
-	static ServerInitializeModHandler *instance = 
-		new ServerInitializeModHandler;
-	return instance;
-}
-
-ServerInitializeModHandler::ServerInitializeModHandler()
-{
-	ScorchedServer::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsInitializeModMessage::ComsInitializeModMessageType,
 		this);
 }
@@ -49,7 +42,7 @@ bool ServerInitializeModHandler::processMessage(
 	ComsInitializeModMessage message;
 	if (!message.readMessage(reader)) return false;
 
-	ServerLoadLevel::instance()->destinationLoadLevel(netMessage.getDestinationId());
+	ServerLoadLevel::destinationLoadLevel(netMessage.getDestinationId());
 
 	return true;
 }

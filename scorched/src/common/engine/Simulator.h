@@ -35,9 +35,11 @@ public:
 	Simulator();
 	virtual ~Simulator();
 
+	virtual void clear();
+
 	void setScorchedContext(ScorchedContext *context);
 
-	void simulate();
+	virtual void simulate();
 
 	// Accessors
 	RandomGenerator &getRandomGenerator() { return random_; }

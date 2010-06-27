@@ -26,23 +26,16 @@
 #include <coms/ComsDefenseMessage.h>
 
 class Tank;
-class ServerDefenseHandler : 
-	public ComsMessageHandlerI
+class ServerDefenseHandler : public ComsMessageHandlerI
 {
 public:
-	static ServerDefenseHandler *instance();
+	ServerDefenseHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ServerDefenseHandler();
 
 	virtual bool processMessage(
 		NetMessage &message,
 		const char *messageType,
 		NetBufferReader &reader);
-
-protected:
-	static ServerDefenseHandler *instance_;
-
-private:
-	ServerDefenseHandler();
-	virtual ~ServerDefenseHandler();
 };
 
 

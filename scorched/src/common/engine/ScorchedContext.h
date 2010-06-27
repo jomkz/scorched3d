@@ -43,10 +43,10 @@ class Simulator;
 class ScorchedContext
 {
 public:
-	ScorchedContext(const char *name, bool server);
+	ScorchedContext(const char *name);
 	virtual ~ScorchedContext();
 
-	bool getServerMode() { return serverMode; }
+	virtual bool getServerMode() = 0;
 
 	void setNetInterface(NetInterface *i) { netInterface = i; }
 	NetInterface &getNetInterface() { return *netInterface; }
@@ -58,7 +58,7 @@ public:
 	TargetContainer &getTargetContainer() { return *targetContainer; }
 	TargetMovement &getTargetMovement() { return *targetMovement; }
 	TankTeamScore &getTankTeamScore() { return *tankTeamScore; }
-	ActionController &getActionController() { return *actionController; }
+	ActionController &getActionController();
 	LandscapeMaps &getLandscapeMaps() { return *landscapeMaps; }
 	OptionsScorched &getOptionsGame() { return *optionsGame; }
 	OptionsTransient &getOptionsTransient() { return *optionsTransient; }
@@ -68,10 +68,9 @@ public:
 	TankModelStore &getTankModels() { return *tankModelStore; }
 	LUAScriptFactory &getLUAScriptFactory() { return *luaScriptFactory; }
 	LUAScriptHook &getLUAScriptHook() { return *luaScriptHook; }
-	Simulator &getSimulator() { return *simulator; }
+	virtual Simulator &getSimulator() = 0;
 
 protected:
-	ActionController *actionController;
 	LandscapeMaps *landscapeMaps;
 	ComsMessageHandler *comsMessageHandler;
 	NetInterface *netInterface;
@@ -88,8 +87,6 @@ protected:
 	TargetMovement *targetMovement;
 	LUAScriptFactory *luaScriptFactory;
 	LUAScriptHook *luaScriptHook;
-	Simulator *simulator;
-	bool serverMode;
 };
 
 #endif

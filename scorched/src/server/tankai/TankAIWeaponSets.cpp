@@ -41,15 +41,8 @@ TankAIWeaponSets::WeaponSetAccessories::WeaponSetAccessories(Tank *tank) :
 	tankId = tank->getPlayerId();
 }
 
-TankAIWeaponSets *TankAIWeaponSets::instance()
-{
-	static TankAIWeaponSets instance;
-	return &instance;
-}
-
 TankAIWeaponSets::TankAIWeaponSets()
 {
-	parseConfig();
 }
 
 TankAIWeaponSets::~TankAIWeaponSets()

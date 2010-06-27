@@ -18,30 +18,18 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ScorchedServerUtilh_INCLUDE__)
-#define __INCLUDE_ScorchedServerUtilh_INCLUDE__
+#if !defined(__INCLUDE_ClientDisconnectedh_INCLUDE__)
+#define __INCLUDE_ClientDisconnectedh_INCLUDE__
 
-#include <server/ServerTimedMessage.h>
-#include <server/ServerTextFilter.h>
-#include <server/ServerBanned.h>
-#include <server/ServerAuthHandler.h>
+#include <engine/GameStateI.h>
 
-class ScorchedServerUtil
+class ClientDisconnected : public GameStateI
 {
 public:
-	static ScorchedServerUtil *instance();
+	ClientDisconnected();
+	virtual ~ClientDisconnected();
 
-	ServerAuthHandler *getAuthHandler();
-	ServerTimedMessage timedMessage;
-	ServerBanned bannedPlayers;
-	ServerTextFilter textFilter;
-
-protected:
-	static ScorchedServerUtil *instance_;
-
-private:
-	ScorchedServerUtil();
-	virtual ~ScorchedServerUtil();
+	virtual void enterState(const unsigned state);
 };
 
-#endif // __INCLUDE_ScorchedServerUtilh_INCLUDE__
+#endif // __INCLUDE_ClientDisconnectedh_INCLUDE__

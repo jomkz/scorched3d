@@ -22,11 +22,22 @@
 #include <server/ServerSimulator.h>
 #include <server/ServerState.h>
 #include <server/ServerDestinations.h>
+#include <server/ServerAuthHandlerStore.h>
+#include <server/ServerTimedMessage.h>
+#include <server/ServerBanned.h>
+#include <server/ServerTextFilter.h>
+#include <server/ServerHandlers.h>
+#include <server/ServerLoadLevel.h>
+#include <server/ServerChannelManager.h>
+#include <common/OptionsScorched.h>
+#include <common/Logger.h>
 #include <tank/TankDeadContainer.h>
 #include <tank/TankContainer.h>
 #include <tankai/TankAIStore.h>
+#include <tankai/TankAIWeaponSets.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <coms/ComsSimulateResultMessage.h>
+#include <lua/LUAScriptHook.h>
 
 #ifndef S3D_SERVER
 #include <client/ClientParams.h>
@@ -34,12 +45,16 @@
 #endif
 
 ScorchedServer *ScorchedServer::instance_ = 0;
+static bool instanceLock = false;
 
 ScorchedServer *ScorchedServer::instance()
 {
 	if (!instance_)
 	{
+		DIALOG_ASSERT(!instanceLock);
+		instanceLock = true;
 		instance_ = new ScorchedServer;
+		instanceLock = false;
 	}
 
 #ifndef S3D_SERVER
@@ -54,20 +69,26 @@ ScorchedServer *ScorchedServer::instance()
 }
 
 ScorchedServer::ScorchedServer() : 
-	ScorchedContext("Server", true)
+	ScorchedContext("Server")
 {
 	serverState_ = new ServerState();
 	serverSimulator_ = new ServerSimulator();
-	simulator = serverSimulator_;
-	actionController = &simulator->getActionController();
-	simulator->setScorchedContext(this);
+	serverSimulator_->setScorchedContext(this);
 	serverDestinations_ = new ServerDestinations();
-	deadContainer_ = new TankDeadContainer;
-	tankAIStore_ = new TankAIStore;
+	deadContainer_ = new TankDeadContainer();
+	tankAIStore_ = new TankAIStore();
+	authHandler_ = new ServerAuthHandlerStore();
+	timedMessage_ = new ServerTimedMessage();
+	bannedPlayers_ = new ServerBanned();
+	textFilter_ = new ServerTextFilter();
+	serverLoadLevel_ = new ServerLoadLevel(getComsMessageHandler());
+	serverChannelManager_ = new ServerChannelManager(getComsMessageHandler());
 
+	serverHandlers_ = new ServerHandlers(getComsMessageHandler());
 	getComsMessageHandler().addHandler(
 		ComsSimulateResultMessage::ComsSimulateResultMessageType,
 		serverSimulator_);
+	getLUAScriptHook().addHookProvider("server_channeltext");
 }
 
 ScorchedServer::~ScorchedServer()
@@ -75,3 +96,17 @@ ScorchedServer::~ScorchedServer()
 	delete deadContainer_;
 }
 
+Simulator &ScorchedServer::getSimulator() 
+{ 
+	return *serverSimulator_; 
+}
+
+ServerAuthHandler *ScorchedServer::getAuthHandler()
+{
+	return authHandler_->getAuthHandler();
+}
+
+ServerConnectAuthHandler &ScorchedServer::getServerConnectAuthHandler()
+{
+	return serverHandlers_->getServerConnectAuthHandler();
+}

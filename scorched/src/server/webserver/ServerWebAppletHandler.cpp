@@ -23,6 +23,7 @@
 #include <webserver/ServerWebServer.h>
 #include <server/ServerChannelManager.h>
 #include <server/ServerAdminCommon.h>
+#include <server/ScorchedServer.h>
 #include <XML/XMLNode.h>
 
 bool ServerWebAppletHandler::AppletFileHandler::processRequest(
@@ -108,7 +109,7 @@ bool ServerWebAppletHandler::AppletAsyncHandler::processRequest(
 		// Add all of the available chat channels
 		{
 			std::list<std::string> channels =
-				ServerChannelManager::instance()->getAllChannels();
+				ScorchedServer::instance()->getServerChannelManager().getAllChannels();
 			std::list<std::string>::iterator itor;
 			for (itor = channels.begin();
 				itor != channels.end();
@@ -124,7 +125,7 @@ bool ServerWebAppletHandler::AppletAsyncHandler::processRequest(
 	// Add all of the chat message that this applet has not seen
 	std::string chatText;
 	std::list<ServerChannelManager::MessageEntry> &textsList = 
-		ServerChannelManager::instance()->getLastMessages();
+		ScorchedServer::instance()->getServerChannelManager().getLastMessages();
 	if (!textsList.empty())
 	{
 		std::list<ServerChannelManager::MessageEntry>::reverse_iterator textsListItor;

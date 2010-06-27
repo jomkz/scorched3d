@@ -18,35 +18,18 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <tankai/TankAI.h>
-#include <lang/LangResource.h>
-#include <XML/XMLNode.h>
+#if !defined(__INCLUDE_ServerAuthHandlerStoreh_INCLUDE__)
+#define __INCLUDE_ServerAuthHandlerStoreh_INCLUDE__
 
-bool TankAI::tankAILogging_ = false;
+#include <server/ServerAuthHandler.h>
 
-TankAI::TankAI() : 
-	availableForRandom_(true),
-	availableForPlayers_(true)
+class ServerAuthHandlerStore
 {
-}
+public:
+	ServerAuthHandlerStore();
+	virtual ~ServerAuthHandlerStore();
 
-TankAI::~TankAI()
-{
-}
+	ServerAuthHandler *getAuthHandler();
+};
 
-bool TankAI::parseConfig(TankAIWeaponSets &sets, XMLNode *node)
-{
-	if (!node->getNamedChild("name", name_)) return false;
-	if (!node->getNamedChild("description", description_)) return false;
-	if (!node->getNamedChild("availableforrandom", availableForRandom_)) return false;
-	if (!node->getNamedChild("availableforplayers", availableForPlayers_)) return false;
-
-	return true;
-}
-
-ToolTip *TankAI::getToolTip()
-{
-	toolTip_.setText(ToolTip::ToolTipInfo, LANG_STRING(name_), 
-		LANG_RESOURCE(name_ + "_ai_description",  description_));
-	return &toolTip_;
-}
+#endif // __INCLUDE_ServerAuthHandlerStoreh_INCLUDE__

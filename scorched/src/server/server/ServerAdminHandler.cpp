@@ -20,13 +20,13 @@
 
 #include <server/ServerAdminHandler.h>
 #include <server/ScorchedServer.h>
-#include <server/ScorchedServerUtil.h>
 #include <server/ServerChannelManager.h>
 #include <server/ServerCommon.h>
 #include <server/ServerSyncCheck.h>
 #include <server/ServerAdminCommon.h>
 #include <server/ServerAdminSessions.h>
 #include <server/ServerDestinations.h>
+#include <server/ServerBanned.h>
 #include <common/StatsLogger.h>
 #include <common/Logger.h>
 #include <common/Defines.h>
@@ -38,16 +38,9 @@
 #include <tank/TankState.h>
 #include <stdlib.h>
 
-ServerAdminHandler *ServerAdminHandler::instance()
+ServerAdminHandler::ServerAdminHandler(ComsMessageHandler &comsMessageHandler)
 {
-	static ServerAdminHandler *instance = 
-		new ServerAdminHandler;
-	return instance;
-}
-
-ServerAdminHandler::ServerAdminHandler()
-{
-	ScorchedServer::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsAdminMessage::ComsAdminMessageTyper,
 		this);
 }
@@ -87,9 +80,9 @@ bool ServerAdminHandler::processMessage(
 			adminSession =
 				ServerAdminSessions::instance()->getSession(sid);
 
-			ServerChannelManager::instance()->refreshDestination(destinationId);
+			ScorchedServer::instance()->getServerChannelManager().refreshDestination(destinationId);
 
-			ServerChannelManager::instance()->sendText(
+			ScorchedServer::instance()->getServerChannelManager().sendText(
 				ChannelText("info", "ADMIN_LOGGED_IN", 
 					"Server admin \"{0}\" logged in",
 					adminSession->credentials.username),
@@ -114,7 +107,7 @@ bool ServerAdminHandler::processMessage(
 				destinationInfo->setAdminTries(
 					destinationInfo->getAdminTries() + 1);
 				
-				ServerChannelManager::instance()->sendText(
+				ScorchedServer::instance()->getServerChannelManager().sendText(
 					ChannelText("info", 
 						"INCORRECT_PASSWORD",
 						"Incorrect admin password (try {0}/3)", 
@@ -144,7 +137,7 @@ bool ServerAdminHandler::processMessage(
 
 	if (!adminSession)
 	{
-		ServerChannelManager::instance()->sendText(
+		ScorchedServer::instance()->getServerChannelManager().sendText(
 			ChannelText("info", "ADMIN_NOT_LOGGED_IN", 
 				"You are not logged in as admin"),
 			destinationId,
@@ -193,7 +186,7 @@ bool ServerAdminHandler::processMessage(
 			result +=
 				"-----------------------------------------------------\n";
 
-			ServerChannelManager::instance()->sendText( 
+			ScorchedServer::instance()->getServerChannelManager().sendText( 
 				ChannelText("info", LANG_STRING(result)),
 				destinationId,
 				false);
@@ -201,7 +194,7 @@ bool ServerAdminHandler::processMessage(
 		break;
 	case ComsAdminMessage::AdminLogout:
 		{
-			ServerChannelManager::instance()->sendText( 
+			ScorchedServer::instance()->getServerChannelManager().sendText( 
 				ChannelText("info", "ADMIN_LOGGED_OUT", 
 					"Server admin \"{0}\" logged out",
 					adminName),
@@ -211,7 +204,7 @@ bool ServerAdminHandler::processMessage(
 				adminName));
 
 			ServerAdminSessions::instance()->logout(message.getSid());
-			ServerChannelManager::instance()->refreshDestination(destinationId);
+			ScorchedServer::instance()->getServerChannelManager().refreshDestination(destinationId);
 
 			ComsAdminResultMessage resultMessage(0, message.getType());
 			ComsMessageSender::sendToSingleClient(resultMessage, destinationId);
@@ -225,7 +218,7 @@ bool ServerAdminHandler::processMessage(
 				"--Admin Show Banned----------------------------------\n";
 
 			std::list<ServerBanned::BannedRange> &bannedIps = 
-				ScorchedServerUtil::instance()->bannedPlayers.getBannedIps();
+				ScorchedServer::instance()->getBannedPlayers().getBannedIps();
 			std::list<ServerBanned::BannedRange>::iterator itor;
 			for (itor = bannedIps.begin();
 				itor != bannedIps.end();
@@ -256,7 +249,7 @@ bool ServerAdminHandler::processMessage(
 			result +=
 				"-----------------------------------------------------\n";
 
-			ServerChannelManager::instance()->sendText( 
+			ScorchedServer::instance()->getServerChannelManager().sendText( 
 				ChannelText("info", LANG_STRING(result)),
 				destinationId, 
 				false);
@@ -268,7 +261,7 @@ bool ServerAdminHandler::processMessage(
 				adminSession->credentials,
 				atoi(message.getParam1()), "<via console>"))
 			{
-				ServerChannelManager::instance()->sendText( 
+				ScorchedServer::instance()->getServerChannelManager().sendText( 
 					ChannelText("info", 
 						"UNKNOWN_PLAYER_BAN", 
 						"Unknown player for ban"),
@@ -283,7 +276,7 @@ bool ServerAdminHandler::processMessage(
 				adminSession->credentials,
 				atoi(message.getParam1()), "<via console>"))
 			{
-				ServerChannelManager::instance()->sendText( 
+				ScorchedServer::instance()->getServerChannelManager().sendText( 
 					ChannelText("info",
 						"UNKNOWN_PLAYER_FLAG",
 						"Unknown player for flag"),
@@ -298,7 +291,7 @@ bool ServerAdminHandler::processMessage(
 				adminSession->credentials,
 				atoi(message.getParam1())))
 			{
-				ServerChannelManager::instance()->sendText( 
+				ScorchedServer::instance()->getServerChannelManager().sendText( 
 					ChannelText("info",
 						"UNKNOWN_PLAYER_POOR",
 						"Unknown player for poor"),
@@ -313,7 +306,7 @@ bool ServerAdminHandler::processMessage(
 				adminSession->credentials,
 				atoi(message.getParam1())))
 			{
-				ServerChannelManager::instance()->sendText( 
+				ScorchedServer::instance()->getServerChannelManager().sendText( 
 					ChannelText("info", 
 						"UNKNOWN_PLAYER_KICK",
 						"Unknown player for kick"),
@@ -330,7 +323,7 @@ bool ServerAdminHandler::processMessage(
 				adminSession->credentials,
 				atoi(message.getParam1()), mute))
 			{
-				ServerChannelManager::instance()->sendText( 
+				ScorchedServer::instance()->getServerChannelManager().sendText( 
 					ChannelText("info",
 						"UNKNOWN_PLAYER_MUTE",
 						"Unknown player for mute"),
@@ -345,7 +338,7 @@ bool ServerAdminHandler::processMessage(
 				adminSession->credentials,
 				atoi(message.getParam1()), "<via console>"))
 			{
-				ServerChannelManager::instance()->sendText( 
+				ScorchedServer::instance()->getServerChannelManager().sendText( 
 					ChannelText("info",
 						"UNKNOWN_PLAYER_PERMMUTE",
 						"Unknown player for permmute"),
@@ -360,7 +353,7 @@ bool ServerAdminHandler::processMessage(
 				adminSession->credentials,
 				atoi(message.getParam1())))
 			{
-				ServerChannelManager::instance()->sendText( 
+				ScorchedServer::instance()->getServerChannelManager().sendText( 
 					ChannelText("info",
 						"UNKNOWN_PLAYER_UNPERMMUTE",
 						"Unknown player for unpermmute"),
@@ -380,7 +373,7 @@ bool ServerAdminHandler::processMessage(
 		break;
 	case ComsAdminMessage::AdminSyncCheck:
 		{
-			ServerChannelManager::instance()->sendText( 
+			ScorchedServer::instance()->getServerChannelManager().sendText( 
 				ChannelText("info", "SENDING_SYNC", "sending sync..."),
 				destinationId, true);
 			ServerSyncCheck::instance()->sendSyncCheck();
@@ -398,7 +391,7 @@ bool ServerAdminHandler::processMessage(
 				adminSession->credentials,
 				atoi(message.getParam1()), (float) atof(message.getParam2())))
 			{
-				ServerChannelManager::instance()->sendText( 
+				ScorchedServer::instance()->getServerChannelManager().sendText( 
 					ChannelText("info", 
 						"UNKNOWN_PLAYER_SLAP", 
 						"Unknown player for slap"),
@@ -412,7 +405,7 @@ bool ServerAdminHandler::processMessage(
 				adminSession->credentials,
 				message.getParam1()))
 			{
-				ServerChannelManager::instance()->sendText( 
+				ScorchedServer::instance()->getServerChannelManager().sendText( 
 					ChannelText("info",
 						"UNKNOWN_PLAYER_ADD",
 						"Unknown player type to add"),

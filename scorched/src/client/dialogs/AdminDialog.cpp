@@ -86,11 +86,11 @@ AdminDialog::AdminDialog() :
 			addWidget(new GLWTab("Bots", LANG_RESOURCE("BOTS", "Bots"), 10, 40, 580, 330));
 
 		aiSelector_ = (GLWDropDown *) botsTab_->addWidget(new GLWDropDownText(10, 150, 150));
-		TankAINames aiNames;
-		aiNames.loadAIs();
+		std::list<std::string> ais;
+		TankAINames::loadAIs(ais);
 		std::list<std::string>::iterator itor;
-		for (itor = aiNames.getAis().begin();
-			itor != aiNames.getAis().end();
+		for (itor = ais.begin();
+			itor != ais.end();
 			itor++)
 		{
 			if (*itor != "Human")

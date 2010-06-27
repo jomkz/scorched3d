@@ -48,6 +48,11 @@ void TankAIStore::clearAIs()
 
 bool TankAIStore::loadAIs(bool shallow)
 {
+	if (!shallow)
+	{
+		tankAiWeaponSets_.parseConfig();
+	}
+
 	// Load key definition file
 	XMLFile file;
 	if (!file.readFile(S3D::getModFile("data/tankais.xml")))
@@ -87,7 +92,7 @@ bool TankAIStore::loadAIs(bool shallow)
 		TankAI *computer = 0;
 		if (shallow) computer = new TankAIShallow;
 		else computer = new TankAICurrent;
-		if (!computer->parseConfig(currentNode))
+		if (!computer->parseConfig(tankAiWeaponSets_, currentNode))
 		{
 			return false;
 		}

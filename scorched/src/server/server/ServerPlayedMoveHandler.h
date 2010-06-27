@@ -24,24 +24,16 @@
 #include <coms/ComsMessageHandler.h>
 
 class ComsPlayedMoveMessage;
-class ServerPlayedMoveHandler : 
-	public ComsMessageHandlerI
+class ServerPlayedMoveHandler : public ComsMessageHandlerI
 {
 public:
-	static ServerPlayedMoveHandler *instance();
+	ServerPlayedMoveHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ServerPlayedMoveHandler();
 
 	virtual bool processMessage(
 		NetMessage &message,
 		const char *messageType,
 		NetBufferReader &reader);
-
-protected:
-	static ServerPlayedMoveHandler *instance_;
-
-private:
-	ServerPlayedMoveHandler();
-	virtual ~ServerPlayedMoveHandler();
 };
-
 
 #endif

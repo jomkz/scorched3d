@@ -64,7 +64,6 @@ private:
 	DECLARE_EVENT_TABLE()
 
 	LandscapeDefinitionsBase landscapeDefinitions;
-	TankAINames tankAIStore;
 
 	wxTextCtrl *IDC_MOTD_CTRL;
 	wxButton *IDC_SELECTALL_CTRL;
@@ -486,8 +485,6 @@ SettingsFrame::SettingsFrame(bool server, OptionsGame &context) :
 
 	// Re-read just in case a new mod has been loaded
 	DIALOG_ASSERT(landscapeDefinitions.readLandscapeDefinitions());
-	tankAIStore.clearAIs();
-	DIALOG_ASSERT(tankAIStore.loadAIs());
 
 	createMainPanel(server);
 	createMoneyPanel();
@@ -604,7 +601,9 @@ bool SettingsFrame::TransferDataToWindow()
 			wxString("Players re-connect with the same money and weapons.", wxConvUTF8));
 
 		// Reload the AIs in case a new mod has been loaded
-		std::list<std::string> &ais = tankAIStore.getAis();
+
+		std::list<std::string> ais;
+		TankAINames::loadAIs(ais);
 		for (int i=0; i<24; i++)
 		{
 			std::list<std::string>::iterator itor;

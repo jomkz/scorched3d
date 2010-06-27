@@ -18,6 +18,7 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <server/ScorchedServer.h>
 #include <tankai/TankAICurrentWeapons.h>
 #include <XML/XMLNode.h>
 #include <stdlib.h>
@@ -40,13 +41,13 @@ TankAIWeaponSets::WeaponSet *TankAICurrentWeapons::getCurrentWeaponSet()
 	return currentWeaponSet_;
 }
 
-bool TankAICurrentWeapons::parseConfig(XMLNode *node)
+bool TankAICurrentWeapons::parseConfig(TankAIWeaponSets &sets, XMLNode *node)
 {
 	std::string weaponset;
 	while (node->getNamedChild("weaponset", weaponset, false))
 	{
 		TankAIWeaponSets::WeaponSet *weaponSet = 
-			TankAIWeaponSets::instance()->getWeaponSet(weaponset.c_str());
+			sets.getWeaponSet(weaponset.c_str());
 		if (!weaponSet) node->returnError(
 			S3D::formatStringBuffer("Cannot find weapon set \"%s\"", weaponset.c_str()));
 		weaponSets_.push_back(weaponSet);

@@ -38,7 +38,20 @@ Simulator::Simulator() :
 
 Simulator::~Simulator()
 {
+	clear();
+}
 
+void Simulator::clear()
+{
+	actionController_.clear();
+	events_.clear();
+	while (!simActions_.empty())
+	{
+		SimActionContainer *container = simActions_.back();
+		delete container->action_;
+		delete container;
+		simActions_.pop_back();
+	}
 }
 
 void Simulator::setScorchedContext(ScorchedContext *context)

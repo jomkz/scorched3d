@@ -35,6 +35,7 @@
 #include <common/OptionsScorched.h>
 #include <server/ServerCommon.h>
 #include <server/ServerChannelManager.h>
+#include <server/ScorchedServer.h>
 #ifndef S3D_SERVER
 	#include <sound/SoundUtils.h>
 #endif
@@ -121,7 +122,7 @@ void PlayMovesSimAction::tankTimedOut(ScorchedContext &context, Tank *tank)
 		tank->getScore().setMissedMoves(
 			tank->getScore().getMissedMoves() + 1);
 
-		ServerChannelManager::instance()->sendText(
+		ScorchedServer::instance()->getServerChannelManager().sendText(
 			ChannelText("info",
 				"PLAYER_MISSED_SHOOT",
 				"[p:{0}] failed to move, allowed {1} more missed move(s)",

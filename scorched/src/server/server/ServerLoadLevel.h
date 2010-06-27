@@ -26,7 +26,8 @@
 class ServerLoadLevel : public ComsMessageHandlerI
 {
 public:
-	static ServerLoadLevel *instance();
+	ServerLoadLevel(ComsMessageHandler &comsMessageHandler);
+	virtual ~ServerLoadLevel();
 
 	static void destinationLoadLevel(unsigned int destinationId);
 	static bool destinationUsingCurrentLevel(unsigned int destinationId);
@@ -37,13 +38,7 @@ public:
 		NetBufferReader &reader);
 
 protected:
-	static ServerLoadLevel *instance_;
 	static void setLoaded(unsigned int destinationId);
-
-private:
-	ServerLoadLevel();
-	virtual ~ServerLoadLevel();
-
 };
 
 #endif

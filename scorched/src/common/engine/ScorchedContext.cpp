@@ -21,6 +21,7 @@
 #include <engine/ScorchedContext.h>
 #include <engine/GameState.h>
 #include <engine/ActionController.h>
+#include <engine/Simulator.h>
 #include <engine/ModFiles.h>
 #include <net/NetInterface.h>
 #include <coms/ComsMessageHandler.h>
@@ -35,8 +36,7 @@
 #include <weapons/AccessoryStore.h>
 #include <lua/LUAScriptHook.h>
 
-ScorchedContext::ScorchedContext(const char *name, bool server) : 
-	serverMode(server)
+ScorchedContext::ScorchedContext(const char *name)
 {
 	accessoryStore = new AccessoryStore();
 	targetContainer = new TargetContainer();
@@ -54,8 +54,8 @@ ScorchedContext::ScorchedContext(const char *name, bool server) :
 	targetMovement = new TargetMovement();
 	luaScriptFactory = new LUAScriptFactory();
 	luaScriptHook = new LUAScriptHook(luaScriptFactory,
-		server?"server":"client",
-		server?S3D::getSettingsFile("serverhooks"):S3D::getSettingsFile("clienthooks"));
+		name[0]=='S'?"server":"client",
+		name[0]=='S'?S3D::getSettingsFile("serverhooks"):S3D::getSettingsFile("clienthooks"));
 
 	getTargetSpace().setContext(this);
 	luaScriptFactory->setContext(this);
@@ -63,4 +63,9 @@ ScorchedContext::ScorchedContext(const char *name, bool server) :
 
 ScorchedContext::~ScorchedContext()
 {
+}
+
+ActionController &ScorchedContext::getActionController()
+{
+	return getSimulator().getActionController();
 }

@@ -1842,9 +1842,6 @@
     <ClCompile Include="..\..\server\server\ScorchedServer.cpp">
       <Filter>server</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\server\server\ScorchedServerUtil.cpp">
-      <Filter>server</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\server\server\ServerAddPlayerHandler.cpp">
       <Filter>server</Filter>
     </ClCompile>
@@ -2300,6 +2297,15 @@
     </ClCompile>
     <ClCompile Include="..\GLEXT\GLTextureReferenceData.cpp">
       <Filter>GLEXT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientDisconnected.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerAuthHandlerStore.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerHandlers.cpp">
+      <Filter>server</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4049,9 +4055,6 @@
     <ClInclude Include="..\..\server\server\ScorchedServer.h">
       <Filter>server</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\server\server\ScorchedServerUtil.h">
-      <Filter>server</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\server\server\ServerAddPlayerHandler.h">
       <Filter>server</Filter>
     </ClInclude>
@@ -4504,6 +4507,15 @@
     </ClInclude>
     <ClInclude Include="..\GLEXT\GLTextureReferenceData.h">
       <Filter>GLEXT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientDisconnected.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerAuthHandlerStore.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerHandlers.h">
+      <Filter>server</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

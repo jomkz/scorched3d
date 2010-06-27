@@ -26,6 +26,7 @@
 #include <common/ToolTip.h>
 #include <string>
 
+class TankAIWeaponSets;
 class Weapon;
 class XMLNode;
 class Tank;
@@ -39,7 +40,7 @@ public:
 	virtual TankAI *createCopy(Tank *tank) = 0;
 
 	// Onetime init
-	virtual bool parseConfig(XMLNode *node);
+	virtual bool parseConfig(TankAIWeaponSets &sets, XMLNode *node);
 
 	// Other
 	virtual const char *getName() { return name_.c_str(); }

@@ -485,7 +485,7 @@ bool ServerWebServer::validateUser(
 		ServerAdminSessions::SessionParams *adminSession =
 			ServerAdminSessions::instance()->getSession(sid);
 
-		ServerChannelManager::instance()->sendText(
+		ScorchedServer::instance()->getServerChannelManager().sendText(
 			ChannelText("info",
 				"ADMIN_WEB_LOGIN",
 				"server admin \"{0}\" logged in",

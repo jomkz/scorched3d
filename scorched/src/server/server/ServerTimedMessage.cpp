@@ -71,7 +71,7 @@ void ServerTimedMessage::checkEntries(time_t currentTime)
 			
 			LangString message = entry.messages.front();
 			ChannelText textMessage("announce", message);
-			ServerChannelManager::instance()->sendText(textMessage, false);
+			ScorchedServer::instance()->getServerChannelManager().sendText(textMessage, false);
 			entry.messages.pop_front();
 			entry.messages.push_back(message);
 		}

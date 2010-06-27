@@ -31,7 +31,10 @@ class XMLNode;
 class TankAIWeaponSets
 {
 public:
-	static TankAIWeaponSets *instance();
+	TankAIWeaponSets();
+	virtual ~TankAIWeaponSets();
+
+	bool parseConfig();
 
 	class WeaponSetAccessories 
 	{
@@ -72,12 +75,6 @@ public:
 
 protected:
 	std::map<std::string, WeaponSet> weaponSets_;
-	bool parseConfig();
-
-private:
-	TankAIWeaponSets();
-	virtual ~TankAIWeaponSets();
-
 };
 
 #endif

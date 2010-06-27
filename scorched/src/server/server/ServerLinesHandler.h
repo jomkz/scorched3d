@@ -23,21 +23,16 @@
 
 #include <coms/ComsMessageHandler.h>
 
-class ServerLinesHandler : 
-	public ComsMessageHandlerI
+class ServerLinesHandler : public ComsMessageHandlerI
 {
 public:
-	static ServerLinesHandler *instance();
+	ServerLinesHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ServerLinesHandler();
 
 	virtual bool processMessage(
 		NetMessage &message,
 		const char *messageType,
 		NetBufferReader &reader);
-
-private:
-	ServerLinesHandler();
-	virtual ~ServerLinesHandler();
-
 };
 
 #endif

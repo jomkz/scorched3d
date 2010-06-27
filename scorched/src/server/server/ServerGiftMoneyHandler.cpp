@@ -26,20 +26,9 @@
 #include <tank/TankContainer.h>
 #include <common/Logger.h>
 
-ServerGiftMoneyHandler *ServerGiftMoneyHandler::instance_ = 0;
-
-ServerGiftMoneyHandler *ServerGiftMoneyHandler::instance()
+ServerGiftMoneyHandler::ServerGiftMoneyHandler(ComsMessageHandler &comsMessageHandler)
 {
-	if (!instance_)
-	{
-		instance_ = new ServerGiftMoneyHandler;
-	}
-	return instance_;
-}
-
-ServerGiftMoneyHandler::ServerGiftMoneyHandler()
-{
-	ScorchedServer::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsGiftMoneyMessage::ComsGiftMoneyMessageType,
 		this);
 }

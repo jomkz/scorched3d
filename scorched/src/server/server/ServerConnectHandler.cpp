@@ -22,7 +22,7 @@
 #include <server/ScorchedServer.h>
 #include <server/ServerCommon.h>
 #include <server/ServerAuthHandler.h>
-#include <server/ScorchedServerUtil.h>
+#include <server/ServerBanned.h>
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
 #include <tank/TankContainer.h>
@@ -30,20 +30,9 @@
 #include <coms/ComsConnectMessage.h>
 #include <coms/ComsMessageSender.h>
 
-ServerConnectHandler *ServerConnectHandler::instance_ = 0;
-
-ServerConnectHandler *ServerConnectHandler::instance()
+ServerConnectHandler::ServerConnectHandler(ComsMessageHandler &comsMessageHandler)
 {
-	if (!instance_)
-	{
-		instance_ = new ServerConnectHandler;
-	}
-	return instance_;
-}
-
-ServerConnectHandler::ServerConnectHandler()
-{
-	ScorchedServer::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsConnectMessage::ComsConnectMessageType,
 		this);
 }
@@ -94,7 +83,7 @@ bool ServerConnectHandler::processMessage(
 
 	// Tell the client to continue auth connection
 	ComsConnectAuthMessage comsConnectAuthMessage;
-	ServerAuthHandler *authHandler = ScorchedServerUtil::instance()->getAuthHandler();
+	ServerAuthHandler *authHandler = ScorchedServer::instance()->getAuthHandler();
 	if (authHandler)
 	{
 		authHandler->createAuthentication(comsConnectAuthMessage);
@@ -128,7 +117,7 @@ bool ServerConnectHandler::checkStandardParams(unsigned int destinationId, unsig
 
 	// Check if this ip address has been banned
 	ServerBanned::BannedType type = 
-		ScorchedServerUtil::instance()->bannedPlayers.getBanned(ipAddress);
+		ScorchedServer::instance()->getBannedPlayers().getBanned(ipAddress);
 	if (type == ServerBanned::Banned)
 	{
 		ServerCommon::kickDestination(destinationId,

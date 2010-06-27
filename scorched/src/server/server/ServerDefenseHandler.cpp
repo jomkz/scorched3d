@@ -26,20 +26,9 @@
 #include <tank/TankContainer.h>
 #include <common/Logger.h>
 
-ServerDefenseHandler *ServerDefenseHandler::instance_ = 0;
-
-ServerDefenseHandler *ServerDefenseHandler::instance()
+ServerDefenseHandler::ServerDefenseHandler(ComsMessageHandler &comsMessageHandler)
 {
-	if (!instance_)
-	{
-		instance_ = new ServerDefenseHandler;
-	}
-	return instance_;
-}
-
-ServerDefenseHandler::ServerDefenseHandler()
-{
-	ScorchedServer::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsDefenseMessage::ComsDefenseMessageType,
 		this);
 }

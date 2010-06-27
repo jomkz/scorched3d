@@ -188,7 +188,7 @@ bool ServerTurns::showScore()
 		ChannelText text("info",
 			"ROUND_FINISHED_TEAM_WON",
 			"Round finished due to team obtaining an objective.");
-		ServerChannelManager::instance()->sendText(text, true);
+		ScorchedServer::instance()->getServerChannelManager().sendText(text, true);
 		return true;
 	}
 
@@ -199,7 +199,7 @@ bool ServerTurns::showScore()
 		ChannelText text("info",
 			"ROUND_FINISHED_TEAM",
 			"Round finished due to last team standing.");
-		ServerChannelManager::instance()->sendText(text, true);
+		ScorchedServer::instance()->getServerChannelManager().sendText(text, true);
 		return true;
 	}
 	else if (ScorchedServer::instance()->getTankContainer().aliveCount() == 0)
@@ -208,7 +208,7 @@ bool ServerTurns::showScore()
 		ChannelText text("info",
 			"ROUND_FINISHED_DEAD",
 			"Round finished due to annihilation.");
-		ServerChannelManager::instance()->sendText(text, true);
+		ScorchedServer::instance()->getServerChannelManager().sendText(text, true);
 		return true;
 	}
 	else if (ScorchedServer::instance()->getTankContainer().aliveCount() <= 1)
@@ -217,7 +217,7 @@ bool ServerTurns::showScore()
 		ChannelText text("info",
 			"ROUND_FINISHED_PLAYER",
 			"Round finished due to last man standing.");
-		ServerChannelManager::instance()->sendText(text, true);
+		ScorchedServer::instance()->getServerChannelManager().sendText(text, true);
 		return true;
 	}
 
@@ -236,7 +236,7 @@ bool ServerTurns::showScore()
 			ChannelText text("info",
 				"ROUND_FINISHED_TANK_WON",
 				"Round finished due to player obtaining an objective.");
-			ServerChannelManager::instance()->sendText(text, true);
+			ScorchedServer::instance()->getServerChannelManager().sendText(text, true);
 			return true;
 		}
 
@@ -252,7 +252,7 @@ bool ServerTurns::showScore()
 		ChannelText text("info",
 			"ROUND_FINISHED_SKIP",
 			"Round finished due to all players skipping moves.");
-		ServerChannelManager::instance()->sendText(text, true);
+		ScorchedServer::instance()->getServerChannelManager().sendText(text, true);
 		return true;
 	}
 

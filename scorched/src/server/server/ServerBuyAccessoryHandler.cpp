@@ -26,20 +26,9 @@
 #include <common/Logger.h>
 #include <tank/TankContainer.h>
 
-ServerBuyAccessoryHandler *ServerBuyAccessoryHandler::instance_ = 0;
-
-ServerBuyAccessoryHandler *ServerBuyAccessoryHandler::instance()
+ServerBuyAccessoryHandler::ServerBuyAccessoryHandler(ComsMessageHandler &comsMessageHandler)
 {
-	if (!instance_)
-	{
-		instance_ = new ServerBuyAccessoryHandler;
-	}
-	return instance_;
-}
-
-ServerBuyAccessoryHandler::ServerBuyAccessoryHandler()
-{
-	ScorchedServer::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsBuyAccessoryMessage::ComsBuyAccessoryMessageType,
 		this);
 }

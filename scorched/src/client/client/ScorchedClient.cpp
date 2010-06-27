@@ -42,7 +42,7 @@ ScorchedClient *ScorchedClient::instance()
 }
 
 ScorchedClient::ScorchedClient() : 
-	ScorchedContext("Client", false)
+	ScorchedContext("Client")
 {
 	mainLoop_ = new MainLoop();
 	mainLoop_->clear();
@@ -51,9 +51,7 @@ ScorchedClient::ScorchedClient() :
 	mainLoop_->addMainLoop(gameState);
 
 	clientSimulator_ = new ClientSimulator();
-	simulator = clientSimulator_;
-	actionController = &simulator->getActionController();
-	simulator->setScorchedContext(this);
+	clientSimulator_->setScorchedContext(this);
 
 	new ComsMessageHandlerIAdapter<ClientSimulator>(
 		clientSimulator_, &ClientSimulator::processComsSimulateMessage,
@@ -82,4 +80,9 @@ ScorchedClient::ScorchedClient() :
 
 ScorchedClient::~ScorchedClient()
 {
+}
+
+Simulator &ScorchedClient::getSimulator() 
+{ 
+	return *clientSimulator_; 
 }

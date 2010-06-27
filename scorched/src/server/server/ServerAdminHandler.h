@@ -23,23 +23,17 @@
 
 #include <coms/ComsMessageHandler.h>
 
-class ServerAdminHandler : 
-	public ComsMessageHandlerI
+class ServerAdminHandler : public ComsMessageHandlerI
 {
 public:
-	static ServerAdminHandler *instance();
+	ServerAdminHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ServerAdminHandler();
 
 	// Inherited from ComsMessageHandlerI
 	virtual bool processMessage(
 		NetMessage &message,
 		const char *messageType,
 		NetBufferReader &reader);
-protected:
-
-private:
-	ServerAdminHandler();
-	virtual ~ServerAdminHandler();
-
 };
 
 #endif

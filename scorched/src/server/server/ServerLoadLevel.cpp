@@ -32,17 +32,9 @@
 #include <coms/ComsLoadLevelMessage.h>
 #include <coms/ComsLevelLoadedMessage.h>
 
-ServerLoadLevel *ServerLoadLevel::instance_ = 0;
-
-ServerLoadLevel *ServerLoadLevel::instance()
+ServerLoadLevel::ServerLoadLevel(ComsMessageHandler &comsMessageHandler)
 {
-	if (!instance_) instance_ = new ServerLoadLevel();
-	return instance_;
-}
-
-ServerLoadLevel::ServerLoadLevel()
-{
-	ScorchedServer::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsLevelLoadedMessage::ComsLevelLoadedMessageType,
 		this);
 }

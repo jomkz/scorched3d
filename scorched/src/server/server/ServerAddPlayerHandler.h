@@ -24,11 +24,11 @@
 #include <coms/ComsMessageHandler.h>
 
 class Tank;
-class ServerAddPlayerHandler : 
-	public ComsMessageHandlerI
+class ServerAddPlayerHandler : public ComsMessageHandlerI
 {
 public:
-	static ServerAddPlayerHandler *instance();
+	ServerAddPlayerHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ServerAddPlayerHandler();
 
 	virtual bool processMessage(
 		NetMessage &message,
@@ -36,13 +36,6 @@ public:
 		NetBufferReader &reader);
 
 	static bool filterName(Tank *tank, LangString &sentname);
-
-protected:
-	static ServerAddPlayerHandler *instance_;
-
-private:
-	ServerAddPlayerHandler();
-	virtual ~ServerAddPlayerHandler();
 };
 
 #endif

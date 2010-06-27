@@ -18,32 +18,23 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <server/ScorchedServerUtil.h>
-#include <server/ScorchedServer.h>
+#include <server/ServerAuthHandlerStore.h>
 #include <server/ServerAuthHandlerForumLogin.h>
 #include <server/ServerAuthHandlerPrefered.h>
 #include <server/ServerAuthHandlerMinKills.h>
 #include <server/ServerAuthHandlerDefault.h>
+#include <server/ScorchedServer.h>
 #include <common/OptionsScorched.h>
-#include <common/Logger.h>
 
-ScorchedServerUtil *ScorchedServerUtil::instance_ = 0;
-
-ScorchedServerUtil *ScorchedServerUtil::instance()
-{
-	if (!instance_) instance_ = new ScorchedServerUtil;
-	return instance_;
-}
-
-ScorchedServerUtil::ScorchedServerUtil()
+ServerAuthHandlerStore::ServerAuthHandlerStore()
 {
 }
 
-ScorchedServerUtil::~ScorchedServerUtil()
+ServerAuthHandlerStore::~ServerAuthHandlerStore()
 {
 }
 
-ServerAuthHandler *ScorchedServerUtil::getAuthHandler()
+ServerAuthHandler *ServerAuthHandlerStore::getAuthHandler()
 {
 	const char *handler = ScorchedServer::instance()->getOptionsGame().getAuthHandler();
 	if (0 == strcmp("none", handler))

@@ -23,9 +23,9 @@
 #include <server/ServerChannelManager.h>
 #include <server/ServerBanned.h>
 #include <server/ScorchedServer.h>
-#include <server/ScorchedServerUtil.h>
 #include <server/ServerCommon.h>
 #include <server/ServerSimulator.h>
+#include <server/ServerAuthHandler.h>
 #include <server/ServerState.h>
 #include <engine/SaveGame.h>
 #include <tank/TankModelStore.h>
@@ -53,20 +53,9 @@
 #include <client/ClientParams.h>
 #endif
 
-ServerConnectAuthHandler *ServerConnectAuthHandler::instance_ = 0;
-
-ServerConnectAuthHandler *ServerConnectAuthHandler::instance()
+ServerConnectAuthHandler::ServerConnectAuthHandler(ComsMessageHandler &comsMessageHandler)
 {
-	if (!instance_)
-	{
-		instance_ = new ServerConnectAuthHandler;
-	}
-	return instance_;
-}
-
-ServerConnectAuthHandler::ServerConnectAuthHandler()
-{
-	ScorchedServer::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsConnectAuthMessage::ComsConnectAuthMessageType,
 		this);
 }
@@ -130,7 +119,7 @@ void ServerConnectAuthHandler::processMessageInternal(
 	ComsConnectAuthMessage &message)
 {
 	// Check for acceptance bassed on standard checks
-	if (!ServerConnectHandler::instance()->checkStandardParams(destinationId, ipAddress)) return;
+	if (!ServerConnectHandler::checkStandardParams(destinationId, ipAddress)) return;
 
 	// Check player availability
 	if (message.getNoPlayers() > 
@@ -151,7 +140,7 @@ void ServerConnectAuthHandler::processMessageInternal(
 	// Auth handler, make sure that only prefered players can connect
 	// DO FIRST AS THE HANDLER MAY ALTER THE MESSAGE
 	ServerAuthHandler *authHandler =
-		ScorchedServerUtil::instance()->getAuthHandler();
+		ScorchedServer::instance()->getAuthHandler();
 	if (authHandler)
 	{
 		std::string resultMessage;
@@ -189,7 +178,7 @@ void ServerConnectAuthHandler::processMessageInternal(
 	// Check if this unique id has been banned
 	// Do after auth handler as this may update uniqueid
 	ServerBanned::BannedType type = 
-		ScorchedServerUtil::instance()->bannedPlayers.getBanned(uniqueId.c_str(), SUid.c_str());
+		ScorchedServer::instance()->getBannedPlayers().getBanned(uniqueId.c_str(), SUid.c_str());
 	if (type == ServerBanned::Banned)
 	{
 		ServerCommon::kickDestination(destinationId, 

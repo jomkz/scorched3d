@@ -33,7 +33,7 @@ TankAINames::~TankAINames()
 
 }
 
-bool TankAINames::loadAIs()
+bool TankAINames::loadAIs(std::list<std::string> &ais)
 {
 	// Load key definition file
 	XMLFile file;
@@ -79,12 +79,12 @@ bool TankAINames::loadAIs()
 
 		if (availableForPlayers)
 		{
-			ais_.push_back(name);
+			ais.push_back(name);
 		}
 	}
 
-	ais_.push_back("Random");
-	ais_.push_back("Human");
+	ais.push_back("Random");
+	ais.push_back("Human");
 
 	return true;
 }

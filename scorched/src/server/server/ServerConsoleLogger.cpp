@@ -21,14 +21,6 @@
 #include <server/ServerConsoleLogger.h>
 #include <common/Logger.h>
 
-ServerConsoleLogger *ServerConsoleLogger::instance_ = 0;
-
-ServerConsoleLogger *ServerConsoleLogger::instance()
-{
-	if (!instance_) instance_ = new ServerConsoleLogger();
-	return instance_;
-}
-
 ServerConsoleLogger::ServerConsoleLogger()
 {
 	Logger::instance()->addLogger(this);
@@ -36,6 +28,7 @@ ServerConsoleLogger::ServerConsoleLogger()
 
 ServerConsoleLogger::~ServerConsoleLogger()
 {
+	Logger::instance()->remLogger(this);
 }
 
 void ServerConsoleLogger::logMessage(LoggerInfo &info)

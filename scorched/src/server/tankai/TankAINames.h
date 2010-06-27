@@ -27,16 +27,11 @@
 class TankAINames
 {
 public:
+	static bool loadAIs(std::list<std::string> &ais); 
+protected:
 	TankAINames();
 	virtual ~TankAINames();
 
-	void clearAIs() { ais_.clear(); }
-	bool loadAIs(); 
-
-	std::list<std::string> &getAis() { return ais_; }
-
-protected:
-	std::list<std::string> ais_;
 };
 
 #endif

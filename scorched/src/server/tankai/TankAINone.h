@@ -31,7 +31,7 @@ public:
 
 	virtual TankAINone *createCopy(Tank *tank) { return 0; }
 
-	virtual bool parseConfig(XMLNode *node) { return false; }
+	virtual bool parseConfig(TankAIWeaponSets &sets, XMLNode *node) { return false; }
 
 	virtual const char *getName() { return "None"; }
 	virtual const char *getDescription() { return "None"; }
