@@ -62,7 +62,7 @@ static const char *getAdminUserName(std::map<std::string, std::string> &fields)
 {
 	unsigned int sid = atoi(ServerWebServerUtil::getField(fields, "sid"));
 	ServerAdminSessions::SessionParams *session =
-		ServerAdminSessions::instance()->getSession(sid);
+		ScorchedServer::instance()->getServerAdminSessions().getSession(sid);
 	if (session) return session->credentials.username.c_str();
 	return "Unknown";
 }
@@ -637,7 +637,7 @@ bool ServerWebHandler::SessionsHandler::processRequest(
 	{
 		std::string sessions;
 		std::map<unsigned int, ServerAdminSessions::SessionParams> &sessionparams = 
-			ServerAdminSessions::instance()->getAllSessions();
+			ScorchedServer::instance()->getServerAdminSessions().getAllSessions();
 		std::map<unsigned int, ServerAdminSessions::SessionParams>::iterator itor;
 		for (itor = sessionparams.begin(); itor != sessionparams.end(); itor++)
 		{
@@ -662,10 +662,10 @@ bool ServerWebHandler::SessionsHandler::processRequest(
 	// List of admins
 	{
 		std::string admins;
-		addUser(admins, ServerAdminSessions::instance()->getLocalUserCredentials());
+		addUser(admins, ScorchedServer::instance()->getServerAdminSessions().getLocalUserCredentials());
 		std::list<ServerAdminSessions::Credential> creds;
 		std::list<ServerAdminSessions::Credential>::iterator itor;
-		ServerAdminSessions::instance()->getAllCredentials(creds);
+		ScorchedServer::instance()->getServerAdminSessions().getAllCredentials(creds);
 		for (itor = creds.begin();
 			itor != creds.end();
 			itor++)
@@ -691,13 +691,13 @@ bool ServerWebHandler::AccountHandler::processRequest(
 	if (setpassword && oldpassword && newpassword)
 	{
 		if (request.getSession()->credentials.username == 
-			ServerAdminSessions::instance()->getLocalUserCredentials().username)
+			ScorchedServer::instance()->getServerAdminSessions().getLocalUserCredentials().username)
 		{
 			request.getFields()["MESSAGE"] = "<b>Cannot set local connection password</b><br/>";
 		}
 		else
 		{
-			if (ServerAdminSessions::instance()->setPassword(
+			if (ScorchedServer::instance()->getServerAdminSessions().setPassword(
 				request.getSession()->credentials.username.c_str(),
 				oldpassword,
 				newpassword))

@@ -29,17 +29,6 @@
 #include <engine/ModFiles.h>
 #include <time.h>
 
-ServerFileServer *ServerFileServer::instance_ = 0;
-
-ServerFileServer *ServerFileServer::instance()
-{
-	if (!instance_)
-	{
-		instance_ = new ServerFileServer;
-	}
-	return instance_;
-}
-
 ServerFileServer::ServerFileServer() : lastTime_(0), bytesSent_(0)
 {
 }

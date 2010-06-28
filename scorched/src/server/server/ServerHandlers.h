@@ -33,6 +33,7 @@
 #include <server/ServerInitializeModHandler.h>
 #include <server/ServerLinesHandler.h>
 #include <server/ServerPlayedMoveHandler.h>
+#include <server/ServerOperationResultHandler.h>
 
 class ComsMessageHandler;
 class ServerHandlers
@@ -56,6 +57,7 @@ protected:
 	ServerInitializeModHandler serverInitializeModHandler_;
 	ServerLinesHandler serverLinesHandler_;
 	ServerPlayedMoveHandler serverPlayedMoveHandler_;
+	ServerOperationResultHandler serverOperationResultHandler_;
 };
 
 #endif // __INCLUDE_ServerHandlersh_INCLUDE__

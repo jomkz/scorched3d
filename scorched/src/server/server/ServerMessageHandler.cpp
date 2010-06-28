@@ -37,17 +37,6 @@
 #include <common/OptionsScorched.h>
 #include <common/StatsLogger.h>
 
-ServerMessageHandler *ServerMessageHandler::instance_ = 0;
-
-ServerMessageHandler *ServerMessageHandler::instance()
-{
-	if (!instance_)
-	{
-		instance_ = new ServerMessageHandler;
-	}
-	return instance_;
-}
-
 ServerMessageHandler::ServerMessageHandler()
 {
 }

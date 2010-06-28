@@ -25,7 +25,6 @@
 #include <server/ServerSimulator.h>
 #include <server/ServerConsoleProgressCounter.h>
 #include <server/ServerChannelManager.h>
-#include <server/ServerMessageHandler.h>
 #include <server/ServerLoadLevel.h>
 #include <weapons/EconomyStore.h>
 #include <tank/TankContainer.h>

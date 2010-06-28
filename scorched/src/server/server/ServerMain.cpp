@@ -55,7 +55,6 @@
 #include <server/ServerChannelManager.h>
 #include <server/ServerConnectHandler.h>
 #include <server/ServerConnectAuthHandler.h>
-#include <server/ServerOperationResultHandler.h>
 #include <server/ServerConsoleProgressCounter.h>
 #include <server/ServerConsoleLogger.h>
 #include <server/ServerFileServer.h>
@@ -112,8 +111,6 @@ bool startServer(bool local, ProgressCounter *counter)
 	ScorchedServer::instance()->getOptionsGame().updateChangeSet();
 	ScorchedServer::instance()->getNetInterface().setMessageHandler(
 		&ScorchedServer::instance()->getComsMessageHandler());
-	ScorchedServer::instance()->getComsMessageHandler().setConnectionHandler(
-		ServerMessageHandler::instance());
 
 	// Set the mod
 	S3D::setDataFileMod(
@@ -127,9 +124,6 @@ bool startServer(bool local, ProgressCounter *counter)
 			counter)) return false;
 	}
 #endif
-
-	// Reset server state
-	ScorchedServer::instance()->getServerState().setState(ServerState::ServerStartupState);
 	
 	// Parse config
 	if (!ScorchedServer::instance()->getAccessoryStore().parseFile(
@@ -230,7 +224,7 @@ void serverLoop(fixed timeDifference)
 		ScorchedServer::instance()->getServerState().simulate(timeDifference);
 
 		ScorchedServer::instance()->getServerConnectAuthHandler().processMessages();
-		ServerFileServer::instance()->simulate();
+		ScorchedServer::instance()->getServerFileServer().simulate();
 		ScorchedServer::instance()->getServerChannelManager().simulate(timeDifference);
 		ScorchedServer::instance()->getTimedMessage().simulate();
 

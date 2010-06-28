@@ -65,7 +65,7 @@ bool ServerAdminHandler::processMessage(
 
 	// Check if the SID is valid
 	ServerAdminSessions::SessionParams *adminSession =
-		ServerAdminSessions::instance()->getSession(message.getSid());
+		ScorchedServer::instance()->getServerAdminSessions().getSession(message.getSid());
 
 	// Check if we are logging in
 	if (message.getType() == ComsAdminMessage::AdminLogin ||
@@ -73,12 +73,12 @@ bool ServerAdminHandler::processMessage(
 	{	
 		unsigned int sid = message.getSid();
 		if (adminSession ||
-			(sid = ServerAdminSessions::instance()->
+			(sid = ScorchedServer::instance()->getServerAdminSessions().
 				login(message.getParam1(), message.getParam2(),
 				NetInterface::getIpName(netMessage.getIpAddress()))) != 0)
 		{
 			adminSession =
-				ServerAdminSessions::instance()->getSession(sid);
+				ScorchedServer::instance()->getServerAdminSessions().getSession(sid);
 
 			ScorchedServer::instance()->getServerChannelManager().refreshDestination(destinationId);
 
@@ -203,7 +203,7 @@ bool ServerAdminHandler::processMessage(
 				S3D::formatStringBuffer("Server admin \"%s\" logged out",
 				adminName));
 
-			ServerAdminSessions::instance()->logout(message.getSid());
+			ScorchedServer::instance()->getServerAdminSessions().logout(message.getSid());
 			ScorchedServer::instance()->getServerChannelManager().refreshDestination(destinationId);
 
 			ComsAdminResultMessage resultMessage(0, message.getType());
@@ -376,7 +376,7 @@ bool ServerAdminHandler::processMessage(
 			ScorchedServer::instance()->getServerChannelManager().sendText( 
 				ChannelText("info", "SENDING_SYNC", "sending sync..."),
 				destinationId, true);
-			ServerSyncCheck::instance()->sendSyncCheck();
+			ScorchedServer::instance()->getServerSyncCheck().sendSyncCheck();
 		}
 		break;
 	case ComsAdminMessage::AdminKillAll:

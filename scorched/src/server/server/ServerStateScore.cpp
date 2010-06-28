@@ -73,7 +73,7 @@ void ServerStateScore::enterState(ServerStateEnoughPlayers &enoughPlayers)
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(showScoreAction);
 
 	// Force clients to check (if enabled)
-	ServerSyncCheck::instance()->sendAutoSyncCheck();
+	ScorchedServer::instance()->getServerSyncCheck().sendAutoSyncCheck();
 }
 
 void ServerStateScore::scoreFinished()

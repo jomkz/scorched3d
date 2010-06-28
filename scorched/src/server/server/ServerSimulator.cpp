@@ -107,7 +107,7 @@ void ServerSimulator::nextSendTime()
 		if (action->getMetaClassId() == syncCheckSimAction.getMetaClassId())
 		{
 			SyncCheckSimAction *syncAction = (SyncCheckSimAction *) action;
-			ServerSyncCheck::instance()->sentSyncCheck(syncAction->getSyncId());
+			ScorchedServer::instance()->getServerSyncCheck().sentSyncCheck(syncAction->getSyncId());
 		}
 	}
 	sendActions_.clear();

@@ -32,7 +32,8 @@ ServerHandlers::ServerHandlers(ComsMessageHandler &comsMessageHandler) :
 	serverHaveModFileHandler_(comsMessageHandler),
 	serverInitializeModHandler_(comsMessageHandler),
 	serverLinesHandler_(comsMessageHandler),
-	serverPlayedMoveHandler_(comsMessageHandler)
+	serverPlayedMoveHandler_(comsMessageHandler),
+	serverOperationResultHandler_(comsMessageHandler)
 {
 }
 

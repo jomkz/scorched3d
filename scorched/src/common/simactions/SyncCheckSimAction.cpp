@@ -45,7 +45,7 @@ bool SyncCheckSimAction::invokeAction(ScorchedContext &context)
 	if (context.getServerMode())
 	{
 		ComsSyncCheckMessage *message = new ComsSyncCheckMessage(syncId_, context);
-		ServerSyncCheck::instance()->addServerSyncCheck(message);
+		ScorchedServer::instance()->getServerSyncCheck().addServerSyncCheck(message);
 	}
 	else
 	{

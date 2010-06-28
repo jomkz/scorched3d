@@ -271,7 +271,7 @@ void ServerWebServer::processMessage(NetMessage &message)
 						{
 							unsigned int sid = (unsigned int) atoi(fields["sid"].c_str());
 							ServerAdminSessions::SessionParams *session =
-								ServerAdminSessions::instance()->getSession(sid);
+								ScorchedServer::instance()->getServerAdminSessions().getSession(sid);
 							if (session)
 							{
 								username = session->credentials.username;
@@ -448,7 +448,7 @@ unsigned int ServerWebServer::validateSession(
 	if (strcmp(url, "/Applet.jar") == 0)
 	{
 		ServerAdminSessions::SessionParams *session =
-			ServerAdminSessions::instance()->getFirstSession();
+			ScorchedServer::instance()->getServerAdminSessions().getFirstSession();
 		if (session)
 		{
 			return session->sid;
@@ -460,7 +460,7 @@ unsigned int ServerWebServer::validateSession(
 	{
 		unsigned int sid = (unsigned int) atoi(fields["sid"].c_str());
 		ServerAdminSessions::SessionParams *params =
-			ServerAdminSessions::instance()->getSession(sid);
+			ScorchedServer::instance()->getServerAdminSessions().getSession(sid);
 		if (params) return sid;
 	}
 
@@ -473,7 +473,7 @@ bool ServerWebServer::validateUser(
 	std::map<std::string, std::string> &fields)
 {
 	// Create a session for the user
-	unsigned int sid = ServerAdminSessions::instance()->login(
+	unsigned int sid = ScorchedServer::instance()->getServerAdminSessions().login(
 		fields["name"].c_str(),
 		fields["password"].c_str(),
 		ip);
@@ -483,7 +483,7 @@ bool ServerWebServer::validateUser(
 		fields["sid"] = S3D::formatStringBuffer("%u", sid);
 
 		ServerAdminSessions::SessionParams *adminSession =
-			ServerAdminSessions::instance()->getSession(sid);
+			ScorchedServer::instance()->getServerAdminSessions().getSession(sid);
 
 		ScorchedServer::instance()->getServerChannelManager().sendText(
 			ChannelText("info",
@@ -515,7 +515,8 @@ bool ServerWebServer::processQueue(ServerWebServerQueue &queue, bool keepEntries
 		bool keepEntry = keepEntries;
 
 		// Get the session for the user
-		ServerAdminSessions::SessionParams *session = ServerAdminSessions::instance()->getSession(
+		ServerAdminSessions::SessionParams *session = 
+			ScorchedServer::instance()->getServerAdminSessions().getSession(
 			entry->getSid());
 		entry->getRequest().setSession(session);
 
@@ -538,7 +539,7 @@ bool ServerWebServer::processQueue(ServerWebServerQueue &queue, bool keepEntries
 				NetMessagePool::instance()->addToPool(message);
 
 				// Update the session time so we don't timeout
-				ServerAdminSessions::instance()->getSession(entry->getSid());
+				ScorchedServer::instance()->getServerAdminSessions().getSession(entry->getSid());
 			}
 			else
 			{

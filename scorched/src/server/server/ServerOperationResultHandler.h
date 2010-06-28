@@ -23,23 +23,16 @@
 
 #include <coms/ComsMessageHandler.h>
 
-class ServerOperationResultHandler : 
-	public ComsMessageHandlerI
+class ServerOperationResultHandler : public ComsMessageHandlerI
 {
 public:
-	static ServerOperationResultHandler *instance();
+	ServerOperationResultHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ServerOperationResultHandler();
 
 	virtual bool processMessage(
 		NetMessage &message,
 		const char *messageType,
 		NetBufferReader &reader);
-
-protected:
-	static ServerOperationResultHandler *instance_;
-
-private:
-	ServerOperationResultHandler();
-	virtual ~ServerOperationResultHandler();
 };
 
 #endif // __INCLUDE_ServerOperationResultHandlerh_INCLUDE__

@@ -29,7 +29,8 @@
 class ServerAdminSessions
 {
 public:
-	static ServerAdminSessions *instance();
+	ServerAdminSessions();
+	virtual ~ServerAdminSessions();
 
 	static std::string PERMISSION_BANPLAYER;
 	static std::string PERMISSION_KICKPLAYER;
@@ -77,10 +78,6 @@ public:
 protected:
 	Credential localCreds_;
 	std::map<unsigned int, SessionParams> sessions_;
-
-private:
-	ServerAdminSessions();
-	virtual ~ServerAdminSessions();
 
 };
 

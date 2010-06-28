@@ -36,7 +36,11 @@ class ServerTextFilter;
 class ServerHandlers;
 class ServerLoadLevel;
 class ServerConnectAuthHandler;
+class ServerAdminSessions;
 class ServerChannelManager;
+class ServerSyncCheck;
+class ServerMessageHandler;
+class ServerFileServer;
 
 class ScorchedServer : public ScorchedContext
 {
@@ -61,6 +65,10 @@ public:
 	ServerLoadLevel &getServerLoadLevel() { return *serverLoadLevel_; }
 	ServerConnectAuthHandler &getServerConnectAuthHandler();
 	ServerChannelManager &getServerChannelManager() { return *serverChannelManager_; }
+	ServerAdminSessions &getServerAdminSessions() { return *serverAdminSessions_; }
+	ServerSyncCheck &getServerSyncCheck() { return *serverSyncCheck_; }
+	ServerMessageHandler &getServerMessageHandler() { return *serverMessageHandler_; }
+	ServerFileServer &getServerFileServer() { return *serverFileServer_; }
 
 protected:
 	static ScorchedServer *instance_;
@@ -76,6 +84,10 @@ protected:
 	ServerHandlers *serverHandlers_;
 	ServerLoadLevel *serverLoadLevel_;
 	ServerChannelManager *serverChannelManager_;	
+	ServerAdminSessions *serverAdminSessions_;
+	ServerSyncCheck *serverSyncCheck_;
+	ServerMessageHandler *serverMessageHandler_;
+	ServerFileServer *serverFileServer_;
 
 private:
 	ScorchedServer();

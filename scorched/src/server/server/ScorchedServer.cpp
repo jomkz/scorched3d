@@ -29,6 +29,10 @@
 #include <server/ServerHandlers.h>
 #include <server/ServerLoadLevel.h>
 #include <server/ServerChannelManager.h>
+#include <server/ServerAdminSessions.h>
+#include <server/ServerSyncCheck.h>
+#include <server/ServerMessageHandler.h>
+#include <server/ServerFileServer.h>
 #include <common/OptionsScorched.h>
 #include <common/Logger.h>
 #include <tank/TankDeadContainer.h>
@@ -72,6 +76,7 @@ ScorchedServer::ScorchedServer() :
 	ScorchedContext("Server")
 {
 	serverState_ = new ServerState();
+	serverFileServer_ = new ServerFileServer();
 	serverSimulator_ = new ServerSimulator();
 	serverSimulator_->setScorchedContext(this);
 	serverDestinations_ = new ServerDestinations();
@@ -83,12 +88,16 @@ ScorchedServer::ScorchedServer() :
 	textFilter_ = new ServerTextFilter();
 	serverLoadLevel_ = new ServerLoadLevel(getComsMessageHandler());
 	serverChannelManager_ = new ServerChannelManager(getComsMessageHandler());
-
+	serverAdminSessions_ = new ServerAdminSessions();
+	serverSyncCheck_ = new ServerSyncCheck(getComsMessageHandler());
 	serverHandlers_ = new ServerHandlers(getComsMessageHandler());
 	getComsMessageHandler().addHandler(
 		ComsSimulateResultMessage::ComsSimulateResultMessageType,
 		serverSimulator_);
 	getLUAScriptHook().addHookProvider("server_channeltext");
+
+	serverMessageHandler_ = new ServerMessageHandler();
+	getComsMessageHandler().setConnectionHandler(serverMessageHandler_);
 }
 
 ScorchedServer::~ScorchedServer()

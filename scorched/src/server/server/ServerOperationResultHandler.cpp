@@ -24,20 +24,9 @@
 #include <image/ImageFactory.h>
 #include <time.h>
 
-ServerOperationResultHandler *ServerOperationResultHandler::instance_ = 0;
-
-ServerOperationResultHandler *ServerOperationResultHandler::instance()
+ServerOperationResultHandler::ServerOperationResultHandler(ComsMessageHandler &comsMessageHandler)
 {
-	if (!instance_)
-	{
-		instance_ = new ServerOperationResultHandler;
-	}
-	return instance_;
-}
-
-ServerOperationResultHandler::ServerOperationResultHandler()
-{
-	ScorchedServer::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsOperationResultMessage::ComsOperationResultMessageType,
 		this);
 }

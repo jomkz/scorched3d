@@ -124,7 +124,7 @@ void ServerState::simulate(fixed frameTime)
 		break;
 	}
 
-	ServerSyncCheck::instance()->simulate();
+	ScorchedServer::instance()->getServerSyncCheck().simulate();
 }
 
 void ServerState::buyingFinished(ComsPlayedMoveMessage &message)

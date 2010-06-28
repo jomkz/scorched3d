@@ -64,7 +64,7 @@ void ServerStatePlaying::enterState()
 		addSimulatorAction(teamBallance);
 
 	// Reset the auto-sync check timer
-	ServerSyncCheck::instance()->enterState();
+	ScorchedServer::instance()->getServerSyncCheck().enterState();
 
 	// Setup the correct turn algorithm for the game
 	switch (ScorchedServer::instance()->getOptionsGame().getTurnType().getValue())

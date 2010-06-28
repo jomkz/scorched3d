@@ -35,13 +35,6 @@ std::string ServerAdminSessions::PERMISSION_ALTERGAME("altergame");
 std::string ServerAdminSessions::PERMISSION_ALTERSERVER("alterserver");
 std::string ServerAdminSessions::PERMISSION_ALTERSETTINGS("altersettings");
 
-ServerAdminSessions *ServerAdminSessions::instance()
-{
-	static ServerAdminSessions *instance = 
-		new ServerAdminSessions;
-	return instance;
-}
-
 ServerAdminSessions::ServerAdminSessions()
 {
 	localCreds_.password = "";

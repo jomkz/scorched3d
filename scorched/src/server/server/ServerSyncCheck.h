@@ -30,7 +30,8 @@
 class ServerSyncCheck : public ComsMessageHandlerI 
 {
 public:
-	static ServerSyncCheck *instance();
+	ServerSyncCheck(ComsMessageHandler &comsMessageHandler);
+	virtual ~ServerSyncCheck();
 
 	void enterState();
 	void simulate();
@@ -68,9 +69,6 @@ protected:
 		const char *mapName,
 		NetBuffer &serverBuffer, NetBuffer &clientBuffer);
 
-private:
-	ServerSyncCheck();
-	virtual ~ServerSyncCheck();
 };
 
 #endif

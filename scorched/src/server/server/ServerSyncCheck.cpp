@@ -66,17 +66,9 @@ ServerSyncCheck::SyncContext::~SyncContext()
 	clientMessages.clear();
 }
 
-ServerSyncCheck *ServerSyncCheck::instance_(0);
-
-ServerSyncCheck *ServerSyncCheck::instance()
+ServerSyncCheck::ServerSyncCheck(ComsMessageHandler &comsMessageHandler)
 {
-	if (!instance_) instance_ = new ServerSyncCheck();
-	return instance_;
-}
-
-ServerSyncCheck::ServerSyncCheck()
-{
-	ScorchedServer::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsSyncCheckMessage::ComsSyncCheckMessageType,
 		this);
 }

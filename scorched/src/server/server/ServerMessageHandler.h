@@ -25,11 +25,11 @@
 #include <coms/ComsMessageHandler.h>
 #include <map>
 
-class ServerMessageHandler : 
-	public ComsMessageConnectionHandlerI
+class ServerMessageHandler : public ComsMessageConnectionHandlerI
 {
 public:
-	static ServerMessageHandler *instance();
+	ServerMessageHandler();
+	virtual ~ServerMessageHandler();
 
 	virtual void clientConnected(NetMessage &message);
 	virtual void clientDisconnected(NetMessage &message);
@@ -40,14 +40,6 @@ public:
 	virtual void messageSent(unsigned int destinationId);
 
 	void destroyPlayer(unsigned int playerId, const char *reason);
-
-protected:
-	static ServerMessageHandler *instance_;
-
-private:
-	ServerMessageHandler();
-	virtual ~ServerMessageHandler();
 };
-
 
 #endif

@@ -183,7 +183,7 @@ void ServerStateEnoughPlayers::removeBots(int requiredPlayers, int noPlayers)
 		aiItor++, noPlayers--)
 	{
 		std::pair<unsigned int, unsigned int> item = *aiItor;
-		ServerMessageHandler::instance()->destroyPlayer(
+		ScorchedServer::instance()->getServerMessageHandler().destroyPlayer(
 			item.second, "Auto-kick");
 	}
 }

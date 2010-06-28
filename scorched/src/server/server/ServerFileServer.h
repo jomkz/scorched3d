@@ -27,12 +27,12 @@ class ServerDestination;
 class ServerFileServer
 {
 public:
-	static ServerFileServer *instance();
+	ServerFileServer();
+	virtual ~ServerFileServer();
 
 	void simulate();
 
 protected:
-	static ServerFileServer *instance_;
 	unsigned int lastTime_;
 	unsigned int bytesSent_;
 
@@ -40,10 +40,6 @@ protected:
 	bool sendNextFile(ComsFileMessage &message,
 		ServerDestination *destination, 
 		unsigned int size, unsigned int &sentSize);
-
-private:
-	ServerFileServer();
-	virtual ~ServerFileServer();
 };
 
 #endif // __INCLUDE_ServerFileServerh_INCLUDE__
