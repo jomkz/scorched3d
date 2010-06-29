@@ -37,17 +37,18 @@
 
 static FileLogger *serverFileLogger = 0;
 
-void ServerCommon::startFileLogger()
+void ServerCommon::startFileLogger(const std::string &settingsFile)
 {
 	if (!serverFileLogger) 
 	{
+		OptionsGame optionsGame;
+		optionsGame.readOptionsFromFile(settingsFile);
+
 		char buffer[256];
-		snprintf(buffer, 256, "ServerLog-%i-", 
-			ScorchedServer::instance()->getOptionsGame().getPortNo());
+		snprintf(buffer, 256, "ServerLog-%i-", optionsGame.getPortNo());
 
 		serverFileLogger = new FileLogger(buffer);
-		if (0 != strcmp(ScorchedServer::instance()->getOptionsGame().
-			getServerFileLogger(), "none"))
+		if (0 != strcmp(optionsGame.getServerFileLogger(), "none"))
 		{
 			Logger::addLogger(serverFileLogger);
 			Logger::log( "Created file logger.");

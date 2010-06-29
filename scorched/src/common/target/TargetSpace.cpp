@@ -44,7 +44,7 @@ TargetSpace::TargetSpace() :
 
 TargetSpace::~TargetSpace()
 {
-	delete squares_;
+	delete [] squares_;
 }
 
 void TargetSpace::updateTarget(Target *target)

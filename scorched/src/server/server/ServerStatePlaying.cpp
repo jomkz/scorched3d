@@ -39,6 +39,7 @@ ServerStatePlaying::ServerStatePlaying() :
 
 ServerStatePlaying::~ServerStatePlaying()
 {
+	delete roundStarted_;
 }
 
 bool ServerStatePlaying::showScore()

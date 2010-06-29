@@ -26,19 +26,14 @@
 class EconomyStore
 {
 public:
-	static EconomyStore *instance();
+	EconomyStore();
+	virtual ~EconomyStore();
 
 	Economy *getEconomy();
 
 protected:
-	static EconomyStore *instance_;
 	Economy *economy_;
-
 	void loadEconomy();
-
-private:
-	EconomyStore();
-	virtual ~EconomyStore();
 };
 
 #endif

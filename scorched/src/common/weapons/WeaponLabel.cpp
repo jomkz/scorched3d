@@ -23,14 +23,16 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponLabel);
 
-WeaponLabel::WeaponLabel()
+WeaponLabel::WeaponLabel() :
+	nextWeapon_(0)
 {
 
 }
 
 WeaponLabel::~WeaponLabel()
 {
-
+	delete nextWeapon_;
+	nextWeapon_ = 0;
 }
 
 bool WeaponLabel::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

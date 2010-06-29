@@ -34,7 +34,6 @@ WeaponInvokeWeapon::WeaponInvokeWeapon() :
 
 WeaponInvokeWeapon::~WeaponInvokeWeapon()
 {
-
 }
 
 bool WeaponInvokeWeapon::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

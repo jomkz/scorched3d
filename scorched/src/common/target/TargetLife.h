@@ -26,12 +26,12 @@
 #include <net/NetBuffer.h>
 #include <common/FixedVector4.h>
 
-class ScorchedContext;
+class TargetSpace;
 class Target;
 class TargetLife
 {
 public:
-	TargetLife(ScorchedContext &context, unsigned int playerId);
+	TargetLife(bool serverMode, TargetSpace &targetSpace, unsigned int playerId);
 	virtual ~TargetLife();
 
 	void newGame();
@@ -76,7 +76,8 @@ public:
 	bool readMessage(NetBufferReader &reader);
 
 protected:
-	ScorchedContext &context_;
+	bool serverMode_;
+	TargetSpace &targetSpace_;
 	TargetSpaceContainment spaceContainment_;
 	Target *target_;
 	FixedVector4 quaternion_;

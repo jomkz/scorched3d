@@ -38,8 +38,15 @@ ServerTurnsSimultaneous::ServerTurnsSimultaneous(bool waitForShots) :
 
 ServerTurnsSimultaneous::~ServerTurnsSimultaneous()
 {
+	std::map<unsigned int, ComsPlayedMoveMessage*>::iterator itor;
+	for (itor = moves_.begin();
+		itor != moves_.end();
+		itor++)
+	{
+		delete itor->second;
+	}
+	moves_.clear();
 }
-
 
 void ServerTurnsSimultaneous::internalEnterState()
 {

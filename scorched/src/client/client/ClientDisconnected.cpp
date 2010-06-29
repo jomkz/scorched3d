@@ -23,6 +23,7 @@
 #include <client/ClientState.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientSimulator.h>
+#include <server/ScorchedServer.h>
 #include <engine/GameState.h>
 
 ClientDisconnected::ClientDisconnected() : GameStateI("ClientDisconnected")
@@ -36,6 +37,7 @@ ClientDisconnected::~ClientDisconnected()
 void ClientDisconnected::enterState(const unsigned state)
 {
 	ScorchedClient::instance()->getClientSimulator().clear();
+	ScorchedServer::instance()->stopServer();
 
 	ScorchedClient::instance()->getGameState().stimulate(
 		ClientState::StimOptions);

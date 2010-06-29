@@ -33,7 +33,8 @@ WeaponLeapFrog::WeaponLeapFrog():
 
 WeaponLeapFrog::~WeaponLeapFrog()
 {
-
+	delete collisionAction_;
+	collisionAction_ = 0;
 }
 
 bool WeaponLeapFrog::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

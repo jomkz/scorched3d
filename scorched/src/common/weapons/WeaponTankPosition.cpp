@@ -27,14 +27,16 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponTankPosition);
 
-WeaponTankPosition::WeaponTankPosition() : sightPos_(false)
+WeaponTankPosition::WeaponTankPosition() : 
+	sightPos_(false), aimedWeapon_(0)
 {
 
 }
 
 WeaponTankPosition::~WeaponTankPosition()
 {
-
+	delete aimedWeapon_;
+	aimedWeapon_ = 0;
 }
 
 bool WeaponTankPosition::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

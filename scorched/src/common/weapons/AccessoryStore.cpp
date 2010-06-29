@@ -34,7 +34,23 @@ AccessoryStore::AccessoryStore() : muzzleFlash_(0)
 
 AccessoryStore::~AccessoryStore()
 {
+	clearAccessories();
+}
 
+void AccessoryStore::clearAccessories()
+{
+	AccessoryPart::resetAccessoryPartIds();
+	Accessory::resetAccessoryIds();
+	muzzleFlash_ = 0;
+	deathAnimation_ = 0;
+	while (!accessories_.empty())
+	{
+		Accessory *accessory = accessories_.front();
+		accessories_.pop_front();
+		delete accessory;
+	}
+	accessoryParts_.clear();
+	tabGroups_.clear();
 }
 
 bool AccessoryStore::parseFile(
@@ -357,26 +373,6 @@ AccessoryPart *AccessoryStore::findByAccessoryPartId(unsigned int id)
 		}
 	}
 	return 0;
-}
-
-void AccessoryStore::clearAccessories()
-{
-	AccessoryPart::resetAccessoryPartIds();
-	Accessory::resetAccessoryIds();
-	muzzleFlash_ = 0;
-	deathAnimation_ = 0;
-	while (!accessories_.empty())
-	{
-		Accessory *accessory = accessories_.front();
-		accessories_.pop_front();
-		delete accessory;
-	}
-	while (!accessoryParts_.empty())
-	{
-		AccessoryPart *accessoryPart = accessoryParts_.front();
-		accessoryParts_.pop_front();
-		delete accessoryPart;
-	}
 }
 
 bool AccessoryStore::writeWeapon(NamedNetBuffer &buffer, Weapon *weapon)

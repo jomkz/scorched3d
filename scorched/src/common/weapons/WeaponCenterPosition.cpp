@@ -34,7 +34,8 @@ WeaponCenterPosition::WeaponCenterPosition() :
 
 WeaponCenterPosition::~WeaponCenterPosition()
 {
-
+	delete nextAction_;
+	nextAction_ = 0;
 }
 
 bool WeaponCenterPosition::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

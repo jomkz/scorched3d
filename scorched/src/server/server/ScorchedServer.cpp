@@ -34,33 +34,43 @@
 #include <server/ServerMessageHandler.h>
 #include <server/ServerFileServer.h>
 #include <common/OptionsScorched.h>
+#include <common/OptionsTransient.h>
 #include <common/Logger.h>
+#include <engine/ModFiles.h>
+#include <engine/ActionController.h>
 #include <tank/TankDeadContainer.h>
 #include <tank/TankContainer.h>
+#include <tank/TankModelStore.h>
 #include <tankai/TankAIStore.h>
 #include <tankai/TankAIWeaponSets.h>
+#include <tankai/TankAIAdder.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <coms/ComsSimulateResultMessage.h>
 #include <lua/LUAScriptHook.h>
+#include <weapons/EconomyStore.h>
+#include <weapons/AccessoryStore.h>
+#include <net/NetServerTCP3.h>
+#include <net/NetLoopBack.h>
 
 #ifndef S3D_SERVER
 #include <client/ClientParams.h>
 #include <client/ScorchedClient.h>
+#include <console/ConsoleRuleMethodIAdapter.h>
 #endif
 
 ScorchedServer *ScorchedServer::instance_ = 0;
-static bool instanceLock = false;
+static ScorchedServer *instanceLock = 0;
+bool ScorchedServer::started_ = false;
 
 ScorchedServer *ScorchedServer::instance()
 {
-	if (!instance_)
-	{
-		DIALOG_ASSERT(!instanceLock);
-		instanceLock = true;
-		instance_ = new ScorchedServer;
-		instanceLock = false;
-	}
+	return instance_;
+}
 
+bool ScorchedServer::startServer(const std::string &settingsFile, 
+	bool rewriteOptions, bool writeFullOptions,
+	bool local, ProgressCounter *counter)
+{
 #ifndef S3D_SERVER
 	if (ClientParams::instance()->getConnectedToServer() &&
 		ScorchedClient::instance()->getTankContainer().getCurrentDestinationId() != 0)
@@ -69,12 +79,33 @@ ScorchedServer *ScorchedServer::instance()
 	}
 #endif
 
-	return instance_;
+	stopServer();
+
+	DIALOG_ASSERT(!instanceLock);
+	instanceLock = new ScorchedServer;
+	instance_ = instanceLock;
+	instanceLock = 0;
+
+	started_ = instance_->startServerInternal(settingsFile, 
+		rewriteOptions, writeFullOptions,
+		local, counter);
+	return started_;
+}
+
+void ScorchedServer::stopServer()
+{
+	if (instance_)
+	{
+		delete instance_;
+		instance_ = 0;
+	}
+	started_ = false;
 }
 
 ScorchedServer::ScorchedServer() : 
 	ScorchedContext("Server")
 {
+	economyStore_ = new EconomyStore();
 	serverState_ = new ServerState();
 	serverFileServer_ = new ServerFileServer();
 	serverSimulator_ = new ServerSimulator();
@@ -103,6 +134,22 @@ ScorchedServer::ScorchedServer() :
 ScorchedServer::~ScorchedServer()
 {
 	delete deadContainer_;
+	delete tankAIStore_;
+	delete serverSimulator_;
+	delete serverDestinations_;
+	delete serverState_;
+	delete authHandler_;
+	delete timedMessage_;
+	delete bannedPlayers_;
+	delete textFilter_;
+	delete serverHandlers_;
+	delete serverLoadLevel_;
+	delete serverChannelManager_;	
+	delete serverAdminSessions_;
+	delete serverSyncCheck_;
+	delete serverMessageHandler_;
+	delete serverFileServer_;
+	delete economyStore_;
 }
 
 Simulator &ScorchedServer::getSimulator() 
@@ -118,4 +165,90 @@ ServerAuthHandler *ScorchedServer::getAuthHandler()
 ServerConnectAuthHandler &ScorchedServer::getServerConnectAuthHandler()
 {
 	return serverHandlers_->getServerConnectAuthHandler();
+}
+
+bool ScorchedServer::startServerInternal(const std::string &settingsFile, 
+	bool rewriteOptions, bool writeFullOptions,
+	bool local, ProgressCounter *counter)
+{
+	Logger::log(S3D::formatStringBuffer("Scorched3D - Version %s (%s) - %s",
+		S3D::ScorchedVersion.c_str(), 
+		S3D::ScorchedProtocolVersion.c_str(), 
+		S3D::ScorchedBuildTime.c_str()));
+
+	// Load options
+	getOptionsGame().getMainOptions().readOptionsFromFile(settingsFile);
+	if (rewriteOptions)
+	{
+		getOptionsGame().getMainOptions().writeOptionsToFile(
+			settingsFile,
+			writeFullOptions);
+	}
+
+	// Setup the message handling classes
+	if (local)
+	{
+		setNetInterface(new NetLoopBack(true));
+	}
+	else
+	{
+		// Only create a net server for the actual multiplayer case
+		// A loopback is created by the client for a single player game 
+		setNetInterface(new NetServerTCP3());
+	}
+
+	getOptionsGame().updateChangeSet();
+	getNetInterface().setMessageHandler(&getComsMessageHandler());
+
+	// Set the mod
+	S3D::setDataFileMod(getOptionsGame().getMod());
+
+	// Load mod
+#ifdef S3D_SERVER
+	{
+		if (!getModFiles().loadModFiles(getOptionsGame().getMod(), false, counter)) return false;
+	}
+#endif
+	
+	// Parse config
+	if (!getAccessoryStore().parseFile(getContext(), counter)) return false;
+	if (!getTankModels().loadTankMeshes(getContext(), 2, counter)) return false;
+	getOptionsTransient().reset();
+	if (!getLandscapes().readLandscapeDefinitions()) return false;
+
+	// Add the server side bots
+	// Add any new AIs
+	if (!getTankAIs().loadAIs()) return false;
+	TankAIAdder::addTankAIs(*this);
+
+	checkSettings();
+
+	// Load all script hooks
+	if (!getLUAScriptHook().loadHooks()) return false;
+
+#ifndef S3D_SERVER
+	new ConsoleRuleMethodIAdapter<ActionController>(
+		&getActionController(), 
+		&ActionController::logActions, "ActionsLog");
+	new ConsoleRuleMethodIAdapter<ActionController>(
+		&getActionController(), 
+		&ActionController::startActionProfiling, "ActionsProfilingStart");
+	new ConsoleRuleMethodIAdapter<ActionController>(
+		&getActionController(), 
+		&ActionController::stopActionProfiling, "ActionsProfilingStop");
+#endif
+
+	return true;
+}
+
+void ScorchedServer::checkSettings()
+{
+	getLandscapes().checkEnabled(getOptionsGame());
+	
+	if (getOptionsGame().getTeamBallance() == OptionsGame::TeamBallanceBotsVs &&
+		getOptionsGame().getTeams() > 2)
+	{
+		S3D::dialogExit("ScorchedServer",
+			"Cannot start a game with more than 2 teams in the bots vs mode");		
+	}
 }

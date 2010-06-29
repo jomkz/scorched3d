@@ -31,6 +31,11 @@ WeaponTeamAction::WeaponTeamAction()
 
 WeaponTeamAction::~WeaponTeamAction()
 {
+	for (int i=0; i<5; i++)
+	{
+		delete action_[i];
+		action_[i] = 0;
+	}
 }
 
 bool WeaponTeamAction::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

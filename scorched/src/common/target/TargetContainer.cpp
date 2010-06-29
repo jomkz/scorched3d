@@ -26,6 +26,17 @@ TargetContainer::TargetContainer()
 
 TargetContainer::~TargetContainer()
 {
+	std::map<unsigned int, Target *>::iterator itor;
+	for (itor = targets_.begin();
+		itor != targets_.end();
+		itor++)
+	{
+		if (itor->second->isTarget())
+		{
+			delete itor->second;
+		}
+	}
+	targets_.clear();
 }
 
 void TargetContainer::addTarget(Target *target)

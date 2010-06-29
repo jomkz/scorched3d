@@ -34,7 +34,14 @@ TankDeadContainer::TankDeadContainer()
 
 TankDeadContainer::~TankDeadContainer()
 {
-
+	std::map<std::string, NetBuffer *>::iterator itor;
+	for (itor = deadTanks_.begin();
+		itor != deadTanks_.end();
+		itor++)
+	{
+		delete itor->second;
+	}
+	deadTanks_.clear();
 }
 
 void TankDeadContainer::addDeadTank(Tank *tank, const std::string &storedName)

@@ -38,31 +38,49 @@
 
 ScorchedContext::ScorchedContext(const char *name)
 {
-	accessoryStore = new AccessoryStore();
-	targetContainer = new TargetContainer();
-	tankContainer = new TankContainer(*targetContainer);
-	landscapeMaps = new LandscapeMaps();
-	comsMessageHandler = new ComsMessageHandler(name);
-	netInterface = (NetInterface *) 0;
-	optionsGame = new OptionsScorched();
-	optionsTransient = new OptionsTransient(*optionsGame);
-	modFiles = new ModFiles();
-	landscapes = new LandscapeDefinitions();
-	tankModelStore = new TankModelStore();
-	tankTeamScore = new TankTeamScore();
-	targetSpace = new TargetSpace();
-	targetMovement = new TargetMovement();
-	luaScriptFactory = new LUAScriptFactory();
-	luaScriptHook = new LUAScriptHook(luaScriptFactory,
+	accessoryStore_ = new AccessoryStore();
+	targetContainer_ = new TargetContainer();
+	tankContainer_ = new TankContainer(*targetContainer_);
+	landscapeMaps_ = new LandscapeMaps();
+	comsMessageHandler_ = new ComsMessageHandler(name);
+	netInterface_ = (NetInterface *) 0;
+	optionsGame_ = new OptionsScorched();
+	optionsTransient_ = new OptionsTransient(*optionsGame_);
+	modFiles_ = new ModFiles();
+	landscapes_ = new LandscapeDefinitions();
+	tankModelStore_ = new TankModelStore();
+	tankTeamScore_ = new TankTeamScore();
+	targetSpace_ = new TargetSpace();
+	targetMovement_ = new TargetMovement();
+	luaScriptFactory_ = new LUAScriptFactory();
+	luaScriptHook_ = new LUAScriptHook(luaScriptFactory_,
 		name[0]=='S'?"server":"client",
 		name[0]=='S'?S3D::getSettingsFile("serverhooks"):S3D::getSettingsFile("clienthooks"));
 
 	getTargetSpace().setContext(this);
-	luaScriptFactory->setContext(this);
+	luaScriptFactory_->setContext(this);
 }
 
 ScorchedContext::~ScorchedContext()
 {
+	if (netInterface_) getNetInterface().stop();
+
+	delete landscapeMaps_;
+	delete comsMessageHandler_;
+	delete netInterface_;
+	delete optionsGame_;
+	delete optionsTransient_;
+	delete modFiles_;
+	delete accessoryStore_;
+	delete landscapes_;
+	delete targetContainer_;
+	delete tankContainer_;
+	delete tankModelStore_;
+	delete tankTeamScore_;
+	delete targetSpace_;
+	delete targetMovement_;
+	delete luaScriptFactory_;
+	delete luaScriptHook_;
 }
 
 ActionController &ScorchedContext::getActionController()

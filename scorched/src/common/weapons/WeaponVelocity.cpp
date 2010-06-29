@@ -24,14 +24,16 @@
 REGISTER_ACCESSORY_SOURCE(WeaponVelocity);
 
 WeaponVelocity::WeaponVelocity() :
-	velocityChange_(0), abs_(false)
+	velocityChange_(0), abs_(false),
+	aimedWeapon_(0)
 {
 
 }
 
 WeaponVelocity::~WeaponVelocity()
 {
-
+	delete aimedWeapon_;
+	aimedWeapon_ = 0;
 }
 
 bool WeaponVelocity::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

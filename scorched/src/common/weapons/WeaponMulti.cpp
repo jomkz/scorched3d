@@ -31,7 +31,11 @@ WeaponMulti::WeaponMulti()
 
 WeaponMulti::~WeaponMulti()
 {
-
+	while (!subWeapons_.empty())
+	{
+		delete subWeapons_.back();
+		subWeapons_.pop_back();
+	}
 }
 
 bool WeaponMulti::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

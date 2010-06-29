@@ -29,7 +29,6 @@
 #include <tank/TankContainer.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankModelContainer.h>
-#include <tank/TankModelStore.h>
 
 REGISTER_CLASS_SOURCE(TankChangeSimAction);
 

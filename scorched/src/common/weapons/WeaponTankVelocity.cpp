@@ -26,14 +26,16 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponTankVelocity);
 
-WeaponTankVelocity::WeaponTankVelocity()
+WeaponTankVelocity::WeaponTankVelocity() :
+	aimedWeapon_(0)
 {
 
 }
 
 WeaponTankVelocity::~WeaponTankVelocity()
 {
-
+	delete aimedWeapon_;
+	aimedWeapon_ = 0;
 }
 
 bool WeaponTankVelocity::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

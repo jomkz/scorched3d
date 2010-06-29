@@ -18,14 +18,11 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <server/ScorchedServer.h>
 #include <server/ServerMain.h>
 #include <server/ServerParams.h>
 #include <engine/ModDirs.h>
-#include <common/OptionsGame.h>
 #include <common/ARGParser.h>
 #include <common/Defines.h>
-#include <common/OptionsTransient.h>
 #include <locale.h>
 #include <math.h>
 #include <signal.h>
@@ -66,14 +63,6 @@ int main(int argc, char *argv[])
 		S3D::dialogExit(scorched3dAppName, S3D::formatStringBuffer(
 			"Server file \"%s\" does not exist.",
 			ServerParams::instance()->getServerFile()));
-	}
-	ScorchedServer::instance()->getOptionsGame().getMainOptions().readOptionsFromFile(
-		(char *) ServerParams::instance()->getServerFile());
-	if (ServerParams::instance()->getRewriteOptions())
-	{
-		ScorchedServer::instance()->getOptionsGame().getMainOptions().writeOptionsToFile(
-			(char *) ServerParams::instance()->getServerFile(),
-			ServerParams::instance()->getWriteFullOptions());
 	}
 
 #ifdef WIN32

@@ -33,6 +33,11 @@ WeaponRandomChoice::WeaponRandomChoice() :
 
 WeaponRandomChoice::~WeaponRandomChoice()
 {
+	while (!weaponsChoice_.empty())
+	{
+		delete weaponsChoice_.back().weapon;
+		weaponsChoice_.pop_back();
+	}
 }
 
 bool WeaponRandomChoice::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

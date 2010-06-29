@@ -42,6 +42,16 @@ ServerStateBuying::ServerStateBuying() :
 
 ServerStateBuying::~ServerStateBuying()
 {
+	delete buyingStarted_;
+	buyingStarted_ = 0;
+	std::map<unsigned int, BuyingPlayer*>::iterator itor;
+	for (itor = buyingPlayers_.begin();
+		itor != buyingPlayers_.end();
+		itor++)
+	{
+		delete itor->second;
+	}
+	buyingPlayers_.clear();
 }
 
 void ServerStateBuying::enterState()

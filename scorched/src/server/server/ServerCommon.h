@@ -25,7 +25,7 @@
 
 namespace ServerCommon
 {
-	void startFileLogger();
+	void startFileLogger(const std::string &settingsFile);
 	void serverLog(const std::string &text);
 	void kickDestination(unsigned int destinationId, const std::string &message);
 	void kickPlayer(unsigned int playerId, const std::string &message);

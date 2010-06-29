@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <weapons/AccessoryStore.h>
-#include <tank/TankModelStore.h>
 #include <tank/TankModelContainer.h>
 #include <tank/TankAccessories.h>
 #include <tank/TankType.h>

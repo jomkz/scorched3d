@@ -28,14 +28,16 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponScatterPosition);
 
-WeaponScatterPosition::WeaponScatterPosition()
+WeaponScatterPosition::WeaponScatterPosition() :
+	aimedWeapon_(0)
 {
 
 }
 
 WeaponScatterPosition::~WeaponScatterPosition()
 {
-
+	delete aimedWeapon_;
+	aimedWeapon_ = 0;
 }
 
 bool WeaponScatterPosition::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

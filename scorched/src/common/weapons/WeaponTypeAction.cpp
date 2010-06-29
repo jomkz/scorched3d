@@ -33,6 +33,14 @@ WeaponTypeAction::WeaponTypeAction()
 
 WeaponTypeAction::~WeaponTypeAction()
 {
+	std::map<std::string, Weapon *>::iterator itor;
+	for (itor = actions_.begin();
+		itor != actions_.end();
+		itor++)
+	{
+		delete itor->second;
+	}
+	actions_.clear();
 }
 
 bool WeaponTypeAction::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

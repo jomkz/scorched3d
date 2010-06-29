@@ -26,9 +26,14 @@
 static unsigned int ClientLoopBackID = 100001;
 static unsigned int ServerLoopBackID = 200002;
 
+NetLoopBack *NetLoopBack::serverLoopback_(0);
+NetLoopBack *NetLoopBack::clientLoopback_(0);
+
 NetLoopBack::NetLoopBack(bool server) 
-	: loopback_(0), server_(server), started_(true)
+	: server_(server), started_(true)
 {
+	if (server_) serverLoopback_ = this;
+	else clientLoopback_ = this;
 }
 
 NetLoopBack::~NetLoopBack()
@@ -45,14 +50,9 @@ bool NetLoopBack::connect(const char *hostName, int portNo)
 	{
 		NetMessage *message = NetMessagePool::instance()->
 			getFromPool(NetMessage::ConnectMessage, ClientLoopBackID, 0);
-		loopback_->messageHandler_.addMessage(message);
+		getLoopback()->messageHandler_.addMessage(message);
 	}
 	return true;
-}
-
-void NetLoopBack::setLoopBack(NetLoopBack *loopback)
-{
-	loopback_ = loopback;
 }
 
 bool NetLoopBack::started()
@@ -77,7 +77,7 @@ void NetLoopBack::disconnectAllClients()
 			getFromPool(NetMessage::DisconnectMessage, 
 				server_?ServerLoopBackID:ClientLoopBackID, 0, 
 				(unsigned int) 0);
-		loopback_->messageHandler_.addMessage(message);
+		getLoopback()->messageHandler_.addMessage(message);
 	}
 	{
 		NetMessage *message = NetMessagePool::instance()->
@@ -86,6 +86,12 @@ void NetLoopBack::disconnectAllClients()
 				(unsigned int) 0);
 		messageHandler_.addMessage(message);
 	}
+}
+
+NetLoopBack *NetLoopBack::getLoopback()
+{
+	if (server_) return clientLoopback_;
+	else return serverLoopback_;
 }
 
 void NetLoopBack::disconnectClient(unsigned int client)
@@ -107,7 +113,6 @@ void NetLoopBack::sendMessageServer(NetBuffer &buffer,
 void NetLoopBack::sendMessageDest(NetBuffer &buffer, 
 	unsigned int destination, unsigned int flags)
 {
-	DIALOG_ASSERT(loopback_);
 	DIALOG_ASSERT(
 		(server_ && destination == ClientLoopBackID) || 
 		(!server_ && destination == ServerLoopBackID));
@@ -119,6 +124,6 @@ void NetLoopBack::sendMessageDest(NetBuffer &buffer,
 			0, flags, recvTime);
 	message->getBuffer().reset();
 	message->getBuffer().addDataToBuffer(buffer.getBuffer(), buffer.getBufferUsed());
-	loopback_->messageHandler_.addMessage(message);
+	getLoopback()->messageHandler_.addMessage(message);
 }
 

@@ -25,24 +25,14 @@
 #include <common/Logger.h>
 #include <stdlib.h>
 
-EconomyStore *EconomyStore::instance_ = 0;
-
-EconomyStore *EconomyStore::instance()
-{
-	if (!instance_)
-	{
-		instance_ = new EconomyStore();
-	}
-	return instance_;
-}
-
 EconomyStore::EconomyStore() : economy_(0)
 {
-	loadEconomy();
 }
 
 EconomyStore::~EconomyStore()
 {
+	delete economy_;
+	economy_ = 0;
 }
 
 void EconomyStore::loadEconomy()
@@ -65,7 +55,8 @@ void EconomyStore::loadEconomy()
 
 Economy *EconomyStore::getEconomy()
 { 
-	if (0 != strcmp(ScorchedServer::instance()->getOptionsGame().getEconomy(),
+	if (economy_ == 0 ||
+		0 != strcmp(ScorchedServer::instance()->getOptionsGame().getEconomy(),
 		economy_->getClassName()))
 	{
 		Logger::log( "Loading new economy");

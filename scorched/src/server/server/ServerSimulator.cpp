@@ -44,6 +44,7 @@ ServerSimulator::ServerSimulator() :
 
 ServerSimulator::~ServerSimulator()
 {
+	clear();
 }
 
 void ServerSimulator::clear()

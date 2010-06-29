@@ -23,9 +23,6 @@
 
 #include <common/fixed.h>
 
-class ProgressCounter;
-bool startServer(bool local, ProgressCounter *counter = 0);
-void serverMain(ProgressCounter *counter = 0);
 void serverLoop(fixed timeDifference);
 void consoleServer();
 

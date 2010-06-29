@@ -25,6 +25,7 @@
 #include <tank/TankScore.h>
 #include <weapons/AccessoryStore.h>
 #include <weapons/EconomyStore.h>
+#include <server/ScorchedServer.h>
 
 REGISTER_CLASS_SOURCE(TankAccessorySimAction);
 
@@ -71,7 +72,7 @@ bool TankAccessorySimAction::invokeAction(ScorchedContext &context)
 
 		if (context.getServerMode())
 		{
-			EconomyStore::instance()->getEconomy()->accessoryBought(
+			ScorchedServer::instance()->getEconomyStore().getEconomy()->accessoryBought(
 				tank, accessory->getName());
 		}
 
@@ -86,7 +87,7 @@ bool TankAccessorySimAction::invokeAction(ScorchedContext &context)
 
 		if (context.getServerMode())
 		{
-			EconomyStore::instance()->getEconomy()->accessorySold(
+			ScorchedServer::instance()->getEconomyStore().getEconomy()->accessorySold(
 				tank, accessory->getName());
 		}
 

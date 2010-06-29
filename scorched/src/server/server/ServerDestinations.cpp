@@ -26,6 +26,14 @@ ServerDestinations::ServerDestinations()
 
 ServerDestinations::~ServerDestinations()
 {
+	std::map<unsigned int, ServerDestination*>::iterator itor;
+	for (itor = serverDestinations_.begin();
+		itor != serverDestinations_.end();
+		itor++)
+	{
+		delete itor->second;
+	}
+	serverDestinations_.clear();
 }
 
 void ServerDestinations::addDestination(unsigned int destinationId, unsigned int ipAddress)

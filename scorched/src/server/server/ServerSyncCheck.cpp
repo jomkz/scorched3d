@@ -75,6 +75,14 @@ ServerSyncCheck::ServerSyncCheck(ComsMessageHandler &comsMessageHandler)
 
 ServerSyncCheck::~ServerSyncCheck()
 {
+	std::map<unsigned int, SyncContext*>::iterator itor;
+	for (itor = contexts_.begin();
+		itor != contexts_.end();
+		itor++)
+	{
+		delete itor->second;
+	}
+	contexts_.clear();
 }
 
 void ServerSyncCheck::enterState()

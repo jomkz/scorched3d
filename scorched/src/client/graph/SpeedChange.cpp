@@ -129,7 +129,8 @@ void SpeedChange::setSpeed(fixed speed)
 	ScorchedClient::instance()->getSimulator().setFast(speed);
 	ParticleEngine::setFast(speed.asFloat());
 
-	if (!ClientParams::instance()->getConnectedToServer())
+	if (!ClientParams::instance()->getConnectedToServer() &&
+		ScorchedServer::serverStarted())
 	{
 		ScorchedServer::instance()->getSimulator().setFast(speed);
 	}

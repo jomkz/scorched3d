@@ -25,14 +25,16 @@
 REGISTER_ACCESSORY_SOURCE(WeaponDelay);
 
 WeaponDelay::WeaponDelay() :
-	delay_(0)
+	delay_(0),
+	delayedWeapon_(0)
 {
 
 }
 
 WeaponDelay::~WeaponDelay()
 {
-
+	delete delayedWeapon_;
+	delayedWeapon_ = 0;
 }
 
 bool WeaponDelay::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

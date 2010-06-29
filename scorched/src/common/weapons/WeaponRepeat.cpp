@@ -24,14 +24,16 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponRepeat);
 
-WeaponRepeat::WeaponRepeat() : delay_(0)
+WeaponRepeat::WeaponRepeat() : 
+	delay_(0), repeatWeapon_(0)
 {
 
 }
 
 WeaponRepeat::~WeaponRepeat()
 {
-
+	delete repeatWeapon_;
+	repeatWeapon_ = 0;
 }
 
 bool WeaponRepeat::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

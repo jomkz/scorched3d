@@ -36,14 +36,16 @@ REGISTER_ACCESSORY_SOURCE(WeaponRoller);
 WeaponRoller::WeaponRoller() : 
 	shieldHurtFactor_(0), windFactor_(1), 
 	maintainVelocity_(false), roll_(true),
-	dampenVelocityExp_(1), stepSize_(true, 100)
+	dampenVelocityExp_(1), stepSize_(true, 100),
+	collisionAction_(0)
 {
 
 }
 
 WeaponRoller::~WeaponRoller()
 {
-
+	delete collisionAction_;
+	collisionAction_ = 0;
 }
 
 bool WeaponRoller::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

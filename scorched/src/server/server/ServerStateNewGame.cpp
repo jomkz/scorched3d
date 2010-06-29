@@ -91,8 +91,8 @@ void ServerStateNewGame::newGameState()
 	}	
 
 	// Make any enconomic changes
-	EconomyStore::instance()->getEconomy()->calculatePrices();
-	EconomyStore::instance()->getEconomy()->savePrices();
+	ScorchedServer::instance()->getEconomyStore().getEconomy()->calculatePrices();
+	ScorchedServer::instance()->getEconomyStore().getEconomy()->savePrices();
 
 	// Get a landscape definition to use
 	ServerCommon::serverLog("Generating landscape");

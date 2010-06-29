@@ -22,9 +22,12 @@
 #define __INCLUDE_ScorchedServerh_INCLUDE__
 
 #include <engine/ScorchedContext.h>
+#include <string>
 
+class ProgressCounter;
 class TankDeadContainer;
 class TankAIStore;
+class EconomyStore;
 class ServerSimulator;
 class ServerDestinations;
 class ServerState;
@@ -47,7 +50,14 @@ class ScorchedServer : public ScorchedContext
 public:
 	static ScorchedServer *instance();
 
+	static bool startServer(const std::string &settingsFile, 
+		bool rewriteOptions, bool writeFullOptions,
+		bool local, ProgressCounter *counter);
+	static void stopServer();
+	static bool serverStarted() { return started_; }
+
 	virtual bool getServerMode() { return true; }
+	virtual Simulator &getSimulator();
 
 	TankDeadContainer &getTankDeadContainer() { return *deadContainer_; }
 	ScorchedContext &getContext() { return *this; }
@@ -55,8 +65,6 @@ public:
 	ServerSimulator &getServerSimulator() { return *serverSimulator_; }
 	ServerDestinations &getServerDestinations() { return *serverDestinations_; }
 	ServerState &getServerState() { return *serverState_; }
-	virtual Simulator &getSimulator();
-
 	ServerAuthHandler *getAuthHandler();
 	ServerTimedMessage &getTimedMessage() { return *timedMessage_; }
 	ServerBanned &getBannedPlayers() { return *bannedPlayers_; }
@@ -69,9 +77,12 @@ public:
 	ServerSyncCheck &getServerSyncCheck() { return *serverSyncCheck_; }
 	ServerMessageHandler &getServerMessageHandler() { return *serverMessageHandler_; }
 	ServerFileServer &getServerFileServer() { return *serverFileServer_; }
+	EconomyStore &getEconomyStore() { return *economyStore_; }
 
 protected:
 	static ScorchedServer *instance_;
+	static bool started_;
+
 	TankDeadContainer *deadContainer_;
 	TankAIStore *tankAIStore_;
 	ServerSimulator *serverSimulator_;
@@ -88,6 +99,12 @@ protected:
 	ServerSyncCheck *serverSyncCheck_;
 	ServerMessageHandler *serverMessageHandler_;
 	ServerFileServer *serverFileServer_;
+	EconomyStore *economyStore_;
+
+	void checkSettings();
+	bool startServerInternal(const std::string &settingsFile, 
+		bool rewriteOptions, bool writeFullOptions,
+		bool local, ProgressCounter *counter);
 
 private:
 	ScorchedServer();

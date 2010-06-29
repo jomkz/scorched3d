@@ -30,8 +30,6 @@ public:
 	NetLoopBack(bool server);
 	virtual ~NetLoopBack();
 
-	void setLoopBack(NetLoopBack *loopback);
-
 	virtual bool started();
 	virtual bool connect(const char *hostName, int portNo);
 	virtual bool start(int portNo) { return true; }
@@ -53,7 +51,10 @@ protected:
 	bool started_;
 	bool server_;
 	NetMessageHandler messageHandler_;
-	NetLoopBack *loopback_;
+	
+	NetLoopBack *getLoopback();
+
+	static NetLoopBack *serverLoopback_, *clientLoopback_;
 };
 
 #endif

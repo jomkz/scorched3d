@@ -32,7 +32,14 @@ TankModelStore::TankModelStore()
 
 TankModelStore::~TankModelStore()
 {
-
+	std::vector<TankModel *>::iterator itor;
+	for (itor = models_.begin();
+		itor != models_.end();
+		itor++)
+	{
+		delete *itor;
+	}
+	models_.clear();
 }
 
 bool TankModelStore::loadTankMeshes(ScorchedContext &context, 

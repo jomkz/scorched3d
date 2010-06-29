@@ -43,6 +43,28 @@ ServerTurns::ServerTurns(bool waitForShots) :
 
 ServerTurns::~ServerTurns()
 {
+	delete shotsStarted_;
+	delete moveStarted_;
+	{
+		std::map<unsigned int, PlayingPlayer*>::iterator itor;
+		for (itor = playingPlayers_.begin();
+			itor != playingPlayers_.end();
+			itor++)
+		{
+			delete itor->second;
+		}
+		playingPlayers_.clear();
+	}
+	{
+		std::map<unsigned int, WaitingPlayer*>::iterator itor;
+		for (itor = waitingPlayers_.begin();
+			itor != waitingPlayers_.end();
+			itor++)
+		{
+			delete itor->second;
+		}
+		waitingPlayers_.clear();
+	}
 }
 
 void ServerTurns::enterState()

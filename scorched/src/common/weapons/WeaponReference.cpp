@@ -24,14 +24,16 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponReference);
 
-WeaponReference::WeaponReference()
+WeaponReference::WeaponReference() :
+	refWeapon_(0)
 {
 
 }
 
 WeaponReference::~WeaponReference()
 {
-
+	delete refWeapon_;
+	refWeapon_ = 0;
 }
 
 bool WeaponReference::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

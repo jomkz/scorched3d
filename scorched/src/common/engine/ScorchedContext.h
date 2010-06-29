@@ -48,45 +48,45 @@ public:
 
 	virtual bool getServerMode() = 0;
 
-	void setNetInterface(NetInterface *i) { netInterface = i; }
-	NetInterface &getNetInterface() { return *netInterface; }
-	bool getNetInterfaceValid() { return netInterface != 0; }
+	void setNetInterface(NetInterface *i) { netInterface_ = i; }
+	NetInterface &getNetInterface() { return *netInterface_; }
+	bool getNetInterfaceValid() { return netInterface_ != 0; }
 
-	TargetSpace &getTargetSpace() { return *targetSpace; }
-	AccessoryStore &getAccessoryStore() { return *accessoryStore; }
-	TankContainer &getTankContainer() { return *tankContainer; }
-	TargetContainer &getTargetContainer() { return *targetContainer; }
-	TargetMovement &getTargetMovement() { return *targetMovement; }
-	TankTeamScore &getTankTeamScore() { return *tankTeamScore; }
+	TargetSpace &getTargetSpace() { return *targetSpace_; }
+	AccessoryStore &getAccessoryStore() { return *accessoryStore_; }
+	TankContainer &getTankContainer() { return *tankContainer_; }
+	TargetContainer &getTargetContainer() { return *targetContainer_; }
+	TargetMovement &getTargetMovement() { return *targetMovement_; }
+	TankTeamScore &getTankTeamScore() { return *tankTeamScore_; }
 	ActionController &getActionController();
-	LandscapeMaps &getLandscapeMaps() { return *landscapeMaps; }
-	OptionsScorched &getOptionsGame() { return *optionsGame; }
-	OptionsTransient &getOptionsTransient() { return *optionsTransient; }
-	ComsMessageHandler &getComsMessageHandler() { return *comsMessageHandler; }
-	ModFiles &getModFiles() { return *modFiles; }
-	LandscapeDefinitions &getLandscapes() { return *landscapes; }
-	TankModelStore &getTankModels() { return *tankModelStore; }
-	LUAScriptFactory &getLUAScriptFactory() { return *luaScriptFactory; }
-	LUAScriptHook &getLUAScriptHook() { return *luaScriptHook; }
+	LandscapeMaps &getLandscapeMaps() { return *landscapeMaps_; }
+	OptionsScorched &getOptionsGame() { return *optionsGame_; }
+	OptionsTransient &getOptionsTransient() { return *optionsTransient_; }
+	ComsMessageHandler &getComsMessageHandler() { return *comsMessageHandler_; }
+	ModFiles &getModFiles() { return *modFiles_; }
+	LandscapeDefinitions &getLandscapes() { return *landscapes_; }
+	TankModelStore &getTankModels() { return *tankModelStore_; }
+	LUAScriptFactory &getLUAScriptFactory() { return *luaScriptFactory_; }
+	LUAScriptHook &getLUAScriptHook() { return *luaScriptHook_; }
 	virtual Simulator &getSimulator() = 0;
 
 protected:
-	LandscapeMaps *landscapeMaps;
-	ComsMessageHandler *comsMessageHandler;
-	NetInterface *netInterface;
-	OptionsScorched *optionsGame;
-	OptionsTransient *optionsTransient;
-	ModFiles *modFiles;
-	AccessoryStore *accessoryStore;
-	LandscapeDefinitions *landscapes;
-	TargetContainer *targetContainer;
-	TankContainer *tankContainer;
-	TankModelStore *tankModelStore;
-	TankTeamScore *tankTeamScore;
-	TargetSpace *targetSpace;
-	TargetMovement *targetMovement;
-	LUAScriptFactory *luaScriptFactory;
-	LUAScriptHook *luaScriptHook;
+	LandscapeMaps *landscapeMaps_;
+	ComsMessageHandler *comsMessageHandler_;
+	NetInterface *netInterface_;
+	OptionsScorched *optionsGame_;
+	OptionsTransient *optionsTransient_;
+	ModFiles *modFiles_;
+	AccessoryStore *accessoryStore_;
+	LandscapeDefinitions *landscapes_;
+	TargetContainer *targetContainer_;
+	TankContainer *tankContainer_;
+	TankModelStore *tankModelStore_;
+	TankTeamScore *tankTeamScore_;
+	TargetSpace *targetSpace_;
+	TargetMovement *targetMovement_;
+	LUAScriptFactory *luaScriptFactory_;
+	LUAScriptHook *luaScriptHook_;
 };
 
 #endif

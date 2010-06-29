@@ -32,7 +32,14 @@ TankContainer::TankContainer(TargetContainer &targets) :
 
 TankContainer::~TankContainer()
 {
-
+	std::map<unsigned int, Tank *>::iterator itor;
+	for (itor = tanks_.begin();
+		itor != tanks_.end();
+		itor++)
+	{
+		delete itor->second;
+	}
+	tanks_.clear();
 }
 
 void TankContainer::addTank(Tank *tank)

@@ -41,22 +41,10 @@
 #include <tankai/TankAIStore.h>
 #include <tank/TankModelStore.h>
 #include <tank/TankContainer.h>
-#include <server/ServerLinesHandler.h>
-#include <server/ServerMessageHandler.h>
-#include <server/ServerGiftMoneyHandler.h>
-#include <server/ServerDefenseHandler.h>
-#include <server/ServerPlayedMoveHandler.h>
-#include <server/ServerAddPlayerHandler.h>
-#include <server/ServerAdminHandler.h>
-#include <server/ServerHaveModFilesHandler.h>
-#include <server/ServerBuyAccessoryHandler.h>
-#include <server/ServerFileAkHandler.h>
-#include <server/ServerInitializeModHandler.h>
-#include <server/ServerChannelManager.h>
-#include <server/ServerConnectHandler.h>
-#include <server/ServerConnectAuthHandler.h>
 #include <server/ServerConsoleProgressCounter.h>
 #include <server/ServerConsoleLogger.h>
+#include <server/ServerConnectAuthHandler.h>
+#include <server/ServerChannelManager.h>
 #include <server/ServerFileServer.h>
 #include <server/ServerLoadLevel.h>
 #include <server/ServerRegistration.h>
@@ -68,6 +56,7 @@
 #include <server/ScorchedServer.h>
 #include <server/ServerState.h>
 #include <server/ServerTimedMessage.h>
+#include <server/ServerParams.h>
 #include <SDL/SDL.h>
 
 #ifdef S3D_SERVER
@@ -75,97 +64,15 @@
 #endif
 
 static Clock serverTimer;
-static bool serverStarted = false;
 
-void checkSettings()
-{
-	ScorchedServer::instance()->getLandscapes().checkEnabled(
-		ScorchedServer::instance()->getOptionsGame());
-	
-	if (ScorchedServer::instance()->getOptionsGame().getTeamBallance() == 
-		OptionsGame::TeamBallanceBotsVs &&
-		ScorchedServer::instance()->getOptionsGame().getTeams() > 2)
-	{
-		S3D::dialogExit("ScorchedServer",
-			"Cannot start a game with more than 2 teams in the bots vs mode");		
-	}
-}
-
-bool startServer(bool local, ProgressCounter *counter)
-{
-	Logger::log(S3D::formatStringBuffer("Scorched3D - Version %s (%s) - %s",
-		S3D::ScorchedVersion.c_str(), 
-		S3D::ScorchedProtocolVersion.c_str(), 
-		S3D::ScorchedBuildTime.c_str()));
-
-	// Setup the message handling classes
-	if (!local)
-	{
-		// Only create a net server for the actual multiplayer case
-		// A loopback is created by the client for a single player game 
-		ScorchedServer::instance()->getContext().setNetInterface(
-			//new NetServerTCP(new NetServerTCPScorchedProtocol());
-			new NetServerTCP3());
-	}
-
-	ScorchedServer::instance()->getOptionsGame().updateChangeSet();
-	ScorchedServer::instance()->getNetInterface().setMessageHandler(
-		&ScorchedServer::instance()->getComsMessageHandler());
-
-	// Set the mod
-	S3D::setDataFileMod(
-		ScorchedServer::instance()->getOptionsGame().getMod());
-
-	// Load mod
-#ifdef S3D_SERVER
-	{
-		if (!ScorchedServer::instance()->getModFiles().loadModFiles(
-			ScorchedServer::instance()->getOptionsGame().getMod(), false,
-			counter)) return false;
-	}
-#endif
-	
-	// Parse config
-	if (!ScorchedServer::instance()->getAccessoryStore().parseFile(
-		ScorchedServer::instance()->getContext(),
-		counter)) return false;
-	if (!ScorchedServer::instance()->getTankModels().loadTankMeshes(
-		ScorchedServer::instance()->getContext(), 2, counter))
-		return false;
-	ScorchedServer::instance()->getOptionsTransient().reset();
-	if (!ScorchedServer::instance()->getLandscapes().readLandscapeDefinitions()) return false;
-
-	// Add the server side bots
-	// Add any new AIs
-	std::map<unsigned int, Tank *> serverTanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
-	std::map<unsigned int, Tank *>::iterator serverTanksIterator;
-	for (serverTanksIterator = serverTanks.begin();
-		serverTanksIterator != serverTanks.end();
-		serverTanksIterator++)
-	{
-		delete ScorchedServer::instance()->getTankContainer().removeTank(serverTanksIterator->first);
-	}
-	if (!ScorchedServer::instance()->getTankAIs().loadAIs()) return false;
-	TankAIAdder::addTankAIs(*ScorchedServer::instance());
-
-	// Start the state machine
-	// ServerState::setupStates(ScorchedServer::instance()->getGameState());
-	EconomyStore::instance();
-
-	checkSettings();
-
-	// Load all script hooks
-	if (!ScorchedServer::instance()->getLUAScriptHook().loadHooks()) return false;
-
-	serverStarted = true;
-	return true;
-}
-
-void serverMain(ProgressCounter *counter)
+static void serverMain(ProgressCounter *counter)
 {
 	// Create the server states
-	if (!startServer(false, counter)) exit(64);
+	if (!ScorchedServer::instance()->startServer(
+		ServerParams::instance()->getServerFile(),
+		ServerParams::instance()->getRewriteOptions(),
+		ServerParams::instance()->getWriteFullOptions(),
+		false, counter)) exit(64);
 
 	// Try to start the server
 	if (!ScorchedServer::instance()->getContext().getNetInterface().start(
@@ -206,7 +113,7 @@ void serverLoop(fixed timeDifference)
 	Logger::processLogEntries();
 
 	// Main server loop:
-	if (!serverStarted ||
+	if (!ScorchedServer::serverStarted() ||
 		!ScorchedServer::instance()->getContext().getNetInterfaceValid())
 	{
 		return;
@@ -239,7 +146,7 @@ void consoleServer()
 {
 	ServerConsoleLogger serverConsoleLogger;
 	ServerConsoleProgressCounter::instance();
-	ServerCommon::startFileLogger();
+	ServerCommon::startFileLogger(ServerParams::instance()->getServerFile());
 	serverMain(ServerConsoleProgressCounter::instance()->getProgressCounter());
 
 	serverTimer.getTicksDifference();

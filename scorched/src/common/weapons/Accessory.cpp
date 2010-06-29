@@ -40,6 +40,7 @@ unsigned int Accessory::nextAccessoryId_ = 0;
 Accessory::Accessory() :
 	accessoryId_(++nextAccessoryId_),
 	name_("NONAME"), description_("NODESC"), 
+	accessoryAction_(0),
 	toolTip_(ToolTip::ToolTipHelp, LangString(), LangString()),
 	price_(0), bundle_(1), armsLevel_(9), freemarketLimits_(150),
 	modelScale_(1),
@@ -56,6 +57,8 @@ Accessory::Accessory() :
 
 Accessory::~Accessory()
 {
+	delete accessoryAction_;
+	accessoryAction_ = 0;
 }
 
 bool Accessory::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

@@ -33,14 +33,16 @@
 REGISTER_ACCESSORY_SOURCE(WeaponAimedOver);
 
 WeaponAimedOver::WeaponAimedOver() :
-	warHeads_(0)
+	warHeads_(0),
+	aimedWeapon_(0)
 {
 
 }
 
 WeaponAimedOver::~WeaponAimedOver()
 {
-
+	delete aimedWeapon_;
+	aimedWeapon_ = 0;
 }
 
 bool WeaponAimedOver::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

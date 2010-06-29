@@ -44,6 +44,10 @@ ServerChannelManager::ChannelEntry::ChannelEntry(
 
 ServerChannelManager::ChannelEntry::~ChannelEntry()
 {
+	delete filter_;
+	filter_ = 0;
+	delete auth_;
+	auth_ = 0;
 }
 
 ServerChannelManager::DestinationLocalEntry::DestinationLocalEntry(
@@ -176,6 +180,26 @@ ServerChannelManager::ServerChannelManager(ComsMessageHandler &comsMessageHandle
 
 ServerChannelManager::~ServerChannelManager()
 {
+	{
+		std::map<unsigned int, DestinationEntry *>::iterator itor;
+		for (itor = destinationEntries_.begin();
+			itor != destinationEntries_.end();
+			itor++)
+		{
+			delete itor->second;
+		}
+		destinationEntries_.clear();
+	}
+	{
+		std::list<ChannelEntry *>::iterator itor;
+		for (itor = channelEntries_.begin();
+			itor != channelEntries_.end();
+			itor++)
+		{
+			delete *itor;
+		}
+		channelEntries_.clear();
+	}
 }
 
 void ServerChannelManager::simulate(fixed frameTime)

@@ -32,7 +32,8 @@ WeaponTranslate::WeaponTranslate() :
 
 WeaponTranslate::~WeaponTranslate()
 {
-
+	delete nextAction_;
+	nextAction_ = 0;
 }
 
 bool WeaponTranslate::parseXML(AccessoryCreateContext &context,XMLNode *accessoryNode)

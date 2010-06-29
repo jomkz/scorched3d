@@ -50,7 +50,8 @@ WeaponProjectile::WeaponProjectile() :
 
 WeaponProjectile::~WeaponProjectile()
 {
-
+	delete collisionAction_;
+	collisionAction_ = 0;
 }
 
 bool WeaponProjectile::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

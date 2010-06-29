@@ -34,6 +34,7 @@ ServerAuthHandlerForumLogin::ServerAuthHandlerForumLogin() :
 
 ServerAuthHandlerForumLogin::~ServerAuthHandlerForumLogin()
 {
+	if (mysql_) mysql_close(mysql_);
 }
 
 void ServerAuthHandlerForumLogin::createAuthentication(ComsConnectAuthMessage &authMessage)

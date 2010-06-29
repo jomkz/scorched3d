@@ -26,14 +26,16 @@
 REGISTER_ACCESSORY_SOURCE(WeaponMirv);
 
 WeaponMirv::WeaponMirv() :
-	noWarheads_(0), hspreadDist_(0), vspreadDist_(0)
+	noWarheads_(0), hspreadDist_(0), vspreadDist_(0),
+	aimedWeapon_(0)
 {
 
 }
 
 WeaponMirv::~WeaponMirv()
 {
-
+	delete aimedWeapon_;
+	aimedWeapon_ = 0;
 }
 
 bool WeaponMirv::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

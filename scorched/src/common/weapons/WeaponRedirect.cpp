@@ -37,7 +37,8 @@ WeaponRedirect::WeaponRedirect() :
 
 WeaponRedirect::~WeaponRedirect()
 {
-
+	delete nextAction_;
+	nextAction_ = 0;
 }
 
 bool WeaponRedirect::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

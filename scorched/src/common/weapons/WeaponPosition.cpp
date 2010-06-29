@@ -26,14 +26,16 @@
 REGISTER_ACCESSORY_SOURCE(WeaponPosition);
 
 WeaponPosition::WeaponPosition() :
-	positionOffset_(0, 0, 0)
+	positionOffset_(0, 0, 0),
+	aimedWeapon_(0)
 {
 
 }
 
 WeaponPosition::~WeaponPosition()
 {
-
+	delete aimedWeapon_;
+	aimedWeapon_ = 0;
 }
 
 bool WeaponPosition::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode) 

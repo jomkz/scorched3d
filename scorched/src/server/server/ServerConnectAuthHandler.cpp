@@ -62,6 +62,14 @@ ServerConnectAuthHandler::ServerConnectAuthHandler(ComsMessageHandler &comsMessa
 
 ServerConnectAuthHandler::~ServerConnectAuthHandler()
 {
+	std::list<AuthMessage *>::iterator itor;
+	for (itor = authMessages_.begin();
+		itor != authMessages_.end();
+		itor++)
+	{
+		delete *itor;
+	}
+	authMessages_.clear();
 }
 
 bool ServerConnectAuthHandler::processMessage(

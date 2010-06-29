@@ -28,14 +28,16 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponScatterDirection);
 
-WeaponScatterDirection::WeaponScatterDirection()
+WeaponScatterDirection::WeaponScatterDirection() :
+	aimedWeapon_(0)
 {
 
 }
 
 WeaponScatterDirection::~WeaponScatterDirection()
 {
-
+	delete aimedWeapon_;
+	aimedWeapon_ = 0;
 }
 
 bool WeaponScatterDirection::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

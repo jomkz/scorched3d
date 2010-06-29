@@ -32,7 +32,6 @@
 	#include <graph/ModelRendererStore.h>
 	#include <graph/ModelRendererSimulator.h>
 #endif
-#include <3dsparse/ModelStore.h>
 #include <3dsparse/Model.h>
 #include <string.h>
 

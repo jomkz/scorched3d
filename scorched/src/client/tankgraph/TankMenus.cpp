@@ -80,15 +80,6 @@ TankMenus::TankMenus() : logger_("ClientLog")
 	new ConsoleRuleMethodIAdapter<TankMenus>(
 		this, &TankMenus::groupInfo, "GroupInfo");
 
-	new ConsoleRuleMethodIAdapter<ActionController>(
-		&ScorchedServer::instance()->getActionController(), 
-		&ActionController::logActions, "ActionsLog");
-	new ConsoleRuleMethodIAdapter<ActionController>(
-		&ScorchedServer::instance()->getActionController(), 
-		&ActionController::startActionProfiling, "ActionsProfilingStart");
-	new ConsoleRuleMethodIAdapter<ActionController>(
-		&ScorchedServer::instance()->getActionController(), 
-		&ActionController::stopActionProfiling, "ActionsProfilingStop");
 	//new ConsoleRuleMethodIAdapterEx<TankMenus>(
 	//	this, &TankMenus::runScriptConsole, "RunScript");
 	new ConsoleRuleFnIBooleanAdapter(
@@ -116,7 +107,6 @@ TankMenus::TankMenus() : logger_("ClientLog")
 	}
 	if (logState & 0x2)
 	{
-		ScorchedServer::instance()->getComsMessageHandler().getMessageLogging() = true;
 		ScorchedClient::instance()->getComsMessageHandler().getMessageLogging() = true;
 	}
 }
@@ -264,15 +254,18 @@ void TankMenus::showTankDetails()
 		const char *description = "Unknown";
 		if (!ClientParams::instance()->getConnectedToServer())
 		{
-			Tank *otherTank = ScorchedServer::instance()->
-				getTankContainer().getTankById(tank->getPlayerId());
-			if (otherTank && !otherTank->getTankAI())
+			if (ScorchedServer::serverStarted())
 			{
-				description = "Human";
-			}
-			else if (otherTank && otherTank->getTankAI())
-			{
-				description = otherTank->getTankAI()->getName();
+				Tank *otherTank = ScorchedServer::instance()->
+					getTankContainer().getTankById(tank->getPlayerId());
+				if (otherTank && !otherTank->getTankAI())
+				{
+					description = "Human";
+				}
+				else if (otherTank && otherTank->getTankAI())
+				{
+					description = otherTank->getTankAI()->getName();
+				}
 			}
 		}
 

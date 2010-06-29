@@ -28,14 +28,16 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponGroupSelect);
 
-WeaponGroupSelect::WeaponGroupSelect()
+WeaponGroupSelect::WeaponGroupSelect() :
+	nextAction_(0)
 {
 
 }
 
 WeaponGroupSelect::~WeaponGroupSelect()
 {
-
+	delete nextAction_;
+	nextAction_ = 0;
 }
 
 bool WeaponGroupSelect::parseXML(AccessoryCreateContext &context,XMLNode *accessoryNode)

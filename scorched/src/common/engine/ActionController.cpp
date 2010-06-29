@@ -35,7 +35,7 @@ ActionController::ActionController() :
 
 ActionController::~ActionController()
 {
-
+	clear(false);
 }
 
 void ActionController::clear(bool warn)

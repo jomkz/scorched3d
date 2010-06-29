@@ -129,28 +129,15 @@ static bool initComs(ProgressCounter *progressCounter)
 		delete &ScorchedClient::instance()->getContext().getNetInterface();
 		ScorchedClient::instance()->getContext().setNetInterface(0);
 	}
-	if (ScorchedServer::instance()->getContext().getNetInterfaceValid())
-	{
-		ScorchedServer::instance()->getContext().getNetInterface().stop();
-		delete &ScorchedServer::instance()->getContext().getNetInterface();
-		ScorchedServer::instance()->getContext().setNetInterface(0);
-	}
 
 	// Create the new net handlers
 	if (ClientParams::instance()->getConnectedToServer())
 	{
-		ScorchedClient::instance()->getContext().setNetInterface(
-			//new NetServerTCP(new NetServerTCPScorchedProtocol());
-			new NetServerTCP3());
+		ScorchedClient::instance()->getContext().setNetInterface(new NetServerTCP3());
 	}
 	else
 	{
-		NetLoopBack *serverLoopBack = new NetLoopBack(true);
-		ScorchedServer::instance()->getContext().setNetInterface(serverLoopBack);
-		NetLoopBack *clientLoopBack = new NetLoopBack(false);
-		ScorchedClient::instance()->getContext().setNetInterface(clientLoopBack);
-		serverLoopBack->setLoopBack(clientLoopBack);
-		clientLoopBack->setLoopBack(serverLoopBack);
+		ScorchedClient::instance()->getContext().setNetInterface(new NetLoopBack(false));
 	}
 	ScorchedClient::instance()->getNetInterface().setMessageHandler(
 		&ScorchedClient::instance()->getComsMessageHandler());
@@ -216,7 +203,26 @@ static bool initClient()
 	// Start the server (if required)
 	if (!ClientParams::instance()->getConnectedToServer())
 	{
-		if (!startServer(true, &progressCounter)) return false;
+		std::string clientFile = ClientParams::instance()->getClientFile();
+		if (ClientParams::instance()->getStartCustom())
+		{
+			clientFile = S3D::getSettingsFile("singlecustom.xml");
+		}
+
+		// If not load the client settings file
+		if (!S3D::fileExists(clientFile.c_str()))
+		{
+			S3D::dialogExit(scorched3dAppName, S3D::formatStringBuffer(
+				"Client file \"%s\" does not exist.",
+				clientFile.c_str()));
+		}
+
+		if (!ScorchedServer::instance()->startServer(
+			clientFile,
+			ClientParams::instance()->getRewriteOptions(),
+			ClientParams::instance()->getWriteFullOptions(),
+			true,
+			&progressCounter)) return false;
 	}
 
 	ConnectDialog::instance()->start();
@@ -235,28 +241,6 @@ static bool startClientInternal()
 	else if (ClientParams::instance()->getStartCustom() ||
 		ClientParams::instance()->getClientFile()[0])
 	{
-		std::string clientFile = ClientParams::instance()->getClientFile();
-		if (ClientParams::instance()->getStartCustom())
-		{
-			clientFile = S3D::getSettingsFile("singlecustom.xml");
-		}
-
-		// If not load the client settings file
-		if (!S3D::fileExists(clientFile.c_str()))
-		{
-			S3D::dialogExit(scorched3dAppName, S3D::formatStringBuffer(
-				"Client file \"%s\" does not exist.",
-				clientFile.c_str()));
-		}
-		ScorchedServer::instance()->getOptionsGame().getMainOptions().readOptionsFromFile(
-			(char *) clientFile.c_str());
-		if (ClientParams::instance()->getRewriteOptions())
-		{
-			ScorchedServer::instance()->getOptionsGame().getMainOptions().writeOptionsToFile(
-				(char *) clientFile.c_str(),
-				ClientParams::instance()->getWriteFullOptions());
-		}
-
 		return initClient();
 	}
 	else if (ClientParams::instance()->getSaveFile()[0])

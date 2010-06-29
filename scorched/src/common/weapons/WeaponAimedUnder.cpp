@@ -31,14 +31,17 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponAimedUnder);
 
-WeaponAimedUnder::WeaponAimedUnder() : warHeads_(0), moveUnderground_(true)
+WeaponAimedUnder::WeaponAimedUnder() : 
+	warHeads_(0), moveUnderground_(true),
+	aimedWeapon_(0)
 {
 
 }
 
 WeaponAimedUnder::~WeaponAimedUnder()
 {
-
+	delete aimedWeapon_;
+	aimedWeapon_ = 0;
 }
 
 bool WeaponAimedUnder::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)

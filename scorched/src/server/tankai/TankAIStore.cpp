@@ -33,7 +33,7 @@ TankAIStore::TankAIStore()
 
 TankAIStore::~TankAIStore()
 {
-
+	clearAIs();
 }
 
 void TankAIStore::clearAIs()

@@ -45,7 +45,7 @@ Target::Target(unsigned int playerId,
 {
 	setName(name);
 
-	life_ = new TargetLife(context, playerId);
+	life_ = new TargetLife(context.getServerMode(), context.getTargetSpace(), playerId);
 	shield_ = new TargetShield(context, playerId);
 	parachute_ = new TargetParachute(context);
 	group_ = new TargetGroup(context);

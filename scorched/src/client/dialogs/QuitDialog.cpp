@@ -123,7 +123,10 @@ void QuitDialog::buttonDown(unsigned int id)
 	else if (killButton_ && id == killButton_->getId())
 	{
 		AdminSimAction *simAction = new AdminSimAction(AdminSimAction::eKillAll, 0, 0);
-		ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
+		if (ScorchedServer::serverStarted())
+		{
+			ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
+		}
 
 		GLWWindowManager::instance()->hideWindow(id_);
 	}

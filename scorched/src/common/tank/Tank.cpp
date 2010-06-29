@@ -74,8 +74,6 @@ Tank::Tank(ScorchedContext &context,
 
 Tank::~Tank()
 {
-	state_->setState(TankState::sDead);
-
 	delete tankAI_; tankAI_ = 0;
 	delete accessories_; accessories_ = 0;
 	delete score_; score_ = 0;
