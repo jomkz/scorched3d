@@ -198,6 +198,18 @@ void NetServerTCP3::actualSendRecvFunc()
 		}
 	}
 
+	// Tidy any outstanding connections before we stop
+	while (!finishedDestinations_.empty()) 
+	{
+		NetServerTCP3Destination *destination = finishedDestinations_.front();
+		if (destination->allFinished())
+		{
+			delete destination;
+			finishedDestinations_.pop_front();
+		}
+		SDL_Delay(10);
+	}
+
 	if (serverSock_) SDLNet_TCP_Close(serverSock_);
 	serverSock_ = 0;
 }

@@ -124,8 +124,8 @@ bool ExplosionTextures::createTextures(ProgressCounter *counter)
 
 	Image bitmap5 = ImageFactory::loadImage(
 		S3D::eModLocation, 
-		"data/textures/rain.bmp",
 		"data/textures/rainm.bmp",
+		"data/textures/rain.bmp",
 		false);
 	rainTexture.create(bitmap5);
 	DIALOG_ASSERT(rainTexture.textureValid());

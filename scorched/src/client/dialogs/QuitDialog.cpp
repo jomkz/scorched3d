@@ -84,12 +84,12 @@ void QuitDialog::display()
 		state == ClientState::StateConnect);
 	if (!disable)
 	{
-		disconnectButton_  = new GLWTextButton(LANG_RESOURCE("DISCONNECT_GAME", "Disconnect from Game"), 0, 0, 225, this, 
+		disconnectButton_  = new GLWTextButton(LANG_RESOURCE("QUIT_GAME_TO_MENU", "Quit to Main Menu"), 0, 0, 225, this, 
 			GLWButton::ButtonFlagCenterX);
 		addWidget(disconnectButton_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
 		disconnectButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
-			LANG_RESOURCE("DISCONNECT_GAME", "Disconnect from Game"),
-			LANG_RESOURCE("DISCONNECT_GAME_TOOLKIT", "Disconnect from current server back to main menu")));
+			LANG_RESOURCE("QUIT_GAME_TO_MENU", "Quit to Main Menu"),
+			LANG_RESOURCE("QUIT_GAME_TO_MENU_TOOLTIP", "Quit current game back to game main menu")));
 	}
 	else
 	{
@@ -101,7 +101,7 @@ void QuitDialog::display()
 	addWidget(quitButton_, 0, SpaceLeft | SpaceRight | SpaceTop, 10.0f);
 	quitButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
 		LANG_RESOURCE("QUIT_GAME", "Quit Game"),
-		LANG_RESOURCE("QUIT_GAME_TOOLTIP", "Quits Scorched3D")));
+		LANG_RESOURCE("QUIT_GAME_TOOLTIP", "Quits Scorched3D back to the OS")));
 
 	okButton_ = new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 0, 0, 225, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX);

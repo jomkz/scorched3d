@@ -39,6 +39,7 @@ public:
 		ProgressCounter *counter = 0);
 	bool writeModFiles(const std::string &mod);
 	void clearData();
+	void clearAll();
 
 	std::map<std::string, ModFileEntry *> &getFiles() { return files_; }
 	static bool excludeFile(const std::string &file);

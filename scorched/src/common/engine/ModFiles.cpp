@@ -31,14 +31,7 @@ ModFiles::ModFiles()
 
 ModFiles::~ModFiles()
 {
-	std::map<std::string, ModFileEntry *>::iterator itor;
-	for (itor = files_.begin();
-		itor != files_.end();
-		itor++)
-	{
-		delete (*itor).second;
-	}
-	files_.clear();
+	clearAll();
 }
 
 bool ModFiles::fileEnding(const std::string &file, const std::string &ext)
@@ -85,6 +78,7 @@ bool ModFiles::excludeFile(const std::string &file)
 bool ModFiles::loadModFiles(const std::string &mod, 
 	bool createDir, ProgressCounter *counter)
 {
+	clearAll();
 	{
 		// Get and check the user mod directory exists
 		std::string modDir = S3D::getSettingsModFile(mod);
@@ -280,6 +274,18 @@ void ModFiles::clearData()
 		 ModFileEntry *entry = (*itor).second;
 		 entry->getCompressedBuffer().clear();
 	}
+}
+
+void ModFiles::clearAll()
+{
+	std::map<std::string, ModFileEntry *>::iterator itor;
+	for (itor = files_.begin();
+		itor != files_.end();
+		itor++)
+	{
+		delete (*itor).second;
+	}
+	files_.clear();
 }
 
 bool ModFiles::exportModFiles(const std::string &mod, const std::string &fileName)
