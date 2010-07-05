@@ -50,14 +50,12 @@ ScorchedContext::ScorchedContext(const char *name)
 	landscapes_ = new LandscapeDefinitions();
 	tankModelStore_ = new TankModelStore();
 	tankTeamScore_ = new TankTeamScore();
-	targetSpace_ = new TargetSpace();
 	targetMovement_ = new TargetMovement();
 	luaScriptFactory_ = new LUAScriptFactory();
 	luaScriptHook_ = new LUAScriptHook(luaScriptFactory_,
 		name[0]=='S'?"server":"client",
 		name[0]=='S'?S3D::getSettingsFile("serverhooks"):S3D::getSettingsFile("clienthooks"));
 
-	getTargetSpace().setContext(this);
 	luaScriptFactory_->setContext(this);
 }
 
@@ -77,7 +75,6 @@ ScorchedContext::~ScorchedContext()
 	delete tankContainer_;
 	delete tankModelStore_;
 	delete tankTeamScore_;
-	delete targetSpace_;
 	delete targetMovement_;
 	delete luaScriptFactory_;
 	delete luaScriptHook_;

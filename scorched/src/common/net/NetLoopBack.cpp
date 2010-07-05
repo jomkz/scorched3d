@@ -38,6 +38,8 @@ NetLoopBack::NetLoopBack(bool server)
 
 NetLoopBack::~NetLoopBack()
 {
+	if (server_) serverLoopback_ = 0;
+	else clientLoopback_ = 0;
 }
 
 bool NetLoopBack::connect(const char *hostName, int portNo)
@@ -47,6 +49,7 @@ bool NetLoopBack::connect(const char *hostName, int portNo)
 			getFromPool(NetMessage::ConnectMessage, ServerLoopBackID, 0);
 		messageHandler_.addMessage(message);
 	}
+	if (getLoopback())
 	{
 		NetMessage *message = NetMessagePool::instance()->
 			getFromPool(NetMessage::ConnectMessage, ClientLoopBackID, 0);
@@ -72,6 +75,7 @@ int NetLoopBack::processMessages()
 
 void NetLoopBack::disconnectAllClients()
 {
+	if (getLoopback())
 	{
 		NetMessage *message = NetMessagePool::instance()->
 			getFromPool(NetMessage::DisconnectMessage, 
@@ -114,6 +118,7 @@ void NetLoopBack::sendMessageDest(NetBuffer &buffer,
 	unsigned int destination, unsigned int flags)
 {
 	DIALOG_ASSERT(
+		getLoopback() &&
 		(server_ && destination == ClientLoopBackID) || 
 		(!server_ && destination == ServerLoopBackID));
 

@@ -29,10 +29,10 @@ class LandscapeDefinition
 public:
 	LandscapeDefinition();
 	LandscapeDefinition(
-		const char *tex, 
-		const char *defn,
+		const std::string &tex, 
+		const std::string &defn,
 		unsigned int seed,
-		const char *name,
+		const std::string &name,
 		unsigned int definitionNumber);
 
 	const char *getTex() { return tex_.c_str(); }

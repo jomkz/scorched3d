@@ -44,6 +44,7 @@
 #include <tankai/TankAIStore.h>
 #include <tankai/TankAIWeaponSets.h>
 #include <tankai/TankAIAdder.h>
+#include <target/TargetSpace.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <coms/ComsSimulateResultMessage.h>
 #include <lua/LUAScriptHook.h>
@@ -61,6 +62,7 @@
 ScorchedServer *ScorchedServer::instance_ = 0;
 static ScorchedServer *instanceLock = 0;
 bool ScorchedServer::started_ = false;
+TargetSpace *ScorchedServer::targetSpace_ = new TargetSpace();
 
 ScorchedServer *ScorchedServer::instance()
 {
@@ -105,6 +107,8 @@ void ScorchedServer::stopServer()
 ScorchedServer::ScorchedServer() : 
 	ScorchedContext("Server")
 {
+	targetSpace_->setContext(this);
+
 	economyStore_ = new EconomyStore();
 	serverState_ = new ServerState();
 	serverFileServer_ = new ServerFileServer();
@@ -133,6 +137,7 @@ ScorchedServer::ScorchedServer() :
 
 ScorchedServer::~ScorchedServer()
 {
+	targetSpace_->clear();
 	delete deadContainer_;
 	delete tankAIStore_;
 	delete serverSimulator_;

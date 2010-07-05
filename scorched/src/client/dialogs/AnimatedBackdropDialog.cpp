@@ -32,6 +32,7 @@
 #include <client/ScorchedClient.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <landscapemap/LandscapeMaps.h>
+#include <common/Defines.h>
 
 AnimatedBackdropDialog *AnimatedBackdropDialog::instance_ = 0;
 
@@ -75,13 +76,12 @@ void AnimatedBackdropDialog::init()
 			"Failed to parse landscape definitions");
 	}
 
-	LandscapeDefinition definition = ScorchedClient::instance()->getLandscapes().getLandscapeDefn(
-		"peak");
-
-	// Set the progress dialog nicities
-	LandscapeDefinitionsEntry *landscapeDefinition =
-		ScorchedClient::instance()->getLandscapes().getLandscapeByName(
-			definition.getName());
+	LandscapeDefinition definition(
+		"data/landscapes/texbackdrop.xml",
+		"data/landscapes/defnbackdrop.xml",
+		32, 
+		"AnimatedBackdropDialog",
+		UINT_MAX);
 
 	// Generate new landscape
 	ScorchedClient::instance()->getLandscapeMaps().generateMaps(

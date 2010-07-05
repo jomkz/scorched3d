@@ -48,7 +48,6 @@ void Simulator::clear()
 	while (!simActions_.empty())
 	{
 		SimActionContainer *container = simActions_.back();
-		delete container->action_;
 		delete container;
 		simActions_.pop_back();
 	}

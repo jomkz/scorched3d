@@ -33,6 +33,7 @@ public:
 	virtual void draw();
 	void drawBackground();
 	virtual void simulate(float frameTime);
+	void reInit() { init_ = false; }
 
 protected:
 	static AnimatedBackdropDialog *instance_;

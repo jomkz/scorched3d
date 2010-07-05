@@ -208,31 +208,6 @@ LandscapeDefinition LandscapeDefinitions::getBlankLandscapeDefn()
 	return entry;
 }
 
-LandscapeDefinition LandscapeDefinitions::getLandscapeDefn(
-	const char *name)
-{
-	LandscapeDefinitionsEntry *result = 0;
-
-	// Build a list of the maps that are enabled
-	std::list<LandscapeDefinitionsEntry>::iterator itor;
-	for (itor = entries_.begin();
-		itor != entries_.end();
-		itor++)
-	{
-		result = &(*itor);
-		if (0 == strcmp(name, result->name.c_str())) break;
-	}
-
-	// Return the chosen definition
-	std::string tex = result->texs[0];
-	std::string defn = result->defns[0];
-	unsigned int seed = 33;//(unsigned int) rand();
-
-	LandscapeDefinition entry(
-		tex.c_str(), defn.c_str(), seed, result->name.c_str(), 0);
-	return entry;
-}
-
 LandscapeDefinition LandscapeDefinitions::getRandomLandscapeDefn(
 	OptionsScorched &context, TankContainer &tankContainer)
 {

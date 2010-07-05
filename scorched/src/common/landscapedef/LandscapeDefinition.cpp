@@ -33,10 +33,10 @@ LandscapeDefinition::LandscapeDefinition() :
 }
 
 LandscapeDefinition::LandscapeDefinition(
-	const char *tex,
-	const char *defn,
+	const std::string &tex,
+	const std::string &defn,
 	unsigned int seed,
-	const char *name,
+	const std::string &name,
 	unsigned int definitionNumber) :
 	tex_(tex), defn_(defn), seed_(seed), name_(name),
 	definitionNumber_(definitionNumber)

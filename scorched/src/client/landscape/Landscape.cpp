@@ -538,11 +538,13 @@ void Landscape::generate(ProgressCounter *counter)
 		bitmaps[3] = &texture3;
 
 		// Generate the new landscape
-		if (counter) counter->setNewOp(LANG_RESOURCE("LANDSCAPE_MAP", "Landscape Map"));
+		if (counter) counter->setNewOp(LANG_RESOURCE("LANDSCAPE_MAP", "Generate Landscape Map"));
 		ImageModifier::addHeightToBitmap(
 			ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap(),
 			mainMap_, 
 			bitmapRock, bitmapShore, bitmaps, 4, 1024, counter);
+
+		mainMap_.writeToFile("i:\\plan.bmp");
 
 		// Set the general surround and roof texture
 		groundTexture_.replace(texture0, false);
@@ -553,7 +555,7 @@ void Landscape::generate(ProgressCounter *counter)
 		LandscapeTexTextureFile *generate = 
 			(LandscapeTexTextureFile *) tex->texture;
 
-		if (counter) counter->setNewOp(LANG_RESOURCE("LANDSCAPE_MAP", "Landscape Map"));
+		if (counter) counter->setNewOp(LANG_RESOURCE("LANDSCAPE_MAP", "Load Landscape Map"));
 		Image texture = 
 			ImageFactory::loadImage(S3D::eModLocation, generate->texture.c_str());
 		mainMap_ = texture.createResize(1024, 1024);

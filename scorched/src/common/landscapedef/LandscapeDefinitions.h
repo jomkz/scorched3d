@@ -43,7 +43,6 @@ public:
 
 	void checkEnabled(OptionsScorched &context);
 	LandscapeDefinition getBlankLandscapeDefn();
-	LandscapeDefinition getLandscapeDefn(const char *name);
 	LandscapeDefinition getRandomLandscapeDefn(OptionsScorched &context, TankContainer &tankContainer);
 	LandscapeTex *getTex(const char *file, bool load = false);
 	LandscapeDefn *getDefn(const char *file, bool load = false);

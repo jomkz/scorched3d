@@ -47,6 +47,11 @@ TargetSpace::~TargetSpace()
 	delete [] squares_;
 }
 
+void TargetSpace::clear()
+{
+	for (int i=0; i<noSquares_; i++) squares_[i].targets.clear();
+}
+
 void TargetSpace::updateTarget(Target *target)
 {
 	if (!target->getAlive() ||

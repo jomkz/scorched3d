@@ -52,7 +52,8 @@ public:
 	NetInterface &getNetInterface() { return *netInterface_; }
 	bool getNetInterfaceValid() { return netInterface_ != 0; }
 
-	TargetSpace &getTargetSpace() { return *targetSpace_; }
+	virtual TargetSpace &getTargetSpace() = 0;
+	virtual Simulator &getSimulator() = 0;
 	AccessoryStore &getAccessoryStore() { return *accessoryStore_; }
 	TankContainer &getTankContainer() { return *tankContainer_; }
 	TargetContainer &getTargetContainer() { return *targetContainer_; }
@@ -68,8 +69,7 @@ public:
 	TankModelStore &getTankModels() { return *tankModelStore_; }
 	LUAScriptFactory &getLUAScriptFactory() { return *luaScriptFactory_; }
 	LUAScriptHook &getLUAScriptHook() { return *luaScriptHook_; }
-	virtual Simulator &getSimulator() = 0;
-
+	
 protected:
 	LandscapeMaps *landscapeMaps_;
 	ComsMessageHandler *comsMessageHandler_;
@@ -83,7 +83,6 @@ protected:
 	TankContainer *tankContainer_;
 	TankModelStore *tankModelStore_;
 	TankTeamScore *tankTeamScore_;
-	TargetSpace *targetSpace_;
 	TargetMovement *targetMovement_;
 	LUAScriptFactory *luaScriptFactory_;
 	LUAScriptHook *luaScriptHook_;

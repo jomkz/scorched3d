@@ -25,10 +25,13 @@
 #include <graph/MainCamera.h>
 #include <graph/ParticleEngine.h>
 #include <graph/OptionsDisplay.h>
+#include <target/TargetSpace.h>
 #include <coms/ComsSimulateMessage.h>
 #include <coms/ComsNetStatMessage.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscape/GraphicalLandscapeMap.h>
+
+TargetSpace *ScorchedClient::targetSpace_ = new TargetSpace();
 
 ScorchedClient *ScorchedClient::instance_ = 0;
 
@@ -44,6 +47,8 @@ ScorchedClient *ScorchedClient::instance()
 ScorchedClient::ScorchedClient() : 
 	ScorchedContext("Client")
 {
+	targetSpace_->setContext(this);
+
 	mainLoop_ = new MainLoop();
 	mainLoop_->clear();
 
@@ -80,6 +85,7 @@ ScorchedClient::ScorchedClient() :
 
 ScorchedClient::~ScorchedClient()
 {
+	targetSpace_->clear();
 }
 
 Simulator &ScorchedClient::getSimulator() 

@@ -33,6 +33,8 @@ public:
 	TargetSpace();
 	virtual ~TargetSpace();
 
+	void clear();
+
 	void updateTarget(Target *target);
 	void setContext(ScorchedContext *context) { context_ = context; }
 

@@ -35,15 +35,17 @@ public:
 
 	virtual bool getServerMode() { return false; }
 
+	virtual Simulator &getSimulator();
+	virtual TargetSpace &getTargetSpace() { return *targetSpace_; }
 	MainLoop &getMainLoop() { return *mainLoop_; }
 	ScorchedContext &getContext() { return *this; }
 	ParticleEngine &getParticleEngine() { return *particleEngine_; }
 	GameState &getGameState() { return *gameState; }
 	ClientSimulator &getClientSimulator() { return *clientSimulator_; }
-	virtual Simulator &getSimulator();
 
 protected:
 	static ScorchedClient *instance_;
+	static TargetSpace *targetSpace_;
 	MainLoop *mainLoop_;
 	ParticleEngine* particleEngine_;
 	GameState *gameState;

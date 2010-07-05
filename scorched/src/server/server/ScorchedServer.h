@@ -57,8 +57,9 @@ public:
 	static bool serverStarted() { return started_; }
 
 	virtual bool getServerMode() { return true; }
-	virtual Simulator &getSimulator();
 
+	virtual Simulator &getSimulator();
+	virtual TargetSpace &getTargetSpace() { return *targetSpace_; }
 	TankDeadContainer &getTankDeadContainer() { return *deadContainer_; }
 	ScorchedContext &getContext() { return *this; }
 	TankAIStore &getTankAIs() { return *tankAIStore_; }
@@ -82,7 +83,8 @@ public:
 protected:
 	static ScorchedServer *instance_;
 	static bool started_;
-
+	static TargetSpace *targetSpace_;
+	
 	TankDeadContainer *deadContainer_;
 	TankAIStore *tankAIStore_;
 	ServerSimulator *serverSimulator_;
