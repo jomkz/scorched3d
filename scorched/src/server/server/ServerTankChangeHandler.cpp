@@ -18,7 +18,7 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <server/ServerAddPlayerHandler.h>
+#include <server/ServerTankChangeHandler.h>
 #include <server/ServerConnectHandler.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerChannelManager.h>
@@ -30,43 +30,33 @@
 #include <common/StatsLogger.h>
 #include <common/Logger.h>
 #include <common/Defines.h>
-#include <coms/ComsAddPlayerMessage.h>
+#include <coms/ComsTankChangeMessage.h>
 #include <simactions/TankChangeSimAction.h>
 #include <tankai/TankAIStore.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 
-ServerAddPlayerHandler::ServerAddPlayerHandler(ComsMessageHandler &comsMessageHandler)
+ServerTankChangeHandler::ServerTankChangeHandler(ComsMessageHandler &comsMessageHandler)
 {
 	comsMessageHandler.addHandler(
-		ComsAddPlayerMessage::ComsAddPlayerMessageType,
+		ComsTankChangeMessage::ComsTankChangeMessageType,
 		this);
 }
 
-ServerAddPlayerHandler::~ServerAddPlayerHandler()
+ServerTankChangeHandler::~ServerTankChangeHandler()
 {
 }
 
-bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
+bool ServerTankChangeHandler::processMessage(NetMessage &netMessage,
 	const char *messageType, NetBufferReader &reader)
 {
-	ComsAddPlayerMessage message;
+	ComsTankChangeMessage message;
 	if (!message.readMessage(reader)) return false;
 
 	// Validate player
 	unsigned int playerId = message.getPlayerId();
 	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
-	if (!tank || 
-		(tank->getState().getState() != TankState::sDead &&
-		tank->getState().getState() != TankState::sSpectator))
-	{
-		ScorchedServer::instance()->getServerChannelManager().sendText( 
-			ChannelText("info", "CHANGE_WHEN_DEAD", 
-			"Can only change tank when dead."),
-			netMessage.getDestinationId(), 
-			false);
-		return true;
-	}
+	if (!tank) return true;
 
 	// Add a computer player (if chosen and a single player match)
 	if (0 != strcmp(message.getPlayerType(), "Human"))
@@ -115,7 +105,7 @@ bool ServerAddPlayerHandler::processMessage(NetMessage &netMessage,
 	return true;
 }
 
-bool ServerAddPlayerHandler::filterName(Tank *tank,
+bool ServerTankChangeHandler::filterName(Tank *tank,
 	LangString &sentname)
 {
 	LangString originalname = sentname;

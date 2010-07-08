@@ -18,17 +18,17 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerAddPlayerHandlerh_INCLUDE__)
-#define __INCLUDE_ServerAddPlayerHandlerh_INCLUDE__
+#if !defined(__INCLUDE_ServerTankChangeHandlerh_INCLUDE__)
+#define __INCLUDE_ServerTankChangeHandlerh_INCLUDE__
 
 #include <coms/ComsMessageHandler.h>
 
 class Tank;
-class ServerAddPlayerHandler : public ComsMessageHandlerI
+class ServerTankChangeHandler : public ComsMessageHandlerI
 {
 public:
-	ServerAddPlayerHandler(ComsMessageHandler &comsMessageHandler);
-	virtual ~ServerAddPlayerHandler();
+	ServerTankChangeHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ServerTankChangeHandler();
 
 	virtual bool processMessage(
 		NetMessage &message,

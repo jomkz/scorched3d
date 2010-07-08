@@ -33,7 +33,7 @@
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
-#include <coms/ComsAddPlayerMessage.h>
+#include <coms/ComsTankChangeMessage.h>
 #include <server/ServerBanned.h>
 #include <server/ServerChannelManager.h>
 #include <server/ScorchedServer.h>
@@ -139,23 +139,28 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 			TankAvatar tankAvatar;
 			tankAvatar.loadFromFile(S3D::getDataFile("data/avatars/computer.png"));
 
-			// Tell the clients to create this tank
-			ComsAddPlayerMessage addPlayerMessage(
+			// Tell the clients how to create this tank
+			ComsTankChangeMessage tankChangeMessage(
 				playerId_,
 				playerName_,
 				color,
 				tankModel->getName(),
 				0,
 				team,
-				""); 
-			addPlayerMessage.setPlayerIconName("data/avatars/computer.png");
-			addPlayerMessage.getPlayerIcon().addDataToBuffer(
+				"",
+				false); 
+			tankChangeMessage.setPlayerIconName("data/avatars/computer.png");
+			tankChangeMessage.getPlayerIcon().addDataToBuffer(
 				tankAvatar.getFile().getBuffer(),
 				tankAvatar.getFile().getBufferUsed());
 
-			TankChangeSimAction *changeAction = new TankChangeSimAction(addPlayerMessage);
+			TankChangeSimAction *changeAction = new TankChangeSimAction(tankChangeMessage);
 			((ScorchedServer &)context).getServerSimulator().addSimulatorAction(changeAction);
 		}
+	}
+	if (destinationId_ == 0)
+	{
+		tank->getState().setState(TankState::sSpectator);
 	}
 
 #ifndef S3D_SERVER

@@ -233,7 +233,7 @@ void GLWSelectorPart::draw()
 			{
 				glColor3f(item.getColor()[0], item.getColor()[1], item.getColor()[2]);
 				GLState textureOn(GLState::TEXTURE_ON);
-				item.getIcon()->draw();
+				item.getIcon()->draw(true);
 
 				float x = selectedX_ + (hasSelectedEntry_?15.0f:5.0f);
 				float y = currentTop - 19.0f;

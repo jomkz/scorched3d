@@ -41,15 +41,6 @@ TankModel *TankModelContainer::getTankModel()
 { 
 	if (!tankModel_)
 	{
-	#ifndef S3D_SERVER
-		if (tank_->getRenderer())
-		{
-			TargetRendererImplTank *renderer = (TargetRendererImplTank *)
-				tank_->getRenderer();
-			renderer->resetModel();
-		}
-	#endif
-
 		tankModel_ = context_.getTankModels().getModelByName(modelName_.c_str());
 		if (!tankModel_)
 		{
@@ -65,6 +56,15 @@ void TankModelContainer::setTankModelName(const char *modelName)
 {
 	modelName_ = modelName;
 	tankModel_ = 0;
+
+#ifndef S3D_SERVER
+	if (tank_->getRenderer())
+	{
+		TargetRendererImplTank *renderer = (TargetRendererImplTank *)
+			tank_->getRenderer();
+		renderer->resetModel();
+	}
+#endif
 }
 
 bool TankModelContainer::writeMessage(NamedNetBuffer &buffer)

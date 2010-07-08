@@ -18,17 +18,17 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <coms/ComsAddPlayerMessage.h>
+#include <coms/ComsTankChangeMessage.h>
 
-ComsMessageType ComsAddPlayerMessage::ComsAddPlayerMessageType("ComsAddPlayerMessageType");
+ComsMessageType ComsTankChangeMessage::ComsTankChangeMessageType("ComsTankChangeMessageType");
 
-ComsAddPlayerMessage::ComsAddPlayerMessage() :
-	ComsMessage(ComsAddPlayerMessageType)
+ComsTankChangeMessage::ComsTankChangeMessage() :
+	ComsMessage(ComsTankChangeMessageType)
 {
 }
 
-ComsAddPlayerMessage::ComsAddPlayerMessage(ComsAddPlayerMessage &other) :
-	ComsMessage(ComsAddPlayerMessageType),
+ComsTankChangeMessage::ComsTankChangeMessage(ComsTankChangeMessage &other) :
+	ComsMessage(ComsTankChangeMessageType),
 	playerId_(other.playerId_),
 	playerName_(other.playerName_),
 	playerType_(other.playerType_),
@@ -36,37 +36,40 @@ ComsAddPlayerMessage::ComsAddPlayerMessage(ComsAddPlayerMessage &other) :
 	modelName_(other.modelName_),
 	destinationId_(other.destinationId_),
 	playerTeam_(other.playerTeam_),
-	playerIconName_(other.playerIconName_)
+	playerIconName_(other.playerIconName_),
+	spectate_(other.spectate_)
 {
 	playerIcon_.reset();
 	playerIcon_.addDataToBuffer(other.playerIcon_.getBuffer(), 
 		other.playerIcon_.getBufferUsed());
 }
 
-ComsAddPlayerMessage::ComsAddPlayerMessage(
+ComsTankChangeMessage::ComsTankChangeMessage(
 		unsigned int playerId,
 		const LangString &playerName,
 		Vector playerColor,
 		const char *modelName,
 		unsigned int destinationId,
 		unsigned int playerTeam,
-		const char *playerType) :
-	ComsMessage(ComsAddPlayerMessageType),
+		const char *playerType,
+		bool spectate) :
+	ComsMessage(ComsTankChangeMessageType),
 	playerId_(playerId),
 	playerName_(playerName),
 	playerType_(playerType),
 	playerColor_(playerColor),
 	modelName_(modelName),
 	destinationId_(destinationId),
-	playerTeam_(playerTeam)
+	playerTeam_(playerTeam),
+	spectate_(spectate)
 {
 }
 
-ComsAddPlayerMessage::~ComsAddPlayerMessage()
+ComsTankChangeMessage::~ComsTankChangeMessage()
 {
 }
 
-bool ComsAddPlayerMessage::writeMessage(NetBuffer &buffer)
+bool ComsTankChangeMessage::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(playerName_);
 	buffer.addToBuffer(playerType_);
@@ -75,6 +78,7 @@ bool ComsAddPlayerMessage::writeMessage(NetBuffer &buffer)
 	buffer.addToBuffer(destinationId_);
 	buffer.addToBuffer(playerTeam_);
 	buffer.addToBuffer(playerColor_);
+	buffer.addToBuffer(spectate_);
 	buffer.addToBuffer(playerIcon_.getBufferUsed());
 	if (playerIcon_.getBufferUsed() > 0)
 	{
@@ -85,7 +89,7 @@ bool ComsAddPlayerMessage::writeMessage(NetBuffer &buffer)
 	return true;
 }
 
-bool ComsAddPlayerMessage::readMessage(NetBufferReader &reader)
+bool ComsTankChangeMessage::readMessage(NetBufferReader &reader)
 {
 	if (!reader.getFromBuffer(playerName_)) return false;
 	if (!reader.getFromBuffer(playerType_)) return false;
@@ -94,6 +98,7 @@ bool ComsAddPlayerMessage::readMessage(NetBufferReader &reader)
 	if (!reader.getFromBuffer(destinationId_)) return false;
 	if (!reader.getFromBuffer(playerTeam_)) return false;
 	if (!reader.getFromBuffer(playerColor_)) return false;
+	if (!reader.getFromBuffer(spectate_)) return false;
 	unsigned int used = 0;
 	if (!reader.getFromBuffer(used)) return false;
 	if (used > 0)

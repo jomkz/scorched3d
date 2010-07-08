@@ -22,13 +22,13 @@
 #define AFX_TankChangeSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
 #include <simactions/SimAction.h>
-#include <coms/ComsAddPlayerMessage.h>
+#include <coms/ComsTankChangeMessage.h>
 
 class TankChangeSimAction : public SimAction
 {
 public:
 	TankChangeSimAction();
-	TankChangeSimAction(ComsAddPlayerMessage &message);
+	TankChangeSimAction(ComsTankChangeMessage &message);
 	virtual ~TankChangeSimAction();
 
 	virtual bool invokeAction(ScorchedContext &context);
@@ -38,7 +38,7 @@ public:
 
 REGISTER_CLASS_HEADER(TankChangeSimAction);
 protected:
-	ComsAddPlayerMessage message_;
+	ComsTankChangeMessage message_;
 };
 
 #endif // !defined(AFX_TankChangeSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

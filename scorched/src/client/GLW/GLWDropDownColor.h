@@ -22,7 +22,7 @@
 #define __INCLUDE_GLWDropDownColorh_INCLUDE__
 
 #include <GLW/GLWDropDown.h>
-#include <GLEXT/GLTexture.h>
+#include <GLEXT/GLTextureReference.h>
 
 class GLWDropDownColor : public GLWDropDown
 {
@@ -40,8 +40,7 @@ public:
 	REGISTER_CLASS_HEADER(GLWDropDownColor);
 
 protected:
-	GLTexture colorTexture_;
-	bool createdTexture_;
+	GLTextureReference colorTexture_;
 };
 
 #endif

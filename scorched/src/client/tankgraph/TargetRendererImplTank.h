@@ -86,7 +86,6 @@ public:
 	virtual void targetBurnt() {}
 
 	void resetModel() { mesh_ = 0; }
-	TankModel *getModel();
 	ModelRendererTank *getMesh();
 	GLWTankTips *getTips() { return &tankTips_; }
 

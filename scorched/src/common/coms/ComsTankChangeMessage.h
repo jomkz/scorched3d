@@ -18,28 +18,29 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef _ComsAddPlayerMessage_h
-#define _ComsAddPlayerMessage_h
+#ifndef _ComsTankChangeMessage_h
+#define _ComsTankChangeMessage_h
 
 #include <coms/ComsMessage.h>
 #include <common/Vector.h>
 
-class ComsAddPlayerMessage : public ComsMessage
+class ComsTankChangeMessage : public ComsMessage
 {
 public:
-	static ComsMessageType ComsAddPlayerMessageType;
+	static ComsMessageType ComsTankChangeMessageType;
 
-	ComsAddPlayerMessage();
-	ComsAddPlayerMessage(ComsAddPlayerMessage &other);
-	ComsAddPlayerMessage(
+	ComsTankChangeMessage();
+	ComsTankChangeMessage(ComsTankChangeMessage &other);
+	ComsTankChangeMessage(
 		unsigned int playerId,
 		const LangString &playerName,
 		Vector playerColor,
 		const char *modelName,
 		unsigned int destinationId,
 		unsigned int playerTeam,
-		const char *playerType);
-	virtual ~ComsAddPlayerMessage();
+		const char *playerType,
+		bool spectate);
+	virtual ~ComsTankChangeMessage();
 
 	const LangString &getPlayerName() { return playerName_; }
 	void setPlayerName(const LangString &name) { playerName_ = name; }
@@ -49,6 +50,7 @@ public:
 	Vector &getPlayerColor() { return playerColor_; }
 	unsigned int getDestinationId() { return destinationId_; }
 	unsigned int getPlayerTeam() { return playerTeam_; }
+	bool getSpectate() { return spectate_; }
 
 	void setPlayerIconName(const char *name) { playerIconName_ = name; }
 	const char *getPlayerIconName() { return playerIconName_.c_str(); }
@@ -67,12 +69,13 @@ protected:
 	std::string modelName_;
 	std::string playerIconName_;
 	Vector playerColor_;
+	bool spectate_;
 	NetBuffer playerIcon_;
 
 private:
-	const ComsAddPlayerMessage & operator=(const ComsAddPlayerMessage &);
+	const ComsTankChangeMessage & operator=(const ComsTankChangeMessage &);
 
 };
 
-#endif // _ComsAddPlayerMessage_h
+#endif // _ComsTankChangeMessage_h
 

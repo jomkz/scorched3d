@@ -25,8 +25,12 @@
 REGISTER_CLASS_SOURCE(GLWDropDownColor);
 
 GLWDropDownColor::GLWDropDownColor(float x, float y, float w) :
-	GLWDropDown(x, y, w), createdTexture_(false)
+	GLWDropDown(x, y, w)
 {
+	colorTexture_.setImageID(
+		ImageID(S3D::eDataLocation, 
+		"data/images/white.bmp"),
+		GLTextureReference::eTextureClamped);
 }
 
 GLWDropDownColor::~GLWDropDownColor()
@@ -35,15 +39,6 @@ GLWDropDownColor::~GLWDropDownColor()
 
 void GLWDropDownColor::addColor(Vector &color)
 {
-	if (!createdTexture_)
-	{
-		createdTexture_ = true;
-		Image map = ImageFactory::loadImage(
-			S3D::eDataLocation,
-			"data/images/white.bmp");
-		colorTexture_.create(map);
-	}
-
 	GLWSelectorEntry entry(LANG_STRING(""), 0, false, &colorTexture_, 0);
 	entry.getColor() = color;
 	entry.getTextureWidth() = 32;

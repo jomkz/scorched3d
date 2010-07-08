@@ -89,16 +89,12 @@ TargetRendererImplTank::~TargetRendererImplTank()
 {
 }
 
-TankModel *TargetRendererImplTank::getModel()
-{
-	return tank_->getModelContainer().getTankModel();
-}
-
 ModelRendererTank *TargetRendererImplTank::getMesh()
 {
 	if (!mesh_)
 	{
-		mesh_ = ModelRendererTankStore::instance()->getMesh(getModel()->getTankModelID());
+		TankModel *model = tank_->getModelContainer().getTankModel();
+		mesh_ = ModelRendererTankStore::instance()->getMesh(model->getTankModelID());
 	}
 	return mesh_;
 }

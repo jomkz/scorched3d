@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_ServerHandlersh_INCLUDE__)
 #define __INCLUDE_ServerHandlersh_INCLUDE__
 
-#include <server/ServerAddPlayerHandler.h>
+#include <server/ServerTankChangeHandler.h>
 #include <server/ServerAdminHandler.h>
 #include <server/ServerBuyAccessoryHandler.h>
 #include <server/ServerConnectAuthHandler.h>
@@ -45,7 +45,7 @@ public:
 	ServerConnectAuthHandler &getServerConnectAuthHandler() { return serverConnectAuthHandler_; }
 
 protected:
-	ServerAddPlayerHandler serverAddPlayerHandler_;
+	ServerTankChangeHandler serverTankChangeHandler_;
 	ServerAdminHandler serverAdminHandler_;
 	ServerBuyAccessoryHandler serverBuyAccessoryHandler_;
 	ServerConnectAuthHandler serverConnectAuthHandler_;

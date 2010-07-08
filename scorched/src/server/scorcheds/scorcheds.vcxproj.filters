@@ -219,9 +219,6 @@
     <ClCompile Include="..\server\ScorchedServer.cpp">
       <Filter>server</Filter>
     </ClCompile>
-    <ClCompile Include="..\server\ServerAddPlayerHandler.cpp">
-      <Filter>server</Filter>
-    </ClCompile>
     <ClCompile Include="..\server\ServerAdminCommon.cpp">
       <Filter>server</Filter>
     </ClCompile>
@@ -776,9 +773,6 @@
     </ClCompile>
     <ClCompile Include="..\..\common\3dsparse\Vertex.cpp">
       <Filter>3dsparse</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\coms\ComsAddPlayerMessage.cpp">
-      <Filter>coms</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\coms\ComsAdminMessage.cpp">
       <Filter>coms</Filter>
@@ -1446,6 +1440,12 @@
     <ClCompile Include="..\server\ServerHandlers.cpp">
       <Filter>server</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsTankChangeMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\server\ServerTankChangeHandler.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -1608,9 +1608,6 @@
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="..\server\ScorchedServer.h">
-      <Filter>server</Filter>
-    </ClInclude>
-    <ClInclude Include="..\server\ServerAddPlayerHandler.h">
       <Filter>server</Filter>
     </ClInclude>
     <ClInclude Include="..\server\ServerAdminCommon.h">
@@ -2164,9 +2161,6 @@
     </ClInclude>
     <ClInclude Include="..\..\common\3dsparse\Vertex.h">
       <Filter>3dsparse</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\coms\ComsAddPlayerMessage.h">
-      <Filter>coms</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\coms\ComsAdminMessage.h">
       <Filter>coms</Filter>
@@ -2820,6 +2814,12 @@
       <Filter>server</Filter>
     </ClInclude>
     <ClInclude Include="..\server\ServerHandlers.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsTankChangeMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\server\ServerTankChangeHandler.h">
       <Filter>server</Filter>
     </ClInclude>
   </ItemGroup>

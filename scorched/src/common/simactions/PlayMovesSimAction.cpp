@@ -122,18 +122,27 @@ void PlayMovesSimAction::tankTimedOut(ScorchedContext &context, Tank *tank)
 		tank->getScore().setMissedMoves(
 			tank->getScore().getMissedMoves() + 1);
 
-		ScorchedServer::instance()->getServerChannelManager().sendText(
-			ChannelText("info",
-				"PLAYER_MISSED_SHOOT",
-				"[p:{0}] failed to move, allowed {1} more missed move(s)",
-				tank->getTargetName(),
-				allowedMissed - tank->getScore().getMissedMoves()),
-				true);
 		if (tank->getScore().getMissedMoves() >= allowedMissed)
 		{
-			// Then kick this player
-			ServerCommon::kickDestination(tank->getDestinationId(),
-				"Missed too many moves");
+			ScorchedServer::instance()->getServerChannelManager().sendText(
+				ChannelText("info",
+					"PLAYER_MISSED_SPECTATOR",
+					"[p:{0}] failed to move, moved to spectators",
+					tank->getTargetName()),
+					true);
+
+			tank->getState().setState(TankState::sSpectator);
+			tank->getState().setNotSpectator(false);
+		}
+		else
+		{
+			ScorchedServer::instance()->getServerChannelManager().sendText(
+				ChannelText("info",
+					"PLAYER_MISSED_SHOOT",
+					"[p:{0}] failed to move, allowed {1} more missed move(s)",
+					tank->getTargetName(),
+					allowedMissed - tank->getScore().getMissedMoves()),
+					true);
 		}
 	}
 }

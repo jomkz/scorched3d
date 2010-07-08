@@ -38,7 +38,7 @@
 #include <GLW/GLWWindowManager.h>
 #include <GLW/GLWTextButton.h>
 #include <image/ImageFactory.h>
-#include <coms/ComsAddPlayerMessage.h>
+#include <coms/ComsTankChangeMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <stdio.h>
 
@@ -224,7 +224,8 @@ void PlayerDialog::display()
 		addWidget(infoPanel);
 	}
 
-	TankAIStore tankAIStore;
+	static TankAIStore tankAIStore;
+	tankAIStore.clearAIs();
 	tankAIStore.loadAIs(true);
 
 	// Add teams
@@ -297,18 +298,6 @@ void PlayerDialog::nextPlayer()
 		{
 			imageList_->setCurrentShortPath("player.png");
 		}
-
-		if (cancelButton_)
-		{
-			if (tank && tank->getState().getState() == TankState::sDead)
-			{
-				cancelButton_->setText(LANG_RESOURCE("CANCEL", "Cancel"));
-			}
-			else
-			{
-				cancelButton_->setText(LANG_RESOURCE("SPECTATE", "Spectate"));
-			}
-		}
 	}
 	else
 	{
@@ -365,8 +354,7 @@ unsigned int PlayerDialog::getNextPlayer(unsigned int current)
 		Tank *tank = (*itor).second;
 		if ((tank->getDestinationId() == 
 			ScorchedClient::instance()->getTankContainer().getCurrentDestinationId()) &&
-			(tank->getPlayerId() != TargetID::SPEC_TANK_ID) &&
-			(tank->getState().getState() != TankState::sNormal))
+			(tank->getPlayerId() != TargetID::SPEC_TANK_ID))
 		{
 			if (current == 0)
 			{
@@ -386,82 +374,79 @@ int PlayerDialog::getCurrentTeam()
 
 void PlayerDialog::buttonDown(unsigned int id)
 {
-	if (id == okId_)
+	if (playerName_->getText().empty())
 	{
-		if (!playerName_->getText().empty())
+		playerName_->setText(LANG_STRING("PLAYER"));
+	}
+
+	// If we are connected online save this players name
+	if (ClientParams::instance()->getConnectedToServer())
+	{
+		OptionsDisplay::instance()->getOnlineUserNameEntry().setValue(
+			playerName_->getText().c_str());
+		OptionsDisplay::instance()->getOnlineTankModelEntry().setValue(
+			viewer_->getModelName());
+		OptionsDisplay::instance()->getOnlineUserIconEntry().setValue(
+			imageList_->getCurrentShortPath());
+		if (ScorchedClient::instance()->getOptionsGame().getTeams() == 1)
 		{
-			// If we are connected online save this players name
-			if (ClientParams::instance()->getConnectedToServer())
-			{
-				OptionsDisplay::instance()->getOnlineUserNameEntry().setValue(
-					playerName_->getText().c_str());
-				OptionsDisplay::instance()->getOnlineTankModelEntry().setValue(
-					viewer_->getModelName());
-				OptionsDisplay::instance()->getOnlineUserIconEntry().setValue(
-					imageList_->getCurrentShortPath());
-				if (ScorchedClient::instance()->getOptionsGame().getTeams() == 1)
-				{
-					OptionsDisplay::instance()->getOnlineColorEntry().setValue(
-						colorDropDown_->getCurrentColor());
-				}
-			}
-
-			// Check the current model exists or get a random one
-			TankModel *model = 
-				ScorchedClient::instance()->getTankModels().
-					getModelByName(viewer_->getModelName());
-			if (!model)
-			{
-				model = ScorchedClient::instance()->getTankModels().
-					getRandomModel(getCurrentTeam(), false);
-			}
-
-			// Get the player type
-			const char *playerType = typeDropDown_->getCurrentDataText();
-
-			// Add this player
-			ComsAddPlayerMessage message(currentPlayerId_,
-				playerName_->getLangString(),
-				colorDropDown_->getCurrentColor(),
-				model->getName(),
-				ScorchedClient::instance()->getTankContainer().getCurrentDestinationId(),
-				getCurrentTeam(),
-				playerType);
-			// Add avatar (if not one)
-			Tank *tank = ScorchedClient::instance()->getTankContainer().
-				getTankById(currentPlayerId_);
-			if (tank && 
-				strcmp(tank->getAvatar().getName(), imageList_->getCurrentShortPath()) != 0)
-			{
-				if (tank->getAvatar().loadFromFile(imageList_->getCurrentLongPath()))
-				{
-					if (tank->getAvatar().getFile().getBufferUsed() <=
-						(unsigned) ScorchedClient::instance()->getOptionsGame().getMaxAvatarSize())
-					{
-						message.setPlayerIconName(imageList_->getCurrentShortPath());
-						message.getPlayerIcon().addDataToBuffer(
-							tank->getAvatar().getFile().getBuffer(),
-							tank->getAvatar().getFile().getBufferUsed());
-					}
-					else
-					{
-						ChannelText text("general", 
-							LANG_RESOURCE_2("AVATAR_TOO_LARGE", 
-							"Warning: Avatar too large to send to server, is {0} should be < {1}",
-							tank->getAvatar().getFile().getBufferUsed(),
-							ScorchedClient::instance()->getOptionsGame().getMaxAvatarSize()));
-						Logger::log( "Warning: Avatar too large to send to server");
-					}
-				}
-			}
-			ComsMessageSender::sendToServer(message);
-
-			nextPlayer();
+			OptionsDisplay::instance()->getOnlineColorEntry().setValue(
+				colorDropDown_->getCurrentColor());
 		}
 	}
-	else if (cancelButton_ &&
-		id == cancelButton_->getId())
+
+	// Check the current model exists or get a random one
+	TankModel *model = 
+		ScorchedClient::instance()->getTankModels().
+			getModelByName(viewer_->getModelName());
+	if (!model)
 	{
-		GLWWindowManager::instance()->hideWindow(getId());
+		model = ScorchedClient::instance()->getTankModels().
+			getRandomModel(getCurrentTeam(), false);
 	}
+
+	// Get the player type
+	const char *playerType = typeDropDown_->getCurrentDataText();
+
+	// Add this player
+	bool spectate = (cancelButton_ && (id == cancelButton_->getId()));
+	ComsTankChangeMessage message(currentPlayerId_,
+		playerName_->getLangString(),
+		colorDropDown_->getCurrentColor(),
+		model->getName(),
+		ScorchedClient::instance()->getTankContainer().getCurrentDestinationId(),
+		getCurrentTeam(),
+		playerType,
+		spectate);
+	// Add avatar (if not one)
+	Tank *tank = ScorchedClient::instance()->getTankContainer().
+		getTankById(currentPlayerId_);
+	if (tank && 
+		strcmp(tank->getAvatar().getName(), imageList_->getCurrentShortPath()) != 0)
+	{
+		if (tank->getAvatar().loadFromFile(imageList_->getCurrentLongPath()))
+		{
+			if (tank->getAvatar().getFile().getBufferUsed() <=
+				(unsigned) ScorchedClient::instance()->getOptionsGame().getMaxAvatarSize())
+			{
+				message.setPlayerIconName(imageList_->getCurrentShortPath());
+				message.getPlayerIcon().addDataToBuffer(
+					tank->getAvatar().getFile().getBuffer(),
+					tank->getAvatar().getFile().getBufferUsed());
+			}
+			else
+			{
+				ChannelText text("general", 
+					LANG_RESOURCE_2("AVATAR_TOO_LARGE", 
+					"Warning: Avatar too large to send to server, is {0} should be < {1}",
+					tank->getAvatar().getFile().getBufferUsed(),
+					ScorchedClient::instance()->getOptionsGame().getMaxAvatarSize()));
+				Logger::log( "Warning: Avatar too large to send to server");
+			}
+		}
+	}
+	
+	ComsMessageSender::sendToServer(message);
+
+	nextPlayer();
 }

@@ -45,7 +45,6 @@
 #include <common/Logger.h>
 #include <net/NetInterface.h>
 #include <simactions/TankAddSimAction.h>
-#include <coms/ComsAddPlayerMessage.h>
 #include <coms/ComsConnectAcceptMessage.h>
 #include <coms/ComsConnectMessage.h>
 #include <coms/ComsMessageSender.h>

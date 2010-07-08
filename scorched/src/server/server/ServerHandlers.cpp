@@ -21,7 +21,7 @@
 #include <server/ServerHandlers.h>
 
 ServerHandlers::ServerHandlers(ComsMessageHandler &comsMessageHandler) :
-	serverAddPlayerHandler_(comsMessageHandler),
+	serverTankChangeHandler_(comsMessageHandler),
 	serverAdminHandler_(comsMessageHandler),
 	serverBuyAccessoryHandler_(comsMessageHandler),
 	serverConnectAuthHandler_(comsMessageHandler),

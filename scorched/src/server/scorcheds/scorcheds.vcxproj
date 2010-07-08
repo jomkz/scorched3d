@@ -97,6 +97,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\common\coms\ComsTankChangeMessage.cpp" />
     <ClCompile Include="..\..\common\image\Image.cpp" />
     <ClCompile Include="..\..\common\image\ImageBitmapFactory.cpp" />
     <ClCompile Include="..\..\common\image\ImageData.cpp" />
@@ -109,6 +110,7 @@
     <ClCompile Include="..\..\common\simactions\TankBuyingSimAction.cpp" />
     <ClCompile Include="..\server\ServerAuthHandlerStore.cpp" />
     <ClCompile Include="..\server\ServerHandlers.cpp" />
+    <ClCompile Include="..\server\ServerTankChangeHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="..\..\common\common\ARGParser.cpp" />
     <ClCompile Include="..\..\common\common\ChannelManager.cpp" />
@@ -159,7 +161,6 @@
     <ClCompile Include="..\..\common\common\Vector4.cpp" />
     <ClCompile Include="..\..\common\common\VectorLib.cpp" />
     <ClCompile Include="..\server\ScorchedServer.cpp" />
-    <ClCompile Include="..\server\ServerAddPlayerHandler.cpp" />
     <ClCompile Include="..\server\ServerAdminCommon.cpp" />
     <ClCompile Include="..\server\ServerAdminHandler.cpp" />
     <ClCompile Include="..\server\ServerAdminSessions.cpp" />
@@ -345,7 +346,6 @@
     <ClCompile Include="..\..\common\3dsparse\MSModelFactory.cpp" />
     <ClCompile Include="..\..\common\3dsparse\TreeModelFactory.cpp" />
     <ClCompile Include="..\..\common\3dsparse\Vertex.cpp" />
-    <ClCompile Include="..\..\common\coms\ComsAddPlayerMessage.cpp" />
     <ClCompile Include="..\..\common\coms\ComsAdminMessage.cpp" />
     <ClCompile Include="..\..\common\coms\ComsAdminResultMessage.cpp" />
     <ClCompile Include="..\..\common\coms\ComsBuyAccessoryMessage.cpp" />
@@ -611,6 +611,7 @@
     <ClInclude Include="..\..\common\common\Vector.h" />
     <ClInclude Include="..\..\common\common\Vector4.h" />
     <ClInclude Include="..\..\common\common\VectorLib.h" />
+    <ClInclude Include="..\..\common\coms\ComsTankChangeMessage.h" />
     <ClInclude Include="..\..\common\image\Image.h" />
     <ClInclude Include="..\..\common\image\ImageBitmapFactory.h" />
     <ClInclude Include="..\..\common\image\ImageData.h" />
@@ -622,7 +623,6 @@
     <ClInclude Include="..\..\common\image\ImageStore.h" />
     <ClInclude Include="..\..\common\simactions\TankBuyingSimAction.h" />
     <ClInclude Include="..\server\ScorchedServer.h" />
-    <ClInclude Include="..\server\ServerAddPlayerHandler.h" />
     <ClInclude Include="..\server\ServerAdminCommon.h" />
     <ClInclude Include="..\server\ServerAdminHandler.h" />
     <ClInclude Include="..\server\ServerAdminSessions.h" />
@@ -672,6 +672,7 @@
     <ClInclude Include="..\server\ServerStateStartingMatch.h" />
     <ClInclude Include="..\server\ServerStateTankNewGame.h" />
     <ClInclude Include="..\server\ServerSyncCheck.h" />
+    <ClInclude Include="..\server\ServerTankChangeHandler.h" />
     <ClInclude Include="..\server\ServerTextFilter.h" />
     <ClInclude Include="..\server\ServerTimedMessage.h" />
     <ClInclude Include="..\server\ServerTurns.h" />
@@ -809,7 +810,6 @@
     <ClInclude Include="..\..\common\3dsparse\MSModelFactory.h" />
     <ClInclude Include="..\..\common\3dsparse\TreeModelFactory.h" />
     <ClInclude Include="..\..\common\3dsparse\Vertex.h" />
-    <ClInclude Include="..\..\common\coms\ComsAddPlayerMessage.h" />
     <ClInclude Include="..\..\common\coms\ComsAdminMessage.h" />
     <ClInclude Include="..\..\common\coms\ComsAdminResultMessage.h" />
     <ClInclude Include="..\..\common\coms\ComsBuyAccessoryMessage.h" />

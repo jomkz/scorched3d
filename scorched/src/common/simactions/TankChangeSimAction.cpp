@@ -36,7 +36,7 @@ TankChangeSimAction::TankChangeSimAction()
 {
 }
 
-TankChangeSimAction::TankChangeSimAction(ComsAddPlayerMessage &message) :
+TankChangeSimAction::TankChangeSimAction(ComsTankChangeMessage &message) :
 	message_(message)
 {
 
@@ -52,7 +52,7 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 	// Validate player
 	unsigned int playerId = message_.getPlayerId();
 	Tank *tank = context.getTankContainer().getTankById(playerId);
-	if (!tank || tank->getState().getState() == TankState::sNormal)
+	if (!tank || tank->getState().getState() == TankState::sLoading)
 	{
 		return true;
 	}
@@ -115,10 +115,8 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 		}
 	}
 
-	// Tell the logger about a new tank
-	StatsLogger::instance()->tankJoined(tank);
-
 	// Choose a team (if applicable)
+	unsigned int oldTeam = tank->getTeam();
 	if (context.getOptionsGame().getTeams() > 1)
 	{
 		if (message_.getPlayerTeam() > 0 && message_.getPlayerTeam() <=
@@ -137,36 +135,70 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 	// Do this AFTER the team has been set
 	tank->getModelContainer().setTankModelName(message_.getModelName());
 
-	// Show some infor
-	if (!tank->getState().getNotSpectator())
+	// Check what the tank is trying to do
+	if (message_.getSpectate())
 	{
-#ifdef S3D_SERVER
-	Logger::log(S3D::formatStringBuffer(
-		"Player playing dest=\"%i\" id=\"%i\" \"%s\"",
-		tank->getDestinationId(), tank->getPlayerId(),
-		tank->getCStrName().c_str()));
-#endif // #ifdef S3D_SERVER
+		if (tank->getState().getState() != TankState::sSpectator)
+		{
+			ChannelManager::showText(
+				context,
+				ChannelText("info",
+					"PLAYER_SPECTATOR",
+					"Player spectating [p:{0}]",
+					tank->getTargetName()));
 
-		ChannelManager::showText(
-			context,
-			ChannelText("info",
-				"PLAYER_PLAYING",
-				"Player playing [p:{0}]",
-				sentname));
-	} 
-	else if (oldName != tank->getTargetName())
-	{
-		ChannelManager::showText(
-			context,
-			ChannelText("info",
-				"PLAYER_NAME_CHANGE",
-				"Player \"{0}\" changed name to \"[p:{1}]\"",
-				oldName, tank->getTargetName()));
+			// Set state
+			tank->getState().setState(TankState::sSpectator);
+			tank->getState().setNotSpectator(false);
+		}
 	}
+	else 
+	{
+		if (tank->getState().getState() == TankState::sSpectator)
+		{
+			ChannelManager::showText(
+				context,
+				ChannelText("info",
+					"PLAYER_PLAYING",
+					"Player playing [p:{0}]",
+					tank->getTargetName()));
 
-	// Set state
-	tank->getState().setState(TankState::sDead);
-	tank->getState().setNotSpectator(true);
+			// Set state
+			tank->getState().setState(TankState::sDead);
+			tank->getState().setNotSpectator(true);
+
+			// Tell the logger about a new tank
+			StatsLogger::instance()->tankJoined(tank);
+		}
+		else
+		{
+			// The tank is not a spectator
+			if (oldName != tank->getTargetName())
+			{
+				ChannelManager::showText(
+					context,
+					ChannelText("info",
+						"PLAYER_NAME_CHANGE",
+						"Player \"{0}\" changed name to \"[p:{1}]\"",
+						oldName, tank->getTargetName()));
+			}
+			if (oldTeam != tank->getTeam())
+			{
+				ChannelManager::showText(
+					context,
+					ChannelText("info",
+						"PLAYER_TEAM_CHANGE",
+						"Player \"[p:{1}]\" changed to {1} team",
+						tank->getTargetName(),
+						TankColorGenerator::getTeamName(tank->getTeam())));
+
+				if (tank->getState().getState() == TankState::sNormal)
+				{
+					tank->getState().setState(TankState::sDead);
+				}
+			}
+		}
+	}
 
 	return true;
 }

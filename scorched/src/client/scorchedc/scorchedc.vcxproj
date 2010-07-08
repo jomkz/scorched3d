@@ -185,7 +185,6 @@
     <ClCompile Include="..\..\common\3dsparse\MSModelFactory.cpp" />
     <ClCompile Include="..\..\common\3dsparse\TreeModelFactory.cpp" />
     <ClCompile Include="..\..\common\3dsparse\Vertex.cpp" />
-    <ClCompile Include="..\..\common\coms\ComsAddPlayerMessage.cpp" />
     <ClCompile Include="..\..\common\coms\ComsAdminMessage.cpp" />
     <ClCompile Include="..\..\common\coms\ComsAdminResultMessage.cpp" />
     <ClCompile Include="..\..\common\coms\ComsBuyAccessoryMessage.cpp" />
@@ -215,6 +214,7 @@
     <ClCompile Include="..\..\common\coms\ComsSimulateMessage.cpp" />
     <ClCompile Include="..\..\common\coms\ComsSimulateResultMessage.cpp" />
     <ClCompile Include="..\..\common\coms\ComsSyncCheckMessage.cpp" />
+    <ClCompile Include="..\..\common\coms\ComsTankChangeMessage.cpp" />
     <ClCompile Include="..\..\common\engine\ActionController.cpp" />
     <ClCompile Include="..\..\common\engine\EventContainer.cpp" />
     <ClCompile Include="..\..\common\engine\GameState.cpp" />
@@ -452,6 +452,7 @@
     <ClCompile Include="..\..\common\XML\XMLStringBuffer.cpp" />
     <ClCompile Include="..\..\server\server\ServerAuthHandlerStore.cpp" />
     <ClCompile Include="..\..\server\server\ServerHandlers.cpp" />
+    <ClCompile Include="..\..\server\server\ServerTankChangeHandler.cpp" />
     <ClCompile Include="..\client\ClientAdmin.cpp" />
     <ClCompile Include="..\client\ClientAdminResultHandler.cpp" />
     <ClCompile Include="..\client\ClientChannelManager.cpp" />
@@ -692,7 +693,6 @@
     <ClCompile Include="..\..\server\tankai\TankAIStrings.cpp" />
     <ClCompile Include="..\..\server\tankai\TankAIWeaponSets.cpp" />
     <ClCompile Include="..\..\server\server\ScorchedServer.cpp" />
-    <ClCompile Include="..\..\server\server\ServerAddPlayerHandler.cpp" />
     <ClCompile Include="..\..\server\server\ServerAdminCommon.cpp" />
     <ClCompile Include="..\..\server\server\ServerAdminHandler.cpp" />
     <ClCompile Include="..\..\server\server\ServerAdminSessions.cpp" />
@@ -922,7 +922,6 @@
     <ClInclude Include="..\..\common\3dsparse\MSModelFactory.h" />
     <ClInclude Include="..\..\common\3dsparse\TreeModelFactory.h" />
     <ClInclude Include="..\..\common\3dsparse\Vertex.h" />
-    <ClInclude Include="..\..\common\coms\ComsAddPlayerMessage.h" />
     <ClInclude Include="..\..\common\coms\ComsAdminMessage.h" />
     <ClInclude Include="..\..\common\coms\ComsAdminResultMessage.h" />
     <ClInclude Include="..\..\common\coms\ComsBuyAccessoryMessage.h" />
@@ -952,6 +951,7 @@
     <ClInclude Include="..\..\common\coms\ComsSimulateMessage.h" />
     <ClInclude Include="..\..\common\coms\ComsSimulateResultMessage.h" />
     <ClInclude Include="..\..\common\coms\ComsSyncCheckMessage.h" />
+    <ClInclude Include="..\..\common\coms\ComsTankChangeMessage.h" />
     <ClInclude Include="..\..\common\engine\ActionController.h" />
     <ClInclude Include="..\..\common\engine\EventContainer.h" />
     <ClInclude Include="..\..\common\engine\GameState.h" />
@@ -1185,6 +1185,7 @@
     <ClInclude Include="..\..\common\XML\XMLStringBuffer.h" />
     <ClInclude Include="..\..\server\server\ServerAuthHandlerStore.h" />
     <ClInclude Include="..\..\server\server\ServerHandlers.h" />
+    <ClInclude Include="..\..\server\server\ServerTankChangeHandler.h" />
     <ClInclude Include="..\client\ClientAdmin.h" />
     <ClInclude Include="..\client\ClientAdminResultHandler.h" />
     <ClInclude Include="..\client\ClientChannelManager.h" />
@@ -1431,7 +1432,6 @@
     <ClInclude Include="..\..\server\tankai\TankAIStrings.h" />
     <ClInclude Include="..\..\server\tankai\TankAIWeaponSets.h" />
     <ClInclude Include="..\..\server\server\ScorchedServer.h" />
-    <ClInclude Include="..\..\server\server\ServerAddPlayerHandler.h" />
     <ClInclude Include="..\..\server\server\ServerAdminCommon.h" />
     <ClInclude Include="..\..\server\server\ServerAdminHandler.h" />
     <ClInclude Include="..\..\server\server\ServerAdminSessions.h" />
