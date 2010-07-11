@@ -233,6 +233,9 @@ void SettingsFrame::createScorePanel()
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
 			scorePanel_, sizer, context_.getScorePerResignEntry()));
+	setters_.push_back(
+		OptionEntrySetterUtil::createOtherSetter(
+			scorePanel_, sizer, context_.getScorePerSpectateEntry()));
 
 	book_->AddPage(scorePanel_, wxT("Score"));
 	scorePanel_->SetAutoLayout(TRUE);

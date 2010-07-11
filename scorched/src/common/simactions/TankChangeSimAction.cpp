@@ -26,6 +26,7 @@
 #include <common/ChannelManager.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
+#include <tank/TankScore.h>
 #include <tank/TankContainer.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankModelContainer.h>
@@ -146,6 +147,13 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 					"PLAYER_SPECTATOR",
 					"Player spectating [p:{0}]",
 					tank->getTargetName()));
+
+			if (tank->getState().getState() == TankState::sNormal)
+			{
+				int scorePerSpectate = context.getOptionsGame().getScorePerSpectate();
+				tank->getScore().setScore(
+					tank->getScore().getScore() + scorePerSpectate);
+			}
 
 			// Set state
 			tank->getState().setState(TankState::sSpectator);

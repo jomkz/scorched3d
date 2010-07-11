@@ -116,6 +116,9 @@ public:
 	int getScorePerResign() { return scorePerResign_; }
 	OptionEntryInt &getScorePerResignEntry() { return scorePerResign_; }
 
+	int getScorePerSpectate() { return scorePerSpectate_; }
+	OptionEntryInt &getScorePerSpectateEntry() { return scorePerSpectate_; }
+
 	int getScoreWonForRound() { return scoreWonForRound_; }
 	OptionEntryInt &getScoreWonForRoundEntry() { return scoreWonForRound_; }
 
@@ -441,6 +444,7 @@ protected:
 	OptionEntryBoundedInt scorePerAssist_;
 	OptionEntryBoundedInt scorePerKill_;
 	OptionEntryBoundedInt scorePerResign_;
+	OptionEntryBoundedInt scorePerSpectate_;
 	OptionEntryBoundedInt scoreWonForRound_;
 	OptionEntryBoundedInt scoreWonForLives_;
 	OptionEntryInt maxLandscapeSize_;

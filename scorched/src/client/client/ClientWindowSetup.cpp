@@ -260,7 +260,7 @@ void ClientWindowSetup::setupStartWindows(GLWWindowSkinManager *skinManager)
 void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 {
 	KEYBOARDKEY("SHOW_QUIT_DIALOG", quitKey);
-	KEYBOARDKEY("SHOW_PLAYER_DIALOG", playerKey);
+	KEYBOARDKEY("SHOW_TEAM_DIALOG", teamKey);
 	KEYBOARDKEY("SHOW_AIM_DIALOG", aimKey);
 	KEYBOARDKEY("SHOW_WEAPON_DIALOG", weaponKey);
 	KEYBOARDKEY("SHOW_SKIP_DIALOG", skipKey);
@@ -275,9 +275,9 @@ void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape, 
 		ScoreDialog::instance2(), 0, true);
 	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape, 
-		RulesDialog::instance(), 0, true);
+		RulesDialog::instance(), rulesKey, true);
 	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape,
-		PlayerDialog::instance(), 0, false);
+		PlayerDialog::instance(), teamKey, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape, 
 		MainMenuDialog::instance(), 0, true);
 	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape, 

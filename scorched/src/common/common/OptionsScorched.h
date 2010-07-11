@@ -89,6 +89,7 @@ public:
 	OPTIONINT_GETTER(ScorePerAssist);
 	OPTIONINT_GETTER(ScorePerKill);
 	OPTIONINT_GETTER(ScorePerResign);
+	OPTIONINT_GETTER(ScorePerSpectate);
 	OPTIONINT_GETTER(ScoreWonForRound);
 	OPTIONINT_GETTER(ScoreWonForLives);
 
