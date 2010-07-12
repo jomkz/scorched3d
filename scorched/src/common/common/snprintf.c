@@ -91,7 +91,11 @@
  *    if the C library has some snprintf functions already.
  **************************************************************/
 
+// Modified by gcamp to correctly support LL formats
+
 #define NULL 0
+
+#include <SDL/SDL.h>
 
 #ifdef TEST_SNPRINTF /* need math library headers for testing */
 
@@ -124,12 +128,6 @@
 #define LDOUBLE long double
 #else
 #define LDOUBLE double
-#endif
-
-#ifdef HAVE_LONG_LONG
-#define LLONG long long
-#else
-#define LLONG long
 #endif
 
 #ifndef VA_COPY
@@ -185,7 +183,7 @@ static size_t dopr(char *buffer, size_t maxlen, const char *format,
 static void fmtstr(char *buffer, size_t *currlen, size_t maxlen,
 		    char *value, int flags, int min, int max);
 static void fmtint(char *buffer, size_t *currlen, size_t maxlen,
-		    long value, int base, int min, int max, int flags);
+		    Sint64 value, int base, int min, int max, int flags);
 static void fmtfp(char *buffer, size_t *currlen, size_t maxlen,
 		   LDOUBLE fvalue, int min, int max, int flags);
 static void dopr_outch(char *buffer, size_t *currlen, size_t maxlen, char c);
@@ -193,7 +191,7 @@ static void dopr_outch(char *buffer, size_t *currlen, size_t maxlen, char c);
 static size_t dopr(char *buffer, size_t maxlen, const char *format, va_list args_in)
 {
 	char ch;
-	LLONG value;
+	Sint64 value;
 	LDOUBLE fvalue;
 	char *strvalue;
 	int min;
@@ -316,7 +314,7 @@ static size_t dopr(char *buffer, size_t maxlen, const char *format, va_list args
 				else if (cflags == DP_C_LONG)
 					value = va_arg (args, long int);
 				else if (cflags == DP_C_LLONG)
-					value = va_arg (args, LLONG);
+					value = va_arg (args, Sint64);
 				else
 					value = va_arg (args, int);
 				fmtint (buffer, &currlen, maxlen, value, 10, min, max, flags);
@@ -326,11 +324,11 @@ static size_t dopr(char *buffer, size_t maxlen, const char *format, va_list args
 				if (cflags == DP_C_SHORT)
 					value = va_arg (args, unsigned int);
 				else if (cflags == DP_C_LONG)
-					value = (long)va_arg (args, unsigned long int);
+					value = va_arg (args, unsigned long int);
 				else if (cflags == DP_C_LLONG)
-					value = (long)va_arg (args, unsigned LLONG);
+					value = va_arg (args, Uint64);
 				else
-					value = (long)va_arg (args, unsigned int);
+					value = va_arg (args, unsigned int);
 				fmtint (buffer, &currlen, maxlen, value, 8, min, max, flags);
 				break;
 			case 'u':
@@ -338,11 +336,11 @@ static size_t dopr(char *buffer, size_t maxlen, const char *format, va_list args
 				if (cflags == DP_C_SHORT)
 					value = va_arg (args, unsigned int);
 				else if (cflags == DP_C_LONG)
-					value = (long)va_arg (args, unsigned long int);
+					value = va_arg (args, unsigned long int);
 				else if (cflags == DP_C_LLONG)
-					value = (LLONG)va_arg (args, unsigned LLONG);
+					value = va_arg (args, Uint64);
 				else
-					value = (long)va_arg (args, unsigned int);
+					value = va_arg (args, unsigned int);
 				fmtint (buffer, &currlen, maxlen, value, 10, min, max, flags);
 				break;
 			case 'X':
@@ -352,11 +350,11 @@ static size_t dopr(char *buffer, size_t maxlen, const char *format, va_list args
 				if (cflags == DP_C_SHORT)
 					value = va_arg (args, unsigned int);
 				else if (cflags == DP_C_LONG)
-					value = (long)va_arg (args, unsigned long int);
+					value = va_arg (args, unsigned long int);
 				else if (cflags == DP_C_LLONG)
-					value = (LLONG)va_arg (args, unsigned LLONG);
+					value = va_arg (args, Uint64);
 				else
-					value = (long)va_arg (args, unsigned int);
+					value = va_arg (args, unsigned int);
 				fmtint (buffer, &currlen, maxlen, value, 16, min, max, flags);
 				break;
 			case 'f':
@@ -411,9 +409,9 @@ static size_t dopr(char *buffer, size_t maxlen, const char *format, va_list args
 					num = va_arg (args, long int *);
 					*num = (long int)currlen;
 				} else if (cflags == DP_C_LLONG) {
-					LLONG *num;
-					num = va_arg (args, LLONG *);
-					*num = (LLONG)currlen;
+					Sint64 *num;
+					num = va_arg (args, Sint64 *);
+					*num = (Sint64)currlen;
 				} else {
 					int *num;
 					num = va_arg (args, int *);
@@ -492,10 +490,10 @@ static void fmtstr(char *buffer, size_t *currlen, size_t maxlen,
 /* Have to handle DP_F_NUM (ie 0x and 0 alternates) */
 
 static void fmtint(char *buffer, size_t *currlen, size_t maxlen,
-		    long value, int base, int min, int max, int flags)
+		    Sint64 value, int base, int min, int max, int flags)
 {
 	int signvalue = 0;
-	unsigned long uvalue;
+	Uint64 uvalue;
 	char convert[20];
 	int place = 0;
 	int spadlen = 0; /* amount to space pad */
@@ -597,11 +595,11 @@ static LDOUBLE POW10(int exp)
 	return result;
 }
 
-static LLONG ROUND(LDOUBLE value)
+static Sint64 ROUND(LDOUBLE value)
 {
-	LLONG intpart;
+	Sint64 intpart;
 
-	intpart = (LLONG)value;
+	intpart = (Sint64)value;
 	value = value - intpart;
 	if (value >= 0.5) intpart++;
 	
@@ -703,7 +701,7 @@ static void fmtfp (char *buffer, size_t *currlen, size_t maxlen,
 	temp = ufvalue;
 	my_modf(temp, &intpart);
 
-	fracpart = ROUND((POW10(max)) * (ufvalue - intpart));
+	fracpart = (double) ROUND((POW10(max)) * (ufvalue - intpart));
 	
 	if (fracpart >= POW10(max)) {
 		intpart++;

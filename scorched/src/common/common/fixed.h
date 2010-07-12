@@ -25,10 +25,11 @@
 #ifndef _FIXED_H
 #define _FIXED_H
 
-#define	FIXED_RESOLUTION		10000
-#define	FIXED_RESOLUTION_FLOAT	10000.0f
-
 #include <SDL/SDL.h>
+
+#ifndef SDL_HAS_64BIT_TYPE
+#error 64 bit type has not been found for this system
+#endif
 
 class fixed
 {
@@ -52,12 +53,12 @@ public:
 
 	fixed(unsigned int nVal)
 	{
-		m_nVal = nVal*FIXED_RESOLUTION;
+		m_nVal = Sint64(nVal)*FIXED_RESOLUTION;
 	}
 
 	fixed(int nVal)
 	{
-		m_nVal = nVal*FIXED_RESOLUTION;
+		m_nVal = Sint64(nVal)*FIXED_RESOLUTION;
 	}
 
 	fixed(Sint64 nVal)
@@ -149,7 +150,7 @@ public:
 
 	fixed ceil()
 	{
-		return fixed(m_nVal/FIXED_RESOLUTION+1);
+		return fixed(m_nVal/FIXED_RESOLUTION+Sint64(1));
 	}
 
 	fixed operator+(fixed b)
@@ -182,7 +183,7 @@ public:
 
 	fixed abs()
 	{
-		if (m_nVal > 0) return fixed(*this);
+		if (m_nVal > Sint64(0)) return fixed(*this);
 		else return fixed(true, -m_nVal);
 	}
 
@@ -215,6 +216,9 @@ public:
 	static fixed XPIO2;
 
 	static fixed fromFloat(float flt);
+
+	static Sint64 FIXED_RESOLUTION;
+	static float FIXED_RESOLUTION_FLOAT;
 };
 
 fixed absx( fixed p_Base );

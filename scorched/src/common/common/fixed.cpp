@@ -42,8 +42,11 @@ fixed fixed::XPIO2 =   fixed(true,_XPIO2);
 #define _XLN_10   23025 // 2.30258509299404568402
 #define XLN_10   fixed(true,_XLN_10)
 
-fixed fixed::MAX_FIXED(true, LLONG_MAX); // 64 bit
-fixed fixed::MIN_FIXED(true, LLONG_MIN); // 64 bit
+Sint64 fixed::FIXED_RESOLUTION(10000);
+float fixed::FIXED_RESOLUTION_FLOAT(10000.0f);
+
+fixed fixed::MAX_FIXED(true, Sint64(LLONG_MAX)); // 64 bit
+fixed fixed::MIN_FIXED(true, Sint64(LLONG_MIN)); // 64 bit
 
 fixed::fixed(const char *nVal)
 {
@@ -72,8 +75,8 @@ fixed::fixed(const char *nVal)
 	i[ip] = '\0';
 	f[4] = '\0';
 
-	long ipa = atol(i);
-	long fpa = atol(f);
+	Sint64 ipa = atol(i);
+	Sint64 fpa = atol(f);
 
 	m_nVal = ipa * FIXED_RESOLUTION + fpa;
 	if (neg) m_nVal =- m_nVal;
@@ -81,10 +84,10 @@ fixed::fixed(const char *nVal)
 
 const char *fixed::asString()
 {
-	static char result[15];
+	static char result[20];
 	int r = 0;
 
-	char buffer[15];
+	char buffer[20];
 	if (m_nVal < 0) 
 	{
 		snprintf(buffer, 15, "%lli", -m_nVal);
@@ -278,7 +281,7 @@ static fixed ilog10( fixed p_Base )
 fixed fixed::sqrt()
 {
 	Sint64 val = iSqrt(m_nVal);
-	val *= 100;
+	val *= Sint64(100);
 	return fixed(true, val);
 }
 

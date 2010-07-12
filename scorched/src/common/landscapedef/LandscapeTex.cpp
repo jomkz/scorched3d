@@ -115,7 +115,7 @@ bool LandscapeTexTextureFile::readXML(XMLNode *node)
 
 // LandscapeTex
 LandscapeTex::LandscapeTex() :
-	border(0), texture(0)
+	border(0), texture(0), precipitation(0)
 {
 }
 
@@ -123,6 +123,7 @@ LandscapeTex::~LandscapeTex()
 {
 	delete border;
 	delete texture;
+	delete precipitation;
 }
 
 bool LandscapeTex::readXML(LandscapeDefinitions *definitions, XMLNode *node)

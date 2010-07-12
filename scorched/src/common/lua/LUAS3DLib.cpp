@@ -69,27 +69,27 @@ static void addTank(lua_State *L, Tank *tank)
 	lua_settable(L, -3);
 
 	lua_pushstring(L, "team");
-	lua_pushnumber(L, tank->getTeam() * FIXED_RESOLUTION);
+	lua_pushnumber(L, lua_Number(tank->getTeam() * fixed::FIXED_RESOLUTION));
 	lua_settable(L, -3);
 
 	lua_pushstring(L, "money");
-	lua_pushnumber(L, tank->getScore().getMoney() * FIXED_RESOLUTION);
+	lua_pushnumber(L, lua_Number(tank->getScore().getMoney() * fixed::FIXED_RESOLUTION));
 	lua_settable(L, -3);
 
 	lua_pushstring(L, "score");
-	lua_pushnumber(L, tank->getScore().getScore() * FIXED_RESOLUTION);
+	lua_pushnumber(L, lua_Number(tank->getScore().getScore() * fixed::FIXED_RESOLUTION));
 	lua_settable(L, -3);
 
 	lua_pushstring(L, "rank");
-	lua_pushnumber(L, tank->getScore().getRank() * FIXED_RESOLUTION);
+	lua_pushnumber(L, lua_Number(tank->getScore().getRank() * fixed::FIXED_RESOLUTION));
 	lua_settable(L, -3);
 
 	lua_pushstring(L, "skill");
-	lua_pushnumber(L, tank->getScore().getSkill() * FIXED_RESOLUTION);
+	lua_pushnumber(L, lua_Number(tank->getScore().getSkill() * fixed::FIXED_RESOLUTION));
 	lua_settable(L, -3);
 
 	lua_pushstring(L, "lives");
-	lua_pushnumber(L, tank->getState().getLives() * FIXED_RESOLUTION);
+	lua_pushnumber(L, lua_Number(tank->getState().getLives() * fixed::FIXED_RESOLUTION));
 	lua_settable(L, -3);
 }
 
@@ -117,11 +117,11 @@ static int s3d_get_option(lua_State *L)
 			entry->getEntryType() == OptionEntry::OptionEntryBoundedIntType ||
 			entry->getEntryType() == OptionEntry::OptionEntryEnumType)
 		{
-			lua_pushnumber(L, ((OptionEntryInt *)entry)->getValue() * FIXED_RESOLUTION);
+			lua_pushnumber(L, lua_Number(((OptionEntryInt *)entry)->getValue() * fixed::FIXED_RESOLUTION));
 		}
 		else if (entry->getEntryType() == OptionEntry::OptionEntryFloatType)
 		{
-			lua_pushnumber(L, (unsigned int)(((OptionEntryFloat *)entry)->getValue() * FIXED_RESOLUTION));
+			lua_pushnumber(L, (unsigned int)(((OptionEntryFloat *)entry)->getValue() * fixed::FIXED_RESOLUTION));
 		}
 		else if (entry->getEntryType() == OptionEntry::OptionEntryFixedType)
 		{
@@ -244,7 +244,7 @@ static int s3d_set_tank_score(lua_State *L)
 	LUAScript *wrapper = getScript(L);
 
 	int number = luaL_checknumber(L, 1);
-	int score = luaL_checknumber(L, 2) / FIXED_RESOLUTION;
+	int score = int(luaL_checknumber(L, 2) / fixed::FIXED_RESOLUTION);
 
 	Tank *tank =
 		wrapper->getContext()->getTankContainer().getTankById((unsigned int) number);
@@ -264,7 +264,7 @@ static int s3d_set_tank_money(lua_State *L)
 	LUAScript *wrapper = getScript(L);
 
 	int number = luaL_checknumber(L, 1);
-	int money = luaL_checknumber(L, 2) / FIXED_RESOLUTION;
+	int money = int(luaL_checknumber(L, 2) / fixed::FIXED_RESOLUTION);
 
 	Tank *tank =
 		wrapper->getContext()->getTankContainer().getTankById((unsigned int) number);
@@ -305,7 +305,7 @@ static int s3d_give_weapon(lua_State *L)
 
 	int number = luaL_checknumber(L, 1);
 	const char *weaponName = luaL_checkstring(L, 2);
-	int count = luaL_checknumber(L, 3) / FIXED_RESOLUTION;
+	int count = int(luaL_checknumber(L, 3) / fixed::FIXED_RESOLUTION);
 
 	Tank *tank =
 		wrapper->getContext()->getTankContainer().getTankById((unsigned int) number);

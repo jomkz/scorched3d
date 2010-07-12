@@ -25,7 +25,7 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <SDL/SDL.h>
 
-static const fixed StepSize = fixed(true, FIXED_RESOLUTION / 50);
+static const fixed StepSize = fixed(true, fixed::FIXED_RESOLUTION / Sint64(50));
 
 Simulator::Simulator() :
 	speed_(1),

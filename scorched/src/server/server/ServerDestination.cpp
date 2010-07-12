@@ -89,7 +89,7 @@ ServerDestination::ServerDestination(unsigned int destinationId,
 	admin_(false), levelNumber_(0),
 	destinationId_(destinationId),
 	ipAddress_(ipAddress),
-	ping_(25, fixed(true, FIXED_RESOLUTION / 25))
+	ping_(25, fixed(true, fixed::FIXED_RESOLUTION / Sint64(25)))
 {
 }
 

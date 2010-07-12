@@ -31,11 +31,11 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <common/Logger.h>
 
-static fixed maxStepSize(true, 1 * FIXED_RESOLUTION);
-static fixed minStepSize(true, FIXED_RESOLUTION / 10);
+static fixed maxStepSize(true, 1 * fixed::FIXED_RESOLUTION);
+static fixed minStepSize(true, fixed::FIXED_RESOLUTION / Sint64(10));
 
 ServerSimulator::ServerSimulator() :
-	sendStepSize_(true, 1 * FIXED_RESOLUTION),
+	sendStepSize_(true, 1 * fixed::FIXED_RESOLUTION),
 	levelMessage_(0)
 {
 	nextSendTime_ = 0;
@@ -136,7 +136,7 @@ fixed ServerSimulator::calcSendStepSize()
 	{
 		ServerDestination *destination = destItor->second;
 		fixed value = destination->getPing().getAverage() + 
-			fixed(true, FIXED_RESOLUTION / 10);
+			fixed(true, fixed::FIXED_RESOLUTION / Sint64(10));
 		if (value > max)
 		{
 			max = value;

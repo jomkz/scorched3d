@@ -96,12 +96,12 @@ static Sint64 iSqrtLL(Sint64 value)
 
 fixed FixedVector::Magnitude()
 {
-	Sint64 a = V[0].getInternalData()*V[0].getInternalData()/FIXED_RESOLUTION;
-	Sint64 b = V[1].getInternalData()*V[1].getInternalData()/FIXED_RESOLUTION;
-	Sint64 c = V[2].getInternalData()*V[2].getInternalData()/FIXED_RESOLUTION;
+	Sint64 a = V[0].getInternalData()*V[0].getInternalData()/fixed::FIXED_RESOLUTION;
+	Sint64 b = V[1].getInternalData()*V[1].getInternalData()/fixed::FIXED_RESOLUTION;
+	Sint64 c = V[2].getInternalData()*V[2].getInternalData()/fixed::FIXED_RESOLUTION;
 	Sint64 res = a + b + c;
 	Sint64 result = iSqrtLL(res);
-	result *= 100;
+	result *= Sint64(100);
 
 	return fixed(true, result);
 }

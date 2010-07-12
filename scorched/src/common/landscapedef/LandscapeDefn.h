@@ -36,7 +36,10 @@ public:
 		eStartHeight,
 		eRoofCavern,
 		eHeightMapFile,
-		eHeightMapGenerate
+		eHeightMapGenerate,
+		eDeformDeform,
+		eDeformSolid,
+		eDeformFile
 	};
 
 	virtual bool readXML(XMLNode *node) = 0;
@@ -71,9 +74,34 @@ public:
 	fixed width;
 	fixed height;
 	LandscapeDefnType *heightmap;
+	LandscapeDefnType *deform;
 
 	virtual bool readXML(XMLNode *node);
 	virtual DefnType getType() { return eRoofCavern; }
+};
+
+class LandscapeDefnDeformFile : public LandscapeDefnType
+{
+public:
+	std::string file;
+	bool levelsurround;
+
+	virtual bool readXML(XMLNode *node);
+	virtual DefnType getType() { return eDeformFile; }
+};
+
+class LandscapeDefnDeformSolid : public LandscapeDefnType
+{
+public:
+	virtual bool readXML(XMLNode *node);
+	virtual DefnType getType() { return eDeformSolid; }
+};
+
+class LandscapeDefnDeformDeform : public LandscapeDefnType
+{
+public:
+	virtual bool readXML(XMLNode *node);
+	virtual DefnType getType() { return eDeformDeform; }
 };
 
 class LandscapeDefnHeightMapFile : public LandscapeDefnType
@@ -129,6 +157,7 @@ public:
 	LandscapeDefnType *roof;
 	LandscapeDefnType *tankstart;
 	LandscapeDefnType *heightmap;
+	LandscapeDefnType *deform;
 	LandscapeTexDefn texDefn;
 
 	bool readXML(LandscapeDefinitions *definitions, XMLNode *node);

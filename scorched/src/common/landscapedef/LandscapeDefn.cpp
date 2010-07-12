@@ -48,6 +48,15 @@ static LandscapeDefnType *fetchRoofMapDefnType(const char *type)
 	return 0;
 }
 
+static LandscapeDefnType *fetchDeformType(const char *type)
+{
+	if (0 == strcmp(type, "solid")) return new LandscapeDefnDeformSolid;
+	if (0 == strcmp(type, "deform")) return new LandscapeDefnDeformDeform;
+	if (0 == strcmp(type, "file")) return new LandscapeDefnDeformFile;
+	S3D::dialogMessage("LandscapeDefnType", S3D::formatStringBuffer("Unknown deform type %s", type));
+	return 0;
+}
+
 static bool parseMinMax(XMLNode *parent, const char *name, 
 	fixed &min, fixed &max)
 {
@@ -73,13 +82,15 @@ bool LandscapeDefnTypeNone::readXML(XMLNode *node)
 	return node->failChildren();
 }
 
-LandscapeDefnRoofCavern::LandscapeDefnRoofCavern() : heightmap(0)
+LandscapeDefnRoofCavern::LandscapeDefnRoofCavern() : 
+	heightmap(0), deform(0)
 {
 }
 
 LandscapeDefnRoofCavern::~LandscapeDefnRoofCavern()
 {
 	delete heightmap;
+	delete deform;
 }
 
 bool LandscapeDefnRoofCavern::readXML(XMLNode *node)
@@ -94,7 +105,36 @@ bool LandscapeDefnRoofCavern::readXML(XMLNode *node)
 		if (!(heightmap = fetchHeightMapDefnType(heightmaptype.c_str()))) return false;
 		if (!heightmap->readXML(heightNode)) return false;
 	}	
+	{
+		XMLNode *deformNode;
+		std::string deformtype;
+		if (node->getNamedChild("deform", deformNode, false))
+		{
+			if (!deformNode->getNamedParameter("type", deformtype)) return false;
+			if (!(deform = fetchDeformType(deformtype.c_str()))) return false;
+			if (!deform->readXML(deformNode)) return false;
+		}
+		else
+		{
+			deform = new LandscapeDefnDeformDeform();
+		}
+	}
 	return node->failChildren();
+}
+
+bool LandscapeDefnDeformFile::readXML(XMLNode *node)
+{
+	return true;
+}
+
+bool LandscapeDefnDeformSolid::readXML(XMLNode *node)
+{
+	return true;
+}
+
+bool LandscapeDefnDeformDeform::readXML(XMLNode *node)
+{
+	return true;
 }
 
 bool LandscapeDefnStartHeight::readXML(XMLNode *node)
@@ -164,12 +204,16 @@ bool LandscapeDefnHeightMapGenerate::readXML(XMLNode *node)
 }
 
 LandscapeDefn::LandscapeDefn() :
-	heightmap(0), tankstart(0), roof(0)
+	heightmap(0), tankstart(0), roof(0), deform(0)
 {
 }
 
 LandscapeDefn::~LandscapeDefn()
 {
+	delete roof;
+	delete tankstart;
+	delete heightmap;
+	delete deform;
 }
 
 bool LandscapeDefn::readXML(LandscapeDefinitions *definitions, XMLNode *node)
@@ -225,6 +269,20 @@ bool LandscapeDefn::readXML(LandscapeDefinitions *definitions, XMLNode *node)
 		if (!roofNode->getNamedParameter("type", rooftype)) return false;
 		if (!(roof = fetchRoofMapDefnType(rooftype.c_str()))) return false;
 		if (!roof->readXML(roofNode)) return false;
+	}
+	{
+		XMLNode *deformNode;
+		std::string deformtype;
+		if (node->getNamedChild("deform", deformNode, false))
+		{
+			if (!deformNode->getNamedParameter("type", deformtype)) return false;
+			if (!(deform = fetchDeformType(deformtype.c_str()))) return false;
+			if (!deform->readXML(deformNode)) return false;
+		}
+		else
+		{
+			deform = new LandscapeDefnDeformDeform();
+		}
 	}
 
 	if (!texDefn.readXML(definitions, node)) return false;
