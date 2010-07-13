@@ -190,6 +190,8 @@ void ServerConnectAuthHandler::processMessageInternal(
 	{
 		ServerCommon::kickDestination(destinationId, 
 			"Banned uniqueid/suid connection from destination");
+		Logger::log(S3D::formatStringBuffer("UniqueId: %s, Suid: %s", 
+			uniqueId.c_str(), SUid.c_str()));
 		return;
 	}
 
@@ -212,6 +214,8 @@ void ServerConnectAuthHandler::processMessageInternal(
 					{
 						ServerCommon::kickDestination(destinationId,
 							"Duplicate uniqueid connection from destination");
+						Logger::log(S3D::formatStringBuffer("UniqueId: %s, Suid: %s", 
+							uniqueId.c_str(), SUid.c_str()));
 						return;
 					}
 				}
@@ -221,6 +225,8 @@ void ServerConnectAuthHandler::processMessageInternal(
 					{
 						ServerCommon::kickDestination(destinationId,
 							"Duplicate SUI connection from destination");
+						Logger::log(S3D::formatStringBuffer("UniqueId: %s, Suid: %s", 
+							uniqueId.c_str(), SUid.c_str()));
 						return;
 					}
 				}
