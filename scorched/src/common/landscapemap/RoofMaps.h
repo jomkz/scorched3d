@@ -42,12 +42,14 @@ public:
 	fixed getRoofBaseHeight() { return roofBaseHeight_; }
 
 	HeightMap &getRoofMap() { return rmap_; }
+	HeightMap &getDeformRoofMap() { return deformRMap_; }
 
 protected:
 	LandscapeDefinitionCache &defnCache_;
 
 	// The roof of the landscape
 	HeightMap rmap_;
+	HeightMap deformRMap_;
 	fixed roofBaseHeight_;
 
 	void generateRMap(

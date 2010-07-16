@@ -20,6 +20,7 @@
 
 #include <landscapemap/RoofMaps.h>
 #include <landscapemap/HeightMapLoader.h>
+#include <image/ImageFactory.h>
 #include <common/ProgressCounter.h>
 #include <engine/ScorchedContext.h>
 #include <landscapedef/LandscapeDefinitionCache.h>
@@ -82,6 +83,7 @@ void RoofMaps::generateRMap(
 	int mapWidth = defnCache_.getDefn()->getLandscapeWidth();
 	int mapHeight = defnCache_.getDefn()->getLandscapeHeight();
 	rmap_.create(mapWidth, mapHeight, true);
+	deformRMap_.create(rmap_.getMapWidth(), rmap_.getMapHeight(), true);
 	roofBaseHeight_ = 0;
 
 	// Generate the roof
@@ -111,6 +113,50 @@ void RoofMaps::generateRMap(
 				fixed height = rmap_.getHeight(i, j);
 				height = fixed(cavern->height) - height;
 				rmap_.setHeight(i, j, height);
+			}
+		}
+
+		// Generate the deform map (if any)
+		if (cavern->deform->getType() == LandscapeDefnType::eDeformFile)
+		{
+			LandscapeDefnDeformFile *file = 
+				(LandscapeDefnDeformFile *) cavern->deform;
+
+			// Load the landscape
+			Image image = ImageFactory::loadImage(S3D::eModLocation, file->file);
+			if (!image.getBits())
+			{
+				S3D::dialogExit("HeightMapLoader", S3D::formatStringBuffer(
+					"Error: Unable to find deform roof map \"%s\"",
+					file->file.c_str()));
+			}
+			else
+			{
+				HeightMapLoader::loadTerrain(
+					deformRMap_,
+					image, 
+					file->levelsurround,
+					counter);
+
+				for (int j=0; j<=deformRMap_.getMapHeight(); j++)
+				{
+					for (int i=0; i<=deformRMap_.getMapWidth(); i++)
+					{
+						fixed height = deformRMap_.getHeight(i, j);
+						height = fixed(cavern->height) - height;
+						deformRMap_.setHeight(i, j, height);
+					}
+				}
+			}
+		}
+		else
+		{
+			for (int x=0; x<rmap_.getMapWidth(); x++)
+			{
+				for (int y=0; y<rmap_.getMapHeight(); y++)
+				{
+					deformRMap_.setHeight(x, y, rmap_.getHeight(x, y));
+				}
 			}
 		}
 	}

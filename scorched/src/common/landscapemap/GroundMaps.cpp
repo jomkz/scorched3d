@@ -29,6 +29,7 @@
 #include <tank/TankContainer.h>
 #include <common/Logger.h>
 #include <tankai/TankAIAdder.h>
+#include <image/ImageFactory.h>
 #include <lang/LangResource.h>
 
 GroundMaps::GroundMaps(LandscapeDefinitionCache &defnCache) :
@@ -95,6 +96,7 @@ void GroundMaps::generateHMap(
 	map_.create(defnCache_.getDefn()->getLandscapeWidth(), 
 		defnCache_.getDefn()->getLandscapeHeight(), 
 		false);
+	deformMap_.create(map_.getMapWidth(), map_.getMapHeight(), false);
 
 	// Generate the landscape
 	bool levelSurround = false;
@@ -106,6 +108,40 @@ void GroundMaps::generateHMap(
 		counter))
 	{
 		S3D::dialogExit("Landscape", "Failed to generate landscape");
+	}
+
+	// Generate the deform map (if any)
+	if (defnCache_.getDefn()->deform->getType() == LandscapeDefnType::eDeformFile)
+	{
+		LandscapeDefnDeformFile *file = 
+			(LandscapeDefnDeformFile *) defnCache_.getDefn()->deform;
+
+		// Load the landscape
+		Image image = ImageFactory::loadImage(S3D::eModLocation, file->file);
+		if (!image.getBits())
+		{
+			S3D::dialogExit("HeightMapLoader", S3D::formatStringBuffer(
+				"Error: Unable to find deform landscape map \"%s\"",
+				file->file.c_str()));
+		}
+		else
+		{
+			HeightMapLoader::loadTerrain(
+				deformMap_,
+				image, 
+				file->levelsurround,
+				counter);
+		}
+	}
+	else
+	{
+		for (int x=0; x<map_.getMapWidth(); x++)
+		{
+			for (int y=0; y<map_.getMapHeight(); y++)
+			{
+				deformMap_.setHeight(x, y, map_.getHeight(x, y));
+			}
+		}
 	}
 }
 

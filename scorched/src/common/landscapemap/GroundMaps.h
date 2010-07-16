@@ -70,11 +70,14 @@ public:
 	// Actual heightmap
 	HeightMap &getHeightMap() { return map_; }
 
+	HeightMap &getDeformMap() { return deformMap_; }
+
 protected:
 	int arenaX_, arenaY_;
 	int arenaWidth_, arenaHeight_;
 	HeightMap map_; // The current level's heightmap
 	NapalmMap nmap_; // How high napalm is at certain points
+	HeightMap deformMap_; // How low can this level go
 	TargetGroups groups_; // The groups in the scene
 	LandscapeDefinitionCache &defnCache_;
 

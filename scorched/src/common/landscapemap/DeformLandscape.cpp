@@ -21,6 +21,7 @@
 #include <landscapemap/DeformLandscape.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeTex.h>
+#include <landscapedef/LandscapeDefn.h>
 #include <landscapedef/LandscapeDefinition.h>
 #include <target/TargetContainer.h>
 #include <target/TargetLife.h>
@@ -157,12 +158,14 @@ bool DeformLandscape::deformLandscapeInternal(
 	bool setNormals)
 {
 	HeightMap &hmap = context.getLandscapeMaps().getGroundMaps().getHeightMap();
+	HeightMap &deformhmap = context.getLandscapeMaps().getGroundMaps().getDeformMap();
 
 	bool hits = false;
 	int iradius = (int) radius.asInt() + 1;
 	if (iradius > 49) iradius = 49;
 
-	fixed lowestHeight = fixed(context.getOptionsGame().getMinimumLandHeight());
+	fixed lowestLandscapeHeight = fixed(context.getOptionsGame().getMinimumLandHeight());
+	LandscapeDefnType::DefnType deformType = context.getLandscapeMaps().getDefinitions().getDefn()->deform->getType();
 	DeformLandscapeCache::DeformLandscapeCacheItem &deformItem = deformCache.getItem(iradius);
 	fixed *explosionDepth = deformItem.explosionDepth_;
 	fixed *explosionDistance = deformItem.explosionDistance_;
@@ -193,6 +196,13 @@ bool DeformLandscape::deformLandscapeInternal(
 							else
 							{
 								newHeight = pos[2] - *explosionDepth;
+							}
+
+							fixed lowestHeight = lowestLandscapeHeight;
+							if (deformType != LandscapeDefnType::eDeformDeform)
+							{
+								fixed deformHeight = deformhmap.getHeight(absx, absy);
+								lowestHeight = MAX(deformHeight, lowestLandscapeHeight);
 							}
 
 							if (newHeight < lowestHeight)
@@ -254,6 +264,7 @@ bool DeformLandscape::deformRoofInternal(ScorchedContext &context,
 	bool setNormals)
 {
 	HeightMap &hmap = context.getLandscapeMaps().getRoofMaps().getRoofMap();
+	HeightMap &deformhmap = context.getLandscapeMaps().getRoofMaps().getDeformRoofMap();
 
 	bool hits = false;
 	int iradius = (int) radius.asInt() + 1;
@@ -262,6 +273,8 @@ bool DeformLandscape::deformRoofInternal(ScorchedContext &context,
 	DeformLandscapeCache::DeformLandscapeCacheItem &deformItem = deformCache.getItem(iradius);
 	fixed *explosionDepth = deformItem.explosionDepth_;
 	fixed *explosionDistance = deformItem.explosionDistance_;
+	LandscapeDefnType::DefnType deformType = 
+		((LandscapeDefnRoofCavern *)(context.getLandscapeMaps().getDefinitions().getDefn()->roof))->deform->getType();
 
 	// Take out or add a chunk into the landsacpe
 	for (int y=-iradius; y<=iradius; y++)
@@ -289,6 +302,22 @@ bool DeformLandscape::deformRoofInternal(ScorchedContext &context,
 							else
 							{
 								newHeight = pos[2] + *explosionDepth;
+							}
+
+							if (deformType != LandscapeDefnType::eDeformDeform)
+							{
+								fixed deformHeight = deformhmap.getHeight(absx, absy);
+								if (newHeight > deformHeight)
+								{
+									if (currentHeight > deformHeight)
+									{
+										newHeight = currentHeight;
+									}
+									else
+									{
+										newHeight = deformHeight;
+									}
+								}
 							}
 						}
 					}
@@ -374,8 +403,12 @@ void DeformLandscape::flattenAreaInternal(
 {
 	int iSize = size.asInt();
 	HeightMap &hmap = context.getLandscapeMaps().getGroundMaps().getHeightMap();
+	HeightMap &deformhmap = context.getLandscapeMaps().getGroundMaps().getDeformMap();
 	int posX = tankPos[0].asInt();
 	int posY = tankPos[1].asInt();
+
+	fixed lowestLandscapeHeight = fixed(context.getOptionsGame().getMinimumLandHeight());
+	LandscapeDefnType::DefnType deformType = context.getLandscapeMaps().getDefinitions().getDefn()->deform->getType();
 
 	// Flatten a small area around the tank
 	for (int x=-iSize; x<=iSize; x++)
@@ -388,7 +421,29 @@ void DeformLandscape::flattenAreaInternal(
 				ix < hmap.getMapWidth() &&
 				iy < hmap.getMapHeight())
 			{
-				hmap.setHeight(ix, iy, tankPos[2]);
+				fixed newHeight = tankPos[2];
+				fixed currentHeight = hmap.getHeight(ix, iy);
+
+				fixed lowestHeight = lowestLandscapeHeight;
+				if (deformType != LandscapeDefnType::eDeformDeform)
+				{
+					fixed deformHeight = deformhmap.getHeight(ix, iy);
+					lowestHeight = MAX(deformHeight, lowestLandscapeHeight);
+				}
+
+				if (newHeight < lowestHeight)
+				{
+					if (currentHeight < lowestHeight)
+					{
+						newHeight = currentHeight;
+					}
+					else
+					{
+						newHeight = lowestHeight;
+					}
+				}
+
+				hmap.setHeight(ix, iy, newHeight);
 			}
 		}
 	}
