@@ -124,7 +124,10 @@ bool LandscapeDefnRoofCavern::readXML(XMLNode *node)
 
 bool LandscapeDefnDeformFile::readXML(XMLNode *node)
 {
-	return true;
+	if (!node->getNamedChild("file", file)) return false;
+	if (!node->getNamedChild("levelsurround", levelsurround)) return false;
+	if (!S3D::checkDataFile(file.c_str())) return false;
+	return node->failChildren();
 }
 
 bool LandscapeDefnDeformSolid::readXML(XMLNode *node)

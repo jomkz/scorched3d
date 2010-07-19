@@ -165,7 +165,7 @@ void ScoreDialog::draw()
 	{
 		LANG_RESOURCE_VAR(CURRENT_RANKINGS, "CURRENT_RANKINGS", "Current Rankings");
 		LANG_RESOURCE_VAR(FINAL_RANKINGS, "FINAL_RANKINGS", "Final Rankings");
-		LANG_RESOURCE_VAR(WAITING_FOR_PLAYERS, "WAITING_FOR_PLAYERS", "Waiting for more players");
+		LANG_RESOURCE_VAR(WAITING_FOR_PLAYERS, "WAITING_FOR_PLAYERS", "Waiting for players");
 		LANG_RESOURCE_VAR(WAITING_TO_JOIN, "WAITING_TO_JOIN", "Waiting to join game");
 		LangString SERVER_NAME = LANG_STRING(ScorchedClient::instance()->getOptionsGame().getServerName());
 
@@ -182,12 +182,12 @@ void ScoreDialog::draw()
 		GLWFont::instance()->getGameShadowFont()->draw(
 			GLWColors::black,
 				20,
-				x_ + 8.0f - 2.0f, y_ + h_ - 22.0f + 2.0f, 0.0f,
+				x_ + 8.0f - 2.0f, y_ + h_ - 27.0f + 2.0f, 0.0f,
 				*text);
 		GLWFont::instance()->getGameFont()->draw(
 				white,
 				20,
-				x_ + 8.0f, y_ + h_ - 22.0f, 0.0f,
+				x_ + 8.0f, y_ + h_ - 27.0f, 0.0f,
 				*text);
 	}
 
@@ -205,7 +205,7 @@ void ScoreDialog::draw()
 		GLWFont::instance()->getGameFont()->draw(
 			white,
 			10,
-			x_ + 470 - roundsWidth, y_ + h_ - 40.0f, 0.0f,
+			x_ + 470 - roundsWidth, y_ + h_ - 25.0f, 0.0f,
 			buffer);
 	}
 

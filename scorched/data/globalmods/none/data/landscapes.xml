@@ -116,7 +116,9 @@
 		<weight>100</weight>
 		<defn>
 			<item>data/landscapes/defncavern.xml</item>
+      <!--
       <item>data/landscapes/defncavern2.xml</item>
+      -->
 		</defn>
 		<tex>
 			<item>data/landscapes/texcavern.xml</item>

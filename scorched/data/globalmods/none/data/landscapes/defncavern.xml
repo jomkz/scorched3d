@@ -31,6 +31,8 @@
 			<landsmoothing>0.0</landsmoothing>
 			<levelsurround>false</levelsurround>
 		</heightmap>
+    <deform type="deform">
+    </deform>
 	</roof>
 	<heightmap type="generate">
 		<mask>data/landscapes/valley-mask.bmp</mask>
@@ -52,8 +54,10 @@
 		<landsmoothing>0.04</landsmoothing>
 		<levelsurround>true</levelsurround>
 	</heightmap>
-	<!--<heightmap type="file">
-		<file>data/landscapes/valley-mask.bmp</file>
-		<levelsurround>true</levelsurround>
-	</heightmap>-->
+  <!--
+  <deform type="file">
+    <file>data/landscapes/craters1.bmp</file>
+    <levelsurround>true</levelsurround>
+  </deform>
+  -->
 </defn>
