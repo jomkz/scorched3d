@@ -23,6 +23,7 @@
 
 #include <engine/GameStateI.h>
 #include <common/fixed.h>
+#include <common/ToolTipResource.h>
 
 class ShotCountDown : public GameStateI
 {
@@ -43,11 +44,14 @@ public:
 
 	void simulateTime(fixed simTime);
 
+	bool getRoundTime(std::string &result);
+
 	//Inherited from GameStateI
 	virtual void draw(const unsigned state);
 
 protected:
 	static ShotCountDown *instance_;
+	ToolTipResource moveTip_;
 
 	struct MoveInfo
 	{
@@ -63,7 +67,6 @@ protected:
 	} round;
 
 	void drawMove();
-	void drawRound();
 
 private:
 	ShotCountDown();

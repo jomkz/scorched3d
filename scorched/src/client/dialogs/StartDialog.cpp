@@ -25,6 +25,7 @@
 #include <dialogs/NetworkSelectDialog.h>
 #include <dialogs/SettingsSelectDialog.h>
 #include <dialogs/SettingsSubSelectDialog.h>
+#include <dialogs/QuitDialog.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientParams.h>
 #include <client/ClientMain.h>
@@ -186,7 +187,8 @@ void StartDialog::mouseDown(int button, float x, float y, bool &skipRest)
 		}
 		break;
 	case 6:
-		ScorchedClient::instance()->getMainLoop().exitLoop();
+		GLWWindowManager::instance()->showWindow(
+			QuitDialog::instance()->getId());
 		break;
 	}
 }

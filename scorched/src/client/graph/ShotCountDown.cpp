@@ -28,6 +28,7 @@
 #include <GLW/GLWFont.h>
 #include <GLW/GLWidget.h>
 #include <GLW/GLWColors.h>
+#include <GLW/GLWToolTip.h>
 #include <GLEXT/GLTexture.h>
 #include <sound/Sound.h>
 #include <sound/SoundUtils.h>
@@ -47,7 +48,11 @@ ShotCountDown *ShotCountDown::instance()
 }
 
 ShotCountDown::ShotCountDown() : 
-	GameStateI("ShotCountDown")
+	GameStateI("ShotCountDown"),
+	moveTip_(ToolTipResource(ToolTip::ToolTipHelp,
+		"ROUND_TIMER", "Round Timer",
+		"ROUND_TIMER_TOOLTIP",
+		"Remaining time for the current player to make a move."))
 {
 	move.show_ = false;
 	round.show_ = false;
@@ -112,10 +117,6 @@ void ShotCountDown::draw(const unsigned currentstate)
 	{
 		drawMove();
 	}
-	if (round.show_)
-	{
-		drawRound();
-	}
 }
 
 void ShotCountDown::drawMove()
@@ -157,95 +158,31 @@ void ShotCountDown::drawMove()
 
 	GLWFont::instance()->getGameShadowFont()->draw(
 		GLWColors::black, 20, (wWidth/2.0f) - (width / 2) - 2,
-		wHeight - 50.0f + 2, 0.0f, 
+		wHeight - 25.0f + 2, 0.0f, 
 		str);
 	GLWFont::instance()->getGameFont()->draw(
 		*fontColor, 20, (wWidth/2.0f) - (width / 2),
-		wHeight - 50.0f, 0.0f, 
+		wHeight - 25.0f, 0.0f, 
 		str);
 
-	if (move.playerId_ != 0)
-	{
-		Tank *tank = ScorchedClient::instance()->getTankContainer().
-			getTankById(move.playerId_);
-		if (tank)
-		{
-			tank->getAvatar().getTexture()->draw();
-
-			float playerWidth = GLWFont::instance()->getGameFont()->getWidth(14, tank->getTargetName());
-			float playerLeft = (wWidth/2.0f) - (width / 2) - playerWidth - 10.0f;
-			float playerTop = wHeight - 47.0f;
-
-			glColor3f(1.0f, 1.0f, 1.0f);
-			glBegin(GL_QUADS);
-				glTexCoord2f(0.0f,1.0f); glVertex2f(playerLeft - 25.0f, playerTop + 15.0f);
-				glTexCoord2f(0.0f,0.0f); glVertex2f(playerLeft - 25.0f, playerTop - 5.0f);
-				glTexCoord2f(1.0f,0.0f); glVertex2f(playerLeft - 5.0f, playerTop - 5.0f);
-				glTexCoord2f(1.0f,1.0f); glVertex2f(playerLeft - 5.0f, playerTop + 15.0f);
-			glEnd();
-
-			{
-				GLState tState(GLState::TEXTURE_OFF);
-				glColor3f(0.0f, 0.0f, 0.0f);
-				glBegin(GL_LINE_LOOP);
-					glVertex2f(playerLeft - 25.0f, playerTop + 15.0f);
-					glVertex2f(playerLeft - 25.0f, playerTop - 5.0f);
-					glVertex2f(playerLeft - 5.0f, playerTop - 5.0f);
-					glVertex2f(playerLeft - 5.0f, playerTop + 15.0f);
-				glEnd();
-			}
-
-			GLWFont::instance()->getGameShadowFont()->draw(
-				GLWColors::black, 14, playerLeft - 1,
-				playerTop + 1, 0.0f, 
-				tank->getTargetName());
-			GLWFont::instance()->getGameFont()->draw(
-				tank->getColor(), 14, playerLeft,
-				playerTop, 0.0f, 
-				tank->getTargetName());
-
-			LANG_RESOURCE_VAR(buyingString, "BUYING", "Buying");
-			LANG_RESOURCE_VAR(playingString, "PLAYING", "Playing");
-
-			float typeLeft = (wWidth/2.0f) + (width / 2) + 10.0f;
-			GLWFont::instance()->getGameShadowFont()->draw(
-				GLWColors::black, 14, typeLeft - 1,
-				playerTop + 1, 0.0f, 
-				move.type_==eBuying?buyingString:playingString);
-			GLWFont::instance()->getGameFont()->draw(
-				darkYellow, 14, typeLeft,
-				playerTop, 0.0f, 
-				move.type_==eBuying?buyingString:playingString);
-		}
-	}
+	GLWToolTip::instance()->addToolTip(&moveTip_,
+		(wWidth/2.0f) - (width / 2), wHeight - 25.0f, width, 20.0f);
 }
 
-void ShotCountDown::drawRound()
+bool ShotCountDown::getRoundTime(std::string &str)
 {
-	float wHeight = (float) GLViewPort::getHeight();
-	float wWidth = (float) GLViewPort::getWidth();
+	if (!round.show_) return false;
 
-	GLState state(GLState::BLEND_ON | GLState::TEXTURE_ON | GLState::DEPTH_OFF); 
-
-	static Vector darkYellow(0.5f, 0.5f, 0.1f);
-	static Vector red(0.7f, 0.0f, 0.0f);
-
-	std::string str = "-";
-	Vector *fontColor = &darkYellow;
-
+	str = "-";
 	if (round.timer_ > 0)
 	{
 		if (round.timer_ <= 5)
 		{
-			fontColor = &red;
-
 			str = S3D::formatStringBuffer("%.1f", 
 				round.timer_.asFloat());		
 		}
 		else
 		{
-			fontColor = &darkYellow;
-
 			int timeLeft = round.timer_.asInt();
 			div_t split = div(timeLeft, 60);
 			str = S3D::formatStringBuffer("%02i:%02i", 
@@ -253,15 +190,5 @@ void ShotCountDown::drawRound()
 				split.rem);
 		}
 	}
-
-	float width = GLWFont::instance()->getGameFont()->getWidth(15, str);	
-
-	GLWFont::instance()->getGameShadowFont()->draw(
-		GLWColors::black, 15, (wWidth/2.0f) - (width / 2) - 2,
-		wHeight - 20.0f + 2, 0.0f, 
-		str);
-	GLWFont::instance()->getGameFont()->draw(
-		*fontColor, 15, (wWidth/2.0f) - (width / 2),
-		wHeight - 20.0f, 0.0f, 
-		str);
+	return true;
 }

@@ -22,6 +22,7 @@
 #include <GLW/GLWFont.h>
 #include <GLW/GLWTranslate.h>
 #include <GLW/GLWWindView.h>
+#include <GLW/GLWColors.h>
 #include <client/ScorchedClient.h>
 #include <tankgraph/TargetRendererImplTank.h>
 #include <tank/TankContainer.h>
@@ -151,6 +152,10 @@ void GLWScorchedInfo::draw()
 					fontSize_, current->getTargetName());
 				offSet = w_ / 2.0f - (namewidth / 2.0f);
 			}
+			GLWFont::instance()->getGameShadowFont()->draw(
+				GLWColors::black, fontSize_, x_ + offSet - 1,
+				y_ + 1, 0.0f, 
+				current->getTargetName());
 			GLWFont::instance()->getGameFont()->draw(
 				current->getColor(), fontSize_,
 				x_ + offSet, y_, 0.0f,

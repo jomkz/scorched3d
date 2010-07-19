@@ -36,6 +36,12 @@ GLWIconButton::~GLWIconButton()
 {
 }
 
+void GLWIconButton::setToolTip(ToolTip *tooltip)
+{
+	GLWButton::setToolTip(tooltip);
+	icon_.setToolTip(tooltip);
+}
+
 void GLWIconButton::setX(float x)
 {
 	GLWButton::setX(x);

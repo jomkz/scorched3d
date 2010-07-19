@@ -33,6 +33,7 @@
 #include <GLW/GLWColors.h>
 #include <client/ClientParams.h>
 #include <graph/OptionsDisplay.h>
+#include <graph/ShotCountDown.h>
 #include <common/OptionsTransient.h>
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
@@ -205,8 +206,27 @@ void ScoreDialog::draw()
 		GLWFont::instance()->getGameFont()->draw(
 			white,
 			10,
-			x_ + 470 - roundsWidth, y_ + h_ - 25.0f, 0.0f,
+			x_ + 470 - roundsWidth, y_ + h_ - 15.0f, 0.0f,
 			buffer);
+	}
+	if (!finished) 
+	{
+		std::string str;
+		if (ShotCountDown::instance()->getRoundTime(str))
+		{
+			LangString buffer;
+			LANG_RESOURCE_VAR_1(ROUND_TIME, "ROUND_TIME", "Round time {0}",
+				S3D::formatStringBuffer("%s", str.c_str()));
+			buffer.append(ROUND_TIME);
+
+			float roundsWidth = GLWFont::instance()->getGameFont()->getWidth(
+				10, buffer);
+			GLWFont::instance()->getGameFont()->draw(
+				white,
+				10,
+				x_ + 470 - roundsWidth, y_ + h_ - 30.0f, 0.0f,
+				buffer);
+		}
 	}
 
 	LANG_RESOURCE_VAR(SCORE_NAME, "SCORE_NAME", "Name");

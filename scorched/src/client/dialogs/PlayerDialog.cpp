@@ -57,18 +57,34 @@ PlayerDialog::PlayerDialog() :
 	GLWWindow("Team", 10.0f, 10.0f, 740.0f, 480.0f, eSmallTitle,
 		"Allows the player to make changes to their\n"
 		"name, their tank and to change teams."),
-	allocatedTeam_(0), cancelButton_(0), viewer_(0)
+	allocatedTeam_(0), cancelButton_(0), viewer_(0), spectateButton_(0)
 {
 	needCentered_ = true;
 
 	// Add buttons
-	okId_ = addWidget(new GLWTextButton(LANG_RESOURCE("PLAY", "Play"), 665, 10, 65, this, 
-		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX))->getId();
-	if (ClientParams::instance()->getConnectedToServer())
-	{
-		cancelButton_ = (GLWTextButton *) addWidget(new GLWTextButton(LANG_RESOURCE("SPECTATE", "Spectate"), 550, 10, 105, this, 
-			GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX));
-	}
+	GLWButton *okButton = (GLWTextButton *)  addWidget(new GLWTextButton(LANG_RESOURCE("PLAY", "Play"), 665, 10, 65, this, 
+		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX));
+	okId_ = okButton->getId();
+	okButton->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("PLAY", "Play"), 
+		LANG_RESOURCE("PLAY_PLAYER_DIALOG_TOOLTIP",
+		"Start or continue playing.\n"
+		"Apply all displayed player settings.")));
+
+	spectateButton_ = (GLWTextButton *) addWidget(new GLWTextButton(LANG_RESOURCE("SPECTATE", "Spectate"), 555, 10, 105, this, 
+		GLWButton::ButtonFlagCenterX));
+	spectateButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("SPECTATE", "Spectate"), 
+		LANG_RESOURCE("SPECTATE_PLAYER_DIALOG_TOOLTIP",
+		"Change into specator mode.\n"
+		"This action will kill the player if they are alive.")));
+
+	cancelButton_ =  (GLWTextButton *) addWidget(new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 445, 10, 105, this, 
+		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX));
+	cancelButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+		LANG_RESOURCE("CANCEL", "Cancel"), 
+		LANG_RESOURCE("CANCEL_PLAYER_DIALOG_TOOPTIP",
+		"Close dialog without making any changes to the player.")));
 
 	GLWPanel *infoPanel = new GLWPanel(10.0f, 390.0f, 720.0f, 75.0f,
 		false, true, true);
@@ -298,11 +314,19 @@ void PlayerDialog::nextPlayer()
 		{
 			imageList_->setCurrentShortPath("player.png");
 		}
+
+		cancelButton_->setEnabled(true);
+		spectateButton_->setEnabled(tank?tank->getState().getState() != TankState::sSpectator:false);
 	}
 	else
 	{
 		// Else use the default names
-		if (tank) playerName_->setText(tank->getTargetName());
+		if (tank) 
+		{
+			playerName_->setText(tank->getTargetName());
+		}
+		cancelButton_->setEnabled(false);
+		spectateButton_->setEnabled(false);
 	}
 		
 	imageList_->setEnabled(true);
@@ -374,6 +398,12 @@ int PlayerDialog::getCurrentTeam()
 
 void PlayerDialog::buttonDown(unsigned int id)
 {
+	if (cancelButton_ && id == cancelButton_->getId())
+	{
+		nextPlayer();
+		return;
+	}
+
 	if (playerName_->getText().empty())
 	{
 		playerName_->setText(LANG_STRING("PLAYER"));
@@ -409,7 +439,7 @@ void PlayerDialog::buttonDown(unsigned int id)
 	const char *playerType = typeDropDown_->getCurrentDataText();
 
 	// Add this player
-	bool spectate = (cancelButton_ && (id == cancelButton_->getId()));
+	bool spectate = (spectateButton_ && (id == spectateButton_->getId()));
 	ComsTankChangeMessage message(currentPlayerId_,
 		playerName_->getLangString(),
 		colorDropDown_->getCurrentColor(),

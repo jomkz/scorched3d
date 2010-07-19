@@ -68,6 +68,7 @@ protected:
 	ToolTip humanToolTip_;
 	GLTexture colorTexture_;
 	GLWTextButton *cancelButton_;
+	GLWTextButton *spectateButton_;
 	unsigned int allocatedTeam_;
 	unsigned int okId_;
 	unsigned int currentPlayerId_;

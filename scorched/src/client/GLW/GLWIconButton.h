@@ -39,6 +39,8 @@ public:
 	virtual void setW(float w);
 	virtual void setH(float h);
 
+	virtual void setToolTip(ToolTip *tooltip);
+
 	void setTextureImage(const ImageID &imageId) { icon_.setTextureImage(imageId); }
 
 	REGISTER_CLASS_HEADER(GLWIconButton);

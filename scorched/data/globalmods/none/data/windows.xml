@@ -54,8 +54,58 @@
 			</item>
 		</items>
 	</window>
-	-->	
-	<window>
+	-->
+
+  <window>
+    <name>CombatChannels</name>
+    <state>all</state>
+    <state>start</state>
+    <visible>true</visible>
+    <key></key>
+    <windowlevel>200000</windowlevel>
+    <w>-280</w>
+    <h>100</h>
+    <x>140</x>
+    <y>-130</y>
+    <windowstate>805</windowstate>
+    <tooltiptransparent>true</tooltiptransparent>
+    <notooltip>true</notooltip>
+    <description>Shows combat channel messages</description>
+    <items>
+      <item>
+        <widget type="GLWChannelView">
+          <x>0</x>
+          <y>0</y>
+          <w>0</w>
+          <h>0</h>
+          <displaytime>15.0</displaytime>
+          <totallines>50</totallines>
+          <visiblelines>5</visiblelines>
+          <linedepth>18</linedepth>
+          <fontsize>12</fontsize>
+          <outlinefontsize>14</outlinefontsize>
+          <textaligntop>false</textaligntop>
+          <splitlargelines>true</splitlargelines>
+          <parentsized>true</parentsized>
+          <tooltiptransparent>true</tooltiptransparent>
+          <showchannelname>false</showchannelname>
+          <showchannelnumber>true</showchannelnumber>
+          <allowscroll>false</allowscroll>
+          <textsound>data/wav/misc/text.wav</textsound>
+          <channel>combat</channel>
+          <channelcolor>
+            <channel>combat</channel>
+            <color>
+              <A>0.8</A>
+              <B>0.8</B>
+              <C>0.0</C>
+            </color>
+          </channelcolor>
+        </widget>
+      </item>
+    </items>
+  </window>
+  <window>
 		<name>Channels</name>
 		<state>all</state>
 		<state>start</state>
@@ -110,7 +160,6 @@
 					<channel>general</channel>
 					<channel>team</channel>
 					<channel>whisper</channel>
-					<channel>combat</channel>
 					<channelcolor>
 						<channel>announce</channel>
 						<color><A>0.8</A><B>0.8</B><C>0.8</C></color>
@@ -132,10 +181,6 @@
 					<channelcolor>
 						<channel>whisper</channel>
 						<color><A>0.7</A><B>0.0</B><C>0.7</C></color>
-					</channelcolor>
-					<channelcolor>
-						<channel>combat</channel>
-						<color><A>0.8</A><B>0.8</B><C>0.0</C></color>
 					</channelcolor>
 				</widget>
 			</item>
@@ -202,6 +247,7 @@ strength and direction.</description>
 				<widget type="GLWIcon">
 					<x>0</x><y>0</y>
 					<w>128</w><h>128</h>
+          <tooltiptransparent>true</tooltiptransparent>
 					<bitmap>data/windows/wind.bmp</bitmap>
 					<bitmapa>data/windows/winda2.bmp</bitmapa>
 					<invert>true</invert>
@@ -251,6 +297,7 @@ including its health, and defense status</description>
 				<widget type="GLWIcon">
 					<x>0</x><y>-12</y>
 					<w>190</w><h>190</h>
+          <tooltiptransparent>true</tooltiptransparent>
 					<bitmap>data/windows/player.bmp</bitmap>
 					<bitmapa>data/windows/playera2.bmp</bitmapa>
 					<invert>true</invert>
@@ -415,6 +462,7 @@ including its power and direction.</description>
 				<widget type="GLWIcon">
 					<x>0</x><y>-12</y>
 					<w>190</w><h>190</h>
+          <tooltiptransparent>true</tooltiptransparent>
 					<bitmap>data/windows/weapon.bmp</bitmap>
 					<bitmapa>data/windows/weapona2.bmp</bitmapa>
 					<invert>true</invert>
