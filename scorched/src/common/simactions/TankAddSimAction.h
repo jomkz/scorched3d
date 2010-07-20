@@ -39,6 +39,8 @@ public:
 	virtual bool writeMessage(NetBuffer &buffer);
 	virtual bool readMessage(NetBufferReader &reader);
 
+	NetBuffer &getScoreNetBuffer() { return scoreNetBuffer_; }
+
 	static unsigned int TankAddSimActionCount;
 
 REGISTER_CLASS_HEADER(TankAddSimAction);
@@ -46,6 +48,7 @@ protected:
 	unsigned int playerId_, destinationId_;
 	std::string uniqueId_, sUID_, hostDesc_, aiName_;
 	LangString playerName_;
+	NetBuffer scoreNetBuffer_;
 	unsigned int ipAddress_;
 };
 

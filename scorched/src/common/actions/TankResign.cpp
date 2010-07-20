@@ -34,7 +34,8 @@
 TankResign::TankResign(unsigned int playerId, fixed resignTime) :
 	Action(playerId),
 	resignTime_(resignTime),
-	playerId_(playerId)
+	playerId_(playerId),
+	stateChangeCount_(0)
 {
 }
 
@@ -44,10 +45,12 @@ TankResign::~TankResign()
 
 void TankResign::init()
 {
+	Tank *tank = context_->getTankContainer().getTankById(playerId_);
+	if (tank) stateChangeCount_ = tank->getState().getStateChangeCount();
+
 #ifndef S3D_SERVER
 	if (!context_->getServerMode())
 	{
-		Tank *tank = context_->getTankContainer().getTankById(playerId_);
 		if (tank && resignTime_ > 0)
 		{
 			ChannelText text("combat",
@@ -59,7 +62,7 @@ void TankResign::init()
 			ChannelManager::showText(*context_, text);
 		}
 	}
-#endif // #ifndef S3D_SERVER
+#endif // #ifndef S3D_SERVER	
 }
 
 void TankResign::simulate(fixed frameTime, bool &remove)
@@ -72,7 +75,9 @@ void TankResign::simulate(fixed frameTime, bool &remove)
 
 		Tank *tank = 
 			context_->getTankContainer().getTankById(playerId_);
-		if (tank && tank->getState().getState() == TankState::sNormal)
+		if (tank && 
+			tank->getState().getState() == TankState::sNormal &&
+			tank->getState().getStateChangeCount() == stateChangeCount_)
 		{
 			// update player assists when this player resigns
 			int moneyPerAssist = 

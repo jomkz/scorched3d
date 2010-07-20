@@ -54,7 +54,7 @@ bool TankNewMatchSimAction::invokeAction(ScorchedContext &context)
 		if (!tank->getAccessories().readMessage(reader) ||
 			!tank->getScore().readMessage(reader))
 		{
-			Logger::log("ERROR: Failed to update residual player info (read)");
+			Logger::log("ERROR: TankNewMatchSimAction failed to update residual player info (read)");
 		}
 
 		// Don't get credited for the new game stats

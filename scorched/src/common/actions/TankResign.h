@@ -38,6 +38,7 @@ public:
 protected:
 	fixed resignTime_;
 	unsigned int playerId_;
+	unsigned int stateChangeCount_;
 
 };
 

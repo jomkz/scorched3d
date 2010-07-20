@@ -61,7 +61,8 @@ TankState::TankState(ScorchedContext &context, unsigned int playerId) :
 	lives_(0), maxLives_(1), moveId_(0),
 	skippedShots_(0),
 	notSpectator_(false),
-	newlyJoined_(true)
+	newlyJoined_(true),
+	stateChangeCount_(0)
 {
 }
 
@@ -71,6 +72,7 @@ TankState::~TankState()
 
 void TankState::newMatch()
 {
+	stateChangeCount_ = 0;
 	setState(sDead);
 }
 
@@ -101,6 +103,7 @@ void TankState::setState(State s)
 			s == allowedStateTransitions[i].to)
 		{
 			state_ = s;
+			stateChangeCount_++;
 			break;
 		}
 	}

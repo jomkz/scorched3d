@@ -32,6 +32,7 @@
 #include <tank/TankColorGenerator.h>
 #include <tank/TankContainer.h>
 #include <tank/TankModelContainer.h>
+#include <tank/TankDeadContainer.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
@@ -344,6 +345,17 @@ void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,
 	// Add this tank
 	TankAddSimAction *simAction = new TankAddSimAction(tankId, destinationId,
 		sentUniqueId, sentSUI, sentHostDesc, ipAddress, playerName, "");
+	if (sentUniqueId[0])
+	{
+		ScorchedServer::instance()->getTankDeadContainer().getDeadTank(
+			simAction, sentUniqueId);
+	}
+	else if (sentSUI[0])
+	{
+		ScorchedServer::instance()->getTankDeadContainer().getDeadTank(
+			simAction, sentSUI);
+	}
+
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
 }
 

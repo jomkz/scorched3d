@@ -24,6 +24,7 @@
 #include <tank/TankContainer.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
+#include <tank/TankScore.h>
 #include <tank/TankModelStore.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankModelContainer.h>
@@ -163,6 +164,16 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 		tank->getState().setState(TankState::sSpectator);
 	}
 
+	if (scoreNetBuffer_.getBufferUsed() > 0)
+	{
+		NetBufferReader reader(scoreNetBuffer_);
+		if (!tank->getAccessories().readMessage(reader) ||
+			!tank->getScore().readMessage(reader))
+		{
+			Logger::log("ERROR: TankAddSimAction failed to update residual player info (read)");
+		}
+	}
+
 #ifndef S3D_SERVER
 	if (!context.getServerMode())
 	{
@@ -224,6 +235,7 @@ bool TankAddSimAction::writeMessage(NetBuffer &buffer)
 	buffer.addToBuffer(playerId_);
 	buffer.addToBuffer(destinationId_);
 	buffer.addToBuffer(playerName_);
+	buffer.addToBuffer(scoreNetBuffer_);
 
 	return true;
 }
@@ -233,6 +245,7 @@ bool TankAddSimAction::readMessage(NetBufferReader &reader)
 	if (!reader.getFromBuffer(playerId_)) return false;
 	if (!reader.getFromBuffer(destinationId_)) return false;
 	if (!reader.getFromBuffer(playerName_)) return false;
+	if (!reader.getFromBuffer(scoreNetBuffer_)) return false;
 	
 	return true;
 }

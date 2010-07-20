@@ -24,6 +24,7 @@
 #include <map>
 #include <tank/Tank.h>
 #include <simactions/TankNewMatchSimAction.h>
+#include <simactions/TankAddSimAction.h>
 
 class TankDeadContainer  
 {
@@ -33,7 +34,8 @@ public:
 
 	void clearTanks();
 	void addDeadTank(Tank *tank, const std::string &storedName);
-	void getDeadTank(Tank *tank, TankNewMatchSimAction *simAction, const std::string &storedName);
+	void getDeadTank(TankNewMatchSimAction *simAction, const std::string &storedName);
+	void getDeadTank(TankAddSimAction *simAction, const std::string &storedName);
 
 protected:
 	std::map<std::string, NetBuffer *> deadTanks_;

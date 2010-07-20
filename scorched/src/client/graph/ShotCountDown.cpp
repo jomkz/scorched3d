@@ -153,6 +153,10 @@ void ShotCountDown::drawMove()
 				split.rem);
 		}
 	}
+	else
+	{
+		return;
+	}
 
 	float width = GLWFont::instance()->getGameFont()->getWidth(20, str);	
 

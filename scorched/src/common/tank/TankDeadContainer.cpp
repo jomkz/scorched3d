@@ -72,7 +72,7 @@ void TankDeadContainer::addDeadTank(Tank *tank, const std::string &storedName)
 	deadTanks_[storedName] = buffer;
 }
 
-void TankDeadContainer::getDeadTank(Tank *tank, TankNewMatchSimAction *simAction, const std::string &storedName)
+void TankDeadContainer::getDeadTank(TankNewMatchSimAction *simAction, const std::string &storedName)
 {
 	// Get the buffer
 	std::map<std::string, NetBuffer *>::iterator finditor =
@@ -85,6 +85,18 @@ void TankDeadContainer::getDeadTank(Tank *tank, TankNewMatchSimAction *simAction
 
 	deadTanks_.erase(finditor);
 	delete buffer;
+}
+
+void TankDeadContainer::getDeadTank(TankAddSimAction *simAction, const std::string &storedName)
+{
+	// Get the buffer
+	std::map<std::string, NetBuffer *>::iterator finditor =
+		deadTanks_.find(storedName);
+	if (finditor == deadTanks_.end()) return;
+	NetBuffer *buffer = finditor->second;
+
+	simAction->getScoreNetBuffer().reset();
+	simAction->getScoreNetBuffer().addDataToBuffer(buffer->getBuffer(), buffer->getBufferUsed());
 }
 
 void TankDeadContainer::clearTanks()
