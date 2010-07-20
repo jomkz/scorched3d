@@ -88,21 +88,21 @@ close(CLIENT);
 
 createInstallMakefile();
 createBinaryMakefile(
-	"../src/launcher/scorched/scorched.vcproj", 
+	"../src/launcher/scorched/scorched.vcxproj", 
 	"../src/launcher/scorched/Makefile.am", 
 	"scorched3d",
 	'-I../../client -I../../server -I../../launcher @WX_CFLAGS@ @FT2_CFLAGS@ @SDL_CFLAGS@',
 	'@WX_LIBS@ @FT2_LIBS@ @SDL_LIBS@'
 	);
 createBinaryMakefile(
-	"../src/client/scorchedc/scorchedc.vcproj", 
+	"../src/client/scorchedc/scorchedc.vcxproj", 
 	"../src/client/scorchedc/Makefile.am", 
 	"scorched3dc",
 	'-I../../client -I../../server  @FFTW_CFLAGS@ @AL_CFLAGS@ @FT2_CFLAGS@ @OGG_CFLAGS@ @SDL_CFLAGS@',
 	'@FFTW_LIBS@ @AL_LIBS@ @FT2_LIBS@ @GL_LIBS@ @OGG_LIBS@ @SDL_LIBS@'
 	);
 createBinaryMakefile(
-	"../src/server/scorcheds/scorcheds.vcproj", 
+	"../src/server/scorcheds/scorcheds.vcxproj", 
 	"../src/server/scorcheds/Makefile.am", 
 	"scorched3ds",
 	'-I../../server -DS3D_SERVER=1 @SDL_CFLAGS@ @MYSQL_CFLAGS@',

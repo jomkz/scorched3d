@@ -29,9 +29,46 @@ std::string SecureID::GetPrivateKey(void)
 
 #elif defined(__DARWIN__)
 
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <net/if_dl.h>
+#include <ifaddrs.h>
+
 std::string SecureID::GetPrivateKey(void)
 {
-	return "0:0:0:0:0:0";
+	unsigned char node[6];
+	memset(node, 0, sizeof(node));
+
+	struct ifaddrs *ifap;
+	if (getifaddrs(&ifap) == 0) 
+	{
+		struct ifaddrs *p;
+		for (p = ifap; p; p = p->ifa_next) 
+		{
+			if (p->ifa_addr->sa_family == AF_LINK) 
+			{
+				struct sockaddr_dl* sdp = (struct sockaddr_dl*) p->ifa_addr;
+				if (sdp->sdl_data)
+				{
+					memcpy(node, sdp->sdl_data + sdp->sdl_nlen, 6);
+					if (node[0] || node[1] || node[2]) break;
+				}
+			}
+		}
+		freeifaddrs(ifap);
+	}
+
+	std::string result = "";
+	if (node[0] || node[1] || node[2]) 
+	{
+		result = S3D::formatStringBuffer(
+			"%02X:%02X:%02X:%02X:%02X:%02X",
+			node[0], node[1], node[2],
+			node[3], node[4], node[5]);
+	}
+
+	return result;
 }
 
 #else
