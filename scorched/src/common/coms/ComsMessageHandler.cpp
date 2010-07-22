@@ -180,7 +180,14 @@ void ComsMessageHandler::processMessage(NetMessage &message,
 		return;
 	}
 	ComsMessageHandlerI *handler = handlers[messageTypeId];
-	
+	if (!handler)
+	{
+		if (connectionHandler_)
+			connectionHandler_->clientError(message, 
+				S3D::formatStringBuffer("Failed to find %s message type handler \"%s\"",
+					sendRecv, messageTypeStr));
+		return;
+	}	
 	if (!handler->processMessage(
 		message, messageTypeStr, reader))
 	{

@@ -344,7 +344,7 @@ bool ServerWebServer::processRequest(
 	{
 		// We have requested the login page
 		// Have the login credentials been supplied
-		if (validateUser(ip, url, fields))
+		if (validateUser(ip, url, fields, delayed))
 		{
 			// Yes, and credentials are correct
 			// Show the starting (players) page
@@ -357,7 +357,6 @@ bool ServerWebServer::processRequest(
 			// Show the login page after a delay
 			if (!ServerWebServerUtil::getHtmlTemplate(
 				0, "login.html", fields, text)) return false;
-			delayed = true;
 		}
 	}
 	else
@@ -470,7 +469,8 @@ unsigned int ServerWebServer::validateSession(
 bool ServerWebServer::validateUser(
 	const char *ip,
 	const char *url,
-	std::map<std::string, std::string> &fields)
+	std::map<std::string, std::string> &fields,
+	bool &delayed)
 {
 	// Create a session for the user
 	unsigned int sid = ScorchedServer::instance()->getServerAdminSessions().login(
@@ -496,8 +496,12 @@ bool ServerWebServer::validateUser(
 	}
 	else
 	{
-		Logger::log(S3D::formatStringBuffer("Failed login for server admin \"%s\", via web, ip \"%s\"",
-			fields["name"].c_str(), ip));
+		if (fields["name"] != "" && fields["password"] != "")
+		{
+			Logger::log(S3D::formatStringBuffer("Failed login for server admin \"%s\", via web, ip \"%s\"",
+				fields["name"].c_str(), ip));
+			delayed = true;
+		}
 	}
 
 	return false;

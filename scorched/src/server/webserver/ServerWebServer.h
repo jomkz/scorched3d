@@ -75,7 +75,8 @@ protected:
 	bool validateUser(
 		const char *ip,
 		const char *url,
-		std::map<std::string, std::string> &fields);
+		std::map<std::string, std::string> &fields,
+		bool &delayed);
 	unsigned int validateSession(
 		const char *ip,
 		const char *url,
