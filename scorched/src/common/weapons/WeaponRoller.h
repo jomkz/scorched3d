@@ -37,6 +37,7 @@ public:
 	Weapon *getCollisionAction() { return collisionAction_; }
 	ModelID &getRollerModelID() { return rollerModelId_; }
 	bool getRoll() { return roll_; }
+	bool getStickyShields() { return stickyShields_; }
 	fixed getShieldHurtFactor(ScorchedContext &context);
 	fixed getTime(ScorchedContext &context);
 	fixed getWindFactor(ScorchedContext &context);
@@ -59,6 +60,7 @@ protected:
 	fixed windFactor_;
 	fixed time_, stepSize_;
 	bool roll_;
+	bool stickyShields_;
 
 	bool maintainVelocity_;
 	NumberParser dampenVelocityExp_;

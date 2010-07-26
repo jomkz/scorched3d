@@ -8,6 +8,7 @@
 			<nocollision>true</nocollision>
 			<displayshadow>false</displayshadow>
 			<groupname>boids-gulls</groupname>
+      <groupname>camera</groupname>
 			<modelscale>0.01</modelscale>
 		</object>
 	</placement>

@@ -37,7 +37,7 @@ WeaponRoller::WeaponRoller() :
 	shieldHurtFactor_(0), windFactor_(1), 
 	maintainVelocity_(false), roll_(true),
 	dampenVelocityExp_(1), stepSize_(true, 100),
-	collisionAction_(0)
+	collisionAction_(0), stickyShields_(false)
 {
 
 }
@@ -73,6 +73,9 @@ bool WeaponRoller::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 
 	// Get if we are to roll
 	accessoryNode->getNamedChild("roll", roll_, false);
+
+	// Get if we are to roll
+	accessoryNode->getNamedChild("stickyshields", stickyShields_, false);
 
 	XMLNode *subNode = 0;
 	if (!accessoryNode->getNamedChild("collisionaction", subNode)) return false;

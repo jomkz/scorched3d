@@ -40,7 +40,8 @@ public:
 		fixed windFactor = 1,
 		bool underGroundCollision = false,
 		bool rotateOnCollision = false,
-		bool wallCollision = true);
+		bool wallCollision = true,
+		bool stickyShields = false);
 	virtual void collision(PhysicsParticleObject &position, 
 		ScorchedCollisionId collisionId);
 

@@ -45,6 +45,7 @@ public:
 		CamLeftFar,
 		CamRightFar,
 		CamSpectator,
+		CamObject,
 		CamFree
 	};
 
@@ -87,7 +88,8 @@ protected:
 	CamType cameraPos_;
 	ParticleEmitter rainEmitter_, snowEmitter_;
 	ParticleEngine particleEngine_;
-	float totalTime_;
+	float totalTime_, objectTime_;
+	int viewObject_;
 	int dragXStart_, dragYStart_;
 	bool dragging_;
 	bool lastLandIntersectValid_;

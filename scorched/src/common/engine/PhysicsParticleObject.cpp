@@ -42,7 +42,8 @@
 
 PhysicsParticleObject::PhysicsParticleObject() : 
 	handler_(0), context_(0), underGroundCollision_(false), iterations_(0),
-	info_(ParticleTypeNone, 0, 0), rotateOnCollision_(false), wallCollision_(true)
+	info_(ParticleTypeNone, 0, 0), rotateOnCollision_(false), wallCollision_(true),
+	stickyShields_(false)
 {
 }
 
@@ -60,13 +61,15 @@ void PhysicsParticleObject::setPhysics(
 	ScorchedContext &context, 
 	FixedVector &position, FixedVector &velocity,
 	fixed sphereSize, fixed sphereDensity, fixed windFactor,
-	bool underGroundCollision, bool rotateOnCollision, bool wallCollision)
+	bool underGroundCollision, bool rotateOnCollision, 
+	bool wallCollision, bool stickyShields)
 {
 	info_ = info;
 	context_ = &context;
 	underGroundCollision_ = underGroundCollision;
 	rotateOnCollision_ = rotateOnCollision;
 	wallCollision_ = wallCollision;
+	stickyShields_ = stickyShields;
 
 	FixedVector zaxis(0, 0, 1);
 	rotation_.setQuatFromAxisAndAngle(zaxis, 0);
@@ -119,6 +122,14 @@ void PhysicsParticleObject::checkCollision()
 			getWallCollision(collision)) 
 		{
 			action = checkShotCollision(collision, target);
+
+			if (action == CollisionActionBounce &&
+				collision.collisionId == CollisionIdShield &&
+				stickyShields_)
+			{
+				bounceFactor = fixed(true, 1750);
+			}
+
 			if (action != CollisionActionNone)
 			{
 				if (context_->getOptionsGame().getActionSyncCheck())
@@ -143,7 +154,8 @@ void PhysicsParticleObject::checkCollision()
 
 			velocity_[2] = MIN(velocity_[2], 1);
 
-			if (collision.collisionId != CollisionIdShield)
+			if (collision.collisionId != CollisionIdShield ||
+				stickyShields_)
 			{
 				bounceFactor = fixed(true, 1750);
 			}

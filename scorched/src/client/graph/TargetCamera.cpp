@@ -63,6 +63,7 @@ static const char *cameraNames[] =
 	"LeftFar",
 	"RightFar",
 	"Spectator",
+	"Object",
 	"Free"
 };
 static const int noCameraNames = sizeof(cameraNames) / sizeof(char *);
@@ -95,6 +96,7 @@ static const char *cameraDescriptions[] =
 	"Look at the right of the current tank.\n"
 	"Tracks the current tanks rotation.",
 	"Look at the island from afar.",
+	"Looks from some moving objects e.g. birds",
 	"A custom camera position has been made by the\n"
 	"user."
 };
@@ -103,10 +105,11 @@ static const int noCameraDescriptions = sizeof(cameraDescriptions) / sizeof(char
 TargetCamera::TargetCamera() : 
 	mainCam_(300, 300), 
 	cameraPos_(CamSpectator), 
-	totalTime_(0.0f),
+	totalTime_(0.0f), objectTime_(0.0f),
 	particleEngine_(&mainCam_, 6000),
 	dragging_(false),
-	lastLandIntersectValid_(false)
+	lastLandIntersectValid_(false),
+	viewObject_(0)
 {
 	resetCam();
 
@@ -213,6 +216,7 @@ float TargetCamera::maxHeightFunc(int x, int y, void *data)
 
 void TargetCamera::simulate(float frameTime, bool playing)
 {
+	objectTime_ += frameTime * ParticleEngine::getFast();
 	totalTime_ += frameTime * ParticleEngine::getFast();
 	while (totalTime_ > 0.05f)
 	{
@@ -453,6 +457,30 @@ void TargetCamera::moveCamera()
 		break;
 	case CamSpectator:
 		viewSpectator();
+		break;
+	case CamObject:
+		{
+			TargetGroupsSetEntry *groupEntry = ScorchedClient::instance()->getLandscapeMaps().
+				getGroundMaps().getGroups().getGroup("camera");
+			if (groupEntry && groupEntry->getObjectCount() > 0)
+			{
+				TargetGroup *targetGroup = groupEntry->getObjectByPos(viewObject_ % groupEntry->getObjectCount());
+				FixedVector &position = targetGroup->getTarget()->getLife().getTargetPosition();
+				FixedVector &velocity = targetGroup->getTarget()->getLife().getVelocity();
+				mainCam_.setLookAt(position.asVector());
+				mainCam_.setOffSet(velocity.asVector().Normalize() * -mainCam_.getZoom());
+
+				if (objectTime_ > 15.0f)
+				{
+					objectTime_ = 0.0f;
+					viewObject_ = rand();
+				}
+			}
+			else
+			{
+				viewSpectator();
+			}
+		}
 		break;
 	default:
 		break;

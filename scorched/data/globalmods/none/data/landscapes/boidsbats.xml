@@ -8,6 +8,7 @@
 			<nocollision>true</nocollision>
 			<displayshadow>false</displayshadow>
 			<groupname>boids-bats</groupname>
+      <groupname>camera</groupname>
 			<modelscale>0.03</modelscale>
 		</object>
 	</placement>

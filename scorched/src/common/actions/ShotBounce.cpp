@@ -50,7 +50,8 @@ void ShotBounce::init()
 {
 	PhysicsParticleInfo info(ParticleTypeBounce, weaponContext_.getPlayerId(), this);
 	setPhysics(info, startPosition_, velocity_, 
-		1, 5, weapon_->getWindFactor(*context_), false, weapon_->getRoll());
+		1, 5, weapon_->getWindFactor(*context_), false, 
+		weapon_->getRoll(), true, weapon_->getStickyShields());
 	stepSize_ = weapon_->getStepSize() * 
 		fixed(true, context_->getOptionsGame().getWeaponSpeed());
 

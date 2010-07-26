@@ -78,7 +78,8 @@ public:
 		fixed windFactor = 1,
 		bool underGroundCollision = false,
 		bool rotateOnCollision = false,
-		bool wallCollision = true);
+		bool wallCollision = true,
+		bool stickyShields = false);
 
 	void applyForce(FixedVector &force);
 	void simulate(fixed frameTime);
@@ -97,6 +98,7 @@ protected:
 	bool underGroundCollision_;
 	bool rotateOnCollision_;
 	bool wallCollision_;
+	bool stickyShields_;
 	unsigned int iterations_;
 	FixedVector position_;
 	FixedVector velocity_;

@@ -38,7 +38,7 @@ void PhysicsParticle::setPhysics(
 	FixedVector &position, FixedVector &velocity,
 	fixed sphereSize, fixed sphereDensity, fixed windFactor,
 	bool underGroundCollision, bool rotateOnCollision,
-	bool wallCollision)
+	bool wallCollision, bool stickyShields)
 {
 	physicsObject_.setPhysics(
 		info,
@@ -47,7 +47,8 @@ void PhysicsParticle::setPhysics(
 		sphereSize, sphereDensity, windFactor,
 		underGroundCollision,
 		rotateOnCollision,
-		wallCollision);
+		wallCollision,
+		stickyShields);
 	physicsObject_.setHandler(this);
 }
 
