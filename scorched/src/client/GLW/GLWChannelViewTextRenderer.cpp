@@ -111,7 +111,7 @@ bool GLWChannelViewTextRenderer::drawCharacter(
 
 	// Render any player avatars
 	if (textEntry->type == ePlayerEntry &&
-		character == '@' &&
+		character == 3473 &&
 		textEntry->data)
 	{
 		glColor4f(1.0f, 1.0f, 1.0f, color[3]);

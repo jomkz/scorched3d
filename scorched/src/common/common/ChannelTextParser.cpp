@@ -160,7 +160,7 @@ bool ChannelTextParser::createPlayerEntry(ScorchedContext &context,
 {
 	entry.type = ePlayerEntry;
 	entry.text.push_back('[');
-	entry.text.push_back('@');
+	entry.text.push_back(3473);
 	entry.text.append(part);
 	entry.text.push_back(']');
 	entry.data = 0;

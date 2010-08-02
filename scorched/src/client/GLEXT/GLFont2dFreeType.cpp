@@ -84,10 +84,22 @@ bool GLFont2dFreeType::createCharacter(unsigned int ch, GLFont2dStorage::CharEnt
 	// The First Thing We Do Is Get FreeType To Render Our Character
 	// Into A Bitmap.  This Actually Requires A Couple Of FreeType Commands:
 
+	/*
+	char buffer[256];
+	for (int i=2588; i<5000; i++) {
+		FT_Get_Glyph_Name(face_, i, buffer, 256);
+		if (0 == strcmp(buffer, "filledbox")) {
+			break;
+		}
+	}
+	*/
+
 	// Load The Glyph For Our Character.
  	FT_UInt charIndex = FT_Get_Char_Index( face_, ch );
-	if (!charIndex) {
-		charIndex = FT_Get_Char_Index( face_, '?');
+	if (!charIndex) 
+	{
+		if (charIndex < (FT_UInt) face_->num_glyphs) charIndex = ch;
+		else charIndex = FT_Get_Char_Index( face_, '?');
 	}
 
 	if(FT_Load_Glyph( face_, charIndex, FT_LOAD_DEFAULT )) 
