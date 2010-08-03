@@ -38,6 +38,8 @@ bool GLStateExtension::hasFBO_ = false;
 bool GLStateExtension::hasDrawRangeElements_ = false;
 bool GLStateExtension::isSoftwareOpenGL_ = false;
 int GLStateExtension::textureUnits_ = 0;
+int GLStateExtension::imageUnits_ = 0;
+int GLStateExtension::textureCoords_ = 0;
 int GLStateExtension::maxElementVertices_ = 0;
 int GLStateExtension::maxElementIndices_ = 0;
 
@@ -92,6 +94,10 @@ void GLStateExtension::setup()
 				GLint textureUnits;
 				glGetIntegerv(GL_MAX_TEXTURE_UNITS_ARB, &textureUnits);
 				textureUnits_ = textureUnits;
+				glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS_ARB, &textureUnits);
+				imageUnits_ = textureUnits;
+				glGetIntegerv(GL_MAX_TEXTURE_COORDS_ARB, &textureUnits);
+				textureCoords_ = textureUnits;
 				hasMultiTex_ = true;
 			}
 		}
@@ -159,8 +165,8 @@ void GLStateExtension::setup()
 	Logger::log(S3D::formatStringBuffer("GL_RENDERER:%s", glGetString(GL_RENDERER)));
 	Logger::log(S3D::formatStringBuffer("GL_VERSION:%s", glGetString(GL_VERSION)));
 	Logger::log(S3D::formatStringBuffer("GL_EXTENSIONS:%s", glGetString(GL_EXTENSIONS)));
-	Logger::log(S3D::formatStringBuffer("TEXTURE UNITS: %s (%i units)", 
-		(hasMultiTex()?"On":"Off"),textureUnits_));
+	Logger::log(S3D::formatStringBuffer("TEXTURE UNITS: %s (%i tex units, %i image units, %i coords)", 
+		(hasMultiTex()?"On":"Off"),textureUnits_, imageUnits_, textureCoords_));
 	Logger::log(S3D::formatStringBuffer("VERTEX BUFFER OBJECT:%s", 
 		(hasVBO()?"On":"Off")));
 	Logger::log(S3D::formatStringBuffer("DRAW RANGE ELEMENTS:%s%s", 
