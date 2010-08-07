@@ -37,7 +37,7 @@
 #endif
 
 unsigned int S3D::ScorchedPort = 27270;
-std::string S3D::ScorchedVersion = "43.2";
+std::string S3D::ScorchedVersion = "43.2BETA";
 std::string S3D::ScorchedProtocolVersion = "en";
 #ifdef __DATE__
 std::string S3D::ScorchedBuildTime = __DATE__;
@@ -89,6 +89,11 @@ std::string S3D::getStartTime()
 void S3D::setSettingsDir(const std::string &dir)
 {
 	settingsDir = dir;
+
+	if (S3D::stristr(S3D::ScorchedVersion.c_str(), "BETA"))
+	{
+		settingsDir.append("BETA");
+	}
 }
 
 void S3D::setDataFileMod(const std::string &mod)
