@@ -59,7 +59,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Ws2_32.lib;$(SolutionDir)/../scorched-dep-win32/lib/jpg/jpeg.lib;$(SolutionDir)/../scorched-dep-win32/lib/mysql/libmysql.lib;$(SolutionDir)/../scorched-dep-win32/lib/png/libpng13.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL_net.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDLmain.lib;$(SolutionDir)/../scorched-dep-win32/lib/zlib/zlib1.lib;$(SolutionDir)/../scorched-dep-win32/lib/expat/libexpat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Ws2_32.lib;$(SolutionDir)/../scorched-dep-win32/lib/jpg/jpeg.lib;$(SolutionDir)/../scorched-dep-win32/lib/mysql/libmysql.lib;$(SolutionDir)/../scorched-dep-win32/lib/png/libpng.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL_net.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDLmain.lib;$(SolutionDir)/../scorched-dep-win32/lib/zlib/zlib1.lib;$(SolutionDir)/../scorched-dep-win32/lib/expat/libexpat.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -84,7 +84,7 @@
       <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Ws2_32.lib;$(SolutionDir)/../scorched-dep-win32/lib/jpg/jpeg.lib;$(SolutionDir)/../scorched-dep-win32/lib/mysql/libmysql.lib;$(SolutionDir)/../scorched-dep-win32/lib/png/libpng13.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL_net.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDLmain.lib;$(SolutionDir)/../scorched-dep-win32/lib/zlib/zlib1.lib;$(SolutionDir)/../scorched-dep-win32/lib/expat/libexpat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Ws2_32.lib;$(SolutionDir)/../scorched-dep-win32/lib/jpg/jpeg.lib;$(SolutionDir)/../scorched-dep-win32/lib/mysql/libmysql.lib;$(SolutionDir)/../scorched-dep-win32/lib/png/libpng.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL_net.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDLmain.lib;$(SolutionDir)/../scorched-dep-win32/lib/zlib/zlib1.lib;$(SolutionDir)/../scorched-dep-win32/lib/expat/libexpat.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
