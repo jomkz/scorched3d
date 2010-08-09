@@ -13,6 +13,7 @@ SetCompressor lzma
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
+!include "scripts\FileAssociation.nsh"
 
 ; MUI Settings
 !define MUI_ABORTWARNING
@@ -89,6 +90,8 @@ Section "MainSection" SEC01
   File "Release\scorchedc.exe"
   File "Release\scorcheds.exe"
     
+  ${registerExtension} "$INSTDIR\scorchedc.exe" ".s3l" "Scorched3D_Launch"
+
   FileOpen $9 "$INSTDIR\data\lang\language.ini" w
   StrCmp $LANGUAGE ${LANG_ENGLISH} 0 +2
     FileWrite $9 "EN"
@@ -106,9 +109,9 @@ Section -AdditionalIcons
   
   CreateShortCut "$SMPROGRAMS\Scorched3D\Uninstall Scorched3D.lnk" "$INSTDIR\uninst.exe"
   CreateShortCut "$SMPROGRAMS\Scorched3D\Scorched3D.lnk" "$INSTDIR\scorched.exe" "" "$INSTDIR\data\images\tank2.ico"
-  CreateShortCut "$SMPROGRAMS\Scorched3D\Scorched3D Documentation.lnk" "$INSTDIR\${PRODUCT_NAME}-docs.url"
-  CreateShortCut "$SMPROGRAMS\Scorched3D\Scorched3D Homepage.lnk" "$INSTDIR\${PRODUCT_NAME}.url"
-  CreateShortCut "$SMPROGRAMS\Scorched3D\Scorched3D Donations.lnk" "$INSTDIR\${PRODUCT_NAME}-donate.url"
+  CreateShortCut "$SMPROGRAMS\Scorched3D\Scorched3D Documentation.lnk" "$INSTDIR\${PRODUCT_NAME}-docs.url" "" "$INSTDIR\data\images\tank2.ico"
+  CreateShortCut "$SMPROGRAMS\Scorched3D\Scorched3D Homepage.lnk" "$INSTDIR\${PRODUCT_NAME}.url" "" "$INSTDIR\data\images\tank2.ico"
+  CreateShortCut "$SMPROGRAMS\Scorched3D\Scorched3D Donations.lnk" "$INSTDIR\${PRODUCT_NAME}-donate.url" "" "$INSTDIR\data\images\tank2.ico"
 SectionEnd
 
 Section -Post
@@ -146,6 +149,8 @@ Section Uninstall
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   SetAutoClose true
   
+  ${unregisterExtension} ".s3l" "Scorched3D_Launch"
+
   StrCmp $DEL_USER "FALSE" nodel
   RMDir /r "$INSTDIR\.scorched3d"
   RMDir /r "$PROFILE\.scorched3d"

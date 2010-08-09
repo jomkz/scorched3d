@@ -184,7 +184,7 @@ OptionsGame::OptionsGame() :
 	maxNumberWeapons_(options_, "MaxNumberWeapons",
 		"The number of each weapon the player is allowed", 0, 90, 0, 500, 10),
 	weaponSpeed_(options_, "WeaponSpeed",
-		"The speed of projectiles and rollers", 0, 10000, 2500, 40000, 2500),
+		"The speed of projectiles and rollers", 0, 10000, 2500, 40000, 2000),
 	maxLandscapeSize_(options_, "MaxLandscapeSize",
 		"The largest landscape (in bytes) that will be sent to the clients", 0, 200000),
 	startTime_(options_, "StartTime", 

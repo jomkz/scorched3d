@@ -1570,6 +1570,9 @@
   <ItemGroup>
     <None Include="..\..\common\lua\Makefile" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\common\common\include.rc" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

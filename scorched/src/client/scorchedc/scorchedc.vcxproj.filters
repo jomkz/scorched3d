@@ -4523,4 +4523,9 @@
       <Filter>lua</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\common\common\include.rc">
+      <Filter>common</Filter>
+    </ResourceCompile>
+  </ItemGroup>
 </Project>
