@@ -36,6 +36,7 @@ public:
 
 	bool loadTankMeshes(ScorchedContext &context, int detailLevel,
 		ProgressCounter *counter = 0);
+	void clear();
 
 	TankModel *getModelByName(const char *name);
 	TankModel *getRandomModel(int team, bool ai);

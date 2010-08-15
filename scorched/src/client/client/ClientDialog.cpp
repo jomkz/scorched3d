@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <client/ClientDialog.h>
+#include <client/LoadPNG.h>
 #include <graph/GLSetup.h>
 #include <graph/MainCamera.h>
 #include <graph/Main2DCamera.h>
@@ -42,8 +43,10 @@ bool createScorchedWindow()
 	bool fullscreen = OptionsDisplay::instance()->getFullScreen();
 
 	SDL_WM_SetCaption(scorched3dAppName, "tank2");
-	std::string iconFile = S3D::getDataFile("data/images/tank2.bmp");
-	SDL_WM_SetIcon(SDL_LoadBMP(iconFile.c_str()), NULL);
+	std::string iconFile = S3D::getDataFile("data/images/tank2.png");
+
+	SDL_Surface *icon = EXT_LoadPNG_RW(SDL_RWFromFile(iconFile.c_str(), "rb"));
+	SDL_WM_SetIcon(icon, NULL);
 
 	if (!Display::instance()->changeSettings(width,height,fullscreen)) 
 	{

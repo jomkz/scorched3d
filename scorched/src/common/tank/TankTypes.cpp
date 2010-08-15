@@ -80,3 +80,8 @@ TankType *TankTypes::getType(const char *name)
 	}
 	return 0;
 }
+
+void TankTypes::clear()
+{
+	types_.clear();
+}

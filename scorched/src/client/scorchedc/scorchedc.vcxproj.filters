@@ -2307,6 +2307,9 @@
     <ClCompile Include="..\..\server\server\ServerTankChangeHandler.cpp">
       <Filter>server</Filter>
     </ClCompile>
+    <ClCompile Include="..\client\LoadPNG.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -4516,6 +4519,9 @@
     </ClInclude>
     <ClInclude Include="..\..\server\server\ServerTankChangeHandler.h">
       <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\LoadPNG.h">
+      <Filter>client</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

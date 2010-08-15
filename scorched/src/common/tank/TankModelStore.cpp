@@ -32,19 +32,14 @@ TankModelStore::TankModelStore()
 
 TankModelStore::~TankModelStore()
 {
-	std::vector<TankModel *>::iterator itor;
-	for (itor = models_.begin();
-		itor != models_.end();
-		itor++)
-	{
-		delete *itor;
-	}
-	models_.clear();
+	clear();
 }
 
 bool TankModelStore::loadTankMeshes(ScorchedContext &context, 
 	int detailLevel, ProgressCounter *counter)
 {
+	clear();
+
 	// Load the tank types
 	if (!types_.loadTankTypes(context)) return false;
 
@@ -201,4 +196,18 @@ TankModel *TankModelStore::getModelByName(const char *name)
 TankType *TankModelStore::getTypeByName(const char *name)
 {
 	return types_.getType(name);
+}
+
+void TankModelStore::clear() 
+{
+	std::vector<TankModel *>::iterator itor;
+	for (itor = models_.begin();
+		itor != models_.end();
+		itor++)
+	{
+		delete *itor;
+	}
+	models_.clear();
+	modelCatagories_.clear();
+	types_.clear();
 }

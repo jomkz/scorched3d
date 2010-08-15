@@ -478,6 +478,7 @@
     <ClCompile Include="..\client\ClientStartGameHandler.cpp" />
     <ClCompile Include="..\client\ClientState.cpp" />
     <ClCompile Include="..\client\ClientWindowSetup.cpp" />
+    <ClCompile Include="..\client\LoadPNG.cpp" />
     <ClCompile Include="..\client\ScorchedClient.cpp" />
     <ClCompile Include="..\client\SecureID.cpp" />
     <ClCompile Include="..\client\UniqueIdStore.cpp" />
@@ -1211,6 +1212,7 @@
     <ClInclude Include="..\client\ClientStartGameHandler.h" />
     <ClInclude Include="..\client\ClientState.h" />
     <ClInclude Include="..\client\ClientWindowSetup.h" />
+    <ClInclude Include="..\client\LoadPNG.h" />
     <ClInclude Include="..\client\ScorchedClient.h" />
     <ClInclude Include="..\client\SecureID.h" />
     <ClInclude Include="..\client\UniqueIdStore.h" />
