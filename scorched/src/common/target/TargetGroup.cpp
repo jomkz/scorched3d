@@ -45,14 +45,28 @@ bool TargetGroup::writeMessage(NamedNetBuffer &buffer)
 {
 	NamedNetBufferSection section(buffer, "TargetGroup");
 	buffer.addToBufferNamed("size", (int) groups_.size());
-	std::set<TargetGroupsSetEntry *>::iterator itor;
-	for (itor = groups_.begin();
-		itor != groups_.end();
-		itor++)
+
+	std::set<std::string> groupNames;
 	{
-		TargetGroupsSetEntry *group = *itor;
-		buffer.addToBufferNamed("name", group->getName());
-	}	
+		std::set<TargetGroupsSetEntry *>::iterator itor;
+		for (itor = groups_.begin();
+			itor != groups_.end();
+			itor++)
+		{
+			TargetGroupsSetEntry *group = *itor;
+			groupNames.insert(group->getName());
+		}	
+	}
+	{
+		std::set<std::string>::iterator itor;
+		for (itor = groupNames.begin();
+			itor != groupNames.end();
+			itor++)
+		{			
+			buffer.addToBufferNamed("name", *itor);
+		}
+	}
+
 	return true;
 }
 
