@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <image/ImageData.h>
+#include <string.h>
 
 ImageData::ImageData() :
 	referenceCount_(0),

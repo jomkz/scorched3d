@@ -22,6 +22,7 @@
 #include <landscapedef/LandscapeDefinition.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <engine/ScorchedContext.h>
+#include <limits.h>
 
 LandscapeDefinitionCache::LandscapeDefinitionCache() : 
 	cachedTex_(0), cachedDefn_(0)

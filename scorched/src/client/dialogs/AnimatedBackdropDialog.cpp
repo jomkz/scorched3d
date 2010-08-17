@@ -33,6 +33,7 @@
 #include <landscapedef/LandscapeDefinitions.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <common/Defines.h>
+#include <limits.h>
 
 AnimatedBackdropDialog *AnimatedBackdropDialog::instance_ = 0;
 
