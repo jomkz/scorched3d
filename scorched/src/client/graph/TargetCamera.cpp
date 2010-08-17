@@ -468,7 +468,8 @@ void TargetCamera::moveCamera()
 				FixedVector &position = targetGroup->getTarget()->getLife().getTargetPosition();
 				FixedVector &velocity = targetGroup->getTarget()->getLife().getVelocity();
 				mainCam_.setLookAt(position.asVector());
-				mainCam_.setOffSet(velocity.asVector().Normalize() * -5.0f);
+				Vector offset = velocity.asVector().Normalize() * -5.0f;
+				mainCam_.setOffSet(offset);
 
 				if (objectTime_ > 15.0f)
 				{
