@@ -39,6 +39,7 @@
 #include <GLW/GLWWindowSkinManager.h>
 #include <GLEXT/GLLenseFlare.h>
 #include <lang/LangResource.h>
+#include <tankai/TankAIStrings.h>
 
 ClientInitializeModHandler *ClientInitializeModHandler::instance_ = 0;
 
@@ -86,6 +87,9 @@ bool ClientInitializeModHandler::initialize()
 	{
 		ScorchedServer::instance()->getModFiles().clearData();
 	}
+
+	// Re-load the tank names/sayings
+	ScorchedClient::instance()->getTankAIStrings().load();
 
 	// Load the accessory files
 	if (!ScorchedClient::instance()->getAccessoryStore().parseFile(

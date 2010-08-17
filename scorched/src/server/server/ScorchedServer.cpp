@@ -41,6 +41,7 @@
 #include <tank/TankDeadContainer.h>
 #include <tank/TankContainer.h>
 #include <tank/TankModelStore.h>
+#include <tankai/TankAIStrings.h>
 #include <tankai/TankAIStore.h>
 #include <tankai/TankAIWeaponSets.h>
 #include <tankai/TankAIAdder.h>
@@ -225,6 +226,7 @@ bool ScorchedServer::startServerInternal(const std::string &settingsFile,
 	// Add any new AIs
 	if (!getTankAIs().loadAIs()) return false;
 	TankAIAdder::addTankAIs(*this);
+	getTankAIStrings().load();
 
 	checkSettings();
 

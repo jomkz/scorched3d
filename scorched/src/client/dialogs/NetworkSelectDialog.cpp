@@ -103,7 +103,8 @@ NetworkSelectDialog::NetworkSelectDialog() :
 		"data/images/coga.bmp",
 		true)),
 	tankTex_(ImageID(S3D::eDataLocation,
-		"data/images/tank2s.bmp"))
+		"",
+		"data/images/tank2.png"))
 {
 	std::list<GLWIconTable::Column> gamescolumns, playerscolumns;
 	for (int i=0;; i++)

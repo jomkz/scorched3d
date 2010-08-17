@@ -23,19 +23,15 @@
 #include <common/OptionsScorched.h>
 #include <engine/Simulator.h>
 
-TankAIStrings *TankAIStrings::instance_ = 0;
-
-TankAIStrings *TankAIStrings::instance()
+TankAIStrings::TankAIStrings()
 {
-	if (!instance_)
-	{
-		instance_ = new TankAIStrings;
-	}
-
-	return instance_;
 }
 
-TankAIStrings::TankAIStrings()
+TankAIStrings::~TankAIStrings()
+{
+}
+
+void TankAIStrings::load()
 {
 	// Check we have init correctly
 	bool s1 = deathLines_.readFile(S3D::getModFile("data/talk/talk2.txt"));
@@ -43,10 +39,6 @@ TankAIStrings::TankAIStrings()
 	bool s3 = aiPlayerNames_.readFile(S3D::getModFile("data/ainames.txt"));
 	bool s4 = playerNames_.readFile(S3D::getModFile("data/playernames.txt"));
 	DIALOG_ASSERT(s1 && s2 && s3 && s4);
-}
-
-TankAIStrings::~TankAIStrings()
-{
 }
 
 const char *TankAIStrings::getPlayerName()

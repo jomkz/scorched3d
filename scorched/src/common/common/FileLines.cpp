@@ -35,6 +35,7 @@ FileLines::~FileLines()
 
 bool FileLines::readFile(const std::string &filename)
 {
+	fileLines_.clear();
 	FILE *in = fopen(filename.c_str(), "r");
 	if (in)
 	{

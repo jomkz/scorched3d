@@ -239,6 +239,7 @@ void PlayerDialog::display()
 		infoPanel->addWidget(viewer_);
 		addWidget(infoPanel);
 	}
+	viewer_->init();
 
 	static TankAIStore tankAIStore;
 	tankAIStore.clearAIs();

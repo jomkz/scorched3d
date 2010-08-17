@@ -39,7 +39,16 @@ BackdropDialog *BackdropDialog::instance()
 
 BackdropDialog::BackdropDialog() : 
 	GLWWindow("Backdrop", 0.0f, 0.0f, 0.0f, 0.0f, eHideName,
-		"The backdrop dialog")
+		"The backdrop dialog"),
+	logoTex_(ImageID(S3D::eModLocation,
+			"data/windows/scorched.jpg",
+			"data/windows/scorcheda.jpg",
+			false), 
+			GLTextureReference::eMipMap | GLTextureReference::eTextureClamped),
+	footerTex_(ImageID(S3D::eDataLocation,
+			"",
+			"data/images/hiscore.png"), 
+			GLTextureReference::eMipMap | GLTextureReference::eTextureClamped)
 {
 	windowLevel_ = 5000000;
 }
@@ -102,13 +111,7 @@ void BackdropDialog::drawLogo()
 	if (S3D::getDataFileMod() != lastMod_)
 	{
 		lastMod_ = S3D::getDataFileMod();
-
-		Image logoMap = ImageFactory::loadImage(
-			S3D::eModLocation,
-			"data/windows/scorched.jpg",
-			"data/windows/scorcheda.jpg",
-			false);
-		logoTex_.create(logoMap, false);
+		if (logoTex_.isValid())	logoTex_.getData()->reset();
 	}
 
 	GLState currentState(GLState::DEPTH_OFF | GLState::BLEND_ON | GLState::TEXTURE_ON);
@@ -142,16 +145,6 @@ void BackdropDialog::drawLogo()
 
 void BackdropDialog::drawFooter()
 {
-	static bool createdTexture = false;
-	if (!createdTexture)
-	{
-		createdTexture = true;
-		Image logoMap = ImageFactory::loadAlphaImage(
-			S3D::eDataLocation,
-			"data/images/hiscore.png");
-		footerTex_.create(logoMap, false);
-	}
-
 	GLState currentState(GLState::DEPTH_OFF | GLState::BLEND_ON | GLState::TEXTURE_ON);
 
 	// Calcuate how may tiles are needed

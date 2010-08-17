@@ -450,7 +450,7 @@ void TankDamage::logDeath()
 
 	if (killedTank->getDestinationId() == 0)
 	{
-		const char *line = TankAIStrings::instance()->getDeathLine(*context_);
+		const char *line = context_->getTankAIStrings().getDeathLine(*context_);
 		if (line)
 		{
 			context_->getActionController().addAction(

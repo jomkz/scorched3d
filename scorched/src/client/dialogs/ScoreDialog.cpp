@@ -47,7 +47,7 @@
 
 static const float rankLeft = 15.0f;
 static const float iconLeft = 5.0f;
-static const float nameLeft = 35.0f;
+static const float nameLeft = 45.0f;
 static const float livesLeft = 230.0f;
 static const float killsLeft = 255.0f;
 static const float assistsLeft = 280.0f;
@@ -501,30 +501,25 @@ void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
 
 	// Form the name
 	static LangString name;
-
-	// Max length 12
-	if (current->getTargetName().size() > 12) 
-		name = current->getTargetName().substr(0, 12);
-	else
-		name = current->getTargetName();
-
+	name.clear();
 	if (finished && ! ClientParams::instance()->getConnectedToServer())
 	{
-		name.append(LANG_STRING(" ("));
+		name.append(LANG_STRING("("));
 		Tank *serverTank = 
 			ScorchedServer::instance()->getTankContainer().getTankById(
 			current->getPlayerId());
 		TankAI *tankAI = serverTank->getTankAI();
 		if (tankAI) name.append(LANG_STRING(tankAI->getName()));
 		else name.append(LANG_RESOURCE("HUMAN", "Human"));
-		name.append(LANG_STRING(")"));
+		name.append(LANG_STRING(") "));
 	}
 	else if (current->getState().getState() != TankState::sNormal)
 	{
-		name.append(LANG_STRING(" ("));
+		name.append(LANG_STRING("("));
 		name.append(current->getState().getSmallStateLangString());
-		name.append(LANG_STRING(")"));
+		name.append(LANG_STRING(") "));
 	}
+	name.append(current->getTargetName());
 
 	if (!current->getState().getTankPlaying())
 	{
@@ -536,17 +531,9 @@ void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
 			10,
 			textX + nameLeft, textY, 0.0f,
 			name);
-		/*GLWFont::instance()->getGameFont()->draw(
-			current->getColor(),
-			10,
-			textX + readyLeft, textY, 0.0f,
-			S3D::formatStringBuffer("%2s",
-			((current->getState().getReadyState() == TankState::SNotReady)?"*":" ")));*/
 	}
 	else
 	{
-		if (name.size() > 25) name = name.substr(0, 25); // Limit length
-
 		GLState state(GLState::TEXTURE_ON);
 		glColor3f(1.0f, 1.0f, 1.0f);
 		current->getAvatar().getTexture()->draw();

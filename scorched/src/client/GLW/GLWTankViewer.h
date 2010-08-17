@@ -37,6 +37,8 @@ public:
 		int numH = 0, int numV = 0);
 	virtual ~GLWTankViewer();
 
+	void init();
+
 	void selectModelByName(const char *name);
 	const char *getModelName();
 	void setTeam(int team);

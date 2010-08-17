@@ -324,7 +324,7 @@ void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,
 	}
 	else
 	{
-		playerName = LANG_STRING(TankAIStrings::instance()->getPlayerName());
+		playerName = LANG_STRING(ScorchedServer::instance()->getTankAIStrings().getPlayerName());
 		tankId = TankAIAdder::getNextTankId(
 			sentUniqueId,
 			ScorchedServer::instance()->getContext());
@@ -372,7 +372,7 @@ void ServerConnectAuthHandler::processAIInternal(const std::string &aiName)
 	// Tank Name
 	LangString newname = 
 		LANG_STRING(ScorchedServer::instance()->getOptionsGame().getBotNamePrefix());
-	newname += LANG_STRING(TankAIStrings::instance()->getAIPlayerName(
+	newname += LANG_STRING(ScorchedServer::instance()->getTankAIStrings().getAIPlayerName(
 		ScorchedServer::instance()->getContext()));
 
 	// Unique Id

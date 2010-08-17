@@ -39,7 +39,7 @@ public:
 protected:
 	static BackdropDialog *instance_;
 	GLTexture backTex_;
-	GLTexture logoTex_, footerTex_;
+	GLTextureReference logoTex_, footerTex_;
 	std::string lastMod_;
 
 private:

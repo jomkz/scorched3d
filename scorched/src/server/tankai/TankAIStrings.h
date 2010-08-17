@@ -27,7 +27,10 @@
 class TankAIStrings  
 {
 public:
-	static TankAIStrings *instance();
+	TankAIStrings();
+	virtual ~TankAIStrings();
+
+	void load();
 
 	const char *getDeathLine(ScorchedContext &context);
 	const char *getAttackLine(ScorchedContext &context);
@@ -40,11 +43,6 @@ protected:
 	FileLines attackLines_;
 	FileLines playerNames_;
 	FileLines aiPlayerNames_;
-
-private:
-	TankAIStrings();
-	virtual ~TankAIStrings();
-
 };
 
 #endif // !defined(AFX_TankAIStrings_H__C6D1A1B3_EA15_43B7_9232_A90A5D0CF60B__INCLUDED_)

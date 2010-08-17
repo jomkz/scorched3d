@@ -52,22 +52,7 @@ GLWTankViewer::GLWTankViewer(float x, float y, int numH, int numV) :
 					y + TankSquareSize * numV + TankPadding + 5.0f,
 					+ TankSquareSize * numH + TankPadding)
 {
-	std::set<std::string> &catagories = 
-		ScorchedClient::instance()->getTankModels().getModelCatagories();
-	std::set<std::string>::iterator catItor;
-	for (catItor = catagories.begin();
-		 catItor != catagories.end();
-		 catItor++)
-	{
-		catagoryChoice_.addText(LANG_RESOURCE(*catItor, *catItor), (*catItor));
-	}
-
 	catagoryChoice_.setHandler(this);
-	catagoryChoice_.setCurrentPosition(0);
-	if (catagoryChoice_.getCurrentEntry()) 
-	{
-		select(0, 0, *catagoryChoice_.getCurrentEntry());
-	}
 
 	catagoryChoice_.setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
 		LANG_RESOURCE("MODEL_CATAGORY", "Model Catagory"),
@@ -87,6 +72,25 @@ GLWTankViewer::GLWTankViewer(float x, float y, int numH, int numV) :
 GLWTankViewer::~GLWTankViewer()
 {
 
+}
+
+void GLWTankViewer::init()
+{
+	models_.clear();
+	std::set<std::string> &catagories = 
+		ScorchedClient::instance()->getTankModels().getModelCatagories();
+	std::set<std::string>::iterator catItor;
+	for (catItor = catagories.begin();
+		 catItor != catagories.end();
+		 catItor++)
+	{
+		catagoryChoice_.addText(LANG_RESOURCE(*catItor, *catItor), (*catItor));
+	}
+	catagoryChoice_.setCurrentPosition(0);
+	if (catagoryChoice_.getCurrentEntry()) 
+	{
+		select(0, 0, *catagoryChoice_.getCurrentEntry());
+	}
 }
 
 void GLWTankViewer::setTeam(int team)

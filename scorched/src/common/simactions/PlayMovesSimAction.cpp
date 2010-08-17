@@ -179,7 +179,7 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 	// Tank say
 	if (tank->getDestinationId() == 0)
 	{
-		const char *line = TankAIStrings::instance()->getAttackLine(context);
+		const char *line = context.getTankAIStrings().getAttackLine(context);
 		if (line)
 		{
 			context.getActionController().addAction(
