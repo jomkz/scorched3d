@@ -38,7 +38,8 @@ public:
 	const char *getAIPlayerName(ScorchedContext &context);
 
 protected:
-	static TankAIStrings *instance_;
+	unsigned int playerNamesCounter_;
+	unsigned int aiPlayerNamesCounter_;
 	FileLines deathLines_;
 	FileLines attackLines_;
 	FileLines playerNames_;

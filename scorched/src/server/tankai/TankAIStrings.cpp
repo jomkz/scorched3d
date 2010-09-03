@@ -23,7 +23,9 @@
 #include <common/OptionsScorched.h>
 #include <engine/Simulator.h>
 
-TankAIStrings::TankAIStrings()
+TankAIStrings::TankAIStrings() :
+	playerNamesCounter_(0),
+	aiPlayerNamesCounter_(0)
 {
 }
 
@@ -43,22 +45,20 @@ void TankAIStrings::load()
 
 const char *TankAIStrings::getPlayerName()
 {
-	static unsigned int counter = 0;
 	const char *playerName = 
-		playerNames_.getLines()[counter++ % playerNames_.getLines().size()].c_str();
+		playerNames_.getLines()[playerNamesCounter_++ % playerNames_.getLines().size()].c_str();
 	return playerName;
 }
 
 const char *TankAIStrings::getAIPlayerName(ScorchedContext &context)
 {
-	static unsigned int counter = 0;
 	if (context.getOptionsGame().getRandomizeBotNames())
 	{
-		counter = (int) rand();
+		aiPlayerNamesCounter_ = (int) rand();
 	}
 
 	const char *playerName = 
-		aiPlayerNames_.getLines()[counter++ % aiPlayerNames_.getLines().size()].c_str();
+		aiPlayerNames_.getLines()[aiPlayerNamesCounter_++ % aiPlayerNames_.getLines().size()].c_str();
 	return playerName;
 }
 

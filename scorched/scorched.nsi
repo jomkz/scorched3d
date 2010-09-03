@@ -45,8 +45,8 @@ SetCompressor lzma
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "Scorched3D-${PRODUCT_VERSION}.exe"
-InstallDir "$PROGRAMFILES\Scorched3D"
+OutFile "${PRODUCT_NAME}-${PRODUCT_VERSION}.exe"
+InstallDir "$PROGRAMFILES\${PRODUCT_NAME}"
 ShowInstDetails show
 ShowUnInstDetails show
 
@@ -105,13 +105,13 @@ Section -AdditionalIcons
   WriteIniStr "$INSTDIR\${PRODUCT_NAME}-docs.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}\wiki"
   WriteIniStr "$INSTDIR\${PRODUCT_NAME}-donate.url" "InternetShortcut" "URL" "${PRODUCT_DONATE_WEB_SITE}"
   
-  CreateDirectory "$SMPROGRAMS\Scorched3D"
+  CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
   
-  CreateShortCut "$SMPROGRAMS\Scorched3D\Uninstall Scorched3D.lnk" "$INSTDIR\uninst.exe"
-  CreateShortCut "$SMPROGRAMS\Scorched3D\Scorched3D.lnk" "$INSTDIR\scorched.exe" "" "$INSTDIR\data\images\tank2.ico"
-  CreateShortCut "$SMPROGRAMS\Scorched3D\Scorched3D Documentation.lnk" "$INSTDIR\${PRODUCT_NAME}-docs.url" "" "$INSTDIR\data\images\tank2.ico"
-  CreateShortCut "$SMPROGRAMS\Scorched3D\Scorched3D Homepage.lnk" "$INSTDIR\${PRODUCT_NAME}.url" "" "$INSTDIR\data\images\tank2.ico"
-  CreateShortCut "$SMPROGRAMS\Scorched3D\Scorched3D Donations.lnk" "$INSTDIR\${PRODUCT_NAME}-donate.url" "" "$INSTDIR\data\images\tank2.ico"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall Scorched3D.lnk" "$INSTDIR\uninst.exe"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Scorched3D.lnk" "$INSTDIR\scorched.exe" "" "$INSTDIR\data\images\tank2.ico"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Scorched3D Documentation.lnk" "$INSTDIR\${PRODUCT_NAME}-docs.url" "" "$INSTDIR\data\images\tank2.ico"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Scorched3D Homepage.lnk" "$INSTDIR\${PRODUCT_NAME}.url" "" "$INSTDIR\data\images\tank2.ico"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Scorched3D Donations.lnk" "$INSTDIR\${PRODUCT_NAME}-donate.url" "" "$INSTDIR\data\images\tank2.ico"
 SectionEnd
 
 Section -Post
@@ -144,7 +144,7 @@ Section Uninstall
 
   RMDir /r "$INSTDIR\data"
   RMDir /r "$INSTDIR\documentation"
-  RMDir /r "$SMPROGRAMS\Scorched3D"
+  RMDir /r "$SMPROGRAMS\${PRODUCT_NAME}"
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   SetAutoClose true
@@ -152,8 +152,8 @@ Section Uninstall
   ${unregisterExtension} ".s3l" "Scorched3D_Launch"
 
   StrCmp $DEL_USER "FALSE" nodel
-  RMDir /r "$INSTDIR\.scorched3d"
-  RMDir /r "$PROFILE\.scorched3d"
+  RMDir /r "$INSTDIR\.${PRODUCT_NAME}"
+  RMDir /r "$PROFILE\.${PRODUCT_NAME}"
 nodel:
 
   Delete "$INSTDIR\*.*"
