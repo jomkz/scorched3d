@@ -2310,6 +2310,9 @@
     <ClCompile Include="..\client\LoadPNG.cpp">
       <Filter>client</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\simactions\NextTurnSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -4522,6 +4525,9 @@
     </ClInclude>
     <ClInclude Include="..\client\LoadPNG.h">
       <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\NextTurnSimAction.h">
+      <Filter>simactions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

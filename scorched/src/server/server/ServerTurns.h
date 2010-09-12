@@ -45,6 +45,7 @@ public:
 	virtual void internalSimulate(fixed frameTime) = 0;
 	virtual bool internalFinished();
 	virtual void internalMoveFinished(ComsPlayedMoveMessage &playedMessage) = 0;
+	virtual void internalShotsFinished();
 
 protected:
 	enum ShotsState
@@ -97,6 +98,7 @@ protected:
 	void playShots(std::list<ComsPlayedMoveMessage *> messages, unsigned int moveId, bool timeOutPlayers);
 	void shotsStarted(fixed simulationTime, SimAction *action);
 	void moveStarted(fixed simulationTime, SimAction *action);
+	void incrementTurn();
 };
 
 #endif

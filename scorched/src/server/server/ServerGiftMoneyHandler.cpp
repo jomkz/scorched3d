@@ -24,6 +24,7 @@
 #include <server/ServerState.h>
 #include <simactions/TankGiftSimAction.h>
 #include <tank/TankContainer.h>
+#include <tank/TankState.h>
 #include <common/Logger.h>
 
 ServerGiftMoneyHandler::ServerGiftMoneyHandler(ComsMessageHandler &comsMessageHandler)
@@ -69,6 +70,11 @@ bool ServerGiftMoneyHandler::processMessage(
 	if (fromTank->getDestinationId() != netMessage.getDestinationId())
 	{
 		Logger::log( "ERROR: Player gifting does not exist at this destination");
+		return true;
+	}
+	if (fromTank->getState().getState() != TankState::sBuying) 
+	{
+		Logger::log( "ERROR: Player gifting when not in buying state");
 		return true;
 	}
 

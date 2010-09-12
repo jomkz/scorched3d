@@ -18,31 +18,24 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerTurnsSimultaneoush_INCLUDE__)
-#define __INCLUDE_ServerTurnsSimultaneoush_INCLUDE__
+#if !defined(AFX_NextTurnSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#define AFX_NextTurnSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
-#include <map>
-#include <list>
-#include <server/ServerTurns.h>
-#include <engine/SimulatorI.h>
+#include <simactions/SimAction.h>
 
-class Tank;
-class ComsPlayedMoveMessage;
-class ServerTurnsSimultaneous : public ServerTurns
+class NextTurnSimAction : public SimAction
 {
 public:
-	ServerTurnsSimultaneous(bool waitForShots);
-	virtual ~ServerTurnsSimultaneous();
+	NextTurnSimAction();
+	virtual ~NextTurnSimAction();
 
-	virtual void internalEnterState();
-	virtual void internalSimulate(fixed frameTime);
-	virtual void internalMoveFinished(ComsPlayedMoveMessage &playedMessage);
-	virtual void internalShotsFinished();
+	virtual bool invokeAction(ScorchedContext &context);
 
+	virtual bool writeMessage(NetBuffer &buffer);
+	virtual bool readMessage(NetBufferReader &reader);
+
+REGISTER_CLASS_HEADER(NextTurnSimAction);
 protected:
-	ShotsState shotsState_;
-	unsigned int nextMoveId_;
-	std::map<unsigned int, ComsPlayedMoveMessage*>  moves_;
 };
 
-#endif
+#endif // !defined(AFX_NextTurnSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

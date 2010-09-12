@@ -62,6 +62,9 @@ public:
 	int getCurrentRoundNo() { return currentRoundNo_.getValue(); }
 	void setCurrentRoundNo(int round) { currentRoundNo_.setValue(round); }
 
+	int getCurrentTurnNo() { return currentTurnNo_.getValue(); }
+	void setCurrentTurnNo(int round) { currentTurnNo_.setValue(round); }
+
 	// Arms Level
 	int getArmsLevel();
 
@@ -74,7 +77,7 @@ public:
 protected:
 	std::list<OptionEntry *> options_;
 	OptionsScorched &optionsGame_;
-	OptionEntryInt currentRoundNo_;
+	OptionEntryInt currentRoundNo_, currentTurnNo_;
 	OptionEntryInt wallType_;
 
 	bool newGame_;

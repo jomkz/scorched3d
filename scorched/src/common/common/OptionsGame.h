@@ -173,6 +173,9 @@ public:
 	int getNoRounds() { return numberOfRounds_; }
 	OptionEntryInt &getNoRoundsEntry() { return numberOfRounds_; }
 
+	int getNoTurns() { return maxRoundTurns_; }
+	OptionEntryInt &getNoTurnsEntry() { return maxRoundTurns_; }
+
 	int getRemoveBotsAtPlayers() { return removeBotsAtPlayers_; }
 	OptionEntryInt &getRemoveBotsAtPlayersEntry() { return removeBotsAtPlayers_; }
 
@@ -420,6 +423,7 @@ protected:
 	OptionEntryBoundedInt idleCycleTime_;
 	OptionEntryBoundedInt allowedMissedMoves_;
 	OptionEntryBoundedInt numberOfRounds_;
+	OptionEntryBoundedInt maxRoundTurns_;
 	OptionEntryBoundedInt maxNumberWeapons_;
 	OptionEntryBoundedInt gravity_;
 	OptionEntryBoundedInt minFallingDistance_;
@@ -459,8 +463,6 @@ protected:
 	OptionEntryBoundedInt skillForSelfKill_;
 	OptionEntryBoundedInt skillForTeamKill_;
 	OptionEntryBoundedInt moneyStarting_;
-	OptionEntryBoundedInt depricatedIdleKickTime_;
-	OptionEntryBoundedInt depricatedIdleShotKickTime_;
 	OptionEntryEnum teamBallance_;
 	OptionEntryBoundedInt moneyInterest_;
 	OptionEntryBool limitPowerByHealth_;
@@ -509,9 +511,10 @@ protected:
 	OptionEntryBool allowSameUniqueId_;
 	OptionEntryBool debugFeatures_;
 
-	// Depricated (old) options
+	// Depricated (old) 
+	OptionEntryBoundedInt depricatedIdleKickTime_;
+	OptionEntryBoundedInt depricatedIdleShotKickTime_;
 	OptionEntryBool depricatedDelayedDefenseActivation_;
-	OptionEntryBoundedInt depricatedMaxRoundTurns_;
 	OptionEntryBoundedInt depricatedKeepAliveTime_;
 	OptionEntryBoundedInt depricatedKeepAliveTimeoutTime_;
 	OptionEntryEnum depricatedScoreType_;

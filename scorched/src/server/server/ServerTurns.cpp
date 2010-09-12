@@ -28,9 +28,11 @@
 #include <tank/TankScore.h>
 #include <tank/TankTeamScore.h>
 #include <common/OptionsScorched.h>
+#include <common/OptionsTransient.h>
 #include <simactions/TankStartMoveSimAction.h>
 #include <simactions/TankStopMoveSimAction.h>
 #include <simactions/PlayMovesSimAction.h>
+#include <simactions/NextTurnSimAction.h>
 #include <coms/ComsPlayedMoveMessage.h>
 
 ServerTurns::ServerTurns(bool waitForShots) : 
@@ -90,6 +92,10 @@ void ServerTurns::enterState()
 	internalEnterState();
 }
 
+void ServerTurns::internalShotsFinished()
+{
+}
+
 void ServerTurns::simulate(fixed frameTime)
 {
 	// Check what we are allowed to do
@@ -98,6 +104,7 @@ void ServerTurns::simulate(fixed frameTime)
 	{
 		if (ScorchedServer::instance()->getActionController().noReferencedActions())
 		{
+			internalShotsFinished();
 			shotsState_ = eShotsNone;
 		}
 		else
@@ -243,6 +250,20 @@ bool ServerTurns::showScore()
 		return true;
 	}
 
+	if (ScorchedServer::instance()->getOptionsGame().getNoTurns() > 0)
+	{
+		if (ScorchedServer::instance()->getOptionsTransient().getCurrentTurnNo() >
+			ScorchedServer::instance()->getOptionsGame().getNoTurns())
+		{
+			// Max turns exceeded
+			ChannelText text("info",
+				"ROUND_FINISHED_TURNS",
+				"Round finished due to maximum moves reached.");
+			ScorchedServer::instance()->getServerChannelManager().sendText(text, true);
+			return true;
+		}
+	}
+
 	// Check for tanks skiping turns
 	bool allSkipped = true;
 	std::map<unsigned int, Tank *> &tanks =
@@ -362,4 +383,10 @@ void ServerTurns::playShots(std::list<ComsPlayedMoveMessage *> messages, unsigne
 	}
 	ScorchedServer::instance()->getServerSimulator().
 		addSimulatorAction(movesAction, callback);
+}
+
+void ServerTurns::incrementTurn()
+{
+	NextTurnSimAction *turnAction = new NextTurnSimAction();
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(turnAction);
 }

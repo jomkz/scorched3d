@@ -18,31 +18,33 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerTurnsSimultaneoush_INCLUDE__)
-#define __INCLUDE_ServerTurnsSimultaneoush_INCLUDE__
+#include <simactions/NextTurnSimAction.h>
+#include <common/OptionsTransient.h>
 
-#include <map>
-#include <list>
-#include <server/ServerTurns.h>
-#include <engine/SimulatorI.h>
+REGISTER_CLASS_SOURCE(NextTurnSimAction);
 
-class Tank;
-class ComsPlayedMoveMessage;
-class ServerTurnsSimultaneous : public ServerTurns
+NextTurnSimAction::NextTurnSimAction() 
 {
-public:
-	ServerTurnsSimultaneous(bool waitForShots);
-	virtual ~ServerTurnsSimultaneous();
+}
 
-	virtual void internalEnterState();
-	virtual void internalSimulate(fixed frameTime);
-	virtual void internalMoveFinished(ComsPlayedMoveMessage &playedMessage);
-	virtual void internalShotsFinished();
+NextTurnSimAction::~NextTurnSimAction()
+{
+}
 
-protected:
-	ShotsState shotsState_;
-	unsigned int nextMoveId_;
-	std::map<unsigned int, ComsPlayedMoveMessage*>  moves_;
-};
+bool NextTurnSimAction::invokeAction(ScorchedContext &context)
+{
+	context.getOptionsTransient().setCurrentTurnNo(
+		context.getOptionsTransient().getCurrentTurnNo() + 1);
 
-#endif
+	return true;
+}
+
+bool NextTurnSimAction::writeMessage(NetBuffer &buffer)
+{
+	return true;
+}
+
+bool NextTurnSimAction::readMessage(NetBufferReader &reader)
+{
+	return true;
+}

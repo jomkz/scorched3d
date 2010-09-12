@@ -317,7 +317,7 @@ void PlayerDialog::nextPlayer()
 		}
 
 		cancelButton_->setEnabled(true);
-		spectateButton_->setEnabled(tank?tank->getState().getState() != TankState::sSpectator:false);
+		spectateButton_->setEnabled(true);
 	}
 	else
 	{

@@ -73,6 +73,11 @@ void ServerTurnsSimultaneous::internalEnterState()
 	}	
 }
 
+void ServerTurnsSimultaneous::internalShotsFinished()
+{
+	incrementTurn();
+}
+
 void ServerTurnsSimultaneous::internalSimulate(fixed frameTime)
 {
 	// Build list of currently playing destinations
@@ -172,6 +177,10 @@ void ServerTurnsSimultaneous::internalSimulate(fixed frameTime)
 		}
 		moves_.clear();
 		playShots(messages, nextMoveId_, true);
+		if (!waitForShots_)
+		{
+			incrementTurn();
+		}
 	}
 }
 

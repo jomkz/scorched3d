@@ -30,6 +30,8 @@ OptionsTransient::OptionsTransient(OptionsScorched &optionsGame) :
 	optionsGame_(optionsGame), newGame_(false),
 	currentRoundNo_(options_, "CurrentRoundNo", 
 		"The current number of rounds played in this game", 0, 0),
+	currentTurnNo_(options_, "CurrentTurnNo", 
+		"The current number of turns played in this round", 0, 1),
 	wallType_(options_, "WallType",
 		"The current wall type", 0, 0)
 {
@@ -94,6 +96,7 @@ bool OptionsTransient::readFromBuffer(NetBufferReader &reader)
 void OptionsTransient::reset()
 {
 	currentRoundNo_.setValue(0);
+	currentTurnNo_.setValue(1);
 }
 
 void OptionsTransient::startNewGame()
@@ -103,6 +106,7 @@ void OptionsTransient::startNewGame()
 
 void OptionsTransient::newGame()
 {
+	currentTurnNo_.setValue(1);
 	currentRoundNo_.setValue(currentRoundNo_.getValue() + 1);	
 	newGameWall();
 }

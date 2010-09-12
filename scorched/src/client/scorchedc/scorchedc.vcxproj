@@ -327,6 +327,7 @@
     <ClCompile Include="..\..\common\net\NetServerTCP3Send.cpp" />
     <ClCompile Include="..\..\common\net\NetServerTCPProtocol.cpp" />
     <ClCompile Include="..\..\common\net\NetServerTCPRead.cpp" />
+    <ClCompile Include="..\..\common\simactions\NextTurnSimAction.cpp" />
     <ClCompile Include="..\..\common\simactions\TankBuyingSimAction.cpp" />
     <ClCompile Include="..\..\common\target\Target.cpp" />
     <ClCompile Include="..\..\common\target\TargetContainer.cpp" />
@@ -1061,6 +1062,7 @@
     <ClInclude Include="..\..\common\net\NetServerTCP3Send.h" />
     <ClInclude Include="..\..\common\net\NetServerTCPProtocol.h" />
     <ClInclude Include="..\..\common\net\NetServerTCPRead.h" />
+    <ClInclude Include="..\..\common\simactions\NextTurnSimAction.h" />
     <ClInclude Include="..\..\common\simactions\TankBuyingSimAction.h" />
     <ClInclude Include="..\..\common\target\Target.h" />
     <ClInclude Include="..\..\common\target\TargetContainer.h" />

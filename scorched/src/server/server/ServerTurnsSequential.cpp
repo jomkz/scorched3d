@@ -107,6 +107,7 @@ void ServerTurnsSequential::internalSimulate(fixed frameTime)
 	if (waitingPlayers_.empty() && playingPlayer_ == 0) 
 	{
 		internalEnterState();
+		incrementTurn();
 	}
 
 	// Check tanks are alive

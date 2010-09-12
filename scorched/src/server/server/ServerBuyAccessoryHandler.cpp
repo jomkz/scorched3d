@@ -25,6 +25,7 @@
 #include <simactions/TankAccessorySimAction.h>
 #include <common/Logger.h>
 #include <tank/TankContainer.h>
+#include <tank/TankState.h>
 
 ServerBuyAccessoryHandler::ServerBuyAccessoryHandler(ComsMessageHandler &comsMessageHandler)
 {
@@ -68,6 +69,12 @@ bool ServerBuyAccessoryHandler::processMessage(
 	if (tank->getDestinationId() != netMessage.getDestinationId())
 	{
 		Logger::log( "ERROR: Player buying does not exist at this destination");
+		return true;
+	}
+
+	if (tank->getState().getState() != TankState::sBuying) 
+	{
+		Logger::log( "ERROR: Player buying when not in buying state");
 		return true;
 	}
 

@@ -1446,6 +1446,9 @@
     <ClCompile Include="..\server\ServerTankChangeHandler.cpp">
       <Filter>server</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\simactions\NextTurnSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -2821,6 +2824,9 @@
     </ClInclude>
     <ClInclude Include="..\server\ServerTankChangeHandler.h">
       <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\NextTurnSimAction.h">
+      <Filter>simactions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
