@@ -54,6 +54,7 @@ public:
 	fixed getWindFactor(ScorchedContext &context);
 	fixed getShieldHurtFactor(ScorchedContext &context);
 	fixed getTimedCollision(ScorchedContext &context) { return timedCollision_.getValue(context); }
+	fixed getHeightCollision(ScorchedContext &context) { return heightCollision_.getValue(context); }
 	fixed getSpinSpeed(ScorchedContext &context) { return spinSpeed_.getValue(context); }
 	fixed getStepSize() { return stepSize_; }
 	float getFlameLife() { return flameLife_; }
@@ -95,6 +96,7 @@ protected:
 	NumberParser scale_;
 	NumberParser windFactor_;
 	NumberParser drag_;
+	NumberParser heightCollision_;
 	fixed stepSize_;
 	Vector flameStartColor1_, flameStartColor2_;
 	Vector flameEndColor1_, flameEndColor2_;

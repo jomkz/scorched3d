@@ -37,12 +37,38 @@ GLWDropDownColor::~GLWDropDownColor()
 {
 }
 
-void GLWDropDownColor::addColor(Vector &color)
+void GLWDropDownColor::addColor(Vector &newColor)
 {
+	std::list<GLWSelectorEntry>::iterator coloritor;
+	for (coloritor = texts_.begin();
+		coloritor != texts_.end();
+		coloritor++)
+	{
+		Vector &color = coloritor->getColor();
+		if (newColor[0] > color[0]) break;
+		else if (newColor[0] == color[0])
+		{
+			if (newColor[1] > color[1]) break;
+			else if (newColor[1] == color[1])
+			{
+				if (newColor[2] > color[2]) break;
+				else if (newColor[2] == color[2])
+				{
+					break;
+				}
+			}
+		}
+	}
+
 	GLWSelectorEntry entry(LANG_STRING(""), 0, false, &colorTexture_, 0);
-	entry.getColor() = color;
+	entry.getColor() = newColor;
 	entry.getTextureWidth() = 32;
-	addEntry(entry);
+
+	texts_.insert(coloritor, entry);
+	if (!current_)
+	{
+		current_ = &texts_.back();
+	}
 }
 
 Vector &GLWDropDownColor::getCurrentColor()

@@ -252,6 +252,8 @@ void PlayerDialog::display()
 		teamDropDown_->addText(LANG_RESOURCE("NONE", "None"), "None");
 		teamDropDown_->setVisible(false);
 		teamLabel_->setVisible(false);
+		colorDropDown_->setVisible(true);
+		colorLabel_->setVisible(true);
 	}
 	else
 	{
@@ -262,6 +264,8 @@ void PlayerDialog::display()
 			entry.getColor() = TankColorGenerator::getTeamColor(i);
 			teamDropDown_->addEntry(entry);
 		}	
+		teamDropDown_->setVisible(true);
+		teamLabel_->setVisible(true);
 		colorDropDown_->setVisible(false);
 		colorLabel_->setVisible(false);
 	}

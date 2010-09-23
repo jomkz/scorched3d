@@ -59,6 +59,7 @@ public:
 
 	const char *getName() { return name_.c_str(); }
 	virtual const char *getDescription() { return description_.c_str(); }
+	virtual const char *getRangeDescription() { return 0; }
 	virtual unsigned getData() { return data_; }
 
 	virtual EntryType getEntryType() = 0;
@@ -150,7 +151,7 @@ public:
 						  int minValue, int maxValue, int stepValue);
 	virtual ~OptionEntryBoundedInt();
 
-	virtual const char *getDescription();
+	virtual const char *getRangeDescription();
 	virtual EntryType getEntryType() { return OptionEntryBoundedIntType; }
 	virtual bool setValue(int value);
 
@@ -183,7 +184,7 @@ public:
 
 	virtual EntryType getEntryType() { return OptionEntryEnumType; }
 	virtual bool setValue(int value);
-	virtual const char *getDescription();
+	virtual const char *getRangeDescription();
 
 	virtual const char *getDefaultValueAsString();
 	virtual const char *getValueAsString();
@@ -280,7 +281,7 @@ public:
 
 	virtual EntryType getEntryType() { return OptionEntryStringEnumType; }
 	virtual bool setValue(const std::string &value);
-	virtual const char *getDescription();
+	virtual const char *getRangeDescription();
 
 	virtual bool setValueFromString(const std::string &string);
 

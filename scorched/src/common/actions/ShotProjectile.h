@@ -66,7 +66,7 @@ protected:
 	fixed thrustTime_;
 	fixed thrustAmount_;
 	fixed drag_, stepSize_;
-	fixed timedCollision_;
+	fixed timedCollision_, heightCollision_;
 	fixed spinSpeed_;
 #ifndef S3D_SERVER
 	std::list<RenderTracer::TracerLinePoint> positions_;

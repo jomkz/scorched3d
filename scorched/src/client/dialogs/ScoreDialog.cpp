@@ -136,6 +136,7 @@ void ScoreDialog::windowInit(const unsigned state)
 
 void ScoreDialog::draw()
 {
+	Tank *currentTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
 	float h = sortedTanks_.size() * lineSpacer + 80.0f;
 	if (ScorchedClient::instance()->getOptionsGame().getTeams() > 1)
 	{
@@ -159,6 +160,22 @@ void ScoreDialog::draw()
 		ClientState::StateScore)
 	{
 		finished = ShowScoreAction::getFinalScore();
+	}
+	bool buying = false;
+	{
+		std::map<unsigned int, Tank *> &playingTanks =
+			ScorchedClient::instance()->getTankContainer().getPlayingTanks();
+		std::map<unsigned int, Tank *>::iterator itor;
+		for (itor = playingTanks.begin();
+			itor != playingTanks.end();
+			itor ++)
+		{
+			if (itor->second->getState().getState() ==
+				TankState::sBuying)
+			{
+				buying = true;
+			}
+		}
 	}
 
 	Vector white(0.9f, 0.9f, 1.0f);
@@ -390,7 +407,7 @@ void ScoreDialog::draw()
 				if (current && current->getTeam() == (i + 1) && current->getState().getTankPlaying()) 
 				{
 					someTeam = true;
-					addLine(current, y, (char *)((winningTeam==(i+1))?"1":"2"), finished);
+					addLine(currentTank, current, y, (char *)((winningTeam==(i+1))?"1":"2"), finished, buying);
 					
 					tmpLastScoreValue += current->getScore().getScore();
 					tmpLastMoneyValue += current->getScore().getMoney();
@@ -423,7 +440,7 @@ void ScoreDialog::draw()
 			{
 				snprintf(strrank, 10, "%i", rank);
 
-				addLine(current, y, strrank, finished);
+				addLine(currentTank, current, y, strrank, finished, buying);
 				tmpLastScoreValue += current->getScore().getScore();
 				tmpLastMoneyValue += current->getScore().getMoney();
 				y+= lineSpacer;
@@ -442,7 +459,7 @@ void ScoreDialog::draw()
 			getTankContainer().getTankById(playerId);
 		if (current && !current->getState().getTankPlaying()) 
 		{
-			addLine(current, y, " ", false);
+			addLine(currentTank, current, y, " ", false, buying);
 			y+= lineSpacer;
 		}
 	}	
@@ -470,14 +487,13 @@ void ScoreDialog::addScoreLine(float y, Vector &color, int score)
 		S3D::formatStringBuffer("%i", score));
 }
 
-void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
+void ScoreDialog::addLine(Tank *currentPlayer, Tank *linePlayer, float y, char *rank, bool finished, bool buying)
 {
 	float textX = x_;
 	float textY  = y_ + h_ - y - lineSpacer - 25.0f;
-	bool currentPlayer = false;
 
 	TargetRendererImplTank *renderer = (TargetRendererImplTank *)
-		current->getRenderer();
+		linePlayer->getRenderer();
 	if (renderer)
 	{
 		GLWToolTip::instance()->addToolTip(&renderer->getTips()->tankTip,
@@ -488,12 +504,11 @@ void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
 	}
 
 	// Print a highlight behind the current clients player
-	if (current->getState().getTankPlaying() &&
-		current->getDestinationId() == 
+	if (linePlayer->getState().getTankPlaying() &&
+		linePlayer->getDestinationId() == 
 		ScorchedClient::instance()->getTankContainer().getCurrentDestinationId())
 	{
-		Tank *currentTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
-		if (!currentTank || current == currentTank)
+		if (!currentPlayer || linePlayer == currentPlayer)
 		{
 			GLState state(GLState::BLEND_ON); 
 
@@ -515,27 +530,27 @@ void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
 		name.append(LANG_STRING("("));
 		Tank *serverTank = 
 			ScorchedServer::instance()->getTankContainer().getTankById(
-			current->getPlayerId());
+			linePlayer->getPlayerId());
 		TankAI *tankAI = serverTank->getTankAI();
 		if (tankAI) name.append(LANG_STRING(tankAI->getName()));
 		else name.append(LANG_RESOURCE("HUMAN", "Human"));
 		name.append(LANG_STRING(") "));
 	}
-	else if (current->getState().getState() != TankState::sNormal)
+	else if (linePlayer->getState().getState() != TankState::sNormal)
 	{
 		name.append(LANG_STRING("("));
-		name.append(current->getState().getSmallStateLangString());
+		name.append(linePlayer->getState().getSmallStateLangString());
 		name.append(LANG_STRING(") "));
 	}
-	name.append(current->getTargetName());
+	name.append(linePlayer->getTargetName());
 
-	if (!current->getState().getTankPlaying())
+	if (!linePlayer->getState().getTankPlaying())
 	{
 		if (name.size() > 50) name = name.substr(0, 50); // Limit length
 
 		// Print the name on the screen
 		GLWFont::instance()->getGameFont()->draw(
-			current->getColor(),
+			linePlayer->getColor(),
 			10,
 			textX + nameLeft, textY, 0.0f,
 			name);
@@ -544,7 +559,7 @@ void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
 	{
 		GLState state(GLState::TEXTURE_ON);
 		glColor3f(1.0f, 1.0f, 1.0f);
-		current->getAvatar().getTexture()->draw();
+		linePlayer->getAvatar().getTexture()->draw();
 		glBegin(GL_QUADS);
 			glTexCoord2f(0.0f, 0.0f);
 			glVertex2f(textX + iconLeft,
@@ -562,66 +577,72 @@ void ScoreDialog::addLine(Tank *current, float y, char *rank, bool finished)
 
 		// Print the name on the screen
 		GLWFont::instance()->getGameFont()->draw(
-			current->getColor(),
+			linePlayer->getColor(),
 			10,
 			textX + rankLeft, textY, 0.0f,
 			rank);
 		GLWFont::instance()->getGameFont()->drawWidth(
 			killsLeft - nameLeft,
-			current->getColor(),
+			linePlayer->getColor(),
 			10,
 			textX + nameLeft, textY, 0.0f,
 			name);
 		GLWFont::instance()->getGameFont()->draw(
-			current->getColor(),
+			linePlayer->getColor(),
 			10,
 			textX + killsLeft, textY, 0.0f,
-			S3D::formatStringBuffer("%i", current->getScore().getKills()));
-		GLWFont::instance()->getGameFont()->draw(
-			current->getColor(),
-			10,
-			textX + moneyLeft, textY, 0.0f,
-			S3D::formatMoney(current->getScore().getMoney()));
-		GLWFont::instance()->getGameFont()->draw(
-			current->getColor(),
-			10,
-			textX + winsLeft, textY, 0.0f,
-			S3D::formatStringBuffer("%i", current->getScore().getWins()));
-		GLWFont::instance()->getGameFont()->draw(
-			current->getColor(),
-			10,
-			textX + scoreLeft, textY, 0.0f,
-			S3D::formatStringBuffer("%i", current->getScore().getScore()));
-		GLWFont::instance()->getGameFont()->draw(
-			current->getColor(),
-			10,
-			textX + assistsLeft, textY, 0.0f,
-			S3D::formatStringBuffer("%i", current->getScore().getAssists()));
-		GLWFont::instance()->getGameFont()->draw(
-			current->getColor(),
-			10,
-			textX + readyLeft, textY, 0.0f,
-			current->getState().getMoveId()!=0?"*":" ");
-		if (current->getScore().getRank() >= 0)
+			S3D::formatStringBuffer("%i", linePlayer->getScore().getKills()));
+		if (!buying ||
+			currentPlayer == linePlayer ||
+			(currentPlayer && linePlayer->getTeam() > 0 && 
+			linePlayer->getTeam() == currentPlayer->getTeam()))
 		{
 			GLWFont::instance()->getGameFont()->draw(
-				current->getColor(),
+				linePlayer->getColor(),
 				10,
-				textX + statsLeft, textY, 0.0f,
-				S3D::formatStringBuffer("%i", current->getScore().getRank()));
+				textX + moneyLeft, textY, 0.0f,
+				S3D::formatMoney(linePlayer->getScore().getMoney()));
 		}
 		GLWFont::instance()->getGameFont()->draw(
-			current->getColor(),
+			linePlayer->getColor(),
 			10,
-			textX + livesLeft, textY, 0.0f,
-			S3D::formatStringBuffer("%i", current->getState().getLives()));
-		if (current->getScore().getPing() >= 0)
+			textX + winsLeft, textY, 0.0f,
+			S3D::formatStringBuffer("%i", linePlayer->getScore().getWins()));
+		GLWFont::instance()->getGameFont()->draw(
+			linePlayer->getColor(),
+			10,
+			textX + scoreLeft, textY, 0.0f,
+			S3D::formatStringBuffer("%i", linePlayer->getScore().getScore()));
+		GLWFont::instance()->getGameFont()->draw(
+			linePlayer->getColor(),
+			10,
+			textX + assistsLeft, textY, 0.0f,
+			S3D::formatStringBuffer("%i", linePlayer->getScore().getAssists()));
+		GLWFont::instance()->getGameFont()->draw(
+			linePlayer->getColor(),
+			10,
+			textX + readyLeft, textY, 0.0f,
+			linePlayer->getState().getMoveId()!=0?"*":" ");
+		if (linePlayer->getScore().getRank() >= 0)
 		{
 			GLWFont::instance()->getGameFont()->draw(
-				current->getColor(),
+				linePlayer->getColor(),
+				10,
+				textX + statsLeft, textY, 0.0f,
+				S3D::formatStringBuffer("%i", linePlayer->getScore().getRank()));
+		}
+		GLWFont::instance()->getGameFont()->draw(
+			linePlayer->getColor(),
+			10,
+			textX + livesLeft, textY, 0.0f,
+			S3D::formatStringBuffer("%i", linePlayer->getState().getLives()));
+		if (linePlayer->getScore().getPing() >= 0)
+		{
+			GLWFont::instance()->getGameFont()->draw(
+				linePlayer->getColor(),
 				10,
 				textX + pingLeft, textY, 0.0f,
-				S3D::formatStringBuffer("%i", current->getScore().getPing()));
+				S3D::formatStringBuffer("%i", linePlayer->getScore().getPing()));
 		}
 	}
 }

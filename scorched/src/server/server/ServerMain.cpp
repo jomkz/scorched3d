@@ -144,8 +144,8 @@ void serverLoop(fixed timeDifference)
 
 void consoleServer()
 {
-	ServerConsoleLogger serverConsoleLogger;
 	ServerConsoleProgressCounter::instance();
+	ServerConsoleLogger serverConsoleLogger;
 	ServerCommon::startFileLogger(ServerParams::instance()->getServerFile());
 	serverMain(ServerConsoleProgressCounter::instance()->getProgressCounter());
 

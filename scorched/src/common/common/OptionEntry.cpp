@@ -153,8 +153,9 @@ bool OptionEntryHelper::writeToXML(std::list<OptionEntry *> &options,
 
 			// Add the comments for this node
 			node->addChild(new XMLNode("", 
-				S3D::formatStringBuffer("%s: %s (default value : \"%s\")", 
-				entry->getName(), entry->getDescription(), entry->getDefaultValueAsString()), 
+				S3D::formatStringBuffer("%s: %s.  Default value : \"%s\" %s.", 
+				entry->getName(), entry->getDescription(), 
+				entry->getDefaultValueAsString(), entry->getRangeDescription()?entry->getRangeDescription():""), 
 				XMLNode::XMLCommentType));
 			
 			if (!entry->isDefaultValue() || allOptions)
@@ -358,13 +359,10 @@ OptionEntryBoundedInt::~OptionEntryBoundedInt()
 {
 }
 
-const char *OptionEntryBoundedInt::getDescription()
+const char *OptionEntryBoundedInt::getRangeDescription()
 {
 	static std::string result;
-
-	result = description_;
-	result += S3D::formatStringBuffer(" (Max = %i, Min = %i)", getMaxValue(), getMinValue());
-
+	result = S3D::formatStringBuffer("Max = %i, Min = %i", getMaxValue(), getMinValue());
 	return result.c_str();
 }
 
@@ -389,19 +387,16 @@ OptionEntryEnum::~OptionEntryEnum()
 {
 }
 
-const char *OptionEntryEnum::getDescription()
+const char *OptionEntryEnum::getRangeDescription()
 {
 	static std::string result;
-
-	result = description_;
-	result += " ( possible values = [";
+	result = "possible values = [";
 	for (EnumEntry *current = enums_; current->description[0]; current++)
 	{
 		result += S3D::formatStringBuffer(" \"%s\" ",
 			current->description, current->value);
 	}
-	result += "] )";
-
+	result += "]";
 	return result.c_str();
 }
 
@@ -606,17 +601,16 @@ OptionEntryStringEnum::~OptionEntryStringEnum()
 {
 }
 
-const char *OptionEntryStringEnum::getDescription()
+const char *OptionEntryStringEnum::getRangeDescription()
 {
 	static std::string result;
-
-	result = description_;
+	result = "possible values = [";
 	for (EnumEntry *current = enums_; current->value[0]; current++)
 	{
-		result += S3D::formatStringBuffer(" (\"%s\")",
+		result += S3D::formatStringBuffer(" \"%s\" ",
 			current->value);
 	}
-
+	result += "]";
 	return result.c_str();
 }
 

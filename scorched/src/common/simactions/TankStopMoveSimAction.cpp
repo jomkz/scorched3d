@@ -61,6 +61,7 @@ void TankStopMoveSimAction::stopMove(ScorchedContext &context, Tank *tank)
 		if (tank->getDestinationId() == context.getTankContainer().getCurrentDestinationId())
 		{
 #ifndef S3D_SERVER
+			ScorchedClient::instance()->getTankContainer().setCurrentPlayerId(0);
 			ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
 			ShotCountDown::instance()->hideMoveTime();
 #endif

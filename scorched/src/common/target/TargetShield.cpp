@@ -20,11 +20,13 @@
 
 #include <target/TargetShield.h>
 #include <target/TargetSpace.h>
+#include <tank/TankContainer.h>
 #include <weapons/AccessoryStore.h>
 #include <weapons/ShieldRound.h>
 #include <weapons/ShieldSquare.h>
 #include <engine/ScorchedContext.h>
 #include <engine/ActionController.h>
+#include <common/OptionsScorched.h>
 
 TargetShield::TargetShield(ScorchedContext &context,
 	unsigned int playerId) :
@@ -32,7 +34,9 @@ TargetShield::TargetShield(ScorchedContext &context,
 	currentShield_(0),
 	power_(0), 
 	target_(0),
-	boundingSize_(0)
+	boundingSize_(0),
+	graphicalCurrentShield_(0),
+	graphicalShieldPower_(0)
 {
 }
 
@@ -72,6 +76,44 @@ void TargetShield::setShieldPower(fixed power)
 	{
 		power_ = 0;
 		setCurrentShield(0);
+	}
+}
+
+bool TargetShield::returnGraphical()
+{
+	if (target_->isTarget()) return false;
+	if (!context_.getOptionsGame().getDelayedDefenseActivation()) return false;
+	Tank *thisTank = (Tank *) target_;
+	Tank *currentTank = context_.getTankContainer().getCurrentTank();
+	if (thisTank == currentTank) return false;
+	if (!currentTank) return false;
+
+	return true;
+}
+
+Accessory *TargetShield::getGraphicalCurrentShield()
+{
+	if (returnGraphical())
+	{
+		return graphicalCurrentShield_;
+	}
+	else
+	{
+		graphicalCurrentShield_ = currentShield_;
+		return currentShield_;
+	}
+}
+
+fixed TargetShield::getGraphicalShieldPower()
+{
+	if (returnGraphical())
+	{
+		return graphicalShieldPower_;
+	}
+	else
+	{
+		graphicalShieldPower_ = power_;
+		return power_;
 	}
 }
 

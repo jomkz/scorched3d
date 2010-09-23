@@ -417,8 +417,8 @@ void Landscape::drawObjects()
 {
 	drawSetup();
 
-	wall_->draw();
 	sky_->drawLayers();
+	wall_->draw();
 
 	drawTearDown();
 }

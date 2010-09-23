@@ -32,7 +32,8 @@ WeaponProjectile::WeaponProjectile() :
 	showShotPath_(false), showEndPoint_(false), 
 	createSmoke_(true),	createFlame_(true), 
 	spinSpeed_(1), apexNoDud_(false), timedDud_(false),
-	timedCollision_(0), shieldHurtFactor_(1), windFactor_(1),
+	timedCollision_(0), heightCollision_(0),
+	shieldHurtFactor_(1), windFactor_(1),
 	flameLife_(1.0f), smokeLife_(4.0f),
 	flameStartColor1_(0.9f, 0.0f, 0.0f), flameStartColor2_(1.0f, 0.2f, 0.2f),
 	flameEndColor1_(0.95f, 0.9f, 0.2f), flameEndColor2_(1.0f, 1.0f, 0.3f),
@@ -139,6 +140,9 @@ bool WeaponProjectile::parseXML(AccessoryCreateContext &context, XMLNode *access
 	accessoryNode->getNamedChild("timedcollision", timedCollision_, false);
 	accessoryNode->getNamedChild("timeddud", timedDudNode, false);
 	if (timedDudNode) timedDud_ = true;
+
+	// Get the height collision point
+	accessoryNode->getNamedChild("heightcollision", heightCollision_, false);
 
 	// Get the no smoke node
 	XMLNode *noCreateSmokeNode = 0;

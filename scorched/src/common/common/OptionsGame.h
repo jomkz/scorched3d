@@ -361,6 +361,9 @@ public:
 	bool getResidualPlayers() { return residualPlayers_; }
 	OptionEntryBool &getResidualPlayersEntry() { return residualPlayers_; }
 
+	bool getDelayedDefenseActivation() { return delayedDefenseActivation_; }
+	OptionEntryBool &getDelayedDefenseActivationEntry() { return delayedDefenseActivation_; }
+
 	bool getAutoSendSyncCheck() { return autoSendSyncCheck_; }
 	OptionEntryBool &getAutoSendSyncCheckEntry() { return autoSendSyncCheck_; }
 
@@ -492,6 +495,7 @@ protected:
 	OptionEntryBool actionCollisionSyncCheck_;
 	OptionEntryBool autoSendSyncCheck_;
 	OptionEntryBool residualPlayers_;
+	OptionEntryBool delayedDefenseActivation_;
 	OptionEntryBool randomizeBotNames_;
 	OptionEntryBool giveAllWeapons_;
 	OptionEntryBool registeredUserNames_;
@@ -514,7 +518,6 @@ protected:
 	// Depricated (old) 
 	OptionEntryBoundedInt depricatedIdleKickTime_;
 	OptionEntryBoundedInt depricatedIdleShotKickTime_;
-	OptionEntryBool depricatedDelayedDefenseActivation_;
 	OptionEntryBoundedInt depricatedKeepAliveTime_;
 	OptionEntryBoundedInt depricatedKeepAliveTimeoutTime_;
 	OptionEntryEnum depricatedScoreType_;

@@ -96,6 +96,7 @@ void GLWScorchedInfo::draw()
 			setToolTip(&windTip);
 
 			static CachedValueString windSpeed;
+			static float windWidth = 0.0f;
 			if (windSpeed.hasChanged(ScorchedClient::instance()->
 				getSimulator().getWind().getWindSpeed()))
 			{
@@ -108,20 +109,23 @@ void GLWScorchedInfo::draw()
 					windSpeed.cachedString = LANG_RESOURCE_1("WIND_FORCE", "Force {0}",
 						S3D::formatStringBuffer("%.0f", windSpeed.cachedValue.asFloat()));
 				}
+				windWidth = GLWFont::instance()->
+					getGameFont()->getWidth(fontSize_, windSpeed.cachedString);
 			}
 
 			float offSet = 0.0f;
 			if (!noCenter_) 
 			{
-				float windwidth = GLWFont::instance()->
-					getGameFont()->getWidth(
-					fontSize_, windSpeed.cachedString);
-				offSet = w_ / 2.0f - (windwidth / 2.0f);
+				offSet = w_ / 2.0f - (windWidth / 2.0f);
 			}
+			GLWFont::instance()->getGameShadowFont()->draw(
+				GLWColors::black, fontSize_,
+				x_ + offSet - 1.0f, y_ + 1.0f, 0.0f,
+				windSpeed.cachedString);
 			GLWFont::instance()->getGameFont()->draw(
 				*fontColor, fontSize_,
 				x_ + offSet, y_, 0.0f,
-				windSpeed.cachedString);                    
+				windSpeed.cachedString);
 		}
 		break;
 	}

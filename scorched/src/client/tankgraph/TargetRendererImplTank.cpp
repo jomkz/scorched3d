@@ -673,12 +673,11 @@ void TargetRendererImplTank::drawLife()
 	{
 		float shieldLife = 0.0f;
 		Accessory *currentShield =
-			tank_->getShield().getCurrentShield();
+			tank_->getShield().getGraphicalCurrentShield();
 		if (currentShield)
 		{	
-			Shield *shield =  (Shield *) 
-				tank_->getShield().getCurrentShield()->getAction();
-			shieldLife = tank_->getShield().getShieldPower().asFloat() / 
+			Shield *shield =  (Shield *) currentShield->getAction();
+			shieldLife = tank_->getShield().getGraphicalShieldPower().asFloat() / 
 				shield->getPower().asFloat() * 100.0f;
 		}
 

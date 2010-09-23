@@ -32,7 +32,7 @@ bool ModelRendererTree::skipPre_ = false;
 // Pine
 GLTextureReference ModelRendererTree::pineTextureA_(ImageID(S3D::eModLocation,
 				"data/textures/pine2.bmp",
-				"data/textures/pine2.bmp",
+				"data/textures/pine2a.bmp",
 				false));
 GLTextureReference ModelRendererTree::pineTextureB_(ImageID(S3D::eModLocation,
 				"data/textures/pine3.bmp",

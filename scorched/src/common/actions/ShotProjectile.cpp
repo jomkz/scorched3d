@@ -82,6 +82,7 @@ void ShotProjectile::init()
 	thrustTime_ = getWeapon()->getThrustTime(*context_);
 	thrustAmount_ = getWeapon()->getThrustAmount(*context_);
 	timedCollision_ = getWeapon()->getTimedCollision(*context_);
+	heightCollision_ = getWeapon()->getHeightCollision(*context_);
 	drag_ = getWeapon()->getDrag(*context_);
 	stepSize_ = getWeapon()->getStepSize() * 
 		fixed(true, context_->getOptionsGame().getWeaponSpeed());
@@ -178,6 +179,23 @@ void ShotProjectile::simulate(fixed frameTime, bool &remove)
 		{
 			doCollision(getCurrentPosition());
 			remove = true;
+		}
+	}
+
+	// Apex collision
+	if (!remove &&
+		heightCollision_ > 0)
+	{
+		if (getCurrentVelocity()[2] < 0)
+		{
+			fixed landHeight = context_->getLandscapeMaps().
+				getGroundMaps().getInterpHeight(
+					getCurrentPosition()[0], getCurrentPosition()[1]);
+			if (getCurrentPosition()[2] <= heightCollision_ + landHeight)
+			{
+				doCollision(getCurrentPosition());
+				remove = true;
+			}
 		}
 	}
 

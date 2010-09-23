@@ -40,6 +40,10 @@ public:
 	Accessory *getCurrentShield() { return currentShield_; }
 	void setCurrentShield(Accessory *sh);
 
+	// Used only for delayed shield defense
+	Accessory *getGraphicalCurrentShield();
+	fixed getGraphicalShieldPower();
+
 	fixed getShieldPower() { return power_; }
 	fixed getShieldBoundingSize() { return boundingSize_; }
 	void setShieldPower(fixed power);
@@ -53,6 +57,10 @@ protected:
 	ScorchedContext &context_;
 	Accessory *currentShield_;
 	fixed power_, boundingSize_;
+	Accessory *graphicalCurrentShield_;
+	fixed graphicalShieldPower_;
+
+	bool returnGraphical();
 };
 
 #endif // __INCLUDE_TargetShieldh_INCLUDE__

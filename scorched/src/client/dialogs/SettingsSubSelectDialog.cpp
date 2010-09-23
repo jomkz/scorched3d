@@ -220,6 +220,8 @@ SettingsSubSelectDialog::SettingsSubSelectDialog() :
 		controls_, weaponsTab_, optionsGame.getGiveAllWeaponsEntry());
 	GLWOptionEntry::createEntry(
 		controls_, weaponsTab_, optionsGame.getResidualPlayersEntry());
+	GLWOptionEntry::createEntry(
+		controls_, weaponsTab_, optionsGame.getDelayedDefenseActivationEntry());
 	weaponsTab_->addWidget(new GLWSpacer(0.0f, 20.0f));
 
 	GLWOptionEntry::createEntry(

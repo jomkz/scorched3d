@@ -247,7 +247,7 @@ void TargetRendererImpl::drawShield(float shieldHit, float totalTime)
 	}
 
 	// Draw the actual shield
-	Accessory *accessory = target_->getShield().getCurrentShield();
+	Accessory *accessory = target_->getShield().getGraphicalCurrentShield();
 	if (!accessory) return;
 	Shield *shield = (Shield *) accessory->getAction();
 
@@ -392,7 +392,7 @@ void TargetRendererImpl::createParticle()
 	// if we have a shield or if we are falling
 	if (target_->isTarget())
 	{
-		if (!target_->getShield().getCurrentShield() &&
+		if (!target_->getShield().getGraphicalCurrentShield() &&
 			(tree_ || !target_->getTargetState().getFalling()))
 		{
 			return;

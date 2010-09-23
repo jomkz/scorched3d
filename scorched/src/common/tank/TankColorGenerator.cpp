@@ -35,30 +35,32 @@ TankColorGenerator *TankColorGenerator::instance()
 
 TankColorGenerator::TankColorGenerator()
 {
-	addColor(0x7F, 0xFF, 0xD4);
-	addColor(0xD2, 0x69, 0x1E);
-	addColor(0x8B, 0x00, 0x8B);
-	addColor(0x99, 0x32, 0xCC);
-	addColor(0x8D, 0xBC, 0x8F);
-	addColor(0x00, 0xDE, 0xD1);
-	addColor(0xFF, 0x8C, 0x00);
-	addColor(0xFF, 0xE4, 0xC4);
-	addColor(0x00, 0xBF, 0xFF);
-	addColor(0xB2, 0x22, 0x22);
-	addColor(0xFF, 0x00, 0xFF);
-	addColor(0xFF, 0xD7, 0x00);
-	addColor(0xAD, 0xD8, 0xE6);
-	addColor(0xFF, 0xB6, 0xC1);
-	addColor(0xFA, 0xFA, 0xD2);
-	addColor(0x00, 0x22, 0xFF);
-	addColor(0xDE, 0xB8, 0x87);
-	addColor(0xFF, 0x45, 0x00);
-	addColor(0xDA, 0xA5, 0x20);
-	addColor(0xFF, 0xFF, 0x20);
-	addColor(0xFF, 0x00, 0x20);
-	addColor(0x2E, 0x8B, 0x57);
-	addColor(0xBD, 0xB7, 0x6B);
-	addColor(0x7F, 0xFF, 0x00);
+	addColor(255, 0, 0);
+	addColor(255, 255, 0);
+	addColor(255, 120, 0);
+	addColor(140, 0, 255);
+	addColor(255, 0, 255);
+	addColor(0, 0, 255);
+	addColor(0, 255, 0);
+	addColor(255, 190, 0);
+	addColor(255, 255, 140);
+	addColor(140, 255, 255);
+	addColor(140, 140, 255);
+	addColor(140, 0, 0);
+	addColor(140, 140, 0);
+	addColor(140, 140, 140);
+	addColor(140, 255, 0);
+	addColor(255, 0, 140);
+	addColor(140, 255, 140);	
+	addColor(0, 0, 140);
+	addColor(0, 140, 0);
+	addColor(0, 255, 140);
+	addColor(140, 0, 140);
+	addColor(0, 255, 255);
+	addColor(0, 140, 255);
+	addColor(0, 140, 140);
+	addColor(255, 140, 255);
+	addColor(190, 125, 35);
 }
 
 TankColorGenerator::~TankColorGenerator()
@@ -71,29 +73,7 @@ void TankColorGenerator::addColor(unsigned r, unsigned g, unsigned b)
 		float(int(float(r) / 2.550f)) / 100.0f, 
 		float(int(float(g) / 2.550f)) / 100.0f, 
 		float(int(float(b) / 2.550f)) / 100.0f);
-	
-	std::vector<Vector*>::iterator coloritor;
-	for (coloritor = availableColors_.begin();
-		coloritor != availableColors_.end();
-		coloritor++)
-	{
-		Vector &color = *(*coloritor);
-		if (newColor[0] > color[0]) break;
-		else if (newColor[0] == color[0])
-		{
-			if (newColor[1] > color[1]) break;
-			else if (newColor[1] == color[1])
-			{
-				if (newColor[2] > color[2]) break;
-				else if (newColor[2] == color[2])
-				{
-					break;
-				}
-			}
-		}
-	}
-
-	availableColors_.insert(coloritor, new Vector(newColor));
+	availableColors_.push_back(new Vector(newColor));
 }
 
 bool TankColorGenerator::colorAvailable(Vector &color,

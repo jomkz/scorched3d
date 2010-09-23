@@ -44,7 +44,7 @@ protected:
 	int lastNoPlayers_;
 
 	void calculateScores();
-	void addLine(Tank *current, float y, char *rank, bool finished);
+	void addLine(Tank *currentPlayer, Tank *linePlayer, float y, char *rank, bool finished, bool buying);
 	void addScoreLine(float y, Vector &color, int score);
 
 private:

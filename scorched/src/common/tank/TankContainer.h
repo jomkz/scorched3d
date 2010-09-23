@@ -32,12 +32,12 @@ public:
 	virtual ~TankContainer();
 
 	void addTank(Tank *tank);
-	Tank *getCurrentTank();
 
+	Tank *getCurrentTank() { return currentPlayer_; }
 	unsigned int getCurrentDestinationId() { return destinationId_; }
 	void setCurrentDestinationId(unsigned int did) { destinationId_ = did; }
 	unsigned int getCurrentPlayerId() { return playerId_; }
-	void setCurrentPlayerId(unsigned int pid) { playerId_ = pid; }
+	void setCurrentPlayerId(unsigned int pid);
 	unsigned int getCurrentRoundId() { return roundId_; }
 	void setCurrentRoundId(unsigned int rid) { roundId_ = rid; }
 
@@ -58,8 +58,9 @@ protected:
 	unsigned int destinationId_;
 	unsigned int roundId_;
 	TargetContainer &targets_;
+	Tank *currentPlayer_;
 	std::map<unsigned int, Tank *> tanks_;
-
+	std::map<unsigned int, Tank *> tmpPlayingTanks_;
 };
 
 #endif // !defined(AFX_TANKCONTAINER_H__56AF98E2_E188_45EC_AA25_1865ADBBA3F1__INCLUDED_)

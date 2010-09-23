@@ -611,13 +611,13 @@ static void generateTargetTip(LangString &tip, Target *target)
 		S3D::formatStringBuffer("%.0f", target->getLife().getLife().asFloat()),
 		S3D::formatStringBuffer("%.0f", target->getLife().getMaxLife().asFloat())));
 
-	if (target->getShield().getCurrentShield())
+	Accessory *shieldAccessory = target->getShield().getGraphicalCurrentShield();
+	if (shieldAccessory)
 	{
-		Shield *shield = (Shield*) 
-			target->getShield().getCurrentShield()->getAction();
+		Shield *shield = (Shield*) shieldAccessory->getAction();
 
 		tip.append(LANG_RESOURCE_2("TARGET_SHIELD", "\nShield   : {0}/{1}",
-			S3D::formatStringBuffer("%.0f", target->getShield().getShieldPower().asFloat()),
+			S3D::formatStringBuffer("%.0f", target->getShield().getGraphicalShieldPower().asFloat()),
 			S3D::formatStringBuffer("%.0f", shield->getPower().asFloat())));
 	}
 	if (!target->isTarget())

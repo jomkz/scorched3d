@@ -25,7 +25,8 @@ TankContainer::TankContainer(TargetContainer &targets) :
 	targets_(targets),
 	playerId_(0), 
 	destinationId_(0),
-	roundId_(0)
+	roundId_(0),
+	currentPlayer_(0)
 {
 
 }
@@ -55,6 +56,11 @@ Tank *TankContainer::removeTank(unsigned int playerId)
 	{
 		tanks_.erase(playerId);
 		DIALOG_ASSERT(!target->isTarget());
+
+		if (currentPlayer_ == target)
+		{
+			currentPlayer_ = 0;
+		}
 	}
 	return (Tank *) target;
 }
@@ -83,19 +89,17 @@ Tank *TankContainer::getTankByName(const LangString &name)
 	return 0;
 }
 
-Tank *TankContainer::getCurrentTank()
-{
+void TankContainer::setCurrentPlayerId(unsigned int pid) 
+{ 
+	playerId_ = pid; 
 	if (playerId_)
 	{
-		static Tank *currentPlayer = 0;
-		if (!currentPlayer || currentPlayer->getPlayerId() != playerId_)
-		{
-			currentPlayer = getTankById(playerId_);
-		}
-		return currentPlayer;
+		currentPlayer_ = getTankById(playerId_);
 	}
-
-	return 0;
+	else 
+	{
+		currentPlayer_ = 0;
+	}
 }
 
 int TankContainer::teamCount()
@@ -157,8 +161,7 @@ int TankContainer::getNoOfNonSpectatorTanks()
 
 std::map<unsigned int, Tank *> &TankContainer::getPlayingTanks()
 {
-	static std::map<unsigned int, Tank *> tanks;
-	tanks.clear();
+	tmpPlayingTanks_.clear();
 
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = tanks_.begin();
@@ -166,10 +169,10 @@ std::map<unsigned int, Tank *> &TankContainer::getPlayingTanks()
 		mainitor++)
 	{
 		Tank *current = (*mainitor).second;
-		tanks[current->getPlayerId()] = current;
+		tmpPlayingTanks_[current->getPlayerId()] = current;
 	}	
 
-	return tanks;
+	return tmpPlayingTanks_;
 }
 
 std::map<unsigned int, Tank *> &TankContainer::getAllTanks()
