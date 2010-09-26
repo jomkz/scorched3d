@@ -24,15 +24,15 @@
 #include <GLW/GLWWindow.h>
 #include <GLW/GLWTextButton.h>
 #include <GLW/GLWIconTable.h>
-#include <GLW/GLWTextBox.h>
 #include <GLW/GLWDropDownText.h>
-#include <GLW/GLWLabel.h>
+#include <dialogs/TextBoxDialog.h>
 #include <common/ToolTip.h>
 
 class NetworkSelectDialog : 
 	public GLWWindow,
 	public GLWButtonI,
 	public GLWIconTableI,
+	public TextBoxDialogI,
 	public GLWDropDownI
 {
 public:
@@ -55,6 +55,9 @@ public:
 
 	// GLWDropDownI
 	virtual void select(unsigned int id, const int pos, GLWSelectorEntry value);
+
+	// TextBoxDialogI
+	virtual void textBoxResult(TextBoxDialog *dialog, const LangString &result);
 
 protected:
 	static NetworkSelectDialog *instance_;

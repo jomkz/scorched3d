@@ -29,6 +29,8 @@ namespace ClientWindowSetup
 		unsigned int state, const char *windowState);
 	void addCommonComponents(GLWWindowSkinManager *skinManager,
 		unsigned state);
+	void addMessageComponents(GLWWindowSkinManager *skinManager,
+		unsigned state);
 	void setupStartWindows(GLWWindowSkinManager *skinManager);
 	void setupGameWindows(GLWWindowSkinManager *skinManager);
 };

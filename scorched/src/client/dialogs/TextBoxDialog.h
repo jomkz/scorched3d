@@ -25,14 +25,21 @@
 #include <GLW/GLWTextButton.h>
 #include <GLW/GLWTextBox.h>
 
+class TextBoxDialog;
+class TextBoxDialogI 
+{
+public:
+	virtual void textBoxResult(TextBoxDialog *dialog, const LangString &result) = 0;
+};
+
 class TextBoxDialog : public GLWWindow,
 	public GLWButtonI
 {
 public:
 	static TextBoxDialog *instance();
 
-	static void show(const LangString &text);
-	static LangString &getText() { return instance_->message_; }
+	static void show(const LangString &message, const LangString &text, TextBoxDialogI *user);
+	static LangString &getText() { return instance_->result_->getLangString(); }
 
 	virtual void mouseDown(int button, float x, float y, bool &skipRest);
 	virtual void mouseUp(int button, float x, float y, bool &skipRest);
@@ -47,9 +54,10 @@ protected:
 	static TextBoxDialog *instance_;
 
 	GLWTextButton *okButton_, *cancelButton_;
-	GLWTextBox *message_;
+	GLWTextBox *result_;
+	GLWLabel *message_;
+	TextBoxDialogI *user_;
 	
-
 private:
 	TextBoxDialog();
 	virtual ~TextBoxDialog();

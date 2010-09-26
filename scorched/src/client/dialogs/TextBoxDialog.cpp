@@ -33,13 +33,16 @@ TextBoxDialog *TextBoxDialog::instance()
 }
 
 TextBoxDialog::TextBoxDialog() : 
-	GLWWindow("MsgBox", 210.0f, 150.0f, eHideName, "")
+	GLWWindow("TextBox", 210.0f, 150.0f, eHideName, ""),
+	user_(0)
 {
 	GLWPanel *topPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
 
-	message_ = new GLWTextBox(0.0f, 0.0f, 300.0f, LANG_STRING(""));
+	message_ = new GLWLabel(0.0f, 0.0f, LANG_STRING(""), 8.0f, GLWLabel::eMultiLine);
 	topPanel->addWidget(message_, 0, SpaceTop | SpaceLeft | SpaceRight | AlignCenterLeftRight, 10.0f);
-	topPanel->setLayout(GLWPanel::LayoutHorizontal);
+	result_ = new GLWTextBox(0.0f, 0.0f, 300.0f, LANG_STRING(""));
+	topPanel->addWidget(result_, 0, SpaceTop | SpaceLeft | SpaceRight | AlignCenterLeftRight, 10.0f);
+	topPanel->setLayout(GLWPanel::LayoutVerticle);
 	addWidget(topPanel);
 
 	GLWPanel *botPanel = new GLWPanel(0.0f, 0.0f, 0.0f, 0.0f, false, false);
@@ -65,10 +68,11 @@ TextBoxDialog::~TextBoxDialog()
 
 }
 
-void TextBoxDialog::show(const LangString &message)
+void TextBoxDialog::show(const LangString &message, const LangString &text, TextBoxDialogI *user)
 {
+	instance()->user_ = user;
 	instance()->message_->setText(message);
-	instance()->message_->calcWidth();
+	instance()->result_->setText(text);
 	instance()->layout();
 
 	GLWWindowManager::instance()->showWindow(instance()->getId());
@@ -76,9 +80,10 @@ void TextBoxDialog::show(const LangString &message)
 
 void TextBoxDialog::buttonDown(unsigned int id)
 {
+	GLWWindowManager::instance()->hideWindow(id_);
 	if (id == okButton_->getId())
 	{
-		GLWWindowManager::instance()->hideWindow(id_);
+		if (user_) user_->textBoxResult(this, instance()->result_->getLangString());
 	}
 }
 

@@ -141,7 +141,7 @@ NetworkSelectDialog::NetworkSelectDialog() :
 
 	addWidget(new GLWPanel(220.0f, 525.0f, 300.0f, 25.0f, true));
 	ipaddress_ = (GLWLabel *) addWidget(
-		new GLWLabel(225.0f, 527.0f));
+		new GLWLabel(225.0f, 525.0f));
 	connectTo_ = (GLWTextButton *) addWidget(
 		new GLWTextButton(LANG_RESOURCE("CONNECT_TO_LABEL", "Connect To :"), 75.0f, 527.0f, 135, this,
 		GLWButton::ButtonFlagCenterX));
@@ -404,7 +404,7 @@ void NetworkSelectDialog::drawColumnPlayers(unsigned int id, int row, int col,
 bool NetworkSelectDialog::serverCompatable(std::string pversion, std::string version)
 {
 	if (pversion.size() > 0 && 
-		0 != strcmp(pversion.c_str(), S3D::ScorchedProtocolVersion.c_str()))
+		pversion.c_str() != S3D::ScorchedProtocolVersion.c_str())
 	{
 		return false;
 	}
@@ -556,6 +556,11 @@ void NetworkSelectDialog::setIPAddress(const LangString &text)
 	ipaddress_->setText(text);
 }
 
+void NetworkSelectDialog::textBoxResult(TextBoxDialog *dialog, const LangString &result)
+{
+	setIPAddress(result);
+}
+
 void NetworkSelectDialog::buttonDown(unsigned int id)
 {
 	if (id == refresh_->getId())
@@ -606,5 +611,12 @@ void NetworkSelectDialog::buttonDown(unsigned int id)
 	else if (id == cancelId_)
 	{
 		GLWWindowManager::instance()->hideWindow(id_);
+	}
+	else if (id == connectTo_->getId())
+	{
+		TextBoxDialog::instance()->show(LANG_RESOURCE("EDIT_CONNECTION", 
+			"Edit connection details : HostName or HostName:Port\n"
+			"e.g. 192.168.1.1:27270 or 192.168.1.2 or scorched3d.co.uk:27270"),
+			ipaddress_->getLangString(), this);
 	}
 }

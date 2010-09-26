@@ -106,10 +106,6 @@ void ClientWindowSetup::addCommonComponents(GLWWindowSkinManager *skinManager,
 	GLWWindowManager::instance()->addWindow(state, 
  		InventoryDialog::instance(), showInvKey, false);
 
-	KEYBOARDKEY("SHOW_QUIT_DIALOG", quitKey);
-	GLWWindowManager::instance()->addWindow(state, 
- 		QuitDialog::instance(), quitKey, false);
-
 	KEYBOARDKEY("SHOW_KIBITZ_DIALOG", kibitzKey);
 	GLWWindowManager::instance()->addWindow(state, 
 		KibitzingDialog::instance(), kibitzKey, false);
@@ -136,13 +132,10 @@ void ClientWindowSetup::addCommonComponents(GLWWindowSkinManager *skinManager,
 	}
 	GLWWindowManager::instance()->addWindow(state,
 		MessageDialog::instance(), 0, true);
-
 	GLWWindowManager::instance()->addWindow(state, 
 		MainMenuDialog::instance(), 0, true);
-	GLWWindowManager::instance()->addWindow(state,
-		GLWSelector::instance(), 0, true);
-	GLWWindowManager::instance()->addWindow(state,
-		MsgBoxDialog::instance(), 0, false);
+
+	addMessageComponents(skinManager, state);
 
 	if (state != ClientState::StateBuyWeapons &&
 		state != ClientState::StateAutoDefense)
@@ -170,10 +163,24 @@ void ClientWindowSetup::addCommonComponents(GLWWindowSkinManager *skinManager,
 	}
 }
 
+void ClientWindowSetup::addMessageComponents(GLWWindowSkinManager *skinManager, unsigned state)
+{
+	KEYBOARDKEY("SHOW_QUIT_DIALOG", quitKey);
+	GLWWindowManager::instance()->addWindow(state, 
+ 		QuitDialog::instance(), quitKey, false);
+
+	GLWWindowManager::instance()->addWindow(state,
+		GLWSelector::instance(), 0, true);
+	GLWWindowManager::instance()->addWindow(state,
+		MsgBoxDialog::instance(), 0, false);
+	GLWWindowManager::instance()->addWindow(state,
+		TextBoxDialog::instance(), 0, false);
+}
+
 // This is called before any mod has been loaded
 void ClientWindowSetup::setupStartWindows(GLWWindowSkinManager *skinManager)
 {
-	KEYBOARDKEY("SHOW_QUIT_DIALOG", quitKey);
+	
 	KEYBOARDKEY("SHOW_PLAYER_DIALOG", playerKey);
 	KEYBOARDKEY("SHOW_AIM_DIALOG", aimKey);
 	KEYBOARDKEY("SHOW_WEAPON_DIALOG", weaponKey);
@@ -184,8 +191,6 @@ void ClientWindowSetup::setupStartWindows(GLWWindowSkinManager *skinManager)
 	GLWWindowManager::instance()->removeState(ClientState::StateOptions);
 	GLWWindowManager::instance()->addWindow(ClientState::StateOptions, 
 		AnimatedBackdropDialog::instance(), 0, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateOptions, 
-		QuitDialog::instance(), quitKey, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StateOptions, 
  		SoundDialog::instance(), showSoundKey, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StateOptions, 
@@ -204,17 +209,12 @@ void ClientWindowSetup::setupStartWindows(GLWWindowSkinManager *skinManager)
 		SettingsSubSelectDialog::instance(), 0, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StateOptions, 
 		MainMenuDialog::instance(), 0, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateOptions, 
-		GLWSelector::instance(), 0, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateOptions, 
-		MsgBoxDialog::instance(), 0, false);
+	addMessageComponents(skinManager, ClientState::StateOptions);
 
 	// StateConnect
 	GLWWindowManager::instance()->removeState(ClientState::StateConnect);
 	GLWWindowManager::instance()->addWindow(ClientState::StateConnect, 
 		BackdropDialog::instance(), 0, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateConnect, 
-		QuitDialog::instance(), quitKey, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StateConnect, 
  		SoundDialog::instance(), showSoundKey, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StateConnect, 
@@ -225,10 +225,7 @@ void ClientWindowSetup::setupStartWindows(GLWWindowSkinManager *skinManager)
 		AuthDialog::instance(), 0, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StateConnect, 
 		MainMenuDialog::instance(), 0, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateConnect, 
-		GLWSelector::instance(), 0, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateConnect, 
-		MsgBoxDialog::instance(), 0, false);
+	addMessageComponents(skinManager, ClientState::StateConnect);
 
 	// StateDisconnected
 	GLWWindowManager::instance()->removeState(ClientState::StateDisconnected);
@@ -237,15 +234,10 @@ void ClientWindowSetup::setupStartWindows(GLWWindowSkinManager *skinManager)
 	GLWWindowManager::instance()->addWindow(ClientState::StateDisconnected, 
  		SoundDialog::instance(), showSoundKey, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StateDisconnected, 
-		QuitDialog::instance(), quitKey, false);
-	GLWWindowManager::instance()->addWindow(ClientState::StateDisconnected, 
 		LogDialog::instance(), 0, true);
 	GLWWindowManager::instance()->addWindow(ClientState::StateDisconnected, 
 		MainMenuDialog::instance(), 0, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateDisconnected, 
-		GLWSelector::instance(), 0, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateDisconnected, 
-		MsgBoxDialog::instance(), 0, false);
+	addMessageComponents(skinManager, ClientState::StateDisconnected);
 
 	// StateLoadFiles
 	GLWWindowManager::instance()->removeState(ClientState::StateLoadFiles);
@@ -259,7 +251,6 @@ void ClientWindowSetup::setupStartWindows(GLWWindowSkinManager *skinManager)
 // This is called after the correct mod has been loaded
 void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 {
-	KEYBOARDKEY("SHOW_QUIT_DIALOG", quitKey);
 	KEYBOARDKEY("SHOW_TEAM_DIALOG", teamKey);
 	KEYBOARDKEY("SHOW_AIM_DIALOG", aimKey);
 	KEYBOARDKEY("SHOW_WEAPON_DIALOG", weaponKey);
@@ -280,12 +271,7 @@ void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 		PlayerDialog::instance(), teamKey, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape, 
 		MainMenuDialog::instance(), 0, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape, 
- 		QuitDialog::instance(), quitKey, false);
-	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape, 
-		GLWSelector::instance(), 0, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape, 
-		MsgBoxDialog::instance(), 0, false);
+	addMessageComponents(skinManager, ClientState::StateWaitNoLandscape);
 	if (ScorchedClient::instance()->getOptionsGame().getTutorial()[0])
 	{
 		GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape, 
