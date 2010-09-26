@@ -26,13 +26,13 @@
 #include <GLW/GLWIconTable.h>
 #include <GLW/GLWTextBox.h>
 #include <GLW/GLWDropDownText.h>
+#include <GLW/GLWLabel.h>
 #include <common/ToolTip.h>
 
 class NetworkSelectDialog : 
 	public GLWWindow,
 	public GLWButtonI,
 	public GLWIconTableI,
-	public GLWTextBoxI,
 	public GLWDropDownI
 {
 public:
@@ -53,9 +53,6 @@ public:
 	virtual void rowChosen(unsigned int id, int row);
 	virtual void columnSelected(unsigned int id, int col);
 
-	// GLWTextBoxI
-	virtual void textChanged(unsigned int id, const LangString &text);
-
 	// GLWDropDownI
 	virtual void select(unsigned int id, const int pos, GLWSelectorEntry value);
 
@@ -69,8 +66,8 @@ protected:
 	GLTextureReference keyTex_, cogTex_;
 	GLWIconTable *gamesIconTable_;
 	GLWIconTable *playersIconTable_;
-	GLWTextButton *ok_, *refresh_, *favourites_;
-	GLWTextBox *ipaddress_;
+	GLWTextButton *ok_, *refresh_, *favourites_, *connectTo_;
+	GLWLabel *ipaddress_;
 	GLWDropDownText *refreshType_;
 	unsigned int invalidateId_;
 	unsigned int cancelId_, addFavouriteId_;
@@ -82,6 +79,7 @@ protected:
 	bool serverCompatable(std::string pversion, std::string version);
 	GLTexture *getTexture(int row, LangString *&message);
 	void drawIcon(GLTexture *tex, float &x, float y, LangString &message);
+	void setIPAddress(const LangString &text);
 
 	void drawColumnGames(unsigned int id, int row, int column, float x, float y, float w);
 	void drawColumnPlayers(unsigned int id, int row, int col, float x, float y, float w);

@@ -52,6 +52,9 @@ public:
 	void setSize(float size);
 	void calcWidth();
 
+	std::string &getText();
+	LangString &getLangString() { return labelText_; }
+
 	REGISTER_CLASS_HEADER(GLWLabel);
 
 protected:

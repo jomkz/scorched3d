@@ -2313,6 +2313,9 @@
     <ClCompile Include="..\..\common\simactions\NextTurnSimAction.cpp">
       <Filter>simactions</Filter>
     </ClCompile>
+    <ClCompile Include="..\dialogs\TextBoxDialog.cpp">
+      <Filter>dialogs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -4528,6 +4531,9 @@
     </ClInclude>
     <ClInclude Include="..\..\common\simactions\NextTurnSimAction.h">
       <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dialogs\TextBoxDialog.h">
+      <Filter>dialogs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

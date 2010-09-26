@@ -20,10 +20,10 @@
 
 #include <dialogs/NetworkSelectDialog.h>
 #include <dialogs/MsgBoxDialog.h>
-#include <GLW/GLWLabel.h>
 #include <GLW/GLWWindowManager.h>
 #include <GLW/GLWFont.h>
 #include <GLW/GLWTranslate.h>
+#include <GLW/GLWPanel.h>
 #include <GLEXT/GLTextureStore.h>
 #include <serverbrowser/ServerBrowser.h>
 #include <client/ScorchedClient.h>
@@ -128,7 +128,7 @@ NetworkSelectDialog::NetworkSelectDialog() :
 
 	ok_ = (GLWTextButton *) addWidget(
 		new GLWTextButton(LANG_RESOURCE("JOIN_GAME", "Join Game"), 640, 10, 130, this, 
-		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX));
+		GLWButton::ButtonFlagCenterX));
 	cancelId_ = addWidget(
 		new GLWTextButton(LANG_RESOURCE("CANCEL", "Cancel"), 530, 10, 105, this, 
 		GLWButton::ButtonFlagCancel | GLWButton::ButtonFlagCenterX))->getId();
@@ -139,10 +139,12 @@ NetworkSelectDialog::NetworkSelectDialog() :
 		new GLWTextButton(LANG_RESOURCE("ADD_FAVOURITE", "Add Favourite"), 10, 10, 155, this, 
 		GLWButton::ButtonFlagCenterX));
 
-	ipaddress_ = (GLWTextBox *) addWidget(
-		new GLWTextBox(210.0f, 525.0f, 300.0));
-	addWidget(new GLWLabel(75.0f, 525.0f, LANG_RESOURCE("CONNECT_TO_LABEL", "Connect To :")));
-	ipaddress_->setHandler(this);
+	addWidget(new GLWPanel(220.0f, 525.0f, 300.0f, 25.0f, true));
+	ipaddress_ = (GLWLabel *) addWidget(
+		new GLWLabel(225.0f, 527.0f));
+	connectTo_ = (GLWTextButton *) addWidget(
+		new GLWTextButton(LANG_RESOURCE("CONNECT_TO_LABEL", "Connect To :"), 75.0f, 527.0f, 135, this,
+		GLWButton::ButtonFlagCenterX));
 
 	refreshType_ = (GLWDropDownText *) addWidget(
 		new GLWDropDownText(530.0f, 525.0f, 150.0f));
@@ -151,8 +153,6 @@ NetworkSelectDialog::NetworkSelectDialog() :
 	refreshType_->addText(LANG_RESOURCE("FAVOURITES", "Favourites"), "Favourites");
 	refreshType_->setCurrentText(LANG_RESOURCE("INTERNET", "Internet"));
 	refreshType_->setHandler(this);
-
-	ipaddress_->setCurrent();
 }
 
 NetworkSelectDialog::~NetworkSelectDialog()
@@ -449,7 +449,7 @@ void NetworkSelectDialog::rowSelectedGames(unsigned int id, int row)
 	}
 
 	// Set ip address for this server
-	ipaddress_->setText(LANG_STRING(ipaddress));
+	setIPAddress(LANG_STRING(ipaddress));
 
 	// Set players for this server
 	std::string players = 
@@ -480,7 +480,7 @@ void NetworkSelectDialog::columnSelectedGames(unsigned int id, int col)
 
 void NetworkSelectDialog::display()
 {
-	ipaddress_->setText(LangString());
+	setIPAddress(LangString());
 	refreshType_->setCurrentText(LANG_RESOURCE("INTERNET", "Internet"));
 }
 
@@ -549,10 +549,11 @@ void NetworkSelectDialog::stopRefresh()
 	updateTable();
 }
 
-void NetworkSelectDialog::textChanged(unsigned int id, const LangString &text)
+void NetworkSelectDialog::setIPAddress(const LangString &text)
 {
 	ok_->setEnabled(text[0]!='\0');
 	favourites_->setEnabled(text[0]!='\0');
+	ipaddress_->setText(text);
 }
 
 void NetworkSelectDialog::buttonDown(unsigned int id)
@@ -572,7 +573,7 @@ void NetworkSelectDialog::buttonDown(unsigned int id)
 	{
 		GLWWindowManager::instance()->hideWindow(id_);
 
-		if (ipaddress_->getText()[0])
+		if (!ipaddress_->getText().empty())
 		{
 			ClientParams::instance()->reset();
 			ClientParams::instance()->setConnect(ipaddress_->getText().c_str());

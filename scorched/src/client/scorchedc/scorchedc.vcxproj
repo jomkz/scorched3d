@@ -520,6 +520,7 @@
     <ClCompile Include="..\dialogs\SkipDialog.cpp" />
     <ClCompile Include="..\dialogs\SoundDialog.cpp" />
     <ClCompile Include="..\dialogs\StartDialog.cpp" />
+    <ClCompile Include="..\dialogs\TextBoxDialog.cpp" />
     <ClCompile Include="..\dialogs\TipDialog.cpp" />
     <ClCompile Include="..\dialogs\TutorialDialog.cpp" />
     <ClCompile Include="..\GLEXT\GLCamera.cpp" />
@@ -1255,6 +1256,7 @@
     <ClInclude Include="..\dialogs\SkipDialog.h" />
     <ClInclude Include="..\dialogs\SoundDialog.h" />
     <ClInclude Include="..\dialogs\StartDialog.h" />
+    <ClInclude Include="..\dialogs\TextBoxDialog.h" />
     <ClInclude Include="..\dialogs\TipDialog.h" />
     <ClInclude Include="..\dialogs\TutorialDialog.h" />
     <ClInclude Include="..\GLEXT\GLCamera.h" />

@@ -73,6 +73,13 @@ void GLWLabel::setText(const LangString &text)
 	w_ = 0.0f;
 }
 
+std::string &GLWLabel::getText() 
+{
+	static std::string result; 
+	result = LangStringUtil::convertFromLang(labelText_); 
+	return result;
+}
+
 void GLWLabel::calcWidth()
 {
 	if (w_ == 0.0f)
