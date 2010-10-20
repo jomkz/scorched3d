@@ -22,6 +22,7 @@
 #define AFX_igd_H__5F21C9C7_0F71_4CCC_ABB9_976CF0A5C5EC__INCLUDED_
 
 #include <net/NetBuffer.h>
+#include <XML/XMLNode.h>
 #include <list>
 
 class igd
@@ -30,21 +31,27 @@ public:
 	igd();
 	virtual ~igd();
 
-	void sendInitialRequest();
+	void sendInitialRequest(int portNumber);
 
 protected:
 	struct Location
 	{
+		std::string friendlyName, manufacturer;
 		std::string location, st;
 		std::string host, path;
 		int port;
 		IPaddress ipAddress;
 		std::string serviceData;
+		std::string controlUrl;
 	};
 
-	void sendInitialRequest(UDPsocket udpsock);
+	void sendInitialRequest(UDPsocket udpsock, const char *serviceType);
 	void recvInitialRequest(UDPsocket udpsock, std::list<Location> &locations);
 	void sendServiceRequest(Location &location);
+	bool parseServiceRequest(Location &location);
+	bool sendTCPRequest(Location &location, const std::string &request, std::string &response);
+	bool findServiceType(XMLNode *deviceNode, const char *serviceType, std::string &controlUrl);
+	bool addPortMapping(Location &location, int portNumber);
 };
 
 #endif // !defined(AFX_igd_H__5F21C9C7_0F71_4CCC_ABB9_976CF0A5C5EC__INCLUDED_)

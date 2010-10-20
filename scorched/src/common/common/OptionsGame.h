@@ -358,6 +358,9 @@ public:
 	bool getPublishServer() { return publishServer_; }
 	OptionEntryBool &getPublishServerEntry() { return publishServer_; }
 
+	bool getUseUPnP() { return useUPnP_; }
+	OptionEntryBool &getUseUPnPEntry() { return useUPnP_; }
+
 	bool getResidualPlayers() { return residualPlayers_; }
 	OptionEntryBool &getResidualPlayersEntry() { return residualPlayers_; }
 
@@ -511,6 +514,7 @@ protected:
 	OptionEntryInt managementPortNo_;
 	OptionEntryString publishAddress_;
 	OptionEntryBool publishServer_;
+	OptionEntryBool useUPnP_;
 	OptionEntryBool allowSameIP_;
 	OptionEntryBool allowSameUniqueId_;
 	OptionEntryBool debugFeatures_;

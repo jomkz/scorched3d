@@ -21,6 +21,7 @@
 #include <igd/igd.h>
 #include <common/Logger.h>
 #include <XML/XMLStringBuffer.h>
+#include <net/NetInterface.h>
 
 static const char *UPNP_MCAST_ADDR = "239.255.255.250";
 static unsigned int PORT = 1900;
@@ -49,7 +50,7 @@ igd::~igd()
 {
 }
 
-void igd::sendInitialRequest()
+void igd::sendInitialRequest(int portNumber)
 {
 	UDPsocket udpsock = SDLNet_UDP_Open(0);
 	if (!udpsock)
@@ -59,7 +60,13 @@ void igd::sendInitialRequest()
 
 	// Perform SSDP discovery
 	std::list<Location> locations;
-	sendInitialRequest(udpsock);
+	const char *services[] = {
+		"urn:schemas-upnp-org:device:InternetGatewayDevice:1",
+		"urn:schemas-upnp-org:service:WANIPConnection:1",
+		"urn:schemas-upnp-org:service:WANPPPConnection:1" };
+	for (int i=0; i<sizeof(services)/sizeof(const char*);i++) {
+		sendInitialRequest(udpsock, services[i]);
+	}
 	recvInitialRequest(udpsock, locations);
 	SDLNet_UDP_Close(udpsock);
 
@@ -67,20 +74,22 @@ void igd::sendInitialRequest()
 	std::list<Location>::iterator itor;
 	for (itor = locations.begin(); itor!= locations.end(); itor++)
 	{
+		// Ask the device for its services
 		Location &location = *itor;
 		sendServiceRequest(location);
-		if (!location.serviceData.empty())
+		if (parseServiceRequest(location))
 		{
-			XMLStringBuffer xmlDocument;
-			if (xmlDocument.create(location.serviceData.c_str(), location.serviceData.size()))
+			// Try to use the service to add a mapping
+			if (addPortMapping(location, portNumber))
 			{
-				Logger::log("OK");
+				Logger::log(S3D::formatStringBuffer("Created port mapping"));
+				break;
 			}
 		}
 	}
 }
 
-void igd::sendInitialRequest(UDPsocket udpsock)
+void igd::sendInitialRequest(UDPsocket udpsock, const char *serviceType)
 {
 	std::string buffer = S3D::formatStringBuffer(
 		"M-SEARCH * HTTP/1.1\r\n"
@@ -90,14 +99,17 @@ void igd::sendInitialRequest(UDPsocket udpsock)
 		"MX: 2\r\n" // Seconds to delay response from device
 		"\r\n",
 		UPNP_MCAST_ADDR, PORT, 
-		"urn:schemas-upnp-org:device:InternetGatewayDevice:1");
+		serviceType);
 
 	int len = buffer.size() + 1;
 	Packet packet;
 	memcpy(packet.packet->data, buffer.c_str(), len);
 	packet.packet->len = len;
 	packet.packet->channel = -1;
-	SDLNet_ResolveHost(&packet.packet->address, UPNP_MCAST_ADDR, PORT);
+	if (SDLNet_ResolveHost(&packet.packet->address, UPNP_MCAST_ADDR, PORT) != 0)
+	{
+		Logger::log("igd::Failed to find IGD ssdp discover address");
+	}
 
 	if (SDLNet_UDP_Send(udpsock, -1, packet.packet) == 0)
 	{
@@ -146,7 +158,7 @@ static bool parseUrl(const char *data, std::string &host, int &port, std::string
 void igd::recvInitialRequest(UDPsocket udpsock, std::list<Location> &locations)
 {
 	Packet packet;
-	for (int i=0; i<20; i++)
+	for (int i=0; i<30; i++)
 	{
 		SDL_Delay(100);
 		if (SDLNet_UDP_Recv(udpsock, packet.packet) == 1)
@@ -165,11 +177,26 @@ void igd::recvInitialRequest(UDPsocket udpsock, std::list<Location> &locations)
 
 void igd::sendServiceRequest(Location &location)
 {
+	std::string request = S3D::formatStringBuffer(
+		"GET %s HTTP/1.0\r\n"
+		"Host: %s:%i\r\n"
+		"Connection: Close\r\n"
+		"User-Agent: UPnP/1.0, Scorched3D\r\n"
+		"Cache-Control: no-cache\r\n"
+		"Pragma: no-cache\r\n"
+		"\r\n",
+		location.path.c_str(),
+		location.host.c_str(), location.port);
+	sendTCPRequest(location, request, location.serviceData);
+}
+
+bool igd::sendTCPRequest(Location &location, const std::string &request, std::string &response)
+{
 	if (SDLNet_ResolveHost(&location.ipAddress, location.host.c_str(), location.port) != 0)
 	{
 		Logger::log(S3D::formatStringBuffer("igd::Failed to resolve host and port, %s:%i", 
 			location.host.c_str(), location.port));
-		return;		
+		return false;		
 	}
 
 	TCPsocket tcpsock = SDLNet_TCP_Open(&location.ipAddress);
@@ -177,22 +204,15 @@ void igd::sendServiceRequest(Location &location)
 	{
 		Logger::log(S3D::formatStringBuffer("igd::Failed to connect to host and port, %s:%i", 
 			location.host.c_str(), location.port));
-		return;		
+		return false;		
 	}
 
-	std::string request = S3D::formatStringBuffer(
-		"GET %s HTTP/1.0\r\n"
-		"Host: %s:%i\r\n"
-		"Connection: Close\r\n"
-		"User-Agent: OS/version, UPnP/1.0, MiniUPnPc/1.4\r\n"
-		"\r\n",
-		location.path.c_str(),
-		location.host.c_str(), location.port);
 	if (SDLNet_TCP_Send(tcpsock, request.c_str(), request.size()) != request.size())
 	{
 		Logger::log(S3D::formatStringBuffer("igd::Failed to send request to host and port, %s:%i", 
 			location.host.c_str(), location.port));
-		return;	
+		SDLNet_TCP_Close(tcpsock);
+		return false;	
 	}
 
 	std::string result;
@@ -204,13 +224,15 @@ void igd::sendServiceRequest(Location &location)
 		result.append(std::string(buffer, bytesRead));
 	}
 
+	bool code = false;
 	if (result.find("200 OK") != -1)
 	{
 		const char *data = strstr(result.c_str(), "\r\n\r\n");
 		if (data) 
 		{
 			data+=4;
-			location.serviceData = data;
+			response = data;
+			code = true;
 		} 
 		else
 		{
@@ -225,4 +247,124 @@ void igd::sendServiceRequest(Location &location)
 	}
 
 	SDLNet_TCP_Close(tcpsock);
+	return code;
+}
+
+bool igd::parseServiceRequest(Location &location)
+{
+	if (location.serviceData.empty()) return false;
+
+	// Parse the service document
+	XMLStringBuffer xmlDocument;
+	if (!xmlDocument.create(location.serviceData.c_str(), location.serviceData.size()))
+	{
+		Logger::log(S3D::formatStringBuffer("igd::Failed to parse service from host and port, %s:%i, %s", 
+				location.host.c_str(), location.port, location.serviceData.c_str()));
+		return false;
+	}
+
+	// Get the root node
+	XMLNode *deviceNode = 0;
+	if (!xmlDocument.getRootNode()->getNamedChild("device", deviceNode, false))
+	{
+		Logger::log(S3D::formatStringBuffer("igd::Failed to get service device from host and port, %s:%i, %s", 
+				location.host.c_str(), location.port, location.serviceData.c_str()));
+		return false;
+	}
+
+	// Get the device info
+	if (!deviceNode->getNamedChild("friendlyName", location.friendlyName, false) ||
+		!deviceNode->getNamedChild("manufacturer", location.manufacturer, false))
+	{
+		Logger::log(S3D::formatStringBuffer("igd::Failed to get service info from host and port, %s:%i, %s", 
+				location.host.c_str(), location.port, location.serviceData.c_str()));
+		return false;
+	}
+	
+	Logger::log(S3D::formatStringBuffer("Found UPnP device : %s - %s", 
+		location.manufacturer.c_str(), location.friendlyName.c_str()));
+
+	if (findServiceType(deviceNode, "urn:schemas-upnp-org:service:WANIPConnection:1", location.controlUrl) ||
+		findServiceType(deviceNode, "urn:schemas-upnp-org:service:WANPPPConnection:1", location.controlUrl))
+	{
+		Logger::log(S3D::formatStringBuffer("Found UPnP service %s", location.controlUrl.c_str()));
+		return true;
+	}
+	return false;
+}
+
+bool igd::findServiceType(XMLNode *deviceNode, const char *wantedServiceType, std::string &controlUrl)
+{
+	XMLNode *serviceListNode = 0;
+	if (deviceNode->getNamedChild("serviceList", serviceListNode, false)) 
+	{
+		XMLNode *serviceNode = 0;
+		while (serviceListNode->getNamedChild("service", serviceNode, false))
+		{
+			std::string serviceType;
+			if (serviceNode->getNamedChild("serviceType", serviceType, false) &&
+				serviceNode->getNamedChild("controlURL", controlUrl, false))
+			{
+				if (serviceType == wantedServiceType)
+				{
+					return true;
+				}
+			}
+		}
+	}
+	XMLNode *deviceListNode = 0;
+	if (deviceNode->getNamedChild("deviceList", deviceListNode, false)) 
+	{
+		XMLNode *newDeviceNode = 0;
+		while (deviceListNode->getNamedChild("device", newDeviceNode, false))
+		{
+			if (findServiceType(newDeviceNode, wantedServiceType, controlUrl))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool igd::addPortMapping(Location &location, int portNumber)
+{
+	std::string data = S3D::formatStringBuffer(
+		"<?xml version=\"1.0\"?>\n"
+		"<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">"
+		"<s:Body>"
+		"<u:AddPortMapping xmlns:u=\"urn:schemas-upnp-org:service:WANIPConnection:1\">"
+		"<NewRemoteHost></NewRemoteHost>"
+		"<NewExternalPort>%i</NewExternalPort>"
+		"<NewProtocol>TCP</NewProtocol>"
+		"<NewInternalPort>%i</NewInternalPort>"
+		"<NewInternalClient>192.168.0.100</NewInternalClient>"
+		"<NewEnabled>1</NewEnabled>"
+		"<NewPortMappingDescription>Scorched3DS</NewPortMappingDescription>"
+		"<NewLeaseDuration>0</NewLeaseDuration>"
+		"</u:AddPortMapping>"
+		"</s:Body>"
+		"</s:Envelope>",
+		portNumber,
+		portNumber
+		);
+
+	std::string buffer = S3D::formatStringBuffer(
+		"POST %s HTTP/1.0\r\n"		"Host: %s:%i\r\n"
+		"User-Agent: UPnP/1.0, Scorched3D\r\n"
+		"Content-Length: %u\r\n"		"Content-Type: text/xml\r\n"		"SOAPAction: \"urn:schemas-upnp-org:service:WANIPConnection:1#AddPortMapping\"\r\n"		"Connection: Close\r\n"		"Cache-Control: no-cache\r\n"
+		"Pragma: no-cache\r\n"
+		"\r\n"
+		"%s",
+		location.controlUrl.c_str(),
+		location.host.c_str(), location.port,
+		data.size(),
+		data.c_str());
+
+	std::string response;
+	if (sendTCPRequest(location, buffer, response))
+	{
+		return true;
+	}
+	return false;
 }

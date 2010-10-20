@@ -59,6 +59,8 @@
 #include <server/ServerParams.h>
 #include <SDL/SDL.h>
 
+#include <igd/igd.h>
+
 #ifdef S3D_SERVER
 #include <webserver/ServerWebServer.h>
 #endif
@@ -87,6 +89,14 @@ static void serverMain(ProgressCounter *counter)
 			ScorchedServer::instance()->getOptionsGame().getPortNo() + 1));
 	}
 
+	// Try to update the route to add the external port mapping
+	if (ScorchedServer::instance()->getOptionsGame().getUseUPnP())
+	{
+		igd pnpigd;
+		pnpigd.sendInitialRequest(ScorchedServer::instance()->getOptionsGame().getPortNo());
+	}
+
+	// Contact the registration server
  	if (ScorchedServer::instance()->getOptionsGame().getPublishServer()) 
 	{
 		ServerRegistration::instance()->start();

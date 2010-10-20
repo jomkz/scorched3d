@@ -107,6 +107,9 @@ bool ServerSFrame::TransferDataToWindow()
 	IDC_PUBLISH_CTRL->SetValue(options_.getPublishServer());
 	IDC_PUBLISH_CTRL->SetToolTip(
 		convertString(options_.getPublishServerEntry().getDescription()));
+	IDC_USEUPNP_CTRL->SetValue(options_.getUseUPnP());
+	IDC_USEUPNP_CTRL->SetToolTip(
+		convertString(options_.getUseUPnPEntry().getDescription()));
 	IDC_PUBLISHIP_CTRL->SetValue(
 		convertString(options_.getPublishAddress()));
 	IDC_PUBLISHIP_CTRL->SetToolTip(
@@ -148,6 +151,7 @@ bool ServerSFrame::TransferDataFromWindow()
 	options_.getServerNameEntry().setValue(std::string(IDC_SERVER_NAME_CTRL->GetValue().mb_str(wxConvUTF8)));
 	options_.getPublishServerEntry().setValue(IDC_PUBLISH_CTRL->GetValue());
 	options_.getPublishAddressEntry().setValue(std::string(IDC_PUBLISHIP_CTRL->GetValue().mb_str(wxConvUTF8)));
+	options_.getUseUPnPEntry().setValue(IDC_USEUPNP_CTRL->GetValue());
 	options_.getAllowSameIPEntry().setValue(IDC_ALLOWSAME_CTRL->GetValue());
 	options_.getAllowSameUniqueIdEntry().setValue(IDC_ALLOWSAMEID_CTRL->GetValue());
 	options_.getModEntry().setValue(std::string(IDC_SERVER_MOD_CTRL->GetValue().mb_str(wxConvUTF8)));

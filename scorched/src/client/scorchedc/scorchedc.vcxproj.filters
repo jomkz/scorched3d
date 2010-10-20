@@ -112,6 +112,9 @@
     <Filter Include="scorchedc">
       <UniqueIdentifier>{1493465c-c9e4-4626-92c3-715cb69d9a94}</UniqueIdentifier>
     </Filter>
+    <Filter Include="igd">
+      <UniqueIdentifier>{977e0f03-9983-4bde-9704-b7c038c8a0ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\common\ARGParser.cpp">
@@ -2315,6 +2318,9 @@
     </ClCompile>
     <ClCompile Include="..\dialogs\TextBoxDialog.cpp">
       <Filter>dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\igd\igd.cpp">
+      <Filter>igd</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4534,6 +4540,9 @@
     </ClInclude>
     <ClInclude Include="..\dialogs\TextBoxDialog.h">
       <Filter>dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\igd\igd.h">
+      <Filter>igd</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

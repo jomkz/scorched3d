@@ -70,6 +70,11 @@ static void createControls(wxWindow *parent,
 		wxT("Allow ALL other internet users to see and use this server"));	
 	servernameSizer->Add(IDC_PUBLISH_CTRL, 0, wxTOP, 5);
 
+	IDC_USEUPNP_CTRL = 
+		new wxCheckBox(parent, IDC_USEPNP,
+		wxT("Try to automaticaly add external port forwarding rules using UPnP"));	
+	servernameSizer->Add(IDC_USEUPNP_CTRL, 0, wxTOP, 5);
+
 	IDC_ALLOWSAME_CTRL = 
 		new wxCheckBox(parent, -1,
 		wxT("Allow multiple clients from same machine to use this server"));	

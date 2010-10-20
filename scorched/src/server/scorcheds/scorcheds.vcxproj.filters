@@ -67,6 +67,9 @@
     <Filter Include="simactions">
       <UniqueIdentifier>{bcd8c942-31b2-49c5-b242-3d241308afff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="igd">
+      <UniqueIdentifier>{6cdbf2a0-f9d7-4f42-bd45-4f27a9915e66}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1449,6 +1452,9 @@
     <ClCompile Include="..\..\common\simactions\NextTurnSimAction.cpp">
       <Filter>simactions</Filter>
     </ClCompile>
+    <ClCompile Include="..\igd\igd.cpp">
+      <Filter>igd</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -2827,6 +2833,9 @@
     </ClInclude>
     <ClInclude Include="..\..\common\simactions\NextTurnSimAction.h">
       <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\igd\igd.h">
+      <Filter>igd</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
