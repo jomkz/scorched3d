@@ -253,7 +253,7 @@ bool ServerAuthHandlerForumLogin::connectHandler()
 		!file.getRootNode()->getNamedChild("passwd", passwd) ||
 		!file.getRootNode()->getNamedChild("db", db)) 
 	{
-		Logger::log(S3D::formatStringBuffer("Failed to parse %s settings file.", fileName));
+		Logger::log(S3D::formatStringBuffer("Failed to parse %s settings file.", fileName.c_str()));
 		return false;
 	}
 
