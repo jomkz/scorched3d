@@ -28,6 +28,7 @@ class NetBufferUtil
 {
 public:
 	static void setBlockingIO(TCPsocket &socket);
+	static bool getLocalIPAddress(TCPsocket &so, std::string &result);
 
 private:
 	NetBufferUtil();

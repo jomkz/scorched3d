@@ -47,11 +47,11 @@ protected:
 
 	void sendInitialRequest(UDPsocket udpsock, const char *serviceType);
 	void recvInitialRequest(UDPsocket udpsock, std::list<Location> &locations);
-	void sendServiceRequest(Location &location);
+	void sendServiceRequest(Location &location, std::string &localAddress);
 	bool parseServiceRequest(Location &location);
-	bool sendTCPRequest(Location &location, const std::string &request, std::string &response);
+	bool sendTCPRequest(Location &location, const std::string &request, std::string &response, std::string &localAddress);
 	bool findServiceType(XMLNode *deviceNode, const char *serviceType, std::string &controlUrl);
-	bool addPortMapping(Location &location, int portNumber);
+	bool addPortMapping(Location &location, int portNumber, const std::string &localName);
 };
 
 #endif // !defined(AFX_igd_H__5F21C9C7_0F71_4CCC_ABB9_976CF0A5C5EC__INCLUDED_)

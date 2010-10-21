@@ -21,8 +21,11 @@
 #ifndef _WIN32
 #include <fcntl.h>
 #define SOCKET	int
+#include <sys/socket.h>
+#include <netdb.h>
 #else
 #include <winsock2.h>
+#include <ws2tcpip.h>
 #endif
 
 #include <net/NetBufferUtil.h>
@@ -41,6 +44,24 @@ struct _TCPsocket {
 	IPaddress localAddress;
 	int sflag;
 };
+
+bool NetBufferUtil::getLocalIPAddress(TCPsocket &so, std::string &result)
+{
+	struct sockaddr saddr;
+	int saddrlen = sizeof(saddr);
+	if(getsockname(so->channel, &saddr, &saddrlen) < 0) return false;
+
+	char addressName[256];
+	if (getnameinfo(&saddr, saddrlen,
+		addressName, 256,
+		NULL, 0,
+		NI_NUMERICHOST | NI_NUMERICSERV) != 0) 
+	{
+		return false;
+	}
+	result = addressName;
+	return true;
+}
 
 void NetBufferUtil::setBlockingIO(TCPsocket &so)
 {
