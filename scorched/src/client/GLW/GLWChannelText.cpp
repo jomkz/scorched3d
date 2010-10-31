@@ -58,7 +58,6 @@ GLWChannelText::GLWChannelText() :
 		"CHAT", "Chat", 
 		"CHAT_SHOW_TOOLTIP", "Show chat menu"));
 	button_.setTextureImage(ImageID(S3D::eModLocation, "", "data/windows/arrow_r.png"));
-	prompt_.setChannelView(&view_);
 }
 
 GLWChannelText::~GLWChannelText()

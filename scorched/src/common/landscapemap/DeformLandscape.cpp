@@ -67,7 +67,7 @@ public:
 						fixed distToRadius = fixed(radius) - dist;
 						explosionDepth = ((distToRadius / radius) * fixed::XPIO2).sin() * radius;
 
-						explosionDistance = fixed(1) - (dist / radius);
+						explosionDistance = explosionDepth / radius;
 						explosionDistance *= fixed(3);
 						if (explosionDistance > fixed(1)) explosionDistance = fixed(1);						
 					}

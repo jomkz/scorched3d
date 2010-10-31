@@ -325,6 +325,8 @@ OptionsGame::OptionsGame() :
 		"Allow other scorched net clients to see this server.  Do not use for LAN games.", 0, false),
 	useUPnP_(options_, "UseUPnP",
 		"Try to automaticaly add external port forwarding rules using UPnP", 0, false),
+	useUPnPLogging_(options_, "UseUPnPLogging",
+		"Turn on packet logging for UPnP", 0, false),
 	publishAddress_(options_, "PublishAddress",
 		"IP address to publish to scorched net clients (auto-detected if not given).", 0, "AutoDetect"),
 	botNamePrefix_(options_, "BotNamePrefix", 

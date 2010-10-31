@@ -21,14 +21,9 @@
 #if !defined(__INCLUDE_GLWChannelViewh_INCLUDE__)
 #define __INCLUDE_GLWChannelViewh_INCLUDE__
 
-#include <GLW/GLWidget.h>
-#include <GLW/GLWIconButton.h>
+#include <GLW/GLWChatView.h>
 #include <GLW/GLWChannelViewTextRenderer.h>
-#include <GLEXT/GLTextureReference.h>
 #include <client/ClientChannelManagerI.h>
-#include <common/KeyboardKey.h>
-#include <common/Vector.h>
-#include <list>
 
 class GLWChannelViewI
 {
@@ -39,9 +34,8 @@ public:
 };
 
 class GLWChannelView : 
-	public GLWidget,
-	public ClientChannelManagerI,
-	public GLWButtonI
+	public GLWChatView,
+	public ClientChannelManagerI
 {
 public:
 	class BaseChannelEntry
@@ -60,8 +54,7 @@ public:
 	GLWChannelView();
 	virtual ~GLWChannelView();
 
-	bool getParentSized() { return parentSized_; }
-	bool initFromXMLInternal(XMLNode *node);
+	virtual bool initFromXMLInternal(XMLNode *node);
 
 	unsigned int getLastWhisperSrc() { return lastWhisperSrc_; }
 
@@ -76,16 +69,6 @@ public:
 
 	// GLWidget
 	virtual void draw();
-	virtual void simulate(float frameTime);
-	virtual bool initFromXML(XMLNode *node);
-	virtual void mouseDown(int button, float x, float y, bool &skipRest);
-	virtual void mouseUp(int button, float x, float y, bool &skipRest);
-	virtual void mouseDrag(int button, float mx, float my, float x, float y, bool &skipRest);
-	virtual void keyDown(char *buffer, unsigned int keyState, 
-		KeyboardHistory::HistoryElement *history, int hisCount, 
-		bool &skipRest);
-	virtual void setX(float x);
-	virtual void setY(float y);
 
 	// ClientChannelManagerI
 	virtual void channelText(ChannelText &text);
@@ -93,50 +76,21 @@ public:
 		std::list<ChannelDefinition> &registeredChannels,
 		std::list<ChannelDefinition> &availableChannels);
 
-	// ButtonI
-	virtual void buttonDown(unsigned int id);
-
 	REGISTER_CLASS_HEADER(GLWChannelView);
 
 protected:
-	class GLWChannelViewEntry
-	{
-	public:
-		Vector color;
-		GLWChannelViewTextRenderer text;
-		float timeRemaining;
-	};
-
 	GLWChannelViewI *handler_;
-	GLWIconButton upButton_;
-	GLWIconButton downButton_;
-	GLWIconButton resetButton_;
 
+	std::string textSound_;
 	unsigned int lastChannelId_;
 	unsigned int lastWhisperSrc_;
-	bool init_;
-	bool alignTop_, parentSized_;
-	bool splitLargeLines_, allowScroll_;
 	bool showChannelName_, showChannelNumber_;
-	int lineDepth_;
-	int scrollPosition_;
-	float displayTime_;
-	float fontSize_, outlineFontSize_;
-	int visibleLines_, totalLines_;
-	int currentVisible_;
-	std::list<GLWChannelViewEntry> textLines_;
-	KeyboardKey *scrollUpKey_;
-	KeyboardKey *scrollDownKey_;
-	KeyboardKey *scrollResetKey_;
 	std::map<std::string, Vector> channelColors_;
 	std::list<std::string> startupChannels_;
 	std::list<CurrentChannelEntry> currentChannels_;
 	std::list<BaseChannelEntry> availableChannels_;
-	std::string textSound_;
 
-	void addInfo(Vector &color, GLWChannelViewTextRenderer &text);
 	void formCurrentChannelList(std::list<std::string> &result);
-	int splitLine(const LangString &message);
 };
 
 #endif // __INCLUDE_GLWChannelViewh_INCLUDE__

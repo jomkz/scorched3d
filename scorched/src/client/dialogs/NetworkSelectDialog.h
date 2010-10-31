@@ -38,6 +38,7 @@ class NetworkSelectDialog :
 public:
 	static NetworkSelectDialog *instance();
 
+	virtual void draw();
 	virtual void simulate(float frameTime);
 
 	// GLWWindow

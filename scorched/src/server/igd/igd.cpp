@@ -23,6 +23,8 @@
 #include <XML/XMLStringBuffer.h>
 #include <net/NetInterface.h>
 #include <net/NetBufferUtil.h>
+#include <server/ScorchedServer.h>
+#include <common/OptionsScorched.h>
 
 static const char *UPNP_MCAST_ADDR = "239.255.255.250";
 static unsigned int PORT = 1900;
@@ -82,7 +84,8 @@ void igd::sendInitialRequest(int portNumber)
 		if (parseServiceRequest(location))
 		{
 			// Try to use the service to add a mapping
-			if (addPortMapping(location, portNumber, localAddress))
+			if (addPortMapping(location, "TCP", portNumber, localAddress) &&
+				addPortMapping(location, "UDP", portNumber + 1, localAddress))
 			{
 				break;
 			}
@@ -165,6 +168,11 @@ void igd::recvInitialRequest(UDPsocket udpsock, std::list<Location> &locations)
 		if (SDLNet_UDP_Recv(udpsock, packet.packet) == 1)
 		{
 			const char *data = (const char *) packet.packet->data;
+			if (ScorchedServer::instance()->getOptionsGame().getUseUPnPLogging())
+			{
+				Logger::log(S3D::formatStringBuffer("igd::recieved UDP packet %s", data));
+			}
+
 			Location location;
 			if (parseInitialItem(data, "\nLOCATION: ", location.location) &&
 				parseInitialItem(data, "\nST: ", location.st) &&
@@ -215,6 +223,11 @@ bool igd::sendTCPRequest(Location &location, const std::string &request, std::st
 		return false;	
 	}
 
+	if (ScorchedServer::instance()->getOptionsGame().getUseUPnPLogging())
+	{
+		Logger::log(S3D::formatStringBuffer("igd::sent TCP packet %s", request.c_str()));
+	}
+
 	if (SDLNet_TCP_Send(tcpsock, request.c_str(), request.size()) != request.size())
 	{
 		Logger::log(S3D::formatStringBuffer("igd::Failed to send request to host and port, %s:%i", 
@@ -230,6 +243,11 @@ bool igd::sendTCPRequest(Location &location, const std::string &request, std::st
 		int bytesRead = SDLNet_TCP_Recv(tcpsock, buffer, sizeof(buffer));
 		if (bytesRead <=0) break;
 		result.append(std::string(buffer, bytesRead));
+	}
+
+	if (ScorchedServer::instance()->getOptionsGame().getUseUPnPLogging())
+	{
+		Logger::log(S3D::formatStringBuffer("igd::recieved TCP packet %s", result.c_str()));
 	}
 
 	bool code = false;
@@ -336,7 +354,8 @@ bool igd::findServiceType(XMLNode *deviceNode, const char *wantedServiceType, st
 	return false;
 }
 
-bool igd::addPortMapping(Location &location, int portNumber, const std::string &localAddress)
+bool igd::addPortMapping(Location &location, const std::string &protocol, 
+	int portNumber, const std::string &localAddress)
 {
 	std::string data = S3D::formatStringBuffer(
 		"<?xml version=\"1.0\"?>\n"
@@ -345,18 +364,20 @@ bool igd::addPortMapping(Location &location, int portNumber, const std::string &
 		"<u:AddPortMapping xmlns:u=\"urn:schemas-upnp-org:service:WANIPConnection:1\">"
 		"<NewRemoteHost></NewRemoteHost>"
 		"<NewExternalPort>%i</NewExternalPort>"
-		"<NewProtocol>TCP</NewProtocol>"
+		"<NewProtocol>%s</NewProtocol>"
 		"<NewInternalPort>%i</NewInternalPort>"
 		"<NewInternalClient>%s</NewInternalClient>"
 		"<NewEnabled>1</NewEnabled>"
-		"<NewPortMappingDescription>Scorched3DS</NewPortMappingDescription>"
+		"<NewPortMappingDescription>Scorched3DS%s</NewPortMappingDescription>"
 		"<NewLeaseDuration>0</NewLeaseDuration>"
 		"</u:AddPortMapping>"
 		"</s:Body>"
 		"</s:Envelope>",
 		portNumber,
+		protocol.c_str(),
 		portNumber,
-		localAddress.c_str()
+		localAddress.c_str(),
+		protocol.c_str()
 		);
 
 	std::string buffer = S3D::formatStringBuffer(
@@ -379,7 +400,8 @@ bool igd::addPortMapping(Location &location, int portNumber, const std::string &
 	std::string response, newLocalAddress;
 	if (sendTCPRequest(location, buffer, response, newLocalAddress))
 	{
-		Logger::log(S3D::formatStringBuffer("Added UPnP port mapping to %s:%i", 
+		Logger::log(S3D::formatStringBuffer("Added UPnP port mapping %s to %s:%i", 
+			protocol.c_str(),
 			localAddress.c_str(), portNumber));
 		return true;
 	}

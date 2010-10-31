@@ -559,6 +559,7 @@
     <ClCompile Include="..\GLW\GLWChannelText.cpp" />
     <ClCompile Include="..\GLW\GLWChannelView.cpp" />
     <ClCompile Include="..\GLW\GLWChannelViewTextRenderer.cpp" />
+    <ClCompile Include="..\GLW\GLWChatView.cpp" />
     <ClCompile Include="..\GLW\GLWCheckBox.cpp" />
     <ClCompile Include="..\GLW\GLWCheckBoxText.cpp" />
     <ClCompile Include="..\GLW\GLWColors.cpp" />
@@ -1299,6 +1300,7 @@
     <ClInclude Include="..\GLW\GLWChannelText.h" />
     <ClInclude Include="..\GLW\GLWChannelView.h" />
     <ClInclude Include="..\GLW\GLWChannelViewTextRenderer.h" />
+    <ClInclude Include="..\GLW\GLWChatView.h" />
     <ClInclude Include="..\GLW\GLWCheckBox.h" />
     <ClInclude Include="..\GLW\GLWCheckBoxText.h" />
     <ClInclude Include="..\GLW\GLWColors.h" />

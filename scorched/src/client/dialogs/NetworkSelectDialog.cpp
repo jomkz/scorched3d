@@ -24,6 +24,7 @@
 #include <GLW/GLWFont.h>
 #include <GLW/GLWTranslate.h>
 #include <GLW/GLWPanel.h>
+#include <GLEXT/GLViewPort.h>
 #include <GLEXT/GLTextureStore.h>
 #include <serverbrowser/ServerBrowser.h>
 #include <client/ScorchedClient.h>
@@ -158,6 +159,20 @@ NetworkSelectDialog::NetworkSelectDialog() :
 NetworkSelectDialog::~NetworkSelectDialog()
 {
 
+}
+
+void NetworkSelectDialog::draw()
+{
+	if (needCentered_)
+	{
+		int wWidth = GLViewPort::getWidth();
+		int wHeight = GLViewPort::getHeight();
+		setX((wWidth - getW()) / 2.0f);
+		setY((wHeight - getH()) - 25.0f);
+		needCentered_ = false;
+	}
+
+	GLWWindow::draw();
 }
 
 void NetworkSelectDialog::simulate(float frameTime)

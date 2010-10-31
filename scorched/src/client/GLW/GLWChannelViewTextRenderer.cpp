@@ -28,8 +28,7 @@
 #include <lang/LangResource.h>
 #include <weapons/AccessoryStore.h>
 
-GLWChannelViewTextRenderer::GLWChannelViewTextRenderer(GLWChannelView *channelView) :
-	channelView_(channelView)
+GLWChannelViewTextRenderer::GLWChannelViewTextRenderer()
 {
 }
 

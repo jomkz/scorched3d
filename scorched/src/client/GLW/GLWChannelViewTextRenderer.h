@@ -31,10 +31,8 @@ class GLWChannelViewTextRenderer :
 	public GLFont2dI
 {
 public:
-	GLWChannelViewTextRenderer(GLWChannelView *channelView = 0);
+	GLWChannelViewTextRenderer();
 	virtual ~GLWChannelViewTextRenderer();
-
-	void setChannelView(GLWChannelView *channelView) { channelView_ = channelView; }
     
 	// GLFont2d
 	virtual bool drawCharacter(

@@ -36,14 +36,15 @@ void DeformTextures::deformLandscape(Vector &pos, float radius,
 		getGroundMaps().getHeightMap();
 	int iradius = (int) radius + 1;
 	if (iradius > 49) iradius = 49;
+	int idiam = iradius * 2;
 
 	float pixelsPerSW = (float)(Landscape::instance()->getMainMap().getWidth()) / float(hmap.getMapWidth());
 	float pixelsPerSH = (float)(Landscape::instance()->getMainMap().getHeight()) / float(hmap.getMapHeight());
 
-	GLint x = GLint((pos[0] - radius) * pixelsPerSW);
-	GLint y = GLint((pos[1] - radius) * pixelsPerSH);
-	GLsizei w = GLsizei(pixelsPerSW * 2.0f * radius);
-	GLsizei h = GLsizei(pixelsPerSH * 2.0f * radius);
+	GLint x = GLint((pos[0] - iradius - 1) * pixelsPerSW);
+	GLint y = GLint((pos[1] - iradius - 1) * pixelsPerSH);
+	GLsizei w = GLsizei(pixelsPerSW * 2.0f * iradius);
+	GLsizei h = GLsizei(pixelsPerSH * 2.0f * iradius);
 
 	x = MAX(x, 0);
 	y = MAX(y, 0);
@@ -59,42 +60,44 @@ void DeformTextures::deformLandscape(Vector &pos, float radius,
 		int landscapeWidth = Landscape::instance()->getMainMap().getWidth();
 		int width = 3 * landscapeWidth;
 		width   = (width + 3) & ~3;	
+		int destWidthInc = width - w * 3;
+
+		float posX = 0, posY = 0;
+		float posXinc = 1.0f / pixelsPerSW;
+		float posYinc = 1.0f / pixelsPerSH;
 
 		GLubyte *bytes = 
 			Landscape::instance()->getMainMap().getBits() + ((width * y) + x * 3);
 		GLubyte *destBits = bytes;
-		for (int b=0; b<h;b++)
+		for (int b=0; b<h;b++, posY+=posYinc)
 		{
-			float mapYf = float(b) / pixelsPerSH + 2.0f;
-			float mapYb = mapYf - floorf(mapYf);
-			float mapYa = 1.0f - mapYb;
-            int mapY = int(mapYf);
-
-			for (int a=0; a<w; a++)
+            int mapY1 = int(posY);
+			int mapY2 = mapY1 + 1;
+			posX = 0.0f;
+			for (int a=0; a<w; a++, posX+=posXinc)
 			{
-				float mapXf = float(a) / pixelsPerSW + 2.0f;
-				float mapXb = mapXf - floorf(mapXf);
-				float mapXa = 1.0f - mapXb;
-				int mapX = int(mapXf);
-
-				if (mapX < 99 && mapY < 99)
+				int mapX1 = int(posX);
+				int mapX2 = mapX1 + 1;
+				if (mapX1 < idiam && mapY1 < idiam) 
 				{
-					float mag = 0.0f;
-					if (a < w-1 && b < h-1)
+					float mag = map.map[mapX1][mapY1].asFloat();
+					float magx = mag;
+					if (mapX2 < idiam)
 					{
-						float maga = 
-							map.map[mapX][mapY].asFloat() * mapXa +
-							map.map[mapX + 1][mapY].asFloat() * mapXb;
-						float magb = 
-							map.map[mapX][mapY + 1].asFloat() * mapXa +
-							map.map[mapX + 1][mapY + 1].asFloat() * mapXb;
-						mag = maga * mapYa + magb * mapYb;
+						magx = map.map[mapX2][mapY1].asFloat();
 					}
-					else 
+					float magy = mag;
+					if (mapY2 < idiam)
 					{
-						mag = map.map[mapX][mapY].asFloat();
+						magy = map.map[mapX2][mapY1].asFloat();
 					}
-					
+					float dx = posX - float(mapX1);
+					float dy = posY - float(mapY1);
+
+					float xmag = (magx * dx) + (mag * 1.0f - dx);
+					float ymag = (magy * dy) + (mag * 1.0f - dy);
+					mag = (xmag + ymag) / 2.0f;
+
 					if (mag > 0.0f)
 					{
 						int posX = (x + a) % scorchedMap.getWidth();
@@ -112,7 +115,7 @@ void DeformTextures::deformLandscape(Vector &pos, float radius,
 				}
 				destBits +=3;
 			}
-			destBits += width - w * 3;
+			destBits += destWidthInc;
 		}
 
 		GLState currentState(GLState::TEXTURE_ON);

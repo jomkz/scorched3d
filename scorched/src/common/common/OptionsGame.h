@@ -361,6 +361,9 @@ public:
 	bool getUseUPnP() { return useUPnP_; }
 	OptionEntryBool &getUseUPnPEntry() { return useUPnP_; }
 
+	bool getUseUPnPLogging() { return useUPnPLogging_; }
+	OptionEntryBool &getUseUPnPLoggingEntry() { return useUPnPLogging_; }
+
 	bool getResidualPlayers() { return residualPlayers_; }
 	OptionEntryBool &getResidualPlayersEntry() { return residualPlayers_; }
 
@@ -515,6 +518,7 @@ protected:
 	OptionEntryString publishAddress_;
 	OptionEntryBool publishServer_;
 	OptionEntryBool useUPnP_;
+	OptionEntryBool useUPnPLogging_;
 	OptionEntryBool allowSameIP_;
 	OptionEntryBool allowSameUniqueId_;
 	OptionEntryBool debugFeatures_;

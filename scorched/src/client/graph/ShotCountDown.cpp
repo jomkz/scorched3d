@@ -80,7 +80,8 @@ void ShotCountDown::showRoundTime(fixed timer)
 
 void ShotCountDown::simulateTime(fixed simTime)
 {
-	if (!OptionsDisplay::instance()->getNoCountDownSound())
+	if (!OptionsDisplay::instance()->getNoCountDownSound() &&
+		move.show_)
 	{
 		if (move.timer_ > 0 && move.timer_.asInt() <= 6)
 		{

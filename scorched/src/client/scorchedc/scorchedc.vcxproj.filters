@@ -2322,6 +2322,9 @@
     <ClCompile Include="..\..\server\igd\igd.cpp">
       <Filter>igd</Filter>
     </ClCompile>
+    <ClCompile Include="..\GLW\GLWChatView.cpp">
+      <Filter>GLW</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -4543,6 +4546,9 @@
     </ClInclude>
     <ClInclude Include="..\..\server\igd\igd.h">
       <Filter>igd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GLW\GLWChatView.h">
+      <Filter>GLW</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

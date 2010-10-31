@@ -146,6 +146,7 @@ public:
 	OPTIONBOOL_GETTER(AllowSameUniqueId);
 	OPTIONBOOL_GETTER(PublishServer);
 	OPTIONBOOL_GETTER(UseUPnP);
+	OPTIONBOOL_GETTER(UseUPnPLogging);
 	OPTIONBOOL_GETTER(ResidualPlayers);
 	OPTIONBOOL_GETTER(DelayedDefenseActivation);
 	OPTIONBOOL_GETTER(AutoSendSyncCheck);
