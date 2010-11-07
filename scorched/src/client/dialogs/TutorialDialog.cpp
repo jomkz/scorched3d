@@ -267,7 +267,7 @@ void TutorialDialog::drawHighlight(float x, float y, float w, float h)
 	{
 		Image maps = ImageFactory::loadImage(
 			S3D::eDataLocation,
-			"data/images/triangle.bmp"
+			"data/images/triangle.bmp",
 			"data/images/triangle.bmp",
 			false);
 		triangleTex_.create(maps, true);
