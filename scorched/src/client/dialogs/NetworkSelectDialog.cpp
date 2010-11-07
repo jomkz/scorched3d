@@ -20,6 +20,7 @@
 
 #include <dialogs/NetworkSelectDialog.h>
 #include <dialogs/MsgBoxDialog.h>
+#include <dialogs/NetworkChatDialog.h>
 #include <GLW/GLWWindowManager.h>
 #include <GLW/GLWFont.h>
 #include <GLW/GLWTranslate.h>
@@ -495,12 +496,16 @@ void NetworkSelectDialog::columnSelectedGames(unsigned int id, int col)
 
 void NetworkSelectDialog::display()
 {
+	GLWWindowManager::instance()->showWindow(NetworkChatDialog::instance()->getId());
+
 	setIPAddress(LangString());
 	refreshType_->setCurrentText(LANG_RESOURCE("INTERNET", "Internet"));
 }
 
 void NetworkSelectDialog::hide()
 {
+	GLWWindowManager::instance()->hideWindow(NetworkChatDialog::instance()->getId());
+
 	stopRefresh();
 }
 

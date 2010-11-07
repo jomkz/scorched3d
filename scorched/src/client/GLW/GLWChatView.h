@@ -35,13 +35,21 @@ class GLWChatView :
 	public GLWButtonI
 {
 public:
-	GLWChatView();
+	GLWChatView(float x = 0.0f, float y = 0.0f, float w = 0.0f, float h = 0.0f);
 	virtual ~GLWChatView();
 
-	void addChat(Vector &color, const LangString &text, GLFont2dI *render = 0);
+	void addLargeChat(const Vector &color, const LangString &text, GLFont2dI *render = 0);
+	void addChat(const Vector &color, const LangString &text, GLFont2dI *render = 0);
+	void clearChat();
+
+	virtual bool initFromXMLInternal(XMLNode *node);
+
+	void setAllowScroll(bool allowScroll) { allowScroll_ = allowScroll; }
+	void setDisplayTime(float displayTime) { displayTime_ = displayTime; }
+	void setSplitLargeLines(bool splitLargeLines) { splitLargeLines_ = splitLargeLines; }
 
 	bool getParentSized() { return parentSized_; }
-	virtual bool initFromXMLInternal(XMLNode *node);
+	void setParentSized(bool parentSized) { parentSized_ = parentSized; }
 
 	// GLWidget
 	virtual void draw();
@@ -69,7 +77,7 @@ private:
 	class GLWChatViewEntry
 	{
 	public:
-		GLWChatViewEntry(Vector &color, const LangString &text, 
+		GLWChatViewEntry(const Vector &color, const LangString &text, 
 			float timeRemaining, GLFont2dI *renderer) 
 		{
 			this->color = color;

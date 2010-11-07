@@ -59,6 +59,7 @@
 #include <dialogs/ModSubSelectDialog.h>
 #include <dialogs/SaveSelectDialog.h>
 #include <dialogs/NetworkSelectDialog.h>
+#include <dialogs/NetworkChatDialog.h>
 #include <dialogs/MsgBoxDialog.h>
 #include <dialogs/SettingsSelectDialog.h>
 #include <dialogs/SettingsSubSelectDialog.h>
@@ -203,6 +204,8 @@ void ClientWindowSetup::setupStartWindows(GLWWindowSkinManager *skinManager)
 		SaveSelectDialog::instance(), 0, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StateOptions,
 		NetworkSelectDialog::instance(), 0, false);
+	GLWWindowManager::instance()->addWindow(ClientState::StateOptions,
+		NetworkChatDialog::instance(), 0, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StateOptions,
 		SettingsSelectDialog::instance(), 0, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StateOptions,

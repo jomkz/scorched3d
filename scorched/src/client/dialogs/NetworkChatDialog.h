@@ -18,48 +18,56 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ServerBrowserServerListh_INCLUDE__)
-#define __INCLUDE_ServerBrowserServerListh_INCLUDE__
+#if !defined(__INCLUDE_NetworkChatDialogh_INCLUDE__)
+#define __INCLUDE_NetworkChatDialogh_INCLUDE__
 
+#include <SDL/SDL_thread.h>
 #include <SDL/SDL.h>
-#include <map>
-#include <string>
-#include <vector>
+#include <GLW/GLWWindow.h>
+#include <GLW/GLWChatView.h>
 
-class ServerBrowserEntry
+class NetworkChatDialogTextRenderer : public GLFont2dI
 {
 public:
-	ServerBrowserEntry();
-	virtual ~ServerBrowserEntry();
+	NetworkChatDialogTextRenderer(int len);
+	virtual ~NetworkChatDialogTextRenderer();
+    
+	// GLFont2d
+	virtual bool drawCharacter(
+		unsigned int character,
+		int charPosition, Vector &position, 
+		GLFont2dStorage::CharEntry &charEntry, Vector4 &color);
 
-	void addAttribute(const std::string &name, const std::string &value);
-	const char *getAttribute(const std::string &attrName);
-
-protected:
-	std::map<std::string, std::string> attributes_;
+private:
+	int len_;
 };
 
-class ServerBrowserServerList
+class NetworkChatDialog : public GLWWindow 
 {
 public:
-	ServerBrowserServerList();
-	virtual ~ServerBrowserServerList();
+	static NetworkChatDialog *instance();
 
-	unsigned int &getRefreshId() { return refreshId_; }
+	// Inherited from GLWWindow
+	virtual void draw();
+	virtual void display();
+	virtual void hide();
 
-	// Accessors onto the list
-	int getNoEntries();
-	const char *getEntryValue(int pos, const std::string &name);
-	void addEntryValue(int pos, const std::string &name, const std::string &value);
-	void sortEntries(const std::string &name);
-	void addEntry(ServerBrowserEntry &entry);
-
-	void clear();
+	static int threadFunc(void *);
 
 protected:
-	unsigned int refreshId_;
-	std::vector<ServerBrowserEntry> servers_;
-	SDL_mutex *vectorMutex_;
+	static NetworkChatDialog *instance_;
+	std::list<std::string> messages_;
+	GLWChatView *chatView_;
+	SDL_mutex *mutex_;
+	bool sendMessages_;
+	int lastMessageId_, messageDelay_;
+
+	void actualThreadFunc();
+	void sendMessage();
+
+private:
+	NetworkChatDialog();
+	virtual ~NetworkChatDialog();
 };
 
 #endif

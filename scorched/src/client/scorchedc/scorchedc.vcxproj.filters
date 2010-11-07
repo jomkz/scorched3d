@@ -2325,6 +2325,9 @@
     <ClCompile Include="..\GLW\GLWChatView.cpp">
       <Filter>GLW</Filter>
     </ClCompile>
+    <ClCompile Include="..\dialogs\NetworkChatDialog.cpp">
+      <Filter>dialogs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -4549,6 +4552,9 @@
     </ClInclude>
     <ClInclude Include="..\GLW\GLWChatView.h">
       <Filter>GLW</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dialogs\NetworkChatDialog.h">
+      <Filter>dialogs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -215,6 +215,7 @@ bool igd::sendTCPRequest(Location &location, const std::string &request, std::st
 			location.host.c_str(), location.port));
 		return false;		
 	}
+	NetBufferUtil::setBlockingIO(tcpsock);
 
 	if (!NetBufferUtil::getLocalIPAddress(tcpsock, localAddress))
 	{

@@ -38,7 +38,11 @@ OptionsMasterListServer::OptionsMasterListServer() :
 	masterListBackupServerURI_(options_, "MasterListBackupServerURI",
 		"The URI on the backup master list server for scorched3d", 0, "/scorched"),
 	masterListServerTimeout_(options_, "MasterListServerTimeout",
-		"The amount of time to allow for list communications", 0, 10)
+		"The amount of time to allow for list communications", 0, 10),
+	chatServer_(options_, "ChatServer",
+		"The chat server for scorched3d", 0, "www.scorched3d.co.uk"),
+	chatServerURI_(options_, "ChatServerURI",
+		"The URI on the chat server for scorched3d", 0, "/phpBB3/chatmessages.php")
 {
 	readOptionsFromFile();
 }

@@ -214,7 +214,6 @@ void GLWChannelView::channelText(ChannelText &channelText)
 	GLWChannelViewTextRenderer chanText;
 	chanText.parseText(ScorchedClient::instance()->getContext(), channelName);
 	
-	bool firstTime = true;
 	int currentLen = 0;
 	const LangString &text = chanText.getString();
 	int totalLen = (int) text.size();
@@ -233,7 +232,6 @@ void GLWChannelView::channelText(ChannelText &channelText)
 		currentLen += partLen;
 	}
 }
-
 
 void GLWChannelView::draw()
 {

@@ -506,6 +506,7 @@
     <ClCompile Include="..\dialogs\ModSelectDialog.cpp" />
     <ClCompile Include="..\dialogs\ModSubSelectDialog.cpp" />
     <ClCompile Include="..\dialogs\MsgBoxDialog.cpp" />
+    <ClCompile Include="..\dialogs\NetworkChatDialog.cpp" />
     <ClCompile Include="..\dialogs\NetworkSelectDialog.cpp" />
     <ClCompile Include="..\dialogs\PlayerDialog.cpp" />
     <ClCompile Include="..\dialogs\ProfileDialog.cpp" />
@@ -1244,6 +1245,7 @@
     <ClInclude Include="..\dialogs\ModSelectDialog.h" />
     <ClInclude Include="..\dialogs\ModSubSelectDialog.h" />
     <ClInclude Include="..\dialogs\MsgBoxDialog.h" />
+    <ClInclude Include="..\dialogs\NetworkChatDialog.h" />
     <ClInclude Include="..\dialogs\NetworkSelectDialog.h" />
     <ClInclude Include="..\dialogs\PlayerDialog.h" />
     <ClInclude Include="..\dialogs\ProfileDialog.h" />

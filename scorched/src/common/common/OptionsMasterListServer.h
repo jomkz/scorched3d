@@ -28,10 +28,12 @@ class OptionsMasterListServer
 public:
 	static OptionsMasterListServer *instance();
 
-	const char * getMasterListServer() { return masterListServer_; }
-	const char * getMasterListServerURI() { return masterListServerURI_; }
-	const char * getMasterListBackupServer() { return masterListBackupServer_; }
-	const char * getMasterListBackupServerURI() { return masterListBackupServerURI_; }
+	const char *getMasterListServer() { return masterListServer_; }
+	const char *getMasterListServerURI() { return masterListServerURI_; }
+	const char *getMasterListBackupServer() { return masterListBackupServer_; }
+	const char *getMasterListBackupServerURI() { return masterListBackupServerURI_; }
+	const char *getChatServer() { return chatServer_; }
+	const char *getChatServerURI() { return chatServerURI_; }
 	int getMasterListServerTimeout() { return masterListServerTimeout_; }
 
 protected:
@@ -43,6 +45,8 @@ protected:
 	OptionEntryString masterListServerURI_;
 	OptionEntryString masterListBackupServer_;
 	OptionEntryString masterListBackupServerURI_;
+	OptionEntryString chatServer_;
+	OptionEntryString chatServerURI_;
 	OptionEntryInt masterListServerTimeout_;
 
 	bool readOptionsFromFile();

@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <serverbrowser/ServerBrowserServerList.h>
+#include <common/Defines.h>
 #include <algorithm>
 
 ServerBrowserEntry::ServerBrowserEntry()

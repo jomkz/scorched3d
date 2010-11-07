@@ -68,6 +68,8 @@ ServerRegistrationEntry::ServerRegistrationEntry(
 		"User-Agent: Scorched3D\r\n"
 		"Host: %s\r\n"
 		"Connection: close\r\n"
+		"Cache-Control: no-cache\r\n"
+		"Pragma: no-cache\r\n"
 		"\r\n"
 		"\r\n",
 		masterListServerURI,

@@ -36,7 +36,8 @@
 
 REGISTER_CLASS_SOURCE(GLWChatView);
 
-GLWChatView::GLWChatView() : 
+GLWChatView::GLWChatView(float x, float y, float w, float h) : 
+	GLWidget(x, y, w, h),
 	init_(false), 
 	visibleLines_(5), totalLines_(50),
 	displayTime_(10.0f),
@@ -49,6 +50,9 @@ GLWChatView::GLWChatView() :
 	resetButton_(x_ + 2.0f, y_ + 1.0f, 14.0f, 14.0f),
 	scrollUpKey_(0), scrollDownKey_(0), scrollResetKey_(0)
 {
+	setX(x_);
+	setY(y_);
+
 	upButton_.setHandler(this);
 	downButton_.setHandler(this);
 	resetButton_.setHandler(this);
@@ -74,6 +78,17 @@ GLWChatView::GLWChatView() :
 
 GLWChatView::~GLWChatView()
 {
+	clearChat();
+}
+
+void GLWChatView::clearChat()
+{
+	scrollPosition_ = -1;
+	while (!textLines_.empty())
+	{
+		delete textLines_.back();
+		textLines_.pop_back();
+	}
 }
 
 void GLWChatView::buttonDown(unsigned int id)
@@ -138,7 +153,26 @@ int GLWChatView::splitLine(const LangString &message)
 	return totalLen;
 }
 
-void GLWChatView::addChat(Vector &color, const LangString &text, GLFont2dI *renderer)
+void GLWChatView::addLargeChat(const Vector &color, const LangString &text, GLFont2dI *renderer)
+{
+	int currentLen = 0;
+	int totalLen = (int) text.size();
+	while (currentLen < totalLen)
+	{
+		// Get the next split position
+		int partLen = splitLine(&text[currentLen]);
+		bool nl=(text[currentLen + partLen - 1] == '\n');
+		LangString subset(text, currentLen, (nl?partLen-1:partLen));
+
+		// Create the new text and add it
+		addChat(color, subset, currentLen==0?renderer:0);
+
+		// Increment the current position
+		currentLen += partLen;
+	}
+}
+
+void GLWChatView::addChat(const Vector &color, const LangString &text, GLFont2dI *renderer)
 {
 	GLWChatViewEntry *entry = new GLWChatViewEntry(color, text, displayTime_, renderer);
 	textLines_.push_front(entry);
