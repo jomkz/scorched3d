@@ -48,7 +48,7 @@ struct _TCPsocket {
 bool NetBufferUtil::getLocalIPAddress(TCPsocket &so, std::string &result)
 {
 	struct sockaddr saddr;
-	int saddrlen = sizeof(saddr);
+	socklen_t saddrlen = sizeof(saddr);
 	if(getsockname(so->channel, &saddr, &saddrlen) < 0) return false;
 
 	char addressName[256];
