@@ -41,7 +41,6 @@ public:
 		GLFont2dStorage::CharEntry &charEntry, Vector4 &color);
 
 protected:
-	GLWChannelView *channelView_;
 	ToolTip toolTip_;
 
 };

@@ -131,6 +131,8 @@ protected:
 class GLFont2dI
 {
 public:
+	virtual ~GLFont2dI() {}
+
 	virtual bool drawCharacter(
 		unsigned int character,
 		int charPosition, Vector &position, 
