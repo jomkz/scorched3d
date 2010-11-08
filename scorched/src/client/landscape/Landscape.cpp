@@ -544,7 +544,7 @@ void Landscape::generate(ProgressCounter *counter)
 			mainMap_, 
 			bitmapRock, bitmapShore, bitmaps, 4, 1024, counter);
 
-		mainMap_.writeToFile("i:\\plan.bmp");
+		//mainMap_.writeToFile("i:\\plan.bmp");
 
 		// Set the general surround and roof texture
 		groundTexture_.replace(texture0, false);
