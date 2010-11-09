@@ -75,6 +75,7 @@ NetworkChatDialog::NetworkChatDialog() :
 	chatView_->setAllowScroll(true);
 	chatView_->setSplitLargeLines(true);
 	chatView_->setDisplayTime(3600);
+	chatView_->setVisibleLines(7);
 
 	needCentered_ = true;
 	mutex_ = SDL_CreateMutex();

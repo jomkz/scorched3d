@@ -420,7 +420,7 @@ void NetworkSelectDialog::drawColumnPlayers(unsigned int id, int row, int col,
 bool NetworkSelectDialog::serverCompatable(std::string pversion, std::string version)
 {
 	if (pversion.size() > 0 && 
-		pversion.c_str() != S3D::ScorchedProtocolVersion.c_str())
+		pversion != S3D::ScorchedProtocolVersion)
 	{
 		return false;
 	}

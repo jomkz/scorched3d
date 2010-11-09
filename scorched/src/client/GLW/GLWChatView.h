@@ -47,6 +47,7 @@ public:
 	void setAllowScroll(bool allowScroll) { allowScroll_ = allowScroll; }
 	void setDisplayTime(float displayTime) { displayTime_ = displayTime; }
 	void setSplitLargeLines(bool splitLargeLines) { splitLargeLines_ = splitLargeLines; }
+	void setVisibleLines(int visibleLines) { visibleLines_ = visibleLines; }
 
 	bool getParentSized() { return parentSized_; }
 	void setParentSized(bool parentSized) { parentSized_ = parentSized; }
