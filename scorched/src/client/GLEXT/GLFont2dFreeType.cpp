@@ -104,7 +104,11 @@ bool GLFont2dFreeType::createCharacter(unsigned int ch, GLFont2dStorage::CharEnt
 
 	if(FT_Load_Glyph( face_, charIndex, FT_LOAD_DEFAULT )) 
 	{ 
-		S3D::dialogMessage("GLFont", "FT_Load_Glyph failed"); return false; 
+		charIndex = FT_Get_Char_Index( face_, '?');
+		if(FT_Load_Glyph( face_, charIndex, FT_LOAD_DEFAULT )) 
+		{ 
+			S3D::dialogMessage("GLFont", "FT_Load_Glyph failed"); return false; 
+		}
 	}
 
 	// Move The Face's Glyph Into A Glyph Object.
