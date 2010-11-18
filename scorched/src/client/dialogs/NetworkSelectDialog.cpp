@@ -169,7 +169,7 @@ void NetworkSelectDialog::draw()
 		int wWidth = GLViewPort::getWidth();
 		int wHeight = GLViewPort::getHeight();
 		setX((wWidth - getW()) / 2.0f);
-		setY((wHeight - getH()) - 25.0f);
+		setY(MAX(0, (wHeight - getH()) - 25.0f));
 		needCentered_ = false;
 	}
 

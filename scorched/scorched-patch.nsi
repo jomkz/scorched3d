@@ -13,6 +13,7 @@ SetCompressor lzma
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
+!include "scripts\FileAssociation.nsh"
 
 ; MUI Settings
 !define MUI_ABORTWARNING
