@@ -161,18 +161,7 @@ int TankContainer::getNoOfNonSpectatorTanks()
 
 std::map<unsigned int, Tank *> &TankContainer::getPlayingTanks()
 {
-	tmpPlayingTanks_.clear();
-
-	std::map<unsigned int, Tank *>::iterator mainitor;
-	for (mainitor = tanks_.begin();
-		mainitor != tanks_.end();
-		mainitor++)
-	{
-		Tank *current = (*mainitor).second;
-		tmpPlayingTanks_[current->getPlayerId()] = current;
-	}	
-
-	return tmpPlayingTanks_;
+	return tanks_;
 }
 
 std::map<unsigned int, Tank *> &TankContainer::getAllTanks()

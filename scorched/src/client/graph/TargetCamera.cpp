@@ -278,6 +278,30 @@ void TargetCamera::moveCamera()
 	float currentRotation = 0.0f;
 
 	Tank *currentTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+	if (!currentTank || !currentTank->getAlive()) 
+	{
+		currentTank = 0;
+		unsigned int currentDestinationId = ScorchedClient::instance()->
+			getTankContainer().getCurrentDestinationId();
+		std::map<unsigned int, Tank *> &tanks = ScorchedClient::instance()->
+			getTankContainer().getAllTanks();
+		std::map<unsigned int, Tank *>::iterator itor;
+		for (itor = tanks.begin();
+			itor != tanks.end();
+			itor++)
+		{
+			Tank *tank = itor->second;
+			if (tank->getDestinationId() == currentDestinationId)
+			{
+				if (!currentTank) currentTank = tank;
+				else
+				{
+					currentTank = 0;
+					break;
+				}
+			}
+		}
+	}
 	if (currentTank && currentTank->getAlive())
 	{
 		position = currentTank->getPosition().getTankTurretPosition().asVector();

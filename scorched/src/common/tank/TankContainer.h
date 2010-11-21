@@ -60,7 +60,6 @@ protected:
 	TargetContainer &targets_;
 	Tank *currentPlayer_;
 	std::map<unsigned int, Tank *> tanks_;
-	std::map<unsigned int, Tank *> tmpPlayingTanks_;
 };
 
 #endif // !defined(AFX_TANKCONTAINER_H__56AF98E2_E188_45EC_AA25_1865ADBBA3F1__INCLUDED_)
