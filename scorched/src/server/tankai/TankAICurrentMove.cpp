@@ -356,7 +356,7 @@ bool TankAICurrentMove::makeProjectileShot(Tank *tank, Tank *targetTank,
 	{
 		// Check this angle
 		Vector actualPosition;
-		TankAIAimGuesser aimGuesser;
+		TankAIAimGuesser aimGuesser(ScorchedServer::instance()->getContext());
 		if (aimGuesser.guess(tank, aimPosition, degs, aimDistance, actualPosition))
 		{	
 			// Check we are not firing too close to us
@@ -900,7 +900,7 @@ bool TankAICurrentMove::makeGroupShot(Tank *tank,
 			{
 				// Check this angle
 				Vector actualPosition;
-				TankAIAimGuesser aimGuesser;
+				TankAIAimGuesser aimGuesser(ScorchedServer::instance()->getContext());
 				if (aimGuesser.guess(tank, current->position, 
 					degs, 15.0f, actualPosition))
 				{

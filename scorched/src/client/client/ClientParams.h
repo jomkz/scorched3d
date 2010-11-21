@@ -36,6 +36,7 @@ public:
 	const char *getNonParam() { return nonParam_.getValue(); }
 	int getExitTime() { return exittime_.getValue(); }
 	bool getStartCustom() { return startcustom_.getValue(); }
+	bool getConnectAcceptDefaults() { return connectAcceptDefaults_.getValue(); }
 	bool getConnectedToServer() { return (getConnect()[0] != '\0'); }
 
 	void setStartCustom(bool custom) { startcustom_.setValue(custom); }
@@ -58,6 +59,7 @@ protected:
 	OptionEntryString save_;
 	OptionEntryString nonParam_;
 	OptionEntryBool startcustom_;
+	OptionEntryBool connectAcceptDefaults_;
 	OptionEntryInt exittime_;
 
 private:

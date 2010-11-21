@@ -27,7 +27,7 @@ class Tank;
 class TankAIAimGuesser : public PhysicsParticleObjectHandler
 {
 public:
-	TankAIAimGuesser();
+	TankAIAimGuesser(ScorchedContext &context);
 	virtual ~TankAIAimGuesser();
 
 	bool guess(Tank *tank, Vector &target, 
@@ -42,6 +42,7 @@ public:
 
 protected:
 	bool collision_;
+	ScorchedContext &context_;
 	PhysicsParticleObject currentGuess_;
 
 	void getCurrentGuess(Tank *tank);

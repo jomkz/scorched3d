@@ -29,6 +29,7 @@
 #include <common/OptionsTransient.h>
 #include <common/Defines.h>
 #include <client/ScorchedClient.h>
+#include <client/ClientParams.h>
 #include <lang/LangResource.h>
 
 RulesDialog *RulesDialog::instance_ = 0;
@@ -134,6 +135,11 @@ void RulesDialog::draw()
 	if (rulesTab_->getDepressed())
 	{
 		drawRules();
+	}
+
+	if (ClientParams::instance()->getConnectAcceptDefaults())
+	{
+		buttonDown(okId_);
 	}
 }
 

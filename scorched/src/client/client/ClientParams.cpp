@@ -35,6 +35,8 @@ ClientParams *ClientParams::instance()
 ClientParams::ClientParams() :
 	connect_(options_, "connect", 
 		"The name of the server to connect to, starts a NET/LAN client", 0, ""),
+	connectAcceptDefaults_(options_, "connectwithdefaults", 
+		"Connect to the server without prompting for player name and tank selection", 0, false),
 	client_(options_, "startclient",
 		"Starts a scorched 3d client, requires the name of the client settings file e.g. data/singlecustom.xml", 0, ""),
 	startcustom_(options_, "startcustom",
@@ -60,6 +62,7 @@ ClientParams::~ClientParams()
 
 void ClientParams::reset()
 {
+	connectAcceptDefaults_.setValueFromString(connectAcceptDefaults_.getDefaultValueAsString());
 	connect_.setValueFromString(connect_.getDefaultValueAsString());
 	client_.setValueFromString(client_.getDefaultValueAsString());
 	startcustom_.setValueFromString(startcustom_.getDefaultValueAsString());

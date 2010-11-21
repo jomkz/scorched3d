@@ -293,6 +293,11 @@ void PlayerDialog::display()
 	}
 	currentPlayerId_ = 0;
 	nextPlayer();
+
+	if (ClientParams::instance()->getConnectAcceptDefaults())
+	{
+		buttonDown(okId_);
+	}
 }
 
 void PlayerDialog::nextPlayer()

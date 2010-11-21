@@ -22,13 +22,13 @@
 #include <tank/Tank.h>
 #include <tank/TankLib.h>
 #include <tank/TankPosition.h>
-#include <server/ScorchedServer.h>
 #include <common/OptionsScorched.h>
 #include <common/Logger.h>
 #include <common/RandomGenerator.h>
 #include <math.h>
 
-TankAIAimGuesser::TankAIAimGuesser()
+TankAIAimGuesser::TankAIAimGuesser(ScorchedContext &context) :
+	context_(context)
 {
 }
 
@@ -93,7 +93,7 @@ void TankAIAimGuesser::initialShot(Tank *tank, Vector &target)
 	FileRandomGenerator random;
 	random.seed(rand());
 	TankLib::getShotTowardsPosition(
-		ScorchedServer::instance()->getContext(),
+		context_,
 		random,
 		tank->getPosition().getTankPosition(), 
 		FixedVector::fromVector(target), 
@@ -155,9 +155,9 @@ void TankAIAimGuesser::wallCollision(PhysicsParticleObject &position,
 
 void TankAIAimGuesser::getCurrentGuess(Tank *tank)
 {
-	bool actionSyncCheck = ScorchedServer::instance()->getOptionsGame().
+	bool actionSyncCheck = context_.getOptionsGame().
 		getMainOptions().getActionSyncCheck();
-	ScorchedServer::instance()->getOptionsGame().getMainOptions().
+	context_.getOptionsGame().getMainOptions().
 		getActionSyncCheckEntry().setValue(false);
 
 	FixedVector shotVelocity = tank->getPosition().getVelocityVector() *
@@ -166,7 +166,7 @@ void TankAIAimGuesser::getCurrentGuess(Tank *tank)
 
 	PhysicsParticleObject particleObject;
 	PhysicsParticleInfo info(ParticleTypeShot, tank->getPlayerId(), 0);
-	particleObject.setPhysics(info, ScorchedServer::instance()->getContext(),
+	particleObject.setPhysics(info, context_,
 		shotPosition, shotVelocity);
 	particleObject.setHandler(this);
 
@@ -176,6 +176,6 @@ void TankAIAimGuesser::getCurrentGuess(Tank *tank)
 		particleObject.simulate(1);
 	}
 
-	ScorchedServer::instance()->getOptionsGame().getMainOptions().
+	context_.getOptionsGame().getMainOptions().
 		getActionSyncCheckEntry().setValue(actionSyncCheck);
 }
