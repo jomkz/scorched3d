@@ -138,9 +138,6 @@
     <ClCompile Include="..\..\common\common\ProgressCounter.cpp">
       <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\common\RandomGenerator.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\common\snprintf.c">
       <Filter>common</Filter>
     </ClCompile>
@@ -348,9 +345,6 @@
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\common\ProgressCounter.h">
-      <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\common\RandomGenerator.h">
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\common\Vector.h">

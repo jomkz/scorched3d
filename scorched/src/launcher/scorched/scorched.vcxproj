@@ -131,7 +131,6 @@
     <ClCompile Include="..\..\common\common\OptionsGame.cpp" />
     <ClCompile Include="..\..\common\common\OptionsParameters.cpp" />
     <ClCompile Include="..\..\common\common\ProgressCounter.cpp" />
-    <ClCompile Include="..\..\common\common\RandomGenerator.cpp" />
     <ClCompile Include="..\..\common\common\snprintf.c" />
     <ClCompile Include="..\..\common\common\Vector.cpp" />
     <ClCompile Include="..\..\common\common\Vector4.cpp" />
@@ -203,7 +202,6 @@
     <ClInclude Include="..\..\common\common\OptionsGame.h" />
     <ClInclude Include="..\..\common\common\OptionsParameters.h" />
     <ClInclude Include="..\..\common\common\ProgressCounter.h" />
-    <ClInclude Include="..\..\common\common\RandomGenerator.h" />
     <ClInclude Include="..\..\common\common\Vector.h" />
     <ClInclude Include="..\..\common\common\Vector4.h" />
     <ClInclude Include="..\..\common\common\VectorLib.h" />

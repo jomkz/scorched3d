@@ -33,11 +33,14 @@ public:
 	virtual fixed getRandFixed() = 0;
 };
 
+class ScorchedContext;
 class FileRandomGenerator : public RandomGenerator
 {
 public:
 	FileRandomGenerator();
 	virtual ~FileRandomGenerator();
+
+	void setScorchedContext(ScorchedContext *context) { context_ = context; }
 
 	void seed(unsigned int seed);
 	unsigned int getSeed();
@@ -51,6 +54,7 @@ public:
 protected:
 	static unsigned int bufferSize_;
 	static unsigned int *buffer_;
+	ScorchedContext *context_;
 	unsigned int position_;
 
 private:

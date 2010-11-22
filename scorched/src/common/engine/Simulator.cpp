@@ -58,6 +58,7 @@ void Simulator::setScorchedContext(ScorchedContext *context)
 	context_ = context;
 	actionController_.setScorchedContext(context);
 	wind_.setScorchedContext(context);
+	random_.setScorchedContext(context);
 }
 
 void Simulator::simulate()

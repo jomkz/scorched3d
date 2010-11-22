@@ -379,6 +379,9 @@ public:
 	bool getActionSyncCheck() { return actionSyncCheck_; }
 	OptionEntryBool &getActionSyncCheckEntry() { return actionSyncCheck_; }
 
+	bool getActionRandomSyncCheck() { return actionRandomSyncCheck_; }
+	OptionEntryBool &getActionRandomSyncCheckEntry() { return actionRandomSyncCheck_; }
+
 	bool getActionMovementSyncCheck() { return actionMovementSyncCheck_; }
 	OptionEntryBool &getActionMovementSyncCheckEntry() { return actionMovementSyncCheck_; }
 
@@ -498,6 +501,7 @@ protected:
 	OptionEntryString botNamePrefix_;
 	OptionEntryBool actionSyncCheck_;
 	OptionEntryBool actionMovementSyncCheck_;
+	OptionEntryBool actionRandomSyncCheck_;
 	OptionEntryBool actionCollisionSyncCheck_;
 	OptionEntryBool autoSendSyncCheck_;
 	OptionEntryBool residualPlayers_;

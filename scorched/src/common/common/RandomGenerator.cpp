@@ -20,6 +20,9 @@
 
 #include <common/RandomGenerator.h>
 #include <common/Defines.h>
+#include <common/OptionsScorched.h>
+#include <engine/Simulator.h>
+#include <engine/ScorchedContext.h>
 #include <net/NetBuffer.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -35,6 +38,7 @@ unsigned int FileRandomGenerator::bufferSize_ = 0;
 unsigned int *FileRandomGenerator::buffer_ = 0;
 
 FileRandomGenerator::FileRandomGenerator() :
+	context_(0),
 	position_(0)
 {
 	// Cache the buffer so we only read it once
@@ -83,7 +87,18 @@ unsigned int FileRandomGenerator::getRandUInt()
 	unsigned int value = buffer_[pos];
 	unsigned int lvalue = value << (32 - maskpos);
 	unsigned int rvalue = value >> maskpos;
-	return lvalue | rvalue;
+	unsigned int result = lvalue | rvalue;
+
+	if (context_ &&
+		context_->getOptionsGame().getActionSyncCheck() &&
+		context_->getOptionsGame().getActionRandomSyncCheck())
+	{
+		context_->getSimulator().addSyncCheck(
+			S3D::formatStringBuffer("Random: %u %u", 
+				position_, result));
+	}
+
+	return result;
 }
 
 fixed FileRandomGenerator::getRandFixed()
