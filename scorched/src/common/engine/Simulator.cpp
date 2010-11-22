@@ -22,6 +22,7 @@
 #include <engine/ScorchedContext.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
+#include <target/TargetLife.h>
 #include <movement/TargetMovement.h>
 #include <common/OptionsScorched.h>
 #include <landscapemap/LandscapeMaps.h>
@@ -164,9 +165,10 @@ void Simulator::newLevel()
 			itor++)
 		{
 			Tank *tank = itor->second;
-			addSyncCheck(S3D::formatStringBuffer("Tank : %u %s %s", 
+			addSyncCheck(S3D::formatStringBuffer("Tank : %u %s %s - %s", 
 				tank->getPlayerId(), tank->getCStrName().c_str(), 
-				tank->getState().getSmallStateString()));
+				tank->getState().getSmallStateString(),
+				tank->getLife().getTargetPosition().asQuickString()));
 		}
 	}
 }
