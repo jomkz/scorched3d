@@ -22,6 +22,7 @@
 #include <landscapedef/LandscapeDefn.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapemap/DeformLandscape.h>
+#include <engine/Simulator.h>
 #include <tank/TankContainer.h>
 #include <tank/TankPosition.h>
 #include <tank/TankState.h>
@@ -30,6 +31,7 @@
 #include <target/TargetState.h>
 #include <image/ImageFactory.h>
 #include <common/Logger.h>
+#include <common/OptionsScorched.h>
 
 static bool tankMaskCloseness(ScorchedContext &context, int team, 
 	FixedVector &tankPos, Image &tankMask)
@@ -209,6 +211,14 @@ FixedVector PlacementTankPosition::placeTank(unsigned int playerId, int team,
 	// Get the height of the tank
 	tankPos[2] = context.getLandscapeMaps().getGroundMaps().getInterpHeight(
 		tankPos[0], tankPos[1]);
+
+	// Log placement
+	if (context.getOptionsGame().getActionSyncCheck()) 
+	{
+		context.getSimulator().addSyncCheck(
+			S3D::formatStringBuffer("Tank placement %u %s",
+				playerId, tankPos.asQuickString()));
+	}
 
 	return tankPos;
 }

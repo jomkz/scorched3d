@@ -20,6 +20,8 @@
 
 #include <engine/Simulator.h>
 #include <engine/ScorchedContext.h>
+#include <tank/TankContainer.h>
+#include <tank/TankState.h>
 #include <movement/TargetMovement.h>
 #include <common/OptionsScorched.h>
 #include <landscapemap/LandscapeMaps.h>
@@ -150,4 +152,21 @@ void Simulator::newLevel()
 	random_.seed(context_->getLandscapeMaps().getDefinitions().getSeed());
 	events_.initialize(*context_);
 	wind_.newLevel();
+
+	// Log initial target positions
+	if (context_->getOptionsGame().getActionSyncCheck()) 
+	{
+		std::map<unsigned int, Tank *> &tanks =
+			context_->getTankContainer().getAllTanks();
+		std::map<unsigned int, Tank *>::iterator itor;
+		for (itor = tanks.begin();
+			itor != tanks.end();
+			itor++)
+		{
+			Tank *tank = itor->second;
+			addSyncCheck(S3D::formatStringBuffer("Tank : %u %s %s", 
+				tank->getPlayerId(), tank->getCStrName().c_str(), 
+				tank->getState().getSmallStateString()));
+		}
+	}
 }
