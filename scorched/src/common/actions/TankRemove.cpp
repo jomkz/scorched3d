@@ -20,6 +20,7 @@
 
 #include <actions/TankRemove.h>
 #include <tank/TankContainer.h>
+#include <tank/TankState.h>
 #include <common/Logger.h>
 
 TankRemove::TankRemove(unsigned int playerId, fixed removeTime) :
@@ -44,7 +45,23 @@ void TankRemove::simulate(fixed frameTime, bool &remove)
 {
 	removeTime_ -= frameTime;
 
-	if (removeTime_ <= 0)
+	int alive = 0;
+	std::map<unsigned int, Tank *> &tanks = context_->getTankContainer().getAllTanks();
+	std::map<unsigned int, Tank *>::iterator mainitor;
+	for (mainitor = tanks.begin();
+		mainitor != tanks.end();
+		mainitor++)
+	{
+		Tank *current = (*mainitor).second;
+		if (current->getState().getTankPlaying() &&
+			current->getState().getLives() > 0 &&
+			current->getPlayerId() != playerId_)
+		{
+			alive++;
+		}
+	}
+
+	if (removeTime_ <= 0 || alive == 0)
 	{
 		remove = true;
 	}

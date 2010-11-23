@@ -34,6 +34,7 @@ public:
 	virtual ~ServerSimulator();
 
 	virtual void clear();
+	void processRemaining();
 
 	void addSimulatorAction(SimAction *action, SimulatorI *callback = 0);
 

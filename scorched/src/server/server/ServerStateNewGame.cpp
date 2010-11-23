@@ -45,8 +45,8 @@ void ServerStateNewGame::newGame()
 {
 	newGameState();
 
-	// Store this as the current level
-	ScorchedServer::instance()->getServerSimulator().newLevel();
+	// Make sure any remaining actions have been processed before starting a new game
+	ScorchedServer::instance()->getServerSimulator().processRemaining();
 
 	// Make sure tanks are in correct state
 	std::set<unsigned int> loadingDestinations;
@@ -67,6 +67,11 @@ void ServerStateNewGame::newGame()
 			}
 		}
 	}
+
+	// Store this as the current level
+	// Do after setting the state so the state of the tanks is consistent when 
+	// the level is saved
+	ScorchedServer::instance()->getServerSimulator().newLevel();
 
 	// Tell all destinations to load
 	std::set<unsigned int>::iterator destItor;

@@ -181,7 +181,7 @@ bool ServerSimulator::processMessage(
 	return true;
 }
 
-void ServerSimulator::newLevel()
+void ServerSimulator::processRemaining()
 {
 	// Process any remaining actions
 	while (!simActions_.empty())
@@ -191,7 +191,10 @@ void ServerSimulator::newLevel()
 		delete container;
 		simActions_.pop_front();
 	}
+}
 
+void ServerSimulator::newLevel()
+{
 	Simulator::newLevel();
 
 	nextSendTime_ = 0;
