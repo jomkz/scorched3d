@@ -107,9 +107,12 @@ static bool tankTargetCloseness(ScorchedContext &context, unsigned int playerId,
 		fixed closeness = MAX(tankCloseness/2, thisTarget->getBorder());
 		if ((tankPos - thisTarget->getLife().getTargetPosition()).Magnitude() < closeness) 
 		{
-			context.getSimulator().addSyncCheck(
-				S3D::formatStringBuffer("Tank placement target close %u", 
-				thisTarget->getPlayerId()));
+			if (context.getOptionsGame().getActionSyncCheck()) 
+			{
+				context.getSimulator().addSyncCheck(
+					S3D::formatStringBuffer("Tank placement target close %u", 
+					thisTarget->getPlayerId()));
+			}
 			return false;
 		}
 	}
