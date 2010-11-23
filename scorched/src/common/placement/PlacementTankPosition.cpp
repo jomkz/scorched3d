@@ -107,6 +107,9 @@ static bool tankTargetCloseness(ScorchedContext &context, unsigned int playerId,
 		fixed closeness = MAX(tankCloseness/2, thisTarget->getBorder());
 		if ((tankPos - thisTarget->getLife().getTargetPosition()).Magnitude() < closeness) 
 		{
+			context.getSimulator().addSyncCheck(
+				S3D::formatStringBuffer("Tank placement target close %u", 
+				thisTarget->getPlayerId()));
 			return false;
 		}
 	}
@@ -121,10 +124,25 @@ static bool tankTargetCloseness(ScorchedContext &context, unsigned int playerId,
 		Tank *thisTank = (*tankItor).second;
 		if (thisTank->getPlayerId() == playerId) continue;
 
+		if (context.getOptionsGame().getActionSyncCheck()) 
+		{
+			context.getSimulator().addSyncCheck(S3D::formatStringBuffer("Tank : %u %s %s - %s", 
+				thisTank->getPlayerId(), thisTank->getCStrName().c_str(), 
+				thisTank->getState().getSmallStateString(),
+				thisTank->getLife().getTargetPosition().asQuickString()));
+		}
+
 		if (thisTank->getState().getTankPlaying())
 		{
 			if ((tankPos - thisTank->getLife().getTargetPosition()).Magnitude() < tankCloseness) 
 			{
+				if (context.getOptionsGame().getActionSyncCheck()) 
+				{
+					context.getSimulator().addSyncCheck(
+						S3D::formatStringBuffer("Tank placement tank close %u",
+						thisTank->getPlayerId()));
+				}
+
 				return false;
 			}
 		}
@@ -190,18 +208,48 @@ FixedVector PlacementTankPosition::placeTank(unsigned int playerId, int team,
 		tankPos = FixedVector(posX, posY, height);
 
 		// Make sure not lower than water line
-		if (tankPos[2] < minHeight || tankPos[2] > maxHeight) continue;
+		if (tankPos[2] < minHeight || tankPos[2] > maxHeight) 
+		{
+			if (context.getOptionsGame().getActionSyncCheck()) 
+			{
+				context.getSimulator().addSyncCheck(
+					S3D::formatStringBuffer("Tank placement height %s %u", 
+					tankPos.asQuickString(), minHeight.getInternalData()));
+			}
+			continue;
+		}
 
 		// Make sure normal is less than given
-		if (normal[2] < flatness) continue;
+		if (normal[2] < flatness)
+		{
+			if (context.getOptionsGame().getActionSyncCheck()) 
+			{
+				context.getSimulator().addSyncCheck(
+					S3D::formatStringBuffer("Tank placement flatness %s %u", 
+					normal.asQuickString(), flatness.getInternalData()));
+			}
+			continue;
+		}
 
 		// Make sure the mask allows the tank
 		if (tankMask.getBits() && 
-			!tankMaskCloseness(context, team, tankPos, tankMask)) continue;
+			!tankMaskCloseness(context, team, tankPos, tankMask)) 
+		{
+			if (context.getOptionsGame().getActionSyncCheck()) 
+			{
+				context.getSimulator().addSyncCheck(
+					S3D::formatStringBuffer("Tank placement mask %i %s", 
+					team, tankPos.asQuickString()));
+			}
+			continue;
+		}
 
 		// Check tanks are not too close to others or targets
 		fixed closeness = (tankCloseness * fixed(i)) / fixed(maxIt);
-		if (!tankTargetCloseness(context, playerId, tankPos, closeness)) continue;
+		if (!tankTargetCloseness(context, playerId, tankPos, closeness)) 
+		{
+			continue;
+		}
 
 		// Everything looks ok
 		break;
