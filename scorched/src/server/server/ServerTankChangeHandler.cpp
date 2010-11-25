@@ -82,15 +82,6 @@ bool ServerTankChangeHandler::processMessage(NetMessage &netMessage,
 			ScorchedServer::instance()->getTankAIs().
 			getAIByName(message.getPlayerType());
 		if (!ai) return true;
-
-		// Set the tank to have the ai
-		tank->setTankAI(ai->createCopy(tank));
-		tank->setDestinationId(0);
-	}
-	else
-	{
-		tank->setDestinationId(netMessage.getDestinationId());
-		tank->setTankAI(0);
 	}
 
 	// Setup the new player

@@ -62,9 +62,9 @@ void TargetMovementEntryShips::generate(ScorchedContext &context,
 	fixed diff = fixed(360) / fixed(shipGroup->controlpoints);
 	for (fixed i=0; i<360; i+=diff)
 	{
-		fixed distWidth = random.getRandFixed() * 
+		fixed distWidth = random.getRandFixed("ShipMovement") * 
 			shipGroup->controlpointsrand + shipGroup->controlpointswidth;
-		fixed distHeight = random.getRandFixed() * 
+		fixed distHeight = random.getRandFixed("ShipMovement") * 
 			shipGroup->controlpointsrand + shipGroup->controlpointsheight;
 		fixed x = (i / 180 * fixed::XPI).sin() * distWidth + fixed(mapWidth) / 2;
 		fixed y = (i / 180 * fixed::XPI).cos() * distHeight + fixed(mapHeight) / 2;
@@ -115,8 +115,8 @@ void TargetMovementEntryShips::generate(ScorchedContext &context,
 		}
 
 		// Generate the offsets for each target
-		fixed offX = random.getRandFixed() * 200;
-		fixed offY = random.getRandFixed() * 200;
+		fixed offX = random.getRandFixed("ShipMovement") * 200;
+		fixed offY = random.getRandFixed("ShipMovement") * 200;
 		FixedVector offset(offX, offY - 100, 0);
 		TargetMovementEntryShipsOffset *offsetEntry = new TargetMovementEntryShipsOffset();
 		offsetEntry->offset = offset;

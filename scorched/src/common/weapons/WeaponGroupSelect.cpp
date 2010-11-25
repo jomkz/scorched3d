@@ -72,7 +72,7 @@ void WeaponGroupSelect::fireWeapon(ScorchedContext &context,
 	// Select the object
 	int objectCount = groupEntry->getObjectCount();
 	if (objectCount == 0) return;
-	unsigned int object = context.getSimulator().getRandomGenerator().getRandUInt() % objectCount;
+	unsigned int object = context.getSimulator().getRandomGenerator().getRandUInt("WeaponGroupSelect") % objectCount;
 	TargetGroup *entry = groupEntry->getObjectByPos(object);
 
 	FixedVector newPosition = entry->getTarget()->getLife().getTargetPosition();

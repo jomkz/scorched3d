@@ -106,9 +106,9 @@ fixed NumberParser::getValue(ScorchedContext &context) //RandomGenerator &genera
                         step_ = *(++itor);
 
                 if (step_ == 0)
-                        value = random.getRandFixed() * (max_ - min_) + min_;
+                        value = random.getRandFixed("NumberParser:Range") * (max_ - min_) + min_;
                 else
-					value = fixed(((random.getRandFixed() * (max_ - min_) /  step_ ).asInt()) * step_.asInt()) + min_;
+					value = fixed(((random.getRandFixed("NumberParser:Range") * (max_ - min_) /  step_ ).asInt()) * step_.asInt()) + min_;
                 return value;
         }
 
@@ -118,7 +118,7 @@ fixed NumberParser::getValue(ScorchedContext &context) //RandomGenerator &genera
         		S3D::dialogExit("NumberParser.cpp",
 		                S3D::formatStringBuffer("Invalid DISTRIBUTION expression: \"%s\"",
 				expression_.c_str()));
-				int operandNo = (random.getRandFixed() * fixed((unsigned int) operands_.size())).asInt();
+				int operandNo = (random.getRandFixed("NumberParser:Distribution") * fixed((unsigned int) operands_.size())).asInt();
                 for (int i = 0; i <= operandNo; i++) itor++;
                 value = *itor;
                 return value;

@@ -111,18 +111,18 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 	fixed rotation = modelrotation_;
 	if (modelrotationsnap_ > 0)
 	{
-		rotation = fixed((generator.getRandFixed() * 360).asInt() / 
+		rotation = fixed((generator.getRandFixed("Tank Definition") * 360).asInt() / 
 			(modelrotationsnap_.asInt())) * modelrotationsnap_;
 	}
 	fixed finalModelScale = modelscale_;
 	if (modelscalediff_ > 0)
 	{
-		finalModelScale += generator.getRandFixed() * modelscalediff_;
+		finalModelScale += generator.getRandFixed("Tank Definition") * modelscalediff_;
 	}
 	fixed finalBrightness = modelbrightness_;
 	if (finalBrightness == -1)
 	{
-		finalBrightness = generator.getRandFixed() * fixed(true, 7000) + fixed(true, 3000);
+		finalBrightness = generator.getRandFixed("Tank Definition") * fixed(true, 7000) + fixed(true, 3000);
 	}
 
 	FixedVector finalSize = size_;

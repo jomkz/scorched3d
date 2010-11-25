@@ -111,7 +111,7 @@ fixed LandscapeConditionTime::getNextEventTime(ScorchedContext &context, int eve
 		return fixed::MAX_FIXED;
 	}
 
-	return context.getSimulator().getRandomGenerator().getRandFixed() * 
+	return context.getSimulator().getRandomGenerator().getRandFixed("LandscapeEvents") * 
 		(maxtime - mintime) + mintime;
 }
 
@@ -137,7 +137,7 @@ fixed LandscapeConditionRandom::getNextEventTime(ScorchedContext &context, int e
 		return fixed::MAX_FIXED;
 	}
 
-	if (context.getSimulator().getRandomGenerator().getRandFixed() < randomchance)
+	if (context.getSimulator().getRandomGenerator().getRandFixed("LandscapeEvents") < randomchance)
 	{
 		return randomdelay;
 	}
@@ -210,7 +210,7 @@ void LandscapeActionFireWeaponFromGroup::fireAction(ScorchedContext &context)
 	// Select the object
 	int objectCount = groupEntry->getObjectCount();
 	if (objectCount == 0) return;
-	unsigned int object = context.getSimulator().getRandomGenerator().getRandUInt() % objectCount;
+	unsigned int object = context.getSimulator().getRandomGenerator().getRandUInt("LandscapeEvents") % objectCount;
 	TargetGroup *entry = groupEntry->getObjectByPos(object);
 
 	FixedVector newPosition = entry->getTarget()->getLife().getTargetPosition();

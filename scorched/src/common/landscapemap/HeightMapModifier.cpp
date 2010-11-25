@@ -62,7 +62,7 @@ void HeightMapModifier::noise(HeightMap &hmap,
 	if (defn.noisefactor == 0) return;
 	if (counter) counter->setNewOp(LANG_RESOURCE("NOISE", "Noise"));
 
-	unsigned int randomU = generator.getRandUInt() % 5000;
+	unsigned int randomU = generator.getRandUInt("HeightMapModifier") % 5000;
 	int random = (int) randomU;
 
 	fixed *noisemap = new fixed[defn.noisewidth * defn.noiseheight];
@@ -216,8 +216,8 @@ void HeightMapModifier::waterErrosion(HeightMap &hmap,
 		if (counter) counter->setNewPercentage((100.0f * float(o)) / float(30));
 
 		// Choose a random start
-		int x = generator.getRandUInt() % hmap.getMapWidth();
-		int y = generator.getRandUInt() % hmap.getMapHeight();
+		int x = generator.getRandUInt("HeightMapModifier") % hmap.getMapWidth();
+		int y = generator.getRandUInt("HeightMapModifier") % hmap.getMapHeight();
 		
 		// Set the position and starting height
 		int startx = x;
@@ -285,7 +285,7 @@ void HeightMapModifier::waterErrosion(HeightMap &hmap,
 					{
 						if (a==-size || a==size || b==-size || b==size)
 						{
-							fixed newSurroundHeight = startHeight - lowered + raised + generator.getRandFixed() * 2;
+							fixed newSurroundHeight = startHeight - lowered + raised + generator.getRandFixed("HeightMapModifier") * 2;
 							newSurroundHeight = MAX(newSurroundHeight, 0);
 							fixed oldSurroundHeight = hmap.getHeight(x + a, y + b);
 							if (oldSurroundHeight > newSurroundHeight)
@@ -393,7 +393,7 @@ void HeightMapModifier::scale(HeightMap &hmap,
 
 	if (counter) counter->setNewOp(LANG_RESOURCE("SCALING_PHASE_2", "Scaling Phase 2"));
 
-	fixed realMax = ((fixed(defn.landheightmax) - fixed(defn.landheightmin)) * generator.getRandFixed()) + 
+	fixed realMax = ((fixed(defn.landheightmax) - fixed(defn.landheightmin)) * generator.getRandFixed("HeightMapModifier")) + 
 		defn.landheightmin;
 	fixed per = realMax / max;
 
@@ -437,7 +437,7 @@ void HeightMapModifier::addCirclePeak(HeightMap &hmap, FixedVector &start,
 				fixed dist = distsq.sqrt();
 				fixed distRand = (dist / fixed(20)) * pt2;
 				if (distRand > pt2) distRand = pt2;
-				dist *= offsetGenerator.getRandFixed() * distRand + fixed(1) - (distRand / fixed(2));
+				dist *= offsetGenerator.getRandFixed("HeightMapModifier") * distRand + fixed(1) - (distRand / fixed(2));
 				if (dist < sizew)
 				{
 					fixed newHeight = (dist * fixed::XPI / sizew).cos() * sizeh / fixed(4) + sizeh / fixed(4);
@@ -483,18 +483,18 @@ void HeightMapModifier::generateTerrain(HeightMap &hmap,
 	fixed maskMultY = fixed(maskMap.getHeight()) / fixed(hmap.getMapHeight());
 
 	const int noItter = (fixed(defn.landhillsmax - defn.landhillsmin) *
-		generator.getRandFixed() + fixed(defn.landhillsmin)).asInt();
+		generator.getRandFixed("HeightMapModifier") + fixed(defn.landhillsmin)).asInt();
 
 	for (int i=0; i<noItter; i++)
 	{
 		if (counter) counter->setNewPercentage((100.0f * float(i)) / float(noItter));
 
 		// Choose settings for a random hemisphere
-		fixed sizew = (fixed(defn.landpeakwidthxmax) - fixed(defn.landpeakwidthxmin)) * generator.getRandFixed() 
+		fixed sizew = (fixed(defn.landpeakwidthxmax) - fixed(defn.landpeakwidthxmin)) * generator.getRandFixed("HeightMapModifier") 
 			+ fixed(defn.landpeakwidthxmin);
-		fixed sizew2 = (fixed(defn.landpeakwidthymax) - fixed(defn.landpeakwidthymin)) * generator.getRandFixed() 
+		fixed sizew2 = (fixed(defn.landpeakwidthymax) - fixed(defn.landpeakwidthymin)) * generator.getRandFixed("HeightMapModifier") 
 			+ fixed(defn.landpeakwidthymin) + sizew;
-		fixed sizeh = ((fixed(defn.landpeakheightmax) - fixed(defn.landpeakheightmin)) * generator.getRandFixed() 
+		fixed sizeh = ((fixed(defn.landpeakheightmax) - fixed(defn.landpeakheightmin)) * generator.getRandFixed("HeightMapModifier") 
 					   + defn.landpeakheightmin) * MAX(sizew, sizew2);
 
 		// Choose a border around this hemisphere
@@ -508,9 +508,9 @@ void HeightMapModifier::generateTerrain(HeightMap &hmap,
 		}
 
 		// Choose a point for this hemisphere
-		fixed sx = (generator.getRandFixed() * (fixed(hmap.getMapWidth()) - 
+		fixed sx = (generator.getRandFixed("HeightMapModifier") * (fixed(hmap.getMapWidth()) - 
 												(bordersizex * fixed(2)))) + bordersizex;
-		fixed sy = (generator.getRandFixed() * (fixed(hmap.getMapHeight()) - 
+		fixed sy = (generator.getRandFixed("HeightMapModifier") * (fixed(hmap.getMapHeight()) - 
 												(bordersizey * fixed(2)))) + bordersizey;
 
 		// Check if the point passes the mask
@@ -526,7 +526,7 @@ void HeightMapModifier::generateTerrain(HeightMap &hmap,
 			unsigned char maskPt = maskMap.getBits()[(bx * 3) + (by * maskMap.getWidth() * 3)];
 
 			//printf("%i %i %i %s\n", maskPt, bx, by, defn.mask.c_str());
-			ok = ((generator.getRandFixed() * fixed(255)) < fixed(maskPt));
+			ok = ((generator.getRandFixed("HeightMapModifier") * fixed(255)) < fixed(maskPt));
 			}
 		}
 

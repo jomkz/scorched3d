@@ -42,7 +42,7 @@ void Wind::newLevel()
 	{
 		case OptionsGame::WindRandom:
 			windSpeed_ = (
-				(random.getRandFixed() * fixed(true, 59000)).asInt()); // ie range 0->5
+				(random.getRandFixed("Wind") * fixed(true, 59000)).asInt()); // ie range 0->5
 			break;
 		case OptionsGame::Wind1:
 		case OptionsGame::Wind2:
@@ -54,11 +54,11 @@ void Wind::newLevel()
 			break;
 		case OptionsGame::WindBreezy:
 			windSpeed_ = (
-				(random.getRandFixed() * fixed(true, 29000)).asInt());// ie range 0->2);
+				(random.getRandFixed("Wind") * fixed(true, 29000)).asInt());// ie range 0->2);
 			break;
 		case OptionsGame::WindGale:
 			windSpeed_ = (
-				(random.getRandFixed() * fixed(true, 29000)).asInt() + 3); // ie range 3->5);
+				(random.getRandFixed("Wind") * fixed(true, 29000)).asInt() + 3); // ie range 3->5);
 			break;
 		case OptionsGame::WindNone:
 		default:
@@ -68,7 +68,7 @@ void Wind::newLevel()
 
 	if (windSpeed_ > 0)
 	{
-		fixed winAngle = random.getRandFixed() * 360;
+		fixed winAngle = random.getRandFixed("Wind") * 360;
 		windStartAngle_ = (winAngle);
 		windAngle_ = (winAngle);
 	}
@@ -110,16 +110,16 @@ void Wind::updateChangeTime()
 	switch (context_->getOptionsGame().getWindType().getValue()) 
 	{
 	case OptionsGame::WindChangeSomeTimes:
-		windChangeTime_ = random.getRandFixed() * 30 + 30;
+		windChangeTime_ = random.getRandFixed("Wind") * 30 + 30;
 		break;
 	case OptionsGame::WindChangeFrequently:
-		windChangeTime_ = random.getRandFixed() * 15 + 15;
+		windChangeTime_ = random.getRandFixed("Wind") * 15 + 15;
 		break;
 	case OptionsGame::WindChangeConstantly:
-		windChangeTime_ = random.getRandFixed() * 5 + 5;
+		windChangeTime_ = random.getRandFixed("Wind") * 5 + 5;
 		break;
 	case OptionsGame::WindChangeAlways:
-		windChangeTime_ = random.getRandFixed() * 2;
+		windChangeTime_ = random.getRandFixed("Wind") * 2;
 		break;
 	}
 }
@@ -136,7 +136,7 @@ void Wind::simulate(fixed frameTime)
 		RandomGenerator &random =
 			context_->getSimulator().getRandomGenerator();
 
-		fixed winAngle = random.getRandFixed() * 180 - 90;
+		fixed winAngle = random.getRandFixed("Wind") * 180 - 90;
 		winAngle = fixed(1) - winAngle.cos();
 		winAngle *= 25;
 		windAngle_ = windStartAngle_ + winAngle;

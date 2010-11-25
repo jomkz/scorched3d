@@ -76,8 +76,8 @@ void WeaponNapalm::fireWeapon(ScorchedContext &context,
 	RandomGenerator &random = context.getSimulator().getRandomGenerator();
 	for (int i=0; i<numberStreams_; i++)
 	{
-		int x = (position[0] + random.getRandFixed() * 4 - 2).asInt();
-		int y = (position[1] + random.getRandFixed() * 4 - 2).asInt();
+		int x = (position[0] + random.getRandFixed("WeaponNapalm") * 4 - 2).asInt();
+		int y = (position[1] + random.getRandFixed("WeaponNapalm") * 4 - 2).asInt();
 		addNapalm(context, weaponContext, x, y);
 	}
 

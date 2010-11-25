@@ -63,11 +63,11 @@ void PlacementTypeBounds::getPositions(ScorchedContext &context,
 		do
 		{
 			position.position[0] = 
-				generator.getRandFixed() * (maxbounds[0] - minbounds[0]) + minbounds[0];
+				generator.getRandFixed("PlacementTypeBounds") * (maxbounds[0] - minbounds[0]) + minbounds[0];
 			position.position[1] = 
-				generator.getRandFixed() * (maxbounds[1] - minbounds[1]) + minbounds[1];
+				generator.getRandFixed("PlacementTypeBounds") * (maxbounds[1] - minbounds[1]) + minbounds[1];
 			position.position[2] = 
-				generator.getRandFixed() * (maxbounds[2] - minbounds[2]) + minbounds[2];
+				generator.getRandFixed("PlacementTypeBounds") * (maxbounds[2] - minbounds[2]) + minbounds[2];
 		} 
 		while (context.getLandscapeMaps().getGroundMaps().
 			getInterpHeight(position.position[0], position.position[1]) >= position.position[2]);

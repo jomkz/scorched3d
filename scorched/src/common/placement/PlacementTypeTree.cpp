@@ -79,8 +79,8 @@ void PlacementTypeTree::getPositions(ScorchedContext &context,
 	for (int i=0; i<numclusters; i++)
 	{
 		// Get a random point
-		int x = (generator.getRandFixed() * 64).asInt();
-		int y = (generator.getRandFixed() * 64).asInt();
+		int x = (generator.getRandFixed("PlacementTypeTree") * 64).asInt();
+		int y = (generator.getRandFixed("PlacementTypeTree") * 64).asInt();
 
 		// Check point is in the correct height band
 		fixed height = 
@@ -103,12 +103,12 @@ void PlacementTypeTree::getPositions(ScorchedContext &context,
 		{
 			// Group other areas around this point that are likely to get trees
 			// Do a few groups
-			int n = (generator.getRandFixed() * 10).asInt() + 5;
+			int n = (generator.getRandFixed("PlacementTypeTree") * 10).asInt() + 5;
 			for (int j=0; j<n; j++)
 			{
 				// Check groups is within bounds
-				int newX = x + (generator.getRandFixed() * 8).asInt() - 4;
-				int newY = y + (generator.getRandFixed() * 8).asInt() - 4;
+				int newX = x + (generator.getRandFixed("PlacementTypeTree") * 8).asInt() - 4;
+				int newY = y + (generator.getRandFixed("PlacementTypeTree") * 8).asInt() - 4;
 				if (newX >= 0 && newX < 64 &&
 					newY >= 0 && newY < 64)
 				{
@@ -183,14 +183,14 @@ void PlacementTypeTree::getPositions(ScorchedContext &context,
 			counter->setNewPercentage(
 				MAX(float(i)/float(NoIterations), float(objectCount) / float(maxobjects)) *100.0f);
 
-		fixed lx = generator.getRandFixed() * fixed(groundMapWidth);
-		fixed ly = generator.getRandFixed() * fixed(groundMapHeight);
+		fixed lx = generator.getRandFixed("PlacementTypeTree") * fixed(groundMapWidth);
+		fixed ly = generator.getRandFixed("PlacementTypeTree") * fixed(groundMapHeight);
 		int rx = (lx.asInt());
 		int ry = (ly.asInt());
 		int nx = rx / treeMapMultWidth;
 		int ny = ry / treeMapMultHeight;
 		int r = objectMap[nx + 64 * ny];
-		int nr = (generator.getRandFixed() * 512).asInt();
+		int nr = (generator.getRandFixed("PlacementTypeTree") * 512).asInt();
 
 		if (nr < r)
 		{

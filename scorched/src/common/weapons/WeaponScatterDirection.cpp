@@ -69,11 +69,11 @@ void WeaponScatterDirection::fireWeapon(ScorchedContext &context,
 	RandomGenerator &random = context.getSimulator().getRandomGenerator();
 	FixedVector vel;
 	vel[0] += direction_[0] - directionOffset_[0] + 
-		directionOffset_[0] * 2 * random.getRandFixed();
+		directionOffset_[0] * 2 * random.getRandFixed("WeaponScatterDirection");
 	vel[1] += direction_[1] - directionOffset_[1] + 
-		directionOffset_[1] * 2 * random.getRandFixed();
+		directionOffset_[1] * 2 * random.getRandFixed("WeaponScatterDirection");
 	vel[2] += direction_[2] - directionOffset_[2] + 
-		directionOffset_[2] * 2 * random.getRandFixed();
+		directionOffset_[2] * 2 * random.getRandFixed("WeaponScatterDirection");
 
 	aimedWeapon_->fireWeapon(context, weaponContext, position, vel);
 

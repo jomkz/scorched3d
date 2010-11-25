@@ -201,9 +201,9 @@ FixedVector PlacementTankPosition::placeTank(unsigned int playerId, int team,
 	{
 		// Find a new position for the tank
 		fixed posX = fixed(arenaX) + (fixed(arenaWidth - tankBorder * 2) * 
-			generator.getRandFixed()) + fixed(tankBorder);
+			generator.getRandFixed("PlacementTankPosition")) + fixed(tankBorder);
 		fixed posY = fixed(arenaY) + (fixed(arenaHeight - tankBorder * 2) * 
-			generator.getRandFixed()) + fixed(tankBorder);
+			generator.getRandFixed("PlacementTankPosition")) + fixed(tankBorder);
 		fixed height = context.getLandscapeMaps().getGroundMaps().
 			getHeight(posX.asInt(), posY.asInt());
 		FixedVector normal = context.getLandscapeMaps().getGroundMaps().

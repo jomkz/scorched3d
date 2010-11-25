@@ -68,11 +68,11 @@ const char *TankAIStrings::getDeathLine(ScorchedContext &context)
 	const char *deathLine = 0;
 	fixed percentage = 
 		fixed(context.getOptionsGame().getComputersDeathTalk());
-	fixed talkPer = generator.getRandFixed() * 100;
+	fixed talkPer = generator.getRandFixed("TankAIStrings::getDeathLine1") * 100;
 	if (talkPer < percentage)
 	{
 		deathLine = deathLines_.getLines()
-			[generator.getRandUInt() % deathLines_.getLines().size()].c_str();
+			[generator.getRandUInt("TankAIStrings::getDeathLine2") % deathLines_.getLines().size()].c_str();
 	}
 
 	return deathLine;
@@ -84,11 +84,11 @@ const char *TankAIStrings::getAttackLine(ScorchedContext &context)
 	const char *attackLine = 0;
 	fixed percentage = 
 		fixed(context.getOptionsGame().getComputersAttackTalk());
-	fixed talkPer = generator.getRandFixed() * 100;
+	fixed talkPer = generator.getRandFixed("TankAIStrings::getAttackLine1") * 100;
 	if (talkPer < percentage)
 	{
 		attackLine = attackLines_.getLines()
-			[generator.getRandUInt() % attackLines_.getLines().size()].c_str();
+			[generator.getRandUInt("TankAIStrings::getAttackLine2") % attackLines_.getLines().size()].c_str();
 	}
 	
 	return attackLine;

@@ -62,7 +62,7 @@ void PlacementObjectRandom::createObject(ScorchedContext &context,
 	unsigned int &playerId,
 	PlacementType::Position &position)
 {
-	fixed totalWeight = generator.getRandFixed() * totalWeight_;
+	fixed totalWeight = generator.getRandFixed("PlacementObjectRandom") * totalWeight_;
 	fixed currentWeight = 0;
 
 	std::vector<RandomObject>::iterator itor;

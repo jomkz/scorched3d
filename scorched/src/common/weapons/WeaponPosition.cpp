@@ -82,11 +82,11 @@ void WeaponPosition::fireWeapon(ScorchedContext &context,
 
 	FixedVector newPosition;
 	newPosition[0] = position_[0] - positionOffset_[0] +
-		positionOffset_[0] * 2 * random.getRandFixed();
+		positionOffset_[0] * 2 * random.getRandFixed("WeaponPosition");
 	newPosition[1] = position_[1] - positionOffset_[1] +
-		positionOffset_[1] * 2 * random.getRandFixed();
+		positionOffset_[1] * 2 * random.getRandFixed("WeaponPosition");
 	newPosition[2] = position_[2] - positionOffset_[2] +		
-		positionOffset_[2] * 2 * random.getRandFixed();
+		positionOffset_[2] * 2 * random.getRandFixed("WeaponPosition");
 	
 	aimedWeapon_->fireWeapon(context, weaponContext, newPosition, velocity);
 

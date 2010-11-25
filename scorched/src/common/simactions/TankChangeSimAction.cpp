@@ -24,12 +24,14 @@
 #include <common/StatsLogger.h>
 #include <common/Logger.h>
 #include <common/ChannelManager.h>
+#include <tankai/TankAIStore.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
 #include <tank/TankContainer.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankModelContainer.h>
+#include <server/ScorchedServer.h>
 
 REGISTER_CLASS_SOURCE(TankChangeSimAction);
 
@@ -56,6 +58,27 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 	if (!tank || tank->getState().getState() == TankState::sLoading)
 	{
 		return true;
+	}
+
+	// Check the tank is the correct AI
+	if (0 != strcmp(message_.getPlayerType(), "Human"))
+	{
+		if (context.getServerMode())
+		{
+			TankAI *ai = ScorchedServer::instance()->getTankAIs().
+				getAIByName(message_.getPlayerType());
+			if (ai) tank->setTankAI(ai->createCopy(tank));
+		}
+		else
+		{
+			tank->setTankAI(0);
+		}
+		tank->setDestinationId(0);
+	}
+	else
+	{
+		tank->setDestinationId(message_.getDestinationId());
+		tank->setTankAI(0);
 	}
 
 	// Make sure no-one has the same name

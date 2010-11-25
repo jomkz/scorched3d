@@ -165,8 +165,9 @@ void Simulator::newLevel()
 			itor++)
 		{
 			Tank *tank = itor->second;
-			addSyncCheck(S3D::formatStringBuffer("Tank : %u %s %s - %s", 
-				tank->getPlayerId(), tank->getCStrName().c_str(), 
+			addSyncCheck(S3D::formatStringBuffer("Tank : %u:%u %s %s - %s", 
+				tank->getDestinationId(), tank->getPlayerId(),  
+				tank->getCStrName().c_str(), 
 				tank->getState().getSmallStateString(),
 				tank->getLife().getTargetPosition().asQuickString()));
 		}

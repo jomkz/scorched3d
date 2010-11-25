@@ -50,7 +50,7 @@ bool TankAISniperGuesser::guess(Tank *tank, Vector &target,
 		angleXYDegs, angleYZDegs, power,
 		checkIntersection))
 	{
-		fixed xyOffset = generator.getRandFixed() * fixed::fromFloat(offset);
+		fixed xyOffset = generator.getRandFixed("TankAISniperGuesser") * fixed::fromFloat(offset);
 		fixed yzOffset = fixed::fromFloat(offset) - xyOffset;
 
 		tank->getPosition().rotateGunXY(angleXYDegs + xyOffset, false);

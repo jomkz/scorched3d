@@ -213,12 +213,6 @@ void ServerMessageHandler::destroyPlayer(unsigned int tankId, const char *reason
 		removalTime = ScorchedServer::instance()->getOptionsGame().getRemoveTime();
 	}
 
-	// Make this player a computer controlled player
-	{
-		TankAI *ai = new TankAINone(tank->getPlayerId());
-		tank->setTankAI(ai); // Will automaticaly set the destinationId to 0
-	}
-
 	// Log the removal
 	StatsLogger::instance()->tankDisconnected(tank);
 

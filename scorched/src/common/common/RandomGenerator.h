@@ -29,8 +29,8 @@ class RandomGenerator
 public:
 	virtual ~RandomGenerator();
 
-	virtual unsigned int getRandUInt() = 0;
-	virtual fixed getRandFixed() = 0;
+	virtual unsigned int getRandUInt(const char *source) = 0;
+	virtual fixed getRandFixed(const char *source) = 0;
 };
 
 class ScorchedContext;
@@ -45,8 +45,8 @@ public:
 	void seed(unsigned int seed);
 	unsigned int getSeed();
 
-	virtual unsigned int getRandUInt();
-	virtual fixed getRandFixed();
+	virtual unsigned int getRandUInt(const char *source);
+	virtual fixed getRandFixed(const char *source);
 
 	bool writeMessage(NetBuffer &buffer);
 	bool readMessage(NetBufferReader &reader);

@@ -221,6 +221,15 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 	}
 #endif
 
+	if (context.getOptionsGame().getActionSyncCheck()) 
+	{
+		context.getSimulator().
+			addSyncCheck(S3D::formatStringBuffer("Tank : %u:%u %s %s", 
+				tank->getDestinationId(), tank->getPlayerId(),  
+				tank->getCStrName().c_str(), 
+				tank->getState().getSmallStateString()));
+	}
+
 	ChannelText text("info", 
 		"PLAYER_CONNECTED",
 		"Player connected [p:{0}]",

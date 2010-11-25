@@ -288,7 +288,7 @@ void Napalm::simulateAddEdge(int x, int y)
 
 	// Add this current point to the napalm map
 	RandomGenerator &random = context_->getSimulator().getRandomGenerator();
-	int offset = (random.getRandFixed() * 31).asInt();
+	int offset = (random.getRandFixed("Napalm") * 31).asInt();
 	NapalmEntry *newEntry = new NapalmEntry(x, y, offset, particleSet_);
 	napalmPoints_.push_back(newEntry);
 	napalmRANDPoints_.push_back(newEntry);
@@ -380,7 +380,7 @@ void Napalm::simulateAddEdge(int x, int y)
 		}
 		else if (heightL == heightR)
 		{
-			if (random.getRandUInt() % 2 == 0)
+			if (random.getRandUInt("Napalm") % 2 == 0)
 			{
 				heightLR = &heightL;
 				LR = -1;
@@ -406,7 +406,7 @@ void Napalm::simulateAddEdge(int x, int y)
 		}
 		else if (heightU == heightD)
 		{
-			if (random.getRandUInt() % 2 == 0)
+			if (random.getRandUInt("Napalm") % 2 == 0)
 			{
 				heightUD = &heightU;	
 				UD = +1;
@@ -437,7 +437,7 @@ void Napalm::simulateAddEdge(int x, int y)
 		{
 			if (*heightLR < height) 
 			{
-				if (random.getRandUInt() % 2 == 0)
+				if (random.getRandUInt("Napalm") % 2 == 0)
 				{
 					dir = eUD;
 				}

@@ -90,7 +90,7 @@ void WeaponRandomChoice::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
 	RandomGenerator &random = context.getSimulator().getRandomGenerator();
-	unsigned int randWeight = random.getRandUInt() % totalWeight_;
+	unsigned int randWeight = random.getRandUInt("WeaponRandomChoice") % totalWeight_;
 	unsigned int currentWeight = 0;
 
 	std::list<WeaponWeight>::iterator itor;

@@ -71,8 +71,8 @@ void PlacementTypeMask::getPositions(ScorchedContext &context,
 		if (i % 1000 == 0) if (counter) 
 			counter->setNewPercentage(float(i)/float(NoIterations)*100.0f);
 
-		fixed lx = generator.getRandFixed() * fixed(groundMapWidth);
-		fixed ly = generator.getRandFixed() * fixed(groundMapHeight);
+		fixed lx = generator.getRandFixed("PlacementTypeMask") * fixed(groundMapWidth);
+		fixed ly = generator.getRandFixed("PlacementTypeMask") * fixed(groundMapHeight);
 		
 		if (xsnap > 0) 
 		{

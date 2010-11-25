@@ -144,8 +144,8 @@ void WeaponRoller::fireWeapon(ScorchedContext &context,
 		position[2] += fixed(true, 1500);
 		
 		// Make a slightly different starting position
-		position[0] += random.getRandFixed() * 2 - 1;
-		position[1] += random.getRandFixed() * 2 - 1;
+		position[0] += random.getRandFixed("WeaponRoller") * 2 - 1;
+		position[1] += random.getRandFixed("WeaponRoller") * 2 - 1;
 		fixed minHeight = context.getLandscapeMaps().getGroundMaps().getInterpHeight(
 			position[0], position[1]) + 1;
 		if (position[2] < minHeight) position[2] = minHeight;
@@ -207,9 +207,9 @@ void WeaponRoller::addRoller(ScorchedContext &context,
 	}
 	else
 	{
-		newVelocity[0] = random.getRandFixed() - fixed(true, 5000);
-		newVelocity[1] = random.getRandFixed() - fixed(true, 5000);
-		newVelocity[2] = random.getRandFixed() * 2;
+		newVelocity[0] = random.getRandFixed("WeaponRoller") - fixed(true, 5000);
+		newVelocity[1] = random.getRandFixed("WeaponRoller") - fixed(true, 5000);
+		newVelocity[2] = random.getRandFixed("WeaponRoller") * 2;
 	}
 	
 	context.getActionController().addAction(

@@ -78,7 +78,7 @@ unsigned int FileRandomGenerator::getSeed()
 	return position_;
 }
 
-unsigned int FileRandomGenerator::getRandUInt()
+unsigned int FileRandomGenerator::getRandUInt(const char *source)
 {
 	unsigned int pos = position_ % bufferSize_;
 	position_++;
@@ -94,16 +94,17 @@ unsigned int FileRandomGenerator::getRandUInt()
 		context_->getOptionsGame().getActionRandomSyncCheck())
 	{
 		context_->getSimulator().addSyncCheck(
-			S3D::formatStringBuffer("Random: %u %u", 
+			S3D::formatStringBuffer("Random: %s %u %u", 
+				source,
 				position_, result));
 	}
 
 	return result;
 }
 
-fixed FileRandomGenerator::getRandFixed()
+fixed FileRandomGenerator::getRandFixed(const char *source)
 {
-	unsigned int rd = getRandUInt();
+	unsigned int rd = getRandUInt(source);
 	unsigned int fract = rd % 10000;
 	fixed result(true, fract);
 

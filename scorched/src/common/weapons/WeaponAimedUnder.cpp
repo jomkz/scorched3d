@@ -140,7 +140,7 @@ void WeaponAimedUnder::fireWeapon(ScorchedContext &context,
 	for (int i=0; i<warHeads_; i++)
 	{
 		// Random probablity
-		fixed dist = maxDist * random.getRandFixed();
+		fixed dist = maxDist * random.getRandFixed("WeaponAimedUnder");
 
 		// Find which tank fits this probability
 		Tank *shootAt = 0;
@@ -158,8 +158,8 @@ void WeaponAimedUnder::fireWeapon(ScorchedContext &context,
 		}			
 
 		// Calcuate the angle for the shot
-		fixed angleXYDegs = random.getRandFixed() * 360;
-		fixed angleYZDegs = random.getRandFixed() * 30 + 50;
+		fixed angleXYDegs = random.getRandFixed("WeaponAimedUnder") * 360;
+		fixed angleYZDegs = random.getRandFixed("WeaponAimedUnder") * 30 + 50;
 		fixed power = 1000;
 		if (shootAt)
 		{
@@ -171,9 +171,9 @@ void WeaponAimedUnder::fireWeapon(ScorchedContext &context,
 				shootAt->getPosition().getTankPosition(), -1, 
 				angleXYDegs, angleYZDegs, power);
 
-			angleXYDegs += (random.getRandFixed() * maxInacuracy_.getValue(context)) - 
+			angleXYDegs += (random.getRandFixed("WeaponAimedUnder") * maxInacuracy_.getValue(context)) - 
 				(maxInacuracy_.getValue(context) / 2);
-			angleYZDegs += (random.getRandFixed() * maxInacuracy_.getValue(context)) - 
+			angleYZDegs += (random.getRandFixed("WeaponAimedUnder") * maxInacuracy_.getValue(context)) - 
 				(maxInacuracy_.getValue(context) / 2);
 		}
 

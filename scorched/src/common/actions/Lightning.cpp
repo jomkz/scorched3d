@@ -188,9 +188,9 @@ void Lightning::dispaceDirection(FixedVector &direction,
 	FixedVector newdir;
 	while (breakCount++ < 1000)
 	{
-		newdir[0] = (generator.getRandFixed() - fixed(true, 5000)) * 2;
-		newdir[1] = (generator.getRandFixed() - fixed(true, 5000)) * 2;
-		newdir[2] = (generator.getRandFixed() - fixed(true, 5000)) * 2;
+		newdir[0] = (generator.getRandFixed("Lighting") - fixed(true, 5000)) * 2;
+		newdir[1] = (generator.getRandFixed("Lighting") - fixed(true, 5000)) * 2;
+		newdir[2] = (generator.getRandFixed("Lighting") - fixed(true, 5000)) * 2;
 		newdir.StoreNormalize();
 
 		fixed a = newdir[0] * direction[0] + 
@@ -218,7 +218,7 @@ void Lightning::generateLightning(int id, int depth, fixed size,
 
 	RandomGenerator &generator = context_->getSimulator().getRandomGenerator();
 	fixed length = weapon_->getSegLength() + 
-		weapon_->getSegVar() * generator.getRandFixed();
+		weapon_->getSegVar() * generator.getRandFixed("Lighting");
 	FixedVector end = start + direction * length;
 
 	// Add the new lightning segment
@@ -236,7 +236,7 @@ void Lightning::generateLightning(int id, int depth, fixed size,
 	damageTargets(segment.end, hurtMap);
 
 	// Rand posibility that we stop
-	if (depth > 1 && generator.getRandFixed() < 
+	if (depth > 1 && generator.getRandFixed("Lighting") < 
 		weapon_->getDeathProb())
 	{
 		segment.endsegment = true;
@@ -263,7 +263,7 @@ void Lightning::generateLightning(int id, int depth, fixed size,
 	}
 
 	// Make a new strand
-	if (generator.getRandFixed() <= 
+	if (generator.getRandFixed("Lighting") <= 
 		weapon_->getSplitProb() - fixed(depth - 1) * weapon_->getSplitVar())
     {
 		fixed newsize = size + weapon_->getSizeVar();

@@ -89,7 +89,7 @@ void WeaponMirv::fireWeapon(ScorchedContext &context,
 			diff[2] -= 1;
 			FixedVector perp = newDiff * diff;
 
-			newDiff += (perp * ((random.getRandFixed() * hspreadDist) - (hspreadDist * fixed(true, 5000))));
+			newDiff += (perp * ((random.getRandFixed("WeaponMirv") * hspreadDist) - (hspreadDist * fixed(true, 5000))));
 		}
 		newDiff[2] += (fixed(i - (noWarheads_ / 2)) / 
 			fixed(noWarheads_ / 2)) * vspreadDist_.getValue(context);

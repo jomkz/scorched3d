@@ -172,7 +172,7 @@ void TankLib::getShotTowardsPosition(ScorchedContext &context,
 	}
 
 	// Add some randomness to the power
-	power += (random.getRandFixed() * 200) - 100;
+	power += (random.getRandFixed("TankLib::getShotTowardsPosition") * 200) - 100;
 	if (power < 100) power = 100;
 
 	if (context.getSimulator().getWind().getWindOn())
@@ -186,7 +186,8 @@ void TankLib::getShotTowardsPosition(ScorchedContext &context,
 		ndirection = ndirection.Normalize();
 		ndirection = ndirection.get2DPerp();
 		fixed windoffsetLR = context.getSimulator().getWind().getWindDirection().dotP(ndirection);
-		angleXYDegs += windoffsetLR * distance2D * (fixed(true, 1200) + random.getRandFixed()) * fixed(true, 400) * windMag;
+		angleXYDegs += windoffsetLR * distance2D * (fixed(true, 1200) + 
+			random.getRandFixed("TankLib::getShotTowardsPosition")) * fixed(true, 400) * windMag;
 
 		fixed windoffsetFB = context.getSimulator().getWind().getWindDirection().dotP(direction.Normalize());
 		windoffsetFB /= 10;

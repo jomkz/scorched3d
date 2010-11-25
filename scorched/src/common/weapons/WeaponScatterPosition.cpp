@@ -92,8 +92,8 @@ void WeaponScatterPosition::fireWeapon(ScorchedContext &context,
 	{
 		ok = true;
 
-		pos[0] = p[0] + (random.getRandFixed() * scatterWidth) - (scatterWidth / 2);
-		pos[1] = p[1] + (random.getRandFixed() * scatterHeight) - (scatterHeight / 2);
+		pos[0] = p[0] + (random.getRandFixed("WeaponScatterPosition") * scatterWidth) - (scatterWidth / 2);
+		pos[1] = p[1] + (random.getRandFixed("WeaponScatterPosition") * scatterHeight) - (scatterHeight / 2);
 		pos[2] = p[2];
 		if (landheight_)
 		{
