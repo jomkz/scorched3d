@@ -75,10 +75,33 @@ void ClientStartGameHandler::startGame(TankStartMoveSimAction *action)
 	// Set the camera back to this players camera position
 	if (OptionsDisplay::instance()->getStorePlayerCamera())
 	{
-		MainCamera::instance()->getTarget().getCamera().setLookAt(current->getCamera().getCameraLookAt());
-		Vector rotation = current->getCamera().getCameraRotation();
-		MainCamera::instance()->getTarget().getCamera().movePosition(rotation[0], rotation[1], rotation[2]);
-		MainCamera::instance()->getTarget().setCameraType((TargetCamera::CamType) current->getCamera().getCameraType());
+		int counter = 0;
+		unsigned int currentDestinationId = ScorchedClient::instance()->
+			getTankContainer().getCurrentDestinationId();
+		std::map<unsigned int, Tank *> &tanks = ScorchedClient::instance()->
+			getTankContainer().getAllTanks();
+		std::map<unsigned int, Tank *>::iterator itor;
+		for (itor = tanks.begin();
+			itor != tanks.end();
+			itor++)
+		{
+			Tank *tank = itor->second;
+			if (tank->getDestinationId() == currentDestinationId &&
+				tank->getAlive())
+			{
+				counter++;
+			}
+		}
+
+		// Only reset the position if there is more than one human player
+		// from the same destination
+		if (counter > 1)
+		{
+			MainCamera::instance()->getTarget().getCamera().setLookAt(current->getCamera().getCameraLookAt());
+			Vector rotation = current->getCamera().getCameraRotation();
+			MainCamera::instance()->getTarget().getCamera().movePosition(rotation[0], rotation[1], rotation[2]);
+			MainCamera::instance()->getTarget().setCameraType((TargetCamera::CamType) current->getCamera().getCameraType());
+		}
 	}
 
 	// Ensure that the landscape is set to the "proper" texture

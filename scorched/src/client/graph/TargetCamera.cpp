@@ -291,7 +291,8 @@ void TargetCamera::moveCamera()
 			itor++)
 		{
 			Tank *tank = itor->second;
-			if (tank->getDestinationId() == currentDestinationId)
+			if (tank->getDestinationId() == currentDestinationId &&
+				tank->getAlive())
 			{
 				if (!currentTank) currentTank = tank;
 				else
