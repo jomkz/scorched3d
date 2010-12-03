@@ -73,31 +73,29 @@ void DeformTextures::deformLandscape(Vector &pos, float radius,
 		{
             int mapY1 = int(posY);
 			int mapY2 = mapY1 + 1;
+			if (mapY2 >= idiam) mapY2 = mapY1;
+
 			posX = 0.0f;
 			for (int a=0; a<w; a++, posX+=posXinc)
 			{
 				int mapX1 = int(posX);
 				int mapX2 = mapX1 + 1;
+				if (mapX2 >= idiam) mapX2 = mapY1;
+
 				if (mapX1 < idiam && mapY1 < idiam) 
 				{
-					float mag = map.map[mapX1][mapY1].asFloat();
-					float magx = mag;
-					if (mapX2 < idiam)
-					{
-						magx = map.map[mapX2][mapY1].asFloat();
-					}
-					float magy = mag;
-					if (mapY2 < idiam)
-					{
-						magy = map.map[mapX2][mapY1].asFloat();
-					}
+					float magx1y1 = map.map[mapX1][mapY1].asFloat();
+					float magx2y1 = map.map[mapX2][mapY1].asFloat();
+					float magx1y2 = map.map[mapX1][mapY2].asFloat();
+					float magx2y2 = map.map[mapX2][mapY2].asFloat();
+
 					float dx = posX - float(mapX1);
 					float dy = posY - float(mapY1);
 
-					float xmag = (magx * dx) + (mag * 1.0f - dx);
-					float ymag = (magy * dy) + (mag * 1.0f - dy);
-					mag = (xmag + ymag) / 2.0f;
+					float ymag1 = (magx1y2 * dy) + (magx1y1 * (1.0f - dy));
+					float ymag2 = (magx2y2 * dy) + (magx2y1 * (1.0f - dy));
 
+					float mag = (ymag2 * dx) + (ymag1 * (1.0f - dx));
 					if (mag > 0.0f)
 					{
 						int posX = (x + a) % scorchedMap.getWidth();
