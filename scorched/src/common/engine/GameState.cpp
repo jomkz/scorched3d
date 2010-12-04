@@ -63,9 +63,9 @@ GameState::GameState(MainLoop *mainLoop, const char *name) :
 	name_(name),
 	fakeMiddleButton_(true),
 	currentMouseState_(0),
-	pendingStimulus_(UINT_MAX),
 	currentState_(UINT_MAX),
 	currentEntry_(0),
+	stateCount_(0),
 	currentStateI_(0),
 	currentMouseX_(0), currentMouseY_(0),
 	mouseDoubleX_(0), mouseDoubleY_(0),
@@ -99,8 +99,9 @@ void GameState::mouseWheel(short z)
 	{
 		GameStateEntry *thisEntry = currentEntry_;
 		unsigned thisState = currentState_;
+		unsigned thisStateCount = stateCount_;
 
-		StateIList *currentList = &currentEntry_->subMouseWheelList;
+		StateIList *currentList = &thisEntry->subMouseWheelList;
 		if (!currentList->empty())
 		{
 			StateIList::iterator subItor;
@@ -111,7 +112,7 @@ void GameState::mouseWheel(short z)
 				(*subItor)->mouseWheel(thisState, 
 					currentMouseX_, currentMouseY_, 
 					(int) z, skipRest);
-				if (checkStimulate()) return;
+				if (thisStateCount != stateCount_) return;
 				if (skipRest) break;
 			}
 		}
@@ -133,7 +134,7 @@ void GameState::mouseMove(int x, int y)
 			int diffY = mouseMDragY_ - y; mouseMDragY_ = y;
 
 			mouseMoveCall(thisState, MouseButtonMiddle, 
-						  currentEntry_->subMouseDragMiddleList,
+						  thisEntry->subMouseDragMiddleList,
 					x, y, diffX, diffY);
 		}
 
@@ -144,7 +145,7 @@ void GameState::mouseMove(int x, int y)
 			int diffY = mouseMDragY_ - y; mouseMDragY_ = y;
 
 			mouseMoveCall(thisState, MouseButtonMiddle, 
-						  currentEntry_->subMouseDragMiddleList,
+						  thisEntry->subMouseDragMiddleList,
 					x, y, diffX, diffY);
 		}
 		else
@@ -155,7 +156,7 @@ void GameState::mouseMove(int x, int y)
 				int diffY = mouseLDragY_ - y; mouseLDragY_ = y;
 
 				mouseMoveCall(thisState, MouseButtonLeft, 
-							  currentEntry_->subMouseDragLeftList,
+							  thisEntry->subMouseDragLeftList,
 						x, y, diffX, diffY);
 			}
 			if (MouseButtonRight & currentMouseState_)
@@ -164,7 +165,7 @@ void GameState::mouseMove(int x, int y)
 				int diffY = mouseRDragY_ - y; mouseRDragY_ = y;
 
 				mouseMoveCall(thisState, MouseButtonRight, 
-							  currentEntry_->subMouseDragRightList,
+							  thisEntry->subMouseDragRightList,
 						x, y, diffX, diffY);
 			}
 		}
@@ -185,7 +186,6 @@ void GameState::mouseMoveCall(const unsigned state, MouseButton button,
 			subItor++)
 		{
 			(*subItor)->mouseDrag(state, button, mx, my, dx, dy, skipRest);
-			if (checkStimulate()) return;
 			if (skipRest) break;
 		}
 	}
@@ -228,6 +228,7 @@ void GameState::mouseUpDown(MouseButton button, bool down, int x, int y)
 	{
 		GameStateEntry *thisEntry = currentEntry_;
 		unsigned thisState = currentState_;
+		unsigned thisStateCount = stateCount_;
 
 		StateIList *currentList = 0;
 		if (down)
@@ -240,15 +241,15 @@ void GameState::mouseUpDown(MouseButton button, bool down, int x, int y)
 			{
 			case MouseButtonRight:
 				mouseRDragX_ = x; mouseRDragY_ = y;
-				currentList = &currentEntry_->subMouseDownRightList;
+				currentList = &thisEntry->subMouseDownRightList;
 				break;
 			case MouseButtonMiddle:
 				mouseMDragX_ = x; mouseMDragY_ = y;
-				currentList = &currentEntry_->subMouseDownMiddleList;
+				currentList = &thisEntry->subMouseDownMiddleList;
 				break;
 			default:
 				mouseLDragX_ = x; mouseLDragY_ = y;
-				currentList = &currentEntry_->subMouseDownLeftList;
+				currentList = &thisEntry->subMouseDownLeftList;
 				break;
 			}
 
@@ -266,20 +267,20 @@ void GameState::mouseUpDown(MouseButton button, bool down, int x, int y)
 				(MouseButtonLeft & currentMouseState_ && 
 				MouseButtonRight & currentMouseState_))
 			{
-				currentList = &currentEntry_->subMouseUpMiddleList;
+				currentList = &thisEntry->subMouseUpMiddleList;
 			}
 			else
 			{
 				switch(button)
 				{
 				case MouseButtonRight:
-					currentList = &currentEntry_->subMouseUpRightList;
+					currentList = &thisEntry->subMouseUpRightList;
 					break;
 				case MouseButtonMiddle:
-					currentList = &currentEntry_->subMouseUpMiddleList;
+					currentList = &thisEntry->subMouseUpMiddleList;
 					break;
 				default:
-					currentList = &currentEntry_->subMouseUpLeftList;
+					currentList = &thisEntry->subMouseUpLeftList;
 					break;
 				}
 			}
@@ -305,7 +306,7 @@ void GameState::mouseUpDown(MouseButton button, bool down, int x, int y)
 				{
 					(*subItor)->mouseUp(thisState, button, x, y, skipRest);
 				}
-				if (checkStimulate()) return;
+				if (thisStateCount != stateCount_) return;
 				if (skipRest) break;
 			}
 		}
@@ -314,11 +315,11 @@ void GameState::mouseUpDown(MouseButton button, bool down, int x, int y)
 
 void GameState::simulate(float simTime)
 {
-	if (checkStimulate()) return;
 	if (currentEntry_)
 	{
 		GameStateEntry *thisEntry = currentEntry_;
 		unsigned thisState = currentState_;
+		unsigned thisStateCount = stateCount_;
 
 		if (stateTimeLogging_)
 		{
@@ -342,7 +343,7 @@ void GameState::simulate(float simTime)
 				GameStateI *stateI = (*subItor);
 				currentStateI_ = stateI;
 				stateI->simulate(thisState, simTime);
-				if (checkStimulate()) return;
+				if (thisStateCount != stateCount_) return;
 
 				timers_[timerCount % 50].simulateTime += 
 					timerClock_.getTicksDifference();
@@ -353,7 +354,7 @@ void GameState::simulate(float simTime)
 			// needs to up to date with respect to all other
 			// changes made in the simulate loop
 			itor->current->simulate(thisState, simTime);
-			if (checkStimulate()) return;
+			if (thisStateCount != stateCount_) return;
 		}
 
 		if (!thisEntry->subKeyList.empty())
@@ -376,7 +377,7 @@ void GameState::simulate(float simTime)
 			{
 				(*subItor)->keyboardCheck(thisState, simTime, buffer, keyState, 
 					history, historySize, skipRest);
-				if (checkStimulate()) return;
+				if (thisStateCount != stateCount_) return;
 				if (skipRest) break;
 			}
 		}
@@ -399,7 +400,7 @@ void GameState::simulate(float simTime)
 					setState(itor->second);
 					return;
 				}
-				if (checkStimulate()) return;
+				if (thisStateCount != stateCount_) return;
 			}
 		}
 	}
@@ -412,6 +413,7 @@ void GameState::draw()
 	{
 		GameStateEntry *thisEntry = currentEntry_;
 		unsigned thisState = currentState_;
+		unsigned thisStateCount = stateCount_;
 
 		timerClock_.getTicksDifference();
 		int timerCount = 0;
@@ -431,7 +433,7 @@ void GameState::draw()
 				GameStateI *stateI = (*subItor);
 				currentStateI_ = stateI;
 				stateI->draw(thisState);
-				if (checkStimulate()) return;
+				if (thisStateCount != stateCount_) return;
 
 				timers_[timerCount % 50].drawTime += 
 					timerClock_.getTicksDifference();
@@ -450,9 +452,9 @@ void GameState::setState(const unsigned state)
 
 	clearTimers();
 
+	stateCount_++;
 	currentState_ = state;
 	currentEntry_ = 0;
-	pendingStimulus_ = UINT_MAX;
 	std::map<unsigned, GameStateEntry>::iterator itor = stateList_.find(state);
 	if (itor != stateList_.end())
 	{
@@ -472,8 +474,6 @@ void GameState::setState(const unsigned state)
 				s->enterState(thisState);
 			}
 		}
-
-		if (checkStimulate()) return;
 	}
 	else
 	{
@@ -489,30 +489,6 @@ void GameState::setState(const unsigned state)
 	}
 }
 
-bool GameState::checkStimulate()
-{
-	if (pendingStimulus_ != UINT_MAX)
-	{
-		std::map<unsigned, unsigned>::iterator itor = 
-			currentEntry_->stimList.find(pendingStimulus_);
-		if (itor != currentEntry_->stimList.end())
-		{
-			pendingStimulus_ = UINT_MAX;
-			setState(itor->second);
-			return true;
-		}
-		else
-		{
-			S3D::dialogExit("Scorched3D", S3D::formatStringBuffer(
-				"%s: Failed to find stimulus %i in state %i", 
-				name_.c_str(),
-				pendingStimulus_, currentState_));
-		}
-	}
-
-	return false;
-}
-
 void GameState::stimulate(const unsigned stimulus)
 {
 	if (stateLogging_)
@@ -520,8 +496,20 @@ void GameState::stimulate(const unsigned stimulus)
 		Logger::log(S3D::formatStringBuffer("%s::stimulate(%i)", name_.c_str(), stimulus));
 	}
 
-	pendingStimulus_ = stimulus;
-	checkStimulate();
+	std::map<unsigned, unsigned>::iterator itor = 
+		currentEntry_->stimList.find(stimulus);
+	if (itor != currentEntry_->stimList.end())
+	{
+		setState(itor->second);
+		return;
+	}
+	else
+	{
+		S3D::dialogExit("Scorched3D", S3D::formatStringBuffer(
+			"%s: Failed to find stimulus %i in state %i", 
+			name_.c_str(),
+			stimulus, currentState_));
+	}
 }
 
 GameState::GameStateEntry* GameState::getEntry(const unsigned state)

@@ -177,12 +177,12 @@ protected:
 		StateIList enterStateList;
 	};
 
+	unsigned stateCount_;
 	unsigned currentState_; 
 	GameStateI *currentStateI_;
 	GameStateEntry *currentEntry_; 
 	std::map<unsigned, GameStateEntry> stateList_;
 	std::string name_;
-	unsigned pendingStimulus_;
 	bool fakeMiddleButton_;
 	bool stateLogging_;
 	bool stateTimeLogging_;
@@ -193,7 +193,6 @@ protected:
 	Clock doubleClickClock_;
 	TimerInfo timers_[50];
 	MainLoop *mainLoop_;
-	bool checkStimulate();
 
 	// Dragging stuff
 	// Up or down for each button (bit field)

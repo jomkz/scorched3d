@@ -30,6 +30,7 @@
 #include <GLW/GLWTab.h>
 #include <GLW/GLWDropDownText.h>
 
+class Tank;
 class InventoryDialog : public GLWWindow,
 						public GLWButtonI,
 						public GLWDropDownI
@@ -55,6 +56,7 @@ protected:
 	GLWPanel *topPanel_;
 	GLWDropDownText *sortDropDown_;
 
+	Tank *getCurrentTank();
 	void setupWindow();
 	void playerRefresh();
 	void addPlayerName();

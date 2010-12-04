@@ -33,6 +33,7 @@
 #include <weapons/AccessoryStore.h>
 #include <tank/TankContainer.h>
 #include <tank/TankScore.h>
+#include <tank/TankState.h>
 #include <tank/TankAccessories.h>
 #include <stdio.h>
 
@@ -132,7 +133,7 @@ void InventoryDialog::addPlayerName()
 {
 	topPanel_->clear();
 
-	Tank *tank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+	Tank *tank = getCurrentTank();
 	if (!tank) return;
 
 	topPanel_->addWidget(new GLWFlag(tank->getColor(), 5, 15, 60));
@@ -151,7 +152,7 @@ void InventoryDialog::addPlayerWeapons()
 
 	int height = 10;
 
-	Tank *tank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+	Tank *tank = getCurrentTank();
 	if (!tank) return;
 
 	std::list<Accessory *> tankAccessories;
@@ -190,8 +191,7 @@ void InventoryDialog::playerRefresh()
 
 void InventoryDialog::windowInit(const unsigned state)
 {
-	Tank *tank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
-	if (tank)
+	if (GLWWindowManager::instance()->windowVisible(getId()))
 	{
 		playerRefresh();
 	}
@@ -205,3 +205,33 @@ void InventoryDialog::buttonDown(unsigned int id)
 	}
 }
 
+Tank *InventoryDialog::getCurrentTank()
+{
+	Tank *currentTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+	if (!currentTank) 
+	{
+		currentTank = 0;
+		unsigned int currentDestinationId = ScorchedClient::instance()->
+			getTankContainer().getCurrentDestinationId();
+		std::map<unsigned int, Tank *> &tanks = ScorchedClient::instance()->
+			getTankContainer().getAllTanks();
+		std::map<unsigned int, Tank *>::iterator itor;
+		for (itor = tanks.begin();
+			itor != tanks.end();
+			itor++)
+		{
+			Tank *tank = itor->second;
+			if (tank->getDestinationId() == currentDestinationId &&
+				tank->getState().getTankPlaying())
+			{
+				if (!currentTank) currentTank = tank;
+				else
+				{
+					currentTank = 0;
+					break;
+				}
+			}
+		}
+	}
+	return currentTank;
+}
