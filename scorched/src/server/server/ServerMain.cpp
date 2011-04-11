@@ -69,11 +69,14 @@ static Clock serverTimer;
 
 static void serverMain(ProgressCounter *counter)
 {
-	// Create the server states
-	if (!ScorchedServer::instance()->startServer(
+	ScorchedServerSettingsOptions settings(
 		ServerParams::instance()->getServerFile(),
 		ServerParams::instance()->getRewriteOptions(),
-		ServerParams::instance()->getWriteFullOptions(),
+		ServerParams::instance()->getWriteFullOptions());
+
+	// Create the server states
+	if (!ScorchedServer::instance()->startServer(
+		settings,
 		false, counter)) exit(64);
 
 	// Try to start the server

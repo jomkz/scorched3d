@@ -110,6 +110,7 @@
     <ClCompile Include="..\..\common\simactions\NextTurnSimAction.cpp" />
     <ClCompile Include="..\..\common\simactions\TankBuyingSimAction.cpp" />
     <ClCompile Include="..\igd\igd.cpp" />
+    <ClCompile Include="..\server\ScorchedServerSettings.cpp" />
     <ClCompile Include="..\server\ServerAuthHandlerStore.cpp" />
     <ClCompile Include="..\server\ServerHandlers.cpp" />
     <ClCompile Include="..\server\ServerTankChangeHandler.cpp" />
@@ -627,6 +628,7 @@
     <ClInclude Include="..\..\common\simactions\TankBuyingSimAction.h" />
     <ClInclude Include="..\igd\igd.h" />
     <ClInclude Include="..\server\ScorchedServer.h" />
+    <ClInclude Include="..\server\ScorchedServerSettings.h" />
     <ClInclude Include="..\server\ServerAdminCommon.h" />
     <ClInclude Include="..\server\ServerAdminHandler.h" />
     <ClInclude Include="..\server\ServerAdminSessions.h" />

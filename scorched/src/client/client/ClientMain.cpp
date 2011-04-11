@@ -53,7 +53,6 @@
 #include <dialogs/BackdropDialog.h>
 #include <dialogs/ConnectDialog.h>
 #include <server/ScorchedServer.h>
-#include <engine/SaveGame.h>
 #include <console/ConsoleFileReader.h>
 #include <console/Console.h>
 #include <GLW/GLWWindowManager.h>
@@ -203,26 +202,39 @@ static bool initClient()
 	// Start the server (if required)
 	if (!ClientParams::instance()->getConnectedToServer())
 	{
-		std::string clientFile = ClientParams::instance()->getClientFile();
-		if (ClientParams::instance()->getStartCustom())
-		{
-			clientFile = S3D::getSettingsFile("singlecustom.xml");
-		}
+		ScorchedServerSettings *settings = 0;
 
-		// If not load the client settings file
-		if (!S3D::fileExists(clientFile.c_str()))
+		if (ClientParams::instance()->getSaveFile()[0])
 		{
-			S3D::dialogExit(scorched3dAppName, S3D::formatStringBuffer(
-				"Client file \"%s\" does not exist.",
-				clientFile.c_str()));
+			// Load the saved game state (settings)
+			settings = new ScorchedServerSettingsSave(ClientParams::instance()->getSaveFile());
+		}
+		else
+		{
+			std::string clientFile = ClientParams::instance()->getClientFile();
+			if (ClientParams::instance()->getStartCustom())
+			{
+				clientFile = S3D::getSettingsFile("singlecustom.xml");
+			}
+
+			// If not load the client settings file
+			if (!S3D::fileExists(clientFile.c_str()))
+			{
+				S3D::dialogExit(scorched3dAppName, S3D::formatStringBuffer(
+					"Client file \"%s\" does not exist.",
+					clientFile.c_str()));
+			}
+
+			settings = new ScorchedServerSettingsOptions(clientFile,
+				ClientParams::instance()->getRewriteOptions(),
+				ClientParams::instance()->getWriteFullOptions());
 		}
 
 		if (!ScorchedServer::instance()->startServer(
-			clientFile,
-			ClientParams::instance()->getRewriteOptions(),
-			ClientParams::instance()->getWriteFullOptions(),
+			*settings,
 			true,
 			&progressCounter)) return false;
+		delete settings;
 	}
 
 	ConnectDialog::instance()->start();
@@ -252,15 +264,6 @@ static bool startClientInternal()
 				"Client read saved game file \"%s\" does not exist.",
 				ClientParams::instance()->getSaveFile()),
 				false);
-		}
-
-		// Load the saved game state (settings)
-		if (!SaveGame::loadState(ClientParams::instance()->getSaveFile()))
-		{
-			S3D::dialogExit(scorched3dAppName, S3D::formatStringBuffer(
-				"Cannot load save file \"%s\".",
-				ClientParams::instance()->getSaveFile()), 
-				false);			
 		}
 
 		return initClient();

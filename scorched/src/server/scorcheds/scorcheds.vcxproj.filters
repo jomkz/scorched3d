@@ -1455,6 +1455,9 @@
     <ClCompile Include="..\igd\igd.cpp">
       <Filter>igd</Filter>
     </ClCompile>
+    <ClCompile Include="..\server\ScorchedServerSettings.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -2836,6 +2839,9 @@
     </ClInclude>
     <ClInclude Include="..\igd\igd.h">
       <Filter>igd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\server\ScorchedServerSettings.h">
+      <Filter>server</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

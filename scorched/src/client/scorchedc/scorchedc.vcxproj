@@ -452,6 +452,7 @@
     <ClCompile Include="..\..\common\XML\XMLParser.cpp" />
     <ClCompile Include="..\..\common\XML\XMLStringBuffer.cpp" />
     <ClCompile Include="..\..\server\igd\igd.cpp" />
+    <ClCompile Include="..\..\server\server\ScorchedServerSettings.cpp" />
     <ClCompile Include="..\..\server\server\ServerAuthHandlerStore.cpp" />
     <ClCompile Include="..\..\server\server\ServerHandlers.cpp" />
     <ClCompile Include="..\..\server\server\ServerTankChangeHandler.cpp" />
@@ -1191,6 +1192,7 @@
     <ClInclude Include="..\..\common\XML\XMLParser.h" />
     <ClInclude Include="..\..\common\XML\XMLStringBuffer.h" />
     <ClInclude Include="..\..\server\igd\igd.h" />
+    <ClInclude Include="..\..\server\server\ScorchedServerSettings.h" />
     <ClInclude Include="..\..\server\server\ServerAuthHandlerStore.h" />
     <ClInclude Include="..\..\server\server\ServerHandlers.h" />
     <ClInclude Include="..\..\server\server\ServerTankChangeHandler.h" />

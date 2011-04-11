@@ -111,9 +111,9 @@ bool SaveGame::loadTargets(const std::string &fileName)
 		itor++)
 	{
 		Tank *tank = (*itor).second;
-		if (tank->getDestinationId() != 0)
+		if (tank->getDestinationId() == 0)
 		{
-			tank->getState().setState(TankState::sLoading);
+			tank->getState().setState(TankState::sDead);
 		}
 	}
 

@@ -38,6 +38,7 @@
 #include <common/Logger.h>
 #include <engine/ModFiles.h>
 #include <engine/ActionController.h>
+#include <engine/SaveGame.h>
 #include <tank/TankDeadContainer.h>
 #include <tank/TankContainer.h>
 #include <tank/TankModelStore.h>
@@ -70,8 +71,7 @@ ScorchedServer *ScorchedServer::instance()
 	return instance_;
 }
 
-bool ScorchedServer::startServer(const std::string &settingsFile, 
-	bool rewriteOptions, bool writeFullOptions,
+bool ScorchedServer::startServer(const ScorchedServerSettings &settings, 
 	bool local, ProgressCounter *counter)
 {
 #ifndef S3D_SERVER
@@ -89,9 +89,7 @@ bool ScorchedServer::startServer(const std::string &settingsFile,
 	instance_ = instanceLock;
 	instanceLock = 0;
 
-	started_ = instance_->startServerInternal(settingsFile, 
-		rewriteOptions, writeFullOptions,
-		local, counter);
+	started_ = instance_->startServerInternal(settings, local, counter);
 	return started_;
 }
 
@@ -173,8 +171,7 @@ ServerConnectAuthHandler &ScorchedServer::getServerConnectAuthHandler()
 	return serverHandlers_->getServerConnectAuthHandler();
 }
 
-bool ScorchedServer::startServerInternal(const std::string &settingsFile, 
-	bool rewriteOptions, bool writeFullOptions,
+bool ScorchedServer::startServerInternal(const ScorchedServerSettings &settings, 
 	bool local, ProgressCounter *counter)
 {
 	Logger::log(S3D::formatStringBuffer("Scorched3D - Version %s (%s) - %s",
@@ -182,13 +179,36 @@ bool ScorchedServer::startServerInternal(const std::string &settingsFile,
 		S3D::ScorchedProtocolVersion.c_str(), 
 		S3D::ScorchedBuildTime.c_str()));
 
-	// Load options
-	getOptionsGame().getMainOptions().readOptionsFromFile(settingsFile);
-	if (rewriteOptions)
+	std::string settingsType = ((ScorchedServerSettings &) settings).type();
+	if (settingsType == "FILE")
 	{
-		getOptionsGame().getMainOptions().writeOptionsToFile(
-			settingsFile,
-			writeFullOptions);
+		ScorchedServerSettingsOptions &options = (ScorchedServerSettingsOptions &) settings;
+
+		// Load options
+		getOptionsGame().getMainOptions().readOptionsFromFile(options.settingsFile_);
+		if (options.rewriteOptions_)
+		{
+			getOptionsGame().getMainOptions().writeOptionsToFile(
+				options.settingsFile_,
+				options.writeFullOptions_);
+		}
+	}
+	else if (settingsType == "SAVE")
+	{
+		ScorchedServerSettingsSave &options = (ScorchedServerSettingsSave &) settings;
+
+		// Load the saved game state (settings)
+		if (!SaveGame::loadState(options.saveFile_))
+		{
+			S3D::dialogExit("Scorched3D", S3D::formatStringBuffer(
+				"Cannot load save file \"%s\".",
+				options.saveFile_), 
+				false);			
+		}
+	}
+	else
+	{
+		S3D::dialogExit("Scorched3D", "ScorchedServer::startServerInternal - Unknown settings type");
 	}
 
 	// Setup the message handling classes

@@ -22,6 +22,7 @@
 #define __INCLUDE_ScorchedServerh_INCLUDE__
 
 #include <engine/ScorchedContext.h>
+#include <server/ScorchedServerSettings.h>
 #include <string>
 
 class ProgressCounter;
@@ -50,8 +51,7 @@ class ScorchedServer : public ScorchedContext
 public:
 	static ScorchedServer *instance();
 
-	static bool startServer(const std::string &settingsFile, 
-		bool rewriteOptions, bool writeFullOptions,
+	static bool startServer(const ScorchedServerSettings &settings, 
 		bool local, ProgressCounter *counter);
 	static void stopServer();
 	static bool serverStarted() { return started_; }
@@ -104,8 +104,7 @@ protected:
 	EconomyStore *economyStore_;
 
 	void checkSettings();
-	bool startServerInternal(const std::string &settingsFile, 
-		bool rewriteOptions, bool writeFullOptions,
+	bool startServerInternal(const ScorchedServerSettings &settings, 
 		bool local, ProgressCounter *counter);
 
 private:

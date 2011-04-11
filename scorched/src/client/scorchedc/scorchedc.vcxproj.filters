@@ -2328,6 +2328,9 @@
     <ClCompile Include="..\dialogs\NetworkChatDialog.cpp">
       <Filter>dialogs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\server\server\ScorchedServerSettings.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -4555,6 +4558,9 @@
     </ClInclude>
     <ClInclude Include="..\dialogs\NetworkChatDialog.h">
       <Filter>dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ScorchedServerSettings.h">
+      <Filter>server</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
