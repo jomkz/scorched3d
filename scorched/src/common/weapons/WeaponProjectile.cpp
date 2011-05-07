@@ -99,7 +99,8 @@ bool WeaponProjectile::parseXML(AccessoryCreateContext &context, XMLNode *access
 	accessoryNode->getNamedChild("animatesmoketexture", animateSmokeTexture, false);
 	if (animateFlameTexture) animateFlameTexture_ = true;
 	if (animateSmokeTexture) animateSmokeTexture_ = true;
-
+	accessoryNode->getNamedChild("smoketexture", smokeTexture_, false);
+	
 	// Drag
 	accessoryNode->getNamedChild("drag", drag_, false);
 	accessoryNode->getNamedChild("stepsize", stepSize_, false);
