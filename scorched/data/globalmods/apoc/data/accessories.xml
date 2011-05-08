@@ -8291,6 +8291,125 @@ distance from your tank in the direction you aim</description>
 		</accessoryaction>
 	</accessory>
 	<accessory>
+		<name>Dirt Charge</name>
+		<armslevel>7</armslevel>
+		<maximumnumber>0</maximumnumber>
+		<description>A projectile weapon that throws many
+small dirt clods in all directions.</description>
+		<icon>dcharge.bmp</icon>
+		<bundlesize>3</bundlesize>
+		<cost>6250</cost>
+		<activationsound>shoot/flare.wav</activationsound>
+		<model type='MilkShape'>data/accessories/dirt/dirt.txt</model>
+		<accessoryaction type='WeaponProjectile'>
+			<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
+			<collisionaction type='WeaponMulti'>
+				<subweapon1 type='WeaponExplosion'>
+					<hurtamount>0</hurtamount>
+					<deform>down</deform><size>4</size>
+					<explosionsound>explosions/gloop.wav</explosionsound>
+					<explosiontexture>exp03</explosiontexture>
+				</subweapon1>
+				<subweapon2 type='WeaponAimedOver'>
+					<nowarheads>5</nowarheads>
+					<percentagemiss>1</percentagemiss>
+					<maxaimdistance>0</maxaimdistance>
+					<inaccuracy>50</inaccuracy>
+					<aimedweapon type='WeaponProjectile'>
+						<nocreateflame/><nocreatesmoke/>
+						<timedcollision>0.6</timedcollision>
+						<projectilescale>0.8</projectilescale>
+						<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
+						<collisionaction type='WeaponMulti'>
+							<subweapon1 type='WeaponExplosion'>
+								<hurtamount>0</hurtamount>
+								<deform>down</deform>
+								<size>3</size>
+								<explosionsound>explosions/gloop.wav</explosionsound>
+								<explosiontexture>exp03</explosiontexture>
+								<nocreatedebris/>
+							</subweapon1>
+							<subweapon2 type='WeaponAimedOver'>
+								<nowarheads>3</nowarheads>
+								<percentagemiss>1</percentagemiss>
+								<maxaimdistance>0</maxaimdistance>
+								<inaccuracy>20</inaccuracy>
+								<aimedweapon type='WeaponProjectile'>
+									<nocreateflame/>
+									<nocreatesmoke/>
+									<timedcollision>0.8</timedcollision>
+									<projectilescale>0.6</projectilescale>
+									<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
+									<collisionaction type='WeaponMulti'>
+										<subweapon1 type='WeaponExplosion'>
+											<hurtamount>0</hurtamount>
+											<deform>down</deform>
+											<size>3</size>
+											<explosionsound>explosions/gloop.wav</explosionsound>
+											<explosiontexture>exp03</explosiontexture>
+											<nocreatedebris/>
+										</subweapon1>
+										<subweapon2 type='WeaponAimedOver'>
+											<nowarheads>2</nowarheads>
+											<percentagemiss>5</percentagemiss>
+											<maxaimdistance>0</maxaimdistance>
+											<inaccuracy>50</inaccuracy>
+											<aimedweapon type='WeaponVelocity'>
+											<velocitychange>0.85</velocitychange>
+											<aimedweapon type='WeaponProjectile'>
+												<nocreateflame/>
+												<nocreatesmoke/>
+												<timedcollision>0.8</timedcollision>
+												<projectilescale>0.5</projectilescale>
+												<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
+												<collisionaction type='WeaponMulti'>
+													<subweapon1 type='WeaponExplosion'>
+														<hurtamount>0</hurtamount>
+														<deform>down</deform>
+														<size>2</size>
+														<explosionsound>explosions/gloop.wav</explosionsound>
+														<explosiontexture>exp03</explosiontexture>
+														<nocreatedebris/>
+													</subweapon1>
+													<subweapon2 type='WeaponAimedOver'>
+														<nowarheads>2</nowarheads>
+														<percentagemiss>5</percentagemiss>
+														<maxaimdistance>0</maxaimdistance>
+														<inaccuracy>20</inaccuracy>
+														<aimedweapon type='WeaponVelocity'>
+														    <velocitychange>0.7</velocitychange>
+															<aimedweapon type='WeaponProjectile'>
+															<nocreateflame/>
+															<nocreatesmoke/>
+															<projectilescale>0.5</projectilescale>
+															<shieldhurtfactor>0.3</shieldhurtfactor>
+															<projectilemodel type='ase'>
+																<mesh>data/accessories/roller.ase</mesh><skin>data/accessories/white.bmp</skin>
+																 </projectilemodel>
+																<collisionaction type='WeaponExplosion'>
+																	<hurtamount>0</hurtamount>
+																	<deform>up</deform><size>3.0</size>
+																	<explosionsound>explosions/gloop.wav</explosionsound>
+																	<explosiontexture>exp03</explosiontexture>
+																	<nocreatedebris/>
+																</collisionaction>
+			                                            	</aimedweapon>
+			                                            </aimedweapon>	
+													</subweapon2>
+												</collisionaction>
+											</aimedweapon>
+											</aimedweapon>
+										</subweapon2>
+									</collisionaction>
+								</aimedweapon>
+							</subweapon2>	
+						</collisionaction>
+					</aimedweapon>
+				</subweapon2>
+			</collisionaction>
+		</accessoryaction>
+	</accessory>
+	<accessory>
 		<name>Small Meteor</name>
 		<armslevel>4</armslevel>
 		<description>A meteor that explodes on impact, scattering
@@ -10576,7 +10695,7 @@ contact with any tank.</description>
 					<nextaction type='WeaponRoller'>
 						<shieldhurtfactor>0.02</shieldhurtfactor>
 						<numberrollers>8</numberrollers>
-						<time>RANGE(1,2)</time>
+						<time>RANGE(4,5)</time>
 						<rollermodel type='MilkShape'>data/accessories/roller/roller.txt</rollermodel>
 						<collisionaction type='WeaponExplosion'>
 							<hurtamount>1.0</hurtamount>
@@ -10612,7 +10731,7 @@ with any tank.</description>
 					<nextaction type='WeaponRoller'>
 					    <shieldhurtfactor>0.035</shieldhurtfactor>
 						<numberrollers>8</numberrollers>
-						<time>RANGE(1,2)</time>
+						<time>RANGE(4,5)</time>
 						<rollermodel type='MilkShape'>data/accessories/roller/roller.txt</rollermodel>
 						<collisionaction type='WeaponExplosion'>
 							<hurtamount>1.0</hurtamount>
@@ -15087,6 +15206,12 @@ release lethal clouds of gas when destroyed.</description>
 						<invoke>Gas Grenade</invoke>
 					</weapon>
 				</weaponchoice12>
+				<weaponchoice13>
+                    <weight>12</weight>
+                    <weapon type='WeaponInvokeWeapon'>
+                        <invoke>Dirt Charge</invoke>
+                    </weapon>
+                </weaponchoice13>
 			</subweapon2>
 		</accessoryaction>
 	</accessory>
