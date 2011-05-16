@@ -44,29 +44,13 @@ ServerStateNewGame::~ServerStateNewGame()
 
 void ServerStateNewGame::newGame()
 {
-	// Inform the stats logger
-	std::list<Tank *> playingTanks;
-	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
-	std::map<unsigned int, Tank *>::iterator mainitor;
-	for (mainitor = tanks.begin();
-		mainitor != tanks.end();
-		mainitor++)
-	{
-		Tank *current = (*mainitor).second;
-		if (current->getState().getTankPlaying())
-		{
-			playingTanks.push_back(current);
-		}
-	}
-	StatsLogger::instance()->gameStart(playingTanks);
-
 	newGameState();
 
 	// Make sure any remaining actions have been processed before starting a new game
 	ScorchedServer::instance()->getServerSimulator().processRemaining();
 
 	// Make sure tanks are in correct state
+	std::list<Tank *> playingTanks;
 	std::set<unsigned int> loadingDestinations;
 	std::map<unsigned int, Tank *> &tanks = 
 		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
@@ -82,9 +66,13 @@ void ServerStateNewGame::newGame()
 			if (loadingDestinations.find(tank->getDestinationId()) == loadingDestinations.end())
 			{
 				loadingDestinations.insert(tank->getDestinationId());
+				playingTanks.push_back(tank);
 			}
 		}
 	}
+
+	// Inform the stats logger
+	StatsLogger::instance()->gameStart(playingTanks);
 
 	// Store this as the current level
 	// Do after setting the state so the state of the tanks is consistent when 
