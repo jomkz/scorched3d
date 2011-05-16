@@ -26,6 +26,7 @@
 #include <simactions/RoundStartSimAction.h>
 #include <simactions/TankTeamBallanceSimAction.h>
 #include <common/OptionsScorched.h>
+#include <common/StatsLogger.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
@@ -57,6 +58,23 @@ void ServerStatePlaying::enterState()
 		new RoundStartSimAction(++nextRoundId_, roundTime_);
 	ScorchedServer::instance()->getServerSimulator().
 		addSimulatorAction(roundStart, roundTime_>0?roundStarted_:0);
+
+	// Inform the stats logger
+	std::list<Tank *> playingTanks;
+	std::map<unsigned int, Tank *> &tanks = 
+		ScorchedServer::instance()->getTankContainer().getAllTanks();
+	std::map<unsigned int, Tank *>::iterator mainitor;
+	for (mainitor = tanks.begin();
+		mainitor != tanks.end();
+		mainitor++)
+	{
+		Tank *current = (*mainitor).second;
+		if (current->getState().getTankPlaying())
+		{
+			playingTanks.push_back(current);
+		}
+	}
+	StatsLogger::instance()->roundStart(playingTanks);
 
 	// Ballance any teams needing ballanced
 	TankTeamBallanceSimAction *teamBallance =

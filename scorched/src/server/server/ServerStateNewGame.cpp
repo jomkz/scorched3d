@@ -32,6 +32,7 @@
 #include <landscapedef/LandscapeDefinitions.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <common/OptionsTransient.h>
+#include <common/StatsLogger.h>
 
 ServerStateNewGame::ServerStateNewGame()
 {
@@ -43,6 +44,23 @@ ServerStateNewGame::~ServerStateNewGame()
 
 void ServerStateNewGame::newGame()
 {
+	// Inform the stats logger
+	std::list<Tank *> playingTanks;
+	std::map<unsigned int, Tank *> &tanks = 
+		ScorchedServer::instance()->getTankContainer().getAllTanks();
+	std::map<unsigned int, Tank *>::iterator mainitor;
+	for (mainitor = tanks.begin();
+		mainitor != tanks.end();
+		mainitor++)
+	{
+		Tank *current = (*mainitor).second;
+		if (current->getState().getTankPlaying())
+		{
+			playingTanks.push_back(current);
+		}
+	}
+	StatsLogger::instance()->gameStart(playingTanks);
+
 	newGameState();
 
 	// Make sure any remaining actions have been processed before starting a new game
