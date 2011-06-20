@@ -24,6 +24,7 @@
 #include <server/ServerBanned.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerCommon.h>
+#include <server/ServerDestinations.h>
 #include <server/ServerSimulator.h>
 #include <server/ServerAuthHandler.h>
 #include <server/ServerState.h>
@@ -128,6 +129,17 @@ void ServerConnectAuthHandler::processMessageInternal(
 {
 	// Check for acceptance bassed on standard checks
 	if (!ServerConnectHandler::checkStandardParams(destinationId, ipAddress)) return;
+
+	// Check that this message has come from a destination that is still connected
+	// This may happen if the client disconnects very early on in the initial setup
+	ServerDestination *serverDestination = 
+		ScorchedServer::instance()->getServerDestinations().getDestination(destinationId);
+	if (!serverDestination) 
+	{
+		ServerCommon::serverLog(S3D::formatStringBuffer(
+			"Failed to find destination %i for connecting player", destinationId));
+		return;
+	}
 
 	// Check player availability
 	if (message.getNoPlayers() > 
