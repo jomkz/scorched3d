@@ -633,6 +633,76 @@
 		<catagory>Humour</catagory>
 		<model type="MilkShape">data/tanks/ignignokt/ignignokt.txt</model> 
 	</tank>
+  <tank>
+    <name>Semi</name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/semi/semi.txt</model>
+  </tank>
+  <tank>
+    <name>Semi Low Poly</name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/semi_low/semi_low.txt</model>
+  </tank>
+  <tank>
+    <name>Bald Eagle </name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/eagle/eagle2.txt</model>
+  </tank>
+  <tank>
+    <name>F-117 NightHawk</name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/f117/f117.txt</model>
+  </tank>
+  <tank>
+    <name>SR-71 BlackBird</name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/sr7/sr7.txt</model>
+  </tank>
+  <tank>
+    <name>F-35 Lightning II</name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/f35/f35.txt</model>
+  </tank>
+  <tank>
+    <name>Forest Eagle </name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/blackeagle/blackeagle2.txt</model>
+  </tank>
+  <tank>
+    <name>Harpoon Eagle </name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/blackeagle/harpooneagle.txt</model>
+  </tank>
+  <tank>
+    <name>Brown Eagle </name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/blackeagle/brown.txt</model>
+  </tank>
+  <tank>
+    <name>Black Eagle </name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/blackeagle/black.txt</model>
+  </tank>
+  <tank>
+    <name>M1A2</name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/m1a2/abrams.txt</model>
+  </tank>
+  <tank>
+    <name>Mobile Rocket Artillery</name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/m1a2/abrams_tel.txt</model>
+  </tank>
+  <tank>
+    <name>M1A2 TUSK</name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/m1a2/abrams_tusk.txt</model>
+  </tank>
+  <tank>
+    <name>M1A2 Missile Variant</name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/m1a2/abrams_variant.txt</model>
+  </tank>
 	<!--<tank>
 		<name>R2D2</name>
 		<catagory>Starwars</catagory>
