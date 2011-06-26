@@ -32,6 +32,7 @@
 #include <client/ScorchedClient.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <landscapemap/LandscapeMaps.h>
+#include <movement/TargetMovement.h>
 #include <common/Defines.h>
 #include <limits.h>
 
@@ -141,6 +142,8 @@ void AnimatedBackdropDialog::simulate(float frameTime)
 	RenderTargets::instance()->render3D.simulate(0, frameTime);
 	ScorchedClient::instance()->getSimulator().simulate();
 	ScorchedClient::instance()->getParticleEngine().simulate(0, frameTime);
+	ScorchedClient::instance()->getTargetMovement().simulate(
+		ScorchedClient::instance()->getContext(), fixed::fromFloat(frameTime));
 
 	MainCamera::instance()->getTarget().setCameraType(TargetCamera::CamFree);
 	MainCamera::instance()->getCamera().movePosition(rotation_, 1.3f, 225.0f);

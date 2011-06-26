@@ -109,8 +109,11 @@ static bool initHardware(ProgressCounter *progressCounter)
 				"Failed to aquire sound.\n"
 				"Is anything else currently using the sound card?");
 		}
-		Sound::instance()->getDefaultListener()->setGain(
-			float(OptionsDisplay::instance()->getSoundVolume()) / 128.0f);
+		else
+		{
+			Sound::instance()->getDefaultListener()->setGain(
+				float(OptionsDisplay::instance()->getSoundVolume()) / 128.0f);
+		}
 	}
 	return true;
 }

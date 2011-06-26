@@ -18,13 +18,13 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <console/ConsoleRuleMethodIAdapter.h>
 #include <common/Defines.h>
 #include <graph/OptionsDisplay.h>
 #include <common/Logger.h>
 #include <sound/Sound.h>
 #include <sound/SoundBufferFactory.h>
 #include <sound/PlayingSoundSource.h>
+#include <console/ConsoleRuleMethodIAdapter.h>
 #include <graph/OptionsDisplay.h>
 #ifdef __DARWIN__
 #include <OpenAL/al.h>
@@ -62,6 +62,11 @@ Sound::Sound() :
 
 Sound::~Sound()
 {
+
+}
+
+void Sound::destroy()
+{
 	if (init_)
 	{
 		{
@@ -73,6 +78,10 @@ Sound::~Sound()
 				SoundSource *source = (*itor);
 				delete source;
 			}
+			totalSources_.clear();
+			availableSources_.clear();
+			managedSources_.clear();
+			playingSources_.clear();
 		}
 		{
 			BufferMap::iterator itor;
@@ -83,6 +92,7 @@ Sound::~Sound()
 				SoundBuffer *buffer = (*itor).second;
 				delete buffer;
 			}
+			bufferMap_.clear();
 		}
 
 		ALCcontext *context = alcGetCurrentContext();
@@ -91,12 +101,6 @@ Sound::~Sound()
         alcCloseDevice(device);
 	}
 	init_ = false;
-}
-
-void Sound::destroy()
-{
-	delete this;
-	instance_ = 0;
 }
 
 static char *checkString(char *x) 

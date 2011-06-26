@@ -669,8 +669,8 @@ void MovementMap::limitTexture(FixedVector &center, int limit)
 			bool in3 = false;
 			if (posX > arenaX &&
 				posY > arenaY &&
-				posX > arenaX + arenaWidth &&
-				posY > arenaY + arenaHeight)
+				posX < arenaX + arenaWidth &&
+				posY < arenaY + arenaHeight)
 			{
 				FixedVector position1(posX1, posY, 0);
 				FixedVector position2(posX, posY, 0);
