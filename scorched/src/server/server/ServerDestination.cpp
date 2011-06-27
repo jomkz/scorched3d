@@ -22,7 +22,7 @@
 #include <engine/ModFiles.h>
 
 ServerDestinationMod::ServerDestinationMod() : 
-	readyToReceive_(true), sent_(false), init_(false), totalLeft_(0)
+	readyToReceive_(true), init_(false), totalLeft_(0)
 {
 	files_ = new std::list<ModIdentifierEntry>();
 }

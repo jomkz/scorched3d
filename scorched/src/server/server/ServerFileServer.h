@@ -32,6 +32,8 @@ public:
 
 	void simulate();
 
+	void sendToDestination(ServerDestination *destination);
+
 protected:
 	unsigned int lastTime_;
 	unsigned int bytesSent_;

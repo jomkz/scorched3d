@@ -157,6 +157,7 @@ bool ChannelText::writeMessage(NetBuffer &buffer)
 	buffer.addToBuffer(destPlayerId_);
 	buffer.addToBuffer(admin_);
 	buffer.addToBuffer(flags_);
+	buffer.addToBuffer(srcPlayerName_);
 	buffer.addToBuffer(messageKey_);
 	if (!messageKey_.empty())
 	{
@@ -182,6 +183,7 @@ bool ChannelText::readMessage(NetBufferReader &reader)
 	if (!reader.getFromBuffer(destPlayerId_)) return false;
 	if (!reader.getFromBuffer(admin_)) return false;
 	if (!reader.getFromBuffer(flags_)) return false;
+	if (!reader.getFromBuffer(srcPlayerName_)) return false;
 	if (!reader.getFromBuffer(messageKey_)) return false;
 	if (!messageKey_.empty())
 	{

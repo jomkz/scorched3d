@@ -249,6 +249,9 @@ void ClientWindowSetup::setupStartWindows(GLWWindowSkinManager *skinManager)
 	addStateWindows(skinManager, ClientState::StateLoadFiles, "start");
 	GLWWindowManager::instance()->addWindow(ClientState::StateLoadFiles,
 		ProgressDialog::instance(), 0, true);
+	GLWWindowManager::instance()->addWindow(ClientState::StateLoadFiles, 
+		MainMenuDialog::instance(), 0, true);
+	addMessageComponents(skinManager, ClientState::StateLoadFiles);
 }
 
 // This is called after the correct mod has been loaded

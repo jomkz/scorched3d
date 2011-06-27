@@ -97,6 +97,7 @@ public:
 	void setMessageKey(const std::string &key) { messageKey_ = key; }
 	void setMessageValue(const std::string &value) { messageValue_ = value; }
 	void setSrcPlayerId(unsigned int srcPlayerId) { srcPlayerId_ = srcPlayerId; }
+	void setSrcPlayerName(const LangString &srcPlayerName) { srcPlayerName_ = srcPlayerName; }
 	void setDestPlayerId(unsigned int destPlayerId) { destPlayerId_ = destPlayerId; }
 	void setFlags(unsigned int flags) { flags_ = flags; }
 	void setAdminPlayer(const std::string &admin) { admin_ = admin; }
@@ -107,6 +108,7 @@ public:
 	const std::string &getMessageKey() { return messageKey_; }
 	const std::string &getMessageValue() { return messageValue_; }
 	const std::vector<LangString> &getMessageParams() { return messageParams_; }
+	const LangString &getSrcPlayerName() { return srcPlayerName_; }
     unsigned int getSrcPlayerId() { return srcPlayerId_; }
 	unsigned int getDestPlayerId() { return destPlayerId_; }
 	unsigned int getFlags() { return flags_; }
@@ -123,6 +125,7 @@ protected:
 	std::string messageValue_;
 	std::string channel_;
 	LangString message_;
+	LangString srcPlayerName_;
 	std::string admin_;
 };
 

@@ -86,12 +86,6 @@ void ServerFileServer::simulate()
 	// If no people are downloading then there is nothing to do
 	if (downloadCount == 0) return;
 
-	// Cacluate the maximum amount that can be downloaded by each
-	// client per second
-	int maxDownloadPerClient = 
-		ScorchedServer::instance()->getOptionsGame().getModDownloadSpeed() /
-		downloadCount;
-
 	// Check if this is the next second
 	unsigned int theTime = (unsigned int) time(0);
 	if (theTime > lastTime_)
@@ -99,18 +93,6 @@ void ServerFileServer::simulate()
 		// If so reset the amount that can be sent by this server
 		lastTime_ = theTime;
 		bytesSent_ = 0;
-
-		// Reset the sent state for each client
-		for (itor = destinations.begin();
-			itor != destinations.end();
-			itor++)
-		{
-			ServerDestination *destination = itor->second;
-			if (destination->getState() == ServerDestination::sDownloadingMod)
-			{
-				destination->getMod().setSent(false);
-			}
-		}
 	}
 
 	// Send bytes to each ready client
@@ -118,32 +100,42 @@ void ServerFileServer::simulate()
 		itor != destinations.end();
 		itor++)
 	{
-		// Make sure we have not sent too much this second already
-		if (bytesSent_ + maxDownloadPerClient > 
-			(unsigned int) ScorchedServer::instance()->getOptionsGame().getModDownloadSpeed() + 5)
-		{
-			return;
-		}
-
 		ServerDestination *destination = itor->second;
-		if (destination->getState() == ServerDestination::sDownloadingMod)
-		{
-			// Check if the client is ready to recieve more
-			// bytes and there is some to send and
-			// we have not sent to this client this second
-			if (destination->getMod().getReadyToReceive() &&
-				!destination->getMod().getFiles().empty() &&
-				!destination->getMod().getSent())
-			{
-				// Send bytes to this tank
-				destination->getMod().setSent(true);
-				destination->getMod().setReadyToReceive(false);
-				bytesSent_ += maxDownloadPerClient;
-
-				sendBytes(destination, maxDownloadPerClient);
-			}
-		}
+		sendToDestination(destination);
 	}
+}
+
+void ServerFileServer::sendToDestination(ServerDestination *destination)
+{
+	const unsigned int sizeToSend = ScorchedServer::instance()->getOptionsGame().getModDownloadSpeed() / 10;
+
+	// Check we should be downloading
+	if (destination->getState() != ServerDestination::sDownloadingMod)
+	{
+		return;
+	}
+
+	// Make sure we have not sent too much this second already
+	if (bytesSent_ + sizeToSend >
+		(unsigned int) ScorchedServer::instance()->getOptionsGame().getModDownloadSpeed() + 5)
+	{
+		return;
+	}
+
+	// Check if the client is ready to recieve more
+	// bytes and there is some to send and
+	// we have not sent to this client this second
+	if (!destination->getMod().getReadyToReceive() ||
+		destination->getMod().getFiles().empty())
+	{
+		return;
+	}
+
+	// Send bytes to this tank
+	destination->getMod().setReadyToReceive(false);
+	bytesSent_ += sizeToSend;
+
+	sendBytes(destination, sizeToSend);
 }
 
 void ServerFileServer::sendBytes(ServerDestination *destination, unsigned int size)

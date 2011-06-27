@@ -21,6 +21,7 @@
 #include <server/ServerFileAkHandler.h>
 #include <server/ServerDestinations.h>
 #include <server/ScorchedServer.h>
+#include <server/ServerFileServer.h>
 #include <coms/ComsFileAkMessage.h>
 
 ServerFileAkHandler::ServerFileAkHandler(ComsMessageHandler &comsMessageHandler)
@@ -47,6 +48,8 @@ bool ServerFileAkHandler::processMessage(
 			netMessage.getDestinationId());
 	if (!destination) return false;
 	destination->getMod().setReadyToReceive(true);
+
+	ScorchedServer::instance()->getServerFileServer().sendToDestination(destination);
 
 	return true;
 }

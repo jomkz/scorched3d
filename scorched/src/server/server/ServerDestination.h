@@ -37,9 +37,6 @@ public:
 	void setInit(bool i) { init_ = i; }
 	bool getInit() { return init_; }
 
-	void setSent(bool s) { sent_ = s; }
-	bool getSent() { return sent_; }
-
 	void setTotalLeft(unsigned int size) { totalLeft_ = size; };
 	unsigned int getTotalLeft() { return totalLeft_; }
 
@@ -50,7 +47,6 @@ public:
 
 protected:
 	bool readyToReceive_;
-	bool sent_;
 	bool init_;
 	unsigned int totalLeft_;
 	std::list<ModIdentifierEntry> *files_; // Ptr so we dont include ModFiles.h

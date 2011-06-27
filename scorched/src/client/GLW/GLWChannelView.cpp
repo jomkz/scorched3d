@@ -201,6 +201,10 @@ void GLWChannelView::channelText(ChannelText &channelText)
 	{
 		channelName.append(LANG_PARAM_1("[p:{0}]", tank->getTargetName()));
 	}
+	else if (channelText.getSrcPlayerName().size() > 0)
+	{
+		channelName.append(LANG_PARAM_1("[{0}]", channelText.getSrcPlayerName()));
+	}
 	if (channelText.getAdminPlayer()[0])
 	{
 		channelName.append(LANG_PARAM_1("[a:{0}]", channelText.getAdminPlayer()));

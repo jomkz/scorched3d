@@ -86,12 +86,11 @@ bool ClientFileHandler::processMessage(
 		if (totalBytes_ == 0) totalBytes_ = bytesLeft;
 
 		// Update progress
-		const char *shortFileName = fileName.c_str();
-		if (strrchr(shortFileName, '/')) shortFileName = strrchr(shortFileName, '/') + 1;
 		unsigned int doneBytes = totalBytes_ - bytesLeft;
+		float percentage = float(doneBytes * 100 / totalBytes_);
 		ProgressDialog::instance()->progressChange(
-			LANG_RESOURCE_1("DOWNLOADING_FILE", "Downloading {0}", shortFileName), 
-			float(doneBytes * 100 / totalBytes_));
+			LANG_RESOURCE_2("DOWNLOADING_FILE", "Downloading mod, {0}% {1} KB", 
+			percentage, (doneBytes / 1000)), percentage);
 
 		// Read the size
 		unsigned int maxsize = 0;

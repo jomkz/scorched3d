@@ -638,7 +638,26 @@ bool ServerChannelManager::processChannelTextMessage(
 		Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(
 			textMessage.getChannelText().getSrcPlayerId());
 		if (!tank || tank->getDestinationId() != 
-			netNessage.getDestinationId()) return true;
+			netNessage.getDestinationId()) 
+		{
+			// Tank either didnt supply its id (perhaps it was loading levels)
+			// or supplied the wrong one
+			std::map<unsigned int, Tank *> &tanks = 
+				ScorchedServer::instance()->getTankContainer().getAllTanks();
+			std::map<unsigned int, Tank *>::iterator itor;
+			for (itor = tanks.begin();
+				itor != tanks.end();
+				itor++)
+			{
+				if (itor->second->getDestinationId() == netNessage.getDestinationId())
+				{
+					tank = itor->second;
+					break;
+				}
+			}
+			if (!tank) return true;
+		}
+		textMessage.getChannelText().setSrcPlayerName(tank->getTargetName());
 
 		// Check that this client has this channel
 		DestinationEntry *destEntry = 
