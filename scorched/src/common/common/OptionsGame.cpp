@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-//    Scorched3D (c) 2000-2009
+//    Scorched3D (c) 2000-2011
 //
 //    This file is part of Scorched3D.
 //
@@ -13,9 +13,9 @@
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
-//    You should have received a copy of the GNU General Public License
-//    along with Scorched3D; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    You should have received a copy of the GNU General Public License along
+//    with this program; if not, write to the Free Software Foundation, Inc.,
+//    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <common/OptionsGame.h>
@@ -305,7 +305,7 @@ OptionsGame::OptionsGame() :
 		"The name of currently running Scorched3D mod", 0, "none"),
 	motd_(options_, "MOTD",
 		"The message of the day", 0, 
-		"Scorched3D : Copyright 2010 Gavin Camp\n"
+		"Scorched3D : Copyright 2011 Gavin Camp\n"
 		"For updates and news visit:\n"
 		"http://www.scorched3d.co.uk",
 		true),
