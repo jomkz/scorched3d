@@ -39,7 +39,7 @@ Target::Target(unsigned int playerId,
 	ScorchedContext &context) :
 	playerId_(playerId),
 	context_(context),
-	deathAction_(0), burnAction_(0),
+	deathAction_(0), burnAction_(0), collisionAction_(0),
 	renderer_(0), 
 	border_(0)
 {
@@ -135,6 +135,7 @@ bool Target::writeMessage(NamedNetBuffer &buffer)
 	buffer.addToBufferNamed("border", border_);
 	if (!context_.getAccessoryStore().writeWeapon(buffer, deathAction_)) return false;
 	if (!context_.getAccessoryStore().writeWeapon(buffer, burnAction_)) return false;
+	if (!context_.getAccessoryStore().writeWeapon(buffer, collisionAction_)) return false;
 
 	return true;
 }
@@ -184,6 +185,11 @@ bool Target::readMessage(NetBufferReader &reader)
 	if (!context_.getAccessoryStore().readWeapon(reader, burnAction_))
 	{
 		Logger::log("Target::burnAction read failed");
+		return false;
+	}
+	if (!context_.getAccessoryStore().readWeapon(reader, collisionAction_))
+	{
+		Logger::log("Target::collisionAction read failed");
 		return false;
 	}
 

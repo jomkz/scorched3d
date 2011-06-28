@@ -91,6 +91,7 @@ bool TargetDefinition::readXML(XMLNode *node)
 	node->getNamedChild("driveovertodestroy", driveovertodestroy_, false);
 	node->getNamedChild("removeaction", removeaction_, false);
 	node->getNamedChild("burnaction", burnaction_, false);
+	node->getNamedChild("collisionaction", collisionaction_, false);
 
 	if (!shadow_.readXML(node)) return false;
 	if (!groups_.readXML(node)) return false;
@@ -203,6 +204,19 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 		}
 
 		target->setBurnAction((Weapon *) action->getAction());
+	}
+	if (collisionaction_.c_str()[0] && 0 != strcmp(collisionaction_.c_str(), "none"))
+	{
+		Accessory *action = context.getAccessoryStore().
+			findByPrimaryAccessoryName(collisionaction_.c_str());		
+		if (!action || action->getType() != AccessoryPart::AccessoryWeapon)
+		{
+			S3D::dialogExit("Scorched3D",
+				S3D::formatStringBuffer("Failed to find collision action \"%s\"",
+				collisionaction_.c_str()));
+		}
+
+		target->setCollisionAction((Weapon *) action->getAction());
 	}
 
 #ifndef S3D_SERVER

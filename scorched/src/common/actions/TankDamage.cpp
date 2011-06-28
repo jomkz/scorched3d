@@ -138,6 +138,9 @@ void TankDamage::calculateDamage()
 		}
 	}
 
+	// Add the collision action
+	addDamageAction(damagedTarget, damagedTarget->getCollisionAction());
+
 	// Remove any damage from shield first
 	if (damage_ > 0)
 	{
@@ -418,7 +421,11 @@ void TankDamage::calculateDeath()
 
 	// Add the tank death explosion
 	// Make the tank explode in one of many ways
-	Weapon *weapon = killedTarget->getDeathAction();
+	addDamageAction(killedTarget, killedTarget->getDeathAction());
+}
+
+void TankDamage::addDamageAction(Target *target, Weapon *weapon) 
+{
 	if (weapon)
 	{
 		if (context_->getOptionsGame().getActionSyncCheck())
@@ -428,7 +435,7 @@ void TankDamage::calculateDeath()
 					weapon->getParent()->getName()));
 		}
 
-		FixedVector position = killedTarget->getLife().getTargetPosition();
+		FixedVector position = target->getLife().getTargetPosition();
 		FixedVector velocity;
 		WeaponFireContext weaponContext(weaponContext_.getPlayerId(), 
 			Weapon::eDataDeathAnimation);

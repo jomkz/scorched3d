@@ -26,6 +26,7 @@
 #include <target/TargetRenderer.h>
 #include <target/TargetState.h>
 #include <target/TargetSpace.h>
+#include <target/TargetLife.h>
 #include <tank/TankViewPoints.h>
 #include <actions/Napalm.h>
 #include <actions/CameraPositionAction.h>
@@ -42,6 +43,8 @@
 #include <landscapedef/LandscapeTex.h>
 #include <weapons/AccessoryStore.h>
 #include <common/Defines.h>
+#include <common/StatsLogger.h>
+#include <common/OptionsScorched.h>
 
 static const int deformSize = 3;
 static DeformLandscape::DeformPoints deformMap;
@@ -581,6 +584,12 @@ void Napalm::simulateDamage()
 			{
 				TargetDamageCalc::damageTarget(*context_, target, weapon_, 
 					weaponContext_, damage, true, false, false);
+
+				if (burnedTargets_.find(target->getPlayerId()) == burnedTargets_.end()) 
+				{
+					burnedTargets_.insert(target->getPlayerId());
+					addBurnAction(target);
+				}
 			}
 
 			// Set this target to burnt
@@ -591,5 +600,28 @@ void Napalm::simulateDamage()
 			}
 		}
 		TargetDamageCalc.clear();
+	}
+}
+
+void Napalm::addBurnAction(Target *target)
+{
+	Weapon *weapon = target->getBurnAction();
+	if (weapon)
+	{
+		if (context_->getOptionsGame().getActionSyncCheck())
+		{
+			context_->getSimulator().addSyncCheck(
+				S3D::formatStringBuffer("BurnAction: %u %s", 
+					target->getPlayerId(),
+					weapon->getParent()->getName()));
+		}
+
+		FixedVector position = target->getLife().getTargetPosition();
+		FixedVector velocity;
+		WeaponFireContext weaponContext(weaponContext_.getPlayerId(), 
+			Weapon::eDataDeathAnimation);
+		weapon->fireWeapon(*context_, weaponContext, 
+			position, velocity);
+		StatsLogger::instance()->weaponFired(weapon, true);
 	}
 }

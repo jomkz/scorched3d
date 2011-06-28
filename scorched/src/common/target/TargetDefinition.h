@@ -62,6 +62,7 @@ protected:
 	fixed border_;
 	std::string removeaction_;
 	std::string burnaction_;
+	std::string collisionaction_;
 	ModelID modelId_;
 	ModelID modelburntId_;
 	PlacementShadowDefinition shadow_;

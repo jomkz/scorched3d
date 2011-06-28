@@ -25,6 +25,7 @@
 #include <actions/Action.h>
 #include <weapons/Weapon.h>
 
+class Target;
 class TankDamage : public Action
 {
 public:
@@ -49,6 +50,7 @@ protected:
 
 	void calculateDamage();
 	void calculateDeath();
+	void addDamageAction(Target *target, Weapon *weapon);
 	void logDeath();
 };
 

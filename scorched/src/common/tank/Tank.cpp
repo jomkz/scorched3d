@@ -36,6 +36,7 @@
 #include <weapons/AccessoryStore.h>
 #include <target/TargetLife.h>
 #include <engine/ScorchedContext.h>
+#include <engine/Simulator.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
 
@@ -143,8 +144,22 @@ bool Tank::getVisible()
 
 Weapon *Tank::getDeathAction()
 {
-	setDeathAction(context_.getAccessoryStore().getDeathAnimation());
-	return Target::getDeathAction();
+	std::list<Accessory *> &accessories = getAccessories().
+		getAllAccessoriesByGroup("deathaction");
+	if (!accessories.empty())
+	{
+		std::vector<Accessory *> accessoriesVector;
+		accessoriesVector.insert(accessoriesVector.begin(), accessories.begin(), accessories.end());
+
+		Accessory *accessory = accessoriesVector[
+			context_.getSimulator().getRandomGenerator().getRandUInt("getDeathAction") % accessoriesVector.size()];
+		if (accessory->getAction()->getType() == AccessoryPart::AccessoryWeapon)
+		{
+			return (Weapon *) accessory->getAction();
+		}
+	}
+
+	return context_.getAccessoryStore().getDeathAnimation();
 }
 
 Vector &Tank::getColor()

@@ -29,6 +29,7 @@
 #include <vector>
 #include <set>
 
+class Target;
 class TankViewPointProvider;
 class GLTextureSet;
 class Napalm : public Action
@@ -69,6 +70,7 @@ protected:
 	int startX_, startY_;
 	fixed totalTime_, hurtTime_;
 	fixed napalmTime_;
+	std::set<unsigned int> burnedTargets_;
 	std::set<unsigned int> edgePoints_;
 	std::map<unsigned int, int> napalmPointsCount_;
 	std::list<NapalmEntry *> napalmPoints_;
@@ -79,6 +81,7 @@ protected:
 	void simulateAddEdge(int x, int y);
 	void simulateRmStep();
 	void simulateDamage();
+	void addBurnAction(Target *target);
 
 };
 

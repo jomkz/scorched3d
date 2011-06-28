@@ -71,8 +71,10 @@ public:
 	// Actions
 	void setDeathAction(Weapon *deathAction) { deathAction_ = deathAction; }
 	void setBurnAction(Weapon *burnAction) { burnAction_ = burnAction; }
+	void setCollisionAction(Weapon *collisionAction) { collisionAction_ = collisionAction; }
 	virtual Weapon *getDeathAction() { return deathAction_; }
 	virtual Weapon *getBurnAction() { return burnAction_; }
+	virtual Weapon *getCollisionAction() { return collisionAction_; }
 
 	// Renderer
 	fixed getBorder() { return border_; }
@@ -104,7 +106,7 @@ protected:
 	TargetGroup *group_;
 	LangString name_;
 	std::string cStrName_;
-	Weapon *deathAction_, *burnAction_;
+	Weapon *deathAction_, *burnAction_, *collisionAction_;
 
 };
 
