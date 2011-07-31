@@ -227,6 +227,9 @@ public:
 	int getMinFallingDistance() { return minFallingDistance_; }
 	OptionEntryInt &getMinFallingDistanceEntry() { return minFallingDistance_; }
 
+	bool getTankFallingDamage() { return tankFallingDamage_; }
+	OptionEntryBool &getTankFallingDamageEntry() { return tankFallingDamage_; }
+
 	int getMaxClimbingDistance() { return maxClimbingDistance_; }
 	OptionEntryInt &getMaxClimbingDistanceEntry() { return maxClimbingDistance_; }
 
@@ -439,6 +442,7 @@ protected:
 	OptionEntryBoundedInt maxNumberWeapons_;
 	OptionEntryBoundedInt gravity_;
 	OptionEntryBoundedInt minFallingDistance_;
+	OptionEntryBool tankFallingDamage_;
 	OptionEntryBoundedInt maxClimbingDistance_;
 	OptionEntryBoundedInt playerLives_;
 	OptionEntryBoundedInt teams_;

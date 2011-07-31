@@ -72,6 +72,11 @@ bool S3D::dirMake(const std::string &file)
 	return true;
 }
 
+bool S3D::removeFile(const std::string &file)
+{
+	return (remove(file.c_str()) == 0);
+}
+
 bool S3D::fileExists(const std::string &file)
 {
 	return (S3D::fileModTime(file) != 0);

@@ -47,6 +47,7 @@ public:
 	Vector &getBilboardVectorX();
 	Vector &getBilboardVectorY();
 
+	float *getBilboardMatrix() { return s.fBilboard; }
 	float *getViewMatrix() { return s.fView; }
 
 protected:
@@ -57,6 +58,7 @@ protected:
 		float fProj[16];
 		float fView[16];
 		float fClip[16];
+		float fBilboard[16];
 		float viewport[4];
 		float aspect;
 	} s, b;

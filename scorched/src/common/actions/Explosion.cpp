@@ -231,9 +231,17 @@ void Explosion::init()
 		{
 			if (RAND <= params_->getCreateMushroomAmount().asFloat())
 			{
-				context_->getActionController().addAction(
-					new SpriteAction(
-					new ExplosionNukeRenderer(position_.asVector(), params_->getSize().asFloat() - 2.0f)));	
+				GLTextureSet *texture = ExplosionTextures::instance()->getTextureSetByName(
+					params_->getMushroomTexture());
+				if (texture)
+				{
+					context_->getActionController().addAction(
+						new SpriteAction(
+						new ExplosionNukeRenderer(position_.asVector(), 
+							params_->getSize().asFloat() - 2.0f,
+							texture,
+							false)));	
+				}
 			}
 		}
 

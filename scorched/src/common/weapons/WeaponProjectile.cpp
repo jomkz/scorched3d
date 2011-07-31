@@ -31,7 +31,7 @@ WeaponProjectile::WeaponProjectile() :
 	apexCollision_(false), waterCollision_(false), wallCollision_(true),
 	showShotPath_(false), showEndPoint_(false), 
 	createSmoke_(true),	createFlame_(true), 
-	spinSpeed_(1), apexNoDud_(false), timedDud_(false),
+	spinSpeed_(1), spinAxis_(0.0f, 0.0f, 1.0f), apexNoDud_(false), timedDud_(false),
 	timedCollision_(0), heightCollision_(0),
 	shieldHurtFactor_(1), windFactor_(1),
 	flameLife_(1.0f), smokeLife_(4.0f),
@@ -66,6 +66,7 @@ bool WeaponProjectile::parseXML(AccessoryCreateContext &context, XMLNode *access
 
 	// Get the spin
 	accessoryNode->getNamedChild("spinspeed", spinSpeed_, false);
+	accessoryNode->getNamedChild("spinaxis", spinAxis_, false);
 
 	// Get the optional weapon model scale
 	accessoryNode->getNamedChild("projectilescale", scale_, false);
@@ -202,6 +203,7 @@ void WeaponProjectile::fireWeapon(ScorchedContext &context,
 		this, 
 		weaponContext,
 		flareType_, // FlareType
-		spinSpeed_.getValue(context)); 
+		spinSpeed_.getValue(context),
+		spinAxis_); 
 	context.getActionController().addAction(action);	
 }

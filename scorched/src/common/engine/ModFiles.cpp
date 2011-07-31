@@ -50,11 +50,19 @@ bool ModFiles::fileEnding(const std::string &file, const std::string &ext)
 	return true;
 }
 
-bool ModFiles::excludeFile(const std::string &file)
+bool ModFiles::excludeSpecialFile(const std::string &file)
 {
 	if (file == "Thumbs.db") return true;
 	if (file == "CVS") return true;
 	if (file == "..") return true;
+	if (strstr(file.c_str(), "..")) return true;
+
+	return false;
+}
+
+bool ModFiles::excludeFile(const std::string &file)
+{
+	if (excludeSpecialFile(file)) return true;
 
 	if (!fileEnding(file, ".xml") &&
 		!fileEnding(file, ".bmp") &&

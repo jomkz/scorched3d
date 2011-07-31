@@ -51,8 +51,21 @@ bool ServerHaveModFilesHandler::processMessage(
 
 	unsigned int destinationId = netMessage.getDestinationId();
 
-	std::list<ModFileEntry *> neededEntries_;
+	std::list<ModIdentifierEntry> neededEntries;
 	unsigned int neededLength = 0;
+
+	// Build up a list of all of the files this client has
+	std::map<std::string, ModIdentifierEntry*> hasEntries;
+	{
+		std::list<ModIdentifierEntry>::iterator hasItor;
+		for (hasItor = message.getFiles().begin();
+			hasItor != message.getFiles().end();
+			hasItor++)
+		{
+			ModIdentifierEntry *entry = &(*hasItor);
+			hasEntries[entry->fileName] = entry;
+		}
+	}
 
 	// Build up a list of mod files that this client needs
 	// and does not already have
@@ -67,44 +80,70 @@ bool ServerHaveModFilesHandler::processMessage(
 			const std::string &fileName = (*itor).first;
 			ModFileEntry *fileEntry = (*itor).second;
 
-			ModIdentifierEntry *hasEntry = 
-				message.getFile(fileName.c_str());
-			if (!hasEntry ||
-				hasEntry->crc != fileEntry->getCompressedCrc() ||
-				hasEntry->length != fileEntry->getCompressedSize())
+			// See if this file exists (or is correct) for this client
+			std::map<std::string, ModIdentifierEntry*>::iterator hasEntryItor =
+				hasEntries.find(fileName);
+			if (hasEntryItor == hasEntries.end() ||
+				hasEntryItor->second->crc != fileEntry->getCompressedCrc() ||
+				hasEntryItor->second->length != fileEntry->getCompressedSize())
 			{
 #ifdef _DEBUG
-				if (!hasEntry)
+				if (hasEntryItor == hasEntries.end())
 				{
 					ServerCommon::serverLog(
 						S3D::formatStringBuffer("Mod download \"%s\" new file",
 							fileName.c_str()));
 				}
-				else if (hasEntry->length != fileEntry->getCompressedSize())
+				else if (hasEntryItor->second->length != fileEntry->getCompressedSize())
 				{
 					ServerCommon::serverLog(
 						S3D::formatStringBuffer("Mod download \"%s\" size difference %u %u",
 						fileName.c_str(),
-						hasEntry->length, 
+						hasEntryItor->second->length, 
 						fileEntry->getCompressedSize()));
 				}
-				else if (hasEntry->crc != fileEntry->getCompressedCrc())
+				else if (hasEntryItor->second->crc != fileEntry->getCompressedCrc())
 				{
 					ServerCommon::serverLog(
 						S3D::formatStringBuffer("Mod download \"%s\" crc difference %u %u",
 						fileName.c_str(),
-						hasEntry->crc, 
+						hasEntryItor->second->crc, 
 						fileEntry->getCompressedCrc()));
 				}
 #endif //_DEBUG
 
-				neededEntries_.push_back(fileEntry);
+				ModIdentifierEntry newEntry(true,
+					fileEntry->getFileName(),
+					0, fileEntry->getCompressedCrc());
+				neededEntries.push_back(newEntry);
 				neededLength += fileEntry->getCompressedSize();
 			}
+
+			// Say that this file will be sent to the client
+			if (hasEntryItor != hasEntries.end()) {
+				hasEntries.erase(hasEntryItor);
+			}
+		}
+
+		std::map<std::string, ModIdentifierEntry*>::iterator hasItor;
+		for (hasItor = hasEntries.begin();
+			hasItor != hasEntries.end();
+			hasItor++)
+		{
+#ifdef _DEBUG
+			ServerCommon::serverLog(
+				S3D::formatStringBuffer("Mod download \"%s\" removing file",
+					hasItor->first.c_str()));
+#endif //_DEBUG
+
+			ModIdentifierEntry newEntry(false,
+				hasItor->first,
+				0, 0);
+			neededEntries.push_back(newEntry);
 		}
 	}
 
-	if (neededEntries_.empty())
+	if (neededEntries.empty())
 	{
 		// No files need downloading
 		ScorchedServer::instance()->getServerChannelManager().sendText(
@@ -136,31 +175,6 @@ bool ServerHaveModFilesHandler::processMessage(
 				ScorchedServer::instance()->getOptionsGame().getMod());
 		ServerCommon::kickDestination(destinationId, reason);
 	}
-	else 
-	{
-		int timeLeft = int(
-				float(neededLength) / 
-				float(ScorchedServer::instance()->getOptionsGame().getModDownloadSpeed())
-			);
-		int timeMinutes = timeLeft / 60;
-		int timeSeconds = timeLeft % 60;
-		// This server allows file downloads
-		// The the client how much needs to be downloaded
-		ScorchedServer::instance()->getServerChannelManager().sendText(
-			ChannelText("info",
-				"SERVER_DOWNLOAD_MOD",
-				"This server requires the \"{0}\" Scorched3D mod.\n"
-				"This will require downloading {1} bytes\n"
-				"Maximun {2} bytes per second = Minimum of {3} minutes\n"
-				"Note: This will also depend on how many server\n"
-				"downloads and your link speed.",
-				ScorchedServer::instance()->getOptionsGame().getMod(),
-				neededLength,
-				ScorchedServer::instance()->getOptionsGame().getModDownloadSpeed(),
-				timeMinutes),
-			destinationId,
-			false);
-	}
 #endif
 
 	// Set the files to download in this tanks profile
@@ -170,17 +184,13 @@ bool ServerHaveModFilesHandler::processMessage(
 	if (!destination) return false;
 
 	// and for each needed entry
-	std::list<ModFileEntry *>::iterator neededItor;
-	for (neededItor = neededEntries_.begin();
-		neededItor != neededEntries_.end();
+	std::list<ModIdentifierEntry>::iterator neededItor;
+	for (neededItor = neededEntries.begin();
+		neededItor != neededEntries.end();
 		neededItor ++)
 	{
-		ModFileEntry *entry = (*neededItor);
-
-		// Add the entry this tank needs to download
-		ModIdentifierEntry newEntry(entry->getFileName(),
-			0, entry->getCompressedCrc());
-		destination->getMod().addFile(newEntry);
+		ModIdentifierEntry &entry = (*neededItor);
+		destination->getMod().addFile(entry);
 	}
 	destination->getMod().setInit(true);
 	destination->getMod().setTotalLeft(neededLength);

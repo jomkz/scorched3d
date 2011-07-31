@@ -36,7 +36,8 @@ public:
 	ShotProjectile(
 		FixedVector &startPosition, FixedVector &velocity,
 		WeaponProjectile *weapon, WeaponFireContext &weaponContext,
-		unsigned int flareType, fixed spinSpeed);
+		unsigned int flareType, 
+		fixed spinSpeed, const Vector &spinAxis);
 	virtual ~ShotProjectile();
 
 	virtual void simulate(fixed frameTime, bool &remove);
@@ -68,6 +69,7 @@ protected:
 	fixed drag_, stepSize_;
 	fixed timedCollision_, heightCollision_;
 	fixed spinSpeed_;
+	Vector spinAxis_;
 #ifndef S3D_SERVER
 	std::list<RenderTracer::TracerLinePoint> positions_;
 #endif

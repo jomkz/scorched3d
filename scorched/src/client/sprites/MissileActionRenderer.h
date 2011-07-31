@@ -33,7 +33,7 @@ class VirtualSoundSource;
 class MissileActionRenderer : public ActionRenderer
 {
 public:
-	MissileActionRenderer(int flareType, float scale = 1.0f, float spinspeed = 1.0f);
+	MissileActionRenderer(int flareType, float scale, float spinspeed, const Vector &rotationAxis);
 	virtual ~MissileActionRenderer();
 
 	virtual void simulate(Action *action, float timepassed, bool &remove);
@@ -48,6 +48,7 @@ protected:
 	GLTextureSet *flameTextureSet_;
 	GLTextureSet *smokeTextureSet_;
 	MissileMesh *mesh_;
+	Vector rotationAxis_;
 	float rotation_;
 	float scale_;
 	float frame_;

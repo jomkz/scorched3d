@@ -116,6 +116,27 @@ void GLCameraFrustum::draw(const unsigned state)
 	s.fClip[14] = s.fView[12] * s.fProj[ 2] + s.fView[13] * s.fProj[ 6] + s.fView[14] * s.fProj[10] + s.fView[15] * s.fProj[14];
 	s.fClip[15] = s.fView[12] * s.fProj[ 3] + s.fView[13] * s.fProj[ 7] + s.fView[14] * s.fProj[11] + s.fView[15] * s.fProj[15];
 
+	// Bilboard matrix
+	s.fBilboard[0] = s.fClip[0];
+	s.fBilboard[1] = s.fClip[4];
+	s.fBilboard[2] = s.fClip[8];
+	s.fBilboard[3] = 0.0f; // x
+
+	s.fBilboard[4] = s.fClip[1];
+	s.fBilboard[5] = s.fClip[5];
+	s.fBilboard[6] = s.fClip[9];
+	s.fBilboard[7] = 0.0f; // y
+
+	s.fBilboard[8] = s.fClip[2];
+	s.fBilboard[9] = s.fClip[6];
+	s.fBilboard[10] = s.fClip[10];
+	s.fBilboard[11] = 0.0f; // z
+
+	s.fBilboard[12] = 0.0f;
+	s.fBilboard[13] = 0.0f;
+	s.fBilboard[14] = 0.0f;
+	s.fBilboard[15] = 1.0f;
+
 	// Extract the right plane
 	s.frustum_[0][0] = s.fClip[ 3] - s.fClip[ 0];
 	s.frustum_[0][1] = s.fClip[ 7] - s.fClip[ 4];

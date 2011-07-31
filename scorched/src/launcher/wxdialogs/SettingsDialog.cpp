@@ -304,7 +304,9 @@ void SettingsFrame::createEnvPanel()
 	setters_.push_back(
 		OptionEntrySetterUtil::createOtherSetter(
 			envPanel_, sizer, context_.getMaxClimbingDistanceEntry()));
-
+	setters_.push_back(
+		OptionEntrySetterUtil::createOtherSetter(
+			envPanel_, sizer, context_.getTankFallingDamageEntry()));
 
 	book_->AddPage(envPanel_, wxT("Env"));
 	envPanel_->SetAutoLayout(TRUE);

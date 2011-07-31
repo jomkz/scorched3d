@@ -104,7 +104,8 @@ void GLWWeaponModel::draw()
 		Vector direction(0.3f, 1.0f, 1.0f);
 		float scale = MIN(storedWeapon->getModelScale().asFloat(), 1.0f);
 		storedMesh->setScale(w_ / 3.0f * scale);
-		storedMesh->draw(position, direction, 0, totalTime_ * 45.0f, totalTime_ * 20.0f);
+		Vector rotationAxis(0.0f, 0.0f, 1.0f);
+		storedMesh->draw(position, direction, 0, totalTime_ * 45.0f, rotationAxis, totalTime_ * 20.0f);
 	glPopMatrix();
 
 	Landscape::instance()->getSky().getSun().setLightPosition(); // Reset light

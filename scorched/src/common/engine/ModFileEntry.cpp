@@ -111,6 +111,19 @@ bool ModFileEntry::writeModFile(const std::string &fileName,
 	return true;
 }
 
+bool ModFileEntry::removeModFile(const std::string &filename, 
+								const std::string &modName)
+{
+	// Check that this file is allowed to be sent
+	if (ModFiles::excludeSpecialFile(filename)) return true;
+
+	std::string needfile = S3D::getSettingsModFile(S3D::formatStringBuffer("%s/%s", 
+		modName.c_str(), filename.c_str()));
+	S3D::removeFile(needfile);
+
+	return true;
+}
+
 bool ModFileEntry::loadModFile(const std::string &filename)
 {
 	static NetBuffer fileContents;

@@ -68,7 +68,7 @@ MissileMesh::~MissileMesh()
 {
 }
 
-void MissileMesh::draw(Vector &position, Vector &direction, int flareType, float rotation, float frame)
+void MissileMesh::draw(Vector &position, Vector &direction, int flareType, float rotation, Vector &rotationAxis, float frame)
 {
 	// Figure out the opengl roation matrix from the direction
 	// of the fired missile
@@ -87,7 +87,7 @@ void MissileMesh::draw(Vector &position, Vector &direction, int flareType, float
 		glRotatef(angXYDeg, 0.0f, 0.0f, 1.0f);
 		glRotatef(angYZDeg, 1.0f, 0.0f, 0.0f);
 
-		glRotatef(rotation, 0.0f, 0.0f, 1.0f);
+		glRotatef(rotation, rotationAxis[0], rotationAxis[1], rotationAxis[2]);
 		glScalef(scale, scale, scale);
 		model_->draw(frame, 0.0f, 1.0f, true);
 	glPopMatrix();

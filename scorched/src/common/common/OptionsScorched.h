@@ -64,6 +64,7 @@ public:
 	OPTIONINT_GETTER(MaxLandscapeSize);
 	OPTIONINT_GETTER(AllowedMissedMoves);
 	OPTIONINT_GETTER(MinFallingDistance);
+	OPTIONBOOL_GETTER(TankFallingDamage);
 	OPTIONINT_GETTER(MaxClimbingDistance);
 	OPTIONINT_GETTER(PlayerLives);
 	OPTIONINT_GETTER(Gravity);

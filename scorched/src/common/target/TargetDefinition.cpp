@@ -42,7 +42,7 @@ TargetDefinition::TargetDefinition() :
 	driveovertodestroy_(false), flattendestroy_(false), border_(0), 
 	displaydamage_(true), displayshadow_(true), displayhardwareshadow_(true),
 	nodamageburn_(false), nocollision_(false), nofalling_(false),
-	nofallingdamage_(false)
+	nofallingdamage_(false), billboard_(false)
 {
 	shadow_.setDrawShadow(false);
 }
@@ -73,6 +73,7 @@ bool TargetDefinition::readXML(XMLNode *node)
 	node->getNamedChild("modelrotationsnap", modelrotationsnap_, false);
 	node->getNamedChild("modelbrightness", modelbrightness_, false);
 	node->getNamedChild("border", border_, false);
+	node->getNamedChild("billboard", billboard_, false);
 
 	XMLNode *modelnode, *burntmodelnode;
 	if (!node->getNamedChild("model", modelnode)) return false;
@@ -225,7 +226,8 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 		target->setRenderer(
 			new TargetRendererImplTarget(
 				target, modelId_, modelburntId_,
-				finalModelScale.asFloat(), finalBrightness.asFloat()));
+				finalModelScale.asFloat(), finalBrightness.asFloat(), 
+				billboard_));
 	}
 #endif // #ifndef S3D_SERVER
 

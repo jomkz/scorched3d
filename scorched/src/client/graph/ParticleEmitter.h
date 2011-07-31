@@ -133,7 +133,9 @@ public:
 		Vector &position,
 		ParticleEngine &engine,
 		int number,
-		float width);
+		float width,
+		GLTextureSet *set,
+		bool animate);
 	void emitPrecipitation(
 		Vector &position,
 		ParticleEngine &engine,

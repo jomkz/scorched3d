@@ -143,7 +143,8 @@ void Landscape::recalculateLandscape()
 	if (!resetLandscape_)
 	{
 		resetLandscape_ = true;
-		resetLandscapeTimer_ = 1.0f; // Recalculate the water in x seconds
+		float recalcTime = float(OptionsDisplay::instance()->getDeformRecalculationTime()) / 1000.0f;
+		resetLandscapeTimer_ = recalcTime; // Recalculate the landscape in x seconds
 	}
 }
 
@@ -152,7 +153,8 @@ void Landscape::recalculateRoof()
 	if (!resetRoof_)
 	{
 		resetRoof_ = true;
-		resetRoofTimer_ = 1.0f; // Recalculate the water in x seconds
+		float recalcTime = float(OptionsDisplay::instance()->getDeformRecalculationTime()) / 1000.0f;
+		resetRoofTimer_ = recalcTime; // Recalculate the water in x seconds
 	}
 }
 

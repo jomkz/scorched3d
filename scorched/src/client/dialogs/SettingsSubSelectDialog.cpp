@@ -203,6 +203,8 @@ SettingsSubSelectDialog::SettingsSubSelectDialog() :
 		controls_, envTab_, optionsGame.getMinFallingDistanceEntry());
 	GLWOptionEntry::createEntry(
 		controls_, envTab_, optionsGame.getMaxClimbingDistanceEntry());
+	GLWOptionEntry::createEntry(
+		controls_, envTab_, optionsGame.getTankFallingDamageEntry());
 	envTab_->addWidget(new GLWSpacer(0.0f, 20.0f));
 
 	// Weapons Tab

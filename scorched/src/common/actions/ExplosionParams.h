@@ -54,6 +54,7 @@ public:
 	void setCreateMushroomAmount(fixed amount) { createMushroomAmount_ = amount; }
 
 	const char *getExplosionTexture();
+	const char *getMushroomTexture();
 	const char *getExplosionSound();
 	FixedVector &getExplosionColor();
 
@@ -94,6 +95,7 @@ protected:
 	std::string deformTexture_;
 	std::string explosionTexture_;
 	std::string explosionSound_;
+	std::string mushroomTexture_;
 	DeformType deform_;
 	ExplosionType explosionType_;
 	

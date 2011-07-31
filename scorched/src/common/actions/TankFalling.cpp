@@ -132,6 +132,10 @@ void TankFalling::collision(PhysicsParticleObject &position,
 			// No damage (or parachutes used for tiny falls)
 			damage = 0;
 		}
+		else if (!context_->getOptionsGame().getTankFallingDamage() && !current->isTarget()) 
+		{
+			damage = 0;
+		}
 		else if (current->getTargetState().getNoFallingDamage())
 		{
 			damage = 0;

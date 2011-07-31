@@ -464,7 +464,9 @@ void ParticleEmitter::emitMushroom(
 	Vector &position,
 	ParticleEngine &engine,
 	int number,
-	float width)
+	float width,
+	GLTextureSet *set,
+	bool animate)
 {
 	for (int i=0; i<number; i++)
 	{
@@ -476,9 +478,18 @@ void ParticleEmitter::emitMushroom(
 		particle->position_ = position;
 		particle->renderer_ = ParticleRendererMushroom::getInstance();
 		particle->textureCoord_ = int(RAND * 4.0f);
-		particle->texture_ = &ExplosionTextures::instance()->smokeTexture;
 		particle->shadow_ = (RAND > 0.80f);
 		particle->userData_ = new ExplosionNukeRendererEntry(position, width);
+
+		if (animate)
+		{
+			particle->textureSet_ = set;
+		}
+		else
+		{
+			int index = MIN(int(RAND * (set->getNoTextures() - 1)), set->getNoTextures() - 1);
+			particle->texture_ = set->getTexture(index);
+		}
 	}
 }
 

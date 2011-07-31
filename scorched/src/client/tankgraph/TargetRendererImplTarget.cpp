@@ -33,14 +33,14 @@
 
 TargetRendererImplTarget::TargetRendererImplTarget(Target *target,
 	ModelID model, ModelID burntModel, 
-	float scale, float color) :
+	float scale, float color, bool billboard) :
 	TargetRendererImpl(target),
 	modelId_(model), burntModelId_(burntModel),
 	target_(target),
 	burnt_(false),
 	shieldHit_(0.0f), totalTime_(0.0f),
 	targetTips_(target),
-	scale_(scale), color_(color)
+	scale_(scale), color_(color), billboard_(billboard)
 {
 	modelRenderer_ = new ModelRendererSimulator(
 		ModelRendererStore::instance()->loadModel(model));
@@ -115,11 +115,23 @@ void TargetRendererImplTarget::render(float distance)
 	float drawCullingDistance = OptionsDisplay::instance()->getDrawCullingDistance() * size;
 	if (distance < drawCullingDistance)
 	{
-		cacheMatrix();
-
 		glColor3f(color_, color_, color_);
 		glPushMatrix();
-			glMultMatrixf(cachedMatrix_);
+			if (billboard_)
+			{
+				glTranslatef(
+					target_->getLife().getFloatPosition()[0], 
+					target_->getLife().getFloatPosition()[1], 
+					target_->getLife().getFloatPosition()[2]);
+				glMultMatrixf(GLCameraFrustum::instance()->getBilboardMatrix());
+				glScalef(scale_, scale_, scale_);
+			}
+			else
+			{
+				 cacheMatrix();
+				 glMultMatrixf(cachedMatrix_);
+			}
+
 			if (burnt_) burntModelRenderer_->drawBottomAligned(distance, 1.0f);
 			else modelRenderer_->drawBottomAligned(distance, 1.0f);
 		glPopMatrix();
@@ -135,7 +147,20 @@ void TargetRendererImplTarget::renderReflection(float distance)
 		cacheMatrix();
 		glColor3f(color_, color_, color_);
 		glPushMatrix();
-			glMultMatrixf(cachedMatrix_);
+			if (billboard_)
+			{
+				glTranslatef(
+					target_->getLife().getFloatPosition()[0], 
+					target_->getLife().getFloatPosition()[1], 
+					target_->getLife().getFloatPosition()[2]);
+				glMultMatrixf(GLCameraFrustum::instance()->getBilboardMatrix());
+				glScalef(scale_, scale_, scale_);
+			}
+			else
+			{
+				 glMultMatrixf(cachedMatrix_);
+			}
+
 			if (burnt_) burntModelRenderer_->drawBottomAligned(distance, 1.0f);
 			else modelRenderer_->drawBottomAligned(distance, 1.0f);
 		glPopMatrix();
@@ -151,6 +176,8 @@ void TargetRendererImplTarget::render2D(float distance)
 
 void TargetRendererImplTarget::renderShadow(float distance)
 {
+	if (billboard_) return;
+
 	glPushMatrix();
 		glMultMatrixf(cachedMatrix_);
 		if (burnt_) burntModelRenderer_->drawBottomAligned(distance, 1.0f, false);

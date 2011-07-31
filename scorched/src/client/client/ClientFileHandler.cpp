@@ -74,96 +74,119 @@ bool ClientFileHandler::processMessage(
 		reader.getFromBuffer(fileName);
 		if (fileName.size() == 0) break;
 
-		// Read flags
-		bool firstChunk = false;
-		bool lastChunk = false;
-		reader.getFromBuffer(firstChunk);
-		reader.getFromBuffer(lastChunk);
-
-		// Read file count
-		unsigned int bytesLeft = 0;
-		reader.getFromBuffer(bytesLeft);
-		if (totalBytes_ == 0) totalBytes_ = bytesLeft;
-
-		// Update progress
-		unsigned int doneBytes = totalBytes_ - bytesLeft;
-		float percentage = float(doneBytes * 100 / totalBytes_);
-		ProgressDialog::instance()->progressChange(
-			LANG_RESOURCE_2("DOWNLOADING_FILE", "Downloading mod, {0}% {1} KB", 
-			percentage, (doneBytes / 1000)), percentage);
-
-		// Read the size
-		unsigned int maxsize = 0;
-		unsigned int uncompressedsize = 0;
-		unsigned int crc = 0;
-		unsigned int size = 0;
-		reader.getFromBuffer(maxsize);
-		reader.getFromBuffer(uncompressedsize);
-		reader.getFromBuffer(crc);
-		reader.getFromBuffer(size);
-		
-		// The first part
-		if (firstChunk)
+		// Check if we are adding or removing this file
+		bool addFile = true;
+		reader.getFromBuffer(addFile);
+		if (addFile)
 		{
-			// Remove the file if it already exists
+			// Read flags
+			bool firstChunk = false;
+			bool lastChunk = false;
+			reader.getFromBuffer(firstChunk);
+			reader.getFromBuffer(lastChunk);
+
+			// Read file count
+			unsigned int bytesLeft = 0;
+			reader.getFromBuffer(bytesLeft);
+			if (totalBytes_ == 0) totalBytes_ = bytesLeft;
+
+			// Update progress
+			unsigned int doneBytes = totalBytes_ - bytesLeft;
+			float percentage = float(doneBytes * 100 / totalBytes_);
+			ProgressDialog::instance()->progressChange(
+				LANG_RESOURCE_2("DOWNLOADING_FILE", "Downloading mod, {0}% {1} KB", 
+				percentage, (doneBytes / 1000)), percentage);
+
+			// Read the size
+			unsigned int maxsize = 0;
+			unsigned int uncompressedsize = 0;
+			unsigned int crc = 0;
+			unsigned int size = 0;
+			reader.getFromBuffer(maxsize);
+			reader.getFromBuffer(uncompressedsize);
+			reader.getFromBuffer(crc);
+			reader.getFromBuffer(size);
+		
+			// The first part
+			if (firstChunk)
+			{
+				// Remove the file if it already exists
+				std::map<std::string, ModFileEntry *>::iterator findItor = 
+					files.find(fileName);
+				if (findItor != files.end())
+				{
+					delete (*findItor).second;
+					files.erase(findItor);
+				}
+
+				// Create a new file
+				ModFileEntry *fileEntry = new ModFileEntry;
+				fileEntry->setFileName(fileName.c_str());
+				fileEntry->setCompressedCrc(crc);
+				fileEntry->setUncompressedSize(uncompressedsize);
+				files[fileName] = fileEntry;
+			}
+
+			// Locate the file
+			std::map<std::string, ModFileEntry *>::iterator findItor = 
+				files.find(fileName);
+			if (findItor == files.end())
+			{
+				Logger::log(S3D::formatStringBuffer("Failed to find partial mod file \"%s\"", 
+					fileName.c_str()));
+				return false;
+			}
+			ModFileEntry *entry = (*findItor).second;
+
+			// Add the bytes to the file
+			entry->getCompressedBuffer().addDataToBuffer(
+				reader.getBuffer() + reader.getReadSize(), size);
+			reader.setReadSize(reader.getReadSize() + size);
+
+			// Check if we have finished this file
+			if (lastChunk)
+			{
+				// Finished
+				Logger::log(S3D::formatStringBuffer(" %u/%u %s - %i bytes",
+					doneBytes,
+					totalBytes_,
+					fileName.c_str(),
+					entry->getCompressedSize()));
+
+				// Wrong size
+				if (entry->getCompressedSize() != maxsize)
+				{
+					Logger::log(S3D::formatStringBuffer("Downloaded mod file incorrect size \"%s\".\n"
+						"Expected %u, got %u.",
+						fileName.c_str(), entry->getCompressedSize(), maxsize));
+					return false;
+				}
+
+				// Write file
+				if (!entry->writeModFile(fileName.c_str(),
+					ScorchedClient::instance()->getOptionsGame().getMod()))
+				{
+					Logger::log(S3D::formatStringBuffer("Failed to write mod file \"%s\"",
+						fileName.c_str()));
+					return false;
+				}
+			}
+		}
+		else
+		{
+			// Remove the file 
 			std::map<std::string, ModFileEntry *>::iterator findItor = 
 				files.find(fileName);
 			if (findItor != files.end())
 			{
+				findItor->second->removeModFile(fileName, 
+					ScorchedClient::instance()->getOptionsGame().getMod());
+
+				Logger::log(S3D::formatStringBuffer(" %s - removed",
+					fileName.c_str()));
+
 				delete (*findItor).second;
 				files.erase(findItor);
-			}
-
-			// Create a new file
-			ModFileEntry *fileEntry = new ModFileEntry;
-			fileEntry->setFileName(fileName.c_str());
-			fileEntry->setCompressedCrc(crc);
-			fileEntry->setUncompressedSize(uncompressedsize);
-			files[fileName] = fileEntry;
-		}
-
-		// Locate the file
-		std::map<std::string, ModFileEntry *>::iterator findItor = 
-			files.find(fileName);
-		if (findItor == files.end())
-		{
-			Logger::log(S3D::formatStringBuffer("Failed to find partial mod file \"%s\"", 
-				fileName.c_str()));
-			return false;
-		}
-		ModFileEntry *entry = (*findItor).second;
-
-		// Add the bytes to the file
-		entry->getCompressedBuffer().addDataToBuffer(
-			reader.getBuffer() + reader.getReadSize(), size);
-		reader.setReadSize(reader.getReadSize() + size);
-
-		// Check if we have finished this file
-		if (lastChunk)
-		{
-			// Finished
-			Logger::log(S3D::formatStringBuffer(" %u/%u %s - %i bytes",
-				doneBytes,
-				totalBytes_,
-				fileName.c_str(),
-				entry->getCompressedSize()));
-
-			// Wrong size
-			if (entry->getCompressedSize() != maxsize)
-			{
-				Logger::log(S3D::formatStringBuffer("Downloaded mod file incorrect size \"%s\".\n"
-					"Expected %u, got %u.",
-					fileName.c_str(), entry->getCompressedSize(), maxsize));
-				return false;
-			}
-
-			// Write file
-			if (!entry->writeModFile(fileName.c_str(),
-				ScorchedClient::instance()->getOptionsGame().getMod()))
-			{
-				Logger::log(S3D::formatStringBuffer("Failed to write mod file \"%s\"",
-					fileName.c_str()));
-				return false;
 			}
 		}
 	}

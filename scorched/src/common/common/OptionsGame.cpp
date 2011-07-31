@@ -217,6 +217,8 @@ OptionsGame::OptionsGame() :
 		"The amount of time to give clients to respond after shots before kicking them", OptionEntry::DataDepricated, 45, 0, 90, 5),
 	minFallingDistance_(options_, "MinFallingDistance",
 		"The minimum distance that can be made with no damage (value is divided by 10)", 0, 5, 0, 100, 5),
+	tankFallingDamage_(options_, "TankFallingDamage", 
+		"If tanks tank damage from falling", 0, true),
 	maxClimbingDistance_(options_, "MaxClimbingDistance",
 		"The maximum distance that a tank can climb per movement square (divided by 10)", 0, 8, 0, 20, 1),
 	playerLives_(options_, "PlayerLives",

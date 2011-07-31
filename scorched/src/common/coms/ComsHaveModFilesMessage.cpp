@@ -31,21 +31,6 @@ ComsHaveModFilesMessage::~ComsHaveModFilesMessage()
 {
 }
 
-ModIdentifierEntry *ComsHaveModFilesMessage::getFile(const char *name)
-{
-	std::list<ModIdentifierEntry>::iterator itor;
-	for (itor = files_.begin();
-		itor != files_.end();
-		itor++)
-	{
-		ModIdentifierEntry &entry = *itor;
-		if (0 == strcmp(entry.fileName.c_str(), name))
-			return &entry;
-	}
-
-	return 0;
-}
-
 bool ComsHaveModFilesMessage::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer((int) files_.size());

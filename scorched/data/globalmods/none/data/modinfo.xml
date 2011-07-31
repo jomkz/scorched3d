@@ -7,7 +7,7 @@ Choose a custom game for more options or to play with
 more than one human player.</description>
 		<icon>data/windows/tank2.bmp</icon>
 		<url>http://www.scorched3d.co.uk</url>
-		<protocolversion>eo</protocolversion>
+		<protocolversion>ep</protocolversion>
 	</main>
 	<game>
 		<shortdescription>Target practice</shortdescription>

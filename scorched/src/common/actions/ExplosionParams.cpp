@@ -31,7 +31,8 @@ ExplosionParams::ExplosionParams() :
 	luminance_(true), animate_(true),
 	onlyHurtShield_(false), explodeUnderGround_(true),
 	minLife_(true, 5000), maxLife_(1), shake_(0),
-	explosionTexture_("exp00")
+	explosionTexture_("exp00"),
+	mushroomTexture_("smoke")
 {
 }
 
@@ -42,6 +43,11 @@ ExplosionParams::~ExplosionParams()
 const char *ExplosionParams::getExplosionTexture()
 {
 	return explosionTexture_.c_str();
+}
+
+const char *ExplosionParams::getMushroomTexture()
+{
+	return mushroomTexture_.c_str();
 }
 
 const char *ExplosionParams::getExplosionSound()
@@ -123,6 +129,7 @@ bool ExplosionParams::parseXML(XMLNode *accessoryNode)
 
 	// Get the explosion texture
 	accessoryNode->getNamedChild("explosiontexture", explosionTexture_, false);
+	accessoryNode->getNamedChild("mushroomtexture", mushroomTexture_, false);
 
 	// Get the explosion sound
 	if (accessoryNode->getNamedChild("explosionsound", explosionSound_, false))
@@ -179,6 +186,7 @@ void ExplosionParams::parseLUA(lua_State *L, int position)
 	
 	deformTexture_ = LUAUtil::getStringFromTable(L, position, "deformtexture", deformTexture_);
 	explosionTexture_ = LUAUtil::getStringFromTable(L, position, "explosiontexture", explosionTexture_);
+	mushroomTexture_ = LUAUtil::getStringFromTable(L, position, "mushroomtexture", mushroomTexture_);
 	explosionSound_ = LUAUtil::getStringFromTable(L, position, "explosionsound", explosionSound_);
 
 	fixed deform = LUAUtil::getNumberFromTable(L, position, "deform", int(deform_));

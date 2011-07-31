@@ -202,7 +202,7 @@ bool ScorchedServer::startServerInternal(const ScorchedServerSettings &settings,
 		{
 			S3D::dialogExit("Scorched3D", S3D::formatStringBuffer(
 				"Cannot load save file \"%s\".",
-				options.saveFile_), 
+				options.saveFile_.c_str()), 
 				false);			
 		}
 	}

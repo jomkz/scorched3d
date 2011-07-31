@@ -86,6 +86,8 @@ protected:
 	bool waterCollision_, wallCollision_;
 	bool apexNoDud_, timedDud_;
 	NumberParser spinSpeed_;
+	Vector spinAxis_;
+
 	bool createSmoke_, createFlame_;
 	float flameLife_, smokeLife_;
 	float flameStartSize_, flameEndSize_;

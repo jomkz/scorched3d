@@ -142,6 +142,7 @@ bool ClientConnectionAcceptHandler::processMessage(
 
 		comsFileMessage.getFiles().push_back(
 			ModIdentifierEntry(
+				true,
 				name.c_str(),
 				file->getCompressedSize(),
 				file->getCompressedCrc()));

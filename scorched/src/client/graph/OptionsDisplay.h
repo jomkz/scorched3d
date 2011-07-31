@@ -202,6 +202,9 @@ public:
 	int getEffectsDetail() { return effectsDetail_; }
 	OptionEntryInt &getEffectsDetailEntry() { return effectsDetail_; }
 
+	int getDeformRecalculationTime() { return deformRecalculationTime_; }
+	OptionEntryInt &getDeformRecalculationTimeEntry() { return deformRecalculationTime_; }
+
 	bool getDrawLines() { return drawLines_; }
 	OptionEntryBool &getDrawLinesEntry() { return drawLines_; }
 
@@ -546,6 +549,7 @@ protected:
 	OptionEntryBoundedInt texSize_;
 	OptionEntryBoundedInt tankDetail_;
 	OptionEntryBoundedInt effectsDetail_;
+	OptionEntryBoundedInt deformRecalculationTime_;
 	OptionEntryBoundedInt soundVolume_;
 	OptionEntryBoundedInt ambientSoundVolume_;
 	OptionEntryBoundedInt musicVolume_;

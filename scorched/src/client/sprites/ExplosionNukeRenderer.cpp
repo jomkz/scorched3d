@@ -65,8 +65,10 @@ void ExplosionNukeRendererEntry::simulate(Particle *particle, float time)
 
 Vector *ExplosionNukeRenderer::positions_ = 0;
 
-ExplosionNukeRenderer::ExplosionNukeRenderer(Vector &position, float size) 
-	: totalTime_(0.0f), time_(0.0f), position_(position), size_(size)
+ExplosionNukeRenderer::ExplosionNukeRenderer(Vector &position, float size,
+	GLTextureSet *set,
+	bool animate) 
+	: set_(set), animate_(animate), totalTime_(0.0f), time_(0.0f), position_(position), size_(size)
 {
 	position_[2] -= size_;
 	float height = ScorchedClient::instance()->getLandscapeMaps().
@@ -153,7 +155,9 @@ void ExplosionNukeRenderer::simulate(Action *action, float frameTime, bool &remo
 					position_,
 					ScorchedClient::instance()->getParticleEngine(),
 					SmokesPerTime,
-					size_);
+					size_,
+					set_,
+					animate_);
 			}
 			else remove = true;
 		}

@@ -50,7 +50,7 @@ protected:
 class ExplosionNukeRenderer : public ActionRenderer
 {
 public:
-	ExplosionNukeRenderer(Vector &position, float size);
+	ExplosionNukeRenderer(Vector &position, float size, GLTextureSet *set, bool animate);
 	virtual ~ExplosionNukeRenderer();
 
 	virtual void draw(Action *action);
@@ -58,6 +58,8 @@ public:
 
 	static Vector *positions_;
 protected:
+	GLTextureSet *set_;
+	bool animate_;
 	Vector position_;
 	float size_;
 	float time_;

@@ -26,15 +26,18 @@
 
 struct ModIdentifierEntry
 {
-	ModIdentifierEntry(const std::string &f = "",
+	ModIdentifierEntry(bool a = true,
+		const std::string &f = "",
 		unsigned int l = 0,
 		unsigned int c = 0) :
+		addFile(a),
 		fileName(f),
 		length(l),
 		crc(c)
 	{
 	};
 
+	bool addFile;
 	std::string fileName;
 	unsigned int length;
 	unsigned int crc;
@@ -48,6 +51,7 @@ public:
 
 	bool loadModFile(const std::string &file);
 	bool writeModFile(const std::string &file, const std::string &mod);
+	bool removeModFile(const std::string &file, const std::string &mod);
 
 	void setFileName(const std::string &name) { fileName_ = name; }
 	std::string getFileName() { return fileName_; }

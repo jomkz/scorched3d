@@ -32,7 +32,7 @@ class TargetRendererImplTarget :
 public:
 	TargetRendererImplTarget(Target *target, 
 		ModelID model, ModelID burntModel,
-		float scale, float color);
+		float scale, float color, bool billboard);
 	virtual ~TargetRendererImplTarget();
 
 	// TargetRendererImpl
@@ -57,7 +57,7 @@ protected:
 	Target *target_;
 	ModelRendererSimulator *modelRenderer_;
 	ModelRendererSimulator *burntModelRenderer_;
-	bool burnt_;
+	bool burnt_, billboard_;
 	float shieldHit_, totalTime_;
 	float scale_, color_;
 	GLWTargetTips targetTips_;

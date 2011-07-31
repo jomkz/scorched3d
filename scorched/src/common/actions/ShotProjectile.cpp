@@ -40,13 +40,14 @@
 ShotProjectile::ShotProjectile(FixedVector &startPosition, FixedVector &velocity,
 							   WeaponProjectile *weapon, WeaponFireContext &weaponContext,
 							   unsigned int flareType,
-							   fixed spinSpeed ) :
+							   fixed spinSpeed, const Vector &spinAxis) :
 	PhysicsParticle(weaponContext.getPlayerId()),
 	startPosition_(startPosition), velocity_(velocity), 
 	weapon_(weapon), weaponContext_(weaponContext), 
 	flareType_(flareType), vPoint_(0),
 	snapTime_(fixed(true, 2000)), up_(false),
-	totalTime_(0), simulateTime_(0), spinSpeed_(spinSpeed)
+	totalTime_(0), simulateTime_(0), 
+	spinSpeed_(spinSpeed), spinAxis_(spinAxis)
 {
 }
 
@@ -57,7 +58,8 @@ void ShotProjectile::init()
 	{
 		setActionRender(new MissileActionRenderer(flareType_, 
 				weapon_->getScale(*context_).asFloat(),
-				spinSpeed_.asFloat()));
+				spinSpeed_.asFloat(),
+				spinAxis_));
 
 		vPoint_ = new TankViewPointProvider();
 		vPoint_->incrementReference();

@@ -42,6 +42,7 @@ public:
 	void clearAll();
 
 	std::map<std::string, ModFileEntry *> &getFiles() { return files_; }
+	static bool excludeSpecialFile(const std::string &file);
 	static bool excludeFile(const std::string &file);
 	static bool fileEnding(const std::string &file, const std::string &ext);
 

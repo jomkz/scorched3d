@@ -33,7 +33,6 @@ public:
 	ComsHaveModFilesMessage();
 	virtual ~ComsHaveModFilesMessage();
 
-	ModIdentifierEntry *getFile(const char *name);
 	std::list<ModIdentifierEntry> &getFiles() { return files_; }
 
 	// Inherited from ComsMessage

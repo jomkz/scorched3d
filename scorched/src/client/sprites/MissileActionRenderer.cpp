@@ -34,10 +34,11 @@
 #include <graph/ParticleEngine.h>
 #include <sound/Sound.h>
 
-MissileActionRenderer::MissileActionRenderer(int flareType, float scale, float spinSpeed) : 
+MissileActionRenderer::MissileActionRenderer(int flareType, float scale, float spinSpeed, const Vector &rotationAxis) : 
 	flareType_(flareType), counter_(0.05f, 0.05f), 
 	mesh_(0), scale_(scale), rotation_(180.0f),
 	flameemitter_(0), smokeemitter_(0), sound_(0),
+	rotationAxis_(rotationAxis),
 	spinSpeed_(spinSpeed)
 {
 	frame_ = (float) rand();
@@ -125,7 +126,6 @@ void MissileActionRenderer::simulate(Action *action, float timepassed, bool &rem
 	// Rotate the shot
 	frame_ += timepassed * 20.0f;
 	rotation_ += shot->getCurrentVelocity().Magnitude().asFloat() * spinSpeed_;
-		//shot->getWeapon()->getSpinSpeed();
 
 	// Add flame trail
 	if (shot->getWeapon()->getCreateFlame())
@@ -197,7 +197,7 @@ void MissileActionRenderer::draw(Action *action)
 
 	// Draw the missile
 	mesh_->setScale(scale_);
-	mesh_->draw(actualPos, actualdir, flareType_, rotation_, frame_);
+	mesh_->draw(actualPos, actualdir, flareType_, rotation_, rotationAxis_, frame_);
 
 	// Draw the missile shadow
 	float aboveGround =
