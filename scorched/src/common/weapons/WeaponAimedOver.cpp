@@ -25,6 +25,8 @@
 #include <tank/Tank.h>
 #include <tank/TankLib.h>
 #include <tank/TankPosition.h>
+#include <tank/TankContainer.h>
+#include <target/TargetLife.h>
 #include <common/Defines.h>
 #include <common/OptionsTransient.h>
 #include <list>
@@ -34,7 +36,8 @@ REGISTER_ACCESSORY_SOURCE(WeaponAimedOver);
 
 WeaponAimedOver::WeaponAimedOver() :
 	warHeads_(0),
-	aimedWeapon_(0)
+	aimedWeapon_(0),
+	randomWhenNoTargets_(true)
 {
 
 }
@@ -74,6 +77,9 @@ bool WeaponAimedOver::parseXML(AccessoryCreateContext &context, XMLNode *accesso
 	// Get the accessory percentage miss chance
 	if (!accessoryNode->getNamedChild("inaccuracy", maxInacuracy_)) return false;
 
+	accessoryNode->getNamedChild("groupname", groupName_, false);
+	accessoryNode->getNamedChild("randomwhennotargets", randomWhenNoTargets_, false);
+
 	return true;
 }
 
@@ -103,17 +109,46 @@ void WeaponAimedOver::fireWeapon(ScorchedContext &context,
 	}
 
 	// Get all of the distances of the tanks less than maxAimedDistance_ away
-	std::list<std::pair<fixed, Tank *> > sortedTanks;
-	TankLib::getTanksSortedByDistance(
-		context,
+	std::list<std::pair<fixed, Target *> > sortedTanks;
+	std::list<Target *> targets;
+	if (groupName_.empty())
+	{
+		std::map<unsigned int, Tank *> &allTanks =
+			context.getTankContainer().getAllTanks();
+		std::map<unsigned int, Tank *>::iterator itor;
+		for (itor = allTanks.begin();
+			itor != allTanks.end();
+			itor++)
+		{
+			targets.push_back(itor->second);
+		}
+	}
+	else
+	{
+		TargetGroupsSetEntry *groupEntry = context.getLandscapeMaps().getGroundMaps().getGroups().
+			getGroup(groupName_.c_str());
+		if (groupEntry) 
+		{
+			std::map<unsigned int, TargetGroup *> &objects = groupEntry->getObjects();
+			std::map<unsigned int, TargetGroup *>::iterator itor;
+			for (itor = objects.begin();
+				itor != objects.end();
+				itor++)
+			{
+				targets.push_back(itor->second->getTarget());
+			}			
+		}
+	}
+	TankLib::getTargetsSortedByDistance(
 		position, 
+		targets,
 		sortedTanks,
 		0,
 		maxAimedDistance_.getValue(context));
 
 	// Add all of these distances together
 	fixed totalDist = 0;
-	std::list<std::pair<fixed, Tank *> >::iterator itor;
+	std::list<std::pair<fixed, Target *> >::iterator itor;
 	for (itor = sortedTanks.begin();
 		itor != sortedTanks.end();
 		itor++)
@@ -150,7 +185,7 @@ void WeaponAimedOver::fireWeapon(ScorchedContext &context,
 		fixed dist = maxDist * random.getRandFixed("WeaponAimedOver");
 
 		// Find which tank fits this probability
-		Tank *shootAt = 0;
+		Target *shootAt = 0;
 		fixed distC = 0;
 		for (itor = sortedTanks.begin();
 			itor != sortedTanks.end();
@@ -176,7 +211,7 @@ void WeaponAimedOver::fireWeapon(ScorchedContext &context,
 				context,
 				random,
 				position, 
-				shootAt->getPosition().getTankPosition(), 
+				shootAt->getLife().getTargetPosition(), 
 				angleXYDegs, angleYZDegs, power);
 			power *= fixed(true, 6000);
 
@@ -184,6 +219,10 @@ void WeaponAimedOver::fireWeapon(ScorchedContext &context,
 				(maxInacuracy_.getValue(context) / 2);
 			angleYZDegs += (random.getRandFixed("WeaponAimedOver") * maxInacuracy_.getValue(context)) - 
 				(maxInacuracy_.getValue(context) / 2);
+		}
+		else if (!randomWhenNoTargets_)
+		{
+			continue;
 		}
 		if (ceiling) angleYZDegs += 180;
 

@@ -26,17 +26,18 @@
 #include <list>
 
 class Tank;
+class Target;
 class RandomGenerator;
 namespace TankLib
 {
 	bool intersection(ScorchedContext &context,
 		FixedVector position, fixed xy, fixed yz, fixed power,
 		int dist);
-	fixed getDistanceToTank(FixedVector &position, Tank *targetTank);
-	void getTanksSortedByDistance(
-		ScorchedContext &context,
+	fixed getDistanceToTank(FixedVector &position, Target *targetTank);
+	void getTargetsSortedByDistance(
 		FixedVector &position, 
-		std::list<std::pair<fixed, Tank *> > &result,
+		std::list<Target *> &srcTargets,
+		std::list<std::pair<fixed, Target *> > &result,
 		unsigned int teams,
 		fixed maxDistance = -1);
 	bool getSniperShotTowardsPosition(ScorchedContext &context,

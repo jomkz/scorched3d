@@ -52,6 +52,7 @@ public:
 	bool getCreateFlame() { return createFlame_; }
 	bool getTimedDud() { return timedDud_; }
 	fixed getWindFactor(ScorchedContext &context);
+	fixed getGravityFactor(ScorchedContext &context);
 	fixed getShieldHurtFactor(ScorchedContext &context);
 	fixed getTimedCollision(ScorchedContext &context) { return timedCollision_.getValue(context); }
 	fixed getHeightCollision(ScorchedContext &context) { return heightCollision_.getValue(context); }
@@ -97,6 +98,7 @@ protected:
 	NumberParser shieldHurtFactor_;
 	NumberParser scale_;
 	NumberParser windFactor_;
+	NumberParser gravityFactor_;
 	NumberParser drag_;
 	NumberParser heightCollision_;
 	fixed stepSize_;

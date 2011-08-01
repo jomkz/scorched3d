@@ -22,6 +22,7 @@
 #include <tank/TankContainer.h>
 #include <tank/TankPosition.h>
 #include <tank/TankState.h>
+#include <target/TargetLife.h>
 #include <engine/Simulator.h>
 #include <common/RandomGenerator.h>
 #include <common/Defines.h>
@@ -31,43 +32,47 @@
 #endif
 #include <math.h>
 
-fixed TankLib::getDistanceToTank(FixedVector &position, Tank *targetTank)
+fixed TankLib::getDistanceToTank(FixedVector &position, Target *targetTank)
 {
 	FixedVector currentdirection = 
-			targetTank->getPosition().getTankPosition() - position;
+		targetTank->getLife().getTargetPosition() - position;
 	fixed maxdistance2D = (currentdirection[0] * 
 		currentdirection[0] + currentdirection[1] * currentdirection[1]).sqrt();
 	return maxdistance2D;
 }
 
-void TankLib::getTanksSortedByDistance(ScorchedContext &context,
-									   FixedVector &position, 
-									  std::list<std::pair<fixed, Tank *> > &result,
+void TankLib::getTargetsSortedByDistance(FixedVector &position, 
+									   std::list<Target *> &srcTargets,
+									  std::list<std::pair<fixed, Target *> > &result,
 									  unsigned int teams,
 									  fixed maxDistance)
 {
-	std::list<std::pair<fixed, Tank *> > tankDistList;
-	std::map<unsigned int, Tank *> &allCurrentTanks = 
-		context.getTankContainer().getAllTanks();
-	std::map<unsigned int, Tank *>::iterator itor;
-	for (itor = allCurrentTanks.begin();
-		itor != allCurrentTanks.end();
+	std::list<std::pair<fixed, Target *> > tankDistList;
+	std::list<Target *>::iterator itor;
+	for (itor = srcTargets.begin();
+		itor != srcTargets.end();
 		itor++)
 	{
-		Tank *targetTank = (*itor).second;
-		if (targetTank->getState().getState() == TankState::sNormal)
+		Target *targetTank = (*itor);
+		if (targetTank->getAlive())
 		{
-			if (teams > 0 && teams == targetTank->getTeam()) continue;
+			if (teams > 0)
+			{
+				if (!targetTank->isTarget())
+				{
+					if (teams == ((Tank *) targetTank)->getTeam()) continue;
+				}
+			}
 
 			fixed maxdistance2D = getDistanceToTank(position, targetTank);
-			tankDistList.push_back(std::pair<fixed, Tank*>(maxdistance2D, targetTank));
+			tankDistList.push_back(std::pair<fixed, Target*>(maxdistance2D, targetTank));
 		}
 	}
 
 	while (!tankDistList.empty())
 	{
-		std::list<std::pair<fixed, Tank *> >::iterator removeItor = tankDistList.begin();
-		std::list<std::pair<fixed, Tank *> >::iterator itor = tankDistList.begin(); itor++;
+		std::list<std::pair<fixed, Target *> >::iterator removeItor = tankDistList.begin();
+		std::list<std::pair<fixed, Target *> >::iterator itor = tankDistList.begin(); itor++;
 		for (;itor != tankDistList.end(); itor++)
 		{
 			if ((*itor).first <  (*removeItor).first) 

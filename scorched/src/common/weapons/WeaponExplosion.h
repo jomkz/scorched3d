@@ -41,7 +41,9 @@ public:
 
 protected:
 	ExplosionParams params_;
+	bool deformSizeSet_;
 	NumberParser sizeExp_;
+	NumberParser deformSizeExp_;
 	NumberParser shakeExp_;
 	NumberParser minLifeExp_, maxLifeExp_;
 	NumberParser createMushroomAmountExp_;

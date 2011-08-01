@@ -54,6 +54,7 @@ protected:
 	WeaponRoller *weapon_;
 	WeaponFireContext weaponContext_;
 	fixed totalTime_, simulateTime_, stepSize_;
+	fixed weaponTime_;
 	ModelRendererSimulator *model_;
 
 	void doCollision();

@@ -34,7 +34,7 @@
 REGISTER_ACCESSORY_SOURCE(WeaponRoller);
 
 WeaponRoller::WeaponRoller() : 
-	shieldHurtFactor_(0), windFactor_(1), 
+	shieldHurtFactorExp_(0), windFactorExp_(1), gravityFactorExp_(1),
 	maintainVelocity_(false), roll_(true),
 	dampenVelocityExp_(1), stepSize_(true, 100),
 	collisionAction_(0), stickyShields_(false)
@@ -64,6 +64,7 @@ bool WeaponRoller::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 
 	// Get the wind factor (if any)
 	accessoryNode->getNamedChild("windfactor", windFactorExp_, false);
+	accessoryNode->getNamedChild("gravityfactor", gravityFactorExp_, false);
 
 	// Get the maintianvelocity (if any)
 	accessoryNode->getNamedChild("maintainvelocity", maintainVelocity_, false);
@@ -98,7 +99,12 @@ bool WeaponRoller::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 
 fixed WeaponRoller::getWindFactor(ScorchedContext &context)
 {
-	return windFactor_;
+	return windFactorExp_.getValue(context);
+}
+
+fixed WeaponRoller::getGravityFactor(ScorchedContext &context)
+{
+	return gravityFactorExp_.getValue(context);
 }
 
 fixed WeaponRoller::getTime(ScorchedContext &context)
@@ -108,22 +114,12 @@ fixed WeaponRoller::getTime(ScorchedContext &context)
 
 fixed WeaponRoller::getShieldHurtFactor(ScorchedContext &context)
 {
-	return shieldHurtFactor_;
+	return shieldHurtFactorExp_.getValue(context);
 }
 
 void WeaponRoller::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &oldposition, FixedVector &velocity)
 {
-	// Get the values from the numberparser expressions
-	// leaving time in the sim loop so that individual rollers can
-	//  have different times
-	// time_ = timeExp_.getValue(context);
-	
-	shieldHurtFactor_ = shieldHurtFactorExp_.getValue(context, shieldHurtFactor_);
-	windFactor_ = windFactorExp_.getValue(context, windFactor_);
-
-	dampenVelocity_ = dampenVelocityExp_.getValue(context, dampenVelocity_);
-
 	fixed minHeight = context.getLandscapeMaps().getGroundMaps().getInterpHeight(
 		oldposition[0], oldposition[1]);
 
@@ -203,7 +199,7 @@ void WeaponRoller::addRoller(ScorchedContext &context,
 	FixedVector newVelocity;
 	if (maintainVelocity_)
 	{
-		newVelocity = velocity * dampenVelocity_;
+		newVelocity = velocity * dampenVelocityExp_.getValue(context);
 	}
 	else
 	{

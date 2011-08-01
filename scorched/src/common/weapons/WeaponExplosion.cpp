@@ -41,6 +41,14 @@ bool WeaponExplosion::parseXML(AccessoryCreateContext &context, XMLNode *accesso
 	if (!Weapon::parseXML(context, accessoryNode)) return false;
 
     if (!accessoryNode->getNamedChild("size", sizeExp_)) return false;
+	if (accessoryNode->getNamedChild("deformsize", deformSizeExp_, false))
+	{
+		deformSizeSet_ = true;
+	}
+	else
+	{
+		deformSizeSet_ = false;
+	}
 	if (!accessoryNode->getNamedChild("hurtamount", hurtAmountExp_)) return false;
 
 	accessoryNode->getNamedChild("explosionshake", shakeExp_, false);
@@ -59,6 +67,7 @@ void WeaponExplosion::fireWeapon(ScorchedContext &context,
 	ExplosionParams *newParams = new ExplosionParams(params_);
 
 	newParams->setSize(sizeExp_.getValue(context, params_.getSize()));
+	newParams->setDeformSize(deformSizeSet_?deformSizeExp_.getValue(context, params_.getDeformSize()):newParams->getSize());
 	newParams->setHurtAmount(hurtAmountExp_.getValue(context, params_.getHurtAmount()));
 	newParams->setShake(shakeExp_.getValue(context, params_.getShake()));
 	newParams->setMinLife(minLifeExp_.getValue(context, params_.getMinLife()));

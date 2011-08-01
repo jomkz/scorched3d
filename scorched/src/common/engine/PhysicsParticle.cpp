@@ -36,7 +36,7 @@ PhysicsParticle::~PhysicsParticle()
 void PhysicsParticle::setPhysics(
 	PhysicsParticleInfo info,
 	FixedVector &position, FixedVector &velocity,
-	fixed sphereSize, fixed sphereDensity, fixed windFactor,
+	fixed sphereSize, fixed sphereDensity, fixed windFactor, fixed gravityFactor,
 	bool underGroundCollision, bool rotateOnCollision,
 	bool wallCollision, bool stickyShields)
 {
@@ -44,7 +44,7 @@ void PhysicsParticle::setPhysics(
 		info,
 		*context_, 
 		position, velocity,
-		sphereSize, sphereDensity, windFactor,
+		sphereSize, sphereDensity, windFactor, gravityFactor,
 		underGroundCollision,
 		rotateOnCollision,
 		wallCollision,

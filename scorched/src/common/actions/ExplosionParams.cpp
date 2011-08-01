@@ -23,7 +23,7 @@
 #include <XML/XMLNode.h>
 
 ExplosionParams::ExplosionParams() :
-	size_(1), 
+	size_(1), deformSize_(1),
 	multiColored_(false), hurtAmount_(0),
 	deform_(DeformDown), explosionType_(ExplosionNormal),
 	createDebris_(true), createMushroomAmount_(0),
@@ -168,6 +168,7 @@ void ExplosionParams::parseLUA(lua_State *L, int position)
 	luaL_checktype(L, position, LUA_TTABLE);
 
 	size_ = LUAUtil::getNumberFromTable(L, position, "size", size_);
+	deformSize_ = LUAUtil::getNumberFromTable(L, position, "deformsize", size_);
 	hurtAmount_ = LUAUtil::getNumberFromTable(L, position, "hurtamount", hurtAmount_);
 
 	shake_ = LUAUtil::getNumberFromTable(L, position, "shake", shake_);

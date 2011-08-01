@@ -45,7 +45,8 @@ protected:
 	NumberParser percentageMissChance_;
 	NumberParser maxInacuracy_;
 	bool moveUnderground_;
-
+	std::string groupName_;
+	bool randomWhenNoTargets_;
 };
 
 #endif // !defined(AFX_WeaponAimedUnder_H__24F2D834_712D_4355_AC74_3571E2F4B14D__INCLUDED_)

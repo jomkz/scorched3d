@@ -76,6 +76,7 @@ public:
 		fixed sphereSize = 0,
 		fixed sphereDensity = 0,
 		fixed windFactor = 1,
+		fixed gravityFactor = 1,
 		bool underGroundCollision = false,
 		bool rotateOnCollision = false,
 		bool wallCollision = true,

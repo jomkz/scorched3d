@@ -25,6 +25,8 @@
 #include <tank/TankLib.h>
 #include <tank/Tank.h>
 #include <tank/TankPosition.h>
+#include <tank/TankContainer.h>
+#include <target/TargetLife.h>
 #include <common/Defines.h>
 #include <list>
 #include <math.h>
@@ -33,7 +35,8 @@ REGISTER_ACCESSORY_SOURCE(WeaponAimedUnder);
 
 WeaponAimedUnder::WeaponAimedUnder() : 
 	warHeads_(0), moveUnderground_(true),
-	aimedWeapon_(0)
+	aimedWeapon_(0),
+	randomWhenNoTargets_(true)
 {
 
 }
@@ -76,6 +79,9 @@ bool WeaponAimedUnder::parseXML(AccessoryCreateContext &context, XMLNode *access
 	// Get optional moveunderground attribute
 	accessoryNode->getNamedChild("moveunderground", moveUnderground_, false);
 
+	accessoryNode->getNamedChild("groupname", groupName_, false);
+	accessoryNode->getNamedChild("randomwhennotargets", randomWhenNoTargets_, false);
+
 	return true;
 }
 
@@ -96,17 +102,47 @@ void WeaponAimedUnder::fireWeapon(ScorchedContext &context,
 	}
 
 	// Get all of the distances of the tanks less than 50 away
-	std::list<std::pair<fixed, Tank *> > sortedTanks;
-	TankLib::getTanksSortedByDistance(
-		context,
+	// Get all of the distances of the tanks less than maxAimedDistance_ away
+	std::list<std::pair<fixed, Target *> > sortedTanks;
+	std::list<Target *> targets;
+	if (groupName_.empty())
+	{
+		std::map<unsigned int, Tank *> &allTanks =
+			context.getTankContainer().getAllTanks();
+		std::map<unsigned int, Tank *>::iterator itor;
+		for (itor = allTanks.begin();
+			itor != allTanks.end();
+			itor++)
+		{
+			targets.push_back(itor->second);
+		}
+	}
+	else
+	{
+		TargetGroupsSetEntry *groupEntry = context.getLandscapeMaps().getGroundMaps().getGroups().
+			getGroup(groupName_.c_str());
+		if (groupEntry) 
+		{
+			std::map<unsigned int, TargetGroup *> &objects = groupEntry->getObjects();
+			std::map<unsigned int, TargetGroup *>::iterator itor;
+			for (itor = objects.begin();
+				itor != objects.end();
+				itor++)
+			{
+				targets.push_back(itor->second->getTarget());
+			}			
+		}
+	}
+	TankLib::getTargetsSortedByDistance(
 		position, 
+		targets,
 		sortedTanks,
 		0,
 		maxAimedDistance_.getValue(context));
 
 	// Add all of these distances together
 	fixed totalDist = 0;
-	std::list<std::pair<fixed, Tank *> >::iterator itor;
+	std::list<std::pair<fixed, Target *> >::iterator itor;
 	for (itor = sortedTanks.begin();
 		itor != sortedTanks.end();
 		itor++)
@@ -143,7 +179,7 @@ void WeaponAimedUnder::fireWeapon(ScorchedContext &context,
 		fixed dist = maxDist * random.getRandFixed("WeaponAimedUnder");
 
 		// Find which tank fits this probability
-		Tank *shootAt = 0;
+		Target *shootAt = 0;
 		fixed distC = 0;
 		for (itor = sortedTanks.begin();
 			itor != sortedTanks.end();
@@ -168,13 +204,17 @@ void WeaponAimedUnder::fireWeapon(ScorchedContext &context,
 			TankLib::getSniperShotTowardsPosition(
 				context,
 				position, 
-				shootAt->getPosition().getTankPosition(), -1, 
+				shootAt->getLife().getTargetPosition(), -1, 
 				angleXYDegs, angleYZDegs, power);
 
 			angleXYDegs += (random.getRandFixed("WeaponAimedUnder") * maxInacuracy_.getValue(context)) - 
 				(maxInacuracy_.getValue(context) / 2);
 			angleYZDegs += (random.getRandFixed("WeaponAimedUnder") * maxInacuracy_.getValue(context)) - 
 				(maxInacuracy_.getValue(context) / 2);
+		}
+		else if (!randomWhenNoTargets_)
+		{
+			continue;
 		}
 
 		// Create the shot

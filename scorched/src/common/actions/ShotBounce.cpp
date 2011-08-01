@@ -50,11 +50,11 @@ void ShotBounce::init()
 {
 	PhysicsParticleInfo info(ParticleTypeBounce, weaponContext_.getPlayerId(), this);
 	setPhysics(info, startPosition_, velocity_, 
-		1, 5, weapon_->getWindFactor(*context_), false, 
+		1, 5, weapon_->getWindFactor(*context_), weapon_->getGravityFactor(*context_), false, 
 		weapon_->getRoll(), true, weapon_->getStickyShields());
 	stepSize_ = weapon_->getStepSize() * 
 		fixed(true, context_->getOptionsGame().getWeaponSpeed());
-
+	weaponTime_ = weapon_->getTime(*context_);
 	if (!context_->getServerMode()) 
 	{
 		vPoint_ = new TankViewPointProvider();
@@ -97,7 +97,7 @@ void ShotBounce::collision(PhysicsParticleObject &position,
 void ShotBounce::simulate(fixed frameTime, bool &remove)
 {
 	totalTime_ += frameTime;
-	if (totalTime_ > weapon_->getTime(*context_))
+	if (totalTime_ > weaponTime_)
 	{
 		doCollision();
 		remove = true;

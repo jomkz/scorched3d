@@ -298,23 +298,23 @@ void Explosion::simulate(fixed frameTime, bool &remove)
 					OptionsGame::ScaleMedium);
 			multiplier *= fixed(true, 5000);
 			multiplier += 1;
-			fixed explosionSize = params_->getSize() * multiplier;	
+			fixed deformExplosionSize = params_->getDeformSize() * multiplier;	
 
 			// Check if we are allowed to explode underground
 			if (!params_->getExplodeUnderGround())
 			{
 				if (position_[2] - landHeight < -1)
 				{
-					explosionSize = 0;
+					deformExplosionSize = 0;
 				}
 			}
 
 			// Remove areas from the height map
-			if (explosionSize > 0)
+			if (deformExplosionSize > 0)
 			{
 				DeformLandscape::deformLandscape(
 					*context_,
-					newPosition, explosionSize, 
+					newPosition, deformExplosionSize, 
 					(params_->getDeformType() == ExplosionParams::DeformDown),
 					params_->getDeformTexture());
 			}

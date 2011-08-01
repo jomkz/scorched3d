@@ -41,6 +41,7 @@ public:
 	fixed getShieldHurtFactor(ScorchedContext &context);
 	fixed getTime(ScorchedContext &context);
 	fixed getWindFactor(ScorchedContext &context);
+	fixed getGravityFactor(ScorchedContext &context);
 	fixed getStepSize() { return stepSize_; }
 
 	// Inherited from Weapon
@@ -53,19 +54,16 @@ protected:
 	NumberParser numberRollers_;
 	Weapon *collisionAction_;
 	ModelID rollerModelId_;
+	NumberParser dampenVelocityExp_;
 	NumberParser shieldHurtFactorExp_;
+	NumberParser gravityFactorExp_;
 	NumberParser windFactorExp_;
 	NumberParser timeExp_;
-	fixed shieldHurtFactor_;
-	fixed windFactor_;
-	fixed time_, stepSize_;
+	fixed stepSize_;
 	bool roll_;
 	bool stickyShields_;
-
 	bool maintainVelocity_;
-	NumberParser dampenVelocityExp_;
-	fixed dampenVelocity_;;
-
+	
 	void addRoller(ScorchedContext &context, 
 		WeaponFireContext &weaponContext,
 		FixedVector &position, FixedVector &velocity);

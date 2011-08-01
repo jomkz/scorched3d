@@ -60,7 +60,7 @@ void PhysicsParticleObject::setPhysics(
 	PhysicsParticleInfo info,
 	ScorchedContext &context, 
 	FixedVector &position, FixedVector &velocity,
-	fixed sphereSize, fixed sphereDensity, fixed windFactor,
+	fixed sphereSize, fixed sphereDensity, fixed windFactor, fixed gravityFactor,
 	bool underGroundCollision, bool rotateOnCollision, 
 	bool wallCollision, bool stickyShields)
 {
@@ -81,7 +81,7 @@ void PhysicsParticleObject::setPhysics(
 		fixed(true, 25000) * windFactor;
 
 	FixedVector gravity(0, 0, context_->getOptionsGame().getGravity());
-	windFactor_ += gravity;
+	windFactor_ += gravity * gravityFactor;
 	windFactor_ /= 70;
 }
 

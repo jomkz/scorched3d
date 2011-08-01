@@ -47,6 +47,7 @@ public:
 	void parseLUA(lua_State *L, int position);
 
 	void setSize(fixed size) { size_ = size; }
+	void setDeformSize(fixed size) { deformSize_ = size; }
 	void setShake(fixed shake) { shake_ = shake; }
 	void setMinLife(fixed minLife) { minLife_ = minLife; }
 	void setMaxLife(fixed maxLife) { maxLife_ = maxLife; }
@@ -59,6 +60,7 @@ public:
 	FixedVector &getExplosionColor();
 
 	fixed getSize() { return size_; }
+	fixed getDeformSize() { return deformSize_; }
 	fixed getMaxLife() { return maxLife_; }
 	fixed getMinLife() { return minLife_; }
 	fixed getHurtAmount() { return hurtAmount_; }
@@ -78,7 +80,7 @@ public:
 	const char *getDeformTexture() { return deformTexture_.c_str(); }
 
 protected:
-	fixed size_;
+	fixed size_, deformSize_;
 	fixed hurtAmount_;
 	fixed shake_;
 	fixed minLife_, maxLife_;
