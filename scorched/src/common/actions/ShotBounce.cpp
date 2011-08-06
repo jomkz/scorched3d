@@ -57,14 +57,17 @@ void ShotBounce::init()
 	weaponTime_ = weapon_->getTime(*context_);
 	if (!context_->getServerMode()) 
 	{
-		vPoint_ = new TankViewPointProvider();
-		vPoint_->incrementReference();
-		vPoint_->setValues(startPosition_);
+		if (!weapon_->getNoCameraTrack())
+		{
+			vPoint_ = new TankViewPointProvider();
+			vPoint_->incrementReference();
+			vPoint_->setValues(startPosition_);
 
-		// Point the action camera at this event
-		CameraPositionAction *pos = new CameraPositionAction(
-			weaponContext_.getPlayerId(), vPoint_, 5, 5, false);
-		context_->getActionController().addAction(pos);
+			// Point the action camera at this event
+			CameraPositionAction *pos = new CameraPositionAction(
+				weaponContext_.getPlayerId(), vPoint_, 5, 5, false);
+			context_->getActionController().addAction(pos);
+		}
 	}
 }
 

@@ -37,7 +37,8 @@ WeaponRoller::WeaponRoller() :
 	shieldHurtFactorExp_(0), windFactorExp_(1), gravityFactorExp_(1),
 	maintainVelocity_(false), roll_(true),
 	dampenVelocityExp_(1), stepSize_(true, 100),
-	collisionAction_(0), stickyShields_(false)
+	collisionAction_(0), stickyShields_(false),
+	noCameraTrack_(false)
 {
 
 }
@@ -77,6 +78,8 @@ bool WeaponRoller::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 
 	// Get if we are to roll
 	accessoryNode->getNamedChild("stickyshields", stickyShields_, false);
+
+	accessoryNode->getNamedChild("nocameratrack", noCameraTrack_, false);
 
 	XMLNode *subNode = 0;
 	if (!accessoryNode->getNamedChild("collisionaction", subNode)) return false;

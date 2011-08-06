@@ -30,6 +30,7 @@ ExplosionParams::ExplosionParams() :
 	createSplash_(true), windAffected_(true),
 	luminance_(true), animate_(true),
 	onlyHurtShield_(false), explodeUnderGround_(true),
+	noCameraTrack_(false),
 	minLife_(true, 5000), maxLife_(1), shake_(0),
 	explosionTexture_("exp00"),
 	mushroomTexture_("smoke")
@@ -92,6 +93,8 @@ bool ExplosionParams::parseXML(XMLNode *accessoryNode)
 	accessoryNode->getNamedChild("onlyhurtshield", onlyHurtShield_, false);
 
 	accessoryNode->getNamedChild("explodeunderground", explodeUnderGround_, false);
+
+	accessoryNode->getNamedChild("nocameratrack", noCameraTrack_, false);	
 
 	// Get the no debris node
 	XMLNode *noCreateDebrisNode = 0;

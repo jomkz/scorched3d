@@ -76,6 +76,7 @@ public:
 	const char *getSmokeTexture() { return smokeTexture_.c_str(); }
 	bool getAnimateFlameTexture() { return animateFlameTexture_; }
 	bool getAnimateSmokeTexture() { return animateSmokeTexture_; }
+	bool getNoCameraTrack() { return noCameraTrack_; }
 	fixed getScale(ScorchedContext &context) { return scale_.getValue(context); }
 	ModelID &getModelID() { return modelId_; }
 
@@ -86,6 +87,7 @@ protected:
 	bool apexCollision_;
 	bool waterCollision_, wallCollision_;
 	bool apexNoDud_, timedDud_;
+	bool noCameraTrack_;
 	NumberParser spinSpeed_;
 	Vector spinAxis_;
 

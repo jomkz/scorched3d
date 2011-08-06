@@ -35,6 +35,7 @@ NapalmParams::NapalmParams() :
 	allowUnderWater_(false),
 	luminance_(true),
 	singleFlow_(true),
+	noCameraTrack_(false),
 	napalmTexture_("flames"),
 	deformTexture_(""),
 	numberParticles_(100)
@@ -74,6 +75,7 @@ bool NapalmParams::parseXML(XMLNode *accessoryNode)
 	accessoryNode->getNamedChild("groundscorchper", groundScorchPer_, false);
 	accessoryNode->getNamedChild("nosmoke", noSmokeNode, false);
 	accessoryNode->getNamedChild("noobjectdamage", noObjectDamageNode, false);
+	accessoryNode->getNamedChild("nocameratrack", noCameraTrack_, false);
 	if (noSmokeNode) noSmoke_ = true;
 	if (noObjectDamageNode) noObjectDamage_ = true;
 

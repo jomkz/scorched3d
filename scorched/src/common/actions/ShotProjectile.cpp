@@ -61,19 +61,22 @@ void ShotProjectile::init()
 				spinSpeed_.asFloat(),
 				spinAxis_));
 
-		vPoint_ = new TankViewPointProvider();
-		vPoint_->incrementReference();
-		FixedVector velocity = velocity_;
-		velocity[2] = 10;
-		vPoint_->setValues(startPosition_, velocity);
+		if (!weapon_->getNoCameraTrack())
+		{
+			vPoint_ = new TankViewPointProvider();
+			vPoint_->incrementReference();
+			FixedVector velocity = velocity_;
+			velocity[2] = 10;
+			vPoint_->setValues(startPosition_, velocity);
 		
-		CameraPositionAction *positionAction = new CameraPositionAction(
-			weaponContext_.getPlayerId(),
-			vPoint_,
-			5,
-			10,
-			false);
-		context_->getActionController().addAction(positionAction);
+			CameraPositionAction *positionAction = new CameraPositionAction(
+				weaponContext_.getPlayerId(),
+				vPoint_,
+				5,
+				10,
+				false);
+			context_->getActionController().addAction(positionAction);
+		}
 	}
 #endif // #ifndef S3D_SERVER
 

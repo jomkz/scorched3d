@@ -101,17 +101,20 @@ void Napalm::init()
 #ifndef S3D_SERVER
 	if (!context_->getServerMode()) 
 	{
-		FixedVector position(fixed(startX_), fixed(startY_), context_->getLandscapeMaps().
-			getGroundMaps().getHeight(startX_, startY_));
-		vPoint_ = new TankViewPointProvider();
-		vPoint_->setValues(position);
-		vPoint_->incrementReference();
+		if (!params_->getNoCameraTrack())
+		{
+			FixedVector position(fixed(startX_), fixed(startY_), context_->getLandscapeMaps().
+				getGroundMaps().getHeight(startX_, startY_));
+			vPoint_ = new TankViewPointProvider();
+			vPoint_->setValues(position);
+			vPoint_->incrementReference();
 
-		CameraPositionAction *pos = new CameraPositionAction(
-			weaponContext_.getPlayerId(),
-			vPoint_,
-			5, 5, true);
-		context_->getActionController().addAction(pos);
+			CameraPositionAction *pos = new CameraPositionAction(
+				weaponContext_.getPlayerId(),
+				vPoint_,
+				5, 5, true);
+			context_->getActionController().addAction(pos);
+		}
 
 		set_ = ExplosionTextures::instance()->getTextureSetByName(
 			params_->getNapalmTexture());

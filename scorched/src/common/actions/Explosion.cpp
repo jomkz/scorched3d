@@ -156,13 +156,16 @@ void Explosion::init()
 		}
 		else
 		{
-			TankViewPointProvider *vPoint = new TankViewPointProvider();
-			vPoint->setValues(position_, TankViewPointProvider::defaultLookFrom, explosionSize);
-			CameraPositionAction *pos = new CameraPositionAction(
-				weaponContext_.getPlayerId(),
-				vPoint,
-				4, 10, true);
-			context_->getActionController().addAction(pos);
+			if (!params_->getNoCameraTrack())
+			{
+				TankViewPointProvider *vPoint = new TankViewPointProvider();
+				vPoint->setValues(position_, TankViewPointProvider::defaultLookFrom, explosionSize);
+				CameraPositionAction *pos = new CameraPositionAction(
+					weaponContext_.getPlayerId(),
+					vPoint,
+					4, 10, true);
+				context_->getActionController().addAction(pos);
+			}
 		}
 
 		{

@@ -38,6 +38,7 @@ public:
 	ModelID &getRollerModelID() { return rollerModelId_; }
 	bool getRoll() { return roll_; }
 	bool getStickyShields() { return stickyShields_; }
+	bool getNoCameraTrack() { return noCameraTrack_; }
 	fixed getShieldHurtFactor(ScorchedContext &context);
 	fixed getTime(ScorchedContext &context);
 	fixed getWindFactor(ScorchedContext &context);
@@ -63,6 +64,7 @@ protected:
 	bool roll_;
 	bool stickyShields_;
 	bool maintainVelocity_;
+	bool noCameraTrack_;
 	
 	void addRoller(ScorchedContext &context, 
 		WeaponFireContext &weaponContext,

@@ -76,6 +76,7 @@ public:
 	bool getLuminance() { return luminance_; }
 	bool getAnimate() { return animate_; }
 	bool getExplodeUnderGround() { return explodeUnderGround_; }
+	bool getNoCameraTrack() { return noCameraTrack_; }
 	
 	const char *getDeformTexture() { return deformTexture_.c_str(); }
 
@@ -93,6 +94,7 @@ protected:
 	bool explodeUnderGround_;
 	bool onlyHurtShield_;
 	bool animate_;
+	bool noCameraTrack_;
 	
 	std::string deformTexture_;
 	std::string explosionTexture_;

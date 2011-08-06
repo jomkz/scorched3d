@@ -54,6 +54,7 @@ public:
 	bool getAllowUnderWater() { return allowUnderWater_; }
 	bool getLuminance() { return luminance_; }
 	bool getSingleFlow() { return singleFlow_; }
+	bool getNoCameraTrack() { return noCameraTrack_; }
 	const char *getNapalmTexture() { return napalmTexture_.c_str(); }
 	const char *getDeformTexture() { return deformTexture_.c_str(); }
 
@@ -71,6 +72,7 @@ protected:
 	bool allowUnderWater_;// Turns on/off napalm working under water
 	bool singleFlow_;    // Use a single flow of napalm or cover the whole downward area
 	bool luminance_;     // The texutre luminance
+	bool noCameraTrack_;
 	std::string napalmTexture_;
 	std::string deformTexture_;
 
