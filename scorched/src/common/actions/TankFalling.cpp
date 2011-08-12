@@ -77,7 +77,7 @@ void TankFalling::init()
 		FixedVector velocity(0, 0, 0);
 		PhysicsParticleInfo info(ParticleTypeFalling, fallingPlayerId_, this);
 		setPhysics(info, tankStartPosition_, velocity, 
-			0, 0, 0, false);
+			0, 0, 0, 1, false);
 	}
 	else
 	{

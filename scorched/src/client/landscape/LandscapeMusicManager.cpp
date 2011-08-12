@@ -131,7 +131,7 @@ void LandscapeMusicManager::addMusicType(LandscapeMusicType *music)
 		LandscapeMusicType::PlayState playState = (*stateitor);
 
 		MusicStateEntry stateEntry;
-		stateEntry.file = music->file;
+		stateEntry.file = S3D::getModFile(music->file);
 		stateEntry.gain = music->gain;
 		if (stateMusic_.find(int(playState)) == stateMusic_.end())
 		{
@@ -258,7 +258,7 @@ void LandscapeMusicManager::simulate(const unsigned state, float simTime)
 		// Load the next sound buffer
 		SoundBuffer *buffer = 
 			Sound::instance()->fetchOrCreateBuffer(
-				S3D::getModFile(wantedEntry->file.c_str()));
+				wantedEntry->file.c_str());
 		if (buffer)
 		{
 			// Start a new sound source

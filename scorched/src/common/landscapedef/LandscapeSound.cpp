@@ -215,7 +215,7 @@ bool LandscapeSoundSoundFile::readXML(XMLNode *node)
 	while (node->getNamedChild("file", file, false))
 	{
 		if (!S3D::checkDataFile(file.c_str())) return false;
-		files.push_back(file);
+		files.push_back(S3D::getModFile(file));
 	}
 	if (files.empty()) return node->returnError("No file node");
 
@@ -234,8 +234,7 @@ bool LandscapeSoundSoundFile::play(VirtualSoundSource *source, float ambientGain
 #ifndef S3D_SERVER
 	std::string &file = files[rand() % files.size()];
 	SoundBuffer *buffer = 
-		Sound::instance()->fetchOrCreateBuffer(
-			S3D::getModFile(file.c_str()));
+		Sound::instance()->fetchOrCreateBuffer(file.c_str());
 	if (!buffer) return false;
 
 	source->setGain(gain * ambientGain);

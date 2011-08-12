@@ -1874,4 +1874,170 @@ and shields damaging the tank directly.</description>
 			</nextaction>			
 		</accessoryaction>
 	</accessory>
+
+<!--
+  <accessory>
+    <name>expshot</name>
+    <armslevel>5</armslevel>
+    <description>flare2 shot</description>
+    <activationsound>none</activationsound>
+    <maximumnumber>0</maximumnumber>
+    <accessoryaction type="WeaponVelocity">
+      <abs>true</abs>
+      <velocitychange>RANGE (0.5,0.7)</velocitychange>
+      <aimedweapon type="WeaponProjectile">
+        <nowallcollision/>
+        <projectilescale>0.0001</projectilescale>
+        <shieldhurtfactor>0</shieldhurtfactor>
+        <stepsize>0.005</stepsize>
+        <spinspeed>1.0</spinspeed>
+        <timedcollision>0.5</timedcollision>
+        <windfactor>0</windfactor>
+        <enginesound>none</enginesound>
+        <flamestartsize>1.8</flamestartsize>
+        <flameendsize>1.2</flameendsize>
+        <flamelife>0.2</flamelife>
+        <nocreatesmoke/>
+        <flametexture>heat</flametexture>
+        <flamestartcolor1>
+          <A>0.5</A>
+          <B>0</B>
+          <C>0</C>
+        </flamestartcolor1>
+        <flameendcolor1>
+          <A>0</A>
+          <B>0</B>
+          <C>0.5</C>
+        </flameendcolor1>
+        <flamestartcolor2>
+          <A>1</A>
+          <B>0</B>
+          <C>0</C>
+        </flamestartcolor2>
+        <flameendcolor2>
+          <A>0.5</A>
+          <B>0.5</B>
+          <C>0</C>
+        </flameendcolor2>
+        <collisionaction type="WeaponProjectile">
+          <nowallcollision/>
+          <projectilescale>0.0001</projectilescale>
+          <shieldhurtfactor>0</shieldhurtfactor>
+          <stepsize>0.005</stepsize>
+          <spinspeed>1.0</spinspeed>
+          <timedcollision>0.2</timedcollision>
+          <windfactor>0</windfactor>
+          <enginesound>none</enginesound>
+          <flamestartsize>1</flamestartsize>
+          <flameendsize>1</flameendsize>
+          <flamelife>0.2</flamelife>
+          <nocreatesmoke/>
+          <flametexture>exp08</flametexture>
+          <flamestartcolor1>
+            <A>0.5</A>
+            <B>0</B>
+            <C>0</C>
+          </flamestartcolor1>
+          <flameendcolor1>
+            <A>0</A>
+            <B>0</B>
+            <C>0.5</C>
+          </flameendcolor1>
+          <flamestartcolor2>
+            <A>1</A>
+            <B>0</B>
+            <C>0</C>
+          </flamestartcolor2>
+          <flameendcolor2>
+            <A>0.5</A>
+            <B>0.5</B>
+            <C>0</C>
+          </flameendcolor2>
+          <collisionaction type="WeaponNull">
+          </collisionaction>
+        </collisionaction>
+      </aimedweapon>
+    </accessoryaction>
+  </accessory>
+  <accessory>
+    <name>missiledebris</name>
+    <armslevel>0</armslevel>
+    <description>flare2</description>
+    <maximumnumber>0</maximumnumber>
+    <accessoryaction type="WeaponMulti">
+      <subweapon1 type="WeaponAimedOver">
+        <nowarheads>8</nowarheads>
+        <maxaimdistance>0</maxaimdistance>
+        <percentagemiss>0</percentagemiss>
+        <inaccuracy>0</inaccuracy>
+        <aimedweapon type="WeaponRedirect">
+          <habs>true</habs>
+          <vabs>true</vabs>
+          <hredirect>RANGE (0,360)</hredirect>
+          <vredirect>RANGE (-45,45)</vredirect>
+          <nextaction type="WeaponReference">
+            <weapon>expshot</weapon>
+          </nextaction>
+        </aimedweapon>
+      </subweapon1>
+    </accessoryaction>
+  </accessory>
+  <accessory>
+    <name>Heat-Seeking Maverick</name>
+    <armslevel>5</armslevel>
+    <cost>10000</cost>
+    <bundlesize>5</bundlesize>
+    <maximumnumber>30</maximumnumber>
+    <modelscale>1</modelscale>
+    <projectilemodel type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</projectilemodel>
+    <description>Will seek out tanks before it detonates, aim is key to using this weapon.</description>
+    <accessoryaction type="WeaponMulti">
+      <subweapon1 type="WeaponNull"/>
+      <subweapon2 type="WeaponProjectile">
+        <projectilemodel type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</projectilemodel>
+        <projectilescale>1</projectilescale>
+        <spinspeed>0.3</spinspeed>
+        <apexcollision/>
+        <apexnodud/>
+        <collisionaction type="WeaponProjectile">
+          <projectilemodel type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</projectilemodel>
+          <projectilescale>1</projectilescale>
+          <spinspeed>0.3</spinspeed>
+          <heightcollision>8</heightcollision>
+          <collisionaction type="WeaponMulti">
+            <subweapon1 type="WeaponAimedUnder">
+              <nowarheads>1</nowarheads>
+              <maxaimdistance>50</maxaimdistance>
+              <moveunderground>false</moveunderground>
+              <percentagemiss>0</percentagemiss>
+              <inaccuracy>0</inaccuracy>
+              <aimedweapon type="WeaponProjectile">
+                <projectilemodel type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</projectilemodel>
+                <nowallcollision/>
+                <timedcollision>3</timedcollision>
+                <projectilescale>1</projectilescale>
+                <spinspeed>0.3</spinspeed>
+                <collisionaction type="WeaponMulti">
+                  <subweapon1 type="WeaponExplosion">
+                    <hurtamount>3</hurtamount>
+                    <deform>down</deform>
+                    <size>2</size>
+                    <explosiontexture>exp00</explosiontexture>
+                  </subweapon1>
+                  <subweapon2 type="WeaponReference">
+                    <weapon>missiledebris</weapon>
+                  </subweapon2>
+                </collisionaction>
+              </aimedweapon>
+            </subweapon1>
+            <subweapon2 type="WeaponSound">
+              <gain>1.6</gain>
+              <sound>data/wav/misc/thunder.wav</sound>
+            </subweapon2>
+          </collisionaction>
+        </collisionaction>
+      </subweapon2>
+    </accessoryaction>
+  </accessory>
+  -->
 </accessories>
