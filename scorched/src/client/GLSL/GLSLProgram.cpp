@@ -47,7 +47,7 @@ GLSLProgram::~GLSLProgram()
 	std::list<GLSLShader*>::iterator it;
 	for (it = attached_shaders_.begin(); 
 		it != attached_shaders_.end(); 
-		it++)
+		++it)
 	{
 		glDetachObjectARB(id_, (*it)->getId());
 	}
@@ -76,7 +76,7 @@ void GLSLProgram::detach(GLSLShader &s)
 			it = attached_shaders_.erase(it);
 		} else 
 		{
-			it++;
+			++it;
 		}
 	}
 	linked_ = false;

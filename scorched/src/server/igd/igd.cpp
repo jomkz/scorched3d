@@ -75,7 +75,7 @@ void igd::sendInitialRequest(int portNumber)
 
 	// For each device discovered try to get the service definition
 	std::list<Location>::iterator itor;
-	for (itor = locations.begin(); itor!= locations.end(); itor++)
+	for (itor = locations.begin(); itor!= locations.end(); ++itor)
 	{
 		// Ask the device for its services
 		Location &location = *itor;

@@ -90,7 +90,6 @@ void WaterWaves::generateWaves(float waterHeight, ProgressCounter *counter)
 void WaterWaves::findPoints(WaterWaveContext *context,
 	float waterHeight, ProgressCounter *counter)
 {
-	int distanceCount = 0;
 	for (int y=context->pointsMult; 
 		y<context->mapHeight - context->pointsMult; 
 		y+=context->pointsMult)
@@ -326,7 +325,7 @@ void WaterWaves::drawBoxes(Water2Patches &currentPatch,
 		Vector ptA, ptB, ptC, ptD;
 		std::vector<WaterWaveEntry>::iterator itor = paths.begin();
 		std::vector<WaterWaveEntry>::iterator enditor = paths.end();
-		for (; itor != enditor; itor++)
+		for (; itor != enditor; ++itor)
 		{
 			WaterWaveEntry &p = *itor;
 				

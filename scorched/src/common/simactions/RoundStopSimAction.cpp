@@ -46,7 +46,7 @@ bool RoundStopSimAction::invokeAction(ScorchedContext &context)
 	std::map<unsigned int, Tank *>::iterator tankItor;
 	for (tankItor = tanks.begin();
 		tankItor != tanks.end();
-		tankItor++)
+		++tankItor)
 	{
 		TankStopMoveSimAction::stopMove(context, tankItor->second);
 	}

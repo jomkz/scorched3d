@@ -88,7 +88,7 @@ void AdminSimAction::killAll(ScorchedContext &context)
 		context.getTankContainer().getAllTanks();
 	for (itor = tanks.begin();
 		 itor != tanks.end();
-		 itor++)
+		 ++itor)
 	{
 		Tank *current = (*itor).second;
 		if (current->getState().getState() == TankState::sNormal ||

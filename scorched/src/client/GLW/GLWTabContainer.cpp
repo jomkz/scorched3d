@@ -39,7 +39,7 @@ void GLWTabContainer::layout()
 	std::list<GLWPanelEntry>::iterator itor;
 	for (itor = widgets_.begin();
 		itor != widgets_.end();
-		itor++)
+		++itor)
 	{
 		GLWPanelEntry &entry = *itor;
 
@@ -55,7 +55,7 @@ void GLWTabContainer::layout()
 
 	for (itor = widgets_.begin();
 		itor != widgets_.end();
-		itor++)
+		++itor)
 	{
 		GLWPanelEntry &entry = *itor;
 

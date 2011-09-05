@@ -119,7 +119,7 @@ fixed NumberParser::getValue(ScorchedContext &context) //RandomGenerator &genera
 		                S3D::formatStringBuffer("Invalid DISTRIBUTION expression: \"%s\"",
 				expression_.c_str()));
 				int operandNo = (random.getRandFixed("NumberParser:Distribution") * fixed((unsigned int) operands_.size())).asInt();
-                for (int i = 0; i <= operandNo; i++) itor++;
+                for (int i = 0; i <= operandNo; i++) ++itor;
                 value = *itor;
                 return value;
         }

@@ -68,7 +68,7 @@ ServerAdminSessions::SessionParams *ServerAdminSessions::getSession(unsigned int
 	std::map <unsigned int, SessionParams>::iterator sitor;
 	for (sitor = sessions_.begin();
 		sitor != sessions_.end();
-		sitor++)
+		++sitor)
 	{
 		SessionParams &params = (*sitor).second;
 		if (currentTime > params.sessionTime + SessionTimeOut)
@@ -120,7 +120,7 @@ unsigned int ServerAdminSessions::login(const char *name, const char *password, 
 			std::list<Credential>::iterator itor;
 			for (itor = creds.begin();
 				itor != creds.end();
-				itor++)
+				++itor)
 			{
 				Credential &credential = (*itor);
 				if (0 == strcmp(name, credential.username.c_str()) &&
@@ -141,7 +141,7 @@ unsigned int ServerAdminSessions::login(const char *name, const char *password, 
 	std::map<unsigned int, SessionParams>::iterator itor;
 	for (itor = sessions_.begin();
 		itor != sessions_.end();
-		itor++)
+		++itor)
 	{
 		SessionParams &params = (*itor).second;
 		if (0 == strcmp(params.credentials.username.c_str(), 
@@ -193,7 +193,7 @@ bool ServerAdminSessions::setPassword(const char *name,
 	std::list<Credential>::iterator itor;
 	for (itor = creds.begin();
 		itor != creds.end();
-		itor++)
+		++itor)
 	{
 		Credential &credential = (*itor);
 		if (0 == strcmp(name, credential.username.c_str()) &&
@@ -217,7 +217,7 @@ bool ServerAdminSessions::setAllCredentials(std::list<Credential> &creds)
 	std::list<Credential>::iterator itor;
 	for (itor = creds.begin();
 		itor != creds.end();
-		itor++)
+		++itor)
 	{
 		Credential &credential = *itor;
 		XMLNode *userNode = new XMLNode("user");
@@ -228,7 +228,7 @@ bool ServerAdminSessions::setAllCredentials(std::list<Credential> &creds)
 		std::set<std::string>::iterator permitor;
 		for (permitor = credential.permissions.begin();
 			permitor != credential.permissions.end();
-			permitor++)
+			++permitor)
 		{
 			userNode->addChild(new XMLNode("permission", *permitor));
 		}
@@ -269,7 +269,7 @@ bool ServerAdminSessions::getAllCredentials(std::list<Credential> &creds)
 	std::list<XMLNode *> &children = file.getRootNode()->getChildren();
     for (childrenItor = children.begin();
 		 childrenItor != children.end();
-		 childrenItor++)
+		 ++childrenItor)
     {
         XMLNode *currentNode = (*childrenItor);
 		if (strcmp(currentNode->getName(), "user")) return false;

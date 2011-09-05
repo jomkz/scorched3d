@@ -108,7 +108,7 @@ void ConsoleImpl::keyboardCheck(const unsigned state, float frameTime,
 						std::vector<ConsoleRule *>::iterator itor;
 						for (itor = matches.begin();
 							itor != matches.end();
-							itor++)
+							++itor)
 						{
 							std::string text = (*itor)->toString();
 							addLine(false, text.c_str());
@@ -165,7 +165,7 @@ void ConsoleImpl::keyboardCheck(const unsigned state, float frameTime,
 		std::list<KeyboardKey *> &keys = Keyboard::instance()->getCommandKeys();
 		std::list<KeyboardKey *>::iterator keyItor = keys.begin();
 		std::list<KeyboardKey *>::iterator keyEndItor = keys.end();
-		for (; keyItor != keyEndItor; keyItor++)
+		for (; keyItor != keyEndItor; ++keyItor)
 		{
 			KeyboardKey *key = (*keyItor);
 			if (key->keyDown(buffer, keyState, false))
@@ -278,7 +278,7 @@ void ConsoleImpl::help()
 
 	for (itor = result.begin();
 		itor != result.end();
-		itor++)
+		++itor)
 	{
 		addLine(false, *itor);
 	}

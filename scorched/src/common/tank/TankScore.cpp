@@ -131,7 +131,7 @@ bool TankScore::writeMessage(NamedNetBuffer &buffer)
 	std::set<unsigned int>::iterator itor;
 	for (itor = hurtBy_.begin();
 		itor != hurtBy_.end();
-		itor++)
+		++itor)
 	{
 		buffer.addToBufferNamed("hurtBy", *itor);
 	}

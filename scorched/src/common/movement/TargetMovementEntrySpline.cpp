@@ -63,7 +63,7 @@ void TargetMovementEntrySpline::generate(ScorchedContext &context,
 		std::vector<FixedVector>::iterator itor;
 		for (itor = controlPoints.begin();
 			itor != controlPoints.end();
-			itor++)
+			++itor)
 		{
 			FixedVector &point = (*itor);
 			point[2] = context.getLandscapeMaps().getGroundMaps().getInterpHeight(
@@ -90,9 +90,8 @@ void TargetMovementEntrySpline::generate(ScorchedContext &context,
 	std::map<unsigned int, TargetGroup *>::iterator itor;
 	for (itor = objects.begin();
 		itor != objects.end();
-		itor++)
+		++itor)
 	{
-		unsigned int playerId = (*itor).first;
 		TargetGroup *entry = (*itor).second;
 
 		if (!entry->getTarget()->isTarget() ||
@@ -135,9 +134,8 @@ void TargetMovementEntrySpline::simulate(ScorchedContext &context, fixed frameTi
 	std::map<unsigned int, TargetGroup *>::iterator itor;
 	for (itor = objects.begin();
 		itor != objects.end();
-		itor++)
+		++itor)
 	{
-		unsigned int playerId = (*itor).first;
 		TargetGroup *groupEntry = (*itor).second;
 		
 		fixed angle = atan2x(direction[1], direction[0]);

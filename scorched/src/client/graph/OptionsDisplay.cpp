@@ -401,7 +401,7 @@ void OptionsDisplay::loadDefaultValues()
         std::list<OptionEntry *>::iterator itor;
         for (itor = options_.begin();
                 itor != options_.end();
-                itor++)
+                ++itor)
 	{
                 OptionEntry *entry = (*itor);
 		if (!(entry->getData() & NoRestore))

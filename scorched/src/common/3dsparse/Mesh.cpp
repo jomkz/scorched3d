@@ -73,7 +73,7 @@ void Mesh::move(FixedVector &movement)
 	std::vector<Vertex *>::iterator itor;
 	for (itor = vertexes_.begin();
 		itor != vertexes_.end();
-		itor++)
+		++itor)
 	{
 		(*itor)->position += movement;
 	}

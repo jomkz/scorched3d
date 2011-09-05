@@ -98,7 +98,7 @@ void ServerSimulator::nextSendTime()
 	std::list<SendAction>::iterator itor;
 	for (itor = sendActions_.begin();
 		itor != sendActions_.end();
-		itor++)
+		++itor)
 	{
 		SimAction *action = itor->action;
 		SimulatorI *callback = itor->callback;
@@ -132,7 +132,7 @@ fixed ServerSimulator::calcSendStepSize()
 	std::map<unsigned int, ServerDestination*>::iterator destItor;
 	for (destItor = destinations.begin();
 		destItor != destinations.end();
-		destItor++)
+		++destItor)
 	{
 		ServerDestination *destination = destItor->second;
 		fixed value = destination->getPing().getAverage() + 

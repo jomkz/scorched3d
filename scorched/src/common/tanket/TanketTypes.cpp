@@ -73,7 +73,7 @@ TanketType *TanketTypes::getType(const char *name)
 	std::vector<TanketType *>::iterator itor;
 	for (itor = types_.begin();
 		itor != types_.end();
-		itor++)
+		++itor)
 	{
 		TanketType *type = (*itor);
 		if (0 == strcmp(name, type->getName())) return type;

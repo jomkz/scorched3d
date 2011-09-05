@@ -326,7 +326,7 @@ void MSModelFactory::loadFile(FILE *in, const char *fileName, Model *model)
 		std::vector<Mesh *>::iterator mitor;
 		for (mitor = model->getMeshes().begin();
 			mitor != model->getMeshes().end();
-			mitor++, modelIndex++)
+			++mitor, modelIndex++)
 		{
 			if (meshMaterials[modelIndex] == m)
 			{
@@ -369,7 +369,7 @@ void MSModelFactory::loadFile(FILE *in, const char *fileName, Model *model)
 	std::vector<Mesh *>::iterator mitor;
 	for (mitor = model->getMeshes().begin();
 		mitor != model->getMeshes().end();
-		mitor++, modelIndex++)
+		++mitor, modelIndex++)
 	{
 		int materialIndex = meshMaterials[modelIndex];
 		if (materialIndex == -1)

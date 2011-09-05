@@ -49,7 +49,7 @@ bool KeyboardKey::addKeys(std::list<std::string> &keyNames,
 	std::list<std::string>::iterator itorState;
 	for (itor = keyNames.begin(), itorState = keyStates.begin();
 		 itor != keyNames.end() && itorState != keyStates.end();
-		 itor++, i++, itorState++)
+		 ++itor, i++, ++itorState)
 	{
 		unsigned int keyValue = 0;
 		std::string &name = *itor;
@@ -84,7 +84,7 @@ int KeyboardKey::keyIndex(unsigned int key, unsigned int state)
 	std::vector<KeyEntry>::iterator itor;
 	for (itor = keys_.begin();
 		itor != keys_.end();
-		itor++, i++)
+		++itor, i++)
 	{
 		KeyEntry &entry = *itor;
 		if (entry.key == key &&
@@ -119,7 +119,7 @@ void KeyboardKey::removeKey(unsigned int position)
 		std::vector<KeyEntry>::iterator itor;
 		for (itor = keys_.begin();
 			itor != keys_.end();
-			itor++, i++)
+			++itor, i++)
 		{
 			if (i == position)
 			{

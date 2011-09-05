@@ -96,7 +96,7 @@ void WeaponRandomChoice::fireWeapon(ScorchedContext &context,
 	std::list<WeaponWeight>::iterator itor;
 	for (itor = weaponsChoice_.begin();
 		itor != weaponsChoice_.end();
-		itor++)
+		++itor)
 	{
 		WeaponWeight &weightEntry = *itor;
 		currentWeight += weightEntry.weight;

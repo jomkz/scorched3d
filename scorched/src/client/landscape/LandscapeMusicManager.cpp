@@ -102,7 +102,7 @@ void LandscapeMusicManager::addMusic(std::vector<LandscapeInclude *> &musics)
 	std::vector<LandscapeInclude *>::iterator includeitor;
 	for (includeitor = musics.begin();
 		includeitor != musics.end(); 
-		includeitor++)
+		++includeitor)
 	{
 		LandscapeInclude *include = (*includeitor);
 		addMusicTypes(include->musics);
@@ -114,7 +114,7 @@ void LandscapeMusicManager::addMusicTypes(std::vector<LandscapeMusicType *> &mus
 	std::vector<LandscapeMusicType *>::iterator itor;
 	for (itor = musics.begin();
 		itor != musics.end();
-		itor++)
+		++itor)
 	{
 		LandscapeMusicType *music = (*itor);
 		addMusicType(music);
@@ -126,7 +126,7 @@ void LandscapeMusicManager::addMusicType(LandscapeMusicType *music)
 	std::vector<LandscapeMusicType::PlayState>::iterator stateitor;
 	for (stateitor = music->playstates.begin();
 		stateitor != music->playstates.end();
-		stateitor++)
+		++stateitor)
 	{
 		LandscapeMusicType::PlayState playState = (*stateitor);
 
@@ -198,7 +198,7 @@ void LandscapeMusicManager::simulate(const unsigned state, float simTime)
 	std::list<MusicPlayingEntry *>::iterator itor;
 	for (itor = currentMusic_.begin();
 		itor != currentMusic_.end();
-		itor++)
+		++itor)
 	{
 		MusicPlayingEntry *playingEntry = *itor;
 
@@ -242,7 +242,7 @@ void LandscapeMusicManager::simulate(const unsigned state, float simTime)
 	// Since the source is managed it will be automatically deleted once it has stopped
 	for (itor = remove.begin();
 		itor != remove.end();
-		itor++)
+		++itor)
 	{
 		MusicPlayingEntry *playingEntry = *itor;
 		playingEntry->currentSource->stop();

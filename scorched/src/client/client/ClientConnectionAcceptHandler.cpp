@@ -135,7 +135,7 @@ bool ClientConnectionAcceptHandler::processMessage(
 	std::map<std::string, ModFileEntry *>::iterator itor;
 	for (itor = files.begin();
 		itor != files.end();
-		itor++)
+		++itor)
 	{
 		const std::string &name = (*itor).first;
 		ModFileEntry *file = (*itor).second;

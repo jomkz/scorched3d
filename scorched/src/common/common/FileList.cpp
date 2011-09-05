@@ -66,7 +66,7 @@ bool FileList::addAllFiles(const std::string &baseDir,
 		ListType::iterator itor;
 		for (itor = newList.getFiles().begin();
 			itor != newList.getFiles().end();
-			itor++)
+			++itor)
 		{
 			std::string &fileName = (*itor);
 

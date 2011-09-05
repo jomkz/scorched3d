@@ -60,7 +60,7 @@ bool TankAINames::loadAIs(std::list<std::string> &ais)
 	std::list<XMLNode *> &children = file.getRootNode()->getChildren();
     for (childrenItor = children.begin();
 		 childrenItor != children.end();
-		 childrenItor++)
+		 ++childrenItor)
     {
 		// Parse the ai entry
         XMLNode *currentNode = (*childrenItor);

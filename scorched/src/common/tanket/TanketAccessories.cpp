@@ -64,7 +64,7 @@ void TanketAccessories::newMatch()
 		std::list<Accessory *>::iterator itor;
 		for (itor = accessories.begin();
 			itor != accessories.end();
-			itor++)
+			++itor)
 		{
 			Accessory *accessory = (*itor);
 			if (accessory->getMaximumNumber() > 0)
@@ -90,7 +90,7 @@ void TanketAccessories::newMatch()
 		std::map<Accessory *, int>::iterator itor;
 		for (itor = accessories.begin();
 			itor != accessories.end();
-			itor++)
+			++itor)
 		{
 			Accessory *accessory = (*itor).first;
 			int count = (*itor).second;
@@ -109,7 +109,7 @@ void TanketAccessories::clearAccessories()
 	std::map<std::string, AccessoryList*>::iterator groupsItor;
 	for (groupsItor = accessoryGroups_.begin();
 		groupsItor != accessoryGroups_.end();
-		groupsItor++)
+		++groupsItor)
 	{
 		delete (*groupsItor).second;
 	}
@@ -118,7 +118,7 @@ void TanketAccessories::clearAccessories()
 	std::map<AccessoryPart::AccessoryType, AccessoryList*>::iterator typesItor;
 	for (typesItor = accessoryTypes_.begin();
 		typesItor != accessoryTypes_.end();
-		typesItor++)
+		++typesItor)
 	{
 		delete (*typesItor).second;
 	}
@@ -131,7 +131,7 @@ void TanketAccessories::getAllAccessories(std::list<Accessory *> &result)
 	std::map<Accessory *, int>::iterator itor;
 	for (itor = accessories_.begin();
 		itor != accessories_.end();
-		itor++)
+		++itor)
 	{
 		Accessory *accessory = (*itor).first;
 		result.push_back(accessory);
@@ -355,7 +355,6 @@ LangString TanketAccessories::getAccessoryCountString(Accessory *accessory)
 
 LangString TanketAccessories::getAccessoryAndCountString(Accessory *accessory)
 {
-	int count = getAccessoryCount(accessory);
 	LangString buffer;
 	buffer.append(LANG_RESOURCE(accessory->getName(), accessory->getName())).
 		append(LANG_STRING(" ("));
@@ -390,7 +389,7 @@ bool TanketAccessories::writeMessage(NamedNetBuffer &buffer, bool writeAccessori
 	std::map<Accessory *, int>::iterator itor;
 	for (itor = accessories_.begin();
 		itor != accessories_.end();
-		itor++)
+		++itor)
 	{
 		ordered[itor->first->getAccessoryId()] = itor->second;
 	}
@@ -399,7 +398,7 @@ bool TanketAccessories::writeMessage(NamedNetBuffer &buffer, bool writeAccessori
 	buffer.addToBufferNamed("noAccessories", (int) ordered.size());
 	for (itor2 = ordered.begin();
 		itor2 != ordered.end();
-		itor2++)
+		++itor2)
 	{
 		buffer.addToBufferNamed("accessory", itor2->first);
 		buffer.addToBufferNamed("count", itor2->second);

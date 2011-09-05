@@ -106,7 +106,7 @@ void ModSelectDialog::display()
 	std::list<ModInfo>::iterator itor;
 	for (itor = modDirs.getDirs().begin();
 		itor != modDirs.getDirs().end();
-		itor++)
+		++itor)
 	{
 		ModInfo &info = (*itor);
 		if (!info.getMenuEntries().empty())

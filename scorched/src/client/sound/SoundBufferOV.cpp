@@ -73,7 +73,6 @@ SoundBufferOV::SoundBufferOV(const char *fileName) :
 
 bool SoundBufferOV::openStream(const char *fileName, OggVorbis_File &oggStream)
 {
-	int error = 0;
 	ov_callbacks callbacks = {
 		read_func,
 		seek_func,

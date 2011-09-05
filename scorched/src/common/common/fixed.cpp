@@ -444,7 +444,7 @@ fixed asinx(fixed arg)
 		arg = -arg;
 		sign++;
 	}
-	if(arg > 1) fixed(0);
+	if(arg > 1) return fixed(0);
 	temp = sqrtx(fixed(1) - arg*arg);
 	if(arg > fixed(true, 7000)) temp = fixed::XPIO2 - atanx(temp/arg);
 	else temp = atanx(arg/temp);

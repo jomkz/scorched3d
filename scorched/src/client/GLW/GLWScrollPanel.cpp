@@ -59,7 +59,7 @@ void GLWScrollPanel::calculateVisible()
 		std::list<GLWPanel::GLWPanelEntry>::iterator itor;
 		for (itor = getWidgets().begin();
 			itor != getWidgets().end();
-			itor++)
+			++itor)
 		{
 				GLWidget *vw = (GLWidget *) (*itor).widget;
 				if (vw->getY() < 0.0f || vw->getY() + vw->getH() > h_)
@@ -101,7 +101,7 @@ void GLWScrollPanel::draw()
 		std::list<GLWPanel::GLWPanelEntry>::iterator itor;
 		for (itor = getWidgets().begin();
 			itor != getWidgets().end();
-			itor++)
+			++itor)
 		{
 			glPushMatrix();
 				GLWidget *vw = (GLWidget *) (*itor).widget;
@@ -131,7 +131,7 @@ void GLWScrollPanel::mouseUp(int button, float x, float y, bool &skipRest)
 		std::list<GLWPanel::GLWPanelEntry>::iterator itor;
 		for (itor = getWidgets().begin();
 			itor != getWidgets().end();
-			itor++)
+			++itor)
 		{
 			GLWidget *vw =
 				(GLWidget *) (*itor).widget;
@@ -162,7 +162,7 @@ void GLWScrollPanel::mouseDown(int button, float x, float y, bool &skipRest)
 		std::list<GLWPanel::GLWPanelEntry>::iterator itor;
 		for (itor = getWidgets().begin();
 			itor != getWidgets().end();
-			itor++)
+			++itor)
 		{
 			GLWidget *vw =
 				(GLWidget *) (*itor).widget;
@@ -193,7 +193,7 @@ void GLWScrollPanel::mouseDrag(int button, float mx, float my, float x, float y,
 		std::list<GLWPanel::GLWPanelEntry>::iterator itor;
 		for (itor = getWidgets().begin();
 			itor != getWidgets().end();
-			itor++)
+			++itor)
 		{
 			GLWidget *vw =
 				(GLWidget *) (*itor).widget;
@@ -235,7 +235,7 @@ void GLWScrollPanel::positionChange(unsigned int id, int current, int movement)
 	std::list<GLWPanel::GLWPanelEntry>::iterator itor;
 	for (itor = getWidgets().begin();
 		itor != getWidgets().end();
-		itor++)
+		++itor)
 	{
 		GLWidget *vw =
 			(GLWidget *) (*itor).widget;

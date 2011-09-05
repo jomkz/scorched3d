@@ -44,7 +44,7 @@ void GLTextureStore::resetModFiles()
 	std::map<std::string, GLTextureReferenceData *>::iterator itor;
 	for (itor = references_.begin();
 		itor != references_.end();
-		itor++)
+		++itor)
 	{
 		if (itor->second->getImageID().getImageLocation() == S3D::eModLocation)
 		{

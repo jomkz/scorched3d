@@ -296,7 +296,7 @@ void RenderTargets::draw(bool reflection)
 
 		GLGlobalState globalState(0);
 
-		void *currentPatchPtr = 0, *currentObject = 0;
+		void *currentPatchPtr = 0;
 		TargetListIterator patchItor(patchInfo.getTargetVisibility());
 		TargetVisibilityIterator itor;
 		while (currentPatchPtr = patchItor.getNext())

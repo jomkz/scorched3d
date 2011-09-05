@@ -41,7 +41,7 @@ ServerTurnsSimultaneous::~ServerTurnsSimultaneous()
 	std::map<unsigned int, ComsPlayedMoveMessage*>::iterator itor;
 	for (itor = moves_.begin();
 		itor != moves_.end();
-		itor++)
+		++itor)
 	{
 		delete itor->second;
 	}
@@ -55,7 +55,7 @@ void ServerTurnsSimultaneous::internalEnterState()
 	std::map<unsigned int, ComsPlayedMoveMessage*>::iterator movesItor;
 	for (movesItor = moves_.begin();
 		movesItor != moves_.end();
-		movesItor++)
+		++movesItor)
 	{
 		delete movesItor->second;
 	}
@@ -66,7 +66,7 @@ void ServerTurnsSimultaneous::internalEnterState()
 	std::map<unsigned int, Tank*>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = itor->second;
 		tank->getState().setMoveId(0);
@@ -89,7 +89,7 @@ void ServerTurnsSimultaneous::internalSimulate(fixed frameTime)
 	bool finished = true;
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = itor->second;
 		if (tank->getState().getMoveId() != 0)
@@ -118,7 +118,7 @@ void ServerTurnsSimultaneous::internalSimulate(fixed frameTime)
 	
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = itor->second;
 		if (tank->getState().getState() == TankState::sNormal &&
@@ -159,7 +159,7 @@ void ServerTurnsSimultaneous::internalSimulate(fixed frameTime)
 		std::map<unsigned int, ComsPlayedMoveMessage*>::iterator movesItor;
 		for (movesItor = moves_.begin();
 			movesItor != moves_.end();
-			movesItor++)
+			++movesItor)
 		{
 			unsigned int playerId = movesItor->first;
 			ComsPlayedMoveMessage *message = movesItor->second;

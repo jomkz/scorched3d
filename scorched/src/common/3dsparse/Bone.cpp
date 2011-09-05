@@ -63,7 +63,7 @@ FixedVector &Bone::getPositionAtTime(fixed currentTime)
 	std::vector<BonePositionKey *>::iterator itor;
 	for (itor = positionKeys_.begin();
 		itor != positionKeys_.end();
-		itor++)
+		++itor)
 	{
 		BonePositionKey *key = (*itor);
 		if (key->time >= currentTime)
@@ -99,7 +99,7 @@ void Bone::getRotationAtTime(fixed currentTime, BoneMatrixType &m)
 	std::vector<BoneRotationKey *>::iterator itor;
 	for (itor = rotationKeys_.begin();
 		itor != rotationKeys_.end();
-		itor++)
+		++itor)
 	{
 		BoneRotationKey *key = (*itor);
 		if (key->time >= currentTime)

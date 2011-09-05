@@ -104,7 +104,7 @@ void GLWTextBox::keyDown(char *buffer, unsigned int keyState,
 			std::list<GLWPanel::GLWPanelEntry>::iterator itor;
 			for (itor = widgets.begin();
 				itor != widgets.end();
-				itor++)
+				++itor)
 			{
 				GLWPanel::GLWPanelEntry &entry = *itor;
 				if (entry.widget->getMetaClassId() == getMetaClassId())
@@ -178,7 +178,7 @@ void GLWTextBox::setCurrent()
 	std::list<GLWPanel::GLWPanelEntry>::iterator itor;
 	for (itor = widgets.begin();
 		itor != widgets.end();
-		itor++)
+		++itor)
 	{
 		GLWPanel::GLWPanelEntry &entry = *itor;
 		if (entry.widget->getMetaClassId() == getMetaClassId())

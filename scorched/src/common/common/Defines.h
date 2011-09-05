@@ -25,6 +25,8 @@
 #include "porting.h"
 #else
 #pragma warning(disable : 4996)
+#pragma warning(disable : 4100) // unreferenced formal parameter
+#pragma warning(disable : 4512) // assignment operator could not be generated
 #endif
 
 #include <common/DefinesString.h>

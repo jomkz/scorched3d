@@ -277,8 +277,6 @@ bool GLFont2d::drawStringHandler(unsigned length,
 		int pos = 0;
 		for (;*string; string++, pos++)
 		{
-			unsigned int list = *string;
-
 			acolor[0] = color[0];
 			acolor[1] = color[1];
 			acolor[2] = color[2];

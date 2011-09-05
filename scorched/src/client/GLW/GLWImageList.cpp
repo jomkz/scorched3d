@@ -50,7 +50,7 @@ void GLWImageList::addDirectory(const std::string &directory)
 	std::list<std::string>::iterator itor;
 	for (itor = filelist.getFiles().begin();
 		itor != filelist.getFiles().end();
-		itor++)
+		++itor)
 	{
 		const char *filename = (*itor).c_str();
 		Image png = ImageFactory::loadImage(S3D::eAbsLocation, filename);
@@ -115,7 +115,7 @@ bool GLWImageList::setCurrentShortPath(const char *current)
 	std::list<GLWImageListEntry*>::iterator itor;
 	for (itor = entries_.begin();
 		itor != entries_.end();
-		itor++)
+		++itor)
 	{
 		GLWImageListEntry *entry = (*itor);
 		if (0 == strcmp(entry->shortFileName.c_str(), current))
@@ -164,7 +164,7 @@ void GLWImageList::mouseDown(int button, float x, float y,
 			std::list<GLWImageListEntry*>::iterator itor;
 			for (itor = entries_.begin();
 				itor != entries_.end();
-				itor++)
+				++itor)
 			{
 				GLWImageListEntry *entry = (*itor);
 				entries.push_back(

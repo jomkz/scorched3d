@@ -53,7 +53,7 @@ void ServerTurnsFree::internalEnterState()
 	std::map<unsigned int, Tank*>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = itor->second;
 		tank->getState().setMoveId(0);
@@ -73,7 +73,7 @@ void ServerTurnsFree::internalSimulate(fixed frameTime)
 	std::map<unsigned int, Tank*>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = itor->second;
 		if (tank->getState().getMoveId() != 0)
@@ -96,7 +96,7 @@ void ServerTurnsFree::internalSimulate(fixed frameTime)
 	std::list<unsigned int>::iterator waitingItor;
 	for (waitingItor = waitingPlayers_.begin();
 		waitingItor != waitingPlayers_.end();
-		waitingItor++)
+		++waitingItor)
 	{
 		unsigned int playerId = *waitingItor;
 
@@ -136,10 +136,8 @@ void ServerTurnsFree::internalSimulate(fixed frameTime)
 	std::map<unsigned int, fixed>::iterator timedItor;
 	for (timedItor = timedPlayers_.begin();
 		timedItor != timedPlayers_.end();
-		timedItor++)
+		++timedItor)
 	{
-		unsigned int playerId = timedItor->first;
-
 		timedItor->second -= frameTime;
 		if (timedItor->second <= 0)
 		{

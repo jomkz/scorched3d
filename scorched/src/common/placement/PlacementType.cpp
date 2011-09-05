@@ -75,7 +75,7 @@ void PlacementType::createObjects(ScorchedContext &context,
 	std::list<Position>::iterator itor;
 	for (itor = returnPositions.begin();
 		itor != returnPositions.end();
-		itor++)
+		++itor)
 	{
 		Position &position = *itor;
 		placementobject->createObject(
@@ -94,7 +94,7 @@ bool PlacementType::checkCloseness(FixedVector &position,
 	std::map<unsigned int, Target *>::iterator targetsitor;
 	for (targetsitor = targets.begin();
 		targetsitor != targets.end();
-		targetsitor++)
+		++targetsitor)
 	{
 		Target *target = (*targetsitor).second;
 		if (!target->isTarget()) continue;
@@ -119,7 +119,7 @@ bool PlacementType::checkCloseness(FixedVector &position,
 		std::list<Position>::iterator currentItor;
 		for (currentItor = returnPositions.begin();
 			currentItor != returnPositions.begin();
-			currentItor++)
+			++currentItor)
 		{
 			Position *object = &(*currentItor);
 

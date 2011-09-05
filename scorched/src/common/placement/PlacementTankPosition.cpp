@@ -98,7 +98,7 @@ static bool tankTargetCloseness(ScorchedContext &context, unsigned int playerId,
 	context.getTargetSpace().getCollisionSet(tankPos, tankCloseness.asInt(), targets);
 	for (itor = targets.begin();
 		itor != targets.end();
-		itor++)
+		++itor)
 	{
 		Target *thisTarget = (*itor).second;
 		if (!thisTarget->isTarget()) continue;
@@ -121,7 +121,7 @@ static bool tankTargetCloseness(ScorchedContext &context, unsigned int playerId,
 	std::map<unsigned int, Tank *>::iterator tankItor;
 	for (tankItor = tanks.begin();
 		tankItor != tanks.end();
-		tankItor++)
+		++tankItor)
 	{
 		Tank *thisTank = (*tankItor).second;
 		if (thisTank->getPlayerId() == playerId) continue;

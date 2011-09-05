@@ -149,7 +149,6 @@ void BackdropDialog::drawFooter()
 
 	// Calcuate how may tiles are needed
 	float wWidth = (float) GLViewPort::getWidth();
-	float wHeight = (float) GLViewPort::getHeight();
 
 	// Draw the higer rez logo
 	const float logoWidth = 200.0f;
@@ -209,8 +208,6 @@ void BackdropDialog::capture()
 				{
 					for (int b=-3; b<=3; b++)
 					{
-						int srcx = a + x;
-						int srcy = b + y;
 						unsigned char *src2 = src + a * 3 + b * GLViewPort::getActualWidth() * 3;
 						if (src2 >= screenpixels && src2 - screenpixels < imageSize)
 						{

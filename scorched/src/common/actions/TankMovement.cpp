@@ -152,7 +152,7 @@ void TankMovement::init()
 		itor != positions.end();)
 	{
 		unsigned int fistpt = (*itor);
-		itor++;
+		++itor;
 
 		if (itor != positions.end())
 		{
@@ -379,7 +379,7 @@ void TankMovement::moveTank(Tank *tank)
 	std::map<unsigned int, Target *>::iterator itor;
 	for (itor = collisionTargets.begin();
 		itor != collisionTargets.end();
-		itor++)
+		++itor)
 	{
 		// Check that this is a target we have driven over
 		// and we can destroy it

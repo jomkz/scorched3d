@@ -76,14 +76,14 @@ void ServerTextFilter::filterString(LangString &inputText)
 
 	// For each part 
 	std::vector<TextPart>::iterator itor;
-	for (itor = parts.begin(); itor != parts.end(); itor++)
+	for (itor = parts.begin(); itor != parts.end(); ++itor)
 	{
 		TextPart &part = (*itor);
 		const unsigned int *text = part.part.c_str();
 		
 		// Check that they don't contain the words
 		std::list<LangString>::iterator witor;
-		for (witor = words_.begin(); witor != words_.end(); witor++)
+		for (witor = words_.begin(); witor != words_.end(); ++witor)
 		{
 			const unsigned int *word = (*witor).c_str();
 			unsigned int *pos = LangStringUtil::stristr(text, word);
@@ -113,7 +113,7 @@ void ServerTextFilter::filterString(LangString &inputText)
 
 			// Check each word against the parts so far
 			std::list<LangString>::iterator witor;
-			for (witor = words_.begin(); witor != words_.end(); witor++)
+			for (witor = words_.begin(); witor != words_.end(); ++witor)
 			{
 				const unsigned int *word = (*witor).c_str();
 				if (LangStringUtil::strcasecmp(text, word) == 0)
@@ -136,7 +136,7 @@ void ServerTextFilter::filterString(LangString &inputText)
 	}
 
 	// Re-form the words
-	for (itor = parts.begin(); itor != parts.end(); itor++)
+	for (itor = parts.begin(); itor != parts.end(); ++itor)
 	{
 		TextPart &part = (*itor);
 		const unsigned int *text = part.part.c_str();
@@ -167,7 +167,7 @@ void ServerTextFilter::loadFile()
 	std::vector<std::string>::iterator itor;
 	for (itor = lines.getLines().begin();
 		itor != lines.getLines().end();
-		itor++)
+		++itor)
 	{
 		if ((*itor).c_str()[0])
 		{

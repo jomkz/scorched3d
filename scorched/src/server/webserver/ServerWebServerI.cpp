@@ -38,7 +38,7 @@ ServerWebServerIRequest::~ServerWebServerIRequest()
 	std::map<std::string, NetMessage *>::iterator partitor;
 	for (partitor = parts_.begin();
 		partitor != parts_.end();
-		partitor++)
+		++partitor)
 	{
 		NetMessage *newMessage = (*partitor).second;
 		NetMessagePool::instance()->addToPool(newMessage);

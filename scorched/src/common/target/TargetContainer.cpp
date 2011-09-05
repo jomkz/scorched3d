@@ -29,7 +29,7 @@ TargetContainer::~TargetContainer()
 	std::map<unsigned int, Target *>::iterator itor;
 	for (itor = targets_.begin();
 		itor != targets_.end();
-		itor++)
+		++itor)
 	{
 		if (itor->second->isTarget())
 		{

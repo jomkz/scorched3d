@@ -91,7 +91,6 @@ void NetworkChatDialog::draw()
 	if (needCentered_)
 	{
 		int wWidth = GLViewPort::getWidth();
-		int wHeight = GLViewPort::getHeight();
 		setX((wWidth - getW()) / 2.0f);
 		setY(20.0f);
 		needCentered_ = false;
@@ -104,7 +103,7 @@ void NetworkChatDialog::draw()
 		std::list<std::string>::iterator itor;
 		for (itor = messages_.begin();
 			itor != messages_.end();
-			itor++)
+			++itor)
 		{
 			std::string &message = *itor;
 			int len = message.find("says :");
@@ -221,14 +220,12 @@ void NetworkChatDialog::sendMessage()
 		result.append(std::string(buffer, bytesRead));
 	}
 
-	bool code = false;
 	if (result.find("200 OK") != -1)
 	{
 		const char *data = strstr(result.c_str(), "\r\n\r\n");
 		if (data) 
 		{
 			data+=4;
-			code = true;
 
 			std::string result = data;
 			XMLStringBuffer xml;
@@ -240,7 +237,7 @@ void NetworkChatDialog::sendMessage()
 					std::list<XMLNode *>::iterator itor;
 					for (itor = children.begin();
 						itor != children.end();
-						itor++)
+						++itor)
 					{
 						XMLNode *messageNode = *itor;
 						std::string id, user, date, message;

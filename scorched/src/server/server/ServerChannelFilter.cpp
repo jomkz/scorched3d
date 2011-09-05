@@ -46,7 +46,7 @@ bool ServerChannelFilterTeams::sentToDestination(ChannelText &text, unsigned int
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *recvTank = itor->second;
 		if (recvTank->getDestinationId() == destination &&

@@ -89,7 +89,7 @@ void ServerBrowserRefresh::refreshList()
 	std::map<UDPsocket, ServerBrowserRefreshEntry>::iterator cleanitor;
 	for (cleanitor = entryMap_.begin();
 		cleanitor != entryMap_.end();
-		cleanitor++)
+		++cleanitor)
 	{
 		UDPsocket socket = (*cleanitor).first;
 		SDLNet_UDP_Close(socket);
@@ -135,7 +135,7 @@ void ServerBrowserRefresh::processMessages(time_t theTime)
 	std::map<UDPsocket, ServerBrowserRefreshEntry>::iterator itor;
 	for (itor = entryMap_.begin();
 		itor != entryMap_.end();
-		itor++)
+		++itor)
 	{
 		UDPsocket socket = (*itor).first;
 		ServerBrowserRefreshEntry &entry = (*itor).second;
@@ -157,7 +157,7 @@ void ServerBrowserRefresh::processMessages(time_t theTime)
 		}
 	}
 
-	while (finished.size())
+	while (!finished.empty())
 	{
 		UDPsocket socket = finished.front();
 		finished.pop_front();
@@ -181,7 +181,7 @@ void ServerBrowserRefresh::processMessage(UDPpacket *packet, ServerBrowserRefres
 		std::list<XMLNode *> &children = xmlBuffer.getRootNode()->getParameters();
 		for (childrenItor = children.begin();
 			childrenItor != children.end();
-			childrenItor++)
+			++childrenItor)
 		{
 			XMLNode *currentNode = (*childrenItor);
 			list_.addEntryValue(entry.position_,

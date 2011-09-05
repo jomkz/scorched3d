@@ -89,7 +89,7 @@ void MainLoop::simulate(float frameTime)
 	std::set<MainLoopI *>::iterator itor;
 	for (itor = mainLoops_.begin();
 		itor != mainLoops_.end();
-		itor++)
+		++itor)
 	{
 		MainLoopI *current = (*itor);
 		current->simulate(frameTime);
@@ -111,7 +111,7 @@ void MainLoop::draw()
 	std::set<MainLoopI *>::iterator itor;
 	for (itor = mainLoops_.begin();
 		itor != mainLoops_.end();
-		itor++)
+		++itor)
 	{
 		MainLoopI *current = (*itor);
 		current->draw();

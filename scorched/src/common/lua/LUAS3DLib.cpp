@@ -174,7 +174,7 @@ static int s3d_get_tanks(lua_State *L)
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin(); 
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = itor->second;
 		lua_pushnumber(L, tank->getPlayerId());

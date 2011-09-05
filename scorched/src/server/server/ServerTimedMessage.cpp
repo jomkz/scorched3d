@@ -62,7 +62,7 @@ void ServerTimedMessage::checkEntries(time_t currentTime)
 	std::list<TimedMessageEntry>::iterator itor;
 	for (itor = entries_.begin();
 		itor != entries_.end();
-		itor++)
+		++itor)
 	{
 		TimedMessageEntry &entry = (*itor);
 		if (entry.lastTime + (time_t) entry.timeInterval < currentTime)
@@ -107,7 +107,7 @@ bool ServerTimedMessage::load()
 	std::list<XMLNode *> &children = file.getRootNode()->getChildren();
 	for (childrenItor = children.begin();
 		 childrenItor != children.end();
-		childrenItor++)
+		++childrenItor)
 	{
 		XMLNode *currentNode = (*childrenItor);
 

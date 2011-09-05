@@ -98,7 +98,6 @@ void ImageModifier::addLightMapToBitmap(Image &destBitmap,
 	ProgressCounter *counter)
 {
 	const float softShadow = 3.0f;
-	const int sideFade = 16;
 	const int lightMapWidth = 256; // Resolution of the light map
 
 	if (counter) counter->setNewOp(LANG_RESOURCE("LIGHT_MAP", "Light Map"));
@@ -574,7 +573,6 @@ void ImageModifier::addWaterToBitmap(HeightMap &hMap,
 
 Image ImageModifier::makeArenaBitmap()
 {
-	Vector &wallColor = ScorchedClient::instance()->getOptionsTransient().getWallColor();
 	Image handle = ImageFactory::createBlank(128, 128, true, 0);
 
 	int arenaX = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaX();
@@ -611,7 +609,6 @@ Image ImageModifier::makeArenaBitmap()
 
 Image ImageModifier::makeArenaSurroundBitmap()
 {
-	Vector &wallColor = ScorchedClient::instance()->getOptionsTransient().getWallColor();
 	Image handle = ImageFactory::createBlank(128, 128, true, 0);
 
 	unsigned char *bits = handle.getBits();
@@ -721,7 +718,6 @@ void ImageModifier::addCircleToLandscape(
 void ImageModifier::addCircle(Image &destBitmap, 
 								 float sx, float sy, float sw, float opacity)
 {
-	int decrement = int(opacity * 125.0f);
 	float halfW = sw / 2.0f;
 
 	float minX = sx - halfW;

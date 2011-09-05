@@ -37,7 +37,7 @@ TankDeadContainer::~TankDeadContainer()
 	std::map<std::string, NetBuffer *>::iterator itor;
 	for (itor = deadTanks_.begin();
 		itor != deadTanks_.end();
-		itor++)
+		++itor)
 	{
 		delete itor->second;
 	}
@@ -104,7 +104,7 @@ void TankDeadContainer::clearTanks()
 	std::map<std::string, NetBuffer *>::iterator itor;
 	for (itor = deadTanks_.begin();
 		itor != deadTanks_.end();
-		itor++)
+		++itor)
 	{
 		NetBuffer *current = (*itor).second;
 		delete current;

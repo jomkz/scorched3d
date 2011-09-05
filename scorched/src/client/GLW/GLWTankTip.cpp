@@ -123,7 +123,7 @@ void TankFuelTip::showItems(float x, float y)
 	std::list<Accessory *>::iterator itor;
 	for (itor = fuels.begin();
 		itor != fuels.end();
-		itor++)
+		++itor)
 	{
 		Accessory *current = (*itor);
 		if (tank_->getAccessories().canUse(current))
@@ -266,7 +266,7 @@ void TankShieldTip::showItems(float x, float y)
 	std::list<Accessory *>::iterator itor;
 	for (itor = shields.begin();
 		itor != shields.end();
-		itor++)
+		++itor)
 	{
 		Accessory *current = (*itor);
 		if (tank_->getAccessories().canUse(current))
@@ -410,7 +410,7 @@ void TankParachutesTip::showItems(float x, float y)
 	std::list<Accessory *>::iterator itor;
 	for (itor = parachutes.begin();
 		itor != parachutes.end();
-		itor++)
+		++itor)
 	{
 		Accessory *current = (*itor);
 		if (tank_->getAccessories().canUse(*itor))
@@ -522,7 +522,7 @@ void TankWeaponTip::showItems(float x, float y)
 	std::list<Accessory *>::iterator itor;
 	for (itor = weapons.begin();
 		itor != weapons.end();
-		itor++)
+		++itor)
 	{
 		Accessory *weapon = (*itor);
 		if (tank_->getAccessories().canUse(weapon))

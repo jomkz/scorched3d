@@ -52,7 +52,7 @@ void LandscapeSoundManager::cleanUp()
 	std::list<LandscapeSoundManagerEntry>::iterator itor;
 	for (itor = entries_.begin();
 		itor != entries_.end();
-		itor++)
+		++itor)
 	{
 		LandscapeSoundManagerEntry &entry = (*itor);
 		delete entry.soundSource;
@@ -82,14 +82,14 @@ void LandscapeSoundManager::loadSound(std::vector<LandscapeInclude *> &sounds)
 	std::vector<LandscapeInclude *>::iterator itor;
 	for (itor = sounds.begin();
 		itor != sounds.end();
-		itor++)
+		++itor)
 	{
 		LandscapeInclude *sound = (*itor);
 
 		std::vector<LandscapeSoundType *>::iterator typeItor;
 		for (typeItor = sound->sounds.begin();
 			typeItor != sound->sounds.end();
-			typeItor ++)
+			++typeItor)
 		{
 			LandscapeSoundType *soundType = (*typeItor);
 			for (int i=0; i<soundType->position->getInitCount(); i++)
@@ -142,7 +142,7 @@ void LandscapeSoundManager::simulate(float frameTime)
 	std::list<LandscapeSoundManagerEntry>::iterator itor;
 	for (itor = entries_.begin();
 		itor != entries_.end();
-		itor++)
+		++itor)
 	{
 		LandscapeSoundManagerEntry &entry = (*itor);
 

@@ -273,7 +273,6 @@ void TargetCamera::moveCamera()
 	float arenaY = (float) ScorchedClient::instance()->getLandscapeMaps().
 		getGroundMaps().getArenaY();
 
-	bool simulateCamera = true;
 	Vector position(arenaX + arenaWidth / 2.0f, arenaY + arenaHeight / 2.0f, 15.0f);
 	float currentRotation = 0.0f;
 
@@ -288,7 +287,7 @@ void TargetCamera::moveCamera()
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = tanks.begin();
 			itor != tanks.end();
-			itor++)
+			++itor)
 		{
 			Tank *tank = itor->second;
 			if (tank->getDestinationId() == currentDestinationId &&

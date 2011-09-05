@@ -118,7 +118,7 @@ bool ServerAuthHandlerForumLogin::authenticateUser(ComsConnectAuthMessage &authM
 	{
 		message = 
 			"This server is running in secure mode.\n"
-			"Your supplied password was not correct.\n";
+			"Your supplied password was not correct.\n"
 			"Please ensure you are using the same password as your forum account.\n";
 		return false;
 	}
@@ -237,7 +237,7 @@ bool ServerAuthHandlerForumLogin::connectHandler()
 	std::string fileName = S3D::getSettingsFile(S3D::formatStringBuffer("forumlogin-%i.xml",
 		ScorchedServer::instance()->getOptionsGame().getPortNo()));
 
-	std::string host, user, passwd, db, prefix;
+	std::string host, user, passwd, db;
 	if (!file.readFile(fileName) ||
 		!file.getRootNode())
 	{

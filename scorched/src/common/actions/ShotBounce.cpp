@@ -125,7 +125,6 @@ void ShotBounce::draw()
 		if (!model_)
 		{
 			ModelID &id = ((WeaponRoller *) weapon_)->getRollerModelID();
-			bool useTexture = (strcmp(id.getSkinName(), "none") != 0);
 			model_ = new ModelRendererSimulator(
 				ModelRendererStore::instance()->loadModel(id));
 		}

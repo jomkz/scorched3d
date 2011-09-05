@@ -57,7 +57,7 @@ void ServerStateNewGame::newGame()
 	std::map<unsigned int, Tank *>::iterator tankItor;
 	for (tankItor = tanks.begin();
 		tankItor != tanks.end();
-		tankItor++)
+		++tankItor)
 	{
 		Tank *tank = tankItor->second;
 		if (tank->getState().getState() != TankState::sLoading)
@@ -83,7 +83,7 @@ void ServerStateNewGame::newGame()
 	std::set<unsigned int>::iterator destItor;
 	for (destItor = loadingDestinations.begin();
 		destItor != loadingDestinations.end();
-		destItor++)
+		++destItor)
 	{
 		ServerLoadLevel::destinationLoadLevel(*destItor);
 	}

@@ -145,7 +145,7 @@ void OptionEntrySetterUtil::updateControls(
 	std::list<OptionEntrySetter>::iterator itor;
 	for (itor = controls.begin();
 		itor != controls.end();
-		itor++)
+		++itor)
 	{
 		OptionEntrySetter &entrySetter = *itor;
 		switch (entrySetter.getEntry().getEntryType())
@@ -181,7 +181,7 @@ void OptionEntrySetterUtil::updateEntries(
 	std::list<OptionEntrySetter>::iterator itor;
 	for (itor = controls.begin();
 		itor != controls.end();
-		itor++)
+		++itor)
 	{
 		OptionEntrySetter &entrySetter = *itor;
 		switch (entrySetter.getEntry().getEntryType())

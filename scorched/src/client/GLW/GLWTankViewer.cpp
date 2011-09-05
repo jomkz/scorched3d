@@ -82,7 +82,7 @@ void GLWTankViewer::init()
 	std::set<std::string>::iterator catItor;
 	for (catItor = catagories.begin();
 		 catItor != catagories.end();
-		 catItor++)
+		 ++catItor)
 	{
 		catagoryChoice_.addText(LANG_RESOURCE(*catItor, *catItor), (*catItor));
 	}
@@ -131,7 +131,7 @@ void GLWTankViewer::select(unsigned int id,
 	std::vector<TankModel *>::iterator modelItor;
 	for (modelItor = models.begin();
 		 modelItor != models.end();
-		 modelItor++)
+		 ++modelItor)
 	{
 		TankModel *tankModel = (*modelItor);
 		if (tankModel->isOfCatagory(value.getDataText()))
@@ -183,7 +183,7 @@ void GLWTankViewer::setTankModels(std::vector<ModelEntry> &models)
 	std::vector<ModelEntry>::iterator itor;
 	for (itor = models_.begin();
 		itor != models_.end();
-		itor++)
+		++itor)
 	{
 		ModelEntry entry = (*itor);
 		if (0==strcmp(entry.model->getName(),"Random"))
@@ -449,7 +449,7 @@ void GLWTankViewer::selectModelByName(const char *name)
 	std::vector<ModelEntry>::iterator itor;
 	for (itor = models_.begin();
 		 itor != models_.end();
-		 itor++, currentSel ++)
+		 ++itor, currentSel ++)
 	{
 		TankModel *current = (*itor).model;
 		if (0 == strcmp(current->getName(), name))

@@ -169,7 +169,7 @@ void WeaponRoller::fireWeapon(ScorchedContext &context,
 			std::map<unsigned int, Target *>::iterator itor;
 			for (itor = targets.begin();
 				itor != targets.end();
-				itor++)
+				++itor)
 			{
 				Target *current = (*itor).second;
 				FixedVector &tankPos = 

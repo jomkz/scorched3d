@@ -67,7 +67,7 @@ bool ComsLoadLevelMessage::saveTargets(ScorchedContext &context)
 	std::map<unsigned int, Tank *>::iterator targetItor;
 	for (targetItor = tanks.begin();
 		targetItor != tanks.end();
-		targetItor++)
+		++targetItor)
 	{
 		Tank *tank = targetItor->second;
 		targetsBuffer_.addToBuffer(tank->getPlayerId());
@@ -157,7 +157,7 @@ bool ComsLoadLevelMessage::loadTargets(ScorchedContext &context)
 	std::map<unsigned int, Tank *>::iterator targetItor;
 	for (targetItor = tanks.begin();
 		targetItor != tanks.end();
-		targetItor++)
+		++targetItor)
 	{
 		Tank *tank = targetItor->second;
 		if (usedTargetIds.find(tank->getPlayerId()) ==

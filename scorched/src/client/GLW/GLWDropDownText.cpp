@@ -64,7 +64,7 @@ void GLWDropDownText::setCurrentText(const LangString &text)
 	std::list<GLWSelectorEntry>::iterator itor;
 	for (itor = texts_.begin();
 		itor != texts_.end();
-		itor++)
+		++itor)
 	{
 		GLWSelectorEntry &entry = *itor;
 		if (entry.getText() == text)

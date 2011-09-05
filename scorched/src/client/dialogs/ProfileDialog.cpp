@@ -216,7 +216,7 @@ void ProfileDialog::drawTanks(Tank *currentTank)
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin(); 
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = itor->second;
 		if (!tank->getAlive()) continue;

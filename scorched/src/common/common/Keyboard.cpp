@@ -156,7 +156,7 @@ void Keyboard::clear()
 	std::map<std::string, KeyboardKey *>::iterator itor;
 	for (itor = keyMap_.begin();
 		itor != keyMap_.end();
-		itor++)
+		++itor)
 	{
 		delete (*itor).second;
 	}
@@ -171,7 +171,7 @@ bool Keyboard::saveKeyFile()
 	std::list<std::string>::iterator itor;
 	for (itor = keyList_.begin();
 		itor != keyList_.end();
-		itor++)
+		++itor)
 	{
 		KeyboardKey *key = getKey((*itor).c_str());
 		if (!key || !key->getChanged()) continue;
@@ -188,7 +188,7 @@ bool Keyboard::saveKeyFile()
 		std::vector<KeyboardKey::KeyEntry>::iterator subitor;
 		for (subitor = keys.begin();
 			subitor != keys.end();
-			subitor++)
+			++subitor)
 		{
 			KeyboardKey::KeyEntry &subentry = (*subitor);
 			const char *name = "";
@@ -229,7 +229,7 @@ bool Keyboard::loadKeyFile(bool loadDefaults)
 	std::map<std::string, KeyboardKey *>::iterator keyItor;
 	for (keyItor = keyMap_.begin();
 		keyItor != keyMap_.end();
-		keyItor++)
+		++keyItor)
 	{
 		KeyboardKey *key = keyItor->second;		
 
@@ -240,7 +240,7 @@ bool Keyboard::loadKeyFile(bool loadDefaults)
 		std::map<std::string, KeyboardKey *>::iterator dupeItor;
 		for (dupeItor = keyMap_.begin();
 			dupeItor != keyMap_.end();
-			dupeItor++)
+			++dupeItor)
 		{
 			KeyboardKey *dupe = dupeItor->second;
 			if (dupe == key) continue;
@@ -249,7 +249,7 @@ bool Keyboard::loadKeyFile(bool loadDefaults)
 			std::vector<KeyboardKey::KeyEntry>::iterator itor;
 			for (itor = dupeKeys.begin();
 				itor != dupeKeys.end();
-				itor++)
+				++itor)
 			{
 				KeyboardKey::KeyEntry &entry = *itor;
 				int keyIndex = key->keyIndex(entry.key, entry.state);
@@ -299,7 +299,7 @@ bool Keyboard::loadKeyFile(const std::string &fileName, bool masterFile)
 	std::list<XMLNode *> &children = file.getRootNode()->getChildren();
     for (childrenItor = children.begin();
 		 childrenItor != children.end();
-		 childrenItor++)
+		 ++childrenItor)
     {
 		// Parse the key entry
         XMLNode *currentNode = (*childrenItor);

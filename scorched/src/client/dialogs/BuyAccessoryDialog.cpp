@@ -104,7 +104,7 @@ void BuyAccessoryDialog::draw()
 		std::list<GLWPanel::GLWPanelEntry>::iterator itor;
 		for (itor = getWidgets().begin();
 			itor != getWidgets().end();
-			itor++)
+			++itor)
 		{
 			GLWPanel::GLWPanelEntry &entry = (*itor);
 			if (entry.widget->getMetaClassId() == sellTab_->getMetaClassId())
@@ -156,7 +156,7 @@ void BuyAccessoryDialog::addTabs()
 	std::set<std::string>::reverse_iterator itor;
 	for (itor = groupNames.rbegin();
 		itor != groupNames.rend();
-		itor++)
+		++itor)
 	{
 		std::string name = (*itor);
 		GLWTab *tab = (GLWTab *)
@@ -187,7 +187,7 @@ void BuyAccessoryDialog::playerRefreshKeepPos()
 	std::list<GLWPanel::GLWPanelEntry>::iterator itor;
 	for (itor = getWidgets().begin();
 		itor != getWidgets().end();
-		itor++)
+		++itor)
 	{
 		GLWPanel::GLWPanelEntry &entry = (*itor);
 		if (entry.widget->getMetaClassId() == sellTab_->getMetaClassId())
@@ -202,7 +202,7 @@ void BuyAccessoryDialog::playerRefreshKeepPos()
 
 	for (itor = getWidgets().begin();
 		itor != getWidgets().end();
-		itor++)
+		++itor)
 	{
 		GLWPanel::GLWPanelEntry &entry = (*itor);
 		if (entry.widget->getMetaClassId() == sellTab_->getMetaClassId())
@@ -218,7 +218,7 @@ void BuyAccessoryDialog::addPlayerWeapons()
 	std::list<GLWPanel::GLWPanelEntry>::iterator itor;
 	for (itor = getWidgets().begin();
 		itor != getWidgets().end();
-		itor++)
+		++itor)
 	{
 		GLWPanel::GLWPanelEntry &entry = (*itor);
 		if (entry.widget->getMetaClassId() == sellTab_->getMetaClassId())
@@ -237,7 +237,7 @@ void BuyAccessoryDialog::addPlayerWeapons()
 	std::set<std::string>::iterator groupItor;
 	for (groupItor = groupNames.begin();
 		groupItor != groupNames.end();
-		groupItor++)
+		++groupItor)
 	{
 		addPlayerWeaponsBuy(buyTabs_[*groupItor], (*groupItor).c_str());
 	}
@@ -253,7 +253,7 @@ void BuyAccessoryDialog::addPlayerFavorites()
 	std::list<Accessory *>::reverse_iterator itor;
 	for (itor = acessories.rbegin();
 		itor != acessories.rend();
-		itor++)
+		++itor)
 	{
 		Accessory *current = *itor;
 		if (favorites_.find(current->getName()) != favorites_.end())
@@ -274,7 +274,7 @@ void BuyAccessoryDialog::addPlayerWeaponsBuy(GLWTab *tab, const char *group)
 	std::list<Accessory *>::reverse_iterator itor2;
 	for (itor2 = weapons.rbegin();
 		itor2 != weapons.rend();
-		itor2++)
+		++itor2)
 	{
 		Accessory *current = (*itor2);
 		if (addAccessory(tab, height, current)) height += 24.0f;
@@ -292,7 +292,7 @@ void BuyAccessoryDialog::addPlayerWeaponsSell()
 	std::list<Accessory *>::reverse_iterator itor;
 	for (itor = tankAccessories.rbegin();
 		itor != tankAccessories.rend();
-		itor++)
+		++itor)
 	{
 		Accessory *current = *itor;
 		if (addAccessory(sellTab_, height, current)) height += 24.0f;
@@ -421,7 +421,7 @@ void BuyAccessoryDialog::display()
 	std::list<GLWPanel::GLWPanelEntry>::iterator itor;
 	for (itor = getWidgets().begin();
 		itor != getWidgets().end();
-		itor++)
+		++itor)
 	{
 		GLWPanel::GLWPanelEntry &entry = (*itor);
 		if (entry.widget->getMetaClassId() == sellTab_->getMetaClassId())
@@ -445,7 +445,7 @@ void BuyAccessoryDialog::tabDown(unsigned int id)
 	std::list<GLWPanel::GLWPanelEntry>::iterator itor;
 	for (itor = getWidgets().begin();
 		itor != getWidgets().end();
-		itor++)
+		++itor)
 	{
 		GLWPanel::GLWPanelEntry &entry = (*itor);
 		if (entry.widget->getMetaClassId() == sellTab_->getMetaClassId())
@@ -494,7 +494,7 @@ void BuyAccessoryDialog::stateChange(bool state, unsigned int id)
 			std::list<GLWPanel::GLWPanelEntry>::iterator itor;
 			for (itor = getWidgets().begin();
 				itor != getWidgets().end();
-				itor++)
+				++itor)
 			{
 				GLWPanel::GLWPanelEntry &entry = (*itor);
 				if (entry.widget->getMetaClassId() == sellTab_->getMetaClassId())
@@ -623,7 +623,7 @@ void BuyAccessoryDialog::saveFavorites()
 	std::set<std::string>::iterator itor;
 	for (itor = favorites_.begin();
 		itor != favorites_.end();
-		itor++)
+		++itor)
 	{
 		std::string accessory = *itor;
 

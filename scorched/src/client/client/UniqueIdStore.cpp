@@ -79,7 +79,7 @@ bool UniqueIdStore::saveStore()
 	std::list<Entry>::iterator itor;
 	for (itor = ids_.begin();
 		itor != ids_.end();
-		itor++)
+		++itor)
 	{
 		Entry *entry = &(*itor);
 		XMLNode *idNode = new XMLNode("id");
@@ -100,7 +100,7 @@ const char *UniqueIdStore::getUniqueId(unsigned int ip)
 	std::list<Entry>::iterator itor;
 	for (itor = ids_.begin();
 		itor != ids_.end();
-		itor++)
+		++itor)
 	{
 		Entry &entry = *itor;
 		if (entry.ip == ip)
@@ -150,7 +150,7 @@ bool UniqueIdStore::saveUniqueId(unsigned int ip, const char *id,
 	std::list<Entry>::iterator itor;
 	for (itor = ids_.begin();
 		itor != ids_.end();
-		itor++)
+		++itor)
 	{
 		Entry &entry = *itor;
 		if (0 == strcmp(entry.published.c_str(), published))

@@ -104,7 +104,7 @@ bool ComsMessageSender::sendToMultipleClients(
 	std::list<unsigned int>::iterator itor;
 	for (itor = sendDestinations.begin();
 		itor != sendDestinations.end();
-		itor++)
+		++itor)
 	{
 		unsigned int destination = *itor;
 		findItor = destinations.find(destination);
@@ -154,7 +154,7 @@ bool ComsMessageSender::sendToAllConnectedClients(
 		ScorchedServer::instance()->getServerDestinations().getServerDestinations();
 	for (itor = dests.begin();
 		itor != dests.end();
-		itor++)
+		++itor)
 	{
 		ServerDestination *destination = (*itor).second;
 		destinations.push_back(destination->getDestinationId());
@@ -175,9 +175,8 @@ bool ComsMessageSender::sendToAllLoadedClients(
 		ScorchedServer::instance()->getServerDestinations().getServerDestinations();
 	for (itor = dests.begin();
 		itor != dests.end();
-		itor++)
+		++itor)
 	{
-		unsigned int destinionId = itor->first;
 		ServerDestination *destination = itor->second;
 		if (destination->getState() == ServerDestination::sFinished ||
 			(destination->getState() == ServerDestination::sLoadingLevel &&

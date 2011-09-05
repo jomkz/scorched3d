@@ -68,7 +68,7 @@ void PlacementObjectRandom::createObject(ScorchedContext &context,
 	std::vector<RandomObject>::iterator itor;
 	for (itor = objects_.begin();
 		itor != objects_.end();
-		itor++)
+		++itor)
 	{
 		RandomObject &object = (*itor);
 		currentWeight += object.weight;

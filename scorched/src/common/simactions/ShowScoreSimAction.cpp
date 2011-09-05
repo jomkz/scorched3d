@@ -94,7 +94,7 @@ void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = playingTank.begin();
 		itor != playingTank.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = (*itor).second;
 		tank->getState().setMoveId(0);
@@ -114,7 +114,7 @@ void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = playingTank.begin();
 			itor != playingTank.end();
-			itor++)
+			++itor)
 		{
 			Tank *tank = (*itor).second;
 			if (!tank->getState().getTankPlaying()) continue;
@@ -137,7 +137,7 @@ void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 		{
 			for (itor = playingTank.begin();
 				itor != playingTank.end();
-				itor++)
+				++itor)
 			{
 				Tank *tank = (*itor).second;
 				if (!tank->getState().getTankPlaying()) continue;
@@ -152,7 +152,7 @@ void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 
 		for (itor = playingTank.begin();
 			itor != playingTank.end();
-			itor++)
+			++itor)
 		{
 			Tank *tank = (*itor).second;
 			if (!tank->getState().getTankPlaying()) continue;
@@ -176,7 +176,7 @@ void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = playingTank.begin();
 			itor != playingTank.end();
-			itor++)
+			++itor)
 		{
 			Tank *tank = (*itor).second;
 			if (!tank->getState().getTankPlaying()) continue;
@@ -201,7 +201,7 @@ void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 		{
 			for (itor = playingTank.begin();
 				itor != playingTank.end();
-				itor++)
+				++itor)
 			{
 				Tank *tank = (*itor).second;
 				if (!tank->getState().getTankPlaying()) continue;
@@ -229,7 +229,7 @@ void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = playingTank.begin();
 			itor != playingTank.end();
-			itor++)
+			++itor)
 		{
 			Tank *tank = (*itor).second;
 			if (!tank->getState().getTankPlaying()) continue;
@@ -261,7 +261,7 @@ void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 		context.getTankContainer().getAllTanks();
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = (*itor).second;
 
@@ -307,7 +307,7 @@ void ShowScoreSimAction::scoreOverallWinner(ScorchedContext &context)
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = tanks.begin();
 			itor != tanks.end();
-			itor++)
+			++itor)
 		{
 			Tank *current = (*itor).second;
 			if (current->getState().getTankPlaying())
@@ -326,7 +326,7 @@ void ShowScoreSimAction::scoreOverallWinner(ScorchedContext &context)
             std::list<Tank *>::iterator scoreitor;
 			for (scoreitor = sortedTanks.begin();
 				scoreitor != sortedTanks.end();
-				scoreitor++)
+				++scoreitor)
 			{
 				Tank *current = *scoreitor;
 				if (topScore->getScore().getScore() == 
@@ -396,7 +396,7 @@ void ShowScoreSimAction::scoreOverallWinner(ScorchedContext &context)
 			std::map<unsigned int, Tank *>::iterator itor;
 			for (itor = tanks.begin();
 				itor != tanks.end();
-				itor++)
+				++itor)
 			{
 				Tank *tank = (*itor).second;
 				if (tank->getTeam() == winningTeam)

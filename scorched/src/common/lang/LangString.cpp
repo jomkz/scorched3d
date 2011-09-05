@@ -110,7 +110,7 @@ std::string LangStringConverter::getValueAsString()
 		{
 			if (*i == '\n') result.append("\\n");
 			else if (*i == '\\') result.append("\\\\");
-			else if (*i == '\n') result.append("\\t");
+			else if (*i == '\t') result.append("\\t");
 			else result.append(S3D::formatStringBuffer("\\u%04X", *i));
 		}
 		else

@@ -129,7 +129,7 @@ bool ServerSFrame::TransferDataToWindow()
 	std::list<ModInfo>::iterator itor;
 	for (itor = modDirs.getDirs().begin();
 		itor != modDirs.getDirs().end();
-		itor++)
+		++itor)
 	{
 		ModInfo &info = *itor;
 		IDC_SERVER_MOD_CTRL->Append(convertString(info.getName()));

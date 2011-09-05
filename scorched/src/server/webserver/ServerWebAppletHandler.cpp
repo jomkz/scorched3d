@@ -113,7 +113,7 @@ bool ServerWebAppletHandler::AppletAsyncHandler::processRequest(
 			std::list<std::string>::iterator itor;
 			for (itor = channels.begin();
 				itor != channels.end();
-				itor++)
+				++itor)
 			{
 				text.append("<addchannel>").
 					append(itor->c_str()).
@@ -131,7 +131,7 @@ bool ServerWebAppletHandler::AppletAsyncHandler::processRequest(
 		std::list<ServerChannelManager::MessageEntry>::reverse_iterator textsListItor;
 		for (textsListItor = textsList.rbegin();
 			textsListItor != textsList.rend();
-			textsListItor++)
+			++textsListItor)
 		{
 			ServerChannelManager::MessageEntry &entry = *textsListItor;
 			if (lastMessage_ >= entry.messageid) break;

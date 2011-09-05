@@ -65,7 +65,7 @@ int GLWDropDown::getCurrentPosition()
 	int pos = 0;
 	for (itor = texts_.begin();
 		itor != texts_.end();
-		itor++, pos++)
+		++itor, pos++)
 	{
 		GLWSelectorEntry &entry = *itor;
 		if (current_ == &entry)
@@ -83,7 +83,7 @@ void GLWDropDown::setCurrentPosition(int pos)
 	std::list<GLWSelectorEntry>::iterator itor;
 	for (itor = texts_.begin();
 		itor != texts_.end();
-		itor++)
+		++itor)
 	{
 		GLWSelectorEntry &entry = *itor;
 		current_ = &entry;
@@ -108,11 +108,6 @@ void GLWDropDown::addEntry(GLWSelectorEntry text)
 void GLWDropDown::draw()
 {
 	GLWidget::draw();
-
-	float mouseX = float(ScorchedClient::instance()->getGameState().getMouseX());
-	mouseX -= GLWTranslate::getPosX();
-	float mouseY = float(ScorchedClient::instance()->getGameState().getMouseY());
-	mouseY -= GLWTranslate::getPosY();
 
 	glBegin(GL_LINE_LOOP);
 		drawShadedRoundBox(x_, y_, w_, h_, 10.0f, false);
@@ -182,7 +177,7 @@ void GLWDropDown::itemSelected(GLWSelectorEntry *entry, int pos)
 	std::list<GLWSelectorEntry>::iterator itor;
 	for (itor = texts_.begin();
 		itor != texts_.end();
-		itor++)
+		++itor)
 	{
 		GLWSelectorEntry &entry = *itor;
 		current_ = &entry;

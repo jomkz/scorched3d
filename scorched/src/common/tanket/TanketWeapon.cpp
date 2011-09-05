@@ -51,7 +51,7 @@ void TanketWeapon::changed()
 		std::list<Accessory *>::iterator itor;
 		for (itor = result.begin();
 			itor != result.end();
-			itor++)
+			++itor)
 		{
 			if (tanket_->getAccessories().canUse(*itor))
 			{

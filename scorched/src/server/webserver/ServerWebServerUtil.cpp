@@ -83,7 +83,7 @@ std::string ServerWebServerUtil::concatLines(std::list<std::string> &lines)
 	std::list<std::string>::iterator itor;
 	for (itor = lines.begin();
 		itor != lines.end();
-		itor++)
+		++itor)
 	{
 		result.append(*itor).append("<br>");
 
@@ -386,7 +386,7 @@ bool ServerWebServerUtil::getTemplate(
 								getChangedOptions().getOptions();
 						for (itor = options.begin();
 							itor != options.end();
-							itor++)
+							++itor)
 						{
 							OptionEntry *entry = (*itor);
 							if (!(entry->getData() & OptionEntry::DataProtected))

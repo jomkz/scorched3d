@@ -128,7 +128,7 @@ void GLWPlanView::simulate(float frameTime)
 		std::list<Vector>::iterator recieveitor;
 		for (recieveitor = info.recievepoints.begin();
 			recieveitor != info.recievepoints.end();
-			recieveitor++)
+			++recieveitor)
 		{
 			Vector &v = (*recieveitor);
 			if (v[2] > 3.0f) v[2] = 3.0f;
@@ -141,7 +141,7 @@ void GLWPlanView::simulate(float frameTime)
 		}
 		else
 		{
-			playeritor++;
+			++playeritor;
 		}
 	}
 }
@@ -218,7 +218,7 @@ void GLWPlanView::drawLines()
 		std::list<PlayerDrawnInfo>::iterator playeritor;
 		for (playeritor = dragPoints_.begin();
 			playeritor != dragPoints_.end();
-			playeritor++)
+			++playeritor)
 		{
 			PlayerDrawnInfo &info = (*playeritor);
 			drawLine(info);
@@ -269,7 +269,7 @@ void GLWPlanView::drawLine(PlayerDrawnInfo &info)
 	std::list<Vector>::iterator itor;
 	for (itor = info.points.begin();
 		itor != info.points.end();
-		itor++)
+		++itor)
 	{
 		Vector &v = (*itor);
 
@@ -399,7 +399,7 @@ void GLWPlanView::drawTanks()
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = currentTanks.begin();
 		itor != currentTanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = (*itor).second;
 		if (tank->getState().getState() == TankState::sNormal ||
@@ -518,7 +518,7 @@ void GLWPlanView::addRecievePoints(unsigned int playerId,
 	std::list<PlayerDrawnInfo>::iterator dragItor;
 	for (dragItor = dragPoints_.begin();
 		dragItor != dragPoints_.end();
-		dragItor++)
+		++dragItor)
 	{
 		PlayerDrawnInfo &info = (*dragItor);
 		if (info.playerId == playerId)

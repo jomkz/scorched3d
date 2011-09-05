@@ -172,7 +172,7 @@ bool GLMenuEntry::click(float currentTop, int x, int y)
 			std::list<GLMenuItem>::iterator itor;
 			for (itor = menuItems_.begin();
 				itor != menuItems_.end();
-				itor++)
+				++itor)
 			{
 				GLMenuItem &item = (*itor);
 				entries.push_back(
@@ -217,7 +217,7 @@ void GLMenuEntry::itemSelected(GLWSelectorEntry *entry, int position)
 	std::list<GLMenuItem>::iterator itor;
 	for (itor = menuItems_.begin();
 		itor != menuItems_.end();
-		itor++, pos++)
+		++itor, pos++)
 	{
 		if (pos == position)
 		{

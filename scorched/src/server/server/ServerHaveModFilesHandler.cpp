@@ -60,7 +60,7 @@ bool ServerHaveModFilesHandler::processMessage(
 		std::list<ModIdentifierEntry>::iterator hasItor;
 		for (hasItor = message.getFiles().begin();
 			hasItor != message.getFiles().end();
-			hasItor++)
+			++hasItor)
 		{
 			ModIdentifierEntry *entry = &(*hasItor);
 			hasEntries[entry->fileName] = entry;
@@ -75,7 +75,7 @@ bool ServerHaveModFilesHandler::processMessage(
 		std::map<std::string, ModFileEntry *>::iterator itor;
 		for (itor = modFiles.begin();
 			itor != modFiles.end();
-			itor++)
+			++itor)
 		{
 			const std::string &fileName = (*itor).first;
 			ModFileEntry *fileEntry = (*itor).second;
@@ -128,7 +128,7 @@ bool ServerHaveModFilesHandler::processMessage(
 		std::map<std::string, ModIdentifierEntry*>::iterator hasItor;
 		for (hasItor = hasEntries.begin();
 			hasItor != hasEntries.end();
-			hasItor++)
+			++hasItor)
 		{
 #ifdef _DEBUG
 			ServerCommon::serverLog(
@@ -187,7 +187,7 @@ bool ServerHaveModFilesHandler::processMessage(
 	std::list<ModIdentifierEntry>::iterator neededItor;
 	for (neededItor = neededEntries.begin();
 		neededItor != neededEntries.end();
-		neededItor ++)
+		++neededItor)
 	{
 		ModIdentifierEntry &entry = (*neededItor);
 		destination->getMod().addFile(entry);

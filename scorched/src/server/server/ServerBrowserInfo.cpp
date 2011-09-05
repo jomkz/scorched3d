@@ -157,7 +157,7 @@ void ServerBrowserInfo::processStatusMessage(std::list<std::string> &reply)
 	std::map<unsigned int, Tank *>::iterator tanksitor;
 	for (tanksitor = tanks.begin();
 		tanksitor != tanks.end();
-		tanksitor++)
+		++tanksitor)
 	{
 		Tank *tank = (*tanksitor).second;
 		if (tank->getTankAI()) compplayers++;
@@ -192,7 +192,7 @@ void ServerBrowserInfo::processInfoMessage(std::list<std::string> &reply)
 	std::list<OptionEntry *>::iterator optionItor;
 	for (optionItor = options.begin();
 		optionItor != options.end();
-		optionItor ++)
+		++optionItor)
 	{
 		OptionEntry *entry = (*optionItor);
 		if (!(entry->getData() & OptionEntry::DataProtected) &&
@@ -214,7 +214,7 @@ void ServerBrowserInfo::processPlayerMessage(std::list<std::string> &reply)
 	int i=0;
 	for (tankItor =  tanks.begin();
 		tankItor != tanks.end();
-		tankItor++, i++)
+		++tankItor, i++)
 	{
 		Tank *tank = (*tankItor).second;
 

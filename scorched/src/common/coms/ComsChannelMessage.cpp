@@ -45,7 +45,7 @@ bool ComsChannelMessage::writeMessage(NetBuffer &buffer)
 	std::list<ChannelDefinition>::iterator itor;
 	for (itor = channels_.begin();
 		itor != channels_.end();
-		itor++)
+		++itor)
 	{
 		buffer.addToBuffer(itor->getType());
 		buffer.addToBuffer(itor->getChannel());
@@ -53,7 +53,7 @@ bool ComsChannelMessage::writeMessage(NetBuffer &buffer)
 	buffer.addToBuffer((int) availableChannels_.size());
 	for (itor = availableChannels_.begin();
 		itor != availableChannels_.end();
-		itor++)
+		++itor)
 	{
 		buffer.addToBuffer(itor->getType());
 		buffer.addToBuffer(itor->getChannel());

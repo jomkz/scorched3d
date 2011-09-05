@@ -105,7 +105,7 @@ void Laser::simulate(fixed frameTime, bool &remove)
 				std::map<unsigned int, Target *>::iterator itor;
 				for (itor = collisionTargets.begin();
 					itor != collisionTargets.end();
-					itor++)
+					++itor)
 				{
 					Target *current = (*itor).second;
 					if (current->getAlive() &&
@@ -158,7 +158,7 @@ void Laser::simulate(fixed frameTime, bool &remove)
 			std::set<unsigned int>::iterator itor;
 			for (itor = damagedTargets_.begin();
 				itor != damagedTargets_.end();
-				itor++)
+				++itor)
 			{
 				unsigned int damagedTarget = (*itor);
 				context_->getActionController().addAction(

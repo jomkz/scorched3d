@@ -37,7 +37,7 @@ GLWIconTable::GLWIconTable(
 		std::list<Column>::iterator itor;
 		for (itor = columns->begin();
 			itor != columns->end();
-			itor++)
+			++itor)
 		{
 			Column &col = *itor;
 			GLWTextButton *button = new
@@ -183,7 +183,7 @@ void GLWIconTable::mouseDown(int button, float x, float y, bool &skipRest)
 		std::vector<GLWTextButton *>::iterator itor;
 		for (itor = columns_.begin();
 			itor != columns_.end();
-			itor++)
+			++itor)
 		{
 			GLWTextButton *column = (*itor);
 			column->mouseDown(button, x, y, skipRest);
@@ -200,7 +200,7 @@ void GLWIconTable::mouseDrag(int button, float mx, float my, float x, float y, b
 		std::vector<GLWTextButton *>::iterator itor;
 		for (itor = columns_.begin();
 			itor != columns_.end();
-			itor++)
+			++itor)
 		{
 			GLWTextButton *column = (*itor);
 			column->mouseDrag(button, mx, my, x, y, skipRest);
@@ -217,7 +217,7 @@ void GLWIconTable::mouseUp(int button, float x, float y, bool &skipRest)
 		std::vector<GLWTextButton *>::iterator itor;
 		for (itor = columns_.begin();
 			itor != columns_.end();
-			itor++)
+			++itor)
 		{
 			GLWTextButton *column = (*itor);
 			column->mouseUp(button, x, y, skipRest);

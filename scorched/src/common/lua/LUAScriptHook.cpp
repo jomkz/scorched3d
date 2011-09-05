@@ -108,14 +108,14 @@ void LUAScriptHook::callHookInternal(const std::string &hookName, const std::vec
 	std::vector<HookEntry>::iterator 
 		itor = hookItor->second.begin(), 
 		endItor = hookItor->second.end();
-	for (;itor != endItor;itor++)
+	for (;itor != endItor;++itor)
 	{
 		LUAScript *script = itor->script;
 		if (!script->startFunction(itor->entryPoint)) continue;
 
 		for (paramItor = params.begin();
 			paramItor != endParamItor;
-			paramItor++)
+			++paramItor)
 		{
 			switch (paramItor->type) 
 			{
@@ -141,7 +141,7 @@ void LUAScriptHook::listHooks()
 	std::map<std::string, std::vector<HookEntry> >::iterator topItor;
 	for (topItor = hookNames_.begin();
 		topItor != hookNames_.end();
-		topItor++)
+		++topItor)
 	{
 		Logger::log(S3D::formatStringBuffer("  %s", topItor->first.c_str()));
 	}
@@ -152,12 +152,12 @@ void LUAScriptHook::clearHooks()
 	std::map<std::string, std::vector<HookEntry> >::iterator topItor;
 	for (topItor = hookNames_.begin();
 		topItor != hookNames_.end();
-		topItor++)
+		++topItor)
 	{
 		std::vector<HookEntry>::iterator itor;
 		for (itor = topItor->second.begin();
 			itor != topItor->second.end();
-			itor++)
+			++itor)
 		{
 			HookEntry &entry = *itor;
 			delete entry.script;
@@ -176,7 +176,7 @@ bool LUAScriptHook::loadHooks()
 	FileList::ListType::iterator itor;
 	for (itor = files.begin();
 		itor != files.end();
-		itor++)
+		++itor)
 	{
 		if (!loadHook(directoryName_, *itor)) return false;
 	}
@@ -201,7 +201,7 @@ bool LUAScriptHook::loadHook(const std::string &directoryName, const std::string
 	std::list<XMLNode *> &children = file.getRootNode()->getChildren();
     for (childrenItor = children.begin();
 		 childrenItor != children.end();
-		 childrenItor++)
+		 ++childrenItor)
     {
         XMLNode *currentNode = (*childrenItor);
 

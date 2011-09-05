@@ -75,7 +75,7 @@ bool ServerLinesHandler::processMessage(
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *currentTank = (*itor).second;
 		if (tank->getTeam() == currentTank->getTeam() ||

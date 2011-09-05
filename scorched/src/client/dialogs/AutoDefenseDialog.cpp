@@ -116,7 +116,7 @@ void AutoDefenseDialog::buttonDown(unsigned int butid)
 				tankInfo_.tankAccessories.getAllAccessoriesByType(
 					AccessoryPart::AccessoryParachute);
 			std::list<Accessory *>::iterator parasItor = paras.begin();
-			for (int i=1; i<ddpara_->getCurrentPosition() && parasItor != paras.end(); i++) parasItor++;
+			for (int i=1; i<ddpara_->getCurrentPosition() && parasItor != paras.end(); i++) ++parasItor;
 			
 			if (parasItor != paras.end())
 			{
@@ -136,7 +136,7 @@ void AutoDefenseDialog::buttonDown(unsigned int butid)
 				tankInfo_.tankAccessories.getAllAccessoriesByType(
 					AccessoryPart::AccessoryShield);
 			std::list<Accessory *>::iterator shieldsItor = shields.begin();
-			for (int i=1; i<ddshields_->getCurrentPosition() && shieldsItor != shields.end(); i++) shieldsItor++;
+			for (int i=1; i<ddshields_->getCurrentPosition() && shieldsItor != shields.end(); i++) ++shieldsItor;
 			
 			if (shieldsItor != shields.end())
 			{
@@ -180,7 +180,7 @@ void AutoDefenseDialog::displayCurrent()
 	ddshields_->addEntry(GLWSelectorEntry(LANG_RESOURCE("SHIELDS_OFF", "Shields Off"), &shieldsOffTip));
 	for (shieldsItor = shields.begin();
 		shieldsItor != shields.end();
-		shieldsItor++)
+		++shieldsItor)
 	{
 		Accessory *shield = (*shieldsItor);
 		ddshields_->addEntry(GLWSelectorEntry(
@@ -200,7 +200,7 @@ void AutoDefenseDialog::displayCurrent()
 	ddpara_->addEntry(GLWSelectorEntry(LANG_RESOURCE("PARACHUTES_OFF", "Parachutes Off"), &parachutesOffTip));
 	for (parachutesItor = parachutes.begin();
 		parachutesItor != parachutes.end();
-		parachutesItor++)
+		++parachutesItor)
 	{
 		Accessory *parachute = (*parachutesItor);
 		ddpara_->addEntry(GLWSelectorEntry(

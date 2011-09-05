@@ -162,7 +162,7 @@ void Simulator::newLevel()
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = tanks.begin();
 			itor != tanks.end();
-			itor++)
+			++itor)
 		{
 			Tank *tank = itor->second;
 			addSyncCheck(S3D::formatStringBuffer("Tank : %u:%u %s %s - %s", 

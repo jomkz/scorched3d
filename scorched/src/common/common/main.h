@@ -64,7 +64,7 @@ void run_main(int argc, char *argv[], OptionsParameters &params)
 	std::list<OptionEntry *>::iterator nonParamItor;
 	for (nonParamItor = params.getNonParamOptions().begin();
 		nonParamItor != params.getNonParamOptions().end();
-		nonParamItor++)
+		++nonParamItor)
 	{
 		OptionEntryString *str = (OptionEntryString *) *nonParamItor;
 		aParser.addNonParamEntry(

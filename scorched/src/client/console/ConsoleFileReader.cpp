@@ -42,7 +42,7 @@ bool ConsoleFileReader::loadFileIntoConsole(const std::string &fileName,
 	std::list<XMLNode *>::iterator childrenItor;
 	for (childrenItor = file.getRootNode()->getChildren().begin();
 		childrenItor != file.getRootNode()->getChildren().end();
-		childrenItor++)
+		++childrenItor)
 	{
 		XMLNode *currentNode = (*childrenItor);		
 		if (strcmp(currentNode->getName(), "command")==0)
@@ -63,7 +63,7 @@ void ConsoleFileReader::saveConsoleIntoFile(const std::string &filename)
 	std::deque<ConsoleLine *>::iterator itor;
 	for (itor = lines.begin();
 		itor != lines.end();
-		itor++)
+		++itor)
 	{
 		std::string cleanLine;
 		std::string dirtyLine(LangStringUtil::convertFromLang((*itor)->getLine()));

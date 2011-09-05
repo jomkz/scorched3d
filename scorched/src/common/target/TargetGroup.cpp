@@ -51,7 +51,7 @@ bool TargetGroup::writeMessage(NamedNetBuffer &buffer)
 		std::set<TargetGroupsSetEntry *>::iterator itor;
 		for (itor = groups_.begin();
 			itor != groups_.end();
-			itor++)
+			++itor)
 		{
 			TargetGroupsSetEntry *group = *itor;
 			groupNames.insert(group->getName());
@@ -61,7 +61,7 @@ bool TargetGroup::writeMessage(NamedNetBuffer &buffer)
 		std::set<std::string>::iterator itor;
 		for (itor = groupNames.begin();
 			itor != groupNames.end();
-			itor++)
+			++itor)
 		{			
 			buffer.addToBufferNamed("name", *itor);
 		}
@@ -94,7 +94,7 @@ bool TargetGroup::readMessage(NetBufferReader &reader)
 	std::set<TargetGroupsSetEntry *>::iterator itor;
 	for (itor = groupsCopy.begin();
 		itor != groupsCopy.end();
-		itor++)
+		++itor)
 	{
 		TargetGroupsSetEntry *group = *itor;
 		if (goodGroups.find(group->getName()) == goodGroups.end())
@@ -127,7 +127,7 @@ void TargetGroup::removeFromAllGroups()
 	std::set<TargetGroupsSetEntry *>::iterator itor;
 	for (itor = groupsCopy.begin();
 		itor != groupsCopy.end();
-		itor++)
+		++itor)
 	{
 		TargetGroupsSetEntry *group = *itor;
 		if (group->hasObject(this))

@@ -65,7 +65,7 @@ MovementMap::MovementMap(
 		context.getTargetContainer().getTargets();
 	for (targetItor = targets.begin(); 
 		targetItor != targets.end();
-		targetItor++)
+		++targetItor)
 	{
 		Target *target = (*targetItor).second;
 		if (movementProof(context, target, tanket))
@@ -122,7 +122,7 @@ MovementMap::MovementMapEntry &MovementMap::getAndCheckEntry(int w, int h)
 			std::list<Target *>::iterator targetItor;
 			for (targetItor = checkTargets_.begin(); 
 				targetItor != checkTargets_.end();
-				targetItor++)
+				++targetItor)
 			{
 				Target *target = (*targetItor);
 				if (inShield(target, tanket_, position))
@@ -286,7 +286,7 @@ bool MovementMap::allowedPosition(ScorchedContext &context, Tanket *tanket, Fixe
 	context.getTargetSpace().getCollisionSet(position, fixed(1), targets);
 	for (targetItor = targets.begin(); 
 		targetItor != targets.end();
-		targetItor++)
+		++targetItor)
 	{
 		Target *target = (*targetItor).second;
 
@@ -534,7 +534,7 @@ void MovementMap::calculateAllPositions(fixed fuel)
 		std::list<unsigned int>::iterator edgeItor;
 		for (edgeItor = tmpEdgeList.begin();
 			edgeItor != tmpEdgeList.end();
-			edgeItor++)
+			++edgeItor)
 		{
 			unsigned int pt = (*edgeItor);
 			unsigned int x = pt >> 16;

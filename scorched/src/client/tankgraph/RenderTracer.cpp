@@ -87,14 +87,14 @@ void RenderTracer::draw(const unsigned state)
 	
 	std::list<Vector>::iterator itor = current_->points.begin();
 	std::list<Vector>::iterator itorend = current_->points.end();
-	for (;itor != itorend; itor++)
+	for (;itor != itorend; ++itor)
 	{
 		drawTracerEnd(*itor);
 	}
 
 	std::list<std::list<TracerLinePoint> >::iterator itor2 = current_->lines.begin();
 	std::list<std::list<TracerLinePoint> >::iterator itorend2 = current_->lines.end();
-	for (;itor2 != itorend2; itor2++)
+	for (;itor2 != itorend2; ++itor2)
 	{
 		drawSmokeTracer(*itor2);
 	}
@@ -139,7 +139,7 @@ void RenderTracer::drawSmokeTracer(std::list<TracerLinePoint> &positions)
 		float totalDist = 0.0f;
 		std::list<TracerLinePoint>::iterator itor = positions.begin();
 		std::list<TracerLinePoint>::iterator itorend = positions.end();
-		for (;itor != itorend; itor++)
+		for (;itor != itorend; ++itor)
 		{
 			Vector &currentPos = (*itor).position;
 			Vector &cross = (*itor).cross;

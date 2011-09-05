@@ -176,7 +176,7 @@ void GLWListView::mouseDown(int button, float x, float y, bool &skipRest)
 	std::vector<UrlEntry>::iterator itor;
 	for (itor = urls_.begin();
 		itor != urls_.end();
-		itor++)
+		++itor)
 	{
 		UrlEntry &entry = *itor;
 		if (inBox(x, y, entry.x_, entry.y_, entry.w_, entry.h_))
@@ -247,7 +247,7 @@ bool GLWListView::addWordEntry(std::list<WordEntry> &words,
 		std::list<XMLNode *>::iterator itor;
 		for (itor = parameters.begin();
 			itor != parameters.end();
-			itor++)
+			++itor)
 		{
 			XMLNode *node = *itor;
 			wordEntry.event_[node->getName()] = node->getContent();
@@ -271,7 +271,7 @@ bool GLWListView::getLines(std::list<WordEntry> &words, float &lineLen)
 	std::list<WordEntry>::iterator itor;
 	for (itor = words.begin();
 		itor != words.end();
-		itor++)
+		++itor)
 	{
 		WordEntry &wordEntry = *itor;
 
@@ -311,7 +311,7 @@ bool GLWListView::getWords(XMLNode *node, std::list<WordEntry> &words)
 	std::list<XMLNode *> children = node->getChildren();
 	for (childrenItor = children.begin();
 		childrenItor != children.end();
-		childrenItor++)
+		++childrenItor)
 	{
 		XMLNode *child = (*childrenItor);
 

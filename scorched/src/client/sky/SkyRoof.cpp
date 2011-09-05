@@ -123,8 +123,6 @@ void SkyRoof::makeList()
 
 void SkyRoof::drawSegment(Vector &a, Vector &b, Vector &na, Vector &nb)
 {
-	HeightMap &rmap = ScorchedClient::instance()->
-		getLandscapeMaps().getRoofMaps().getRoofMap();
 	HeightMap &hmap = ScorchedClient::instance()->
 		getLandscapeMaps().getGroundMaps().getHeightMap();
 	LandscapeDefn &defn =

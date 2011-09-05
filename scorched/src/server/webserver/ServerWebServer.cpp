@@ -256,7 +256,7 @@ void ServerWebServer::processMessage(NetMessage &message)
 						std::map<std::string, std::string>::iterator itor;
 						for (itor = fields.begin();
 							itor != fields.end();
-							itor++)
+							++itor)
 						{
 							if (0 != strcmp((*itor).first.c_str(), "password"))
 							{
@@ -296,7 +296,7 @@ void ServerWebServer::processMessage(NetMessage &message)
 			std::map<std::string, NetMessage *>::iterator partitor;
 			for (partitor = parts.begin();
 				partitor != parts.end();
-				partitor++)
+				++partitor)
 			{
 				NetMessage *newMessage = (*partitor).second;
 				NetMessagePool::instance()->addToPool(newMessage);

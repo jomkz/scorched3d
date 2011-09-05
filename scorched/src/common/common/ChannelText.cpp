@@ -166,7 +166,7 @@ bool ChannelText::writeMessage(NetBuffer &buffer)
 		std::vector<LangString>::iterator itor;
 		for (itor = messageParams_.begin();
 			itor != messageParams_.end();
-			itor++)
+			++itor)
 		{
 			buffer.addToBuffer(*itor);
 		}

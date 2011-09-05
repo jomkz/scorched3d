@@ -74,7 +74,7 @@ void ServerWebServerQueue::removeEntry(unsigned int destinationId)
 	std::list<ServerWebServerQueueEntry *>::iterator itor;
 	for (itor = entries_.begin();
 		itor != entries_.end();
-		itor++)
+		++itor)
 	{
 		ServerWebServerQueueEntry *entry = *itor;
 		if (entry->getDestinationId() == destinationId)
@@ -95,7 +95,7 @@ bool ServerWebServerQueue::hasEntry(unsigned int destinationId)
 	std::list<ServerWebServerQueueEntry *>::iterator itor;
 	for (itor = entries_.begin();
 		itor != entries_.end();
-		itor++)
+		++itor)
 	{
 		ServerWebServerQueueEntry *entry = *itor;
 		if (entry->getDestinationId() == destinationId)

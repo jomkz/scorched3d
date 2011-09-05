@@ -99,7 +99,7 @@ void ServerChannelManager::DestinationEntry::getLocalIds(const std::string &chan
 	std::map<unsigned int, DestinationLocalEntry>::iterator itor;
 	for (itor = localEntries_.begin();
 		itor != localEntries_.end();
-		itor++)
+		++itor)
 	{
 		DestinationLocalEntry &entry = (*itor).second;
 		if (entry.getChannels().find(channel) != entry.getChannels().end())
@@ -134,7 +134,7 @@ void ServerChannelManager::DestinationEntry::updateChannels()
 	std::map<unsigned int, DestinationLocalEntry>::iterator itor;
 	for (itor = localEntries_.begin();
 		itor != localEntries_.end();
-		itor++)
+		++itor)
 	{
 		DestinationLocalEntry &entry = (*itor).second;
 		channels_.insert(entry.getChannels().begin(), entry.getChannels().end());
@@ -184,7 +184,7 @@ ServerChannelManager::~ServerChannelManager()
 		std::map<unsigned int, DestinationEntry *>::iterator itor;
 		for (itor = destinationEntries_.begin();
 			itor != destinationEntries_.end();
-			itor++)
+			++itor)
 		{
 			delete itor->second;
 		}
@@ -194,7 +194,7 @@ ServerChannelManager::~ServerChannelManager()
 		std::list<ChannelEntry *>::iterator itor;
 		for (itor = channelEntries_.begin();
 			itor != channelEntries_.end();
-			itor++)
+			++itor)
 		{
 			delete *itor;
 		}
@@ -218,7 +218,7 @@ void ServerChannelManager::simulate(fixed frameTime)
 		std::map<unsigned int, DestinationEntry *>::iterator itor;
 		for (itor = destinationEntries_.begin();
 			itor != destinationEntries_.end();
-			itor++)
+			++itor)
 		{
 			DestinationEntry *entry = itor->second;
 			if (entry->getMessageCount() > MuteThreshold)
@@ -264,7 +264,7 @@ ServerChannelManager::ChannelEntry *ServerChannelManager::getChannelEntryByName(
 	std::list<ChannelEntry *>::iterator itor;
 	for (itor = channelEntries_.begin();
 		itor != channelEntries_.end();
-		itor++)
+		++itor)
 	{
 		ChannelEntry *entry = *itor;
 		if (name == entry->getName()) return entry;
@@ -288,7 +288,7 @@ std::list<std::string> ServerChannelManager::getAllChannels()
 	std::list<ChannelEntry *>::iterator itor;
 	for (itor = channelEntries_.begin();
 		itor != channelEntries_.end();
-		itor++)
+		++itor)
 	{
 		ChannelEntry *channelEntry = (*itor);
 		result.push_back(channelEntry->getName());
@@ -341,7 +341,7 @@ void ServerChannelManager::refreshDestination(unsigned int destinationId)
 	std::map<unsigned int, DestinationLocalEntry>::iterator localItor;
 	for (localItor = localEntries.begin();
 		localItor != localEntries.end();
-		localItor++)
+		++localItor)
 	{
 		unsigned int localId = localItor->first;
 		DestinationLocalEntry &localEntry = localItor->second;
@@ -351,7 +351,7 @@ void ServerChannelManager::refreshDestination(unsigned int destinationId)
 		std::list<ChannelEntry *>::iterator itor;
 		for (itor = channelEntries_.begin();
 			itor != channelEntries_.end();
-			itor++)
+			++itor)
 		{
 			ChannelEntry *channelEntry = (*itor);
 
@@ -438,7 +438,7 @@ void ServerChannelManager::joinClient(unsigned int destinationId, unsigned int l
 	std::list<ChannelEntry *>::iterator itor;
 	for (itor = channelEntries_.begin();
 		itor != channelEntries_.end();
-		itor++)
+		++itor)
 	{
 		ChannelEntry *channelEntry = (*itor);
 
@@ -456,7 +456,7 @@ void ServerChannelManager::joinClient(unsigned int destinationId, unsigned int l
 		std::list<ChannelDefinition>::iterator startItor;
 		for (startItor = startChannels.begin();
 			startItor != startChannels.end();
-			startItor++)
+			++startItor)
 		{
 			const char *startChannel = startItor->getChannel();
 			if (0 == strcmp(startChannel, channelEntry->getName()))
@@ -579,7 +579,7 @@ void ServerChannelManager::actualSend(const ChannelText &constText,
 	std::map<unsigned int, DestinationEntry *>::iterator destItor;
 	for (destItor = destinations.begin();
 		destItor != destinations.end();
-		destItor++)
+		++destItor)
 	{
 		DestinationEntry *entry = (*destItor).second;
 		if (!channelEntry->getFilter() || channelEntry->getFilter()->sentToDestination(
@@ -647,7 +647,7 @@ bool ServerChannelManager::processChannelTextMessage(
 			std::map<unsigned int, Tank *>::iterator itor;
 			for (itor = tanks.begin();
 				itor != tanks.end();
-				itor++)
+				++itor)
 			{
 				if (itor->second->getDestinationId() == netNessage.getDestinationId())
 				{

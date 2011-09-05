@@ -70,7 +70,7 @@ void WeaponMulti::fireWeapon(ScorchedContext &context,
 	std::list<Weapon *>::iterator itor;
 	for (itor = subWeapons_.begin();
 		 itor != subWeapons_.end();
-		 itor++)
+		 ++itor)
 	{
 		Weapon *weapon = *itor;
 		weapon->fireWeapon(context, weaponContext, position, velocity);

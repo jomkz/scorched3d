@@ -42,7 +42,7 @@ void GLWDropDownColor::addColor(Vector &newColor)
 	std::list<GLWSelectorEntry>::iterator coloritor;
 	for (coloritor = texts_.begin();
 		coloritor != texts_.end();
-		coloritor++)
+		++coloritor)
 	{
 		Vector &color = coloritor->getColor();
 		if (newColor[0] > color[0]) break;
@@ -83,7 +83,7 @@ void GLWDropDownColor::setCurrentColor(Vector &color)
 	std::list<GLWSelectorEntry>::iterator itor;
 	for (itor = texts_.begin();
 		itor != texts_.end();
-		itor++)
+		++itor)
 	{
 		GLWSelectorEntry &entry = *itor;
 		if (color == entry.getColor())

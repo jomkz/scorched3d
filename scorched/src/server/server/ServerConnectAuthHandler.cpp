@@ -65,7 +65,7 @@ ServerConnectAuthHandler::~ServerConnectAuthHandler()
 	std::list<AuthMessage *>::iterator itor;
 	for (itor = authMessages_.begin();
 		itor != authMessages_.end();
-		itor++)
+		++itor)
 	{
 		delete *itor;
 	}
@@ -215,7 +215,7 @@ void ServerConnectAuthHandler::processMessageInternal(
 		std::map<unsigned int, Tank *>::iterator playingItor;
 		for (playingItor = playingTanks.begin();
 			playingItor != playingTanks.end();
-			playingItor++)
+			++playingItor)
 		{
 			Tank *current = (*playingItor).second;
 			if (current->getDestinationId() != 0)
@@ -409,7 +409,7 @@ bool ServerConnectAuthHandler::uniqueIdTaken(const std::string &uniqueId)
 	std::map<unsigned int, Tank *>::iterator playingItor;
 	for (playingItor = playingTanks.begin();
 		playingItor != playingTanks.end();
-		playingItor++)
+		++playingItor)
 	{
 		Tank *current = (*playingItor).second;
 		if (0 == strcmp(current->getUniqueId(), uniqueId.c_str()))

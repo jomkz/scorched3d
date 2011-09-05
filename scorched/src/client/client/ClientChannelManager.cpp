@@ -42,7 +42,7 @@ void ClientChannelManager::ChannelEntry::setChannels(std::list<ChannelDefinition
 	std::list<ChannelDefinition>::iterator itor;
 	for (itor = channels.begin();
 		itor != channels.end();
-		itor++)
+		++itor)
 	{
 		channels_.insert(itor->getChannel());
 	}
@@ -102,7 +102,7 @@ bool ClientChannelManager::registerClient(ClientChannelManagerI *reciever,
 	std::list<std::string>::iterator itor;
 	for (itor = channels.begin();
 		itor != channels.end();
-		itor++)
+		++itor)
 	{
 		ChannelDefinition entry(itor->c_str());
 		message.getChannels().push_back(entry);
@@ -139,7 +139,7 @@ bool ClientChannelManager::changeRegistration(ClientChannelManagerI *reciever,
 	std::list<std::string>::iterator itor;
 	for (itor = channels.begin();
 		itor != channels.end();
-		itor++)
+		++itor)
 	{
 		ChannelDefinition entry(itor->c_str());
 		message.getChannels().push_back(entry);
@@ -154,7 +154,7 @@ void ClientChannelManager::addChannel(const char *lookfor, const char *channel)
 	std::map<unsigned int, ChannelEntry *>::iterator itor;
 	for (itor = recievers_.begin();
 		itor != recievers_.end();
-		itor++)
+		++itor)
 	{
 		ChannelEntry *r = (*itor).second;
 		if (r->hasChannel(lookfor))
@@ -165,7 +165,7 @@ void ClientChannelManager::addChannel(const char *lookfor, const char *channel)
 			std::set<std::string>::iterator itor;
 			for (itor = currentChannels.begin();
 				itor != currentChannels.end();
-				itor++)
+				++itor)
 			{
 				channels.push_back(*itor);
 			}
@@ -181,7 +181,7 @@ void ClientChannelManager::removeChannel(const char *channel)
 	std::map<unsigned int, ChannelEntry *>::iterator itor;
 	for (itor = recievers_.begin();
 		itor != recievers_.end();
-		itor++)
+		++itor)
 	{
 		ChannelEntry *r = (*itor).second;
 		if (r->hasChannel(channel))
@@ -192,7 +192,7 @@ void ClientChannelManager::removeChannel(const char *channel)
 			std::set<std::string>::iterator itor;
 			for (itor = currentChannels.begin();
 				itor != currentChannels.end();
-				itor++)
+				++itor)
 			{
 				channels.push_back(*itor);
 			}
@@ -208,7 +208,7 @@ unsigned int ClientChannelManager::getChannelEntry(ClientChannelManagerI *reciev
 	std::map<unsigned int, ChannelEntry *>::iterator itor;
 	for (itor = recievers_.begin();
 		itor != recievers_.end();
-		itor++)
+		++itor)
 	{
 		ChannelEntry *r = (*itor).second;
 		if (r->getUser() == reciever) return (*itor).first;
@@ -239,7 +239,7 @@ void ClientChannelManager::sendText(const ChannelText &constText)
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = tanks.begin();
 			itor != tanks.end();
-			itor++)
+			++itor)
 		{
 			Tank *tank = (*itor).second;
 			if (tank->getDestinationId() == 
@@ -274,7 +274,7 @@ void ClientChannelManager::showText(const ChannelText &constText)
 	std::map<unsigned int, ChannelEntry *>::iterator itor;
 	for (itor = recievers_.begin();
 		itor != recievers_.end();
-		itor++)
+		++itor)
 	{
 		ChannelEntry *entry = (*itor).second;
 		if (entry->hasChannel(text.getChannel()))
@@ -352,7 +352,7 @@ bool ClientChannelManager::processChannelTextMessage(NetMessage &message,
 		std::list<unsigned int>::iterator itor;
 		for (itor = textMessage.getIds().begin();
 			itor != textMessage.getIds().end();
-			itor++)
+			++itor)
 		{
 			unsigned int id = (*itor);
 

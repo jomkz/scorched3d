@@ -89,7 +89,7 @@ void GLWTab::setDepressed()
 	std::list<GLWPanel::GLWPanelEntry>::iterator itor;
 	for (itor = parent_->getWidgets().begin();
 		itor != parent_->getWidgets().end();
-		itor++)
+		++itor)
 	{
 		GLWPanel::GLWPanelEntry &entry = (*itor);
 		if (entry.widget->getMetaClassId() == getMetaClassId())
@@ -120,7 +120,7 @@ void GLWTab::draw()
 		std::list<GLWPanel::GLWPanelEntry>::iterator itor;
 		for (itor = parent_->getWidgets().begin();
 			itor != parent_->getWidgets().end();
-			itor++)
+			++itor)
 		{
 			GLWPanel::GLWPanelEntry &entry = (*itor);
 			if (entry.widget->getMetaClassId() == getMetaClassId())

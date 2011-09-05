@@ -73,7 +73,7 @@ bool GLWWindowSkinManager::loadWindows()
 	std::list<XMLNode *> &children = file.getRootNode()->getChildren();
     for (childrenItor = children.begin();
         childrenItor != children.end();
-        childrenItor++)
+        ++childrenItor)
     {
 		// For each node named window
         XMLNode *currentNode = (*childrenItor);
@@ -97,7 +97,7 @@ std::list<GLWWindowSkin *> GLWWindowSkinManager::getStateWindows(const char *sta
 	std::list<GLWWindowSkin *>::iterator itor;
 	for (itor = windows_.begin();
 		itor != windows_.end();
-		itor++)
+		++itor)
 	{
 		GLWWindowSkin *window = (GLWWindowSkin *) *itor;
 		if (window->inState(state))

@@ -139,7 +139,7 @@ FixedVector Boid2::checkGrouping(std::vector<Boid2*> &boidSet)
 
 	int count = 0, countDist = 0;
 	std::vector<Boid2*>::iterator itor;
-	for (itor = boidSet.begin(); itor != boidSet.end(); itor++)
+	for (itor = boidSet.begin(); itor != boidSet.end(); ++itor)
 	{
 		Boid2 *other = (Boid2 *) *itor;
 		if (!other || other == this) continue; 

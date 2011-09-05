@@ -78,7 +78,7 @@ bool TankAIStore::loadAIs(bool shallow)
 	std::list<XMLNode *> &children = file.getRootNode()->getChildren();
     for (childrenItor = children.begin();
 		 childrenItor != children.end();
-		 childrenItor++)
+		 ++childrenItor)
     {
 		// Parse the ai entry
         XMLNode *currentNode = (*childrenItor);
@@ -107,7 +107,7 @@ bool TankAIStore::loadAIs(bool shallow)
 		std::list<TankAI *>::iterator itor;
 		for (itor = ais_.begin();
 			itor != ais_.end();
-			itor++)
+			++itor)
 		{
 			TankAI *ai = (*itor);
 			if (ai->availableForRandom())
@@ -135,7 +135,7 @@ TankAI *TankAIStore::getAIByName(const char *name)
 	std::list<TankAI *>::iterator itor;
 	for (itor = ais_.begin();
 		itor != ais_.end();
-		itor++)
+		++itor)
 	{
 		if (!strcmp((*itor)->getName(), name)) return (*itor);
 	}

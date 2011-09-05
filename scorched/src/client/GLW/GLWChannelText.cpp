@@ -226,7 +226,7 @@ void GLWChannelText::processNotVisibleKey(unsigned int unicode, unsigned int dik
 	std::map<KeyboardKey *, std::string>::iterator keyItor;
 	for (keyItor = keys_.begin();
 		keyItor != keys_.end();
-		keyItor++)
+		++keyItor)
 	{
 		KeyboardKey *key = keyItor->first;
 		std::string &channel = keyItor->second;
@@ -236,7 +236,7 @@ void GLWChannelText::processNotVisibleKey(unsigned int unicode, unsigned int dik
 		std::vector<KeyboardKey::KeyEntry>::iterator itor;
 		for (itor = talkKeys.begin();
 			itor != talkKeys.end();
-			itor++)
+			++itor)
 		{
 			KeyboardKey::KeyEntry &entry = *itor;
 			if (dik == entry.key)
@@ -446,7 +446,7 @@ void GLWChannelText::setHistoryText()
 		std::list<ChannelText>::reverse_iterator itor;
 		for (itor = lastMessages_.rbegin();
 			itor != lastMessages_.rend();
-			itor++, p++)
+			++itor, p++)
 		{
 			if (p == historyPosition_)
 			{
@@ -653,7 +653,7 @@ void GLWChannelText::buttonDown(unsigned int id)
 	std::list<ChannelText>::iterator resendItor;
 	for (resendItor = lastMessages_.begin();
 		resendItor != lastMessages_.end();
-		resendItor++)
+		++resendItor)
 	{
 		ChannelText &channelText = *resendItor;
 		resend.getPopups().push_back(GLWSelectorEntry(channelText.getMessage(), 
@@ -668,7 +668,7 @@ void GLWChannelText::buttonDown(unsigned int id)
 	std::map<unsigned int, Tank *>::iterator tankItor;
 	for (tankItor = tanks.begin();
 		tankItor != tanks.end();
-		tankItor++)
+		++tankItor)
 	{
 		Tank *tank = (*tankItor).second;
 		if (tank == currentTank ||
@@ -686,7 +686,7 @@ void GLWChannelText::buttonDown(unsigned int id)
 	std::list<GLWChannelView::CurrentChannelEntry>::iterator channelItor;
 	for (channelItor = channels.begin();
 		channelItor != channels.end();
-		channelItor++)
+		++channelItor)
 	{
 		GLWChannelView::CurrentChannelEntry &channel = (*channelItor);
 
@@ -715,7 +715,7 @@ void GLWChannelText::buttonDown(unsigned int id)
 	std::list<GLWChannelView::BaseChannelEntry>::iterator availableItor;
 	for (availableItor = available.begin();
 		availableItor != available.end();
-		availableItor++)
+		++availableItor)
 	{
 		GLWChannelView::BaseChannelEntry &channel = *availableItor;
 
@@ -734,7 +734,7 @@ void GLWChannelText::buttonDown(unsigned int id)
 	std::vector<Vector *>::iterator colorItor;
 	for (colorItor = colors.begin();
 		colorItor != colors.end();
-		colorItor++)
+		++colorItor)
 	{
 		Vector *color = *colorItor;
 
@@ -860,7 +860,7 @@ void GLWChannelText::itemSelected(GLWSelectorEntry *entry, int position)
 			std::list<ChannelText>::iterator resendItor;
 			for (resendItor = lastMessages_.begin();
 				resendItor != lastMessages_.end();
-				resendItor++)
+				++resendItor)
 			{
 				ChannelText &text = *resendItor;
 				if (text.getMessage() == entry->getText()) 
@@ -930,7 +930,7 @@ bool GLWChannelText::checkCurrentChannel()
 		std::list<GLWChannelView::CurrentChannelEntry>::iterator itor;
 		for (itor = entries.begin();
 			itor != entries.end();
-			itor++)
+			++itor)
 		{
 			GLWChannelView::CurrentChannelEntry &entry = *itor;
 			if (channelValid(channelEntry_.channel.c_str()))

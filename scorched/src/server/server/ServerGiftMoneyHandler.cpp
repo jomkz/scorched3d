@@ -47,7 +47,6 @@ bool ServerGiftMoneyHandler::processMessage(
 	if (!message.readMessage(reader)) return false;
 
 	unsigned int fromPlayerId = message.getFromPlayerId();
-	unsigned int toPlayerId = message.getToPlayerId();
 
 	// Check we are at the correct time to buy anything
 	if ((ScorchedServer::instance()->getServerState().getState() != 

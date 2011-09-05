@@ -113,7 +113,7 @@ static int getNumberOfPlayers()
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = tanks.begin();
 		mainitor != tanks.end();
-		mainitor++)
+		++mainitor)
 	{
 		Tank *current = (*mainitor).second;
 		if (current->getTankAI()) count++;

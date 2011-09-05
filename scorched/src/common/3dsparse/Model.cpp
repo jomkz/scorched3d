@@ -60,7 +60,7 @@ void Model::centre()
 	std::vector<Mesh *>::iterator itor;
 	for (itor = meshes_.begin();
 		itor != meshes_.end();
-		itor++)
+		++itor)
 	{
 		max_[0] = MAX(max_[0], (*itor)->getMax()[0]);
 		max_[1] = MAX(max_[1], (*itor)->getMax()[1]);
@@ -74,7 +74,7 @@ void Model::centre()
 	FixedVector centre = (max_ + min_) / -2;
 	for (itor = meshes_.begin();
 		itor != meshes_.end();
-		itor++)
+		++itor)
 	{
 		(*itor)->move(centre);
 	}
@@ -96,7 +96,7 @@ void Model::countTextures()
 	std::vector<Mesh *>::iterator itor;
 	for (itor = meshes_.begin();
 		itor != meshes_.end();
-		itor++)
+		++itor)
 	{
 		Mesh *mesh = *itor;
 		if (mesh->getTextureName()[0]) 
@@ -117,14 +117,14 @@ void Model::setupColor()
 	std::vector<Mesh *>::iterator itor;
 	for (itor = meshes_.begin();
 		itor != meshes_.end();
-		itor++)
+		++itor)
 	{
 		Mesh *mesh = (*itor);
 	
 		std::vector<Face *>::iterator itor;
 		for (itor = mesh->getFaces().begin();
 			itor != mesh->getFaces().end();
-			itor++)
+			++itor)
 		{
 			Face *face = *itor;
 			for (int i=0; i<3; i++)

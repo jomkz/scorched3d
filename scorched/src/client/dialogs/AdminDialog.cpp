@@ -91,7 +91,7 @@ AdminDialog::AdminDialog() :
 		std::list<std::string>::iterator itor;
 		for (itor = ais.begin();
 			itor != ais.end();
-			itor++)
+			++itor)
 		{
 			if (*itor != "Human")
 			{
@@ -127,7 +127,7 @@ void AdminDialog::drawColumn(unsigned int id, int row, int col,
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++, pos++)
+		++itor, pos++)
 	{
 		if (pos == row) 
 		{
@@ -185,7 +185,7 @@ void AdminDialog::buttonDown(unsigned int id)
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++, pos++)
+		++itor, pos++)
 	{
 		if (adminTable_->getSelected() == pos)
 		{

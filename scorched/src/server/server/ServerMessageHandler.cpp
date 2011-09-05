@@ -74,7 +74,7 @@ void ServerMessageHandler::clientConnected(NetMessage &message)
 	std::map<unsigned int, ServerDestination *>::iterator destItor;
 	for (destItor = destinations.begin();
 		destItor != destinations.end();
-		destItor++)
+		++destItor)
 	{
 		unsigned int serverDestinationId = destItor->first;
 		ServerDestination *serverDestination = destItor->second;
@@ -130,7 +130,7 @@ void ServerMessageHandler::clientDisconnected(NetMessage &message)
 		ScorchedServer::instance()->getTankContainer().getAllTanks();
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = (*itor).second;
 		if (tank->getDestinationId() == destinationId)
@@ -143,7 +143,7 @@ void ServerMessageHandler::clientDisconnected(NetMessage &message)
 	std::list<unsigned int>::iterator remItor;
 	for (remItor = removePlayers.begin();
 		 remItor != removePlayers.end();
-		 remItor++)
+		 ++remItor)
 	{
 		unsigned int playerId = *remItor;
 		destroyPlayer(playerId, reason);

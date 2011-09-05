@@ -122,7 +122,7 @@ void TankDamage::calculateDamage()
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = tanks.begin();
 			itor != tanks.end();
-			itor++)
+			++itor)
 		{
 			Tank *tank = (*itor).second;
 			TankAI *ai = tank->getTankAI();
@@ -307,7 +307,7 @@ void TankDamage::calculateDamage()
 				std::set<unsigned int>::iterator itor;
 				for (itor = hurtBy.begin();
 					itor != hurtBy.end();
-					itor++)
+					++itor)
 				{
 					unsigned int hurtByPlayer = (*itor);
 					Tank *hurtByTank = 

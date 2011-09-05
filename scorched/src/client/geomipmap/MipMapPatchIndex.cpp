@@ -71,7 +71,6 @@ void MipMapPatchIndex::generate(int size, int totalsize, int skip, unsigned int 
 	// Generate a standard x by y grid of indices for a triangle strip
 	// use degenerate indices to keep winding in the correct order
 	std::vector<unsigned short> indices;
-	int j=0;
 	for (int y=0; y<size; y+=skip)
 	{
 		for (int x=0; x<=size; x+=skip)

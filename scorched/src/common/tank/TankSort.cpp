@@ -96,8 +96,8 @@ void TankSort::getSortedTanks(std::list<Tank *> &list, ScorchedContext &context)
 	while (!list.empty())
 	{
 		std::list<Tank *>::iterator removeItor = list.begin();
-		std::list<Tank *>::iterator itor = list.begin(); itor++;
-		for (;itor != list.end(); itor++)
+		std::list<Tank *>::iterator itor = list.begin(); ++itor;
+		for (;itor != list.end(); ++itor)
 		{
 			static TankSort::SortOnScore compare;
 			if (!compare(*itor, *removeItor, context)) removeItor = itor;
@@ -120,7 +120,7 @@ void TankSort::getSortedTanksIds(ScorchedContext &context,
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = (*itor).second;
 		sortedTanks.push_back(tank);
@@ -130,7 +130,7 @@ void TankSort::getSortedTanksIds(ScorchedContext &context,
 	std::list<Tank *>::iterator resultitor;
 	for (resultitor = sortedTanks.begin();
 		resultitor != sortedTanks.end();
-		resultitor++)
+		++resultitor)
 	{
 		list.push_back((*resultitor)->getPlayerId());
 	}

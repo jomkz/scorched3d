@@ -84,7 +84,7 @@ bool TankColorGenerator::colorAvailable(Vector &color,
 	std::map<unsigned int, Tank *>::iterator tankitor;
 	for (tankitor = tanks.begin();
 		tankitor != tanks.end();
-		tankitor++)
+		++tankitor)
 	{
 		Tank *tank = (*tankitor).second;
 		if (tank->getColor() == color)
@@ -108,7 +108,7 @@ std::vector<Vector *> TankColorGenerator::getAvailableColors(
 	std::vector<Vector*>::iterator coloritor;
 	for (coloritor = availableColors_.begin();
 		coloritor != availableColors_.end();
-		coloritor++)
+		++coloritor)
 	{
 		Vector *color = (*coloritor);
 		if (colorAvailable(*color, tanks, currentTank))

@@ -192,7 +192,7 @@ void AccessoryStore::sortList(std::list<Accessory *> &accList, int sortKey)
 		std::list<Accessory *>::iterator itor;
 		for (itor = accList.begin();
 			itor != accList.end();
-			itor++)
+			++itor)
 		{
 			accVector.push_back(*itor);
 		}
@@ -244,7 +244,7 @@ void AccessoryStore::sortList(std::list<Accessory *> &accList, int sortKey)
 		std::list<Accessory *>::iterator setItor;
 		for (setItor = accList.begin();
 			setItor != accList.end();
-			setItor++)
+			++setItor)
 		{
 			Accessory *accessory = *setItor;
 			accessorySet.insert(accessory);
@@ -254,7 +254,7 @@ void AccessoryStore::sortList(std::list<Accessory *> &accList, int sortKey)
 		std::list<Accessory *>::iterator itor;
 		for (itor = accessories_.begin();
 			itor != accessories_.end();
-			itor++)
+			++itor)
 		{
 			Accessory *accessory = *itor;
 			if (accessorySet.find(accessory) != accessorySet.end())
@@ -272,7 +272,7 @@ std::list<Accessory *> AccessoryStore::getAllAccessoriesByTabGroup(
 	std::list<Accessory *>::iterator itor;
 	for (itor = accessories_.begin();
 		itor != accessories_.end();
-		itor++)
+		++itor)
 	{
 		Accessory *accessory = (*itor);
 		if (0 == strcmp(tabgroup, accessory->getTabGroupName()))
@@ -291,7 +291,7 @@ std::list<Accessory *> AccessoryStore::getAllAccessories(int sortKey)
 	std::list<Accessory *>::iterator itor;
 	for (itor = accessories_.begin();
 		itor != accessories_.end();
-		itor++)
+		++itor)
 	{
 		result.push_back(*itor);
 	}
@@ -315,7 +315,7 @@ Accessory *AccessoryStore::findByPrimaryAccessoryName(const char *name)
 	std::list<Accessory *>::iterator itor;
 	for (itor = accessories_.begin();
 		itor != accessories_.end();
-		itor++)
+		++itor)
 	{
 		Accessory *accessory = (*itor);
 		if (strcmp(accessory->getName(), name) == 0)
@@ -331,7 +331,7 @@ Accessory *AccessoryStore::findByAccessoryId(unsigned int id)
 	std::list<Accessory *>::iterator itor;
 	for (itor = accessories_.begin();
 		itor != accessories_.end();
-		itor++)
+		++itor)
 	{
 		Accessory *accessory = (*itor);
 		if (accessory->getAccessoryId() == id)
@@ -347,7 +347,7 @@ AccessoryPart *AccessoryStore::findAccessoryPartByAccessoryId(unsigned int id, c
 	std::list<AccessoryPart *>::iterator itor;
 	for (itor = accessoryParts_.begin();
 		itor != accessoryParts_.end();
-		itor++)
+		++itor)
 	{
 		AccessoryPart *accessoryPart = (*itor);
 		if (accessoryPart->getParent()->getAccessoryId() == id &&
@@ -364,7 +364,7 @@ AccessoryPart *AccessoryStore::findByAccessoryPartId(unsigned int id)
 	std::list<AccessoryPart *>::iterator itor;
 	for (itor = accessoryParts_.begin();
 		itor != accessoryParts_.end();
-		itor++)
+		++itor)
 	{
 		AccessoryPart *accessoryPart = (*itor);
 		if (accessoryPart->getAccessoryPartId() == id)
@@ -428,7 +428,7 @@ bool AccessoryStore::writeEconomyToBuffer(NetBuffer &buffer)
 	std::list<Accessory *>::iterator itor;
 	for (itor = accessories.begin();
 		itor != accessories.end();
-		itor++)
+		++itor)
 	{
 		Accessory *accessory = (*itor);
 		buffer.addToBuffer(accessory->getAccessoryId());

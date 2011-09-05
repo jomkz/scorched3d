@@ -72,7 +72,7 @@ void ServerCommon::kickDestination(unsigned int destinationId,
 		ScorchedServer::instance()->getTankContainer().getAllTanks();
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = (*itor).second;
 		if (tank->getDestinationId() == destinationId)

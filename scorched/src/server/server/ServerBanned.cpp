@@ -64,7 +64,7 @@ bool ServerBanned::load(bool force)
 	std::list<XMLNode *> &children = file.getRootNode()->getChildren();
 	for (childrenItor = children.begin();
 		 childrenItor != children.end();
-		childrenItor++)
+		++childrenItor)
 	{
 		XMLNode *currentNode = (*childrenItor);
 		XMLNode *maskNode = 0, *timeNode = 0, *typeNode = 0;
@@ -178,7 +178,7 @@ ServerBanned::BannedType ServerBanned::getBanned(
 	std::list<BannedRange>::iterator itor;
 	for (itor = bannedIps_.begin();
 		itor != bannedIps_.end();
-		itor++)
+		++itor)
 	{
 		BannedRange &range = *itor;
 		unsigned int newip = range.mask & ip;
@@ -220,7 +220,7 @@ void ServerBanned::addBannedEntry(unsigned int ip, unsigned int mask,
 	std::list<BannedRange>::iterator itor;
 	for (itor = bannedIps_.begin();
 		itor != bannedIps_.end();
-		itor++)
+		++itor)
 	{
 		BannedRange &range = *itor;
 		if (range.mask == mask)
@@ -294,14 +294,14 @@ bool ServerBanned::save()
 	std::list<BannedRange>::iterator itor;
 	for (itor = bannedIps_.begin();
 		itor != bannedIps_.end();
-		itor++)
+		++itor)
 	{
 		BannedRange &range = *itor;
 		unsigned int m = range.mask;
 		std::map<unsigned int, BannedEntry>::iterator ipitor;
 		for (ipitor = range.ips.begin();
 			ipitor != range.ips.end();
-			ipitor++)
+			++ipitor)
 		{
 			// Add ip address
 			unsigned int ip = (*ipitor).first;

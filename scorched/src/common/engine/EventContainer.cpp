@@ -57,7 +57,7 @@ void EventContainer::addEvents(ScorchedContext &context,
 	std::vector<LandscapeInclude *>::iterator itor;
 	for (itor = events.begin();
 		itor != events.end();
-		itor++)
+		++itor)
 	{
 		LandscapeInclude *event = (*itor);
 		addEvent(context, event->events);
@@ -70,7 +70,7 @@ void EventContainer::addEvent(ScorchedContext &context,
 	std::vector<LandscapeEvent *>::iterator itor;
 	for (itor = events.begin();
 		itor != events.end();
-		itor++)
+		++itor)
 	{
 		LandscapeEvent *event = (*itor);
 
@@ -88,7 +88,7 @@ void EventContainer::simulate(fixed frameTime, ScorchedContext &context)
 	std::vector<EventEntry>::iterator itor;
 	for (itor = events_.begin();
 		itor != events_.end();
-		itor++)
+		++itor)
 	{
 		EventEntry &entry = (*itor);
 		

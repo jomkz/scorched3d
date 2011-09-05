@@ -82,13 +82,11 @@ bool ServerWebHandler::PlayerHandler::processRequest(
 		ScorchedServer::instance()->getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
 
-	const char *adminName = getAdminUserName(request.getFields());
-
 	// Check for any action
 	const char *action = ServerWebServerUtil::getField(request.getFields(), "action");
 	if (action)
 	{
-		for (itor = tanks.begin(); itor != tanks.end(); itor++)
+		for (itor = tanks.begin(); itor != tanks.end(); ++itor)
 		{
 			// Is this tank selected
 			Tank *tank = (*itor).second;
@@ -172,7 +170,7 @@ bool ServerWebHandler::PlayerHandler::processRequest(
 
 	// Player Entries
 	std::string players;
-	for (itor = tanks.begin(); itor != tanks.end(); itor++)
+	for (itor = tanks.begin(); itor != tanks.end(); ++itor)
 	{
 		Tank *tank = (*itor).second;
 		std::string cleanName(ServerWebServerUtil::htmlLangString(tank->getTargetName()));
@@ -209,7 +207,7 @@ bool ServerWebHandler::PlayerHandler::processRequest(
 	std::list<TankAI *>::iterator aiitor;
 	for (aiitor = ais.begin();
 		aiitor != ais.end();
-		aiitor++)
+		++aiitor)
 	{
 		TankAI *ai = (*aiitor);
 		if (ai->availableForPlayers())
@@ -378,7 +376,7 @@ bool ServerWebHandler::LogFileHandler::processRequest(
 			std::list<std::string>::iterator itor;
 			for (itor = files.begin();
 				itor!= files.end();
-				itor++)
+				++itor)
 			{
 				const std::string &fileName = (*itor).c_str();
 				const std::string &fullFilename = S3D::getLogFile(fileName);
@@ -411,7 +409,7 @@ bool ServerWebHandler::LogFileHandler::processRequest(
 			std::vector<LogFile>::iterator itor;
 			for (itor = logFiles.begin();
 				itor != logFiles.end();
-				itor++)
+				++itor)
 			{
 				LogFile &logFile = *itor;
 				const char *fileName = logFile.fileName.c_str();
@@ -437,8 +435,6 @@ bool ServerWebHandler::GameHandler::processRequest(
 	ServerWebServerIRequest &request,
 	std::string &text)
 {
-	const char *adminName = getAdminUserName(request.getFields());
-
 	// Check for any action
 	const char *action = ServerWebServerUtil::getField(request.getFields(), "action");
 	if (action)
@@ -536,7 +532,7 @@ bool ServerWebHandler::BannedHandler::processRequest(
 	std::list<ServerBanned::BannedRange>::iterator itor;
 	for (itor = bannedIps.begin();
 		itor != bannedIps.end();
-		itor++)
+		++itor)
 	{
 		ServerBanned::BannedRange &range = (*itor);
 		std::string mask = NetInterface::getIpName(range.mask);
@@ -544,7 +540,7 @@ bool ServerWebHandler::BannedHandler::processRequest(
 		std::map<unsigned int, ServerBanned::BannedEntry>::iterator ipitor;
 		for (ipitor = range.ips.begin();
 			ipitor != range.ips.end();
-			ipitor++)
+			++ipitor)
 		{
 			unsigned int ip = (*ipitor).first;
 			ServerBanned::BannedEntry &entry = (*ipitor).second;
@@ -588,7 +584,7 @@ bool ServerWebHandler::ModsHandler::processRequest(
 	std::map<std::string, ModFileEntry *>::iterator itor;
 	for (itor = modFiles.begin();
 		itor != modFiles.end();
-		itor++)
+		++itor)
 	{
 		ModFileEntry *entry = (*itor).second;
 		std::string cleanFileName;
@@ -615,7 +611,7 @@ static void addUser(std::string &admins, ServerAdminSessions::Credential &crende
 	{
 		permissions.append(*permitor);
 
-		permitor++;
+		++permitor;
 		if (permitor != crendential.permissions.end()) permissions.append(", ");
 	}
 
@@ -639,7 +635,7 @@ bool ServerWebHandler::SessionsHandler::processRequest(
 		std::map<unsigned int, ServerAdminSessions::SessionParams> &sessionparams = 
 			ScorchedServer::instance()->getServerAdminSessions().getAllSessions();
 		std::map<unsigned int, ServerAdminSessions::SessionParams>::iterator itor;
-		for (itor = sessionparams.begin(); itor != sessionparams.end(); itor++)
+		for (itor = sessionparams.begin(); itor != sessionparams.end(); ++itor)
 		{
 			ServerAdminSessions::SessionParams &params = (*itor).second;
 
@@ -668,7 +664,7 @@ bool ServerWebHandler::SessionsHandler::processRequest(
 		ScorchedServer::instance()->getServerAdminSessions().getAllCredentials(creds);
 		for (itor = creds.begin();
 			itor != creds.end();
-			itor++)
+			++itor)
 		{
 			ServerAdminSessions::Credential &crendential = (*itor);
 			addUser(admins, crendential);

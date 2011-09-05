@@ -62,7 +62,7 @@ void ModelRendererTank::setupModelRendererTank()
 	std::vector<Mesh *>::iterator itor;
 	for (itor = model_->getMeshes().begin();
 		itor != model_->getMeshes().end();
-		itor++)
+		++itor)
 	{
 		Mesh *mesh = (*itor);
 		const char *name = mesh->getName();

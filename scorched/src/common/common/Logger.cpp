@@ -73,7 +73,7 @@ void Logger::remLogger(LoggerI *logger)
 			Logger::instance()->loggers_.erase(itor);
 			break;
 		}
-		itor++;
+		++itor;
 	}
 	SDL_UnlockMutex(logMutex_);
 }
@@ -171,7 +171,7 @@ void Logger::processLogEntries()
 		std::list<LoggerI *>::iterator logItor;
 		for (logItor = loggers.begin();
 			logItor != loggers.end();
-			logItor++)
+			++logItor)
 		{
 			LoggerI *log = (*logItor);
 			log->logMessage(*firstEntry);

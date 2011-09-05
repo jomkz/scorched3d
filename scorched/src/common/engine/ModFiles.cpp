@@ -126,7 +126,7 @@ bool ModFiles::loadModFiles(const std::string &mod,
 		std::list<std::string>::iterator itor;
 		for (itor = files.begin();
 			itor != files.end();
-			itor++)
+			++itor)
 		{
 			char *file = (char *) (*itor).c_str();
 			file += dir.size() - strlen(landscapesBase);
@@ -139,7 +139,7 @@ bool ModFiles::loadModFiles(const std::string &mod,
 		std::map<std::string, ModFileEntry *>::iterator itor;
 		for (itor = files_.begin();
 			itor != files_.end();
-			itor++)
+			++itor)
 		{
 			ModFileEntry *entry = (*itor).second;
 			totalCompSize += entry->getCompressedSize();
@@ -187,7 +187,7 @@ bool ModFiles::loadModDir(const std::string &modDir,
 	int i = 0;
 	for (itor = files.begin();
 		itor != files.end();
-		itor++, i++)
+		++itor, i++)
 	{
 		if (counter) counter->setNewPercentage(float(i) 
 			/ float(files.size()) * 100.0f);
@@ -264,7 +264,7 @@ bool ModFiles::writeModFiles(const std::string &mod)
 	std::map<std::string, ModFileEntry *>::iterator itor;
 	for (itor = files_.begin();
 		itor != files_.end();
-		itor++)
+		++itor)
 	{
 		ModFileEntry *entry = (*itor).second;
 		if (!entry->writeModFile(entry->getFileName(), mod)) return false;
@@ -277,7 +277,7 @@ void ModFiles::clearData()
 	 std::map<std::string, ModFileEntry *>::iterator itor;
 	 for (itor = files_.begin();
 	 	itor != files_.end();
-		itor++)
+		++itor)
 	{
 		 ModFileEntry *entry = (*itor).second;
 		 entry->getCompressedBuffer().clear();
@@ -289,7 +289,7 @@ void ModFiles::clearAll()
 	std::map<std::string, ModFileEntry *>::iterator itor;
 	for (itor = files_.begin();
 		itor != files_.end();
-		itor++)
+		++itor)
 	{
 		delete (*itor).second;
 	}
@@ -315,7 +315,7 @@ bool ModFiles::exportModFiles(const std::string &mod, const std::string &fileNam
 	std::map<std::string, ModFileEntry *>::iterator itor;
 	for (itor = files_.begin();
 		itor != files_.end();
-		itor++)
+		++itor)
 	{
 		ModFileEntry *entry = (*itor).second;
 	

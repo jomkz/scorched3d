@@ -108,7 +108,7 @@ bool SaveGame::loadTargets(const std::string &fileName)
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = (*itor).second;
 		if (tank->getDestinationId() == 0)

@@ -60,7 +60,7 @@ void PlacementObjectGroup::createObject(ScorchedContext &context,
 	std::list<GroupObject>::iterator itor;
 	for (itor = groups_.begin();
 		itor != groups_.end();
-		itor++)
+		++itor)
 	{
 		GroupObject &groupObject = (*itor);
 

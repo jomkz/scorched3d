@@ -51,7 +51,7 @@ bool ActionParams::parseXML(XMLNode *accessoryNode)
 	std::vector<ActionParam *>::iterator itor;
 	for (itor = params_.begin();
 		itor != params_.end();
-		itor++)
+		++itor)
 	{
 		if (!(*itor)->parseXML(accessoryNode)) return false;
 	}
@@ -66,7 +66,7 @@ void ActionParams::initLUA(lua_State *L, int position)
 	std::vector<ActionParam *>::iterator itor;
 	for (itor = params_.begin();
 		itor != params_.end();
-		itor++)
+		++itor)
 	{
 		(*itor)->initLUA(L, position);
 	}
@@ -77,7 +77,7 @@ void ActionParams::initXML(ScorchedContext &context)
 	std::vector<ActionParam *>::iterator itor;
 	for (itor = params_.begin();
 		itor != params_.end();
-		itor++)
+		++itor)
 	{
 		(*itor)->initXML(context);
 	}

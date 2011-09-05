@@ -107,7 +107,7 @@ void ModSubSelectDialog::display()
 	std::list<ModInfo::MenuEntry>::iterator itor;
 	for (itor = modInfo_.getMenuEntries().begin();
 		itor != modInfo_.getMenuEntries().end();
-		itor++)
+		++itor)
 	{
 		ModInfo::MenuEntry &entry = (*itor);
 		GLWIconListSubModItem *item = new GLWIconListSubModItem(entry);

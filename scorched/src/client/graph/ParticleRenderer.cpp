@@ -145,8 +145,7 @@ void ParticleRendererSmoke::renderParticle(Particle &particle)
 
 void ParticleRendererSmoke::simulateParticle(Particle &particle, float time)
 {
-	SmokeActionRenderer *renderer = (SmokeActionRenderer *)
-		particle.userData_;
+
 }
 
 ParticleRendererNapalm *ParticleRendererNapalm::getInstance()
@@ -254,27 +253,6 @@ void ParticleRendererRain::simulateParticle(Particle &particle, float time)
 		alpha = 0.7f * (1.0f - (particle.distance_ / MaxDist));
 	}
 	particle.alpha_ = alpha;
-
-	// Distance
-	float distanceX = cameraPos[0] - particle.position_[0];
-	float distanceY = cameraPos[1] - particle.position_[1];
-	/*if (distanceX > 100.0f)
-	{
-		particle.position_[0] = -100.0f + distanceX - 100.0f;
-	}
-	else if (distanceX < -100.0f)
-	{
-		particle.position_[0] = 100.0f + distanceX + 100.0f;
-	} 
-
-	if (distanceY > 100.0f)
-	{
-		particle.position_[1] = -100.0f + distanceY - 100.0f;
-	}
-	else if (distanceY < -100.0f)
-	{
-		particle.position_[1] = 100.0f + distanceY + 100.0f;
-	}*/
 }
 
 ParticleRendererSnow *ParticleRendererSnow::getInstance()

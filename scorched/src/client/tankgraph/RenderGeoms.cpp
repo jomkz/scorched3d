@@ -70,7 +70,7 @@ void RenderGeoms::drawCollisionBounds()
 	std::map<unsigned int, Target *>::iterator itor;
 	for (itor = targets.begin();
 		itor != targets.end();
-		itor++)
+		++itor)
 	{
 		Target *target = (*itor).second;
 		if (!target->getAlive())
@@ -150,7 +150,7 @@ void RenderGeoms::drawCollisionGeoms()
 	std::map<unsigned int, Target *>::iterator itor;
 	for (itor = targets.begin();
 		itor != targets.end();
-		itor++)
+		++itor)
 	{
 		Target *target = (*itor).second;
 		if (!target->getAlive())

@@ -88,7 +88,7 @@ void GLWSelector::showSelector(GLWSelectorI *user,
 	std::list<GLWSelectorEntry>::iterator itor;
 	for (itor = entries.begin();
 		itor != entries.end();
-		itor++)
+		++itor)
 	{
 		partEntries.push_back(*itor);
 		if ((int) partEntries.size() * 20 >= GLViewPort::getHeight() - 40)
@@ -105,7 +105,7 @@ void GLWSelector::showSelector(GLWSelectorI *user,
 			partEntries.clear();
 		}
 	}
-	if (partEntries.size() > 0)
+	if (!partEntries.empty())
 	{
 		GLWSelectorPart *part = new GLWSelectorPart(
 			user, basePosition,
@@ -167,7 +167,7 @@ void GLWSelector::draw()
 	std::list<GLWSelectorPart *>::iterator itor;
 	for (itor = parts_.begin();
 		itor != parts_.end();
-		itor++)
+		++itor)
 	{
 		GLWSelectorPart *part = (*itor);
 		part->draw();
@@ -198,7 +198,7 @@ void GLWSelector::mouseDown(int button, float mouseX, float mouseY, bool &hitMen
 	std::list<GLWSelectorPart *>::reverse_iterator itor;
 	for (itor = parts_.rbegin();
 		itor != parts_.rend();
-		itor++)
+		++itor)
 	{
 		GLWSelectorPart *part = (*itor);
 		part->mouseDown(mouseX, mouseY, hit);

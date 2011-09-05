@@ -142,7 +142,7 @@ void GLWToolTip::calculateTip(ToolTip *tip)
 
 	std::list<LangString>::iterator itor;
 	std::list<LangString>::iterator enditor = tipTexts_.end();
-	for (itor = tipTexts_.begin(); itor != enditor; itor++)
+	for (itor = tipTexts_.begin(); itor != enditor; ++itor)
 	{
 		float width = float(GLWFont::instance()->getGameFont()->
 			getWidth(9,(*itor))) + 10.0f;
@@ -292,7 +292,7 @@ void GLWToolTip::draw(const unsigned state)
 
 	std::list<LangString>::iterator itor;
 	std::list<LangString>::iterator enditor = tipTexts_.end();
-	for (itor = tipTexts_.begin(); itor != enditor; itor++)
+	for (itor = tipTexts_.begin(); itor != enditor; ++itor)
 	{
 		pos -= 10.0f;
 

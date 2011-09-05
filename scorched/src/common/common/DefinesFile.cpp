@@ -91,7 +91,7 @@ time_t S3D::fileModTime(const std::string &file)
 {
 	struct stat buf;
 	memset(&buf, 0, sizeof(buf));
-	int result = stat(file.c_str(), &buf );
+	stat(file.c_str(), &buf );
 
 	return buf.st_mtime;
 }

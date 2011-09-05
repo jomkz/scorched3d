@@ -66,7 +66,7 @@ bool TankModelStore::loadTankMeshes(ScorchedContext &context,
 	std::list<XMLNode *> &children = file.getRootNode()->getChildren();
     for (childrenItor = children.begin();
         childrenItor != children.end();
-        childrenItor++, count++)
+        ++childrenItor, count++)
     {
 		if (counter) counter->
 			setNewPercentage(float(count) / float(children.size()) * 100.0f);
@@ -128,7 +128,7 @@ void TankModelStore::addModels(std::vector<TankModel *> &src)
 		std::set<std::string>::iterator catitor;
 		for (catitor = catagories.begin();
 			catitor != catagories.end();
-			catitor++)
+			++catitor)
 		{
 			modelCatagories_.insert((*catitor).c_str());
 		}
@@ -153,7 +153,7 @@ TankModel *TankModelStore::getRandomModel(int team, bool ai)
 	std::vector<TankModel *>::iterator itor;
 	for (itor = models_.begin();
 		itor != models_.end();
-		itor++)
+		++itor)
 	{
 		TankModel *model = (*itor);
 		if (strcmp(model->getName(), "Random") != 0)
@@ -178,7 +178,7 @@ TankModel *TankModelStore::getModelByName(const char *name)
 	std::vector<TankModel *>::iterator itor;
 	for (itor = models_.begin();
 		 itor != models_.end();
-		 itor++)
+		 ++itor)
 	{
 		TankModel *current = (*itor);
 		if (0 == strcmp(current->getName(), name))
@@ -195,7 +195,7 @@ void TankModelStore::clear()
 	std::vector<TankModel *>::iterator itor;
 	for (itor = models_.begin();
 		itor != models_.end();
-		itor++)
+		++itor)
 	{
 		delete *itor;
 	}

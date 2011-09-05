@@ -59,7 +59,7 @@ ServerSyncCheck::SyncContext::~SyncContext()
 	std::map<unsigned int, ComsSyncCheckMessage*>::iterator itor;
 	for (itor = clientMessages.begin();
 		itor != clientMessages.end();
-		itor++)
+		++itor)
 	{
 		delete itor->second;
 	}
@@ -78,7 +78,7 @@ ServerSyncCheck::~ServerSyncCheck()
 	std::map<unsigned int, SyncContext*>::iterator itor;
 	for (itor = contexts_.begin();
 		itor != contexts_.end();
-		itor++)
+		++itor)
 	{
 		delete itor->second;
 	}
@@ -96,7 +96,7 @@ void ServerSyncCheck::simulate()
 	std::map<unsigned int, SyncContext*>::iterator itor;
 	for (itor = contexts_.begin();
 		itor != contexts_.end();
-		itor++)
+		++itor)
 	{
 		SyncContext *context = itor->second;
 		if (checkContext(context))
@@ -152,7 +152,7 @@ void ServerSyncCheck::sentSyncCheck(unsigned int syncId)
 		ScorchedServer::instance()->getServerDestinations().getServerDestinations();
 	for (itor = dests.begin();
 		itor != dests.end();
-		itor++)
+		++itor)
 	{
 		ServerDestination *destination = (*itor).second;
 		if (destination->getState() == ServerDestination::sFinished)
@@ -210,7 +210,7 @@ bool ServerSyncCheck::checkContext(SyncContext *context)
 	std::set<unsigned int>::iterator clientDestItor;
 	for (clientDestItor = context->clientDestinations.begin();
 		clientDestItor != context->clientDestinations.end();
-		clientDestItor++)
+		++clientDestItor)
 	{
 		unsigned int clientDestinationId = *clientDestItor;
 		if (ScorchedServer::instance()->getServerDestinations().
@@ -228,7 +228,7 @@ bool ServerSyncCheck::checkContext(SyncContext *context)
 	std::map<unsigned int, ComsSyncCheckMessage*>::iterator clientItor;
 	for (clientItor = context->clientMessages.begin();
 		clientItor != context->clientMessages.end();
-		clientItor++)
+		++clientItor)
 	{
 		unsigned int destinationId = clientItor->first;
 		ComsSyncCheckMessage *clientMessage = clientItor->second;
@@ -395,7 +395,7 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 					std::set<TargetGroupsSetEntry *>::iterator groupItor;
 					for (groupItor = groups.begin();
 						groupItor != groups.end();
-						groupItor++)
+						++groupItor)
 					{
 						TargetGroupsSetEntry *group = *groupItor;
 						groupnames.append(group->getName()).append(" ");
@@ -441,7 +441,7 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 	std::map<unsigned int, NetBuffer *>::iterator unfoundItor;
 	for (unfoundItor = clientTanks.begin();
 		unfoundItor != clientTanks.end();
-		unfoundItor ++)
+		++unfoundItor)
 	{
 		unsigned int playerId = unfoundItor->first;
 		syncCheckLog(S3D::formatStringBuffer("**** SyncCheck cannot find server target %u, Dest %u Sync %u",

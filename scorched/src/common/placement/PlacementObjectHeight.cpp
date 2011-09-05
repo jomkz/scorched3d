@@ -66,7 +66,7 @@ void PlacementObjectHeight::createObject(ScorchedContext &context,
 	std::vector<HeightObject>::iterator itor;
 	for (itor = objects_.begin();
 		itor != objects_.end();
-		itor++)
+		++itor)
 	{
 		HeightObject &object = (*itor);
 

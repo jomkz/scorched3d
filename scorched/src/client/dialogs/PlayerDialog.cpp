@@ -95,8 +95,7 @@ PlayerDialog::PlayerDialog() :
 	colorTexture_.create(map);
 
 	// Create players avatar choice
-	GLWLabel *avatarLabel = (GLWLabel *) 
-		infoPanel->addWidget(new GLWLabel(10, 25, LANG_RESOURCE("AVATAR_LABEL", "Avatar:")));
+	infoPanel->addWidget(new GLWLabel(10, 25, LANG_RESOURCE("AVATAR_LABEL", "Avatar:")));
 	avatarTip1_.setText(ToolTip::ToolTipHelp, 
 		LANG_RESOURCE("AVATAR", "Avatar"), 
 		LANG_RESOURCE("AVATAR_TOOLTIP_CHANGE",
@@ -280,7 +279,7 @@ void PlayerDialog::display()
 		std::list<TankAI *>::iterator aiitor;
 		for (aiitor = tankAIStore.getAis().begin();
 			aiitor != tankAIStore.getAis().end();
-			aiitor++)
+			++aiitor)
 		{
 			TankAI *ai = (*aiitor);
 			if (ai->availableForPlayers())
@@ -353,7 +352,7 @@ void PlayerDialog::nextPlayer()
 		std::vector<Vector *>::iterator itor;
 		for (itor = availableColors.begin();
 			itor != availableColors.end();
-			itor++)
+			++itor)
 		{
 			Vector &color = *(*itor);
 			colorDropDown_->addColor(color);
@@ -383,7 +382,7 @@ unsigned int PlayerDialog::getNextPlayer(unsigned int current)
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = (*itor).second;
 		if ((tank->getDestinationId() == 

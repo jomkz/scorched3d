@@ -64,8 +64,6 @@ void HeightMapVisibilityPatch::setLocation(int x, int y,
 
 	// Set pointers to heightmap
 	dataSize_ = (mapWidth + 1) * (mapHeight + 1);
-
-	GraphicalLandscapeMap *landscapeMap = (GraphicalLandscapeMap *) heightMap_->getGraphicalMap();
 	dataOffSet_ = (x + (y * (mapWidth + 1))) * 
 		sizeof(GraphicalLandscapeMap::HeightData) / sizeof(float);
 

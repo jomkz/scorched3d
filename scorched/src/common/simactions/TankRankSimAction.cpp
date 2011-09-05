@@ -38,7 +38,7 @@ bool TankRankSimAction::invokeAction(ScorchedContext &context)
 	std::list<StatsLogger::TankRank>::iterator itor;
 	for (itor = ranks_.begin();
 		itor != ranks_.end();
-		itor++)
+		++itor)
 	{
 		StatsLogger::TankRank &rank = *itor;
 		Tank *tank = context.getTankContainer().getTankById(rank.getPlayerId());
@@ -58,7 +58,7 @@ bool TankRankSimAction::writeMessage(NetBuffer &buffer)
 	std::list<StatsLogger::TankRank>::iterator itor;
 	for (itor = ranks_.begin();
 		itor != ranks_.end();
-		itor++)
+		++itor)
 	{
 		StatsLogger::TankRank &rank = *itor;
 		buffer.addToBuffer(rank.getPlayerId());

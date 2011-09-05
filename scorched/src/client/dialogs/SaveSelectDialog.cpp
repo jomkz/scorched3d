@@ -112,7 +112,7 @@ void SaveSelectDialog::display()
 		FileList::ListType::iterator itor;
 		for (itor = files.begin();
 			itor != files.end();
-			itor++)
+			++itor)
 		{
 			const char *shortPath = (*itor).c_str();
 			std::string fullPath = S3D::getSaveFile(shortPath);

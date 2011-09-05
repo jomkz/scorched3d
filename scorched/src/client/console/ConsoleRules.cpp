@@ -46,7 +46,7 @@ void ConsoleRules::removeRule(ConsoleRule *rule)
 	std::multimap<std::string, ConsoleRule *>::iterator itor;
 	for (itor = rules_.begin();
 		itor != rules_.end();
-		itor++)
+		++itor)
 	{
 		ConsoleRule *r = itor->second;
 		if (r == rule)
@@ -68,10 +68,10 @@ std::string ConsoleRules::matchRule(const char *line,
 		std::multimap<std::string, ConsoleRule *>::iterator itor;
 		for (itor = rules_.begin();
 			itor != rules_.end();
-			itor++)
+			++itor)
 		{
 			ConsoleRule *rule = itor->second;
-			matches.push_back((*itor).second);
+			matches.push_back(rule);
 		}
 		return "";
 	}
@@ -80,7 +80,7 @@ std::string ConsoleRules::matchRule(const char *line,
 		std::multimap<std::string, ConsoleRule *>::iterator itor;
 		for (itor = rules_.begin();
 			itor != rules_.end();
-			itor++)
+			++itor)
 		{
 			ConsoleRule *rule = itor->second;
 			ConsoleRuleValue &nameValue = values[0];
@@ -165,7 +165,7 @@ void ConsoleRules::addLine(Console *console, const char *line)
 			std::vector<ConsoleRule *>::iterator itor;
 			for (itor = closeMatches.begin();
 				itor != closeMatches.end();
-				itor++)
+				++itor)
 			{
 				std::string text = (*itor)->toString();
 				console->addLine(false, S3D::formatStringBuffer(
@@ -202,7 +202,7 @@ ConsoleRule *ConsoleRules::matchRule(
 	{
 		for (ruleItor = sameNumberArgs.begin();
 			ruleItor != sameNumberArgs.end();
-			ruleItor++)
+			++ruleItor)
 		{
 			ConsoleRule *rule = *ruleItor;
 			closeMatches.push_back(rule);
@@ -334,7 +334,7 @@ void ConsoleRules::dump(std::vector<std::string> &resultList)
 	std::multimap<std::string, ConsoleRule *>::iterator itor;
 	for (itor = rules_.begin();
 		itor != rules_.end();
-		itor++)
+		++itor)
 	{
 		ConsoleRule *rule = itor->second;
 		resultList.push_back(rule->toString());

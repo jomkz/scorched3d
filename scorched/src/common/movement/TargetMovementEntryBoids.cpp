@@ -75,9 +75,8 @@ void TargetMovementEntryBoids::makeBoids(ScorchedContext &context,
 	std::map<unsigned int, TargetGroup *>::iterator itor;
 	for (itor = objects.begin();
 		itor != objects.end();
-		itor++)
+		++itor)
 	{
-		unsigned int playerId = (*itor).first;
 		TargetGroup *groupEntry = (*itor).second;
 		makeBoid(context, groupEntry);
 	}
@@ -113,9 +112,8 @@ void TargetMovementEntryBoids::simulate(ScorchedContext &context, fixed frameTim
 	std::map<unsigned int, TargetGroup *>::iterator itor;
 	for (itor = objects.begin();
 		itor != objects.end();
-		itor++)
+		++itor)
 	{
-		unsigned int playerId = (*itor).first;
 		TargetGroup *groupEntry = (*itor).second;
 
 		Boid2 *boid = (Boid2 *) groupEntry->getTarget()->getTargetState().getMovement();
@@ -139,7 +137,7 @@ void TargetMovementEntryBoids::processSet(fixed frameTime, std::vector<Boid2*> &
 	std::vector<Boid2*>::iterator itor;
 	for (itor = boidSet.begin();
 		itor != boidSet.end();
-		itor++)
+		++itor)
 	{
 		Boid2 *boid = (*itor);
 		boid->update(frameTime, boidSet, (movementNumber_ % 10) == 0);

@@ -252,7 +252,7 @@ void ARGParser::showArgs(char *topString)
 	std::map<std::string, Entry>::iterator itor;
 	for (itor = argMap_.begin();
 		itor != argMap_.end();
-		itor++)
+		++itor)
 	{
 		char *type = "unknown";
 		if (itor->second.destC || itor->second.destString) type = "<string>";
@@ -272,7 +272,7 @@ void ARGParser::showArgs(char *topString)
 	}
 	for (itor = nonParamMap_.begin();
 		itor != nonParamMap_.end();
-		itor++)
+		++itor)
 	{
 		char buffer2[255];
 		buffer2[0] = '\0';

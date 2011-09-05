@@ -50,7 +50,7 @@ bool ComsConnectAuthMessage::writeMessage(NetBuffer &buffer)
 	std::map<std::string, std::string>::iterator itor;
 	for (itor = values_.begin();
 		itor != values_.end();
-		itor++)
+		++itor)
 	{
 		buffer.addToBuffer((*itor).first.c_str());
 		buffer.addToBuffer((*itor).second.c_str());

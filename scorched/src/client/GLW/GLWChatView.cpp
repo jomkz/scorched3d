@@ -198,7 +198,7 @@ void GLWChatView::simulate(float frameTime)
 	std::list<GLWChatViewEntry*>::iterator itor;
 	for (itor = textLines_.begin();
 		itor != textLines_.end() && count < visibleLines_;
-		itor++, count++)
+		++itor, count++)
 	{
 		GLWChatViewEntry &entry = *(*itor);
 		entry.timeRemaining -= frameTime;
@@ -262,7 +262,7 @@ void GLWChatView::draw()
 		int count = 0;
 		for (;
 			startingPos != textLines_.end() && count < scrollPosition_;
-			startingPos++, count++)
+			++startingPos, count++)
 		{
 		}
 	}
@@ -275,7 +275,7 @@ void GLWChatView::draw()
 		std::list<GLWChatViewEntry*>::iterator itor;
 		for (itor = startingPos;
 			itor != textLines_.end() && count < visibleLines_;
-			itor++, count++)
+			++itor, count++)
 		{
 			GLWChatViewEntry &entry = *(*itor);
 
@@ -301,7 +301,7 @@ void GLWChatView::draw()
 		std::list<GLWChatViewEntry*>::iterator itor;
 		for (itor = startingPos;
 			itor != textLines_.end() && count < visibleLines_;
-			itor++, count++)
+			++itor, count++)
 		{
 			GLWChatViewEntry &entry = *(*itor);
 

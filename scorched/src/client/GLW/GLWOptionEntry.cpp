@@ -61,7 +61,7 @@ void GLWOptionEntry::createEntry(
 		std::list<ModInfo>::iterator itor;
 		for (itor = modDirs.getDirs().begin();
 			itor != modDirs.getDirs().end();
-			itor++)
+			++itor)
 		{
 			ModInfo &info = (*itor);
 			((GLWDropDownText *) control)->addText(
@@ -142,7 +142,7 @@ void GLWOptionEntry::updateControls(
 	std::list<GLWOptionEntry>::iterator itor;
 	for (itor = controls.begin();
 		itor != controls.end();
-		itor++)
+		++itor)
 	{
 		GLWOptionEntry &entrySetter = *itor;
 
@@ -192,7 +192,7 @@ void GLWOptionEntry::updateEntries(
 	std::list<GLWOptionEntry>::iterator itor;
 	for (itor = controls.begin();
 		itor != controls.end();
-		itor++)
+		++itor)
 	{
 		GLWOptionEntry &entrySetter = *itor;
 

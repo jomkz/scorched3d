@@ -42,7 +42,7 @@ public:
 		typename std::map<std::string, T *>::iterator itor;
 		for (itor = items_.begin();
 			itor != items_.end();
-			itor++)
+			++itor)
 		{
 			T *item = (*itor).second;
 			delete item;

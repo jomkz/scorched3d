@@ -293,7 +293,7 @@ void SettingsSubSelectDialog::displayLand()
 	std::list<LandscapeDefinitionsEntry>::iterator itor;
 	for (itor = defns.begin();
 		 itor != defns.end();
-		 itor++)
+		 ++itor)
 	{
 		LandscapeDefinitionsEntry &dfn = *itor;
 
@@ -344,7 +344,7 @@ void SettingsSubSelectDialog::buttonDown(unsigned int id)
 		std::vector<GLWIconListItem *>::iterator itor;
 		for (itor = landItems.begin();
 			itor != landItems.end();
-			itor++)
+			++itor)
 		{
 			SettingsSubSelectDialogListItem *landItem = 
 				(SettingsSubSelectDialogListItem *) *itor;
@@ -370,7 +370,7 @@ void SettingsSubSelectDialog::buttonDown(unsigned int id)
 		std::vector<GLWIconListItem *>::iterator itor;
 		for (itor = landItems.begin();
 			itor != landItems.end();
-			itor++)
+			++itor)
 		{
 			SettingsSubSelectDialogListItem *landItem = 
 				(SettingsSubSelectDialogListItem *) *itor;

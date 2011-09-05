@@ -59,7 +59,7 @@ void GLWSelectorPart::calculateDimensions(float drawX, float drawY)
 	std::list<GLWSelectorEntry>::iterator itor;
 	for (itor =	entries_.begin();
 		itor != entries_.end();
-		itor++)
+		++itor)
 	{
 		// Get height
 		GLWSelectorEntry &item = (*itor);
@@ -156,7 +156,7 @@ void GLWSelectorPart::draw()
 	std::list<GLWSelectorEntry>::iterator itor;
 	for (itor =	entries_.begin();
 		itor != entries_.end();
-		itor++, position++)
+		++itor, position++)
 	{
 		GLWSelectorEntry &item = (*itor);
 
@@ -285,7 +285,7 @@ void GLWSelectorPart::mouseDown(float mouseX, float mouseY, bool &hit)
 		std::list<GLWSelectorEntry>::iterator itor;
 		for (itor =	entries_.begin();
 			 itor != entries_.end();
-			 itor++)
+			 ++itor)
 		{
 			GLWSelectorEntry &item = (*itor);
 		

@@ -62,7 +62,7 @@ void Lightning::init()
 	std::map<unsigned int, fixed>::iterator hurtItor;
 	for (hurtItor = hurtMap.begin();
 		hurtItor != hurtMap.end();
-		hurtItor++)
+		++hurtItor)
 	{
 		unsigned int playerId = (*hurtItor).first;
 		fixed damage = (*hurtItor).second;
@@ -140,7 +140,7 @@ void Lightning::draw()
 		std::list<Segment>::iterator itor;
 		for (itor = segments_.begin();
 			itor != segments_.end();
-			itor++)
+			++itor)
 		{
 			Segment &segment = (*itor);
 			Vector cameraDir = (segment.start.asVector() - cameraPos).Normalize();
@@ -291,7 +291,7 @@ void Lightning::damageTargets(FixedVector &position,
 	std::map<unsigned int, Target *>::iterator itor;
 	for (itor = collisionTargets.begin();
 		itor != collisionTargets.end();
-		itor++)
+		++itor)
 	{
 		Target *target = (*itor).second;
 		if (target->getAlive() &&

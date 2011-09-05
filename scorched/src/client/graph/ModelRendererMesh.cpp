@@ -57,7 +57,7 @@ void ModelRendererMesh::setup()
 	std::vector<BoneType *>::iterator itor;
 	for (itor = baseTypes.begin();
 		itor != baseTypes.end();
-		itor++)
+		++itor)
 	{
 		boneTypes_.push_back(new BoneType(*(*itor)));
 	}
@@ -286,7 +286,7 @@ void ModelRendererMesh::drawVerts(Mesh *mesh, bool vertexLighting, int frame)
 	std::vector<Face *>::iterator itor;
 	for (itor = mesh->getFaces().begin();
 		itor != mesh->getFaces().end();
-		itor++)
+		++itor)
 	{
 		Face *face = *itor;
 

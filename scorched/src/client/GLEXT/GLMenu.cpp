@@ -92,7 +92,7 @@ void GLMenu::draw()
 	std::map<std::string, GLMenuEntry *>::iterator itor;
 	for (itor = menuList_.begin();
 		itor != menuList_.end();
-		itor++)
+		++itor)
 	{
 		GLMenuEntry *entry = itor->second;
 		if (entry->getSelected())
@@ -118,7 +118,7 @@ void GLMenu::draw()
 		std::map<std::string, GLMenuEntry *>::iterator itor;
 		for (itor = menuList_.begin();
 			itor != menuList_.end();
-			itor++)
+			++itor)
 		{
 			GLMenuEntry *entry = itor->second;
 			if (!(entry->getFlags() & eMenuAlignRight))
@@ -139,7 +139,7 @@ void GLMenu::draw()
 		currentWidth = (float) GLViewPort::getWidth();
 		for (itor = menuList_.begin();
 			itor != menuList_.end();
-			itor++)
+			++itor)
 		{
 			GLMenuEntry *entry = itor->second;
 			if (entry->getFlags() & eMenuAlignRight)
@@ -170,7 +170,7 @@ void GLMenu::mouseDown(int button, float x, float y, bool &hitMenu)
 	std::map<std::string, GLMenuEntry *>::iterator itor;
 	for (itor = menuList_.begin();
 		itor != menuList_.end();
-		itor++)
+		++itor)
 	{
 		GLMenuEntry *entry = itor->second;
 		if (entry->getState() == 0 ||

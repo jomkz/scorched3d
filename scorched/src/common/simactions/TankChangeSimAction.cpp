@@ -92,7 +92,7 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 			context.getTankContainer().getAllTanks();
 		for (mainitor = tanks.begin();
 			mainitor != tanks.end();
-			mainitor++)
+			++mainitor)
 		{
 			Tank *currentTank = (*mainitor).second;
 			if (currentTank->getTargetName() == (sentname + postFix) &&

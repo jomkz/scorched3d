@@ -510,8 +510,6 @@ void Landscape::generate(ProgressCounter *counter)
 	ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeHeight());*/
 
 	// Load the texture bitmaps from resources 
-	LandscapeDefn *defn = 
-			ScorchedClient::instance()->getLandscapeMaps().getDefinitions().getDefn();
 	LandscapeTex *tex = 
 			ScorchedClient::instance()->getLandscapeMaps().getDefinitions().getTex();
 	if (tex->texture->getType() == LandscapeTexType::eTextureGenerate)
@@ -610,7 +608,7 @@ void Landscape::generate(ProgressCounter *counter)
 	std::list<PlacementShadowDefinition::Entry>::iterator itor;
 	for (itor = shadows.begin();
 		itor != shadows.end();
-		itor++)
+		++itor)
 	{
 		PlacementShadowDefinition::Entry &entry = (*itor);
 

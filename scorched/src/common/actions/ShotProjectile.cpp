@@ -118,7 +118,7 @@ void ShotProjectile::collision(PhysicsParticleObject &position,
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = tanks.begin();
 			itor != tanks.end();
-			itor++)
+			++itor)
 		{
 			Tank *tank = (*itor).second;
 			TankAI *ai = tank->getTankAI();

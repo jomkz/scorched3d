@@ -83,7 +83,7 @@ ComsSyncCheckMessage::ComsSyncCheckMessage(unsigned int syncId,
 	targetsBuffer_.addToBuffer((int) possibletargets.size());
 	for (itor = possibletargets.begin();
 		itor != possibletargets.end();
-		itor++)
+		++itor)
 	{
 		Target *target = (*itor).second;
 		targetsBuffer_.addToBuffer(target->getPlayerId());
@@ -113,7 +113,7 @@ bool ComsSyncCheckMessage::writeMessage(NetBuffer &buffer)
 	std::vector<std::string>::iterator itor;
 	for (itor = syncChecks_.begin();
 		itor != syncChecks_.end();
-		itor++)
+		++itor)
 	{
 		buffer.addToBuffer(*itor);
 	}

@@ -71,7 +71,7 @@ bool FileLines::writeFile(const std::string &filename)
 	std::vector<std::string>::iterator itor;
 	for (itor = fileLines_.begin();
 		itor != fileLines_.end();
-		itor++)
+		++itor)
 	{
 		fprintf(out, "%s\n", (*itor).c_str());
 	}
@@ -90,7 +90,7 @@ void FileLines::getAsOneLine(std::string &output)
 	std::vector<std::string>::iterator itor;
 	for (itor = fileLines_.begin();
 		 itor != fileLines_.end();
-		 itor++)
+		 ++itor)
 	{
 		output += (*itor);
 		output += "\n";

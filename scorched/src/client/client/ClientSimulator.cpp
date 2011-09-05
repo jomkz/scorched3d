@@ -117,7 +117,7 @@ void ClientSimulator::addComsSimulateMessage(ComsSimulateMessage &message)
 	std::list<SimAction *>::iterator itor;
 	for (itor = message.getActions().begin();
 		itor != message.getActions().end();
-		itor++)
+		++itor)
 	{
 		SimAction *action = *itor;
 		if (action->replayAction() || !loadingLevel_)

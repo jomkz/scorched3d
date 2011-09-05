@@ -50,7 +50,7 @@ bool XMLFile::readFile(const std::string &fileName)
 	std::vector<std::string>::iterator itor;
 	for (itor = lines.getLines().begin();
 		itor != lines.getLines().end();
-		itor++)
+		++itor)
 	{
 		if (!parser_.parse((*itor).c_str(), (int) (*itor).size(), 0)) return false;
 

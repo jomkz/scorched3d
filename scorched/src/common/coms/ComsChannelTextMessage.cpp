@@ -44,7 +44,7 @@ bool ComsChannelTextMessage::writeMessage(NetBuffer &buffer)
 	std::list<unsigned int>::iterator itor;
 	for (itor = ids_.begin();
 		itor != ids_.end();
-		itor++)
+		++itor)
 	{
 		buffer.addToBuffer(*itor);
 	}

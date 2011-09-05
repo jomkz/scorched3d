@@ -258,7 +258,7 @@ void Napalm::simulateAddStep()
 	std::set<unsigned int>::iterator itor;
 	for (itor = currentEdges.begin();
 		itor != currentEdges.end();
-		itor++)
+		++itor)
 	{
 		unsigned int currentEdge = *itor;
 		int x = UINT_TO_X(currentEdge);
@@ -530,7 +530,7 @@ void Napalm::simulateDamage()
 		napalmPointsCount_.begin();
 	std::map<unsigned int, int>::iterator endItor = 
 		napalmPointsCount_.end();
-	for (;itor != endItor; itor++)
+	for (;itor != endItor; ++itor)
 	{
 		unsigned int pointsCount = itor->first;
 		fixed count = fixed(itor->second);
@@ -550,7 +550,7 @@ void Napalm::simulateDamage()
 		std::map<unsigned int, Target *>::iterator itor;
 		for (itor = collisionTargets.begin();
 			itor != collisionTargets.end();
-			itor++)
+			++itor)
 		{
 			Target *target = (*itor).second;
 			if (target->getAlive())
@@ -575,7 +575,7 @@ void Napalm::simulateDamage()
 		std::map<unsigned int, fixed>::iterator damageItor;
 		for (damageItor = TargetDamageCalc.begin();
 			damageItor != TargetDamageCalc.end();
-			damageItor++)
+			++damageItor)
 		{
 			Target *target = 
 				context_->getTargetContainer().getTargetById(damageItor->first);

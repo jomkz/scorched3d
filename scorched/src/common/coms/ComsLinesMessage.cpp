@@ -39,7 +39,7 @@ bool ComsLinesMessage::writeMessage(NetBuffer &buffer)
 	std::list<Vector>::iterator itor;
 	for (itor = lines_.begin();
 		itor != lines_.end();
-		itor++)
+		++itor)
 	{
 		Vector &v = (*itor);
 		buffer.addToBuffer(v);

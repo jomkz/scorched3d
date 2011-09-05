@@ -54,7 +54,7 @@ void OptionsScorched::updateLevelOptions(ScorchedContext &context, LandscapeDefi
 	std::list<OptionEntry *>::iterator mainitor;
 	for (levelitor = levelOptions.begin(), mainitor = mainoptions.begin();
 		levelitor != levelOptions.end() && mainitor != mainoptions.end();
-		levelitor++, mainitor++)
+		++levelitor, ++mainitor)
 	{
 		OptionEntry *mainEntry = (*mainitor);
 		OptionEntry *levelEntry = (*levelitor);
@@ -97,7 +97,7 @@ void OptionsScorched::updateLevelOptions(std::vector<LandscapeInclude *> &option
 	std::vector<LandscapeInclude *>::iterator itor;
 	for (itor = options.begin();
 		itor != options.end();
-		itor++)
+		++itor)
 	{
 		LandscapeInclude *option = (*itor);
 
@@ -105,7 +105,7 @@ void OptionsScorched::updateLevelOptions(std::vector<LandscapeInclude *> &option
 		std::vector<LandscapeOptionsType *>::iterator typeItor;
 		for (typeItor = option->options.begin();
 			typeItor != option->options.end();
-			typeItor ++)
+			++typeItor)
 		{
 			LandscapeOptionsType *optionType = (*typeItor);
 
@@ -113,7 +113,7 @@ void OptionsScorched::updateLevelOptions(std::vector<LandscapeInclude *> &option
 			std::list<OptionEntry *>::iterator srcitor;
 			for (srcitor = optionType->options.getOptions().begin();
 				srcitor != optionType->options.getOptions().end();
-				srcitor++)
+				++srcitor)
 			{
 				OptionEntry *srcEntry = (*srcitor);
 				if (srcEntry->isChangedValue())
@@ -148,7 +148,7 @@ bool OptionsScorched::commitChanges()
 	std::list<OptionEntry *>::iterator otheritor;
 	for (itor=options.begin(), otheritor=otheroptions.begin();
 		itor!=options.end() && otheritor!=otheroptions.end();
-		itor++, otheritor++)
+		++itor, ++otheritor)
 	{
 		OptionEntry *entry = *itor;
 		OptionEntry *otherentry = *otheritor;

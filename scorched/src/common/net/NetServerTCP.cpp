@@ -175,7 +175,7 @@ bool NetServerTCP::pollDeleted()
 	std::map<unsigned int, NetServerTCPRead *>::iterator itor;
 	for (itor = connections_.begin();
 		itor != connections_.end();
-		itor++)
+		++itor)
 	{
 		NetServerTCPRead *serverRead = (*itor).second;
 		unsigned int id = (*itor).first;
@@ -188,7 +188,7 @@ bool NetServerTCP::pollDeleted()
 	std::list<unsigned int>::iterator itor2;
 	for (itor2 = remove.begin();
 		itor2 != remove.end();
-		itor2++)
+		++itor2)
 	{
 		unsigned int id = (*itor2);
 		connections_.erase(id);
@@ -227,7 +227,7 @@ void NetServerTCP::disconnectAllClients()
 	std::map<unsigned int, NetServerTCPRead *>::iterator itor;
 	for (itor = connections_.begin();
 		itor != connections_.end();
-		itor++)
+		++itor)
 	{
 		unsigned int id = (*itor).first;
 		disconnectClient(id);

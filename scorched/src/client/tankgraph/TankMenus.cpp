@@ -126,7 +126,7 @@ void TankMenus::groupInfo()
 	std::map<std::string, TargetGroupsGroupEntry*>::iterator itor;
 	for (itor = groups.begin();
 		itor != groups.end();
-		itor++)
+		++itor)
 	{
 		const std::string &name = itor->first;
 		TargetGroupsGroupEntry *entry = itor->second;
@@ -165,7 +165,7 @@ void TankMenus::showInventory()
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = (*itor).second;
 		Console::instance()->addLine(false,
@@ -179,7 +179,7 @@ void TankMenus::showInventory()
 		std::list<Accessory *>::iterator aitor;
 		for (aitor = accessories.begin();
 			aitor != accessories.end();
-			aitor++)
+			++aitor)
 		{
 			Accessory *accessory = (*aitor);
 
@@ -201,7 +201,7 @@ void TankMenus::showTargetDetails()
 	std::map<unsigned int, Target *>::iterator itor;
 	for (itor = targets.begin();
 		itor != targets.end();
-		itor++)
+		++itor)
 	{
 		Target *target = (*itor).second;
 
@@ -225,7 +225,7 @@ void TankMenus::showTargetDetails()
 	std::map<std::string, unsigned int>::iterator resultItor;
 	for (resultItor = results.begin();
 		resultItor != results.end();
-		resultItor++)
+		++resultItor)
 	{
 		snprintf(buffer, 1024, "\"%s\" - %u", resultItor->first.c_str(), resultItor->second);
 		Console::instance()->addLine(false, buffer);
@@ -249,7 +249,7 @@ void TankMenus::showTankDetails()
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = (*itor).second;
 
@@ -469,7 +469,7 @@ bool TankMenus::AccessoryMenu::getMenuItems(const char* menuName,
 	std::set<std::string>::iterator groupitor;
 	for (groupitor = tabGroups.begin();
 		groupitor != tabGroups.end();
-		groupitor++)
+		++groupitor)
 	{
 		const char *group = (*groupitor).c_str();
 		std::list<Accessory *> weapons = ScorchedClient::instance()->
@@ -480,11 +480,9 @@ bool TankMenus::AccessoryMenu::getMenuItems(const char* menuName,
 		std::list<Accessory *>::iterator itor;
 		for (itor = weapons.begin();
 			itor != weapons.end();
-			itor++)
+			++itor)
 		{
 			Accessory *accessory = (*itor);
-			int accessoryCount = 
-				firstTank->getAccessories().getAccessoryCount(accessory);
 			if (!firstTank->getAccessories().canUse(accessory)) continue;
 
 			bool sel = false;

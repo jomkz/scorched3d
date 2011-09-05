@@ -59,7 +59,7 @@ void OptionsDisplayConsole::addDisplayToConsole()
 	std::list<OptionEntry *>::iterator itor;
 	for (itor = OptionsDisplay::instance()->getOptions().begin();
 		itor != OptionsDisplay::instance()->getOptions().end();
-		itor++)
+		++itor)
 	{
 		OptionEntry *entry = (*itor);
 		if ((entry->getData() & OptionsDisplay::DebugOnly) &&

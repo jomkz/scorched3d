@@ -37,7 +37,7 @@ bool ComsHaveModFilesMessage::writeMessage(NetBuffer &buffer)
 	std::list<ModIdentifierEntry>::iterator itor;
 	for (itor = files_.begin();
 		itor != files_.end();
-		itor++)
+		++itor)
 	{
 		ModIdentifierEntry &entry = *itor;
 		buffer.addToBuffer(entry.fileName);

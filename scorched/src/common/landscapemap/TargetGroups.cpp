@@ -37,7 +37,7 @@ void TargetGroups::clearGroups()
 	std::map<std::string, TargetGroupsGroupEntry*>::iterator itor;
 	for (itor = groups_.begin();
 		itor != groups_.end();
-		itor++)
+		++itor)
 	{
 		TargetGroupsGroupEntry *entry = (*itor).second;
 		delete entry;

@@ -90,7 +90,7 @@ ResourceBundleEntry *LangImpl::getEntry(
 	std::vector<ResourceBundle *>::iterator itor;
 	for (itor = bundles_.begin();
 		itor != bundles_.end();
-		itor++)
+		++itor)
 	{
 		ResourceBundle *bundle = *itor;
 		entry = bundle->getEntry(key);

@@ -47,7 +47,7 @@ ServerStateBuying::~ServerStateBuying()
 	std::map<unsigned int, BuyingPlayer*>::iterator itor;
 	for (itor = buyingPlayers_.begin();
 		itor != buyingPlayers_.end();
-		itor++)
+		++itor)
 	{
 		delete itor->second;
 	}
@@ -64,7 +64,7 @@ void ServerStateBuying::enterState()
 	std::map<unsigned int, BuyingPlayer*>::iterator buyingItor;
 	for (buyingItor = buyingPlayers_.begin();
 		buyingItor != buyingPlayers_.end();
-		buyingItor++)
+		++buyingItor)
 	{
 		delete buyingItor->second;
 	}
@@ -74,7 +74,7 @@ void ServerStateBuying::enterState()
 	std::map<unsigned int, Tank*>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = itor->second;
 		tank->getState().setMoveId(0);
@@ -112,7 +112,7 @@ bool ServerStateBuying::simulate(fixed frameTime)
 	std::map<unsigned int, Tank*>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = itor->second;
 		if (tank->getState().getState() == TankState::sDead)
@@ -185,7 +185,7 @@ bool ServerStateBuying::simulate(fixed frameTime)
 	std::map<unsigned int, BuyingPlayer*>::iterator buyingItor;
 	for (buyingItor = buyingPlayers_.begin();
 		buyingItor != buyingPlayers_.end();
-		buyingItor++)
+		++buyingItor)
 	{
 		unsigned int playerId = buyingItor->first;
 		BuyingPlayer *buying = buyingItor->second;
@@ -197,7 +197,7 @@ bool ServerStateBuying::simulate(fixed frameTime)
 	}
 	for (processPlayersItor = processPlayers.begin();
 		processPlayersItor != processPlayers.end();
-		processPlayersItor++)
+		++processPlayersItor)
 	{
 		unsigned int playerId = *processPlayersItor;
 		BuyingPlayer *buying = buyingPlayers_[playerId];

@@ -82,11 +82,6 @@ bool GLWIcon::initFromXML(XMLNode *node)
 	bool invert = (0 == strcmp(invertNode->getContent(), "true"));
 	if (bitmapNode && bitmapANode)
 	{
-		std::string bitmapName = 
-			S3D::getModFile(bitmapNode->getContent());
-		std::string bitmapAName = 
-			S3D::getModFile(bitmapANode->getContent());
-
 		setTextureImage(
 			ImageID(S3D::eModLocation, 
 			bitmapNode->getContent(),

@@ -344,7 +344,7 @@ void SettingsFrame::createLandPanel()
 	std::list<LandscapeDefinitionsEntry>::iterator itor;
 	for (itor = defns.begin();
 		 itor != defns.end();
-		 itor++, i++)
+		 ++itor, i++)
 	{
 		LandscapeDefinitionsEntry &dfn = *itor;
 		wxBoxSizer *boxSizer = new wxBoxSizer(wxVERTICAL);
@@ -530,7 +530,7 @@ void SettingsFrame::onSelectAll(wxCommandEvent &event)
 		landscapeDefinitions.getAllLandscapes();
 	std::list<LandscapeDefinitionsEntry>::iterator itor = 
 		defns.begin();
-	for (int i = 0; i<(int) defns.size(); i++, itor++)
+	for (int i = 0; i<(int) defns.size(); i++, ++itor)
 	{
 		landscapes[i]->SetValue(true);
 	}
@@ -542,7 +542,7 @@ void SettingsFrame::onDeselectAll(wxCommandEvent &event)
 		landscapeDefinitions.getAllLandscapes();
 	std::list<LandscapeDefinitionsEntry>::iterator itor =
 		defns.begin();  
-	for (int i = 0; i<(int) defns.size(); i++, itor++)
+	for (int i = 0; i<(int) defns.size(); i++, ++itor)
 	{           
 		landscapes[i]->SetValue(false);
 	}
@@ -620,7 +620,7 @@ bool SettingsFrame::TransferDataToWindow()
 			std::list<std::string>::iterator itor;
 			for (itor = ais.begin();
 				itor != ais.end();
-				itor++)
+				++itor)
 			{
 				IDC_COMBO_PTYPE_CTRL[i]->Append(
 					wxString((*itor).c_str(), wxConvUTF8));
@@ -637,7 +637,7 @@ bool SettingsFrame::TransferDataToWindow()
 			landscapeDefinitions.getAllLandscapes();
 		std::list<LandscapeDefinitionsEntry>::iterator itor = 
 			defns.begin();
-		for (int i = 0; i<(int) defns.size(); i++, itor++)
+		for (int i = 0; i<(int) defns.size(); i++, ++itor)
 		{
 			landscapes[i]->SetValue(
 				landscapeDefinitions.landscapeEnabled(
@@ -702,7 +702,7 @@ bool SettingsFrame::TransferDataFromWindow()
 			landscapeDefinitions.getAllLandscapes();
 		std::list<LandscapeDefinitionsEntry>::iterator itor = 
 			defns.begin();
-		for (int i = 0; i<(int) defns.size(); i++, itor++)
+		for (int i = 0; i<(int) defns.size(); i++, ++itor)
 		{
 			if (landscapes[i]->GetValue())
 			{

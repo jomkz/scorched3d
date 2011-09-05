@@ -57,7 +57,7 @@ TargetGroup *TargetGroupsSetEntry::getObjectByPos(int position)
 	std::map<unsigned int, TargetGroup *>::iterator itor;
 	for (itor = objects_.begin();
 		itor != objects_.end();
-		itor ++, pos--)
+		++itor, pos--)
 	{
 		if (pos <=0) return (*itor).second;
 	}

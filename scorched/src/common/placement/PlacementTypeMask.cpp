@@ -65,7 +65,6 @@ void PlacementTypeMask::getPositions(ScorchedContext &context,
 	}
 
 	const int NoIterations = numobjects;
-	int objectCount = 0;
 	for (int i=0; i<NoIterations; i++)
 	{
 		if (i % 1000 == 0) if (counter) 

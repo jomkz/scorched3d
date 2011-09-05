@@ -120,7 +120,7 @@ void GiftMoneyDialog::display()
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = itor->second;
 		if (tank->getTeam() == currentTank->getTeam() &&

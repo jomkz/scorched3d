@@ -64,7 +64,7 @@ void TargetMovement::addMovements(ScorchedContext &context,
 	std::vector<LandscapeInclude *>::iterator itor;
 	for (itor = movements.begin();
 		itor != movements.end();
-		itor++)
+		++itor)
 	{
 		LandscapeInclude *movement = (*itor);
 		addMovementType(context, random, movement->movements);
@@ -78,7 +78,7 @@ void TargetMovement::addMovementType(ScorchedContext &context,
 	std::vector<LandscapeMovementType *>::iterator itor;
 	for (itor = movementtypes.begin();
 		itor != movementtypes.end();
-		itor++)
+		++itor)
 	{
 		LandscapeMovementType *movementtype = (*itor);
 
@@ -108,7 +108,7 @@ void TargetMovement::simulate(ScorchedContext &context, fixed frameTime)
 	std::vector<TargetMovementEntry *>::iterator itor;
 	for (itor = movements_.begin();
 		itor != movements_.end();
-		itor++)
+		++itor)
 	{
 		TargetMovementEntry *movementEntry = *itor;
 		movementEntry->simulate(context, frameTime * 20);
@@ -120,7 +120,7 @@ void TargetMovement::draw()
 	std::vector<TargetMovementEntry *>::iterator itor;
 	for (itor = movements_.begin();
 		itor != movements_.end();
-		itor++)
+		++itor)
 	{
 		TargetMovementEntry *movementEntry = *itor;
 		movementEntry->draw();
@@ -132,7 +132,7 @@ void TargetMovement::reset()
 	std::vector<TargetMovementEntry *>::iterator itor;
 	for (itor = movements_.begin();
 		itor != movements_.end();
-		itor++)
+		++itor)
 	{
 		TargetMovementEntry *movementEntry = *itor;
 		movementEntry->reset();

@@ -67,7 +67,6 @@ void TankAvatar::clear()
 bool TankAvatar::readMessage(NetBufferReader &reader)
 {
 	std::string name;
-	unsigned int used = 0;
 	if (!reader.getFromBuffer(name)) return false;
 	if (!reader.getFromBuffer(tmpBuffer)) return false;
 	setFromBuffer(name, tmpBuffer);
@@ -121,7 +120,7 @@ bool TankAvatar::setFromBuffer(const std::string &fileName, NetBuffer &buffer)
 		std::list<AvatarStore>::iterator itor;
 		for (itor = storeEntries_.begin();
 			itor != storeEntries_.end();
-			itor++)
+			++itor)
 		{
 			AvatarStore &store = (*itor);
 			if (store.crc_ == crc &&

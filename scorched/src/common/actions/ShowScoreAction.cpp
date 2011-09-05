@@ -60,7 +60,7 @@ void ShowScoreAction::init()
 			std::map<unsigned int, Tank *>::iterator itor;
 			for (itor = tanks.begin();
 				itor != tanks.end();
-				itor++)
+				++itor)
 			{
 				Tank *tank = (*itor).second;
 				Logger::log(S3D::formatStringBuffer("%s - %s",

@@ -146,7 +146,7 @@ TutorialFileEntry *TutorialFileEntry::checkConditions()
 	std::list<TutorialCondition *>::iterator itor;
 	for (itor = conditions_.begin();
 		itor != conditions_.end();
-		itor++)
+		++itor)
 	{
 		TutorialCondition *condition = (*itor);
 
@@ -184,7 +184,7 @@ bool TutorialFile::parseFile(const std::string &file)
 	std::list<XMLNode *>::iterator stepitor;
 	for (stepitor = steps->getChildren().begin();
 		stepitor != steps->getChildren().end();
-		stepitor++)
+		++stepitor)
 	{
 		XMLNode *node = (*stepitor);
 
@@ -232,7 +232,7 @@ bool TutorialFile::parseFile(const std::string &file)
 	std::list<std::pair<TutorialCondition *, XMLNode *> >::iterator conditor;
 	for (conditor = conditions.begin();
 		conditor != conditions.end();
-		conditor++)
+		++conditor)
 	{
 		TutorialCondition *condition = (*conditor).first;
 		XMLNode *conditionNode = (*conditor).second;

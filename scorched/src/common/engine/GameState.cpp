@@ -107,7 +107,7 @@ void GameState::mouseWheel(short z)
 			StateIList::iterator subItor;
 			for (subItor = currentList->begin();
 				subItor != currentList->end();
-				subItor++)
+				++subItor)
 			{
 				(*subItor)->mouseWheel(thisState, 
 					currentMouseX_, currentMouseY_, 
@@ -183,7 +183,7 @@ void GameState::mouseMoveCall(const unsigned state, MouseButton button,
 		StateIList::iterator subItor;
 		for (subItor = currentList.begin();
 			subItor != currentList.end();
-			subItor++)
+			++subItor)
 		{
 			(*subItor)->mouseDrag(state, button, mx, my, dx, dy, skipRest);
 			if (skipRest) break;
@@ -296,7 +296,7 @@ void GameState::mouseUpDown(MouseButton button, bool down, int x, int y)
 			StateIList::iterator subItor;
 			for (subItor = currentList->begin();
 				subItor != currentList->end();
-				subItor++)
+				++subItor)
 			{
 				if (down) 
 				{
@@ -333,12 +333,12 @@ void GameState::simulate(float simTime)
 		std::list<GameStateSubEntry>::iterator itor;
 		for (itor = thisEntry->loopList.begin();
 			itor != thisEntry->loopList.end();
-			itor++)
+			++itor)
 		{
 			StateIList::iterator subItor;
 			for (subItor = itor->subLoopList.begin();
 				subItor != itor->subLoopList.end();
-				subItor++, timerCount++)
+				++subItor, timerCount++)
 			{
 				GameStateI *stateI = (*subItor);
 				currentStateI_ = stateI;
@@ -373,7 +373,7 @@ void GameState::simulate(float simTime)
 			StateIList::iterator subItor;
 			for (subItor = thisEntry->subKeyList.begin();
 				subItor != thisEntry->subKeyList.end();
-				subItor++)
+				++subItor)
 			{
 				(*subItor)->keyboardCheck(thisState, simTime, buffer, keyState, 
 					history, historySize, skipRest);
@@ -387,7 +387,7 @@ void GameState::simulate(float simTime)
 			StiulusIList::iterator itor;
 			for (itor = thisEntry->condStimList.begin();
 				itor != thisEntry->condStimList.end();
-				itor++)
+				++itor)
 			{
 				SimulusIPair &p = *itor;
 				if (p.first->acceptStateChange(thisState, p.second, simTime))
@@ -421,14 +421,14 @@ void GameState::draw()
 		std::list<GameStateSubEntry>::iterator itor;
 		for (itor = thisEntry->loopList.begin();
 			itor != thisEntry->loopList.end();
-			itor++)
+			++itor)
 		{
 			itor->current->draw(thisState);
 
 			StateIList::iterator subItor;
 			for (subItor = itor->subLoopList.begin();
 				subItor != itor->subLoopList.end();
-				subItor++, timerCount++)
+				++subItor, timerCount++)
 			{
 				GameStateI *stateI = (*subItor);
 				currentStateI_ = stateI;
@@ -468,7 +468,7 @@ void GameState::setState(const unsigned state)
 			StateIList::iterator subItor;
 			for (subItor = thisEntry->enterStateList.begin();
 				subItor != thisEntry->enterStateList.end();
-				subItor++)
+				++subItor)
 			{
 				GameStateI *s = (*subItor);
 				s->enterState(thisState);
@@ -545,7 +545,7 @@ GameState::GameStateSubEntry* GameState::getSubEntry(const unsigned state,
 	std::list<GameStateSubEntry>::iterator subItor;
 	for (subItor = foundEntry->loopList.begin();
 		subItor != foundEntry->loopList.end();
-		subItor++)
+		++subItor)
 	{
 		if (subItor->current == entry)
 		{
@@ -722,7 +722,7 @@ void GameState::clearTimers(bool printTimers)
 				std::vector<GameStatePerfCounter *>::iterator itor;
 				for (itor = timers_[i].gameStateI->getPerfCounters().begin();
 					itor != timers_[i].gameStateI->getPerfCounters().end();
-					itor++)
+					++itor)
 				{
 					GameStatePerfCounter *counter = *itor;
 					bool used = counter->getUsed();

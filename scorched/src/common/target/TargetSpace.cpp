@@ -85,7 +85,7 @@ void TargetSpace::updateTarget(Target *target)
 			std::vector<Square*>::iterator itor;
 			for (itor = squares.begin();
 				itor != squares.end();
-				itor++)
+				++itor)
 			{
 				Square *square = *itor;
 				target->getLife().getSpaceContainment().squares.push_back(square->squarenum);
@@ -181,7 +181,7 @@ Target *TargetSpace::getCollision(FixedVector &position)
 	std::map<unsigned int, Target *>::iterator itor;
 	for (itor = potentialTargets.begin();
 		itor != potentialTargets.end();
-		itor++)
+		++itor)
 	{
 		Target *target = (*itor).second;
 		if (!target->getAlive())
@@ -266,7 +266,7 @@ void TargetSpace::getCollisionSet(FixedVector &position, fixed radius,
 				square->targets;
 			for (itor = potentialTargets.begin();
 				itor != potentialTargets.end();
-				itor++)
+				++itor)
 			{
 				Target *target = (*itor).second;
 				if (!target->getAlive())
@@ -298,7 +298,7 @@ void TargetSpace::getCollisionSet(FixedVector &position, fixed radius,
 		std::map<unsigned int, Target *>::iterator itor;
 		for (itor = collisionTargets.begin();
 			itor != collisionTargets.end();
-			itor++)
+			++itor)
 		{
 			targets.append(S3D::formatStringBuffer("%u:%s ", 
 				itor->second->getPlayerId(),
@@ -415,7 +415,7 @@ void TargetSpace::draw()
 			std::map<unsigned int, Target *>::iterator itor;
 			for (itor = square->targets.begin();
 				itor != square->targets.end();
-				itor++)
+				++itor)
 			{
 				Target *target = (*itor).second;
 				glVertex3fv(target->getLife().getFloatPosition());

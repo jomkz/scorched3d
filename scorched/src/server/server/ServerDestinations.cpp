@@ -29,7 +29,7 @@ ServerDestinations::~ServerDestinations()
 	std::map<unsigned int, ServerDestination*>::iterator itor;
 	for (itor = serverDestinations_.begin();
 		itor != serverDestinations_.end();
-		itor++)
+		++itor)
 	{
 		delete itor->second;
 	}

@@ -164,7 +164,7 @@ bool ServerAdminHandler::processMessage(
 			std::map<unsigned int, Tank *>::iterator itor;
 			for (itor = tanks.begin();
 				itor != tanks.end();
-				itor++)
+				++itor)
 			{
 				Tank *tank = (*itor).second;
 
@@ -222,7 +222,7 @@ bool ServerAdminHandler::processMessage(
 			std::list<ServerBanned::BannedRange>::iterator itor;
 			for (itor = bannedIps.begin();
 				itor != bannedIps.end();
-				itor++)
+				++itor)
 			{
 				ServerBanned::BannedRange &range = (*itor);
 				std::string mask = NetInterface::getIpName(range.mask);
@@ -230,7 +230,7 @@ bool ServerAdminHandler::processMessage(
 				std::map<unsigned int, ServerBanned::BannedEntry>::iterator ipitor;
 				for (ipitor = range.ips.begin();
 					ipitor != range.ips.end();
-					ipitor++)
+					++ipitor)
 				{
 					unsigned int ip = (*ipitor).first;
 					ServerBanned::BannedEntry &entry = (*ipitor).second;

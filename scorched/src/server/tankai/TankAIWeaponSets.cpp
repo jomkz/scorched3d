@@ -120,7 +120,7 @@ void TankAIWeaponSets::WeaponSet::buyWeapons(WeaponSetAccessories &tankAccessori
 		std::vector<WeaponSetEntry>::iterator itor;
 		for (itor = weapons.begin();
 			itor != weapons.end();
-			itor++)
+			++itor)
 		{
 			WeaponSetEntry &weapon = *itor;
 			if (weapon.weaponValid(tankAccessories, lastRound))
@@ -138,7 +138,7 @@ void TankAIWeaponSets::WeaponSet::buyWeapons(WeaponSetAccessories &tankAccessori
 		std::multimap<unsigned int, WeaponSetEntry *>::reverse_iterator ritor;
 		for (ritor = potentialWeapons.rbegin();
 			ritor != potentialWeapons.rend();
-			ritor++)
+			++ritor)
 		{
 			WeaponSetEntry *weapon = ritor->second;
 			priorityWeapons.push_back(weapon);
@@ -169,7 +169,7 @@ Accessory *TankAIWeaponSets::WeaponSet::getTankAccessoryByType(
 	std::vector<WeaponSetEntry>::iterator itor;
 	for (itor = weapons.begin();
 		itor != weapons.end();
-		itor++)
+		++itor)
 	{
 		WeaponSetEntry &current = *itor;
 		if (current.type == getType)

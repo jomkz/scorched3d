@@ -55,7 +55,7 @@ void PlacementTypeDirect::getPositions(ScorchedContext &context,
 	int i = 0;
 	for (itor = positions.begin();
 		itor != positions.end();
-		itor++, i++)
+		++itor, i++)
 	{
 		if (i % 10 == 0) if (counter) 
 			counter->setNewPercentage(float(i)/float(positions.size())*100.0f);

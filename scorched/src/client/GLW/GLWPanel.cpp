@@ -67,7 +67,7 @@ GLWidget *GLWPanel::addWidget(GLWidget *widget, GLWCondition *condition,
 	std::list<GLWPanelEntry>::iterator itor;
 	for (itor = widgets_.begin();
 		itor != widgets_.end();
-		itor++)
+		++itor)
 	{
 		GLWPanelEntry &entry = *itor;
 		DIALOG_ASSERT(entry.widget != widget);
@@ -84,7 +84,7 @@ GLWidget *GLWPanel::getWidgetByName(const char *name)
 	std::list<GLWPanelEntry>::iterator itor;
 	for (itor = widgets_.begin();
 		itor != widgets_.end();
-		itor++)
+		++itor)
 	{
 		GLWPanelEntry &entry = *itor;
 		if ((*itor).widget->getVisible() &&
@@ -111,7 +111,7 @@ void GLWPanel::clear()
 	std::list<GLWPanelEntry>::iterator itor;
 	for (itor = widgets_.begin();
 		itor != widgets_.end();
-		itor++)
+		++itor)
 	{
 		delete (*itor).widget;
 		delete (*itor).condition;
@@ -124,7 +124,7 @@ void GLWPanel::simulate(float frameTime)
 	std::list<GLWPanelEntry>::iterator itor;
 	for (itor = widgets_.begin();
 		itor != widgets_.end();
-		itor++)
+		++itor)
 	{
 		GLWPanelEntry &entry = *itor;
 		if ((*itor).widget->getVisible() &&
@@ -172,7 +172,7 @@ void GLWPanel::draw()
 			std::list<GLWPanelEntry>::iterator itor;
 			for (itor = widgets_.begin();
 				itor != widgets_.end();
-				itor++)
+				++itor)
 			{
 				GLWPanelEntry &entry = *itor;
 				if ((*itor).widget->getVisible() &&
@@ -200,7 +200,7 @@ void GLWPanel::mouseWheel(float x, float y, float z, bool &skipRest)
 	std::list<GLWPanelEntry>::reverse_iterator itor;
 	for (itor = widgets_.rbegin();
 		itor != widgets_.rend();
-		itor++)
+		++itor)
 	{
 		GLWPanelEntry &entry = *itor;
 		if ((*itor).widget->getVisible() &&
@@ -223,7 +223,7 @@ void GLWPanel::mouseDown(int button, float x, float y, bool &skipRest)
 	std::list<GLWPanelEntry>::reverse_iterator itor;
 	for (itor = widgets_.rbegin();
 		itor != widgets_.rend();
-		itor++)
+		++itor)
 	{
 		GLWPanelEntry &entry = *itor;
 		if ((*itor).widget->getVisible() &&
@@ -246,7 +246,7 @@ void GLWPanel::mouseUp(int button, float x, float y, bool &skipRest)
 	std::list<GLWPanelEntry>::reverse_iterator itor;
 	for (itor = widgets_.rbegin();
 		itor != widgets_.rend();
-		itor++)
+		++itor)
 	{
 		GLWPanelEntry &entry = *itor;
 		if ((*itor).widget->getVisible() &&
@@ -271,7 +271,7 @@ void GLWPanel::mouseDrag(int button, float mx, float my, float x, float y, bool 
 	std::list<GLWPanelEntry>::reverse_iterator itor;
 	for (itor = widgets_.rbegin();
 		itor != widgets_.rend();
-		itor++)
+		++itor)
 	{
 		GLWPanelEntry &entry = *itor;
 		if ((*itor).widget->getVisible() &&
@@ -292,7 +292,7 @@ void GLWPanel::keyDown(char *buffer, unsigned int keyState,
 	std::list<GLWPanelEntry>::reverse_iterator itor;
 	for (itor = widgets_.rbegin();
 		itor != widgets_.rend();
-		itor++)
+		++itor)
 	{
 		GLWPanelEntry &entry = *itor;
 		if ((*itor).widget->getVisible() &&
@@ -310,7 +310,7 @@ void GLWPanel::display()
 	std::list<GLWPanelEntry>::reverse_iterator itor;
 	for (itor = widgets_.rbegin();
 		itor != widgets_.rend();
-		itor++)
+		++itor)
 	{
 		GLWPanelEntry &entry = *itor;
 		if ((*itor).widget->getVisible() &&
@@ -327,7 +327,7 @@ void GLWPanel::hide()
 	std::list<GLWPanelEntry>::reverse_iterator itor;
 	for (itor = widgets_.rbegin();
 		itor != widgets_.rend();
-		itor++)
+		++itor)
 	{
 		GLWPanelEntry &entry = *itor;
 		if ((*itor).widget->getVisible() &&
@@ -353,7 +353,7 @@ bool GLWPanel::initFromXML(XMLNode *node)
 		std::list<XMLNode *> &children = itemsNode->getChildren();
 	for (childrenItor = children.begin();
 		childrenItor != children.end();
-		childrenItor++)
+		++childrenItor)
 	{
 		// For each node named items
 		XMLNode *currentNode = (*childrenItor);
@@ -422,7 +422,7 @@ void GLWPanel::saveSettings(XMLNode *node)
 	std::list<GLWPanelEntry>::iterator itor;
 	for (itor = widgets_.begin();
 		itor != widgets_.end();
-		itor++)
+		++itor)
 	{
 		itor->widget->saveSettings(node);
 	}
@@ -435,7 +435,7 @@ void GLWPanel::loadSettings(XMLNode *node, bool resetPositions)
 	std::list<GLWPanelEntry>::iterator itor;
 	for (itor = widgets_.begin();
 		itor != widgets_.end();
-		itor++)
+		++itor)
 	{
 		itor->widget->loadSettings(node, resetPositions);
 	}
@@ -456,7 +456,7 @@ void GLWPanel::layout()
 	std::list<GLWPanelEntry>::iterator itor;
 	for (itor = widgets_.begin();
 		itor != widgets_.end();
-		itor++, wid++)
+		++itor, wid++)
 	{
 		GLWPanelEntry &entry = *itor;
 		
@@ -509,7 +509,7 @@ void GLWPanel::layout()
 		float width = 0.0f;
 		for (itor = widgets_.begin();
 			itor != widgets_.end();
-			itor++)
+			++itor)
 		{
 			GLWPanelEntry &entry = *itor;
 			width += entry.leftSpace;
@@ -540,7 +540,7 @@ void GLWPanel::layout()
 		float height = getH();
 		for (itor = widgets_.begin();
 			itor != widgets_.end();
-			itor++)
+			++itor)
 		{
 			GLWPanelEntry &entry = *itor;
 			height -= entry.topSpace;
@@ -573,7 +573,7 @@ void GLWPanel::layout()
 		float height = getH();
 		for (itor = widgets_.begin();
 			itor != widgets_.end();
-			itor++)
+			++itor)
 		{
 			GLWPanelEntry &entry = *itor;
 

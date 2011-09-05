@@ -50,7 +50,7 @@ void TankRemove::simulate(fixed frameTime, bool &remove)
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = tanks.begin();
 		mainitor != tanks.end();
-		mainitor++)
+		++mainitor)
 	{
 		Tank *current = (*mainitor).second;
 		if (current->getState().getTankPlaying() &&

@@ -401,7 +401,7 @@ bool OptionsGame::writeToBuffer(NetBuffer &buffer,
 	std::list<OptionEntry *>::iterator itor;
 	for (itor = options_.begin();
 		itor != options_.end();
-		itor++)
+		++itor)
 	{
 		OptionEntry *entry = *itor;
 		saveOptions.push_back(entry);
@@ -421,7 +421,7 @@ bool OptionsGame::readFromBuffer(NetBufferReader &reader,
 	std::list<OptionEntry *>::iterator itor;
 	for (itor = options_.begin();
 		itor != options_.end();
-		itor++)
+		++itor)
 	{
 		OptionEntry *entry = *itor;
 		saveOptions.push_back(entry);
@@ -439,7 +439,7 @@ bool OptionsGame::writeOptionsToFile(const std::string &filePath, bool allOption
 	std::list<OptionEntry *>::iterator itor;
 	for (itor = options_.begin();
 		itor != options_.end();
-		itor++)
+		++itor)
 	{
 		OptionEntry *entry = *itor;
 		saveOptions.push_back(entry);
@@ -456,7 +456,7 @@ bool OptionsGame::readOptionsFromFile(const std::string &filePath)
         std::list<OptionEntry *>::iterator itor;
         for (itor = options_.begin();
                 itor != options_.end();
-                itor++)
+                ++itor)
         {
                 OptionEntry *entry = *itor;
                 saveOptions.push_back(entry);

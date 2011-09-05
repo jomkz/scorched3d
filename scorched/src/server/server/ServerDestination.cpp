@@ -43,7 +43,7 @@ void ServerDestinationMod::rmFile(const char *file)
 	std::list<ModIdentifierEntry>::iterator itor;
 	for (itor = files_->begin();
 		itor != files_->end();
-		itor++)
+		++itor)
 	{
 		ModIdentifierEntry &entry = (*itor);
 		if (0 == strcmp(entry.fileName.c_str(), file))
@@ -59,7 +59,7 @@ ModIdentifierEntry *ServerDestinationMod::getFile(const char *file)
 	std::list<ModIdentifierEntry>::iterator itor;
 	for (itor = files_->begin();
 		itor != files_->end();
-		itor++)
+		++itor)
 	{
 		ModIdentifierEntry &entry = (*itor);
 		if (0 == strcmp(entry.fileName.c_str(), file))

@@ -65,7 +65,7 @@ void LargeHemisphere::draw(float radius, float radius2,
 		std::list<Entry>::iterator itor;
 		for (itor = entries_.begin();
 			itor != entries_.end();
-			itor++)
+			++itor)
 		{
 			// Should check for visibility here, but it seems so quick anyway
 			Entry &entry = *itor;
@@ -99,7 +99,7 @@ void LargeHemisphere::drawColored(float radius, float radius2,
 		std::list<Entry>::iterator itor;
 		for (itor = entries_.begin();
 			itor != entries_.end();
-			itor++)
+			++itor)
 		{
 			Entry &entry = *itor;
 			glCallList(entry.listNo_);

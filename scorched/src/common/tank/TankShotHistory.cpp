@@ -43,7 +43,7 @@ std::vector<TankShotHistory::ShotEntry> &TankShotHistory::getOldShots()
 	std::vector<ShotEntry>::iterator itor;
 	for (itor = oldShots_.begin();
 		itor != oldShots_.end();
-		itor++)
+		++itor)
 	{
 		ShotEntry &entry = *itor;
 		entry.current = 

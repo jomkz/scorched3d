@@ -52,7 +52,7 @@ bool ModDirs::loadModDir(const std::string &dirName, bool global)
 		FileList::ListType::iterator itor;
 		for (itor = dirs.begin();
 			itor != dirs.end();
-			itor++)
+			++itor)
 		{
 			std::string filename = (*itor);
 			if (!loadModFile(filename, global)) return false;
@@ -82,7 +82,7 @@ bool ModDirs::loadModFile(const std::string &inputFileName, bool global)
 	std::list<ModInfo>::iterator itor;
 	for (itor = dirs_.begin();
 		itor != dirs_.end();
-		itor++)
+		++itor)
 	{
 		ModInfo &info = (*itor);
 		if (0 == strcmp(info.getName(), newFileName.c_str())) return true;

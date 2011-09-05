@@ -852,7 +852,7 @@ bool TankAICurrentMove::makeGroupShot(Tanket *tanket,
 			std::list<Tanket *>::iterator toItor;
 			for (toItor = sortedTankets.begin();
 				toItor != sortedTankets.end();
-				toItor++)
+				++toItor)
 			{
 				Tanket *to = *toItor;
 
@@ -881,7 +881,7 @@ bool TankAICurrentMove::makeGroupShot(Tanket *tanket,
 		std::list<GroupingEntry>::iterator itor;
 		for (itor = foundEntries.begin();
 			itor != foundEntries.end();
-			itor++)
+			++itor)
 		{
 			GroupingEntry &entry = *itor;
 			if (!current ||

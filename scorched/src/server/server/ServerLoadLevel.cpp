@@ -127,7 +127,7 @@ void ServerLoadLevel::setLoaded(unsigned int destinationId)
 		ScorchedServer::instance()->getTankContainer().getAllTanks();
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		// For each tank
 		Tank *tank = (*itor).second;

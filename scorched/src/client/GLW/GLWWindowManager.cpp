@@ -87,7 +87,7 @@ void GLWWindowManager::setCurrentEntry(const unsigned state)
 		windowsCopy = currentStateEntry_->windows_;
 		for (qitor = windowsCopy.begin();
 			qitor != windowsCopy.end();
-			qitor++)
+			++qitor)
 		{
 			GLWWindow *window = *qitor;
 			if (windowVisible(window->getId()))
@@ -116,7 +116,7 @@ void GLWWindowManager::setCurrentEntry(const unsigned state)
 	windowsCopy = currentStateEntry_->windows_;
 	for (qitor = windowsCopy.begin();
 		qitor != windowsCopy.end();
-		qitor++)
+		++qitor)
 	{
 		GLWWindow *window = *qitor;
 		window->windowInit(state);
@@ -167,14 +167,14 @@ void GLWWindowManager::removeWindow(GLWWindow *removeWindow)
 	std::map<unsigned, StateEntry>::iterator itor;
 	for (itor = stateEntrys_.begin();
 		itor != stateEntrys_.end();
-		itor++)
+		++itor)
 	{
 		{
 			std::list<std::pair<KeyboardKey *, GLWWindow *> > tmpList;
 			std::list<std::pair<KeyboardKey *, GLWWindow *> >::iterator keyItor;
 			for (keyItor = itor->second.windowKeys_.begin();
 				keyItor != itor->second.windowKeys_.end();
-				keyItor++)
+				++keyItor)
 			{
 				if (keyItor->second != removeWindow) 
 				{
@@ -317,7 +317,7 @@ bool GLWWindowManager::windowInCurrentState(unsigned id)
 	std::deque<GLWWindow *>::iterator itor;
 	for (itor = currentStateEntry_->windows_.begin();
 		itor != currentStateEntry_->windows_.end();
-		itor++)
+		++itor)
 	{
 		GLWWindow *window = (*itor);
 		if (window->getId() == id)
@@ -343,7 +343,7 @@ void GLWWindowManager::draw(const unsigned state)
 	std::deque<GLWWindow *>::iterator itor;
 	for (itor = currentStateEntry_->windows_.begin();
 		itor != currentStateEntry_->windows_.end();
-		itor++)
+		++itor)
 	{
 		GLWWindow *window = (*itor);
 		if (windowVisible(window->getId()))
@@ -361,7 +361,7 @@ GLWWindow *GLWWindowManager::getWindowByName(const char *name)
 	std::deque<GLWWindow *>::iterator itor;
 	for (itor = currentStateEntry_->windows_.begin();
 		itor != currentStateEntry_->windows_.end();
-		itor++)
+		++itor)
 	{
 		GLWWindow *window = (*itor);
 		if (0 == strcmp(window->getName(), name)) return window;
@@ -374,7 +374,7 @@ unsigned int GLWWindowManager::getFocus(int x, int y)
 	std::deque<GLWWindow *>::reverse_iterator itor;
 	for (itor = currentStateEntry_->windows_.rbegin();
 		itor != currentStateEntry_->windows_.rend();
-		itor++)
+		++itor)
 	{
 		GLWWindow *window = (*itor);
 		if (windowVisible(window->getId()))
@@ -399,7 +399,7 @@ void GLWWindowManager::simulate(const unsigned state, float simTime)
 	std::deque<GLWWindow *>::iterator itor;
 	for (itor = currentStateEntry_->windows_.begin();
 		itor != currentStateEntry_->windows_.end();
-		itor++)
+		++itor)
 	{
 		GLWWindow *window = (*itor);
 		if (windowVisible(window->getId()))
@@ -421,7 +421,7 @@ void GLWWindowManager::keyboardCheck(const unsigned state, float frameTime,
 	std::deque<GLWWindow *>::reverse_iterator itor;
 	for (itor = currentStateEntry_->windows_.rbegin();
 		itor != currentStateEntry_->windows_.rend();
-		itor++)
+		++itor)
 	{
 		GLWWindow *window = (*itor);
 		if (windowVisible(window->getId()))
@@ -438,14 +438,12 @@ void GLWWindowManager::keyboardCheck(const unsigned state, float frameTime,
 
 	for (int i=0; i<hisCount; i++)
 	{
-		unsigned int dik = history[i].sdlKey;
-
 		std::list<std::pair<KeyboardKey *, GLWWindow *> >::iterator keyItor;
 		std::list<std::pair<KeyboardKey *, GLWWindow *> >::iterator endKeyItor = 
 			currentStateEntry_->windowKeys_.end();
 		for (keyItor = currentStateEntry_->windowKeys_.begin();
 			keyItor != endKeyItor;
-			keyItor++)
+			++keyItor)
 		{
 			KeyboardKey *key = (*keyItor).first;
 			if (key && key->keyDown(buffer, keyState))
@@ -472,7 +470,7 @@ void GLWWindowManager::mouseDown(const unsigned state, GameState::MouseButton bu
 	std::deque<GLWWindow *>::reverse_iterator itor;
 	for (itor = currentStateEntry_->windows_.rbegin();
 		itor != currentStateEntry_->windows_.rend();
-		itor++)
+		++itor)
 	{
 		GLWWindow *window = (*itor);
 		if (windowVisible(window->getId()))
@@ -492,7 +490,7 @@ void GLWWindowManager::mouseUp(const unsigned state, GameState::MouseButton butt
 	std::deque<GLWWindow *>::reverse_iterator itor;
 	for (itor = currentStateEntry_->windows_.rbegin();
 		itor != currentStateEntry_->windows_.rend();
-		itor++)
+		++itor)
 	{
 		GLWWindow *window = (*itor);
 		if (windowVisible(window->getId()))
@@ -513,7 +511,7 @@ void GLWWindowManager::mouseDrag(const unsigned state, GameState::MouseButton bu
 	std::deque<GLWWindow *>::reverse_iterator itor;
 	for (itor = currentStateEntry_->windows_.rbegin();
 		itor != currentStateEntry_->windows_.rend();
-		itor++)
+		++itor)
 	{
 		GLWWindow *window = (*itor);
 		if (windowVisible(window->getId()))
@@ -534,7 +532,7 @@ void GLWWindowManager::mouseWheel(const unsigned state,
 	std::deque<GLWWindow *>::reverse_iterator itor;
 	for (itor = currentStateEntry_->windows_.rbegin();
 		itor != currentStateEntry_->windows_.rend();
-		itor++)
+		++itor)
 	{
 		GLWWindow *window = (*itor);
 		if (windowVisible(window->getId()))
@@ -554,7 +552,7 @@ bool GLWWindowManager::getMenuItems(const char* menuName,
 		std::map<unsigned, GLWWindow *>::iterator itor;
 		for (itor = idToWindow_.begin();
 			itor != idToWindow_.end();
-			itor++)
+			++itor)
 		{
 			unsigned id = (*itor).first;
 			GLWWindow *window = (*itor).second;
@@ -582,7 +580,7 @@ void GLWWindowManager::menuSelection(const char* menuName,
 		std::map<unsigned, GLWWindow *>::iterator itor;
 		for (itor = idToWindow_.begin();
 			itor != idToWindow_.end();
-			itor++)
+			++itor)
 		{
 			unsigned id = (*itor).first;
 			GLWWindow *window = (*itor).second;
@@ -642,7 +640,7 @@ void GLWWindowManager::loadSettings()
 	std::list<XMLNode *> &children = settings->getChildren();
     for (childrenItor = children.begin();
         childrenItor != children.end();
-        childrenItor++)
+        ++childrenItor)
     {
 		XMLNode *node = (*childrenItor);
 
@@ -654,7 +652,7 @@ void GLWWindowManager::loadSettings()
 		std::map<unsigned, GLWWindow *>::iterator winitor;
 		for (winitor = idToWindow_.begin();
 			winitor != idToWindow_.end();
-			winitor++)
+			++winitor)
 		{
 			GLWWindow *w = (*winitor).second;
 			if (0 == strcmp(w->getName(), window.c_str()))
@@ -685,7 +683,7 @@ void GLWWindowManager::saveSettings()
 		std::map<unsigned, GLWWindow *>::iterator winitor;
 		for (winitor = idToWindow_.begin();
 			winitor != idToWindow_.end();
-			winitor++)
+			++winitor)
 		{
 			GLWWindow *w = (*winitor).second;
 

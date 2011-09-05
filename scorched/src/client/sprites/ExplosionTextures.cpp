@@ -56,7 +56,7 @@ bool ExplosionTextures::createTextures(ProgressCounter *counter)
 		std::map<std::string, GLTextureSet*>::iterator itor;
 		for (itor = textureSets.begin();
 			itor != textureSets.end();
-			itor++)
+			++itor)
 		{
 			delete itor->second;
 		}
@@ -68,7 +68,7 @@ bool ExplosionTextures::createTextures(ProgressCounter *counter)
 		std::map<std::string, Image*>::iterator itor;
 		for (itor = scorchedBitmaps.begin();
 			itor != scorchedBitmaps.end();
-			itor++)
+			++itor)
 		{
 			delete itor->second;
 		}
@@ -159,7 +159,7 @@ bool ExplosionTextures::createTextures(ProgressCounter *counter)
 	std::list<XMLNode *> &children = file.getRootNode()->getChildren();
     for (childrenItor = children.begin();
 		 childrenItor != children.end();
-		 childrenItor++)
+		 ++childrenItor)
     {
 		// Check if it is a texture set
         XMLNode *currentNode = (*childrenItor);
@@ -182,7 +182,7 @@ bool ExplosionTextures::createTextures(ProgressCounter *counter)
 		std::list<XMLNode *> &textures = currentNode->getChildren();
 		for (textureItor = textures.begin();
 			textureItor != textures.end();
-			textureItor++)
+			++textureItor)
 		{
 			// Check if it is a texture
 			XMLNode *currentTexture = (*textureItor);

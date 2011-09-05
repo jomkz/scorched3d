@@ -50,7 +50,7 @@ bool TankViewPoints::getValues(FixedVector &lookAt, FixedVector &lookFrom)
 		points_.begin();
 	std::set<TankViewPointProvider *>::iterator enditor =
 		points_.end();
-	for (; itor != enditor; itor++)
+	for (; itor != enditor; ++itor)
 	{
 		TankViewPointProvider *provider = *itor;
 

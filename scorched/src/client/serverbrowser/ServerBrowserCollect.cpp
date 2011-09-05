@@ -190,7 +190,7 @@ void ServerBrowserCollect::processMessage(NetMessage &message)
 				std::list<XMLNode *> &children = xmlBuffer.getRootNode()->getChildren();
 				for (childrenItor = children.begin();
 					childrenItor != children.end();
-					childrenItor++)
+					++childrenItor)
 				{
 					// Find each server node
 					XMLNode *currentNode = (*childrenItor);
@@ -232,7 +232,7 @@ bool ServerBrowserCollect::fetchFavoritesList()
 	std::set<std::string>::iterator itor;
 	for (itor = favs.begin();
 		itor != favs.end();
-		itor++)
+		++itor)
 	{
 		const char *fav = (*itor).c_str();
 
@@ -269,7 +269,7 @@ std::set<std::string> ServerBrowserCollect::getFavourites()
 	std::list<XMLNode *>::iterator childrenItor;
 	for (childrenItor = file.getRootNode()->getChildren().begin();
 		childrenItor != file.getRootNode()->getChildren().end();
-		childrenItor++)
+		++childrenItor)
 	{
 		XMLNode *currentNode = (*childrenItor);
 		result.insert(currentNode->getContent());
@@ -285,7 +285,7 @@ void ServerBrowserCollect::setFavourites(std::set<std::string> &favs)
 	std::set<std::string>::iterator itor;
 	for (itor = favs.begin();
 		itor != favs.end();
-		itor++)
+		++itor)
 	{
 		const char *fav = (*itor).c_str();
 		favouritesNode.addChild(new XMLNode("favourite", fav));

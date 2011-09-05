@@ -62,7 +62,7 @@ bool ClientLinesHandler::processMessage(
 	std::list<GLWPlanView *>::iterator itor;
 	for (itor = callbacks_.begin();
 		itor != callbacks_.end();
-		itor++)
+		++itor)
 	{
 		GLWPlanView *view = (*itor);
 		view->addRecievePoints(

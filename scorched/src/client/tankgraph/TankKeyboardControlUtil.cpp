@@ -178,7 +178,7 @@ void TankKeyboardControlUtil::nextWeapon(Tank *tank)
 	std::list<Accessory *>::iterator itor;
 	for (itor = result.begin();
 		itor != result.end();
-		itor++)
+		++itor)
 	{
 		if (tank->getAccessories().getWeapons().getCurrent() == (*itor))
 		{
@@ -203,7 +203,7 @@ void TankKeyboardControlUtil::prevWeapon(Tank *tank)
 	std::list<Accessory *>::iterator itor;
 	for (itor = result.begin();
 		itor != result.end();
-		itor++)
+		++itor)
 	{
 		if (tank->getAccessories().getWeapons().getCurrent() == (*itor))
 		{

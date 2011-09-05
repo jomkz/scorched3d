@@ -61,7 +61,6 @@ void Sun::generate()
 	LandscapeTex &tex = *ScorchedClient::instance()->
 		getLandscapeMaps().getDefinitions().getTex();
 
-	std::string file = S3D::getModFile(tex.suntexture.c_str());
 	if (!tex.suntexturemask.c_str()[0])
 	{
 		Image map = ImageFactory::loadImage(

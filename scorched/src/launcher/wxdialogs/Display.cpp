@@ -427,7 +427,7 @@ static void refreshIdentControls()
 	std::list<UniqueIdStore::Entry>::iterator itor;
 	for (itor = idStore.getIds().begin();
 		itor != idStore.getIds().end();
-		itor++, pos++)
+		++itor, pos++)
 	{
 		UniqueIdStore::Entry &entry = *itor;
 		IDC_USERID_CTRL->SetCellValue(pos, 0, wxString(entry.published.c_str(), wxConvUTF8));
@@ -481,7 +481,7 @@ static void createKeysControls(wxWindow *parent, wxSizer *topsizer)
 	std::list<std::string>::iterator itor;
 	for (itor = keys.begin();
 		itor != keys.end();
-		itor++)
+		++itor)
 	{
 		KeyboardKey *key = Keyboard::instance()->getKey((*itor).c_str());
 
@@ -537,7 +537,7 @@ static void updateModList()
 		std::list<ModInfo>::iterator itor;
 		for (itor = dirs.getDirs().begin();
 			itor != dirs.getDirs().end();
-			itor++)
+			++itor)
 		{
 			ModInfo &info = (*itor);
 			modbox->Append(wxString(info.getName(), wxConvUTF8));

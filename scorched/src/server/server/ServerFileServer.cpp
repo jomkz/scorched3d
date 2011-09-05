@@ -48,7 +48,7 @@ void ServerFileServer::simulate()
 	std::map<unsigned int, ServerDestination*>::iterator itor;
 	for (itor = destinations.begin();
 		itor != destinations.end();
-		itor++)
+		++itor)
 	{
 		unsigned int serverDestinationId = itor->first;
 		ServerDestination *destination = itor->second;
@@ -98,7 +98,7 @@ void ServerFileServer::simulate()
 	// Send bytes to each ready client
 	for (itor = destinations.begin();
 		itor != destinations.end();
-		itor++)
+		++itor)
 	{
 		ServerDestination *destination = itor->second;
 		sendToDestination(destination);

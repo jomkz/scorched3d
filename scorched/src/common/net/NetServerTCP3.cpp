@@ -239,7 +239,7 @@ void NetServerTCP3::checkClients()
 	std::map<unsigned int, NetServerTCP3Destination *>::iterator itor;
 	for (itor = destinations_.begin();
 		itor != destinations_.end();
-		itor++)
+		++itor)
 	{
 		NetServerTCP3Destination *destination = itor->second;
 		if (destination->anyFinished())
@@ -275,7 +275,6 @@ void NetServerTCP3::processMessage(NetMessage &message)
 			std::map<unsigned int, NetServerTCP3Destination *>::iterator itor =
 				destinations_.begin();
 			unsigned int destinationId = (*itor).first;
-			NetServerTCP3Destination *destination = (*itor).second;
 
 			// This is a message telling us to kick the client, do so
 			destroyDestination(message.getBuffer(), destinationId, NetMessage::KickDisconnect);

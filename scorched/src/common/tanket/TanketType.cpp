@@ -91,7 +91,7 @@ const char *TanketType::getDescription()
 		std::map<Accessory *, int>::iterator itor;
 		for (itor = accessories_.begin();
 			itor != accessories_.end();
-			itor++, count++)
+			++itor, count++)
 		{
 			Accessory *accessory = (*itor).first;
 			accessoryBuffer.append("+ ").append(accessory->getName());
@@ -105,7 +105,7 @@ const char *TanketType::getDescription()
 		std::set<Accessory *>::iterator itor;
 		for (itor = disabledAccessories_.begin();
 			itor != disabledAccessories_.end();
-			itor++, count++)
+			++itor, count++)
 		{
 			Accessory *accessory = (*itor);
 			accessoryBuffer.append("- ").append(accessory->getName());

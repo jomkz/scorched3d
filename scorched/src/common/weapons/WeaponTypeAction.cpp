@@ -35,7 +35,7 @@ WeaponTypeAction::~WeaponTypeAction()
 	std::map<std::string, Weapon *>::iterator itor;
 	for (itor = actions_.begin();
 		itor != actions_.end();
-		itor++)
+		++itor)
 	{
 		delete itor->second;
 	}
@@ -50,7 +50,7 @@ bool WeaponTypeAction::parseXML(AccessoryCreateContext &context, XMLNode *access
 	std::list<XMLNode *>::iterator itor;
 	for (itor = children.begin();
 		itor != children.end();
-		itor++)
+		++itor)
 	{
 		XMLNode *node = (*itor);
 

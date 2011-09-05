@@ -59,7 +59,7 @@ static void setValues(ServerAdminSessions::Credential &credential,
 				getChangedOptions().getOptions();
 		for (itor = options.begin();
 			itor != options.end();
-			itor++)
+			++itor)
 		{
 			OptionEntry *entry = (*itor);
 			std::map<std::string, std::string>::iterator findItor =
@@ -90,7 +90,7 @@ static void setValues(ServerAdminSessions::Credential &credential,
 				getChangedOptions().getPlayerTypeOptions();
 		for (itor = options.begin();
 			itor != options.end();
-			itor++)
+			++itor)
 		{
 			OptionEntry *entry = (*itor);
 			std::map<std::string, std::string>::iterator findItor =
@@ -165,7 +165,7 @@ bool ServerWebSettingsHandler::SettingsPlayersHandler::processRequest(
 				getChangedOptions().getPlayerTypeOptions();
 		for (itor = options.begin();
 			itor != options.end();
-			itor++)
+			++itor)
 		{
 			OptionEntry *entry = (*itor);
 			
@@ -176,7 +176,7 @@ bool ServerWebSettingsHandler::SettingsPlayersHandler::processRequest(
 			value.append("</td><td>");
 			value.append(S3D::formatStringBuffer("<select name='%s'>", entry->getName()));
 			std::list<std::string>::iterator aiitor;
-			for (aiitor = ais.begin(); aiitor != ais.end(); aiitor++)
+			for (aiitor = ais.begin(); aiitor != ais.end(); ++aiitor)
 			{
 				std::string &ai = (*aiitor);
 				value.append(S3D::formatStringBuffer("<option %s>%s</option>",
@@ -235,7 +235,7 @@ bool ServerWebSettingsHandler::SettingsLandscapeHandler::processRequest(
 		{
 			for (itor = defns.begin();
 				itor != defns.end();
-				itor++)
+				++itor)
 			{
 				LandscapeDefinitionsEntry &dfn = *itor;
 		
@@ -266,7 +266,7 @@ bool ServerWebSettingsHandler::SettingsLandscapeHandler::processRequest(
 	std::string landscapes;
 	for (itor = defns.begin();
 		itor != defns.end();
-		itor++)
+		++itor)
 	{
 		LandscapeDefinitionsEntry &dfn = *itor;
 
@@ -321,7 +321,7 @@ bool ServerWebSettingsHandler::SettingsAllHandler::processRequest(
 	std::string settings;
 	for (itor = options.begin();
 		itor != options.end();
-		itor++)
+		++itor)
 	{
 		OptionEntry *entry = (*itor);
 		if (!(entry->getData() & OptionEntry::DataDepricated))
@@ -462,7 +462,7 @@ bool ServerWebSettingsHandler::SettingsModHandler::processRequest(
 		std::list<ModInfo>::iterator itor;
 		for (itor = modDirs.getDirs().begin();
 			itor != modDirs.getDirs().end();
-			itor++)
+			++itor)
 		{
 			ModInfo &modInfo = (*itor);
 

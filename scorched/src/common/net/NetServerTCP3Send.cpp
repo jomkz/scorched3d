@@ -48,7 +48,7 @@ NetServerTCP3Send::~NetServerTCP3Send()
 	std::list<NetMessage *>::iterator itor;
 	for (itor = outgoingMessages_.begin();
 		itor != outgoingMessages_.end();
-		itor++)
+		++itor)
 	{
 		NetMessagePool::instance()->addToPool(*itor);
 	}

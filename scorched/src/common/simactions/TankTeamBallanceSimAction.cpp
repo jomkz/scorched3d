@@ -58,7 +58,7 @@ bool TankTeamBallanceSimAction::invokeAction(ScorchedContext &context)
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = playingTanks.begin();
 		 mainitor != playingTanks.end();
-		 mainitor++)
+		 ++mainitor)
 	{
 		Tank *current = (*mainitor).second;
 		if (current->getState().getTankPlaying())
@@ -98,7 +98,7 @@ bool TankTeamBallanceSimAction::invokeAction(ScorchedContext &context)
 	// Make sure everyone is using a team model
 	for (mainitor = playingTanks.begin();
 		 mainitor != playingTanks.end();
-		 mainitor++)
+		 ++mainitor)
 	{
 		Tank *current = (*mainitor).second;
 		if (current->getState().getTankPlaying() &&
@@ -143,7 +143,7 @@ void TankTeamBallanceSimAction::minMaxTeams(ScorchedContext &context,
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = playingTanks.begin();
 		 mainitor != playingTanks.end();
-		 mainitor++)
+		 ++mainitor)
 	{
 		Tank *current = (*mainitor).second;
 		if (current->getState().getTankPlaying())
@@ -209,7 +209,7 @@ void TankTeamBallanceSimAction::checkTeamsBotsVs(ScorchedContext &context)
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = playingTanks.begin();
 		 mainitor != playingTanks.end();
-		 mainitor++)
+		 ++mainitor)
 	{
 		Tank *current = (*mainitor).second;
 		if (current->getState().getTankPlaying())

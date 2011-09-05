@@ -91,7 +91,7 @@ void TankResign::simulate(fixed frameTime, bool &remove)
 			std::set<unsigned int>::iterator itor;
 			for (itor = hurtBy.begin();
 				itor != hurtBy.end();
-				itor++)
+				++itor)
 			{
 				unsigned int hurtByPlayer = (*itor);
 				Tank *hurtByTank = 

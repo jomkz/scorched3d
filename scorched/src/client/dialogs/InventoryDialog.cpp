@@ -163,10 +163,9 @@ void InventoryDialog::addPlayerWeapons()
 	std::list<Accessory *>::reverse_iterator itor;
 	for (itor = tankAccessories.rbegin();
 		itor != tankAccessories.rend();
-		itor++)
+		++itor)
 	{
 		Accessory *current = *itor;
-		int count = tank->getAccessories().getAccessoryCount(current);
 
 		GLWPanel *newPanel = (GLWPanel *)
 			sellTab_->addWidget(new GLWPanel(10.0f, (float) height, 315.0f, 20.0f, true));
@@ -218,7 +217,7 @@ Tank *InventoryDialog::getCurrentTank()
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = tanks.begin();
 			itor != tanks.end();
-			itor++)
+			++itor)
 		{
 			Tank *tank = itor->second;
 			if (tank->getDestinationId() == currentDestinationId &&

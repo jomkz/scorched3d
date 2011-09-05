@@ -113,7 +113,6 @@ void ClientConnectionAuthHandler::sendAuth()
 
 	// Check the number of players that are connecting
 	unsigned int noPlayers = 1;
-	const char *savedGame = "";
 	if (!ClientParams::instance()->getConnectedToServer() &&
 		!ClientParams::instance()->getSaveFile()[0])
 	{

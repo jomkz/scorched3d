@@ -81,7 +81,6 @@ ExplosionNukeRenderer::ExplosionNukeRenderer(Vector &position, float size,
 
 		float zPos = 0.0f;
 		float width = 0.0f;
-		float widthAdd = 0.0f;
 
 		for (int i=0; i<ExplosionNukeRenderer_STEPS; i++)
 		{

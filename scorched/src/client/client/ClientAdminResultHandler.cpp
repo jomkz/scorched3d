@@ -56,7 +56,7 @@ bool ClientAdminResultHandler::processMessage(
 		std::set<ClientAdminResultHandlerI *>::iterator itor;
 		for (itor = handlers_.begin();
 			itor != handlers_.end();
-			itor++)
+			++itor)
 		{
 			(*itor)->adminResult(message.getSid(), message.getType());
 		}

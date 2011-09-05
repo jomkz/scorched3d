@@ -345,7 +345,7 @@ void MainFrame::onMotion(wxMouseEvent &event)
 	std::list<ImageData *>::iterator itor;
 	for (itor = images_.begin();
 		itor != images_.end();
-		itor++, pos++)
+		++itor, pos++)
 	{
 		ImageData *imageData = (*itor);
 		if (mouseX_ > imageData->x &&
@@ -442,7 +442,7 @@ void MainFrame::onPaint(wxPaintEvent& event)
 	std::list<ImageData *>::iterator itor;
 	for (itor = images_.begin();
 		itor != images_.end();
-		itor++)
+		++itor)
 	{
 		ImageData *imageData = (*itor);
 
@@ -566,7 +566,7 @@ void showMainDialog()
 		if (bitmap.LoadFile(convertString(S3D::getDataFile("data/images/splash.gif")), 
 			wxBITMAP_TYPE_GIF))
 		{
-			wxSplashScreen* splash = new wxSplashScreen(bitmap,
+			new wxSplashScreen(bitmap,
 				wxSPLASH_CENTRE_ON_SCREEN | wxSPLASH_TIMEOUT,
 				9000, NULL, -1, wxDefaultPosition, wxDefaultSize,
 				wxSIMPLE_BORDER | wxSTAY_ON_TOP);

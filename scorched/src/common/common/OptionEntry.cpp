@@ -48,7 +48,7 @@ bool OptionEntryHelper::addToArgParser(std::list<OptionEntry *> &options,
 	std::list<OptionEntry *>::iterator itor;
 	for (itor = options.begin();
 		itor != options.end();
-		itor++)
+		++itor)
 	{
 		if (!(*itor)->addToArgParser(parser)) return false;
 	}
@@ -67,7 +67,7 @@ bool OptionEntryHelper::writeToBuffer(std::list<OptionEntry *> &options,
 	std::list<OptionEntry *>::iterator itor;
 	for (itor = options.begin();
 		itor != options.end();
-		itor++)
+		++itor)
 	{
 		OptionEntry *entry = *itor;
 		// Only send data that is allowed to be sent
@@ -96,7 +96,7 @@ bool OptionEntryHelper::readFromBuffer(std::list<OptionEntry *> &options,
 	std::list<OptionEntry *>::iterator itor;
 	for (itor = options.begin();
 		itor != options.end();
-		itor++)
+		++itor)
 	{
 		OptionEntry *entry = (*itor);
 		if (!(entry->getData() & OptionEntry::DataProtected) || useprotected)
@@ -144,7 +144,7 @@ bool OptionEntryHelper::writeToXML(std::list<OptionEntry *> &options,
 	std::list<OptionEntry *>::iterator itor;
 	for (itor = options.begin();
 		itor != options.end();
-		itor++)
+		++itor)
 	{
 		OptionEntry *entry = (*itor);
 
@@ -196,7 +196,7 @@ bool OptionEntryHelper::readFromXML(std::list<OptionEntry *> &options,
 	std::list<OptionEntry *>::iterator itor;
 	for (itor = options.begin();
 		itor != options.end();
-		itor++)
+		++itor)
 	{
 		OptionEntry *entry = (*itor);
 		std::string name = entry->getName();
@@ -270,7 +270,7 @@ OptionEntry *OptionEntryHelper::getEntry(
 	std::list<OptionEntry *>::iterator itor;
 	for (itor = options.begin();
 		itor != options.end();
-		itor++)
+		++itor)
 	{
 		OptionEntry *entry = (*itor);
 		if (0 == strcmp(entry->getName(), name)) return entry;

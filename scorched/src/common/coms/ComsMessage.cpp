@@ -56,7 +56,7 @@ ComsMessageType *ComsMessageType::getTypeForId(unsigned int id)
 		std::map<std::string, ComsMessageType *>::iterator itor;
 		for (itor = coms_message_map->begin();
 			itor != coms_message_map->end();
-			itor++, id++)
+			++itor, id++)
 		{
 			(*coms_message_array)[id] = itor->second;
 			itor->second->id_ = id;
@@ -82,6 +82,7 @@ ComsMessage::~ComsMessage()
 bool ComsMessage::writeTypeMessage(NetBuffer &buffer)
 {
 	unsigned char actualId = messageType_.getId();
+	DIALOG_ASSERT(actualId == messageType_.getId());
 	buffer.addToBuffer(actualId);
 	return true;
 }

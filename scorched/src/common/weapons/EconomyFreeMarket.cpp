@@ -78,7 +78,7 @@ bool EconomyFreeMarket::loadPrices()
 		std::list<XMLNode *>::iterator itor;
 		for (itor = nodes.begin();
 			itor != nodes.end();
-			itor++)
+			++itor)
 		{
 			XMLNode *node = *itor;
 			std::string name;
@@ -113,7 +113,7 @@ bool EconomyFreeMarket::savePrices()
 	std::map<unsigned int, float>::iterator itor;
 	for (itor = accessoryPrice_.begin();
 		itor != accessoryPrice_.end();
-		itor++)
+		++itor)
 	{
 		unsigned int accessoryId = itor->first;
 		float price = itor->second;
@@ -145,7 +145,7 @@ void EconomyFreeMarket::calculatePrices()
 	std::map<unsigned int, float>::iterator itor;
 	for (itor = accessoryPrice_.begin();
 		itor != accessoryPrice_.end();
-		itor++)
+		++itor)
 	{
 		unsigned int accessoryId = itor->first;
 		float price = itor->second;
@@ -179,7 +179,7 @@ void EconomyFreeMarket::accessoryBought(Tank *tank,
 		std::list<Accessory *>::iterator itor;
 		for (itor = weapons.begin();
 			itor != weapons.end();
-			itor++)
+			++itor)
 		{
 			Accessory *accessory = *itor;
 
@@ -208,7 +208,7 @@ void EconomyFreeMarket::accessoryBought(Tank *tank,
 		std::list<Accessory *>::iterator itor;
 		for (itor = possibleAccessories.begin();
 			itor != possibleAccessories.end();
-			itor++)
+			++itor)
 		{
 			Accessory *accessory = (*itor);
 

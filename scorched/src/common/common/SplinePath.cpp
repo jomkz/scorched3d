@@ -97,7 +97,7 @@ void SplinePath::draw()
 	glBegin(GL_LINE_LOOP);
 		for (itor = pathPoints_.begin();
 			itor != pathPoints_.end();
-			itor++)
+			++itor)
 		{
 			Vector &pt = (*itor).asVector();
 			glVertex3fv(pt);
@@ -109,7 +109,7 @@ void SplinePath::draw()
 	glBegin(GL_POINTS);
 		for (itor = controlPoints_.begin();
 			itor != controlPoints_.end();
-			itor++)
+			++itor)
 		{
 			Vector &pt = (*itor).asVector();
 			glVertex3fv(pt);

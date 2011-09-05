@@ -32,7 +32,7 @@ FrameLimiter::~FrameLimiter()
 
 void FrameLimiter::dontLimitFrameTime()
 {
-	unsigned int lastFrameTicks = frameTime_.getTicksDifference();
+	frameTime_.getTicksDifference();
 }
 
 void FrameLimiter::limitFrameTime()

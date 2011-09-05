@@ -72,7 +72,7 @@ ServerAuthHandlerPrefered::UserEntry *ServerAuthHandlerPrefered::getUserByName(c
 	std::list<UserEntry>::iterator itor;
 	for (itor = entries_.begin();
 		itor != entries_.end();
-		itor++)
+		++itor)
 	{
 		UserEntry &entry = *itor;
 		if (0 == strcmp(entry.name.c_str(), name))
@@ -90,7 +90,7 @@ ServerAuthHandlerPrefered::UserEntry *ServerAuthHandlerPrefered::getUserById(con
 	std::list<UserEntry>::iterator itor;
 	for (itor = entries_.begin();
 		itor != entries_.end();
-		itor++)
+		++itor)
 	{
 		UserEntry &entry = *itor;
 		if (0 == strcmp(entry.uniqueid.c_str(), uniqueId))
@@ -128,7 +128,7 @@ bool ServerAuthHandlerPrefered::load()
 	std::list<XMLNode *> &children = file.getRootNode()->getChildren();
 	for (childrenItor = children.begin();
 		 childrenItor != children.end();
-		childrenItor++)
+		++childrenItor)
 	{
 		XMLNode *currentNode = (*childrenItor);
 

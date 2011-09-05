@@ -75,7 +75,7 @@ void ClientWindowSetup::addStateWindows(GLWWindowSkinManager *skinManager,
 	std::list<GLWWindowSkin *>::iterator itor;
 	for (itor = allStateWindows.begin();
 		itor != allStateWindows.end();
-		itor++)
+		++itor)
 	{
 		GLWWindowSkin *window = *itor;
 		KeyboardKey *key = 0;

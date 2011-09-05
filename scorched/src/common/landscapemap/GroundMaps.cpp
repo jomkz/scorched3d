@@ -174,7 +174,7 @@ void GroundMaps::generateObjects(
 	std::map<unsigned int, Target *>::iterator itor;
 	for (itor = targets.begin();
 		itor != targets.end();
-		itor++)
+		++itor)
 	{
 		unsigned int playerId = (*itor).first;
 		Target *target = (*itor).second;
@@ -200,7 +200,7 @@ void GroundMaps::generateObjects(
 		std::vector<LandscapeInclude *>::iterator itor;
 		for (itor = defn->texDefn.includes.begin();
 			itor != defn->texDefn.includes.end();
-			itor++)
+			++itor)
 		{
 			LandscapeInclude *place = (*itor);
 			FileRandomGenerator objectsGenerator;
@@ -214,7 +214,7 @@ void GroundMaps::generateObjects(
 		std::vector<LandscapeInclude *>::iterator itor;
 		for (itor = tex->texDefn.includes.begin();
 			itor != tex->texDefn.includes.end();
-			itor++)
+			++itor)
 		{
 			LandscapeInclude *place = (*itor);
 			FileRandomGenerator objectsGenerator;
@@ -231,7 +231,7 @@ void GroundMaps::generateObjects(
 		std::list<PlacementShadowDefinition::Entry>::iterator itor;
 		for (itor = shadows.begin();
 			itor != shadows.end();
-			itor++)
+			++itor)
 		{
 			PlacementShadowDefinition::Entry &entry = (*itor);
 			entry.definition_->updateLandscapeHeight(

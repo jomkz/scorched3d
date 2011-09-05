@@ -291,7 +291,7 @@ void DisplayFrame::onKeyButton(wxCommandEvent &event)
 	std::list<wxButton *>::iterator itor;
 	for (itor = keyboardKeyList.begin();
 		itor != keyboardKeyList.end();
-		itor++)
+		++itor)
 	{
 		wxButton *button = (*itor);
 		KeyButtonData *data = (KeyButtonData *) button->GetRefData();
@@ -328,7 +328,7 @@ void DisplayFrame::refreshKeysControls()
 	std::list<wxButton *>::iterator buttonitor;
 	for (buttonitor = keyboardKeyList.begin();
 		buttonitor != keyboardKeyList.end();
-		buttonitor++)
+		++buttonitor)
 	{
 		wxButton *button = (*buttonitor);			
 

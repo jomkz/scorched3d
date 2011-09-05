@@ -46,7 +46,7 @@ MissileMesh::MissileMesh(ModelID &missile) :
 	std::vector<Mesh *>::iterator itor;
 	for (itor = model_->getModel()->getMeshes().begin();
 		itor != model_->getModel()->getMeshes().end();
-		itor++)
+		++itor)
 	{
 		Mesh *mesh = (*itor);
 		const char *name = mesh->getName();
@@ -96,7 +96,7 @@ void MissileMesh::draw(Vector &position, Vector &direction, int flareType, float
 	std::list<FlareInfo>::iterator flareItor;
 	for (flareItor =  flares_.begin();
 		 flareItor != flares_.end();
-		 flareItor++)
+		 ++flareItor)
 	{
 		FlareInfo info = (*flareItor);
 

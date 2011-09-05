@@ -88,7 +88,7 @@ void RulesDialog::addMOTD(const char *text)
 	std::list<OptionEntry *>::iterator levelitor;
 	for (mainitor = mainoptions.begin(), levelitor = leveloptions.begin();
 		mainitor != mainoptions.end() && levelitor != leveloptions.end();
-		mainitor++, levelitor++)
+		++mainitor, ++levelitor)
 	{
 		OptionEntry *mainentry = (*mainitor);
 		OptionEntry *levelentry = (*levelitor);
@@ -145,7 +145,6 @@ void RulesDialog::draw()
 
 void RulesDialog::drawRules()
 {
-	OptionsTransient &optionsT = ScorchedClient::instance()->getOptionsTransient();
 	OptionsScorched &options = ScorchedClient::instance()->getOptionsGame();
 
 	GLState newState(GLState::TEXTURE_OFF | GLState::DEPTH_OFF);

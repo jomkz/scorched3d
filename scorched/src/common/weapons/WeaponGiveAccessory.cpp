@@ -82,7 +82,7 @@ void WeaponGiveAccessory::weaponCallback(
 	std::vector<Accessory *>::iterator itor;
 	for (itor = giveAccessories_.begin();
 		itor != giveAccessories_.end();
-		itor++)
+		++itor)
 	{
 		Accessory *accessory = (*itor);
 

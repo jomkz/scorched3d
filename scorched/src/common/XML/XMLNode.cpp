@@ -29,7 +29,6 @@ void XMLNode::removeSpecialChars(const std::string &content, std::string &result
 	result = "";
 	for (char *c=(char *) content.c_str(); *c; c++)
 	{
-		char newchar = *c;
 		if (*c == '\n') result += "&#10;";
 		else if (*c < 32 || *c > 126) result += " ";
 		else if (*c == '>') result += "&gt;";
@@ -255,7 +254,7 @@ void XMLNode::addNodeToFile(FileLines &lines, int spacing)
 		std::list<XMLNode *>::iterator pitor;
 		for (pitor = parameters_.begin();
 			pitor != parameters_.end();
-			pitor++)
+			++pitor)
 		{
 			XMLNode *node = (*pitor);
 			DIALOG_ASSERT(node->type_ == XMLParameterType);
@@ -287,7 +286,7 @@ void XMLNode::addNodeToFile(FileLines &lines, int spacing)
 			std::list<XMLNode *>::iterator itor;
 			for (itor = children_.begin();
 				itor != children_.end();
-				itor++)
+				++itor)
 			{
 				XMLNode *node = (*itor);
 				node->addNodeToFile(lines, spacing + 1);
@@ -311,7 +310,7 @@ bool XMLNode::failChildren()
 		std::list<XMLNode *>::iterator itor;
 		for (itor = getChildren().begin();
 			itor != getChildren().end();
-			itor++)
+			++itor)
 		{
 			XMLNode	*node = (*itor);
 			if (node->getType() == XMLNodeType)
@@ -375,7 +374,7 @@ bool XMLNode::getNamedChild(const char *name, XMLNode *&value,
 	std::list<XMLNode *>::iterator itor;
 	for (itor = children_.begin();
 		itor != children_.end();
-		itor++)
+		++itor)
 	{
 		XMLNode *node = (*itor);
 		if (strcmp(name, node->getName()) == 0) 
@@ -403,7 +402,7 @@ bool XMLNode::getNamedParameter(const char *name, XMLNode *&value,
 	std::list<XMLNode *>::iterator itor;
 	for (itor = parameters_.begin();
 		itor != parameters_.end();
-		itor++)
+		++itor)
 	{
 		XMLNode *node = (*itor);
 		if (strcmp(name, node->getName()) == 0)
@@ -606,7 +605,7 @@ const char *XMLNode::getContent()
 		std::list<XMLNode *>::iterator itor;
 		for (itor = getChildren().begin();
 			itor != getChildren().end();
-			itor++)
+			++itor)
 		{
 			XMLNode *node = (*itor);
 			if (node->getType() == XMLContentType)

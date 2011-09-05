@@ -50,7 +50,7 @@ void TankLib::getTargetsSortedByDistance(FixedVector &position,
 	std::list<Target *>::iterator itor;
 	for (itor = srcTargets.begin();
 		itor != srcTargets.end();
-		itor++)
+		++itor)
 	{
 		Target *targetTank = (*itor);
 		if (targetTank->getAlive())
@@ -71,8 +71,8 @@ void TankLib::getTargetsSortedByDistance(FixedVector &position,
 	while (!tankDistList.empty())
 	{
 		std::list<std::pair<fixed, Target *> >::iterator removeItor = tankDistList.begin();
-		std::list<std::pair<fixed, Target *> >::iterator itor = tankDistList.begin(); itor++;
-		for (;itor != tankDistList.end(); itor++)
+		std::list<std::pair<fixed, Target *> >::iterator itor = tankDistList.begin(); ++itor;
+		for (;itor != tankDistList.end(); ++itor)
 		{
 			if ((*itor).first <  (*removeItor).first) 
 			{

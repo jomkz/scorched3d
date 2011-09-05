@@ -72,7 +72,7 @@ bool PlayMovesSimAction::invokeAction(ScorchedContext &context)
 	std::list<ComsPlayedMoveMessage *>::iterator itor;
 	for (itor = messages_.begin();
 		itor != messages_.end();
-		itor++)
+		++itor)
 	{
 		ComsPlayedMoveMessage *message = *itor;
 		Tank *tank = context.getTankContainer().getTankById(message->getPlayerId());
@@ -260,7 +260,7 @@ bool PlayMovesSimAction::writeMessage(NetBuffer &buffer)
 	std::list<ComsPlayedMoveMessage *>::iterator itor;
 	for (itor = messages_.begin();
 		itor != messages_.end();
-		itor++)
+		++itor)
 	{
 		ComsPlayedMoveMessage *message = *itor;
 		message->writeMessage(buffer);

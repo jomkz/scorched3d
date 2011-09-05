@@ -73,7 +73,7 @@ void Sound::destroy()
 			SourceList::iterator itor;
 			for (itor = totalSources_.begin();
 				itor != totalSources_.end();
-				itor++)
+				++itor)
 			{
 				SoundSource *source = (*itor);
 				delete source;
@@ -87,7 +87,7 @@ void Sound::destroy()
 			BufferMap::iterator itor;
 			for (itor = bufferMap_.begin();
 				itor != bufferMap_.end();
-				itor++)
+				++itor)
 			{
 				SoundBuffer *buffer = (*itor).second;
 				delete buffer;
@@ -185,7 +185,7 @@ void Sound::showSoundBuffers()
 	PlayingSourceList::iterator itor;
 	for (itor = playingSources_.begin();
 		itor != playingSources_.end();
-		itor++, i++)
+		++itor, i++)
 	{
 		PlayingSoundSource *source = (*itor);
 		if (source->getVirtualSource())
@@ -212,7 +212,7 @@ void Sound::simulate(const unsigned state, float frameTime)
 	PlayingSourceList::iterator playingitor;
 	for (playingitor = playingSources_.begin();
 		playingitor != playingSources_.end();
-		playingitor++)
+		++playingitor)
 	{
 		SoundSource *source = (*playingitor)->getActualSource();
 		if (source && source->getPlaying())
@@ -265,7 +265,7 @@ void Sound::updateSources()
 	PlayingSourceList::iterator fitor;
 	for (fitor = playingSources_.begin();
 		fitor != playingSources_.end();
-		fitor++)
+		++fitor)
 	{
 		PlayingSoundSource *source = (*fitor);
 		if (source->getVirtualSource())
@@ -284,7 +284,7 @@ void Sound::updateSources()
 	PlayingSourceList::reverse_iterator ritor;
 	for (ritor = playingSources_.rbegin();
 		ritor != playingSources_.rend();
-		ritor++, count++)
+		++ritor, count++)
 	{
 		PlayingSoundSource *source = (*ritor);
 
@@ -376,7 +376,7 @@ void Sound::updateSources()
 		VirtualSourceList::iterator manitor;
 		for (manitor = managedSources_.begin();
 			manitor != managedSources_.end();
-			manitor++)
+			++manitor)
 		{
 			VirtualSoundSource *source = (*manitor);
 			if (!source->getPlaying())

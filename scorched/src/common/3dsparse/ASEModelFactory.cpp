@@ -47,7 +47,7 @@ Model *ASEModelFactory::createModel(const char *fileName,
 		std::vector<Mesh *>::iterator itor;
 		for (itor = model_->getMeshes().begin();
 			itor != model_->getMeshes().end();
-			itor++)
+			++itor)
 		{
 			Mesh *mesh = *itor;
 			mesh->setTextureName(texName);
@@ -129,13 +129,13 @@ void ASEModelFactory::calculateTexCoords()
 	std::vector<Mesh *>::iterator itor;
 	for (itor = model_->getMeshes().begin();
 		itor != model_->getMeshes().end();
-		itor++)
+		++itor)
 	{
 		Mesh *mesh = *itor;
 		std::vector<Face*>::iterator fitor;
 		for (fitor = mesh->getFaces().begin();
 			fitor != mesh->getFaces().end();
-			fitor++)
+			++fitor)
 		{
 			Face &face = *(*fitor);
 

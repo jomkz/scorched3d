@@ -49,7 +49,7 @@ bool ComsSimulateMessage::writeMessage(NetBuffer &buffer)
 	std::list<SimAction *>::iterator itor;
 	for (itor = actions_.begin();
 		itor != actions_.end();
-		itor++)
+		++itor)
 	{
 		SimAction *action = *itor;
 		buffer.addToBuffer(action->getClassName());

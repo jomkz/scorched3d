@@ -57,7 +57,7 @@ unsigned int OptionsTransient::getLeastUsedTeam(TankContainer &container)
 		container.getAllTanks();
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = (*itor).second;
 		if (tank->getTeam() > 0 &&

@@ -74,7 +74,7 @@ Tank *TankContainer::getTankByName(const LangString &name)
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = tanks_.begin();
 		mainitor != tanks_.end();
-		mainitor++)
+		++mainitor)
 	{
 		Tank *tank = (*mainitor).second;
 		if (tank->getTargetName() == name) return tank;
@@ -105,7 +105,7 @@ int TankContainer::teamCount()
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = tanks_.begin();
 		mainitor != tanks_.end();
-		mainitor++)
+		++mainitor)
 	{
 		Tank *current = (*mainitor).second;
 		if (current->getState().getTankPlaying() &&
@@ -126,7 +126,7 @@ int TankContainer::aliveCount()
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = tanks_.begin();
 		mainitor != tanks_.end();
-		mainitor++)
+		++mainitor)
 	{
 		Tank *current = (*mainitor).second;
 		if (current->getState().getTankPlaying() &&
@@ -144,7 +144,7 @@ int TankContainer::getNoOfNonSpectatorTanks()
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = tanks_.begin();
 		mainitor != tanks_.end();
-		mainitor++)
+		++mainitor)
 	{
 		Tank *current = (*mainitor).second;
 		if (current->getState().getTankPlaying()) count++;

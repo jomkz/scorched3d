@@ -37,7 +37,7 @@ void TargetDamageCalc::explosion(ScorchedContext &context,
 	std::map<unsigned int, Target *>::iterator itor;
 	for (itor = collisionTargets.begin();
 		itor != collisionTargets.end();
-		itor++)
+		++itor)
 	{
 		Target *current = (*itor).second;
 		if (!current->getAlive()) continue;

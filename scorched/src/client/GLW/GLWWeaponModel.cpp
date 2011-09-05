@@ -68,7 +68,6 @@ void GLWWeaponModel::draw()
 		current->getRenderer();
 	if (!renderer) return;
 
-	GLWTankTips *tankTips = renderer->getTips();
 	Accessory *weapon = current->getAccessories().getWeapons().getCurrent();
 	if (!weapon) return;
 

@@ -44,7 +44,7 @@ void ActionController::clear(bool warn)
 	std::list<Action *>::iterator newItor;
 	for (newItor = newActions_.begin();
 		newItor != newActions_.end();
-		newItor++)
+		++newItor)
 	{
 		Action *act = *newItor;
 		if (warn)
@@ -81,7 +81,7 @@ bool ActionController::allEvents()
 	std::list<Action *>::iterator newItor;
 	for (newItor = newActions_.begin();
 		newItor != newActions_.end();
-		newItor++)
+		++newItor)
 	{
 		Action *act = *newItor;
 		if (act->getPlayerId() != 0) return false;
@@ -116,7 +116,7 @@ void ActionController::stopActionProfiling()
 	std::map<std::string, int>::iterator itor;
 	for (itor =  actionProfile_.begin();
 		itor != actionProfile_.end();
-		itor++)
+		++itor)
 	{
 		const std::string &name = (*itor).first;
 		int count = (*itor).second;

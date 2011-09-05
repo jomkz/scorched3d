@@ -86,7 +86,7 @@ bool ServerStateEnoughPlayers::enoughPlayers()
 		std::map<unsigned int, Tank *>::iterator mainitor;
 		for (mainitor = playingTanks.begin();
 			 mainitor != playingTanks.end();
-			 mainitor++)
+			 ++mainitor)
 		{
 			Tank *current = (*mainitor).second;
 			if (current->getState().getTankPlaying() &&
@@ -140,7 +140,7 @@ int ServerStateEnoughPlayers::countBots(ScorchedContext &context)
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = playingTanks.begin();
 		mainitor != playingTanks.end();
-		mainitor++)
+		++mainitor)
 	{
 		Tank *current = (*mainitor).second;
 		if ((current->getDestinationId() != 0 && current->getState().getTankPlaying()) ||
@@ -163,7 +163,7 @@ void ServerStateEnoughPlayers::removeBots(int requiredPlayers, int noPlayers)
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = playingTanks.begin();
 		mainitor != playingTanks.end();
-		mainitor++)
+		++mainitor)
 	{
 		Tank *current = (*mainitor).second;
 		if (current->getDestinationId() == 0 &&
@@ -180,7 +180,7 @@ void ServerStateEnoughPlayers::removeBots(int requiredPlayers, int noPlayers)
 	std::multimap<unsigned int, unsigned int>::reverse_iterator aiItor;
 	for (aiItor = ais_.rbegin(); 
 		noPlayers > requiredPlayers && aiItor != ais_.rend(); 
-		aiItor++, noPlayers--)
+		++aiItor, noPlayers--)
 	{
 		std::pair<unsigned int, unsigned int> item = *aiItor;
 		ScorchedServer::instance()->getServerMessageHandler().destroyPlayer(
@@ -199,7 +199,7 @@ void ServerStateEnoughPlayers::addBots(int requiredPlayers, int noPlayers)
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = playingTanks.begin();
 		mainitor != playingTanks.end();
-		mainitor++)
+		++mainitor)
 	{
 		Tank *current = (*mainitor).second;
 		if (current->getDestinationId() == 0 &&

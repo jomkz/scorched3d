@@ -155,7 +155,7 @@ CameraPositionAction *CameraPositionActionRegistry::getCurrentBest()
 		std::set<CameraPositionAction *>::iterator itor;
 		for (itor = actions_.begin();
 			itor != actions_.end();
-			itor++)
+			++itor)
 		{
 			CameraPositionAction *action = (*itor);
 			

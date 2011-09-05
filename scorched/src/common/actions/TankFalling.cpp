@@ -193,7 +193,7 @@ void TankFalling::collision(PhysicsParticleObject &position,
 		std::map<unsigned int, Target *>::iterator itor;
 		for (itor = collisionTargets.begin();
 			itor != collisionTargets.end();
-			itor++)
+			++itor)
 		{
 			Target *collisionTarget = (*itor).second;
 

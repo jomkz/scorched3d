@@ -116,7 +116,7 @@ void WeaponAimedOver::fireWeapon(ScorchedContext &context,
 		std::map<unsigned int, Tanket *>::iterator itor;
 		for (itor = allTankets.begin();
 			itor != allTankets.end();
-			itor++)
+			++itor)
 		{
 			targets.push_back(itor->second);
 		}
@@ -131,7 +131,7 @@ void WeaponAimedOver::fireWeapon(ScorchedContext &context,
 			std::map<unsigned int, TargetGroup *>::iterator itor;
 			for (itor = objects.begin();
 				itor != objects.end();
-				itor++)
+				++itor)
 			{
 				targets.push_back(itor->second->getTarget());
 			}			
@@ -149,7 +149,7 @@ void WeaponAimedOver::fireWeapon(ScorchedContext &context,
 	std::list<std::pair<fixed, Target *> >::iterator itor;
 	for (itor = sortedTanks.begin();
 		itor != sortedTanks.end();
-		itor++)
+		++itor)
 	{
 		totalDist += (*itor).first;
 	}
@@ -164,7 +164,7 @@ void WeaponAimedOver::fireWeapon(ScorchedContext &context,
 	{
 		for (itor = sortedTanks.begin();
 			itor != sortedTanks.end();
-			itor++)
+			++itor)
 		{
 			(*itor).first = totalDist - (*itor).first;
 			maxDist += (*itor).first;
@@ -187,7 +187,7 @@ void WeaponAimedOver::fireWeapon(ScorchedContext &context,
 		fixed distC = 0;
 		for (itor = sortedTanks.begin();
 			itor != sortedTanks.end();
-			itor++)
+			++itor)
 		{
 			distC += (*itor).first;
 			if (dist < distC)

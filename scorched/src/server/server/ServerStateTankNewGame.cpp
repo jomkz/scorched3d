@@ -40,7 +40,7 @@ void ServerStateTankNewGame::enterState()
 	std::map<unsigned int, Tank*>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = itor->second;
 		TankNewGameSimAction *tankNewGameAction = 

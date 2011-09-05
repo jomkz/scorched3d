@@ -76,7 +76,7 @@ bool LandscapeDefinitions::readLandscapeDefinitionsEntry(LandscapeDefinitionsEnt
 	std::vector<std::string> &defns = entry.defns;
 	for (itor2 = defns.begin();
 		itor2 != defns.end();
-		itor2++)
+		++itor2)
 	{
 		const char *landscapeDefnFile = (*itor2).c_str();
 		LandscapeDefn *landscapeDefn = getDefn(landscapeDefnFile, true);
@@ -86,7 +86,7 @@ bool LandscapeDefinitions::readLandscapeDefinitionsEntry(LandscapeDefinitionsEnt
 	std::vector<std::string> &texs = entry.texs;
 	for (itor2 = texs.begin();
 		itor2 != texs.end();
-		itor2++)
+		++itor2)
 	{
 		const char *landscapeTexFile = (*itor2).c_str();
 		LandscapeTex *landscapeTex = getTex(landscapeTexFile, true);
@@ -107,7 +107,7 @@ bool LandscapeDefinitions::readLandscapeDefinitions()
 	std::list<LandscapeDefinitionsEntry>::iterator itor;
 	for (itor = entries_.begin();
 		itor != entries_.end();
-		itor++)
+		++itor)
 	{
 		LandscapeDefinitionsEntry &entry = (*itor);
 		if (!readLandscapeDefinitionsEntry(entry)) return false;
@@ -142,7 +142,7 @@ const std::string LandscapeDefinitions::getLeastUsedFile(
 	std::vector<std::string>::iterator itor;
 	for (itor = files.begin();
 		itor != files.end();
-		itor++)
+		++itor)
 	{
 		std::string &file = (*itor);
 
@@ -178,7 +178,7 @@ void LandscapeDefinitions::checkEnabled(OptionsScorched &context)
 	std::list<LandscapeDefinitionsEntry>::iterator itor;
 	for (itor = entries_.begin();
 		itor != entries_.end();
-		itor++)
+		++itor)
 	{
 		LandscapeDefinitionsEntry &result = *itor;
 		if (landscapeEnabled(context.getMainOptions(), result.name.c_str()))
@@ -218,7 +218,7 @@ LandscapeDefinition LandscapeDefinitions::getRandomLandscapeDefn(
 	std::list<LandscapeDefinitionsEntry>::iterator itor;
 	for (itor = entries_.begin();
 		itor != entries_.end();
-		itor++)
+		++itor)
 	{
 		LandscapeDefinitionsEntry &current = *itor;
 		if (landscapeEnabled(context.getMainOptions(), current.name.c_str()))
@@ -229,7 +229,7 @@ LandscapeDefinition LandscapeDefinitions::getRandomLandscapeDefn(
 			std::vector<std::string>::iterator defnitor;
 			for (defnitor = current.defns.begin();
 				defnitor != current.defns.end();
-				defnitor++)
+				++defnitor)
 			{
 				LandscapeDefn *defn = getDefn(defnitor->c_str());
 				if (players >= defn->getMinPlayers() && players <= defn->getMaxPlayers())
@@ -289,7 +289,7 @@ LandscapeDefinitionsEntry *LandscapeDefinitions::getRandomLandscapeDefnEntry(
 		std::list<LandscapeDefinitionsEntry*>::iterator passedItor;
 		for (passedItor = passedLandscapes.begin();
 			passedItor != passedLandscapes.end();
-			passedItor++)
+			++passedItor)
 		{
 			LandscapeDefinitionsEntry *current = *passedItor;
 			if (next) 
@@ -307,7 +307,7 @@ LandscapeDefinitionsEntry *LandscapeDefinitions::getRandomLandscapeDefnEntry(
 		std::list<LandscapeDefinitionsEntry*>::iterator passedItor;
 		for (passedItor = passedLandscapes.begin();
 			passedItor != passedLandscapes.end();
-			passedItor++)
+			++passedItor)
 		{
 			LandscapeDefinitionsEntry *current = *passedItor;
 			totalWeight += current->weight;
@@ -318,7 +318,7 @@ LandscapeDefinitionsEntry *LandscapeDefinitions::getRandomLandscapeDefnEntry(
 		float soFar = 0.0f;
 		for (passedItor = passedLandscapes.begin();
 			passedItor != passedLandscapes.end();
-			passedItor++)
+			++passedItor)
 		{
 			LandscapeDefinitionsEntry *current = *passedItor;
 			soFar += current->weight;

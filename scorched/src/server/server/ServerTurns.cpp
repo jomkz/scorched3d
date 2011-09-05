@@ -51,7 +51,7 @@ ServerTurns::~ServerTurns()
 		std::map<unsigned int, PlayingPlayer*>::iterator itor;
 		for (itor = playingPlayers_.begin();
 			itor != playingPlayers_.end();
-			itor++)
+			++itor)
 		{
 			delete itor->second;
 		}
@@ -61,7 +61,7 @@ ServerTurns::~ServerTurns()
 		std::map<unsigned int, WaitingPlayer*>::iterator itor;
 		for (itor = waitingPlayers_.begin();
 			itor != waitingPlayers_.end();
-			itor++)
+			++itor)
 		{
 			delete itor->second;
 		}
@@ -75,7 +75,7 @@ void ServerTurns::enterState()
 	std::map<unsigned int, PlayingPlayer*>::iterator playingItor;
 	for (playingItor = playingPlayers_.begin();
 		playingItor != playingPlayers_.end();
-		playingItor++)
+		++playingItor)
 	{
 		delete playingItor->second;
 	}
@@ -83,7 +83,7 @@ void ServerTurns::enterState()
 	std::map<unsigned int, WaitingPlayer*>::iterator waitingItor;
 	for (waitingItor = waitingPlayers_.begin();
 		waitingItor != waitingPlayers_.end();
-		waitingItor++)
+		++waitingItor)
 	{
 		delete waitingItor->second;
 	}
@@ -121,7 +121,7 @@ void ServerTurns::simulate(fixed frameTime)
 	std::map<unsigned int, PlayingPlayer*>::iterator playingItor;
 	for (playingItor = playingPlayers_.begin();
 		playingItor != playingPlayers_.end();
-		playingItor++)
+		++playingItor)
 	{
 		unsigned int playerId = playingItor->first;
 		PlayingPlayer *playing = playingItor->second;
@@ -133,7 +133,7 @@ void ServerTurns::simulate(fixed frameTime)
 	}
 	for (processPlayersItor = processPlayers.begin();
 		processPlayersItor != processPlayers.end();
-		processPlayersItor++)
+		++processPlayersItor)
 	{
 		unsigned int playerId = *processPlayersItor;
 		PlayingPlayer *playing = playingPlayers_[playerId];
@@ -149,7 +149,7 @@ void ServerTurns::simulate(fixed frameTime)
 	std::map<unsigned int, WaitingPlayer*>::iterator waitingItor;
 	for (waitingItor = waitingPlayers_.begin();
 		waitingItor != waitingPlayers_.end();
-		waitingItor++)
+		++waitingItor)
 	{
 		unsigned int playerId = waitingItor->first;
 		WaitingPlayer *waiting = waitingItor->second;
@@ -159,7 +159,7 @@ void ServerTurns::simulate(fixed frameTime)
 	}
 	for (processPlayersItor = processPlayers.begin();
 		processPlayersItor != processPlayers.end();
-		processPlayersItor++)
+		++processPlayersItor)
 	{
 		unsigned int playerId = *processPlayersItor;
 		WaitingPlayer *waiting = waitingPlayers_[playerId];
@@ -271,7 +271,7 @@ bool ServerTurns::showScore()
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = (*itor).second;
 		if (tank->getScore().getWonGame())
@@ -370,7 +370,7 @@ void ServerTurns::playShots(std::list<ComsPlayedMoveMessage *> messages, unsigne
 	std::list<ComsPlayedMoveMessage *>::iterator itor;
 	for (itor = messages.begin();
 		itor != messages.end();
-		itor++)
+		++itor)
 	{
 		movesAction->addMove(*itor);
 	}

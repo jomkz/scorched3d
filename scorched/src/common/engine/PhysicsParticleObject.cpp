@@ -657,7 +657,7 @@ bool PhysicsParticleObject::getTargetBounceCollision(CollisionInfo &collision, T
 	std::map<unsigned int, Target *>::iterator itor;
 	for (itor = collisionTargets.begin();
 		itor != collisionTargets.end();
-		itor++)
+		++itor)
 	{
 		Target *target = (*itor).second;
 		if (target->getLife().collision(position_) ||

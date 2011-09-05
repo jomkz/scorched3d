@@ -116,7 +116,7 @@ void ScoreDialog::calculateScores()
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = (*itor).second;
 		lastMoneyValue_ += tank->getScore().getMoney();
@@ -168,7 +168,7 @@ void ScoreDialog::draw()
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = playingTanks.begin();
 			itor != playingTanks.end();
-			itor ++)
+			++itor)
 		{
 			if (itor->second->getState().getState() ==
 				TankState::sBuying)
@@ -400,7 +400,7 @@ void ScoreDialog::draw()
 			std::list<unsigned int>::iterator itor;
 			for (itor = sortedTanks_.begin();
 				itor != sortedTanks_.end();
-				itor ++)
+				++itor)
 			{
 				unsigned int playerId = (*itor);
 				Tank *current = ScorchedClient::instance()->getTankContainer().getTankById(playerId);
@@ -432,7 +432,7 @@ void ScoreDialog::draw()
 		std::list<unsigned int>::iterator itor;
 		for (itor = sortedTanks_.begin();
 			itor != sortedTanks_.end();
-			itor ++, rank++)
+			++itor, rank++)
 		{
 			unsigned int playerId = (*itor);
 			Tank *current = ScorchedClient::instance()->getTankContainer().getTankById(playerId);
@@ -452,7 +452,7 @@ void ScoreDialog::draw()
 	std::list<unsigned int>::iterator itor;
 	for (itor = sortedTanks_.begin();
 		itor != sortedTanks_.end();
-		itor ++)
+		++itor)
 	{
 		unsigned int playerId = (*itor);
 		Tank *current = ScorchedClient::instance()->

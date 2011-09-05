@@ -159,7 +159,7 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	int i=0;
 	for (messageItor = simulateMessages.begin();
 		messageItor != simulateMessages.end();
-		messageItor++, i++)
+		++messageItor, i++)
 	{
 		ProgressDialogSync::noevents_instance()->
 			setNewPercentage(100.0f * float(i) / float(simulateMessages.size()));
@@ -236,7 +236,7 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	std::map<unsigned int, Tank *>::iterator tankItor;
 	for (tankItor = ScorchedClient::instance()->getTankContainer().getAllTanks().begin();
 		tankItor != ScorchedClient::instance()->getTankContainer().getAllTanks().end();
-		tankItor++)
+		++tankItor)
 	{
 		Tank *current = (*tankItor).second;
 		current->getRenderer()->moved();

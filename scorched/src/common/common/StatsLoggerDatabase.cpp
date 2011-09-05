@@ -139,7 +139,7 @@ void StatsLoggerDatabase::createLogger()
 		std::list<StatsLoggerDatabase::RowResult>::iterator itor;
 		for (itor = prefixRows.begin();
 			itor != prefixRows.end();
-			itor++)
+			++itor)
 		{
 			StatsLoggerDatabase::RowResult &rowResult = (*itor);
 			prefixid_ = atoi(rowResult.columns[0].c_str());
@@ -165,7 +165,7 @@ void StatsLoggerDatabase::createLogger()
 		std::list<StatsLoggerDatabase::RowResult>::iterator itor;
 		for (itor = serverIdRows.begin();
 			itor != serverIdRows.end();
-			itor++)
+			++itor)
 		{
 			StatsLoggerDatabase::RowResult &rowResult = (*itor);
 			serverid_ = atoi(rowResult.columns[0].c_str());
@@ -193,7 +193,7 @@ void StatsLoggerDatabase::createLogger()
 		std::list<StatsLoggerDatabase::RowResult>::iterator itor;
 		for (itor = seriesIdRows.begin();
 			itor != seriesIdRows.end();
-			itor++)
+			++itor)
 		{
 			StatsLoggerDatabase::RowResult &rowResult = (*itor);
 			seriesid_ = atoi(rowResult.columns[0].c_str());
@@ -221,7 +221,7 @@ void StatsLoggerDatabase::createLogger()
 	std::list<Accessory *>::iterator itor;	
 	for (itor = weapons.begin();
 		itor != weapons.end();
-		itor++)
+		++itor)
 	{
 		Accessory *accessory = *itor;
 
@@ -237,7 +237,7 @@ void StatsLoggerDatabase::createLogger()
 			std::list<StatsLoggerDatabase::RowResult>::iterator itor;
 			for (itor = weaponIdRows.begin();
 				itor != weaponIdRows.end();
-				itor++)
+				++itor)
 			{
 				StatsLoggerDatabase::RowResult &rowResult = (*itor);
 				weaponId = atoi(rowResult.columns[0].c_str());
@@ -303,7 +303,7 @@ void StatsLoggerDatabase::addIpAliases(int playerId,
 		std::list<StatsLoggerDatabase::RowResult>::iterator itor;
 		for (itor = ipaddressesRows.begin();
 			itor != ipaddressesRows.end();
-			itor++)
+			++itor)
 		{
 			StatsLoggerDatabase::RowResult &rowResult = (*itor);
 			ipaddresses.push_back(rowResult.columns[0]);
@@ -313,7 +313,7 @@ void StatsLoggerDatabase::addIpAliases(int playerId,
 	std::list<std::string>::iterator itor;
 	for (itor = ipaddresses.begin();
 		itor != ipaddresses.end();
-		itor++)
+		++itor)
 	{
 		const char *ipaddress = (*itor).c_str();
 		std::list<int> newplayers;
@@ -326,7 +326,7 @@ void StatsLoggerDatabase::addIpAliases(int playerId,
 			std::list<StatsLoggerDatabase::RowResult>::iterator itor;
 			for (itor = ipaddressRows.begin();
 				itor != ipaddressRows.end();
-				itor++)
+				++itor)
 			{
 				StatsLoggerDatabase::RowResult &rowResult = (*itor);
 				int newplayerid = atoi(rowResult.columns[0].c_str());
@@ -340,7 +340,7 @@ void StatsLoggerDatabase::addIpAliases(int playerId,
 		std::list<int>::iterator itor2;
 		for (itor2 = newplayers.begin();
 			itor2 != newplayers.end();
-			itor2++)
+			++itor2)
 		{
 			addIpAliases((*itor2), currentPlayers, results);
 		}
@@ -383,7 +383,7 @@ std::string StatsLoggerDatabase::getTopRanks()
 		std::list<StatsLoggerDatabase::RowResult>::iterator itor;
 		for (itor = rankRows.begin();
 			itor != rankRows.end();
-			itor++)
+			++itor)
 		{
 			StatsLoggerDatabase::RowResult &result = (*itor);
 			stringResult.append("<tr>");
@@ -418,7 +418,7 @@ std::string StatsLoggerDatabase::getPlayerInfo(const char *player)
 		std::list<StatsLoggerDatabase::RowResult>::iterator itor;
 		for (itor = playerRows.begin();
 			itor != playerRows.end();
-			itor++)
+			++itor)
 		{
 			StatsLoggerDatabase::RowResult &result = (*itor);
 			for (unsigned int i=0; i<result.columns.size(); i++)
@@ -457,7 +457,7 @@ void StatsLoggerDatabase::combinePlayers(unsigned int player1, unsigned int play
 	std::list<StatsLoggerDatabase::RowResult>::iterator itor;
 	for (itor = player2Results.begin();
 		itor != player2Results.end();
-		itor++)
+		++itor)
 	{
 		StatsLoggerDatabase::RowResult &player2Result = *itor;
 		const char *prefixId = player2Result.getValue("prefixid");
@@ -484,7 +484,7 @@ void StatsLoggerDatabase::combinePlayers(unsigned int player1, unsigned int play
 				std::map<std::string, unsigned int>::iterator itor;
 				for (itor = player1Result.names.begin();
 					itor != player1Result.names.end();
-					itor++)
+					++itor)
 				{
 					std::string name = itor->first;
 					std::string value1 = player1Result.getValue(name.c_str());
@@ -544,7 +544,7 @@ static bool findInList(std::list<std::string> &results,
 	std::list<std::string>::iterator itor;
 	for (itor = results.begin();
 		itor != results.end();
-		itor++)
+		++itor)
 	{
 		if (0 == strcmp(name, (*itor).c_str())) return true;
 	}
@@ -565,7 +565,7 @@ void StatsLoggerDatabase::addAliases(int playerId,
 			std::list<StatsLoggerDatabase::RowResult>::iterator itor;
 			for (itor = nameRows.begin();
 				itor != nameRows.end();
-				itor++)
+				++itor)
 			{
 				StatsLoggerDatabase::RowResult &rowResult = (*itor);
 				if (!findInList(results, rowResult.columns[0].c_str()))
@@ -586,7 +586,7 @@ void StatsLoggerDatabase::addAliases(int playerId,
 			std::list<StatsLoggerDatabase::RowResult>::iterator itor;
 			for (itor = nameRows.begin();
 				itor != nameRows.end();
-				itor++)
+				++itor)
 			{
 				StatsLoggerDatabase::RowResult &rowResult = (*itor);
 				if (!findInList(results, rowResult.columns[0].c_str()))
@@ -623,7 +623,7 @@ void StatsLoggerDatabase::gameStart(std::list<Tank *> &tanks)
 	std::list<Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = *itor;
 		if (tank->getState().getTankPlaying())
@@ -649,7 +649,7 @@ void StatsLoggerDatabase::roundStart(std::list<Tank *> &tanks)
 	std::list<Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
-		itor++)
+		++itor)
 	{
 		Tank *tank = *itor;
 		if (tank->getState().getTankPlaying())
@@ -733,7 +733,7 @@ void StatsLoggerDatabase::periodicUpdate()
 			std::list<StatsLoggerDatabase::RowResult>::iterator itor;
 			for (itor = binaryRows.begin();
 				itor != binaryRows.end();
-				itor++)
+				++itor)
 			{
 				StatsLoggerDatabase::RowResult &rowResult = (*itor);
 				if (rowResult.columns[1] == "0")
@@ -756,7 +756,7 @@ void StatsLoggerDatabase::periodicUpdate()
 		int rank = 1;
 		for (playerItor = playerRows.begin();
 			playerItor != playerRows.end();
-			playerItor++, rank++)
+			++playerItor, rank++)
 		{
 			StatsLoggerDatabase::RowResult &playerRow = *playerItor;
 			runQuery("UPDATE scorched3d_stats SET rank=%i "
@@ -790,7 +790,7 @@ StatsLogger::TankRank StatsLoggerDatabase::tankRank(Tank *tank)
 		std::list<StatsLoggerDatabase::RowResult>::iterator itor;
 		for (itor = skillRows.begin();
 			itor != skillRows.end();
-			itor++)
+			++itor)
 		{
 			StatsLoggerDatabase::RowResult &rowResult = (*itor);
 			result.setSkill(atoi(rowResult.columns[0].c_str()));
@@ -807,7 +807,7 @@ StatsLogger::TankRank StatsLoggerDatabase::tankRank(Tank *tank)
 			std::list<StatsLoggerDatabase::RowResult>::iterator itor;
 			for (itor = countRows.begin();
 				itor != countRows.end();
-				itor++)
+				++itor)
 			{
 				StatsLoggerDatabase::RowResult &rowResult = (*itor);
 				result.setRank(atoi(rowResult.columns[0].c_str()) + 1);
@@ -833,7 +833,7 @@ int StatsLoggerDatabase::getPlayerId(const char *uniqueId)
 		std::list<StatsLoggerDatabase::RowResult>::iterator itor;
 		for (itor = playerIdRows.begin();
 			itor != playerIdRows.end();
-			itor++)
+			++itor)
 		{
 			StatsLoggerDatabase::RowResult &rowResult = (*itor);
 			playerId = atoi(rowResult.columns[0].c_str());
@@ -1017,7 +1017,7 @@ void StatsLoggerDatabase::tankJoined(Tank *tank)
 			std::list<StatsLoggerDatabase::RowResult>::iterator itor;
 			for (itor = binaryIdRows.begin();
 				itor != binaryIdRows.end();
-				itor++)
+				++itor)
 			{
 				StatsLoggerDatabase::RowResult &rowResult = (*itor);
 				binaryid = atoi(rowResult.columns[0].c_str());
@@ -1070,7 +1070,7 @@ int StatsLoggerDatabase::getKillCount(const char *uniqueId)
 			std::list<StatsLoggerDatabase::RowResult>::iterator itor;
 			for (itor = killsRows.begin();
 				itor != killsRows.end();
-				itor++)
+				++itor)
 			{
 				StatsLoggerDatabase::RowResult &rowResult = (*itor);
 				kills += atoi(rowResult.columns[0].c_str());

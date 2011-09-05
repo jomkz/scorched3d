@@ -405,7 +405,6 @@ void VisibilityPatchGrid::drawHeightMap(GraphicalLandscapeMap *landscapeMap, int
 				unsigned int index = currentPatch->getVisibilityIndex();
 				if (index == -1) index = shadowLOD;
 
-				unsigned int borders = 0;
 				int leftIndex = PATCH_INDEX_SHADOW(currentPatch->getLeftPatch(), shadowLOD);
 				int rightIndex = PATCH_INDEX_SHADOW(currentPatch->getRightPatch(), shadowLOD);
 				int topIndex = PATCH_INDEX_SHADOW(currentPatch->getTopPatch(), shadowLOD);
@@ -429,7 +428,6 @@ void VisibilityPatchGrid::drawHeightMap(GraphicalLandscapeMap *landscapeMap, int
 			unsigned int index = currentPatch->getVisibilityIndex();
 			if (index == -1) continue;
 
-			unsigned int borders = 0;
 			int leftIndex = PATCH_INDEX_NORMAL(currentPatch->getLeftPatch());
 			int rightIndex = PATCH_INDEX_NORMAL(currentPatch->getRightPatch());
 			int topIndex = PATCH_INDEX_NORMAL(currentPatch->getTopPatch());
@@ -487,7 +485,6 @@ void VisibilityPatchGrid::drawLandLODLevels()
 			unsigned int index = currentPatch->getVisibilityIndex();
 			if (index == -1) continue;
 
-			unsigned int borders = 0;
 			int leftIndex = currentPatch->getLeftPatch()?
 				currentPatch->getLeftPatch()->getVisibilityIndex():-1;
 			int rightIndex = currentPatch->getRightPatch()?
@@ -574,7 +571,6 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 			unsigned int index = currentPatch->getVisibilityIndex();
 			if (index == -1) continue;
 
-			unsigned int borders = 0;
 			int leftIndex = currentPatch->getLeftPatch()?
 				currentPatch->getLeftPatch()->getVisibilityIndex():-1;
 			int rightIndex = currentPatch->getRightPatch()?

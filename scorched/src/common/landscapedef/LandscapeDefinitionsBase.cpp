@@ -80,7 +80,7 @@ bool LandscapeDefinitionsBase::readLandscapeDefinitions()
 		std::list<XMLNode *> &children = file.getRootNode()->getChildren();
 	for (childrenItor = children.begin();
 		childrenItor != children.end();
-		childrenItor++)
+		++childrenItor)
 	{
 		LandscapeDefinitionsEntry newDefn;
 		if (!newDefn.readXML(*childrenItor)) return false;
@@ -110,7 +110,7 @@ LandscapeDefinitionsEntry *LandscapeDefinitionsBase::getLandscapeByName(
 	std::list<LandscapeDefinitionsEntry>::iterator itor;
 	for (itor = entries_.begin();
 		itor != entries_.end();
-		itor++)
+		++itor)
 	{
 		LandscapeDefinitionsEntry &result = *itor;
 		if (0 == strcmp(name, result.name.c_str()))
