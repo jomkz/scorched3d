@@ -34,7 +34,7 @@
 #include <tank/TankContainer.h>
 #include <tank/TankScore.h>
 #include <tank/TankState.h>
-#include <tank/TankAccessories.h>
+#include <tanket/TanketAccessories.h>
 #include <stdio.h>
 
 InventoryDialog *InventoryDialog::instance_ = 0;

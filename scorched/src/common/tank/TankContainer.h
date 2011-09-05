@@ -23,12 +23,12 @@
 
 #include <map>
 #include <tank/Tank.h>
-#include <target/TargetContainer.h>
+#include <tanket/TanketContainer.h>
 
 class TankContainer  
 {
 public:
-	TankContainer(TargetContainer &targets);
+	TankContainer(TanketContainer &tankets);
 	virtual ~TankContainer();
 
 	void addTank(Tank *tank);
@@ -50,14 +50,13 @@ public:
 
 	int getNoOfTanks();
 	int getNoOfNonSpectatorTanks();
-	std::map<unsigned int, Tank *> &getPlayingTanks(); // Players (Human or AI)
-	std::map<unsigned int, Tank *> &getAllTanks(); // All tanks (inc temp)
+	std::map<unsigned int, Tank *> &getAllTanks(); // All tanks
 
 protected:
 	unsigned int playerId_;
 	unsigned int destinationId_;
 	unsigned int roundId_;
-	TargetContainer &targets_;
+	TanketContainer &tankets_;
 	Tank *currentPlayer_;
 	std::map<unsigned int, Tank *> tanks_;
 };

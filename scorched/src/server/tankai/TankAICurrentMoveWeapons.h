@@ -23,14 +23,14 @@
 
 #include <tankai/TankAICurrentWeapons.h>
 
-class Tank;
+class Tanket;
 class Shield;
 class Accessory;
 class TankAICurrentMoveWeapons
 {
 public:
-	TankAICurrentMoveWeapons(Tank *tank, 
-		Tank *targetTank,
+	TankAICurrentMoveWeapons(Tanket *tanket, 
+		Tanket *targetTanket,
 		TankAIWeaponSets::WeaponSet *weapons);
 	virtual ~TankAICurrentMoveWeapons();
 

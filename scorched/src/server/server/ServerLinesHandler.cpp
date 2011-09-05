@@ -71,7 +71,7 @@ bool ServerLinesHandler::processMessage(
 	std::set<unsigned int> doneDests;
 	doneDests.insert(netMessage.getDestinationId()); // Don't send to recieved dest
 	std::map<unsigned int, Tank *> &tanks =
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+		ScorchedServer::instance()->getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();

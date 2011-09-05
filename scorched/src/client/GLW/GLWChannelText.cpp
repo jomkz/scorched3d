@@ -664,7 +664,7 @@ void GLWChannelText::buttonDown(unsigned int id)
 	Tank *currentTank = 
 		ScorchedClient::instance()->getTankContainer().getCurrentTank();
 	std::map<unsigned int, Tank *> &tanks = ScorchedClient::instance()->
-		getTankContainer().getPlayingTanks();
+		getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank *>::iterator tankItor;
 	for (tankItor = tanks.begin();
 		tankItor != tanks.end();

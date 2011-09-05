@@ -19,9 +19,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <tankai/TankAIAimGuesser.h>
-#include <tank/Tank.h>
+#include <tanket/Tanket.h>
+#include <tanket/TanketShotInfo.h>
 #include <tank/TankLib.h>
-#include <tank/TankPosition.h>
+#include <target/TargetLife.h>
 #include <common/OptionsScorched.h>
 #include <common/Logger.h>
 #include <common/RandomGenerator.h>
@@ -36,19 +37,19 @@ TankAIAimGuesser::~TankAIAimGuesser()
 {
 }
 
-bool TankAIAimGuesser::guess(Tank *tank, Vector &target, 
+bool TankAIAimGuesser::guess(Tanket *tanket, Vector &target, 
 	float angleYZDegs, float distance, 
 	Vector &actualPosition)
 {
-	tank->getPosition().rotateGunYZ(fixed::fromFloat(angleYZDegs), false);
+	tanket->getShotInfo().rotateGunYZ(fixed::fromFloat(angleYZDegs), false);
 
 	// Make an initial randomish shot up
-	initialShot(tank, target);
+	initialShot(tanket, target);
 
 	for (int i=0;;i++)
 	{
 		// Find out where this may land
-		getCurrentGuess(tank);
+		getCurrentGuess(tanket);
 		if (!collision_)
 		{
 			// No collision
@@ -76,14 +77,14 @@ bool TankAIAimGuesser::guess(Tank *tank, Vector &target,
 		}
 
 		// Not close
-		refineShot(tank, currentGuess_.getPosition().asVector(), target);
+		refineShot(tanket, currentGuess_.getPosition().asVector(), target);
 	}
 
 	// Never gets here
 	return false;
 }
 
-void TankAIAimGuesser::initialShot(Tank *tank, Vector &target)
+void TankAIAimGuesser::initialShot(Tanket *tanket, Vector &target)
 {
 	fixed angleXYDegs;
 	fixed angleYZDegs;
@@ -95,22 +96,22 @@ void TankAIAimGuesser::initialShot(Tank *tank, Vector &target)
 	TankLib::getShotTowardsPosition(
 		context_,
 		random,
-		tank->getPosition().getTankPosition(), 
+		tanket->getShotInfo().getTankPosition(), 
 		FixedVector::fromVector(target), 
 		angleXYDegs, angleYZDegs, power);
 
 	// Set the parameters
 	// Sets the angle of the gun and the power
-	tank->getPosition().rotateGunXY(angleXYDegs, false);
-	tank->getPosition().changePower(power, false);
+	tanket->getShotInfo().rotateGunXY(angleXYDegs, false);
+	tanket->getShotInfo().changePower(power, false);
 }
 
-void TankAIAimGuesser::refineShot(Tank *tank,
+void TankAIAimGuesser::refineShot(Tanket *tanket,
 	Vector &currentPos, Vector &wantedPos)
 {
 	// Get the used velocity
-	FixedVector shotVelocity = tank->getPosition().getVelocityVector() *
-		(tank->getPosition().getPower() + 1);
+	FixedVector shotVelocity = tanket->getShotInfo().getVelocityVector() *
+		(tanket->getShotInfo().getPower() + 1);
 
 	// Figure out how much the last shot missed by
 	Vector missedBy = wantedPos - currentPos;
@@ -123,18 +124,18 @@ void TankAIAimGuesser::refineShot(Tank *tank,
 	fixed angleXYRads = atan2x(shotVelocity[1], shotVelocity[0]);
 	fixed angleXYDegs = (angleXYRads / fixed::XPI) * 180 - 90;
 
-	tank->getPosition().rotateGunXY(angleXYDegs, false);
+	tanket->getShotInfo().rotateGunXY(angleXYDegs, false);
 
 	// And the new best power
-	float dist = (currentPos - tank->getPosition().getTankPosition().asVector()).Magnitude2d();
-	float wanteddist = (wantedPos - tank->getPosition().getTankPosition().asVector()).Magnitude2d();
+	float dist = (currentPos - tanket->getShotInfo().getTankPosition().asVector()).Magnitude2d();
+	float wanteddist = (wantedPos - tanket->getShotInfo().getTankPosition().asVector()).Magnitude2d();
 	float currentPower = (float) (log(dist) / log(2.0));
 	float wantedPower = (float) (log(wanteddist) / log(2.0));
 
-	fixed power = tank->getPosition().getPower() * fixed::fromFloat(wantedPower) / 
+	fixed power = tanket->getShotInfo().getPower() * fixed::fromFloat(wantedPower) / 
 		fixed::fromFloat(currentPower);
 
-	tank->getPosition().changePower(power, false);
+	tanket->getShotInfo().changePower(power, false);
 }
 
 void TankAIAimGuesser::collision(PhysicsParticleObject &position, 
@@ -153,19 +154,19 @@ void TankAIAimGuesser::wallCollision(PhysicsParticleObject &position,
 	collision_ = true;
 }
 
-void TankAIAimGuesser::getCurrentGuess(Tank *tank)
+void TankAIAimGuesser::getCurrentGuess(Tanket *tanket)
 {
 	bool actionSyncCheck = context_.getOptionsGame().
 		getMainOptions().getActionSyncCheck();
 	context_.getOptionsGame().getMainOptions().
 		getActionSyncCheckEntry().setValue(false);
 
-	FixedVector shotVelocity = tank->getPosition().getVelocityVector() *
-		(tank->getPosition().getPower() + 1);
-	FixedVector shotPosition = tank->getPosition().getTankGunPosition();
+	FixedVector shotVelocity = tanket->getShotInfo().getVelocityVector() *
+		(tanket->getShotInfo().getPower() + 1);
+	FixedVector shotPosition = tanket->getShotInfo().getTankGunPosition();
 
 	PhysicsParticleObject particleObject;
-	PhysicsParticleInfo info(ParticleTypeShot, tank->getPlayerId(), 0);
+	PhysicsParticleInfo info(ParticleTypeShot, tanket->getPlayerId(), 0);
 	particleObject.setPhysics(info, context_,
 		shotPosition, shotVelocity);
 	particleObject.setHandler(this);

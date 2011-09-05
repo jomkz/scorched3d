@@ -21,7 +21,7 @@
 #if !defined(AFX_BuyAccessoryDialogTankInfo_H__4B5E93CF_1DE2_4979_A629_AEBD725ABE65__INCLUDED_)
 #define AFX_BuyAccessoryDialogTankInfo_H__4B5E93CF_1DE2_4979_A629_AEBD725ABE65__INCLUDED_
 
-#include <tank/TankAccessories.h>
+#include <tanket/TanketAccessories.h>
 #include <common/Vector.h>
 
 class BuyAccessoryDialogTankInfo
@@ -29,7 +29,7 @@ class BuyAccessoryDialogTankInfo
 public:
 	static BuyAccessoryDialogTankInfo *instance();
 
-	TankAccessories tankAccessories;
+	TanketAccessories tankAccessories;
 	Vector tankColor;
 	LangString tankName;
 	int tankMoney;

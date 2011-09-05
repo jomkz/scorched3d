@@ -21,7 +21,7 @@
 #include <tank/TankDeadContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
-#include <tank/TankAccessories.h>
+#include <tanket/TanketAccessories.h>
 #include <net/NetBuffer.h>
 #include <server/ScorchedServer.h>
 #include <common/OptionsScorched.h>

@@ -29,16 +29,23 @@
 #include <simactions/TankAccessorySimAction.h>
 #include <XML/XMLFile.h>
 
-TankAIWeaponSets::WeaponSetAccessories::WeaponSetAccessories(Tank *tank) :
+TankAIWeaponSets::WeaponSetAccessories::WeaponSetAccessories(Tanket *tanket) :
 	tankAccessories(ScorchedServer::instance()->getContext())
 {
-	tankAccessories.setTank(tank);
+	tankAccessories.setTanket(tanket);
 	NetBuffer buffer;
-	tank->getAccessories().writeMessage(buffer, true);
+	tanket->getAccessories().writeMessage(buffer, true);
 	NetBufferReader reader(buffer);
 	tankAccessories.readMessage(reader);
-	tankMoney = tank->getScore().getMoney();
-	tankId = tank->getPlayerId();
+	if (!tanket->isTarget())
+	{
+		tankMoney = ((Tank *) tanket)->getScore().getMoney();
+	}
+	else
+	{
+		tankMoney = 100000;
+	}
+	tankId = tanket->getPlayerId();
 }
 
 TankAIWeaponSets::TankAIWeaponSets()
@@ -153,7 +160,7 @@ void TankAIWeaponSets::WeaponSet::buyWeapons(WeaponSetAccessories &tankAccessori
 }
 
 Accessory *TankAIWeaponSets::WeaponSet::getTankAccessoryByType(
-	Tank *tank, const char *getType)
+	Tanket *tanket, const char *getType)
 {
 	DIALOG_ASSERT(WeaponSetEntry::checkType(getType));
 
@@ -171,7 +178,7 @@ Accessory *TankAIWeaponSets::WeaponSet::getTankAccessoryByType(
 				ScorchedServer::instance()->getOptionsTransient().getArmsLevel() ||
 				ScorchedServer::instance()->getOptionsGame().getGiveAllWeapons())
 			{
-				if (tank->getAccessories().canUse(current.accessory))
+				if (tanket->getAccessories().canUse(current.accessory))
 				{
 					if (!result ||
 						result->priorityuse < current.priorityuse)

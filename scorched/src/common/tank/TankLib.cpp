@@ -20,7 +20,6 @@
 
 #include <tank/TankLib.h>
 #include <tank/TankContainer.h>
-#include <tank/TankPosition.h>
 #include <tank/TankState.h>
 #include <target/TargetLife.h>
 #include <engine/Simulator.h>

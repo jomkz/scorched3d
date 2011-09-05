@@ -20,7 +20,7 @@
 
 #include <tankai/TankAICurrentDefenses.h>
 #include <tank/Tank.h>
-#include <tank/TankAccessories.h>
+#include <tanket/TanketAccessories.h>
 #include <weapons/Accessory.h>
 #include <target/TargetLife.h>
 #include <target/TargetShield.h>
@@ -49,47 +49,47 @@ bool TankAICurrentDefenses::parseConfig(XMLNode *node)
 	return node->failChildren();	
 }
 
-void TankAICurrentDefenses::selectFirstShield(Tank *tank)
+void TankAICurrentDefenses::selectFirstShield(Tanket *tanket)
 {
-	if (tank->getShield().getCurrentShield()) return;
+	if (tanket->getShield().getCurrentShield()) return;
 
 	std::list<Accessory *> &shields =
-		tank->getAccessories().getAllAccessoriesByType(
+		tanket->getAccessories().getAllAccessoriesByType(
 			AccessoryPart::AccessoryShield);
 	if (!shields.empty())
 	{
 		Accessory *shield = shields.front();
-		shieldsUpDown(tank, shield->getAccessoryId());
+		shieldsUpDown(tanket, shield->getAccessoryId());
 	}
 }
 
-void TankAICurrentDefenses::selectFirstParachute(Tank *tank)
+void TankAICurrentDefenses::selectFirstParachute(Tanket *tanket)
 {
-	if (tank->getParachute().getCurrentParachute()) return;
+	if (tanket->getParachute().getCurrentParachute()) return;
 
 	std::list<Accessory *> &parachutes =
-		tank->getAccessories().getAllAccessoriesByType(
+		tanket->getAccessories().getAllAccessoriesByType(
 			AccessoryPart::AccessoryParachute);
 	if (!parachutes.empty())
 	{
 		Accessory *parachute = parachutes.front();
-		parachutesUpDown(tank, parachute->getAccessoryId());
+		parachutesUpDown(tanket, parachute->getAccessoryId());
 	}
 }
 
-void TankAICurrentDefenses::raiseDefenses(Tank *tank)
+void TankAICurrentDefenses::raiseDefenses(Tanket *tanket)
 {
 	// Try to enable parachutes (fails if we don't have any)
-	if (useParachutes_) selectFirstParachute(tank);
+	if (useParachutes_) selectFirstParachute(tanket);
 
 	// Try to raise shields (fails if we don't have any)
-	if (useShields_) selectFirstShield(tank);
+	if (useShields_) selectFirstShield(tanket);
 }
 
-void TankAICurrentDefenses::parachutesUpDown(Tank *tank, unsigned int paraId)
+void TankAICurrentDefenses::parachutesUpDown(Tanket *tanket, unsigned int paraId)
 {
 	ComsDefenseMessage defenseMessage(
-		tank->getPlayerId(),
+		tanket->getPlayerId(),
 		(paraId!=0)?ComsDefenseMessage::eParachutesUp:ComsDefenseMessage::eParachutesDown,
 		paraId);
 
@@ -97,10 +97,10 @@ void TankAICurrentDefenses::parachutesUpDown(Tank *tank, unsigned int paraId)
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
 }
 
-void TankAICurrentDefenses::shieldsUpDown(Tank *tank, unsigned int shieldId)
+void TankAICurrentDefenses::shieldsUpDown(Tanket *tanket, unsigned int shieldId)
 {
 	ComsDefenseMessage defenseMessage(
-		tank->getPlayerId(),
+		tanket->getPlayerId(),
 		(shieldId!=0)?ComsDefenseMessage::eShieldUp:ComsDefenseMessage::eShieldDown,
 		shieldId);
 

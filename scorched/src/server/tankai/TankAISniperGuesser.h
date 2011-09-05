@@ -23,14 +23,14 @@
 
 #include <common/Vector.h>
 
-class Tank;
+class Tanket;
 class TankAISniperGuesser
 {
 public:
 	TankAISniperGuesser();
 	virtual ~TankAISniperGuesser();
 
-	bool guess(Tank *tank, Vector &target, 
+	bool guess(Tanket *tanket, Vector &target, 
 		float distForSniper, bool checkIntersection, float offset);
 };
 

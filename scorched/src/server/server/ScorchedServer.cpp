@@ -42,6 +42,7 @@
 #include <tank/TankDeadContainer.h>
 #include <tank/TankContainer.h>
 #include <tank/TankModelStore.h>
+#include <tanket/TanketTypes.h>
 #include <tankai/TankAIStrings.h>
 #include <tankai/TankAIStore.h>
 #include <tankai/TankAIWeaponSets.h>
@@ -238,6 +239,7 @@ bool ScorchedServer::startServerInternal(const ScorchedServerSettings &settings,
 	
 	// Parse config
 	if (!getAccessoryStore().parseFile(getContext(), counter)) return false;
+	if (!getTanketTypes().loadTanketTypes(getContext())) return false;
 	if (!getTankModels().loadTankMeshes(getContext(), 2, counter)) return false;
 	getOptionsTransient().reset();
 	if (!getLandscapes().readLandscapeDefinitions()) return false;

@@ -54,7 +54,7 @@ unsigned int OptionsTransient::getLeastUsedTeam(TankContainer &container)
 	// Add all the tanks to the counts
 	std::map<unsigned int, Tank *>::iterator itor;
 	std::map<unsigned int, Tank *> &tanks = 
-		container.getPlayingTanks();
+		container.getAllTanks();
 	for (itor = tanks.begin();
 		itor != tanks.end();
 		itor++)

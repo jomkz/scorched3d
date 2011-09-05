@@ -25,7 +25,6 @@
 #include <map>
 #include <set>
 #include <tank/TankModel.h>
-#include <tank/TankTypes.h>
 #include <common/ProgressCounter.h>
 
 class TankModelStore
@@ -41,13 +40,10 @@ public:
 	TankModel *getModelByName(const char *name);
 	TankModel *getRandomModel(int team, bool ai);
 
-	TankType *getTypeByName(const char *name);
-
 	std::vector<TankModel *> &getModels() { return models_; }
 	std::set<std::string> &getModelCatagories() { return modelCatagories_; }
 
 protected:
-	TankTypes types_;
 	std::vector<TankModel *> models_;
 	std::set<std::string, std::less<std::string> > modelCatagories_;
 

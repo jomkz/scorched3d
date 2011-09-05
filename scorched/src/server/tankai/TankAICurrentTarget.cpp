@@ -20,9 +20,10 @@
 
 #include <tankai/TankAICurrentTarget.h>
 #include <server/ScorchedServer.h>
-#include <tank/TankContainer.h>
-#include <tank/TankSort.h>
-#include <tank/TankPosition.h>
+#include <tank/Tank.h>
+#include <tank/TankScore.h>
+#include <tanket/TanketContainer.h>
+#include <tanket/TanketShotInfo.h>
 #include <target/TargetLife.h>
 #include <target/TargetShield.h>
 #include <weapons/Shield.h>
@@ -63,7 +64,7 @@ void TankAICurrentTarget::clear()
 float TankAICurrentTarget::getTotalDamageTaken()
 {
 	float damage = 0.0f;
-	std::map<Tank *, float>::iterator itor;
+	std::map<Tanket *, float>::iterator itor;
 	for (itor = damageTaken_.begin();
 		itor != damageTaken_.end();
 		itor++)
@@ -73,57 +74,57 @@ float TankAICurrentTarget::getTotalDamageTaken()
 	return damage;
 }
 
-void TankAICurrentTarget::gaveDamage(Tank *tank, float damage)
+void TankAICurrentTarget::gaveDamage(Tanket *tanket, float damage)
 {
-	std::map<Tank *, float>::iterator findItor =
-		damageGiven_.find(tank);
+	std::map<Tanket *, float>::iterator findItor =
+		damageGiven_.find(tanket);
 	if (findItor == damageGiven_.end())
 	{
-		damageGiven_[tank] = damage;
+		damageGiven_[tanket] = damage;
 	}
 	else
 	{
-		damageGiven_[tank] += damage;
+		damageGiven_[tanket] += damage;
 	}
 }
 
-void TankAICurrentTarget::tookDamage(Tank *tank, float damage)
+void TankAICurrentTarget::tookDamage(Tanket *tanket, float damage)
 {
-	std::map<Tank *, float>::iterator findItor =
-		damageTaken_.find(tank);
+	std::map<Tanket *, float>::iterator findItor =
+		damageTaken_.find(tanket);
 	if (findItor == damageTaken_.end())
 	{
-		damageTaken_[tank] = damage;
+		damageTaken_[tanket] = damage;
 	}
 	else
 	{
-		damageTaken_[tank] += damage;
+		damageTaken_[tanket] += damage;
 	}
 }
 
-void TankAICurrentTarget::shotAt(Tank *tank)
+void TankAICurrentTarget::shotAt(Tanket *tanket)
 {
-	std::map<Tank *, float>::iterator findItor =
-		shotAt_.find(tank);
+	std::map<Tanket *, float>::iterator findItor =
+		shotAt_.find(tanket);
 	if (findItor == shotAt_.end())
 	{
-		shotAt_[tank] = 1.0f;
+		shotAt_[tanket] = 1.0f;
 	}
 	else
 	{
-		shotAt_[tank] += 1.0f;
+		shotAt_[tanket] += 1.0f;
 	}
 }
 
-float TankAICurrentTarget::rankPlayer(std::list<Tank *> &players, Tank *player)
+float TankAICurrentTarget::rankPlayer(std::list<Tanket *> &players, Tanket *player)
 {
 	int position = 1;
-	std::list<Tank *>::iterator itor;
+	std::list<Tanket *>::iterator itor;
 	for (itor = players.begin();
 		itor != players.end();
 		itor++, position++)
 	{
-		Tank *currentTank = *itor;
+		Tanket *currentTank = *itor;
 		if (currentTank == player)
 		{
 			float score = 1.0f - (float(position * 2) / float(players.size()));
@@ -134,15 +135,15 @@ float TankAICurrentTarget::rankPlayer(std::list<Tank *> &players, Tank *player)
 	return -1.0f;
 }
 
-float TankAICurrentTarget::rankPlayer(std::multimap<float, Tank *> &players, Tank *player)
+float TankAICurrentTarget::rankPlayer(std::multimap<float, Tanket *> &players, Tanket *player)
 {
 	int position = 1;
-	std::multimap<float, Tank *>::iterator itor;
+	std::multimap<float, Tanket *>::iterator itor;
 	for (itor = players.begin();
 		itor != players.end();
 		itor++, position++)
 	{
-		Tank *currentTank = itor->second;
+		Tanket *currentTank = itor->second;
 		if (currentTank == player)
 		{
 			float score = (float(position * 2) / float(players.size())) - 1.0f;
@@ -153,68 +154,70 @@ float TankAICurrentTarget::rankPlayer(std::multimap<float, Tank *> &players, Tan
 	return -1.0f;
 }
 
-void TankAICurrentTarget::getTargets(Tank *thisTank, std::list<Tank *> &resultTargets)
+void TankAICurrentTarget::getTargets(Tanket *thisTanket, std::list<Tanket *> &resultTargets)
 {
-	std::list<Tank *> possible;
-	std::multimap<float, Tank *> damageTakenSorted;
-	std::multimap<float, Tank *> damageGivenSorted;
-	std::multimap<float, Tank *> shotAtSorted;
-	std::multimap<float, Tank *> distanceSorted;
+	std::list<Tanket *> possible;
+	std::multimap<float, Tanket *> damageTakenSorted;
+	std::multimap<float, Tanket *> damageGivenSorted;
+	std::multimap<float, Tanket *> shotAtSorted;
+	std::multimap<float, Tanket *> distanceSorted;
+	std::multimap<float, Tanket *> scoreSorted;
 
 	// Get the list of tanks we can shoot at
-	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
-	std::map<unsigned int, Tank *>::iterator posItor;
+	std::map<unsigned int, Tanket *> &tanks = 
+		ScorchedServer::instance()->getTanketContainer().getAllTankets();
+	std::map<unsigned int, Tanket *>::iterator posItor;
 	for (posItor = tanks.begin();
 		posItor != tanks.end();
 		posItor++)
 	{
-		Tank *currentTank = posItor->second;
-		if (currentTank == thisTank) continue;
-		if (thisTank->getTeam() > 0 && 
-			currentTank->getTeam() == thisTank->getTeam()) continue;
-		if (!currentTank->getAlive()) continue;
+		Tanket *currentTanket = posItor->second;
+		if (currentTanket == thisTanket) continue;
+		if (thisTanket->getTeam() > 0 && 
+			currentTanket->getTeam() == thisTanket->getTeam()) continue;
+		if (!currentTanket->getAlive()) continue;
 
-		possible.push_back(currentTank);
+		possible.push_back(currentTanket);
 
-		if (damageTaken_.find(currentTank) != damageTaken_.end())
-		{
-			damageTakenSorted.insert(std::pair<float, Tank *>(
-				damageTaken_[currentTank], currentTank));
+		if (!currentTanket->isTarget()) {
+			Tank *currentTank = (Tank *) currentTanket;
+			scoreSorted.insert(std::pair<float, Tanket *>((float) currentTank->getScore().getScore(), currentTank));
 		}
-		if (damageGiven_.find(currentTank) != damageGiven_.end())
+
+		if (damageTaken_.find(currentTanket) != damageTaken_.end())
 		{
-			damageGivenSorted.insert(std::pair<float, Tank *>(
-				damageGiven_[currentTank], currentTank));
+			damageTakenSorted.insert(std::pair<float, Tanket *>(
+				damageTaken_[currentTanket], currentTanket));
 		}
-		if (shotAt_.find(currentTank) != shotAt_.end())
+		if (damageGiven_.find(currentTanket) != damageGiven_.end())
 		{
-			shotAtSorted.insert(std::pair<float, Tank *>(
-				shotAt_[currentTank], currentTank));
+			damageGivenSorted.insert(std::pair<float, Tanket *>(
+				damageGiven_[currentTanket], currentTanket));
 		}
-		distanceSorted.insert(std::pair<float, Tank *>(
-			((currentTank->getPosition().getTankPosition() - 
-			thisTank->getPosition().getTankPosition()).Magnitude()).asFloat(), currentTank));
+		if (shotAt_.find(currentTanket) != shotAt_.end())
+		{
+			shotAtSorted.insert(std::pair<float, Tanket *>(
+				shotAt_[currentTanket], currentTanket));
+		}
+		distanceSorted.insert(std::pair<float, Tanket *>(
+			((currentTanket->getShotInfo().getTankPosition() - 
+			thisTanket->getShotInfo().getTankPosition()).Magnitude()).asFloat(), currentTanket));
 	}
-
-	// Sort the tanks in score order
-	std::list<Tank *> scoreSorted = possible;
-	TankSort::getSortedTanks(scoreSorted, ScorchedServer::instance()->getContext());
 
 	// Go through all possible tanks
 	// and weight them according to the weightings
-	std::multimap<float, Tank *> weightedTanks;
-	std::list<Tank *>::iterator itor;
+	std::multimap<float, Tanket *> weightedTanks;
+	std::list<Tanket *>::iterator itor;
 	for (itor = possible.begin();
 		itor != possible.end();
 		itor++)
 	{
-		Tank *currentTank = *itor;
+		Tanket *currentTank = *itor;
 
 		float healthScore = ((currentTank->getLife().getLife() * 2) 
 			/ currentTank->getLife().getMaxLife()).asFloat() - 1.0f;
 		float randomScore = RAND * 2.0f - 1.0f;
-		float playerScore = ((currentTank->getDestinationId() == 0)?-1.0f:1.0f);
+		float playerScore = ((currentTank->getTankAI() != 0)?-1.0f:1.0f);
 		float shieldScore = ((currentTank->getShield().getShieldPower() * 2).asFloat() 
 			/ 100.0f) - 1.0f;
 		float scoreScore = rankPlayer(scoreSorted, currentTank);
@@ -233,11 +236,11 @@ void TankAICurrentTarget::getTargets(Tank *thisTank, std::list<Tank *> &resultTa
 			damagetakenScore * damagetaken_ +
 			damagedoneScore * damagedone_ +
 			distanceScore * distance_;
-		weightedTanks.insert(std::pair<float, Tank *>(weight, currentTank));
+		weightedTanks.insert(std::pair<float, Tanket *>(weight, currentTank));
 	}
 
 	// Form the final list
-	std::multimap<float, Tank *>::reverse_iterator weightedItor;
+	std::multimap<float, Tanket *>::reverse_iterator weightedItor;
 	for (weightedItor = weightedTanks.rbegin();
 		weightedItor != weightedTanks.rend();
 		weightedItor++)

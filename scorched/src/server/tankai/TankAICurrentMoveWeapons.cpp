@@ -19,8 +19,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <tankai/TankAICurrentMoveWeapons.h>
-#include <tank/Tank.h>
-#include <tank/TankPosition.h>
+#include <tanket/Tanket.h>
+#include <tanket/TanketShotInfo.h>
 #include <target/TargetShield.h>
 #include <target/TargetParachute.h>
 #include <server/ScorchedServer.h>
@@ -30,23 +30,23 @@
 #include <weapons/WeaponNapalm.h>
 #include <weapons/Shield.h>
 
-TankAICurrentMoveWeapons::TankAICurrentMoveWeapons(Tank *tank, 
-	Tank *targetTank,
+TankAICurrentMoveWeapons::TankAICurrentMoveWeapons(Tanket *tanket, 
+	Tanket *targetTanket,
 	TankAIWeaponSets::WeaponSet *weapons)
 {
 	// Check if this target has shields
 	shield = 0;
-	if (targetTank->getShield().getCurrentShield())
+	if (targetTanket->getShield().getCurrentShield())
 	{
-		shield = (Shield *) targetTank->getShield().
+		shield = (Shield *) targetTanket->getShield().
 			getCurrentShield()->getAction();
 	}
 
 	// Normal weapons
-	small = weapons->getTankAccessoryByType(tank, "explosionsmall");
-	large = weapons->getTankAccessoryByType(tank, "explosionlarge");
-	roller = weapons->getTankAccessoryByType(tank, "roller");
-	uncover = weapons->getTankAccessoryByType(tank, "uncover");
+	small = weapons->getTankAccessoryByType(tanket, "explosionsmall");
+	large = weapons->getTankAccessoryByType(tanket, "explosionlarge");
+	roller = weapons->getTankAccessoryByType(tanket, "roller");
+	uncover = weapons->getTankAccessoryByType(tanket, "uncover");
 
 	// Check for being under water
 	fixed waterHeight = -10;
@@ -59,9 +59,9 @@ TankAICurrentMoveWeapons::TankAICurrentMoveWeapons(Tank *tank,
 		waterHeight = water->height;
 	}
 	napalm = 0;
-	if (targetTank->getPosition().getTankPosition()[2] > waterHeight)
+	if (targetTanket->getShotInfo().getTankPosition()[2] > waterHeight)
 	{
-		napalm = weapons->getTankAccessoryByType(tank, "napalm");
+		napalm = weapons->getTankAccessoryByType(tanket, "napalm");
 	}
 
 	// Check for laser proof shields
@@ -69,15 +69,15 @@ TankAICurrentMoveWeapons::TankAICurrentMoveWeapons(Tank *tank,
 	if (!shield ||
 		shield->getLaserProof() == Shield::ShieldLaserProofNone)
 	{
-		laser = weapons->getTankAccessoryByType(tank, "laser");
+		laser = weapons->getTankAccessoryByType(tanket, "laser");
 	}
 
 	// Check for having parachutes
 	// Cheating!!, need a better way for this
 	digger = 0;
-	if (!targetTank->getParachute().getCurrentParachute())
+	if (!targetTanket->getParachute().getCurrentParachute())
 	{
-		digger = weapons->getTankAccessoryByType(tank, "digger");
+		digger = weapons->getTankAccessoryByType(tanket, "digger");
 	}
 }
 

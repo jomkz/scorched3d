@@ -118,7 +118,7 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 	{
 		// Check the color is not already in use
 		std::map<unsigned int, Tank *> &tanks = 
-			context.getTankContainer().getPlayingTanks();
+			context.getTankContainer().getAllTanks();
 		if (TankColorGenerator::instance()->colorAvailable(
 			message_.getPlayerColor(), tanks, tank))
 		{

@@ -40,8 +40,8 @@
 #include <tank/TankTeamScore.h>
 #include <tank/TankScore.h>
 #include <tank/TankState.h>
-#include <tank/TankPosition.h>
 #include <tankai/TankAI.h>
+#include <tanket/TanketShotInfo.h>
 #include <target/TargetShield.h>
 #include <target/TargetLife.h>
 #include <target/TargetParachute.h>
@@ -199,7 +199,7 @@ void TankDamage::calculateDamage()
 			!damagedTarget->isTarget())
 		{
 			Tank *damagedTank = (Tank *) damagedTarget;
-			damagedTank->getPosition().changePower(0, true);
+			damagedTank->getShotInfo().changePower(0, true);
 		}
 
 		if (context_->getOptionsGame().getActionSyncCheck())

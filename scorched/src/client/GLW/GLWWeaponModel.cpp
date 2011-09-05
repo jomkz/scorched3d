@@ -24,7 +24,7 @@
 #include <tankgraph/TargetRendererImplTank.h>
 #include <tankgraph/MissileMesh.h>
 #include <tank/TankContainer.h>
-#include <tank/TankAccessories.h>
+#include <tanket/TanketAccessories.h>
 #include <tank/TankState.h>
 #include <GLW/GLWTranslate.h>
 #include <weapons/AccessoryStore.h>

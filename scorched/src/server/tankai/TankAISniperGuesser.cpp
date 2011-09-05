@@ -19,9 +19,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <tankai/TankAISniperGuesser.h>
-#include <tank/Tank.h>
 #include <tank/TankLib.h>
-#include <tank/TankPosition.h>
+#include <tanket/Tanket.h>
+#include <tanket/TanketShotInfo.h>
 #include <server/ScorchedServer.h>
 #include <common/Logger.h>
 #include <common/RandomGenerator.h>
@@ -34,14 +34,14 @@ TankAISniperGuesser::~TankAISniperGuesser()
 {
 }
 
-bool TankAISniperGuesser::guess(Tank *tank, Vector &target, 
+bool TankAISniperGuesser::guess(Tanket *tanket, Vector &target, 
 	float distForSniper, bool checkIntersection, float offset)
 {
 	fixed angleXYDegs, angleYZDegs, power;
 	FileRandomGenerator generator;
 	generator.seed(rand());
 
-	FixedVector shotPosition = tank->getPosition().getTankPosition();
+	FixedVector shotPosition = tanket->getShotInfo().getTankPosition();
 	if (TankLib::getSniperShotTowardsPosition(
 		ScorchedServer::instance()->getContext(),
 		shotPosition, 
@@ -53,9 +53,9 @@ bool TankAISniperGuesser::guess(Tank *tank, Vector &target,
 		fixed xyOffset = generator.getRandFixed("TankAISniperGuesser") * fixed::fromFloat(offset);
 		fixed yzOffset = fixed::fromFloat(offset) - xyOffset;
 
-		tank->getPosition().rotateGunXY(angleXYDegs + xyOffset, false);
-		tank->getPosition().rotateGunYZ(angleYZDegs + yzOffset, false);
-		tank->getPosition().changePower(power, false);
+		tanket->getShotInfo().rotateGunXY(angleXYDegs + xyOffset, false);
+		tanket->getShotInfo().rotateGunYZ(angleYZDegs + yzOffset, false);
+		tanket->getShotInfo().changePower(power, false);
 
 		return true;
 	}

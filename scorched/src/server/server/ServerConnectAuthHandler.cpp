@@ -32,7 +32,6 @@
 #include <tank/TankModelStore.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankContainer.h>
-#include <tank/TankModelContainer.h>
 #include <tank/TankDeadContainer.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
@@ -212,7 +211,7 @@ void ServerConnectAuthHandler::processMessageInternal(
 	if (!ScorchedServer::instance()->getOptionsGame().getAllowSameUniqueId())
 	{
 		std::map<unsigned int, Tank *> &playingTanks = 
-			ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+			ScorchedServer::instance()->getTankContainer().getAllTanks();
 		std::map<unsigned int, Tank *>::iterator playingItor;
 		for (playingItor = playingTanks.begin();
 			playingItor != playingTanks.end();
@@ -406,7 +405,7 @@ void ServerConnectAuthHandler::processAIInternal(const std::string &aiName)
 bool ServerConnectAuthHandler::uniqueIdTaken(const std::string &uniqueId)
 {
 	std::map<unsigned int, Tank *> &playingTanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+		ScorchedServer::instance()->getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank *>::iterator playingItor;
 	for (playingItor = playingTanks.begin();
 		playingItor != playingTanks.end();

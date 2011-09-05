@@ -18,7 +18,6 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <tank/TankModelStore.h>
 #include <dialogs/PlayerDialog.h>
 #include <client/ClientState.h>
 #include <client/ScorchedClient.h>
@@ -28,6 +27,7 @@
 #include <tank/TankColorGenerator.h>
 #include <tank/TankState.h>
 #include <tank/TankAvatar.h>
+#include <tank/TankModelStore.h>
 #include <client/ClientParams.h>
 #include <graph/OptionsDisplay.h>
 #include <common/OptionsTransient.h>
@@ -347,7 +347,7 @@ void PlayerDialog::nextPlayer()
 	if (ScorchedClient::instance()->getOptionsGame().getTeams() == 1)
 	{
 		std::map<unsigned int, Tank *> tanks =
-			ScorchedClient::instance()->getTankContainer().getPlayingTanks();
+			ScorchedClient::instance()->getTankContainer().getAllTanks();
 		std::vector<Vector *> availableColors =
 			TankColorGenerator::instance()->getAvailableColors(tanks, tank);
 		std::vector<Vector *>::iterator itor;
@@ -379,7 +379,7 @@ void PlayerDialog::nextPlayer()
 unsigned int PlayerDialog::getNextPlayer(unsigned int current)
 {
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedClient::instance()->getTankContainer().getPlayingTanks();
+		ScorchedClient::instance()->getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();

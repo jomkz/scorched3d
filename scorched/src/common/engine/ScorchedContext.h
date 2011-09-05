@@ -34,7 +34,9 @@ class OptionsTransient;
 class ModFiles;
 class LandscapeDefinitions;
 class TankContainer;
+class TanketContainer;
 class TankModelStore;
+class TanketTypes;
 class TankTeamScore;
 class LUAScriptFactory;
 class LUAScriptHook;
@@ -57,6 +59,7 @@ public:
 	virtual Simulator &getSimulator() = 0;
 	AccessoryStore &getAccessoryStore() { return *accessoryStore_; }
 	TankContainer &getTankContainer() { return *tankContainer_; }
+	TanketContainer &getTanketContainer() { return *tanketContainer_; }
 	TargetContainer &getTargetContainer() { return *targetContainer_; }
 	TargetMovement &getTargetMovement() { return *targetMovement_; }
 	TankTeamScore &getTankTeamScore() { return *tankTeamScore_; }
@@ -67,6 +70,7 @@ public:
 	ComsMessageHandler &getComsMessageHandler() { return *comsMessageHandler_; }
 	ModFiles &getModFiles() { return *modFiles_; }
 	LandscapeDefinitions &getLandscapes() { return *landscapes_; }
+	TanketTypes &getTanketTypes() { return *tanketTypes_; }
 	TankModelStore &getTankModels() { return *tankModelStore_; }
 	LUAScriptFactory &getLUAScriptFactory() { return *luaScriptFactory_; }
 	LUAScriptHook &getLUAScriptHook() { return *luaScriptHook_; }
@@ -82,9 +86,11 @@ protected:
 	AccessoryStore *accessoryStore_;
 	LandscapeDefinitions *landscapes_;
 	TargetContainer *targetContainer_;
+	TanketContainer *tanketContainer_;
 	TankContainer *tankContainer_;
 	TankModelStore *tankModelStore_;
 	TankTeamScore *tankTeamScore_;
+	TanketTypes *tanketTypes_;
 	TargetMovement *targetMovement_;
 	LUAScriptFactory *luaScriptFactory_;
 	LUAScriptHook *luaScriptHook_;

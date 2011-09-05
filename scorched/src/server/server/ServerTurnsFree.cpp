@@ -49,7 +49,7 @@ void ServerTurnsFree::internalEnterState()
 	timedPlayers_.clear();
 
 	std::map<unsigned int, Tank*> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+		ScorchedServer::instance()->getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank*>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
@@ -69,7 +69,7 @@ void ServerTurnsFree::internalSimulate(fixed frameTime)
 	// Build list of currently playing destinations
 	std::set<unsigned int> playingDestinations;
 	std::map<unsigned int, Tank*> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+		ScorchedServer::instance()->getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank*>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();

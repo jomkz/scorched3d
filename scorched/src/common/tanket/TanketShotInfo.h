@@ -18,46 +18,24 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_TankPositionh_INCLUDE__)
-#define __INCLUDE_TankPositionh_INCLUDE__
+#if !defined(__INCLUDE_TanketShotInfoh_INCLUDE__)
+#define __INCLUDE_TanketShotInfoh_INCLUDE__
 
 #include <net/NetBuffer.h>
 #include <vector>
 
-class Tank;
+class Tanket;
 class ScorchedContext;
-class TankPosition
+class TanketShotInfo
 {
 public:
+	TanketShotInfo(ScorchedContext &context);
+	virtual ~TanketShotInfo();
 
-	struct ShotEntry
-	{
-		ShotEntry(fixed p = 0, fixed r = 0, fixed e = 0) : 
-			power(p), rot(r), ele(e) { }
-	
-		fixed power;
-		fixed rot;
-		fixed ele;
-		bool current;
-	};
-
-	TankPosition(ScorchedContext &context);
-	virtual ~TankPosition();
-
-	void setTank(Tank *tank) { tank_ = tank; }
+	void setTanket(Tanket *tanket) { tanket_ = tanket; }
 
 	// State change
-	void clientNewGame();
-	void madeShot();
 	void newGame();
-	
-	// Saved settings
-	fixed getRotationXYDiff();
-	fixed getRotationYZDiff();
-	fixed getPowerDiff();
-	void revertSettings(unsigned int index = 0);
-	void undo();
-	std::vector<ShotEntry> &getOldShots();
 
 	// Gun/Turret Rotation
 	fixed rotateGunXY(fixed angle, bool diff=true);
@@ -94,12 +72,10 @@ public:
 
 protected:
 	ScorchedContext &context_;
-	Tank *tank_;
+	Tanket *tanket_;
 
 	// Turret angles
-	std::vector<ShotEntry> oldShots_;
 	fixed turretRotXY_, turretRotYZ_, power_;
-	fixed oldTurretRotXY_, oldTurretRotYZ_, oldPower_;
 	fixed maxPower_;
 	int selectPositionX_, selectPositionY_;
 };

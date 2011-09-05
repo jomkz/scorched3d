@@ -24,8 +24,8 @@
 	#include <sprites/ExplosionTextures.h>
 #endif
 #include <tank/TankContainer.h>
-#include <tank/TankPosition.h>
 #include <tank/TankAvatar.h>
+#include <tanket/TanketShotInfo.h>
 #include <engine/ScorchedContext.h>
 #include <engine/ActionController.h>
 #include <common/Defines.h>
@@ -54,7 +54,7 @@ void TankSay::init()
 			// put a speach bubble over the talking tank
 			Vector white(1.0f, 1.0f, 1.0f);
 			TalkRenderer *talk = new TalkRenderer(
-				tank->getPosition().getTankTurretPosition().asVector(),
+				tank->getShotInfo().getTankTurretPosition().asVector(),
 				white);
 			context_->getActionController().addAction(new SpriteAction(talk));
 

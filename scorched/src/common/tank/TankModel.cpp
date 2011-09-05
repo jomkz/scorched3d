@@ -19,9 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <tank/TankModel.h>
-#include <tank/TankType.h>
 #include <tank/Tank.h>
-#include <tank/TankModelStore.h>
 #include <XML/XMLNode.h>
 #include <engine/ScorchedContext.h>
 

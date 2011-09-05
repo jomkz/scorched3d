@@ -18,53 +18,53 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <tank/TankBatteries.h>
-#include <tank/Tank.h>
-#include <tank/TankAccessories.h>
+#include <tanket/TanketBatteries.h>
+#include <tanket/Tanket.h>
+#include <tanket/TanketAccessories.h>
 #include <weapons/Accessory.h>
 
-TankBatteries::TankBatteries(ScorchedContext &context) :
+TanketBatteries::TanketBatteries(ScorchedContext &context) :
 	context_(context),
-	tank_(0)
+	tanket_(0)
 {
 }
 
-TankBatteries::~TankBatteries()
+TanketBatteries::~TanketBatteries()
 {
 }
 
-void TankBatteries::newMatch()
+void TanketBatteries::newMatch()
 {
 }
 
-void TankBatteries::changed()
+void TanketBatteries::changed()
 {
 }
 
-Accessory *TankBatteries::getBatteryAccessory()
+Accessory *TanketBatteries::getBatteryAccessory()
 {
 	std::list<Accessory *> &result =
-		tank_->getAccessories().getAllAccessoriesByType(
+		tanket_->getAccessories().getAllAccessoriesByType(
 			AccessoryPart::AccessoryBattery);
 	if (result.empty()) return 0;
 	return result.front();
 }
 
-int TankBatteries::getNoBatteries()
+int TanketBatteries::getNoBatteries()
 {
 	Accessory *battery = getBatteryAccessory();
 	if (!battery) return 0;
-	return tank_->getAccessories().getAccessoryCount(battery);
+	return tanket_->getAccessories().getAccessoryCount(battery);
 }
 
-bool TankBatteries::canUse()
+bool TanketBatteries::canUse()
 {
 	int count = getNoBatteries();
 	if (count == -1) return true;
 	if (count == 0) return false;
 
 	std::list<Accessory *> &result =
-		tank_->getAccessories().getAllAccessoriesByType(
+		tanket_->getAccessories().getAllAccessoriesByType(
 			AccessoryPart::AccessoryBattery);
 	if (result.empty()) return false;
 	if (count >= result.front()->getUseNumber()) return true;

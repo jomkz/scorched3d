@@ -23,9 +23,8 @@
 #include <engine/Simulator.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <tank/TankLib.h>
-#include <tank/Tank.h>
-#include <tank/TankPosition.h>
-#include <tank/TankContainer.h>
+#include <tanket/Tanket.h>
+#include <tanket/TanketContainer.h>
 #include <target/TargetLife.h>
 #include <common/Defines.h>
 #include <list>
@@ -107,11 +106,11 @@ void WeaponAimedUnder::fireWeapon(ScorchedContext &context,
 	std::list<Target *> targets;
 	if (groupName_.empty())
 	{
-		std::map<unsigned int, Tank *> &allTanks =
-			context.getTankContainer().getAllTanks();
-		std::map<unsigned int, Tank *>::iterator itor;
-		for (itor = allTanks.begin();
-			itor != allTanks.end();
+		std::map<unsigned int, Tanket *> &allTankets =
+			context.getTanketContainer().getAllTankets();
+		std::map<unsigned int, Tanket *>::iterator itor;
+		for (itor = allTankets.begin();
+			itor != allTankets.end();
 			itor++)
 		{
 			targets.push_back(itor->second);

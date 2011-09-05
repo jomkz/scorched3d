@@ -112,7 +112,7 @@ void ScoreDialog::calculateScores()
 {
 	lastScoreValue_ = lastMoneyValue_ = 0;
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedClient::instance()->getTankContainer().getPlayingTanks();
+		ScorchedClient::instance()->getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
@@ -164,7 +164,7 @@ void ScoreDialog::draw()
 	bool buying = false;
 	{
 		std::map<unsigned int, Tank *> &playingTanks =
-			ScorchedClient::instance()->getTankContainer().getPlayingTanks();
+			ScorchedClient::instance()->getTankContainer().getAllTanks();
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = playingTanks.begin();
 			itor != playingTanks.end();
@@ -465,7 +465,7 @@ void ScoreDialog::draw()
 	}	
 
 	std::map<unsigned int, Tank *> &realTanks = 
-		ScorchedClient::instance()->getTankContainer().getPlayingTanks();
+		ScorchedClient::instance()->getTankContainer().getAllTanks();
 	if (tmpLastScoreValue != lastScoreValue_ ||
 		tmpLastMoneyValue != lastMoneyValue_ ||
 		realTanks.size() != lastNoPlayers_)

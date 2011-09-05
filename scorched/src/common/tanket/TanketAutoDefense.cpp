@@ -18,41 +18,33 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_TANKWEAPON_H__CC20069B_6E50_49E0_B735_D739BCBF58A9__INCLUDED_)
-#define AFX_TANKWEAPON_H__CC20069B_6E50_49E0_B735_D739BCBF58A9__INCLUDED_
+#include <weapons/AccessoryStore.h>
+#include <tanket/TanketAutoDefense.h>
+#include <tanket/Tanket.h>
+#include <tanket/TanketAccessories.h>
 
-#include <map>
-#include <list>
-#include <string>
-#include <net/NetBuffer.h>
-
-class ScorchedContext;
-class Tank;
-class Accessory;
-class TankWeapon  
+TanketAutoDefense::TanketAutoDefense(ScorchedContext &context) :
+	context_(context),
+	tanket_(0)
 {
-public:
-	TankWeapon(ScorchedContext &context);
-	virtual ~TankWeapon();
+}
 
-	void setTank(Tank *tank) { tank_ = tank; }
+TanketAutoDefense::~TanketAutoDefense()
+{
+}
 
-	void newMatch();
-	void changed();
+void TanketAutoDefense::newMatch()
+{
+}
 
-	bool setWeapon(Accessory *wp);
+void TanketAutoDefense::changed()
+{
+}
 
-	// Change the currently selected weapon
-	Accessory *getCurrent();
-	const char *getWeaponString();
-
-protected:
-	Accessory *currentWeapon_;
-	ScorchedContext &context_;
-	Tank *tank_;
-
-	void setCurrentWeapon(Accessory *wp);
-
-};
-
-#endif // !defined(AFX_TANKWEAPON_H__CC20069B_6E50_49E0_B735_D739BCBF58A9__INCLUDED_)
+bool TanketAutoDefense::haveDefense()
+{
+	std::list<Accessory *> &result =
+		tanket_->getAccessories().getAllAccessoriesByType(
+			AccessoryPart::AccessoryAutoDefense);
+	return !result.empty();
+}

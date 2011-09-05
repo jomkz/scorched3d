@@ -36,8 +36,8 @@
 #include <tankgraph/TankKeyboardControlUtil.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
-#include <tank/TankPosition.h>
-#include <tank/TankAccessories.h>
+#include <tanket/TanketShotInfo.h>
+#include <tanket/TanketAccessories.h>
 #include <target/TargetLife.h>
 #include <common/ChannelManager.h>
 #include <common/Keyboard.h>
@@ -305,8 +305,8 @@ void TargetCamera::moveCamera()
 	}
 	if (currentTank && currentTank->getAlive())
 	{
-		position = currentTank->getPosition().getTankTurretPosition().asVector();
-		currentRotation = (180.0f - currentTank->getPosition().getRotationGunXY().asFloat()) / 57.32f;
+		position = currentTank->getShotInfo().getTankTurretPosition().asVector();
+		currentRotation = (180.0f - currentTank->getShotInfo().getRotationGunXY().asFloat()) / 57.32f;
 	}
 
 	switch (cameraPos_)
@@ -515,10 +515,10 @@ void TargetCamera::moveCamera()
 
 void TargetCamera::viewBehindTank(Tank *tank)
 {
-	Vector position = tank->getPosition().getTankTurretPosition().asVector();
-	float currentRotation = (180.0f - tank->getPosition().getRotationGunXY().asFloat()) / 57.32f;
-	float currentElevation = (tank->getPosition().getRotationGunYZ().asFloat()) / 160.0f;
-	Vector newPos = tank->getPosition().getTankGunPosition().asVector();
+	Vector position = tank->getShotInfo().getTankTurretPosition().asVector();
+	float currentRotation = (180.0f - tank->getShotInfo().getRotationGunXY().asFloat()) / 57.32f;
+	float currentElevation = (tank->getShotInfo().getRotationGunYZ().asFloat()) / 160.0f;
+	Vector newPos = tank->getShotInfo().getTankGunPosition().asVector();
 	Vector diff = newPos - position;
 	Vector newPos2 = position + (diff);
 	newPos2[2] += 0.5f;
@@ -732,7 +732,7 @@ void TargetCamera::mouseUp(GameState::MouseButton button,
 		}
 
 		Landscape::instance()->restoreLandscapeTexture();
-		currentTank->getPosition().setSelectPosition(posX, posY);
+		currentTank->getShotInfo().setSelectPosition(posX, posY);
 		TankKeyboardControlUtil::fireShot(currentTank);
 	}
 }

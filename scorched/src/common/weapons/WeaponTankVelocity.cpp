@@ -20,9 +20,8 @@
 
 #include <weapons/WeaponTankVelocity.h>
 #include <weapons/AccessoryStore.h>
-#include <tank/TankContainer.h>
-#include <tank/TankState.h>
-#include <tank/TankPosition.h>
+#include <tanket/TanketShotInfo.h>
+#include <tanket/TanketContainer.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponTankVelocity);
 
@@ -61,10 +60,10 @@ bool WeaponTankVelocity::parseXML(AccessoryCreateContext &context, XMLNode *acce
 void WeaponTankVelocity::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
-	if (tank && tank->getState().getState() == TankState::sNormal)
+	Tanket *tanket = context.getTanketContainer().getTanketById(weaponContext.getPlayerId());
+	if (tanket && tanket->getAlive())
 	{
-		FixedVector newVelocity = tank->getPosition().getVelocityVector();
+		FixedVector newVelocity = tanket->getShotInfo().getVelocityVector();
 		aimedWeapon_->fireWeapon(context, weaponContext, position, newVelocity);
 	}
 }

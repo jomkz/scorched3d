@@ -25,7 +25,6 @@
 
 // The model used for this tank
 class ScorchedContext;
-class TankType;
 class TankModel;
 class Tank;
 class TankModelContainer

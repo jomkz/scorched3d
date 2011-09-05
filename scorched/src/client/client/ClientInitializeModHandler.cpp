@@ -30,7 +30,6 @@
 #include <common/OptionsScorched.h>
 #include <client/ClientParams.h>
 #include <dialogs/ProgressDialog.h>
-#include <tank/TankModelStore.h>
 #include <engine/ModFiles.h>
 #include <graph/OptionsDisplay.h>
 #include <coms/ComsInitializeModMessage.h>
@@ -40,6 +39,8 @@
 #include <GLEXT/GLLenseFlare.h>
 #include <lang/LangResource.h>
 #include <tankai/TankAIStrings.h>
+#include <tank/TankModelStore.h>
+#include <tanket/TanketTypes.h>
 
 ClientInitializeModHandler *ClientInitializeModHandler::instance_ = 0;
 
@@ -95,6 +96,13 @@ bool ClientInitializeModHandler::initialize()
 	if (!ScorchedClient::instance()->getAccessoryStore().parseFile(
 		ScorchedClient::instance()->getContext(),
 		ProgressDialogSync::events_instance())) return false;
+
+	if (!ScorchedClient::instance()->getTanketTypes().
+		loadTanketTypes(ScorchedClient::instance()->getContext())) {
+
+		S3D::dialogMessage("Scorched 3D", "Failed to load tank types");
+		return false;
+	}
 
 	// Load tank models here
 	// This is after mods are complete but before any tanks models are used

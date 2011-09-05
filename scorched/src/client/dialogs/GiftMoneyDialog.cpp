@@ -116,7 +116,7 @@ void GiftMoneyDialog::display()
 
 	// Add all tanks in the same team as the current
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedClient::instance()->getTankContainer().getPlayingTanks();
+		ScorchedClient::instance()->getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();

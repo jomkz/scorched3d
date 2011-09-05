@@ -24,7 +24,6 @@
 #include <target/TargetState.h>
 #include <target/TargetGroup.h>
 #include <target/Target.h>
-#include <tank/TankType.h>
 #include <engine/ScorchedContext.h>
 #include <engine/ActionController.h>
 #include <tankai/TankAIAdder.h>

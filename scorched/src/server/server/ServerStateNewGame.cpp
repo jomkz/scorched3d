@@ -53,7 +53,7 @@ void ServerStateNewGame::newGame()
 	std::list<Tank *> playingTanks;
 	std::set<unsigned int> loadingDestinations;
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+		ScorchedServer::instance()->getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank *>::iterator tankItor;
 	for (tankItor = tanks.begin();
 		tankItor != tanks.end();

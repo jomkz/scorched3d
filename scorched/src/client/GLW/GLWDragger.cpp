@@ -25,7 +25,6 @@
 #include <client/ScorchedClient.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
-#include <tank/TankPosition.h>
 
 REGISTER_CLASS_SOURCE(GLWDragger);
 

@@ -21,19 +21,16 @@
 #if !defined(AFX_TANK_H__52F37177_46EA_49C8_9B58_E6C57ABDB78A__INCLUDED_)
 #define AFX_TANK_H__52F37177_46EA_49C8_9B58_E6C57ABDB78A__INCLUDED_
 
-#include <target/Target.h>
+#include <tanket/Tanket.h>
 
-class TankType;
-class TankAI;
-class TankAccessories;
 class TankScore;
 class TankState;
-class TankPosition;
+class TankShotHistory;
 class TankModelContainer;
 class TankAvatar;
 class TankCamera;
 class TankViewPointsCollection;
-class Tank : public Target
+class Tank : public Tanket
 {
 public:
 	// Constructor for tank
@@ -61,17 +58,12 @@ public:
 	virtual bool isTarget() { return false; }
 	unsigned int getDestinationId();
 	void setDestinationId(unsigned int id) { destinationId_ = id; }
-	unsigned int getTeam() { return team_; }
-	void setTeam(unsigned int team) { team_ = team; }
 	const char *getUniqueId() { return uniqueId_.c_str(); }
 	void setUniqueId(const char *id) { uniqueId_ = id; }
 	const char *getSUI() { return SUI_.c_str(); }
 	void setSUI(const char *SecID) { SUI_ = SecID; }
 	const char *getHostDesc() { return hostDesc_.c_str(); }
 	void setHostDesc(const char *id) { hostDesc_ = id; }
-	TankAI *getTankAI() { return tankAI_; }
-	TankType *getTankType() { return tankType_; }
-	void setTankAI(TankAI *ai);
 	Vector &getColor();
 	void setColor(Vector &color) { color_ = color; }
 	unsigned int getIpAddress() { return ipAddress_; }
@@ -79,9 +71,8 @@ public:
 	virtual Weapon *getDeathAction();
 
 	// Other attributes
-	TankAccessories& getAccessories() { return *accessories_; }
 	TankScore &getScore() { return *score_; }
-	TankPosition &getPosition() { return *position_; }
+	TankShotHistory &getShotHistory() { return *shotHistory_; }
 	TankState &getState() { return *state_; }
 	TankAvatar &getAvatar() { return *avatar_; }
 	TankCamera &getCamera() { return *camera_; }
@@ -92,20 +83,15 @@ protected:
 	ScorchedContext &context_;
 	TankViewPointsCollection *viewPoints_;
 	TankModelContainer *modelContainer_;
-	TankAccessories *accessories_;
 	TankScore *score_;
-	TankPosition *position_;
+	TankShotHistory *shotHistory_;
 	TankState *state_;
 	TankAvatar *avatar_;
 	TankCamera *camera_;
-	TankAI *tankAI_;
-	TankType *tankType_;
 	Vector color_;
 	std::string uniqueId_;
 	std::string SUI_;
 	std::string hostDesc_;
-	unsigned int team_;
-	unsigned int playerId_;
 	unsigned int destinationId_;
 	unsigned int ipAddress_;
 

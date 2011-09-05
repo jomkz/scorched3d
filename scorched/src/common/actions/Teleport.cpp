@@ -24,7 +24,6 @@
 #include <common/OptionsScorched.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
-#include <tank/TankPosition.h>
 #include <tank/TankViewPoints.h>
 #include <target/TargetDamageCalc.h>
 #include <target/TargetLife.h>
@@ -66,7 +65,7 @@ void Teleport::init()
 		{
 			Vector white(1.0f, 1.0f, 1.0f);
 			TeleportRenderer *teleport = new TeleportRenderer(
-				tank->getPosition().getTankTurretPosition().asVector(),
+				tank->getLife().getTargetPosition().asVector(),
 				white);
 			context_->getActionController().addAction(new SpriteAction(teleport));
 		}
@@ -97,7 +96,7 @@ void Teleport::simulate(fixed frameTime, bool &remove)
 					Sound::instance()->fetchOrCreateBuffer(
 						S3D::getModFile(weapon_->getSound()));
 				SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
-					activateSound, tank->getPosition().getTankPosition().asVector());
+					activateSound, tank->getLife().getTargetPosition().asVector());
 			}
 		}
 #endif // #ifndef S3D_SERVER

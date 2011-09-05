@@ -36,7 +36,7 @@ ServerStateTankNewGame::~ServerStateTankNewGame()
 void ServerStateTankNewGame::enterState()
 {
 	std::map<unsigned int, Tank*> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+		ScorchedServer::instance()->getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank*>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();

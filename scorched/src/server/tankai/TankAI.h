@@ -29,7 +29,7 @@
 class TankAIWeaponSets;
 class Weapon;
 class XMLNode;
-class Tank;
+class Tanket;
 class TankAI
 {
 public:
@@ -37,7 +37,7 @@ public:
 	virtual ~TankAI();
 
 	// Instance init
-	virtual TankAI *createCopy(Tank *tank) = 0;
+	virtual TankAI *createCopy(Tanket *tanket) = 0;
 
 	// Onetime init
 	virtual bool parseConfig(TankAIWeaponSets &sets, XMLNode *node);

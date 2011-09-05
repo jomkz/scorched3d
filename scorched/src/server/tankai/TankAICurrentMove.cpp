@@ -33,8 +33,8 @@
 #include <tankai/TankAI.h>
 #include <tank/Tank.h>
 #include <tank/TankLib.h>
-#include <tank/TankPosition.h>
-#include <tank/TankAccessories.h>
+#include <tanket/TanketAccessories.h>
+#include <tanket/TanketShotInfo.h>
 #include <target/TargetLife.h>
 #include <target/TargetShield.h>
 #include <target/TargetParachute.h>
@@ -134,7 +134,7 @@ void TankAICurrentMove::clear()
 	shotRecords_.clear();
 }
 
-void TankAICurrentMove::playMove(Tank *tank, 
+void TankAICurrentMove::playMove(Tanket *tanket, 
 	TankAIWeaponSets::WeaponSet *weapons, bool useBatteries,
 	unsigned int moveId)
 {
@@ -142,14 +142,14 @@ void TankAICurrentMove::playMove(Tank *tank,
 	moveData.moveId = moveId;
 	moveData.madeMove = false;
 	moveData.usedBatteries = false;
-	playMove(tank, weapons, useBatteries, moveData);
+	playMoveInternal(tanket, weapons, useBatteries, moveData);
 
 	if (!moveData.madeMove)
 	{
 		if (moveData.usedBatteries)
 		{
 			TankStartMoveSimAction *simAction = 
-				new TankStartMoveSimAction(tank->getPlayerId(), moveId, 0, false, 0);
+				new TankStartMoveSimAction(tanket->getPlayerId(), moveId, 0, false, 0);
 			ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
 		}
 		else
@@ -160,24 +160,24 @@ void TankAICurrentMove::playMove(Tank *tank,
 	}
 }
 
-void TankAICurrentMove::playMove(Tank *tank, 
+void TankAICurrentMove::playMoveInternal(Tanket *tanket, 
 	TankAIWeaponSets::WeaponSet *weapons, bool useBatteries,
 	MoveData &moveData)
 {
 	if (TankAI::getTankAILogging())
 	{
 		Logger::log(S3D::formatStringBuffer("----- TankAI %u %s ----------------",
-			tank->getPlayerId(), tank->getCStrName().c_str()));
+			tanket->getPlayerId(), tanket->getCStrName().c_str()));
 	}
 
-	std::list<Tank *> sortedTanks;	
+	std::list<Tanket *> sortedTankets;	
 
 	// Find the list of tanks we can shoot at 
 	// In the order we want to shoot at them
-	targets_.getTargets(tank, sortedTanks);
+	targets_.getTargets(tanket, sortedTankets);
 	if (TankAI::getTankAILogging())
 	{
-		Logger::log(S3D::formatStringBuffer("TankAI - Found %u tanks to shoot at", sortedTanks.size()));
+		Logger::log(S3D::formatStringBuffer("TankAI - Found %u tanks to shoot at", sortedTankets.size()));
 	}
 
 	// Check if we have taken a lot of damage and we can move
@@ -189,40 +189,40 @@ void TankAICurrentMove::playMove(Tank *tank,
 		// Bring the health back up
 		if (useBatteries)
 		{
-			if (useAvailableBatteries(tank, moveData)) return;
+			if (useAvailableBatteries(tanket, moveData)) return;
 		}
 
-		if (tank->getLife().getLife().asFloat() > movementLife_)
+		if (tanket->getLife().getLife().asFloat() > movementLife_)
 		{
 			// Try to move
-			if (makeMoveShot(tank, weapons, sortedTanks, moveData)) return;
+			if (makeMoveShot(tanket, weapons, sortedTankets, moveData)) return;
 		}
 	}
 
 	// Check to see if we can make a huge shot at a number of tanks
 	if (RAND <= groupShotChance_)
 	{
-		if (makeGroupShot(tank, weapons, sortedTanks, moveData)) return;
+		if (makeGroupShot(tanket, weapons, sortedTankets, moveData)) return;
 	}
 
 	// Try to shoot at each tank in turn
-	while (!sortedTanks.empty())
+	while (!sortedTankets.empty())
 	{
 		// Get the first tank
-		Tank *targetTank = sortedTanks.front();
-		sortedTanks.pop_front();
+		Tanket *targetTanket = sortedTankets.front();
+		sortedTankets.pop_front();
 
 		if (TankAI::getTankAILogging())
 		{
 			Logger::log(S3D::formatStringBuffer("TankAI - Checking target %u %s", 
-				targetTank->getPlayerId(), targetTank->getCStrName().c_str()));
+				targetTanket->getPlayerId(), targetTanket->getCStrName().c_str()));
 		}
 
 		// Get the list of weapons that might make sense here
-		TankAICurrentMoveWeapons moveWeapons(tank, targetTank, weapons);
+		TankAICurrentMoveWeapons moveWeapons(tanket, targetTanket, weapons);
 
 		// Try to shoot at it
-		if (shootAtTank(tank, targetTank, moveWeapons, moveData)) return;
+		if (shootAtTank(tanket, targetTanket, moveWeapons, moveData)) return;
 
 		// Keeping trying to shoot at the tanks until we make a shot
 		// or run out of tanks
@@ -230,10 +230,10 @@ void TankAICurrentMove::playMove(Tank *tank,
 		// Check if we can use batteries, as perhaps we couldn't shoot 
 		// due to a lack of power
 		if (useBatteries &&
-			tank->getLife().getLife() < tank->getLife().getMaxLife())
+			tanket->getLife().getLife() < tanket->getLife().getMaxLife())
 		{
 			// Bring the health back up
-			if (useAvailableBatteries(tank, moveData)) return;
+			if (useAvailableBatteries(tanket, moveData)) return;
 		}
 	}
 
@@ -244,46 +244,46 @@ void TankAICurrentMove::playMove(Tank *tank,
 
 	// Try to move so we can get a better shot at the targets
 	// Only move if we have a hope of hitting them
-	if (tank->getLife().getLife().asFloat() > movementLife_)
+	if (tanket->getLife().getLife().asFloat() > movementLife_)
 	{
-		targets_.getTargets(tank, sortedTanks);
-		if (makeMoveShot(tank, weapons, sortedTanks, moveData)) return;
+		targets_.getTargets(tanket, sortedTankets);
+		if (makeMoveShot(tanket, weapons, sortedTankets, moveData)) return;
 	}
 
 	// Is there any point in making a move
 	// Done after select weapons to allow shields to be raised
 	if (useResign_ &&
 		ScorchedServer::instance()->getOptionsGame().getResignMode() != OptionsGame::ResignNone &&
-		tank->getLife().getLife().asFloat() < resignLife_) 
+		tanket->getLife().getLife().asFloat() < resignLife_) 
 	{
-		resign(tank, moveData);
+		resign(tanket, moveData);
 		return;
 	}
 
 	// By default skip this move if we can't find anything to do
 	// Perhaps we are burried etc...
-	skipMove(tank, moveData);
+	skipMove(tanket, moveData);
 }
 
-bool TankAICurrentMove::shootAtTank(Tank *tank, Tank *targetTank, 
+bool TankAICurrentMove::shootAtTank(Tanket *tanket, Tanket *targetTanket, 
 	TankAICurrentMoveWeapons &weapons, MoveData &moveData)
 {
 	// Try to make a sniper shot
-	if (makeSniperShot(tank, targetTank, weapons, moveData)) return true;
+	if (makeSniperShot(tanket, targetTanket, weapons, moveData)) return true;
 
 	// Try to make a laser shot
-	if (makeLaserSniperShot(tank, targetTank, weapons, moveData)) return true;
+	if (makeLaserSniperShot(tanket, targetTanket, weapons, moveData)) return true;
 
 	// Then a projectile shot
-	if (makeProjectileShot(tank, targetTank, weapons, moveData)) return true;
+	if (makeProjectileShot(tanket, targetTanket, weapons, moveData)) return true;
 
 	// Check if we are burried
-	if (makeBurriedShot(tank, targetTank, weapons, moveData)) return true;
+	if (makeBurriedShot(tanket, targetTanket, weapons, moveData)) return true;
 
 	return false;
 }
 
-bool TankAICurrentMove::makeProjectileShot(Tank *tank, Tank *targetTank, 
+bool TankAICurrentMove::makeProjectileShot(Tanket *tanket, Tanket *targetTanket, 
 	TankAICurrentMoveWeapons &weapons, MoveData &moveData)
 {
 	if (TankAI::getTankAILogging())
@@ -306,7 +306,7 @@ bool TankAICurrentMove::makeProjectileShot(Tank *tank, Tank *targetTank,
 	}
 
 	// Get the place we want to shoot at
-	Vector directTarget = targetTank->getPosition().getTankPosition().asVector();
+	Vector directTarget = targetTanket->getShotInfo().getTankPosition().asVector();
 
 	// Check if the person is in a hole
 	bool inhole = false;
@@ -339,7 +339,7 @@ bool TankAICurrentMove::makeProjectileShot(Tank *tank, Tank *targetTank,
 	}
 
 	// Get the distance to get to this tank
-	float tankAimDistance = getShotDistance(targetTank, true);
+	float tankAimDistance = getShotDistance(targetTanket, true);
 	tankAimDistance -= 5.0f;
 	if (tankAimDistance < 0.0f) tankAimDistance = 0.0f;
 	//Logger::log(S3D::formatStringBuffer("Aim Distance %.2f", tankAimDistance));
@@ -357,13 +357,13 @@ bool TankAICurrentMove::makeProjectileShot(Tank *tank, Tank *targetTank,
 		// Check this angle
 		Vector actualPosition;
 		TankAIAimGuesser aimGuesser(ScorchedServer::instance()->getContext());
-		if (aimGuesser.guess(tank, aimPosition, degs, aimDistance, actualPosition))
+		if (aimGuesser.guess(tanket, aimPosition, degs, aimDistance, actualPosition))
 		{	
 			// Check we are not firing too close to us
 			float distanceFromTarget = 
 				(actualPosition - directTarget).Magnitude();
 			float distanceFromUs = 
-				(actualPosition - tank->getPosition().getTankPosition().asVector()).Magnitude();
+				(actualPosition - tanket->getShotInfo().getTankPosition().asVector()).Magnitude();
 			if (distanceFromUs < projectileMinDistance_)
 			{
 				if (TankAI::getTankAILogging())
@@ -386,7 +386,7 @@ bool TankAICurrentMove::makeProjectileShot(Tank *tank, Tank *targetTank,
 				// Check if the tank is in a hole
 				if (inhole)
 				{
-					setWeapon(tank, weapons.roller);
+					setWeapon(tanket, weapons.roller);
 					if (TankAI::getTankAILogging())
 					{
 						Logger::log(S3D::formatStringBuffer("TankAI - in hole roller used"));
@@ -399,9 +399,9 @@ bool TankAICurrentMove::makeProjectileShot(Tank *tank, Tank *targetTank,
 					if (weapons.shield)
 					{
 						// A shield beating weapon
-						if (weapons.digger) setWeapon(tank, weapons.digger);
-						else if (weapons.napalm) setWeapon(tank, weapons.napalm);
-						else if (weapons.large) setWeapon(tank, weapons.large);
+						if (weapons.digger) setWeapon(tanket, weapons.digger);
+						else if (weapons.napalm) setWeapon(tanket, weapons.napalm);
+						else if (weapons.large) setWeapon(tanket, weapons.large);
 						else 
 						{
 							if (TankAI::getTankAILogging())
@@ -414,9 +414,9 @@ bool TankAICurrentMove::makeProjectileShot(Tank *tank, Tank *targetTank,
 					else
 					{
 						// A normal weapon
-						if (weapons.digger) setWeapon(tank, weapons.digger);
-						else if (weapons.large) setWeapon(tank, weapons.large);		
-						else if (weapons.small) setWeapon(tank, weapons.small);					
+						if (weapons.digger) setWeapon(tanket, weapons.digger);
+						else if (weapons.large) setWeapon(tanket, weapons.large);		
+						else if (weapons.small) setWeapon(tanket, weapons.small);					
 						else 
 						{
 							if (TankAI::getTankAILogging())
@@ -436,8 +436,8 @@ bool TankAICurrentMove::makeProjectileShot(Tank *tank, Tank *targetTank,
 				}
 
 				// We are not close, choose a cheap weapon
-				if (weapons.small) setWeapon(tank, weapons.small);	
-				else if (weapons.large) setWeapon(tank, weapons.large);
+				if (weapons.small) setWeapon(tanket, weapons.small);	
+				else if (weapons.large) setWeapon(tanket, weapons.large);
 				else 
 				{
 					if (TankAI::getTankAILogging())
@@ -449,8 +449,8 @@ bool TankAICurrentMove::makeProjectileShot(Tank *tank, Tank *targetTank,
 			}
 
 			// Fire the shot
-			shotAtTank(targetTank, true, distanceFromTarget);
-			fireShot(tank, moveData);
+			shotAtTank(targetTanket, true, distanceFromTarget);
+			fireShot(tanket, moveData);
 			return true;
 		}
 		else
@@ -465,7 +465,7 @@ bool TankAICurrentMove::makeProjectileShot(Tank *tank, Tank *targetTank,
 	return false;
 }
 
-bool TankAICurrentMove::makeSniperShot(Tank *tank, Tank *targetTank, 
+bool TankAICurrentMove::makeSniperShot(Tanket *tanket, Tanket *targetTanket, 
 	TankAICurrentMoveWeapons &weapons, MoveData &moveData)
 {
 	if (TankAI::getTankAILogging())
@@ -487,13 +487,13 @@ bool TankAICurrentMove::makeSniperShot(Tank *tank, Tank *targetTank,
 	}
 
 	// Get the place we want to shoot at
-	Vector directTarget = targetTank->getPosition().getTankPosition().asVector();
+	Vector directTarget = targetTanket->getShotInfo().getTankPosition().asVector();
 
 	// First check to see if we can make a sniper shot that carries all the way
 	// as this is generaly an easier shot
-	float offset = getShotDistance(targetTank, false);
+	float offset = getShotDistance(targetTanket, false);
 	TankAISniperGuesser sniperGuesser;
-	if (sniperGuesser.guess(tank, directTarget, sniperUseDistance_, true, offset))
+	if (sniperGuesser.guess(tanket, directTarget, sniperUseDistance_, true, offset))
 	{
 		// We can make a ordinary sniper shot
 		if (TankAI::getTankAILogging())
@@ -510,9 +510,9 @@ bool TankAICurrentMove::makeSniperShot(Tank *tank, Tank *targetTank,
 			if (weapons.shield)
 			{
 				// Use a shield beating weapon			
-				if (weapons.digger) setWeapon(tank, weapons.digger);
-				else if (weapons.laser) setWeapon(tank, weapons.laser);
-				else if (weapons.large) setWeapon(tank, weapons.large);
+				if (weapons.digger) setWeapon(tanket, weapons.digger);
+				else if (weapons.laser) setWeapon(tanket, weapons.laser);
+				else if (weapons.large) setWeapon(tanket, weapons.large);
 				else 
 				{
 					if (TankAI::getTankAILogging())
@@ -525,9 +525,9 @@ bool TankAICurrentMove::makeSniperShot(Tank *tank, Tank *targetTank,
 			else
 			{
 				// Just use an ordinary weapon
-				if (weapons.digger) setWeapon(tank, weapons.digger);
-				else if (weapons.large) setWeapon(tank, weapons.large);
-				else if (weapons.small) setWeapon(tank, weapons.small);
+				if (weapons.digger) setWeapon(tanket, weapons.digger);
+				else if (weapons.large) setWeapon(tanket, weapons.large);
+				else if (weapons.small) setWeapon(tanket, weapons.small);
 				else 
 				{
 					if (TankAI::getTankAILogging())
@@ -539,16 +539,16 @@ bool TankAICurrentMove::makeSniperShot(Tank *tank, Tank *targetTank,
 			}
 
 			// Fire the shot
-			shotAtTank(targetTank, false, 0.0f);
-			fireShot(tank, moveData);
+			shotAtTank(targetTanket, false, 0.0f);
+			fireShot(tanket, moveData);
 			return true;
 		}
 		else if (weapons.laser)
 		{
 			// They have a reflective shield but we can use a laser
 			// Set and fire the laser
-			shotAtTank(targetTank, false, 0.0f);
-			fireShot(tank, moveData);
+			shotAtTank(targetTanket, false, 0.0f);
+			fireShot(tanket, moveData);
 			return true;
 		}
 	}
@@ -556,7 +556,7 @@ bool TankAICurrentMove::makeSniperShot(Tank *tank, Tank *targetTank,
 	return false;
 }
 
-bool TankAICurrentMove::makeLaserSniperShot(Tank *tank, Tank *targetTank, 
+bool TankAICurrentMove::makeLaserSniperShot(Tanket *tanket, Tanket *targetTanket, 
 	TankAICurrentMoveWeapons &weapons, MoveData &moveData)
 {
 	if (TankAI::getTankAILogging())
@@ -575,13 +575,13 @@ bool TankAICurrentMove::makeLaserSniperShot(Tank *tank, Tank *targetTank,
 	}
 
 	// Get the place we want to shoot at
-	Vector directTarget = targetTank->getPosition().getTankPosition().asVector();
+	Vector directTarget = targetTanket->getShotInfo().getTankPosition().asVector();
 	
 	// Second check to see if we can make a sniper shot that is obstructed
 	// but could use a laser
-	float offset = getShotDistance(targetTank, false);
+	float offset = getShotDistance(targetTanket, false);
 	TankAISniperGuesser sniperGuesser;
-	if (sniperGuesser.guess(tank, directTarget, sniperUseDistance_, false, offset))
+	if (sniperGuesser.guess(tanket, directTarget, sniperUseDistance_, false, offset))
 	{
 		if (TankAI::getTankAILogging())
 		{
@@ -589,16 +589,16 @@ bool TankAICurrentMove::makeLaserSniperShot(Tank *tank, Tank *targetTank,
 		}
 
 		// Set and fire the laser
-		shotAtTank(targetTank, false, 0.0f);
-		setWeapon(tank, weapons.laser);
-		fireShot(tank, moveData);
+		shotAtTank(targetTanket, false, 0.0f);
+		setWeapon(tanket, weapons.laser);
+		fireShot(tanket, moveData);
 		return true;
 	}
 
 	return false;
 }
 
-bool TankAICurrentMove::makeBurriedShot(Tank *tank, Tank *targetTank, 
+bool TankAICurrentMove::makeBurriedShot(Tanket *tanket, Tanket *targetTanket, 
 	TankAICurrentMoveWeapons &weapons, MoveData &moveData)
 {
 	if (TankAI::getTankAILogging())
@@ -621,13 +621,13 @@ bool TankAICurrentMove::makeBurriedShot(Tank *tank, Tank *targetTank,
 	fixed xy, yz, power;
 	TankLib::getSniperShotTowardsPosition(
 		ScorchedServer::instance()->getContext(),
-		tank->getPosition().getTankPosition(), targetTank->getPosition().getTankPosition(),
+		tanket->getShotInfo().getTankPosition(), targetTanket->getShotInfo().getTankPosition(),
 		100000, xy, yz, power);
 
 	// Check if this shot is burried
 	if (TankLib::intersection(
 		ScorchedServer::instance()->getContext(), 
-		tank->getPosition().getTankGunPosition(), 
+		tanket->getShotInfo().getTankGunPosition(), 
 		xy, yz, power, 2))
 	{
 		if (TankAI::getTankAILogging())
@@ -636,12 +636,12 @@ bool TankAICurrentMove::makeBurriedShot(Tank *tank, Tank *targetTank,
 		}
 
 		// Try to uncover the tank
-		tank->getPosition().rotateGunXY(xy, false);
-		tank->getPosition().rotateGunYZ(yz, false);
-		tank->getPosition().changePower(power, false);
+		tanket->getShotInfo().rotateGunXY(xy, false);
+		tanket->getShotInfo().rotateGunYZ(yz, false);
+		tanket->getShotInfo().changePower(power, false);
 
-		setWeapon(tank, weapons.uncover);
-		fireShot(tank, moveData);
+		setWeapon(tanket, weapons.uncover);
+		fireShot(tanket, moveData);
 		return true;
 	}
 
@@ -720,9 +720,9 @@ bool TankAICurrentMove::inHole(Vector &position)
 	return true;
 }
 
-bool TankAICurrentMove::makeMoveShot(Tank *tank, 
+bool TankAICurrentMove::makeMoveShot(Tanket *tanket, 
 	TankAIWeaponSets::WeaponSet *weapons,
-	std::list<Tank *> &sortedTanks,
+	std::list<Tanket *> &sortedTankets,
 	MoveData &moveData)
 {
 	if (TankAI::getTankAILogging())
@@ -731,9 +731,9 @@ bool TankAICurrentMove::makeMoveShot(Tank *tank,
 	}
 
 	if (!useFuel_) return false;
-	if (sortedTanks.empty()) return false;
+	if (sortedTankets.empty()) return false;
 
-	Accessory *fuel = weapons->getTankAccessoryByType(tank, "fuel");
+	Accessory *fuel = weapons->getTankAccessoryByType(tanket, "fuel");
 	if (!fuel) return false;
 
 	ScorchedContext &context = ScorchedServer::instance()->getContext();
@@ -744,14 +744,14 @@ bool TankAICurrentMove::makeMoveShot(Tank *tank,
 	{
 		// Try to find a position to move to that we want to move to
 		// For the moment, just use the 1st target
-		Tank *target = sortedTanks.front();
-		Vector targetPos = target->getPosition().getTankPosition().asVector();
-		Vector tankPos = tank->getPosition().getTankPosition().asVector();
+		Tanket *target = sortedTankets.front();
+		Vector targetPos = target->getShotInfo().getTankPosition().asVector();
+		Vector tankPos = tanket->getShotInfo().getTankPosition().asVector();
 		float totalDistance = MAX(100.0f, MIN(500.0f, (targetPos - tankPos).Magnitude() * 2.0f));
 
 		// Can we move to this target at all?
 		MovementMap mmap(
-			tank, 
+			tanket, 
 			context);
 		if (!mmap.calculatePosition(FixedVector::fromVector(targetPos), 
 			fixed::fromFloat(totalDistance))) return false;
@@ -783,9 +783,9 @@ bool TankAICurrentMove::makeMoveShot(Tank *tank,
 					totalDamageBeforeMove_ = targets_.getTotalDamageTaken();
 
 					// Move
-					tank->getPosition().setSelectPosition((int) x, (int) y);
-					setWeapon(tank, fuel);
-					fireShot(tank, moveData);
+					tanket->getShotInfo().setSelectPosition((int) x, (int) y);
+					setWeapon(tanket, fuel);
+					fireShot(tanket, moveData);
 
 					return true;
 				}
@@ -801,13 +801,13 @@ bool TankAICurrentMove::makeMoveShot(Tank *tank,
 struct GroupingEntry
 {
 	Vector position;
-	std::list<Tank *> targets;
+	std::list<Tanket *> targets;
 	float totalDistance;
 };
 
-bool TankAICurrentMove::makeGroupShot(Tank *tank, 
+bool TankAICurrentMove::makeGroupShot(Tanket *tanket, 
 	TankAIWeaponSets::WeaponSet *weapons,
-	std::list<Tank *> &sortedTanks,
+	std::list<Tanket *> &sortedTankets,
 	MoveData &moveData)
 {
 	if (TankAI::getTankAILogging())
@@ -816,7 +816,7 @@ bool TankAICurrentMove::makeGroupShot(Tank *tank,
 	}
 
 	if (groupShotSize_ == 0) return false;
-	Accessory *explosionhuge = weapons->getTankAccessoryByType(tank, "explosionhuge");
+	Accessory *explosionhuge = weapons->getTankAccessoryByType(tanket, "explosionhuge");
 	if (!explosionhuge) return false;
 	
 	std::list<GroupingEntry> foundEntries;
@@ -844,20 +844,20 @@ bool TankAICurrentMove::makeGroupShot(Tank *tank,
 
 			// Check this is not too near to us!
 			float distance = 
-				(tank->getPosition().getTankPosition().asVector() - 
+				(tanket->getShotInfo().getTankPosition().asVector() - 
 				entry.position).Magnitude();
 			if (distance < groupTargetDistance_ * 2.0f) continue;
 			
 			// Find all tanks near this position			
-			std::list<Tank *>::iterator toItor;
-			for (toItor = sortedTanks.begin();
-				toItor != sortedTanks.end();
+			std::list<Tanket *>::iterator toItor;
+			for (toItor = sortedTankets.begin();
+				toItor != sortedTankets.end();
 				toItor++)
 			{
-				Tank *to = *toItor;
+				Tanket *to = *toItor;
 
 				distance = 
-					(to->getPosition().getTankPosition().asVector() - 
+					(to->getShotInfo().getTankPosition().asVector() - 
 					entry.position).Magnitude();
 				if (distance < groupTargetDistance_)
 				{
@@ -901,11 +901,11 @@ bool TankAICurrentMove::makeGroupShot(Tank *tank,
 				// Check this angle
 				Vector actualPosition;
 				TankAIAimGuesser aimGuesser(ScorchedServer::instance()->getContext());
-				if (aimGuesser.guess(tank, current->position, 
+				if (aimGuesser.guess(tanket, current->position, 
 					degs, 15.0f, actualPosition))
 				{
-					setWeapon(tank, explosionhuge);
-					fireShot(tank, moveData);
+					setWeapon(tanket, explosionhuge);
+					fireShot(tanket, moveData);
 					return true;
 				}
 			}
@@ -915,19 +915,19 @@ bool TankAICurrentMove::makeGroupShot(Tank *tank,
 	return false;
 }
 
-bool TankAICurrentMove::useAvailableBatteries(Tank *tank, MoveData &moveData)
+bool TankAICurrentMove::useAvailableBatteries(Tanket *tanket, MoveData &moveData)
 {
-	if (!tank->getAccessories().getBatteries().canUse()) return false;
-	int noBatteries = tank->getAccessories().getBatteries().getNoBatteries();
+	if (!tanket->getAccessories().getBatteries().canUse()) return false;
+	int noBatteries = tanket->getAccessories().getBatteries().getNoBatteries();
 	if (noBatteries == 0) return false;
 	if (noBatteries == -1) noBatteries = 1000;
 
 	unsigned int batteryId = 
-		tank->getAccessories().getBatteries().getBatteryAccessory()->getAccessoryId();
+		tanket->getAccessories().getBatteries().getBatteryAccessory()->getAccessoryId();
 
 	int lifeWanted = 
-		tank->getLife().getMaxLife().asInt() - 
-		tank->getLife().getLife().asInt();
+		tanket->getLife().getMaxLife().asInt() - 
+		tanket->getLife().getLife().asInt();
 	int batteriesWanted = lifeWanted / 10;
 
 	int useBatteries = MIN(batteriesWanted, noBatteries);
@@ -935,7 +935,7 @@ bool TankAICurrentMove::useAvailableBatteries(Tank *tank, MoveData &moveData)
 
 	for (int b=0; b<useBatteries; b++)
 	{
-		useBattery(tank, batteryId, moveData);
+		useBattery(tanket, batteryId, moveData);
 	}
 
 	return true;
@@ -976,11 +976,11 @@ Vector TankAICurrentMove::lowestHighest(TankAICurrentMoveWeapons &weapons,
 	return bestPos;
 }
 
-float TankAICurrentMove::getShotDistance(Tank *tank, bool projectile)
+float TankAICurrentMove::getShotDistance(Tanket *tanket, bool projectile)
 {
 	// Try to find an existing record
-	std::map<Tank *, ShotRecord>::iterator itor = 
-		shotRecords_.find(tank);
+	std::map<Tanket *, ShotRecord>::iterator itor = 
+		shotRecords_.find(tanket);
 	if (itor == shotRecords_.end())
 	{
 		if (projectile) return projectileStartDistance_;
@@ -993,33 +993,33 @@ float TankAICurrentMove::getShotDistance(Tank *tank, bool projectile)
 	}
 }
 
-void TankAICurrentMove::shotAtTank(Tank *tank, bool projectile, float newDistance)
+void TankAICurrentMove::shotAtTank(Tanket *tanket, bool projectile, float newDistance)
 {
-	targets_.shotAt(tank);
+	targets_.shotAt(tanket);
 
 	// Try to find an existing record
-	std::map<Tank *, ShotRecord>::iterator itor = 
-		shotRecords_.find(tank);
+	std::map<Tanket *, ShotRecord>::iterator itor = 
+		shotRecords_.find(tanket);
 	if (itor == shotRecords_.end())
 	{
 		// Create one
 		ShotRecord record;
 		record.projectileCurrentDistance = projectileStartDistance_; 
 		record.sniperCurrentDistance = sniperStartDistance_;
-		record.position = tank->getPosition().getTankPosition().asVector();
-		shotRecords_[tank] = record;
+		record.position = tanket->getShotInfo().getTankPosition().asVector();
+		shotRecords_[tanket] = record;
 	}
 
 	// Update the new record with the details about the current shot
-	ShotRecord &record = shotRecords_[tank];
-	float distance = (record.position - tank->getPosition().getTankPosition().asVector()).Magnitude();
+	ShotRecord &record = shotRecords_[tanket];
+	float distance = (record.position - tanket->getShotInfo().getTankPosition().asVector()).Magnitude();
 	float distanceDec = 0.0f;
 	if (distance > 5.0f)
 	{
 		distanceDec = MIN(distance - 5.0f, 20.0f) / 20.0f;
 	}
 
-	record.position = tank->getPosition().getTankPosition().asVector();
+	record.position = tanket->getShotInfo().getTankPosition().asVector();
 	if (projectile)
 	{
 		record.projectileCurrentDistance = newDistance;
@@ -1048,53 +1048,53 @@ void TankAICurrentMove::shotAtTank(Tank *tank, bool projectile, float newDistanc
 	}
 }
 
-void TankAICurrentMove::setWeapon(Tank *tank, Accessory *accessory)
+void TankAICurrentMove::setWeapon(Tanket *tanket, Accessory *accessory)
 {
 	if (TankAI::getTankAILogging())
 	{
 		Logger::log(S3D::formatStringBuffer("TankAI - setting weapon %s", accessory->getName()));
 	}
 
-	tank->getAccessories().getWeapons().setWeapon(accessory);
+	tanket->getAccessories().getWeapons().setWeapon(accessory);
 }
 
-void TankAICurrentMove::skipMove(Tank *tank, MoveData &moveData)
+void TankAICurrentMove::skipMove(Tanket *tanket, MoveData &moveData)
 {
 	if (TankAI::getTankAILogging())
 	{
 		Logger::log(S3D::formatStringBuffer("TankAI - skipping"));
 	}
 
-	ComsPlayedMoveMessage message(tank->getPlayerId(), 
+	ComsPlayedMoveMessage message(tanket->getPlayerId(), 
 		moveData.moveId,
 		ComsPlayedMoveMessage::eSkip);
 	ScorchedServer::instance()->getServerState().moveFinished(message);
 	moveData.madeMove = true;
 }
 
-void TankAICurrentMove::resign(Tank *tank, MoveData &moveData)
+void TankAICurrentMove::resign(Tanket *tanket, MoveData &moveData)
 {
 	if (TankAI::getTankAILogging())
 	{
 		Logger::log(S3D::formatStringBuffer("TankAI - resigning"));
 	}
 
-	ComsPlayedMoveMessage message(tank->getPlayerId(), 
+	ComsPlayedMoveMessage message(tanket->getPlayerId(), 
 		moveData.moveId, 
 		ComsPlayedMoveMessage::eResign);
 	ScorchedServer::instance()->getServerState().moveFinished(message);
 	moveData.madeMove = true;
 }
 
-void TankAICurrentMove::fireShot(Tank *tank, MoveData &moveData)
+void TankAICurrentMove::fireShot(Tanket *tanket, MoveData &moveData)
 {
 	if (TankAI::getTankAILogging())
 	{
-		Logger::log(S3D::formatStringBuffer("TankAI - shooting at tank %s", tank->getCStrName().c_str()));
+		Logger::log(S3D::formatStringBuffer("TankAI - shooting at tank %s", tanket->getCStrName().c_str()));
 	}
 
 	Accessory *currentWeapon = 
-		tank->getAccessories().getWeapons().getCurrent();
+		tanket->getAccessories().getWeapons().getCurrent();
 	if (currentWeapon)
 	{
 		if (TankAI::getTankAILogging())
@@ -1102,16 +1102,16 @@ void TankAICurrentMove::fireShot(Tank *tank, MoveData &moveData)
 			Logger::log(S3D::formatStringBuffer("TankAI - firing shot"));
 		}
 
-		ComsPlayedMoveMessage message(tank->getPlayerId(), 
+		ComsPlayedMoveMessage message(tanket->getPlayerId(), 
 			moveData.moveId, 
 			ComsPlayedMoveMessage::eShot);
 		message.setShot(
 			currentWeapon->getAccessoryId(),
-			tank->getPosition().getRotationGunXY(),
-			tank->getPosition().getRotationGunYZ(),
-			tank->getPosition().getPower(),
-			tank->getPosition().getSelectPositionX(),
-			tank->getPosition().getSelectPositionY());
+			tanket->getShotInfo().getRotationGunXY(),
+			tanket->getShotInfo().getRotationGunYZ(),
+			tanket->getShotInfo().getPower(),
+			tanket->getShotInfo().getSelectPositionX(),
+			tanket->getShotInfo().getSelectPositionY());
 	
 		ScorchedServer::instance()->getServerState().moveFinished(message);
 		moveData.madeMove = true;
@@ -1123,11 +1123,11 @@ void TankAICurrentMove::fireShot(Tank *tank, MoveData &moveData)
 			Logger::log(S3D::formatStringBuffer("TankAI - skipping due to no weapon"));
 		}
 
-		skipMove(tank, moveData);
+		skipMove(tanket, moveData);
 	}
 }
 
-void TankAICurrentMove::useBattery(Tank *tank, unsigned int batteryId, 
+void TankAICurrentMove::useBattery(Tanket *tanket, unsigned int batteryId, 
 	MoveData &moveData)
 {
 	if (TankAI::getTankAILogging())
@@ -1136,7 +1136,7 @@ void TankAICurrentMove::useBattery(Tank *tank, unsigned int batteryId,
 	}
 
 	ComsDefenseMessage defenseMessage(
-		tank->getPlayerId(),
+		tanket->getPlayerId(),
 		ComsDefenseMessage::eBatteryUse,
 		batteryId);
 

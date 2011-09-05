@@ -77,7 +77,7 @@ void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 {
 	// Calculate all the tanks interest
 	std::map<unsigned int, Tank *> &playingTank = 
-		context.getTankContainer().getPlayingTanks();
+		context.getTankContainer().getAllTanks();
 
 	int moneyWonForRound = 
 		context.getOptionsGame().getMoneyWonForRound();
@@ -258,7 +258,7 @@ void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 	// Update the stats for the players before sending out the
 	// stats message
 	std::map<unsigned int, Tank *> &tanks = 
-		context.getTankContainer().getPlayingTanks();
+		context.getTankContainer().getAllTanks();
 	for (itor = tanks.begin();
 		itor != tanks.end();
 		itor++)
@@ -303,7 +303,7 @@ void ShowScoreSimAction::scoreOverallWinner(ScorchedContext &context)
 	{
 		std::list<Tank *> sortedTanks;
 		std::map<unsigned int, Tank *> &tanks = 
-			context.getTankContainer().getPlayingTanks();
+			context.getTankContainer().getAllTanks();
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = tanks.begin();
 			itor != tanks.end();
@@ -392,7 +392,7 @@ void ShowScoreSimAction::scoreOverallWinner(ScorchedContext &context)
 		if (winningTeam != 0)
 		{
 			std::map<unsigned int, Tank *> &tanks = 
-				context.getTankContainer().getPlayingTanks();
+				context.getTankContainer().getAllTanks();
 			std::map<unsigned int, Tank *>::iterator itor;
 			for (itor = tanks.begin();
 				itor != tanks.end();

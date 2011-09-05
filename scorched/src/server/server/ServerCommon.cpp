@@ -69,7 +69,7 @@ void ServerCommon::kickDestination(unsigned int destinationId,
 	bool kickedPlayers = false;
 	std::map<unsigned int, Tank *>::iterator itor;
 	std::map<unsigned int, Tank *> tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+		ScorchedServer::instance()->getTankContainer().getAllTanks();
 	for (itor = tanks.begin();
 		itor != tanks.end();
 		itor++)

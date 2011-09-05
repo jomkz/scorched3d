@@ -29,8 +29,9 @@
 #include <tank/TankState.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankScore.h>
-#include <tank/TankAccessories.h>
-#include <tank/TankPosition.h>
+#include <tank/TankShotHistory.h>
+#include <tanket/TanketShotInfo.h>
+#include <tanket/TanketAccessories.h>
 #include <target/TargetParachute.h>
 #include <target/TargetLife.h>
 #include <target/TargetShield.h>
@@ -375,7 +376,7 @@ void GLWScorchedInfo::draw()
 			{
 				setToolTip(&renderer->getTips()->rotationTip);
 				static CachedValueString rotationValue;
-				if (rotationValue.hasChanged(current->getPosition().getRotationGunXY()))
+				if (rotationValue.hasChanged(current->getShotInfo().getRotationGunXY()))
 				{
 					rotationValue.cachedString =
 						LANG_STRING(S3D::formatStringBuffer("%.1f",
@@ -391,7 +392,7 @@ void GLWScorchedInfo::draw()
 		case eRotationDiff:
 			{
 				static CachedValueString rotationValue;
-				if (rotationValue.hasChanged(current->getPosition().getRotationXYDiff()))
+				if (rotationValue.hasChanged(current->getShotHistory().getRotationXYDiff()))
 				{
 					rotationValue.cachedString = 
 						LANG_STRING(S3D::formatStringBuffer("%+.1f",
@@ -409,7 +410,7 @@ void GLWScorchedInfo::draw()
 				setToolTip(&renderer->getTips()->elevationTip);
 
 				static CachedValueString elevationValue;
-				if (elevationValue.hasChanged(current->getPosition().getRotationGunYZ()))
+				if (elevationValue.hasChanged(current->getShotInfo().getRotationGunYZ()))
 				{
 					elevationValue.cachedString =
 						LANG_STRING(S3D::formatStringBuffer("%.1f",
@@ -425,7 +426,7 @@ void GLWScorchedInfo::draw()
 		case eElevationDiff:
 			{
 				static CachedValueString elevationValue;
-				if (elevationValue.hasChanged(current->getPosition().getRotationYZDiff()))
+				if (elevationValue.hasChanged(current->getShotHistory().getRotationYZDiff()))
 				{
 					elevationValue.cachedString =
 						LANG_STRING(S3D::formatStringBuffer("%+.1f",
@@ -442,7 +443,7 @@ void GLWScorchedInfo::draw()
 				setToolTip(&renderer->getTips()->powerTip);
 
 				static CachedValueString powerValue;
-				if (powerValue.hasChanged(current->getPosition().getPower()))
+				if (powerValue.hasChanged(current->getShotInfo().getPower()))
 				{
 					powerValue.cachedString =
 						LANG_STRING(S3D::formatStringBuffer("%.1f",
@@ -457,7 +458,7 @@ void GLWScorchedInfo::draw()
 		case ePowerDiff:
 			{
 				static CachedValueString powerValue;
-				if (powerValue.hasChanged(current->getPosition().getPowerDiff()))
+				if (powerValue.hasChanged(current->getShotHistory().getPowerDiff()))
 				{
 					powerValue.cachedString =
 						LANG_STRING(S3D::formatStringBuffer("%+.1f",

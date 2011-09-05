@@ -23,14 +23,14 @@
 
 #include <engine/PhysicsParticleObject.h>
 
-class Tank;
+class Tanket;
 class TankAIAimGuesser : public PhysicsParticleObjectHandler
 {
 public:
 	TankAIAimGuesser(ScorchedContext &context);
 	virtual ~TankAIAimGuesser();
 
-	bool guess(Tank *tank, Vector &target, 
+	bool guess(Tanket *tanket, Vector &target, 
 		float angleXYDegs, float distance, 
 		Vector &actualPosition);
 
@@ -45,9 +45,9 @@ protected:
 	ScorchedContext &context_;
 	PhysicsParticleObject currentGuess_;
 
-	void getCurrentGuess(Tank *tank);
-	void initialShot(Tank *tank, Vector &target);
-	void refineShot(Tank *tank,
+	void getCurrentGuess(Tanket *tanket);
+	void initialShot(Tanket *tanket, Vector &target);
+	void refineShot(Tanket *tanket,
 		Vector &currentPos, Vector &wantedPos);
 };
 

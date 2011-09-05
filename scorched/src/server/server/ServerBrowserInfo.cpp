@@ -153,7 +153,7 @@ void ServerBrowserInfo::processStatusMessage(std::list<std::string> &reply)
 
 	int compplayers = 0;
 	std::map<unsigned int, Tank *> &tanks =
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+		ScorchedServer::instance()->getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank *>::iterator tanksitor;
 	for (tanksitor = tanks.begin();
 		tanksitor != tanks.end();
@@ -209,7 +209,7 @@ void ServerBrowserInfo::processPlayerMessage(std::list<std::string> &reply)
 	// Add all of the player information
 	char tmp[128];
 	std::map<unsigned int, Tank *> &tanks =
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+		ScorchedServer::instance()->getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank *>::iterator tankItor;
 	int i=0;
 	for (tankItor =  tanks.begin();

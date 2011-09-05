@@ -121,7 +121,7 @@ void AdminDialog::drawColumn(unsigned int id, int row, int col,
 	float x, float y, float w)
 {
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedClient::instance()->getTankContainer().getPlayingTanks();
+		ScorchedClient::instance()->getTankContainer().getAllTanks();
 
 	int pos = 0;
 	std::map<unsigned int, Tank *>::iterator itor;
@@ -170,14 +170,14 @@ void AdminDialog::draw()
 	GLWWindow::draw();
 
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedClient::instance()->getTankContainer().getPlayingTanks();
+		ScorchedClient::instance()->getTankContainer().getAllTanks();
 	adminTable_->setItemCount((int) tanks.size());
 }
 
 void AdminDialog::buttonDown(unsigned int id)
 {
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedClient::instance()->getTankContainer().getPlayingTanks();
+		ScorchedClient::instance()->getTankContainer().getAllTanks();
 
 	unsigned int sid = ClientAdminResultHandler::instance()->getSid();
 	unsigned int playerId = 0;

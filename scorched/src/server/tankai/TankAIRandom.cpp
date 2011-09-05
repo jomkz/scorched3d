@@ -32,10 +32,10 @@ TankAIRandom::~TankAIRandom()
 {
 }
 
-TankAI *TankAIRandom::createCopy(Tank *tank)
+TankAI *TankAIRandom::createCopy(Tanket *tanket)
 {
 	TankAI *result = ais_[rand() % ais_.size()];
-	return result->createCopy(tank);
+	return result->createCopy(tanket);
 }
 
 void TankAIRandom::addTankAI(TankAI *ai)

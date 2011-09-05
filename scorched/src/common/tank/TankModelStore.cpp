@@ -40,9 +40,6 @@ bool TankModelStore::loadTankMeshes(ScorchedContext &context,
 {
 	clear();
 
-	// Load the tank types
-	if (!types_.loadTankTypes(context)) return false;
-
 	// Load tank definition file
 	if (counter) counter->setNewOp(LANG_RESOURCE("LOADING_TANKS", "Loading tanks"));
 	XMLFile file;
@@ -193,11 +190,6 @@ TankModel *TankModelStore::getModelByName(const char *name)
 	return 0;
 }
 
-TankType *TankModelStore::getTypeByName(const char *name)
-{
-	return types_.getType(name);
-}
-
 void TankModelStore::clear() 
 {
 	std::vector<TankModel *>::iterator itor;
@@ -209,5 +201,4 @@ void TankModelStore::clear()
 	}
 	models_.clear();
 	modelCatagories_.clear();
-	types_.clear();
 }

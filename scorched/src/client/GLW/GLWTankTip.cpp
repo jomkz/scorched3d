@@ -20,10 +20,10 @@
 
 #include <GLW/GLWTankTip.h>
 #include <tankgraph/TankKeyboardControlUtil.h>
-#include <tank/TankPosition.h>
-#include <tank/TankAccessories.h>
+#include <tanket/TanketAccessories.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
+#include <tank/TankShotHistory.h>
 #include <target/TargetLife.h>
 #include <target/TargetShield.h>
 #include <target/TargetParachute.h>
@@ -55,8 +55,8 @@ void TankUndoMenu::showItems(float x, float y)
 		"elevtaion and power."));
 
 	std::list<GLWSelectorEntry> entries;
-	std::vector<TankPosition::ShotEntry> &oldShots =
-		tank_->getPosition().getOldShots();
+	std::vector<TankShotHistory::ShotEntry> &oldShots =
+		tank_->getShotHistory().getOldShots();
 	for (int i=0; i<(int) oldShots.size(); i++)
 	{
 		char buffer[128];
@@ -76,7 +76,7 @@ void TankUndoMenu::showItems(float x, float y)
 
 void TankUndoMenu::itemSelected(GLWSelectorEntry *entry, int position)
 {
-	tank_->getPosition().revertSettings((unsigned long) entry->getUserData());
+	tank_->getShotHistory().revertSettings((unsigned long) entry->getUserData());
 }
 
 TankFuelTip::TankFuelTip(Tank *tank) : 
@@ -561,7 +561,7 @@ void TankPowerTip::populate()
 			"The power used to fire the current weapon.\n"
 			"Click to revert back to previous settings.\n"
 			"Power : {0}",
-			tank_->getPosition().getPowerString()));
+			tank_->getShotHistory().getPowerString()));
 	}
 }
 
@@ -582,7 +582,7 @@ void TankRotationTip::populate()
 		"The rotation of the current player's tank turret.\n"
 		"Click to revert back to previous settings.\n"
 		"Rotation : {0}",
-		tank_->getPosition().getRotationString()));
+		tank_->getShotHistory().getRotationString()));
 }
 
 TankElevationTip::TankElevationTip(Tank *tank) : 
@@ -602,7 +602,7 @@ void TankElevationTip::populate()
 		"The elevation of the current player's gun.\n"
 		"Click to revert back to previous settings.\n"
 		"Elevation : {0}",
-		tank_->getPosition().getElevationString()));
+		tank_->getShotHistory().getElevationString()));
 }
 
 static void generateTargetTip(LangString &tip, Target *target)

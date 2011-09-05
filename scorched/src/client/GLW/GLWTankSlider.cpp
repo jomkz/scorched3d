@@ -26,7 +26,7 @@
 #include <client/ScorchedClient.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
-#include <tank/TankPosition.h>
+#include <tanket/TanketShotInfo.h>
 #include <lang/LangResource.h>
 
 REGISTER_CLASS_SOURCE(GLWTankSlider);
@@ -56,7 +56,7 @@ void GLWTankSlider::draw()
 	{
 		if (currentTank->getState().getState() == TankState::sNormal)
 		{
-			setCurrent(currentTank->getPosition().getPower().asFloat());
+			setCurrent(currentTank->getShotInfo().getPower().asFloat());
 		}
 	}
 	
@@ -73,7 +73,7 @@ void GLWTankSlider::currentChanged(unsigned int id, float value)
 		{
 			if (id == getId())
 			{
-				currentTank->getPosition().changePower(
+				currentTank->getShotInfo().changePower(
 					fixed::fromFloat(value), false);
 			}
 		}

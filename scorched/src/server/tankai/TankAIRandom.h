@@ -30,7 +30,7 @@ public:
 	TankAIRandom();
 	virtual ~TankAIRandom();
 
-	virtual TankAI *createCopy(Tank *tank);
+	virtual TankAI *createCopy(Tanket *tanket);
 
 	virtual bool parseConfig(TankAIWeaponSets &sets, XMLNode *node) { return true; }
 	void addTankAI(TankAI *ai);

@@ -27,7 +27,7 @@
 #include <common/Logger.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
-#include <tank/TankPosition.h>
+#include <tanket/TanketShotInfo.h>
 #include <sprites/TalkRenderer.h>
 #include <engine/ActionController.h>
 
@@ -235,7 +235,7 @@ void ClientChannelManager::sendText(const ChannelText &constText)
 	if (!playerId)
 	{
 		std::map<unsigned int, Tank *> &tanks = 
-			ScorchedClient::instance()->getTankContainer().getPlayingTanks();
+			ScorchedClient::instance()->getTankContainer().getAllTanks();
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = tanks.begin();
 			itor != tanks.end();
@@ -323,7 +323,7 @@ bool ClientChannelManager::processChannelTextMessage(NetMessage &message,
 			// put a speach bubble over the talking tank
 			Vector white(1.0f, 1.0f, 1.0f);
 			TalkRenderer *talk = new TalkRenderer(
-				tank->getPosition().getTankTurretPosition().asVector(),
+				tank->getShotInfo().getTankTurretPosition().asVector(),
 				white);
 			ScorchedClient::instance()->getActionController().
 				addAction(new SpriteAction(talk));

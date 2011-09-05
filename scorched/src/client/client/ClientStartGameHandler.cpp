@@ -25,7 +25,7 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <engine/ActionController.h>
 #include <tank/TankContainer.h>
-#include <tank/TankAccessories.h>
+#include <tanket/TanketAccessories.h>
 #include <tank/TankCamera.h>
 #include <graph/MainCamera.h>
 #include <graph/OptionsDisplay.h>

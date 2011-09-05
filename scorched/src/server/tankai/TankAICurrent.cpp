@@ -19,15 +19,15 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <tankai/TankAICurrent.h>
-#include <tank/TankContainer.h>
-#include <tank/TankAccessories.h>
+#include <tanket/TanketAccessories.h>
+#include <tanket/TanketContainer.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerState.h>
 #include <common/OptionsTransient.h>
 #include <coms/ComsPlayedMoveMessage.h>
 #include <XML/XMLNode.h>
 
-TankAICurrent::TankAICurrent() : tank_(0)
+TankAICurrent::TankAICurrent() : tanket_(0)
 {
 }
 
@@ -35,16 +35,16 @@ TankAICurrent::~TankAICurrent()
 {
 }
 
-TankAI *TankAICurrent::createCopy(Tank *tank)
+TankAI *TankAICurrent::createCopy(Tanket *tanket)
 {
 	TankAICurrent *result = new TankAICurrent(*this);
-	result->setTank(tank);
+	result->setTanket(tanket);
 	return result;
 }
 
-void TankAICurrent::setTank(Tank *tank)
+void TankAICurrent::setTanket(Tanket *tanket)
 {
-	tank_ = tank;
+	tanket_ = tanket;
 }
 
 bool TankAICurrent::parseConfig(TankAIWeaponSets &sets, XMLNode *node)
@@ -84,10 +84,10 @@ void TankAICurrent::newGame()
 void TankAICurrent::playMove(unsigned int moveId)
 {
 	// Raise any defenses
-	defenses_.raiseDefenses(tank_);
+	defenses_.raiseDefenses(tanket_);
 
 	// Make the move
-	move_.playMove(tank_, 
+	move_.playMove(tanket_, 
 		wantedWeapons_.getCurrentWeaponSet(),
 		defenses_.getUseBatteries(),
 		moveId);
@@ -99,15 +99,15 @@ void TankAICurrent::buyAccessories(unsigned int moveId)
 		(ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() >=
 		ScorchedServer::instance()->getOptionsGame().getNoRounds());
 
-	TankAIWeaponSets::WeaponSetAccessories tankAccessories(tank_);
+	TankAIWeaponSets::WeaponSetAccessories tankAccessories(tanket_);
 	wantedWeapons_.buyWeapons(tankAccessories, lastRound);
 	if (tankAccessories.tankAccessories.getAutoDefense().haveDefense())
 	{
-		defenses_.raiseDefenses(tank_);
+		defenses_.raiseDefenses(tanket_);
 	}
 
 	// This AI has finished buying
-	ComsPlayedMoveMessage playedMessage(tank_->getPlayerId(), 
+	ComsPlayedMoveMessage playedMessage(tanket_->getPlayerId(), 
 		moveId, 
 		ComsPlayedMoveMessage::eFinishedBuy);
 	ScorchedServer::instance()->getServerState().buyingFinished(playedMessage);
@@ -116,22 +116,22 @@ void TankAICurrent::buyAccessories(unsigned int moveId)
 void TankAICurrent::tankHurt(Weapon *weapon, float damage, 
 	unsigned int damaged, unsigned int fired)
 {
-	if (damaged == tank_->getPlayerId())
+	if (damaged == tanket_->getPlayerId())
 	{
-		Tank *firedTank = ScorchedServer::instance()->
-			getTankContainer().getTankById(fired);
-		if (firedTank)
+		Tanket *firedTanket = ScorchedServer::instance()->
+			getTanketContainer().getTanketById(fired);
+		if (firedTanket)
 		{
-			move_.getTargets().tookDamage(firedTank, damage);		
+			move_.getTargets().tookDamage(firedTanket, damage);		
 		}
 	}
-	else if (fired == tank_->getPlayerId())
+	else if (fired == tanket_->getPlayerId())
 	{
-		Tank *damagedTank = ScorchedServer::instance()->
-			getTankContainer().getTankById(damaged);
-		if (damagedTank)
+		Tanket *damagedTanket = ScorchedServer::instance()->
+			getTanketContainer().getTanketById(damaged);
+		if (damagedTanket)
 		{
-			move_.getTargets().gaveDamage(damagedTank, damage);		
+			move_.getTargets().gaveDamage(damagedTanket, damage);		
 		}
 	}
 }

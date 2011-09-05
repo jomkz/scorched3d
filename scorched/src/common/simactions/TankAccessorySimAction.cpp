@@ -20,7 +20,7 @@
 
 #include <simactions/TankAccessorySimAction.h>
 #include <tank/TankContainer.h>
-#include <tank/TankAccessories.h>
+#include <tanket/TanketAccessories.h>
 #include <tank/TankScore.h>
 #include <weapons/AccessoryStore.h>
 #include <weapons/EconomyStore.h>

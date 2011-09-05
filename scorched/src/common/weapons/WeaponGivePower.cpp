@@ -22,7 +22,7 @@
 #include <weapons/AccessoryStore.h>
 #include <engine/ActionController.h>
 #include <tank/TankContainer.h>
-#include <tank/TankPosition.h>
+#include <tanket/TanketShotInfo.h>
 #include <common/Defines.h>
 #include <common/ChannelManager.h>
 #include <lang/LangResource.h>
@@ -65,8 +65,8 @@ void WeaponGivePower::weaponCallback(
 	if (!tank) return;
 
 	fixed power = power_.getValue(context);
-	tank->getPosition().setMaxPower(
-		MAX(tank->getPosition().getMaxPower(), power));
+	tank->getShotInfo().setMaxPower(
+		MAX(tank->getShotInfo().getMaxPower(), power));
 
 	{
 		ChannelText text("combat", 

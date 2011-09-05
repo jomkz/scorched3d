@@ -25,7 +25,7 @@
 #include <map>
 
 class Target;
-class Tank;
+class Tanket;
 class XMLNode;
 class TankAICurrentTarget
 {
@@ -36,18 +36,18 @@ public:
 	virtual bool parseConfig(XMLNode *node);
 
 	void clear();
-	void getTargets(Tank *tank, std::list<Tank *> &targets);
+	void getTargets(Tanket *tanket, std::list<Tanket *> &targets);
 
-	void gaveDamage(Tank *tank, float damage);
-	void tookDamage(Tank *tank, float damage);
-	void shotAt(Tank *tank);
+	void gaveDamage(Tanket *tanket, float damage);
+	void tookDamage(Tanket *tanket, float damage);
+	void shotAt(Tanket *tanket);
 
 	float getTotalDamageTaken();
 
 protected:
-	std::map<Tank *, float> damageGiven_;
-	std::map<Tank *, float> damageTaken_;
-	std::map<Tank *, float> shotAt_;
+	std::map<Tanket *, float> damageGiven_;
+	std::map<Tanket *, float> damageTaken_;
+	std::map<Tanket *, float> shotAt_;
 
 	float health_;
 	float random_;
@@ -59,8 +59,8 @@ protected:
 	float player_;
 	float distance_;
 
-	float rankPlayer(std::list<Tank *> &players, Tank *player);
-	float rankPlayer(std::multimap<float, Tank *> &players, Tank *player);
+	float rankPlayer(std::list<Tanket *> &players, Tanket *player);
+	float rankPlayer(std::multimap<float, Tanket *> &players, Tanket *player);
 };
 
 #endif // !defined(AFX_TankAICurrentTarget_H__5F21C9C7_0F71_4CCC_ABB9_976CF0A5C5EC__INCLUDED_)

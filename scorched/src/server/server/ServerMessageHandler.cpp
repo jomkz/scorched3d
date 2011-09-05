@@ -127,7 +127,7 @@ void ServerMessageHandler::clientDisconnected(NetMessage &message)
 	unsigned int destinationId = message.getDestinationId();
 	std::map<unsigned int, Tank *>::iterator itor;
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+		ScorchedServer::instance()->getTankContainer().getAllTanks();
 	for (itor = tanks.begin();
 		itor != tanks.end();
 		itor++)

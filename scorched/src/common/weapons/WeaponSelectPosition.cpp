@@ -20,9 +20,8 @@
 
 #include <weapons/WeaponSelectPosition.h>
 #include <weapons/AccessoryStore.h>
-#include <tank/TankContainer.h>
-#include <tank/TankState.h>
-#include <tank/TankPosition.h>
+#include <tanket/TanketContainer.h>
+#include <tanket/TanketShotInfo.h>
 #include <landscapemap/LandscapeMaps.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponSelectPosition);
@@ -65,15 +64,15 @@ void WeaponSelectPosition::fireWeapon(ScorchedContext &context,
 	// This weapon re-centers the current shot on the user selected position
 	// This can be used for firing from a moving tank
 
-	Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
-	if (tank && tank->getState().getState() == TankState::sNormal)
+	Tanket *tanket = context.getTanketContainer().getTanketById(weaponContext.getPlayerId());
+	if (tanket && tanket->getAlive())
 	{
 		FixedVector newPosition;
-		newPosition[0] = fixed(tank->getPosition().getSelectPositionX());
-		newPosition[1] = fixed(tank->getPosition().getSelectPositionY());
+		newPosition[0] = fixed(tanket->getShotInfo().getSelectPositionX());
+		newPosition[1] = fixed(tanket->getShotInfo().getSelectPositionY());
 		newPosition[2] = context.getLandscapeMaps().getGroundMaps().getHeight(
-			tank->getPosition().getSelectPositionX(),
-			tank->getPosition().getSelectPositionY());
+			tanket->getShotInfo().getSelectPositionX(),
+			tanket->getShotInfo().getSelectPositionY());
 
 		aimedWeapon_->fireWeapon(context, weaponContext, newPosition, velocity);
 	}

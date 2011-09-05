@@ -21,7 +21,7 @@
 #include <simactions/TankNewMatchSimAction.h>
 #include <tank/TankState.h>
 #include <tank/TankContainer.h>
-#include <tank/TankAccessories.h>
+#include <tanket/TanketAccessories.h>
 #include <tank/TankScore.h>
 #include <common/Logger.h>
 

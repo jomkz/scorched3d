@@ -31,8 +31,8 @@
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
 #include <tank/TankContainer.h>
-#include <tank/TankPosition.h>
-#include <tank/TankAccessories.h>
+#include <tanket/TanketAccessories.h>
+#include <tanket/TanketShotInfo.h>
 #include <target/TargetShield.h>
 #include <target/TargetLife.h>
 #include <target/TargetSpace.h>
@@ -40,9 +40,9 @@
 #include <memory.h>
 
 MovementMap::MovementMap(
-	Tank *tank, 
+	Tanket *tanket, 
 	ScorchedContext &context) :
-	tank_(tank), context_(context)
+	tanket_(tanket), context_(context)
 {
 	arenaX_ = context_.getLandscapeMaps().getGroundMaps().getArenaX();
 	arenaY_ = context_.getLandscapeMaps().getGroundMaps().getArenaY();
@@ -68,7 +68,7 @@ MovementMap::MovementMap(
 		targetItor++)
 	{
 		Target *target = (*targetItor).second;
-		if (movementProof(context, target, tank))
+		if (movementProof(context, target, tanket))
 		{
 			checkTargets_.push_back(target);
 		}
@@ -125,7 +125,7 @@ MovementMap::MovementMapEntry &MovementMap::getAndCheckEntry(int w, int h)
 				targetItor++)
 			{
 				Target *target = (*targetItor);
-				if (inShield(target, tank_, position))
+				if (inShield(target, tanket_, position))
 				{
 					entry.type = eNoMovement;
 					break;
@@ -211,7 +211,7 @@ void MovementMap::addPoint(unsigned int x, unsigned int y,
 	}
 }
 
-bool MovementMap::movementProof(ScorchedContext &context, Target *target, Tank *tank)
+bool MovementMap::movementProof(ScorchedContext &context, Target *target, Tanket *tanket)
 {
 	if (!target->getAlive() ||
 		!target->getShield().getCurrentShield()) return false;
@@ -229,7 +229,7 @@ bool MovementMap::movementProof(ScorchedContext &context, Target *target, Tank *
 		movementProof = true;
 		break;
 	case Shield::ShieldMovementSame:
-		if (target->getPlayerId() == tank->getPlayerId())
+		if (target->getPlayerId() == tanket->getPlayerId())
 		{
 			movementProof = false;
 		}
@@ -237,33 +237,33 @@ bool MovementMap::movementProof(ScorchedContext &context, Target *target, Tank *
 			!target->isTarget())
 		{
 			Tank *targetTank = (Tank *) target;
-			if (targetTank->getTeam() == tank->getTeam())
+			if (targetTank->getTeam() == tanket->getTeam())
 			{
 				movementProof = false;
 			}
 		}
 		break;
 	case Shield::ShieldMovementTeam1:
-		if (tank->getTeam() == 1 ||
-			tank->getTeam() == 0) movementProof = false;
+		if (tanket->getTeam() == 1 ||
+			tanket->getTeam() == 0) movementProof = false;
 		break;
 	case Shield::ShieldMovementTeam2:
-		if (tank->getTeam() == 2 ||
-			tank->getTeam() == 0) movementProof = false;
+		if (tanket->getTeam() == 2 ||
+			tanket->getTeam() == 0) movementProof = false;
 		break;
 	case Shield::ShieldMovementTeam3:
-		if (tank->getTeam() == 3 ||
-			tank->getTeam() == 0) movementProof = false;
+		if (tanket->getTeam() == 3 ||
+			tanket->getTeam() == 0) movementProof = false;
 		break;
 	case Shield::ShieldMovementTeam4:
-		if (tank->getTeam() == 4 ||
-			tank->getTeam() == 0) movementProof = false;
+		if (tanket->getTeam() == 4 ||
+			tanket->getTeam() == 0) movementProof = false;
 		break;
 	}
 	return movementProof;
 }
 
-bool MovementMap::inShield(Target *target, Tank *tank, FixedVector &position)
+bool MovementMap::inShield(Target *target, Tanket *tanket, FixedVector &position)
 {
 	Shield *shield = (Shield *)
 		(target->getShield().getCurrentShield()->getAction());
@@ -279,7 +279,7 @@ bool MovementMap::inShield(Target *target, Tank *tank, FixedVector &position)
 	return shield->inShield(offset);
 }
 
-bool MovementMap::allowedPosition(ScorchedContext &context, Tank *tank, FixedVector &position)
+bool MovementMap::allowedPosition(ScorchedContext &context, Tanket *tanket, FixedVector &position)
 {
 	std::map<unsigned int, Target *>::iterator targetItor;
 	std::map<unsigned int, Target *> targets;
@@ -290,8 +290,8 @@ bool MovementMap::allowedPosition(ScorchedContext &context, Tank *tank, FixedVec
 	{
 		Target *target = (*targetItor).second;
 
-		if (movementProof(context, target, tank) &&
-			inShield(target, tank, position))
+		if (movementProof(context, target, tanket) &&
+			inShield(target, tanket, position))
 		{
 			return false;
 		}
@@ -321,9 +321,9 @@ fixed MovementMap::getWaterHeight()
 	if (context_.getOptionsGame().getMovementRestriction() ==
 		OptionsGame::MovementRestrictionLandOrAbove)
 	{
-		if (waterHeight > tank_->getPosition().getTankPosition()[2] - fixed(true, 1000))
+		if (waterHeight > tanket_->getShotInfo().getTankPosition()[2] - fixed(true, 1000))
 		{
-			waterHeight = tank_->getPosition().getTankPosition()[2] - fixed(true, 1000);
+			waterHeight = tanket_->getShotInfo().getTankPosition()[2] - fixed(true, 1000);
 		}
 	}
 	return waterHeight;
@@ -332,7 +332,7 @@ fixed MovementMap::getWaterHeight()
 fixed MovementMap::getFuel(WeaponMoveTank *weapon)
 {
 	fixed fuel = fixed(0);
-	int numberFuel = tank_->getAccessories().getAccessoryCount(weapon->getParent());
+	int numberFuel = tanket_->getAccessories().getAccessoryCount(weapon->getParent());
 	if (numberFuel == -1)
 	{
 		fuel = weapon->getMaximumRange();
@@ -347,10 +347,10 @@ fixed MovementMap::getFuel(WeaponMoveTank *weapon)
 bool MovementMap::tankBurried()
 {
 	fixed landscapeHeight = context_.getLandscapeMaps().getGroundMaps().getInterpHeight(
-		tank_->getPosition().getTankPosition()[0],
-		tank_->getPosition().getTankPosition()[1]);
+		tanket_->getShotInfo().getTankPosition()[0],
+		tanket_->getShotInfo().getTankPosition()[1]);
 	fixed tankHeight = 
-		tank_->getPosition().getTankPosition()[2];
+		tanket_->getShotInfo().getTankPosition()[2];
 	fixed MaxTankClimbHeight = fixed(context_.getOptionsGame().
 		getMaxClimbingDistance()) / fixed(10);
 	if (landscapeHeight > tankHeight + MaxTankClimbHeight)
@@ -434,9 +434,9 @@ bool MovementMap::calculatePosition(FixedVector &position, fixed fuel)
 
 	// Setup movement variables
 	unsigned int posX = (unsigned int) 
-		tank_->getPosition().getTankPosition()[0].asInt();
+		tanket_->getShotInfo().getTankPosition()[0].asInt();
 	unsigned int posY = (unsigned int) 
-		tank_->getPosition().getTankPosition()[1].asInt();
+		tanket_->getShotInfo().getTankPosition()[1].asInt();
 	unsigned int startPt = POINT_TO_UINT(posX, posY);
 	unsigned int endPt = POINT_TO_UINT(
 		(unsigned int)position[0].asInt(), 
@@ -503,9 +503,9 @@ void MovementMap::calculateAllPositions(fixed fuel)
 
 	// Setup movement variables
 	unsigned int posX = (unsigned int) 
-		tank_->getPosition().getTankPosition()[0].asInt();
+		tanket_->getShotInfo().getTankPosition()[0].asInt();
 	unsigned int posY = (unsigned int) 
-		tank_->getPosition().getTankPosition()[1].asInt();
+		tanket_->getShotInfo().getTankPosition()[1].asInt();
 
 	// Check we can move at all
 	if (getAndCheckEntry(posX, posY).type == eNotSeen)

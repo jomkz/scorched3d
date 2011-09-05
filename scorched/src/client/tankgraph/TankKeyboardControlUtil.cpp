@@ -20,9 +20,10 @@
 
 #include <tankgraph/TankKeyboardControlUtil.h>
 #include <tank/TankContainer.h>
-#include <tank/TankPosition.h>
 #include <tank/TankState.h>
-#include <tank/TankAccessories.h>
+#include <tank/TankShotHistory.h>
+#include <tanket/TanketAccessories.h>
+#include <tanket/TanketShotInfo.h>
 #include <tankgraph/TargetRendererImplTank.h>
 #include <target/TargetShield.h>
 #include <target/TargetLife.h>
@@ -61,16 +62,16 @@ void TankKeyboardControlUtil::keyboardCheck(
 	// Create sounds
 	if (!elevateSound_) elevateSound_ = 
 		new VirtualSoundSource(VirtualSoundPriority::eRotation, true, false);
-	elevateSound_->setPosition(tank->getPosition().getTankPosition().asVector());
+	elevateSound_->setPosition(tank->getLife().getTargetPosition().asVector());
 	if (!rotateSound_) rotateSound_ =
 		new VirtualSoundSource(VirtualSoundPriority::eRotation, true, false);
-	rotateSound_->setPosition(tank->getPosition().getTankPosition().asVector());
+	rotateSound_->setPosition(tank->getLife().getTargetPosition().asVector());
 	if (!startSound_) startSound_ =
 		new VirtualSoundSource(VirtualSoundPriority::eRotation, false, false);
-	startSound_->setPosition(tank->getPosition().getTankPosition().asVector());
+	startSound_->setPosition(tank->getLife().getTargetPosition().asVector());
 	if (!powerSound_) powerSound_ =
 		new VirtualSoundSource(VirtualSoundPriority::eRotation, true, false);
-	powerSound_->setPosition(tank->getPosition().getTankPosition().asVector());
+	powerSound_->setPosition(tank->getLife().getTargetPosition().asVector());
 
 	// Check key moves
 	moveLeftRight(tank, buffer, keyState, frameTime);
@@ -143,7 +144,7 @@ void TankKeyboardControlUtil::keyboardCheck(
 	KEYBOARDKEY("UNDO_MOVE", undoKey);
 	if (undoKey->keyDown(buffer, keyState, false))
 	{
-		tank->getPosition().undo();
+		tank->getShotHistory().undo();
 	}
 
 	KEYBOARDKEY("CHANGE_UP_WEAPON", weaponUpKey);
@@ -239,14 +240,14 @@ void TankKeyboardControlUtil::autoAim(Tank *tank)
 		if (ScorchedClient::instance()->getLandscapeMaps().
 			getGroundMaps().getIntersect(direction, intersect))
         {
-			Vector &position = tank->getPosition().getTankPosition().asVector();
+			Vector &position = tank->getLife().getTargetPosition().asVector();
 
 			// Calculate direction
 			Vector direction = intersect - position;
 			float angleXYRads = atan2f(direction[1], direction[0]);
 			float angleXYDegs = (angleXYRads / 3.14f) * 180.0f - 90.0f;
 			
-			tank->getPosition().rotateGunXY(fixed::fromFloat(angleXYDegs), false);
+			tank->getShotInfo().rotateGunXY(fixed::fromFloat(angleXYDegs), false);
 			leftRightHUD(tank);
 
 			TargetRendererImplTankAIM::setAimPosition(intersect);
@@ -285,7 +286,7 @@ void TankKeyboardControlUtil::moveLeftRight(Tank *tank,
 		else if (rightKS) mult *= 0.25f;
 		else if (rightKVS) mult *= 0.05f;
 
-		tank->getPosition().rotateGunXY(fixed::fromFloat(-45.0f * mult));
+		tank->getShotInfo().rotateGunXY(fixed::fromFloat(-45.0f * mult));
 		currentLRMoving = true;
 
 		leftRightHUD(tank);
@@ -297,7 +298,7 @@ void TankKeyboardControlUtil::moveLeftRight(Tank *tank,
 		else if (leftKS) mult *= 0.25f;
 		else if (leftKVS) mult *= 0.05f;
 
-		tank->getPosition().rotateGunXY(fixed::fromFloat(45.0f * mult));
+		tank->getShotInfo().rotateGunXY(fixed::fromFloat(45.0f * mult));
 		currentLRMoving = true;
 
 		leftRightHUD(tank);
@@ -323,9 +324,9 @@ void TankKeyboardControlUtil::moveLeftRight(Tank *tank,
 
 void TankKeyboardControlUtil::leftRightHUD(Tank *tank)
 {		
-	float rot = tank->getPosition().getRotationGunXY().asFloat() / 360.0f;
+	float rot = tank->getShotInfo().getRotationGunXY().asFloat() / 360.0f;
 	TargetRendererImplTankHUD::setText("Rot:", 
-		tank->getPosition().getRotationString(), rot * 100.0f);
+		tank->getShotHistory().getRotationString(), rot * 100.0f);
 }
 
 void TankKeyboardControlUtil::moveUpDown(Tank *tank,
@@ -379,7 +380,7 @@ void TankKeyboardControlUtil::moveUpDown(Tank *tank,
 		else if (upKS) mult *= 0.25f;
 		else if (upKVS) mult *= 0.05f;
 
-		tank->getPosition().rotateGunYZ(fixed::fromFloat(-45.0f * mult));
+		tank->getShotInfo().rotateGunYZ(fixed::fromFloat(-45.0f * mult));
 		currentUDMoving = true;
 
 		upDownHUD(tank);
@@ -391,7 +392,7 @@ void TankKeyboardControlUtil::moveUpDown(Tank *tank,
 		else if (downKS) mult *= 0.25f;
 		else if (downKVS) mult *= 0.05f;
 
-		tank->getPosition().rotateGunYZ(fixed::fromFloat(45.0f * mult));
+		tank->getShotInfo().rotateGunYZ(fixed::fromFloat(45.0f * mult));
 		currentUDMoving = true;
 
 		upDownHUD(tank);
@@ -417,9 +418,9 @@ void TankKeyboardControlUtil::moveUpDown(Tank *tank,
 
 void TankKeyboardControlUtil::upDownHUD(Tank *tank)
 {
-	float rot = tank->getPosition().getRotationGunYZ().asFloat() / 90.0f;
+	float rot = tank->getShotInfo().getRotationGunYZ().asFloat() / 90.0f;
 	TargetRendererImplTankHUD::setText("Ele:", 
-		tank->getPosition().getElevationString(), rot * 100.0f);
+		tank->getShotHistory().getElevationString(), rot * 100.0f);
 }
 
 void TankKeyboardControlUtil::movePower(Tank *tank,
@@ -452,7 +453,7 @@ void TankKeyboardControlUtil::movePower(Tank *tank,
 		else if (incKS) mult *= 0.25f;
 		else if (incKVS) mult *= 0.05f;
 
-		tank->getPosition().changePower(fixed::fromFloat(250.0f * mult));
+		tank->getShotInfo().changePower(fixed::fromFloat(250.0f * mult));
 		currentPMoving = true;
 
 		powerHUD(tank);
@@ -464,7 +465,7 @@ void TankKeyboardControlUtil::movePower(Tank *tank,
 		else if (decKS) mult *= 0.25f;
 		else if (decKVS) mult *= 0.05f;
 
-		tank->getPosition().changePower(fixed::fromFloat(-250.0f * mult));
+		tank->getShotInfo().changePower(fixed::fromFloat(-250.0f * mult));
 		currentPMoving = true;
 
 		powerHUD(tank);
@@ -488,10 +489,10 @@ void TankKeyboardControlUtil::movePower(Tank *tank,
 
 void TankKeyboardControlUtil::powerHUD(Tank *tank)
 {
-	float power = tank->getPosition().getPower().asFloat() / 
-		tank->getPosition().getMaxPower().asFloat();
+	float power = tank->getShotInfo().getPower().asFloat() / 
+		tank->getShotInfo().getMaxPower().asFloat();
 	TargetRendererImplTankHUD::setText("Pwr:", 
-		tank->getPosition().getPowerString(), power * 100.0f);
+		tank->getShotHistory().getPowerString(), power * 100.0f);
 }
 
 
@@ -508,11 +509,11 @@ void TankKeyboardControlUtil::fireShot(Tank *tank)
 			ComsPlayedMoveMessage::eShot);
 		comsMessage.setShot(
 			currentWeapon->getAccessoryId(),
-			tank->getPosition().getRotationGunXY(),
-			tank->getPosition().getRotationGunYZ(),
-			tank->getPosition().getPower(),
-			tank->getPosition().getSelectPositionX(),
-			tank->getPosition().getSelectPositionY());
+			tank->getShotInfo().getRotationGunXY(),
+			tank->getShotInfo().getRotationGunYZ(),
+			tank->getShotInfo().getPower(),
+			tank->getShotInfo().getSelectPositionX(),
+			tank->getShotInfo().getSelectPositionY());
 
 		// If so we send this move to the server
 		ComsMessageSender::sendToServer(comsMessage);

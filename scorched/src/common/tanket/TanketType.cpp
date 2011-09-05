@@ -18,21 +18,21 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <tank/TankType.h>
+#include <tanket/TanketType.h>
 #include <XML/XMLParser.h>
 #include <common/Defines.h>
 #include <engine/ScorchedContext.h>
 #include <weapons/AccessoryStore.h>
 
-TankType::TankType()
+TanketType::TanketType()
 {
 }
 
-TankType::~TankType()
+TanketType::~TanketType()
 {
 }
 
-bool TankType::initFromXML(ScorchedContext &context, XMLNode *node)
+bool TanketType::initFromXML(ScorchedContext &context, XMLNode *node)
 {
 	if (!node->getNamedChild("name", name_)) return false;
 	if (!node->getNamedChild("life", life_)) return false;
@@ -75,13 +75,13 @@ bool TankType::initFromXML(ScorchedContext &context, XMLNode *node)
 	return node->failChildren();
 }
 
-bool TankType::getAccessoryDisabled(Accessory *accessory)
+bool TanketType::getAccessoryDisabled(Accessory *accessory)
 {
 	if (disabledAccessories_.empty()) return false;
 	return (disabledAccessories_.find(accessory) != disabledAccessories_.end());
 }
 
-const char *TankType::getDescription()
+const char *TanketType::getDescription()
 {
 	std::string accessoryBuffer;
 	{

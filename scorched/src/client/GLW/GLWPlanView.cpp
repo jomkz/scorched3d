@@ -33,7 +33,7 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
-#include <tank/TankPosition.h>
+#include <target/TargetLife.h>
 #include <common/Vector.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
@@ -388,7 +388,7 @@ void GLWPlanView::drawTanks()
 	float maxWidth = MAX(arenaWidth_, arenaHeight_);
 
 	std::map<unsigned int, Tank *> &currentTanks =
-		ScorchedClient::instance()->getTankContainer().getPlayingTanks();
+		ScorchedClient::instance()->getTankContainer().getAllTanks();
 	if (currentTanks.empty()) return;
 
 	Vector position;
@@ -405,7 +405,7 @@ void GLWPlanView::drawTanks()
 		if (tank->getState().getState() == TankState::sNormal ||
 			tank->getState().getState() == TankState::sBuying)
 		{		
-			tank->getPosition().getTankPosition().asVector(position);			
+			tank->getLife().getTargetPosition().asVector(position);			
 
 			if ((flash_ && tank->getState().getMoveId() != 0) ||
 				tank->getState().getMoveId() == 0)

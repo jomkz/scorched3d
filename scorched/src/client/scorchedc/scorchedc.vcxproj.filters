@@ -115,6 +115,9 @@
     <Filter Include="igd">
       <UniqueIdentifier>{977e0f03-9983-4bde-9704-b7c038c8a0ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="tanket">
+      <UniqueIdentifier>{715d80a7-433e-42eb-96c8-8599130fc45a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\common\ARGParser.cpp">
@@ -816,16 +819,7 @@
     <ClCompile Include="..\..\common\tank\Tank.cpp">
       <Filter>tank</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\tank\TankAccessories.cpp">
-      <Filter>tank</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\tank\TankAutoDefense.cpp">
-      <Filter>tank</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\tank\TankAvatar.cpp">
-      <Filter>tank</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\tank\TankBatteries.cpp">
       <Filter>tank</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\tank\TankCamera.cpp">
@@ -852,9 +846,6 @@
     <ClCompile Include="..\..\common\tank\TankModelStore.cpp">
       <Filter>tank</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\tank\TankPosition.cpp">
-      <Filter>tank</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\tank\TankScore.cpp">
       <Filter>tank</Filter>
     </ClCompile>
@@ -867,16 +858,7 @@
     <ClCompile Include="..\..\common\tank\TankTeamScore.cpp">
       <Filter>tank</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\tank\TankType.cpp">
-      <Filter>tank</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\tank\TankTypes.cpp">
-      <Filter>tank</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\tank\TankViewPoints.cpp">
-      <Filter>tank</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\tank\TankWeapon.cpp">
       <Filter>tank</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\placement\PlacementGroupDefinition.cpp">
@@ -2331,6 +2313,39 @@
     <ClCompile Include="..\..\server\server\ScorchedServerSettings.cpp">
       <Filter>server</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\tanket\TanketAccessories.cpp">
+      <Filter>tanket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tanket\TanketBatteries.cpp">
+      <Filter>tanket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tanket\TanketAutoDefense.cpp">
+      <Filter>tanket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tanket\TanketWeapon.cpp">
+      <Filter>tanket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tanket\Tanket.cpp">
+      <Filter>tanket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tank\TankWeaponSwitcher.cpp">
+      <Filter>tank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tanket\TanketContainer.cpp">
+      <Filter>tanket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tanket\TanketShotInfo.cpp">
+      <Filter>tanket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tank\TankShotHistory.cpp">
+      <Filter>tank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tanket\TanketType.cpp">
+      <Filter>tanket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tanket\TanketTypes.cpp">
+      <Filter>tanket</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -3032,16 +3047,7 @@
     <ClInclude Include="..\..\common\tank\Tank.h">
       <Filter>tank</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\common\tank\TankAccessories.h">
-      <Filter>tank</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\tank\TankAutoDefense.h">
-      <Filter>tank</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\common\tank\TankAvatar.h">
-      <Filter>tank</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\tank\TankBatteries.h">
       <Filter>tank</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\tank\TankCamera.h">
@@ -3068,9 +3074,6 @@
     <ClInclude Include="..\..\common\tank\TankModelStore.h">
       <Filter>tank</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\common\tank\TankPosition.h">
-      <Filter>tank</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\common\tank\TankScore.h">
       <Filter>tank</Filter>
     </ClInclude>
@@ -3083,16 +3086,7 @@
     <ClInclude Include="..\..\common\tank\TankTeamScore.h">
       <Filter>tank</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\common\tank\TankType.h">
-      <Filter>tank</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\tank\TankTypes.h">
-      <Filter>tank</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\common\tank\TankViewPoints.h">
-      <Filter>tank</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\tank\TankWeapon.h">
       <Filter>tank</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\placement\PlacementGroupDefinition.h">
@@ -4561,6 +4555,39 @@
     </ClInclude>
     <ClInclude Include="..\..\server\server\ScorchedServerSettings.h">
       <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tanket\TanketAccessories.h">
+      <Filter>tanket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tanket\TanketBatteries.h">
+      <Filter>tanket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tanket\TanketAutoDefense.h">
+      <Filter>tanket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tanket\TanketWeapon.h">
+      <Filter>tanket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tanket\Tanket.h">
+      <Filter>tanket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tank\TankWeaponSwitcher.h">
+      <Filter>tank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tanket\TanketContainer.h">
+      <Filter>tanket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tanket\TanketShotInfo.h">
+      <Filter>tanket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tank\TankShotHistory.h">
+      <Filter>tank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tanket\TanketType.h">
+      <Filter>tanket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tanket\TanketTypes.h">
+      <Filter>tanket</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

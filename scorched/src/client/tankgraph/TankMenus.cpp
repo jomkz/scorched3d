@@ -27,14 +27,16 @@
 #include <client/ScorchedClient.h>
 #include <server/ScorchedServer.h>
 #include <tank/TankContainer.h>
-#include <tank/TankAccessories.h>
-#include <tank/TankModelContainer.h>
+#include <tanket/TanketAccessories.h>
 #include <tank/TankState.h>
 #include <tank/TankModel.h>
+#include <tank/TankModelContainer.h>
 #include <tankai/TankAI.h>
 #include <target/TargetParachute.h>
 #include <target/TargetShield.h>
+#include <target/TargetLife.h>
 #include <tankgraph/TankMenus.h>
+#include <tankgraph/TankKeyboardControlUtil.h>
 #include <GLW/GLWWindowManager.h>
 #include <client/ClientParams.h>
 #include <graph/OptionsDisplay.h>
@@ -418,10 +420,39 @@ void TankMenus::AccessoryMenu::menuSelection(const char* menuName,
 	const int position, GLMenuItem &item)
 {
 	Accessory *accessory = (Accessory *) item.getUserData();
-	Tank *firstTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
-	if (firstTank && accessory)
+	Tank *tank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+	if (tank && accessory)
 	{
-		firstTank->getAccessories().activate(accessory);
+		switch (accessory->getType())
+		{
+		case AccessoryPart::AccessoryParachute:
+			TankKeyboardControlUtil::parachutesUpDown(
+				tank->getPlayerId(),
+				(tank->getParachute().getCurrentParachute()==accessory)?
+				0:accessory->getAccessoryId());
+			break;
+		case AccessoryPart::AccessoryShield:
+			TankKeyboardControlUtil::shieldsUpDown(
+				tank->getPlayerId(),
+				(tank->getShield().getCurrentShield()==accessory)?
+				0:accessory->getAccessoryId());
+			break;
+		case AccessoryPart::AccessoryWeapon:
+			tank->getAccessories().getWeapons().setWeapon(accessory);
+			break;
+		case AccessoryPart::AccessoryBattery:
+			if (tank->getLife().getLife() < 
+				tank->getLife().getMaxLife())
+			{
+				TankKeyboardControlUtil::useBattery(
+					tank->getPlayerId(), 
+					accessory->getAccessoryId());
+			}
+			break;
+		case AccessoryPart::AccessoryAutoDefense:
+			default:
+			break;
+		}
 	}
 }
 

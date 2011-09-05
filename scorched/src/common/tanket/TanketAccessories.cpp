@@ -19,21 +19,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <weapons/AccessoryStore.h>
-#include <tank/TankModelContainer.h>
-#include <tank/TankAccessories.h>
-#include <tank/TankType.h>
-#include <tank/Tank.h>
-#include <target/TargetParachute.h>
-#include <target/TargetShield.h>
-#include <target/TargetLife.h>
-#ifndef S3D_SERVER
-	#include <tankgraph/TankKeyboardControlUtil.h>
-#endif
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <lang/LangResource.h>
+#include <tanket/TanketAccessories.h>
+#include <tanket/TanketType.h>
+#include <tanket/Tanket.h>
 
-TankAccessories::TankAccessories(ScorchedContext &context) :
+TanketAccessories::TanketAccessories(ScorchedContext &context) :
 	context_(context),
 	tankWeapon_(context),
 	tankAuto_(context),
@@ -41,20 +34,20 @@ TankAccessories::TankAccessories(ScorchedContext &context) :
 {
 }
 
-TankAccessories::~TankAccessories()
+TanketAccessories::~TanketAccessories()
 {
 	clearAccessories();
 }
 
-void TankAccessories::setTank(Tank *tank)
+void TanketAccessories::setTanket(Tanket *tanket)
 {
-	tank_ = tank;
-	tankWeapon_.setTank(tank);
-	tankAuto_.setTank(tank);
-	tankBatteries_.setTank(tank);
+	tanket_ = tanket;
+	tankWeapon_.setTanket(tanket);
+	tankAuto_.setTanket(tanket);
+	tankBatteries_.setTanket(tanket);
 }
 
-void TankAccessories::newMatch()
+void TanketAccessories::newMatch()
 {
 	clearAccessories();
 
@@ -92,7 +85,7 @@ void TankAccessories::newMatch()
 
 	// Add all of the accessories that come from the tank's type
 	{
-		TankType *type = tank_->getTankType();
+		TanketType *type = tanket_->getTanketType();
 		std::map<Accessory *, int> accessories = type->getAccessories();
 		std::map<Accessory *, int>::iterator itor;
 		for (itor = accessories.begin();
@@ -109,7 +102,7 @@ void TankAccessories::newMatch()
 	changed();
 }
 
-void TankAccessories::clearAccessories()
+void TanketAccessories::clearAccessories()
 {
 	accessories_.clear();
 
@@ -133,7 +126,7 @@ void TankAccessories::clearAccessories()
 
 }
 
-void TankAccessories::getAllAccessories(std::list<Accessory *> &result)
+void TanketAccessories::getAllAccessories(std::list<Accessory *> &result)
 {
 	std::map<Accessory *, int>::iterator itor;
 	for (itor = accessories_.begin();
@@ -145,7 +138,7 @@ void TankAccessories::getAllAccessories(std::list<Accessory *> &result)
 	}
 }
 
-std::list<Accessory *> &TankAccessories::getAllAccessoriesByType(
+std::list<Accessory *> &TanketAccessories::getAllAccessoriesByType(
 	AccessoryPart::AccessoryType type)
 {
 	std::map<AccessoryPart::AccessoryType, AccessoryList*>::iterator itor =
@@ -159,7 +152,7 @@ std::list<Accessory *> &TankAccessories::getAllAccessoriesByType(
 	return emptyList;
 }
 
-std::list<Accessory *> &TankAccessories::getAllAccessoriesByGroup(
+std::list<Accessory *> &TanketAccessories::getAllAccessoriesByGroup(
 	const char *groupName)
 {
 	std::map<std::string, AccessoryList*>::iterator itor =
@@ -173,7 +166,7 @@ std::list<Accessory *> &TankAccessories::getAllAccessoriesByGroup(
 	return emptyList;
 }
 
-bool TankAccessories::canUse(Accessory *accessory)
+bool TanketAccessories::canUse(Accessory *accessory)
 {
 	int count = getAccessoryCount(accessory);
 	if (count == 0) return false;
@@ -181,7 +174,7 @@ bool TankAccessories::canUse(Accessory *accessory)
 	return false;
 }
 
-int TankAccessories::getAccessoryCount(Accessory *accessory)
+int TanketAccessories::getAccessoryCount(Accessory *accessory)
 {
 	std::map<Accessory *, int>::iterator foundAccessory =
 		accessories_.find(accessory);
@@ -193,10 +186,10 @@ int TankAccessories::getAccessoryCount(Accessory *accessory)
 	return currentNumber;
 }
 
-bool TankAccessories::accessoryAllowed(Accessory *accessory, int count)
+bool TanketAccessories::accessoryAllowed(Accessory *accessory, int count)
 {
 	// Check if this tank type allows this accessory
-	TankType *type = tank_->getTankType();
+	TanketType *type = tanket_->getTanketType();
 	if (type->getAccessoryDisabled(accessory)) return false;
 
 	// Check if this accessory is allowed at all
@@ -230,22 +223,22 @@ bool TankAccessories::accessoryAllowed(Accessory *accessory, int count)
 	// Check if this is a bot only weapon
 	if (accessory->getBotOnly())
 	{
-		if(tank_->getDestinationId() != 0)
+		if(tanket_->getTankAI() == 0)
 		{
-	        	return false;
+	        return false;
 		}
 	}
 
 	return true;
 }
 
-void TankAccessories::add(Accessory *accessory, int count, bool check)
+void TanketAccessories::add(Accessory *accessory, int count, bool check)
 {
 	add_(accessory, count, check);
 	changed();
 }
 
-void TankAccessories::add_(Accessory *accessory, int count, bool check)
+void TanketAccessories::add_(Accessory *accessory, int count, bool check)
 {
 	if (check)
 	{
@@ -307,7 +300,7 @@ void TankAccessories::add_(Accessory *accessory, int count, bool check)
 	}
 }
 
-void TankAccessories::rm(Accessory *accessory, int count)
+void TanketAccessories::rm(Accessory *accessory, int count)
 {
 	std::map<Accessory *, int>::iterator itor = 
 		accessories_.find(accessory);
@@ -343,7 +336,7 @@ void TankAccessories::rm(Accessory *accessory, int count)
 	changed();
 }
 
-LangString TankAccessories::getAccessoryCountString(Accessory *accessory)
+LangString TanketAccessories::getAccessoryCountString(Accessory *accessory)
 {
 	int count = getAccessoryCount(accessory);
 	LangString buffer;
@@ -360,7 +353,7 @@ LangString TankAccessories::getAccessoryCountString(Accessory *accessory)
 	return buffer;
 }
 
-LangString TankAccessories::getAccessoryAndCountString(Accessory *accessory)
+LangString TanketAccessories::getAccessoryAndCountString(Accessory *accessory)
 {
 	int count = getAccessoryCount(accessory);
 	LangString buffer;
@@ -372,7 +365,7 @@ LangString TankAccessories::getAccessoryAndCountString(Accessory *accessory)
 	return buffer;
 }
 
-void TankAccessories::changed()
+void TanketAccessories::changed()
 {
 	// Tell the appropriate container that the count has changed
 	tankAuto_.changed();
@@ -380,9 +373,9 @@ void TankAccessories::changed()
 	tankBatteries_.changed();
 }
 
-bool TankAccessories::writeMessage(NamedNetBuffer &buffer, bool writeAccessories)
+bool TanketAccessories::writeMessage(NamedNetBuffer &buffer, bool writeAccessories)
 {
-	NamedNetBufferSection section(buffer, "TankAccessories");
+	NamedNetBufferSection section(buffer, "TanketAccessories");
 
 	// Send the fact we are not sending any accessories
 	if (!writeAccessories)
@@ -415,7 +408,7 @@ bool TankAccessories::writeMessage(NamedNetBuffer &buffer, bool writeAccessories
 	return true;
 }
 
-bool TankAccessories::readMessage(NetBufferReader &reader)
+bool TanketAccessories::readMessage(NetBufferReader &reader)
 {
 	int totalAccessories = 0;
 	if (!reader.getFromBuffer(totalAccessories)) return false;
@@ -449,42 +442,4 @@ bool TankAccessories::readMessage(NetBufferReader &reader)
 
 	changed();
 	return true;
-}
-
-void TankAccessories::activate(Accessory *accessory)
-{
-	DIALOG_ASSERT(!context_.getServerMode());
-
-#ifndef S3D_SERVER
-	switch (accessory->getType())
-	{
-	case AccessoryPart::AccessoryParachute:
-		TankKeyboardControlUtil::parachutesUpDown(
-			tank_->getPlayerId(),
-			(tank_->getParachute().getCurrentParachute()==accessory)?
-			0:accessory->getAccessoryId());
-		break;
-	case AccessoryPart::AccessoryShield:
-		TankKeyboardControlUtil::shieldsUpDown(
-			tank_->getPlayerId(),
-			(tank_->getShield().getCurrentShield()==accessory)?
-			0:accessory->getAccessoryId());
-		break;
-	case AccessoryPart::AccessoryWeapon:
-		getWeapons().setWeapon(accessory);
-		break;
-	case AccessoryPart::AccessoryBattery:
-		if (tank_->getLife().getLife() < 
-			tank_->getLife().getMaxLife())
-		{
-			TankKeyboardControlUtil::useBattery(
-				tank_->getPlayerId(), 
-				accessory->getAccessoryId());
-		}
-		break;
-	case AccessoryPart::AccessoryAutoDefense:
-		default:
-		break;
-	}
-#endif
 }

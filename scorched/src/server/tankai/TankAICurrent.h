@@ -32,7 +32,7 @@ public:
 	TankAICurrent();
 	virtual ~TankAICurrent();
 
-	virtual TankAI *createCopy(Tank *tank);
+	virtual TankAI *createCopy(Tanket *tanket);
 
 	virtual bool parseConfig(TankAIWeaponSets &sets, XMLNode *node);
 
@@ -50,12 +50,12 @@ public:
 		Vector &position);
 
 protected:
-	Tank *tank_;
+	Tanket *tanket_;
 	TankAICurrentWeapons wantedWeapons_;
 	TankAICurrentDefenses defenses_;
 	TankAICurrentMove move_;
 
-	void setTank(Tank *tank);
+	void setTanket(Tanket *tanket);
 	void resign();
 
 };

@@ -28,7 +28,7 @@
 #include <XML/XMLParser.h>
 #include <tank/Tank.h>
 #include <tank/TankScore.h>
-#include <tank/TankAccessories.h>
+#include <tanket/TanketAccessories.h>
 #include <stdlib.h>
 
 REGISTER_CLASS_SOURCE(EconomyFreeMarket);

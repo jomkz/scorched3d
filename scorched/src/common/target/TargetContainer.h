@@ -38,7 +38,7 @@ public:
 	std::map<unsigned int, Target *> &getTargets() { return targets_; }
 
 protected:
-	friend class TankContainer;
+	friend class TanketContainer;
 
 	std::map<unsigned int, Target *> targets_;
 

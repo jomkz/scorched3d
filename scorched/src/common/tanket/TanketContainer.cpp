@@ -18,25 +18,48 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_TankTypesh_INCLUDE__)
-#define __INCLUDE_TankTypesh_INCLUDE__
+#include <tanket/TanketContainer.h>
+#include <tank/TankState.h>
 
-#include <tank/TankType.h>
-#include <vector>
-
-class TankTypes
+TanketContainer::TanketContainer(TargetContainer &targets) : 
+	targets_(targets)
 {
-public:
-	TankTypes();
-	virtual ~TankTypes();
 
-	bool loadTankTypes(ScorchedContext &context);
-	TankType *getType(const char *name);
+}
 
-	void clear();
+TanketContainer::~TanketContainer()
+{
+	tankets_.clear();
+}
 
-protected:
-	std::vector<TankType *> types_;
-};
+void TanketContainer::addTanket(Tanket *tanket)
+{
+	targets_.internalAddTarget(tanket);
+	tankets_[tanket->getPlayerId()] = tanket;
+}
 
-#endif // __INCLUDE_TankTypesh_INCLUDE__
+Tanket *TanketContainer::removeTanket(unsigned int playerId)
+{
+	Target *target = targets_.internalRemoveTarget(playerId);
+	if (target)
+	{
+		tankets_.erase(playerId);
+	}
+	return (Tanket *) target;
+}
+
+Tanket *TanketContainer::getTanketById(unsigned int id)
+{
+	std::map<unsigned int, Tanket *>::iterator findItor =
+		tankets_.find(id);
+	if (findItor != tankets_.end())
+	{
+		return (*findItor).second;
+	}
+	return 0;
+}
+
+std::map<unsigned int, Tanket *> &TanketContainer::getAllTankets()
+{
+	return tankets_;
+}

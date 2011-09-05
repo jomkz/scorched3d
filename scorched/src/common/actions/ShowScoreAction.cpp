@@ -56,7 +56,7 @@ void ShowScoreAction::init()
 		{
 			Logger::log("Final scores -------");
 			std::map<unsigned int, Tank *> &tanks =
-				context_->getTankContainer().getPlayingTanks();
+				context_->getTankContainer().getAllTanks();
 			std::map<unsigned int, Tank *>::iterator itor;
 			for (itor = tanks.begin();
 				itor != tanks.end();

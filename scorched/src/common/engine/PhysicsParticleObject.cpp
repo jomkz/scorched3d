@@ -27,7 +27,6 @@
 #include <target/TargetShield.h>
 #include <target/TargetLife.h>
 #include <tank/TankContainer.h>
-#include <tank/TankPosition.h>
 #include <weapons/Accessory.h>
 #include <weapons/Shield.h>
 #include <weapons/ShieldRoundReflective.h>
@@ -546,7 +545,7 @@ bool PhysicsParticleObject::getShieldCollision(CollisionInfo &collision, Target 
 	Tank *shotTank = context_->getTankContainer().getTankById(info_.playerId_);
 	if (shotTank)
 	{
-		FixedVector offset = shotTank->getPosition().getTankPosition() -
+		FixedVector offset = shotTank->getLife().getTargetPosition() -
 			target->getLife().getTargetPosition();
 		if (shield->tankInShield(offset))
 		{

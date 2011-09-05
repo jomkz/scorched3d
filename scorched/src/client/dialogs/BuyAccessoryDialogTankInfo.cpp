@@ -42,7 +42,7 @@ void BuyAccessoryDialogTankInfo::set()
 	Tank *tank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
 	if (tank)
 	{
-		tankAccessories.setTank(tank);
+		tankAccessories.setTanket(tank);
 		NetBuffer buffer;
 		tank->getAccessories().writeMessage(buffer, true);
 		NetBufferReader reader(buffer);
@@ -55,7 +55,7 @@ void BuyAccessoryDialogTankInfo::set()
 	} 
 	else
 	{
-		tankAccessories.setTank(0);
+		tankAccessories.setTanket(0);
 		tankAccessories.clearAccessories();
 		tankColor = Vector::getNullVector();
 		tankName = LangString();

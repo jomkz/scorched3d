@@ -116,7 +116,7 @@ void TankSort::getSortedTanksIds(ScorchedContext &context,
 	std::list<Tank *> sortedTanks;
 	std::map<unsigned int, Tank *> tanks;
 	if (allTanks) tanks = context.getTankContainer().getAllTanks();
-	else tanks = context.getTankContainer().getPlayingTanks();
+	else tanks = context.getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();

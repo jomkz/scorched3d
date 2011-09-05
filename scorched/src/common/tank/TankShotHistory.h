@@ -18,39 +18,57 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_TankTypeh_INCLUDE__)
-#define __INCLUDE_TankTypeh_INCLUDE__
+#if !defined(__INCLUDE_TankShotHistoryh_INCLUDE__)
+#define __INCLUDE_TankShotHistoryh_INCLUDE__
 
-#include <common/fixed.h>
-#include <string>
-#include <map>
-#include <set>
+#include <net/NetBuffer.h>
+#include <vector>
 
-class XMLNode;
-class Accessory;
+class Tank;
 class ScorchedContext;
-class TankType
+class TankShotHistory
 {
 public:
-	TankType();
-	virtual ~TankType();
+	struct ShotEntry
+	{
+		ShotEntry(fixed p = 0, fixed r = 0, fixed e = 0) : 
+			power(p), rot(r), ele(e) { }
+	
+		fixed power;
+		fixed rot;
+		fixed ele;
+		bool current;
+	};
 
-	const char *getName() { return name_.c_str(); }
-	const char *getDescription();
-	fixed getLife() { return life_; }
-	fixed getPower() { return power_; }
+	TankShotHistory(ScorchedContext &context);
+	virtual ~TankShotHistory();
 
-	std::map<Accessory *, int> &getAccessories() { return accessories_; }
-	bool getAccessoryDisabled(Accessory *accessory);
+	void setTank(Tank *tank) { tank_ = tank; }
 
-	bool initFromXML(ScorchedContext &context, XMLNode *node);
+	// State change
+	void clientNewGame();
+	void madeShot();
+	
+	// Saved settings
+	fixed getRotationXYDiff();
+	fixed getRotationYZDiff();
+	fixed getPowerDiff();
+	void revertSettings(unsigned int index = 0);
+	void undo();
+	std::vector<ShotEntry> &getOldShots();
+
+	const char *getRotationString();
+	const char *getElevationString();
+	const char *getPowerString();
 
 protected:
-	std::string name_, description_;
-	std::map<Accessory *, int> accessories_;
-	std::set<Accessory *> disabledAccessories_;
-	fixed life_;
-	fixed power_;
+	ScorchedContext &context_;
+	Tank *tank_;
+
+	// Turret angles
+	std::vector<ShotEntry> oldShots_;
+	fixed oldTurretRotXY_, oldTurretRotYZ_, oldPower_;
 };
 
-#endif // __INCLUDE_TankTypeh_INCLUDE__
+#endif
+

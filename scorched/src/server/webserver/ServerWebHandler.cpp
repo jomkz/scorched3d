@@ -454,7 +454,7 @@ bool ServerWebHandler::GameHandler::processRequest(
 	}
 
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+		ScorchedServer::instance()->getTankContainer().getAllTanks();
 	request.getFields()["PLAYERS"] = S3D::formatStringBuffer("%i/%i", tanks.size(), 
 		ScorchedServer::instance()->getOptionsGame().getNoMaxPlayers());
 

@@ -40,12 +40,11 @@
 	#include <sound/Sound.h>
 #endif
 #include <tank/TankContainer.h>
-#include <tank/TankModelStore.h>
-#include <tank/TankPosition.h>
 #include <tank/TankState.h>
 #include <tank/TankModelContainer.h>
-#include <tank/TankAccessories.h>
+#include <tanket/TanketAccessories.h>
 #include <tank/TankViewPoints.h>
+#include <tank/TankModelStore.h>
 #include <target/TargetLife.h>
 #include <target/TargetState.h>
 #include <target/TargetSpace.h>
@@ -108,7 +107,7 @@ void TankMovement::init()
 			Sound::instance()->fetchOrCreateBuffer(
 				S3D::getModFile("data/wav/movement/tankmove.wav"));
 		moveSoundSource_ = new VirtualSoundSource(VirtualSoundPriority::eAction, true, false);
-		moveSoundSource_->setPosition(tank->getPosition().getTankPosition().asVector());
+		moveSoundSource_->setPosition(tank->getLife().getTargetPosition().asVector());
 		moveSoundSource_->play(moveSound);
 	}
 #endif // #ifndef S3D_SERVER

@@ -27,7 +27,7 @@
 #include <image/ImageFactory.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
-#include <tank/TankPosition.h>
+#include <tanket/TanketShotInfo.h>
 #include <target/TargetLife.h>
 #include <tankgraph/TargetRendererImplTank.h>
 
@@ -74,17 +74,17 @@ void GLWScorchedInfoSpinner::draw()
 	case eRotation:
 		minValue = 0.0f;
 		maxValue = 360.0f;
-		currentValue = current->getPosition().getRotationGunXY().asFloat();
+		currentValue = current->getShotInfo().getRotationGunXY().asFloat();
 		break;
 	case eElevation:
 		minValue = 0.0f;
 		maxValue = 90.0f;
-		currentValue = current->getPosition().getRotationGunYZ().asFloat();
+		currentValue = current->getShotInfo().getRotationGunYZ().asFloat();
 		break;
 	case ePower:
 		minValue = 0.0f;
-		maxValue = current->getPosition().getMaxPower().asFloat();
-		currentValue = current->getPosition().getPower().asFloat();
+		maxValue = current->getShotInfo().getMaxPower().asFloat();
+		currentValue = current->getShotInfo().getPower().asFloat();
 		break;
 	}
 

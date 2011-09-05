@@ -26,7 +26,7 @@
 #include <queue>
 
 class WeaponMoveTank;
-class Tank;
+class Tanket;
 class Target;
 class ScorchedContext;
 class MovementMap
@@ -62,7 +62,7 @@ public:
 	};
 
 	MovementMap(
-		Tank *tank, 
+		Tanket *tanket, 
 		ScorchedContext &context);
 	virtual ~MovementMap();
 
@@ -77,11 +77,11 @@ public:
 
 	// Functions returns true if a tank can move into the give position,
 	// false otherwise.  Shields and obstacles my prevent a tank moving.
-	static bool inShield(Target *target, Tank *tank, FixedVector &position);
+	static bool inShield(Target *target, Tanket *tanket, FixedVector &position);
 	static bool movementProof(ScorchedContext &context, 
-		Target *target, Tank *tank);
+		Target *target, Tanket *tanket);
 	static bool allowedPosition(ScorchedContext &context, 
-		Tank *tank, FixedVector &position);
+		Tanket *tanket, FixedVector &position);
 
 protected:
 	MovementMapEntry *entries_;
@@ -89,7 +89,7 @@ protected:
 	int arenaX_, arenaY_;
 	int arenaWidth_, arenaHeight_;
 	fixed minHeight_;
-	Tank *tank_;
+	Tanket *tanket_;
 	ScorchedContext &context_;
 	std::list<Target *> checkTargets_;
 

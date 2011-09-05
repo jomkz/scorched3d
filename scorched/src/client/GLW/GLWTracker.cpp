@@ -28,7 +28,7 @@
 #include <client/ScorchedClient.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
-#include <tank/TankPosition.h>
+#include <tanket/TanketShotInfo.h>
 #include <lang/LangResource.h>
 
 REGISTER_CLASS_SOURCE(GLWTracker);
@@ -109,8 +109,8 @@ void GLWTankTracker::draw()
 	{
 		if (currentTank->getState().getState() == TankState::sNormal)
 		{
-			setCurrentX(currentTank->getPosition().getRotationGunXY().asFloat());
-			setCurrentY(currentTank->getPosition().getRotationGunYZ().asFloat());
+			setCurrentX(currentTank->getShotInfo().getRotationGunXY().asFloat());
+			setCurrentY(currentTank->getShotInfo().getRotationGunYZ().asFloat());
 		}
 	}
 	GLWTracker::draw();
@@ -126,8 +126,8 @@ void GLWTankTracker::currentChanged(unsigned int id, float valueX, float valueY)
 		{
 			if (id == getId())
 			{
-				currentTank->getPosition().rotateGunXY(fixed::fromFloat(valueX), false);
-				currentTank->getPosition().rotateGunYZ(fixed::fromFloat(valueY), false);
+				currentTank->getShotInfo().rotateGunXY(fixed::fromFloat(valueX), false);
+				currentTank->getShotInfo().rotateGunYZ(fixed::fromFloat(valueY), false);
 			}
 		}
 	}	

@@ -39,7 +39,6 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <tankai/TankAIAdder.h>
 #include <tankai/TankAIStore.h>
-#include <tank/TankModelStore.h>
 #include <tank/TankContainer.h>
 #include <server/ServerConsoleProgressCounter.h>
 #include <server/ServerConsoleLogger.h>

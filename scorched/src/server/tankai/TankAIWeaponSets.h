@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_TankAIWeaponSetsh_INCLUDE__)
 #define __INCLUDE_TankAIWeaponSetsh_INCLUDE__
 
-#include <tank/TankAccessories.h>
+#include <tanket/TanketAccessories.h>
 
 #include <vector>
 #include <map>
@@ -39,11 +39,11 @@ public:
 	class WeaponSetAccessories 
 	{
 	public:
-		WeaponSetAccessories(Tank *tank);
+		WeaponSetAccessories(Tanket *tanket);
 
 		int tankMoney;
 		unsigned int tankId;
-		TankAccessories tankAccessories;
+		TanketAccessories tankAccessories;
 	};
 
 	class WeaponSetEntry
@@ -68,7 +68,7 @@ public:
 
 		bool parseConfig(XMLNode *node);
 		void buyWeapons(WeaponSetAccessories &tankAccessories, bool lastRound);
-		Accessory *getTankAccessoryByType(Tank *tank, const char *type);
+		Accessory *getTankAccessoryByType(Tanket *tanket, const char *type);
 	};
 
 	WeaponSet *getWeaponSet(const char *name);

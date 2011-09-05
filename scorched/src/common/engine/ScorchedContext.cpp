@@ -29,6 +29,7 @@
 #include <tank/TankContainer.h>
 #include <tank/TankTeamScore.h>
 #include <tank/TankModelStore.h>
+#include <tanket/TanketTypes.h>
 #include <target/TargetSpace.h>
 #include <movement/TargetMovement.h>
 #include <landscapemap/LandscapeMaps.h>
@@ -41,7 +42,8 @@ ScorchedContext::ScorchedContext(const char *name)
 {
 	accessoryStore_ = new AccessoryStore();
 	targetContainer_ = new TargetContainer();
-	tankContainer_ = new TankContainer(*targetContainer_);
+	tanketContainer_ = new TanketContainer(*targetContainer_);
+	tankContainer_ = new TankContainer(*tanketContainer_);
 	landscapeMaps_ = new LandscapeMaps();
 	comsMessageHandler_ = new ComsMessageHandler(name);
 	netInterface_ = (NetInterface *) 0;
@@ -49,6 +51,7 @@ ScorchedContext::ScorchedContext(const char *name)
 	optionsTransient_ = new OptionsTransient(*optionsGame_);
 	modFiles_ = new ModFiles();
 	landscapes_ = new LandscapeDefinitions();
+	tanketTypes_ = new TanketTypes();
 	tankModelStore_ = new TankModelStore();
 	tankTeamScore_ = new TankTeamScore();
 	targetMovement_ = new TargetMovement();
@@ -74,7 +77,9 @@ ScorchedContext::~ScorchedContext()
 	delete accessoryStore_;
 	delete landscapes_;
 	delete targetContainer_;
+	delete tanketContainer_;
 	delete tankContainer_;
+	delete tanketTypes_;
 	delete tankModelStore_;
 	delete tankTeamScore_;
 	delete targetMovement_;

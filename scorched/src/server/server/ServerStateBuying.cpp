@@ -25,7 +25,7 @@
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
-#include <tank/TankAccessories.h>
+#include <tanket/TanketAccessories.h>
 #include <tank/TankDeadContainer.h>
 #include <tankai/TankAI.h>
 #include <common/OptionsScorched.h>
@@ -70,7 +70,7 @@ void ServerStateBuying::enterState()
 	}
 	buyingPlayers_.clear();
 	std::map<unsigned int, Tank*> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+		ScorchedServer::instance()->getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank*>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
@@ -108,7 +108,7 @@ bool ServerStateBuying::simulate(fixed frameTime)
 	bool loading = false;
 	bool dead = false;
 	std::map<unsigned int, Tank*> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getPlayingTanks();
+		ScorchedServer::instance()->getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank*>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();

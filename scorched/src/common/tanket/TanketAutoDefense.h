@@ -18,33 +18,28 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <weapons/AccessoryStore.h>
-#include <tank/TankAutoDefense.h>
-#include <tank/Tank.h>
-#include <tank/TankAccessories.h>
+#if !defined(__INCLUDE_TanketAutoDefenseh_INCLUDE__)
+#define __INCLUDE_TanketAutoDefenseh_INCLUDE__
 
-TankAutoDefense::TankAutoDefense(ScorchedContext &context) :
-	context_(context),
-	tank_(0)
-{
-}
+#include <net/NetBuffer.h>
 
-TankAutoDefense::~TankAutoDefense()
+class Tanket;
+class ScorchedContext;
+class TanketAutoDefense
 {
-}
+public:
+	TanketAutoDefense(ScorchedContext &context);
+	virtual ~TanketAutoDefense();
 
-void TankAutoDefense::newMatch()
-{
-}
+	void setTanket(Tanket *tanket) { tanket_ = tanket; }
 
-void TankAutoDefense::changed()
-{
-}
+	void newMatch();
+	void changed();
+	bool haveDefense();
 
-bool TankAutoDefense::haveDefense()
-{
-	std::list<Accessory *> &result =
-		tank_->getAccessories().getAllAccessoriesByType(
-			AccessoryPart::AccessoryAutoDefense);
-	return !result.empty();
-}
+protected:
+	ScorchedContext &context_;
+	Tanket *tanket_;
+};
+
+#endif

@@ -20,17 +20,16 @@
 
 #include <math.h>
 #include <tank/Tank.h>
-#include <tank/TankType.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankModelStore.h>
-#include <tank/TankAccessories.h>
 #include <tank/TankScore.h>
 #include <tank/TankState.h>
-#include <tank/TankPosition.h>
+#include <tank/TankShotHistory.h>
 #include <tank/TankModelContainer.h>
 #include <tank/TankViewPoints.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankCamera.h>
+#include <tank/TankWeaponSwitcher.h>
 #include <tankai/TankAI.h>
 #include <tankai/TankAIStore.h>
 #include <weapons/AccessoryStore.h>
@@ -40,95 +39,79 @@
 #include <common/Defines.h>
 #include <common/Logger.h>
 
+static TankWeaponSwitcher *weaponSwitcher = new TankWeaponSwitcher();
+
 Tank::Tank(ScorchedContext &context, 
 		unsigned int playerId, 
 		unsigned int destinationId,
 		const LangString &name, 
 		Vector &color) :
-	Target(playerId, name, context), 
+	Tanket(context, playerId, name), 
 	context_(context),
 	destinationId_(destinationId),
 	color_(color), 
-	tankAI_(0),
-	team_(0), 
 	ipAddress_(0)
 {
-	tankType_ = 
-		context_.getTankModels().getTypeByName("none");
-
-	accessories_ = new TankAccessories(context);
 	score_ = new TankScore(context);
 	state_ = new TankState(context, playerId);
-	position_ = new TankPosition(context);
+	shotHistory_ = new TankShotHistory(context);
 	modelContainer_ = new TankModelContainer(context_);
 	avatar_ = new TankAvatar();
 	camera_ = new TankCamera(context);
 	viewPoints_ = new TankViewPointsCollection(context_);
 
-	position_->setTank(this);
+	getAccessories().getWeapons().setWeaponSwitcher(weaponSwitcher);
+
+	shotHistory_->setTank(this);
 	score_->setTank(this);
 	state_->setTank(this);
-	accessories_->setTank(this);
 	modelContainer_->setTank(this);
 	state_->setState(TankState::sLoading);
 }
 
 Tank::~Tank()
 {
-	delete tankAI_; tankAI_ = 0;
-	delete accessories_; accessories_ = 0;
 	delete score_; score_ = 0;
 	delete state_; state_ = 0;
-	delete position_; position_ = 0;
+	delete shotHistory_; shotHistory_ = 0;
 	delete modelContainer_; modelContainer_ = 0;
 	delete avatar_; avatar_ = 0;
 	delete camera_; camera_ = 0;
 	delete viewPoints_; viewPoints_ = 0;
 }
 
-void Tank::setTankAI(TankAI *ai)
-{
-	if (tankAI_) delete tankAI_;
-	tankAI_ = ai;
-}
-
 unsigned int Tank::getDestinationId() 
 { 
-	if (tankAI_) return 0;
+	if (getTankAI()) return 0;
 	return destinationId_; 
 }
 
 void Tank::newMatch()
 {
-	accessories_->newMatch();
+	Tanket::newMatch();
 	score_->newMatch();
 	state_->newMatch();
-	if (tankAI_) tankAI_->newMatch();
 }
 
 void Tank::newGame()
 {
-	getLife().setMaxLife(tankType_->getLife());
-
-	Target::newGame();
+	Tanket::newGame();
 
 	state_->newGame();
 	score_->newGame();
-	position_->newGame();
-	if (tankAI_) tankAI_->newGame();
 }
 
 void Tank::rezTank()
 {
-	if (tankAI_) tankAI_->newGame();
+	if (getTankAI()) getTankAI()->newGame();
 	getState().setState(TankState::sNormal);
 	getLife().setLife(getLife().getMaxLife());
-	getPosition().undo();
+	shotHistory_->undo();
 }
 
 void Tank::clientNewGame()
 {
-	position_->clientNewGame();
+	shotHistory_->clientNewGame();
 	state_->clientNewGame();
 }
 
@@ -164,7 +147,7 @@ Weapon *Tank::getDeathAction()
 
 Vector &Tank::getColor()
 {
-	if (team_ > 0) return TankColorGenerator::getTeamColor(team_);
+	if (getTeam() > 0) return TankColorGenerator::getTeamColor(getTeam());
 	return color_;
 }
 
@@ -172,14 +155,11 @@ bool Tank::writeMessage(NamedNetBuffer &buffer)
 {
 	NamedNetBufferSection section(buffer, "Tank");
 
-	if (!Target::writeMessage(buffer)) return false;  // Base class 1st
+	if (!Tanket::writeMessage(buffer)) return false;  // Base class 1st
 	buffer.addToBufferNamed("destinationId", destinationId_);
-	buffer.addToBufferNamed("team", team_);
 	buffer.addToBufferNamed("color", color_);
 	if (!state_->writeMessage(buffer)) return false;
-	if (!accessories_->writeMessage(buffer, true)) return false;
 	if (!score_->writeMessage(buffer)) return false;
-	if (!position_->writeMessage(buffer)) return false;
 	if (!modelContainer_->writeMessage(buffer)) return false;
 	if (!avatar_->writeMessage(buffer)) return false;
 	return true;
@@ -187,19 +167,14 @@ bool Tank::writeMessage(NamedNetBuffer &buffer)
 
 bool Tank::readMessage(NetBufferReader &reader)
 {
-	if (!Target::readMessage(reader)) 
+	if (!Tanket::readMessage(reader)) 
 	{
-		Logger::log("Target::readMessage failed");
+		Logger::log("Tanket::readMessage failed");
 		return false; // Base class 1st
 	}
 	if (!reader.getFromBuffer(destinationId_))
 	{
 		Logger::log("Tank::destinationId_ read failed");
-		return false;
-	}
-	if (!reader.getFromBuffer(team_))
-	{
-		Logger::log("Tank::team_ read failed");
 		return false;
 	}
 	if (!reader.getFromBuffer(color_))
@@ -212,19 +187,9 @@ bool Tank::readMessage(NetBufferReader &reader)
 		Logger::log("Tank::state_ read failed");
 		return false;
 	}
-	if (!accessories_->readMessage(reader))
-	{
-		Logger::log("Tank::accessories_ read failed");
-		return false;
-	}
 	if (!score_->readMessage(reader))
 	{
 		Logger::log("Tank::score_ read failed");
-		return false;
-	}
-	if (!position_->readMessage(reader))
-	{
-		Logger::log("Tank::position_ read failed");
 		return false;
 	}
 	if (!modelContainer_->readMessage(reader))

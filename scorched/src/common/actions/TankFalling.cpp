@@ -27,7 +27,7 @@
 #include <target/TargetLife.h>
 #include <target/TargetSpace.h>
 #include <tank/Tank.h>
-#include <tank/TankAccessories.h>
+#include <tanket/TanketAccessories.h>
 #include <engine/ScorchedContext.h>
 #include <engine/ActionController.h>
 #include <engine/Simulator.h>

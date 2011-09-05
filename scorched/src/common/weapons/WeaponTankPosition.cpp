@@ -20,9 +20,8 @@
 
 #include <weapons/WeaponTankPosition.h>
 #include <weapons/AccessoryStore.h>
-#include <tank/TankContainer.h>
-#include <tank/TankState.h>
-#include <tank/TankPosition.h>
+#include <tanket/TanketContainer.h>
+#include <tanket/TanketShotInfo.h>
 #include <target/TargetLife.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponTankPosition);
@@ -67,13 +66,13 @@ void WeaponTankPosition::fireWeapon(ScorchedContext &context,
 	// This weapon re-centers the current shot on the firing tank.
 	// This can be used for firing from a moving tank
 
-	Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
-	if (tank && tank->getState().getState() == TankState::sNormal)
+	Tanket *tanket = context.getTanketContainer().getTanketById(weaponContext.getPlayerId());
+	if (tanket && tanket->getAlive())
 	{
-		FixedVector newPosition = tank->getLife().getTargetPosition();
+		FixedVector newPosition = tanket->getLife().getTargetPosition();
 		if (sightPos_)
 		{
-			newPosition = tank->getPosition().getTankGunPosition();
+			newPosition = tanket->getShotInfo().getTankGunPosition();
 		}
 
 		aimedWeapon_->fireWeapon(context, weaponContext, newPosition, velocity);

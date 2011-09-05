@@ -28,7 +28,8 @@
 #include <graph/OptionsDisplay.h>
 #include <graph/ModelRendererSimulator.h>
 #include <tank/TankContainer.h>
-#include <tank/TankPosition.h>
+#include <tanket/TanketShotInfo.h>
+#include <target/TargetLife.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <tankgraph/TargetRendererImplTank.h>
 #include <sprites/ExplosionTextures.h>
@@ -142,9 +143,9 @@ void ProfileDialog::simulate(float frameTime)
 void ProfileDialog::drawLandscape(Tank *currentTank)
 {
 	// Get tank attributes
-	fixed tankRotation = -currentTank->getPosition().getRotationGunXY() / 180 * fixed::XPI;
+	fixed tankRotation = -currentTank->getShotInfo().getRotationGunXY() / 180 * fixed::XPI;
 	FixedVector tankDirection(tankRotation.sin(), tankRotation.cos(), 0);
-	FixedVector startPosition = currentTank->getPosition().getTankPosition() - tankDirection * 25;
+	FixedVector startPosition = currentTank->getShotInfo().getTankPosition() - tankDirection * 25;
 
 	// Draw the landscape
 	GLState state1(GLState::TEXTURE_OFF | GLState::BLEND_ON | GLState::DEPTH_OFF);
@@ -175,7 +176,7 @@ void ProfileDialog::drawAIM(Tank *currentTank)
 
 	if (TargetRendererImplTankAIM::drawAim())
 	{
-		FixedVector tankPosition = currentTank->getPosition().getTankPosition();
+		FixedVector tankPosition = currentTank->getLife().getTargetPosition();
 		float distance = (tankPosition.asVector() - 
 			TargetRendererImplTankAIM::getAimPosition()).Magnitude2d();
 
@@ -202,8 +203,8 @@ void ProfileDialog::drawAIM(Tank *currentTank)
 void ProfileDialog::drawTanks(Tank *currentTank)
 {
 	// Get tank attributes
-	FixedVector tankPosition = currentTank->getPosition().getTankPosition();
-	fixed tankRotation = -currentTank->getPosition().getRotationGunXY() / 180 * fixed::XPI;
+	FixedVector tankPosition = currentTank->getLife().getTargetPosition();
+	fixed tankRotation = -currentTank->getShotInfo().getRotationGunXY() / 180 * fixed::XPI;
 	FixedVector tankDirection(tankRotation.sin(), tankRotation.cos(), 0);
 	FixedVector startPosition = tankPosition - tankDirection * 25;
 
@@ -211,7 +212,7 @@ void ProfileDialog::drawTanks(Tank *currentTank)
 
 	bool showingToolTip = false;
 	std::map<unsigned int, Tank *> &tanks =
-		ScorchedClient::instance()->getTankContainer().getPlayingTanks();
+		ScorchedClient::instance()->getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin(); 
 		itor != tanks.end();
@@ -222,14 +223,14 @@ void ProfileDialog::drawTanks(Tank *currentTank)
 
 		if (tank != currentTank)
 		{
-			FixedVector thisTankDir = (tank->getPosition().getTankPosition() - tankPosition);
+			FixedVector thisTankDir = (tank->getLife().getTargetPosition() - tankPosition);
 			thisTankDir[2] = 0;
 			thisTankDir.StoreNormalize();
 			fixed dotP = thisTankDir.dotP2D(tankDirection);
 			if (dotP < fixed(true, 8000)) continue;
 		}
 
-		FixedVector AP = tank->getPosition().getTankPosition() - startPosition;
+		FixedVector AP = tank->getLife().getTargetPosition() - startPosition;
 		FixedVector AB = tankDirection * 400;
 
 		fixed ab2 = AB[0]*AB[0] + AB[1]*AB[1];
@@ -242,7 +243,7 @@ void ProfileDialog::drawTanks(Tank *currentTank)
 				ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getInterpHeight(
 				point[0], point[1]);
 			fixed x = t * 400;
-			fixed tankheight = tank->getPosition().getTankPosition()[2];
+			fixed tankheight = tank->getLife().getTargetPosition()[2];
 
 			if (landheight < tankheight + 10)
 			{
@@ -291,8 +292,8 @@ void ProfileDialog::drawTanks(Tank *currentTank)
 						mesh->draw(
 							0.0f,
 							matrix, position, 0.0f,
-							tank->getPosition().getRotationGunXY().asFloat(),
-							tank->getPosition().getRotationGunYZ().asFloat(),
+							tank->getShotInfo().getRotationGunXY().asFloat(),
+							tank->getShotInfo().getRotationGunYZ().asFloat(),
 							false);
 					}
 				glPopMatrix();
@@ -338,11 +339,11 @@ void ProfileDialog::drawAiming(Tank *currentTank)
 {
 	GLState state3(GLState::TEXTURE_OFF | GLState::BLEND_ON);
 
-	FixedVector tankPosition = currentTank->getPosition().getTankTurretPosition();
+	FixedVector tankPosition = currentTank->getShotInfo().getTankTurretPosition();
 	FixedVector tankWindowPosition(25, tankPosition[2], 0);
 
 	const fixed diff = fixed(5) / 180 * fixed::XPI;
-	fixed tankElevation1 = (fixed(90) - currentTank->getPosition().getRotationGunYZ()) / 180 * fixed::XPI;
+	fixed tankElevation1 = (fixed(90) - currentTank->getShotInfo().getRotationGunYZ()) / 180 * fixed::XPI;
 	fixed tankElevation2 = tankElevation1 + diff;
 	FixedVector tankElevationDirection1(tankElevation1.sin(), tankElevation1.cos(), 0);
 	FixedVector tankElevationDirection2(tankElevation2.sin(), tankElevation2.cos(), 0);

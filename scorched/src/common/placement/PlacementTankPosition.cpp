@@ -24,7 +24,6 @@
 #include <landscapemap/DeformLandscape.h>
 #include <engine/Simulator.h>
 #include <tank/TankContainer.h>
-#include <tank/TankPosition.h>
 #include <tank/TankState.h>
 #include <target/TargetLife.h>
 #include <target/TargetSpace.h>

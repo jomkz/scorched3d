@@ -18,23 +18,24 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_TANKACCESSORIES_H__60850A18_DED2_4BB0_B104_CB0941EF6D1D__INCLUDED_)
-#define AFX_TANKACCESSORIES_H__60850A18_DED2_4BB0_B104_CB0941EF6D1D__INCLUDED_
+#if !defined(AFX_TanketAccessories_H__60850A18_DED2_4BB0_B104_CB0941EF6D1D__INCLUDED_)
+#define AFX_TanketAccessories_H__60850A18_DED2_4BB0_B104_CB0941EF6D1D__INCLUDED_
 
 #include <weapons/AccessoryPart.h>
-#include <tank/TankWeapon.h>
-#include <tank/TankAutoDefense.h>
-#include <tank/TankBatteries.h>
+#include <tanket/TanketWeapon.h>
+#include <tanket/TanketAutoDefense.h>
+#include <tanket/TanketBatteries.h>
 #include <lang/LangString.h>
 
+class Tanket;
 class ScorchedContext;
-class TankAccessories  
+class TanketAccessories  
 {
 public:
-	TankAccessories(ScorchedContext &context);
-	virtual ~TankAccessories();
+	TanketAccessories(ScorchedContext &context);
+	virtual ~TanketAccessories();
 
-	void setTank(Tank *tank);
+	void setTanket(Tanket *tanket);
 
 	void newMatch();
 	void add(Accessory *accessory, int count, bool check = true);
@@ -42,8 +43,6 @@ public:
 	void clearAccessories();
 
 	bool canUse(Accessory *accessory);
-
-	void activate(Accessory *accessory);
 
 	bool accessoryAllowed(Accessory *accessory, int count);
 	int getAccessoryCount(Accessory *accessory);
@@ -53,9 +52,9 @@ public:
 	std::list<Accessory *> &getAllAccessoriesByGroup(
 		const char *groupName);
 
-	TankWeapon &getWeapons() { return tankWeapon_; }
-	TankAutoDefense &getAutoDefense() { return tankAuto_; }
-	TankBatteries &getBatteries() { return tankBatteries_; }
+	TanketWeapon &getWeapons() { return tankWeapon_; }
+	TanketAutoDefense &getAutoDefense() { return tankAuto_; }
+	TanketBatteries &getBatteries() { return tankBatteries_; }
 
 	LangString getAccessoryCountString(Accessory *accessory);
 	LangString getAccessoryAndCountString(Accessory *accessory);
@@ -66,10 +65,10 @@ public:
 
 protected:
 	ScorchedContext &context_;
-	TankWeapon tankWeapon_;
-	TankAutoDefense tankAuto_;
-	TankBatteries tankBatteries_;
-	Tank *tank_;
+	TanketWeapon tankWeapon_;
+	TanketAutoDefense tankAuto_;
+	TanketBatteries tankBatteries_;
+	Tanket *tanket_;
 
 	typedef std::list<Accessory *> AccessoryList;
 	std::map<Accessory *, int> accessories_;
@@ -80,4 +79,4 @@ protected:
 	void add_(Accessory *accessory, int count, bool check);
 };
 
-#endif // !defined(AFX_TANKACCESSORIES_H__60850A18_DED2_4BB0_B104_CB0941EF6D1D__INCLUDED_)
+#endif // !defined(AFX_TanketAccessories_H__60850A18_DED2_4BB0_B104_CB0941EF6D1D__INCLUDED_)

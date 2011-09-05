@@ -29,7 +29,7 @@ public:
 	TankAINone(unsigned int playerId);
 	virtual ~TankAINone();
 
-	virtual TankAINone *createCopy(Tank *tank) { return 0; }
+	virtual TankAINone *createCopy(Tanket *tanket) { return 0; }
 
 	virtual bool parseConfig(TankAIWeaponSets &sets, XMLNode *node) { return false; }
 

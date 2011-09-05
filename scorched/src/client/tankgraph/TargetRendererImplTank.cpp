@@ -22,11 +22,10 @@
 #include <sprites/ExplosionTextures.h>
 #include <tank/TankLib.h>
 #include <tank/TankContainer.h>
-#include <tank/TankModelStore.h>
-#include <tank/TankModelContainer.h>
 #include <tank/TankState.h>
-#include <tank/TankPosition.h>
 #include <tank/TankAvatar.h>
+#include <tank/TankModelContainer.h>
+#include <tanket/TanketShotInfo.h>
 #include <target/TargetLife.h>
 #include <target/TargetShield.h>
 #include <target/TargetState.h>
@@ -146,8 +145,8 @@ void TargetRendererImplTank::render(float distance)
 				tank_->getLife().getFloatRotMatrix(),
 				tank_->getLife().getFloatPosition(), 
 				fireOffSet_, 
-				tank_->getPosition().getRotationGunXY().asFloat(), 
-				tank_->getPosition().getRotationGunYZ().asFloat(),
+				tank_->getShotInfo().getRotationGunXY().asFloat(), 
+				tank_->getShotInfo().getRotationGunYZ().asFloat(),
 				false, modelSize, fade, true);
 		}
 	}
@@ -172,8 +171,8 @@ void TargetRendererImplTank::renderReflection(float distance)
 				tank_->getLife().getFloatRotMatrix(),
 				tank_->getLife().getFloatPosition(), 
 				fireOffSet_, 
-				tank_->getPosition().getRotationGunXY().asFloat(), 
-				tank_->getPosition().getRotationGunYZ().asFloat(),
+				tank_->getShotInfo().getRotationGunXY().asFloat(), 
+				tank_->getShotInfo().getRotationGunYZ().asFloat(),
 				false, modelSize, fade, true);
 		}
 	}
@@ -191,8 +190,8 @@ void TargetRendererImplTank::renderShadow(float distance)
 			tank_->getLife().getFloatRotMatrix(),
 			tank_->getLife().getFloatPosition(), 
 			fireOffSet_, 
-			tank_->getPosition().getRotationGunXY().asFloat(), 
-			tank_->getPosition().getRotationGunYZ().asFloat(),
+			tank_->getShotInfo().getRotationGunXY().asFloat(), 
+			tank_->getShotInfo().getRotationGunYZ().asFloat(),
 			false, modelSize, 1.0f, false);
 	}
 }
@@ -248,7 +247,7 @@ void TargetRendererImplTank::drawParticle(float distance)
 
 void TargetRendererImplTank::drawNames()
 {
-	Vector &position = tank_->getPosition().getTankPosition().asVector();
+	Vector &position = tank_->getLife().getTargetPosition().asVector();
 	float height = position[2];
 	float groundHeight = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().
 		getHeight((int) position[0], (int) position[1]).asFloat();
@@ -289,7 +288,7 @@ void TargetRendererImplTank::drawNames()
 		}
 
 		Vector position = 
-			tank_->getPosition().getTankPosition().asVector() - bilX;
+			tank_->getLife().getTargetPosition().asVector() - bilX;
 		position[2] = height + 8.5f;
 
 		tank_->getAvatar().getTexture()->draw();
@@ -310,25 +309,25 @@ void TargetRendererImplTank::drawSight()
 	static GLTextureReference aimRotationTexture(ImageID(S3D::eModLocation, "", "data/windows/aimrotation.png"), 
 		GLTextureReference::eMipMap | GLTextureReference::eTextureClamped);
 
-	float tankRotationDeg = tank_->getPosition().getRotationGunXY().asFloat();
-	float tankElevationDeg = tank_->getPosition().getRotationGunYZ().asFloat();
+	float tankRotationDeg = tank_->getShotInfo().getRotationGunXY().asFloat();
+	float tankElevationDeg = tank_->getShotInfo().getRotationGunYZ().asFloat();
 
 	glPushMatrix();
  		if (OptionsDisplay::instance()->getOldSightPosition())
 		{
 			FixedVector &turretCenter = getMesh()->getTurretCenter();
 			glTranslatef(
-				tank_->getPosition().getTankPosition()[0].asFloat(),
-				tank_->getPosition().getTankPosition()[1].asFloat(),
-				tank_->getPosition().getTankPosition()[2].asFloat() +
+				tank_->getLife().getTargetPosition()[0].asFloat(),
+				tank_->getLife().getTargetPosition()[1].asFloat(),
+				tank_->getLife().getTargetPosition()[2].asFloat() +
 				(turretCenter[2].asFloat() - getMesh()->getModel()->getMin()[2].asFloat()) * getMesh()->getScale());
 		}
 		else
 		{
 			glTranslatef(
-				tank_->getPosition().getTankGunPosition()[0].asFloat(),
-				tank_->getPosition().getTankGunPosition()[1].asFloat(),
-				tank_->getPosition().getTankGunPosition()[2].asFloat());
+				tank_->getShotInfo().getTankGunPosition()[0].asFloat(),
+				tank_->getShotInfo().getTankGunPosition()[1].asFloat(),
+				tank_->getShotInfo().getTankGunPosition()[2].asFloat());
 		}
 	
 		GLState sightState1(GLState::BLEND_ON | GLState::TEXTURE_ON | GLState::LIGHTING_OFF | GLState::ALPHATEST_ON);
@@ -527,11 +526,11 @@ void TargetRendererImplTank::drawOldSight()
 		{		
 			FixedVector &turretCenter = getMesh()->getTurretCenter();
 			glTranslatef(
-				tank_->getPosition().getTankPosition()[0].asFloat(),
-				tank_->getPosition().getTankPosition()[1].asFloat(),
-				tank_->getPosition().getTankPosition()[2].asFloat() +
+				tank_->getLife().getTargetPosition()[0].asFloat(),
+				tank_->getLife().getTargetPosition()[1].asFloat(),
+				tank_->getLife().getTargetPosition()[2].asFloat() +
 				(turretCenter[2].asFloat() - getMesh()->getModel()->getMin()[2].asFloat()) * getMesh()->getScale());
-			glRotatef(tank_->getPosition().getRotationGunXY().asFloat(), 
+			glRotatef(tank_->getShotInfo().getRotationGunXY().asFloat(), 
 				0.0f, 0.0f, 1.0f);
 			
 			FixedVector &gunOffSet = getMesh()->getGunOffSet();
@@ -543,14 +542,14 @@ void TargetRendererImplTank::drawOldSight()
 		else
 		{
 			glTranslatef(
-				tank_->getPosition().getTankGunPosition()[0].asFloat(),
-				tank_->getPosition().getTankGunPosition()[1].asFloat(),
-				tank_->getPosition().getTankGunPosition()[2].asFloat());
-			glRotatef(tank_->getPosition().getRotationGunXY().asFloat(), 
+				tank_->getShotInfo().getTankGunPosition()[0].asFloat(),
+				tank_->getShotInfo().getTankGunPosition()[1].asFloat(),
+				tank_->getShotInfo().getTankGunPosition()[2].asFloat());
+			glRotatef(tank_->getShotInfo().getRotationGunXY().asFloat(), 
 				0.0f, 0.0f, 1.0f);
 		}
 
-		glRotatef(tank_->getPosition().getRotationGunYZ().asFloat(), 
+		glRotatef(tank_->getShotInfo().getRotationGunYZ().asFloat(), 
 			1.0f, 0.0f, 0.0f);
 		glCallList(sightList_);
 	glPopMatrix();
@@ -593,9 +592,9 @@ void TargetRendererImplTank::simulate(float frameTime)
 			float randX = RAND * randOff - randOffDiv; 
 			float randY = RAND * randOff - randOffDiv; 
 			Landscape::instance()->getSmoke().addSmoke(
-				tank_->getPosition().getTankTurretPosition()[0].asFloat() + randX, 
-				tank_->getPosition().getTankTurretPosition()[1].asFloat() + randY, 
-				tank_->getPosition().getTankTurretPosition()[2].asFloat());
+				tank_->getShotInfo().getTankTurretPosition()[0].asFloat() + randX, 
+				tank_->getShotInfo().getTankTurretPosition()[1].asFloat() + randY, 
+				tank_->getShotInfo().getTankTurretPosition()[2].asFloat());
 
 			smokeWaitForTime_ = (
 				(RAND * float(tank_->getLife().getLife().asFloat()) * 10.0f) + 250.0f)
@@ -616,7 +615,7 @@ void TargetRendererImplTank::drawArrow()
 	Vector &bilX = GLCameraFrustum::instance()->getBilboardVectorX();
 	bilX /= 2.0f;
 
-	Vector &position = tank_->getPosition().getTankPosition().asVector();
+	Vector &position = tank_->getLife().getTargetPosition().asVector();
 	float height = position[2];
 	float groundHeight = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().
 		getHeight((int) position[0], (int) position[1]).asFloat();
@@ -662,7 +661,7 @@ void TargetRendererImplTank::drawLife()
 	Vector &bilX = GLCameraFrustum::instance()->getBilboardVectorX();
 	bilX /= 2.0f;
 
-	Vector &position = tank_->getPosition().getTankPosition().asVector();
+	Vector &position = tank_->getLife().getTargetPosition().asVector();
 	float height = position[2];
 	float groundHeight = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().
 		getHeight((int) position[0], (int) position[1]).asFloat();
@@ -692,7 +691,7 @@ void TargetRendererImplTank::drawLife()
 void TargetRendererImplTank::drawLifeBar(Vector &bilX, float value, 
 									float height, float barheight)
 {
-	Vector &position = tank_->getPosition().getTankPosition().asVector();
+	Vector &position = tank_->getLife().getTargetPosition().asVector();
 	glBegin(GL_QUADS);
 		if (value == 100.0f || value == 0.0f)
 		{

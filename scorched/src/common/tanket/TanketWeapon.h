@@ -18,32 +18,51 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_TANKBATTERIES_H__83501862_9536_4108_A7E6_2377AD98EB72__INCLUDED_)
-#define AFX_TANKBATTERIES_H__83501862_9536_4108_A7E6_2377AD98EB72__INCLUDED_
+#if !defined(AFX_TanketWeapon_H__CC20069B_6E50_49E0_B735_D739BCBF58A9__INCLUDED_)
+#define AFX_TanketWeapon_H__CC20069B_6E50_49E0_B735_D739BCBF58A9__INCLUDED_
 
+#include <map>
+#include <list>
+#include <string>
 #include <net/NetBuffer.h>
 
 class ScorchedContext;
-class Tank;
+class Tanket;
 class Accessory;
-class TankBatteries  
+
+class TanketWeaponSwitcher
 {
 public:
-	TankBatteries(ScorchedContext &context);
-	virtual ~TankBatteries();
+	virtual void switchWeapon(ScorchedContext &context, Tanket *tanket, Accessory *currentWeapon, Accessory *newWeapon) = 0;
+};
 
-	void setTank(Tank *tank) { tank_ = tank; }
+class TanketWeapon  
+{
+public:
+	TanketWeapon(ScorchedContext &context);
+	virtual ~TanketWeapon();
+
+	void setWeaponSwitcher(TanketWeaponSwitcher *weaponSwitcher) { weaponSwitcher_ = weaponSwitcher; }
+
+	void setTanket(Tanket *tanket) { tanket_ = tanket; }
 
 	void newMatch();
 	void changed();
-	int getNoBatteries();
-	Accessory *getBatteryAccessory();
-	bool canUse();
+
+	bool setWeapon(Accessory *wp);
+
+	// Change the currently selected weapon
+	Accessory *getCurrent();
+	const char *getWeaponString();
 
 protected:
+	Accessory *currentWeapon_;
 	ScorchedContext &context_;
-	Tank *tank_;
+	Tanket *tanket_;
+	TanketWeaponSwitcher *weaponSwitcher_;
+
+	void setCurrentWeapon(Accessory *wp);
 
 };
 
-#endif // !defined(AFX_TANKBBATTERIES_H__83501862_9536_4108_A7E6_2377AD98EB72__INCLUDED_)
+#endif // !defined(AFX_TanketWeapon_H__CC20069B_6E50_49E0_B735_D739BCBF58A9__INCLUDED_)

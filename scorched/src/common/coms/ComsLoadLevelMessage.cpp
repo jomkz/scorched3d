@@ -62,7 +62,7 @@ bool ComsLoadLevelMessage::saveTargets(ScorchedContext &context)
 {
 	// Tanks
 	std::map<unsigned int, Tank *> &tanks =
-		context.getTankContainer().getPlayingTanks();
+		context.getTankContainer().getAllTanks();
 	targetsBuffer_.addToBuffer((int) tanks.size());
 	std::map<unsigned int, Tank *>::iterator targetItor;
 	for (targetItor = tanks.begin();
@@ -153,7 +153,7 @@ bool ComsLoadLevelMessage::loadTargets(ScorchedContext &context)
 
 	// Remove any targets that have been removed due to game play
 	std::map<unsigned int, Tank *> tanks =
-		context.getTankContainer().getPlayingTanks(); // Copy
+		context.getTankContainer().getAllTanks(); // Copy
 	std::map<unsigned int, Tank *>::iterator targetItor;
 	for (targetItor = tanks.begin();
 		targetItor != tanks.end();

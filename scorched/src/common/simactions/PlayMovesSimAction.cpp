@@ -23,10 +23,11 @@
 #include <weapons/AccessoryStore.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
-#include <tank/TankPosition.h>
-#include <tank/TankAccessories.h>
+#include <tanket/TanketAccessories.h>
 #include <tank/TankContainer.h>
 #include <tank/TankScore.h>
+#include <tank/TankShotHistory.h>
+#include <tanket/TanketShotInfo.h>
 #include <target/TargetRenderer.h>
 #include <tankai/TankAIStrings.h>
 #include <actions/TankSay.h>
@@ -165,16 +166,16 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 	}
 
 	// Set the tank to have the correct rotation etc..
-	tank->getPosition().rotateGunXY(
+	tank->getShotInfo().rotateGunXY(
 		message.getRotationXY(), false);
-	tank->getPosition().rotateGunYZ(
+	tank->getShotInfo().rotateGunYZ(
 		message.getRotationYZ(), false);
-	tank->getPosition().changePower(
+	tank->getShotInfo().changePower(
 		message.getPower(), false);
-	tank->getPosition().setSelectPosition(
+	tank->getShotInfo().setSelectPosition(
 		message.getSelectPositionX(), 
 		message.getSelectPositionY());
-	tank->getPosition().madeShot();
+	tank->getShotHistory().madeShot();
 
 	// Tank say
 	if (tank->getDestinationId() == 0)
@@ -206,16 +207,16 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 					S3D::getModFile(S3D::formatStringBuffer("data/wav/%s", 
 					weapon->getParent()->getActivationSound())));
 			SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
-				firedSound, tank->getPosition().getTankPosition().asVector());
+				firedSound, tank->getShotInfo().getTankPosition().asVector());
 		}
 	}
 #endif // #ifndef S3D_SERVER
 
 	// Get firing context
 	WeaponFireContext weaponContext(tank->getPlayerId(), 0);
-	FixedVector velocity = tank->getPosition().getVelocityVector() *
-		(tank->getPosition().getPower() + 1);
-	FixedVector position = tank->getPosition().getTankGunPosition();
+	FixedVector velocity = tank->getShotInfo().getVelocityVector() *
+		(tank->getShotInfo().getPower() + 1);
+	FixedVector position = tank->getShotInfo().getTankGunPosition();
 
 	// Create an action for the muzzle flash
 	// add it to the action controller

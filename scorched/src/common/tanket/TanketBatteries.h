@@ -18,28 +18,32 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_TankAutoDefenseh_INCLUDE__)
-#define __INCLUDE_TankAutoDefenseh_INCLUDE__
+#if !defined(AFX_TanketBatteries_H__83501862_9536_4108_A7E6_2377AD98EB72__INCLUDED_)
+#define AFX_TanketBatteries_H__83501862_9536_4108_A7E6_2377AD98EB72__INCLUDED_
 
 #include <net/NetBuffer.h>
 
-class Tank;
 class ScorchedContext;
-class TankAutoDefense
+class Tanket;
+class Accessory;
+class TanketBatteries  
 {
 public:
-	TankAutoDefense(ScorchedContext &context);
-	virtual ~TankAutoDefense();
+	TanketBatteries(ScorchedContext &context);
+	virtual ~TanketBatteries();
 
-	void setTank(Tank *tank) { tank_ = tank; }
+	void setTanket(Tanket *tanket) { tanket_ = tanket; }
 
 	void newMatch();
 	void changed();
-	bool haveDefense();
+	int getNoBatteries();
+	Accessory *getBatteryAccessory();
+	bool canUse();
 
 protected:
 	ScorchedContext &context_;
-	Tank *tank_;
+	Tanket *tanket_;
+
 };
 
-#endif
+#endif // !defined(AFX_TANKBBATTERIES_H__83501862_9536_4108_A7E6_2377AD98EB72__INCLUDED_)

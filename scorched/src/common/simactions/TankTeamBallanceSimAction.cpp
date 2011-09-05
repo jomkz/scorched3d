@@ -23,8 +23,8 @@
 #include <tank/TankScore.h>
 #include <tank/TankState.h>
 #include <tank/TankModelStore.h>
-#include <tank/TankModelContainer.h>
 #include <tank/TankColorGenerator.h>
+#include <tank/TankModelContainer.h>
 #include <engine/Simulator.h>
 #include <common/OptionsScorched.h>
 #include <common/ChannelManager.h>
@@ -54,7 +54,7 @@ bool TankTeamBallanceSimAction::invokeAction(ScorchedContext &context)
 {
 	// Make sure everyone is in a team if they should be
 	std::map<unsigned int, Tank *> &playingTanks = 
-		context.getTankContainer().getPlayingTanks();
+		context.getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = playingTanks.begin();
 		 mainitor != playingTanks.end();
@@ -139,7 +139,7 @@ void TankTeamBallanceSimAction::minMaxTeams(ScorchedContext &context,
 
 	// Count players in each team
 	std::map<unsigned int, Tank *> &playingTanks = 
-		context.getTankContainer().getPlayingTanks();
+		context.getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = playingTanks.begin();
 		 mainitor != playingTanks.end();
@@ -205,7 +205,7 @@ void TankTeamBallanceSimAction::checkTeamsAuto(ScorchedContext &context)
 void TankTeamBallanceSimAction::checkTeamsBotsVs(ScorchedContext &context)
 {
 	std::map<unsigned int, Tank *> &playingTanks = 
-		context.getTankContainer().getPlayingTanks();
+		context.getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = playingTanks.begin();
 		 mainitor != playingTanks.end();

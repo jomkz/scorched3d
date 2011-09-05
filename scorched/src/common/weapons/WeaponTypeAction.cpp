@@ -21,9 +21,8 @@
 #include <weapons/WeaponTypeAction.h>
 #include <weapons/AccessoryStore.h>
 #include <engine/ActionController.h>
-#include <tank/TankContainer.h>
-#include <tank/TankModelContainer.h>
-#include <tank/TankType.h>
+#include <tanket/TanketContainer.h>
+#include <tanket/TanketType.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponTypeAction);
 
@@ -89,11 +88,11 @@ void WeaponTypeAction::weaponCallback(
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 	unsigned int userData)
 {
-	Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
-	if (!tank) return;
+	Tanket *tanket = context.getTanketContainer().getTanketById(weaponContext.getPlayerId());
+	if (!tanket) return;
 
 	std::map<std::string, Weapon *>::iterator itor = 
-		actions_.find(tank->getTankType()->getName());
+		actions_.find(tanket->getTanketType()->getName());
 	if (itor == actions_.end()) return;
 
 	Weapon *action = (*itor).second;

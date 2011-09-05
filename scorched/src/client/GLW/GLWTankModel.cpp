@@ -24,7 +24,7 @@
 #include <client/ClientState.h>
 #include <tankgraph/TargetRendererImplTank.h>
 #include <tank/TankContainer.h>
-#include <tank/TankPosition.h>
+#include <tanket/TanketShotInfo.h>
 #include <common/Vector4.h>
 #include <landscape/Landscape.h>
 #include <sky/Sky.h>
@@ -96,8 +96,8 @@ void GLWTankModel::draw()
 			mesh->draw(
 				totalTime_ * 20.0f,
 				matrix, position, 0.0f,
-				current->getPosition().getRotationGunXY().asFloat(),
-				current->getPosition().getRotationGunYZ().asFloat(),
+				current->getShotInfo().getRotationGunXY().asFloat(),
+				current->getShotInfo().getRotationGunYZ().asFloat(),
 				true);
 		}
 	glPopMatrix();
