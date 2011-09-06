@@ -26,6 +26,7 @@
 #include <tank/TankScore.h>
 #include <tank/TankState.h>
 #include <tank/TankAvatar.h>
+#include <tanket/TanketShotInfo.h>
 #include <tankgraph/TargetRendererImplTank.h>
 #include <tankai/TankAI.h>
 #include <GLW/GLWFont.h>
@@ -622,7 +623,7 @@ void ScoreDialog::addLine(Tank *currentPlayer, Tank *linePlayer, float y, char *
 			linePlayer->getColor(),
 			10,
 			textX + readyLeft, textY, 0.0f,
-			linePlayer->getState().getMoveId()!=0?"*":" ");
+			linePlayer->getShotInfo().getMoveId()!=0?"*":" ");
 		if (linePlayer->getScore().getRank() >= 0)
 		{
 			GLWFont::instance()->getGameFont()->draw(

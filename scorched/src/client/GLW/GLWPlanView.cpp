@@ -33,6 +33,7 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
+#include <tanket/TanketShotInfo.h>
 #include <target/TargetLife.h>
 #include <common/Vector.h>
 #include <common/Defines.h>
@@ -407,8 +408,8 @@ void GLWPlanView::drawTanks()
 		{		
 			tank->getLife().getTargetPosition().asVector(position);			
 
-			if ((flash_ && tank->getState().getMoveId() != 0) ||
-				tank->getState().getMoveId() == 0)
+			if ((flash_ && tank->getShotInfo().getMoveId() != 0) ||
+				tank->getShotInfo().getMoveId() == 0)
 			{
 				glColor3fv(tank->getColor());
 				drawQuad(position[0], position[1], 8.0f, 8.0f);

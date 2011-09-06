@@ -58,8 +58,7 @@ TankState::TankState(ScorchedContext &context, unsigned int playerId) :
 	context_(context), 
 	muted_(false),
 	skipshots_(false),
-	lives_(0), maxLives_(1), moveId_(0),
-	skippedShots_(0),
+	lives_(0), maxLives_(1),
 	notSpectator_(false),
 	newlyJoined_(true),
 	stateChangeCount_(0)
@@ -78,7 +77,6 @@ void TankState::newMatch()
 
 void TankState::newGame()
 {
-	skippedShots_ = 0;
 	setState(sNormal);
 
 	maxLives_ = context_.getOptionsGame().getPlayerLives();
@@ -86,7 +84,6 @@ void TankState::newGame()
 	lives_ = maxLives_;
 	tank_->getTargetState().setFalling(0);
 	tank_->getTargetState().setMoving(0);
-	if (!context_.getServerMode()) moveId_ = 0;
 }
 
 void TankState::clientNewGame()

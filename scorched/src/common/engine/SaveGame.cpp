@@ -101,7 +101,7 @@ bool SaveGame::loadTargets(const std::string &fileName)
 	if (!loadFile(fileName, message)) return false;
 
 	if (!message.loadState(ScorchedServer::instance()->getContext())) return false;
-	if (!message.loadTargets(ScorchedServer::instance()->getContext())) return false;
+	if (!message.loadTanks(ScorchedServer::instance()->getContext())) return false;
 
 	std::map<unsigned int, Tank *> tanks = 
 		ScorchedServer::instance()->getTankContainer().getAllTanks();

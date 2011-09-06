@@ -25,7 +25,7 @@
 #include <coms/ComsPlayedMoveMessage.h>
 #include <list>
 
-class Tank;
+class Tanket;
 class PlayMovesSimAction : public SimAction
 {
 public:
@@ -47,11 +47,11 @@ protected:
 	std::list<ComsPlayedMoveMessage *> messages_;
 
 	void tankTimedOut(ScorchedContext &context, 
-		Tank *tank);
+		Tanket *tanket);
 	void tankFired(ScorchedContext &context,
-		Tank *tank, ComsPlayedMoveMessage &message);
+		Tanket *tanket, ComsPlayedMoveMessage &message);
 	void tankResigned(ScorchedContext &context,
-		Tank *tank, ComsPlayedMoveMessage &message);
+		Tanket *tanket, ComsPlayedMoveMessage &message);
 };
 
 #endif // !defined(AFX_PlayMovesSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

@@ -27,6 +27,7 @@
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
 #include <tank/TankTeamScore.h>
+#include <tanket/TanketShotInfo.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <simactions/TankStartMoveSimAction.h>
@@ -285,7 +286,7 @@ bool ServerTurns::showScore()
 
 		if (tank->getState().getLives() > 0 &&
 			tank->getState().getTankPlaying() &&
-			tank->getState().getSkippedShots() < 3)
+			tank->getShotInfo().getSkippedShots() < 3)
 		{
 			allSkipped = false;
 		}
@@ -302,7 +303,7 @@ bool ServerTurns::showScore()
 	return false;
 }
 
-void ServerTurns::playMove(Tank *tank, unsigned int moveId, fixed maximumShotTime, fixed delayStartMoveTime)
+void ServerTurns::playMove(Tanket *tanket, unsigned int moveId, fixed maximumShotTime, fixed delayStartMoveTime)
 {
 	// If there is a maximum shot time make sure the AIs dont think longer
 	// than the allowed time
@@ -314,14 +315,18 @@ void ServerTurns::playMove(Tank *tank, unsigned int moveId, fixed maximumShotTim
 
 	// Get the ping
 	fixed ping = 0;
-	ServerDestination *destination = 
-		ScorchedServer::instance()->getServerDestinations().getDestination(tank->getDestinationId());
-	if (destination) ping = destination->getPing().getAverage();
+	if (!tanket->isTarget())
+	{
+		Tank *tank = (Tank *) tanket;
+		ServerDestination *destination = 
+			ScorchedServer::instance()->getServerDestinations().getDestination(tank->getDestinationId());
+		if (destination) ping = destination->getPing().getAverage();
+	}
 
 	// Create the move action
-	tank->getState().setMoveId(moveId);
+	tanket->getShotInfo().setMoveId(moveId);
 	TankStartMoveSimAction *tankSimAction = new TankStartMoveSimAction(
-		tank->getPlayerId(), tank->getState().getMoveId(), maximumShotTime, false, ping);
+		tanket->getPlayerId(), tanket->getShotInfo().getMoveId(), maximumShotTime, false, ping);
 
 	// If shotTime > 0 then add to the list of playing players so they can be timed out
 	SimulatorI *callback = 0;
@@ -329,7 +334,7 @@ void ServerTurns::playMove(Tank *tank, unsigned int moveId, fixed maximumShotTim
 	{
 		fixed simulationTime(ScorchedServer::instance()->getServerSimulator().getSendStepSize());
 		PlayingPlayer *playingPlayer = new PlayingPlayer(moveId, maximumShotTime + simulationTime * 2);
-		playingPlayers_[tank->getPlayerId()] = playingPlayer;
+		playingPlayers_[tanket->getPlayerId()] = playingPlayer;
 		callback = moveStarted_;
 	}
 
@@ -337,7 +342,7 @@ void ServerTurns::playMove(Tank *tank, unsigned int moveId, fixed maximumShotTim
 	if (delayStartMoveTime > 0)
 	{
 		WaitingPlayer *waitingPlayer = new WaitingPlayer(delayStartMoveTime, tankSimAction, callback);
-		waitingPlayers_[tank->getPlayerId()] = waitingPlayer;
+		waitingPlayers_[tanket->getPlayerId()] = waitingPlayer;
 	}
 	else
 	{
@@ -345,11 +350,11 @@ void ServerTurns::playMove(Tank *tank, unsigned int moveId, fixed maximumShotTim
 	}
 }
 
-void ServerTurns::playMoveFinished(Tank *tank)
+void ServerTurns::playMoveFinished(Tanket *tanket)
 {	
 	// Remove timeout check for this player
 	std::map<unsigned int, PlayingPlayer*>::iterator findItor =
-		playingPlayers_.find(tank->getPlayerId());
+		playingPlayers_.find(tanket->getPlayerId());
 	if (findItor != playingPlayers_.end())
 	{
 		delete findItor->second;
@@ -358,9 +363,9 @@ void ServerTurns::playMoveFinished(Tank *tank)
 
 	// Send stop move action
 	TankStopMoveSimAction *tankSimAction = 
-		new TankStopMoveSimAction(tank->getPlayerId());
+		new TankStopMoveSimAction(tanket->getPlayerId());
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction);	
-	tank->getState().setMoveId(0);
+	tanket->getShotInfo().setMoveId(0);
 }
 
 void ServerTurns::playShots(std::list<ComsPlayedMoveMessage *> messages, unsigned int moveId, bool timeOutPlayers)

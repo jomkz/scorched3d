@@ -154,13 +154,12 @@ void TargetMovementEntryShips::simulate(ScorchedContext &context, fixed frameTim
 			FixedVector shipPosition = position;
 			shipPosition += directionPerp * -offset[0];
 			shipPosition += direction * offset[1];
-			shipPosition[2] -= 1;
 			fixed angle = atan2x(direction[1], direction[0]);
 			fixed angleDegs = (angle / fixed::XPI) * 180 - 90;
 
 			// Update target
 			groupEntry->getTarget()->getLife().setTargetPositionAndRotation(
-				position, angleDegs);
+				shipPosition, angleDegs);
 		}
 	}
 }

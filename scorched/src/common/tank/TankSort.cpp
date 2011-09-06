@@ -110,13 +110,10 @@ void TankSort::getSortedTanks(std::list<Tank *> &list, ScorchedContext &context)
 	list = newList;
 }
 
-void TankSort::getSortedTanksIds(ScorchedContext &context, 
-	std::list<unsigned int> &list, bool allTanks)
+void TankSort::getSortedTanksIds(ScorchedContext &context, std::list<unsigned int> &list)
 {
 	std::list<Tank *> sortedTanks;
-	std::map<unsigned int, Tank *> tanks;
-	if (allTanks) tanks = context.getTankContainer().getAllTanks();
-	else tanks = context.getTankContainer().getAllTanks();
+	std::map<unsigned int, Tank *> tanks = context.getTankContainer().getAllTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();

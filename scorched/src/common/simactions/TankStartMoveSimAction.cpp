@@ -24,6 +24,7 @@
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
 #include <tank/TankContainer.h>
+#include <tanket/TanketShotInfo.h>
 #include <tankai/TankAI.h>
 #include <engine/ActionController.h>
 #include <common/OptionsScorched.h>
@@ -53,40 +54,52 @@ TankStartMoveSimAction::~TankStartMoveSimAction()
 
 bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 {
-	Tank *tank = context.getTankContainer().getTankById(playerId_);
-	if (!tank) return true;
+	Tanket *tanket = context.getTanketContainer().getTanketById(playerId_);
+	if (!tanket) return true;
 
-	tank->getScore().setPing((ping_ * 1000).asInt());
-
-	if (tank->getState().getState() != TankState::sNormal && !buying_) return true;
-	if (tank->getState().getState() != TankState::sBuying && buying_) return true;
-
-	if (!context.getServerMode())
+	if (!tanket->isTarget()) 
 	{
-		tank->getState().setMoveId(moveId_);
+		Tank *tank = (Tank *) tanket;
+		tank->getScore().setPing((ping_ * 1000).asInt());
 
-		if (tank->getDestinationId() == context.getTankContainer().getCurrentDestinationId())
-		{
-#ifndef S3D_SERVER
-			ClientStartGameHandler::instance()->startGame(this);
-			ShotCountDown::instance()->showMoveTime(
-				timeout_, 
-				buying_?ShotCountDown::eBuying:ShotCountDown::ePlaying,
-				playerId_);
-#endif
-		}
+		if (tank->getState().getState() != TankState::sNormal && !buying_) return true;
+		if (tank->getState().getState() != TankState::sBuying && buying_) return true;
 	}
 	else
 	{
-		if (tank->getDestinationId() == 0)
+		if (!tanket->getAlive()) return true;
+	}
+
+	if (!context.getServerMode())
+	{
+		tanket->getShotInfo().setMoveId(moveId_);
+
+#ifndef S3D_SERVER
+		if (!tanket->isTarget()) 
+		{
+			Tank *tank = (Tank *) tanket;
+			if (tank->getDestinationId() == context.getTankContainer().getCurrentDestinationId())
+			{
+				ClientStartGameHandler::instance()->startGame(this);
+				ShotCountDown::instance()->showMoveTime(
+					timeout_, 
+					buying_?ShotCountDown::eBuying:ShotCountDown::ePlaying,
+					playerId_);
+			}
+		}
+#endif
+	}
+	else
+	{
+		if (tanket->getTankAI())
 		{
 			if (buying_)
 			{
-				tank->getTankAI()->buyAccessories(moveId_);
+				tanket->getTankAI()->buyAccessories(moveId_);
 			}
 			else
 			{
-				tank->getTankAI()->playMove(moveId_);
+				tanket->getTankAI()->playMove(moveId_);
 			}
 		}
 	}

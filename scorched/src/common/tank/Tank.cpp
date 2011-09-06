@@ -125,6 +125,11 @@ bool Tank::getVisible()
 	return getAlive() || getState().getState() == TankState::sBuying;
 }
 
+bool Tank::getPlaying()
+{
+	return getState().getTankPlaying();
+}
+
 Weapon *Tank::getDeathAction()
 {
 	std::list<Accessory *> &accessories = getAccessories().

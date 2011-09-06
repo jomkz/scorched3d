@@ -26,8 +26,7 @@
 #endif
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeTex.h>
-#include <tank/TankContainer.h>
-#include <tank/TankState.h>
+#include <tanket/TanketContainer.h>
 #include <tank/TankViewPoints.h>
 #include <tankai/TankAI.h>
 #include <common/Defines.h>
@@ -113,18 +112,18 @@ void ShotProjectile::collision(PhysicsParticleObject &position,
 	if (!collision_)
 	{
 		// Tell all AIs about this collision
-		std::map<unsigned int, Tank *> tanks = 
-			context_->getTankContainer().getAllTanks();
-		std::map<unsigned int, Tank *>::iterator itor;
+		std::map<unsigned int, Tanket *> tanks = 
+			context_->getTanketContainer().getAllTankets();
+		std::map<unsigned int, Tanket *>::iterator itor;
 		for (itor = tanks.begin();
 			itor != tanks.end();
 			++itor)
 		{
-			Tank *tank = (*itor).second;
-			TankAI *ai = tank->getTankAI();
+			Tanket *tanket = (*itor).second;
+			TankAI *ai = tanket->getTankAI();
 			if (ai)
 			{		
-				if (tank->getState().getState() == TankState::sNormal)
+				if (tanket->getAlive())
 				{
 					ai->shotLanded(collisionId, 
 						getWeapon(), getPlayerId(), 

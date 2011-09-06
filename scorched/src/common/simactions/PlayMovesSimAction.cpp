@@ -21,12 +21,10 @@
 #include <simactions/PlayMovesSimAction.h>
 #include <engine/ActionController.h>
 #include <weapons/AccessoryStore.h>
-#include <tank/TankAvatar.h>
-#include <tank/TankState.h>
 #include <tanket/TanketAccessories.h>
-#include <tank/TankContainer.h>
-#include <tank/TankScore.h>
+#include <tanket/TanketContainer.h>
 #include <tank/TankShotHistory.h>
+#include <tank/TankState.h>
 #include <tanket/TanketShotInfo.h>
 #include <target/TargetRenderer.h>
 #include <tankai/TankAIStrings.h>
@@ -75,44 +73,44 @@ bool PlayMovesSimAction::invokeAction(ScorchedContext &context)
 		++itor)
 	{
 		ComsPlayedMoveMessage *message = *itor;
-		Tank *tank = context.getTankContainer().getTankById(message->getPlayerId());
-		if (tank && tank->getState().getState() == TankState::sNormal)
+		Tanket *tanket = context.getTanketContainer().getTanketById(message->getPlayerId());
+		if (tanket && tanket->getAlive())
 		{
 			switch (message->getType())
 			{
 			case ComsPlayedMoveMessage::eShot:
-				tankFired(context, tank, *message);
+				tankFired(context, tanket, *message);
 				break;
 			case ComsPlayedMoveMessage::eResign:
-				tankResigned(context, tank, *message);
+				tankResigned(context, tanket, *message);
 				break;
 			}
 
 			if (timeoutPlayers_ &&
 				message->getType() == ComsPlayedMoveMessage::eTimeout)
 			{
-				tankTimedOut(context, tank);
+				tankTimedOut(context, tanket);
 			}
 			else
 			{
-				tank->getScore().setMissedMoves(0);
+				tanket->getShotInfo().setMissedMoves(0);
 			}
 
 			if (message->getType() == ComsPlayedMoveMessage::eTimeout ||
 				message->getType() == ComsPlayedMoveMessage::eSkip)
 			{
-				tank->getState().setSkippedShots(tank->getState().getSkippedShots() + 1);
+				tanket->getShotInfo().setSkippedShots(tanket->getShotInfo().getSkippedShots() + 1);
 			}
 			else
 			{
-				tank->getState().setSkippedShots(0);
+				tanket->getShotInfo().setSkippedShots(0);
 			}
 		}
 	}
 	return true;
 }
 
-void PlayMovesSimAction::tankTimedOut(ScorchedContext &context, Tank *tank)
+void PlayMovesSimAction::tankTimedOut(ScorchedContext &context, Tanket *tanket)
 {
 	if (!context.getServerMode()) return;
 
@@ -120,20 +118,24 @@ void PlayMovesSimAction::tankTimedOut(ScorchedContext &context, Tank *tank)
 		context.getOptionsGame().getAllowedMissedMoves();
 	if (allowedMissed > 0)
 	{
-		tank->getScore().setMissedMoves(
-			tank->getScore().getMissedMoves() + 1);
+		tanket->getShotInfo().setMissedMoves(
+			tanket->getShotInfo().getMissedMoves() + 1);
 
-		if (tank->getScore().getMissedMoves() >= allowedMissed)
+		if (tanket->getShotInfo().getMissedMoves() >= allowedMissed)
 		{
-			ScorchedServer::instance()->getServerChannelManager().sendText(
-				ChannelText("info",
-					"PLAYER_MISSED_SPECTATOR",
-					"[p:{0}] failed to move, moved to spectators",
-					tank->getTargetName()),
-					true);
+			if (!tanket->isTarget())
+			{
+				Tank *tank = (Tank *) tanket;
+				ScorchedServer::instance()->getServerChannelManager().sendText(
+					ChannelText("info",
+						"PLAYER_MISSED_SPECTATOR",
+						"[p:{0}] failed to move, moved to spectators",
+						tank->getTargetName()),
+						true);
 
-			tank->getState().setState(TankState::sSpectator);
-			tank->getState().setNotSpectator(false);
+				tank->getState().setState(TankState::sSpectator);
+				tank->getState().setNotSpectator(false);
+			}
 		}
 		else
 		{
@@ -141,15 +143,15 @@ void PlayMovesSimAction::tankTimedOut(ScorchedContext &context, Tank *tank)
 				ChannelText("info",
 					"PLAYER_MISSED_SHOOT",
 					"[p:{0}] failed to move, allowed {1} more missed move(s)",
-					tank->getTargetName(),
-					allowedMissed - tank->getScore().getMissedMoves()),
+					tanket->getTargetName(),
+					allowedMissed - tanket->getShotInfo().getMissedMoves()),
 					true);
 		}
 	}
 }
 
 void PlayMovesSimAction::tankFired(ScorchedContext &context, 
-	Tank *tank, ComsPlayedMoveMessage &message)
+	Tanket *tanket, ComsPlayedMoveMessage &message)
 {
 	// Check the weapon name exists and is a weapon
 	Accessory *accessory = 
@@ -162,37 +164,45 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 		// Actually use up one of the weapons
 		// Fuel, is used up differently at the rate of one weapon per movement square
 		// This is done sperately in the tank movement action
-		tank->getAccessories().rm(accessory, accessory->getUseNumber());
+		tanket->getAccessories().rm(accessory, accessory->getUseNumber());
 	}
 
 	// Set the tank to have the correct rotation etc..
-	tank->getShotInfo().rotateGunXY(
+	tanket->getShotInfo().rotateGunXY(
 		message.getRotationXY(), false);
-	tank->getShotInfo().rotateGunYZ(
+	tanket->getShotInfo().rotateGunYZ(
 		message.getRotationYZ(), false);
-	tank->getShotInfo().changePower(
+	tanket->getShotInfo().changePower(
 		message.getPower(), false);
-	tank->getShotInfo().setSelectPosition(
+	tanket->getShotInfo().setSelectPosition(
 		message.getSelectPositionX(), 
 		message.getSelectPositionY());
-	tank->getShotHistory().madeShot();
-
-	// Tank say
-	if (tank->getDestinationId() == 0)
+	if (!tanket->isTarget())
 	{
-		const char *line = context.getTankAIStrings().getAttackLine(context);
-		if (line)
+		Tank *tank = (Tank *) tanket;
+		tank->getShotHistory().madeShot();
+
+		// Tank say
+		if (tank->getDestinationId() == 0)
 		{
-			context.getActionController().addAction(
-				new TankSay(tank->getPlayerId(), 
-				LANG_STRING(line)));
+			const char *line = context.getTankAIStrings().getAttackLine(context);
+			if (line)
+			{
+				context.getActionController().addAction(
+					new TankSay(tank->getPlayerId(), 
+					LANG_STRING(line)));
+			}
 		}
+
+		// Stats events
+		StatsLogger::instance()->tankFired(tank, weapon);
+		StatsLogger::instance()->weaponFired(weapon, false);	
 	}
 
 #ifndef S3D_SERVER
 	if (!context.getServerMode()) 
 	{
-		TargetRenderer *renderer = tank->getRenderer();
+		TargetRenderer *renderer = tanket->getRenderer();
 		if (renderer)
 		{
 			renderer->fired();
@@ -207,16 +217,16 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 					S3D::getModFile(S3D::formatStringBuffer("data/wav/%s", 
 					weapon->getParent()->getActivationSound())));
 			SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
-				firedSound, tank->getShotInfo().getTankPosition().asVector());
+				firedSound, tanket->getShotInfo().getTankPosition().asVector());
 		}
 	}
 #endif // #ifndef S3D_SERVER
 
 	// Get firing context
-	WeaponFireContext weaponContext(tank->getPlayerId(), 0);
-	FixedVector velocity = tank->getShotInfo().getVelocityVector() *
-		(tank->getShotInfo().getPower() + 1);
-	FixedVector position = tank->getShotInfo().getTankGunPosition();
+	WeaponFireContext weaponContext(tanket->getPlayerId(), 0);
+	FixedVector velocity = tanket->getShotInfo().getVelocityVector() *
+		(tanket->getShotInfo().getPower() + 1);
+	FixedVector position = tanket->getShotInfo().getTankGunPosition();
 
 	// Create an action for the muzzle flash
 	// add it to the action controller
@@ -229,14 +239,10 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 	// Create the action for the weapon and
 	// add it to the action controller
 	weapon->fireWeapon(context, weaponContext, position, velocity);
-
-	// Stats events
-	StatsLogger::instance()->tankFired(tank, weapon);
-	StatsLogger::instance()->weaponFired(weapon, false);	
 }
 
 void PlayMovesSimAction::tankResigned(ScorchedContext &context, 
-	Tank *tank, ComsPlayedMoveMessage &message)
+	Tanket *tanket, ComsPlayedMoveMessage &message)
 {
 	if (context.getOptionsGame().getResignMode() == OptionsGame::ResignNone)
 	{
@@ -249,7 +255,7 @@ void PlayMovesSimAction::tankResigned(ScorchedContext &context,
 		resignTime = 10;
 	}
 	context.getActionController().addAction(
-		new TankResign(tank->getPlayerId(), resignTime));
+		new TankResign(tanket->getPlayerId(), resignTime));
 }
 
 bool PlayMovesSimAction::writeMessage(NetBuffer &buffer)

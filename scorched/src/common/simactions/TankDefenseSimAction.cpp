@@ -19,8 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <simactions/TankDefenseSimAction.h>
-#include <tank/TankContainer.h>
-#include <tank/TankState.h>
+#include <tanket/TanketContainer.h>
 #include <tanket/TanketAccessories.h>
 #include <weapons/AccessoryStore.h>
 #include <target/TargetLife.h>
@@ -50,8 +49,8 @@ bool TankDefenseSimAction::invokeAction(ScorchedContext &context)
 	unsigned int playerId = defenseMessage_.getPlayerId();
 
 	// Check tank exists and is alive
-	Tank *tank = context.getTankContainer().getTankById(playerId);
-	if (!tank || !tank->getState().getTankPlaying())
+	Tanket *tanket = context.getTanketContainer().getTanketById(playerId);
+	if (!tanket || !tanket->getPlaying())
 	{
 		return true;
 	}
@@ -60,15 +59,15 @@ bool TankDefenseSimAction::invokeAction(ScorchedContext &context)
 	switch (defenseMessage_.getChange())
 	{
 	case ComsDefenseMessage::eBatteryUse:
-		if (tank->getAccessories().getBatteries().canUse())
+		if (tanket->getAccessories().getBatteries().canUse())
 		{
 			Accessory *battery = 
 				context.getAccessoryStore().
 					findByAccessoryId(defenseMessage_.getInfoId());
 			if (battery)
 			{
-				tank->getAccessories().rm(battery, battery->getUseNumber());
-				tank->getLife().setLife(tank->getLife().getLife() + 10);
+				tanket->getAccessories().rm(battery, battery->getUseNumber());
+				tanket->getLife().setLife(tanket->getLife().getLife() + 10);
 
 #ifndef S3D_SERVER
 				if (!context.getServerMode())
@@ -80,7 +79,7 @@ bool TankDefenseSimAction::invokeAction(ScorchedContext &context)
 							Sound::instance()->fetchOrCreateBuffer(
 								S3D::getModFile(S3D::formatStringBuffer("data/wav/%s", battery->getActivationSound())));
 						SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
-							batSound, tank->getLife().getTargetPosition().asVector());
+							batSound, tanket->getLife().getTargetPosition().asVector());
 					}
 				}
 #endif
@@ -94,10 +93,10 @@ bool TankDefenseSimAction::invokeAction(ScorchedContext &context)
 					findByAccessoryId(defenseMessage_.getInfoId());
 			if (accessory->getType() == AccessoryPart::AccessoryShield)
 			{
-				if (tank->getAccessories().canUse(accessory))
+				if (tanket->getAccessories().canUse(accessory))
 				{
-					tank->getAccessories().rm(accessory, accessory->getUseNumber());
-					tank->getShield().setCurrentShield(accessory);
+					tanket->getAccessories().rm(accessory, accessory->getUseNumber());
+					tanket->getShield().setCurrentShield(accessory);
 
 #ifndef S3D_SERVER
 					if (!context.getServerMode())
@@ -109,7 +108,7 @@ bool TankDefenseSimAction::invokeAction(ScorchedContext &context)
 								Sound::instance()->fetchOrCreateBuffer(
 									S3D::getModFile(S3D::formatStringBuffer("data/wav/%s", accessory->getActivationSound())));
 							SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
-								activateSound, tank->getLife().getTargetPosition().asVector());
+								activateSound, tanket->getLife().getTargetPosition().asVector());
 						}
 					}
 #endif
@@ -119,10 +118,10 @@ bool TankDefenseSimAction::invokeAction(ScorchedContext &context)
 		break;
 	case ComsDefenseMessage::eShieldDown:
 		{
-			Accessory *shield = tank->getShield().getCurrentShield();
+			Accessory *shield = tanket->getShield().getCurrentShield();
 			if (shield)
 			{
-				tank->getShield().setCurrentShield(0);
+				tanket->getShield().setCurrentShield(0);
 			}
 		}	
 		break;
@@ -133,9 +132,9 @@ bool TankDefenseSimAction::invokeAction(ScorchedContext &context)
 					findByAccessoryId(defenseMessage_.getInfoId());
 			if (parachute->getType() == AccessoryPart::AccessoryParachute)
 			{
-				if (tank->getAccessories().canUse(parachute))
+				if (tanket->getAccessories().canUse(parachute))
 				{
-					tank->getParachute().setCurrentParachute(parachute);
+					tanket->getParachute().setCurrentParachute(parachute);
 
 #ifndef S3D_SERVER
 					if (!context.getServerMode())
@@ -147,7 +146,7 @@ bool TankDefenseSimAction::invokeAction(ScorchedContext &context)
 								Sound::instance()->fetchOrCreateBuffer(
 									S3D::getModFile(S3D::formatStringBuffer("data/wav/%s", parachute->getActivationSound())));
 							SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
-								paraSound, tank->getLife().getTargetPosition().asVector());
+								paraSound, tanket->getLife().getTargetPosition().asVector());
 						}
 					}
 #endif
@@ -156,9 +155,9 @@ bool TankDefenseSimAction::invokeAction(ScorchedContext &context)
 		}
 		break;
 	case ComsDefenseMessage::eParachutesDown:
-		if (tank->getParachute().getCurrentParachute())
+		if (tanket->getParachute().getCurrentParachute())
 		{
-			tank->getParachute().setCurrentParachute(0);
+			tanket->getParachute().setCurrentParachute(0);
 		}
 		break;
 	}

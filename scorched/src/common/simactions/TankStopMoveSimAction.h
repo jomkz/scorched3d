@@ -23,7 +23,7 @@
 
 #include <simactions/SimAction.h>
 
-class Tank;
+class Tanket;
 class TankStopMoveSimAction : public SimAction
 {
 public:
@@ -36,7 +36,7 @@ public:
 	virtual bool writeMessage(NetBuffer &buffer);
 	virtual bool readMessage(NetBufferReader &reader);
 
-	static void stopMove(ScorchedContext &context, Tank *tank);
+	static void stopMove(ScorchedContext &context, Tanket *tanket);
 
 REGISTER_CLASS_HEADER(TankStopMoveSimAction);
 protected:

@@ -56,6 +56,8 @@ protected:
 	LangString name_;
 	std::string parachute_;
 	std::string shield_;
+	std::string ainame_;
+	int team_;
 	FixedVector size_;
 	fixed modelscale_, modelscalediff_;
 	fixed modelrotation_, modelbrightness_;

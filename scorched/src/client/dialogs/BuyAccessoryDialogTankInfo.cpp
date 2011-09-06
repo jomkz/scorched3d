@@ -23,6 +23,7 @@
 #include <tank/TankContainer.h>
 #include <tank/TankScore.h>
 #include <tank/TankState.h>
+#include <tanket/TanketShotInfo.h>
 
 BuyAccessoryDialogTankInfo *BuyAccessoryDialogTankInfo::instance_ = 0;
 
@@ -51,7 +52,7 @@ void BuyAccessoryDialogTankInfo::set()
 		tankId = tank->getPlayerId();
 		tankMoney = tank->getScore().getMoney();
 		tankName = tank->getTargetName();
-		tankMoveId = tank->getState().getMoveId();
+		tankMoveId = tank->getShotInfo().getMoveId();
 	} 
 	else
 	{

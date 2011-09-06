@@ -20,6 +20,7 @@
 
 #include <weapons/AccessoryStore.h>
 #include <common/RandomGenerator.h>
+#include <common/DefinesAssert.h>
 #ifndef S3D_SERVER
 	#include <tankgraph/TargetRendererImplTarget.h>
 #endif
@@ -29,6 +30,9 @@
 #include <target/TargetShield.h>
 #include <target/TargetParachute.h>
 #include <target/TargetState.h>
+#include <tanket/TanketContainer.h>
+#include <tankai/TankAIStore.h>
+#include <server/ScorchedServer.h>
 #include <3dsparse/ModelStore.h>
 #include <3dsparse/Model.h>
 #include <common/Defines.h>
@@ -42,7 +46,7 @@ TargetDefinition::TargetDefinition() :
 	driveovertodestroy_(false), flattendestroy_(false), border_(0), 
 	displaydamage_(true), displayshadow_(true), displayhardwareshadow_(true),
 	nodamageburn_(false), nocollision_(false), nofalling_(false),
-	nofallingdamage_(false), billboard_(false)
+	nofallingdamage_(false), billboard_(false), team_(0)
 {
 	shadow_.setDrawShadow(false);
 }
@@ -94,6 +98,9 @@ bool TargetDefinition::readXML(XMLNode *node)
 	node->getNamedChild("burnaction", burnaction_, false);
 	node->getNamedChild("collisionaction", collisionaction_, false);
 
+	node->getNamedChild("ainame", ainame_, false);
+	node->getNamedChild("team", team_, false);
+
 	if (!shadow_.readXML(node)) return false;
 	if (!groups_.readXML(node)) return false;
 
@@ -106,25 +113,47 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 	ScorchedContext &context,
 	RandomGenerator &generator)
 {
-	Target *target = new Target(playerId, 
-		name_, context);
+	Target *target = 0;
+	Tanket *tanket = 0;
+	if (ainame_.empty())
+	{
+		target = new Target(playerId, name_, context);
+	} 
+	else
+	{
+		tanket = new Tanket(context, playerId, name_);
+		TankAI *ai = 0;
+		if (context.getServerMode() &&
+			ainame_ != "Human")
+		{
+			ai = ((ScorchedServer &)context).getTankAIs().getAIByName(ainame_.c_str());
+			if (!ai) 
+			{
+				S3D::dialogExit("TargetDefinition",
+					S3D::formatStringBuffer("Cannot find AI name %s", ainame_.c_str()));
+			}
+			ai = ai->createCopy(tanket);
+		}
+		tanket->setTankAI(ai);
+		target = tanket;
+	}
 	target->getLife().setBoundingSphere(boundingsphere_);
 
 	fixed rotation = modelrotation_;
 	if (modelrotationsnap_ > 0)
 	{
-		rotation = fixed((generator.getRandFixed("Tank Definition") * 360).asInt() / 
+		rotation = fixed((generator.getRandFixed("Target Definition") * 360).asInt() / 
 			(modelrotationsnap_.asInt())) * modelrotationsnap_;
 	}
 	fixed finalModelScale = modelscale_;
 	if (modelscalediff_ > 0)
 	{
-		finalModelScale += generator.getRandFixed("Tank Definition") * modelscalediff_;
+		finalModelScale += generator.getRandFixed("Target Definition") * modelscalediff_;
 	}
 	fixed finalBrightness = modelbrightness_;
 	if (finalBrightness == -1)
 	{
-		finalBrightness = generator.getRandFixed("Tank Definition") * fixed(true, 7000) + fixed(true, 3000);
+		finalBrightness = generator.getRandFixed("Target Definition") * fixed(true, 7000) + fixed(true, 3000);
 	}
 
 	FixedVector finalSize = size_;
@@ -150,6 +179,7 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 	target->getLife().setRotation(rotation);
 	target->setBorder(border_);
 	target->loaded();
+	if (tanket) tanket->newMatch();
 	target->newGame();
 
 	if (shield_.c_str()[0] && 0 != strcmp(shield_.c_str(), "none"))
@@ -233,6 +263,9 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 
 	target->getLife().setTargetPosition(position);
 	groups_.addToGroups(context, &target->getGroup(), false);
+
+	if (!tanket) context.getTargetContainer().addTarget(target);
+	else context.getTanketContainer().addTanket(tanket);
 
 	return target;
 }

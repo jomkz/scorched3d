@@ -120,7 +120,7 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 
 	// Read the state from the message
 	if (!message.loadState(ScorchedClient::instance()->getContext())) return false;
-	if (!message.loadTargets(ScorchedClient::instance()->getContext())) return false;
+	if (!message.loadTanks(ScorchedClient::instance()->getContext())) return false;
 
 	// make sure we can only see the correct settings
 	OptionsDisplayConsole::instance()->addDisplayToConsole();

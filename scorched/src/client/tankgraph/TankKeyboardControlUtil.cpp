@@ -505,7 +505,7 @@ void TankKeyboardControlUtil::fireShot(Tank *tank)
 		// send message saying we are finished with shot
 		ComsPlayedMoveMessage comsMessage(
 			tank->getPlayerId(), 
-			tank->getState().getMoveId(),
+			tank->getShotInfo().getMoveId(),
 			ComsPlayedMoveMessage::eShot);
 		comsMessage.setShot(
 			currentWeapon->getAccessoryId(),
@@ -528,7 +528,7 @@ void TankKeyboardControlUtil::skipShot(Tank *tank)
 	// send message saying we are finished with shot
 	ComsPlayedMoveMessage comsMessage(
 		tank->getPlayerId(), 
-		tank->getState().getMoveId(),
+		tank->getShotInfo().getMoveId(),
 		ComsPlayedMoveMessage::eSkip);
 
 	// Check if we are running in a NET/LAN environment
@@ -544,7 +544,7 @@ void TankKeyboardControlUtil::resign(Tank *tank)
 	// send message saying we are finished with shot
 	ComsPlayedMoveMessage comsMessage(
 		tank->getPlayerId(), 
-		tank->getState().getMoveId(),
+		tank->getShotInfo().getMoveId(),
 		ComsPlayedMoveMessage::eResign);
 
 	// Check if we are running in a NET/LAN environment

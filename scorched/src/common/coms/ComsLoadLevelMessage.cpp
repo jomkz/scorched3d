@@ -58,28 +58,28 @@ bool ComsLoadLevelMessage::saveState(ScorchedContext &context)
 	return false;
 }
 
-bool ComsLoadLevelMessage::saveTargets(ScorchedContext &context)
+bool ComsLoadLevelMessage::saveTanks(ScorchedContext &context)
 {
 	// Tanks
 	std::map<unsigned int, Tank *> &tanks =
 		context.getTankContainer().getAllTanks();
-	targetsBuffer_.addToBuffer((int) tanks.size());
+	tanksBuffer_.addToBuffer((int) tanks.size());
 	std::map<unsigned int, Tank *>::iterator targetItor;
 	for (targetItor = tanks.begin();
 		targetItor != tanks.end();
 		++targetItor)
 	{
 		Tank *tank = targetItor->second;
-		targetsBuffer_.addToBuffer(tank->getPlayerId());
-		if (!tank->writeMessage(targetsBuffer_)) return false;
+		tanksBuffer_.addToBuffer(tank->getPlayerId());
+		if (!tank->writeMessage(tanksBuffer_)) return false;
 
 		if (tank->getTankAI())
 		{
-			targetsBuffer_.addToBuffer(tank->getTankAI()->getName());
+			tanksBuffer_.addToBuffer(tank->getTankAI()->getName());
 		}
 		else
 		{
-			targetsBuffer_.addToBuffer("Human");
+			tanksBuffer_.addToBuffer("Human");
 		}
 	}
 
@@ -105,11 +105,11 @@ bool ComsLoadLevelMessage::loadState(ScorchedContext &context, bool fullState)
 	return true;
 }
 
-bool ComsLoadLevelMessage::loadTargets(ScorchedContext &context)
+bool ComsLoadLevelMessage::loadTanks(ScorchedContext &context)
 {
-	NetBufferReader reader(targetsBuffer_);
+	NetBufferReader reader(tanksBuffer_);
 
-	// Tanks
+	// Add any new tanks
 	int targetCount = 0;
 	if (!reader.getFromBuffer(targetCount)) return false;
 	std::set<unsigned int> usedTargetIds;
@@ -151,7 +151,7 @@ bool ComsLoadLevelMessage::loadTargets(ScorchedContext &context)
 		}
 	}
 
-	// Remove any targets that have been removed due to game play
+	// Remove any tanks that have disconnected
 	std::map<unsigned int, Tank *> tanks =
 		context.getTankContainer().getAllTanks(); // Copy
 	std::map<unsigned int, Tank *>::iterator targetItor;
@@ -207,7 +207,7 @@ bool ComsLoadLevelMessage::writeMessage(NetBuffer &buffer)
 	if (!landscapeDefinition_.writeMessage(buffer)) return false;
 	buffer.addToBuffer(stateBuffer_);
 	buffer.addToBuffer(actualTime_);
-	buffer.addToBuffer(targetsBuffer_);
+	buffer.addToBuffer(tanksBuffer_);
 	buffer.addToBuffer(simulateBuffer_);
 
 	return true;
@@ -218,7 +218,7 @@ bool ComsLoadLevelMessage::readMessage(NetBufferReader &reader)
 	if (!landscapeDefinition_.readMessage(reader)) return false;
 	if (!reader.getFromBuffer(stateBuffer_)) return false;
 	if (!reader.getFromBuffer(actualTime_)) return false;
-	if (!reader.getFromBuffer(targetsBuffer_)) return false;
+	if (!reader.getFromBuffer(tanksBuffer_)) return false;
 	if (!reader.getFromBuffer(simulateBuffer_)) return false;
 
 	return true;

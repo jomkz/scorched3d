@@ -31,7 +31,8 @@ TanketShotInfo::TanketShotInfo(ScorchedContext &context) :
 	turretRotXY_(0), turretRotYZ_(0),
 	power_(1000), maxPower_(1000),
 	tanket_(0), context_(context),
-	selectPositionX_(0), selectPositionY_(0)
+	selectPositionX_(0), selectPositionY_(0),
+	moveId_(0), missedMoves_(0), skippedShots_(0)
 {
 	turretRotXY_ = 0;
 	turretRotYZ_ = 45;
@@ -45,6 +46,9 @@ void TanketShotInfo::newGame()
 {
 	TanketType *type = tanket_->getTanketType();
 	maxPower_ = type->getPower();
+	missedMoves_ = 0;
+	skippedShots_ = 0;
+	if (!context_.getServerMode()) moveId_ = 0;
 }
 
 FixedVector &TanketShotInfo::getTankGunPosition()

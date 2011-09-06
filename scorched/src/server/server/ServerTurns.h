@@ -25,7 +25,7 @@
 #include <list>
 #include <map>
 
-class Tank;
+class Tanket;
 class ComsPlayedMoveMessage;
 class fixed;
 class ServerTurns 
@@ -93,8 +93,8 @@ protected:
 	std::map<unsigned int, WaitingPlayer*> waitingPlayers_;
 
 	bool showScore();
-	void playMove(Tank *tank, unsigned int moveId, fixed maximumShotTime, fixed delayStartMoveTime);
-	void playMoveFinished(Tank *tank);
+	void playMove(Tanket *tank, unsigned int moveId, fixed maximumShotTime, fixed delayStartMoveTime);
+	void playMoveFinished(Tanket *tank);
 	void playShots(std::list<ComsPlayedMoveMessage *> messages, unsigned int moveId, bool timeOutPlayers);
 	void shotsStarted(fixed simulationTime, SimAction *action);
 	void moveStarted(fixed simulationTime, SimAction *action);

@@ -117,18 +117,18 @@ void TankDamage::calculateDamage()
 	if (!damagedTarget->isTarget())
 	{
 		// Tell all AIs about this collision
-		std::map<unsigned int, Tank *> tanks = 
-			context_->getTankContainer().getAllTanks();
-		std::map<unsigned int, Tank *>::iterator itor;
-		for (itor = tanks.begin();
-			itor != tanks.end();
+		std::map<unsigned int, Tanket *> tankets = 
+			context_->getTanketContainer().getAllTankets();
+		std::map<unsigned int, Tanket *>::iterator itor;
+		for (itor = tankets.begin();
+			itor != tankets.end();
 			++itor)
 		{
-			Tank *tank = (*itor).second;
-			TankAI *ai = tank->getTankAI();
+			Tanket *tanket = (*itor).second;
+			TankAI *ai = tanket->getTankAI();
 			if (ai)
 			{		
-				if (tank->getState().getState() == TankState::sNormal)
+				if (tanket->getAlive())
 				{
 					ai->tankHurt(weapon_, damage_.asFloat(),
 						damagedTarget->getPlayerId(), 

@@ -41,11 +41,11 @@ bool RoundStopSimAction::invokeAction(ScorchedContext &context)
 	context.getTankContainer().setCurrentRoundId(0);
 
 	// Stop any tanks from making any moves
-	std::map<unsigned int, Tank *> &tanks =
-		context.getTankContainer().getAllTanks();
-	std::map<unsigned int, Tank *>::iterator tankItor;
-	for (tankItor = tanks.begin();
-		tankItor != tanks.end();
+	std::map<unsigned int, Tanket *> &tankets =
+		context.getTanketContainer().getAllTankets();
+	std::map<unsigned int, Tanket *>::iterator tankItor;
+	for (tankItor = tankets.begin();
+		tankItor != tankets.end();
 		++tankItor)
 	{
 		TankStopMoveSimAction::stopMove(context, tankItor->second);

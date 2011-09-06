@@ -25,6 +25,7 @@
 #include <tank/TankContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
+#include <tanket/TanketShotinfo.h>
 #include <tanket/TanketAccessories.h>
 #include <tank/TankDeadContainer.h>
 #include <tankai/TankAI.h>
@@ -77,7 +78,7 @@ void ServerStateBuying::enterState()
 		++itor)
 	{
 		Tank *tank = itor->second;
-		tank->getState().setMoveId(0);
+		tank->getShotInfo().setMoveId(0);
 		if (firstRound) tank->getState().setNewlyJoined(true);
 	}
 }
@@ -156,7 +157,7 @@ bool ServerStateBuying::simulate(fixed frameTime)
 			// Check if this tank should buy
 			if (buying)
 			{
-				if (tank->getState().getMoveId() == 0)
+				if (tank->getShotInfo().getMoveId() == 0)
 				{
 					if (boughtPlayers_.find(tank->getPlayerId()) == boughtPlayers_.end() &&
 						(tank->getDestinationId() == 0 ||
@@ -228,7 +229,7 @@ void ServerStateBuying::playerBuying(unsigned int playerId)
 	nextMoveId_++;
 
 	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
-	tank->getState().setMoveId(nextMoveId_);
+	tank->getShotInfo().setMoveId(nextMoveId_);
 
 	fixed buyingTime
 		(ScorchedServer::instance()->getOptionsGame().getBuyingTime());
@@ -287,11 +288,11 @@ void ServerStateBuying::buyingFinished(ComsPlayedMoveMessage &playedMessage)
 	unsigned int moveId = playedMessage.getMoveId();
 	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
 	if (!tank || !tank->getState().getTankPlaying()) return;
-	if (moveId != tank->getState().getMoveId()) return;
+	if (moveId != tank->getShotInfo().getMoveId()) return;
 
 	// Set this player to finished buying
 	boughtPlayers_.insert(tank->getPlayerId());
-	tank->getState().setMoveId(0);
+	tank->getShotInfo().setMoveId(0);
 
 	TankStopMoveSimAction *tankSimAction = 
 		new TankStopMoveSimAction(playerId);

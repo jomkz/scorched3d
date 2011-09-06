@@ -66,6 +66,14 @@ public:
 	const char *getElevationString();
 	const char *getPowerString();
 
+	// Move stuff
+	void setMoveId(unsigned int moveId) { moveId_ = moveId; }
+	unsigned int getMoveId() { return moveId_; }
+	int getMissedMoves() { return missedMoves_; }
+	void setMissedMoves(int miss) { missedMoves_ = miss; }
+	void setSkippedShots(int skipped) { skippedShots_ = skipped; }
+	int getSkippedShots() { return skippedShots_; }
+
 	// Serialize the tank
 	bool writeMessage(NamedNetBuffer &buffer);
 	bool readMessage(NetBufferReader &reader);
@@ -73,6 +81,10 @@ public:
 protected:
 	ScorchedContext &context_;
 	Tanket *tanket_;
+
+	unsigned int moveId_;
+	int missedMoves_;
+	int skippedShots_;
 
 	// Turret angles
 	fixed turretRotXY_, turretRotYZ_, power_;

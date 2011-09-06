@@ -54,9 +54,6 @@ public:
 	int getScore() { return score_; }
 	void setScore(int score);
 
-	int getMissedMoves() { return missedMoves_; }
-	void setMissedMoves(int miss) { missedMoves_ = miss; }
-
 	bool getWonGame() { return wonGame_; }
 	void setWonGame() { wonGame_ = true; }
 
@@ -102,7 +99,6 @@ protected:
 	int totalMoneyEarned_, totalScoreEarned_;
 	int wins_;
 	int score_;
-	int missedMoves_;
 	bool wonGame_;
 	time_t startTime_;
 	time_t lastStatTime_;

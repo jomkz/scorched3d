@@ -60,13 +60,9 @@ public:
 	bool getMuted() { return muted_; }
 	void setSkipShots(bool skip) { skipshots_ = skip; }
 	bool getSkipShots() { return skipshots_; }
-	void setSkippedShots(int skipped) { skippedShots_ = skipped; }
-	int getSkippedShots() { return skippedShots_; }
 	int getLives() { return lives_; }
 	void setLives(int lives) { lives_ = lives; }
 	int getMaxLives() { return maxLives_; }
-	void setMoveId(unsigned int moveId) { moveId_ = moveId; }
-	unsigned int getMoveId() { return moveId_; }
 	bool getNewlyJoined() { return newlyJoined_; }
 	void setNewlyJoined(bool n) { newlyJoined_ = n; }
 	unsigned int getStateChangeCount() { return stateChangeCount_; }
@@ -84,13 +80,11 @@ protected:
 	ScorchedContext &context_;
 	State state_;
 	int lives_, maxLives_;
-	unsigned int moveId_;
 	unsigned int stateChangeCount_;
 	bool muted_;
 	bool skipshots_;
 	bool notSpectator_;
 	bool newlyJoined_;
-	int skippedShots_;
 
 };
 

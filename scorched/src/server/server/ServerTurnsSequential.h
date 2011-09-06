@@ -41,7 +41,7 @@ protected:
 	unsigned int playingPlayer_;
 	std::list<unsigned int> waitingPlayers_;
 
-	void makeMove(Tank *tank);
+	void makeMove(Tanket *tanket);
 };
 
 #endif

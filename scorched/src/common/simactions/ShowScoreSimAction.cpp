@@ -31,6 +31,7 @@
 #include <tank/TankScore.h>
 #include <tank/TankState.h>
 #include <tank/TankSort.h>
+#include <tanket/TanketShotInfo.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerSimulator.h>
 
@@ -97,7 +98,7 @@ void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 		++itor)
 	{
 		Tank *tank = (*itor).second;
-		tank->getState().setMoveId(0);
+		tank->getShotInfo().setMoveId(0);
 
 		if (!tank->getState().getTankPlaying()) continue;
 		if (!tank->getAlive()) continue;

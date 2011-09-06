@@ -25,9 +25,9 @@
 #include <common/OptionsScorched.h>
 #include <simactions/PlayMovesSimAction.h>
 #include <simactions/TankStopMoveSimAction.h>
-#include <tank/TankContainer.h>
-#include <tank/TankState.h>
-#include <tank/TankScore.h>
+#include <tanket/TanketContainer.h>
+#include <tanket/TanketShotInfo.h>
+#include <tank/Tank.h>
 #include <list>
 
 ServerTurnsSimultaneous::ServerTurnsSimultaneous(bool waitForShots) :
@@ -61,15 +61,15 @@ void ServerTurnsSimultaneous::internalEnterState()
 	}
 	moves_.clear();
 
-	std::map<unsigned int, Tank*> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
-	std::map<unsigned int, Tank*>::iterator itor;
-	for (itor = tanks.begin();
-		itor != tanks.end();
+	std::map<unsigned int, Tanket*> &tankets = 
+		ScorchedServer::instance()->getTanketContainer().getAllTankets();
+	std::map<unsigned int, Tanket*>::iterator itor;
+	for (itor = tankets.begin();
+		itor != tankets.end();
 		++itor)
 	{
-		Tank *tank = itor->second;
-		tank->getState().setMoveId(0);
+		Tanket *tanket = itor->second;
+		tanket->getShotInfo().setMoveId(0);
 	}	
 }
 
@@ -82,57 +82,67 @@ void ServerTurnsSimultaneous::internalSimulate(fixed frameTime)
 {
 	// Build list of currently playing destinations
 	std::set<unsigned int> playingDestinations;
-	std::map<unsigned int, Tank*> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
-	std::map<unsigned int, Tank*>::iterator itor;
+	std::map<unsigned int, Tanket*> &tankets = 
+		ScorchedServer::instance()->getTanketContainer().getAllTankets();
+	std::map<unsigned int, Tanket*>::iterator itor;
 
 	bool finished = true;
-	for (itor = tanks.begin();
-		itor != tanks.end();
+	for (itor = tankets.begin();
+		itor != tankets.end();
 		++itor)
 	{
-		Tank *tank = itor->second;
-		if (tank->getState().getMoveId() != 0)
+		Tanket *tanket = itor->second;
+		if (tanket->getShotInfo().getMoveId() != 0)
 		{
-			if (tank->getState().getState() == TankState::sNormal)
+			if (tanket->getAlive())
 			{
-				if (tank->getDestinationId() != 0)
+				unsigned int destinationId = 0;
+				if (!tanket->isTarget())
 				{
-					playingDestinations.insert(tank->getDestinationId());
+					destinationId = ((Tank *) tanket)->getDestinationId();
+				}
+				if (destinationId != 0)
+				{
+					playingDestinations.insert(destinationId);
 				}
 			}
 			else
 			{
-				playMoveFinished(tank);
+				playMoveFinished(tanket);
 			}
 		}
 
-		if (tank->getState().getState() == TankState::sNormal)
+		if (tanket->getAlive())
 		{
-			if (moves_.find(tank->getPlayerId()) == moves_.end())
+			if (moves_.find(tanket->getPlayerId()) == moves_.end())
 			{
 				finished = false;
 			}
 		}
 	}
 	
-	for (itor = tanks.begin();
-		itor != tanks.end();
+	for (itor = tankets.begin();
+		itor != tankets.end();
 		++itor)
 	{
-		Tank *tank = itor->second;
-		if (tank->getState().getState() == TankState::sNormal &&
-			tank->getState().getMoveId() == 0)
+		Tanket *tanket = itor->second;
+		if (tanket->getAlive() &&
+			tanket->getShotInfo().getMoveId() == 0)
 		{
-			if (moves_.find(tank->getPlayerId()) == moves_.end())
+			if (moves_.find(tanket->getPlayerId()) == moves_.end())
 			{
-				if (playingDestinations.find(tank->getDestinationId()) == 
+				unsigned int destinationId = 0;
+				if (!tanket->isTarget())
+				{
+					destinationId = ((Tank *) tanket)->getDestinationId();
+				}
+				if (playingDestinations.find(destinationId) == 
 					playingDestinations.end())
 				{
 					fixed delayShotTime = 0;
-					if (tank->getDestinationId() != 0)
+					if (destinationId != 0)
 					{
-						playingDestinations.insert(tank->getDestinationId());
+						playingDestinations.insert(destinationId);
 					}
 					else
 					{
@@ -147,7 +157,7 @@ void ServerTurnsSimultaneous::internalSimulate(fixed frameTime)
 
 					fixed shotTime = fixed(
 						ScorchedServer::instance()->getOptionsGame().getShotTime());
-					playMove(tank, ++nextMoveId_, shotTime, delayShotTime);
+					playMove(tanket, ++nextMoveId_, shotTime, delayShotTime);
 				}
 			}
 		}
@@ -164,9 +174,9 @@ void ServerTurnsSimultaneous::internalSimulate(fixed frameTime)
 			unsigned int playerId = movesItor->first;
 			ComsPlayedMoveMessage *message = movesItor->second;
 
-			Tank *tank = ScorchedServer::instance()->
-				getTankContainer().getTankById(playerId);
-			if (tank && tank->getState().getState() == TankState::sNormal)
+			Tanket *tanket = ScorchedServer::instance()->
+				getTanketContainer().getTanketById(playerId);
+			if (tanket && tanket->getAlive())
 			{
 				messages.push_back(message);
 			}
@@ -189,11 +199,11 @@ void ServerTurnsSimultaneous::internalMoveFinished(ComsPlayedMoveMessage &played
 	unsigned int playerId = playedMessage.getPlayerId();
 	unsigned int moveId = playedMessage.getMoveId();
 
-	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
-	if (!tank || tank->getState().getMoveId() != moveId) return;
+	Tanket *tanket = ScorchedServer::instance()->getTanketContainer().getTanketById(playerId);
+	if (!tanket || tanket->getShotInfo().getMoveId() != moveId) return;
 	if (moves_.find(playerId) != moves_.end()) return;
 	
-	playMoveFinished(tank);
+	playMoveFinished(tanket);
 	
 	moves_[playerId] = new ComsPlayedMoveMessage(playedMessage);
 }

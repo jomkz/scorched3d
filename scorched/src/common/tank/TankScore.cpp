@@ -60,7 +60,6 @@ void TankScore::newMatch()
 	kills_ = 0;
 	assists_ = 0;
 	score_ = 0;
-	missedMoves_ = 0;
 
 	newGame();
 }

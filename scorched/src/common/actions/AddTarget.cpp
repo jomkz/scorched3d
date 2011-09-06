@@ -55,7 +55,6 @@ void AddTarget::simulate(fixed frameTime, bool &remove)
 	Target *target = addTarget_->getTargetDefinition().createTarget(
 		playerId, position_, FixedVector::getNullVector(), *context_, 
 		context_->getSimulator().getRandomGenerator());
-	context_->getTargetContainer().addTarget(target);
 
 	if (context_->getOptionsGame().getActionSyncCheck())
 	{

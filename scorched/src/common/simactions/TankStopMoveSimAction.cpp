@@ -20,7 +20,7 @@
 
 #include <simactions/TankStopMoveSimAction.h>
 #include <tank/TankContainer.h>
-#include <tank/TankState.h>
+#include <tanket/TanketShotInfo.h>
 #ifndef S3D_SERVER
 #include <client/ScorchedClient.h>
 #include <client/ClientState.h>
@@ -44,28 +44,33 @@ TankStopMoveSimAction::~TankStopMoveSimAction()
 
 bool TankStopMoveSimAction::invokeAction(ScorchedContext &context)
 {
-	Tank *tank = context.getTankContainer().getTankById(playerId_);
-	if (!tank) return true;
+	Tanket *tanket = context.getTanketContainer().getTanketById(playerId_);
+	if (!tanket) return true;
 
-	stopMove(context, tank);
+	stopMove(context, tanket);
 
 	return true;
 }
 
-void TankStopMoveSimAction::stopMove(ScorchedContext &context, Tank *tank)
+void TankStopMoveSimAction::stopMove(ScorchedContext &context, Tanket *tanket)
 {
 	if (!context.getServerMode())
 	{
-		tank->getState().setMoveId(0);
+		tanket->getShotInfo().setMoveId(0);
 
-		if (tank->getDestinationId() == context.getTankContainer().getCurrentDestinationId())
-		{
 #ifndef S3D_SERVER
-			ScorchedClient::instance()->getTankContainer().setCurrentPlayerId(0);
-			ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
-			ShotCountDown::instance()->hideMoveTime();
-#endif
+		if (!tanket->isTarget())
+		{
+			Tank *tank = (Tank *) tanket;
+			if (tank->getDestinationId() == context.getTankContainer().getCurrentDestinationId())
+			{
+
+				ScorchedClient::instance()->getTankContainer().setCurrentPlayerId(0);
+				ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
+				ShotCountDown::instance()->hideMoveTime();
+			}
 		}
+#endif
 	}
 }
 
