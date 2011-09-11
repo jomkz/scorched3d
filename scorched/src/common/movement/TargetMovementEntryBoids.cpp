@@ -84,7 +84,7 @@ void TargetMovementEntryBoids::makeBoids(ScorchedContext &context,
 
 Boid2 *TargetMovementEntryBoids::makeBoid(ScorchedContext &context, TargetGroup *groupEntry)
 {
-	if (!groupEntry->getTarget()->isTarget() ||
+	if (groupEntry->getTarget()->getType() == Target::TypeTank ||
 		groupEntry->getTarget()->getPlayerId() >= TargetID::MIN_TARGET_TRANSIENT_ID)
 	{
 		S3D::dialogExit("TargetMovementEntryBoids",

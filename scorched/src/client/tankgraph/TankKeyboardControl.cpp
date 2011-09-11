@@ -20,7 +20,7 @@
 
 #include <tankgraph/TankKeyboardControl.h>
 #include <tankgraph/TankKeyboardControlUtil.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankState.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientState.h>
@@ -54,7 +54,7 @@ void TankKeyboardControl::enterState(const unsigned state)
 	//if (state == ClientState::StateShot)
 	{
 		Tank *currentTank =
-			ScorchedClient::instance()->getTankContainer().getCurrentTank();
+			ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 		if (currentTank)
 		{
 			if (currentTank->getState().getState() == TankState::sNormal)
@@ -71,7 +71,7 @@ void TankKeyboardControl::keyboardCheck(const unsigned state, float frameTime,
 							bool &skipRest)
 {
 	Tank *currentTank =
-		ScorchedClient::instance()->getTankContainer().getCurrentTank();
+		ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (currentTank)
 	{
 		if (currentTank->getState().getState() == TankState::sNormal)

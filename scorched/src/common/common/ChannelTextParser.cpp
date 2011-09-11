@@ -21,7 +21,8 @@
 #include <common/ChannelTextParser.h>
 #include <engine/ScorchedContext.h>
 #include <weapons/AccessoryStore.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <lang/LangResource.h>
 
 ChannelTextParser::ChannelTextParser()
@@ -165,7 +166,7 @@ bool ChannelTextParser::createPlayerEntry(ScorchedContext &context,
 	entry.text.push_back(']');
 	entry.data = 0;
 
-	Tank *tank = context.getTankContainer().getTankByName(part);
+	Tank *tank = context.getTargetContainer().getTankByName(part);
 	if (tank)
 	{
 		entry.data = tank->getPlayerId();

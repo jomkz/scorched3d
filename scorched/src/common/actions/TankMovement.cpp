@@ -39,7 +39,8 @@
 	#include <GLEXT/GLImageModifier.h>
 	#include <sound/Sound.h>
 #endif
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <tank/TankModelContainer.h>
 #include <tanket/TanketAccessories.h>
@@ -80,7 +81,7 @@ TankMovement::~TankMovement()
 
 void TankMovement::init()
 {
-	Tank *tank = context_->getTankContainer().getTankById(weaponContext_.getPlayerId());
+	Tank *tank = context_->getTargetContainer().getTankById(weaponContext_.getPlayerId());
 	if (!tank) return;	
 
 	tank->getTargetState().setMoving(this);
@@ -221,7 +222,7 @@ void TankMovement::simulate(fixed frameTime, bool &remove)
 void TankMovement::simulationMove(fixed frameTime)
 {
 	Tank *tank = 
-		context_->getTankContainer().getTankById(weaponContext_.getPlayerId());
+		context_->getTargetContainer().getTankById(weaponContext_.getPlayerId());
 	if (tank)
 	{
 		// Stop moving if the tank is dead
@@ -384,7 +385,7 @@ void TankMovement::moveTank(Tank *tank)
 		// Check that this is a target we have driven over
 		// and we can destroy it
 		Target *target = (*itor).second;
-		if (target->isTarget() &&
+		if (target->getType() != Target::TypeTank &&
 			target->getTargetState().getDriveOverToDestroy())
 		{
 			// Kill the target we've driven over

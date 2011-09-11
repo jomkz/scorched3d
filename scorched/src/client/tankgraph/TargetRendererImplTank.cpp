@@ -21,7 +21,7 @@
 #include <tankgraph/TargetRendererImplTank.h>
 #include <sprites/ExplosionTextures.h>
 #include <tank/TankLib.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankModelContainer.h>
@@ -120,7 +120,7 @@ void TargetRendererImplTank::render(float distance)
 		size * 2.5f * float(OptionsDisplay::instance()->getTankModelSize()) / 100.0f);
 
 	bool currentTank = 
-		(tank_ == ScorchedClient::instance()->getTankContainer().getCurrentTank() &&
+		(tank_ == ScorchedClient::instance()->getTargetContainer().getCurrentTank() &&
 		ScorchedClient::instance()->getGameState().getState() == ClientState::StatePlaying);
 	if (fade > 0.0f)
 	{
@@ -211,7 +211,7 @@ void TargetRendererImplTank::drawParticle(float distance)
 	drawShield(shieldHit_, totalTime_);
 
 	bool currentTank = 
-		(tank_ == ScorchedClient::instance()->getTankContainer().getCurrentTank() &&
+		(tank_ == ScorchedClient::instance()->getTargetContainer().getCurrentTank() &&
 		ScorchedClient::instance()->getGameState().getState() == ClientState::StatePlaying);
 
 	// Draw the tank sight
@@ -746,7 +746,7 @@ void TargetRendererImplTank::render2D(float distance)
 
 	// Draw the hightlighted ring around the tank
 	bool currentTank = 
-		(tank_ == ScorchedClient::instance()->getTankContainer().getCurrentTank() &&
+		(tank_ == ScorchedClient::instance()->getTargetContainer().getCurrentTank() &&
 		ScorchedClient::instance()->getGameState().getState() == ClientState::StatePlaying);
 	if (currentTank)
 	{

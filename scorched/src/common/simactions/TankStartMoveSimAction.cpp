@@ -20,10 +20,11 @@
 
 #include <simactions/TankStartMoveSimAction.h>
 #include <server/ScorchedServer.h>
+#include <tank/Tank.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tanket/TanketShotInfo.h>
 #include <tankai/TankAI.h>
 #include <engine/ActionController.h>
@@ -54,10 +55,10 @@ TankStartMoveSimAction::~TankStartMoveSimAction()
 
 bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 {
-	Tanket *tanket = context.getTanketContainer().getTanketById(playerId_);
+	Tanket *tanket = context.getTargetContainer().getTanketById(playerId_);
 	if (!tanket) return true;
 
-	if (!tanket->isTarget()) 
+	if (tanket->getType() == Target::TypeTank) 
 	{
 		Tank *tank = (Tank *) tanket;
 		tank->getScore().setPing((ping_ * 1000).asInt());
@@ -75,10 +76,10 @@ bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 		tanket->getShotInfo().setMoveId(moveId_);
 
 #ifndef S3D_SERVER
-		if (!tanket->isTarget()) 
+		if (tanket->getType() == Target::TypeTank) 
 		{
 			Tank *tank = (Tank *) tanket;
-			if (tank->getDestinationId() == context.getTankContainer().getCurrentDestinationId())
+			if (tank->getDestinationId() == context.getTargetContainer().getCurrentDestinationId())
 			{
 				ClientStartGameHandler::instance()->startGame(this);
 				ShotCountDown::instance()->showMoveTime(

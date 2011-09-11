@@ -25,7 +25,7 @@
 #include <landscape/LandscapeMusicManager.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeDefinitions.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <target/TargetLife.h>
 #include <tankgraph/TargetRendererImplTank.h>
 #include <console/ConsoleRuleMethodIAdapter.h>

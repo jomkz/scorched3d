@@ -22,7 +22,7 @@
 #include <server/ScorchedServer.h>
 #include <tank/Tank.h>
 #include <tank/TankScore.h>
-#include <tanket/TanketContainer.h>
+#include <target/TargetContainer.h>
 #include <tanket/TanketShotInfo.h>
 #include <target/TargetLife.h>
 #include <target/TargetShield.h>
@@ -165,7 +165,7 @@ void TankAICurrentTarget::getTargets(Tanket *thisTanket, std::list<Tanket *> &re
 
 	// Get the list of tanks we can shoot at
 	std::map<unsigned int, Tanket *> &tanks = 
-		ScorchedServer::instance()->getTanketContainer().getAllTankets();
+		ScorchedServer::instance()->getTargetContainer().getTankets();
 	std::map<unsigned int, Tanket *>::iterator posItor;
 	for (posItor = tanks.begin();
 		posItor != tanks.end();
@@ -179,7 +179,7 @@ void TankAICurrentTarget::getTargets(Tanket *thisTanket, std::list<Tanket *> &re
 
 		possible.push_back(currentTanket);
 
-		if (!currentTanket->isTarget()) {
+		if (currentTanket->getType() == Target::TypeTank) {
 			Tank *currentTank = (Tank *) currentTanket;
 			scoreSorted.insert(std::pair<float, Tanket *>((float) currentTank->getScore().getScore(), currentTank));
 		}

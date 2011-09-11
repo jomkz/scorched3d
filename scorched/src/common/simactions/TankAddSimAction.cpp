@@ -21,7 +21,8 @@
 #include <simactions/TankAddSimAction.h>
 #include <simactions/TankChangeSimAction.h>
 #include <simactions/TankRankSimAction.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
@@ -74,7 +75,7 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 {
 	// Alocate new color
 	Vector color = TankColorGenerator::instance()->getNextColor(
-		context.getTankContainer().getAllTanks());
+		context.getTargetContainer().getTanks());
 	if (playerId_ == TargetID::SPEC_TANK_ID)
 	{
 		color = Vector(0.7f, 0.7f, 0.7f);
@@ -101,7 +102,7 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 		else
 		{
 			team = context.getOptionsTransient().getLeastUsedTeam(
-				context.getTankContainer());
+				context.getTargetContainer());
 		}
 	}
 	tank->setTeam(team);
@@ -122,7 +123,7 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 	}
 
 	// Add this tank 
-	context.getTankContainer().addTank(tank);
+	context.getTargetContainer().addTarget(tank);
 	StatsLogger::instance()->tankConnected(tank);
 
 	if (context.getServerMode())

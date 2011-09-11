@@ -18,9 +18,10 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <tank/Tank.h>
 #include <tank/TankLib.h>
-#include <tank/TankContainer.h>
 #include <tank/TankState.h>
+#include <target/TargetContainer.h>
 #include <target/TargetLife.h>
 #include <engine/Simulator.h>
 #include <common/RandomGenerator.h>
@@ -57,9 +58,9 @@ void TankLib::getTargetsSortedByDistance(FixedVector &position,
 		{
 			if (teams > 0)
 			{
-				if (!targetTank->isTarget())
+				if (targetTank->getType() != Target::TypeTarget)
 				{
-					if (teams == ((Tank *) targetTank)->getTeam()) continue;
+					if (teams == ((Tanket *) targetTank)->getTeam()) continue;
 				}
 			}
 

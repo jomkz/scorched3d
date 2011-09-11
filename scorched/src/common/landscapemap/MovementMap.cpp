@@ -25,12 +25,12 @@
 #include <weapons/AccessoryStore.h>
 #include <weapons/Shield.h>
 #include <weapons/WeaponMoveTank.h>
-#include <target/TargetContainer.h>
 #include <engine/ScorchedContext.h>
 #include <common/FixedVector.h>
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
-#include <tank/TankContainer.h>
+#include <tanket/Tanket.h>
+#include <target/TargetContainer.h>
 #include <tanket/TanketAccessories.h>
 #include <tanket/TanketShotInfo.h>
 #include <target/TargetShield.h>
@@ -234,10 +234,10 @@ bool MovementMap::movementProof(ScorchedContext &context, Target *target, Tanket
 			movementProof = false;
 		}
 		else if (context.getOptionsGame().getTeams() > 1 &&
-			!target->isTarget())
+			target->getType() != Target::TypeTarget)
 		{
-			Tank *targetTank = (Tank *) target;
-			if (targetTank->getTeam() == tanket->getTeam())
+			Tanket *targetTanket = (Tanket *) target;
+			if (targetTanket->getTeam() == tanket->getTeam())
 			{
 				movementProof = false;
 			}

@@ -19,9 +19,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <simactions/TankLoadedSimAction.h>
+#include <tank/Tank.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 
 REGISTER_CLASS_SOURCE(TankLoadedSimAction);
 
@@ -40,7 +41,7 @@ TankLoadedSimAction::~TankLoadedSimAction()
 
 bool TankLoadedSimAction::invokeAction(ScorchedContext &context)
 {
-	Tank *tank = context.getTankContainer().getTankById(playerId_);
+	Tank *tank = context.getTargetContainer().getTankById(playerId_);
 	if (!tank) return false;
 
 	tank->loaded();

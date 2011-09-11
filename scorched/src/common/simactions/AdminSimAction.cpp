@@ -21,7 +21,8 @@
 #include <simactions/AdminSimAction.h>
 #include <common/Logger.h>
 #include <common/OptionsTransient.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <target/TargetLife.h>
 
@@ -85,7 +86,7 @@ void AdminSimAction::killAll(ScorchedContext &context)
 
 	std::map<unsigned int, Tank *>::iterator itor;
 	std::map<unsigned int, Tank *> &tanks = 
-		context.getTankContainer().getAllTanks();
+		context.getTargetContainer().getTanks();
 	for (itor = tanks.begin();
 		 itor != tanks.end();
 		 ++itor)
@@ -110,7 +111,7 @@ void AdminSimAction::newGame(ScorchedContext &context)
 void AdminSimAction::slap(ScorchedContext &context)
 {
 	Tank *targetTank = context.
-		getTankContainer().getTankById(playerId_);
+		getTargetContainer().getTankById(playerId_);
 	if (!targetTank) return;
 
 	targetTank->getLife().setLife(
@@ -120,7 +121,7 @@ void AdminSimAction::slap(ScorchedContext &context)
 void AdminSimAction::kill(ScorchedContext &context)
 {
 	Tank *targetTank = context.
-		getTankContainer().getTankById(playerId_);
+		getTargetContainer().getTankById(playerId_);
 	if (!targetTank) return;
 
 	targetTank->getState().setState(TankState::sDead);

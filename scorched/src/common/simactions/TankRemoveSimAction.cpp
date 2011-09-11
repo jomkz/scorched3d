@@ -21,7 +21,8 @@
 #include <simactions/TankRemoveSimAction.h>
 #include <engine/ActionController.h>
 #include <engine/ScorchedContext.h>
-#include <tank/TankContainer.h>
+#include <tank/Tank.h>
+#include <target/TargetContainer.h>
 #include <tankai/TankAINone.h>
 #include <actions/TankRemove.h>
 
@@ -47,7 +48,7 @@ TankRemoveSimAction::~TankRemoveSimAction()
 
 bool TankRemoveSimAction::invokeAction(ScorchedContext &context)
 {
-	Tank *tank = context.getTankContainer().getTankById(playerId_);
+	Tank *tank = context.getTargetContainer().getTankById(playerId_);
 	if (tank)
 	{
 		// Make this player a computer controlled player

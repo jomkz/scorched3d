@@ -19,7 +19,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <simactions/TankStopMoveSimAction.h>
-#include <tank/TankContainer.h>
+#include <tank/Tank.h>
+#include <target/TargetContainer.h>
 #include <tanket/TanketShotInfo.h>
 #ifndef S3D_SERVER
 #include <client/ScorchedClient.h>
@@ -44,7 +45,7 @@ TankStopMoveSimAction::~TankStopMoveSimAction()
 
 bool TankStopMoveSimAction::invokeAction(ScorchedContext &context)
 {
-	Tanket *tanket = context.getTanketContainer().getTanketById(playerId_);
+	Tanket *tanket = context.getTargetContainer().getTanketById(playerId_);
 	if (!tanket) return true;
 
 	stopMove(context, tanket);
@@ -59,13 +60,13 @@ void TankStopMoveSimAction::stopMove(ScorchedContext &context, Tanket *tanket)
 		tanket->getShotInfo().setMoveId(0);
 
 #ifndef S3D_SERVER
-		if (!tanket->isTarget())
+		if (tanket->getType() == Target::TypeTank)
 		{
 			Tank *tank = (Tank *) tanket;
-			if (tank->getDestinationId() == context.getTankContainer().getCurrentDestinationId())
+			if (tank->getDestinationId() == context.getTargetContainer().getCurrentDestinationId())
 			{
 
-				ScorchedClient::instance()->getTankContainer().setCurrentPlayerId(0);
+				ScorchedClient::instance()->getTargetContainer().setCurrentPlayerId(0);
 				ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
 				ShotCountDown::instance()->hideMoveTime();
 			}

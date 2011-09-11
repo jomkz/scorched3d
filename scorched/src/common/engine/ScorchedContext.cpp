@@ -26,7 +26,7 @@
 #include <net/NetInterface.h>
 #include <coms/ComsMessageHandler.h>
 #include <common/OptionsTransient.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankTeamScore.h>
 #include <tank/TankModelStore.h>
 #include <tanket/TanketTypes.h>
@@ -42,8 +42,6 @@ ScorchedContext::ScorchedContext(const char *name)
 {
 	accessoryStore_ = new AccessoryStore();
 	targetContainer_ = new TargetContainer();
-	tanketContainer_ = new TanketContainer(*targetContainer_);
-	tankContainer_ = new TankContainer(*tanketContainer_);
 	landscapeMaps_ = new LandscapeMaps();
 	comsMessageHandler_ = new ComsMessageHandler(name);
 	netInterface_ = (NetInterface *) 0;
@@ -77,8 +75,6 @@ ScorchedContext::~ScorchedContext()
 	delete accessoryStore_;
 	delete landscapes_;
 	delete targetContainer_;
-	delete tanketContainer_;
-	delete tankContainer_;
 	delete tanketTypes_;
 	delete tankModelStore_;
 	delete tankTeamScore_;

@@ -19,7 +19,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <simactions/TankDefenseSimAction.h>
-#include <tanket/TanketContainer.h>
+#include <target/TargetContainer.h>
+#include <tanket/Tanket.h>
 #include <tanket/TanketAccessories.h>
 #include <weapons/AccessoryStore.h>
 #include <target/TargetLife.h>
@@ -49,7 +50,7 @@ bool TankDefenseSimAction::invokeAction(ScorchedContext &context)
 	unsigned int playerId = defenseMessage_.getPlayerId();
 
 	// Check tank exists and is alive
-	Tanket *tanket = context.getTanketContainer().getTanketById(playerId);
+	Tanket *tanket = context.getTargetContainer().getTanketById(playerId);
 	if (!tanket || !tanket->getPlaying())
 	{
 		return true;

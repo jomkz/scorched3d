@@ -31,7 +31,7 @@
 #include <engine/SaveGame.h>
 #include <tank/TankModelStore.h>
 #include <tank/TankColorGenerator.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankDeadContainer.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
@@ -144,7 +144,7 @@ void ServerConnectAuthHandler::processMessageInternal(
 	if (message.getNoPlayers() > 
 		(unsigned int)
 		(ScorchedServer::instance()->getOptionsGame().getNoMaxPlayers() -
-		ScorchedServer::instance()->getTankContainer().getNoOfTanks()))
+		ScorchedServer::instance()->getTargetContainer().getNoOfTanks()))
 	{
 		std::string kickMessage = 
 			S3D::formatStringBuffer(
@@ -211,7 +211,7 @@ void ServerConnectAuthHandler::processMessageInternal(
 	if (!ScorchedServer::instance()->getOptionsGame().getAllowSameUniqueId())
 	{
 		std::map<unsigned int, Tank *> &playingTanks = 
-			ScorchedServer::instance()->getTankContainer().getAllTanks();
+			ScorchedServer::instance()->getTargetContainer().getTanks();
 		std::map<unsigned int, Tank *>::iterator playingItor;
 		for (playingItor = playingTanks.begin();
 			playingItor != playingTanks.end();
@@ -405,7 +405,7 @@ void ServerConnectAuthHandler::processAIInternal(const std::string &aiName)
 bool ServerConnectAuthHandler::uniqueIdTaken(const std::string &uniqueId)
 {
 	std::map<unsigned int, Tank *> &playingTanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
+		ScorchedServer::instance()->getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator playingItor;
 	for (playingItor = playingTanks.begin();
 		playingItor != playingTanks.end();

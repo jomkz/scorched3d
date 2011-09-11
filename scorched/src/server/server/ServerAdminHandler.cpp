@@ -34,7 +34,7 @@
 #include <coms/ComsAdminResultMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <net/NetInterface.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankState.h>
 #include <stdlib.h>
 
@@ -157,7 +157,7 @@ bool ServerAdminHandler::processMessage(
 	case ComsAdminMessage::AdminShow:
 		{
 			std::map<unsigned int, Tank *> &tanks = 
-				ScorchedServer::instance()->getTankContainer().getAllTanks();
+				ScorchedServer::instance()->getTargetContainer().getTanks();
 			std::string result;
 			result += 
 				"--Admin Show-----------------------------------------\n";

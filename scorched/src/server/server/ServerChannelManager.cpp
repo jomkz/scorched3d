@@ -28,7 +28,8 @@
 #include <coms/ComsChannelMessage.h>
 #include <coms/ComsChannelTextMessage.h>
 #include <common/OptionsScorched.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <lang/LangResource.h>
 
@@ -497,7 +498,7 @@ void ServerChannelManager::actualSend(const ChannelText &constText,
 	ChannelText text = constText;
 
 	// Get the tank for this message (if any)
-	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(
+	Tank *tank = ScorchedServer::instance()->getTargetContainer().getTankById(
 		text.getSrcPlayerId());
 
 	// Check that this channel exists
@@ -635,7 +636,7 @@ bool ServerChannelManager::processChannelTextMessage(
 		textMessage.getChannelText().setMessageValue("");
 
 		// Validate that this message came from this tank
-		Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(
+		Tank *tank = ScorchedServer::instance()->getTargetContainer().getTankById(
 			textMessage.getChannelText().getSrcPlayerId());
 		if (!tank || tank->getDestinationId() != 
 			netNessage.getDestinationId()) 
@@ -643,7 +644,7 @@ bool ServerChannelManager::processChannelTextMessage(
 			// Tank either didnt supply its id (perhaps it was loading levels)
 			// or supplied the wrong one
 			std::map<unsigned int, Tank *> &tanks = 
-				ScorchedServer::instance()->getTankContainer().getAllTanks();
+				ScorchedServer::instance()->getTargetContainer().getTanks();
 			std::map<unsigned int, Tank *>::iterator itor;
 			for (itor = tanks.begin();
 				itor != tanks.end();
@@ -732,7 +733,7 @@ bool ServerChannelManager::processChannelTextMessage(
 		if (textMessage.getChannelText().getDestPlayerId())
 		{
 			// This is a whisper message, check the destination exists
-			Tank *destTank = ScorchedServer::instance()->getTankContainer().
+			Tank *destTank = ScorchedServer::instance()->getTargetContainer().
 				getTankById(textMessage.getChannelText().getDestPlayerId());
 			if (destTank && destTank->getDestinationId())
 			{

@@ -27,7 +27,7 @@
 #include <graph/Main2DCamera.h>
 #include <graph/OptionsDisplay.h>
 #include <graph/ModelRendererSimulator.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tanket/TanketShotInfo.h>
 #include <target/TargetLife.h>
 #include <landscapemap/LandscapeMaps.h>
@@ -118,7 +118,7 @@ void ProfileDialog::draw()
 	
 	// Draw the stuff we want to see
 	Tank *currentTank =
-		ScorchedClient::instance()->getTankContainer().getCurrentTank();
+		ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (currentTank && currentTank->getAlive())
 	{
 		drawAIM(currentTank);
@@ -212,7 +212,7 @@ void ProfileDialog::drawTanks(Tank *currentTank)
 
 	bool showingToolTip = false;
 	std::map<unsigned int, Tank *> &tanks =
-		ScorchedClient::instance()->getTankContainer().getAllTanks();
+		ScorchedClient::instance()->getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin(); 
 		itor != tanks.end();

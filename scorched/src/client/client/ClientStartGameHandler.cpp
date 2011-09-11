@@ -24,8 +24,9 @@
 #include <landscape/Landscape.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <engine/ActionController.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tanket/TanketAccessories.h>
+#include <tank/Tank.h>
 #include <tank/TankCamera.h>
 #include <graph/MainCamera.h>
 #include <graph/OptionsDisplay.h>
@@ -57,16 +58,16 @@ ClientStartGameHandler::~ClientStartGameHandler()
 
 void ClientStartGameHandler::startGame(TankStartMoveSimAction *action)
 {
-	Tank *tank = ScorchedClient::instance()->getTankContainer().
+	Tank *tank = ScorchedClient::instance()->getTargetContainer().
 		getTankById(action->getPlayerId());
 	if (!tank)
 	{
 		return;
 	}
 
-	ScorchedClient::instance()->getTankContainer().setCurrentPlayerId(
+	ScorchedClient::instance()->getTargetContainer().setCurrentPlayerId(
 		action->getPlayerId());
-	Tank *current = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+	Tank *current = ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (!current) 
 	{
 		return;
@@ -77,9 +78,9 @@ void ClientStartGameHandler::startGame(TankStartMoveSimAction *action)
 	{
 		int counter = 0;
 		unsigned int currentDestinationId = ScorchedClient::instance()->
-			getTankContainer().getCurrentDestinationId();
+			getTargetContainer().getCurrentDestinationId();
 		std::map<unsigned int, Tank *> &tanks = ScorchedClient::instance()->
-			getTankContainer().getAllTanks();
+			getTargetContainer().getTanks();
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = tanks.begin();
 			itor != tanks.end();

@@ -33,7 +33,7 @@
 #include <coms/ComsTankChangeMessage.h>
 #include <simactions/TankChangeSimAction.h>
 #include <tankai/TankAIStore.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankState.h>
 
 ServerTankChangeHandler::ServerTankChangeHandler(ComsMessageHandler &comsMessageHandler)
@@ -55,7 +55,7 @@ bool ServerTankChangeHandler::processMessage(NetMessage &netMessage,
 
 	// Validate player
 	unsigned int playerId = message.getPlayerId();
-	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
+	Tank *tank = ScorchedServer::instance()->getTargetContainer().getTankById(playerId);
 	if (!tank) return true;
 
 	// Add a computer player (if chosen and a single player match)

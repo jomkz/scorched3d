@@ -25,7 +25,7 @@
 #include <tankgraph/RenderGeoms.h>
 #include <graph/OptionsDisplay.h>
 #include <graph/ModelRendererTree.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <target/TargetState.h>
 #include <target/TargetLife.h>
 #include <client/ScorchedClient.h>
@@ -129,7 +129,7 @@ static void drawTargetShadows(TargetVisibilityIterator &itor, float distance)
 		Target *target = (Target *) currentObject;
 		if (target->getTargetState().getDisplayHardwareShadow())
 		{
-			if (target->isTarget())
+			if (target->getType() != Target::TypeTank)
 			{
 				TargetRendererImplTarget *renderImpl = (TargetRendererImplTarget *) target->getRenderer();
 				renderImpl->renderShadow(distance);
@@ -210,7 +210,7 @@ static void drawTargets(TargetVisibilityIterator &itor, float distance, bool ref
 			}
 		}
 
-		if (target->isTarget())
+		if (target->getType() != Target::TypeTank)
 		{
 			TargetRendererImplTarget *renderImpl = (TargetRendererImplTarget *) target->getRenderer();
 			if (reflection)	renderImpl->renderReflection(distance);
@@ -329,7 +329,7 @@ static void drawTargets2D(TargetVisibilityIterator &itor, float distance)
 	while (currentObject = itor.getNext())
 	{
 		Target *target = (Target *) currentObject;
-		if (target->isTarget())
+		if (target->getType() != Target::TypeTank)
 		{
 			TargetRendererImplTarget *renderImpl = (TargetRendererImplTarget *) target->getRenderer();
 			renderImpl->render2D(distance);

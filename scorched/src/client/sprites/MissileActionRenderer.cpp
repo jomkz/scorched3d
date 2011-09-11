@@ -28,11 +28,12 @@
 #include <landscape/ShadowMap.h>
 #include <graph/OptionsDisplay.h>
 #include <common/Defines.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <client/ScorchedClient.h>
 #include <engine/ScorchedContext.h>
 #include <graph/ParticleEngine.h>
 #include <sound/Sound.h>
+#include <tank/Tank.h>
 
 MissileActionRenderer::MissileActionRenderer(int flareType, float scale, float spinSpeed, const Vector &rotationAxis) : 
 	flareType_(flareType), counter_(0.05f, 0.05f), 
@@ -169,7 +170,7 @@ void MissileActionRenderer::draw(Action *action)
 	if (shot->getWeapon()->getShowShotPath())
 	{
 		Tank *current = 
-			action->getScorchedContext()->getTankContainer().
+			action->getScorchedContext()->getTargetContainer().
 			getTankById(shot->getPlayerId());
 		if (current)
 		{
@@ -189,7 +190,7 @@ void MissileActionRenderer::draw(Action *action)
 	if (!mesh_)
 	{
 		Tank *currentPlayer = action->
-			getScorchedContext()->getTankContainer().getTankById(
+			getScorchedContext()->getTargetContainer().getTankById(
 			shot->getPlayerId());
 		mesh_ = Accessory::getWeaponMesh(
 			shot->getWeapon()->getModelID(), currentPlayer);

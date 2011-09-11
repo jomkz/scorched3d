@@ -25,7 +25,8 @@
 #include <coms/ComsChannelTextMessage.h>
 #include <console/ConsoleRuleMethodIAdapter.h>
 #include <common/Logger.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <tanket/TanketShotInfo.h>
 #include <sprites/TalkRenderer.h>
@@ -231,11 +232,11 @@ void ClientChannelManager::sendText(const ChannelText &constText)
 	ChannelText text = constText;
 
 	unsigned int playerId = 
-		ScorchedClient::instance()->getTankContainer().getCurrentPlayerId();
+		ScorchedClient::instance()->getTargetContainer().getCurrentPlayerId();
 	if (!playerId)
 	{
 		std::map<unsigned int, Tank *> &tanks = 
-			ScorchedClient::instance()->getTankContainer().getAllTanks();
+			ScorchedClient::instance()->getTargetContainer().getTanks();
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = tanks.begin();
 			itor != tanks.end();
@@ -243,7 +244,7 @@ void ClientChannelManager::sendText(const ChannelText &constText)
 		{
 			Tank *tank = (*itor).second;
 			if (tank->getDestinationId() == 
-				ScorchedClient::instance()->getTankContainer().getCurrentDestinationId())
+				ScorchedClient::instance()->getTargetContainer().getCurrentDestinationId())
 			{
 				playerId = tank->getPlayerId();
 				break;
@@ -316,7 +317,7 @@ bool ClientChannelManager::processChannelTextMessage(NetMessage &message,
 		ComsChannelTextMessage textMessage;
 		if (!textMessage.readMessage(reader)) return false;
 
-		Tank *tank = ScorchedClient::instance()->getTankContainer().getTankById(
+		Tank *tank = ScorchedClient::instance()->getTargetContainer().getTankById(
 			textMessage.getChannelText().getSrcPlayerId());
 		if(tank && tank->getState().getState() == TankState::sNormal)
 		{

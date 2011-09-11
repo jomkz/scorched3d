@@ -23,7 +23,7 @@
 #include <client/ClientState.h>
 #include <tankgraph/TargetRendererImplTank.h>
 #include <tankgraph/MissileMesh.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tanket/TanketAccessories.h>
 #include <tank/TankState.h>
 #include <GLW/GLWTranslate.h>
@@ -57,7 +57,7 @@ void GLWWeaponModel::draw()
 	GLWidget::draw();
 
 	Tank *current = 
-		ScorchedClient::instance()->getTankContainer().getCurrentTank();
+		ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (!current ||
 		current->getState().getState() != TankState::sNormal)
 	{
@@ -113,7 +113,7 @@ void GLWWeaponModel::draw()
 void GLWWeaponModel::mouseDown(int button, float x, float y, bool &skipRest)
 {
 	Tank *current = 
- 		ScorchedClient::instance()->getTankContainer().getCurrentTank();
+ 		ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (!current ||
 		current->getState().getState() != TankState::sNormal)
   	{

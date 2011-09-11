@@ -25,7 +25,7 @@
 #include <server/ServerBanned.h>
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <coms/ComsConnectAuthMessage.h>
 #include <coms/ComsConnectMessage.h>
 #include <coms/ComsMessageSender.h>
@@ -102,7 +102,7 @@ bool ServerConnectHandler::checkStandardParams(unsigned int destinationId, unsig
 		// First things, first
 		// Check we can actually accept the connection
 		if (ScorchedServer::instance()->getOptionsGame().getNoMaxPlayers() <=
-			ScorchedServer::instance()->getTankContainer().getNoOfTanks())
+			ScorchedServer::instance()->getTargetContainer().getNoOfTanks())
 		{
 			const char *kickMessage =
 				"--------------------------------------------------\n"

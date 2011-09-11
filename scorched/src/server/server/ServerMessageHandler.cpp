@@ -27,7 +27,7 @@
 #include <server/ServerSimulator.h>
 #include <server/ServerState.h>
 #include <tank/TankDeadContainer.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankState.h>
 #include <tankai/TankAINone.h>
 #include <simactions/TankRemoveSimAction.h>
@@ -127,7 +127,7 @@ void ServerMessageHandler::clientDisconnected(NetMessage &message)
 	unsigned int destinationId = message.getDestinationId();
 	std::map<unsigned int, Tank *>::iterator itor;
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
+		ScorchedServer::instance()->getTargetContainer().getTanks();
 	for (itor = tanks.begin();
 		itor != tanks.end();
 		++itor)
@@ -160,7 +160,7 @@ void ServerMessageHandler::clientDisconnected(NetMessage &message)
 void ServerMessageHandler::destroyPlayer(unsigned int tankId, const char *reason)
 {
 	// Try to remove this player
-	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(tankId);
+	Tank *tank = ScorchedServer::instance()->getTargetContainer().getTankById(tankId);
 	if (!tank)
 	{
 		Logger::log(S3D::formatStringBuffer("Unknown player disconnected id=\"%i\" (%s)", 

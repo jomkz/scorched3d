@@ -20,7 +20,7 @@
 
 #include <simactions/RoundStopSimAction.h>
 #include <simactions/TankStopMoveSimAction.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #ifndef S3D_SERVER
 #include <graph/ShotCountDown.h>
 #endif
@@ -38,11 +38,11 @@ RoundStopSimAction::~RoundStopSimAction()
 bool RoundStopSimAction::invokeAction(ScorchedContext &context)
 {
 	// Stop the current round
-	context.getTankContainer().setCurrentRoundId(0);
+	context.getTargetContainer().setCurrentRoundId(0);
 
 	// Stop any tanks from making any moves
 	std::map<unsigned int, Tanket *> &tankets =
-		context.getTanketContainer().getAllTankets();
+		context.getTargetContainer().getTankets();
 	std::map<unsigned int, Tanket *>::iterator tankItor;
 	for (tankItor = tankets.begin();
 		tankItor != tankets.end();

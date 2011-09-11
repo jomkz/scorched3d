@@ -23,7 +23,8 @@
 #include <server/ServerSimulator.h>
 #include <server/ServerChannelManager.h>
 #include <server/ServerDestinations.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
 #include <tank/TankTeamScore.h>
@@ -58,16 +59,6 @@ ServerTurns::~ServerTurns()
 		}
 		playingPlayers_.clear();
 	}
-	{
-		std::map<unsigned int, WaitingPlayer*>::iterator itor;
-		for (itor = waitingPlayers_.begin();
-			itor != waitingPlayers_.end();
-			++itor)
-		{
-			delete itor->second;
-		}
-		waitingPlayers_.clear();
-	}
 }
 
 void ServerTurns::enterState()
@@ -81,14 +72,6 @@ void ServerTurns::enterState()
 		delete playingItor->second;
 	}
 	playingPlayers_.clear();
-	std::map<unsigned int, WaitingPlayer*>::iterator waitingItor;
-	for (waitingItor = waitingPlayers_.begin();
-		waitingItor != waitingPlayers_.end();
-		++waitingItor)
-	{
-		delete waitingItor->second;
-	}
-	waitingPlayers_.clear();
 
 	internalEnterState();
 }
@@ -147,29 +130,6 @@ void ServerTurns::simulate(fixed frameTime)
 
 	// Remove time from waiting players
 	processPlayers.clear();
-	std::map<unsigned int, WaitingPlayer*>::iterator waitingItor;
-	for (waitingItor = waitingPlayers_.begin();
-		waitingItor != waitingPlayers_.end();
-		++waitingItor)
-	{
-		unsigned int playerId = waitingItor->first;
-		WaitingPlayer *waiting = waitingItor->second;
-
-		waiting->waitTime_ -= frameTime;
-		if (waiting->waitTime_ < 0) processPlayers.push_back(playerId);
-	}
-	for (processPlayersItor = processPlayers.begin();
-		processPlayersItor != processPlayers.end();
-		++processPlayersItor)
-	{
-		unsigned int playerId = *processPlayersItor;
-		WaitingPlayer *waiting = waitingPlayers_[playerId];
-
-		ScorchedServer::instance()->getServerSimulator().
-			addSimulatorAction(waiting->action_, waiting->callback_);
-		delete waiting;
-		waitingPlayers_.erase(playerId);
-	}
 
 	// Do other stuff
 	internalSimulate(frameTime);
@@ -223,7 +183,7 @@ bool ServerTurns::showScore()
 	}
 
 	if (ScorchedServer::instance()->getOptionsGame().getTeams() > 1 &&
-		ScorchedServer::instance()->getTankContainer().teamCount() == 1)
+		ScorchedServer::instance()->getTargetContainer().teamCount() == 1)
 	{
 		// Only one team left
 		ChannelText text("info",
@@ -232,7 +192,7 @@ bool ServerTurns::showScore()
 		ScorchedServer::instance()->getServerChannelManager().sendText(text, true);
 		return true;
 	}
-	else if (ScorchedServer::instance()->getTankContainer().aliveCount() == 0)
+	else if (ScorchedServer::instance()->getTargetContainer().aliveCount() == 0)
 	{
 		// Only one person left
 		ChannelText text("info",
@@ -241,7 +201,7 @@ bool ServerTurns::showScore()
 		ScorchedServer::instance()->getServerChannelManager().sendText(text, true);
 		return true;
 	}
-	else if (ScorchedServer::instance()->getTankContainer().aliveCount() <= 1)
+	else if (ScorchedServer::instance()->getTargetContainer().aliveCount() <= 1)
 	{
 		// Only one person left
 		ChannelText text("info",
@@ -268,7 +228,7 @@ bool ServerTurns::showScore()
 	// Check for tanks skiping turns
 	bool allSkipped = true;
 	std::map<unsigned int, Tank *> &tanks =
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
+		ScorchedServer::instance()->getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
@@ -303,19 +263,11 @@ bool ServerTurns::showScore()
 	return false;
 }
 
-void ServerTurns::playMove(Tanket *tanket, unsigned int moveId, fixed maximumShotTime, fixed delayStartMoveTime)
+void ServerTurns::playMove(Tanket *tanket, unsigned int moveId, fixed maximumShotTime)
 {
-	// If there is a maximum shot time make sure the AIs dont think longer
-	// than the allowed time
-	if (maximumShotTime > 0)
-	{
-		if (delayStartMoveTime > maximumShotTime - 5) delayStartMoveTime = maximumShotTime - 5;
-		if (delayStartMoveTime < 0) delayStartMoveTime = 0;
-	}
-
 	// Get the ping
 	fixed ping = 0;
-	if (!tanket->isTarget())
+	if (tanket->getType() == Target::TypeTank)
 	{
 		Tank *tank = (Tank *) tanket;
 		ServerDestination *destination = 
@@ -339,15 +291,7 @@ void ServerTurns::playMove(Tanket *tanket, unsigned int moveId, fixed maximumSho
 	}
 
 	// Delay players that need delayed
-	if (delayStartMoveTime > 0)
-	{
-		WaitingPlayer *waitingPlayer = new WaitingPlayer(delayStartMoveTime, tankSimAction, callback);
-		waitingPlayers_[tanket->getPlayerId()] = waitingPlayer;
-	}
-	else
-	{
-		ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction, callback);
-	}
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(tankSimAction, callback);
 }
 
 void ServerTurns::playMoveFinished(Tanket *tanket)

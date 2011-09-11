@@ -24,7 +24,7 @@
 #include <common/OptionsGame.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankDeadContainer.h>
 #include <tank/TankTeamScore.h>
 #include <tank/TankState.h>

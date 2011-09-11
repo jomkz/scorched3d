@@ -27,7 +27,7 @@
 #include <engine/ModFiles.h>
 #include <image/ImageFactory.h>
 #include <image/ImagePngFactory.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <net/NetInterface.h>
 #include <coms/ComsConnectAcceptMessage.h>
 #include <coms/ComsHaveModFilesMessage.h>
@@ -82,7 +82,7 @@ bool ClientConnectionAcceptHandler::processMessage(
 
 	// The server tells us what our id is.
 	// Set this id so we know what our players are
-	ScorchedClient::instance()->getTankContainer().
+	ScorchedClient::instance()->getTargetContainer().
 		setCurrentDestinationId(message.getDestinationId());
 
 	// Tell the user to wait

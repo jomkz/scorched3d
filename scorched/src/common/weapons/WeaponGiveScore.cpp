@@ -21,7 +21,8 @@
 #include <weapons/WeaponGiveScore.h>
 #include <weapons/AccessoryStore.h>
 #include <engine/ActionController.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankTeamScore.h>
 #include <tank/TankScore.h>
 #include <common/Defines.h>
@@ -62,7 +63,7 @@ void WeaponGiveScore::weaponCallback(
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 	unsigned int userData)
 {
-	Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
+	Tank *tank = context.getTargetContainer().getTankById(weaponContext.getPlayerId());
 	if (!tank) return;
 
 	tank->getScore().setScore(tank->getScore().getScore() + score_);

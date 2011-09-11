@@ -22,10 +22,11 @@
 #include <server/ScorchedServer.h>
 #include <server/ServerMessageHandler.h>
 #include <server/ServerChannelManager.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <target/TargetLife.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
-#include <target/TargetLife.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <common/Logger.h>
@@ -69,7 +70,7 @@ void ServerCommon::kickDestination(unsigned int destinationId,
 	bool kickedPlayers = false;
 	std::map<unsigned int, Tank *>::iterator itor;
 	std::map<unsigned int, Tank *> tanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
+		ScorchedServer::instance()->getTargetContainer().getTanks();
 	for (itor = tanks.begin();
 		itor != tanks.end();
 		++itor)
@@ -105,7 +106,7 @@ void ServerCommon::kickPlayer(unsigned int playerId,
 	Logger::log(S3D::formatStringBuffer("Kicking player \"%i\" %s", playerId, message.c_str()));
 
 	Tank *tank = ScorchedServer::instance()->
-		getTankContainer().getTankById(playerId);
+		getTargetContainer().getTankById(playerId);
 	if (tank)
 	{
 		ScorchedServer::instance()->getServerChannelManager().sendText(ChannelText("info", 

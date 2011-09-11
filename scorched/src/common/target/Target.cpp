@@ -101,7 +101,7 @@ void Target::setName(const LangString &name)
 {
 	name_ = name;
 	if (!context_.getOptionsGame().getAllowMultiLingualNames() &&
-		!isTarget())
+		getType() == Target::TypeTank)
 	{
 		for (unsigned int *c = (unsigned int *)name_.c_str();
 			*c;

@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <tankgraph/TankKeyboardControlUtil.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankShotHistory.h>
 #include <tanket/TanketAccessories.h>

@@ -24,7 +24,8 @@
 #include <server/ServerDestinations.h>
 #include <coms/ComsLinesMessage.h>
 #include <coms/ComsMessageSender.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <common/Logger.h>
 #include <set>
@@ -56,7 +57,7 @@ bool ServerLinesHandler::processMessage(
 	if (playerId == 0) return true;
 
 	// Check this is a tank, and comes from the correct destination
-	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
+	Tank *tank = ScorchedServer::instance()->getTargetContainer().getTankById(playerId);
 	if (!tank || tank->getDestinationId() != netMessage.getDestinationId()) return true;
 
 	// If this tank has been muted also don't allow lines
@@ -71,7 +72,7 @@ bool ServerLinesHandler::processMessage(
 	std::set<unsigned int> doneDests;
 	doneDests.insert(netMessage.getDestinationId()); // Don't send to recieved dest
 	std::map<unsigned int, Tank *> &tanks =
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
+		ScorchedServer::instance()->getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();

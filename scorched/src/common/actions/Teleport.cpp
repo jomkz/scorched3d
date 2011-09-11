@@ -22,7 +22,8 @@
 #include <actions/CameraPositionAction.h>
 #include <common/Defines.h>
 #include <common/OptionsScorched.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <tank/TankViewPoints.h>
 #include <target/TargetDamageCalc.h>
@@ -60,7 +61,7 @@ void Teleport::init()
 #ifndef S3D_SERVER
 	if (!context_->getServerMode())
 	{
-		Tank *tank = context_->getTankContainer().getTankById(weaponContext_.getPlayerId());
+		Tank *tank = context_->getTargetContainer().getTankById(weaponContext_.getPlayerId());
 		if (tank && tank->getState().getState() == TankState::sNormal)
 		{
 			Vector white(1.0f, 1.0f, 1.0f);
@@ -89,7 +90,7 @@ void Teleport::simulate(fixed frameTime, bool &remove)
 #ifndef S3D_SERVER
 		if (!context_->getServerMode())
 		{
-			Tank *tank = context_->getTankContainer().getTankById(weaponContext_.getPlayerId());
+			Tank *tank = context_->getTargetContainer().getTankById(weaponContext_.getPlayerId());
 			if (tank && tank->getState().getState() == TankState::sNormal)
 			{
 				SoundBuffer *activateSound = 
@@ -105,7 +106,7 @@ void Teleport::simulate(fixed frameTime, bool &remove)
 	totalTime_ += frameTime;
 	if (totalTime_ > weapon_->getDelay(*context_))
 	{
-		Tank *tank = context_->getTankContainer().getTankById(weaponContext_.getPlayerId());
+		Tank *tank = context_->getTargetContainer().getTankById(weaponContext_.getPlayerId());
 		if (tank && tank->getState().getState() == TankState::sNormal)
 		{
 			fixed height = context_->getLandscapeMaps().getGroundMaps().getInterpHeight(

@@ -28,7 +28,7 @@
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankModelContainer.h>
 #include <server/ScorchedServer.h>
@@ -54,7 +54,7 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 {
 	// Validate player
 	unsigned int playerId = message_.getPlayerId();
-	Tank *tank = context.getTankContainer().getTankById(playerId);
+	Tank *tank = context.getTargetContainer().getTankById(playerId);
 	if (!tank || tank->getState().getState() == TankState::sLoading)
 	{
 		return true;
@@ -89,7 +89,7 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 		bool found = false;
 		std::map<unsigned int, Tank *>::iterator mainitor;
 		std::map<unsigned int, Tank *> tanks = 
-			context.getTankContainer().getAllTanks();
+			context.getTargetContainer().getTanks();
 		for (mainitor = tanks.begin();
 			mainitor != tanks.end();
 			++mainitor)
@@ -118,7 +118,7 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 	{
 		// Check the color is not already in use
 		std::map<unsigned int, Tank *> &tanks = 
-			context.getTankContainer().getAllTanks();
+			context.getTargetContainer().getTanks();
 		if (TankColorGenerator::instance()->colorAvailable(
 			message_.getPlayerColor(), tanks, tank))
 		{
@@ -151,7 +151,7 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 		else
 		{
 			tank->setTeam(context.getOptionsTransient().getLeastUsedTeam(
-				context.getTankContainer()));
+				context.getTargetContainer()));
 		}
 	}
 

@@ -27,6 +27,7 @@
 #include <placement/PlacementTypeBounds.h>
 #include <placement/PlacementTypeTankStart.h>
 #include <landscapemap/LandscapeMaps.h>
+#include <target/Target.h>
 #include <target/TargetContainer.h>
 #include <target/TargetLife.h>
 #include <engine/ScorchedContext.h>
@@ -97,7 +98,7 @@ bool PlacementType::checkCloseness(FixedVector &position,
 		++targetsitor)
 	{
 		Target *target = (*targetsitor).second;
-		if (!target->isTarget()) continue;
+		if (target->getType() == Target::TypeTank) continue;
 
 		fixed distx = target->getLife().getTargetPosition()[0] - position[0];
 		fixed disty = target->getLife().getTargetPosition()[1] - position[1];

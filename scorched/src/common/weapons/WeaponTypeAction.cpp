@@ -21,7 +21,8 @@
 #include <weapons/WeaponTypeAction.h>
 #include <weapons/AccessoryStore.h>
 #include <engine/ActionController.h>
-#include <tanket/TanketContainer.h>
+#include <target/TargetContainer.h>
+#include <tanket/Tanket.h>
 #include <tanket/TanketType.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponTypeAction);
@@ -88,7 +89,7 @@ void WeaponTypeAction::weaponCallback(
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 	unsigned int userData)
 {
-	Tanket *tanket = context.getTanketContainer().getTanketById(weaponContext.getPlayerId());
+	Tanket *tanket = context.getTargetContainer().getTanketById(weaponContext.getPlayerId());
 	if (!tanket) return;
 
 	std::map<std::string, Weapon *>::iterator itor = 

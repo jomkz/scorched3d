@@ -19,7 +19,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <actions/TankRemove.h>
-#include <tank/TankContainer.h>
+#include <target/Target.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <common/Logger.h>
 
@@ -32,9 +34,9 @@ TankRemove::TankRemove(unsigned int playerId, fixed removeTime) :
 
 TankRemove::~TankRemove()
 {
-	Tank *tank = context_->getTankContainer().removeTank(playerId_);
-	if (!tank) Logger::log("ERROR: Failed to find player to remove");
-	delete tank;
+	Target *target = context_->getTargetContainer().removeTarget(playerId_);
+	if (!target) Logger::log("ERROR: Failed to find player to remove");
+	delete target;
 }
 
 void TankRemove::init()
@@ -46,7 +48,7 @@ void TankRemove::simulate(fixed frameTime, bool &remove)
 	removeTime_ -= frameTime;
 
 	int alive = 0;
-	std::map<unsigned int, Tank *> &tanks = context_->getTankContainer().getAllTanks();
+	std::map<unsigned int, Tank *> &tanks = context_->getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = tanks.begin();
 		mainitor != tanks.end();

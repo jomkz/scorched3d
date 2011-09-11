@@ -828,9 +828,6 @@
     <ClCompile Include="..\..\common\tank\TankColorGenerator.cpp">
       <Filter>tank</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\tank\TankContainer.cpp">
-      <Filter>tank</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\tank\TankDeadContainer.cpp">
       <Filter>tank</Filter>
     </ClCompile>
@@ -2331,9 +2328,6 @@
     <ClCompile Include="..\..\common\tank\TankWeaponSwitcher.cpp">
       <Filter>tank</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\tanket\TanketContainer.cpp">
-      <Filter>tanket</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\tanket\TanketShotInfo.cpp">
       <Filter>tanket</Filter>
     </ClCompile>
@@ -3054,9 +3048,6 @@
       <Filter>tank</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\tank\TankColorGenerator.h">
-      <Filter>tank</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\tank\TankContainer.h">
       <Filter>tank</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\tank\TankDeadContainer.h">
@@ -4573,9 +4564,6 @@
     </ClInclude>
     <ClInclude Include="..\..\common\tank\TankWeaponSwitcher.h">
       <Filter>tank</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\tanket\TanketContainer.h">
-      <Filter>tanket</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\tanket\TanketShotInfo.h">
       <Filter>tanket</Filter>

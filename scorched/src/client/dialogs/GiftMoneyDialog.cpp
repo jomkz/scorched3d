@@ -21,7 +21,8 @@
 #include <dialogs/GiftMoneyDialog.h>
 #include <graph/OptionsDisplay.h>
 #include <client/ScorchedClient.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankScore.h>
 #include <tank/TankState.h>
 #include <GLW/GLWTextButton.h>
@@ -91,7 +92,7 @@ void GiftMoneyDialog::display()
 
 	// Get the current playing tank
 	Tank *currentTank = 
-		ScorchedClient::instance()->getTankContainer().getCurrentTank();
+		ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (!currentTank)
 	{
 		GLWWindowManager::instance()->hideWindow(getId());
@@ -116,7 +117,7 @@ void GiftMoneyDialog::display()
 
 	// Add all tanks in the same team as the current
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedClient::instance()->getTankContainer().getAllTanks();
+		ScorchedClient::instance()->getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();

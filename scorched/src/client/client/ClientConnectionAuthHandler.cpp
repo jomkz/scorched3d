@@ -33,7 +33,7 @@
 #include <coms/ComsConnectAuthMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <graph/OptionsDisplay.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <client/SecureID.h>
 #include <net/NetInterface.h>
 

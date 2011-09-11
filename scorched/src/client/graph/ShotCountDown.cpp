@@ -32,7 +32,7 @@
 #include <GLEXT/GLTexture.h>
 #include <sound/Sound.h>
 #include <sound/SoundUtils.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankAvatar.h>
 #include <lang/LangResource.h>
 

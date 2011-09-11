@@ -23,7 +23,7 @@
 #include <common/Keyboard.h>
 #include <common/ToolTip.h>
 #include <client/ScorchedClient.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankState.h>
 
 REGISTER_CLASS_SOURCE(GLWDragger);

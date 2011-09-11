@@ -42,6 +42,8 @@ public:
 		Vector &color);
 	virtual ~Tank();
 
+	virtual TargetType getType() { return Target::TypeTank; }
+
 	// Called when the state changes
 	virtual void newMatch();
 	virtual void newGame();

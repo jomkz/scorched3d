@@ -48,6 +48,13 @@ class Weapon;
 class Target  
 {
 public:
+	enum TargetType
+	{
+		TypeTarget = 1,
+		TypeTank = 2,
+		TypeTanket = 3
+	};
+
 	Target(unsigned int playerId, 
 		const LangString &name, 
 		ScorchedContext &context);
@@ -59,7 +66,7 @@ public:
 	virtual bool getAlive();
 	virtual bool getPlaying();
 	virtual bool getVisible();
-	virtual bool isTarget() { return true; }
+	virtual TargetType getType() { return Target::TypeTarget; }
 	unsigned int getPlayerId() { return playerId_; }
 
 	// Weapons

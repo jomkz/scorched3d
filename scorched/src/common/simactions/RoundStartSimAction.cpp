@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <simactions/RoundStartSimAction.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #ifndef S3D_SERVER
 #include <graph/ShotCountDown.h>
 #endif
@@ -42,7 +42,7 @@ RoundStartSimAction::~RoundStartSimAction()
 
 bool RoundStartSimAction::invokeAction(ScorchedContext &context)
 {
-	context.getTankContainer().setCurrentRoundId(roundId_);
+	context.getTargetContainer().setCurrentRoundId(roundId_);
 
 	if (timeout_ != 0)
 	{

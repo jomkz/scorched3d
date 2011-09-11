@@ -21,7 +21,7 @@
 #include <GLW/GLWChannelViewTextRenderer.h>
 #include <GLW/GLWChannelView.h>
 #include <GLW/GLWTranslate.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankAvatar.h>
 #include <tankgraph/TargetRendererImplTank.h>
 #include <client/ScorchedClient.h>
@@ -56,7 +56,7 @@ bool GLWChannelViewTextRenderer::drawCharacter(
 		case ePlayerEntry:
 			{
 				TargetRendererImplTank *renderer = 0;
-				Tank *tank = ScorchedClient::instance()->getTankContainer().
+				Tank *tank = ScorchedClient::instance()->getTargetContainer().
 					getTankById(textEntry->data);
 				if (tank) renderer = (TargetRendererImplTank *) tank->getRenderer();
 				if (renderer)
@@ -116,7 +116,7 @@ bool GLWChannelViewTextRenderer::drawCharacter(
 		glColor4f(1.0f, 1.0f, 1.0f, color[3]);
 
 		{
-			Tank *tank = ScorchedClient::instance()->getTankContainer().
+			Tank *tank = ScorchedClient::instance()->getTargetContainer().
 				getTankById(textEntry->data);
 			if (tank) tank->getAvatar().getTexture()->draw(true);
 			else TankAvatar::getDefaultTexture()->draw(true);

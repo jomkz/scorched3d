@@ -19,9 +19,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <tankgraph/RenderTracer.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <GLEXT/GLTexture.h>
 #include <client/ScorchedClient.h>
+#include <tank/Tank.h>
 
 RenderTracer *RenderTracer::instance_ = 0;
 
@@ -62,7 +63,7 @@ void RenderTracer::clearTracerLines()
 
 void RenderTracer::draw(const unsigned state)
 {
-	Tank *current = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+	Tank *current = ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (!current) return;
 
 	if (!current_ || 

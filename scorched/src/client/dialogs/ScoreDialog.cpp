@@ -20,7 +20,7 @@
 
 #include <dialogs/ScoreDialog.h>
 #include <tank/TankSort.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankTeamScore.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankScore.h>
@@ -113,7 +113,7 @@ void ScoreDialog::calculateScores()
 {
 	lastScoreValue_ = lastMoneyValue_ = 0;
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedClient::instance()->getTankContainer().getAllTanks();
+		ScorchedClient::instance()->getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
@@ -137,7 +137,7 @@ void ScoreDialog::windowInit(const unsigned state)
 
 void ScoreDialog::draw()
 {
-	Tank *currentTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+	Tank *currentTank = ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	float h = sortedTanks_.size() * lineSpacer + 80.0f;
 	if (ScorchedClient::instance()->getOptionsGame().getTeams() > 1)
 	{
@@ -165,7 +165,7 @@ void ScoreDialog::draw()
 	bool buying = false;
 	{
 		std::map<unsigned int, Tank *> &playingTanks =
-			ScorchedClient::instance()->getTankContainer().getAllTanks();
+			ScorchedClient::instance()->getTargetContainer().getTanks();
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = playingTanks.begin();
 			itor != playingTanks.end();
@@ -404,7 +404,7 @@ void ScoreDialog::draw()
 				++itor)
 			{
 				unsigned int playerId = (*itor);
-				Tank *current = ScorchedClient::instance()->getTankContainer().getTankById(playerId);
+				Tank *current = ScorchedClient::instance()->getTargetContainer().getTankById(playerId);
 				if (current && current->getTeam() == (i + 1) && current->getState().getTankPlaying()) 
 				{
 					someTeam = true;
@@ -436,7 +436,7 @@ void ScoreDialog::draw()
 			++itor, rank++)
 		{
 			unsigned int playerId = (*itor);
-			Tank *current = ScorchedClient::instance()->getTankContainer().getTankById(playerId);
+			Tank *current = ScorchedClient::instance()->getTargetContainer().getTankById(playerId);
 			if (current && current->getState().getTankPlaying()) 
 			{
 				snprintf(strrank, 10, "%i", rank);
@@ -457,7 +457,7 @@ void ScoreDialog::draw()
 	{
 		unsigned int playerId = (*itor);
 		Tank *current = ScorchedClient::instance()->
-			getTankContainer().getTankById(playerId);
+			getTargetContainer().getTankById(playerId);
 		if (current && !current->getState().getTankPlaying()) 
 		{
 			addLine(currentTank, current, y, " ", false, buying);
@@ -466,7 +466,7 @@ void ScoreDialog::draw()
 	}	
 
 	std::map<unsigned int, Tank *> &realTanks = 
-		ScorchedClient::instance()->getTankContainer().getAllTanks();
+		ScorchedClient::instance()->getTargetContainer().getTanks();
 	if (tmpLastScoreValue != lastScoreValue_ ||
 		tmpLastMoneyValue != lastMoneyValue_ ||
 		realTanks.size() != lastNoPlayers_)
@@ -507,7 +507,7 @@ void ScoreDialog::addLine(Tank *currentPlayer, Tank *linePlayer, float y, char *
 	// Print a highlight behind the current clients player
 	if (linePlayer->getState().getTankPlaying() &&
 		linePlayer->getDestinationId() == 
-		ScorchedClient::instance()->getTankContainer().getCurrentDestinationId())
+		ScorchedClient::instance()->getTargetContainer().getCurrentDestinationId())
 	{
 		if (!currentPlayer || linePlayer == currentPlayer)
 		{
@@ -530,7 +530,7 @@ void ScoreDialog::addLine(Tank *currentPlayer, Tank *linePlayer, float y, char *
 	{
 		name.append(LANG_STRING("("));
 		Tank *serverTank = 
-			ScorchedServer::instance()->getTankContainer().getTankById(
+			ScorchedServer::instance()->getTargetContainer().getTankById(
 			linePlayer->getPlayerId());
 		TankAI *tankAI = serverTank->getTankAI();
 		if (tankAI) name.append(LANG_STRING(tankAI->getName()));

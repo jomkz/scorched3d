@@ -20,7 +20,8 @@
 
 #include <tankai/TankAICurrent.h>
 #include <tanket/TanketAccessories.h>
-#include <tanket/TanketContainer.h>
+#include <tanket/Tanket.h>
+#include <target/TargetContainer.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerState.h>
 #include <common/OptionsTransient.h>
@@ -119,7 +120,7 @@ void TankAICurrent::tankHurt(Weapon *weapon, float damage,
 	if (damaged == tanket_->getPlayerId())
 	{
 		Tanket *firedTanket = ScorchedServer::instance()->
-			getTanketContainer().getTanketById(fired);
+			getTargetContainer().getTanketById(fired);
 		if (firedTanket)
 		{
 			move_.getTargets().tookDamage(firedTanket, damage);		
@@ -128,7 +129,7 @@ void TankAICurrent::tankHurt(Weapon *weapon, float damage,
 	else if (fired == tanket_->getPlayerId())
 	{
 		Tanket *damagedTanket = ScorchedServer::instance()->
-			getTanketContainer().getTanketById(damaged);
+			getTargetContainer().getTanketById(damaged);
 		if (damagedTanket)
 		{
 			move_.getTargets().gaveDamage(damagedTanket, damage);		

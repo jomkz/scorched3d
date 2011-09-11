@@ -377,7 +377,7 @@ void DeformLandscape::flattenArea(
 			++itor)
 		{
 			Target *target = (*itor).second;
-			if (target->isTarget() &&
+			if (target->getType() != Target::TypeTank &&
 				target->getTargetState().getFlattenDestroy())
 			{
 				Target *removedTarget = 

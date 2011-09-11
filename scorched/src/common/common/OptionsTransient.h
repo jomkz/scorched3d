@@ -25,14 +25,14 @@
 #include <common/OptionsScorched.h>
 #include <net/NetBuffer.h>
 
-class TankContainer;
+class TargetContainer;
 class OptionsTransient
 {
 public:
 	OptionsTransient(OptionsScorched &optionsGame);
 	virtual ~OptionsTransient();
 
-	unsigned int getLeastUsedTeam(TankContainer &container);
+	unsigned int getLeastUsedTeam(TargetContainer &container);
 
 	enum WallType
 	{

@@ -42,6 +42,7 @@ public:
 protected:
 	ShotsState shotsState_;
 	unsigned int nextMoveId_;
+	fixed waitingTime_;
 	std::map<unsigned int, ComsPlayedMoveMessage*>  moves_;
 };
 

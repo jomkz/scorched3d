@@ -25,7 +25,7 @@
 #include <client/ScorchedClient.h>
 #include <target/TargetRenderer.h>
 #include <image/ImageFactory.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankState.h>
 #include <tanket/TanketShotInfo.h>
 #include <target/TargetLife.h>
@@ -55,7 +55,7 @@ void GLWScorchedInfoSpinner::draw()
 	
 	// Get the current tank and model
 	Tank *current = 
- 		ScorchedClient::instance()->getTankContainer().getCurrentTank();
+ 		ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (!current ||
 		current->getState().getState() != TankState::sNormal)
   	{
@@ -196,7 +196,7 @@ void GLWScorchedInfoSpinner::draw()
 void GLWScorchedInfoSpinner::mouseDown(int button, float x, float y, bool &skipRest)
 {
 	Tank *current = 
- 		ScorchedClient::instance()->getTankContainer().getCurrentTank();
+ 		ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (!current ||
 		current->getState().getState() != TankState::sNormal)
   	{

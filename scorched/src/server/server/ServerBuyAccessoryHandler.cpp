@@ -24,7 +24,8 @@
 #include <server/ServerSimulator.h>
 #include <simactions/TankAccessorySimAction.h>
 #include <common/Logger.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 
 ServerBuyAccessoryHandler::ServerBuyAccessoryHandler(ComsMessageHandler &comsMessageHandler)
@@ -58,7 +59,7 @@ bool ServerBuyAccessoryHandler::processMessage(
 	}
 
 	// Check that is player still exists
-	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
+	Tank *tank = ScorchedServer::instance()->getTargetContainer().getTankById(playerId);
 	if (!tank)
 	{
 		Logger::log( "ERROR: Player buying does not exist");

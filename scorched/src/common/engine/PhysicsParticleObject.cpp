@@ -23,10 +23,11 @@
 #include <engine/ActionController.h>
 #include <engine/Simulator.h>
 #include <landscapemap/LandscapeMaps.h>
+#include <tank/Tank.h>
 #include <target/TargetSpace.h>
 #include <target/TargetShield.h>
 #include <target/TargetLife.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <weapons/Accessory.h>
 #include <weapons/Shield.h>
 #include <weapons/ShieldRoundReflective.h>
@@ -542,7 +543,7 @@ bool PhysicsParticleObject::getShieldCollision(CollisionInfo &collision, Target 
 
 	// Is this tank in the shield
 	// This should always be a tank as it is the one firing
-	Tank *shotTank = context_->getTankContainer().getTankById(info_.playerId_);
+	Tank *shotTank = context_->getTargetContainer().getTankById(info_.playerId_);
 	if (shotTank)
 	{
 		FixedVector offset = shotTank->getLife().getTargetPosition() -

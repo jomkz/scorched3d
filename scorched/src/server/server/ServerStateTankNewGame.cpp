@@ -21,7 +21,8 @@
 #include <server/ServerStateTankNewGame.h>
 #include <server/ServerSimulator.h>
 #include <server/ScorchedServer.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <simactions/TankNewGameSimAction.h>
 
@@ -36,7 +37,7 @@ ServerStateTankNewGame::~ServerStateTankNewGame()
 void ServerStateTankNewGame::enterState()
 {
 	std::map<unsigned int, Tank*> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
+		ScorchedServer::instance()->getTargetContainer().getTanks();
 	std::map<unsigned int, Tank*>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();

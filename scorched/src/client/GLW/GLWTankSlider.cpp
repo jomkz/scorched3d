@@ -24,7 +24,8 @@
 #include <common/Keyboard.h>
 #include <common/ToolTipResource.h>
 #include <client/ScorchedClient.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <tanket/TanketShotInfo.h>
 #include <lang/LangResource.h>
@@ -51,7 +52,7 @@ GLWTankSlider::~GLWTankSlider()
 void GLWTankSlider::draw()
 {
 	Tank *currentTank =
-		ScorchedClient::instance()->getTankContainer().getCurrentTank();
+		ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (currentTank)
 	{
 		if (currentTank->getState().getState() == TankState::sNormal)
@@ -66,7 +67,7 @@ void GLWTankSlider::draw()
 void GLWTankSlider::currentChanged(unsigned int id, float value)
 {
 	Tank *currentTank =
-		ScorchedClient::instance()->getTankContainer().getCurrentTank();
+		ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (currentTank)
 	{
 		if (currentTank->getState().getState() == TankState::sNormal)

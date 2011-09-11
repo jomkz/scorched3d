@@ -21,7 +21,7 @@
 #include <actions/TankResign.h>
 #include <actions/Resurrection.h>
 #include <engine/ScorchedContext.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
 #include <tank/TankTeamScore.h>
@@ -45,7 +45,7 @@ TankResign::~TankResign()
 
 void TankResign::init()
 {
-	Tank *tank = context_->getTankContainer().getTankById(playerId_);
+	Tank *tank = context_->getTargetContainer().getTankById(playerId_);
 	if (tank) stateChangeCount_ = tank->getState().getStateChangeCount();
 
 #ifndef S3D_SERVER
@@ -74,7 +74,7 @@ void TankResign::simulate(fixed frameTime, bool &remove)
 		remove = true;
 
 		Tank *tank = 
-			context_->getTankContainer().getTankById(playerId_);
+			context_->getTargetContainer().getTankById(playerId_);
 		if (tank && 
 			tank->getState().getState() == TankState::sNormal &&
 			tank->getState().getStateChangeCount() == stateChangeCount_)
@@ -95,7 +95,7 @@ void TankResign::simulate(fixed frameTime, bool &remove)
 			{
 				unsigned int hurtByPlayer = (*itor);
 				Tank *hurtByTank = 
-					context_->getTankContainer().getTankById(hurtByPlayer);
+					context_->getTargetContainer().getTankById(hurtByPlayer);
 				if (!hurtByTank) continue;
 
 				// Only score when the tank does not hurt itself

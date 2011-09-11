@@ -23,7 +23,7 @@
 #include <GLW/GLWTextButton.h>
 #include <GLW/GLWFont.h>
 #include <GLW/GLWWindowManager.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <client/ClientParams.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>

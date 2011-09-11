@@ -21,7 +21,8 @@
 #include <weapons/WeaponTeamAction.h>
 #include <weapons/AccessoryStore.h>
 #include <engine/ActionController.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponTeamAction);
 
@@ -84,7 +85,7 @@ void WeaponTeamAction::weaponCallback(
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 	unsigned int userData)
 {
-	Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
+	Tank *tank = context.getTargetContainer().getTankById(weaponContext.getPlayerId());
 	if (!tank) return;
 
 	Weapon *action = action_[tank->getTeam()];

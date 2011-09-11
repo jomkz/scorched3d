@@ -36,6 +36,8 @@ public:
 		const LangString &name);
 	virtual ~Tanket();
 
+	virtual TargetType getType() { return Target::TypeTanket; }
+
 	// Called when the state changes
 	virtual void newMatch();
 	virtual void newGame();

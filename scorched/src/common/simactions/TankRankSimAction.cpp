@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <simactions/TankRankSimAction.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankScore.h>
 
 REGISTER_CLASS_SOURCE(TankRankSimAction);
@@ -41,7 +41,7 @@ bool TankRankSimAction::invokeAction(ScorchedContext &context)
 		++itor)
 	{
 		StatsLogger::TankRank &rank = *itor;
-		Tank *tank = context.getTankContainer().getTankById(rank.getPlayerId());
+		Tank *tank = context.getTargetContainer().getTankById(rank.getPlayerId());
 		if (tank)
 		{
 			if (rank.getRank() != -1) tank->getScore().setRank(rank.getRank());

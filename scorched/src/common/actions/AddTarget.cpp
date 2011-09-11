@@ -22,6 +22,7 @@
 #include <engine/ActionController.h>
 #include <engine/ScorchedContext.h>
 #include <engine/Simulator.h>
+#include <target/Target.h>
 #include <target/TargetContainer.h>
 #include <target/TargetDamageCalc.h>
 #include <tankai/TankAIAdder.h>

@@ -20,7 +20,8 @@
 
 #include <dialogs/BuyAccessoryDialogTankInfo.h>
 #include <client/ScorchedClient.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankScore.h>
 #include <tank/TankState.h>
 #include <tanket/TanketShotInfo.h>
@@ -40,7 +41,7 @@ BuyAccessoryDialogTankInfo::BuyAccessoryDialogTankInfo() :
 
 void BuyAccessoryDialogTankInfo::set()
 {
-	Tank *tank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+	Tank *tank = ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (tank)
 	{
 		tankAccessories.setTanket(tank);

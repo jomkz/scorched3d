@@ -20,7 +20,8 @@
 
 #include <server/ServerChannelFilter.h>
 #include <server/ScorchedServer.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 
 ServerChannelFilter::ServerChannelFilter()
 {
@@ -33,7 +34,7 @@ ServerChannelFilter::~ServerChannelFilter()
 bool ServerChannelFilterTeams::sentToDestination(ChannelText &text, unsigned int destination)
 {
 	// Find the tank that is sending the message
-	Tank *sendTank = ScorchedServer::instance()->getTankContainer().getTankById(
+	Tank *sendTank = ScorchedServer::instance()->getTargetContainer().getTankById(
 		text.getSrcPlayerId());
 	if (!sendTank) return false;
 
@@ -42,7 +43,7 @@ bool ServerChannelFilterTeams::sentToDestination(ChannelText &text, unsigned int
 
 	// Find a suitable tank to recieve the message
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
+		ScorchedServer::instance()->getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();

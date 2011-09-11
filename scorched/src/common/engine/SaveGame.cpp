@@ -23,7 +23,8 @@
 #include <common/OptionsTransient.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerSimulator.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 
 bool SaveGame::saveFile(const std::string &fileName) 
@@ -104,7 +105,7 @@ bool SaveGame::loadTargets(const std::string &fileName)
 	if (!message.loadTanks(ScorchedServer::instance()->getContext())) return false;
 
 	std::map<unsigned int, Tank *> tanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
+		ScorchedServer::instance()->getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();

@@ -25,7 +25,8 @@
 #include <common/OptionsTransient.h>
 #include <common/Defines.h>
 #include <net/NetInterface.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
@@ -140,7 +141,7 @@ void ServerBrowserInfo::processStatusMessage(std::list<std::string> &reply)
 	char version[256];
 	snprintf(version, 256, "%s (%s)", S3D::ScorchedVersion.c_str(), S3D::ScorchedProtocolVersion.c_str());
 	char players[25];
-	snprintf(players, 25, "%i", ScorchedServer::instance()->getTankContainer().getNoOfTanks());
+	snprintf(players, 25, "%i", ScorchedServer::instance()->getTargetContainer().getNoOfTanks());
 	char maxplayers[25];
 	snprintf(maxplayers, 25, "%i", ScorchedServer::instance()->getOptionsGame().getNoMaxPlayers());
 	char type[100];
@@ -153,7 +154,7 @@ void ServerBrowserInfo::processStatusMessage(std::list<std::string> &reply)
 
 	int compplayers = 0;
 	std::map<unsigned int, Tank *> &tanks =
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
+		ScorchedServer::instance()->getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator tanksitor;
 	for (tanksitor = tanks.begin();
 		tanksitor != tanks.end();
@@ -209,7 +210,7 @@ void ServerBrowserInfo::processPlayerMessage(std::list<std::string> &reply)
 	// Add all of the player information
 	char tmp[128];
 	std::map<unsigned int, Tank *> &tanks =
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
+		ScorchedServer::instance()->getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator tankItor;
 	int i=0;
 	for (tankItor =  tanks.begin();

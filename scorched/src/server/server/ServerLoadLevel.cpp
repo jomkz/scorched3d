@@ -26,7 +26,8 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <engine/Simulator.h>
 #include <simactions/TankLoadedSimAction.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsLoadLevelMessage.h>
@@ -124,7 +125,7 @@ void ServerLoadLevel::setLoaded(unsigned int destinationId)
 	// These tanks are now ready to play
 	std::map<unsigned int, Tank *>::iterator itor;
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
+		ScorchedServer::instance()->getTargetContainer().getTanks();
 	for (itor = tanks.begin();
 		itor != tanks.end();
 		++itor)

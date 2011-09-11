@@ -21,7 +21,8 @@
 #include <client/ClientLinesHandler.h>
 #include <client/ScorchedClient.h>
 #include <coms/ComsLinesMessage.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <GLW/GLWPlanView.h>
 
@@ -56,7 +57,7 @@ bool ClientLinesHandler::processMessage(
 	if (!message.readMessage(reader)) return false;
 
 	Tank *tank = ScorchedClient::instance()->
-		getTankContainer().getTankById(message.getPlayerId());
+		getTargetContainer().getTankById(message.getPlayerId());
 	if (!tank || tank->getState().getMuted()) return true;
 
 	std::list<GLWPlanView *>::iterator itor;

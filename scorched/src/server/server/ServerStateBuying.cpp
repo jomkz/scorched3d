@@ -22,7 +22,7 @@
 #include <server/ScorchedServer.h>
 #include <server/ServerSimulator.h>
 #include <server/ServerDestinations.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
 #include <tanket/TanketShotinfo.h>
@@ -71,7 +71,7 @@ void ServerStateBuying::enterState()
 	}
 	buyingPlayers_.clear();
 	std::map<unsigned int, Tank*> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
+		ScorchedServer::instance()->getTargetContainer().getTanks();
 	std::map<unsigned int, Tank*>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
@@ -109,7 +109,7 @@ bool ServerStateBuying::simulate(fixed frameTime)
 	bool loading = false;
 	bool dead = false;
 	std::map<unsigned int, Tank*> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
+		ScorchedServer::instance()->getTargetContainer().getTanks();
 	std::map<unsigned int, Tank*>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
@@ -228,7 +228,7 @@ void ServerStateBuying::playerBuying(unsigned int playerId)
 {
 	nextMoveId_++;
 
-	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
+	Tank *tank = ScorchedServer::instance()->getTargetContainer().getTankById(playerId);
 	tank->getShotInfo().setMoveId(nextMoveId_);
 
 	fixed buyingTime
@@ -286,7 +286,7 @@ void ServerStateBuying::buyingFinished(ComsPlayedMoveMessage &playedMessage)
 	// Check if this player is valid
 	unsigned int playerId = playedMessage.getPlayerId();
 	unsigned int moveId = playedMessage.getMoveId();
-	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
+	Tank *tank = ScorchedServer::instance()->getTargetContainer().getTankById(playerId);
 	if (!tank || !tank->getState().getTankPlaying()) return;
 	if (moveId != tank->getShotInfo().getMoveId()) return;
 

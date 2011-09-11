@@ -24,7 +24,7 @@
 #include <client/ScorchedClient.h>
 #include <dialogs/ConnectDialog.h>
 #include <dialogs/MsgBoxDialog.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <lang/LangResource.h>
 #include <common/Logger.h>
 #include <net/NetInterface.h>
@@ -67,7 +67,7 @@ void ClientMessageHandler::clientDisconnected(NetMessage &message)
 
 	Logger::log(S3D::formatStringBuffer("Disconnected"));
 	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimDisconnected);
-	ScorchedClient::instance()->getTankContainer().setCurrentDestinationId(0);
+	ScorchedClient::instance()->getTargetContainer().setCurrentDestinationId(0);
 }
 
 void ClientMessageHandler::clientError(NetMessage &message,

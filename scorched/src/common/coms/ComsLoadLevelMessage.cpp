@@ -24,7 +24,8 @@
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <engine/Simulator.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankTeamScore.h>
 #include <tankai/TankAIStore.h>
 #include <weapons/AccessoryStore.h>
@@ -62,7 +63,7 @@ bool ComsLoadLevelMessage::saveTanks(ScorchedContext &context)
 {
 	// Tanks
 	std::map<unsigned int, Tank *> &tanks =
-		context.getTankContainer().getAllTanks();
+		context.getTargetContainer().getTanks();
 	tanksBuffer_.addToBuffer((int) tanks.size());
 	std::map<unsigned int, Tank *>::iterator targetItor;
 	for (targetItor = tanks.begin();
@@ -119,7 +120,7 @@ bool ComsLoadLevelMessage::loadTanks(ScorchedContext &context)
 		if (!reader.getFromBuffer(playerId)) return false;
 		usedTargetIds.insert(playerId);
 
-		Tank *tank = context.getTankContainer().getTankById(playerId);
+		Tank *tank = context.getTargetContainer().getTankById(playerId);
 		if (!tank)
 		{
 			tank = new Tank(
@@ -134,7 +135,7 @@ bool ComsLoadLevelMessage::loadTanks(ScorchedContext &context)
 				tank->setRenderer(new TargetRendererImplTank(tank));
 			}
 #endif
-			context.getTankContainer().addTank(tank);
+			context.getTargetContainer().addTarget(tank);
 		}
 
 		if (!tank->readMessage(reader)) return false;
@@ -153,7 +154,7 @@ bool ComsLoadLevelMessage::loadTanks(ScorchedContext &context)
 
 	// Remove any tanks that have disconnected
 	std::map<unsigned int, Tank *> tanks =
-		context.getTankContainer().getAllTanks(); // Copy
+		context.getTargetContainer().getTanks(); // Copy
 	std::map<unsigned int, Tank *>::iterator targetItor;
 	for (targetItor = tanks.begin();
 		targetItor != tanks.end();
@@ -163,8 +164,8 @@ bool ComsLoadLevelMessage::loadTanks(ScorchedContext &context)
 		if (usedTargetIds.find(tank->getPlayerId()) ==
 			usedTargetIds.end())
 		{
-			Tank *removedTank = 
-				context.getTankContainer().removeTank(tank->getPlayerId());
+			Target *removedTank = 
+				context.getTargetContainer().removeTarget(tank->getPlayerId());
 			delete removedTank;
 		}
 	}

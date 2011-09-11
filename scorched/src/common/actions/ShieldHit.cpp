@@ -23,6 +23,7 @@
 #include <engine/ScorchedContext.h>
 #include <weapons/Accessory.h>
 #include <weapons/Shield.h>
+#include <tank/Tank.h>
 #include <target/TargetContainer.h>
 #include <target/TargetShield.h>
 #include <target/TargetRenderer.h>

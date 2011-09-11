@@ -34,7 +34,8 @@
 #include <water/Water.h>
 #include <engine/GameState.h>
 #include <tankgraph/TankKeyboardControlUtil.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <tanket/TanketShotInfo.h>
 #include <tanket/TanketAccessories.h>
@@ -276,14 +277,14 @@ void TargetCamera::moveCamera()
 	Vector position(arenaX + arenaWidth / 2.0f, arenaY + arenaHeight / 2.0f, 15.0f);
 	float currentRotation = 0.0f;
 
-	Tank *currentTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+	Tank *currentTank = ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (!currentTank || !currentTank->getAlive()) 
 	{
 		currentTank = 0;
 		unsigned int currentDestinationId = ScorchedClient::instance()->
-			getTankContainer().getCurrentDestinationId();
+			getTargetContainer().getCurrentDestinationId();
 		std::map<unsigned int, Tank *> &tanks = ScorchedClient::instance()->
-			getTankContainer().getAllTanks();
+			getTargetContainer().getTanks();
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = tanks.begin();
 			itor != tanks.end();
@@ -368,7 +369,7 @@ void TargetCamera::moveCamera()
 				unsigned int tankId = *
 					TankViewPointsCollection::TankViewPointsTanks.begin();
 				Tank *viewTank = ScorchedClient::instance()->
-					getTankContainer().getTankById(tankId);
+					getTargetContainer().getTankById(tankId);
 
 				FixedVector lookatPos, lookfromPos;
 				if (viewTank->getViewPoints().getProjectileViewPoints().
@@ -655,7 +656,7 @@ void TargetCamera::mouseUp(GameState::MouseButton button,
 		ClientState::StatePlaying)
 	{
 		currentTank = ScorchedClient::instance()->
-			getTankContainer().getCurrentTank();
+			getTargetContainer().getCurrentTank();
 		if (currentTank)
 		{
 			currentWeapon = currentTank->getAccessories().getWeapons().getCurrent();

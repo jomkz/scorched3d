@@ -23,7 +23,7 @@
 #include <graph/MainCamera.h>
 #include <client/ClientState.h>
 #include <tankgraph/TargetRendererImplTank.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tanket/TanketShotInfo.h>
 #include <common/Vector4.h>
 #include <landscape/Landscape.h>
@@ -45,7 +45,7 @@ GLWTankModel::~GLWTankModel()
 void GLWTankModel::draw()
 {
 	Tank *current = 
-		ScorchedClient::instance()->getTankContainer().getCurrentTank();
+		ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (!current) return;
 
 	TargetRendererImplTank *renderer = (TargetRendererImplTank *) 

@@ -132,7 +132,7 @@ void TankFalling::collision(PhysicsParticleObject &position,
 			// No damage (or parachutes used for tiny falls)
 			damage = 0;
 		}
-		else if (!context_->getOptionsGame().getTankFallingDamage() && !current->isTarget()) 
+		else if (!context_->getOptionsGame().getTankFallingDamage() && current->getType() != Target::TypeTarget) 
 		{
 			damage = 0;
 		}
@@ -149,14 +149,14 @@ void TankFalling::collision(PhysicsParticleObject &position,
 				damage = 0;
 
 				// Remove parachutes if we have one
-				if (!current->isTarget())
+				if (current->getType() != Target::TypeTarget)
 				{
-					Tank *currentTank = (Tank *) current;
-					currentTank->getAccessories().rm(parachute_->getParent(),
+					Tanket *currentTanket = (Tanket *) current;
+					currentTanket->getAccessories().rm(parachute_->getParent(),
 						parachute_->getParent()->getUseNumber());
-					if (!currentTank->getAccessories().canUse(parachute_->getParent()))
+					if (!currentTanket->getAccessories().canUse(parachute_->getParent()))
 					{
-						current->getParachute().setCurrentParachute(0);
+						currentTanket->getParachute().setCurrentParachute(0);
 					}
 				}
 			}
@@ -174,7 +174,7 @@ void TankFalling::collision(PhysicsParticleObject &position,
 		current->getLife().setTargetPosition(position.getPosition());
 
 		// Flatten the area around tanks
-		if (!current->isTarget())
+		if (current->getType() == Target::TypeTank)
 		{
 			DeformLandscape::flattenArea(*context_, position.getPosition());
 		}
@@ -197,9 +197,9 @@ void TankFalling::collision(PhysicsParticleObject &position,
 		{
 			Target *collisionTarget = (*itor).second;
 
-			if (current->isTarget() &&
+			if (current->getType() != Target::TypeTank &&
 				current->getTargetState().getDriveOverToDestroy() &&
-				!collisionTarget->isTarget())
+				collisionTarget->getType() != Target::TypeTarget)
 			{
 				// Kill the falling target
 				WeaponFireContext weaponContext(weaponContext_);
@@ -210,9 +210,9 @@ void TankFalling::collision(PhysicsParticleObject &position,
 						current->getLife().getLife(),
 						false, false, false));
 			}
-			else if (collisionTarget->isTarget() &&
+			else if (collisionTarget->getType() != Target::TypeTank &&
 				collisionTarget->getTargetState().getDriveOverToDestroy() &&
-				!current->isTarget())
+				current->getType() != Target::TypeTarget)
 			{
 				// Kill the target we've fallen on
 				WeaponFireContext weaponContext(weaponContext_);

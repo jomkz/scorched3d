@@ -23,7 +23,8 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapemap/DeformLandscape.h>
 #include <engine/Simulator.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <target/TargetLife.h>
 #include <target/TargetSpace.h>
@@ -101,7 +102,7 @@ static bool tankTargetCloseness(ScorchedContext &context, unsigned int playerId,
 		++itor)
 	{
 		Target *thisTarget = (*itor).second;
-		if (!thisTarget->isTarget()) continue;
+		if (thisTarget->getType() == Target::TypeTank) continue;
 
 		fixed closeness = MAX(tankCloseness/2, thisTarget->getBorder());
 		if ((tankPos - thisTarget->getLife().getTargetPosition()).Magnitude() < closeness) 
@@ -117,7 +118,7 @@ static bool tankTargetCloseness(ScorchedContext &context, unsigned int playerId,
 	}
 
 	// Make sure the tank is not too close to other tanks
-	std::map<unsigned int, Tank *> tanks = context.getTankContainer().getAllTanks();
+	std::map<unsigned int, Tank *> tanks = context.getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator tankItor;
 	for (tankItor = tanks.begin();
 		tankItor != tanks.end();

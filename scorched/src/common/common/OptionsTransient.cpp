@@ -21,7 +21,8 @@
 #include <common/OptionsTransient.h>
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <time.h>
 #include <math.h>
@@ -42,7 +43,7 @@ OptionsTransient::~OptionsTransient()
 {
 }
 
-unsigned int OptionsTransient::getLeastUsedTeam(TankContainer &container)
+unsigned int OptionsTransient::getLeastUsedTeam(TargetContainer &container)
 {
 	// Reset all the counts
 	std::map<unsigned int, unsigned int> counts;
@@ -54,7 +55,7 @@ unsigned int OptionsTransient::getLeastUsedTeam(TankContainer &container)
 	// Add all the tanks to the counts
 	std::map<unsigned int, Tank *>::iterator itor;
 	std::map<unsigned int, Tank *> &tanks = 
-		container.getAllTanks();
+		container.getTanks();
 	for (itor = tanks.begin();
 		itor != tanks.end();
 		++itor)

@@ -94,7 +94,7 @@ void TargetMovementEntrySpline::generate(ScorchedContext &context,
 	{
 		TargetGroup *entry = (*itor).second;
 
-		if (!entry->getTarget()->isTarget() ||
+		if (entry->getTarget()->getType() == Target::TypeTank ||
 			entry->getTarget()->getPlayerId() >= TargetID::MIN_TARGET_TRANSIENT_ID)
 		{
 			S3D::dialogExit("TargetMovementEntrySpline",

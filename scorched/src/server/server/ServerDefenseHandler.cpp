@@ -23,7 +23,8 @@
 #include <server/ScorchedServer.h>
 #include <server/ServerSimulator.h>
 #include <simactions/TankDefenseSimAction.h>
-#include <tank/TankContainer.h>
+#include <tank/Tank.h>
+#include <target/TargetContainer.h>
 #include <common/Logger.h>
 
 ServerDefenseHandler::ServerDefenseHandler(ComsMessageHandler &comsMessageHandler)
@@ -62,7 +63,7 @@ bool ServerDefenseHandler::processMessage(
 	}
 
 	// Check tank exists 
-	Tank *tank = ScorchedServer::instance()->getTankContainer().getTankById(playerId);
+	Tank *tank = ScorchedServer::instance()->getTargetContainer().getTankById(playerId);
 	if (!tank || tank->getDestinationId() != netMessage.getDestinationId())
 	{
 		Logger::log("ERROR: Player using defense does not exist at this destination");

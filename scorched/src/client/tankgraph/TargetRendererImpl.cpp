@@ -390,7 +390,7 @@ void TargetRendererImpl::createParticle()
 
 	// If this is a target we only need the particle
 	// if we have a shield or if we are falling
-	if (target_->isTarget())
+	if (target_->getType() != Target::TypeTank)
 	{
 		if (!target_->getShield().getGraphicalCurrentShield() &&
 			(tree_ || !target_->getTargetState().getFalling()))

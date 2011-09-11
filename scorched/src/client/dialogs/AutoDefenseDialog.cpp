@@ -24,7 +24,7 @@
 #include <GLW/GLWTextButton.h>
 #include <GLW/GLWWindowManager.h>
 #include <tankgraph/TankKeyboardControlUtil.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <target/TargetShield.h>
 #include <target/TargetParachute.h>
 #include <common/OptionsTransient.h>

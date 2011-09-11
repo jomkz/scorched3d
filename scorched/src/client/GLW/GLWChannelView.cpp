@@ -31,9 +31,10 @@
 #include <client/ClientChannelManager.h>
 #include <client/ScorchedClient.h>
 #include <sound/SoundUtils.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <lang/LangResource.h>
 #include <lang/LangParam.h>
+#include <tank/Tank.h>
 
 GLWChannelViewI::~GLWChannelViewI()
 {
@@ -175,13 +176,13 @@ void GLWChannelView::channelText(ChannelText &channelText)
 	CurrentChannelEntry *channel = getChannel(channelText.getChannel());
 	if (!channel) return;
 
-	Tank *tank = ScorchedClient::instance()->getTankContainer().
+	Tank *tank = ScorchedClient::instance()->getTargetContainer().
 		getTankById(channelText.getSrcPlayerId());
 	if (tank)
 	{
 		if (channel->type & ChannelDefinition::eWhisperChannel)
 		{
-			if (tank != ScorchedClient::instance()->getTankContainer().getCurrentTank())
+			if (tank != ScorchedClient::instance()->getTargetContainer().getCurrentTank())
 			{
 				lastWhisperSrc_ = tank->getPlayerId();
 			}

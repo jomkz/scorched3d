@@ -28,7 +28,7 @@
 #include <GLW/GLWWindowManager.h>
 #include <GLW/GLWListView.h>
 #include <client/ScorchedClient.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <target/TargetRenderer.h>
 #include <tankgraph/TargetRendererImpl.h>
 #include <common/Logger.h>

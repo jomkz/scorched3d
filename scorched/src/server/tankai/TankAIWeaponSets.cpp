@@ -37,13 +37,13 @@ TankAIWeaponSets::WeaponSetAccessories::WeaponSetAccessories(Tanket *tanket) :
 	tanket->getAccessories().writeMessage(buffer, true);
 	NetBufferReader reader(buffer);
 	tankAccessories.readMessage(reader);
-	if (!tanket->isTarget())
+	if (tanket->getType() == Target::TypeTank)
 	{
 		tankMoney = ((Tank *) tanket)->getScore().getMoney();
 	}
 	else
 	{
-		tankMoney = 100000;
+		tankMoney = 0;
 	}
 	tankId = tanket->getPlayerId();
 }

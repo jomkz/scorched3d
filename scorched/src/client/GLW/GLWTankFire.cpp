@@ -23,7 +23,8 @@
 #include <tankgraph/TankKeyboardControlUtil.h>
 #include <common/ToolTipResource.h>
 #include <lang/LangResource.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 
 REGISTER_CLASS_SOURCE(GLWTankFire);
@@ -58,7 +59,7 @@ void GLWTankFire::mouseUp(int button, float x, float y, bool &skipRest)
 		if (inBox(x, y, x_, y_, w_, h_))
 		{
 			Tank *currentTank =
-				ScorchedClient::instance()->getTankContainer().getCurrentTank();
+				ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 			if (currentTank)
 			{
 				if (currentTank->getState().getState() == 

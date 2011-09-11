@@ -20,7 +20,7 @@
 
 #include <client/ClientAdminResultHandler.h>
 #include <client/ScorchedClient.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankState.h>
 #include <coms/ComsAdminResultMessage.h>
 

@@ -28,7 +28,8 @@
 #include <simactions/TankStopMoveSimAction.h>
 #include <coms/ComsPlayedMoveMessage.h>
 #include <tank/TankSort.h>
-#include <tanket/TanketContainer.h>
+#include <tanket/Tanket.h>
+#include <target/TargetContainer.h>
 #include <tanket/TanketShotInfo.h>
 #include <list>
 
@@ -66,7 +67,7 @@ void ServerTurnsSequential::internalEnterState()
 	{
 		// Tankets wont be on the list, so add them
 		std::map<unsigned int, Tanket*> &tankets = 
-			ScorchedServer::instance()->getTanketContainer().getAllTankets();
+			ScorchedServer::instance()->getTargetContainer().getTankets();
 		std::map<unsigned int, Tanket*>::iterator itor;
 		for (itor = tankets.begin();
 			itor != tankets.end();
@@ -74,7 +75,7 @@ void ServerTurnsSequential::internalEnterState()
 		{
 			Tanket *tanket = itor->second;
 			tanket->getShotInfo().setMoveId(0);
-			if (tanket->isTarget())
+			if (tanket->getType() == Target::TypeTanket)
 			{
 				waitingPlayers_.push_back(tanket->getPlayerId());
 			}
@@ -127,8 +128,8 @@ void ServerTurnsSequential::internalSimulate(fixed frameTime)
 
 	// Check tanks are alive
 	Tanket *playingTanket =
-		ScorchedServer::instance()->getTanketContainer().getTanketById(playingPlayer_);
-	if (!playingTanket || playingTanket->getAlive())
+		ScorchedServer::instance()->getTargetContainer().getTanketById(playingPlayer_);
+	if (!playingTanket || !playingTanket->getAlive())
 	{
 		if (playingTanket && playingTanket->getShotInfo().getMoveId() != 0)
 		{
@@ -147,7 +148,7 @@ void ServerTurnsSequential::internalSimulate(fixed frameTime)
 			waitingPlayers_.pop_front();
 
 			Tanket *waitingTanket =
-				ScorchedServer::instance()->getTanketContainer().getTanketById(waitingPlayer);
+				ScorchedServer::instance()->getTargetContainer().getTanketById(waitingPlayer);
 			if (waitingTanket && waitingTanket->getAlive())
 			{
 				playingPlayer_ = waitingPlayer;
@@ -163,7 +164,7 @@ void ServerTurnsSequential::makeMove(Tanket *tanket)
 	nextMoveId_++;
 	fixed shotTime = fixed(
 		ScorchedServer::instance()->getOptionsGame().getShotTime());
-	playMove(tanket, nextMoveId_, shotTime, 0);
+	playMove(tanket, nextMoveId_, shotTime);
 }
 
 void ServerTurnsSequential::internalMoveFinished(ComsPlayedMoveMessage &playedMessage)
@@ -171,7 +172,7 @@ void ServerTurnsSequential::internalMoveFinished(ComsPlayedMoveMessage &playedMe
 	unsigned int playerId = playedMessage.getPlayerId();
 	unsigned int moveId = playedMessage.getMoveId();
 	if (playerId != playingPlayer_) return;
-	Tanket *tanket = ScorchedServer::instance()->getTanketContainer().getTanketById(playerId);
+	Tanket *tanket = ScorchedServer::instance()->getTargetContainer().getTanketById(playerId);
 	if (!tanket || tanket->getShotInfo().getMoveId() != moveId) return;
 
 	playMoveFinished(tanket);

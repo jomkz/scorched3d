@@ -22,7 +22,7 @@
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeDefn.h>
 #include <landscapedef/LandscapeInclude.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
@@ -209,10 +209,10 @@ LandscapeDefinition LandscapeDefinitions::getBlankLandscapeDefn()
 }
 
 LandscapeDefinition LandscapeDefinitions::getRandomLandscapeDefn(
-	OptionsScorched &context, TankContainer &tankContainer)
+	OptionsScorched &context, TargetContainer &TargetContainer)
 {
 	// Build a list of the maps that are enabled
-	int players = tankContainer.getNoOfNonSpectatorTanks();
+	int players = TargetContainer.getNoOfNonSpectatorTanks();
 	std::list<LandscapeDefinitionsEntry *> allPassedLandscapes;
 	std::list<LandscapeDefinitionsEntry *> minMaxPassedLandscapes;
 	std::list<LandscapeDefinitionsEntry>::iterator itor;

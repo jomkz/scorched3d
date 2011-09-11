@@ -22,7 +22,8 @@
 #include <GLW/GLWWindowManager.h>
 #include <GLW/GLWDropDownText.h>
 #include <GLW/GLWFont.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankColorGenerator.h>
 #include <tankai/TankAINames.h>
 #include <client/ScorchedClient.h>
@@ -121,7 +122,7 @@ void AdminDialog::drawColumn(unsigned int id, int row, int col,
 	float x, float y, float w)
 {
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedClient::instance()->getTankContainer().getAllTanks();
+		ScorchedClient::instance()->getTargetContainer().getTanks();
 
 	int pos = 0;
 	std::map<unsigned int, Tank *>::iterator itor;
@@ -170,14 +171,14 @@ void AdminDialog::draw()
 	GLWWindow::draw();
 
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedClient::instance()->getTankContainer().getAllTanks();
+		ScorchedClient::instance()->getTargetContainer().getTanks();
 	adminTable_->setItemCount((int) tanks.size());
 }
 
 void AdminDialog::buttonDown(unsigned int id)
 {
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedClient::instance()->getTankContainer().getAllTanks();
+		ScorchedClient::instance()->getTargetContainer().getTanks();
 
 	unsigned int sid = ClientAdminResultHandler::instance()->getSid();
 	unsigned int playerId = 0;

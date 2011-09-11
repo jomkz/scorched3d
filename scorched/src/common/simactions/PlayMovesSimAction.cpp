@@ -22,7 +22,8 @@
 #include <engine/ActionController.h>
 #include <weapons/AccessoryStore.h>
 #include <tanket/TanketAccessories.h>
-#include <tanket/TanketContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankShotHistory.h>
 #include <tank/TankState.h>
 #include <tanket/TanketShotInfo.h>
@@ -73,7 +74,7 @@ bool PlayMovesSimAction::invokeAction(ScorchedContext &context)
 		++itor)
 	{
 		ComsPlayedMoveMessage *message = *itor;
-		Tanket *tanket = context.getTanketContainer().getTanketById(message->getPlayerId());
+		Tanket *tanket = context.getTargetContainer().getTanketById(message->getPlayerId());
 		if (tanket && tanket->getAlive())
 		{
 			switch (message->getType())
@@ -123,7 +124,7 @@ void PlayMovesSimAction::tankTimedOut(ScorchedContext &context, Tanket *tanket)
 
 		if (tanket->getShotInfo().getMissedMoves() >= allowedMissed)
 		{
-			if (!tanket->isTarget())
+			if (tanket->getType() == Target::TypeTank)
 			{
 				Tank *tank = (Tank *) tanket;
 				ScorchedServer::instance()->getServerChannelManager().sendText(
@@ -177,7 +178,7 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 	tanket->getShotInfo().setSelectPosition(
 		message.getSelectPositionX(), 
 		message.getSelectPositionY());
-	if (!tanket->isTarget())
+	if (tanket->getType() == Target::TypeTank)
 	{
 		Tank *tank = (Tank *) tanket;
 		tank->getShotHistory().madeShot();

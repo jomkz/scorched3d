@@ -21,7 +21,8 @@
 #include <engine/ScorchedContext.h>
 #include <engine/Simulator.h>
 #include <actions/CameraPositionAction.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 
 CameraPositionAction::CameraPositionAction(
 	unsigned int playerId,
@@ -46,7 +47,7 @@ CameraPositionAction::~CameraPositionAction()
 		{
 			CameraPositionActionRegistry::rmCameraPositionAction(this);
 		}
-		Tank *tank = context_->getTankContainer().getTankById(playerId_);
+		Tank *tank = context_->getTargetContainer().getTankById(playerId_);
 		if (tank) 
 		{
 			// Remove projectile
@@ -76,7 +77,7 @@ void CameraPositionAction::init()
 		{
 			CameraPositionActionRegistry::addCameraPositionAction(this);
 		}
-		Tank *tank = context_->getTankContainer().getTankById(playerId_);
+		Tank *tank = context_->getTargetContainer().getTankById(playerId_);
 		if (tank) 
 		{
 			// Add projectile

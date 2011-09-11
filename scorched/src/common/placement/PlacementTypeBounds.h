@@ -38,6 +38,7 @@ public:
 
 protected:
 	int count;
+	bool onground;
 	FixedVector minbounds, maxbounds;
 };
 

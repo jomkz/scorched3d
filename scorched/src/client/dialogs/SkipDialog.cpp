@@ -24,7 +24,8 @@
 #include <GLW/GLWWindowManager.h>
 #include <client/ScorchedClient.h>
 #include <tankgraph/TankKeyboardControlUtil.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <common/Defines.h>
 #include <common/OptionsScorched.h>
@@ -77,7 +78,7 @@ void SkipDialog::buttonDown(unsigned int id)
 	if (id == okId_ ||
 		id == allId_)
 	{
-		Tank *firstTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+		Tank *firstTank = ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 		if (firstTank)
 		{
 			if (id == allId_)
@@ -91,7 +92,7 @@ void SkipDialog::buttonDown(unsigned int id)
 	}
 	else if (id == resignId_)
 	{
-		Tank *firstTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+		Tank *firstTank = ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 		if (firstTank)
 		{
 			TankKeyboardControlUtil::resign(firstTank);

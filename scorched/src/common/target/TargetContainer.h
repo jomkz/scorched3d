@@ -21,10 +21,12 @@
 #if !defined(__INCLUDE_TargetContainerh_INCLUDE__)
 #define __INCLUDE_TargetContainerh_INCLUDE__
 
-#include <target/Target.h>
 #include <map>
+#include <lang/LangString.h>
 
-class TankContainer;
+class Tank;
+class Target;
+class Tanket;
 class TargetContainer
 {
 public:
@@ -34,17 +36,36 @@ public:
 	void addTarget(Target *target);
 	Target *removeTarget(unsigned int playerId);
 	Target *getTargetById(unsigned int id);
+	Tanket *getTanketById(unsigned int id);
+	Tank *getTankById(unsigned int id);
+	Tank *getTankByName(const LangString &name);
 	
 	std::map<unsigned int, Target *> &getTargets() { return targets_; }
+	std::map<unsigned int, Tanket *> &getTankets() { return tankets_; }
+	std::map<unsigned int, Tank *> &getTanks() { return tanks_; }
+
+	Tank *getCurrentTank() { return currentPlayer_; }
+	unsigned int getCurrentDestinationId() { return destinationId_; }
+	void setCurrentDestinationId(unsigned int did) { destinationId_ = did; }
+	unsigned int getCurrentPlayerId() { return playerId_; }
+	void setCurrentPlayerId(unsigned int pid);
+	unsigned int getCurrentRoundId() { return roundId_; }
+	void setCurrentRoundId(unsigned int rid) { roundId_ = rid; }
+
+	int aliveCount();
+	int teamCount();
+
+	int getNoOfTanks() { return tanks_.size(); }
+	int getNoOfNonSpectatorTanks();
 
 protected:
-	friend class TanketContainer;
-
 	std::map<unsigned int, Target *> targets_;
-
-	void internalAddTarget(Target *target);
-	Target *internalRemoveTarget(unsigned int playerId);
-
+	std::map<unsigned int, Tanket *> tankets_;
+	std::map<unsigned int, Tank *> tanks_;
+	unsigned int playerId_;
+	unsigned int destinationId_;
+	unsigned int roundId_;
+	Tank *currentPlayer_;
 };
 
 #endif // __INCLUDE_TargetContainerh_INCLUDE__

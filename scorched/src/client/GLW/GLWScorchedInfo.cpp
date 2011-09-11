@@ -25,7 +25,7 @@
 #include <GLW/GLWColors.h>
 #include <client/ScorchedClient.h>
 #include <tankgraph/TargetRendererImplTank.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankScore.h>
@@ -133,7 +133,7 @@ void GLWScorchedInfo::draw()
 	
 	// Get the current tank and model
 	Tank *current = 
- 		ScorchedClient::instance()->getTankContainer().getCurrentTank();
+ 		ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (!current ||
 		current->getState().getState() != TankState::sNormal)
   	{
@@ -476,7 +476,7 @@ void GLWScorchedInfo::draw()
 void GLWScorchedInfo::mouseDown(int button, float x, float y, bool &skipRest)
 {
 	Tank *current = 
- 		ScorchedClient::instance()->getTankContainer().getCurrentTank();
+ 		ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (!current ||
 		current->getState().getState() != TankState::sNormal)
   	{

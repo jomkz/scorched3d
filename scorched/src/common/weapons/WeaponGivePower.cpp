@@ -21,7 +21,8 @@
 #include <weapons/WeaponGivePower.h>
 #include <weapons/AccessoryStore.h>
 #include <engine/ActionController.h>
-#include <tank/TankContainer.h>
+#include <tank/Tank.h>
+#include <target/TargetContainer.h>
 #include <tanket/TanketShotInfo.h>
 #include <common/Defines.h>
 #include <common/ChannelManager.h>
@@ -61,7 +62,7 @@ void WeaponGivePower::weaponCallback(
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 	unsigned int userData)
 {
-	Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
+	Tank *tank = context.getTargetContainer().getTankById(weaponContext.getPlayerId());
 	if (!tank) return;
 
 	fixed power = power_.getValue(context);

@@ -21,8 +21,9 @@
 #include <weapons/WeaponGiveAccessory.h>
 #include <weapons/AccessoryStore.h>
 #include <engine/ActionController.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tanket/TanketAccessories.h>
+#include <tank/Tank.h>
 #include <tank/TankScore.h>
 #include <common/Defines.h>
 #include <common/ChannelManager.h>
@@ -76,7 +77,7 @@ void WeaponGiveAccessory::weaponCallback(
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 	unsigned int userData)
 {
-	Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
+	Tank *tank = context.getTargetContainer().getTankById(weaponContext.getPlayerId());
 	if (!tank) return;
 
 	std::vector<Accessory *>::iterator itor;

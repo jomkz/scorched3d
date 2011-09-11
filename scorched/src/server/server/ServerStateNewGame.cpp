@@ -27,7 +27,7 @@
 #include <server/ServerChannelManager.h>
 #include <server/ServerLoadLevel.h>
 #include <weapons/EconomyStore.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankState.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <landscapemap/LandscapeMaps.h>
@@ -53,7 +53,7 @@ void ServerStateNewGame::newGame()
 	std::list<Tank *> playingTanks;
 	std::set<unsigned int> loadingDestinations;
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
+		ScorchedServer::instance()->getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator tankItor;
 	for (tankItor = tanks.begin();
 		tankItor != tanks.end();
@@ -117,7 +117,7 @@ void ServerStateNewGame::newGameState()
 	{
 		defn = ScorchedServer::instance()->getLandscapes().getRandomLandscapeDefn(
 			ScorchedServer::instance()->getContext().getOptionsGame(),
-			ScorchedServer::instance()->getContext().getTankContainer());
+			ScorchedServer::instance()->getContext().getTargetContainer());
 	}
 
 	// Load the per level options

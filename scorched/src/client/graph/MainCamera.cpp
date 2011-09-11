@@ -38,7 +38,8 @@
 #include <common/Logger.h>
 #include <coms/ComsOperationResultMessage.h>
 #include <coms/ComsMessageSender.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankCamera.h>
 #include <lang/LangResource.h>
 #include <math.h>
@@ -109,7 +110,7 @@ static int getNumberOfPlayers()
 {
 	int count = 0;
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedClient::instance()->getTankContainer().getAllTanks();
+		ScorchedClient::instance()->getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = tanks.begin();
 		mainitor != tanks.end();
@@ -240,7 +241,7 @@ void MainCamera::simulate(const unsigned state, float frameTime)
 		ClientParams::instance()->getConnectedToServer() ||
 		getNumberOfPlayers() <= 1)
 	{
-		Tank *current = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+		Tank *current = ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 		if (current)
 		{
 			Vector rotation(

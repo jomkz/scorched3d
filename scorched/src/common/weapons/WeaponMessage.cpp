@@ -21,7 +21,7 @@
 #include <weapons/WeaponMessage.h>
 #include <weapons/AccessoryStore.h>
 #include <engine/ActionController.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankState.h>
 #include <common/Defines.h>
 #include <common/ChannelManager.h>

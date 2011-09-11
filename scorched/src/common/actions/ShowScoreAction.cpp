@@ -22,7 +22,8 @@
 #include <engine/ScorchedContext.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerState.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankScore.h>
 #include <common/Logger.h>
 #ifndef S3D_SERVER
@@ -56,7 +57,7 @@ void ShowScoreAction::init()
 		{
 			Logger::log("Final scores -------");
 			std::map<unsigned int, Tank *> &tanks =
-				context_->getTankContainer().getAllTanks();
+				context_->getTargetContainer().getTanks();
 			std::map<unsigned int, Tank *>::iterator itor;
 			for (itor = tanks.begin();
 				itor != tanks.end();

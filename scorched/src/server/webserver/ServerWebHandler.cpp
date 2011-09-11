@@ -38,7 +38,7 @@
 #include <common/StatsLogger.h>
 #include <common/FileList.h>
 #include <net/NetInterface.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
@@ -79,7 +79,7 @@ bool ServerWebHandler::PlayerHandler::processRequest(
 	}
 
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
+		ScorchedServer::instance()->getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
 
 	// Check for any action
@@ -450,7 +450,7 @@ bool ServerWebHandler::GameHandler::processRequest(
 	}
 
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
+		ScorchedServer::instance()->getTargetContainer().getTanks();
 	request.getFields()["PLAYERS"] = S3D::formatStringBuffer("%i/%i", tanks.size(), 
 		ScorchedServer::instance()->getOptionsGame().getNoMaxPlayers());
 

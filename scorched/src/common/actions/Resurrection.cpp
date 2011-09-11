@@ -25,7 +25,8 @@
 #include <placement/PlacementTankPosition.h>
 #include <common/ChannelManager.h>
 #include <common/OptionsScorched.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <target/TargetLife.h>
 #include <lang/LangResource.h>
@@ -58,7 +59,7 @@ void Resurrection::simulate(fixed frameTime, bool &remove)
 	{
 		remove = true;
 
-		Tank *tank = context_->getTankContainer().getTankById(playerId_);
+		Tank *tank = context_->getTargetContainer().getTankById(playerId_);
 		if (tank)
 		{
 	#ifndef S3D_SERVER

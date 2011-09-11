@@ -23,7 +23,8 @@
 #include <engine/Simulator.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <tank/TankLib.h>
-#include <tanket/TanketContainer.h>
+#include <tanket/Tanket.h>
+#include <target/TargetContainer.h>
 #include <target/TargetLife.h>
 #include <common/Defines.h>
 #include <common/OptionsTransient.h>
@@ -112,7 +113,7 @@ void WeaponAimedOver::fireWeapon(ScorchedContext &context,
 	if (groupName_.empty())
 	{
 		std::map<unsigned int, Tanket *> &allTankets =
-			context.getTanketContainer().getAllTankets();
+			context.getTargetContainer().getTankets();
 		std::map<unsigned int, Tanket *>::iterator itor;
 		for (itor = allTankets.begin();
 			itor != allTankets.end();

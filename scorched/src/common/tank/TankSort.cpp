@@ -20,7 +20,7 @@
 
 #include <tank/TankSort.h>
 #include <tank/Tank.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankTeamScore.h>
 #include <tank/TankScore.h>
 #include <tank/TankState.h>
@@ -113,7 +113,7 @@ void TankSort::getSortedTanks(std::list<Tank *> &list, ScorchedContext &context)
 void TankSort::getSortedTanksIds(ScorchedContext &context, std::list<unsigned int> &list)
 {
 	std::list<Tank *> sortedTanks;
-	std::map<unsigned int, Tank *> tanks = context.getTankContainer().getAllTanks();
+	std::map<unsigned int, Tank *> tanks = context.getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();

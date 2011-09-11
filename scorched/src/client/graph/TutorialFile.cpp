@@ -22,7 +22,7 @@
 #include <GLW/GLWWindowManager.h>
 #include <client/ScorchedClient.h>
 #include <common/OptionsTransient.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <server/ServerSimulator.h>
 #include <server/ScorchedServer.h>
 #include <simactions/AdminSimAction.h>
@@ -108,8 +108,8 @@ bool TutorialConditionFirstMove::parseXML(TutorialFile *file, XMLNode *node)
 
 TutorialFileEntry *TutorialConditionTankDead::checkCondition()
 {
-	if (ScorchedClient::instance()->getTankContainer().getNoOfTanks() -
-		ScorchedClient::instance()->getTankContainer().aliveCount() > 1)
+	if (ScorchedClient::instance()->getTargetContainer().getNoOfTanks() -
+		ScorchedClient::instance()->getTargetContainer().aliveCount() > 1)
 	{
 		AdminSimAction *simAction = new AdminSimAction(AdminSimAction::eKillAll, 0, 0);
 		ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);

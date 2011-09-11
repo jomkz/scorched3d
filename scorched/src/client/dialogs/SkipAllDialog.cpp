@@ -24,7 +24,8 @@
 #include <GLW/GLWWindowManager.h>
 #include <client/ScorchedClient.h>
 #include <tankgraph/TankKeyboardControlUtil.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <common/Defines.h>
 #include <time.h>
@@ -65,7 +66,7 @@ void SkipAllDialog::simulate(float frameTime)
 
 		if (passedTime >= 5)
 		{
-			Tank *firstTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+			Tank *firstTank = ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 			if (firstTank)
 			{
 				TankKeyboardControlUtil::skipShot(firstTank);
@@ -91,7 +92,7 @@ void SkipAllDialog::windowInit(const unsigned state)
 {
 	skipAll_ = false;
 
-	Tank *firstTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+	Tank *firstTank = ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (firstTank)
 	{
 		if (firstTank->getState().getSkipShots())
@@ -114,7 +115,7 @@ void SkipAllDialog::buttonDown(unsigned int id)
 {
 	if (id == cancelId_)
 	{
-		Tank *firstTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+		Tank *firstTank = ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 		if (firstTank)
 		{
 			firstTank->getState().setSkipShots(false);

@@ -22,7 +22,7 @@
 #include <client/ScorchedClient.h>
 #include <client/ClientChannelManager.h>
 #include <client/ClientAdminResultHandler.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <console/Console.h>
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsAdminMessage.h>

@@ -24,13 +24,13 @@
 #ifndef S3D_SERVER
 	#include <tankgraph/TargetRendererImplTarget.h>
 #endif
+#include <tanket/Tanket.h>
 #include <target/TargetDefinition.h>
-#include <target/Target.h>
 #include <target/TargetLife.h>
 #include <target/TargetShield.h>
 #include <target/TargetParachute.h>
 #include <target/TargetState.h>
-#include <tanket/TanketContainer.h>
+#include <target/TargetContainer.h>
 #include <tankai/TankAIStore.h>
 #include <server/ScorchedServer.h>
 #include <3dsparse/ModelStore.h>
@@ -264,8 +264,7 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 	target->getLife().setTargetPosition(position);
 	groups_.addToGroups(context, &target->getGroup(), false);
 
-	if (!tanket) context.getTargetContainer().addTarget(target);
-	else context.getTanketContainer().addTanket(tanket);
+	context.getTargetContainer().addTarget(target);
 
 	return target;
 }

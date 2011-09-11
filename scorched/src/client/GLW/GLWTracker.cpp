@@ -26,7 +26,8 @@
 #include <common/ToolTipResource.h>
 #include <graph/OptionsDisplay.h>
 #include <client/ScorchedClient.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <tanket/TanketShotInfo.h>
 #include <lang/LangResource.h>
@@ -104,7 +105,7 @@ GLWTankTracker::~GLWTankTracker()
 void GLWTankTracker::draw()
 {
 	Tank *currentTank =
-		ScorchedClient::instance()->getTankContainer().getCurrentTank();
+		ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (currentTank)
 	{
 		if (currentTank->getState().getState() == TankState::sNormal)
@@ -119,7 +120,7 @@ void GLWTankTracker::draw()
 void GLWTankTracker::currentChanged(unsigned int id, float valueX, float valueY)
 {
 	Tank *currentTank =
-		ScorchedClient::instance()->getTankContainer().getCurrentTank();
+		ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (currentTank)
 	{
 		if (currentTank->getState().getState() == TankState::sNormal)

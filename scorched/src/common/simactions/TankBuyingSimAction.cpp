@@ -21,8 +21,9 @@
 #include <simactions/TankBuyingSimAction.h>
 #include <placement/PlacementTankPosition.h>
 #include <engine/Simulator.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <target/TargetLife.h>
 
 std::set<unsigned int> TankBuyingSimAction::runningPlayerIds_;
@@ -49,7 +50,7 @@ TankBuyingSimAction::~TankBuyingSimAction()
 
 bool TankBuyingSimAction::invokeAction(ScorchedContext &context)
 {
-	Tank *tank = context.getTankContainer().getTankById(playerId_);
+	Tank *tank = context.getTargetContainer().getTankById(playerId_);
 	if (!tank) return false;
 
 	if (tank->getState().getState() != TankState::sDead) return true;

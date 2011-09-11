@@ -27,7 +27,7 @@
 #include <simactions/TankTeamBallanceSimAction.h>
 #include <common/OptionsScorched.h>
 #include <common/StatsLogger.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
 
@@ -62,7 +62,7 @@ void ServerStatePlaying::enterState()
 	// Inform the stats logger
 	std::list<Tank *> playingTanks;
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
+		ScorchedServer::instance()->getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = tanks.begin();
 		mainitor != tanks.end();

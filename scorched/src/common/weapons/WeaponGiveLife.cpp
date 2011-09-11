@@ -21,7 +21,8 @@
 #include <weapons/WeaponGiveLife.h>
 #include <weapons/AccessoryStore.h>
 #include <engine/ActionController.h>
-#include <tank/TankContainer.h>
+#include <tank/Tank.h>
+#include <target/TargetContainer.h>
 #include <target/TargetLife.h>
 #include <common/Defines.h>
 #include <common/ChannelManager.h>
@@ -62,7 +63,7 @@ void WeaponGiveLife::weaponCallback(
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 	unsigned int userData)
 {
-	Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
+	Tank *tank = context.getTargetContainer().getTankById(weaponContext.getPlayerId());
 	if (!tank) return;
 
 	fixed life = life_.getValue(context);

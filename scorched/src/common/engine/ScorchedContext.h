@@ -33,7 +33,7 @@ class OptionsScorched;
 class OptionsTransient;
 class ModFiles;
 class LandscapeDefinitions;
-class TankContainer;
+class TargetContainer;
 class TanketContainer;
 class TankModelStore;
 class TanketTypes;
@@ -58,8 +58,6 @@ public:
 	virtual TargetSpace &getTargetSpace() = 0;
 	virtual Simulator &getSimulator() = 0;
 	AccessoryStore &getAccessoryStore() { return *accessoryStore_; }
-	TankContainer &getTankContainer() { return *tankContainer_; }
-	TanketContainer &getTanketContainer() { return *tanketContainer_; }
 	TargetContainer &getTargetContainer() { return *targetContainer_; }
 	TargetMovement &getTargetMovement() { return *targetMovement_; }
 	TankTeamScore &getTankTeamScore() { return *tankTeamScore_; }
@@ -86,8 +84,6 @@ protected:
 	AccessoryStore *accessoryStore_;
 	LandscapeDefinitions *landscapes_;
 	TargetContainer *targetContainer_;
-	TanketContainer *tanketContainer_;
-	TankContainer *tankContainer_;
 	TankModelStore *tankModelStore_;
 	TankTeamScore *tankTeamScore_;
 	TanketTypes *tanketTypes_;

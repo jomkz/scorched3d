@@ -23,7 +23,8 @@
 #include <server/ServerStatePlaying.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerState.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 
 ServerPlayedMoveHandler::ServerPlayedMoveHandler(ComsMessageHandler &comsMessageHandler)
@@ -45,7 +46,7 @@ bool ServerPlayedMoveHandler::processMessage(
 	ComsPlayedMoveMessage message;
 	if (!message.readMessage(reader)) return false;
 
-	Tank *tank = ScorchedServer::instance()->getTankContainer().
+	Tank *tank = ScorchedServer::instance()->getTargetContainer().
 		getTankById(message.getPlayerId());
 	if (!tank) return true;
 	if (tank->getDestinationId() != netMessage.getDestinationId()) return true;

@@ -31,7 +31,7 @@
 #include <landscape/Landscape.h>
 #include <landscape/LandscapePoints.h>
 #include <landscapemap/LandscapeMaps.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankState.h>
 #include <tanket/TanketShotInfo.h>
 #include <target/TargetLife.h>
@@ -108,7 +108,7 @@ void GLWPlanView::simulate(float frameTime)
 			last[2] = 0.0f;
 
 			ComsLinesMessage message(
-				ScorchedClient::instance()->getTankContainer().getCurrentPlayerId());
+				ScorchedClient::instance()->getTargetContainer().getCurrentPlayerId());
 			message.getLines() = sendPoints;
 			if (dragging_) message.getLines().push_back(Vector::getNullVector());
 			sendPoints.clear();
@@ -210,7 +210,7 @@ void GLWPlanView::drawLines()
 	if (!localPoints_.points.empty())
 	{
 		localPoints_.playerId = ScorchedClient::instance()->
-			getTankContainer().getCurrentPlayerId();
+			getTargetContainer().getCurrentPlayerId();
 		drawLine(localPoints_);
 	}
 
@@ -255,7 +255,7 @@ bool GLWPlanView::simulateLine(PlayerDrawnInfo &info)
 void GLWPlanView::drawLine(PlayerDrawnInfo &info)
 {
 	Tank *current =
-		ScorchedClient::instance()->getTankContainer().getTankById(
+		ScorchedClient::instance()->getTargetContainer().getTankById(
 			info.playerId);
 	if (!current)
 	{
@@ -389,7 +389,7 @@ void GLWPlanView::drawTanks()
 	float maxWidth = MAX(arenaWidth_, arenaHeight_);
 
 	std::map<unsigned int, Tank *> &currentTanks =
-		ScorchedClient::instance()->getTankContainer().getAllTanks();
+		ScorchedClient::instance()->getTargetContainer().getTanks();
 	if (currentTanks.empty()) return;
 
 	Vector position;

@@ -27,7 +27,8 @@
 #include <common/Logger.h>
 #include <weapons/AccessoryStore.h>
 #include <tanket/TanketAccessories.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
 #include <target/TargetLife.h>
@@ -151,7 +152,7 @@ static int s3d_get_tank(lua_State *L)
 
 	int number = luaL_checknumber(L, 1);
 	Tank *tank =
-		wrapper->getContext()->getTankContainer().getTankById((unsigned int) number);
+		wrapper->getContext()->getTargetContainer().getTankById((unsigned int) number);
 	if (tank) addTank(L, tank);
 	else
 	{
@@ -168,7 +169,7 @@ static int s3d_get_tanks(lua_State *L)
 	LUAScript *wrapper = getScript(L);
 
 	std::map<unsigned int, Tank *> &tanks =
-		wrapper->getContext()->getTankContainer().getAllTanks();
+		wrapper->getContext()->getTargetContainer().getTanks();
 	lua_newtable(L);
 
 	std::map<unsigned int, Tank *>::iterator itor;
@@ -247,7 +248,7 @@ static int s3d_set_tank_score(lua_State *L)
 	int score = int(luaL_checknumber(L, 2) / fixed::FIXED_RESOLUTION);
 
 	Tank *tank =
-		wrapper->getContext()->getTankContainer().getTankById((unsigned int) number);
+		wrapper->getContext()->getTargetContainer().getTankById((unsigned int) number);
 	if (!tank)
 	{
 		Logger::log(S3D::formatStringBuffer("s3d_set_tank_score:Failed to an tank id %u", 
@@ -267,7 +268,7 @@ static int s3d_set_tank_money(lua_State *L)
 	int money = int(luaL_checknumber(L, 2) / fixed::FIXED_RESOLUTION);
 
 	Tank *tank =
-		wrapper->getContext()->getTankContainer().getTankById((unsigned int) number);
+		wrapper->getContext()->getTargetContainer().getTankById((unsigned int) number);
 	if (!tank)
 	{
 		Logger::log(S3D::formatStringBuffer("s3d_set_tank_money:Failed to an tank id %u", 
@@ -287,7 +288,7 @@ static int s3d_set_tank_position(lua_State *L)
 	FixedVector position = LUAUtil::getVectorFromStack(L, 2);
 
 	Tank *tank =
-		wrapper->getContext()->getTankContainer().getTankById((unsigned int) number);
+		wrapper->getContext()->getTargetContainer().getTankById((unsigned int) number);
 	if (!tank)
 	{
 		Logger::log(S3D::formatStringBuffer("s3d_set_tank_money:Failed to an tank id %u", 
@@ -308,7 +309,7 @@ static int s3d_give_weapon(lua_State *L)
 	int count = int(luaL_checknumber(L, 3) / fixed::FIXED_RESOLUTION);
 
 	Tank *tank =
-		wrapper->getContext()->getTankContainer().getTankById((unsigned int) number);
+		wrapper->getContext()->getTargetContainer().getTankById((unsigned int) number);
 	if (!tank)
 	{
 		Logger::log(S3D::formatStringBuffer("s3d_give_weapon:Failed to an tank id %u", 

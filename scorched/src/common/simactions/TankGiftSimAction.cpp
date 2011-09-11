@@ -19,7 +19,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <simactions/TankGiftSimAction.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
 #include <lang/LangResource.h>
@@ -50,14 +51,14 @@ bool TankGiftSimAction::invokeAction(ScorchedContext &context)
 	int money = giftMessage_.getMoney();
 
 	// Check tank exists and is alive
-	Tank *fromTank = context.getTankContainer().getTankById(fromPlayerId);
+	Tank *fromTank = context.getTargetContainer().getTankById(fromPlayerId);
 	if (!fromTank || !fromTank->getState().getTankPlaying())
 	{
 		return true;
 	}
 
 	// Check to player
-	Tank *toTank = context.getTankContainer().getTankById(toPlayerId);
+	Tank *toTank = context.getTargetContainer().getTankById(toPlayerId);
 	if (!toTank || !toTank->getState().getTankPlaying())
 	{
 		return true;

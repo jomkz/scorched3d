@@ -24,8 +24,9 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <engine/Simulator.h>
 #include <engine/ScorchedContext.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <target/TargetLife.h>
 
 unsigned int TankNewGameSimAction::instanceCount_(0);
@@ -51,7 +52,7 @@ TankNewGameSimAction::~TankNewGameSimAction()
 
 bool TankNewGameSimAction::invokeAction(ScorchedContext &context)
 {
-	Tank *tank = context.getTankContainer().getTankById(playerId_);
+	Tank *tank = context.getTargetContainer().getTankById(playerId_);
 	if (!tank) return false;
 
 	if (tank->getState().getState() != TankState::sBuying) return true;

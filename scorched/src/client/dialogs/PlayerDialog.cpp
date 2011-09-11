@@ -23,7 +23,8 @@
 #include <client/ScorchedClient.h>
 #include <tankai/TankAIStore.h>
 #include <tankai/TankAIStrings.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankState.h>
 #include <tank/TankAvatar.h>
@@ -186,7 +187,7 @@ void PlayerDialog::draw()
 		// Auto select the team with the least players
 		unsigned int newTeam = 
 			ScorchedClient::instance()->getOptionsTransient().getLeastUsedTeam(
-			ScorchedClient::instance()->getTankContainer());
+			ScorchedClient::instance()->getTargetContainer());
 		if (newTeam != allocatedTeam_)
 		{
 			teamDropDown_->setCurrentPosition(newTeam - 1);
@@ -310,7 +311,7 @@ void PlayerDialog::nextPlayer()
 	}
 
 	Tank *tank = 
-		ScorchedClient::instance()->getTankContainer().getTankById(currentPlayerId_);
+		ScorchedClient::instance()->getTargetContainer().getTankById(currentPlayerId_);
 	if (ClientParams::instance()->getConnectedToServer())
 	{
 		// If we are connected online then use the online name
@@ -346,7 +347,7 @@ void PlayerDialog::nextPlayer()
 	if (ScorchedClient::instance()->getOptionsGame().getTeams() == 1)
 	{
 		std::map<unsigned int, Tank *> tanks =
-			ScorchedClient::instance()->getTankContainer().getAllTanks();
+			ScorchedClient::instance()->getTargetContainer().getTanks();
 		std::vector<Vector *> availableColors =
 			TankColorGenerator::instance()->getAvailableColors(tanks, tank);
 		std::vector<Vector *>::iterator itor;
@@ -378,7 +379,7 @@ void PlayerDialog::nextPlayer()
 unsigned int PlayerDialog::getNextPlayer(unsigned int current)
 {
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedClient::instance()->getTankContainer().getAllTanks();
+		ScorchedClient::instance()->getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
@@ -386,7 +387,7 @@ unsigned int PlayerDialog::getNextPlayer(unsigned int current)
 	{
 		Tank *tank = (*itor).second;
 		if ((tank->getDestinationId() == 
-			ScorchedClient::instance()->getTankContainer().getCurrentDestinationId()) &&
+			ScorchedClient::instance()->getTargetContainer().getCurrentDestinationId()) &&
 			(tank->getPlayerId() != TargetID::SPEC_TANK_ID))
 		{
 			if (current == 0)
@@ -453,12 +454,12 @@ void PlayerDialog::buttonDown(unsigned int id)
 		playerName_->getLangString(),
 		colorDropDown_->getCurrentColor(),
 		model->getName(),
-		ScorchedClient::instance()->getTankContainer().getCurrentDestinationId(),
+		ScorchedClient::instance()->getTargetContainer().getCurrentDestinationId(),
 		getCurrentTeam(),
 		playerType,
 		spectate);
 	// Add avatar (if not one)
-	Tank *tank = ScorchedClient::instance()->getTankContainer().
+	Tank *tank = ScorchedClient::instance()->getTargetContainer().
 		getTankById(currentPlayerId_);
 	if (tank && 
 		strcmp(tank->getAvatar().getName(), imageList_->getCurrentShortPath()) != 0)

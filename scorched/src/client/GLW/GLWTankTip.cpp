@@ -620,7 +620,7 @@ static void generateTargetTip(LangString &tip, Target *target)
 			S3D::formatStringBuffer("%.0f", target->getShield().getGraphicalShieldPower().asFloat()),
 			S3D::formatStringBuffer("%.0f", shield->getPower().asFloat())));
 	}
-	if (!target->isTarget())
+	if (target->getType() == Target::TypeTank)
 	{
 		Tank *tank = (Tank *) target;
 

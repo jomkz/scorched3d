@@ -30,7 +30,7 @@ class LandscapeDefn;
 class LandscapeTex;
 class LandscapeInclude;
 class OptionsGame;
-class TankContainer;
+class TargetContainer;
 
 class LandscapeDefinitions : public LandscapeDefinitionsBase
 {
@@ -43,7 +43,7 @@ public:
 
 	void checkEnabled(OptionsScorched &context);
 	LandscapeDefinition getBlankLandscapeDefn();
-	LandscapeDefinition getRandomLandscapeDefn(OptionsScorched &context, TankContainer &tankContainer);
+	LandscapeDefinition getRandomLandscapeDefn(OptionsScorched &context, TargetContainer &TargetContainer);
 	LandscapeTex *getTex(const char *file, bool load = false);
 	LandscapeDefn *getDefn(const char *file, bool load = false);
 	LandscapeInclude *getInclude(const char *file, bool load = false);

@@ -23,7 +23,8 @@
 	#include <sprites/TalkRenderer.h>
 	#include <sprites/ExplosionTextures.h>
 #endif
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankAvatar.h>
 #include <tanket/TanketShotInfo.h>
 #include <engine/ScorchedContext.h>
@@ -45,7 +46,7 @@ TankSay::~TankSay()
 void TankSay::init()
 {
 	Tank *tank = 
-		context_->getTankContainer().getTankById(playerId_);
+		context_->getTargetContainer().getTankById(playerId_);
 	if (tank)
 	{
 #ifndef S3D_SERVER

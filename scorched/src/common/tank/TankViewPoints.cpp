@@ -21,7 +21,7 @@
 #include <common/Defines.h>
 #include <common/OptionsScorched.h>
 #include <tank/TankViewPoints.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 
 std::set<unsigned int> TankViewPointsCollection::TankViewPointsTanks;
 

@@ -25,7 +25,8 @@
 #include <server/ServerSimulator.h>
 #include <server/ServerBanned.h>
 #include <server/ServerAuthHandler.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
 #include <tankai/TankAIAdder.h>
@@ -60,7 +61,7 @@ static void internalBanPlayer(ServerAdminSessions::Credential &credential,
 	ServerBanned::BannedType type, const char *reason)
 {
 	Tank *tank = ScorchedServer::instance()->
-		getTankContainer().getTankById(playerId);
+		getTargetContainer().getTankById(playerId);
 	if (tank)
 	{
 		if (tank->getDestinationId() == 0)
@@ -101,7 +102,7 @@ bool ServerAdminCommon::kickPlayer(ServerAdminSessions::Credential &credential, 
 	if (!credential.hasPermission(ServerAdminSessions::PERMISSION_KICKPLAYER)) return false;
 
 	Tank *targetTank = ScorchedServer::instance()->
-		getTankContainer().getTankById(playerId);
+		getTargetContainer().getTankById(playerId);
 	if (!targetTank) return false;
 
 	adminLog(ChannelText("info",
@@ -119,7 +120,7 @@ bool ServerAdminCommon::kickPlayer(ServerAdminSessions::Credential &credential, 
 bool ServerAdminCommon::poorPlayer(ServerAdminSessions::Credential &credential, unsigned int playerId)
 {
 	Tank *targetTank = ScorchedServer::instance()->
-		getTankContainer().getTankById(playerId);
+		getTargetContainer().getTankById(playerId);
 	if (!targetTank) return false;
 
 	adminLog(ChannelText("info",
@@ -137,7 +138,7 @@ bool ServerAdminCommon::banPlayer(ServerAdminSessions::Credential &credential, u
 	if (!credential.hasPermission(ServerAdminSessions::PERMISSION_BANPLAYER)) return false;
 
 	Tank *targetTank = ScorchedServer::instance()->
-		getTankContainer().getTankById(playerId);
+		getTargetContainer().getTankById(playerId);
 	if (!targetTank) return false;
 
 	adminLog(ChannelText("info",
@@ -157,7 +158,7 @@ bool ServerAdminCommon::banPlayer(ServerAdminSessions::Credential &credential, u
 bool ServerAdminCommon::slapPlayer(ServerAdminSessions::Credential &credential, unsigned int playerId, float slap)
 {
 	Tank *targetTank = ScorchedServer::instance()->
-		getTankContainer().getTankById(playerId);
+		getTargetContainer().getTankById(playerId);
 	if (!targetTank) return false;
 
 	adminLog(ChannelText("info",
@@ -176,7 +177,7 @@ bool ServerAdminCommon::slapPlayer(ServerAdminSessions::Credential &credential, 
 bool ServerAdminCommon::killPlayer(ServerAdminSessions::Credential &credential, unsigned int playerId)
 {
 	Tank *targetTank = ScorchedServer::instance()->
-		getTankContainer().getTankById(playerId);
+		getTargetContainer().getTankById(playerId);
 	if (!targetTank) return false;
 
 	adminLog(ChannelText("info",
@@ -194,7 +195,7 @@ bool ServerAdminCommon::killPlayer(ServerAdminSessions::Credential &credential, 
 bool ServerAdminCommon::flagPlayer(ServerAdminSessions::Credential &credential, unsigned int playerId, const char *reason)
 {
 	Tank *targetTank = ScorchedServer::instance()->
-		getTankContainer().getTankById(playerId);
+		getTargetContainer().getTankById(playerId);
 	if (!targetTank) return false;
 
 	adminLog(ChannelText("info",
@@ -214,7 +215,7 @@ bool ServerAdminCommon::flagPlayer(ServerAdminSessions::Credential &credential, 
 bool ServerAdminCommon::mutePlayer(ServerAdminSessions::Credential &credential, unsigned int playerId, bool mute)
 {
 	Tank *targetTank = ScorchedServer::instance()->
-		getTankContainer().getTankById(playerId);
+		getTargetContainer().getTankById(playerId);
 	if (!targetTank) return false;
 
 	adminLog(ChannelText("info",
@@ -230,7 +231,7 @@ bool ServerAdminCommon::mutePlayer(ServerAdminSessions::Credential &credential, 
 bool ServerAdminCommon::permMutePlayer(ServerAdminSessions::Credential &credential, unsigned int playerId, const char *reason)
 {
 	Tank *targetTank = ScorchedServer::instance()->
-		getTankContainer().getTankById(playerId);
+		getTargetContainer().getTankById(playerId);
 	if (!targetTank) return false;
 
 	adminLog(ChannelText("info",
@@ -251,7 +252,7 @@ bool ServerAdminCommon::permMutePlayer(ServerAdminSessions::Credential &credenti
 bool ServerAdminCommon::unpermMutePlayer(ServerAdminSessions::Credential &credential, unsigned int playerId)
 {
 	Tank *targetTank = ScorchedServer::instance()->
-		getTankContainer().getTankById(playerId);
+		getTargetContainer().getTankById(playerId);
 	if (!targetTank) return false;
 
 	adminLog(ChannelText("info",

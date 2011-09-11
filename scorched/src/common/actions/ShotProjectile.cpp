@@ -26,9 +26,10 @@
 #endif
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeTex.h>
-#include <tanket/TanketContainer.h>
 #include <tank/TankViewPoints.h>
+#include <target/TargetContainer.h>
 #include <tankai/TankAI.h>
+#include <tanket/Tanket.h>
 #include <common/Defines.h>
 #include <common/OptionsScorched.h>
 #include <engine/ScorchedContext.h>
@@ -112,8 +113,8 @@ void ShotProjectile::collision(PhysicsParticleObject &position,
 	if (!collision_)
 	{
 		// Tell all AIs about this collision
-		std::map<unsigned int, Tanket *> tanks = 
-			context_->getTanketContainer().getAllTankets();
+		std::map<unsigned int, Tanket *> &tanks = 
+			context_->getTargetContainer().getTankets();
 		std::map<unsigned int, Tanket *>::iterator itor;
 		for (itor = tanks.begin();
 			itor != tanks.end();

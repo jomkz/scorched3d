@@ -87,7 +87,7 @@ ComsSyncCheckMessage::ComsSyncCheckMessage(unsigned int syncId,
 	{
 		Target *target = (*itor).second;
 		targetsBuffer_.addToBuffer(target->getPlayerId());
-		targetsBuffer_.addToBuffer(target->isTarget());
+		targetsBuffer_.addToBuffer((int) target->getType());
 
 		NetBuffer tmpBuffer;
 		target->writeMessage(tmpBuffer);

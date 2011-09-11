@@ -25,7 +25,8 @@
 #include <server/ServerSimulator.h>
 #include <server/ServerCommon.h>
 #include <server/ServerMessageHandler.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
 #include <tankai/TankAI.h>
@@ -55,7 +56,7 @@ bool ServerStateEnoughPlayers::enoughPlayers()
 	}
 
 	// Make sure we have enough players to play a game
-	if (ScorchedServer::instance()->getTankContainer().getNoOfNonSpectatorTanks() <
+	if (ScorchedServer::instance()->getTargetContainer().getNoOfNonSpectatorTanks() <
 		ScorchedServer::instance()->getOptionsGame().getNoMinPlayers())
 	{
 		checkExit();
@@ -82,7 +83,7 @@ bool ServerStateEnoughPlayers::enoughPlayers()
 			teamCount[i] = 0;
 		}
 		std::map<unsigned int, Tank *> &playingTanks = 
-			ScorchedServer::instance()->getTankContainer().getAllTanks();
+			ScorchedServer::instance()->getTargetContainer().getTanks();
 		std::map<unsigned int, Tank *>::iterator mainitor;
 		for (mainitor = playingTanks.begin();
 			 mainitor != playingTanks.end();
@@ -136,7 +137,7 @@ int ServerStateEnoughPlayers::countBots(ScorchedContext &context)
 	// or an ai
 	int noPlayers = 0;
 	std::map<unsigned int, Tank *> &playingTanks = 
-		context.getTankContainer().getAllTanks();
+		context.getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = playingTanks.begin();
 		mainitor != playingTanks.end();
@@ -159,7 +160,7 @@ void ServerStateEnoughPlayers::removeBots(int requiredPlayers, int noPlayers)
 	// Get this list of computer players and sort them
 	// by the time they have been playing for
 	std::map<unsigned int, Tank *> &playingTanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
+		ScorchedServer::instance()->getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = playingTanks.begin();
 		mainitor != playingTanks.end();
@@ -195,7 +196,7 @@ void ServerStateEnoughPlayers::addBots(int requiredPlayers, int noPlayers)
 	// Get this list of computer players and sort them
 	// by ai name
 	std::map<unsigned int, Tank *> &playingTanks = 
-		ScorchedServer::instance()->getTankContainer().getAllTanks();
+		ScorchedServer::instance()->getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator mainitor;
 	for (mainitor = playingTanks.begin();
 		mainitor != playingTanks.end();

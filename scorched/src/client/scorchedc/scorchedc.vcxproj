@@ -333,7 +333,6 @@
     <ClCompile Include="..\..\common\tanket\TanketAccessories.cpp" />
     <ClCompile Include="..\..\common\tanket\TanketAutoDefense.cpp" />
     <ClCompile Include="..\..\common\tanket\TanketBatteries.cpp" />
-    <ClCompile Include="..\..\common\tanket\TanketContainer.cpp" />
     <ClCompile Include="..\..\common\tanket\TanketShotInfo.cpp" />
     <ClCompile Include="..\..\common\tanket\TanketType.cpp" />
     <ClCompile Include="..\..\common\tanket\TanketTypes.cpp" />
@@ -356,7 +355,6 @@
     <ClCompile Include="..\..\common\tank\TankAvatar.cpp" />
     <ClCompile Include="..\..\common\tank\TankCamera.cpp" />
     <ClCompile Include="..\..\common\tank\TankColorGenerator.cpp" />
-    <ClCompile Include="..\..\common\tank\TankContainer.cpp" />
     <ClCompile Include="..\..\common\tank\TankDeadContainer.cpp" />
     <ClCompile Include="..\..\common\tank\TankLib.cpp" />
     <ClCompile Include="..\..\common\tank\TankModel.cpp" />
@@ -1077,7 +1075,6 @@
     <ClInclude Include="..\..\common\tanket\TanketAccessories.h" />
     <ClInclude Include="..\..\common\tanket\TanketAutoDefense.h" />
     <ClInclude Include="..\..\common\tanket\TanketBatteries.h" />
-    <ClInclude Include="..\..\common\tanket\TanketContainer.h" />
     <ClInclude Include="..\..\common\tanket\TanketShotInfo.h" />
     <ClInclude Include="..\..\common\tanket\TanketType.h" />
     <ClInclude Include="..\..\common\tanket\TanketTypes.h" />
@@ -1100,7 +1097,6 @@
     <ClInclude Include="..\..\common\tank\TankAvatar.h" />
     <ClInclude Include="..\..\common\tank\TankCamera.h" />
     <ClInclude Include="..\..\common\tank\TankColorGenerator.h" />
-    <ClInclude Include="..\..\common\tank\TankContainer.h" />
     <ClInclude Include="..\..\common\tank\TankDeadContainer.h" />
     <ClInclude Include="..\..\common\tank\TankLib.h" />
     <ClInclude Include="..\..\common\tank\TankModel.h" />

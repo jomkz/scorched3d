@@ -23,7 +23,8 @@
 #include <server/ServerSimulator.h>
 #include <server/ServerState.h>
 #include <simactions/TankGiftSimAction.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <common/Logger.h>
 
@@ -60,7 +61,7 @@ bool ServerGiftMoneyHandler::processMessage(
 
 	// Check that is player still exists
 	Tank *fromTank = ScorchedServer::instance()->
-		getTankContainer().getTankById(fromPlayerId);
+		getTargetContainer().getTankById(fromPlayerId);
 	if (!fromTank)
 	{
 		Logger::log( "ERROR: Player gifting does not exist");

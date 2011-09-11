@@ -31,7 +31,8 @@
 #include <common/OptionsTransient.h>
 #include <common/Defines.h>
 #include <weapons/AccessoryStore.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankScore.h>
 #include <tank/TankState.h>
 #include <tanket/TanketAccessories.h>
@@ -206,14 +207,14 @@ void InventoryDialog::buttonDown(unsigned int id)
 
 Tank *InventoryDialog::getCurrentTank()
 {
-	Tank *currentTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+	Tank *currentTank = ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (!currentTank) 
 	{
 		currentTank = 0;
 		unsigned int currentDestinationId = ScorchedClient::instance()->
-			getTankContainer().getCurrentDestinationId();
+			getTargetContainer().getCurrentDestinationId();
 		std::map<unsigned int, Tank *> &tanks = ScorchedClient::instance()->
-			getTankContainer().getAllTanks();
+			getTargetContainer().getTanks();
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = tanks.begin();
 			itor != tanks.end();

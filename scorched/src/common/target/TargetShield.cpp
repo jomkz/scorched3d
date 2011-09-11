@@ -20,7 +20,7 @@
 
 #include <target/TargetShield.h>
 #include <target/TargetSpace.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <weapons/AccessoryStore.h>
 #include <weapons/ShieldRound.h>
 #include <weapons/ShieldSquare.h>
@@ -81,10 +81,10 @@ void TargetShield::setShieldPower(fixed power)
 
 bool TargetShield::returnGraphical()
 {
-	if (target_->isTarget()) return false;
+	if (target_->getType() != Target::TypeTank) return false;
 	if (!context_.getOptionsGame().getDelayedDefenseActivation()) return false;
 	Tank *thisTank = (Tank *) target_;
-	Tank *currentTank = context_.getTankContainer().getCurrentTank();
+	Tank *currentTank = context_.getTargetContainer().getCurrentTank();
 	if (thisTank == currentTank) return false;
 	if (!currentTank) return false;
 

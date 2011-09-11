@@ -30,7 +30,7 @@
 #include <common/ToolTipResource.h>
 #include <client/ClientChannelManager.h>
 #include <client/ScorchedClient.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <lang/LangResource.h>
 #include <lang/LangParam.h>
 

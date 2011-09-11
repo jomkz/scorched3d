@@ -19,7 +19,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <tank/TankWeaponSwitcher.h>
-#include <tank/TankContainer.h>
+#include <Tank/Tank.h>
+#include <target/TargetContainer.h>
 #include <target/TargetLife.h>
 #include <weapons/AccessoryStore.h>
 #include <weapons/WeaponMoveTank.h>
@@ -44,12 +45,12 @@ TankWeaponSwitcher::~TankWeaponSwitcher()
 void TankWeaponSwitcher::switchWeapon(ScorchedContext &context, Tanket *tanket, Accessory *currentWeapon, Accessory *newWeapon) 
 {
 #ifndef S3D_SERVER
-	if (!context.getServerMode() && !tanket->isTarget())
+	if (!context.getServerMode() && tanket->getType() == Target::TypeTank)
 	{
 		Tank *tank = (Tank *) tanket;
 
 		// Only show this information on this tanks client
-		if (ScorchedClient::instance()->getTankContainer().getCurrentDestinationId() ==
+		if (ScorchedClient::instance()->getTargetContainer().getCurrentDestinationId() ==
 			tank->getDestinationId() &&
 			ScorchedClient::instance()->getGameState().getState() == ClientState::StatePlaying)
 		{

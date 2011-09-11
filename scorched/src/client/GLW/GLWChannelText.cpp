@@ -28,7 +28,8 @@
 #include <XML/XMLParser.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientChannelManager.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <tank/TankColorGenerator.h>
 #include <common/ToolTipResource.h>
@@ -662,9 +663,9 @@ void GLWChannelText::buttonDown(unsigned int id)
 
 	// For each tank
 	Tank *currentTank = 
-		ScorchedClient::instance()->getTankContainer().getCurrentTank();
+		ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	std::map<unsigned int, Tank *> &tanks = ScorchedClient::instance()->
-		getTankContainer().getAllTanks();
+		getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator tankItor;
 	for (tankItor = tanks.begin();
 		tankItor != tanks.end();
@@ -773,7 +774,7 @@ void GLWChannelText::itemSelected(GLWSelectorEntry *entry, int position)
 	case eMuteSelectorStart:
 		{
 			Tank *tank = 
-				ScorchedClient::instance()->getTankContainer().
+				ScorchedClient::instance()->getTargetContainer().
 					getTankByName(entry->getText());
 			if (tank) 
 			{
@@ -795,7 +796,7 @@ void GLWChannelText::itemSelected(GLWSelectorEntry *entry, int position)
 	case eWhisperSelectorStart:
 		{
 			Tank *tank = 
-				ScorchedClient::instance()->getTankContainer().
+				ScorchedClient::instance()->getTargetContainer().
 					getTankByName(entry->getText());
 			if (tank)
 			{
@@ -885,7 +886,7 @@ bool GLWChannelText::channelValid(const char *channelName)
 	bool whisperDestValid = false;
 	if (whisperDest_)
 	{
-		Tank *whisperTank = ScorchedClient::instance()->getTankContainer().
+		Tank *whisperTank = ScorchedClient::instance()->getTargetContainer().
 			getTankById(whisperDest_);
 		if (whisperTank)
 		{

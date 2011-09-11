@@ -40,7 +40,7 @@
 #include <engine/ActionController.h>
 #include <engine/SaveGame.h>
 #include <tank/TankDeadContainer.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankModelStore.h>
 #include <tanket/TanketTypes.h>
 #include <tankai/TankAIStrings.h>
@@ -77,7 +77,7 @@ bool ScorchedServer::startServer(const ScorchedServerSettings &settings,
 {
 #ifndef S3D_SERVER
 	if (ClientParams::instance()->getConnectedToServer() &&
-		ScorchedClient::instance()->getTankContainer().getCurrentDestinationId() != 0)
+		ScorchedClient::instance()->getTargetContainer().getCurrentDestinationId() != 0)
 	{
 		DIALOG_ASSERT(0);
 	}

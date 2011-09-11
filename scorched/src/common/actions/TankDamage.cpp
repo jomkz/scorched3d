@@ -36,7 +36,7 @@
 #include <engine/ScorchedContext.h>
 #include <engine/ActionController.h>
 #include <engine/Simulator.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tank/TankTeamScore.h>
 #include <tank/TankScore.h>
 #include <tank/TankState.h>
@@ -71,7 +71,7 @@ void TankDamage::init()
 	{
 		Target *damagedTarget = 
 			context_->getTargetContainer().getTargetById(damagedPlayerId_);
-		if (damagedTarget && !damagedTarget->isTarget())
+		if (damagedTarget && damagedTarget->getType() == Target::TypeTank)
 		{
 			TankViewPointProvider *vPoint = new TankViewPointProvider();
 			vPoint->setValues(damagedTarget->getLife().getTargetPosition());
@@ -114,11 +114,11 @@ void TankDamage::calculateDamage()
 	if (!damagedTarget || !damagedTarget->getAlive()) return;
 
 	// Tell this tanks ai that is has been hurt by another tank
-	if (!damagedTarget->isTarget())
+	if (damagedTarget->getType() != Target::TypeTarget)
 	{
 		// Tell all AIs about this collision
 		std::map<unsigned int, Tanket *> tankets = 
-			context_->getTanketContainer().getAllTankets();
+			context_->getTargetContainer().getTankets();
 		std::map<unsigned int, Tanket *>::iterator itor;
 		for (itor = tankets.begin();
 			itor != tankets.end();
@@ -196,9 +196,9 @@ void TankDamage::calculateDamage()
 			damagedTarget->getLife().getLife();
 		damagedTarget->getLife().setLife(damagedTarget->getLife().getLife() - damage_);
 		if (context_->getOptionsGame().getLimitPowerByHealth() &&
-			!damagedTarget->isTarget())
+			damagedTarget->getType() != Target::TypeTarget)
 		{
-			Tank *damagedTank = (Tank *) damagedTarget;
+			Tanket *damagedTank = (Tanket *) damagedTarget;
 			damagedTank->getShotInfo().changePower(0, true);
 		}
 
@@ -216,8 +216,8 @@ void TankDamage::calculateDamage()
 		// Add any score got from this endevour
 		// Should always be a tank that has fired
 		Tank *firedTank = 
-			context_->getTankContainer().getTankById(firedPlayerId);
-		if (firedTank && !damagedTarget->isTarget())
+			context_->getTargetContainer().getTankById(firedPlayerId);
+		if (firedTank && damagedTarget->getType() == Target::TypeTank)
 		{	
 			Tank *damagedTank = (Tank *) damagedTarget;
 
@@ -311,7 +311,7 @@ void TankDamage::calculateDamage()
 				{
 					unsigned int hurtByPlayer = (*itor);
 					Tank *hurtByTank = 
-						context_->getTankContainer().getTankById(hurtByPlayer);
+						context_->getTargetContainer().getTankById(hurtByPlayer);
 					if (!hurtByTank) continue;
 
 					// Only score when the tank does not hurt itself
@@ -346,7 +346,7 @@ void TankDamage::calculateDamage()
 			// The tank has died, make it blow up etc.
 			calculateDeath();
 
-			if (!damagedTarget->isTarget())
+			if (damagedTarget->getType() == Target::TypeTank)
 			{
 				// The tank is now dead
 				Tank *damagedTank = (Tank *) damagedTarget;
@@ -393,7 +393,7 @@ void TankDamage::calculateDamage()
 	// DO LAST
 	// If the tank is a target, remove the target
 	if (!damagedTarget->getAlive() &&
-		damagedTarget->isTarget())
+		damagedTarget->getType() != Target::TypeTank)
 	{
 		Target *removedTarget = 
 			context_->getTargetContainer().
@@ -451,7 +451,7 @@ void TankDamage::logDeath()
 
 	Target *killedTarget = 
 		context_->getTargetContainer().getTargetById(damagedPlayerId_);
-	if (killedTarget->isTarget()) return;
+	if (killedTarget->getType() != Target::TypeTank) return;
 
 	Tank *killedTank = (Tank *) killedTarget;
 
@@ -467,7 +467,7 @@ void TankDamage::logDeath()
 	}
 
 	Tank *firedTank = 0;
-	if (firedPlayerId != 0) firedTank = context_->getTankContainer().getTankById(firedPlayerId);
+	if (firedPlayerId != 0) firedTank = context_->getTargetContainer().getTankById(firedPlayerId);
 	else
 	{
 		Vector white(1.0f, 1.0f, 1.0f);

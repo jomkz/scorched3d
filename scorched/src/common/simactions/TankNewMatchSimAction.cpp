@@ -19,8 +19,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <simactions/TankNewMatchSimAction.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tanket/TanketAccessories.h>
 #include <tank/TankScore.h>
 #include <common/Logger.h>
@@ -43,7 +44,7 @@ TankNewMatchSimAction::~TankNewMatchSimAction()
 
 bool TankNewMatchSimAction::invokeAction(ScorchedContext &context)
 {
-	Tank *tank = context.getTankContainer().getTankById(playerId_);
+	Tank *tank = context.getTargetContainer().getTankById(playerId_);
 	if (!tank) return false;
 
 	tank->newMatch();

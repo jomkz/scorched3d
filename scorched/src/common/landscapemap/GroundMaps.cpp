@@ -25,8 +25,8 @@
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <landscapedef/LandscapeDefinitionCache.h>
+#include <target/Target.h>
 #include <target/TargetContainer.h>
-#include <tank/TankContainer.h>
 #include <common/Logger.h>
 #include <tankai/TankAIAdder.h>
 #include <image/ImageFactory.h>
@@ -178,7 +178,7 @@ void GroundMaps::generateObjects(
 	{
 		unsigned int playerId = (*itor).first;
 		Target *target = (*itor).second;
-		if (target->isTarget())
+		if (target->getType() != Target::TypeTank)
 		{
 			Target *removedTarget = 
 				context.getTargetContainer().removeTarget(playerId);

@@ -43,7 +43,8 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <landscape/Landscape.h>
 #include <lang/LangResource.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankCamera.h>
 #include <target/TargetRenderer.h>
 #include <net/NetInterface.h>
@@ -234,8 +235,8 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	// Reset camera positions for each tank
 	bool playerTanks = false;
 	std::map<unsigned int, Tank *>::iterator tankItor;
-	for (tankItor = ScorchedClient::instance()->getTankContainer().getAllTanks().begin();
-		tankItor != ScorchedClient::instance()->getTankContainer().getAllTanks().end();
+	for (tankItor = ScorchedClient::instance()->getTargetContainer().getTanks().begin();
+		tankItor != ScorchedClient::instance()->getTargetContainer().getTanks().end();
 		++tankItor)
 	{
 		Tank *current = (*tankItor).second;

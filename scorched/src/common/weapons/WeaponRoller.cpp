@@ -25,6 +25,7 @@
 #include <common/Defines.h>
 #include <engine/ActionController.h>
 #include <engine/Simulator.h>
+#include <target/Target.h>
 #include <target/TargetContainer.h>
 #include <target/TargetShield.h>
 #include <target/TargetLife.h>

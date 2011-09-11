@@ -26,7 +26,7 @@
 #include <client/ClientState.h>
 #include <client/ScorchedClient.h>
 #include <server/ScorchedServer.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
 #include <tanket/TanketAccessories.h>
 #include <tank/TankState.h>
 #include <tank/TankModel.h>
@@ -161,7 +161,7 @@ void TankMenus::clearTracerLines()
 void TankMenus::showInventory()
 {
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedClient::instance()->getTankContainer().getAllTanks();
+		ScorchedClient::instance()->getTargetContainer().getTanks();
 	std::map<unsigned int, Tank *>::iterator itor;
 	for (itor = tanks.begin();
 		itor != tanks.end();
@@ -206,7 +206,7 @@ void TankMenus::showTargetDetails()
 		Target *target = (*itor).second;
 
 		std::string name = target->getCStrName();
-		if (target->isTarget() &&
+		if (target->getType() != Target::TypeTank &&
 			target->getRenderer() &&
 			name.empty())
 		{
@@ -239,9 +239,9 @@ void TankMenus::showTargetDetails()
 void TankMenus::showTankDetails()
 {
 	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedClient::instance()->getTankContainer().getAllTanks();
+		ScorchedClient::instance()->getTargetContainer().getTanks();
 	Tank *currentTank = 
-		ScorchedClient::instance()->getTankContainer().getCurrentTank();
+		ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 
 	Console::instance()->addLine(false,
 		"--Tank Dump-----------------------------------------");
@@ -259,7 +259,7 @@ void TankMenus::showTankDetails()
 			if (ScorchedServer::serverStarted())
 			{
 				Tank *otherTank = ScorchedServer::instance()->
-					getTankContainer().getTankById(tank->getPlayerId());
+					getTargetContainer().getTankById(tank->getPlayerId());
 				if (otherTank && !otherTank->getTankAI())
 				{
 					description = "Human";
@@ -354,7 +354,7 @@ TankMenus::PlayerMenu::PlayerMenu()
 void TankMenus::PlayerMenu::menuSelection(const char* menuName, 
 	const int position, GLMenuItem &item)
 {
-	Tank *firstTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+	Tank *firstTank = ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (firstTank)
 	{
 		switch (position)
@@ -392,7 +392,7 @@ bool TankMenus::PlayerMenu::getEnabled(const char* menuName)
 	if (ScorchedClient::instance()->getGameState().getState() 
 		!= ClientState::StatePlaying) return false;
 
-	Tank *firstTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+	Tank *firstTank = ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (firstTank)
 	{
 		return (firstTank->getState().getState() == TankState::sNormal);
@@ -420,7 +420,7 @@ void TankMenus::AccessoryMenu::menuSelection(const char* menuName,
 	const int position, GLMenuItem &item)
 {
 	Accessory *accessory = (Accessory *) item.getUserData();
-	Tank *tank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+	Tank *tank = ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (tank && accessory)
 	{
 		switch (accessory->getType())
@@ -459,7 +459,7 @@ void TankMenus::AccessoryMenu::menuSelection(const char* menuName,
 bool TankMenus::AccessoryMenu::getMenuItems(const char* menuName, 
 											std::list<GLMenuItem> &result)
 {
-	Tank *firstTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+	Tank *firstTank = ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (!firstTank) return true;
 
 	std::string lastGroup;
@@ -533,7 +533,7 @@ bool TankMenus::AccessoryMenu::getEnabled(const char* menuName)
 	if (ScorchedClient::instance()->getGameState().getState() != 
 		ClientState::StatePlaying) return false;
 
-	Tank *firstTank = ScorchedClient::instance()->getTankContainer().getCurrentTank();
+	Tank *firstTank = ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (firstTank)
 	{
 		return (firstTank->getState().getState() == TankState::sNormal);

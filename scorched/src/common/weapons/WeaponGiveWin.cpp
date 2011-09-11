@@ -21,7 +21,8 @@
 #include <weapons/WeaponGiveWin.h>
 #include <weapons/AccessoryStore.h>
 #include <engine/ActionController.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankTeamScore.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankScore.h>
@@ -72,7 +73,7 @@ void WeaponGiveWin::weaponCallback(
 		int team = winningTeam_;
 		if (team == 0) 
 		{
-			Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
+			Tank *tank = context.getTargetContainer().getTankById(weaponContext.getPlayerId());
 			if (!tank) return;
 
 			team = tank->getTeam();
@@ -90,7 +91,7 @@ void WeaponGiveWin::weaponCallback(
 	}
 	else
 	{
-		Tank *tank = context.getTankContainer().getTankById(weaponContext.getPlayerId());
+		Tank *tank = context.getTargetContainer().getTankById(weaponContext.getPlayerId());
 		if (!tank) return;
 
 		tank->getScore().setWonGame();

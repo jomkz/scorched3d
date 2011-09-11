@@ -304,6 +304,9 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 	static Target *tmpTarget = new Target(0, LangString(),
 		ScorchedServer::instance()->getContext());
 	tmpTarget->getLife().setLife(0); // Make sure not added to target space
+	static Tanket *tmpTanket = new Tanket(ScorchedServer::instance()->getContext(), 0, 
+		LangString());
+	tmpTanket->getLife().setLife(0); // Make sure not added to target space
 	static Tank *tmpTank = new Tank(
 		ScorchedServer::instance()->getContext(),
 		0,
@@ -321,8 +324,8 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 	{
 		unsigned int playerId;
 		if (!clientReader.getFromBuffer(playerId)) return false;
-		bool isTarget;
-		if (!clientReader.getFromBuffer(isTarget)) return false;
+		int targetType;
+		if (!clientReader.getFromBuffer(targetType)) return false;
 		NetBuffer *tmpBuffer = new NetBuffer();
 		if (!clientReader.getFromBuffer(*tmpBuffer)) return false;
 		clientTanks[playerId] = tmpBuffer;
@@ -336,8 +339,8 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 	{
 		unsigned int playerId;
 		if (!serverReader.getFromBuffer(playerId)) return false;
-		bool isTarget;
-		if (!serverReader.getFromBuffer(isTarget)) return false;
+		int targetType;
+		if (!serverReader.getFromBuffer(targetType)) return false;
 		NetBuffer tmpBuffer;
 		if (!serverReader.getFromBuffer(tmpBuffer)) return false;
 		
@@ -359,7 +362,9 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 					Target *target = 0;
 					std::string clientToString, serverToString;
 					{
-						if (isTarget)
+						switch ((Target::TargetType) targetType) 
+						{
+						case Target::TypeTarget:
 						{
 							target = tmpTarget;
 
@@ -373,7 +378,23 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 							tmpTarget->toString(serverToString);
 							tmpTarget->getLife().setLife(0);// Make sure not added to target space
 						}
-						else
+						break;
+						case Target::TypeTanket:
+						{
+							target = tmpTank;
+
+							NetBufferReader clientReader(*clientTank->second);
+							tmpTanket->readMessage(clientReader);
+							tmpTanket->toString(clientToString);
+							tmpTanket->getLife().setLife(0);// Make sure not added to target space
+
+							NetBufferReader serverReader(tmpBuffer);
+							tmpTanket->readMessage(serverReader);
+							tmpTanket->toString(serverToString);
+							tmpTanket->getLife().setLife(0);// Make sure not added to target space
+						}
+						break;
+						case Target::TypeTank:
 						{
 							target = tmpTank;
 
@@ -386,7 +407,9 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 							tmpTank->readMessage(serverReader);
 							tmpTank->toString(serverToString);
 							tmpTank->getState().setState(TankState::sDead);// Make sure not added to target space
-						}				
+						}
+						break;
+						}
 					}				
 
 					// Output information
@@ -402,7 +425,7 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 					}
 					syncCheckLog(S3D::formatStringBuffer(
 						"**** SyncCheck %s differ %u Dest %u Sync %u Groups %s",
-						isTarget?"target":"tank",
+						targetType==Target::TypeTarget?"target":targetType==Target::TypeTank?"tank":"tanket",
 						playerId,
 						destinationId, client->getSyncId(), groupnames.c_str()));
 					syncCheckLog(S3D::formatStringBuffer("Server : %s",
@@ -414,18 +437,30 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 					{
 						clientTank->second->setBufferUsed(u);
 						Logger::addLogger(syncCheckFileLogger);
-						if (isTarget)
+						switch ((Target::TargetType) targetType) 
+						{
+						case Target::TypeTarget:
 						{
 							NetBufferReader reader(*clientTank->second);
 							tmpTarget->readMessage(reader);
 							tmpTarget->getLife().setLife(0);// Make sure not added to target space
 						}
-						else
+						break;
+						case Target::TypeTanket:
+						{
+							NetBufferReader reader(*clientTank->second);
+							tmpTanket->readMessage(reader);
+							tmpTanket->getLife().setLife(0);// Make sure not added to target space
+						}
+						break;
+						case Target::TypeTank:
 						{
 							NetBufferReader reader(*clientTank->second);
 							tmpTank->readMessage(reader);
 							tmpTank->getState().setState(TankState::sDead);// Make sure not added to target space
-						}				
+						}
+						break;
+						}
 						Logger::remLogger(syncCheckFileLogger);
 					}
 					break;

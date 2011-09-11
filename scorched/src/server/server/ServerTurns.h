@@ -69,31 +69,14 @@ protected:
 		bool startedMove_;
 		fixed moveTime_;
 	};
-	struct WaitingPlayer
-	{
-		WaitingPlayer(
-			fixed waitTime,
-			SimAction *action, 
-			SimulatorI *callback) :
-			waitTime_(waitTime),
-			action_(action),
-			callback_(callback)
-		{
-		}
-
-		fixed waitTime_;
-		SimAction *action_;
-		SimulatorI *callback_;
-	};
 
 	bool waitForShots_;
 	ShotsState shotsState_;
 	SimulatorIAdapter<ServerTurns> *shotsStarted_, *moveStarted_;
 	std::map<unsigned int, PlayingPlayer*> playingPlayers_;
-	std::map<unsigned int, WaitingPlayer*> waitingPlayers_;
 
 	bool showScore();
-	void playMove(Tanket *tank, unsigned int moveId, fixed maximumShotTime, fixed delayStartMoveTime);
+	void playMove(Tanket *tank, unsigned int moveId, fixed maximumShotTime);
 	void playMoveFinished(Tanket *tank);
 	void playShots(std::list<ComsPlayedMoveMessage *> messages, unsigned int moveId, bool timeOutPlayers);
 	void shotsStarted(fixed simulationTime, SimAction *action);

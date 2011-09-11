@@ -20,7 +20,8 @@
 
 #include <engine/Simulator.h>
 #include <engine/ScorchedContext.h>
-#include <tank/TankContainer.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <target/TargetLife.h>
 #include <movement/TargetMovement.h>
@@ -158,7 +159,7 @@ void Simulator::newLevel()
 	if (context_->getOptionsGame().getActionSyncCheck()) 
 	{
 		std::map<unsigned int, Tank *> &tanks =
-			context_->getTankContainer().getAllTanks();
+			context_->getTargetContainer().getTanks();
 		std::map<unsigned int, Tank *>::iterator itor;
 		for (itor = tanks.begin();
 			itor != tanks.end();

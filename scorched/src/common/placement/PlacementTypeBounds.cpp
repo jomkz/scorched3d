@@ -26,7 +26,7 @@
 #include <common/Defines.h>
 #include <XML/XMLParser.h>
 
-PlacementTypeBounds::PlacementTypeBounds()
+PlacementTypeBounds::PlacementTypeBounds() : onground(false)
 {
 }
 
@@ -40,12 +40,14 @@ bool PlacementTypeBounds::readXML(XMLNode *node)
 	if (!node->getNamedChild("minbounds", minbounds)) return false;
 	if (!node->getNamedChild("maxbounds", maxbounds)) return false;
 
+	node->getNamedChild("onground", onground, false);
+
 	if (maxbounds[0] - minbounds[0] < 25 ||
 		maxbounds[1] - minbounds[1] < 25 ||
 		maxbounds[2] - minbounds[2] < 10)
 	{
 		return node->returnError(
-			"PlacementTypeBounds bounding box is too small, it must be at least 25x10 units");
+			"PlacementTypeBounds bounding box is too small, it must be at least 25x25x10 units");
 	}
 
 	return PlacementType::readXML(node);
@@ -66,11 +68,23 @@ void PlacementTypeBounds::getPositions(ScorchedContext &context,
 				generator.getRandFixed("PlacementTypeBounds") * (maxbounds[0] - minbounds[0]) + minbounds[0];
 			position.position[1] = 
 				generator.getRandFixed("PlacementTypeBounds") * (maxbounds[1] - minbounds[1]) + minbounds[1];
-			position.position[2] = 
-				generator.getRandFixed("PlacementTypeBounds") * (maxbounds[2] - minbounds[2]) + minbounds[2];
+
+			fixed groundHeight = context.getLandscapeMaps().getGroundMaps().
+				getInterpHeight(position.position[0], position.position[1]);
+
+			if (onground) 
+			{
+				position.position[2] = groundHeight;
+			} 
+			else
+			{
+				position.position[2] = 
+					generator.getRandFixed("PlacementTypeBounds") * (maxbounds[2] - minbounds[2]) + minbounds[2];
+			}
+
+			if (position.position[2] >= groundHeight) break;
 		} 
-		while (context.getLandscapeMaps().getGroundMaps().
-			getInterpHeight(position.position[0], position.position[1]) >= position.position[2]);
+		while (true);
 
 		// Set velocity pointing into the middle
 		FixedVector middle = (maxbounds + minbounds) / 2;
