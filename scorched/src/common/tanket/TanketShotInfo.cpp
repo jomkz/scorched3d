@@ -32,7 +32,8 @@ TanketShotInfo::TanketShotInfo(ScorchedContext &context) :
 	power_(1000), maxPower_(1000),
 	tanket_(0), context_(context),
 	selectPositionX_(0), selectPositionY_(0),
-	moveId_(0), missedMoves_(0), skippedShots_(0)
+	moveId_(0), missedMoves_(0), skippedShots_(0),
+	useNormalMoves_(true)
 {
 	turretRotXY_ = 0;
 	turretRotYZ_ = 45;

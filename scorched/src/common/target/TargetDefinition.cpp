@@ -25,6 +25,7 @@
 	#include <tankgraph/TargetRendererImplTarget.h>
 #endif
 #include <tanket/Tanket.h>
+#include <tanket/TanketShotInfo.h>
 #include <target/TargetDefinition.h>
 #include <target/TargetLife.h>
 #include <target/TargetShield.h>
@@ -46,7 +47,7 @@ TargetDefinition::TargetDefinition() :
 	driveovertodestroy_(false), flattendestroy_(false), border_(0), 
 	displaydamage_(true), displayshadow_(true), displayhardwareshadow_(true),
 	nodamageburn_(false), nocollision_(false), nofalling_(false),
-	nofallingdamage_(false), billboard_(false), team_(0)
+	nofallingdamage_(false), billboard_(false), team_(0), useNormalMoves_(true)
 {
 	shadow_.setDrawShadow(false);
 }
@@ -100,6 +101,7 @@ bool TargetDefinition::readXML(XMLNode *node)
 
 	node->getNamedChild("ainame", ainame_, false);
 	node->getNamedChild("team", team_, false);
+	node->getNamedChild("usenormalmoves", useNormalMoves_, false);
 
 	if (!shadow_.readXML(node)) return false;
 	if (!groups_.readXML(node)) return false;
@@ -135,6 +137,7 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 			ai = ai->createCopy(tanket);
 		}
 		tanket->setTankAI(ai);
+		tanket->getShotInfo().setUseNormalMoves(useNormalMoves_);
 		target = tanket;
 	}
 	target->getLife().setBoundingSphere(boundingsphere_);

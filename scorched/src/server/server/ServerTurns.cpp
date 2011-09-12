@@ -39,7 +39,8 @@
 
 ServerTurns::ServerTurns(bool waitForShots) : 
 	shotsState_(eShotsNone),
-	waitForShots_(waitForShots)
+	waitForShots_(waitForShots),
+	nextNonNormalMoveId_(0)
 {
 	shotsStarted_ = new SimulatorIAdapter<ServerTurns>(this,  &ServerTurns::shotsStarted);
 	moveStarted_ = new SimulatorIAdapter<ServerTurns>(this,  &ServerTurns::moveStarted);
@@ -72,6 +73,18 @@ void ServerTurns::enterState()
 		delete playingItor->second;
 	}
 	playingPlayers_.clear();
+	timedPlayers_.clear();
+
+	std::map<unsigned int, Tanket*> &tankets = 
+		ScorchedServer::instance()->getTargetContainer().getTankets();
+	std::map<unsigned int, Tanket*>::iterator itor;
+	for (itor = tankets.begin();
+		itor != tankets.end();
+		++itor)
+	{
+		Tanket *tanket = itor->second;
+		tanket->getShotInfo().setMoveId(0);
+	}
 
 	internalEnterState();
 }
@@ -101,7 +114,6 @@ void ServerTurns::simulate(fixed frameTime)
 	std::list<unsigned int>::iterator processPlayersItor;
 
 	// Remove time from playing players
-	processPlayers.clear();
 	std::map<unsigned int, PlayingPlayer*>::iterator playingItor;
 	for (playingItor = playingPlayers_.begin();
 		playingItor != playingPlayers_.end();
@@ -128,8 +140,41 @@ void ServerTurns::simulate(fixed frameTime)
 		moveFinished(timedOutMessage);
 	}
 
-	// Remove time from waiting players
-	processPlayers.clear();
+	// Fire tankets that are not using the normal move mechanics
+	std::map<unsigned int, Tanket*> &tankets = 
+		ScorchedServer::instance()->getTargetContainer().getTankets();
+	std::map<unsigned int, Tanket*>::iterator itor;
+	for (itor = tankets.begin();
+		itor != tankets.end();
+		++itor)
+	{
+		Tanket *tanket = itor->second;
+		if (tanket->getShotInfo().getMoveId() == 0 &&
+			!tanket->getShotInfo().getUseNormalMoves() &&
+			tanket->getTankAI())
+		{
+			// Check player isn't delayed
+			if (timedPlayers_.find(tanket->getPlayerId()) ==
+				timedPlayers_.end())
+			{
+				playMove(tanket, ++nextNonNormalMoveId_, fixed(0));
+			}
+		}
+	}
+
+	// Process the delay (if any)
+	std::map<unsigned int, fixed>::iterator timedItor;
+	for (timedItor = timedPlayers_.begin();
+		timedItor != timedPlayers_.end();
+		++timedItor)
+	{
+		timedItor->second -= frameTime;
+		if (timedItor->second <= 0)
+		{
+			timedPlayers_.erase(timedItor);
+			break;
+		}
+	}	
 
 	// Do other stuff
 	internalSimulate(frameTime);
@@ -154,7 +199,38 @@ void ServerTurns::moveStarted(fixed simulationTime, SimAction *action)
 
 void ServerTurns::moveFinished(ComsPlayedMoveMessage &playedMessage)
 {
-	internalMoveFinished(playedMessage);
+	unsigned int playerId = playedMessage.getPlayerId();
+	unsigned int moveId = playedMessage.getMoveId();
+
+	// Check to see if this a tanket that is not using the normal move mechanics
+	Tanket *tanket = ScorchedServer::instance()->getTargetContainer().getTanketById(playerId);
+	if (tanket && !tanket->getShotInfo().getUseNormalMoves())
+	{
+		if (tanket->getShotInfo().getMoveId() == moveId)
+		{
+			playMoveFinished(tanket);
+			if (tanket->getAlive() &&
+				tanket->getTankAI())
+			{			
+				// Make the move
+				std::list<ComsPlayedMoveMessage*> messages;
+				messages.push_back(new ComsPlayedMoveMessage(playedMessage));
+				playShots(messages, ++nextNonNormalMoveId_, false);
+
+				// Add some thinking time on the AIs shots
+				int aiShotTime = ScorchedServer::instance()->getOptionsGame().getAIShotTime();
+				aiShotTime += (rand() % 5) - 3;
+				if (aiShotTime > 0)
+				{
+					timedPlayers_[tanket->getPlayerId()] = fixed(aiShotTime);
+				}
+			}
+		}
+	}
+	else
+	{
+		internalMoveFinished(playedMessage);
+	}
 }
 
 bool ServerTurns::finished()

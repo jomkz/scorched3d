@@ -73,6 +73,8 @@ public:
 	void setMissedMoves(int miss) { missedMoves_ = miss; }
 	void setSkippedShots(int skipped) { skippedShots_ = skipped; }
 	int getSkippedShots() { return skippedShots_; }
+	void setUseNormalMoves(bool useNormalMoves) { useNormalMoves_ = useNormalMoves; }
+	bool getUseNormalMoves() { return useNormalMoves_; }
 
 	// Serialize the tank
 	bool writeMessage(NamedNetBuffer &buffer);
@@ -82,6 +84,7 @@ protected:
 	ScorchedContext &context_;
 	Tanket *tanket_;
 
+	bool useNormalMoves_;
 	unsigned int moveId_;
 	int missedMoves_;
 	int skippedShots_;

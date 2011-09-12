@@ -74,6 +74,8 @@ void ServerTurnsSequential::internalEnterState()
 			++itor)
 		{
 			Tanket *tanket = itor->second;
+			if (!tanket->getShotInfo().getUseNormalMoves()) continue;
+
 			tanket->getShotInfo().setMoveId(0);
 			if (tanket->getType() == Target::TypeTanket)
 			{

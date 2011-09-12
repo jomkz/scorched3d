@@ -70,10 +70,12 @@ protected:
 		fixed moveTime_;
 	};
 
+	unsigned int nextNonNormalMoveId_;
 	bool waitForShots_;
 	ShotsState shotsState_;
 	SimulatorIAdapter<ServerTurns> *shotsStarted_, *moveStarted_;
 	std::map<unsigned int, PlayingPlayer*> playingPlayers_;
+	std::map<unsigned int, fixed> timedPlayers_;
 
 	bool showScore();
 	void playMove(Tanket *tank, unsigned int moveId, fixed maximumShotTime);

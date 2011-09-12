@@ -94,6 +94,8 @@ void ServerTurnsSimultaneous::internalSimulate(fixed frameTime)
 		++itor)
 	{
 		Tanket *tanket = itor->second;
+		if (!tanket->getShotInfo().getUseNormalMoves()) continue;
+
 		if (tanket->getShotInfo().getMoveId() != 0)
 		{
 			if (tanket->getAlive())

@@ -46,7 +46,6 @@ void ServerTurnsFree::internalEnterState()
 	nextMoveId_++;
 
 	waitingPlayers_.clear();
-	timedPlayers_.clear();
 
 	std::map<unsigned int, Tanket*> &tankets = 
 		ScorchedServer::instance()->getTargetContainer().getTankets();
@@ -76,6 +75,8 @@ void ServerTurnsFree::internalSimulate(fixed frameTime)
 		++itor)
 	{
 		Tanket *tanket = itor->second;
+		if (!tanket->getShotInfo().getUseNormalMoves()) continue;
+
 		if (tanket->getShotInfo().getMoveId() != 0)
 		{
 			if (tanket->getAlive())
@@ -142,20 +143,6 @@ void ServerTurnsFree::internalSimulate(fixed frameTime)
 			}
 		}
 	}
-
-	// Process the delay
-	std::map<unsigned int, fixed>::iterator timedItor;
-	for (timedItor = timedPlayers_.begin();
-		timedItor != timedPlayers_.end();
-		++timedItor)
-	{
-		timedItor->second -= frameTime;
-		if (timedItor->second <= 0)
-		{
-			timedPlayers_.erase(timedItor);
-			break;
-		}
-	}	
 }
 
 void ServerTurnsFree::internalMoveFinished(ComsPlayedMoveMessage &playedMessage)

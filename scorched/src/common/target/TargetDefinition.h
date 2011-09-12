@@ -52,6 +52,7 @@ protected:
 	bool displaydamage_, displayshadow_;
 	bool displayhardwareshadow_;
 	bool nofallingdamage_;
+	bool useNormalMoves_;
 	bool billboard_;
 	LangString name_;
 	std::string parachute_;
