@@ -97,6 +97,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\common\actions\TanketMovement.cpp" />
+    <ClCompile Include="..\..\common\actions\TanketResign.cpp" />
+    <ClCompile Include="..\..\common\actions\TargetFalling.cpp" />
     <ClCompile Include="..\..\common\common\ARGParser.cpp" />
     <ClCompile Include="..\..\common\common\ChannelManager.cpp" />
     <ClCompile Include="..\..\common\common\ChannelText.cpp" />
@@ -166,11 +169,7 @@
     <ClCompile Include="..\..\common\actions\ShowScoreAction.cpp" />
     <ClCompile Include="..\..\common\actions\SkyFlash.cpp" />
     <ClCompile Include="..\..\common\actions\SoundAction.cpp" />
-    <ClCompile Include="..\..\common\actions\TankDamage.cpp" />
-    <ClCompile Include="..\..\common\actions\TankFalling.cpp" />
-    <ClCompile Include="..\..\common\actions\TankMovement.cpp" />
     <ClCompile Include="..\..\common\actions\TankRemove.cpp" />
-    <ClCompile Include="..\..\common\actions\TankResign.cpp" />
     <ClCompile Include="..\..\common\actions\TankSay.cpp" />
     <ClCompile Include="..\..\common\actions\Teleport.cpp" />
     <ClCompile Include="..\..\common\3dsparse\aseFile.lex.cpp" />
@@ -341,6 +340,7 @@
     <ClCompile Include="..\..\common\tank\TankWeaponSwitcher.cpp" />
     <ClCompile Include="..\..\common\target\Target.cpp" />
     <ClCompile Include="..\..\common\target\TargetContainer.cpp" />
+    <ClCompile Include="..\..\common\target\TargetDamage.cpp" />
     <ClCompile Include="..\..\common\target\TargetDamageCalc.cpp" />
     <ClCompile Include="..\..\common\target\TargetDefinition.cpp" />
     <ClCompile Include="..\..\common\target\TargetGroup.cpp" />
@@ -839,6 +839,9 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\common\actions\TanketMovement.h" />
+    <ClInclude Include="..\..\common\actions\TanketResign.h" />
+    <ClInclude Include="..\..\common\actions\TargetFalling.h" />
     <ClInclude Include="..\..\common\common\ARGParser.h" />
     <ClInclude Include="..\..\common\common\ChannelManager.h" />
     <ClInclude Include="..\..\common\common\ChannelText.h" />
@@ -913,11 +916,7 @@
     <ClInclude Include="..\..\common\actions\ShowScoreAction.h" />
     <ClInclude Include="..\..\common\actions\SkyFlash.h" />
     <ClInclude Include="..\..\common\actions\SoundAction.h" />
-    <ClInclude Include="..\..\common\actions\TankDamage.h" />
-    <ClInclude Include="..\..\common\actions\TankFalling.h" />
-    <ClInclude Include="..\..\common\actions\TankMovement.h" />
     <ClInclude Include="..\..\common\actions\TankRemove.h" />
-    <ClInclude Include="..\..\common\actions\TankResign.h" />
     <ClInclude Include="..\..\common\actions\TankSay.h" />
     <ClInclude Include="..\..\common\actions\Teleport.h" />
     <ClInclude Include="..\..\common\3dsparse\aseFile.tab.cpp.h" />
@@ -1083,6 +1082,7 @@
     <ClInclude Include="..\..\common\tank\TankWeaponSwitcher.h" />
     <ClInclude Include="..\..\common\target\Target.h" />
     <ClInclude Include="..\..\common\target\TargetContainer.h" />
+    <ClInclude Include="..\..\common\target\TargetDamage.h" />
     <ClInclude Include="..\..\common\target\TargetDamageCalc.h" />
     <ClInclude Include="..\..\common\target\TargetDefinition.h" />
     <ClInclude Include="..\..\common\target\TargetGroup.h" />

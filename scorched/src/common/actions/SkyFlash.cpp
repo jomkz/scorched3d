@@ -26,7 +26,7 @@
 #endif
 
 SkyFlash::SkyFlash() :
-	Action(ACTION_NOT_REFERENCED)
+	Action(false)
 {
 }
 

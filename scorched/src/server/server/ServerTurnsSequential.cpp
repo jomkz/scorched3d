@@ -184,6 +184,6 @@ void ServerTurnsSequential::internalMoveFinished(ComsPlayedMoveMessage &playedMe
 	{
 		std::list<ComsPlayedMoveMessage*> messages;
 		messages.push_back(new ComsPlayedMoveMessage(playedMessage));
-		playShots(messages, moveId, true);
+		playShots(messages, moveId, true, true);
 	}
 }

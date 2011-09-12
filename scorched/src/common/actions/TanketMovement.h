@@ -18,8 +18,8 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_TankMovementh_INCLUDE__)
-#define __INCLUDE_TankMovementh_INCLUDE__
+#if !defined(__INCLUDE_TanketMovementh_INCLUDE__)
+#define __INCLUDE_TanketMovementh_INCLUDE__
 
 #include <actions/Action.h>
 #include <common/FixedVector.h>
@@ -31,19 +31,19 @@
 class TankViewPointProvider;
 class VirtualSoundSource;
 class WeaponMoveTank;
-class Tank;
-class TankMovement : public Action
+class Tanket;
+class TanketMovement : public Action
 {
 public:
-	TankMovement(WeaponFireContext &weaponContext,
+	TanketMovement(WeaponFireContext &weaponContext,
 		WeaponMoveTank *weapon_,
 		int positionX, int positionY);
-	virtual ~TankMovement();
+	virtual ~TanketMovement();
 
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
 	virtual std::string getActionDetails();
-	virtual std::string getActionType() { return "TankMovement"; }
+	virtual std::string getActionType() { return "TanketMovement"; }
 
 protected:
 	// A list containing smooth positions
@@ -79,7 +79,7 @@ protected:
 	unsigned int stepCount_;
 	bool remove_, moving_;
 
-	void moveTank(Tank *tank);
+	void moveTanket(Tanket *tanket);
 	void simulationMove(fixed frameTime);
 
 };

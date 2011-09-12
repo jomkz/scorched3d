@@ -30,7 +30,7 @@
 #include <target/TargetRenderer.h>
 #include <tankai/TankAIStrings.h>
 #include <actions/TankSay.h>
-#include <actions/TankResign.h>
+#include <actions/TanketResign.h>
 #include <common/StatsLogger.h>
 #include <common/OptionsScorched.h>
 #include <server/ServerCommon.h>
@@ -47,8 +47,8 @@ PlayMovesSimAction::PlayMovesSimAction() :
 {
 }
 
-PlayMovesSimAction::PlayMovesSimAction(unsigned int moveId, bool timeoutPlayers) :
-	moveId_(moveId), timeoutPlayers_(timeoutPlayers)
+PlayMovesSimAction::PlayMovesSimAction(unsigned int moveId, bool timeoutPlayers, bool referenced) :
+	moveId_(moveId), timeoutPlayers_(timeoutPlayers), referenced_(referenced)
 {
 }
 
@@ -224,7 +224,8 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 #endif // #ifndef S3D_SERVER
 
 	// Get firing context
-	WeaponFireContext weaponContext(tanket->getPlayerId(), 0);
+	WeaponFireContext weaponContext(tanket->getPlayerId(), referenced_, 
+		(tanket->getType() == Target::TypeTank));
 	FixedVector velocity = tanket->getShotInfo().getVelocityVector() *
 		(tanket->getShotInfo().getPower() + 1);
 	FixedVector position = tanket->getShotInfo().getTankGunPosition();
@@ -256,13 +257,14 @@ void PlayMovesSimAction::tankResigned(ScorchedContext &context,
 		resignTime = 10;
 	}
 	context.getActionController().addAction(
-		new TankResign(tanket->getPlayerId(), resignTime));
+		new TanketResign(tanket->getPlayerId(), resignTime, referenced_));
 }
 
 bool PlayMovesSimAction::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(moveId_);
 	buffer.addToBuffer(timeoutPlayers_);
+	buffer.addToBuffer(referenced_);
 	buffer.addToBuffer((unsigned int) messages_.size());
 	std::list<ComsPlayedMoveMessage *>::iterator itor;
 	for (itor = messages_.begin();
@@ -280,6 +282,7 @@ bool PlayMovesSimAction::readMessage(NetBufferReader &reader)
 {
 	if (!reader.getFromBuffer(moveId_)) return false;
 	if (!reader.getFromBuffer(timeoutPlayers_)) return false;
+	if (!reader.getFromBuffer(referenced_)) return false;
 	unsigned int size = 0;
 	if (!reader.getFromBuffer(size)) return false;
 	for (unsigned int s=0; s<size; s++)

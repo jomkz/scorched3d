@@ -18,15 +18,15 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <actions/TankFalling.h>
-#include <actions/TankDamage.h>
+#include <actions/TargetFalling.h>
+#include <target/TargetDamage.h>
 #include <target/TargetContainer.h>
 #include <target/TargetState.h>
 #include <target/TargetParachute.h>
 #include <target/TargetDamageCalc.h>
 #include <target/TargetLife.h>
 #include <target/TargetSpace.h>
-#include <tank/Tank.h>
+#include <tanket/Tanket.h>
 #include <tanket/TanketAccessories.h>
 #include <engine/ScorchedContext.h>
 #include <engine/ActionController.h>
@@ -36,17 +36,17 @@
 #include <common/OptionsScorched.h>
 #include <landscapemap/DeformLandscape.h>
 
-TankFalling::TankFalling(Weapon *weapon, unsigned int fallingPlayerId,
+TargetFalling::TargetFalling(Weapon *weapon, unsigned int fallingPlayerId,
 				   WeaponFireContext &weaponContext,
 				   Parachute *parachute) :
-	PhysicsParticle(weaponContext.getPlayerId()),
+	PhysicsParticle(weaponContext.getReferenced()),
 	weapon_(weapon),
 	fallingPlayerId_(fallingPlayerId),
 	weaponContext_(weaponContext), parachute_(parachute)
 {
 }
 
-TankFalling::~TankFalling()
+TargetFalling::~TargetFalling()
 {
 	if (context_)
 	{
@@ -61,7 +61,7 @@ TankFalling::~TankFalling()
 	}
 }
 
-void TankFalling::init()
+void TargetFalling::init()
 {
 	Target *current = 
 		context_->getTargetContainer().getTargetById(fallingPlayerId_);
@@ -85,13 +85,13 @@ void TankFalling::init()
 	}
 }
 
-std::string TankFalling::getActionDetails()
+std::string TargetFalling::getActionDetails()
 {
 	return S3D::formatStringBuffer("%u %s",
 		fallingPlayerId_, weapon_->getParent()->getName());
 }
 
-void TankFalling::simulate(fixed frameTime, bool &remove)
+void TargetFalling::simulate(fixed frameTime, bool &remove)
 {
 	if (!collision_)
 	{
@@ -114,7 +114,7 @@ void TankFalling::simulate(fixed frameTime, bool &remove)
 	PhysicsParticle::simulate(frameTime, remove);
 }
 
-void TankFalling::collision(PhysicsParticleObject &position, 
+void TargetFalling::collision(PhysicsParticleObject &position, 
 	ScorchedCollisionId collisionId)
 {
 	Target *current = context_->getTargetContainer().getTargetById(fallingPlayerId_);
@@ -165,7 +165,7 @@ void TankFalling::collision(PhysicsParticleObject &position,
 		if (context_->getOptionsGame().getActionSyncCheck())
 		{
 			context_->getSimulator().addSyncCheck(
-				S3D::formatStringBuffer("TankFalling: %u %s", 
+				S3D::formatStringBuffer("TargetFalling: %u %s", 
 					current->getPlayerId(),
 					position.getPosition().asQuickString()));
 		}
@@ -179,14 +179,8 @@ void TankFalling::collision(PhysicsParticleObject &position,
 			DeformLandscape::flattenArea(*context_, position.getPosition());
 		}
 
-		// Add the damage to the tank
-		TargetDamageCalc::damageTarget(
-			*context_,
-			current, weapon_, 
-			weaponContext_, damage, 
-			false, false, false);
-
 		// Check if we have collected/given any items
+		bool targetDead = false;
 		std::map<unsigned int, Target *> collisionTargets;
 		context_->getTargetSpace().getCollisionSet(
 			current->getLife().getTargetPosition(), 3, collisionTargets, false);
@@ -205,10 +199,13 @@ void TankFalling::collision(PhysicsParticleObject &position,
 				WeaponFireContext weaponContext(weaponContext_);
 				weaponContext.setPlayerId(collisionTarget->getPlayerId());
 
-				context_->getActionController().addAction(
-					new TankDamage(weapon_, current->getPlayerId(), weaponContext, 
-						current->getLife().getLife(),
-						false, false, false));
+				TargetDamage::damageTarget(*context_,
+					weapon_, fallingPlayerId_, weaponContext, 
+					current->getLife().getLife(),
+					false, false, false);
+
+				// This removes the target so no point continuing
+				break;
 			}
 			else if (collisionTarget->getType() != Target::TypeTank &&
 				collisionTarget->getTargetState().getDriveOverToDestroy() &&
@@ -218,13 +215,20 @@ void TankFalling::collision(PhysicsParticleObject &position,
 				WeaponFireContext weaponContext(weaponContext_);
 				weaponContext.setPlayerId(current->getPlayerId());
 
-				context_->getActionController().addAction(
-					new TankDamage(weapon_, 
+				TargetDamage::damageTarget(*context_, weapon_, 
 					collisionTarget->getPlayerId(), weaponContext_, 
 					collisionTarget->getLife().getLife(),
-					false, false, false));
+					false, false, false);
 			}
 		}
+
+		// Add the damage to the tank
+		// Note: This may remove the target so do this last
+		TargetDamageCalc::damageTarget(
+			*context_,
+			fallingPlayerId_, weapon_, 
+			weaponContext_, damage, 
+			false, false, false);
 	}
 
 	PhysicsParticle::collision(position, collisionId);

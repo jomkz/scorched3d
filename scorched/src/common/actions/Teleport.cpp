@@ -42,7 +42,7 @@
 Teleport::Teleport(FixedVector position,
 		WeaponFireContext &weaponContext,
 		WeaponTeleport *weapon) :
-	Action(weaponContext.getPlayerId()),
+	Action(weaponContext.getReferenced()),
 	position_(position), 
 	weaponContext_(weaponContext),
 	weapon_(weapon),
@@ -142,7 +142,8 @@ void Teleport::simulate(fixed frameTime, bool &remove)
 				tank->getLife().setTargetPosition(position_);
 
 				// Check if this tank can fall, this will result in flattening the area
-				TargetDamageCalc::damageTarget(*context_, tank, weapon_, 
+				TargetDamageCalc::damageTarget(*context_, 
+					weaponContext_.getPlayerId(), weapon_, 
 					weaponContext_, 0, false, true, false);
 			}
 		}

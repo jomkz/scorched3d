@@ -38,7 +38,7 @@
 ShotBounce::ShotBounce(WeaponRoller *weapon, 
 		FixedVector &startPosition, FixedVector &velocity,
 		WeaponFireContext &weaponContext) : 
-	PhysicsParticle(weaponContext.getPlayerId()),
+	PhysicsParticle(weaponContext.getReferenced()),
 	startPosition_(startPosition),
 	velocity_(velocity), weapon_(weapon), weaponContext_(weaponContext),
 	totalTime_(0), simulateTime_(0),

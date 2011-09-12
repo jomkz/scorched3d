@@ -725,9 +725,7 @@ void PhysicsParticleActionObject::bounceShieldHit(Target *target)
 	if (shield->getShieldType() != Shield::ShieldTypeRoundMag && hurtFactor > 0)
 	{
 		context_->getActionController().addAction(
-			new ShieldHit(target->getPlayerId(),
-				position_,
-				hurtFactor));
+			new ShieldHit(target->getPlayerId(), position_, hurtFactor));
 	}
 }
 

@@ -723,27 +723,6 @@
     <ClCompile Include="..\..\common\actions\SoundAction.cpp">
       <Filter>actions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\actions\TankDamage.cpp">
-      <Filter>actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\actions\TankFalling.cpp">
-      <Filter>actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\actions\TankMovement.cpp">
-      <Filter>actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\actions\TankRemove.cpp">
-      <Filter>actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\actions\TankResign.cpp">
-      <Filter>actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\actions\TankSay.cpp">
-      <Filter>actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\actions\Teleport.cpp">
-      <Filter>actions</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\3dsparse\aseFile.lex.cpp">
       <Filter>3dsparse</Filter>
     </ClCompile>
@@ -1467,6 +1446,30 @@
     <ClCompile Include="..\..\common\tank\TankWeaponSwitcher.cpp">
       <Filter>tank</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\actions\ActionParams.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\TanketMovement.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\TanketResign.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\TankRemove.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\TankSay.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\TargetFalling.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\Teleport.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\target\TargetDamage.cpp">
+      <Filter>target</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -2127,27 +2130,6 @@
       <Filter>actions</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\actions\SoundAction.h">
-      <Filter>actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\actions\TankDamage.h">
-      <Filter>actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\actions\TankFalling.h">
-      <Filter>actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\actions\TankMovement.h">
-      <Filter>actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\actions\TankRemove.h">
-      <Filter>actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\actions\TankResign.h">
-      <Filter>actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\actions\TankSay.h">
-      <Filter>actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\actions\Teleport.h">
       <Filter>actions</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\3dsparse\aseFile.tab.cpp.h">
@@ -2857,6 +2839,30 @@
     </ClInclude>
     <ClInclude Include="..\..\common\tank\TankWeaponSwitcher.h">
       <Filter>tank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\ActionParams.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\TanketMovement.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\TanketResign.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\TankRemove.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\TankSay.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\TargetFalling.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\Teleport.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\target\TargetDamage.h">
+      <Filter>target</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

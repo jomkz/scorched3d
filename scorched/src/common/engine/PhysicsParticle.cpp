@@ -21,8 +21,8 @@
 #include <engine/PhysicsParticle.h>
 #include <engine/ScorchedContext.h>
 
-PhysicsParticle::PhysicsParticle(unsigned int playerId)  : 
-	Action(playerId),
+PhysicsParticle::PhysicsParticle(bool referenced)  : 
+	Action(referenced),
 	collision_(false), totalActionTime_(0)
 {
 

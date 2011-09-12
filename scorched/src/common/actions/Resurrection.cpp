@@ -35,7 +35,7 @@ Resurrection::Resurrection(
 	unsigned int playerId,
 	FixedVector &position,
 	fixed resurrectTime) :
-	Action(playerId),
+	Action(true),
 	playerId_(playerId),
 	position_(position),
 	resurrectTime_(resurrectTime)

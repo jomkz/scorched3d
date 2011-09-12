@@ -20,7 +20,7 @@
 
 #include <weapons/WeaponMoveTank.h>
 #include <weapons/AccessoryStore.h>
-#include <actions/TankMovement.h>
+#include <actions/TanketMovement.h>
 #include <engine/ActionController.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeDefn.h>
@@ -69,6 +69,6 @@ void WeaponMoveTank::fireWeapon(ScorchedContext &context,
 		posY > arenaY + 5 && posY < arenaY + arenaHeight - 5)
 	{
 		context.getActionController().addAction(
-			new TankMovement(weaponContext, this, posX, posY));		
+			new TanketMovement(weaponContext, this, posX, posY));		
 	}
 }

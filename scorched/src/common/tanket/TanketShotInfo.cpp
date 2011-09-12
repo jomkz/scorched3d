@@ -46,7 +46,7 @@ TanketShotInfo::~TanketShotInfo()
 void TanketShotInfo::newGame()
 {
 	TanketType *type = tanket_->getTanketType();
-	maxPower_ = type->getPower();
+	maxPower_ = power_ = type->getPower();
 	missedMoves_ = 0;
 	skippedShots_ = 0;
 	if (!context_.getServerMode()) moveId_ = 0;

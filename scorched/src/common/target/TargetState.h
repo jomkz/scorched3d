@@ -21,8 +21,8 @@
 #if !defined(__INCLUDE_TargetStateh_INCLUDE__)
 #define __INCLUDE_TargetStateh_INCLUDE__
 
-class TankFalling;
-class TankMovement;
+class TargetFalling;
+class TanketMovement;
 class NamedNetBuffer;
 class NetBufferReader;
 
@@ -39,11 +39,11 @@ public:
 	TargetState();
 	virtual ~TargetState();
 
-	TankFalling *getFalling() { return falling_; }
-	void setFalling(TankFalling *falling) { falling_ = falling; }
+	TargetFalling *getFalling() { return falling_; }
+	void setFalling(TargetFalling *falling) { falling_ = falling; }
 
-	TankMovement *getMoving() { return moving_; }
-	void setMoving(TankMovement *moving) { moving_ = moving; }
+	TanketMovement *getMoving() { return moving_; }
+	void setMoving(TanketMovement *moving) { moving_ = moving; }
 
 	bool getDisplayDamage() { return displayDamage_; }
 	void setDisplayDamage(bool displayDamage) { displayDamage_ = displayDamage; }
@@ -79,8 +79,8 @@ public:
     bool readMessage(NetBufferReader &reader);
 
 protected:
-	TankFalling *falling_;
-	TankMovement *moving_;
+	TargetFalling *falling_;
+	TanketMovement *moving_;
 	TargetStateMovement *movement_;
 	bool displayHardwareShadow_;
 	bool displayShadow_;

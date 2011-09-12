@@ -160,7 +160,7 @@ void ServerTurnsFree::internalMoveFinished(ComsPlayedMoveMessage &playedMessage)
 		// Make the move
 		std::list<ComsPlayedMoveMessage*> messages;
 		messages.push_back(new ComsPlayedMoveMessage(playedMessage));
-		playShots(messages, nextMoveId_, false);
+		playShots(messages, nextMoveId_, false, true);
 
 		// Check to see if this is timed mode
 		int delayShotTime = 0;

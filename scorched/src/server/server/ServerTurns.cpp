@@ -215,7 +215,7 @@ void ServerTurns::moveFinished(ComsPlayedMoveMessage &playedMessage)
 				// Make the move
 				std::list<ComsPlayedMoveMessage*> messages;
 				messages.push_back(new ComsPlayedMoveMessage(playedMessage));
-				playShots(messages, ++nextNonNormalMoveId_, false);
+				playShots(messages, ++nextNonNormalMoveId_, false, false);
 
 				// Add some thinking time on the AIs shots
 				int aiShotTime = ScorchedServer::instance()->getOptionsGame().getAIShotTime();
@@ -388,10 +388,10 @@ void ServerTurns::playMoveFinished(Tanket *tanket)
 	tanket->getShotInfo().setMoveId(0);
 }
 
-void ServerTurns::playShots(std::list<ComsPlayedMoveMessage *> messages, unsigned int moveId, bool timeOutPlayers)
+void ServerTurns::playShots(std::list<ComsPlayedMoveMessage *> messages, unsigned int moveId, bool timeOutPlayers, bool referenced)
 {
 	PlayMovesSimAction *movesAction = 
-		new PlayMovesSimAction(moveId, timeOutPlayers);
+		new PlayMovesSimAction(moveId, timeOutPlayers, referenced);
 	std::list<ComsPlayedMoveMessage *>::iterator itor;
 	for (itor = messages.begin();
 		itor != messages.end();

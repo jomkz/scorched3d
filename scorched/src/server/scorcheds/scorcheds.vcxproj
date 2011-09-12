@@ -97,6 +97,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\common\actions\ActionParams.cpp" />
+    <ClCompile Include="..\..\common\actions\TanketMovement.cpp" />
+    <ClCompile Include="..\..\common\actions\TanketResign.cpp" />
+    <ClCompile Include="..\..\common\actions\TankRemove.cpp" />
+    <ClCompile Include="..\..\common\actions\TankSay.cpp" />
+    <ClCompile Include="..\..\common\actions\TargetFalling.cpp" />
+    <ClCompile Include="..\..\common\actions\Teleport.cpp" />
     <ClCompile Include="..\..\common\coms\ComsTankChangeMessage.cpp" />
     <ClCompile Include="..\..\common\image\Image.cpp" />
     <ClCompile Include="..\..\common\image\ImageBitmapFactory.cpp" />
@@ -133,6 +140,7 @@
     <ClCompile Include="..\..\common\tank\TankTeamScore.cpp" />
     <ClCompile Include="..\..\common\tank\TankViewPoints.cpp" />
     <ClCompile Include="..\..\common\tank\TankWeaponSwitcher.cpp" />
+    <ClCompile Include="..\..\common\target\TargetDamage.cpp" />
     <ClCompile Include="..\igd\igd.cpp" />
     <ClCompile Include="..\server\ScorchedServerSettings.cpp" />
     <ClCompile Include="..\server\ServerAuthHandlerStore.cpp" />
@@ -354,13 +362,6 @@
     <ClCompile Include="..\..\common\actions\ShowScoreAction.cpp" />
     <ClCompile Include="..\..\common\actions\SkyFlash.cpp" />
     <ClCompile Include="..\..\common\actions\SoundAction.cpp" />
-    <ClCompile Include="..\..\common\actions\TankDamage.cpp" />
-    <ClCompile Include="..\..\common\actions\TankFalling.cpp" />
-    <ClCompile Include="..\..\common\actions\TankMovement.cpp" />
-    <ClCompile Include="..\..\common\actions\TankRemove.cpp" />
-    <ClCompile Include="..\..\common\actions\TankResign.cpp" />
-    <ClCompile Include="..\..\common\actions\TankSay.cpp" />
-    <ClCompile Include="..\..\common\actions\Teleport.cpp" />
     <ClCompile Include="..\..\common\3dsparse\aseFile.lex.cpp" />
     <ClCompile Include="..\..\common\3dsparse\aseFile.tab.cpp" />
     <ClCompile Include="..\..\common\3dsparse\ASEModelFactory.cpp" />
@@ -563,6 +564,13 @@
     <ClCompile Include="..\..\common\simactions\TankTeamBallanceSimAction.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\common\actions\ActionParams.h" />
+    <ClInclude Include="..\..\common\actions\TanketMovement.h" />
+    <ClInclude Include="..\..\common\actions\TanketResign.h" />
+    <ClInclude Include="..\..\common\actions\TankRemove.h" />
+    <ClInclude Include="..\..\common\actions\TankSay.h" />
+    <ClInclude Include="..\..\common\actions\TargetFalling.h" />
+    <ClInclude Include="..\..\common\actions\Teleport.h" />
     <ClInclude Include="..\..\common\common\ARGParser.h" />
     <ClInclude Include="..\..\common\common\ChannelManager.h" />
     <ClInclude Include="..\..\common\common\ChannelText.h" />
@@ -652,6 +660,7 @@
     <ClInclude Include="..\..\common\tank\TankTeamScore.h" />
     <ClInclude Include="..\..\common\tank\TankViewPoints.h" />
     <ClInclude Include="..\..\common\tank\TankWeaponSwitcher.h" />
+    <ClInclude Include="..\..\common\target\TargetDamage.h" />
     <ClInclude Include="..\igd\igd.h" />
     <ClInclude Include="..\server\ScorchedServer.h" />
     <ClInclude Include="..\server\ScorchedServerSettings.h" />
@@ -824,13 +833,6 @@
     <ClInclude Include="..\..\common\actions\ShowScoreAction.h" />
     <ClInclude Include="..\..\common\actions\SkyFlash.h" />
     <ClInclude Include="..\..\common\actions\SoundAction.h" />
-    <ClInclude Include="..\..\common\actions\TankDamage.h" />
-    <ClInclude Include="..\..\common\actions\TankFalling.h" />
-    <ClInclude Include="..\..\common\actions\TankMovement.h" />
-    <ClInclude Include="..\..\common\actions\TankRemove.h" />
-    <ClInclude Include="..\..\common\actions\TankResign.h" />
-    <ClInclude Include="..\..\common\actions\TankSay.h" />
-    <ClInclude Include="..\..\common\actions\Teleport.h" />
     <ClInclude Include="..\..\common\3dsparse\aseFile.tab.cpp.h" />
     <ClInclude Include="..\..\common\3dsparse\ASEModelFactory.h" />
     <ClInclude Include="..\..\common\3dsparse\Bone.h" />

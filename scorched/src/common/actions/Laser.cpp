@@ -19,12 +19,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <actions/Laser.h>
-#include <actions/TankDamage.h>
 #include <engine/ScorchedContext.h>
 #include <engine/ActionController.h>
 #include <weapons/AccessoryStore.h>
 #include <weapons/Shield.h>
 #include <actions/ShieldHit.h>
+#include <target/TargetDamage.h>
 #include <target/TargetContainer.h>
 #include <target/TargetShield.h>
 #include <target/TargetLife.h>
@@ -40,7 +40,7 @@
 Laser::Laser(Weapon *weapon, LaserParams *params,
 		FixedVector &position, FixedVector &direction,
 		WeaponFireContext &weaponContext) :
-	Action(weaponContext.getPlayerId()),
+	Action(weaponContext.getReferenced()),
 	params_(params),
 	totalTime_(0),
 	drawLength_(0),
@@ -161,10 +161,9 @@ void Laser::simulate(fixed frameTime, bool &remove)
 				++itor)
 			{
 				unsigned int damagedTarget = (*itor);
-				context_->getActionController().addAction(
-					new TankDamage(
+				TargetDamage::damageTarget(*context_,
 						weapon_, damagedTarget, weaponContext_,
-						damage_, false, false, false));
+						damage_, false, false, false);
 			}
 		}
 	}

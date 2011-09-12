@@ -41,9 +41,10 @@ void WeaponFireContextInternal::decrementReference()
 	if (referenceCount_ == 0) delete this;
 }
 
-WeaponFireContext::WeaponFireContext(unsigned int playerId, unsigned int data) :
+WeaponFireContext::WeaponFireContext(unsigned int playerId, bool referenced, bool updateStats) :
 	playerId_(playerId),
-	data_(data)
+	referenced_(referenced),
+	updateStats_(updateStats)
 {
 	internalContext_ = new WeaponFireContextInternal();
 	internalContext_->incrementReference();
@@ -51,7 +52,8 @@ WeaponFireContext::WeaponFireContext(unsigned int playerId, unsigned int data) :
 
 WeaponFireContext::WeaponFireContext(WeaponFireContext &other) :
 	playerId_(other.playerId_),
-	data_(other.data_),
+	updateStats_(other.updateStats_),
+	referenced_(other.referenced_),
 	labelCount_(other.labelCount_),
 	internalContext_(other.internalContext_)
 {

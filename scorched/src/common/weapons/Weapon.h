@@ -47,19 +47,20 @@ protected:
 class WeaponFireContext
 {
 public:
-	WeaponFireContext(unsigned int playerId, unsigned int data);
+	WeaponFireContext(unsigned int playerId, bool referenced, bool updateStats);
 	WeaponFireContext(WeaponFireContext &other);
 	virtual ~WeaponFireContext();
 
 	unsigned int getPlayerId() { return playerId_; }
 	void setPlayerId(unsigned int playerId) { playerId_ = playerId; }
-	unsigned int getData() { return data_; }
+	bool getUpdateStats() { return updateStats_; }
+	bool getReferenced() { return referenced_; }
 	int getIncLabelCount(unsigned int label);
 	WeaponFireContextInternal &getInternalContext() { return *internalContext_; }
 
 protected:
 	unsigned int playerId_;
-	unsigned int data_;
+	bool referenced_, updateStats_;
 	std::map<unsigned int, int> labelCount_;
 	WeaponFireContextInternal *internalContext_;
 

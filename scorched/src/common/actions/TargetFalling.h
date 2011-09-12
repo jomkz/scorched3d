@@ -18,27 +18,41 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
+#if !defined(__INCLUDE_TargetFallingh_INCLUDE__)
+#define __INCLUDE_TargetFallingh_INCLUDE__
 
-#if !defined(__INCLUDE_TankResignh_INCLUDE__)
-#define __INCLUDE_TankResignh_INCLUDE__
+#include <engine/PhysicsParticle.h>
+#include <engine/ScorchedCollisionIds.h>
+#include <weapons/Weapon.h>
 
-#include <actions/Action.h>
+#include <map>
+#include <list>
 
-class TankResign : public Action
+class Parachute;
+class TargetFalling : public PhysicsParticle
 {
 public:
-	TankResign(unsigned int playerId, fixed resignTime);
-	virtual ~TankResign();
+	TargetFalling(Weapon *weapon, unsigned int fallingPlayerId,
+			WeaponFireContext &weaponContext, Parachute *parachute);
+	virtual ~TargetFalling();
 
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
 	virtual std::string getActionDetails();
-	virtual std::string getActionType() { return "TankResign"; }
+	virtual std::string getActionType() { return "TargetFalling"; }
+
+	virtual void collision(PhysicsParticleObject &position, 
+		ScorchedCollisionId collisionId);
+
+	Parachute *getParachute() { return parachute_; }
 
 protected:
-	fixed resignTime_;
-	unsigned int playerId_;
-	unsigned int stateChangeCount_;
+	Weapon *weapon_;
+	Parachute *parachute_;
+	unsigned int fallingPlayerId_;
+	WeaponFireContext weaponContext_;
+	unsigned int data_;
+	FixedVector tankStartPosition_;
 
 };
 

@@ -37,7 +37,7 @@ public:
 		bool checkFall,
 		bool shieldOnlyDamage);
 	static void damageTarget(ScorchedContext &context,
-		Target *target, 
+		unsigned int playerId, 
 		Weapon *weapon, WeaponFireContext &weaponContext,
 		fixed damage,
 		bool useShieldDamage, bool checkFall,

@@ -26,7 +26,7 @@ CallbackWeapon::CallbackWeapon(
 	WeaponCallback *callback,
 	fixed delay, unsigned int callbackData,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity) :
-	Action(weaponContext.getPlayerId()),
+	Action(weaponContext.getReferenced()),
 	callback_(callback),
 	delay_(delay),
 	callbackData_(callbackData),

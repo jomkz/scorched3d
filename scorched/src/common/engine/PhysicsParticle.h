@@ -29,7 +29,7 @@ class PhysicsParticle :
 	public PhysicsParticleObjectHandler
 {
 public:
-	PhysicsParticle(unsigned int playerId);
+	PhysicsParticle(bool referenced);
 	virtual ~PhysicsParticle();
 
 	virtual void setPhysics(

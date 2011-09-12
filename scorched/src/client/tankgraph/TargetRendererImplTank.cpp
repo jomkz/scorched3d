@@ -34,7 +34,7 @@
 #include <landscape/ShadowMap.h>
 #include <landscape/Smoke.h>
 #include <landscapemap/LandscapeMaps.h>
-#include <actions/TankFalling.h>
+#include <actions/TargetFalling.h>
 #include <engine/ActionController.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientState.h>

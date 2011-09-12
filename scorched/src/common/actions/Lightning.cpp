@@ -38,7 +38,7 @@
 Lightning::Lightning(WeaponLightning *weapon,
 		WeaponFireContext &weaponContext,
 		FixedVector &position, FixedVector &velocity) :
-	Action(weaponContext.getPlayerId()),
+	Action(weaponContext.getReferenced()),
 	totalTime_(0),
 	weapon_(weapon),
 	weaponContext_(weaponContext),
@@ -67,13 +67,9 @@ void Lightning::init()
 		unsigned int playerId = (*hurtItor).first;
 		fixed damage = (*hurtItor).second;
 
-		Target *target = context_->getTargetContainer().getTargetById(playerId);
-		if (target)
-		{
-			TargetDamageCalc::damageTarget(
-				*context_, target, weapon_, weaponContext_, 
-				damage, true, false, false);
-		}
+		TargetDamageCalc::damageTarget(
+			*context_, playerId, weapon_, weaponContext_, 
+			damage, true, false, false);
 	}
 
 #ifndef S3D_SERVER

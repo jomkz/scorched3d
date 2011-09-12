@@ -58,7 +58,7 @@ static bool deformCreated = false;
 Napalm::Napalm(int x, int y, Weapon *weapon, 
 	NapalmParams *params,
 	WeaponFireContext &weaponContext) :
-	Action(weaponContext.getPlayerId()),
+	Action(weaponContext.getReferenced()),
 	startX_(x), startY_(y), napalmTime_(0), 
 	weapon_(weapon), params_(params),
 	weaponContext_(weaponContext), 
@@ -581,25 +581,26 @@ void Napalm::simulateDamage()
 				context_->getTargetContainer().getTargetById(damageItor->first);
 			fixed damage = (*damageItor).second;
 
-			// Add damage to the tank
-			// If allowed for this target type (mainly for trees)
-			if (!target->getTargetState().getNoDamageBurn())
-			{
-				TargetDamageCalc::damageTarget(*context_, target, weapon_, 
-					weaponContext_, damage, true, false, false);
-
-				if (burnedTargets_.find(target->getPlayerId()) == burnedTargets_.end()) 
-				{
-					burnedTargets_.insert(target->getPlayerId());
-					addBurnAction(target);
-				}
-			}
-
 			// Set this target to burnt
 			if (target->getRenderer() &&
 				!params_->getNoObjectDamage())
 			{
 				target->getRenderer()->targetBurnt();
+			}
+
+			// Add damage to the tank
+			// If allowed for this target type (mainly for trees)
+			if (!target->getTargetState().getNoDamageBurn())
+			{
+				if (burnedTargets_.find(target->getPlayerId()) == burnedTargets_.end()) 
+				{
+					burnedTargets_.insert(target->getPlayerId());
+					addBurnAction(target);
+				}
+
+				// Do last as it may remove the target
+				TargetDamageCalc::damageTarget(*context_, target->getPlayerId(), weapon_, 
+					weaponContext_, damage, true, false, false);
 			}
 		}
 		TargetDamageCalc.clear();
@@ -621,8 +622,7 @@ void Napalm::addBurnAction(Target *target)
 
 		FixedVector position = target->getLife().getTargetPosition();
 		FixedVector velocity;
-		WeaponFireContext weaponContext(weaponContext_.getPlayerId(), 
-			Weapon::eDataDeathAnimation);
+		WeaponFireContext weaponContext(weaponContext_.getPlayerId(), weaponContext_.getReferenced(), false);
 		weapon->fireWeapon(*context_, weaponContext, 
 			position, velocity);
 		StatsLogger::instance()->weaponFired(weapon, true);

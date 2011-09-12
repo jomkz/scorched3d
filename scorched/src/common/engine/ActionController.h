@@ -91,7 +91,6 @@ protected:
 	int referenceCount_;
 	bool actionProfiling_;
 
-	bool allEvents();
 	void addNewActions(fixed time);
 
 };

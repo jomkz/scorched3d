@@ -191,7 +191,7 @@ void ServerTurnsSimultaneous::internalSimulate(fixed frameTime)
 			}
 		}
 		moves_.clear();
-		playShots(messages, nextMoveId_, true);
+		playShots(messages, nextMoveId_, true, true);
 		if (!waitForShots_)
 		{
 			incrementTurn();

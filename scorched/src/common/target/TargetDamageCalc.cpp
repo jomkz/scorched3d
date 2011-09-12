@@ -19,12 +19,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <target/TargetDamageCalc.h>
+#include <target/TargetDamage.h>
 #include <target/TargetContainer.h>
 #include <target/TargetLife.h>
 #include <target/TargetSpace.h>
 #include <common/Logger.h>
 #include <engine/ActionController.h>
-#include <actions/TankDamage.h>
 
 void TargetDamageCalc::explosion(ScorchedContext &context,
 							   Weapon *weapon,WeaponFireContext &weaponContext,
@@ -54,7 +54,7 @@ void TargetDamageCalc::explosion(ScorchedContext &context,
 				damage = fixed(100) - damage;
 			}
 
-			damageTarget(context, current, weapon, weaponContext, 
+			damageTarget(context, current->getPlayerId(), weapon, weaponContext, 
 				damage * damageAmount, true, checkFall, shieldOnlyDamage);
 		}
 		else 
@@ -66,7 +66,7 @@ void TargetDamageCalc::explosion(ScorchedContext &context,
 			if (dist2d < radius + 5)
 			{
 				// explosion under tank
-				damageTarget(context, current, weapon, weaponContext, 
+				damageTarget(context, current->getPlayerId(), weapon, weaponContext, 
 					0, true, checkFall, shieldOnlyDamage);
 			}
 		}
@@ -74,14 +74,14 @@ void TargetDamageCalc::explosion(ScorchedContext &context,
 }
 
 void TargetDamageCalc::damageTarget(ScorchedContext &context,
-								Target *target, Weapon *weapon, 
+								unsigned int playerId, Weapon *weapon, 
 								WeaponFireContext &weaponContext, fixed damage,
 								bool useShieldDamage, bool checkFall,
 								bool shieldOnlyDamage)
 {
 	// Remove the correct damage from the tanks
-	TankDamage *tankDamage = new TankDamage(
-		weapon, target->getPlayerId(), weaponContext, 
+	TargetDamage::damageTarget(
+		context,
+		weapon, playerId, weaponContext, 
 		damage, useShieldDamage, checkFall, shieldOnlyDamage);
-	context.getActionController().addAction(tankDamage);
 }

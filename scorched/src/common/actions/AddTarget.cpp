@@ -34,7 +34,7 @@
 
 AddTarget::AddTarget(FixedVector &position,
 	WeaponAddTarget *addTarget) :
-	Action(Action::ACTION_REFERENCED),
+	Action(true),
 	position_(position),
 	addTarget_(addTarget)
 {
@@ -67,8 +67,8 @@ void AddTarget::simulate(fixed frameTime, bool &remove)
 	}
 
 	// Check if this new target can fall
-	WeaponFireContext weaponContext(0, 0);
-	TargetDamageCalc::damageTarget(*context_, target, addTarget_, 
+	WeaponFireContext weaponContext(playerId, false, false);
+	TargetDamageCalc::damageTarget(*context_, target->getPlayerId(), addTarget_, 
 		weaponContext, 0, false, true, false);
 
 	remove = true;

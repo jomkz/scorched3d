@@ -35,7 +35,7 @@
 bool ShowScoreAction::finalScoreStatic_ = false;
 
 ShowScoreAction::ShowScoreAction(fixed scoreTime, bool finalScore) :
-	Action(Action::ACTION_REFERENCED),
+	Action(true),
 	scoreTime_(scoreTime),
 	finalScore_(finalScore)
 {

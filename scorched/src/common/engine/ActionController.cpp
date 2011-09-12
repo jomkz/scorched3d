@@ -49,8 +49,8 @@ void ActionController::clear(bool warn)
 		Action *act = *newItor;
 		if (warn)
 		{
-			Logger::log(S3D::formatStringBuffer("Warning: removing added timed out action %s, %u",
-				act->getActionType().c_str(), act->getPlayerId()));
+			Logger::log(S3D::formatStringBuffer("Warning: removing added timed out action %s",
+				act->getActionType().c_str()));
 		}
 		delete act;
 	}
@@ -62,8 +62,8 @@ void ActionController::clear(bool warn)
 		Action *act = actions_.actions[a];
 		if (warn)
 		{
-			Logger::log(S3D::formatStringBuffer("Warning: removing added timed out action %s, %u",
-				act->getActionType().c_str(), act->getPlayerId()));
+			Logger::log(S3D::formatStringBuffer("Warning: removing added timed out action %s",
+				act->getActionType().c_str()));
 		}
 		delete act;
 	}
@@ -71,27 +71,6 @@ void ActionController::clear(bool warn)
 
 	// Ref count
 	referenceCount_ = 0;
-}
-
-bool ActionController::allEvents()
-{
-	// Criteria to add more events :-
-	// Check that there are referenced actions in the simulation,
-	// and that these referenced actions are not events
-	std::list<Action *>::iterator newItor;
-	for (newItor = newActions_.begin();
-		newItor != newActions_.end();
-		++newItor)
-	{
-		Action *act = *newItor;
-		if (act->getPlayerId() != 0) return false;
-	}
-	for (int a=0; a<actions_.actionCount; a++)
-	{
-		Action *act = actions_.actions[a];
-		if (act->getPlayerId() != 0) return false;
-	}
-	return true;
 }
 
 void ActionController::logActions()
@@ -162,8 +141,7 @@ void ActionController::addNewActions(fixed time)
 		actions_.push_back(action);
 		
 		// Log it
-		if (action->getPlayerId() != Action::ACTION_NOT_REFERENCED &&
-			action->getActionSyncCheck())
+		if (action->getActionSyncCheck())
 		{
 			if (context_->getOptionsGame().getActionSyncCheck())
 			{
@@ -189,7 +167,7 @@ void ActionController::addNewActions(fixed time)
 			}	
 		}
 
-		if (action->getPlayerId() != 0) referenceCount_ ++;
+		if (action->getReferenced()) referenceCount_ ++;
 
 		newActions_.pop_front();
 	}
@@ -219,7 +197,7 @@ void ActionController::simulate(fixed frameTime, fixed time)
 		act->simulate(frameTime, remove);
 
 		// Ensure that no referenced actions over do their time
-		if (act->getPlayerId() != 0)
+		if (act->getReferenced())
 		{
 			if ((time - act->getActionStartTime() > 30))
 			{
@@ -233,12 +211,13 @@ void ActionController::simulate(fixed frameTime, fixed time)
 		// If this action has finished add to list to be removed
 		if (remove)
 		{
-			if (act->getPlayerId() != Action::ACTION_NOT_REFERENCED &&
-				act->getActionSyncCheck())
+			if (act->getReferenced())
 			{
 				referenceCount_--;
 				if (referenceCount_<0) referenceCount_ = 0;
-
+			}
+			if (act->getActionSyncCheck())
+			{
 				if (context_->getOptionsGame().getActionSyncCheck())
 				{
 					std::string actionType = act->getActionType();

@@ -30,7 +30,7 @@ CameraPositionAction::CameraPositionAction(
 	fixed showTime,
 	unsigned int priority,
 	bool explosion) : 
-	Action(ACTION_NOT_REFERENCED),
+	Action(false),
 	playerId_(playerId),
 	totalTime_(0), showTime_(showTime),
 	provider_(provider), showPriority_(priority),

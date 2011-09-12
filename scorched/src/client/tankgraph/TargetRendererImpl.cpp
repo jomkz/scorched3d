@@ -32,7 +32,7 @@
 #include <weapons/ShieldRound.h>
 #include <weapons/ShieldSquare.h>
 #include <weapons/Accessory.h>
-#include <actions/TankFalling.h>
+#include <actions/TargetFalling.h>
 #include <GLEXT/GLState.h>
 #include <GLEXT/GLTexture.h>
 #include <image/ImageFactory.h>

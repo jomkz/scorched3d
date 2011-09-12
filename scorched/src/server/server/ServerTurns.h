@@ -80,7 +80,8 @@ protected:
 	bool showScore();
 	void playMove(Tanket *tank, unsigned int moveId, fixed maximumShotTime);
 	void playMoveFinished(Tanket *tank);
-	void playShots(std::list<ComsPlayedMoveMessage *> messages, unsigned int moveId, bool timeOutPlayers);
+	void playShots(std::list<ComsPlayedMoveMessage *> messages, unsigned int moveId, 
+		bool timeOutPlayers, bool referenced);
 	void shotsStarted(fixed simulationTime, SimAction *action);
 	void moveStarted(fixed simulationTime, SimAction *action);
 	void incrementTurn();

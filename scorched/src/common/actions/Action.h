@@ -42,10 +42,7 @@ public:
 class Action
 {
 public:
-	static const unsigned int ACTION_REFERENCED;
-	static const unsigned int ACTION_NOT_REFERENCED;
-
-	Action(unsigned int playerId);
+	Action(bool actionReferenced);
 	virtual ~Action();
 
 	virtual void init() = 0;
@@ -59,13 +56,13 @@ public:
 	void setActionRender(ActionRenderer *renderer);
 	void setScorchedContext(ScorchedContext *context);
 	ScorchedContext *getScorchedContext();
-	unsigned int getPlayerId() { return playerId_; }
+	bool getReferenced() { return actionReferenced_; }
 	void setActionStartTime(fixed time) { actionStartTime_ = time; }
 	fixed getActionStartTime() { return actionStartTime_; }
 
 protected:
 	const char *name_;
-	unsigned int playerId_;
+	bool actionReferenced_;
 	ActionRenderer *renderer_;
 	ScorchedContext *context_;
 	fixed actionStartTime_;

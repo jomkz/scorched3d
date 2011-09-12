@@ -26,7 +26,7 @@
 #include <common/Logger.h>
 
 TankRemove::TankRemove(unsigned int playerId, fixed removeTime) :
-	Action(playerId),
+	Action(false),
 	removeTime_(removeTime),
 	playerId_(playerId)
 {

@@ -18,9 +18,8 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <actions/TankMovement.h>
-#include <actions/TankFalling.h>
-#include <actions/TankDamage.h>
+#include <actions/TanketMovement.h>
+#include <actions/TargetFalling.h>
 #include <actions/ShotProjectile.h>
 #include <actions/CameraPositionAction.h>
 #include <engine/ScorchedContext.h>
@@ -41,11 +40,11 @@
 #endif
 #include <target/TargetContainer.h>
 #include <tank/Tank.h>
-#include <tank/TankState.h>
 #include <tank/TankModelContainer.h>
 #include <tanket/TanketAccessories.h>
 #include <tank/TankViewPoints.h>
 #include <tank/TankModelStore.h>
+#include <target/TargetDamage.h>
 #include <target/TargetLife.h>
 #include <target/TargetState.h>
 #include <target/TargetSpace.h>
@@ -54,10 +53,10 @@
 
 static const int NoMovementTransitions = 4;
 
-TankMovement::TankMovement(WeaponFireContext &weaponContext,
+TanketMovement::TanketMovement(WeaponFireContext &weaponContext,
 	WeaponMoveTank *weapon,
 	int positionX, int positionY) : 
-	Action(weaponContext.getPlayerId()),
+	Action(weaponContext.getReferenced()),
 	weaponContext_(weaponContext), 
 	positionX_(positionX), positionY_(positionY),
 	timePassed_(0), weapon_(weapon),
@@ -67,7 +66,7 @@ TankMovement::TankMovement(WeaponFireContext &weaponContext,
 {
 }
 
-TankMovement::~TankMovement()
+TanketMovement::~TanketMovement()
 {
 #ifndef S3D_SERVER
 	if (!context_->getServerMode())
@@ -79,18 +78,19 @@ TankMovement::~TankMovement()
 	if (vPoint_) vPoint_->decrementReference();
 }
 
-void TankMovement::init()
+void TanketMovement::init()
 {
-	Tank *tank = context_->getTargetContainer().getTankById(weaponContext_.getPlayerId());
-	if (!tank) return;	
+	Tanket *tanket = context_->getTargetContainer().getTanketById(weaponContext_.getPlayerId());
+	if (!tanket) return;	
 
-	tank->getTargetState().setMoving(this);
+	tanket->getTargetState().setMoving(this);
 
-	startPosition_ = tank->getLife().getTargetPosition();
+	startPosition_ = tanket->getLife().getTargetPosition();
 
 	// Start the tank movement sound
 #ifndef S3D_SERVER
-	if (!context_->getServerMode()) 
+	if (!context_->getServerMode() &&
+		tanket->getType() == Target::TypeTank) 
 	{
 		vPoint_ = new TankViewPointProvider();
 		vPoint_->setValues(startPosition_);
@@ -108,7 +108,7 @@ void TankMovement::init()
 			Sound::instance()->fetchOrCreateBuffer(
 				S3D::getModFile("data/wav/movement/tankmove.wav"));
 		moveSoundSource_ = new VirtualSoundSource(VirtualSoundPriority::eAction, true, false);
-		moveSoundSource_->setPosition(tank->getLife().getTargetPosition().asVector());
+		moveSoundSource_->setPosition(tanket->getLife().getTargetPosition().asVector());
 		moveSoundSource_->play(moveSound);
 	}
 #endif // #ifndef S3D_SERVER
@@ -120,7 +120,7 @@ void TankMovement::init()
 	// Upper 32 bits = x positions
 	std::list<unsigned int> positions;
 	MovementMap mmap(
-		tank, 
+		tanket, 
 		*context_);
 	FixedVector pos(positionX_, positionY_, 0);
 	mmap.calculatePosition(pos, mmap.getFuel(weapon_));
@@ -184,18 +184,18 @@ void TankMovement::init()
 	// If this weapon is set to use a constant amount of fuel then use this amount
 	if (weapon_->getUseFuel() > 0)
 	{
-		tank->getAccessories().rm(weapon_->getParent(), weapon_->getUseFuel());
+		tanket->getAccessories().rm(weapon_->getParent(), weapon_->getUseFuel());
 	}
 }
 
-std::string TankMovement::getActionDetails()
+std::string TanketMovement::getActionDetails()
 {
 	return S3D::formatStringBuffer("%u %i,%i %s",
 		weaponContext_.getPlayerId(), positionX_, positionY_, 
 		weapon_->getParent()->getName());
 }
 
-void TankMovement::simulate(fixed frameTime, bool &remove)
+void TanketMovement::simulate(fixed frameTime, bool &remove)
 {
 	if (!remove_)
 	{
@@ -219,25 +219,28 @@ void TankMovement::simulate(fixed frameTime, bool &remove)
 	Action::simulate(frameTime, remove);
 }
 
-void TankMovement::simulationMove(fixed frameTime)
+void TanketMovement::simulationMove(fixed frameTime)
 {
-	Tank *tank = 
-		context_->getTargetContainer().getTankById(weaponContext_.getPlayerId());
-	if (tank)
+	Tanket *tanket = 
+		context_->getTargetContainer().getTanketById(weaponContext_.getPlayerId());
+	if (tanket)
 	{
 		// Stop moving if the tank is dead
-		if (tank->getState().getState() == TankState::sNormal)
+		if (tanket->getAlive())
 		{
 			// Check to see if this tank is falling
 			// If it is then we wait until the fall is over
-			if (!tank->getTargetState().getFalling() &&
-				tank->getTargetState().getMoving() == this)
+			if (!tanket->getTargetState().getFalling() &&
+				tanket->getTargetState().getMoving() == this)
 			{
 				// Add a smoke trail
 				// Check if we are not on the server
 #ifndef S3D_SERVER
-				if (!context_->getServerMode())
+				if (!context_->getServerMode() &&
+					tanket->getType() == Target::TypeTank)
 				{
+					Tank *tank = (Tank *) tanket;
+
 					// Check if this tank type allows smoke trails
 					TankModel *model = tank->getModelContainer().getTankModel();
 					if (model && model->getMovementSmoke())
@@ -245,9 +248,9 @@ void TankMovement::simulationMove(fixed frameTime)
 						if (smokeCounter_.nextDraw(frameTime.asFloat()))
 						{
 							Landscape::instance()->getSmoke().addSmoke(
-								tank->getLife().getFloatPosition()[0],
-								tank->getLife().getFloatPosition()[1],
-								tank->getLife().getFloatPosition()[2]);
+								tanket->getLife().getFloatPosition()[0],
+								tanket->getLife().getFloatPosition()[1],
+								tanket->getLife().getFloatPosition()[2]);
 						}
 					}
 				}
@@ -262,7 +265,7 @@ void TankMovement::simulationMove(fixed frameTime)
 					timePassed_ -= stepTime;
 					if (!expandedPositions_.empty())
 					{
-						moveTank(tank);
+						moveTanket(tanket);
 					}
 					else break;
 				}
@@ -276,17 +279,17 @@ void TankMovement::simulationMove(fixed frameTime)
 
 	if (moving_ == false)
 	{
-		if (tank)
+		if (tanket)
 		{
-			if (tank->getTargetState().getMoving() == this) 
+			if (tanket->getTargetState().getMoving() == this) 
 			{
-				tank->getTargetState().setMoving(0);
+				tanket->getTargetState().setMoving(0);
 			}
-			tank->getLife().setRotation(0);
-			if (tank->getState().getState() == TankState::sNormal)
+			tanket->getLife().setRotation(0);
+			if (tanket->getAlive())
 			{
 				// Move the tank to the final position
-				DeformLandscape::flattenArea(*context_, tank->getLife().getTargetPosition());
+				DeformLandscape::flattenArea(*context_, tanket->getLife().getTargetPosition());
 			}
 		}
 
@@ -294,7 +297,7 @@ void TankMovement::simulationMove(fixed frameTime)
 	}
 }
 
-void TankMovement::moveTank(Tank *tank)
+void TanketMovement::moveTanket(Tanket *tanket)
 {
 	fixed x = expandedPositions_.front().x;
 	fixed y = expandedPositions_.front().y;
@@ -355,7 +358,7 @@ void TankMovement::moveTank(Tank *tank)
 	}
 
 	// Check this new position is allowed
-	if (!MovementMap::allowedPosition(*context_, tank, newPos))
+	if (!MovementMap::allowedPosition(*context_, tanket, newPos))
 	{
 		expandedPositions_.clear();
 		return;
@@ -366,17 +369,17 @@ void TankMovement::moveTank(Tank *tank)
 	// -1 means use 1 unit of fuel per movement square
 	if (useF && (weapon_->getUseFuel() == -1))
 	{
-		tank->getAccessories().rm(weapon_->getParent(), 1);
+		tanket->getAccessories().rm(weapon_->getParent(), 1);
 	}
 
 	// Actually move the tank
-	tank->getLife().setRotation(a);
-	tank->getLife().setTargetPosition(newPos);
+	tanket->getLife().setRotation(a);
+	tanket->getLife().setTargetPosition(newPos);
 
 	// Remove the targets that this tank "drives over"
 	std::map<unsigned int, Target *> collisionTargets;
 	context_->getTargetSpace().getCollisionSet(
-		tank->getLife().getTargetPosition(), 3, collisionTargets, false);
+		tanket->getLife().getTargetPosition(), 3, collisionTargets, false);
 	std::map<unsigned int, Target *>::iterator itor;
 	for (itor = collisionTargets.begin();
 		itor != collisionTargets.end();
@@ -389,10 +392,10 @@ void TankMovement::moveTank(Tank *tank)
 			target->getTargetState().getDriveOverToDestroy())
 		{
 			// Kill the target we've driven over
-			context_->getActionController().addAction(
-				new TankDamage(weapon_, target->getPlayerId(), weaponContext_, 
-					target->getLife().getLife(),
-					false, false, false));
+			TargetDamage::damageTarget(*context_,
+				weapon_, target->getPlayerId(), weaponContext_, 
+				target->getLife().getLife(),
+				false, false, false);
 
 			// Do a small explosion where we remove this target
 			Accessory *accessory = 
@@ -402,7 +405,7 @@ void TankMovement::moveTank(Tank *tank)
 				Weapon *weapon = (Weapon *) accessory->getAction();
 				weapon->fireWeapon(*context_, 
 					weaponContext_,
-					tank->getLife().getTargetPosition(), 
+					tanket->getLife().getTargetPosition(), 
 					FixedVector::getNullVector());
 			}
 		}
@@ -410,8 +413,10 @@ void TankMovement::moveTank(Tank *tank)
 
 	// Add tracks
 #ifndef S3D_SERVER
-	if (!context_->getServerMode())
+	if (!context_->getServerMode() &&
+		tanket->getType() == Target::TypeTank)
 	{
+		Tank *tank = (Tank *) tanket;
 		stepCount_++;
 		if (stepCount_ % 5 == 0)
 		{

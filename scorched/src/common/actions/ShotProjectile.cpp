@@ -41,7 +41,7 @@ ShotProjectile::ShotProjectile(FixedVector &startPosition, FixedVector &velocity
 							   WeaponProjectile *weapon, WeaponFireContext &weaponContext,
 							   unsigned int flareType,
 							   fixed spinSpeed, const Vector &spinAxis) :
-	PhysicsParticle(weaponContext.getPlayerId()),
+	PhysicsParticle(weaponContext.getReferenced()),
 	startPosition_(startPosition), velocity_(velocity), 
 	weapon_(weapon), weaponContext_(weaponContext), 
 	flareType_(flareType), vPoint_(0),

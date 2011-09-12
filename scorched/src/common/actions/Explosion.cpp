@@ -49,7 +49,7 @@
 Explosion::Explosion(FixedVector &position,
 	ExplosionParams *params,
 	Weapon *weapon, WeaponFireContext &weaponContext) :
-	Action(weaponContext.getPlayerId()),
+	Action(weaponContext.getReferenced()),
 	params_(params),
 	firstTime_(true), totalTime_(0),
 	weapon_(weapon), weaponContext_(weaponContext), 
