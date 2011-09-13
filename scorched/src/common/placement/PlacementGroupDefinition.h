@@ -21,11 +21,11 @@
 #if !defined(__INCLUDE_PlacementGroupDefinitionh_INCLUDE__)
 #define __INCLUDE_PlacementGroupDefinitionh_INCLUDE__
 
-#include <target/TargetGroup.h>
 #include <XML/XMLNode.h>
 #include <vector>
 #include <string>
 
+class ObjectGroupEntry;
 class ScorchedContext;
 class PlacementGroupDefinition
 {
@@ -36,16 +36,14 @@ public:
 	bool readXML(XMLNode *node);
 
 	void addToGroups(ScorchedContext &context,
-		TargetGroup *objectEntry,
-		bool thin);
+		ObjectGroupEntry *objectGroupEntry);
 
 protected:
 	std::vector<std::string> groupnames_;
 
 	void addToGroup(const char *groupName,
 		ScorchedContext &context,
-		TargetGroup *objectEntry,
-		bool thin);
+		ObjectGroupEntry *objectGroupEntry);
 };
 
 #endif // __INCLUDE_PlacementGroupDefinitionh_INCLUDE__

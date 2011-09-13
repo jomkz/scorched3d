@@ -23,10 +23,11 @@
 
 #include <common/FixedVector.h>
 #include <movement/TargetMovementEntry.h>
-#include <landscapemap/TargetGroupsSetEntry.h>
 #include <map>
 #include <vector>
 
+class ObjectGroupEntry;
+class ObjectGroup;
 class Obstacle;
 class Boid2;
 class TargetMovementEntryBoids : public TargetMovementEntry
@@ -51,7 +52,7 @@ public:
 	virtual void reset();
 
 protected:
-	TargetGroupsSetEntry *groupEntry_;
+	ObjectGroup *objectGroup_;
 
 	unsigned int movementNumber_;
 	FixedVector minBounds_, maxBounds_;
@@ -61,7 +62,7 @@ protected:
 
 	void makeBoids(ScorchedContext &context, RandomGenerator &random,
 		FixedVector &maxBounds, FixedVector &minBounds);
-	Boid2 *makeBoid(ScorchedContext &context, TargetGroup *groupEntry);
+	Boid2 *makeBoid(ScorchedContext &context, ObjectGroupEntry *entry);
 	void processSet(fixed frameTime, std::vector<Boid2*> &boidSet);
 };
 

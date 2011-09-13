@@ -56,6 +56,7 @@ void LandscapeSoundManager::cleanUp()
 	{
 		LandscapeSoundManagerEntry &entry = (*itor);
 		delete entry.soundSource;
+		delete entry.initData;
 		entry.soundSource = 0;
 	}
 	entries_.clear();

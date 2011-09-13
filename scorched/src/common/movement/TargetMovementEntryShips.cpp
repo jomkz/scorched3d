@@ -22,6 +22,8 @@
 #include <common/Defines.h>
 #include <common/RandomGenerator.h>
 #include <engine/ScorchedContext.h>
+#include <engine/ObjectGroups.h>
+#include <engine/ObjectGroupEntry.h>
 #include <target/Target.h>
 #include <target/TargetLife.h>
 #include <target/TargetState.h>
@@ -83,9 +85,8 @@ void TargetMovementEntryShips::generate(ScorchedContext &context,
 	path_.simulate(shipGroup->starttime);
 
 	// Find the group to move the objects in
-	groupEntry_ = context.getLandscapeMaps().getGroundMaps().getGroups().
-		getGroup(shipGroup->groupname.c_str());
-	if (!groupEntry_)
+	objectGroup_ = context.getObjectGroups().getGroup(shipGroup->groupname.c_str());
+	if (!objectGroup_)
 	{
 		S3D::dialogExit("TargetMovementEntryShips", 
 			S3D::formatStringBuffer("Group entry %s has no objects defined for it", 
@@ -93,21 +94,24 @@ void TargetMovementEntryShips::generate(ScorchedContext &context,
 	}
 
 	// Generate the list of offsets for all of the targets in the group
-	std::map<unsigned int, TargetGroup *> &objects = groupEntry_->getObjects();
-	std::map<unsigned int, TargetGroup *>::iterator itor;
-	for (itor = objects.begin();
-		itor != objects.end();
-		++itor)
+	ObjectGroup::ObjectGroupEntryHolderIterator iterator(objectGroup_);
+	ObjectGroupEntry *entry;
+	while (entry = iterator.getNext())
 	{
-		TargetGroup *entry = (*itor).second;
+		if (entry->getType() != ObjectGroupEntry::TypeTarget)
+		{
+			S3D::dialogExit("TargetMovementEntryShips",
+				"Movement can be assigned to level targets only (no particles)");
+		}
 
-		if (entry->getTarget()->getType() == Target::TypeTank ||
-			entry->getTarget()->getPlayerId() >= TargetID::MIN_TARGET_TRANSIENT_ID)
+		Target *target = (Target *) entry->getObject();
+		if (target->getType() == Target::TypeTank ||
+			target->getPlayerId() >= TargetID::MIN_TARGET_TRANSIENT_ID)
 		{
 			S3D::dialogExit("TargetMovementEntryShips",
 				"Movement can be assigned to level targets only (no tanks)");
 		}
-		if (entry->getTarget()->getTargetState().getMovement())
+		if (target->getTargetState().getMovement())
 		{
 			S3D::dialogExit("TargetMovementEntryBoids",
 				"Only one movement can be assigned to each target");
@@ -121,7 +125,7 @@ void TargetMovementEntryShips::generate(ScorchedContext &context,
 		offsetEntry->offset = offset;
 
 		// Set this target as moving
-		entry->getTarget()->getTargetState().setMovement(offsetEntry);
+		target->getTargetState().setMovement(offsetEntry);
 	}
 }
 
@@ -137,16 +141,19 @@ void TargetMovementEntryShips::simulate(ScorchedContext &context, fixed frameTim
 	FixedVector directionPerp = direction.get2DPerp();
 
 	// For each target set position and rotation based on its offset
-	std::map<unsigned int, TargetGroup *> &objects = groupEntry_->getObjects();
-	std::map<unsigned int, TargetGroup *>::iterator itor;
-	for (itor = objects.begin();
-		itor != objects.end();
-		++itor)
+	ObjectGroup::ObjectGroupEntryHolderIterator iterator(objectGroup_);
+	ObjectGroupEntry *entry;
+	while (entry = iterator.getNext())
 	{
-		TargetGroup *groupEntry = (*itor).second;
-		
+		if (entry->getType() != ObjectGroupEntry::TypeTarget)
+		{
+			S3D::dialogExit("TargetMovementEntryShips",
+				"Movement can be assigned to level targets only (no particles)");
+		}
+
+		Target *target = (Target *) entry->getObject();
 		TargetMovementEntryShipsOffset *offsetEntry = (TargetMovementEntryShipsOffset *) 
-			groupEntry->getTarget()->getTargetState().getMovement();
+			target->getTargetState().getMovement();
 		if (offsetEntry)
 		{
 			// Calculate position
@@ -158,8 +165,7 @@ void TargetMovementEntryShips::simulate(ScorchedContext &context, fixed frameTim
 			fixed angleDegs = (angle / fixed::XPI) * 180 - 90;
 
 			// Update target
-			groupEntry->getTarget()->getLife().setTargetPositionAndRotation(
-				shipPosition, angleDegs);
+			target->getLife().setTargetPositionAndRotation(shipPosition, angleDegs);
 		}
 	}
 }

@@ -21,6 +21,9 @@
 #include <weapons/WeaponAimedOver.h>
 #include <weapons/AccessoryStore.h>
 #include <engine/Simulator.h>
+#include <engine/ObjectGroups.h>
+#include <engine/ObjectGroup.h>
+#include <engine/ObjectGroupEntry.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <tank/TankLib.h>
 #include <tanket/Tanket.h>
@@ -124,17 +127,22 @@ void WeaponAimedOver::fireWeapon(ScorchedContext &context,
 	}
 	else
 	{
-		TargetGroupsSetEntry *groupEntry = context.getLandscapeMaps().getGroundMaps().getGroups().
-			getGroup(groupName_.c_str());
-		if (groupEntry) 
+		ObjectGroup *objectGroup = context.getObjectGroups().getGroup(groupName_.c_str());
+		if (objectGroup) 
 		{
-			std::map<unsigned int, TargetGroup *> &objects = groupEntry->getObjects();
-			std::map<unsigned int, TargetGroup *>::iterator itor;
-			for (itor = objects.begin();
-				itor != objects.end();
-				++itor)
+			ObjectGroup::ObjectGroupEntryHolderIterator iterator(objectGroup);
+			ObjectGroupEntry *entry;
+			while (entry = iterator.getNext())
 			{
-				targets.push_back(itor->second->getTarget());
+				switch (entry->getType())
+				{
+				case ObjectGroupEntry::TypeTarget:
+				{
+					Target *target = (Target *) entry->getObject();
+					targets.push_back(target);
+				}
+				break;
+				}
 			}			
 		}
 	}

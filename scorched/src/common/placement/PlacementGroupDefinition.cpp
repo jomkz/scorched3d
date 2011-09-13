@@ -20,6 +20,7 @@
 
 #include <placement/PlacementGroupDefinition.h>
 #include <engine/ScorchedContext.h>
+#include <engine/ObjectGroups.h>
 #include <landscapemap/LandscapeMaps.h>
 
 PlacementGroupDefinition::PlacementGroupDefinition()
@@ -42,28 +43,23 @@ bool PlacementGroupDefinition::readXML(XMLNode *node)
 
 void PlacementGroupDefinition::addToGroups(
 	ScorchedContext &context,
-	TargetGroup *objectEntry,
-	bool thin)
+	ObjectGroupEntry *objectGroupEntry)
 {
 	for (unsigned int i=0; i<groupnames_.size(); i++)
 	{
 		std::string groupname = groupnames_[i];
-		addToGroup(groupname.c_str(), context, objectEntry, thin);
+		addToGroup(groupname.c_str(), context, objectGroupEntry);
 	}
 }
 
 void PlacementGroupDefinition::addToGroup(
 	const char *groupName,
 	ScorchedContext &context,
-	TargetGroup *objectEntry,
-	bool thin)
+	ObjectGroupEntry *objectGroupEntry)
 {
-	TargetGroupsGroupEntry *group =
-		context.getLandscapeMaps().getGroundMaps().getGroups().getGroup(
-			groupName, 
-			&context.getLandscapeMaps().getGroundMaps().getHeightMap());
+	ObjectGroup *group = context.getObjectGroups().getGroup(groupName, true);
 	if (group)
 	{
-		group->addObject(objectEntry, thin);
+		group->addObject(objectGroupEntry);
 	}
 }

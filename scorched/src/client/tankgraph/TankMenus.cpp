@@ -23,6 +23,9 @@
 #include <engine/GameState.h>
 #include <engine/ActionController.h>
 #include <engine/MainLoop.h>
+#include <engine/ObjectGroup.h>
+#include <engine/ObjectGroups.h>
+#include <engine/ObjectGroupEntry.h>
 #include <client/ClientState.h>
 #include <client/ScorchedClient.h>
 #include <server/ScorchedServer.h>
@@ -120,16 +123,15 @@ TankMenus::~TankMenus()
 
 void TankMenus::groupInfo()
 {
-	std::map<std::string, TargetGroupsGroupEntry*> &groups = 
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().
-			getGroups().getGroups();
-	std::map<std::string, TargetGroupsGroupEntry*>::iterator itor;
+	std::map<std::string, ObjectGroup *> &groups = 
+		ScorchedClient::instance()->getObjectGroups().getGroups();
+	std::map<std::string, ObjectGroup*>::iterator itor;
 	for (itor = groups.begin();
 		itor != groups.end();
 		++itor)
 	{
 		const std::string &name = itor->first;
-		TargetGroupsGroupEntry *entry = itor->second;
+		ObjectGroup *entry = itor->second;
 		Logger::log(S3D::formatStringBuffer("Group %s count %i", 
 			name.c_str(),
 			entry->getObjectCount()));

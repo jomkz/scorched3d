@@ -24,7 +24,7 @@
 			<timing type='looped'></timing>
 			<sound type='file'>
 				<file>data/wav/misc/frogs.wav</file>
-				<gain>1.0</gain>
+				<gain>0.7</gain>
 			</sound>
 		</sound>
 		<sound>

@@ -22,13 +22,9 @@
 #include <target/Target.h>
 #include <target/TargetLife.h>
 #include <engine/ScorchedContext.h>
-#include <landscapemap/TargetGroupsSetEntry.h>
-#include <landscapemap/LandscapeMaps.h>
-#include <net/NetBuffer.h>
-#include <set>
 
 TargetGroup::TargetGroup(ScorchedContext &context) :
-	context_(context)
+	ObjectGroupEntry(context.getObjectGroups())
 {
 }
 
@@ -36,103 +32,12 @@ TargetGroup::~TargetGroup()
 {
 }
 
-FixedVector &TargetGroup::getPosition()
+void *TargetGroup::getObject()
 {
-	return target_->getLife().getTargetPosition();
+	return target_;
 }
 
-bool TargetGroup::writeMessage(NamedNetBuffer &buffer)
+ObjectGroupEntry::ObjectType TargetGroup::getType()
 {
-	NamedNetBufferSection section(buffer, "TargetGroup");
-	buffer.addToBufferNamed("size", (int) groups_.size());
-
-	std::set<std::string> groupNames;
-	{
-		std::set<TargetGroupsSetEntry *>::iterator itor;
-		for (itor = groups_.begin();
-			itor != groups_.end();
-			++itor)
-		{
-			TargetGroupsSetEntry *group = *itor;
-			groupNames.insert(group->getName());
-		}	
-	}
-	{
-		std::set<std::string>::iterator itor;
-		for (itor = groupNames.begin();
-			itor != groupNames.end();
-			++itor)
-		{			
-			buffer.addToBufferNamed("name", *itor);
-		}
-	}
-
-	return true;
-}
-
-bool TargetGroup::readMessage(NetBufferReader &reader)
-{
-	std::set<std::string> goodGroups;
-
-	int groupNo = 0;
-	if (!reader.getFromBuffer(groupNo)) return false;
-	for (int g=0; g<groupNo; g++)
-	{
-		std::string groupName;
-		if (!reader.getFromBuffer(groupName)) return false;
-
-		TargetGroupsSetEntry *group = 
-			context_.getLandscapeMaps().getGroundMaps().getGroups().getGroup(groupName.c_str());
-		if (group && !group->hasObject(this))
-		{
-			group->addObject(this, false);
-		}
-		goodGroups.insert(groupName);
-	}
-
-	std::set<TargetGroupsSetEntry *> groupsCopy = groups_;
-	std::set<TargetGroupsSetEntry *>::iterator itor;
-	for (itor = groupsCopy.begin();
-		itor != groupsCopy.end();
-		++itor)
-	{
-		TargetGroupsSetEntry *group = *itor;
-		if (goodGroups.find(group->getName()) == goodGroups.end())
-		{
-			if (group->hasObject(this))
-			{
-				group->removeObject(this);
-			}
-		}
-	}
-
-	return true;
-}
-
-void TargetGroup::addToGroup(TargetGroupsSetEntry *group)
-{
-	groups_.insert(group);
-}
-
-void TargetGroup::removeFromGroup(TargetGroupsSetEntry *group)
-{
-	groups_.erase(group);
-}
-
-void TargetGroup::removeFromAllGroups()
-{
-	if (groups_.empty()) return;
-
-	std::set<TargetGroupsSetEntry *> groupsCopy = groups_;
-	std::set<TargetGroupsSetEntry *>::iterator itor;
-	for (itor = groupsCopy.begin();
-		itor != groupsCopy.end();
-		++itor)
-	{
-		TargetGroupsSetEntry *group = *itor;
-		if (group->hasObject(this))
-		{
-			group->removeObject(this);
-		}
-	}
+	return ObjectGroupEntry::TypeTarget;
 }

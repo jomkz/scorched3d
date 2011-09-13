@@ -32,7 +32,7 @@ public:
 	FixedVector offset;
 };
 
-class TargetGroupsGroupEntry;
+class ObjectGroup;
 class TargetMovementEntryShips : public TargetMovementEntry
 {
 public:
@@ -49,7 +49,7 @@ public:
 
 protected:
 	SplinePath path_;
-	TargetGroupsGroupEntry *groupEntry_;
+	ObjectGroup *objectGroup_;
 };
 
 #endif // __INCLUDE_TargetMovementEntryShipsh_INCLUDE__

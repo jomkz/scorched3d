@@ -29,6 +29,7 @@
 #include <target/TargetDefinition.h>
 #include <target/TargetLife.h>
 #include <target/TargetShield.h>
+#include <target/TargetGroup.h>
 #include <target/TargetParachute.h>
 #include <target/TargetState.h>
 #include <target/TargetContainer.h>
@@ -265,7 +266,7 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 #endif // #ifndef S3D_SERVER
 
 	target->getLife().setTargetPosition(position);
-	groups_.addToGroups(context, &target->getGroup(), false);
+	groups_.addToGroups(context, &target->getGroup());
 
 	context.getTargetContainer().addTarget(target);
 

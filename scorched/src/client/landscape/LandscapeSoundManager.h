@@ -43,11 +43,11 @@ protected:
 	struct LandscapeSoundManagerEntry
 	{
 		LandscapeSoundManagerEntry() : 
-			soundSource(0), removed(false) {}
+			soundSource(0), initData(0), soundType(0), removed(false) {}
 
 		VirtualSoundSource *soundSource;
 		LandscapeSoundType *soundType;
-		unsigned int initData;
+		void *initData;
 
 		float timeLeft;
 		bool removed;

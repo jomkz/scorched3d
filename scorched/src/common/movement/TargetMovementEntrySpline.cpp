@@ -22,6 +22,9 @@
 #include <common/Defines.h>
 #include <common/RandomGenerator.h>
 #include <engine/ScorchedContext.h>
+#include <engine/ObjectGroups.h>
+#include <engine/ObjectGroup.h>
+#include <engine/ObjectGroupEntry.h>
 #include <target/Target.h>
 #include <target/TargetLife.h>
 #include <target/TargetState.h>
@@ -76,9 +79,8 @@ void TargetMovementEntrySpline::generate(ScorchedContext &context,
 	path_.simulate(splineGroup->starttime);
 
 	// Find the group to move the objects in
-	groupEntry_ = context.getLandscapeMaps().getGroundMaps().getGroups().
-		getGroup(splineGroup->groupname.c_str());
-	if (!groupEntry_)
+	objectGroup_ = context.getObjectGroups().getGroup(splineGroup->groupname.c_str());
+	if (!objectGroup_)
 	{
 		S3D::dialogExit("TargetMovementEntrySpline", 
 			S3D::formatStringBuffer("Group entry %s has no objects defined for it", 
@@ -86,29 +88,37 @@ void TargetMovementEntrySpline::generate(ScorchedContext &context,
 	}
 
 	// Generate the list of offsets for all of the targets in the group
-	std::map<unsigned int, TargetGroup *> &objects = groupEntry_->getObjects();
-	std::map<unsigned int, TargetGroup *>::iterator itor;
-	for (itor = objects.begin();
-		itor != objects.end();
-		++itor)
+	ObjectGroup::ObjectGroupEntryHolderIterator iterator(objectGroup_);
+	ObjectGroupEntry *entry;
+	while (entry = iterator.getNext())
 	{
-		TargetGroup *entry = (*itor).second;
-
-		if (entry->getTarget()->getType() == Target::TypeTank ||
-			entry->getTarget()->getPlayerId() >= TargetID::MIN_TARGET_TRANSIENT_ID)
-		{
-			S3D::dialogExit("TargetMovementEntrySpline",
-				"Movement can be assigned to level targets only (no tanks)");
-		}
-		if (entry->getTarget()->getTargetState().getMovement())
-		{
-			S3D::dialogExit("TargetMovementEntryBoids",
-				"Only one movement can be assigned to each target");
-		}
-
-		// Set this target as moving
-		entry->getTarget()->getTargetState().setMovement(new TargetStateMovement());
+		makeObject(entry);
 	}
+}
+
+void TargetMovementEntrySpline::makeObject(ObjectGroupEntry *entry)
+{
+	if (entry->getType() != ObjectGroupEntry::TypeTarget)
+	{
+		S3D::dialogExit("TargetMovementEntrySpline",
+			"Movement can be assigned to level targets only (no particles)");
+	}
+
+	Target *target = (Target *) entry->getObject();
+	if (target->getType() == Target::TypeTank ||
+		target->getPlayerId() >= TargetID::MIN_TARGET_TRANSIENT_ID)
+	{
+		S3D::dialogExit("TargetMovementEntrySpline",
+			"Movement can be assigned to level targets only (no tanks)");
+	}
+	if (target->getTargetState().getMovement())
+	{
+		S3D::dialogExit("TargetMovementEntrySpline",
+			"Only one movement can be assigned to each target");
+	}
+
+	// Set this target as moving
+	target->getTargetState().setMovement(new TargetStateMovement());
 }
 
 void TargetMovementEntrySpline::simulate(ScorchedContext &context, fixed frameTime)
@@ -130,21 +140,26 @@ void TargetMovementEntrySpline::simulate(ScorchedContext &context, fixed frameTi
 	}
 
 	// For each target set position and rotation based on its offset
-	std::map<unsigned int, TargetGroup *> &objects = groupEntry_->getObjects();
-	std::map<unsigned int, TargetGroup *>::iterator itor;
-	for (itor = objects.begin();
-		itor != objects.end();
-		++itor)
+	ObjectGroup::ObjectGroupEntryHolderIterator iterator(objectGroup_);
+	ObjectGroupEntry *entry;
+	while (entry = iterator.getNext())
 	{
-		TargetGroup *groupEntry = (*itor).second;
+		if (entry->getType() != ObjectGroupEntry::TypeTarget)
+		{
+			S3D::dialogExit("TargetMovementEntrySpline",
+				"Movement can be assigned to level targets only (no particles)");
+		}
 		
+		Target *target = (Target *) entry->getObject();
+		if (!target->getTargetState().getMovement()) makeObject(entry);
+
 		fixed angle = atan2x(direction[1], direction[0]);
 		fixed angleDegs = (angle / fixed::XPI) * 180 - 90;
 
 		// Update target
-		groupEntry->getTarget()->getLife().setTargetPositionAndRotation(
+		target->getLife().setTargetPositionAndRotation(
 			position, angleDegs);
-		groupEntry->getTarget()->getLife().setVelocity(direction);
+		target->getLife().setVelocity(direction);
 	}
 }
 

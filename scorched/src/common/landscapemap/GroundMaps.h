@@ -23,7 +23,7 @@
 
 #include <landscapemap/HeightMap.h>
 #include <landscapemap/NapalmMap.h>
-#include <landscapemap/TargetGroups.h>
+#include <placement/PlacementShadowDefinition.h>
 
 class RandomGenerator;
 class ScorchedContext;
@@ -64,13 +64,12 @@ public:
 	int getArenaX();
 	int getArenaY();
 
-	// Objects funtions
-	TargetGroups &getGroups() { return groups_; }
-
 	// Actual heightmap
 	HeightMap &getHeightMap() { return map_; }
 
 	HeightMap &getDeformMap() { return deformMap_; }
+
+	std::list<PlacementShadowDefinition::Entry> &getShadows() { return shadows_; }
 
 protected:
 	int arenaX_, arenaY_;
@@ -78,8 +77,8 @@ protected:
 	HeightMap map_; // The current level's heightmap
 	NapalmMap nmap_; // How high napalm is at certain points
 	HeightMap deformMap_; // How low can this level go
-	TargetGroups groups_; // The groups in the scene
 	LandscapeDefinitionCache &defnCache_;
+	std::list<PlacementShadowDefinition::Entry> shadows_;
 
 	// Generate levels
 	void generateHMap(

@@ -42,6 +42,7 @@ class LUAScriptFactory;
 class LUAScriptHook;
 class Simulator;
 class TankAIStrings;
+class ObjectGroups;
 
 class ScorchedContext
 {
@@ -73,6 +74,7 @@ public:
 	LUAScriptFactory &getLUAScriptFactory() { return *luaScriptFactory_; }
 	LUAScriptHook &getLUAScriptHook() { return *luaScriptHook_; }
 	TankAIStrings &getTankAIStrings() { return *tankAIStrings_; }
+	ObjectGroups &getObjectGroups() { return *objectGroups_; }
 	
 protected:
 	LandscapeMaps *landscapeMaps_;
@@ -91,6 +93,7 @@ protected:
 	LUAScriptFactory *luaScriptFactory_;
 	LUAScriptHook *luaScriptHook_;
 	TankAIStrings *tankAIStrings_;
+	ObjectGroups *objectGroups_;
 };
 
 #endif

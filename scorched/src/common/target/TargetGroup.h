@@ -21,41 +21,24 @@
 #if !defined(__INCLUDE_TargetGrouph_INCLUDE__)
 #define __INCLUDE_TargetGrouph_INCLUDE__
 
-#include <common/FixedVector.h>
-#include <set>
+#include <engine/ObjectGroupEntry.h>
 
-class TargetGroupsSetEntry;
-class ScorchedContext;
-class NamedNetBuffer;
-class NetBufferReader;
 class Target;
-class TargetGroup
+class ScorchedContext;
+class TargetGroup : public ObjectGroupEntry
 {
 public:
 	TargetGroup(ScorchedContext &context);
 	virtual ~TargetGroup();
 
+	virtual void *getObject();
+	virtual ObjectGroupEntry::ObjectType getType();
+
 	void setTarget(Target *target) { target_ = target; }
 	Target *getTarget() { return target_; }
 
-	std::set<TargetGroupsSetEntry *> &getAllGroups() { return groups_; }
-	FixedVector &getPosition();
-
-	void removeFromAllGroups();
-
-	virtual bool writeMessage(NamedNetBuffer &buffer);
-	virtual bool readMessage(NetBufferReader &reader);
-
-private:
-	friend class TargetGroupsSetEntry;
-
-	void addToGroup(TargetGroupsSetEntry *group);
-	void removeFromGroup(TargetGroupsSetEntry *group);
-
 protected:
-	ScorchedContext &context_;
 	Target *target_;
-	std::set<TargetGroupsSetEntry *> groups_;
 };
 
 #endif // __INCLUDE_TargetGrouph_INCLUDE__

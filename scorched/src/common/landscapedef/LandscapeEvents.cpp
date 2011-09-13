@@ -20,6 +20,9 @@
 
 #include <landscapedef/LandscapeEvents.h>
 #include <landscapemap/LandscapeMaps.h>
+#include <engine/ObjectGroupEntry.h>
+#include <engine/ObjectGroups.h>
+#include <engine/ObjectGroup.h>
 #include <engine/ScorchedContext.h>
 #include <engine/Simulator.h>
 #include <target/Target.h>
@@ -82,12 +85,11 @@ bool LandscapeConditionGroupSize::fireEvent(ScorchedContext &context,
 {
 	if (eventNumber == 1) // i.e. the first event
 	{
-		TargetGroupsGroupEntry *groupEntry =
-			context.getLandscapeMaps().getGroundMaps().getGroups().getGroup(
-				groupname.c_str());
-		if (groupEntry)
+		ObjectGroup *objectGroup =
+			context.getObjectGroups().getGroup(groupname.c_str());
+		if (objectGroup)
 		{
-			int groupCount = groupEntry->getObjectCount();
+			int groupCount = objectGroup->getObjectCount();
 			if (groupCount <= groupsize) return true;
 		}
 	}
@@ -203,21 +205,28 @@ void LandscapeActionFireWeaponFromGroup::fireAction(ScorchedContext &context)
 	Weapon *weapon = (Weapon *) accessory->getAction();
 
 	// Find the group to select the objects in
-	TargetGroupsSetEntry *groupEntry = context.getLandscapeMaps().getGroundMaps().getGroups().
-		getGroup(groupname.c_str());
-	if (!groupEntry) return;
+	ObjectGroup *objectGroup = context.getObjectGroups().getGroup(groupname.c_str());
+	if (!objectGroup) return;
 
 	// Select the object
-	int objectCount = groupEntry->getObjectCount();
+	int objectCount = objectGroup->getObjectCount();
 	if (objectCount == 0) return;
 	unsigned int object = context.getSimulator().getRandomGenerator().getRandUInt("LandscapeEvents") % objectCount;
-	TargetGroup *entry = groupEntry->getObjectByPos(object);
+	ObjectGroupEntry *entry = objectGroup->getObjectByPos(object);
 
-	FixedVector newPosition = entry->getTarget()->getLife().getTargetPosition();
-	FixedVector newVelocity = entry->getTarget()->getLife().getVelocity();
+	switch (entry->getType())
+	{
+	case ObjectGroupEntry::TypeTarget:
+		{
+			Target *target = (Target *) entry->getObject();
+			FixedVector newPosition = target->getLife().getTargetPosition();
+			FixedVector newVelocity = target->getLife().getVelocity();
 
-	WeaponFireContext weaponContext(entry->getTarget()->getPlayerId(), false, false);
-	weapon->fireWeapon(context, weaponContext, newPosition, newVelocity);
+			WeaponFireContext weaponContext(target->getPlayerId(), false, false);
+			weapon->fireWeapon(context, weaponContext, newPosition, newVelocity);
+		}
+		break;
+	}
 }
 
 bool LandscapeActionFireWeaponFromGroup::readXML(XMLNode *node)

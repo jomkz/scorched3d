@@ -33,6 +33,9 @@
 #include <landscapedef/LandscapeDefn.h>
 #include <water/Water.h>
 #include <engine/GameState.h>
+#include <engine/ObjectGroup.h>
+#include <engine/ObjectGroups.h>
+#include <engine/ObjectGroupEntry.h>
 #include <tankgraph/TankKeyboardControlUtil.h>
 #include <target/TargetContainer.h>
 #include <tank/Tank.h>
@@ -485,16 +488,24 @@ void TargetCamera::moveCamera()
 		break;
 	case CamObject:
 		{
-			TargetGroupsSetEntry *groupEntry = ScorchedClient::instance()->getLandscapeMaps().
-				getGroundMaps().getGroups().getGroup("camera");
-			if (groupEntry && groupEntry->getObjectCount() > 0)
+			ObjectGroup *objectGroup = ScorchedClient::instance()->getObjectGroups().getGroup("camera");
+			if (objectGroup && objectGroup->getObjectCount() > 0)
 			{
-				TargetGroup *targetGroup = groupEntry->getObjectByPos(viewObject_ % groupEntry->getObjectCount());
-				FixedVector &position = targetGroup->getTarget()->getLife().getTargetPosition();
-				FixedVector &velocity = targetGroup->getTarget()->getLife().getVelocity();
-				mainCam_.setLookAt(position.asVector());
-				Vector offset = velocity.asVector().Normalize() * -5.0f;
-				mainCam_.setOffSet(offset);
+				ObjectGroupEntry *entry = objectGroup->getObjectByPos(viewObject_ % objectGroup->getObjectCount());
+				switch (entry->getType())
+				{
+				case ObjectGroupEntry::TypeTarget:
+				{
+					Target *target = (Target *) entry->getObject();
+					FixedVector position = target->getLife().getTargetPosition();
+					FixedVector velocity = target->getLife().getVelocity();
+
+					mainCam_.setLookAt(position.asVector());
+					Vector offset = velocity.asVector().Normalize() * -5.0f;
+					mainCam_.setOffSet(offset);
+				}
+				break;
+				}
 
 				if (objectTime_ > 15.0f)
 				{

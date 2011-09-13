@@ -603,8 +603,7 @@ void Landscape::generate(ProgressCounter *counter)
 
 	// Add shadows to the mainmap
 	std::list<PlacementShadowDefinition::Entry> &shadows = 
-		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().
-			getGroups().getShadows();
+		ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getShadows();
 	std::list<PlacementShadowDefinition::Entry>::iterator itor;
 	for (itor = shadows.begin();
 		itor != shadows.end();

@@ -969,15 +969,6 @@
     <ClCompile Include="..\..\common\landscapemap\RoofMaps.cpp">
       <Filter>landscapemap</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\landscapemap\TargetGroups.cpp">
-      <Filter>landscapemap</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\landscapemap\TargetGroupsGroupEntry.cpp">
-      <Filter>landscapemap</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\landscapemap\TargetGroupsSetEntry.cpp">
-      <Filter>landscapemap</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\lua\lapi.cpp">
       <Filter>lua</Filter>
     </ClCompile>
@@ -1213,9 +1204,6 @@
       <Filter>target</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\target\TargetDefinition.cpp">
-      <Filter>target</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\target\TargetGroup.cpp">
       <Filter>target</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\target\TargetLife.cpp">
@@ -1468,6 +1456,18 @@
       <Filter>actions</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\target\TargetDamage.cpp">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\engine\ObjectGroup.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\engine\ObjectGroupEntry.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\engine\ObjectGroups.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\target\TargetGroup.cpp">
       <Filter>target</Filter>
     </ClCompile>
   </ItemGroup>
@@ -2381,15 +2381,6 @@
     <ClInclude Include="..\..\common\landscapemap\RoofMaps.h">
       <Filter>landscapemap</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\common\landscapemap\TargetGroups.h">
-      <Filter>landscapemap</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\landscapemap\TargetGroupsGroupEntry.h">
-      <Filter>landscapemap</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\landscapemap\TargetGroupsSetEntry.h">
-      <Filter>landscapemap</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\common\lua\lapi.h">
       <Filter>lua</Filter>
     </ClInclude>
@@ -2607,9 +2598,6 @@
       <Filter>target</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\target\TargetDefinition.h">
-      <Filter>target</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\target\TargetGroup.h">
       <Filter>target</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\target\TargetLife.h">
@@ -2862,6 +2850,18 @@
       <Filter>actions</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\target\TargetDamage.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\ObjectGroup.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\ObjectGroupEntry.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\ObjectGroups.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\target\TargetGroup.h">
       <Filter>target</Filter>
     </ClInclude>
   </ItemGroup>

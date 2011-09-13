@@ -23,6 +23,9 @@
 #include <common/Defines.h>
 #include <common/RandomGenerator.h>
 #include <engine/ScorchedContext.h>
+#include <engine/ObjectGroups.h>
+#include <engine/ObjectGroup.h>
+#include <engine/ObjectGroupEntry.h>
 #include <target/Target.h>
 #include <target/TargetLife.h>
 #include <target/TargetState.h>
@@ -54,9 +57,8 @@ void TargetMovementEntryBoids::generate(ScorchedContext &context,
 	maxBounds_ = boids->maxbounds;
 
 	// Find the group to move the objects in
-	groupEntry_ = context.getLandscapeMaps().getGroundMaps().getGroups().
-		getGroup(boids->groupname.c_str());
-	if (!groupEntry_)
+	objectGroup_ = context.getObjectGroups().getGroup(boids->groupname.c_str());
+	if (!objectGroup_)
 	{
 		S3D::dialogExit("TargetMovementEntryBoids", 
 			S3D::formatStringBuffer("Group entry %s has no objects defined for it", 
@@ -71,34 +73,38 @@ void TargetMovementEntryBoids::makeBoids(ScorchedContext &context,
 	RandomGenerator &random, FixedVector &maxBounds, FixedVector &minBounds)
 {
 	// Generate the list of offsets for all of the targets in the group
-	std::map<unsigned int, TargetGroup *> &objects = groupEntry_->getObjects();
-	std::map<unsigned int, TargetGroup *>::iterator itor;
-	for (itor = objects.begin();
-		itor != objects.end();
-		++itor)
+	ObjectGroup::ObjectGroupEntryHolderIterator iterator(objectGroup_);
+	ObjectGroupEntry *entry;
+	while (entry = iterator.getNext())
 	{
-		TargetGroup *groupEntry = (*itor).second;
-		makeBoid(context, groupEntry);
+		makeBoid(context, entry);
 	}
 }
 
-Boid2 *TargetMovementEntryBoids::makeBoid(ScorchedContext &context, TargetGroup *groupEntry)
+Boid2 *TargetMovementEntryBoids::makeBoid(ScorchedContext &context, ObjectGroupEntry *entry)
 {
-	if (groupEntry->getTarget()->getType() == Target::TypeTank ||
-		groupEntry->getTarget()->getPlayerId() >= TargetID::MIN_TARGET_TRANSIENT_ID)
+	if (entry->getType() != ObjectGroupEntry::TypeTarget)
+	{
+		S3D::dialogExit("TargetMovementEntryBoids",
+			"Movement can be assigned to level targets only (no particles)");
+	}
+
+	Target *target = (Target *) entry->getObject();
+	if (target->getType() == Target::TypeTank ||
+		target->getPlayerId() >= TargetID::MIN_TARGET_TRANSIENT_ID)
 	{
 		S3D::dialogExit("TargetMovementEntryBoids",
 			"Movement can be assigned to level targets only (no tanks)");
 	}
-	if (groupEntry->getTarget()->getTargetState().getMovement())
+	if (target->getTargetState().getMovement())
 	{
 		S3D::dialogExit("TargetMovementEntryBoids",
 			"Only one movement can be assigned to each target");
 	}
 
 	// Set this target as moving
-	Boid2 *boid = new Boid2(context, groupEntry->getTarget(), this);
-	groupEntry->getTarget()->getTargetState().setMovement(boid);
+	Boid2 *boid = new Boid2(context, target, this);
+	target->getTargetState().setMovement(boid);
 	return boid;
 }
 
@@ -108,16 +114,19 @@ void TargetMovementEntryBoids::simulate(ScorchedContext &context, fixed frameTim
 	std::vector<Boid2*> boidSet;
 
 	// For each target set position and rotation based on its offset
-	std::map<unsigned int, TargetGroup *> &objects = groupEntry_->getObjects();
-	std::map<unsigned int, TargetGroup *>::iterator itor;
-	for (itor = objects.begin();
-		itor != objects.end();
-		++itor)
+	ObjectGroup::ObjectGroupEntryHolderIterator iterator(objectGroup_);
+	ObjectGroupEntry *entry;
+	while (entry = iterator.getNext())
 	{
-		TargetGroup *groupEntry = (*itor).second;
+		if (entry->getType() != ObjectGroupEntry::TypeTarget)
+		{
+			S3D::dialogExit("TargetMovementEntryBoids",
+				"Movement can be assigned to level targets only (no particles)");
+		}
+		Target *target = (Target *) entry->getObject();
 
-		Boid2 *boid = (Boid2 *) groupEntry->getTarget()->getTargetState().getMovement();
-		if (!boid) boid = makeBoid(context, groupEntry);
+		Boid2 *boid = (Boid2 *) target->getTargetState().getMovement();
+		if (!boid) boid = makeBoid(context, entry);
 
 		boidSet.push_back(boid);
 		if (boidSet.size() == 5)

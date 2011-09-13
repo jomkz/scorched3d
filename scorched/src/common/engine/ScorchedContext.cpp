@@ -23,6 +23,7 @@
 #include <engine/ActionController.h>
 #include <engine/Simulator.h>
 #include <engine/ModFiles.h>
+#include <engine/ObjectGroups.h>
 #include <net/NetInterface.h>
 #include <coms/ComsMessageHandler.h>
 #include <common/OptionsTransient.h>
@@ -40,6 +41,7 @@
 
 ScorchedContext::ScorchedContext(const char *name)
 {
+	objectGroups_ = new ObjectGroups();
 	accessoryStore_ = new AccessoryStore();
 	targetContainer_ = new TargetContainer();
 	landscapeMaps_ = new LandscapeMaps();
@@ -82,6 +84,7 @@ ScorchedContext::~ScorchedContext()
 	delete luaScriptFactory_;
 	delete luaScriptHook_;
 	delete tankAIStrings_;
+	delete objectGroups_;
 }
 
 ActionController &ScorchedContext::getActionController()

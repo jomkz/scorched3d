@@ -226,6 +226,9 @@
     <ClCompile Include="..\..\common\engine\ModFileEntry.cpp" />
     <ClCompile Include="..\..\common\engine\ModFiles.cpp" />
     <ClCompile Include="..\..\common\engine\ModInfo.cpp" />
+    <ClCompile Include="..\..\common\engine\ObjectGroup.cpp" />
+    <ClCompile Include="..\..\common\engine\ObjectGroupEntry.cpp" />
+    <ClCompile Include="..\..\common\engine\ObjectGroups.cpp" />
     <ClCompile Include="..\..\common\engine\PhysicsParticle.cpp" />
     <ClCompile Include="..\..\common\engine\PhysicsParticleObject.cpp" />
     <ClCompile Include="..\..\common\engine\SaveGame.cpp" />
@@ -265,9 +268,6 @@
     <ClCompile Include="..\..\common\landscapemap\MovementMap.cpp" />
     <ClCompile Include="..\..\common\landscapemap\NapalmMap.cpp" />
     <ClCompile Include="..\..\common\landscapemap\RoofMaps.cpp" />
-    <ClCompile Include="..\..\common\landscapemap\TargetGroups.cpp" />
-    <ClCompile Include="..\..\common\landscapemap\TargetGroupsGroupEntry.cpp" />
-    <ClCompile Include="..\..\common\landscapemap\TargetGroupsSetEntry.cpp" />
     <ClCompile Include="..\..\common\lua\lapi.cpp" />
     <ClCompile Include="..\..\common\lua\lauxlib.cpp" />
     <ClCompile Include="..\..\common\lua\lbaselib.cpp" />
@@ -972,6 +972,9 @@
     <ClInclude Include="..\..\common\engine\ModFileEntry.h" />
     <ClInclude Include="..\..\common\engine\ModFiles.h" />
     <ClInclude Include="..\..\common\engine\ModInfo.h" />
+    <ClInclude Include="..\..\common\engine\ObjectGroup.h" />
+    <ClInclude Include="..\..\common\engine\ObjectGroupEntry.h" />
+    <ClInclude Include="..\..\common\engine\ObjectGroups.h" />
     <ClInclude Include="..\..\common\engine\PhysicsParticle.h" />
     <ClInclude Include="..\..\common\engine\PhysicsParticleObject.h" />
     <ClInclude Include="..\..\common\engine\SaveGame.h" />
@@ -1013,9 +1016,6 @@
     <ClInclude Include="..\..\common\landscapemap\MovementMap.h" />
     <ClInclude Include="..\..\common\landscapemap\NapalmMap.h" />
     <ClInclude Include="..\..\common\landscapemap\RoofMaps.h" />
-    <ClInclude Include="..\..\common\landscapemap\TargetGroups.h" />
-    <ClInclude Include="..\..\common\landscapemap\TargetGroupsGroupEntry.h" />
-    <ClInclude Include="..\..\common\landscapemap\TargetGroupsSetEntry.h" />
     <ClInclude Include="..\..\common\lua\lapi.h" />
     <ClInclude Include="..\..\common\lua\lauxlib.h" />
     <ClInclude Include="..\..\common\lua\lcode.h" />

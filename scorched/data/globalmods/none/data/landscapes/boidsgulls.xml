@@ -34,7 +34,7 @@
 			<file>data/wav/misc/gull2.wav</file>
 			<file>data/wav/misc/gull4.wav</file>
 			<file>data/wav/misc/gull5.wav</file>
-			<gain>1.0</gain>
+			<gain>0.3</gain>
 		</sound>
 	</sound>
 	<!--

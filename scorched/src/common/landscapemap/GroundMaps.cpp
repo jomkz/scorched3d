@@ -25,6 +25,7 @@
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <landscapedef/LandscapeDefinitionCache.h>
+#include <engine/ObjectGroups.h>
 #include <target/Target.h>
 #include <target/TargetContainer.h>
 #include <common/Logger.h>
@@ -187,10 +188,10 @@ void GroundMaps::generateObjects(
 	}
 
 	// Remove any existing shadows
-	groups_.getShadows().clear();
+	getShadows().clear();
 
 	// Remove any existing groups
-	groups_.clearGroups();
+	context.getObjectGroups().clearGroups();
 
 	// Add objects to the landscape (if any)
 	// Do this now as it adds shadows to the mainmap
@@ -226,8 +227,7 @@ void GroundMaps::generateObjects(
 
 	// Deform the main map with respect to the objects
 	{
-		std::list<PlacementShadowDefinition::Entry> &shadows = 
-			groups_.getShadows();
+		std::list<PlacementShadowDefinition::Entry> &shadows = getShadows();
 		std::list<PlacementShadowDefinition::Entry>::iterator itor;
 		for (itor = shadows.begin();
 			itor != shadows.end();

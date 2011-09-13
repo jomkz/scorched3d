@@ -21,6 +21,9 @@
 #include <weapons/WeaponGroupSelect.h>
 #include <weapons/AccessoryStore.h>
 #include <engine/Simulator.h>
+#include <engine/ObjectGroups.h>
+#include <engine/ObjectGroup.h>
+#include <engine/ObjectGroupEntry.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeTex.h>
 #include <target/Target.h>
@@ -65,19 +68,24 @@ void WeaponGroupSelect::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
 	// Find the group to select the objects in
-	TargetGroupsSetEntry *groupEntry = context.getLandscapeMaps().getGroundMaps().getGroups().
-		getGroup(groupName_.c_str());
-	if (!groupEntry) return;
+	ObjectGroup *objectGroup = context.getObjectGroups().getGroup(groupName_.c_str());
+	if (!objectGroup) return;
 
 	// Select the object
-	int objectCount = groupEntry->getObjectCount();
+	int objectCount = objectGroup->getObjectCount();
 	if (objectCount == 0) return;
 	unsigned int object = context.getSimulator().getRandomGenerator().getRandUInt("WeaponGroupSelect") % objectCount;
-	TargetGroup *entry = groupEntry->getObjectByPos(object);
+	ObjectGroupEntry *entry = objectGroup->getObjectByPos(object);
 
-	FixedVector newPosition = entry->getTarget()->getLife().getTargetPosition();
-	FixedVector newVelocity = entry->getTarget()->getLife().getVelocity();
-
-	nextAction_->fireWeapon(context, weaponContext, newPosition, newVelocity);
+	switch (entry->getType())
+	{
+	case ObjectGroupEntry::TypeTarget:
+	{
+		Target *target = (Target *) entry->getObject();
+		FixedVector newPosition = target->getLife().getTargetPosition();
+		FixedVector newVelocity = target->getLife().getVelocity();
+		nextAction_->fireWeapon(context, weaponContext, newPosition, newVelocity);
+	}
+	break;
+	}
 }
-

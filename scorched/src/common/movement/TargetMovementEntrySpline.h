@@ -25,7 +25,8 @@
 #include <movement/TargetMovementEntry.h>
 #include <map>
 
-class TargetGroupsGroupEntry;
+class ObjectGroup;
+class ObjectGroupEntry;
 class TargetMovementEntrySpline : public TargetMovementEntry
 {
 public:
@@ -42,9 +43,11 @@ public:
 
 protected:
 	SplinePath path_;
-	TargetGroupsGroupEntry *groupEntry_;
+	ObjectGroup *objectGroup_;
 	bool groundOnly_;
 	ScorchedContext *context_;
+
+	void makeObject(ObjectGroupEntry *entry);
 };
 
 #endif // __INCLUDE_TargetMovementEntrySplineh_INCLUDE__

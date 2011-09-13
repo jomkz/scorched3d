@@ -33,6 +33,8 @@
 #include <tank/TankState.h>
 #include <target/Target.h>
 #include <target/TargetLife.h>
+#include <target/TargetGroup.h>
+#include <engine/ObjectGroup.h>
 
 static FileLogger *syncCheckFileLogger = 0;
 
@@ -414,13 +416,13 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 
 					// Output information
 					std::string groupnames = "";
-					std::set<TargetGroupsSetEntry *> &groups = target->getGroup().getAllGroups();
-					std::set<TargetGroupsSetEntry *>::iterator groupItor;
+					std::set<ObjectGroup *> &groups = target->getGroup().getAllGroups();
+					std::set<ObjectGroup *>::iterator groupItor;
 					for (groupItor = groups.begin();
 						groupItor != groups.end();
 						++groupItor)
 					{
-						TargetGroupsSetEntry *group = *groupItor;
+						ObjectGroup *group = *groupItor;
 						groupnames.append(group->getName()).append(" ");
 					}
 					syncCheckLog(S3D::formatStringBuffer(
