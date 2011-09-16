@@ -22,7 +22,7 @@
 #define __INCLUDE_PlacementObjectTargeth_INCLUDE__
 
 #include <placement/PlacementObject.h>
-#include <placement/PlacementGroupDefinition.h>
+#include <engine/ObjectGroupEntryDefinition.h>
 #include <target/TargetDefinition.h>
 
 class PlacementObjectTarget : public PlacementObject
@@ -40,7 +40,7 @@ public:
 
 protected:
 	TargetDefinition targetDef_;
-	PlacementGroupDefinition groups_;
+	ObjectGroupEntryDefinition groups_;
 };
 
 #endif // __INCLUDE_PlacementObjectTargeth_INCLUDE__

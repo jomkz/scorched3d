@@ -18,41 +18,44 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <target/TargetGroup.h>
-#include <target/Target.h>
-#include <target/TargetLife.h>
+#include <actions/ParticleGroup.h>
 #include <engine/ScorchedContext.h>
+#include <engine/PhysicsParticle.h>
+#include <weapons/Weapon.h>
 
-TargetGroup::TargetGroup(ScorchedContext &context) :
-	ObjectGroupEntry(context.getObjectGroups())
+ParticleGroup::ParticleGroup(ScorchedContext &context,
+	PhysicsParticle *physicsParticle, WeaponFireContext *weaponFireContext) :
+	ObjectGroupEntry(context.getObjectGroups()),
+	physicsParticle_(physicsParticle),
+	weaponFireContext_(weaponFireContext)
 {
 }
 
-TargetGroup::~TargetGroup()
+ParticleGroup::~ParticleGroup()
 {
 }
 
-void *TargetGroup::getObject()
+void *ParticleGroup::getObject()
 {
-	return target_;
+	return physicsParticle_;
 }
 
-ObjectGroupEntry::ObjectType TargetGroup::getType()
+ObjectGroupEntry::ObjectType ParticleGroup::getType()
 {
-	return ObjectGroupEntry::TypeTarget;
+	return ObjectGroupEntry::TypeParticle;
 }
 
-FixedVector &TargetGroup::getPosition()
+FixedVector &ParticleGroup::getPosition()
 {
-	return target_->getLife().getTargetPosition();
+	return physicsParticle_->getCurrentPosition();
 }
 
-FixedVector &TargetGroup::getVelocity()
+FixedVector &ParticleGroup::getVelocity()
 {
-	return target_->getLife().getVelocity();
+	return physicsParticle_->getCurrentVelocity();
 }
 
-unsigned int TargetGroup::getPlayerId()
+unsigned int ParticleGroup::getPlayerId()
 {
-	return target_->getPlayerId();
+	return weaponFireContext_->getPlayerId();
 }

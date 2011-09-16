@@ -18,20 +18,19 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <placement/PlacementGroupDefinition.h>
+#include <engine/ObjectGroupEntryDefinition.h>
 #include <engine/ScorchedContext.h>
 #include <engine/ObjectGroups.h>
-#include <landscapemap/LandscapeMaps.h>
 
-PlacementGroupDefinition::PlacementGroupDefinition()
+ObjectGroupEntryDefinition::ObjectGroupEntryDefinition()
 {
 }
 
-PlacementGroupDefinition::~PlacementGroupDefinition()
+ObjectGroupEntryDefinition::~ObjectGroupEntryDefinition()
 {
 }
 
-bool PlacementGroupDefinition::readXML(XMLNode *node)
+bool ObjectGroupEntryDefinition::readXML(XMLNode *node)
 {
 	std::string groupname;
 	while (node->getNamedChild("groupname", groupname, false))
@@ -41,7 +40,7 @@ bool PlacementGroupDefinition::readXML(XMLNode *node)
 	return true;
 }
 
-void PlacementGroupDefinition::addToGroups(
+void ObjectGroupEntryDefinition::addToGroups(
 	ScorchedContext &context,
 	ObjectGroupEntry *objectGroupEntry)
 {
@@ -52,7 +51,7 @@ void PlacementGroupDefinition::addToGroups(
 	}
 }
 
-void PlacementGroupDefinition::addToGroup(
+void ObjectGroupEntryDefinition::addToGroup(
 	const char *groupName,
 	ScorchedContext &context,
 	ObjectGroupEntry *objectGroupEntry)

@@ -23,6 +23,7 @@
 
 #include <weapons/Weapon.h>
 #include <common/ModelID.h>
+#include <engine/ObjectGroupEntryDefinition.h>
 
 class WeaponProjectile : public Weapon
 {
@@ -79,6 +80,7 @@ public:
 	bool getNoCameraTrack() { return noCameraTrack_; }
 	fixed getScale(ScorchedContext &context) { return scale_.getValue(context); }
 	ModelID &getModelID() { return modelId_; }
+	ObjectGroupEntryDefinition &getGroups() { return groups_; }
 
 protected:
 	bool under_;
@@ -95,6 +97,7 @@ protected:
 	float flameLife_, smokeLife_;
 	float flameStartSize_, flameEndSize_;
 	float smokeStartSize_, smokeEndSize_;
+	ObjectGroupEntryDefinition groups_;
 	NumberParser thrustTime_, thrustAmount_;
 	NumberParser timedCollision_;
 	NumberParser shieldHurtFactor_;

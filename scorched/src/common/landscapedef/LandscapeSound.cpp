@@ -54,18 +54,10 @@ bool LandscapeSoundPositionSet::setPosition(VirtualSoundSource *source, void *da
 	ObjectGroupEntry *entry = reference->getEntry();
 	if (!entry) return false;
 
-	switch (entry->getType())
-	{
-	case ObjectGroupEntry::TypeTarget:
-	{
-		Target *target = (Target *) entry->getObject();
-		Vector position = target->getLife().getTargetPosition().asVector();
-		Vector velocity = target->getLife().getVelocity().asVector();
-		source->setPosition(position);
-		source->setVelocity(velocity);
-	}
-	break;
-	}
+	Vector position = entry->getPosition().asVector();
+	Vector velocity = entry->getVelocity().asVector();
+	source->setPosition(position);
+	source->setVelocity(velocity);
 #endif
 
 	return true;

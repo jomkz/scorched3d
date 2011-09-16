@@ -23,6 +23,7 @@
 
 #include <weapons/Weapon.h>
 #include <common/ModelID.h>
+#include <engine/ObjectGroupEntryDefinition.h>
 
 class ScorchedContext;
 class WeaponRoller : public Weapon
@@ -44,6 +45,7 @@ public:
 	fixed getWindFactor(ScorchedContext &context);
 	fixed getGravityFactor(ScorchedContext &context);
 	fixed getStepSize() { return stepSize_; }
+	ObjectGroupEntryDefinition &getGroups() { return groups_; }
 
 	// Inherited from Weapon
 	virtual void fireWeapon(ScorchedContext &context,
@@ -55,6 +57,7 @@ protected:
 	NumberParser numberRollers_;
 	Weapon *collisionAction_;
 	ModelID rollerModelId_;
+	ObjectGroupEntryDefinition groups_;
 	NumberParser dampenVelocityExp_;
 	NumberParser shieldHurtFactorExp_;
 	NumberParser gravityFactorExp_;

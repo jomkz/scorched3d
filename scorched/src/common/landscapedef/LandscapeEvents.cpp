@@ -214,19 +214,11 @@ void LandscapeActionFireWeaponFromGroup::fireAction(ScorchedContext &context)
 	unsigned int object = context.getSimulator().getRandomGenerator().getRandUInt("LandscapeEvents") % objectCount;
 	ObjectGroupEntry *entry = objectGroup->getObjectByPos(object);
 
-	switch (entry->getType())
-	{
-	case ObjectGroupEntry::TypeTarget:
-		{
-			Target *target = (Target *) entry->getObject();
-			FixedVector newPosition = target->getLife().getTargetPosition();
-			FixedVector newVelocity = target->getLife().getVelocity();
+	FixedVector newPosition = entry->getPosition();
+	FixedVector newVelocity = entry->getVelocity();
 
-			WeaponFireContext weaponContext(target->getPlayerId(), false, false);
-			weapon->fireWeapon(context, weaponContext, newPosition, newVelocity);
-		}
-		break;
-	}
+	WeaponFireContext weaponContext(entry->getPlayerId(), false, false);
+	weapon->fireWeapon(context, weaponContext, newPosition, newVelocity);
 }
 
 bool LandscapeActionFireWeaponFromGroup::readXML(XMLNode *node)

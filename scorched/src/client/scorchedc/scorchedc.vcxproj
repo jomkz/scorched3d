@@ -97,6 +97,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\common\actions\ParticleGroup.cpp" />
     <ClCompile Include="..\..\common\actions\TanketMovement.cpp" />
     <ClCompile Include="..\..\common\actions\TanketResign.cpp" />
     <ClCompile Include="..\..\common\actions\TargetFalling.cpp" />
@@ -228,6 +229,7 @@
     <ClCompile Include="..\..\common\engine\ModInfo.cpp" />
     <ClCompile Include="..\..\common\engine\ObjectGroup.cpp" />
     <ClCompile Include="..\..\common\engine\ObjectGroupEntry.cpp" />
+    <ClCompile Include="..\..\common\engine\ObjectGroupEntryDefinition.cpp" />
     <ClCompile Include="..\..\common\engine\ObjectGroups.cpp" />
     <ClCompile Include="..\..\common\engine\PhysicsParticle.cpp" />
     <ClCompile Include="..\..\common\engine\PhysicsParticleObject.cpp" />
@@ -365,7 +367,6 @@
     <ClCompile Include="..\..\common\tank\TankState.cpp" />
     <ClCompile Include="..\..\common\tank\TankTeamScore.cpp" />
     <ClCompile Include="..\..\common\tank\TankViewPoints.cpp" />
-    <ClCompile Include="..\..\common\placement\PlacementGroupDefinition.cpp" />
     <ClCompile Include="..\..\common\placement\PlacementObject.cpp" />
     <ClCompile Include="..\..\common\placement\PlacementObjectGroup.cpp" />
     <ClCompile Include="..\..\common\placement\PlacementObjectHeight.cpp" />
@@ -401,6 +402,7 @@
     <ClCompile Include="..\..\common\weapons\ShieldSquareReflective.cpp" />
     <ClCompile Include="..\..\common\weapons\Weapon.cpp" />
     <ClCompile Include="..\..\common\weapons\WeaponAddTarget.cpp" />
+    <ClCompile Include="..\..\common\weapons\WeaponAimed.cpp" />
     <ClCompile Include="..\..\common\weapons\WeaponAimedOver.cpp" />
     <ClCompile Include="..\..\common\weapons\WeaponAimedUnder.cpp" />
     <ClCompile Include="..\..\common\weapons\WeaponAnimation.cpp" />
@@ -839,6 +841,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\common\actions\ParticleGroup.h" />
     <ClInclude Include="..\..\common\actions\TanketMovement.h" />
     <ClInclude Include="..\..\common\actions\TanketResign.h" />
     <ClInclude Include="..\..\common\actions\TargetFalling.h" />
@@ -974,6 +977,7 @@
     <ClInclude Include="..\..\common\engine\ModInfo.h" />
     <ClInclude Include="..\..\common\engine\ObjectGroup.h" />
     <ClInclude Include="..\..\common\engine\ObjectGroupEntry.h" />
+    <ClInclude Include="..\..\common\engine\ObjectGroupEntryDefinition.h" />
     <ClInclude Include="..\..\common\engine\ObjectGroups.h" />
     <ClInclude Include="..\..\common\engine\PhysicsParticle.h" />
     <ClInclude Include="..\..\common\engine\PhysicsParticleObject.h" />
@@ -1107,7 +1111,6 @@
     <ClInclude Include="..\..\common\tank\TankState.h" />
     <ClInclude Include="..\..\common\tank\TankTeamScore.h" />
     <ClInclude Include="..\..\common\tank\TankViewPoints.h" />
-    <ClInclude Include="..\..\common\placement\PlacementGroupDefinition.h" />
     <ClInclude Include="..\..\common\placement\PlacementObject.h" />
     <ClInclude Include="..\..\common\placement\PlacementObjectGroup.h" />
     <ClInclude Include="..\..\common\placement\PlacementObjectHeight.h" />
@@ -1143,6 +1146,7 @@
     <ClInclude Include="..\..\common\weapons\ShieldSquareReflective.h" />
     <ClInclude Include="..\..\common\weapons\Weapon.h" />
     <ClInclude Include="..\..\common\weapons\WeaponAddTarget.h" />
+    <ClInclude Include="..\..\common\weapons\WeaponAimed.h" />
     <ClInclude Include="..\..\common\weapons\WeaponAimedOver.h" />
     <ClInclude Include="..\..\common\weapons\WeaponAimedUnder.h" />
     <ClInclude Include="..\..\common\weapons\WeaponAnimation.h" />

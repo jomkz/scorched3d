@@ -26,6 +26,7 @@
 #ifndef	S3D_SERVER
 	#include <tankgraph/RenderTracer.h>
 #endif
+#include <actions/ParticleGroup.h>
 #include <weapons/WeaponProjectile.h>
 #include <list>
 
@@ -54,6 +55,7 @@ public:
 #endif
 
 protected:
+	ParticleGroup *groups_;
 	FixedVector startPosition_, velocity_;
 	WeaponProjectile *weapon_;
 	TankViewPointProvider *vPoint_;

@@ -56,20 +56,20 @@ void TankWeaponSwitcher::switchWeapon(ScorchedContext &context, Tanket *tanket, 
 		{
 
 		// Turn off fuel display (if any)
-		if (currentWeapon && 
-			currentWeapon->getPositionSelect() != Accessory::ePositionSelectNone)
+		if (newWeapon && 
+			newWeapon->getPositionSelect() == Accessory::ePositionSelectNone)
 		{
 			Landscape::instance()->restoreLandscapeTexture();
 		}
 		// Turn on selection display (if any)
-		if (currentWeapon &&
-			currentWeapon->getPositionSelect() != Accessory::ePositionSelectNone)
+		if (newWeapon &&
+			newWeapon->getPositionSelect() != Accessory::ePositionSelectNone)
 		{
-			if (currentWeapon->getPositionSelect() == Accessory::ePositionSelectFuel)
+			if (newWeapon->getPositionSelect() == Accessory::ePositionSelectFuel)
 			{
 				WeaponMoveTank *moveWeapon = (WeaponMoveTank *)
 					context.getAccessoryStore().findAccessoryPartByAccessoryId(
-						currentWeapon->getAccessoryId(), "WeaponMoveTank");
+						newWeapon->getAccessoryId(), "WeaponMoveTank");
 				if (moveWeapon)
 				{
 					MovementMap mmap(
@@ -79,25 +79,25 @@ void TankWeaponSwitcher::switchWeapon(ScorchedContext &context, Tanket *tanket, 
 					mmap.movementTexture();	
 				}
 			}
-			else if (currentWeapon->getPositionSelect() == Accessory::ePositionSelectFuelLimit)
+			else if (newWeapon->getPositionSelect() == Accessory::ePositionSelectFuelLimit)
 			{
 				MovementMap mmap(
 					tank, 
 					context);
-				mmap.calculateAllPositions(fixed(currentWeapon->getPositionSelectLimit()));
+				mmap.calculateAllPositions(fixed(newWeapon->getPositionSelectLimit()));
 				mmap.movementTexture();	
 			}
-			else if (currentWeapon->getPositionSelect() == Accessory::ePositionSelectLimit)
+			else if (newWeapon->getPositionSelect() == Accessory::ePositionSelectLimit)
 			{
 				MovementMap::limitTexture(tank->getLife().getTargetPosition(), 
-					currentWeapon->getPositionSelectLimit());
+					newWeapon->getPositionSelectLimit());
 			}
 
 			ChannelText text("banner",
 				LANG_RESOURCE_1(
 					"GROUND_WEAPON_ACTIVATE", 
 					"Click ground to activate {0}",
-					currentWeapon->getName()));
+					newWeapon->getName()));
 			ChannelManager::showText(ScorchedClient::instance()->getContext(), 
 				text);
 		}

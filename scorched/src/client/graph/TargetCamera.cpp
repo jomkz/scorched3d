@@ -492,20 +492,12 @@ void TargetCamera::moveCamera()
 			if (objectGroup && objectGroup->getObjectCount() > 0)
 			{
 				ObjectGroupEntry *entry = objectGroup->getObjectByPos(viewObject_ % objectGroup->getObjectCount());
-				switch (entry->getType())
-				{
-				case ObjectGroupEntry::TypeTarget:
-				{
-					Target *target = (Target *) entry->getObject();
-					FixedVector position = target->getLife().getTargetPosition();
-					FixedVector velocity = target->getLife().getVelocity();
+				FixedVector &position = entry->getPosition();
+				FixedVector &velocity = entry->getVelocity();
 
-					mainCam_.setLookAt(position.asVector());
-					Vector offset = velocity.asVector().Normalize() * -5.0f;
-					mainCam_.setOffSet(offset);
-				}
-				break;
-				}
+				mainCam_.setLookAt(position.asVector());
+				Vector offset = velocity.asVector().Normalize() * -5.0f;
+				mainCam_.setOffSet(offset);
 
 				if (objectTime_ > 15.0f)
 				{

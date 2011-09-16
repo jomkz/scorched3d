@@ -18,41 +18,45 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <target/TargetGroup.h>
-#include <target/Target.h>
-#include <target/TargetLife.h>
-#include <engine/ScorchedContext.h>
+#include <engine/ObjectGroupEntry.h>
+#include <engine/ObjectGroups.h>
+#include <common/Defines.h>
+#include <stdio.h>
 
-TargetGroup::TargetGroup(ScorchedContext &context) :
-	ObjectGroupEntry(context.getObjectGroups())
+ObjectGroups::ObjectGroups()
 {
 }
 
-TargetGroup::~TargetGroup()
+ObjectGroups::~ObjectGroups()
 {
 }
 
-void *TargetGroup::getObject()
+void ObjectGroups::clearGroups()
 {
-	return target_;
+	// Groups
+	std::map<std::string, ObjectGroup*>::iterator itor;
+	for (itor = groups_.begin();
+		itor != groups_.end();
+		++itor)
+	{
+		ObjectGroup *entry = (*itor).second;
+		delete entry;
+	}
+	groups_.clear();
 }
 
-ObjectGroupEntry::ObjectType TargetGroup::getType()
+ObjectGroup *ObjectGroups::getGroup(const char *name, bool create)
 {
-	return ObjectGroupEntry::TypeTarget;
-}
-
-FixedVector &TargetGroup::getPosition()
-{
-	return target_->getLife().getTargetPosition();
-}
-
-FixedVector &TargetGroup::getVelocity()
-{
-	return target_->getLife().getVelocity();
-}
-
-unsigned int TargetGroup::getPlayerId()
-{
-	return target_->getPlayerId();
+	std::map<std::string, ObjectGroup*>::iterator findItor = groups_.find(name);
+	if (findItor != groups_.end())
+	{
+		return (*findItor).second;
+	}
+	if (create)
+	{
+		ObjectGroup *entry = new ObjectGroup(name);
+		groups_[name] = entry;
+		return entry;
+	}
+	return 0;
 }

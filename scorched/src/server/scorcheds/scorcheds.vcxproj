@@ -98,6 +98,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\actions\ActionParams.cpp" />
+    <ClCompile Include="..\..\common\actions\ParticleGroup.cpp" />
     <ClCompile Include="..\..\common\actions\TanketMovement.cpp" />
     <ClCompile Include="..\..\common\actions\TanketResign.cpp" />
     <ClCompile Include="..\..\common\actions\TankRemove.cpp" />
@@ -107,6 +108,7 @@
     <ClCompile Include="..\..\common\coms\ComsTankChangeMessage.cpp" />
     <ClCompile Include="..\..\common\engine\ObjectGroup.cpp" />
     <ClCompile Include="..\..\common\engine\ObjectGroupEntry.cpp" />
+    <ClCompile Include="..\..\common\engine\ObjectGroupEntryDefinition.cpp" />
     <ClCompile Include="..\..\common\engine\ObjectGroups.cpp" />
     <ClCompile Include="..\..\common\image\Image.cpp" />
     <ClCompile Include="..\..\common\image\ImageBitmapFactory.cpp" />
@@ -145,6 +147,7 @@
     <ClCompile Include="..\..\common\tank\TankWeaponSwitcher.cpp" />
     <ClCompile Include="..\..\common\target\TargetDamage.cpp" />
     <ClCompile Include="..\..\common\target\TargetGroup.cpp" />
+    <ClCompile Include="..\..\common\weapons\WeaponAimed.cpp" />
     <ClCompile Include="..\igd\igd.cpp" />
     <ClCompile Include="..\server\ScorchedServerSettings.cpp" />
     <ClCompile Include="..\server\ServerAuthHandlerStore.cpp" />
@@ -506,7 +509,6 @@
     <ClCompile Include="..\..\common\net\NetServerTCP3Send.cpp" />
     <ClCompile Include="..\..\common\net\NetServerTCPProtocol.cpp" />
     <ClCompile Include="..\..\common\net\NetServerTCPRead.cpp" />
-    <ClCompile Include="..\..\common\placement\PlacementGroupDefinition.cpp" />
     <ClCompile Include="..\..\common\placement\PlacementObject.cpp" />
     <ClCompile Include="..\..\common\placement\PlacementObjectGroup.cpp" />
     <ClCompile Include="..\..\common\placement\PlacementObjectHeight.cpp" />
@@ -565,6 +567,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\actions\ActionParams.h" />
+    <ClInclude Include="..\..\common\actions\ParticleGroup.h" />
     <ClInclude Include="..\..\common\actions\TanketMovement.h" />
     <ClInclude Include="..\..\common\actions\TanketResign.h" />
     <ClInclude Include="..\..\common\actions\TankRemove.h" />
@@ -627,6 +630,7 @@
     <ClInclude Include="..\..\common\coms\ComsTankChangeMessage.h" />
     <ClInclude Include="..\..\common\engine\ObjectGroup.h" />
     <ClInclude Include="..\..\common\engine\ObjectGroupEntry.h" />
+    <ClInclude Include="..\..\common\engine\ObjectGroupEntryDefinition.h" />
     <ClInclude Include="..\..\common\engine\ObjectGroups.h" />
     <ClInclude Include="..\..\common\image\Image.h" />
     <ClInclude Include="..\..\common\image\ImageBitmapFactory.h" />
@@ -665,6 +669,7 @@
     <ClInclude Include="..\..\common\tank\TankWeaponSwitcher.h" />
     <ClInclude Include="..\..\common\target\TargetDamage.h" />
     <ClInclude Include="..\..\common\target\TargetGroup.h" />
+    <ClInclude Include="..\..\common\weapons\WeaponAimed.h" />
     <ClInclude Include="..\igd\igd.h" />
     <ClInclude Include="..\server\ScorchedServer.h" />
     <ClInclude Include="..\server\ScorchedServerSettings.h" />
@@ -972,7 +977,6 @@
     <ClInclude Include="..\..\common\net\NetServerTCP3Send.h" />
     <ClInclude Include="..\..\common\net\NetServerTCPProtocol.h" />
     <ClInclude Include="..\..\common\net\NetServerTCPRead.h" />
-    <ClInclude Include="..\..\common\placement\PlacementGroupDefinition.h" />
     <ClInclude Include="..\..\common\placement\PlacementObject.h" />
     <ClInclude Include="..\..\common\placement\PlacementObjectGroup.h" />
     <ClInclude Include="..\..\common\placement\PlacementObjectHeight.h" />

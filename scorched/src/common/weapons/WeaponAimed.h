@@ -18,41 +18,35 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <target/TargetGroup.h>
-#include <target/Target.h>
-#include <target/TargetLife.h>
-#include <engine/ScorchedContext.h>
+#if !defined(AFX_WeaponAimed_H__A96ADD10_0901_4E1D_A49B_9BE78AD33B9B__INCLUDED_)
+#define AFX_WeaponAimed_H__A96ADD10_0901_4E1D_A49B_9BE78AD33B9B__INCLUDED_
 
-TargetGroup::TargetGroup(ScorchedContext &context) :
-	ObjectGroupEntry(context.getObjectGroups())
-{
-}
+#include <weapons/Weapon.h>
 
-TargetGroup::~TargetGroup()
+class WeaponAimed : public Weapon
 {
-}
+public:
+	WeaponAimed();
+	virtual ~WeaponAimed();
 
-void *TargetGroup::getObject()
-{
-	return target_;
-}
+	virtual bool parseXML(AccessoryCreateContext &context,
+		XMLNode *accessoryNode);
 
-ObjectGroupEntry::ObjectType TargetGroup::getType()
-{
-	return ObjectGroupEntry::TypeTarget;
-}
+protected:
+	int warHeads_;
+	Weapon *aimedWeapon_;
+	NumberParser maxAimedDistance_;
+	NumberParser percentageMissChance_;
+	NumberParser maxInacuracy_;
+	std::string groupName_;
+	bool randomWhenNoTargets_;
 
-FixedVector &TargetGroup::getPosition()
-{
-	return target_->getLife().getTargetPosition();
-}
+	void fireAimedWeapon(ScorchedContext &context,
+		WeaponFireContext &weaponContext, FixedVector &position, bool invert);
+	virtual void aimShot(ScorchedContext &context,
+		RandomGenerator &random,
+		FixedVector &position, FixedVector &shootAt,
+		fixed &angleXYDegs, fixed &angleYZDegs, fixed &power) = 0;
+};
 
-FixedVector &TargetGroup::getVelocity()
-{
-	return target_->getLife().getVelocity();
-}
-
-unsigned int TargetGroup::getPlayerId()
-{
-	return target_->getPlayerId();
-}
+#endif // !defined(AFX_WeaponAimed_H__A96ADD10_0901_4E1D_A49B_9BE78AD33B9B__INCLUDED_)

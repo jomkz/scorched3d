@@ -23,6 +23,7 @@
 
 #include <engine/PhysicsParticle.h>
 #include <engine/ScorchedCollisionIds.h>
+#include <actions/ParticleGroup.h>
 #include <weapons/WeaponRoller.h>
 
 class TankViewPointProvider;
@@ -48,6 +49,7 @@ public:
 	WeaponRoller *getWeapon() { return weapon_; }
 
 protected:
+	ParticleGroup *groups_;
 	TankViewPointProvider *vPoint_;
 	FixedVector startPosition_, velocity_;
 	FixedVector lookFrom_;

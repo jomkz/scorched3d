@@ -18,32 +18,24 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_PlacementGroupDefinitionh_INCLUDE__)
-#define __INCLUDE_PlacementGroupDefinitionh_INCLUDE__
+#if !defined(__INCLUDE_ObjectGroupsh_INCLUDE__)
+#define __INCLUDE_ObjectGroupsh_INCLUDE__
 
-#include <XML/XMLNode.h>
-#include <vector>
-#include <string>
+#include <engine/ObjectGroup.h>
+#include <map>
 
-class ObjectGroupEntry;
-class ScorchedContext;
-class PlacementGroupDefinition
+class ObjectGroups
 {
 public:
-	PlacementGroupDefinition();
-	virtual ~PlacementGroupDefinition();
+	ObjectGroups();
+	virtual ~ObjectGroups();
 
-	bool readXML(XMLNode *node);
+	ObjectGroup *getGroup(const char *name, bool create = false);
+	void clearGroups();
 
-	void addToGroups(ScorchedContext &context,
-		ObjectGroupEntry *objectGroupEntry);
-
+	std::map<std::string, ObjectGroup*> &getGroups() { return groups_; }
 protected:
-	std::vector<std::string> groupnames_;
-
-	void addToGroup(const char *groupName,
-		ScorchedContext &context,
-		ObjectGroupEntry *objectGroupEntry);
+	std::map<std::string, ObjectGroup*> groups_;
 };
 
-#endif // __INCLUDE_PlacementGroupDefinitionh_INCLUDE__
+#endif

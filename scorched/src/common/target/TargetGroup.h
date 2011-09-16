@@ -33,9 +33,11 @@ public:
 
 	virtual void *getObject();
 	virtual ObjectGroupEntry::ObjectType getType();
+	virtual FixedVector &getPosition();
+	virtual FixedVector &getVelocity();
+	virtual unsigned int getPlayerId();
 
 	void setTarget(Target *target) { target_ = target; }
-	Target *getTarget() { return target_; }
 
 protected:
 	Target *target_;

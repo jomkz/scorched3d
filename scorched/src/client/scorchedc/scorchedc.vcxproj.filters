@@ -834,9 +834,6 @@
     <ClCompile Include="..\..\common\tank\TankViewPoints.cpp">
       <Filter>tank</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\placement\PlacementGroupDefinition.cpp">
-      <Filter>placement</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\placement\PlacementObject.cpp">
       <Filter>placement</Filter>
     </ClCompile>
@@ -2340,6 +2337,15 @@
     <ClCompile Include="..\..\common\target\TargetGroup.cpp">
       <Filter>target</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\engine\ObjectGroupEntryDefinition.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\ParticleGroup.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponAimed.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -3055,9 +3061,6 @@
     </ClInclude>
     <ClInclude Include="..\..\common\tank\TankViewPoints.h">
       <Filter>tank</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\placement\PlacementGroupDefinition.h">
-      <Filter>placement</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\placement\PlacementObject.h">
       <Filter>placement</Filter>
@@ -4576,6 +4579,15 @@
     </ClInclude>
     <ClInclude Include="..\..\common\target\TargetGroup.h">
       <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\ObjectGroupEntryDefinition.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\ParticleGroup.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponAimed.h">
+      <Filter>weapons</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

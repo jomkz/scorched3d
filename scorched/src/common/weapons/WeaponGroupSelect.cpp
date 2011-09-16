@@ -77,15 +77,7 @@ void WeaponGroupSelect::fireWeapon(ScorchedContext &context,
 	unsigned int object = context.getSimulator().getRandomGenerator().getRandUInt("WeaponGroupSelect") % objectCount;
 	ObjectGroupEntry *entry = objectGroup->getObjectByPos(object);
 
-	switch (entry->getType())
-	{
-	case ObjectGroupEntry::TypeTarget:
-	{
-		Target *target = (Target *) entry->getObject();
-		FixedVector newPosition = target->getLife().getTargetPosition();
-		FixedVector newVelocity = target->getLife().getVelocity();
-		nextAction_->fireWeapon(context, weaponContext, newPosition, newVelocity);
-	}
-	break;
-	}
+	FixedVector newPosition = entry->getPosition();
+	FixedVector newVelocity = entry->getVelocity();
+	nextAction_->fireWeapon(context, weaponContext, newPosition, newVelocity);
 }

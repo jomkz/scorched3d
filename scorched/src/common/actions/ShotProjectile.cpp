@@ -47,7 +47,8 @@ ShotProjectile::ShotProjectile(FixedVector &startPosition, FixedVector &velocity
 	flareType_(flareType), vPoint_(0),
 	snapTime_(fixed(true, 2000)), up_(false),
 	totalTime_(0), simulateTime_(0), 
-	spinSpeed_(spinSpeed), spinAxis_(spinAxis)
+	spinSpeed_(spinSpeed), spinAxis_(spinAxis),
+	groups_(0)
 {
 }
 
@@ -92,6 +93,12 @@ void ShotProjectile::init()
 	drag_ = getWeapon()->getDrag(*context_);
 	stepSize_ = getWeapon()->getStepSize() * 
 		fixed(true, context_->getOptionsGame().getWeaponSpeed());
+
+	if (weapon_->getGroups().hasGroups())
+	{
+		groups_ = new ParticleGroup(*context_, this, &weaponContext_);
+		weapon_->getGroups().addToGroups(*context_, groups_);
+	}
 }
 
 std::string ShotProjectile::getActionDetails()
@@ -105,6 +112,7 @@ std::string ShotProjectile::getActionDetails()
 ShotProjectile::~ShotProjectile()
 {
 	if (vPoint_) vPoint_->decrementReference();
+	delete groups_;
 }
 
 void ShotProjectile::collision(PhysicsParticleObject &position, 

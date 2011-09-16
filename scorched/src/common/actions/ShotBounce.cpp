@@ -42,7 +42,7 @@ ShotBounce::ShotBounce(WeaponRoller *weapon,
 	startPosition_(startPosition),
 	velocity_(velocity), weapon_(weapon), weaponContext_(weaponContext),
 	totalTime_(0), simulateTime_(0),
-	model_(0), vPoint_(0)
+	model_(0), vPoint_(0), groups_(0)
 {
 }
 
@@ -69,6 +69,12 @@ void ShotBounce::init()
 			context_->getActionController().addAction(pos);
 		}
 	}
+
+	if (weapon_->getGroups().hasGroups())
+	{
+		groups_ = new ParticleGroup(*context_, this, &weaponContext_);
+		weapon_->getGroups().addToGroups(*context_, groups_);
+	}
 }
 
 ShotBounce::~ShotBounce()
@@ -77,6 +83,7 @@ ShotBounce::~ShotBounce()
 	delete model_;
 #endif
 	if (vPoint_) vPoint_->decrementReference();
+	delete groups_;
 }
 
 std::string ShotBounce::getActionDetails()

@@ -24,8 +24,8 @@
 #include <common/ModelID.h>
 #include <common/RandomGenerator.h>
 #include <engine/ScorchedContext.h>
+#include <engine/ObjectGroupEntryDefinition.h>
 #include <placement/PlacementShadowDefinition.h>
-#include <placement/PlacementGroupDefinition.h>
 
 class Target;
 class TargetDefinition
@@ -42,7 +42,7 @@ public:
 		RandomGenerator &generator);
 
 	PlacementShadowDefinition &getShadow() { return shadow_; }
-	PlacementGroupDefinition &getGroups() { return groups_; }
+	ObjectGroupEntryDefinition &getGroups() { return groups_; }
 
 protected:
 	fixed life_;
@@ -70,7 +70,7 @@ protected:
 	ModelID modelId_;
 	ModelID modelburntId_;
 	PlacementShadowDefinition shadow_;
-	PlacementGroupDefinition groups_;
+	ObjectGroupEntryDefinition groups_;
 };
 
 #endif // __INCLUDE_TargetDefinitionh_INCLUDE__

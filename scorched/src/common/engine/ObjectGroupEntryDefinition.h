@@ -18,41 +18,33 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <target/TargetGroup.h>
-#include <target/Target.h>
-#include <target/TargetLife.h>
-#include <engine/ScorchedContext.h>
+#if !defined(__INCLUDE_ObjectGroupEntryDefinitionh_INCLUDE__)
+#define __INCLUDE_ObjectGroupEntryDefinitionh_INCLUDE__
 
-TargetGroup::TargetGroup(ScorchedContext &context) :
-	ObjectGroupEntry(context.getObjectGroups())
-{
-}
+#include <XML/XMLNode.h>
+#include <vector>
+#include <string>
 
-TargetGroup::~TargetGroup()
+class ObjectGroupEntry;
+class ScorchedContext;
+class ObjectGroupEntryDefinition
 {
-}
+public:
+	ObjectGroupEntryDefinition();
+	virtual ~ObjectGroupEntryDefinition();
 
-void *TargetGroup::getObject()
-{
-	return target_;
-}
+	bool readXML(XMLNode *node);
 
-ObjectGroupEntry::ObjectType TargetGroup::getType()
-{
-	return ObjectGroupEntry::TypeTarget;
-}
+	bool hasGroups() { return !groupnames_.empty(); }
+	void addToGroups(ScorchedContext &context,
+		ObjectGroupEntry *objectGroupEntry);
 
-FixedVector &TargetGroup::getPosition()
-{
-	return target_->getLife().getTargetPosition();
-}
+protected:
+	std::vector<std::string> groupnames_;
 
-FixedVector &TargetGroup::getVelocity()
-{
-	return target_->getLife().getVelocity();
-}
+	void addToGroup(const char *groupName,
+		ScorchedContext &context,
+		ObjectGroupEntry *objectGroupEntry);
+};
 
-unsigned int TargetGroup::getPlayerId()
-{
-	return target_->getPlayerId();
-}
+#endif // __INCLUDE_ObjectGroupEntryDefinitionh_INCLUDE__
