@@ -34,6 +34,8 @@ public:
 	void showText(const ChannelText &text);
 	void sendText(const ChannelText &text);
 
+	bool channelActive(const std::string &channelName);
+
 	std::set<unsigned int> &getMutedPlayers() { return mutedPlayers_; }
 
 	bool registerClient(ClientChannelManagerI *reciever,

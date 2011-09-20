@@ -29,6 +29,7 @@
 #include <tank/TankState.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankModelStore.h>
+#include <tanket/TanketTypes.h>
 #include <client/ClientParams.h>
 #include <graph/OptionsDisplay.h>
 #include <common/OptionsTransient.h>
@@ -39,34 +40,22 @@
 #include <GLW/GLWWindowManager.h>
 #include <GLW/GLWTextButton.h>
 #include <image/ImageFactory.h>
-#include <coms/ComsTankChangeMessage.h>
-#include <coms/ComsMessageSender.h>
 #include <stdio.h>
 
-PlayerDialog *PlayerDialog::instance_ = 0;
-
-PlayerDialog *PlayerDialog::instance()
-{
-	if (!instance_)
-	{
-		instance_ = new PlayerDialog;
-	}
-	return instance_;
-}
-
-PlayerDialog::PlayerDialog() : 
-	GLWWindow("Team", 10.0f, 10.0f, 740.0f, 480.0f, eSmallTitle,
-		"Allows the player to make changes to their\n"
-		"name, their tank and to change teams."),
-	allocatedTeam_(0), cancelButton_(0), viewer_(0), spectateButton_(0)
+PlayerDialog::PlayerDialog(const std::string &name, 
+		unsigned int states, 
+		const std::string &description) : 
+	GLWWindow(name, 10.0f, 10.0f, 740.0f, 480.0f, 
+		states,
+		description),
+	cancelButton_(0), viewer_(0), spectateButton_(0)
 {
 	needCentered_ = true;
 
 	// Add buttons
-	GLWButton *okButton = (GLWTextButton *)  addWidget(new GLWTextButton(LANG_RESOURCE("PLAY", "Play"), 665, 10, 65, this, 
+	okButton_ = (GLWTextButton *)  addWidget(new GLWTextButton(LANG_RESOURCE("PLAY", "Play"), 665, 10, 65, this, 
 		GLWButton::ButtonFlagOk | GLWButton::ButtonFlagCenterX));
-	okId_ = okButton->getId();
-	okButton->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
+	okButton_->setToolTip(new ToolTip(ToolTip::ToolTipHelp, 
 		LANG_RESOURCE("PLAY", "Play"), 
 		LANG_RESOURCE("PLAY_PLAYER_DIALOG_TOOLTIP",
 		"Start or continue playing.\n"
@@ -96,80 +85,106 @@ PlayerDialog::PlayerDialog() :
 	colorTexture_.create(map);
 
 	// Create players avatar choice
-	infoPanel->addWidget(new GLWLabel(10, 25, LANG_RESOURCE("AVATAR_LABEL", "Avatar:")));
-	avatarTip1_.setText(ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("AVATAR", "Avatar"), 
-		LANG_RESOURCE("AVATAR_TOOLTIP_CHANGE",
-		"The current player's avatar.\n"
-		"Click to change.\n"));
-	imageList_ = new GLWImageList(95.0f, 20.0f);
-	imageList_->addDirectory(S3D::getSettingsFile("avatars"));
-	imageList_->addDirectory(S3D::getDataFile("data/avatars"));
-	imageList_->setCurrentShortPath("player.png");
-	imageList_->setToolTip(&avatarTip1_);
-	imageList_->setName("Avatar");
-	infoPanel->addWidget(imageList_);
+	{
+		infoPanel->addWidget(new GLWLabel(10, 25, LANG_RESOURCE("AVATAR_LABEL", "Avatar:")));
+		avatarTip1_.setText(ToolTip::ToolTipHelp, 
+			LANG_RESOURCE("AVATAR", "Avatar"), 
+			LANG_RESOURCE("AVATAR_TOOLTIP_CHANGE",
+			"The current player's avatar.\n"
+			"Click to change.\n"));
+		imageList_ = new GLWImageList(95.0f, 20.0f);
+		imageList_->addDirectory(S3D::getSettingsFile("avatars"));
+		imageList_->addDirectory(S3D::getDataFile("data/avatars"));
+		imageList_->setCurrentShortPath("player.png");
+		imageList_->setToolTip(&avatarTip1_);
+		imageList_->setName("Avatar");
+		infoPanel->addWidget(imageList_);
+	}
 
 	// Create player name choice
-	ToolTip *nameTip = new ToolTip(ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("PLAYER_NAME", "Player Name"),
-		LANG_RESOURCE("PLAYER_NAME_TOOLTIP",
-		"The name of this player.\n"
-		"Use the backspace or delete key to remove this name.\n"
-		"Type in a new player name via the keyboad to change."));
-	GLWLabel *nameLabel = (GLWLabel *) 
-		infoPanel->addWidget(new GLWLabel(145, 40, LANG_RESOURCE("NAME_LABEL", "Name:")));
-	nameLabel->setToolTip(nameTip);
-	playerName_ = (GLWTextBox *) 
-		infoPanel->addWidget(new GLWTextBox(215, 40, 495, LANG_RESOURCE("PLAYER", "Player")));
-	playerName_->setMaxTextLen(22);
-	playerName_->setToolTip(nameTip);
-	playerName_->setName("Name");
-	playerName_->setAllowUnicode(
-		ScorchedClient::instance()->getOptionsGame().getAllowMultiLingualNames());
+	{
+		ToolTip *nameTip = new ToolTip(ToolTip::ToolTipHelp, 
+			LANG_RESOURCE("PLAYER_NAME", "Player Name"),
+			LANG_RESOURCE("PLAYER_NAME_TOOLTIP",
+			"The name of this player.\n"
+			"Use the backspace or delete key to remove this name.\n"
+			"Type in a new player name via the keyboad to change."));
+		GLWLabel *nameLabel = (GLWLabel *) 
+			infoPanel->addWidget(new GLWLabel(145, 40, LANG_RESOURCE("NAME_LABEL", "Name:")));
+		nameLabel->setToolTip(nameTip);
+		playerName_ = (GLWTextBox *) 
+			infoPanel->addWidget(new GLWTextBox(215, 40, 495, LANG_RESOURCE("PLAYER", "Player")));
+		playerName_->setMaxTextLen(22);
+		playerName_->setToolTip(nameTip);
+		playerName_->setName("Name");
+		playerName_->setAllowUnicode(
+			ScorchedClient::instance()->getOptionsGame().getAllowMultiLingualNames());
+	}
 	
 	// Create team choice
-	ToolTip *teamTip = new ToolTip(ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("TEAM_SELECTION", "Team Selection"),
-		LANG_RESOURCE("TEAM_SELECTION_TOOLTIP", "Change the team this player will join.\n"
-		"This is only available when playing team games."));
-	teamLabel_ = (GLWLabel *) 
-		infoPanel->addWidget(new GLWLabel(145, 8, LANG_RESOURCE("TEAM_LABEL", "Team:")));
-	teamLabel_->setToolTip(teamTip);
-	teamDropDown_ = (GLWDropDownText *) 
-		infoPanel->addWidget(new GLWDropDownText(215, 8, 120));
-	teamDropDown_->setHandler(this);
-	teamDropDown_->setToolTip(teamTip);
-	teamDropDown_->setName("Team");
+	{
+		ToolTip *teamTip = new ToolTip(ToolTip::ToolTipHelp, 
+			LANG_RESOURCE("TEAM_SELECTION", "Team Selection"),
+			LANG_RESOURCE("TEAM_SELECTION_TOOLTIP", "Change the team this player will join.\n"
+			"This is only available when playing team games."));
+		teamLabel_ = (GLWLabel *) 
+			infoPanel->addWidget(new GLWLabel(145, 8, LANG_RESOURCE("TEAM_LABEL", "Team:")));
+		teamLabel_->setToolTip(teamTip);
+		teamDropDown_ = (GLWDropDownText *) 
+			infoPanel->addWidget(new GLWDropDownText(215, 8, 120));
+		teamDropDown_->setHandler(this);
+		teamDropDown_->setToolTip(teamTip);
+		teamDropDown_->setName("Team");
+	}
 
 	// Create color choice
-	ToolTip *colorTip = new ToolTip(ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("COLOR_SELECTION", "Color Selection"),
-		LANG_RESOURCE("COLOR_SELECTION_TOOLTIP", "Change the color this player displayed as.\n"
-		"This is only available when playing non-team games."));
-	colorLabel_ = (GLWLabel *) 
-		infoPanel->addWidget(new GLWLabel(145, 8, LANG_RESOURCE("COLOR_LABEL", "Color:")));
-	colorLabel_->setToolTip(colorTip);
-	colorDropDown_ = (GLWDropDownColor *) 
-		infoPanel->addWidget(new GLWDropDownColor(215, 8, 120));
-	colorDropDown_->setHandler(this);
-	colorDropDown_->setToolTip(colorTip);
-	colorDropDown_->setName("Color");
+	{
+		ToolTip *colorTip = new ToolTip(ToolTip::ToolTipHelp, 
+			LANG_RESOURCE("COLOR_SELECTION", "Color Selection"),
+			LANG_RESOURCE("COLOR_SELECTION_TOOLTIP", "Change the color this player displayed as.\n"
+			"This is only available when playing non-team games."));
+		colorLabel_ = (GLWLabel *) 
+			infoPanel->addWidget(new GLWLabel(145, 8, LANG_RESOURCE("COLOR_LABEL", "Color:")));
+		colorLabel_->setToolTip(colorTip);
+		colorDropDown_ = (GLWDropDownColor *) 
+			infoPanel->addWidget(new GLWDropDownColor(215, 8, 120));
+		colorDropDown_->setHandler(this);
+		colorDropDown_->setToolTip(colorTip);
+		colorDropDown_->setName("Color");
+	}
 
 	// Create computer type choice
-	ToolTip *typeTip = new ToolTip(ToolTip::ToolTipHelp, 
-		LANG_RESOURCE("PLAYER_TYPE", "Player Type"),
-		LANG_RESOURCE("PLAYER_TYPE_TOOLTIP", "Change between human and computer controlled\n"
-		"players.  This is only available when playing\n"
-		"single player games."));
-	GLWLabel *typeLabel = (GLWLabel *) 
-		infoPanel->addWidget(new GLWLabel(520, 8, LANG_RESOURCE("TYPE_LABEL", "Type:")));
-	typeLabel->setToolTip(typeTip);
-	typeDropDown_ = (GLWDropDownText *) 
-		infoPanel->addWidget(new GLWDropDownText(590, 8, 120));
-	typeDropDown_->setHandler(this);
-	typeDropDown_->setToolTip(typeTip);
-	typeDropDown_->setName("Type");
+	{
+		ToolTip *aiTypeTip = new ToolTip(ToolTip::ToolTipHelp, 
+			LANG_RESOURCE("PLAYER_TYPE", "Player AI"),
+			LANG_RESOURCE("PLAYER_TYPE_TOOLTIP", "Change between human and computer controlled\n"
+			"players.  This is only available when playing\n"
+			"single player games."));
+		GLWLabel *aiTypeLabel = (GLWLabel *) 
+			infoPanel->addWidget(new GLWLabel(350, 8, LANG_RESOURCE("AI_LABEL", "AI:")));
+		aiTypeLabel->setToolTip(aiTypeTip);
+		aiTypeDropDown_ = (GLWDropDownText *) 
+			infoPanel->addWidget(new GLWDropDownText(390, 8, 120));
+		aiTypeDropDown_->setHandler(this);
+		aiTypeDropDown_->setToolTip(aiTypeTip);
+		aiTypeDropDown_->setName("Type");
+	}
+
+	// Create tank type choice
+	{
+		ToolTip *tankTypeTip = new ToolTip(ToolTip::ToolTipHelp, 
+			LANG_RESOURCE("TANK_TYPE", "Tank Type"),
+			LANG_RESOURCE("TANK_TYPE_TOOLTIP", "Change between tanks with different abilities.\n"
+			"This is only available for selected mods."));
+		GLWLabel *tankTypeLabel = (GLWLabel *) 
+			infoPanel->addWidget(new GLWLabel(525, 8, LANG_RESOURCE("TANK_TYPE_LABEL", "Type:")));
+		tankTypeLabel->setToolTip(tankTypeTip);
+		tankTypeDropDown_ = (GLWDropDownText *) 
+			infoPanel->addWidget(new GLWDropDownText(590, 8, 120));
+		tankTypeDropDown_->setHandler(this);
+		tankTypeDropDown_->setToolTip(tankTypeTip);
+		tankTypeDropDown_->setName("TankType");
+	}
 
 	humanToolTip_.setText(ToolTip::ToolTipHelp, 
 		LANG_RESOURCE("HUMAN", "Human"), 
@@ -180,56 +195,46 @@ PlayerDialog::~PlayerDialog()
 {
 }
 
-void PlayerDialog::draw()
-{
-	if (ScorchedClient::instance()->getOptionsGame().getTeams() != 1)
-	{
-		// Auto select the team with the least players
-		unsigned int newTeam = 
-			ScorchedClient::instance()->getOptionsTransient().getLeastUsedTeam(
-			ScorchedClient::instance()->getTargetContainer());
-		if (newTeam != allocatedTeam_)
-		{
-			teamDropDown_->setCurrentPosition(newTeam - 1);
-			allocatedTeam_ = newTeam;
-			viewer_->setTeam(newTeam);
-		}
-	}
-	GLWWindow::draw();
-}
-
-void PlayerDialog::select(unsigned int id, const int pos, 
-	GLWSelectorEntry value)
-{
-	if (id == typeDropDown_->getId())
-	{
-		if (value.getDataText() == "Human")
-		{
-			imageList_->setCurrentShortPath("player.png");
-		}
-		else
-		{
-			imageList_->setCurrentShortPath("computer.png");
-		}
-	}
-	else if (id == teamDropDown_->getId())
-	{
-		viewer_->setTeam(getCurrentTeam());
-	}
-}
-
 void PlayerDialog::keyDown(char *buffer, unsigned int keyState, 
 		KeyboardHistory::HistoryElement *history, int hisCount, 
 		bool &skipRest)
 {
 	GLWWindow::keyDown(buffer, keyState, history, hisCount, skipRest);
-	if (ClientParams::instance()->getConnectedToServer()) skipRest = true;
+	skipRest = true;
 }
 
-void PlayerDialog::display()
-{	
-	GLWWindow::display();
+void PlayerDialog::select(unsigned int id, const int pos, 
+	GLWSelectorEntry value)
+{
+	if (id == teamDropDown_->getId())
+	{
+		viewer_->setTeam(teamDropDown_->getCurrentPosition() + 1);
+	}
+	else if (id == tankTypeDropDown_->getId())
+	{
+		viewer_->setTankType(tankTypeDropDown_->getCurrentDataText());
+	}
+}
 
+void PlayerDialog::buttonDown(unsigned int id)
+{
+	if (cancelButton_ && id == cancelButton_->getId())
+	{
+		cancelButton();
+	}
+	else if (id == okButton_->getId() ||
+		id == spectateButton_->getId())
+	{
+		if (!playerName_->getText().empty())
+		{
+			okButton(id == spectateButton_->getId());
+		}
+	}
+}
+
+void PlayerDialog::initializeFromTank(Tank *tank)
+{
+	// Init viewer
 	if (!viewer_)
 	{
 		GLWPanel *infoPanel = new GLWPanel(10.0f, 40.0f, 720.0f, 330.0f,
@@ -241,12 +246,14 @@ void PlayerDialog::display()
 	}
 	viewer_->init();
 
+	// Set TankAIs
 	static TankAIStore tankAIStore;
 	tankAIStore.clearAIs();
 	tankAIStore.loadAIs(true);
 
-	// Add teams
+	// Add teams/colors
 	teamDropDown_->clear();
+	colorDropDown_->clear();
 	if (ScorchedClient::instance()->getOptionsGame().getTeams() == 1)
 	{
 		teamDropDown_->addText(LANG_RESOURCE("NONE", "None"), "None");
@@ -254,98 +261,8 @@ void PlayerDialog::display()
 		teamLabel_->setVisible(false);
 		colorDropDown_->setVisible(true);
 		colorLabel_->setVisible(true);
-	}
-	else
-	{
-		for (int i=1; i<=ScorchedClient::instance()->getOptionsGame().getTeams(); i++)
-		{
-			const char *name = TankColorGenerator::getTeamName(i);
-			GLWSelectorEntry entry(LANG_RESOURCE(name, name), 0, false, &colorTexture_, 0);
-			entry.getColor() = TankColorGenerator::getTeamColor(i);
-			teamDropDown_->addEntry(entry);
-		}	
-		teamDropDown_->setVisible(true);
-		teamLabel_->setVisible(true);
-		colorDropDown_->setVisible(false);
-		colorLabel_->setVisible(false);
-	}
 
-	// Add player types
-	typeDropDown_->clear();
-	typeDropDown_->addEntry(GLWSelectorEntry(LANG_RESOURCE("HUMAN", "Human"), 
-		&humanToolTip_, false, 0, 0, "Human"));
-	if (!ClientParams::instance()->getConnectedToServer() &&
-		!ScorchedClient::instance()->getOptionsGame().getTutorial()[0])
-	{
-		std::list<TankAI *>::iterator aiitor;
-		for (aiitor = tankAIStore.getAis().begin();
-			aiitor != tankAIStore.getAis().end();
-			++aiitor)
-		{
-			TankAI *ai = (*aiitor);
-			if (ai->availableForPlayers())
-			{
-				typeDropDown_->addEntry(
-					GLWSelectorEntry(LANG_RESOURCE(ai->getName(), ai->getName()),
-						(*aiitor)->getToolTip(), false, 0, 0, ai->getName()));
-			}
-		}
-	}
-	currentPlayerId_ = 0;
-	nextPlayer();
-
-	if (ClientParams::instance()->getConnectAcceptDefaults())
-	{
-		buttonDown(okId_);
-	}
-}
-
-void PlayerDialog::nextPlayer()
-{
-	allocatedTeam_ = 0;
-	currentPlayerId_ = getNextPlayer(currentPlayerId_);
-	if (currentPlayerId_ == 0)
-	{
-		GLWWindowManager::instance()->hideWindow(getId());
-		return;
-	}
-
-	Tank *tank = 
-		ScorchedClient::instance()->getTargetContainer().getTankById(currentPlayerId_);
-	if (ClientParams::instance()->getConnectedToServer())
-	{
-		// If we are connected online then use the online name
-		playerName_->setText(
-			LANG_STRING(OptionsDisplay::instance()->getOnlineUserName()));
-		viewer_->selectModelByName(
-			OptionsDisplay::instance()->getOnlineTankModel());
-		if (!imageList_->setCurrentShortPath(
-			OptionsDisplay::instance()->getOnlineUserIcon()))
-		{
-			imageList_->setCurrentShortPath("player.png");
-		}
-
-		cancelButton_->setEnabled(true);
-		spectateButton_->setEnabled(true);
-	}
-	else
-	{
-		// Else use the default names
-		if (tank) 
-		{
-			playerName_->setText(tank->getTargetName());
-		}
-		cancelButton_->setEnabled(false);
-		spectateButton_->setEnabled(false);
-	}
-		
-	imageList_->setEnabled(true);
-	imageList_->setToolTip(&avatarTip1_);
-
-	// Add colors
-	colorDropDown_->clear();
-	if (ScorchedClient::instance()->getOptionsGame().getTeams() == 1)
-	{
+		// Add colors
 		std::map<unsigned int, Tank *> tanks =
 			ScorchedClient::instance()->getTargetContainer().getTanks();
 		std::vector<Vector *> availableColors =
@@ -359,134 +276,88 @@ void PlayerDialog::nextPlayer()
 			colorDropDown_->addColor(color);
 		}
 
-		if (ClientParams::instance()->getConnectedToServer())
+		// Set color from tank
+		colorDropDown_->setCurrentColor(tank->getColor());		
+	}
+	else
+	{
+		// Create team entries
+		for (int i=1; i<=ScorchedClient::instance()->getOptionsGame().getTeams(); i++)
 		{
-			Vector onlineColor = 
-				OptionsDisplay::instance()->getOnlineColor();
-			colorDropDown_->setCurrentColor(onlineColor);
-			if (colorDropDown_->getCurrentColor() != onlineColor)
-			{
-				colorDropDown_->setCurrentColor(tank->getColor());	
-			}
+			const char *name = TankColorGenerator::getTeamName(i);
+			GLWSelectorEntry entry(LANG_RESOURCE(name, name), 0, false, &colorTexture_, 0);
+			entry.getColor() = TankColorGenerator::getTeamColor(i);
+			teamDropDown_->addEntry(entry);
+		}	
+		teamDropDown_->setVisible(true);
+		teamLabel_->setVisible(true);
+		colorDropDown_->setVisible(false);
+		colorLabel_->setVisible(false);
+
+		// Set team from tank
+		int team = tank->getTeam();
+		if (team == 0)
+		{
+			team = 
+				ScorchedClient::instance()->getOptionsTransient().getLeastUsedTeam(
+					ScorchedClient::instance()->getTargetContainer());
 		}
-		else
-		{
-			colorDropDown_->setCurrentColor(tank->getColor());			
-		}
+		teamDropDown_->setCurrentPosition(team - 1);
+		viewer_->setTeam(team);
 	}
-}
 
-unsigned int PlayerDialog::getNextPlayer(unsigned int current)
-{
-	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedClient::instance()->getTargetContainer().getTanks();
-	std::map<unsigned int, Tank *>::iterator itor;
-	for (itor = tanks.begin();
-		itor != tanks.end();
-		++itor)
+	// Add player types
+	aiTypeDropDown_->clear();
+	aiTypeDropDown_->addEntry(GLWSelectorEntry(LANG_RESOURCE("HUMAN", "Human"), 
+		&humanToolTip_, false, 0, 0, "Human"));
+	if (!ClientParams::instance()->getConnectedToServer() &&
+		!ScorchedClient::instance()->getOptionsGame().getTutorial()[0])
 	{
-		Tank *tank = (*itor).second;
-		if ((tank->getDestinationId() == 
-			ScorchedClient::instance()->getTargetContainer().getCurrentDestinationId()) &&
-			(tank->getPlayerId() != TargetID::SPEC_TANK_ID))
+		std::list<TankAI *>::iterator aiitor;
+		for (aiitor = tankAIStore.getAis().begin();
+			aiitor != tankAIStore.getAis().end();
+			++aiitor)
 		{
-			if (current == 0)
+			TankAI *ai = (*aiitor);
+			if (ai->availableForPlayers())
 			{
-				return tank->getPlayerId();
-			}
-			else if (tank->getPlayerId() == current) current = 0;
-		}
-	}
-	return 0;
-}
-
-int PlayerDialog::getCurrentTeam()
-{
-	return ((ScorchedClient::instance()->getOptionsGame().getTeams() > 1)?
-		teamDropDown_->getCurrentPosition() + 1:0);
-}
-
-void PlayerDialog::buttonDown(unsigned int id)
-{
-	if (cancelButton_ && id == cancelButton_->getId())
-	{
-		nextPlayer();
-		return;
-	}
-
-	if (playerName_->getText().empty())
-	{
-		playerName_->setText(LANG_STRING("PLAYER"));
-	}
-
-	// If we are connected online save this players name
-	if (ClientParams::instance()->getConnectedToServer())
-	{
-		OptionsDisplay::instance()->getOnlineUserNameEntry().setValue(
-			playerName_->getText().c_str());
-		OptionsDisplay::instance()->getOnlineTankModelEntry().setValue(
-			viewer_->getModelName());
-		OptionsDisplay::instance()->getOnlineUserIconEntry().setValue(
-			imageList_->getCurrentShortPath());
-		if (ScorchedClient::instance()->getOptionsGame().getTeams() == 1)
-		{
-			OptionsDisplay::instance()->getOnlineColorEntry().setValue(
-				colorDropDown_->getCurrentColor());
-		}
-	}
-
-	// Check the current model exists or get a random one
-	TankModel *model = 
-		ScorchedClient::instance()->getTankModels().
-			getModelByName(viewer_->getModelName());
-	if (!model)
-	{
-		model = ScorchedClient::instance()->getTankModels().
-			getRandomModel(getCurrentTeam(), false);
-	}
-
-	// Get the player type
-	const char *playerType = typeDropDown_->getCurrentDataText();
-
-	// Add this player
-	bool spectate = (spectateButton_ && (id == spectateButton_->getId()));
-	ComsTankChangeMessage message(currentPlayerId_,
-		playerName_->getLangString(),
-		colorDropDown_->getCurrentColor(),
-		model->getName(),
-		ScorchedClient::instance()->getTargetContainer().getCurrentDestinationId(),
-		getCurrentTeam(),
-		playerType,
-		spectate);
-	// Add avatar (if not one)
-	Tank *tank = ScorchedClient::instance()->getTargetContainer().
-		getTankById(currentPlayerId_);
-	if (tank && 
-		strcmp(tank->getAvatar().getName(), imageList_->getCurrentShortPath()) != 0)
-	{
-		if (tank->getAvatar().loadFromFile(imageList_->getCurrentLongPath()))
-		{
-			if (tank->getAvatar().getFile().getBufferUsed() <=
-				(unsigned) ScorchedClient::instance()->getOptionsGame().getMaxAvatarSize())
-			{
-				message.setPlayerIconName(imageList_->getCurrentShortPath());
-				message.getPlayerIcon().addDataToBuffer(
-					tank->getAvatar().getFile().getBuffer(),
-					tank->getAvatar().getFile().getBufferUsed());
-			}
-			else
-			{
-				ChannelText text("general", 
-					LANG_RESOURCE_2("AVATAR_TOO_LARGE", 
-					"Warning: Avatar too large to send to server, is {0} should be < {1}",
-					tank->getAvatar().getFile().getBufferUsed(),
-					ScorchedClient::instance()->getOptionsGame().getMaxAvatarSize()));
-				Logger::log( "Warning: Avatar too large to send to server");
+				aiTypeDropDown_->addEntry(
+					GLWSelectorEntry(LANG_RESOURCE(ai->getName(), ai->getName()),
+						(*aiitor)->getToolTip(), false, 0, 0, ai->getName()));
 			}
 		}
 	}
-	
-	ComsMessageSender::sendToServer(message);
 
-	nextPlayer();
+	// Set the current tankai
+	aiTypeDropDown_->setCurrentPosition(0);
+	if (tank->getTankAI())
+	{
+		aiTypeDropDown_->setCurrentText(
+			LANG_RESOURCE(tank->getTankAI()->getName(), tank->getTankAI()->getName()));
+	}
+
+	// Set the anme
+	playerName_->setText(tank->getTargetName());
+
+	// Set the current avatar
+	imageList_->setCurrentShortPath("player.png");
+	if (tank->getAvatar().getName()[0])
+	{
+		imageList_->setCurrentShortPath(tank->getAvatar().getName());
+	}
+
+	// Tank types
+	tankTypeDropDown_->clear();
+	std::vector<TanketType *> &tanketTypes = ScorchedClient::instance()->getTanketTypes().getTypes();
+	std::vector<TanketType *>::iterator tanketTypesItor;
+	for (tanketTypesItor = tanketTypes.begin();
+		tanketTypesItor != tanketTypes.end();
+		++tanketTypesItor)
+	{
+		TanketType *type = *tanketTypesItor;
+		tankTypeDropDown_->addEntry(
+			GLWSelectorEntry(LANG_RESOURCE(type->getName(), type->getName()),
+				0, false, 0, 0, type->getName()));
+	}
+	viewer_->setTankType(tank->getTanketType()->getName());
 }

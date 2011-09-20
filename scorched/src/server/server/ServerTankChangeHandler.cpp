@@ -35,6 +35,7 @@
 #include <tankai/TankAIStore.h>
 #include <target/TargetContainer.h>
 #include <tank/TankState.h>
+#include <tank/TankModelStore.h>
 
 ServerTankChangeHandler::ServerTankChangeHandler(ComsMessageHandler &comsMessageHandler)
 {
@@ -88,6 +89,19 @@ bool ServerTankChangeHandler::processMessage(NetMessage &netMessage,
 	LangString name(message.getPlayerName());
 	filterName(tank, name);
 	message.setPlayerName(name);
+
+	// Check model
+	TankModel *model = ScorchedServer::instance()->getTankModels().getModelByName(message.getModelName());
+	if (!model->isOfAi(tank->getDestinationId() == 0) ||
+		!model->isOfTankType(message.getTankType()) ||
+		!model->isOfTeam(message.getPlayerTeam()))
+	{
+		model = ScorchedServer::instance()->getTankModels().getRandomModel(
+			message.getPlayerTeam(),
+			tank->getDestinationId() == 0,
+			message.getTankType());
+		message.setModelName(model->getName());
+	}
 
 	// Send to client
 	TankChangeSimAction *simAction = new TankChangeSimAction(message);

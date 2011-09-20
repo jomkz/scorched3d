@@ -18,42 +18,30 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_RulesDialogh_INCLUDE__)
-#define __INCLUDE_RulesDialogh_INCLUDE__
+#if !defined(__INCLUDE_PlayerInitialDialogh_INCLUDE__)
+#define __INCLUDE_PlayerInitialDialogh_INCLUDE__
 
-#include <GLW/GLWWindow.h>
-#include <GLW/GLWButton.h>
-#include <GLW/GLWListView.h>
-#include <GLW/GLWIcon.h>
-#include <GLW/GLWTab.h>
+#include <dialogs/PlayerDialog.h>
 
-class RulesDialog : public GLWWindow , 
-					public GLWButtonI
+class PlayerInitialDialog : public PlayerDialog
 {
 public:
-	static RulesDialog *instance();
+	static PlayerInitialDialog *instance();
 
-	virtual void hide();
-	virtual void display();
-	virtual void buttonDown(unsigned int id);
-	virtual void draw();
-
-	void addIcon(const ImageID &imageId);
+	void displayDialog();
 
 protected:
-	static RulesDialog *instance_;
-	GLWListView *motdList_, *rulesList_;
-	GLWIcon *icon_;
-	GLWTab *rulesTab_;
-	GLWTab *motdTab_;
-	unsigned int okId_;
+	PlayerInitialDialog();
+	virtual ~PlayerInitialDialog();
 
-	void drawRules();
-	void addMOTD(const char *text);
+	unsigned int currentPlayerId_;
 
-private:
-	RulesDialog();
-	virtual ~RulesDialog();
+	void initializeDefaults(Tank *tank);
+	void nextPlayer();
+	void getNextPlayer();
+	virtual void okButton(bool spectate);
+	virtual void cancelButton();
+
 };
 
 #endif

@@ -52,8 +52,6 @@ bool ComsConnectAcceptMessage::writeMessage(NetBuffer &buffer)
 	buffer.addToBuffer(serverName_);
 	buffer.addToBuffer(publishAddress_);
 	buffer.addToBuffer(uniqueId_);
-	buffer.addToBuffer(serverPng_.getBufferUsed());
-	buffer.addDataToBuffer(serverPng_.getBuffer(), serverPng_.getBufferUsed());
 	if (!ScorchedServer::instance()->getOptionsGame().getMainOptions().
 		writeToBuffer(buffer, false, false)) return false;
 	return true;
@@ -67,10 +65,6 @@ bool ComsConnectAcceptMessage::readMessage(NetBufferReader &reader)
 	if (!reader.getFromBuffer(uniqueId_)) return false;
 	unsigned int used;
 	if (!reader.getFromBuffer(used)) return false;
-	serverPng_.allocate(used);
-	serverPng_.reset();
-	serverPng_.setBufferUsed(used);
-	reader.getDataFromBuffer(serverPng_.getBuffer(), used);
 #ifndef S3D_SERVER
 	if (!ScorchedClient::instance()->getOptionsGame().getMainOptions().
 		readFromBuffer(reader, false, false)) return false;

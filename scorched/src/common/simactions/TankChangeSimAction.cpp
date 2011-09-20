@@ -28,9 +28,10 @@
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
-#include <target/TargetContainer.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankModelContainer.h>
+#include <target/TargetContainer.h>
+#include <tanket/TanketTypes.h>
 #include <server/ScorchedServer.h>
 
 REGISTER_CLASS_SOURCE(TankChangeSimAction);
@@ -153,6 +154,13 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 			tank->setTeam(context.getOptionsTransient().getLeastUsedTeam(
 				context.getTargetContainer()));
 		}
+	}
+
+	// Tank type
+	TanketType *type = context.getTanketTypes().getType(message_.getTankType());
+	if (type)
+	{
+		tank->setTanketType(type);
 	}
 
 	// Make sure the model is available and for the correct team

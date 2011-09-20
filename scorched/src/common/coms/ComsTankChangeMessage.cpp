@@ -37,7 +37,8 @@ ComsTankChangeMessage::ComsTankChangeMessage(ComsTankChangeMessage &other) :
 	destinationId_(other.destinationId_),
 	playerTeam_(other.playerTeam_),
 	playerIconName_(other.playerIconName_),
-	spectate_(other.spectate_)
+	spectate_(other.spectate_),
+	tankType_(other.tankType_)
 {
 	playerIcon_.reset();
 	playerIcon_.addDataToBuffer(other.playerIcon_.getBuffer(), 
@@ -48,6 +49,7 @@ ComsTankChangeMessage::ComsTankChangeMessage(
 		unsigned int playerId,
 		const LangString &playerName,
 		Vector playerColor,
+		const char *tankType,
 		const char *modelName,
 		unsigned int destinationId,
 		unsigned int playerTeam,
@@ -58,6 +60,7 @@ ComsTankChangeMessage::ComsTankChangeMessage(
 	playerName_(playerName),
 	playerType_(playerType),
 	playerColor_(playerColor),
+	tankType_(tankType),
 	modelName_(modelName),
 	destinationId_(destinationId),
 	playerTeam_(playerTeam),
@@ -73,6 +76,7 @@ bool ComsTankChangeMessage::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(playerName_);
 	buffer.addToBuffer(playerType_);
+	buffer.addToBuffer(tankType_);
 	buffer.addToBuffer(modelName_);
 	buffer.addToBuffer(playerId_);
 	buffer.addToBuffer(destinationId_);
@@ -93,6 +97,7 @@ bool ComsTankChangeMessage::readMessage(NetBufferReader &reader)
 {
 	if (!reader.getFromBuffer(playerName_)) return false;
 	if (!reader.getFromBuffer(playerType_)) return false;
+	if (!reader.getFromBuffer(tankType_)) return false;
 	if (!reader.getFromBuffer(modelName_)) return false;
 	if (!reader.getFromBuffer(playerId_)) return false;
 	if (!reader.getFromBuffer(destinationId_)) return false;

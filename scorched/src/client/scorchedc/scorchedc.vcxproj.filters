@@ -1257,9 +1257,6 @@
     <ClCompile Include="..\dialogs\QuitDialog.cpp">
       <Filter>dialogs</Filter>
     </ClCompile>
-    <ClCompile Include="..\dialogs\RulesDialog.cpp">
-      <Filter>dialogs</Filter>
-    </ClCompile>
     <ClCompile Include="..\dialogs\SaveDialog.cpp">
       <Filter>dialogs</Filter>
     </ClCompile>
@@ -2345,6 +2342,12 @@
     </ClCompile>
     <ClCompile Include="..\..\common\weapons\WeaponAimed.cpp">
       <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dialogs\PlayerInitialDialog.cpp">
+      <Filter>dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dialogs\PlayerInGameDialog.cpp">
+      <Filter>dialogs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3485,9 +3488,6 @@
     <ClInclude Include="..\dialogs\QuitDialog.h">
       <Filter>dialogs</Filter>
     </ClInclude>
-    <ClInclude Include="..\dialogs\RulesDialog.h">
-      <Filter>dialogs</Filter>
-    </ClInclude>
     <ClInclude Include="..\dialogs\SaveDialog.h">
       <Filter>dialogs</Filter>
     </ClInclude>
@@ -4588,6 +4588,12 @@
     </ClInclude>
     <ClInclude Include="..\..\common\weapons\WeaponAimed.h">
       <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dialogs\PlayerInitialDialog.h">
+      <Filter>dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dialogs\PlayerInGameDialog.h">
+      <Filter>dialogs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -21,7 +21,6 @@
 #include <client/ClientConnectionAcceptHandler.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientState.h>
-#include <dialogs/RulesDialog.h>
 #include <dialogs/ConnectDialog.h>
 #include <dialogs/ProgressDialog.h>
 #include <engine/ModFiles.h>
@@ -89,25 +88,6 @@ bool ClientConnectionAcceptHandler::processMessage(
 	Logger::log(S3D::formatStringBuffer(
 		"Connection accepted by \"%s\".\nPlease wait...",
 		message.getServerName()));
-
-	// Set the server specific png for the current server
-	{
-		if (message.getServerPng().getBufferUsed() > 0)
-		{
-			// Use a custom icon
-			Image map = ImagePngFactory::loadFromBuffer(message.getServerPng());
-
-			// Set the texture
-			//texture = new GLTexture;
-			//texture->create(map, false);
-		}
-		
-		RulesDialog::instance()->addIcon(
-			ImageID(S3D::eDataLocation,
-				"data/images/scorched.png", 
-				"data/images/scorcheda.png", 
-				false));
-	}
 
 	// Set the mod
 	S3D::setDataFileMod(

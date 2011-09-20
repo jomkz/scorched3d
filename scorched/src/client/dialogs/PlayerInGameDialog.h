@@ -18,43 +18,28 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <client/ClientGameStoppedHandler.h>
-#include <client/ClientState.h>
-#include <client/ScorchedClient.h>
-#include <GLW/GLWWindowManager.h>
-#include <coms/ComsGameStoppedMessage.h>
+#if !defined(__INCLUDE_PlayerInGameDialogh_INCLUDE__)
+#define __INCLUDE_PlayerInGameDialogh_INCLUDE__
 
-ClientGameStoppedHandler *ClientGameStoppedHandler::instance_ = 0;
+#include <dialogs/PlayerDialog.h>
 
-ClientGameStoppedHandler *ClientGameStoppedHandler::instance()
+class PlayerInGameDialog : public PlayerDialog
 {
-	if (!instance_)
-	{
-		instance_ = new ClientGameStoppedHandler;
-	}
-	return instance_;
-}
+public:
+	static PlayerInGameDialog *instance();
 
-ClientGameStoppedHandler::ClientGameStoppedHandler()
-{
-	ScorchedClient::instance()->getComsMessageHandler().addHandler(
-		ComsGameStoppedMessage::ComsGameStoppedMessageType,
-		this);
-}
+	void displayDialog();
 
-ClientGameStoppedHandler::~ClientGameStoppedHandler()
-{
-}
+	// Window
+	virtual void display();
 
-bool ClientGameStoppedHandler::processMessage(
-	NetMessage &netMessage,
-	const char *messageType,
-	NetBufferReader &reader)
-{
-	ComsGameStoppedMessage message;
-	if (!message.readMessage(reader)) return false;
+protected:
+	PlayerInGameDialog();
+	virtual ~PlayerInGameDialog();
 
-	ScorchedClient::instance()->getGameState().
-		stimulate(ClientState::StimGameStopped);
-	return true;
-}
+	Tank *getCurrentPlayer();
+	virtual void okButton(bool spectate);
+	virtual void cancelButton();
+};
+
+#endif

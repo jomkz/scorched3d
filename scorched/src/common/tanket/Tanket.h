@@ -51,6 +51,7 @@ public:
 	unsigned int getTeam() { return team_; }
 	void setTeam(unsigned int team) { team_ = team; }
 
+	void setTanketType(TanketType *type) { tanketType_ = type; }
 	TanketType *getTanketType() { return tanketType_; }
 	TanketAccessories& getAccessories() { return *accessories_; }
 	TanketShotInfo& getShotInfo() { return *shotInfo_; }

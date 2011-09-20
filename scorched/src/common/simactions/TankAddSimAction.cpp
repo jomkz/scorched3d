@@ -29,6 +29,7 @@
 #include <tank/TankModelStore.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankModelContainer.h>
+#include <tanket/TanketType.h>
 #include <tankai/TankAIStore.h>
 #include <common/ChannelManager.h>
 #include <common/StatsLogger.h>
@@ -137,7 +138,7 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 		{
 			// Form the tank ai model
 			TankModel *tankModel = 
-				context.getTankModels().getRandomModel(team, true);
+				context.getTankModels().getRandomModel(team, true, tank->getTanketType()->getName());
 			TankAvatar tankAvatar;
 			tankAvatar.loadFromFile(S3D::getDataFile("data/avatars/computer.png"));
 
@@ -146,6 +147,7 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 				playerId_,
 				playerName_,
 				color,
+				tank->getTanketType()->getName(),
 				tankModel->getName(),
 				0,
 				team,

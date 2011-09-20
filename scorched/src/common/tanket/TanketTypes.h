@@ -33,6 +33,8 @@ public:
 	bool loadTanketTypes(ScorchedContext &context);
 	TanketType *getType(const char *name);
 
+	std::vector<TanketType *> &getTypes() { return types_; }
+
 	void clear();
 
 protected:

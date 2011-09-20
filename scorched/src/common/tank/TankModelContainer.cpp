@@ -21,6 +21,7 @@
 #include <tank/TankModelContainer.h>
 #include <tank/TankModelStore.h>
 #include <tank/Tank.h>
+#include <tanket/TanketType.h>
 #ifndef S3D_SERVER
 	#include <tankgraph/TargetRendererImplTank.h>
 #endif
@@ -45,7 +46,7 @@ TankModel *TankModelContainer::getTankModel()
 		if (!tankModel_)
 		{
 			tankModel_ = context_.getTankModels().getRandomModel(
-				tank_->getTeam(), tank_->getDestinationId() == 0);
+				tank_->getTeam(), tank_->getDestinationId() == 0, tank_->getTanketType()->getName());
 		}
 	}
 

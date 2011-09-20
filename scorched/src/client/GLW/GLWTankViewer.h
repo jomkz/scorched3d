@@ -42,6 +42,7 @@ public:
 	void selectModelByName(const char *name);
 	const char *getModelName();
 	void setTeam(int team);
+	void setTankType(const std::string &tankType);
 
 	// Inhertied from GLWDropDownI
 	virtual void select(unsigned int id, const int pos, GLWSelectorEntry value);
@@ -75,7 +76,9 @@ protected:
 	float totalTime_;
 	int selected_;
 	int team_;
+	std::string tankType_;
 
+	void refreshAvailableModels();
 	void setTankModels(std::vector<ModelEntry> &models);
 	virtual void drawItem(int pos, bool selected);
 	virtual void drawCaption(int pos);

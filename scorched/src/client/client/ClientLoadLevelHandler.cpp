@@ -31,6 +31,8 @@
 #include <engine/MainLoop.h>
 #include <dialogs/ProgressDialog.h>
 #include <dialogs/CameraDialog.h>
+#include <dialogs/PlayerInitialDialog.h>
+#include <dialogs/PlayerInGameDialog.h>
 #include <coms/ComsLoadLevelMessage.h>
 #include <coms/ComsLevelLoadedMessage.h>
 #include <coms/ComsMessageSender.h>
@@ -49,6 +51,7 @@
 #include <target/TargetRenderer.h>
 #include <net/NetInterface.h>
 #include <image/ImageFactory.h>
+#include <GLW/GLWWindowManager.h>
 
 ClientLoadLevelHandler *ClientLoadLevelHandler::instance_ = 0;
 
@@ -256,6 +259,16 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 
 	// Make sure simulator knows we are not loading a level
 	ScorchedClient::instance()->getClientSimulator().setLoadingLevel(false);
+
+	// Display the player dialog
+	if (strcmp(message.getLandscapeDefinition().getName(), "blank") == 0)
+	{
+		PlayerInitialDialog::instance()->displayDialog();
+	}
+	else
+	{
+		PlayerInGameDialog::instance()->displayDialog();
+	}
 
 	// Tell the server we have finished processing the landscape
 	ComsLevelLoadedMessage levelLoadedMessage;

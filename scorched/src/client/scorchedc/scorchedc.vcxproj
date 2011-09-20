@@ -514,10 +514,11 @@
     <ClCompile Include="..\dialogs\NetworkChatDialog.cpp" />
     <ClCompile Include="..\dialogs\NetworkSelectDialog.cpp" />
     <ClCompile Include="..\dialogs\PlayerDialog.cpp" />
+    <ClCompile Include="..\dialogs\PlayerInGameDialog.cpp" />
+    <ClCompile Include="..\dialogs\PlayerInitialDialog.cpp" />
     <ClCompile Include="..\dialogs\ProfileDialog.cpp" />
     <ClCompile Include="..\dialogs\ProgressDialog.cpp" />
     <ClCompile Include="..\dialogs\QuitDialog.cpp" />
-    <ClCompile Include="..\dialogs\RulesDialog.cpp" />
     <ClCompile Include="..\dialogs\SaveDialog.cpp" />
     <ClCompile Include="..\dialogs\SaveSelectDialog.cpp" />
     <ClCompile Include="..\dialogs\ScoreDialog.cpp" />
@@ -1258,10 +1259,11 @@
     <ClInclude Include="..\dialogs\NetworkChatDialog.h" />
     <ClInclude Include="..\dialogs\NetworkSelectDialog.h" />
     <ClInclude Include="..\dialogs\PlayerDialog.h" />
+    <ClInclude Include="..\dialogs\PlayerInGameDialog.h" />
+    <ClInclude Include="..\dialogs\PlayerInitialDialog.h" />
     <ClInclude Include="..\dialogs\ProfileDialog.h" />
     <ClInclude Include="..\dialogs\ProgressDialog.h" />
     <ClInclude Include="..\dialogs\QuitDialog.h" />
-    <ClInclude Include="..\dialogs\RulesDialog.h" />
     <ClInclude Include="..\dialogs\SaveDialog.h" />
     <ClInclude Include="..\dialogs\SaveSelectDialog.h" />
     <ClInclude Include="..\dialogs\ScoreDialog.h" />

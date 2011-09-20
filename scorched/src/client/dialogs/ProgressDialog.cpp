@@ -27,11 +27,15 @@
 #include <graph/Main2DCamera.h>
 #include <client/ClientMain.h>
 #include <client/ClientState.h>
+#include <client/ClientParams.h>
 #include <client/ClientProcessingLoop.h>
+#include <server/ScorchedServer.h>
 #include <engine/MainLoop.h>
+#include <common/OptionsScorched.h>
 #include <common/Clock.h>
 #include <common/Defines.h>
 #include <common/ChannelText.h>
+#include <lang/LangResource.h>
 #include <GLW/GLWFont.h>
 #include <GLW/GLWWindowManager.h>
 #include <GLW/GLWColors.h>
@@ -50,7 +54,7 @@ ProgressDialog *ProgressDialog::instance()
 }
 
 ProgressDialog::ProgressDialog() : 
-	GLWWindow("Progress", 10.0f, 10.0f, 470.0f, 80.0f, eTransparent | eNoTitle | eHideName, ""),
+	GLWWindow("Progress", 10.0f, 10.0f, 500.0f, 80.0f, eTransparent | eNoTitle | eHideName, ""),
 	progressPercentage_(0)
 {
 	setUser(this);
@@ -91,9 +95,126 @@ void ProgressDialog::setIcon(Image image)
 	icon_.create(newMap);
 }
 
+void ProgressDialog::drawRules(ScorchedContext &context)
+{
+	GLState newState(GLState::TEXTURE_OFF | GLState::DEPTH_OFF);
+
+	LANG_RESOURCE_VAR(SINGLE_PLAYER_GAME, "SINGLE_PLAYER_GAME", "Single Player Game");
+	LangString SERVER_NAME = LANG_STRING(context.getOptionsGame().getServerName());
+
+	LangString *text = &SINGLE_PLAYER_GAME;
+	if (ClientParams::instance()->getConnectedToServer())
+	{
+		text = &SERVER_NAME;
+	}
+
+	Vector offWhite(0.9f, 0.9f, 1.0f);
+	GLWFont::instance()->getGameShadowFont()->draw(
+		GLWColors::black,
+			20,
+			x_ + 13.0f - 2.0f, y_ + h_ - 32.0f + 2.0f, 0.0f,
+			*text);
+	GLWFont::instance()->getGameFont()->draw(
+			offWhite,
+			20,
+			x_ + 13.0f, y_ + h_ - 32.0f, 0.0f,
+			*text);
+
+	float top = y_ + 225.0f;
+	float left = x_ + 22.0f;
+	Vector yellow(1.0f, 1.0f, 1.0f); // Hmm, thats not yellow
+
+	const char *type = "Annihilate free for all";
+	if (context.getOptionsGame().getTeams() > 1) type = "Annihilate opposing team(s)";
+
+	LANG_RESOURCE_VAR_1(TYPE_LABEL, "TYPE_LABEL", "Type : {0}", type);
+	GLWFont::instance()->getGameFont()->draw(
+		yellow,
+		12,
+		left, top - 45.0f, 0.0f,
+		TYPE_LABEL);
+
+	LANG_RESOURCE_VAR_1(MOD_LABEL, "MOD_LABEL", "Mod : {0}", 
+		context.getOptionsGame().getMod());
+	GLWFont::instance()->getGameFont()->draw(
+		yellow,
+		12,
+		left, top - 75.0f, 0.0f,
+		MOD_LABEL);
+
+	LANG_RESOURCE_VAR_1(GAME_TYPE_LABEL, "GAME_TYPE_LABEL", "Game type : {0}", 
+		context.getOptionsGame().getTurnType().getValueAsString());
+	GLWFont::instance()->getGameFont()->draw(
+		yellow,
+		12,
+		left, top - 90.0f, 0.0f,
+		GAME_TYPE_LABEL);
+
+	LANG_RESOURCE_VAR_1(TEAMS_LABEL, "TEAMS_LABEL", "Teams : {0}", 
+		S3D::formatStringBuffer("%i", context.getOptionsGame().getTeams()));
+	LANG_RESOURCE_VAR(TEAMS_NONE, "TEAMS_NONE", "Teams : None");
+	GLWFont::instance()->getGameFont()->draw(
+		yellow,
+		12,
+		left, top - 105.0f, 0.0f,
+		(context.getOptionsGame().getTeams() > 1)?TEAMS_LABEL:TEAMS_NONE);
+
+	LANG_RESOURCE_VAR_1(SHOT_TIME_LABEL, "SHOT_TIME_LABEL", "Shot Time : {0}", 
+		S3D::formatStringBuffer("%i", context.getOptionsGame().getShotTime()));
+	LANG_RESOURCE_VAR(SHOT_TIME_UNLIMITED, "SHOT_TIME_UNLIMITED", "Shot time : Unlimited");
+	GLWFont::instance()->getGameFont()->draw(
+		yellow,
+		12,
+		left, top - 135.0f, 0.0f,
+		(context.getOptionsGame().getShotTime() > 0)?SHOT_TIME_LABEL:SHOT_TIME_UNLIMITED);
+
+	LANG_RESOURCE_VAR_1(BUYING_TIME_LABEL, "BUYING_TIME_LABEL", "Buying Time : {0}", 
+		S3D::formatStringBuffer("%i", context.getOptionsGame().getShotTime()));
+	LANG_RESOURCE_VAR(BUYING_TIME_UNLIMITED, "BUYING_TIME_UNLIMITED", "Buying time : Unlimited");
+	GLWFont::instance()->getGameFont()->draw(
+		yellow,
+		12,
+		left, top - 150.0f, 0.0f,
+		(context.getOptionsGame().getBuyingTime() > 0)?BUYING_TIME_LABEL:BUYING_TIME_UNLIMITED);
+
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glBegin(GL_LINES);
+		glVertex2f(x_ + 10.0f, y_ + 55.0f);
+		glVertex2f(x_ + 490.0f, y_ + 55.0f);
+	glEnd();
+}
+
 void ProgressDialog::draw()
 {
+	ScorchedContext *rulesContext = 0;
+	unsigned int state = ScorchedClient::instance()->getGameState().getState();
+	if (state >= ClientState::StateLoadFiles)
+	{
+		rulesContext = ScorchedClient::instance();
+	}
+	else if (ScorchedServer::instance() &&
+		ScorchedServer::instance()->getNetInterfaceValid())
+	{
+		rulesContext = ScorchedServer::instance();
+	}
+
+	if (rulesContext)
+	{
+		needsCentered();
+		h_ = 240.0f;
+	}
+	else
+	{
+		needsCentered();
+		h_ = 55.0f;
+	}
+
 	GLWWindow::draw();
+
+	if (rulesContext)
+	{
+		drawRules(*rulesContext);
+	}
 
 	{
 		GLState state(GLState::DEPTH_OFF | GLState::TEXTURE_ON | GLState::BLEND_ON);
@@ -119,7 +240,7 @@ void ProgressDialog::draw()
 
 		// Draw the progress bars
 		glPushMatrix();
-			glTranslatef(x_ + 80.0f, y_ + 10.0f, 0.0f);
+			glTranslatef(x_ + 10.0f, y_ - 4.0f, 0.0f);
 
 			bar1_.draw();
 			glColor3f(1.0f, 1.0f, 1.0f);
@@ -127,38 +248,39 @@ void ProgressDialog::draw()
 				glTexCoord2f(0.0f, 0.0f);
 				glVertex2f(0.0f, 15.0f);
 				glTexCoord2f(progressPercentage_ / 100.0f, 0.0f);
-				glVertex2f(380.0f * progressPercentage_ / 100.0f, 15.0f);
+				glVertex2f(480.0f * progressPercentage_ / 100.0f, 15.0f);
 				glTexCoord2f(progressPercentage_ / 100.0f, 1.0f);
-				glVertex2f(380.0f * progressPercentage_ / 100.0f, 26.0f);
+				glVertex2f(480.0f * progressPercentage_ / 100.0f, 26.0f);
 				glTexCoord2f(0.0, 1.0f);
 				glVertex2f(0.0f, 26.0f);
 			glEnd();
 			bar2_.draw();
 			glBegin(GL_QUADS);
 				glTexCoord2f(progressPercentage_ / 100.0f, 0.0f);
-				glVertex2f(380.0f * progressPercentage_ / 100.0f, 15.0f);
+				glVertex2f(480.0f * progressPercentage_ / 100.0f, 15.0f);
 				glTexCoord2f(1.0f, 0.0f);
-				glVertex2f(380.0f, 15.0f);
+				glVertex2f(480.0f, 15.0f);
 				glTexCoord2f(1.0f, 1.0f);
-				glVertex2f(380.0f, 26.0f);
+				glVertex2f(480.0f, 26.0f);
 				glTexCoord2f(progressPercentage_ / 100.0f, 1.0f);
-				glVertex2f(380.0f * progressPercentage_ / 100.0f, 26.0f);
+				glVertex2f(480.0f * progressPercentage_ / 100.0f, 26.0f);
 			glEnd();
 			
 			// Draw the progress text
 			GLWFont::instance()->getGameShadowFont()->drawWidth(380.0f, 
 				GLWColors::black, 
-				14.0f, 0.0f - 2.0f, 33.0f + 2.0f, 0.0f, 
+				14.0f, 5.0f - 2.0f, 33.0f + 2.0f, 0.0f, 
 				progressText_);
 
 			Vector white(1.0f, 1.0f, 1.0f);
 			GLWFont::instance()->getGameFont()->drawWidth(380.0f, 
 				white, 
-				14.0f, 0.0f, 33.0f, 0.0f, 
+				14.0f, 5.0f, 33.0f, 0.0f, 
 				progressText_);
 		glPopMatrix();
 
 		// Draw the icon
+		/*
 		icon_.draw();
 		glPushMatrix();
 		{
@@ -193,6 +315,7 @@ void ProgressDialog::draw()
 			glLineWidth(1.0f);
 		}
 		glPopMatrix();
+		*/
 	}
 }
 
@@ -243,20 +366,19 @@ void ProgressDialogSync::progressChange(const LangString &op, const float percen
 		Main2DCamera::instance()->draw(0);
 
 		unsigned int state = ScorchedClient::instance()->getGameState().getState();
-		if (state >= ClientState::StateLoadLevel)
+		if (state >= ClientState::StateLoadFiles)
 		{
-			GLWWindowManager::instance()->simulate(ClientState::StateLoadLevel, MIN(0.25f, timeDelay));
-			GLWWindowManager::instance()->draw(ClientState::StateLoadLevel);
-			LandscapeMusicManager::instance()->simulate(ClientState::StateLoadLevel, frameTime);
-			Sound::instance()->simulate(ClientState::StateLoadLevel, frameTime);
+			GLWWindowManager::instance()->simulate(state, MIN(0.25f, timeDelay));
+			GLWWindowManager::instance()->draw(state);
 		}
 		else
 		{
 			BackdropDialog::instance()->draw();
 			ProgressDialog::instance()->draw();
-			LandscapeMusicManager::instance()->simulate(state, frameTime);
-			Sound::instance()->simulate(state, frameTime);
 		}
+
+		LandscapeMusicManager::instance()->simulate(state, frameTime);
+		Sound::instance()->simulate(state, frameTime);
 
 		ScorchedClient::instance()->getMainLoop().swapBuffers();
 

@@ -252,25 +252,6 @@ void ServerConnectAuthHandler::processMessageInternal(
 		ScorchedServer::instance()->getOptionsGame().getServerName(),
 		ScorchedServer::instance()->getOptionsGame().getPublishAddress(),
 		uniqueId.c_str());
-	// Add the connection png
-#ifdef S3D_SERVER
-	{
-		std::string fileName = 
-			S3D::getSettingsFile(S3D::formatStringBuffer("icon-%i.png",
-				ScorchedServer::instance()->getOptionsGame().getPortNo()));
-		FILE *in = fopen(fileName.c_str(), "rb");
-		if (in)
-		{
-			acceptMessage.getServerPng().reset();
-			unsigned char readBuf[512];
-			while (unsigned int size = fread(readBuf, sizeof(unsigned char), 512, in))
-			{
-				acceptMessage.getServerPng().addDataToBuffer(readBuf, size);
-			}
-			fclose(in);
-		}
-	}
-#endif
 	if (!ComsMessageSender::sendToSingleClient(acceptMessage, destinationId))
 	{
 		ServerCommon::kickDestination(destinationId,

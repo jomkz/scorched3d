@@ -285,6 +285,22 @@ void ClientChannelManager::showText(const ChannelText &constText)
 	}
 }
 
+bool ClientChannelManager::channelActive(const std::string &channelName)
+{
+	std::map<unsigned int, ChannelEntry *>::iterator itor;
+	for (itor = recievers_.begin();
+		itor != recievers_.end();
+		++itor)
+	{
+		ChannelEntry *entry = (*itor).second;
+		if (entry->hasChannel(channelName))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 bool ClientChannelManager::processChannelMessage(NetMessage &message, 
 	NetBufferReader &reader)
 {

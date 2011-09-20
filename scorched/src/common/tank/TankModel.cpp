@@ -20,11 +20,11 @@
 
 #include <tank/TankModel.h>
 #include <tank/Tank.h>
+#include <tanket/TanketType.h>
 #include <XML/XMLNode.h>
 #include <engine/ScorchedContext.h>
 
 TankModel::TankModel() :
-	init_(false), 
 	aiOnly_(false), 
 	movementSmoke_(true)
 {
@@ -42,7 +42,10 @@ bool TankModel::initFromXML(ScorchedContext &context, XMLNode *node)
 
 	// Get the tank type (if any)
 	std::string typeName;
-	node->getNamedChild("type", typeName, false);
+	while (node->getNamedChild("type", typeName, false))
+	{
+		tankTypes_.insert(typeName);
+	}
 
 	// Get the model node
 	XMLNode *modelNode;
@@ -109,11 +112,6 @@ bool TankModel::loadImage(XMLNode *node, const char *nodeName,
 	return true;
 }
 
-void TankModel::clear()
-{
-	init_ = false;
-}
-
 bool TankModel::lessThan(TankModel *other)
 {
 	return (strcmp(getName(), other->getName()) < 0);
@@ -124,6 +122,14 @@ bool TankModel::isOfCatagory(const char *catagory)
 	std::set<std::string>::iterator itor =
 		catagories_.find(catagory);
 	return (itor != catagories_.end());
+}
+
+bool TankModel::isOfTankType(const char *tankType)
+{
+	if (tankTypes_.empty()) return true;
+	std::set<std::string>::iterator itor =
+		tankTypes_.find(tankType);
+	return (itor != tankTypes_.end());
 }
 
 bool TankModel::isOfAi(bool ai)
@@ -145,7 +151,8 @@ bool TankModel::isOfTeam(int team)
 bool TankModel::availableForTank(Tank *tank)
 {
 	if (isOfTeam(tank->getTeam()) &&
-		isOfAi(tank->getDestinationId() == 0))
+		isOfAi(tank->getDestinationId() == 0) &&
+		isOfTankType(tank->getTanketType()->getName()))
 	{
 		return true;
 	}

@@ -26,6 +26,7 @@
 #include <GLW/GLWWindow.h>
 #include <GLEXT/GLTexture.h>
 
+class ScorchedContext;
 class ProgressDialog : 
 	public GLWWindow,
 	public ProgressCounterI,
@@ -49,6 +50,8 @@ protected:
 	FileLines tips_;
 	LangString progressText_;
 	float progressPercentage_;
+
+	void drawRules(ScorchedContext &context);
 
 private:
 	ProgressDialog();

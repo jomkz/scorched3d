@@ -30,14 +30,12 @@
 #include <GLEXT/GLTexture.h>
 #include <GLW/GLWTankViewer.h>
 
+class Tank;
 class PlayerDialog : public GLWWindow,
 	public GLWButtonI, public GLWDropDownI
 {
 public:
-	static PlayerDialog *instance();
-
-	virtual void display();
-	virtual void draw();
+	void initializeFromTank(Tank *tank);
 
 	// Inherited from GLWWindow
 	virtual void keyDown(char *buffer, unsigned int keyState, 
@@ -52,12 +50,14 @@ public:
 		GLWSelectorEntry value);
 
 protected:
-	PlayerDialog();
+	PlayerDialog(const std::string &name, 
+		unsigned int states, 
+		const std::string &description);
 	virtual ~PlayerDialog();
 
-	static PlayerDialog *instance_;
-	GLWDropDownText *typeDropDown_;
+	GLWDropDownText *aiTypeDropDown_;
 	GLWDropDownText *teamDropDown_;
+	GLWDropDownText *tankTypeDropDown_;
 	GLWDropDownColor *colorDropDown_;
 	GLWLabel *colorLabel_;
 	GLWLabel *teamLabel_;
@@ -69,13 +69,10 @@ protected:
 	GLTexture colorTexture_;
 	GLWTextButton *cancelButton_;
 	GLWTextButton *spectateButton_;
-	unsigned int allocatedTeam_;
-	unsigned int okId_;
-	unsigned int currentPlayerId_;
+	GLWTextButton *okButton_;
 
-	void nextPlayer();
-	int getCurrentTeam();
-	unsigned int getNextPlayer(unsigned int current);
+	virtual void okButton(bool spectate) = 0;
+	virtual void cancelButton() = 0;
 
 };
 

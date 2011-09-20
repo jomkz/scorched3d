@@ -147,7 +147,7 @@ void TankModelStore::killModels(std::vector<TankModel *> &src)
 	}
 }
 
-TankModel *TankModelStore::getRandomModel(int team, bool ai)
+TankModel *TankModelStore::getRandomModel(int team, bool ai, const char *tankType)
 {
 	std::vector<TankModel *> models;
 	std::vector<TankModel *>::iterator itor;
@@ -159,7 +159,11 @@ TankModel *TankModelStore::getRandomModel(int team, bool ai)
 		if (strcmp(model->getName(), "Random") != 0)
 		{
 			if (model->isOfTeam(team) && 
-				model->isOfAi(ai)) models.push_back(model);
+				model->isOfAi(ai) &&
+				model->isOfTankType(tankType)) 
+			{
+					models.push_back(model);
+			}
 		}
 	}
 

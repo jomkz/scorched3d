@@ -38,7 +38,7 @@ public:
 	void clear();
 
 	TankModel *getModelByName(const char *name);
-	TankModel *getRandomModel(int team, bool ai);
+	TankModel *getRandomModel(int team, bool ai, const char *tankType);
 
 	std::vector<TankModel *> &getModels() { return models_; }
 	std::set<std::string> &getModelCatagories() { return modelCatagories_; }

@@ -28,8 +28,8 @@
 #include <string>
 
 class ScorchedContext;
-class TankType;
 class Tank;
+class TankModelStore;
 class TankModel
 {
 public:
@@ -39,7 +39,6 @@ public:
 	bool initFromXML(ScorchedContext &context, XMLNode *node);
 
 	virtual bool lessThan(TankModel *other);
-	void clear();
 
 	const char *getName() { return tankName_.c_str(); }
 	ModelID &getTankModelID() { return modelId_; }
@@ -48,18 +47,18 @@ public:
 	ImageID &getTracksHId() { return tracksHId_; }
 	ImageID &getTracksVHId() { return tracksVHId_; }
 	ImageID &getTracksHVId() { return tracksHVId_; }
-	std::set<std::string> &getCatagories() { return catagories_; }
-	bool getAiOnly() { return aiOnly_; }
-	bool getMovementSmoke() { return movementSmoke_; }
 
-	bool isOfAi(bool ai);
+	bool getMovementSmoke() { return movementSmoke_; }
 	bool isOfCatagory(const char *catagory);
+	bool isOfAi(bool ai);
+	bool isOfTankType(const char *tankType);
 	bool isOfTeam(int team);
 
 	bool availableForTank(Tank *tank);
 
 protected:
-	bool init_;
+	friend class TankModelStore;
+
 	bool aiOnly_;
 	bool movementSmoke_;
 	std::string tankName_;
@@ -69,8 +68,11 @@ protected:
 	ImageID tracksHId_;
 	ImageID tracksVHId_;
 	ImageID tracksHVId_;
+	std::set<std::string> tankTypes_;
 	std::set<std::string> catagories_;
 	std::set<int> teams_;
+
+	std::set<std::string> &getCatagories() { return catagories_; }
 
 	bool loadImage(XMLNode *node, const char *nodeName, 
 		ImageID &image, const char *backupImage);

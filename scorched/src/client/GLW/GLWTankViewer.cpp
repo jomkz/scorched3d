@@ -87,45 +87,34 @@ void GLWTankViewer::init()
 		catagoryChoice_.addText(LANG_RESOURCE(*catItor, *catItor), (*catItor));
 	}
 	catagoryChoice_.setCurrentPosition(0);
-	if (catagoryChoice_.getCurrentEntry()) 
-	{
-		select(0, 0, *catagoryChoice_.getCurrentEntry());
-	}
+	refreshAvailableModels();
 }
 
 void GLWTankViewer::setTeam(int team)
 {
 	team_ = team;
+	refreshAvailableModels();
+}
 
-	// Save current model
-	int scrollCurrent = scrollBar_.getCurrent();
-	TankModel *model = 0;
-	if (selected_ >= 0 &&
-		selected_ < (int) models_.size())
-	{
-		model = models_[selected_].model;
-	}
-
-	// Show new team models
-	if (catagoryChoice_.getCurrentEntry())
-	{
-		select(0, 0, *catagoryChoice_.getCurrentEntry());
-	}
-
-	// Select old model
-	scrollBar_.setCurrent(scrollCurrent);
-	for (int i=0; i<(int)models_.size(); i++)
-	{
-		if (models_[i].model == model) selected_ = i;
-	}
+void GLWTankViewer::setTankType(const std::string &tankType)
+{
+	tankType_ = tankType;
+	refreshAvailableModels();
 }
 
 void GLWTankViewer::select(unsigned int id, 
 						   const int pos, 
 						   GLWSelectorEntry value)
 {
-	std::vector<ModelEntry> newmodels;
+	refreshAvailableModels();
+}
 
+void GLWTankViewer::refreshAvailableModels()
+{
+	GLWSelectorEntry *catagoryEntry = catagoryChoice_.getCurrentEntry();
+	if (!catagoryEntry) return;
+
+	std::vector<ModelEntry> newmodels;
 	std::vector<TankModel *> &models = 
 		ScorchedClient::instance()->getTankModels().getModels();
 	std::vector<TankModel *>::iterator modelItor;
@@ -134,11 +123,12 @@ void GLWTankViewer::select(unsigned int id,
 		 ++modelItor)
 	{
 		TankModel *tankModel = (*modelItor);
-		if (tankModel->isOfCatagory(value.getDataText()))
+		if (tankModel->isOfCatagory(catagoryEntry->getDataText()))
 		{
 			// Check if this tank is allowed for this team
 			if (!tankModel->isOfTeam(team_) ||
-				!tankModel->isOfAi(false))
+				!tankModel->isOfAi(false) ||
+				!tankModel->isOfTankType(tankType_.c_str()))
 			{
 				continue;
 			}
@@ -150,7 +140,23 @@ void GLWTankViewer::select(unsigned int id,
 		}
 	}
 
+	// Save current model
+	int scrollCurrent = scrollBar_.getCurrent();
+	TankModel *model = 0;
+	if (selected_ >= 0 &&
+		selected_ < (int) models_.size())
+	{
+		model = models_[selected_].model;
+	}
+
 	setTankModels(newmodels);
+
+	// Select old model
+	scrollBar_.setCurrent(scrollCurrent);
+	for (int i=0; i<(int)models_.size(); i++)
+	{
+		if (models_[i].model == model) selected_ = i;
+	}
 }
 
 void GLWTankViewer::setTankModels(std::vector<ModelEntry> &models)
@@ -440,9 +446,6 @@ void GLWTankViewer::drawItem(int pos, bool selected)
 void GLWTankViewer::selectModelByName(const char *name)
 {
 	DIALOG_ASSERT(models_.size());
-
-	// Ensure that all models have been loaded
-	//select(0, 0, "All");
 
 	// Select the appropriate model
 	int currentSel = 0;

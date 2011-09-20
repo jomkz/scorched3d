@@ -26,6 +26,7 @@
 #include <tank/TankModelStore.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankModelContainer.h>
+#include <tanket/TanketType.h>
 #include <engine/Simulator.h>
 #include <common/OptionsScorched.h>
 #include <common/ChannelManager.h>
@@ -109,7 +110,8 @@ bool TankTeamBallanceSimAction::invokeAction(ScorchedContext &context)
 			if (!current->getModelContainer().getTankModel()->availableForTank(current))
 			{
 				TankModel *model = context.getTankModels().getRandomModel(
-					current->getTeam(), current->getDestinationId() == 0);
+					current->getTeam(), current->getDestinationId() == 0,
+					current->getTanketType()->getName());
 				current->getModelContainer().setTankModelName(model->getName());
 			}
 		}

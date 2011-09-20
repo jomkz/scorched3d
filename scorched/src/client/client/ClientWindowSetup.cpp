@@ -32,7 +32,7 @@
 #include <dialogs/MainMenuDialog.h>
 #include <dialogs/CameraDialog.h>
 #include <dialogs/ProfileDialog.h>
-#include <dialogs/PlayerDialog.h>
+#include <dialogs/PlayerInGameDialog.h>
 #include <dialogs/QuitDialog.h>
 #include <dialogs/LogDialog.h>
 #include <dialogs/ConnectDialog.h>
@@ -41,7 +41,6 @@
 #include <dialogs/ProgressDialog.h>
 #include <dialogs/GiftMoneyDialog.h>
 #include <dialogs/BuyAccessoryDialog.h>
-#include <dialogs/RulesDialog.h>
 #include <dialogs/ScoreDialog.h>
 #include <dialogs/SaveDialog.h>
 #include <dialogs/KibitzingDialog.h>
@@ -66,6 +65,7 @@
 #include <dialogs/AdminCheckDialog.h>
 #include <dialogs/AdminAuthDialog.h>
 #include <dialogs/AdminDialog.h>
+#include <dialogs/PlayerInitialDialog.h>
 
 void ClientWindowSetup::addStateWindows(GLWWindowSkinManager *skinManager,
 	unsigned int state, const char *windowState)
@@ -143,12 +143,8 @@ void ClientWindowSetup::addCommonComponents(GLWWindowSkinManager *skinManager,
 	{
 		KEYBOARDKEY("SHOW_TEAM_DIALOG", teamKey);
 		GLWWindowManager::instance()->addWindow(state,
-			PlayerDialog::instance(), teamKey, false);
+			PlayerInGameDialog::instance(), teamKey, false);
 	}
-
-	KEYBOARDKEY("SHOW_RULES_DIALOG", rulesKey);
-	GLWWindowManager::instance()->addWindow(state, 
-		RulesDialog::instance(), rulesKey, true);
 
 	GLWWindowManager::instance()->addWindow(state, 
 		AdminCheckDialog::instance(), 0, false);
@@ -271,10 +267,8 @@ void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 	addStateWindows(skinManager, ClientState::StateWaitNoLandscape, "start");
 	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape, 
 		ScoreDialog::instance2(), 0, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape, 
-		RulesDialog::instance(), rulesKey, true);
 	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape,
-		PlayerDialog::instance(), teamKey, false);
+		PlayerInitialDialog::instance(), 0, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape, 
 		MainMenuDialog::instance(), 0, true);
 	addMessageComponents(skinManager, ClientState::StateWaitNoLandscape);
