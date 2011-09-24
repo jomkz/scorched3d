@@ -26,6 +26,7 @@
 #include <map>
 #include <set>
 
+class ToolTip;
 class XMLNode;
 class Accessory;
 class ScorchedContext;
@@ -35,8 +36,10 @@ public:
 	TanketType();
 	virtual ~TanketType();
 
+	bool getUseAsDefault() { return default_; }
+
 	const char *getName() { return name_.c_str(); }
-	const char *getDescription();
+	ToolTip *getTooltip() { return tooltip_; }
 	fixed getLife() { return life_; }
 	fixed getPower() { return power_; }
 
@@ -46,11 +49,15 @@ public:
 	bool initFromXML(ScorchedContext &context, XMLNode *node);
 
 protected:
+	bool default_;
+	ToolTip *tooltip_;
 	std::string name_, description_;
 	std::map<Accessory *, int> accessories_;
 	std::set<Accessory *> disabledAccessories_;
 	fixed life_;
 	fixed power_;
+
+	void formTooltip();
 };
 
 #endif // __INCLUDE_TanketTypeh_INCLUDE__

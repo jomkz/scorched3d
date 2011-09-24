@@ -458,6 +458,8 @@ void GLWTankViewer::selectModelByName(const char *name)
 		if (0 == strcmp(current->getName(), name))
 		{
 			selected_ = currentSel;
+			int steps = selected_ / numH_;
+			scrollBar_.setCurrent(steps);
 			return;
 		}
 	}

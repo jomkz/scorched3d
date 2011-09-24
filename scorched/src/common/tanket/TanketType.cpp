@@ -20,11 +20,12 @@
 
 #include <tanket/TanketType.h>
 #include <XML/XMLParser.h>
+#include <common/ToolTip.h>
 #include <common/Defines.h>
 #include <engine/ScorchedContext.h>
 #include <weapons/AccessoryStore.h>
 
-TanketType::TanketType()
+TanketType::TanketType() : tooltip_(0), default_(false)
 {
 }
 
@@ -34,9 +35,11 @@ TanketType::~TanketType()
 
 bool TanketType::initFromXML(ScorchedContext &context, XMLNode *node)
 {
+	node->getNamedChild("default", default_, false);
 	if (!node->getNamedChild("name", name_)) return false;
 	if (!node->getNamedChild("life", life_)) return false;
 	if (!node->getNamedChild("power", power_)) return false;
+	if (!node->getNamedChild("description", description_)) return false;
 
 	XMLNode *accessoryNode = 0;
 	while (node->getNamedChild("accessory", accessoryNode, false))
@@ -72,6 +75,8 @@ bool TanketType::initFromXML(ScorchedContext &context, XMLNode *node)
 		disabledAccessories_.insert(accessory);
 	}
 
+	formTooltip();
+
 	return node->failChildren();
 }
 
@@ -81,8 +86,10 @@ bool TanketType::getAccessoryDisabled(Accessory *accessory)
 	return (disabledAccessories_.find(accessory) != disabledAccessories_.end());
 }
 
-const char *TanketType::getDescription()
+void TanketType::formTooltip()
 {
+	delete tooltip_;
+
 	std::string accessoryBuffer;
 	{
 		if (!accessories_.empty()) accessoryBuffer.append("\n");
@@ -113,11 +120,15 @@ const char *TanketType::getDescription()
 		}
 	}
 
-	description_ = S3D::formatStringBuffer(
-		"Life : %.0f\n"
-		"Power : %.0f%s",
-		getLife().asFloat(),
-		getPower().asFloat(),
-		accessoryBuffer.c_str());	
-	return description_.c_str();
+	tooltip_ = new ToolTip(
+		ToolTip::ToolTipNone,
+		LANG_STRING(name_),
+		LANG_STRING(S3D::formatStringBuffer(
+			"%s\n"
+			"Life : %.0f\n"
+			"Power : %.0f%s",
+			description_.c_str(),
+			getLife().asFloat(),
+			getPower().asFloat(),
+			accessoryBuffer.c_str())));
 }

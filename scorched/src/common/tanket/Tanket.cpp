@@ -38,7 +38,7 @@ Tanket::Tanket(ScorchedContext &context,
 	context_(context),
 	tankAI_(0), team_(0)
 {
-	tanketType_ = context.getTanketTypes().getType("none");
+	tanketType_ = context.getTanketTypes().getDefaultType();
 
 	accessories_ = new TanketAccessories(context);
 	accessories_->setTanket(this);

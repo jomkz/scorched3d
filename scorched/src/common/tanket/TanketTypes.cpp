@@ -22,7 +22,7 @@
 #include <common/Defines.h>
 #include <XML/XMLFile.h>
 
-TanketTypes::TanketTypes()
+TanketTypes::TanketTypes() : defaultType_(0)
 {
 }
 
@@ -54,15 +54,20 @@ bool TanketTypes::loadTanketTypes(ScorchedContext &context)
 	while (file.getRootNode()->getNamedChild("tanktype", currentNode, false))
     {
 		// Create the TanketType
-		TanketType *type= new TanketType();
+		TanketType *type = new TanketType();
 		if (!type->initFromXML(context, currentNode)) return false;
 		types_.push_back(type);
+		if (type->getUseAsDefault()) defaultType_ = type;
 	}
 
-	if (!getType("none"))
+	if (types_.empty())
 	{
 		return file.getRootNode()->returnError(
-			"tank types file must define the \"none\" type");
+			"tank types file must define at least one type");
+	}
+	if (!defaultType_)
+	{
+		defaultType_ = types_.front();
 	}
 
 	return file.getRootNode()->failChildren();

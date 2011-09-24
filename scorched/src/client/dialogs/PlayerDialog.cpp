@@ -29,6 +29,7 @@
 #include <tank/TankState.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankModelStore.h>
+#include <tank/TankModelContainer.h>
 #include <tanket/TanketTypes.h>
 #include <client/ClientParams.h>
 #include <graph/OptionsDisplay.h>
@@ -246,12 +247,8 @@ void PlayerDialog::initializeFromTank(Tank *tank)
 	}
 	viewer_->init();
 
-	// Set TankAIs
-	static TankAIStore tankAIStore;
-	tankAIStore.clearAIs();
-	tankAIStore.loadAIs(true);
-
 	// Add teams/colors
+	viewer_->setTeam(0);
 	teamDropDown_->clear();
 	colorDropDown_->clear();
 	if (ScorchedClient::instance()->getOptionsGame().getTeams() == 1)
@@ -307,6 +304,10 @@ void PlayerDialog::initializeFromTank(Tank *tank)
 	}
 
 	// Add player types
+	// Set TankAIs
+	static TankAIStore tankAIStore;
+	tankAIStore.clearAIs();
+	tankAIStore.loadAIs(true);
 	aiTypeDropDown_->clear();
 	aiTypeDropDown_->addEntry(GLWSelectorEntry(LANG_RESOURCE("HUMAN", "Human"), 
 		&humanToolTip_, false, 0, 0, "Human"));
@@ -356,8 +357,16 @@ void PlayerDialog::initializeFromTank(Tank *tank)
 	{
 		TanketType *type = *tanketTypesItor;
 		tankTypeDropDown_->addEntry(
-			GLWSelectorEntry(LANG_RESOURCE(type->getName(), type->getName()),
-				0, false, 0, 0, type->getName()));
+			GLWSelectorEntry(
+				LANG_RESOURCE(type->getName(), type->getName()),
+				type->getTooltip(), 
+				false, 0, 0, type->getName()));
 	}
+	tankTypeDropDown_->setCurrentText(
+		LANG_RESOURCE(tank->getTanketType()->getName(), tank->getTanketType()->getName()));
 	viewer_->setTankType(tank->getTanketType()->getName());
+
+	// Tank model
+	const char *tankModelName = tank->getModelContainer().getTankModel()->getName();
+	viewer_->selectModelByName(tankModelName);
 }

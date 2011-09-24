@@ -56,7 +56,7 @@ void PlayerInitialDialog::displayDialog()
 	// Set cancel/spectate
 	if (ClientParams::instance()->getConnectedToServer())
 	{
-		cancelButton_->setEnabled(true);
+		cancelButton_->setEnabled(false);
 		spectateButton_->setEnabled(true);
 	}
 	else

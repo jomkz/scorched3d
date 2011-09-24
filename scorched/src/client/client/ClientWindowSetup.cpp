@@ -268,6 +268,8 @@ void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape, 
 		ScoreDialog::instance2(), 0, true);
 	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape,
+		PlayerInGameDialog::instance(), 0, false);
+	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape,
 		PlayerInitialDialog::instance(), 0, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape, 
 		MainMenuDialog::instance(), 0, true);

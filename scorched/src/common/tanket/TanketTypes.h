@@ -30,6 +30,8 @@ public:
 	TanketTypes();
 	virtual ~TanketTypes();
 
+	TanketType *getDefaultType() { return defaultType_; }
+
 	bool loadTanketTypes(ScorchedContext &context);
 	TanketType *getType(const char *name);
 
@@ -38,6 +40,7 @@ public:
 	void clear();
 
 protected:
+	TanketType *defaultType_;
 	std::vector<TanketType *> types_;
 };
 
