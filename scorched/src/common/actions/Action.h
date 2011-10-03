@@ -68,6 +68,8 @@ protected:
 	fixed actionStartTime_;
 };
 
+#ifndef S3D_SERVER
+
 class SpriteAction : public Action
 {
 public:
@@ -76,6 +78,9 @@ public:
 
 	virtual void init();
 	virtual std::string getActionType() { return "SpriteAction"; }
+	virtual bool getActionSyncCheck() { return false; }
 };
+
+#endif
 
 #endif // !defined(AFX_ACTION_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

@@ -71,6 +71,8 @@ void ActionRenderer::simulate(Action *action, float frametime, bool &removeActio
 {
 }
 
+#ifndef S3D_SERVER
+
 SpriteAction::SpriteAction(ActionRenderer *render) : 
 	Action(false)
 {
@@ -84,3 +86,5 @@ SpriteAction::~SpriteAction()
 void SpriteAction::init()
 {
 }
+
+#endif
