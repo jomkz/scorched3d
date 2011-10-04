@@ -2349,6 +2349,9 @@
     <ClCompile Include="..\dialogs\PlayerInGameDialog.cpp">
       <Filter>dialogs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\XML\XMLDiff.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -4594,6 +4597,9 @@
     </ClInclude>
     <ClInclude Include="..\dialogs\PlayerInGameDialog.h">
       <Filter>dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\XML\XMLDiff.h">
+      <Filter>XML</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

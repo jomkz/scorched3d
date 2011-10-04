@@ -35,6 +35,7 @@
 #include <target/TargetLife.h>
 #include <target/TargetGroup.h>
 #include <engine/ObjectGroup.h>
+#include <XML/XMLDiff.h>
 
 static FileLogger *syncCheckFileLogger = 0;
 
@@ -261,9 +262,7 @@ bool ServerSyncCheck::compareHeightMaps(unsigned int destinationId, unsigned int
 			clientBuffer.getBuffer(),
 			serverBuffer.getBufferUsed()) != 0)
 		{
-			syncCheckLog(S3D::formatStringBuffer("**** SyncCheck %s differ, Dest %u Sync %u",
-				mapName, destinationId, syncId));
-
+			int differences = 0;
 			HeightMap &map = ScorchedServer::instance()->getLandscapeMaps().
 				getGroundMaps().getHeightMap();			
 			NetBufferReader serverReader(serverBuffer);
@@ -282,12 +281,13 @@ bool ServerSyncCheck::compareHeightMaps(unsigned int destinationId, unsigned int
 					if (serverHeight != clientHeight ||
 						serverNormal != clientNormal) 
 					{
-						syncCheckLog(S3D::formatStringBuffer("*** %s %s %s", 
-							serverHeight.asQuickString(), clientHeight.asQuickString(),
-							(serverNormal != clientNormal?"Normal":"")));
+						differences++;
 					}					
 				}
 			}
+
+			syncCheckLog(S3D::formatStringBuffer("**** SyncCheck map height %s differ %i differences, Dest %u Sync %u",
+				mapName, differences, destinationId, syncId));
 		}
 	}
 	return true;
@@ -356,117 +356,79 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 		else
 		{	
 			unsigned int minUsed = MIN(tmpBuffer.getBufferUsed(), clientTank->second->getBufferUsed());
+			bool differences = false;
 			for (unsigned int u=0; u<minUsed; u++)
 			{
 				if (tmpBuffer.getBuffer()[u] != clientTank->second->getBuffer()[u])
 				{
-					// Read the two tank information
-					Target *target = 0;
-					std::string clientToString, serverToString;
+					differences = true;
+				}
+			}
+			if (differences)
+			{
+				// Read the two tank information
+				std::string clientToString, serverToString;
+				Target *target;
+				{
+					switch ((Target::TargetType) targetType) 
 					{
-						switch ((Target::TargetType) targetType) 
-						{
-						case Target::TypeTarget:
-						{
-							target = tmpTarget;
-
-							NetBufferReader clientReader(*clientTank->second);
-							tmpTarget->readMessage(clientReader);
-							tmpTarget->toString(clientToString);
-							tmpTarget->getLife().setLife(0);// Make sure not added to target space
-
-							NetBufferReader serverReader(tmpBuffer);
-							tmpTarget->readMessage(serverReader);
-							tmpTarget->toString(serverToString);
-							tmpTarget->getLife().setLife(0);// Make sure not added to target space
-						}
-						break;
-						case Target::TypeTanket:
-						{
-							target = tmpTank;
-
-							NetBufferReader clientReader(*clientTank->second);
-							tmpTanket->readMessage(clientReader);
-							tmpTanket->toString(clientToString);
-							tmpTanket->getLife().setLife(0);// Make sure not added to target space
-
-							NetBufferReader serverReader(tmpBuffer);
-							tmpTanket->readMessage(serverReader);
-							tmpTanket->toString(serverToString);
-							tmpTanket->getLife().setLife(0);// Make sure not added to target space
-						}
-						break;
-						case Target::TypeTank:
-						{
-							target = tmpTank;
-
-							NetBufferReader clientReader(*clientTank->second);
-							tmpTank->readMessage(clientReader);
-							tmpTank->toString(clientToString);
-							tmpTank->getState().setState(TankState::sDead);// Make sure not added to target space
-
-							NetBufferReader serverReader(tmpBuffer);
-							tmpTank->readMessage(serverReader);
-							tmpTank->toString(serverToString);
-							tmpTank->getState().setState(TankState::sDead);// Make sure not added to target space
-						}
-						break;
-						}
-					}				
-
-					// Output information
-					std::string groupnames = "";
-					std::set<ObjectGroup *> &groups = target->getGroup().getAllGroups();
-					std::set<ObjectGroup *>::iterator groupItor;
-					for (groupItor = groups.begin();
-						groupItor != groups.end();
-						++groupItor)
+					case Target::TypeTarget:
 					{
-						ObjectGroup *group = *groupItor;
-						groupnames.append(group->getName()).append(" ");
-					}
-					syncCheckLog(S3D::formatStringBuffer(
-						"**** SyncCheck %s differ %u Dest %u Sync %u Groups %s",
-						targetType==Target::TypeTarget?"target":targetType==Target::TypeTank?"tank":"tanket",
-						playerId,
-						destinationId, client->getSyncId(), groupnames.c_str()));
-					syncCheckLog(S3D::formatStringBuffer("Server : %s",
-						serverToString.c_str()));
-					syncCheckLog(S3D::formatStringBuffer("Client : %s",
-						clientToString.c_str()));
+						NetBufferReader clientReader(*clientTank->second);
+						tmpTarget->readMessage(clientReader);
+						tmpTarget->toString(clientToString);
+						tmpTarget->getLife().setLife(0);// Make sure not added to target space
 
-					// Check which part of the tank is failing
-					{
-						clientTank->second->setBufferUsed(u);
-						Logger::addLogger(syncCheckFileLogger);
-						switch ((Target::TargetType) targetType) 
-						{
-						case Target::TypeTarget:
-						{
-							NetBufferReader reader(*clientTank->second);
-							tmpTarget->readMessage(reader);
-							tmpTarget->getLife().setLife(0);// Make sure not added to target space
-						}
-						break;
-						case Target::TypeTanket:
-						{
-							NetBufferReader reader(*clientTank->second);
-							tmpTanket->readMessage(reader);
-							tmpTanket->getLife().setLife(0);// Make sure not added to target space
-						}
-						break;
-						case Target::TypeTank:
-						{
-							NetBufferReader reader(*clientTank->second);
-							tmpTank->readMessage(reader);
-							tmpTank->getState().setState(TankState::sDead);// Make sure not added to target space
-						}
-						break;
-						}
-						Logger::remLogger(syncCheckFileLogger);
+						NetBufferReader serverReader(tmpBuffer);
+						tmpTarget->readMessage(serverReader);
+						tmpTarget->toString(serverToString);
+						tmpTarget->getLife().setLife(0);// Make sure not added to target space
+						target = tmpTarget;
 					}
 					break;
-				}
+					case Target::TypeTanket:
+					{
+						NetBufferReader clientReader(*clientTank->second);
+						tmpTanket->readMessage(clientReader);
+						tmpTanket->toString(clientToString);
+						tmpTanket->getLife().setLife(0);// Make sure not added to target space
+
+						NetBufferReader serverReader(tmpBuffer);
+						tmpTanket->readMessage(serverReader);
+						tmpTanket->toString(serverToString);
+						tmpTanket->getLife().setLife(0);// Make sure not added to target space
+						target = tmpTanket;
+					}
+					break;
+					case Target::TypeTank:
+					{
+						NetBufferReader clientReader(*clientTank->second);
+						tmpTank->readMessage(clientReader);
+						tmpTank->toString(clientToString);
+						tmpTank->getState().setState(TankState::sDead);// Make sure not added to target space
+
+						NetBufferReader serverReader(tmpBuffer);
+						tmpTank->readMessage(serverReader);
+						tmpTank->toString(serverToString);
+						tmpTank->getState().setState(TankState::sDead);// Make sure not added to target space
+						target = tmpTank;
+					}
+					break;
+					}
+				}	
+
+				// Output information
+				syncCheckLog(S3D::formatStringBuffer(
+					"**** SyncCheck %s %s differ %u Dest %u Sync %u",
+					targetType==Target::TypeTarget?"target":targetType==Target::TypeTank?"tank":"tanket",
+					target->getCStrName().c_str(),
+					playerId,
+					destinationId, client->getSyncId()));
+
+				// Diff XML documents
+				syncCheckLog("Server then Client diffs");
+				std::string diffResult = XMLDiff::diffString(serverToString, clientToString);
+				syncCheckLog(diffResult.c_str());
 			}
 
 			delete clientTank->second;
@@ -517,6 +479,7 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 	{
 		syncCheckLog(S3D::formatStringBuffer("SyncCheck checked, Dest %u Checks %u Targets %u Sync %u", 
 			destinationId, client->getSyncCheck().size(), noServerTanks, client->getSyncId()));
+		syncCheckLog("--------------------------------------------------------------------");
 		Logger::log(S3D::formatStringBuffer("**** SyncCheck checked, Dest %u Checks %u Targets %u Sync %u", 
 			destinationId, client->getSyncCheck().size(), noServerTanks, client->getSyncId()));
 	}

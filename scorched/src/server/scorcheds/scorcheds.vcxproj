@@ -148,6 +148,7 @@
     <ClCompile Include="..\..\common\target\TargetDamage.cpp" />
     <ClCompile Include="..\..\common\target\TargetGroup.cpp" />
     <ClCompile Include="..\..\common\weapons\WeaponAimed.cpp" />
+    <ClCompile Include="..\..\common\XML\XMLDiff.cpp" />
     <ClCompile Include="..\igd\igd.cpp" />
     <ClCompile Include="..\server\ScorchedServerSettings.cpp" />
     <ClCompile Include="..\server\ServerAuthHandlerStore.cpp" />
@@ -670,6 +671,7 @@
     <ClInclude Include="..\..\common\target\TargetDamage.h" />
     <ClInclude Include="..\..\common\target\TargetGroup.h" />
     <ClInclude Include="..\..\common\weapons\WeaponAimed.h" />
+    <ClInclude Include="..\..\common\XML\XMLDiff.h" />
     <ClInclude Include="..\igd\igd.h" />
     <ClInclude Include="..\server\ScorchedServer.h" />
     <ClInclude Include="..\server\ScorchedServerSettings.h" />

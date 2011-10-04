@@ -450,6 +450,7 @@
     <ClCompile Include="..\..\common\weapons\WeaponTranslate.cpp" />
     <ClCompile Include="..\..\common\weapons\WeaponTypeAction.cpp" />
     <ClCompile Include="..\..\common\weapons\WeaponVelocity.cpp" />
+    <ClCompile Include="..\..\common\XML\XMLDiff.cpp" />
     <ClCompile Include="..\..\common\XML\XMLFile.cpp" />
     <ClCompile Include="..\..\common\XML\XmlNamedNetBuffer.cpp" />
     <ClCompile Include="..\..\common\XML\XMLNode.cpp" />
@@ -1195,6 +1196,7 @@
     <ClInclude Include="..\..\common\weapons\WeaponTranslate.h" />
     <ClInclude Include="..\..\common\weapons\WeaponTypeAction.h" />
     <ClInclude Include="..\..\common\weapons\WeaponVelocity.h" />
+    <ClInclude Include="..\..\common\XML\XMLDiff.h" />
     <ClInclude Include="..\..\common\XML\XMLFile.h" />
     <ClInclude Include="..\..\common\XML\XmlNamedNetBuffer.h" />
     <ClInclude Include="..\..\common\XML\XMLNode.h" />
