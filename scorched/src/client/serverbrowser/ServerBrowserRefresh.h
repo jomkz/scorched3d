@@ -22,7 +22,7 @@
 #define __INCLUDE_ServerBrowserRefreshh_INCLUDE__
 
 #include <serverbrowser/ServerBrowserServerList.h>
-#include <SDL/SDL_net.h>
+#include <net/NetBuffer.h>
 #include <map>
 #include <list>
 #include <time.h>

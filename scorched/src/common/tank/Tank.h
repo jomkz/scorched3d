@@ -68,7 +68,7 @@ public:
 	const char *getHostDesc() { return hostDesc_.c_str(); }
 	void setHostDesc(const char *id) { hostDesc_ = id; }
 	Vector &getColor();
-	void setColor(Vector &color) { color_ = color; }
+	void setColor(const Vector &color) { color_ = color; }
 	unsigned int getIpAddress() { return ipAddress_; }
 	void setIpAddress(unsigned int ipAddress) { ipAddress_ = ipAddress; }
 	virtual Weapon *getDeathAction();

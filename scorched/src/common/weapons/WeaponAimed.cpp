@@ -120,7 +120,7 @@ void WeaponAimed::fireAimedWeapon(ScorchedContext &context,
 
 	// Iterate 
 	fixed totalDist = 0;
-	std::list<std::pair<fixed, FixedVector *>> distances;
+	std::list<std::pair<fixed, FixedVector *> > distances;
 	{
 		fixed maxAimedDistance = maxAimedDistance_.getValue(context);
 		std::list<FixedVector *>::iterator itor;
@@ -146,7 +146,7 @@ void WeaponAimed::fireAimedWeapon(ScorchedContext &context,
 		}
 		else
 		{
-			std::list<std::pair<fixed, FixedVector *>>::iterator itor;
+			std::list<std::pair<fixed, FixedVector *> >::iterator itor;
 			for (itor = distances.begin();
 				itor != distances.end();
 				++itor)
@@ -171,7 +171,7 @@ void WeaponAimed::fireAimedWeapon(ScorchedContext &context,
 		// Find which tank fits this probability
 		FixedVector *shootAt = 0;
 		fixed distC = 0;
-		std::list<std::pair<fixed, FixedVector *>>::iterator itor;
+		std::list<std::pair<fixed, FixedVector *> >::iterator itor;
 		for (itor =  distances.begin();
 			itor !=  distances.end();
 			++itor)

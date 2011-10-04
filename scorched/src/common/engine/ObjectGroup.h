@@ -33,6 +33,7 @@ public:
 	// Also allows the objects to be kept in insertion ordering
 	// so the ordering is consistent across platforms
 	// but with fast removal and insertion speed
+	class ObjectGroupEntryHolderIterator;
 	class ObjectGroupEntryHolder
 	{
 	public:
@@ -46,6 +47,7 @@ public:
 
 	protected:
 		friend class ObjectGroup;
+		friend class ObjectGroupEntryHolderIterator;
 
 		ObjectGroupEntryHolder *next;
 		ObjectGroupEntry *current;
