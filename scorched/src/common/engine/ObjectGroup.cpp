@@ -95,12 +95,11 @@ bool ObjectGroup::removeObject(ObjectGroupEntry *object)
 ObjectGroupEntry *ObjectGroup::getObjectByPos(int position)
 {
 	int pos = position % int(objects_.size());
-	std::map<ObjectGroupEntry *, ObjectGroupEntryHolder *>::iterator itor;
-	for (itor = objects_.begin();
-		itor != objects_.end();
-		++itor, pos--)
+	ObjectGroupEntryHolderIterator iterator(this);
+	ObjectGroupEntry *entry;
+	while (entry = iterator.getNext())
 	{
-		if (pos <=0) return itor->first;
+		if (pos-- <= 0) return entry;
 	}
 	return 0;
 }
