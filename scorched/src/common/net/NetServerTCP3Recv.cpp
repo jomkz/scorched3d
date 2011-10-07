@@ -77,8 +77,8 @@ bool NetServerTCP3Recv::actualRecvFunc()
 	}
 	Uint32 len = SDLNet_Read32(lenbuf);
 	
-	// Cannot recieve a message large than .5 MB
-	if (len > 5000000 || len == 0)
+	// Cannot recieve a message larger than 
+	if (len > 15000000 || len == 0)
 	{
 		Logger::log(S3D::formatStringBuffer(
 			"NetServerTCP3Recv: Buffer was too large to recieve.  Size %i.",

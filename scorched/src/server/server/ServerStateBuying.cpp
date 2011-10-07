@@ -25,7 +25,7 @@
 #include <target/TargetContainer.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
-#include <tanket/TanketShotinfo.h>
+#include <tanket/TanketShotInfo.h>
 #include <tanket/TanketAccessories.h>
 #include <tank/TankDeadContainer.h>
 #include <tankai/TankAI.h>

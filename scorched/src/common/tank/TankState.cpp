@@ -36,21 +36,21 @@ static struct AllowedStateTransitions
 }
 allowedStateTransitions[] =
 {
-	TankState::sLoading, TankState::sSpectator,
-	TankState::sLoading, TankState::sDead,
-	TankState::sSpectator, TankState::sNormal,
-	TankState::sSpectator, TankState::sDead,
-	TankState::sDead, TankState::sNormal,
-	TankState::sDead, TankState::sBuying,
-	TankState::sDead, TankState::sLoading,
-	TankState::sDead, TankState::sSpectator,
-	TankState::sNormal, TankState::sDead,
-	TankState::sNormal, TankState::sLoading,
-	TankState::sNormal, TankState::sSpectator,
-	TankState::sSpectator, TankState::sLoading,
-	TankState::sBuying, TankState::sSpectator,
-	TankState::sBuying, TankState::sLoading,
-	TankState::sBuying, TankState::sNormal
+	{ TankState::sLoading, TankState::sSpectator },
+	{ TankState::sLoading, TankState::sDead },
+	{ TankState::sSpectator, TankState::sNormal },
+	{ TankState::sSpectator, TankState::sDead },
+	{ TankState::sDead, TankState::sNormal },
+	{ TankState::sDead, TankState::sBuying },
+	{ TankState::sDead, TankState::sLoading },
+	{ TankState::sDead, TankState::sSpectator },
+	{ TankState::sNormal, TankState::sDead },
+	{ TankState::sNormal, TankState::sLoading },
+	{ TankState::sNormal, TankState::sSpectator },
+	{ TankState::sSpectator, TankState::sLoading },
+	{ TankState::sBuying, TankState::sSpectator },
+	{ TankState::sBuying, TankState::sLoading },
+	{ TankState::sBuying, TankState::sNormal }
 };
 
 TankState::TankState(ScorchedContext &context, unsigned int playerId) : 

@@ -43,7 +43,7 @@ public:
 	void setNewPercentage(float percentage);
 
 	LangString &getCurrentOp() { return currentOp_; }
-	const float getCurrentPercentage() { return currentPercentage_; }
+	float getCurrentPercentage() { return currentPercentage_; }
 
 protected:
 	LangString currentOp_;

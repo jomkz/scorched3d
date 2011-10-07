@@ -170,7 +170,7 @@ class OptionEntryEnum : public OptionEntryInt
 public:
 	struct EnumEntry
 	{
-		char *description;
+		const char *description;
 		int value;
 	};
 
@@ -268,7 +268,7 @@ class OptionEntryStringEnum : public OptionEntryString
 public:
 	struct EnumEntry
 	{
-		char *value;
+		const char *value;
 	};
 
 	OptionEntryStringEnum(std::list<OptionEntry *> &group,

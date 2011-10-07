@@ -76,7 +76,7 @@ void ChannelTextParser::parseText(ScorchedContext &context, const LangString &te
 	const unsigned int *start = 0;
 
 	// Find the next [
-	while (start = LangStringUtil::strstr(pos, LANG_STRING("[")))
+	while ((start = LangStringUtil::strstr(pos, LANG_STRING("["))))
 	{
 		// Add all text before [
 		text_.append(pos, start - pos);

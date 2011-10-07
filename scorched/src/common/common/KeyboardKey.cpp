@@ -133,7 +133,7 @@ void KeyboardKey::removeKey(unsigned int position)
 
 bool KeyboardKey::translateKeyName(const char *name, unsigned int &key)
 {
-	for (int i=0; i<sizeof(KeyTranslationTable)/sizeof(KeyTranslation); i++)
+	for (unsigned int i=0; i<sizeof(KeyTranslationTable)/sizeof(KeyTranslation); i++)
 	{
 		if (strcmp(KeyTranslationTable[i].keyName, name)==0)
 		{
@@ -146,7 +146,7 @@ bool KeyboardKey::translateKeyName(const char *name, unsigned int &key)
 
 bool KeyboardKey::translateKeyState(const char *name, unsigned int &state)
 {
-	for (int i=0; i<sizeof(KeyStateTranslationTable)/sizeof(KeyStateTranslation); i++)
+	for (unsigned int i=0; i<sizeof(KeyStateTranslationTable)/sizeof(KeyStateTranslation); i++)
 	{
 		if (strcmp(KeyStateTranslationTable[i].keyStateName, name)==0)
 		{
@@ -159,7 +159,7 @@ bool KeyboardKey::translateKeyState(const char *name, unsigned int &state)
 
 bool KeyboardKey::translateKeyNameValue(unsigned int key, const char *&name)
 {
-	for (int i=0; i<sizeof(KeyTranslationTable)/sizeof(KeyTranslation); i++)
+	for (unsigned int i=0; i<sizeof(KeyTranslationTable)/sizeof(KeyTranslation); i++)
 	{
 		if (KeyTranslationTable[i].keySym == key)
 		{
@@ -171,7 +171,7 @@ bool KeyboardKey::translateKeyNameValue(unsigned int key, const char *&name)
 
 bool KeyboardKey::translateKeyStateValue(unsigned int state, const char *&name)
 {
-	for (int i=0; i<sizeof(KeyStateTranslationTable)/sizeof(KeyStateTranslation); i++)
+	for (unsigned int i=0; i<sizeof(KeyStateTranslationTable)/sizeof(KeyStateTranslation); i++)
 	{
 		if (KeyStateTranslationTable[i].keyStateSym == state)
 		{

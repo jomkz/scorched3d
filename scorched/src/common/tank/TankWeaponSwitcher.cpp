@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <tank/TankWeaponSwitcher.h>
-#include <Tank/Tank.h>
+#include <tank/Tank.h>
 #include <target/TargetContainer.h>
 #include <target/TargetLife.h>
 #include <weapons/AccessoryStore.h>

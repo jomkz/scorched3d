@@ -180,7 +180,6 @@ void TargetFalling::collision(PhysicsParticleObject &position,
 		}
 
 		// Check if we have collected/given any items
-		bool targetDead = false;
 		std::map<unsigned int, Target *> collisionTargets;
 		context_->getTargetSpace().getCollisionSet(
 			current->getLife().getTargetPosition(), 3, collisionTargets, false);

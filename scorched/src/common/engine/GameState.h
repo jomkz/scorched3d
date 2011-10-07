@@ -87,7 +87,7 @@ public:
 	void setState(const unsigned state);
 	void stimulate(const unsigned stimulus);
 	void setFakeMiddleButton(bool fake);
-	const unsigned getState() { return currentState_; }
+	unsigned getState() { return currentState_; }
 	int getMouseX() { return currentMouseX_; }
 	int getMouseY() { return currentMouseY_; }
 	bool &getStateLogging() { return stateLogging_; }

@@ -52,7 +52,7 @@ bool SyncCheckSimAction::invokeAction(ScorchedContext &context)
 #ifndef S3D_SERVER
 		ComsSyncCheckMessage message(syncId_, context);
 		ComsMessageSender::sendToServer(message);
-#endif S3D_SERVER
+#endif 
 	}
 
 	return true;

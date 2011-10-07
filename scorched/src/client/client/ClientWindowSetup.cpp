@@ -178,10 +178,6 @@ void ClientWindowSetup::addMessageComponents(GLWWindowSkinManager *skinManager, 
 void ClientWindowSetup::setupStartWindows(GLWWindowSkinManager *skinManager)
 {
 	
-	KEYBOARDKEY("SHOW_PLAYER_DIALOG", playerKey);
-	KEYBOARDKEY("SHOW_AIM_DIALOG", aimKey);
-	KEYBOARDKEY("SHOW_WEAPON_DIALOG", weaponKey);
-	KEYBOARDKEY("SHOW_SKIP_DIALOG", skipKey);
 	KEYBOARDKEY("SHOW_SOUND_DIALOG", showSoundKey);
 
 	// StateOptions
@@ -253,12 +249,7 @@ void ClientWindowSetup::setupStartWindows(GLWWindowSkinManager *skinManager)
 // This is called after the correct mod has been loaded
 void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 {
-	KEYBOARDKEY("SHOW_TEAM_DIALOG", teamKey);
-	KEYBOARDKEY("SHOW_AIM_DIALOG", aimKey);
-	KEYBOARDKEY("SHOW_WEAPON_DIALOG", weaponKey);
 	KEYBOARDKEY("SHOW_SKIP_DIALOG", skipKey);
-	KEYBOARDKEY("SHOW_RULES_DIALOG", rulesKey);
-	KEYBOARDKEY("SHOW_SOUND_DIALOG", showSoundKey);
 
 	// StateWaitNoLandscape
 	GLWWindowManager::instance()->removeState(ClientState::StateWaitNoLandscape);

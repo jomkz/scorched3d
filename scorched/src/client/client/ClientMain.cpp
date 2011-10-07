@@ -73,7 +73,6 @@
 #include <sound/Sound.h>
 #include <SDL/SDL.h>
 
-static int mouseEventCount = 0;
 static bool paused = false;
 extern char scorched3dAppName[128];
 

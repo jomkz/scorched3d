@@ -109,7 +109,7 @@ bool ServerBrowserCollect::fetchLANList()
 {
 	complete_ = false;
 
-	if(SDLNet_Init()==-1) false;
+	DIALOG_ASSERT(SDLNet_Init()!=-1);
 
 	list_.clear();
 	

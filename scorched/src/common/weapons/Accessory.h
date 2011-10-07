@@ -57,19 +57,19 @@ public:
 	const char *getName() { return name_.c_str(); }
 	LangString &getStringName();
 	const char *getDescription() { return description_.c_str(); }
-	const int getPrice() { return price_; }
-	const int getSellPrice() { return sellPrice_; }
-	const int getOriginalSellPrice() { return originalSellPrice_; }
-	const int getOriginalPrice() { return originalPrice_; }
-	const int getFreeMarketLimits() { return freemarketLimits_; }
-	const int getBundle() { return bundle_; }
-	const int getArmsLevel() { return armsLevel_; }
-	const int getMaximumNumber() { return maximumNumber_; }
-	const int getStartingNumber() { return startingNumber_; }
-	const int getUseNumber() { return useNumber_; }
-	const bool getAIOnly() { return aiOnly_; }
-	const bool getBotOnly() { return botOnly_; }
-	const bool getNoBuy() { return noBuy_; }
+	int getPrice() { return price_; }
+	int getSellPrice() { return sellPrice_; }
+	int getOriginalSellPrice() { return originalSellPrice_; }
+	int getOriginalPrice() { return originalPrice_; }
+	int getFreeMarketLimits() { return freemarketLimits_; }
+	int getBundle() { return bundle_; }
+	int getArmsLevel() { return armsLevel_; }
+	int getMaximumNumber() { return maximumNumber_; }
+	int getStartingNumber() { return startingNumber_; }
+	int getUseNumber() { return useNumber_; }
+	bool getAIOnly() { return aiOnly_; }
+	bool getBotOnly() { return botOnly_; }
+	bool getNoBuy() { return noBuy_; }
 	PositionSelectType getPositionSelect() { return positionSelect_; }
 	int getPositionSelectLimit() { return positionSelectLimit_; }
 

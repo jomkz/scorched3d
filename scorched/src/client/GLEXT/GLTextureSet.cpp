@@ -35,7 +35,7 @@ GLTextureSet::~GLTextureSet()
 	}
 }
 
-const int GLTextureSet::getNoTextures()
+int GLTextureSet::getNoTextures()
 {
 	return (int) textures_.size();
 }

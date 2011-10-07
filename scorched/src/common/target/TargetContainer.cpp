@@ -87,8 +87,12 @@ Target *TargetContainer::removeTarget(unsigned int playerId)
 		{
 			currentPlayer_ = 0;
 		}
+		// Note: No break
 	case Target::TypeTanket:
 		tankets_.erase(playerId);
+		// Note: No break
+	case Target::TypeTarget:
+		break;
 	}
 	return target;
 }

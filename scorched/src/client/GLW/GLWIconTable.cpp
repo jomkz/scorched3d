@@ -94,7 +94,6 @@ void GLWIconTable::draw()
 	int min = MIN(itemCount_, scrollBar_.getCurrent());
 	int max = MIN(itemCount_, scrollBar_.getCurrent() + scrollBar_.getSee());
 
-	float x = x_ + 5.0f; 
 	float y = y_ + h_ - 25.0f;
 
 	// Draw all rows

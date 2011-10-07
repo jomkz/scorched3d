@@ -31,7 +31,7 @@ public:
 	GLTextureSet();
 	virtual ~GLTextureSet();
 
-	const int getNoTextures();
+	int getNoTextures();
 
 	GLTexture *getTexture(int index);
 	void addTexture(GLTexture *texture);

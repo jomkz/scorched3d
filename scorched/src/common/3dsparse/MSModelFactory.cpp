@@ -53,7 +53,7 @@ bool MSModelFactory::getNextLine(char *line, FILE *in)
 	while (fgets(line, 256, in) != 0)
 	{
 		lineNo_++;
-		if (wincr=strchr(line,'\r')) 
+		if ((wincr=strchr(line,'\r'))) 
 		{ 
 			*wincr='\n'; 
 			*(wincr + 1) = '\0'; 
@@ -86,7 +86,7 @@ void MSModelFactory::loadFile(FILE *in, const char *fileName, Model *model)
 	char fixed4[20], fixed5[20], fixed6[20];
 
 	char *sep;
-	while (sep=strchr(filePath, '\\')) *sep = '/';
+	while ((sep=strchr(filePath, '\\'))) *sep = '/';
 	sep = strrchr(filePath, '/');
 	if (sep) *sep = '\0';
 

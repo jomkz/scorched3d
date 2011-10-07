@@ -18,18 +18,9 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-
-// ARGParser.cpp: implementation of the ARGParser class.
-//
-//////////////////////////////////////////////////////////////////////
-
 #include <common/ARGParser.h>
 #include <common/Defines.h>
 #include <stdio.h>
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
 ARGParser::Entry::Entry(ARGParserBoolI *destBoolArg,
 						ARGParserIntI *destIntArg,
@@ -67,10 +58,10 @@ bool ARGParser::parse(int argc,char *argv[])
     for (i=1; i<argc;i++)
  	        cmd += space + quote + argv[i] + quote;
 
-	return parse((char *)cmd.c_str());
+	return parse(cmd.c_str());
 }
 
-bool ARGParser::parse(char *lpCmdLine)
+bool ARGParser::parse(const char *lpCmdLine)
 {
 	std::list<std::string> cmdLine;
 
@@ -122,7 +113,7 @@ bool ARGParser::parse(char *lpCmdLine)
 	return true;
 }
 
-bool ARGParser::parseLineIntoStrings(char *line, std::list<std::string> &cmdLine)
+bool ARGParser::parseLineIntoStrings(const char *line, std::list<std::string> &cmdLine)
 {
 	bool inQuote = false;
 	std::string currentEntry;
@@ -236,7 +227,7 @@ bool ARGParser::parseArg(ARGParser::Entry &newEntry, std::list<std::string> &cmd
 	return true;
 }
 
-void ARGParser::showArgs(char *topString)
+void ARGParser::showArgs(const char *topString)
 {
 	char buffer[4048];
 	if (topString)
@@ -254,7 +245,7 @@ void ARGParser::showArgs(char *topString)
 		itor != argMap_.end();
 		++itor)
 	{
-		char *type = "unknown";
+		const char *type = "unknown";
 		if (itor->second.destC || itor->second.destString) type = "<string>";
 		else if (itor->second.destB || itor->second.destBool) type = "";
 		else if (itor->second.destI || itor->second.destInt) type = "<int>";
@@ -328,7 +319,7 @@ void ARGParser::addEntry(char *cmd, ARGParserStringI *destString, char *help)
 	addNewEntry(cmd, newEntry);
 }
 
-void ARGParser::addNewEntry(char *cmd, ARGParser::Entry &newEntry)
+void ARGParser::addNewEntry(const char *cmd, ARGParser::Entry &newEntry)
 {
 	argMap_[cmd] = newEntry;
 }

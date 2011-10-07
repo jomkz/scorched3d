@@ -479,7 +479,7 @@ void TargetRendererImpl::storeTarget2DPos()
 
 		viewport[2] = GLViewPort::getWidth();
 		viewport[3] = GLViewPort::getHeight();
-		int result = gluProject(
+		gluProject(
 			tankTurretPos[0], 
 			tankTurretPos[1], 
 			tankTurretPos[2],

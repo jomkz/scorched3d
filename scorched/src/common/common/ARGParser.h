@@ -57,7 +57,7 @@ public:
 	ARGParser();
 	virtual ~ARGParser();
 
-	bool parse(char *lpCmdLine);
+	bool parse(const char *lpCmdLine);
 	bool parse(int argc,char *argv[]);
 	void addEntry(char *cmd, char **destStr, char *help = "");
 	void addEntry(char *cmd, int *destI, char *help = "");
@@ -69,7 +69,7 @@ public:
 
 	void addNonParamEntry(char *cmd, ARGParserStringI *destString, char *help = "");
 
-	void showArgs(char *topString = NULL);
+	void showArgs(const char *topString = NULL);
 
 protected:
 	struct Entry
@@ -93,8 +93,8 @@ protected:
 
 	std::map<std::string, Entry> argMap_;
 	std::map<std::string, Entry> nonParamMap_;
-	void addNewEntry(char *cmd, ARGParser::Entry &entry);
-	bool parseLineIntoStrings(char *line, std::list<std::string> &cmdLine);
+	void addNewEntry(const char *cmd, ARGParser::Entry &entry);
+	bool parseLineIntoStrings(const char *line, std::list<std::string> &cmdLine);
 	bool parseArg(ARGParser::Entry &newEntry, std::list<std::string> &cmdLine);
 };
 

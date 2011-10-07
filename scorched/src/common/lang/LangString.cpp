@@ -159,7 +159,7 @@ int LangStringUtil::strcmp(const LangString &str1, const LangString &str2)
 
 	for (const unsigned int *c1 = str1.c_str(),
 		*c2 = str2.c_str();
-		*c1, *c2;
+		*c1 && *c2;
 		c1++, c2++)
 	{
 		if (c1 < c2) return -1;

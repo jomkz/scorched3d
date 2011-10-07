@@ -50,7 +50,8 @@ FileRandomGenerator::FileRandomGenerator() :
 		DIALOG_ASSERT(in);
 		bufferSize_= 100000;
 		unsigned int *tmpbuffer = new unsigned int[bufferSize_];
-		int size = (int) fread(tmpbuffer, sizeof(unsigned int), bufferSize_, in);
+		unsigned int size = (unsigned int) 
+			fread(tmpbuffer, sizeof(unsigned int), bufferSize_, in);
 		fclose(in);	
 		DIALOG_ASSERT(size == bufferSize_);
 

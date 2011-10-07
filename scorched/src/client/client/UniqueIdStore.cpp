@@ -28,7 +28,7 @@
 
 UniqueIdStore::UniqueIdStore()
 {
-	if(SDLNet_Init()==-1) false;
+	DIALOG_ASSERT(SDLNet_Init()!=-1);
 }
 
 UniqueIdStore::~UniqueIdStore()
