@@ -72,6 +72,7 @@ bool XMLDiff::nodesEqual(XMLNode &first, XMLNode &second)
 			if (nodesEqual(*firstChild, *secondChild))
 			{
 				second.getChildren().remove(secondChild);
+				delete secondChild;
 				found = true;
 				break;
 			}
@@ -82,7 +83,11 @@ bool XMLDiff::nodesEqual(XMLNode &first, XMLNode &second)
 		}
 
 		++firstItor;
-		if (found) first.getChildren().remove(firstChild);
+		if (found) 
+		{
+			first.getChildren().remove(firstChild);
+			delete firstChild;
+		}
 	}
 
 	return allEqual;
