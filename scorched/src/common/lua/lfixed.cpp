@@ -12,6 +12,7 @@ void fixed_lua_number2str(char *result, int number)
 
 int fixed_lua_str2number(const char *s, char **endptr)
 {
+	strtod(s, endptr); // Increment endptr
 	fixed f(s);
 	return (int) f.getInternalData();
 }
