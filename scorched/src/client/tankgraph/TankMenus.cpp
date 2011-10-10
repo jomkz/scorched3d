@@ -123,18 +123,21 @@ TankMenus::~TankMenus()
 
 void TankMenus::groupInfo()
 {
-	std::map<std::string, ObjectGroup *> &groups = 
+	std::map<std::string, ObjectGroup *> *groups = 
 		ScorchedClient::instance()->getObjectGroups().getGroups();
-	std::map<std::string, ObjectGroup*>::iterator itor;
-	for (itor = groups.begin();
-		itor != groups.end();
-		++itor)
+	if (groups)
 	{
-		const std::string &name = itor->first;
-		ObjectGroup *entry = itor->second;
-		Logger::log(S3D::formatStringBuffer("Group %s count %i", 
-			name.c_str(),
-			entry->getObjectCount()));
+		std::map<std::string, ObjectGroup*>::iterator itor;
+		for (itor = groups->begin();
+			itor != groups->end();
+			++itor)
+		{
+			const std::string &name = itor->first;
+			ObjectGroup *entry = itor->second;
+			Logger::log(S3D::formatStringBuffer("Group %s count %i", 
+				name.c_str(),
+				entry->getObjectCount()));
+		}
 	}
 }
 

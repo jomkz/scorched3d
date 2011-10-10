@@ -429,3 +429,8 @@ void OptionsDisplay::loadFastestValues()
 	OptionEntryHelper::readFromFile(options_, path);
 }
 
+void OptionsDisplay::loadUltraValues()
+{
+	std::string path = S3D::getDataFile("data/ultradisplay.xml");
+	OptionEntryHelper::readFromFile(options_, path);
+}

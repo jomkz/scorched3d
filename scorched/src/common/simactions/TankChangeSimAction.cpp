@@ -34,21 +34,24 @@
 #include <tanket/TanketTypes.h>
 #include <server/ScorchedServer.h>
 
+unsigned int TankChangeSimAction::TankChangeSimActionCount = 0;
+
 REGISTER_CLASS_SOURCE(TankChangeSimAction);
 
 TankChangeSimAction::TankChangeSimAction()
 {
+	TankChangeSimActionCount++;
 }
 
 TankChangeSimAction::TankChangeSimAction(ComsTankChangeMessage &message) :
 	message_(message)
 {
-
+	TankChangeSimActionCount++;
 }
 
 TankChangeSimAction::~TankChangeSimAction()
 {
-
+	TankChangeSimActionCount--;
 }
 
 bool TankChangeSimAction::invokeAction(ScorchedContext &context)

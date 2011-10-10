@@ -28,6 +28,8 @@ class ClientLoadLevelHandler : public ComsMessageHandlerI
 public:
 	static ClientLoadLevelHandler* instance();
 
+	void setInitialLevel(bool initialLevel) { initialLevel_ = initialLevel; }
+
 	virtual bool processMessage(
 		NetMessage &message,
 		const char *messageType,
@@ -35,6 +37,7 @@ public:
 
 protected:
 	static ClientLoadLevelHandler* instance_;
+	bool initialLevel_;
 
 	bool actualProcessMessage(
 		NetMessage &netMessage,

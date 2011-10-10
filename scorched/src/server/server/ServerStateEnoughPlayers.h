@@ -25,10 +25,17 @@ class ScorchedContext;
 class ServerStateEnoughPlayers 
 {
 public:
+	enum Result
+	{
+		eEnough,
+		eNotEnough,
+		eWaiting
+	};
+
 	ServerStateEnoughPlayers();
 	virtual ~ServerStateEnoughPlayers();
 
-	bool enoughPlayers();
+	ServerStateEnoughPlayers::Result enoughPlayers();
 protected:
 	void checkExit();
 	void ballanceBots(ScorchedContext &context);

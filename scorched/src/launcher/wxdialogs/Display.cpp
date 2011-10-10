@@ -53,7 +53,7 @@ static void createMainControls(wxWindow *parent, wxSizer *sizer)
 
 	wxFlexGridSizer *displaySizer3 = new wxFlexGridSizer(1, 7, 5, 5);
 
-	displaySizer3->Add(new wxStaticText(parent, -1, wxT("&Dialog/Font Sizes :")));
+	displaySizer3->Add(new wxStaticText(parent, -1, wxT("&UI/HUD Scale :")));
 	IDC_TINYDIALOGS_CTRL = new wxRadioButton(parent, -1, wxT("Tiny"), 
 		wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
 	IDC_SMALLDIALOGS_CTRL = new wxRadioButton(parent, -1, wxT("Small"));
@@ -134,27 +134,31 @@ static void createMainControls(wxWindow *parent, wxSizer *sizer)
 	{
 	// Load settings
 	wxStaticBox *speedBox = new wxStaticBox(parent, -1, 
-		wxT("Game Speed Options"));
+		wxT("Game Detail Options"));
 	wxStaticBoxSizer *speedSizer = new wxStaticBoxSizer(speedBox, wxHORIZONTAL);
 
 	wxGridSizer *loadSizer = new wxFlexGridSizer(2, 2);
-	IDC_LOADDEFAULTS_CTRL = new wxButton(parent, ID_LOADDEFAULTS, wxT("&Normal Settings"), wxDefaultPosition, wxSize(120,-1));
-	IDC_LOADMEDIUM_CTRL = new wxButton(parent, ID_LOADMEDIUM, wxT("Faster Settings"), wxDefaultPosition, wxSize(120,-1));
-	IDC_LOADFASTEST_CTRL = new wxButton(parent, ID_LOADFASTEST, wxT("Fastest Settings"), wxDefaultPosition, wxSize(120,-1));
-	IDC_LOADSAFE_CTRL = new wxButton(parent, ID_LOADSAFE, wxT("Safe Options"), wxDefaultPosition, wxSize(120,-1));
+	IDC_LOADULTRA_CTRL = new wxButton(parent,  ID_LOADULTRA, wxT("&Ultra Detail"), wxDefaultPosition, wxSize(120,-1));
+	IDC_LOADDEFAULTS_CTRL = new wxButton(parent, ID_LOADDEFAULTS, wxT("&Normal Detail"), wxDefaultPosition, wxSize(120,-1));
+	IDC_LOADMEDIUM_CTRL = new wxButton(parent, ID_LOADMEDIUM, wxT("Faster Detail"), wxDefaultPosition, wxSize(120,-1));
+	IDC_LOADFASTEST_CTRL = new wxButton(parent, ID_LOADFASTEST, wxT("Fastest Detail"), wxDefaultPosition, wxSize(120,-1));
+	IDC_LOADSAFE_CTRL = new wxButton(parent, ID_LOADSAFE, wxT("Safe Mode"), wxDefaultPosition, wxSize(120,-1));
+	loadSizer->Add(IDC_LOADULTRA_CTRL, 0, wxALL, 2);
+	loadSizer->Add(new wxStaticText(parent, -1, wxT("Use ultra detail settings for Scorched3D. (For V FAST machines)")),
+		0, wxALL, 2);
 	loadSizer->Add(IDC_LOADDEFAULTS_CTRL, 0, wxALL, 2);
-	loadSizer->Add(new wxStaticText(parent, -1, wxT("Load the normal starting settings for Scorched3D. (FAST machines)")),
+	loadSizer->Add(new wxStaticText(parent, -1, wxT("Use normal detail settings for Scorched3D. (For FAST machines)")),
 		0, wxALL, 2);
 	loadSizer->Add(IDC_LOADMEDIUM_CTRL, 0, wxALL, 2);
-	loadSizer->Add(new wxStaticText(parent, -1, wxT("Load a faster set of settings for Scorched3D. (MEDIUM machines)\n"
+	loadSizer->Add(new wxStaticText(parent, -1, wxT("Use faster detail settings for Scorched3D. (For MEDIUM machines)\n"
 		"Note: This will result in a slightly reduced graphical experience.")),
 		0, wxALL, 2);
 	loadSizer->Add(IDC_LOADFASTEST_CTRL, 0, wxALL, 2);
-	loadSizer->Add(new wxStaticText(parent, -1, wxT("Load the fastest settings for Scorched3D. (SLOW machines)\n"
+	loadSizer->Add(new wxStaticText(parent, -1, wxT("Use fastest detail settings for Scorched3D. (For SLOW machines)\n"
 		"Note: This will result in a greatly reduced graphical and audio experience.")),
 		0, wxALL, 2);
 	loadSizer->Add(IDC_LOADSAFE_CTRL, 0, wxALL, 2);
-	loadSizer->Add(new wxStaticText(parent, -1, wxT("Load the safest settings for Scorched3D.\n"
+	loadSizer->Add(new wxStaticText(parent, -1, wxT("Use safest settings for Scorched3D.\n"
 		"Note: This will result in a greatly reduced overall experience but may prevent crashes.")),
 		0, wxALL, 2);
 

@@ -73,7 +73,7 @@ void ShotBounce::init()
 	if (weapon_->getGroups().hasGroups())
 	{
 		groups_ = new ParticleGroup(*context_, this, &weaponContext_);
-		weapon_->getGroups().addToGroups(*context_, groups_);
+		weapon_->getGroups().addToGroups(context_->getObjectGroups(), groups_);
 	}
 }
 

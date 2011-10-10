@@ -21,6 +21,7 @@
 enum
 {
 	ID_LOADDEFAULTS = 60,
+	ID_LOADULTRA,
 	ID_LOADFASTEST,
 	ID_LOADSAFE,
 	ID_LOADMEDIUM,
@@ -101,6 +102,7 @@ static wxTextCtrl *IDC_TANKMODEL_CTRL = 0;
 static wxGrid *IDC_USERID_CTRL = 0;
 static wxTextCtrl *IDC_HOSTDESC_CTRL = 0;
 
+static wxButton *IDC_LOADULTRA_CTRL = 0;
 static wxButton *IDC_LOADDEFAULTS_CTRL = 0;
 static wxButton *IDC_LOADKEYDEFAULTS_CTRL = 0;
 static wxButton *IDC_LOADSAFE_CTRL = 0;

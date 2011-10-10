@@ -35,6 +35,7 @@ ServerState::~ServerState()
 
 void ServerState::simulate(fixed frameTime)
 {
+	ServerStateEnoughPlayers::Result enoughResult;
 	switch (serverState_)
 	{
 	case ServerStartupState:
@@ -42,12 +43,13 @@ void ServerState::simulate(fixed frameTime)
 		serverState_ = ServerWaitingForPlayersState;
 		break;
 	case ServerWaitingForPlayersState:
-		if (enoughPlayers_.enoughPlayers())
+		enoughResult = enoughPlayers_.enoughPlayers();
+		if (enoughResult == ServerStateEnoughPlayers::eEnough)
 		{
 			startingMatch_.reset();
 			serverState_ = ServerMatchCountDownState;
 		}
-		else 
+		else if (enoughResult == ServerStateEnoughPlayers::eNotEnough)
 		{
 			fixed cycleTime = ScorchedServer::instance()->getOptionsGame().getIdleCycleTime();
 			if (ScorchedServer::instance()->getServerSimulator().getCurrentTime() > cycleTime)
@@ -57,14 +59,15 @@ void ServerState::simulate(fixed frameTime)
 		}
 		break;
 	case ServerMatchCountDownState:
-		if (enoughPlayers_.enoughPlayers())
+		enoughResult = enoughPlayers_.enoughPlayers();
+		if (enoughResult  == ServerStateEnoughPlayers::eEnough)
 		{
 			if (startingMatch_.startingMatch(frameTime))
 			{
 				serverState_ = ServerNewLevelState;
 			}
 		}
-		else
+		else if (enoughResult  == ServerStateEnoughPlayers::eNotEnough)
 		{
 			startingMatch_.stoppingMatch();
 			serverState_ = ServerWaitingForPlayersState;
@@ -92,7 +95,7 @@ void ServerState::simulate(fixed frameTime)
 		break;
 	case ServerPlayingState:
 		if (playing_.showScore() || 
-			!enoughPlayers_.enoughPlayers())
+			enoughPlayers_.enoughPlayers() == ServerStateEnoughPlayers::eNotEnough)
 		{
 			serverState_ = ServerFinishWaitState;
 			finishWait_.enterState();

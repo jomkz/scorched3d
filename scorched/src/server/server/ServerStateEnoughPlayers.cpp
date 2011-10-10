@@ -33,6 +33,7 @@
 #include <tankai/TankAIAdder.h>
 #include <simactions/TankAddSimAction.h>
 #include <simactions/TankRemoveSimAction.h>
+#include <simactions/TankChangeSimAction.h>
 #include <common/OptionsScorched.h>
 #include <common/Logger.h>
 
@@ -44,15 +45,25 @@ ServerStateEnoughPlayers::~ServerStateEnoughPlayers()
 {
 }
 
-bool ServerStateEnoughPlayers::enoughPlayers()
+ServerStateEnoughPlayers::Result ServerStateEnoughPlayers::enoughPlayers()
 {
-	// Check if we need to add or remove bots to keep game going
 	if (TankAddSimAction::TankAddSimActionCount == 0 &&
 		TankRemoveSimAction::TankRemoveSimActionCount == 0 &&
+		TankChangeSimAction::TankChangeSimActionCount == 0 &&
 		!ScorchedServer::instance()->getServerConnectAuthHandler().outstandingRequests())
 	{
+		// Check if we need to add or remove bots to keep game going
 		// Any bots added won't join until the next round anyway
 		ballanceBots(ScorchedServer::instance()->getContext());
+	}
+
+	// Only perform checks if nothing no players are being added or removed
+	if (TankAddSimAction::TankAddSimActionCount != 0 ||
+		TankRemoveSimAction::TankRemoveSimActionCount != 0 ||
+		TankChangeSimAction::TankChangeSimActionCount != 0 ||
+		ScorchedServer::instance()->getServerConnectAuthHandler().outstandingRequests())
+	{
+		return ServerStateEnoughPlayers::eWaiting;
 	}
 
 	// Make sure we have enough players to play a game
@@ -60,7 +71,7 @@ bool ServerStateEnoughPlayers::enoughPlayers()
 		ScorchedServer::instance()->getOptionsGame().getNoMinPlayers())
 	{
 		checkExit();
-		return false;
+		return ServerStateEnoughPlayers::eNotEnough;
 	}
 	
 	// Check we have enough team players
@@ -101,12 +112,12 @@ bool ServerStateEnoughPlayers::enoughPlayers()
 			if (teamCount[i] == 0)
 			{
 				checkExit();
-				return false;
+				return ServerStateEnoughPlayers::eNotEnough;
 			}
 		}
 	}
 	
-	return true;
+	return ServerStateEnoughPlayers::eEnough;
 }
 
 void ServerStateEnoughPlayers::ballanceBots(ScorchedContext &context)

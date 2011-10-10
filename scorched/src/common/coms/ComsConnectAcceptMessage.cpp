@@ -63,8 +63,6 @@ bool ComsConnectAcceptMessage::readMessage(NetBufferReader &reader)
 	if (!reader.getFromBuffer(serverName_)) return false;
 	if (!reader.getFromBuffer(publishAddress_)) return false;
 	if (!reader.getFromBuffer(uniqueId_)) return false;
-	unsigned int used;
-	if (!reader.getFromBuffer(used)) return false;
 #ifndef S3D_SERVER
 	if (!ScorchedClient::instance()->getOptionsGame().getMainOptions().
 		readFromBuffer(reader, false, false)) return false;

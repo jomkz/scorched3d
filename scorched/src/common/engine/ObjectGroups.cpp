@@ -23,7 +23,7 @@
 #include <common/Defines.h>
 #include <stdio.h>
 
-ObjectGroups::ObjectGroups()
+ObjectGroups::ObjectGroups() : groups_(0)
 {
 }
 
@@ -33,29 +33,35 @@ ObjectGroups::~ObjectGroups()
 
 void ObjectGroups::clearGroups()
 {
-	// Groups
+	if (!groups_) return;
+
 	std::map<std::string, ObjectGroup*>::iterator itor;
-	for (itor = groups_.begin();
-		itor != groups_.end();
+	for (itor = groups_->begin();
+		itor != groups_->end();
 		++itor)
 	{
 		ObjectGroup *entry = (*itor).second;
 		delete entry;
 	}
-	groups_.clear();
+	delete groups_;
+	groups_ = 0;
 }
 
 ObjectGroup *ObjectGroups::getGroup(const char *name, bool create)
 {
-	std::map<std::string, ObjectGroup*>::iterator findItor = groups_.find(name);
-	if (findItor != groups_.end())
+	if (groups_)
 	{
-		return (*findItor).second;
+		std::map<std::string, ObjectGroup*>::iterator findItor = groups_->find(name);
+		if (findItor != groups_->end())
+		{
+			return (*findItor).second;
+		}
 	}
 	if (create)
 	{
+		if (!groups_) groups_ = new std::map<std::string, ObjectGroup*>();
 		ObjectGroup *entry = new ObjectGroup(name);
-		groups_[name] = entry;
+		(*groups_)[name] = entry;
 		return entry;
 	}
 	return 0;

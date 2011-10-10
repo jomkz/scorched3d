@@ -54,6 +54,11 @@ PlayerInGameDialog::~PlayerInGameDialog()
 
 void PlayerInGameDialog::displayDialog()
 {
+	GLWWindowManager::instance()->showWindow(getId());
+}
+
+void PlayerInGameDialog::display()
+{
 	// Set cancel/spectate
 	if (ClientParams::instance()->getConnectedToServer())
 	{
@@ -66,11 +71,6 @@ void PlayerInGameDialog::displayDialog()
 		spectateButton_->setEnabled(false);
 	}
 
-	GLWWindowManager::instance()->showWindow(getId());
-}
-
-void PlayerInGameDialog::display()
-{
 	Tank *tank = getCurrentPlayer();
 	if (!tank) 
 	{

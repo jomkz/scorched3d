@@ -36,6 +36,8 @@ public:
 	virtual bool writeMessage(NetBuffer &buffer);
 	virtual bool readMessage(NetBufferReader &reader);
 
+	static unsigned int TankChangeSimActionCount;
+
 REGISTER_CLASS_HEADER(TankChangeSimAction);
 protected:
 	ComsTankChangeMessage message_;

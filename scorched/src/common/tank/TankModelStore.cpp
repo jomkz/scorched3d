@@ -167,7 +167,13 @@ TankModel *TankModelStore::getRandomModel(int team, bool ai, const char *tankTyp
 		}
 	}
 
-	DIALOG_ASSERT(models.size());
+	if (models.empty()) 
+	{
+		S3D::dialogExit("TankModelStore",
+			S3D::formatStringBuffer("Failed to find any tank models that match the "
+				"current team (%i), ai (%s) and tanktype (%s)",
+				team, ai?"yes":"no", tankType));
+	}
 	unsigned int randomNumber = rand();
 	TankModel *model = models[randomNumber % models.size()];
 	return model;

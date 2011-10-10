@@ -48,7 +48,7 @@ void ServerStateScore::enterState(ServerStateEnoughPlayers &enoughPlayers)
 	}
 	else
 	{
-		if (!enoughPlayers.enoughPlayers())
+		if (enoughPlayers.enoughPlayers() == ServerStateEnoughPlayers::eNotEnough)
 		{
 			overAllWinner_ = true;
 		}

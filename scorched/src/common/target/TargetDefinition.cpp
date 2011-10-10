@@ -266,7 +266,7 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 #endif // #ifndef S3D_SERVER
 
 	target->getLife().setTargetPosition(position);
-	groups_.addToGroups(context, &target->getGroup());
+	groups_.addToGroups(context.getObjectGroups(), &target->getGroup());
 
 	context.getTargetContainer().addTarget(target);
 

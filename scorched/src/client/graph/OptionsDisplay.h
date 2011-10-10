@@ -404,6 +404,7 @@ public:
 	void loadDefaultValues();
 	void loadMediumValues();
 	void loadFastestValues();
+	void loadUltraValues();
 	bool writeOptionsToFile(bool allOptions);
 	bool readOptionsFromFile();
 

@@ -51,6 +51,7 @@ public:
 	virtual bool TransferDataToWindow();
 	virtual bool TransferDataFromWindow();
 
+	void onLoadUltraButton(wxCommandEvent &event);
 	void onLoadDefaultsButton(wxCommandEvent &event);
 	void onLoadFastestButton(wxCommandEvent &event);
 	void onLoadMediumButton(wxCommandEvent &event);
@@ -81,6 +82,7 @@ protected:
 };
 
 BEGIN_EVENT_TABLE(DisplayFrame, wxDialog)
+	EVT_BUTTON(ID_LOADULTRA,  DisplayFrame::onLoadUltraButton)
     EVT_BUTTON(ID_LOADDEFAULTS,  DisplayFrame::onLoadDefaultsButton)
 	EVT_BUTTON(ID_LOADFASTEST,  DisplayFrame::onLoadFastestButton)
 	EVT_BUTTON(ID_LOADMEDIUM,  DisplayFrame::onLoadMediumButton)
@@ -204,6 +206,13 @@ DisplayFrame::DisplayFrame() :
 	topsizer->SetSizeHints(this); // set size hints to honour minimum size
 
 	CentreOnScreen();
+}
+
+void DisplayFrame::onLoadUltraButton(wxCommandEvent &event)
+{
+	OptionsDisplay::instance()->loadDefaultValues();
+	OptionsDisplay::instance()->loadUltraValues();
+	refreshScreen();
 }
 
 void DisplayFrame::onLoadDefaultsButton(wxCommandEvent &event)

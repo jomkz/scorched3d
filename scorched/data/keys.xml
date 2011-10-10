@@ -264,13 +264,6 @@
 		<key>y</key>
 	</keyentry>
 	<keyentry>
-		<name>SHOW_RULES_DIALOG</name>
-		<title>Show rules</title>
-		<description>Shows or hides the rules dialog</description>
-		<group>2</group>
-		<key>r</key>
-	</keyentry>
-	<keyentry>
 		<name>SHOW_SCORE_DIALOG</name>
 		<title>Show score</title>
 		<description>Shows or hides the score dialog</description>
@@ -283,6 +276,7 @@
 		<description>Shows or hides the team dialog</description>
 		<group>2</group>
 		<key>m</key>
+    <key>r</key>
 	</keyentry>
 	<keyentry>
 		<name>SHOW_CAMERA_DIALOG</name>

@@ -23,6 +23,7 @@
 #include <client/ClientState.h>
 #include <client/ClientReloadAdaptor.h>
 #include <client/ClientSimulator.h>
+#include <client/ClientParams.h>
 #include <common/Clock.h>
 #include <common/OptionsScorched.h>
 #include <common/Logger.h>
@@ -65,7 +66,7 @@ ClientLoadLevelHandler *ClientLoadLevelHandler::instance()
 	return instance_;
 }
 
-ClientLoadLevelHandler::ClientLoadLevelHandler()
+ClientLoadLevelHandler::ClientLoadLevelHandler() : initialLevel_(false)
 {
 	ScorchedClient::instance()->getComsMessageHandler().addHandler(
 		ComsLoadLevelMessage::ComsLoadLevelMessageType,
@@ -260,14 +261,18 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	// Make sure simulator knows we are not loading a level
 	ScorchedClient::instance()->getClientSimulator().setLoadingLevel(false);
 
-	// Display the player dialog
-	if (strcmp(message.getLandscapeDefinition().getName(), "blank") == 0)
+	// Show the player selection dialogs
+	if (initialLevel_)
 	{
-		PlayerInitialDialog::instance()->displayDialog();
-	}
-	else
-	{
-		PlayerInGameDialog::instance()->displayDialog();
+		initialLevel_ = false;
+		if (ClientParams::instance()->getConnectedToServer())
+		{
+			PlayerInGameDialog::instance()->displayDialog();
+		}
+		else
+		{
+			PlayerInitialDialog::instance()->displayDialog();
+		}
 	}
 
 	// Tell the server we have finished processing the landscape

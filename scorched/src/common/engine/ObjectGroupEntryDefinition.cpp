@@ -41,22 +41,22 @@ bool ObjectGroupEntryDefinition::readXML(XMLNode *node)
 }
 
 void ObjectGroupEntryDefinition::addToGroups(
-	ScorchedContext &context,
+	ObjectGroups &objectGroups,
 	ObjectGroupEntry *objectGroupEntry)
 {
 	for (unsigned int i=0; i<groupnames_.size(); i++)
 	{
 		std::string groupname = groupnames_[i];
-		addToGroup(groupname.c_str(), context, objectGroupEntry);
+		addToGroup(groupname.c_str(), objectGroups, objectGroupEntry);
 	}
 }
 
 void ObjectGroupEntryDefinition::addToGroup(
 	const char *groupName,
-	ScorchedContext &context,
+	ObjectGroups &objectGroups,
 	ObjectGroupEntry *objectGroupEntry)
 {
-	ObjectGroup *group = context.getObjectGroups().getGroup(groupName, true);
+	ObjectGroup *group = objectGroups.getGroup(groupName, true);
 	if (group)
 	{
 		group->addObject(objectGroupEntry);

@@ -26,7 +26,7 @@
 #include <string>
 
 class ObjectGroupEntry;
-class ScorchedContext;
+class ObjectGroups;
 class ObjectGroupEntryDefinition
 {
 public:
@@ -36,14 +36,14 @@ public:
 	bool readXML(XMLNode *node);
 
 	bool hasGroups() { return !groupnames_.empty(); }
-	void addToGroups(ScorchedContext &context,
+	void addToGroups(ObjectGroups &objectGroups,
 		ObjectGroupEntry *objectGroupEntry);
 
 protected:
 	std::vector<std::string> groupnames_;
 
 	void addToGroup(const char *groupName,
-		ScorchedContext &context,
+		ObjectGroups &objectGroups,
 		ObjectGroupEntry *objectGroupEntry);
 };
 
