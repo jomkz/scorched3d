@@ -47,13 +47,14 @@
 #include <math.h>
 
 Explosion::Explosion(FixedVector &position,
+	FixedVector &velocity,
 	ExplosionParams *params,
 	Weapon *weapon, WeaponFireContext &weaponContext) :
 	Action(weaponContext.getReferenced()),
 	params_(params),
 	firstTime_(true), totalTime_(0),
 	weapon_(weapon), weaponContext_(weaponContext), 
-	position_(position)
+	position_(position), velocity_(velocity)
 {
 }
 
@@ -221,7 +222,19 @@ void Explosion::init()
 						Vector(0.0f, 0.0f, 0.0f), // Gravity
 						params_->getLuminance(),
 						params_->getWindAffected());
-					emmiter.emitExplosionRing(400, position_.asVector(),
+
+					Vector axis(0.0f, 0.0f, 1.0f);
+					if (params_->getExplosionType() == ExplosionParams::ExplosionRingDirectional)
+					{
+						axis = velocity_.asVector();
+						if (axis.MagnitudeSquared() == 0.0f)
+						{
+							axis[2] = 1.0f;
+						}
+					}
+					emmiter.emitExplosionRing(400, 
+						position_.asVector(),
+						axis,
 						ScorchedClient::instance()->getParticleEngine(),
 						explosionSize.asFloat(),
 						texture,

@@ -93,6 +93,7 @@ public:
 		bool animate);
 	void emitExplosionRing(int number,
 		Vector &position,
+		Vector &axis,
 		ParticleEngine &engine,
 		float width,
 		GLTextureSet *set,

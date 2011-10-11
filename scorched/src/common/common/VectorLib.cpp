@@ -58,3 +58,22 @@ bool VectorLib::sphereIntersection(Vector &start, Vector &end,
 
 	return false;
 }
+
+Vector VectorLib::rotationAroundAxis(Vector &p, float angle, Vector &axis)
+{
+	Vector q;
+	axis.StoreNormalize();
+	float costheta = cos(angle); 
+	float sintheta = sin(angle); 
+	q[0] += (costheta + (1 - costheta) * axis[0] * axis[0]) * p[0]; 
+	q[0] += ((1 - costheta) * axis[0] * axis[1] - axis[2] * sintheta) * p[1]; 
+	q[0] += ((1 - costheta) * axis[0] * axis[2] + axis[1] * sintheta) * p[2]; 
+	q[1] += ((1 - costheta) * axis[0] * axis[1] + axis[2] * sintheta) * p[0]; 
+	q[1] += (costheta + (1 - costheta) * axis[1] * axis[1]) * p[1]; 
+	q[1] += ((1 - costheta) * axis[1] * axis[2] - axis[0] * sintheta) * p[2]; 
+	q[2] += ((1 - costheta) * axis[0] * axis[2] - axis[1] * sintheta) * p[0]; 
+	q[2] += ((1 - costheta) * axis[1] * axis[2] + axis[0] * sintheta) * p[1]; 
+	q[2] += (costheta + (1 - costheta) * axis[2] * axis[2]) * p[2]; 
+	
+	return q; 
+}

@@ -95,11 +95,12 @@ static int s3d_explosion(lua_State *L)
 
 	unsigned int playerId = (unsigned int) luaL_checknumber(L, 1);
 	FixedVector position = LUAUtil::getVectorFromStack(L, 2);
-	explosionParams->parseLUA(L, 3);	
+	FixedVector velocity = LUAUtil::getVectorFromStack(L, 3);
+	explosionParams->parseLUA(L, 4);	
 
 	WeaponFireContext fireContext(playerId, true, true);
 	Explosion *explosion = new Explosion(
-		position, explosionParams, wrapper->getWeapon(), fireContext);
+		position, velocity, explosionParams, wrapper->getWeapon(), fireContext);
 	wrapper->getContext()->getActionController().addAction(explosion);
 
 	return 0;

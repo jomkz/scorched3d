@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <common/Defines.h>
+#include <common/VectorLib.h>
 #include <graph/ParticleEmitter.h>
 #include <graph/ParticleTypes.h>
 #include <sprites/DebrisActionRenderer.h>
@@ -232,6 +233,7 @@ void ParticleEmitter::emitLinear(int number,
 
 void ParticleEmitter::emitExplosionRing(int number,
 	Vector &position,
+	Vector &inAxis,
 	ParticleEngine &engine,
 	float width,
 	GLTextureSet *set,
@@ -244,12 +246,16 @@ void ParticleEmitter::emitExplosionRing(int number,
 
 		createDefaultParticle(*particle);
 
-		Vector velocity;
 		float ang = RAND * 2.0f * 3.14f;
 		float speed = width * 4.0f;
-		velocity[0] = getFastSin(ang) * speed;
-		velocity[1] = getFastCos(ang) * speed;
-		velocity[2] = 0.0f;
+		Vector axis = inAxis.Normalize();
+		Vector otheraxis(0.0f, 1.0f, 0.0f);
+		if (fabs(axis[1]) > 0.7f)
+		{
+			otheraxis = Vector(1.0f, 0.0f, 0.0f);
+		}
+		Vector p = axis * otheraxis;
+		Vector velocity = VectorLib::rotationAroundAxis(p, ang, axis) * speed;
 
 		particle->velocity_ = velocity;
 		particle->position_ = position;

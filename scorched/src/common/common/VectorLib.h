@@ -31,6 +31,7 @@ namespace VectorLib
 	bool sphereIntersection(Vector &start, Vector &end, 
 							Vector &sphereCentre, float radius, float &distance);
 
+	Vector rotationAroundAxis(Vector &p, float angle, Vector &axis);
 };
 
 

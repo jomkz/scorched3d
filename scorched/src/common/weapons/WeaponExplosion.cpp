@@ -75,7 +75,7 @@ void WeaponExplosion::fireWeapon(ScorchedContext &context,
 	newParams->setCreateMushroomAmount(createMushroomAmountExp_.getValue(context, params_.getCreateMushroomAmount()));
 
 	Action *action = new Explosion(
-		position, newParams, this, weaponContext);
+		position, velocity, newParams, this, weaponContext);
 	context.getActionController().addAction(action);	
 }
 

@@ -155,10 +155,11 @@ bool ExplosionParams::parseXML(XMLNode *accessoryNode)
 	{
 		if (explosionType == "normal") explosionType_ = ExplosionNormal;
 		else if (explosionType == "ring") explosionType_ = ExplosionRing;
+		else if (explosionType == "directionalring") explosionType_ = ExplosionRingDirectional;
 		else 
 		{	
 			return accessoryNode->returnError(
-				S3D::formatStringBuffer("Unknown explosion type \"%s\" should be normal or ring",
+				S3D::formatStringBuffer("Unknown explosion type \"%s\" should be normal, ring or directionalring",
 				explosionType.c_str()));
 		}
 	}

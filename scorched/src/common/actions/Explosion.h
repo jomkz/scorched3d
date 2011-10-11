@@ -30,6 +30,7 @@ class Explosion : public Action
 {
 public:
 	Explosion(FixedVector &position, 
+		FixedVector &velocity,
 		ExplosionParams *params,
 		Weapon *weapon, 
 		WeaponFireContext &weaponContext);
@@ -44,7 +45,7 @@ public:
 protected:
 	ExplosionParams *params_;
 	bool firstTime_;
-	FixedVector position_;
+	FixedVector position_, velocity_;
 	fixed totalTime_;
 	Weapon *weapon_;
 	WeaponFireContext weaponContext_;

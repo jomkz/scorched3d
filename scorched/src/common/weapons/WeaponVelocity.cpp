@@ -73,10 +73,8 @@ void WeaponVelocity::fireWeapon(ScorchedContext &context,
 	}
 	else
 	{
-
 		newVelocity = velocity * velocityChange_.getValue(context);
 		aimedWeapon_->fireWeapon(context, weaponContext, position, newVelocity);
 	}
-
 }
 

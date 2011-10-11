@@ -37,7 +37,8 @@ public:
 	enum ExplosionType
 	{
 		ExplosionNormal = 0,
-		ExplosionRing = 1
+		ExplosionRing = 1,
+		ExplosionRingDirectional = 2
 	};
 
 	ExplosionParams();
