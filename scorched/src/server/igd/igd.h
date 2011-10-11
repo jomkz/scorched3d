@@ -24,6 +24,7 @@
 #include <net/NetBuffer.h>
 #include <XML/XMLNode.h>
 #include <list>
+#include <set>
 
 class igd
 {
@@ -43,6 +44,7 @@ protected:
 		IPaddress ipAddress;
 		std::string serviceData;
 		std::string controlUrl;
+		std::string serviceType;
 	};
 
 	void sendInitialRequest(UDPsocket udpsock, const char *serviceType);
@@ -50,9 +52,12 @@ protected:
 	void sendServiceRequest(Location &location, std::string &localAddress);
 	bool parseServiceRequest(Location &location);
 	bool sendTCPRequest(Location &location, const std::string &request, std::string &response, std::string &localAddress);
-	bool findServiceType(XMLNode *deviceNode, const char *serviceType, std::string &controlUrl);
+	bool findServiceType(XMLNode *deviceNode, std::set<std::string> &wantedServiceTypes,
+		std::string &serviceType, std::string &controlUrl);
 	bool addPortMapping(Location &location, const std::string &protocol,
 		int portNumber, const std::string &localName);
+	bool getExtenalAddress(Location &location, const std::string &localName);
+	bool sendRequest(Location &location, const std::string &action, std::string &data, std::string &response);
 };
 
 #endif // !defined(AFX_igd_H__5F21C9C7_0F71_4CCC_ABB9_976CF0A5C5EC__INCLUDED_)

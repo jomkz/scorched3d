@@ -87,6 +87,10 @@ void igd::sendInitialRequest(int portNumber)
 			if (addPortMapping(location, "TCP", portNumber, localAddress) &&
 				addPortMapping(location, "UDP", portNumber + 1, localAddress))
 			{
+				if (strcmp(ScorchedServer::instance()->getOptionsGame().getPublishAddress(), "AutoDetect"))
+				{
+					getExtenalAddress(location, localAddress);
+				}
 				break;
 			}
 		}
@@ -168,6 +172,10 @@ void igd::recvInitialRequest(UDPsocket udpsock, std::list<Location> &locations)
 		if (SDLNet_UDP_Recv(udpsock, packet.packet) == 1)
 		{
 			const char *data = (const char *) packet.packet->data;
+			if (packet.packet->len >= 0)
+			{
+				((char *)data)[MIN(packet.packet->len, packet.packet->maxlen - 1)] = '\0';
+			}
 			if (ScorchedServer::instance()->getOptionsGame().getUseUPnPLogging())
 			{
 				Logger::log(S3D::formatStringBuffer("igd::recieved UDP packet %s", data));
@@ -312,8 +320,10 @@ bool igd::parseServiceRequest(Location &location)
 		location.host.c_str(), location.port,
 		location.friendlyName.c_str(), location.manufacturer.c_str()));
 
-	if (findServiceType(deviceNode, "urn:schemas-upnp-org:service:WANIPConnection:1", location.controlUrl) ||
-		findServiceType(deviceNode, "urn:schemas-upnp-org:service:WANPPPConnection:1", location.controlUrl))
+	std::set<std::string> wantedServiceTypes;
+	wantedServiceTypes.insert("urn:schemas-upnp-org:service:WANIPConnection:1");
+	wantedServiceTypes.insert("urn:schemas-upnp-org:service:WANPPPConnection:1");
+	if (findServiceType(deviceNode, wantedServiceTypes, location.serviceType, location.controlUrl))
 	{
 		Logger::log(S3D::formatStringBuffer("Found UPnP service %s", location.controlUrl.c_str()));
 		return true;
@@ -321,7 +331,8 @@ bool igd::parseServiceRequest(Location &location)
 	return false;
 }
 
-bool igd::findServiceType(XMLNode *deviceNode, const char *wantedServiceType, std::string &controlUrl)
+bool igd::findServiceType(XMLNode *deviceNode, std::set<std::string> &wantedServiceTypes, 
+	std::string &serviceType, std::string &controlUrl)
 {
 	XMLNode *serviceListNode = 0;
 	if (deviceNode->getNamedChild("serviceList", serviceListNode, false)) 
@@ -329,11 +340,10 @@ bool igd::findServiceType(XMLNode *deviceNode, const char *wantedServiceType, st
 		XMLNode *serviceNode = 0;
 		while (serviceListNode->getNamedChild("service", serviceNode, false))
 		{
-			std::string serviceType;
 			if (serviceNode->getNamedChild("serviceType", serviceType, false) &&
 				serviceNode->getNamedChild("controlURL", controlUrl, false))
 			{
-				if (serviceType == wantedServiceType)
+				if (wantedServiceTypes.find(serviceType) != wantedServiceTypes.end())
 				{
 					return true;
 				}
@@ -346,7 +356,7 @@ bool igd::findServiceType(XMLNode *deviceNode, const char *wantedServiceType, st
 		XMLNode *newDeviceNode = 0;
 		while (deviceListNode->getNamedChild("device", newDeviceNode, false))
 		{
-			if (findServiceType(newDeviceNode, wantedServiceType, controlUrl))
+			if (findServiceType(newDeviceNode, wantedServiceTypes, serviceType, controlUrl))
 			{
 				return true;
 			}
@@ -362,7 +372,7 @@ bool igd::addPortMapping(Location &location, const std::string &protocol,
 		"<?xml version=\"1.0\"?>\n"
 		"<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">"
 		"<s:Body>"
-		"<u:AddPortMapping xmlns:u=\"urn:schemas-upnp-org:service:WANIPConnection:1\">"
+		"<u:AddPortMapping xmlns:u=\"%s\">"
 		"<NewRemoteHost></NewRemoteHost>"
 		"<NewExternalPort>%i</NewExternalPort>"
 		"<NewProtocol>%s</NewProtocol>"
@@ -374,6 +384,7 @@ bool igd::addPortMapping(Location &location, const std::string &protocol,
 		"</u:AddPortMapping>"
 		"</s:Body>"
 		"</s:Envelope>",
+		location.serviceType.c_str(),
 		portNumber,
 		protocol.c_str(),
 		portNumber,
@@ -381,25 +392,8 @@ bool igd::addPortMapping(Location &location, const std::string &protocol,
 		protocol.c_str()
 		);
 
-	std::string buffer = S3D::formatStringBuffer(
-		"POST %s HTTP/1.0\r\n"
-		"Host: %s:%i\r\n"
-		"User-Agent: UPnP/1.0, Scorched3D\r\n"
-		"Content-Length: %u\r\n"
-		"Content-Type: text/xml\r\n"
-		"SOAPAction: \"urn:schemas-upnp-org:service:WANIPConnection:1#AddPortMapping\"\r\n"
-		"Connection: Close\r\n"
-		"Cache-Control: no-cache\r\n"
-		"Pragma: no-cache\r\n"
-		"\r\n"
-		"%s",
-		location.controlUrl.c_str(),
-		location.host.c_str(), location.port,
-		data.size(),
-		data.c_str());
-
-	std::string response, newLocalAddress;
-	if (sendTCPRequest(location, buffer, response, newLocalAddress))
+	std::string response;
+	if (sendRequest(location, "AddPortMapping", data, response))
 	{
 		Logger::log(S3D::formatStringBuffer("Added UPnP port mapping %s to %s:%i", 
 			protocol.c_str(),
@@ -408,3 +402,72 @@ bool igd::addPortMapping(Location &location, const std::string &protocol,
 	}
 	return false;
 }
+
+bool igd::getExtenalAddress(Location &location, const std::string &localName)
+{
+	std::string data = S3D::formatStringBuffer(
+		"<?xml version=\"1.0\"?>\n"
+		"<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">"
+		"<s:Body>"
+		"<u:GetExternalIPAddress xmlns:u=\"%s:1\">"
+		"</u:GetExternalIPAddress>"
+		"</s:Body>"
+		"</s:Envelope>",
+		location.serviceType.c_str()
+		);
+
+	std::string response;
+	if (sendRequest(location, "GetExternalIPAddress", data, response))
+	{
+		XMLStringBuffer xmlDocument;
+		if (!xmlDocument.create(response.c_str(), response.size()))
+		{
+			Logger::log("Failed to parse external ip address response");
+			return false;
+		}
+
+		XMLNode *currentNode;
+		if (!xmlDocument.getRootNode()->getNamedChild("s:Body", currentNode)) return false;
+		if (!currentNode->getNamedChild("u:GetExternalIPAddressResponse", currentNode)) return false;
+
+		std::string externalAddress;
+		if (!currentNode->getNamedChild("NewExternalIPAddress", externalAddress)) return false;
+
+		Logger::log(S3D::formatStringBuffer("Got external address %s", 
+			externalAddress.c_str()));
+		ScorchedServer::instance()->getOptionsGame().getMainOptions().getPublishAddressEntry().
+			setValueFromString(externalAddress.c_str());
+		return true;
+	}
+	return false;
+}
+
+bool igd::sendRequest(Location &location, const std::string &action, std::string &data, std::string &response)
+{
+	std::string buffer = S3D::formatStringBuffer(
+		"POST %s HTTP/1.0\r\n"
+		"Host: %s:%i\r\n"
+		"User-Agent: UPnP/1.0, Scorched3D\r\n"
+		"Content-Length: %u\r\n"
+		"Content-Type: text/xml\r\n"
+		"SOAPAction: \"%s#%s\"\r\n"
+		"Connection: Close\r\n"
+		"Cache-Control: no-cache\r\n"
+		"Pragma: no-cache\r\n"
+		"\r\n"
+		"%s",
+		location.controlUrl.c_str(),
+		location.host.c_str(), location.port,
+		data.size(),
+		location.serviceType.c_str(),
+		action.c_str(),
+		data.c_str());
+
+	std::string newLocalAddress;
+	if (sendTCPRequest(location, buffer, response, newLocalAddress))
+	{
+		return true;
+	}
+	return false;
+}
+
