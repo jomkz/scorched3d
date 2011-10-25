@@ -39,7 +39,7 @@
 #include <GLEXT/GLImageModifier.h>
 
 Water::Water() :
-	height_(25.0f), transparency_(1.0f), 
+	height_(25.0f), transparency_(1.0f), maxTransparency_(1.0f),
 	waterOn_(false)
 {
 	wTex_ = new Water2Renderer();
@@ -55,7 +55,7 @@ Water::~Water()
 
 void Water::setTransparency(float transparency)
 {
-	transparency_ = transparency;
+	transparency_ = MIN(maxTransparency_, transparency);
 }
 
 void Water::draw()
@@ -101,6 +101,7 @@ void Water::generate(ProgressCounter *counter)
 
 	// Set quick water attributes
 	height_ = water->height.asFloat();
+	maxTransparency_ = water->waterTransparency;
 	waterOn_ = true;
 
 	// General all other water items

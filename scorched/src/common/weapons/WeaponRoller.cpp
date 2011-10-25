@@ -39,7 +39,7 @@ WeaponRoller::WeaponRoller() :
 	maintainVelocity_(false), roll_(true),
 	dampenVelocityExp_(1), stepSize_(true, 100),
 	collisionAction_(0), stickyShields_(false),
-	noCameraTrack_(false)
+	noCameraTrack_(false), scale_(1)
 {
 
 }
@@ -56,6 +56,8 @@ bool WeaponRoller::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 
 	// Get number of rollers
 	if (!accessoryNode->getNamedChild("numberrollers", numberRollers_)) return false;
+
+	accessoryNode->getNamedChild("scale", scale_, false);
 
 	// Get life time
 	if (!accessoryNode->getNamedChild("time", timeExp_)) return false;
@@ -117,6 +119,11 @@ fixed WeaponRoller::getGravityFactor(ScorchedContext &context)
 fixed WeaponRoller::getTime(ScorchedContext &context)
 {
 	return timeExp_.getValue(context);
+}
+
+fixed WeaponRoller::getScale(ScorchedContext &context) 
+{ 
+	return scale_.getValue(context); 
 }
 
 fixed WeaponRoller::getShieldHurtFactor(ScorchedContext &context)

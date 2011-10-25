@@ -88,7 +88,7 @@ void ServerStatePlaying::enterState()
 	// Setup the correct turn algorithm for the game
 	switch (ScorchedServer::instance()->getOptionsGame().getTurnType().getValue())
 	{
-	case OptionsGame::TurnSequentialLooserFirst:
+	case OptionsGame::TurnSequentialLoserFirst:
 	case OptionsGame::TurnSequentialRandom:
 		turns_ = &turnsSequential_;
 		break;

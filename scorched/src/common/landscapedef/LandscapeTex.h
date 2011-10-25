@@ -89,6 +89,7 @@ public:
 
 	// Both
 	fixed height;
+	float waterTransparency;
 	
 	virtual bool readXML(XMLNode *node);
 	virtual TexType getType() { return eWater; }

@@ -33,6 +33,7 @@ WeaponProjectile::WeaponProjectile() :
 	createSmoke_(true),	createFlame_(true), noCameraTrack_(false),
 	spinSpeed_(1), spinAxis_(0.0f, 0.0f, 1.0f), apexNoDud_(false), timedDud_(false),
 	timedCollision_(0), heightCollision_(0),
+	wobbleSpin_(0), wobbleAmount_(2),
 	shieldHurtFactor_(1), windFactor_(1), gravityFactor_(1),
 	flameLife_(1.0f), smokeLife_(4.0f),
 	flameStartColor1_(0.9f, 0.0f, 0.0f), flameStartColor2_(1.0f, 0.2f, 0.2f),
@@ -64,6 +65,10 @@ bool WeaponProjectile::parseXML(AccessoryCreateContext &context, XMLNode *access
 	accessoryNode->getNamedChild("under", underNode, false);
 	if (underNode) under_ = true;
 
+	// Get the wobble
+	accessoryNode->getNamedChild("wobblespin", wobbleSpin_, false);
+	accessoryNode->getNamedChild("wobbleamount", wobbleAmount_, false);
+	
 	// Get the spin
 	accessoryNode->getNamedChild("spinspeed", spinSpeed_, false);
 	accessoryNode->getNamedChild("spinaxis", spinAxis_, false);

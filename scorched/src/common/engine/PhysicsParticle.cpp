@@ -57,6 +57,11 @@ void PhysicsParticle::applyForce(FixedVector &force)
 	physicsObject_.applyForce(force);
 }
 
+void PhysicsParticle::applyOffset(FixedVector &offset)
+{
+	physicsObject_.applyOffset(offset);
+}
+
 void PhysicsParticle::collision(PhysicsParticleObject &position, 
 	ScorchedCollisionId collisionId)
 {

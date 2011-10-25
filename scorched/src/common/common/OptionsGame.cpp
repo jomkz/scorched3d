@@ -34,7 +34,7 @@ static OptionEntryEnum::EnumEntry turnEnum[] =
 {
 	{ "TurnSimultaneous", OptionsGame::TurnSimultaneous },
 	{ "TurnSimultaneousNoWait", OptionsGame::TurnSimultaneousNoWait },
-	{ "TurnSequentialLooserFirst", OptionsGame::TurnSequentialLooserFirst },
+	{ "TurnSequentialLoserFirst", OptionsGame::TurnSequentialLoserFirst },
 	{ "TurnSequentialRandom", OptionsGame::TurnSequentialRandom },
 	{ "TurnFree", OptionsGame::TurnFree },
 	{ "TurnFreeTimed", OptionsGame::TurnFreeTimed },
@@ -258,7 +258,7 @@ OptionsGame::OptionsGame() :
 	teamBallance_(options_, "TeamBallance",
 		"The mode of team auto-ballancing performed for team games", 0, int(TeamBallanceNone), teamBallanceEnum),
 	turnType_(options_, "TurnType", 
-		"The player turn mode", 0, 	int(TurnSequentialLooserFirst), turnEnum), // Data, default, min, max
+		"The player turn mode", 0, 	int(TurnSequentialLoserFirst), turnEnum), // Data, default, min, max
 	moneyBuyOnRound_(options_, "MoneyBuyOnRound", 
 		"The first round players are allowed to buy on", 0 ,2, 1, 50, 1),
 	moneyWonForRound_(options_, "MoneyWonForRound", 

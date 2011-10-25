@@ -38,6 +38,7 @@ protected:
 	NumberParser maxAimedDistance_;
 	NumberParser percentageMissChance_;
 	NumberParser maxInacuracy_;
+	bool noSelfHoming_;
 	std::string groupName_;
 	bool randomWhenNoTargets_;
 

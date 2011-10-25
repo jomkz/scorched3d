@@ -51,10 +51,10 @@ void ServerTurnsSequential::internalEnterState()
 	OptionsGame::TurnType turnType = (OptionsGame::TurnType)
 		ScorchedServer::instance()->getOptionsGame().getTurnType().getValue();
 
-	// On the very first round make the order random (if looser first chosen)
-	// as there is no looser yet!
+	// On the very first round make the order random (if loser first chosen)
+	// as there is no loser yet!
 	if ((ScorchedServer::instance()->getOptionsTransient().getCurrentRoundNo() == 1) &&
-		turnType == OptionsGame::TurnSequentialLooserFirst)
+		turnType == OptionsGame::TurnSequentialLoserFirst)
 	{
 		turnType = OptionsGame::TurnSequentialRandom;
 	}

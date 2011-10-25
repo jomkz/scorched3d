@@ -56,6 +56,11 @@ void PhysicsParticleObject::applyForce(FixedVector &force)
 	velocity_ += force;
 }
 
+void PhysicsParticleObject::applyOffset(FixedVector &offset)
+{
+	position_ += offset;
+}
+
 void PhysicsParticleObject::setPhysics(
 	PhysicsParticleInfo info,
 	ScorchedContext &context, 

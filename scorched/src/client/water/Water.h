@@ -58,7 +58,7 @@ public:
 
 protected:
 	bool waterOn_;
-	float height_, transparency_;
+	float height_, transparency_, maxTransparency_;
 	Water2 *wMap_;
 	Water2Renderer *wTex_;
 	WaterMapPoints *wMapPoints_;

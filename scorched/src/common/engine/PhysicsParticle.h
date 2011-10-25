@@ -52,6 +52,7 @@ public:
 	void setCurrentPosition(FixedVector &position);
 
 	void applyForce(FixedVector &force);
+	void applyOffset(FixedVector &offset);
 
 	// Inherited from action
 	virtual void simulate(fixed timepassed, bool &remove);

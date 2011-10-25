@@ -68,9 +68,11 @@ protected:
 	// 	values set ONCE per projectile
 	fixed thrustTime_;
 	fixed thrustAmount_;
+	fixed wobbleSpin_, wobbleAmount_;
 	fixed drag_, stepSize_;
 	fixed timedCollision_, heightCollision_;
 	fixed spinSpeed_;
+	fixed physicsSpin_;
 	Vector spinAxis_;
 #ifndef S3D_SERVER
 	std::list<RenderTracer::TracerLinePoint> positions_;

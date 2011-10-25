@@ -83,6 +83,7 @@ public:
 		bool stickyShields = false);
 
 	void applyForce(FixedVector &force);
+	void applyOffset(FixedVector &offset);
 	void simulate(fixed frameTime);
 
 	FixedVector &getPosition() { return position_; }

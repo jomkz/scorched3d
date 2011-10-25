@@ -55,6 +55,7 @@ void ShotBounce::init()
 	stepSize_ = weapon_->getStepSize() * 
 		fixed(true, context_->getOptionsGame().getWeaponSpeed());
 	weaponTime_ = weapon_->getTime(*context_);
+	scale_ = weapon_->getScale(*context_).asFloat();
 	if (!context_->getServerMode()) 
 	{
 		if (!weapon_->getNoCameraTrack())
@@ -150,7 +151,7 @@ void ShotBounce::draw()
 				model_->getRenderer()->getModel()->getMin()[2].asFloat() * 0.08f);
 
 			glMultMatrixf(rotMatrix);
-			glScalef(0.08f, 0.08f, 0.08f);
+			glScalef(0.08f * scale_, 0.08f * scale_, 0.08f * scale_);
 			model_->draw();
 		glPopMatrix();
 	}

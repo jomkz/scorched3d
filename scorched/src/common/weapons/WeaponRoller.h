@@ -45,6 +45,7 @@ public:
 	fixed getWindFactor(ScorchedContext &context);
 	fixed getGravityFactor(ScorchedContext &context);
 	fixed getStepSize() { return stepSize_; }
+	fixed getScale(ScorchedContext &context);
 	ObjectGroupEntryDefinition &getGroups() { return groups_; }
 
 	// Inherited from Weapon
@@ -63,6 +64,7 @@ protected:
 	NumberParser gravityFactorExp_;
 	NumberParser windFactorExp_;
 	NumberParser timeExp_;
+	NumberParser scale_;
 	fixed stepSize_;
 	bool roll_;
 	bool stickyShields_;

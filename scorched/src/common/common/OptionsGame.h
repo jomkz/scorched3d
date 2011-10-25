@@ -38,7 +38,7 @@ public:
 	enum TurnType
 	{
 		TurnSimultaneous = 0,
-		TurnSequentialLooserFirst = 1,
+		TurnSequentialLoserFirst = 1,
 		TurnSequentialRandom = 2,
 		TurnSimultaneousNoWait = 3,
 		TurnFree = 4,

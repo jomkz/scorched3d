@@ -82,6 +82,9 @@ bool LandscapeTexBorderWater::readXML(XMLNode *node)
 	if (!node->getNamedChild("wavebottomb", wavebottomb)) return false;
 	if (!node->getNamedChild("wavelight", wavelight)) return false;
 
+	waterTransparency = 1.0f;
+	node->getNamedChild("watertransparency", waterTransparency, false);	
+
 	return node->failChildren();
 }
 

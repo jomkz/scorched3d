@@ -119,7 +119,6 @@ bool TankLib::getSniperShotTowardsPosition(ScorchedContext &context,
 	FixedVector direction = shootAt - position;
 	fixed angleXYRads = atan2x(direction[1], direction[0]);
 	angleXYDegs = (angleXYRads / fixed::XPI) * fixed(180) - fixed(90);
-	if (angleXYDegs > 88) angleXYDegs = 0; // Fix distance rounding error
 
 	fixed distance2D = (direction[0] * direction[0] + 
 		direction[1] * direction[1]).sqrt();

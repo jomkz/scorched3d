@@ -58,9 +58,6 @@
     <Filter Include="GLEXT">
       <UniqueIdentifier>{d3b1e27f-7322-4abd-ac19-5afd45c3442a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GLSL">
-      <UniqueIdentifier>{4e73ad08-70a8-4481-a659-2f6a0259c5c2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GLW">
       <UniqueIdentifier>{6abb7403-6aef-4789-a37b-07b7f458c20e}</UniqueIdentifier>
     </Filter>
@@ -117,6 +114,9 @@
     </Filter>
     <Filter Include="tanket">
       <UniqueIdentifier>{715d80a7-433e-42eb-96c8-8599130fc45a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GLSL">
+      <UniqueIdentifier>{4e73ad08-70a8-4481-a659-2f6a0259c5c2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

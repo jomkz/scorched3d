@@ -68,6 +68,8 @@ public:
 	fixed getThrustAmount(ScorchedContext &context) { return thrustAmount_.getValue(context); }
 	fixed getThrustTime(ScorchedContext &context) { return thrustTime_.getValue(context); }
 	fixed getDrag(ScorchedContext &context) { return drag_.getValue(context); }
+	fixed getWobbleSpin(ScorchedContext &context) { return wobbleSpin_.getValue(context); }
+	fixed getWobbleAmount(ScorchedContext &context) { return wobbleAmount_.getValue(context); }
 	Vector &getFlameStartColor1() { return flameStartColor1_; }
 	Vector &getFlameStartColor2() { return flameStartColor2_; }
 	Vector &getFlameEndColor1() { return flameEndColor1_; }
@@ -106,6 +108,8 @@ protected:
 	NumberParser gravityFactor_;
 	NumberParser drag_;
 	NumberParser heightCollision_;
+	NumberParser wobbleSpin_;
+	NumberParser wobbleAmount_;
 	fixed stepSize_;
 	Vector flameStartColor1_, flameStartColor2_;
 	Vector flameEndColor1_, flameEndColor2_;

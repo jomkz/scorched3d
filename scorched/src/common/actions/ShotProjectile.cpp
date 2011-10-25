@@ -32,6 +32,7 @@
 #include <tanket/Tanket.h>
 #include <common/Defines.h>
 #include <common/OptionsScorched.h>
+#include <common/Logger.h>
 #include <engine/ScorchedContext.h>
 #include <engine/ActionController.h>
 #include <weapons/AccessoryStore.h>
@@ -48,7 +49,7 @@ ShotProjectile::ShotProjectile(FixedVector &startPosition, FixedVector &velocity
 	snapTime_(fixed(true, 2000)), up_(false),
 	totalTime_(0), simulateTime_(0), 
 	spinSpeed_(spinSpeed), spinAxis_(spinAxis),
-	groups_(0)
+	groups_(0), physicsSpin_(0)
 {
 }
 
@@ -90,6 +91,8 @@ void ShotProjectile::init()
 	thrustAmount_ = getWeapon()->getThrustAmount(*context_);
 	timedCollision_ = getWeapon()->getTimedCollision(*context_);
 	heightCollision_ = getWeapon()->getHeightCollision(*context_);
+	wobbleSpin_ = getWeapon()->getWobbleSpin(*context_);
+	wobbleAmount_= getWeapon()->getWobbleAmount(*context_);
 	drag_ = getWeapon()->getDrag(*context_);
 	stepSize_ = getWeapon()->getStepSize() * 
 		fixed(true, context_->getOptionsGame().getWeaponSpeed());
@@ -211,6 +214,16 @@ void ShotProjectile::simulate(fixed frameTime, bool &remove)
 				remove = true;
 			}
 		}
+	}
+
+	if (wobbleSpin_ > 0)
+	{
+		FixedVector up(0, 0, 1);
+		FixedVector velocityPerp = (velocity_.Normalize() * up).Normalize();
+		FixedVector forceDir = ((velocityPerp * physicsSpin_.cos()) * wobbleAmount_ * velocity_.Magnitude() / 50);
+		applyOffset(forceDir);
+
+		physicsSpin_ += wobbleSpin_;
 	}
 
 	// Thrust

@@ -38,7 +38,8 @@
 WeaponAimed::WeaponAimed() :
 	warHeads_(0),
 	aimedWeapon_(0),
-	randomWhenNoTargets_(true)
+	randomWhenNoTargets_(true),
+	noSelfHoming_(false)
 {
 
 }
@@ -81,6 +82,9 @@ bool WeaponAimed::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNo
 	// If set only consider items of this group
 	accessoryNode->getNamedChild("groupname", groupName_, false);
 
+	// Do we ignore shots to ourself
+	accessoryNode->getNamedChild("noselfhoming", noSelfHoming_, false);
+
 	// If there are no items in group/range just randomly shoot
 	accessoryNode->getNamedChild("randomwhennotargets", randomWhenNoTargets_, false);
 
@@ -101,6 +105,7 @@ void WeaponAimed::fireAimedWeapon(ScorchedContext &context,
 			itor != allTankets.end();
 			++itor)
 		{
+			if (noSelfHoming_ && weaponContext.getPlayerId() == itor->second->getPlayerId()) continue;
 			positions.push_back(&itor->second->getLife().getTargetPosition());
 		}
 	}

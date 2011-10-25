@@ -58,6 +58,7 @@ protected:
 	fixed totalTime_, simulateTime_, stepSize_;
 	fixed weaponTime_;
 	ModelRendererSimulator *model_;
+	float scale_;
 
 	void doCollision();
 
