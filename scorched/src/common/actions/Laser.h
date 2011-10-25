@@ -43,6 +43,7 @@ protected:
 	LaserParams *params_;
 	fixed totalTime_;
 	fixed drawLength_;
+	fixed directionMagnitude_;
 	WeaponFireContext weaponContext_;
 	Weapon *weapon_;
 	FixedVector position_, direction_;
@@ -51,7 +52,6 @@ protected:
 	fixed laserTime_, hurtRadius_;
 	float angXY_, angYZ_;
 	fixed length_, damage_;
-
 };
 
 #endif // __INCLUDE_Laserh_INCLUDE__

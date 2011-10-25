@@ -33,6 +33,7 @@
 #include <common/Logger.h>
 #ifndef S3D_SERVER
 	#include <GLEXT/GLState.h>
+	#include <sprites/ExplosionTextures.h>
 #endif
 #include <math.h>
 #include <set>
@@ -59,7 +60,8 @@ Laser::~Laser()
 
 void Laser::init()
 {
-	fixed per = direction_.Magnitude() / 50;
+	directionMagnitude_ = direction_.Magnitude();
+	fixed per = directionMagnitude_ / 50;
 	length_ = params_->getMinimumDistance() + 
 		(params_->getMaximumDistance() - params_->getMinimumDistance()) * per;
 	damage_ = params_->getMinimumHurt() + 
@@ -69,6 +71,10 @@ void Laser::init()
 
 	angXY_ = 180.0f - atan2f(dir[0].asFloat(), dir[1].asFloat()) / 3.14f * 180.0f;
 	angYZ_ = acosf(dir[2].asFloat()) / 3.14f * 180.0f;
+
+	// preset some values from the numberparser expressions
+	laserTime_ = params_->getTotalTime();
+	hurtRadius_ = params_->getHurtRadius();
 }
 
 std::string Laser::getActionDetails()
@@ -85,11 +91,7 @@ void Laser::simulate(fixed frameTime, bool &remove)
 	{
 		firstTime_ = false;
 		
-		// preset some values from the numberparser expressions
-		laserTime_ = params_->getTotalTime();
-		hurtRadius_ = params_->getHurtRadius();
-
-		if (damage_ > 0 && direction_.Magnitude() > 0)
+		if (damage_ > 0 && directionMagnitude_ > 0)
 		{
 			std::set<unsigned int> damagedTargets_;
 
@@ -188,9 +190,16 @@ void Laser::draw()
 		float radius1 = 0.05f / 2.0f * hurtRadius_.asFloat();
 		float radius2 = 0.2f / 2.0f * hurtRadius_.asFloat();
 
-		GLState glState(GLState::TEXTURE_OFF | GLState::BLEND_ON);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		glColor4f(1.0f, 1.0f, 1.0f,	timePer);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+		GLTextureSet *set = ExplosionTextures::instance()->getTextureSetByName(params_->getRingTexture());
+
+		float floatLength = drawLength_.asFloat();
+
+		GLState glState(GLState::TEXTURE_OFF | GLState::BLEND_ON | GLState::ALPHATEST_OFF);
+		glDepthMask(GL_FALSE);
+		
 		glPushMatrix();
 			glTranslatef(
 				position_[0].asFloat(), 
@@ -200,16 +209,47 @@ void Laser::draw()
 			glRotatef(angYZ_, 1.0f, 0.0f, 0.0f);
 
 			glColor4f(1.0f, 1.0f, 1.0f,	timePer);
-			gluCylinder(obj, radius1, radius1, drawLength_.asFloat(), 3, 1);
+			gluCylinder(obj, radius1, radius1, floatLength, 3, 1);
 
 			glColor4f(
 				params_->getColor()[0],
 				params_->getColor()[1],
 				params_->getColor()[2],
 				timePer);
-			gluCylinder(obj, radius2, radius2, drawLength_.asFloat(), 5, 1);
+			gluCylinder(obj, radius2, radius2, floatLength, 5, 1);
+
+			if (params_->getRingRadius() > 0)
+			{
+				GLState glState(GLState::TEXTURE_ON);
+				set->getTexture(0)->draw();
+				glBegin(GL_QUADS);
+				float moveAmount = 1.0f;
+				float size = params_->getRingRadius();
+				for (float f=0.0f; f<floatLength; f+=moveAmount)
+				{
+					glTexCoord2f(0.0f, 0.0f);
+					glVertex3f(-size, -size, f);
+					glTexCoord2f(0.0f, 1.0f);
+					glVertex3f(-size, size, f);
+					glTexCoord2f(1.0f, 1.0f);
+					glVertex3f(size, size, f);
+					glTexCoord2f(1.0f, 0.0f);
+					glVertex3f(size, -size, f);
+
+					glTexCoord2f(1.0f, 1.0f);
+					glVertex3f(size, size, f);
+					glTexCoord2f(0.0f, 1.0f);
+					glVertex3f(-size, size, f);
+					glTexCoord2f(0.0f, 0.0f);
+					glVertex3f(-size, -size, f);
+					glTexCoord2f(1.0f, 0.0f);
+					glVertex3f(size, -size, f);
+				}
+				glEnd();
+			}
 		glPopMatrix();
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glDepthMask(GL_TRUE);
 	}
 #endif // #ifndef S3D_SERVER
 }

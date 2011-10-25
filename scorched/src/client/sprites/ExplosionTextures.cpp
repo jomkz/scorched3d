@@ -217,7 +217,7 @@ bool ExplosionTextures::createTextures(ProgressCounter *counter)
 	return true;
 }
 
-GLTextureSet *ExplosionTextures::getTextureSetByName(const char *name)
+GLTextureSet *ExplosionTextures::getTextureSetByName(const std::string &name)
 {
 	DIALOG_ASSERT(!textureSets.empty());
 
@@ -231,9 +231,9 @@ GLTextureSet *ExplosionTextures::getTextureSetByName(const char *name)
 	return result;
 }
 
-Image &ExplosionTextures::getScorchBitmap(const char *name)
+Image &ExplosionTextures::getScorchBitmap(const std::string &name)
 {
-	if (name[0])
+	if (!name.empty())
 	{
 		std::map<std::string, Image*>::iterator findItor =
 			scorchedBitmaps.find(name);

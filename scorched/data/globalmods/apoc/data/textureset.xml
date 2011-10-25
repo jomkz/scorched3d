@@ -1,4 +1,7 @@
 <texturesets>
+  <textureset name="ring">
+    <texture>textures/ring.bmp</texture>
+  </textureset>
 	<textureset name="particle">
 		<texture>textures/particle.bmp</texture>
 	</textureset>

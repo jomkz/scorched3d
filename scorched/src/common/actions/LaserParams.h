@@ -52,13 +52,18 @@ public:
 	bool getHurtFirer() { return hurtFirer_; }
 	Vector &getColor() { return color_; }
 
+	float getRingRadius() { return ringRadius_; }
+	std::string &getRingTexture() { return ringTexture_; }
+
 protected:
+	std::string ringTexture_;
 	fixed minimumHurt_, maximumHurt_;
 	fixed minimumDistance_, maximumDistance_;
 	fixed hurtRadius_;
 	fixed totalTime_;
 	bool hurtFirer_;
 	Vector color_;
+	float ringRadius_;
 };
 
 #endif // __INCLUDE_LaserParamsh_INCLUDE__

@@ -41,9 +41,9 @@ public:
 	GLTexture snowTexture;
 	GLTexture arrowTexture;
 
-	Image &getScorchBitmap(const char *name);
+	Image &getScorchBitmap(const std::string &name);
 
-	GLTextureSet *getTextureSetByName(const char *name);
+	GLTextureSet *getTextureSetByName(const std::string &name);
 	std::map<std::string, GLTextureSet*> textureSets;
 	std::map<std::string, Image*> scorchedBitmaps;
 
