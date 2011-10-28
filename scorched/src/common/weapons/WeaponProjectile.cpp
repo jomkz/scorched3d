@@ -177,7 +177,8 @@ bool WeaponProjectile::parseXML(AccessoryCreateContext &context, XMLNode *access
 	accessoryNode->getNamedChild("gravityfactor", gravityFactor_, false);
 
 	// Groups
-	if (!groups_.readXML(accessoryNode)) return false;
+	if (!localGroups_.readXML(accessoryNode, "localgroupname")) return false;
+	if (!globalGroups_.readXML(accessoryNode, "globalgroupname")) return false;
 
 	// Get the next weapon
 	XMLNode *subNode = 0;

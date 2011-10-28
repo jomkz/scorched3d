@@ -58,7 +58,7 @@ static bool deformCreated = false;
 Napalm::Napalm(int x, int y, Weapon *weapon, 
 	NapalmParams *params,
 	WeaponFireContext &weaponContext) :
-	Action(weaponContext.getReferenced()),
+	Action(weaponContext.getInternalContext().getReferenced()),
 	startX_(x), startY_(y), napalmTime_(0), 
 	weapon_(weapon), params_(params),
 	weaponContext_(weaponContext), 
@@ -622,7 +622,7 @@ void Napalm::addBurnAction(Target *target)
 
 		FixedVector position = target->getLife().getTargetPosition();
 		FixedVector velocity;
-		WeaponFireContext weaponContext(weaponContext_.getPlayerId(), weaponContext_.getReferenced(), false);
+		WeaponFireContext weaponContext(weaponContext_.getPlayerId(), weaponContext_.getInternalContext().getReferenced(), false);
 		weapon->fireWeapon(*context_, weaponContext, 
 			position, velocity);
 		StatsLogger::instance()->weaponFired(weapon, true);

@@ -42,7 +42,7 @@
 Teleport::Teleport(FixedVector position,
 		WeaponFireContext &weaponContext,
 		WeaponTeleport *weapon) :
-	Action(weaponContext.getReferenced()),
+	Action(weaponContext.getInternalContext().getReferenced()),
 	position_(position), 
 	weaponContext_(weaponContext),
 	weapon_(weapon),

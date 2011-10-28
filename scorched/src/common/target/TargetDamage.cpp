@@ -412,7 +412,7 @@ void TargetDamage::addDamageAction(ScorchedContext &context, WeaponFireContext &
 
 		FixedVector position = target->getLife().getTargetPosition();
 		FixedVector velocity;
-		WeaponFireContext weaponContext(weaponContext.getPlayerId(), weaponContext.getReferenced(), false);
+		WeaponFireContext weaponContext(weaponContext.getPlayerId(), weaponContext.getInternalContext().getReferenced(), false);
 		weapon->fireWeapon(context, weaponContext, position, velocity);
 		StatsLogger::instance()->weaponFired(weapon, true);
 	}
@@ -464,7 +464,7 @@ void TargetDamage::logDeath(ScorchedContext &context, WeaponFireContext &weaponC
 
 			StatsLogger::instance()->
 				tankSelfKilled(firedTank, weapon);
-			StatsLogger::instance()->weaponKilled(weapon, !weaponContext.getUpdateStats());
+			StatsLogger::instance()->weaponKilled(weapon, !weaponContext.getInternalContext().getUpdateStats());
 			{
 				ChannelText text("combat",
 					LANG_RESOURCE_3(
@@ -487,7 +487,7 @@ void TargetDamage::logDeath(ScorchedContext &context, WeaponFireContext &weaponC
 
 			StatsLogger::instance()->
 				tankTeamKilled(firedTank, killedTank, weapon);
-			StatsLogger::instance()->weaponKilled(weapon, !weaponContext.getUpdateStats());
+			StatsLogger::instance()->weaponKilled(weapon, !weaponContext.getInternalContext().getUpdateStats());
 			{
 				ChannelText text("combat", 
 					LANG_RESOURCE_4(
@@ -542,7 +542,7 @@ void TargetDamage::logDeath(ScorchedContext &context, WeaponFireContext &weaponC
 
 			StatsLogger::instance()->
 				tankKilled(firedTank, killedTank, weapon);
-			StatsLogger::instance()->weaponKilled(weapon, !weaponContext.getUpdateStats());
+			StatsLogger::instance()->weaponKilled(weapon, !weaponContext.getInternalContext().getUpdateStats());
 			{
 				if (weaponContext.getInternalContext().getKillCount() > 1)
 				{

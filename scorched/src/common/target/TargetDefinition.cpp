@@ -105,7 +105,7 @@ bool TargetDefinition::readXML(XMLNode *node)
 	node->getNamedChild("usenormalmoves", useNormalMoves_, false);
 
 	if (!shadow_.readXML(node)) return false;
-	if (!groups_.readXML(node)) return false;
+	if (!groups_.readXML(node, "groupname")) return false;
 
 	return node->failChildren();
 }

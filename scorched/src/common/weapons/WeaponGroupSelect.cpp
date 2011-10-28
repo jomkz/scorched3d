@@ -68,7 +68,8 @@ void WeaponGroupSelect::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
 	// Find the group to select the objects in
-	ObjectGroup *objectGroup = context.getObjectGroups().getGroup(groupName_.c_str());
+	ObjectGroup *objectGroup = weaponContext.getInternalContext().getLocalGroups().getGroup(groupName_.c_str());
+	if (!objectGroup) objectGroup = context.getObjectGroups().getGroup(groupName_.c_str());
 	if (!objectGroup) return;
 
 	// Select the object

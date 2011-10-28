@@ -42,7 +42,7 @@ ShotProjectile::ShotProjectile(FixedVector &startPosition, FixedVector &velocity
 							   WeaponProjectile *weapon, WeaponFireContext &weaponContext,
 							   unsigned int flareType,
 							   fixed spinSpeed, const Vector &spinAxis) :
-	PhysicsParticle(weaponContext.getReferenced()),
+	PhysicsParticle(weaponContext.getInternalContext().getReferenced()),
 	startPosition_(startPosition), velocity_(velocity), 
 	weapon_(weapon), weaponContext_(weaponContext), 
 	flareType_(flareType), vPoint_(0),
@@ -97,10 +97,11 @@ void ShotProjectile::init()
 	stepSize_ = getWeapon()->getStepSize() * 
 		fixed(true, context_->getOptionsGame().getWeaponSpeed());
 
-	if (weapon_->getGroups().hasGroups())
+	if (weapon_->getLocalGroups().hasGroups() || weapon_->getGlobalGroups().hasGroups())
 	{
 		groups_ = new ParticleGroup(*context_, this, &weaponContext_);
-		weapon_->getGroups().addToGroups(context_->getObjectGroups(), groups_);
+		weapon_->getLocalGroups().addToGroups(weaponContext_.getInternalContext().getLocalGroups(), groups_);
+		weapon_->getGlobalGroups().addToGroups(context_->getObjectGroups(), groups_);
 	}
 }
 

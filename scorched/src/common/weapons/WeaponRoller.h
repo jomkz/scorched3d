@@ -46,7 +46,8 @@ public:
 	fixed getGravityFactor(ScorchedContext &context);
 	fixed getStepSize() { return stepSize_; }
 	fixed getScale(ScorchedContext &context);
-	ObjectGroupEntryDefinition &getGroups() { return groups_; }
+	ObjectGroupEntryDefinition &getLocalGroups() { return localGroups_; }
+	ObjectGroupEntryDefinition &getGlobalGroups() { return globalGroups_; }
 
 	// Inherited from Weapon
 	virtual void fireWeapon(ScorchedContext &context,
@@ -58,7 +59,7 @@ protected:
 	NumberParser numberRollers_;
 	Weapon *collisionAction_;
 	ModelID rollerModelId_;
-	ObjectGroupEntryDefinition groups_;
+	ObjectGroupEntryDefinition localGroups_, globalGroups_;
 	NumberParser dampenVelocityExp_;
 	NumberParser shieldHurtFactorExp_;
 	NumberParser gravityFactorExp_;

@@ -21,13 +21,15 @@
 #include <weapons/Weapon.h>
 #include <weapons/AccessoryStore.h>
 
-WeaponFireContextInternal::WeaponFireContextInternal() :
-	killCount_(0), referenceCount_(0)
+WeaponFireContextInternal::WeaponFireContextInternal(bool referenced, bool updateStats) :
+	referenced_(referenced), updateStats_(updateStats),
+	killCount_(0), referenceCount_(0), labelCount_(0)
 {
 }
 
 WeaponFireContextInternal::~WeaponFireContextInternal()
 {
+	delete labelCount_;
 }
 
 void WeaponFireContextInternal::incrementReference()
@@ -41,20 +43,26 @@ void WeaponFireContextInternal::decrementReference()
 	if (referenceCount_ == 0) delete this;
 }
 
-WeaponFireContext::WeaponFireContext(unsigned int playerId, bool referenced, bool updateStats) :
-	playerId_(playerId),
-	referenced_(referenced),
-	updateStats_(updateStats)
+int WeaponFireContextInternal::getIncLabelCount(unsigned int label)
 {
-	internalContext_ = new WeaponFireContextInternal();
+	if (!labelCount_) labelCount_ = new std::map<unsigned int, int>();
+
+	std::map<unsigned int, int>::iterator findItor =
+		labelCount_->find(label);
+	if (findItor == labelCount_->end()) (*labelCount_)[label] = 0;
+
+	return ++(*labelCount_)[label];
+}
+
+WeaponFireContext::WeaponFireContext(unsigned int playerId, bool referenced, bool updateStats) :
+	playerId_(playerId)
+{
+	internalContext_ = new WeaponFireContextInternal(referenced, updateStats);
 	internalContext_->incrementReference();
 }
 
 WeaponFireContext::WeaponFireContext(WeaponFireContext &other) :
 	playerId_(other.playerId_),
-	updateStats_(other.updateStats_),
-	referenced_(other.referenced_),
-	labelCount_(other.labelCount_),
 	internalContext_(other.internalContext_)
 {
 	internalContext_->incrementReference();
@@ -63,15 +71,6 @@ WeaponFireContext::WeaponFireContext(WeaponFireContext &other) :
 WeaponFireContext::~WeaponFireContext()
 {
 	internalContext_->decrementReference();
-}
-
-int WeaponFireContext::getIncLabelCount(unsigned int label)
-{
-	std::map<unsigned int, int>::iterator findItor =
-		labelCount_.find(label);
-	if (findItor == labelCount_.end()) labelCount_[label] = 0;
-
-	return ++labelCount_[label];
 }
 
 Weapon::Weapon() : 

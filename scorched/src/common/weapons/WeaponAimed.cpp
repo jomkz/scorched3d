@@ -111,7 +111,8 @@ void WeaponAimed::fireAimedWeapon(ScorchedContext &context,
 	}
 	else
 	{
-		ObjectGroup *objectGroup = context.getObjectGroups().getGroup(groupName_.c_str());
+		ObjectGroup *objectGroup = weaponContext.getInternalContext().getLocalGroups().getGroup(groupName_.c_str());
+		if (!objectGroup) objectGroup = context.getObjectGroups().getGroup(groupName_.c_str());
 		if (objectGroup) 
 		{
 			ObjectGroup::ObjectGroupEntryHolderIterator iterator(objectGroup);

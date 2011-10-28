@@ -56,7 +56,7 @@ static const int NoMovementTransitions = 4;
 TanketMovement::TanketMovement(WeaponFireContext &weaponContext,
 	WeaponMoveTank *weapon,
 	int positionX, int positionY) : 
-	Action(weaponContext.getReferenced()),
+	Action(weaponContext.getInternalContext().getReferenced()),
 	weaponContext_(weaponContext), 
 	positionX_(positionX), positionY_(positionY),
 	timePassed_(0), weapon_(weapon),

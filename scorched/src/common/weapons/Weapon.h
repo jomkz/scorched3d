@@ -25,23 +25,37 @@
 #include <net/NetBuffer.h>
 #include <common/FixedVector.h>
 #include <engine/ScorchedContext.h>
-#include <common/NumberParser.h>
+#include <engine/ObjectGroups.h>
 
 class WeaponFireContextInternal
 {
 public:
-	WeaponFireContextInternal();
+	WeaponFireContextInternal(bool referenced, bool updateStats);
 	virtual ~WeaponFireContextInternal();
 
 	int getKillCount() { return killCount_; }
 	void setKillCount(int killCount) { killCount_ = killCount; }
+
+	bool getUpdateStats() { return updateStats_; }
+	bool getReferenced() { return referenced_; }
+
+	ObjectGroups &getLocalGroups() { return localGroups_; }
+
+	int getIncLabelCount(unsigned int label);
 
 	void incrementReference();
 	void decrementReference();
 
 protected:
 	int killCount_;
+	bool referenced_, updateStats_;
 	unsigned int referenceCount_;
+	ObjectGroups localGroups_;
+	std::map<unsigned int, int> *labelCount_;
+
+private:
+	WeaponFireContextInternal(WeaponFireContextInternal &other);
+	WeaponFireContextInternal &operator=(WeaponFireContextInternal &other);
 };
 
 class WeaponFireContext
@@ -53,19 +67,16 @@ public:
 
 	unsigned int getPlayerId() { return playerId_; }
 	void setPlayerId(unsigned int playerId) { playerId_ = playerId; }
-	bool getUpdateStats() { return updateStats_; }
-	bool getReferenced() { return referenced_; }
-	int getIncLabelCount(unsigned int label);
+	
 	WeaponFireContextInternal &getInternalContext() { return *internalContext_; }
 
 protected:
 	unsigned int playerId_;
-	bool referenced_, updateStats_;
-	std::map<unsigned int, int> labelCount_;
 	WeaponFireContextInternal *internalContext_;
 
 private:
 	WeaponFireContext &operator=(WeaponFireContext &other);
+	
 };
 
 class Action;

@@ -51,7 +51,7 @@ bool WeaponGotoLabel::parseXML(AccessoryCreateContext &context, XMLNode *accesso
 void WeaponGotoLabel::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	int doneCount = weaponContext.getIncLabelCount(getAccessoryPartId());
+	int doneCount = weaponContext.getInternalContext().getIncLabelCount(getAccessoryPartId());
 	if (doneCount <= count_)
 	{
 		weaponLabel_->fireWeapon(context, weaponContext, position, velocity);

@@ -85,7 +85,8 @@ bool WeaponRoller::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 	accessoryNode->getNamedChild("nocameratrack", noCameraTrack_, false);
 
 	// Groups
-	if (!groups_.readXML(accessoryNode)) return false;
+	if (!localGroups_.readXML(accessoryNode, "localgroupname")) return false;
+	if (!globalGroups_.readXML(accessoryNode, "globalgroupname")) return false;
 
 	XMLNode *subNode = 0;
 	if (!accessoryNode->getNamedChild("collisionaction", subNode)) return false;

@@ -82,7 +82,8 @@ public:
 	bool getNoCameraTrack() { return noCameraTrack_; }
 	fixed getScale(ScorchedContext &context) { return scale_.getValue(context); }
 	ModelID &getModelID() { return modelId_; }
-	ObjectGroupEntryDefinition &getGroups() { return groups_; }
+	ObjectGroupEntryDefinition &getLocalGroups() { return localGroups_; }
+	ObjectGroupEntryDefinition &getGlobalGroups() { return globalGroups_; }
 
 protected:
 	bool under_;
@@ -99,7 +100,7 @@ protected:
 	float flameLife_, smokeLife_;
 	float flameStartSize_, flameEndSize_;
 	float smokeStartSize_, smokeEndSize_;
-	ObjectGroupEntryDefinition groups_;
+	ObjectGroupEntryDefinition localGroups_, globalGroups_;
 	NumberParser thrustTime_, thrustAmount_;
 	NumberParser timedCollision_;
 	NumberParser shieldHurtFactor_;

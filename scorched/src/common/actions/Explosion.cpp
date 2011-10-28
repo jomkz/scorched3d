@@ -50,7 +50,7 @@ Explosion::Explosion(FixedVector &position,
 	FixedVector &velocity,
 	ExplosionParams *params,
 	Weapon *weapon, WeaponFireContext &weaponContext) :
-	Action(weaponContext.getReferenced()),
+	Action(weaponContext.getInternalContext().getReferenced()),
 	params_(params),
 	firstTime_(true), totalTime_(0),
 	weapon_(weapon), weaponContext_(weaponContext), 

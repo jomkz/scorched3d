@@ -38,7 +38,7 @@
 Lightning::Lightning(WeaponLightning *weapon,
 		WeaponFireContext &weaponContext,
 		FixedVector &position, FixedVector &velocity) :
-	Action(weaponContext.getReferenced()),
+	Action(weaponContext.getInternalContext().getReferenced()),
 	totalTime_(0),
 	weapon_(weapon),
 	weaponContext_(weaponContext),

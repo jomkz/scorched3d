@@ -39,7 +39,7 @@
 TargetFalling::TargetFalling(Weapon *weapon, unsigned int fallingPlayerId,
 				   WeaponFireContext &weaponContext,
 				   Parachute *parachute) :
-	PhysicsParticle(weaponContext.getReferenced()),
+	PhysicsParticle(weaponContext.getInternalContext().getReferenced()),
 	weapon_(weapon),
 	fallingPlayerId_(fallingPlayerId),
 	weaponContext_(weaponContext), parachute_(parachute)

@@ -30,10 +30,10 @@ ObjectGroupEntryDefinition::~ObjectGroupEntryDefinition()
 {
 }
 
-bool ObjectGroupEntryDefinition::readXML(XMLNode *node)
+bool ObjectGroupEntryDefinition::readXML(XMLNode *node, const std::string &nodeName)
 {
 	std::string groupname;
-	while (node->getNamedChild("groupname", groupname, false))
+	while (node->getNamedChild(nodeName.c_str(), groupname, false))
 	{
 		groupnames_.push_back(groupname);
 	}

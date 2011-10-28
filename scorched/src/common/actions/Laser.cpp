@@ -41,7 +41,7 @@
 Laser::Laser(Weapon *weapon, LaserParams *params,
 		FixedVector &position, FixedVector &direction,
 		WeaponFireContext &weaponContext) :
-	Action(weaponContext.getReferenced()),
+	Action(weaponContext.getInternalContext().getReferenced()),
 	params_(params),
 	totalTime_(0),
 	drawLength_(0),

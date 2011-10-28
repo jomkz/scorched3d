@@ -38,7 +38,7 @@
 ShotBounce::ShotBounce(WeaponRoller *weapon, 
 		FixedVector &startPosition, FixedVector &velocity,
 		WeaponFireContext &weaponContext) : 
-	PhysicsParticle(weaponContext.getReferenced()),
+	PhysicsParticle(weaponContext.getInternalContext().getReferenced()),
 	startPosition_(startPosition),
 	velocity_(velocity), weapon_(weapon), weaponContext_(weaponContext),
 	totalTime_(0), simulateTime_(0),
@@ -71,10 +71,11 @@ void ShotBounce::init()
 		}
 	}
 
-	if (weapon_->getGroups().hasGroups())
+	if (weapon_->getLocalGroups().hasGroups() || weapon_->getGlobalGroups().hasGroups())
 	{
 		groups_ = new ParticleGroup(*context_, this, &weaponContext_);
-		weapon_->getGroups().addToGroups(context_->getObjectGroups(), groups_);
+		weapon_->getLocalGroups().addToGroups(weaponContext_.getInternalContext().getLocalGroups(), groups_);
+		weapon_->getGlobalGroups().addToGroups(context_->getObjectGroups(), groups_);
 	}
 }
 

@@ -33,7 +33,7 @@ public:
 	ObjectGroupEntryDefinition();
 	virtual ~ObjectGroupEntryDefinition();
 
-	bool readXML(XMLNode *node);
+	bool readXML(XMLNode *node, const std::string &nodeName);
 
 	bool hasGroups() { return !groupnames_.empty(); }
 	void addToGroups(ObjectGroups &objectGroups,
