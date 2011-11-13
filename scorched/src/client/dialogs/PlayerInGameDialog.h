@@ -29,6 +29,7 @@ public:
 	static PlayerInGameDialog *instance();
 
 	void displayDialog();
+	void initializeFirst();
 
 	// Window
 	virtual void display();
@@ -40,6 +41,7 @@ protected:
 	Tank *getCurrentPlayer();
 	virtual void okButton(bool spectate);
 	virtual void cancelButton();
+	void initializeFromTank(Tank *tank);
 };
 
 #endif

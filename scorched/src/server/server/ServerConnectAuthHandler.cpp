@@ -135,8 +135,6 @@ void ServerConnectAuthHandler::processMessageInternal(
 		ScorchedServer::instance()->getServerDestinations().getDestination(destinationId);
 	if (!serverDestination) 
 	{
-		ServerCommon::serverLog(S3D::formatStringBuffer(
-			"Failed to find destination %i for connecting player", destinationId));
 		return;
 	}
 

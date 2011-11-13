@@ -233,7 +233,7 @@ void PlayerDialog::buttonDown(unsigned int id)
 	}
 }
 
-void PlayerDialog::initializeFromTank(Tank *tank)
+void PlayerDialog::initialize()
 {
 	// Init viewer
 	if (!viewer_)
@@ -244,13 +244,10 @@ void PlayerDialog::initializeFromTank(Tank *tank)
 		viewer_->setName("Tank");
 		infoPanel->addWidget(viewer_);
 		addWidget(infoPanel);
+		viewer_->init();
 	}
-	viewer_->init();
 
 	// Add teams/colors
-	viewer_->setTeam(0);
-	teamDropDown_->clear();
-	colorDropDown_->clear();
 	if (ScorchedClient::instance()->getOptionsGame().getTeams() == 1)
 	{
 		teamDropDown_->addText(LANG_RESOURCE("NONE", "None"), "None");
@@ -258,27 +255,11 @@ void PlayerDialog::initializeFromTank(Tank *tank)
 		teamLabel_->setVisible(false);
 		colorDropDown_->setVisible(true);
 		colorLabel_->setVisible(true);
-
-		// Add colors
-		std::map<unsigned int, Tank *> tanks =
-			ScorchedClient::instance()->getTargetContainer().getTanks();
-		std::vector<Vector *> availableColors =
-			TankColorGenerator::instance()->getAvailableColors(tanks, tank);
-		std::vector<Vector *>::iterator itor;
-		for (itor = availableColors.begin();
-			itor != availableColors.end();
-			++itor)
-		{
-			Vector &color = *(*itor);
-			colorDropDown_->addColor(color);
-		}
-
-		// Set color from tank
-		colorDropDown_->setCurrentColor(tank->getColor());		
 	}
 	else
 	{
 		// Create team entries
+		teamDropDown_->clear();
 		for (int i=1; i<=ScorchedClient::instance()->getOptionsGame().getTeams(); i++)
 		{
 			const char *name = TankColorGenerator::getTeamName(i);
@@ -290,17 +271,6 @@ void PlayerDialog::initializeFromTank(Tank *tank)
 		teamLabel_->setVisible(true);
 		colorDropDown_->setVisible(false);
 		colorLabel_->setVisible(false);
-
-		// Set team from tank
-		int team = tank->getTeam();
-		if (team == 0)
-		{
-			team = 
-				ScorchedClient::instance()->getOptionsTransient().getLeastUsedTeam(
-					ScorchedClient::instance()->getTargetContainer());
-		}
-		teamDropDown_->setCurrentPosition(team - 1);
-		viewer_->setTeam(team);
 	}
 
 	// Add player types
@@ -329,23 +299,8 @@ void PlayerDialog::initializeFromTank(Tank *tank)
 		}
 	}
 
-	// Set the current tankai
-	aiTypeDropDown_->setCurrentPosition(0);
-	if (tank->getTankAI())
-	{
-		aiTypeDropDown_->setCurrentText(
-			LANG_RESOURCE(tank->getTankAI()->getName(), tank->getTankAI()->getName()));
-	}
-
-	// Set the anme
-	playerName_->setText(tank->getTargetName());
-
 	// Set the current avatar
 	imageList_->setCurrentShortPath("player.png");
-	if (tank->getAvatar().getName()[0])
-	{
-		imageList_->setCurrentShortPath(tank->getAvatar().getName());
-	}
 
 	// Tank types
 	tankTypeDropDown_->clear();
@@ -362,11 +317,4 @@ void PlayerDialog::initializeFromTank(Tank *tank)
 				type->getTooltip(), 
 				false, 0, 0, type->getName()));
 	}
-	tankTypeDropDown_->setCurrentText(
-		LANG_RESOURCE(tank->getTanketType()->getName(), tank->getTanketType()->getName()));
-	viewer_->setTankType(tank->getTanketType()->getName());
-
-	// Tank model
-	const char *tankModelName = tank->getModelContainer().getTankModel()->getName();
-	viewer_->selectModelByName(tankModelName);
 }

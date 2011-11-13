@@ -35,7 +35,7 @@ class PlayerDialog : public GLWWindow,
 	public GLWButtonI, public GLWDropDownI
 {
 public:
-	void initializeFromTank(Tank *tank);
+	void initialize();
 
 	// Inherited from GLWWindow
 	virtual void keyDown(char *buffer, unsigned int keyState, 

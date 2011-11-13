@@ -41,6 +41,8 @@
 #include <server/ServerChannelManager.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerSimulator.h>
+#include <server/ServerDestinations.h>
+#include <server/ServerMessageHandler.h>
 #ifndef S3D_SERVER
 #include <client/ClientChannelManager.h>
 #include <tankgraph/TargetRendererImplTank.h>
@@ -188,6 +190,7 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 		}
 	}
 #else
+	if (context.getServerMode())
 	{
 		// Add to dialog
 		Logger::log(S3D::formatStringBuffer("Player connected dest=\"%i\" id=\"%i\" name=\"%s\" unique=[%s] SUI=[%s]",
@@ -223,6 +226,18 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 		}
 	}
 #endif
+
+	if (context.getServerMode() && destinationId_)
+	{	
+		// Check the server destination actualy exists for this tank
+		// It may not if the destination was closed during tank creation
+		ServerDestination *serverDestination = 
+			ScorchedServer::instance()->getServerDestinations().getDestination(destinationId_);
+		if (!serverDestination)
+		{
+			ScorchedServer::instance()->getServerMessageHandler().destroyPlayer(playerId_, "Connection closed");
+		}
+	}
 
 	if (context.getOptionsGame().getActionSyncCheck()) 
 	{

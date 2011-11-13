@@ -230,7 +230,7 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 					context,
 					ChannelText("info",
 						"PLAYER_TEAM_CHANGE",
-						"Player \"[p:{1}]\" changed to {1} team",
+						"Player \"[p:{0}]\" changed to the {1} team",
 						tank->getTargetName(),
 						TankColorGenerator::getTeamName(tank->getTeam())));
 

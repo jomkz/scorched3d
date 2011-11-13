@@ -29,16 +29,18 @@ public:
 	static PlayerInitialDialog *instance();
 
 	void displayDialog();
+	void draw();
 
 protected:
 	PlayerInitialDialog();
 	virtual ~PlayerInitialDialog();
 
 	unsigned int currentPlayerId_;
+	unsigned int allocatedTeam_;
 
-	void initializeDefaults(Tank *tank);
 	void nextPlayer();
 	void getNextPlayer();
+	void initializeFromTank(Tank *tank);
 	virtual void okButton(bool spectate);
 	virtual void cancelButton();
 

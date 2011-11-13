@@ -20,16 +20,20 @@
 
 #include <dialogs/PlayerInGameDialog.h>
 #include <target/TargetContainer.h>
+#include <tanket/TanketType.h>
 #include <tank/Tank.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankModelContainer.h>
 #include <tank/TankModelStore.h>
+#include <tank/TankColorGenerator.h>
+#include <tankai/TankAI.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientParams.h>
 #include <graph/OptionsDisplay.h>
 #include <common/OptionsGame.h>
 #include <common/OptionsTransient.h>
 #include <common/Logger.h>
+#include <lang/LangResource.h>
 #include <coms/ComsTankChangeMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <client/ClientChannelManager.h>
@@ -79,6 +83,11 @@ void PlayerInGameDialog::display()
 	}
 
 	initializeFromTank(tank);
+
+	if (ClientParams::instance()->getConnectAcceptDefaults())
+	{
+		okButton(false);
+	}
 }
 
 void PlayerInGameDialog::okButton(bool spectate)
@@ -88,6 +97,22 @@ void PlayerInGameDialog::okButton(bool spectate)
 	{
 		GLWWindowManager::instance()->hideWindow(getId());
 		return;
+	}
+
+	// If we are connected online save this players name
+	if (ClientParams::instance()->getConnectedToServer())
+	{
+		OptionsDisplay::instance()->getOnlineUserNameEntry().setValue(
+			playerName_->getText().c_str());
+		OptionsDisplay::instance()->getOnlineTankModelEntry().setValue(
+			viewer_->getModelName());
+		OptionsDisplay::instance()->getOnlineUserIconEntry().setValue(
+			imageList_->getCurrentShortPath());
+		if (ScorchedClient::instance()->getOptionsGame().getTeams() == 1)
+		{
+			OptionsDisplay::instance()->getOnlineColorEntry().setValue(
+				colorDropDown_->getCurrentColor());
+		}
 	}
 
 	int currentTeam = ((ScorchedClient::instance()->getOptionsGame().getTeams() > 1)?
@@ -174,4 +199,83 @@ Tank *PlayerInGameDialog::getCurrentPlayer()
 		}
 	}
 	return 0;
+}
+
+void PlayerInGameDialog::initializeFirst()
+{
+	if (ClientParams::instance()->getConnectedToServer())
+	{
+		// If we are connected online then use the online name
+		playerName_->setText(LANG_STRING(OptionsDisplay::instance()->getOnlineUserName()));
+		viewer_->selectModelByName(OptionsDisplay::instance()->getOnlineTankModel());
+		colorDropDown_->setCurrentColor(OptionsDisplay::instance()->getOnlineColor());
+		imageList_->setCurrentShortPath(OptionsDisplay::instance()->getOnlineUserIcon());
+	}
+}
+
+void PlayerInGameDialog::initializeFromTank(Tank *tank)
+{
+	initialize();
+
+	// Add teams/colors
+	if (ScorchedClient::instance()->getOptionsGame().getTeams() == 1)
+	{
+		// Add colors
+		colorDropDown_->clear();
+		std::map<unsigned int, Tank *> tanks =
+			ScorchedClient::instance()->getTargetContainer().getTanks();
+		std::vector<Vector *> availableColors =
+			TankColorGenerator::instance()->getAvailableColors(tanks, tank);
+		std::vector<Vector *>::iterator itor;
+		for (itor = availableColors.begin();
+			itor != availableColors.end();
+			++itor)
+		{
+			Vector &color = *(*itor);
+			colorDropDown_->addColor(color);
+		}
+
+		// Set color from tank
+		colorDropDown_->setCurrentColor(tank->getColor());		
+		viewer_->setTeam(0);
+	}
+	else
+	{
+		// Set team from tank
+		int team = tank->getTeam();
+		if (team == 0)
+		{
+			team = 
+				ScorchedClient::instance()->getOptionsTransient().getLeastUsedTeam(
+					ScorchedClient::instance()->getTargetContainer());
+		}
+		teamDropDown_->setCurrentPosition(team - 1);
+		viewer_->setTeam(team);
+	}
+
+	// Set the current tankai
+	aiTypeDropDown_->setCurrentPosition(0);
+	if (tank->getTankAI())
+	{
+		aiTypeDropDown_->setCurrentText(
+			LANG_RESOURCE(tank->getTankAI()->getName(), tank->getTankAI()->getName()));
+	}
+
+	// Set the anme
+	playerName_->setText(tank->getTargetName());
+
+	// Set the current avatar
+	if (tank->getAvatar().getName()[0])
+	{
+		imageList_->setCurrentShortPath(tank->getAvatar().getName());
+	}
+
+	// Tank types
+	tankTypeDropDown_->setCurrentText(
+		LANG_RESOURCE(tank->getTanketType()->getName(), tank->getTanketType()->getName()));
+	viewer_->setTankType(tank->getTanketType()->getName());
+
+	// Tank model
+	const char *tankModelName = tank->getModelContainer().getTankModel()->getName();
+	viewer_->selectModelByName(tankModelName);
 }

@@ -22,6 +22,7 @@
 #include <server/ScorchedServer.h>
 #include <server/ServerMessageHandler.h>
 #include <server/ServerChannelManager.h>
+#include <server/ServerDestinations.h>
 #include <target/TargetContainer.h>
 #include <target/TargetLife.h>
 #include <tank/Tank.h>
@@ -116,10 +117,15 @@ void ServerCommon::kickPlayer(unsigned int playerId,
 		Logger::log(S3D::formatStringBuffer("Kicking client \"%s\" \"%i\"", 
 			tank->getCStrName().c_str(), tank->getPlayerId()));
 
-		if (tank->getDestinationId() == 0)
+		// Check to see if the destination exists
+		// It may not if the tank is an AI, or if something has gone wrong when creating the tank
+		// at least this way we can always kick it
+		ServerDestination *destination =
+			ScorchedServer::instance()->getServerDestinations().getDestination(tank->getDestinationId());
+		if (!destination)
 		{
 			ScorchedServer::instance()->getServerMessageHandler().
-				destroyPlayer(tank->getPlayerId(), "Kicked");
+				destroyPlayer(tank->getPlayerId(), message.c_str());
 		}
 		else
 		{

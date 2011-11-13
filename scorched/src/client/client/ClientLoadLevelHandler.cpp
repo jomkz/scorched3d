@@ -268,6 +268,7 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 		if (ClientParams::instance()->getConnectedToServer())
 		{
 			PlayerInGameDialog::instance()->displayDialog();
+			PlayerInGameDialog::instance()->initializeFirst();
 		}
 		else
 		{

@@ -24,6 +24,7 @@
 #include <tank/TankAvatar.h>
 #include <tank/TankModelContainer.h>
 #include <tank/TankModelStore.h>
+#include <tank/TankColorGenerator.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientParams.h>
 #include <graph/OptionsDisplay.h>
@@ -43,7 +44,7 @@ PlayerInitialDialog *PlayerInitialDialog::instance()
 
 PlayerInitialDialog::PlayerInitialDialog() :
 	PlayerDialog("Player", eSmallTitle | eHideName, ""),
-	currentPlayerId_(0)
+	currentPlayerId_(0), allocatedTeam_(0)
 {
 }
 
@@ -54,46 +55,19 @@ PlayerInitialDialog::~PlayerInitialDialog()
 void PlayerInitialDialog::displayDialog()
 {
 	// Set cancel/spectate
-	if (ClientParams::instance()->getConnectedToServer())
-	{
-		cancelButton_->setEnabled(false);
-		spectateButton_->setEnabled(true);
-	}
-	else
-	{
-		cancelButton_->setEnabled(false);
-		spectateButton_->setEnabled(false);
-	}
+	cancelButton_->setEnabled(false);
+	spectateButton_->setEnabled(false);
 
 	GLWWindowManager::instance()->showWindow(getId());
 
+	initialize();
+	allocatedTeam_ = 0;
 	currentPlayerId_ = 0;
 	nextPlayer();
-
-	if (ClientParams::instance()->getConnectAcceptDefaults())
-	{
-		okButton(false);
-	}
 }
 
 void PlayerInitialDialog::okButton(bool spectate)
 {
-	// If we are connected online save this players name
-	if (ClientParams::instance()->getConnectedToServer())
-	{
-		OptionsDisplay::instance()->getOnlineUserNameEntry().setValue(
-			playerName_->getText().c_str());
-		OptionsDisplay::instance()->getOnlineTankModelEntry().setValue(
-			viewer_->getModelName());
-		OptionsDisplay::instance()->getOnlineUserIconEntry().setValue(
-			imageList_->getCurrentShortPath());
-		if (ScorchedClient::instance()->getOptionsGame().getTeams() == 1)
-		{
-			OptionsDisplay::instance()->getOnlineColorEntry().setValue(
-				colorDropDown_->getCurrentColor());
-		}
-	}
-
 	int currentTeam = ((ScorchedClient::instance()->getOptionsGame().getTeams() > 1)?
 		teamDropDown_->getCurrentPosition() + 1:0);
 
@@ -159,7 +133,17 @@ void PlayerInitialDialog::cancelButton()
 
 }
 
-void PlayerInitialDialog::initializeDefaults(Tank *tank)
+void PlayerInitialDialog::nextPlayer()
+{
+	allocatedTeam_ = 0;
+	getNextPlayer();
+	if (currentPlayerId_ == 0) 
+	{
+		GLWWindowManager::instance()->hideWindow(getId());
+	}
+}
+
+void PlayerInitialDialog::draw()
 {
 	if (ScorchedClient::instance()->getOptionsGame().getTeams() != 1)
 	{
@@ -167,27 +151,14 @@ void PlayerInitialDialog::initializeDefaults(Tank *tank)
 		unsigned int newTeam = 
 			ScorchedClient::instance()->getOptionsTransient().getLeastUsedTeam(
 			ScorchedClient::instance()->getTargetContainer());
-		tank->setTeam(newTeam);
+		if (newTeam != allocatedTeam_)
+		{
+			teamDropDown_->setCurrentPosition(newTeam - 1);
+			allocatedTeam_ = newTeam;
+			viewer_->setTeam(newTeam);
+		}
 	}
-
-	if (ClientParams::instance()->getConnectedToServer())
-	{
-		// If we are connected online then use the online name
-		tank->setName(LANG_STRING(OptionsDisplay::instance()->getOnlineUserName()));
-		tank->getAvatar().loadFromFile(S3D::getDataFile(S3D::formatStringBuffer("data/avatars/%s", 
-			OptionsDisplay::instance()->getOnlineUserIcon())));
-		tank->getModelContainer().setTankModelName(OptionsDisplay::instance()->getOnlineTankModel());
-		tank->setColor(OptionsDisplay::instance()->getOnlineColor());
-	}
-}
-
-void PlayerInitialDialog::nextPlayer()
-{
-	getNextPlayer();
-	if (currentPlayerId_ == 0) 
-	{
-		GLWWindowManager::instance()->hideWindow(getId());
-	}
+	GLWWindow::draw();
 }
 
 void PlayerInitialDialog::getNextPlayer()
@@ -210,7 +181,6 @@ void PlayerInitialDialog::getNextPlayer()
 			if (current == 0)
 			{
 				currentPlayerId_ = tank->getPlayerId();
-				initializeDefaults(tank);
 				initializeFromTank(tank);
 				break;
 			}
@@ -219,5 +189,31 @@ void PlayerInitialDialog::getNextPlayer()
 				current = 0;
 			}
 		}
+	}
+}
+
+void PlayerInitialDialog::initializeFromTank(Tank *tank)
+{
+	playerName_->setText(tank->getTargetName());
+
+	if (ScorchedClient::instance()->getOptionsGame().getTeams() == 1)
+	{
+		// Add colors
+		std::map<unsigned int, Tank *> tanks =
+			ScorchedClient::instance()->getTargetContainer().getTanks();
+		std::vector<Vector *> availableColors =
+			TankColorGenerator::instance()->getAvailableColors(tanks, tank);
+		std::vector<Vector *>::iterator itor;
+		for (itor = availableColors.begin();
+			itor != availableColors.end();
+			++itor)
+		{
+			Vector &color = *(*itor);
+			colorDropDown_->addColor(color);
+		}
+
+		// Set color from tank
+		colorDropDown_->setCurrentColor(tank->getColor());		
+		viewer_->setTeam(0);
 	}
 }
