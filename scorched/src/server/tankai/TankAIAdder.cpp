@@ -24,14 +24,15 @@
 #include <target/TargetContainer.h>
 #include <server/ServerConnectAuthHandler.h>
 
-unsigned int TankAIAdder::getNextTankId(const char *uniqueId, ScorchedContext &context)
+unsigned int TankAIAdder::getNextTankId(const char *uniqueId, ScorchedContext &context, std::set<unsigned int> &takenPlayerIds)
 {
 	// Try to use the persistent stats id
 	if (uniqueId[0])
 	{
 		unsigned int id = StatsLogger::instance()->getStatsId(uniqueId);
 		if (id != 0 &&
-			!context.getTargetContainer().getTargetById(id))
+			!context.getTargetContainer().getTargetById(id) &&
+			takenPlayerIds.find(id) == takenPlayerIds.end())
 		{
 			DIALOG_ASSERT(id >= TargetID::MIN_TANK_ID && id <= TargetID::MAX_TANK_ID);
 			return id;
@@ -45,7 +46,8 @@ unsigned int TankAIAdder::getNextTankId(const char *uniqueId, ScorchedContext &c
 		++id;
 		if (id >= TargetID::MAX_TANK_ID) id = TargetID::START_TRANSIENT_TANK_ID;
 	}
-	while (context.getTargetContainer().getTargetById(id));
+	while (context.getTargetContainer().getTargetById(id) ||
+		takenPlayerIds.find(id) != takenPlayerIds.end());
 
 	DIALOG_ASSERT(id >= TargetID::START_TRANSIENT_TANK_ID && id <= TargetID::MAX_TANK_ID);
 	return id;

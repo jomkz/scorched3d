@@ -115,9 +115,8 @@ void ServerConnectAuthHandler::processMessages()
 		// Check that there are no outstanding tank addition requests
 		if (TankAddSimAction::TankAddSimActionCount > 0) break;
 
-		std::string aiName = aiAdditions_.back();
-		processAIInternal(aiName);
-		aiAdditions_.pop_back();
+		processAIInternal(aiAdditions_);
+		aiAdditions_.clear();
 	}
 }
 
@@ -315,9 +314,11 @@ void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,
 	else
 	{
 		playerName = LANG_STRING(ScorchedServer::instance()->getTankAIStrings().getPlayerName());
+		std::set<unsigned int> takenPlayerIds;
 		tankId = TankAIAdder::getNextTankId(
 			sentUniqueId,
-			ScorchedServer::instance()->getContext());
+			ScorchedServer::instance()->getContext(),
+			takenPlayerIds);
 	}
 
 	// Make sure host desc does not contain \"
@@ -349,36 +350,45 @@ void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
 }
 
-void ServerConnectAuthHandler::processAIInternal(const std::string &aiName)
+void ServerConnectAuthHandler::processAIInternal(std::list<std::string> &aiAdditions)
 {
-	TankAI *ai = ScorchedServer::instance()->getTankAIs().getAIByName(aiName.c_str());
-	if (!ai)
+	std::set<std::string> takenUniqueIds;
+	std::set<unsigned int> takenPlayerIds;
+	std::list<std::string>::iterator itor;
+	for (itor = aiAdditions.begin(); itor != aiAdditions.end(); ++itor)
 	{
-		Logger::log(S3D::formatStringBuffer("Failed to find a tank ai called \"%s\"",
-			aiName.c_str()));
-		return;
+		std::string &aiName = *itor;
+		TankAI *ai = ScorchedServer::instance()->getTankAIs().getAIByName(aiName.c_str());
+		if (!ai)
+		{
+			Logger::log(S3D::formatStringBuffer("Failed to find a tank ai called \"%s\"",
+				aiName.c_str()));
+			return;
+		}
+
+		// Tank Name
+		LangString newname = 
+			LANG_STRING(ScorchedServer::instance()->getOptionsGame().getBotNamePrefix());
+		newname += LANG_STRING(ScorchedServer::instance()->getTankAIStrings().getAIPlayerName(
+			ScorchedServer::instance()->getContext()));
+
+		// Unique Id
+		char uniqueId[256];
+		for (int i=1;;i++)
+		{
+			snprintf(uniqueId, 256, "%s - computer - %i", aiName.c_str(), i);
+			if (takenUniqueIds.find(uniqueId) == takenUniqueIds.end() && !uniqueIdTaken(uniqueId)) break;
+		}
+		takenUniqueIds.insert(uniqueId);
+		unsigned int playerId = TankAIAdder::getNextTankId(
+			uniqueId, ScorchedServer::instance()->getContext(), takenPlayerIds);
+		takenPlayerIds.insert(playerId);
+
+		// Add this new tank
+		TankAddSimAction *simAction = new TankAddSimAction(playerId, 0,
+			uniqueId, "", "AI", 0, newname, aiName);
+		ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
 	}
-
-	// Tank Name
-	LangString newname = 
-		LANG_STRING(ScorchedServer::instance()->getOptionsGame().getBotNamePrefix());
-	newname += LANG_STRING(ScorchedServer::instance()->getTankAIStrings().getAIPlayerName(
-		ScorchedServer::instance()->getContext()));
-
-	// Unique Id
-	char uniqueId[256];
-	for (int i=1;;i++)
-	{
-		snprintf(uniqueId, 256, "%s - computer - %i", aiName.c_str(), i);
-		if (!uniqueIdTaken(uniqueId)) break;
-	}
-	unsigned int playerId = TankAIAdder::getNextTankId(
-		uniqueId, ScorchedServer::instance()->getContext());
-
-	// Add this new tank
-	TankAddSimAction *simAction = new TankAddSimAction(playerId, 0,
-		uniqueId, "", "AI", 0, newname, aiName);
-	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(simAction);
 }
 
 bool ServerConnectAuthHandler::uniqueIdTaken(const std::string &uniqueId)

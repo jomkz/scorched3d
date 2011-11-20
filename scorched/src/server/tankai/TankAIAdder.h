@@ -22,13 +22,14 @@
 #define __INCLUDE_TankAIAdderh_INCLUDE__
 
 #include <server/ScorchedServer.h>
+#include <set>
 
 namespace TankAIAdder
 {
 	void addTankAIs(ScorchedServer &context);
 	void addTankAI(ScorchedServer &context, const char *aiName);
 
-	unsigned int getNextTankId(const char *unqiueId, ScorchedContext &context);
+	unsigned int getNextTankId(const char *unqiueId, ScorchedContext &context, std::set<unsigned int> &takenPlayerIds);
 	unsigned int getNextTargetId(ScorchedContext &context);
 };
 

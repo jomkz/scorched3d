@@ -53,7 +53,7 @@ protected:
 	std::list<std::string> aiAdditions_;
 
 	void processAIInternal(
-		const std::string &aiName);
+		std::list<std::string> &aiAdditions);
 	void processMessageInternal(
 		unsigned int destinationId,
 		unsigned int ipAddress,
