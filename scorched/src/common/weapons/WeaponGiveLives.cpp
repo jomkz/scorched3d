@@ -65,7 +65,8 @@ void WeaponGiveLives::weaponCallback(
 	Tank *tank = context.getTargetContainer().getTankById(weaponContext.getPlayerId());
 	if (!tank) return;
 
-	if (tank->getState().getMaxLives() > 0)
+	if (tank->getAlive() &&
+		tank->getState().getMaxLives() > 0)
 	{
 		tank->getState().setLives(
 			MAX(tank->getState().getLives() + lives_, 1));

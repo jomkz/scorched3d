@@ -114,8 +114,13 @@ void AdminSimAction::slap(ScorchedContext &context)
 		getTargetContainer().getTankById(playerId_);
 	if (!targetTank) return;
 
-	targetTank->getLife().setLife(
-		targetTank->getLife().getLife() -  amount_);
+	if (targetTank->getState().getState() == TankState::sNormal ||
+		targetTank->getState().getState() == TankState::sDead ||
+		targetTank->getState().getState() == TankState::sBuying)
+	{
+		targetTank->getLife().setLife(
+			targetTank->getLife().getLife() -  amount_);
+	}
 }
 
 void AdminSimAction::kill(ScorchedContext &context)
@@ -124,6 +129,11 @@ void AdminSimAction::kill(ScorchedContext &context)
 		getTargetContainer().getTankById(playerId_);
 	if (!targetTank) return;
 
-	targetTank->getState().setState(TankState::sDead);
-	targetTank->getState().setLives(0);
+	if (targetTank->getState().getState() == TankState::sNormal ||
+		targetTank->getState().getState() == TankState::sDead ||
+		targetTank->getState().getState() == TankState::sBuying)
+	{
+		targetTank->getState().setState(TankState::sDead);
+		targetTank->getState().setLives(0);
+	}
 }
