@@ -148,6 +148,12 @@ ClientAdmin::ClientAdmin()
 		ConsoleRuleParam("player", ConsoleRuleTypeNumber),
 		ConsoleRuleParam("amount", ConsoleRuleTypeNumber)),
 		(unsigned int) ComsAdminMessage::AdminSlap);
+	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
+		this, &ClientAdmin::adminTwoParam, "admin", 
+		ConsoleUtil::formParams(ConsoleRuleParam("changename"), 
+		ConsoleRuleParam("player", ConsoleRuleTypeNumber),
+		ConsoleRuleParam("name", ConsoleRuleTypeString)),
+		(unsigned int) ComsAdminMessage::AdminChangeName);
 
 	// Two String Params
 	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(

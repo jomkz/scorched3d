@@ -37,6 +37,11 @@ AdminSimAction::AdminSimAction(AdminType type, unsigned int playerId, fixed amou
 {
 }
 
+AdminSimAction::AdminSimAction(unsigned int playerId, const LangString &newName) :
+	type_(eChangeName), playerId_(playerId), amount_(0), newName_(newName)
+{
+}
+
 AdminSimAction::~AdminSimAction()
 {
 }
@@ -57,6 +62,9 @@ bool AdminSimAction::invokeAction(ScorchedContext &context)
 	case eKill:
 		kill(context);
 		break;
+	case eChangeName:
+		changeName(context);
+		break;
 	}
 
 	return true;
@@ -67,6 +75,7 @@ bool AdminSimAction::writeMessage(NetBuffer &buffer)
 	buffer.addToBuffer((int) type_);
 	buffer.addToBuffer(playerId_);
 	buffer.addToBuffer(amount_);
+	buffer.addToBuffer(newName_);
 	return true;
 }
 
@@ -77,6 +86,7 @@ bool AdminSimAction::readMessage(NetBufferReader &reader)
 	type_ = (AdminType) type;
 	if (!reader.getFromBuffer(playerId_)) return false;
 	if (!reader.getFromBuffer(amount_)) return false;
+	if (!reader.getFromBuffer(newName_)) return false;
 	return true;
 }
 
@@ -106,6 +116,15 @@ void AdminSimAction::newGame(ScorchedContext &context)
 {
 	killAll(context);
 	context.getOptionsTransient().startNewGame();	
+}
+
+void AdminSimAction::changeName(ScorchedContext &context)
+{
+	Tank *targetTank = context.
+		getTargetContainer().getTankById(playerId_);
+	if (!targetTank) return;
+
+	targetTank->setName(newName_);
 }
 
 void AdminSimAction::slap(ScorchedContext &context)

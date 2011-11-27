@@ -31,11 +31,13 @@ public:
 		eKillAll,
 		eNewGame,
 		eSlap,
-		eKill
+		eKill,
+		eChangeName
 	};
 
 	AdminSimAction();
 	AdminSimAction(AdminType type, unsigned int playerId, fixed amount);
+	AdminSimAction(unsigned int playerId, const LangString &newName);
 	virtual ~AdminSimAction();
 
 	virtual bool invokeAction(ScorchedContext &context);
@@ -48,11 +50,13 @@ protected:
 	AdminType type_;
 	unsigned int playerId_;
 	fixed amount_;
+	LangString newName_;
 
 	void killAll(ScorchedContext &context);
 	void newGame(ScorchedContext &context);
 	void slap(ScorchedContext &context);
 	void kill(ScorchedContext &context);
+	void changeName(ScorchedContext &context);
 };
 
 #endif // !defined(AFX_AdminSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

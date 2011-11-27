@@ -36,6 +36,7 @@ public:
 		AdminLogout,
 		AdminShow,
 		AdminShowBanned,
+		AdminChangeName,
 		AdminSyncCheck,
 		AdminKillAll,
 		AdminKick,

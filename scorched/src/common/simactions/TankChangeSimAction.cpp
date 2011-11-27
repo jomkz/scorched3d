@@ -192,6 +192,7 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 			// Set state
 			tank->getState().setState(TankState::sSpectator);
 			tank->getState().setNotSpectator(false);
+			tank->getState().setLives(0);
 		}
 	}
 	else 
@@ -208,6 +209,7 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 			// Set state
 			tank->getState().setState(TankState::sDead);
 			tank->getState().setNotSpectator(true);
+			tank->getState().setLives(0);
 
 			// Tell the logger about a new tank
 			StatsLogger::instance()->tankJoined(tank);
@@ -237,6 +239,7 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 				if (tank->getState().getState() == TankState::sNormal)
 				{
 					tank->getState().setState(TankState::sDead);
+					tank->getState().setLives(0);
 				}
 			}
 		}

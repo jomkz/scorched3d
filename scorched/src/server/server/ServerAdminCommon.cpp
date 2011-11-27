@@ -107,7 +107,7 @@ bool ServerAdminCommon::kickPlayer(ServerAdminSessions::Credential &credential, 
 
 	adminLog(ChannelText("info",
 		"ADMIN_KICK",
-		"\"{0}\" admin kick [p:{1}]",
+		"admin \"{0}\" kicked [p:{1}]",
 		credential.username,
 		targetTank->getTargetName()));
 	ServerCommon::kickPlayer(
@@ -125,7 +125,7 @@ bool ServerAdminCommon::poorPlayer(ServerAdminSessions::Credential &credential, 
 
 	adminLog(ChannelText("info",
 		"ADMIN_POOR",
-		"\"{0}\" admin poor [p:{1}]",
+		"admin \"{0}\" removed all of [p:{1}]'s money",
 		credential.username,
 		targetTank->getTargetName()));
 	targetTank->getScore().setMoney(0);
@@ -143,7 +143,7 @@ bool ServerAdminCommon::banPlayer(ServerAdminSessions::Credential &credential, u
 
 	adminLog(ChannelText("info",
 		"ADMIN_BAN",
-		"\"{0}\" admin ban [p:{1}]",
+		"admin \"{0}\" banned [p:{1}]",
 		credential.username,
 		targetTank->getTargetName()));
 	internalBanPlayer(
@@ -163,12 +163,31 @@ bool ServerAdminCommon::slapPlayer(ServerAdminSessions::Credential &credential, 
 
 	adminLog(ChannelText("info",
 		"ADMIN_SLAP",
-		"\"{0}\" admin slap [p:{1}] {2}",
+		"admin \"{0}\" slapped [p:{1}] for {2} life",
 		credential.username,
 		targetTank->getTargetName(),
 		slap));
 
 	AdminSimAction *action = new AdminSimAction(AdminSimAction::eSlap, playerId, fixed(int(slap)));
+	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(action);
+
+	return true;
+}
+
+bool ServerAdminCommon::changeNamePlayer(ServerAdminSessions::Credential &credential, unsigned int playerId, const LangString &newName)
+{
+	Tank *targetTank = ScorchedServer::instance()->
+		getTargetContainer().getTankById(playerId);
+	if (!targetTank) return false;
+
+	adminLog(ChannelText("info",
+		"ADMIN_CHANGE_NAME",
+		"admin \"{0}\" changed the name of [p:{1}] to {2}",
+		credential.username,
+		targetTank->getTargetName(),
+		newName));
+
+	AdminSimAction *action = new AdminSimAction(playerId, newName);
 	ScorchedServer::instance()->getServerSimulator().addSimulatorAction(action);
 
 	return true;
@@ -182,7 +201,7 @@ bool ServerAdminCommon::killPlayer(ServerAdminSessions::Credential &credential, 
 
 	adminLog(ChannelText("info",
 		"ADMIN_KILL",
-		"\"{0}\" admin kill [p:{1}]",
+		"admin \"{0}\" killed [p:{1}]",
 		credential.username,
 		targetTank->getTargetName()));
 
@@ -200,7 +219,7 @@ bool ServerAdminCommon::flagPlayer(ServerAdminSessions::Credential &credential, 
 
 	adminLog(ChannelText("info",
 		"ADMIN_FLAG",
-		"\"{0}\" admin flag [p:{1}]",
+		"admin \"{0}\" flagged [p:{1}] for attention",
 		credential.username,
 		targetTank->getTargetName()));
 	internalBanPlayer(
@@ -220,7 +239,7 @@ bool ServerAdminCommon::mutePlayer(ServerAdminSessions::Credential &credential, 
 
 	adminLog(ChannelText("info",
 		mute?"ADMIN_MUTE":"ADMIN_UNMUTE",
-		mute?"\"{0}\" admin mute [p:{1}]":"\"{0}\" admin unmute [p:{1}]",
+		mute?"admin \"{0}\" muted [p:{1}]":"admin \"{0}\" unmuted [p:{1}]",
 		credential.username,
 		targetTank->getTargetName()));
 	targetTank->getState().setMuted(mute); 
@@ -236,7 +255,7 @@ bool ServerAdminCommon::permMutePlayer(ServerAdminSessions::Credential &credenti
 
 	adminLog(ChannelText("info",
 		"ADMIN_PERMMUTE",
-		"\"{0}\" admin permmute [p:{1}]",
+		"admin \"{0}\" permanently muted [p:{1}]",
 		credential.username,
 		targetTank->getTargetName()));
 	internalBanPlayer(
@@ -257,7 +276,7 @@ bool ServerAdminCommon::unpermMutePlayer(ServerAdminSessions::Credential &creden
 
 	adminLog(ChannelText("info",
 		"ADMIN_UNPERMMUTE",
-		"\"{0}\" admin unpermmute [p:{1}]",
+		"admin \"{0}\" removed permanently muting of [p:{1}]",
 		credential.username,
 		targetTank->getTargetName()));
 	internalBanPlayer(
@@ -277,7 +296,7 @@ bool ServerAdminCommon::newGame(ServerAdminSessions::Credential &credential)
 
 	adminLog(ChannelText("info",
 		"ADMIN_NEW_GAME",
-		"\"{0}\" admin new game",
+		"admin \"{0}\" started a new game",
 		credential.username));
 
 	AdminSimAction *action = new AdminSimAction(AdminSimAction::eNewGame, 0, 0);
@@ -293,7 +312,7 @@ bool ServerAdminCommon::killAll(ServerAdminSessions::Credential &credential)
 
 	adminLog(ChannelText("info",
 		"ADMIN_KILL_ALL",
-		"\"{0}\" admin kill all",
+		"admin \"{0}\" killed all players",
 		credential.username));
 
 	AdminSimAction *action = new AdminSimAction(AdminSimAction::eKillAll, 0, 0);
@@ -309,7 +328,7 @@ bool ServerAdminCommon::stopServer(ServerAdminSessions::Credential &credential)
 
 	adminLog(ChannelText("info",
 		"ADMIN_STOP_SERVER",
-		"\"{0}\" admin stop server",
+		"admin \"{0}\" stopping the server",
 		credential.username));
 
 	exit(0);
@@ -324,7 +343,7 @@ bool ServerAdminCommon::stopServerWhenEmpty(ServerAdminSessions::Credential &cre
 
 	adminLog(ChannelText("info",
 		"ADMIN_STOP_SERVER_WHEN_EMPTY",
-		"\"{0}\" admin stop server when empty",
+		"admin \"{0}\" stopping the server when empty",
 		credential.username));
 
 	ServerCommon::getExitEmpty() = true;
@@ -339,7 +358,7 @@ bool ServerAdminCommon::setLogging(ServerAdminSessions::Credential &credential, 
 
 	adminLog(ChannelText("info",
 		"SET_LOGGING",
-		"\"{0}\" set logging",
+		"admin \"{0}\" set logging",
 		credential.username));
 
 	ScorchedServer::instance()->getComsMessageHandler().getMessageLogging() = logging;

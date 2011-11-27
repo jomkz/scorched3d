@@ -43,23 +43,23 @@ AdminDialog *AdminDialog::instance()
 }
 
 AdminDialog::AdminDialog() : 
-	GLWWindow("Admin", 600.0f, 400.0f, eHideName, "")
+	GLWWindow("Admin", 680.0f, 400.0f, eHideName, "")
 {
 	{
 		playerTab_ = (GLWTab *)
-			addWidget(new GLWTab("Player", LANG_RESOURCE("PLAYER", "Player"), 10, 40, 580, 330));
+			addWidget(new GLWTab("Player", LANG_RESOURCE("PLAYER", "Player"), 10, 40, 660, 330));
 
 		// Player Table
 		std::list<GLWIconTable::Column> adminColumns;
 		adminColumns.push_back(GLWIconTable::Column(LANG_RESOURCE("PLAYER", "Player"), 250.0f));
 		adminColumns.push_back(GLWIconTable::Column(LANG_RESOURCE("TEAM", "Team"), 100.0f));
-		adminTable_ = new GLWIconTable(10.0f, 40.0f, 560.0f, 280.0f, &adminColumns, 20.0f);
+		adminTable_ = new GLWIconTable(10.0f, 40.0f, 650.0f, 280.0f, &adminColumns, 20.0f);
 		playerTab_->addWidget(adminTable_);
 		adminTable_->setHandler(this);
 		adminTable_->setItemCount(0);
 
 		// Player Actions
-		GLWPanel *buttonPanel = new GLWPanel(10.0f, 10.0f, 600.0f, 50.0f, false, false);
+		GLWPanel *buttonPanel = new GLWPanel(10.0f, 10.0f, 650.0f, 50.0f, false, false);
 		kickButton_ = new GLWTextButton(LANG_RESOURCE("KICK", "Kick"), 0, 0, 80, this, 
 			GLWButton::ButtonFlagCenterX);
 		buttonPanel->addWidget(kickButton_, 0, SpaceRight, 10.0f);
@@ -78,6 +78,9 @@ AdminDialog::AdminDialog() :
 		unmuteButton_ = new GLWTextButton(LANG_RESOURCE("UNMUTE", "UnMute"), 0, 0, 80, this, 
 			GLWButton::ButtonFlagCenterX);
 		buttonPanel->addWidget(unmuteButton_, 0, SpaceRight, 10.0f);
+		changeNameButton_ = new GLWTextButton(LANG_RESOURCE("CHANGE_NAME", "Name"), 0, 0, 80, this, 
+			GLWButton::ButtonFlagCenterX);
+		buttonPanel->addWidget(changeNameButton_, 0, SpaceRight, 10.0f);
 		buttonPanel->setLayout(GLWPanel::LayoutHorizontal);
 		playerTab_->addWidget(buttonPanel, 0, SpaceAll, 10.0f);
 		buttonPanel->layout();
@@ -239,6 +242,13 @@ void AdminDialog::buttonDown(unsigned int id)
 	{
 		ComsAdminMessage message(sid, ComsAdminMessage::AdminAdd, 
 			aiSelector_->getCurrentEntry()->getDataText());
+		ComsMessageSender::sendToServer(message);
+	}
+	else if (id == changeNameButton_->getId()) 
+	{
+		ComsAdminMessage message(sid, ComsAdminMessage::AdminChangeName, 
+			S3D::formatStringBuffer("%u", playerId),
+			"ChangeName");
 		ComsMessageSender::sendToServer(message);
 	}
 }

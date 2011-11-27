@@ -132,6 +132,10 @@ bool ServerWebHandler::PlayerHandler::processRequest(
 				{
 					ServerAdminCommon::slapPlayer(request.getSession()->credentials, tank->getPlayerId(), 25.0f);
 				}
+				else if (0 == strcmp(action, "ChangeName"))
+				{
+					ServerAdminCommon::changeNamePlayer(request.getSession()->credentials, tank->getPlayerId(), LANG_STRING("ChangeName"));
+				}
 				else if (0 == strcmp(action, "Kill"))
 				{
 					ServerAdminCommon::killPlayer(request.getSession()->credentials, tank->getPlayerId());

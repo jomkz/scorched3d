@@ -399,6 +399,21 @@ bool ServerAdminHandler::processMessage(
 			}
 		}
 		break;
+	case ComsAdminMessage::AdminChangeName:
+		{
+			if (!ServerAdminCommon::changeNamePlayer(
+				adminSession->credentials,
+				atoi(message.getParam1()), 
+				LangStringUtil::convertToLang(message.getParam2())))
+			{
+				ScorchedServer::instance()->getServerChannelManager().sendText( 
+					ChannelText("info", 
+						"UNKNOWN_PLAYER_CHANGE_NAME", 
+						"Unknown player for change name"),
+					destinationId, false);
+			}
+		}
+		break;
 	case ComsAdminMessage::AdminAdd:
 		{
 			if (!ServerAdminCommon::addPlayer(

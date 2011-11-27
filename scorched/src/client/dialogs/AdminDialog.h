@@ -53,6 +53,7 @@ protected:
 	GLWTextButton *ok_;
 	GLWButton *kickButton_, *banButton_, *slapButton_;
 	GLWButton *poorButton_, *muteButton_, *unmuteButton_;
+	GLWButton *changeNameButton_;
 	GLWTab *playerTab_, *botsTab_;
 	GLWDropDown *aiSelector_;
 	GLWButton *addButton_;

@@ -135,6 +135,7 @@ void PlayMovesSimAction::tankTimedOut(ScorchedContext &context, Tanket *tanket)
 						true);
 
 				tank->getState().setState(TankState::sSpectator);
+				tank->getState().setLives(0);
 				tank->getState().setNotSpectator(false);
 			}
 		}
