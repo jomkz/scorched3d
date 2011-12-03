@@ -49,6 +49,7 @@ protected:
 	NumberParser stepTime_;     // Add/rm napalm every StepTime secs
 	NumberParser hurtStepTime_; // Calculate damage every HurtStepTime secs
 	NumberParser hurtPerSecond_;// Damage per second
+	NumberParser landscapeErosion_; // Removal of the landscape
 
 	void addNapalm(ScorchedContext &context, WeaponFireContext &weaponContext,
 		int x, int y);

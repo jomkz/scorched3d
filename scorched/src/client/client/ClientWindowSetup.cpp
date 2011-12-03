@@ -238,6 +238,8 @@ void ClientWindowSetup::setupStartWindows(GLWWindowSkinManager *skinManager)
 	GLWWindowManager::instance()->removeState(ClientState::StateLoadFiles);
 	GLWWindowManager::instance()->addWindow(ClientState::StateLoadFiles,
 		BackdropDialog::instance(), 0, true);
+	GLWWindowManager::instance()->addWindow(ClientState::StateOptions, 
+ 		SoundDialog::instance(), showSoundKey, false);
 	addStateWindows(skinManager, ClientState::StateLoadFiles, "start");
 	GLWWindowManager::instance()->addWindow(ClientState::StateLoadFiles,
 		ProgressDialog::instance(), 0, true);
@@ -250,6 +252,7 @@ void ClientWindowSetup::setupStartWindows(GLWWindowSkinManager *skinManager)
 void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 {
 	KEYBOARDKEY("SHOW_SKIP_DIALOG", skipKey);
+	KEYBOARDKEY("SHOW_SOUND_DIALOG", showSoundKey);
 
 	// StateWaitNoLandscape
 	GLWWindowManager::instance()->removeState(ClientState::StateWaitNoLandscape);
@@ -262,6 +265,8 @@ void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 		PlayerInGameDialog::instance(), 0, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape,
 		PlayerInitialDialog::instance(), 0, false);
+	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape, 
+ 		SoundDialog::instance(), showSoundKey, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StateWaitNoLandscape, 
 		MainMenuDialog::instance(), 0, true);
 	addMessageComponents(skinManager, ClientState::StateWaitNoLandscape);
@@ -278,6 +283,8 @@ void ClientWindowSetup::setupGameWindows(GLWWindowSkinManager *skinManager)
 	addStateWindows(skinManager, ClientState::StateLoadLevel, "start");
 	GLWWindowManager::instance()->addWindow(ClientState::StateLoadLevel,
 		ProgressDialog::instance(), 0, true);
+	GLWWindowManager::instance()->addWindow(ClientState::StateLoadLevel, 
+ 		SoundDialog::instance(), showSoundKey, false);
 
 	// StateWait
 	GLWWindowManager::instance()->removeState(ClientState::StateWait);

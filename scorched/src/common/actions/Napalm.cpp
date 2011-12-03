@@ -544,6 +544,12 @@ void Napalm::simulateDamage()
 			fixed(y),
 			height);
 
+		if (params_->getLandscapeErosion() > 0)
+		{
+			DeformLandscape::deformLandscape(*context_, position, 
+				1, true, params_->getLandscapeErosion(), params_->getDeformTexture());
+		}
+
 		std::map<unsigned int, Target *> collisionTargets;
 		context_->getTargetSpace().getCollisionSet(position, 
 			fixed(EffectRadius), collisionTargets);

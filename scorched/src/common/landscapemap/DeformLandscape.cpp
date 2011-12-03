@@ -112,7 +112,7 @@ static DeformLandscapeCache deformCache;
 
 void DeformLandscape::deformLandscape(
 	ScorchedContext &context,
-	FixedVector &pos, fixed radius, bool down,
+	FixedVector &pos, fixed radius, bool down, fixed depthScale,
 	const char *deformTexture)
 {
 	if (context.getOptionsGame().getActionSyncCheck())
@@ -126,7 +126,7 @@ void DeformLandscape::deformLandscape(
 	static DeformPoints deformMap;
 	if (down && context.getLandscapeMaps().getRoofMaps().getRoofOn())
 	{
-		bool hits = deformRoofInternal(context, pos, radius, true);
+		bool hits = deformRoofInternal(context, pos, radius, depthScale, true);
 #ifndef S3D_SERVER
 		if (hits && !context.getServerMode())
 		{
@@ -136,9 +136,9 @@ void DeformLandscape::deformLandscape(
 #endif
 	}
 
-	bool hits = deformLandscapeInternal(context, pos, radius, down, deformMap, true);
+	bool hits = deformLandscapeInternal(context, pos, radius, down, deformMap, true, depthScale);
 #ifndef S3D_SERVER
-	if (hits && !context.getServerMode())
+	if (hits && !context.getServerMode() && deformTexture)
 	{
 		Landscape::instance()->recalculateLandscape();
 		VisibilityPatchGrid::instance()->recalculateLandscapeErrors(pos, radius);
@@ -155,7 +155,7 @@ void DeformLandscape::deformLandscape(
 bool DeformLandscape::deformLandscapeInternal(
 	ScorchedContext &context,
 	FixedVector &pos, fixed radius, bool down, DeformPoints &map, 
-	bool setNormals)
+	bool setNormals, fixed depthScale)
 {
 	HeightMap &hmap = context.getLandscapeMaps().getGroundMaps().getHeightMap();
 	HeightMap &deformhmap = context.getLandscapeMaps().getGroundMaps().getDeformMap();
@@ -185,17 +185,18 @@ bool DeformLandscape::deformLandscapeInternal(
 				{
 					fixed currentHeight = hmap.getHeight(absx, absy);
 					fixed newHeight = currentHeight;
+					fixed actualExplosionDepth = *explosionDepth * depthScale;
 					if (down)
 					{
-						if (currentHeight > pos[2] - *explosionDepth)
+						if (currentHeight > pos[2] - actualExplosionDepth)
 						{
-							if (currentHeight > pos[2] + *explosionDepth)
+							if (currentHeight > pos[2] + actualExplosionDepth)
 							{
-								newHeight -= *explosionDepth + *explosionDepth;
+								newHeight -= actualExplosionDepth + actualExplosionDepth;
 							}
 							else
 							{
-								newHeight = pos[2] - *explosionDepth;
+								newHeight = pos[2] - actualExplosionDepth;
 							}
 
 							fixed lowestHeight = lowestLandscapeHeight;
@@ -220,9 +221,9 @@ bool DeformLandscape::deformLandscapeInternal(
 					}
 					else
 					{
-						if (currentHeight < pos[2] + *explosionDepth)
+						if (currentHeight < pos[2] + actualExplosionDepth)
 						{
-							newHeight = currentHeight + *explosionDepth;
+							newHeight = currentHeight + actualExplosionDepth;
 						}
 					}
 
@@ -260,7 +261,7 @@ bool DeformLandscape::deformLandscapeInternal(
 }
 
 bool DeformLandscape::deformRoofInternal(ScorchedContext &context,
-	FixedVector &pos, fixed radius, 
+	FixedVector &pos, fixed radius, fixed depthScale,
 	bool setNormals)
 {
 	HeightMap &hmap = context.getLandscapeMaps().getRoofMaps().getRoofMap();
@@ -293,15 +294,16 @@ bool DeformLandscape::deformRoofInternal(ScorchedContext &context,
 					fixed newHeight = currentHeight;
 
 					{
-						if (currentHeight < pos[2] + *explosionDepth)
+						fixed actualExplosionDepth = *explosionDepth * depthScale;
+						if (currentHeight < pos[2] + actualExplosionDepth)
 						{
-							if (currentHeight < pos[2] - *explosionDepth)
+							if (currentHeight < pos[2] - actualExplosionDepth)
 							{
-								newHeight += *explosionDepth + *explosionDepth;
+								newHeight += actualExplosionDepth + actualExplosionDepth;
 							}
 							else
 							{
-								newHeight = pos[2] + *explosionDepth;
+								newHeight = pos[2] + actualExplosionDepth;
 							}
 
 							if (deformType != LandscapeDefnType::eDeformDeform)

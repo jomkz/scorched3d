@@ -193,6 +193,7 @@ bool TanketAccessories::accessoryAllowed(Accessory *accessory, int count)
 	if (type->getAccessoryDisabled(accessory)) return false;
 
 	// Check if this accessory is allowed at all
+	if (accessory->getNoBuy()) return false;
 	if (accessory->getMaximumNumber() == 0) return false;
 	int currentCount = getAccessoryCount(accessory);
 	if (currentCount + count >

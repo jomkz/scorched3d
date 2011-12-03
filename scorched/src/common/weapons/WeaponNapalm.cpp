@@ -30,7 +30,7 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponNapalm);
 
-WeaponNapalm::WeaponNapalm()
+WeaponNapalm::WeaponNapalm() : landscapeErosion_(0)
 {
 
 }
@@ -51,6 +51,7 @@ bool WeaponNapalm::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 	if (!accessoryNode->getNamedChild("hurtpersecond", hurtPerSecond_)) return false;
 	if (!accessoryNode->getNamedChild("numberstreams", numberStreams_)) return false;
 	if (!accessoryNode->getNamedChild("napalmsound", napalmSound_)) return false;
+	accessoryNode->getNamedChild("landscapeerosion", landscapeErosion_, false);
 	if (!S3D::checkDataFile(S3D::formatStringBuffer("data/wav/%s", napalmSound_.c_str()))) return false;
 
 	if (!params_.parseXML(accessoryNode)) return false;
@@ -106,6 +107,7 @@ void WeaponNapalm::addNapalm(ScorchedContext &context,
 	params->setStepTime(stepTime_.getValue(context));
 	params->setHurtStepTime(hurtStepTime_.getValue(context));
 	params->setHurtPerSecond(hurtPerSecond_.getValue(context));
+	params->setLandscapeErosion(landscapeErosion_.getValue(context));
 
 	// Ensure that the napalm has not hit the walls
 	// or anything outside the landscape

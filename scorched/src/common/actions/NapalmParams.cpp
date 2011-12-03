@@ -38,7 +38,8 @@ NapalmParams::NapalmParams() :
 	noCameraTrack_(false),
 	napalmTexture_("flames"),
 	deformTexture_(""),
-	numberParticles_(100)
+	numberParticles_(100),
+	landscapeErosion_(0)
 {
 }
 
@@ -92,6 +93,7 @@ void NapalmParams::parseLUA(lua_State *L, int position)
 	hurtStepTime_ = LUAUtil::getNumberFromTable(L, position, "hurtsteptime", hurtStepTime_);
 	hurtPerSecond_ = LUAUtil::getNumberFromTable(L, position, "hurtpersecond", hurtPerSecond_);
 	groundScorchPer_ = LUAUtil::getNumberFromTable(L, position, "groundscorchper", groundScorchPer_);
+	landscapeErosion_ = LUAUtil::getNumberFromTable(L, position, "landscapeerosion", landscapeErosion_);
 	effectRadius_ = LUAUtil::getIntFromTable(L, position, "effectradius", effectRadius_);
 	numberParticles_ = LUAUtil::getIntFromTable(L, position, "numberparticles", numberParticles_);
 	noSmoke_ = LUAUtil::getBoolFromTable(L, position, "nosmoke", noSmoke_);

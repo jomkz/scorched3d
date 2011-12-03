@@ -331,7 +331,7 @@ void Explosion::simulate(fixed frameTime, bool &remove)
 				DeformLandscape::deformLandscape(
 					*context_,
 					newPosition, deformExplosionSize, 
-					(params_->getDeformType() == ExplosionParams::DeformDown),
+					(params_->getDeformType() == ExplosionParams::DeformDown), 1,
 					params_->getDeformTexture());
 			}
 		}

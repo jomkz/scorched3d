@@ -185,6 +185,11 @@ bool TankState::getTankPlaying()
 	return state_ == sNormal || state_ == sDead || state_ == sBuying;
 }
 
+bool TankState::getTankAliveOrBuying()
+{
+	return state_ == sNormal || state_ == sBuying;
+}
+
 bool TankState::writeMessage(NamedNetBuffer &buffer)
 {
 	NamedNetBufferSection section(buffer, "TankState");

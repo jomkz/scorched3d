@@ -55,6 +55,7 @@ public:
 	void setNotSpectator(bool notSpectator) { notSpectator_ = notSpectator; }
 
 	bool getTankPlaying();
+	bool getTankAliveOrBuying();
 
 	void setMuted(bool muted) { muted_ = muted; }
 	bool getMuted() { return muted_; }

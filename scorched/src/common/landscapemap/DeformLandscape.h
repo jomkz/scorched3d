@@ -38,7 +38,7 @@ public:
 	static void deformLandscape(
 		ScorchedContext &context,
 		FixedVector &pos, fixed radius, 
-		bool down,
+		bool down, fixed depthScale,
 		const char *deformTexture);
 	static void flattenArea(
 		ScorchedContext &context, 
@@ -51,16 +51,16 @@ private:
 		ScorchedContext &context,
 		FixedVector &pos, fixed radius, 
 		bool down, DeformPoints &map,
-		bool setNormals);
+		bool setNormals, fixed depthScale);
 	static bool deformRoofInternal(
 		ScorchedContext &context,
-		FixedVector &pos, fixed radius, 
+		FixedVector &pos, fixed radius, fixed depthScale,
 		bool setNormals);
 	static void flattenAreaInternal(
 		ScorchedContext &context, 
 		FixedVector &tankPos,
 		bool removeObjects,
-		fixed size,
+		fixed size, 
 		bool setNormals);
 };
 

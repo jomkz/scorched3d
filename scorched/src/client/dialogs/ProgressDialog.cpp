@@ -169,7 +169,7 @@ void ProgressDialog::drawRules(ScorchedContext &context)
 		(context.getOptionsGame().getShotTime() > 0)?SHOT_TIME_LABEL:SHOT_TIME_UNLIMITED);
 
 	LANG_RESOURCE_VAR_1(BUYING_TIME_LABEL, "BUYING_TIME_LABEL", "Buying Time : {0}", 
-		S3D::formatStringBuffer("%i", context.getOptionsGame().getShotTime()));
+		S3D::formatStringBuffer("%i", context.getOptionsGame().getBuyingTime()));
 	LANG_RESOURCE_VAR(BUYING_TIME_UNLIMITED, "BUYING_TIME_UNLIMITED", "Buying time : Unlimited");
 	GLWFont::instance()->getGameFont()->draw(
 		yellow,

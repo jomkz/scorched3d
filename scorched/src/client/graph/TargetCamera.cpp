@@ -281,7 +281,7 @@ void TargetCamera::moveCamera()
 	float currentRotation = 0.0f;
 
 	Tank *currentTank = ScorchedClient::instance()->getTargetContainer().getCurrentTank();
-	if (!currentTank || !currentTank->getAlive()) 
+	if (!currentTank || !currentTank->getState().getTankAliveOrBuying()) 
 	{
 		currentTank = 0;
 		unsigned int currentDestinationId = ScorchedClient::instance()->
@@ -295,7 +295,7 @@ void TargetCamera::moveCamera()
 		{
 			Tank *tank = itor->second;
 			if (tank->getDestinationId() == currentDestinationId &&
-				tank->getAlive())
+				tank->getState().getTankAliveOrBuying())
 			{
 				if (!currentTank) currentTank = tank;
 				else
@@ -306,7 +306,7 @@ void TargetCamera::moveCamera()
 			}
 		}
 	}
-	if (currentTank && currentTank->getAlive())
+	if (currentTank && currentTank->getState().getTankAliveOrBuying())
 	{
 		position = currentTank->getShotInfo().getTankTurretPosition().asVector();
 		currentRotation = (180.0f - currentTank->getShotInfo().getRotationGunXY().asFloat()) / 57.32f;
@@ -323,7 +323,7 @@ void TargetCamera::moveCamera()
 				mainCam_.setLookAt(action->getProvider()->getPosition().asVector());
 				mainCam_.movePosition(currentRotation + 0.3f, 0.7f, 80.0f);
 			}
-			else if (currentTank && currentTank->getAlive())
+			else if (currentTank && currentTank->getState().getTankAliveOrBuying())
 			{
 				viewBehindTank(currentTank);
 			} 
@@ -362,7 +362,7 @@ void TargetCamera::moveCamera()
 					mainCam_.setOffSet(lookfromPos.asVector(), true);
 				}
 			}
-			else if (currentTank && currentTank->getAlive())
+			else if (currentTank && currentTank->getState().getTankAliveOrBuying())
 			{
 				viewBehindTank(currentTank);
 			}
@@ -390,7 +390,7 @@ void TargetCamera::moveCamera()
 		break;
 	case CamAim:
 		{
-			if (currentTank && currentTank->getAlive())
+			if (currentTank && currentTank->getState().getTankAliveOrBuying())
 			{
 				viewBehindTank(currentTank);
 			}
@@ -413,7 +413,7 @@ void TargetCamera::moveCamera()
 					mainCam_.setOffSet(lookfromPos.asVector(), true);
 				}
 			}
-			else if (currentTank && currentTank->getAlive())
+			else if (currentTank && currentTank->getState().getTankAliveOrBuying())
 			{
 				viewBehindTank(currentTank);
 			}

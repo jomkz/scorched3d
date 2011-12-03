@@ -40,6 +40,7 @@ public:
 	void setStepTime(fixed value) { stepTime_ = value; }
 	void setHurtStepTime(fixed value) { hurtStepTime_ = value; }
 	void setHurtPerSecond(fixed value) { hurtPerSecond_ = value; }
+	void setLandscapeErosion(fixed value) { landscapeErosion_ = value; }
 
 	fixed getNapalmTime() { return napalmTime_; }
 	fixed getNapalmHeight() { return napalmHeight_; }
@@ -47,6 +48,7 @@ public:
 	fixed getHurtStepTime() { return hurtStepTime_; }
 	fixed getHurtPerSecond() { return hurtPerSecond_; }
 	fixed getGroundScorchPer() { return groundScorchPer_; }
+	fixed getLandscapeErosion() { return landscapeErosion_; }
 	int getEffectRadius() { return effectRadius_; }
 	int getNumberParticles() { return numberParticles_; }
 	bool getNoSmoke() { return noSmoke_; }
@@ -65,6 +67,7 @@ protected:
 	fixed hurtStepTime_; // Calculate damage every HurtStepTime secs
 	fixed hurtPerSecond_;// Damage per second
 	fixed groundScorchPer_; // The percentage chance the ground will be scorched
+	fixed landscapeErosion_; // How much height will be removed for the erosion
 	int effectRadius_;   // How close do tanks take damage
 	int numberParticles_;// How many napalm particles can be created
 	bool noSmoke_;       // Turns off smoke emitted by napalm

@@ -105,8 +105,12 @@ void WeaponAimed::fireAimedWeapon(ScorchedContext &context,
 			itor != allTankets.end();
 			++itor)
 		{
-			if (noSelfHoming_ && weaponContext.getPlayerId() == itor->second->getPlayerId()) continue;
-			positions.push_back(&itor->second->getLife().getTargetPosition());
+			Tanket *tanket = itor->second;
+			if (tanket->getAlive())
+			{
+				if (noSelfHoming_ && weaponContext.getPlayerId() == tanket->getPlayerId()) continue;
+				positions.push_back(&itor->second->getLife().getTargetPosition());
+			}
 		}
 	}
 	else

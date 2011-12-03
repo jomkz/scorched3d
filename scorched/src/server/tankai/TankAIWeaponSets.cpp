@@ -148,7 +148,7 @@ void TankAIWeaponSets::WeaponSet::buyWeapons(WeaponSetAccessories &tankAccessori
 		Accessory *choosenAccessory = choosenWeapon->accessory;
 
 		// Buy this weapon
-		tankAccessories.tankAccessories.add(choosenAccessory, choosenAccessory->getBundle());
+		tankAccessories.tankAccessories.add(choosenAccessory, choosenAccessory->getBundle(), false);
 		tankAccessories.tankMoney -= choosenAccessory->getPrice();
 		if (tankAccessories.tankMoney < 0) tankAccessories.tankMoney = 0;
 
@@ -246,21 +246,13 @@ bool TankAIWeaponSets::WeaponSetEntry::checkType(const char *type)
 bool TankAIWeaponSets::WeaponSetEntry::weaponValid(
 	WeaponSetAccessories &tankAccessories, bool lastRound)
 {
-	if (accessory->getNoBuy()) return false;
+	if (!tankAccessories.tankAccessories.accessoryAllowed(accessory, accessory->getBundle()))
+	{
+		return false;
+	}
 
-	int currentCount = tankAccessories.tankAccessories.getAccessoryCount(accessory);
 	int currentMoney = tankAccessories.tankMoney;
-
-	int maxCount = accessory->getMaximumNumber();
-	if (currentCount >= maxCount) return false;
-
-	if (currentCount < 0) return false;
 	if (currentMoney < accessory->getPrice()) return false;
-
-	if ((10 - accessory->getArmsLevel()) <=
-		ScorchedServer::instance()->getOptionsTransient().getArmsLevel() ||
-		ScorchedServer::instance()->getOptionsGame().getGiveAllWeapons()) {}
-	else return false;
 
 	if (type == "autodefense")
 	{
@@ -274,6 +266,7 @@ bool TankAIWeaponSets::WeaponSetEntry::weaponValid(
 
 	if (!lastRound)
 	{
+		int currentCount = tankAccessories.tankAccessories.getAccessoryCount(accessory);
 		if (currentCount > buymin) return false;
 		if ((currentMoney < moneymin && moneymin != 0) || 
 			(currentMoney > moneymax && moneymax != 0)) return false;
