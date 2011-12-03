@@ -37,8 +37,8 @@
 #endif
 
 unsigned int S3D::ScorchedPort = 27270;
-std::string S3D::ScorchedVersion = "43.3beta3";
-std::string S3D::ScorchedProtocolVersion = "ep";
+std::string S3D::ScorchedVersion = "43.3beta4";
+std::string S3D::ScorchedProtocolVersion = "eq";
 #ifdef __DATE__
 std::string S3D::ScorchedBuildTime = __DATE__;
 #else
