@@ -129,7 +129,7 @@ static bool tankTargetCloseness(ScorchedContext &context, unsigned int playerId,
 
 		if (context.getOptionsGame().getActionSyncCheck()) 
 		{
-			context.getSimulator().addSyncCheck(S3D::formatStringBuffer("Tank : %u %s %s - %s", 
+			context.getSimulator().addSyncCheck(S3D::formatStringBuffer("Tank placement current : %u %s %s - %s", 
 				thisTank->getPlayerId(), thisTank->getCStrName().c_str(), 
 				thisTank->getState().getSmallStateString(),
 				thisTank->getLife().getTargetPosition().asQuickString()));

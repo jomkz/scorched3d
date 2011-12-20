@@ -391,6 +391,9 @@ public:
 	bool getActionCollisionSyncCheck() { return actionCollisionSyncCheck_; }
 	OptionEntryBool &getActionCollisionSyncCheckEntry() { return actionCollisionSyncCheck_; }
 
+	bool getTargetPlacementSyncCheck() { return targetPlacementSyncCheck_; }
+	OptionEntryBool &getTargetPlacementSyncCheckEntry() { return targetPlacementSyncCheck_; }
+
 	const char *getAuthHandler() { return authHandler_; }
 	OptionEntryStringEnum &getAuthHandlerEntry() { return authHandler_; }
 
@@ -507,6 +510,7 @@ protected:
 	OptionEntryBool actionMovementSyncCheck_;
 	OptionEntryBool actionRandomSyncCheck_;
 	OptionEntryBool actionCollisionSyncCheck_;
+	OptionEntryBool targetPlacementSyncCheck_;
 	OptionEntryBool autoSendSyncCheck_;
 	OptionEntryBool residualPlayers_;
 	OptionEntryBool delayedDefenseActivation_;

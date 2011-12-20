@@ -156,8 +156,11 @@ void Simulator::newLevel()
 	wind_.newLevel();
 
 	// Log initial target positions
-	if (context_->getOptionsGame().getActionSyncCheck()) 
+	if (context_->getOptionsGame().getActionSyncCheck() ||
+		context_->getOptionsGame().getTargetPlacementSyncCheck()) 
 	{
+		addSyncCheck(S3D::formatStringBuffer("New Level"));
+
 		std::map<unsigned int, Tank *> &tanks =
 			context_->getTargetContainer().getTanks();
 		std::map<unsigned int, Tank *>::iterator itor;
@@ -171,6 +174,21 @@ void Simulator::newLevel()
 				tank->getCStrName().c_str(), 
 				tank->getState().getSmallStateString(),
 				tank->getLife().getTargetPosition().asQuickString()));
+		}
+	}
+	if (context_->getOptionsGame().getTargetPlacementSyncCheck())
+	{
+		std::map<unsigned int, Target*> &targets =
+			context_->getTargetContainer().getTargets();
+		std::map<unsigned int, Target*>::iterator itor;
+		for (itor = targets.begin();
+			itor != targets.end();
+			++itor)
+		{
+			Target *target = itor->second;
+			addSyncCheck(S3D::formatStringBuffer("Target : %u %s", 
+				target->getPlayerId(),  
+				target->getLife().getTargetPosition().asQuickString()));
 		}
 	}
 }

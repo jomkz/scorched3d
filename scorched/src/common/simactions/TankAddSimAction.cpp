@@ -242,7 +242,7 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 	if (context.getOptionsGame().getActionSyncCheck()) 
 	{
 		context.getSimulator().
-			addSyncCheck(S3D::formatStringBuffer("Tank : %u:%u %s %s", 
+			addSyncCheck(S3D::formatStringBuffer("TankAdd : %u:%u %s %s", 
 				tank->getDestinationId(), tank->getPlayerId(),  
 				tank->getCStrName().c_str(), 
 				tank->getState().getSmallStateString()));

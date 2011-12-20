@@ -251,6 +251,8 @@ OptionsGame::OptionsGame() :
 		"Gather enhanced action syncchecking for random number generation", 0, false),
 	actionCollisionSyncCheck_(options_, "ActionCollisionSyncCheck",
 		"Gather enhanced action syncchecking for particle collisions", 0, false),
+	targetPlacementSyncCheck_(options_, "TargetPlacementSyncCheck",
+		"Gather enhanced action syncchecking for initial target placements", 0, false),
 	resignMode_(options_, "ResignMode",
 		"When does a players resign take place", 0, int(ResignTimed), resignEnum),
 	movementRestriction_(options_, "MovementRestriction",

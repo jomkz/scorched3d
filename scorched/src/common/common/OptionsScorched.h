@@ -152,6 +152,7 @@ public:
 	OPTIONBOOL_GETTER(DelayedDefenseActivation);
 	OPTIONBOOL_GETTER(AutoSendSyncCheck);
 	OPTIONBOOL_GETTER(ActionSyncCheck);
+	OPTIONBOOL_GETTER(TargetPlacementSyncCheck);
 	OPTIONBOOL_GETTER(ActionMovementSyncCheck);
 	OPTIONBOOL_GETTER(ActionRandomSyncCheck);
 	OPTIONBOOL_GETTER(ActionCollisionSyncCheck);
