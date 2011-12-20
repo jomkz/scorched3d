@@ -77,7 +77,7 @@ Vector &GLWDropDownColor::getCurrentColor()
 	return getCurrentEntry()->getColor();
 }
 
-void GLWDropDownColor::setCurrentColor(Vector &color)
+void GLWDropDownColor::setCurrentColor(const Vector &color)
 {
 	int position = 0;
 	std::list<GLWSelectorEntry>::iterator itor;
@@ -86,7 +86,7 @@ void GLWDropDownColor::setCurrentColor(Vector &color)
 		++itor)
 	{
 		GLWSelectorEntry &entry = *itor;
-		if (color == entry.getColor())
+		if (((Vector &) color) == entry.getColor())
 		{
 			current_ = &entry;
 			break;

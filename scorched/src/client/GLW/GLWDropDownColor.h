@@ -32,7 +32,7 @@ public:
 
 	void addColor(Vector &color);
 	Vector &getCurrentColor();
-	void setCurrentColor(Vector &color);
+	void setCurrentColor(const Vector &color);
 
 	// Inherited from GLWidget
 	virtual void draw();
