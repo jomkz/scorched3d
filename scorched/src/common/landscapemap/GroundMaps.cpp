@@ -125,14 +125,17 @@ void GroundMaps::generateHMap(
 				"Error: Unable to find deform landscape map \"%s\"",
 				file->file.c_str()));
 		}
-		else
+		if (!image.getLossless())
 		{
-			HeightMapLoader::loadTerrain(
-				deformMap_,
-				image, 
-				file->levelsurround,
-				counter);
+			S3D::dialogExit("HeightMapLoader", S3D::formatStringBuffer(
+				"Error: Deform landscape map \"%s\" is not a lossless image format",
+				file->file.c_str()));
 		}
+		HeightMapLoader::loadTerrain(
+			deformMap_,
+			image, 
+			file->levelsurround,
+			counter);
 	}
 	else
 	{

@@ -64,6 +64,12 @@ void PlacementTypeTree::getPositions(ScorchedContext &context,
 				S3D::formatStringBuffer("Error: failed to find mask \"%s\"",
 				mask.c_str()));
 		}
+		if (!map.getLossless())
+		{
+			S3D::dialogExit("PlacementTypeTree", S3D::formatStringBuffer(
+				"Error: Placement mask \"%s\" is not a lossless image format",
+				mask.c_str()));
+		}
 	}
 
 	// Generate a map of where the trees should go

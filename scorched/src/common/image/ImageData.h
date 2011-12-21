@@ -32,12 +32,14 @@ public:
 
 	void clear();
 
+	bool getLossless() { return lossless_; }
 	unsigned char *getBits() { return bits_; }
 	int getWidth() { return width_; }
 	int getHeight() { return height_; }
 	int getAlignment() { return alignment_; }
 	int getComponents() { return components_; }
 
+	void setLossless(bool lossless) { lossless_ = lossless; }
 	void setBits(unsigned char *bits) { delete [] bits_; bits_ = bits; }
 	void setWidth(int width) { width_ = width; }
 	void setHeight(int height) { height_ = height; }
@@ -48,6 +50,7 @@ public:
 	void dereference();
 
 protected:
+	bool lossless_;
 	int referenceCount_;
 	unsigned char *bits_;
 	int width_;

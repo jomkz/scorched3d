@@ -181,6 +181,12 @@ FixedVector PlacementTankPosition::placeTank(unsigned int playerId, int team,
 			tankMask = ImageFactory::loadImage(
 				S3D::eModLocation, height->startmask.c_str());
 			DIALOG_ASSERT(tankMask.getBits());
+			if (!tankMask.getLossless())
+			{
+				S3D::dialogExit("LandscapePlacement", S3D::formatStringBuffer(
+					"Error: Placement mask \"%s\" is not a lossless image format",
+					height->startmask.c_str()));
+			}
 		}
 	}
 	else

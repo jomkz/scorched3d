@@ -471,6 +471,12 @@ void HeightMapModifier::generateTerrain(HeightMap &hmap,
 				"Error: Failed to find mask map \"%s\"",
 				defn.mask.c_str()));
 		}
+		if (!maskMap.getLossless())
+		{
+			S3D::dialogExit("Landscape", S3D::formatStringBuffer(
+				"Error: Mask map \"%s\" is not a lossless image format",
+				defn.mask.c_str()));
+		}
 	}
 
 	// Generate the landscape

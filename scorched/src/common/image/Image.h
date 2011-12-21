@@ -38,11 +38,13 @@ public:
 	unsigned char *getBitsOffset(int offset);
 	unsigned char *getBitsPos(int x, int y);
 
+	bool getLossless() { return data_->getLossless(); }
 	int getWidth() { return data_->getWidth(); }
 	int getHeight() { return data_->getHeight(); }
 	int getAlignment() { return data_->getAlignment(); }
 	int getComponents() { return data_->getComponents(); }
 
+	void setLossless(bool lossless) { data_->setLossless(lossless); }
 	void setBits(unsigned char *bits) { data_->setBits(bits); }
 	void setWidth(int width) { data_->setWidth(width); }
 	void setHeight(int height) { data_->setHeight(height); }

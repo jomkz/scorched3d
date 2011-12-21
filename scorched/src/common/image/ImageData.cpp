@@ -27,11 +27,13 @@ ImageData::ImageData() :
 	width_(0),
 	height_(0),
 	alignment_(0),
-	components_(0)
+	components_(0),
+	lossless_(true)
 {
 }
 
 ImageData::ImageData(int width, int height, bool alpha, unsigned char fill) :
+	lossless_(true),
 	referenceCount_(0),
 	bits_(0),
 	width_(0),
@@ -66,11 +68,13 @@ void ImageData::clear()
 	height_ = 0;
 	alignment_ = 0;
 	components_ = 0;
+	lossless_ = true;
 }
 
 void ImageData::createBlankInternal(int width, int height, bool alpha, unsigned char fill)
 {
 	clear();
+	lossless_ = true;
 	width_ = width;
 	height_ = height;
 	components_ = alpha?4:3;

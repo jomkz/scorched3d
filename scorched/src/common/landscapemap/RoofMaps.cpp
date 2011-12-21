@@ -130,22 +130,25 @@ void RoofMaps::generateRMap(
 					"Error: Unable to find deform roof map \"%s\"",
 					file->file.c_str()));
 			}
-			else
+			if (!image.getLossless())
 			{
-				HeightMapLoader::loadTerrain(
-					deformRMap_,
-					image, 
-					file->levelsurround,
-					counter);
+				S3D::dialogExit("HeightMapLoader", S3D::formatStringBuffer(
+					"Error: Deform landscape map \"%s\" is not a lossless image format",
+					file->file.c_str()));
+			}
+			HeightMapLoader::loadTerrain(
+				deformRMap_,
+				image, 
+				file->levelsurround,
+				counter);
 
-				for (int j=0; j<=deformRMap_.getMapHeight(); j++)
+			for (int j=0; j<=deformRMap_.getMapHeight(); j++)
+			{
+				for (int i=0; i<=deformRMap_.getMapWidth(); i++)
 				{
-					for (int i=0; i<=deformRMap_.getMapWidth(); i++)
-					{
-						fixed height = deformRMap_.getHeight(i, j);
-						height = fixed(cavern->height) - height;
-						deformRMap_.setHeight(i, j, height);
-					}
+					fixed height = deformRMap_.getHeight(i, j);
+					height = fixed(cavern->height) - height;
+					deformRMap_.setHeight(i, j, height);
 				}
 			}
 		}

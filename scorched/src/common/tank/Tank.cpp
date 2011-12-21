@@ -38,6 +38,7 @@
 #include <engine/Simulator.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
+#include <algorithm>
 
 static TankWeaponSwitcher *weaponSwitcher = new TankWeaponSwitcher();
 
@@ -130,6 +131,11 @@ bool Tank::getPlaying()
 	return getState().getTankPlaying();
 }
 
+static inline bool lt_accessory(const Accessory *o1, const Accessory *o2) 
+{ 
+	return ((Accessory*)o1)->getAccessoryId() > ((Accessory *)o2)->getAccessoryId();
+}
+
 Weapon *Tank::getDeathAction()
 {
 	std::list<Accessory *> &accessories = getAccessories().
@@ -138,6 +144,7 @@ Weapon *Tank::getDeathAction()
 	{
 		std::vector<Accessory *> accessoriesVector;
 		accessoriesVector.insert(accessoriesVector.begin(), accessories.begin(), accessories.end());
+		std::sort(accessoriesVector.begin(), accessoriesVector.end(), lt_accessory);
 
 		Accessory *accessory = accessoriesVector[
 			context_.getSimulator().getRandomGenerator().getRandUInt("getDeathAction") % accessoriesVector.size()];

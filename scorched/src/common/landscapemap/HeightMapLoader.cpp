@@ -106,14 +106,17 @@ bool HeightMapLoader::generateTerrain(
 				file->file.c_str()));
 			return false;
 		}
-		else
+		if (!image.getLossless())
 		{
-			HeightMapLoader::loadTerrain(
-				hmap,
-				image, 
-				file->levelsurround,
-				counter);
+			S3D::dialogExit("HeightMapLoader", S3D::formatStringBuffer(
+				"Error: Deform landscape map \"%s\" is not a lossless image format",
+				file->file.c_str()));
 		}
+		HeightMapLoader::loadTerrain(
+			hmap,
+			image, 
+			file->levelsurround,
+			counter);
 	}
 	else if (defn->getType() == LandscapeDefnType::eHeightMapGenerate)
 	{

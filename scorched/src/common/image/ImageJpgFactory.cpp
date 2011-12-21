@@ -49,6 +49,7 @@ Image ImageJpgFactory::loadFromFile(const char *filename, const char *alphafilen
 		bitmap.getHeight() == alpha.getHeight())
 	{
 		result = Image(bitmap.getWidth(), bitmap.getHeight(), true);
+		result.setLossless(false);
 
 		unsigned char *bbits = bitmap.getBits();
 		unsigned char *abits = alpha.getBits();
@@ -173,6 +174,7 @@ Image ImageJpgFactory::loadFromBuffer(NetBuffer &buffer, bool readalpha)
 		(cinfo.output_components == 4 && readalpha))
 	{
 		result = Image(cinfo.output_width, cinfo.output_height, readalpha);
+		result.setLossless(false);
 
 		JSAMPARRAY buffer = (*cinfo.mem->alloc_sarray)
 			((j_common_ptr) &cinfo, JPOOL_IMAGE, 
