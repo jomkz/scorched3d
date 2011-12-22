@@ -111,7 +111,6 @@ void WeaponScatterPosition::fireWeapon(ScorchedContext &context,
 		}
 	}
 
-	aimedWeapon_->fireWeapon(context, weaponContext, pos, velocity);
-
+	aimedWeapon_->fire(context, weaponContext, pos, velocity);
 }
 

@@ -162,6 +162,6 @@ void ShotBounce::draw()
 void ShotBounce::doCollision()
 {
 	WeaponRoller *proj = (WeaponRoller *) weapon_;
-	proj->getCollisionAction()->fireWeapon(
+	proj->getCollisionAction()->fire(
 		*context_, weaponContext_, getCurrentPosition(), getCurrentVelocity());
 }

@@ -64,7 +64,7 @@ void WeaponTranslate::fireWeapon(ScorchedContext &context,
 	FixedVector newVelocity = velocity.Normalize() * translateDist_.getValue(context);
 	FixedVector newPosition = position + newVelocity;
 	
-	nextAction_->fireWeapon(context, weaponContext, newPosition, velocity);
+	nextAction_->fire(context, weaponContext, newPosition, velocity);
 	
 }
 

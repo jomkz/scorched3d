@@ -80,6 +80,6 @@ bool WeaponReference::parseXML(AccessoryCreateContext &context, XMLNode *accesso
 void WeaponReference::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	refWeapon_->fireWeapon(context, weaponContext, position, velocity);
+	refWeapon_->fire(context, weaponContext, position, velocity);
 }
 

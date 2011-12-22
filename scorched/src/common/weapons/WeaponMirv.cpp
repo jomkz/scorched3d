@@ -71,7 +71,7 @@ void WeaponMirv::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
 	// Add a shot that will fall where the original was aimed
-	aimedWeapon_->fireWeapon(context, weaponContext, position, velocity);
+	aimedWeapon_->fire(context, weaponContext, position, velocity);
 
 	RandomGenerator &random = context.getSimulator().getRandomGenerator();
 
@@ -94,7 +94,7 @@ void WeaponMirv::fireWeapon(ScorchedContext &context,
 		newDiff[2] += (fixed(i - (noWarheads_ / 2)) / 
 			fixed(noWarheads_ / 2)) * vspreadDist_.getValue(context);
 
-		aimedWeapon_->fireWeapon(context, weaponContext, position, newDiff);
+		aimedWeapon_->fire(context, weaponContext, position, newDiff);
 	}
 }
 

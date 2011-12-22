@@ -314,7 +314,7 @@ void ShotProjectile::doCollision(FixedVector &position)
 #endif // #ifndef S3D_SERVER
 
 	FixedVector velocity;
-	getWeapon()->getCollisionAction()->fireWeapon(
+	getWeapon()->getCollisionAction()->fire(
 		*context_, weaponContext_, position, getCurrentVelocity());
 }
 

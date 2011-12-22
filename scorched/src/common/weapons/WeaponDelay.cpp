@@ -74,5 +74,5 @@ void WeaponDelay::weaponCallback(
 			WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 			unsigned int userData)
 {
-	delayedWeapon_->fireWeapon(context, weaponContext, position, velocity);
+	delayedWeapon_->fire(context, weaponContext, position, velocity);
 }

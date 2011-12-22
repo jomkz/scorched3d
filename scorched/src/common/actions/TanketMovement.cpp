@@ -403,7 +403,7 @@ void TanketMovement::moveTanket(Tanket *tanket)
 			if (accessory && accessory->getType() == AccessoryPart::AccessoryWeapon)
 			{
 				Weapon *weapon = (Weapon *) accessory->getAction();
-				weapon->fireWeapon(*context_, 
+				weapon->fire(*context_, 
 					weaponContext_,
 					tanket->getLife().getTargetPosition(), 
 					FixedVector::getNullVector());

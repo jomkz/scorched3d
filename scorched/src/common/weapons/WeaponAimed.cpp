@@ -227,7 +227,7 @@ void WeaponAimed::fireAimedWeapon(ScorchedContext &context,
 			angleXYDegs, angleYZDegs);
 		velocity *= power;
 
-		aimedWeapon_->fireWeapon(
+		aimedWeapon_->fire(
 			context, weaponContext, position, velocity);	
 	}
 }

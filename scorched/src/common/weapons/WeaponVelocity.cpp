@@ -69,12 +69,12 @@ void WeaponVelocity::fireWeapon(ScorchedContext &context,
 	if (abs_)
 	{
 		newVelocity = velocity.Normalize() * 50 * velocityChange_.getValue(context); 
-		aimedWeapon_->fireWeapon(context, weaponContext, position, newVelocity);
+		aimedWeapon_->fire(context, weaponContext, position, newVelocity);
 	}
 	else
 	{
 		newVelocity = velocity * velocityChange_.getValue(context);
-		aimedWeapon_->fireWeapon(context, weaponContext, position, newVelocity);
+		aimedWeapon_->fire(context, weaponContext, position, newVelocity);
 	}
 }
 

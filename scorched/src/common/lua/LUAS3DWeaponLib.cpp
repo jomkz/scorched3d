@@ -83,7 +83,7 @@ static int s3d_fire_weapon(lua_State *L)
 	Weapon *weapon = (Weapon*) accessoryPart;
 
 	WeaponFireContext weaponContext(playerId, true, true);
-	weapon->fireWeapon(*wrapper->getContext(), weaponContext, position, velocity);
+	weapon->fire(*wrapper->getContext(), weaponContext, position, velocity);
 
 	return 0;
 }

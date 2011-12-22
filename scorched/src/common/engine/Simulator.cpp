@@ -132,7 +132,6 @@ void Simulator::actualSimulate(fixed frameTime)
 
 void Simulator::addSyncCheck(const std::string &msg)
 {
-	DIALOG_ASSERT(context_->getOptionsGame().getActionSyncCheck());
 	syncCheck_.push_back(
 		S3D::formatStringBuffer(
 			">%s %s<", currentTime_.asQuickString(), msg.c_str()));

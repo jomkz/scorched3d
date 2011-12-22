@@ -75,6 +75,6 @@ void WeaponScatterDirection::fireWeapon(ScorchedContext &context,
 	vel[2] += direction_[2] - directionOffset_[2] + 
 		directionOffset_[2] * 2 * random.getRandFixed("WeaponScatterDirection");
 
-	aimedWeapon_->fireWeapon(context, weaponContext, position, vel);
+	aimedWeapon_->fire(context, weaponContext, position, vel);
 
 }

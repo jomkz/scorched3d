@@ -182,7 +182,7 @@ void LandscapeActionFireWeapon::fireAction(ScorchedContext &context)
 
 	WeaponFireContext weaponContext(0, false, false);
 	FixedVector pos, vel;
-	weapon->fireWeapon(context, weaponContext, pos, vel);
+	weapon->fire(context, weaponContext, pos, vel);
 }
 
 bool LandscapeActionFireWeapon::readXML(XMLNode *node)
@@ -218,7 +218,7 @@ void LandscapeActionFireWeaponFromGroup::fireAction(ScorchedContext &context)
 	FixedVector newVelocity = entry->getVelocity();
 
 	WeaponFireContext weaponContext(entry->getPlayerId(), false, false);
-	weapon->fireWeapon(context, weaponContext, newPosition, newVelocity);
+	weapon->fire(context, weaponContext, newPosition, newVelocity);
 }
 
 bool LandscapeActionFireWeaponFromGroup::readXML(XMLNode *node)

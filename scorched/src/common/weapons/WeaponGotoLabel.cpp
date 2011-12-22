@@ -54,6 +54,6 @@ void WeaponGotoLabel::fireWeapon(ScorchedContext &context,
 	int doneCount = weaponContext.getInternalContext().getIncLabelCount(getAccessoryPartId());
 	if (doneCount <= count_)
 	{
-		weaponLabel_->fireWeapon(context, weaponContext, position, velocity);
+		weaponLabel_->fire(context, weaponContext, position, velocity);
 	}
 }

@@ -73,6 +73,6 @@ void WeaponMulti::fireWeapon(ScorchedContext &context,
 		 ++itor)
 	{
 		Weapon *weapon = *itor;
-		weapon->fireWeapon(context, weaponContext, position, velocity);
+		weapon->fire(context, weaponContext, position, velocity);
 	}
 }

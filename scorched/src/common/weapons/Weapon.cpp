@@ -20,6 +20,9 @@
 
 #include <weapons/Weapon.h>
 #include <weapons/AccessoryStore.h>
+#include <engine/ScorchedContext.h>
+#include <engine/Simulator.h>
+#include <common/OptionsScorched.h>
 
 WeaponFireContextInternal::WeaponFireContextInternal(bool referenced, bool updateStats) :
 	referenced_(referenced), updateStats_(updateStats),
@@ -96,4 +99,19 @@ int Weapon::getArmsLevel()
 {
 	if (armsLevel_ == -1) return parent_->getArmsLevel();
 	return armsLevel_;
+}
+
+void Weapon::fire(ScorchedContext &context,
+	WeaponFireContext &weaponContext,
+	FixedVector &position, FixedVector &velocity)
+{
+	if (context.getOptionsGame().getWeaponSyncCheck())
+	{
+		context.getSimulator().addSyncCheck(S3D::formatStringBuffer("WeaponFire %s-%u-%s %u %s %s",
+			getParent()->getName(), getParent()->getAccessoryId(), getAccessoryTypeName(),
+			weaponContext.getPlayerId(),
+			position.asQuickString(), velocity.asQuickString()));
+	}
+
+	fireWeapon(context, weaponContext, position, velocity);
 }

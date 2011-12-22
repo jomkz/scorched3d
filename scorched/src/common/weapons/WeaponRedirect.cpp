@@ -82,7 +82,7 @@ void WeaponRedirect::fireWeapon(ScorchedContext &context,
 	newVelocity.StoreNormalize();
 	newVelocity *= currentMag;
 	
-	nextAction_->fireWeapon(context, weaponContext, position, newVelocity);
+	nextAction_->fire(context, weaponContext, position, newVelocity);
 
 }
 

@@ -91,7 +91,7 @@ void WeaponTeamAction::weaponCallback(
 	Weapon *action = action_[tank->getTeam()];
 	if (action)
 	{
-		action->fireWeapon(context, weaponContext, position, velocity);
+		action->fire(context, weaponContext, position, velocity);
 	}
 }
 

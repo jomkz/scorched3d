@@ -76,7 +76,7 @@ void WeaponTankPosition::fireWeapon(ScorchedContext &context,
 			newPosition = tanket->getShotInfo().getTankGunPosition();
 		}
 
-		aimedWeapon_->fireWeapon(context, weaponContext, newPosition, velocity);
+		aimedWeapon_->fire(context, weaponContext, newPosition, velocity);
 	}
 }
 

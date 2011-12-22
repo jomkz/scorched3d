@@ -99,7 +99,7 @@ void WeaponTypeAction::weaponCallback(
 	Weapon *action = (*itor).second;
 	if (action)
 	{
-		action->fireWeapon(context, weaponContext, position, velocity);
+		action->fire(context, weaponContext, position, velocity);
 	}
 }
 

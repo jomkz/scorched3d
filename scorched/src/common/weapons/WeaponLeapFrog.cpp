@@ -82,5 +82,5 @@ void WeaponLeapFrog::fireWeapon(ScorchedContext &context,
 		}
 	}
 
-	collisionAction_->fireWeapon(context, weaponContext, newPosition, newVelocity);
+	collisionAction_->fire(context, weaponContext, newPosition, newVelocity);
 }

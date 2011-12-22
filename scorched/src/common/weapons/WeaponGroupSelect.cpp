@@ -80,5 +80,5 @@ void WeaponGroupSelect::fireWeapon(ScorchedContext &context,
 
 	FixedVector newPosition = entry->getPosition();
 	FixedVector newVelocity = entry->getVelocity();
-	nextAction_->fireWeapon(context, weaponContext, newPosition, newVelocity);
+	nextAction_->fire(context, weaponContext, newPosition, newVelocity);
 }

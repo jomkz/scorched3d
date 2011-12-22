@@ -65,7 +65,7 @@ void WeaponTankVelocity::fireWeapon(ScorchedContext &context,
 	if (tanket && tanket->getAlive())
 	{
 		FixedVector newVelocity = tanket->getShotInfo().getVelocityVector();
-		aimedWeapon_->fireWeapon(context, weaponContext, position, newVelocity);
+		aimedWeapon_->fire(context, weaponContext, position, newVelocity);
 	}
 }
 

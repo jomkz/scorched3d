@@ -72,6 +72,6 @@ void WeaponCenterPosition::fireWeapon(ScorchedContext &context,
 	newPositon[1] = (arenaHeight / 2) + arenaY;
 	newPositon[2] = height_.getValue(context);
 	
-	nextAction_->fireWeapon(context, weaponContext, newPositon, velocity);
+	nextAction_->fire(context, weaponContext, newPositon, velocity);
 
 }

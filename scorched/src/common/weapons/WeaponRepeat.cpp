@@ -67,7 +67,7 @@ void WeaponRepeat::fireWeapon(ScorchedContext &context,
 	{
 		for (int i=0; i<repeat_; i++)
 		{
-			repeatWeapon_->fireWeapon(context, weaponContext, position, velocity);
+			repeatWeapon_->fire(context, weaponContext, position, velocity);
 		}
 	}
 	else
@@ -81,7 +81,7 @@ void WeaponRepeat::weaponCallback(
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 	unsigned int userData)
 {
-	repeatWeapon_->fireWeapon(context, weaponContext, position, velocity);
+	repeatWeapon_->fire(context, weaponContext, position, velocity);
 
 	if (userData > 1)
 	{

@@ -94,15 +94,18 @@ public:
 	virtual bool parseXML(AccessoryCreateContext &context,
 		XMLNode *accessoryNode);
 	
-	virtual void fireWeapon(ScorchedContext &context,
+	void fire(ScorchedContext &context,
 		WeaponFireContext &weaponContext,
-		FixedVector &position, FixedVector &velocity) = 0;
+		FixedVector &position, FixedVector &velocity);
 
 	int getArmsLevel();
 
 protected:
 	int armsLevel_;
 
+	virtual void fireWeapon(ScorchedContext &context,
+		WeaponFireContext &weaponContext,
+		FixedVector &position, FixedVector &velocity) = 0;
 };
 
 #endif // !defined(AFX_WEAPON_H__65439E20_84A6_406A_8FD0_045A3E7555D3__INCLUDED_)

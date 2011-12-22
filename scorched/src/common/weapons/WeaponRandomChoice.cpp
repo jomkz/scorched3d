@@ -104,7 +104,7 @@ void WeaponRandomChoice::fireWeapon(ScorchedContext &context,
 		if (currentWeight >= randWeight)
 		{
 			Weapon *weapon = weightEntry.weapon;
-			weapon->fireWeapon(context, weaponContext, position, velocity);
+			weapon->fire(context, weaponContext, position, velocity);
 			break;
 		}
 	}

@@ -72,6 +72,6 @@ void WeaponInvokeWeapon::fireWeapon(ScorchedContext &context,
 	}
     
 	weaponStack_.insert(invokeWeapon_);
-	invokeWeapon_->fireWeapon(context, weaponContext, position, velocity);
+	invokeWeapon_->fire(context, weaponContext, position, velocity);
 	weaponStack_.erase(invokeWeapon_);
 }

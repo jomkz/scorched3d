@@ -413,7 +413,7 @@ void TargetDamage::addDamageAction(ScorchedContext &context, WeaponFireContext &
 		FixedVector position = target->getLife().getTargetPosition();
 		FixedVector velocity;
 		WeaponFireContext weaponContext(weaponContext.getPlayerId(), weaponContext.getInternalContext().getReferenced(), false);
-		weapon->fireWeapon(context, weaponContext, position, velocity);
+		weapon->fire(context, weaponContext, position, velocity);
 		StatsLogger::instance()->weaponFired(weapon, true);
 	}
 }
