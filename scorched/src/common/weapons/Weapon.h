@@ -89,7 +89,7 @@ public:
 	virtual bool parseXML(AccessoryCreateContext &context,
 		XMLNode *accessoryNode);
 	
-	void fire(ScorchedContext &context,
+	virtual void fire(ScorchedContext &context,
 		WeaponFireContext &weaponContext,
 		FixedVector &position, FixedVector &velocity);
 
@@ -98,6 +98,9 @@ public:
 protected:
 	int armsLevel_;
 
+	virtual void addWeaponSyncCheck(ScorchedContext &context,
+		WeaponFireContext &weaponContext,
+		FixedVector &position, FixedVector &velocity);
 	virtual void fireWeapon(ScorchedContext &context,
 		WeaponFireContext &weaponContext,
 		FixedVector &position, FixedVector &velocity) = 0;

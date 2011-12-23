@@ -107,11 +107,18 @@ void Weapon::fire(ScorchedContext &context,
 {
 	if (context.getOptionsGame().getWeaponSyncCheck())
 	{
-		context.getSimulator().addSyncCheck(S3D::formatStringBuffer("WeaponFire %s-%u-%s %u %s %s",
-			getParent()->getName(), getParent()->getAccessoryId(), getAccessoryTypeName(),
-			weaponContext.getPlayerId(),
-			position.asQuickString(), velocity.asQuickString()));
+		addWeaponSyncCheck(context, weaponContext, position, velocity);
 	}
 
 	fireWeapon(context, weaponContext, position, velocity);
+}
+
+void Weapon::addWeaponSyncCheck(ScorchedContext &context,
+	WeaponFireContext &weaponContext,
+	FixedVector &position, FixedVector &velocity)
+{
+	context.getSimulator().addSyncCheck(S3D::formatStringBuffer("WeaponFire %s-%u-%s %u %s %s",
+		getParent()->getName(), getParent()->getAccessoryId(), getAccessoryTypeName(),
+		weaponContext.getPlayerId(),
+		position.asQuickString(), velocity.asQuickString()));
 }

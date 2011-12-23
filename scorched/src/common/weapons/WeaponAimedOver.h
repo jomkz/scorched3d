@@ -32,13 +32,13 @@ public:
 	virtual bool parseXML(AccessoryCreateContext &context,
 		XMLNode *accessoryNode);
 
+	REGISTER_ACCESSORY_HEADER(WeaponAimedOver, AccessoryPart::AccessoryWeapon);
+
+protected:
 	// Inherited from Weapon
 	virtual void fireWeapon(ScorchedContext &context,
 		WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity);
 
-	REGISTER_ACCESSORY_HEADER(WeaponAimedOver, AccessoryPart::AccessoryWeapon);
-
-protected:
 	virtual void aimShot(ScorchedContext &context,
 		RandomGenerator &random,
 		FixedVector &position, FixedVector &shootAt,

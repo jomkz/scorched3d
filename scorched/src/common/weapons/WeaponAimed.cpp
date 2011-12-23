@@ -91,6 +91,17 @@ bool WeaponAimed::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNo
 	return true;
 }
 
+void WeaponAimed::addWeaponSyncCheck(ScorchedContext &context,
+	WeaponFireContext &weaponContext,
+	FixedVector &position, FixedVector &velocity)
+{
+	context.getSimulator().addSyncCheck(S3D::formatStringBuffer("WeaponFire %s-%u-%s %u %s %s \"%s\"",
+		getParent()->getName(), getParent()->getAccessoryId(), getAccessoryTypeName(),
+		weaponContext.getPlayerId(),
+		position.asQuickString(), velocity.asQuickString(),
+		groupName_.c_str()));
+}
+
 void WeaponAimed::fireAimedWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, bool invert)
 {

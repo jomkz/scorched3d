@@ -44,6 +44,9 @@ protected:
 
 	void fireAimedWeapon(ScorchedContext &context,
 		WeaponFireContext &weaponContext, FixedVector &position, bool invert);
+	virtual void addWeaponSyncCheck(ScorchedContext &context,
+		WeaponFireContext &weaponContext,
+		FixedVector &position, FixedVector &velocity);
 	virtual void aimShot(ScorchedContext &context,
 		RandomGenerator &random,
 		FixedVector &position, FixedVector &shootAt,
