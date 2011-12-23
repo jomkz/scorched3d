@@ -33,6 +33,8 @@ ParticleGroup::ParticleGroup(ScorchedContext &context,
 
 ParticleGroup::~ParticleGroup()
 {
+	physicsParticle_ = 0;
+	weaponFireContext_ = 0;
 }
 
 void *ParticleGroup::getObject()

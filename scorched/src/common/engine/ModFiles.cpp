@@ -92,7 +92,7 @@ bool ModFiles::loadModFiles(const std::string &mod,
 		std::string modDir = S3D::getSettingsModFile(mod);
 		if (S3D::dirExists(modDir))
 		{
-			if (counter) counter->setNewOp(LANG_RESOURCE("LOADING_USER_MODS", "Loading User Mods"));
+			if (counter) counter->setNewOp(LANG_RESOURCE_1("LOADING_USER_MODS", "Loading User Mod {0}", mod));
 			if (!loadModDir(modDir, mod, counter)) return false;
 		}
 		else
@@ -107,7 +107,7 @@ bool ModFiles::loadModFiles(const std::string &mod,
 		std::string modDir = S3D::getGlobalModFile(mod);
 		if (S3D::dirExists(modDir))
 		{
-			if (counter) counter->setNewOp(LANG_RESOURCE("LOADING_GLOBAL_MODS", "Loading Global Mods"));
+			if (counter) counter->setNewOp(LANG_RESOURCE_1("LOADING_GLOBAL_MODS", "Loading Global Mod {0}", mod));
 			if (!loadModDir(modDir, mod, counter)) return false;
 		}
 	}

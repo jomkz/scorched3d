@@ -83,11 +83,6 @@ class Action;
 class Weapon : public AccessoryPart
 {
 public:
-	enum DataEnum
-	{
-		eDataDeathAnimation = 1
-	};
-
 	Weapon();
 	virtual ~Weapon();
 

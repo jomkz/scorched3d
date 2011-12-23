@@ -179,8 +179,9 @@ void TargetDamage::damageTarget(ScorchedContext &context,
 		if (context.getOptionsGame().getActionSyncCheck())
 		{
 			context.getSimulator().addSyncCheck(
-				S3D::formatStringBuffer("TargetDamage: %u %s", 
+				S3D::formatStringBuffer("TargetDamage: %u %u %s", 
 					damagedTarget->getPlayerId(),
+					weaponContext.getPlayerId(),
 					damagedTarget->getLife().getLife().asQuickString()));
 		}
 
@@ -313,7 +314,7 @@ void TargetDamage::damageTarget(ScorchedContext &context,
 					}
 				}
 			}
-		}
+		} 
 
 		if (killedTank)
 		{
@@ -398,7 +399,7 @@ void TargetDamage::calculateDeath(ScorchedContext &context, WeaponFireContext &w
 	addDamageAction(context, weaponContext, killedTarget, killedTarget->getDeathAction());
 }
 
-void TargetDamage::addDamageAction(ScorchedContext &context, WeaponFireContext &weaponContext, 
+void TargetDamage::addDamageAction(ScorchedContext &context, WeaponFireContext &originalWeaponContext, 
 	Target *target, Weapon *weapon) 
 {
 	if (weapon)
@@ -412,8 +413,10 @@ void TargetDamage::addDamageAction(ScorchedContext &context, WeaponFireContext &
 
 		FixedVector position = target->getLife().getTargetPosition();
 		FixedVector velocity;
-		WeaponFireContext weaponContext(weaponContext.getPlayerId(), weaponContext.getInternalContext().getReferenced(), false);
-		weapon->fire(context, weaponContext, position, velocity);
+		WeaponFireContext newWeaponContext(originalWeaponContext.getPlayerId(), 
+			originalWeaponContext.getInternalContext().getReferenced(), 
+			false);
+		weapon->fire(context, newWeaponContext, position, velocity);
 		StatsLogger::instance()->weaponFired(weapon, true);
 	}
 }
