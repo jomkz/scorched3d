@@ -178,6 +178,19 @@ void WeaponAimed::fireAimedWeapon(ScorchedContext &context,
 		}
 	}
 
+	if (context.getOptionsGame().getWeaponSyncCheck())
+	{
+		std::string buffer("WeaponAimedTargets ");
+		std::list<std::pair<fixed, FixedVector *> >::iterator itor;
+		for (itor = distances.begin();
+			itor != distances.end();
+			++itor)
+		{
+			buffer += S3D::formatStringBuffer("%s %s, ", itor->first.asQuickString(), itor->second->asQuickString());
+		}
+		context.getSimulator().addSyncCheck(buffer);
+	}
+
 	RandomGenerator &random = context.getSimulator().getRandomGenerator();
 	
 	// Add a percetage that we will not fire at any tank
@@ -211,6 +224,14 @@ void WeaponAimed::fireAimedWeapon(ScorchedContext &context,
 		fixed power = random.getRandFixed("WeaponAimed") * 300 + 150;
 		if (shootAt)
 		{
+			if (context.getOptionsGame().getWeaponSyncCheck())
+			{
+				context.getSimulator().addSyncCheck(S3D::formatStringBuffer("WeaponAimed %s,%s,%s %s",
+					angleXYDegs.asQuickString(), angleYZDegs.asQuickString(),
+					power.asQuickString(),
+					shootAt->asQuickString()));
+			}
+
 			// We have a tank to aim at
 			// Aim a shot towards it
 			aimShot(
