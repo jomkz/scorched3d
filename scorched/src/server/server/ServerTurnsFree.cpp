@@ -29,6 +29,7 @@
 #include <tanket/TanketShotInfo.h>
 #include <tank/Tank.h>
 #include <list>
+#include <set>
 
 ServerTurnsFree::ServerTurnsFree() :
 	ServerTurns(false),

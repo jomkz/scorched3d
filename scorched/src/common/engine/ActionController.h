@@ -21,10 +21,7 @@
 #if !defined(AFX_ACTIONCONTROLLER_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_)
 #define AFX_ACTIONCONTROLLER_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_
 
-#include <set>
-#include <list>
 #include <map>
-#include <vector>
 #include <string.h>
 #include <actions/Action.h>
 
@@ -56,7 +53,7 @@ protected:
 	class ActionList
 	{
 	public:
-		ActionList() : actionCount(0), maxActions(1000)
+		ActionList(int startingSize) : actionCount(0), maxActions(startingSize)
 		{
 			actions = new Action*[maxActions];
 		}
@@ -77,6 +74,10 @@ protected:
 		{
 			actionCount = 0;
 		}
+		bool empty() 
+		{
+			return (actionCount == 0);
+		}
 
 		int actionCount;
 		Action **actions;
@@ -85,7 +86,7 @@ protected:
 	};
 
 	ScorchedContext *context_;
-	std::list<Action *> newActions_;
+	ActionList newActions_;
 	ActionList actions_;
 	std::map<std::string, int> actionProfile_;
 	int referenceCount_;

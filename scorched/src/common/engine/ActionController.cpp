@@ -28,7 +28,9 @@
 ActionController::ActionController() : 
 	referenceCount_(0),
 	context_(0),
-	actionProfiling_(false)
+	actionProfiling_(false),
+	newActions_(10),
+	actions_(1000)
 {
 
 }
@@ -41,12 +43,9 @@ ActionController::~ActionController()
 void ActionController::clear(bool warn)
 {
 	// New actions
-	std::list<Action *>::iterator newItor;
-	for (newItor = newActions_.begin();
-		newItor != newActions_.end();
-		++newItor)
+	for (int a=0; a<newActions_.actionCount; a++)
 	{
-		Action *act = *newItor;
+		Action *act = newActions_.actions[a];
 		if (warn)
 		{
 			Logger::log(S3D::formatStringBuffer("Warning: removing added timed out action %s",
@@ -76,7 +75,7 @@ void ActionController::clear(bool warn)
 void ActionController::logActions()
 {
 	Logger::log(S3D::formatStringBuffer("ActionLog : New %i, Ref %i",
-		(int) newActions_.size(),
+		newActions_.actionCount,
 		referenceCount_));
 	for (int a=0; a<actions_.actionCount; a++)
 	{
@@ -136,13 +135,10 @@ void ActionController::addNewActions(fixed time)
 		context_->getSimulator().addSyncCheck("Adding Actions");
 	}
 
-	int newActionCount = 0;
-	while (!newActions_.empty())
+	int syncActionCount = 0;
+	for (int a=0; a<newActions_.actionCount; a++)
 	{
-		newActionCount++;
-
-		// Get next action
-		Action *action = newActions_.front(); 
+		Action *action = newActions_.actions[a];
 
 		// Initialize it
 		action->setScorchedContext(context_);
@@ -155,11 +151,12 @@ void ActionController::addNewActions(fixed time)
 		{
 			if (context_->getOptionsGame().getActionSyncCheck())
 			{
+				syncActionCount++;
 				std::string actionType = action->getActionType();
 				std::string actionDetails = action->getActionDetails();
 				context_->getSimulator().addSyncCheck(
 					S3D::formatStringBuffer("Added Action : %i %s:%s", 
-						newActionCount,
+						syncActionCount,
 						actionType.c_str(), 
 						actionDetails.c_str()));
 			}
@@ -179,9 +176,8 @@ void ActionController::addNewActions(fixed time)
 		}
 
 		if (action->getReferenced()) referenceCount_ ++;
-
-		newActions_.pop_front();
 	}
+	newActions_.clear();
 }
 
 void ActionController::draw()
