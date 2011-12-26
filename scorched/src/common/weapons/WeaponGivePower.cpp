@@ -30,7 +30,8 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponGivePower);
 
-WeaponGivePower::WeaponGivePower()
+WeaponGivePower::WeaponGivePower() :
+	power_("WeaponGivePower::power", 0)
 {
 
 }

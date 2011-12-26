@@ -31,21 +31,22 @@ WeaponProjectile::WeaponProjectile() :
 	apexCollision_(false), waterCollision_(false), wallCollision_(true),
 	showShotPath_(false), showEndPoint_(false), 
 	createSmoke_(true),	createFlame_(true), noCameraTrack_(false),
-	spinSpeed_(1), spinAxis_(0.0f, 0.0f, 1.0f), apexNoDud_(false), timedDud_(false),
-	timedCollision_(0), heightCollision_(0),
-	wobbleSpin_(0), wobbleAmount_(2),
-	shieldHurtFactor_(1), windFactor_(1), gravityFactor_(1),
+	spinSpeed_("WeaponProjectile::spinSpeed", 1), spinAxis_(0.0f, 0.0f, 1.0f), apexNoDud_(false), timedDud_(false),
+	timedCollision_("WeaponProjectile::timedCollision", 0), heightCollision_("WeaponProjectile::heightCollision", 0),
+	wobbleSpin_("WeaponProjectile::wobbleSpin", 0), wobbleAmount_("WeaponProjectile::wobbleAmount", 2),
+	shieldHurtFactor_("WeaponProjectile::shieldHurtFactor", 1), windFactor_("WeaponProjectile::windFactor", 1), 
+	gravityFactor_("WeaponProjectile::gravityFactor", 1),
 	flameLife_(1.0f), smokeLife_(4.0f),
 	flameStartColor1_(0.9f, 0.0f, 0.0f), flameStartColor2_(1.0f, 0.2f, 0.2f),
 	flameEndColor1_(0.95f, 0.9f, 0.2f), flameEndColor2_(1.0f, 1.0f, 0.3f),
 	flameStartSize_(0.5f), flameEndSize_(3.0f),
 	smokeStartSize_(0.5f), smokeEndSize_(4.0f),
-	thrustAmount_(0), thrustTime_(0),
-	drag_(0), stepSize_(true, 75),
+	thrustAmount_("WeaponProjectile::thrustAmount", 0), thrustTime_("WeaponProjectile::thrustTime", 0),
+	drag_("WeaponProjectile::drag", 0), stepSize_(true, 75),
 	engineSound_("data/wav/misc/rocket.wav"),
 	flameTexture_("particle"), smokeTexture_("particle"),
 	animateFlameTexture_(false), animateSmokeTexture_(false),
-	scale_(1), flareType_(0)
+	scale_("WeaponProjectile::scale", 1), flareType_(0)
 {
 
 }

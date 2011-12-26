@@ -26,7 +26,7 @@
 REGISTER_ACCESSORY_SOURCE(WeaponLeapFrog);
 
 WeaponLeapFrog::WeaponLeapFrog():  
-	collisionAction_(0), bounce_(fixed(true, 6000))
+	collisionAction_(0), bounce_("WeaponLeapFrog::bounce", fixed(true, 6000))
 {
 
 }

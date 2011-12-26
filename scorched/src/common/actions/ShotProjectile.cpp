@@ -55,11 +55,12 @@ ShotProjectile::ShotProjectile(FixedVector &startPosition, FixedVector &velocity
 
 void ShotProjectile::init()
 {
+	fixed weaponScale = weapon_->getScale(*context_);
 #ifndef S3D_SERVER
 	if (!context_->getServerMode()) 
 	{
 		setActionRender(new MissileActionRenderer(flareType_, 
-				weapon_->getScale(*context_).asFloat(),
+				weaponScale.asFloat(),
 				spinSpeed_.asFloat(),
 				spinAxis_));
 

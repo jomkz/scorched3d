@@ -30,7 +30,13 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponNapalm);
 
-WeaponNapalm::WeaponNapalm() : landscapeErosion_(0)
+WeaponNapalm::WeaponNapalm() :
+	napalmTime_("WeaponNapalm::napalmTime", 0),
+	napalmHeight_("WeaponNapalm::napalmHeight", 0),
+	stepTime_("WeaponNapalm::stepTime", 0),
+	hurtStepTime_("WeaponNapalm::hurtStepTime", 0),
+	hurtPerSecond_("WeaponNapalm::hurtPerSecond", 0),
+	landscapeErosion_("WeaponNapalm::landscapeErosion", 0)
 {
 
 }

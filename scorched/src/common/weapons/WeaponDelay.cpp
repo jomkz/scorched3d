@@ -25,7 +25,7 @@
 REGISTER_ACCESSORY_SOURCE(WeaponDelay);
 
 WeaponDelay::WeaponDelay() :
-	delay_(0),
+	delay_("WeaponDelay::delay", 0),
 	delayedWeapon_(0)
 {
 

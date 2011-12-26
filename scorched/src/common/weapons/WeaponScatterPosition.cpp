@@ -29,7 +29,7 @@
 REGISTER_ACCESSORY_SOURCE(WeaponScatterPosition);
 
 WeaponScatterPosition::WeaponScatterPosition() :
-	aimedWeapon_(0)
+	aimedWeapon_(0), scatterpercentage_("WeaponScatterPosition::scatterpercentage", 0)
 {
 
 }

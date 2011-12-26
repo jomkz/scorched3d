@@ -28,7 +28,7 @@
 REGISTER_ACCESSORY_SOURCE(WeaponRedirect);
 
 WeaponRedirect::WeaponRedirect() :
-	hredirect_(0), vredirect_(0),
+	hredirect_("WeaponRedirect::hredirect", 0), vredirect_("WeaponRedirect::vredirect", 0),
 	habs_(false), vabs_(false),
 	nextAction_(0)
 {

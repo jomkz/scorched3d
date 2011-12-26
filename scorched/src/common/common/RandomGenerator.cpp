@@ -91,7 +91,6 @@ unsigned int FileRandomGenerator::getRandUInt(const char *source)
 	unsigned int result = lvalue | rvalue;
 
 	if (context_ &&
-		context_->getOptionsGame().getActionSyncCheck() &&
 		context_->getOptionsGame().getActionRandomSyncCheck())
 	{
 		context_->getSimulator().addSyncCheck(

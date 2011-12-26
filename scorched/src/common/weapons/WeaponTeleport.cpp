@@ -27,7 +27,8 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponTeleport);
 
-WeaponTeleport::WeaponTeleport() : groundOnly_(true)
+WeaponTeleport::WeaponTeleport() : 
+	groundOnly_(true), delay_("WeaponTeleport::delay", 0)
 {
 
 }

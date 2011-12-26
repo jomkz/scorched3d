@@ -129,8 +129,18 @@ void ActionController::addAction(Action *action)
 
 void ActionController::addNewActions(fixed time)
 {
+	if (newActions_.empty()) return;
+
+	if (context_->getOptionsGame().getActionSyncCheck())
+	{
+		context_->getSimulator().addSyncCheck("Adding Actions");
+	}
+
+	int newActionCount = 0;
 	while (!newActions_.empty())
 	{
+		newActionCount++;
+
 		// Get next action
 		Action *action = newActions_.front(); 
 
@@ -148,7 +158,8 @@ void ActionController::addNewActions(fixed time)
 				std::string actionType = action->getActionType();
 				std::string actionDetails = action->getActionDetails();
 				context_->getSimulator().addSyncCheck(
-					S3D::formatStringBuffer("Add Action : %s:%s", 
+					S3D::formatStringBuffer("Added Action : %i %s:%s", 
+						newActionCount,
 						actionType.c_str(), 
 						actionDetails.c_str()));
 			}

@@ -35,11 +35,15 @@
 REGISTER_ACCESSORY_SOURCE(WeaponRoller);
 
 WeaponRoller::WeaponRoller() : 
-	shieldHurtFactorExp_(0), windFactorExp_(1), gravityFactorExp_(1),
+	shieldHurtFactorExp_("WeaponRoller::shieldHurtFactorExp", 0), 
+	windFactorExp_("WeaponRoller::windFactorExp", 1), 
+	gravityFactorExp_("WeaponRoller::gravityFactorExp", 1),
 	maintainVelocity_(false), roll_(true),
-	dampenVelocityExp_(1), stepSize_(true, 100),
+	dampenVelocityExp_("WeaponRoller::dampenVelocityExp", 1), stepSize_(true, 100),
 	collisionAction_(0), stickyShields_(false),
-	noCameraTrack_(false), scale_(1)
+	noCameraTrack_(false), scale_("WeaponRoller::scale", 1),
+	timeExp_("WeaponRoller::timeExp", 0),
+	numberRollers_("WeaponRoller::numberRollers", 0)
 {
 
 }

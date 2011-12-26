@@ -30,7 +30,8 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponGiveLife);
 
-WeaponGiveLife::WeaponGiveLife()
+WeaponGiveLife::WeaponGiveLife() :
+	life_("WeaponGiveLife::life", 0)
 {
 
 }

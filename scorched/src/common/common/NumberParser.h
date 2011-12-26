@@ -34,8 +34,7 @@
 class NumberParser
 {
 public:
-	NumberParser();
-	NumberParser(fixed value);
+	NumberParser(const char *valueName, fixed value);
 	virtual ~NumberParser();
 
 	fixed getValue(ScorchedContext &context); 
@@ -46,6 +45,7 @@ public:
 	bool setExpression(fixed value);
 
 protected:
+	const char *valueName_;
 	bool getOperands();
 	bool isFixed_, isValid_;
 	std::string expression_;

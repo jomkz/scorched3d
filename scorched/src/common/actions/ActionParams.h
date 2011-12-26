@@ -55,6 +55,8 @@ protected:
 class FixedActionParam : public ActionParam
 {
 public:
+	FixedActionParam() : parser_("FixedActionParam", 0) {}
+
 	fixed getValue() { return value_; }
 	void setValue(fixed value) { value_ = value; }
 

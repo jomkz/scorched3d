@@ -25,7 +25,7 @@
 REGISTER_ACCESSORY_SOURCE(WeaponRepeat);
 
 WeaponRepeat::WeaponRepeat() : 
-	delay_(0), repeatWeapon_(0)
+	delay_("WeaponRepeat::delay", 0), repeatWeapon_(0)
 {
 
 }

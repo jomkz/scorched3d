@@ -24,7 +24,7 @@
 REGISTER_ACCESSORY_SOURCE(WeaponVelocity);
 
 WeaponVelocity::WeaponVelocity() :
-	velocityChange_(0), abs_(false),
+	velocityChange_("WeaponVelocity::velocityChange", 0), abs_(false),
 	aimedWeapon_(0)
 {
 

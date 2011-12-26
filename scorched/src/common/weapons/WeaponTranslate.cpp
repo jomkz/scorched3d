@@ -25,7 +25,7 @@
 REGISTER_ACCESSORY_SOURCE(WeaponTranslate);
 
 WeaponTranslate::WeaponTranslate() :
-	translateDist_(0), nextAction_(0)
+	translateDist_("WeaponTranslate::translateDist", 0), nextAction_(0)
 {
 
 }

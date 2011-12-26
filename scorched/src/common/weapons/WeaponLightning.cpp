@@ -26,7 +26,21 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponLightning);
 
-WeaponLightning::WeaponLightning()
+WeaponLightning::WeaponLightning() :
+	coneLengthExp_("WeaponLightning::coneLengthExp", 0),
+	segLengthExp_("WeaponLightning::segLengthExp", 0),
+	segVarExp_("WeaponLightning::segVarExp", 0),
+	sizeExp_("WeaponLightning::sizeExp", 0),
+	sizeVarExp_("WeaponLightning::sizeVarExp", 0),
+	minSizeExp_("WeaponLightning::minSizeExp", 0),
+	splitProbExp_("WeaponLightning::splitProbExp", 0),
+	splitVarExp_("WeaponLightning::splitVarExp", 0),
+	deathProbExp_("WeaponLightning::deathProbExp", 0),
+	derivAngleExp_("WeaponLightning::derivAngleExp", 0),
+	angleVarExp_("WeaponLightning::angleVarExp", 0),
+	totalTimeExp_("WeaponLightning::totalTimeExp", 0),
+	segHurtExp_("WeaponLightning::segHurtExp", 0),
+	segHurtRadiusExp_("WeaponLightning::segHurtRadiusExp", 0)
 {
 }
 

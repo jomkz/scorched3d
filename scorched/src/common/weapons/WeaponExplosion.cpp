@@ -26,7 +26,13 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponExplosion);
 
-WeaponExplosion::WeaponExplosion()
+WeaponExplosion::WeaponExplosion() :
+	sizeExp_("WeaponExplosion::sizeExp", 0),
+	deformSizeExp_("WeaponExplosion::deformSizeExp", 0),
+	shakeExp_("WeaponExplosion::shakeExp", 0),
+	minLifeExp_("WeaponExplosion::minLifeExp", 0), maxLifeExp_("WeaponExplosion::maxLifeExp", 0),
+	createMushroomAmountExp_("WeaponExplosion::createMushroomAmountExp", 0),
+	hurtAmountExp_("WeaponExplosion::hurtAmountExp", 0)
 {
 
 }

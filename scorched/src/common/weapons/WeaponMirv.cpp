@@ -26,7 +26,9 @@
 REGISTER_ACCESSORY_SOURCE(WeaponMirv);
 
 WeaponMirv::WeaponMirv() :
-	noWarheads_(0), hspreadDist_(0), vspreadDist_(0),
+	noWarheads_(0), 
+	hspreadDist_("WeaponMirv::hspreadDist", 0), 
+	vspreadDist_("WeaponMirv::vspreadDist", 0),
 	aimedWeapon_(0)
 {
 
