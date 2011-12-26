@@ -130,11 +130,6 @@ void ActionController::addNewActions(fixed time)
 {
 	if (newActions_.empty()) return;
 
-	if (context_->getOptionsGame().getActionSyncCheck())
-	{
-		context_->getSimulator().addSyncCheck("Adding Actions");
-	}
-
 	int syncActionCount = 0;
 	for (int a=0; a<newActions_.actionCount; a++)
 	{
