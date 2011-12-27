@@ -38,7 +38,9 @@ ServerParams::ServerParams() :
 	hideWindow_(options_, "hidewindow",
 		"Hides the scorched3d console window (windows)", 0, false),
 	startCustom_(options_, "startcustom",
-		"Starts a scorched 3d server, uses the last server made", 0, false)
+		"Starts a scorched 3d server, uses the last server made", 0, false),
+	exitOnSyncFailure_(options_, "exitonsyncfailure",
+		"Exits the server if a sync failure is found", 0, false)
 {
 
 }

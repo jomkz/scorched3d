@@ -23,6 +23,7 @@
 #include <server/ServerState.h>
 #include <server/ServerDestinations.h>
 #include <server/ScorchedServer.h>
+#include <server/ServerParams.h>
 #include <simactions/SyncCheckSimAction.h>
 #include <landscapemap/GroundMaps.h>
 #include <landscapemap/LandscapeMaps.h>
@@ -482,6 +483,11 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 		syncCheckLog("--------------------------------------------------------------------");
 		Logger::log(S3D::formatStringBuffer("**** SyncCheck checked, Dest %u Checks %u Targets %u Sync %u", 
 			destinationId, client->getSyncCheck().size(), noServerTanks, client->getSyncId()));
+
+		if (ServerParams::instance()->getExitOnSyncFailure())
+		{
+			exit(1);
+		}
 	}
 	else
 	{
