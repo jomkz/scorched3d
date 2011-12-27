@@ -306,7 +306,7 @@ bool TankAICurrentMove::makeProjectileShot(Tanket *tanket, Tanket *targetTanket,
 	}
 
 	// Get the place we want to shoot at
-	Vector directTarget = targetTanket->getShotInfo().getTankPosition().asVector();
+	Vector directTarget = targetTanket->getLife().getTargetPosition().asVector();
 
 	// Check if the person is in a hole
 	bool inhole = false;
@@ -363,7 +363,7 @@ bool TankAICurrentMove::makeProjectileShot(Tanket *tanket, Tanket *targetTanket,
 			float distanceFromTarget = 
 				(actualPosition - directTarget).Magnitude();
 			float distanceFromUs = 
-				(actualPosition - tanket->getShotInfo().getTankPosition().asVector()).Magnitude();
+				(actualPosition - tanket->getLife().getTargetPosition().asVector()).Magnitude();
 			if (distanceFromUs < projectileMinDistance_)
 			{
 				if (TankAI::getTankAILogging())
@@ -487,7 +487,7 @@ bool TankAICurrentMove::makeSniperShot(Tanket *tanket, Tanket *targetTanket,
 	}
 
 	// Get the place we want to shoot at
-	Vector directTarget = targetTanket->getShotInfo().getTankPosition().asVector();
+	Vector directTarget = targetTanket->getLife().getTargetPosition().asVector();
 
 	// First check to see if we can make a sniper shot that carries all the way
 	// as this is generaly an easier shot
@@ -575,7 +575,7 @@ bool TankAICurrentMove::makeLaserSniperShot(Tanket *tanket, Tanket *targetTanket
 	}
 
 	// Get the place we want to shoot at
-	Vector directTarget = targetTanket->getShotInfo().getTankPosition().asVector();
+	Vector directTarget = targetTanket->getLife().getTargetPosition().asVector();
 	
 	// Second check to see if we can make a sniper shot that is obstructed
 	// but could use a laser
@@ -621,13 +621,14 @@ bool TankAICurrentMove::makeBurriedShot(Tanket *tanket, Tanket *targetTanket,
 	fixed xy, yz, power;
 	TankLib::getSniperShotTowardsPosition(
 		ScorchedServer::instance()->getContext(),
-		tanket->getShotInfo().getTankPosition(), targetTanket->getShotInfo().getTankPosition(),
+		tanket->getLife().getTargetPosition(), targetTanket->getLife().getTargetPosition(),
 		100000, xy, yz, power);
 
 	// Check if this shot is burried
 	if (TankLib::intersection(
 		ScorchedServer::instance()->getContext(), 
-		tanket->getShotInfo().getTankGunPosition(), 
+		TankLib::getTankGunPosition(tanket->getLife().getTankTurretPosition(), 
+			tanket->getShotInfo().getRotationGunXY(), tanket->getShotInfo().getRotationGunYZ()),
 		xy, yz, power, 2))
 	{
 		if (TankAI::getTankAILogging())
@@ -745,8 +746,8 @@ bool TankAICurrentMove::makeMoveShot(Tanket *tanket,
 		// Try to find a position to move to that we want to move to
 		// For the moment, just use the 1st target
 		Tanket *target = sortedTankets.front();
-		Vector targetPos = target->getShotInfo().getTankPosition().asVector();
-		Vector tankPos = tanket->getShotInfo().getTankPosition().asVector();
+		Vector targetPos = target->getLife().getTargetPosition().asVector();
+		Vector tankPos = tanket->getLife().getTargetPosition().asVector();
 		float totalDistance = MAX(100.0f, MIN(500.0f, (targetPos - tankPos).Magnitude() * 2.0f));
 
 		// Can we move to this target at all?
@@ -844,7 +845,7 @@ bool TankAICurrentMove::makeGroupShot(Tanket *tanket,
 
 			// Check this is not too near to us!
 			float distance = 
-				(tanket->getShotInfo().getTankPosition().asVector() - 
+				(tanket->getLife().getTargetPosition().asVector() - 
 				entry.position).Magnitude();
 			if (distance < groupTargetDistance_ * 2.0f) continue;
 			
@@ -857,7 +858,7 @@ bool TankAICurrentMove::makeGroupShot(Tanket *tanket,
 				Tanket *to = *toItor;
 
 				distance = 
-					(to->getShotInfo().getTankPosition().asVector() - 
+					(to->getLife().getTargetPosition().asVector() - 
 					entry.position).Magnitude();
 				if (distance < groupTargetDistance_)
 				{
@@ -1006,20 +1007,20 @@ void TankAICurrentMove::shotAtTank(Tanket *tanket, bool projectile, float newDis
 		ShotRecord record;
 		record.projectileCurrentDistance = projectileStartDistance_; 
 		record.sniperCurrentDistance = sniperStartDistance_;
-		record.position = tanket->getShotInfo().getTankPosition().asVector();
+		record.position = tanket->getLife().getTargetPosition().asVector();
 		shotRecords_[tanket] = record;
 	}
 
 	// Update the new record with the details about the current shot
 	ShotRecord &record = shotRecords_[tanket];
-	float distance = (record.position - tanket->getShotInfo().getTankPosition().asVector()).Magnitude();
+	float distance = (record.position - tanket->getLife().getTargetPosition().asVector()).Magnitude();
 	float distanceDec = 0.0f;
 	if (distance > 5.0f)
 	{
 		distanceDec = MIN(distance - 5.0f, 20.0f) / 20.0f;
 	}
 
-	record.position = tanket->getShotInfo().getTankPosition().asVector();
+	record.position = tanket->getLife().getTargetPosition().asVector();
 	if (projectile)
 	{
 		record.projectileCurrentDistance = newDistance;

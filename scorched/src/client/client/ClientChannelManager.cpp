@@ -28,6 +28,7 @@
 #include <target/TargetContainer.h>
 #include <tank/Tank.h>
 #include <tank/TankState.h>
+#include <target/TargetLife.h>
 #include <tanket/TanketShotInfo.h>
 #include <sprites/TalkRenderer.h>
 #include <engine/ActionController.h>
@@ -340,7 +341,7 @@ bool ClientChannelManager::processChannelTextMessage(NetMessage &message,
 			// put a speach bubble over the talking tank
 			Vector white(1.0f, 1.0f, 1.0f);
 			TalkRenderer *talk = new TalkRenderer(
-				tank->getShotInfo().getTankTurretPosition().asVector(),
+				tank->getLife().getTankTurretPosition().asVector(),
 				white);
 			ScorchedClient::instance()->getActionController().
 				addAction(new SpriteAction(talk));

@@ -48,6 +48,7 @@ public:
 	void setRotation(fixed rotation);
 	FixedVector &getVelocity() { return velocity_; }
 	void setVelocity(FixedVector &velocity) { velocity_ = velocity; }
+	FixedVector &getTankTurretPosition();
 
 	void setTarget(Target *target) { target_ = target; }
 	void setBoundingSphere(bool sphereGeom);

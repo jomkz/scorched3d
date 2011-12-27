@@ -24,6 +24,7 @@
 #include <tanket/Tanket.h>
 #include <tanket/TanketShotInfo.h>
 #include <target/TargetLife.h>
+#include <tank/TankLib.h>
 
 REGISTER_ACCESSORY_SOURCE(WeaponTankPosition);
 
@@ -73,7 +74,7 @@ void WeaponTankPosition::fireWeapon(ScorchedContext &context,
 		FixedVector newPosition = tanket->getLife().getTargetPosition();
 		if (sightPos_)
 		{
-			newPosition = tanket->getShotInfo().getTankGunPosition();
+			newPosition = tanket->getLife().getTankTurretPosition();
 		}
 
 		aimedWeapon_->fire(context, weaponContext, newPosition, velocity);

@@ -316,18 +316,23 @@ void TargetRendererImplTank::drawSight()
  		if (OptionsDisplay::instance()->getOldSightPosition())
 		{
 			FixedVector &turretCenter = getMesh()->getTurretCenter();
+			FixedVector &targetPosition = tank_->getLife().getTargetPosition();
 			glTranslatef(
-				tank_->getLife().getTargetPosition()[0].asFloat(),
-				tank_->getLife().getTargetPosition()[1].asFloat(),
-				tank_->getLife().getTargetPosition()[2].asFloat() +
+				targetPosition[0].asFloat(),
+				targetPosition[1].asFloat(),
+				targetPosition[2].asFloat() +
 				(turretCenter[2].asFloat() - getMesh()->getModel()->getMin()[2].asFloat()) * getMesh()->getScale());
 		}
 		else
 		{
+			FixedVector &tankGunPosition = TankLib::getTankGunPosition(
+				tank_->getLife().getTankTurretPosition(),
+				tank_->getShotInfo().getRotationGunXY(),
+				tank_->getShotInfo().getRotationGunYZ());
 			glTranslatef(
-				tank_->getShotInfo().getTankGunPosition()[0].asFloat(),
-				tank_->getShotInfo().getTankGunPosition()[1].asFloat(),
-				tank_->getShotInfo().getTankGunPosition()[2].asFloat());
+				tankGunPosition[0].asFloat(),
+				tankGunPosition[1].asFloat(),
+				tankGunPosition[2].asFloat());
 		}
 	
 		GLState sightState1(GLState::BLEND_ON | GLState::TEXTURE_ON | GLState::LIGHTING_OFF | GLState::ALPHATEST_ON);
@@ -541,10 +546,15 @@ void TargetRendererImplTank::drawOldSight()
 		}
 		else
 		{
+			FixedVector &tankGunPosition = TankLib::getTankGunPosition(
+				tank_->getLife().getTankTurretPosition(),
+				tank_->getShotInfo().getRotationGunXY(),
+				tank_->getShotInfo().getRotationGunYZ());
+
 			glTranslatef(
-				tank_->getShotInfo().getTankGunPosition()[0].asFloat(),
-				tank_->getShotInfo().getTankGunPosition()[1].asFloat(),
-				tank_->getShotInfo().getTankGunPosition()[2].asFloat());
+				tankGunPosition[0].asFloat(),
+				tankGunPosition[1].asFloat(),
+				tankGunPosition[2].asFloat());
 			glRotatef(tank_->getShotInfo().getRotationGunXY().asFloat(), 
 				0.0f, 0.0f, 1.0f);
 		}
@@ -587,14 +597,16 @@ void TargetRendererImplTank::simulate(float frameTime)
 		smokeTime_ += frameTime;
 		if (smokeTime_ >= smokeWaitForTime_)
 		{
+			FixedVector &tankTurretPosition = tank_->getLife().getTankTurretPosition();
+
 			const float randOff = 1.0f;
 			const float randOffDiv = 0.5f;
 			float randX = RAND * randOff - randOffDiv; 
 			float randY = RAND * randOff - randOffDiv; 
 			Landscape::instance()->getSmoke().addSmoke(
-				tank_->getShotInfo().getTankTurretPosition()[0].asFloat() + randX, 
-				tank_->getShotInfo().getTankTurretPosition()[1].asFloat() + randY, 
-				tank_->getShotInfo().getTankTurretPosition()[2].asFloat());
+				tankTurretPosition[0].asFloat() + randX, 
+				tankTurretPosition[1].asFloat() + randY, 
+				tankTurretPosition[2].asFloat());
 
 			smokeWaitForTime_ = (
 				(RAND * float(tank_->getLife().getLife().asFloat()) * 10.0f) + 250.0f)

@@ -66,15 +66,7 @@ void WeaponTankVelocity::fireWeapon(ScorchedContext &context,
 	Tanket *tanket = context.getTargetContainer().getTanketById(weaponContext.getPlayerId());
 	if (tanket && tanket->getAlive())
 	{
-		if (context.getOptionsGame().getWeaponSyncCheck())
-		{
-			context.getSimulator().addSyncCheck(S3D::formatStringBuffer("WeaponTankVelocity %s %s",
-				tanket->getShotInfo().getRotationGunXY().asQuickString(),
-				tanket->getShotInfo().getRotationGunYZ().asQuickString()
-				));
-		}
-
-		FixedVector newVelocity = tanket->getShotInfo().getVelocityVector();
+		FixedVector newVelocity = weaponContext.getInternalContext().getVelocityVector();
 		aimedWeapon_->fire(context, weaponContext, position, newVelocity);
 	}
 }

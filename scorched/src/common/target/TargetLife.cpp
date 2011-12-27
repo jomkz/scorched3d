@@ -121,6 +121,14 @@ Vector &TargetLife::getFloatCenterPosition()
 	return result;
 }
 
+FixedVector &TargetLife::getTankTurretPosition()
+{
+	static FixedVector tankTurretPosition;
+	tankTurretPosition = getTargetPosition();
+	tankTurretPosition[2] += 1;
+	return tankTurretPosition;
+}
+
 fixed TargetLife::collisionDistance(FixedVector &position)
 {
 	FixedVector &currentPosition = getCenterPosition();

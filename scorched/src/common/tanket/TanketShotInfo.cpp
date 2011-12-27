@@ -52,36 +52,6 @@ void TanketShotInfo::newGame()
 	if (!context_.getServerMode()) moveId_ = 0;
 }
 
-FixedVector &TanketShotInfo::getTankGunPosition()
-{
-	static FixedVector tankGunPosition;
-	tankGunPosition = TankLib::getGunPosition(
-			getRotationGunXY(), getRotationGunYZ());
-	tankGunPosition += getTankTurretPosition();
-
-	return tankGunPosition;
-}
-
-FixedVector &TanketShotInfo::getTankTurretPosition()
-{
-	static FixedVector tankTurretPosition;
-	tankTurretPosition = getTankPosition();
-	tankTurretPosition[2] += 1;
-
-	return tankTurretPosition;
-}
-
-FixedVector &TanketShotInfo::getTankPosition()
-{ 
-	return tanket_->getLife().getTargetPosition();
-}
-
-FixedVector &TanketShotInfo::getVelocityVector()
-{
-	return TankLib::getVelocityVector(
-		getRotationGunXY(), getRotationGunYZ());
-}
-
 fixed TanketShotInfo::rotateGunXY(fixed angle, bool diff)
 {
 	if (diff) turretRotXY_ += angle;

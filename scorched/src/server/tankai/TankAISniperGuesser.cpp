@@ -22,6 +22,7 @@
 #include <tank/TankLib.h>
 #include <tanket/Tanket.h>
 #include <tanket/TanketShotInfo.h>
+#include <target/TargetLife.h>
 #include <server/ScorchedServer.h>
 #include <common/Logger.h>
 #include <common/RandomGenerator.h>
@@ -41,7 +42,7 @@ bool TankAISniperGuesser::guess(Tanket *tanket, Vector &target,
 	FileRandomGenerator generator;
 	generator.seed(rand());
 
-	FixedVector shotPosition = tanket->getShotInfo().getTankPosition();
+	FixedVector shotPosition = tanket->getLife().getTargetPosition();
 	if (TankLib::getSniperShotTowardsPosition(
 		ScorchedServer::instance()->getContext(),
 		shotPosition, 

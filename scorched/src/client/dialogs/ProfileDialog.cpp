@@ -145,7 +145,7 @@ void ProfileDialog::drawLandscape(Tank *currentTank)
 	// Get tank attributes
 	fixed tankRotation = -currentTank->getShotInfo().getRotationGunXY() / 180 * fixed::XPI;
 	FixedVector tankDirection(tankRotation.sin(), tankRotation.cos(), 0);
-	FixedVector startPosition = currentTank->getShotInfo().getTankPosition() - tankDirection * 25;
+	FixedVector startPosition = currentTank->getLife().getTargetPosition() - tankDirection * 25;
 
 	// Draw the landscape
 	GLState state1(GLState::TEXTURE_OFF | GLState::BLEND_ON | GLState::DEPTH_OFF);
@@ -339,7 +339,7 @@ void ProfileDialog::drawAiming(Tank *currentTank)
 {
 	GLState state3(GLState::TEXTURE_OFF | GLState::BLEND_ON);
 
-	FixedVector tankPosition = currentTank->getShotInfo().getTankTurretPosition();
+	FixedVector tankPosition = currentTank->getLife().getTankTurretPosition();
 	FixedVector tankWindowPosition(25, tankPosition[2], 0);
 
 	const fixed diff = fixed(5) / 180 * fixed::XPI;

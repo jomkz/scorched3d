@@ -96,7 +96,7 @@ void TankAIAimGuesser::initialShot(Tanket *tanket, Vector &target)
 	TankLib::getShotTowardsPosition(
 		context_,
 		random,
-		tanket->getShotInfo().getTankPosition(), 
+		tanket->getLife().getTargetPosition(), 
 		FixedVector::fromVector(target), 
 		angleXYDegs, angleYZDegs, power);
 
@@ -110,7 +110,8 @@ void TankAIAimGuesser::refineShot(Tanket *tanket,
 	Vector &currentPos, Vector &wantedPos)
 {
 	// Get the used velocity
-	FixedVector shotVelocity = tanket->getShotInfo().getVelocityVector() *
+	FixedVector shotVelocity = 
+		TankLib::getVelocityVector(tanket->getShotInfo().getRotationGunXY(), tanket->getShotInfo().getRotationGunYZ()) *
 		(tanket->getShotInfo().getPower() + 1);
 
 	// Figure out how much the last shot missed by
@@ -127,8 +128,8 @@ void TankAIAimGuesser::refineShot(Tanket *tanket,
 	tanket->getShotInfo().rotateGunXY(angleXYDegs, false);
 
 	// And the new best power
-	float dist = (currentPos - tanket->getShotInfo().getTankPosition().asVector()).Magnitude2d();
-	float wanteddist = (wantedPos - tanket->getShotInfo().getTankPosition().asVector()).Magnitude2d();
+	float dist = (currentPos - tanket->getLife().getTargetPosition().asVector()).Magnitude2d();
+	float wanteddist = (wantedPos - tanket->getLife().getTargetPosition().asVector()).Magnitude2d();
 	float currentPower = (float) (log(dist) / log(2.0));
 	float wantedPower = (float) (log(wanteddist) / log(2.0));
 
@@ -161,9 +162,10 @@ void TankAIAimGuesser::getCurrentGuess(Tanket *tanket)
 	context_.getOptionsGame().getMainOptions().
 		getActionSyncCheckEntry().setValue(false);
 
-	FixedVector shotVelocity = tanket->getShotInfo().getVelocityVector() *
+	FixedVector shotVelocity = TankLib::getVelocityVector(tanket->getShotInfo().getRotationGunXY(), tanket->getShotInfo().getRotationGunYZ()) *
 		(tanket->getShotInfo().getPower() + 1);
-	FixedVector shotPosition = tanket->getShotInfo().getTankGunPosition();
+	FixedVector shotPosition = TankLib::getTankGunPosition(tanket->getLife().getTankTurretPosition(),
+		tanket->getShotInfo().getRotationGunXY(), tanket->getShotInfo().getRotationGunYZ());
 
 	PhysicsParticleObject particleObject;
 	PhysicsParticleInfo info(ParticleTypeShot, tanket->getPlayerId(), 0);

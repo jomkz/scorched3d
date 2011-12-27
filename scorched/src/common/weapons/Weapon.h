@@ -30,7 +30,9 @@
 class WeaponFireContextInternal
 {
 public:
-	WeaponFireContextInternal(bool referenced, bool updateStats);
+	WeaponFireContextInternal(unsigned int selectPositionX, unsigned int selectPositionY,
+		const FixedVector &velocityVectory,
+		bool referenced, bool updateStats);
 	virtual ~WeaponFireContextInternal();
 
 	int getKillCount() { return killCount_; }
@@ -38,6 +40,10 @@ public:
 
 	bool getUpdateStats() { return updateStats_; }
 	bool getReferenced() { return referenced_; }
+
+	unsigned int getSelectPositionX() { return selectPositionX_; }
+	unsigned int getSelectPositionY() { return selectPositionY_; }
+	FixedVector &getVelocityVector() { return velocityVector_; }
 
 	ObjectGroups &getLocalGroups() { return localGroups_; }
 
@@ -51,6 +57,9 @@ protected:
 	bool referenced_, updateStats_;
 	unsigned int referenceCount_;
 	ObjectGroups localGroups_;
+	unsigned int selectPositionX_;
+	unsigned int selectPositionY_;
+	FixedVector velocityVector_;
 	std::map<unsigned int, int> *labelCount_;
 
 private:
@@ -61,7 +70,10 @@ private:
 class WeaponFireContext
 {
 public:
-	WeaponFireContext(unsigned int playerId, bool referenced, bool updateStats);
+	WeaponFireContext(unsigned int playerId, 
+		unsigned int selectPositionX, unsigned int selectPositionY,
+		const FixedVector &velocityVector,
+		bool referenced, bool updateStats);
 	WeaponFireContext(WeaponFireContext &other);
 	virtual ~WeaponFireContext();
 

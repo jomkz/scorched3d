@@ -321,9 +321,9 @@ fixed MovementMap::getWaterHeight()
 	if (context_.getOptionsGame().getMovementRestriction() ==
 		OptionsGame::MovementRestrictionLandOrAbove)
 	{
-		if (waterHeight > tanket_->getShotInfo().getTankPosition()[2] - fixed(true, 1000))
+		if (waterHeight > tanket_->getLife().getTargetPosition()[2] - fixed(true, 1000))
 		{
-			waterHeight = tanket_->getShotInfo().getTankPosition()[2] - fixed(true, 1000);
+			waterHeight = tanket_->getLife().getTargetPosition()[2] - fixed(true, 1000);
 		}
 	}
 	return waterHeight;
@@ -347,10 +347,10 @@ fixed MovementMap::getFuel(WeaponMoveTank *weapon)
 bool MovementMap::tankBurried()
 {
 	fixed landscapeHeight = context_.getLandscapeMaps().getGroundMaps().getInterpHeight(
-		tanket_->getShotInfo().getTankPosition()[0],
-		tanket_->getShotInfo().getTankPosition()[1]);
+		tanket_->getLife().getTargetPosition()[0],
+		tanket_->getLife().getTargetPosition()[1]);
 	fixed tankHeight = 
-		tanket_->getShotInfo().getTankPosition()[2];
+		tanket_->getLife().getTargetPosition()[2];
 	fixed MaxTankClimbHeight = fixed(context_.getOptionsGame().
 		getMaxClimbingDistance()) / fixed(10);
 	if (landscapeHeight > tankHeight + MaxTankClimbHeight)
@@ -434,9 +434,9 @@ bool MovementMap::calculatePosition(FixedVector &position, fixed fuel)
 
 	// Setup movement variables
 	unsigned int posX = (unsigned int) 
-		tanket_->getShotInfo().getTankPosition()[0].asInt();
+		tanket_->getLife().getTargetPosition()[0].asInt();
 	unsigned int posY = (unsigned int) 
-		tanket_->getShotInfo().getTankPosition()[1].asInt();
+		tanket_->getLife().getTargetPosition()[1].asInt();
 	unsigned int startPt = POINT_TO_UINT(posX, posY);
 	unsigned int endPt = POINT_TO_UINT(
 		(unsigned int)position[0].asInt(), 
@@ -503,9 +503,9 @@ void MovementMap::calculateAllPositions(fixed fuel)
 
 	// Setup movement variables
 	unsigned int posX = (unsigned int) 
-		tanket_->getShotInfo().getTankPosition()[0].asInt();
+		tanket_->getLife().getTargetPosition()[0].asInt();
 	unsigned int posY = (unsigned int) 
-		tanket_->getShotInfo().getTankPosition()[1].asInt();
+		tanket_->getLife().getTargetPosition()[1].asInt();
 
 	// Check we can move at all
 	if (getAndCheckEntry(posX, posY).type == eNotSeen)

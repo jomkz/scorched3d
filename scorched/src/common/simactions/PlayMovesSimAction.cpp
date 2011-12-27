@@ -23,10 +23,12 @@
 #include <weapons/AccessoryStore.h>
 #include <tanket/TanketAccessories.h>
 #include <target/TargetContainer.h>
+#include <tanket/TanketShotInfo.h>
+#include <target/TargetLife.h>
 #include <tank/Tank.h>
+#include <tank/TankLib.h>
 #include <tank/TankShotHistory.h>
 #include <tank/TankState.h>
-#include <tanket/TanketShotInfo.h>
 #include <target/TargetRenderer.h>
 #include <tankai/TankAIStrings.h>
 #include <actions/TankSay.h>
@@ -169,20 +171,29 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 		tanket->getAccessories().rm(accessory, accessory->getUseNumber());
 	}
 
-	// Set the tank to have the correct rotation etc..
-	tanket->getShotInfo().rotateGunXY(
-		message.getRotationXY(), false);
-	tanket->getShotInfo().rotateGunYZ(
-		message.getRotationYZ(), false);
-	tanket->getShotInfo().changePower(
-		message.getPower(), false);
-	tanket->getShotInfo().setSelectPosition(
-		message.getSelectPositionX(), 
-		message.getSelectPositionY());
 	if (tanket->getType() == Target::TypeTank)
 	{
 		Tank *tank = (Tank *) tanket;
-		tank->getShotHistory().madeShot();
+
+		// Set the tank rotation so others can see what we are shooting at
+#ifndef S3D_SERVER
+		if (!context.getServerMode())
+		{
+			if (tank->getDestinationId() != context.getTargetContainer().getCurrentDestinationId())
+			{
+
+				tanket->getShotInfo().rotateGunXY(
+					message.getRotationXY(), false);
+				tanket->getShotInfo().rotateGunYZ(
+					message.getRotationYZ(), false);
+				tanket->getShotInfo().changePower(
+					message.getPower(), false);
+				tanket->getShotInfo().setSelectPosition(
+					message.getSelectPositionX(), 
+					message.getSelectPositionY());
+			}
+		}
+#endif
 
 		// Tank say
 		if (tank->getDestinationId() == 0)
@@ -219,17 +230,24 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 					S3D::getModFile(S3D::formatStringBuffer("data/wav/%s", 
 					weapon->getParent()->getActivationSound())));
 			SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
-				firedSound, tanket->getShotInfo().getTankPosition().asVector());
+				firedSound, tanket->getLife().getTargetPosition().asVector());
 		}
 	}
 #endif // #ifndef S3D_SERVER
 
 	// Get firing context
-	WeaponFireContext weaponContext(tanket->getPlayerId(), referenced_, 
+	FixedVector newVelocity = TankLib::getVelocityVector(
+		message.getRotationXY(), message.getRotationYZ());
+	WeaponFireContext weaponContext(
+		tanket->getPlayerId(),
+		message.getSelectPositionX(), message.getSelectPositionY(),
+		newVelocity,
+		referenced_, 
 		(tanket->getType() == Target::TypeTank));
-	FixedVector velocity = tanket->getShotInfo().getVelocityVector() *
-		(tanket->getShotInfo().getPower() + 1);
-	FixedVector position = tanket->getShotInfo().getTankGunPosition();
+	FixedVector velocity = newVelocity * (message.getPower() + 1);
+	FixedVector position = TankLib::getTankGunPosition(
+		tanket->getLife().getTankTurretPosition(),
+		message.getRotationXY(), message.getRotationYZ());
 
 	// Create an action for the muzzle flash
 	// add it to the action controller

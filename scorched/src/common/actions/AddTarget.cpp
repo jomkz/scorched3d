@@ -67,7 +67,7 @@ void AddTarget::simulate(fixed frameTime, bool &remove)
 	}
 
 	// Check if this new target can fall
-	WeaponFireContext weaponContext(playerId, false, false);
+	WeaponFireContext weaponContext(playerId, 0, 0, FixedVector(), false, false);
 	TargetDamageCalc::damageTarget(*context_, target->getPlayerId(), addTarget_, 
 		weaponContext, 0, false, true, false);
 

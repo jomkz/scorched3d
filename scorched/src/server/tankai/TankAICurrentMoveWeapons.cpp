@@ -23,6 +23,7 @@
 #include <tanket/TanketShotInfo.h>
 #include <target/TargetShield.h>
 #include <target/TargetParachute.h>
+#include <target/TargetLife.h>
 #include <server/ScorchedServer.h>
 #include <landscapedef/LandscapeTex.h>
 #include <landscapemap/LandscapeMaps.h>
@@ -59,7 +60,7 @@ TankAICurrentMoveWeapons::TankAICurrentMoveWeapons(Tanket *tanket,
 		waterHeight = water->height;
 	}
 	napalm = 0;
-	if (targetTanket->getShotInfo().getTankPosition()[2] > waterHeight)
+	if (targetTanket->getLife().getTargetPosition()[2] > waterHeight)
 	{
 		napalm = weapons->getTankAccessoryByType(tanket, "napalm");
 	}

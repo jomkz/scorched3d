@@ -628,7 +628,12 @@ void Napalm::addBurnAction(Target *target)
 
 		FixedVector position = target->getLife().getTargetPosition();
 		FixedVector velocity;
-		WeaponFireContext weaponContext(weaponContext_.getPlayerId(), weaponContext_.getInternalContext().getReferenced(), false);
+		WeaponFireContext weaponContext(weaponContext_.getPlayerId(), 
+			weaponContext_.getInternalContext().getSelectPositionX(), 
+			weaponContext_.getInternalContext().getSelectPositionY(), 
+			weaponContext_.getInternalContext().getVelocityVector(),
+			weaponContext_.getInternalContext().getReferenced(), 
+			false);
 		weapon->fire(*context_, weaponContext, 
 			position, velocity);
 		StatsLogger::instance()->weaponFired(weapon, true);

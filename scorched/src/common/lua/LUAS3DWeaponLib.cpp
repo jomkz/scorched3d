@@ -82,7 +82,7 @@ static int s3d_fire_weapon(lua_State *L)
 
 	Weapon *weapon = (Weapon*) accessoryPart;
 
-	WeaponFireContext weaponContext(playerId, true, true);
+	WeaponFireContext weaponContext(playerId, 0, 0, FixedVector(), true, true);
 	weapon->fire(*wrapper->getContext(), weaponContext, position, velocity);
 
 	return 0;
@@ -98,7 +98,7 @@ static int s3d_explosion(lua_State *L)
 	FixedVector velocity = LUAUtil::getVectorFromStack(L, 3);
 	explosionParams->parseLUA(L, 4);	
 
-	WeaponFireContext fireContext(playerId, true, true);
+	WeaponFireContext fireContext(playerId, 0, 0, FixedVector(), true, true);
 	Explosion *explosion = new Explosion(
 		position, velocity, explosionParams, wrapper->getWeapon(), fireContext);
 	wrapper->getContext()->getActionController().addAction(explosion);
@@ -115,7 +115,7 @@ static int s3d_napalm(lua_State *L)
 	FixedVector position = LUAUtil::getVectorFromStack(L, 2);
 	napalmParams->parseLUA(L, 3);	
 
-	WeaponFireContext fireContext(playerId, true, true);
+	WeaponFireContext fireContext(playerId, 0, 0, FixedVector(), true, true);
 	Napalm *napalm = new Napalm(
 		position[0].asInt(), position[1].asInt(),
 		wrapper->getWeapon(), napalmParams, fireContext);
@@ -134,7 +134,7 @@ static int s3d_laser(lua_State *L)
 	FixedVector direction = LUAUtil::getVectorFromStack(L, 3);
 	laserParams->parseLUA(L, 4);
 
-	WeaponFireContext fireContext(playerId, true, true);
+	WeaponFireContext fireContext(playerId, 0, 0, FixedVector(), true, true);
 	Laser *laser = new Laser(
 		wrapper->getWeapon(), laserParams,
 		position, direction,

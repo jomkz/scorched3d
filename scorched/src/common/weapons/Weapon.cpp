@@ -24,9 +24,12 @@
 #include <engine/Simulator.h>
 #include <common/OptionsScorched.h>
 
-WeaponFireContextInternal::WeaponFireContextInternal(bool referenced, bool updateStats) :
+WeaponFireContextInternal::WeaponFireContextInternal(unsigned int selectPositionX, unsigned int selectPositionY,
+		const FixedVector &velocityVector, bool referenced, bool updateStats) :
 	referenced_(referenced), updateStats_(updateStats),
-	killCount_(0), referenceCount_(0), labelCount_(0)
+	killCount_(0), referenceCount_(0), labelCount_(0),
+	velocityVector_(velocityVector),
+	selectPositionX_(selectPositionX), selectPositionY_(selectPositionY)
 {
 }
 
@@ -57,10 +60,15 @@ int WeaponFireContextInternal::getIncLabelCount(unsigned int label)
 	return ++(*labelCount_)[label];
 }
 
-WeaponFireContext::WeaponFireContext(unsigned int playerId, bool referenced, bool updateStats) :
+WeaponFireContext::WeaponFireContext(unsigned int playerId, 
+	unsigned int selectPositionX, unsigned int selectPositionY,
+	const FixedVector &velocityVector,
+	bool referenced, bool updateStats) :
 	playerId_(playerId)
 {
-	internalContext_ = new WeaponFireContextInternal(referenced, updateStats);
+	internalContext_ = new WeaponFireContextInternal(selectPositionX, selectPositionY,
+		velocityVector,
+		referenced, updateStats);
 	internalContext_->incrementReference();
 }
 

@@ -514,6 +514,7 @@ void TankKeyboardControlUtil::fireShot(Tank *tank)
 			tank->getShotInfo().getPower(),
 			tank->getShotInfo().getSelectPositionX(),
 			tank->getShotInfo().getSelectPositionY());
+		tank->getShotHistory().madeShot();
 
 		// If so we send this move to the server
 		ComsMessageSender::sendToServer(comsMessage);

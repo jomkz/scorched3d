@@ -231,3 +231,10 @@ FixedVector &TankLib::getGunPosition(fixed xy, fixed yz)
 	return pos;
 }
 
+FixedVector &TankLib::getTankGunPosition(FixedVector &tankTurretPosition, fixed xy, fixed yz)
+{
+	static FixedVector tankGunPosition;
+	tankGunPosition = TankLib::getGunPosition(xy, yz);
+	tankGunPosition += tankTurretPosition;
+	return tankGunPosition;
+}

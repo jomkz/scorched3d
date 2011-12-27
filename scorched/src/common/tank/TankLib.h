@@ -51,6 +51,7 @@ namespace TankLib
 		fixed &angleXYDegs, fixed &angleYZDegs, fixed &power);
 	FixedVector &getVelocityVector(fixed xy, fixed yz);
 	FixedVector &getGunPosition(fixed xy, fixed yz);
+	FixedVector &getTankGunPosition(FixedVector &tankTurretPosition, fixed xy, fixed yz);
 };
 
 

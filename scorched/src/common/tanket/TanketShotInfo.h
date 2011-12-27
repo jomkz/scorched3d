@@ -37,30 +37,22 @@ public:
 	// State change
 	void newGame();
 
-	// Gun/Turret Rotation
+	// Gun/Turret Rotation, position
 	fixed rotateGunXY(fixed angle, bool diff=true);
 	fixed rotateGunYZ(fixed angle, bool diff=true);
-	fixed getRotationGunXY() { return turretRotXY_; }
-	fixed getRotationGunYZ() { return turretRotYZ_; }
-
-	// Select position
-	int getSelectPositionX() { return selectPositionX_; }
-	int getSelectPositionY() { return selectPositionY_; }
 	void setSelectPosition(int x, int y) { 
 		selectPositionX_ = x; selectPositionY_ = y; }
-
-	// Power of gun
-	fixed getPower() { return power_; }
 	fixed changePower(fixed power, bool diff=true);
 
+	fixed getRotationGunXY() { return turretRotXY_; }
+	fixed getRotationGunYZ() { return turretRotYZ_; }
+	int getSelectPositionX() { return selectPositionX_; }
+	int getSelectPositionY() { return selectPositionY_; }
+	fixed getPower() { return power_; }
+
+	// Power of gun
 	fixed getMaxPower() { return maxPower_; }
 	void setMaxPower(fixed power) { maxPower_ = power; }
-
-	// Position
-	FixedVector &getVelocityVector();
-	FixedVector &getTankPosition(); // Position of center bottom of tank
-	FixedVector &getTankTurretPosition(); // Position of center of turret
-	FixedVector &getTankGunPosition(); // Position of end of gun
 
 	const char *getRotationString();
 	const char *getElevationString();

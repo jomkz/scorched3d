@@ -200,8 +200,8 @@ void TankAICurrentTarget::getTargets(Tanket *thisTanket, std::list<Tanket *> &re
 				shotAt_[currentTanket], currentTanket));
 		}
 		distanceSorted.insert(std::pair<float, Tanket *>(
-			((currentTanket->getShotInfo().getTankPosition() - 
-			thisTanket->getShotInfo().getTankPosition()).Magnitude()).asFloat(), currentTanket));
+			((currentTanket->getLife().getTargetPosition() - 
+			thisTanket->getLife().getTargetPosition()).Magnitude()).asFloat(), currentTanket));
 	}
 
 	// Go through all possible tanks

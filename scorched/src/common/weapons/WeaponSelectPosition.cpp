@@ -62,18 +62,15 @@ bool WeaponSelectPosition::parseXML(AccessoryCreateContext &context, XMLNode *ac
 void WeaponSelectPosition::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	// This weapon re-centers the current shot on the user selected position
-	// This can be used for firing from a moving tank
-
 	Tanket *tanket = context.getTargetContainer().getTanketById(weaponContext.getPlayerId());
 	if (tanket && tanket->getAlive())
 	{
 		FixedVector newPosition;
-		newPosition[0] = fixed(tanket->getShotInfo().getSelectPositionX());
-		newPosition[1] = fixed(tanket->getShotInfo().getSelectPositionY());
+		newPosition[0] = fixed(weaponContext.getInternalContext().getSelectPositionX());
+		newPosition[1] = fixed(weaponContext.getInternalContext().getSelectPositionY());
 		newPosition[2] = context.getLandscapeMaps().getGroundMaps().getHeight(
-			tanket->getShotInfo().getSelectPositionX(),
-			tanket->getShotInfo().getSelectPositionY());
+			weaponContext.getInternalContext().getSelectPositionX(),
+			weaponContext.getInternalContext().getSelectPositionY());
 
 		aimedWeapon_->fire(context, weaponContext, newPosition, velocity);
 	}

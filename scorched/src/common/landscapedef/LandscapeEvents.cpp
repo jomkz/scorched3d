@@ -180,7 +180,7 @@ void LandscapeActionFireWeapon::fireAction(ScorchedContext &context)
 			S3D::formatStringBuffer("Accessory named \"%s\" is not a weapon", weapon.c_str()));
 	Weapon *weapon = (Weapon *) accessory->getAction();
 
-	WeaponFireContext weaponContext(0, false, false);
+	WeaponFireContext weaponContext(0, 0, 0, FixedVector(), false, false);
 	FixedVector pos, vel;
 	weapon->fire(context, weaponContext, pos, vel);
 }
@@ -217,7 +217,7 @@ void LandscapeActionFireWeaponFromGroup::fireAction(ScorchedContext &context)
 	FixedVector newPosition = entry->getPosition();
 	FixedVector newVelocity = entry->getVelocity();
 
-	WeaponFireContext weaponContext(entry->getPlayerId(), false, false);
+	WeaponFireContext weaponContext(entry->getPlayerId(), 0, 0, newVelocity, false, false);
 	weapon->fire(context, weaponContext, newPosition, newVelocity);
 }
 
