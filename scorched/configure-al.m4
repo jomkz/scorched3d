@@ -9,23 +9,32 @@ AC_ARG_ENABLE(openaltest,
 AC_MSG_CHECKING(for OpenAL support)
 AC_PATH_PROG(OPENAL_CONFIG, openal-config, no)
 if test x$OPENAL_CONFIG = xno; then
-	echo "*** The openal-config script installed by OpenAL could not be found"
-	echo "*** Make sure openal-config is in your path, or set the OPENAL_CONFIG"
-	echo "*** environment variable to the full path to openal-config."
+	echo "The openal-config script installed by OpenAL could not be found"
+	echo "Make sure openal-config is in your path, or set the OPENAL_CONFIG"
+	echo "environment variable to the full path to openal-config."
+	echo "Trying pkg-config instead."
 
-	AC_MSG_ERROR([*** Can't find the openal library. Try: http://www.openal.org/])
-else
+	AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+	if test x$PKG_CONFIG = xno; then
+		echo "The pkg-config script could not be found"
+		echo "Make sure pkg-config is in your path, or set the PKG_CONFIG"
+		echo "environment variable to the full path to pkg-config."
 
-	if test x"$use_static_openal" = x"yes"; then
-		AL_LIBS="/usr/local/lib/libopenal.a"
+		AC_MSG_ERROR([*** Can't find the openal library. Try: http://www.openal.org/])
 	else
-		AL_LIBS="`$OPENAL_CONFIG --libs`"
+		OPENAL_CONFIG="$PKG_CONFIG openal";
 	fi
-	
-	AL_CFLAGS="`$OPENAL_CONFIG --cflags`"
-
-	AC_MSG_RESULT(yes)
 fi
+	
+if test x"$use_static_openal" = x"yes"; then
+	AL_LIBS="/usr/local/lib/libopenal.a"
+else
+	AL_LIBS="`$OPENAL_CONFIG --libs`"
+fi
+
+AL_CFLAGS="`$OPENAL_CONFIG --cflags`"
+
+AC_MSG_RESULT(yes)
 
 AC_MSG_CHECKING(for Freealut support)
 AC_PATH_PROG(FREEALUT_CONFIG, freealut-config, no)

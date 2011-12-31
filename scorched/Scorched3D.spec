@@ -9,13 +9,13 @@ Source0: http://unc.dl.sourceforge.net/sourceforge/scorched3d/Scorched3D-%{versi
 BuildRoot: %{_tmppath}/%{name}-buildroot
 
 BuildRequires:  SDL_net SDL_net-devel SDL SDL-devel >= 1.2.5
-BuildRequires:  fftw3-devel, libpng-devel 
-BuildRequires:  freetype freetype-devel, expat-devel, 
-BuildRequires:  libogg libogg-devel libvorbis libvorbis-devel, libjpeg-devel
+BuildRequires:  fftw-devel libjpeg-devel libpng-devel glew-devel
+BuildRequires:  freetype freetype-devel expat-devel, 
+BuildRequires:  libogg libogg-devel libvorbis libvorbis-devel libjpeg-devel
 BuildRequires:  wxGTK wxGTK-devel >= 2.4.0
-BuildRequires:  openal openal-devel freealut freealut-devel
+BuildRequires:  openal-soft openal-soft-devel freealut freealut-devel
 BuildRequires:  autoconf automake libtool 
-Requires: SDL, SDL_net, freetype, libogg, wxGTK, openal, freealut
+Requires: SDL, SDL_net, freetype, libogg, wxGTK, openal-soft, freealut
 
 %description
 Scorched3D is a cross-platform 3D remake of the popular 2D artillery game
