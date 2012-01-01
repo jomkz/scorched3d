@@ -45,6 +45,12 @@ MipMapPatchIndexs::MipMapPatchIndexs() :
 
 MipMapPatchIndexs::~MipMapPatchIndexs()
 {
+	while (!levels_.empty())
+	{
+		IndexLevel *level = levels_.back();
+		levels_.pop_back();
+		delete level;
+	}
 }
 
 void MipMapPatchIndexs::generate(int size, int totalsize, unsigned int totallods)

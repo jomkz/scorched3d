@@ -267,5 +267,7 @@ bool GLFont2dFreeType::createCharacter(unsigned int ch, GLFont2dStorage::CharEnt
 
 	// Finish The Display List
 	glEndList();
+	
+	FT_Done_Glyph(glyph);
 	return true;
 }

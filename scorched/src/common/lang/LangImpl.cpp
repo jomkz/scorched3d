@@ -26,10 +26,28 @@
 
 static SDL_mutex *langMutex = 0;
 
-LangImpl::LangImpl()
+LangImpl::LangImpl() : undefinedBundle_(0)
 {
 	langMutex = SDL_CreateMutex();
 	init();
+}
+
+LangImpl::~LangImpl()
+{
+	clear();
+}
+
+void LangImpl::clear()
+{
+	std::vector<ResourceBundle *>::iterator itor;
+	for (itor = bundles_.begin();
+		itor != bundles_.end();
+		++itor)
+	{
+		ResourceBundle *bundle = *itor;
+		delete bundle;
+	}
+	bundles_.clear();
 }
 
 void LangImpl::init()
@@ -66,13 +84,14 @@ void LangImpl::init()
 	langBundle->loadFromFile(langResourceFile);
 	bundles_.push_back(langBundle);
 
-	bundles_.push_back(&undefinedBundle_);
+	undefinedBundle_ = new ResourceBundle();
+	bundles_.push_back(undefinedBundle_);
 	SDL_UnlockMutex(langMutex);
 }
 
 void LangImpl::saveUndefined()
 {
-	undefinedBundle_.writeToFile(S3D::getDataFile("data/lang/lang_undefined.resource"));
+	undefinedBundle_->writeToFile(S3D::getDataFile("data/lang/lang_undefined.resource"));
 }
 
 ResourceBundleEntry *LangImpl::getEntry(
@@ -99,7 +118,7 @@ ResourceBundleEntry *LangImpl::getEntry(
 	if (!entry) 
 	{
 		entry = new ResourceBundleEntryImpl(key, value);
-		undefinedBundle_.addEntry(entry);
+		undefinedBundle_->addEntry(entry);
 	}
 
 	SDL_UnlockMutex(langMutex);

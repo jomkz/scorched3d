@@ -47,6 +47,7 @@ bool createScorchedWindow()
 
 	SDL_Surface *icon = EXT_LoadPNG_RW(SDL_RWFromFile(iconFile.c_str(), "rb"));
 	SDL_WM_SetIcon(icon, NULL);
+	SDL_FreeSurface(icon);
 
 	if (!Display::instance()->changeSettings(width,height,fullscreen)) 
 	{

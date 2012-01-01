@@ -36,6 +36,7 @@ public:
 	void simulate(ScorchedContext &context, fixed frameTime);
 	void draw();
 	void reset();
+	void clear();
 
 protected:
 	std::vector<TargetMovementEntry *> movements_;

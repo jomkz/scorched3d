@@ -22,6 +22,16 @@
 #include <lang/ResourceBundleEntryImpl.h>
 #include <common/DefinesString.h>
 
+ResourceBundle::~ResourceBundle()
+{
+	ResourceBundleSet::iterator itor;
+	for (itor = entries_.begin(); itor != entries_.end(); ++itor)
+	{
+		delete *itor;
+	}
+	entries_.clear();
+}
+
 ResourceBundleEntry *ResourceBundle::getEntry(const std::string &key)
 {
 	ResourceBundleEntryImpl searchEntry(key);

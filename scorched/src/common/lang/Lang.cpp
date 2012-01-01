@@ -21,8 +21,10 @@
 #include <lang/Lang.h>
 #include <lang/LangImpl.h>
 
+Lang *Lang::instance_ = 0;
+
 Lang *Lang::instance()
 {
-	static LangImpl instance;
-	return &instance;
+	if (!instance_) instance_ = new LangImpl();
+	return instance_;
 }

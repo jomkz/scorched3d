@@ -35,9 +35,10 @@ TargetMovement::TargetMovement()
 
 TargetMovement::~TargetMovement()
 {
+	clear();
 }
 
-void TargetMovement::generate(ScorchedContext &context)
+void TargetMovement::clear()
 {
 	while (!movements_.empty())
 	{
@@ -45,6 +46,11 @@ void TargetMovement::generate(ScorchedContext &context)
 		movements_.pop_back();
 		delete movement;
 	}
+}
+
+void TargetMovement::generate(ScorchedContext &context)
+{
+	clear();
 
 	LandscapeTex &tex = 
 		*context.getLandscapeMaps().getDefinitions().getTex();

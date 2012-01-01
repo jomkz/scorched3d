@@ -29,6 +29,7 @@ class LangImpl : public Lang
 {
 public:
 	LangImpl();
+	~LangImpl();
 
 	virtual void saveUndefined();
 
@@ -39,9 +40,10 @@ public:
 
 protected:
 	void init();
+	void clear();
 
 	std::vector<ResourceBundle *> bundles_;
-	ResourceBundle undefinedBundle_;
+	ResourceBundle *undefinedBundle_;
 };
 
 #endif // __INCLUDE_LangImpl_INCLUDE__

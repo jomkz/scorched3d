@@ -64,6 +64,12 @@ int main(int argc, char *argv[])
 			"Server file \"%s\" does not exist.",
 			ServerParams::instance()->getServerFile()));
 	}
+	// Set the exittime
+	if (ServerParams::instance()->getExitTime() > 0)
+	{
+		ServerParams::instance()->setExitTime(
+			int(ServerParams::instance()->getExitTime() + time(0)));
+	}
 
 #ifdef WIN32
 	if (ServerParams::instance()->getHideWindow())

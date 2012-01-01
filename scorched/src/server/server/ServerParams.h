@@ -32,6 +32,8 @@ public:
 	bool getHideWindow() { return hideWindow_.getValue(); }
 	bool getServerCustom() { return startCustom_.getValue(); }
 	bool getExitOnSyncFailure() { return exitOnSyncFailure_.getValue(); }
+	int getExitTime() { return exitTime_.getValue(); }
+	void setExitTime(int exitTime) { exitTime_.setValue(exitTime); }
 
 	void setServerFile(const std::string &file) { server_.setValue(file); }
 
@@ -39,6 +41,7 @@ protected:
 	static ServerParams *instance_;
 
 	OptionEntryString server_;
+	OptionEntryInt exitTime_;
 	OptionEntryBool hideWindow_;
 	OptionEntryBool startCustom_;
 	OptionEntryBool exitOnSyncFailure_;

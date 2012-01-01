@@ -28,6 +28,9 @@
 class ResourceBundle
 {
 public:
+	ResourceBundle() {}
+	~ResourceBundle();
+
 	bool loadFromFile(const std::string &file);
 	bool writeToFile(const std::string &file);
 

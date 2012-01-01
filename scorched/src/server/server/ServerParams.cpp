@@ -40,7 +40,10 @@ ServerParams::ServerParams() :
 	startCustom_(options_, "startcustom",
 		"Starts a scorched 3d server, uses the last server made", 0, false),
 	exitOnSyncFailure_(options_, "exitonsyncfailure",
-		"Exits the server if a sync failure is found", 0, false)
+		"Exits the server if a sync failure is found", 0, false),
+	exitTime_(options_, "exittime",
+		"Exits the server after a given time period (in seconds)", 0, 0)
+
 {
 
 }

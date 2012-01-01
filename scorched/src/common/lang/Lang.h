@@ -35,6 +35,9 @@ public:
 		const std::string &key, const std::string &value) = 0;
 	virtual ResourceBundleEntry *getEntry(
 		const std::string &key, const LangString &value) = 0;
+
+private:
+	static Lang *instance_;
 };
 
 #endif // __INCLUDE_Lang_INCLUDE__

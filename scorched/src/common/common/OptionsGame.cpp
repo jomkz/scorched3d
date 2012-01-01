@@ -393,7 +393,14 @@ OptionsGame::OptionsGame() :
 
 OptionsGame::~OptionsGame()
 {
-	
+	std::list<OptionEntry *>::iterator itor;
+	for (itor = playerTypeOptions_.begin();
+		itor != playerTypeOptions_.end();
+		++itor)
+	{
+		OptionEntry *entry = *itor;
+		delete entry;
+	}
 }
 
 bool OptionsGame::writeToBuffer(NetBuffer &buffer,

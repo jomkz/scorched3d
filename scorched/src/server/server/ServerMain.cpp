@@ -169,5 +169,15 @@ void consoleServer()
 		unsigned int ticksDifference = serverTimer.getTicksDifference();
 		fixed timeDifference(true, ticksDifference * 10);
 		serverLoop(timeDifference);
+
+		if (ServerParams::instance()->getExitTime() > 0)
+		{
+			if (time(0) > ServerParams::instance()->getExitTime())
+			{
+				Logger::log("Exiting server due to exit time");
+				Logger::processLogEntries();
+				break;
+			}
+		}
 	}
 }

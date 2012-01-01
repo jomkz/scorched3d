@@ -50,6 +50,7 @@ Tanket::~Tanket()
 {
 	delete accessories_; accessories_ = 0;
 	delete shotInfo_; shotInfo_ = 0;
+	delete tankAI_; tankAI_ = 0;
 }
 
 void Tanket::setTankAI(TankAI *ai)
