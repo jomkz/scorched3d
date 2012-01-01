@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <engine/ModFiles.h>
+#include <engine/ModInfo.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
 #include <common/FileList.h>
@@ -92,7 +93,7 @@ bool ModFiles::loadModFiles(const std::string &mod,
 		std::string modDir = S3D::getSettingsModFile(mod);
 		if (S3D::dirExists(modDir))
 		{
-			if (counter) counter->setNewOp(LANG_RESOURCE_1("LOADING_USER_MODS", "Loading User Mod {0}", mod));
+			if (counter) counter->setNewOp(LANG_RESOURCE_1("LOADING_USER_MODS", "Loading User Mod : {0}", mod));
 			if (!loadModDir(modDir, mod, counter)) return false;
 		}
 		else
@@ -101,19 +102,27 @@ bool ModFiles::loadModFiles(const std::string &mod,
 		}
 	}
 
-	if (mod != "none")
+	std::string modInfoFile = S3D::getModFile("data/modinfo.xml");
+	ModInfo modInfo(mod.c_str());
+	if (!modInfo.parse(modInfoFile))
+	{
+		S3D::dialogExit("Mod", S3D::formatStringBuffer(
+			"Failed to parse mod info for mod %s", mod.c_str()));
+	}
+
+	if (!modInfo.getShippedMod())
 	{
 		// Get and check global mod directory
 		std::string modDir = S3D::getGlobalModFile(mod);
 		if (S3D::dirExists(modDir))
 		{
-			if (counter) counter->setNewOp(LANG_RESOURCE_1("LOADING_GLOBAL_MODS", "Loading Global Mod {0}", mod));
+			if (counter) counter->setNewOp(LANG_RESOURCE_1("LOADING_GLOBAL_MODS", "Loading Global Mod : {0}", mod));
 			if (!loadModDir(modDir, mod, counter)) return false;
 		}
 	}
 	else
 	{
-		// For the default "none" mod load some files that can
+		// For the shipped mods load some files that can
 		// be downloaded
 		loadLocalModFile("data/accessories.xml", mod);
 		loadLocalModFile("data/modinfo.xml", mod);

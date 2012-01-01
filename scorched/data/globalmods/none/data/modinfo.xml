@@ -8,6 +8,7 @@ more than one human player.</description>
 		<icon>data/windows/tank2.bmp</icon>
 		<url>http://www.scorched3d.co.uk</url>
 		<protocolversion>eq</protocolversion>
+    <shippedmod>true</shippedmod>
 	</main>
 	<game>
 		<shortdescription>Target practice</shortdescription>

@@ -27,6 +27,7 @@
 	</border>
 	<texture type="file">
     <texture>data/landscapes/backdroptex.bmp</texture>
+    <surroundtexture>data/textures/landscape/default/texture0.bmp</surroundtexture>
 	</texture>
 	<placements><placement>data/landscapes/placepalm2.xml</placement></placements>
 	<ambientsounds>

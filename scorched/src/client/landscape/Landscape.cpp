@@ -561,8 +561,18 @@ void Landscape::generate(ProgressCounter *counter)
 		mainMap_ = texture.createResize(1024, 1024);
 
 		// Set the general surround and roof texture
-		groundTexture_.replace(texture, false);
-		roofTexture_.replace(texture, true);
+		if (generate->surroundTexture.empty())
+		{
+			groundTexture_.replace(texture, false);
+			roofTexture_.replace(texture, true);
+		}
+		else
+		{
+			Image surroundTexture = 
+				ImageFactory::loadImage(S3D::eModLocation, generate->surroundTexture.c_str());
+			groundTexture_.replace(surroundTexture, false);
+			roofTexture_.replace(surroundTexture, true);
+		}
 	}
 	else
 	{

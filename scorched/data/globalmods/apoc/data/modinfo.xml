@@ -8,6 +8,7 @@ more than one human player.</description>
 		<icon>data/windows/nuke.bmp</icon>
 		<url>http://apochq.handwired.net/</url>
 		<protocolversion>eq</protocolversion>
+    <shippedmod>true</shippedmod>
 	</main>
 	<game>
 		<shortdescription>Apocalypse Target practice</shortdescription>

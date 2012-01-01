@@ -114,6 +114,7 @@ class LandscapeTexTextureFile : public LandscapeTexType
 {
 public:
 	std::string texture;
+	std::string surroundTexture;
 
 	virtual bool readXML(XMLNode *node);
 	virtual TexType getType() { return eTextureFile; }

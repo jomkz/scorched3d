@@ -113,6 +113,10 @@ bool LandscapeTexTextureFile::readXML(XMLNode *node)
 {
 	if (!node->getNamedChild("texture", texture)) return false;
 	if (!S3D::checkDataFile(texture.c_str())) return false;
+	if (node->getNamedChild("surroundtexture", surroundTexture, false))
+	{
+		if (!S3D::checkDataFile(surroundTexture.c_str())) return false;
+	}
 	return node->failChildren();
 }
 
