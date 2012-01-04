@@ -43,6 +43,7 @@ LandscapeDefinitions::LandscapeDefinitions() :
 
 LandscapeDefinitions::~LandscapeDefinitions()
 {
+	clearLandscapeDefinitions();
 }
 
 void LandscapeDefinitions::clearLandscapeDefinitions()
@@ -56,17 +57,17 @@ void LandscapeDefinitions::clearLandscapeDefinitions()
 
 LandscapeTex *LandscapeDefinitions::getTex(const char *file, bool load)
 {
-	return texs_.getItem(this, file, load, true);
+	return texs_.getItem(this, file, load);
 }
 
 LandscapeInclude *LandscapeDefinitions::getInclude(const char *file, bool load)
 {
-	return include_.getItem(this, file, load, true);
+	return include_.getItem(this, file, load);
 }
 
 LandscapeDefn *LandscapeDefinitions::getDefn(const char *file, bool load)
 {
-	return defns_.getItem(this, file, load, true);
+	return defns_.getItem(this, file, load);
 }
 
 bool LandscapeDefinitions::readLandscapeDefinitionsEntry(LandscapeDefinitionsEntry &entry)

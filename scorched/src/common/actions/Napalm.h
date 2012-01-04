@@ -74,7 +74,6 @@ protected:
 	std::set<unsigned int> edgePoints_;
 	std::map<unsigned int, int> napalmPointsCount_;
 	std::list<NapalmEntry *> napalmPoints_;
-	std::vector<NapalmEntry *> napalmRANDPoints_;
 
 	fixed getHeight(int x, int y);
 	void simulateAddStep();

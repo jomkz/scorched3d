@@ -146,11 +146,11 @@ ServerChannelManager::ServerChannelManager(ComsMessageHandler &comsMessageHandle
 	totalTime_(0), lastMessageId_(0)
 {
 	// Register to recieve comms messages
-	new ComsMessageHandlerIAdapter<ServerChannelManager>(
+	handler1_ = new ComsMessageHandlerIAdapter<ServerChannelManager>(
 		this, &ServerChannelManager::processChannelMessage,
 		ComsChannelMessage::ComsChannelMessageType,
 		comsMessageHandler);
-	new ComsMessageHandlerIAdapter<ServerChannelManager>(
+	handler2_ = new ComsMessageHandlerIAdapter<ServerChannelManager>(
 		this, &ServerChannelManager::processChannelTextMessage,
 		ComsChannelTextMessage::ComsChannelTextMessageType,
 		comsMessageHandler);
@@ -181,6 +181,8 @@ ServerChannelManager::ServerChannelManager(ComsMessageHandler &comsMessageHandle
 
 ServerChannelManager::~ServerChannelManager()
 {
+	delete handler1_;
+	delete handler2_;
 	{
 		std::map<unsigned int, DestinationEntry *>::iterator itor;
 		for (itor = destinationEntries_.begin();

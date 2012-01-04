@@ -28,6 +28,7 @@ TanketTypes::TanketTypes() : defaultType_(0)
 
 TanketTypes::~TanketTypes()
 {
+	clear();
 }
 
 bool TanketTypes::loadTanketTypes(ScorchedContext &context)
@@ -88,5 +89,11 @@ TanketType *TanketTypes::getType(const char *name)
 
 void TanketTypes::clear()
 {
+	while (!types_.empty())
+	{
+		delete types_.back();
+		types_.pop_back();
+	}
+
 	types_.clear();
 }

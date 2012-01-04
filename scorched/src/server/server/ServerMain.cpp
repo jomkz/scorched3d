@@ -180,4 +180,6 @@ void consoleServer()
 			}
 		}
 	}
+
+	ScorchedServer::instance()->stopServer();
 }

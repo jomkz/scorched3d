@@ -125,6 +125,7 @@ protected:
 	std::map<unsigned int, DestinationEntry *> destinationEntries_;
 	std::list<ChannelEntry *> channelEntries_;
 	std::list<MessageEntry> lastMessages_;
+	ComsMessageHandlerI *handler1_, *handler2_;
 
 	ChannelEntry *getChannelEntryByName(const std::string &name);
 	DestinationEntry *getDestinationEntryById(unsigned int destinationId);

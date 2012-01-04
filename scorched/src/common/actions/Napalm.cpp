@@ -72,6 +72,11 @@ Napalm::~Napalm()
 {
 	delete params_;
 	if (vPoint_) vPoint_->decrementReference();
+	while (!napalmPoints_.empty()) 
+	{
+		NapalmEntry *entry = napalmPoints_.front();
+		delete entry;
+	}
 }
 
 void Napalm::init()
@@ -137,9 +142,17 @@ void Napalm::simulate(fixed frameTime, bool &remove)
 			!params_->getNoSmoke() &&
 			counter_.nextDraw(frameTime.asFloat()))
 		{
+			NapalmEntry *entry = 0;
 			int count = rand() % napalmPoints_.size();
+			std::list<NapalmEntry *>::iterator itor;
+			for (itor = napalmPoints_.begin();
+				itor != napalmPoints_.end();
+				itor++, count --)
+			{
+				entry = *itor;
+				if (count <=0) break;
+			}
 
-			NapalmEntry *entry = napalmRANDPoints_[napalmRANDPoints_.size() - 1 - count];
 			fixed posZ = 
 				ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeight(
 				entry->posX, entry->posY);
@@ -297,7 +310,6 @@ void Napalm::simulateAddEdge(int x, int y)
 	int offset = (random.getRandFixed("Napalm") * 31).asInt();
 	NapalmEntry *newEntry = new NapalmEntry(x, y, offset, particleSet_);
 	napalmPoints_.push_back(newEntry);
-	napalmRANDPoints_.push_back(newEntry);
 
 	unsigned int pointsCount = XY2_TO_UINT(x, y);
 	std::map<unsigned int, int>::iterator countItor =

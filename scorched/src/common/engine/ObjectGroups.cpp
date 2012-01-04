@@ -29,8 +29,7 @@ ObjectGroups::ObjectGroups() : groups_(0)
 
 ObjectGroups::~ObjectGroups()
 {
-	delete groups_;
-	groups_ = 0;
+	clearGroups();
 }
 
 void ObjectGroups::clearGroups()

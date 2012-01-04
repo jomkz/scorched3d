@@ -36,6 +36,10 @@ public:
 		typeName_(typeName)
 	{
 	}
+	~LandscapeDefinitionsItem()
+	{
+		clearItems();
+	}
 
 	void clearItems()
 	{
@@ -51,7 +55,7 @@ public:
 	}
 
 	T *getItem(LandscapeDefinitions *defns,
-		const char *fileName, bool load, bool cache)
+		const char *fileName, bool load)
 	{
 		T *item = 0;
 		typename std::map<std::string, T *>::iterator itor;
@@ -94,10 +98,7 @@ public:
 				return 0;
 			}
 
-			if (cache)
-			{
-				items_[fileName] = item;
-			}
+			items_[fileName] = item;
 		}
 
 		return item;

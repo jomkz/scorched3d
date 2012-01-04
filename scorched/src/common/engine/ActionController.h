@@ -57,6 +57,10 @@ protected:
 		{
 			actions = new Action*[maxActions];
 		}
+		~ActionList()
+		{
+			delete [] actions;
+		}
 
 		void push_back(Action *action)
 		{
