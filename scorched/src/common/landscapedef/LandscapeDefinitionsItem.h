@@ -90,6 +90,7 @@ public:
 			}
 
 			item = new T;
+			items_[fileName] = item;
 			if (!item->readXML(defns, file.getRootNode()))
 			{
 				S3D::dialogMessage("Scorched Landscape", 
@@ -97,8 +98,6 @@ public:
 					dataFile.c_str()));
 				return 0;
 			}
-
-			items_[fileName] = item;
 		}
 
 		return item;

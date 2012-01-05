@@ -46,12 +46,14 @@ PlacementType *PlacementType::create(const char *type)
 	return 0;
 }
 
-PlacementType::PlacementType()
+PlacementType::PlacementType() : placementobject(0)
 {
 }
 
 PlacementType::~PlacementType()
 {
+	delete placementobject;
+	placementobject = 0;
 }
 
 bool PlacementType::readXML(XMLNode *node)
