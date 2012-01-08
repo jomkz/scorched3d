@@ -93,10 +93,10 @@ bool ClientFileHandler::processMessage(
 
 			// Update progress
 			unsigned int doneBytes = totalBytes_ - bytesLeft;
-			float percentage = float(doneBytes * 100 / totalBytes_);
+			unsigned int percentage = unsigned int(((doneBytes / 1024) * 100) / (totalBytes_ / 1024));
 			ProgressDialog::instance()->progressChange(
-				LANG_RESOURCE_2("DOWNLOADING_FILE", "Downloading mod, {0}% {1} KB", 
-				percentage, (doneBytes / 1000)), percentage);
+				LANG_RESOURCE_3("DOWNLOADING_FILE", "Downloading mod, {0}% {1}/{2} KB", 
+				percentage, (doneBytes / 1024), (totalBytes_ / 1024)), float(percentage));
 
 			// Read the size
 			unsigned int uncompressedSize = 0;
