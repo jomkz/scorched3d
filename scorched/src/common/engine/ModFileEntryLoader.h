@@ -18,46 +18,21 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ModFileEntryh_INCLUDE__)
-#define __INCLUDE_ModFileEntryh_INCLUDE__
+#if !defined(__INCLUDE_ModFileEntryLoaderh_INCLUDE__)
+#define __INCLUDE_ModFileEntryLoaderh_INCLUDE__
 
 #include <net/NetBuffer.h>
 #include <string>
 
-struct ModIdentifierEntry
-{
-	ModIdentifierEntry(bool a = true,
-		const std::string &f = "",
-		unsigned int l = 0,
-		unsigned int c = 0) :
-		addFile(a),
-		fileName(f),
-		length(l),
-		crc(c)
-	{
-	};
-
-	bool addFile;
-	std::string fileName;
-	unsigned int length;
-	unsigned int crc;
-};
-
-class ModFileEntry
+class ModFileEntryLoader
 {
 public:
-	ModFileEntry(const std::string &name, 
-		unsigned int uncompressedcrc, unsigned int uncompressedSize);
-	virtual ~ModFileEntry();
-
-	std::string &getFileName() { return fileName_; }
-	unsigned int getUncompressedCrc() { return uncompressedcrc_; }
-	unsigned int getUncompressedSize() { return uncompressedSize_; }
-
-protected:
-	std::string fileName_;
-	unsigned int uncompressedcrc_;
-	unsigned int uncompressedSize_;
+	static bool loadModFile(NetBuffer &buffer, const std::string &file);
+	static bool writeModFile(NetBuffer &buffer, const std::string &file, const std::string &mod);
+	static bool removeModFile(const std::string &file, const std::string &mod);
+private:
+	ModFileEntryLoader();
+	virtual ~ModFileEntryLoader();
 };
 
 #endif

@@ -766,11 +766,6 @@ void DisplayFrame::onImportMod(wxCommandEvent &event)
 		S3D::dialogMessage("Import Mod", "Failed to read mod export file");
 		return;
 	}
-	if (!files.writeModFiles(mod))
-	{
-		S3D::dialogMessage("Import Mod", "Failed to write mod files");
-		return;
-	}
 	updateModList();
 }
 

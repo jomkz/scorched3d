@@ -234,6 +234,9 @@
     <ClCompile Include="..\..\common\lang\ResourceBundleEntryImpl.cpp">
       <Filter>lang</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\engine\ModFileEntryLoader.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ScorchedParams.h">
@@ -442,6 +445,9 @@
     </ClInclude>
     <ClInclude Include="..\..\common\lang\ResourceBundleEntryImpl.h">
       <Filter>lang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\ModFileEntryLoader.h">
+      <Filter>engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

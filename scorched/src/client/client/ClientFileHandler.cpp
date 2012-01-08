@@ -22,6 +22,7 @@
 #include <client/ClientState.h>
 #include <client/ScorchedClient.h>
 #include <engine/ModFiles.h>
+#include <engine/ModFileEntryLoader.h>
 #include <dialogs/ProgressDialog.h>
 #include <common/Logger.h>
 #include <common/Defines.h>
@@ -98,18 +99,51 @@ bool ClientFileHandler::processMessage(
 				percentage, (doneBytes / 1000)), percentage);
 
 			// Read the size
-			unsigned int maxsize = 0;
-			unsigned int uncompressedsize = 0;
-			unsigned int crc = 0;
-			unsigned int size = 0;
-			reader.getFromBuffer(maxsize);
-			reader.getFromBuffer(uncompressedsize);
-			reader.getFromBuffer(crc);
-			reader.getFromBuffer(size);
+			unsigned int uncompressedSize = 0;
+			unsigned int chunkSize = 0;
+			reader.getFromBuffer(uncompressedSize);
+			reader.getFromBuffer(chunkSize);
 		
 			// The first part
 			if (firstChunk)
 			{
+				recvBuffer_.reset();
+			}
+
+			// Add the bytes to the file
+			recvBuffer_.addDataToBuffer(
+				reader.getBuffer() + reader.getReadSize(), chunkSize);
+			reader.setReadSize(reader.getReadSize() + chunkSize);
+
+			// Check if we have finished this file
+			if (lastChunk)
+			{
+				// Finished
+				Logger::log(S3D::formatStringBuffer(" %u/%u %s - %i bytes",
+					doneBytes,
+					totalBytes_,
+					fileName.c_str(),
+					recvBuffer_.getBufferUsed()));
+
+				// Wrong size
+				if (recvBuffer_.getBufferUsed() != uncompressedSize)
+				{
+					Logger::log(S3D::formatStringBuffer("Downloaded mod file incorrect size \"%s\".\n"
+						"Expected %u, got %u.",
+						fileName.c_str(), recvBuffer_.getBufferUsed(), uncompressedSize));
+					return false;
+				}
+
+				// Write file
+				if (!ModFileEntryLoader::writeModFile(recvBuffer_, fileName.c_str(),
+					ScorchedClient::instance()->getOptionsGame().getMod()))
+				{
+					Logger::log(S3D::formatStringBuffer("Failed to write mod file \"%s\"",
+						fileName.c_str()));
+					return false;
+				}
+
+
 				// Remove the file if it already exists
 				std::map<std::string, ModFileEntry *>::iterator findItor = 
 					files.find(fileName);
@@ -120,56 +154,8 @@ bool ClientFileHandler::processMessage(
 				}
 
 				// Create a new file
-				ModFileEntry *fileEntry = new ModFileEntry;
-				fileEntry->setFileName(fileName.c_str());
-				fileEntry->setCompressedCrc(crc);
-				fileEntry->setUncompressedSize(uncompressedsize);
+				ModFileEntry *fileEntry = new ModFileEntry(fileName, recvBuffer_.getCrc(), recvBuffer_.getBufferUsed());
 				files[fileName] = fileEntry;
-			}
-
-			// Locate the file
-			std::map<std::string, ModFileEntry *>::iterator findItor = 
-				files.find(fileName);
-			if (findItor == files.end())
-			{
-				Logger::log(S3D::formatStringBuffer("Failed to find partial mod file \"%s\"", 
-					fileName.c_str()));
-				return false;
-			}
-			ModFileEntry *entry = (*findItor).second;
-
-			// Add the bytes to the file
-			entry->getCompressedBuffer().addDataToBuffer(
-				reader.getBuffer() + reader.getReadSize(), size);
-			reader.setReadSize(reader.getReadSize() + size);
-
-			// Check if we have finished this file
-			if (lastChunk)
-			{
-				// Finished
-				Logger::log(S3D::formatStringBuffer(" %u/%u %s - %i bytes",
-					doneBytes,
-					totalBytes_,
-					fileName.c_str(),
-					entry->getCompressedSize()));
-
-				// Wrong size
-				if (entry->getCompressedSize() != maxsize)
-				{
-					Logger::log(S3D::formatStringBuffer("Downloaded mod file incorrect size \"%s\".\n"
-						"Expected %u, got %u.",
-						fileName.c_str(), entry->getCompressedSize(), maxsize));
-					return false;
-				}
-
-				// Write file
-				if (!entry->writeModFile(fileName.c_str(),
-					ScorchedClient::instance()->getOptionsGame().getMod()))
-				{
-					Logger::log(S3D::formatStringBuffer("Failed to write mod file \"%s\"",
-						fileName.c_str()));
-					return false;
-				}
 			}
 		}
 		else
@@ -179,7 +165,7 @@ bool ClientFileHandler::processMessage(
 				files.find(fileName);
 			if (findItor != files.end())
 			{
-				findItor->second->removeModFile(fileName, 
+				ModFileEntryLoader::removeModFile(fileName, 
 					ScorchedClient::instance()->getOptionsGame().getMod());
 
 				Logger::log(S3D::formatStringBuffer(" %s - removed",

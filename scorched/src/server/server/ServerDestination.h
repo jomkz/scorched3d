@@ -23,6 +23,7 @@
 
 #include <list>
 #include <common/RollingAverage.h>
+#include <net/NetBuffer.h>
 
 struct ModIdentifierEntry;
 class ServerDestinationMod
@@ -42,13 +43,16 @@ public:
 
 	void addFile(ModIdentifierEntry &entry);
 	void rmFile(const char *file);
-	ModIdentifierEntry *getFile(const char *file);
-	std::list<ModIdentifierEntry> &getFiles() { return *files_; }
+	ModIdentifierEntry *getNextFile();
+	
+	NetBuffer &getSendBuffer() { return sendBuffer_; }
 
 protected:
 	bool readyToReceive_;
 	bool init_;
 	unsigned int totalLeft_;
+	NetBuffer sendBuffer_;
+	std::string lastFile_;
 	std::list<ModIdentifierEntry> *files_; // Ptr so we dont include ModFiles.h
 
 };

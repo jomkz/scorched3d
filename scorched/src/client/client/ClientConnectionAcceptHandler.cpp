@@ -125,8 +125,8 @@ bool ClientConnectionAcceptHandler::processMessage(
 			ModIdentifierEntry(
 				true,
 				name.c_str(),
-				file->getCompressedSize(),
-				file->getCompressedCrc()));
+				file->getUncompressedSize(),
+				file->getUncompressedCrc()));
 	}
 	if (!ComsMessageSender::sendToServer(comsFileMessage)) return false;
 

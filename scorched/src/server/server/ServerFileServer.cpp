@@ -55,7 +55,7 @@ void ServerFileServer::simulate()
 		if (destination->getState() == ServerDestination::sDownloadingMod)
 		{
 			// Does this tank have any more files to send
-			if (!destination->getMod().getFiles().empty())
+			if (destination->getMod().getNextFile())
 			{
 				// Yes, 1 more tank to send to
 				downloadCount++;
@@ -126,7 +126,7 @@ void ServerFileServer::sendToDestination(ServerDestination *destination)
 	// bytes and there is some to send and
 	// we have not sent to this client this second
 	if (!destination->getMod().getReadyToReceive() ||
-		destination->getMod().getFiles().empty())
+		!destination->getMod().getNextFile())
 	{
 		return;
 	}
@@ -162,44 +162,34 @@ bool ServerFileServer::sendNextFile(ComsFileMessage &message,
 	unsigned int &bytesSent)
 {
 	// Get the next file to send
-	std::list<ModIdentifierEntry> &files = 
-		destination->getMod().getFiles();
-	if (files.empty()) return false;
-	ModIdentifierEntry &entry = files.front();
+	ModIdentifierEntry *entry = destination->getMod().getNextFile();
+	if (!entry) return false;
 
-	if (entry.addFile) 
+	if (entry->addFile) 
 	{
-		// Find the next file in the modfiles
-		std::map<std::string, ModFileEntry *> &modfiles =
-			ScorchedServer::instance()->getModFiles().getFiles();
-		std::map<std::string, ModFileEntry *>::iterator findItor =
-			modfiles.find(entry.fileName);
-		DIALOG_ASSERT(findItor != modfiles.end());
-		ModFileEntry *modentry = (*findItor).second;
+		NetBuffer &sendBuffer = destination->getMod().getSendBuffer();
 
 		// Check how much still needs to be sent
-		unsigned int sizeSent = entry.length;
-		unsigned int sizeLeftToSend = modentry->getCompressedSize() - sizeSent;
+		unsigned int sizeSent = entry->length;
+		unsigned int sizeLeftToSend = sendBuffer.getBufferUsed() - sizeSent;
 		unsigned int sizeToSend = MIN(sizeLeftToSend, size);
 		unsigned int bytesLeft = destination->getMod().getTotalLeft();
 		bool firstChunk = (sizeSent == 0);
 		bool lastChunk = (sizeToSend == sizeLeftToSend);
 
 		// Add the bytes to the buffer
-		message.fileBuffer.addToBuffer(modentry->getFileName());
+		message.fileBuffer.addToBuffer(entry->fileName);
 		message.fileBuffer.addToBuffer(true);
 		message.fileBuffer.addToBuffer(firstChunk);
 		message.fileBuffer.addToBuffer(lastChunk);
 		message.fileBuffer.addToBuffer(bytesLeft);
-		message.fileBuffer.addToBuffer(modentry->getCompressedSize());
-		message.fileBuffer.addToBuffer(modentry->getUncompressedSize());
-		message.fileBuffer.addToBuffer(modentry->getCompressedCrc());
+		message.fileBuffer.addToBuffer(sendBuffer.getBufferUsed());
 		message.fileBuffer.addToBuffer(sizeToSend);
-		message.fileBuffer.addDataToBuffer(modentry->getCompressedBytes() + entry.length,
+		message.fileBuffer.addDataToBuffer(sendBuffer.getBuffer() + entry->length,
 			sizeToSend);
 
 		// Update how much we have sent
-		entry.length += sizeToSend;
+		entry->length += sizeToSend;
 		destination->getMod().setTotalLeft(destination->getMod().getTotalLeft() - sizeToSend);
 
 		// Have we sent the whole file
@@ -207,18 +197,17 @@ bool ServerFileServer::sendNextFile(ComsFileMessage &message,
 		{
 			// If so remove the file from the list that
 			// still needs to be sent
-			std::string fileName = modentry->getFileName();
-			destination->getMod().rmFile(fileName.c_str());
+			destination->getMod().rmFile(entry->fileName.c_str());
 		}
 
 		bytesSent = sizeToSend;
 	} 
 	else 
 	{
-		message.fileBuffer.addToBuffer(entry.fileName);
+		message.fileBuffer.addToBuffer(entry->fileName);
 		message.fileBuffer.addToBuffer(false);
 
-		destination->getMod().rmFile(entry.fileName.c_str());
+		destination->getMod().rmFile(entry->fileName.c_str());
 
 		bytesSent = 0;
 	}

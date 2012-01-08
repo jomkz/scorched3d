@@ -377,6 +377,15 @@ void NetBuffer::addToBuffer(NetBuffer &add)
 	addDataToBuffer(add.getBuffer(), add.getBufferUsed());
 }
 
+unsigned NetBuffer::getCrc()
+{
+	if (getBufferUsed() == 0) return 0;
+
+	unsigned int crc =  crc32(0L, Z_NULL, 0);
+	crc = crc32(crc, (unsigned char *) getBuffer(), getBufferUsed());
+	return crc;
+}
+
 NetBufferReader::NetBufferReader() :
 	buffer_(0),
 	bufferSize_(0),

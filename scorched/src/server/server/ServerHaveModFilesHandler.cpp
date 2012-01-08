@@ -84,8 +84,8 @@ bool ServerHaveModFilesHandler::processMessage(
 			std::map<std::string, ModIdentifierEntry*>::iterator hasEntryItor =
 				hasEntries.find(fileName);
 			if (hasEntryItor == hasEntries.end() ||
-				hasEntryItor->second->crc != fileEntry->getCompressedCrc() ||
-				hasEntryItor->second->length != fileEntry->getCompressedSize())
+				hasEntryItor->second->crc != fileEntry->getUncompressedCrc() ||
+				hasEntryItor->second->length != fileEntry->getUncompressedSize())
 			{
 #ifdef _DEBUG
 				if (hasEntryItor == hasEntries.end())
@@ -94,29 +94,29 @@ bool ServerHaveModFilesHandler::processMessage(
 						S3D::formatStringBuffer("Mod download \"%s\" new file",
 							fileName.c_str()));
 				}
-				else if (hasEntryItor->second->length != fileEntry->getCompressedSize())
+				else if (hasEntryItor->second->length != fileEntry->getUncompressedSize())
 				{
 					ServerCommon::serverLog(
 						S3D::formatStringBuffer("Mod download \"%s\" size difference %u %u",
 						fileName.c_str(),
 						hasEntryItor->second->length, 
-						fileEntry->getCompressedSize()));
+						fileEntry->getUncompressedSize()));
 				}
-				else if (hasEntryItor->second->crc != fileEntry->getCompressedCrc())
+				else if (hasEntryItor->second->crc != fileEntry->getUncompressedCrc())
 				{
 					ServerCommon::serverLog(
 						S3D::formatStringBuffer("Mod download \"%s\" crc difference %u %u",
 						fileName.c_str(),
 						hasEntryItor->second->crc, 
-						fileEntry->getCompressedCrc()));
+						fileEntry->getUncompressedCrc()));
 				}
 #endif //_DEBUG
 
 				ModIdentifierEntry newEntry(true,
 					fileEntry->getFileName(),
-					0, fileEntry->getCompressedCrc());
+					0, fileEntry->getUncompressedCrc());
 				neededEntries.push_back(newEntry);
-				neededLength += fileEntry->getCompressedSize();
+				neededLength += fileEntry->getUncompressedSize();
 			}
 
 			// Say that this file will be sent to the client

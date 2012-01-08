@@ -37,6 +37,7 @@ public:
 protected:
 	static ClientFileHandler* instance_;
 	unsigned int totalBytes_;
+	NetBuffer recvBuffer_;
 
 private:
 	ClientFileHandler();

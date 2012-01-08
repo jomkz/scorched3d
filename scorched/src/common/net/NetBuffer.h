@@ -121,6 +121,7 @@ public:
 	char *getBuffer() { return buffer_; }
 	unsigned getTotalBufferSize() { return bufferSize_; }
 	unsigned getBufferUsed() { return usedSize_; }
+	unsigned getCrc();
 
 	// Adds raw data to into the buffer
 	// NOTE: Care must be taken to ensure that the added data

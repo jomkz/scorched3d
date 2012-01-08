@@ -81,14 +81,6 @@ bool ClientInitializeModHandler::processMessage(
 
 bool ClientInitializeModHandler::initialize()
 {
-	// Clear any memory used by stored mod files as they will not be required now
-	ScorchedClient::instance()->getModFiles().clearData();
-	if (!ClientParams::instance()->getConnectedToServer() &&
-		ScorchedServer::serverStarted())
-	{
-		ScorchedServer::instance()->getModFiles().clearData();
-	}
-
 	// Re-load the tank names/sayings
 	ScorchedClient::instance()->getTankAIStrings().load();
 

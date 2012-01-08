@@ -23,7 +23,7 @@
 #include <XML/XMLFile.h>
 
 ModInfo::ModInfo(const std::string &name) :
-	name_(name), shippedMod_(false)
+	name_(name)
 {
 
 }
@@ -64,7 +64,6 @@ bool ModInfo::parse(const std::string &fileName)
 	{
 		shortDescription_ = description_;
 	}
-	mainNode->getNamedChild("shippedmod", shippedMod_, false);
 	if (!mainNode->failChildren()) return false;
 
 	if (S3D::fileExists(S3D::getModFile(tmpicon)))

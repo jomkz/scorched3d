@@ -594,11 +594,10 @@ bool ServerWebHandler::ModsHandler::processRequest(
 		std::string cleanFileName;
 		std::string dirtyFileName(entry->getFileName());
 		XMLNode::removeSpecialChars(dirtyFileName, cleanFileName);
-		modfiles += S3D::formatStringBuffer("<tr><td>%s</td><td>%u</td><td>%u</td><td>%u</td></tr>",
+		modfiles += S3D::formatStringBuffer("<tr><td>%s</td><td>%u</td><td>%u</td></tr>",
 			cleanFileName.c_str(),
-			entry->getCompressedSize(),
-			entry->getCompressedCrc(),
-			entry->getUncompressedSize());
+			entry->getUncompressedSize(),
+			entry->getUncompressedCrc());
 	}
 	request.getFields()["MODFILES"] = modfiles;
 

@@ -225,6 +225,7 @@
     <ClCompile Include="..\..\common\engine\MetaClass.cpp" />
     <ClCompile Include="..\..\common\engine\ModDirs.cpp" />
     <ClCompile Include="..\..\common\engine\ModFileEntry.cpp" />
+    <ClCompile Include="..\..\common\engine\ModFileEntryLoader.cpp" />
     <ClCompile Include="..\..\common\engine\ModFiles.cpp" />
     <ClCompile Include="..\..\common\engine\ModInfo.cpp" />
     <ClCompile Include="..\..\common\engine\ObjectGroup.cpp" />
@@ -975,6 +976,7 @@
     <ClInclude Include="..\..\common\engine\MetaClass.h" />
     <ClInclude Include="..\..\common\engine\ModDirs.h" />
     <ClInclude Include="..\..\common\engine\ModFileEntry.h" />
+    <ClInclude Include="..\..\common\engine\ModFileEntryLoader.h" />
     <ClInclude Include="..\..\common\engine\ModFiles.h" />
     <ClInclude Include="..\..\common\engine\ModInfo.h" />
     <ClInclude Include="..\..\common\engine\ObjectGroup.h" />

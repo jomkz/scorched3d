@@ -97,6 +97,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\common\engine\ModFileEntryLoader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ScorchedParams.cpp" />
     <ClCompile Include="..\wxdialogs\CreateDialogs.cpp" />
@@ -165,6 +166,7 @@
     <ClCompile Include="..\..\common\lang\ResourceBundleEntryImpl.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\common\engine\ModFileEntryLoader.h" />
     <ClInclude Include="ScorchedParams.h" />
     <ClInclude Include="..\wxdialogs\DisplayDialog.h" />
     <ClInclude Include="..\wxdialogs\KeyDialog.h" />

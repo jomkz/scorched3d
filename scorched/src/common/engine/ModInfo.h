@@ -46,7 +46,6 @@ public:
 	const char *getDescription() { return description_.c_str(); }
 	const char *getShortDescription() { return shortDescription_.c_str(); }
 	const char *getProtocolVersion() { return protocolversion_.c_str(); }
-	bool getShippedMod() { return shippedMod_; }
 	std::list<MenuEntry> &getMenuEntries() { return entries_; }
 
 protected:
@@ -56,7 +55,6 @@ protected:
 	std::string description_;
 	std::string shortDescription_;
 	std::string protocolversion_;
-	bool shippedMod_;
 	std::list<MenuEntry> entries_;
 };
 

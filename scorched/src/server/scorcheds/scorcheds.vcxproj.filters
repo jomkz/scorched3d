@@ -1479,6 +1479,9 @@
     <ClCompile Include="..\..\common\XML\XMLDiff.cpp">
       <Filter>XML</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\engine\ModFileEntryLoader.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -2881,6 +2884,9 @@
     </ClInclude>
     <ClInclude Include="..\..\common\XML\XMLDiff.h">
       <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\ModFileEntryLoader.h">
+      <Filter>engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -37,8 +37,6 @@ public:
 
 	bool loadModFiles(const std::string &mod, bool createDir, 
 		ProgressCounter *counter = 0);
-	bool writeModFiles(const std::string &mod);
-	void clearData();
 	void clearAll();
 
 	std::map<std::string, ModFileEntry *> &getFiles() { return files_; }
@@ -49,11 +47,14 @@ public:
 protected:
 	std::map<std::string, ModFileEntry *> files_;
 
-	bool loadModDir(const std::string &moddir, const std::string &mod,
+	bool loadModDir(NetBuffer  &tmpFileContents, 
+		const std::string &moddir, const std::string &mod,
 		ProgressCounter *counter = 0);
-	bool loadModFile(const std::string &fullFileName,
+	bool loadModFile(NetBuffer &tmpFileContents, 
+		const std::string &fullFileName,
 		const std::string &modDir, const std::string &mod);
-	bool loadLocalModFile(const std::string &local, 
+	bool loadLocalModFile(NetBuffer &tmpFileContents, 
+		const std::string &local, 
 		const std::string &mod);
 
 private:

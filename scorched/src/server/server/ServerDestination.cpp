@@ -20,6 +20,7 @@
 
 #include <server/ServerDestination.h>
 #include <engine/ModFiles.h>
+#include <engine/ModFileEntryLoader.h>
 
 ServerDestinationMod::ServerDestinationMod() : 
 	readyToReceive_(true), init_(false), totalLeft_(0)
@@ -49,25 +50,27 @@ void ServerDestinationMod::rmFile(const char *file)
 		if (0 == strcmp(entry.fileName.c_str(), file))
 		{
 			files_->erase(itor);
-			return;
+			break;
 		}
 	}
+
+	if (files_->empty()) sendBuffer_.clear();
+	else sendBuffer_.reset();
 }
 
-ModIdentifierEntry *ServerDestinationMod::getFile(const char *file)
+ModIdentifierEntry *ServerDestinationMod::getNextFile()
 {
-	std::list<ModIdentifierEntry>::iterator itor;
-	for (itor = files_->begin();
-		itor != files_->end();
-		++itor)
+	if (files_->empty()) return 0;
+	ModIdentifierEntry &entry = files_->front();
+
+	if (lastFile_ != entry.fileName ||
+		sendBuffer_.getBufferUsed() == 0)
 	{
-		ModIdentifierEntry &entry = (*itor);
-		if (0 == strcmp(entry.fileName.c_str(), file))
-		{
-			return &entry;
-		}
+		lastFile_ = entry.fileName;
+		ModFileEntryLoader::loadModFile(sendBuffer_, S3D::getModFile(lastFile_));
 	}
-	return 0;
+	
+	return &entry;
 }
 
 static struct AllowedStateTransitions

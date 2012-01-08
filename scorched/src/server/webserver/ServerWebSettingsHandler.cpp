@@ -422,23 +422,12 @@ bool ServerWebSettingsHandler::SettingsModHandler::processRequest(
 			std::string mod;
 			if (files.importModFiles(mod, message->getBuffer()))
 			{
-				if (files.writeModFiles(mod))
-				{
-					return ServerWebServerUtil::getHtmlMessage(
-						request.getSession(), 
-						"Mod Upload", 
-						S3D::formatStringBuffer("Successfuly uploaded and imported mod %s",
-						(mod[0]?mod.c_str():"Unknown")), 
-						request.getFields(), text);
-				}
-				else
-				{
-					return ServerWebServerUtil::getHtmlMessage(
-						request.getSession(), 
-						"Mod Upload", 
-						"Failed to write mod files to disk", 
-						request.getFields(), text);
-				}
+				return ServerWebServerUtil::getHtmlMessage(
+					request.getSession(), 
+					"Mod Upload", 
+					S3D::formatStringBuffer("Successfuly uploaded and imported mod %s",
+					(mod[0]?mod.c_str():"Unknown")), 
+					request.getFields(), text);
 			}
 			else
 			{

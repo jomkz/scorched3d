@@ -20,6 +20,7 @@
 
 #include <engine/ModFiles.h>
 #include <engine/ModInfo.h>
+#include <engine/ModFileEntryLoader.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
 #include <common/FileList.h>
@@ -87,14 +88,16 @@ bool ModFiles::excludeFile(const std::string &file)
 bool ModFiles::loadModFiles(const std::string &mod, 
 	bool createDir, ProgressCounter *counter)
 {
+	NetBuffer tmpFileContents;
+
 	clearAll();
 	{
 		// Get and check the user mod directory exists
 		std::string modDir = S3D::getSettingsModFile(mod);
 		if (S3D::dirExists(modDir))
 		{
-			if (counter) counter->setNewOp(LANG_RESOURCE_1("LOADING_USER_MODS", "Loading User Mod : {0}", mod));
-			if (!loadModDir(modDir, mod, counter)) return false;
+			if (counter) counter->setNewOp(LANG_RESOURCE_1("LOADING_USER_MODS", "Loading User Mod \"{0}\"", mod));
+			if (!loadModDir(tmpFileContents, modDir, mod, counter)) return false;
 		}
 		else
 		{
@@ -110,53 +113,29 @@ bool ModFiles::loadModFiles(const std::string &mod,
 			"Failed to parse mod info for mod %s", mod.c_str()));
 	}
 
-	if (!modInfo.getShippedMod())
 	{
 		// Get and check global mod directory
 		std::string modDir = S3D::getGlobalModFile(mod);
 		if (S3D::dirExists(modDir))
 		{
-			if (counter) counter->setNewOp(LANG_RESOURCE_1("LOADING_GLOBAL_MODS", "Loading Global Mod : {0}", mod));
-			if (!loadModDir(modDir, mod, counter)) return false;
-		}
-	}
-	else
-	{
-		// For the shipped mods load some files that can
-		// be downloaded
-		loadLocalModFile("data/accessories.xml", mod);
-		loadLocalModFile("data/modinfo.xml", mod);
-		loadLocalModFile("data/landscapes.xml", mod);
-
-		const char *landscapesBase = "data/landscapes";
-		std::string dir = S3D::getModFile(landscapesBase);
-		FileList fList(dir, "*.xml", true);
-		std::list<std::string> &files = fList.getFiles();
-		std::list<std::string>::iterator itor;
-		for (itor = files.begin();
-			itor != files.end();
-			++itor)
-		{
-			char *file = (char *) (*itor).c_str();
-			file += dir.size() - strlen(landscapesBase);
-			loadLocalModFile(file, mod);
+			if (counter) counter->setNewOp(LANG_RESOURCE_1("LOADING_GLOBAL_MODS", "Loading Global Mod \"{0}\"", mod));
+			if (!loadModDir(tmpFileContents, modDir, mod, counter)) return false;
 		}
 	}
 	
 	{
-		unsigned int totalCompSize = 0, totalSize = 0;
+		unsigned int totalSize = 0;
 		std::map<std::string, ModFileEntry *>::iterator itor;
 		for (itor = files_.begin();
 			itor != files_.end();
 			++itor)
 		{
 			ModFileEntry *entry = (*itor).second;
-			totalCompSize += entry->getCompressedSize();
 			totalSize += entry->getUncompressedSize();
 		}
 
-		Logger::log(S3D::formatStringBuffer("Loaded mod \"%s\", %u files, space required %u (%u) bytes", 
-			mod.c_str(), files_.size(), totalCompSize, totalSize));
+		Logger::log(S3D::formatStringBuffer("Loaded mod \"%s\", %u files, disk space required %u bytes", 
+			mod.c_str(), files_.size(), totalSize));
 
 		if (!createDir && files_.empty())
 		{
@@ -174,7 +153,8 @@ bool ModFiles::loadModFiles(const std::string &mod,
 	return true;
 }
 
-bool ModFiles::loadLocalModFile(const std::string &local, 
+bool ModFiles::loadLocalModFile(NetBuffer &tmpFileContents, 
+	const std::string &local, 
 	const std::string &mod)
 {
 	std::string dataFile = S3D::getModFile(local);
@@ -182,10 +162,11 @@ bool ModFiles::loadLocalModFile(const std::string &local,
 	char *modDir = (char *) modDirStr.c_str();
 	modDir[dataFile.size() - local.size()] = '\0';
 
-	return loadModFile(dataFile, modDir, mod);
+	return loadModFile(tmpFileContents, dataFile, modDir, mod);
 }
 
-bool ModFiles::loadModDir(const std::string &modDir, 
+bool ModFiles::loadModDir(NetBuffer &tmpFileContents, 
+	const std::string &modDir, 
 	const std::string &mod, ProgressCounter *counter)
 {
 	// Load all files contained in this directory
@@ -203,7 +184,7 @@ bool ModFiles::loadModDir(const std::string &modDir,
 
 		// Load the file
 		std::string &fileName = (*itor);
-		if (!loadModFile(fileName, modDir, mod))
+		if (!loadModFile(tmpFileContents, fileName, modDir, mod))
 		{
 			return false;
 		}
@@ -212,7 +193,8 @@ bool ModFiles::loadModDir(const std::string &modDir,
 	return true;
 }
 
-bool ModFiles::loadModFile(const std::string &fullFileName,
+bool ModFiles::loadModFile(NetBuffer &tmpFileContents, 
+	const std::string &fullFileName,
 	const std::string &modDir, const std::string &mod)
 {
 	std::string shortFileNameStr(fullFileName.c_str());
@@ -245,8 +227,7 @@ bool ModFiles::loadModFile(const std::string &fullFileName,
 	if (files_.find(shortFileName) != files_.end()) return true;
 
 	// Create the new mod file and load the file
-	ModFileEntry *file = new ModFileEntry();
-	if (!file->loadModFile(fullFileName))
+	if (!ModFileEntryLoader::loadModFile(tmpFileContents, fullFileName))
 	{
 		S3D::dialogMessage("Mod", S3D::formatStringBuffer(
 			"Error: Failed to load file \"%s\" mod directory \"%s\" in the \"%s\" mod",
@@ -257,40 +238,11 @@ bool ModFiles::loadModFile(const std::string &fullFileName,
 	}
 
 	// Store for future
-	file->setFileName(shortFileName);
+	ModFileEntry *file = new ModFileEntry(shortFileName, 
+		tmpFileContents.getCrc(), 
+		tmpFileContents.getBufferUsed());
 	files_[shortFileName] = file;
 	return true;
-}
-
-bool ModFiles::writeModFiles(const std::string &mod)
-{
-	std::string modDir = S3D::getSettingsModFile(mod);
-	if (!S3D::dirExists(modDir))
-	{
-		S3D::dirMake(modDir);
-	}
-
-	std::map<std::string, ModFileEntry *>::iterator itor;
-	for (itor = files_.begin();
-		itor != files_.end();
-		++itor)
-	{
-		ModFileEntry *entry = (*itor).second;
-		if (!entry->writeModFile(entry->getFileName(), mod)) return false;
-	}
-	return true;
-}
-
-void ModFiles::clearData()
-{
-	 std::map<std::string, ModFileEntry *>::iterator itor;
-	 for (itor = files_.begin();
-	 	itor != files_.end();
-		++itor)
-	{
-		 ModFileEntry *entry = (*itor).second;
-		 entry->getCompressedBuffer().clear();
-	}
 }
 
 void ModFiles::clearAll()
@@ -310,6 +262,8 @@ bool ModFiles::exportModFiles(const std::string &mod, const std::string &fileNam
 	FILE *out = fopen(fileName.c_str(), "wb");
 	if (!out) return false;
 
+	S3D::setDataFileMod(mod);
+
 	// Mod Name
 	NetBuffer tmpBuffer;
 	tmpBuffer.reset();
@@ -321,6 +275,7 @@ bool ModFiles::exportModFiles(const std::string &mod, const std::string &fileNam
 		out);	
 
 	// Mod Files
+	NetBuffer tmpFileContents;
 	std::map<std::string, ModFileEntry *>::iterator itor;
 	for (itor = files_.begin();
 		itor != files_.end();
@@ -328,13 +283,15 @@ bool ModFiles::exportModFiles(const std::string &mod, const std::string &fileNam
 	{
 		ModFileEntry *entry = (*itor).second;
 	
+		std::string fullFileName = S3D::getModFile(entry->getFileName());
+		ModFileEntryLoader::loadModFile(tmpFileContents, fullFileName);
+
 		tmpBuffer.reset();
 		tmpBuffer.addToBuffer(entry->getFileName());
-		tmpBuffer.addToBuffer(entry->getUncompressedSize());
-		tmpBuffer.addToBuffer(entry->getCompressedBuffer().getBufferUsed());
-		tmpBuffer.addToBuffer(entry->getCompressedCrc());
-		tmpBuffer.addDataToBuffer(entry->getCompressedBuffer().getBuffer(),
-			entry->getCompressedBuffer().getBufferUsed());
+		tmpBuffer.addToBuffer(tmpFileContents.getBufferUsed());
+		tmpBuffer.addToBuffer(tmpFileContents.getCrc());
+		tmpBuffer.addDataToBuffer(tmpFileContents.getBuffer(),
+			tmpFileContents.getBufferUsed());
 
 		fwrite(tmpBuffer.getBuffer(),
 			sizeof(unsigned char),
@@ -392,6 +349,13 @@ bool ModFiles::importModFiles(std::string &mod, NetBuffer &tmpBuffer)
 		return false;
 	}
 
+	std::string modDir = S3D::getSettingsModFile(mod);
+	if (!S3D::dirExists(modDir))
+	{
+		S3D::dirMake(modDir);
+	}
+
+	NetBuffer tmpFileContents;
 	for (;;)
 	{
 		// File Name
@@ -400,24 +364,30 @@ bool ModFiles::importModFiles(std::string &mod, NetBuffer &tmpBuffer)
 		if (0 == strcmp(name.c_str(), "*")) break;
 
 		// File Header
-		unsigned int unCompressedSize;
-		unsigned int compressedSize;
-		unsigned int compressedCrc;
-		tmpReader.getFromBuffer(unCompressedSize);
-		tmpReader.getFromBuffer(compressedSize);
-		tmpReader.getFromBuffer(compressedCrc);
+		unsigned int uncompressedSize;
+		unsigned int uncompressedCrc;
+		tmpReader.getFromBuffer(uncompressedSize);
+		tmpReader.getFromBuffer(uncompressedCrc);
 
 		// File
-		ModFileEntry *entry = new ModFileEntry;
-		entry->setFileName(name.c_str());
-		entry->setCompressedCrc(compressedCrc);
-		entry->setUncompressedSize(unCompressedSize);
-		entry->getCompressedBuffer().allocate(compressedSize);
-		entry->getCompressedBuffer().setBufferUsed(compressedSize);
+		tmpFileContents.allocate(uncompressedSize);
+		tmpFileContents.setBufferUsed(uncompressedSize);
 		tmpReader.getDataFromBuffer(
-			entry->getCompressedBuffer().getBuffer(), 
-			compressedSize);
-		files_[name] = entry;
+			tmpFileContents.getBuffer(), 
+			uncompressedSize);
+		if (tmpFileContents.getCrc() != uncompressedCrc)
+		{
+			S3D::dialogMessage("Scorched3D", 
+				S3D::formatStringBuffer("CRC failure for file %s in mod", name.c_str()));
+			return false;
+		}
+
+		if (!ModFileEntryLoader::writeModFile(tmpFileContents, name, mod))
+		{
+			S3D::dialogMessage("Scorched3D", 
+				S3D::formatStringBuffer("Failure to write mod file %s in mod", name.c_str()));
+			return false;
+		}
 	}
 
 	return true;

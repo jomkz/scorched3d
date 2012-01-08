@@ -106,6 +106,7 @@
     <ClCompile Include="..\..\common\actions\TargetFalling.cpp" />
     <ClCompile Include="..\..\common\actions\Teleport.cpp" />
     <ClCompile Include="..\..\common\coms\ComsTankChangeMessage.cpp" />
+    <ClCompile Include="..\..\common\engine\ModFileEntryLoader.cpp" />
     <ClCompile Include="..\..\common\engine\ObjectGroup.cpp" />
     <ClCompile Include="..\..\common\engine\ObjectGroupEntry.cpp" />
     <ClCompile Include="..\..\common\engine\ObjectGroupEntryDefinition.cpp" />
@@ -629,6 +630,7 @@
     <ClInclude Include="..\..\common\common\Vector4.h" />
     <ClInclude Include="..\..\common\common\VectorLib.h" />
     <ClInclude Include="..\..\common\coms\ComsTankChangeMessage.h" />
+    <ClInclude Include="..\..\common\engine\ModFileEntryLoader.h" />
     <ClInclude Include="..\..\common\engine\ObjectGroup.h" />
     <ClInclude Include="..\..\common\engine\ObjectGroupEntry.h" />
     <ClInclude Include="..\..\common\engine\ObjectGroupEntryDefinition.h" />
