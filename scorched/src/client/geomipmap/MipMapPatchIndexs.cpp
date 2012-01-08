@@ -51,6 +51,8 @@ MipMapPatchIndexs::~MipMapPatchIndexs()
 		levels_.pop_back();
 		delete level;
 	}
+	delete bufferObject_;
+	bufferObject_ = 0;
 }
 
 void MipMapPatchIndexs::generate(int size, int totalsize, unsigned int totallods)

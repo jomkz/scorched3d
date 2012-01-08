@@ -34,6 +34,9 @@ Water2Patches::Water2Patches() : patches_(0),
 Water2Patches::~Water2Patches()
 {
 	delete [] patches_;
+	patches_ = 0;
+	delete bufferObject_;
+	bufferObject_ = 0;
 }
 
 void Water2Patches::generate(Water2Points &heights, 

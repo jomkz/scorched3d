@@ -24,7 +24,6 @@
 #include <graph/OptionsDisplay.h>
 #include <GLEXT/GLState.h>
 #include <GLEXT/GLStateExtension.h>
-#include <GLEXT/GLVertexBufferObject.h>
 #include <GLEXT/GLInfo.h>
 
 Water2Patch::Water2Patch() : 

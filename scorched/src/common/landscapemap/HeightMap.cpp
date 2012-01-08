@@ -36,6 +36,9 @@ HeightMap::HeightMap() :
 HeightMap::~HeightMap()
 {
 	delete [] heightData_;
+	heightData_ = 0;
+	if (graphicalMap_) delete graphicalMap_;
+	graphicalMap_ = 0;
 }
 
 void HeightMap::create(const int width, const int height, bool invertedNormals)

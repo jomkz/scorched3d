@@ -32,6 +32,9 @@ GraphicalLandscapeMap::GraphicalLandscapeMap() :
 GraphicalLandscapeMap::~GraphicalLandscapeMap()
 {
 	delete [] heightData_;
+	heightData_ = 0;
+	delete bufferObject_;
+	bufferObject_ = 0;
 }
 
 void GraphicalLandscapeMap::create(const int width, const int height)

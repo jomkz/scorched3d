@@ -61,6 +61,7 @@
 #include <console/ConsoleRuleMethodIAdapter.h>
 #include <image/ImageFactory.h>
 #include <GLEXT/GLTexture.h>
+#include <GLEXT/GLTextureStore.h>
 #include <lua/LUAScriptFactory.h>
 
 TankMenus::TankMenus() : logger_("ClientLog")
@@ -149,7 +150,11 @@ void TankMenus::logToFile()
 void TankMenus::showTextureDetails()
 {
 	Console::instance()->addLine(false,
-		S3D::formatStringBuffer("%i bytes", GLTexture::getTextureSpace()));
+		S3D::formatStringBuffer("Textures use %u bytes", 
+		GLTexture::getTextureSpace()));
+	Console::instance()->addLine(false,
+		S3D::formatStringBuffer("There are %u texture references", 
+		GLTextureStore::instance()->getReferenceCount()));
 }
 
 void TankMenus::resetLandscape()

@@ -30,6 +30,7 @@ public:
 	static GLTextureStore *instance();
 
 	void resetModFiles();
+	unsigned int getReferenceCount() { return references_.size(); }
 
 	GLTextureReferenceData *getTextureReference(const ImageID &imageId, unsigned texState);
 	void removeTextureReference(GLTextureReferenceData *reference);

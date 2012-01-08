@@ -28,8 +28,8 @@
 #include <landscape/GraphicalLandscapeMap.h>
 #include <client/ScorchedClient.h>
 #include <engine/GameState.h>
-#include <GLEXT/GLStateExtension.h>
 #include <GLEXT/GLVertexBufferObject.h>
+#include <GLEXT/GLStateExtension.h>
 #include <GLEXT/GLCamera.h>
 #include <GLSL/GLSLShaderSetup.h>
 #include <graph/OptionsDisplay.h>

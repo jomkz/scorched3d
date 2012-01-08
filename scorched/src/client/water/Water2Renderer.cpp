@@ -50,6 +50,7 @@ Water2Renderer::Water2Renderer() :
 
 Water2Renderer::~Water2Renderer()
 {
+	delete waterShader_;
 }
 
 void Water2Renderer::simulate(float frameTime)
