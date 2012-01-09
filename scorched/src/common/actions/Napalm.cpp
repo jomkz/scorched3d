@@ -76,6 +76,7 @@ Napalm::~Napalm()
 	{
 		NapalmEntry *entry = napalmPoints_.front();
 		delete entry;
+		napalmPoints_.pop_front();
 	}
 }
 
