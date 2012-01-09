@@ -37,6 +37,7 @@ extern "C" {
 
 #include <common/Defines.h>
 #include <image/ImageJpgFactory.h>
+#include <setjmp.h>
 
 Image ImageJpgFactory::loadFromFile(const char *filename, const char *alphafilename, bool invert)
 {
@@ -96,7 +97,12 @@ Image ImageJpgFactory::loadFromFile(const char * filename, bool readalpha)
 	}
 	fclose(file);
 
-	return loadFromBuffer(netBuffer, readalpha);
+	Image result = loadFromBuffer(netBuffer, readalpha);
+	if (!result.getBits())
+	{
+		printf("Failed to load jpg file %s", filename);
+	}
+	return result;
 }
 
 METHODDEF(void)
@@ -138,12 +144,46 @@ term_source (j_decompress_ptr cinfo)
   /* no work necessary here */
 }
 
+struct my_error_mgr {
+  struct jpeg_error_mgr pub;	/* "public" fields */
+
+  jmp_buf setjmp_buffer;	/* for return to caller */
+};
+
+typedef struct my_error_mgr *my_error_ptr;
+
+METHODDEF(void)
+my_error_exit (j_common_ptr cinfo)
+{
+  /* cinfo->err really points to a my_error_mgr struct, so coerce pointer */
+  my_error_ptr myerr = (my_error_ptr) cinfo->err;
+
+  /* Always display the message. */
+  /* We could postpone this until after returning, if we chose. */
+  (*cinfo->err->output_message) (cinfo);
+
+  /* Return control to the setjmp point */
+  longjmp(myerr->setjmp_buffer, 1);
+}
+
 Image ImageJpgFactory::loadFromBuffer(NetBuffer &buffer, bool readalpha)
 {
 	struct jpeg_decompress_struct cinfo;
-	struct jpeg_error_mgr jerr;
+	struct my_error_mgr jerr;
 
-	cinfo.err = jpeg_std_error(&jerr);	
+	Image result;
+
+	cinfo.err = jpeg_std_error(&jerr.pub);	
+	jerr.pub.error_exit = my_error_exit;
+	/* Establish the setjmp return context for my_error_exit to use. */
+	if (setjmp(jerr.setjmp_buffer)) {
+		/* If we get here, the JPEG code has signaled an error.
+		* We need to clean up the JPEG object, close the input file, and return.
+		*/
+		jpeg_destroy_decompress(&cinfo);
+		return result;
+	}
+
 	jpeg_create_decompress(&cinfo);
 
 	// Get the buffer reading entry points
@@ -169,7 +209,6 @@ Image ImageJpgFactory::loadFromBuffer(NetBuffer &buffer, bool readalpha)
 	jpeg_read_header(&cinfo, TRUE);
 	jpeg_start_decompress(&cinfo);
 
-	Image result;
 	if ((cinfo.output_components == 3 && !readalpha) ||
 		(cinfo.output_components == 4 && readalpha))
 	{
