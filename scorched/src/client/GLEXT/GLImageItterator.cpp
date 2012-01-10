@@ -36,8 +36,8 @@ ImageItterator::ImageItterator(Image &bitmap,
 		dx_ = 1;
 		dy_ = 1;
 	}
-	width_ = 3 * bitmap.getWidth();
-	width_   = (width_ + 3) & ~3;	
+	width_ = bitmap.getComponents() * bitmap.getWidth();
+	components_ = bitmap.getComponents();
 
 	reset();
 }
@@ -69,5 +69,5 @@ void ImageItterator::incY()
 
 unsigned char *ImageItterator::getPos()
 {
-	return pos_ + (int) posX_ * 3;
+	return pos_ + (int) posX_ * components_;
 }

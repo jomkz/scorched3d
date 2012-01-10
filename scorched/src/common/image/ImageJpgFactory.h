@@ -35,7 +35,7 @@ public:
 	in RGBA format, otherwise in RGB format.
 	*/
 	static Image loadFromFile(const char *filename, bool readalpha = false);
-	static Image loadFromBuffer(NetBuffer &buffer, bool readalpha);
+	static Image loadFromBuffer(NetBuffer &buffer, bool readalpha, std::string &errorMessage);
 };
 
 #endif // !defined(AFX_ImageJpgFactory_H__315BF771_5E56_4C78_9D9F_51608D8CB3F0__INCLUDED_)

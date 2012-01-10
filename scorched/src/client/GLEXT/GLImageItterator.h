@@ -84,10 +84,12 @@ public:
 	*/
 	unsigned char *getPos();
 
+	int getComponents() { return components_; }
+
 protected:
 	Image &bitmap_;
 	float dx_, dy_;
-	int width_;
+	int width_, components_;
 	Type type_;
 
 	unsigned char *pos_;

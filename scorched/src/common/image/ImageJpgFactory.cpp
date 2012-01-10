@@ -53,10 +53,13 @@ Image ImageJpgFactory::loadFromFile(const char * filename, bool readalpha)
 	}
 	fclose(file);
 
-	Image result = loadFromBuffer(netBuffer, readalpha);
+	std::string errorMessage;
+	Image result = loadFromBuffer(netBuffer, readalpha, errorMessage);
 	if (!result.getBits())
 	{
-		printf("Failed to load jpg file %s\n", filename);
+		S3D::dialogExit("Scorched3D", 
+			S3D::formatStringBuffer("Failed to load jpg file %s, %s\n", 
+			filename, errorMessage.c_str()));
 	}
 	return result;
 }
@@ -122,7 +125,7 @@ my_error_exit (j_common_ptr cinfo)
   longjmp(myerr->setjmp_buffer, 1);
 }
 
-Image ImageJpgFactory::loadFromBuffer(NetBuffer &buffer, bool readalpha)
+Image ImageJpgFactory::loadFromBuffer(NetBuffer &buffer, bool readalpha, std::string &errorMessage)
 {
 	struct jpeg_decompress_struct cinfo;
 	struct my_error_mgr jerr;
@@ -136,6 +139,7 @@ Image ImageJpgFactory::loadFromBuffer(NetBuffer &buffer, bool readalpha)
 		/* If we get here, the JPEG code has signaled an error.
 		* We need to clean up the JPEG object, close the input file, and return.
 		*/
+		errorMessage = "LibJPEG error";
 		jpeg_destroy_decompress(&cinfo);
 		return result;
 	}
@@ -207,7 +211,7 @@ Image ImageJpgFactory::loadFromBuffer(NetBuffer &buffer, bool readalpha)
 	} 
 	else 
 	{
-		printf("Image format not supported\n");
+		errorMessage = "Image format not supported";
 	}
 
 	jpeg_finish_decompress(&cinfo);

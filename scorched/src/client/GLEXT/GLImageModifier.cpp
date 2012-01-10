@@ -72,6 +72,8 @@ bool ImageModifier::findIntersection(HeightMap &hMap,
 
 void ImageModifier::tileBitmap(Image &src, Image &dest)
 {
+	DIALOG_ASSERT(dest.getComponents() == 3);
+
 	GLubyte *destBytes = dest.getBits();
 	for (int j=0; j<dest.getHeight(); j++)
 	{
@@ -80,12 +82,20 @@ void ImageModifier::tileBitmap(Image &src, Image &dest)
 			int srcX = i % src.getWidth();
 			int srcY = j % src.getHeight();
 
-			GLubyte *srcBytes = src.getBits() + (3 * srcX) +
-				(3 * src.getWidth() * srcY);
+			GLubyte *srcBytes = src.getBits() + (src.getComponents() * srcX) +
+				(src.getComponents() * src.getWidth() * srcY);
 
 			destBytes[0] = srcBytes[0];
-			destBytes[1] = srcBytes[1];
-			destBytes[2] = srcBytes[2];
+			if (src.getComponents() == 1)
+			{
+				destBytes[1] = srcBytes[0];
+				destBytes[2] = srcBytes[0];
+			}
+			else
+			{
+				destBytes[1] = srcBytes[1];
+				destBytes[2] = srcBytes[2];
+			}
 		}
 	}
 }
@@ -97,6 +107,8 @@ void ImageModifier::addLightMapToBitmap(Image &destBitmap,
 	Vector &diffuse,
 	ProgressCounter *counter)
 {
+	DIALOG_ASSERT(destBitmap.getComponents() == 3);
+
 	const float softShadow = 3.0f;
 	const int lightMapWidth = 256; // Resolution of the light map
 
@@ -186,6 +198,22 @@ void ImageModifier::addLightMapToBitmap(Image &destBitmap,
 	delete [] bitmap;
 }
 
+static void blendPixels(GLubyte *destBits, GLubyte *sourceBits, int sourceComponents, float blendAmount)
+{
+	if (sourceComponents == 1)
+	{
+		destBits[0] += (GLubyte) ((float) sourceBits[0] * blendAmount);
+		destBits[1] += (GLubyte) ((float) sourceBits[0] * blendAmount);
+		destBits[2] += (GLubyte) ((float) sourceBits[0] * blendAmount);
+	}
+	else
+	{
+		destBits[0] += (GLubyte) ((float) sourceBits[0] * blendAmount);
+		destBits[1] += (GLubyte) ((float) sourceBits[1] * blendAmount);
+		destBits[2] += (GLubyte) ((float) sourceBits[2] * blendAmount);
+	}
+}
+
 void ImageModifier::addHeightToBitmap(HeightMap &hMap,
 										 Image &destBitmap, 
 										 Image &slopeBitmap,
@@ -195,6 +223,8 @@ void ImageModifier::addHeightToBitmap(HeightMap &hMap,
 										 int destBitmapScaleSize,
 										 ProgressCounter *counter)
 {
+	DIALOG_ASSERT(destBitmap.getComponents() == 3);
+
 	const float maxHeight = 30.0f; // Last texture ends at height 30
 	const float blendHeightFactor = 0.4f; // Ends blend when 40% into height band
 	const float blendNormalSlopeStart = 0.8f; // Starts blending slope at .80
@@ -354,37 +384,31 @@ void ImageModifier::addHeightToBitmap(HeightMap &hMap,
 				}
 			}
 
+			destBits[0] = destBits[1] = destBits[2] = 0;
+
 			// Add first height component
 			GLubyte *sourceBits1 = bitmapItors[heightIndex]->getPos();
-			destBits[0] = (GLubyte) ((float) sourceBits1[0] * blendFirstAmount);
-			destBits[1] = (GLubyte) ((float) sourceBits1[1] * blendFirstAmount);
-			destBits[2] = (GLubyte) ((float) sourceBits1[2] * blendFirstAmount);
+			blendPixels(destBits, sourceBits1, bitmapItors[heightIndex]->getComponents(), blendFirstAmount);
 
 			if (blendSecondAmount > 0.0f)
 			{
 				// Add second height component (if blending)
 				GLubyte *sourceBits2 = bitmapItors[heightIndex + 1]->getPos();
-				destBits[0] += (GLubyte) ((float) sourceBits2[0] * blendSecondAmount);
-				destBits[1] += (GLubyte) ((float) sourceBits2[1] * blendSecondAmount);
-				destBits[2] += (GLubyte) ((float) sourceBits2[2] * blendSecondAmount);
+				blendPixels(destBits, sourceBits2, bitmapItors[heightIndex + 1]->getComponents(), blendSecondAmount);
 			}
 
 			if (blendSideAmount > 0.0f)
 			{
 				// Add side component (if blending normals)
 				GLubyte *sourceBits3 = bitmapItors[numberSources]->getPos();
-				destBits[0] += (GLubyte) ((float) sourceBits3[0] * blendSideAmount);
-				destBits[1] += (GLubyte) ((float) sourceBits3[1] * blendSideAmount);
-				destBits[2] += (GLubyte) ((float) sourceBits3[2] * blendSideAmount);
+				blendPixels(destBits, sourceBits3, bitmapItors[numberSources]->getComponents(), blendSideAmount);
 			}
 
 			if (blendShoreAmount > 0.0f)
 			{
 				// Add side component (if blending normals)
 				GLubyte *sourceBits4 = bitmapItors[numberSources + 1]->getPos();
-				destBits[0] += (GLubyte) ((float) sourceBits4[0] * blendShoreAmount);
-				destBits[1] += (GLubyte) ((float) sourceBits4[1] * blendShoreAmount);
-				destBits[2] += (GLubyte) ((float) sourceBits4[2] * blendShoreAmount);
+				blendPixels(destBits, sourceBits4, bitmapItors[numberSources + 1]->getComponents(), blendShoreAmount);
 			}
 
 			for (i=0; i<numberSources+2; i++) bitmapItors[i]->incX();
@@ -409,9 +433,10 @@ void ImageModifier::addHeightToBitmap(HeightMap &hMap,
 	delete [] heightBitmaps;
 }
 
-void ImageModifier::redBitmap(
-		Image &destBitmap)
+void ImageModifier::redBitmap(Image &destBitmap)
 {
+	DIALOG_ASSERT(destBitmap.getComponents() == 3);
+
 	unsigned char *destBits = destBitmap.getBits();
 	for (int y=0; y<destBitmap.getHeight(); y++)
 	{
@@ -432,6 +457,8 @@ void ImageModifier::addTexturesToBitmap(
 		Image **heightBitmaps,
 		int numberSources)
 {
+	DIALOG_ASSERT(destBitmap.getComponents() == 3);
+
 	std::vector<Image *> sources;
 	for (int i=0; i<numberSources; i++)
 	{
@@ -474,6 +501,7 @@ void ImageModifier::removeWaterFromBitmap(HeightMap &hMap,
 							Image &alphaBitmap,
 							float waterHeight)
 {
+	DIALOG_ASSERT(destBitmap.getComponents() == 4);
 	DIALOG_ASSERT(srcBitmap.getWidth() == destBitmap.getWidth() &&
 		srcBitmap.getWidth() == alphaBitmap.getWidth());
 	DIALOG_ASSERT(srcBitmap.getHeight() == destBitmap.getHeight() &&
@@ -491,7 +519,7 @@ void ImageModifier::removeWaterFromBitmap(HeightMap &hMap,
 	{
 		GLfloat hx = 0.0f;
 		for (int x=0; x<srcBitmap.getWidth(); x++, hx+=hdx, 
-			destBits+=4, srcBits+=3, alphaBits+=3)
+			destBits+=destBitmap.getComponents(), srcBits+=srcBitmap.getComponents(), alphaBits+=alphaBitmap.getComponents())
 		{
 			GLubyte alpha = 255 - alphaBits[0];
 			if (alpha > 0)
@@ -510,8 +538,16 @@ void ImageModifier::removeWaterFromBitmap(HeightMap &hMap,
 			}
 
 			destBits[0] = srcBits[0];
-			destBits[1] = srcBits[1];
-			destBits[2] = srcBits[2];
+			if (srcBitmap.getComponents() == 1)
+			{
+				destBits[1] = srcBits[0];
+				destBits[2] = srcBits[0];
+			}
+			else
+			{
+				destBits[1] = srcBits[1];
+				destBits[2] = srcBits[2];
+			}
 			destBits[3] = alpha;
 		}
 	}
@@ -522,6 +558,8 @@ void ImageModifier::addWaterToBitmap(HeightMap &hMap,
 										Image &waterBitmap,
 										float waterHeight)
 {
+	DIALOG_ASSERT(destBitmap.getComponents() == 3);
+
 	const float waterPercentage = 0.75f;
 	const float oneMinusPercentage = 1.0f - waterPercentage;
 
@@ -539,7 +577,7 @@ void ImageModifier::addWaterToBitmap(HeightMap &hMap,
 	for (int by=0; by<destBitmap.getHeight(); by++, hy+=hdy, bitmapItor.incY())
 	{
 		GLfloat hx = 0.0f;
-		for (int bx=0; bx<destBitmap.getWidth(); bx++, destBits+=3, hx+=hdx, bitmapItor.incX())
+		for (int bx=0; bx<destBitmap.getWidth(); bx++, destBits+=destBitmap.getComponents(), hx+=hdx, bitmapItor.incX())
 		{
 			float height = hMap.getInterpHeight(
 				fixed::fromFloat(hx), fixed::fromFloat(hy)).asFloat();
@@ -684,6 +722,14 @@ void ImageModifier::makeBitmapTransparent(Image &output,
 		Image &input,
 		Image &mask)
 {
+	DIALOG_ASSERT(output.getComponents() == 4);
+	DIALOG_ASSERT(input.getComponents() == 3);
+	DIALOG_ASSERT(mask.getComponents() == 4);
+	DIALOG_ASSERT(output.getWidth() == input.getWidth());
+	DIALOG_ASSERT(output.getWidth() == mask.getWidth());
+	DIALOG_ASSERT(output.getHeight() == input.getHeight());
+	DIALOG_ASSERT(output.getHeight() == mask.getHeight());
+
 	GLubyte *outputBits = output.getBits();
 	GLubyte *maskBits = mask.getBits();
 	GLubyte *inputBits = input.getBits();
@@ -789,6 +835,8 @@ void ImageModifier::addBitmap(Image &destBitmap,
 	float sx, float sy, float scalex, float scaley, 
 	bool commit)
 {
+	DIALOG_ASSERT(destBitmap.getComponents() == 3);
+
 	int srcScaleWidth = int(float(srcBitmap.getWidth()) * scalex);
 	int srcScaleHeight = int(float(srcBitmap.getHeight()) * scaley);
 
@@ -836,8 +884,16 @@ void ImageModifier::addBitmap(Image &destBitmap,
 			}
 
 			tmpDest[0] = GLubyte(float(tmpSrc[0]) * alpha + float(tmpDest[0]) * invAlpha);
-			tmpDest[1] = GLubyte(float(tmpSrc[1]) * alpha + float(tmpDest[1]) * invAlpha);
-			tmpDest[2] = GLubyte(float(tmpSrc[2]) * alpha + float(tmpDest[2]) * invAlpha);
+			if (srcBitmap.getComponents() == 1)
+			{
+				tmpDest[1] = GLubyte(float(tmpSrc[0]) * alpha + float(tmpDest[1]) * invAlpha);
+				tmpDest[2] = GLubyte(float(tmpSrc[0]) * alpha + float(tmpDest[2]) * invAlpha);
+			}
+			else
+			{
+				tmpDest[1] = GLubyte(float(tmpSrc[1]) * alpha + float(tmpDest[1]) * invAlpha);
+				tmpDest[2] = GLubyte(float(tmpSrc[2]) * alpha + float(tmpDest[2]) * invAlpha);
+			}
 
 			tmpDest += 3;
 		}
