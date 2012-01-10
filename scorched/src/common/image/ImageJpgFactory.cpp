@@ -39,50 +39,6 @@ extern "C" {
 #include <image/ImageJpgFactory.h>
 #include <setjmp.h>
 
-Image ImageJpgFactory::loadFromFile(const char *filename, const char *alphafilename, bool invert)
-{
-	Image result;
-	Image bitmap = loadFromFile(filename, false);
-	Image alpha = loadFromFile(alphafilename, false);
-
-	if (bitmap.getBits() && alpha.getBits() && 
-		bitmap.getWidth() == alpha.getWidth() &&
-		bitmap.getHeight() == alpha.getHeight())
-	{
-		result = Image(bitmap.getWidth(), bitmap.getHeight(), true);
-		result.setLossless(false);
-
-		unsigned char *bbits = bitmap.getBits();
-		unsigned char *abits = alpha.getBits();
-		unsigned char *bits = result.getBits();
-		for (int y=0; y<bitmap.getHeight(); y++)
-		{
-			for (int x=0; x<bitmap.getWidth(); x++)
-			{
-				bits[0] = bbits[0];
-				bits[1] = bbits[1];
-				bits[2] = bbits[2];
-
-				unsigned char avg = (unsigned char)(int(abits[0] + abits[1] + abits[2]) / 3);
-				if (invert)
-				{
-					bits[3] = (unsigned char)(255 - avg);
-				}
-				else
-				{
-					bits[3] = avg;
-				}
-
-				bbits += 3;
-				abits += 3;
-				bits += 4;
-			}
-		}
-	}
-
-	return result;
-}
-
 Image ImageJpgFactory::loadFromFile(const char * filename, bool readalpha)
 {
 	FILE *file = fopen(filename, "rb");
@@ -100,7 +56,7 @@ Image ImageJpgFactory::loadFromFile(const char * filename, bool readalpha)
 	Image result = loadFromBuffer(netBuffer, readalpha);
 	if (!result.getBits())
 	{
-		printf("Failed to load jpg file %s", filename);
+		printf("Failed to load jpg file %s\n", filename);
 	}
 	return result;
 }
@@ -210,9 +166,10 @@ Image ImageJpgFactory::loadFromBuffer(NetBuffer &buffer, bool readalpha)
 	jpeg_start_decompress(&cinfo);
 
 	if ((cinfo.output_components == 3 && !readalpha) ||
-		(cinfo.output_components == 4 && readalpha))
+		(cinfo.output_components == 4 && readalpha) ||
+		(cinfo.output_components == 1 && !readalpha))
 	{
-		result = Image(cinfo.output_width, cinfo.output_height, readalpha);
+		result = Image(cinfo.output_width, cinfo.output_height, cinfo.output_components, 255);
 		result.setLossless(false);
 
 		JSAMPARRAY buffer = (*cinfo.mem->alloc_sarray)
@@ -235,12 +192,22 @@ Image ImageJpgFactory::loadFromBuffer(NetBuffer &buffer, bool readalpha)
 					dest+=cinfo.output_components, src+=cinfo.output_components)
 				{
 					dest[0] = src[0];
-					dest[1] = src[1];
-					dest[2] = src[2];
-					if (readalpha) dest[3] = src[3];
+					if (cinfo.output_components > 1)
+					{
+						dest[1] = src[1];
+						dest[2] = src[2];
+						if (cinfo.output_components > 3)
+						{
+							dest[3] = src[3];
+						}
+					}
 				}
 			}
 		}
+	} 
+	else 
+	{
+		printf("Image format not supported\n");
 	}
 
 	jpeg_finish_decompress(&cinfo);

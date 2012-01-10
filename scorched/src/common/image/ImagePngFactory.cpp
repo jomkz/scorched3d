@@ -29,48 +29,6 @@
 #include <png.h>
 #endif
 
-Image ImagePngFactory::loadFromFile(const char *filename, const char *alphafilename, bool invert)
-{
-	Image result;
-	Image bitmap = loadFromFile(filename, false);
-	Image alpha = loadFromFile(alphafilename, false);
-
-	if (bitmap.getBits() && alpha.getBits() && 
-		bitmap.getWidth() == alpha.getWidth() &&
-		bitmap.getHeight() == alpha.getHeight())
-	{
-		result = Image(bitmap.getWidth(), bitmap.getHeight(), true);
-
-		unsigned char *bbits = bitmap.getBits();
-		unsigned char *abits = alpha.getBits();
-		unsigned char *bits = result.getBits();
-		for (int y=0; y<bitmap.getHeight(); y++)
-		{
-			for (int x=0; x<bitmap.getWidth(); x++)
-			{
-				bits[0] = bbits[0];
-				bits[1] = bbits[1];
-				bits[2] = bbits[2];
-
-				unsigned char avg = (unsigned char)(int(abits[0] + abits[1] + abits[2]) / 3);
-				if (invert)
-				{
-					bits[3] = (unsigned char)(255 - avg);
-				}
-				else
-				{
-					bits[3] = avg;
-				}
-
-				bbits += 3;
-				abits += 3;
-				bits += 4;
-			}
-		}
-	}
-
-	return result;
-}
 Image ImagePngFactory::loadFromFile(const char *filename, bool readalpha)
 {
 	FILE *file = fopen(filename, "rb");

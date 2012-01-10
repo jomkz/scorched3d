@@ -34,7 +34,6 @@ public:
 	in RGBA format, otherwise in RGB format.
 	*/
 	static Image loadFromFile(const char *filename, bool readalpha = false);
-	static Image loadFromFile(const char *filename, const char *alphafilename, bool invert);
 	static Image loadFromBuffer(NetBuffer &buffer, bool readalpha = false);
 
 	static bool writeToBuffer(Image image, NetBuffer &buffer);

@@ -69,7 +69,7 @@ Image ImageFactory::loadImage(
 
 Image ImageFactory::createBlank(int width, int height, bool alpha, unsigned char fill)
 {
-	Image result(width, height, alpha, fill);
+	Image result(width, height, alpha?4:3, fill);
 	return result;
 }
 
@@ -122,6 +122,9 @@ Image ImageFactory::combineImage(Image bitmap, Image alpha, bool invert)
 		bitmap.getWidth() == alpha.getWidth() &&
 		bitmap.getHeight() == alpha.getHeight())
 	{
+		DIALOG_ASSERT((bitmap.getComponents() == 3 && alpha.getComponents() == 1) ||
+			(bitmap.getComponents() == 3 && alpha.getComponents() == 3));
+
 		result = Image(bitmap.getWidth(), bitmap.getHeight(), true);
 
 		unsigned char *bbits = bitmap.getBits();
@@ -135,7 +138,9 @@ Image ImageFactory::combineImage(Image bitmap, Image alpha, bool invert)
 				bits[1] = bbits[1];
 				bits[2] = bbits[2];
 
-				unsigned char avg = (unsigned char)(int(abits[0] + abits[1] + abits[2]) / 3);
+				unsigned char avg = 0;
+				if (alpha.getComponents() == 3) avg = (unsigned char)(int(abits[0] + abits[1] + abits[2]) / 3);
+				else if (alpha.getComponents() == 1) avg = abits[0];
 				if (invert)
 				{
 					bits[3] = (unsigned char)(255 - avg);
@@ -145,9 +150,9 @@ Image ImageFactory::combineImage(Image bitmap, Image alpha, bool invert)
 					bits[3] = avg;
 				}
 
-				bbits += 3;
-				abits += 3;
-				bits += 4;
+				bbits += bitmap.getComponents();
+				abits += alpha.getComponents();
+				bits += result.getComponents();
 			}
 		}
 	}

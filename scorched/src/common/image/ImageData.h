@@ -27,7 +27,7 @@ class ImageData
 {
 public:
 	ImageData();
-	ImageData(int width, int height, bool alpha = false, unsigned char fill = 255);
+	ImageData(int width, int height, int components = 3, unsigned char fill = 255);
 	~ImageData();
 
 	void clear();
@@ -58,7 +58,7 @@ protected:
 	int alignment_;
 	int components_;
 
-	void createBlankInternal(int width, int height, bool alpha, unsigned char fill);
+	void createBlankInternal(int width, int height, int components, unsigned char fill);
 
 private:
 	ImageData(const ImageData &other);

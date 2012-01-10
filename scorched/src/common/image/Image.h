@@ -28,7 +28,8 @@ class Image
 {
 public:
 	Image();
-	Image(int width, int height, bool alpha = false, unsigned char fill = 255);
+	Image(int width, int height, bool alpha = false);
+	Image(int width, int height, int components, unsigned char fill);
 	Image(const Image &other);
 	virtual ~Image();
 

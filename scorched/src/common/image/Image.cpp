@@ -30,9 +30,15 @@ Image::Image()
 	data_->reference();
 }
 
-Image::Image(int width, int height, bool alpha, unsigned char fill)
+Image::Image(int width, int height, bool alpha)
 {
-	data_ = new ImageData(width, height, alpha, fill);
+	data_ = new ImageData(width, height, alpha?4:3, 255);
+	data_->reference();
+}
+
+Image::Image(int width, int height, int components, unsigned char fill)
+{
+	data_ = new ImageData(width, height, components, fill);
 	data_->reference();
 }
 

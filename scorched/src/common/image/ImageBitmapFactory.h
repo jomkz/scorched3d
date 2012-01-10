@@ -41,7 +41,6 @@ public:
 	in RGBA format, otherwise in RGB format.
 	*/
 	static Image loadFromFile(const char *filename, bool alpha = false);
-	static Image loadFromFile(const char *filename, const char *alphafilename, bool invert);
 };
 
 #endif // !defined(AFX_ImageBitmapFactory_H__315BF771_5E56_4C78_9D9F_51608D8CB3F0__INCLUDED_)

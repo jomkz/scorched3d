@@ -32,7 +32,7 @@ ImageData::ImageData() :
 {
 }
 
-ImageData::ImageData(int width, int height, bool alpha, unsigned char fill) :
+ImageData::ImageData(int width, int height, int components, unsigned char fill) :
 	lossless_(true),
 	referenceCount_(0),
 	bits_(0),
@@ -41,7 +41,7 @@ ImageData::ImageData(int width, int height, bool alpha, unsigned char fill) :
 	alignment_(0),
 	components_(0)
 {
-	createBlankInternal(width, height, alpha, fill);
+	createBlankInternal(width, height, components, fill);
 }
 
 ImageData::~ImageData()
@@ -71,13 +71,13 @@ void ImageData::clear()
 	lossless_ = true;
 }
 
-void ImageData::createBlankInternal(int width, int height, bool alpha, unsigned char fill)
+void ImageData::createBlankInternal(int width, int height, int components, unsigned char fill)
 {
 	clear();
 	lossless_ = true;
 	width_ = width;
 	height_ = height;
-	components_ = alpha?4:3;
+	components_ = components;
 	int bitsize = components_ * width * height;
 
 	bits_ = new unsigned char[bitsize];
