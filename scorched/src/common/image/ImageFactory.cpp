@@ -123,7 +123,9 @@ Image ImageFactory::combineImage(Image bitmap, Image alpha, bool invert)
 		bitmap.getHeight() == alpha.getHeight())
 	{
 		DIALOG_ASSERT((bitmap.getComponents() == 3 && alpha.getComponents() == 1) ||
-			(bitmap.getComponents() == 3 && alpha.getComponents() == 3));
+			(bitmap.getComponents() == 3 && alpha.getComponents() == 3) ||
+			(bitmap.getComponents() == 1 && alpha.getComponents() == 3) ||
+			(bitmap.getComponents() == 1 && alpha.getComponents() == 1));
 
 		result = Image(bitmap.getWidth(), bitmap.getHeight(), true);
 
@@ -135,8 +137,11 @@ Image ImageFactory::combineImage(Image bitmap, Image alpha, bool invert)
 			for (int x=0; x<bitmap.getWidth(); x++)
 			{
 				bits[0] = bbits[0];
-				bits[1] = bbits[1];
-				bits[2] = bbits[2];
+				if (bitmap.getComponents() > 1)
+				{
+					bits[1] = bbits[1];
+					bits[2] = bbits[2];
+				}
 
 				unsigned char avg = 0;
 				if (alpha.getComponents() == 3) avg = (unsigned char)(int(abits[0] + abits[1] + abits[2]) / 3);

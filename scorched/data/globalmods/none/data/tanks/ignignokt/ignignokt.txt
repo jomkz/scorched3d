@@ -1065,7 +1065,7 @@ Materials: 1
 0.000000 0.000000 0.000000 1.000000
 0.128000
 1.000000
-".\ignignokt.bmp"
+".\ignignokt.jpg"
 ""
 
 Bones: 0

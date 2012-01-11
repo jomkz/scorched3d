@@ -1,12 +1,12 @@
 <tex>
-	<detail>data/textures/landscape/sahara/detail.bmp</detail>
-	<magmasmall>data/textures/landscape/default/magma-small.bmp</magmasmall>
-	<scorch>data/textures/landscape/sahara/scorch.bmp</scorch>
+	<detail>data/textures/landscape/sahara/detail.jpg</detail>
+	<magmasmall>data/textures/landscape/default/magma-small.jpg</magmasmall>
+	<scorch>data/textures/landscape/sahara/scorch.jpg</scorch>
 	<fog><A>0.8</A><B>0.8</B><C>0.8</C></fog>
 	<fogdensity>0.001</fogdensity>
-	<skytexture>data/textures/landscape/sahara/cloud1.bmp</skytexture>
-	<skytexturemask>data/textures/landscape/sahara/cloud1m.bmp</skytexturemask>
-	<skycolormap>data/textures/landscape/sahara/clearsky.bmp</skycolormap>
+	<skytexture>data/textures/landscape/sahara/cloud1.jpg</skytexture>
+	<skytexturemask>data/textures/landscape/sahara/cloud1m.jpg</skytexturemask>
+	<skycolormap>data/textures/landscape/sahara/clearsky.jpg</skycolormap>
 	<skytimeofday>3</skytimeofday>
 	<skysunxy>110</skysunxy>
 	<skysunyz>15</skysunyz>
@@ -15,8 +15,8 @@
 	<suncolor><A>0.4</A><B>0.4</B><C>0.4</C></suncolor>
 	<suntexture>data/textures/glow1.bmp</suntexture>
 	<border type="water">
-		<reflection>data/textures/landscape/sahara/cubemap.bmp</reflection>
-		<texture>data/textures/landscape/sahara/water.bmp</texture>
+		<reflection>data/textures/landscape/sahara/cubemap.jpg</reflection>
+		<texture>data/textures/landscape/sahara/water.jpg</texture>
 		<wavetopa><A>0.0</A><B>0.0</B><C>0.0</C></wavetopa>
 		<wavetopb><A>0.49</A><B>0.83</B><C>0.94</C></wavetopb>
 		<wavebottoma><A>0.0</A><B>0.0</B><C>0.0</C></wavebottoma>
@@ -26,12 +26,12 @@
 		<height>5.0</height>
 	</border>
 	<texture type="generate">
-		<rockside>data/textures/landscape/sahara/rockside.bmp</rockside>
-		<shore>data/textures/landscape/sahara/shore.bmp</shore>
-		<roof>data/textures/landscape/sahara/texture0.bmp</roof>
-		<texture0>data/textures/landscape/sahara/texture0.bmp</texture0>
-		<texture1>data/textures/landscape/sahara/texture1.bmp</texture1>
-		<texture2>data/textures/landscape/sahara/texture2.bmp</texture2>
-		<texture3>data/textures/landscape/sahara/texture3.bmp</texture3>
+		<rockside>data/textures/landscape/sahara/rockside.jpg</rockside>
+		<shore>data/textures/landscape/sahara/shore.jpg</shore>
+		<roof>data/textures/landscape/sahara/texture0.jpg</roof>
+		<texture0>data/textures/landscape/sahara/texture0.jpg</texture0>
+		<texture1>data/textures/landscape/sahara/texture1.jpg</texture1>
+		<texture2>data/textures/landscape/sahara/texture2.jpg</texture2>
+		<texture3>data/textures/landscape/sahara/texture3.jpg</texture3>
 	</texture>
 </tex>

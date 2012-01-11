@@ -109,11 +109,11 @@ void Hemisphere::drawColored(float radius, float radius2,
 		int colorJ = MAX(j - 1, 0);
 		int colorIndexA = int(float(colorJ) / float(heightSlices) * 15.0f);
 		int colorIndexB = int(float(j) / float(heightSlices) * 15.0f);
-		int bitmapIndexA = daytime * 3 + (16 * 3) * colorIndexA;
-		int bitmapIndexB = daytime * 3 + (16 * 3) * colorIndexB;
+		int bitmapIndexA = daytime * colors.getComponents() + (16 * colors.getComponents()) * colorIndexA;
+		int bitmapIndexB = daytime * colors.getComponents() + (16 * colors.getComponents()) * colorIndexB;
 
 		DIALOG_ASSERT(bitmapIndexA >= 0);
-		DIALOG_ASSERT(bitmapIndexB + 2 < 
+		DIALOG_ASSERT(bitmapIndexB < 
 			colors.getWidth() * colors.getHeight() * colors.getComponents());
 
 		for (int i=startRotationSlice;i<=endRotationSlice;i++) 
@@ -138,8 +138,16 @@ void Hemisphere::drawColored(float radius, float radius2,
 				}
 
 				c1[0] = MIN(float(bits[bitmapIndexA]) / 255.0f + dotP, 1.0f);
-				c1[1] = MIN(float(bits[bitmapIndexA + 1]) / 255.0f + dotP, 1.0f);
-				c1[2] = MIN(float(bits[bitmapIndexA + 2]) / 255.0f + dotP, 1.0f);
+				if (colors.getComponents() == 1)
+				{
+					c1[1] = MIN(float(bits[bitmapIndexA]) / 255.0f + dotP, 1.0f);
+					c1[2] = MIN(float(bits[bitmapIndexA]) / 255.0f + dotP, 1.0f);
+				}
+				else
+				{
+					c1[1] = MIN(float(bits[bitmapIndexA + 1]) / 255.0f + dotP, 1.0f);
+					c1[2] = MIN(float(bits[bitmapIndexA + 2]) / 255.0f + dotP, 1.0f);
+				}
 			}
 
 			Vector e2, p2, c2;
@@ -159,8 +167,16 @@ void Hemisphere::drawColored(float radius, float radius2,
 				}
 
 				c2[0] = MIN(float(bits[bitmapIndexB]) / 255.0f + dotP, 1.0f);
-				c2[1] = MIN(float(bits[bitmapIndexB + 1]) / 255.0f + dotP, 1.0f);
-				c2[2] = MIN(float(bits[bitmapIndexB + 2]) / 255.0f + dotP, 1.0f);
+				if (colors.getComponents() == 1)
+				{
+					c2[1] = MIN(float(bits[bitmapIndexB]) / 255.0f + dotP, 1.0f);
+					c2[2] = MIN(float(bits[bitmapIndexB]) / 255.0f + dotP, 1.0f);
+				}
+				else
+				{
+					c2[1] = MIN(float(bits[bitmapIndexB + 1]) / 255.0f + dotP, 1.0f);
+					c2[2] = MIN(float(bits[bitmapIndexB + 2]) / 255.0f + dotP, 1.0f);
+				}
 			}
 
 			if (!inverse)

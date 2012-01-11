@@ -179,12 +179,10 @@ Image ImageJpgFactory::loadFromBuffer(NetBuffer &buffer, bool readalpha, std::st
 		JSAMPARRAY buffer = (*cinfo.mem->alloc_sarray)
 			((j_common_ptr) &cinfo, JPOOL_IMAGE, 
 				cinfo.output_width * cinfo.output_components, 1);
-
 		while (cinfo.output_scanline < cinfo.output_height)
 		{
 			int currentLine = cinfo.output_scanline;
 			int lines = jpeg_read_scanlines(&cinfo, buffer, 1);
-
 			if (lines > 0)
 			{
 				int destPos = cinfo.output_width * cinfo.output_components * 

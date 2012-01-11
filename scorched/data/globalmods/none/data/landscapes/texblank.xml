@@ -1,9 +1,9 @@
 <tex>
-	<detail>data/textures/landscape/default/detail.bmp</detail>
-	<magmasmall>data/textures/landscape/default/magma-small.bmp</magmasmall>
-	<scorch>data/textures/landscape/default/scorch.bmp</scorch>
-	<skytexture>data/textures/landscape/default/cloud1.bmp</skytexture>
-	<skytexturemask>data/textures/landscape/default/cloud1m.bmp</skytexturemask>
+	<detail>data/textures/landscape/default/detail.jpg</detail>
+	<magmasmall>data/textures/landscape/default/magma-small.jpg</magmasmall>
+	<scorch>data/textures/landscape/default/scorch.jpg</scorch>
+	<skytexture>data/textures/landscape/default/cloud1.jpg</skytexture>
+	<skytexturemask>data/textures/landscape/default/cloud1m.jpg</skytexturemask>
 	<skycolormap>data/textures/clearsky.bmp</skycolormap>
 	<skytimeofday>3</skytimeofday>
 	<skysunxy>45</skysunxy>

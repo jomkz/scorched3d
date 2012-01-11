@@ -3,7 +3,7 @@
 		<name>Random</name>
 		<model type="ase">
 			<mesh>data/tanks/question.ase</mesh>
-			<skin>data/tanks/question.bmp</skin>
+			<skin>data/tanks/question.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -167,7 +167,7 @@
 		<catagory>Tank</catagory>
 		<model type="ase">
 			<mesh>data/tanks/panzer3.ase</mesh>
-			<skin>data/tanks/panzer3.bmp</skin>
+			<skin>data/tanks/panzer3.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -175,7 +175,7 @@
 		<catagory>Artillery</catagory>
 		<model type="ase">
 			<mesh>data/tanks/flakpanzerwirbelwind.ase</mesh>
-			<skin>data/tanks/flakpanzerwirbelwind.bmp</skin>
+			<skin>data/tanks/flakpanzerwirbelwind.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -183,7 +183,7 @@
 		<catagory>Artillery</catagory>
 		<model type="ase">
 			<mesh>data/tanks/sa-19.ase</mesh>
-			<skin>data/tanks/sa-19.bmp</skin>
+			<skin>data/tanks/sa-19.jpg</skin>
 		</model>
 		<projectilemodel type="MilkShape">data/accessories/barrage/barrage.txt</projectilemodel>
 	</tank>
@@ -192,7 +192,7 @@
 		<catagory>Artillery</catagory>
 		<model type="ase">
 			<mesh>data/tanks/zsu-24-1.ase</mesh>
-			<skin>data/tanks/zsu-24-1.bmp</skin>
+			<skin>data/tanks/zsu-24-1.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -200,7 +200,7 @@
 		<catagory>Missile</catagory>
 		<model type="ase">
 			<mesh>data/tanks/rapier.ase</mesh>
-			<skin>data/tanks/rapier.bmp</skin>
+			<skin>data/tanks/rapier.jpg</skin>
 		</model>
 		<projectilemodel type="MilkShape">data/accessories/m48/m48.txt</projectilemodel>
 	</tank>
@@ -209,7 +209,7 @@
 		<catagory>Missile</catagory>
 		<model type="ase">
 			<mesh>data/tanks/harpoon.ase</mesh>
-			<skin>data/tanks/harpoon.bmp</skin>
+			<skin>data/tanks/harpoon.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -217,7 +217,7 @@
 		<catagory>Missile</catagory>
 		<model type="ase">
 			<mesh>data/tanks/v2.ase</mesh>
-			<skin>data/tanks/v2.bmp</skin>
+			<skin>data/tanks/v2.jpg</skin>
 		</model>
 		<projectilemodel type="MilkShape">data/accessories/v2missile/v2missile.txt</projectilemodel>
 	</tank>
@@ -226,7 +226,7 @@
 		<catagory>Missile</catagory>
 		<model type="ase">
 			<mesh>data/tanks/seasparrow.ase</mesh>
-			<skin>data/tanks/seasparrow.bmp</skin>
+			<skin>data/tanks/seasparrow.jpg</skin>
 		</model>
 		<projectilemodel type="MilkShape">data/accessories/m48/m48.txt</projectilemodel>
 	</tank>
@@ -235,7 +235,7 @@
 		<catagory>Missile</catagory>
 		<model type="ase">
 			<mesh>data/tanks/ram.ase</mesh>
-			<skin>data/tanks/ram.bmp</skin>
+			<skin>data/tanks/ram.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -243,7 +243,7 @@
 		<catagory>Tank</catagory>
 		<model type="ase">
 			<mesh>data/tanks/a7v.ase</mesh>
-			<skin>data/tanks/a7v.bmp</skin>
+			<skin>data/tanks/a7v.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -251,7 +251,7 @@
 		<catagory>Tank</catagory>
 		<model type="ase">
 			<mesh>data/tanks/mark1.ase</mesh>
-			<skin>data/tanks/mark1.bmp</skin>
+			<skin>data/tanks/mark1.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -259,7 +259,7 @@
 		<catagory>Artillery</catagory>
 		<model type="ase">
 			<mesh>data/tanks/railgun.ase</mesh>
-			<skin>data/tanks/railgun.bmp</skin>
+			<skin>data/tanks/railgun.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -267,7 +267,7 @@
 		<catagory>Future</catagory>
 		<model type="ase">
 			<mesh>data/tanks/siegetank.ase</mesh>
-			<skin>data/tanks/siegetank.bmp</skin>
+			<skin>data/tanks/siegetank.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -275,7 +275,7 @@
 		<catagory>Future</catagory>
 		<model type="ase">
 			<mesh>data/tanks/siegetank2.ase</mesh>
-			<skin>data/tanks/siegetank2.bmp</skin>
+			<skin>data/tanks/siegetank2.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -283,7 +283,7 @@
 		<catagory>Starwars</catagory>
 		<model type="ase">
 			<mesh>data/tanks/hothgun.ase</mesh>
-			<skin>data/tanks/hothgun.bmp</skin>
+			<skin>data/tanks/hothgun.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -291,7 +291,7 @@
 		<catagory>Starwars</catagory>
 		<model type="ase">
 			<mesh>data/tanks/hothgun2.ase</mesh>
-			<skin>data/tanks/hothgun2.bmp</skin>
+			<skin>data/tanks/hothgun2.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -299,7 +299,7 @@
 		<catagory>Starwars</catagory>
 		<model type="ase">
 			<mesh>data/tanks/atst.ase</mesh>
-			<skin>data/tanks/atst.bmp</skin>
+			<skin>data/tanks/atst.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -307,7 +307,7 @@
 		<catagory>Starwars</catagory>
 		<model type="ase">
 			<mesh>data/tanks/aat.ase</mesh>
-			<skin>data/tanks/aat.bmp</skin>
+			<skin>data/tanks/aat.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -315,7 +315,7 @@
 		<catagory>Artillery</catagory>
 		<model type="ase">
 			<mesh>data/tanks/phalanx.ase</mesh>
-			<skin>data/tanks/phalanx.bmp</skin>
+			<skin>data/tanks/phalanx.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -323,7 +323,7 @@
 		<catagory>Artillery</catagory>
 		<model type="ase">
 			<mesh>data/tanks/towedartillery.ase</mesh>
-			<skin>data/tanks/towedartilleryb.bmp</skin>
+			<skin>data/tanks/towedartilleryb.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -331,7 +331,7 @@
 		<catagory>Missile</catagory>
 		<model type="ase">
 			<mesh>data/tanks/hawk.ase</mesh>
-			<skin>data/tanks/hawk.bmp</skin>
+			<skin>data/tanks/hawk.jpg</skin>
 		</model>
 		<projectilemodel type="MilkShape">data/accessories/hawkmissile/hawk.txt</projectilemodel>
 	</tank>
@@ -340,7 +340,7 @@
 		<catagory>Artillery</catagory>
 		<model type="ase">
 			<mesh>data/tanks/towedartillery.ase</mesh>
-			<skin>data/tanks/towedartillery.bmp</skin>
+			<skin>data/tanks/towedartillery.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -348,7 +348,7 @@
 		<catagory>Helicopters</catagory>
 		<model type="ase">
 			<mesh>data/tanks/apache.ase</mesh>
-			<skin>data/tanks/apache.bmp</skin>
+			<skin>data/tanks/apache.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -356,7 +356,7 @@
 		<catagory>Helicopters</catagory>
 		<model type="ase">
 			<mesh>data/tanks/apache-long.ase</mesh>
-			<skin>data/tanks/apache-long.bmp</skin>
+			<skin>data/tanks/apache-long.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -364,7 +364,7 @@
 		<catagory>Missile</catagory>
 		<model type="ase">
 			<mesh>data/tanks/bm13.ase</mesh>
-			<skin>data/tanks/bm13.bmp</skin>
+			<skin>data/tanks/bm13.jpg</skin>
 		</model>
 		<projectilemodel type="MilkShape">data/accessories/barrage/barrage.txt</projectilemodel>
 	</tank>
@@ -373,7 +373,7 @@
 		<catagory>Tank</catagory>
 		<model type="ase">
 			<mesh>data/tanks/bradley.ase</mesh>
-			<skin>data/tanks/bradley.bmp</skin>
+			<skin>data/tanks/bradley.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -381,7 +381,7 @@
 		<catagory>Tank</catagory>
 		<model type="ase">
 			<mesh>data/tanks/bradley.ase</mesh>
-			<skin>data/tanks/bradleyb.bmp</skin>
+			<skin>data/tanks/bradleyb.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -389,7 +389,7 @@
 		<catagory>Helicopters</catagory>
 		<model type="ase">
 			<mesh>data/tanks/hind.ase</mesh>
-			<skin>data/tanks/hind.bmp</skin>
+			<skin>data/tanks/hind.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -397,7 +397,7 @@
 		<catagory>Artillery</catagory>
 		<model type="ase">
 			<mesh>data/tanks/howitzer.ase</mesh>
-			<skin>data/tanks/howitzer.bmp</skin>
+			<skin>data/tanks/howitzer.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -405,7 +405,7 @@
 		<catagory>Missile</catagory>
 		<model type="ase">
 			<mesh>data/tanks/hummermlrs.ase</mesh>
-			<skin>data/tanks/hummermlrs.bmp</skin>
+			<skin>data/tanks/hummermlrs.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -413,7 +413,7 @@
 		<catagory>Missile</catagory>
 		<model type="ase">
 			<mesh>data/tanks/hummersam.ase</mesh>
-			<skin>data/tanks/hummersam.bmp</skin>
+			<skin>data/tanks/hummersam.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -421,7 +421,7 @@
 		<catagory>Missile</catagory>
 		<model type="ase">
 			<mesh>data/tanks/hummertow.ase</mesh>
-			<skin>data/tanks/hummertow.bmp</skin>
+			<skin>data/tanks/hummertow.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -429,7 +429,7 @@
 		<catagory>Artillery</catagory>
 		<model type="ase">
 			<mesh>data/tanks/m110.ase</mesh>
-			<skin>data/tanks/m110.bmp</skin>
+			<skin>data/tanks/m110.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -437,7 +437,7 @@
 		<catagory>Artillery</catagory>
 		<model type="ase">
 			<mesh>data/tanks/m198.ase</mesh>
-			<skin>data/tanks/m198.bmp</skin>
+			<skin>data/tanks/m198.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -445,7 +445,7 @@
 		<catagory>Tank</catagory>
 		<model type="ase">
 			<mesh>data/tanks/m1a1.ase</mesh>
-			<skin>data/tanks/m1a1.bmp</skin>
+			<skin>data/tanks/m1a1.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -453,7 +453,7 @@
 		<catagory>Artillery</catagory>
 		<model type="ase">
 			<mesh>data/tanks/m7priest.ase</mesh>
-			<skin>data/tanks/m7priest.bmp</skin>
+			<skin>data/tanks/m7priest.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -461,7 +461,7 @@
 		<catagory>Artillery</catagory>
 		<model type="ase">
 			<mesh>data/tanks/paladin.ase</mesh>
-			<skin>data/tanks/paladin.bmp</skin>
+			<skin>data/tanks/paladin.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -469,7 +469,7 @@
 		<catagory>Missile</catagory>
 		<model type="ase">
 			<mesh>data/tanks/patriot.ase</mesh>
-			<skin>data/tanks/patriot.bmp</skin>
+			<skin>data/tanks/patriot.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -477,7 +477,7 @@
 		<catagory>Missile</catagory>
 		<model type="ase">
 			<mesh>data/tanks/sa6.ase</mesh>
-			<skin>data/tanks/sa6.bmp</skin>
+			<skin>data/tanks/sa6.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -485,7 +485,7 @@
 		<catagory>Missile</catagory>
 		<model type="ase">
 			<mesh>data/tanks/scud.ase</mesh>
-			<skin>data/tanks/scud.bmp</skin>
+			<skin>data/tanks/scud.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -493,7 +493,7 @@
 		<catagory>Tank</catagory>
 		<model type="ase">
 			<mesh>data/tanks/t55.ase</mesh>
-			<skin>data/tanks/t55.bmp</skin>
+			<skin>data/tanks/t55.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -501,7 +501,7 @@
 		<catagory>Tank</catagory>
 		<model type="ase">
 			<mesh>data/tanks/t55.ase</mesh>
-			<skin>data/tanks/t55b.bmp</skin>
+			<skin>data/tanks/t55b.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -509,7 +509,7 @@
 		<catagory>Tank</catagory>
 		<model type="ase">
 			<mesh>data/tanks/t74.ase</mesh>
-			<skin>data/tanks/t74.bmp</skin>
+			<skin>data/tanks/t74.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -517,7 +517,7 @@
 		<catagory>Tank</catagory>
 		<model type="ase">
 			<mesh>data/tanks/t74.ase</mesh>
-			<skin>data/tanks/t74b.bmp</skin>
+			<skin>data/tanks/t74b.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -525,7 +525,7 @@
 		<catagory>Tank</catagory>
 		<model type="ase">
 			<mesh>data/tanks/tank2.ase</mesh>
-			<skin>data/tanks/tank2.bmp</skin>
+			<skin>data/tanks/tank2.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -533,7 +533,7 @@
 		<catagory>Artillery</catagory>
 		<model type="ase">
 			<mesh>data/tanks/tank3.ase</mesh>
-			<skin>data/tanks/tank3.bmp</skin>
+			<skin>data/tanks/tank3.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -541,7 +541,7 @@
 		<catagory>Artillery</catagory>
 		<model type="ase">
 			<mesh>data/tanks/tank4.ase</mesh>
-			<skin>data/tanks/tank4.bmp</skin>
+			<skin>data/tanks/tank4.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -549,7 +549,7 @@
 		<catagory>Tank</catagory>
 		<model type="ase">
 			<mesh>data/tanks/tank5.ase</mesh>
-			<skin>data/tanks/tank5.bmp</skin>
+			<skin>data/tanks/tank5.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -557,7 +557,7 @@
 		<catagory>Tank</catagory>
 		<model type="ase">
 			<mesh>data/tanks/tank5.ase</mesh>
-			<skin>data/tanks/tank5a.bmp</skin>
+			<skin>data/tanks/tank5a.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -565,7 +565,7 @@
 		<catagory>Missile</catagory>
 		<model type="ase">
 			<mesh>data/tanks/tank6.ase</mesh>
-			<skin>data/tanks/tank6.bmp</skin>
+			<skin>data/tanks/tank6.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -573,7 +573,7 @@
 		<catagory>Missile</catagory>
 		<model type="ase">
 			<mesh>data/tanks/tank6.ase</mesh>
-			<skin>data/tanks/tank6a.bmp</skin>
+			<skin>data/tanks/tank6a.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -581,7 +581,7 @@
 		<catagory>Missile</catagory>
 		<model type="ase">
 			<mesh>data/tanks/tank6.ase</mesh>
-			<skin>data/tanks/tank6b.bmp</skin>
+			<skin>data/tanks/tank6b.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -589,7 +589,7 @@
 		<catagory>Missile</catagory>
 		<model type="ase">
 			<mesh>data/tanks/tos1.ase</mesh>
-			<skin>data/tanks/tos1.bmp</skin>
+			<skin>data/tanks/tos1.jpg</skin>
 		</model>
 	</tank>
 	<tank>
@@ -597,7 +597,7 @@
 		<catagory>Artillery</catagory>
 		<model type="ase">
 			<mesh>data/tanks/wespe.ase</mesh>
-			<skin>data/tanks/wespe.bmp</skin>
+			<skin>data/tanks/wespe.jpg</skin>
 		</model>
 	</tank>
 	<tank>

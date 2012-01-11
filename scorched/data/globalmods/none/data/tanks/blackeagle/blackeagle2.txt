@@ -6769,7 +6769,7 @@ Materials: 1
 0.309804 0.309804 0.309804 1.000000
 0.000000
 1.000000
-"blackeagle_2.bmp"
+"blackeagle_2.jpg"
 ""
 
 Bones: 0

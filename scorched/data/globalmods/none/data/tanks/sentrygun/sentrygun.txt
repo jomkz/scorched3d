@@ -1203,7 +1203,7 @@ Materials: 1
 0.000000 0.000000 0.000000 1.000000
 0.128000
 1.000000
-".\sentrygun.bmp"
+".\sentrygun.jpg"
 ""
 
 Bones: 0
