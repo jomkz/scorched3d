@@ -1,9 +1,9 @@
 <tex>
-	<detail>data/textures/landscape/default/detail.bmp</detail>
-	<magmasmall>data/textures/landscape/default/magma-small.bmp</magmasmall>
-	<scorch>data/textures/landscape/tropical/scorch.bmp</scorch>
-	<skytexture>data/textures/landscape/sand/cloud1.bmp</skytexture>
-	<skytexturemask>data/textures/landscape/default/cloud1m.bmp</skytexturemask>
+	<detail>data/textures/landscape/default/detail.jpg</detail>
+	<magmasmall>data/textures/landscape/default/magma-small.jpg</magmasmall>
+	<scorch>data/textures/landscape/tropical/scorch.jpg</scorch>
+	<skytexture>data/textures/landscape/sand/cloud1.jpg</skytexture>
+	<skytexturemask>data/textures/landscape/default/cloud1m.jpg</skytexturemask>
 	<skycolormap>data/textures/clearsky.bmp</skycolormap>
 	<skytimeofday>3</skytimeofday>
 	<skysunxy>110</skysunxy>
@@ -16,13 +16,13 @@
 	<suntexture>data/textures/glow1.bmp</suntexture>
 	<border type="none"></border>
 	<texture type="generate">
-		<rockside>data/textures/landscape/sand/texture2.bmp</rockside>
-		<shore>data/textures/landscape/sand/shore.bmp</shore>
-		<roof>data/textures/landscape/sand/texture0.bmp</roof>
-		<texture0>data/textures/landscape/desert/surround.bmp</texture0>
-		<texture1>data/textures/landscape/desert/surround.bmp</texture1>
-		<texture2>data/textures/landscape/sand/texture1.bmp</texture2>
-		<texture3>data/textures/landscape/sand/texture1.bmp</texture3>
+		<rockside>data/textures/landscape/sand/texture2.jpg</rockside>
+		<shore>data/textures/landscape/sand/shore.jpg</shore>
+		<roof>data/textures/landscape/sand/texture0.jpg</roof>
+		<texture0>data/textures/landscape/desert/surround.jpg</texture0>
+		<texture1>data/textures/landscape/desert/surround.jpg</texture1>
+		<texture2>data/textures/landscape/sand/texture1.jpg</texture2>
+		<texture3>data/textures/landscape/sand/texture1.jpg</texture3>
 	</texture>
 	<placements><placement>data/landscapes/placedesert.xml</placement></placements>
 	<ambientsounds>

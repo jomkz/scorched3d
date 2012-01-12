@@ -1,10 +1,10 @@
 <tex>
-	<detail>data/textures/landscape/default/detail.bmp</detail>
-	<magmasmall>data/textures/landscape/default/magma-small.bmp</magmasmall>
-	<scorch>data/textures/landscape/default/scorch.bmp</scorch>
-	<skytexture>data/textures/landscape/default/cloud1d.bmp</skytexture>
+	<detail>data/textures/landscape/default/detail.jpg</detail>
+	<magmasmall>data/textures/landscape/default/magma-small.jpg</magmasmall>
+	<scorch>data/textures/landscape/default/scorch.jpg</scorch>
+	<skytexture>data/textures/landscape/default/cloud1d.jpg</skytexture>
 	<skytexturestatic>data/textures/stars.bmp</skytexturestatic>
-	<skytexturemask>data/textures/landscape/default/cloud1m.bmp</skytexturemask>
+	<skytexturemask>data/textures/landscape/default/cloud1m.jpg</skytexturemask>
 	<skycolormap>data/textures/clearsky.bmp</skycolormap>
 	<skytimeofday>8</skytimeofday>
 	<skysunxy>90</skysunxy>
@@ -17,8 +17,8 @@
 	<nosunfog>true</nosunfog>
 	<fogdensity>0.0011</fogdensity>
 	<border type="water">
-		<reflection>data/textures/landscape/default/cubemap.bmp</reflection>
-		<texture>data/textures/landscape/default/water.bmp</texture>
+		<reflection>data/textures/landscape/default/cubemap.jpg</reflection>
+		<texture>data/textures/landscape/default/water.jpg</texture>
 		<wavetopa><A>0.0</A><B>0.0</B><C>0.0</C></wavetopa>
 		<wavetopb><A>0.49</A><B>0.83</B><C>0.94</C></wavetopb>
 		<wavebottoma><A>0.0</A><B>0.0</B><C>0.0</C></wavebottoma>
@@ -28,13 +28,13 @@
 		<height>5.0</height>
 	</border>
   <texture type="generate">
-    <rockside>data/textures/landscape/default/rockside.bmp</rockside>
-    <shore>data/textures/landscape/default/shore.bmp</shore>
-    <roof>data/textures/landscape/default/texture0.bmp</roof>
-    <texture0>data/textures/landscape/default/texture0.bmp</texture0>
-    <texture1>data/textures/landscape/default/texture1.bmp</texture1>
-    <texture2>data/textures/landscape/default/texture2.bmp</texture2>
-    <texture3>data/textures/landscape/default/texture4.bmp</texture3>
+    <rockside>data/textures/landscape/default/rockside.jpg</rockside>
+    <shore>data/textures/landscape/default/shore.jpg</shore>
+    <roof>data/textures/landscape/default/texture0.jpg</roof>
+    <texture0>data/textures/landscape/default/texture0.jpg</texture0>
+    <texture1>data/textures/landscape/default/texture1.jpg</texture1>
+    <texture2>data/textures/landscape/default/texture2.jpg</texture2>
+    <texture3>data/textures/landscape/default/texture4.jpg</texture3>
   </texture>
 	<placements>
 		<placement>data/landscapes/placepine_bldg.xml</placement>
