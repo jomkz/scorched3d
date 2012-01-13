@@ -1,0 +1,160 @@
+<place>
+		<placement type='direct'>
+			<position>
+				<position>
+					<A>469</A>
+					<B>180</B>
+					<C>5</C>
+				</position>
+			</position>
+			<object type='model'>
+			<nocollision>true</nocollision>
+				<model type='MilkShape'>data/meshes/pship/pship2.txt</model>
+				<drawshadow>false</drawshadow>
+				<modelscale>0.05</modelscale>
+				<modelrotationsnap>45</modelrotationsnap>
+				<groupname>ss</groupname>
+			</object>
+		</placement>
+		
+			<placement type='direct'>
+			<position>
+				<position>
+					<A>480</A>
+					<B>194</B>
+					<C>6.6</C>
+				</position>
+			</position>
+			<object type='model'>
+			<nocollision>true</nocollision>
+				<model type='MilkShape'>data/meshes/sweeteners/woodenbarrel.txt</model>
+				<drawshadow>false</drawshadow>
+				<modelscale>0.03</modelscale>
+				<groupname>barrel</groupname>
+			</object>
+		</placement>
+		
+	<movement type="spline">
+
+ <speed>0.5</speed>
+ <starttime>0</starttime>
+ <groundonly>false</groundonly>
+
+ <controlpoint>
+		<A>480</A>
+					<B>194</B>
+	<C>7.5</C>
+ </controlpoint>
+
+ <controlpoint>
+ 	<A>480</A>
+					<B>194</B>
+	<C>6.6</C>
+ </controlpoint>
+
+ <controlpoint>
+		<A>480</A>
+					<B>194</B>
+	<C>7.5</C>
+ </controlpoint>
+ <groupname>barrel</groupname>
+</movement>
+
+
+
+	<placement type='direct'>
+			<position>
+				<position>
+					<A>464</A>
+					<B>190</B>
+					<C>7</C>
+				</position>
+			</position>
+			<object type='model'>
+			<nocollision>true</nocollision>
+				<model type='MilkShape'>data/meshes/sweeteners/woodenbarrel.txt</model>
+				<drawshadow>false</drawshadow>
+				<modelscale>0.03</modelscale>
+				<modelrotationsnap>90</modelrotationsnap>
+				<groupname>barrel2</groupname>
+			</object>
+		</placement>
+		
+	<movement type="spline">
+
+ <speed>0.7</speed>
+ <starttime>0</starttime>
+ <groundonly>false</groundonly>
+
+ <controlpoint>
+		<A>464</A>
+					<B>190</B>
+	<C>7.8</C>
+ </controlpoint>
+
+ <controlpoint>
+ 	<A>464</A>
+					<B>190</B>
+	<C>7</C>
+ </controlpoint>
+
+ <controlpoint>
+		<A>464</A>
+					<B>190</B>
+	<C>7.8</C>
+ </controlpoint>
+ <groupname>barrel2</groupname>
+</movement>
+
+
+
+	<placement type='direct'>
+			<position>
+				<position>
+					<A>470</A>
+					<B>198</B>
+					<C>6.98</C>
+				</position>
+			</position>
+			<object type='model'>
+			<nocollision>true</nocollision>
+				<model type='MilkShape'>data/meshes/sweeteners/woodenbarrel.txt</model>
+				<drawshadow>false</drawshadow>
+				<modelscale>0.03</modelscale>
+				<modelrotationsnap>90</modelrotationsnap>
+				<groupname>barrel3</groupname>
+			</object>
+		</placement>
+		
+	<movement type="spline">
+
+ <speed>0.6</speed>
+ <starttime>0</starttime>
+ <groundonly>false</groundonly>
+
+ <controlpoint>
+		<A>470</A>
+					<B>198</B>
+	<C>7.7</C>
+ </controlpoint>
+
+ <controlpoint>
+ 		<A>470</A>
+					<B>198</B>
+	<C>7</C>
+ </controlpoint>
+
+ <controlpoint>
+		<A>470</A>
+					<B>198</B>
+	<C>7.7</C>
+ </controlpoint>
+ <groupname>barrel3</groupname>
+</movement>
+		
+		
+		
+		
+
+
+</place>

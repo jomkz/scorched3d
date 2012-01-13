@@ -1,0 +1,36 @@
+<defn>
+	<minplayers>0</minplayers>
+	<maxplayers>24</maxplayers>
+	<landscapewidth>512</landscapewidth>
+	<landscapeheight>512</landscapeheight>
+	
+	  <arenawidth>256</arenawidth>
+    <arenaheight>256</arenaheight>
+
+  <tankstart type="height">
+    <startcloseness>20</startcloseness>
+    <height>
+      <min>5.5</min>
+      <max>60</max>
+    </height>
+    <startmask></startmask>
+  </tankstart>
+  <roof type="cavern">
+    <width>300</width>
+    <height>125</height>
+    <heightmap type="file">
+      <file>data/landscapes/cavernroof.bmp</file>
+      <levelsurround>true</levelsurround>
+    </heightmap>
+  </roof>
+	<heightmap type="file">
+    	<file>data/landscapes/cavernroof.bmp</file>
+    	<levelsurround>true</levelsurround>
+  </heightmap>
+  
+ <includes>
+       <include>data/landscapes/options.xml</include>
+         </includes>
+
+
+</defn>

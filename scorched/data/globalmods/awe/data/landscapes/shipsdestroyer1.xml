@@ -1,0 +1,39 @@
+<shipgroups>
+
+
+  	<placement type="count">
+		<count>1</count>
+		<object type='target'>
+			<model type='MilkShape'>data/meshes/cruiser/cruiser.txt</model>
+			<nocollision>true</nocollision>
+			<displayshadow>false</displayshadow>
+			<groupname>ships-Cruiser</groupname>
+				<modelscale>1</modelscale>
+		</object>
+	</placement>
+
+
+		<movement type="ships">
+		<speed>0.04</speed>
+		<controlpoints>12</controlpoints>
+	    <controlpointswidth>500</controlpointswidth>
+		<controlpointsheight>500</controlpointsheight>
+		<controlpointsrand>1</controlpointsrand>
+		<starttime>600</starttime>
+		<groupname>ships-Cruiser</groupname>
+	</movement>
+	
+
+  <event>
+    <condition type="time">
+      <mintime>18.0</mintime>
+      <maxtime>30.0</maxtime>
+      <singletimeonly>false</singletimeonly>
+    </condition>
+    <action type="fireweaponfromgroup">
+      <weapon>bombardc</weapon>
+      		<groupname>ships-Cruiser</groupname>
+    </action>
+  </event>
+  
+  </shipgroups>

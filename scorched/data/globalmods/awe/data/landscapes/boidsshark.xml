@@ -1,0 +1,169 @@
+<shipgroups>
+	<placement type="count">
+		<count>1</count>
+             <object type="random">
+
+               <randomobject>
+              	<object type='model'>
+		<nocollision>false</nocollision>
+		<life>50</life>
+		<model type='MilkShape'>data/meshes/shark/shark.txt</model>
+		<drawshadow>false</drawshadow>
+		<modelscale>0.2</modelscale>
+		<groupname>shark</groupname>
+		</object>
+                </randomobject>
+                
+                <randomobject>
+              	<object type='model'>
+		<nocollision>false</nocollision>
+		<life>50</life>
+		<model type='MilkShape'>data/meshes/shark/sharkv2.txt</model>
+		<drawshadow>false</drawshadow>
+		<modelscale>0.2</modelscale>
+		<groupname>shark</groupname>
+		</object>
+                </randomobject>
+                
+                 <randomobject>
+              	<object type='model'>
+		<nocollision>false</nocollision>
+		<life>50</life>
+		<model type='MilkShape'>data/meshes/shark/sharkv3.txt</model>
+		<drawshadow>false</drawshadow>
+		<modelscale>0.2</modelscale>
+		<groupname>shark</groupname>
+		</object>
+                </randomobject>
+
+</object>
+	</placement>
+<movement type="spline">
+
+ <speed>0.055</speed>
+ <starttime>0</starttime>
+ <groundonly>false</groundonly>
+
+ <controlpoint>
+ <A>100</A><!--x-->
+ <B>100</B> <!--y-->
+ <C>7.25</C>
+ </controlpoint>
+
+ <controlpoint>
+ <A>450</A>
+ <B>100</B>
+ <C>7.25</C>
+ </controlpoint>
+
+ <controlpoint>
+ <A>425</A>
+ <B>425</B>
+ <C>7.25</C>
+ </controlpoint>
+ 
+  <controlpoint>
+ <A>100</A>
+ <B>450</B>
+ <C>7.25</C>
+ </controlpoint>
+
+ <groupname>shark</groupname>
+</movement>
+
+
+
+
+ 	<placement type="count">
+		<count>1</count>
+             <object type="random">
+
+               <randomobject>
+              	<object type='model'>
+		<nocollision>false</nocollision>
+		<life>50</life>
+		<model type='MilkShape'>data/meshes/shark/shark.txt</model>
+		<drawshadow>false</drawshadow>
+		<modelscale>0.2</modelscale>
+		<groupname>shark2</groupname>
+		</object>
+                </randomobject>
+                
+                <randomobject>
+              	<object type='model'>
+		<nocollision>false</nocollision>
+		<life>50</life>
+		<model type='MilkShape'>data/meshes/shark/sharkv2.txt</model>
+		<drawshadow>false</drawshadow>
+		<modelscale>0.2</modelscale>
+		<groupname>shark2</groupname>
+		</object>
+                </randomobject>
+                
+                 <randomobject>
+              	<object type='model'>
+		<nocollision>false</nocollision>
+		<life>50</life>
+		<model type='MilkShape'>data/meshes/shark/sharkv3.txt</model>
+		<drawshadow>false</drawshadow>
+		<modelscale>0.2</modelscale>
+		<groupname>shark2</groupname>
+		</object>
+                </randomobject>
+
+</object>
+	</placement>
+<movement type="spline">
+
+ <speed>0.055</speed>
+ <starttime>0</starttime>
+ <groundonly>false</groundonly>
+   <controlpoint>
+ <A>96</A>
+ <B>450</B>
+ <C>7.25</C>
+ </controlpoint>
+ <controlpoint>
+ <A>425</A>
+ <B>410</B>
+ <C>7.25</C>
+ </controlpoint>
+  <controlpoint>
+ <A>450</A>
+ <B>193</B>
+ <C>7.25</C>
+ </controlpoint>
+ <controlpoint>
+ <A>100</A><!--x-->
+ <B>100</B> <!--y-->
+ <C>7.25</C>
+ </controlpoint>
+ <groupname>shark2</groupname>
+</movement>
+
+
+
+</shipgroups>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

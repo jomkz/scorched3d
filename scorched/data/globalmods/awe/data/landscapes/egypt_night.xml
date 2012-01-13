@@ -1,0 +1,50 @@
+<tex>
+	<detail>data/textures/landscape/misc/detail_1.jpg</detail>
+	<magmasmall>data/textures/landscape/default/magma-small.jpg</magmasmall>
+	<scorch>data/textures/landscape/default/scorch.jpg</scorch>
+	<fog><A>0</A><B>0</B><C>0</C></fog>
+	<fogdensity>0.0008</fogdensity>
+	<skytexture>data/textures/landscape/misc/haze.jpg</skytexture>
+	<skytexturestatic>data/textures/stars.bmp</skytexturestatic>
+	<skytexturemask>data/textures/landscape/misc/haze.jpg</skytexturemask>
+	<skycolormap>data/textures/landscape/misc/night.jpg</skycolormap>
+	<skytimeofday>8</skytimeofday>
+	<skysunxy>45</skysunxy>
+	<skysunyz>30</skysunyz>
+	<skyambience><A>0.105</A><B>0.105</B><C>0.11</C></skyambience>
+	<skydiffuse><A>0.7</A><B>0.7</B><C>0.8</C></skydiffuse>
+	<suncolor><A>1.0</A><B>1.0</B><C>1.0</C></suncolor>
+	<suntexture>data/textures/moon.bmp</suntexture>
+	<suntexturemask>data/textures/crescent.bmp</suntexturemask>
+	<nosunblend>true</nosunblend>
+	<nosunfog>true</nosunfog>
+	<nohorizonglow>false</nohorizonglow>
+	<border type="water">
+		<reflection>data/textures/landscape/default/cubemap.jpg</reflection>
+		<texture>data/textures/landscape/default/waternight.jpg</texture>
+		<wavetopa><A>0.0</A><B>0.0</B><C>0.0</C></wavetopa>
+		<wavetopb><A>0.49</A><B>0.83</B><C>0.94</C></wavetopb>
+		<wavebottoma><A>0.0</A><B>0.0</B><C>0.0</C></wavebottoma>
+		<wavebottomb><A>0.29</A><B>0.56</B><C>0.91</C></wavebottomb>
+		<wavelight><A>0.3</A><B>0.3</B><C>0.3</C></wavelight>
+		<foam>data/textures/foam.png</foam>
+		<height>3.0</height>
+	</border>
+	<texture type="generate">
+		<rockside>data/textures/landscape/misc/rocky.jpg</rockside>
+		<shore>data/textures/landscape/misc/sandy.jpg</shore>
+		<roof>data/textures/landscape/misc/sandy.jpg</roof>
+		<texture0>data/textures/landscape/misc/muddy.jpg</texture0>
+		<texture1>data/textures/landscape/misc/deadwood.jpg</texture1>
+		<texture2>data/textures/landscape/misc/pit.jpg</texture2>
+		<texture3>data/textures/landscape/misc/pit.jpg</texture3>
+	</texture>
+	<ambientsounds>
+		<ambientsound>data/wav/ambient/desert.xml</ambientsound>
+		<ambientsound>data/wav/ambient/waves.xml</ambientsound>
+		<ambientsound>data/landscapes/ambientsoundnight.xml</ambientsound>
+	</ambientsounds>
+	
+
+
+</tex>

@@ -1,0 +1,443 @@
+<weaponsets>
+  
+     <!--Reaper-->
+  <weaponset>
+    <name>WeaponSetReaper</name>
+    <set>
+      <weapon><name>Rocket</name><type>explosionsmall</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Tank Round</name><type>explosionsmall</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Main Cannon</name><type>explosionsmall</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Parachute</name><type>parachute</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>100</prioritybuy><priorityuse>100</priorityuse></weapon>
+      <weapon><name>Repair Kit</name><type>other</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>100</prioritybuy><priorityuse>100</priorityuse></weapon>
+      <weapon><name>Survival Kit</name><type>other</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Flak-Jacket</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Echo</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Bomb Shelter</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>70</priorityuse></weapon>
+      <weapon><name>Modern Armor Upgrade</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Reactive Armor</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>70</priorityuse></weapon>
+      <weapon><name>Early Warning System</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>EMP Field</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Radar</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Sniper Rifle</name><type>laser</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>EMP Pulse</name><type>uncover</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Motor</name><type>fuel</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>70</prioritybuy><priorityuse>70</priorityuse></weapon>
+      <weapon><name>Diesel</name><type>fuel</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>40</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Rocket Fuel</name><type>fuel</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>40</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>MLRS</name><type>fuel</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Shred Missiles</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Tabun Gas Grenade</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Anti-Armor Sabot</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Incendiary Rocket</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Incendiary Shell</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Black Powder Bombs</name><type>roller</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Flashbang Grenade</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>5</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>M-67 Frag</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>EMP Wave</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Assault Rifle</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Desert Eagle</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Machine Gun</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>M-20 Bazooka</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Javelin Rocket</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Saiga</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>M230 Mini-Gun</name><type>laser</type><buymin>1</buymin><buymax>1</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>5</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Plasmoid</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>5</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Agent Pink</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Phosphorus Bomb</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Bawoo Grenade</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Hydride Grenade</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Sulfuric Acid</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Cruise Missile</name><type>explosionsmall</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Hellfire II</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>M-35 Thermal</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Dragon Shell</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Atomic Rollers</name><type>roller</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Sabot Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Hellcat Missile</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Bunker Buster</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Cluster Shell</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Heat-Seeking Maverick</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Incendiary Salvo</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Cluster Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Artillery Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Flamethrower</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Incendiary Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Rocket Salvo</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Biochemical Shell</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Airdropped Minefield</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Cluster Drop</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Incendiary Bombing</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Air-Strike</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Carpet Bombing</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>V2 Guided Rocket</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Gunship Support</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>MOAB Drop</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Bromide Drop</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Warthog Support</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Volt Cannon</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>CBU-755 ClusterBomb</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Shake n' Bake</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>M-29 Cluster Mirv</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Toast n' Roast</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Gas Canisters</name><type>roller</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Tactical Nuclear Missile</name><type>explosionhuge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+    </set>
+  </weaponset>
+ 
+ 
+  <!--Crossbreed-->
+  <weaponset>
+    <name>WeaponSetCrossbreed</name>
+    <set>
+          <weapon><name>Rocket</name><type>explosionsmall</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Tank Round</name><type>explosionsmall</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Main Cannon</name><type>explosionsmall</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Parachute</name><type>parachute</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>100</prioritybuy><priorityuse>100</priorityuse></weapon>
+      <weapon><name>Repair Kit</name><type>other</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>100</prioritybuy><priorityuse>100</priorityuse></weapon>
+      <weapon><name>Survival Kit</name><type>other</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Flak-Jacket</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Echo</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Bomb Shelter</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>70</priorityuse></weapon>
+      <weapon><name>Modern Armor Upgrade</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Reactive Armor</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>70</priorityuse></weapon>
+      <weapon><name>Early Warning System</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>EMP Field</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Radar</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Sniper Rifle</name><type>laser</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>EMP Pulse</name><type>uncover</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Motor</name><type>fuel</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>70</prioritybuy><priorityuse>70</priorityuse></weapon>
+      <weapon><name>Diesel</name><type>fuel</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>40</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Rocket Fuel</name><type>fuel</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>40</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>MLRS</name><type>fuel</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Shred Missiles</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Tabun Gas Grenade</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Anti-Armor Sabot</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Incendiary Rocket</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Incendiary Shell</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Black Powder Bombs</name><type>roller</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Flashbang Grenade</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>5</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>M-67 Frag</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>EMP Wave</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Assault Rifle</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Desert Eagle</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Machine Gun</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>M-20 Bazooka</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Javelin Rocket</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Saiga</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>M230 Mini-Gun</name><type>laser</type><buymin>1</buymin><buymax>1</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>5</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Plasmoid</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>5</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Agent Pink</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Phosphorus Bomb</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Bawoo Grenade</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Hydride Grenade</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Sulfuric Acid</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Cruise Missile</name><type>explosionsmall</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Hellfire II</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>M-35 Thermal</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Dragon Shell</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Atomic Rollers</name><type>roller</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Sabot Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Hellcat Missile</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Bunker Buster</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Cluster Shell</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Heat-Seeking Maverick</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Incendiary Salvo</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Cluster Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Artillery Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Flamethrower</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Incendiary Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Rocket Salvo</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Biochemical Shell</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Airdropped Minefield</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Cluster Drop</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Incendiary Bombing</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Air-Strike</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Carpet Bombing</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>V2 Guided Rocket</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Gunship Support</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>MOAB Drop</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Bromide Drop</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Warthog Support</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+    </set>
+  </weaponset>
+   <!--Angel-->
+  <weaponset>
+    <name>WeaponSetAngel</name>
+    <set>
+      <weapon><name>Rocket</name><type>explosionsmall</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Tank Round</name><type>explosionsmall</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Main Cannon</name><type>explosionsmall</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Parachute</name><type>parachute</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>100</prioritybuy><priorityuse>100</priorityuse></weapon>
+      <weapon><name>Repair Kit</name><type>other</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>100</prioritybuy><priorityuse>100</priorityuse></weapon>
+      <weapon><name>Survival Kit</name><type>other</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Flak-Jacket</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Echo</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Bomb Shelter</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>70</priorityuse></weapon>
+      <weapon><name>Modern Armor Upgrade</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Reactive Armor</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>70</priorityuse></weapon>
+      <weapon><name>Early Warning System</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>EMP Field</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Radar</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Sniper Rifle</name><type>laser</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>EMP Pulse</name><type>uncover</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Motor</name><type>fuel</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>70</prioritybuy><priorityuse>70</priorityuse></weapon>
+      <weapon><name>Diesel</name><type>fuel</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>40</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Rocket Fuel</name><type>fuel</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>40</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Shred Missiles</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Tabun Gas Grenade</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Anti-Armor Sabot</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Incendiary Rocket</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Incendiary Shell</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Black Powder Bombs</name><type>roller</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Flashbang Grenade</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>5</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>M-67 Frag</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>EMP Wave</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Assault Rifle</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Desert Eagle</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Machine Gun</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>M-20 Bazooka</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Javelin Rocket</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Saiga</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>M230 Mini-Gun</name><type>laser</type><buymin>1</buymin><buymax>1</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>5</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Plasmoid</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>5</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Agent Pink</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Phosphorus Bomb</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Bawoo Grenade</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Hydride Grenade</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Sulfuric Acid</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Cruise Missile</name><type>explosionsmall</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Hellfire II</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>M-35 Thermal</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Dragon Shell</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Atomic Rollers</name><type>roller</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Sabot Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Hellcat Missile</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Bunker Buster</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Cluster Shell</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Heat-Seeking Maverick</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Incendiary Salvo</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Cluster Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Artillery Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Flamethrower</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Incendiary Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Rocket Salvo</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Airdropped Minefield</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Cluster Drop</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Incendiary Bombing</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Air-Strike</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Carpet Bombing</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>V2 Guided Rocket</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Gunship Support</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>MOAB Drop</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Bromide Drop</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Warthog Support</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+
+    </set>
+  </weaponset>
+ <!--Demon-->
+  <weaponset>
+    <name>WeaponSetDemon</name>
+    <set>
+      <weapon><name>Rocket</name><type>explosionsmall</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Tank Round</name><type>explosionsmall</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Main Cannon</name><type>explosionsmall</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Parachute</name><type>parachute</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>100</prioritybuy><priorityuse>100</priorityuse></weapon>
+      <weapon><name>Repair Kit</name><type>other</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>100</prioritybuy><priorityuse>100</priorityuse></weapon>
+      <weapon><name>Survival Kit</name><type>other</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Flak-Jacket</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Echo</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Bomb Shelter</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>70</priorityuse></weapon>
+      <weapon><name>Modern Armor Upgrade</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Reactive Armor</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>70</priorityuse></weapon>
+      <weapon><name>Early Warning System</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>EMP Field</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Radar</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Sniper Rifle</name><type>laser</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>EMP Pulse</name><type>uncover</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Motor</name><type>fuel</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>70</prioritybuy><priorityuse>70</priorityuse></weapon>
+      <weapon><name>Diesel</name><type>fuel</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>40</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Rocket Fuel</name><type>fuel</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>40</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Shred Missiles</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Tabun Gas Grenade</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Anti-Armor Sabot</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Incendiary Rocket</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Incendiary Shell</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Black Powder Bombs</name><type>roller</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Flashbang Grenade</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>5</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>M-67 Frag</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>EMP Wave</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Assault Rifle</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Desert Eagle</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Machine Gun</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>M-20 Bazooka</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Javelin Rocket</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Saiga</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>M230 Mini-Gun</name><type>laser</type><buymin>1</buymin><buymax>1</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>5</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Plasmoid</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>5</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Agent Pink</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Phosphorus Bomb</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Bawoo Grenade</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Hydride Grenade</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Sulfuric Acid</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Cruise Missile</name><type>explosionsmall</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Hellfire II</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>M-35 Thermal</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Dragon Shell</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Atomic Rollers</name><type>roller</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Sabot Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Hellcat Missile</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Bunker Buster</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Cluster Shell</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Heat-Seeking Maverick</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Incendiary Salvo</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Cluster Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Artillery Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Flamethrower</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Incendiary Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Rocket Salvo</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Biochemical Shell</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+    </set>
+  </weaponset>
+<!--Prototype-->
+  <weaponset>
+    <name>WeaponSetPrototype</name>
+    <set>
+      <weapon><name>Rocket</name><type>explosionsmall</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Tank Round</name><type>explosionsmall</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Main Cannon</name><type>explosionsmall</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Parachute</name><type>parachute</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>100</prioritybuy><priorityuse>100</priorityuse></weapon>
+      <weapon><name>Repair Kit</name><type>other</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>100</prioritybuy><priorityuse>100</priorityuse></weapon>
+      <weapon><name>Survival Kit</name><type>other</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Flak-Jacket</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Echo</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Bomb Shelter</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>70</priorityuse></weapon>
+      <weapon><name>Modern Armor Upgrade</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Reactive Armor</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>70</priorityuse></weapon>
+      <weapon><name>Early Warning System</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>EMP Field</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Radar</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Sniper Rifle</name><type>laser</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>EMP Pulse</name><type>uncover</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Motor</name><type>fuel</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>70</prioritybuy><priorityuse>70</priorityuse></weapon>
+      <weapon><name>Diesel</name><type>fuel</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>40</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Rocket Fuel</name><type>fuel</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>40</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Shred Missiles</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Tabun Gas Grenade</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Anti-Armor Sabot</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Incendiary Rocket</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Incendiary Shell</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Black Powder Bombs</name><type>roller</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Flashbang Grenade</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>5</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>M-67 Frag</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>EMP Wave</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Assault Rifle</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Desert Eagle</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Machine Gun</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>M-20 Bazooka</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Javelin Rocket</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Saiga</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>M230 Mini-Gun</name><type>laser</type><buymin>1</buymin><buymax>1</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>5</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Plasmoid</name><type>laser</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>5</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Agent Pink</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Phosphorus Bomb</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Bawoo Grenade</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Hydride Grenade</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Sulfuric Acid</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Cruise Missile</name><type>explosionsmall</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Hellfire II</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>M-35 Thermal</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Dragon Shell</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Atomic Rollers</name><type>roller</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Sabot Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Hellcat Missile</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Bunker Buster</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Cluster Shell</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Heat-Seeking Maverick</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Incendiary Salvo</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Cluster Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Artillery Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Flamethrower</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Incendiary Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Rocket Salvo</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
+
+    </set>
+  </weaponset>
+<!--Drone-->
+  <weaponset>
+    <name>WeaponSetDrone</name>
+    <set>
+      <weapon><name>Rocket</name><type>explosionsmall</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Tank Round</name><type>explosionsmall</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Main Cannon</name><type>explosionsmall</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Parachute</name><type>parachute</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>100</prioritybuy><priorityuse>100</priorityuse></weapon>
+      <weapon><name>Repair Kit</name><type>other</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>100</prioritybuy><priorityuse>100</priorityuse></weapon>
+      <weapon><name>Survival Kit</name><type>other</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Flak-Jacket</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Echo</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Bomb Shelter</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>70</priorityuse></weapon>
+      <weapon><name>Modern Armor Upgrade</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Reactive Armor</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>70</priorityuse></weapon>
+      <weapon><name>Early Warning System</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>EMP Field</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Radar</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Sniper Rifle</name><type>laser</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>EMP Pulse</name><type>uncover</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+      <weapon><name>Motor</name><type>fuel</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>70</prioritybuy><priorityuse>70</priorityuse></weapon>
+      <weapon><name>Diesel</name><type>fuel</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>40</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Rocket Fuel</name><type>fuel</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>40</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Shred Missiles</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Tabun Gas Grenade</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Anti-Armor Sabot</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Incendiary Rocket</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Incendiary Shell</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Black Powder Bombs</name><type>roller</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Flashbang Grenade</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>5</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>M-67 Frag</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>30</priorityuse></weapon>
+    </set>
+  </weaponset>
+  <!--Basic-->
+  <weaponset>
+    <name>WeaponSetBasic</name>
+    <set>
+      <weapon><name>Rocket</name><type>explosionsmall</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Tank Round</name><type>explosionsmall</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Main Cannon</name><type>explosionsmall</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Parachute</name><type>parachute</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>100</prioritybuy><priorityuse>100</priorityuse></weapon>
+      <weapon><name>Repair Kit</name><type>other</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>100</prioritybuy><priorityuse>100</priorityuse></weapon>
+      <weapon><name>Survival Kit</name><type>other</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Flak-Jacket</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Echo</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Bomb Shelter</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>70</priorityuse></weapon>
+      <weapon><name>Modern Armor Upgrade</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Reactive Armor</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>70</priorityuse></weapon>
+      <weapon><name>Early Warning System</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>EMP Field</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Radar</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Sniper Rifle</name><type>laser</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>0</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>EMP Pulse</name><type>uncover</type><buymin>0</buymin><buymax>0</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>10</prioritybuy><priorityuse>20</priorityuse></weapon>
+    </set>
+  </weaponset>
+  <!--BasicDefense-->
+  <weaponset>
+    <name>WeaponSetDefense</name>
+    <set>
+      <weapon><name>Parachute</name><type>parachute</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>100</prioritybuy><priorityuse>100</priorityuse></weapon>
+      <weapon><name>Repair Kit</name><type>other</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>100</prioritybuy><priorityuse>100</priorityuse></weapon>
+      <weapon><name>Survival Kit</name><type>other</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Flak-Jacket</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Echo</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>50</priorityuse></weapon>
+      <weapon><name>Bomb Shelter</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>70</priorityuse></weapon>
+      <weapon><name>Modern Armor Upgrade</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Reactive Armor</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>70</priorityuse></weapon>
+      <weapon><name>Early Warning System</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>90</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>EMP Field</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>40</priorityuse></weapon>
+      <weapon><name>Radar</name><type>shield</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>50</prioritybuy><priorityuse>40</priorityuse></weapon>
+    </set>
+  </weaponset>
+  <!--Empty-->
+  <weaponset>
+  <name>WeaponSetEmpty</name>
+    <set>
+      
+    </set>
+  </weaponset>
+</weaponsets>

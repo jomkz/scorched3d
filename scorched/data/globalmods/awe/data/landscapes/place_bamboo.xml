@@ -1,0 +1,69 @@
+<place>
+		<placement type="mask">
+
+  <numobjects>1000</numobjects>
+
+  <mask>data/landscapes/allwhite.png</mask>
+    <mincloseness>0</mincloseness>
+      <minheight>1</minheight>
+      <maxheight>10</maxheight>
+  <minslope>0.5</minslope>
+           <xsnap>1</xsnap>
+
+  <ysnap>1</ysnap>
+
+
+
+    	<object type="random">
+    <randomobject>
+  <object type='target'>
+                  <model type="MilkShape">data/meshes/bamboo/bamboo1.txt</model>
+                  <modelscale>0.005</modelscale>
+                  <modelscalediff>0.003</modelscalediff>
+                  <modelrotationsnap>1</modelrotationsnap>
+                  <modelbrightness>-1.0</modelbrightness>
+                  <displayshadow>false</displayshadow>
+                  <nodamageburn>true</nodamageburn>
+                  <displaydamage>false</displaydamage>
+                  <drawshadow>false</drawshadow>
+                  <groupname>Bamboo Thicket</groupname>
+                  <flattenarea>1</flattenarea>
+                  <flattendestroy>false</flattendestroy>
+               </object>
+  </randomobject>
+   <randomobject>
+  <object type='target'>
+                  <model type="MilkShape">data/meshes/bamboo/bamboo2.txt</model>
+                  <modelscale>0.005</modelscale>
+                  <modelscalediff>0.003</modelscalediff>
+                  <modelrotationsnap>1</modelrotationsnap>
+                  <modelbrightness>-1.0</modelbrightness>
+                  <displayshadow>false</displayshadow>
+                  <nodamageburn>true</nodamageburn>
+                  <displaydamage>false</displaydamage>
+                  <drawshadow>false</drawshadow>
+                  <flattenarea>1</flattenarea>
+                  <groupname>Bamboo Thicket</groupname>
+                  <flattendestroy>false</flattendestroy>
+               </object>
+  </randomobject>
+
+   <randomobject>
+  <object type='target'>
+                  <model type="MilkShape">data/meshes/bamboo/bamboo3.txt</model>
+                  <modelscale>0.005</modelscale>
+                  <modelscalediff>0.003</modelscalediff>
+                  <modelrotationsnap>1</modelrotationsnap>
+                  <modelbrightness>-1.0</modelbrightness>
+                  <displayshadow>false</displayshadow>
+                  <nodamageburn>true</nodamageburn>
+                  <displaydamage>false</displaydamage>
+                  <drawshadow>false</drawshadow>
+                  <flattenarea>1</flattenarea>
+                  <groupname>Bamboo Thicket</groupname>
+                  <flattendestroy>false</flattendestroy>
+               </object>
+  </randomobject>
+</object>
+</placement>
+</place>

@@ -1,0 +1,35 @@
+<shipgroups>
+	<placement type="count">
+		<count>1</count>
+		<object type='target'>
+			<model type='MilkShape'>data/meshes/pship/pship.txt</model>
+			<nocollision>true</nocollision>
+			<displayshadow>false</displayshadow>
+			<groupname>pship</groupname>
+			<modelscale>0.055</modelscale>
+		</object>
+	</placement>
+	<movement type="ships">
+		<speed>0.01</speed>
+		<controlpoints>8</controlpoints>
+		<controlpointswidth>250</controlpointswidth>
+		<controlpointsheight>250</controlpointsheight>
+		<controlpointsrand>400</controlpointsrand>
+		<starttime>600</starttime>
+		<groupname>pship</groupname>
+	</movement>
+
+  <event>
+    <condition type="time">
+      <mintime>15.0</mintime>
+      <maxtime>25.0</maxtime>
+      <singletimeonly>false</singletimeonly>
+    </condition>
+    <action type="fireweaponfromgroup">
+      <weapon>Fire Cannon At Tank</weapon>
+      <groupname>pship</groupname>
+    </action>
+  </event>
+
+
+</shipgroups>

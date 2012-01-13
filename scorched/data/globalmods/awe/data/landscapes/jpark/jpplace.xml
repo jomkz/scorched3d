@@ -1,0 +1,598 @@
+<place>
+  <!--<placement type='direct'>
+    <position>
+      <position>
+        <A>512</A>
+        <B>564</B>
+        <C>0</C>
+      </position>
+    </position>
+    <object type='target'>
+      <model type='MilkShape'>data/meshes/jpark/parkgate.txt</model>
+      <modelscale>0.2</modelscale>
+      <modelrotationsnap>-1</modelrotationsnap>
+      <life>1500</life>
+      <nocollision>true</nocollision>
+      <removeaction>none</removeaction>
+      <flattenarea>1</flattenarea>
+      <groupname>Gate</groupname>
+      <displayshadow>false</displayshadow>
+    </object>
+
+  </placement>
+
+
+  <placement type='direct'>
+    <position>
+      <position>
+        <A>512</A>
+        <B>562.8</B>
+        <C>58</C>
+      </position>
+    </position>
+    <object type='target'>
+      <model type='MilkShape'>data/accessories/projectile/flare.txt</model>
+      <modelscale>0.11</modelscale>
+      <modelrotationsnap>-1</modelrotationsnap>
+      <life>500000000000000</life>
+      <size>
+        <A>0.1</A>
+        <B>0.1</B>
+        <C>0.1</C>
+      </size>
+      <boundingsphere>false</boundingsphere>
+      <shield>gatetop</shield>
+      <nocollision>false</nocollision>
+      <removeaction>none</removeaction>
+      <flattenarea>0</flattenarea>
+      <groupname>Park Gate</groupname>
+      <displayshadow>false</displayshadow>
+    </object>
+
+  </placement>
+
+
+  <placement type='direct'>
+    <position>
+      <position>
+        <A>494</A>
+    
+        <B>563</B>
+     
+        <C>0</C>
+      </position>
+    </position>
+    <object type='target'>
+      <model type='MilkShape'>data/accessories/projectile/flare.txt</model>
+      <modelscale>0.11</modelscale>
+      <modelrotationsnap>-1</modelrotationsnap>
+      <life>500000000000000</life>
+      <size>
+        <A>0.1</A>
+        <B>0.1</B>
+        <C>0.1</C>
+      </size>
+      <boundingsphere>false</boundingsphere>
+      <shield>gateside</shield>
+      <nocollision>false</nocollision>
+      <removeaction>none</removeaction>
+      <flattenarea>0</flattenarea>
+      <groupname>Park Gate</groupname>
+      <displayshadow>false</displayshadow>
+    </object>
+
+  </placement>
+
+  <placement type='direct'>
+    <position>
+      <position>
+        <A>495.50</A>
+
+        <B>563</B>
+
+        <C>45</C>
+      </position>
+    </position>
+    <object type='target'>
+      <model type='MilkShape'>data/accessories/projectile/flare.txt</model>
+      <modelscale>0.11</modelscale>
+      <modelrotationsnap>-1</modelrotationsnap>
+      <life>500000000000000</life>
+      <size>
+        <A>0.1</A>
+        <B>0.1</B>
+        <C>0.1</C>
+      </size>
+      <boundingsphere>false</boundingsphere>
+      <shield>gateside2</shield>
+      <nocollision>false</nocollision>
+      <removeaction>none</removeaction>
+      <flattenarea>0</flattenarea>
+      <groupname>Park Gate</groupname>
+      <displayshadow>false</displayshadow>
+    </object>
+
+  </placement>
+
+  <placement type='direct'>
+    <position>
+      <position>
+        <A>496.6</A>
+
+        <B>563</B>
+
+        <C>59</C>
+      </position>
+    </position>
+    <object type='target'>
+      <model type='MilkShape'>data/accessories/projectile/flare.txt</model>
+      <modelscale>0.11</modelscale>
+      <modelrotationsnap>-1</modelrotationsnap>
+      <life>500000000000000</life>
+      <size>
+        <A>0.1</A>
+        <B>0.1</B>
+        <C>0.1</C>
+      </size>
+      <boundingsphere>false</boundingsphere>
+      <shield>gateside3</shield>
+      <nocollision>false</nocollision>
+      <removeaction>none</removeaction>
+      <flattenarea>0</flattenarea>
+      <groupname>Park Gate</groupname>
+      <displayshadow>false</displayshadow>
+    </object>
+
+  </placement>
+
+
+
+
+
+
+  <placement type='direct'>
+    <position>
+      <position>
+        <A>530</A>
+
+        <B>563</B>
+
+        <C>0</C>
+      </position>
+    </position>
+    <object type='target'>
+      <model type='MilkShape'>data/accessories/projectile/flare.txt</model>
+      <modelscale>0.11</modelscale>
+      <modelrotationsnap>-1</modelrotationsnap>
+      <life>500000000000000</life>
+      <size>
+        <A>0.1</A>
+        <B>0.1</B>
+        <C>0.1</C>
+      </size>
+      <boundingsphere>false</boundingsphere>
+      <shield>gateside</shield>
+      <nocollision>false</nocollision>
+      <removeaction>none</removeaction>
+      <flattenarea>0</flattenarea>
+      <groupname>Park Gate</groupname>
+      <displayshadow>false</displayshadow>
+    </object>
+
+  </placement>
+
+  <placement type='direct'>
+    <position>
+      <position>
+        <A>528.5</A>
+        <B>563</B>
+        <C>45</C>
+      </position>
+    </position>
+    <object type='target'>
+      <model type='MilkShape'>data/accessories/projectile/flare.txt</model>
+      <modelscale>0.11</modelscale>
+      <modelrotationsnap>-1</modelrotationsnap>
+      <life>500000000000000</life>
+      <size>
+        <A>0.1</A>
+        <B>0.1</B>
+        <C>0.1</C>
+      </size>
+      <boundingsphere>false</boundingsphere>
+      <shield>gateside2</shield>
+      <nocollision>false</nocollision>
+      <removeaction>none</removeaction>
+      <flattenarea>0</flattenarea>
+      <groupname>Park Gate</groupname>
+      <displayshadow>false</displayshadow>
+    </object>
+
+  </placement>
+
+  <placement type='direct'>
+    <position>
+      <position>
+        <A>527.4</A>
+        <B>563</B>
+        <C>59</C>
+      </position>
+    </position>
+    <object type='target'>
+      <model type='MilkShape'>data/accessories/projectile/flare.txt</model>
+      <modelscale>0.11</modelscale>
+      <modelrotationsnap>-1</modelrotationsnap>
+      <life>500000000000000</life>
+      <size>
+        <A>0.1</A>
+        <B>0.1</B>
+        <C>0.1</C>
+      </size>
+      <boundingsphere>false</boundingsphere>
+      <shield>gateside3</shield>
+      <nocollision>false</nocollision>
+      <removeaction>none</removeaction>
+      <flattenarea>0</flattenarea>
+      <groupname>Park Gate</groupname>
+      <displayshadow>false</displayshadow>
+    </object>
+
+  </placement>
+
+
+
+  <placement type='direct'>
+    <position>
+      <position>
+        <A>512</A>
+        <B>564</B>
+        <C>0</C>
+      </position>
+    </position>
+    <object type='target'>
+      <size>
+        <A>28</A>
+        <B>5</B>
+        <C>28.5</C>
+      </size>
+      <boundingsphere>false</boundingsphere>
+      <model type='MilkShape'>data/meshes/jpark/innergate.txt</model>
+      <modelscale>0.2</modelscale>
+      <modelrotationsnap>-1</modelrotationsnap>
+      <life>1</life>
+      <shield>gate</shield>
+      <nocollision>false</nocollision>
+      <removeaction>none</removeaction>
+      <flattenarea>1</flattenarea>
+      <groupname>Door</groupname>
+      <displayshadow>false</displayshadow>
+    </object>
+
+  </placement>
+
+  <placement type='direct'>
+    <position>
+      <position>
+        <A>463</A>
+        <B>562</B>
+        <C>0</C>
+      </position>
+    </position>
+    <object type='target'>
+      <model type='MilkShape'>data/meshes/jpark/fence.txt</model>
+      <modelscale>0.11</modelscale>
+      <modelrotationsnap>-1</modelrotationsnap>
+      <life>500000000000000</life>
+      <size>
+        <A>0.1</A>
+        <B>0.1</B>
+        <C>0.1</C>
+      </size>
+      <boundingsphere>false</boundingsphere>
+      <shield>fence</shield>
+      <nocollision>false</nocollision>
+      <removeaction>none</removeaction>
+      <flattenarea>-1</flattenarea>
+      <groupname>Electric Fence</groupname>
+      <displayshadow>false</displayshadow>
+    </object>
+
+  </placement>
+  <placement type='direct'>
+    <position>
+      <position>
+        <A>414.37</A>
+        <B>562</B>
+        <C>0</C>
+      </position>
+    </position>
+    <object type='target'>
+      <model type='MilkShape'>data/meshes/jpark/fence.txt</model>
+      <modelscale>0.11</modelscale>
+      <modelrotationsnap>-1</modelrotationsnap>
+      <life>500000000000000</life>
+      <size>
+        <A>0.1</A>
+        <B>0.1</B>
+        <C>0.1</C>
+      </size>
+      <boundingsphere>false</boundingsphere>
+      <shield>fence</shield>
+      <nocollision>false</nocollision>
+      <removeaction>none</removeaction>
+      <flattenarea>-1</flattenarea>
+      <groupname>Electric Fence</groupname>
+      <displayshadow>false</displayshadow>
+    </object>
+
+  </placement>
+  <placement type='direct'>
+    <position>
+      <position>
+        <A>365.74</A>
+        <B>562</B>
+        <C>0</C>
+      </position>
+    </position>
+    <object type='target'>
+      <model type='MilkShape'>data/meshes/jpark/fence.txt</model>
+      <modelscale>0.11</modelscale>
+      <modelrotationsnap>-1</modelrotationsnap>
+      <life>500000000000000</life>
+      <size>
+        <A>0.1</A>
+        <B>0.1</B>
+        <C>0.1</C>
+      </size>
+      <boundingsphere>false</boundingsphere>
+      <shield>fence</shield>
+      <nocollision>false</nocollision>
+      <removeaction>none</removeaction>
+      <flattenarea>-1</flattenarea>
+      <groupname>Electric Fence</groupname>
+      <displayshadow>false</displayshadow>
+    </object>
+
+  </placement>
+
+  <placement type='direct'>
+    <position>
+      <position>
+        <A>317.11</A>
+        <B>562</B>
+        <C>0</C>
+      </position>
+    </position>
+    <object type='target'>
+      <model type='MilkShape'>data/meshes/jpark/fence.txt</model>
+      <modelscale>0.11</modelscale>
+
+      <life>500000000000000</life>
+      <size>
+        <A>0.1</A>
+        <B>0.1</B>
+        <C>0.1</C>
+      </size>
+      <boundingsphere>false</boundingsphere>
+      <shield>fence</shield>
+      <nocollision>false</nocollision>
+      <removeaction>none</removeaction>
+      <flattenarea>-1</flattenarea>
+      <groupname>Electric Fence</groupname>
+      <displayshadow>false</displayshadow>
+    </object>
+
+  </placement>
+
+
+  <placement type='direct'>
+    <position>
+      <position>
+        <A>561</A>
+        <B>562</B>
+        <C>0</C>
+      </position>
+    </position>
+    <object type='target'>
+      <model type='MilkShape'>data/meshes/jpark/fence.txt</model>
+      <modelscale>0.11</modelscale>
+      <modelrotationsnap>-1</modelrotationsnap>
+      <life>500000000000000</life>
+      <size>
+        <A>0.1</A>
+        <B>0.1</B>
+        <C>0.1</C>
+      </size>
+      <boundingsphere>false</boundingsphere>
+      <shield>fence</shield>
+      <nocollision>false</nocollision>
+      <removeaction>none</removeaction>
+      <flattenarea>-1</flattenarea>
+      <groupname>Electric Fence</groupname>
+      <displayshadow>false</displayshadow>
+    </object>
+
+  </placement>
+  <placement type='direct'>
+    <position>
+      <position>
+        <A>609.63</A>
+        <B>562</B>
+        <C>0</C>
+      </position>
+    </position>
+    <object type='target'>
+      <model type='MilkShape'>data/meshes/jpark/fence.txt</model>
+      <modelscale>0.11</modelscale>
+      <modelrotationsnap>-1</modelrotationsnap>
+      <life>500000000000000</life>
+      <size>
+        <A>0.1</A>
+        <B>0.1</B>
+        <C>0.1</C>
+      </size>
+      <boundingsphere>false</boundingsphere>
+      <shield>fence</shield>
+      <nocollision>false</nocollision>
+      <removeaction>none</removeaction>
+      <flattenarea>-1</flattenarea>
+      <groupname>Electric Fence</groupname>
+      <displayshadow>false</displayshadow>
+    </object>
+
+  </placement>
+  <placement type='direct'>
+    <position>
+      <position>
+        <A>658.26</A>
+        <B>562</B>
+        <C>0</C>
+      </position>
+    </position>
+    <object type='target'>
+      <model type='MilkShape'>data/meshes/jpark/fence.txt</model>
+      <modelscale>0.11</modelscale>
+      <modelrotationsnap>-1</modelrotationsnap>
+      <life>500000000000000</life>
+      <size>
+        <A>0.1</A>
+        <B>0.1</B>
+        <C>0.1</C>
+      </size>
+      <boundingsphere>false</boundingsphere>
+      <shield>fence</shield>
+      <nocollision>false</nocollision>
+      <removeaction>none</removeaction>
+      <flattenarea>-1</flattenarea>
+      <groupname>Electric Fence</groupname>
+      <displayshadow>false</displayshadow>
+    </object>
+
+  </placement>
+
+  <placement type='direct'>
+    <position>
+      <position>
+        <A>706.89</A>
+        <B>562</B>
+        <C>0</C>
+      </position>
+    </position>
+    <object type='target'>
+      <model type='MilkShape'>data/meshes/jpark/fence.txt</model>
+      <modelscale>0.11</modelscale>
+
+      <life>500000000000000</life>
+      <size>
+        <A>0.1</A>
+        <B>0.1</B>
+        <C>0.1</C>
+      </size>
+      <boundingsphere>false</boundingsphere>
+      <shield>fence</shield>
+      <nocollision>false</nocollision>
+      <removeaction>none</removeaction>
+      <flattenarea>-1</flattenarea>
+      <groupname>Electric Fence</groupname>
+      <displayshadow>false</displayshadow>
+    </object>
+
+  </placement>-->
+
+
+
+
+  <placement type="mask">
+    <numobjects>900</numobjects>
+    <mask>data/landscapes/jpark/treemask.png</mask>
+    <mincloseness>0</mincloseness>
+
+    <minheight>8</minheight>
+    <maxheight>35</maxheight>
+    <minslope>0.5</minslope>
+    <xsnap>1</xsnap>
+    <ysnap>1</ysnap>
+    <object type='target'>
+      <model type="MilkShape">data/meshes/jpark/fern2.txt</model>
+      <modelscale>0.04</modelscale>
+      <nocollision>true</nocollision>
+      <modelscalediff>0.04</modelscalediff>
+      <modelrotationsnap>1</modelrotationsnap>
+      <modelbrightness>-1.0</modelbrightness>
+      <displayshadow>false</displayshadow>
+      <nodamageburn>true</nodamageburn>
+      <displaydamage>false</displaydamage>
+      <drawshadow>false</drawshadow>
+      <groupname>fern</groupname>
+      <nofalling>false</nofalling>
+      <flattendestroy>true</flattendestroy>
+    </object>
+  </placement>
+
+
+  <placement type="mask">
+
+    <numobjects>800</numobjects>
+
+    <mask>data/landscapes/jpark/treemask.png</mask>
+    <mincloseness>0</mincloseness>
+
+    <minheight>8</minheight>
+    <maxheight>35</maxheight>
+    <minslope>0.5</minslope>
+    <xsnap>1</xsnap>
+
+    <ysnap>1</ysnap>
+
+
+    <object type='target'>
+      <model type="MilkShape">data/meshes/trees/superpalm2.txt</model>
+      <modelscale>0.05</modelscale>
+      <nocollision>true</nocollision>
+      <modelscalediff>0.2</modelscalediff>
+      <modelrotationsnap>1</modelrotationsnap>
+      <modelbrightness>-1.0</modelbrightness>
+      <displayshadow>false</displayshadow>
+      <nodamageburn>true</nodamageburn>
+      <displaydamage>false</displaydamage>
+      <drawshadow>false</drawshadow>
+      <groupname>trees</groupname>
+      <flattendestroy>false</flattendestroy>
+    </object>
+  </placement>
+
+
+  <placement type="mask">
+
+    <numobjects>15</numobjects>
+
+    <mask>data/landscapes/jpark/treemask.png</mask>
+    <mincloseness>0</mincloseness>
+
+    <minheight>8</minheight>
+    <maxheight>35</maxheight>
+    <minslope>0.5</minslope>
+    <xsnap>1</xsnap>
+    <ysnap>1</ysnap>
+    <object type='target'>
+      <model type="MilkShape">data/meshes/jpark/nest.txt</model>
+      <modelscale>0.0078</modelscale>
+      <modelscalediff>0</modelscalediff>
+      <modelrotationsnap>1</modelrotationsnap>
+      <modelbrightness>-1.0</modelbrightness>
+      <displayshadow>false</displayshadow>
+      <nodamageburn>true</nodamageburn>
+      <displaydamage>false</displaydamage>
+      <drawshadow>false</drawshadow>
+      <groupname>dino nest</groupname>
+      <nocollision>true</nocollision>
+      <flattendestroy>false</flattendestroy>
+    </object>
+  </placement>-->
+
+
+
+</place>
+
+
+

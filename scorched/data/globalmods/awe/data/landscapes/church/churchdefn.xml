@@ -1,0 +1,20 @@
+<defn>
+       <minplayers>2</minplayers>
+       <maxplayers>24</maxplayers>
+       <landscapewidth>256</landscapewidth>
+       <landscapeheight>256</landscapeheight>
+  <arenawidth>256</arenawidth>
+  <arenaheight>256</arenaheight>
+       <roof type="sky"></roof>
+       <tankstart type="height">
+               <startcloseness>20</startcloseness>
+               <height><min>20</min><max>100</max></height> <startmask>data/landscapes/church/mask.bmp</startmask>
+       </tankstart>
+       <heightmap type="file">
+               <file>data/landscapes/church/flat.bmp</file>
+               <levelsurround>true</levelsurround>
+       </heightmap>
+       	 <includes>
+       <include>data/landscapes/options.xml</include>
+         </includes>
+</defn>

@@ -1,0 +1,34 @@
+<place>
+		<placement type="mask">
+
+  <numobjects>80</numobjects>
+
+  <mask>data/landscapes/allwhite.png</mask>
+    <mincloseness>0</mincloseness>
+      <minheight>1</minheight>
+      <maxheight>10</maxheight>
+  <minslope>0.5</minslope>
+           <xsnap>1</xsnap>
+
+  <ysnap>1</ysnap>
+
+    	<object type="random">
+    <randomobject>
+  <object type='target'>
+                  <model type="MilkShape">data/meshes/gold_ore/gold_ore.txt</model>
+                  <modelscale>0.2</modelscale>
+                  <modelscalediff>0.2</modelscalediff>
+                  <modelrotationsnap>1</modelrotationsnap>
+                  <modelbrightness>-1.0</modelbrightness>
+                  <displayshadow>false</displayshadow>
+                  <nodamageburn>false</nodamageburn>
+                  <displaydamage>false</displaydamage>
+                  <drawshadow>false</drawshadow>
+                    <removeaction>oredestroy</removeaction>
+                  <groupname>Gold Ore</groupname>
+                  <flattendestroy>false</flattendestroy>
+               </object>
+  </randomobject>
+</object>
+</placement>
+</place>

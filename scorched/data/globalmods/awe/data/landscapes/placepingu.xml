@@ -1,0 +1,38 @@
+<place>
+		<placement type='mask'>
+			<numobjects>50</numobjects>
+			<mask>data/landscapes/nomask.bmp</mask>
+			<minheight>5</minheight>
+			<maxheight>200</maxheight>
+			<mincloseness>1</mincloseness>
+			<minslope>0.5</minslope>
+			<xsnap>0</xsnap>
+			<ysnap>0</ysnap>
+			<object type='random'>
+				<randomobject>
+					<object type='model'>
+						<model type='MilkShape'>data/accessories/pinguins/pinguin1.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/pinguins/pinguin1.txt</modelburnt>
+						<modelrotationsnap>5</modelrotationsnap>
+						<groupname></groupname>
+					</object>
+				</randomobject>
+				<randomobject>
+					<object type='model'>
+						<model type='MilkShape'>data/accessories/pinguins/pinguin2.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/pinguins/pinguin2.txt</modelburnt>
+						<modelrotationsnap>5</modelrotationsnap>
+						<groupname></groupname>
+					</object>
+				</randomobject>
+				<randomobject>
+					<object type='model'>
+						<model type='MilkShape'>data/accessories/pinguins/2pinguins.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/pinguins/2pinguins.txt</modelburnt>
+						<modelrotationsnap>5</modelrotationsnap>
+						<groupname></groupname>
+					</object>
+				</randomobject>
+			</object>
+		</placement>
+</place>
