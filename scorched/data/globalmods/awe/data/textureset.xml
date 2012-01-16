@@ -474,6 +474,36 @@
     <texture>textures/exp/shock/screen_13.bmp</texture>
     <texture>textures/exp/shock/screen_14.bmp</texture>
   </textureset>
+  <textureset name="shock2">
+    <texture>textures/exp/shock2/screen_1.bmp</texture>
+    <texture>textures/exp/shock2/screen_2.bmp</texture>
+    <texture>textures/exp/shock2/screen_3.bmp</texture>
+    <texture>textures/exp/shock2/screen_4.bmp</texture>
+    <texture>textures/exp/shock2/screen_5.bmp</texture>
+    <texture>textures/exp/shock2/screen_6.bmp</texture>
+    <texture>textures/exp/shock2/screen_7.bmp</texture>
+    <texture>textures/exp/shock2/screen_8.bmp</texture>
+    <texture>textures/exp/shock2/screen_9.bmp</texture>
+    <texture>textures/exp/shock2/screen_10.bmp</texture>
+    <texture>textures/exp/shock2/screen_11.bmp</texture>
+    <texture>textures/exp/shock2/screen_12.bmp</texture>
+    <texture>textures/exp/shock2/screen_13.bmp</texture>
+    <texture>textures/exp/shock2/screen_14.bmp</texture>
+    <texture>textures/exp/shock2/screen_1.bmp</texture>
+    <texture>textures/exp/shock2/screen_2.bmp</texture>
+    <texture>textures/exp/shock2/screen_3.bmp</texture>
+    <texture>textures/exp/shock2/screen_4.bmp</texture>
+    <texture>textures/exp/shock2/screen_5.bmp</texture>
+    <texture>textures/exp/shock2/screen_6.bmp</texture>
+    <texture>textures/exp/shock2/screen_7.bmp</texture>
+    <texture>textures/exp/shock2/screen_8.bmp</texture>
+    <texture>textures/exp/shock2/screen_9.bmp</texture>
+    <texture>textures/exp/shock2/screen_10.bmp</texture>
+    <texture>textures/exp/shock2/screen_11.bmp</texture>
+    <texture>textures/exp/shock2/screen_12.bmp</texture>
+    <texture>textures/exp/shock2/screen_13.bmp</texture>
+    <texture>textures/exp/shock2/screen_14.bmp</texture>
+  </textureset>
   <textureset name="sludge">
     <texture>textures/exp/sludge/screen_14.bmp</texture>
     <texture>textures/exp/sludge/screen_13.bmp</texture>

@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<landscapes>   
+<landscapes>
+    <landscape>
+    <name>Fleet_Battle</name>
+    <description></description>
+    <picture></picture>
+    <weight>100</weight>
+    <defn>
+      <item>data/landscapes/battle/battledefn.xml</item>
+    </defn>
+    <tex>
+      <item>data/landscapes/texlavaplain.xml</item>
+    </tex>
+  </landscape>
+
   <landscape>
     <name>Park_Entrance</name>
     <description></description>
-    <picture>jp.jpg</picture>
+    <picture></picture>
     <weight>100</weight>
     <defn>
       <item>data/landscapes/jpark/jpdefn.xml</item>
@@ -16,7 +29,7 @@
   <landscape>
     <name>Lost_World_Isle</name>
     <description></description>
-    <picture>lw.jpg</picture>
+    <picture></picture>
     <weight>100</weight>
     <defn>
       <item>data/landscapes/jpark/lostworlddefn.xml</item>

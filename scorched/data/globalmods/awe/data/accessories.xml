@@ -4355,12 +4355,145 @@
 
   <!--Cluster Bombs & Shells-->
   <accessory>
+    <name>clusterfxsm</name>
+    <armslevel>2</armslevel>
+    <description>clustershots</description>
+    <maximumnumber>0</maximumnumber>
+    <accessoryaction type="WeaponMulti">
+      <subweapon1 type="WeaponAimedUnder">
+        <nowarheads>30</nowarheads>
+        <maxaimdistance>0</maxaimdistance>
+        <percentagemiss>0</percentagemiss>
+        <inaccuracy>RANGE (0,1)</inaccuracy>
+        <noselfhoming>true</noselfhoming>
+        <aimedweapon type="WeaponRedirect">
+          <habs>false</habs>
+          <vabs>true</vabs>
+          <hredirect>RANGE (-360,360)</hredirect>
+          <vredirect>RANGE (120,240)</vredirect>
+          <nextaction type="WeaponProjectile">
+            <smoketexture>smoky</smoketexture>
+            <flamestartcolor1>
+              <A>1.0</A>
+              <B>1.0</B>
+              <C>1.0</C>
+            </flamestartcolor1>
+            <flameendcolor1>
+              <A>1.0</A>
+              <B>1.0</B>
+              <C>1.0</C>
+            </flameendcolor1>
+            <flamestartcolor2>
+              <A>1.0</A>
+              <B>1.0</B>
+              <C>1.0</C>
+            </flamestartcolor2>
+            <flameendcolor2>
+              <A>1.0</A>
+              <B>1.0</B>
+              <C>1.0</C>
+            </flameendcolor2>
+            <projectilescale>0.0001</projectilescale>
+            <gravityfactor>0.2</gravityfactor>
+            <flamestartsize>0.5</flamestartsize>
+            <flameendsize>1</flameendsize>
+            <flamelife>0.5</flamelife>
+            <stepsize>0.002</stepsize>
+            <projectilemodel type="MilkShape">data/accessories/projectile/clusterrocket.txt</projectilemodel>
+            <enginesound>none</enginesound>
+            <timedcollision>RANGE (0.05,0.06)</timedcollision>
+            <shieldhurtfactor>0</shieldhurtfactor>
+            <collisionaction type="WeaponProjectile">
+              <nocreateflame/>
+              <stepsize>0.001</stepsize>
+              <nocreatesmoke/>
+              <shieldhurtfactor>0.35</shieldhurtfactor>
+              <enginesound>none</enginesound>
+              <projectilescale>0.3</projectilescale>
+              <collisionaction type="WeaponMulti">
+                <subweapon1 type="WeaponExplosion">
+                  <nocameratrack>true</nocameratrack>
+                  <deform>down</deform>
+                  <deformsize>1</deformsize>
+                  <explosiontexture>sparky</explosiontexture>
+                  <explosionsound>none</explosionsound>
+                  <size>1</size>
+                  <nocreatedebris/>
+                  <maxlife>0.3</maxlife>
+                  <hurtamount>0.6</hurtamount>
+                </subweapon1>
+                <subweapon2 type="WeaponExplosion">
+                  <nocameratrack>true</nocameratrack>
+                  <deform>none</deform>
+                  <maxlife>0.2</maxlife>
+                  <explosiontexture>up</explosiontexture>
+                  <explosionsound>none</explosionsound>
+                  <size>4</size>
+                  <hurtamount>0</hurtamount>
+                  <nocreatedebris/>
+                  <nocreatesplash/>
+                </subweapon2>
+                <subweapon3 type="WeaponRandomChoice">
+                  <weaponchoice1>
+                    <weight>5</weight>
+                    <weapon type="WeaponSound">
+                      <sound>data/wav/clusterbomb/a.ogg</sound>
+                    </weapon>
+                  </weaponchoice1>
+                  <weaponchoice2>
+                    <weight>5</weight>
+                    <weapon type="WeaponSound">
+                      <sound>data/wav/clusterbomb/b.ogg</sound>
+                    </weapon>
+                  </weaponchoice2>
+                  <weaponchoice3>
+                    <weight>5</weight>
+                    <weapon type="WeaponSound">
+                      <sound>data/wav/clusterbomb/c.ogg</sound>
+                    </weapon>
+                  </weaponchoice3>
+                  <weaponchoice4>
+                    <weight>5</weight>
+                    <weapon type="WeaponSound">
+                      <sound>data/wav/clusterbomb/d.ogg</sound>
+                    </weapon>
+                  </weaponchoice4>
+                  <weaponchoice5>
+                    <weight>5</weight>
+                    <weapon type="WeaponSound">
+                      <sound>data/wav/clusterbomb/new/b.ogg</sound>
+                    </weapon>
+                  </weaponchoice5>
+                  <weaponchoice6>
+                    <weight>5</weight>
+                    <weapon type="WeaponSound">
+                      <sound>data/wav/clusterbomb/f.ogg</sound>
+                    </weapon>
+                  </weaponchoice6>
+                  <weaponchoice7>
+                    <weight>5</weight>
+                    <weapon type="WeaponSound">
+                      <sound>data/wav/clusterbomb/g.ogg</sound>
+                    </weapon>
+                  </weaponchoice7>
+                </subweapon3>
+              </collisionaction>
+            </collisionaction>
+          </nextaction>
+        </aimedweapon>
+      </subweapon1>
+      <subweapon2 type="WeaponSound">
+        <sound>data/wav/test/airpop.ogg</sound>
+      </subweapon2>
+    </accessoryaction>
+  </accessory>
+  <!--<accessory>
     <name>2ndstage</name>
     <armslevel>2</armslevel>
     <description>2nd stage</description>
     <maximumnumber>0</maximumnumber>
     <accessoryaction type="WeaponMulti">
-      <subweapon1 type="WeaponAimedOver">
+      <subweapon1 type="WeaponAimedUnder">
         <nowarheads>1</nowarheads>
         <maxaimdistance>0</maxaimdistance>
         <percentagemiss>0</percentagemiss>
@@ -4389,7 +4522,7 @@
                   <explosiontexture>trans</explosiontexture>
                   <explosionsound>none</explosionsound>
                 </subweapon1>
-                <subweapon2 type="WeaponAimedOver">
+                <subweapon2 type="WeaponAimedUnder">
                   <nowarheads>10</nowarheads>
                   <maxaimdistance>0</maxaimdistance>
                   <percentagemiss>0</percentagemiss>
@@ -4462,7 +4595,6 @@
                           </weaponchoice7>
                         </subweapon2>
                         <subweapon3 type="WeaponNull">
-                          <!--<weapon>shelldebris</weapon>-->
                         </subweapon3>
                         <subweapon4 type="WeaponExplosion">
                           <animate/>
@@ -4497,8 +4629,8 @@
         </aimedweapon>
       </subweapon1>
     </accessoryaction>
-  </accessory>
-  <accessory>
+  </accessory>-->
+  <!--<accessory>
     <name>CBU-755 ClusterBomb</name>
     <armslevel>2</armslevel>
     <description>Releases many small bomblets on apex. Large Scatter damage.</description>
@@ -4520,48 +4652,55 @@
       <collisionaction type="WeaponMulti">
         <subweapon1 type="WeaponNull">
         </subweapon1>
-        <subweapon2 type="WeaponMirv">
-          <nowarheads>28</nowarheads>
-          <hspreaddist>0.2</hspreaddist>
-          <vspreaddist>15.0</vspreaddist>
-          <aimedweapon type="WeaponProjectile">
-            <enginesound>none</enginesound>
-            <nocreateflame/>
-            <shieldhurtfactor>0</shieldhurtfactor>
-            <nocreatesmoke/>
-            <projectilescale>0.1</projectilescale>
-            <stepsize>0.015</stepsize>
-            <projectilemodel type="MilkShape">data/accessories/projectile/smkgrn.txt</projectilemodel>
-            <heightcollision>15</heightcollision>
-            <collisionaction type="WeaponMulti">
-              <subweapon1 type="WeaponReference">
-                <weapon>2ndstage</weapon>
-              </subweapon1>
-              <subweapon2 type="WeaponExplosion">
-                <nocreatedebris/>
-                <noluminance/>
-                <nocreatesplash/>
-                <animate/>
-                <maxlife>0.6</maxlife>
-                <hurtamount>0</hurtamount>
-                <deform>none</deform>
-                <size>1</size>
-                <explosiontexture>crackle</explosiontexture>
-                <explosionsound>none</explosionsound>
-              </subweapon2>
-            </collisionaction>
-          </aimedweapon>
+        <subweapon2 type="WeaponRepeat">
+          <repeat>26</repeat>
+          <delay>0.0</delay>
+          <repeatweapon type="WeaponMirv">
+            <nowarheads>1</nowarheads>
+            <hspreaddist>0.05</hspreaddist>
+            <vspreaddist>15.0</vspreaddist>
+            <aimedweapon type="WeaponProjectile">
+              <gravityfactor>0.3</gravityfactor>
+              <stepsize>0.006</stepsize>
+              <projectilescale>0.0095</projectilescale>
+              <shieldhurtfactor>0.35</shieldhurtfactor>
+              <enginesound>none</enginesound>
+              <nocreateflame/>
+              <nocreatesmoke/>
+              <flametexture>heat</flametexture>
+              <heightcollision>RANGE (10,40)</heightcollision>
+              <collisionaction type="WeaponMulti">
+                <subweapon1 type="WeaponDelay">
+                  <delay>RANGE (3,7)</delay>
+                  <delayedweapon type="WeaponReference">
+                    <weapon>clusterfxsm</weapon>
+                  </delayedweapon>
+                </subweapon1>
+                <subweapon2 type="WeaponExplosion">
+                  <nocreatedebris/>
+                  <noluminance/>
+                  <nocreatesplash/>
+                  <animate/>
+                  <maxlife>0.6</maxlife>
+                  <hurtamount>0</hurtamount>
+                  <deform>none</deform>
+                  <size>1</size>
+                  <explosiontexture>trans</explosiontexture>
+                  <explosionsound>none</explosionsound>
+                </subweapon2>
+              </collisionaction>
+            </aimedweapon>
+          </repeatweapon>
         </subweapon2>
         <subweapon3 type="WeaponProjectile">
+          <projectilescale>0.0095</projectilescale>
+          <shieldhurtfactor>0.35</shieldhurtfactor>
           <enginesound>none</enginesound>
           <nocreateflame/>
           <nocreatesmoke/>
-          <projectilescale>0.1</projectilescale>
-          <stepsize>0.015</stepsize>
-          <shieldhurtfactor>0</shieldhurtfactor>
           <heightcollision>5</heightcollision>
           <collisionaction type="WeaponReference">
-            <weapon>2ndstage</weapon>
+            <weapon>clusterfxsm</weapon>
           </collisionaction>
         </subweapon3>
         <subweapon4 type="WeaponMulti">
@@ -4578,7 +4717,9 @@
         </subweapon4>
       </collisionaction>
     </accessoryaction>
-  </accessory>
+  </accessory>-->
+  
+
   <accessory>
     <name>Cluster Shell</name>
     <armslevel>4</armslevel>
@@ -4651,7 +4792,7 @@
                     <subweapon2 type="WeaponDelay">
                       <delay>0.2</delay>
                       <delayedweapon type="WeaponReference">
-                        <weapon>2ndstage</weapon>
+                        <weapon>clusterfxsm</weapon>
                       </delayedweapon>
                     </subweapon2>
                     <subweapon3 type="WeaponRandomChoice">
@@ -4677,6 +4818,8 @@
       </subweapon2>
     </accessoryaction>
   </accessory>
+
+
   <accessory>
     <name>Cluster Barrage</name>
     <armslevel>3</armslevel>
@@ -5533,8 +5676,7 @@
         <size>12</size>
         <nocreatedebris/>
         <nowindaffected/>
-        <minlife>1.5</minlife>
-        <explosiontexture>sap</explosiontexture>
+        <explosiontexture>shock2</explosiontexture>
         <explosionsound>none</explosionsound>
         <explosiontype>ring</explosiontype>
       </subweapon8>
@@ -5564,7 +5706,6 @@
             <abs>true</abs>
             <velocitychange>1</velocitychange>
             <aimedweapon type="WeaponProjectile">
-
               <projectilescale>0.002</projectilescale>
               <nocreatesmoke/>
               <flamestartcolor1>
@@ -5591,6 +5732,7 @@
               <flameendsize>0.75</flameendsize>
               <shieldhurtfactor>0</shieldhurtfactor>
               <flamelife>0.28</flamelife>
+              <flametexture>shock2</flametexture>
               <timedcollision>RANGE(0.4,0.7)</timedcollision>
               <gravityfactor>0</gravityfactor>
               <stepsize>0.002</stepsize>
@@ -5604,13 +5746,64 @@
       </subweapon10>
     </accessoryaction>
   </accessory>
+
+  <accessory>
+    <name>bawoospark</name>
+    <maximumnumber>0</maximumnumber>
+    <accessoryaction type="WeaponRepeat">
+      <repeat>25</repeat>
+      <delay>0.1</delay>
+      <repeatweapon type="WeaponAimedOver">
+        <nowarheads>1</nowarheads>
+        <percentagemiss>99</percentagemiss>
+        <maxaimdistance>0</maxaimdistance>
+        <inaccuracy>99</inaccuracy>
+        <aimedweapon type="WeaponRedirect">
+          <habs>true</habs>
+          <vabs>true</vabs>
+          <hredirect>RANGE (0,360)</hredirect>
+          <vredirect>RANGE (-90,90)</vredirect>
+          <nextaction type="WeaponVelocity">
+            <abs>true</abs>
+            <velocitychange>RANGE (0.8,1)</velocitychange>
+            <aimedweapon type="WeaponProjectile">
+              <windfactor>0</windfactor>
+              <nowallcollision/>
+              <enginesound>none</enginesound>
+              <projectilescale>0.0001</projectilescale>
+              <nocreateflame/>
+              <shieldhurtfactor>0.1</shieldhurtfactor>
+              <nocreatesmoke/>
+              <stepsize>0.001</stepsize>
+              <flamestartsize>2</flamestartsize>
+              <flameendsize>9</flameendsize>
+              <timedcollision>0.003</timedcollision>
+              <collisionaction type="WeaponExplosion">
+                <hurtamount>0.0</hurtamount>
+                <deform>none</deform>
+                <nowindaffected/>
+                <deformsize>0</deformsize>
+                <size>4</size>
+                <nocreatedebris/>
+                <animate/>
+                <explosiontexture>shock2</explosiontexture>
+                <explosionsound>none</explosionsound>
+                <explosiontype>directionalring</explosiontype>
+              </collisionaction>
+            </aimedweapon>
+          </nextaction>
+        </aimedweapon>
+      </repeatweapon>
+    </accessoryaction>
+  </accessory>
+  
   <accessory>
     <name>Bawoo Grenade</name>
     <armslevel>7</armslevel>
     <description>Fire a grenade which will bounce a couple times and explode</description>
-    <bundlesize>2</bundlesize>
-    <cost>6000</cost>
-    <icon>s.bmp</icon>
+    <bundlesize>1</bundlesize>
+    <cost>4000</cost>
+    <icon>m.bmp</icon>
     <activationsound>grenade/40mm.ogg</activationsound>
     <model type="MilkShape">data/accessories/id/bawooid.txt</model>
     <accessoryaction type="WeaponMulti">
@@ -5662,6 +5855,7 @@
                       <projectilescale>0.00002</projectilescale>
                       <nocreateflame/>
                       <nocreatesmoke/>
+                      <windfactor>0</windfactor>
                       <gravityfactor>0</gravityfactor>
                       <timedcollision>RANGE(0.5,2.4)</timedcollision>
                       <drag>0.01</drag>
@@ -5701,7 +5895,8 @@
                           <flamestartsize>1</flamestartsize>
                           <flameendsize>1</flameendsize>
                           <flamelife>0.28</flamelife>
-
+                          <flametexture>shock2</flametexture>
+                          <windfactor>0</windfactor>
                           <gravityfactor>0</gravityfactor>
                           <stepsize>0.001</stepsize>
                           <timedcollision>5</timedcollision>
@@ -5745,6 +5940,13 @@
                     <weapon>ions</weapon>
                   </delayedweapon>
                 </subweapon3>
+                <subweapon4 type='WeaponDelay'>
+                  <delay>0.3</delay>
+                  <delayedweapon type='WeaponReference'>
+                    <weapon>bawoospark</weapon>
+                  </delayedweapon>
+                </subweapon4>
+                
               </collisionaction>
             </collisionaction>
           </subweapon2>
@@ -5924,51 +6126,50 @@
                     </nextaction>
                   </aimedweapon>
                 </subweapon3>
-                  <subweapon4 type="WeaponAimedOver">
-        <nowarheads>25</nowarheads>
-        <maxaimdistance>0</maxaimdistance>
-        <percentagemiss>0</percentagemiss>
-        <inaccuracy>0</inaccuracy>
-        <aimedweapon type="WeaponRedirect">
-          <habs>false</habs>
-          <vabs>true</vabs>
-          <hredirect>RANGE (0,360)</hredirect>
-          <vredirect>RANGE (0,360)</vredirect>
-          <nextaction type="WeaponProjectile">
-            <nocameratrack>true</nocameratrack>
-            <projectilemodel type="MilkShape">data/accessories/projectile/bpowder.txt</projectilemodel>
-            <projectilescale>0.2</projectilescale>
-            <nocreateflame/>
-            <gravityfactor>0</gravityfactor>
-            <timedcollision>0.47</timedcollision>
-            <nocreatesmoke/>
-            <stepsize>0.004</stepsize>
-            <enginesound>none</enginesound>
-            <shieldhurtfactor>0.1</shieldhurtfactor>
-            <collisionaction type="WeaponMulti">
-              <subweapon1 type="WeaponExplosion">
-                <nocameratrack>true</nocameratrack>
-                <deform>down</deform>
-                <explosiontexture>none</explosiontexture>
-                <explosionsound>none</explosionsound>
-                <size>1</size>
-                <nocreatedebris/>
-                <hurtamount>1</hurtamount>
-              </subweapon1>
-              <subweapon2 type="WeaponExplosion">
-                <nocameratrack>true</nocameratrack>
-                <deform>none</deform>
-                <explosiontexture>exp00</explosiontexture>
-                <explosionsound>none</explosionsound>
-                <size>1</size>
-                <hurtamount>0</hurtamount>
-                <nocreatedebris/>
-                <nocreatesplash/>
-              </subweapon2>
-            </collisionaction>
-          </nextaction>
-        </aimedweapon>
-      </subweapon4>
+                <subweapon4 type="WeaponAimedOver">
+                  <nowarheads>65</nowarheads>
+                  <maxaimdistance>0</maxaimdistance>
+                  <percentagemiss>0</percentagemiss>
+                  <inaccuracy>0</inaccuracy>
+                  <aimedweapon type="WeaponRedirect">
+                    <habs>false</habs>
+                    <vabs>true</vabs>
+                    <hredirect>RANGE (0,360)</hredirect>
+                    <vredirect>RANGE (0,360)</vredirect>
+                    <nextaction type="WeaponProjectile">
+                      <nocameratrack>true</nocameratrack>
+                      <projectilemodel type="MilkShape">data/accessories/projectile/bpowder.txt</projectilemodel>
+                      <projectilescale>0.1</projectilescale>
+                      <nocreateflame/>
+                      <gravityfactor>0.4</gravityfactor>
+                      <nocreatesmoke/>
+                      <stepsize>0.004</stepsize>
+                      <enginesound>none</enginesound>
+                      <shieldhurtfactor>0.1</shieldhurtfactor>
+                      <collisionaction type="WeaponMulti">
+                        <subweapon1 type="WeaponExplosion">
+                          <nocameratrack>true</nocameratrack>
+                          <deform>down</deform>
+                          <explosiontexture>none</explosiontexture>
+                          <explosionsound>none</explosionsound>
+                          <size>1</size>
+                          <nocreatedebris/>
+                          <hurtamount>0.5</hurtamount>
+                        </subweapon1>
+                        <subweapon2 type="WeaponExplosion">
+                          <nocameratrack>true</nocameratrack>
+                          <deform>none</deform>
+                          <explosiontexture>up</explosiontexture>
+                          <explosionsound>none</explosionsound>
+                          <size>1</size>
+                          <hurtamount>0</hurtamount>
+                          <nocreatedebris/>
+                          <nocreatesplash/>
+                        </subweapon2>
+                      </collisionaction>
+                    </nextaction>
+                  </aimedweapon>
+                </subweapon4>
               </collisionaction>
             </collisionaction>
           </subweapon2>
@@ -6654,7 +6855,7 @@
     <accessoryaction type="WeaponMulti">
       <subweapon1 type="WeaponExplosion">
         <deform>none</deform>
-        <hurtamount>2</hurtamount>
+        <hurtamount>1</hurtamount>
         <size>6</size>
         <explosiontexture>particle</explosiontexture>
         <nocreatedebris/>
@@ -7304,12 +7505,118 @@
   </accessory>
 
   <!--Volt Cannon-->
+  <accessory>
+    <name>volt</name>
+    <maximumnumber>0</maximumnumber>
+    <accessoryaction type="WeaponMulti">
+      <subweapon1 type='WeaponLightning'>
+        <conelength>RANGE (6,12)</conelength>
+        <seglength>RANGE (3,6)</seglength>
+        <segvar>0</segvar>
+        <size>RANGE (2,4)</size>
+        <sizevar>0</sizevar>
+        <minsize>2</minsize>
+        <splitprob>100</splitprob>
+        <splitvar>100</splitvar>
+        <deathprob>0</deathprob>
+        <derivangle>45</derivangle>
+        <anglevar>10</anglevar>
+        <totaltime>RANGE (0.5,1.3)</totaltime>
+        <seghurt>1</seghurt>
+        <seghurtradius>6</seghurtradius>
+        <sound>data/wav/shock/volt.ogg</sound>
+        <texture>data/textures/lightning.bmp</texture>
+        <!--notextpokemon-->
+      </subweapon1>
+    </accessoryaction>
+  </accessory>
+
+  <accessory>
+    <name>voltspark</name>
+    <maximumnumber>0</maximumnumber>
+    <accessoryaction type="WeaponRepeat">
+      <repeat>25</repeat>
+      <delay>0.1</delay>
+      <repeatweapon type="WeaponAimedOver">
+        <nowarheads>1</nowarheads>
+        <percentagemiss>99</percentagemiss>
+        <maxaimdistance>0</maxaimdistance>
+        <inaccuracy>99</inaccuracy>
+        <aimedweapon type="WeaponRedirect">
+          <habs>true</habs>
+          <vabs>true</vabs>
+          <hredirect>RANGE (0,360)</hredirect>
+          <vredirect>RANGE (-90,90)</vredirect>
+          <nextaction type="WeaponVelocity">
+            <abs>true</abs>
+            <velocitychange>RANGE (0.8,1)</velocitychange>
+            <aimedweapon type="WeaponProjectile">
+              <windfactor>0</windfactor>
+              <nowallcollision/>
+              <enginesound>none</enginesound>
+              <projectilescale>0.0001</projectilescale>
+              <nocreateflame/>
+              <shieldhurtfactor>0.2</shieldhurtfactor>
+              <nocreatesmoke/>
+              <stepsize>0.001</stepsize>
+              <flamestartsize>2</flamestartsize>
+              <flameendsize>9</flameendsize>
+              <timedcollision>0.003</timedcollision>
+              <collisionaction type="WeaponExplosion">
+                <hurtamount>0.0</hurtamount>
+                <deform>none</deform>
+                <nowindaffected/>
+                <deformsize>0</deformsize>
+                <size>4</size>
+                <nocreatedebris/>
+                <animate/>
+                <explosiontexture>shock</explosiontexture>
+                <explosionsound>shock/volt.ogg</explosionsound>
+                <explosiontype>directionalring</explosiontype>
+              </collisionaction>
+            </aimedweapon>
+          </nextaction>
+        </aimedweapon>
+      </repeatweapon>
+    </accessoryaction>
+  </accessory>
+
+  <accessory>
+    <name>voltsurge</name>
+    <armslevel>0</armslevel>
+    <description>debris</description>
+    <maximumnumber>0</maximumnumber>
+    <accessoryaction type="WeaponMulti">
+
+      <subweapon1 type='WeaponMulti'>
+        <subweapon1 type="WeaponRepeat">
+          <repeat>80</repeat>
+          <delay>RANGE (0,0.06)</delay>
+          <repeatweapon type="WeaponAimedOver">
+            <nowarheads>1</nowarheads>
+            <maxaimdistance>0</maxaimdistance>
+            <percentagemiss>0</percentagemiss>
+            <inaccuracy>0</inaccuracy>
+            <aimedweapon type="WeaponRedirect">
+              <habs>true</habs>
+              <vabs>true</vabs>
+              <hredirect>RANGE (0,360)</hredirect>
+              <vredirect>RANGE (0,360)</vredirect>
+              <nextaction type="WeaponReference">
+                <weapon>volt</weapon>
+              </nextaction>
+            </aimedweapon>
+          </repeatweapon>
+        </subweapon1>
+      </subweapon1>
+    </accessoryaction>
+  </accessory>
 
   <accessory>
     <name>Volt Cannon</name>
     <armslevel>7</armslevel>
     <description>A Bouncy Electric Weapon.</description>
-    <icon>l.bmp</icon>
+    <icon>m.bmp</icon>
     <bundlesize>1</bundlesize>
     <cost>6000</cost>
     <activationsound>shock/shoot.ogg</activationsound>
@@ -7331,139 +7638,30 @@
           <subweapon1 type="WeaponMulti">
             <subweapon1 type="WeaponExplosion">
               <hurtamount>1.5</hurtamount>
-              <deform>none</deform>
+              <deform>down</deform>
+              <deformsize>1</deformsize>
               <nocreatedebris/>
-              <size>10</size>
+              <size>6</size>
               <explosiontexture>shock</explosiontexture>
-              <explosionsound>shock/shock.ogg</explosionsound>
+              <explosionsound>shock/shockexp.ogg</explosionsound>
+              <explosiontype>directionalring</explosiontype>
             </subweapon1>
             <subweapon2 type="WeaponReference">
-              <weapon>roundlight</weapon>
+              <weapon>voltsurge</weapon>
             </subweapon2>
+
+            <subweapon3 type="WeaponExplosion">
+              <hurtamount>0</hurtamount>
+              <deform>none</deform>
+              <nocreatedebris/>
+              <size>9</size>
+              <explosiontexture>sap2</explosiontexture>
+              <explosionsound>shock/shock.ogg</explosionsound>
+            </subweapon3>
+            <subweapon4 type="WeaponReference">
+              <weapon>voltspark</weapon>
+            </subweapon4>
           </subweapon1>
-          <subweapon2 type="WeaponRedirect">
-            <habs>false</habs>
-            <vabs>false</vabs>
-            <hredirect>-5</hredirect>
-            <vredirect>0</vredirect>
-            <nextaction type="WeaponLeapFrog">
-              <bounce>0.4</bounce>
-              <collisionaction type="WeaponProjectile">
-                <nocreateflame/>
-                <nocreatesmoke/>
-                <enginesound>data/wav/shock/shockengine.ogg</enginesound>
-                <projectilescale>0.75</projectilescale>
-                <flaretype>3</flaretype>
-                <spinaxis>
-                  <a>-1</a>
-                  <b>-1</b>
-                  <c>0</c>
-                </spinaxis>
-                <projectilemodel type="MilkShape">data/accessories/id/lightningcannonball.txt</projectilemodel>
-                <collisionaction type="WeaponMulti">
-                  <subweapon1 type="WeaponMulti">
-                    <subweapon1 type="WeaponExplosion">
-                      <hurtamount>1.25</hurtamount>
-                      <deform>none</deform>
-                      <nocreatedebris/>
-                      <size>8</size>
-                      <explosiontexture>shock</explosiontexture>
-                      <explosionsound>shock/shock.ogg</explosionsound>
-                    </subweapon1>
-                    <subweapon2 type="WeaponReference">
-                      <weapon>roundlight</weapon>
-                    </subweapon2>
-                  </subweapon1>
-                  <subweapon2 type="WeaponRedirect">
-                    <habs>false</habs>
-                    <vabs>false</vabs>
-                    <hredirect>10</hredirect>
-                    <vredirect>0</vredirect>
-                    <nextaction type="WeaponLeapFrog">
-                      <bounce>0.3</bounce>
-                      <collisionaction type="WeaponProjectile">
-                        <nocreateflame/>
-                        <enginesound>data/wav/shock/shockengine.ogg</enginesound>
-                        <nocreatesmoke/>
-                        <projectilescale>0.75</projectilescale>
-                        <flaretype>3</flaretype>
-                        <spinaxis>
-                          <a>1</a>
-                          <b>1</b>
-                          <c>0</c>
-                        </spinaxis>
-                        <projectilemodel type="MilkShape">data/accessories/id/lightningcannonball.txt</projectilemodel>
-                        <collisionaction type="WeaponMulti">
-                          <subweapon1 type="WeaponMulti">
-                            <subweapon1 type="WeaponExplosion">
-                              <hurtamount>1.0</hurtamount>
-                              <deform>none</deform>
-                              <nocreatedebris/>
-                              <size>6</size>
-                              <explosiontexture>shock</explosiontexture>
-                              <explosionsound>shock/shock.ogg</explosionsound>
-                            </subweapon1>
-                            <subweapon2 type="WeaponReference">
-                              <weapon>roundlight</weapon>
-                            </subweapon2>
-                          </subweapon1>
-                          <subweapon2 type="WeaponRedirect">
-                            <habs>false</habs>
-                            <vabs>false</vabs>
-                            <hredirect>-10</hredirect>
-                            <vredirect>0</vredirect>
-                            <nextaction type="WeaponLeapFrog">
-                              <bounce>0.3</bounce>
-                              <collisionaction type="WeaponProjectile">
-                                <nocreateflame/>
-                                <nocreatesmoke/>
-                                <enginesound>data/wav/shock/shockengine.ogg</enginesound>
-                                <projectilescale>0.75</projectilescale>
-                                <flaretype>3</flaretype>
-                                <spinaxis>
-                                  <a>-1</a>
-                                  <b>-1</b>
-                                  <c>0</c>
-                                </spinaxis>
-                                <projectilemodel type="MilkShape">data/accessories/id/lightningcannonball.txt</projectilemodel>
-                                <collisionaction type="WeaponMulti">
-                                  <subweapon1 type="WeaponMulti">
-                                    <subweapon1 type="WeaponExplosion">
-                                      <hurtamount>1.5</hurtamount>
-                                      <deform>down</deform>
-                                      <deformsize>1</deformsize>
-                                      <nocreatedebris/>
-                                      <size>6</size>
-                                      <explosiontexture>shock</explosiontexture>
-                                      <explosionsound>shock/shockexp.ogg</explosionsound>
-                                      <explosiontype>directionalring</explosiontype>
-                                    </subweapon1>
-                                    <subweapon2 type="WeaponReference">
-                                      <weapon>roundlight</weapon>
-                                    </subweapon2>
-
-                                    <subweapon3 type="WeaponExplosion">
-                                      <hurtamount>0</hurtamount>
-                                      <deform>none</deform>
-                                      <nocreatedebris/>
-                                      <size>9</size>
-                                      <explosiontexture>sap2</explosiontexture>
-                                      <explosionsound>test/missile_seperate.ogg</explosionsound>
-                                    </subweapon3>
-
-                                  </subweapon1>
-                                </collisionaction>
-                              </collisionaction>
-                            </nextaction>
-                          </subweapon2>
-                        </collisionaction>
-                      </collisionaction>
-                    </nextaction>
-                  </subweapon2>
-                </collisionaction>
-              </collisionaction>
-            </nextaction>
-          </subweapon2>
         </collisionaction>
       </subweapon2>
     </accessoryaction>
@@ -7481,39 +7679,39 @@
           <gain>0.2</gain>
         </weapon>
       </weaponchoice1>
-            <weaponchoice2>
+      <weaponchoice2>
         <weight>10</weight>
         <weapon type="WeaponSound">
           <sound>data/wav/a10/bwz2.ogg</sound>
-           <gain>0.2</gain>
+          <gain>0.2</gain>
         </weapon>
       </weaponchoice2>
-            <weaponchoice3>
+      <weaponchoice3>
         <weight>10</weight>
         <weapon type="WeaponSound">
           <sound>data/wav/a10/bwz3.ogg</sound>
-           <gain>0.2</gain>
+          <gain>0.2</gain>
         </weapon>
       </weaponchoice3>
-            <weaponchoice4>
+      <weaponchoice4>
         <weight>10</weight>
         <weapon type="WeaponSound">
           <sound>data/wav/a10/bwz4.ogg</sound>
-           <gain>0.2</gain>
+          <gain>0.2</gain>
         </weapon>
       </weaponchoice4>
-            <weaponchoice5>
+      <weaponchoice5>
         <weight>10</weight>
         <weapon type="WeaponSound">
           <sound>data/wav/a10/bwz5.ogg</sound>
-           <gain>0.2</gain>
+          <gain>0.2</gain>
         </weapon>
       </weaponchoice5>
-            <weaponchoice6>
+      <weaponchoice6>
         <weight>10</weight>
         <weapon type="WeaponSound">
           <sound>data/wav/a10/bwz6.ogg</sound>
-           <gain>0.2</gain>
+          <gain>0.2</gain>
         </weapon>
       </weaponchoice6>
     </accessoryaction>
@@ -7569,16 +7767,16 @@
                 <weapon>bullet_whizz</weapon>
               </subweapon1>
               <subweapon2 type='WeaponProjectile'>
-                 <nocameratrack>true</nocameratrack>
+                <nocameratrack>true</nocameratrack>
                 <enginesound>none</enginesound>
                 <projectilescale>0.001</projectilescale>
                 <shieldhurtfactor>0.2</shieldhurtfactor>
                 <spinspeed>1.0</spinspeed>
                 <gravityfactor>0.045</gravityfactor>
                 <timedcollision>20</timedcollision>
-                  <flamestartsize>0.5</flamestartsize>
-            <flameendsize>0.5</flameendsize>
-            <flamelife>0.1</flamelife>
+                <flamestartsize>0.5</flamestartsize>
+                <flameendsize>0.5</flameendsize>
+                <flamelife>0.1</flamelife>
                 <nocreatesmoke/>
                 <windfactor>0.0</windfactor>
                 <nowallcollision/>
@@ -7591,7 +7789,7 @@
                     <deform>down</deform>
                     <deformsize>RANGE (0.5,1.3)</deformsize>
                     <minlife>0.2</minlife>
-                       <nocameratrack>true</nocameratrack>
+                    <nocameratrack>true</nocameratrack>
                     <maxlife>0.3</maxlife>
                     <size>RANGE (2,4)</size>
                     <nocreatedebris/>
@@ -7610,7 +7808,7 @@
                         <maxlife>0.2</maxlife>
                         <nocreatedebris/>
                         <nowindaffected/>
-                           <nocameratrack>true</nocameratrack>
+                        <nocameratrack>true</nocameratrack>
                         <explosiontexture>btop</explosiontexture>
                         <explosionsound>none</explosionsound>
                       </subweapon1>
@@ -7623,7 +7821,7 @@
                         <maxlife>0.2</maxlife>
                         <nocreatedebris/>
                         <nowindaffected/>
-                           <nocameratrack>true</nocameratrack>
+                        <nocameratrack>true</nocameratrack>
                         <explosiontexture>bbot</explosiontexture>
                         <explosionsound>none</explosionsound>
                       </subweapon2>
@@ -7651,7 +7849,7 @@
         <maxlife>0.1</maxlife>
         <explosionshake>0</explosionshake>
         <size>1</size>
-           <nocameratrack>true</nocameratrack>
+        <nocameratrack>true</nocameratrack>
         <nocreatedebris/>
         <explosiontexture>blast</explosiontexture>
         <explosionsound>none</explosionsound>
@@ -7669,7 +7867,7 @@
             <hurtamount>0.0</hurtamount>
             <deform>none</deform>
             <size>1</size>
-             <nocameratrack>true</nocameratrack>
+            <nocameratrack>true</nocameratrack>
             <animate/>
             <explosionsound>none</explosionsound>
             <explosiontexture>smoky</explosiontexture>
@@ -8544,7 +8742,7 @@
         <smokeendsize>0.6</smokeendsize>
         <flamelife>0.2</flamelife>
         <smokelife>0.9</smokelife>
-        <stepsize>0.03</stepsize>
+        <stepsize>0.009</stepsize>
         <nocreatesmoke/>
         <flametexture>heat</flametexture>
         <collisionaction type="WeaponRandomChoice">
@@ -8603,15 +8801,16 @@
         <delay>0.025</delay>
         <repeatweapon type="WeaponGroupSelect">
           <groupname>b1b</groupname>
-          <nextaction type="WeaponAimedUnder">
+          <nextaction type="WeaponAimedOver">
             <nowarheads>1</nowarheads>
-            <maxaimdistance>500</maxaimdistance>
+            <maxaimdistance>0</maxaimdistance>
             <percentagemiss>0</percentagemiss>
-            <inaccuracy>RANGE (25,70)</inaccuracy>
-            <groupname>b1_target</groupname>
-            <randomwhennotargets>true</randomwhennotargets>
-            <aimedweapon type="WeaponReference">
+            <inaccuracy>0</inaccuracy>
+            <aimedweapon type="WeaponVelocity">
+            <velocitychange>0.3</velocitychange>
+            <aimedweapon type='WeaponReference'>
               <weapon>minestrike</weapon>
+              </aimedweapon>
             </aimedweapon>
           </nextaction>
         </repeatweapon>
@@ -8895,8 +9094,39 @@
           <subweapon4 type="WeaponReference">
             <weapon>impactsmoke</weapon>
           </subweapon4>
-          <subweapon5 type="WeaponAimedOver">
-            <nowarheads>3</nowarheads>
+          <subweapon5 type="WeaponReference">
+                  <weapon>clusterfxsm</weapon>
+          </subweapon5>
+        </collisionaction>
+      </subweapon1>
+      <subweapon2 type="WeaponRandomChoice">
+        <weaponchoice1>
+          <weight>1</weight>
+          <weapon type="WeaponSound">
+            <sound>data/wav/custom/release.wav</sound>
+          </weapon>
+        </weaponchoice1>
+        <weaponchoice2>
+          <weight>2</weight>
+          <weapon type="WeaponNull">
+          </weapon>
+        </weaponchoice2>
+      </subweapon2>
+    </accessoryaction>
+  </accessory>
+
+  <accessory>
+    <name>planeattackmk</name>
+    <maximumnumber>0</maximumnumber>
+    <nobuy>true</nobuy>
+    <accessoryaction type="WeaponMulti">
+      <subweapon1 type="WeaponRepeat">
+        <repeat>6</repeat>
+        <delay>0.138</delay>
+        <repeatweapon type="WeaponGroupSelect">
+          <groupname>f117</groupname>
+          <nextaction type="WeaponAimedOver">
+            <nowarheads>1</nowarheads>
             <maxaimdistance>0</maxaimdistance>
             <percentagemiss>0</percentagemiss>
             <inaccuracy>0</inaccuracy>
@@ -8917,66 +9147,12 @@
                   <C>3</C>
                 </directionoffset>
                 <aimedweapon type="WeaponReference">
-                  <weapon>2ndstage</weapon>
-                </aimedweapon>
-              </nextaction>
-            </aimedweapon>
-          </subweapon5>
-        </collisionaction>
-      </subweapon1>
-      <subweapon2 type="WeaponRandomChoice">
-        <weaponchoice1>
-          <weight>1</weight>
-          <weapon type="WeaponSound">
-            <sound>data/wav/custom/release.wav</sound>
-          </weapon>
-        </weaponchoice1>
-        <weaponchoice2>
-          <weight>2</weight>
-          <weapon type="WeaponNull">
-          </weapon>
-        </weaponchoice2>
-      </subweapon2>
-    </accessoryaction>
-  </accessory>
-  <accessory>
-    <name>planeattackmk</name>
-    <maximumnumber>0</maximumnumber>
-    <nobuy>true</nobuy>
-    <accessoryaction type="WeaponMulti">
-      <subweapon1 type="WeaponGroupSelect">
-        <groupname>f117</groupname>
-        <nextaction type="WeaponRepeat">
-          <repeat>2</repeat>
-          <delay>0.05</delay>
-          <repeatweapon type="WeaponAimedOver">
-            <nowarheads>1</nowarheads>
-            <maxaimdistance>0</maxaimdistance>
-            <percentagemiss>0</percentagemiss>
-            <inaccuracy>0</inaccuracy>
-            <aimedweapon type="WeaponRedirect">
-              <habs>false</habs>
-              <vabs>true</vabs>
-              <hredirect>0</hredirect>
-              <vredirect>-180</vredirect>
-              <nextaction type="WeaponScatterDirection">
-                <direction>
-                  <A>0</A>
-                  <B>0</B>
-                  <C>1</C>
-                </direction>
-                <directionoffset>
-                  <A>1</A>
-                  <B>1</B>
-                  <C>3</C>
-                </directionoffset>
-                <aimedweapon type="WeaponReference">
                   <weapon>mkstrike</weapon>
                 </aimedweapon>
               </nextaction>
             </aimedweapon>
-          </repeatweapon>
-        </nextaction>
+          </nextaction>
+        </repeatweapon>
       </subweapon1>
     </accessoryaction>
   </accessory>
@@ -9029,7 +9205,7 @@
               <C>1.0</C>
             </flameendcolor2>
             <windfactor>0</windfactor>
-            <projectilemodel type="MilkShape">data/accessories/projectile/rocket.txt</projectilemodel>
+            <projectilemodel type="MilkShape">data/accessories/projectile/clusterrocket.txt</projectilemodel>
             <collisionaction type="WeaponMulti">
               <subweapon1 type="WeaponReference">
                 <weapon>rocketexp</weapon>
@@ -9941,7 +10117,7 @@
     <bundlesize>1</bundlesize>
     <cost>12000</cost>
     <icon>m.bmp</icon>
-    <model type="MilkShape">data/accessories/projectile/hotrocket.txt</model>
+    <model type="MilkShape">data/accessories/projectile/nshell.txt</model>
     <modelscale>1</modelscale>
     <description>Fire Several Napalm bombs at the enemy.</description>
     <activationsound>none</activationsound>
@@ -10059,7 +10235,7 @@
       </subweapon2>
     </accessoryaction>
   </accessory>
- 
+
   <!--Snipers-->
   <accessory>
     <name>Machine Gun</name>
@@ -12069,8 +12245,8 @@
       </subweapon2>
     </accessoryaction>
   </accessory>
-  
-   <accessory>
+
+  <accessory>
     <name>Radiation Nuke</name>
     <armslevel>2</armslevel>
     <description>The Ultimate Nuclear Weapon, after the initial blast, radiation ensues.</description>
@@ -12083,7 +12259,7 @@
       <subweapon1 type="WeaponProjectile">
         <projectilescale>1.5</projectilescale>
         <stepsize>0.0055</stepsize>
-        <enginesound>none</enginesound>
+        <enginesound>data/wav/shoot/nukethrust.ogg</enginesound>
         <flamestartsize>1.5</flamestartsize>
         <flameendsize>1</flameendsize>
         <flamelife>0.4</flamelife>
@@ -20841,7 +21017,7 @@
       <abs>true</abs>
       <velocitychange>1</velocitychange>
       <aimedweapon type='WeaponProjectile'>
-        <projectilemodel type="MilkShape">data/accessories/vehicles/gunship.txt</projectilemodel>
+        <projectilemodel type="MilkShape">data/accessories/vehicles/gunship2.txt</projectilemodel>
         <nocreateflame/>
         <nocreatesmoke/>
         <enginesound>data/wav/airplane/rotor.ogg</enginesound>
@@ -20866,7 +21042,7 @@
               <weapon type='WeaponProjectile'>
                 <nocreateflame/>
                 <nocreatesmoke/>
-                <projectilemodel type="MilkShape">data/accessories/vehicles/gunship.txt</projectilemodel>
+                <projectilemodel type="MilkShape">data/accessories/vehicles/gunship2.txt</projectilemodel>
                 <shieldhurtfactor>0</shieldhurtfactor>
                 <gravityfactor>0</gravityfactor>
                 <drag>0.005</drag>
@@ -20884,7 +21060,7 @@
                   <subweapon1 type='WeaponProjectile'>
                     <nocreateflame/>
                     <nocreatesmoke/>
-                    <projectilemodel type="MilkShape">data/accessories/vehicles/gunship.txt</projectilemodel>
+                    <projectilemodel type="MilkShape">data/accessories/vehicles/gunship2.txt</projectilemodel>
                     <shieldhurtfactor>0</shieldhurtfactor>
                     <thrustamount>0.6</thrustamount>
                     <thrusttime>1</thrusttime>
@@ -21589,7 +21765,10 @@
     <name>Mine-Sweeper</name>
     <armslevel>10</armslevel>
     <description>Forcibly detonate any  mines on the field when you die.</description>
-    <maximumnumber>2</maximumnumber>
+    <maximumnumber>0</maximumnumber>
+    <cost>0</cost>
+    <nobuy>true</nobuy>
+    <bundlesize>1</bundlesize>
     <icon>ko.bmp</icon>
     <model type="MilkShape">data/accessories/projectile/at_mine.txt</model>
     <accessoryaction type="WeaponMulti">
@@ -21638,7 +21817,7 @@
       <projectilemodel type="MilkShape">data/accessories/projectile/smkgrn.txt</projectilemodel>
       <spinspeed>0.3</spinspeed>
       <nocreatesmoke/>
-         <nocameratrack>true</nocameratrack>
+      <nocameratrack>true</nocameratrack>
       <flamestartsize>1</flamestartsize>
       <flameendsize>0.5</flameendsize>
       <flamelife>0.6</flamelife>
@@ -21694,7 +21873,7 @@
                 <nocreatedebris/>
                 <onlyhurtshield>true</onlyhurtshield>
                 <nowindaffected/>
-                   <nocameratrack>true</nocameratrack>
+                <nocameratrack>true</nocameratrack>
                 <minlife>2</minlife>
                 <maxlife>3</maxlife>
                 <hurtamount>0.0</hurtamount>
@@ -21710,7 +21889,7 @@
                   <nocreatesplash/>
                   <nocreatedebris/>
                   <nowindaffected/>
-                     <nocameratrack>true</nocameratrack>
+                  <nocameratrack>true</nocameratrack>
                   <minlife>0.2</minlife>
                   <maxlife>0.3</maxlife>
                   <hurtamount>0.0</hurtamount>
@@ -21812,7 +21991,7 @@
     <nomuzzleflash/>
     <modelscale>2.0</modelscale>
     <activationsound>custom/tubelaunch.ogg</activationsound>
-    <model type="MilkShape">data/accessories/vehicles/gunship.txt</model>
+    <model type="MilkShape">data/accessories/vehicles/gunship2.txt</model>
     <accessoryaction type="WeaponProjectile">
       <projectilemodel type="MilkShape">data/accessories/projectile/smkgrn.txt</projectilemodel>
       <spinspeed>0.3</spinspeed>
@@ -22511,7 +22690,7 @@
     </accessoryaction>
   </accessory>
   <accessory>
-    <name>Airdropped Minefield</name>
+    <name>Gator Mine System</name>
     <armslevel>10</armslevel>
     <description>Fires a smoke grenade that will call in an air strike to drop mines on the target. Mines drift with wind.</description>
     <tabgroup>air</tabgroup>
@@ -22642,7 +22821,8 @@
             <sound>data/wav/airplane/lancer.ogg</sound>
           </delayedweapon>
         </subweapon3>
-        <subweapon4 type="WeaponDelay">
+        <subweapon4 type="WeaponNull">
+        <!--Delay">
           <delay>3</delay>
           <delayedweapon type="WeaponMulti">
             <subweapon1 type="WeaponGiveAccessory">
@@ -22653,7 +22833,7 @@
               <sound>data/wav/voice/minesweep.ogg</sound>
               <gain>0.4</gain>
             </subweapon2>
-          </delayedweapon>
+          </delayedweapon> -->
         </subweapon4>
         <subweapon5 type="WeaponRandomChoice">
           <weaponchoice1>
@@ -22870,7 +23050,7 @@
   </accessory>
   <accessory>
     <name>Cluster Drop</name>
-    <armslevel>8</armslevel>
+    <armslevel>6</armslevel>
     <description>Fires a smoke grenade that will call in an air strike.</description>
     <tabgroup>air</tabgroup>
     <cost>7000</cost>
@@ -22981,7 +23161,7 @@
                   <weapon>f117_flyover</weapon>
                 </subweapon1>
                 <subweapon2 type="WeaponDelay">
-                  <delay>10.828</delay>
+                  <delay>10.4</delay>
                   <delayedweapon type='WeaponGroupSelect'>
                     <groupname>f117</groupname>
                     <nextaction type='WeaponReference'>
@@ -23267,7 +23447,7 @@
                     <size>3.5</size>
                     <explosionshake>0.6</explosionshake>
                     <explosiontexture>blast</explosiontexture>
-                    <explosionsound>none</explosionsound>
+                    <explosionsound>test/missile_seperate.ogg</explosionsound>
                   </subweapon1>
                   <subweapon2 type="WeaponExplosion">
                     <nocreatedebris/>
@@ -23650,7 +23830,7 @@
       </subweapon2>
     </accessoryaction>
   </accessory>
-
+  
   <accessory>
     <name>MOAB Drop</name>
     <armslevel>4</armslevel>
@@ -23849,7 +24029,7 @@
         <weaponchoice4>
           <weight>5</weight>
           <weapon type="WeaponGiveAccessory">
-            <giveaccessory>Airdropped Minefield</giveaccessory>
+            <giveaccessory>Gator Mine System</giveaccessory>
             <number>1</number>
           </weapon>
         </weaponchoice4>
@@ -23860,16 +24040,16 @@
             <number>1</number>
           </weapon>
         </weaponchoice5>
-        
-             <weaponchoice6>
+
+        <weaponchoice6>
           <weight>5</weight>
           <weapon type="WeaponGiveAccessory">
             <giveaccessory>Gunship Support</giveaccessory>
             <number>1</number>
           </weapon>
         </weaponchoice6>
-        
-           <weaponchoice7>
+
+        <weaponchoice7>
           <weight>5</weight>
           <weapon type="WeaponGiveAccessory">
             <giveaccessory>Carpet Bombing</giveaccessory>
@@ -23877,7 +24057,7 @@
           </weapon>
         </weaponchoice7>
 
-              <weaponchoice8>
+        <weaponchoice8>
           <weight>5</weight>
           <weapon type="WeaponGiveAccessory">
             <giveaccessory>Bromide Drop</giveaccessory>
@@ -23885,7 +24065,7 @@
           </weapon>
         </weaponchoice8>
 
-                 <weaponchoice9>
+        <weaponchoice9>
           <weight>5</weight>
           <weapon type="WeaponGiveAccessory">
             <giveaccessory>Warthog Support</giveaccessory>
@@ -24844,8 +25024,8 @@
       </subweapon1>
     </accessoryaction>
   </accessory>-->
-  
-        <!--<accessory>
+
+  <!--<accessory>
     <name>Thermite Stockpile</name>
     <armslevel>4</armslevel>
     <description>Stock your tank up with thermite, will explode from your tank when you die.</description>
@@ -25869,4 +26049,9 @@
       </subweapon1>
     </accessoryaction>
   </accessory>
+
+ 
+  
+  
+ 
 </accessories>
