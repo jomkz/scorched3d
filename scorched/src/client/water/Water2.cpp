@@ -219,7 +219,7 @@ void Water2::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)
 	// Waves, oaf part 1
 	if (GLStateExtension::hasShaders() &&
 		!OptionsDisplay::instance()->getNoWaterWaves() &&
-		!OptionsDisplay::instance()->getSimpleWaterShaders())
+		!GLStateExtension::useSimpleShaders())
 	{
 		counter->setNewOp(LANG_RESOURCE("WATER_WAVES", "Water Waves"));
 		for (unsigned k = 0; k < wave_phases; ++k) 
@@ -245,7 +245,7 @@ void Water2::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)
 		// Add waves to AOF image
 		if (GLStateExtension::hasShaders() &&
 			!OptionsDisplay::instance()->getNoWaterWaves() &&
-			!OptionsDisplay::instance()->getSimpleWaterShaders())
+			!GLStateExtension::useSimpleShaders())
 		{
 			generateAOF(wd, &aofImage, rndtab, displacements, aof);
 		}

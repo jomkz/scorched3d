@@ -43,6 +43,7 @@ int GLStateExtension::textureCoords_ = 0;
 int GLStateExtension::maxVarying_ = 0;
 int GLStateExtension::maxElementVertices_ = 0;
 int GLStateExtension::maxElementIndices_ = 0;
+bool GLStateExtension::useSimpleShaders_ = true;
 
 void GLStateExtension::setup()
 {
@@ -99,8 +100,6 @@ void GLStateExtension::setup()
 				imageUnits_ = textureUnits;
 				glGetIntegerv(GL_MAX_TEXTURE_COORDS_ARB, &textureUnits);
 				textureCoords_ = textureUnits;
-				glGetIntegerv(GL_MAX_VARYING_FLOATS_ARB, &textureUnits);
-				maxVarying_ = textureUnits;
 
 				hasMultiTex_ = true;
 			}
@@ -145,6 +144,14 @@ void GLStateExtension::setup()
 				GLEW_ARB_shader_objects &&
 				GLEW_ARB_vertex_shader &&
 				(textureUnits_ >=4 );
+
+			GLint textureUnits;
+			glGetIntegerv(GL_MAX_VARYING_FLOATS_ARB, &textureUnits);
+			maxVarying_ = textureUnits;
+			if (!OptionsDisplay::instance()->getSimpleWaterShaders())
+			{
+				if (maxVarying_ > 32) useSimpleShaders_ = false;
+			}
 		}
 		if (!OptionsDisplay::instance()->getNoGLShadows() &&
 			hasShaders_)

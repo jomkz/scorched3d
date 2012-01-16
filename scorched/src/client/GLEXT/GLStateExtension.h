@@ -64,6 +64,8 @@ public:
 	static bool hasShaders() { return hasShaders_; }
 	// Is this a software implementation
 	static bool isSoftwareOpenGL() { return isSoftwareOpenGL_; }
+	// Should we use simple shaders 
+	static bool useSimpleShaders() { return useSimpleShaders_; }
 
 protected:
 	static bool envCombine_;
@@ -84,6 +86,7 @@ protected:
 	static bool hasMultiTex_;
 	static bool hasDrawRangeElements_;
 	static bool isSoftwareOpenGL_;
+	static bool useSimpleShaders_;
 
 private:
 	GLStateExtension();

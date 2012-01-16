@@ -589,7 +589,7 @@ void VisibilityPatchGrid::drawWater(Water2Patches &patches,
 			// Setup the texture matrix for texture 0
 			if (waterShader)
 			{
-				if (!OptionsDisplay::instance()->getSimpleWaterShaders())
+				if (!GLStateExtension::useSimpleShaders())
 				{
 					Vector landfoam;
 					landfoam[0] = currentPatch->getOffset()[0];

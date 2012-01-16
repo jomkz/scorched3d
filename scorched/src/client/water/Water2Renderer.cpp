@@ -71,7 +71,7 @@ void Water2Renderer::draw(Water2 &water2, WaterMapPoints &points,
 		// Set the normal map for the current water frame
 		if (GLStateExtension::hasShaders() &&
 			!OptionsDisplay::instance()->getNoWaterMovement() &&
-			!OptionsDisplay::instance()->getSimpleWaterShaders())
+			!GLStateExtension::useSimpleShaders())
 		{
 			normalTexture_.replace(currentPatch_->getNormalMap(), 
 				GLStateExtension::hasHardwareMipmaps());
@@ -121,7 +121,7 @@ void Water2Renderer::drawWaterShaders(Water2 &water2, float transparency)
 	waterShader_->set_uniform("transparency", transparency);
 
 	// Tex 3
-	if (!OptionsDisplay::instance()->getSimpleWaterShaders())
+	if (!GLStateExtension::useSimpleShaders())
 	{
 		waterShader_->set_gl_texture(currentPatch_->getAOF(), "tex_foamamount", 3);
 	}
@@ -163,7 +163,7 @@ void Water2Renderer::drawWaterShaders(Water2 &water2, float transparency)
 
 	// Tex 0
 	glActiveTextureARB(GL_TEXTURE0);
-	if (!OptionsDisplay::instance()->getSimpleWaterShaders())
+	if (!GLStateExtension::useSimpleShaders())
 	{
 		waterShader_->set_uniform("noise_xform_0", noise_0_pos);
 		waterShader_->set_uniform("noise_xform_1", noise_1_pos);
@@ -355,7 +355,7 @@ void Water2Renderer::generate(LandscapeTexBorderWater *water, ProgressCounter *c
 				dl.push_back("USE_SHADOWS");
 			}
 
-			if (OptionsDisplay::instance()->getSimpleWaterShaders())
+			if (GLStateExtension::useSimpleShaders())
 			{
 				waterShader_ = new GLSLShaderSetup(
 					S3D::getDataFile("data/shaders/watersimple.vshader"),
@@ -428,7 +428,7 @@ void Water2Renderer::generate(LandscapeTexBorderWater *water, ProgressCounter *c
 		waterShader_->set_uniform("upwelltop", upwelltop);
 		waterShader_->set_uniform("upwellbot", upwellbot);
 		waterShader_->set_uniform("upwelltopbot", upwelltopbot);
-		if (!OptionsDisplay::instance()->getSimpleWaterShaders())
+		if (!GLStateExtension::useSimpleShaders())
 		{
 			Vector landfoam;
 			waterShader_->set_uniform("landfoam", landfoam);
