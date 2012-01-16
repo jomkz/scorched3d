@@ -54,6 +54,8 @@ public:
 	static int getImageUnits() { return imageUnits_; }
 	// How many texture coords
 	static int getTextureCoords() { return textureCoords_; }
+	// How many varying floats in shaders
+	static int getMaxVarying() { return maxVarying_; }
 	// Use FrameBuffer extension
 	static bool hasHardwareShadows() { return hasHardwareShadows_; }
 	// Use glBlendColorEXT
@@ -70,6 +72,7 @@ protected:
 	static bool hasFBO_;
 	static bool hasShaders_;
 	static int textureUnits_, imageUnits_, textureCoords_;
+	static int maxVarying_;
 	static int maxElementVertices_;
 	static int maxElementIndices_;
 	static bool hasCubeMap_;
