@@ -63,7 +63,7 @@
       <weapon><name>Incendiary Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
       <weapon><name>Rocket Salvo</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
       <weapon><name>Biochemical Shell</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
-      <weapon><name>Airdropped Minefield</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <weapon><name>Gator Mine System</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
       <weapon><name>Cluster Drop</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
       <weapon><name>Incendiary Bombing</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
       <weapon><name>Air-Strike</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
@@ -74,7 +74,7 @@
       <weapon><name>Bromide Drop</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
       <weapon><name>Warthog Support</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
       <weapon><name>Volt Cannon</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
-      <weapon><name>CBU-755 ClusterBomb</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
+      <!--<weapon><name>CBU-755 ClusterBomb</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>-->
       <weapon><name>Shake n' Bake</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
       <weapon><name>M-29 Cluster Mirv</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
       <weapon><name>Toast n' Roast</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>30</prioritybuy><priorityuse>30</priorityuse></weapon>
@@ -147,7 +147,7 @@
       <weapon><name>Incendiary Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
       <weapon><name>Rocket Salvo</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
       <weapon><name>Biochemical Shell</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
-      <weapon><name>Airdropped Minefield</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Gator Mine System</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
       <weapon><name>Cluster Drop</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
       <weapon><name>Incendiary Bombing</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
       <weapon><name>Air-Strike</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
@@ -220,7 +220,7 @@
       <weapon><name>Flamethrower</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
       <weapon><name>Incendiary Barrage</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
       <weapon><name>Rocket Salvo</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>20</prioritybuy><priorityuse>20</priorityuse></weapon>
-      <weapon><name>Airdropped Minefield</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
+      <weapon><name>Gator Mine System</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
       <weapon><name>Cluster Drop</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
       <weapon><name>Incendiary Bombing</name><type>napalm</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
       <weapon><name>Air-Strike</name><type>explosionlarge</type><buymin>1</buymin><buymax>2</buymax><moneymin>0</moneymin><moneymax>0</moneymax><prioritybuy>80</prioritybuy><priorityuse>80</priorityuse></weapon>
