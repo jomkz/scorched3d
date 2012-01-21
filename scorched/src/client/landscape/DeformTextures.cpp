@@ -32,6 +32,8 @@ void DeformTextures::deformLandscape(Vector &pos, float radius,
 	Image &scorchedMap, 
 	DeformLandscape::DeformPoints &map)
 {
+	DIALOG_ASSERT(Landscape::instance()->getMainMap().getComponents() == 3);
+
 	HeightMap &hmap = ScorchedClient::instance()->getLandscapeMaps().
 		getGroundMaps().getHeightMap();
 	int iradius = (int) radius + 1;
@@ -101,14 +103,27 @@ void DeformTextures::deformLandscape(Vector &pos, float radius,
 						int posX = (x + a) % scorchedMap.getWidth();
 						int posY = (y + b) % scorchedMap.getHeight();
 						GLubyte *srcBits = 
-							scorchedMap.getBits() + ((scorchedMap.getWidth() * posY * 3) + posX * 3);
+							scorchedMap.getBits() + ((scorchedMap.getWidth() * posY * 
+							scorchedMap.getComponents()) + (posX * scorchedMap.getComponents()));
 
-						destBits[0] = (GLubyte) ((float(srcBits[0]) * mag) + 
-							(float(destBits[0]) * (1.0f - mag)));
-						destBits[1] = (GLubyte) ((float(srcBits[1]) * mag) + 
-							(float(destBits[1]) * (1.0f - mag)));
-						destBits[2] = (GLubyte) ((float(srcBits[2]) * mag) + 
-							(float(destBits[2]) * (1.0f - mag)));
+						if (scorchedMap.getComponents() == 1)
+						{
+							destBits[0] = (GLubyte) ((float(srcBits[0]) * mag) + 
+								(float(destBits[0]) * (1.0f - mag)));
+							destBits[1] = (GLubyte) ((float(srcBits[0]) * mag) + 
+								(float(destBits[1]) * (1.0f - mag)));
+							destBits[2] = (GLubyte) ((float(srcBits[0]) * mag) + 
+								(float(destBits[2]) * (1.0f - mag)));
+						}
+						else
+						{
+							destBits[0] = (GLubyte) ((float(srcBits[0]) * mag) + 
+								(float(destBits[0]) * (1.0f - mag)));
+							destBits[1] = (GLubyte) ((float(srcBits[1]) * mag) + 
+								(float(destBits[1]) * (1.0f - mag)));
+							destBits[2] = (GLubyte) ((float(srcBits[2]) * mag) + 
+								(float(destBits[2]) * (1.0f - mag)));
+						}
 					}
 				}
 				destBits +=3;
