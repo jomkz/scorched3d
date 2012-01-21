@@ -27,7 +27,7 @@
 REGISTER_ACCESSORY_SOURCE(WeaponCenterPosition);
 
 WeaponCenterPosition::WeaponCenterPosition() :
-	height_("WeaponCenterPosition::height", 0),
+	height_("WeaponCenterPosition::height"),
 	nextAction_(0)
 {
 

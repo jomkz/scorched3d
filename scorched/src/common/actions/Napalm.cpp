@@ -561,6 +561,9 @@ void Napalm::simulateDamage()
 		{
 			DeformLandscape::deformLandscape(*context_, position, 
 				1, true, params_->getLandscapeErosion(), params_->getDeformTexture());
+			TargetDamageCalc::explosion(
+				*context_, weapon_, weaponContext_, 
+				position, 1, 0, true, false);
 		}
 
 		std::map<unsigned int, Target *> collisionTargets;

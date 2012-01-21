@@ -40,9 +40,9 @@ WeaponAimed::WeaponAimed() :
 	aimedWeapon_(0),
 	randomWhenNoTargets_(true),
 	noSelfHoming_(false),
-	maxAimedDistance_("WeaponAimed::maxAimedDistance", 0),
-	percentageMissChance_("WeaponAimed::percentageMissChance", 0),
-	maxInacuracy_("WeaponAimed::maxInacuracy", 0)
+	maxAimedDistance_("WeaponAimed::maxAimedDistance"),
+	percentageMissChance_("WeaponAimed::percentageMissChance"),
+	maxInacuracy_("WeaponAimed::maxInacuracy")
 {
 
 }

@@ -2042,4 +2042,27 @@ and shields damaging the tank directly.</description>
     </accessoryaction>
   </accessory>
   -->
+<!--
+  <accessory>
+    <name>Baby Ring</name>
+    <armslevel>6</armslevel>
+    <description>A large explosive projectile weapon.</description>
+    <icon>bnuke.bmp</icon>
+    <bundlesize>3</bundlesize>
+    <cost>8000</cost>
+    <activationsound>shoot/large.wav</activationsound>
+    <model type='MilkShape'>data/accessories/littleboy/littleboy.txt</model>
+    <accessoryaction type='WeaponExplosion'>
+      <hurtamount>0.0</hurtamount>
+      <deform>none</deform>
+      <size>11</size>
+      <nocreatedebris></nocreatedebris>
+      <nocreatesplash></nocreatesplash>
+      <explosionshake>0.0</explosionshake>
+      <explosiontexture>exp00</explosiontexture>
+      <explosionsound>explosions/large.wav</explosionsound>
+      <explosiontype>directionalring</explosiontype>
+    </accessoryaction>
+  </accessory> 
+--> 
 </accessories>

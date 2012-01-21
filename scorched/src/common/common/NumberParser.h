@@ -34,6 +34,7 @@
 class NumberParser
 {
 public:
+	NumberParser(const char *valueName);
 	NumberParser(const char *valueName, fixed value);
 	virtual ~NumberParser();
 

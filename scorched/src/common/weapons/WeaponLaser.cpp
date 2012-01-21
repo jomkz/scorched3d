@@ -26,10 +26,10 @@
 REGISTER_ACCESSORY_SOURCE(WeaponLaser);
 
 WeaponLaser::WeaponLaser() :
-	minimumHurt_("WeaponLaser::minimumHurt", 0), maximumHurt_("WeaponLaser::maximumHurt", 0),
-	minimumDistance_("WeaponLaser::minimumDistance", 0), maximumDistance_("WeaponLaser::maximumDistance", 0),
-	hurtRadius_("WeaponLaser::hurtRadius", 0),
-	totalTime_("WeaponLaser::totalTime", 0)
+	minimumHurt_("WeaponLaser::minimumHurt"), maximumHurt_("WeaponLaser::maximumHurt"),
+	minimumDistance_("WeaponLaser::minimumDistance"), maximumDistance_("WeaponLaser::maximumDistance"),
+	hurtRadius_("WeaponLaser::hurtRadius"),
+	totalTime_("WeaponLaser::totalTime")
 {
 }
 

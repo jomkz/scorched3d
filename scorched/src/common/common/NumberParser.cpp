@@ -25,6 +25,12 @@
 #include <list>
 #include <sstream>
 
+NumberParser::NumberParser(const char *valueName) :
+	valueName_(valueName)
+{
+
+}
+
 NumberParser::NumberParser(const char *valueName, fixed value) :
 	valueName_(valueName)
 {

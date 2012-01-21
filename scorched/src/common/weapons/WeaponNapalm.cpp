@@ -31,11 +31,11 @@
 REGISTER_ACCESSORY_SOURCE(WeaponNapalm);
 
 WeaponNapalm::WeaponNapalm() :
-	napalmTime_("WeaponNapalm::napalmTime", 0),
-	napalmHeight_("WeaponNapalm::napalmHeight", 0),
-	stepTime_("WeaponNapalm::stepTime", 0),
-	hurtStepTime_("WeaponNapalm::hurtStepTime", 0),
-	hurtPerSecond_("WeaponNapalm::hurtPerSecond", 0),
+	napalmTime_("WeaponNapalm::napalmTime"),
+	napalmHeight_("WeaponNapalm::napalmHeight"),
+	stepTime_("WeaponNapalm::stepTime"),
+	hurtStepTime_("WeaponNapalm::hurtStepTime"),
+	hurtPerSecond_("WeaponNapalm::hurtPerSecond"),
 	landscapeErosion_("WeaponNapalm::landscapeErosion", 0)
 {
 
