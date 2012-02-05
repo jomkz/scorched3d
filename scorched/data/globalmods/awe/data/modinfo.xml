@@ -5,7 +5,7 @@
     <description>Start an AWE game. Engrossing and creative tank warfare.</description>
     <icon>data/windows/pro.png</icon>
     <url>http://www.scorched3d.co.uk</url>
-    <protocolversion>er</protocolversion>
+    <protocolversion>es</protocolversion>
   </main>
    <game>
     <shortdescription>Exhibition Mode</shortdescription>
