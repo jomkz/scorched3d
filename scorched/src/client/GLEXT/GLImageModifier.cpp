@@ -256,17 +256,9 @@ void ImageModifier::addHeightToBitmap(HeightMap &hMap,
 		if (bitmapScale != 1.0f)
 		{
 			// Create the newly scaled bitmaps
-			heightBitmaps[i] = new Image(ImageFactory::createBlank(
+			heightBitmaps[i] = new Image(origHeightBitmaps[i]->createResize(
 				int(bitmapScale * origHeightBitmaps[i]->getWidth()),
 				int(bitmapScale * origHeightBitmaps[i]->getHeight())));
-
-			// Scale bitmap
-			gluScaleImage(
-				GL_RGB, 
-				origHeightBitmaps[i]->getWidth(), origHeightBitmaps[i]->getHeight(), 
-				GL_UNSIGNED_BYTE, origHeightBitmaps[i]->getBits(),
-				heightBitmaps[i]->getWidth(), heightBitmaps[i]->getHeight(), 
-				GL_UNSIGNED_BYTE, heightBitmaps[i]->getBits());
 		}
 		else
 		{

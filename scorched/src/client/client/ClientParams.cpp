@@ -45,6 +45,8 @@ ClientParams::ClientParams() :
 		"Continues a scorched 3d client game, requires the name of the saved game.", 0, ""),
 	exittime_(options_, "exittime",
 		"The time after which the client will exit", 0, 0),
+	disconnecttime_(options_, "disconnecttime",
+		"The time after which the client will disconnect from the server", 0, 0),
 	username_(options_, "username",
 		"The username of the NET/LAN server", 0, ""),
 	password_(options_, "password",

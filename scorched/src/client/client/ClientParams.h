@@ -35,6 +35,7 @@ public:
 	const char *getPassword() { return password_.getValue(); }
 	const char *getNonParam() { return nonParam_.getValue(); }
 	int getExitTime() { return exittime_.getValue(); }
+	int getDisconnectTime() { return disconnecttime_.getValue(); }
 	bool getStartCustom() { return startcustom_.getValue(); }
 	bool getConnectAcceptDefaults() { return connectAcceptDefaults_.getValue(); }
 	bool getConnectedToServer() { return (getConnect()[0] != '\0'); }
@@ -45,7 +46,6 @@ public:
 	void setUserName(const char *username) { username_.setValue(username); }
 	void setPassword(const char *password) { password_.setValue(password); }
 	void setConnect(const char *address) { connect_.setValue(address); }
-	void setExitTime(int time) { exittime_.setValue(time); }
 
 	void reset();
 
@@ -61,6 +61,7 @@ protected:
 	OptionEntryBool startcustom_;
 	OptionEntryBool connectAcceptDefaults_;
 	OptionEntryInt exittime_;
+	OptionEntryInt disconnecttime_;
 
 private:
 	ClientParams();

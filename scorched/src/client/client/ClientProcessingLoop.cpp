@@ -26,6 +26,8 @@
 #include <server/ServerMain.h>
 #include <engine/Simulator.h>
 
+time_t startTime = 0;
+
 ClientProcessingLoop *ClientProcessingLoop::instance_ = 0;
 
 ClientProcessingLoop *ClientProcessingLoop::instance()
@@ -75,9 +77,19 @@ void ClientProcessingLoop::process(float frameTime, bool processClientMessages)
 
 	if (ClientParams::instance()->getExitTime() > 0)
 	{
-		if (time(0) > ClientParams::instance()->getExitTime())
+		if (startTime == 0) startTime = time(0);
+		if (time(0) - startTime > ClientParams::instance()->getExitTime())
 		{
 			exit(0);
+		}
+	}
+	if (ClientParams::instance()->getDisconnectTime() > 0)
+	{
+		if (startTime == 0) startTime = time(0);
+		if (time(0) - startTime > ClientParams::instance()->getDisconnectTime())
+		{
+			startTime = time(0);
+			ScorchedClient::instance()->getNetInterface().disconnectAllClients();
 		}
 	}
 }

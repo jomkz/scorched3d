@@ -187,6 +187,16 @@ PlayerDialog::PlayerDialog(const std::string &name,
 		tankTypeDropDown_->setName("TankType");
 	}
 
+	// Create tank vieer
+	{
+		GLWPanel *infoPanel = new GLWPanel(10.0f, 40.0f, 720.0f, 330.0f,
+			false, true, true);
+		viewer_ = new GLWTankViewer(5.0f, 5.0f, 4, 3);
+		viewer_->setName("Tank");
+		infoPanel->addWidget(viewer_);
+		addWidget(infoPanel);
+	}
+
 	humanToolTip_.setText(ToolTip::ToolTipHelp, 
 		LANG_RESOURCE("HUMAN", "Human"), 
 		LANG_RESOURCE("HUMAN_TOOLTIP", "A human controlled player."));
@@ -236,16 +246,7 @@ void PlayerDialog::buttonDown(unsigned int id)
 void PlayerDialog::initialize()
 {
 	// Init viewer
-	if (!viewer_)
-	{
-		GLWPanel *infoPanel = new GLWPanel(10.0f, 40.0f, 720.0f, 330.0f,
-			false, true, true);
-		viewer_ = new GLWTankViewer(5.0f, 5.0f, 4, 3);
-		viewer_->setName("Tank");
-		infoPanel->addWidget(viewer_);
-		addWidget(infoPanel);
-		viewer_->init();
-	}
+	viewer_->init();
 
 	// Add teams/colors
 	if (ScorchedClient::instance()->getOptionsGame().getTeams() == 1)

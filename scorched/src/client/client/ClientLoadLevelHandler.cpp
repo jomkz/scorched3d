@@ -24,6 +24,7 @@
 #include <client/ClientReloadAdaptor.h>
 #include <client/ClientSimulator.h>
 #include <client/ClientParams.h>
+#include <sound/Sound.h>
 #include <common/Clock.h>
 #include <common/OptionsScorched.h>
 #include <common/Logger.h>
@@ -187,6 +188,7 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	}
 
 	// Sync the simulator
+	Sound::instance()->setPlaySounds(false);
 	ProgressDialogSync::noevents_instance()->setNewOp(
 		LANG_RESOURCE("SYNCING_SIMULATOR", "Syncing Simulator"));
 	Clock generateClock;
@@ -208,6 +210,7 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 		ScorchedClient::instance()->getClientSimulator().
 			setSimulationTime(actualTimeCurrent);
 	}
+	Sound::instance()->setPlaySounds(true);
 	float deformTime = generateClock.getTimeDifference();
 	Logger::log(S3D::formatStringBuffer("Landscape sync event time %.2f seconds", deformTime));
 

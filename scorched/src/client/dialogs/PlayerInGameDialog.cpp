@@ -63,6 +63,8 @@ void PlayerInGameDialog::displayDialog()
 
 void PlayerInGameDialog::display()
 {
+	initialize();
+
 	// Set cancel/spectate
 	if (ClientParams::instance()->getConnectedToServer())
 	{
@@ -215,8 +217,6 @@ void PlayerInGameDialog::initializeFirst()
 
 void PlayerInGameDialog::initializeFromTank(Tank *tank)
 {
-	initialize();
-
 	// Add teams/colors
 	if (ScorchedClient::instance()->getOptionsGame().getTeams() == 1)
 	{

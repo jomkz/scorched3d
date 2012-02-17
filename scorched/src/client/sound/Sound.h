@@ -54,6 +54,8 @@ public:
 	void addPlaying(VirtualSoundSource *source);
 	void removePlaying(VirtualSoundSource *source);
 
+	void setPlaySounds(bool playSounds) { playSounds_ = playSounds; }
+
 	void simulate(const unsigned state, float simTime);
 	int getAvailableChannels();
 	int getPlayingChannels();
@@ -73,6 +75,7 @@ protected:
 	VirtualSourceList managedSources_;
 	PlayingSourceList playingSources_;
 	bool init_;
+	bool playSounds_;
 
 	void updateSources();
 	SoundBuffer *createBuffer(char *fileName);

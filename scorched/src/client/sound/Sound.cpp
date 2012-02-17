@@ -49,7 +49,7 @@ Sound *Sound::instance()
 }
 
 Sound::Sound() : 
-	init_(false), totalTime_(0.0f),
+	init_(false), totalTime_(0.0f), playSounds_(true),
 	GameStateI("Sound")
 {
 	new ConsoleRuleMethodIAdapter<Sound>(
@@ -250,10 +250,13 @@ static inline bool lt_virt(PlayingSoundSource *p2, PlayingSoundSource *p1)
 
 void Sound::addPlaying(VirtualSoundSource *virt)
 {
-	// Add the new source
-	PlayingSoundSource *source = new PlayingSoundSource(virt);
-	playingSources_.push_back(source);
-	virt->setPlayingSource(source); // Need to do this before updateSources
+	if (playSounds_)
+	{
+		// Add the new source
+		PlayingSoundSource *source = new PlayingSoundSource(virt);
+		playingSources_.push_back(source);
+		virt->setPlayingSource(source); // Need to do this before updateSources
+	}
 
 	updateSources();
 }

@@ -166,8 +166,14 @@ Image Image::createResize(int newWidth, int newHeight)
 
 	if (getWidth() != newWidth || getHeight() != newHeight)
 	{
+		GLenum format = GL_RGBA;
+		if (getComponents() == 4) format = GL_RGBA;
+		else if (getComponents() == 3) format = GL_RGB;
+		else if (getComponents() == 2) format = GL_LUMINANCE_ALPHA;
+		else if (getComponents() == 1) format = GL_LUMINANCE;
+
 		int result = gluScaleImage(
-			((getComponents()==4)?GL_RGBA:GL_RGB), 
+			format, 
 			getWidth(), getHeight(),
 			GL_UNSIGNED_BYTE, getBits(),
 			newWidth, newHeight, 

@@ -63,7 +63,10 @@ void ClientMessageHandler::clientConnected(NetMessage &message)
 
 void ClientMessageHandler::clientDisconnected(NetMessage &message)
 {
-	ClientParams::instance()->reset();
+	if (ClientParams::instance()->getDisconnectTime() == 0)
+	{
+		ClientParams::instance()->reset();
+	}
 
 	Logger::log(S3D::formatStringBuffer("Disconnected"));
 	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimDisconnected);
