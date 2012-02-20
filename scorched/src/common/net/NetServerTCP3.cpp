@@ -120,8 +120,10 @@ void NetServerTCP3::stop()
 {
 	if (started())
 	{
+		SDL_Thread *localSendRecvThread = sendRecvThread_;
 		disconnectAllClients();
-		while (started()) SDL_Delay(100);
+		int status;
+		SDL_WaitThread(localSendRecvThread, &status);
 	}
 }
 

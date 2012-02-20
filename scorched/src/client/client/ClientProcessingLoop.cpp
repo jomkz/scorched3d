@@ -21,8 +21,10 @@
 #include <client/ClientProcessingLoop.h>
 #include <client/ClientParams.h>
 #include <client/ScorchedClient.h>
+#include <client/ClientMain.h>
 #include <net/NetInterface.h>
 #include <common/Logger.h>
+#include <target/TargetContainer.h>
 #include <server/ServerMain.h>
 #include <engine/Simulator.h>
 
@@ -89,7 +91,14 @@ void ClientProcessingLoop::process(float frameTime, bool processClientMessages)
 		if (time(0) - startTime > ClientParams::instance()->getDisconnectTime())
 		{
 			startTime = time(0);
-			ScorchedClient::instance()->getNetInterface().disconnectAllClients();
+			if (ScorchedClient::instance()->getTargetContainer().getCurrentDestinationId())
+			{
+				ScorchedClient::instance()->getNetInterface().disconnectAllClients();
+			}
+			else
+			{
+				ClientMain::startClient();
+			}
 		}
 	}
 }

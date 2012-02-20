@@ -82,6 +82,7 @@ bool Tanket::writeMessage(NamedNetBuffer &buffer)
 	if (!accessories_->writeMessage(buffer, true)) return false;
 	if (!shotInfo_->writeMessage(buffer)) return false;
 	buffer.addToBufferNamed("team", team_);
+	buffer.addToBufferNamed("tankettype", tanketType_->getName());
 
 	return true;
 }
@@ -106,6 +107,12 @@ bool Tanket::readMessage(NetBufferReader &reader)
 	if (!reader.getFromBuffer(team_))
 	{
 		Logger::log("Tanket::team_ read failed");
+		return false;
+	}
+	std::string tanketTypeName;
+	if (!reader.getFromBuffer(tanketTypeName))
+	{
+		Logger::log("Tanket::tanketType_ read failed");
 		return false;
 	}
 
