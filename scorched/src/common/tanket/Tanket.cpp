@@ -78,7 +78,7 @@ bool Tanket::writeMessage(NamedNetBuffer &buffer)
 {
 	NamedNetBufferSection section(buffer, "Tanket");
 
-	buffer.addToBufferNamed("tankettype", tanketType_->getName());
+	//buffer.addToBufferNamed("tankettype", tanketType_->getName());
 	if (!Target::writeMessage(buffer)) return false;  // Base class 1st
 	if (!accessories_->writeMessage(buffer, true)) return false;
 	if (!shotInfo_->writeMessage(buffer)) return false;
@@ -89,7 +89,7 @@ bool Tanket::writeMessage(NamedNetBuffer &buffer)
 
 bool Tanket::readMessage(NetBufferReader &reader)
 {
-	std::string tanketTypeName;
+	/*std::string tanketTypeName;
 	if (!reader.getFromBuffer(tanketTypeName))
 	{
 		Logger::log("Tanket::tanketType_ read failed");
@@ -99,7 +99,7 @@ bool Tanket::readMessage(NetBufferReader &reader)
 	{
 		tanketType_ = context_.getTanketTypes().getType(tanketTypeName.c_str());
 		if (!tanketType_) tanketType_ = context_.getTanketTypes().getDefaultType();
-	}
+	}*/
 	if (!Target::readMessage(reader)) 
 	{
 		Logger::log("Target::readMessage failed");

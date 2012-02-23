@@ -210,8 +210,11 @@ void PlayerInGameDialog::initializeFirst()
 		// If we are connected online then use the online name
 		playerName_->setText(LANG_STRING(OptionsDisplay::instance()->getOnlineUserName()));
 		viewer_->selectModelByName(OptionsDisplay::instance()->getOnlineTankModel());
-		colorDropDown_->setCurrentColor(OptionsDisplay::instance()->getOnlineColor());
 		imageList_->setCurrentShortPath(OptionsDisplay::instance()->getOnlineUserIcon());
+		if (ScorchedClient::instance()->getOptionsGame().getTeams() == 1)
+		{
+			colorDropDown_->setCurrentColor(OptionsDisplay::instance()->getOnlineColor());
+		}
 	}
 }
 

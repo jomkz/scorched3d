@@ -95,7 +95,7 @@ void GLWDropDownColor::setCurrentColor(const Vector &color)
 		position++;
 	}
 
-	if (handler_)
+	if (handler_ && current_)
 	{
 		handler_->select(id_, position, *current_);
 	}
