@@ -33,6 +33,8 @@ TanketTypes::~TanketTypes()
 
 bool TanketTypes::loadTanketTypes(ScorchedContext &context)
 {
+	clear();
+
 	XMLFile file;
 	if (!file.readFile(S3D::getModFile("data/tanktypes.xml")))
 	{
@@ -89,6 +91,7 @@ TanketType *TanketTypes::getType(const char *name)
 
 void TanketTypes::clear()
 {
+	defaultType_ = 0;
 	while (!types_.empty())
 	{
 		delete types_.back();
