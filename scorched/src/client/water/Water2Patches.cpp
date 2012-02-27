@@ -95,7 +95,7 @@ void Water2Patches::generateNormalMap()
 	//but we can't feed it to texture class yet
 	if (!normalMap_.getBits()) 
 	{
-		normalMap_ = ImageFactory::createBlank(totalSize_, totalSize_);
+		normalMap_ = Image(totalSize_, totalSize_);
 	}
 
 	unsigned char *normalBits = normalMap_.getBits();

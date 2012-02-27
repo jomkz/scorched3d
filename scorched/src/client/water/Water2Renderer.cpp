@@ -411,7 +411,7 @@ void Water2Renderer::generate(LandscapeTexBorderWater *water, ProgressCounter *c
 		reflectionTexture_.create(bitmapWater2, true); // Not the reflection in this case
 	}
 
-	Image map = ImageFactory::createBlank(128, 128, false, 0);
+	Image map(128, 128, 3, 0);
 	normalTexture_.create(map, GLStateExtension::hasHardwareMipmaps());
 
 	LandscapeDefn &defn = *ScorchedClient::instance()->getLandscapeMaps().

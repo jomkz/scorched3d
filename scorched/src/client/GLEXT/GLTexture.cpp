@@ -23,7 +23,6 @@
 #include <common/Defines.h>
 #include <set>
 
-//static std::set<GLuint> usedNumbers_;
 unsigned int GLTexture::textureSpace_ = 0;
 unsigned int GLTexture::textureSets_ = 0;
 
@@ -41,7 +40,6 @@ GLTexture::~GLTexture()
 	if (texNum_)
 	{
 		glDeleteTextures(1, &texNum_);
-		//usedNumbers_.erase(texNum_);
 		texNum_ = 0;
 	}
 }
@@ -60,16 +58,17 @@ bool GLTexture::replace(Image &bitmap, bool mipMap)
 {
 	GLenum format = 
 		(bitmap.getComponents()==1)?GL_LUMINANCE:
+		(bitmap.getComponents() == 2)?GL_LUMINANCE_ALPHA:
 		((bitmap.getComponents() == 3)?GL_RGB:GL_RGBA);
 
 	if (textureValid())
 	{ 
 		if(GLStateExtension::getNoTexSubImage() ||
 			(bitmap.getWidth() != width_) ||
-			(bitmap.getHeight() != height_))
+			(bitmap.getHeight() != height_) ||
+			(format != texFormat_))
 		{
 			glDeleteTextures(1, &texNum_);
-			//usedNumbers_.erase(texNum_);
 			texNum_ = 0;
 		}
 	}
@@ -98,6 +97,7 @@ bool GLTexture::create(Image &bitmap, bool mipMap)
 {
 	GLenum format = 
 		(bitmap.getComponents()==1)?GL_LUMINANCE:
+		(bitmap.getComponents() == 2)?GL_LUMINANCE_ALPHA:
 		((bitmap.getComponents() == 3)?GL_RGB:GL_RGBA);
 	
 	bool success = create(bitmap.getBits(),
@@ -117,11 +117,6 @@ bool GLTexture::createObject()
 	{
 		GLfloat priority = 1.0f;
 		glGenTextures(1, &texNum_);
-		//if (usedNumbers_.find(texNum_) != usedNumbers_.end())
-		//{
-		//	DIALOG_ASSERT("Texture Reuse" == 0);
-		//}
-		//usedNumbers_.insert(texNum_);
 
 		glPrioritizeTextures(1, &texNum_, &priority);
 	}

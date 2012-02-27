@@ -133,7 +133,7 @@ Image Image::createAlphaMult(float mult)
 {
 	if (getComponents() != 4) return Image();
 	
-	Image map = ImageFactory::createBlank(getWidth(), getHeight(), true);
+	Image map(getWidth(), getHeight(), true);
 
 	unsigned char *srcBits = getBits();
 	unsigned char *destBits = map.getBits();
@@ -159,7 +159,7 @@ Image Image::createResize(int newWidth, int newHeight)
 {
 	if (!getBits()) return Image();
 
-	Image map = ImageFactory::createBlank(newWidth, newHeight);
+	Image map(newWidth, newHeight, getComponents(), 0);
 
 	// Odd hack to fix a seeming memory corruption with gluScaleImage
 	map.setBits(new unsigned char[newWidth * 2 * newHeight * map.getComponents()]);

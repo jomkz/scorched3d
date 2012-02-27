@@ -38,8 +38,6 @@ public:
 	static Image loadAlphaImage(
 		S3D::FileLocation imageLocation,
 		const std::string &filename);
-	static Image createBlank(int width, int height, 
-		bool alpha = false, unsigned char fill = 255);
 
 #ifndef S3D_SERVER
 	static Image grabScreen();

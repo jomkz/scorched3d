@@ -238,8 +238,7 @@ void Water2::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)
 		if (counter) counter->setNewPercentage(float(k * 50) / float(wave_phases));
 		Water2Points &wd = displacements[k % wave_phases];
 
-		Image aofImage = 
-			ImageFactory::createBlank(wave_resolution, wave_resolution, false, 0);
+		Image aofImage(wave_resolution, wave_resolution, 3, 0);
 		memcpy(aofImage.getBits(), loadedFoam.getBits(), wave_resolution * wave_resolution * 3);
 
 		// Add waves to AOF image

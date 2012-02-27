@@ -132,7 +132,7 @@ void Water::generate(ProgressCounter *counter)
 	{
 		Image bitmapWater = loadedBitmapWater.createResize(
 			sprayMaskBitmap.getWidth(), sprayMaskBitmap.getHeight());
-		Image textureWaterNew = ImageFactory::createBlank(
+		Image textureWaterNew(
 			sprayMaskBitmap.getWidth(), sprayMaskBitmap.getHeight(), true);
 		ImageModifier::makeBitmapTransparent(textureWaterNew, 
 			bitmapWater, sprayMaskBitmap);

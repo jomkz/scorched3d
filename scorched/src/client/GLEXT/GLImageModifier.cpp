@@ -603,7 +603,7 @@ void ImageModifier::addWaterToBitmap(HeightMap &hMap,
 
 Image ImageModifier::makeArenaBitmap()
 {
-	Image handle = ImageFactory::createBlank(128, 128, true, 0);
+	Image handle(128, 128, 4, 0);
 
 	int arenaX = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaX();
 	int arenaY = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getArenaY();
@@ -639,7 +639,7 @@ Image ImageModifier::makeArenaBitmap()
 
 Image ImageModifier::makeArenaSurroundBitmap()
 {
-	Image handle = ImageFactory::createBlank(128, 128, true, 0);
+	Image handle(128, 128, 4, 0);
 
 	unsigned char *bits = handle.getBits();
 	for (int y=0; y<handle.getHeight(); y++)
@@ -715,7 +715,7 @@ void ImageModifier::makeBitmapTransparent(Image &output,
 		Image &mask)
 {
 	DIALOG_ASSERT(output.getComponents() == 4);
-	DIALOG_ASSERT(input.getComponents() == 3);
+	DIALOG_ASSERT(input.getComponents() == 3 || input.getComponents() == 1);
 	DIALOG_ASSERT(mask.getComponents() == 4);
 	DIALOG_ASSERT(output.getWidth() == input.getWidth());
 	DIALOG_ASSERT(output.getWidth() == mask.getWidth());
@@ -728,12 +728,22 @@ void ImageModifier::makeBitmapTransparent(Image &output,
 
 	for (int i=0; i<output.getWidth() * output.getHeight(); i++)
 	{
-		outputBits[0] = inputBits[0];
-		outputBits[1] = inputBits[1];
-		outputBits[2] = inputBits[2];
-		outputBits[3] = maskBits[3];
+		if (input.getComponents() == 1)
+		{
+			outputBits[0] = inputBits[0];
+			outputBits[1] = inputBits[0];
+			outputBits[2] = inputBits[0];
+			outputBits[3] = maskBits[3];
+		}
+		else
+		{
+			outputBits[0] = inputBits[0];
+			outputBits[1] = inputBits[1];
+			outputBits[2] = inputBits[2];
+			outputBits[3] = maskBits[3];
+		}
 
-		inputBits += 3;
+		inputBits += input.getComponents();
 		outputBits += 4;
 		maskBits += 4;
 	}

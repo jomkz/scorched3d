@@ -190,8 +190,7 @@ void BackdropDialog::capture()
 	glReadPixels(0, 0, GLViewPort::getActualWidth(), GLViewPort::getActualHeight(), 
 		GL_RGB, GL_UNSIGNED_BYTE, screenpixels);
 
-	Image handle = ImageFactory::createBlank(
-		backTex_.getWidth(), backTex_.getHeight());
+	Image handle(backTex_.getWidth(), backTex_.getHeight());
 
 	unsigned char *src = screenpixels;
 	for (int y=0; y<GLViewPort::getActualHeight(); y++)

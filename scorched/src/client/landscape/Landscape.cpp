@@ -237,9 +237,9 @@ void Landscape::drawShadows()
 
 			static float *depthResult = 
 				new float[shadowFrameBuffer_.getWidth() * shadowFrameBuffer_.getHeight()];
-			static Image depthImage =
-				ImageFactory::createBlank(shadowFrameBuffer_.getWidth(),
-					shadowFrameBuffer_.getHeight());
+			static Image depthImage(
+				shadowFrameBuffer_.getWidth(),
+				shadowFrameBuffer_.getHeight());
 
 			glReadPixels(0, 0, 
 				shadowFrameBuffer_.getWidth(), shadowFrameBuffer_.getHeight(),
@@ -484,10 +484,10 @@ void Landscape::generate(ProgressCounter *counter)
 	// Generate the texture used to map onto the landscape
 	if (!mainMap_.getBits())
 	{
-		mainMap_ = ImageFactory::createBlank(mapTexSize, mapTexSize);
-		bitmapPlanAlpha_ = ImageFactory::createBlank(planTexSize, planTexSize, true);
-		bitmapPlan_ = ImageFactory::createBlank(planTexSize, planTexSize);
-		bitmapPlanAlphaAlpha_ = ImageFactory::createBlank(planTexSize, planTexSize, false, 0);
+		mainMap_ = Image(mapTexSize, mapTexSize);
+		bitmapPlanAlpha_ = Image(planTexSize, planTexSize, true);
+		bitmapPlan_ = Image(planTexSize, planTexSize);
+		bitmapPlanAlphaAlpha_ = Image(planTexSize, planTexSize, 3, 0);
 	}
 
 	if (GLStateExtension::hasHardwareShadows())
@@ -652,7 +652,7 @@ void Landscape::generate(ProgressCounter *counter)
 			tex->scorch);
 	Image scorchMap = scorchMap_.createResize(
 		sprayMaskBitmap.getWidth(), sprayMaskBitmap.getHeight());
-	Image texture1New = ImageFactory::createBlank(sprayMaskBitmap.getWidth(), sprayMaskBitmap.getHeight(), true);
+	Image texture1New(sprayMaskBitmap.getWidth(), sprayMaskBitmap.getHeight(), true);
 	ImageModifier::makeBitmapTransparent(texture1New, scorchMap, sprayMaskBitmap);
 	landTex1_.replace(texture1New);
 

@@ -67,12 +67,6 @@ Image ImageFactory::loadImage(
 	return loadImageID(imageId);
 }
 
-Image ImageFactory::createBlank(int width, int height, bool alpha, unsigned char fill)
-{
-	Image result(width, height, alpha?4:3, fill);
-	return result;
-}
-
 #ifndef S3D_SERVER
 
 #include <GLEXT/GLState.h>
@@ -83,7 +77,7 @@ Image ImageFactory::grabScreen()
 	GLint		viewport[4];		/* Current viewport */
 	glGetIntegerv(GL_VIEWPORT, viewport);
 
-	Image map = ImageFactory::createBlank(viewport[2], viewport[3], false);
+	Image map(viewport[2], viewport[3], false);
 
 	glFinish();				/* Finish all OpenGL commands */
 	glPixelStorei(GL_PACK_ALIGNMENT, 4);	/* Force 4-byte alignment */

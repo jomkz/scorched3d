@@ -70,7 +70,7 @@ void InfoMap::addAdapters()
 
 void InfoMap::showHeightBands()
 {
-	Image newMap = ImageFactory::createBlank(
+	Image newMap(
 		Landscape::instance()->getMainMap().getWidth(),
 		Landscape::instance()->getMainMap().getHeight());
 	float *heights = new float[
@@ -151,7 +151,7 @@ void InfoMap::showHeightBands()
 
 void InfoMap::showGrid()
 {
-	Image newMap = ImageFactory::createBlank(
+	Image newMap(
 		Landscape::instance()->getMainMap().getWidth(),
 		Landscape::instance()->getMainMap().getHeight());
 
