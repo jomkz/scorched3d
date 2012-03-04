@@ -70,6 +70,7 @@
 #include <common/ProgressCounter.h>
 #include <common/Clock.h>
 #include <common/Defines.h>
+#include <common/Logger.h>
 #include <sound/Sound.h>
 #include <SDL/SDL.h>
 
@@ -342,6 +343,11 @@ bool ClientMain::clientEventLoop(float frameTime)
 
 bool ClientMain::clientMain()
 {
+	Logger::log(S3D::formatStringBuffer("Scorched3D - Version %s (%s) - %s",
+		S3D::ScorchedVersion.c_str(), 
+		S3D::ScorchedProtocolVersion.c_str(), 
+		S3D::ScorchedBuildTime.c_str()));
+
 	// Create the actual window
 	if (!createScorchedWindow()) return false;
 
