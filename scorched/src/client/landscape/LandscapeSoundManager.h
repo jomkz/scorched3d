@@ -28,6 +28,7 @@ class VirtualSoundSource;
 class SoundBuffer;
 class LandscapeInclude;
 class LandscapeSoundType;
+class LandscapeSoundItem;
 class LandscapeSoundManager
 {
 public:
@@ -47,7 +48,7 @@ protected:
 
 		VirtualSoundSource *soundSource;
 		LandscapeSoundType *soundType;
-		void *initData;
+		LandscapeSoundItem *initData;
 
 		float timeLeft;
 		bool removed;
