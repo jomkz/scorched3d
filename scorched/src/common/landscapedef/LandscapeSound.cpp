@@ -59,8 +59,8 @@ bool LandscapeSoundPositionSet::setPosition(VirtualSoundSource *source, Landscap
 {
 #ifndef S3D_SERVER
 	if (!data) return false;
-	ObjectGroupEntryReference *reference = 
-		(ObjectGroupEntryReference *) data;
+	LandscapeSoundPositionSetItem *item = (LandscapeSoundPositionSetItem *) data;
+	ObjectGroupEntryReference *reference = item->getReference();
 	ObjectGroupEntry *entry = reference->getEntry();
 	if (!entry) return false;
 

@@ -115,6 +115,9 @@ class LandscapeSoundPositionSetItem : public LandscapeSoundItem
 public:
 	LandscapeSoundPositionSetItem(ObjectGroupEntryReference *reference);
 	virtual ~LandscapeSoundPositionSetItem();
+
+	ObjectGroupEntryReference *getReference() { return reference_; }
+
 private:
 	ObjectGroupEntryReference *reference_;
 };
