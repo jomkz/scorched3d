@@ -255,6 +255,8 @@ OptionsGame::OptionsGame() :
 		"Gather enhanced action syncchecking for initial target placements", 0, false),
 	weaponSyncCheck_(options_, "WeaponSyncCheck",
 		"Gather enhanced action syncchecking for weapon invocations", 0, false),
+	accessoryNameSyncCheck_(options_, "AccessoryNameSyncCheck",
+		"Also send the accessory names when sending the tank sync check", 0, false),
 	resignMode_(options_, "ResignMode",
 		"When does a players resign take place", 0, int(ResignTimed), resignEnum),
 	movementRestriction_(options_, "MovementRestriction",

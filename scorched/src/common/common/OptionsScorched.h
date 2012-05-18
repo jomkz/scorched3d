@@ -153,6 +153,7 @@ public:
 	OPTIONBOOL_GETTER(AutoSendSyncCheck);
 	OPTIONBOOL_GETTER(ActionSyncCheck);
 	OPTIONBOOL_GETTER(WeaponSyncCheck);
+	OPTIONBOOL_GETTER(AccessoryNameSyncCheck);
 	OPTIONBOOL_GETTER(TargetPlacementSyncCheck);
 	OPTIONBOOL_GETTER(ActionMovementSyncCheck);
 	OPTIONBOOL_GETTER(ActionRandomSyncCheck);

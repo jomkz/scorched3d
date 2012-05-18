@@ -42,7 +42,7 @@ std::string S3D::ScorchedVersion = "43.3d"
 	" **DEBUG**"
 #endif
 ;
-std::string S3D::ScorchedProtocolVersion = "et";
+std::string S3D::ScorchedProtocolVersion = "eu";
 #ifdef __DATE__
 std::string S3D::ScorchedBuildTime = __DATE__;
 #else

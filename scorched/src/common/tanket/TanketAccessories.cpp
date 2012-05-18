@@ -404,8 +404,11 @@ bool TanketAccessories::writeMessage(NamedNetBuffer &buffer, bool writeAccessori
 		buffer.addToBufferNamed("accessory", itor2->first);
 		buffer.addToBufferNamed("count", itor2->second);
 
-		//Accessory *accessory = context_.getAccessoryStore().findByAccessoryId(itor2->first);
-		//buffer.addToBufferNamed("name", accessory->getName());
+		if (context_.getOptionsGame().getAccessoryNameSyncCheck())
+		{
+			Accessory *accessory = context_.getAccessoryStore().findByAccessoryId(itor2->first);
+			buffer.addToBufferNamed("name", accessory->getName());
+		}
 	}
 
 	return true;
@@ -432,8 +435,12 @@ bool TanketAccessories::readMessage(NetBufferReader &reader)
 		int accessoryCount = 0;
 		if (!reader.getFromBuffer(accessoryId)) return false;
 		if (!reader.getFromBuffer(accessoryCount)) return false;
-		//std::string accessoryName;
-		//if (!reader.getFromBuffer(accessoryName)) return false;
+
+		if (context_.getOptionsGame().getAccessoryNameSyncCheck())
+		{
+			std::string accessoryName;
+			if (!reader.getFromBuffer(accessoryName)) return false;
+		}
 
 		Accessory *accessory = 
 			context_.getAccessoryStore().findByAccessoryId(accessoryId);
