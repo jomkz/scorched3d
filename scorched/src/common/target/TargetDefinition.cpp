@@ -124,7 +124,7 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 	} 
 	else
 	{
-		tanket = new Tanket(context, playerId, name_);
+		tanket = new Tanket(context, playerId, 0, name_);
 		TankAI *ai = 0;
 		if (context.getServerMode() &&
 			ainame_ != "Human")

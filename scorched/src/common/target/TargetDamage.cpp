@@ -90,23 +90,27 @@ void TargetDamage::damageTarget(ScorchedContext &context,
 	// Tell this tanks ai that is has been hurt by another tank
 	if (damagedTarget->getType() != Target::TypeTarget)
 	{
+		// If on server
 		// Tell all AIs about this collision
-		std::map<unsigned int, Tanket *> tankets = 
-			context.getTargetContainer().getTankets();
-		std::map<unsigned int, Tanket *>::iterator itor;
-		for (itor = tankets.begin();
-			itor != tankets.end();
-			++itor)
+		if (context.getServerMode())
 		{
-			Tanket *tanket = (*itor).second;
-			TankAI *ai = tanket->getTankAI();
-			if (ai)
-			{		
-				if (tanket->getAlive())
-				{
-					ai->tankHurt(weapon, damage.asFloat(),
-						damagedTarget->getPlayerId(), 
-						firedPlayerId);
+			std::map<unsigned int, Tanket *> tankets = 
+				context.getTargetContainer().getTankets();
+			std::map<unsigned int, Tanket *>::iterator itor;
+			for (itor = tankets.begin();
+				itor != tankets.end();
+				++itor)
+			{
+				Tanket *tanket = (*itor).second;
+				TankAI *ai = tanket->getTankAI();
+				if (ai)
+				{		
+					if (tanket->getAlive())
+					{
+						ai->tankHurt(weapon, damage.asFloat(),
+							damagedTarget->getPlayerId(), 
+							firedPlayerId);
+					}
 				}
 			}
 		}

@@ -33,6 +33,7 @@ public:
 	// Constructor for tanket
 	Tanket(ScorchedContext &context, 
 		unsigned int playerId, 
+		unsigned int destinationId,
 		const LangString &name);
 	virtual ~Tanket();
 
@@ -50,6 +51,8 @@ public:
 	void setTankAI(TankAI *ai);
 	unsigned int getTeam() { return team_; }
 	void setTeam(unsigned int team) { team_ = team; }
+	unsigned int getDestinationId();
+	void setDestinationId(unsigned int id) { destinationId_ = id; }
 
 	void setTanketType(TanketType *type) { tanketType_ = type; }
 	TanketType *getTanketType() { return tanketType_; }
@@ -63,6 +66,7 @@ protected:
 	TanketType *tanketType_;
 	TankAI *tankAI_;
 	unsigned int team_;
+	unsigned int destinationId_;
 
 };
 

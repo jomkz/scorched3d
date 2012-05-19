@@ -307,7 +307,7 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 	static Target *tmpTarget = new Target(0, LangString(),
 		ScorchedServer::instance()->getContext());
 	tmpTarget->getLife().setLife(0); // Make sure not added to target space
-	static Tanket *tmpTanket = new Tanket(ScorchedServer::instance()->getContext(), 0, 
+	static Tanket *tmpTanket = new Tanket(ScorchedServer::instance()->getContext(), 0, 0,
 		LangString());
 	tmpTanket->getLife().setLife(0); // Make sure not added to target space
 	static Tank *tmpTank = new Tank(

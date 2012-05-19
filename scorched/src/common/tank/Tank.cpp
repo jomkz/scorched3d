@@ -47,9 +47,8 @@ Tank::Tank(ScorchedContext &context,
 		unsigned int destinationId,
 		const LangString &name, 
 		Vector &color) :
-	Tanket(context, playerId, name), 
+	Tanket(context, playerId, destinationId, name), 
 	context_(context),
-	destinationId_(destinationId),
 	color_(color), 
 	ipAddress_(0)
 {
@@ -79,12 +78,6 @@ Tank::~Tank()
 	delete avatar_; avatar_ = 0;
 	delete camera_; camera_ = 0;
 	delete viewPoints_; viewPoints_ = 0;
-}
-
-unsigned int Tank::getDestinationId() 
-{ 
-	if (getTankAI()) return 0;
-	return destinationId_; 
 }
 
 void Tank::newMatch()
@@ -168,7 +161,6 @@ bool Tank::writeMessage(NamedNetBuffer &buffer)
 	NamedNetBufferSection section(buffer, "Tank");
 
 	if (!Tanket::writeMessage(buffer)) return false;  // Base class 1st
-	buffer.addToBufferNamed("destinationId", destinationId_);
 	buffer.addToBufferNamed("color", color_);
 	if (!state_->writeMessage(buffer)) return false;
 	if (!score_->writeMessage(buffer)) return false;
@@ -183,11 +175,6 @@ bool Tank::readMessage(NetBufferReader &reader)
 	{
 		Logger::log("Tanket::readMessage failed");
 		return false; // Base class 1st
-	}
-	if (!reader.getFromBuffer(destinationId_))
-	{
-		Logger::log("Tank::destinationId_ read failed");
-		return false;
 	}
 	if (!reader.getFromBuffer(color_))
 	{
@@ -215,10 +202,5 @@ bool Tank::readMessage(NetBufferReader &reader)
 		return false;
 	}
 
-	if (!context_.getServerMode())
-	{
-		// If any humans turn into computers remove the HumanAI
-		if (destinationId_ == 0) setTankAI(0);
-	}
 	return true;
 }

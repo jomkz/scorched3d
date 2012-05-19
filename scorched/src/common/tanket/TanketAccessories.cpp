@@ -224,7 +224,7 @@ bool TanketAccessories::accessoryAllowed(Accessory *accessory, int count)
 	// Check if this is a bot only weapon
 	if (accessory->getBotOnly())
 	{
-		if(tanket_->getTankAI() == 0)
+		if (tanket_->getDestinationId() != 0)
 		{
 	        return false;
 		}

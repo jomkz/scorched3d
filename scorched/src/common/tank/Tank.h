@@ -59,8 +59,7 @@ public:
 	virtual bool getAlive();
 	virtual bool getPlaying();
 	virtual bool isTarget() { return false; }
-	unsigned int getDestinationId();
-	void setDestinationId(unsigned int id) { destinationId_ = id; }
+
 	const char *getUniqueId() { return uniqueId_.c_str(); }
 	void setUniqueId(const char *id) { uniqueId_ = id; }
 	const char *getSUI() { return SUI_.c_str(); }
@@ -95,7 +94,6 @@ protected:
 	std::string uniqueId_;
 	std::string SUI_;
 	std::string hostDesc_;
-	unsigned int destinationId_;
 	unsigned int ipAddress_;
 
 };

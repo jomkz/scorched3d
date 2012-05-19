@@ -33,10 +33,12 @@
 
 Tanket::Tanket(ScorchedContext &context, 
 		unsigned int playerId, 
+		unsigned int destinationId,
 		const LangString &name) :
 	Target(playerId, name, context), 
 	context_(context),
-	tankAI_(0), team_(0)
+	tankAI_(0), team_(0),
+	destinationId_(destinationId)
 {
 	tanketType_ = context.getTanketTypes().getDefaultType();
 
@@ -57,6 +59,12 @@ void Tanket::setTankAI(TankAI *ai)
 {
 	if (tankAI_) delete tankAI_;
 	tankAI_ = ai;
+}
+
+unsigned int Tanket::getDestinationId() 
+{ 
+	if (getTankAI()) return 0;
+	return destinationId_; 
 }
 
 void Tanket::newMatch()
@@ -80,6 +88,7 @@ bool Tanket::writeMessage(NamedNetBuffer &buffer)
 
 	buffer.addToBufferNamed("tankettype", tanketType_->getName());
 	if (!Target::writeMessage(buffer)) return false;  // Base class 1st
+	buffer.addToBufferNamed("destinationId", destinationId_);
 	if (!accessories_->writeMessage(buffer, true)) return false;
 	if (!shotInfo_->writeMessage(buffer)) return false;
 	buffer.addToBufferNamed("team", team_);
@@ -104,6 +113,11 @@ bool Tanket::readMessage(NetBufferReader &reader)
 	{
 		Logger::log("Target::readMessage failed");
 		return false; // Base class 1st
+	}
+	if (!reader.getFromBuffer(destinationId_))
+	{
+		Logger::log("Tank::destinationId_ read failed");
+		return false;
 	}
 	if (!accessories_->readMessage(reader))
 	{
