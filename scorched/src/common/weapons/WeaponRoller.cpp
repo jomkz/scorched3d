@@ -41,6 +41,7 @@ WeaponRoller::WeaponRoller() :
 	maintainVelocity_(false), roll_(true),
 	dampenVelocityExp_("WeaponRoller::dampenVelocityExp", 1), stepSize_(true, 100),
 	collisionAction_(0), stickyShields_(false),
+	landscapeCollision_(true), shieldCollision_(true),
 	noCameraTrack_(false), scale_("WeaponRoller::scale", 1),
 	timeExp_("WeaponRoller::timeExp"),
 	numberRollers_("WeaponRoller::numberRollers")
@@ -66,6 +67,9 @@ bool WeaponRoller::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 	// Get life time
 	if (!accessoryNode->getNamedChild("time", timeExp_)) return false;
 	accessoryNode->getNamedChild("stepsize", stepSize_, false);
+
+	accessoryNode->getNamedChild("landscapecollision", landscapeCollision_, false);
+	accessoryNode->getNamedChild("shieldcollision", shieldCollision_, false);
 
     // Get the hurt factor (if any)
     accessoryNode->getNamedChild("shieldhurtfactor", shieldHurtFactorExp_, false);

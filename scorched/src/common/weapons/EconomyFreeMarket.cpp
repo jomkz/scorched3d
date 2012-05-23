@@ -162,6 +162,15 @@ void EconomyFreeMarket::calculatePrices()
 void EconomyFreeMarket::accessoryBought(Tank *tank, 
 		const char *accessoryName)
 {
+	// Check if we track bot (ai) purchases
+	if (tank->getDestinationId() == 0)
+	{
+		if (!ScorchedServer::instance()->getOptionsGame().getFreeMarketTracksBotPurchases())
+		{
+			return;
+		}
+	}
+
 	// Find the bought accessory
 	Accessory *boughtAccessory = 
 		ScorchedServer::instance()->getAccessoryStore().

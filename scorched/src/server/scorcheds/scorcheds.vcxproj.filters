@@ -1482,6 +1482,9 @@
     <ClCompile Include="..\..\common\engine\ModFileEntryLoader.cpp">
       <Filter>engine</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeDefnTankStart.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -2887,6 +2890,9 @@
     </ClInclude>
     <ClInclude Include="..\..\common\engine\ModFileEntryLoader.h">
       <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeDefnTankStart.h">
+      <Filter>landscapedef</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

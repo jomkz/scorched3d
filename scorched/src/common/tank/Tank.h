@@ -70,7 +70,7 @@ public:
 	void setColor(const Vector &color) { color_ = color; }
 	unsigned int getIpAddress() { return ipAddress_; }
 	void setIpAddress(unsigned int ipAddress) { ipAddress_ = ipAddress; }
-	virtual Weapon *getDeathAction();
+	virtual Accessory *getDeathAction();
 
 	// Other attributes
 	TankScore &getScore() { return *score_; }

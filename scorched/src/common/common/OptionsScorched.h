@@ -107,6 +107,7 @@ public:
 	OPTIONINT_GETTER(Interest);
 	OPTIONINT_GETTER(FreeMarketAdjustment);
 	OPTIONINT_GETTER(FreeMarketLimits);
+	OPTIONBOOL_GETTER(FreeMarketTracksBotPurchases);
 	OPTIONINT_GETTER(BuyOnRound);
 	OPTIONINT_GETTER(MoneyPerRound);
 	OPTIONINT_GETTER(MoneyWonForRound);

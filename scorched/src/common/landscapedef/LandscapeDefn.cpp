@@ -19,18 +19,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <landscapedef/LandscapeDefn.h>
+#include <landscapedef/LandscapeDefnTankStart.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <common/Defines.h>
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-
-static LandscapeDefnType *fetchTankStartDefnType(const char *type)
-{
-	if (0 == strcmp(type, "height")) return new LandscapeDefnStartHeight;
-	S3D::dialogMessage("LandscapeDefnType", S3D::formatStringBuffer("Unknown tankstart type %s", type));
-	return 0;
-}
 
 static LandscapeDefnType *fetchHeightMapDefnType(const char *type)
 {
@@ -140,22 +134,6 @@ bool LandscapeDefnDeformDeform::readXML(XMLNode *node)
 	return true;
 }
 
-bool LandscapeDefnStartHeight::readXML(XMLNode *node)
-{
-	if (!node->getNamedChild("startcloseness", startcloseness)) return false;
-	if (!parseMinMax(node, "height", heightmin, heightmax)) return false;
-	if (!node->getNamedChild("startmask", startmask)) return false;
-	if (!node->getNamedChild("flatness", flatness, false))
-	{
-		flatness = 0;
-	}
-	if (!startmask.empty())
-	{
-		if (!S3D::checkDataFile(startmask.c_str())) return false;
-	}
-	return node->failChildren();
-}
-
 bool LandscapeDefnHeightMapFile::readXML(XMLNode *node)
 {
 	if (!node->getNamedChild("file", file)) return false;
@@ -254,7 +232,7 @@ bool LandscapeDefn::readXML(LandscapeDefinitions *definitions, XMLNode *node)
 		std::string tankstarttype;
 		if (!node->getNamedChild("tankstart", startNode)) return false;
 		if (!startNode->getNamedParameter("type", tankstarttype)) return false;
-		if (!(tankstart = fetchTankStartDefnType(tankstarttype.c_str()))) return false;
+		if (!(tankstart = LandscapeDefnTypeTankStart::createType(tankstarttype.c_str()))) return false;
 		if (!tankstart->readXML(startNode)) return false;
 	}
 	{

@@ -631,9 +631,10 @@ void Napalm::simulateDamage()
 
 void Napalm::addBurnAction(Target *target)
 {
-	Weapon *weapon = target->getBurnAction();
-	if (weapon)
+	Accessory *accessory = target->getBurnAction();
+	if (accessory)
 	{
+		Weapon *weapon = (Weapon *) accessory->getAction();
 		if (context_->getOptionsGame().getActionSyncCheck())
 		{
 			context_->getSimulator().addSyncCheck(

@@ -58,8 +58,8 @@ public:
 		Accessory *parent, XMLNode *currentNode);
 	AccessoryPart *findByAccessoryPartId(unsigned int id);
 
-	Weapon *getDeathAnimation();
-	Weapon *getMuzzelFlash();
+	Accessory *getDeathAnimation();
+	Accessory *getMuzzelFlash();
 
 	std::list<Accessory *> getAllAccessories(int sortKey=SortNothing);
 	std::list<Accessory *> getAllAccessoriesByTabGroup(const char *tabgroup, int sortKey=SortNothing);
@@ -81,8 +81,8 @@ protected:
 	std::list<Accessory *> accessories_;
 	std::list<AccessoryPart *> accessoryParts_;
 	std::map<std::string, XMLNode *> parsingNodes_;
-	Weapon *muzzleFlash_;
-	Weapon *deathAnimation_;
+	Accessory *muzzleFlash_;
+	Accessory *deathAnimation_;
 
 };
 

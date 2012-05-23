@@ -49,12 +49,12 @@ ObjectGroupEntry::ObjectType ParticleGroup::getType()
 
 FixedVector &ParticleGroup::getPosition()
 {
-	return physicsParticle_->getCurrentPosition();
+	return physicsParticle_->getPhysics().getPosition();
 }
 
 FixedVector &ParticleGroup::getVelocity()
 {
-	return physicsParticle_->getCurrentVelocity();
+	return physicsParticle_->getPhysics().getVelocity();
 }
 
 unsigned int ParticleGroup::getPlayerId()

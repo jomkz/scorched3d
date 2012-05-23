@@ -103,18 +103,18 @@ void MissileActionRenderer::simulate(Action *action, float timepassed, bool &rem
 			SoundBuffer *rocket = Sound::instance()->fetchOrCreateBuffer(
 				S3D::getModFile(engineSound));
 			sound_ = new VirtualSoundSource(VirtualSoundPriority::eMissile, true, false);
-			sound_->setPosition(shot->getCurrentPosition().asVector());
+			sound_->setPosition(shot->getPhysics().getPosition().asVector());
 			sound_->setGain(0.25f);
 			sound_->play(rocket);
 		}
 	}
 	if (sound_)
 	{
-		sound_->setPosition(shot->getCurrentPosition().asVector());
-		sound_->setVelocity(shot->getCurrentVelocity().asVector());
+		sound_->setPosition(shot->getPhysics().getPosition().asVector());
+		sound_->setVelocity(shot->getPhysics().getVelocity().asVector());
 	}
 
-	Vector &actualPos = shot->getCurrentPosition().asVector();
+	Vector &actualPos = shot->getPhysics().getPosition().asVector();
 	Vector actualPos1;
 	actualPos1[0] = actualPos[0] - 0.25f;
 	actualPos1[1] = actualPos[1] - 0.25f;
@@ -126,7 +126,7 @@ void MissileActionRenderer::simulate(Action *action, float timepassed, bool &rem
 
 	// Rotate the shot
 	frame_ += timepassed * 20.0f;
-	rotation_ += shot->getCurrentVelocity().Magnitude().asFloat() * spinSpeed_;
+	rotation_ += shot->getPhysics().getVelocity().Magnitude().asFloat() * spinSpeed_;
 
 	// Add flame trail
 	if (shot->getWeapon()->getCreateFlame())
@@ -143,13 +143,13 @@ void MissileActionRenderer::simulate(Action *action, float timepassed, bool &rem
 	{
 		if (counter_.nextDraw(timepassed))
 		{
-			Vector vel1 = shot->getCurrentVelocity().asVector();
+			Vector vel1 = shot->getPhysics().getVelocity().asVector();
 			Vector vel2;
 			vel1 *= -0.4f;
 			vel2 = vel1 * 0.7f;
 
-			actualPos1 -= shot->getCurrentVelocity().asVector() * 0.2f;
-			actualPos2 -= shot->getCurrentVelocity().asVector() * 0.2f;
+			actualPos1 -= shot->getPhysics().getVelocity().asVector() * 0.2f;
+			actualPos2 -= shot->getPhysics().getVelocity().asVector() * 0.2f;
 
 			smokeemitter_->setVelocity(vel1, vel2);
 			smokeemitter_->emitLinear(3, actualPos1, actualPos2, 
@@ -164,8 +164,8 @@ void MissileActionRenderer::simulate(Action *action, float timepassed, bool &rem
 void MissileActionRenderer::draw(Action *action)
 {
 	ShotProjectile *shot = (ShotProjectile *) action;
-	Vector &actualPos = shot->getCurrentPosition().asVector();
-	Vector &actualdir = shot->getCurrentVelocity().asVector();
+	Vector &actualPos = shot->getPhysics().getPosition().asVector();
+	Vector &actualdir = shot->getPhysics().getVelocity().asVector();
 
 	if (shot->getWeapon()->getShowShotPath())
 	{

@@ -42,6 +42,7 @@
 #include <tank/TankState.h>
 #include <tankai/TankAI.h>
 #include <tanket/TanketShotInfo.h>
+#include <tanket/TanketAccessories.h>
 #include <target/TargetShield.h>
 #include <target/TargetLife.h>
 #include <target/TargetParachute.h>
@@ -404,10 +405,11 @@ void TargetDamage::calculateDeath(ScorchedContext &context, WeaponFireContext &w
 }
 
 void TargetDamage::addDamageAction(ScorchedContext &context, WeaponFireContext &originalWeaponContext, 
-	Target *target, Weapon *weapon) 
+	Target *target, Accessory *accessory) 
 {
-	if (weapon)
+	if (accessory)
 	{
+		Weapon *weapon = (Weapon *) accessory->getAction();
 		if (context.getOptionsGame().getActionSyncCheck())
 		{
 			context.getSimulator().addSyncCheck(
@@ -425,6 +427,18 @@ void TargetDamage::addDamageAction(ScorchedContext &context, WeaponFireContext &
 			false);
 		weapon->fire(context, newWeaponContext, position, velocity);
 		StatsLogger::instance()->weaponFired(weapon, true);
+
+		if (target->getType() != Target::TypeTarget) 
+		{
+			Tanket *tanket = (Tanket *) target;
+			if (accessory->getUseNumber() > 0)
+			{
+				// Actually use up one of the weapons
+				// Fuel, is used up differently at the rate of one weapon per movement square
+				// This is done sperately in the tank movement action
+				tanket->getAccessories().rm(accessory, accessory->getUseNumber());
+			}
+		}
 	}
 }
 

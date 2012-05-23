@@ -225,7 +225,7 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 				removeaction_.c_str()));
 		}
 
-		target->setDeathAction((Weapon *) action->getAction());
+		target->setDeathAction(action);
 	}
 	if (burnaction_.c_str()[0] && 0 != strcmp(burnaction_.c_str(), "none"))
 	{
@@ -238,7 +238,7 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 				burnaction_.c_str()));
 		}
 
-		target->setBurnAction((Weapon *) action->getAction());
+		target->setBurnAction(action);
 	}
 	if (collisionaction_.c_str()[0] && 0 != strcmp(collisionaction_.c_str(), "none"))
 	{
@@ -251,7 +251,7 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 				collisionaction_.c_str()));
 		}
 
-		target->setCollisionAction((Weapon *) action->getAction());
+		target->setCollisionAction(action);
 	}
 
 #ifndef S3D_SERVER

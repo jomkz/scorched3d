@@ -25,67 +25,17 @@ PhysicsParticle::PhysicsParticle(bool referenced)  :
 	Action(referenced),
 	collision_(false), totalActionTime_(0)
 {
-
+	physicsObject_.setHandler(this);
 }
 
 PhysicsParticle::~PhysicsParticle()
 {
 
 }
-
-void PhysicsParticle::setPhysics(
-	PhysicsParticleInfo info,
-	FixedVector &position, FixedVector &velocity,
-	fixed sphereSize, fixed sphereDensity, fixed windFactor, fixed gravityFactor,
-	bool underGroundCollision, bool rotateOnCollision,
-	bool wallCollision, bool stickyShields)
-{
-	physicsObject_.setPhysics(
-		info,
-		*context_, 
-		position, velocity,
-		sphereSize, sphereDensity, windFactor, gravityFactor,
-		underGroundCollision,
-		rotateOnCollision,
-		wallCollision,
-		stickyShields);
-	physicsObject_.setHandler(this);
-}
-
-void PhysicsParticle::applyForce(FixedVector &force)
-{
-	physicsObject_.applyForce(force);
-}
-
-void PhysicsParticle::applyOffset(FixedVector &offset)
-{
-	physicsObject_.applyOffset(offset);
-}
-
 void PhysicsParticle::collision(PhysicsParticleObject &position, 
 	ScorchedCollisionId collisionId)
 {
 	collision_ = true;
-}
-
-void PhysicsParticle::setCurrentPosition(FixedVector &position)
-{
-	physicsObject_.setPosition(position);
-}
-
-FixedVector &PhysicsParticle::getCurrentPosition()
-{
-	return physicsObject_.getPosition();
-}
-
-FixedVector &PhysicsParticle::getCurrentVelocity()
-{
-	return physicsObject_.getVelocity();
-}
-
-FixedVector4 &PhysicsParticle::getRotationQuat()
-{
-	return physicsObject_.getRotationQuat();
 }
 
 void PhysicsParticle::simulate(fixed frameTime, bool &remove)
@@ -96,5 +46,3 @@ void PhysicsParticle::simulate(fixed frameTime, bool &remove)
 	totalActionTime_ += frameTime;
 	if (totalActionTime_ > 30) remove = true;
 }
-
-

@@ -72,15 +72,22 @@ public:
 	void setPhysics(
 		PhysicsParticleInfo info,
 		ScorchedContext &context, 
-		FixedVector &position, FixedVector &velocity,
-		fixed sphereSize = 0,
-		fixed sphereDensity = 0,
-		fixed windFactor = 1,
-		fixed gravityFactor = 1,
-		bool underGroundCollision = false,
-		bool rotateOnCollision = false,
-		bool wallCollision = true,
-		bool stickyShields = false);
+		FixedVector &position, FixedVector &velocity);
+	void setForces(
+		fixed windFactor, fixed gravityFactor);
+
+	void setOptionUnderGroundCollision(bool underGroundCollision) 
+		{ optionUnderGroundCollision_ = underGroundCollision; }
+	void setOptionRotateOnCollision(bool rotateOnCollision) 
+		{ optionRotateOnCollision_ = rotateOnCollision; }
+	void setOptionWallCollision(bool wallCollision) 
+		{ optionWallCollision_ = wallCollision; }
+	void setOptionStickyShields(bool stickyShields) 
+		{ optionStickyShields_ = stickyShields; }
+	void setOptionShieldCollision(bool shieldCollision) 
+		{ optionShieldCollision_ = shieldCollision; }
+	void setOptionLandscapeCollision(bool landscapeCollision)
+		{ optionLandscapeCollision_ = landscapeCollision; }
 
 	void applyForce(FixedVector &force);
 	void applyOffset(FixedVector &offset);
@@ -97,10 +104,12 @@ protected:
 	PhysicsParticleInfo info_;
 	ScorchedContext *context_;
 	PhysicsParticleObjectHandler *handler_;
-	bool underGroundCollision_;
-	bool rotateOnCollision_;
-	bool wallCollision_;
-	bool stickyShields_;
+	bool optionUnderGroundCollision_;
+	bool optionRotateOnCollision_;
+	bool optionWallCollision_;
+	bool optionStickyShields_;
+	bool optionShieldCollision_;
+	bool optionLandscapeCollision_;
 	unsigned int iterations_;
 	FixedVector position_;
 	FixedVector velocity_;

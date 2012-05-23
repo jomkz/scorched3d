@@ -291,6 +291,8 @@ OptionsGame::OptionsGame() :
 		"The scale of the adjustment changes made by the free market", 0, 100),
 	freeMarketLimits_(options_, "FreeMarketLimits",
 		"The scale of the max/min prices (*1.5) allowed by the free market e.g. 2 is a 300% increase/reduction", 0, 2),
+	freeMarketTracksBotPurchases_(options_, "FreeMarketTrackBotPurchases",
+		"Allows the purchases bots (ais) make to be tracked by the free market", 0, false),
 	windForce_(options_, "WindForce", 
 		"The force of the wind", 0, int(WindRandom), windForceEnum),
 	windType_(options_, "WindType", 

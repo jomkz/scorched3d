@@ -33,7 +33,6 @@ public:
 	enum DefnType
 	{
 		eNone,
-		eStartHeight,
 		eRoofCavern,
 		eHeightMapFile,
 		eHeightMapGenerate,
@@ -51,18 +50,6 @@ class LandscapeDefnTypeNone : public LandscapeDefnType
 public:
 	virtual bool readXML(XMLNode *node);
 	virtual DefnType getType() { return eNone; }
-};
-
-class LandscapeDefnStartHeight : public LandscapeDefnType
-{
-public:
-	fixed flatness;
-	fixed startcloseness;
-	fixed heightmin, heightmax;
-	std::string startmask;
-
-	virtual bool readXML(XMLNode *node);
-	virtual DefnType getType() { return eStartHeight; }
 };
 
 class LandscapeDefnRoofCavern : public LandscapeDefnType
@@ -139,6 +126,7 @@ public:
 	virtual DefnType getType() { return eHeightMapGenerate; }
 };
 
+class LandscapeDefnTypeTankStart;
 class LandscapeDefn
 {
 public:
@@ -155,7 +143,7 @@ public:
 	int getArenaY() { return arenay; }
 
 	LandscapeDefnType *roof;
-	LandscapeDefnType *tankstart;
+	LandscapeDefnTypeTankStart *tankstart;
 	LandscapeDefnType *heightmap;
 	LandscapeDefnType *deform;
 	LandscapeTexDefn texDefn;

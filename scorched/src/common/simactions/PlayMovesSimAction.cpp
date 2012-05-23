@@ -253,8 +253,12 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 	// add it to the action controller
 	if (weapon->getParent()->getMuzzleFlash())
 	{
-		Weapon *muzzleFlash = context.getAccessoryStore().getMuzzelFlash();
-		if (muzzleFlash) muzzleFlash->fire(context, weaponContext, position, velocity);
+		Accessory *muzzleFlash = context.getAccessoryStore().getMuzzelFlash();
+		if (muzzleFlash) 
+		{
+			Weapon *muzzleWeapon = (Weapon *) muzzleFlash->getAction();
+			muzzleWeapon->fire(context, weaponContext, position, velocity);
+		}
 	}
 
 	// Create the action for the weapon and

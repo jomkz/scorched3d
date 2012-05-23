@@ -84,10 +84,13 @@ void ShotProjectile::init()
 #endif // #ifndef S3D_SERVER
 
 	PhysicsParticleInfo info(ParticleTypeShot, weaponContext_.getPlayerId(), this);
-	setPhysics(info, startPosition_, velocity_, 
-		0, 0, weapon_->getWindFactor(*context_), weapon_->getGravityFactor(*context_), 
-		getWeapon()->getUnder(), 
-		false, getWeapon()->getWallCollision());
+	getPhysics().setPhysics(info, *context_, startPosition_, velocity_);
+	getPhysics().setForces(weapon_->getWindFactor(*context_), weapon_->getGravityFactor(*context_));
+	getPhysics().setOptionUnderGroundCollision(getWeapon()->getUnder());
+	getPhysics().setOptionWallCollision(getWeapon()->getWallCollision());
+	getPhysics().setOptionLandscapeCollision(getWeapon()->getLandscapeCollision());
+	getPhysics().setOptionShieldCollision(getWeapon()->getShieldCollision());
+
 	thrustTime_ = getWeapon()->getThrustTime(*context_);
 	thrustAmount_ = getWeapon()->getThrustAmount(*context_);
 	timedCollision_ = getWeapon()->getTimedCollision(*context_);
@@ -141,7 +144,7 @@ void ShotProjectile::collision(PhysicsParticleObject &position,
 				{
 					ai->shotLanded(collisionId, 
 						getWeapon(), getPlayerId(), 
-						getCurrentPosition().asVector());
+						getPhysics().getPosition().asVector());
 				}
 			}
 		}
@@ -182,9 +185,9 @@ void ShotProjectile::simulate(fixed frameTime, bool &remove)
 			waterHeight = water->height;
 		}
 
-		if (getCurrentPosition()[2] < waterHeight)
+		if (getPhysics().getPosition()[2] < waterHeight)
 		{
-			doCollision(getCurrentPosition());
+			doCollision(getPhysics().getPosition());
 			remove = true;
 		}
 	}
@@ -193,10 +196,10 @@ void ShotProjectile::simulate(fixed frameTime, bool &remove)
 	if (!remove &&
 		getWeapon()->getApexCollision())
 	{
-		if (getCurrentVelocity()[2] > 0) up_ = true;
+		if (getPhysics().getVelocity()[2] > 0) up_ = true;
 		else if (up_)
 		{
-			doCollision(getCurrentPosition());
+			doCollision(getPhysics().getPosition());
 			remove = true;
 		}
 	}
@@ -205,14 +208,15 @@ void ShotProjectile::simulate(fixed frameTime, bool &remove)
 	if (!remove &&
 		heightCollision_ > 0)
 	{
-		if (getCurrentVelocity()[2] < 0)
+		if (getPhysics().getVelocity()[2] < 0)
 		{
 			fixed landHeight = context_->getLandscapeMaps().
 				getGroundMaps().getInterpHeight(
-					getCurrentPosition()[0], getCurrentPosition()[1]);
-			if (getCurrentPosition()[2] <= heightCollision_ + landHeight)
+					getPhysics().getPosition()[0], 
+					getPhysics().getPosition()[1]);
+			if (getPhysics().getPosition()[2] <= heightCollision_ + landHeight)
 			{
-				doCollision(getCurrentPosition());
+				doCollision(getPhysics().getPosition());
 				remove = true;
 			}
 		}
@@ -223,7 +227,7 @@ void ShotProjectile::simulate(fixed frameTime, bool &remove)
 		FixedVector up(0, 0, 1);
 		FixedVector velocityPerp = (velocity_.Normalize() * up).Normalize();
 		FixedVector forceDir = ((velocityPerp * physicsSpin_.cos()) * wobbleAmount_ * velocity_.Magnitude() / 50);
-		applyOffset(forceDir);
+		getPhysics().applyOffset(forceDir);
 
 		physicsSpin_ += wobbleSpin_;
 	}
@@ -234,19 +238,19 @@ void ShotProjectile::simulate(fixed frameTime, bool &remove)
 		if (totalTime_ < thrustTime_ ||
 			thrustTime_ == 0)
 		{
-			FixedVector direction = getCurrentVelocity();
+			FixedVector direction = getPhysics().getVelocity();
 			direction.StoreNormalize();
 			direction *= thrustAmount_;
-			applyForce(direction);
+			getPhysics().applyForce(direction);
 		}
 	}
 
 	// Drag
 	if (drag_ > 0)
 	{
-		FixedVector direction = getCurrentVelocity();
+		FixedVector direction = getPhysics().getVelocity();
 		direction *= -drag_;
-		applyForce(direction);
+		getPhysics().applyForce(direction);
 	}
 
 	// Timed collision
@@ -255,7 +259,7 @@ void ShotProjectile::simulate(fixed frameTime, bool &remove)
 	{
 		if (totalTime_ > timedCollision_)
 		{
-			doCollision(getCurrentPosition());
+			doCollision(getPhysics().getPosition());
 			remove = true;
 		}
 	}
@@ -271,8 +275,8 @@ void ShotProjectile::simulate(fixed frameTime, bool &remove)
 			{
 				Vector up (0.0f, 0.0f, 1.0f);
 				RenderTracer::TracerLinePoint point;
-				point.position = getCurrentPosition().asVector();
-				point.cross = (getCurrentVelocity().asVector() * up).Normalize();
+				point.position = getPhysics().getPosition().asVector();
+				point.cross = (getPhysics().getVelocity().asVector() * up).Normalize();
 				positions_.push_back(point);
 				snapTime_ = 0;
 			}
@@ -289,9 +293,9 @@ void ShotProjectile::simulate(fixed frameTime, bool &remove)
 
 	if (vPoint_)
 	{
-		FixedVector velocity = -getCurrentVelocity();
+		FixedVector velocity = -getPhysics().getVelocity();
 		velocity[2] = 10;
-		vPoint_->setValues(getCurrentPosition(), velocity);
+		vPoint_->setValues(getPhysics().getPosition(), velocity);
 	}
 }
 
@@ -316,6 +320,7 @@ void ShotProjectile::doCollision(FixedVector &position)
 
 	FixedVector velocity;
 	getWeapon()->getCollisionAction()->fire(
-		*context_, weaponContext_, position, getCurrentVelocity());
+		*context_, weaponContext_, position, 
+		getPhysics().getVelocity());
 }
 

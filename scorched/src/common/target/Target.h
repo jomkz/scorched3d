@@ -44,7 +44,7 @@ class TargetShield;
 class TargetGroup;
 class TargetParachute;
 class TargetRenderer;
-class Weapon;
+class Accessory;
 class Target  
 {
 public:
@@ -77,12 +77,12 @@ public:
 	TargetState &getTargetState() { return *targetState_; }
 
 	// Actions
-	void setDeathAction(Weapon *deathAction) { deathAction_ = deathAction; }
-	void setBurnAction(Weapon *burnAction) { burnAction_ = burnAction; }
-	void setCollisionAction(Weapon *collisionAction) { collisionAction_ = collisionAction; }
-	virtual Weapon *getDeathAction() { return deathAction_; }
-	virtual Weapon *getBurnAction() { return burnAction_; }
-	virtual Weapon *getCollisionAction() { return collisionAction_; }
+	void setDeathAction(Accessory *deathAction) { deathAction_ = deathAction; }
+	void setBurnAction(Accessory *burnAction) { burnAction_ = burnAction; }
+	void setCollisionAction(Accessory *collisionAction) { collisionAction_ = collisionAction; }
+	virtual Accessory *getDeathAction() { return deathAction_; }
+	virtual Accessory *getBurnAction() { return burnAction_; }
+	virtual Accessory *getCollisionAction() { return collisionAction_; }
 
 	// Renderer
 	fixed getBorder() { return border_; }
@@ -114,7 +114,7 @@ protected:
 	TargetGroup *group_;
 	LangString name_;
 	std::string cStrName_;
-	Weapon *deathAction_, *burnAction_, *collisionAction_;
+	Accessory *deathAction_, *burnAction_, *collisionAction_;
 
 };
 

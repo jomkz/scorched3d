@@ -119,14 +119,13 @@ bool AccessoryStore::parseFile(
 		// Add weapons to death animations, weighted by arms level
 		if (accessory->getAction()->getType() == AccessoryPart::AccessoryWeapon)
 		{
-			Weapon *weapon = (Weapon *) accessory->getAction();
 			if (0 == strcmp(accessory->getName(), "WeaponMuzzle"))
 			{
-				muzzleFlash_ = weapon;
+				muzzleFlash_ = accessory;
 			}
 			else if (0 == strcmp(accessory->getName(), "WeaponDeathAnimation"))
 			{
-				deathAnimation_ = weapon;
+				deathAnimation_ = accessory;
 			}
 		}	
 
@@ -300,12 +299,12 @@ std::list<Accessory *> AccessoryStore::getAllAccessories(int sortKey)
 	return result;
 }
 
-Weapon *AccessoryStore::getMuzzelFlash()
+Accessory *AccessoryStore::getMuzzelFlash()
 {
 	return muzzleFlash_;
 }
 
-Weapon *AccessoryStore::getDeathAnimation()
+Accessory *AccessoryStore::getDeathAnimation()
 {
 	return deathAnimation_;
 }

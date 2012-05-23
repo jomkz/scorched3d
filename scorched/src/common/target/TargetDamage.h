@@ -39,7 +39,7 @@ protected:
 	static void calculateDeath(ScorchedContext &context, WeaponFireContext &weaponContext,
 		Weapon *weapon, unsigned int damagedPlayerId);
 	static void addDamageAction(ScorchedContext &context, WeaponFireContext &weaponContext,
-		Target *target, Weapon *weapon);
+		Target *target, Accessory *weapon);
 	static void logDeath(ScorchedContext &context, WeaponFireContext &weaponContext,
 		Weapon *weapon, unsigned int damagedPlayerId);
 

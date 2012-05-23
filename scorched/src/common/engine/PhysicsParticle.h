@@ -32,27 +32,10 @@ public:
 	PhysicsParticle(bool referenced);
 	virtual ~PhysicsParticle();
 
-	virtual void setPhysics(
-		PhysicsParticleInfo info,
-		FixedVector &position, FixedVector &velocity,
-		fixed sphereSize = 0,
-		fixed sphereDensity = 0,
-		fixed windFactor = 1,
-		fixed gravityFactor = 1,
-		bool underGroundCollision = false,
-		bool rotateOnCollision = false,
-		bool wallCollision = true,
-		bool stickyShields = false);
 	virtual void collision(PhysicsParticleObject &position, 
 		ScorchedCollisionId collisionId);
 
-	FixedVector &getCurrentPosition();
-	FixedVector &getCurrentVelocity();
-	FixedVector4 &getRotationQuat();
-	void setCurrentPosition(FixedVector &position);
-
-	void applyForce(FixedVector &force);
-	void applyOffset(FixedVector &offset);
+	PhysicsParticleActionObject &getPhysics() { return physicsObject_; }
 
 	// Inherited from action
 	virtual void simulate(fixed timepassed, bool &remove);

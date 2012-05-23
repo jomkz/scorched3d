@@ -191,6 +191,9 @@ public:
 	int getFreeMarketLimits() { return freeMarketLimits_; }
 	OptionEntryInt &getFreeMarketLimitsEntry() { return freeMarketLimits_; }
 
+	bool getFreeMarketTracksBotPurchases() { return freeMarketTracksBotPurchases_; }
+	OptionEntryBool &getFreeMarketTracksBotPurchasesEntry() { return freeMarketTracksBotPurchases_; }
+
 	int getMaxLandscapeSize() { return maxLandscapeSize_; }
 	OptionEntryInt &getMaxLandscapeSizeEntry() { return maxLandscapeSize_; }
 
@@ -479,6 +482,7 @@ protected:
 	OptionEntryInt maxLandscapeSize_;
 	OptionEntryInt freeMarketAdjustment_;
 	OptionEntryInt freeMarketLimits_;
+	OptionEntryBool freeMarketTracksBotPurchases_;
 	OptionEntryInt minimumLandHeight_;
 	OptionEntryBoundedInt skillForRound_;
 	OptionEntryBoundedInt skillForMatch_;

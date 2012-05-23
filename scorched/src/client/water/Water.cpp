@@ -101,7 +101,7 @@ void Water::generate(ProgressCounter *counter)
 
 	// Set quick water attributes
 	height_ = water->height.asFloat();
-	maxTransparency_ = water->waterTransparency;
+	transparency_ = maxTransparency_ = water->waterTransparency;
 	waterOn_ = true;
 
 	// General all other water items

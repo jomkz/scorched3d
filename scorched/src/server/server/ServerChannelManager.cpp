@@ -520,8 +520,7 @@ void ServerChannelManager::actualSend(const ChannelText &constText,
 		// Remove any bad characters
 		for (unsigned int *r = (unsigned int *) filteredText.c_str(); *r; r++)
 		{
-			if (*r == '%' || *r < 0) *r = ' ';
-			else if (*r == '[') *r = '(';
+			if (*r == '[') *r = '(';
 			else if (*r == ']') *r = ')';
 		}
 		if (!ScorchedServer::instance()->getOptionsGame().getAllowMultiLingualChat())

@@ -40,12 +40,15 @@ public:
 	bool getRoll() { return roll_; }
 	bool getStickyShields() { return stickyShields_; }
 	bool getNoCameraTrack() { return noCameraTrack_; }
+	bool getLandscapeCollision() { return landscapeCollision_; }
+	bool getShieldCollision() { return shieldCollision_; }
 	fixed getShieldHurtFactor(ScorchedContext &context);
 	fixed getTime(ScorchedContext &context);
 	fixed getWindFactor(ScorchedContext &context);
 	fixed getGravityFactor(ScorchedContext &context);
 	fixed getStepSize() { return stepSize_; }
 	fixed getScale(ScorchedContext &context);
+
 	ObjectGroupEntryDefinition &getLocalGroups() { return localGroups_; }
 	ObjectGroupEntryDefinition &getGlobalGroups() { return globalGroups_; }
 
@@ -69,6 +72,8 @@ protected:
 	fixed stepSize_;
 	bool roll_;
 	bool stickyShields_;
+	bool landscapeCollision_;
+	bool shieldCollision_;
 	bool maintainVelocity_;
 	bool noCameraTrack_;
 	

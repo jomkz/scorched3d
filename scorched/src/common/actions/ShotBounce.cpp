@@ -49,9 +49,13 @@ ShotBounce::ShotBounce(WeaponRoller *weapon,
 void ShotBounce::init()
 {
 	PhysicsParticleInfo info(ParticleTypeBounce, weaponContext_.getPlayerId(), this);
-	setPhysics(info, startPosition_, velocity_, 
-		1, 5, weapon_->getWindFactor(*context_), weapon_->getGravityFactor(*context_), false, 
-		weapon_->getRoll(), true, weapon_->getStickyShields());
+	getPhysics().setPhysics(info, *context_, startPosition_, velocity_);
+	getPhysics().setForces(weapon_->getWindFactor(*context_), weapon_->getGravityFactor(*context_));
+	getPhysics().setOptionRotateOnCollision(weapon_->getRoll());
+	getPhysics().setOptionStickyShields(weapon_->getStickyShields());
+	getPhysics().setOptionLandscapeCollision(getWeapon()->getLandscapeCollision());
+	getPhysics().setOptionShieldCollision(getWeapon()->getShieldCollision());
+
 	stepSize_ = weapon_->getStepSize() * 
 		fixed(true, context_->getOptionsGame().getWeaponSpeed());
 	weaponTime_ = weapon_->getTime(*context_);
@@ -129,7 +133,7 @@ void ShotBounce::draw()
 	if (!context_->getServerMode()) 
 	{
 		static float rotMatrix[16];
-		getRotationQuat().getOpenGLRotationMatrix(rotMatrix);
+		getPhysics().getRotationQuat().getOpenGLRotationMatrix(rotMatrix);
 
 		if (!model_)
 		{
@@ -140,15 +144,15 @@ void ShotBounce::draw()
 
 		if (vPoint_)
 		{
-			vPoint_->setValues(getCurrentPosition(), lookFrom_);
+			vPoint_->setValues(getPhysics().getPosition(), lookFrom_);
 		}
 
 		GLState state(GLState::TEXTURE_OFF);
 		glPushMatrix();
 			glTranslatef(
-				getCurrentPosition()[0].asFloat(), 
-				getCurrentPosition()[1].asFloat(), 
-				getCurrentPosition()[2].asFloat() -
+				getPhysics().getPosition()[0].asFloat(), 
+				getPhysics().getPosition()[1].asFloat(), 
+				getPhysics().getPosition()[2].asFloat() -
 				model_->getRenderer()->getModel()->getMin()[2].asFloat() * 0.08f);
 
 			glMultMatrixf(rotMatrix);
@@ -163,5 +167,7 @@ void ShotBounce::doCollision()
 {
 	WeaponRoller *proj = (WeaponRoller *) weapon_;
 	proj->getCollisionAction()->fire(
-		*context_, weaponContext_, getCurrentPosition(), getCurrentVelocity());
+		*context_, weaponContext_, 
+		getPhysics().getPosition(), 
+		getPhysics().getVelocity());
 }

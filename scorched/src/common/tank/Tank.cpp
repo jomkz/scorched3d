@@ -129,7 +129,7 @@ static inline bool lt_accessory(const Accessory *o1, const Accessory *o2)
 	return ((Accessory*)o1)->getAccessoryId() > ((Accessory *)o2)->getAccessoryId();
 }
 
-Weapon *Tank::getDeathAction()
+Accessory *Tank::getDeathAction()
 {
 	std::list<Accessory *> &accessories = getAccessories().
 		getAllAccessoriesByGroup("deathaction");
@@ -143,7 +143,7 @@ Weapon *Tank::getDeathAction()
 			context_.getSimulator().getRandomGenerator().getRandUInt("getDeathAction") % accessoriesVector.size()];
 		if (accessory->getAction()->getType() == AccessoryPart::AccessoryWeapon)
 		{
-			return (Weapon *) accessory->getAction();
+			return accessory;
 		}
 	}
 

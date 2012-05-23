@@ -120,6 +120,7 @@
     <ClCompile Include="..\..\common\image\ImageLuminanceFactory.cpp" />
     <ClCompile Include="..\..\common\image\ImagePngFactory.cpp" />
     <ClCompile Include="..\..\common\image\ImageStore.cpp" />
+    <ClCompile Include="..\..\common\landscapedef\LandscapeDefnTankStart.cpp" />
     <ClCompile Include="..\..\common\simactions\NextTurnSimAction.cpp" />
     <ClCompile Include="..\..\common\simactions\TankBuyingSimAction.cpp" />
     <ClCompile Include="..\..\common\tanket\Tanket.cpp" />
@@ -644,6 +645,7 @@
     <ClInclude Include="..\..\common\image\ImageLuminanceFactory.h" />
     <ClInclude Include="..\..\common\image\ImagePngFactory.h" />
     <ClInclude Include="..\..\common\image\ImageStore.h" />
+    <ClInclude Include="..\..\common\landscapedef\LandscapeDefnTankStart.h" />
     <ClInclude Include="..\..\common\simactions\NextTurnSimAction.h" />
     <ClInclude Include="..\..\common\simactions\TankBuyingSimAction.h" />
     <ClInclude Include="..\..\common\tanket\Tanket.h" />

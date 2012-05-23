@@ -47,6 +47,8 @@ public:
 	bool getShowEndPoint() { return showEndPoint_; }
 	bool getApexCollision() { return apexCollision_; }
 	bool getWaterCollision() { return waterCollision_; }
+	bool getLandscapeCollision() { return landscapeCollision_; }
+	bool getShieldCollision() { return shieldCollision_; }
 	bool getWallCollision() { return wallCollision_; }
 	bool getApexNoDud() { return apexNoDud_; }
 	bool getCreateSmoke() { return createSmoke_; }
@@ -91,6 +93,8 @@ protected:
 	bool showEndPoint_;
 	bool apexCollision_;
 	bool waterCollision_, wallCollision_;
+	bool landscapeCollision_;
+	bool shieldCollision_;
 	bool apexNoDud_, timedDud_;
 	bool noCameraTrack_;
 	NumberParser spinSpeed_;

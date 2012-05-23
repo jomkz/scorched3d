@@ -41,9 +41,9 @@
 #include <common/Logger.h>
 
 PhysicsParticleObject::PhysicsParticleObject() : 
-	handler_(0), context_(0), underGroundCollision_(false), iterations_(0),
-	info_(ParticleTypeNone, 0, 0), rotateOnCollision_(false), wallCollision_(true),
-	stickyShields_(false)
+	handler_(0), context_(0), optionUnderGroundCollision_(false), iterations_(0),
+	info_(ParticleTypeNone, 0, 0), optionRotateOnCollision_(false), optionWallCollision_(true),
+	optionStickyShields_(false), optionShieldCollision_(true), optionLandscapeCollision_(true)
 {
 }
 
@@ -63,23 +63,23 @@ void PhysicsParticleObject::applyOffset(FixedVector &offset)
 
 void PhysicsParticleObject::setPhysics(
 	PhysicsParticleInfo info,
-	ScorchedContext &context, 
-	FixedVector &position, FixedVector &velocity,
-	fixed sphereSize, fixed sphereDensity, fixed windFactor, fixed gravityFactor,
-	bool underGroundCollision, bool rotateOnCollision, 
-	bool wallCollision, bool stickyShields)
+	ScorchedContext &context,
+	FixedVector &position, FixedVector &velocity)
 {
 	info_ = info;
 	context_ = &context;
-	underGroundCollision_ = underGroundCollision;
-	rotateOnCollision_ = rotateOnCollision;
-	wallCollision_ = wallCollision;
-	stickyShields_ = stickyShields;
 
 	FixedVector zaxis(0, 0, 1);
 	rotation_.setQuatFromAxisAndAngle(zaxis, 0);
 	position_ = position;
 	velocity_ = velocity;
+
+	setForces(1, 1);
+}
+
+void PhysicsParticleObject::setForces(
+	fixed windFactor, fixed gravityFactor) 
+{
 	windFactor_ = 
 		context_->getSimulator().getWind().getWindDirection() * 
 		context_->getSimulator().getWind().getWindSpeed() / 
@@ -96,7 +96,7 @@ void PhysicsParticleObject::simulate(fixed frameTime)
 	velocity_ += windFactor_;
 	position_ += velocity_ / 100;
 
-	if (rotateOnCollision_)
+	if (optionRotateOnCollision_)
 	{
 		rotation_ += avelocity_;
 		rotation_.Normalize();
@@ -130,7 +130,7 @@ void PhysicsParticleObject::checkCollision()
 
 			if (action == CollisionActionBounce &&
 				collision.collisionId == CollisionIdShield &&
-				stickyShields_)
+				optionStickyShields_)
 			{
 				bounceFactor = fixed(true, 1750);
 			}
@@ -160,7 +160,7 @@ void PhysicsParticleObject::checkCollision()
 			velocity_[2] = MIN(velocity_[2], 1);
 
 			if (collision.collisionId != CollisionIdShield ||
-				stickyShields_)
+				optionStickyShields_)
 			{
 				bounceFactor = fixed(true, 1750);
 			}
@@ -198,7 +198,7 @@ void PhysicsParticleObject::checkCollision()
 				context_->getLandscapeMaps().getGroundMaps().
 					getInterpHeight(position_[0], position_[1]);
 			fixed particleHeight = position_[2] - landHeight;
-			if (underGroundCollision_)
+			if (optionUnderGroundCollision_)
 			{
 				if (particleHeight > fixed(true, -1000)) 
 					position_[2] = landHeight - fixed(true, 1000);
@@ -209,7 +209,7 @@ void PhysicsParticleObject::checkCollision()
 					position_[2] = landHeight + fixed(true, 1000);
 			}
 
-			if (rotateOnCollision_)
+			if (optionRotateOnCollision_)
 			{
 				FixedVector up(0, 0, -1);
 				FixedVector rotAxis = velocity_ * up;
@@ -425,12 +425,7 @@ PhysicsParticleObject::CollisionAction PhysicsParticleObject::checkFallingCollis
 
 bool PhysicsParticleObject::getLandscapeCollision(CollisionInfo &collision)
 {
-	// Check for collision with the ground
-	// (or underground collision if applicable)
-	fixed landHeight = 
-		context_->getLandscapeMaps().getGroundMaps().
-			getInterpHeight(position_[0], position_[1]);
-	if (underGroundCollision_)
+	if (optionUnderGroundCollision_)
 	{
 		if (position_[2] <= context_->getOptionsGame().getMinimumLandHeight()) 
 		{
@@ -439,7 +434,13 @@ bool PhysicsParticleObject::getLandscapeCollision(CollisionInfo &collision)
 			collision.normal = FixedVector(0, 0, -1);
 			return true;
 		}
-		if (position_[2] >= landHeight)
+		// Check for collision with the ground
+		// (or underground collision if applicable)
+		fixed landHeight = 
+			context_->getLandscapeMaps().getGroundMaps().
+				getInterpHeight(position_[0], position_[1]);
+		if (optionLandscapeCollision_ &&
+			position_[2] >= landHeight)
 		{
 			collision.collisionId = CollisionIdLandscape;
 			collision.deflectFactor = 1;
@@ -458,7 +459,13 @@ bool PhysicsParticleObject::getLandscapeCollision(CollisionInfo &collision)
 			collision.normal = FixedVector(0, 0, 1);
 			return true;
 		}
-		if (position_[2] <= landHeight)
+		// Check for collision with the ground
+		// (or underground collision if applicable)
+		fixed landHeight = 
+			context_->getLandscapeMaps().getGroundMaps().
+				getInterpHeight(position_[0], position_[1]);
+		if (optionLandscapeCollision_ &&
+			position_[2] <= landHeight)
 		{
 			collision.collisionId = CollisionIdLandscape;
 			collision.deflectFactor = 1;
@@ -494,7 +501,7 @@ bool PhysicsParticleObject::getWallCollision(CollisionInfo &collision)
 	}
 
 	// Check if we collide with walls
-	if (!wallCollision_) return false;
+	if (!optionWallCollision_) return false;
 
 	int arenaX = context_->getLandscapeMaps().getGroundMaps().getArenaX();
 	int arenaY = context_->getLandscapeMaps().getGroundMaps().getArenaY();
@@ -533,6 +540,7 @@ bool PhysicsParticleObject::getWallCollision(CollisionInfo &collision)
 
 bool PhysicsParticleObject::getShieldCollision(CollisionInfo &collision, Target *target)
 {
+	if (!optionShieldCollision_) return false;
 	if (!target) return false;
 
 	// Get the shield

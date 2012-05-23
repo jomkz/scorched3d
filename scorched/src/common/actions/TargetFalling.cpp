@@ -76,8 +76,8 @@ void TargetFalling::init()
 
 		FixedVector velocity(0, 0, 0);
 		PhysicsParticleInfo info(ParticleTypeFalling, fallingPlayerId_, this);
-		setPhysics(info, tankStartPosition_, velocity, 
-			0, 0, 0, 1, false);
+		getPhysics().setPhysics(info, *context_, tankStartPosition_, velocity);
+		getPhysics().setForces(0, 1);
 	}
 	else
 	{
@@ -96,13 +96,13 @@ void TargetFalling::simulate(fixed frameTime, bool &remove)
 	if (!collision_)
 	{
 		// Slow falling
-		if (parachute_)	applyForce(parachute_->getSlowForce());
+		if (parachute_)	getPhysics().applyForce(parachute_->getSlowForce());
 
 		// Move the tank to the new position
 		Target *target = context_->getTargetContainer().getTargetById(fallingPlayerId_);
 		if (target && target->getAlive())
 		{
-			FixedVector &position = getCurrentPosition();
+			FixedVector &position = getPhysics().getPosition();
 			if (position[0] != 0 || position[1] != 0 || position[2] != 0)
 			{
 				target->getLife().setTargetPosition(position);
