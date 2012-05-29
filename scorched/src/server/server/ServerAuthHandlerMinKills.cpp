@@ -20,7 +20,7 @@
 
 #include <server/ServerAuthHandlerMinKills.h>
 #include <server/ScorchedServer.h>
-#include <common/StatsLogger.h>
+#include <events/EventHandlerDataBase.h>
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
@@ -47,7 +47,12 @@ bool ServerAuthHandlerMinKills::authenticateUser(ComsConnectAuthMessage &authMes
 {
 	setup();
 
-	int killCount = StatsLogger::instance()->getKillCount(authMessage.getUniqueId());
+	int killCount = 0;
+	if (ScorchedServer::instance()->getEventHandlerDataBase())
+	{
+		killCount = ScorchedServer::instance()->getEventHandlerDataBase()->
+			getKillCount(authMessage.getUniqueId());
+	}
 	if (minKills_ > 0 && killCount < minKills_)
 	{
 		message = S3D::formatStringBuffer(

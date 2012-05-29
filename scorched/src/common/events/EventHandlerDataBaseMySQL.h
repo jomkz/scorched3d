@@ -18,29 +18,38 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_TankRankSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
-#define AFX_TankRankSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
+#ifdef HAVE_MYSQL
 
-#include <simactions/SimAction.h>
+#if !defined(__INCLUDE_EventHandlerDataBaseMySQLh_INCLUDE__)
+#define __INCLUDE_EventHandlerDataBaseMySQLh_INCLUDE__
+
+#if defined(_WIN32)
+#include <Winsock2.h>
+#endif
 #include <events/EventHandlerDataBase.h>
+#include <mysql/mysql.h>
 
-class TankRankSimAction : public SimAction
+class Weapon;
+class EventHandlerDataBaseMySQL : public EventHandlerDataBase
 {
 public:
-	TankRankSimAction();
-	virtual ~TankRankSimAction();
+	EventHandlerDataBaseMySQL();
+	virtual ~EventHandlerDataBaseMySQL();
 
-	void addRank(EventHandlerDataBase::TankRank &rank) { ranks_.push_back(rank); }
-	std::list<EventHandlerDataBase::TankRank> &getRanks() { return  ranks_; }
-
-	virtual bool invokeAction(ScorchedContext &context);
-
-	virtual bool writeMessage(NetBuffer &buffer);
-	virtual bool readMessage(NetBufferReader &reader);
-
-REGISTER_CLASS_HEADER(TankRankSimAction);
 protected:
-	std::list<EventHandlerDataBase::TankRank> ranks_;
+	MYSQL *mysql_;
+
+	virtual bool runQuery(const char *, ...);
+	virtual std::list<EventHandlerDataBase::RowResult> runSelectQuery(const char *, ...);
+	virtual bool connectDatabase(const char *host, const char *port,
+		const char *user, const char *passwd, 
+		const char *db);
+
+	virtual int getLastInsertId();
+	virtual void escapeString(char *to, const char *from, unsigned long length);
+
 };
 
-#endif // !defined(AFX_TankRankSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#endif 
+
+#endif // HAVE_MYSQL

@@ -18,29 +18,50 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_TankRankSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
-#define AFX_TankRankSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
+#include <events/EventHandlerAchievementNumberRankKills.h>
+#include <tank/Tank.h>
 
-#include <simactions/SimAction.h>
-#include <events/EventHandlerDataBase.h>
+static const std::string NAME = "NumberKills";
 
-class TankRankSimAction : public SimAction
-{
-public:
-	TankRankSimAction();
-	virtual ~TankRankSimAction();
-
-	void addRank(EventHandlerDataBase::TankRank &rank) { ranks_.push_back(rank); }
-	std::list<EventHandlerDataBase::TankRank> &getRanks() { return  ranks_; }
-
-	virtual bool invokeAction(ScorchedContext &context);
-
-	virtual bool writeMessage(NetBuffer &buffer);
-	virtual bool readMessage(NetBufferReader &reader);
-
-REGISTER_CLASS_HEADER(TankRankSimAction);
-protected:
-	std::list<EventHandlerDataBase::TankRank> ranks_;
+static unsigned int killRanks[] = {
+	1,
+	10,
+	25,
+	50,
+	100,
+	250,
+	500,
+	1000,
+	2500,
+	5000,
+	10000,
+	15000,
+	20000,
+	25000,
+	30000,
+	35000,
+	40000,
+	45000,
+	50000
 };
 
-#endif // !defined(AFX_TankRankSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+EventHandlerAchievementNumberRankKills::EventHandlerAchievementNumberRankKills(EventHandlerDataBase *database) :
+	EventHandlerAchievementNumberRank(NAME, database, killRanks, sizeof(killRanks)/sizeof(unsigned int))
+{
+
+}
+
+EventHandlerAchievementNumberRankKills::~EventHandlerAchievementNumberRankKills()
+{
+}
+
+unsigned int EventHandlerAchievementNumberRankKills::getCurrentCount(Tank *tank)
+{
+	if (!database_) return 0;
+	return database_->getKillCount(tank->getUniqueId());
+}
+
+void EventHandlerAchievementNumberRankKills::tankKilled(Tank *firedTank, Tank *deadTank, Weapon *weapon)
+{
+	incrementCount(firedTank);
+}

@@ -35,10 +35,11 @@
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
-#include <common/StatsLogger.h>
 #include <common/FileList.h>
+#include <events/EventHandlerDataBase.h>
 #include <net/NetInterface.h>
 #include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
@@ -240,8 +241,12 @@ bool ServerWebHandler::PlayerHandlerThreaded::processRequest(
 	{
 		if (0 == strcmp(action, "ShowAliases"))
 		{
-			std::list<std::string> aliases =
-				StatsLogger::instance()->getAliases(uniqueid);
+			std::list<std::string> aliases;
+			EventHandlerDataBase *database = ScorchedServer::instance()->getEventHandlerDataBase();
+			if (database)
+			{
+				aliases = database->getAliases(uniqueid);
+			}
 			std::string lines = ServerWebServerUtil::concatLines(aliases);
 			return ServerWebServerUtil::getHtmlMessage(
 				request.getSession(), 
@@ -249,8 +254,12 @@ bool ServerWebHandler::PlayerHandlerThreaded::processRequest(
 		}
 		else if (0 == strcmp(action, "ShowIPAliases"))
 		{
-			std::list<std::string> aliases =
-				StatsLogger::instance()->getIpAliases(uniqueid);
+			std::list<std::string> aliases;
+			EventHandlerDataBase *database = ScorchedServer::instance()->getEventHandlerDataBase();
+			if (database)
+			{
+				aliases = database->getIpAliases(uniqueid);
+			}
 			std::string lines = ServerWebServerUtil::concatLines(aliases);
 			return ServerWebServerUtil::getHtmlMessage(
 				request.getSession(), 
@@ -718,6 +727,7 @@ bool ServerWebHandler::StatsHandler::processRequest(
 	std::string &text)
 {
 	std::string message;
+	EventHandlerDataBase *database = ScorchedServer::instance()->getEventHandlerDataBase();
 
 	const char *find;
 	const char *action = ServerWebServerUtil::getField(request.getFields(), "action");
@@ -726,7 +736,10 @@ bool ServerWebHandler::StatsHandler::processRequest(
 		(find = ServerWebServerUtil::getField(request.getFields(), "find")))
 	{
 		message.append("<b>Players</b>\n");
-		message.append(StatsLogger::instance()->getPlayerInfo(find));
+		if (database)
+		{
+			message.append(database->getPlayerInfo(find));
+		}
 	}
 	else if (action && (0 == strcmp(action, "Combine")))
 	{
@@ -738,15 +751,25 @@ bool ServerWebHandler::StatsHandler::processRequest(
 			int p2 = atoi(player2);
 			if (p1 && p2)
 			{
-				StatsLogger::instance()->combinePlayers(p1, p2);
-				message.append("<b>Combined</b>\n");
+				if (database)
+				{
+					database->combinePlayers(p1, p2);
+					message.append("<b>Combined</b>\n");
+				}
+				else 
+				{
+					message.append("<b>No DataBase</b>\n");
+				}
 			}
 		}
 	}
 	else
 	{
 		message.append("<b>Ranks</b>\n");
-		message.append(StatsLogger::instance()->getTopRanks());
+		if (database)
+		{
+			message.append(database->getTopRanks());
+		}		
 	}
 
 	int pos;

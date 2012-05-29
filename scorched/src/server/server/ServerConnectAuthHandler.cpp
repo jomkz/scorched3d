@@ -42,8 +42,8 @@
 #include <common/Defines.h>
 #include <common/FileLines.h>
 #include <common/OptionsScorched.h>
-#include <common/StatsLogger.h>
 #include <common/Logger.h>
+#include <events/EventHandlerDataBase.h>
 #include <net/NetInterface.h>
 #include <simactions/TankAddSimAction.h>
 #include <coms/ComsConnectAcceptMessage.h>
@@ -183,7 +183,10 @@ void ServerConnectAuthHandler::processMessageInternal(
 		// stats logger as this is the only time we can be sure of not
 		// giving out duplicate ids.
 		//
-		uniqueId = StatsLogger::instance()->allocateId();
+		if (ScorchedServer::instance()->getEventHandlerDataBase())
+		{
+			uniqueId = ScorchedServer::instance()->getEventHandlerDataBase()->allocateId();
+		}
 	}
 	std::string SUid = message.getSUI(); //request for SUI
 
@@ -325,8 +328,12 @@ void ServerConnectAuthHandler::addNextTank(unsigned int destinationId,
 	for (char *h=(char *)sentHostDesc; *h; h++) if (*h == '\"') *h=' ';
 
 	// Use the stats name if stats are enabled and the player has one
-	std::list<std::string> aliases  = 
-		StatsLogger::instance()->getAliases(sentUniqueId);
+	std::list<std::string> aliases;
+	if (ScorchedServer::instance()->getEventHandlerDataBase())
+	{
+		aliases = ScorchedServer::instance()->getEventHandlerDataBase()->
+			getAliases(sentUniqueId);
+	}
 	if (!aliases.empty())
 	{
 		LangString alias = LANG_STRING(aliases.front());

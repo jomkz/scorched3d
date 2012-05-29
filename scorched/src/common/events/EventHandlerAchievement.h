@@ -18,38 +18,26 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifdef HAVE_MYSQL
+#if !defined(__INCLUDE_EventHandlerAchievementh_INCLUDE__)
+#define __INCLUDE_EventHandlerAchievementh_INCLUDE__
 
-#if !defined(__INCLUDE_StatsLoggerMySQLh_INCLUDE__)
-#define __INCLUDE_StatsLoggerMySQLh_INCLUDE__
+#include <events/EventHandlerDataBase.h>
 
-#if defined(_WIN32)
-#include <Winsock2.h>
-#endif
-#include <common/StatsLoggerDatabase.h>
-#include <mysql/mysql.h>
-
-class Weapon;
-class StatsLoggerMySQL : public StatsLoggerDatabase
+class EventHandlerAchievement : public EventHandler
 {
 public:
-	StatsLoggerMySQL();
-	virtual ~StatsLoggerMySQL();
+	EventHandlerAchievement(const std::string &name, EventHandlerDataBase *database);
+	virtual ~EventHandlerAchievement();
+
+	const std::string &getAchievementName() { return name_; }
 
 protected:
-	MYSQL *mysql_;
+	std::string name_;
+	unsigned int achievementId_;
+	EventHandlerDataBase *database_;
 
-	virtual bool runQuery(const char *, ...);
-	virtual std::list<StatsLoggerDatabase::RowResult> runSelectQuery(const char *, ...);
-	virtual bool connectDatabase(const char *host, const char *port,
-		const char *user, const char *passwd, 
-		const char *db);
-
-	virtual int getLastInsertId();
-	virtual void escapeString(char *to, const char *from, unsigned long length);
-
+	unsigned int getRank(unsigned int playerId);
+	void awardAchievement(unsigned int playerId, unsigned int rank);
 };
 
-#endif 
-
-#endif // HAVE_MYSQL
+#endif

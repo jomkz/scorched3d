@@ -18,8 +18,9 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <tank/Tank.h>
 #include <tankai/TankAIAdder.h>
-#include <common/StatsLogger.h>
+#include <events/EventHandlerDataBase.h>
 #include <common/OptionsScorched.h>
 #include <target/TargetContainer.h>
 #include <server/ServerConnectAuthHandler.h>
@@ -29,7 +30,11 @@ unsigned int TankAIAdder::getNextTankId(const char *uniqueId, ScorchedContext &c
 	// Try to use the persistent stats id
 	if (uniqueId[0])
 	{
-		unsigned int id = StatsLogger::instance()->getStatsId(uniqueId);
+		unsigned int id = 0;
+		if (ScorchedServer::instance()->getEventHandlerDataBase())
+		{
+			id = ScorchedServer::instance()->getEventHandlerDataBase()->getStatsId(uniqueId);
+		}
 		if (id != 0 &&
 			!context.getTargetContainer().getTargetById(id) &&
 			takenPlayerIds.find(id) == takenPlayerIds.end())

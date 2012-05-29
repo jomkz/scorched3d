@@ -35,7 +35,7 @@
 #include <net/NetInterface.h>
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
-#include <common/StatsLogger.h>
+#include <events/EventController.h>
 
 ServerMessageHandler::ServerMessageHandler()
 {
@@ -214,7 +214,7 @@ void ServerMessageHandler::destroyPlayer(unsigned int tankId, const char *reason
 	}
 
 	// Log the removal
-	StatsLogger::instance()->tankDisconnected(tank);
+	ScorchedServer::instance()->getEventController().tankDisconnected(tank);
 
 	// Actualy remove the tank from the client and server
 	TankRemoveSimAction *removeSimAction = 

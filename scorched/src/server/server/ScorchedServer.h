@@ -45,6 +45,7 @@ class ServerChannelManager;
 class ServerSyncCheck;
 class ServerMessageHandler;
 class ServerFileServer;
+class EventHandlerDataBase;
 
 class ScorchedServer : public ScorchedContext
 {
@@ -79,6 +80,7 @@ public:
 	ServerMessageHandler &getServerMessageHandler() { return *serverMessageHandler_; }
 	ServerFileServer &getServerFileServer() { return *serverFileServer_; }
 	EconomyStore &getEconomyStore() { return *economyStore_; }
+	EventHandlerDataBase *getEventHandlerDataBase() { return eventHandlerDataBase_; }
 
 protected:
 	static ScorchedServer *instance_;
@@ -102,6 +104,7 @@ protected:
 	ServerMessageHandler *serverMessageHandler_;
 	ServerFileServer *serverFileServer_;
 	EconomyStore *economyStore_;
+	EventHandlerDataBase *eventHandlerDataBase_;
 
 	void checkSettings();
 	bool startServerInternal(const ScorchedServerSettings &settings, 

@@ -18,21 +18,73 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <common/StatsLoggerDatabase.h>
+#include <events/EventHandlerDataBase.h>
+#include <events/EventHandlerDataBaseMySQL.h>
+#include <events/EventHandlerDataBasePGSQL.h>
+#include <common/OptionsGame.h>
 #include <common/OptionsScorched.h>
-#include <common/Defines.h>
 #include <common/Logger.h>
-#include <net/NetInterface.h>
-#include <server/ServerCommon.h>
-#include <weapons/AccessoryStore.h>
 #include <server/ScorchedServer.h>
+#include <weapons/AccessoryStore.h>
+#include <weapons/Weapon.h>
+#include <net/NetInterface.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
 #include <tank/TankAvatar.h>
 #include <XML/XMLFile.h>
 #include <stdlib.h>
-#include <time.h>
-#include <math.h>
+
+EventHandlerDataBase *EventHandlerDataBase::createInstance()
+{
+	const char *EventHandlerDataBase =
+		ScorchedServer::instance()->getOptionsGame().getStatsLogger();
+	if (strcmp(EventHandlerDataBase, "mysql") == 0)
+	{
+		if (strcmp(ScorchedServer::instance()->getOptionsGame().getPublishAddress(),
+					"AutoDetect") == 0)
+		{
+			S3D::dialogExit("EventHandlerDataBase",
+				"Stats logging enabled but AutoDetect used for server address");
+		}
+#ifdef HAVE_MYSQL
+		Logger::log( "Created mysql stats logger.");
+		EventHandlerDataBaseMySQL *dataBase = new EventHandlerDataBaseMySQL();
+		dataBase->connect();
+		return dataBase;
+#else
+		S3D::dialogExit("EventHandlerDataBase",
+			"Atempted to create mysql stats logger\n"
+			"but mysql support has not been compiled into this\n"
+			"scorched3d binary.");
+#endif
+	}
+	else if (strcmp(EventHandlerDataBase, "pgsql") == 0)
+	{
+		if (strcmp(ScorchedServer::instance()->getOptionsGame().getPublishAddress(),
+					"AutoDetect") == 0)
+		{
+			S3D::dialogExit("EventHandlerDataBase",
+				"Stats logging enabled but AutoDetect used for server address");
+		}
+
+#ifdef HAVE_PGSQL
+		EventHandlerDataBasePGSQL *dataBase = new EventHandlerDataBasePGSQL();
+		dataBase->connect();
+		return dataBase;
+#else
+		S3D::dialogExit("EventHandlerDataBase",
+			"Atempted to create pgsql stats logger\n"
+			"but pgsql support has not been compiled into this\n"
+			"scorched3d binary.");
+#endif
+	}
+	else
+	{
+		Logger::log( "Created null stats logger.");
+	}
+	return 0;
+}
 
 enum EventType
 {
@@ -47,7 +99,7 @@ enum EventType
 	EventJoined = 9
 };
 
-const char *StatsLoggerDatabase::RowResult::getValue(const char *name)
+const char *EventHandlerDataBase::RowResult::getValue(const char *name)
 {
 	std::map<std::string, unsigned int>::iterator findItor =
 		names.find(name);
@@ -56,21 +108,18 @@ const char *StatsLoggerDatabase::RowResult::getValue(const char *name)
 	return columns[pos].c_str();
 }
 
-StatsLoggerDatabase::StatsLoggerDatabase() : 
-	success_(false),
+EventHandlerDataBase::EventHandlerDataBase() : 
 	serverid_(0), seriesid_(0), prefixid_(0),
 	updateTime_(0)
 {
 }
 
-StatsLoggerDatabase::~StatsLoggerDatabase()
+EventHandlerDataBase::~EventHandlerDataBase()
 {
 }
 
-void StatsLoggerDatabase::createLogger()
+bool EventHandlerDataBase::connect()
 {
-	if (success_) return;
-
 	XMLFile file;
 	std::string fileName = S3D::getSettingsFile(S3D::formatStringBuffer("mysql-%i.xml",
 		ScorchedServer::instance()->getOptionsGame().getPortNo()));
@@ -84,7 +133,7 @@ void StatsLoggerDatabase::createLogger()
 			"Failed to parse %s settings file. Error: %s", 
 			fileName.c_str(),
 			file.getParserError()));
-		return;
+		return false;
 	}
 
 	if (!file.getRootNode()->getNamedChild("host", host) ||
@@ -97,20 +146,18 @@ void StatsLoggerDatabase::createLogger()
 		S3D::dialogExit("Stats Logging", 
 			S3D::formatStringBuffer(
 			"Failed to parse %s settings file.", fileName.c_str()));
-		return;
+		return false;
 	}
 
 	// Create the database connection
-	success_ = false;
 	if (!connectDatabase(host.c_str(), port.c_str(), 
 		user.c_str(), passwd.c_str(), 
 		db.c_str()))
 	{
 		S3D::dialogExit("Stats Logging",
 			"Failed to connect to stats database");
-		return;
+		return false;
 	}
-	success_ = true;
 
 	// Add event types
 	runQuery("INSERT INTO scorched3d_eventtypes "
@@ -130,18 +177,18 @@ void StatsLoggerDatabase::createLogger()
 		EventJoined, EventResigned);
 
 	// Get/allocate the prefixid
-	std::list<StatsLoggerDatabase::RowResult> prefixRows =
+	std::list<EventHandlerDataBase::RowResult> prefixRows =
 		runSelectQuery("SELECT prefixid FROM scorched3d_prefixs "
 		"WHERE prefix = \"%s\";",
 		prefix.c_str());
 	if (!prefixRows.empty())
 	{
-		std::list<StatsLoggerDatabase::RowResult>::iterator itor;
+		std::list<EventHandlerDataBase::RowResult>::iterator itor;
 		for (itor = prefixRows.begin();
 			itor != prefixRows.end();
 			++itor)
 		{
-			StatsLoggerDatabase::RowResult &rowResult = (*itor);
+			EventHandlerDataBase::RowResult &rowResult = (*itor);
 			prefixid_ = atoi(rowResult.columns[0].c_str());
 		}
 	}
@@ -156,18 +203,18 @@ void StatsLoggerDatabase::createLogger()
 	}
 
 	// Get/allocate the server id
-	std::list<StatsLoggerDatabase::RowResult> serverIdRows =
+	std::list<EventHandlerDataBase::RowResult> serverIdRows =
 		runSelectQuery("SELECT serverid, displaystats FROM scorched3d_servers "
 		"WHERE name = \"%s\";",
 		ScorchedServer::instance()->getOptionsGame().getServerName());
 	if (!serverIdRows.empty())
 	{
-		std::list<StatsLoggerDatabase::RowResult>::iterator itor;
+		std::list<EventHandlerDataBase::RowResult>::iterator itor;
 		for (itor = serverIdRows.begin();
 			itor != serverIdRows.end();
 			++itor)
 		{
-			StatsLoggerDatabase::RowResult &rowResult = (*itor);
+			EventHandlerDataBase::RowResult &rowResult = (*itor);
 			serverid_ = atoi(rowResult.columns[0].c_str());
 			displayStats_ = (atoi(rowResult.columns[1].c_str()) != 0);
 		}
@@ -185,17 +232,17 @@ void StatsLoggerDatabase::createLogger()
 	}
 
 	// Get/allocate the series id
-	std::list<StatsLoggerDatabase::RowResult> seriesIdRows =
+	std::list<EventHandlerDataBase::RowResult> seriesIdRows =
 		runSelectQuery("SELECT seriesid FROM scorched3d_series "
 		"WHERE type = 0;");
 	if (!seriesIdRows.empty())
 	{
-		std::list<StatsLoggerDatabase::RowResult>::iterator itor;
+		std::list<EventHandlerDataBase::RowResult>::iterator itor;
 		for (itor = seriesIdRows.begin();
 			itor != seriesIdRows.end();
 			++itor)
 		{
-			StatsLoggerDatabase::RowResult &rowResult = (*itor);
+			EventHandlerDataBase::RowResult &rowResult = (*itor);
 			seriesid_ = atoi(rowResult.columns[0].c_str());
 		}
 	}
@@ -226,7 +273,7 @@ void StatsLoggerDatabase::createLogger()
 		Accessory *accessory = *itor;
 
 		int weaponId = 0;
-		std::list<StatsLoggerDatabase::RowResult> weaponIdRows =
+		std::list<EventHandlerDataBase::RowResult> weaponIdRows =
 			runSelectQuery("SELECT weaponid FROM scorched3d_weapons "
 				"WHERE name = \"%s\" AND seriesid = %i AND prefixid = %i;", 
 				accessory->getName(),
@@ -234,12 +281,12 @@ void StatsLoggerDatabase::createLogger()
 				prefixid_);
 		if (!weaponIdRows.empty())
 		{
-			std::list<StatsLoggerDatabase::RowResult>::iterator itor;
+			std::list<EventHandlerDataBase::RowResult>::iterator itor;
 			for (itor = weaponIdRows.begin();
 				itor != weaponIdRows.end();
 				++itor)
 			{
-				StatsLoggerDatabase::RowResult &rowResult = (*itor);
+				EventHandlerDataBase::RowResult &rowResult = (*itor);
 				weaponId = atoi(rowResult.columns[0].c_str());
 			}
 		}
@@ -286,26 +333,88 @@ void StatsLoggerDatabase::createLogger()
 	Logger::log(S3D::formatStringBuffer("database stats logger started, prefix=%i, server=%i, series=%i",
 		prefixid_, serverid_, seriesid_));
 	periodicUpdate();
+
+	return true;
 }
 
-void StatsLoggerDatabase::addIpAliases(int playerId, 
+unsigned int EventHandlerDataBase::getAchievementId(const std::string &name)
+{
+	unsigned int achievementId = 0;
+	std::list<EventHandlerDataBase::RowResult> achievementIdRows =
+		runSelectQuery("SELECT achievementid FROM scorched3d_achievement_names "
+				"WHERE name = \"%s\";", 
+				name.c_str());
+	if (!achievementIdRows.empty())
+	{
+		achievementId = atoi(achievementIdRows.front().columns[0].c_str());
+	} 
+	else
+	{
+		if (runQuery("INSERT INTO scorched3d_achievement_names "
+				"(name) "
+				"VALUES(\"%s\");", 
+				name.c_str()))
+		{
+			achievementId = getLastInsertId();
+		}
+	}
+	return achievementId;
+}
+
+unsigned int EventHandlerDataBase::getAchievementRank(unsigned int achievementId, unsigned int playerId)
+{
+	unsigned int result = 0;
+	std::list<EventHandlerDataBase::RowResult> achievementRows =
+		runSelectQuery("SELECT achievementrank FROM scorched3d_achievements "
+				"WHERE achievementid = %u AND playerid = %u;", 
+				achievementId, playerId);
+	if (!achievementRows.empty())
+	{
+		result = atoi(achievementRows.front().columns[0].c_str());
+	} 
+	return result;
+}
+
+void EventHandlerDataBase::assignAchievementRank(unsigned int playerId, unsigned int achievementId, unsigned int rank)
+{
+	std::list<EventHandlerDataBase::RowResult> achievementRows =
+		runSelectQuery("SELECT achievementrank FROM scorched3d_achievements "
+				"WHERE achievementid = %u AND playerid = %u;", 
+				achievementId, playerId);
+	if (!achievementRows.empty())
+	{
+		runQuery("UPDATE scorched3d_achievements SET "
+				"achievementrank = %u "
+				"WHERE achievementid = %u AND playerid = %u;", 
+				rank, achievementId, playerId);
+	} 
+	else
+	{
+		runQuery("INSERT INTO scorched3d_achievements "
+				"(achievementid, playerid, achievementrank) "
+				"VALUES(%u, %u, %u);", 
+				achievementId, playerId, rank);
+	}
+}
+
+void EventHandlerDataBase::addIpAliases(int playerId, 
 	std::set<int> &currentPlayers, std::list<std::string> &results)
 {
 	currentPlayers.insert(playerId);
 	addAliases(playerId, results);
 
 	std::list<std::string> ipaddresses;
-	std::list<StatsLoggerDatabase::RowResult> ipaddressesRows =
+	std::list<EventHandlerDataBase::RowResult> ipaddressesRows =
 		runSelectQuery("SELECT ipaddress FROM scorched3d_ipaddress "
 			"WHERE playerid = %i;", playerId);
 	if (!ipaddresses.empty())
 	{
-		std::list<StatsLoggerDatabase::RowResult>::iterator itor;
+		std::list<EventHandlerDataBase::RowResult>::iterator itor;
 		for (itor = ipaddressesRows.begin();
 			itor != ipaddressesRows.end();
 			++itor)
 		{
-			StatsLoggerDatabase::RowResult &rowResult = (*itor);
+			EventHandlerDataBase::RowResult &rowResult = (*itor);
 			ipaddresses.push_back(rowResult.columns[0]);
 		}
 	}
@@ -318,17 +427,17 @@ void StatsLoggerDatabase::addIpAliases(int playerId,
 		const char *ipaddress = (*itor).c_str();
 		std::list<int> newplayers;
 
-		std::list<StatsLoggerDatabase::RowResult> ipaddressRows =
+		std::list<EventHandlerDataBase::RowResult> ipaddressRows =
 			runSelectQuery("SELECT playerid FROM scorched3d_ipaddress "
 				"WHERE ipaddress = \"%s\";", ipaddress);
 		if (!ipaddressRows.empty())
 		{
-			std::list<StatsLoggerDatabase::RowResult>::iterator itor;
+			std::list<EventHandlerDataBase::RowResult>::iterator itor;
 			for (itor = ipaddressRows.begin();
 				itor != ipaddressRows.end();
 				++itor)
 			{
-				StatsLoggerDatabase::RowResult &rowResult = (*itor);
+				EventHandlerDataBase::RowResult &rowResult = (*itor);
 				int newplayerid = atoi(rowResult.columns[0].c_str());
 				if (currentPlayers.find(newplayerid) == currentPlayers.end())
 				{
@@ -347,18 +456,15 @@ void StatsLoggerDatabase::addIpAliases(int playerId,
 	}
 }
 
-std::string StatsLoggerDatabase::getTopRanks()
+std::string EventHandlerDataBase::getTopRanks()
 {
-        createLogger();
-        if (!success_) return "";
-
 	const char *columns = 
 		"rank, kills, deaths, selfkills, teamkills, shots, wins, "
 		"overallwinner, resigns, gamesplayed, timeplayed, roundsplayed, "
 		"moneyearned, skill, name";
 
 	std::string stringResult;
-	std::list<StatsLoggerDatabase::RowResult> rankRows =
+	std::list<EventHandlerDataBase::RowResult> rankRows =
 		runSelectQuery(
 			"select %s from scorched3d_stats "
 			"left join scorched3d_players on scorched3d_stats.playerid = "
@@ -380,12 +486,12 @@ std::string StatsLoggerDatabase::getTopRanks()
 
 	if (!rankRows.empty())
 	{
-		std::list<StatsLoggerDatabase::RowResult>::iterator itor;
+		std::list<EventHandlerDataBase::RowResult>::iterator itor;
 		for (itor = rankRows.begin();
 			itor != rankRows.end();
 			++itor)
 		{
-			StatsLoggerDatabase::RowResult &result = (*itor);
+			EventHandlerDataBase::RowResult &result = (*itor);
 			stringResult.append("<tr>");
 			for (unsigned int i=0; i<result.columns.size(); i++)
 			{
@@ -398,13 +504,10 @@ std::string StatsLoggerDatabase::getTopRanks()
 	return S3D::formatStringBuffer("%s", stringResult.c_str());
 }
 
-std::string StatsLoggerDatabase::getPlayerInfo(const char *player)
+std::string EventHandlerDataBase::getPlayerInfo(const char *player)
 {
-        createLogger();
-        if (!success_) return "";
-
 	std::string stringResult;
-	std::list<StatsLoggerDatabase::RowResult> playerRows =
+	std::list<EventHandlerDataBase::RowResult> playerRows =
 		runSelectQuery("select "
 			"scorched3d_names.playerid as playerid, "
 			"scorched3d_names.name as name, "
@@ -415,12 +518,12 @@ std::string StatsLoggerDatabase::getPlayerInfo(const char *player)
 			player);
 	if (!playerRows.empty())
 	{
-		std::list<StatsLoggerDatabase::RowResult>::iterator itor;
+		std::list<EventHandlerDataBase::RowResult>::iterator itor;
 		for (itor = playerRows.begin();
 			itor != playerRows.end();
 			++itor)
 		{
-			StatsLoggerDatabase::RowResult &result = (*itor);
+			EventHandlerDataBase::RowResult &result = (*itor);
 			for (unsigned int i=0; i<result.columns.size(); i++)
 			{
 				stringResult.append(result.columns[i]);
@@ -433,17 +536,14 @@ std::string StatsLoggerDatabase::getPlayerInfo(const char *player)
 	return S3D::formatStringBuffer("%s", stringResult.c_str());
 }
 
-void StatsLoggerDatabase::combinePlayers(unsigned int player1, unsigned int player2)
+void EventHandlerDataBase::combinePlayers(unsigned int player1, unsigned int player2)
 {
-        createLogger();
-        if (!success_) return;
-
 	// Check these players exist
-	std::list<StatsLoggerDatabase::RowResult> player1Rows =
+	std::list<EventHandlerDataBase::RowResult> player1Rows =
 		runSelectQuery("select name, uniqueid from "
 		"scorched3d_players where playerid=%i", 
 		player1);
-	std::list<StatsLoggerDatabase::RowResult> player2Rows =
+	std::list<EventHandlerDataBase::RowResult> player2Rows =
 		runSelectQuery("select name, uniqueid from "
 		"scorched3d_players where playerid=%i", 
 		player2);
@@ -451,21 +551,21 @@ void StatsLoggerDatabase::combinePlayers(unsigned int player1, unsigned int play
 	if (player2Rows.empty()) return;
 
 	// Find all results from player2
-	std::list<StatsLoggerDatabase::RowResult> player2Results =
+	std::list<EventHandlerDataBase::RowResult> player2Results =
 		runSelectQuery("select * from scorched3d_stats where playerid=%i", 
 		player2);
-	std::list<StatsLoggerDatabase::RowResult>::iterator itor;
+	std::list<EventHandlerDataBase::RowResult>::iterator itor;
 	for (itor = player2Results.begin();
 		itor != player2Results.end();
 		++itor)
 	{
-		StatsLoggerDatabase::RowResult &player2Result = *itor;
+		EventHandlerDataBase::RowResult &player2Result = *itor;
 		const char *prefixId = player2Result.getValue("prefixid");
 		const char *seriesId = player2Result.getValue("seriesid");
 		if (prefixId && seriesId)
 		{
 			// Find all results from player1 in the same prefix and series
-			std::list<StatsLoggerDatabase::RowResult> player1Results =
+			std::list<EventHandlerDataBase::RowResult> player1Results =
 				runSelectQuery("select * from scorched3d_stats where playerid=%i AND "
 				"prefixid=%s and seriesid=%s", 
 				player1, prefixId, seriesId);
@@ -480,7 +580,7 @@ void StatsLoggerDatabase::combinePlayers(unsigned int player1, unsigned int play
 			else
 			{
 				// There are results for player1, combine the results
-				StatsLoggerDatabase::RowResult &player1Result = player1Results.front();
+				EventHandlerDataBase::RowResult &player1Result = player1Results.front();
 				std::map<std::string, unsigned int>::iterator itor;
 				for (itor = player1Result.names.begin();
 					itor != player1Result.names.end();
@@ -523,12 +623,9 @@ void StatsLoggerDatabase::combinePlayers(unsigned int player1, unsigned int play
 	runQuery("delete from scorched3d_ipaddresses where playerid=%i", player2);
 }
 
-std::list<std::string> StatsLoggerDatabase::getIpAliases(const char *unqiueId)
+std::list<std::string> EventHandlerDataBase::getIpAliases(const char *unqiueId)
 {
 	std::list<std::string> results;
-	createLogger();
-	if (!success_) return results;
-	
 	int playerId = getPlayerId(unqiueId);
 	if (playerId == 0) return results;
 
@@ -551,23 +648,23 @@ static bool findInList(std::list<std::string> &results,
 	return false;
 }
 
-void StatsLoggerDatabase::addAliases(int playerId, 
+void EventHandlerDataBase::addAliases(int playerId, 
 	std::list<std::string> &results)
 {
 	// Make sure the last used name is in the list and
 	// it is always first
 	{
-		std::list<StatsLoggerDatabase::RowResult> nameRows =
+		std::list<EventHandlerDataBase::RowResult> nameRows =
 			runSelectQuery("SELECT name FROM scorched3d_players "
 				"WHERE playerid = %i;", playerId);
 		if (!nameRows.empty())
 		{
-			std::list<StatsLoggerDatabase::RowResult>::iterator itor;
+			std::list<EventHandlerDataBase::RowResult>::iterator itor;
 			for (itor = nameRows.begin();
 				itor != nameRows.end();
 				++itor)
 			{
-				StatsLoggerDatabase::RowResult &rowResult = (*itor);
+				EventHandlerDataBase::RowResult &rowResult = (*itor);
 				if (!findInList(results, rowResult.columns[0].c_str()))
 				{
 					results.push_back(rowResult.columns[0].c_str());
@@ -578,17 +675,17 @@ void StatsLoggerDatabase::addAliases(int playerId,
 
 	// Add all other UNIQUE aliases
 	{
-		std::list<StatsLoggerDatabase::RowResult> nameRows =
+		std::list<EventHandlerDataBase::RowResult> nameRows =
 			runSelectQuery("SELECT name FROM scorched3d_names "
 				"WHERE playerid = %i;", playerId);
 		if (!nameRows.empty())
 		{
-			std::list<StatsLoggerDatabase::RowResult>::iterator itor;
+			std::list<EventHandlerDataBase::RowResult>::iterator itor;
 			for (itor = nameRows.begin();
 				itor != nameRows.end();
 				++itor)
 			{
-				StatsLoggerDatabase::RowResult &rowResult = (*itor);
+				EventHandlerDataBase::RowResult &rowResult = (*itor);
 				if (!findInList(results, rowResult.columns[0].c_str()))
 				{
 					results.push_back(rowResult.columns[0].c_str());
@@ -598,12 +695,9 @@ void StatsLoggerDatabase::addAliases(int playerId,
 	}
 }
 
-std::list<std::string> StatsLoggerDatabase::getAliases(const char *unqiueId)
+std::list<std::string> EventHandlerDataBase::getAliases(const char *unqiueId)
 {
 	std::list<std::string> results;
-	createLogger();
-	if (!success_) return results;
-	
 	int playerId = getPlayerId(unqiueId);
 	if (playerId == 0) return results;
 	addAliases(playerId, results);
@@ -611,11 +705,8 @@ std::list<std::string> StatsLoggerDatabase::getAliases(const char *unqiueId)
 	return results;
 }
 
-void StatsLoggerDatabase::gameStart(std::list<Tank *> &tanks)
+void EventHandlerDataBase::gameStart(std::list<Tank *> &tanks)
 {
-	createLogger();
-	if (!success_) return;
-
 	runQuery("UPDATE scorched3d_series SET games = games + 1, "
 		"ended = NOW() WHERE seriesid = %i;",
 		seriesid_);
@@ -637,11 +728,8 @@ void StatsLoggerDatabase::gameStart(std::list<Tank *> &tanks)
 	}
 }
 
-void StatsLoggerDatabase::roundStart(std::list<Tank *> &tanks)
+void EventHandlerDataBase::roundStart(std::list<Tank *> &tanks)
 {
-	createLogger();
-	if (!success_) return;
-
 	runQuery("UPDATE scorched3d_series SET rounds = rounds + 1, "
 		"ended = NOW() WHERE seriesid = %i;",
 		seriesid_);
@@ -663,23 +751,23 @@ void StatsLoggerDatabase::roundStart(std::list<Tank *> &tanks)
 	}
 }
 
-void StatsLoggerDatabase::tankFired(Tank *firedTank, Weapon *weapon)
+void EventHandlerDataBase::tankFired(Tank *firedTank, Weapon *weapon)
 {
-	createLogger();
-	if (!success_) return;
-
 	runQuery("UPDATE scorched3d_stats SET shots=shots+1 "
 		"WHERE playerid = %i AND prefixid = %i AND seriesid = %i;", 
 		playerId_[firedTank->getUniqueId()],
 		prefixid_,
 		seriesid_);
+
+	runQuery("UPDATE scorched3d_weapons SET shots=shots+1 "
+		"WHERE weaponid = \"%i\" AND prefixid = %i AND seriesid = %i;", 
+		weaponId_[weapon->getParent()->getName()],
+		prefixid_,
+		seriesid_);
 }
 
-void StatsLoggerDatabase::tankResigned(Tank *tank)
+void EventHandlerDataBase::tankResigned(Tank *tank)
 {
-	createLogger();
-	if (!success_) return;
-
     runQuery("INSERT INTO scorched3d_events "
 		"(prefixid, seriesid, eventtype, playerid, otherplayerid, weaponid, eventtime) "
 		"VALUES(%i, %i, %i, %i, 0, 0, NOW());",
@@ -694,11 +782,8 @@ void StatsLoggerDatabase::tankResigned(Tank *tank)
 		seriesid_);
 }
 
-void StatsLoggerDatabase::updateStats(Tank *tank)
+void EventHandlerDataBase::periodicUpdate(Tank *tank)
 {
-	createLogger();
-	if (!success_) return;
-
 	if (tank->getState().getTankPlaying())
 	{
 		unsigned int playerId = playerId_[tank->getUniqueId()];
@@ -715,7 +800,7 @@ void StatsLoggerDatabase::updateStats(Tank *tank)
 	}
 }
 
-void StatsLoggerDatabase::periodicUpdate()
+void EventHandlerDataBase::periodicUpdate()
 {
 	time_t currentTime = time(0);
 	if (currentTime - updateTime_ > 60 * 60 * 12) // 12 hrs
@@ -724,18 +809,18 @@ void StatsLoggerDatabase::periodicUpdate()
 		Logger::log(S3D::formatStringBuffer("statslogger database starting periodics"));
 
 		// Cleanup orphaned avatars
-		std::list<StatsLoggerDatabase::RowResult> binaryRows =
+		std::list<EventHandlerDataBase::RowResult> binaryRows =
 			runSelectQuery("select binaryid, count(binaryid) "
 				"from scorched3d_binary left join "
 				"scorched3d_players on binaryid = avatarid group by avatarid");
 		if (!binaryRows.empty())
 		{
-			std::list<StatsLoggerDatabase::RowResult>::iterator itor;
+			std::list<EventHandlerDataBase::RowResult>::iterator itor;
 			for (itor = binaryRows.begin();
 				itor != binaryRows.end();
 				++itor)
 			{
-				StatsLoggerDatabase::RowResult &rowResult = (*itor);
+				EventHandlerDataBase::RowResult &rowResult = (*itor);
 				if (rowResult.columns[1] == "0")
 				{
 					runQuery("delete from scorched3d_binary where binaryid = %s",
@@ -745,8 +830,8 @@ void StatsLoggerDatabase::periodicUpdate()
 		}
 
 		// Generate ranks
-		std::list<StatsLoggerDatabase::RowResult>::iterator playerItor;
-		std::list<StatsLoggerDatabase::RowResult> playerRows =
+		std::list<EventHandlerDataBase::RowResult>::iterator playerItor;
+		std::list<EventHandlerDataBase::RowResult> playerRows =
 			runSelectQuery(
 				"SELECT playerid, skill from scorched3d_stats "
 				"WHERE seriesid=%u and prefixid=%u order by skill desc",
@@ -758,7 +843,7 @@ void StatsLoggerDatabase::periodicUpdate()
 			playerItor != playerRows.end();
 			++playerItor, rank++)
 		{
-			StatsLoggerDatabase::RowResult &playerRow = *playerItor;
+			EventHandlerDataBase::RowResult &playerRow = *playerItor;
 			runQuery("UPDATE scorched3d_stats SET rank=%i "
 				"WHERE seriesid=%u and prefixid=%u and playerid=%s",
 				rank, 
@@ -771,15 +856,14 @@ void StatsLoggerDatabase::periodicUpdate()
 	}
 }
 
-StatsLogger::TankRank StatsLoggerDatabase::tankRank(Tank *tank)
+EventHandlerDataBase::TankRank EventHandlerDataBase::tankRank(Tank *tank)
 {
 	TankRank result(tank->getPlayerId());
 
-	createLogger();
-	if (!success_ || !displayStats_) return result;
+	if (!displayStats_) return result;
 
 	// Try to determine this players sql playerid
-	std::list<StatsLoggerDatabase::RowResult> skillRows =
+	std::list<EventHandlerDataBase::RowResult> skillRows =
 		runSelectQuery("SELECT skill FROM scorched3d_stats "
 		"WHERE playerid = %i AND prefixid = %i AND seriesid = %i;", 
 		playerId_[tank->getUniqueId()],
@@ -787,16 +871,16 @@ StatsLogger::TankRank StatsLoggerDatabase::tankRank(Tank *tank)
 		seriesid_);
 	if (!skillRows.empty())
 	{
-		std::list<StatsLoggerDatabase::RowResult>::iterator itor;
+		std::list<EventHandlerDataBase::RowResult>::iterator itor;
 		for (itor = skillRows.begin();
 			itor != skillRows.end();
 			++itor)
 		{
-			StatsLoggerDatabase::RowResult &rowResult = (*itor);
+			EventHandlerDataBase::RowResult &rowResult = (*itor);
 			result.setSkill(atoi(rowResult.columns[0].c_str()));
 		}
 
-		std::list<StatsLoggerDatabase::RowResult> countRows =
+		std::list<EventHandlerDataBase::RowResult> countRows =
 			runSelectQuery("SELECT count(*) FROM scorched3d_stats "
 			"WHERE skill > \"%i\" AND prefixid = %i AND seriesid = %i;", 
 			result.getSkill(),
@@ -804,12 +888,12 @@ StatsLogger::TankRank StatsLoggerDatabase::tankRank(Tank *tank)
 			seriesid_);
 		if (!countRows.empty())
 		{
-			std::list<StatsLoggerDatabase::RowResult>::iterator itor;
+			std::list<EventHandlerDataBase::RowResult>::iterator itor;
 			for (itor = countRows.begin();
 				itor != countRows.end();
 				++itor)
 			{
-				StatsLoggerDatabase::RowResult &rowResult = (*itor);
+				EventHandlerDataBase::RowResult &rowResult = (*itor);
 				result.setRank(atoi(rowResult.columns[0].c_str()) + 1);
 			}
 		}
@@ -818,40 +902,39 @@ StatsLogger::TankRank StatsLoggerDatabase::tankRank(Tank *tank)
 	return result;
 }
 
-int StatsLoggerDatabase::getPlayerId(const char *uniqueId)
+int EventHandlerDataBase::getPlayerId(const char *uniqueId)
 {
-	createLogger();
-	if (!success_) return 0;
+	std::map<std::string, int>::iterator itor = playerId_.find(uniqueId);
+	if (itor != playerId_.end()) return itor->second;
 
 	// Try to determine this players sql playerid
 	int playerId = 0;
-	std::list<StatsLoggerDatabase::RowResult> playerIdRows =
+	std::list<EventHandlerDataBase::RowResult> playerIdRows =
 		runSelectQuery("SELECT playerid FROM scorched3d_players "
 			"WHERE uniqueid = \"%s\";", uniqueId);
 	if (!playerIdRows.empty())
 	{
-		std::list<StatsLoggerDatabase::RowResult>::iterator itor;
+		std::list<EventHandlerDataBase::RowResult>::iterator itor;
 		for (itor = playerIdRows.begin();
 			itor != playerIdRows.end();
 			++itor)
 		{
-			StatsLoggerDatabase::RowResult &rowResult = (*itor);
+			EventHandlerDataBase::RowResult &rowResult = (*itor);
 			playerId = atoi(rowResult.columns[0].c_str());
+			playerId_[uniqueId] = playerId;
 		}
 	}
 
 	return playerId;
 }
 
-unsigned int StatsLoggerDatabase::getStatsId(const char *uniqueId)
+unsigned int EventHandlerDataBase::getStatsId(const char *uniqueId)
 {
-	createLogger();
-	if (!success_) return 0;
 	int id = getPlayerId(uniqueId);
 	return id;
 }
 
-std::string StatsLoggerDatabase::allocateId() 
+std::string EventHandlerDataBase::allocateId() 
 { 
 	const char possibleChars [] = {
 		'1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -877,7 +960,7 @@ std::string StatsLoggerDatabase::allocateId()
 	return buffer;
 }
 
-void StatsLoggerDatabase::addInfo(Tank *tank)
+void EventHandlerDataBase::addInfo(Tank *tank)
 {
 	char playerName[1024];
 	escapeString(playerName, 
@@ -913,11 +996,8 @@ void StatsLoggerDatabase::addInfo(Tank *tank)
 		playerId_[tank->getUniqueId()]);
 }
 
-void StatsLoggerDatabase::tankConnected(Tank *tank)
+void EventHandlerDataBase::tankConnected(Tank *tank)
 {
-        createLogger();
-        if (!success_) return;
-
 	// We don't have a player id, create one
 	int playerId = getPlayerId(tank->getUniqueId());
 	if (playerId == 0)
@@ -936,7 +1016,7 @@ void StatsLoggerDatabase::tankConnected(Tank *tank)
 	}
 
 	// Create the players stats entry if it does not exist
-	std::list<StatsLoggerDatabase::RowResult> playerIdRows =
+	std::list<EventHandlerDataBase::RowResult> playerIdRows =
 		runSelectQuery("SELECT playerid FROM scorched3d_stats "
 		"WHERE playerid = %i AND prefixid = %i AND seriesid = %i;", 
 		playerId,
@@ -978,11 +1058,8 @@ void StatsLoggerDatabase::tankConnected(Tank *tank)
 		seriesid_);
 }
 
-void StatsLoggerDatabase::tankJoined(Tank *tank)
+void EventHandlerDataBase::tankJoined(Tank *tank)
 {
-	createLogger();
-	if (!success_) return;
-
 	// Joined events
 	runQuery("INSERT INTO scorched3d_events "
 		"(prefixid, seriesid, eventtype, playerid, otherplayerid, weaponid, eventtime) "
@@ -1007,19 +1084,19 @@ void StatsLoggerDatabase::tankJoined(Tank *tank)
 
 		int binaryid = 0;
 		unsigned int crc = tank->getAvatar().getCrc();
-		std::list<StatsLoggerDatabase::RowResult> binaryIdRows =
+		std::list<EventHandlerDataBase::RowResult> binaryIdRows =
 			runSelectQuery("SELECT binaryid FROM scorched3d_binary "
 			"WHERE name = \"%s\" AND crc = %u;", 
 			buffer,
 			crc);
 		if (!binaryIdRows.empty())
 		{
-			std::list<StatsLoggerDatabase::RowResult>::iterator itor;
+			std::list<EventHandlerDataBase::RowResult>::iterator itor;
 			for (itor = binaryIdRows.begin();
 				itor != binaryIdRows.end();
 				++itor)
 			{
-				StatsLoggerDatabase::RowResult &rowResult = (*itor);
+				EventHandlerDataBase::RowResult &rowResult = (*itor);
 				binaryid = atoi(rowResult.columns[0].c_str());
 			}
 		}
@@ -1052,27 +1129,24 @@ void StatsLoggerDatabase::tankJoined(Tank *tank)
 	}
 }
 
-int StatsLoggerDatabase::getKillCount(const char *uniqueId)
+int EventHandlerDataBase::getKillCount(const char *uniqueId)
 {
-        createLogger();
-        if (!success_) return 0;
-
 	int kills = 0;
 	int playerId = getPlayerId(uniqueId);
 	if (playerId != 0) 
 	{
-		std::list<StatsLoggerDatabase::RowResult> killsRows =
+		std::list<EventHandlerDataBase::RowResult> killsRows =
 			runSelectQuery("SELECT kills FROM scorched3d_stats "
 			"WHERE playerid = %i;",
 			playerId);
 		if (!killsRows.empty())
 		{
-			std::list<StatsLoggerDatabase::RowResult>::iterator itor;
+			std::list<EventHandlerDataBase::RowResult>::iterator itor;
 			for (itor = killsRows.begin();
 				itor != killsRows.end();
 				++itor)
 			{
-				StatsLoggerDatabase::RowResult &rowResult = (*itor);
+				EventHandlerDataBase::RowResult &rowResult = (*itor);
 				kills += atoi(rowResult.columns[0].c_str());
 			}
 		}
@@ -1081,11 +1155,8 @@ int StatsLoggerDatabase::getKillCount(const char *uniqueId)
 	return kills;
 }
 
-void StatsLoggerDatabase::tankDisconnected(Tank *tank)
+void EventHandlerDataBase::tankDisconnected(Tank *tank)
 {
-	createLogger();
-	if (!success_) return;
-
 	// Leaving events
 	runQuery("INSERT INTO scorched3d_events "
 		"(prefixid, seriesid, eventtype, playerid, otherplayerid, weaponid, eventtime) "
@@ -1094,14 +1165,11 @@ void StatsLoggerDatabase::tankDisconnected(Tank *tank)
 		EventDisconnected,
 		playerId_[tank->getUniqueId()]);
 
-	updateStats(tank);
+	periodicUpdate(tank);
 }
 
-void StatsLoggerDatabase::tankKilled(Tank *firedTank, Tank *deadTank, Weapon *weapon)
+void EventHandlerDataBase::tankKilled(Tank *firedTank, Tank *deadTank, Weapon *weapon)
 {
-	createLogger();
-	if (!success_) return;
-
 	runQuery("INSERT INTO scorched3d_events "
 		"(prefixid, seriesid, eventtype, playerid, otherplayerid, weaponid, eventtime) "
 		"VALUES(%i, %i, %i, %i, %i, %i, NOW());",
@@ -1124,13 +1192,16 @@ void StatsLoggerDatabase::tankKilled(Tank *firedTank, Tank *deadTank, Weapon *we
 		playerId_[deadTank->getUniqueId()],
 		prefixid_,
 		seriesid_);
+
+	runQuery("UPDATE scorched3d_weapons SET kills=kills+1 "
+		"WHERE weaponid = \"%i\" AND prefixid = %i AND seriesid = %i;", 
+		weaponId_[weapon->getParent()->getName()],
+		prefixid_,
+		seriesid_);
 }
 
-void StatsLoggerDatabase::tankTeamKilled(Tank *firedTank, Tank *deadTank, Weapon *weapon)
+void EventHandlerDataBase::tankTeamKilled(Tank *firedTank, Tank *deadTank, Weapon *weapon)
 {
-	createLogger();
-	if (!success_) return;
-
 	runQuery("INSERT INTO scorched3d_events "
 		"(prefixid, seriesid, eventtype, playerid, otherplayerid, weaponid, eventtime) "
 		"VALUES(%i, %i, %i, %i, %i, %i, NOW());",
@@ -1152,13 +1223,16 @@ void StatsLoggerDatabase::tankTeamKilled(Tank *firedTank, Tank *deadTank, Weapon
 		playerId_[deadTank->getUniqueId()],
 		prefixid_,
 		seriesid_);
+
+	runQuery("UPDATE scorched3d_weapons SET kills=kills+1 "
+		"WHERE weaponid = \"%i\" AND prefixid = %i AND seriesid = %i;", 
+		weaponId_[weapon->getParent()->getName()],
+		prefixid_,
+		seriesid_);
 }
 
-void StatsLoggerDatabase::tankSelfKilled(Tank *firedTank, Weapon *weapon)
+void EventHandlerDataBase::tankSelfKilled(Tank *firedTank, Weapon *weapon)
 {
-	createLogger();
-	if (!success_) return;
-
 	runQuery("INSERT INTO scorched3d_events "
 		"(prefixid, seriesid, eventtype, playerid, otherplayerid, weaponid, eventtime) "
 		"VALUES(%i, %i, %i, %i, 0, %i, NOW());",
@@ -1173,13 +1247,16 @@ void StatsLoggerDatabase::tankSelfKilled(Tank *firedTank, Weapon *weapon)
 		playerId_[firedTank->getUniqueId()],
 		prefixid_,
 		seriesid_);
+
+	runQuery("UPDATE scorched3d_weapons SET kills=kills+1 "
+		"WHERE weaponid = \"%i\" AND prefixid = %i AND seriesid = %i;", 
+		weaponId_[weapon->getParent()->getName()],
+		prefixid_,
+		seriesid_);
 }
 
-void StatsLoggerDatabase::tankWon(Tank *tank)
+void EventHandlerDataBase::tankWon(Tank *tank)
 {
-	createLogger();
-	if (!success_) return;
-
 	runQuery("INSERT INTO scorched3d_events "
 		"(prefixid, seriesid, eventtype, playerid, otherplayerid, weaponid, eventtime) "
 		"VALUES(%i, %i, %i, %i, 0, 0, NOW());",
@@ -1195,11 +1272,8 @@ void StatsLoggerDatabase::tankWon(Tank *tank)
 		seriesid_);
 }
 
-void StatsLoggerDatabase::tankOverallWinner(Tank *tank)
+void EventHandlerDataBase::tankOverallWinner(Tank *tank)
 {
-	createLogger();
-	if (!success_) return;
-
 	runQuery("INSERT INTO scorched3d_events "
 		"(prefixid, seriesid, eventtype, playerid, otherplayerid, weaponid, eventtime) "
 		"VALUES(%i, %i, %i, %i, 0, 0, NOW());",
@@ -1214,50 +1288,3 @@ void StatsLoggerDatabase::tankOverallWinner(Tank *tank)
 		prefixid_,
 		seriesid_);
 }
-
-void StatsLoggerDatabase::weaponFired(Weapon *weapon, bool deathAni)
-{
-        createLogger();
-        if (!success_) return;
-
-	if (deathAni)
-	{
-		runQuery("UPDATE scorched3d_weapons SET deathshots=deathshots+1 "
-			"WHERE weaponid = \"%i\" AND prefixid = %i AND seriesid = %i;",
-			weaponId_[weapon->getParent()->getName()],
-			prefixid_,
-			seriesid_);
-	}
-	else
-	{
-		runQuery("UPDATE scorched3d_weapons SET shots=shots+1 "
-			"WHERE weaponid = \"%i\" AND prefixid = %i AND seriesid = %i;", 
-			weaponId_[weapon->getParent()->getName()],
-			prefixid_,
-			seriesid_);
-	}
-}
-
-void StatsLoggerDatabase::weaponKilled(Weapon *weapon, bool deathAni)
-{
-        createLogger();
-        if (!success_) return;
-
-	if (deathAni)
-	{
-		runQuery("UPDATE scorched3d_weapons SET deathkills=deathkills+1 "
-			"WHERE weaponid = \"%i\" AND prefixid = %i AND seriesid = %i;", 
-			weaponId_[weapon->getParent()->getName()],
-			prefixid_,
-			seriesid_);
-	}
-	else
-	{
-		runQuery("UPDATE scorched3d_weapons SET kills=kills+1 "
-			"WHERE weaponid = \"%i\" AND prefixid = %i AND seriesid = %i;", 
-			weaponId_[weapon->getParent()->getName()],
-			prefixid_,
-			seriesid_);
-	}
-}
-

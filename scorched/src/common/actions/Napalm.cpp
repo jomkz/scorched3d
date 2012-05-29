@@ -43,7 +43,6 @@
 #include <landscapedef/LandscapeTex.h>
 #include <weapons/AccessoryStore.h>
 #include <common/Defines.h>
-#include <common/StatsLogger.h>
 #include <common/OptionsScorched.h>
 
 static const int deformSize = 3;
@@ -653,6 +652,5 @@ void Napalm::addBurnAction(Target *target)
 			false);
 		weapon->fire(*context_, weaponContext, 
 			position, velocity);
-		StatsLogger::instance()->weaponFired(weapon, true);
 	}
 }

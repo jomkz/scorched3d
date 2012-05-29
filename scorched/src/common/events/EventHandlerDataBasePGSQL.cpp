@@ -21,19 +21,20 @@
 #ifdef HAVE_PGSQL
 /* Code contains several string format bugs, and at least one buffer overflow */
 
-#include <common/StatsLoggerPGSQL.h>
+#include <events/EventHandlerDataBasePGSQL.h>
+#include <common/Logger.h>
 
-StatsLoggerPGSQL::StatsLoggerPGSQL() : pgsql_(NULL), lastresult_ (NULL)
+EventHandlerDataBasePGSQL::EventHandlerDataBasePGSQL() : pgsql_(NULL), lastresult_ (NULL)
 {
 
 }
 
-StatsLoggerPGSQL::~StatsLoggerPGSQL()
+EventHandlerDataBasePGSQL::~EventHandlerDataBasePGSQL()
 {
 }
 
 #define SQL_BUFFER_SIZE 8192
-virtual bool StatsLoggerPGSQL::runQuery(const char *fmt, ...)
+virtual bool EventHandlerDataBasePGSQL::runQuery(const char *fmt, ...)
 {
     if (!success_) return false;
 
@@ -49,7 +50,7 @@ virtual bool StatsLoggerPGSQL::runQuery(const char *fmt, ...)
     va_end(ap);
 
     if(sqlLen >= SQL_BUFFER_SIZE) {
-        Logger::log(0, "pgsql: Query failed, too long.\n");
+        Logger::log("pgsql: Query failed, too long.\n");
         return false;
     }
 
@@ -61,7 +62,7 @@ virtual bool StatsLoggerPGSQL::runQuery(const char *fmt, ...)
             );
 }
 
-bool StatsLoggerPGSQL::connectDatabase(const char *host, const char *user, 
+bool EventHandlerDataBasePGSQL::connectDatabase(const char *host, const char *user, 
 	const char *passwd, const char *db)
 {
       pgsql_ = PQsetdbLogin(
@@ -74,16 +75,16 @@ bool StatsLoggerPGSQL::connectDatabase(const char *host, const char *user,
                 passwd);
     if (pgsql_ && PQstatus(pgsql_) == CONNECTION_OK)
     {
-        Logger::log(0, "pgsql stats logger started");
+        Logger::log("pgsql stats logger started");
     }
     else
     {
-        Logger::log(0, "pgsql stats logger failed to start. "
+		Logger::log(S3D::formatStringBuffer("pgsql stats logger failed to start. "
                 "Error: %s",
-                PQerrorMessage(pgsql_));
-        Logger::log(0, "pgsql params : host %s, user %s, passwd %s, db %s",
-                host.c_str(), user.c_str(),
-                passwd.c_str(), db.c_str());
+                PQerrorMessage(pgsql_)));
+		Logger::log(S3D::formatStringBuffer("pgsql params : host %s, user %s, passwd %s, db %s",
+                host, user,
+                passwd, db));
         if(pgsql_) {
             PQfinish(pgsql_);
             pgsql_ = NULL;

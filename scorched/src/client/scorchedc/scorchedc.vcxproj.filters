@@ -118,6 +118,9 @@
     <Filter Include="GLSL">
       <UniqueIdentifier>{4e73ad08-70a8-4481-a659-2f6a0259c5c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="events">
+      <UniqueIdentifier>{3fed378d-dfa9-4e6d-adf1-fb95355d8d5f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\common\ARGParser.cpp">
@@ -235,21 +238,6 @@
       <Filter>common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\common\SplinePath.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\common\StatsLogger.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\common\StatsLoggerDatabase.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\common\StatsLoggerFile.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\common\StatsLoggerMySQL.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\common\StatsLoggerPGSQL.cpp">
       <Filter>common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\common\ToolTip.cpp">
@@ -2358,6 +2346,33 @@
     <ClCompile Include="..\..\common\landscapedef\LandscapeDefnTankStart.cpp">
       <Filter>landscapedef</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\events\EventController.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\events\EventHandler.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\events\EventHandlerDataBase.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\events\EventHandlerDataBaseMySQL.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\events\EventHandlerDataBasePGSQL.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\events\EventHandlerAchievement.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\events\EventHandlerAchievementNumberRank.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\events\EventHandlerAchievementNumberRankKills.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\TankAchievementSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -2487,21 +2502,6 @@
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\common\SplinePath.h">
-      <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\common\StatsLogger.h">
-      <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\common\StatsLoggerDatabase.h">
-      <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\common\StatsLoggerFile.h">
-      <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\common\StatsLoggerMySQL.h">
-      <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\common\StatsLoggerPGSQL.h">
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\common\StdVectorPtr.h">
@@ -4612,6 +4612,33 @@
     </ClInclude>
     <ClInclude Include="..\..\common\landscapedef\LandscapeDefnTankStart.h">
       <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\events\EventController.h">
+      <Filter>events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\events\EventHandler.h">
+      <Filter>events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\events\EventHandlerDataBase.h">
+      <Filter>events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\events\EventHandlerDataBaseMySQL.h">
+      <Filter>events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\events\EventHandlerDataBasePGSQL.h">
+      <Filter>events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\events\EventHandlerAchievement.h">
+      <Filter>events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\events\EventHandlerAchievementNumberRank.h">
+      <Filter>events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\events\EventHandlerAchievementNumberRankKills.h">
+      <Filter>events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\TankAchievementSimAction.h">
+      <Filter>simactions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

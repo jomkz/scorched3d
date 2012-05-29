@@ -26,8 +26,9 @@
 #include <simactions/RoundStartSimAction.h>
 #include <simactions/TankTeamBallanceSimAction.h>
 #include <common/OptionsScorched.h>
-#include <common/StatsLogger.h>
+#include <events/EventController.h>
 #include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
 
@@ -74,7 +75,7 @@ void ServerStatePlaying::enterState()
 			playingTanks.push_back(current);
 		}
 	}
-	StatsLogger::instance()->roundStart(playingTanks);
+	ScorchedServer::instance()->getEventController().roundStart(playingTanks);
 
 	// Ballance any teams needing ballanced
 	TankTeamBallanceSimAction *teamBallance =

@@ -32,10 +32,11 @@
 #include <tanket/TanketType.h>
 #include <tankai/TankAIStore.h>
 #include <common/ChannelManager.h>
-#include <common/StatsLogger.h>
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
+#include <events/EventController.h>
+#include <events/EventHandlerDataBase.h>
 #include <coms/ComsTankChangeMessage.h>
 #include <server/ServerBanned.h>
 #include <server/ServerChannelManager.h>
@@ -127,14 +128,18 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 
 	// Add this tank 
 	context.getTargetContainer().addTarget(tank);
-	StatsLogger::instance()->tankConnected(tank);
+	context.getEventController().tankConnected(tank);
 
 	if (context.getServerMode())
 	{
-		StatsLogger::TankRank rank = StatsLogger::instance()->tankRank(tank);
-		TankRankSimAction *rankSimAction = new TankRankSimAction();
-		rankSimAction->addRank(rank);
-		((ScorchedServer &)context).getServerSimulator().addSimulatorAction(rankSimAction);
+		if (((ScorchedServer &)context).getEventHandlerDataBase())
+		{
+			EventHandlerDataBase::TankRank rank = ((ScorchedServer &)context).
+				getEventHandlerDataBase()->tankRank(tank);
+			TankRankSimAction *rankSimAction = new TankRankSimAction();
+			rankSimAction->addRank(rank);
+			((ScorchedServer &)context).getServerSimulator().addSimulatorAction(rankSimAction);
+		}
 
 		if (destinationId_ == 0)
 		{

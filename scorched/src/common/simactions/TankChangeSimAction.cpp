@@ -21,10 +21,10 @@
 #include <simactions/TankChangeSimAction.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
-#include <common/StatsLogger.h>
 #include <common/Logger.h>
 #include <common/ChannelManager.h>
 #include <tankai/TankAIStore.h>
+#include <tank/Tank.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
@@ -33,6 +33,7 @@
 #include <target/TargetContainer.h>
 #include <tanket/TanketTypes.h>
 #include <server/ScorchedServer.h>
+#include <events/EventController.h>
 
 unsigned int TankChangeSimAction::TankChangeSimActionCount = 0;
 
@@ -212,7 +213,7 @@ bool TankChangeSimAction::invokeAction(ScorchedContext &context)
 			tank->getState().setLives(0);
 
 			// Tell the logger about a new tank
-			StatsLogger::instance()->tankJoined(tank);
+			context.getEventController().tankJoined(tank);
 		}
 		else
 		{

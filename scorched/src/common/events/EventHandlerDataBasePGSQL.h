@@ -18,29 +18,32 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_TankRankSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
-#define AFX_TankRankSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
+#ifdef HAVE_PGSQL
 
-#include <simactions/SimAction.h>
+#if !defined(__INCLUDE_EventHandlerDataBasePGSQLh_INCLUDE__)
+#define __INCLUDE_EventHandlerDataBasePGSQLh_INCLUDE__
+
+#if defined(_WIN32)
+#include <Winsock2.h>
+#endif
 #include <events/EventHandlerDataBase.h>
+#include <pgsql/libpq-fe.h>
 
-class TankRankSimAction : public SimAction
+class EventHandlerDataBasePGSQL : public EventHandlerDataBase
 {
 public:
-	TankRankSimAction();
-	virtual ~TankRankSimAction();
+	EventHandlerDataBasePGSQL();
+	virtual ~EventHandlerDataBasePGSQL();
 
-	void addRank(EventHandlerDataBase::TankRank &rank) { ranks_.push_back(rank); }
-	std::list<EventHandlerDataBase::TankRank> &getRanks() { return  ranks_; }
-
-	virtual bool invokeAction(ScorchedContext &context);
-
-	virtual bool writeMessage(NetBuffer &buffer);
-	virtual bool readMessage(NetBufferReader &reader);
-
-REGISTER_CLASS_HEADER(TankRankSimAction);
 protected:
-	std::list<EventHandlerDataBase::TankRank> ranks_;
+	PGconn *pgsql_;
+	PGresult *lastresult_;
+
+	virtual bool runQuery(const char *, ...);
+	virtual bool connectDatabase(const char *host, const char *user, 
+		const char *passwd, const char *db);
 };
 
-#endif // !defined(AFX_TankRankSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#endif 
+
+#endif // HAVE_PGSQL

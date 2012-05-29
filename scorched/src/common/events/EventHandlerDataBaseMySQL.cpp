@@ -20,22 +20,20 @@
 
 #ifdef HAVE_MYSQL
 
-#include <common/StatsLoggerMySQL.h>
+#include <events/EventHandlerDataBaseMySQL.h>
 #include <common/Logger.h>
 
-StatsLoggerMySQL::StatsLoggerMySQL() : mysql_(0)
+EventHandlerDataBaseMySQL::EventHandlerDataBaseMySQL() : mysql_(0)
 {
 
 }
 
-StatsLoggerMySQL::~StatsLoggerMySQL()
+EventHandlerDataBaseMySQL::~EventHandlerDataBaseMySQL()
 {
 }
 
-bool StatsLoggerMySQL::runQuery(const char *format, ...)
+bool EventHandlerDataBaseMySQL::runQuery(const char *format, ...)
 {
-	if (!success_) return false;
-
 	va_list ap; 
 	va_start(ap, format); 
 	std::string text = S3D::formatStringList(format, ap);
@@ -44,10 +42,9 @@ bool StatsLoggerMySQL::runQuery(const char *format, ...)
 	return (mysql_real_query(mysql_, text.c_str(), (int) text.size()) == 0);
 }
 
-std::list<StatsLoggerDatabase::RowResult> StatsLoggerMySQL::runSelectQuery(const char *format, ...)
+std::list<EventHandlerDataBase::RowResult> EventHandlerDataBaseMySQL::runSelectQuery(const char *format, ...)
 {
-	std::list<StatsLoggerDatabase::RowResult> results;
-	if (!success_) return results;
+	std::list<EventHandlerDataBase::RowResult> results;
 
 	va_list ap; 
 	va_start(ap, format); 
@@ -64,7 +61,7 @@ std::list<StatsLoggerDatabase::RowResult> StatsLoggerMySQL::runSelectQuery(const
 		MYSQL_FIELD *fields = mysql_fetch_fields(result);
 		for (int r=0; r<rows; r++)
 		{
-			StatsLoggerDatabase::RowResult rowResult;
+			EventHandlerDataBase::RowResult rowResult;
 			MYSQL_ROW row = mysql_fetch_row(result);
 
 			for (int c=0; c<cols; c++)
@@ -83,7 +80,7 @@ std::list<StatsLoggerDatabase::RowResult> StatsLoggerMySQL::runSelectQuery(const
 	return results;
 }
 
-bool StatsLoggerMySQL::connectDatabase(const char *host, const char *port,
+bool EventHandlerDataBaseMySQL::connectDatabase(const char *host, const char *port,
 	const char *user, const char *passwd, 
 	const char *db)
 {
@@ -126,12 +123,12 @@ bool StatsLoggerMySQL::connectDatabase(const char *host, const char *port,
 	return true;
 }
 
-int StatsLoggerMySQL::getLastInsertId()
+int EventHandlerDataBaseMySQL::getLastInsertId()
 {
 	return (int) mysql_insert_id(mysql_);
 }
 
-void StatsLoggerMySQL::escapeString(char *to, const char *from, unsigned long length)
+void EventHandlerDataBaseMySQL::escapeString(char *to, const char *from, unsigned long length)
 {
 	mysql_real_escape_string(mysql_, to, from, length);
 }

@@ -56,7 +56,6 @@ public:
 	AccessoryPart *findAccessoryPartByAccessoryId(unsigned int id, const char *type);
 	AccessoryPart *createAccessoryPart(AccessoryCreateContext &context, 
 		Accessory *parent, XMLNode *currentNode);
-	AccessoryPart *findByAccessoryPartId(unsigned int id);
 
 	Accessory *getDeathAnimation();
 	Accessory *getMuzzelFlash();
@@ -66,10 +65,8 @@ public:
 	std::map<std::string, XMLNode *> &getParsingNodes() { return parsingNodes_; }
 	std::set<std::string> &getTabGroupNames() { return tabGroups_; }
 
-	bool writeWeapon(NamedNetBuffer &buffer, Weapon *weapon);
-	bool readWeapon(NetBufferReader &reader, Weapon *&weapon);
-	bool writeAccessoryPart(NamedNetBuffer &buffer, AccessoryPart *weapon);
-	bool readAccessoryPart(NetBufferReader &reader, AccessoryPart *&part);
+	bool writeAccessory(NamedNetBuffer &buffer, Accessory *accessory);
+	bool readAccessory(NetBufferReader &reader, Accessory *&accessory);
 
 	bool writeEconomyToBuffer(NetBuffer &buffer);
 	bool readEconomyFromBuffer(NetBufferReader &reader);
@@ -78,6 +75,7 @@ public:
 
 protected:
 	std::set<std::string> tabGroups_;
+	std::map<unsigned int, Accessory *> accessoriesById_;
 	std::list<Accessory *> accessories_;
 	std::list<AccessoryPart *> accessoryParts_;
 	std::map<std::string, XMLNode *> parsingNodes_;

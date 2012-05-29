@@ -18,29 +18,42 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_TankRankSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
-#define AFX_TankRankSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
+#include <simactions/TankAchievementSimAction.h>
 
-#include <simactions/SimAction.h>
-#include <events/EventHandlerDataBase.h>
+REGISTER_CLASS_SOURCE(TankAchievementSimAction);
 
-class TankRankSimAction : public SimAction
+TankAchievementSimAction::TankAchievementSimAction()
 {
-public:
-	TankRankSimAction();
-	virtual ~TankRankSimAction();
+}
 
-	void addRank(EventHandlerDataBase::TankRank &rank) { ranks_.push_back(rank); }
-	std::list<EventHandlerDataBase::TankRank> &getRanks() { return  ranks_; }
+TankAchievementSimAction::TankAchievementSimAction(unsigned int playerId, 
+	const std::string &achievementName, unsigned int rank) :
+	playerId_(playerId), achievementName_(achievementName), rank_(rank)
+{
+}
 
-	virtual bool invokeAction(ScorchedContext &context);
+TankAchievementSimAction::~TankAchievementSimAction()
+{
+}
 
-	virtual bool writeMessage(NetBuffer &buffer);
-	virtual bool readMessage(NetBufferReader &reader);
+bool TankAchievementSimAction::invokeAction(ScorchedContext &context)
+{
 
-REGISTER_CLASS_HEADER(TankRankSimAction);
-protected:
-	std::list<EventHandlerDataBase::TankRank> ranks_;
-};
+	return true;
+}
 
-#endif // !defined(AFX_TankRankSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+bool TankAchievementSimAction::writeMessage(NetBuffer &buffer)
+{
+	buffer.addToBuffer(playerId_);
+	buffer.addToBuffer(achievementName_);
+	buffer.addToBuffer(rank_);
+	return true;
+}
+
+bool TankAchievementSimAction::readMessage(NetBufferReader &reader)
+{
+	if (!reader.getFromBuffer(playerId_)) return false;
+	if (!reader.getFromBuffer(achievementName_)) return false;
+	if (!reader.getFromBuffer(rank_)) return false;
+	return true;
+}

@@ -30,7 +30,6 @@
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
-#include <common/StatsLogger.h>
 #include <engine/ModDirs.h>
 #include <engine/ModFiles.h>
 #include <tankai/TankAINames.h>

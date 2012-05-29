@@ -27,13 +27,13 @@
 #include <server/ServerTextFilter.h>
 #include <server/ServerAuthHandler.h>
 #include <common/OptionsScorched.h>
-#include <common/StatsLogger.h>
 #include <common/Logger.h>
 #include <common/Defines.h>
 #include <coms/ComsTankChangeMessage.h>
 #include <simactions/TankChangeSimAction.h>
 #include <tankai/TankAIStore.h>
 #include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <tank/TankModelStore.h>
 

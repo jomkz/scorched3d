@@ -138,9 +138,9 @@ bool Target::writeMessage(NamedNetBuffer &buffer)
 	if (!targetState_->writeMessage(buffer)) return false;
 	if (!group_->writeMessage(buffer)) return false;
 	buffer.addToBufferNamed("border", border_);
-	if (!context_.getAccessoryStore().writeWeapon(buffer, deathAction_)) return false;
-	if (!context_.getAccessoryStore().writeWeapon(buffer, burnAction_)) return false;
-	if (!context_.getAccessoryStore().writeWeapon(buffer, collisionAction_)) return false;
+	if (!context_.getAccessoryStore().writeAccessory(buffer, deathAction_)) return false;
+	if (!context_.getAccessoryStore().writeAccessory(buffer, burnAction_)) return false;
+	if (!context_.getAccessoryStore().writeAccessory(buffer, collisionAction_)) return false;
 
 	return true;
 }
@@ -182,17 +182,17 @@ bool Target::readMessage(NetBufferReader &reader)
 		Logger::log("Target::border read failed");
 		return false;
 	}
-	if (!context_.getAccessoryStore().readWeapon(reader, deathAction_))
+	if (!context_.getAccessoryStore().readAccessory(reader, deathAction_))
 	{
 		Logger::log("Target::deathAction read failed");
 		return false;
 	}
-	if (!context_.getAccessoryStore().readWeapon(reader, burnAction_))
+	if (!context_.getAccessoryStore().readAccessory(reader, burnAction_))
 	{
 		Logger::log("Target::burnAction read failed");
 		return false;
 	}
-	if (!context_.getAccessoryStore().readWeapon(reader, collisionAction_))
+	if (!context_.getAccessoryStore().readAccessory(reader, collisionAction_))
 	{
 		Logger::log("Target::collisionAction read failed");
 		return false;

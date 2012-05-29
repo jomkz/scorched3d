@@ -38,6 +38,7 @@
 #include <weapons/AccessoryStore.h>
 #include <tankai/TankAIStrings.h>
 #include <lua/LUAScriptHook.h>
+#include <events/EventController.h>
 
 ScorchedContext::ScorchedContext(const char *name)
 {
@@ -60,6 +61,7 @@ ScorchedContext::ScorchedContext(const char *name)
 		name[0]=='S'?"server":"client",
 		name[0]=='S'?S3D::getSettingsFile("serverhooks"):S3D::getSettingsFile("clienthooks"));
 	tankAIStrings_ = new TankAIStrings();
+	eventController_ = new EventController();
 
 	luaScriptFactory_->setContext(this);
 }
@@ -85,6 +87,7 @@ ScorchedContext::~ScorchedContext()
 	delete luaScriptHook_;
 	delete tankAIStrings_;
 	delete objectGroups_;
+	delete eventController_;
 }
 
 ActionController &ScorchedContext::getActionController()

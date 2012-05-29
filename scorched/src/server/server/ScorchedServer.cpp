@@ -39,6 +39,9 @@
 #include <engine/ModFiles.h>
 #include <engine/ActionController.h>
 #include <engine/SaveGame.h>
+#include <events/EventHandlerDataBase.h>
+#include <events/EventHandlerAchievementNumberRankKills.h>
+#include <events/EventController.h>
 #include <tank/TankDeadContainer.h>
 #include <target/TargetContainer.h>
 #include <tank/TankModelStore.h>
@@ -254,6 +257,14 @@ bool ScorchedServer::startServerInternal(const ScorchedServerSettings &settings,
 
 	// Load all script hooks
 	if (!getLUAScriptHook().loadHooks()) return false;
+
+	// Add event hooks
+	eventHandlerDataBase_ = EventHandlerDataBase::createInstance();
+	if (eventHandlerDataBase_)
+	{
+		getEventController().addEventHandler(eventHandlerDataBase_);
+	}
+	getEventController().addEventHandler(new EventHandlerAchievementNumberRankKills(eventHandlerDataBase_));
 
 #ifndef S3D_SERVER
 	new ConsoleRuleMethodIAdapter<ActionController>(

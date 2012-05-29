@@ -18,7 +18,6 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <target/TargetDamage.h>
 #include <actions/TargetFalling.h>
 #include <actions/TankSay.h>
 #include <actions/CameraPositionAction.h>
@@ -29,7 +28,7 @@
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
 #include <common/ChannelManager.h>
-#include <common/StatsLogger.h>
+#include <events/EventController.h>
 #include <weapons/AccessoryStore.h>
 #include <weapons/Shield.h>
 #include <landscapemap/LandscapeMaps.h>
@@ -37,12 +36,14 @@
 #include <engine/ActionController.h>
 #include <engine/Simulator.h>
 #include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankTeamScore.h>
 #include <tank/TankScore.h>
 #include <tank/TankState.h>
 #include <tankai/TankAI.h>
 #include <tanket/TanketShotInfo.h>
 #include <tanket/TanketAccessories.h>
+#include <target/TargetDamage.h>
 #include <target/TargetShield.h>
 #include <target/TargetLife.h>
 #include <target/TargetParachute.h>
@@ -426,7 +427,6 @@ void TargetDamage::addDamageAction(ScorchedContext &context, WeaponFireContext &
 			originalWeaponContext.getInternalContext().getReferenced(), 
 			false);
 		weapon->fire(context, newWeaponContext, position, velocity);
-		StatsLogger::instance()->weaponFired(weapon, true);
 
 		if (target->getType() != Target::TypeTarget) 
 		{
@@ -486,9 +486,7 @@ void TargetDamage::logDeath(ScorchedContext &context, WeaponFireContext &weaponC
 
 			firedTank->getScore().setSkill(firedTank->getScore().getSkill() + skillChange);
 
-			StatsLogger::instance()->
-				tankSelfKilled(firedTank, weapon);
-			StatsLogger::instance()->weaponKilled(weapon, !weaponContext.getInternalContext().getUpdateStats());
+			context.getEventController().tankSelfKilled(firedTank, weapon);
 			{
 				ChannelText text("combat",
 					LANG_RESOURCE_3(
@@ -509,9 +507,7 @@ void TargetDamage::logDeath(ScorchedContext &context, WeaponFireContext &weaponC
 
 			firedTank->getScore().setSkill(firedTank->getScore().getSkill() + skillChange);
 
-			StatsLogger::instance()->
-				tankTeamKilled(firedTank, killedTank, weapon);
-			StatsLogger::instance()->weaponKilled(weapon, !weaponContext.getInternalContext().getUpdateStats());
+			context.getEventController().tankTeamKilled(firedTank, killedTank, weapon);
 			{
 				ChannelText text("combat", 
 					LANG_RESOURCE_4(
@@ -564,9 +560,7 @@ void TargetDamage::logDeath(ScorchedContext &context, WeaponFireContext &weaponC
 			firedTank->getScore().setSkill(firedTank->getScore().getSkill() + kbonus);
 			killedTank->getScore().setSkill(killedTank->getScore().getSkill() - vbonus);
 
-			StatsLogger::instance()->
-				tankKilled(firedTank, killedTank, weapon);
-			StatsLogger::instance()->weaponKilled(weapon, !weaponContext.getInternalContext().getUpdateStats());
+			context.getEventController().tankKilled(firedTank, killedTank, weapon);
 			{
 				if (weaponContext.getInternalContext().getKillCount() > 1)
 				{

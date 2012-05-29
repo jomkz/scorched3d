@@ -18,32 +18,21 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifdef HAVE_PGSQL
+#if !defined(__INCLUDE_EventHandlerAchievementNumberRankKillsh_INCLUDE__)
+#define __INCLUDE_EventHandlerAchievementNumberRankKillsh_INCLUDE__
 
-#if !defined(__INCLUDE_StatsLoggerPGSQLh_INCLUDE__)
-#define __INCLUDE_StatsLoggerPGSQLh_INCLUDE__
+#include <events/EventHandlerAchievementNumberRank.h>
 
-#if defined(_WIN32)
-#include <Winsock2.h>
-#endif
-#include <common/StatsLoggerDatabase.h>
-#include <pgsql/libpq-fe.h>
-
-class StatsLoggerPGSQL : public StatsLoggerDatabase
+class EventHandlerAchievementNumberRankKills : public EventHandlerAchievementNumberRank
 {
 public:
-	StatsLoggerPGSQL();
-	virtual ~StatsLoggerPGSQL();
+	EventHandlerAchievementNumberRankKills(EventHandlerDataBase *database);
+	virtual ~EventHandlerAchievementNumberRankKills();
 
+	virtual unsigned int getCurrentCount(Tank *tank);
+
+	virtual void tankKilled(Tank *firedTank, Tank *deadTank, Weapon *weapon);
 protected:
-	PGconn *pgsql_;
-	PGresult *lastresult_;
-
-	virtual bool runQuery(const char *, ...);
-	virtual bool connectDatabase(const char *host, const char *user, 
-		const char *passwd, const char *db);
 };
 
-#endif 
-
-#endif // HAVE_PGSQL
+#endif

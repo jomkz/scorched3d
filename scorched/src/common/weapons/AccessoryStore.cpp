@@ -49,6 +49,7 @@ void AccessoryStore::clearAccessories()
 		accessories_.pop_front();
 		delete accessory;
 	}
+	accessoriesById_.clear();
 	accessoryParts_.clear();
 	tabGroups_.clear();
 }
@@ -114,6 +115,7 @@ bool AccessoryStore::parseFile(
 		}
 
 		// Add the accessory
+		accessoriesById_[accessory->getAccessoryId()] = accessory;
 		accessories_.push_back(accessory);
 
 		// Add weapons to death animations, weighted by arms level
@@ -327,18 +329,10 @@ Accessory *AccessoryStore::findByPrimaryAccessoryName(const char *name)
 
 Accessory *AccessoryStore::findByAccessoryId(unsigned int id)
 {
-	std::list<Accessory *>::iterator itor;
-	for (itor = accessories_.begin();
-		itor != accessories_.end();
-		++itor)
-	{
-		Accessory *accessory = (*itor);
-		if (accessory->getAccessoryId() == id)
-		{
-			return accessory;
-		}
-	}
-	return 0;
+	std::map<unsigned int, Accessory *>::iterator itor = 
+		accessoriesById_.find(id);
+	if (itor == accessoriesById_.end()) return 0;
+	return itor->second;
 }
 
 AccessoryPart *AccessoryStore::findAccessoryPartByAccessoryId(unsigned int id, const char *type)
@@ -358,64 +352,23 @@ AccessoryPart *AccessoryStore::findAccessoryPartByAccessoryId(unsigned int id, c
 	return 0;
 }
 
-AccessoryPart *AccessoryStore::findByAccessoryPartId(unsigned int id)
+bool AccessoryStore::writeAccessory(NamedNetBuffer &buffer, Accessory *accessory)
 {
-	std::list<AccessoryPart *>::iterator itor;
-	for (itor = accessoryParts_.begin();
-		itor != accessoryParts_.end();
-		++itor)
-	{
-		AccessoryPart *accessoryPart = (*itor);
-		if (accessoryPart->getAccessoryPartId() == id)
-		{
-			return accessoryPart;
-		}
-	}
-	return 0;
-}
-
-bool AccessoryStore::writeWeapon(NamedNetBuffer &buffer, Weapon *weapon)
-{
-	return writeAccessoryPart(buffer, weapon);
-}
-
-bool AccessoryStore::readWeapon(NetBufferReader &reader, Weapon *&weapon)
-{
-	weapon = 0;
-
-	AccessoryPart *accessoryPart;
-	if (!readAccessoryPart(reader, accessoryPart)) return false;
-	if (!accessoryPart) return true;
-	if (accessoryPart->getType() == AccessoryPart::AccessoryWeapon)
-	{
-		weapon = ((Weapon *) accessoryPart);
-		return true;
-	}
-	return false;
-}
-
-bool AccessoryStore::writeAccessoryPart(NamedNetBuffer &buffer, AccessoryPart *part)
-{
-	if (part) buffer.addToBufferNamed("accessoryId", part->getAccessoryPartId());
+	if (accessory) buffer.addToBufferNamed("accessoryId", accessory->getAccessoryId());
 	else buffer.addToBufferNamed("accessoryId", (unsigned int) 0);
 	return true;
 }
 
-bool AccessoryStore::readAccessoryPart(NetBufferReader &reader, AccessoryPart *&part)
+bool AccessoryStore::readAccessory(NetBufferReader &reader, Accessory *&accessory)
 {
-	part = 0;
+	accessory = 0;
 
-	unsigned int partId;
-	if (!reader.getFromBuffer(partId)) return false;
-	if (partId == 0) return true;
+	unsigned int accessoryId;
+	if (!reader.getFromBuffer(accessoryId)) return false;
+	if (accessoryId == 0) return true;
 
-	AccessoryPart *accessoryPart = findByAccessoryPartId(partId);
-	if (accessoryPart &&
-		accessoryPart->getAccessoryPartId() == partId)
-	{
-		part = accessoryPart;
-		return true;
-	}
+	accessory = findByAccessoryId(accessoryId);
+	if (accessory) return true;
 	return false;
 }
 

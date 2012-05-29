@@ -28,11 +28,12 @@
 #include <server/ServerLoadLevel.h>
 #include <weapons/EconomyStore.h>
 #include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <common/OptionsTransient.h>
-#include <common/StatsLogger.h>
+#include <events/EventController.h>
 
 ServerStateNewGame::ServerStateNewGame()
 {
@@ -72,7 +73,7 @@ void ServerStateNewGame::newGame()
 	}
 
 	// Inform the stats logger
-	StatsLogger::instance()->gameStart(playingTanks);
+	ScorchedServer::instance()->getEventController().gameStart(playingTanks);
 
 	// Store this as the current level
 	// Do after setting the state so the state of the tanks is consistent when 

@@ -23,11 +23,12 @@
 #include <engine/ActionController.h>
 #include <actions/ShowScoreAction.h>
 #include <common/OptionsScorched.h>
-#include <common/StatsLogger.h>
 #include <common/ChannelManager.h>
+#include <events/EventController.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankTeamScore.h>
 #include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankScore.h>
 #include <tank/TankState.h>
 #include <tank/TankSort.h>
@@ -159,7 +160,7 @@ void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 			if (!tank->getState().getTankPlaying()) continue;
 			if (winningTeams.find(tank->getTeam()) == winningTeams.end()) continue;
 
-			StatsLogger::instance()->tankWon(tank);
+			context.getEventController().tankWon(tank);
 			tank->getScore().setMoney(
 				tank->getScore().getMoney() + moneyWonForRound);
 			tank->getScore().setMoney(
@@ -183,7 +184,7 @@ void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 			if (!tank->getState().getTankPlaying()) continue;
 			if (!tank->getScore().getWonGame()) continue;
 
-			StatsLogger::instance()->tankWon(tank);
+			context.getEventController().tankWon(tank);
 			tank->getScore().setMoney(
 				tank->getScore().getMoney() + moneyWonForRound);
 			tank->getScore().setMoney(
@@ -208,7 +209,7 @@ void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 				if (!tank->getState().getTankPlaying()) continue;
 				if (!tank->getAlive()) continue;
 
-				StatsLogger::instance()->tankWon(tank);
+				context.getEventController().tankWon(tank);
 				tank->getScore().setMoney(
 					tank->getScore().getMoney() + moneyWonForRound);
 				tank->getScore().setMoney(
@@ -274,14 +275,21 @@ void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 		tank->getScore().setScore(tank->getScore().getScore() + scoreAdded);
 
 		// Ensure stats are uptodate
-		StatsLogger::instance()->updateStats(tank);
+		context.getEventController().periodicUpdate(tank);
 
 		// Reset the totaled stats
 		tank->getScore().resetTotalEarnedStats();
 
 		// Get the new rank
-		StatsLogger::TankRank rank = StatsLogger::instance()->tankRank(tank);
-		rankSimAction->addRank(rank);
+		if (context.getServerMode())
+		{
+			if (((ScorchedServer &)context).getEventHandlerDataBase())
+			{
+				EventHandlerDataBase::TankRank rank = 
+					((ScorchedServer &)context).getEventHandlerDataBase()->tankRank(tank);
+				rankSimAction->addRank(rank);
+			}
+		}
 	}
 	if (context.getServerMode())
 	{
@@ -292,7 +300,7 @@ void ShowScoreSimAction::scoreWinners(ScorchedContext &context)
 		delete rankSimAction;
 	}
 
-	StatsLogger::instance()->periodicUpdate();
+	context.getEventController().periodicUpdate();
 }
 
 void ShowScoreSimAction::scoreOverallWinner(ScorchedContext &context)
@@ -338,7 +346,7 @@ void ShowScoreSimAction::scoreOverallWinner(ScorchedContext &context)
 					names.append(current->getTargetName());
 
 					// Score the winning tank as the overall winner
-					StatsLogger::instance()->tankOverallWinner(current);
+					context.getEventController().tankOverallWinner(current);
 
 					current->getScore().setSkill(
 						current->getScore().getSkill() + skillWonForMatch);
@@ -404,7 +412,7 @@ void ShowScoreSimAction::scoreOverallWinner(ScorchedContext &context)
 				{
 					if (tank->getState().getTankPlaying())
 					{
-						StatsLogger::instance()->tankOverallWinner(tank);
+						context.getEventController().tankOverallWinner(tank);
 						tank->getScore().setSkill(
 							tank->getScore().getSkill() + skillWonForMatch);
 					}

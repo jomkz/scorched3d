@@ -18,36 +18,64 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_StatsLoggerDatabaseh_INCLUDE__)
-#define __INCLUDE_StatsLoggerDatabaseh_INCLUDE__
+#if !defined(__INCLUDE_EventHandlerDataBaseh_INCLUDE__)
+#define __INCLUDE_EventHandlerDataBaseh_INCLUDE__
 
-#include <common/StatsLogger.h>
-#include <time.h>
-#include <string>
+#include <list>
 #include <map>
+#include <vector>
 #include <set>
+#include <events/EventHandler.h>
 
-class Weapon;
-class StatsLoggerDatabase : public StatsLogger
+class EventHandlerDataBase : public EventHandler
 {
 public:
-	StatsLoggerDatabase();
-	virtual ~StatsLoggerDatabase();
+	struct TankRank
+	{
+		TankRank(unsigned int playerId) : 
+			playerId_(playerId), rank_(-1), skill_(-1) {}
+		TankRank(unsigned int playerId, int rank, int skill) : 
+			playerId_(playerId), rank_(rank), skill_(skill) {}
 
-	virtual int getKillCount(const char *uniqueId);
+		int getRank() { return rank_; }
+		int getSkill() { return skill_; }
+		unsigned int getPlayerId() { return playerId_; }
+
+		void setRank(int rank) { rank_ = rank; }
+		void setSkill(int skill) { skill_ = skill; }
+		void setPlayerId(int playerId) { playerId_ = playerId; }
+
+	protected:
+		unsigned int playerId_;
+		int rank_;
+		int skill_;
+	};
+
+	static EventHandlerDataBase *EventHandlerDataBase::createInstance();
+
+	EventHandlerDataBase();
+	virtual ~EventHandlerDataBase();
+
+	int getKillCount(const char *uniqueId);
+	std::list<std::string> getAliases(const char *unqiueId);
+	std::list<std::string> getIpAliases(const char *unqiueId);
+	TankRank tankRank(Tank *tank);
+	std::string allocateId();
+	unsigned int getStatsId(const char *uniqueId);
+	std::string getTopRanks();
+	std::string getPlayerInfo(const char *player);
+	void combinePlayers(unsigned int player1, unsigned int player2);
+
+	unsigned int getAchievementId(const std::string &name);
+	unsigned int getAchievementRank(unsigned int achievementId, unsigned int playerId);
+
+	void assignAchievementRank(unsigned int playerId, unsigned int achievementId, unsigned int rank);
+
+	virtual void periodicUpdate();
+	virtual void periodicUpdate(Tank *tank);
+
 	virtual void gameStart(std::list<Tank *> &tanks);
 	virtual void roundStart(std::list<Tank *> &tanks);
-
-	virtual std::list<std::string> getAliases(const char *unqiueId);
-	virtual std::list<std::string> getIpAliases(const char *unqiueId);
-	virtual TankRank tankRank(Tank *tank);
-	virtual void updateStats(Tank *tank);
-	virtual void periodicUpdate();
-	virtual std::string allocateId();
-	virtual unsigned int getStatsId(const char *uniqueId);
-	virtual std::string getTopRanks();
-	virtual std::string getPlayerInfo(const char *player);
-	virtual void combinePlayers(unsigned int player1, unsigned int player2);
 
 	virtual void tankConnected(Tank *tank);
 	virtual void tankDisconnected(Tank *tank);
@@ -62,9 +90,6 @@ public:
 
 	virtual void tankWon(Tank *tank);
 	virtual void tankOverallWinner(Tank *tank);
-
-	virtual void weaponFired(Weapon *weapon, bool deathAni);
-	virtual void weaponKilled(Weapon *weapon, bool deathAni);
 
 protected:
 	struct RowResult
@@ -90,13 +115,12 @@ protected:
 	int serverid_;
 	int seriesid_;
 	int prefixid_;
-    bool success_;
 	bool displayStats_;
 
 	std::map<std::string, int> playerId_;
 	std::map<std::string, int> weaponId_;
 
-	void createLogger();
+	bool connect();
 	int getPlayerId(const char *uniqueId);
 
 	void addInfo(Tank *tank);
@@ -104,8 +128,7 @@ protected:
 		std::list<std::string> &results);
 	void addIpAliases(int playerId, 
 		std::set<int> &currentPlayers, std::list<std::string> &result);
-
 };
 
-#endif 
+#endif
 

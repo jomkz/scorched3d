@@ -27,13 +27,13 @@
 #include <server/ServerAdminSessions.h>
 #include <server/ServerDestinations.h>
 #include <server/ServerBanned.h>
-#include <common/StatsLogger.h>
 #include <common/Logger.h>
 #include <common/Defines.h>
 #include <coms/ComsAdminMessage.h>
 #include <coms/ComsAdminResultMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <net/NetInterface.h>
+#include <tank/Tank.h>
 #include <target/TargetContainer.h>
 #include <tank/TankState.h>
 #include <stdlib.h>
@@ -175,11 +175,10 @@ bool ServerAdminHandler::processMessage(
 				if (destination) ping = destination->getPing().getAverage();
 
 				result += 
-					S3D::formatStringBuffer("%i \"%s\" \"%s\" \"%u\" %s Ping %i\n",
+					S3D::formatStringBuffer("%u \"%s\" \"%s\" %s Ping %i\n",
 						tank->getPlayerId(), 
 						tank->getCStrName().c_str(),
 						NetInterface::getIpName(tank->getIpAddress()),
-						StatsLogger::instance()->getStatsId(tank->getUniqueId()),
 						(tank->getState().getMuted()?"Muted":"Not Muted"),
 						(ping * 1000).asInt());
 			}

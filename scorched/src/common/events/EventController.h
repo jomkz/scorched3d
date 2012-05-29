@@ -18,29 +18,44 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_TankRankSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
-#define AFX_TankRankSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
+#if !defined(__INCLUDE_EventControllerh_INCLUDE__)
+#define __INCLUDE_EventControllerh_INCLUDE__
 
-#include <simactions/SimAction.h>
-#include <events/EventHandlerDataBase.h>
+#include <list>
 
-class TankRankSimAction : public SimAction
+class Tank;
+class Weapon;
+class EventHandler;
+class EventController
 {
 public:
-	TankRankSimAction();
-	virtual ~TankRankSimAction();
+	EventController();
+	virtual ~EventController();
 
-	void addRank(EventHandlerDataBase::TankRank &rank) { ranks_.push_back(rank); }
-	std::list<EventHandlerDataBase::TankRank> &getRanks() { return  ranks_; }
+	void addEventHandler(EventHandler *handler);
 
-	virtual bool invokeAction(ScorchedContext &context);
+	void periodicUpdate();
+	void periodicUpdate(Tank *tank);
 
-	virtual bool writeMessage(NetBuffer &buffer);
-	virtual bool readMessage(NetBufferReader &reader);
+	void gameStart(std::list<Tank *> &tanks);
+	void roundStart(std::list<Tank *> &tanks);
 
-REGISTER_CLASS_HEADER(TankRankSimAction);
-protected:
-	std::list<EventHandlerDataBase::TankRank> ranks_;
+	void tankConnected(Tank *tank);
+	void tankDisconnected(Tank *tank);
+	void tankJoined(Tank *tank);
+
+	void tankFired(Tank *firedTank, Weapon *weapon);
+	void tankResigned(Tank *resignedTank);
+
+	void tankKilled(Tank *firedTank, Tank *deadTank, Weapon *weapon);
+	void tankTeamKilled(Tank *firedTank, Tank *deadTank, Weapon *weapon);
+	void tankSelfKilled(Tank *firedTank, Weapon *weapon);
+
+	void tankWon(Tank *tank);
+	void tankOverallWinner(Tank *tank);
+
+private:
+	std::list<EventHandler *> handlers_;
 };
 
-#endif // !defined(AFX_TankRankSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#endif

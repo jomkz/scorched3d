@@ -22,13 +22,14 @@
 #include <actions/Resurrection.h>
 #include <engine/ScorchedContext.h>
 #include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
 #include <tank/TankTeamScore.h>
 #include <common/Defines.h>
 #include <common/ChannelManager.h>
 #include <common/OptionsScorched.h>
-#include <common/StatsLogger.h>
+#include <events/EventController.h>
 #include <lang/LangResource.h>
 
 TanketResign::TanketResign(unsigned int playerId, fixed resignTime, bool referenced) :
@@ -144,7 +145,7 @@ void TanketResign::simulate(fixed frameTime, bool &remove)
 					}
 					Resurrection::checkResurection(context_, tank);
 
-					StatsLogger::instance()->tankResigned(tank);
+					context_->getEventController().tankResigned(tank);
 
 		#ifndef S3D_SERVER
 					if (!context_->getServerMode())

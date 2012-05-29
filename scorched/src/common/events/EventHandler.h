@@ -18,32 +18,24 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_StatsLoggerFileh_INCLUDE__)
-#define __INCLUDE_StatsLoggerFileh_INCLUDE__
+#if !defined(__INCLUDE_EventHandlerh_INCLUDE__)
+#define __INCLUDE_EventHandlerh_INCLUDE__
 
-#include <common/FileLogger.h>
-#include <common/StatsLogger.h>
+#include <list>
 
-class StatsLoggerFile : public StatsLogger
+class Tank;
+class Weapon;
+class EventHandler
 {
 public:
-	StatsLoggerFile();
-	virtual ~StatsLoggerFile();
+	EventHandler();
+	virtual ~EventHandler();
+
+	virtual void periodicUpdate();
+	virtual void periodicUpdate(Tank *tank);
 
 	virtual void gameStart(std::list<Tank *> &tanks);
 	virtual void roundStart(std::list<Tank *> &tanks);
-
-	virtual int getKillCount(const char *uniqueId);
-	virtual std::list<std::string> getAliases(const char *unqiueId);
-	virtual std::list<std::string> getIpAliases(const char *unqiueId);
-	virtual TankRank tankRank(Tank *tank) { return TankRank(tank->getPlayerId()); }
-	virtual void updateStats(Tank *tank);
-	virtual void periodicUpdate();
-	virtual std::string allocateId();
-	virtual unsigned int getStatsId(const char *uniqueId);
-	virtual std::string getTopRanks();
-	virtual std::string getPlayerInfo(const char *player);
-	virtual void combinePlayers(unsigned int player1, unsigned int player2);
 
 	virtual void tankConnected(Tank *tank);
 	virtual void tankDisconnected(Tank *tank);
@@ -58,15 +50,7 @@ public:
 
 	virtual void tankWon(Tank *tank);
 	virtual void tankOverallWinner(Tank *tank);
-
-	virtual void weaponFired(Weapon *weapon, bool deathAni);
-	virtual void weaponKilled(Weapon *weapon, bool deathAni);
-
-protected:
-	FileLogger *statsLogger_;
-
-	void createLogger();
-
 };
 
 #endif
+

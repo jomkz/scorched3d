@@ -20,7 +20,9 @@
 
 #include <simactions/TankRankSimAction.h>
 #include <target/TargetContainer.h>
+#include <tank/Tank.h>
 #include <tank/TankScore.h>
+#include <events/EventHandlerDataBase.h>
 
 REGISTER_CLASS_SOURCE(TankRankSimAction);
 
@@ -35,12 +37,12 @@ TankRankSimAction::~TankRankSimAction()
 
 bool TankRankSimAction::invokeAction(ScorchedContext &context)
 {
-	std::list<StatsLogger::TankRank>::iterator itor;
+	std::list<EventHandlerDataBase::TankRank>::iterator itor;
 	for (itor = ranks_.begin();
 		itor != ranks_.end();
 		++itor)
 	{
-		StatsLogger::TankRank &rank = *itor;
+		EventHandlerDataBase::TankRank &rank = *itor;
 		Tank *tank = context.getTargetContainer().getTankById(rank.getPlayerId());
 		if (tank)
 		{
@@ -55,12 +57,12 @@ bool TankRankSimAction::invokeAction(ScorchedContext &context)
 bool TankRankSimAction::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer((int) ranks_.size());
-	std::list<StatsLogger::TankRank>::iterator itor;
+	std::list<EventHandlerDataBase::TankRank>::iterator itor;
 	for (itor = ranks_.begin();
 		itor != ranks_.end();
 		++itor)
 	{
-		StatsLogger::TankRank &rank = *itor;
+		EventHandlerDataBase::TankRank &rank = *itor;
 		buffer.addToBuffer(rank.getPlayerId());
 		buffer.addToBuffer(rank.getSkill());
 		buffer.addToBuffer(rank.getRank());
@@ -79,7 +81,7 @@ bool TankRankSimAction::readMessage(NetBufferReader &reader)
 		if (!reader.getFromBuffer(playerId)) return false;
 		if (!reader.getFromBuffer(skill)) return false;
 		if (!reader.getFromBuffer(rank)) return false;
-		ranks_.push_back(StatsLogger::TankRank(playerId, rank, skill));
+		ranks_.push_back(EventHandlerDataBase::TankRank(playerId, rank, skill));
 	}
 	return true;
 }

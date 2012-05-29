@@ -33,7 +33,7 @@
 #include <tankai/TankAIStrings.h>
 #include <actions/TankSay.h>
 #include <actions/TanketResign.h>
-#include <common/StatsLogger.h>
+#include <events/EventController.h>
 #include <common/OptionsScorched.h>
 #include <server/ServerCommon.h>
 #include <server/ServerChannelManager.h>
@@ -208,8 +208,7 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 		}
 
 		// Stats events
-		StatsLogger::instance()->tankFired(tank, weapon);
-		StatsLogger::instance()->weaponFired(weapon, false);	
+		context.getEventController().tankFired(tank, weapon);
 	}
 
 #ifndef S3D_SERVER
