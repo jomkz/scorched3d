@@ -1284,9 +1284,6 @@
     <ClCompile Include="..\GLEXT\GLCameraFrustum.cpp">
       <Filter>GLEXT</Filter>
     </ClCompile>
-    <ClCompile Include="..\GLEXT\glew.c">
-      <Filter>GLEXT</Filter>
-    </ClCompile>
     <ClCompile Include="..\GLEXT\GLFont2d.cpp">
       <Filter>GLEXT</Filter>
     </ClCompile>
@@ -2373,6 +2370,7 @@
     <ClCompile Include="..\..\common\simactions\TankAchievementSimAction.cpp">
       <Filter>simactions</Filter>
     </ClCompile>
+    <ClCompile Include="..\GLEXT\glew.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -3536,9 +3534,6 @@
     <ClInclude Include="..\GLEXT\GLCameraFrustum.h">
       <Filter>GLEXT</Filter>
     </ClInclude>
-    <ClInclude Include="..\GLEXT\glew.h">
-      <Filter>GLEXT</Filter>
-    </ClInclude>
     <ClInclude Include="..\GLEXT\GLFont2d.h">
       <Filter>GLEXT</Filter>
     </ClInclude>
@@ -3603,12 +3598,6 @@
       <Filter>GLEXT</Filter>
     </ClInclude>
     <ClInclude Include="..\GLEXT\GLViewPort.h">
-      <Filter>GLEXT</Filter>
-    </ClInclude>
-    <ClInclude Include="..\GLEXT\glxew.h">
-      <Filter>GLEXT</Filter>
-    </ClInclude>
-    <ClInclude Include="..\GLEXT\wglew.h">
       <Filter>GLEXT</Filter>
     </ClInclude>
     <ClInclude Include="..\GLSL\GLSLProgram.h">
@@ -4640,6 +4629,9 @@
     <ClInclude Include="..\..\common\simactions\TankAchievementSimAction.h">
       <Filter>simactions</Filter>
     </ClInclude>
+    <ClInclude Include="..\GLEXT\glew.h" />
+    <ClInclude Include="..\GLEXT\glxew.h" />
+    <ClInclude Include="..\GLEXT\wglew.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\common\lua\Makefile">

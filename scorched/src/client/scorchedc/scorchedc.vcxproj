@@ -47,8 +47,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)/src/client;$(SolutionDir)/src/server;$(SolutionDir)/src/common;$(SolutionDir)/../scorched-dep-win32/include/zlib/zlib;$(SolutionDir)/../scorched-dep-win32/include/jpg;$(SolutionDir)/../scorched-dep-win32/include/SDL;$(SolutionDir)/../scorched-dep-win32/include/expat/expat;$(SolutionDir)/../scorched-dep-win32/include/png/png;$(SolutionDir)/../scorched-dep-win32/include/al;$(SolutionDir)/../scorched-dep-win32/include/fftw3;$(SolutionDir)/../scorched-dep-win32/include/vorbis;$(SolutionDir)/../scorched-dep-win32/include/ogg;$(SolutionDir)/../scorched-dep-win32/include/freetype;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;HAVE_OGG;PNG_DLL;PNG_NO_STDIO;PNG_NO_GLOBAL_ARRAYS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)/src/client;$(SolutionDir)/src/server;$(SolutionDir)/src/common;$(SolutionDir)/../scorched-dep-win32/include/zlib/zlib;$(SolutionDir)/../scorched-dep-win32/include/jpg;$(SolutionDir)/../scorched-dep-win32/include/SDL;$(SolutionDir)/../scorched-dep-win32/include/expat/expat;$(SolutionDir)/../scorched-dep-win32/include/png/png;$(SolutionDir)/../scorched-dep-win32/include/al;$(SolutionDir)/../scorched-dep-win32/include/fftw3;$(SolutionDir)/../scorched-dep-win32/include/vorbis;$(SolutionDir)/../scorched-dep-win32/include/ogg;$(SolutionDir)/../scorched-dep-win32/include/freetype;$(SolutionDir)/../scorched-dep-win32/include/glew;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;HAVE_OGG;PNG_DLL;PNG_NO_STDIO;PNG_NO_GLOBAL_ARRAYS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -59,7 +59,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Ws2_32.lib;Opengl32.lib;Glu32.lib;$(SolutionDir)/../scorched-dep-win32/lib/jpg/jpeg.lib;$(SolutionDir)/../scorched-dep-win32/lib/png/libpng.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL_net.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDLmain.lib;$(SolutionDir)/../scorched-dep-win32/lib/zlib/zlib1.lib;$(SolutionDir)/../scorched-dep-win32/lib/expat/libexpat.lib;$(SolutionDir)/../scorched-dep-win32/lib/al/ALut.lib;$(SolutionDir)/../scorched-dep-win32/lib/al/OpenAL32.lib;$(SolutionDir)/../scorched-dep-win32/lib/fftw3/fftw3.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/ogg.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/vorbis.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/vorbisfile.lib;$(SolutionDir)/../scorched-dep-win32/lib/truetype/libfreetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Ws2_32.lib;Opengl32.lib;Glu32.lib;$(SolutionDir)/../scorched-dep-win32/lib/jpg/jpeg.lib;$(SolutionDir)/../scorched-dep-win32/lib/png/libpng.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL_net.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDLmain.lib;$(SolutionDir)/../scorched-dep-win32/lib/zlib/zlib1.lib;$(SolutionDir)/../scorched-dep-win32/lib/expat/libexpat.lib;$(SolutionDir)/../scorched-dep-win32/lib/al/ALut.lib;$(SolutionDir)/../scorched-dep-win32/lib/al/OpenAL32.lib;$(SolutionDir)/../scorched-dep-win32/lib/fftw3/fftw3.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/ogg.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/vorbis.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/vorbisfile.lib;$(SolutionDir)/../scorched-dep-win32/lib/truetype/libfreetype.lib;$(SolutionDir)/../scorched-dep-win32/lib/glew/glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -70,8 +70,8 @@
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)/src/client;$(SolutionDir)/src/server;$(SolutionDir)/src/common;$(SolutionDir)/../scorched-dep-win32/include/zlib/zlib;$(SolutionDir)/../scorched-dep-win32/include/jpg;$(SolutionDir)/../scorched-dep-win32/include/SDL;$(SolutionDir)/../scorched-dep-win32/include/expat/expat;$(SolutionDir)/../scorched-dep-win32/include/png/png;$(SolutionDir)/../scorched-dep-win32/include/al;$(SolutionDir)/../scorched-dep-win32/include/fftw3;$(SolutionDir)/../scorched-dep-win32/include/vorbis;$(SolutionDir)/../scorched-dep-win32/include/ogg;$(SolutionDir)/../scorched-dep-win32/include/freetype;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;HAVE_OGG;PNG_DLL;PNG_NO_STDIO;PNG_NO_GLOBAL_ARRAYS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)/src/client;$(SolutionDir)/src/server;$(SolutionDir)/src/common;$(SolutionDir)/../scorched-dep-win32/include/zlib/zlib;$(SolutionDir)/../scorched-dep-win32/include/jpg;$(SolutionDir)/../scorched-dep-win32/include/SDL;$(SolutionDir)/../scorched-dep-win32/include/expat/expat;$(SolutionDir)/../scorched-dep-win32/include/png/png;$(SolutionDir)/../scorched-dep-win32/include/al;$(SolutionDir)/../scorched-dep-win32/include/fftw3;$(SolutionDir)/../scorched-dep-win32/include/vorbis;$(SolutionDir)/../scorched-dep-win32/include/ogg;$(SolutionDir)/../scorched-dep-win32/include/freetype;$(SolutionDir)/../scorched-dep-win32/include/glew;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;HAVE_OGG;PNG_DLL;PNG_NO_STDIO;PNG_NO_GLOBAL_ARRAYS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>false</FunctionLevelLinking>
@@ -84,7 +84,7 @@
       <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Ws2_32.lib;Opengl32.lib;Glu32.lib;$(SolutionDir)/../scorched-dep-win32/lib/jpg/jpeg.lib;$(SolutionDir)/../scorched-dep-win32/lib/png/libpng.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL_net.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDLmain.lib;$(SolutionDir)/../scorched-dep-win32/lib/zlib/zlib1.lib;$(SolutionDir)/../scorched-dep-win32/lib/expat/libexpat.lib;$(SolutionDir)/../scorched-dep-win32/lib/al/ALut.lib;$(SolutionDir)/../scorched-dep-win32/lib/al/OpenAL32.lib;$(SolutionDir)/../scorched-dep-win32/lib/fftw3/fftw3.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/ogg.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/vorbis.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/vorbisfile.lib;$(SolutionDir)/../scorched-dep-win32/lib/truetype/libfreetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Ws2_32.lib;Opengl32.lib;Glu32.lib;$(SolutionDir)/../scorched-dep-win32/lib/jpg/jpeg.lib;$(SolutionDir)/../scorched-dep-win32/lib/png/libpng.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL_net.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDLmain.lib;$(SolutionDir)/../scorched-dep-win32/lib/zlib/zlib1.lib;$(SolutionDir)/../scorched-dep-win32/lib/expat/libexpat.lib;$(SolutionDir)/../scorched-dep-win32/lib/al/ALut.lib;$(SolutionDir)/../scorched-dep-win32/lib/al/OpenAL32.lib;$(SolutionDir)/../scorched-dep-win32/lib/fftw3/fftw3.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/ogg.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/vorbis.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/vorbisfile.lib;$(SolutionDir)/../scorched-dep-win32/lib/truetype/libfreetype.lib;$(SolutionDir)/../scorched-dep-win32/lib/glew/glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -540,7 +540,6 @@
     <ClCompile Include="..\dialogs\TutorialDialog.cpp" />
     <ClCompile Include="..\GLEXT\GLCamera.cpp" />
     <ClCompile Include="..\GLEXT\GLCameraFrustum.cpp" />
-    <ClCompile Include="..\GLEXT\glew.c" />
     <ClCompile Include="..\GLEXT\GLFont2d.cpp" />
     <ClCompile Include="..\GLEXT\GLFont2dFreeType.cpp" />
     <ClCompile Include="..\GLEXT\GLFont2dStorage.cpp" />
@@ -1292,7 +1291,6 @@
     <ClInclude Include="..\dialogs\TutorialDialog.h" />
     <ClInclude Include="..\GLEXT\GLCamera.h" />
     <ClInclude Include="..\GLEXT\GLCameraFrustum.h" />
-    <ClInclude Include="..\GLEXT\glew.h" />
     <ClInclude Include="..\GLEXT\GLFont2d.h" />
     <ClInclude Include="..\GLEXT\GLFont2dFreeType.h" />
     <ClInclude Include="..\GLEXT\GLFont2dStorage.h" />
@@ -1318,8 +1316,6 @@
     <ClInclude Include="..\GLEXT\GLTextureStore.h" />
     <ClInclude Include="..\GLEXT\GLVertexBufferObject.h" />
     <ClInclude Include="..\GLEXT\GLViewPort.h" />
-    <ClInclude Include="..\GLEXT\glxew.h" />
-    <ClInclude Include="..\GLEXT\wglew.h" />
     <ClInclude Include="..\GLSL\GLSLProgram.h" />
     <ClInclude Include="..\GLSL\GLSLShader.h" />
     <ClInclude Include="..\GLSL\GLSLShaderSetup.h" />
