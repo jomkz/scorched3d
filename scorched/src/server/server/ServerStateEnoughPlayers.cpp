@@ -183,7 +183,7 @@ void ServerStateEnoughPlayers::removeBots(int requiredPlayers, int noPlayers)
 		{
 			unsigned int startTime = (unsigned int)
 				current->getScore().getStartTime();
-			ais_.insert(std::pair<unsigned int, unsigned int>
+			ais_.insert(std::pair<const unsigned int, unsigned int>
 				(startTime, current->getPlayerId()));
 		}
 	}
@@ -194,7 +194,7 @@ void ServerStateEnoughPlayers::removeBots(int requiredPlayers, int noPlayers)
 		noPlayers > requiredPlayers && aiItor != ais_.rend(); 
 		++aiItor, noPlayers--)
 	{
-		std::pair<unsigned int, unsigned int> item = *aiItor;
+		std::pair<const unsigned int, unsigned int> item = *aiItor;
 		ScorchedServer::instance()->getServerMessageHandler().destroyPlayer(
 			item.second, "Auto-kick");
 	}
@@ -217,7 +217,7 @@ void ServerStateEnoughPlayers::addBots(int requiredPlayers, int noPlayers)
 		if (current->getDestinationId() == 0 &&
 			!current->getTankAI()->removedPlayer())
 		{
-			ais_.insert(std::pair<std::string, unsigned int>
+			ais_.insert(std::pair<const std::string, unsigned int>
 				(current->getTankAI()->getName(), 
 				current->getPlayerId()));
 		}

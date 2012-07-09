@@ -73,6 +73,7 @@ std::string SecureID::GetPrivateKey(void)
 
 #else
 
+#include <unistd.h>
 #include <sys/ioctl.h>
 #include <net/if.h>
 

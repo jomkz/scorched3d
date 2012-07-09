@@ -34,7 +34,7 @@ public:
 	HeightMap();
 	virtual ~HeightMap();
 
-	void create(int width, int height, bool invertedNormals);
+	void create(const int width, const int height, bool invertedNormals);
 	void reset();
 
 	// Height map size fns
