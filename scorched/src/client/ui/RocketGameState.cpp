@@ -20,6 +20,7 @@
 
 #include <ui/RocketGameState.h>
 #include <ui/LoadPNG.h>
+#include <ui/AnimatedIslandDecoratorInstance.h>
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
 #include <Rocket/Debugger.h>
@@ -78,8 +79,19 @@ void RocketGameState::create()
 				"ERROR: Failed to create rocket context");
 	}
 
+	Rocket::Core::DecoratorInstancer* islandDecorator = new AnimatedIslandDecoratorInstance();
+	Rocket::Core::Factory::RegisterDecoratorInstancer("island", islandDecorator);
+	islandDecorator->RemoveReference();
+
 	std::string demoFile = S3D::getDataFile("data/rocket/demo.rml");
 	Rocket::Core::ElementDocument* document = context->LoadDocument(demoFile.c_str());
+	if (document)
+	{
+		document->Show();
+	}
+
+	demoFile = S3D::getDataFile("data/rocket/islandback.rml");
+	document = context->LoadDocument(demoFile.c_str());
 	if (document)
 	{
 		document->Show();
@@ -103,30 +115,12 @@ void RocketGameState::draw()
 	}
 
 	context->Update();
-
-
-	// Set up the GL state.
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_COLOR_ARRAY);
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(0, 1024, 768, 0, -1, 1);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
 	context->Render();
 	drawTime_ += dTimer_.getTimeDifference();
 
 	swapBuffers();
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		GLboolean result;
-		glGetBooleanv(GL_BLEND, &result);
 	}
 	clearTime_ += dTimer_.getTimeDifference();
 }

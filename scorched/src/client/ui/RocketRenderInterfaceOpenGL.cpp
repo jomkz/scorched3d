@@ -37,6 +37,19 @@ RocketRenderInterfaceOpenGL::RocketRenderInterfaceOpenGL()
 // Called by Rocket when it wants to render geometry that it does not wish to optimise.
 void RocketRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices, int ROCKET_UNUSED(num_vertices), int* indices, int num_indices, const Rocket::Core::TextureHandle texture, const Rocket::Core::Vector2f& translation)
 {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, 1024, 768, 0, -1, 1);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
 	glPushMatrix();
 	glTranslatef(translation.x, translation.y, 0);
 
@@ -59,6 +72,9 @@ void RocketRenderInterfaceOpenGL::RenderGeometry(Rocket::Core::Vertex* vertices,
 	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, indices);
 
 	glPopMatrix();
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
 }
 
 // Called by Rocket when it wants to compile geometry it believes will be static for the forseeable future.		
