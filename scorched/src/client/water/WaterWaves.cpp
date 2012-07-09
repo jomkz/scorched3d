@@ -205,7 +205,7 @@ void WaterWaves::constructLines(WaterWaveContext *context,
 	Vector ptA;
 	Vector ptB;
 	Vector point = points.front();
-	int dist = int(RAND * 10.0f + 1.0f);
+	int dist = int(S3D_RAND * 10.0f + 1.0f);
 	for (int i=0; i<(int)points.size(); i++)
 	{
 		Vector &current = points[i];
@@ -245,7 +245,7 @@ void WaterWaves::constructLines(WaterWaveContext *context,
 					entry.ptD = point + perp * 6.0f;
 				}
 
-				if (RAND > 0.5f) paths1_.push_back(entry);
+				if (S3D_RAND > 0.5f) paths1_.push_back(entry);
 				else paths2_.push_back(entry);
 			}
 
@@ -256,7 +256,7 @@ void WaterWaves::constructLines(WaterWaveContext *context,
 			}
 			else point = current;
 			
-			dist = int(RAND * 10.0f + 1.0f);
+			dist = int(S3D_RAND * 10.0f + 1.0f);
 		}
 	}
 }

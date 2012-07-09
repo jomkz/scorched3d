@@ -46,8 +46,8 @@ void GLWTabContainer::layout()
 		// Size this widget
 		entry.widget->layout();
 
-		w = MAX(entry.widget->getW(), w);
-		h = MAX(entry.widget->getH() + 20.0f, h);
+		w = S3D_MAX(entry.widget->getW(), w);
+		h = S3D_MAX(entry.widget->getH() + 20.0f, h);
 	}
 
 	setW(w);

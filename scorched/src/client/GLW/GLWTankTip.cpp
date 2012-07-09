@@ -205,7 +205,7 @@ void TankBatteryTip::showItems(float x, float y)
 	std::list<GLWSelectorEntry> entries;
 	if (tank_->getAccessories().getBatteries().canUse())
 	{
-		for (int i=1; i<=MIN(count,10); i++)
+		for (int i=1; i<=S3D_MIN(count,10); i++)
 		{
 			entries.push_back(GLWSelectorEntry(
 				LANG_RESOURCE_1("USE_I", "Use {0}", S3D::formatStringBuffer("%i", i)), 

@@ -67,7 +67,7 @@ FixedVector &ExplosionParams::getExplosionColor()
     static FixedVector blue(0, 0, 1);
     static FixedVector yellow(1, 1, 0);
 
-    int color = int(RAND * 4.0f);
+    int color = int(S3D_RAND * 4.0f);
     switch (color)
     {
     case 0:

@@ -62,13 +62,13 @@ void Model::centre()
 		itor != meshes_.end();
 		++itor)
 	{
-		max_[0] = MAX(max_[0], (*itor)->getMax()[0]);
-		max_[1] = MAX(max_[1], (*itor)->getMax()[1]);
-		max_[2] = MAX(max_[2], (*itor)->getMax()[2]);
+		max_[0] = S3D_MAX(max_[0], (*itor)->getMax()[0]);
+		max_[1] = S3D_MAX(max_[1], (*itor)->getMax()[1]);
+		max_[2] = S3D_MAX(max_[2], (*itor)->getMax()[2]);
 
-		min_[0] = MIN(min_[0], (*itor)->getMin()[0]);
-		min_[1] = MIN(min_[1], (*itor)->getMin()[1]);
-		min_[2] = MIN(min_[2], (*itor)->getMin()[2]);
+		min_[0] = S3D_MIN(min_[0], (*itor)->getMin()[0]);
+		min_[1] = S3D_MIN(min_[1], (*itor)->getMin()[1]);
+		min_[2] = S3D_MIN(min_[2], (*itor)->getMin()[2]);
 	}
 
 	FixedVector centre = (max_ + min_) / -2;

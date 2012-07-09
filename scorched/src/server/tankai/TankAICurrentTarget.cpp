@@ -216,7 +216,7 @@ void TankAICurrentTarget::getTargets(Tanket *thisTanket, std::list<Tanket *> &re
 
 		float healthScore = ((currentTank->getLife().getLife() * 2) 
 			/ currentTank->getLife().getMaxLife()).asFloat() - 1.0f;
-		float randomScore = RAND * 2.0f - 1.0f;
+		float randomScore = S3D_RAND * 2.0f - 1.0f;
 		float playerScore = ((currentTank->getTankAI() != 0)?-1.0f:1.0f);
 		float shieldScore = ((currentTank->getShield().getShieldPower() * 2).asFloat() 
 			/ 100.0f) - 1.0f;

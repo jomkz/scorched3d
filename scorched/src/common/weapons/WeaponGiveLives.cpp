@@ -69,7 +69,7 @@ void WeaponGiveLives::weaponCallback(
 		tank->getState().getMaxLives() > 0)
 	{
 		tank->getState().setLives(
-			MAX(tank->getState().getLives() + lives_, 1));
+			S3D_MAX(tank->getState().getLives() + lives_, 1));
 
 		{
 			if (lives_ > 0)

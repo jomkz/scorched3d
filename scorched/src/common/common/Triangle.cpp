@@ -77,12 +77,12 @@ void Triangle::calcLargest()
 
 bool Triangle::pointInBoundingBox(const Vector &pt)
 {
-	float max0 = MAX(ptA_[0], MAX(ptB_[0], ptC_[0]));
-	float max1 = MAX(ptA_[1], MAX(ptB_[1], ptC_[1]));
-	float max2 = MAX(ptA_[2], MAX(ptB_[2], ptC_[2]));
-	float min0 = MIN(ptA_[0], MIN(ptB_[0], ptC_[0]));
-	float min1 = MIN(ptA_[1], MIN(ptB_[1], ptC_[1]));
-	float min2 = MIN(ptA_[2], MIN(ptB_[2], ptC_[2]));
+	float max0 = S3D_MAX(ptA_[0], S3D_MAX(ptB_[0], ptC_[0]));
+	float max1 = S3D_MAX(ptA_[1], S3D_MAX(ptB_[1], ptC_[1]));
+	float max2 = S3D_MAX(ptA_[2], S3D_MAX(ptB_[2], ptC_[2]));
+	float min0 = S3D_MIN(ptA_[0], S3D_MIN(ptB_[0], ptC_[0]));
+	float min1 = S3D_MIN(ptA_[1], S3D_MIN(ptB_[1], ptC_[1]));
+	float min2 = S3D_MIN(ptA_[2], S3D_MIN(ptB_[2], ptC_[2]));
 
 	Vector &Pt = (Vector &) pt;
 	if (Pt[0] < min0-0.1f || Pt[0] > max0+0.1f) return false;

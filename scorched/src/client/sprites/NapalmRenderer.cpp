@@ -28,7 +28,7 @@ NapalmRenderer::NapalmRenderer(GLTextureSet *set) :
 	textureNo_(0.0f), set_(set)
 {
 	int noTextures = set_->getNoTextures();
-	plus_ = int(RAND * noTextures);
+	plus_ = int(S3D_RAND * noTextures);
 }
 
 NapalmRenderer::~NapalmRenderer()

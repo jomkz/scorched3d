@@ -87,8 +87,8 @@ void PlacementTypeMask::getPositions(ScorchedContext &context,
 		{
 			ly = fixed((ly / ysnap).asInt()) * ysnap;
 		}
-		lx = MIN(MAX(fixed(0), lx), fixed(groundMapWidth));
-		ly = MIN(MAX(fixed(0), ly), fixed(groundMapHeight));
+		lx = S3D_MIN(S3D_MAX(fixed(0), lx), fixed(groundMapWidth));
+		ly = S3D_MIN(S3D_MAX(fixed(0), ly), fixed(groundMapHeight));
 
 		fixed height = 
 			context.getLandscapeMaps().getGroundMaps().getInterpHeight(lx, ly);

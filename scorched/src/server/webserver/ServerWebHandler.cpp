@@ -289,8 +289,8 @@ bool ServerWebHandler::LogHandler::processRequest(
 	// Log entries
 	std::string log;
 
-	int min = MAX(start, 0);
-	int max = MIN((int) entries.size(), start + pagesize);
+	int min = S3D_MAX(start, 0);
+	int max = S3D_MIN((int) entries.size(), start + pagesize);
 	for (int i=min; i<max; i++)
 	{
 		std::string cleanText;

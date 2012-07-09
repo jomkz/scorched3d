@@ -203,7 +203,7 @@ bool DeformLandscape::deformLandscapeInternal(
 							if (deformType != LandscapeDefnType::eDeformDeform)
 							{
 								fixed deformHeight = deformhmap.getHeight(absx, absy);
-								lowestHeight = MAX(deformHeight, lowestLandscapeHeight);
+								lowestHeight = S3D_MAX(deformHeight, lowestLandscapeHeight);
 							}
 
 							if (newHeight < lowestHeight)
@@ -430,7 +430,7 @@ void DeformLandscape::flattenAreaInternal(
 				if (deformType != LandscapeDefnType::eDeformDeform)
 				{
 					fixed deformHeight = deformhmap.getHeight(ix, iy);
-					lowestHeight = MAX(deformHeight, lowestLandscapeHeight);
+					lowestHeight = S3D_MAX(deformHeight, lowestLandscapeHeight);
 				}
 
 				if (newHeight < lowestHeight)

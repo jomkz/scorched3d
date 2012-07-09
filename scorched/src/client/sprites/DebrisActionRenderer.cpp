@@ -28,12 +28,12 @@
 DebrisActionRenderer::DebrisActionRenderer() :
 	rotationAng_(0)
 {
-	rotationX_ = RAND;
-	rotationY_ = RAND;
-	rotationZ_ = RAND;
-	rotationSpeed_ = 90.0f + 180.0f * RAND;
+	rotationX_ = S3D_RAND;
+	rotationY_ = S3D_RAND;
+	rotationZ_ = S3D_RAND;
+	rotationSpeed_ = 90.0f + 180.0f * S3D_RAND;
 
-	if (RAND > 0.5f)
+	if (S3D_RAND > 0.5f)
 	{
 		ModelID id;
 		id.initFromString("ase", "data/meshes/rock1.ase", 

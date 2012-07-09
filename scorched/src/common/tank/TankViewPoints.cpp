@@ -58,12 +58,12 @@ bool TankViewPoints::getValues(FixedVector &lookAt, FixedVector &lookFrom)
 		FixedVector &itorLookAt = provider->getLookFrom();
 		fixed itorRadius = provider->getRadius();
 
-		min[0] = MIN(min[0], itorPosition[0] - itorRadius);
-		min[1] = MIN(min[1], itorPosition[1] - itorRadius);
-		min[2] = MIN(min[2], itorPosition[2] - itorRadius);
-		max[0] = MAX(max[0], itorPosition[0] + itorRadius);
-		max[1] = MAX(max[1], itorPosition[1] + itorRadius);
-		max[2] = MAX(max[2], itorPosition[2] + itorRadius);		
+		min[0] = S3D_MIN(min[0], itorPosition[0] - itorRadius);
+		min[1] = S3D_MIN(min[1], itorPosition[1] - itorRadius);
+		min[2] = S3D_MIN(min[2], itorPosition[2] - itorRadius);
+		max[0] = S3D_MAX(max[0], itorPosition[0] + itorRadius);
+		max[1] = S3D_MAX(max[1], itorPosition[1] + itorRadius);
+		max[2] = S3D_MAX(max[2], itorPosition[2] + itorRadius);		
 
 		lookAt += itorPosition;
 		lookFrom += itorLookAt;

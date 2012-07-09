@@ -34,10 +34,10 @@ ExplosionNukeRendererEntry::ExplosionNukeRendererEntry(
 	totalTime_(0.0f), size_(size),
 	startPosition_(position), cloudRotation_(0.0f)
 {
-	float rot = RAND * 3.14f * 2.0f;
-	float width = RAND * 0.5f + 1.0f;
+	float rot = S3D_RAND * 3.14f * 2.0f;
+	float width = S3D_RAND * 0.5f + 1.0f;
     
-	cloudRotation_ = RAND * 360.0f;
+	cloudRotation_ = S3D_RAND * 360.0f;
 	rotation_[0] = getFastSin(rot) * width;
 	rotation_[1] = getFastCos(rot) * width;
 }

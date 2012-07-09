@@ -57,7 +57,7 @@ void PlacementShadowDefinition::updateLandscapeHeight(
 		fixed areaSize = flattenArea_;
 		if (areaSize < 0)
 		{
-			areaSize = MAX(size[0], size[1])/2 + 1;
+			areaSize = S3D_MAX(size[0], size[1])/2 + 1;
 		}
 
 		DeformLandscape::flattenArea(context, position, false, areaSize);
@@ -89,7 +89,7 @@ void PlacementShadowDefinition::updateLandscapeTexture(
 			context,
 			position[0].asFloat(), 
 			position[1].asFloat(), 
-			MAX(size[0], size[1]).asFloat(), 1.0f);
+			S3D_MAX(size[0], size[1]).asFloat(), 1.0f);
 	}
 }
 

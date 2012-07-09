@@ -179,7 +179,7 @@ void GLWPlanView::drawMap()
 {
 	GLState currentState(GLState::DEPTH_OFF | GLState::BLEND_ON | GLState::TEXTURE_ON);
 
-	float maxWidth = MAX(arenaWidth_, arenaHeight_);
+	float maxWidth = S3D_MAX(arenaWidth_, arenaHeight_);
 
 	glPushMatrix();
 		glTranslatef(x_ + 10.0f, y_ + 10.0f, 0.0f);
@@ -322,7 +322,7 @@ void GLWPlanView::drawTexture()
 
 void GLWPlanView::drawCameraPointer()
 {
-	float maxWidth = MAX(arenaWidth_, arenaHeight_);
+	float maxWidth = S3D_MAX(arenaWidth_, arenaHeight_);
 	float width = maxWidth / w_ * 10.0f;
 	float height = maxWidth / h_ * 10.0f;
 
@@ -386,7 +386,7 @@ void GLWPlanView::drawBuoys()
 }
 void GLWPlanView::drawTanks()
 {
-	float maxWidth = MAX(arenaWidth_, arenaHeight_);
+	float maxWidth = S3D_MAX(arenaWidth_, arenaHeight_);
 
 	std::map<unsigned int, Tank *> &currentTanks =
 		ScorchedClient::instance()->getTargetContainer().getTanks();
@@ -448,7 +448,7 @@ void GLWPlanView::mouseDown(int button, float x, float y, bool &skipRest)
 			int arenaHeight = ScorchedClient::instance()->
 				getLandscapeMaps().getGroundMaps().getArenaHeight();
 
-			float maxWidth = (float) MAX(arenaWidth, arenaHeight);
+			float maxWidth = (float) S3D_MAX(arenaWidth, arenaHeight);
 			float mapX = (((x - x_ - 10.0f) / (w_ - 20.0f)) * maxWidth) + arenaX_ -
 				(maxWidth - arenaWidth_) / 2.0f;
 			float mapY = (((y - y_ - 10.0f) / (h_ - 20.0f)) * maxWidth) + arenaY_ -

@@ -93,7 +93,7 @@ void Napalm::init()
 				Vector pos(a, b);
 				float dist = (center - pos).Magnitude();
 				dist /= deformSize;
-				dist = 1.0f - MIN(1.0f, dist);
+				dist = 1.0f - S3D_MIN(1.0f, dist);
 
 				DIALOG_ASSERT(a < 100 && b < 100);
 				deformMap.map[a][b] = fixed::fromFloat(dist);
@@ -364,7 +364,7 @@ void Napalm::simulateAddEdge(int x, int y)
 		{
 			if (height == context_->getLandscapeMaps().getGroundMaps().getHeight(x, y)) 
 			{
-				if (RAND < params_->getGroundScorchPer().asFloat())
+				if (S3D_RAND < params_->getGroundScorchPer().asFloat())
 				{
 					Vector pos(x, y);
 					DeformTextures::deformLandscape(pos, 

@@ -20,7 +20,6 @@
 
 #include <server/ServerMain.h>
 #include <client/ClientMain.h>
-#include <client/ClientDialog.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientAdmin.h>
 #include <client/ClientParams.h>
@@ -72,6 +71,8 @@
 #include <common/Defines.h>
 #include <common/Logger.h>
 #include <sound/Sound.h>
+#include <ui/UISetup.h>
+#include <ui/RocketGameState.h>
 #include <SDL/SDL.h>
 
 static bool paused = false;
@@ -308,7 +309,8 @@ bool ClientMain::clientEventLoop(float frameTime)
 		case SDL_MOUSEBUTTONDOWN:
 		case SDL_MOUSEBUTTONUP:
 		case SDL_MOUSEMOTION:
-			Mouse::instance()->processMouseEvent(event);
+			RocketGameState::instance()->processMouseEvent(event);
+			//Mouse::instance()->processMouseEvent(event);
 			break;
 		case SDL_ACTIVEEVENT:
 			if (event.active.gain == 0)
@@ -323,9 +325,6 @@ bool ClientMain::clientEventLoop(float frameTime)
 			paused = ( OptionsDisplay::instance()->getFocusPause() && (event.active.gain == 0));
 			break;
 		case SDL_VIDEORESIZE:
-			/*Display::instance()->changeSettings(
-				event.resize.w,event.resize.h, 
-				OptionsDisplay::instance()->getFullScreen());*/
 			MainCamera::instance()->getCamera().setWindowSize(
 				event.resize.w, event.resize.h);
 			Main2DCamera::instance()->getViewPort().setWindowSize(
@@ -350,9 +349,11 @@ bool ClientMain::clientMain()
 
 	// Create the actual window
 	if (!createScorchedWindow()) return false;
+	RocketGameState::instance()->create();
 
 	// Start the initial windows
 	ClientState::setupGameState();
+	/*
 	ProgressCounter progressCounter;
 	ProgressDialog::instance()->changeTip();
 	progressCounter.setUser(ProgressDialogSync::events_instance());
@@ -365,7 +366,7 @@ bool ClientMain::clientMain()
 
 	// Try and start the client
 	if (!startClientInternal()) return false;
-
+	*/
 	// Enter the SDL main loop to process SDL events
 	Clock loopClock;
 	for (;;)
@@ -376,7 +377,8 @@ bool ClientMain::clientMain()
 		if (!ScorchedClient::instance()->getMainLoop().mainLoop()) break;
 		if ((!paused) && (idle) )
 		{
-			ScorchedClient::instance()->getMainLoop().draw();
+			RocketGameState::instance()->draw();
+			//ScorchedClient::instance()->getMainLoop().draw();
 		}
 		else
 		{
@@ -389,6 +391,7 @@ bool ClientMain::clientMain()
 	{
 		ScorchedClient::instance()->getNetInterface().disconnectAllClients();
 	}
+	RocketGameState::instance()->destroy();
 	GLWWindowManager::instance()->saveSettings();
     SDL_Delay(1000);
 	Gamma::instance()->reset();

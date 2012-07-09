@@ -114,17 +114,17 @@ static void drawPineLevel(float texX, float texY,
 		glVertex3f(0.0f, 0.0f, height);
 		for (float i=360.0f; i>=0.0f; i-=360.0f / count)
 		{
-			float diff = RAND * 40.0f - 20.0f;
+			float diff = S3D_RAND * 40.0f - 20.0f;
 			glTexCoord2f(
-				texX + (sinf((i + angOffset)/180.0f * PI) * texWidth), 
-				texY + (cosf((i + angOffset)/180.0f * PI) * texWidth));
+				texX + (sinf((i + angOffset)/180.0f * S3D_PI) * texWidth), 
+				texY + (cosf((i + angOffset)/180.0f * S3D_PI) * texWidth));
 			glNormal3f(
-				sinf((i+diff)/180.0f * PI) * (height - lowheight),
-				cosf((i+diff)/180.0f * PI) * (height - lowheight),
+				sinf((i+diff)/180.0f * S3D_PI) * (height - lowheight),
+				cosf((i+diff)/180.0f * S3D_PI) * (height - lowheight),
 				width);
 			glVertex3f(
-				sinf(i/180.0f * PI) * width, 
-				cosf(i/180.0f * PI) * width, 
+				sinf(i/180.0f * S3D_PI) * width, 
+				cosf(i/180.0f * S3D_PI) * width, 
 				lowheight);
 		}
 	glEnd();
@@ -137,17 +137,17 @@ static void drawPineLevel(float texX, float texY,
 		glVertex3f(0.0f, 0.0f, height);
 		for (float i=0.0f; i<=360.0f; i+=360.0f / count)
 		{
-			float diff = RAND * 40.0f - 20.0f;
+			float diff = S3D_RAND * 40.0f - 20.0f;
 			glTexCoord2f(
-				texX + (sinf((i + angOffset)/180.0f * PI) * texWidth), 
-				texY + (cosf((i + angOffset)/180.0f * PI) * texWidth));
+				texX + (sinf((i + angOffset)/180.0f * S3D_PI) * texWidth), 
+				texY + (cosf((i + angOffset)/180.0f * S3D_PI) * texWidth));
 			glNormal3f(
-				-sinf((i+diff)/180.0f * PI) * (height - lowheight),
-				-cosf((i+diff)/180.0f * PI) * (height - lowheight),
+				-sinf((i+diff)/180.0f * S3D_PI) * (height - lowheight),
+				-cosf((i+diff)/180.0f * S3D_PI) * (height - lowheight),
 				-width);
 			glVertex3f(
-				sinf(i/180.0f * PI) * width, 
-				cosf(i/180.0f * PI) * width, 
+				sinf(i/180.0f * S3D_PI) * width, 
+				cosf(i/180.0f * S3D_PI) * width, 
 				lowheight);
 		}
 	glEnd();
@@ -166,12 +166,12 @@ static void drawPineTrunc(float width, float height, float lowheight,
 		{
 			glTexCoord2f(x + w*(float(int(i*5.0f)%360)/360.0f), y + h);
 			glNormal3f(
-				sinf(i/180.0f * PI),
-				cosf(i/180.0f * PI),
+				sinf(i/180.0f * S3D_PI),
+				cosf(i/180.0f * S3D_PI),
 				0.0f);
 			glVertex3f(
-				sinf(i/180.0f * PI) * width, 
-				cosf(i/180.0f * PI) * width, 
+				sinf(i/180.0f * S3D_PI) * width, 
+				cosf(i/180.0f * S3D_PI) * width, 
 				lowheight);
 		}
 	glEnd();
@@ -186,20 +186,20 @@ static void drawPalmTrunc(float width, float height, float count,
 		for (float i=360.0f; i>=0.0f; i-=360.0f / count)
 		{
 			glNormal3f(
-				sinf(i/180.0f * PI), 
-				cosf(i/180.0f * PI), 
+				sinf(i/180.0f * S3D_PI), 
+				cosf(i/180.0f * S3D_PI), 
 				0.0f);
 			if (tex) glTexCoord2f(x, y);
 			else glTexCoord2f(x, y + h);
 			glVertex3f(
-				sinf(i/180.0f * PI) * (width - 0.1f), 
-				cosf(i/180.0f * PI) * (width - 0.1f), 
+				sinf(i/180.0f * S3D_PI) * (width - 0.1f), 
+				cosf(i/180.0f * S3D_PI) * (width - 0.1f), 
 				height);
 			if (tex) glTexCoord2f(x + w, y);
 			else glTexCoord2f(x + w, y + h);
 			glVertex3f(
-				sinf(i/180.0f * PI) * width, 
-				cosf(i/180.0f * PI) * width, 
+				sinf(i/180.0f * S3D_PI) * width, 
+				cosf(i/180.0f * S3D_PI) * width, 
 				0.0f);
 			tex = !tex;
 		}
@@ -213,12 +213,12 @@ static void drawPalmTrunc(float width, float height, float count,
 			if (tex) glTexCoord2f(x + w, y);
 			else glTexCoord2f(x + w, y + h);
 			glNormal3f(
-				sinf(i/180.0f * PI), 
-				cosf(i/180.0f * PI), 
+				sinf(i/180.0f * S3D_PI), 
+				cosf(i/180.0f * S3D_PI), 
 				0.0f);
 			glVertex3f(
-				sinf(i/180.0f * PI) * 0.03f, 
-				cosf(i/180.0f * PI) * 0.03f, 
+				sinf(i/180.0f * S3D_PI) * 0.03f, 
+				cosf(i/180.0f * S3D_PI) * 0.03f, 
 				height - 0.01f);
 			tex = !tex;
 		}
@@ -232,24 +232,24 @@ static void drawPalmLevel(
 	glBegin(GL_QUADS);
 		for (float i=360.0f; i>=0.0f;)
 		{
-			float diff = 0.5f * RAND - 0.25f;
-			float width2 = (w2 * RAND * 0.3f) + (0.7f * w2);
+			float diff = 0.5f * S3D_RAND - 0.25f;
+			float width2 = (w2 * S3D_RAND * 0.3f) + (0.7f * w2);
 			
 			Vector A1(
-				sinf((i-15.0f)/180.0f * PI) * width1, 
-				cosf((i-15.0f)/180.0f * PI) * width1, 
+				sinf((i-15.0f)/180.0f * S3D_PI) * width1, 
+				cosf((i-15.0f)/180.0f * S3D_PI) * width1, 
 				height);
 			Vector A2(
-				sinf(i/180.0f * PI) * width1, 
-				cosf(i/180.0f * PI) * width1, 
+				sinf(i/180.0f * S3D_PI) * width1, 
+				cosf(i/180.0f * S3D_PI) * width1, 
 				height2);
 			Vector A3(
-				sinf(i/180.0f * PI) * width2, 
-				cosf(i/180.0f * PI) * width2, 
+				sinf(i/180.0f * S3D_PI) * width2, 
+				cosf(i/180.0f * S3D_PI) * width2, 
 				height2 + diff);
 			Vector A4(
-				sinf((i-15.0f)/180.0f * PI) * width2, 
-				cosf((i-15.0f)/180.0f * PI) * width2, 
+				sinf((i-15.0f)/180.0f * S3D_PI) * width2, 
+				cosf((i-15.0f)/180.0f * S3D_PI) * width2, 
 				height + diff);
 
 			Vector AN = ((A3 - A4) * (A3 - A2));
@@ -264,20 +264,20 @@ static void drawPalmLevel(
 			glVertex3fv(A4);
 
 			Vector B1(
-				sinf((i-15.0f)/180.0f * PI) * width2, 
-				cosf((i-15.0f)/180.0f * PI) * width2, 
+				sinf((i-15.0f)/180.0f * S3D_PI) * width2, 
+				cosf((i-15.0f)/180.0f * S3D_PI) * width2, 
 				height + diff);
 			Vector B2(
-				sinf(i/180.0f * PI) * width2, 
-				cosf(i/180.0f * PI) * width2, 
+				sinf(i/180.0f * S3D_PI) * width2, 
+				cosf(i/180.0f * S3D_PI) * width2, 
 				height2 + diff);
 			Vector B3(
-				sinf(i/180.0f * PI) * width1, 
-				cosf(i/180.0f * PI) * width1, 
+				sinf(i/180.0f * S3D_PI) * width1, 
+				cosf(i/180.0f * S3D_PI) * width1, 
 				height2);
 			Vector B4(
-				sinf((i-15.0f)/180.0f * PI) * width1, 
-				cosf((i-15.0f)/180.0f * PI) * width1, 
+				sinf((i-15.0f)/180.0f * S3D_PI) * width1, 
+				cosf((i-15.0f)/180.0f * S3D_PI) * width1, 
 				height);
 			Vector BN = ((B1 - B3) * (B2 - B1));
 			glNormal3fv(BN);
@@ -291,20 +291,20 @@ static void drawPalmLevel(
 			glVertex3fv(B4);
 
 			Vector C1(
-				sinf((i+15.0f)/180.0f * PI) * width2, 
-				cosf((i+15.0f)/180.0f * PI) * width2, 
+				sinf((i+15.0f)/180.0f * S3D_PI) * width2, 
+				cosf((i+15.0f)/180.0f * S3D_PI) * width2, 
 				height + diff);
 			Vector C2(
-				sinf(i/180.0f * PI) * width2, 
-				cosf(i/180.0f * PI) * width2, 
+				sinf(i/180.0f * S3D_PI) * width2, 
+				cosf(i/180.0f * S3D_PI) * width2, 
 				height2 + diff);
 			Vector C3(
-				sinf(i/180.0f * PI) * width1, 
-				cosf(i/180.0f * PI) * width1, 
+				sinf(i/180.0f * S3D_PI) * width1, 
+				cosf(i/180.0f * S3D_PI) * width1, 
 				height2);
 			Vector C4(
-				sinf((i+15.0f)/180.0f * PI) * width1, 
-				cosf((i+15.0f)/180.0f * PI) * width1, 
+				sinf((i+15.0f)/180.0f * S3D_PI) * width1, 
+				cosf((i+15.0f)/180.0f * S3D_PI) * width1, 
 				height);
 
 			Vector CN = ((C2 - C1) * (C3 - C2));
@@ -319,20 +319,20 @@ static void drawPalmLevel(
 			glVertex3fv(C4);
 
 			Vector D1(
-				sinf((i+15.0f)/180.0f * PI) * width1, 
-				cosf((i+15.0f)/180.0f * PI) * width1, 
+				sinf((i+15.0f)/180.0f * S3D_PI) * width1, 
+				cosf((i+15.0f)/180.0f * S3D_PI) * width1, 
 				height);
 			Vector D2(
-				sinf(i/180.0f * PI) * width1, 
-				cosf(i/180.0f * PI) * width1, 
+				sinf(i/180.0f * S3D_PI) * width1, 
+				cosf(i/180.0f * S3D_PI) * width1, 
 				height2);
 			Vector D3(
-				sinf(i/180.0f * PI) * width2, 
-				cosf(i/180.0f * PI) * width2, 
+				sinf(i/180.0f * S3D_PI) * width2, 
+				cosf(i/180.0f * S3D_PI) * width2, 
 				height2 + diff);
 			Vector D4(
-				sinf((i+15.0f)/180.0f * PI) * width2, 
-				cosf((i+15.0f)/180.0f * PI) * width2, 
+				sinf((i+15.0f)/180.0f * S3D_PI) * width2, 
+				cosf((i+15.0f)/180.0f * S3D_PI) * width2, 
 				height + diff);
 
 			Vector DN = ((D4 - D3) * (D2 - D4));
@@ -346,7 +346,7 @@ static void drawPalmLevel(
 			glTexCoord2f(texX + 0.37f, texY);
 			glVertex3fv(D4);
 
-			i-= (360.0f / (count + (count-1) * RAND));
+			i-= (360.0f / (count + (count-1) * S3D_RAND));
 		}
 	glEnd();
 

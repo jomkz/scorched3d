@@ -77,7 +77,7 @@ bool WaterVisibilityPatch::setVisible(Vector &cameraPos)
 		{
 			visibilityIndex_ += 3;
 		}
-		visibilityIndex_ = MAX(0, MIN(visibilityIndex_, 6));
+		visibilityIndex_ = S3D_MAX(0, S3D_MIN(visibilityIndex_, 6));
 	}
 
 	if (distance < 2000.0f) 

@@ -99,7 +99,7 @@ public:
 
 	fixed Max()
 	{
-		return MAX(V[0], MAX(V[1], V[2]));
+		return S3D_MAX(V[0], S3D_MAX(V[1], V[2]));
 	}
 
 	void StoreNormalize()

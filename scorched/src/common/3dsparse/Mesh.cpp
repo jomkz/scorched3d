@@ -56,13 +56,13 @@ void Mesh::insertVertex(Vertex &vertex)
 	}
 	else
 	{
-		max_[0] = MAX(max_[0], vertex.position[0]);
-		max_[1] = MAX(max_[1], vertex.position[1]);
-		max_[2] = MAX(max_[2], vertex.position[2]);
+		max_[0] = S3D_MAX(max_[0], vertex.position[0]);
+		max_[1] = S3D_MAX(max_[1], vertex.position[1]);
+		max_[2] = S3D_MAX(max_[2], vertex.position[2]);
 
-		min_[0] = MIN(min_[0], vertex.position[0]);
-		min_[1] = MIN(min_[1], vertex.position[1]);
-		min_[2] = MIN(min_[2], vertex.position[2]);
+		min_[0] = S3D_MIN(min_[0], vertex.position[0]);
+		min_[1] = S3D_MIN(min_[1], vertex.position[1]);
+		min_[2] = S3D_MIN(min_[2], vertex.position[2]);
 	}
 
 	vertexes_.push_back(new Vertex(vertex)); 

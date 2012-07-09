@@ -118,10 +118,10 @@ float HeightMapVisibilityPatch::calculateError(int x1, int x2, int y1, int y2,
 
 	// The error is the maximum error of the above
 	float totalError = 
-		MAX(xmymError, 
-		MAX(x1ymError, 
-		MAX(x2ymError, 
-		MAX(xmy2Error, xmy1Error))));
+		S3D_MAX(xmymError, 
+		S3D_MAX(x1ymError, 
+		S3D_MAX(x2ymError, 
+		S3D_MAX(xmy2Error, xmy1Error))));
 
 	// Recurse to get errors for sub-squares
 	if (x1 - x2 > 2)
@@ -130,8 +130,8 @@ float HeightMapVisibilityPatch::calculateError(int x1, int x2, int y1, int y2,
 		float childError2 = calculateError(xm, x2, y1, ym, xmy1Approx, x2ymApprox, xmymApprox, x2y1);
 		float childError3 = calculateError(x1, xm, ym, y2, x1ymApprox, xmy2Approx, x1y2, xmymApprox);
 		float childError4 = calculateError(xm, x2, ym, y2, xmymApprox, x2y2, xmy2Approx, x2ymApprox);
-		float childError = MAX(childError1, MAX(childError2, MAX(childError3, childError4)));
-		totalError = MAX(childError, totalError);
+		float childError = S3D_MAX(childError1, S3D_MAX(childError2, S3D_MAX(childError3, childError4)));
+		totalError = S3D_MAX(childError, totalError);
 	}
 
 	return totalError;
@@ -162,7 +162,7 @@ float HeightMapVisibilityPatch::calculateError2(int x, int y, int width, float &
 			float approxPosition = left[b] + (right[b] - left[b]) * float(a) / float(width);
 			float actualPosition = getHeight(x + a, y + b);
 			float error = fabs(approxPosition - actualPosition);
-			maxError = MAX(maxError, error);
+			maxError = S3D_MAX(maxError, error);
 		}
 	}
 	return maxError;
@@ -182,7 +182,7 @@ void HeightMapVisibilityPatch::calculateErrors()
 			for (int a=0; a<32; a+=skip)
 			{
 				float currentError = calculateError2(x_ + a, y_ + b, skip, minHeight_, maxHeight_);
-				maxError = MAX(maxError, currentError);
+				maxError = S3D_MAX(maxError, currentError);
 			}
 		}
 
@@ -190,7 +190,7 @@ void HeightMapVisibilityPatch::calculateErrors()
 	}
 
 	float heightRange = maxHeight_ - minHeight_;
-	boundingSize_ = MAX(32.0f, heightRange) * 1.25f;
+	boundingSize_ = S3D_MAX(32.0f, heightRange) * 1.25f;
 	position_ = Vector(float(x_ + 16), float(y_ + 16), 
 		heightRange / 2.0f + minHeight_);
 }

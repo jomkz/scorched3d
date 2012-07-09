@@ -445,7 +445,7 @@ void TargetCamera::moveCamera()
 			Vector newPos2 = position - newPos;
 
 			mainCam_.setLookAt(newPos2);
-			mainCam_.movePosition(currentRotation + HALFPI, 1.0f, 100.f);
+			mainCam_.movePosition(currentRotation + S3D_HALFPI, 1.0f, 100.f);
 		}
 		break;
 	case CamRightFar:
@@ -457,7 +457,7 @@ void TargetCamera::moveCamera()
 			Vector newPos2 = position - newPos;
 
 			mainCam_.setLookAt(newPos2);
-			mainCam_.movePosition(currentRotation - HALFPI, 1.4f, 100.f);
+			mainCam_.movePosition(currentRotation - S3D_HALFPI, 1.4f, 100.f);
 		}
 		break;
 	case CamLeft: 
@@ -469,7 +469,7 @@ void TargetCamera::moveCamera()
 			Vector newPos2 = position - newPos;
 
 			mainCam_.setLookAt(newPos2);
-			mainCam_.movePosition(currentRotation + HALFPI, 1.4f, 20.f);
+			mainCam_.movePosition(currentRotation + S3D_HALFPI, 1.4f, 20.f);
 		}
 		break;
 	case CamRight:
@@ -481,7 +481,7 @@ void TargetCamera::moveCamera()
 			Vector newPos2 = position - newPos;
 
 			mainCam_.setLookAt(newPos2);
-			mainCam_.movePosition(currentRotation - HALFPI, 0.8f, 20.f);
+			mainCam_.movePosition(currentRotation - S3D_HALFPI, 0.8f, 20.f);
 		}
 		break;
 	case CamSpectator:
@@ -545,7 +545,7 @@ void TargetCamera::viewSpectator()
 
 	Vector at(arenaX + arenaWidth / 2.0f, arenaY + arenaHeight / 2.0f, 0.0f);
 	mainCam_.setLookAt(at);
-	mainCam_.movePosition(HALFPI, 1.1f, 200.f);
+	mainCam_.movePosition(S3D_HALFPI, 1.1f, 200.f);
 }
 
 bool TargetCamera::getLandIntersect(int x, int y, Vector &intersect)

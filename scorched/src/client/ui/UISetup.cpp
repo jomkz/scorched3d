@@ -18,8 +18,8 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <client/ClientDialog.h>
-#include <client/LoadPNG.h>
+#include <ui/UISetup.h>
+#include <ui/LoadPNG.h>
 #include <graph/GLSetup.h>
 #include <graph/MainCamera.h>
 #include <graph/Main2DCamera.h>

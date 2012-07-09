@@ -91,8 +91,8 @@ void GLWIconTable::draw()
 	}
 
 	// Figure out how many rows to show
-	int min = MIN(itemCount_, scrollBar_.getCurrent());
-	int max = MIN(itemCount_, scrollBar_.getCurrent() + scrollBar_.getSee());
+	int min = S3D_MIN(itemCount_, scrollBar_.getCurrent());
+	int max = S3D_MIN(itemCount_, scrollBar_.getCurrent() + scrollBar_.getSee());
 
 	float y = y_ + h_ - 25.0f;
 

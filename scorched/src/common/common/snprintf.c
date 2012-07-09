@@ -171,8 +171,8 @@
 #define DP_C_LLONG   4
 
 #define char_to_int(p) ((p)- '0')
-#ifndef MAX
-#define MAX(p,q) (((p) >= (q)) ? (p) : (q))
+#ifndef S3D_MAX
+#define S3D_MAX(p,q) (((p) >= (q)) ? (p) : (q))
 #endif
 
 /* yes this really must be a ||. Don't muck with this (tridge) */
@@ -529,11 +529,11 @@ static void fmtint(char *buffer, size_t *currlen, size_t maxlen,
 	convert[place] = 0;
 
 	zpadlen = max - place;
-	spadlen = min - MAX (max, place) - (signvalue ? 1 : 0);
+	spadlen = min - S3D_MAX (max, place) - (signvalue ? 1 : 0);
 	if (zpadlen < 0) zpadlen = 0;
 	if (spadlen < 0) spadlen = 0;
 	if (flags & DP_F_ZERO) {
-		zpadlen = MAX(zpadlen, spadlen);
+		zpadlen = S3D_MAX(zpadlen, spadlen);
 		spadlen = 0;
 	}
 	if (flags & DP_F_MINUS) 

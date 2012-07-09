@@ -61,9 +61,9 @@ void SkyRoof::makeNormal(Vector &position, Vector &normal)
 	
 	float diffuseLight = (((normal.dotP(sunDirection)) / 2.0f) + 0.5f);
 	Vector light = diffuse * diffuseLight + ambient;
-	light[0] = MIN(1.0f, light[0]);
-	light[1] = MIN(1.0f, light[1]);
-	light[2] = MIN(1.0f, light[2]);
+	light[0] = S3D_MIN(1.0f, light[0]);
+	light[1] = S3D_MIN(1.0f, light[1]);
+	light[2] = S3D_MIN(1.0f, light[2]);
 
 	glColor3fv(light);
 }

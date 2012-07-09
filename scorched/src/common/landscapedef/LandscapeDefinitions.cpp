@@ -315,7 +315,7 @@ LandscapeDefinitionsEntry *LandscapeDefinitions::getRandomLandscapeDefnEntry(
 		}
 
 		// Choose a map based on probablity
-		float pos = RAND * totalWeight;
+		float pos = S3D_RAND * totalWeight;
 		float soFar = 0.0f;
 		for (passedItor = passedLandscapes.begin();
 			passedItor != passedLandscapes.end();

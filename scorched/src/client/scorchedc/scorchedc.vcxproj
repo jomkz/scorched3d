@@ -47,7 +47,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)/src/client;$(SolutionDir)/src/server;$(SolutionDir)/src/common;$(SolutionDir)/../scorched-dep-win32/include/zlib/zlib;$(SolutionDir)/../scorched-dep-win32/include/jpg;$(SolutionDir)/../scorched-dep-win32/include/SDL;$(SolutionDir)/../scorched-dep-win32/include/expat/expat;$(SolutionDir)/../scorched-dep-win32/include/png/png;$(SolutionDir)/../scorched-dep-win32/include/al;$(SolutionDir)/../scorched-dep-win32/include/fftw3;$(SolutionDir)/../scorched-dep-win32/include/vorbis;$(SolutionDir)/../scorched-dep-win32/include/ogg;$(SolutionDir)/../scorched-dep-win32/include/freetype;$(SolutionDir)/../scorched-dep-win32/include/glew;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/src/client;$(SolutionDir)/src/server;$(SolutionDir)/src/common;$(SolutionDir)/../scorched-dep-win32/include/zlib/zlib;$(SolutionDir)/../scorched-dep-win32/include/jpg;$(SolutionDir)/../scorched-dep-win32/include/SDL;$(SolutionDir)/../scorched-dep-win32/include/expat/expat;$(SolutionDir)/../scorched-dep-win32/include/png/png;$(SolutionDir)/../scorched-dep-win32/include/al;$(SolutionDir)/../scorched-dep-win32/include/fftw3;$(SolutionDir)/../scorched-dep-win32/include/vorbis;$(SolutionDir)/../scorched-dep-win32/include/ogg;$(SolutionDir)/../scorched-dep-win32/include/freetype;$(SolutionDir)/../scorched-dep-win32/include/glew;$(SolutionDir)/../scorched-dep-win32/include/rocket;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;HAVE_OGG;PNG_DLL;PNG_NO_STDIO;PNG_NO_GLOBAL_ARRAYS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -59,7 +59,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Ws2_32.lib;Opengl32.lib;Glu32.lib;$(SolutionDir)/../scorched-dep-win32/lib/jpg/jpeg.lib;$(SolutionDir)/../scorched-dep-win32/lib/png/libpng.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL_net.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDLmain.lib;$(SolutionDir)/../scorched-dep-win32/lib/zlib/zlib1.lib;$(SolutionDir)/../scorched-dep-win32/lib/expat/libexpat.lib;$(SolutionDir)/../scorched-dep-win32/lib/al/ALut.lib;$(SolutionDir)/../scorched-dep-win32/lib/al/OpenAL32.lib;$(SolutionDir)/../scorched-dep-win32/lib/fftw3/fftw3.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/ogg.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/vorbis.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/vorbisfile.lib;$(SolutionDir)/../scorched-dep-win32/lib/truetype/libfreetype.lib;$(SolutionDir)/../scorched-dep-win32/lib/glew/glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Ws2_32.lib;Opengl32.lib;Glu32.lib;$(SolutionDir)/../scorched-dep-win32/lib/jpg/jpeg.lib;$(SolutionDir)/../scorched-dep-win32/lib/png/libpng.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL_net.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDLmain.lib;$(SolutionDir)/../scorched-dep-win32/lib/zlib/zlib1.lib;$(SolutionDir)/../scorched-dep-win32/lib/expat/libexpat.lib;$(SolutionDir)/../scorched-dep-win32/lib/al/ALut.lib;$(SolutionDir)/../scorched-dep-win32/lib/al/OpenAL32.lib;$(SolutionDir)/../scorched-dep-win32/lib/fftw3/fftw3.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/ogg.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/vorbis.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/vorbisfile.lib;$(SolutionDir)/../scorched-dep-win32/lib/truetype/libfreetype.lib;$(SolutionDir)/../scorched-dep-win32/lib/glew/glew32.lib;$(SolutionDir)/../scorched-dep-win32/lib/rocket/RocketControls_d.lib;$(SolutionDir)/../scorched-dep-win32/lib/rocket/RocketCore_d.lib;$(SolutionDir)/../scorched-dep-win32/lib/rocket/RocketDebugger_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -70,7 +70,7 @@
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)/src/client;$(SolutionDir)/src/server;$(SolutionDir)/src/common;$(SolutionDir)/../scorched-dep-win32/include/zlib/zlib;$(SolutionDir)/../scorched-dep-win32/include/jpg;$(SolutionDir)/../scorched-dep-win32/include/SDL;$(SolutionDir)/../scorched-dep-win32/include/expat/expat;$(SolutionDir)/../scorched-dep-win32/include/png/png;$(SolutionDir)/../scorched-dep-win32/include/al;$(SolutionDir)/../scorched-dep-win32/include/fftw3;$(SolutionDir)/../scorched-dep-win32/include/vorbis;$(SolutionDir)/../scorched-dep-win32/include/ogg;$(SolutionDir)/../scorched-dep-win32/include/freetype;$(SolutionDir)/../scorched-dep-win32/include/glew;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/src/client;$(SolutionDir)/src/server;$(SolutionDir)/src/common;$(SolutionDir)/../scorched-dep-win32/include/zlib/zlib;$(SolutionDir)/../scorched-dep-win32/include/jpg;$(SolutionDir)/../scorched-dep-win32/include/SDL;$(SolutionDir)/../scorched-dep-win32/include/expat/expat;$(SolutionDir)/../scorched-dep-win32/include/png/png;$(SolutionDir)/../scorched-dep-win32/include/al;$(SolutionDir)/../scorched-dep-win32/include/fftw3;$(SolutionDir)/../scorched-dep-win32/include/vorbis;$(SolutionDir)/../scorched-dep-win32/include/ogg;$(SolutionDir)/../scorched-dep-win32/include/freetype;$(SolutionDir)/../scorched-dep-win32/include/glew;$(SolutionDir)/../scorched-dep-win32/include/rocket;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;HAVE_OGG;PNG_DLL;PNG_NO_STDIO;PNG_NO_GLOBAL_ARRAYS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -84,7 +84,7 @@
       <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Ws2_32.lib;Opengl32.lib;Glu32.lib;$(SolutionDir)/../scorched-dep-win32/lib/jpg/jpeg.lib;$(SolutionDir)/../scorched-dep-win32/lib/png/libpng.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL_net.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDLmain.lib;$(SolutionDir)/../scorched-dep-win32/lib/zlib/zlib1.lib;$(SolutionDir)/../scorched-dep-win32/lib/expat/libexpat.lib;$(SolutionDir)/../scorched-dep-win32/lib/al/ALut.lib;$(SolutionDir)/../scorched-dep-win32/lib/al/OpenAL32.lib;$(SolutionDir)/../scorched-dep-win32/lib/fftw3/fftw3.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/ogg.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/vorbis.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/vorbisfile.lib;$(SolutionDir)/../scorched-dep-win32/lib/truetype/libfreetype.lib;$(SolutionDir)/../scorched-dep-win32/lib/glew/glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Ws2_32.lib;Opengl32.lib;Glu32.lib;$(SolutionDir)/../scorched-dep-win32/lib/jpg/jpeg.lib;$(SolutionDir)/../scorched-dep-win32/lib/png/libpng.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDL_net.lib;$(SolutionDir)/../scorched-dep-win32/lib/SDL/SDLmain.lib;$(SolutionDir)/../scorched-dep-win32/lib/zlib/zlib1.lib;$(SolutionDir)/../scorched-dep-win32/lib/expat/libexpat.lib;$(SolutionDir)/../scorched-dep-win32/lib/al/ALut.lib;$(SolutionDir)/../scorched-dep-win32/lib/al/OpenAL32.lib;$(SolutionDir)/../scorched-dep-win32/lib/fftw3/fftw3.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/ogg.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/vorbis.lib;$(SolutionDir)/../scorched-dep-win32/lib/ogg/vorbisfile.lib;$(SolutionDir)/../scorched-dep-win32/lib/truetype/libfreetype.lib;$(SolutionDir)/../scorched-dep-win32/lib/glew/glew32.lib;$(SolutionDir)/../scorched-dep-win32/lib/rocket/RocketControls.lib;$(SolutionDir)/../scorched-dep-win32/lib/rocket/RocketCore.lib;$(SolutionDir)/../scorched-dep-win32/lib/rocket/RocketDebugger.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -474,7 +474,6 @@
     <ClCompile Include="..\client\ClientConnectionAcceptHandler.cpp" />
     <ClCompile Include="..\client\ClientConnectionAuthHandler.cpp" />
     <ClCompile Include="..\client\ClientConnectionRejectHandler.cpp" />
-    <ClCompile Include="..\client\ClientDialog.cpp" />
     <ClCompile Include="..\client\ClientDisconnected.cpp" />
     <ClCompile Include="..\client\ClientFileHandler.cpp" />
     <ClCompile Include="..\client\ClientGameStoppedHandler.cpp" />
@@ -492,7 +491,6 @@
     <ClCompile Include="..\client\ClientStartGameHandler.cpp" />
     <ClCompile Include="..\client\ClientState.cpp" />
     <ClCompile Include="..\client\ClientWindowSetup.cpp" />
-    <ClCompile Include="..\client\LoadPNG.cpp" />
     <ClCompile Include="..\client\ScorchedClient.cpp" />
     <ClCompile Include="..\client\SecureID.cpp" />
     <ClCompile Include="..\client\UniqueIdStore.cpp" />
@@ -685,6 +683,12 @@
     <ClCompile Include="..\tankgraph\TargetRendererImpl.cpp" />
     <ClCompile Include="..\tankgraph\TargetRendererImplTank.cpp" />
     <ClCompile Include="..\tankgraph\TargetRendererImplTarget.cpp" />
+    <ClCompile Include="..\ui\LoadPNG.cpp" />
+    <ClCompile Include="..\ui\RocketFileInterface.cpp" />
+    <ClCompile Include="..\ui\RocketGameState.cpp" />
+    <ClCompile Include="..\ui\RocketRenderInterfaceOpenGL.cpp" />
+    <ClCompile Include="..\ui\RocketSystemInterface.cpp" />
+    <ClCompile Include="..\ui\UISetup.cpp" />
     <ClCompile Include="..\water\Water.cpp" />
     <ClCompile Include="..\water\Water2.cpp" />
     <ClCompile Include="..\water\Water2Patch.cpp" />
@@ -1225,7 +1229,6 @@
     <ClInclude Include="..\client\ClientConnectionAcceptHandler.h" />
     <ClInclude Include="..\client\ClientConnectionAuthHandler.h" />
     <ClInclude Include="..\client\ClientConnectionRejectHandler.h" />
-    <ClInclude Include="..\client\ClientDialog.h" />
     <ClInclude Include="..\client\ClientDisconnected.h" />
     <ClInclude Include="..\client\ClientFileHandler.h" />
     <ClInclude Include="..\client\ClientGameStoppedHandler.h" />
@@ -1243,7 +1246,6 @@
     <ClInclude Include="..\client\ClientStartGameHandler.h" />
     <ClInclude Include="..\client\ClientState.h" />
     <ClInclude Include="..\client\ClientWindowSetup.h" />
-    <ClInclude Include="..\client\LoadPNG.h" />
     <ClInclude Include="..\client\ScorchedClient.h" />
     <ClInclude Include="..\client\SecureID.h" />
     <ClInclude Include="..\client\UniqueIdStore.h" />
@@ -1438,6 +1440,12 @@
     <ClInclude Include="..\tankgraph\TargetRendererImpl.h" />
     <ClInclude Include="..\tankgraph\TargetRendererImplTank.h" />
     <ClInclude Include="..\tankgraph\TargetRendererImplTarget.h" />
+    <ClInclude Include="..\ui\LoadPNG.h" />
+    <ClInclude Include="..\ui\RocketFileInterface.h" />
+    <ClInclude Include="..\ui\RocketGameState.h" />
+    <ClInclude Include="..\ui\RocketRenderInterfaceOpenGL.h" />
+    <ClInclude Include="..\ui\RocketSystemInterface.h" />
+    <ClInclude Include="..\ui\UISetup.h" />
     <ClInclude Include="..\water\ocean_wave_generator.h" />
     <ClInclude Include="..\water\Water.h" />
     <ClInclude Include="..\water\Water2.h" />

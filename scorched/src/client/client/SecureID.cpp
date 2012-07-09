@@ -19,7 +19,7 @@ std::string SecureID::GetPrivateKey(void)
 	if (dwStatus != NO_ERROR) return ""; // Check status
 
 	std::string Key;
-    for (unsigned int i=0; i<MIN(6, AdapterInfo[0].AddressLength); i++)
+    for (unsigned int i=0; i<S3D_MIN(6, AdapterInfo[0].AddressLength); i++)
     {
         Key += (((unsigned int)AdapterInfo[0].Address[i])&255);
         if (i != 5) Key += ':';

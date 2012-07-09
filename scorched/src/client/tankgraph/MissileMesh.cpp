@@ -57,7 +57,7 @@ MissileMesh::MissileMesh(ModelID &missile) :
 
 			// Find the center that the flare should be eminated from
 			info.position = (mesh->getMax() + mesh->getMin()).asVector() / 2.0f;
-			info.size = MAX(1.0f, (mesh->getMax() - mesh->getMin()).asVector().Magnitude());
+			info.size = S3D_MAX(1.0f, (mesh->getMax() - mesh->getMin()).asVector().Magnitude());
 
 			flares_.push_back(info);
 		}

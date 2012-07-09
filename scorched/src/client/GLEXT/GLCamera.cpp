@@ -28,7 +28,7 @@
 GLCamera *GLCamera::currentCamera_ = 0;
 
 GLCamera::GLCamera(GLsizei windowWidth, GLsizei windowHeight) :
-	rotationXY_(0.0f), rotationYZ_(PI / 4), zoom_(150.0f),
+	rotationXY_(0.0f), rotationYZ_(S3D_PI / 4), zoom_(150.0f),
 	useHeightFunc_(false), minHeightFunc_(0), maxHeightFunc_(0), 
 	totalTime_(0.0f), 
 	shake_(0.0f), minHeightData_(0), maxHeightData_(0)
@@ -123,16 +123,16 @@ void GLCamera::moveViewport(Vector &lookFrom, Vector &lookAt)
 	direction *= 3.0f;
 	if (minHeightFunc_ && useHeightFunc_)
 	{
-		lz = MAX(lz, (*minHeightFunc_)(int(lookFrom[0]), 
+		lz = S3D_MAX(lz, (*minHeightFunc_)(int(lookFrom[0]), 
 			int(lookFrom[1]), minHeightData_));
-		lz = MAX(lz, (*minHeightFunc_)(int(lookFrom[0] + direction[0]), 
+		lz = S3D_MAX(lz, (*minHeightFunc_)(int(lookFrom[0] + direction[0]), 
 			int(lookFrom[1] + direction[1]), minHeightData_));
 	}
 	if (maxHeightFunc_ && useHeightFunc_)
 	{
-		lz = MIN(lz, (*maxHeightFunc_)(int(lookFrom[0]),
+		lz = S3D_MIN(lz, (*maxHeightFunc_)(int(lookFrom[0]),
 			int(lookFrom[1]), maxHeightData_));
-		lz = MIN(lz, (*maxHeightFunc_)(int(lookFrom[0] + direction[0]),
+		lz = S3D_MIN(lz, (*maxHeightFunc_)(int(lookFrom[0] + direction[0]),
 			int(lookFrom[1] + direction[1]), maxHeightData_));
 	}
 
@@ -160,9 +160,9 @@ void GLCamera::simulate(float frameTime)
 		shake_ -= ShakeDecrease;
 		if (shake_ > 0.0f)
 		{
-			shakeV_[0] = RAND * shake_;
-			shakeV_[1] = RAND * shake_;
-			shakeV_[2] = RAND * shake_;
+			shakeV_[0] = S3D_RAND * shake_;
+			shakeV_[1] = S3D_RAND * shake_;
+			shakeV_[2] = S3D_RAND * shake_;
 		}
 		else 
 		{

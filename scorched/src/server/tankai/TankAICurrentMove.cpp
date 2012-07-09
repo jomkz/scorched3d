@@ -184,7 +184,7 @@ void TankAICurrentMove::playMoveInternal(Tanket *tanket,
 	float totalDamage = 
 		targets_.getTotalDamageTaken() - totalDamageBeforeMove_;
 	if (totalDamage > movementDamage_ &&
-		RAND <= movementDamageChance_)
+		S3D_RAND <= movementDamageChance_)
 	{
 		// Bring the health back up
 		if (useBatteries)
@@ -200,7 +200,7 @@ void TankAICurrentMove::playMoveInternal(Tanket *tanket,
 	}
 
 	// Check to see if we can make a huge shot at a number of tanks
-	if (RAND <= groupShotChance_)
+	if (S3D_RAND <= groupShotChance_)
 	{
 		if (makeGroupShot(tanket, weapons, sortedTankets, moveData)) return;
 	}
@@ -346,10 +346,10 @@ bool TankAICurrentMove::makeProjectileShot(Tanket *tanket, Tanket *targetTanket,
 
 	// Find a place where we will hit
 	Vector aimPosition = directTarget;
-	float a = RAND * 3.14f * 2.0f;
+	float a = S3D_RAND * 3.14f * 2.0f;
 	aimPosition[0] += sinf(a) * tankAimDistance;
 	aimPosition[1] += cosf(a) * tankAimDistance;
-	float aimDistance = MIN(tankAimDistance + 5.0f, 15.0f);
+	float aimDistance = S3D_MIN(tankAimDistance + 5.0f, 15.0f);
 
 	// Check for all angles to see if we can shoot at this tank
 	for (float degs=45.0f; degs<=85.0f; degs+=8.0f)
@@ -658,8 +658,8 @@ bool TankAICurrentMove::inHole(Vector &position)
 		Vector lowest = pos;
 		for (float a=0.0f; a<360.0f; a+=45.0f)
 		{
-			float offSetX = sinf(a / 180.0f * PI) * 1.25f;
-			float offSetY = cosf(a / 180.0f * PI) * 1.25f;
+			float offSetX = sinf(a / 180.0f * S3D_PI) * 1.25f;
+			float offSetY = cosf(a / 180.0f * S3D_PI) * 1.25f;
 
 			Vector newPos(
 				pos[0] + offSetX,
@@ -692,8 +692,8 @@ bool TankAICurrentMove::inHole(Vector &position)
 		bool ok = false;
 		for (float radius=2.0f; radius<10.0f; radius+=1.0f)
 		{
-			float offSetX = sinf(a / 180.0f * PI) * radius;
-			float offSetY = cosf(a / 180.0f * PI) * radius;
+			float offSetX = sinf(a / 180.0f * S3D_PI) * radius;
+			float offSetY = cosf(a / 180.0f * S3D_PI) * radius;
 			
 			Vector newPos(
 				pos[0] + offSetX,
@@ -748,7 +748,7 @@ bool TankAICurrentMove::makeMoveShot(Tanket *tanket,
 		Tanket *target = sortedTankets.front();
 		Vector targetPos = target->getLife().getTargetPosition().asVector();
 		Vector tankPos = tanket->getLife().getTargetPosition().asVector();
-		float totalDistance = MAX(100.0f, MIN(500.0f, (targetPos - tankPos).Magnitude() * 2.0f));
+		float totalDistance = S3D_MAX(100.0f, S3D_MIN(500.0f, (targetPos - tankPos).Magnitude() * 2.0f));
 
 		// Can we move to this target at all?
 		MovementMap mmap(
@@ -931,7 +931,7 @@ bool TankAICurrentMove::useAvailableBatteries(Tanket *tanket, MoveData &moveData
 		tanket->getLife().getLife().asInt();
 	int batteriesWanted = lifeWanted / 10;
 
-	int useBatteries = MIN(batteriesWanted, noBatteries);
+	int useBatteries = S3D_MIN(batteriesWanted, noBatteries);
 	if (useBatteries <= 0) return false;
 
 	for (int b=0; b<useBatteries; b++)
@@ -954,8 +954,8 @@ Vector TankAICurrentMove::lowestHighest(TankAICurrentMoveWeapons &weapons,
 				fixed::fromFloat(bestPos[0]), fixed::fromFloat(bestPos[1])).asFloat();
 	for (float a=0.0f; a<360.0f; a+=22.5f)
 	{
-		float offSetX = sinf(a / 180.0f * PI) * radius;
-		float offSetY = cosf(a / 180.0f * PI) * radius;
+		float offSetX = sinf(a / 180.0f * S3D_PI) * radius;
+		float offSetY = cosf(a / 180.0f * S3D_PI) * radius;
 		
 		Vector newPos(
 			directTarget[0] + offSetX,
@@ -1017,7 +1017,7 @@ void TankAICurrentMove::shotAtTank(Tanket *tanket, bool projectile, float newDis
 	float distanceDec = 0.0f;
 	if (distance > 5.0f)
 	{
-		distanceDec = MIN(distance - 5.0f, 20.0f) / 20.0f;
+		distanceDec = S3D_MIN(distance - 5.0f, 20.0f) / 20.0f;
 	}
 
 	record.position = tanket->getLife().getTargetPosition().asVector();
@@ -1027,25 +1027,25 @@ void TankAICurrentMove::shotAtTank(Tanket *tanket, bool projectile, float newDis
 
 		float decrement = 
 			projectileMinDecrement_ +
-			RAND * (projectileMaxDecrement_ - projectileMinDecrement_);
+			S3D_RAND * (projectileMaxDecrement_ - projectileMinDecrement_);
 		record.projectileCurrentDistance = 
-			MAX(projectileEndDistance_, record.projectileCurrentDistance - decrement);				
+			S3D_MAX(projectileEndDistance_, record.projectileCurrentDistance - decrement);				
 
 		distanceDec *= projectileMovementFactor_;
 		record.projectileCurrentDistance = 
-			MIN(projectileStartDistance_, record.projectileCurrentDistance + distanceDec);	
+			S3D_MIN(projectileStartDistance_, record.projectileCurrentDistance + distanceDec);	
 	}
 	else 
 	{
 		float decrement = 
 			sniperMinDecrement_ +
-			RAND * (sniperMaxDecrement_ - sniperMinDecrement_);
+			S3D_RAND * (sniperMaxDecrement_ - sniperMinDecrement_);
 		record.sniperCurrentDistance = 
-			MAX(sniperEndDistance_, record.sniperCurrentDistance - decrement);	
+			S3D_MAX(sniperEndDistance_, record.sniperCurrentDistance - decrement);	
 
 		distanceDec *= sniperMovementFactor_;
 		record.sniperCurrentDistance = 
-			MIN(sniperStartDistance_, record.sniperCurrentDistance + distanceDec);	
+			S3D_MIN(sniperStartDistance_, record.sniperCurrentDistance + distanceDec);	
 	}
 }
 

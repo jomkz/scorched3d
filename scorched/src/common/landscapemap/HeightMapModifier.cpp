@@ -91,7 +91,7 @@ void HeightMapModifier::noise(HeightMap &hmap,
 			fixed height = hmap.getHeight(x, y);
 			fixed newHeight = height + 
 				noisemap[nx.asInt() + ny.asInt() * defn.noisewidth];
-			newHeight = MAX(newHeight, 0);
+			newHeight = S3D_MAX(newHeight, 0);
 			hmap.setHeight(x, y, newHeight);
 		}
 	}
@@ -126,13 +126,13 @@ void HeightMapModifier::edgeEnhance(HeightMap &hmap,
 				pixel = (hmap.getHeight(x, y - 1) - hmap.getHeight(x, y + 1)).abs();
 				if (pixel > max) max = pixel;
 
-				*point = MAX(height, max + height);
+				*point = S3D_MAX(height, max + height);
 			}
 			else
 			{
 				*point = height;
 			}
-			*point = MAX(*point, 0);
+			*point = S3D_MAX(*point, 0);
         }
     }    
 
@@ -268,10 +268,10 @@ void HeightMapModifier::waterErrosion(HeightMap &hmap,
 
 			// Set new height, make sure it is lower than the start by a certain amount
 			fixed lowered = fixed(i) * defn.errosionforce;
-			lowered = MIN(lowered, defn.errosionmaxdepth);
+			lowered = S3D_MIN(lowered, defn.errosionmaxdepth);
 			fixed currentheight = hmap.getHeight(x, y);
-			startHeight = MIN(startHeight, currentheight);
-			fixed newheight = MAX(startHeight - lowered, 0);
+			startHeight = S3D_MIN(startHeight, currentheight);
+			fixed newheight = S3D_MAX(startHeight - lowered, 0);
 			hmap.setHeight(x, y, newheight);
 
 			// Lower the surrounding area so its not so severe
@@ -286,7 +286,7 @@ void HeightMapModifier::waterErrosion(HeightMap &hmap,
 						if (a==-size || a==size || b==-size || b==size)
 						{
 							fixed newSurroundHeight = startHeight - lowered + raised + generator.getRandFixed("HeightMapModifier") * 2;
-							newSurroundHeight = MAX(newSurroundHeight, 0);
+							newSurroundHeight = S3D_MAX(newSurroundHeight, 0);
 							fixed oldSurroundHeight = hmap.getHeight(x + a, y + b);
 							if (oldSurroundHeight > newSurroundHeight)
 							{
@@ -412,12 +412,12 @@ void HeightMapModifier::addCirclePeak(HeightMap &hmap, FixedVector &start,
 									  fixed sizew, fixed sizew2, fixed sizeh,
 									  RandomGenerator &offsetGenerator)
 {
-	fixed maxdist = MAX(sizew2, sizew);
+	fixed maxdist = S3D_MAX(sizew2, sizew);
 	fixed sizewsq = sizew * sizew * fixed(true, 12000);
-	int startx = MAX(0, (start[0] - maxdist).asInt());
-	int starty = MAX(0, (start[1] - maxdist).asInt());
-	int endx = MIN(hmap.getMapWidth(), (start[0] + maxdist).asInt());
-	int endy = MIN(hmap.getMapHeight(), (start[1] + maxdist).asInt());
+	int startx = S3D_MAX(0, (start[0] - maxdist).asInt());
+	int starty = S3D_MAX(0, (start[1] - maxdist).asInt());
+	int endx = S3D_MIN(hmap.getMapWidth(), (start[0] + maxdist).asInt());
+	int endy = S3D_MIN(hmap.getMapHeight(), (start[1] + maxdist).asInt());
 
 	fixed posX, posY;
 	fixed pt2 = fixed(1) / fixed(5);
@@ -501,14 +501,14 @@ void HeightMapModifier::generateTerrain(HeightMap &hmap,
 		fixed sizew2 = (fixed(defn.landpeakwidthymax) - fixed(defn.landpeakwidthymin)) * generator.getRandFixed("HeightMapModifier") 
 			+ fixed(defn.landpeakwidthymin) + sizew;
 		fixed sizeh = ((fixed(defn.landpeakheightmax) - fixed(defn.landpeakheightmin)) * generator.getRandFixed("HeightMapModifier") 
-					   + defn.landpeakheightmin) * MAX(sizew, sizew2);
+					   + defn.landpeakheightmin) * S3D_MAX(sizew, sizew2);
 
 		// Choose a border around this hemisphere
 		fixed bordersizex = fixed(0);
 		fixed bordersizey = fixed(0);
 		if (defn.levelsurround)
 		{
-			fixed bordersize = MAX(sizew, sizew2) * fixed(true, 12000); // 1.2
+			fixed bordersize = S3D_MAX(sizew, sizew2) * fixed(true, 12000); // 1.2
 			bordersizex = bordersize + useBorderX;
 			bordersizey = bordersize + useBorderY;
 		}

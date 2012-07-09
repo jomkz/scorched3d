@@ -140,7 +140,7 @@ void Laser::simulate(fixed frameTime, bool &remove)
 							fixed targetDistance = offset.Magnitude();
 
 							if (targetDistance < params_->getHurtRadius() + 
-								MAX(current->getLife().getSize()[0], current->getLife().getSize()[1]))
+								S3D_MAX(current->getLife().getSize()[0], current->getLife().getSize()[1]))
 							{
 								damagedTargets_.insert(current->getPlayerId());
 							}

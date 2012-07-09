@@ -92,7 +92,7 @@ void WaterWaveDistance::generate(
 								float(float(a) / float(distanceWidth_) * float(mapWidth)), 
 								float(float(b) / float(distanceHeight_) * float(mapHeight)), 0.0f);
 							float distance = (posB - posA).Magnitude();
-							waveDistance_[a + b * distanceWidth_] = MIN(waveDistance_[a + b * distanceWidth_], distance);
+							waveDistance_[a + b * distanceWidth_] = S3D_MIN(waveDistance_[a + b * distanceWidth_], distance);
 						}
 					}
 				}
@@ -106,8 +106,8 @@ float WaterWaveDistance::getWaveDistance(int posx, int posy)
 {
 	int a = int(posx) / distanceWidthMult_;
 	int b = int(posy) / distanceHeightMult_;
-	int x = MAX(0, MIN(a, (distanceWidth_ - 1)));
-	int y = MAX(0, MIN(b, (distanceHeight_ - 1)));
+	int x = S3D_MAX(0, S3D_MIN(a, (distanceWidth_ - 1)));
+	int y = S3D_MAX(0, S3D_MIN(b, (distanceHeight_ - 1)));
 
 	float distance = waveDistance_[x + y * distanceWidth_];
 	distance += fabsf(float(a - x)) + fabsf(float(b - y));

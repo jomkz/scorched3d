@@ -143,7 +143,7 @@ fixed ServerSimulator::calcSendStepSize()
 		}
 	}
 
-	fixed stepSize = MAX(MIN(max, maxStepSize), minStepSize);
+	fixed stepSize = S3D_MAX(S3D_MIN(max, maxStepSize), minStepSize);
 
 	return stepSize;
 }

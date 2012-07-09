@@ -160,9 +160,9 @@ void ImageModifier::addLightMapToBitmap(Image &destBitmap,
 			Vector diffuseLight = diffuse * diffuseLightMult;
 			Vector ambientLight = ambience;
 			Vector lightColor = diffuseLight + ambientLight;
-			lightColor[0] = MIN(1.0f, lightColor[0]);
-			lightColor[1] = MIN(1.0f, lightColor[1]);
-			lightColor[2] = MIN(1.0f, lightColor[2]);
+			lightColor[0] = S3D_MIN(1.0f, lightColor[0]);
+			lightColor[1] = S3D_MIN(1.0f, lightColor[1]);
+			lightColor[2] = S3D_MIN(1.0f, lightColor[2]);
 
 			bitmapBits[0] = lightColor[0];
 			bitmapBits[1] = lightColor[1];
@@ -185,9 +185,9 @@ void ImageModifier::addLightMapToBitmap(Image &destBitmap,
 	{
 		for (int x=0; x<destBitmap.getWidth(); x++)
 		{
-			destBits[0] = GLubyte(MIN(float(destBits[0]) * (srcBits[0] * 1.2f), 255.0f));
-			destBits[1] = GLubyte(MIN(float(destBits[1]) * (srcBits[1] * 1.2f), 255.0f));
-			destBits[2] = GLubyte(MIN(float(destBits[2]) * (srcBits[2] * 1.2f), 255.0f));
+			destBits[0] = GLubyte(S3D_MIN(float(destBits[0]) * (srcBits[0] * 1.2f), 255.0f));
+			destBits[1] = GLubyte(S3D_MIN(float(destBits[1]) * (srcBits[1] * 1.2f), 255.0f));
+			destBits[2] = GLubyte(S3D_MIN(float(destBits[2]) * (srcBits[2] * 1.2f), 255.0f));
 
 			srcBits += 3;
 			destBits += 3;
@@ -472,8 +472,8 @@ void ImageModifier::addTexturesToBitmap(
 		{
 			int texx = x / (destBitmap.getWidth() / 3);
 			int texy = y / (destBitmap.getHeight() / 3);
-			texx = MIN(2, texx);
-			texy = MIN(2, texy);
+			texx = S3D_MIN(2, texx);
+			texy = S3D_MIN(2, texy);
 
 			Image *src = sources[texx + texy * 3];
 			int srcx = x % src->getWidth();
@@ -777,10 +777,10 @@ void ImageModifier::addCircle(Image &destBitmap,
 	maxX /= 2.0f;
 	maxY /= 2.0f;*/
 
-	minX = MAX(minX, 0.0f);
-	minY = MAX(minY, 0.0f);
-	maxX = MIN(maxX, destBitmap.getWidth() - 1.0f);
-	maxY = MIN(maxY, destBitmap.getHeight() - 1.0f);
+	minX = S3D_MAX(minX, 0.0f);
+	minY = S3D_MAX(minY, 0.0f);
+	maxX = S3D_MIN(maxX, destBitmap.getWidth() - 1.0f);
+	maxY = S3D_MIN(maxY, destBitmap.getHeight() - 1.0f);
 
 	int xStart = int(minX);
 	int yStart = int(minY);
@@ -847,10 +847,10 @@ void ImageModifier::addBitmap(Image &destBitmap,
 	float maxX = sx + srcScaleWidth / 2;
 	float maxY = sy + srcScaleHeight / 2;
 
-	minX = MAX(minX, 0.0f);
-	minY = MAX(minY, 0.0f);
-	maxX = MIN(maxX, destBitmap.getWidth() - 1.0f);
-	maxY = MIN(maxY, destBitmap.getHeight() - 1.0f);
+	minX = S3D_MAX(minX, 0.0f);
+	minY = S3D_MAX(minY, 0.0f);
+	maxX = S3D_MIN(maxX, destBitmap.getWidth() - 1.0f);
+	maxY = S3D_MIN(maxY, destBitmap.getHeight() - 1.0f);
 
 	int xStart = int(minX);
 	int yStart = int(minY);
@@ -869,9 +869,9 @@ void ImageModifier::addBitmap(Image &destBitmap,
 		for (int x=0; x<xWidth; x++)
 		{
 			int srcX = int(float(x) / scalex);
-			srcX = MIN(srcX, srcBitmap.getWidth());
+			srcX = S3D_MIN(srcX, srcBitmap.getWidth());
 			int srcY = int(float(y) / scaley);
-			srcY = MIN(srcY, srcBitmap.getHeight());
+			srcY = S3D_MIN(srcY, srcBitmap.getHeight());
 
 			GLubyte *tmpSrc = srcBitmap.getBits() +
 				srcX * srcBitmap.getComponents() +
@@ -927,7 +927,7 @@ void ImageModifier::scalePlanBitmap(Image &destBitmap,
 	Image &srcIncBitmap,
 	int landscapeX, int landscapeY)
 {
-	int maxSize = MAX(landscapeX, landscapeY);
+	int maxSize = S3D_MAX(landscapeX, landscapeY);
 	float xScale = landscapeX / float(maxSize);
 	float yScale = landscapeY / float(maxSize);
 
@@ -944,8 +944,8 @@ void ImageModifier::scalePlanBitmap(Image &destBitmap,
 	{
 		for (int x=0; x<destBitmap.getWidth(); x++, dest+=destBitmap.getComponents())
 		{
-			int srcX = MIN(x + offsetX, srcBitmap.getWidth() - 1);
-			int srcY = MIN(y + offsetY, srcBitmap.getHeight() - 1);
+			int srcX = S3D_MIN(x + offsetX, srcBitmap.getWidth() - 1);
+			int srcY = S3D_MIN(y + offsetY, srcBitmap.getHeight() - 1);
 			GLubyte *src = srcBitmap.getBits() +
 				srcX * srcBitmap.getComponents() +
 				srcY * srcBitmap.getComponents() * srcBitmap.getWidth();			

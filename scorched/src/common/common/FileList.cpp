@@ -88,7 +88,7 @@ bool FileList::addAllFiles(const std::string &baseDir,
 					else
 					{
 						const char *add = fileName.c_str();
-						add += MIN(baseDir.size() + 1, fileName.size());
+						add += S3D_MIN(baseDir.size() + 1, fileName.size());
 						files_.push_back(add);
 					}
 				}

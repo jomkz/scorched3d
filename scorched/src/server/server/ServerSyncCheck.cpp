@@ -356,7 +356,7 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 		}
 		else
 		{	
-			unsigned int minUsed = MIN(tmpBuffer.getBufferUsed(), clientTank->second->getBufferUsed());
+			unsigned int minUsed = S3D_MIN(tmpBuffer.getBufferUsed(), clientTank->second->getBufferUsed());
 			bool differences = false;
 			for (unsigned int u=0; u<minUsed; u++)
 			{
@@ -454,7 +454,7 @@ bool ServerSyncCheck::compareSyncChecks(ComsSyncCheckMessage *server,
 	{
 		syncCheckLog(S3D::formatStringBuffer("SyncCheck checked, Client %u Server %u Checks", 
 			client->getSyncCheck().size(), server->getSyncCheck().size()));
-		unsigned int syncsSize = MAX(
+		unsigned int syncsSize = S3D_MAX(
 			server->getSyncCheck().size(), 
 			client->getSyncCheck().size());
 		for (unsigned int s=0; s<syncsSize; s++)

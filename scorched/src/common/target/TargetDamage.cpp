@@ -157,9 +157,9 @@ void TargetDamage::damageTarget(ScorchedContext &context,
 			damagedTarget->getTargetState().getDisplayDamage())
 		{
 			Vector position = damagedTarget->getLife().getFloatPosition();
-			position[0] += RAND * 5.0f - 2.5f;
-			position[1] += RAND * 5.0f - 2.5f;
-			position[2] += RAND * 5.0f - 2.5f;
+			position[0] += S3D_RAND * 5.0f - 2.5f;
+			position[1] += S3D_RAND * 5.0f - 2.5f;
+			position[2] += S3D_RAND * 5.0f - 2.5f;
 
 			Vector redColor(0.75f, 0.0f, 0.0f);
 			context.getActionController().addAction(

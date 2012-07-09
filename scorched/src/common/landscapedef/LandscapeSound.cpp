@@ -78,7 +78,7 @@ int LandscapeSoundPositionSet::getInitCount()
 #ifndef S3D_SERVER
 	ObjectGroup *objectGroup =
 		ScorchedClient::instance()->getObjectGroups().getGroup(name.c_str());
-	if (objectGroup) return (MIN(maxsounds, objectGroup->getObjectCount()));	
+	if (objectGroup) return (S3D_MIN(maxsounds, objectGroup->getObjectCount()));	
 #endif
 
 	return 0;
@@ -225,7 +225,7 @@ bool LandscapeSoundTimingRepeat::readXML(XMLNode *node)
 
 float LandscapeSoundTimingRepeat::getNextEventTime()
 {
-	return min + max * RAND;
+	return min + max * S3D_RAND;
 }
 
 bool LandscapeSoundSoundFile::readXML(XMLNode *node)

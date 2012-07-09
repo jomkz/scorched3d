@@ -172,7 +172,7 @@ bool ServerFileServer::sendNextFile(ComsFileMessage &message,
 		// Check how much still needs to be sent
 		unsigned int sizeSent = entry->length;
 		unsigned int sizeLeftToSend = sendBuffer.getBufferUsed() - sizeSent;
-		unsigned int sizeToSend = MIN(sizeLeftToSend, size);
+		unsigned int sizeToSend = S3D_MIN(sizeLeftToSend, size);
 		unsigned int bytesLeft = destination->getMod().getTotalLeft();
 		bool firstChunk = (sizeSent == 0);
 		bool lastChunk = (sizeToSend == sizeLeftToSend);

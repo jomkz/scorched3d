@@ -92,7 +92,7 @@ void GLWScorchedInfoSpinner::draw()
 	if (currentValue > maxValue) currentValue = maxValue;
 	float range = maxValue - minValue;
 	float percentage = (currentValue - minValue) / range;
-	float degrees = percentage * PI * 2.0f;
+	float degrees = percentage * S3D_PI * 2.0f;
 
 	float x = x_ + halfWidth_;
 	float y = y_ + halfHeight_;

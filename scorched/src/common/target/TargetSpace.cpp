@@ -112,15 +112,15 @@ void TargetSpace::getSquares(Target *target, std::vector<Square*> &squares)
 		{
 			ShieldRound *round = (ShieldRound *) shield;
 
-			w = MAX(w, (round->getActualRadius() * 2).asInt());
-			h = MAX(h, (round->getActualRadius() * 2).asInt());
+			w = S3D_MAX(w, (round->getActualRadius() * 2).asInt());
+			h = S3D_MAX(h, (round->getActualRadius() * 2).asInt());
 		}
 		else
 		{
 			ShieldSquare *square = (ShieldSquare *) shield;
 
-			w = MAX(w, (square->getSize()[0] * 2).asInt());
-			h = MAX(h, (square->getSize()[1] * 2).asInt());
+			w = S3D_MAX(w, (square->getSize()[0] * 2).asInt());
+			h = S3D_MAX(h, (square->getSize()[1] * 2).asInt());
 		}
 	}
 

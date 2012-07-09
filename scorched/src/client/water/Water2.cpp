@@ -87,8 +87,8 @@ static float calculateError(Water2Points &displacement,
 		midx, x2, midy, y2,
 		approxheight2, x2y2, approxheight5, approxheight6);
 
-	float errorChildren = MAX(errorChild1, MAX(errorChild2, MAX(errorChild3, errorChild4)));
-	float totalError = MAX(errorChildren, MAX(heightdiff1, heightdiff2));
+	float errorChildren = S3D_MAX(errorChild1, S3D_MAX(errorChild2, S3D_MAX(errorChild3, errorChild4)));
+	float totalError = S3D_MAX(errorChildren, S3D_MAX(heightdiff1, heightdiff2));
 	return totalError;
 }
 
@@ -172,7 +172,7 @@ void Water2::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)
 							float thisError = calculateError(displacements[i],
 								x1, x2, y1, y2,
 								x1y1, x2y2, x1y2, x2y1);
-							error = MAX(error, thisError);
+							error = S3D_MAX(error, thisError);
 						}
 					}
 				}
@@ -214,7 +214,7 @@ void Water2::generate(LandscapeTexBorderWater *water, ProgressCounter *counter)
 	memset(aof, 0, sizeof(float) * wave_resolution * wave_resolution);
 
 	float rndtab[37];
-	for (unsigned k = 0; k < 37; ++k) rndtab[k] = RAND;
+	for (unsigned k = 0; k < 37; ++k) rndtab[k] = S3D_RAND;
 
 	// Waves, oaf part 1
 	if (GLStateExtension::hasShaders() &&

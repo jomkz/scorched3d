@@ -368,7 +368,7 @@ void ProgressDialogSync::progressChange(const LangString &op, const float percen
 		unsigned int state = ScorchedClient::instance()->getGameState().getState();
 		if (state >= ClientState::StateLoadFiles)
 		{
-			GLWWindowManager::instance()->simulate(state, MIN(0.25f, timeDelay));
+			GLWWindowManager::instance()->simulate(state, S3D_MIN(0.25f, timeDelay));
 			GLWWindowManager::instance()->draw(state);
 		}
 		else

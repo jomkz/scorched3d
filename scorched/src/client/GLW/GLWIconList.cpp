@@ -81,8 +81,8 @@ void GLWIconList::draw()
 		drawShadedRoundBox(x_, y_, w_, h_, 5.0f, false);
 	glEnd();
 
-	int min = MIN((int) items_.size(), scrollBar_.getCurrent());
-	int max = MIN((int) items_.size(), scrollBar_.getCurrent() + scrollBar_.getSee());
+	int min = S3D_MIN((int) items_.size(), scrollBar_.getCurrent());
+	int max = S3D_MIN((int) items_.size(), scrollBar_.getCurrent() + scrollBar_.getSee());
 
 	float x = x_ + 5.0f; 
 	float y = y_ + h_;

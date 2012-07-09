@@ -43,5 +43,5 @@ bool Counter::nextDraw(float frameTime)
 
 void Counter::genNextTime()
 {
-	nextTime_ = RAND * timeDiff_ + minTime_;
+	nextTime_ = S3D_RAND * timeDiff_ + minTime_;
 }

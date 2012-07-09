@@ -50,7 +50,7 @@ AnimatedBackdropDialog *AnimatedBackdropDialog::instance()
 AnimatedBackdropDialog::AnimatedBackdropDialog() : 
 	GLWWindow("Animated Backdrop", 0.0f, 0.0f, 0.0f, 0.0f, eHideName,
 		"The backdrop dialog"),
-	rotation_(HALFPI),
+	rotation_(S3D_HALFPI),
 	init_(false)
 {
 	windowLevel_ = 5000000;

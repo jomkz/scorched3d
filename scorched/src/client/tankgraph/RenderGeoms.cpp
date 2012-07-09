@@ -163,7 +163,7 @@ void RenderGeoms::drawCollisionGeoms()
 			Vector position = target->getLife().getFloatPosition();
 			Vector &size = target->getLife().getSize().asVector();
 			position[2] += size[2] / 2.0f;
-			float radius = MAX(MAX(size[0], size[1]), size[2]) / 2.0f;
+			float radius = S3D_MAX(S3D_MAX(size[0], size[1]), size[2]) / 2.0f;
 
 			static GLUquadric *obj = 0;
 			if (!obj)

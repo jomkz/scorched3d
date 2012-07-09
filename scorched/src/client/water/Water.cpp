@@ -55,7 +55,7 @@ Water::~Water()
 
 void Water::setTransparency(float transparency)
 {
-	transparency_ = MIN(maxTransparency_, transparency);
+	transparency_ = S3D_MIN(maxTransparency_, transparency);
 }
 
 void Water::draw()

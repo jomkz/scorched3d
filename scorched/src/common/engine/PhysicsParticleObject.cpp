@@ -157,7 +157,7 @@ void PhysicsParticleObject::checkCollision()
 		{
 			action = checkBounceCollision(collision, target);
 
-			velocity_[2] = MIN(velocity_[2], 1);
+			velocity_[2] = S3D_MIN(velocity_[2], 1);
 
 			if (collision.collisionId != CollisionIdShield ||
 				optionStickyShields_)

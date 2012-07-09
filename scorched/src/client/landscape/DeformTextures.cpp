@@ -48,10 +48,10 @@ void DeformTextures::deformLandscape(Vector &pos, float radius,
 	GLsizei w = GLsizei(pixelsPerSW * 2.0f * iradius);
 	GLsizei h = GLsizei(pixelsPerSH * 2.0f * iradius);
 
-	x = MAX(x, 0);
-	y = MAX(y, 0);
-	w = MIN(w, Landscape::instance()->getMainMap().getWidth() - x);
-	h = MIN(h, Landscape::instance()->getMainMap().getHeight() - y);
+	x = S3D_MAX(x, 0);
+	y = S3D_MAX(y, 0);
+	w = S3D_MIN(w, Landscape::instance()->getMainMap().getWidth() - x);
+	h = S3D_MIN(h, Landscape::instance()->getMainMap().getHeight() - y);
 
 	if (!GLStateExtension::getNoTexSubImage() &&
 		x < Landscape::instance()->getMainMap().getWidth() &&

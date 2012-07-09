@@ -140,7 +140,7 @@ fixed TargetLife::collisionDistance(FixedVector &position)
 	{
 		// Find how close the explosion was to the 
 		// outside of the sphere
-		fixed sphereRadius = MAX(MAX(size_[0], size_[1]), size_[2]) / 2;
+		fixed sphereRadius = S3D_MAX(S3D_MAX(size_[0], size_[1]), size_[2]) / 2;
 		dist = direction.Magnitude() - sphereRadius;
 		if (dist < 0) dist = 0;
 	}
@@ -212,7 +212,7 @@ bool TargetLife::collision(FixedVector &position)
 	// Check against actual bounds
 	if (sphereGeom_)
 	{
-		fixed radius = MAX(MAX(size_[0], size_[1]), size_[2]) / 2;
+		fixed radius = S3D_MAX(S3D_MAX(size_[0], size_[1]), size_[2]) / 2;
 		if (direction.Magnitude() > radius) return false;
 	}
 	else
@@ -322,7 +322,7 @@ void TargetLife::updateAABB()
 {
 	if (sphereGeom_)
 	{
-		fixed radius = MAX(MAX(size_[0], size_[1]), size_[2]) / 2;
+		fixed radius = S3D_MAX(S3D_MAX(size_[0], size_[1]), size_[2]) / 2;
 		aabbSize_ = FixedVector(radius * 2, radius * 2, radius * 2);
 	}
 	else
@@ -364,9 +364,9 @@ void TargetLife::updateAABB()
 			if (i == 0) aabbSize_ = result;
 			else
 			{
-				aabbSize_[0] = MAX(aabbSize_[0], result[0]);
-				aabbSize_[1] = MAX(aabbSize_[1], result[1]);
-				aabbSize_[2] = MAX(aabbSize_[2], result[2]);
+				aabbSize_[0] = S3D_MAX(aabbSize_[0], result[0]);
+				aabbSize_[1] = S3D_MAX(aabbSize_[1], result[1]);
+				aabbSize_[2] = S3D_MAX(aabbSize_[2], result[2]);
 			}
 		}
 	}

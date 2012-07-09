@@ -40,8 +40,8 @@ void GLWBitmap::draw()
 	{
 		GLState state(GLState::TEXTURE_OFF | GLState::BLEND_OFF);
 
-		int width = MIN(bitmap_->getWidth(), (int) w_);
-		int height = MIN(bitmap_->getHeight(), (int) h_);
+		int width = S3D_MIN(bitmap_->getWidth(), (int) w_);
+		int height = S3D_MIN(bitmap_->getHeight(), (int) h_);
 
 		glPixelStorei(GL_PACK_ALIGNMENT, 4);    /* Force 4-byte alignment */
 		glPixelStorei(GL_PACK_ROW_LENGTH, 0);

@@ -121,6 +121,9 @@
     <Filter Include="events">
       <UniqueIdentifier>{3fed378d-dfa9-4e6d-adf1-fb95355d8d5f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ui">
+      <UniqueIdentifier>{40dbc53b-b3ca-456c-a897-f242128d3bde}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\common\ARGParser.cpp">
@@ -1102,9 +1105,6 @@
       <Filter>client</Filter>
     </ClCompile>
     <ClCompile Include="..\client\ClientConnectionRejectHandler.cpp">
-      <Filter>client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\client\ClientDialog.cpp">
       <Filter>client</Filter>
     </ClCompile>
     <ClCompile Include="..\client\ClientFileHandler.cpp">
@@ -2244,9 +2244,6 @@
     <ClCompile Include="..\..\server\server\ServerTankChangeHandler.cpp">
       <Filter>server</Filter>
     </ClCompile>
-    <ClCompile Include="..\client\LoadPNG.cpp">
-      <Filter>client</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\simactions\NextTurnSimAction.cpp">
       <Filter>simactions</Filter>
     </ClCompile>
@@ -2370,7 +2367,24 @@
     <ClCompile Include="..\..\common\simactions\TankAchievementSimAction.cpp">
       <Filter>simactions</Filter>
     </ClCompile>
-    <ClCompile Include="..\GLEXT\glew.c" />
+    <ClCompile Include="..\ui\UISetup.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\LoadPNG.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\RocketFileInterface.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\RocketRenderInterfaceOpenGL.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\RocketSystemInterface.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\RocketGameState.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -3352,9 +3366,6 @@
       <Filter>client</Filter>
     </ClInclude>
     <ClInclude Include="..\client\ClientConnectionRejectHandler.h">
-      <Filter>client</Filter>
-    </ClInclude>
-    <ClInclude Include="..\client\ClientDialog.h">
       <Filter>client</Filter>
     </ClInclude>
     <ClInclude Include="..\client\ClientFileHandler.h">
@@ -4503,9 +4514,6 @@
     <ClInclude Include="..\..\server\server\ServerTankChangeHandler.h">
       <Filter>server</Filter>
     </ClInclude>
-    <ClInclude Include="..\client\LoadPNG.h">
-      <Filter>client</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\common\simactions\NextTurnSimAction.h">
       <Filter>simactions</Filter>
     </ClInclude>
@@ -4629,9 +4637,24 @@
     <ClInclude Include="..\..\common\simactions\TankAchievementSimAction.h">
       <Filter>simactions</Filter>
     </ClInclude>
-    <ClInclude Include="..\GLEXT\glew.h" />
-    <ClInclude Include="..\GLEXT\glxew.h" />
-    <ClInclude Include="..\GLEXT\wglew.h" />
+    <ClInclude Include="..\ui\UISetup.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\LoadPNG.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\RocketFileInterface.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\RocketRenderInterfaceOpenGL.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\RocketSystemInterface.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\RocketGameState.h">
+      <Filter>ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\common\lua\Makefile">

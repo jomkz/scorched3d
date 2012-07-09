@@ -79,7 +79,7 @@ void ParticleRendererQuads::renderParticle(Particle &particle)
 	if (particle.textureSet_)
 	{
 		int tex = int((particle.textureSet_->getNoTextures() - 1) * particle.percent_);
-		tex = MIN(MAX(tex, 0), particle.textureSet_->getNoTextures() - 1);
+		tex = S3D_MIN(S3D_MAX(tex, 0), particle.textureSet_->getNoTextures() - 1);
 		GLTexture *texture = particle.textureSet_->getTexture(tex);
 		texture->draw();
 	}

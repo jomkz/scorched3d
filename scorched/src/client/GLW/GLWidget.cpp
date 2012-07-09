@@ -48,8 +48,8 @@ void GLWidget::draw()
 		glNewList(listNo, GL_COMPILE);
 			for (float a=360.0f; a>0.0f; a-=360.0f / 36.0f)
 			{
-				glVertex2f(sinf(a/180.0f * PI), 
-					cosf(a/180.0f * PI));
+				glVertex2f(sinf(a/180.0f * S3D_PI), 
+					cosf(a/180.0f * S3D_PI));
 			}
 		glEndList();
 	}
@@ -169,8 +169,8 @@ void GLWidget::drawCircle(int startA, int endA, float posX, float posY, float si
 		{
 			const float angDeg = 22.5f;
 			float ang = i * angDeg;
-			positions[i][0] = sinf(ang / 180.0f * PI);
-			positions[i][1] = cosf(ang / 180.0f * PI);
+			positions[i][0] = sinf(ang / 180.0f * S3D_PI);
+			positions[i][1] = cosf(ang / 180.0f * S3D_PI);
 		}
 	}
 

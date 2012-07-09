@@ -18,9 +18,8 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-
-#if !defined(__INCLUDE_ScorchedDialogh_INCLUDE__)
-#define __INCLUDE_ScorchedDialogh_INCLUDE__
+#if !defined(__INCLUDE_UISetuph_INCLUDE__)
+#define __INCLUDE_UISetuph_INCLUDE__
 
 bool createScorchedWindow();
 

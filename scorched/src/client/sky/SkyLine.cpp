@@ -59,8 +59,8 @@ void SkyLine::actualDraw(float radius, float radius2, float height)
 	glBegin(GL_QUAD_STRIP);
 	for (float a=0.0f; a<=360.0f; a+=360.0f / 12)
 	{
-		float x = sinf(a / 180.0f * PI) * radius;
-		float y = cosf(a / 180.0f * PI) * radius2;
+		float x = sinf(a / 180.0f * S3D_PI) * radius;
+		float y = cosf(a / 180.0f * S3D_PI) * radius2;
 
 		glTexCoord2f(a / 360.0f, 1.0f);
 		glVertex3f(x, y, height);

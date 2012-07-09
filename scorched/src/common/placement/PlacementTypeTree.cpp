@@ -187,7 +187,7 @@ void PlacementTypeTree::getPositions(ScorchedContext &context,
 	{
 		if (i % 1000 == 0) if (counter) 
 			counter->setNewPercentage(
-				MAX(float(i)/float(NoIterations), float(objectCount) / float(maxobjects)) *100.0f);
+				S3D_MAX(float(i)/float(NoIterations), float(objectCount) / float(maxobjects)) *100.0f);
 
 		fixed lx = generator.getRandFixed("PlacementTypeTree") * fixed(groundMapWidth);
 		fixed ly = generator.getRandFixed("PlacementTypeTree") * fixed(groundMapHeight);

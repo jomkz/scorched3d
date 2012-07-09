@@ -174,7 +174,7 @@ void igd::recvInitialRequest(UDPsocket udpsock, std::list<Location> &locations)
 			const char *data = (const char *) packet.packet->data;
 			if (packet.packet->len >= 0)
 			{
-				((char *)data)[MIN(packet.packet->len, packet.packet->maxlen - 1)] = '\0';
+				((char *)data)[S3D_MIN(packet.packet->len, packet.packet->maxlen - 1)] = '\0';
 			}
 			if (ScorchedServer::instance()->getOptionsGame().getUseUPnPLogging())
 			{

@@ -273,8 +273,8 @@ bool MovementMap::inShield(Target *target, Tanket *tanket, FixedVector &position
 	offset[1] = offset[1].abs();
 	offset[2] = fixed(0);
 	FixedVector surround = offset.Normalize() * fixed(2);
-	offset[0] = MAX(fixed(0), offset[0] - surround[0]);
-	offset[1] = MAX(fixed(0), offset[1] - surround[1]);
+	offset[0] = S3D_MAX(fixed(0), offset[0] - surround[0]);
+	offset[1] = S3D_MAX(fixed(0), offset[1] - surround[1]);
 
 	return shield->inShield(offset);
 }
@@ -339,7 +339,7 @@ fixed MovementMap::getFuel(WeaponMoveTank *weapon)
 	}
 	else
 	{
-		fuel = MIN(weapon->getMaximumRange(), numberFuel);
+		fuel = S3D_MIN(weapon->getMaximumRange(), numberFuel);
 	}
 	return fuel;
 }

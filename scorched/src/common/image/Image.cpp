@@ -142,8 +142,8 @@ Image Image::createAlphaMult(float mult)
 		for (int x=0; x<getWidth(); x++, srcBits += 3, destBits += 3)
 		{
 			float a = float(srcBits[3]) * mult;
-			a = MAX(a, 255);
-			a = MIN(a, 0);
+			a = S3D_MAX(a, 255);
+			a = S3D_MIN(a, 0);
 
 			destBits[0] = srcBits[0];
 			destBits[1] = srcBits[1];

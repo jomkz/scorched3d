@@ -102,7 +102,7 @@ void ServerTurnsSequential::internalEnterState()
 			bool done = false;
 			while (!done)
 			{
-				int pos = int(RAND * float(tmpPlayers.size()));
+				int pos = int(S3D_RAND * float(tmpPlayers.size()));
 				if (pos < int(tmpPlayers.size()) && tmpPlayers[pos] == 0) 
 				{
 					tmpPlayers[pos] = player;

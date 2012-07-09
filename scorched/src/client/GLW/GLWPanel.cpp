@@ -471,17 +471,17 @@ void GLWPanel::layout()
 		if (layout_ == LayoutHorizontal)
 		{
 			w += width;
-			h = MAX(h, height);
+			h = S3D_MAX(h, height);
 		}
 		else if (layout_ == LayoutVerticle)
 		{
-			w = MAX(w, width);
+			w = S3D_MAX(w, width);
 			h += height;
 		}
 		else if (layout_ == LayoutGrid)
 		{
-			gridW[wid % gridWidth_] = MAX(gridW[wid % gridWidth_], width);
-			h = MAX(h, height);
+			gridW[wid % gridWidth_] = S3D_MAX(gridW[wid % gridWidth_], width);
+			h = S3D_MAX(h, height);
 		}
 		else DIALOG_ASSERT(0);
 	}

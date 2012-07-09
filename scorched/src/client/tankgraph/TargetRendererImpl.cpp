@@ -210,8 +210,8 @@ void TargetRendererImpl::drawShield(float shieldHit, float totalTime)
 		glNewList(spiralListNo = glGenLists(1), GL_COMPILE);
 			float height = 0.0f;
 			float width = 0.0f;
-			float totalA = 5.0f * PI;
-			float aInc = PI / 6.0f;
+			float totalA = 5.0f * S3D_PI;
+			float aInc = S3D_PI / 6.0f;
 			glBegin(GL_QUAD_STRIP);
 			for (float a=0.0f; a<totalA; a+=aInc)
 			{
@@ -230,7 +230,7 @@ void TargetRendererImpl::drawShield(float shieldHit, float totalTime)
 			height = 0.0f;
 			width = 0.0f;
 			glBegin(GL_QUAD_STRIP);
-			for (float a=0.0f; a<5.0f * PI; a+=PI/6.0f)
+			for (float a=0.0f; a<5.0f * S3D_PI; a+=S3D_PI/6.0f)
 			{
 				height += 0.05f;
 				width += 0.05f;
@@ -432,7 +432,7 @@ float TargetRendererImpl::getTargetSize()
 	// Target size
 	float targetSize = target_->getLife().getFloatBoundingSize();
 	float shieldSize = target_->getShield().getShieldBoundingSize().asFloat();
-	float size = MAX(targetSize, shieldSize);
+	float size = S3D_MAX(targetSize, shieldSize);
 	return size;
 }
 

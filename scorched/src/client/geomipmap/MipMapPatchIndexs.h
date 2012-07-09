@@ -46,11 +46,11 @@ public:
 
 	MipMapPatchIndex *getIndex(int lod, int leftLod, int rightLod, int topLod, int bottomLod, int addLod = 0)
 	{
-		lod = MIN(lod + addLod, getNoLevels() - 1);
-		leftLod = MIN(leftLod + addLod, getNoLevels() - 1);
-		rightLod = MIN(rightLod + addLod, getNoLevels() - 1);
-		topLod = MIN(topLod + addLod, getNoLevels() - 1);
-		bottomLod = MIN(bottomLod + addLod, getNoLevels() - 1);
+		lod = S3D_MIN(lod + addLod, getNoLevels() - 1);
+		leftLod = S3D_MIN(leftLod + addLod, getNoLevels() - 1);
+		rightLod = S3D_MIN(rightLod + addLod, getNoLevels() - 1);
+		topLod = S3D_MIN(topLod + addLod, getNoLevels() - 1);
+		bottomLod = S3D_MIN(bottomLod + addLod, getNoLevels() - 1);
 
 		unsigned int borders = 0;
 		if (leftLod != -1 && leftLod > lod) 

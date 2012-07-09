@@ -88,7 +88,7 @@ void GLWLabel::calcWidth()
 		{
 			for (int i=0; i<(int) labelTexts_.size(); i++)
 			{
-				w_ = MAX(w_, GLWFont::instance()->getGameFont()->getWidth(
+				w_ = S3D_MAX(w_, GLWFont::instance()->getGameFont()->getWidth(
 					size_, labelTexts_[i]));
 			}
 			h_ = float(labelTexts_.size()) * 20.0f / 14.0f * size_;

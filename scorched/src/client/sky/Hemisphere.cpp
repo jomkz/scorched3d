@@ -36,13 +36,13 @@ void Hemisphere::draw(float radius, float radius2,
 	const float maxTexCoord = 1.0f;
 	for (int j=startHeightSlice; j<endHeightSlice; j++) 
 	{
-		float theta1 = j * HALFPI / float(heightSlices);
-		float theta2 = (j + 1) * HALFPI / float(heightSlices);
+		float theta1 = j * S3D_HALFPI / float(heightSlices);
+		float theta2 = (j + 1) * S3D_HALFPI / float(heightSlices);
 
 		for (int i=startRotationSlice;i<=endRotationSlice;i++) 
 		{
-			float theta3 = i * TWOPI / float(rotationSlices);
-			float c = theta3 / TWOPI * maxTexCoord;
+			float theta3 = i * S3D_TWOPI / float(rotationSlices);
+			float c = theta3 / S3D_TWOPI * maxTexCoord;
 
 			Vector e1, p1;
 			e1[0] = float(cos(theta1) * cos(theta3));
@@ -102,11 +102,11 @@ void Hemisphere::drawColored(float radius, float radius2,
 	const float maxTexCoord = 1.0f;
 	for (int j=startHeightSlice; j<endHeightSlice; j++) 
 	{
-		float theta1 = j * HALFPI / float(heightSlices);
+		float theta1 = j * S3D_HALFPI / float(heightSlices);
 		if (j<0) theta1 *= 0.75f;
-		float theta2 = (j + 1) * HALFPI / float(heightSlices);
+		float theta2 = (j + 1) * S3D_HALFPI / float(heightSlices);
 
-		int colorJ = MAX(j - 1, 0);
+		int colorJ = S3D_MAX(j - 1, 0);
 		int colorIndexA = int(float(colorJ) / float(heightSlices) * 15.0f);
 		int colorIndexB = int(float(j) / float(heightSlices) * 15.0f);
 		int bitmapIndexA = daytime * colors.getComponents() + (16 * colors.getComponents()) * colorIndexA;
@@ -118,8 +118,8 @@ void Hemisphere::drawColored(float radius, float radius2,
 
 		for (int i=startRotationSlice;i<=endRotationSlice;i++) 
 		{
-			float theta3 = i * TWOPI / float(rotationSlices);
-			float c = theta3 / TWOPI * maxTexCoord;
+			float theta3 = i * S3D_TWOPI / float(rotationSlices);
+			float c = theta3 / S3D_TWOPI * maxTexCoord;
 
 			Vector e1, p1, c1;
 			e1[0] = float(cos(theta1) * cos(theta3));
@@ -137,16 +137,16 @@ void Hemisphere::drawColored(float radius, float radius2,
 					dotP = (dotP + 1.0f) / 4.0f;
 				}
 
-				c1[0] = MIN(float(bits[bitmapIndexA]) / 255.0f + dotP, 1.0f);
+				c1[0] = S3D_MIN(float(bits[bitmapIndexA]) / 255.0f + dotP, 1.0f);
 				if (colors.getComponents() == 1)
 				{
-					c1[1] = MIN(float(bits[bitmapIndexA]) / 255.0f + dotP, 1.0f);
-					c1[2] = MIN(float(bits[bitmapIndexA]) / 255.0f + dotP, 1.0f);
+					c1[1] = S3D_MIN(float(bits[bitmapIndexA]) / 255.0f + dotP, 1.0f);
+					c1[2] = S3D_MIN(float(bits[bitmapIndexA]) / 255.0f + dotP, 1.0f);
 				}
 				else
 				{
-					c1[1] = MIN(float(bits[bitmapIndexA + 1]) / 255.0f + dotP, 1.0f);
-					c1[2] = MIN(float(bits[bitmapIndexA + 2]) / 255.0f + dotP, 1.0f);
+					c1[1] = S3D_MIN(float(bits[bitmapIndexA + 1]) / 255.0f + dotP, 1.0f);
+					c1[2] = S3D_MIN(float(bits[bitmapIndexA + 2]) / 255.0f + dotP, 1.0f);
 				}
 			}
 
@@ -166,16 +166,16 @@ void Hemisphere::drawColored(float radius, float radius2,
 					dotP = (dotP + 1.0f) / 4.0f;
 				}
 
-				c2[0] = MIN(float(bits[bitmapIndexB]) / 255.0f + dotP, 1.0f);
+				c2[0] = S3D_MIN(float(bits[bitmapIndexB]) / 255.0f + dotP, 1.0f);
 				if (colors.getComponents() == 1)
 				{
-					c2[1] = MIN(float(bits[bitmapIndexB]) / 255.0f + dotP, 1.0f);
-					c2[2] = MIN(float(bits[bitmapIndexB]) / 255.0f + dotP, 1.0f);
+					c2[1] = S3D_MIN(float(bits[bitmapIndexB]) / 255.0f + dotP, 1.0f);
+					c2[2] = S3D_MIN(float(bits[bitmapIndexB]) / 255.0f + dotP, 1.0f);
 				}
 				else
 				{
-					c2[1] = MIN(float(bits[bitmapIndexB + 1]) / 255.0f + dotP, 1.0f);
-					c2[2] = MIN(float(bits[bitmapIndexB + 2]) / 255.0f + dotP, 1.0f);
+					c2[1] = S3D_MIN(float(bits[bitmapIndexB + 1]) / 255.0f + dotP, 1.0f);
+					c2[2] = S3D_MIN(float(bits[bitmapIndexB + 2]) / 255.0f + dotP, 1.0f);
 				}
 			}
 

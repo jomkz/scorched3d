@@ -74,7 +74,7 @@ static void user_read_fn(png_structp png_ptr,
 {
 	user_read_struct *read_io_ptr = (user_read_struct *) png_get_io_ptr(png_ptr);
 
-	int length_left = MIN(length, read_io_ptr->buffer.getBufferUsed() - read_io_ptr->position);
+	int length_left = S3D_MIN(length, read_io_ptr->buffer.getBufferUsed() - read_io_ptr->position);
 	memcpy(data, &read_io_ptr->buffer.getBuffer()[read_io_ptr->position], length_left);
 	read_io_ptr->position += length_left;
 }

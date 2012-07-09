@@ -34,9 +34,9 @@
 
 static void randomVector(Vector &result, Vector &start, Vector &end)
 {
-	result[0] = start[0] + ((end[0] - start[0]) * RAND);
-	result[1] = start[1] + ((end[1] - start[1]) * RAND);
-	result[2] = start[2] + ((end[2] - start[2]) * RAND);
+	result[0] = start[0] + ((end[0] - start[0]) * S3D_RAND);
+	result[1] = start[1] + ((end[1] - start[1]) * S3D_RAND);
+	result[2] = start[2] + ((end[2] - start[2]) * S3D_RAND);
 }
 
 static void randomCounterVector(Vector &result, Vector &current, 
@@ -50,7 +50,7 @@ static void randomCounterVector(Vector &result, Vector &current,
 
 static float randomScalar(float start, float end)
 {
-	return start + ((end - start) * RAND);
+	return start + ((end - start) * S3D_RAND);
 }
 
 static float randomCounterScalar(float current, 
@@ -218,14 +218,14 @@ void ParticleEmitter::emitLinear(int number,
 		createDefaultParticle(*particle);
 		particle->position_ = position;
 		particle->renderer_ = renderer;
-		particle->textureCoord_ = int(RAND * 4.0f);
+		particle->textureCoord_ = int(S3D_RAND * 4.0f);
 		if (animate)
 		{
 			particle->textureSet_ = set;
 		}
 		else
 		{
-			int index = MIN(int(RAND * (set->getNoTextures() - 1)), set->getNoTextures() - 1);
+			int index = S3D_MIN(int(S3D_RAND * (set->getNoTextures() - 1)), set->getNoTextures() - 1);
 			particle->texture_ = set->getTexture(index);
 		}
 	}
@@ -246,7 +246,7 @@ void ParticleEmitter::emitExplosionRing(int number,
 
 		createDefaultParticle(*particle);
 
-		float ang = RAND * 2.0f * 3.14f;
+		float ang = S3D_RAND * 2.0f * 3.14f;
 		float speed = width * 4.0f;
 		Vector axis = inAxis.Normalize();
 		Vector otheraxis(0.0f, 1.0f, 0.0f);
@@ -260,14 +260,14 @@ void ParticleEmitter::emitExplosionRing(int number,
 		particle->velocity_ = velocity;
 		particle->position_ = position;
 		particle->renderer_ = ParticleRendererQuads::getInstance();
-		particle->textureCoord_ = int(RAND * 4.0f);
+		particle->textureCoord_ = int(S3D_RAND * 4.0f);
 		if (animate)
 		{
 			particle->textureSet_ = set;
 		}
 		else
 		{
-			int index = MIN(int(RAND * (set->getNoTextures() - 1)), set->getNoTextures() - 1);
+			int index = S3D_MIN(int(S3D_RAND * (set->getNoTextures() - 1)), set->getNoTextures() - 1);
 			particle->texture_ = set->getTexture(index);
 		}
 	}
@@ -284,13 +284,13 @@ void ParticleEmitter::emitDebris(int number,
 
 		createDefaultParticle(*particle);
 
-		float direction = RAND * 3.14f * 2.0f;
-		float speed = RAND * 25.0f + 5.0f;
-		float height = RAND * 25.0f + 15.0f;
+		float direction = S3D_RAND * 3.14f * 2.0f;
+		float speed = S3D_RAND * 25.0f + 5.0f;
+		float height = S3D_RAND * 25.0f + 15.0f;
 		Vector velocity(getFastSin(direction) * speed, 
 			getFastCos(direction) * speed, height);
 
-		if (RAND > 0.5f)
+		if (S3D_RAND > 0.5f)
 		{
 			DebrisActionRenderer *debris = new DebrisActionRenderer;
 			particle->velocity_ = velocity;
@@ -323,8 +323,8 @@ void ParticleEmitter::emitSmoke(int number,
 		particle->position_ = position;
 		particle->renderer_ = ParticleRendererQuads::getInstance();
 		particle->texture_ = &ExplosionTextures::instance()->smokeTexture;
-		particle->shadow_ = (RAND > 0.25f);
-		particle->textureCoord_ = (int) (RAND * 4.0f);
+		particle->shadow_ = (S3D_RAND > 0.25f);
+		particle->textureCoord_ = (int) (S3D_RAND * 4.0f);
 	}
 }
 
@@ -357,22 +357,22 @@ void ParticleEmitter::emitSpray(
 
 		createDefaultParticle(*particle);
 
-		float rotation = RAND * 2.0f * 3.14f;
+		float rotation = S3D_RAND * 2.0f * 3.14f;
 		float x = sinf(rotation);
 		float y = cosf(rotation);
 		Vector pos = position;
-		pos[0] += (x * width * RAND);
-		pos[1] += (y * width * RAND);
+		pos[0] += (x * width * S3D_RAND);
+		pos[1] += (y * width * S3D_RAND);
 		Vector velocity;
-		velocity[0] = (x * RAND) / 10.0f;
-		velocity[1] = (y * RAND) / 10.0f;
-		velocity[2] = 25.0f * RAND + 15.0f;
+		velocity[0] = (x * S3D_RAND) / 10.0f;
+		velocity[1] = (y * S3D_RAND) / 10.0f;
+		velocity[2] = 25.0f * S3D_RAND + 15.0f;
 
 		particle->texture_ = texture;
 		particle->velocity_ = velocity;
 		particle->position_ = pos;
 		particle->renderer_ = ParticleRendererQuads::getInstance();
-		particle->textureCoord_ = (int) (RAND * 4.0f);
+		particle->textureCoord_ = (int) (S3D_RAND * 4.0f);
 	}
 }
 
@@ -435,8 +435,8 @@ void ParticleEmitter::emitExplosion(
 		Particle *particle = engine.getNextAliveParticle(ParticleExplosion);
 		if (!particle) return;
 
-		float randRotXY = (RAND * TWOPI);
-		float randRotXZ = (RAND * TWOPI);
+		float randRotXY = (S3D_RAND * S3D_TWOPI);
+		float randRotXZ = (S3D_RAND * S3D_TWOPI);
 		float cosRandRotXZ = (float) cos(randRotXZ);
 		Vector velocity;
 		velocity[0] = float(sin(randRotXY) * cosRandRotXZ);
@@ -444,7 +444,7 @@ void ParticleEmitter::emitExplosion(
 		velocity[2] = float(sin(randRotXZ));
 		velocity *= (width * 2.5f);
 
-		float size = RAND * width * 2.0f + 2.0f;
+		float size = S3D_RAND * width * 2.0f + 2.0f;
 
 		setEndSize(size, size, size, size);
 
@@ -453,14 +453,14 @@ void ParticleEmitter::emitExplosion(
 		particle->velocity_ = velocity;
 		particle->position_ = position;
 		particle->renderer_ = ParticleRendererQuads::getInstance();
-		particle->textureCoord_ = int(RAND * 4.0f);
+		particle->textureCoord_ = int(S3D_RAND * 4.0f);
 		if (animate)
 		{
 			particle->textureSet_ = set;
 		}
 		else
 		{
-			int index = MIN(int(RAND * (set->getNoTextures() - 1)), set->getNoTextures() - 1);
+			int index = S3D_MIN(int(S3D_RAND * (set->getNoTextures() - 1)), set->getNoTextures() - 1);
 			particle->texture_ = set->getTexture(index);
 		}
 	}
@@ -483,8 +483,8 @@ void ParticleEmitter::emitMushroom(
 
 		particle->position_ = position;
 		particle->renderer_ = ParticleRendererMushroom::getInstance();
-		particle->textureCoord_ = int(RAND * 4.0f);
-		particle->shadow_ = (RAND > 0.80f);
+		particle->textureCoord_ = int(S3D_RAND * 4.0f);
+		particle->shadow_ = (S3D_RAND > 0.80f);
 		particle->userData_ = new ExplosionNukeRendererEntry(position, width);
 
 		if (animate)
@@ -493,7 +493,7 @@ void ParticleEmitter::emitMushroom(
 		}
 		else
 		{
-			int index = MIN(int(RAND * (set->getNoTextures() - 1)), set->getNoTextures() - 1);
+			int index = S3D_MIN(int(S3D_RAND * (set->getNoTextures() - 1)), set->getNoTextures() - 1);
 			particle->texture_ = set->getTexture(index);
 		}
 	}
@@ -522,8 +522,8 @@ void ParticleEmitter::emitPrecipitation(
 			particle->texture_ = &ExplosionTextures::instance()->snowTexture;
 			particle->renderer_ = ParticleRendererSnow::getInstance();
 		}
-		particle->position_[0] = position[0] + RAND * 400.0f - 200.0f;
-		particle->position_[1] = position[1] + RAND * 400.0f - 200.0f;
+		particle->position_[0] = position[0] + S3D_RAND * 400.0f - 200.0f;
+		particle->position_[1] = position[1] + S3D_RAND * 400.0f - 200.0f;
 		particle->position_[2] = 180.0f;
 		particle->shadow_ = false;
 	}

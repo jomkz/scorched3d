@@ -171,7 +171,7 @@ void Landscape::drawShadows()
 		getGroundMaps().getLandscapeWidth() / 2.0f;
 	float landHeight = ScorchedClient::instance()->getLandscapeMaps().
 		getGroundMaps().getLandscapeHeight() / 2.0f;
-	float maxWidth = MAX(landWidth, landHeight);
+	float maxWidth = S3D_MAX(landWidth, landHeight);
 
 	// Get the sun's position and landscape dimensions
 	Vector sunPosition = Landscape::instance()->getSky().getSun().getPosition();
@@ -254,8 +254,8 @@ void Landscape::drawShadows()
 				{
 					if (*src != 0.0f)
 					{
-						min = MIN(min, *src);
-						max = MAX(max, *src);
+						min = S3D_MIN(min, *src);
+						max = S3D_MAX(max, *src);
 					}
 
 					//*src = 0.0f; // Black and white

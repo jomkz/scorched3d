@@ -41,7 +41,7 @@ void GLWScrollWBackwards::setCurrent(int c)
 	else
 	{
 		int left = getMax() - getSee();
-		GLWScrollW::setCurrent(MAX(0, left - c));
+		GLWScrollW::setCurrent(S3D_MAX(0, left - c));
 	}
 }
 

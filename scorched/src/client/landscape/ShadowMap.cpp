@@ -111,10 +111,10 @@ void ShadowMap::addShadow(float mapx, float mapy, float mapw, float opacity, boo
 	float maxX = sx + halfW;
 	float maxY = sy + halfW;
 
-	minX = MAX(minX, 0.0f);
-	minY = MAX(minY, 0.0f);
-	maxX = MIN(maxX, size_ - 1.0f);
-	maxY = MIN(maxY, size_ - 1.0f);
+	minX = S3D_MAX(minX, 0.0f);
+	minY = S3D_MAX(minY, 0.0f);
+	maxX = S3D_MIN(maxX, size_ - 1.0f);
+	maxY = S3D_MIN(maxY, size_ - 1.0f);
 
 	int iSize = int(size_);
 	int xStart = int(minX);

@@ -146,8 +146,8 @@ void Explosion::init()
 			// Add initial smoke clouds
 			for (int a=0; a<OptionsDisplay::instance()->getNumberExplosionSubParts() * 2; a++)
 			{
-				float posXY = (RAND * 4.0f) - 2.0f;
-				float posYZ = (RAND * 4.0f) - 2.0f;
+				float posXY = (S3D_RAND * 4.0f) - 2.0f;
+				float posYZ = (S3D_RAND * 4.0f) - 2.0f;
 
 				Landscape::instance()->getSmoke().addSmoke(
 					position_[0].asFloat() + posXY, 
@@ -245,7 +245,7 @@ void Explosion::init()
 
 		if (params_->getCreateMushroomAmount() > 0)
 		{
-			if (RAND <= params_->getCreateMushroomAmount().asFloat())
+			if (S3D_RAND <= params_->getCreateMushroomAmount().asFloat())
 			{
 				GLTextureSet *texture = ExplosionTextures::instance()->getTextureSetByName(
 					params_->getMushroomTexture());

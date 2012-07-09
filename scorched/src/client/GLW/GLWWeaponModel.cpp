@@ -101,7 +101,7 @@ void GLWWeaponModel::draw()
 		glRotatef(totalTime_ * 45.0f, 0.0f, 0.0f, 1.0f);
 		Vector position;
 		Vector direction(0.3f, 1.0f, 1.0f);
-		float scale = MIN(storedWeapon->getModelScale().asFloat(), 1.0f);
+		float scale = S3D_MIN(storedWeapon->getModelScale().asFloat(), 1.0f);
 		storedMesh->setScale(w_ / 3.0f * scale);
 		Vector rotationAxis(0.0f, 0.0f, 1.0f);
 		storedMesh->draw(position, direction, 0, totalTime_ * 45.0f, rotationAxis, totalTime_ * 20.0f);

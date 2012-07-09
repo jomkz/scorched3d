@@ -466,9 +466,9 @@ void Water2Renderer::generate(LandscapeTexBorderWater *water, ProgressCounter *c
 	windDir1_ = ScorchedClient::instance()->
 		getSimulator().getWind().getWindDirection().asVector();
 	windDir1_[2] = 0.0f;
-	windSpeed2_ = MAX(0.0f, RAND * 2.0f - 1.0f + windSpeed1_);
-	windDir2_ = Vector(windDir1_[0] + RAND * 0.4f - 0.2f,
-		windDir1_[1] + RAND * 0.4f - 0.2f);
+	windSpeed2_ = S3D_MAX(0.0f, S3D_RAND * 2.0f - 1.0f + windSpeed1_);
+	windDir2_ = Vector(windDir1_[0] + S3D_RAND * 0.4f - 0.2f,
+		windDir1_[1] + S3D_RAND * 0.4f - 0.2f);
 	windDir1_.StoreNormalize();
 	windDir2_.StoreNormalize();
 }

@@ -601,15 +601,15 @@ void TargetRendererImplTank::simulate(float frameTime)
 
 			const float randOff = 1.0f;
 			const float randOffDiv = 0.5f;
-			float randX = RAND * randOff - randOffDiv; 
-			float randY = RAND * randOff - randOffDiv; 
+			float randX = S3D_RAND * randOff - randOffDiv; 
+			float randY = S3D_RAND * randOff - randOffDiv; 
 			Landscape::instance()->getSmoke().addSmoke(
 				tankTurretPosition[0].asFloat() + randX, 
 				tankTurretPosition[1].asFloat() + randY, 
 				tankTurretPosition[2].asFloat());
 
 			smokeWaitForTime_ = (
-				(RAND * float(tank_->getLife().getLife().asFloat()) * 10.0f) + 250.0f)
+				(S3D_RAND * float(tank_->getLife().getLife().asFloat()) * 10.0f) + 250.0f)
 				/ 3000.0f;;
 			smokeTime_ = 0.0f;
 		}

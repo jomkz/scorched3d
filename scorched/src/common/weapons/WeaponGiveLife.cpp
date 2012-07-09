@@ -92,7 +92,7 @@ void WeaponGiveLife::weaponCallback(
 		if (tank->getLife().getLife() + life <= 0)
 		{
 			tank->getLife().setLife(
-				MIN(fixed(1), tank->getLife().getLife()));
+				S3D_MIN(fixed(1), tank->getLife().getLife()));
 		}
 		else
 		{

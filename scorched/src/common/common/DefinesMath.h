@@ -21,14 +21,14 @@
 #ifndef __DEFINESMATH__
 #define __DEFINESMATH__
 
-#define PI 3.14159f
-#define TWOPI 6.28318f
-#define HALFPI 1.570795f
-#define PIO180 0.017453278f
+#define S3D_PI 3.14159f
+#define S3D_TWOPI 6.28318f
+#define S3D_HALFPI 1.570795f
+#define S3D_PIO180 0.017453278f
 
-#define RAND ((float) rand() / (float) RAND_MAX)
-#define MAX(x,y) ((x)>(y)?(x):(y))
-#define MIN(x,y) ((x)<(y)?(x):(y))
+#define S3D_RAND ((float) rand() / (float) RAND_MAX)
+#define S3D_MAX(x,y) ((x)>(y)?(x):(y))
+#define S3D_MIN(x,y) ((x)<(y)?(x):(y))
 
 extern float getFastSin(float angle);
 extern float getFastCos(float angle);

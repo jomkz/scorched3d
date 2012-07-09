@@ -126,7 +126,7 @@ void GLWWindView::drawDisplay()
 	Vector &lookAt = MainCamera::instance()->getCamera().getLookAt();
 	Vector dir = (lookAt - lookFrom).Normalize();
 
-	float scale2 = MIN(w_, h_) / 90.0f;
+	float scale2 = S3D_MIN(w_, h_) / 90.0f;
 	float angXY = atan2f(dir[0], dir[1]) / 3.14f * 180.0f;
 	float angYZ = acosf(dir[2]) / 3.14f * 180.0f + 180.0f;
 	if (angYZ < 280.0f) angYZ = 280.0f;
@@ -195,7 +195,7 @@ void GLWWindView::drawScene()
 	int landscapeHeight = ScorchedClient::instance()->getLandscapeMaps().
 		getGroundMaps().getLandscapeHeight();
 
-	int maxSize = MAX(arenaWidth, arenaHeight);
+	int maxSize = S3D_MAX(arenaWidth, arenaHeight);
 	float scale = 60.0f / maxSize;
 	glScalef(scale, scale, scale);
 	glTranslatef(arenaWidth/-2.0f-arenaX, arenaHeight/-2.0f-arenaY, 0.0f);

@@ -223,7 +223,7 @@ void LandscapeMusicManager::simulate(const unsigned state, float simTime)
 		if (playingEntry->currentGain < wantedGain)
 		{
 			playingEntry->currentGain += simTime * 0.2f;
-			playingEntry->currentGain = MIN(
+			playingEntry->currentGain = S3D_MIN(
 				wantedGain, 
 				playingEntry->currentGain);
 			playingEntry->currentSource->setGain(playingEntry->currentGain);
@@ -231,7 +231,7 @@ void LandscapeMusicManager::simulate(const unsigned state, float simTime)
 		else if (playingEntry->currentGain > wantedGain)
 		{
 			playingEntry->currentGain -= simTime * 0.2f;
-			playingEntry->currentGain = MAX(
+			playingEntry->currentGain = S3D_MAX(
 				wantedGain, 
 				playingEntry->currentGain);
 			playingEntry->currentSource->setGain(playingEntry->currentGain);

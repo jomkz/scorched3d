@@ -121,7 +121,7 @@ void WeaponGiveAccessory::weaponCallback(
 			int count = tank->getAccessories().getAccessoryCount(accessory);
 			if (count > 0)
 			{
-				int loose = MIN(count, -number_);
+				int loose = S3D_MIN(count, -number_);
 
 				tank->getAccessories().rm(accessory, loose);
 				{

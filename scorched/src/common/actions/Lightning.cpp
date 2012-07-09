@@ -296,7 +296,7 @@ void Lightning::damageTargets(FixedVector &position,
 			fixed distance = (target->getLife().getTargetPosition() -
 				position).Magnitude();
 			if (distance < weapon_->getSegHurtRadius() + 
-				MAX(target->getLife().getSize()[0], target->getLife().getSize()[1]))
+				S3D_MAX(target->getLife().getSize()[0], target->getLife().getSize()[1]))
 			{
 				std::map<unsigned int, fixed>::iterator findItor = 
 					hurtMap.find(target->getPlayerId());

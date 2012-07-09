@@ -68,7 +68,7 @@ void WeaponGivePower::weaponCallback(
 
 	fixed power = power_.getValue(context);
 	tank->getShotInfo().setMaxPower(
-		MAX(tank->getShotInfo().getMaxPower(), power));
+		S3D_MAX(tank->getShotInfo().getMaxPower(), power));
 
 	{
 		ChannelText text("combat", 
