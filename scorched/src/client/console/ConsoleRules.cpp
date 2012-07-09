@@ -38,7 +38,7 @@ void ConsoleRules::addRule(ConsoleRule *rule)
 
 	std::string addName = rule->getName();
 	_strlwr((char *) addName.c_str());
-	rules_.insert(std::pair<std::string, ConsoleRule *>(addName, rule));
+	rules_.insert(std::pair<const std::string, ConsoleRule *>(addName, rule));
 }
 
 void ConsoleRules::removeRule(ConsoleRule *rule) 
@@ -189,7 +189,7 @@ ConsoleRule *ConsoleRules::matchRule(
 	{
 		ConsoleRule *rule = itor->second;
 		matchedRules.insert(
-			std::pair<int, ConsoleRule *>(
+			std::pair<const int, ConsoleRule *>(
 				(int) rule->getParams().size(), rule));
 	}
 

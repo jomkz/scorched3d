@@ -733,7 +733,11 @@ void DisplayFrame::onExportMod(wxCommandEvent &event)
 		convertString(S3D::formatStringBuffer("%s.s3m", (const char *) (selection.mb_str(wxConvUTF8)))), // default filename
 		wxT(""), // default extension
 		wxT("*.s3m"),
+#if wxCHECK_VERSION(2, 8, 0)
+		wxFD_SAVE);
+#else
 		wxSAVE);
+#endif
 	if (file.empty()) return;
 	ModFiles files;
 	if (!files.loadModFiles(std::string(selection.mb_str(wxConvUTF8)), false))
@@ -757,7 +761,11 @@ void DisplayFrame::onImportMod(wxCommandEvent &event)
 		wxT(""), // default filename
 		wxT(""), // default extension
 		wxT("*.s3m"),
+#if wxCHECK_VERSION(2, 8, 0)
+		wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+#else
 		wxOPEN | wxFILE_MUST_EXIST);
+#endif
 	if (file.empty()) return;
 	ModFiles files;
 	std::string mod;

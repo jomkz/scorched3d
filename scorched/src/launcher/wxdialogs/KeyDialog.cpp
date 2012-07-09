@@ -107,7 +107,7 @@ void TextWindow::OnKeyDown(wxKeyEvent& event)
 		keyDialogControlDown = event.ControlDown();
 		keyDialogShiftDown = event.ShiftDown();
 		keyDialogAltDown = event.AltDown();
-		keyDialogKeyCode = event.KeyCode();
+		keyDialogKeyCode = event.GetKeyCode();
 		frame_->EndModal(0);
 	}
 }

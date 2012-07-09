@@ -126,7 +126,7 @@ void TankAIWeaponSets::WeaponSet::buyWeapons(WeaponSetAccessories &tankAccessori
 			if (weapon.weaponValid(tankAccessories, lastRound))
 			{
 				potentialWeapons.insert(
-					std::pair<unsigned int, WeaponSetEntry *>
+					std::pair<const unsigned int, WeaponSetEntry *>
 						(weapon.prioritybuy, &weapon));
 			}
 		}
