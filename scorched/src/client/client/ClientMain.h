@@ -24,7 +24,6 @@
 namespace ClientMain
 {
 	bool startClient();
-	bool clientEventLoop(float frameTime);
 	bool clientMain();
 };
 

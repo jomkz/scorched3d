@@ -41,7 +41,6 @@
 #include <client/ClientWindowSetup.h>
 #include <lang/LangResource.h>
 #include <graph/Mouse.h>
-#include <graph/Gamma.h>
 #include <graph/OptionsDisplay.h>
 #include <graph/OptionsDisplayConsole.h>
 #include <graph/MainCamera.h>
@@ -288,57 +287,7 @@ bool ClientMain::startClient()
 	return startClientInternal();
 }
 
-bool ClientMain::clientEventLoop(float frameTime)
-{
-	static SDL_Event event;
-	bool idle = true;
-	if (SDL_PollEvent(&event))
-	{
-		idle = false;
-		switch (event.type)
-		{
-		/* keyboard events */
-		case SDL_KEYUP:
-			break;
-		case SDL_KEYDOWN:
-			/* keyevents are handled in mainloop */
-			Keyboard::instance()->processKeyboardEvent(event);
-			break;
 
-			/* mouse events */
-		case SDL_MOUSEBUTTONDOWN:
-		case SDL_MOUSEBUTTONUP:
-		case SDL_MOUSEMOTION:
-			RocketGameState::instance()->processMouseEvent(event);
-			//Mouse::instance()->processMouseEvent(event);
-			break;
-		case SDL_ACTIVEEVENT:
-			if (event.active.gain == 0)
-			{
-				Gamma::instance()->reset();
-			}
-			else
-			{
-				Gamma::instance()->set();
-			}
-
-			paused = ( OptionsDisplay::instance()->getFocusPause() && (event.active.gain == 0));
-			break;
-		case SDL_VIDEORESIZE:
-			MainCamera::instance()->getCamera().setWindowSize(
-				event.resize.w, event.resize.h);
-			Main2DCamera::instance()->getViewPort().setWindowSize(
-				event.resize.w, event.resize.h);
-				
-			break;
-		case SDL_QUIT:
-			ScorchedClient::instance()->getMainLoop().exitLoop();
-			break;
-		}
-	}
-
-	return idle;
-}
 
 bool ClientMain::clientMain()
 {
@@ -350,6 +299,7 @@ bool ClientMain::clientMain()
 	ProgressCounter progressCounter;
 	if (!initHardware(&progressCounter)) return false;
 	if (!initComsHandlers()) return false;
+	if (!startClientInternal()) return false;
 
 	// Create the actual window
 	if (!createScorchedWindow()) return false;
@@ -371,28 +321,9 @@ bool ClientMain::clientMain()
 	*/
 
 
-	// Try and start the client
-	if (!startClientInternal()) return false;
-	
-	// Enter the SDL main loop to process SDL events
-	Clock loopClock;
-	for (;;)
-	{
-		float frameTime = loopClock.getTimeDifference();
-		bool idle = clientEventLoop(frameTime);
 
-		if (!ScorchedClient::instance()->getMainLoop().mainLoop()) break;
-		if ((!paused) && (idle) )
-		{
-			RocketGameState::instance()->draw();
-			//ScorchedClient::instance()->getMainLoop().draw();
-		}
-		else
-		{
-			ClientProcessingLoop::instance()->dontLimitFrameTime();
-		}
-		if (paused) SDL_Delay(100);  // Otherwise when not drawing graphics its an infinite loop	
-	}
+	ScorchedClient::instance()->getClientState().clientMainLoop();
+
 
 	if (ScorchedClient::instance()->getContext().getNetInterfaceValid())
 	{
@@ -401,7 +332,6 @@ bool ClientMain::clientMain()
 	RocketGameState::instance()->destroy();
 	GLWWindowManager::instance()->saveSettings();
     SDL_Delay(1000);
-	Gamma::instance()->reset();
 	Sound::instance()->destroy();
 	Lang::instance()->saveUndefined();
 

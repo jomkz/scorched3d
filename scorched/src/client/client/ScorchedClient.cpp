@@ -20,6 +20,7 @@
 
 #include <client/ScorchedClient.h>
 #include <client/ClientSimulator.h>
+#include <client/ClientState.h>
 #include <engine/MainLoop.h>
 #include <engine/GameState.h>
 #include <graph/MainCamera.h>
@@ -48,6 +49,8 @@ ScorchedClient::ScorchedClient() :
 	ScorchedContext("Client")
 {
 	targetSpace_->setContext(this);
+
+	clientState_ = new ClientState();
 
 	mainLoop_ = new MainLoop();
 	mainLoop_->clear();

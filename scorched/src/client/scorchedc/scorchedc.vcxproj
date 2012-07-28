@@ -686,6 +686,9 @@
     <ClCompile Include="..\ui\AnimatedIslandDecorator.cpp" />
     <ClCompile Include="..\ui\AnimatedIslandDecoratorInstancer.cpp" />
     <ClCompile Include="..\ui\LoadPNG.cpp" />
+    <ClCompile Include="..\ui\RocketEventListener.cpp" />
+    <ClCompile Include="..\ui\RocketEventListenerInstancer.cpp" />
+    <ClCompile Include="..\ui\RocketEventProcessor.cpp" />
     <ClCompile Include="..\ui\RocketFileInterface.cpp" />
     <ClCompile Include="..\ui\RocketGameState.cpp" />
     <ClCompile Include="..\ui\RocketRenderInterfaceOpenGL.cpp" />
@@ -1445,6 +1448,9 @@
     <ClInclude Include="..\ui\AnimatedIslandDecorator.h" />
     <ClInclude Include="..\ui\AnimatedIslandDecoratorInstancer.h" />
     <ClInclude Include="..\ui\LoadPNG.h" />
+    <ClInclude Include="..\ui\RocketEventListener.h" />
+    <ClInclude Include="..\ui\RocketEventListenerInstancer.h" />
+    <ClInclude Include="..\ui\RocketEventProcessor.h" />
     <ClInclude Include="..\ui\RocketFileInterface.h" />
     <ClInclude Include="..\ui\RocketGameState.h" />
     <ClInclude Include="..\ui\RocketRenderInterfaceOpenGL.h" />

@@ -23,7 +23,6 @@
 #define __INCLUDE_ClientProcessingLooph_INCLUDE__
 
 #include <engine/GameStateI.h>
-#include <graph/FrameLimiter.h>
 
 class ClientProcessingLoop : 
 	public GameStateI
@@ -36,11 +35,8 @@ public:
 
 	void process(float frameTime, bool processClientMessages);
 
-	void dontLimitFrameTime() { limiter_.dontLimitFrameTime(); }
-
 protected:
 	static ClientProcessingLoop *instance_;
-	FrameLimiter limiter_;
 	float serverTime_;
 
 private:

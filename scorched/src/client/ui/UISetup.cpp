@@ -78,9 +78,6 @@ bool createScorchedWindow()
 	Main2DCamera::instance()->getViewPort().setWindowSize(windowWidth, windowHeight, 
 		width, height);
 
-	Gamma::instance()->save();
-	Gamma::instance()->set();
-
 	GLSetup::setup();
 
 	if (OptionsDisplay::instance()->getOpenGLWarnings() &&

@@ -18,24 +18,25 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef ROCKETSYSTEMINTERFACE_H
-#define ROCKETSYSTEMINTERFACE_H
+#ifndef RocketEventListener_H
+#define RocketEventListener_H
 
-#include <Rocket/Core/SystemInterface.h>
-#include <common/Clock.h>
+#include <Rocket/Core/EventListener.h>
 
-class RocketSystemInterface : public Rocket::Core::SystemInterface
+class RocketEventListener : public Rocket::Core::EventListener
 {
 public:
-	RocketSystemInterface();
+	RocketEventListener(const Rocket::Core::String& value);
+	virtual ~RocketEventListener();
 
-	/// Get the number of seconds elapsed since the start of the application
-	/// @returns Seconds elapsed
-	virtual float GetElapsedTime();
+	/// Sends the event value through to Invader's event processing system.
+	virtual void ProcessEvent(Rocket::Core::Event& event);
+
+	/// Destroys the event.
+	virtual void OnDetach(Rocket::Core::Element* element);
 
 private:
-	Clock clock_;
-	unsigned int passedTime_;
+	Rocket::Core::String value_;
 };
 
 #endif

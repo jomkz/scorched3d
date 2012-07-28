@@ -51,6 +51,6 @@
     <p>
       Destroy all the invaders in each wave before any get past your ship to invade Earth, unleash their deadly toxin and wipe out all of humanity!
     </p>
-    <button onclick="goto main_menu">Back</button>
+    <button onclick="stimulus(StimulusStartGame)">Back</button>
   </body>
 </rml>

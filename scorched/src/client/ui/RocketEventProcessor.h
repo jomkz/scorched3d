@@ -18,24 +18,24 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef ROCKETSYSTEMINTERFACE_H
-#define ROCKETSYSTEMINTERFACE_H
+#ifndef RocketEventProcessor_H
+#define RocketEventProcessor_H
 
-#include <Rocket/Core/SystemInterface.h>
-#include <common/Clock.h>
+#include <Rocket/Core/Event.h>
 
-class RocketSystemInterface : public Rocket::Core::SystemInterface
+class RocketEventProcessor 
 {
 public:
-	RocketSystemInterface();
+	static RocketEventProcessor &instance();
 
-	/// Get the number of seconds elapsed since the start of the application
-	/// @returns Seconds elapsed
-	virtual float GetElapsedTime();
+	void ProcessEvent(Rocket::Core::String &eventString, Rocket::Core::Event &evt);
+
+protected:
+	void ProcessAction(Rocket::Core::String &action, std::list<Rocket::Core::String> &params);
 
 private:
-	Clock clock_;
-	unsigned int passedTime_;
+	RocketEventProcessor();
+	virtual ~RocketEventProcessor();
 };
 
 #endif

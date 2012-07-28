@@ -21,6 +21,7 @@
 #include <ui/RocketGameState.h>
 #include <ui/LoadPNG.h>
 #include <ui/AnimatedIslandDecoratorInstancer.h>
+#include <ui/RocketEventListenerInstancer.h>
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
 #include <Rocket/Debugger.h>
@@ -78,6 +79,10 @@ void RocketGameState::create()
 		S3D::dialogExit("Scorched 3D Display", 
 				"ERROR: Failed to create rocket context");
 	}
+
+	RocketEventListenerInstancer* event_instancer = new RocketEventListenerInstancer();
+	Rocket::Core::Factory::RegisterEventListenerInstancer(event_instancer);
+	event_instancer->RemoveReference();
 
 	Rocket::Core::DecoratorInstancer* islandDecorator = new AnimatedIslandDecoratorInstancer();
 	Rocket::Core::Factory::RegisterDecoratorInstancer("island", islandDecorator);
@@ -198,10 +203,10 @@ void RocketGameState::processMouseEvent(SDL_Event &evt)
 				}
 				break;
 			case SDL_BUTTON_WHEELUP:
-				context->ProcessMouseWheel(120, GetKeyModifierState());
+				context->ProcessMouseWheel(-1, GetKeyModifierState());
 				break;
 			case SDL_BUTTON_WHEELDOWN:
-				context->ProcessMouseWheel(-120, GetKeyModifierState());
+				context->ProcessMouseWheel(1, GetKeyModifierState());
 				break;
 			}
 		}

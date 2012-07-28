@@ -2391,6 +2391,15 @@
     <ClCompile Include="..\ui\AnimatedIslandDecoratorInstancer.cpp">
       <Filter>ui</Filter>
     </ClCompile>
+    <ClCompile Include="..\ui\RocketEventListenerInstancer.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\RocketEventListener.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\RocketEventProcessor.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -4665,6 +4674,15 @@
       <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="..\ui\AnimatedIslandDecoratorInstancer.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\RocketEventListenerInstancer.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\RocketEventListener.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\RocketEventProcessor.h">
       <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>

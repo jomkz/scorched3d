@@ -355,7 +355,7 @@ void ProgressDialogSync::progressChange(const LangString &op, const float percen
 	timeDelay += frameTime;
 	timeDelay2 += frameTime;
 
-	ClientMain::clientEventLoop(frameTime);	
+	//ClientMain::clientEventLoop(frameTime);	
 	ClientProcessingLoop::instance()->process(frameTime, processEvents_);
 
 	ProgressDialog::instance()->progressChange(op, percentage);

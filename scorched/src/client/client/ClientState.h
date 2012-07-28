@@ -18,14 +18,15 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #if !defined(__INCLUDE_ClientStateh_INCLUDE__)
 #define __INCLUDE_ClientStateh_INCLUDE__
 
-#include <engine/GameState.h>
+#include <graph/FrameLimiter.h>
+#include <list>
 
-namespace ClientState  
+class ClientState  
 {
+public:
 	enum Stimulus
 	{
 		StimOptions = 1,
@@ -39,11 +40,15 @@ namespace ClientState
 		StimPlaying,
 		StimDisconnected,
 		StimGameStopped,
-		StimScore
+		StimScore,
+
+
+		StimulusStartGame
 	};
 
 	enum State
 	{
+		
 		StateOptions = 1,
 		StateConnect,
 		StateDisconnected,
@@ -54,13 +59,30 @@ namespace ClientState
 		StateBuyWeapons,
 		StateAutoDefense,
 		StatePlaying,
-		StateScore
+		StateScore,
+
+
+		StateMainOptions,
+		StateStartGame
 	};
 
-	void setupGameState();
-	void addWindowManager(GameState &gameState, unsigned state);
-	void addStandardComponents(GameState &gameState, unsigned state);
-	void addMandatoryComponents(GameState &gameState, unsigned state);
+	ClientState();
+	virtual ~ClientState();
+
+	void clientMainLoop();
+	void performStateStimulus(const std::string &stimulus);
+
+	void stop() { stopped_ = true; }
+
+protected:
+	State currentState_;
+	bool stopped_, paused_;
+	FrameLimiter frameLimiter_;
+	std::list<Stimulus> stimuli_;
+
+	void clientEventLoop();
+	bool getCurrentStimulus(Stimulus stimulus);
+	void errorCurrentStimulus();
 };
 
 #endif

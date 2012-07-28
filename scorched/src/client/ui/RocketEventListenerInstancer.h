@@ -18,24 +18,22 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef ROCKETSYSTEMINTERFACE_H
-#define ROCKETSYSTEMINTERFACE_H
+#ifndef RocketEventListenerInstancer_H
+#define RocketEventListenerInstancer_H
 
-#include <Rocket/Core/SystemInterface.h>
-#include <common/Clock.h>
+#include <Rocket/Core/EventListenerInstancer.h>
 
-class RocketSystemInterface : public Rocket::Core::SystemInterface
+class RocketEventListenerInstancer : public Rocket::Core::EventListenerInstancer
 {
 public:
-	RocketSystemInterface();
+	RocketEventListenerInstancer();
+	virtual ~RocketEventListenerInstancer();
 
-	/// Get the number of seconds elapsed since the start of the application
-	/// @returns Seconds elapsed
-	virtual float GetElapsedTime();
+	/// Instances a new event handle for Invaders.
+	virtual Rocket::Core::EventListener* InstanceEventListener(const Rocket::Core::String& value);
 
-private:
-	Clock clock_;
-	unsigned int passedTime_;
+	/// Destroys the instancer.
+	virtual void Release();
 };
 
 #endif

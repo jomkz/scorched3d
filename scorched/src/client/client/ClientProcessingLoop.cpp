@@ -106,5 +106,5 @@ void ClientProcessingLoop::process(float frameTime, bool processClientMessages)
 void ClientProcessingLoop::draw(const unsigned state)
 {
 	// Make sure frame rate is not exceeded
-	limiter_.limitFrameTime(); 
+	
 }
