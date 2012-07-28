@@ -65,7 +65,7 @@ void RocketGameState::create()
 
 	Rocket::Core::Initialise();
 	Rocket::Controls::Initialise();
-
+	
 	std::string veraFile = S3D::getDataFile("data/fonts/dejavusans.ttf");
 	Rocket::Core::FontDatabase::LoadFontFace(Rocket::Core::String(veraFile.c_str()));
 
@@ -83,19 +83,28 @@ void RocketGameState::create()
 	Rocket::Core::Factory::RegisterDecoratorInstancer("island", islandDecorator);
 	islandDecorator->RemoveReference();
 
-	std::string demoFile = S3D::getDataFile("data/rocket/demo.rml");
-	Rocket::Core::ElementDocument* document = context->LoadDocument(demoFile.c_str());
+	std::string demoFile = S3D::getDataFile("data/rocket/logo.rml");
+	Rocket::Core::ElementDocument *document = context->LoadDocument(demoFile.c_str());
 	if (document)
 	{
 		document->Show();
 	}
 
+	demoFile = S3D::getDataFile("data/rocket/demo.rml");
+	document = context->LoadDocument(demoFile.c_str());
+	if (document)
+	{
+		document->Show();
+	}
+	
+	/*
 	demoFile = S3D::getDataFile("data/rocket/islandback.rml");
 	document = context->LoadDocument(demoFile.c_str());
 	if (document)
 	{
 		document->Show();
 	}
+	*/
 }
 
 void RocketGameState::destroy()

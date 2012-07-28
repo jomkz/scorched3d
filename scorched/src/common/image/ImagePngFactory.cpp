@@ -163,7 +163,7 @@ Image ImagePngFactory::loadFromBuffer(NetBuffer &buffer, bool readalpha)
 
 		for (unsigned int h=0; h<height; h++)
 		{
-			memcpy(result.getBits() + bytes * (height - 1 - h), row_pointers[h], bytes);
+			memcpy(result.getBits() + bytes * h, row_pointers[h], bytes);
 		}
 	}
 	else

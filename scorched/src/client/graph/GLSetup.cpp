@@ -49,6 +49,6 @@ void GLSetup::setup()
 	glAlphaFunc(GL_GREATER, 0.00f);
 
 	Console::instance(); // Make sure console is inited
-	GLState::setBaseState(GLState::TEXTURE_ON | GLState::BLEND_OFF | GLState::DEPTH_ON);
+	//GLState::setBaseState(GLState::TEXTURE_ON | GLState::BLEND_OFF | GLState::DEPTH_ON);
 	GLStateExtension::setup();
 }
