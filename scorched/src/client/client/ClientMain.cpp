@@ -347,26 +347,33 @@ bool ClientMain::clientMain()
 		S3D::ScorchedProtocolVersion.c_str(), 
 		S3D::ScorchedBuildTime.c_str()));
 
+	ProgressCounter progressCounter;
+	if (!initHardware(&progressCounter)) return false;
+	if (!initComsHandlers()) return false;
+
 	// Create the actual window
 	if (!createScorchedWindow()) return false;
 	RocketGameState::instance()->create();
 
 	// Start the initial windows
-	ClientState::setupGameState();
 	/*
-	ProgressCounter progressCounter;
+	ClientState::setupGameState();
+	
+	
 	ProgressDialog::instance()->changeTip();
 	progressCounter.setUser(ProgressDialogSync::events_instance());
 	progressCounter.setNewPercentage(0.0f);
-	if (!initHardware(&progressCounter)) return false;
+
 	if (!initWindows(&progressCounter)) return false;
-	if (!initComsHandlers()) return false;
+	
 
 	OptionsDisplayConsole::instance()->addDisplayToConsole();
+	*/
+
 
 	// Try and start the client
 	if (!startClientInternal()) return false;
-	*/
+	
 	// Enter the SDL main loop to process SDL events
 	Clock loopClock;
 	for (;;)

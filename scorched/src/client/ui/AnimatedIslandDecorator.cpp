@@ -31,9 +31,10 @@
 #include <landscapedef/LandscapeDefinitions.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <movement/TargetMovement.h>
+#include <image/ImageFactory.h>
 
-AnimatedIslandDecorator::AnimatedIslandDecorator() : 
-	init_(false), rotation_(S3D_HALFPI)
+AnimatedIslandDecorator::AnimatedIslandDecorator() :
+	rotation_(S3D_HALFPI)
 {
 }
 
@@ -43,6 +44,19 @@ AnimatedIslandDecorator::~AnimatedIslandDecorator()
 
 bool AnimatedIslandDecorator::Initialise() 
 {
+	Image originalBackMap = ImageFactory::loadImage(
+		S3D::eDataLocation,
+		"data/images/backdrop.jpg");
+	int w = originalBackMap.getWidth();
+	int h = originalBackMap.getHeight();
+	while (w > GLViewPort::getActualWidth() || h > GLViewPort::getActualHeight())
+	{
+		w /= 2;
+		h /= 2;
+	}
+
+	Image backMap = originalBackMap.createResize(w, h);
+	backTex_.create(backMap, false);
 	return true;
 }
 
@@ -58,26 +72,14 @@ void AnimatedIslandDecorator::ReleaseElementData(Rocket::Core::DecoratorDataHand
 
 void AnimatedIslandDecorator::RenderElement(Rocket::Core::Element* ROCKET_UNUSED(element), Rocket::Core::DecoratorDataHandle element_data)
 {
-	if (!init_) 
+	static bool initialized = false;
+	if (!initialized)
 	{
-		init_ = true;
 		generate();
+		initialized = true;
 	}
 
-	simulate(0.1f);
-
-	MainCamera::instance()->draw(0);
-
-	GLCameraFrustum::instance()->draw(0);
-	Landscape::instance()->calculateVisibility();
-	Landscape::instance()->drawShadows();
-	Landscape::instance()->drawLand();
-	RenderTargets::instance()->render3D.draw(0);
-	Landscape::instance()->drawWater();
-	Landscape::instance()->drawObjects();
-
-	// Return the viewport to the original
-	Main2DCamera::instance()->draw(0);
+	drawAnimated();
 }
 
 void AnimatedIslandDecorator::generate()
@@ -116,6 +118,50 @@ void AnimatedIslandDecorator::generate()
 	Landscape::instance()->recalculateRoof();
 
 	OptionsDisplay::instance()->getNoWaterMovementEntry().setValue(waterMove);
+}
+
+void AnimatedIslandDecorator::drawStatic()
+{
+	Main2DCamera::instance()->draw(0);
+
+	GLState currentState(GLState::DEPTH_OFF | GLState::TEXTURE_ON);
+
+	// Calcuate how may tiles are needed
+	float wWidth = (float) GLViewPort::getWidth();
+	float wHeight = (float) GLViewPort::getHeight();
+
+	// Draw the tiled logo backdrop
+	backTex_.draw(true);
+	glColor3f(1.0f, 1.0f, 1.0f);//0.2f, 0.2f, 0.2f);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex2f(0.0f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex2f(wWidth, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex2f(wWidth, wHeight);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex2f(0.0f, wHeight);
+	glEnd();	
+}
+
+void AnimatedIslandDecorator::drawAnimated()
+{
+	float frameTime = clock_.getTimeDifference();
+	simulate(frameTime);
+
+	MainCamera::instance()->draw(0);
+
+	GLCameraFrustum::instance()->draw(0);
+	Landscape::instance()->calculateVisibility();
+	Landscape::instance()->drawShadows();
+	Landscape::instance()->drawLand();
+	RenderTargets::instance()->render3D.draw(0);
+	Landscape::instance()->drawWater();
+	Landscape::instance()->drawObjects();
+
+	// Return the viewport to the original
+	Main2DCamera::instance()->draw(0);
 }
 
 void AnimatedIslandDecorator::simulate(float frameTime)

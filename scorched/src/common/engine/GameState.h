@@ -31,8 +31,8 @@ class GameStateI;
 class GameStateStimulusI;
 class GameState;
 
-#define GAMESTATE_PERF_COUNTER_START(x, y) { static int __counter__ = x.getPerfCounter(y); x.startPerfCount(__counter__); }
-#define GAMESTATE_PERF_COUNTER_END(x, y) { static int __counter__ = x.getPerfCounter(y); x.endPerfCount(__counter__); }
+#define GAMESTATE_PERF_COUNTER_START(x, y) { /*static int __counter__ = x.getPerfCounter(y); x.startPerfCount(__counter__);*/ }
+#define GAMESTATE_PERF_COUNTER_END(x, y) { /*static int __counter__ = x.getPerfCounter(y); x.endPerfCount(__counter__);*/ }
 
 class GameStatePerfCounter
 {

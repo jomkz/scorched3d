@@ -18,33 +18,21 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <ui/AnimatedIslandDecoratorInstance.h>
-#include <ui/AnimatedIslandDecorator.h>
+#if !defined(__INCLUDE_AnimatedIslandDecoratorInstancerh_INCLUDE__)
+#define __INCLUDE_AnimatedIslandDecoratorInstancerh_INCLUDE__
 
-AnimatedIslandDecoratorInstance::AnimatedIslandDecoratorInstance()
+#include <Rocket/Core/DecoratorInstancer.h>
+
+class AnimatedIslandDecoratorInstancer : public Rocket::Core::DecoratorInstancer
 {
-}
+public:
+	AnimatedIslandDecoratorInstancer();
+	virtual ~AnimatedIslandDecoratorInstancer();
 
-AnimatedIslandDecoratorInstance::~AnimatedIslandDecoratorInstance()
-{
-}
+	Rocket::Core::Decorator* InstanceDecorator(const Rocket::Core::String& name, const Rocket::Core::PropertyDictionary& properties);
+	void ReleaseDecorator(Rocket::Core::Decorator* decorator);
 
-Rocket::Core::Decorator* AnimatedIslandDecoratorInstance::InstanceDecorator(const Rocket::Core::String& ROCKET_UNUSED(name), const Rocket::Core::PropertyDictionary& properties)
-{
-	AnimatedIslandDecorator* decorator = new AnimatedIslandDecorator();
-	if (decorator->Initialise()) return decorator;
+	void Release();
+};
 
-	decorator->RemoveReference();
-	ReleaseDecorator(decorator);
-	return NULL;
-}
-
-void AnimatedIslandDecoratorInstance::ReleaseDecorator(Rocket::Core::Decorator* decorator)
-{
-	delete decorator;
-}
-
-void AnimatedIslandDecoratorInstance::Release()
-{
-	delete this;
-}
+#endif

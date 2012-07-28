@@ -2385,10 +2385,10 @@
     <ClCompile Include="..\ui\RocketGameState.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\ui\AnimatedIslandDecoratorInstance.cpp">
+    <ClCompile Include="..\ui\AnimatedIslandDecorator.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\ui\AnimatedIslandDecorator.cpp">
+    <ClCompile Include="..\ui\AnimatedIslandDecoratorInstancer.cpp">
       <Filter>ui</Filter>
     </ClCompile>
   </ItemGroup>
@@ -4661,10 +4661,10 @@
     <ClInclude Include="..\ui\RocketGameState.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\ui\AnimatedIslandDecoratorInstance.h">
+    <ClInclude Include="..\ui\AnimatedIslandDecorator.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\ui\AnimatedIslandDecorator.h">
+    <ClInclude Include="..\ui\AnimatedIslandDecoratorInstancer.h">
       <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>

@@ -22,6 +22,8 @@
 #define __INCLUDE_AnimatedIslandDecoratorh_INCLUDE__
 
 #include <Rocket/Core/Decorator.h>
+#include <common/Clock.h>
+#include <GLEXT/GLTexture.h>
 
 class AnimatedIslandDecorator : public Rocket::Core::Decorator
 {
@@ -36,9 +38,12 @@ public:
 	virtual void RenderElement(Rocket::Core::Element* element, Rocket::Core::DecoratorDataHandle element_data);
 
 protected:
-	bool init_;
 	float rotation_;
+	Clock clock_;
+	GLTexture backTex_;
 
+	void drawStatic();
+	void drawAnimated();
 	void generate();
 	void simulate(float frameTime);
 };

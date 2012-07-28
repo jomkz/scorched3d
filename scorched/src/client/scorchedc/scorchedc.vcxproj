@@ -684,7 +684,7 @@
     <ClCompile Include="..\tankgraph\TargetRendererImplTank.cpp" />
     <ClCompile Include="..\tankgraph\TargetRendererImplTarget.cpp" />
     <ClCompile Include="..\ui\AnimatedIslandDecorator.cpp" />
-    <ClCompile Include="..\ui\AnimatedIslandDecoratorInstance.cpp" />
+    <ClCompile Include="..\ui\AnimatedIslandDecoratorInstancer.cpp" />
     <ClCompile Include="..\ui\LoadPNG.cpp" />
     <ClCompile Include="..\ui\RocketFileInterface.cpp" />
     <ClCompile Include="..\ui\RocketGameState.cpp" />
@@ -1443,7 +1443,7 @@
     <ClInclude Include="..\tankgraph\TargetRendererImplTank.h" />
     <ClInclude Include="..\tankgraph\TargetRendererImplTarget.h" />
     <ClInclude Include="..\ui\AnimatedIslandDecorator.h" />
-    <ClInclude Include="..\ui\AnimatedIslandDecoratorInstance.h" />
+    <ClInclude Include="..\ui\AnimatedIslandDecoratorInstancer.h" />
     <ClInclude Include="..\ui\LoadPNG.h" />
     <ClInclude Include="..\ui\RocketFileInterface.h" />
     <ClInclude Include="..\ui\RocketGameState.h" />

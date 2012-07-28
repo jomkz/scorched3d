@@ -20,7 +20,7 @@
 
 #include <ui/RocketGameState.h>
 #include <ui/LoadPNG.h>
-#include <ui/AnimatedIslandDecoratorInstance.h>
+#include <ui/AnimatedIslandDecoratorInstancer.h>
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
 #include <Rocket/Debugger.h>
@@ -79,7 +79,7 @@ void RocketGameState::create()
 				"ERROR: Failed to create rocket context");
 	}
 
-	Rocket::Core::DecoratorInstancer* islandDecorator = new AnimatedIslandDecoratorInstance();
+	Rocket::Core::DecoratorInstancer* islandDecorator = new AnimatedIslandDecoratorInstancer();
 	Rocket::Core::Factory::RegisterDecoratorInstancer("island", islandDecorator);
 	islandDecorator->RemoveReference();
 
