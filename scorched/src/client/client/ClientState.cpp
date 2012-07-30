@@ -24,6 +24,16 @@
 #include <graph/FrameLimiter.h>
 #include <SDL/SDL.h>
 
+static struct STATE_NAME
+{
+	std::string stateName;
+	ClientState::State state;
+} STATE_NAMES[] =
+{
+	"StateMainOptions", ClientState::StateMainOptions,
+	"StateStartGame", ClientState::StateStartGame
+};
+
 static struct STATE_STIMULI
 {
 	std::string stimulusName;
@@ -35,7 +45,7 @@ static struct STATE_STIMULI
 
 ClientState::ClientState() : 
 	stopped_(false), paused_(false),
-	currentState_(StateMainOptions)
+	currentState_(StateNone)
 {
 }
 
@@ -74,6 +84,19 @@ void ClientState::performStateStimulus(const std::string &state)
 	}
 	S3D::dialogExit("ClientState", 
 		S3D::formatStringBuffer("Failed to find state stimulus %s", state.c_str()));
+}
+
+void ClientState::setState(State newState)
+{
+	currentState_ = newState;
+	for (int i=0; i<sizeof(STATE_NAMES)/sizeof(STATE_NAME); i++)
+	{
+		if (STATE_NAMES[i].state == newState) 
+		{
+			RocketGameState::instance()->setState(STATE_NAMES[i].stateName);
+			break;
+		}
+	}
 }
 
 void ClientState::clientEventLoop()
@@ -124,7 +147,7 @@ void ClientState::clientEventLoop()
 	case StateMainOptions:
 		if (getCurrentStimulus(StimulusStartGame))
 		{
-			currentState_ = StateStartGame;
+			setState(StateStartGame);
 		}
 		else 
 		{
@@ -143,8 +166,10 @@ void ClientState::clientEventLoop()
 
 void ClientState::clientMainLoop()
 {
+	setState(StateMainOptions);
 	while (!stopped_)
 	{
 		clientEventLoop();
 	}
 }
+

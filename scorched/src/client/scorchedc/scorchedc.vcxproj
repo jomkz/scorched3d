@@ -693,6 +693,7 @@
     <ClCompile Include="..\ui\RocketGameState.cpp" />
     <ClCompile Include="..\ui\RocketRenderInterfaceOpenGL.cpp" />
     <ClCompile Include="..\ui\RocketSystemInterface.cpp" />
+    <ClCompile Include="..\ui\RocketWindowState.cpp" />
     <ClCompile Include="..\ui\UISetup.cpp" />
     <ClCompile Include="..\water\Water.cpp" />
     <ClCompile Include="..\water\Water2.cpp" />
@@ -1455,6 +1456,7 @@
     <ClInclude Include="..\ui\RocketGameState.h" />
     <ClInclude Include="..\ui\RocketRenderInterfaceOpenGL.h" />
     <ClInclude Include="..\ui\RocketSystemInterface.h" />
+    <ClInclude Include="..\ui\RocketWindowState.h" />
     <ClInclude Include="..\ui\UISetup.h" />
     <ClInclude Include="..\water\ocean_wave_generator.h" />
     <ClInclude Include="..\water\Water.h" />

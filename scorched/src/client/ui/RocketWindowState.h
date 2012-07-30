@@ -18,43 +18,58 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_RocketGameStateh_INCLUDE__)
-#define __INCLUDE_RocketGameStateh_INCLUDE__
+#if !defined(__INCLUDE_RocketWindowStateh_INCLUDE__)
+#define __INCLUDE_RocketWindowStateh_INCLUDE__
 
-#include <common/Clock.h>
-#include <SDL/SDL.h>
 #include <string>
+#include <list>
+#include <map>
+#include <set>
+#include <Rocket/Core.h>
 
-class RocketRenderInterfaceOpenGL;
-class RocketSystemInterface;
-class RocketFileInterface;
-class RocketWindowState;
-class RocketGameState
+class XMLNode;
+class RocketWindowState
 {
 public:
-	static RocketGameState *instance();
+	RocketWindowState(Rocket::Core::Context *context);
+	virtual ~RocketWindowState();
 
-	void create();
-	void destroy();
-
-	void draw();
-	void swapBuffers();
-
-	void processMouseEvent(SDL_Event &evt);
+	void initialize();
 	void setState(const std::string &state);
 
 protected:
-	static RocketGameState *instance_;
-	Clock dTimer_; // Draw timer
-	float drawTime_, clearTime_, totalTime_;
-	RocketRenderInterfaceOpenGL *openglRenderer_;
-	RocketSystemInterface *systemInterface_;
-	RocketFileInterface *fileInterface_;
-	RocketWindowState* windowState_;
+	class Window
+	{
+	public:
+		bool initializeFromXml(XMLNode *node);
 
+		void open(Rocket::Core::Context *context);
+		void close(Rocket::Core::Context *context);
+
+		std::string getName() { return name_; }
+	private:
+		std::string name_;
+		std::string file_;
+		Rocket::Core::ElementDocument* document_;
+	};
+	class State
+	{
+	public:
+		bool initializeFromXml(XMLNode *node);
+
+		std::string getName() { return name_; }
+		std::set<std::string> &getWindowNames() { return windowNames_; }
+	private:
+		std::string name_;
+		std::set<std::string> windowNames_;
+	};
+
+	Rocket::Core::Context *context_;
+	std::map<std::string, Window *> windows_;
+	std::map<std::string, State *> states_;
+
+	bool loadDefinitions();
 private:
-	RocketGameState();
-	virtual ~RocketGameState();
 
 };
 

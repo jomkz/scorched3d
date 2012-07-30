@@ -2400,6 +2400,9 @@
     <ClCompile Include="..\ui\RocketEventProcessor.cpp">
       <Filter>ui</Filter>
     </ClCompile>
+    <ClCompile Include="..\ui\RocketWindowState.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -4683,6 +4686,9 @@
       <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="..\ui\RocketEventProcessor.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\RocketWindowState.h">
       <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>

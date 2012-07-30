@@ -61,7 +61,7 @@ public:
 		StatePlaying,
 		StateScore,
 
-
+		StateNone,
 		StateMainOptions,
 		StateStartGame
 	};
@@ -83,6 +83,7 @@ protected:
 	void clientEventLoop();
 	bool getCurrentStimulus(Stimulus stimulus);
 	void errorCurrentStimulus();
+	void setState(State newState);
 };
 
 #endif

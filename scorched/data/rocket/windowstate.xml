@@ -1,0 +1,12 @@
+<windowstate>
+  <window name="demo">
+    <file>data/rocket/demo.rml</file>
+  </window>
+  <window name="logo">
+    <file>data/rocket/logo.rml</file>
+  </window>
+  <state name="StateMainOptions">
+    <window name="demo"/>
+    <window name="logo"/>
+  </state>
+</windowstate>

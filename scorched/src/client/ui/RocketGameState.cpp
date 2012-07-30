@@ -20,8 +20,11 @@
 
 #include <ui/RocketGameState.h>
 #include <ui/LoadPNG.h>
-#include <ui/AnimatedIslandDecoratorInstancer.h>
 #include <ui/RocketEventListenerInstancer.h>
+#include <ui/RocketFileInterface.h>
+#include <ui/RocketRenderInterfaceOpenGL.h>
+#include <ui/RocketSystemInterface.h>
+#include <ui/RocketWindowState.h>
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
 #include <Rocket/Debugger.h>
@@ -84,32 +87,8 @@ void RocketGameState::create()
 	Rocket::Core::Factory::RegisterEventListenerInstancer(event_instancer);
 	event_instancer->RemoveReference();
 
-	Rocket::Core::DecoratorInstancer* islandDecorator = new AnimatedIslandDecoratorInstancer();
-	Rocket::Core::Factory::RegisterDecoratorInstancer("island", islandDecorator);
-	islandDecorator->RemoveReference();
-
-	std::string demoFile = S3D::getDataFile("data/rocket/logo.rml");
-	Rocket::Core::ElementDocument *document = context->LoadDocument(demoFile.c_str());
-	if (document)
-	{
-		document->Show();
-	}
-
-	demoFile = S3D::getDataFile("data/rocket/demo.rml");
-	document = context->LoadDocument(demoFile.c_str());
-	if (document)
-	{
-		document->Show();
-	}
-	
-	/*
-	demoFile = S3D::getDataFile("data/rocket/islandback.rml");
-	document = context->LoadDocument(demoFile.c_str());
-	if (document)
-	{
-		document->Show();
-	}
-	*/
+	windowState_ = new RocketWindowState(context);
+	windowState_->initialize();
 }
 
 void RocketGameState::destroy()
@@ -215,4 +194,9 @@ void RocketGameState::processMouseEvent(SDL_Event &evt)
 		context->ProcessMouseMove(evt.button.x, evt.button.y, GetKeyModifierState());
 		break;
 	}
+}
+
+void RocketGameState::setState(const std::string &state)
+{
+	windowState_->setState(state);
 }
