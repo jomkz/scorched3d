@@ -23,20 +23,9 @@
 #include <graph/MainCamera.h>
 #include <coms/ComsOperationMessage.h>
 
-ClientOperationHandler *ClientOperationHandler::instance_ = 0;
-
-ClientOperationHandler *ClientOperationHandler::instance()
+ClientOperationHandler::ClientOperationHandler(ComsMessageHandler &comsMessageHandler)
 {
-	if (!instance_)
-	{
-		instance_ = new ClientOperationHandler;
-	}
-	return instance_;
-}
-
-ClientOperationHandler::ClientOperationHandler()
-{
-	ScorchedClient::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsOperationMessage::ComsOperationMessageTyper,
 		this);
 }

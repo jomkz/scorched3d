@@ -50,7 +50,7 @@ GLWChannelView::GLWChannelView() : lastChannelId_(1), lastWhisperSrc_(0),
 
 GLWChannelView::~GLWChannelView()
 {
-	ClientChannelManager::instance()->deregisterClient(this);
+	ScorchedClient::instance()->getClientChannelManager().deregisterClient(this);
 }
 
 GLWChannelView::CurrentChannelEntry *GLWChannelView::getChannel(const std::string &channelName)
@@ -149,7 +149,7 @@ void GLWChannelView::joinChannel(const std::string &channelName)
 	formCurrentChannelList(channels);
 	channels.push_back(channelName);
 
-	ClientChannelManager::instance()->changeRegistration(this, channels);
+	ScorchedClient::instance()->getClientChannelManager().changeRegistration(this, channels);
 }
 
 void GLWChannelView::leaveChannel(const std::string &channelName)
@@ -158,7 +158,7 @@ void GLWChannelView::leaveChannel(const std::string &channelName)
 	formCurrentChannelList(channels);
 	channels.remove(channelName);
 
-	ClientChannelManager::instance()->changeRegistration(this, channels);
+	ScorchedClient::instance()->getClientChannelManager().changeRegistration(this, channels);
 }
 
 void GLWChannelView::channelText(ChannelText &channelText)
@@ -242,7 +242,7 @@ void GLWChannelView::draw()
 {
 	if (!init_)
 	{
-		ClientChannelManager::instance()->registerClient(this, startupChannels_);
+		ScorchedClient::instance()->getClientChannelManager().registerClient(this, startupChannels_);
 	}
 
 	GLWChatView::draw();

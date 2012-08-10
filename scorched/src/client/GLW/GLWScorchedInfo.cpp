@@ -76,8 +76,8 @@ void GLWScorchedInfo::draw()
 	LANG_RESOURCE_CONST_VAR(OFF, "OFF", "Off");
 
 	Vector *fontColor = &fontColor_;
-	int mouseX = ScorchedClient::instance()->getGameState().getMouseX();
-	int mouseY = ScorchedClient::instance()->getGameState().getMouseY();
+	int mouseX = 0;//ScorchedClient::instance()->getGameState().getMouseX();
+	int mouseY = 0;//ScorchedClient::instance()->getGameState().getMouseY();
 	if (inBox((float) mouseX - GLWTranslate::getPosX(), 
 		(float) mouseY - GLWTranslate::getPosY(), x_, y_, w_, h_))
 	{

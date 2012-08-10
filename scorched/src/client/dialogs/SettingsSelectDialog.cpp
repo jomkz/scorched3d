@@ -129,7 +129,7 @@ void SettingsSelectDialog::buttonDown(unsigned int id)
 
 		ClientParams::instance()->reset();
 		ClientParams::instance()->setStartCustom(true);
-		ClientMain::startClient();
+		//ClientMain::startClient();
 	}
 	else if (id == cancelId_)
 	{

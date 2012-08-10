@@ -28,24 +28,14 @@ class ClientConnectionAcceptHandler :
 	public ComsMessageHandlerI
 {
 public:
-	static ClientConnectionAcceptHandler* instance();
+	ClientConnectionAcceptHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ClientConnectionAcceptHandler();
 
 	// Inherited from ComsMessageHandlerI
 	virtual bool processMessage(
 		NetMessage &message,
 		const char *messageType,
 		NetBufferReader &reader);
-
-protected:
-	static ClientConnectionAcceptHandler* instance_;
-
-private:
-	ClientConnectionAcceptHandler();
-	virtual ~ClientConnectionAcceptHandler();
-
-	ClientConnectionAcceptHandler(const ClientConnectionAcceptHandler &);
-	const ClientConnectionAcceptHandler & operator=(const ClientConnectionAcceptHandler &);
-
 };
 
 #endif // _clientConnectionAcceptHandler_h

@@ -27,7 +27,6 @@
 #include <client/ClientState.h>
 #include <client/ClientWindowSetup.h>
 #include <client/ScorchedClient.h>
-#include <dialogs/AnimatedBackdropDialog.h>
 #include <dialogs/AutoDefenseDialog.h>
 #include <dialogs/MainMenuDialog.h>
 #include <dialogs/CameraDialog.h>
@@ -35,7 +34,6 @@
 #include <dialogs/PlayerInGameDialog.h>
 #include <dialogs/QuitDialog.h>
 #include <dialogs/LogDialog.h>
-#include <dialogs/ConnectDialog.h>
 #include <dialogs/AuthDialog.h>
 #include <dialogs/BackdropDialog.h>
 #include <dialogs/ProgressDialog.h>
@@ -183,8 +181,6 @@ void ClientWindowSetup::setupStartWindows(GLWWindowSkinManager *skinManager)
 	// StateOptions
 	GLWWindowManager::instance()->removeState(ClientState::StateOptions);
 	GLWWindowManager::instance()->addWindow(ClientState::StateOptions, 
-		AnimatedBackdropDialog::instance(), 0, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateOptions, 
  		SoundDialog::instance(), showSoundKey, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StateOptions, 
 		StartDialog::instance(), 0, true);
@@ -214,8 +210,6 @@ void ClientWindowSetup::setupStartWindows(GLWWindowSkinManager *skinManager)
  		SoundDialog::instance(), showSoundKey, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StateConnect, 
 		ProgressDialog::instance(), 0, true);
-	GLWWindowManager::instance()->addWindow(ClientState::StateConnect, 
-		ConnectDialog::instance(), 0, true);
 	GLWWindowManager::instance()->addWindow(ClientState::StateConnect, 
 		AuthDialog::instance(), 0, false);
 	GLWWindowManager::instance()->addWindow(ClientState::StateConnect, 

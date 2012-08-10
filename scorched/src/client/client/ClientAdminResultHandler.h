@@ -35,7 +35,8 @@ class ClientAdminResultHandler :
 	public ComsMessageHandlerI
 {
 public:
-	static ClientAdminResultHandler *instance();
+	ClientAdminResultHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ClientAdminResultHandler();
 
 	void addHandler(ClientAdminResultHandlerI *handler) 
 		{ handlers_.insert(handler); }
@@ -52,11 +53,6 @@ public:
 protected:
 	std::set<ClientAdminResultHandlerI *> handlers_;
 	unsigned int sid_;
-
-private:
-	ClientAdminResultHandler();
-	virtual ~ClientAdminResultHandler();
-
 };
 
 #endif

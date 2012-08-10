@@ -27,7 +27,8 @@ class ClientConnectionAuthHandler :
 	public ComsMessageHandlerI
 {
 public:
-	static ClientConnectionAuthHandler* instance();
+	ClientConnectionAuthHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ClientConnectionAuthHandler();
 
 	// Inherited from ComsMessageHandlerI
 	virtual bool processMessage(
@@ -37,17 +38,6 @@ public:
 
 	void sendAuth();
 	void cancelAuth();
-
-protected:
-	static ClientConnectionAuthHandler* instance_;
-
-private:
-	ClientConnectionAuthHandler();
-	virtual ~ClientConnectionAuthHandler();
-
-	ClientConnectionAuthHandler(const ClientConnectionAuthHandler &);
-	const ClientConnectionAuthHandler & operator=(const ClientConnectionAuthHandler &);
-
 };
 
 #endif // _ClientConnectionAuthHandler_h

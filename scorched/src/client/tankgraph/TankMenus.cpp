@@ -91,12 +91,12 @@ TankMenus::TankMenus() : logger_("ClientLog")
 	new ConsoleRuleFnIBooleanAdapter(
 		"ComsMessageLogging", 
 		ScorchedClient::instance()->getComsMessageHandler().getMessageLogging());
-	new ConsoleRuleFnIBooleanAdapter(
+	/*new ConsoleRuleFnIBooleanAdapter(
 		"StateLogging", 
-		ScorchedClient::instance()->getGameState().getStateLogging());
-	new ConsoleRuleFnIBooleanAdapter(
+		ScorchedClient::instance()->getGameState().getStateLogging());*/
+	/*new ConsoleRuleFnIBooleanAdapter(
 		"StateTimeLogging",
-		ScorchedClient::instance()->getGameState().getStateTimeLogging());
+		ScorchedClient::instance()->getGameState().getStateTimeLogging());*/
 	new ConsoleRuleFnIBooleanAdapter(
 		"AILogging",
 		TankAI::getTankAILogging());
@@ -109,7 +109,7 @@ TankMenus::TankMenus() : logger_("ClientLog")
 	unsigned int logState = OptionsDisplay::instance()->getClientLogState();
 	if (logState & 0x1)
 	{
-		ScorchedClient::instance()->getGameState().getStateLogging() = true;
+		//ScorchedClient::instance()->getGameState().getStateLogging() = true;
 	}
 	if (logState & 0x2)
 	{
@@ -399,8 +399,8 @@ void TankMenus::PlayerMenu::menuSelection(const char* menuName,
 
 bool TankMenus::PlayerMenu::getEnabled(const char* menuName)
 {
-	if (ScorchedClient::instance()->getGameState().getState() 
-		!= ClientState::StatePlaying) return false;
+	//if (ScorchedClient::instance()->getClientState().getState() 
+	//	!= ClientState::StatePlaying) return false;
 
 	Tank *firstTank = ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (firstTank)
@@ -540,8 +540,8 @@ bool TankMenus::AccessoryMenu::getMenuItems(const char* menuName,
 
 bool TankMenus::AccessoryMenu::getEnabled(const char* menuName)
 {
-	if (ScorchedClient::instance()->getGameState().getState() != 
-		ClientState::StatePlaying) return false;
+	//if (ScorchedClient::instance()->getClientState().getState() != 
+	//	ClientState::StatePlaying) return false;
 
 	Tank *firstTank = ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (firstTank)

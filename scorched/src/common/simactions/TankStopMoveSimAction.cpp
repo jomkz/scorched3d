@@ -67,7 +67,7 @@ void TankStopMoveSimAction::stopMove(ScorchedContext &context, Tanket *tanket)
 			{
 
 				ScorchedClient::instance()->getTargetContainer().setCurrentPlayerId(0);
-				ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
+				//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
 				ShotCountDown::instance()->hideMoveTime();
 			}
 		}

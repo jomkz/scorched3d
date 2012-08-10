@@ -24,16 +24,9 @@
 #include <tank/TankState.h>
 #include <coms/ComsAdminResultMessage.h>
 
-ClientAdminResultHandler *ClientAdminResultHandler::instance()
+ClientAdminResultHandler::ClientAdminResultHandler(ComsMessageHandler &comsMessageHandler) : sid_(0)
 {
-	static ClientAdminResultHandler *instance = 
-		new ClientAdminResultHandler;
-	return instance;
-}
-
-ClientAdminResultHandler::ClientAdminResultHandler() : sid_(0)
-{
-	ScorchedClient::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsAdminResultMessage::ComsAdminResultMessageType,
 		this);
 }

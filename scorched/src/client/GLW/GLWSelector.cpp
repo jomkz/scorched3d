@@ -22,6 +22,7 @@
 #include <GLW/GLWSelectorPart.h>
 #include <GLEXT/GLViewPort.h>
 #include <client/ScorchedClient.h>
+#include <client/ClientState.h>
 #include <common/Defines.h>
 #include <graph/OptionsDisplay.h>
 
@@ -149,7 +150,7 @@ void GLWSelector::draw()
 	if (!visible_) return;
 	
 	if (showState_ != 0 &&
-		ScorchedClient::instance()->getGameState().getState() != showState_)
+		ScorchedClient::instance()->getClientState().getState() != showState_)
 	{
 		if (user_) user_->noItemSelected();
 		hideSelector();
@@ -187,7 +188,7 @@ void GLWSelector::mouseDown(int button, float mouseX, float mouseY, bool &hitMen
 	hitMenu = true;
 	
 	if ((showState_ != 0) &&
-		(ScorchedClient::instance()->getGameState().getState() != showState_))
+		(ScorchedClient::instance()->getClientState().getState() != showState_))
 	{
 		if (user_) user_->noItemSelected();
 		hideSelector();

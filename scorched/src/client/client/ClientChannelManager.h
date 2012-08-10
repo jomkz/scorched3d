@@ -29,7 +29,8 @@
 class ClientChannelManager 
 {
 public:
-	static ClientChannelManager *instance();
+	ClientChannelManager(ComsMessageHandler &comsMessageHandler);
+	virtual ~ClientChannelManager();
 
 	void showText(const ChannelText &text);
 	void sendText(const ChannelText &text);
@@ -48,7 +49,6 @@ public:
 	void removeChannel(const char *channel);
 
 protected:
-	static ClientChannelManager *instance_;
 	static unsigned int nextRecieverId_;
 
 	class ChannelEntry
@@ -73,11 +73,6 @@ protected:
 	void say(std::vector<ConsoleRuleValue> &values);
 	bool processChannelMessage(NetMessage &message, NetBufferReader &reader);
 	bool processChannelTextMessage(NetMessage &message, NetBufferReader &reader);
-
-private:
-	ClientChannelManager();
-	virtual ~ClientChannelManager();
-
 };
 
 #endif

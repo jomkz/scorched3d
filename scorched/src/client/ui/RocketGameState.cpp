@@ -28,7 +28,11 @@
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
 #include <Rocket/Debugger.h>
+#include <GLEXT/GLStateExtension.h>
 #include <graph/Main2DCamera.h>
+#include <graph/OptionsDisplay.h>
+#include <graph/Display.h>
+#include <graph/MainCamera.h>
 
 static Rocket::Core::Context* context = 0;
 RocketGameState *RocketGameState::instance_ = 0;
@@ -57,8 +61,111 @@ RocketGameState::~RocketGameState()
 	delete fileInterface_;
 }
 
+extern char scorched3dAppName[128];
+bool RocketGameState::createScorchedWindow()
+{
+	int width = OptionsDisplay::instance()->getScreenWidth();
+	int height = OptionsDisplay::instance()->getScreenHeight();
+	bool fullscreen = OptionsDisplay::instance()->getFullScreen();
+
+	SDL_WM_SetCaption(scorched3dAppName, "Scorched3D");
+	std::string iconFile = S3D::getDataFile("data/images/tank2.png");
+
+	SDL_Surface *icon = EXT_LoadPNG_RW(SDL_RWFromFile(iconFile.c_str(), "rb"));
+	SDL_WM_SetIcon(icon, NULL);
+	SDL_FreeSurface(icon);
+
+	if (!Display::instance()->changeSettings(width,height,fullscreen)) 
+	{
+		S3D::dialogMessage("Scorched 3D Display", 
+			"ERROR: Failed to set the display mode.\n"
+			"Ensure that no other application is exclusively using the graphics hardware.\n"
+			"Ensure that the current desktop mode has at least 24 bits colour depth.\n");
+		return false;
+	}
+
+	int windowWidth = 1024;
+	int windowHeight = 768;
+	switch (OptionsDisplay::instance()->getDialogSize())
+	{
+	case 0:
+		windowWidth = 1600;
+		break;
+	case 1:
+		windowWidth = 1152;
+		break;
+	case 3:
+		windowWidth = 800;
+		break;
+	}
+	windowHeight = (height * windowWidth) / width;
+
+	MainCamera::instance()->getCamera().setWindowSize(width, height);
+	Main2DCamera::instance()->getViewPort().setWindowSize(windowWidth, windowHeight, 
+		width, height);
+
+	glPolygonMode(GL_FRONT, GL_FILL);
+
+	glDisable(GL_TEXTURE_2D);
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+	glDisable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
+	GLfloat fogColor[4]= {0.8f, 0.8f, 0.8f, 1.0f};
+
+	glFogi(GL_FOG_MODE, GL_EXP2);	
+	glFogfv(GL_FOG_COLOR, fogColor);
+	glFogf(GL_FOG_DENSITY, 0.001f);	
+	//glHint(GL_FOG_HINT, GL_DONT_CARE);
+	//glFogf(GL_FOG_START, 1.0f);	
+	//glFogf(GL_FOG_END, 2.0f);
+	//glFogf(GL_FOG_DISTANCE_MODE_NV, GL_EYE_RADIAL_NV);
+
+	glAlphaFunc(GL_GREATER, 0.00f);
+
+	//Console::instance(); // Make sure console is inited
+	//GLState::setBaseState(GLState::TEXTURE_ON | GLState::BLEND_OFF | GLState::DEPTH_ON);
+	GLStateExtension::setup();
+
+	if (OptionsDisplay::instance()->getOpenGLWarnings() &&
+		GLStateExtension::isSoftwareOpenGL())
+	{
+		S3D::dialogMessage("Scorched 3D Display", 
+			S3D::formatStringBuffer(
+			"Warning: This computer is not using the graphics card to renderer OpenGL.\n"
+			"This may cause the game to play very slowly!\n\n"
+			"Please update your graphics drivers from the appropriate website.\n\n"
+			"OpenGL Vendor : %s\nOpenGL Renderer : %s",
+			glGetString(GL_VENDOR), glGetString(GL_RENDERER)));
+	}
+
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, 1024, 768, 0, -1, 1);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	return true;
+}
+
 void RocketGameState::create()
 {
+	createScorchedWindow();
+
 	// Rocket initialisation.
 	openglRenderer_ = new RocketRenderInterfaceOpenGL();
 	Rocket::Core::SetRenderInterface(openglRenderer_);

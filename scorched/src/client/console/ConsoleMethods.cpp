@@ -22,6 +22,7 @@
 #include <console/ConsoleMethods.h>
 #include <console/ConsoleFileReader.h>
 #include <client/ScorchedClient.h>
+#include <client/ClientState.h>
 #include <engine/MainLoop.h>
 
 ConsoleMethods::ConsoleMethods()
@@ -70,7 +71,7 @@ void ConsoleMethods::help()
 
 void ConsoleMethods::exit()
 {
-	ScorchedClient::instance()->getMainLoop().exitLoop();
+	ScorchedClient::instance()->getClientState().stop();
 }
 
 void ConsoleMethods::consoleLoad(std::vector<ConsoleRuleValue> &values)

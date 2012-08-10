@@ -42,20 +42,9 @@
 #include <tank/TankModelStore.h>
 #include <tanket/TanketTypes.h>
 
-ClientInitializeModHandler *ClientInitializeModHandler::instance_ = 0;
-
-ClientInitializeModHandler *ClientInitializeModHandler::instance()
+ClientInitializeModHandler::ClientInitializeModHandler(ComsMessageHandler &comsMessageHandler)
 {
-	if (!instance_)
-	{
-		instance_ = new ClientInitializeModHandler;
-	}
-	return instance_;
-}
-
-ClientInitializeModHandler::ClientInitializeModHandler()
-{
-	ScorchedClient::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsInitializeModMessage::ComsInitializeModMessageType,
 		this);
 }

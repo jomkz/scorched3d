@@ -24,6 +24,7 @@
 #include <GLEXT/GLMenuEntry.h>
 #include <GLW/GLWWindowManager.h>
 #include <client/ScorchedClient.h>
+#include <client/ClientState.h>
 #include <graph/OptionsDisplay.h>
 
 GLMenu::GLMenu() : GLWWindow("Menu", 0.0f, 10.0f, 10000.0f, 32.0f, eHideName, "")
@@ -82,11 +83,11 @@ void GLMenu::draw()
 
 	float currentTop = (float) GLViewPort::getHeight();
 	setY(currentTop - h_);
-	int x = ScorchedClient::instance()->getGameState().getMouseX();
-	int y = ScorchedClient::instance()->getGameState().getMouseY();
+	int x = 0;//ScorchedClient::instance()->getGameState().getMouseX();
+	int y = 0;//ScorchedClient::instance()->getGameState().getMouseY();
 
 	unsigned int currentState =
-		ScorchedClient::instance()->getGameState().getState();
+		ScorchedClient::instance()->getClientState().getState();
 
 	bool selected = false;
 	std::map<std::string, GLMenuEntry *>::iterator itor;
@@ -165,7 +166,7 @@ void GLMenu::mouseDown(int button, float x, float y, bool &hitMenu)
 	float currentTop = (float) GLViewPort::getHeight();
 
 	unsigned int currentState =
-		ScorchedClient::instance()->getGameState().getState();
+		ScorchedClient::instance()->getClientState().getState();
 
 	std::map<std::string, GLMenuEntry *>::iterator itor;
 	for (itor = menuList_.begin();

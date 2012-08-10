@@ -27,6 +27,7 @@
 #include <console/Console.h>
 #include <common/Defines.h>
 #include <client/ClientChannelManager.h>
+#include <client/ScorchedClient.h>
 
 REGISTER_CLASS_SOURCE(GLWTalkBox);
 
@@ -116,7 +117,7 @@ void GLWTalkBox::keyDown(char *buffer, unsigned int keyState,
 				}
 
 				ChannelText message("general", text_);
-				ClientChannelManager::instance()->sendText(message);
+				ScorchedClient::instance()->getClientChannelManager().sendText(message);
 
 				text_.clear();
 			}

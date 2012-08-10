@@ -22,8 +22,10 @@
 #define __INCLUDE_ClientStateh_INCLUDE__
 
 #include <graph/FrameLimiter.h>
+#include <common/Clock.h>
 #include <list>
 
+class ClientStateStartGame;
 class ClientState  
 {
 public:
@@ -70,15 +72,22 @@ public:
 	virtual ~ClientState();
 
 	void clientMainLoop();
-	void performStateStimulus(const std::string &stimulus);
+	void performStateStimulusString(const std::string &stimulus);
+	void performStateStimulus(ClientState::Stimulus stimulus);
 
 	void stop() { stopped_ = true; }
+
+	State getState() { return currentState_; }
+	ClientStateStartGame &getClientStartGame() { return *clientStartGame_; }
 
 protected:
 	State currentState_;
 	bool stopped_, paused_;
 	FrameLimiter frameLimiter_;
+	float serverTime_;
+	Clock frameClock_;
 	std::list<Stimulus> stimuli_;
+	ClientStateStartGame *clientStartGame_;
 
 	void clientEventLoop();
 	bool getCurrentStimulus(Stimulus stimulus);

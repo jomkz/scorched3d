@@ -28,7 +28,8 @@ class ClientLinesHandler :
 	public ComsMessageHandlerI
 {
 public:
-	static ClientLinesHandler *instance();
+	ClientLinesHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ClientLinesHandler();
 
 	virtual bool processMessage(
 		NetMessage &message,
@@ -38,13 +39,7 @@ public:
 	void registerCallback(GLWPlanView *planView);
 
 protected:
-	static ClientLinesHandler *instance_;
 	std::list<GLWPlanView *> callbacks_;
-
-private:
-	ClientLinesHandler();
-	virtual ~ClientLinesHandler();
-
 };
 
 #endif

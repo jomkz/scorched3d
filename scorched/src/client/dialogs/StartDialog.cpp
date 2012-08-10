@@ -74,8 +74,8 @@ StartDialog::~StartDialog()
 
 void StartDialog::draw()
 {
-	int mouseX = ScorchedClient::instance()->getGameState().getMouseX();
-	int mouseY = ScorchedClient::instance()->getGameState().getMouseY();
+	int mouseX = 0;//ScorchedClient::instance()->getGameState().getMouseX();
+	int mouseY = 0;//ScorchedClient::instance()->getGameState().getMouseY();
 	
 	GLState state(GLState::DEPTH_OFF);
 
@@ -158,7 +158,7 @@ void StartDialog::mouseDown(int button, float x, float y, bool &skipRest)
 		std::string targetFilePath = S3D::getDataFile("data/singletutorial.xml");
 		ClientParams::instance()->reset();
 		ClientParams::instance()->setClientFile(targetFilePath.c_str());
-		ClientMain::startClient();
+		//ClientMain::startClient();
 		}
 		break;
 	case 1:

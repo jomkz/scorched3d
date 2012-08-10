@@ -657,7 +657,7 @@ void TargetCamera::mouseUp(GameState::MouseButton button,
 	Accessory *currentWeapon = 0;
 	Tank *currentTank = 0;
 	Accessory::PositionSelectType selectType = Accessory::ePositionSelectNone;
-	if (ScorchedClient::instance()->getGameState().getState() == 
+	if (ScorchedClient::instance()->getClientState().getState() == 
 		ClientState::StatePlaying)
 	{
 		currentTank = ScorchedClient::instance()->

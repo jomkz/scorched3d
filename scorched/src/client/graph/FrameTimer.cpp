@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <graph/FrameTimer.h>
 #include <client/ClientChannelManager.h>
+#include <client/ScorchedClient.h>
 #include <graph/OptionsDisplay.h>
 #include <GLEXT/GLInfo.h>
 #include <GLEXT/GLTexture.h>
@@ -84,7 +85,7 @@ void FrameTimer::simulate(const unsigned state, float frameTime)
 					"{0} frames per second.", 
 					S3D::formatStringBuffer("%.2f", fps_)));
 			chText.setFlags(ChannelText::eNoLog | ChannelText::eNoSound);
-			ClientChannelManager::instance()->showText(chText);
+			ScorchedClient::instance()->getClientChannelManager().showText(chText);
 		}
 	}
 }

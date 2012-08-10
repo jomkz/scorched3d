@@ -106,10 +106,10 @@ void AuthDialog::buttonDown(unsigned int id)
 		if (password_) 
 			ClientParams::instance()->setPassword(password_->getText().c_str());
 
-		ClientConnectionAuthHandler::instance()->sendAuth();
+		//ClientConnectionAuthHandler::instance()->sendAuth();
 	}
 	else
 	{
-		ClientConnectionAuthHandler::instance()->cancelAuth();
+		//ClientConnectionAuthHandler::instance()->cancelAuth();
 	}
 }

@@ -86,7 +86,7 @@ void ProgressDialog::changeTip()
 	if (nl) *nl = ' ';
 
 	ChannelText text("announce", LANG_RESOURCE_1("TIP_ENTRY", "[t:Tip:] {0}", tip));
-	ClientChannelManager::instance()->showText(text);
+	ScorchedClient::instance()->getClientChannelManager().showText(text);
 }
 
 void ProgressDialog::setIcon(Image image)
@@ -187,7 +187,7 @@ void ProgressDialog::drawRules(ScorchedContext &context)
 void ProgressDialog::draw()
 {
 	ScorchedContext *rulesContext = 0;
-	unsigned int state = ScorchedClient::instance()->getGameState().getState();
+	unsigned int state = ScorchedClient::instance()->getClientState().getState();
 	if (state >= ClientState::StateLoadFiles)
 	{
 		rulesContext = ScorchedClient::instance();
@@ -365,7 +365,7 @@ void ProgressDialogSync::progressChange(const LangString &op, const float percen
 	{
 		Main2DCamera::instance()->draw(0);
 
-		unsigned int state = ScorchedClient::instance()->getGameState().getState();
+		unsigned int state = ScorchedClient::instance()->getClientState().getState();
 		if (state >= ClientState::StateLoadFiles)
 		{
 			GLWWindowManager::instance()->simulate(state, S3D_MIN(0.25f, timeDelay));
@@ -380,7 +380,7 @@ void ProgressDialogSync::progressChange(const LangString &op, const float percen
 		LandscapeMusicManager::instance()->simulate(state, frameTime);
 		Sound::instance()->simulate(state, frameTime);
 
-		ScorchedClient::instance()->getMainLoop().swapBuffers();
+		//ScorchedClient::instance()->getMainLoop().swapBuffers();
 
 		timeDelay = 0.0f;
 	}

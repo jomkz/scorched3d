@@ -24,15 +24,21 @@
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
+#include <tank/TankCamera.h>
 #include <target/TargetContainer.h>
+#include <tanket/TanketAccessories.h>
 #include <tanket/TanketShotInfo.h>
 #include <tankai/TankAI.h>
 #include <engine/ActionController.h>
 #include <common/OptionsScorched.h>
 #ifndef S3D_SERVER
+#include <weapons/Accessory.h>
+#include <landscape/Landscape.h>
 #include <graph/ShotCountDown.h>
+#include <graph/OptionsDisplay.h>
+#include <graph/MainCamera.h>
+#include <sound/SoundUtils.h>
 #include <client/ScorchedClient.h>
-#include <client/ClientStartGameHandler.h>
 #endif
 
 REGISTER_CLASS_SOURCE(TankStartMoveSimAction);
@@ -52,6 +58,87 @@ TankStartMoveSimAction::TankStartMoveSimAction(
 TankStartMoveSimAction::~TankStartMoveSimAction()
 {
 }
+
+void TankStartMoveSimAction::startClientGame()
+{
+#ifndef S3D_SERVER
+	Tank *tank = ScorchedClient::instance()->getTargetContainer().getTankById(getPlayerId());
+	if (!tank)
+	{
+		return;
+	}
+
+	ScorchedClient::instance()->getTargetContainer().setCurrentPlayerId(getPlayerId());
+	Tank *current = ScorchedClient::instance()->getTargetContainer().getCurrentTank();
+	if (!current) 
+	{
+		return;
+	}
+
+	// Set the camera back to this players camera position
+	if (OptionsDisplay::instance()->getStorePlayerCamera())
+	{
+		int counter = 0;
+		unsigned int currentDestinationId = ScorchedClient::instance()->
+			getTargetContainer().getCurrentDestinationId();
+		std::map<unsigned int, Tank *> &tanks = ScorchedClient::instance()->
+			getTargetContainer().getTanks();
+		std::map<unsigned int, Tank *>::iterator itor;
+		for (itor = tanks.begin();
+			itor != tanks.end();
+			++itor)
+		{
+			Tank *tank = itor->second;
+			if (tank->getDestinationId() == currentDestinationId &&
+				tank->getAlive())
+			{
+				counter++;
+			}
+		}
+
+		// Only reset the position if there is more than one human player
+		// from the same destination
+		if (counter > 1)
+		{
+			MainCamera::instance()->getTarget().getCamera().setLookAt(current->getCamera().getCameraLookAt());
+			Vector rotation = current->getCamera().getCameraRotation();
+			MainCamera::instance()->getTarget().getCamera().movePosition(rotation[0], rotation[1], rotation[2]);
+			MainCamera::instance()->getTarget().setCameraType((TargetCamera::CamType) current->getCamera().getCameraType());
+		}
+	}
+
+	// Ensure that the landscape is set to the "proper" texture
+	Landscape::instance()->restoreLandscapeTexture();
+
+	// make sound to tell client a new game is commencing
+	CACHE_SOUND(playSound, S3D::getModFile("data/wav/misc/play.wav"));
+	SoundUtils::playRelativeSound(VirtualSoundPriority::eText, playSound);
+
+	// Stimulate into the new game state
+	//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
+	if (getBuying())
+	{
+		//ScorchedClient::instance()->getGameState().stimulate(
+		//	ClientState::StimBuyWeapons);
+	}
+	else
+	{
+		//ScorchedClient::instance()->getGameState().stimulate(
+		//	ClientState::StimPlaying);
+
+		Accessory *currentWeapon = current->getAccessories().getWeapons().getCurrent();
+		if (currentWeapon && 
+			currentWeapon->getPositionSelect() != Accessory::ePositionSelectNone)
+		{
+			std::list<Accessory *> &entries =
+				current->getAccessories().getAllAccessoriesByGroup("weapon");
+			if (!entries.empty()) currentWeapon = entries.front();
+		}
+		current->getAccessories().getWeapons().setWeapon(currentWeapon);
+	}
+#endif
+}
+
 
 bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 {
@@ -81,7 +168,7 @@ bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 			Tank *tank = (Tank *) tanket;
 			if (tank->getDestinationId() == context.getTargetContainer().getCurrentDestinationId())
 			{
-				ClientStartGameHandler::instance()->startGame(this);
+				startClientGame();
 				ShotCountDown::instance()->showMoveTime(
 					timeout_, 
 					buying_?ShotCountDown::eBuying:ShotCountDown::ePlaying,

@@ -18,64 +18,19 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <server/ServerMain.h>
 #include <client/ClientMain.h>
-#include <client/ScorchedClient.h>
-#include <client/ClientAdmin.h>
-#include <client/ClientParams.h>
-#include <client/ClientChannelManager.h>
-#include <client/ClientGameStoppedHandler.h>
-#include <client/ClientMessageHandler.h>
-#include <client/ClientConnectionRejectHandler.h>
-#include <client/ClientLinesHandler.h>
-#include <client/ClientStartGameHandler.h>
-#include <client/ClientProcessingLoop.h>
-#include <client/ClientConnectionAcceptHandler.h>
-#include <client/ClientConnectionAuthHandler.h>
-#include <client/ClientOperationHandler.h>
-#include <client/ClientLoadLevelHandler.h>
-#include <client/ClientInitializeModHandler.h>
-#include <client/ClientAdminResultHandler.h>
-#include <client/ClientFileHandler.h>
 #include <client/ClientState.h>
-#include <client/ClientWindowSetup.h>
-#include <lang/LangResource.h>
-#include <graph/Mouse.h>
-#include <graph/OptionsDisplay.h>
-#include <graph/OptionsDisplayConsole.h>
-#include <graph/MainCamera.h>
-#include <graph/Main2DCamera.h>
-#include <graph/Display.h>
-#include <dialogs/HelpButtonDialog.h>
-#include <dialogs/AnimatedBackdropDialog.h>
-#include <dialogs/BackdropDialog.h>
-#include <dialogs/ConnectDialog.h>
-#include <server/ScorchedServer.h>
-#include <console/ConsoleFileReader.h>
-#include <console/Console.h>
-#include <GLW/GLWWindowManager.h>
-#include <GLW/GLWWindowSkinManager.h>
-#include <engine/MainLoop.h>
-#include <engine/ActionController.h>
-#include <dialogs/ProgressDialog.h>
-#include <net/NetServerTCP.h>
-#include <net/NetServerTCP3.h>
-#include <net/NetLoopBack.h>
-#include <common/ARGParser.h>
-#include <common/Keyboard.h>
-#include <common/OptionsScorched.h>
-#include <common/Keyboard.h>
-#include <common/ProgressCounter.h>
-#include <common/Clock.h>
-#include <common/Defines.h>
-#include <common/Logger.h>
-#include <sound/Sound.h>
-#include <ui/UISetup.h>
-#include <ui/RocketGameState.h>
+#include <client/ScorchedClient.h>
+#include <net/NetInterface.h>
 #include <SDL/SDL.h>
-
-static bool paused = false;
-extern char scorched3dAppName[128];
+#include <common/ProgressCounter.h>
+#include <common/Logger.h>
+#include <common/Defines.h>
+#include <common/Keyboard.h>
+#include <sound/Sound.h>
+#include <graph/OptionsDisplay.h>
+#include <lang/LangResource.h>
+#include <ui/RocketGameState.h>
 
 static bool initHardware(ProgressCounter *progressCounter)
 {
@@ -118,177 +73,6 @@ static bool initHardware(ProgressCounter *progressCounter)
 	return true;
 }
 
-static bool initComs(ProgressCounter *progressCounter)
-{
-	progressCounter->setNewPercentage(0.0f);
-	progressCounter->setNewOp(LANG_RESOURCE("INITIALIZING_COMS", "Initializing Coms"));
-	ScorchedClient::instance();
-
-	// Tidy up any existing net handlers
-	if (ScorchedClient::instance()->getContext().getNetInterfaceValid())
-	{
-		ScorchedClient::instance()->getContext().getNetInterface().stop();
-		delete &ScorchedClient::instance()->getContext().getNetInterface();
-		ScorchedClient::instance()->getContext().setNetInterface(0);
-	}
-
-	// Create the new net handlers
-	if (ClientParams::instance()->getConnectedToServer())
-	{
-		ScorchedClient::instance()->getContext().setNetInterface(new NetServerTCP3());
-	}
-	else
-	{
-		ScorchedClient::instance()->getContext().setNetInterface(new NetLoopBack(false));
-	}
-	ScorchedClient::instance()->getNetInterface().setMessageHandler(
-		&ScorchedClient::instance()->getComsMessageHandler());
-	ClientAdmin::instance();
-
-	return true;
-}
-
-static bool initComsHandlers()
-{
-	// Setup the coms handlers
-	ScorchedClient::instance()->getComsMessageHandler().setConnectionHandler(
-		ClientMessageHandler::instance());
-
-	ClientChannelManager::instance();
-	ClientConnectionRejectHandler::instance();
-	ClientLinesHandler::instance();
-	ClientConnectionAcceptHandler::instance();
-	ClientConnectionAuthHandler::instance();
-	ClientInitializeModHandler::instance();
-	ClientFileHandler::instance();
-	ClientOperationHandler::instance();
-	ClientGameStoppedHandler::instance();
-	ClientStartGameHandler::instance();
-	ClientLoadLevelHandler::instance();
-	ClientAdminResultHandler::instance();
-
-	return true;
-}
-
-static bool initWindows(ProgressCounter *progressCounter)
-{
-	progressCounter->setNewPercentage(0.0f);
-	progressCounter->setNewOp(LANG_RESOURCE("INITIALIZING_WINDOWS", "Initializing Windows"));
-	if (!GLWWindowSkinManager::defaultinstance()->loadWindows())
-	{
-		S3D::dialogMessage("Scorched3D", "Failed to load default windows skins");
-		return false;
-	}
-	ClientWindowSetup::setupStartWindows(GLWWindowSkinManager::defaultinstance());
-	HelpButtonDialog::instance();
-
-	Console::instance()->init();
-	std::string errorString;
-	if (!ConsoleFileReader::loadFileIntoConsole(S3D::getDataFile("data/autoexec.xml"), errorString))
-	{
-		S3D::dialogMessage("Failed to parse data/autoexec.xml", errorString);
-		return false;
-	}
-
-	return true;
-}
-
-static bool initClient()
-{
-	ProgressCounter progressCounter;
-	progressCounter.setUser(ProgressDialogSync::events_instance());
-	progressCounter.setNewPercentage(0.0f);
-
-	// Load in all the coms
-	if (!initComs(&progressCounter)) return false;
-	
-	// Start the server (if required)
-	if (!ClientParams::instance()->getConnectedToServer())
-	{
-		ScorchedServerSettings *settings = 0;
-
-		if (ClientParams::instance()->getSaveFile()[0])
-		{
-			// Load the saved game state (settings)
-			settings = new ScorchedServerSettingsSave(ClientParams::instance()->getSaveFile());
-		}
-		else
-		{
-			std::string clientFile = ClientParams::instance()->getClientFile();
-			if (ClientParams::instance()->getStartCustom())
-			{
-				clientFile = S3D::getSettingsFile("singlecustom.xml");
-			}
-
-			// If not load the client settings file
-			if (!S3D::fileExists(clientFile.c_str()))
-			{
-				S3D::dialogExit(scorched3dAppName, S3D::formatStringBuffer(
-					"Client file \"%s\" does not exist.",
-					clientFile.c_str()));
-			}
-
-			settings = new ScorchedServerSettingsOptions(clientFile,
-				ClientParams::instance()->getRewriteOptions(),
-				ClientParams::instance()->getWriteFullOptions());
-		}
-
-		if (!ScorchedServer::instance()->startServer(
-			*settings,
-			true,
-			&progressCounter)) return false;
-		delete settings;
-	}
-
-	ConnectDialog::instance()->start();
-	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimConnect);
-
-	return true;
-}
-
-static bool startClientInternal()
-{
-	// Check if we are connecting to a server
-	if (ClientParams::instance()->getConnect()[0])
-	{
-		return initClient();	
-	}
-	else if (ClientParams::instance()->getStartCustom() ||
-		ClientParams::instance()->getClientFile()[0])
-	{
-		return initClient();
-	}
-	else if (ClientParams::instance()->getSaveFile()[0])
-	{
-		// Or the client saved game
-		if (!S3D::fileExists(ClientParams::instance()->getSaveFile()))
-		{
-			S3D::dialogExit(scorched3dAppName, S3D::formatStringBuffer(
-				"Client read saved game file \"%s\" does not exist.",
-				ClientParams::instance()->getSaveFile()),
-				false);
-		}
-
-		return initClient();
-	}
-	else
-	{
-		// Do nothing
-	}
-
-	return true;
-}
-
-bool ClientMain::startClient()
-{
-	AnimatedBackdropDialog::instance()->drawBackground();
-	BackdropDialog::instance()->capture();
-
-	return startClientInternal();
-}
-
-
-
 bool ClientMain::clientMain()
 {
 	Logger::log(S3D::formatStringBuffer("Scorched3D - Version %s (%s) - %s",
@@ -298,11 +82,8 @@ bool ClientMain::clientMain()
 
 	ProgressCounter progressCounter;
 	if (!initHardware(&progressCounter)) return false;
-	if (!initComsHandlers()) return false;
-	if (!startClientInternal()) return false;
 
 	// Create the actual window
-	if (!createScorchedWindow()) return false;
 	RocketGameState::instance()->create();
 
 	// Start the initial windows
@@ -321,16 +102,15 @@ bool ClientMain::clientMain()
 	*/
 
 
-
+	// Run the main loop
 	ScorchedClient::instance()->getClientState().clientMainLoop();
 
-
+	// When we get here we have exited the loop and are now shutting down
 	if (ScorchedClient::instance()->getContext().getNetInterfaceValid())
 	{
 		ScorchedClient::instance()->getNetInterface().disconnectAllClients();
 	}
 	RocketGameState::instance()->destroy();
-	GLWWindowManager::instance()->saveSettings();
     SDL_Delay(1000);
 	Sound::instance()->destroy();
 	Lang::instance()->saveUndefined();

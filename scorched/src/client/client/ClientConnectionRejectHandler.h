@@ -27,20 +27,13 @@ class ClientConnectionRejectHandler :
 	public ComsMessageHandlerI
 {
 public:
-	static ClientConnectionRejectHandler *instance();
+	ClientConnectionRejectHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ClientConnectionRejectHandler();
 
 	virtual bool processMessage(
 		NetMessage &message,
 		const char *messageType,
 		NetBufferReader &reader);
-
-protected:
-	static ClientConnectionRejectHandler *instance_;
-
-private:
-	ClientConnectionRejectHandler();
-	virtual ~ClientConnectionRejectHandler();
-
 };
 
 #endif

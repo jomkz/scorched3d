@@ -22,6 +22,7 @@
 #include <engine/ScorchedContext.h>
 #ifndef S3D_SERVER
 	#include <client/ClientChannelManager.h>
+	#include <client/ScorchedClient.h>
 #else
 	#include <common/Logger.h>
 #endif
@@ -35,7 +36,7 @@ void ChannelManager::showText(ScorchedContext &context, const ChannelText &text)
 #ifndef S3D_SERVER
 	if (!context.getServerMode()) 
 	{
-		ClientChannelManager::instance()->showText(text);
+		ScorchedClient::instance()->getClientChannelManager().showText(text);
 	}
 #else
 	ChannelText &nonConst = (ChannelText &) text;

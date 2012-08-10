@@ -26,7 +26,8 @@
 class ClientLoadLevelHandler : public ComsMessageHandlerI
 {
 public:
-	static ClientLoadLevelHandler* instance();
+	ClientLoadLevelHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ClientLoadLevelHandler();
 
 	void setInitialLevel(bool initialLevel) { initialLevel_ = initialLevel; }
 
@@ -36,22 +37,12 @@ public:
 		NetBufferReader &reader);
 
 protected:
-	static ClientLoadLevelHandler* instance_;
 	bool initialLevel_;
 
 	bool actualProcessMessage(
 		NetMessage &netMessage,
 		const char *messageType,
 		NetBufferReader &reader);
-
-private:
-	ClientLoadLevelHandler();
-	virtual ~ClientLoadLevelHandler();
-
-	ClientLoadLevelHandler(const ClientLoadLevelHandler &);
-	const ClientLoadLevelHandler & operator=(const ClientLoadLevelHandler &);
-
 };
 
 #endif // _ClientLoadLevelHandler_h
-

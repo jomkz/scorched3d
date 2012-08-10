@@ -21,6 +21,9 @@
 #include <client/ScorchedClient.h>
 #include <client/ClientSimulator.h>
 #include <client/ClientState.h>
+#include <client/ClientMessageHandler.h>
+#include <client/ClientChannelManager.h>
+#include <client/ClientHandlers.h>
 #include <engine/MainLoop.h>
 #include <engine/GameState.h>
 #include <graph/MainCamera.h>
@@ -51,13 +54,6 @@ ScorchedClient::ScorchedClient() :
 	targetSpace_->setContext(this);
 
 	clientState_ = new ClientState();
-
-	mainLoop_ = new MainLoop();
-	mainLoop_->clear();
-
-	gameState = new GameState(mainLoop_, "Client");
-	mainLoop_->addMainLoop(gameState);
-
 	clientSimulator_ = new ClientSimulator();
 	clientSimulator_->setScorchedContext(this);
 
@@ -84,6 +80,11 @@ ScorchedClient::ScorchedClient() :
 		new GraphicalLandscapeMap());
 	getLandscapeMaps().getRoofMaps().getRoofMap().setGraphicalMap(
 		new GraphicalLandscapeMap());
+
+	clientMessageHandler_ = new ClientMessageHandler();
+	getComsMessageHandler().setConnectionHandler(clientMessageHandler_);
+	channelManager_ = new ClientChannelManager(getComsMessageHandler());
+	clientHandlers_ = new ClientHandlers(getComsMessageHandler());
 }
 
 ScorchedClient::~ScorchedClient()

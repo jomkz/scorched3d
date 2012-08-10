@@ -167,7 +167,7 @@ void GLWPlanView::draw()
 		firstTime_ = false;
 		if (!OptionsDisplay::instance()->getNoPlanDraw())
 		{
-			ClientLinesHandler::instance()->registerCallback(this);
+			//ClientLinesHandler::instance()->registerCallback(this);
 		}
 	}
 

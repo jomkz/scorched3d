@@ -117,7 +117,7 @@ void PlayerInitialDialog::okButton(bool spectate)
 					"Warning: Avatar too large to send to server, is {0} should be < {1}",
 					tank->getAvatar().getFile().getBufferUsed(),
 					ScorchedClient::instance()->getOptionsGame().getMaxAvatarSize()));
-				ClientChannelManager::instance()->showText(text);
+				ScorchedClient::instance()->getClientChannelManager().showText(text);
 				Logger::log( "Warning: Avatar too large to send to server");
 			}
 		}

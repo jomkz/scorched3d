@@ -28,7 +28,7 @@
 #include <server/ServerMain.h>
 #include <engine/Simulator.h>
 
-time_t startTime = 0;
+static time_t startTime = 0;
 
 ClientProcessingLoop *ClientProcessingLoop::instance_ = 0;
 
@@ -97,7 +97,7 @@ void ClientProcessingLoop::process(float frameTime, bool processClientMessages)
 			}
 			else
 			{
-				ClientMain::startClient();
+				//ClientMain::startClient();
 			}
 		}
 	}

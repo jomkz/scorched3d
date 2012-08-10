@@ -233,5 +233,5 @@ void AutoDefenseDialog::finished()
 	ComsMessageSender::sendToServer(comsMessage);
 
 	GLWWindowManager::instance()->hideWindow(getId());
-	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
+	//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
 }

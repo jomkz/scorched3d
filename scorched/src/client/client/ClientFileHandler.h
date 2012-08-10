@@ -27,7 +27,8 @@ class ClientFileHandler  :
 	public ComsMessageHandlerI
 {
 public:
-	static ClientFileHandler* instance();
+	ClientFileHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ClientFileHandler();
 
 	virtual bool processMessage(
 		NetMessage &message,
@@ -35,13 +36,8 @@ public:
 		NetBufferReader &reader);
 
 protected:
-	static ClientFileHandler* instance_;
 	unsigned int totalBytes_;
 	NetBuffer recvBuffer_;
-
-private:
-	ClientFileHandler();
-	virtual ~ClientFileHandler();
 
 };
 

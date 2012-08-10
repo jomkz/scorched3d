@@ -26,7 +26,6 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <server/ScorchedServer.h>
 #include <engine/GameState.h>
-#include <dialogs/AnimatedBackdropDialog.h>
 
 ClientDisconnected::ClientDisconnected() : GameStateI("ClientDisconnected")
 {
@@ -42,12 +41,12 @@ void ClientDisconnected::enterState(const unsigned state)
 		getDefinitions().getDefinition().getName();
 	if (name == "blank")
 	{
-		AnimatedBackdropDialog::instance()->reInit();
+		//AnimatedBackdropDialog::instance()->reInit();
 	}
 	
 	ScorchedClient::instance()->getClientSimulator().clear();
 	ScorchedServer::instance()->stopServer();
 
-	ScorchedClient::instance()->getGameState().stimulate(
-		ClientState::StimOptions);
+	//ScorchedClient::instance()->getGameState().stimulate(
+	//	ClientState::StimOptions);
 }

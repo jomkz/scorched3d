@@ -43,12 +43,12 @@ MessageDialog::MessageDialog() :
 
 	std::list<std::string> startupChannels;
 	startupChannels.push_back("banner");
-	ClientChannelManager::instance()->registerClient(this, startupChannels);
+	ScorchedClient::instance()->getClientChannelManager().registerClient(this, startupChannels);
 }
 
 MessageDialog::~MessageDialog()
 {
-	ClientChannelManager::instance()->deregisterClient(this);
+	ScorchedClient::instance()->getClientChannelManager().deregisterClient(this);
 }
 
 void MessageDialog::channelText(ChannelText &text)

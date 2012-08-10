@@ -82,7 +82,7 @@ MainCamera::~MainCamera()
 
 bool MainCamera::getEnabled(const char* menuName)
 {
-	unsigned int state = ScorchedClient::instance()->getGameState().getState();
+	unsigned int state = ScorchedClient::instance()->getClientState().getState();
 	return (state >= ClientState::StateWait);
 }
 
@@ -130,8 +130,8 @@ void MainCamera::simulate(const unsigned state, float frameTime)
 		OptionsDisplay::instance()->getFullScreen() &&
 		OptionsDisplay::instance()->getSideScroll())
 	{
-		int mouseX = ScorchedClient::instance()->getGameState().getMouseX();
-		int mouseY = ScorchedClient::instance()->getGameState().getMouseY();
+		int mouseX = 0;//ScorchedClient::instance()->getGameState().getMouseX();
+		int mouseY = 0;//ScorchedClient::instance()->getGameState().getMouseY();
 		int windowX = Main2DCamera::instance()->getViewPort().getWidth();
 		int windowY = Main2DCamera::instance()->getViewPort().getHeight();
 

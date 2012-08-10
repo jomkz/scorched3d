@@ -46,6 +46,8 @@ protected:
 	unsigned int moveId_;
 	fixed timeout_, ping_;
 	bool buying_;
+
+	void startClientGame();
 };
 
 #endif // !defined(AFX_TankStartMoveSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

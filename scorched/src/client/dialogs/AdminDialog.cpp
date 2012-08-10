@@ -27,6 +27,7 @@
 #include <tank/TankColorGenerator.h>
 #include <tankai/TankAINames.h>
 #include <client/ScorchedClient.h>
+#include <client/ClientHandlers.h>
 #include <client/ClientAdminResultHandler.h>
 #include <coms/ComsAdminMessage.h>
 #include <coms/ComsMessageSender.h>
@@ -183,7 +184,8 @@ void AdminDialog::buttonDown(unsigned int id)
 	std::map<unsigned int, Tank *> &tanks = 
 		ScorchedClient::instance()->getTargetContainer().getTanks();
 
-	unsigned int sid = ClientAdminResultHandler::instance()->getSid();
+	unsigned int sid = ScorchedClient::instance()->getClientHandlers().
+		getClientAdminResultHandler().getSid();
 	unsigned int playerId = 0;
 	int pos = 0;
 	std::map<unsigned int, Tank *>::iterator itor;

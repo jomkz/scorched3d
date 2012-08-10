@@ -151,7 +151,7 @@ void SaveSelectDialog::buttonDown(unsigned int id)
 			std::string targetFilePath = S3D::getSaveFile(selected->getFile());
 			ClientParams::instance()->reset();
 			ClientParams::instance()->setSaveFile(targetFilePath.c_str());
-			ClientMain::startClient();
+			//ClientMain::startClient();
 		}
 	}
 	else if (id == cancelId_)

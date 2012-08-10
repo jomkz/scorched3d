@@ -477,6 +477,7 @@
     <ClCompile Include="..\client\ClientDisconnected.cpp" />
     <ClCompile Include="..\client\ClientFileHandler.cpp" />
     <ClCompile Include="..\client\ClientGameStoppedHandler.cpp" />
+    <ClCompile Include="..\client\ClientHandlers.cpp" />
     <ClCompile Include="..\client\ClientInitializeModHandler.cpp" />
     <ClCompile Include="..\client\ClientLinesHandler.cpp" />
     <ClCompile Include="..\client\ClientLoadLevelHandler.cpp" />
@@ -488,8 +489,8 @@
     <ClCompile Include="..\client\ClientReloadAdaptor.cpp" />
     <ClCompile Include="..\client\ClientSaveScreenState.cpp" />
     <ClCompile Include="..\client\ClientSimulator.cpp" />
-    <ClCompile Include="..\client\ClientStartGameHandler.cpp" />
     <ClCompile Include="..\client\ClientState.cpp" />
+    <ClCompile Include="..\client\ClientStateStartGame.cpp" />
     <ClCompile Include="..\client\ClientWindowSetup.cpp" />
     <ClCompile Include="..\client\ScorchedClient.cpp" />
     <ClCompile Include="..\client\SecureID.cpp" />
@@ -497,14 +498,12 @@
     <ClCompile Include="..\dialogs\AdminAuthDialog.cpp" />
     <ClCompile Include="..\dialogs\AdminCheckDialog.cpp" />
     <ClCompile Include="..\dialogs\AdminDialog.cpp" />
-    <ClCompile Include="..\dialogs\AnimatedBackdropDialog.cpp" />
     <ClCompile Include="..\dialogs\AuthDialog.cpp" />
     <ClCompile Include="..\dialogs\AutoDefenseDialog.cpp" />
     <ClCompile Include="..\dialogs\BackdropDialog.cpp" />
     <ClCompile Include="..\dialogs\BuyAccessoryDialog.cpp" />
     <ClCompile Include="..\dialogs\BuyAccessoryDialogTankInfo.cpp" />
     <ClCompile Include="..\dialogs\CameraDialog.cpp" />
-    <ClCompile Include="..\dialogs\ConnectDialog.cpp" />
     <ClCompile Include="..\dialogs\GiftMoneyDialog.cpp" />
     <ClCompile Include="..\dialogs\HelpButtonDialog.cpp" />
     <ClCompile Include="..\dialogs\HUDDialog.cpp" />
@@ -694,7 +693,6 @@
     <ClCompile Include="..\ui\RocketRenderInterfaceOpenGL.cpp" />
     <ClCompile Include="..\ui\RocketSystemInterface.cpp" />
     <ClCompile Include="..\ui\RocketWindowState.cpp" />
-    <ClCompile Include="..\ui\UISetup.cpp" />
     <ClCompile Include="..\water\Water.cpp" />
     <ClCompile Include="..\water\Water2.cpp" />
     <ClCompile Include="..\water\Water2Patch.cpp" />
@@ -796,7 +794,6 @@
     <ClCompile Include="..\graph\FrameLimiter.cpp" />
     <ClCompile Include="..\graph\FrameTimer.cpp" />
     <ClCompile Include="..\graph\Gamma.cpp" />
-    <ClCompile Include="..\graph\GLSetup.cpp" />
     <ClCompile Include="..\graph\Main2DCamera.cpp" />
     <ClCompile Include="..\graph\MainCamera.cpp" />
     <ClCompile Include="..\graph\ModelRenderer.cpp" />
@@ -804,7 +801,6 @@
     <ClCompile Include="..\graph\ModelRendererSimulator.cpp" />
     <ClCompile Include="..\graph\ModelRendererStore.cpp" />
     <ClCompile Include="..\graph\ModelRendererTree.cpp" />
-    <ClCompile Include="..\graph\Mouse.cpp" />
     <ClCompile Include="..\graph\OptionsDisplay.cpp" />
     <ClCompile Include="..\graph\OptionsDisplayConsole.cpp" />
     <ClCompile Include="..\graph\Particle.cpp" />
@@ -812,7 +808,6 @@
     <ClCompile Include="..\graph\ParticleEngine.cpp" />
     <ClCompile Include="..\graph\ParticleRenderer.cpp" />
     <ClCompile Include="..\graph\ShotCountDown.cpp" />
-    <ClCompile Include="..\graph\SoftwareMouse.cpp" />
     <ClCompile Include="..\graph\SpeedChange.cpp" />
     <ClCompile Include="..\graph\TargetCamera.cpp" />
     <ClCompile Include="..\graph\TutorialFile.cpp" />
@@ -1238,6 +1233,7 @@
     <ClInclude Include="..\client\ClientDisconnected.h" />
     <ClInclude Include="..\client\ClientFileHandler.h" />
     <ClInclude Include="..\client\ClientGameStoppedHandler.h" />
+    <ClInclude Include="..\client\ClientHandlers.h" />
     <ClInclude Include="..\client\ClientInitializeModHandler.h" />
     <ClInclude Include="..\client\ClientLinesHandler.h" />
     <ClInclude Include="..\client\ClientLoadLevelHandler.h" />
@@ -1249,8 +1245,8 @@
     <ClInclude Include="..\client\ClientReloadAdaptor.h" />
     <ClInclude Include="..\client\ClientSaveScreenState.h" />
     <ClInclude Include="..\client\ClientSimulator.h" />
-    <ClInclude Include="..\client\ClientStartGameHandler.h" />
     <ClInclude Include="..\client\ClientState.h" />
+    <ClInclude Include="..\client\ClientStateStartGame.h" />
     <ClInclude Include="..\client\ClientWindowSetup.h" />
     <ClInclude Include="..\client\ScorchedClient.h" />
     <ClInclude Include="..\client\SecureID.h" />
@@ -1258,14 +1254,12 @@
     <ClInclude Include="..\dialogs\AdminAuthDialog.h" />
     <ClInclude Include="..\dialogs\AdminCheckDialog.h" />
     <ClInclude Include="..\dialogs\AdminDialog.h" />
-    <ClInclude Include="..\dialogs\AnimatedBackdropDialog.h" />
     <ClInclude Include="..\dialogs\AuthDialog.h" />
     <ClInclude Include="..\dialogs\AutoDefenseDialog.h" />
     <ClInclude Include="..\dialogs\BackdropDialog.h" />
     <ClInclude Include="..\dialogs\BuyAccessoryDialog.h" />
     <ClInclude Include="..\dialogs\BuyAccessoryDialogTankInfo.h" />
     <ClInclude Include="..\dialogs\CameraDialog.h" />
-    <ClInclude Include="..\dialogs\ConnectDialog.h" />
     <ClInclude Include="..\dialogs\GiftMoneyDialog.h" />
     <ClInclude Include="..\dialogs\HelpButtonDialog.h" />
     <ClInclude Include="..\dialogs\HUDDialog.h" />
@@ -1457,7 +1451,6 @@
     <ClInclude Include="..\ui\RocketRenderInterfaceOpenGL.h" />
     <ClInclude Include="..\ui\RocketSystemInterface.h" />
     <ClInclude Include="..\ui\RocketWindowState.h" />
-    <ClInclude Include="..\ui\UISetup.h" />
     <ClInclude Include="..\water\ocean_wave_generator.h" />
     <ClInclude Include="..\water\Water.h" />
     <ClInclude Include="..\water\Water2.h" />
@@ -1561,7 +1554,6 @@
     <ClInclude Include="..\graph\FrameLimiter.h" />
     <ClInclude Include="..\graph\FrameTimer.h" />
     <ClInclude Include="..\graph\Gamma.h" />
-    <ClInclude Include="..\graph\GLSetup.h" />
     <ClInclude Include="..\graph\Main2DCamera.h" />
     <ClInclude Include="..\graph\MainCamera.h" />
     <ClInclude Include="..\graph\ModelRenderer.h" />
@@ -1569,7 +1561,6 @@
     <ClInclude Include="..\graph\ModelRendererSimulator.h" />
     <ClInclude Include="..\graph\ModelRendererStore.h" />
     <ClInclude Include="..\graph\ModelRendererTree.h" />
-    <ClInclude Include="..\graph\Mouse.h" />
     <ClInclude Include="..\graph\OptionsDisplay.h" />
     <ClInclude Include="..\graph\OptionsDisplayConsole.h" />
     <ClInclude Include="..\graph\Particle.h" />
@@ -1577,7 +1568,6 @@
     <ClInclude Include="..\graph\ParticleEngine.h" />
     <ClInclude Include="..\graph\ParticleRenderer.h" />
     <ClInclude Include="..\graph\ShotCountDown.h" />
-    <ClInclude Include="..\graph\SoftwareMouse.h" />
     <ClInclude Include="..\graph\SpeedChange.h" />
     <ClInclude Include="..\graph\TargetCamera.h" />
     <ClInclude Include="..\graph\TutorialFile.h" />

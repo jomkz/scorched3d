@@ -153,7 +153,7 @@ void CameraDialog::draw()
 
 void CameraDialog::simulate(float frameTime)
 {
-	bool playing = (ScorchedClient::instance()->getGameState().getState() ==
+	bool playing = (ScorchedClient::instance()->getClientState().getState() ==
 					ClientState::StatePlaying);
 
 	// Simulate this viewport

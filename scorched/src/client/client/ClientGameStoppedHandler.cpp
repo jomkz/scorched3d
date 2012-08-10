@@ -24,20 +24,9 @@
 #include <GLW/GLWWindowManager.h>
 #include <coms/ComsGameStoppedMessage.h>
 
-ClientGameStoppedHandler *ClientGameStoppedHandler::instance_ = 0;
-
-ClientGameStoppedHandler *ClientGameStoppedHandler::instance()
+ClientGameStoppedHandler::ClientGameStoppedHandler(ComsMessageHandler &comsMessageHandler)
 {
-	if (!instance_)
-	{
-		instance_ = new ClientGameStoppedHandler;
-	}
-	return instance_;
-}
-
-ClientGameStoppedHandler::ClientGameStoppedHandler()
-{
-	ScorchedClient::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsGameStoppedMessage::ComsGameStoppedMessageType,
 		this);
 }
@@ -54,7 +43,7 @@ bool ClientGameStoppedHandler::processMessage(
 	ComsGameStoppedMessage message;
 	if (!message.readMessage(reader)) return false;
 
-	ScorchedClient::instance()->getGameState().
-		stimulate(ClientState::StimGameStopped);
+	//ScorchedClient::instance()->getGameState().
+	//	stimulate(ClientState::StimGameStopped);
 	return true;
 }

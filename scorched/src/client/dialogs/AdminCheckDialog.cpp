@@ -40,7 +40,7 @@ AdminCheckDialog *AdminCheckDialog::instance()
 AdminCheckDialog::AdminCheckDialog() :
 	GLWWindow("Admin", 10.0f, 10.0f, 300.0f, 70.0f, eSmallTitle, "Add/Remove players.")
 {
-	ClientAdminResultHandler::instance()->addHandler(this);
+	//ClientAdminResultHandler::instance()->addHandler(this);
 	needCentered_ = true;
 }
 
@@ -52,9 +52,10 @@ void AdminCheckDialog::display()
 {
 	GLWWindow::display();
 
-	unsigned int sid = ClientAdminResultHandler::instance()->getSid();
-	ComsAdminMessage message(sid, ComsAdminMessage::AdminLoginLocal, "", "");
-	ComsMessageSender::sendToServer(message);
+	//unsigned int sid = ScorchedClient::instance()->getClientHandlers().
+	//	getClientAdminResultHandler().getSid();
+	//ComsAdminMessage message(sid, ComsAdminMessage::AdminLoginLocal, "", "");
+	//ComsMessageSender::sendToServer(message);
 
 	GLWWindowManager::instance()->hideWindow(getId());
 }
@@ -63,18 +64,18 @@ void AdminCheckDialog::adminResult(unsigned int sid, ComsAdminMessage::ComsAdmin
 {
 	GLWWindowManager::instance()->hideWindow(AdminDialog::instance()->getId());
 	GLWWindowManager::instance()->hideWindow(AdminAuthDialog::instance()->getId());
-	if (sid)
+	/*if (sid)
 	{
-		ClientChannelManager::instance()->addChannel("general", "admin");
+		ScorchedClient::instance()->getClientChannelManager().addChannel("general", "admin");
 		GLWWindowManager::instance()->showWindow(AdminDialog::instance()->getId());
 	}
 	else 
 	{
-		ClientChannelManager::instance()->removeChannel("admin");
+		ScorchedClient::instance()->getClientChannelManager().removeChannel("admin");
 		if (type == ComsAdminMessage::AdminLogin ||
 			type == ComsAdminMessage::AdminLoginLocal)
 		{
 			GLWWindowManager::instance()->showWindow(AdminAuthDialog::instance()->getId());
 		}
-	}
+	}*/
 }

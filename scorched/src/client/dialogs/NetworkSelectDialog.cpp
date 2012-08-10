@@ -602,7 +602,7 @@ void NetworkSelectDialog::buttonDown(unsigned int id)
 		{
 			ClientParams::instance()->reset();
 			ClientParams::instance()->setConnect(ipaddress_->getText().c_str());
-			ClientMain::startClient();
+			//ClientMain::startClient();
 		}
 	}
 	else if (id == favourites_->getId())

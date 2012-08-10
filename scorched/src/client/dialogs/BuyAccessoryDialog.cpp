@@ -541,7 +541,7 @@ void BuyAccessoryDialog::buttonDown(unsigned int id)
 	if (id == okId_)
 	{
 		saveFavorites();
-		ScorchedClient::instance()->getGameState().stimulate(ClientState::StimAutoDefense);
+		//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimAutoDefense);
 	}
 	else if (id == giftId_)
 	{

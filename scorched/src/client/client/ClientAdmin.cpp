@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <client/ClientAdmin.h>
+#include <client/ClientHandlers.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientChannelManager.h>
 #include <client/ClientAdminResultHandler.h>
@@ -179,17 +180,18 @@ void ClientAdmin::adminNoParams(std::vector<ConsoleRuleValue> &values,
 	ComsAdminMessage::ComsAdminMessageType type = 
 		(ComsAdminMessage::ComsAdminMessageType) userData;
 
-	unsigned int sid = ClientAdminResultHandler::instance()->getSid();
+	unsigned int sid = ScorchedClient::instance()->getClientHandlers().
+		getClientAdminResultHandler().getSid();
 	ComsAdminMessage message(sid, type);
 	ComsMessageSender::sendToServer(message);
 
 	if (type == ComsAdminMessage::AdminLogout)
 	{
-		ClientChannelManager::instance()->removeChannel("admin");
+		ScorchedClient::instance()->getClientChannelManager().removeChannel("admin");
 	}
 	else if (type == ComsAdminMessage::AdminLogin)
 	{
-		ClientChannelManager::instance()->addChannel("general", "admin");
+		ScorchedClient::instance()->getClientChannelManager().addChannel("general", "admin");
 	}
 }
 
@@ -201,7 +203,8 @@ void ClientAdmin::adminOneParam(std::vector<ConsoleRuleValue> &values,
 
 	ConsoleRuleValue param = values[2];
 
-	unsigned int sid = ClientAdminResultHandler::instance()->getSid();
+	unsigned int sid = ScorchedClient::instance()->getClientHandlers().
+		getClientAdminResultHandler().getSid();
 	ComsAdminMessage message(sid, type, param.valueString.c_str());
 	ComsMessageSender::sendToServer(message);
 }
@@ -215,14 +218,15 @@ void ClientAdmin::adminTwoParam(std::vector<ConsoleRuleValue> &values,
 	ConsoleRuleValue param1 = values[2];
 	ConsoleRuleValue param2 = values[3];
 
-	unsigned int sid = ClientAdminResultHandler::instance()->getSid();
+	unsigned int sid = ScorchedClient::instance()->getClientHandlers().
+		getClientAdminResultHandler().getSid();
 	ComsAdminMessage message(sid, type, 
 		param1.valueString.c_str(), param2.valueString.c_str());
 	ComsMessageSender::sendToServer(message);
 
 	if (type == ComsAdminMessage::AdminLogin)
 	{
-		ClientChannelManager::instance()->addChannel("general", "admin");
+		ScorchedClient::instance()->getClientChannelManager().addChannel("general", "admin");
 	}
 }
 

@@ -482,7 +482,7 @@ void GLWChannelText::processNormalText()
 
 	lastMessages_.push_back(text);
 	if (lastMessages_.size() > 10) lastMessages_.pop_front();
-	ClientChannelManager::instance()->sendText(text);
+	ScorchedClient::instance()->getClientChannelManager().sendText(text);
 }
 
 void GLWChannelText::processSpecialText()
@@ -761,8 +761,8 @@ void GLWChannelText::buttonDown(unsigned int id)
 	topLevel.push_back(chat);
 
 	// Show all the entries
-	float x = (float) ScorchedClient::instance()->getGameState().getMouseX();
-	float y = (float) ScorchedClient::instance()->getGameState().getMouseY();
+	float x = 0;//(float) ScorchedClient::instance()->getGameState().getMouseX();
+	float y = 0;//(float) ScorchedClient::instance()->getGameState().getMouseY();
 	GLWSelector::instance()->showSelector(this, x, y, topLevel);
 }
 
@@ -781,13 +781,13 @@ void GLWChannelText::itemSelected(GLWSelectorEntry *entry, int position)
 				if (tank->getState().getMuted()) 
 				{
 					tank->getState().setMuted(false);
-					ClientChannelManager::instance()->getMutedPlayers().erase(
+					ScorchedClient::instance()->getClientChannelManager().getMutedPlayers().erase(
 						tank->getPlayerId());
 				}
 				else
 				{
 					tank->getState().setMuted(true);
-					ClientChannelManager::instance()->getMutedPlayers().insert(
+					ScorchedClient::instance()->getClientChannelManager().getMutedPlayers().insert(
 						tank->getPlayerId());
 				}
 			}
@@ -866,7 +866,7 @@ void GLWChannelText::itemSelected(GLWSelectorEntry *entry, int position)
 				ChannelText &text = *resendItor;
 				if (text.getMessage() == entry->getText()) 
 				{
-					ClientChannelManager::instance()->sendText(text);
+					ScorchedClient::instance()->getClientChannelManager().sendText(text);
 					break;
 				}
 			}

@@ -59,7 +59,7 @@ void QuitDialog::display()
 	needCentered_ = true;
 	clear();
 
-	unsigned int state = ScorchedClient::instance()->getGameState().getState();
+	unsigned int state = ScorchedClient::instance()->getClientState().getState();
 	bool disable = (ClientParams::instance()->getConnectedToServer() ||
 		state == ClientState::StateOptions ||
 		state == ClientState::StateConnect ||
@@ -138,6 +138,6 @@ void QuitDialog::buttonDown(unsigned int id)
 	}
 	else if (id == quitButton_->getId())
 	{
-		ScorchedClient::instance()->getMainLoop().exitLoop();
+		//ScorchedClient::instance()->getMainLoop().exitLoop();
 	}
 }

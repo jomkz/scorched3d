@@ -55,21 +55,9 @@
 #include <image/ImageFactory.h>
 #include <GLW/GLWWindowManager.h>
 
-ClientLoadLevelHandler *ClientLoadLevelHandler::instance_ = 0;
-
-ClientLoadLevelHandler *ClientLoadLevelHandler::instance()
+ClientLoadLevelHandler::ClientLoadLevelHandler(ComsMessageHandler &comsMessageHandler) : initialLevel_(false)
 {
-	if (!instance_)
-	{
-	  instance_ = new ClientLoadLevelHandler();
-	}
-
-	return instance_;
-}
-
-ClientLoadLevelHandler::ClientLoadLevelHandler() : initialLevel_(false)
-{
-	ScorchedClient::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsLoadLevelMessage::ComsLoadLevelMessageType,
 		this);
 }
@@ -118,7 +106,7 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	ScorchedClient::instance()->getClientSimulator().setLoadingLevel(true);
 
 	// Move into the load level state
-	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimLoadLevel);
+	//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimLoadLevel);
 
 	// Read the message
 	ComsLoadLevelMessage message;
@@ -180,11 +168,11 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	// Move into the next state
 	if (strcmp(message.getLandscapeDefinition().getName(), "blank") == 0)
 	{
-		ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWaitNoLandscape);
+		//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWaitNoLandscape);
 	}
 	else
 	{
-		ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
+		//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
 	}
 
 	// Sync the simulator
@@ -237,7 +225,8 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	// As we have not returned to the main loop for ages the
 	// timer will have a lot of time in it
 	// Get rid of this time so we don't screw things up
-	ScorchedClient::instance()->getMainLoop().getTimer().getTimeDifference();
+	// ScorchedClient::instance()->getMainLoop().getTimer().getTimeDifference();
+	// TODO
 
 	// Reset camera positions for each tank
 	bool playerTanks = false;

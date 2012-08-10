@@ -27,20 +27,13 @@ class ClientOperationHandler :
 	public ComsMessageHandlerI
 {
 public:
-	static ClientOperationHandler *instance();
+	ClientOperationHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ClientOperationHandler();
 
 	virtual bool processMessage(
 		NetMessage &message,
 		const char *messageType,
 		NetBufferReader &reader);
-
-protected:
-	static ClientOperationHandler *instance_;
-
-private:
-	ClientOperationHandler();
-	virtual ~ClientOperationHandler();
-
 };
 
 #endif

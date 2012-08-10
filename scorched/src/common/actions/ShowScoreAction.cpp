@@ -79,8 +79,8 @@ void ShowScoreAction::init()
 	{
 		ClientSaveScreenState::instance()->saveScreen();
 
-		ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
-		ScorchedClient::instance()->getGameState().stimulate(ClientState::StimScore);
+		//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
+		//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimScore);
 	}
 #endif
 }

@@ -28,20 +28,13 @@ class ClientGameStoppedHandler  :
 	public ComsMessageHandlerI
 {
 public:
-	static ClientGameStoppedHandler *instance();
+	ClientGameStoppedHandler(ComsMessageHandler &comsMessageHandler);
+	virtual ~ClientGameStoppedHandler();
 
 	virtual bool processMessage(
 		NetMessage &message,
 		const char *messageType,
 		NetBufferReader &reader);
-
-protected:
-	static ClientGameStoppedHandler *instance_;
-
-private:
-	ClientGameStoppedHandler();
-	virtual ~ClientGameStoppedHandler();
 };
-
 
 #endif

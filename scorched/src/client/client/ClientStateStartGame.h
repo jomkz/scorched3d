@@ -18,35 +18,36 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
+#if !defined(__INCLUDE_ClientStateStartGameh_INCLUDE__)
+#define __INCLUDE_ClientStateStartGameh_INCLUDE__
 
-#ifndef _MOUSE_H_
-#define _MOUSE_H_
-
-
+#include <string>
 #include <SDL/SDL.h>
 
-// Mouse.h: interface for the Mouse class.
-//
-//////////////////////////////////////////////////////////////////////
-
-class Mouse
+class UniqueIdStore;
+class ClientStateStartGame  
 {
 public:
-	static Mouse *instance();
-	void processMouseEvent(SDL_Event &event);
-			                       
+	ClientStateStartGame();
+	virtual ~ClientStateStartGame();
+
+	// Called when we want to connect
+	void enterState();
+
+	// Called by the ClientMessageHandler when we are connected
+	void connected();
+
+	UniqueIdStore &getIdStore();
 protected:
-	static Mouse *instance_;
-	int mouse_sensitivity_;
-                       
-private:
-	Mouse();
-	virtual ~Mouse();
+	SDL_Thread *remoteConnectionThread_;
+	UniqueIdStore *idStore_;
 
-	void mouseDown(SDL_Event &event);
-	void mouseUp(SDL_Event &event);
-	void mouseMove(SDL_Event &event);
-
+	void tryConnection();
+	static int tryRemoteConnection(void *);
+	void tryLocalConnection();
+	void finishedTryingConnection();
+	void finished();
+	void connectToServer();
 };
 
-#endif /* _MOUSE_H_ */
+#endif

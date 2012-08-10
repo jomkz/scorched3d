@@ -102,7 +102,7 @@ void ScoreDialog::display()
 	calculateScores();
 
 	if (OptionsDisplay::instance()->getHideFinalScore() &&
-		ScorchedClient::instance()->getGameState().getState() ==
+		ScorchedClient::instance()->getClientState().getState() ==
 		ClientState::StateScore)
 	{
 		GLWWindowManager::instance()->hideWindow(getId());
@@ -157,7 +157,7 @@ void ScoreDialog::draw()
 	GLState newState(GLState::TEXTURE_OFF | GLState::DEPTH_OFF);
 
 	bool finished = false;
-	if (ScorchedClient::instance()->getGameState().getState() == 
+	if (ScorchedClient::instance()->getClientState().getState() == 
 		ClientState::StateScore)
 	{
 		finished = ShowScoreAction::getFinalScore();

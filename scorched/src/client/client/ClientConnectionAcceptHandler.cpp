@@ -20,9 +20,12 @@
 
 #include <client/ClientConnectionAcceptHandler.h>
 #include <client/ClientLoadLevelHandler.h>
+#include <client/ClientStateStartGame.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientState.h>
-#include <dialogs/ConnectDialog.h>
+#include <client/ClientParams.h>
+#include <client/UniqueIdStore.h>
+#include <client/ClientHandlers.h>
 #include <dialogs/ProgressDialog.h>
 #include <engine/ModFiles.h>
 #include <image/ImageFactory.h>
@@ -34,24 +37,11 @@
 #include <coms/ComsMessageSender.h>
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
-#include <client/ClientParams.h>
 #include <common/Defines.h>
 
-ClientConnectionAcceptHandler *ClientConnectionAcceptHandler::instance_ = 0;
-
-ClientConnectionAcceptHandler *ClientConnectionAcceptHandler::instance()
+ClientConnectionAcceptHandler::ClientConnectionAcceptHandler(ComsMessageHandler &comsMessageHandler)
 {
-	if (!instance_)
-	{
-	  instance_ = new ClientConnectionAcceptHandler();
-	}
-
-	return instance_;
-}
-
-ClientConnectionAcceptHandler::ClientConnectionAcceptHandler()
-{
-	ScorchedClient::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsConnectAcceptMessage::ComsConnectAcceptMessageType,
 		this);
 }
@@ -72,7 +62,7 @@ bool ClientConnectionAcceptHandler::processMessage(
 	if (ClientParams::instance()->getConnectedToServer())
 	{
 		unsigned int ip = netMessage.getIpAddress();
-		if (!ConnectDialog::instance()->getIdStore().saveUniqueId(
+		if (!ScorchedClient::instance()->getClientState().getClientStartGame().getIdStore().saveUniqueId(
 			ip, message.getUniqueId(), message.getPublishAddress()))
 		{
 			Logger::log( "Server failed ip security check!");
@@ -130,10 +120,9 @@ bool ClientConnectionAcceptHandler::processMessage(
 	}
 	if (!ComsMessageSender::sendToServer(comsFileMessage)) return false;
 
-	ClientLoadLevelHandler::instance()->setInitialLevel(true);
-
+	ScorchedClient::instance()->getClientHandlers().getClientLoadLevelHandler().setInitialLevel(true);
 	// Move into the files state
-	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimLoadFiles);
+	//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimLoadFiles);
 
 	return true;
 }

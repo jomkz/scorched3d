@@ -25,7 +25,6 @@
 #include <common/OptionsScorched.h>
 #include <common/Logger.h>
 #include <server/ScorchedServer.h>
-#include <dialogs/ConnectDialog.h>
 #include <dialogs/MsgBoxDialog.h>
 #include <dialogs/ProgressDialog.h>
 #include <dialogs/AuthDialog.h>
@@ -37,21 +36,9 @@
 #include <client/SecureID.h>
 #include <net/NetInterface.h>
 
-ClientConnectionAuthHandler *ClientConnectionAuthHandler::instance_ = 0;
-
-ClientConnectionAuthHandler *ClientConnectionAuthHandler::instance()
+ClientConnectionAuthHandler::ClientConnectionAuthHandler(ComsMessageHandler &comsMessageHandler)
 {
-	if (!instance_)
-	{
-	  instance_ = new ClientConnectionAuthHandler();
-	}
-
-	return instance_;
-}
-
-ClientConnectionAuthHandler::ClientConnectionAuthHandler()
-{
-	ScorchedClient::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsConnectAuthMessage::ComsConnectAuthMessageType,
 		this);
 }
@@ -93,8 +80,9 @@ void ClientConnectionAuthHandler::sendAuth()
 	Logger::log("Authenticating");
 	ProgressDialog::instance()->progressChange(LANG_RESOURCE("AUTHENTICATING", "Authenticating"), 100);
 
-	const char *hostName = ConnectDialog::instance()->getHost();
-	int portNumber = ConnectDialog::instance()->getPort();
+	// TODO
+	const char *hostName = "";//ConnectDialog::instance()->getHost();
+	int portNumber = 0;//ConnectDialog::instance()->getPort();
 
 	// Update unique id store
 	std::string uniqueId, SUI;
@@ -104,7 +92,7 @@ void ClientConnectionAuthHandler::sendAuth()
 		if (SDLNet_ResolveHost(&address, (char *) hostName, 0) == 0)
 		{
 			unsigned int ipAddress = SDLNet_Read32(&address.host);
-			uniqueId = ConnectDialog::instance()->getIdStore().getUniqueId(ipAddress);
+			uniqueId = "";//ConnectDialog::instance()->getIdStore().getUniqueId(ipAddress);
 
 			SecureID MakeKey;
 			SUI = MakeKey.getSecureID(ipAddress);
@@ -151,7 +139,7 @@ void ClientConnectionAuthHandler::sendAuth()
 void ClientConnectionAuthHandler::cancelAuth()
 {
 	ScorchedClient::instance()->getNetInterface().stop();
-	ScorchedClient::instance()->getGameState().stimulate(
-		ClientState::StimOptions);
+	//ScorchedClient::instance()->getGameState().stimulate(
+	//	ClientState::StimOptions);
 }
 

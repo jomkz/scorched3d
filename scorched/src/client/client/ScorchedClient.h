@@ -23,12 +23,13 @@
 
 #include <engine/ScorchedContext.h>
 
-class MainLoop;
 class ParticleEngine;
-class GameState;
 class SimulatorGameState;
-class ClientSimulator;
 class ClientState;
+class ClientSimulator;
+class ClientHandlers;
+class ClientMessageHandler;
+class ClientChannelManager;
 class ScorchedClient : public ScorchedContext
 {
 public:
@@ -38,21 +39,22 @@ public:
 
 	virtual Simulator &getSimulator();
 	virtual TargetSpace &getTargetSpace() { return *targetSpace_; }
-	MainLoop &getMainLoop() { return *mainLoop_; }
 	ScorchedContext &getContext() { return *this; }
 	ParticleEngine &getParticleEngine() { return *particleEngine_; }
-	GameState &getGameState() { return *gameState; }
 	ClientState &getClientState() { return *clientState_; }
 	ClientSimulator &getClientSimulator() { return *clientSimulator_; }
+	ClientHandlers &getClientHandlers() { return *clientHandlers_; }
+	ClientChannelManager &getClientChannelManager() { return *channelManager_; }
 
 protected:
 	static ScorchedClient *instance_;
 	static TargetSpace *targetSpace_;
-	MainLoop *mainLoop_;
 	ParticleEngine* particleEngine_;
-	GameState *gameState;
 	ClientState *clientState_;
 	ClientSimulator *clientSimulator_;
+	ClientHandlers *clientHandlers_;
+	ClientMessageHandler *clientMessageHandler_;
+	ClientChannelManager *channelManager_;
 
 private:
 	ScorchedClient();

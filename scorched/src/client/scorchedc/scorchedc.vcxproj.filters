@@ -1146,9 +1146,6 @@
     <ClCompile Include="..\client\ClientSimulator.cpp">
       <Filter>client</Filter>
     </ClCompile>
-    <ClCompile Include="..\client\ClientStartGameHandler.cpp">
-      <Filter>client</Filter>
-    </ClCompile>
     <ClCompile Include="..\client\ClientState.cpp">
       <Filter>client</Filter>
     </ClCompile>
@@ -1173,9 +1170,6 @@
     <ClCompile Include="..\dialogs\AdminDialog.cpp">
       <Filter>dialogs</Filter>
     </ClCompile>
-    <ClCompile Include="..\dialogs\AnimatedBackdropDialog.cpp">
-      <Filter>dialogs</Filter>
-    </ClCompile>
     <ClCompile Include="..\dialogs\AuthDialog.cpp">
       <Filter>dialogs</Filter>
     </ClCompile>
@@ -1192,9 +1186,6 @@
       <Filter>dialogs</Filter>
     </ClCompile>
     <ClCompile Include="..\dialogs\CameraDialog.cpp">
-      <Filter>dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dialogs\ConnectDialog.cpp">
       <Filter>dialogs</Filter>
     </ClCompile>
     <ClCompile Include="..\dialogs\GiftMoneyDialog.cpp">
@@ -2001,9 +1992,6 @@
     <ClCompile Include="..\graph\Gamma.cpp">
       <Filter>graph</Filter>
     </ClCompile>
-    <ClCompile Include="..\graph\GLSetup.cpp">
-      <Filter>graph</Filter>
-    </ClCompile>
     <ClCompile Include="..\graph\Main2DCamera.cpp">
       <Filter>graph</Filter>
     </ClCompile>
@@ -2025,9 +2013,6 @@
     <ClCompile Include="..\graph\ModelRendererTree.cpp">
       <Filter>graph</Filter>
     </ClCompile>
-    <ClCompile Include="..\graph\Mouse.cpp">
-      <Filter>graph</Filter>
-    </ClCompile>
     <ClCompile Include="..\graph\OptionsDisplay.cpp">
       <Filter>graph</Filter>
     </ClCompile>
@@ -2047,9 +2032,6 @@
       <Filter>graph</Filter>
     </ClCompile>
     <ClCompile Include="..\graph\ShotCountDown.cpp">
-      <Filter>graph</Filter>
-    </ClCompile>
-    <ClCompile Include="..\graph\SoftwareMouse.cpp">
       <Filter>graph</Filter>
     </ClCompile>
     <ClCompile Include="..\graph\SpeedChange.cpp">
@@ -2367,9 +2349,6 @@
     <ClCompile Include="..\..\common\simactions\TankAchievementSimAction.cpp">
       <Filter>simactions</Filter>
     </ClCompile>
-    <ClCompile Include="..\ui\UISetup.cpp">
-      <Filter>ui</Filter>
-    </ClCompile>
     <ClCompile Include="..\ui\LoadPNG.cpp">
       <Filter>ui</Filter>
     </ClCompile>
@@ -2402,6 +2381,12 @@
     </ClCompile>
     <ClCompile Include="..\ui\RocketWindowState.cpp">
       <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientStateStartGame.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientHandlers.cpp">
+      <Filter>client</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3425,9 +3410,6 @@
     <ClInclude Include="..\client\ClientSimulator.h">
       <Filter>client</Filter>
     </ClInclude>
-    <ClInclude Include="..\client\ClientStartGameHandler.h">
-      <Filter>client</Filter>
-    </ClInclude>
     <ClInclude Include="..\client\ClientState.h">
       <Filter>client</Filter>
     </ClInclude>
@@ -3452,9 +3434,6 @@
     <ClInclude Include="..\dialogs\AdminDialog.h">
       <Filter>dialogs</Filter>
     </ClInclude>
-    <ClInclude Include="..\dialogs\AnimatedBackdropDialog.h">
-      <Filter>dialogs</Filter>
-    </ClInclude>
     <ClInclude Include="..\dialogs\AuthDialog.h">
       <Filter>dialogs</Filter>
     </ClInclude>
@@ -3471,9 +3450,6 @@
       <Filter>dialogs</Filter>
     </ClInclude>
     <ClInclude Include="..\dialogs\CameraDialog.h">
-      <Filter>dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dialogs\ConnectDialog.h">
       <Filter>dialogs</Filter>
     </ClInclude>
     <ClInclude Include="..\dialogs\GiftMoneyDialog.h">
@@ -4292,9 +4268,6 @@
     <ClInclude Include="..\graph\Gamma.h">
       <Filter>graph</Filter>
     </ClInclude>
-    <ClInclude Include="..\graph\GLSetup.h">
-      <Filter>graph</Filter>
-    </ClInclude>
     <ClInclude Include="..\graph\Main2DCamera.h">
       <Filter>graph</Filter>
     </ClInclude>
@@ -4316,9 +4289,6 @@
     <ClInclude Include="..\graph\ModelRendererTree.h">
       <Filter>graph</Filter>
     </ClInclude>
-    <ClInclude Include="..\graph\Mouse.h">
-      <Filter>graph</Filter>
-    </ClInclude>
     <ClInclude Include="..\graph\OptionsDisplay.h">
       <Filter>graph</Filter>
     </ClInclude>
@@ -4338,9 +4308,6 @@
       <Filter>graph</Filter>
     </ClInclude>
     <ClInclude Include="..\graph\ShotCountDown.h">
-      <Filter>graph</Filter>
-    </ClInclude>
-    <ClInclude Include="..\graph\SoftwareMouse.h">
       <Filter>graph</Filter>
     </ClInclude>
     <ClInclude Include="..\graph\SpeedChange.h">
@@ -4655,9 +4622,6 @@
     <ClInclude Include="..\..\common\simactions\TankAchievementSimAction.h">
       <Filter>simactions</Filter>
     </ClInclude>
-    <ClInclude Include="..\ui\UISetup.h">
-      <Filter>ui</Filter>
-    </ClInclude>
     <ClInclude Include="..\ui\LoadPNG.h">
       <Filter>ui</Filter>
     </ClInclude>
@@ -4690,6 +4654,12 @@
     </ClInclude>
     <ClInclude Include="..\ui\RocketWindowState.h">
       <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientStateStartGame.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientHandlers.h">
+      <Filter>client</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

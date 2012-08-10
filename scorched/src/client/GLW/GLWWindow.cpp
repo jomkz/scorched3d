@@ -187,8 +187,8 @@ void GLWWindow::drawMaximizedWindow()
 			GLWPanel::draw();
 		glPopMatrix();
 
-		int x = ScorchedClient::instance()->getGameState().getMouseX();
-		int y = ScorchedClient::instance()->getGameState().getMouseY();
+		int x = 0;//ScorchedClient::instance()->getGameState().getMouseX();
+		int y = 0;//ScorchedClient::instance()->getGameState().getMouseY();
 		if (GLWWindowManager::instance()->getFocus(x, y) == getId())
 		{
 			if (windowState_ & eResizeable &&

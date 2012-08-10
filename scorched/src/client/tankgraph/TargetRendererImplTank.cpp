@@ -121,7 +121,7 @@ void TargetRendererImplTank::render(float distance)
 
 	bool currentTank = 
 		(tank_ == ScorchedClient::instance()->getTargetContainer().getCurrentTank() &&
-		ScorchedClient::instance()->getGameState().getState() == ClientState::StatePlaying);
+		ScorchedClient::instance()->getClientState().getState() == ClientState::StatePlaying);
 	if (fade > 0.0f)
 	{
 		// Add the tank shadow
@@ -212,7 +212,7 @@ void TargetRendererImplTank::drawParticle(float distance)
 
 	bool currentTank = 
 		(tank_ == ScorchedClient::instance()->getTargetContainer().getCurrentTank() &&
-		ScorchedClient::instance()->getGameState().getState() == ClientState::StatePlaying);
+		ScorchedClient::instance()->getClientState().getState() == ClientState::StatePlaying);
 
 	// Draw the tank sight
 	if (currentTank &&
@@ -759,7 +759,7 @@ void TargetRendererImplTank::render2D(float distance)
 	// Draw the hightlighted ring around the tank
 	bool currentTank = 
 		(tank_ == ScorchedClient::instance()->getTargetContainer().getCurrentTank() &&
-		ScorchedClient::instance()->getGameState().getState() == ClientState::StatePlaying);
+		ScorchedClient::instance()->getClientState().getState() == ClientState::StatePlaying);
 	if (currentTank)
 	{
 		GLState firstState(GLState::DEPTH_OFF);

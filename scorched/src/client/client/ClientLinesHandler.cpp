@@ -26,20 +26,9 @@
 #include <tank/TankState.h>
 #include <GLW/GLWPlanView.h>
 
-ClientLinesHandler *ClientLinesHandler::instance_ = 0;
-
-ClientLinesHandler *ClientLinesHandler::instance()
+ClientLinesHandler::ClientLinesHandler(ComsMessageHandler &comsMessageHandler)
 {
-	if (!instance_)
-	{
-		instance_ = new ClientLinesHandler;
-	}
-	return instance_;
-}
-
-ClientLinesHandler::ClientLinesHandler()
-{
-	ScorchedClient::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsLinesMessage::ComsLinesMessageType,
 		this);
 }

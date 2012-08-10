@@ -57,27 +57,16 @@ bool ClientChannelManager::ChannelEntry::hasChannel(const std::string &channel)
 
 unsigned int ClientChannelManager::nextRecieverId_ = 0;
 
-ClientChannelManager *ClientChannelManager::instance_ = 0;
-
-ClientChannelManager *ClientChannelManager::instance()
-{
-	if (!instance_)
-	{
-		instance_ = new ClientChannelManager;
-	}
-	return instance_;
-}
-
-ClientChannelManager::ClientChannelManager()
+ClientChannelManager::ClientChannelManager(ComsMessageHandler &comsMessageHandler)
 {
 	new ComsMessageHandlerIAdapter<ClientChannelManager>(
 		this, &ClientChannelManager::processChannelMessage,
 		ComsChannelMessage::ComsChannelMessageType,
-		ScorchedClient::instance()->getComsMessageHandler());
+		comsMessageHandler);
 	new ComsMessageHandlerIAdapter<ClientChannelManager>(
 		this, &ClientChannelManager::processChannelTextMessage,
 		ComsChannelTextMessage::ComsChannelTextMessageType,
-		ScorchedClient::instance()->getComsMessageHandler());
+		comsMessageHandler);
 	new ConsoleRuleMethodIAdapterEx<ClientChannelManager>(
 		this, &ClientChannelManager::say, "Say", 
 		ConsoleUtil::formParams(

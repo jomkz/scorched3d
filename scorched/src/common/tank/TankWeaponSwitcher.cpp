@@ -54,7 +54,7 @@ void TankWeaponSwitcher::switchWeapon(ScorchedContext &context, Tanket *tanket, 
 		// Only show this information on this tanks client
 		if (ScorchedClient::instance()->getTargetContainer().getCurrentDestinationId() ==
 			tank->getDestinationId() &&
-			ScorchedClient::instance()->getGameState().getState() == ClientState::StatePlaying)
+			ScorchedClient::instance()->getClientState().getState() == ClientState::StatePlaying)
 		{
 
 		// Turn off fuel display (if any)

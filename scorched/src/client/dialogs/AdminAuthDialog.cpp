@@ -25,6 +25,7 @@
 #include <client/ClientAdminResultHandler.h>
 #include <coms/ComsAdminMessage.h>
 #include <coms/ComsMessageSender.h>
+#include <client/ScorchedClient.h>
 
 AdminAuthDialog *AdminAuthDialog::instance_ = 0;
 
@@ -98,10 +99,11 @@ void AdminAuthDialog::buttonDown(unsigned int id)
 	GLWWindowManager::instance()->hideWindow(getId());
 	if (id == okId_)
 	{
-		unsigned int sid = ClientAdminResultHandler::instance()->getSid();
+		/*unsigned int sid = ScorchedClient::instance()->getClientHandlers().
+			getClientAdminResultHandler().getSid();
 		ComsAdminMessage message(sid, ComsAdminMessage::AdminLogin, 
 			username_->getText().c_str(), 
 			password_->getText().c_str());
-		ComsMessageSender::sendToServer(message);
+		ComsMessageSender::sendToServer(message);*/
 	}
 }

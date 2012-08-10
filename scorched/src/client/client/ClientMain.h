@@ -23,7 +23,6 @@
 
 namespace ClientMain
 {
-	bool startClient();
 	bool clientMain();
 };
 

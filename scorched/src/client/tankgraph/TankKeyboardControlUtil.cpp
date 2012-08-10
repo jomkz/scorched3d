@@ -228,8 +228,8 @@ void TankKeyboardControlUtil::endPlayMove(Tank *tank)
 
 void TankKeyboardControlUtil::autoAim(Tank *tank)
 {
-	int x = ScorchedClient::instance()->getGameState().getMouseX();
-	int y = ScorchedClient::instance()->getGameState().getMouseY();
+	int x = 0;//ScorchedClient::instance()->getGameState().getMouseX();
+	int y = 0;//ScorchedClient::instance()->getGameState().getMouseY();
 	Line direction;
 	Vector intersect;
 
@@ -520,7 +520,7 @@ void TankKeyboardControlUtil::fireShot(Tank *tank)
 		ComsMessageSender::sendToServer(comsMessage);
 
 		// Stimulate into the next state waiting for all the shots
-		ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
+		//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
 	}
 }
 
@@ -537,7 +537,7 @@ void TankKeyboardControlUtil::skipShot(Tank *tank)
 	ComsMessageSender::sendToServer(comsMessage);
 
 	// Stimulate into the next state waiting for all the shots
-	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
+	//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
 }
 
 void TankKeyboardControlUtil::resign(Tank *tank)
@@ -553,7 +553,7 @@ void TankKeyboardControlUtil::resign(Tank *tank)
 	ComsMessageSender::sendToServer(comsMessage);
 	
 	// Stimulate into the next state waiting for all the shots
-	ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
+	//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
 }
 
 void TankKeyboardControlUtil::parachutesUpDown(unsigned int playerId, unsigned int paraId)

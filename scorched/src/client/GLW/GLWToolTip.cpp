@@ -66,8 +66,8 @@ bool GLWToolTip::addToolTip(ToolTip::ToolTipType type,
 	if (!OptionsDisplay::instance()->getShowContextHelp() &&
 		(type & ToolTip::ToolTipHelp)) return false;
 
-	int mouseX = ScorchedClient::instance()->getGameState().getMouseX();
-	int mouseY = ScorchedClient::instance()->getGameState().getMouseY();
+	int mouseX = 0;//ScorchedClient::instance()->getGameState().getMouseX();
+	int mouseY = 0;//ScorchedClient::instance()->getGameState().getMouseY();
 	
 	bool result = false;
 	if (x < mouseX && mouseX < x + w &&
@@ -94,8 +94,8 @@ bool GLWToolTip::addToolTip(ToolTip *tip, float x, float y, float w, float h)
 	if (!OptionsDisplay::instance()->getShowContextHelp() &&
 		(tip->getType() & ToolTip::ToolTipHelp)) return false;
 
-	int mouseX = ScorchedClient::instance()->getGameState().getMouseX();
-	int mouseY = ScorchedClient::instance()->getGameState().getMouseY();
+	int mouseX = 0;//ScorchedClient::instance()->getGameState().getMouseX();
+	int mouseY = 0;//orchedClient::instance()->getGameState().getMouseY();
 	
 	bool result = false;
 	if (x < mouseX && mouseX < x + w &&
@@ -156,8 +156,8 @@ void GLWToolTip::calculateTip(ToolTip *tip)
 
 void GLWToolTip::clearToolTip(float x, float y, float w, float h)
 {
-	int mouseX = ScorchedClient::instance()->getGameState().getMouseX();
-	int mouseY = ScorchedClient::instance()->getGameState().getMouseY();
+	int mouseX = 0;//ScorchedClient::instance()->getGameState().getMouseX();
+	int mouseY = 0;//ScorchedClient::instance()->getGameState().getMouseY();
 	
 	if (x < mouseX && mouseX < x + w &&
 		y < mouseY && mouseY < y + h)

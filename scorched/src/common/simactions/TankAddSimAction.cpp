@@ -46,6 +46,7 @@
 #include <server/ServerMessageHandler.h>
 #ifndef S3D_SERVER
 #include <client/ClientChannelManager.h>
+#include <client/ScorchedClient.h>
 #include <tankgraph/TargetRendererImplTank.h>
 #endif
 
@@ -188,8 +189,8 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 	if (!context.getServerMode())
 	{
 		tank->setRenderer(new TargetRendererImplTank(tank));
-		if (ClientChannelManager::instance()->getMutedPlayers().find(tank->getPlayerId())
-			!= ClientChannelManager::instance()->getMutedPlayers().end())
+		if (ScorchedClient::instance()->getClientChannelManager().getMutedPlayers().find(tank->getPlayerId())
+			!= ScorchedClient::instance()->getClientChannelManager().getMutedPlayers().end())
 		{
 			tank->getState().setMuted(true);
 		}

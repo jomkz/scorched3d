@@ -52,6 +52,8 @@ protected:
 	RocketFileInterface *fileInterface_;
 	RocketWindowState* windowState_;
 
+	bool createScorchedWindow();
+
 private:
 	RocketGameState();
 	virtual ~RocketGameState();

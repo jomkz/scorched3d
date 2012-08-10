@@ -32,20 +32,10 @@
 #include <coms/ComsFileAkMessage.h>
 #include <lang/LangResource.h>
 
-ClientFileHandler *ClientFileHandler::instance_ = 0;
-
-ClientFileHandler *ClientFileHandler::instance()
+ClientFileHandler::ClientFileHandler(ComsMessageHandler &comsMessageHandler) : 
+	totalBytes_(0)
 {
-	if (!instance_)
-	{
-		instance_ = new ClientFileHandler;
-	}
-	return instance_;
-}
-
-ClientFileHandler::ClientFileHandler() : totalBytes_(0)
-{
-	ScorchedClient::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsFileMessage::ComsFileMessageType,
 		this);
 }

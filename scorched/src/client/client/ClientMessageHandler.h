@@ -28,7 +28,8 @@ class ClientMessageHandler :
 	public ComsMessageConnectionHandlerI
 {
 public:
-	static ClientMessageHandler *instance();
+	ClientMessageHandler();
+	virtual ~ClientMessageHandler();
 
 	virtual void clientConnected(NetMessage &message);
 	virtual void clientDisconnected(NetMessage &message);
@@ -37,14 +38,6 @@ public:
 
 	virtual void messageRecv(unsigned int destinationId);
 	virtual void messageSent(unsigned int destinationId);
-
-protected:
-	static ClientMessageHandler *instance_;
-
-private:
-	ClientMessageHandler();
-	virtual ~ClientMessageHandler();
 };
-
 
 #endif

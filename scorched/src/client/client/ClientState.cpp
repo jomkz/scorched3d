@@ -19,10 +19,20 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <client/ClientState.h>
+#include <client/ClientStateStartGame.h>
+#include <client/ScorchedClient.h>
+#include <client/ClientParams.h>
+#include <server/ServerMain.h>
+#include <engine/Simulator.h>
+#include <common/Logger.h>
 #include <ui/RocketGameState.h>
 #include <graph/OptionsDisplay.h>
 #include <graph/FrameLimiter.h>
+#include <target/TargetContainer.h>
+#include <net/NetInterface.h>
 #include <SDL/SDL.h>
+
+static time_t startTime = 0;
 
 static struct STATE_NAME
 {
@@ -45,8 +55,10 @@ static struct STATE_STIMULI
 
 ClientState::ClientState() : 
 	stopped_(false), paused_(false),
-	currentState_(StateNone)
+	currentState_(StateNone),
+	serverTime_(0.0f)
 {
+	clientStartGame_ = new ClientStateStartGame();
 }
 
 ClientState::~ClientState()
@@ -72,7 +84,7 @@ void ClientState::errorCurrentStimulus()
 		stimuli_.front(), currentState_));
 }
 
-void ClientState::performStateStimulus(const std::string &state)
+void ClientState::performStateStimulusString(const std::string &state)
 {
 	for (int i=0; i<sizeof(STATE_STIMULUS)/sizeof(STATE_STIMULI); i++)
 	{
@@ -84,6 +96,11 @@ void ClientState::performStateStimulus(const std::string &state)
 	}
 	S3D::dialogExit("ClientState", 
 		S3D::formatStringBuffer("Failed to find state stimulus %s", state.c_str()));
+}
+
+void ClientState::performStateStimulus(ClientState::Stimulus stimulus)
+{
+	stimuli_.push_back(stimulus);
 }
 
 void ClientState::setState(State newState)
@@ -141,12 +158,58 @@ void ClientState::clientEventLoop()
 	}
 	frameLimiter_.limitFrameTime(); 
 
+	// Simulate
+	float frameTime = frameClock_.getTimeDifference();
+	if (!ClientParams::instance()->getConnectedToServer())
+	{
+		serverTime_ += frameTime;
+		if (serverTime_ > 0.05f)
+		{
+			fixed timeDifference = fixed::fromFloat(serverTime_);
+			timeDifference *= ScorchedClient::instance()->getSimulator().getFast();
+			serverLoop(timeDifference);
+			serverTime_ = 0.0f;
+		}
+	}
+
+	Logger::processLogEntries();
+	if (ScorchedClient::instance()->getContext().getNetInterfaceValid())
+	{
+		ScorchedClient::instance()->getNetInterface().processMessages();
+	}
+
+	if (ClientParams::instance()->getExitTime() > 0)
+	{
+		if (startTime == 0) startTime = time(0);
+		if (time(0) - startTime > ClientParams::instance()->getExitTime())
+		{
+			exit(0);
+		}
+	}
+	if (ClientParams::instance()->getDisconnectTime() > 0)
+	{
+		if (startTime == 0) startTime = time(0);
+		if (time(0) - startTime > ClientParams::instance()->getDisconnectTime())
+		{
+			startTime = time(0);
+			if (ScorchedClient::instance()->getTargetContainer().getCurrentDestinationId())
+			{
+				ScorchedClient::instance()->getNetInterface().disconnectAllClients();
+			}
+			else
+			{
+				performStateStimulus(StimulusStartGame);
+			}
+		}
+	}
+
 	// State stuff
 	switch (currentState_)
 	{
 	case StateMainOptions:
 		if (getCurrentStimulus(StimulusStartGame))
 		{
+			clientStartGame_->enterState();
 			setState(StateStartGame);
 		}
 		else 

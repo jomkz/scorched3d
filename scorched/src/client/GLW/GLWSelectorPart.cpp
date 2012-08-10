@@ -107,8 +107,8 @@ void GLWSelectorPart::draw()
 	GLState currentStateBlend(GLState::TEXTURE_OFF | GLState::DEPTH_OFF | GLState::BLEND_ON);
 
 	GLFont2d &font = *GLWFont::instance()->getGameFont();
-	int mouseX = ScorchedClient::instance()->getGameState().getMouseX();
-	int mouseY = ScorchedClient::instance()->getGameState().getMouseY();
+	int mouseX = 0;//ScorchedClient::instance()->getGameState().getMouseX();
+	int mouseY = 0;//ScorchedClient::instance()->getGameState().getMouseY();
 
 	// Draw the background
 	{

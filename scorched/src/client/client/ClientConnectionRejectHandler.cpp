@@ -25,20 +25,9 @@
 #include <coms/ComsConnectRejectMessage.h>
 #include <common/Logger.h>
 
-ClientConnectionRejectHandler *ClientConnectionRejectHandler::instance_ = 0;
-
-ClientConnectionRejectHandler *ClientConnectionRejectHandler::instance()
+ClientConnectionRejectHandler::ClientConnectionRejectHandler(ComsMessageHandler &comsMessageHandler)
 {
-	if (!instance_)
-	{
-		instance_ = new ClientConnectionRejectHandler;
-	}
-	return instance_;
-}
-
-ClientConnectionRejectHandler::ClientConnectionRejectHandler()
-{
-	ScorchedClient::instance()->getComsMessageHandler().addHandler(
+	comsMessageHandler.addHandler(
 		ComsConnectRejectMessage::ComsConnectRejectMessageType,
 		this);
 }
