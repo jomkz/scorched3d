@@ -32,7 +32,6 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapemap/MovementMap.h>
 #include <lang/LangResource.h>
-#include <client/ScorchedClient.h>
 #include <engine/GameState.h>
 #include <common/ChannelManager.h>
 

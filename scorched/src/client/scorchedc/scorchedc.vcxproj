@@ -471,14 +471,10 @@
     <ClCompile Include="..\client\ClientAdminResultHandler.cpp" />
     <ClCompile Include="..\client\ClientChannelManager.cpp" />
     <ClCompile Include="..\client\ClientChannelManagerI.cpp" />
-    <ClCompile Include="..\client\ClientConnectionAcceptHandler.cpp" />
-    <ClCompile Include="..\client\ClientConnectionAuthHandler.cpp" />
     <ClCompile Include="..\client\ClientConnectionRejectHandler.cpp" />
     <ClCompile Include="..\client\ClientDisconnected.cpp" />
-    <ClCompile Include="..\client\ClientFileHandler.cpp" />
     <ClCompile Include="..\client\ClientGameStoppedHandler.cpp" />
     <ClCompile Include="..\client\ClientHandlers.cpp" />
-    <ClCompile Include="..\client\ClientInitializeModHandler.cpp" />
     <ClCompile Include="..\client\ClientLinesHandler.cpp" />
     <ClCompile Include="..\client\ClientLoadLevelHandler.cpp" />
     <ClCompile Include="..\client\ClientMain.cpp" />
@@ -490,7 +486,7 @@
     <ClCompile Include="..\client\ClientSaveScreenState.cpp" />
     <ClCompile Include="..\client\ClientSimulator.cpp" />
     <ClCompile Include="..\client\ClientState.cpp" />
-    <ClCompile Include="..\client\ClientStateStartGame.cpp" />
+    <ClCompile Include="..\client\ClientStateInitialize.cpp" />
     <ClCompile Include="..\client\ClientWindowSetup.cpp" />
     <ClCompile Include="..\client\ScorchedClient.cpp" />
     <ClCompile Include="..\client\SecureID.cpp" />
@@ -1227,14 +1223,10 @@
     <ClInclude Include="..\client\ClientAdminResultHandler.h" />
     <ClInclude Include="..\client\ClientChannelManager.h" />
     <ClInclude Include="..\client\ClientChannelManagerI.h" />
-    <ClInclude Include="..\client\ClientConnectionAcceptHandler.h" />
-    <ClInclude Include="..\client\ClientConnectionAuthHandler.h" />
     <ClInclude Include="..\client\ClientConnectionRejectHandler.h" />
     <ClInclude Include="..\client\ClientDisconnected.h" />
-    <ClInclude Include="..\client\ClientFileHandler.h" />
     <ClInclude Include="..\client\ClientGameStoppedHandler.h" />
     <ClInclude Include="..\client\ClientHandlers.h" />
-    <ClInclude Include="..\client\ClientInitializeModHandler.h" />
     <ClInclude Include="..\client\ClientLinesHandler.h" />
     <ClInclude Include="..\client\ClientLoadLevelHandler.h" />
     <ClInclude Include="..\client\ClientMain.h" />
@@ -1246,7 +1238,7 @@
     <ClInclude Include="..\client\ClientSaveScreenState.h" />
     <ClInclude Include="..\client\ClientSimulator.h" />
     <ClInclude Include="..\client\ClientState.h" />
-    <ClInclude Include="..\client\ClientStateStartGame.h" />
+    <ClInclude Include="..\client\ClientStateInitialize.h" />
     <ClInclude Include="..\client\ClientWindowSetup.h" />
     <ClInclude Include="..\client\ScorchedClient.h" />
     <ClInclude Include="..\client\SecureID.h" />

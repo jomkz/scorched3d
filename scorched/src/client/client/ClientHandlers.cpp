@@ -23,10 +23,6 @@
 ClientHandlers::ClientHandlers(ComsMessageHandler &comsMessageHandler) :
 	connectionRejectHandler_(comsMessageHandler),
 	linesHandler_(comsMessageHandler),
-	connectionAcceptHandler_(comsMessageHandler),
-	connectionAuthHandler_(comsMessageHandler),
-	initializeModHandler_(comsMessageHandler),
-	fileHandler_(comsMessageHandler),
 	operationHandler_(comsMessageHandler),
 	gameStoppedHandler_(comsMessageHandler),
 	loadLevelHandler_(comsMessageHandler),

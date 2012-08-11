@@ -20,7 +20,7 @@
 
 #include <client/ClientMessageHandler.h>
 #include <client/ClientState.h>
-#include <client/ClientStateStartGame.h>
+#include <client/ClientStateInitialize.h>
 #include <client/ClientParams.h>
 #include <client/ScorchedClient.h>
 #include <dialogs/MsgBoxDialog.h>
@@ -47,7 +47,7 @@ void ClientMessageHandler::messageSent(unsigned int destinationId)
 
 void ClientMessageHandler::clientConnected(NetMessage &message)
 {
-	ScorchedClient::instance()->getClientState().getClientStartGame().connected();
+	ScorchedClient::instance()->getClientState().getClientInitialize().connected();
 }
 
 void ClientMessageHandler::clientDisconnected(NetMessage &message)

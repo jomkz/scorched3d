@@ -23,7 +23,7 @@
 #include <GLW/GLWTextButton.h>
 #include <GLW/GLWWindowManager.h>
 #include <client/ClientParams.h>
-#include <client/ClientConnectionAuthHandler.h>
+//#include <client/ClientConnectionAuthHandler.h>
 
 AuthDialog *AuthDialog::instance_ = 0;
 

@@ -53,7 +53,12 @@ ScorchedClient::ScorchedClient() :
 {
 	targetSpace_->setContext(this);
 
-	clientState_ = new ClientState();
+	clientMessageHandler_ = new ClientMessageHandler();
+	getComsMessageHandler().setConnectionHandler(clientMessageHandler_);
+
+	channelManager_ = new ClientChannelManager(getComsMessageHandler());
+	clientHandlers_ = new ClientHandlers(getComsMessageHandler());
+	clientState_ = new ClientState(getComsMessageHandler());
 	clientSimulator_ = new ClientSimulator();
 	clientSimulator_->setScorchedContext(this);
 
@@ -80,11 +85,6 @@ ScorchedClient::ScorchedClient() :
 		new GraphicalLandscapeMap());
 	getLandscapeMaps().getRoofMaps().getRoofMap().setGraphicalMap(
 		new GraphicalLandscapeMap());
-
-	clientMessageHandler_ = new ClientMessageHandler();
-	getComsMessageHandler().setConnectionHandler(clientMessageHandler_);
-	channelManager_ = new ClientChannelManager(getComsMessageHandler());
-	clientHandlers_ = new ClientHandlers(getComsMessageHandler());
 }
 
 ScorchedClient::~ScorchedClient()

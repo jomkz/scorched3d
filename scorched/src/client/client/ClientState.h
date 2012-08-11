@@ -25,7 +25,8 @@
 #include <common/Clock.h>
 #include <list>
 
-class ClientStateStartGame;
+class ClientStateInitialize;
+class ComsMessageHandler;
 class ClientState  
 {
 public:
@@ -65,10 +66,10 @@ public:
 
 		StateNone,
 		StateMainOptions,
-		StateStartGame
+		StateInitialize
 	};
 
-	ClientState();
+	ClientState(ComsMessageHandler &comsMessageHandler);
 	virtual ~ClientState();
 
 	void clientMainLoop();
@@ -78,7 +79,7 @@ public:
 	void stop() { stopped_ = true; }
 
 	State getState() { return currentState_; }
-	ClientStateStartGame &getClientStartGame() { return *clientStartGame_; }
+	ClientStateInitialize &getClientInitialize() { return *clientInitialize_; }
 
 protected:
 	State currentState_;
@@ -87,7 +88,7 @@ protected:
 	float serverTime_;
 	Clock frameClock_;
 	std::list<Stimulus> stimuli_;
-	ClientStateStartGame *clientStartGame_;
+	ClientStateInitialize *clientInitialize_;
 
 	void clientEventLoop();
 	bool getCurrentStimulus(Stimulus stimulus);

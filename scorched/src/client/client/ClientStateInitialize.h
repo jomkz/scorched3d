@@ -18,18 +18,22 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ClientStateStartGameh_INCLUDE__)
-#define __INCLUDE_ClientStateStartGameh_INCLUDE__
+#if !defined(__INCLUDE_ClientStateInitializeh_INCLUDE__)
+#define __INCLUDE_ClientStateInitializeh_INCLUDE__
 
 #include <string>
 #include <SDL/SDL.h>
+#include <net/NetBuffer.h>
 
+class NetMessage;
+class NetBufferReader;
 class UniqueIdStore;
-class ClientStateStartGame  
+class ComsMessageHandler;
+class ClientStateInitialize  
 {
 public:
-	ClientStateStartGame();
-	virtual ~ClientStateStartGame();
+	ClientStateInitialize(ComsMessageHandler &comsMessageHandler);
+	virtual ~ClientStateInitialize();
 
 	// Called when we want to connect
 	void enterState();
@@ -39,15 +43,23 @@ public:
 
 	UniqueIdStore &getIdStore();
 protected:
+	NetBuffer recvBuffer_;
 	SDL_Thread *remoteConnectionThread_;
 	UniqueIdStore *idStore_;
+	unsigned int totalBytes_;
 
+	void getHost(std::string &host, int &port);
 	void tryConnection();
 	static int tryRemoteConnection(void *);
-	void tryLocalConnection();
 	void finishedTryingConnection();
 	void finished();
 	void connectToServer();
+	void sendAuth();
+	bool initializeMod();
+	bool processConnectAuthMessage(NetMessage &netMessage, NetBufferReader &reader);
+	bool processConnectAcceptMessage(NetMessage &netMessage, NetBufferReader &reader);
+	bool processFileMessage(NetMessage &netMessage, NetBufferReader &mainreader);
+	bool processInitializeModMessage(NetMessage &netMessage, NetBufferReader &reader);
 };
 
 #endif

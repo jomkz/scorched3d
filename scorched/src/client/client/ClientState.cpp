@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <client/ClientState.h>
-#include <client/ClientStateStartGame.h>
+#include <client/ClientStateInitialize.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientParams.h>
 #include <server/ServerMain.h>
@@ -41,7 +41,7 @@ static struct STATE_NAME
 } STATE_NAMES[] =
 {
 	"StateMainOptions", ClientState::StateMainOptions,
-	"StateStartGame", ClientState::StateStartGame
+	"StateInitialize", ClientState::StateInitialize
 };
 
 static struct STATE_STIMULI
@@ -53,12 +53,12 @@ static struct STATE_STIMULI
 	"StimulusStartGame", ClientState::StimulusStartGame
 };
 
-ClientState::ClientState() : 
+ClientState::ClientState(ComsMessageHandler &comsMessageHandler) : 
 	stopped_(false), paused_(false),
 	currentState_(StateNone),
 	serverTime_(0.0f)
 {
-	clientStartGame_ = new ClientStateStartGame();
+	clientInitialize_ = new ClientStateInitialize(comsMessageHandler);
 }
 
 ClientState::~ClientState()
@@ -209,15 +209,15 @@ void ClientState::clientEventLoop()
 	case StateMainOptions:
 		if (getCurrentStimulus(StimulusStartGame))
 		{
-			clientStartGame_->enterState();
-			setState(StateStartGame);
+			setState(StateInitialize);
+			clientInitialize_->enterState();
 		}
 		else 
 		{
 			errorCurrentStimulus();
 		}
 		break;
-	case StateStartGame:
+	case StateInitialize:
 		errorCurrentStimulus();
 		break;
 	default:

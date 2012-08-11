@@ -23,11 +23,7 @@
 
 #include <client/ClientConnectionRejectHandler.h>
 #include <client/ClientLinesHandler.h>
-#include <client/ClientConnectionAcceptHandler.h>
-#include <client/ClientConnectionAuthHandler.h>
-#include <client/ClientInitializeModHandler.h>
 #include <client/ClientOperationHandler.h>
-#include <client/ClientFileHandler.h>
 #include <client/ClientGameStoppedHandler.h>
 #include <client/ClientLoadLevelHandler.h>
 #include <client/ClientAdminResultHandler.h>
@@ -44,10 +40,6 @@ public:
 protected:
 	ClientConnectionRejectHandler connectionRejectHandler_;
 	ClientLinesHandler linesHandler_;
-	ClientConnectionAcceptHandler connectionAcceptHandler_;
-	ClientConnectionAuthHandler connectionAuthHandler_;
-	ClientInitializeModHandler initializeModHandler_;
-	ClientFileHandler fileHandler_;
 	ClientOperationHandler operationHandler_;
 	ClientGameStoppedHandler gameStoppedHandler_;
 	ClientLoadLevelHandler loadLevelHandler_;

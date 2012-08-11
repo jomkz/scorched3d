@@ -1098,22 +1098,10 @@
     <ClCompile Include="..\client\ClientChannelManagerI.cpp">
       <Filter>client</Filter>
     </ClCompile>
-    <ClCompile Include="..\client\ClientConnectionAcceptHandler.cpp">
-      <Filter>client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\client\ClientConnectionAuthHandler.cpp">
-      <Filter>client</Filter>
-    </ClCompile>
     <ClCompile Include="..\client\ClientConnectionRejectHandler.cpp">
       <Filter>client</Filter>
     </ClCompile>
-    <ClCompile Include="..\client\ClientFileHandler.cpp">
-      <Filter>client</Filter>
-    </ClCompile>
     <ClCompile Include="..\client\ClientGameStoppedHandler.cpp">
-      <Filter>client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\client\ClientInitializeModHandler.cpp">
       <Filter>client</Filter>
     </ClCompile>
     <ClCompile Include="..\client\ClientLinesHandler.cpp">
@@ -2382,10 +2370,10 @@
     <ClCompile Include="..\ui\RocketWindowState.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\client\ClientStateStartGame.cpp">
+    <ClCompile Include="..\client\ClientHandlers.cpp">
       <Filter>client</Filter>
     </ClCompile>
-    <ClCompile Include="..\client\ClientHandlers.cpp">
+    <ClCompile Include="..\client\ClientStateInitialize.cpp">
       <Filter>client</Filter>
     </ClCompile>
   </ItemGroup>
@@ -3362,22 +3350,10 @@
     <ClInclude Include="..\client\ClientChannelManagerI.h">
       <Filter>client</Filter>
     </ClInclude>
-    <ClInclude Include="..\client\ClientConnectionAcceptHandler.h">
-      <Filter>client</Filter>
-    </ClInclude>
-    <ClInclude Include="..\client\ClientConnectionAuthHandler.h">
-      <Filter>client</Filter>
-    </ClInclude>
     <ClInclude Include="..\client\ClientConnectionRejectHandler.h">
       <Filter>client</Filter>
     </ClInclude>
-    <ClInclude Include="..\client\ClientFileHandler.h">
-      <Filter>client</Filter>
-    </ClInclude>
     <ClInclude Include="..\client\ClientGameStoppedHandler.h">
-      <Filter>client</Filter>
-    </ClInclude>
-    <ClInclude Include="..\client\ClientInitializeModHandler.h">
       <Filter>client</Filter>
     </ClInclude>
     <ClInclude Include="..\client\ClientLinesHandler.h">
@@ -4655,10 +4631,10 @@
     <ClInclude Include="..\ui\RocketWindowState.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\client\ClientStateStartGame.h">
+    <ClInclude Include="..\client\ClientHandlers.h">
       <Filter>client</Filter>
     </ClInclude>
-    <ClInclude Include="..\client\ClientHandlers.h">
+    <ClInclude Include="..\client\ClientStateInitialize.h">
       <Filter>client</Filter>
     </ClInclude>
   </ItemGroup>
