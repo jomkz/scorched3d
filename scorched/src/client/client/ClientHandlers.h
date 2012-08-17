@@ -25,7 +25,6 @@
 #include <client/ClientLinesHandler.h>
 #include <client/ClientOperationHandler.h>
 #include <client/ClientGameStoppedHandler.h>
-#include <client/ClientLoadLevelHandler.h>
 #include <client/ClientAdminResultHandler.h>
 
 class ClientHandlers  
@@ -34,7 +33,6 @@ public:
 	ClientHandlers(ComsMessageHandler &comsMessageHandler);
 	virtual ~ClientHandlers();
 
-	ClientLoadLevelHandler &getClientLoadLevelHandler() { return loadLevelHandler_; }
 	ClientAdminResultHandler &getClientAdminResultHandler() { return adminResultHandler_; }
 
 protected:
@@ -42,7 +40,6 @@ protected:
 	ClientLinesHandler linesHandler_;
 	ClientOperationHandler operationHandler_;
 	ClientGameStoppedHandler gameStoppedHandler_;
-	ClientLoadLevelHandler loadLevelHandler_;
 	ClientAdminResultHandler adminResultHandler_;
 };
 

@@ -476,7 +476,6 @@
     <ClCompile Include="..\client\ClientGameStoppedHandler.cpp" />
     <ClCompile Include="..\client\ClientHandlers.cpp" />
     <ClCompile Include="..\client\ClientLinesHandler.cpp" />
-    <ClCompile Include="..\client\ClientLoadLevelHandler.cpp" />
     <ClCompile Include="..\client\ClientMain.cpp" />
     <ClCompile Include="..\client\ClientMessageHandler.cpp" />
     <ClCompile Include="..\client\ClientOperationHandler.cpp" />
@@ -487,6 +486,7 @@
     <ClCompile Include="..\client\ClientSimulator.cpp" />
     <ClCompile Include="..\client\ClientState.cpp" />
     <ClCompile Include="..\client\ClientStateInitialize.cpp" />
+    <ClCompile Include="..\client\ClientStateLoadLevel.cpp" />
     <ClCompile Include="..\client\ClientWindowSetup.cpp" />
     <ClCompile Include="..\client\ScorchedClient.cpp" />
     <ClCompile Include="..\client\SecureID.cpp" />
@@ -680,6 +680,8 @@
     <ClCompile Include="..\tankgraph\TargetRendererImplTarget.cpp" />
     <ClCompile Include="..\ui\AnimatedIslandDecorator.cpp" />
     <ClCompile Include="..\ui\AnimatedIslandDecoratorInstancer.cpp" />
+    <ClCompile Include="..\ui\BackdropDecorator.cpp" />
+    <ClCompile Include="..\ui\BackdropDecoratorInstancer.cpp" />
     <ClCompile Include="..\ui\LoadPNG.cpp" />
     <ClCompile Include="..\ui\RocketEventListener.cpp" />
     <ClCompile Include="..\ui\RocketEventListenerInstancer.cpp" />
@@ -1228,7 +1230,6 @@
     <ClInclude Include="..\client\ClientGameStoppedHandler.h" />
     <ClInclude Include="..\client\ClientHandlers.h" />
     <ClInclude Include="..\client\ClientLinesHandler.h" />
-    <ClInclude Include="..\client\ClientLoadLevelHandler.h" />
     <ClInclude Include="..\client\ClientMain.h" />
     <ClInclude Include="..\client\ClientMessageHandler.h" />
     <ClInclude Include="..\client\ClientOperationHandler.h" />
@@ -1239,6 +1240,7 @@
     <ClInclude Include="..\client\ClientSimulator.h" />
     <ClInclude Include="..\client\ClientState.h" />
     <ClInclude Include="..\client\ClientStateInitialize.h" />
+    <ClInclude Include="..\client\ClientStateLoadLevel.h" />
     <ClInclude Include="..\client\ClientWindowSetup.h" />
     <ClInclude Include="..\client\ScorchedClient.h" />
     <ClInclude Include="..\client\SecureID.h" />
@@ -1434,6 +1436,8 @@
     <ClInclude Include="..\tankgraph\TargetRendererImplTarget.h" />
     <ClInclude Include="..\ui\AnimatedIslandDecorator.h" />
     <ClInclude Include="..\ui\AnimatedIslandDecoratorInstancer.h" />
+    <ClInclude Include="..\ui\BackdropDecorator.h" />
+    <ClInclude Include="..\ui\BackdropDecoratorInstancer.h" />
     <ClInclude Include="..\ui\LoadPNG.h" />
     <ClInclude Include="..\ui\RocketEventListener.h" />
     <ClInclude Include="..\ui\RocketEventListenerInstancer.h" />

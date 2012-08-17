@@ -18,32 +18,26 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_AnimatedIslandDecoratorh_INCLUDE__)
-#define __INCLUDE_AnimatedIslandDecoratorh_INCLUDE__
+#if !defined(__INCLUDE_ClientStateLoadLevelh_INCLUDE__)
+#define __INCLUDE_ClientStateLoadLevelh_INCLUDE__
 
-#include <Rocket/Core/Decorator.h>
-#include <common/Clock.h>
-#include <GLEXT/GLTexture.h>
+#include <net/NetBuffer.h>
 
-class AnimatedIslandDecorator : public Rocket::Core::Decorator
+class NetMessage;
+class NetBufferReader;
+class ComsMessageHandler;
+class ClientStateLoadLevel  
 {
 public:
-	AnimatedIslandDecorator();
-	virtual ~AnimatedIslandDecorator();
+	ClientStateLoadLevel(ComsMessageHandler &comsMessageHandler);
+	virtual ~ClientStateLoadLevel();
 
-	bool Initialise();
-
-	virtual Rocket::Core::DecoratorDataHandle GenerateElementData(Rocket::Core::Element* element);
-	virtual void ReleaseElementData(Rocket::Core::DecoratorDataHandle element_data);
-	virtual void RenderElement(Rocket::Core::Element* element, Rocket::Core::DecoratorDataHandle element_data);
-
+	void setInitialLevel(bool initialLevel) { initialLevel_ = initialLevel; }
 protected:
-	float rotation_;
-	Clock clock_;
+	bool initialLevel_;
 
-	void drawAnimated();
-	void generate();
-	void simulate(float frameTime);
+	bool processLoadLevelMessage(NetMessage &netMessage, NetBufferReader &reader);
+	bool actualProcessLoadLevelMessage(NetMessage &netMessage, NetBufferReader &reader);
 };
 
 #endif

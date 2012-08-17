@@ -5,8 +5,18 @@
   <window name="logo">
     <file>data/rocket/logo.rml</file>
   </window>
+  <window name="backdrop">
+    <file>data/rocket/backdrop.rml</file>
+  </window> 
   <state name="StateMainOptions">
+    <window name="backdrop"/>
     <window name="demo"/>
     <window name="logo"/>
+  </state>
+  <state name="StateWaitNoLandscape">
+    <window name="backdrop"/>
+  </state>
+  <state name="StateWait">
+    <window name="backdrop"/>
   </state>
 </windowstate>

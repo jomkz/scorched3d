@@ -18,31 +18,27 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef _ClientLoadLevelHandler_h
-#define _ClientLoadLevelHandler_h
+#if !defined(__INCLUDE_BackdropDecoratorh_INCLUDE__)
+#define __INCLUDE_BackdropDecoratorh_INCLUDE__
 
-#include <coms/ComsMessageHandler.h>
+#include <Rocket/Core/Decorator.h>
+#include <common/Clock.h>
+#include <GLEXT/GLTexture.h>
 
-class ClientLoadLevelHandler : public ComsMessageHandlerI
+class BackdropDecorator : public Rocket::Core::Decorator
 {
 public:
-	ClientLoadLevelHandler(ComsMessageHandler &comsMessageHandler);
-	virtual ~ClientLoadLevelHandler();
+	BackdropDecorator();
+	virtual ~BackdropDecorator();
 
-	void setInitialLevel(bool initialLevel) { initialLevel_ = initialLevel; }
+	bool Initialise();
 
-	virtual bool processMessage(
-		NetMessage &message,
-		const char *messageType,
-		NetBufferReader &reader);
+	virtual Rocket::Core::DecoratorDataHandle GenerateElementData(Rocket::Core::Element* element);
+	virtual void ReleaseElementData(Rocket::Core::DecoratorDataHandle element_data);
+	virtual void RenderElement(Rocket::Core::Element* element, Rocket::Core::DecoratorDataHandle element_data);
 
 protected:
-	bool initialLevel_;
-
-	bool actualProcessMessage(
-		NetMessage &netMessage,
-		const char *messageType,
-		NetBufferReader &reader);
+	GLTexture backTex_;
 };
 
-#endif // _ClientLoadLevelHandler_h
+#endif

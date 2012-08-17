@@ -26,6 +26,7 @@
 #include <list>
 
 class ClientStateInitialize;
+class ClientStateLoadLevel;
 class ComsMessageHandler;
 class ClientState  
 {
@@ -43,22 +44,16 @@ public:
 		StimPlaying,
 		StimDisconnected,
 		StimGameStopped,
-		StimScore,
-
-
-		StimulusStartGame
+		StimScore
 	};
 
-	enum State
+	enum ClientStateEnum
 	{
-		
 		StateOptions = 1,
 		StateConnect,
 		StateDisconnected,
 		StateLoadFiles,
-		StateLoadLevel,
-		StateWaitNoLandscape,
-		StateWait,
+
 		StateBuyWeapons,
 		StateAutoDefense,
 		StatePlaying,
@@ -66,34 +61,39 @@ public:
 
 		StateNone,
 		StateMainOptions,
-		StateInitialize
+		StateInitialize,
+		StateLoadLevel,
+		StateWaitNoLandscape,
+		StateWait
 	};
 
 	ClientState(ComsMessageHandler &comsMessageHandler);
 	virtual ~ClientState();
 
 	void clientMainLoop();
-	void performStateStimulusString(const std::string &stimulus);
-	void performStateStimulus(ClientState::Stimulus stimulus);
+	void setState(ClientStateEnum newState);
+	void setStateString(const std::string &newState);
 
 	void stop() { stopped_ = true; }
+	void resetFrameClock() { frameClock_.getTimeDifference(); }
 
-	State getState() { return currentState_; }
+	ClientStateEnum getState() { return currentState_; }
 	ClientStateInitialize &getClientInitialize() { return *clientInitialize_; }
+	ClientStateLoadLevel &getClientLoadLevel() { return *clientLoadLevel_; }
 
 protected:
-	State currentState_;
+	ClientStateEnum currentState_;
 	bool stopped_, paused_;
 	FrameLimiter frameLimiter_;
 	float serverTime_;
 	Clock frameClock_;
 	std::list<Stimulus> stimuli_;
 	ClientStateInitialize *clientInitialize_;
+	ClientStateLoadLevel *clientLoadLevel_;
 
 	void clientEventLoop();
 	bool getCurrentStimulus(Stimulus stimulus);
 	void errorCurrentStimulus();
-	void setState(State newState);
 };
 
 #endif

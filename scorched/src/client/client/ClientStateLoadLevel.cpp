@@ -18,62 +18,52 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <client/ClientLoadLevelHandler.h>
-#include <client/ScorchedClient.h>
-#include <client/ClientState.h>
-#include <client/ClientReloadAdaptor.h>
+#include <client/ClientStateLoadLevel.h>
 #include <client/ClientSimulator.h>
-#include <client/ClientParams.h>
-#include <sound/Sound.h>
-#include <common/Clock.h>
-#include <common/OptionsScorched.h>
-#include <common/Logger.h>
-#include <common/ChannelText.h>
-#include <common/ChannelManager.h>
-#include <engine/MainLoop.h>
-#include <dialogs/ProgressDialog.h>
-#include <dialogs/CameraDialog.h>
-#include <dialogs/PlayerInitialDialog.h>
-#include <dialogs/PlayerInGameDialog.h>
+#include <client/ScorchedClient.h>
+#include <client/ClientReloadAdaptor.h>
+#include <client/ClientState.h>
+#include <coms/ComsMessageHandler.h>
 #include <coms/ComsLoadLevelMessage.h>
 #include <coms/ComsLevelLoadedMessage.h>
 #include <coms/ComsMessageSender.h>
+#include <common/Clock.h>
+#include <common/Logger.h>
+#include <common/OptionsScorched.h>
+#include <common/ChannelManager.h>
+#include <sound/Sound.h>
+#include <image/ImageFactory.h>
+#include <landscapedef/LandscapeDefinitions.h>
+#include <landscapemap/LandscapeMaps.h>
+#include <landscape/Landscape.h>
+#include <lang/LangResource.h>
 #include <graph/OptionsDisplayConsole.h>
 #include <graph/ParticleEngine.h>
 #include <graph/MainCamera.h>
 #include <graph/SpeedChange.h>
 #include <tankgraph/RenderTracer.h>
-#include <landscapedef/LandscapeDefinitions.h>
-#include <landscapemap/LandscapeMaps.h>
-#include <landscape/Landscape.h>
-#include <lang/LangResource.h>
-#include <target/TargetContainer.h>
 #include <tank/Tank.h>
 #include <tank/TankCamera.h>
+#include <target/TargetContainer.h>
 #include <target/TargetRenderer.h>
 #include <net/NetInterface.h>
-#include <image/ImageFactory.h>
-#include <GLW/GLWWindowManager.h>
 
-ClientLoadLevelHandler::ClientLoadLevelHandler(ComsMessageHandler &comsMessageHandler) : initialLevel_(false)
+ClientStateLoadLevel::ClientStateLoadLevel(ComsMessageHandler &comsMessageHandler) : initialLevel_(true)
 {
-	comsMessageHandler.addHandler(
+	new ComsMessageHandlerIAdapter<ClientStateLoadLevel>(
+		this, &ClientStateLoadLevel::processLoadLevelMessage,
 		ComsLoadLevelMessage::ComsLoadLevelMessageType,
-		this);
+		comsMessageHandler);
 }
 
-ClientLoadLevelHandler::~ClientLoadLevelHandler()
+ClientStateLoadLevel::~ClientStateLoadLevel()
 {
-
 }
 
-bool ClientLoadLevelHandler::processMessage(
-	NetMessage &netMessage,
-	const char *messageType,
-	NetBufferReader &reader)
+bool ClientStateLoadLevel::processLoadLevelMessage(NetMessage &netMessage, NetBufferReader &reader)
 {
 	Clock generateClock;
-	bool result = actualProcessMessage(netMessage, messageType, reader);
+	bool result = actualProcessLoadLevelMessage(netMessage, reader);
 	float generateTime = generateClock.getTimeDifference();
 	int idleTime = ScorchedClient::instance()->getOptionsGame().getBuyingTime();
 
@@ -97,16 +87,12 @@ bool ClientLoadLevelHandler::processMessage(
 	return result;
 }
 
-bool ClientLoadLevelHandler::actualProcessMessage(
-	NetMessage &netMessage,
-	const char *messageType,
-	NetBufferReader &reader)
+bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage, NetBufferReader &reader)
 {
+	ScorchedClient::instance()->getClientState().setState(ClientState::StateLoadLevel);
+
 	// Make sure simulator knows we are loading a level
 	ScorchedClient::instance()->getClientSimulator().setLoadingLevel(true);
-
-	// Move into the load level state
-	//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimLoadLevel);
 
 	// Read the message
 	ComsLoadLevelMessage message;
@@ -120,7 +106,6 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	OptionsDisplayConsole::instance()->addDisplayToConsole();
 
 	// Set the progress dialog nicities
-	ProgressDialog::instance()->changeTip();
 	LandscapeDefinitionsEntry *landscapeDefinition =
 		ScorchedClient::instance()->getLandscapes().getLandscapeByName(
 		message.getLandscapeDefinition().getName());
@@ -129,24 +114,24 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 		Image image = ImageFactory::loadImage(S3D::eModLocation,
 			S3D::formatStringBuffer("data/landscapes/%s", 
 			landscapeDefinition->picture.c_str()));
-		ProgressDialog::instance()->setIcon(image);
+		// TODO
+		//ProgressDialog::instance()->setIcon(image);
 	}
 
 	// Generate new landscape
+	ProgressCounter counter;
 	ScorchedClient::instance()->getLandscapeMaps().generateMaps(
 		ScorchedClient::instance()->getContext(),
 		message.getLandscapeDefinition(),
-		ProgressDialogSync::noevents_instance());
+		&counter); // No events
 
 	// Reset and initialize simulator and
 	ScorchedClient::instance()->getClientSimulator().newLevel();
 
 	// Calculate all the new landscape settings (graphics)
-	Landscape::instance()->generate(ProgressDialogSync::noevents_instance());
+	Landscape::instance()->generate(&counter); // No events
 
 	// Add all missed actions to the simulator
-	ProgressDialogSync::noevents_instance()->setNewOp(
-		LANG_RESOURCE("EXECUTING_EVENTS", "Executing Events"));
 	std::list<ComsSimulateMessage *> simulateMessages;
 	std::list<ComsSimulateMessage *>::iterator messageItor;
 	if (!message.getSimulations(simulateMessages)) return false;
@@ -155,9 +140,6 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 		messageItor != simulateMessages.end();
 		++messageItor, i++)
 	{
-		ProgressDialogSync::noevents_instance()->
-			setNewPercentage(100.0f * float(i) / float(simulateMessages.size()));
-
 		ComsSimulateMessage *simMessage = *messageItor;
 		ScorchedClient::instance()->getClientSimulator().
 			addComsSimulateMessage(*simMessage);
@@ -168,17 +150,15 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	// Move into the next state
 	if (strcmp(message.getLandscapeDefinition().getName(), "blank") == 0)
 	{
-		//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWaitNoLandscape);
+		ScorchedClient::instance()->getClientState().setState(ClientState::StateWaitNoLandscape);
 	}
 	else
 	{
-		//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
+		ScorchedClient::instance()->getClientState().setState(ClientState::StateWait);
 	}
 
 	// Sync the simulator
 	Sound::instance()->setPlaySounds(false);
-	ProgressDialogSync::noevents_instance()->setNewOp(
-		LANG_RESOURCE("SYNCING_SIMULATOR", "Syncing Simulator"));
 	Clock generateClock;
 	fixed actualTime = message.getActualTime();
 	fixed actualTimeCurrent = 0;
@@ -194,16 +174,12 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 
 		float percentage = 100.0f * 
 			float(actualTimeCurrent.asInt()) / float(actualTime.asInt());
-		ProgressDialogSync::noevents_instance()->setNewPercentage(percentage);
 		ScorchedClient::instance()->getClientSimulator().
 			setSimulationTime(actualTimeCurrent);
 	}
 	Sound::instance()->setPlaySounds(true);
 	float deformTime = generateClock.getTimeDifference();
 	Logger::log(S3D::formatStringBuffer("Landscape sync event time %.2f seconds", deformTime));
-
-	ProgressDialogSync::noevents_instance()->setNewOp(
-		LANG_RESOURCE("PROCESSING_MESSAGES", "Processing Messages"));
 
 	// Make sure the landscape has been optimized
 	Landscape::instance()->recalculateLandscape();
@@ -214,8 +190,6 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 		getParticleEngine().killAll();
 	MainCamera::instance()->getTarget().
 		getPrecipitationEngine().killAll();
-	CameraDialog::instance()->getCamera().
-		getPrecipitationEngine().killAll();
 	RenderTracer::instance()->newGame();
 	SpeedChange::instance()->resetSpeed();
 
@@ -225,8 +199,7 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	// As we have not returned to the main loop for ages the
 	// timer will have a lot of time in it
 	// Get rid of this time so we don't screw things up
-	// ScorchedClient::instance()->getMainLoop().getTimer().getTimeDifference();
-	// TODO
+	ScorchedClient::instance()->getClientState().resetFrameClock();
 
 	// Reset camera positions for each tank
 	bool playerTanks = false;
@@ -257,6 +230,8 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	if (initialLevel_)
 	{
 		initialLevel_ = false;
+		// TODO
+		/*
 		if (ClientParams::instance()->getConnectedToServer())
 		{
 			PlayerInGameDialog::instance()->displayDialog();
@@ -266,6 +241,7 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 		{
 			PlayerInitialDialog::instance()->displayDialog();
 		}
+		*/
 	}
 
 	// Tell the server we have finished processing the landscape

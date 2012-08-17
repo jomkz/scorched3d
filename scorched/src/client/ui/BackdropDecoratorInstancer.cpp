@@ -18,32 +18,33 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_AnimatedIslandDecoratorh_INCLUDE__)
-#define __INCLUDE_AnimatedIslandDecoratorh_INCLUDE__
+#include <ui/BackdropDecoratorInstancer.h>
+#include <ui/BackdropDecorator.h>
 
-#include <Rocket/Core/Decorator.h>
-#include <common/Clock.h>
-#include <GLEXT/GLTexture.h>
-
-class AnimatedIslandDecorator : public Rocket::Core::Decorator
+BackdropDecoratorInstancer::BackdropDecoratorInstancer()
 {
-public:
-	AnimatedIslandDecorator();
-	virtual ~AnimatedIslandDecorator();
+}
 
-	bool Initialise();
+BackdropDecoratorInstancer::~BackdropDecoratorInstancer()
+{
+}
 
-	virtual Rocket::Core::DecoratorDataHandle GenerateElementData(Rocket::Core::Element* element);
-	virtual void ReleaseElementData(Rocket::Core::DecoratorDataHandle element_data);
-	virtual void RenderElement(Rocket::Core::Element* element, Rocket::Core::DecoratorDataHandle element_data);
+Rocket::Core::Decorator* BackdropDecoratorInstancer::InstanceDecorator(const Rocket::Core::String& ROCKET_UNUSED(name), const Rocket::Core::PropertyDictionary& properties)
+{
+	BackdropDecorator* decorator = new BackdropDecorator();
+	if (decorator->Initialise()) return decorator;
 
-protected:
-	float rotation_;
-	Clock clock_;
+	decorator->RemoveReference();
+	ReleaseDecorator(decorator);
+	return NULL;
+}
 
-	void drawAnimated();
-	void generate();
-	void simulate(float frameTime);
-};
+void BackdropDecoratorInstancer::ReleaseDecorator(Rocket::Core::Decorator* decorator)
+{
+	delete decorator;
+}
 
-#endif
+void BackdropDecoratorInstancer::Release()
+{
+	delete this;
+}

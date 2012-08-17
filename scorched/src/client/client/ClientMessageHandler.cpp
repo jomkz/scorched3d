@@ -58,7 +58,7 @@ void ClientMessageHandler::clientDisconnected(NetMessage &message)
 	}
 
 	Logger::log(S3D::formatStringBuffer("Disconnected"));
-	ScorchedClient::instance()->getClientState().performStateStimulus(ClientState::StimDisconnected);
+	ScorchedClient::instance()->getClientState().setState(ClientState::StateMainOptions);
 	ScorchedClient::instance()->getTargetContainer().setCurrentDestinationId(0);
 }
 

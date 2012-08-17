@@ -44,19 +44,6 @@ AnimatedIslandDecorator::~AnimatedIslandDecorator()
 
 bool AnimatedIslandDecorator::Initialise() 
 {
-	Image originalBackMap = ImageFactory::loadImage(
-		S3D::eDataLocation,
-		"data/images/backdrop.jpg");
-	int w = originalBackMap.getWidth();
-	int h = originalBackMap.getHeight();
-	while (w > GLViewPort::getActualWidth() || h > GLViewPort::getActualHeight())
-	{
-		w /= 2;
-		h /= 2;
-	}
-
-	Image backMap = originalBackMap.createResize(w, h);
-	backTex_.create(backMap, false);
 	return true;
 }
 
@@ -118,31 +105,6 @@ void AnimatedIslandDecorator::generate()
 	Landscape::instance()->recalculateRoof();
 
 	OptionsDisplay::instance()->getNoWaterMovementEntry().setValue(waterMove);
-}
-
-void AnimatedIslandDecorator::drawStatic()
-{
-	Main2DCamera::instance()->draw(0);
-
-	GLState currentState(GLState::DEPTH_OFF | GLState::TEXTURE_ON);
-
-	// Calcuate how may tiles are needed
-	float wWidth = (float) GLViewPort::getWidth();
-	float wHeight = (float) GLViewPort::getHeight();
-
-	// Draw the tiled logo backdrop
-	backTex_.draw(true);
-	glColor3f(1.0f, 1.0f, 1.0f);//0.2f, 0.2f, 0.2f);
-	glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex2f(0.0f, 0.0f);
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex2f(wWidth, 0.0f);
-		glTexCoord2f(1.0f, 1.0f);
-		glVertex2f(wWidth, wHeight);
-		glTexCoord2f(0.0f, 1.0f);
-		glVertex2f(0.0f, wHeight);
-	glEnd();	
 }
 
 void AnimatedIslandDecorator::drawAnimated()

@@ -1107,9 +1107,6 @@
     <ClCompile Include="..\client\ClientLinesHandler.cpp">
       <Filter>client</Filter>
     </ClCompile>
-    <ClCompile Include="..\client\ClientLoadLevelHandler.cpp">
-      <Filter>client</Filter>
-    </ClCompile>
     <ClCompile Include="..\client\ClientMain.cpp">
       <Filter>client</Filter>
     </ClCompile>
@@ -2376,6 +2373,15 @@
     <ClCompile Include="..\client\ClientStateInitialize.cpp">
       <Filter>client</Filter>
     </ClCompile>
+    <ClCompile Include="..\client\ClientStateLoadLevel.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\BackdropDecorator.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\BackdropDecoratorInstancer.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\common\ARGParser.h">
@@ -3357,9 +3363,6 @@
       <Filter>client</Filter>
     </ClInclude>
     <ClInclude Include="..\client\ClientLinesHandler.h">
-      <Filter>client</Filter>
-    </ClInclude>
-    <ClInclude Include="..\client\ClientLoadLevelHandler.h">
       <Filter>client</Filter>
     </ClInclude>
     <ClInclude Include="..\client\ClientMain.h">
@@ -4636,6 +4639,15 @@
     </ClInclude>
     <ClInclude Include="..\client\ClientStateInitialize.h">
       <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientStateLoadLevel.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\BackdropDecorator.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\BackdropDecoratorInstancer.h">
+      <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

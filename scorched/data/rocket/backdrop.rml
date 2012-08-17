@@ -1,0 +1,21 @@
+<rml>
+	<head>
+		<title>Demo</title>
+		<style>
+      body
+      {
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      }
+
+      backdrop
+      {
+      star-decorator: backdrop;
+      }
+    </style>
+	</head>
+	<body>
+    <backdrop/>
+	</body>
+</rml>

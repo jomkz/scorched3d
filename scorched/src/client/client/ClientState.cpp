@@ -20,6 +20,7 @@
 
 #include <client/ClientState.h>
 #include <client/ClientStateInitialize.h>
+#include <client/ClientStateLoadLevel.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientParams.h>
 #include <server/ServerMain.h>
@@ -37,20 +38,14 @@ static time_t startTime = 0;
 static struct STATE_NAME
 {
 	std::string stateName;
-	ClientState::State state;
+	ClientState::ClientStateEnum state;
 } STATE_NAMES[] =
 {
 	"StateMainOptions", ClientState::StateMainOptions,
-	"StateInitialize", ClientState::StateInitialize
-};
-
-static struct STATE_STIMULI
-{
-	std::string stimulusName;
-	ClientState::Stimulus stimulus;
-} STATE_STIMULUS[] =
-{
-	"StimulusStartGame", ClientState::StimulusStartGame
+	"StateInitialize", ClientState::StateInitialize,
+	"StateLoadLevel", ClientState::StateLoadLevel,
+	"StateWait", ClientState::StateWait,
+	"StateWaitNoLandscape", ClientState::StateWaitNoLandscape
 };
 
 ClientState::ClientState(ComsMessageHandler &comsMessageHandler) : 
@@ -59,58 +54,40 @@ ClientState::ClientState(ComsMessageHandler &comsMessageHandler) :
 	serverTime_(0.0f)
 {
 	clientInitialize_ = new ClientStateInitialize(comsMessageHandler);
+	clientLoadLevel_ = new ClientStateLoadLevel(comsMessageHandler);
 }
 
 ClientState::~ClientState()
 {
 }
 
-bool ClientState::getCurrentStimulus(Stimulus stimulus)
-{
-	if (stimuli_.empty()) return false;
-	if (stimuli_.front() == stimulus) 
-	{
-		stimuli_.pop_front();
-		return true;
-	}
-	return false;
-}
-
-void ClientState::errorCurrentStimulus()
-{
-	if (stimuli_.empty()) return;
-	S3D::dialogExit("ClientState", 
-		S3D::formatStringBuffer("Failed to find state stimulus %u in state %u", 
-		stimuli_.front(), currentState_));
-}
-
-void ClientState::performStateStimulusString(const std::string &state)
-{
-	for (int i=0; i<sizeof(STATE_STIMULUS)/sizeof(STATE_STIMULI); i++)
-	{
-		if (STATE_STIMULUS[i].stimulusName == state) 
-		{
-			stimuli_.push_back(STATE_STIMULUS[i].stimulus);
-			return;
-		}
-	}
-	S3D::dialogExit("ClientState", 
-		S3D::formatStringBuffer("Failed to find state stimulus %s", state.c_str()));
-}
-
-void ClientState::performStateStimulus(ClientState::Stimulus stimulus)
-{
-	stimuli_.push_back(stimulus);
-}
-
-void ClientState::setState(State newState)
+void ClientState::setState(ClientStateEnum newState)
 {
 	currentState_ = newState;
+	switch (currentState_) 
+	{
+	case StateInitialize:
+		clientInitialize_->enterState();
+		break;
+	}
+
 	for (int i=0; i<sizeof(STATE_NAMES)/sizeof(STATE_NAME); i++)
 	{
 		if (STATE_NAMES[i].state == newState) 
 		{
 			RocketGameState::instance()->setState(STATE_NAMES[i].stateName);
+			break;
+		}
+	}
+}
+
+void ClientState::setStateString(const std::string &newState)
+{
+	for (int i=0; i<sizeof(STATE_NAMES)/sizeof(STATE_NAME); i++)
+	{
+		if (STATE_NAMES[i].stateName == newState) 
+		{
+			setState(STATE_NAMES[i].state);
 			break;
 		}
 	}
@@ -198,32 +175,9 @@ void ClientState::clientEventLoop()
 			}
 			else
 			{
-				performStateStimulus(StimulusStartGame);
+				setState(StateInitialize);
 			}
 		}
-	}
-
-	// State stuff
-	switch (currentState_)
-	{
-	case StateMainOptions:
-		if (getCurrentStimulus(StimulusStartGame))
-		{
-			setState(StateInitialize);
-			clientInitialize_->enterState();
-		}
-		else 
-		{
-			errorCurrentStimulus();
-		}
-		break;
-	case StateInitialize:
-		errorCurrentStimulus();
-		break;
-	default:
-		S3D::dialogExit("ClientState", 
-			S3D::formatStringBuffer("Unknown client state %u", currentState_));
-		break;
 	}
 }
 

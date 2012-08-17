@@ -24,6 +24,8 @@
 #include <client/UniqueIdStore.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientHandlers.h>
+#include <client/ClientState.h>
+#include <client/ClientStateLoadLevel.h>
 #include <graph/OptionsDisplay.h>
 #include <GLEXT/GLLenseFlare.h>
 #include <sprites/ExplosionTextures.h>
@@ -416,7 +418,7 @@ bool ClientStateInitialize::processConnectAcceptMessage(
 	totalBytes_ = 0;
 	if (!ComsMessageSender::sendToServer(comsFileMessage)) return false;
 
-	ScorchedClient::instance()->getClientHandlers().getClientLoadLevelHandler().setInitialLevel(true);
+	ScorchedClient::instance()->getClientState().getClientLoadLevel().setInitialLevel(true);
 
 	return true;
 }

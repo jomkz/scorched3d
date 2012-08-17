@@ -18,32 +18,21 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_AnimatedIslandDecoratorh_INCLUDE__)
-#define __INCLUDE_AnimatedIslandDecoratorh_INCLUDE__
+#if !defined(__INCLUDE_BackdropDecoratorInstancerh_INCLUDE__)
+#define __INCLUDE_BackdropDecoratorInstancerh_INCLUDE__
 
-#include <Rocket/Core/Decorator.h>
-#include <common/Clock.h>
-#include <GLEXT/GLTexture.h>
+#include <Rocket/Core/DecoratorInstancer.h>
 
-class AnimatedIslandDecorator : public Rocket::Core::Decorator
+class BackdropDecoratorInstancer : public Rocket::Core::DecoratorInstancer
 {
 public:
-	AnimatedIslandDecorator();
-	virtual ~AnimatedIslandDecorator();
+	BackdropDecoratorInstancer();
+	virtual ~BackdropDecoratorInstancer();
 
-	bool Initialise();
+	Rocket::Core::Decorator* InstanceDecorator(const Rocket::Core::String& name, const Rocket::Core::PropertyDictionary& properties);
+	void ReleaseDecorator(Rocket::Core::Decorator* decorator);
 
-	virtual Rocket::Core::DecoratorDataHandle GenerateElementData(Rocket::Core::Element* element);
-	virtual void ReleaseElementData(Rocket::Core::DecoratorDataHandle element_data);
-	virtual void RenderElement(Rocket::Core::Element* element, Rocket::Core::DecoratorDataHandle element_data);
-
-protected:
-	float rotation_;
-	Clock clock_;
-
-	void drawAnimated();
-	void generate();
-	void simulate(float frameTime);
+	void Release();
 };
 
 #endif

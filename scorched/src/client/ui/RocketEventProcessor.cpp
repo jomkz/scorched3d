@@ -73,7 +73,7 @@ void RocketEventProcessor::ProcessAction(Rocket::Core::String &action, std::list
 		}
 		else
 		{
-			ScorchedClient::instance()->getClientState().performStateStimulusString(params.front().CString());
+			ScorchedClient::instance()->getClientState().setStateString(params.front().CString());
 		}
 	}
 	else
