@@ -28,12 +28,12 @@
 #include <map>
 
 class VirtualSoundSource;
-class LandscapeMusicManager : public GameStateI
+class LandscapeMusicManager
 {
 public:
 	static LandscapeMusicManager *instance();
 
-	virtual void simulate(const unsigned state, float simTime);
+	void simulate(unsigned int state, float simTime);
 
 	void addMusics();
 

@@ -49,8 +49,7 @@ Sound *Sound::instance()
 }
 
 Sound::Sound() : 
-	init_(false), totalTime_(0.0f), playSounds_(true),
-	GameStateI("Sound")
+	init_(false), totalTime_(0.0f), playSounds_(true)
 {
 	new ConsoleRuleMethodIAdapter<Sound>(
 		this, &Sound::showSoundBuffers, "SoundBuffers");
@@ -205,7 +204,7 @@ void Sound::showSoundBuffers()
 	}
 }
 
-void Sound::simulate(const unsigned state, float frameTime)
+void Sound::simulate(float frameTime)
 {
 	// Simulate all the current sources
 	// This is only applicable for streams

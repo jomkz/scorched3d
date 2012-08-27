@@ -23,7 +23,7 @@
 
 #include <common/fixed.h>
 
-void serverLoop(fixed timeDifference);
+bool serverLoop(fixed timeDifference);
 void consoleServer();
 
 #endif

@@ -18,17 +18,21 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <client/ScorchedClient.h>
 #include <client/ClientState.h>
 #include <client/ClientStateInitialize.h>
 #include <client/ClientStateLoadLevel.h>
-#include <client/ScorchedClient.h>
 #include <client/ClientParams.h>
+#include <client/ClientSimulator.h>
+#include <landscape/LandscapeMusicManager.h>
+#include <sound/Sound.h>
 #include <server/ServerMain.h>
 #include <engine/Simulator.h>
 #include <common/Logger.h>
 #include <ui/RocketGameState.h>
 #include <graph/OptionsDisplay.h>
 #include <graph/FrameLimiter.h>
+#include <graph/FrameTimer.h>
 #include <target/TargetContainer.h>
 #include <net/NetInterface.h>
 #include <SDL/SDL.h>
@@ -148,6 +152,11 @@ void ClientState::clientEventLoop()
 			serverTime_ = 0.0f;
 		}
 	}
+
+	Sound::instance()->simulate(frameTime);
+	LandscapeMusicManager::instance()->simulate(currentState_, frameTime);
+	FrameTimer::instance()->simulate(frameTime);
+	ScorchedClient::instance()->getClientSimulator().simulate();
 
 	Logger::processLogEntries();
 	if (ScorchedClient::instance()->getContext().getNetInterfaceValid())

@@ -24,7 +24,7 @@
 #include <engine/GameStateI.h>
 #include <common/Clock.h>
 
-class FrameTimer : public GameStateI
+class FrameTimer
 {
 public:
 	static FrameTimer *instance();
@@ -35,8 +35,8 @@ public:
 	unsigned int getLastTextureSets() { return lastTextureSets_; }
 
 	// Inherited from GameStateI
-	virtual void draw(const unsigned state);
-	virtual void simulate(const unsigned state, float frameTime);
+	virtual void draw();
+	virtual void simulate(float frameTime);
 
 protected:
 	static FrameTimer *instance_;

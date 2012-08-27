@@ -92,7 +92,8 @@ bool ServerTankChangeHandler::processMessage(NetMessage &netMessage,
 
 	// Check model
 	TankModel *model = ScorchedServer::instance()->getTankModels().getModelByName(message.getModelName());
-	if (!model->isOfAi(tank->getDestinationId() == 0) ||
+	if (!model ||
+		!model->isOfAi(tank->getDestinationId() == 0) ||
 		!model->isOfTankType(message.getTankType()) ||
 		!model->isOfTeam(message.getPlayerTeam()))
 	{

@@ -29,7 +29,6 @@
 #include <common/Logger.h>
 
 ClientSimulator::ClientSimulator() : 
-	GameStateI("ClientSimulator"),
 	serverTimeDifference_(10, 0),
 	serverChoke_(25, 0),
 	loadingLevel_(false)
@@ -47,7 +46,7 @@ bool ClientSimulator::continueToSimulate()
 	return !choked;
 }
 
-void ClientSimulator::simulate(const unsigned state, float simTime)
+void ClientSimulator::simulate()
 {
 	if (loadingLevel_) return;
 	Simulator::simulate();

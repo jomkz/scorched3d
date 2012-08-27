@@ -23,6 +23,10 @@
 #include <common/DefinesString.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientState.h>
+#include <target/TargetContainer.h>
+#include <tank/Tank.h>
+#include <coms/ComsTankChangeMessage.h>
+#include <coms/ComsMessageSender.h>
 #include <stdio.h>
 
 RocketEventProcessor &RocketEventProcessor::instance()
@@ -75,6 +79,70 @@ void RocketEventProcessor::ProcessAction(Rocket::Core::String &action, std::list
 		{
 			ScorchedClient::instance()->getClientState().setStateString(params.front().CString());
 		}
+	}
+	else if (action == "joingame")
+	{
+		unsigned int current = 0, currentPlayerId_ = 0;
+		std::map<unsigned int, Tank *> &tanks = 
+			ScorchedClient::instance()->getTargetContainer().getTanks();
+		std::map<unsigned int, Tank *>::iterator itor;
+		for (itor = tanks.begin();
+			itor != tanks.end();
+			++itor)
+		{
+			Tank *tank = (*itor).second;
+			if ((tank->getDestinationId() == 
+				ScorchedClient::instance()->getTargetContainer().getCurrentDestinationId()) &&
+				(tank->getPlayerId() != TargetID::SPEC_TANK_ID))
+			{
+				if (current == 0)
+				{
+					currentPlayerId_ = tank->getPlayerId();
+					break;
+				}
+				else if (tank->getPlayerId() == current) 
+				{
+					current = 0;
+				}
+			}
+		}
+
+		// Add this player
+		ComsTankChangeMessage message(currentPlayerId_,
+			LANG_STRING("TestName"),
+			Vector(),
+			"none",
+			"none",
+			ScorchedClient::instance()->getTargetContainer().getCurrentDestinationId(),
+			0,
+			"Human",
+			false);
+		// Add avatar (if not one)
+		// TODO
+		/*
+		Tank *tank = ScorchedClient::instance()->getTargetContainer().
+			getTankById(currentPlayerId_);
+		if (tank && 
+			strcmp(tank->getAvatar().getName(), imageList_->getCurrentShortPath()) != 0)
+		{
+			if (tank->getAvatar().loadFromFile(imageList_->getCurrentLongPath()))
+			{
+				if (tank->getAvatar().getFile().getBufferUsed() <=
+					(unsigned) ScorchedClient::instance()->getOptionsGame().getMaxAvatarSize())
+				{
+					message.setPlayerIconName(imageList_->getCurrentShortPath());
+					message.getPlayerIcon().addDataToBuffer(
+						tank->getAvatar().getFile().getBuffer(),
+						tank->getAvatar().getFile().getBufferUsed());
+				}
+				else
+				{
+					Logger::log( "Warning: Avatar too large to send to server");
+				}
+			}
+		}
+		*/
+		ComsMessageSender::sendToServer(message);
 	}
 	else
 	{

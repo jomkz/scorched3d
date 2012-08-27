@@ -33,6 +33,7 @@
 #include <graph/OptionsDisplay.h>
 #include <graph/Display.h>
 #include <graph/MainCamera.h>
+#include <graph/FrameTimer.h>
 
 static Rocket::Core::Context* context = 0;
 RocketGameState *RocketGameState::instance_ = 0;
@@ -215,6 +216,7 @@ void RocketGameState::draw()
 	}
 
 	context->Update();
+	FrameTimer::instance()->draw();
 	context->Render();
 	drawTime_ += dTimer_.getTimeDifference();
 

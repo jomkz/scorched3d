@@ -35,7 +35,7 @@
 		static SoundBuffer* var = Sound::instance()->fetchOrCreateBuffer(filename);
 
 class PlayingSoundSource;
-class Sound : public GameStateI
+class Sound
 {
 public:
 	static Sound *instance();
@@ -56,7 +56,7 @@ public:
 
 	void setPlaySounds(bool playSounds) { playSounds_ = playSounds; }
 
-	void simulate(const unsigned state, float simTime);
+	void simulate(float simTime);
 	int getAvailableChannels();
 	int getPlayingChannels();
 

@@ -28,15 +28,13 @@
 #include <common/RollingAverage.h>
 
 class ClientSimulator : 
-	public GameStateI, 
 	public Simulator
 {
 public:
 	ClientSimulator();
 	virtual ~ClientSimulator();
 
-	// GameStateI
-	virtual void simulate(const unsigned state, float simTime);
+	virtual void simulate();
 
 	// ComsMessageHandlerI
 	bool processComsSimulateMessage(

@@ -378,7 +378,7 @@ void ProgressDialogSync::progressChange(const LangString &op, const float percen
 		}
 
 		LandscapeMusicManager::instance()->simulate(state, frameTime);
-		Sound::instance()->simulate(state, frameTime);
+		Sound::instance()->simulate(frameTime);
 
 		//ScorchedClient::instance()->getMainLoop().swapBuffers();
 

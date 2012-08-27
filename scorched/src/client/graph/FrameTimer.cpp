@@ -40,7 +40,6 @@ FrameTimer *FrameTimer::instance()
 }
 
 FrameTimer::FrameTimer() : 
-	GameStateI("FrameTimer"),
 	totalTime_(0.0f), frameCount_(0), 
 	lastStateCount_(0), lastTris_(0), lastTextureSets_(0),
 	fps_(0.0f)
@@ -53,7 +52,7 @@ FrameTimer::~FrameTimer()
 
 }
 
-void FrameTimer::draw(const unsigned state)
+void FrameTimer::draw()
 {
 	frameCount_++;
 
@@ -67,7 +66,7 @@ void FrameTimer::draw(const unsigned state)
 	GLTexture::resetTextureSets();
 }
 
-void FrameTimer::simulate(const unsigned state, float frameTime)
+void FrameTimer::simulate(float frameTime)
 {
 	totalTime_ += frameTime;
 	if (totalTime_ > 5.0f)

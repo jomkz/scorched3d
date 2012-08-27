@@ -168,7 +168,6 @@ void CameraDialog::drawLandscape()
 	RenderTargets::instance()->render3D.draw(0);
 	Landscape::instance()->drawWater();
 	Landscape::instance()->drawObjects();
-	ScorchedClient::instance()->getClientSimulator().draw(0);
 	ScorchedClient::instance()->getParticleEngine().draw(0);
 	targetCam_.drawPrecipitation();
 }

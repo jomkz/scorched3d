@@ -35,8 +35,7 @@ LandscapeMusicManager *LandscapeMusicManager::instance()
 	return &instance_;
 }
 
-LandscapeMusicManager::LandscapeMusicManager() : 
-	GameStateI("LandscapeMusicManager")
+LandscapeMusicManager::LandscapeMusicManager() 
 {
 	addMusics();
 }
@@ -144,7 +143,7 @@ void LandscapeMusicManager::addMusicType(LandscapeMusicType *music)
 	}
 }
 
-void LandscapeMusicManager::simulate(const unsigned state, float simTime)
+void LandscapeMusicManager::simulate(unsigned int state, float simTime)
 {
 	// Find the playstate that matches the current client state
 	LandscapeMusicType::PlayState playState = LandscapeMusicType::StateNone;

@@ -120,7 +120,7 @@ static void serverMain(ProgressCounter *counter)
 	Logger::log(S3D::formatStringBuffer("Server started : %s", startTime.c_str()));
 }
 
-void serverLoop(fixed timeDifference)
+bool serverLoop(fixed timeDifference)
 {
 	Logger::processLogEntries();
 
@@ -128,30 +128,32 @@ void serverLoop(fixed timeDifference)
 	if (!ScorchedServer::serverStarted() ||
 		!ScorchedServer::instance()->getContext().getNetInterfaceValid())
 	{
-		return;
+		return false;
 	}
 		
-		ScorchedServer::instance()->getNetInterface().processMessages();
+	bool processed = ScorchedServer::instance()->getNetInterface().processMessages() > 0;
 #ifdef S3D_SERVER
-		{
-			ServerBrowserInfo::instance()->processMessages();
-			ServerWebServer::instance()->processMessages();
-		}
+	{
+		ServerBrowserInfo::instance()->processMessages();
+		ServerWebServer::instance()->processMessages();
+	}
 #endif
 
-		ScorchedServer::instance()->getSimulator().simulate();
-		ScorchedServer::instance()->getServerState().simulate(timeDifference);
+	ScorchedServer::instance()->getSimulator().simulate();
+	ScorchedServer::instance()->getServerState().simulate(timeDifference);
 
-		ScorchedServer::instance()->getServerConnectAuthHandler().processMessages();
-		ScorchedServer::instance()->getServerFileServer().simulate();
-		ScorchedServer::instance()->getServerChannelManager().simulate(timeDifference);
-		ScorchedServer::instance()->getTimedMessage().simulate();
+	ScorchedServer::instance()->getServerConnectAuthHandler().processMessages();
+	ScorchedServer::instance()->getServerFileServer().simulate();
+	ScorchedServer::instance()->getServerChannelManager().simulate(timeDifference);
+	ScorchedServer::instance()->getTimedMessage().simulate();
 
-		if (timeDifference > 5)
-		{
-			Logger::log(S3D::formatStringBuffer("Warning: Server loop took %.2f seconds", 
-				timeDifference.asFloat()));
-		}
+	if (timeDifference > 5)
+	{
+		Logger::log(S3D::formatStringBuffer("Warning: Server loop took %.2f seconds", 
+			timeDifference.asFloat()));
+	}
+
+	return processed;
 }
 
 void consoleServer()
@@ -164,11 +166,12 @@ void consoleServer()
 	serverTimer.getTicksDifference();
 	for (;;)
 	{
-		SDL_Delay(10);
-
 		unsigned int ticksDifference = serverTimer.getTicksDifference();
 		fixed timeDifference(true, ticksDifference * 10);
-		serverLoop(timeDifference);
+		if (!serverLoop(timeDifference))
+		{
+			SDL_Delay(10);
+		}
 
 		if (ServerParams::instance()->getExitTime() > 0)
 		{
