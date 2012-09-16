@@ -60,9 +60,9 @@ class GameState : public MainLoopI
 public:
 	enum MouseButton
 	{
-		MouseButtonLeft = 0x1,
+		MouseButtonLeft = 0x0,
 		MouseButtonMiddle = 0x2,
-		MouseButtonRight = 0x4,
+		MouseButtonRight = 0x1,
 		MouseButtonLeftDoubleClick = 0x8,
 		MouseButtonMiddleDoubleClick = 0x16,
 		MouseButtonRightDoubleClick = 0x32

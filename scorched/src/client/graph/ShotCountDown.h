@@ -25,7 +25,7 @@
 #include <common/fixed.h>
 #include <common/ToolTipResource.h>
 
-class ShotCountDown : public GameStateI
+class ShotCountDown 
 {
 public:
 	static ShotCountDown *instance();
@@ -46,8 +46,7 @@ public:
 
 	bool getRoundTime(std::string &result);
 
-	//Inherited from GameStateI
-	virtual void draw(const unsigned state);
+	void draw();
 
 protected:
 	static ShotCountDown *instance_;

@@ -112,18 +112,18 @@ void AnimatedIslandDecorator::drawAnimated()
 	float frameTime = clock_.getTimeDifference();
 	simulate(frameTime);
 
-	MainCamera::instance()->draw(0);
+	MainCamera::instance()->draw();
 
-	GLCameraFrustum::instance()->draw(0);
+	GLCameraFrustum::instance()->draw();
 	Landscape::instance()->calculateVisibility();
 	Landscape::instance()->drawShadows();
 	Landscape::instance()->drawLand();
-	RenderTargets::instance()->render3D.draw(0);
+	RenderTargets::instance()->draw3d();
 	Landscape::instance()->drawWater();
 	Landscape::instance()->drawObjects();
 
 	// Return the viewport to the original
-	Main2DCamera::instance()->draw(0);
+	Main2DCamera::instance()->draw();
 }
 
 void AnimatedIslandDecorator::simulate(float frameTime)
@@ -132,10 +132,9 @@ void AnimatedIslandDecorator::simulate(float frameTime)
 
 	MainCamera::instance()->simulate(0, frameTime);
 	Landscape::instance()->simulate(frameTime);
-	RenderTargets::instance()->render2D.simulate(0, frameTime);
-	RenderTargets::instance()->render3D.simulate(0, frameTime);
+	RenderTargets::instance()->simulate(frameTime);
 	ScorchedClient::instance()->getSimulator().simulate();
-	ScorchedClient::instance()->getParticleEngine().simulate(0, frameTime);
+	ScorchedClient::instance()->getParticleEngine().simulate(frameTime);
 	ScorchedClient::instance()->getTargetMovement().simulate(
 		ScorchedClient::instance()->getContext(), fixed::fromFloat(frameTime));
 

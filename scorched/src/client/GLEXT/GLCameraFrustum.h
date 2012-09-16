@@ -24,7 +24,7 @@
 #include <engine/GameStateI.h>
 #include <common/Vector.h>
 
-class GLCameraFrustum : public GameStateI
+class GLCameraFrustum 
 {
 public:
 	static GLCameraFrustum *instance();
@@ -34,7 +34,7 @@ public:
 	static Vector FrustrumGreen;
 	static Vector FrustrumWhite;
 
-	virtual void draw(const unsigned state);
+	void draw();
 
 	bool sphereInFrustum(Vector &point, float fRadius = 1, Vector &color = FrustrumWhite);
 	bool sphereInFrustumThreadSafe(Vector &point, float fRadius);

@@ -18,24 +18,12 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef RocketEventProcessor_H
-#define RocketEventProcessor_H
+#ifndef RocketLUALib_H
+#define RocketLUALib_H
 
-#include <Rocket/Core/Event.h>
+#include <lua/lua.h>
 
-class RocketEventProcessor 
-{
-public:
-	static RocketEventProcessor &instance();
-
-	void ProcessEvent(Rocket::Core::String &eventString, Rocket::Core::Event &evt);
-
-protected:
-	void ProcessAction(Rocket::Core::String &action, std::list<Rocket::Core::String> &params);
-
-private:
-	RocketEventProcessor();
-	virtual ~RocketEventProcessor();
-};
+#define LUA_ROCKETLIBNAME	"s3dui"
+LUALIB_API int (luaopen_rocket) (lua_State *L);
 
 #endif

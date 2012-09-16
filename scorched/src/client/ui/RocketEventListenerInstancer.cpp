@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <ui/RocketEventListenerInstancer.h>
-#include <ui/RocketEventListener.h>
+#include <ui/RocketLUAEventListener.h>
 #include <stdio.h>
 
 RocketEventListenerInstancer::RocketEventListenerInstancer() 
@@ -30,10 +30,12 @@ RocketEventListenerInstancer::~RocketEventListenerInstancer()
 {
 }
 
-// Instances a new event handle for Invaders.
 Rocket::Core::EventListener* RocketEventListenerInstancer::InstanceEventListener(const Rocket::Core::String& value)
 {
-	return new RocketEventListener(value);
+	RocketLUAEventListener *listener = new RocketLUAEventListener();
+	std::string luaScript(value.CString());
+	listener->initialize(luaScript);
+	return listener;
 }
 
 // Destroys the instancer.

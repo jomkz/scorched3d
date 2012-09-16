@@ -24,6 +24,7 @@
 #include <client/ClientStateLoadLevel.h>
 #include <client/ClientParams.h>
 #include <client/ClientSimulator.h>
+#include <landscape/Landscape.h>
 #include <landscape/LandscapeMusicManager.h>
 #include <sound/Sound.h>
 #include <server/ServerMain.h>
@@ -33,6 +34,9 @@
 #include <graph/OptionsDisplay.h>
 #include <graph/FrameLimiter.h>
 #include <graph/FrameTimer.h>
+#include <graph/ParticleEngine.h>
+#include <graph/MainCamera.h>
+#include <tankgraph/RenderTargets.h>
 #include <target/TargetContainer.h>
 #include <net/NetInterface.h>
 #include <SDL/SDL.h>
@@ -157,6 +161,13 @@ void ClientState::clientEventLoop()
 	LandscapeMusicManager::instance()->simulate(currentState_, frameTime);
 	FrameTimer::instance()->simulate(frameTime);
 	ScorchedClient::instance()->getClientSimulator().simulate();
+	if (currentState_ == StateWait)
+	{
+		MainCamera::instance()->simulate(currentState_, frameTime);
+		Landscape::instance()->simulate(frameTime);
+		ScorchedClient::instance()->getParticleEngine().simulate(frameTime);
+		RenderTargets::instance()->simulate(frameTime);
+	}
 
 	Logger::processLogEntries();
 	if (ScorchedClient::instance()->getContext().getNetInterfaceValid())

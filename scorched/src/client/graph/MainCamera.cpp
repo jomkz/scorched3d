@@ -58,7 +58,6 @@ MainCamera *MainCamera::instance()
 }
 
 MainCamera::MainCamera() : 
-	GameStateI("MainCamera"),
 	mouseDown_(false), keyDown_(false), scrolling_(false), showArena_(false),
 	waterTransparency_(1.0f)
 {
@@ -255,40 +254,37 @@ void MainCamera::simulate(const unsigned state, float frameTime)
 	}
 }
 
-void MainCamera::draw(const unsigned state)
+void MainCamera::draw()
 {
 	targetCam_.draw();
 }
 
-void MainCamera::mouseDrag(const unsigned state, 
-	GameState::MouseButton button, 
-	int mx, int my, int x, int y, bool &skipRest)
+void MainCamera::mouseMove(int x, int y)
 {
-	targetCam_.mouseDrag(button, mx, my, x, y, skipRest);
+	targetCam_.mouseMove(x, y);
 }
 
-void MainCamera::mouseWheel(const unsigned state, int x, int y, int z, bool &skipRest)
+void MainCamera::mouseWheel(int z)
 {
-	targetCam_.mouseWheel(x, y, z, skipRest);
+	targetCam_.mouseWheel(z);
 }
 
-void MainCamera::mouseDown(const unsigned state, GameState::MouseButton button, 
-	int x, int y, bool &skipRest)
+void MainCamera::mouseDown(GameState::MouseButton button, 
+	int x, int y)
 {
 	mouseDown_ = true;
 	if (button == GameState::MouseButtonLeft) 
 	{
-		targetCam_.mouseDown(button, x, y, skipRest);
+		targetCam_.mouseDown(button, x, y);
 	}
 }
 
-void MainCamera::mouseUp(const unsigned state, GameState::MouseButton button,
-	int x, int y, bool &skipRest)
+void MainCamera::mouseUp(GameState::MouseButton button,int x, int y)
 {
 	mouseDown_ = false;
 	if (button == GameState::MouseButtonLeft) 
 	{
-		targetCam_.mouseUp(button, x, y, skipRest);
+		targetCam_.mouseUp(button, x, y);
 	}
 }
 
@@ -436,7 +432,7 @@ void MainCamera::useQuick(int key)
 	}
 }
 
-void MainCamera::SaveScreen::draw(const unsigned state)
+void MainCamera::SaveScreen::draw()
 {
 	if (saveScreen_)
 	{
@@ -444,7 +440,7 @@ void MainCamera::SaveScreen::draw(const unsigned state)
 
 		bool hide = Main2DCamera::instance()->getHide();
 		Main2DCamera::instance()->setHide(false);
-		Main2DCamera::instance()->draw(0);
+		Main2DCamera::instance()->draw();
 		Main2DCamera::instance()->setHide(hide);
 
 		static unsigned counter = 0;
@@ -481,9 +477,4 @@ void MainCamera::SaveScreen::draw(const unsigned state)
 		resultMessage.getHeight() = screenMap.getHeight();
 		ComsMessageSender::sendToServer(resultMessage);
 	}
-}
-
-void MainCamera::Precipitation::draw(const unsigned state)
-{
-	MainCamera::instance()->getTarget().drawPrecipitation();
 }

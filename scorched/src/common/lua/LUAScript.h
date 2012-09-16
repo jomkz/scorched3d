@@ -34,9 +34,9 @@ public:
 	LUAScript(ScorchedContext *context);
 	~LUAScript();
 
-	bool loadFromFile(const std::string &filename, std::string &error);
-
-	void addWeaponFunctions();
+	bool executeFile(const std::string &filename, std::string &error);
+	bool initializeFromString(const std::string &script, std::string &error);
+	bool execute(std::string &error);
 
 	bool functionExists(const std::string &functionName);
 	bool startFunction(const std::string &functionName);
@@ -47,6 +47,7 @@ public:
 	bool addBoolParameter(bool boolean);
 	bool addVectorParameter(const FixedVector &vector);
 
+	bool setGlobal(const std::string &name, int value);
 	bool setGlobal(const std::string &name, fixed value);
 
 	ScorchedContext *getContext() { return context_; }
@@ -54,9 +55,12 @@ public:
 	void setWeapon(Weapon *weapon) { weapon_ = weapon; }
 	Weapon *getWeapon() { return weapon_; }
 
+	lua_State *getLUAState() { return L_; }
+
 protected:
 	Weapon *weapon_;
 	ScorchedContext *context_;
+	int savedChunkReference_;
 	lua_State *L_;
 };
 

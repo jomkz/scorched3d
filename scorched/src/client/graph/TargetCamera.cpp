@@ -114,7 +114,8 @@ TargetCamera::TargetCamera() :
 	particleEngine_(&mainCam_, 6000),
 	dragging_(false),
 	lastLandIntersectValid_(false),
-	viewObject_(0)
+	viewObject_(0),
+	buttonDown_(-1)
 {
 	resetCam();
 
@@ -251,7 +252,7 @@ void TargetCamera::simulate(float frameTime, bool playing)
 		totalTime_ -= 0.1f;
 	}
 
-	particleEngine_.simulate(0, frameTime);
+	particleEngine_.simulate(frameTime);
 	mainCam_.simulate(frameTime);
 }
 
@@ -264,7 +265,7 @@ void TargetCamera::draw()
 
 void TargetCamera::drawPrecipitation()
 {
-	particleEngine_.draw(0);
+	particleEngine_.draw();
 }
 
 void TargetCamera::moveCamera()
@@ -564,9 +565,11 @@ bool TargetCamera::getLandIntersect(int x, int y, Vector &intersect)
 	return true;
 }
 
-void TargetCamera::mouseDrag(GameState::MouseButton button, 
-	int mx, int my, int x, int y, bool &skipRest)
+void TargetCamera::mouseMove(int x, int y)
 {
+	int button = GameState::MouseButtonLeft; // TODO
+	int mx = 0, my = 0;
+
 	cameraPos_ = CamFree;
 	if (button == GameState::MouseButtonRight)
 	{
@@ -612,16 +615,13 @@ void TargetCamera::mouseDrag(GameState::MouseButton button,
 	}
 }
 
-void TargetCamera::mouseWheel(int x, int y, int z, bool &skipRest)
+void TargetCamera::mouseWheel(int z)
 {
 	cameraPos_ = CamFree;
-	mainCam_.movePositionDelta(
-			0.0f, 0.0f,
-			((GLfloat) z) / 10.0f);
+	mainCam_.movePositionDelta(0, 0, ((GLfloat) z) / 10.0f);
 }
 
-void TargetCamera::mouseDown(GameState::MouseButton button, 
-	int x, int y, bool &skipRest)
+void TargetCamera::mouseDown(GameState::MouseButton button, int x, int y)
 {
 	dragXStart_ = x;
 	dragYStart_ = y;
@@ -630,8 +630,7 @@ void TargetCamera::mouseDown(GameState::MouseButton button,
 		getLandIntersect(x, y, lastLandIntersect_);
 }
 
-void TargetCamera::mouseUp(GameState::MouseButton button, 
-	int x, int y, bool &skipRest)
+void TargetCamera::mouseUp(GameState::MouseButton button, int x, int y)
 {
 	// Check if we were dragging with the left mouse button
 	// If we were then we ignore the request as the user will have already
@@ -648,8 +647,6 @@ void TargetCamera::mouseUp(GameState::MouseButton button,
 		return;
 	}
 	lastLandIntersectValid_ = false;
-
-    skipRest = true;
 
 	// Does the click on the landscape mean we move there
 	// or do we just want to look there

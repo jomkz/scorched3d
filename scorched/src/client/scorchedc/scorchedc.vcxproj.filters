@@ -1530,9 +1530,6 @@
     <ClCompile Include="..\landscape\LandscapeSoundManager.cpp">
       <Filter>landscape</Filter>
     </ClCompile>
-    <ClCompile Include="..\landscape\LandscapeStateHandler.cpp">
-      <Filter>landscape</Filter>
-    </ClCompile>
     <ClCompile Include="..\landscape\MapPoints.cpp">
       <Filter>landscape</Filter>
     </ClCompile>
@@ -2358,12 +2355,6 @@
     <ClCompile Include="..\ui\RocketEventListenerInstancer.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\ui\RocketEventListener.cpp">
-      <Filter>ui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ui\RocketEventProcessor.cpp">
-      <Filter>ui</Filter>
-    </ClCompile>
     <ClCompile Include="..\ui\RocketWindowState.cpp">
       <Filter>ui</Filter>
     </ClCompile>
@@ -2380,6 +2371,18 @@
       <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="..\ui\BackdropDecoratorInstancer.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\IslandDecorator.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\IslandDecoratorInstancer.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\RocketLUAEventListener.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\RocketLUALib.cpp">
       <Filter>ui</Filter>
     </ClCompile>
   </ItemGroup>
@@ -3791,9 +3794,6 @@
     <ClInclude Include="..\landscape\LandscapeSoundManager.h">
       <Filter>landscape</Filter>
     </ClInclude>
-    <ClInclude Include="..\landscape\LandscapeStateHandler.h">
-      <Filter>landscape</Filter>
-    </ClInclude>
     <ClInclude Include="..\landscape\MapPoints.h">
       <Filter>landscape</Filter>
     </ClInclude>
@@ -4625,12 +4625,6 @@
     <ClInclude Include="..\ui\RocketEventListenerInstancer.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\ui\RocketEventListener.h">
-      <Filter>ui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ui\RocketEventProcessor.h">
-      <Filter>ui</Filter>
-    </ClInclude>
     <ClInclude Include="..\ui\RocketWindowState.h">
       <Filter>ui</Filter>
     </ClInclude>
@@ -4647,6 +4641,18 @@
       <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="..\ui\BackdropDecoratorInstancer.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\IslandDecorator.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\IslandDecoratorInstancer.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\RocketLUAEventListener.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\RocketLUALib.h">
       <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>

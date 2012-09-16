@@ -50,7 +50,7 @@ RenderTargets *RenderTargets::instance()
 }
 
 RenderTargets::RenderTargets() :
-	treesDrawn_(0), targetsDrawn_(0)
+	treesDrawn_(0), targetsDrawn_(0), stepTime_(0.0f)
 {
 }
 
@@ -58,35 +58,21 @@ RenderTargets::~RenderTargets()
 {
 }
 
-void RenderTargets::Renderer2D::draw(const unsigned state)
-{
-	RenderTargets::instance()->draw2d();
-}
-
-void RenderTargets::Renderer2D::simulate(const unsigned state, float simTime)
+void RenderTargets::simulate(float simTime)
 {
 	// Simulate the HUD
 	TargetRendererImplTankHUD::simulate(simTime);
 	TargetRendererImplTankAIM::simulate(simTime);
-}
 
-void RenderTargets::Renderer3D::draw(const unsigned state)
-{
-	RenderTracer::instance()->draw(state);
-	RenderGeoms::instance()->draw(state);
-	RenderTargets::instance()->draw(false);
-}
-
-void RenderTargets::Renderer3D::simulate(const unsigned state, float simTime)
-{
+	// Simulate targets
 	VisibilityPatchInfo &patchInfo = VisibilityPatchGrid::instance()->getPatchInfo();
-	stepTime += simTime;
+	stepTime_ += simTime;
 
 	// step size = 1.0 / physics fps = steps per second
 	const float stepSize = 0.02f;
-	if (stepTime >= stepSize)
+	if (stepTime_ >= stepSize)
 	{
-		float time = stepTime * ScorchedClient::instance()->getSimulator().getFast().asFloat();
+		float time = stepTime_ * ScorchedClient::instance()->getSimulator().getFast().asFloat();
 
 		void *currentPatchPtr = 0, *currentObject = 0;
 		TargetListIterator patchItor(patchInfo.getTargetVisibility());
@@ -112,13 +98,8 @@ void RenderTargets::Renderer3D::simulate(const unsigned state, float simTime)
 			renderImpl->simulate(time);
 		}
 
-		stepTime = 0.0f;
+		stepTime_ = 0.0f;
 	}
-}
-
-void RenderTargets::Renderer3D::enterState(const unsigned state)
-{
-
 }
 
 static void drawTargetShadows(TargetVisibilityIterator &itor, float distance) 
@@ -223,6 +204,13 @@ static void drawTargets(TargetVisibilityIterator &itor, float distance, bool ref
 			else renderImpl->render(distance);
 		}
 	}
+}
+
+void RenderTargets::draw3d()
+{
+	RenderTracer::instance()->draw();
+	RenderGeoms::instance()->draw();
+	RenderTargets::instance()->draw(false);
 }
 
 void RenderTargets::draw(bool reflection)

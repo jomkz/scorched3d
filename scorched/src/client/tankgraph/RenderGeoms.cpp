@@ -41,7 +41,7 @@ RenderGeoms::~RenderGeoms()
 {
 }
 
-void RenderGeoms::draw(const unsigned state)
+void RenderGeoms::draw()
 {
 	if (OptionsDisplay::instance()->getDrawCollisionGeoms())
 	{

@@ -40,8 +40,7 @@ GLCameraFrustum *GLCameraFrustum::instance()
 	return instance_;
 }
 
-GLCameraFrustum::GLCameraFrustum() :
-	GameStateI("GLCameraFrustum")
+GLCameraFrustum::GLCameraFrustum() 
 {
 
 }
@@ -86,7 +85,7 @@ Vector &GLCameraFrustum::getBilboardVectorY()
 	return bil;
 }
 
-void GLCameraFrustum::draw(const unsigned state)
+void GLCameraFrustum::draw()
 {
 	// Get the current projection matrix from OpenGL
 	// Get the current modelview matrix from OpenGL

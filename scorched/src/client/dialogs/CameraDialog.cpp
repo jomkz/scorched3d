@@ -138,7 +138,7 @@ void CameraDialog::draw()
 	//GLCameraFrustum::instance()->restoreFrustum();
 	
 	// Return the viewport to the original
-	Main2DCamera::instance()->draw(0);
+	//Main2DCamera::instance()->draw(0);
 
 	// Draw the camera name
 	GLState newState(GLState::TEXTURE_OFF);
@@ -162,6 +162,7 @@ void CameraDialog::simulate(float frameTime)
 
 void CameraDialog::drawLandscape()
 {
+	/*
 	GLCameraFrustum::instance()->draw(0);
 	Landscape::instance()->calculateVisibility();
 	Landscape::instance()->drawLand();
@@ -170,6 +171,7 @@ void CameraDialog::drawLandscape()
 	Landscape::instance()->drawObjects();
 	ScorchedClient::instance()->getParticleEngine().draw(0);
 	targetCam_.drawPrecipitation();
+	*/
 }
 
 void CameraDialog::mouseDown(int button, float x, float y, bool &skipRest)

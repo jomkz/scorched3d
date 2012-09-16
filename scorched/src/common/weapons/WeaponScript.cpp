@@ -21,6 +21,7 @@
 #include <weapons/WeaponScript.h>
 #include <weapons/AccessoryStore.h>
 #include <common/Defines.h>
+#include <lua/LUAS3DWeaponLib.h>
 #include <lua/LUAScriptFactory.h>
 #include <lua/LUAScript.h>
 
@@ -48,8 +49,8 @@ bool WeaponScript::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 
 	std::string luaErrorString;
 	script_ = context.getScorchedContext().getLUAScriptFactory().createScript();
-	script_->addWeaponFunctions();
-	if (!script_->loadFromFile(S3D::getModFile(filename), luaErrorString))
+	luaopen_s3dweapon(script_->getLUAState());
+	if (!script_->executeFile(S3D::getModFile(filename), luaErrorString))
 	{
 		return accessoryNode->returnError(
 			S3D::formatStringBuffer("Failed to load lua script %s : %s", 

@@ -197,7 +197,7 @@ void Landscape::drawShadows()
 		landWidth, landHeight, 0.0f ,
 		0.0f, 0.0f, 1.0f);
 
-	GLCameraFrustum::instance()->draw(0);
+	GLCameraFrustum::instance()->draw();
 
 	// Save the matrixs used for the sun
 	glGetFloatv(GL_MODELVIEW_MATRIX, lightModelMatrix_);
@@ -285,7 +285,7 @@ void Landscape::drawShadows()
 
 	// Reset camera
 	MainCamera::instance()->getCamera().draw();
-	GLCameraFrustum::instance()->draw(0);
+	GLCameraFrustum::instance()->draw();
 
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_POST");
 }
@@ -395,7 +395,7 @@ void Landscape::drawWater()
 		if (!OptionsDisplay::instance()->getNoParticleReflections())
 		{
 			GAMESTATE_PERF_COUNTER_START(ScorchedClient::instance()->getGameState(), "PARTICLE_REFLECTIONS");
-			ScorchedClient::instance()->getParticleEngine().draw(0);
+			ScorchedClient::instance()->getParticleEngine().draw();
 			GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "PARTICLE_REFLECTIONS");
 		}
 		drawTearDown();

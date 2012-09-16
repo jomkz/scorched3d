@@ -27,7 +27,7 @@
 #include <common/Vector.h>
 #include <map>
 
-class MainCamera : public GameStateI, public GLMenuI
+class MainCamera : public GLMenuI
 {
 public:
 	static MainCamera *instance();
@@ -39,18 +39,12 @@ public:
 	bool getShowArena() { return showArena_; }
 
 	// Inherited from GameStateI
-	virtual void simulate(const unsigned state, 
-		float frameTime);
-	virtual void draw(const unsigned state);
-	virtual void mouseWheel(const unsigned state, 
-		int x, int y, int z, bool &skipRest);
-	virtual void mouseDown(const unsigned state, 
-		GameState::MouseButton button, int x, int y, bool &skipRest);
-	virtual void mouseUp(const unsigned state, 
-		GameState::MouseButton button, int x, int y, bool &skipRest);
-	virtual void mouseDrag(const unsigned state, 
-		GameState::MouseButton button,
-		int mx, int my, int x, int y, bool &skipRest);
+	void simulate(const unsigned state, float frameTime);
+	void draw();
+	void mouseWheel(int z);
+	void mouseDown(GameState::MouseButton button, int x, int y);
+	void mouseUp(GameState::MouseButton button, int x, int y);
+	void mouseMove(int x, int y);
 	virtual void keyboardCheck(
 		const unsigned state, float frameTime, 
 		char *buffer, unsigned int keyState,
@@ -65,22 +59,15 @@ public:
 		std::list<GLMenuItem> &result);
 
 	// Class to save the screen shots
-	class SaveScreen : public GameStateI
+	class SaveScreen 
 	{
 	public:
-		SaveScreen() : GameStateI("SaveScreen"), saveScreen_(false), saveScreenTest_(false) {}
-		virtual void draw(const unsigned state);
+		SaveScreen() : saveScreen_(false), saveScreenTest_(false) {}
+		void draw();
 
 		bool saveScreen_;
 		bool saveScreenTest_;
 	} saveScreen_;
-
-	class Precipitation : public GameStateI
-	{
-	public:
-		Precipitation() : GameStateI("Precipitation") {}
-		virtual void draw(const unsigned state);
-	} precipitation_;
 
 protected:
 	static MainCamera *instance_;

@@ -11,6 +11,9 @@
   <window name ="playerchoice">
     <file>data/rocket/playerchoice.rml</file>
   </window>
+  <window name ="island">
+    <file>data/rocket/island.rml</file>
+  </window>
   <state name="StateMainOptions">
     <window name="backdrop"/>
     <window name="demo"/>
@@ -21,6 +24,6 @@
     <window name="playerchoice"/>
   </state>
   <state name="StateWait">
-    <window name="backdrop"/>
+    <window name="island"/>
   </state>
 </windowstate>

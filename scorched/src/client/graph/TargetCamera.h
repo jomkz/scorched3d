@@ -61,13 +61,10 @@ public:
 	void simulate(float frameTime, bool playing);
 	void draw();
 	void drawPrecipitation();
-	void mouseWheel(int x, int y, int z, bool &skipRest);
-	void mouseDown(GameState::MouseButton button, 
-		int x, int y, bool &skipRest);
-	void mouseUp(GameState::MouseButton button, 
-		int x, int y, bool &skipRest);
-	void mouseDrag(GameState::MouseButton button,
-		int mx, int my, int x, int y, bool &skipRest);
+	void mouseWheel(int z);
+	void mouseDown(GameState::MouseButton button, int x, int y);
+	void mouseUp(GameState::MouseButton button, int x, int y);
+	void mouseMove(int x, int y);
 	bool keyboardCheck(
 		float frameTime, 
 		char *buffer, unsigned int keyState,
@@ -84,6 +81,7 @@ public:
 
 protected:
 	static TargetCamera *currentTargetCamera_;
+	int buttonDown_;
 	GLCamera mainCam_;
 	CamType cameraPos_;
 	ParticleEmitter rainEmitter_, snowEmitter_;

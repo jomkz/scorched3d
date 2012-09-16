@@ -24,6 +24,6 @@
     </style>
   </head>
   <body template="window">
-    <button onclick="stimulus(StateInitialize)">Start Game</button>
+    <button onclick="s3dui.stimulus('StateInitialize')">Start Game</button>
   </body>
 </rml>

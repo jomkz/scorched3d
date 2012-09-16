@@ -23,7 +23,6 @@
 
 #include <Rocket/Core/Decorator.h>
 #include <common/Clock.h>
-#include <GLEXT/GLTexture.h>
 
 class AnimatedIslandDecorator : public Rocket::Core::Decorator
 {

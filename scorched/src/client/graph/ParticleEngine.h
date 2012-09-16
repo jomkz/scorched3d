@@ -25,7 +25,7 @@
 #include <engine/GameStateI.h>
 
 class GLCamera;
-class ParticleEngine : public GameStateI
+class ParticleEngine
 {
 public:
 	ParticleEngine(GLCamera *camera, unsigned int maxParticles);
@@ -44,9 +44,8 @@ public:
 	static void setFast(float speedMult) { speed_ = speedMult; }
 	static float getFast() { return speed_; }
 
-	// Inherited from GameStateI
-	virtual void draw(const unsigned state);
-	virtual void simulate(const unsigned int state, float simTime);
+	virtual void draw();
+	virtual void simulate(float simTime);
 
 protected:
 	Particle *particles_;

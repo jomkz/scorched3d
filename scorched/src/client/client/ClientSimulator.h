@@ -54,15 +54,6 @@ public:
 	fixed getServerChoke() { return serverChoke_.getAverage(); }
 
 	void setLoadingLevel(bool loadingLevel) { loadingLevel_ = loadingLevel; }
-
-	class ActionControllerGameState : public GameStateI
-	{
-	public:
-		ActionControllerGameState();
-
-		virtual void draw(const unsigned state);
-	} actionControllerGameState;
-
 private:
 	fixed waitingEventTime_;
 	RollingAverage serverTimeDifference_, serverChoke_;

@@ -37,7 +37,6 @@ Main2DCamera *Main2DCamera::instance()
 }
 
 Main2DCamera::Main2DCamera() :
-	GameStateI("Main2DCamera"),
 	hide_(false)
 {
 
@@ -48,7 +47,7 @@ Main2DCamera::~Main2DCamera()
 
 }
 
-void Main2DCamera::draw(const unsigned state)
+void Main2DCamera::draw()
 {
 	glClearDepth(1.0f);
 	glClear(GL_DEPTH_BUFFER_BIT);

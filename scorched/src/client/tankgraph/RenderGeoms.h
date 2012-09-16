@@ -26,7 +26,7 @@ class RenderGeoms
 public:
 	static RenderGeoms *instance();
 
-	virtual void draw(const unsigned state);
+	virtual void draw();
 
 protected:
 	void drawTargetSpace();

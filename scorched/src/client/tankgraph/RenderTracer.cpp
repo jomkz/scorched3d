@@ -33,7 +33,6 @@ RenderTracer *RenderTracer::instance()
 }
 
 RenderTracer::RenderTracer() : 
-	GameStateI("RenderTracer"),
 	current_(0), listNo_(0)
 {
 	obj_ = gluNewQuadric();
@@ -61,7 +60,7 @@ void RenderTracer::clearTracerLines()
 	}
 }
 
-void RenderTracer::draw(const unsigned state)
+void RenderTracer::draw()
 {
 	Tank *current = ScorchedClient::instance()->getTargetContainer().getCurrentTank();
 	if (!current) return;

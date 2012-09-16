@@ -48,7 +48,6 @@ ShotCountDown *ShotCountDown::instance()
 }
 
 ShotCountDown::ShotCountDown() : 
-	GameStateI("ShotCountDown"),
 	moveTip_(ToolTipResource(ToolTip::ToolTipHelp,
 		"ROUND_TIMER", "Round Timer",
 		"ROUND_TIMER_TOOLTIP",
@@ -112,7 +111,7 @@ void ShotCountDown::hideRoundTime()
 	round.show_ = false;
 }
 
-void ShotCountDown::draw(const unsigned currentstate)
+void ShotCountDown::draw()
 {
 	if (move.show_) 
 	{

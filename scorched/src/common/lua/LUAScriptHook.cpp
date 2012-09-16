@@ -216,7 +216,7 @@ bool LUAScriptHook::loadHook(const std::string &directoryName, const std::string
 		}
 
 		LUAScript *script = factory_->createScript();
-		if (!script->loadFromFile(scriptFileName, error))
+		if (!script->executeFile(scriptFileName, error))
 		{
 			S3D::dialogMessage("LUAScriptHook", S3D::formatStringBuffer(
 				"From file %s, failed to parse LUA script \"%s\"\n%s", 

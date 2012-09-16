@@ -153,13 +153,3 @@ void ClientSimulator::setSimulationTime(fixed actualTime)
 	// Simulate
 	Simulator::simulateTime();
 }
-
-ClientSimulator::ActionControllerGameState::ActionControllerGameState() :
-	GameStateI("ActionControllerGameState")
-{
-}
-
-void ClientSimulator::ActionControllerGameState::draw(const unsigned int state)
-{
-	ScorchedClient::instance()->getClientSimulator().getActionController().draw();
-}

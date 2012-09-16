@@ -28,7 +28,7 @@
 #include <engine/GameStateI.h>
 
 class Tank;
-class RenderTracer : public GameStateI
+class RenderTracer 
 {
 public:
 	static RenderTracer *instance();
@@ -39,7 +39,7 @@ public:
 		Vector cross;
 	};
 
-	virtual void draw(const unsigned state);
+	void draw();
 
 	void drawTracerEnd(Vector &position);
 	void drawSmokeTracer(std::list<TracerLinePoint> &positions);

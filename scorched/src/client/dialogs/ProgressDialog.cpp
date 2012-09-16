@@ -363,7 +363,7 @@ void ProgressDialogSync::progressChange(const LangString &op, const float percen
 	if ((timeDelay > 0.25f) || 
 		(percentage > 99.0f))
 	{
-		Main2DCamera::instance()->draw(0);
+		Main2DCamera::instance()->draw();
 
 		unsigned int state = ScorchedClient::instance()->getClientState().getState();
 		if (state >= ClientState::StateLoadFiles)

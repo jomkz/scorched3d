@@ -18,16 +18,19 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef RocketEventListener_H
-#define RocketEventListener_H
+#ifndef RocketLUAEventListener_H
+#define RocketLUAEventListener_H
 
 #include <Rocket/Core/EventListener.h>
 
-class RocketEventListener : public Rocket::Core::EventListener
+class LUAScript;
+class RocketLUAEventListener : public Rocket::Core::EventListener
 {
 public:
-	RocketEventListener(const Rocket::Core::String& value);
-	virtual ~RocketEventListener();
+	RocketLUAEventListener();
+	virtual ~RocketLUAEventListener();
+
+	void initialize(const std::string &script);
 
 	/// Sends the event value through to Invader's event processing system.
 	virtual void ProcessEvent(Rocket::Core::Event& event);
@@ -36,7 +39,7 @@ public:
 	virtual void OnDetach(Rocket::Core::Element* element);
 
 private:
-	Rocket::Core::String value_;
+	LUAScript *script_;
 };
 
 #endif

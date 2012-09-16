@@ -128,7 +128,7 @@ void ProfileDialog::draw()
 	}
 		
 	// Return the viewport to the original
-	Main2DCamera::instance()->draw(0);
+	Main2DCamera::instance()->draw();
 }
 
 void ProfileDialog::simulate(float frameTime)

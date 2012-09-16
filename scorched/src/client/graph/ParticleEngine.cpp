@@ -30,7 +30,6 @@ float ParticleEngine::speed_ = 1.0f;
 
 ParticleEngine::ParticleEngine(GLCamera *camera, 
 	unsigned int maxParticles) :
-	GameStateI("ParticleEngine"),
 	camera_(camera),
 	particlesOnScreen_(0), particles_(0), 
 	freeParticles_(0), usedParticles_(0),
@@ -94,7 +93,7 @@ void ParticleEngine::killAll()
 	particlesOnScreen_ = 0;
 }
 
-void ParticleEngine::draw(const unsigned state)
+void ParticleEngine::draw()
 {
 	if (OptionsDisplay::instance()->getNoDrawParticles()) return;
 
@@ -125,7 +124,7 @@ static inline float approx_distance(float  dx, float dy, float dz, float w)
 	return approx;
 }
 
-void ParticleEngine::simulate(const unsigned state, float time)
+void ParticleEngine::simulate(float time)
 {
 	if (speed_ != 1.0f) time *= speed_;
 

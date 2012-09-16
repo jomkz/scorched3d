@@ -21,7 +21,6 @@
 #include <lua/LUAScript.h>
 #include <lua/LUAUtil.h>
 #include <lua/LUAS3DLib.h>
-#include <lua/LUAS3DWeaponLib.h>
 #include <common/Logger.h>
 
 #include "lauxlib.h"
@@ -55,12 +54,7 @@ LUAScript::~LUAScript()
 	}
 }
 
-void LUAScript::addWeaponFunctions()
-{
-	luaopen_s3dweapon(L_);
-}
-
-bool LUAScript::loadFromFile(const std::string &filename, std::string &error)
+bool LUAScript::executeFile(const std::string &filename, std::string &error)
 {
 	// Load the script
 	bool result = true;
@@ -73,6 +67,54 @@ bool LUAScript::loadFromFile(const std::string &filename, std::string &error)
 	}
 	
 	return result;
+}
+
+bool LUAScript::initializeFromString(const std::string &script, std::string &error)
+{
+	bool result = true;
+	int temp_int = luaL_loadstring(L_, script.c_str());
+	if (temp_int != 0)
+	{
+		error = S3D::formatStringBuffer(
+			"ERROR: LUA error : %s", lua_tostring(L_, -1));
+		result = false;
+	}
+	else
+	{
+		// make a copy of the compiled chunk at the top of the stack 
+		lua_pushvalue(L_,-1);
+		// get a reference to it in the registry
+		savedChunkReference_ = luaL_ref(L_, LUA_REGISTRYINDEX);
+	}
+	
+	return result;
+}
+
+bool LUAScript::execute(std::string &error)
+{
+	// clear the stack, just in case
+	lua_settop(L_, 0);
+
+	// push the chunk back on the stack
+	lua_rawgeti(L_, LUA_REGISTRYINDEX, savedChunkReference_);
+
+	// call it
+	bool result = true;
+	int temp_int = lua_pcall(L_, 0, LUA_MULTRET, 0);
+	if (temp_int != 0)
+	{
+		error = S3D::formatStringBuffer(
+			"ERROR: LUA error : %s", lua_tostring(L_, -1));
+		result = false;
+	}
+	return result;
+}
+
+bool LUAScript::setGlobal(const std::string &name, int value)
+{
+	lua_pushnumber(L_, value);
+	lua_setglobal(L_, name.c_str());
+	return true;
 }
 
 bool LUAScript::setGlobal(const std::string &name, fixed value)

@@ -29,12 +29,12 @@
 #include <engine/GameStateI.h>
 #include <GLEXT/GLViewPort.h>
 
-class Main2DCamera : public GameStateI
+class Main2DCamera 
 {
 public:
 	static Main2DCamera *instance();
 
-	virtual void draw(const unsigned state);
+	void draw();
 
 	GLViewPort &getViewPort() { return viewPort_; }
 	bool getHide() { return hide_; }
