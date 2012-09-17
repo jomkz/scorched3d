@@ -20,8 +20,8 @@
 
 #include <ui/RocketWindowState.h>
 #include <ui/AnimatedIslandDecoratorInstancer.h>
-#include <ui/IslandDecoratorInstancer.h>
 #include <ui/BackdropDecoratorInstancer.h>
+#include <ui/SceneElement.h>
 #include <XML/XMLFile.h>
 #include <common/DefinesFile.h>
 
@@ -36,10 +36,6 @@ RocketWindowState::~RocketWindowState()
 
 void RocketWindowState::initialize()
 {
-	Rocket::Core::DecoratorInstancer* islandDecorator = new IslandDecoratorInstancer();
-	Rocket::Core::Factory::RegisterDecoratorInstancer("island", islandDecorator);
-	islandDecorator->RemoveReference();
-
 	Rocket::Core::DecoratorInstancer* animatedIslandDecorator = new AnimatedIslandDecoratorInstancer();
 	Rocket::Core::Factory::RegisterDecoratorInstancer("islandbackdrop", animatedIslandDecorator);
 	animatedIslandDecorator->RemoveReference();
@@ -47,6 +43,10 @@ void RocketWindowState::initialize()
 	Rocket::Core::DecoratorInstancer* backdropDecorator = new BackdropDecoratorInstancer();
 	Rocket::Core::Factory::RegisterDecoratorInstancer("backdrop", backdropDecorator);
 	backdropDecorator->RemoveReference();
+
+	Rocket::Core::ElementInstancer* sceneInstancer = new Rocket::Core::ElementInstancerGeneric<SceneElement>();
+	Rocket::Core::Factory::RegisterElementInstancer("scene", sceneInstancer);
+	sceneInstancer->RemoveReference();
 
 	loadDefinitions();
 }

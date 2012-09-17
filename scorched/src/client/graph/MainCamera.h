@@ -30,8 +30,6 @@
 class MainCamera : public GLMenuI
 {
 public:
-	static MainCamera *instance();
-
 	GLCamera &getCamera() { return targetCam_.getCamera(); }
 	TargetCamera &getTarget() { return targetCam_; }
 

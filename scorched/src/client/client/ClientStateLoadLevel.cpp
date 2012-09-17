@@ -186,10 +186,16 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 	Landscape::instance()->recalculateRoof();
 
 	// Reset stuff
-	ScorchedClient::instance()->
-		getParticleEngine().killAll();
-	MainCamera::instance()->getTarget().
-		getPrecipitationEngine().killAll();
+	ScorchedClient::instance()->getParticleEngine().killAll();
+	std::map<std::string, TargetCamera *>::iterator itor;
+	for (itor = TargetCamera::getAllTargetCameras().begin();
+		itor != TargetCamera::getAllTargetCameras().end();
+		++itor)
+	{
+		TargetCamera *targetCamera = itor->second;
+		targetCamera->getPrecipitationEngine().killAll();
+	}
+
 	RenderTracer::instance()->newGame();
 	SpeedChange::instance()->resetSpeed();
 
@@ -219,7 +225,8 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 	}
 	if (playerTanks)
 	{
-		MainCamera::instance()->getTarget().setCameraType(TargetCamera::CamSpectator);
+		TargetCamera *targetCamera = TargetCamera::getTargetCameraByName("main");
+		if (targetCamera) targetCamera->setCameraType(TargetCamera::CamSpectator);
 	}
 	ClientReloadAdaptor::instance();
 

@@ -42,7 +42,7 @@ bool ClientOperationHandler::processMessage(
 	ComsOperationMessage message;
 	if (!message.readMessage(reader)) return false;
 
-	MainCamera::instance()->saveScreen_.saveScreenTest_ = true;
+	//MainCamera::instance()->saveScreen_.saveScreenTest_ = true;
 
 	return true;
 }

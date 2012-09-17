@@ -347,7 +347,7 @@ void HeightMapVisibilityPatch::drawLODLevel(MipMapPatchIndex &index)
 		position_[0], position_[1], position_[2], 
 		S3D::formatStringBuffer("%i", visibilityIndex_));
 
-	if ((MainCamera::instance()->getCamera().getLookAt() - position_).Magnitude() < 20.0f)
+	if ((TargetCamera::getCurrentTargetCamera()->getCamera().getLookAt() - position_).Magnitude() < 20.0f)
 	{
 		for (int i=0; i<index.getSize(); i++)
 		{

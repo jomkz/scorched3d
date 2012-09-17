@@ -112,7 +112,7 @@ void AnimatedIslandDecorator::drawAnimated()
 	float frameTime = clock_.getTimeDifference();
 	simulate(frameTime);
 
-	MainCamera::instance()->draw();
+	// MainCamera::instance()->draw();// TODO
 
 	GLCameraFrustum::instance()->draw();
 	Landscape::instance()->calculateVisibility();
@@ -130,7 +130,7 @@ void AnimatedIslandDecorator::simulate(float frameTime)
 {
 	rotation_ += frameTime * 0.1f;
 
-	MainCamera::instance()->simulate(0, frameTime);
+	//MainCamera::instance()->simulate(0, frameTime);
 	Landscape::instance()->simulate(frameTime);
 	RenderTargets::instance()->simulate(frameTime);
 	ScorchedClient::instance()->getSimulator().simulate();
@@ -138,6 +138,6 @@ void AnimatedIslandDecorator::simulate(float frameTime)
 	ScorchedClient::instance()->getTargetMovement().simulate(
 		ScorchedClient::instance()->getContext(), fixed::fromFloat(frameTime));
 
-	MainCamera::instance()->getTarget().setCameraType(TargetCamera::CamFree);
-	MainCamera::instance()->getCamera().movePosition(rotation_, 1.3f, 225.0f);
+	//MainCamera::instance()->getTarget().setCameraType(TargetCamera::CamFree);
+	//MainCamera::instance()->getCamera().movePosition(rotation_, 1.3f, 225.0f);
 }

@@ -46,7 +46,8 @@ CameraDialog::CameraDialog() :
 	GLWWindow("Camera", 100, 15, 200, 200, eTransparent | 
 	eResizeable | eSmallTitle | eSavePosition,
 	"Shows a view from behind the current tank\n"
-	"or its shots in a different window")
+	"or its shots in a different window"),
+	targetCam_("NOT_USED")
 {
 	targetCam_.setCameraType(TargetCamera::CamShot);
 }

@@ -163,7 +163,15 @@ void ClientState::clientEventLoop()
 	ScorchedClient::instance()->getClientSimulator().simulate();
 	if (currentState_ == StateWait)
 	{
-		MainCamera::instance()->simulate(currentState_, frameTime);
+		std::map<std::string, TargetCamera *>::iterator itor;
+		for (itor = TargetCamera::getAllTargetCameras().begin();
+			itor != TargetCamera::getAllTargetCameras().end();
+			++itor)
+		{
+			TargetCamera *targetCamera = itor->second;
+			targetCamera->simulate(frameTime, true);
+		}
+
 		Landscape::instance()->simulate(frameTime);
 		ScorchedClient::instance()->getParticleEngine().simulate(frameTime);
 		RenderTargets::instance()->simulate(frameTime);

@@ -262,7 +262,14 @@ void Explosion::init()
 		}
 
 		// Make the camera shake
-		MainCamera::instance()->getCamera().addShake(params_->getShake().asFloat());
+		std::map<std::string, TargetCamera *>::iterator itor;
+		for (itor = TargetCamera::getAllTargetCameras().begin();
+			itor != TargetCamera::getAllTargetCameras().end();
+			++itor)
+		{
+			TargetCamera *targetCamera = itor->second;
+			targetCamera->getCamera().addShake(params_->getShake().asFloat());
+		}
 	}
 #endif // #ifndef S3D_SERVER
 }

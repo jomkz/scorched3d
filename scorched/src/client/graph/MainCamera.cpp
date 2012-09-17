@@ -45,21 +45,10 @@
 #include <math.h>
 #include <time.h>
 
-MainCamera *MainCamera::instance_ = 0;
-
-MainCamera *MainCamera::instance()
-{
-	if (!instance_)
-	{
-		instance_ = new MainCamera;
-	}
-
-	return instance_;
-}
-
 MainCamera::MainCamera() : 
 	mouseDown_(false), keyDown_(false), scrolling_(false), showArena_(false),
-	waterTransparency_(1.0f)
+	waterTransparency_(1.0f),
+	targetCam_("NOT_USED")
 {
 	Image *map = new Image(ImageFactory::loadImage(
 		S3D::eDataLocation,
@@ -261,7 +250,7 @@ void MainCamera::draw()
 
 void MainCamera::mouseMove(int x, int y)
 {
-	targetCam_.mouseMove(x, y);
+	//targetCam_.mouseMove(x, y);
 }
 
 void MainCamera::mouseWheel(int z)
@@ -272,7 +261,6 @@ void MainCamera::mouseWheel(int z)
 void MainCamera::mouseDown(GameState::MouseButton button, 
 	int x, int y)
 {
-	mouseDown_ = true;
 	if (button == GameState::MouseButtonLeft) 
 	{
 		targetCam_.mouseDown(button, x, y);
@@ -281,7 +269,6 @@ void MainCamera::mouseDown(GameState::MouseButton button,
 
 void MainCamera::mouseUp(GameState::MouseButton button,int x, int y)
 {
-	mouseDown_ = false;
 	if (button == GameState::MouseButtonLeft) 
 	{
 		targetCam_.mouseUp(button, x, y);

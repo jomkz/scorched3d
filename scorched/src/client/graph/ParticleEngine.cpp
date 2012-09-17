@@ -20,6 +20,7 @@
 
 #include <graph/ParticleEngine.h>
 #include <graph/OptionsDisplay.h>
+#include <graph/TargetCamera.h>
 #include <engine/Simulator.h>
 #include <client/ScorchedClient.h>
 #include <GLEXT/GLState.h>
@@ -28,9 +29,7 @@
 
 float ParticleEngine::speed_ = 1.0f;
 
-ParticleEngine::ParticleEngine(GLCamera *camera, 
-	unsigned int maxParticles) :
-	camera_(camera),
+ParticleEngine::ParticleEngine(unsigned int maxParticles) :
 	particlesOnScreen_(0), particles_(0), 
 	freeParticles_(0), usedParticles_(0),
 	totalTime_(0.0f), allowSorting_(true)
@@ -140,7 +139,7 @@ void ParticleEngine::simulate(float time)
 void ParticleEngine::normalizedSimulate(float time)
 {
 	Vector momentum;
-	Vector &cameraPos = camera_->getCurrentPos();
+	Vector &cameraPos = TargetCamera::getCurrentTargetCamera()->getCamera().getCurrentPos();
 
 	unsigned int currentParticles = particlesOnScreen_;
 	unsigned int putPos = 0;

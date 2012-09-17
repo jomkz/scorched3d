@@ -107,15 +107,29 @@ static const char *cameraDescriptions[] =
 };
 static const int noCameraDescriptions = sizeof(cameraDescriptions) / sizeof(char *);
 
-TargetCamera::TargetCamera() : 
+std::map<std::string, TargetCamera *> TargetCamera::targetCameras_;
+
+std::map<std::string, TargetCamera *> &TargetCamera::getAllTargetCameras()
+{
+	return targetCameras_;
+}
+
+TargetCamera *TargetCamera::getTargetCameraByName(const std::string &name)
+{
+	std::map<std::string, TargetCamera *>::iterator itor = targetCameras_.find(name);
+	if (itor == targetCameras_.end()) return 0;
+	return itor->second;
+}
+
+TargetCamera::TargetCamera(const std::string &name) : 
 	mainCam_(300, 300), 
 	cameraPos_(CamSpectator), 
 	totalTime_(0.0f), objectTime_(0.0f),
-	particleEngine_(&mainCam_, 6000),
+	particleEngine_(6000),
 	dragging_(false),
 	lastLandIntersectValid_(false),
 	viewObject_(0),
-	buttonDown_(-1)
+	cameraName_(name)
 {
 	resetCam();
 
@@ -152,11 +166,12 @@ TargetCamera::TargetCamera() :
 		Vector(0.0f, 0.0f, -600.0f), // Gravity
 		false,
 		true);
+	targetCameras_[cameraName_] = this;
 }
 
 TargetCamera::~TargetCamera()
 {
-
+	targetCameras_.erase(cameraName_);
 }
 
 void TargetCamera::resetCam()
@@ -222,6 +237,8 @@ float TargetCamera::maxHeightFunc(int x, int y, void *data)
 
 void TargetCamera::simulate(float frameTime, bool playing)
 {
+	currentTargetCamera_ = this;
+
 	objectTime_ += frameTime * ParticleEngine::getFast();
 	totalTime_ += frameTime * ParticleEngine::getFast();
 	while (totalTime_ > 0.05f)
@@ -265,6 +282,7 @@ void TargetCamera::draw()
 
 void TargetCamera::drawPrecipitation()
 {
+	currentTargetCamera_ = this;
 	particleEngine_.draw();
 }
 
@@ -565,29 +583,27 @@ bool TargetCamera::getLandIntersect(int x, int y, Vector &intersect)
 	return true;
 }
 
-void TargetCamera::mouseMove(int x, int y)
+void TargetCamera::mouseDrag(GameState::MouseButton button, int x, int y, int dx, int dy)
 {
-	int button = GameState::MouseButtonLeft; // TODO
-	int mx = 0, my = 0;
-
 	cameraPos_ = CamFree;
 	if (button == GameState::MouseButtonRight)
 	{
+		dragging_ = true;
 		if (OptionsDisplay::instance()->getInvertMouse())
 		{
-			y = -y;
+			dy = -dy;
 		}
 
 		const float QPI = 3.14f / 180.0f;
 		mainCam_.movePositionDelta(
-			(GLfloat) (x) * QPI,
-			(GLfloat) (-y) * QPI,
+			(GLfloat) (dx) * QPI,
+			(GLfloat) (-dy) * QPI,
 			0.0f);
 	}
 	else if (button == GameState::MouseButtonLeft)
 	{
-		if (mx - dragXStart_ > 4 || mx - dragXStart_ < -4 ||
-			my - dragYStart_ > 4 || my - dragYStart_ < -4)
+		if (x - dragXStart_ > 4 || x - dragXStart_ < -4 ||
+			y - dragYStart_ > 4 || y - dragYStart_ < -4)
 		{
 			dragging_ = true;
 		}
@@ -603,15 +619,16 @@ void TargetCamera::mouseMove(int x, int y)
 				getGroundMaps().getArenaX();
 			float arenaY = (float) ScorchedClient::instance()->getLandscapeMaps().
 				getGroundMaps().getArenaY();
-			mainCam_.scroll(float(-x / 2), float(-y / 2), 
+			mainCam_.scroll(float(-dx / 2), float(-dy / 2), 
 				arenaX, arenaY, arenaX + arenaWidth, arenaY + arenaHeight);
 		}
 	}
 	else
 	{
+		dragging_ = true;
 		mainCam_.movePositionDelta(
 			0.0f, 0.0f,
-			(GLfloat) (y));
+			(GLfloat) (dy));
 	}
 }
 

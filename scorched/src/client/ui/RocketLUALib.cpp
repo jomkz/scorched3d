@@ -43,32 +43,6 @@ static LUAScript *getScript(lua_State *L)
 	return script;
 }
 
-static int s3dui_cameraMouseMove(lua_State *L)
-{
-	int x = luaL_checknumber(L, 1);
-	int y = 768 - luaL_checknumber(L, 2); // TODO
-	MainCamera::instance()->mouseMove(x, y);
-	return 0;
-}
-
-static int s3dui_cameraMouseDown(lua_State *L)
-{
-	int button = luaL_checknumber(L, 1);
-	int x = luaL_checknumber(L, 2);
-	int y = 768 - luaL_checknumber(L, 3); // TODO
-	MainCamera::instance()->mouseDown((GameState::MouseButton) button, x, y);
-	return 0;
-}
-
-static int s3dui_cameraMouseUp(lua_State *L)
-{
-	int button = luaL_checknumber(L, 1);
-	int x = luaL_checknumber(L, 2);
-	int y = 768 - luaL_checknumber(L, 3); // TODO
-	MainCamera::instance()->mouseUp((GameState::MouseButton) button, x, y);
-	return 0;
-}
-
 static int s3dui_joinGame(lua_State *L) 
 {
 	unsigned int current = 0, currentPlayerId_ = 0;
@@ -149,8 +123,6 @@ static int s3dui_stimulus(lua_State *L)
 static const luaL_Reg s3drocket[] = {
 	{"stimulus", s3dui_stimulus},
 	{"joinGame", s3dui_joinGame},
-	{"cameraMouseUp", s3dui_cameraMouseUp},
-	{"cameraMouseDown", s3dui_cameraMouseDown},
 	{NULL, NULL}
 };
 

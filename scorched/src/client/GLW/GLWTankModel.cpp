@@ -65,8 +65,8 @@ void GLWTankModel::draw()
 
 	// Find the angles to rotate so the tank is at the
 	// same angle as the "real" tank on the landscape
-	Vector &lookFrom = MainCamera::instance()->getCamera().getCurrentPos();
-	Vector &lookAt = MainCamera::instance()->getCamera().getLookAt();
+	Vector &lookFrom = TargetCamera::getCurrentTargetCamera()->getCamera().getCurrentPos();
+	Vector &lookAt = TargetCamera::getCurrentTargetCamera()->getCamera().getLookAt();
 	Vector dir = (lookAt - lookFrom).Normalize();
 	float angXY = atan2f(dir[0], dir[1]) / 3.14f * 180.0f;
 	float angYZ = acosf(dir[2]) / 3.14f * 180.0f + 180.0f;
@@ -110,7 +110,7 @@ void GLWTankModel::mouseDown(int button, float x, float y, bool &skipRest)
 	if (inBox(x, y, x_, y_, w_, h_))
 	{
 		skipRest = true;
-		MainCamera::instance()->getTarget().setCameraType(TargetCamera::CamBehind);
+		//MainCamera::instance()->getTarget().setCameraType(TargetCamera::CamBehind);
 	}
 }
 

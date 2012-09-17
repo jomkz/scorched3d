@@ -122,8 +122,8 @@ void GLWWindView::draw()
 
 void GLWWindView::drawDisplay()
 {
-	Vector &lookFrom = MainCamera::instance()->getCamera().getCurrentPos();
-	Vector &lookAt = MainCamera::instance()->getCamera().getLookAt();
+	Vector lookFrom; // MainCamera::instance()->getCamera().getCurrentPos(); // TODO
+	Vector lookAt; // TODO = MainCamera::instance()->getCamera().getLookAt();
 	Vector dir = (lookAt - lookFrom).Normalize();
 
 	float scale2 = S3D_MIN(w_, h_) / 90.0f;
@@ -271,12 +271,12 @@ void GLWWindView::mouseDown(int button, float x, float y, bool &skipRest)
 	{
 		skipRest = true;
 
-		unsigned int type =
-			MainCamera::instance()->getTarget().getCameraType();
+		unsigned int type = 0;
+			//MainCamera::instance()->getTarget().getCameraType();
 		type++;
 		if (type >= TargetCamera::CamFree) type = 0;
 
-		MainCamera::instance()->getTarget().setCameraType(
-			(TargetCamera::CamType) type);
+		//MainCamera::instance()->getTarget().setCameraType(
+		//	(TargetCamera::CamType) type); // TODO
 	}
 }

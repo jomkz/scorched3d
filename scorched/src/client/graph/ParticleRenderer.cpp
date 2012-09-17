@@ -237,8 +237,8 @@ void ParticleRendererRain::simulateParticle(Particle &particle, float time)
 		return;
 	}
 
-	Vector &cameraPos = particle.engine_->getCamera()->getCurrentPos();
-	Vector &cameraTarget = particle.engine_->getCamera()->getLookAt();
+	Vector &cameraPos = GLCamera::getCurrentCamera()->getCurrentPos();
+	Vector &cameraTarget = GLCamera::getCurrentCamera()->getLookAt();
 	Vector cameraDirection = (cameraTarget - cameraPos).Normalize();
 
 	// Size

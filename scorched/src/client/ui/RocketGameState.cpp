@@ -101,7 +101,7 @@ bool RocketGameState::createScorchedWindow()
 	}
 	windowHeight = (height * windowWidth) / width;
 
-	MainCamera::instance()->getCamera().setWindowSize(width, height);
+	//MainCamera::instance()->getCamera().setWindowSize(width, height);
 	Main2DCamera::instance()->getViewPort().setWindowSize(windowWidth, windowHeight, 
 		width, height);
 

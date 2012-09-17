@@ -100,10 +100,14 @@ void TankStartMoveSimAction::startClientGame()
 		// from the same destination
 		if (counter > 1)
 		{
-			MainCamera::instance()->getTarget().getCamera().setLookAt(current->getCamera().getCameraLookAt());
-			Vector rotation = current->getCamera().getCameraRotation();
-			MainCamera::instance()->getTarget().getCamera().movePosition(rotation[0], rotation[1], rotation[2]);
-			MainCamera::instance()->getTarget().setCameraType((TargetCamera::CamType) current->getCamera().getCameraType());
+			TargetCamera *targetCamera = TargetCamera::getTargetCameraByName("main");
+			if (targetCamera)
+			{
+				targetCamera->getCamera().setLookAt(current->getCamera().getCameraLookAt());
+				Vector rotation = current->getCamera().getCameraRotation();
+				targetCamera->getCamera().movePosition(rotation[0], rotation[1], rotation[2]);
+				targetCamera->setCameraType((TargetCamera::CamType) current->getCamera().getCameraType());
+			}
 		}
 	}
 

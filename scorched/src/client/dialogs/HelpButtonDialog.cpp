@@ -146,10 +146,15 @@ LangStringStorage *HelpButtonDialog::PerformanceMenu::getMenuToolTip(const char*
 	static LangString result;
 
 	unsigned int pOnScreen = 
-		ScorchedClient::instance()->
-			getParticleEngine().getParticlesOnScreen() +
-		MainCamera::instance()->getTarget().
-			getPrecipitationEngine().getParticlesOnScreen();
+		ScorchedClient::instance()->getParticleEngine().getParticlesOnScreen();
+		std::map<std::string, TargetCamera *>::iterator itor;
+	for (itor = TargetCamera::getAllTargetCameras().begin();
+		itor != TargetCamera::getAllTargetCameras().end();
+		++itor)
+	{
+		TargetCamera *targetCamera = itor->second;
+		pOnScreen += targetCamera->getPrecipitationEngine().getParticlesOnScreen();
+	}			
 
 	result = LANG_STRING(S3D::formatStringBuffer(
 		"%.2f Frames Per Second\n"

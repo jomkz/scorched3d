@@ -77,9 +77,7 @@ ScorchedClient::ScorchedClient() :
 		numberOfBilboards = 100;
 	else if (OptionsDisplay::instance()->getEffectsDetail() == 2) 
 		numberOfBilboards = 10000;
-	particleEngine_ = new ParticleEngine(
-		&MainCamera::instance()->getCamera(), 
-		numberOfBilboards);
+	particleEngine_ = new ParticleEngine(numberOfBilboards);
 
 	getLandscapeMaps().getGroundMaps().getHeightMap().setGraphicalMap(
 		new GraphicalLandscapeMap());

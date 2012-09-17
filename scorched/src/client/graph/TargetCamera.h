@@ -49,9 +49,10 @@ public:
 		CamFree
 	};
 
-	TargetCamera();
+	TargetCamera(const std::string &name);
 	virtual ~TargetCamera();
 
+	std::string &getCameraName() { return cameraName_; }
 	GLCamera &getCamera() { return mainCam_; }
 	CamType getCameraType() { return cameraPos_; }
 	ParticleEngine &getPrecipitationEngine() { return particleEngine_; }
@@ -64,7 +65,7 @@ public:
 	void mouseWheel(int z);
 	void mouseDown(GameState::MouseButton button, int x, int y);
 	void mouseUp(GameState::MouseButton button, int x, int y);
-	void mouseMove(int x, int y);
+	void mouseDrag(GameState::MouseButton button, int x, int y, int dx, int dy);
 	bool keyboardCheck(
 		float frameTime, 
 		char *buffer, unsigned int keyState,
@@ -78,10 +79,13 @@ public:
 	static float maxHeightFunc(int x, int y, void *heightData);
 
 	static TargetCamera *getCurrentTargetCamera() { return currentTargetCamera_; }
+	static TargetCamera *getTargetCameraByName(const std::string &name);
+	static std::map<std::string, TargetCamera *> &getAllTargetCameras();
 
 protected:
 	static TargetCamera *currentTargetCamera_;
-	int buttonDown_;
+	static std::map<std::string, TargetCamera *> targetCameras_;
+	std::string cameraName_;
 	GLCamera mainCam_;
 	CamType cameraPos_;
 	ParticleEmitter rainEmitter_, snowEmitter_;

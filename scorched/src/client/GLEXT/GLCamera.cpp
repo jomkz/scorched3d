@@ -147,6 +147,8 @@ void GLCamera::moveViewport(Vector &lookFrom, Vector &lookAt)
 
 void GLCamera::simulate(float frameTime)
 {
+	currentCamera_ = this;
+
 	const float SecondsToReachTarget = 0.15f;
 	const float ShakeDecrease = 0.06f;
 

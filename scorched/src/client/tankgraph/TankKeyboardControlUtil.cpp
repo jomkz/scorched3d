@@ -233,9 +233,9 @@ void TankKeyboardControlUtil::autoAim(Tank *tank)
 	Line direction;
 	Vector intersect;
 
-	MainCamera::instance()->getCamera().draw();
-	if (MainCamera::instance()->getCamera().
-		getDirectionFromPt((GLfloat) x, (GLfloat) y, direction))
+	//MainCamera::instance()->getCamera().draw(); // TODO
+	//if (MainCamera::instance()->getCamera().
+	//	getDirectionFromPt((GLfloat) x, (GLfloat) y, direction))
 	{
 		if (ScorchedClient::instance()->getLandscapeMaps().
 			getGroundMaps().getIntersect(direction, intersect))

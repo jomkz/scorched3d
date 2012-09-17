@@ -2373,16 +2373,13 @@
     <ClCompile Include="..\ui\BackdropDecoratorInstancer.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\ui\IslandDecorator.cpp">
-      <Filter>ui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ui\IslandDecoratorInstancer.cpp">
-      <Filter>ui</Filter>
-    </ClCompile>
     <ClCompile Include="..\ui\RocketLUAEventListener.cpp">
       <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="..\ui\RocketLUALib.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\SceneElement.cpp">
       <Filter>ui</Filter>
     </ClCompile>
   </ItemGroup>
@@ -4643,16 +4640,13 @@
     <ClInclude Include="..\ui\BackdropDecoratorInstancer.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\ui\IslandDecorator.h">
-      <Filter>ui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ui\IslandDecoratorInstancer.h">
-      <Filter>ui</Filter>
-    </ClInclude>
     <ClInclude Include="..\ui\RocketLUAEventListener.h">
       <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="..\ui\RocketLUALib.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\SceneElement.h">
       <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>

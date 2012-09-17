@@ -18,48 +18,26 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ParticleEngineh_INCLUDE__)
-#define __INCLUDE_ParticleEngineh_INCLUDE__
+#if !defined(__INCLUDE_SceneElementh_INCLUDE__)
+#define __INCLUDE_SceneElementh_INCLUDE__
 
-#include <graph/Particle.h>
-#include <engine/GameStateI.h>
+#include <Rocket/Core/Element.h>
+#include <graph/TargetCamera.h>
 
-class GLCamera;
-class ParticleEngine
+class SceneElement : public Rocket::Core::Element
 {
 public:
-	ParticleEngine(unsigned int maxParticles);
-	virtual ~ParticleEngine();
+	SceneElement(const Rocket::Core::String& tag);
+	virtual ~SceneElement();
 
-	void setMaxParticles(unsigned int maxParticles);
-	unsigned int getMaxParticles();
-	unsigned int getParticlesOnScreen();
-	void setAllowSorting(bool sorting) { allowSorting_ = sorting; }
-
-	void killAll();
-
-	Particle *getNextAliveParticle(unsigned int type);
-
-	static void setFast(float speedMult) { speed_ = speedMult; }
-	static float getFast() { return speed_; }
-
-	virtual void draw();
-	virtual void simulate(float simTime);
-
+	virtual void ProcessEvent(Rocket::Core::Event& evt);
+	virtual void OnRender();
 protected:
-	Particle *particles_;
-	Particle **usedParticles_;
-	Particle **freeParticles_;
+	int mouseDown_;
+	int dx_, dy_;
+	TargetCamera targetCam_;
 
-	float totalTime_;
-	unsigned int maxParticles_;
-	unsigned int particlesOnScreen_;
-	bool allowSorting_;
-
-	static float speed_;
-
-	void normalizedSimulate(float time);
-
+	bool processEventInternal(Rocket::Core::Event& evt);
 };
 
-#endif // __INCLUDE_ParticleEngineh_INCLUDE__
+#endif

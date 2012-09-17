@@ -284,7 +284,7 @@ void Landscape::drawShadows()
 	shadowFrameBuffer_.unBind();
 
 	// Reset camera
-	MainCamera::instance()->getCamera().draw();
+	TargetCamera::getCurrentTargetCamera()->getCamera().draw();
 	GLCameraFrustum::instance()->draw();
 
 	GAMESTATE_PERF_COUNTER_END(ScorchedClient::instance()->getGameState(), "LANDSCAPE_SHADOWS_POST");
@@ -725,7 +725,7 @@ void Landscape::actualDrawLandTextured()
 
 	GLState glState(state);
 
-	bool showArenaArea = MainCamera::instance()->getShowArena();
+	bool showArenaArea = false;// TODO MainCamera::instance()->getShowArena();
 
 	bool useDetail = 
 		GLStateExtension::getTextureUnits() > 2 &&
@@ -895,7 +895,7 @@ void Landscape::actualDrawLandShader()
 	landShader_->set_gl_texture(detailTexture_, "detailmap", 1);
 	landShader_->set_gl_texture(arenaMainTexture_, "arenamap", 3);
 
-	bool showArenaArea = MainCamera::instance()->getShowArena();
+	bool showArenaArea = false; // TODO MainCamera::instance()->getShowArena();
 	landShader_->set_uniform("showarena", showArenaArea?1.0f:0.0f);
 
 	if (getShadowFrameBuffer().bufferValid())
@@ -1024,8 +1024,8 @@ Landscape::CameraContext::CameraContext()
 
 ShadowMap &Landscape::getShadowMap()
 {
-	if (GLCamera::getCurrentCamera() ==
-		&MainCamera::instance()->getCamera())
+	if (TargetCamera::getCurrentTargetCamera() &&
+		TargetCamera::getCurrentTargetCamera()->getCameraName() == "main")
 	{
 		return *cameraContexts_[0].shadowMap_;
 	}

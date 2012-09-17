@@ -681,8 +681,6 @@
     <ClCompile Include="..\ui\AnimatedIslandDecoratorInstancer.cpp" />
     <ClCompile Include="..\ui\BackdropDecorator.cpp" />
     <ClCompile Include="..\ui\BackdropDecoratorInstancer.cpp" />
-    <ClCompile Include="..\ui\IslandDecorator.cpp" />
-    <ClCompile Include="..\ui\IslandDecoratorInstancer.cpp" />
     <ClCompile Include="..\ui\LoadPNG.cpp" />
     <ClCompile Include="..\ui\RocketEventListenerInstancer.cpp" />
     <ClCompile Include="..\ui\RocketFileInterface.cpp" />
@@ -692,6 +690,7 @@
     <ClCompile Include="..\ui\RocketRenderInterfaceOpenGL.cpp" />
     <ClCompile Include="..\ui\RocketSystemInterface.cpp" />
     <ClCompile Include="..\ui\RocketWindowState.cpp" />
+    <ClCompile Include="..\ui\SceneElement.cpp" />
     <ClCompile Include="..\water\Water.cpp" />
     <ClCompile Include="..\water\Water2.cpp" />
     <ClCompile Include="..\water\Water2Patch.cpp" />
@@ -1438,8 +1437,6 @@
     <ClInclude Include="..\ui\AnimatedIslandDecoratorInstancer.h" />
     <ClInclude Include="..\ui\BackdropDecorator.h" />
     <ClInclude Include="..\ui\BackdropDecoratorInstancer.h" />
-    <ClInclude Include="..\ui\IslandDecorator.h" />
-    <ClInclude Include="..\ui\IslandDecoratorInstancer.h" />
     <ClInclude Include="..\ui\LoadPNG.h" />
     <ClInclude Include="..\ui\RocketEventListenerInstancer.h" />
     <ClInclude Include="..\ui\RocketFileInterface.h" />
@@ -1449,6 +1446,7 @@
     <ClInclude Include="..\ui\RocketRenderInterfaceOpenGL.h" />
     <ClInclude Include="..\ui\RocketSystemInterface.h" />
     <ClInclude Include="..\ui\RocketWindowState.h" />
+    <ClInclude Include="..\ui\SceneElement.h" />
     <ClInclude Include="..\water\ocean_wave_generator.h" />
     <ClInclude Include="..\water\Water.h" />
     <ClInclude Include="..\water\Water2.h" />

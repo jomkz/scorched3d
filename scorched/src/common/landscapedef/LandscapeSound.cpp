@@ -118,8 +118,9 @@ bool LandscapeSoundPositionGroup::setPosition(VirtualSoundSource *source, Landsc
 	if (!objectGroup) return false;
 	if (objectGroup->getObjectCount() <= 0) return false;
 
-	Vector &cameraPos = 
-		MainCamera::instance()->getCamera().getCurrentPos();
+	TargetCamera *targetCamera = TargetCamera::getTargetCameraByName("main");
+	if (!targetCamera) return false;
+	Vector &cameraPos = targetCamera->getCamera().getCurrentPos();
 
 	float distance = 255.0f;
 	std::map<unsigned int, Target *> collisionTargets;
@@ -161,8 +162,10 @@ bool LandscapeSoundPositionWater::readXML(XMLNode *node)
 bool LandscapeSoundPositionWater::setPosition(VirtualSoundSource *source, LandscapeSoundItem *data)
 {
 #ifndef S3D_SERVER
-	Vector &cameraPos = 
-		MainCamera::instance()->getCamera().getCurrentPos();
+	TargetCamera *targetCamera = TargetCamera::getTargetCameraByName("main");
+	if (!targetCamera) return false;
+
+	Vector &cameraPos = targetCamera->getCamera().getCurrentPos();
 
 	float distance = Landscape::instance()->getWater().
 		getWaveDistance(int(cameraPos[0]), int(cameraPos[1]));

@@ -89,7 +89,7 @@ void Sun::setLightPosition(bool light0)
 	Vector4 sunPosition = getPosition();
 	if (light0)
 	{
-		Vector &cameraPos = MainCamera::instance()->getTarget().getCamera().getCurrentPos();
+		Vector &cameraPos = TargetCamera::getCurrentTargetCamera()->getCamera().getCurrentPos();
 		sunPosition = getPosition();
 		sunPosition[0] -= cameraPos[0];
 		sunPosition[1] -= cameraPos[1];

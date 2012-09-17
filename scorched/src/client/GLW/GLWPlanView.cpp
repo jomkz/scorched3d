@@ -329,8 +329,8 @@ void GLWPlanView::drawCameraPointer()
 	arrowTex_.draw();
 
 	// Get camera positions
-	Vector currentPos = MainCamera::instance()->getCamera().getCurrentPos();
-	Vector lookAt = MainCamera::instance()->getCamera().getLookAt();
+	Vector currentPos;// = MainCamera::instance()->getCamera().getCurrentPos();
+	Vector lookAt;// TODO = MainCamera::instance()->getCamera().getLookAt();
 	Vector direction = (currentPos - lookAt).Normalize2D();
 	Vector directionPerp = direction.get2DPerp().Normalize2D();
 
@@ -461,8 +461,9 @@ void GLWPlanView::mouseDown(int button, float x, float y, bool &skipRest)
 				Vector lookAt(mapX, mapY, ScorchedClient::instance()->
 					getLandscapeMaps().getGroundMaps().getInterpHeight(
 						fixed::fromFloat(mapX), fixed::fromFloat(mapY)).asFloat() + 5.0f);
-				MainCamera::instance()->getTarget().setCameraType(TargetCamera::CamFree);
-				MainCamera::instance()->getCamera().setLookAt(lookAt);
+				//MainCamera::instance()->getTarget().setCameraType(TargetCamera::CamFree);
+				//MainCamera::instance()->getCamera().setLookAt(lookAt);
+				// TODO
 			}
 		}
 		else if (button == GameState::MouseButtonRight)
