@@ -21,8 +21,12 @@
 #if !defined(AFX_GLSTATE_H__32B0E2D0_566D_4438_94E4_B12FE82430B1__INCLUDED_)
 #define AFX_GLSTATE_H__32B0E2D0_566D_4438_94E4_B12FE82430B1__INCLUDED_
 
+#ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
 #include "glew.h"
+#else
+#include <GL/glew.h>
+#endif
 
 class GLState  
 {

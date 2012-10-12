@@ -25,6 +25,7 @@
 #include <map>
 #include <vector>
 #include <set>
+#include <string>
 #include <events/EventHandler.h>
 
 class EventHandlerDataBase : public EventHandler
@@ -51,7 +52,7 @@ public:
 		int skill_;
 	};
 
-	static EventHandlerDataBase *EventHandlerDataBase::createInstance();
+	static EventHandlerDataBase *createInstance();
 
 	EventHandlerDataBase();
 	virtual ~EventHandlerDataBase();
