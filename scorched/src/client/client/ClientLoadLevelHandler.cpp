@@ -131,6 +131,12 @@ bool ClientLoadLevelHandler::actualProcessMessage(
 	// make sure we can only see the correct settings
 	OptionsDisplayConsole::instance()->addDisplayToConsole();
 
+	// Display info
+	Logger::log(S3D::formatStringBuffer("Loading landscape %s (Defn: %s, Tex: %s)",
+		message.getLandscapeDefinition().getName(),
+		message.getLandscapeDefinition().getDefn(),
+		message.getLandscapeDefinition().getTex()));
+
 	// Set the progress dialog nicities
 	ProgressDialog::instance()->changeTip();
 	LandscapeDefinitionsEntry *landscapeDefinition =

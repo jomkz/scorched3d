@@ -55,10 +55,12 @@ void ShotBounce::init()
 	getPhysics().setOptionStickyShields(weapon_->getStickyShields());
 	getPhysics().setOptionLandscapeCollision(getWeapon()->getLandscapeCollision());
 	getPhysics().setOptionShieldCollision(getWeapon()->getShieldCollision());
+	getPhysics().setOptionTankCollision(getWeapon()->getTankCollision());
 
 	stepSize_ = weapon_->getStepSize() * 
 		fixed(true, context_->getOptionsGame().getWeaponSpeed());
 	weaponTime_ = weapon_->getTime(*context_);
+	timeout_ = weapon_->getTimeout(*context_);
 	scale_ = weapon_->getScale(*context_).asFloat();
 	if (!context_->getServerMode()) 
 	{
@@ -116,6 +118,11 @@ void ShotBounce::simulate(fixed frameTime, bool &remove)
 	if (totalTime_ > weaponTime_)
 	{
 		doCollision();
+		remove = true;
+	}
+	if (timeout_ > 0 && 
+		totalTime_ > timeout_)
+	{
 		remove = true;
 	}
 

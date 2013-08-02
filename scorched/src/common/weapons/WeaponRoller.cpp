@@ -40,8 +40,9 @@ WeaponRoller::WeaponRoller() :
 	gravityFactorExp_("WeaponRoller::gravityFactorExp", 1),
 	maintainVelocity_(false), roll_(true),
 	dampenVelocityExp_("WeaponRoller::dampenVelocityExp", 1), stepSize_(true, 100),
+	timeout_("WeaponRoller::timeout", 0), 
 	collisionAction_(0), stickyShields_(false),
-	landscapeCollision_(true), shieldCollision_(true),
+	landscapeCollision_(true), shieldCollision_(true), tankCollision_(true),
 	noCameraTrack_(false), scale_("WeaponRoller::scale", 1),
 	timeExp_("WeaponRoller::timeExp"),
 	numberRollers_("WeaponRoller::numberRollers")
@@ -67,9 +68,11 @@ bool WeaponRoller::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 	// Get life time
 	if (!accessoryNode->getNamedChild("time", timeExp_)) return false;
 	accessoryNode->getNamedChild("stepsize", stepSize_, false);
+	accessoryNode->getNamedChild("timeout", timeout_, false);
 
 	accessoryNode->getNamedChild("landscapecollision", landscapeCollision_, false);
 	accessoryNode->getNamedChild("shieldcollision", shieldCollision_, false);
+	accessoryNode->getNamedChild("tankcollision", tankCollision_, false);
 
     // Get the hurt factor (if any)
     accessoryNode->getNamedChild("shieldhurtfactor", shieldHurtFactorExp_, false);
@@ -113,31 +116,6 @@ bool WeaponRoller::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 	if (!rollerModelId_.initFromNode(modelNode)) return false;
 
 	return true;
-}
-
-fixed WeaponRoller::getWindFactor(ScorchedContext &context)
-{
-	return windFactorExp_.getValue(context);
-}
-
-fixed WeaponRoller::getGravityFactor(ScorchedContext &context)
-{
-	return gravityFactorExp_.getValue(context);
-}
-
-fixed WeaponRoller::getTime(ScorchedContext &context)
-{
-	return timeExp_.getValue(context);
-}
-
-fixed WeaponRoller::getScale(ScorchedContext &context) 
-{ 
-	return scale_.getValue(context); 
-}
-
-fixed WeaponRoller::getShieldHurtFactor(ScorchedContext &context)
-{
-	return shieldHurtFactorExp_.getValue(context);
 }
 
 void WeaponRoller::fireWeapon(ScorchedContext &context,

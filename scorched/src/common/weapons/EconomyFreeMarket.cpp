@@ -193,9 +193,9 @@ void EconomyFreeMarket::accessoryBought(Tank *tank,
 			Accessory *accessory = *itor;
 
 			int accessoryPrice = 
-				accessory->getOriginalPrice() / accessory->getBundle(); 
+				accessory->getOriginalPrice() / MAX(accessory->getBundle(), 1); 
 			int boughtAccessoryPrice = 
-				boughtAccessory->getOriginalPrice() / accessory->getBundle(); 
+				boughtAccessory->getOriginalPrice() / MAX(accessory->getBundle(), 1); 
 			if (accessoryPrice >= int(float(boughtAccessoryPrice) * 0.33f) && 
 				accessoryPrice <= int(float(boughtAccessoryPrice) * 3.33f) && 
 				tank->getAccessories().accessoryAllowed(accessory, accessory->getBundle()) && 

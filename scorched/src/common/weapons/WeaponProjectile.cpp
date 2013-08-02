@@ -30,10 +30,11 @@ WeaponProjectile::WeaponProjectile() :
 	under_(false), collisionAction_(0), 
 	apexCollision_(false), waterCollision_(false), wallCollision_(true),
 	showShotPath_(false), showEndPoint_(false), 
-	landscapeCollision_(true), shieldCollision_(true),
+	landscapeCollision_(true), shieldCollision_(true), tankCollision_(true),
 	createSmoke_(true),	createFlame_(true), noCameraTrack_(false),
 	spinSpeed_("WeaponProjectile::spinSpeed", 1), spinAxis_(0.0f, 0.0f, 1.0f), apexNoDud_(false), timedDud_(false),
 	timedCollision_("WeaponProjectile::timedCollision", 0), heightCollision_("WeaponProjectile::heightCollision", 0),
+	timeout_("WeaponProjectile::timeout", 0),
 	wobbleSpin_("WeaponProjectile::wobbleSpin", 0), wobbleAmount_("WeaponProjectile::wobbleAmount", 2),
 	shieldHurtFactor_("WeaponProjectile::shieldHurtFactor", 1), windFactor_("WeaponProjectile::windFactor", 1), 
 	gravityFactor_("WeaponProjectile::gravityFactor", 1),
@@ -145,8 +146,9 @@ bool WeaponProjectile::parseXML(AccessoryCreateContext &context, XMLNode *access
 	if (wallCollNode) wallCollision_ = false;	
 
 	// Get the timed collision point
-	XMLNode *timedDudNode = 0;
+	accessoryNode->getNamedChild("timeout", timeout_, false);
 	accessoryNode->getNamedChild("timedcollision", timedCollision_, false);
+	XMLNode *timedDudNode = 0;
 	accessoryNode->getNamedChild("timeddud", timedDudNode, false);
 	if (timedDudNode) timedDud_ = true;
 
@@ -155,6 +157,7 @@ bool WeaponProjectile::parseXML(AccessoryCreateContext &context, XMLNode *access
 
 	accessoryNode->getNamedChild("landscapecollision", landscapeCollision_, false);
 	accessoryNode->getNamedChild("shieldcollision", shieldCollision_, false);
+	accessoryNode->getNamedChild("tankcollision", tankCollision_, false);
 
 	// Get the no smoke node
 	XMLNode *noCreateSmokeNode = 0;

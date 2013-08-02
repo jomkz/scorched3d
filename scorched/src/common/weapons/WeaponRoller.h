@@ -42,12 +42,14 @@ public:
 	bool getNoCameraTrack() { return noCameraTrack_; }
 	bool getLandscapeCollision() { return landscapeCollision_; }
 	bool getShieldCollision() { return shieldCollision_; }
-	fixed getShieldHurtFactor(ScorchedContext &context);
-	fixed getTime(ScorchedContext &context);
-	fixed getWindFactor(ScorchedContext &context);
-	fixed getGravityFactor(ScorchedContext &context);
+	bool getTankCollision() { return tankCollision_; }
+	fixed getShieldHurtFactor(ScorchedContext &context) { return shieldHurtFactorExp_.getValue(context); }
+	fixed getTime(ScorchedContext &context) { return timeExp_.getValue(context); } 
+	fixed getWindFactor(ScorchedContext &context) { return windFactorExp_.getValue(context); }
+	fixed getGravityFactor(ScorchedContext &context) { return gravityFactorExp_.getValue(context); }
 	fixed getStepSize() { return stepSize_; }
-	fixed getScale(ScorchedContext &context);
+	fixed getScale(ScorchedContext &context) { return scale_.getValue(context); }
+	fixed getTimeout(ScorchedContext &context) { return timeout_.getValue(context); }
 
 	ObjectGroupEntryDefinition &getLocalGroups() { return localGroups_; }
 	ObjectGroupEntryDefinition &getGlobalGroups() { return globalGroups_; }
@@ -69,11 +71,13 @@ protected:
 	NumberParser windFactorExp_;
 	NumberParser timeExp_;
 	NumberParser scale_;
+	NumberParser timeout_;
 	fixed stepSize_;
 	bool roll_;
 	bool stickyShields_;
 	bool landscapeCollision_;
 	bool shieldCollision_;
+	bool tankCollision_;
 	bool maintainVelocity_;
 	bool noCameraTrack_;
 	

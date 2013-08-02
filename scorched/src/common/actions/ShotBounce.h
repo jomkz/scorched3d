@@ -55,7 +55,7 @@ protected:
 	FixedVector lookFrom_;
 	WeaponRoller *weapon_;
 	WeaponFireContext weaponContext_;
-	fixed totalTime_, simulateTime_, stepSize_;
+	fixed totalTime_, simulateTime_, stepSize_, timeout_;
 	fixed weaponTime_;
 	ModelRendererSimulator *model_;
 	float scale_;

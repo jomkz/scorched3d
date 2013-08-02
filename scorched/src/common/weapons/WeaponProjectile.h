@@ -49,6 +49,7 @@ public:
 	bool getWaterCollision() { return waterCollision_; }
 	bool getLandscapeCollision() { return landscapeCollision_; }
 	bool getShieldCollision() { return shieldCollision_; }
+	bool getTankCollision() { return tankCollision_; }
 	bool getWallCollision() { return wallCollision_; }
 	bool getApexNoDud() { return apexNoDud_; }
 	bool getCreateSmoke() { return createSmoke_; }
@@ -60,6 +61,7 @@ public:
 	fixed getTimedCollision(ScorchedContext &context) { return timedCollision_.getValue(context); }
 	fixed getHeightCollision(ScorchedContext &context) { return heightCollision_.getValue(context); }
 	fixed getSpinSpeed(ScorchedContext &context) { return spinSpeed_.getValue(context); }
+	fixed getTimeout(ScorchedContext &context) { return timeout_.getValue(context); }
 	fixed getStepSize() { return stepSize_; }
 	float getFlameLife() { return flameLife_; }
 	float getFlameStartSize() { return flameStartSize_; }
@@ -95,6 +97,7 @@ protected:
 	bool waterCollision_, wallCollision_;
 	bool landscapeCollision_;
 	bool shieldCollision_;
+	bool tankCollision_;
 	bool apexNoDud_, timedDud_;
 	bool noCameraTrack_;
 	NumberParser spinSpeed_;
@@ -106,7 +109,7 @@ protected:
 	float smokeStartSize_, smokeEndSize_;
 	ObjectGroupEntryDefinition localGroups_, globalGroups_;
 	NumberParser thrustTime_, thrustAmount_;
-	NumberParser timedCollision_;
+	NumberParser timedCollision_, timeout_;
 	NumberParser shieldHurtFactor_;
 	NumberParser scale_;
 	NumberParser windFactor_;

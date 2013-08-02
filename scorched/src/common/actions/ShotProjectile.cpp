@@ -90,8 +90,10 @@ void ShotProjectile::init()
 	getPhysics().setOptionWallCollision(getWeapon()->getWallCollision());
 	getPhysics().setOptionLandscapeCollision(getWeapon()->getLandscapeCollision());
 	getPhysics().setOptionShieldCollision(getWeapon()->getShieldCollision());
+	getPhysics().setOptionTankCollision(getWeapon()->getTankCollision());
 
 	thrustTime_ = getWeapon()->getThrustTime(*context_);
+	timeout_ = weapon_->getTimeout(*context_);
 	thrustAmount_ = getWeapon()->getThrustAmount(*context_);
 	timedCollision_ = getWeapon()->getTimedCollision(*context_);
 	heightCollision_ = getWeapon()->getHeightCollision(*context_);
@@ -157,7 +159,7 @@ void ShotProjectile::collision(PhysicsParticleObject &position,
 		{
 			doColl = false;
 		}
-		if ((getWeapon()->getTimedCollision(*context_) > 0) && getWeapon()->getTimedDud())
+		if ((timedCollision_ > 0) && getWeapon()->getTimedDud())
 		{
 			doColl = false;
 		}
@@ -204,7 +206,14 @@ void ShotProjectile::simulate(fixed frameTime, bool &remove)
 		}
 	}
 
-	// Apex collision
+	// Timeout
+	if (timeout_ > 0 && 
+		totalTime_ > timeout_)
+	{
+		remove = true;
+	}
+
+	// Height collision
 	if (!remove &&
 		heightCollision_ > 0)
 	{
