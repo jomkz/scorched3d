@@ -176,3 +176,21 @@ create table if not exists scorched3d_binary (
 	
 	PRIMARY KEY(binaryid)
 );
+
+create table if not exists scorched3d_achievement_names (
+	achievementid INTEGER auto_increment,
+
+	name varchar(64) BINARY NOT NULL DEFAULT "",
+
+	PRIMARY KEY(achievementid)
+);
+
+create table if not exists scorched3d_achievements (
+	achievementid INTEGER NOT NULL DEFAULT 0,
+	playerid INTEGER NOT NULL DEFAULT 0,
+	achievementrank INTEGER NOT NULL DEFAULT 0,
+
+	PRIMARY KEY(achievementid, playerid),
+	FOREIGN KEY (achievementid) REFERENCES scorched3d_achievement_names(achievementrank) on delete cascade,
+	FOREIGN KEY (playerid) REFERENCES scorched3d_players(playerid) on delete cascade
+);
