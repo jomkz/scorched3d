@@ -56,6 +56,7 @@ void ShotBounce::init()
 	getPhysics().setOptionLandscapeCollision(getWeapon()->getLandscapeCollision());
 	getPhysics().setOptionShieldCollision(getWeapon()->getShieldCollision());
 	getPhysics().setOptionTankCollision(getWeapon()->getTankCollision());
+	getPhysics().setOptionTargetCollision(getWeapon()->getTargetCollision());
 
 	stepSize_ = weapon_->getStepSize() * 
 		fixed(true, context_->getOptionsGame().getWeaponSpeed());

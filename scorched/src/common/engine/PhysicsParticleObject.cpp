@@ -44,7 +44,7 @@ PhysicsParticleObject::PhysicsParticleObject() :
 	handler_(0), context_(0), optionUnderGroundCollision_(false), iterations_(0),
 	info_(ParticleTypeNone, 0, 0), optionRotateOnCollision_(false), optionWallCollision_(true),
 	optionStickyShields_(false), optionShieldCollision_(true), optionLandscapeCollision_(true),
-	optionTankCollision_(true)
+	optionTankCollision_(true), optionTargetCollision_(true)
 {
 }
 
@@ -644,7 +644,7 @@ bool PhysicsParticleObject::getShieldCollision(CollisionInfo &collision, Target 
 
 bool PhysicsParticleObject::getTargetCollision(CollisionInfo &collision, Target *target)
 {
-	if (!target) return false;
+	if (!target || !optionTargetCollision_) return false;
 	if (target->getType() == Target::TypeTank && !optionTankCollision_) return false;
 
 	// We cannot collide with ourselves

@@ -91,6 +91,7 @@ void ShotProjectile::init()
 	getPhysics().setOptionLandscapeCollision(getWeapon()->getLandscapeCollision());
 	getPhysics().setOptionShieldCollision(getWeapon()->getShieldCollision());
 	getPhysics().setOptionTankCollision(getWeapon()->getTankCollision());
+	getPhysics().setOptionTargetCollision(getWeapon()->getTargetCollision());
 
 	thrustTime_ = getWeapon()->getThrustTime(*context_);
 	timeout_ = weapon_->getTimeout(*context_);

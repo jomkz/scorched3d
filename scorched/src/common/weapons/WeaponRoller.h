@@ -43,6 +43,7 @@ public:
 	bool getLandscapeCollision() { return landscapeCollision_; }
 	bool getShieldCollision() { return shieldCollision_; }
 	bool getTankCollision() { return tankCollision_; }
+	bool getTargetCollision() { return targetCollision_; }
 	fixed getShieldHurtFactor(ScorchedContext &context) { return shieldHurtFactorExp_.getValue(context); }
 	fixed getTime(ScorchedContext &context) { return timeExp_.getValue(context); } 
 	fixed getWindFactor(ScorchedContext &context) { return windFactorExp_.getValue(context); }
@@ -78,6 +79,7 @@ protected:
 	bool landscapeCollision_;
 	bool shieldCollision_;
 	bool tankCollision_;
+	bool targetCollision_;
 	bool maintainVelocity_;
 	bool noCameraTrack_;
 	

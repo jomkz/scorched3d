@@ -90,6 +90,8 @@ public:
 		{ optionLandscapeCollision_ = landscapeCollision; }
 	void setOptionTankCollision(bool tankCollision) 
 		{ optionTankCollision_ = tankCollision; }
+	void setOptionTargetCollision(bool targetCollision) 
+		{ optionTargetCollision_ = targetCollision; }
 
 	void applyForce(FixedVector &force);
 	void applyOffset(FixedVector &offset);
@@ -113,6 +115,7 @@ protected:
 	bool optionShieldCollision_;
 	bool optionLandscapeCollision_;
 	bool optionTankCollision_;
+	bool optionTargetCollision_;
 	unsigned int iterations_;
 	FixedVector position_;
 	FixedVector velocity_;

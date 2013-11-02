@@ -42,7 +42,7 @@ WeaponRoller::WeaponRoller() :
 	dampenVelocityExp_("WeaponRoller::dampenVelocityExp", 1), stepSize_(true, 100),
 	timeout_("WeaponRoller::timeout", 0), 
 	collisionAction_(0), stickyShields_(false),
-	landscapeCollision_(true), shieldCollision_(true), tankCollision_(true),
+	landscapeCollision_(true), shieldCollision_(true), tankCollision_(true), targetCollision_(true),
 	noCameraTrack_(false), scale_("WeaponRoller::scale", 1),
 	timeExp_("WeaponRoller::timeExp"),
 	numberRollers_("WeaponRoller::numberRollers")
@@ -73,6 +73,7 @@ bool WeaponRoller::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 	accessoryNode->getNamedChild("landscapecollision", landscapeCollision_, false);
 	accessoryNode->getNamedChild("shieldcollision", shieldCollision_, false);
 	accessoryNode->getNamedChild("tankcollision", tankCollision_, false);
+	accessoryNode->getNamedChild("targetcollision", targetCollision_, false);
 
     // Get the hurt factor (if any)
     accessoryNode->getNamedChild("shieldhurtfactor", shieldHurtFactorExp_, false);

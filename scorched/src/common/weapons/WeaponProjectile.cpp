@@ -30,7 +30,7 @@ WeaponProjectile::WeaponProjectile() :
 	under_(false), collisionAction_(0), 
 	apexCollision_(false), waterCollision_(false), wallCollision_(true),
 	showShotPath_(false), showEndPoint_(false), 
-	landscapeCollision_(true), shieldCollision_(true), tankCollision_(true),
+	landscapeCollision_(true), shieldCollision_(true), tankCollision_(true), targetCollision_(true),
 	createSmoke_(true),	createFlame_(true), noCameraTrack_(false),
 	spinSpeed_("WeaponProjectile::spinSpeed", 1), spinAxis_(0.0f, 0.0f, 1.0f), apexNoDud_(false), timedDud_(false),
 	timedCollision_("WeaponProjectile::timedCollision", 0), heightCollision_("WeaponProjectile::heightCollision", 0),
@@ -158,6 +158,7 @@ bool WeaponProjectile::parseXML(AccessoryCreateContext &context, XMLNode *access
 	accessoryNode->getNamedChild("landscapecollision", landscapeCollision_, false);
 	accessoryNode->getNamedChild("shieldcollision", shieldCollision_, false);
 	accessoryNode->getNamedChild("tankcollision", tankCollision_, false);
+	accessoryNode->getNamedChild("targetcollision", targetCollision_, false);
 
 	// Get the no smoke node
 	XMLNode *noCreateSmokeNode = 0;

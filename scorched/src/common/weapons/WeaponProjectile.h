@@ -50,6 +50,7 @@ public:
 	bool getLandscapeCollision() { return landscapeCollision_; }
 	bool getShieldCollision() { return shieldCollision_; }
 	bool getTankCollision() { return tankCollision_; }
+	bool getTargetCollision() { return targetCollision_; }
 	bool getWallCollision() { return wallCollision_; }
 	bool getApexNoDud() { return apexNoDud_; }
 	bool getCreateSmoke() { return createSmoke_; }
@@ -97,7 +98,7 @@ protected:
 	bool waterCollision_, wallCollision_;
 	bool landscapeCollision_;
 	bool shieldCollision_;
-	bool tankCollision_;
+	bool tankCollision_, targetCollision_;
 	bool apexNoDud_, timedDud_;
 	bool noCameraTrack_;
 	NumberParser spinSpeed_;
