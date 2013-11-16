@@ -662,9 +662,10 @@ bool PhysicsParticleObject::getTargetCollision(CollisionInfo &collision, Target 
 	return false;
 }
 
-bool PhysicsParticleObject::getTargetBounceCollision(CollisionInfo &collision, Target *target)
+bool PhysicsParticleObject::getTargetBounceCollision(CollisionInfo &collision, Target *notUsedTarget)
 {
 	if (info_.type_ != ParticleTypeBounce) return false;
+	if (!optionTargetCollision_) return false;
 
 	// A special case, to add some width to the bounce particle to make it easier
 	// to hit targets with
