@@ -59,6 +59,7 @@ protected:
 	fixed weaponTime_;
 	ModelRendererSimulator *model_;
 	float scale_;
+	bool collided_;
 
 	void doCollision();
 

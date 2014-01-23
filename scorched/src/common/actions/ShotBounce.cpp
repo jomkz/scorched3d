@@ -42,7 +42,7 @@ ShotBounce::ShotBounce(WeaponRoller *weapon,
 	startPosition_(startPosition),
 	velocity_(velocity), weapon_(weapon), weaponContext_(weaponContext),
 	totalTime_(0), simulateTime_(0),
-	model_(0), vPoint_(0), groups_(0)
+	model_(0), vPoint_(0), groups_(0), collided_(false)
 {
 }
 
@@ -173,6 +173,9 @@ void ShotBounce::draw()
 
 void ShotBounce::doCollision()
 {
+	if (collided_) return;
+	collided_ = true;
+
 	WeaponRoller *proj = (WeaponRoller *) weapon_;
 	proj->getCollisionAction()->fire(
 		*context_, weaponContext_, 

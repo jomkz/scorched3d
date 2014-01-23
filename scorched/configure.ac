@@ -13,8 +13,8 @@ AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_RANLIB
 
-LDFLAGS="-L/usr/X11R6/lib -L/usr/X11R6"
-CPPFLAGS="-I/usr/X11R6/include -I/usr/X11R6"
+LDFLAGS="$LDFLAGS -L/usr/X11R6/lib -L/usr/X11R6"
+CPPFLAGS="$CPPFLAGS -I/usr/X11R6/include -I/usr/X11R6"
 
 if test `uname` == Darwin; then
 LDFLAGS="$LDFLAGS -lmx"
