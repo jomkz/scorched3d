@@ -22,6 +22,7 @@
 #define AFX_TankAI_H__5F21C9C7_0F71_4CCC_ABB9_976CF0A5C5EC__INCLUDED_
 
 #include <engine/ScorchedCollisionIds.h>
+#include <XML/XMLEntrySimpleTypes.h>
 #include <common/Vector.h>
 #include <common/ToolTip.h>
 #include <string>
@@ -30,21 +31,18 @@ class TankAIWeaponSets;
 class Weapon;
 class XMLNode;
 class Tanket;
-class TankAI
+class TankAI : public XMLEntryContainer
 {
 public:
-	TankAI();
+	TankAI(const char *typeName, const char *description);
 	virtual ~TankAI();
 
 	// Instance init
 	virtual TankAI *createCopy(Tanket *tanket) = 0;
-
-	// Onetime init
-	virtual bool parseConfig(TankAIWeaponSets &sets, XMLNode *node);
-
+	
 	// Other
-	virtual const char *getName() { return name_.c_str(); }
-	virtual const char *getDescription() { return description_.c_str(); }
+	virtual const char *getName() { return name_.getValue().c_str(); }
+	virtual const char *getDescription() { return description_.getValue().c_str(); }
 	virtual ToolTip *getToolTip();
 
 	// Notification of actions to perform
@@ -62,19 +60,17 @@ public:
 
 	// Indicates if this computer ai is available for choice by
 	// the random tank ai type
-	virtual bool availableForRandom() { return availableForRandom_; }
-	virtual bool availableForPlayers() { return availableForPlayers_; }
+	virtual bool availableForRandom() { return availableForRandom_.getValue(); }
+	virtual bool availableForPlayers() { return availableForPlayers_.getValue(); }
 	virtual bool removedPlayer() { return false; }
 
 	static bool &getTankAILogging() { return tankAILogging_; }
 
 protected:
 	static bool tankAILogging_;
-	std::string name_, description_;
-	bool availableForRandom_;
-	bool availableForPlayers_;
+	XMLEntryString name_, description_;
+	XMLEntryBool availableForRandom_, availableForPlayers_;
 	ToolTip toolTip_;
-
 };
 
 #endif // !defined(AFX_TankAI_H__5F21C9C7_0F71_4CCC_ABB9_976CF0A5C5EC__INCLUDED_)

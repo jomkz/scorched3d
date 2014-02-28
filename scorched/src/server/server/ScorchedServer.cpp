@@ -55,7 +55,7 @@
 #include <tankai/TankAIWeaponSets.h>
 #include <tankai/TankAIAdder.h>
 #include <target/TargetSpace.h>
-#include <landscapedef/LandscapeDefinitions.h>
+#include <landscapedef/LandscapeDescriptions.h>
 #include <coms/ComsSimulateResultMessage.h>
 #include <weapons/EconomyStore.h>
 #include <weapons/AccessoryStore.h>
@@ -262,7 +262,7 @@ void ScorchedServer::startServerInternal(ScorchedServerSettings *settings,
 		S3D::dialogExit("Scorched3D", "Cannot load tank meshes");
 	}
 	getOptionsTransient().reset();
-	if (!getLandscapes().readLandscapeDefinitions()) 
+	if (!getLandscapes().readLandscapeDescriptions()) 
 	{
 		S3D::dialogExit("Scorched3D", "Cannot read landscape definitions");
 	}

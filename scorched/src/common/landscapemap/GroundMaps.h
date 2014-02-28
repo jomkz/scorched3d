@@ -27,11 +27,11 @@
 class RandomGenerator;
 class ScorchedContext;
 class LandscapeInclude;
-class LandscapeDefinitionCache;
+class LandscapeDescriptionCache;
 class GroundMaps
 {
 public:
-	GroundMaps(LandscapeDefinitionCache &defnCache);
+	GroundMaps(LandscapeDescriptionCache &defnCache);
 	virtual ~GroundMaps();
 
 	// Generates the next level
@@ -73,7 +73,7 @@ protected:
 	HeightMap map_; // The current level's heightmap
 	NapalmMap nmap_; // How high napalm is at certain points
 	HeightMap deformMap_; // How low can this level go
-	LandscapeDefinitionCache &defnCache_;
+	LandscapeDescriptionCache &defnCache_;
 
 	// Generate levels
 	void generateHMap(

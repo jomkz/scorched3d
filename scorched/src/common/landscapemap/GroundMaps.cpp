@@ -23,8 +23,8 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeInclude.h>
 #include <landscapedef/LandscapeTex.h>
-#include <landscapedef/LandscapeDefinitions.h>
-#include <landscapedef/LandscapeDefinitionCache.h>
+#include <landscapedef/LandscapeDescriptions.h>
+#include <landscapedef/LandscapeDescriptionCache.h>
 #include <placement/PlacementType.h>
 #include <engine/ObjectGroups.h>
 #include <target/Target.h>
@@ -34,7 +34,7 @@
 #include <image/ImageFactory.h>
 #include <lang/LangResource.h>
 
-GroundMaps::GroundMaps(LandscapeDefinitionCache &defnCache) :
+GroundMaps::GroundMaps(LandscapeDescriptionCache &defnCache) :
 	defnCache_(defnCache), 
 	arenaX_(-1),
 	arenaY_(-1),
@@ -51,10 +51,10 @@ void GroundMaps::generateMaps(
 	ScorchedContext &context,
 	ProgressCounter *counter)
 {
-	arenaWidth_ = context.getLandscapeMaps().getDefinitions().getDefn()->getArenaWidth();
-	arenaHeight_ = context.getLandscapeMaps().getDefinitions().getDefn()->getArenaHeight();
-	arenaX_ = context.getLandscapeMaps().getDefinitions().getDefn()->getArenaX();
-	arenaY_ = context.getLandscapeMaps().getDefinitions().getDefn()->getArenaY();
+	arenaWidth_ = context.getLandscapeMaps().getDescriptions().getDefn()->getArenaWidth();
+	arenaHeight_ = context.getLandscapeMaps().getDescriptions().getDefn()->getArenaHeight();
+	arenaX_ = context.getLandscapeMaps().getDescriptions().getDefn()->getArenaX();
+	arenaY_ = context.getLandscapeMaps().getDescriptions().getDefn()->getArenaY();
 
 	generateHMap(context, counter);
 	nmap_.create(getLandscapeWidth(), getLandscapeHeight());	

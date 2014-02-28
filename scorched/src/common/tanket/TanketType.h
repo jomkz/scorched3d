@@ -21,43 +21,89 @@
 #if !defined(__INCLUDE_TanketTypeh_INCLUDE__)
 #define __INCLUDE_TanketTypeh_INCLUDE__
 
-#include <common/fixed.h>
-#include <string>
-#include <map>
-#include <set>
+#include <XML/XMLEntrySimpleTypes.h>
+
+class TanketTypeStartingAccessory : public XMLEntryContainer
+{
+public:
+	TanketTypeStartingAccessory();
+	virtual ~TanketTypeStartingAccessory();
+
+	XMLEntryString name;
+	XMLEntryInt count;
+};
+
+class TanketTypeStartingAccessoryList : public XMLEntryList<TanketTypeStartingAccessory>
+{
+public:
+	TanketTypeStartingAccessoryList();
+	virtual ~TanketTypeStartingAccessoryList();
+
+	virtual TanketTypeStartingAccessory *createXMLEntry(void *xmlData);
+};
+
+class TanketTypeDisabledAccessory : public XMLEntryContainer
+{
+public:
+	TanketTypeDisabledAccessory();
+	virtual ~TanketTypeDisabledAccessory();
+
+	XMLEntryString name;
+};
+
+class TanketTypeDisabledAccessoryList : public XMLEntryList<TanketTypeDisabledAccessory>
+{
+public:
+	TanketTypeDisabledAccessoryList();
+	virtual ~TanketTypeDisabledAccessoryList();
+
+	virtual TanketTypeDisabledAccessory *createXMLEntry(void *xmlData);
+};
 
 class ToolTip;
 class XMLNode;
 class Accessory;
 class ScorchedContext;
-class TanketType
+class TanketType : public XMLEntryContainer
 {
 public:
 	TanketType();
 	virtual ~TanketType();
 
-	bool getUseAsDefault() { return default_; }
+	bool getUseAsDefault() { return default_.getValue(); }
 
-	const char *getName() { return name_.c_str(); }
+	const char *getName() { return name_.getValue().c_str(); }
 	ToolTip *getTooltip() { return tooltip_; }
-	fixed getLife() { return life_; }
-	fixed getPower() { return power_; }
+	fixed getLife() { return life_.getValue(); }
+	fixed getPower() { return power_.getValue(); }
 
 	std::map<Accessory *, int> &getAccessories() { return accessories_; }
 	bool getAccessoryDisabled(Accessory *accessory);
 
-	bool initFromXML(ScorchedContext &context, XMLNode *node);
+	virtual bool readXML(XMLNode *node, void *xmlData);
 
 protected:
-	bool default_;
 	ToolTip *tooltip_;
-	std::string name_, description_;
+	XMLEntryString name_, description_;
+	XMLEntryBool default_;
+	XMLEntryFixed life_;
+	XMLEntryFixed power_;
+	TanketTypeStartingAccessoryList startingAccessoryList_;
+	TanketTypeDisabledAccessoryList disabledAccessoryList_;
+	
 	std::map<Accessory *, int> accessories_;
 	std::set<Accessory *> disabledAccessories_;
-	fixed life_;
-	fixed power_;
 
 	void formTooltip();
+};
+
+class TanketTypeList : public XMLEntryList<TanketType>
+{
+public:
+	TanketTypeList();
+	virtual ~TanketTypeList();
+
+	virtual TanketType *createXMLEntry(void *xmlData);
 };
 
 #endif // __INCLUDE_TanketTypeh_INCLUDE__

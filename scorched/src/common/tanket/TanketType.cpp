@@ -25,59 +25,128 @@
 #include <engine/ScorchedContext.h>
 #include <weapons/AccessoryStore.h>
 
-TanketType::TanketType() : tooltip_(0), default_(false)
+TanketTypeStartingAccessory::TanketTypeStartingAccessory() :
+	XMLEntryContainer("TanketTypeStartingAccessory", 
+		"An accessory that this tank type will have at the start of the game without needing to buy it."
+		"Starting number of accessories can also be defined in the accessories file, "
+		"however this file specifies this on a per tank type basis"),
+	name("The name of the accessory as defined in the accessories file"),
+	count("The number of accessories that this tank should start with (-1 is an infinite number)")
 {
+	addChildXMLEntry("name", &name);
+	addChildXMLEntry("count", &count);
+}
+
+TanketTypeStartingAccessory::~TanketTypeStartingAccessory()
+{
+}
+
+TanketTypeStartingAccessoryList::TanketTypeStartingAccessoryList() :
+	XMLEntryList<TanketTypeStartingAccessory>("All the accessories that this tank will start with", 0)
+{
+}
+
+TanketTypeStartingAccessoryList::~TanketTypeStartingAccessoryList()
+{
+}
+
+TanketTypeStartingAccessory *TanketTypeStartingAccessoryList::createXMLEntry(void *xmlData)
+{
+	return new TanketTypeStartingAccessory();
+}
+
+TanketTypeDisabledAccessory::TanketTypeDisabledAccessory() :
+	XMLEntryContainer("TanketTypeDisabledAccessory", 
+		"An accessory that this tank type will not have access to (even if the tank picks it up via a power up)."),
+	name("The name of the accessory as defined in the accessories file")
+{
+	addChildXMLEntry("name", &name);
+}
+
+TanketTypeDisabledAccessory::~TanketTypeDisabledAccessory()
+{
+}
+
+TanketTypeDisabledAccessoryList::TanketTypeDisabledAccessoryList() :
+	XMLEntryList<TanketTypeDisabledAccessory>("All the accessories that this tank will start with", 0)
+{
+}
+
+TanketTypeDisabledAccessoryList::~TanketTypeDisabledAccessoryList()
+{
+}
+
+TanketTypeDisabledAccessory *TanketTypeDisabledAccessoryList::createXMLEntry(void *xmlData)
+{
+	return new TanketTypeDisabledAccessory();
+}
+
+TanketType::TanketType() : 
+	XMLEntryContainer("TanketType", "Defines a new type of a tank.  "
+		"All tanks have an associated type, this type defines the base characteristics of the tank"),
+	name_("The name of this tank type"),
+	description_("The description of this tank type"),
+	life_("The life (health) that this tank will spawn with, also defines the maximum health that this tank can have (excluding powerups)."),
+	power_("The power that this tank will spawn with, also defines the maximum power that this tank can have (excluding powerups)."),
+	default_("Is this the default tank type", 0, false),
+	tooltip_(0)
+{
+	addChildXMLEntry("name", &name_);
+	addChildXMLEntry("description", &description_);
+	addChildXMLEntry("default", &default_);
+	addChildXMLEntry("life", &life_);
+	addChildXMLEntry("power", &power_);
+	addChildXMLEntry("accessory", &startingAccessoryList_);
+	addChildXMLEntry("disableaccessory", &disabledAccessoryList_);
 }
 
 TanketType::~TanketType()
 {
 }
 
-bool TanketType::initFromXML(ScorchedContext &context, XMLNode *node)
+bool TanketType::readXML(XMLNode *node, void *xmlData)
 {
-	node->getNamedChild("default", default_, false);
-	if (!node->getNamedChild("name", name_)) return false;
-	if (!node->getNamedChild("life", life_)) return false;
-	if (!node->getNamedChild("power", power_)) return false;
-	if (!node->getNamedChild("description", description_)) return false;
+	if (!XMLEntryContainer::readXML(node, xmlData)) return false;
 
-	XMLNode *accessoryNode = 0;
-	while (node->getNamedChild("accessory", accessoryNode, false))
+	ScorchedContext *context = (ScorchedContext *) xmlData;
 	{
-		std::string name;
-		int count;
-		if (!accessoryNode->getNamedChild("name", name)) return false;
-		if (!accessoryNode->getNamedChild("count", count)) return false;
-		if (!accessoryNode->failChildren()) return false;
-
-		Accessory *accessory = context.getAccessoryStore().
-			findByPrimaryAccessoryName(name.c_str());
-		if (!accessory)
+		std::list<TanketTypeStartingAccessory *>::iterator 
+			itor = startingAccessoryList_.getChildren().begin(),
+			end = startingAccessoryList_.getChildren().end();
+		for (;itor!=end;++itor)
 		{
-			return accessoryNode->returnError("Failed to find named accessory");
-		}
+			Accessory *accessory = context->getAccessoryStore().
+				findByPrimaryAccessoryName((*itor)->name.getValue().c_str());
+			if (!accessory)
+			{
+				return node->returnError(
+					S3D::formatStringBuffer("Failed to find named starting accessory %s",
+						(*itor)->name.getValue().c_str()));
+			}
 
-		accessories_[accessory] = count;
+			accessories_[accessory] = (*itor)->count.getValue();
+		}
 	}
-	while (node->getNamedChild("disableaccessory", accessoryNode, false))
 	{
-		std::string name;
-		if (!accessoryNode->getNamedChild("name", name)) return false;
-		if (!accessoryNode->failChildren()) return false;
-
-		Accessory *accessory = context.getAccessoryStore().
-			findByPrimaryAccessoryName(name.c_str());
-		if (!accessory)
+		std::list<TanketTypeDisabledAccessory *>::iterator 
+			itor = disabledAccessoryList_.getChildren().begin(),
+			end = disabledAccessoryList_.getChildren().end();
+		for (;itor!=end;++itor)
 		{
-			return accessoryNode->returnError("Failed to find named accessory");
+			Accessory *accessory = context->getAccessoryStore().
+				findByPrimaryAccessoryName((*itor)->name.getValue().c_str());
+			if (!accessory)
+			{
+				return node->returnError(
+					S3D::formatStringBuffer("Failed to find named disabled accessory %s",
+						(*itor)->name.getValue().c_str()));
+			}
+			disabledAccessories_.insert(accessory);
 		}
-
-		disabledAccessories_.insert(accessory);
 	}
 
 	formTooltip();
-
-	return node->failChildren();
+	return true;
 }
 
 bool TanketType::getAccessoryDisabled(Accessory *accessory)
@@ -122,13 +191,27 @@ void TanketType::formTooltip()
 
 	tooltip_ = new ToolTip(
 		ToolTip::ToolTipNone,
-		LANG_STRING(name_),
+		LANG_STRING(name_.getValue()),
 		LANG_STRING(S3D::formatStringBuffer(
 			"%s\n"
 			"Life : %.0f\n"
 			"Power : %.0f%s",
-			description_.c_str(),
+			description_.getValue().c_str(),
 			getLife().asFloat(),
 			getPower().asFloat(),
 			accessoryBuffer.c_str())));
+}
+
+TanketTypeList::TanketTypeList() :
+	XMLEntryList<TanketType>("The list of available tank types", 1)
+{
+}
+
+TanketTypeList::~TanketTypeList()
+{
+}
+
+TanketType *TanketTypeList::createXMLEntry(void *xmlData)
+{
+	return new TanketType();
 }

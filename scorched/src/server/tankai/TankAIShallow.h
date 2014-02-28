@@ -21,6 +21,7 @@
 #if !defined(AFX_TankAIShallow_H__5F21C9C7_0F71_4CCC_ABB9_976CF0A5C5EC__INCLUDED_)
 #define AFX_TankAIShallow_H__5F21C9C7_0F71_4CCC_ABB9_976CF0A5C5EC__INCLUDED_
 
+#include <XML/XMLEntryRoot.h>
 #include <tankai/TankAI.h>
 
 class TankAIShallow : public TankAI
@@ -42,6 +43,24 @@ public:
 	virtual void shotLanded(ScorchedCollisionId collision,
 		Weapon *weapon, unsigned int firer, 
 		Vector &position) {}
+};
+
+class TankAIShallowList : public XMLEntryList<TankAIShallow>
+{
+public:
+	TankAIShallowList();
+	virtual ~TankAIShallowList();
+
+	virtual TankAIShallow *createXMLEntry(void *xmlData);
+};
+
+class TankAIShallowFile : public XMLEntryRoot<XMLEntryContainer>
+{
+public:
+	TankAIShallowFile();
+	virtual ~TankAIShallowFile();
+
+	TankAIShallowList tankAis_;
 };
 
 #endif // !defined(AFX_TankAIShallow_H__5F21C9C7_0F71_4CCC_ABB9_976CF0A5C5EC__INCLUDED_)

@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <landscapedef/LandscapeInclude.h>
-#include <landscapedef/LandscapeDefinitions.h>
+#include <landscapedef/LandscapeDescriptions.h>
 
 LansdscapeIncludeList::LansdscapeIncludeList() :
 	XMLEntryList<XMLEntryString>("A set of files to include into this file")
@@ -35,9 +35,8 @@ XMLEntryString *LansdscapeIncludeList::createXMLEntry(void *xmlData)
 	return new XMLEntryString("The name of file to include into this file");
 }
 
-LandscapeInclude::LandscapeInclude(LandscapeDefinitions *definitions, const char *name, const char *description) :
-	XMLEntryContainer(name, description),
-	definitions_(definitions)
+LandscapeInclude::LandscapeInclude(const char *name, const char *description, bool required) :
+	XMLEntryContainer(name, description, required)
 {
 	addChildXMLEntry("event", &events);
 	addChildXMLEntry("movement", &movements);
@@ -55,13 +54,15 @@ bool LandscapeInclude::readXML(XMLNode *parentNode, void *xmlData)
 {
 	if (!XMLEntryContainer::readXML(parentNode, xmlData)) return false;
 
+	LandscapeDescriptions *descriptions = (LandscapeDescriptions *) xmlData;
+
 	std::list<XMLEntryString *>::iterator itor = includeList.getChildren().begin(),
 		end = includeList.getChildren().end();
 	for (;itor!=end;++itor)
 	{
 		std::string fileName = (*itor)->getValue();
 		LandscapeInclude *landscapeInclude = 
-			definitions_->getInclude(fileName.c_str(), true);
+			descriptions->getInclude(fileName.c_str(), true);
 		if (!landscapeInclude) return false;
 		includes.push_back(landscapeInclude);
 	}
@@ -69,8 +70,9 @@ bool LandscapeInclude::readXML(XMLNode *parentNode, void *xmlData)
 	return true;
 }
 
-LandscapeIncludeFile::LandscapeIncludeFile(LandscapeDefinitions *definitions) :
-	LandscapeInclude(definitions, "LandscapeIncludeFile", 
+LandscapeIncludeFile::LandscapeIncludeFile() :
+	XMLEntryRoot<LandscapeInclude>(S3D::eModLocation, "<multiple>", "include",
+		"LandscapeInclude",
 		"A landscape/scene definition fragment, this fragment can contain many different types of Scorched3D artifact")
 {
 

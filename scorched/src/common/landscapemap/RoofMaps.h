@@ -24,11 +24,11 @@
 #include <landscapemap/HeightMap.h>
 
 class ScorchedContext;
-class LandscapeDefinitionCache;
+class LandscapeDescriptionCache;
 class RoofMaps
 {
 public:
-	RoofMaps(LandscapeDefinitionCache &defnCache);
+	RoofMaps(LandscapeDescriptionCache &defnCache);
 	virtual ~RoofMaps();
 
 	void generateMaps(
@@ -45,7 +45,7 @@ public:
 	HeightMap &getDeformRoofMap() { return deformRMap_; }
 
 protected:
-	LandscapeDefinitionCache &defnCache_;
+	LandscapeDescriptionCache &defnCache_;
 
 	// The roof of the landscape
 	HeightMap rmap_;

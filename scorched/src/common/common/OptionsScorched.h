@@ -39,7 +39,7 @@
 #define OPTIONVECTOR_GETTER(x) bool get##x() GENERIC_GETTER(x)
 
 class ScorchedContext;
-class LandscapeDefinition;
+class LandscapeDescription;
 class LandscapeInclude;
 class OptionsScorched
 {
@@ -175,7 +175,7 @@ public:
 
 	XMLEntrySimpleType *getEntryByName(const std::string &name);
 
-	void updateLevelOptions(ScorchedContext &context, LandscapeDefinition &defn);
+	void updateLevelOptions(ScorchedContext &context, LandscapeDescription &defn);
 	void updateChangeSet();
 	bool commitChanges();
 

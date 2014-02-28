@@ -35,10 +35,10 @@ LandscapeMaps::~LandscapeMaps()
 
 void LandscapeMaps::generateMaps(
 	ScorchedContext &context,
-	LandscapeDefinition &defn,
+	LandscapeDescription &defn,
 	ProgressCounter *counter)
 {
-	dCache_.setDefinition(context, defn);
+	dCache_.setDescription(context, defn);
 	gMaps_.generateMaps(context, counter);
 	rMaps_.generateMaps(context, counter);
 	gMaps_.generateObjects(context, counter);

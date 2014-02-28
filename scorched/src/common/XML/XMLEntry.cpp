@@ -145,7 +145,7 @@ void XMLEntryDocumentGenerator::addRootTypeTags(XMLEntryRootI *rootType, XMLEntr
 	std::map<std::string, TypeEntry>::iterator itor = types_.find(sourceTypeName);
 	DIALOG_ASSERT(itor != types_.end());
 	itor->second.root = true;
-	itor->second.variables->addVariableValue("TYPE_ROOT_FILENAME", rootType->getRootFileName());
+	itor->second.variables->addVariableValue("TYPE_ROOT_FILENAME", rootType->getRootFileName(), true);
 	itor->second.variables->addVariableValue("TYPE_ROOT_NODENAME", rootType->getRootNodeName());
 	itor->second.variables->addVariableValue("TYPE_ROOT_FILELOCATION", 
 		S3D::getLocationConstant(rootType->getRootFileLocation()));

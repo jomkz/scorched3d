@@ -30,7 +30,7 @@
 #include <target/TargetContainer.h>
 #include <tank/Tank.h>
 #include <tank/TankState.h>
-#include <landscapedef/LandscapeDefinitions.h>
+#include <landscapedef/LandscapeDescriptions.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <common/OptionsTransient.h>
 #include <events/EventController.h>
@@ -108,15 +108,15 @@ void ServerStateNewGame::newGameState()
 
 	// Get a landscape definition to use
 	ServerCommon::serverLog("Generating landscape");
-	LandscapeDefinition defn;
-	if (ScorchedServer::instance()->getLandscapeMaps().getDefinitions().
-		getDefinition().getDefinitionNumber() == 0)
+	LandscapeDescription defn;
+	if (ScorchedServer::instance()->getLandscapeMaps().getDescriptions().
+		getDescription().getDescriptionNumber() == 0)
 	{
-		defn = ScorchedServer::instance()->getLandscapes().getBlankLandscapeDefn();
+		defn = ScorchedServer::instance()->getLandscapes().getBlankLandscapeDescription();
 	}
 	else
 	{
-		defn = ScorchedServer::instance()->getLandscapes().getRandomLandscapeDefn(
+		defn = ScorchedServer::instance()->getLandscapes().getRandomLandscapeDescription(
 			ScorchedServer::instance()->getContext().getOptionsGame(),
 			ScorchedServer::instance()->getContext().getTargetContainer());
 	}

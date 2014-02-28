@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <landscapedef/LandscapeTex.h>
-#include <landscapedef/LandscapeDefinitions.h>
+#include <landscapedef/LandscapeDescriptions.h>
 #include <engine/ScorchedContext.h>
 #include <weapons/AccessoryStore.h>
 #include <common/Defines.h>
@@ -28,15 +28,25 @@
 #include <time.h>
 #include <float.h>
 
-// LandscapeTex
-LandscapeTex::LandscapeTex(LandscapeDefinitions *definitions) : 
-	LandscapeInclude(definitions, "LandscapeTex", "A landscape/scene definition, usualy related to the visual aspects of the landscape"),
-	landscapeGenerationSeed("A seed usualy used to create random lanscapes", 0, 0),
-	waterHeight("The height of the lanscape water", 0, -10)
+LandscapeTex::LandscapeTex(const char *name, const char *description, bool required) : 
+	LandscapeInclude(name, description, required),
+	waterHeight("The height of the landscape water", 0, -10)
 {
-	addChildXMLEntry("landscapegenerationseed", &landscapeGenerationSeed, "waterheight", &waterHeight);
+	addChildXMLEntry("waterheight", &waterHeight);
 }
 
 LandscapeTex::~LandscapeTex()
+{
+}
+
+LandscapeTextureFile::LandscapeTextureFile() :
+		XMLEntryRoot<LandscapeTex>(S3D::eModLocation, "<multiple>", 
+			"tex",
+			"LandscapeTexure", 
+			"A landscape/scene definition, usualy related to the visual aspects of the landscape", true)
+{
+}
+
+LandscapeTextureFile::~LandscapeTextureFile()
 {
 }

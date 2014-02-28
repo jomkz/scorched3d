@@ -30,7 +30,7 @@
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
 #include <common/ChannelManager.h>
-#include <landscapedef/LandscapeDefinitions.h>
+#include <landscapedef/LandscapeDescriptions.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <lang/LangResource.h>
 #include <tank/Tank.h>
@@ -92,19 +92,19 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 
 	// Display info
 	Logger::log(S3D::formatStringBuffer("Loading landscape %s (Defn: %s, Tex: %s)",
-		message.getLandscapeDefinition().getName(),
-		message.getLandscapeDefinition().getDefn(),
-		message.getLandscapeDefinition().getTex()));
+		message.getLandscapeDescription().getName(),
+		message.getLandscapeDescription().getDefn(),
+		message.getLandscapeDescription().getTex()));
 
 	// Read the state from the message
 	if (!message.loadState(ScorchedClient::instance()->getContext())) return false;
 	if (!message.loadTanks(ScorchedClient::instance()->getContext())) return false;
 
 	// Set the progress dialog nicities
-	LandscapeDefinitionsEntry *landscapeDefinition =
+	LandscapeDescriptionsEntry *landscapeDescription =
 		ScorchedClient::instance()->getLandscapes().getLandscapeByName(
-		message.getLandscapeDefinition().getName());
-	if (landscapeDefinition)
+		message.getLandscapeDescription().getName());
+	if (landscapeDescription)
 	{
 		//Image image = ImageFactory::loadImage(S3D::eModLocation,
 		//	S3D::formatStringBuffer("data/landscapes/%s", 
@@ -116,7 +116,7 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 	// Generate new landscape
 	ScorchedClient::instance()->getLandscapeMaps().generateMaps(
 		ScorchedClient::instance()->getContext(),
-		message.getLandscapeDefinition(),
+		message.getLandscapeDescription(),
 		GUIProgressCounter::instance()); // No events
 
 	// Reset and initialize simulator and
@@ -142,7 +142,7 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 	simulateMessages.clear();
 
 	// Move into the next state
-	if (strcmp(message.getLandscapeDefinition().getName(), "blank") == 0)
+	if (strcmp(message.getLandscapeDescription().getName(), "blank") == 0)
 	{
 		ScorchedClient::instance()->getClientState().setState(ClientState::StateWaitNoLandscape);
 	}

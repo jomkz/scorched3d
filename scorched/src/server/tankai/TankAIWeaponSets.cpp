@@ -25,9 +25,28 @@
 #include <server/ServerSimulator.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
+#include <common/Defines.h>
 #include <weapons/AccessoryStore.h>
 #include <simactions/TankAccessorySimAction.h>
 #include <XML/XMLFile.h>
+
+static XMLEntryStringEnum::EnumEntry weaponSetTypeEnum[] =
+{
+	{ "explosionhuge" },
+	{ "explosionlarge" },
+	{ "explosionsmall" },
+	{ "uncover" },
+	{ "digger" },
+	{ "roller" },
+	{ "napalm" },
+	{ "laser" },
+	{ "shield" },
+	{ "other" },
+	{ "fuel" },
+	{ "autodefense" },
+	{ "parachute" },
+	{ "" }
+};
 
 TankAIWeaponSets::WeaponSetAccessories::WeaponSetAccessories(Tanket *tanket) :
 	tankAccessories(ScorchedServer::instance()->getContext())
@@ -48,8 +67,14 @@ TankAIWeaponSets::WeaponSetAccessories::WeaponSetAccessories(Tanket *tanket) :
 	tankId = tanket->getPlayerId();
 }
 
-TankAIWeaponSets::TankAIWeaponSets()
+TankAIWeaponSets::TankAIWeaponSets() :
+	XMLEntryRoot<XMLEntryContainer>(S3D::eModLocation, "data/tankaiweaponsets.xml", "weaponsets",
+		"TankAIWeaponSets",
+		"A set of accessories that can be selected for use by a tank AI.  "
+		"Each set tells the tank AI which accessories to buy (and when) and what accessories to use (and when)."
+		"Different sets can be defined to give tank AIs different buying/usage personalities, or to adjust their skill level.")
 {
+	addChildXMLEntry("weaponset", &weaponSets_);
 }
 
 TankAIWeaponSets::~TankAIWeaponSets()
@@ -58,57 +83,32 @@ TankAIWeaponSets::~TankAIWeaponSets()
 
 bool TankAIWeaponSets::parseConfig()
 {
-	XMLFile file;
-	std::string fileName = S3D::getModFile("data/tankaiweaponsets.xml");
-	if (!file.readFile(fileName.c_str(), true))
-	{
-		S3D::dialogMessage("TankAIWeaponSets", S3D::formatStringBuffer(
-			"Failed to parse \"%s\":%s\n", 
-			fileName.c_str(),
-			file.getParserError()));
-		return false;
-	}
-	if (!file.getRootNode())
-	{
-		S3D::dialogMessage("TankAIWeaponSets", S3D::formatStringBuffer(
-			"Failed to weapon sets definition file \"%s\"",
-				fileName.c_str()));
-		return false;		
-	}
-
-	XMLNode *weaponsetNode = 0;
-	while (file.getRootNode()->getNamedChild("weaponset", weaponsetNode, false))
-	{
-		WeaponSet weaponSet;
-		if (!weaponSet.parseConfig(weaponsetNode)) return false;
-		weaponSets_[weaponSet.name] = weaponSet;
-	}
-
-	return file.getRootNode()->failChildren();
+	if (!loadFile(true)) return false;
+	return true;
 }
 
 TankAIWeaponSets::WeaponSet *TankAIWeaponSets::getWeaponSet(const char *name)
 {
-	std::map<std::string, WeaponSet>::iterator findItor =
-		weaponSets_.find(name);
-	if (findItor == weaponSets_.end()) return 0;
-
-	return &findItor->second;
+	std::list<WeaponSet *>::iterator itor = weaponSets_.getChildren().begin(),
+		end = weaponSets_.getChildren().end();
+	for (;itor!=end;++itor)
+	{
+		if ((*itor)->name.getValue() == name) return *itor;
+	}
+	return 0;
 }
 
-bool TankAIWeaponSets::WeaponSet::parseConfig(XMLNode *node)
+TankAIWeaponSets::WeaponSet::WeaponSet() :
+	XMLEntryContainer("TankAIWeaponSet", 
+		"A set of accessories that can be selected for use by a tank AI."),
+	name("The name given to this weapon set, weapon sets are refered to by name in the tank ai definition file")
 {
-	if (!node->getNamedChild("name", name)) return false;
-	XMLNode *setNode = 0, *weaponNode = 0;
-	if (!node->getNamedChild("set", setNode)) return false;
-	while (setNode->getNamedChild("weapon", weaponNode, false))
-	{
-		WeaponSetEntry weapon;
-		if (!weapon.parseConfig(weaponNode)) return false;
-		weapons.push_back(weapon);
-	}
+	addChildXMLEntry("name", &name);
+	addChildXMLEntry("weapon", &weapons);
+}
 
-	return node->failChildren();
+TankAIWeaponSets::WeaponSet::~WeaponSet()
+{
 }
 
 void TankAIWeaponSets::WeaponSet::buyWeapons(WeaponSetAccessories &tankAccessories, bool lastRound)
@@ -117,17 +117,17 @@ void TankAIWeaponSets::WeaponSet::buyWeapons(WeaponSetAccessories &tankAccessori
 	{
 		// Get all of the weapons we can buy
 		std::multimap<unsigned int, WeaponSetEntry *> potentialWeapons;
-		std::vector<WeaponSetEntry>::iterator itor;
-		for (itor = weapons.begin();
-			itor != weapons.end();
+		std::list<WeaponSetEntry *>::iterator itor;
+		for (itor = weapons.getChildren().begin();
+			itor != weapons.getChildren().end();
 			++itor)
 		{
-			WeaponSetEntry &weapon = *itor;
+			WeaponSetEntry &weapon = *(*itor);
 			if (weapon.weaponValid(tankAccessories, lastRound))
 			{
 				potentialWeapons.insert(
 					std::pair<const unsigned int, WeaponSetEntry *>
-						(weapon.prioritybuy, &weapon));
+						(weapon.prioritybuy.getValue(), &weapon));
 			}
 		}
 		if (potentialWeapons.empty()) break;
@@ -142,7 +142,7 @@ void TankAIWeaponSets::WeaponSet::buyWeapons(WeaponSetAccessories &tankAccessori
 		{
 			WeaponSetEntry *weapon = ritor->second;
 			priorityWeapons.push_back(weapon);
-			if (weapon->prioritybuy < priorityWeapons.back()->prioritybuy) break;
+			if (weapon->prioritybuy.getValue() < priorityWeapons.back()->prioritybuy.getValue()) break;
 		}
 		WeaponSetEntry *choosenWeapon = priorityWeapons[rand() % priorityWeapons.size()];
 		Accessory *choosenAccessory = choosenWeapon->accessory;
@@ -162,17 +162,15 @@ void TankAIWeaponSets::WeaponSet::buyWeapons(WeaponSetAccessories &tankAccessori
 Accessory *TankAIWeaponSets::WeaponSet::getTankAccessoryByType(
 	Tanket *tanket, const char *getType)
 {
-	DIALOG_ASSERT(WeaponSetEntry::checkType(getType));
-
 	WeaponSetEntry *result = 0;
 
-	std::vector<WeaponSetEntry>::iterator itor;
-	for (itor = weapons.begin();
-		itor != weapons.end();
+	std::list<WeaponSetEntry *>::iterator itor;
+	for (itor = weapons.getChildren().begin();
+		itor != weapons.getChildren().end();
 		++itor)
 	{
-		WeaponSetEntry &current = *itor;
-		if (current.type == getType)
+		WeaponSetEntry &current = *(*itor);
+		if (current.type.getValue() == getType)
 		{
 			if ((10 - current.accessory->getArmsLevel()) <=
 				ScorchedServer::instance()->getOptionsTransient().getArmsLevel() ||
@@ -181,7 +179,7 @@ Accessory *TankAIWeaponSets::WeaponSet::getTankAccessoryByType(
 				if (tanket->getAccessories().canUse(current.accessory))
 				{
 					if (!result ||
-						result->priorityuse < current.priorityuse)
+						result->priorityuse.getValue() < current.priorityuse.getValue())
 					{
 						result = &current;
 					}
@@ -193,52 +191,45 @@ Accessory *TankAIWeaponSets::WeaponSet::getTankAccessoryByType(
 	return (result?result->accessory:0);
 }
 
-bool TankAIWeaponSets::WeaponSetEntry::parseConfig(XMLNode *node)
+TankAIWeaponSets::WeaponSetEntry::WeaponSetEntry() :
+	XMLEntryContainer("TankAIWeaponSetAccessory", 
+		"The definition of an accessory that a tank AI can use, and under which criteria it will buy and use the weapon"),
+	accessoryName("The name of an accessory, as defined in the accessories.xml file"),
+	buymin("This accessory will only be bought if the tank a count of this accessory lower than this value. "
+		"i.e. stop buying this accessory once a certain minimum amount has been reached"),
+	buymax("Not used"),
+	moneymin("This accessory will only be bought if the tank has more money than this value."
+		"i.e. only buy this accessory if we have a certain minimum amount of money"),
+	moneymax("This accessory will only be bought if the tank has less money than this value."
+		"i.e. only buy this accessory if we have a lower than a maximum amount of money"),
+	prioritybuy("If there is more than one weapon that matches the other criteria, this is the priority this weapon will be bought"),
+	priorityuse("If there is more than one weapon that matches the other criteria, this is the priority this weapon will be used/fired"),
+	type("How this accessory should be treated/used.  The game can't automaticaly tell what type of accessory each accessory is",
+		weaponSetTypeEnum)
 {
-	std::string name;
-	if (!node->getNamedChild("name", name)) return false;
+	addChildXMLEntry("name", &accessoryName);
+	addChildXMLEntry("buymin", &buymin);
+	addChildXMLEntry("buymax", &buymax);
+	addChildXMLEntry("moneymin", &moneymin);
+	addChildXMLEntry("moneymax", &moneymax);
+	addChildXMLEntry("prioritybuy", &prioritybuy);
+	addChildXMLEntry("priorityuse", &priorityuse);
+	addChildXMLEntry("type", &type);
+}
+
+TankAIWeaponSets::WeaponSetEntry::~WeaponSetEntry()
+{
+}
+
+bool TankAIWeaponSets::WeaponSetEntry::readXML(XMLNode *node, void *xmlData)
+{
+	if (!XMLEntryContainer::readXML(node, xmlData)) return false;
 	accessory = ScorchedServer::instance()->getAccessoryStore().
-		findByPrimaryAccessoryName(name.c_str());
+		findByPrimaryAccessoryName(accessoryName.getValue().c_str());
 	if (!accessory)
 	{
 		return node->returnError(
-			S3D::formatStringBuffer("Unknown accessory %s", name.c_str()));
-	}
-
-	if (!node->getNamedChild("buymin", buymin)) return false;
-	if (!node->getNamedChild("buymax", buymax)) return false;
-	if (!node->getNamedChild("moneymin", moneymin)) return false;
-	if (!node->getNamedChild("moneymax", moneymax)) return false;
-	if (!node->getNamedChild("prioritybuy", prioritybuy)) return false;
-	if (!node->getNamedChild("priorityuse", priorityuse)) return false;
-	if (!node->getNamedChild("type", type)) return false;
-
-	if (!checkType(type.c_str()))
-	{
-		return node->returnError(
-			S3D::formatStringBuffer("Unknown type %s", type.c_str()));
-	}
-
-	return node->failChildren();
-}
-
-bool TankAIWeaponSets::WeaponSetEntry::checkType(const char *type)
-{
-	if (0 != strcmp(type, "explosionhuge") &&
-		0 != strcmp(type, "explosionlarge") &&
-		0 != strcmp(type, "explosionsmall") &&
-		0 != strcmp(type, "uncover") &&
-		0 != strcmp(type, "digger") &&
-		0 != strcmp(type, "roller") &&
-		0 != strcmp(type, "napalm") &&
-		0 != strcmp(type, "laser") &&
-		0 != strcmp(type, "shield") &&
-		0 != strcmp(type, "other") &&
-		0 != strcmp(type, "fuel") &&
-		0 != strcmp(type, "autodefense") &&
-		0 != strcmp(type, "parachute"))
-	{
-		return false;
+			S3D::formatStringBuffer("Unknown accessory %s", accessoryName.getValue().c_str()));
 	}
 	return true;
 }
@@ -254,7 +245,7 @@ bool TankAIWeaponSets::WeaponSetEntry::weaponValid(
 	int currentMoney = tankAccessories.tankMoney;
 	if (currentMoney < accessory->getPrice()) return false;
 
-	if (type == "autodefense")
+	if (type.getValue() == "autodefense")
 	{
 		// Don't buy autodefense when simultaneous
 		if (ScorchedServer::instance()->getOptionsGame().getTurnType() == 
@@ -264,13 +255,41 @@ bool TankAIWeaponSets::WeaponSetEntry::weaponValid(
 		}
 	}
 
+	int currentCount = tankAccessories.tankAccessories.getAccessoryCount(accessory);
 	if (!lastRound)
 	{
-		int currentCount = tankAccessories.tankAccessories.getAccessoryCount(accessory);
-		if (currentCount > buymin) return false;
-		if ((currentMoney < moneymin && moneymin != 0) || 
-			(currentMoney > moneymax && moneymax != 0)) return false;
+		if (currentCount > buymin.getValue()) return false;
+		if ((currentMoney < moneymin.getValue() && moneymin.getValue() != 0) || 
+			(currentMoney > moneymax.getValue() && moneymax.getValue() != 0)) return false;
 	}
 	
 	return true;
+}
+
+TankAIWeaponSets::WeaponSetEntryList::WeaponSetEntryList() :
+	XMLEntryList<TankAIWeaponSets::WeaponSetEntry>("The collection of weapons in this weapon set", 0)
+{
+}
+
+TankAIWeaponSets::WeaponSetEntryList::~WeaponSetEntryList()
+{
+}
+
+TankAIWeaponSets::WeaponSetEntry *TankAIWeaponSets::WeaponSetEntryList::createXMLEntry(void *xmlData)
+{
+	return new TankAIWeaponSets::WeaponSetEntry();
+}
+
+TankAIWeaponSets::WeaponSetList::WeaponSetList() :
+	XMLEntryList<TankAIWeaponSets::WeaponSet>("The collection of weaponsets", 1)
+{
+}
+
+TankAIWeaponSets::WeaponSetList::~WeaponSetList()
+{
+}
+
+TankAIWeaponSets::WeaponSet *TankAIWeaponSets::WeaponSetList::createXMLEntry(void *xmlData)
+{
+	return new TankAIWeaponSets::WeaponSet();
 }

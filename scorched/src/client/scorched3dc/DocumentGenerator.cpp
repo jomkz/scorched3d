@@ -19,14 +19,20 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <scorched3dc/DocumentGenerator.h>
+#include <events/EventHandlerDataBase.h>
+#include <landscapedef/LandscapeDescriptionsBase.h>
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeDefn.h>
+#include <landscapedef/LandscapeInclude.h>
 #include <common/OptionsMasterListServer.h>
 #include <common/OptionsGame.h>
 #include <engine/ModInfo.h>
 #include <weapons/Accessory.h>
 #include <client/UniqueIdStore.h>
 #include <client/ClientOptions.h>
+#include <tankai/TankAICurrent.h>
+#include <tankai/TankAIWeaponSets.h>
+#include <tanket/TanketTypes.h>
 
 void DocumentGenerator::generatDocumentation(const std::string &directory)
 {
@@ -34,10 +40,14 @@ void DocumentGenerator::generatDocumentation(const std::string &directory)
 
 	OptionsGame optionsGame;
 	optionsGame.generateDocumentation(documentGenerator);
-	LandscapeTex landscapeTex(0);
+	LandscapeTextureFile landscapeTex;
 	landscapeTex.generateDocumentation(documentGenerator);
-	LandscapeDefn landscapeDefn(0);
+	LandscapeDefinitionFile landscapeDefn;
 	landscapeDefn.generateDocumentation(documentGenerator);
+	LandscapeIncludeFile landscapeInclude;
+	landscapeInclude.generateDocumentation(documentGenerator);
+	LandscapeDescriptionsBase landscapeDescriptions;
+	landscapeDescriptions.generateDocumentation(documentGenerator);
 
 	AccessoryRoot accessory;
 	accessory.generateDocumentation(documentGenerator);
@@ -49,6 +59,17 @@ void DocumentGenerator::generatDocumentation(const std::string &directory)
 	
 	ModInfoRoot modInfo;
 	modInfo.generateDocumentation(documentGenerator);
+
+	DataBaseSettings databaseSettings;
+	databaseSettings.generateDocumentation(documentGenerator);
+
+	TankAICurrentFile tankAICurrent;
+	tankAICurrent.generateDocumentation(documentGenerator);
+	TankAIWeaponSets weaponSets;
+	weaponSets.generateDocumentation(documentGenerator);
+
+	TanketTypes tanketTypes;
+	tanketTypes.generateDocumentation(documentGenerator);
 
 	documentGenerator.writeDocumentation();
 }

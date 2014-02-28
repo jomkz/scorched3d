@@ -31,7 +31,7 @@
 #include <actions/Napalm.h>
 #include <actions/CameraPositionAction.h>
 #include <landscapemap/LandscapeMaps.h>
-#include <landscapedef/LandscapeDefinition.h>
+#include <landscapedef/LandscapeDescription.h>
 #include <landscapedef/LandscapeTex.h>
 #include <weapons/AccessoryStore.h>
 #include <common/Defines.h>
@@ -248,7 +248,7 @@ void Napalm::simulateAddEdge(int x, int y)
 	if (!weapon_->getAllowUnderWater())
 	{
 		// Check napalm is under water 
-		LandscapeTex &tex = *context_->getLandscapeMaps().getDefinitions().getTex();
+		LandscapeTex &tex = *context_->getLandscapeMaps().getDescriptions().getTex();
 		fixed waterHeight = tex.waterHeight.getValue();
 
 		if (height < waterHeight) // Water height

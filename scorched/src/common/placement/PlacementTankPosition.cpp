@@ -28,6 +28,6 @@ FixedVector PlacementTankPosition::placeTank(unsigned int playerId, int team,
 	ScorchedContext &context, RandomGenerator &generator)
 {
 	LandscapeDefnTankStart *defn =
-		context.getLandscapeMaps().getDefinitions().getDefn()->tankstart.getValue();
+		context.getLandscapeMaps().getDescriptions().getDefn()->tankstart.getValue();
 	return defn->placeTank(playerId, team, context, generator);
 }

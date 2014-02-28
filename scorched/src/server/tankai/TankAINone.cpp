@@ -23,6 +23,7 @@
 #include <server/ServerState.h>
 
 TankAINone::TankAINone(unsigned int playerId) :
+	TankAI("TankAINone", "An empty tank AI definition (internal use only)"),
 	playerId_(playerId)
 {
 }

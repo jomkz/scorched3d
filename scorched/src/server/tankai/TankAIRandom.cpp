@@ -21,7 +21,8 @@
 #include <tankai/TankAIRandom.h>
 #include <stdlib.h>
 
-TankAIRandom::TankAIRandom()
+TankAIRandom::TankAIRandom() :
+	TankAI("TankAIRandom", "A random tank AI definition (internal use only)")
 {
 	name_ = "Random";
 	description_ = "A computer controlled player.\n"

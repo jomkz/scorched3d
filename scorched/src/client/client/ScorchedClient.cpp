@@ -40,7 +40,7 @@
 #include <common/ThreadUtils.h>
 #include <common/Logger.h>
 #include <landscapemap/LandscapeMaps.h>
-#include <landscapedef/LandscapeDefinitions.h>
+#include <landscapedef/LandscapeDescriptions.h>
 #include <server/ScorchedServer.h>
 #include <server/ScorchedServerSettings.h>
 
@@ -81,13 +81,13 @@ void ScorchedClient::startClientForDebug()
 	instanceLock = 0;
 
 	thread_id = boost::this_thread::get_id();
-	instance_->getLandscapes().readLandscapeDefinitions();
-	LandscapeDefinition defn = instance_->getLandscapes().getRandomLandscapeDefn(
+	instance_->getLandscapes().readLandscapeDescriptions();
+	LandscapeDescription description = instance_->getLandscapes().getRandomLandscapeDescription(
 		instance_->getOptionsGame(),
 		instance_->getTargetContainer());
 	instance_->getLandscapeMaps().generateMaps(
 		instance_->getContext(),
-		defn,
+		description,
 		0);
 
 	creationMutex.unlock();

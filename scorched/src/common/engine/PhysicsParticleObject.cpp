@@ -527,7 +527,7 @@ bool PhysicsParticleObject::getLandscapeCollision(CollisionInfo &collision)
 
 	if (optionWaterCollision_)
 	{
-		LandscapeTex &tex = *context_->getLandscapeMaps().getDefinitions().getTex();
+		LandscapeTex &tex = *context_->getLandscapeMaps().getDescriptions().getTex();
 		fixed waterHeight = tex.waterHeight.getValue();
 
 		if (position_[2] < waterHeight)

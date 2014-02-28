@@ -51,10 +51,10 @@ WeaponMoveTank::~WeaponMoveTank()
 void WeaponMoveTank::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	int arenaX = context.getLandscapeMaps().getDefinitions().getDefn()->getArenaX();
-	int arenaY = context.getLandscapeMaps().getDefinitions().getDefn()->getArenaY();
-	int arenaWidth = context.getLandscapeMaps().getDefinitions().getDefn()->getArenaWidth();
-	int arenaHeight = context.getLandscapeMaps().getDefinitions().getDefn()->getArenaHeight();
+	int arenaX = context.getLandscapeMaps().getDescriptions().getDefn()->getArenaX();
+	int arenaY = context.getLandscapeMaps().getDescriptions().getDefn()->getArenaY();
+	int arenaWidth = context.getLandscapeMaps().getDescriptions().getDefn()->getArenaWidth();
+	int arenaHeight = context.getLandscapeMaps().getDescriptions().getDefn()->getArenaHeight();
 
 	int posX = position[0].asInt();
 	int posY = position[1].asInt();

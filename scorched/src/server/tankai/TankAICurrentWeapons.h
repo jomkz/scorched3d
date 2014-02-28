@@ -23,19 +23,28 @@
 
 #include <tankai/TankAIWeaponSets.h>
 
-class TankAICurrentWeapons
+class TankAICurrentWeaponsEntryList : public XMLEntryList<XMLEntryString>
+{
+public:
+	TankAICurrentWeaponsEntryList();
+	virtual ~TankAICurrentWeaponsEntryList();
+
+	virtual XMLEntryString *createXMLEntry(void *xmlData);
+};
+
+class TankAICurrentWeapons : public XMLEntryContainer
 {
 public:
 	TankAICurrentWeapons();
 	virtual ~TankAICurrentWeapons();
 
-	virtual bool parseConfig(TankAIWeaponSets &sets, XMLNode *node);
-
+	virtual bool readXML(XMLNode *node, void *xmlData);
 	void buyWeapons(TankAIWeaponSets::WeaponSetAccessories &tankAccessories, bool lastRound);
 
 	TankAIWeaponSets::WeaponSet *getCurrentWeaponSet();
 
 protected:
+	TankAICurrentWeaponsEntryList weaponEntryList_;
 	std::vector<TankAIWeaponSets::WeaponSet *> weaponSets_;
 	TankAIWeaponSets::WeaponSet *currentWeaponSet_;
 };

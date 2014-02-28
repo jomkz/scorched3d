@@ -33,7 +33,7 @@
 #include <target/TargetSpace.h>
 #include <movement/TargetMovement.h>
 #include <landscapemap/LandscapeMaps.h>
-#include <landscapedef/LandscapeDefinitions.h>
+#include <landscapedef/LandscapeDescriptions.h>
 #include <weapons/AccessoryStore.h>
 #include <tankai/TankAIStrings.h>
 #include <events/EventController.h>
@@ -49,7 +49,7 @@ ScorchedContext::ScorchedContext(const char *name)
 	optionsGame_ = new OptionsScorched();
 	optionsTransient_ = new OptionsTransient(*optionsGame_);
 	modFiles_ = new ModFiles();
-	landscapes_ = new LandscapeDefinitions();
+	landscapes_ = new LandscapeDescriptions();
 	tanketTypes_ = new TanketTypes();
 	tankModelStore_ = new TankModelStore();
 	tankTeamScore_ = new TankTeamScore();

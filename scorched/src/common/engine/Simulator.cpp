@@ -160,7 +160,7 @@ void Simulator::newLevel()
 	lastTickTime_ = boost::posix_time::microsec_clock::local_time();
 
 	// Reset events
-	random_.seed(context_->getLandscapeMaps().getDefinitions().getSeed());
+	random_.seed(context_->getLandscapeMaps().getDescriptions().getSeed());
 	events_.initialize(*context_);
 	wind_.newLevel();
 

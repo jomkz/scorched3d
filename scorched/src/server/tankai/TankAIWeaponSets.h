@@ -22,13 +22,11 @@
 #define __INCLUDE_TankAIWeaponSetsh_INCLUDE__
 
 #include <tanket/TanketAccessories.h>
-
-#include <vector>
-#include <map>
-#include <string>
+#include <XML/XMLEntrySimpleTypes.h>
+#include <XML/XMLEntryRoot.h>
 
 class XMLNode;
-class TankAIWeaponSets
+class TankAIWeaponSets : public XMLEntryRoot<XMLEntryContainer>
 {
 public:
 	TankAIWeaponSets();
@@ -46,35 +44,59 @@ public:
 		TanketAccessories tankAccessories;
 	};
 
-	class WeaponSetEntry
+	class WeaponSetEntry : public XMLEntryContainer
 	{
 	public:
-		Accessory *accessory;
-		int buymin, buymax;
-		int moneymin, moneymax;
-		int prioritybuy, priorityuse;
-		std::string type;
+		WeaponSetEntry();
+		virtual ~WeaponSetEntry();
 
-		bool parseConfig(XMLNode *node);
+		XMLEntryString accessoryName;
+		XMLEntryInt buymin, buymax;
+		XMLEntryInt moneymin, moneymax;
+		XMLEntryInt prioritybuy, priorityuse;
+		XMLEntryStringEnum type;
+		Accessory *accessory;
+
+		virtual bool readXML(XMLNode *node, void *xmlData);
+		
 		bool weaponValid(WeaponSetAccessories &tankAccessories, bool lastRound);
-		static bool checkType(const char *type);
 	};
 
-	class WeaponSet
+	class WeaponSetEntryList : public XMLEntryList<WeaponSetEntry>
 	{
 	public:
-		std::string name;
-		std::vector<WeaponSetEntry> weapons;
+		WeaponSetEntryList();
+		virtual ~WeaponSetEntryList();
 
-		bool parseConfig(XMLNode *node);
+		virtual WeaponSetEntry *createXMLEntry(void *xmlData);
+	};
+
+	class WeaponSet : public XMLEntryContainer
+	{
+	public:
+		WeaponSet();
+		virtual ~WeaponSet();
+
+		XMLEntryString name;
+		WeaponSetEntryList weapons;
+
 		void buyWeapons(WeaponSetAccessories &tankAccessories, bool lastRound);
 		Accessory *getTankAccessoryByType(Tanket *tanket, const char *type);
+	};
+
+	class WeaponSetList : public XMLEntryList<WeaponSet>
+	{
+	public:
+		WeaponSetList();
+		virtual ~WeaponSetList();
+
+		virtual WeaponSet *createXMLEntry(void *xmlData);
 	};
 
 	WeaponSet *getWeaponSet(const char *name);
 
 protected:
-	std::map<std::string, WeaponSet> weaponSets_;
+	WeaponSetList weaponSets_;
 };
 
 #endif

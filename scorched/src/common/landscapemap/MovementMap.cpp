@@ -308,7 +308,7 @@ fixed MovementMap::getWaterHeight()
 		context_.getOptionsGame().getMovementRestriction() ==
 		OptionsGame::MovementRestrictionLandOrAbove)
 	{
-		LandscapeTex &tex = *context_.getLandscapeMaps().getDefinitions().getTex();
+		LandscapeTex &tex = *context_.getLandscapeMaps().getDescriptions().getTex();
 		waterHeight = tex.waterHeight.getValue();
 	}
 

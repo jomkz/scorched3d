@@ -21,10 +21,10 @@
 #if !defined(__INCLUDE_TanketTypesh_INCLUDE__)
 #define __INCLUDE_TanketTypesh_INCLUDE__
 
+#include <XML/XMLEntryRoot.h>
 #include <tanket/TanketType.h>
-#include <vector>
 
-class TanketTypes
+class TanketTypes : public XMLEntryRoot<XMLEntryContainer>
 {
 public:
 	TanketTypes();
@@ -35,13 +35,13 @@ public:
 	bool loadTanketTypes(ScorchedContext &context);
 	TanketType *getType(const char *name);
 
-	std::vector<TanketType *> &getTypes() { return types_; }
+	std::list<TanketType *> &getTypes() { return types_.getChildren(); }
 
 	void clear();
 
 protected:
 	TanketType *defaultType_;
-	std::vector<TanketType *> types_;
+	TanketTypeList types_;
 };
 
 #endif // __INCLUDE_TanketTypesh_INCLUDE__

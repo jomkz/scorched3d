@@ -32,8 +32,31 @@
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
 #include <tank/TankAvatar.h>
-#include <XML/XMLFile.h>
 #include <stdlib.h>
+
+DataBaseSettings::DataBaseSettings() :
+	XMLEntryRoot<XMLEntryContainer>(S3D::eSettingsLocation, "database-SERVER_PORT.xml",
+		"database", 
+		"DatabaseSettings", 
+		"The connection settings for the Scorched3D database, the database stores statistics about the connect players"),
+	host("The host that is running the database", 0, "localhost"),
+	port("The port or socket name that allows connection to the database"),
+	user("The database user that will be used to access the database"),
+	passwd("The password for the database user"),
+	db("The name of the database (or tablespace) that will hold the Scorched3D data"),
+	prefix("An prefix that will uniquely identify this server.  This allows multiple S3D servers to share the same database tables.")
+{
+	addChildXMLEntry("host", &host);
+	addChildXMLEntry("port", &port);
+	addChildXMLEntry("user", &user);
+	addChildXMLEntry("passwd", &passwd);
+	addChildXMLEntry("db", &db);
+	addChildXMLEntry("prefix", &prefix);
+}
+
+DataBaseSettings::~DataBaseSettings()
+{
+}
 
 EventHandlerDataBase *EventHandlerDataBase::createInstance()
 {
@@ -120,39 +143,16 @@ EventHandlerDataBase::~EventHandlerDataBase()
 
 bool EventHandlerDataBase::connect()
 {
-	XMLFile file;
 	std::string fileName = S3D::getSettingsFile(S3D::formatStringBuffer("mysql-%i.xml",
 		ScorchedServer::instance()->getOptionsGame().getPortNo()));
 
-	std::string host, port, user, passwd, db, prefix;
-	if (!file.readFile(fileName, true) ||
-		!file.getRootNode())
-	{
-		S3D::dialogExit("Stats Logging",
-			S3D::formatStringBuffer(
-			"Failed to parse %s settings file. Error: %s", 
-			fileName.c_str(),
-			file.getParserError()));
-		return false;
-	}
-
-	if (!file.getRootNode()->getNamedChild("host", host) ||
-		!file.getRootNode()->getNamedChild("port", port) ||
-		!file.getRootNode()->getNamedChild("user", user) ||
-		!file.getRootNode()->getNamedChild("passwd", passwd) ||
-		!file.getRootNode()->getNamedChild("db", db) ||
-		!file.getRootNode()->getNamedChild("prefix", prefix)) 
-	{
-		S3D::dialogExit("Stats Logging", 
-			S3D::formatStringBuffer(
-			"Failed to parse %s settings file.", fileName.c_str()));
-		return false;
-	}
+	DataBaseSettings settings;
+	if (!settings.loadFromFile(fileName, 0)) return false;
 
 	// Create the database connection
-	if (!connectDatabase(host.c_str(), port.c_str(), 
-		user.c_str(), passwd.c_str(), 
-		db.c_str()))
+	if (!connectDatabase(settings.host.getValue().c_str(), settings.port.getValue().c_str(), 
+		settings.user.getValue().c_str(), settings.passwd.getValue().c_str(), 
+		settings.db.getValue().c_str()))
 	{
 		S3D::dialogExit("Stats Logging",
 			"Failed to connect to stats database");
@@ -180,7 +180,7 @@ bool EventHandlerDataBase::connect()
 	std::list<EventHandlerDataBase::RowResult> prefixRows =
 		runSelectQuery("SELECT prefixid FROM scorched3d_prefixs "
 		"WHERE prefix = \"%s\";",
-		prefix.c_str());
+		settings.prefix.getValue().c_str());
 	if (!prefixRows.empty())
 	{
 		std::list<EventHandlerDataBase::RowResult>::iterator itor;
@@ -196,7 +196,7 @@ bool EventHandlerDataBase::connect()
 	{
 		if (runQuery("INSERT INTO scorched3d_prefixs "
 			"(prefix) VALUES(\"%s\");",
-			prefix.c_str()))
+			settings.prefix.getValue().c_str()))
 		{
 			prefixid_ = getLastInsertId();
 		}

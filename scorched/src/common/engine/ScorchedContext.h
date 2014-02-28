@@ -32,7 +32,7 @@ class NetInterface;
 class OptionsScorched;
 class OptionsTransient;
 class ModFiles;
-class LandscapeDefinitions;
+class LandscapeDescriptions;
 class TargetContainer;
 class TanketContainer;
 class TankModelStore;
@@ -67,7 +67,7 @@ public:
 	OptionsTransient &getOptionsTransient() { return *optionsTransient_; }
 	ComsMessageHandler &getComsMessageHandler() { return *comsMessageHandler_; }
 	ModFiles &getModFiles() { return *modFiles_; }
-	LandscapeDefinitions &getLandscapes() { return *landscapes_; }
+	LandscapeDescriptions &getLandscapes() { return *landscapes_; }
 	TanketTypes &getTanketTypes() { return *tanketTypes_; }
 	TankModelStore &getTankModels() { return *tankModelStore_; }
 	TankAIStrings &getTankAIStrings() { return *tankAIStrings_; }
@@ -82,7 +82,7 @@ protected:
 	OptionsTransient *optionsTransient_;
 	ModFiles *modFiles_;
 	AccessoryStore *accessoryStore_;
-	LandscapeDefinitions *landscapes_;
+	LandscapeDescriptions *landscapes_;
 	TargetContainer *targetContainer_;
 	TankModelStore *tankModelStore_;
 	TankTeamScore *tankTeamScore_;

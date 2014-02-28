@@ -21,7 +21,7 @@
 #ifndef _ComsLoadLevelMessage_h
 #define _ComsLoadLevelMessage_h
 
-#include <landscapedef/LandscapeDefinition.h>
+#include <landscapedef/LandscapeDescription.h>
 #include <engine/ScorchedContext.h>
 #include <simactions/SimAction.h>
 #include <coms/ComsSimulateMessage.h>
@@ -47,8 +47,8 @@ public:
 	void addSimulation(ComsSimulateMessage &simulateMessage);
 	bool getSimulations(std::list<ComsSimulateMessage *> &simulateMessages);
 
-	void setLandscapeDefinition(LandscapeDefinition &definition) { landscapeDefinition_ = definition; }
-	LandscapeDefinition &getLandscapeDefinition() { return landscapeDefinition_; }
+	void setLandscapeDescription(LandscapeDescription &definition) { landscapeDescription_ = definition; }
+	LandscapeDescription &getLandscapeDescription() { return landscapeDescription_; }
 
 	// Inherited from ComsMessage
     virtual bool writeMessage(NetBuffer &buffer);
@@ -57,7 +57,7 @@ public:
 protected:
 	unsigned int emptyPosition_;
 	bool lastEmpty_;
-	LandscapeDefinition landscapeDefinition_;
+	LandscapeDescription landscapeDescription_;
 	NetBuffer stateBuffer_;
 	NetBuffer simulateBuffer_;
 	NetBuffer tanksBuffer_;

@@ -254,6 +254,8 @@ public:
 	};
 
 	XMLEntryStringEnum(const char *description,
+		XMLEntryStringEnum::EnumEntry enums[]);
+	XMLEntryStringEnum(const char *description,
 		unsigned int data,
 		const std::string &value,
 		XMLEntryStringEnum::EnumEntry enums[]);

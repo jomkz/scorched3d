@@ -56,7 +56,7 @@
 #include <tankai/TankAIStrings.h>
 #include <tanket/TanketTypes.h>
 #include <weapons/AccessoryStore.h>
-#include <landscapedef/LandscapeDefinitions.h>
+#include <landscapedef/LandscapeDescriptions.h>
 #include <dialogs/GUIProgressCounter.h>
 #include <lang/LangResource.h>
 
@@ -481,7 +481,7 @@ bool ClientStateInitialize::initializeMod()
 	}
 
 	// Load the landscape definitions
-	if (!ScorchedClient::instance()->getLandscapes().readLandscapeDefinitions()) return false;
+	if (!ScorchedClient::instance()->getLandscapes().readLandscapeDescriptions()) return false;
 		
 	return true;
 }

@@ -23,10 +23,10 @@
 #include <image/ImageFactory.h>
 #include <common/ProgressCounter.h>
 #include <engine/ScorchedContext.h>
-#include <landscapedef/LandscapeDefinitionCache.h>
+#include <landscapedef/LandscapeDescriptionCache.h>
 #include <landscapedef/LandscapeDefn.h>
 
-RoofMaps::RoofMaps(LandscapeDefinitionCache &defnCache) :
+RoofMaps::RoofMaps(LandscapeDescriptionCache &defnCache) :
 	defnCache_(defnCache), roofBaseHeight_(0)
 {
 }

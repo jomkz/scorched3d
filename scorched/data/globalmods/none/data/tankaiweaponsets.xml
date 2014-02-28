@@ -1,7 +1,6 @@
 <weaponsets>
 	<weaponset>
 		<name>WeaponSetFull</name>
-		<set>
 			<weapon>
 				<name>Battery</name>
 				<buymin>10</buymin>
@@ -182,12 +181,10 @@
 				<priorityuse>1</priorityuse>
 				<type>digger</type>
 			</weapon>
-		</set>
 	</weaponset>
 
 	<weaponset>
 		<name>WeaponSetLarge</name>
-		<set>
 			<weapon>
 				<name>Auto Defense</name>
 				<buymin>10</buymin>
@@ -278,12 +275,10 @@
 				<priorityuse>1</priorityuse>
 				<type>digger</type>
 			</weapon>
-		</set>
 	</weaponset>
 	
 	<weaponset>
 		<name>WeaponSetBasic</name>
-		<set>
 			<weapon>
 				<name>Baby Missile</name>
 				<buymin>1</buymin>
@@ -314,12 +309,10 @@
 				<priorityuse>1</priorityuse>
 				<type>explosionlarge</type>
 			</weapon>
-		</set>
 	</weaponset>
 	
 	<weaponset>
 		<name>WeaponSetMinimal</name>
-		<set>
 			<weapon>
 				<name>Baby Missile</name>
 				<buymin>1</buymin>
@@ -330,12 +323,9 @@
 				<priorityuse>1</priorityuse>
 				<type>explosionsmall</type>
 			</weapon>
-		</set>
 	</weaponset>
 
 	<weaponset>
 		<name>WeaponSetEmpty</name>
-		<set>
-		</set>
 	</weaponset>
 </weaponsets>

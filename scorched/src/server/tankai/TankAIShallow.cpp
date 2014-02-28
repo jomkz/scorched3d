@@ -20,7 +20,8 @@
 
 #include <tankai/TankAIShallow.h>
 
-TankAIShallow::TankAIShallow()
+TankAIShallow::TankAIShallow() :
+	TankAI("TankAIShallow", "A shallow parsed AI definition (internal use only)")
 {
 }
 
@@ -28,3 +29,27 @@ TankAIShallow::~TankAIShallow()
 {
 }
 
+TankAIShallowList::TankAIShallowList() :
+	XMLEntryList<TankAIShallow>("", 1)
+{
+}
+
+TankAIShallowList::~TankAIShallowList()
+{
+}
+
+TankAIShallow *TankAIShallowList::createXMLEntry(void *xmlData)
+{
+	return new TankAIShallow();
+}
+
+TankAIShallowFile::TankAIShallowFile() :
+	XMLEntryRoot<XMLEntryContainer>(S3D::eModLocation, "data/tankais.xml", "ais",
+		"TankAIsShallow", "The list of available tank AIs (bots)")
+{
+	addChildXMLEntry("ai", &tankAis_);
+}
+
+TankAIShallowFile::~TankAIShallowFile()
+{
+}

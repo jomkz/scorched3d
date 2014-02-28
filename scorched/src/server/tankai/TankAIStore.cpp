@@ -18,7 +18,6 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <XML/XMLFile.h>
 #include <common/Defines.h>
 #include <tankai/TankAIStore.h>
 #include <tankai/TankAICurrent.h>
@@ -53,51 +52,25 @@ bool TankAIStore::loadAIs(bool shallow)
 		tankAiWeaponSets_.parseConfig();
 	}
 
-	// Load key definition file
-	XMLFile file;
-	if (!file.readFile(S3D::getModFile("data/tankais.xml"), true))
+	if (shallow)
 	{
-		S3D::dialogMessage("TankAIStore", 
-					  S3D::formatStringBuffer("Failed to parse \"%s\"\n%s", 
-					  "data/tankais.xml",
-					  file.getParserError()));
-		return false;
+		if (!shallowFile_.loadFile(true, &tankAiWeaponSets_)) return false;
+		std::list<TankAIShallow *>::iterator itor = shallowFile_.tankAis_.getChildren().begin(),
+			end = shallowFile_.tankAis_.getChildren().end();
+		for (;itor!=end;++itor)
+		{
+			addAI(*itor);
+		}
 	}
-
-	// Check file exists
-	if (!file.getRootNode())
+	else
 	{
-		S3D::dialogMessage("TankAIStore",
-					  S3D::formatStringBuffer("Failed to find tank ai definition file \"%s\"",
-					  "data/tankais.xml"));
-		return false;		
-	}
-
-	// Itterate all of the keys in the file
-    std::list<XMLNode *>::iterator childrenItor;
-	std::list<XMLNode *> &children = file.getRootNode()->getChildren();
-    for (childrenItor = children.begin();
-		 childrenItor != children.end();
-		 ++childrenItor)
-    {
-		// Parse the ai entry
-        XMLNode *currentNode = (*childrenItor);
-		if (strcmp(currentNode->getName(), "ai"))
+		if (!currentFile_.loadFile(true, &tankAiWeaponSets_)) return false;
+		std::list<TankAICurrent *>::iterator itor = currentFile_.tankAis_.getChildren().begin(),
+			end = currentFile_.tankAis_.getChildren().end();
+		for (;itor!=end;++itor)
 		{
-			S3D::dialogMessage("TankAIStore",
-						  "Failed to find ai node");
-			return false;
+			addAI(*itor);
 		}
-
-		TankAI *computer = 0;
-		if (shallow) computer = new TankAIShallow;
-		else computer = new TankAICurrent;
-		if (!computer->parseConfig(tankAiWeaponSets_, currentNode))
-		{
-			return false;
-		}
-
-		addAI(computer);
 	}
 
 	// Add the random player

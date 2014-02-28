@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_LandscapeIncludeh_INCLUDE__)
 #define __INCLUDE_LandscapeIncludeh_INCLUDE__
 
-#include <XML/XMLEntry.h>
+#include <XML/XMLEntryRoot.h>
 #include <landscapedef/LandscapeSound.h>
 #include <landscapedef/LandscapeEvent.h>
 #include <landscapedef/LandscapeMovement.h>
@@ -39,11 +39,11 @@ public:
 	virtual XMLEntryString *createXMLEntry(void *xmlData);
 };
 
-class LandscapeDefinitions;
+class LandscapeDescriptions;
 class LandscapeInclude : public XMLEntryContainer
 {
 public:
-	LandscapeInclude(LandscapeDefinitions *definitions, const char *name, const char *description);
+	LandscapeInclude(const char *name, const char *description, bool required);
 	virtual ~LandscapeInclude();
 
 	LandscapeEventList events;
@@ -57,18 +57,15 @@ public:
 	std::list<LandscapeInclude *> includes;
 
 	virtual bool readXML(XMLNode *parentNode, void *xmlData);
-protected:
-	LandscapeDefinitions *definitions_;
-
 private:
 	LandscapeInclude(const LandscapeInclude &other);
 	LandscapeInclude &operator=(LandscapeInclude &other);
 };
 
-class LandscapeIncludeFile : public LandscapeInclude 
+class LandscapeIncludeFile : public XMLEntryRoot<LandscapeInclude>
 {
 public:
-	LandscapeIncludeFile(LandscapeDefinitions *definitions);
+	LandscapeIncludeFile();
 	virtual ~LandscapeIncludeFile();
 };
 

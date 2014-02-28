@@ -23,9 +23,27 @@
 #include <XML/XMLNode.h>
 #include <stdlib.h>
 
+TankAICurrentWeaponsEntryList::TankAICurrentWeaponsEntryList() :
+	XMLEntryList<XMLEntryString>("The set of weapons that this ai has access to", 1)
+{
+}
+
+TankAICurrentWeaponsEntryList::~TankAICurrentWeaponsEntryList()
+{
+}
+
+XMLEntryString *TankAICurrentWeaponsEntryList::createXMLEntry(void *xmlData)
+{
+	return new XMLEntryString("The name of a weapon set that this ai has access to");
+}
+
 TankAICurrentWeapons::TankAICurrentWeapons() : 
+	XMLEntryContainer("TankAIWeapons", "Defines the set of weapons that this tank will use.  "
+		"If more than one set is provided this tank ai will choose a random set.  "
+		"This random choice will then be used until the AI disconnects."),
 	currentWeaponSet_(0)
 {
+	addChildXMLEntry("weaponset", &weaponEntryList_);
 }
 
 TankAICurrentWeapons::~TankAICurrentWeapons()
@@ -41,15 +59,20 @@ TankAIWeaponSets::WeaponSet *TankAICurrentWeapons::getCurrentWeaponSet()
 	return currentWeaponSet_;
 }
 
-bool TankAICurrentWeapons::parseConfig(TankAIWeaponSets &sets, XMLNode *node)
+bool TankAICurrentWeapons::readXML(XMLNode *node, void *xmlData)
 {
-	std::string weaponset;
-	while (node->getNamedChild("weaponset", weaponset, false))
+	if (!XMLEntryContainer::readXML(node, xmlData)) return false;
+
+	TankAIWeaponSets *sets = (TankAIWeaponSets *) xmlData;
+	std::list<XMLEntryString *>::iterator itor = weaponEntryList_.getChildren().begin(),
+		end = weaponEntryList_.getChildren().end();
+	for (;itor!=end;++itor)
 	{
 		TankAIWeaponSets::WeaponSet *weaponSet = 
-			sets.getWeaponSet(weaponset.c_str());
+			sets->getWeaponSet((*itor)->getValue().c_str());
 		if (!weaponSet) node->returnError(
-			S3D::formatStringBuffer("Cannot find weapon set \"%s\"", weaponset.c_str()));
+			S3D::formatStringBuffer("Cannot find tank AI weapon set \"%s\"", 
+			(*itor)->getValue().c_str()));
 		weaponSets_.push_back(weaponSet);
 	}
 	if (weaponSets_.empty())
@@ -57,7 +80,7 @@ bool TankAICurrentWeapons::parseConfig(TankAIWeaponSets &sets, XMLNode *node)
 		return node->returnError("Must define at least one weaponset");
 	}
 
-	return node->failChildren();	
+	return true;
 }
 
 void TankAICurrentWeapons::buyWeapons(TankAIWeaponSets::WeaponSetAccessories &tankAccessories, bool lastRound)

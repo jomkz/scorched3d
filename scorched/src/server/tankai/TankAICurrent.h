@@ -21,6 +21,7 @@
 #if !defined(AFX_TankAICurrent_H__5F21C9C7_0F71_4CCC_ABB9_976CF0A5C5EC__INCLUDED_)
 #define AFX_TankAICurrent_H__5F21C9C7_0F71_4CCC_ABB9_976CF0A5C5EC__INCLUDED_
 
+#include <XML/XMLEntryRoot.h>
 #include <tankai/TankAI.h>
 #include <tankai/TankAICurrentWeapons.h>
 #include <tankai/TankAICurrentDefenses.h>
@@ -33,8 +34,6 @@ public:
 	virtual ~TankAICurrent();
 
 	virtual TankAI *createCopy(Tanket *tanket);
-
-	virtual bool parseConfig(TankAIWeaponSets &sets, XMLNode *node);
 
 	// Inherited from TankAI
 	virtual void newMatch();
@@ -58,6 +57,24 @@ protected:
 	void setTanket(Tanket *tanket);
 	void resign();
 
+};
+
+class TankAICurrentList : public XMLEntryList<TankAICurrent>
+{
+public:
+	TankAICurrentList();
+	virtual ~TankAICurrentList();
+
+	virtual TankAICurrent *createXMLEntry(void *xmlData);
+};
+
+class TankAICurrentFile : public XMLEntryRoot<XMLEntryContainer>
+{
+public:
+	TankAICurrentFile();
+	virtual ~TankAICurrentFile();
+
+	TankAICurrentList tankAis_;
 };
 
 #endif // !defined(AFX_TankAICurrent_H__5F21C9C7_0F71_4CCC_ABB9_976CF0A5C5EC__INCLUDED_)

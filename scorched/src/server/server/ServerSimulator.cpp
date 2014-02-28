@@ -219,8 +219,8 @@ void ServerSimulator::newLevel()
 	// Tanks, options, game, etc...
 	delete levelMessage_;
 	levelMessage_ = new ComsLoadLevelMessage();
-	levelMessage_->setLandscapeDefinition(ScorchedServer::instance()->
-		getLandscapeMaps().getDefinitions().getDefinition());
+	levelMessage_->setLandscapeDescription(ScorchedServer::instance()->
+		getLandscapeMaps().getDescriptions().getDescription());
 	levelMessage_->saveState(ScorchedServer::instance()->getContext());
 	levelMessage_->saveTanks(ScorchedServer::instance()->getContext());
 }

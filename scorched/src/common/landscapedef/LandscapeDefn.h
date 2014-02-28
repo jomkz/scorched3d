@@ -29,7 +29,7 @@
 class LandscapeDefn : public LandscapeInclude
 {
 public:
-	LandscapeDefn(LandscapeDefinitions *definitions);
+	LandscapeDefn(const char *name, const char *description, bool required);
 	virtual ~LandscapeDefn();
 
 	int getMinPlayers() { return minplayers.getValue(); }
@@ -40,6 +40,7 @@ public:
 	int getArenaHeight() { return arenaheight.getValue(); }
 	int getArenaX() { return arenax; }
 	int getArenaY() { return arenay; }
+	int getLandscapeGenerationSeed() { return landscapeGenerationSeed.getValue(); }
 
 	LandscapeDefnTankStartChoice tankstart;
 	LandscapeDefnHeightMapChoice heightmap;
@@ -50,12 +51,20 @@ protected:
 	XMLEntryInt minplayers, maxplayers;
 	XMLEntryInt landscapewidth, landscapeheight;
 	XMLEntryInt arenawidth, arenaheight;
+	XMLEntryInt landscapeGenerationSeed;
 	int arenax, arenay;
 
 private:
 	LandscapeDefn(const LandscapeDefn &other);
 	LandscapeDefn &operator=(LandscapeDefn &other);
 
+};
+
+class LandscapeDefinitionFile : public XMLEntryRoot<LandscapeDefn>
+{
+public:
+	LandscapeDefinitionFile();
+	virtual ~LandscapeDefinitionFile();
 };
 
 #endif

@@ -48,7 +48,7 @@ ClientOptions::ClientOptions() :
 	XMLEntryRoot<XMLEntrySimpleContainer>(S3D::eSettingsLocation, 
 		"display.xml", "ClientOptions", 
 		"ClientOptions", 
-		"The Scorched3D client side options, these options change aspects of the game not relating to gameplay"),
+		"The Scorched3D client side options, these options change aspects of the game not relating to gameplay.  For example display settings."),
 	hostDescription_("The description of this host given to any servers for stats.", XMLEntry::eDataRWAccess | XMLEntry::eDataNoRestore, ""),
 	validateServerIp_("Checks if the server ip address matches the published address", XMLEntry::eDataRWAccess, true),
 	waterAnimate_("Should we animate the landscape water", XMLEntry::eDataRWAccess, true),

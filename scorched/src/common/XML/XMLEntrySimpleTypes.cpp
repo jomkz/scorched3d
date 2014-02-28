@@ -22,7 +22,6 @@
 #include <common/Defines.h>
 #include <common/Logger.h>
 #include <common/FileTemplate.h>
-#include <XML/XMLFile.h>
 #include <stdio.h>
 #include <map>
 
@@ -555,6 +554,13 @@ bool XMLEntryFile::setValueFromString(const std::string &string)
 {
 	if (!S3D::checkDataFile(string)) return false;
 	return XMLEntryString::setValueFromString(string);
+}
+
+XMLEntryStringEnum::XMLEntryStringEnum(const char *description,
+	XMLEntryStringEnum::EnumEntry enums[]) :
+	XMLEntryString(description), 
+	enums_(enums)
+{
 }
 
 XMLEntryStringEnum::XMLEntryStringEnum(const char *description,

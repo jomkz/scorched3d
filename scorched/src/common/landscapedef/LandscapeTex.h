@@ -26,14 +26,20 @@
 class LandscapeTex : public LandscapeInclude
 {
 public:
-	LandscapeTex(LandscapeDefinitions *definitions);
+	LandscapeTex(const char *name, const char *description, bool required);
 	virtual ~LandscapeTex();
 
-	XMLEntryInt landscapeGenerationSeed;
 	XMLEntryFixed waterHeight;
 private:
 	LandscapeTex(const LandscapeTex &other);
 	LandscapeTex &operator=(LandscapeTex &other);
+};
+
+class LandscapeTextureFile : public XMLEntryRoot<LandscapeTex>
+{
+public:
+	LandscapeTextureFile();
+	virtual ~LandscapeTextureFile();
 };
 
 #endif

@@ -24,29 +24,25 @@
 
 bool TankAI::tankAILogging_ = false;
 
-TankAI::TankAI() : 
-	availableForRandom_(true),
-	availableForPlayers_(true)
+TankAI::TankAI(const char *typeName, const char *description) : 
+	XMLEntryContainer(typeName, description),
+	name_("The human readable name given to this tank ai"),
+	description_("The description of this tank ai"),
+	availableForRandom_("If this tank ai can be chosen when the player does not explicitly select an AI but instead chooses a random AI", 0, true),
+	availableForPlayers_("If this tank ai is available for fake players/bots to use (or if it is only usable by things like automated turrets)", 0, true)
 {
+	addChildXMLEntry("name", &name_, "description", &description_);
+	addChildXMLEntry("availableforrandom", &availableForRandom_);
+	addChildXMLEntry("availableforplayers", &availableForPlayers_);
 }
 
 TankAI::~TankAI()
 {
 }
 
-bool TankAI::parseConfig(TankAIWeaponSets &sets, XMLNode *node)
-{
-	if (!node->getNamedChild("name", name_)) return false;
-	if (!node->getNamedChild("description", description_)) return false;
-	if (!node->getNamedChild("availableforrandom", availableForRandom_)) return false;
-	if (!node->getNamedChild("availableforplayers", availableForPlayers_)) return false;
-
-	return true;
-}
-
 ToolTip *TankAI::getToolTip()
 {
-	toolTip_.setText(ToolTip::ToolTipInfo, LANG_STRING(name_), 
-		LANG_RESOURCE(name_ + "_ai_description",  description_));
+	toolTip_.setText(ToolTip::ToolTipInfo, LANG_STRING(name_.getValue()), 
+		LANG_RESOURCE(name_.getValue() + "_ai_description",  description_.getValue()));
 	return &toolTip_;
 }

@@ -23,7 +23,7 @@
 #include <engine/ScorchedContext.h>
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeDefn.h>
-#include <landscapedef/LandscapeDefinitions.h>
+#include <landscapedef/LandscapeDescriptions.h>
 #include <landscapedef/LandscapeOptions.h>
 #include <landscapedef/LandscapeInclude.h>
 #include <net/NetBufferPool.h>
@@ -36,7 +36,7 @@ OptionsScorched::~OptionsScorched()
 {
 }
 
-void OptionsScorched::updateLevelOptions(ScorchedContext &context, LandscapeDefinition &defn)
+void OptionsScorched::updateLevelOptions(ScorchedContext &context, LandscapeDescription &defn)
 {
 	// Get the current level data
 	LandscapeTex *ltex = context.getLandscapes().getTex(defn.getTex());

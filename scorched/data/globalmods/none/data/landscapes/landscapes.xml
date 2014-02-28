@@ -5,12 +5,8 @@
 		<description></description>
 		<picture>oldstyle-pic.bmp</picture>
 		<weight>100</weight>
-		<defn>
-			<item>data/landscapes/defn/defntest.xml</item>
-			<!--<item>data/landscapes/defn/defnoldstyle.xml</item>-->
-		</defn>
-		<tex>
-			<item>data/landscapes/tex/texdefault.xml</item>
-		</tex>
+		<definition>data/landscapes/defn/defntest.xml</definition>
+    <!--<definition>data/landscapes/defn/defnoldstyle.xml</definition>-->
+    <texture>data/landscapes/tex/texdefault.xml</texture>
 	</landscape>
 </landscapes>

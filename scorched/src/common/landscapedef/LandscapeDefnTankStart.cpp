@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <landscapedef/LandscapeDefnTankStart.h>
-#include <landscapedef/LandscapeDefinitions.h>
+#include <landscapedef/LandscapeDescriptions.h>
 #include <landscapedef/LandscapeDefn.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapemap/DeformLandscape.h>
@@ -142,9 +142,9 @@ static bool tankMaskCloseness(ScorchedContext &context, int team,
 {
 	// Find the mask position
 	int maskX = (tankPos[0] * fixed(tankMask.getWidth())).asInt() / 
-		context.getLandscapeMaps().getDefinitions().getDefn()->getLandscapeWidth();
+		context.getLandscapeMaps().getDescriptions().getDefn()->getLandscapeWidth();
 	int maskY = (tankPos[1] * fixed(tankMask.getHeight())).asInt() / 
-		context.getLandscapeMaps().getDefinitions().getDefn()->getLandscapeHeight();
+		context.getLandscapeMaps().getDescriptions().getDefn()->getLandscapeHeight();
 	unsigned char *maskPos = tankMask.getBits() +
 		maskX * 3 + maskY * tankMask.getWidth() * 3;
 		

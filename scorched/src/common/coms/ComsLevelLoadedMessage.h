@@ -21,7 +21,7 @@
 #ifndef _ComsLevelLoadedMessage_h
 #define _ComsLevelLoadedMessage_h
 
-#include <landscapedef/LandscapeDefinition.h>
+#include <landscapedef/LandscapeDescription.h>
 
 class ComsLevelLoadedMessage : public ComsMessage
 {

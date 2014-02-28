@@ -32,7 +32,7 @@
 #include <XML/XMLNode.h>
 
 TankAICurrentTarget::TankAICurrentTarget() :
-	XMLEntryContainer("TankAICurrentTarget", "Weighting factors use to determine which tank to fire at."
+	XMLEntryContainer("TankAITarget", "Weighting factors use to determine which tank to fire at."
 		"Targets are all ranked using these factors. The top weighted targets are selected to be fired at 1st."
 		"Each factor is multiplied by the weight and then all factors are added to give the total weighting."
 		"All factors are in the range -1.0 to 1.0 before weighting."),

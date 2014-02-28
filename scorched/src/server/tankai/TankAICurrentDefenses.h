@@ -23,22 +23,20 @@
 
 #include <tankai/TankAIWeaponSets.h>
 
-class TankAICurrentDefenses
+class TankAICurrentDefenses : public XMLEntryContainer
 {
 public:
 	TankAICurrentDefenses();
 	virtual ~TankAICurrentDefenses();
 
-	virtual bool parseConfig(XMLNode *node);
-
 	void raiseDefenses(Tanket *tanket);
 
-	bool getUseBatteries() { return useBatteries_; }
+	bool getUseBatteries() { return useBatteries_.getValue(); }
 
 protected:
-	bool useParachutes_;
-	bool useShields_;
-	bool useBatteries_;
+	XMLEntryBool useParachutes_;
+	XMLEntryBool useShields_;
+	XMLEntryBool useBatteries_;
 
 	void selectFirstShield(Tanket *tanket);
 	void selectFirstParachute(Tanket *tanket);

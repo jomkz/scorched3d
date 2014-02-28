@@ -18,7 +18,7 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <landscapedef/LandscapeDefinition.h>
+#include <landscapedef/LandscapeDescription.h>
 #include <coms/ComsLoadLevelMessage.h>
 #include <common/Defines.h>
 #include <common/OptionsScorched.h>
@@ -98,7 +98,7 @@ bool ComsLoadLevelMessage::loadState(ScorchedContext &context, bool fullState)
 	if (fullState)
 	{
 		context.getOptionsGame().updateLevelOptions(
-			context, landscapeDefinition_);
+			context, landscapeDescription_);
 		if (!context.getOptionsTransient().readFromBuffer(reader, false)) return false;
 		if (!context.getTankTeamScore().readMessage(reader)) return false;
 		if (!context.getAccessoryStore().readEconomyFromBuffer(reader)) return false;
@@ -206,7 +206,7 @@ bool ComsLoadLevelMessage::getSimulations(std::list<ComsSimulateMessage *> &simu
 
 bool ComsLoadLevelMessage::writeMessage(NetBuffer &buffer)
 {
-	if (!landscapeDefinition_.writeMessage(buffer)) return false;
+	if (!landscapeDescription_.writeMessage(buffer)) return false;
 	buffer.addToBuffer(stateBuffer_);
 	buffer.addToBuffer(actualTime_);
 	buffer.addToBuffer(tanksBuffer_);
@@ -217,7 +217,7 @@ bool ComsLoadLevelMessage::writeMessage(NetBuffer &buffer)
 
 bool ComsLoadLevelMessage::readMessage(NetBufferReader &reader)
 {
-	if (!landscapeDefinition_.readMessage(reader)) return false;
+	if (!landscapeDescription_.readMessage(reader)) return false;
 	if (!reader.getFromBuffer(stateBuffer_)) return false;
 	if (!reader.getFromBuffer(actualTime_)) return false;
 	if (!reader.getFromBuffer(tanksBuffer_)) return false;

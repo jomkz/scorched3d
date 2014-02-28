@@ -22,7 +22,7 @@
 #include <server/ScorchedServer.h>
 #include <server/ServerSimulator.h>
 #include <server/ServerDestinations.h>
-#include <landscapedef/LandscapeDefinition.h>
+#include <landscapedef/LandscapeDescription.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <engine/Simulator.h>
 #include <simactions/DestinationLoadedSimAction.h>
@@ -53,10 +53,10 @@ void ServerLoadLevel::destinationLoadLevel(unsigned int destinationId)
 	}
 	else
 	{
-		LandscapeDefinition &landscapeDefinition =
-			ScorchedServer::instance()->getLandscapeMaps().getDefinitions().
-			getDefinition();
-		if (landscapeDefinition.getDefinitionNumber() != 0)
+		LandscapeDescription &landscapeDescription =
+			ScorchedServer::instance()->getLandscapeMaps().getDescriptions().
+			getDescription();
+		if (landscapeDescription.getDescriptionNumber() != 0)
 		{
 			// Set any tanks from this destination that they are loading the level
 			// set the current version of the level (definition number) that they are loading
@@ -66,7 +66,7 @@ void ServerLoadLevel::destinationLoadLevel(unsigned int destinationId)
 			if (destination)
 			{
 				destination->setState(ServerDestination::sLoadingLevel);
-				destination->setLevelNumber(landscapeDefinition.getDefinitionNumber());
+				destination->setLevelNumber(landscapeDescription.getDescriptionNumber());
 			}
 
 			// Tell this destination to start loading the level
@@ -79,15 +79,15 @@ void ServerLoadLevel::destinationLoadLevel(unsigned int destinationId)
 
 bool ServerLoadLevel::destinationUsingCurrentLevel(unsigned int destinationId)
 {
-	LandscapeDefinition &landscapeDefinition =
-		ScorchedServer::instance()->getLandscapeMaps().getDefinitions().
-		getDefinition();
+	LandscapeDescription &landscapeDescription =
+		ScorchedServer::instance()->getLandscapeMaps().getDescriptions().
+		getDescription();
 
 	ServerDestination *destination =
 		ScorchedServer::instance()->getServerDestinations().getDestination(destinationId);
 	if (destination)
 	{
-		return (destination->getLevelNumber() == landscapeDefinition.getDefinitionNumber());
+		return (destination->getLevelNumber() == landscapeDescription.getDescriptionNumber());
 	}
 	return false;
 }

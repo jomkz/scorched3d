@@ -32,7 +32,7 @@ public:
 	FileTemplateVariables(FileTemplateVariables *parent = 0);
 	~FileTemplateVariables();
 
-	void addVariableValue(const char *name, const char *value);
+	void addVariableValue(const char *name, const char *value, bool htmlEscape = false);
 	FileTemplateVariables *addLoopVariable(const char *name);
 
 	bool hasVariableName(const char *name);

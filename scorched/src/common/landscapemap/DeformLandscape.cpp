@@ -22,7 +22,7 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeDefn.h>
-#include <landscapedef/LandscapeDefinition.h>
+#include <landscapedef/LandscapeDescription.h>
 #include <target/TargetContainer.h>
 #include <target/TargetLife.h>
 #include <target/TargetSpace.h>
@@ -152,7 +152,8 @@ bool DeformLandscape::deformLandscapeInternal(
 	if (iradius > 49) iradius = 49;
 
 	fixed lowestLandscapeHeight = fixed(context.getOptionsGame().getMinimumLandHeight());
-	LandscapeDefnDeform::DefnDeformType deformType = context.getLandscapeMaps().getDefinitions().getDefn()->deform.getValue()->getType();
+	LandscapeDefnDeform::DefnDeformType deformType = context.getLandscapeMaps().getDescriptions().
+		getDefn()->deform.getValue()->getType();
 	DeformLandscapeCache::DeformLandscapeCacheItem &deformItem = deformCache.getItem(iradius);
 	fixed *explosionDepth = deformItem.explosionDepth_;
 	fixed *explosionDistance = deformItem.explosionDistance_;
@@ -304,7 +305,8 @@ void DeformLandscape::flattenAreaInternal(
 	fixed newHeight = tankPos[2];
 
 	fixed lowestLandscapeHeight = fixed(context.getOptionsGame().getMinimumLandHeight());
-	LandscapeDefnDeform::DefnDeformType deformType = context.getLandscapeMaps().getDefinitions().getDefn()->deform.getValue()->getType();
+	LandscapeDefnDeform::DefnDeformType deformType = context.getLandscapeMaps().getDescriptions().
+		getDefn()->deform.getValue()->getType();
 
 	// Flatten a small area around the tank
 	for (int y=-iSize; y<=iSize; y++)

@@ -23,7 +23,7 @@
 
 #include <landscapemap/RoofMaps.h>
 #include <landscapemap/GroundMaps.h>
-#include <landscapedef/LandscapeDefinitionCache.h>
+#include <landscapedef/LandscapeDescriptionCache.h>
 
 class ScorchedClient;
 class LandscapeMaps
@@ -34,15 +34,15 @@ public:
 
 	void generateMaps(
 		ScorchedContext &context,
-		LandscapeDefinition &defn,
+		LandscapeDescription &defn,
 		ProgressCounter *counter = 0);
 
 	GroundMaps &getGroundMaps() { return gMaps_; }
 	RoofMaps &getRoofMaps() { return rMaps_; }
-	LandscapeDefinitionCache &getDefinitions() { return dCache_; }
+	LandscapeDescriptionCache &getDescriptions() { return dCache_; }
 
 protected:
-	LandscapeDefinitionCache dCache_;
+	LandscapeDescriptionCache dCache_;
 	GroundMaps gMaps_;
 	RoofMaps rMaps_;
 };

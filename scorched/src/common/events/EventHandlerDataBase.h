@@ -26,7 +26,19 @@
 #include <vector>
 #include <set>
 #include <string>
+#include <XML/XMLEntryRoot.h>
+#include <XML/XMLEntrySimpleTypes.h>
 #include <events/EventHandler.h>
+
+class DataBaseSettings : public XMLEntryRoot<XMLEntryContainer>
+{
+public:
+	DataBaseSettings();
+	virtual ~DataBaseSettings();
+
+	XMLEntryString host, port, user, passwd;
+	XMLEntryString db, prefix;
+};
 
 class EventHandlerDataBase : public EventHandler
 {

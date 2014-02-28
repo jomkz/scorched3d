@@ -22,7 +22,8 @@
 #define __INCLUDE_TankAIStoreh_INCLUDE__
 
 #include <list>
-#include <tankai/TankAI.h>
+#include <tankai/TankAICurrent.h>
+#include <tankai/TankAIShallow.h>
 #include <tankai/TankAIWeaponSets.h>
 
 class TankAIStore
@@ -39,6 +40,8 @@ public:
 
 protected:
 	TankAIWeaponSets tankAiWeaponSets_;
+	TankAICurrentFile currentFile_;
+	TankAIShallowFile shallowFile_;
 	std::list<TankAI *> ais_;
 
 	void addAI(TankAI *ai);

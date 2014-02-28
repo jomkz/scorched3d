@@ -222,7 +222,7 @@ bool UIStatePlayingLand::getIntersection(const Ogre::Ray &cameraRay, Ogre::Vecto
 
 void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, Ogre::Image &normalMapImage, long tx, long ty)
 {
-	unsigned int seed = ScorchedClient::instance()->getLandscapeMaps().getDefinitions().getSeed();
+	unsigned int seed = ScorchedClient::instance()->getLandscapeMaps().getDescriptions().getSeed();
 
 	/*
 	// Try enabling a color map for color variation

@@ -32,21 +32,21 @@
 #include <XML/XMLNode.h>
 #include <stdlib.h>
 
-TankAICurrentDefenses::TankAICurrentDefenses()
+TankAICurrentDefenses::TankAICurrentDefenses() :
+	XMLEntryContainer("TankAIDefenses", 
+		"Determines if this AI will attempt to raise/use any defenses"),
+	useParachutes_("Should this AI enable parachutes"),
+	useShields_("Should this AI enable shields"),
+	useBatteries_("Should this AI use batteries (repair itself)")
 {
+	addChildXMLEntry("useparachutes", &useParachutes_);
+	addChildXMLEntry("useshields", &useShields_);
+	addChildXMLEntry("usebatteries", &useBatteries_);
 }
 
 
 TankAICurrentDefenses::~TankAICurrentDefenses()
 {
-}
-
-bool TankAICurrentDefenses::parseConfig(XMLNode *node)
-{
-	if (!node->getNamedChild("useparachutes", useParachutes_)) return false;
-	if (!node->getNamedChild("useshields", useShields_)) return false;
-	if (!node->getNamedChild("usebatteries", useBatteries_)) return false;
-	return node->failChildren();	
 }
 
 void TankAICurrentDefenses::selectFirstShield(Tanket *tanket)
@@ -80,10 +80,10 @@ void TankAICurrentDefenses::selectFirstParachute(Tanket *tanket)
 void TankAICurrentDefenses::raiseDefenses(Tanket *tanket)
 {
 	// Try to enable parachutes (fails if we don't have any)
-	if (useParachutes_) selectFirstParachute(tanket);
+	if (useParachutes_.getValue()) selectFirstParachute(tanket);
 
 	// Try to raise shields (fails if we don't have any)
-	if (useShields_) selectFirstShield(tanket);
+	if (useShields_.getValue()) selectFirstShield(tanket);
 }
 
 void TankAICurrentDefenses::parachutesUpDown(Tanket *tanket, unsigned int paraId)

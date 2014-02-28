@@ -510,18 +510,6 @@
     <ClCompile Include="..\..\common\image\ImageStore.cpp">
       <Filter>image</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\landscapedef\LandscapeDefinition.cpp">
-      <Filter>landscapedef</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\landscapedef\LandscapeDefinitionCache.cpp">
-      <Filter>landscapedef</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\landscapedef\LandscapeDefinitions.cpp">
-      <Filter>landscapedef</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\landscapedef\LandscapeDefinitionsBase.cpp">
-      <Filter>landscapedef</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\landscapedef\LandscapeDefn.cpp">
       <Filter>landscapedef</Filter>
     </ClCompile>
@@ -1281,9 +1269,6 @@
     <ClCompile Include="..\..\server\tankai\TankAICurrentWeapons.cpp">
       <Filter>tankai</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\server\tankai\TankAINames.cpp">
-      <Filter>tankai</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\server\tankai\TankAINone.cpp">
       <Filter>tankai</Filter>
     </ClCompile>
@@ -1502,6 +1487,18 @@
     </ClCompile>
     <ClCompile Include="..\..\common\XML\XMLEntryRoot.cpp">
       <Filter>XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeDescription.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeDescriptionCache.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeDescriptions.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeDescriptionsBase.cpp">
+      <Filter>landscapedef</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1939,21 +1936,6 @@
     </ClInclude>
     <ClInclude Include="..\..\common\image\ImageStore.h">
       <Filter>image</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\landscapedef\LandscapeDefinition.h">
-      <Filter>landscapedef</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\landscapedef\LandscapeDefinitionCache.h">
-      <Filter>landscapedef</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\landscapedef\LandscapeDefinitions.h">
-      <Filter>landscapedef</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\landscapedef\LandscapeDefinitionsBase.h">
-      <Filter>landscapedef</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\landscapedef\LandscapeDefinitionsItem.h">
-      <Filter>landscapedef</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\landscapedef\LandscapeDefn.h">
       <Filter>landscapedef</Filter>
@@ -2717,9 +2699,6 @@
     <ClInclude Include="..\..\server\tankai\TankAICurrentWeapons.h">
       <Filter>tankai</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\server\tankai\TankAINames.h">
-      <Filter>tankai</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\server\tankai\TankAINone.h">
       <Filter>tankai</Filter>
     </ClInclude>
@@ -2938,6 +2917,21 @@
     </ClInclude>
     <ClInclude Include="..\..\common\XML\XMLEntryRoot.h">
       <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeDescription.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeDescriptionCache.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeDescriptions.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeDescriptionsBase.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeDescriptionsItem.h">
+      <Filter>landscapedef</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

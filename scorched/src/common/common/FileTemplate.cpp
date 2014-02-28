@@ -20,6 +20,7 @@
 
 #include <common/FileTemplate.h>
 #include <common/Defines.h>
+#include <XML/XMLNode.h>
 
 FileTemplateVariables::FileTemplateVariables(FileTemplateVariables *parent) :
 	parent_(parent)
@@ -47,9 +48,18 @@ bool FileTemplateVariables::hasVariableName(const char *name)
 		variableValues_.find(name) != variableValues_.end();
 }
 
-void FileTemplateVariables::addVariableValue(const char *name, const char *value)
+void FileTemplateVariables::addVariableValue(const char *name, const char *value, bool htmlEscape)
 {
-	variableValues_[name] = value;
+	if (htmlEscape)
+	{
+		std::string actual;
+		XMLNode::removeSpecialChars(value, actual);
+		variableValues_[name] = actual;
+	}
+	else
+	{
+		variableValues_[name] = value;
+	}
 }
 
 FileTemplateVariables *FileTemplateVariables::addLoopVariable(const char *name)

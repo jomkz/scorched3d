@@ -44,7 +44,7 @@ void TargetMovementEntryShips::generate(ScorchedContext &context,
 {
 	int mapWidth = context.getLandscapeMaps().getGroundMaps().getLandscapeWidth();
 	int mapHeight = context.getLandscapeMaps().getGroundMaps().getLandscapeHeight();
-	LandscapeTex &tex = *context.getLandscapeMaps().getDefinitions().getTex();
+	LandscapeTex &tex = *context.getLandscapeMaps().getDescriptions().getTex();
 
 	// Get the water height (if water is on)
 	fixed waterHeight = tex.waterHeight.getValue();

@@ -28,8 +28,13 @@
 #include <coms/ComsPlayedMoveMessage.h>
 #include <XML/XMLNode.h>
 
-TankAICurrent::TankAICurrent() : tanket_(0)
+TankAICurrent::TankAICurrent() : 
+	TankAI("TankAI", "The definition of a computer controller player (an AI/bot)"),
+	tanket_(0)
 {
+	addChildXMLEntry("weapons", &wantedWeapons_);
+	addChildXMLEntry("defense", &defenses_);
+	addChildXMLEntry("attack", &move_);
 }
 
 TankAICurrent::~TankAICurrent()
@@ -46,29 +51,6 @@ TankAI *TankAICurrent::createCopy(Tanket *tanket)
 void TankAICurrent::setTanket(Tanket *tanket)
 {
 	tanket_ = tanket;
-}
-
-bool TankAICurrent::parseConfig(TankAIWeaponSets &sets, XMLNode *node)
-{
-	if (!TankAI::parseConfig(sets, node)) return false;
-
-	{
-		XMLNode *weapons = 0;
-		if (!node->getNamedChild("weapons", weapons)) return false;
-		if (!wantedWeapons_.parseConfig(sets, weapons)) return false;
-	}
-	{
-		XMLNode *defense = 0;
-		if (!node->getNamedChild("defense", defense)) return false;
-		if (!defenses_.parseConfig(defense)) return false;
-	}
-	{
-		XMLNode *attack = 0;
-		if (!node->getNamedChild("attack", attack)) return false;
-		if (!move_.readXML(attack, 0)) return false;
-	}
-
-	return node->failChildren();	
 }
 
 void TankAICurrent::newMatch()
@@ -140,5 +122,30 @@ void TankAICurrent::tankHurt(Weapon *weapon, float damage,
 void TankAICurrent::shotLanded(ScorchedCollisionId collision,
 		Weapon *weapon, unsigned int firer, 
 		Vector &position)
+{
+}
+
+TankAICurrentList::TankAICurrentList() :
+	XMLEntryList<TankAICurrent>("The list of available tank AIs (bots)", 1)
+{
+}
+
+TankAICurrentList::~TankAICurrentList()
+{
+}
+
+TankAICurrent *TankAICurrentList::createXMLEntry(void *xmlData)
+{
+	return new TankAICurrent();
+}
+
+TankAICurrentFile::TankAICurrentFile() :
+	XMLEntryRoot<XMLEntryContainer>(S3D::eModLocation, "data/tankais.xml", "ais",
+		"TankAIs", "The list of available tank AIs (bots)")
+{
+	addChildXMLEntry("ai", &tankAis_);
+}
+
+TankAICurrentFile::~TankAICurrentFile()
 {
 }
