@@ -35,6 +35,7 @@ public:
 	virtual ~ActionRenderer();
 
 	virtual void simulate(Action *action, float frametime, bool &removeAction);
+	virtual void deleteThis() = 0;
 };
 
 class Action

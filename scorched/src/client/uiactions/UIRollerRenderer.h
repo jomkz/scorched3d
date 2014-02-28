@@ -18,18 +18,18 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UIProjectileRendererh_INCLUDE__)
-#define __INCLUDE_UIProjectileRendererh_INCLUDE__
+#if !defined(__INCLUDE_UIRollerRendererh_INCLUDE__)
+#define __INCLUDE_UIRollerRendererh_INCLUDE__
 
 #include <client/ClientUISync.h>
 #include <actions/Action.h>
 
-class ShotProjectile;
-class UIProjectileRenderer : public ClientUISyncActionRegisterable, public ActionRenderer
+class ShotBounce;
+class UIRollerRenderer : public ClientUISyncActionRegisterable, public ActionRenderer
 {
 public:
-	UIProjectileRenderer(ShotProjectile *shotProjectile);
-	virtual ~UIProjectileRenderer();
+	UIRollerRenderer(ShotBounce *shotBounce);
+	virtual ~UIRollerRenderer();
 
 	// ClientUISyncAction (UI and Client Thread)
 	virtual void performUIAction();
@@ -38,7 +38,7 @@ public:
 	virtual void simulate(Action *action, float frametime, bool &removeAction);
 	virtual void deleteThis();
 protected:
-	ShotProjectile *shotProjectile_;
+	ShotBounce *shotBounce_;
 	Ogre::SceneNode *projectileNode_;
 
 	void create();

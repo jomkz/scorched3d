@@ -428,19 +428,19 @@ void UIStatePlayingLand::updateHeight(int x, int y, int w, int h)
 	int sy = y / 128;
 	int ry = y % 128;
 
-	if (rx + w > 128 && ry + h > 128)
+	if (rx + w >= 128 && ry + h >= 128)
 	{
 		updateHeightTerrain(sx, sy, rx, ry, 127 - rx, 127 - ry);
 		updateHeightTerrain(sx + 1, sy, 0, ry, rx + w - 128, 127 - ry);
 		updateHeightTerrain(sx, sy + 1, rx, 0, 127 - rx, ry + h - 128);
 		updateHeightTerrain(sx + 1, sy + 1, 0, 0, rx + w - 128, ry + h - 128);
 	}
-	else if (rx + w > 128)
+	else if (rx + w >= 128)
 	{
 		updateHeightTerrain(sx, sy, rx, ry, 127 - rx, h);
 		updateHeightTerrain(sx + 1, sy, 0 , ry, rx + w - 128, h);
 	}
-	else if (ry + h > 128)
+	else if (ry + h >= 128)
 	{
 		updateHeightTerrain(sx, sy, rx, ry, w, 127 - ry);
 		updateHeightTerrain(sx, sy + 1, rx , 0, w, ry + h - 128);
@@ -457,6 +457,8 @@ void UIStatePlayingLand::updateHeightTerrain(int tx, int ty, int x, int y, int w
 
 	int mapX = tx * 128 + x;
 	int mapY = ty * 128 + y;
+	DIALOG_ASSERT(mapX > 0 && mapY > 0 && mapX + w < hmap_->getMapWidth() && mapY + h < hmap_->getMapHeight());
+
 	Ogre::Terrain *terrain = terrainGroup_->getTerrain(tx, (hmap_->getMapHeight() / 128) - 1 - ty);
 	for (int b=0; b<=h; b++)
 	{
@@ -464,6 +466,9 @@ void UIStatePlayingLand::updateHeightTerrain(int tx, int ty, int x, int y, int w
 		float *landscapeHeightData = terrain->getHeightData(x, 127 - y - b);
 		for (int a=0; a<=w; a++, mapHeightData++, landscapeHeightData++)
 		{
+			//DIALOG_ASSERT(mapX + a < hmap_->getMapWidth() && mapY + b < hmap_->getMapHeight());
+			//DIALOG_ASSERT(x + a < 128 && 127 - y - b >= 0);
+
 			float height = mapHeightData->height.getInternalData() * OgreSystem::OGRE_WORLD_HEIGHT_SCALE_FIXED;
 			(*landscapeHeightData) = height;
 		}

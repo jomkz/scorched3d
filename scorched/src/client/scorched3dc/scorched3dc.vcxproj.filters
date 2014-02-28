@@ -1473,6 +1473,9 @@
     <ClCompile Include="..\uiactions\UITankActiveModel.cpp">
       <Filter>uiactions</Filter>
     </ClCompile>
+    <ClCompile Include="..\uiactions\UIRollerRenderer.cpp">
+      <Filter>uiactions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -2880,6 +2883,9 @@
       <Filter>uiactions</Filter>
     </ClInclude>
     <ClInclude Include="..\uiactions\UITankActiveModel.h">
+      <Filter>uiactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uiactions\UIRollerRenderer.h">
       <Filter>uiactions</Filter>
     </ClInclude>
   </ItemGroup>

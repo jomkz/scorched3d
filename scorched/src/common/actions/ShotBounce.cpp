@@ -28,6 +28,10 @@
 #include <tank/TankViewPoints.h>
 #include <string.h>
 
+#ifndef S3D_SERVER
+#include <uiactions/UIRollerRenderer.h>
+#endif
+
 ShotBounce::ShotBounce(WeaponRoller *weapon, 
 		FixedVector &startPosition, FixedVector &velocity,
 		WeaponFireContext &weaponContext) : 
@@ -53,8 +57,11 @@ void ShotBounce::init()
 		fixed(true, context_->getOptionsGame().getWeaponSpeed());
 	weaponTime_ = weapon_->getTime(*context_);
 	scale_ = weapon_->getScale(*context_).asFloat();
+
+#ifndef S3D_SERVER
 	if (!context_->getServerMode()) 
 	{
+		setActionRender(new UIRollerRenderer(this));
 		if (!weapon_->getNoCameraTrack())
 		{
 			vPoint_ = new TankViewPointProvider();
@@ -67,6 +74,7 @@ void ShotBounce::init()
 			context_->getActionController().addAction(pos);
 		}
 	}
+#endif
 
 	if (weapon_->getLocalGroups().hasGroups() || weapon_->getGlobalGroups().hasGroups())
 	{
@@ -115,17 +123,10 @@ void ShotBounce::simulate(fixed frameTime, bool &remove)
 		PhysicsParticle::simulate(stepSize_, remove);
 		simulateTime_ -= stepSize_;
 	}
-}
 
-void ShotBounce::draw()
-{
 #ifndef S3D_SERVER
 	if (!context_->getServerMode()) 
 	{
-		static float rotMatrix[16];
-		getPhysics().getRotationQuat().getOpenGLRotationMatrix(rotMatrix);
-
-
 		if (vPoint_)
 		{
 			vPoint_->setValues(getPhysics().getPosition(), lookFrom_);

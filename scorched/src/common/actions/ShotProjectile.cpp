@@ -69,11 +69,8 @@ void ShotProjectile::init()
 			vPoint_->setValues(startPosition_, velocity);
 		
 			CameraPositionAction *positionAction = new CameraPositionAction(
-				weaponContext_.getPlayerId(),
-				vPoint_,
-				5,
-				10,
-				false);
+				weaponContext_.getPlayerId(), vPoint_,
+				5, 10, false);
 			context_->getActionController().addAction(positionAction);
 		}
 	}

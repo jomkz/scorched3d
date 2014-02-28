@@ -38,7 +38,6 @@ public:
 
 	virtual void simulate(fixed frameTime, bool &remove);
 	virtual void init();
-	virtual void draw();
 	virtual void collision(PhysicsParticleObject &position, 
 		ScorchedCollisionId collisionId);
 	virtual std::string getActionDetails();

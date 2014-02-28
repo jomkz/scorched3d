@@ -451,6 +451,7 @@
     <ClCompile Include="..\uiactions\UIJoinGameAction.cpp" />
     <ClCompile Include="..\uiactions\UILandscapeDeformAction.cpp" />
     <ClCompile Include="..\uiactions\UIProjectileRenderer.cpp" />
+    <ClCompile Include="..\uiactions\UIRollerRenderer.cpp" />
     <ClCompile Include="..\uiactions\UIRotateTankAction.cpp" />
     <ClCompile Include="..\uiactions\UITankActiveModel.cpp" />
     <ClCompile Include="..\uiactions\UITankModel.cpp" />
@@ -926,6 +927,7 @@
     <ClInclude Include="..\uiactions\UIJoinGameAction.h" />
     <ClInclude Include="..\uiactions\UILandscapeDeformAction.h" />
     <ClInclude Include="..\uiactions\UIProjectileRenderer.h" />
+    <ClInclude Include="..\uiactions\UIRollerRenderer.h" />
     <ClInclude Include="..\uiactions\UIRotateTankAction.h" />
     <ClInclude Include="..\uiactions\UITankActiveModel.h" />
     <ClInclude Include="..\uiactions\UITankModel.h" />

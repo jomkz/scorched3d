@@ -29,13 +29,13 @@ Action::Action(bool actionReferenced) :
 
 Action::~Action()
 {
-	if (renderer_) delete renderer_;
+	if (renderer_) renderer_->deleteThis();
 	renderer_ = 0;
 }
 
 void Action::setActionRender(ActionRenderer *renderer)
 {
-	if (renderer_) delete renderer_;
+	if (renderer_) renderer_->deleteThis();
 	renderer_ = renderer;
 }
 

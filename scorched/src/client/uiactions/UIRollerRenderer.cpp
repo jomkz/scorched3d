@@ -18,18 +18,18 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <uiactions/UIProjectileRenderer.h>
+#include <uiactions/UIRollerRenderer.h>
 #include <scorched3dc/OgreSystem.h>
 #include <scorched3dc/ScorchedUI.h>
-#include <actions/ShotProjectile.h>
+#include <actions/ShotBounce.h>
 
-UIProjectileRenderer::UIProjectileRenderer(ShotProjectile *shotProjectile) :
+UIRollerRenderer::UIRollerRenderer(ShotBounce *shotBounce) :
 	ClientUISyncActionRegisterable(true),
-	shotProjectile_(shotProjectile), projectileNode_(0)
+	shotBounce_(shotBounce), projectileNode_(0)
 {
 }
 
-UIProjectileRenderer::~UIProjectileRenderer()
+UIRollerRenderer::~UIRollerRenderer()
 {
 	ENSURE_UI_THREAD
 	if (projectileNode_)
@@ -39,35 +39,39 @@ UIProjectileRenderer::~UIProjectileRenderer()
 	}
 }
 
-void UIProjectileRenderer::performUIAction()
+void UIRollerRenderer::performUIAction()
 {
 	ClientUISyncActionRegisterable::performUIAction();
-	if (!shotProjectile_) 
+
+	if (!shotBounce_) 
 	{
 		delete this;
 		return;
 	}
 	if (!projectileNode_) create();
 
-	FixedVector &position = shotProjectile_->getPhysics().getPosition();
+	FixedVector &position = shotBounce_->getPhysics().getPosition();
 	projectileNode_->setPosition(
 		position[0].getInternalData() * OgreSystem::OGRE_WORLD_SCALE_FIXED, 
 		position[2].getInternalData() * OgreSystem::OGRE_WORLD_HEIGHT_SCALE_FIXED, 
 		position[1].getInternalData() * OgreSystem::OGRE_WORLD_SCALE_FIXED);
+
+	//FixedVector4 &quat = shotBounce_->getPhysics().getRotationQuat();
+	//projectileNode_->setOrientation(quat[0].asFloat(), quat[1].asFloat(), quat[2].asFloat(), quat[3].asFloat());
 }
 
-void UIProjectileRenderer::simulate(Action *action, float frametime, bool &removeAction)
+void UIRollerRenderer::simulate(Action *action, float frametime, bool &removeAction)
 {
 	registerCallback();
 }
 
-void UIProjectileRenderer::deleteThis()
+void UIRollerRenderer::deleteThis()
 {
-	shotProjectile_ = 0;
+	shotBounce_ = 0;
 	registerCallback();
 }
 
-void UIProjectileRenderer::create()
+void UIRollerRenderer::create()
 {
 	Ogre::SceneManager *sceneManager = ScorchedUI::instance()->getOgreSystem().getOgreLandscapeSceneManager();
 
