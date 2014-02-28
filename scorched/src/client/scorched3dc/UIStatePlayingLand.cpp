@@ -206,6 +206,18 @@ Ogre::Real UIStatePlayingLand::getHeight(const Ogre::Vector3 &position)
 	return 0.0f;
 }
 
+bool UIStatePlayingLand::getIntersection(const Ogre::Ray &cameraRay, Ogre::Vector3 *outPosition)
+{
+	Ogre::TerrainGroup::RayResult result = 
+		terrainGroup_->rayIntersects(cameraRay);
+	if (result.hit) 
+	{
+		*outPosition = result.position;
+		return true;
+	}
+	return false;
+}
+
 void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, Ogre::Image &normalMapImage, long tx, long ty)
 {
 	unsigned int seed = ScorchedClient::instance()->getLandscapeMaps().getDefinitions().getSeed();

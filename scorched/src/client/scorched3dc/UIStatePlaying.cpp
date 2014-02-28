@@ -25,6 +25,8 @@
 #include <scorched3dc/CameraController.h>
 #include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/OgreSystem.h>
+#include <client/ScorchedClient.h>
+#include <landscapemap/LandscapeMaps.h>
 #include <common/DefinesMath.h>
 
 UIStatePlaying::UIStatePlaying() : 
@@ -77,6 +79,13 @@ void UIStatePlaying::createState()
 	// Bloom compositor
 	Ogre::CompositorManager::getSingleton().addCompositor(vp, "Bloom2");
 	Ogre::CompositorManager::getSingleton().setCompositorEnabled(vp, "Bloom2", false);
+
+	// Set the current position
+	GroundMaps &groundMaps = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps();
+	cameraController_->setWantedTarget(Ogre::Vector3(
+		OgreSystem::OGRE_WORLD_SCALE * (groundMaps.getArenaX() + groundMaps.getArenaWidth() / 2), 
+		0.0f, 
+		OgreSystem::OGRE_WORLD_SCALE * (groundMaps.getArenaY() + groundMaps.getArenaHeight() / 2)));
 }
 
 void UIStatePlaying::destroyState()
@@ -95,6 +104,11 @@ void UIStatePlaying::updateState(float frameTime)
 Ogre::Real UIStatePlaying::getHeight(const Ogre::Vector3 &position)
 {
 	return S3D_MAX(land_->getHeight(position), env_->getWaterHeight());
+}
+
+bool UIStatePlaying::getIntersection(const Ogre::Ray &cameraRay, Ogre::Vector3 *outPosition)
+{
+	return land_->getIntersection(cameraRay, outPosition);
 }
 
 void UIStatePlaying::updateHeight(int x, int y, int w, int h)

@@ -20,7 +20,6 @@
 
 #include <scorched3dc/CameraController.h>
 #include <scorched3dc/ScorchedUI.h>
-#include <scorched3dc/OgreSystem.h>
 #include <scorched3dc/InputManager.h>
 #include <client/ClientOptions.h>
 
@@ -56,6 +55,15 @@ void CameraController::create()
 	currentTarget_ = wantedTarget_;
 	camera_->setPosition(wantedCamera_);
 	camera_->lookAt(wantedTarget_);
+}
+
+void CameraController::setWantedTarget(const Ogre::Vector3 &position)
+{
+	float height = 0.0f;
+	if (heightProvider_) height = heightProvider_->getHeight(position);
+	wantedTarget_ = position;
+	wantedTarget_[1] = height;
+	calculateWantedPosition();
 }
 
 void CameraController::calculateWantedPosition()
@@ -157,7 +165,24 @@ void CameraController::update(float elapsedTime)
 
 void CameraController::mouseClick(int positionX, int positionY, int mouseButton)
 {
+	if (mouseButton == OIS::MB_Left)
+	{
+		Ogre::Ray cameraRay;
+		Ogre::Real posX = ((Ogre::Real) positionX) / ((Ogre::Real) camera_->getViewport()->getActualWidth());
+		Ogre::Real posY = ((Ogre::Real) positionY) / ((Ogre::Real) camera_->getViewport()->getActualHeight());
+		camera_->getCameraToViewportRay(posX, posY, &cameraRay);
+		Ogre::Vector3 position;
+		if (heightProvider_ && heightProvider_->getIntersection(cameraRay, &position))
+		{
+			wantedTarget_ = position;
+			calculateWantedPosition();
+		}
+	}
+}
 
+void CameraController::mouseDragStart(int positionX, int positionY, int mouseButton)
+{
+	CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setVisible(false);
 }
 
 void CameraController::mouseDrag(int positionX, int positionY, int positionDeltaX, 
@@ -180,6 +205,12 @@ void CameraController::mouseDrag(int positionX, int positionY, int positionDelta
 		calculateWantedPosition();
 	}
 }
+
+void CameraController::mouseDragStop(int positionX, int positionY, int mouseButton)
+{
+	CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setVisible(true);
+}
+
 
 void CameraController::mouseWheel(int positionDelta)
 {

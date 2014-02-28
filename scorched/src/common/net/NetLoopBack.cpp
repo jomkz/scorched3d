@@ -117,17 +117,19 @@ void NetLoopBack::sendMessageServer(NetBuffer &buffer,
 void NetLoopBack::sendMessageDest(NetBuffer &buffer, 
 	unsigned int destination, unsigned int flags)
 {
-	DIALOG_ASSERT(
-		getLoopback() &&
-		(server_ && destination == ClientLoopBackID) || 
-		(!server_ && destination == ServerLoopBackID));
+	if (getLoopback())
+	{
+		DIALOG_ASSERT(
+			(server_ && destination == ClientLoopBackID) || 
+			(!server_ && destination == ServerLoopBackID));
 
-	unsigned int recvTime = 0;
-	NetMessage *message = NetMessagePool::instance()->
-		getFromPool(NetMessage::BufferMessage, 
-			server_?ServerLoopBackID:ClientLoopBackID, 
-			0, flags, recvTime);
-	message->getBuffer().reset();
-	message->getBuffer().addDataToBuffer(buffer.getBuffer(), buffer.getBufferUsed());
-	getLoopback()->messageHandler_.addMessage(message);
+		unsigned int recvTime = 0;
+		NetMessage *message = NetMessagePool::instance()->
+			getFromPool(NetMessage::BufferMessage, 
+				server_?ServerLoopBackID:ClientLoopBackID, 
+				0, flags, recvTime);
+		message->getBuffer().reset();
+		message->getBuffer().addDataToBuffer(buffer.getBuffer(), buffer.getBufferUsed());
+		getLoopback()->messageHandler_.addMessage(message);
+	}
 }

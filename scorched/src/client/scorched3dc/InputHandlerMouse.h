@@ -30,6 +30,8 @@ public:
 	virtual void mouseClick(int positionX, int positionY, int mouseButton) {}
 	virtual void mouseDrag(int positionX, int positionY, int positionDeltaX, 
 		int positionDeltaY, int mouseButton) {}
+	virtual void mouseDragStart(int positionX, int positionY, int mouseButton) {}
+	virtual void mouseDragStop(int positionX, int positionY, int mouseButton) {}
 	virtual void mouseWheel(int positionDelta) {}
 };
 

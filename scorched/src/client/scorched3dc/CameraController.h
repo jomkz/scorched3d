@@ -27,6 +27,7 @@ class CameraControllerHeightProvider
 {
 public:
 	virtual Ogre::Real getHeight(const Ogre::Vector3 &position) = 0;
+	virtual bool getIntersection(const Ogre::Ray &cameraRay, Ogre::Vector3 *outPosition) = 0;
 };
 
 class CameraController : 
@@ -40,12 +41,15 @@ public:
 
 	void update(float frameTime);
 
+	void setWantedTarget(const Ogre::Vector3 &position);
 	void setHeightProvider(CameraControllerHeightProvider *heightProvider) { heightProvider_ = heightProvider; }
 
 	// InputHandlerMouse
 	virtual void mouseClick(int positionX, int positionY, int mouseButton);
 	virtual void mouseDrag(int positionX, int positionY, int positionDeltaX, 
 		int positionDeltaY, int mouseButton);
+	virtual void mouseDragStop(int positionX, int positionY, int mouseButton);
+	virtual void mouseDragStart(int positionX, int positionY, int mouseButton);
 	virtual void mouseWheel(int positionDelta);
 
 protected:

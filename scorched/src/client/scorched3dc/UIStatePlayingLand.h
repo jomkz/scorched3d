@@ -38,6 +38,7 @@ public:
 	virtual ~UIStatePlayingLand();
 
 	Ogre::Real getHeight(const Ogre::Vector3 &position);
+	bool getIntersection(const Ogre::Ray &cameraRay, Ogre::Vector3 *outPosition);
 	
 	void updateLandscapeTextures();
 	void update(float frameTime);

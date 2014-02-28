@@ -2,7 +2,7 @@
 
 <GUILayout version="4" >
     <Window type="OgreTray/FrameWindow" name="ConsoleRoot" >
-        <Property name="Area" value="{{0,0},{0,0},{0.3,209},{0.3,97}}" />
+        <Property name="Area" value="{{0.5,-320},{0.5,-240},{0.5,320},{0.5,240}}" />
         <Property name="Font" value="DejaVuSans-10" />
         <Property name="Text" value="Console" />
         <Property name="Alpha" value="0.8" />

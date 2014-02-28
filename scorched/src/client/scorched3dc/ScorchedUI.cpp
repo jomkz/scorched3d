@@ -30,6 +30,7 @@
 #include <lang/Lang.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientUISync.h>
+#include <server/ScorchedServer.h>
 
 ScorchedUI *ScorchedUI::instance_(0);
 

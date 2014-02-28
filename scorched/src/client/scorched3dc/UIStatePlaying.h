@@ -43,6 +43,7 @@ public:
 
 	// CameraControllerHeightProvider
 	virtual Ogre::Real getHeight(const Ogre::Vector3 &position);
+	virtual bool getIntersection(const Ogre::Ray &cameraRay, Ogre::Vector3 *outPosition);
 protected:
 	Ogre::SceneManager* sceneMgr_;
 	CameraController *cameraController_;

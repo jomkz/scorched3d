@@ -59,13 +59,13 @@ void InputManager::create(Ogre::Root *ogreRoot, Ogre::RenderWindow* ogreWindow)
 	pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
  
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	pl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_FOREGROUND" )));
-	pl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_NONEXCLUSIVE")));
+	//pl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_FOREGROUND" )));
+	//pl.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_NONEXCLUSIVE")));
 	pl.insert(std::make_pair(std::string("w32_keyboard"), std::string("DISCL_FOREGROUND")));
 	pl.insert(std::make_pair(std::string("w32_keyboard"), std::string("DISCL_NONEXCLUSIVE")));
 #elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-	pl.insert(std::make_pair(std::string("x11_mouse_grab"), std::string("false")));
-	pl.insert(std::make_pair(std::string("x11_mouse_hide"), std::string("false")));
+	//pl.insert(std::make_pair(std::string("x11_mouse_hide"), std::string("false")));
+	//pl.insert(std::make_pair(std::string("x11_mouse_grab"), std::string("false")));
 	pl.insert(std::make_pair(std::string("x11_keyboard_grab"), std::string("false")));
 	pl.insert(std::make_pair(std::string("XAutoRepeatOn"), std::string("true")));
 #endif
@@ -143,20 +143,28 @@ bool InputManager::mouseMoved(const OIS::MouseEvent &arg)
 		}
 	}
 
-	if (mouseDownButton_ == -1)
+	// Always inject mouse movements into CEGUI so the pointer is always in the "right" place
 	{
 		CEGUI::System &sys = CEGUI::System::getSingleton();
 		sys.getDefaultGUIContext().injectMousePosition((float) arg.state.X.abs, (float) arg.state.Y.abs);
 	}
-	else
+	if (mouseDownButton_ != -1)
 	{
 		int dx = arg.state.X.abs - mouseDownX_;
 		int dy = arg.state.Y.abs - mouseDownY_;
 		if (mouseDragging_ || abs(dx) > 5 || abs(dy) > 5)
 		{
-			mouseDragging_ = true;
-			std::list<InputHandlerMouse *>::iterator itor = mouseHandlers_.begin();
 			std::list<InputHandlerMouse *>::iterator endItor = mouseHandlers_.end();
+			if (!mouseDragging_)
+			{
+				mouseDragging_ = true;
+				std::list<InputHandlerMouse *>::iterator itor = mouseHandlers_.begin();
+				for (;itor != endItor; ++itor)
+				{
+					(*itor)->mouseDragStart(arg.state.X.abs, arg.state.Y.abs, mouseDownButton_);
+				}
+			}
+			std::list<InputHandlerMouse *>::iterator itor = mouseHandlers_.begin();
 			for (;itor != endItor; ++itor)
 			{
 				(*itor)->mouseDrag(arg.state.X.abs, arg.state.Y.abs, dx, dy, mouseDownButton_);
@@ -187,12 +195,15 @@ bool InputManager::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID 
 {
 	if (mouseDownButton_ != -1)
 	{
-		std::list<InputHandlerMouse *>::iterator itor = mouseHandlers_.begin();
-		std::list<InputHandlerMouse *>::iterator endItor = mouseHandlers_.end();
-		for (;itor != endItor; ++itor)
+		if (!mouseDragging_)
 		{
-			(*itor)->mouseClick(arg.state.X.abs, arg.state.Y.abs, (int) id);
-		}
+			std::list<InputHandlerMouse *>::iterator itor = mouseHandlers_.begin();
+			std::list<InputHandlerMouse *>::iterator endItor = mouseHandlers_.end();
+			for (;itor != endItor; ++itor)
+			{
+				(*itor)->mouseClick(arg.state.X.abs, arg.state.Y.abs, (int) id);
+			}
+			}
 	}
 	else
 	{
@@ -200,7 +211,16 @@ bool InputManager::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID 
 		sys.getDefaultGUIContext().injectMouseButtonUp(convertButton(id));
 	}
 	mouseDownButton_ = -1;
-	mouseDragging_ = false;
+	if (mouseDragging_)
+	{
+		mouseDragging_ = false;
+		std::list<InputHandlerMouse *>::iterator itor = mouseHandlers_.begin();
+		std::list<InputHandlerMouse *>::iterator endItor = mouseHandlers_.end();
+		for (;itor != endItor; ++itor)
+		{
+			(*itor)->mouseDragStop(arg.state.X.abs, arg.state.Y.abs, (int) id);
+		}
+	}
 	return true;
 }
 
