@@ -68,6 +68,7 @@ LandscapeSoundTimingRepeat::LandscapeSoundTimingRepeat() :
 	min("min", "The minimum amount of time to wait before playing this sound again"),
 	max("max", "The maximum amount of time to wait before playing this sound again")
 {
+	addChildXMLEntry(&min, &max);
 }
 
 LandscapeSoundTimingRepeat::~LandscapeSoundTimingRepeat()

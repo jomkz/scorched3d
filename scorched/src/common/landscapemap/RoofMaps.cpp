@@ -44,7 +44,7 @@ void RoofMaps::generateMaps(
 
 bool RoofMaps::getRoofOn()
 {
-	return (defnCache_.getDefn()->roof->getType() == LandscapeDefnType::eRoofCavern);
+	return false;
 }
 
 fixed RoofMaps::getRoofHeight(int x, int y)
@@ -85,82 +85,4 @@ void RoofMaps::generateRMap(
 	rmap_.create(mapWidth, mapHeight, true);
 	deformRMap_.create(rmap_.getMapWidth(), rmap_.getMapHeight(), true);
 	roofBaseHeight_ = 0;
-
-	// Generate the roof
-	if (getRoofOn())
-	{
-		LandscapeDefnRoofCavern *cavern = 
-			(LandscapeDefnRoofCavern *) defnCache_.getDefn()->roof;
-
-		roofBaseHeight_ = fixed(cavern->height);
-
-		bool smooth = false;
-		if (!HeightMapLoader::generateTerrain(
-			defnCache_.getSeed() + 1,
-			cavern->heightmap,
-			rmap_,
-			smooth,
-			counter))
-		{
-			S3D::dialogExit("Landscape", "Failed to generate roof");
-		}
-
-		// Reverse heights (up-side-down)
-		for (int j=0; j<=rmap_.getMapHeight(); j++)
-		{
-			for (int i=0; i<=rmap_.getMapWidth(); i++)
-			{
-				fixed height = rmap_.getHeight(i, j);
-				height = fixed(cavern->height) - height;
-				rmap_.setHeight(i, j, height);
-			}
-		}
-
-		// Generate the deform map (if any)
-		if (cavern->deform->getType() == LandscapeDefnType::eDeformFile)
-		{
-			LandscapeDefnDeformFile *file = 
-				(LandscapeDefnDeformFile *) cavern->deform;
-
-			// Load the landscape
-			Image image = ImageFactory::loadImage(S3D::eModLocation, file->file);
-			if (!image.getBits())
-			{
-				S3D::dialogExit("HeightMapLoader", S3D::formatStringBuffer(
-					"Error: Unable to find deform roof map \"%s\"",
-					file->file.c_str()));
-			}
-			if (!image.getLossless())
-			{
-				S3D::dialogExit("HeightMapLoader", S3D::formatStringBuffer(
-					"Error: Deform landscape map \"%s\" is not a lossless image format",
-					file->file.c_str()));
-			}
-			HeightMapLoader::loadTerrain(
-				deformRMap_,
-				image, 
-				file->levelsurround,
-				counter);
-
-			for (int j=0; j<=deformRMap_.getMapHeight(); j++)
-			{
-				for (int i=0; i<=deformRMap_.getMapWidth(); i++)
-				{
-					fixed height = deformRMap_.getHeight(i, j);
-					height = fixed(cavern->height) - height;
-					deformRMap_.setHeight(i, j, height);
-				}
-			}
-		}
-		else
-		{
-			for (int x=0; x<rmap_.getMapWidth(); x++)
-			{
-				for (int y=0; y<rmap_.getMapHeight(); y++)
-				{
-					deformRMap_.setHeight(x, y, rmap_.getHeight(x, y));
-				}
-			}
-		}
-	}
 }

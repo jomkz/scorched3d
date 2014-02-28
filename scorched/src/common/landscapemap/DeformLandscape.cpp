@@ -122,20 +122,6 @@ void DeformLandscape::deformLandscape(
 				radius.asQuickString(), (down?"Down":"Up")));
 	}
 
-	if (down && context.getLandscapeMaps().getRoofMaps().getRoofOn())
-	{
-		bool hits = deformRoofInternal(context, pos, radius, depthScale, true);
-#ifndef S3D_SERVER
-		if (hits && !context.getServerMode())
-		{
-			/*
-			Landscape::instance()->recalculateRoof();
-			VisibilityPatchGrid::instance()->recalculateRoofErrors(pos, radius);
-			*/
-		}
-#endif
-	}
-
 	bool hits = deformLandscapeInternal(context, pos, radius, down, true, depthScale);
 #ifndef S3D_SERVER
 	if (hits && !context.getServerMode() && deformTexture)
@@ -165,7 +151,7 @@ bool DeformLandscape::deformLandscapeInternal(
 	if (iradius > 49) iradius = 49;
 
 	fixed lowestLandscapeHeight = fixed(context.getOptionsGame().getMinimumLandHeight());
-	LandscapeDefnType::DefnType deformType = context.getLandscapeMaps().getDefinitions().getDefn()->deform->getType();
+	LandscapeDefnDeform::DefnDeformType deformType = context.getLandscapeMaps().getDefinitions().getDefn()->deform.getValue()->getType();
 	DeformLandscapeCache::DeformLandscapeCacheItem &deformItem = deformCache.getItem(iradius);
 	fixed *explosionDepth = deformItem.explosionDepth_;
 	fixed *explosionDistance = deformItem.explosionDistance_;
@@ -200,7 +186,7 @@ bool DeformLandscape::deformLandscapeInternal(
 							}
 
 							fixed lowestHeight = lowestLandscapeHeight;
-							if (deformType != LandscapeDefnType::eDeformDeform)
+							if (deformType != LandscapeDefnDeform::eDeformDeform)
 							{
 								fixed deformHeight = deformhmap.getHeight(absx, absy);
 								lowestHeight = S3D_MAX(deformHeight, lowestLandscapeHeight);
@@ -224,101 +210,6 @@ bool DeformLandscape::deformLandscapeInternal(
 						if (currentHeight < pos[2] + actualExplosionDepth)
 						{
 							newHeight = currentHeight + actualExplosionDepth;
-						}
-					}
-
-					if (newHeight != currentHeight)
-					{
-						hits = true;
-						hmap.setHeight(absx, absy, newHeight);
-					}
-				}
-			}
-		}
-	}
-
-	if (hits && setNormals)
-	{
-		// Take out or add a chunk into the landsacpe
-		for (int x=-iradius-3; x<=iradius+3; x++)
-		{
-			for (int y=-iradius-3; y<=iradius+3; y++)
-			{
-				int absx = pos[0].asInt() + x;
-				int absy = pos[1].asInt() + y;
-				if (absx >= 0 && absx < hmap.getMapWidth() &&
-					absy >= 0 && absy < hmap.getMapHeight())
-				{
-					hmap.getNormal(absx, absy);
-				}
-			}
-		}
-	}
-
-	return hits;
-}
-
-bool DeformLandscape::deformRoofInternal(ScorchedContext &context,
-	FixedVector &pos, fixed radius, fixed depthScale,
-	bool setNormals)
-{
-	HeightMap &hmap = context.getLandscapeMaps().getRoofMaps().getRoofMap();
-	HeightMap &deformhmap = context.getLandscapeMaps().getRoofMaps().getDeformRoofMap();
-
-	bool hits = false;
-	int iradius = (int) radius.asInt() + 1;
-	if (iradius > 49) iradius = 49;
-
-	DeformLandscapeCache::DeformLandscapeCacheItem &deformItem = deformCache.getItem(iradius);
-	fixed *explosionDepth = deformItem.explosionDepth_;
-	fixed *explosionDistance = deformItem.explosionDistance_;
-	LandscapeDefnType::DefnType deformType = 
-		((LandscapeDefnRoofCavern *)(context.getLandscapeMaps().getDefinitions().getDefn()->roof))->deform->getType();
-
-	// Take out or add a chunk into the landsacpe
-	for (int y=-iradius; y<=iradius; y++)
-	{
-		for (int x=-iradius; x<=iradius; x++, explosionDepth++, explosionDistance++)	
-		{
-			DIALOG_ASSERT(x+iradius<100 && y+iradius<100);
-			if (*explosionDistance != fixed(-1))
-			{
-				int absx = pos[0].asInt() + x;
-				int absy = pos[1].asInt() + y;
-				if (absx > 0 && absx < hmap.getMapWidth() &&
-					absy > 0 && absy < hmap.getMapHeight())
-				{
-					fixed currentHeight = hmap.getHeight(absx, absy);
-					fixed newHeight = currentHeight;
-
-					{
-						fixed actualExplosionDepth = *explosionDepth * depthScale;
-						if (currentHeight < pos[2] + actualExplosionDepth)
-						{
-							if (currentHeight < pos[2] - actualExplosionDepth)
-							{
-								newHeight += actualExplosionDepth + actualExplosionDepth;
-							}
-							else
-							{
-								newHeight = pos[2] + actualExplosionDepth;
-							}
-
-							if (deformType != LandscapeDefnType::eDeformDeform)
-							{
-								fixed deformHeight = deformhmap.getHeight(absx, absy);
-								if (newHeight > deformHeight)
-								{
-									if (currentHeight > deformHeight)
-									{
-										newHeight = currentHeight;
-									}
-									else
-									{
-										newHeight = deformHeight;
-									}
-								}
-							}
 						}
 					}
 
@@ -412,7 +303,7 @@ void DeformLandscape::flattenAreaInternal(
 	fixed newHeight = tankPos[2];
 
 	fixed lowestLandscapeHeight = fixed(context.getOptionsGame().getMinimumLandHeight());
-	LandscapeDefnType::DefnType deformType = context.getLandscapeMaps().getDefinitions().getDefn()->deform->getType();
+	LandscapeDefnDeform::DefnDeformType deformType = context.getLandscapeMaps().getDefinitions().getDefn()->deform.getValue()->getType();
 
 	// Flatten a small area around the tank
 	for (int y=-iSize; y<=iSize; y++)
@@ -429,7 +320,7 @@ void DeformLandscape::flattenAreaInternal(
 				fixed currentHeight = hmap.getHeight(ix, iy);
 
 				fixed lowestHeight = lowestLandscapeHeight;
-				if (deformType != LandscapeDefnType::eDeformDeform)
+				if (deformType != LandscapeDefnDeform::eDeformDeform)
 				{
 					fixed deformHeight = deformhmap.getHeight(ix, iy);
 					lowestHeight = S3D_MAX(deformHeight, lowestLandscapeHeight);

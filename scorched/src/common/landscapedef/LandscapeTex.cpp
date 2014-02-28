@@ -29,17 +29,14 @@
 #include <float.h>
 
 // LandscapeTex
-LandscapeTex::LandscapeTex() : seed(0)
+LandscapeTex::LandscapeTex(LandscapeDefinitions *definitions) : 
+	LandscapeInclude(definitions, "tex", "A landscape/scene definition, usualy related to the visual aspects of the landscape"),
+	landscapeGenerationSeed("landscapegenerationseed", "A seed usualy used to create random lanscapes", 0, 0),
+	waterHeight("waterheight", "The height of the lanscape water", 0, -10)
 {
+	addChildXMLEntry(&landscapeGenerationSeed, &waterHeight);
 }
 
 LandscapeTex::~LandscapeTex()
 {
-}
-
-bool LandscapeTex::readXML(LandscapeDefinitions *definitions, XMLNode *node)
-{
-	if (!texDefn.readXML(definitions, node)) return false;
-
-	return node->failChildren();
 }

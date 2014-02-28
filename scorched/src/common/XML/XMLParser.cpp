@@ -71,11 +71,11 @@ void XMLParser::startElementHandler(const XML_Char *name,
 	if (!root_)
 	{
 		document_ = new XMLNode("<document>");
+		document_->setSource(source_.c_str());
+		document_->setUseContentNodes(useContentNodes_);
 
 		// Create the root node
 		root_ = current_ = new XMLNode(name);
-		root_->setUseContentNodes(useContentNodes_);
-		root_->setSource(source_.c_str());
 		root_->setLine(XML_GetCurrentLineNumber(p_),
 			XML_GetCurrentColumnNumber(p_));
 		document_->addChild(root_);
@@ -86,7 +86,6 @@ void XMLParser::startElementHandler(const XML_Char *name,
 
 		// Add a new child to this node
 		XMLNode *newNode = new XMLNode(name);
-		current_->setUseContentNodes(useContentNodes_);
 		current_->addChild(newNode);
 		current_ = newNode;
 		current_->setLine(XML_GetCurrentLineNumber(p_),

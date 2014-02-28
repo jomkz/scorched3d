@@ -149,6 +149,8 @@
     <ClCompile Include="..\..\common\landscapedef\LandscapeDefinitions.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeDefinitionsBase.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeDefn.cpp" />
+    <ClCompile Include="..\..\common\landscapedef\LandscapeDefnDeform.cpp" />
+    <ClCompile Include="..\..\common\landscapedef\LandscapeDefnHeightMap.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeDefnTankStart.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeEvent.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeEventAction.cpp" />
@@ -162,7 +164,6 @@
     <ClCompile Include="..\..\common\landscapedef\LandscapeSoundSound.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeSoundTiming.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeTex.cpp" />
-    <ClCompile Include="..\..\common\landscapedef\LandscapeTexDefn.cpp" />
     <ClCompile Include="..\..\common\landscapemap\DeformLandscape.cpp" />
     <ClCompile Include="..\..\common\landscapemap\GroundMaps.cpp" />
     <ClCompile Include="..\..\common\landscapemap\HeightMap.cpp" />
@@ -632,6 +633,8 @@
     <ClInclude Include="..\..\common\landscapedef\LandscapeDefinitionsBase.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeDefinitionsItem.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeDefn.h" />
+    <ClInclude Include="..\..\common\landscapedef\LandscapeDefnDeform.h" />
+    <ClInclude Include="..\..\common\landscapedef\LandscapeDefnHeightMap.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeDefnTankStart.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeEvent.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeEventAction.h" />
@@ -645,7 +648,6 @@
     <ClInclude Include="..\..\common\landscapedef\LandscapeSoundSound.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeSoundTiming.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeTex.h" />
-    <ClInclude Include="..\..\common\landscapedef\LandscapeTexDefn.h" />
     <ClInclude Include="..\..\common\landscapemap\DeformLandscape.h" />
     <ClInclude Include="..\..\common\landscapemap\GroundMaps.h" />
     <ClInclude Include="..\..\common\landscapemap\HeightMap.h" />

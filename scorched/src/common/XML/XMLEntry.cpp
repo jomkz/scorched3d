@@ -36,12 +36,6 @@ XMLEntryContainer::XMLEntryContainer(const char *name, const char *description) 
 
 XMLEntryContainer::~XMLEntryContainer()
 {
-	std::list<XMLEntry *>::iterator itor = xmlEntryChildren_.begin(), end = xmlEntryChildren_.end();
-	for (;itor!=end; itor++)
-	{
-		delete *itor;
-	}
-	xmlEntryChildren_.clear();
 }
 
 void XMLEntryContainer::addChildXMLEntry(XMLEntry *entry1)

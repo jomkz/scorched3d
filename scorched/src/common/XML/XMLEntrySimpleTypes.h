@@ -212,6 +212,22 @@ protected:
 	bool multiline_;
 };
 
+class XMLEntryFile : public XMLEntryString
+{
+public:
+	XMLEntryFile(const char *name,
+		const char *description);
+	XMLEntryFile(const char *name,
+		const char *description,
+		unsigned int data,
+		const std::string &defaultValue);
+	virtual ~XMLEntryFile();
+
+	virtual bool setValueFromString(const std::string &string);
+protected:
+	bool afile;
+};
+
 class XMLEntryStringEnum : public XMLEntryString
 {
 public:

@@ -19,13 +19,15 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <placement/PlacementTankPosition.h>
+#include <landscapedef/LandscapeDefn.h>
 #include <landscapedef/LandscapeDefnTankStart.h>
 #include <landscapemap/LandscapeMaps.h>
+#include <engine/ScorchedContext.h>
 
 FixedVector PlacementTankPosition::placeTank(unsigned int playerId, int team,
 	ScorchedContext &context, RandomGenerator &generator)
 {
-	LandscapeDefnTypeTankStart *defn =
-		context.getLandscapeMaps().getDefinitions().getDefn()->tankstart;
+	LandscapeDefnTankStart *defn =
+		context.getLandscapeMaps().getDefinitions().getDefn()->tankstart.getValue();
 	return defn->placeTank(playerId, team, context, generator);
 }

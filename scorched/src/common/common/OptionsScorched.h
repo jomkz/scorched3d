@@ -187,7 +187,7 @@ protected:
 	OptionsGame levelOptions_;
 
 	bool hasLevelChangedValue(const char *name);
-	void updateLevelOptions(std::vector<LandscapeInclude *> &options,
+	void updateLevelOptions(std::list<LandscapeInclude *> &options,
 		std::map<std::string, XMLEntrySimpleType *> &values);
 };
 

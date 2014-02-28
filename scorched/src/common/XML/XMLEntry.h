@@ -73,9 +73,10 @@ public:
 		{
 			return false;
 		}
-		if (child->getNamedParameter("type", type_)) 
+		if (!child->getNamedParameter("type", type_)) 
 		{
-			return false;
+			return child->returnError(S3D::formatStringBuffer(
+				"Failed to find a required type attribute"));;
 		}
 		value_ = createXMLEntry(type_);
 		if (!value_)

@@ -269,7 +269,8 @@ LandscapeDefinition LandscapeDefinitions::getRandomLandscapeDefn(
 	unsigned int seed = (unsigned int) rand();
 	LandscapeTex *landscapeTex = getTex(tex.c_str());
 	DIALOG_ASSERT(landscapeTex);
-	if (landscapeTex->seed != 0) seed = landscapeTex->seed;
+	if (landscapeTex->landscapeGenerationSeed.getValue() != 0) 
+		seed = landscapeTex->landscapeGenerationSeed.getValue();
 
 	LandscapeDefinition entry(
 		tex.c_str(), defn.c_str(), seed, result->name.c_str(),

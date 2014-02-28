@@ -47,10 +47,6 @@ private:
 		FixedVector &pos, fixed radius, 
 		bool down, 
 		bool setNormals, fixed depthScale);
-	static bool deformRoofInternal(
-		ScorchedContext &context,
-		FixedVector &pos, fixed radius, fixed depthScale,
-		bool setNormals);
 	static void flattenAreaInternal(
 		ScorchedContext &context, 
 		FixedVector &tankPos,

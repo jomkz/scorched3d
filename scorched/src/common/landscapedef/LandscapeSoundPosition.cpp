@@ -79,6 +79,7 @@ LandscapeSoundPositionSet::LandscapeSoundPositionSet() :
 	name("name", "The name of the object group to take objects from"),
 	maxsounds("maxsounds", "The maximum number of sounds to play at the same time")
 {
+	addChildXMLEntry(&name, &maxsounds);
 }
 
 LandscapeSoundPositionSet::~LandscapeSoundPositionSet()
@@ -139,6 +140,7 @@ LandscapeSoundPositionGroup::LandscapeSoundPositionGroup() :
 	falloff("falloff", "The distance that the sounds will disipate over"),
 	name("name", "The name of the object group to take objects from")
 {
+	addChildXMLEntry(&name, &falloff);
 }
 
 LandscapeSoundPositionGroup::~LandscapeSoundPositionGroup()
@@ -196,6 +198,7 @@ LandscapeSoundPositionWater::LandscapeSoundPositionWater() :
 		"Sound location played when close to the water shore"),
 	falloff("falloff", "The distance that the sounds will disipate over")
 {
+	addChildXMLEntry(&falloff);
 }
 
 LandscapeSoundPositionWater::~LandscapeSoundPositionWater()
@@ -250,6 +253,7 @@ LandscapeSoundPositionAbsoulte::LandscapeSoundPositionAbsoulte() :
 		"Sound location played from an absolutely specified position"),
 	position("position", "The absolute position to play the sound from")
 {
+	addChildXMLEntry(&position);
 }
 
 LandscapeSoundPositionAbsoulte::~LandscapeSoundPositionAbsoulte()

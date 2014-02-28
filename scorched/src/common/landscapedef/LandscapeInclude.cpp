@@ -18,43 +18,64 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <placement/PlacementType.h>
-#include <landscapedef/LandscapeSound.h>
 #include <landscapedef/LandscapeInclude.h>
-#include <landscapedef/LandscapeEvent.h>
-#include <landscapedef/LandscapeMovement.h>
-#include <landscapedef/LandscapeSound.h>
-#include <landscapedef/LandscapeMusic.h>
-#include <landscapedef/LandscapeOptions.h>
+#include <landscapedef/LandscapeDefinitions.h>
 
-LandscapeInclude::LandscapeInclude()
+LansdscapeIncludeList::LansdscapeIncludeList() :
+	XMLEntryList<XMLEntryString>("include", "A set of files to include into this file")
 {
-	events = new LandscapeEventList();
-	movements = new LandscapeMovementList();
-	sounds = new LandscapeSoundList();
-	musics = new LandscapeMusicList();
-	placements = new PlacementTypeList();
-	options = new LandscapeOptionsList();
+}
+
+LansdscapeIncludeList::~LansdscapeIncludeList()
+{
+}
+
+XMLEntryString *LansdscapeIncludeList::createXMLEntry()
+{
+	return new XMLEntryString("include", "The name of file to include into this file");
+}
+
+LandscapeInclude::LandscapeInclude(LandscapeDefinitions *definitions, const char *name, const char *description) :
+	XMLEntryGroup(name, description),
+	definitions_(definitions)
+{
+	addChildXMLEntry(&events);
+	addChildXMLEntry(&movements);
+	addChildXMLEntry(&sounds);
+	addChildXMLEntry(&musics);
+	addChildXMLEntry(&placements);
+	addChildXMLEntry(&options);
 }
 
 LandscapeInclude::~LandscapeInclude()
 {
-	delete events;
-	delete movements;
-	delete sounds;
-	delete musics;
-	delete placements;
-	delete options;
 }
 
-bool LandscapeInclude::readXML(LandscapeDefinitions *definitions, XMLNode *node)
+bool LandscapeInclude::readXML(XMLNode *parentNode)
 {
-	if (!events->readXML(node)) return false;
-	if (!movements->readXML(node)) return false;
-	if (!sounds->readXML(node)) return false;
-	if (!musics->readXML(node)) return false;
-	if (!placements->readXML(node)) return false;
-	if (!options->readXML(node)) return false;
+	if (!XMLEntryGroup::readXML(parentNode)) return false;
 
-	return node->failChildren();
+	std::list<XMLEntryString *>::iterator itor = includeList.getChildren().begin(),
+		end = includeList.getChildren().end();
+	for (;itor!=end;++itor)
+	{
+		std::string fileName = (*itor)->getValue();
+		LandscapeInclude *landscapeInclude = 
+			definitions_->getInclude(fileName.c_str(), true);
+		if (!landscapeInclude) return false;
+		includes.push_back(landscapeInclude);
+	}
+
+	return true;
+}
+
+LandscapeIncludeFile::LandscapeIncludeFile(LandscapeDefinitions *definitions) :
+	LandscapeInclude(definitions, "include", 
+		"A landscape/scene definition fragment, this fragment can contain many different types of Scorched3D artifact")
+{
+
+}
+
+LandscapeIncludeFile::~LandscapeIncludeFile()
+{
 }

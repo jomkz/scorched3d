@@ -59,21 +59,21 @@ void HeightMapModifier::noise(HeightMap &hmap,
 	RandomGenerator &generator,
 	ProgressCounter *counter)
 {
-	if (defn.noisefactor == 0) return;
+	if (defn.noisefactor.getValue() == 0) return;
 	if (counter) counter->setNewOp(LANG_RESOURCE("NOISE", "Noise"));
 
 	unsigned int randomU = generator.getRandUInt("HeightMapModifier") % 5000;
 	int random = (int) randomU;
 
-	fixed *noisemap = new fixed[defn.noisewidth * defn.noiseheight];
-	for (int y=0; y<defn.noiseheight; y++)
+	fixed *noisemap = new fixed[defn.noisewidth.getValue() * defn.noiseheight.getValue()];
+	for (int y=0; y<defn.noiseheight.getValue(); y++)
 	{
-		for (int x=0; x<defn.noisewidth; x++)
+		for (int x=0; x<defn.noisewidth.getValue(); x++)
 		{
 			int noise = (noiseFn(x,  y,  random) -
 				(INT_MAX / 2)) / 100000;
-			noisemap[x + y * defn.noisewidth] = 
-				fixed(true, noise) * defn.noisefactor;
+			noisemap[x + y * defn.noisewidth.getValue()] = 
+				fixed(true, noise) * defn.noisefactor.getValue();
 		}
 	}
 
@@ -83,14 +83,14 @@ void HeightMapModifier::noise(HeightMap &hmap,
 		if (counter) counter->setNewPercentage((100.0f * float(x)) / float(hmap.getMapWidth()));
 		for (int y=0; y<=hmap.getMapHeight(); y++)
 		{
-			fixed nx = fixed(defn.noisewidth) * fixed(x) / fixed(hmap.getMapWidth());
-			fixed ny = fixed(defn.noiseheight) * fixed(y) / fixed(hmap.getMapHeight());
-			if (nx >= defn.noisewidth) nx = defn.noisewidth - 1;
-			if (ny >= defn.noiseheight) ny = defn.noiseheight - 1;
+			fixed nx = fixed(defn.noisewidth.getValue()) * fixed(x) / fixed(hmap.getMapWidth());
+			fixed ny = fixed(defn.noiseheight.getValue()) * fixed(y) / fixed(hmap.getMapHeight());
+			if (nx >= defn.noisewidth.getValue()) nx = defn.noisewidth.getValue() - 1;
+			if (ny >= defn.noiseheight.getValue()) ny = defn.noiseheight.getValue() - 1;
 
 			fixed height = hmap.getHeight(x, y);
 			fixed newHeight = height + 
-				noisemap[nx.asInt() + ny.asInt() * defn.noisewidth];
+				noisemap[nx.asInt() + ny.asInt() * defn.noisewidth.getValue()];
 			newHeight = S3D_MAX(newHeight, 0);
 			hmap.setHeight(x, y, newHeight);
 		}
@@ -193,7 +193,7 @@ void HeightMapModifier::waterErrosion(HeightMap &hmap,
 	RandomGenerator &generator,
 	ProgressCounter *counter)
 {
-	if (defn.errosions == 0) return;
+	if (defn.errosions.getValue() == 0) return;
 	if (counter) counter->setNewOp(LANG_RESOURCE("WATER_ERROSION", "Water Errosion"));
 
 	// Copy the height map, so we don't keep running down the same paths
@@ -213,7 +213,7 @@ void HeightMapModifier::waterErrosion(HeightMap &hmap,
 	memset(seen, 0, sizeof(int) * (hmap.getMapWidth()+1) * (hmap.getMapHeight()+1));
 
 	// For each errosion stream
-	for (int o=0; o<defn.errosions; o++) 
+	for (int o=0; o<defn.errosions.getValue(); o++) 
 	{
 		if (counter) counter->setNewPercentage((100.0f * float(o)) / float(30));
 
@@ -262,15 +262,15 @@ void HeightMapModifier::waterErrosion(HeightMap &hmap,
 			}
 
 			// Check if have found any, or if we have been here with too many streams
-			if (minIndex == -1 || seen[x + y * (hmap.getMapWidth()+1)] > defn.errosionlayering) 
+			if (minIndex == -1 || seen[x + y * (hmap.getMapWidth()+1)] > defn.errosionlayering.getValue()) 
 			{
 				break;
 			}
 			seen[x + y * (hmap.getMapWidth()+1)]++;
 
 			// Set new height, make sure it is lower than the start by a certain amount
-			fixed lowered = fixed(i) * defn.errosionforce;
-			lowered = S3D_MIN(lowered, defn.errosionmaxdepth);
+			fixed lowered = fixed(i) * defn.errosionforce.getValue();
+			lowered = S3D_MIN(lowered, defn.errosionmaxdepth.getValue());
 			fixed currentheight = hmap.getHeight(x, y);
 			startHeight = S3D_MIN(startHeight, currentheight);
 			fixed newheight = S3D_MAX(startHeight - lowered, 0);
@@ -280,7 +280,7 @@ void HeightMapModifier::waterErrosion(HeightMap &hmap,
 			int size = 1;
 			while (true)
 			{
-				fixed raised = fixed(size) * defn.errosionsurroundforce;
+				fixed raised = fixed(size) * defn.errosionsurroundforce.getValue();
 				for (int a=-size; a<=size; a++)
 				{
 					for (int b=-size; b<=size; b++)
@@ -298,7 +298,7 @@ void HeightMapModifier::waterErrosion(HeightMap &hmap,
 					}
 				}
 				size++;
-				if (size > defn.errosionsurroundsize) break;
+				if (size > defn.errosionsurroundsize.getValue()) break;
 			}
 
 			// Move to the next x,y
@@ -318,7 +318,7 @@ void HeightMapModifier::smooth(HeightMap &hmap,
 							   LandscapeDefnHeightMapGenerate &defn,
 							   ProgressCounter *counter)
 {
-	if (defn.landsmoothing == 0) return;
+	if (defn.landsmoothing.getValue() == 0) return;
 	if (counter) counter->setNewOp(LANG_RESOURCE("SMOOTING", "Smoothing"));
 
 	fixed *newhMap_ = new fixed[(hmap.getMapWidth()+1) * (hmap.getMapHeight()+1)];
@@ -328,7 +328,7 @@ void HeightMapModifier::smooth(HeightMap &hmap,
 	{
 		for (int j=0; j<5; j++)
 		{
-			matrix[i][j] = fixed(defn.landsmoothing); // How much smoothing is done (> is more)
+			matrix[i][j] = fixed(defn.landsmoothing.getValue()); // How much smoothing is done (> is more)
 			if (i==2 && j==2) matrix[i][j] = fixed(1);
 		}
 	}
@@ -395,8 +395,8 @@ void HeightMapModifier::scale(HeightMap &hmap,
 
 	if (counter) counter->setNewOp(LANG_RESOURCE("SCALING_PHASE_2", "Scaling Phase 2"));
 
-	fixed realMax = ((fixed(defn.landheightmax) - fixed(defn.landheightmin)) * generator.getRandFixed("HeightMapModifier")) + 
-		defn.landheightmin;
+	fixed realMax = ((fixed(defn.landheight.max.getValue()) - fixed(defn.landheight.min.getValue())) * generator.getRandFixed("HeightMapModifier")) + 
+		defn.landheight.min.getValue();
 	fixed per = realMax / max;
 
 	for (x=0; x<=hmap.getMapWidth(); x++)
@@ -464,20 +464,20 @@ void HeightMapModifier::generateTerrain(HeightMap &hmap,
 	Image maskMap = bmap;
 
 	// Check if we need to load a new mask
-	if (!defn.mask.empty())
+	if (!defn.mask.getValue().empty())
 	{
-		maskMap = ImageFactory::loadImage(S3D::eModLocation, defn.mask);
+		maskMap = ImageFactory::loadImage(S3D::eModLocation, defn.mask.getValue());
 		if (!maskMap.getBits())
 		{
 			S3D::dialogExit("Landscape", S3D::formatStringBuffer(
 				"Error: Failed to find mask map \"%s\"",
-				defn.mask.c_str()));
+				defn.mask.getValue().c_str()));
 		}
 		if (!maskMap.getLossless())
 		{
 			S3D::dialogExit("Landscape", S3D::formatStringBuffer(
 				"Error: Mask map \"%s\" is not a lossless image format",
-				defn.mask.c_str()));
+				defn.mask.getValue().c_str()));
 		}
 	}
 
@@ -490,25 +490,28 @@ void HeightMapModifier::generateTerrain(HeightMap &hmap,
 	fixed maskMultX = fixed(maskMap.getWidth()) / fixed(hmap.getMapWidth());
 	fixed maskMultY = fixed(maskMap.getHeight()) / fixed(hmap.getMapHeight());
 
-	const int noItter = (fixed(defn.landhillsmax - defn.landhillsmin) *
-		generator.getRandFixed("HeightMapModifier") + fixed(defn.landhillsmin)).asInt();
+	const int noItter = (fixed(defn.landhills.max.getValue() - defn.landhills.min.getValue()) *
+		generator.getRandFixed("HeightMapModifier") + fixed(defn.landhills.min.getValue())).asInt();
 
 	for (int i=0; i<noItter; i++)
 	{
 		if (counter) counter->setNewPercentage((100.0f * float(i)) / float(noItter));
 
 		// Choose settings for a random hemisphere
-		fixed sizew = (fixed(defn.landpeakwidthxmax) - fixed(defn.landpeakwidthxmin)) * generator.getRandFixed("HeightMapModifier") 
-			+ fixed(defn.landpeakwidthxmin);
-		fixed sizew2 = (fixed(defn.landpeakwidthymax) - fixed(defn.landpeakwidthymin)) * generator.getRandFixed("HeightMapModifier") 
-			+ fixed(defn.landpeakwidthymin) + sizew;
-		fixed sizeh = ((fixed(defn.landpeakheightmax) - fixed(defn.landpeakheightmin)) * generator.getRandFixed("HeightMapModifier") 
-					   + defn.landpeakheightmin) * S3D_MAX(sizew, sizew2);
+		fixed sizew = (fixed(defn.landpeakwidthx.max.getValue()) - 
+			fixed(defn.landpeakwidthx.min.getValue())) * generator.getRandFixed("HeightMapModifier") 
+			+ fixed(defn.landpeakwidthx.min.getValue());
+		fixed sizew2 = (fixed(defn.landpeakwidthy.max.getValue()) - 
+			fixed(defn.landpeakwidthy.min.getValue())) * generator.getRandFixed("HeightMapModifier") 
+			+ fixed(defn.landpeakwidthy.min.getValue()) + sizew;
+		fixed sizeh = ((fixed(defn.landpeakheight.max.getValue()) - 
+			fixed(defn.landpeakheight.min.getValue())) * generator.getRandFixed("HeightMapModifier") 
+					   + defn.landpeakheight.min.getValue()) * S3D_MAX(sizew, sizew2);
 
 		// Choose a border around this hemisphere
 		fixed bordersizex = fixed(0);
 		fixed bordersizey = fixed(0);
-		if (defn.levelsurround)
+		if (defn.levelsurround.getValue())
 		{
 			fixed bordersize = S3D_MAX(sizew, sizew2) * fixed(true, 12000); // 1.2
 			bordersizex = bordersize + useBorderX;
@@ -550,8 +553,8 @@ void HeightMapModifier::generateTerrain(HeightMap &hmap,
 	noise(hmap, defn, generator, counter);
 	//edgeEnhance(hmap, defn, generator, counter);
 	waterErrosion(hmap, defn, generator, counter);
-	if (defn.levelsurround) levelSurround(hmap);
+	if (defn.levelsurround.getValue()) levelSurround(hmap);
 	smooth(hmap, defn, counter);
-	if (defn.levelsurround) levelSurround(hmap);
+	if (defn.levelsurround.getValue()) levelSurround(hmap);
 }
 

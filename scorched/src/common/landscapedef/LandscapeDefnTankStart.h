@@ -21,59 +21,92 @@
 #if !defined(__INCLUDE_LandscapeDefnTankStarth_INCLUDE__)
 #define __INCLUDE_LandscapeDefnTankStarth_INCLUDE__
 
-#include <landscapedef/LandscapeDefn.h>
-#include <common/fixed.h>
+#include <XML/XMLEntrySimpleTypes.h>
 #include <image/Image.h>
-#include <coms/ComsMessage.h>
-#include <XML/XMLFile.h>
-#include <string>
 
-class LandscapeDefnTypeTankStart
+class LandscapeDefnTankStartMinMax : public XMLEntryGroup
 {
 public:
-	enum TankStartDefnType
+	LandscapeDefnTankStartMinMax(const char *tagName, const char *description);
+	virtual ~LandscapeDefnTankStartMinMax();
+
+	XMLEntryFixed min, max;
+};
+
+class LandscapeDefnTankStartPositionList : public XMLEntryList<XMLEntryFixedVector>
+{
+public:
+	LandscapeDefnTankStartPositionList();
+	virtual ~LandscapeDefnTankStartPositionList();
+
+	virtual XMLEntryFixedVector *createXMLEntry();
+};
+
+class RandomGenerator;
+class ScorchedContext;
+class LandscapeDefnTankStart : public XMLEntryContainer
+{
+public:
+	enum DefnTankStartType
 	{
 		eHeight,
 		ePositional
 	};
 
-	static LandscapeDefnTypeTankStart *createType(const char *type);
+	LandscapeDefnTankStart(const char *name, const char *description);
+	virtual ~LandscapeDefnTankStart();
 
-	virtual bool readXML(XMLNode *node) = 0;
-	virtual TankStartDefnType getType() = 0;
+	virtual DefnTankStartType getType() = 0;
 
 	virtual FixedVector placeTank(unsigned int playerId, int team,
 		ScorchedContext &context, RandomGenerator &generator) = 0;
 };
 
-class LandscapeDefnTankStartHeight : public LandscapeDefnTypeTankStart
+class LandscapeDefnTankStartChoice : public XMLEntryTypeChoice<LandscapeDefnTankStart>
 {
 public:
+	LandscapeDefnTankStartChoice();
+	virtual ~LandscapeDefnTankStartChoice();
+
+	virtual LandscapeDefnTankStart *createXMLEntry(const std::string &type);
+};
+
+class LandscapeDefnTankStartHeight : public LandscapeDefnTankStart
+{
+public:
+	LandscapeDefnTankStartHeight();
+	virtual ~LandscapeDefnTankStartHeight();
+
 	virtual bool readXML(XMLNode *node);
-	virtual TankStartDefnType getType() { return eHeight; }
+
+	virtual DefnTankStartType getType() { return eHeight; }
 	virtual FixedVector placeTank(unsigned int playerId, int team,
 		ScorchedContext &context, RandomGenerator &generator);
 
 protected:
-	fixed flatness;
-	fixed startcloseness;
-	fixed heightmin, heightmax;
-	std::string startmask;
+	XMLEntryFixed flatness;
+	XMLEntryFixed startcloseness;
+	LandscapeDefnTankStartMinMax height;
+	XMLEntryFile startmask;
 	Image tankMask;
 };
 
-class LandscapeDefnTankStartPositional : public LandscapeDefnTypeTankStart
+class LandscapeDefnTankStartPositional : public LandscapeDefnTankStart
 {
 public:
+	LandscapeDefnTankStartPositional();
+	virtual ~LandscapeDefnTankStartPositional();
+
 	virtual bool readXML(XMLNode *node);
-	virtual TankStartDefnType getType() { return ePositional; }
+
+	virtual DefnTankStartType getType() { return ePositional; }
 	virtual FixedVector placeTank(unsigned int playerId, int team,
 		ScorchedContext &context, RandomGenerator &generator);
 
 protected:
-	fixed flatness;
-	fixed heightmin, heightmax;
-	std::vector<FixedVector> positions;
+	XMLEntryFixed flatness;
+	LandscapeDefnTankStartMinMax height;
+	LandscapeDefnTankStartPositionList positions;
 };
 
 #endif

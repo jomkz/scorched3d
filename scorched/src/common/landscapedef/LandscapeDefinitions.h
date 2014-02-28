@@ -29,6 +29,7 @@ class LandscapeDefinitions;
 class LandscapeDefn;
 class LandscapeTex;
 class LandscapeInclude;
+class LandscapeIncludeFile;
 class OptionsGame;
 class TargetContainer;
 
@@ -56,7 +57,7 @@ protected:
 
 	LandscapeDefinitionsItem<LandscapeTex> texs_;
 	LandscapeDefinitionsItem<LandscapeDefn> defns_;
-	LandscapeDefinitionsItem<LandscapeInclude> include_;
+	LandscapeDefinitionsItem<LandscapeIncludeFile> include_;
 
 	const std::string getLeastUsedFile(
 		OptionsScorched &context, std::vector<std::string> &files);

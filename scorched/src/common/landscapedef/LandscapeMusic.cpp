@@ -42,6 +42,7 @@ LandscapeMusic::LandscapeMusic() :
 	gain("gain", "The gain (volume) of the played music", 0, 1),
 	playstatelist()
 {
+	addChildXMLEntry(&file, &gain, &playstatelist);
 }
 
 LandscapeMusic::~LandscapeMusic()

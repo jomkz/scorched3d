@@ -558,9 +558,6 @@
     <ClCompile Include="..\..\common\landscapedef\LandscapeTex.cpp">
       <Filter>landscapedef</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\landscapedef\LandscapeTexDefn.cpp">
-      <Filter>landscapedef</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\landscapemap\DeformLandscape.cpp">
       <Filter>landscapemap</Filter>
     </ClCompile>
@@ -1503,6 +1500,12 @@
     <ClCompile Include="..\..\common\landscapedef\LandscapeSoundTiming.cpp">
       <Filter>landscapedef</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeDefnDeform.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeDefnHeightMap.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1989,9 +1992,6 @@
       <Filter>landscapedef</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\landscapedef\LandscapeTex.h">
-      <Filter>landscapedef</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\landscapedef\LandscapeTexDefn.h">
       <Filter>landscapedef</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\landscapemap\DeformLandscape.h">
@@ -2937,6 +2937,12 @@
       <Filter>landscapedef</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\landscapedef\LandscapeSoundTiming.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeDefnDeform.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeDefnHeightMap.h">
       <Filter>landscapedef</Filter>
     </ClInclude>
   </ItemGroup>

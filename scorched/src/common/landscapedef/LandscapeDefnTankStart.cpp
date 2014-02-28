@@ -20,6 +20,7 @@
 
 #include <landscapedef/LandscapeDefnTankStart.h>
 #include <landscapedef/LandscapeDefinitions.h>
+#include <landscapedef/LandscapeDefn.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapemap/DeformLandscape.h>
 #include <engine/Simulator.h>
@@ -30,6 +31,7 @@
 #include <target/TargetSpace.h>
 #include <target/TargetState.h>
 #include <image/ImageFactory.h>
+#include <engine/ScorchedContext.h>
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
@@ -37,49 +39,96 @@
 #include <stdlib.h>
 #include <time.h>
 
-static bool parseMinMax(XMLNode *parent, const char *name, 
-	fixed &min, fixed &max)
+LandscapeDefnTankStartMinMax::LandscapeDefnTankStartMinMax(const char *tagName, const char *description) :
+	XMLEntryGroup(tagName, description),
+	min("min", "The minimum value"),
+	max("max", "The maximum value")
 {
-	XMLNode *node = 0;
-	if (!parent->getNamedChild(name, node)) return false;
-	if (!node->getNamedChild("max", max)) return false;
-	if (!node->getNamedChild("min", min)) return false;
-	return node->failChildren();
+	addChildXMLEntry(&min, &max);
 }
 
-LandscapeDefnTypeTankStart *LandscapeDefnTypeTankStart::createType(const char *type)
+LandscapeDefnTankStartMinMax::~LandscapeDefnTankStartMinMax()
 {
-	if (0 == strcmp(type, "height")) return new LandscapeDefnTankStartHeight;
-	if (0 == strcmp(type, "positional")) return new LandscapeDefnTankStartPositional;
+}
+
+LandscapeDefnTankStartPositionList::LandscapeDefnTankStartPositionList() :
+	XMLEntryList<XMLEntryFixedVector>("position", 
+		"An explicit position that a tank may spawn on, the height is ignore and normalized to the lanscape height")
+{
+}
+
+LandscapeDefnTankStartPositionList::~LandscapeDefnTankStartPositionList()
+{
+}
+
+XMLEntryFixedVector *LandscapeDefnTankStartPositionList::createXMLEntry()
+{
+	return new XMLEntryFixedVector("position", "Defines a possible starting position of a tank");
+}
+
+LandscapeDefnTankStartChoice::LandscapeDefnTankStartChoice() :
+	XMLEntryTypeChoice<LandscapeDefnTankStart>("tankstart", 
+		"Defines where tanks should start on the lanscape")
+{
+}
+
+LandscapeDefnTankStartChoice::~LandscapeDefnTankStartChoice()
+{
+}
+
+LandscapeDefnTankStart *LandscapeDefnTankStartChoice::createXMLEntry(const std::string &type)
+{
+	if (0 == strcmp(type.c_str(), "height")) return new LandscapeDefnTankStartHeight;
+	if (0 == strcmp(type.c_str(), "positional")) return new LandscapeDefnTankStartPositional;
 	S3D::dialogMessage("LandscapeDefnTankStartType", S3D::formatStringBuffer("Unknown tankstart type %s", type));
 	return 0;
 }
 
+LandscapeDefnTankStart::LandscapeDefnTankStart(const char *name, const char *description) :
+	XMLEntryContainer(name, description)
+{
+}
+
+LandscapeDefnTankStart::~LandscapeDefnTankStart()
+{
+}
+
+LandscapeDefnTankStartHeight::LandscapeDefnTankStartHeight() :
+	LandscapeDefnTankStart("LandscapeDefnTankStartHeight",
+		"Defines the starting position of the tanks via a set of criteria, height included"),
+	startcloseness("startcloseness", "How close are tanks allows to start to other tanks"),
+	height("height", "The minimum and maximum landscape heights that tanks are allowed to spawn between"),
+	startmask("startmask", "A filename of a mask that defines areas that tanks can and cannot spawn", 0, "none"),
+	flatness("flatness", "The maximum slope that a tank can spawn on", 0, 0)
+{
+	addChildXMLEntry(&startcloseness, &height);
+	addChildXMLEntry(&startmask, &flatness);
+}
+
+LandscapeDefnTankStartHeight::~LandscapeDefnTankStartHeight()
+{
+}
+
 bool LandscapeDefnTankStartHeight::readXML(XMLNode *node)
 {
-	if (!node->getNamedChild("startcloseness", startcloseness)) return false;
-	if (!parseMinMax(node, "height", heightmin, heightmax)) return false;
-	if (!node->getNamedChild("startmask", startmask)) return false;
-	if (!node->getNamedChild("flatness", flatness, false))
+	if (!LandscapeDefnTankStart::readXML(node)) return false;
+
+	if (!startmask.getValue().empty() && startmask.getValue() != "none")
 	{
-		flatness = 0;
-	}
-	if (!startmask.empty())
-	{
-		if (!S3D::checkDataFile(startmask.c_str())) return false;
+		if (!S3D::checkDataFile(startmask.getValue())) return false;
 
 		tankMask = ImageFactory::loadImage(
-			S3D::eModLocation, startmask.c_str());
+			S3D::eModLocation, startmask.getValue());
 		DIALOG_ASSERT(tankMask.getBits());
 		if (!tankMask.getLossless())
 		{
 			S3D::dialogMessage("LandscapeDefnTankStartHeight", S3D::formatStringBuffer(
 				"Error: Placement mask \"%s\" is not a lossless image format",
-				startmask.c_str()));
+				startmask.getValue().c_str()));
 			return false;
 		}
 	}
-	return node->failChildren();
+	return true;
 }
 
 static bool tankMaskCloseness(ScorchedContext &context, int team, 
@@ -223,32 +272,32 @@ FixedVector LandscapeDefnTankStartHeight::placeTank(unsigned int playerId, int t
 			generator.getRandFixed("PlacementTankPosition")) + fixed(tankBorder);
 		fixed posY = fixed(arenaY) + (fixed(arenaHeight - tankBorder * 2) * 
 			generator.getRandFixed("PlacementTankPosition")) + fixed(tankBorder);
-		fixed height = context.getLandscapeMaps().getGroundMaps().
+		fixed newheight = context.getLandscapeMaps().getGroundMaps().
 			getHeight(posX.asInt(), posY.asInt());
 		FixedVector normal = context.getLandscapeMaps().getGroundMaps().
 			getNormal(posX.asInt(), posY.asInt());
-		tankPos = FixedVector(posX, posY, height);
+		tankPos = FixedVector(posX, posY, newheight);
 
 		// Make sure not lower than water line
-		if (tankPos[2] < heightmin || tankPos[2] > heightmax) 
+		if (tankPos[2] < height.min.getValue() || tankPos[2] > height.max.getValue()) 
 		{
 			if (context.getOptionsGame().getActionSyncCheck()) 
 			{
 				context.getSimulator().addSyncCheck(
 					S3D::formatStringBuffer("Tank placement height %s %u", 
-					tankPos.asQuickString(), heightmin.getInternalData()));
+					tankPos.asQuickString(), height.min.getValue().getInternalData()));
 			}
 			continue;
 		}
 
 		// Make sure normal is less than given
-		if (normal[2] < flatness)
+		if (normal[2] < flatness.getValue())
 		{
 			if (context.getOptionsGame().getActionSyncCheck()) 
 			{
 				context.getSimulator().addSyncCheck(
 					S3D::formatStringBuffer("Tank placement flatness %s %u", 
-					normal.asQuickString(), flatness.getInternalData()));
+					normal.asQuickString(), flatness.getValue().getInternalData()));
 			}
 			continue;
 		}
@@ -267,7 +316,7 @@ FixedVector LandscapeDefnTankStartHeight::placeTank(unsigned int playerId, int t
 		}
 
 		// Check tanks are not too close to others or targets
-		fixed closeness = (startcloseness * fixed(i)) / fixed(maxIt);
+		fixed closeness = (startcloseness.getValue() * fixed(i)) / fixed(maxIt);
 		if (!tankTargetCloseness(context, playerId, tankPos, closeness)) 
 		{
 			continue;
@@ -293,31 +342,30 @@ FixedVector LandscapeDefnTankStartHeight::placeTank(unsigned int playerId, int t
 	return tankPos;
 }
 
+LandscapeDefnTankStartPositional::LandscapeDefnTankStartPositional() :
+	LandscapeDefnTankStart("LandscapeDefnTankStartPositional",
+		"Explicity defines the starting position of the tanks via a set of points"),
+	height("height", "The minimum and maximum landscape heights that tanks are allowed to spawn between"),
+	flatness("flatness", "The maximum slope that a tank can spawn on", 0, 0)
+{
+	addChildXMLEntry(&height, &flatness);
+}
+
+LandscapeDefnTankStartPositional::~LandscapeDefnTankStartPositional()
+{
+}
+
 bool LandscapeDefnTankStartPositional::readXML(XMLNode *node)
 {
-	if (!parseMinMax(node, "height", heightmin, heightmax)) return false;
-	if (!node->getNamedChild("flatness", flatness, false))
-	{
-		flatness = 0;
-	}
-
-	XMLNode *positionNode = 0;
-	while (node->getNamedChild("position", positionNode, false, true)) 
-	{
-		fixed x, y;
-		if (!positionNode->getNamedChild("x", x)) return false;
-		if (!positionNode->getNamedChild("y", y)) return false;
-		FixedVector position(x, y, 0);
-		positions.push_back(position);
-	}
-	if (positions.empty())
+	if (!LandscapeDefnTankStart::readXML(node)) return false;
+	if (positions.getChildren().empty())
 	{
 		S3D::dialogMessage("LandscapeDefnTankStartPositional", S3D::formatStringBuffer(
 			"Error: At least one tank starting positon must be specfied"));
 		return false;
 	}
 	
-	return node->failChildren();
+	return true;
 }
 
 FixedVector LandscapeDefnTankStartPositional::placeTank(unsigned int playerId, int team,
@@ -328,39 +376,41 @@ FixedVector LandscapeDefnTankStartPositional::placeTank(unsigned int playerId, i
     
 	int maxIt = 100;
 	int i;
+	std::vector<XMLEntryFixedVector*> startpositions;
+	startpositions.insert(startpositions.begin(), positions.getChildren().begin(), positions.getChildren().end());
 	for (i=maxIt; i>0; i--)
 	{
-		FixedVector &position = positions[i % positions.size()];
+		XMLEntryFixedVector *position = startpositions[i % startpositions.size()];
 
 		// Find a new position for the tank
-		fixed posX = position[0];
-		fixed posY = position[1];
-		fixed height = context.getLandscapeMaps().getGroundMaps().
+		fixed posX = position->getValue()[0];
+		fixed posY = position->getValue()[1];
+		fixed newheight = context.getLandscapeMaps().getGroundMaps().
 			getHeight(posX.asInt(), posY.asInt());
 		FixedVector normal = context.getLandscapeMaps().getGroundMaps().
 			getNormal(posX.asInt(), posY.asInt());
-		tankPos = FixedVector(posX, posY, height);
+		tankPos = FixedVector(posX, posY, newheight);
 
 		// Make sure not lower than water line
-		if (tankPos[2] < heightmin || tankPos[2] > heightmax) 
+		if (tankPos[2] < height.min.getValue() || tankPos[2] > height.max.getValue()) 
 		{
 			if (context.getOptionsGame().getActionSyncCheck()) 
 			{
 				context.getSimulator().addSyncCheck(
 					S3D::formatStringBuffer("Tank placement height %s %u", 
-					tankPos.asQuickString(), heightmin.getInternalData()));
+					tankPos.asQuickString(), height.min.getValue().getInternalData()));
 			}
 			continue;
 		}
 
 		// Make sure normal is less than given
-		if (normal[2] < flatness)
+		if (normal[2] < flatness.getValue())
 		{
 			if (context.getOptionsGame().getActionSyncCheck()) 
 			{
 				context.getSimulator().addSyncCheck(
 					S3D::formatStringBuffer("Tank placement flatness %s %u", 
-					normal.asQuickString(), flatness.getInternalData()));
+					normal.asQuickString(), flatness.getValue().getInternalData()));
 			}
 			continue;
 		}

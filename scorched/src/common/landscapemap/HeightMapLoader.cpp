@@ -86,47 +86,47 @@ void HeightMapLoader::loadTerrain(HeightMap &hmap,
 
 bool HeightMapLoader::generateTerrain(
 	unsigned int seed,
-	LandscapeDefnType *defn,
+	LandscapeDefnHeightMap *defn,
 	HeightMap &hmap,
 	bool &levelSurround,
 	ProgressCounter *counter)
 {
 	// Do we generate or load the landscape
-	if (defn->getType() == LandscapeDefnType::eHeightMapFile)
+	if (defn->getType() == LandscapeDefnHeightMap::eHeightMapFile)
 	{
 		LandscapeDefnHeightMapFile *file = 
 			(LandscapeDefnHeightMapFile *) defn;
 
 		// Load the landscape
-		levelSurround = file->levelsurround;
+		levelSurround = file->levelsurround.getValue();
 		
-		Image image = ImageFactory::loadImage(S3D::eModLocation, file->file);
+		Image image = ImageFactory::loadImage(S3D::eModLocation, file->file.getValue());
 		if (!image.getBits())
 		{
 			S3D::dialogMessage("HeightMapLoader", S3D::formatStringBuffer(
 				"Error: Unable to find image data in landscape map \"%s\"",
-				file->file.c_str()));
+				file->file.getValue().c_str()));
 			return false;
 		}
 		if (!image.getLossless())
 		{
 			S3D::dialogExit("HeightMapLoader", S3D::formatStringBuffer(
 				"Error: Deform landscape map \"%s\" is not a lossless image format",
-				file->file.c_str()));
+				file->file.getValue().c_str()));
 		}
 		HeightMapLoader::loadTerrain(
 			hmap,
 			image, 
-			file->levelsurround,
+			file->levelsurround.getValue(),
 			counter);
 	}
-	else if (defn->getType() == LandscapeDefnType::eHeightMapGenerate)
+	else if (defn->getType() == LandscapeDefnHeightMap::eHeightMapGenerate)
 	{
 		LandscapeDefnHeightMapGenerate *generate = 
 			(LandscapeDefnHeightMapGenerate *) defn;
 
 		// Seed the generator and generate the landscape
-		levelSurround = generate->levelsurround;
+		levelSurround = generate->levelsurround.getValue();
 		FileRandomGenerator generator;
 		FileRandomGenerator offsetGenerator;
 		generator.seed(seed);
@@ -139,7 +139,7 @@ bool HeightMapLoader::generateTerrain(
 			offsetGenerator, 
 			counter);
 	}
-	else if (defn->getType() == LandscapeDefnType::eHeightMapGenerateNoise)
+	else if (defn->getType() == LandscapeDefnHeightMap::eHeightMapGenerateNoise)
 	{
 		LandscapeDefnHeightMapGenerateNoise *generate = 
 			(LandscapeDefnHeightMapGenerateNoise *) defn;

@@ -3,12 +3,12 @@
 	<maxplayers>24</maxplayers>
 	<landscapewidth>256</landscapewidth>
 	<landscapeheight>256</landscapeheight>
-	<roof type="sky"></roof>
 	<tankstart type="height">
 		<startcloseness>20</startcloseness>
 		<height><min>5.5</min><max>300</max></height>
 		<startmask>data/landscapes/textures/test-mask.png</startmask>
 	</tankstart>
+  <deform type="deform"/>
   <!--
 	<heightmap type="file">
     	<file>data/test.png</file>

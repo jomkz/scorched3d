@@ -51,7 +51,9 @@ bool XMLEntrySimpleType::readXML(XMLNode *parentNode)
 	}
 	else if (required)
 	{
-		return false;
+		return parentNode->returnError(S3D::formatStringBuffer(
+			"Failed to find a XML value for required entry \"%s\"",
+			name_));;
 	}
 	return true;
 }
@@ -540,6 +542,30 @@ bool XMLEntryString::setValue(const std::string &value)
 {
 	value_ = value;
 	return true;
+}
+
+XMLEntryFile::XMLEntryFile(const char *name,
+	const char *description) :
+	XMLEntryString(name, description)
+{
+}
+
+XMLEntryFile::XMLEntryFile(const char *name,
+	const char *description,
+	unsigned int data,
+	const std::string &defaultValue) :
+	XMLEntryString(name, description, data, defaultValue)
+{
+}
+
+XMLEntryFile::~XMLEntryFile()
+{
+}
+
+bool XMLEntryFile::setValueFromString(const std::string &string)
+{
+	if (!S3D::checkDataFile(string)) return false;
+	return XMLEntryString::setValueFromString(string);
 }
 
 XMLEntryStringEnum::XMLEntryStringEnum(const char *name,

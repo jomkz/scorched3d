@@ -60,21 +60,21 @@ void TargetMovement::generate(ScorchedContext &context)
 	FileRandomGenerator random;
 	random.seed(context.getLandscapeMaps().getDefinitions().getSeed());
 
-	addMovements(context, random, tex.texDefn.includes);
-	addMovements(context, random, defn.texDefn.includes);
+	addMovements(context, random, tex.includes);
+	addMovements(context, random, defn.includes);
 }
 
 void TargetMovement::addMovements(ScorchedContext &context, 
 	RandomGenerator &random, 
-	std::vector<LandscapeInclude *> &movements)
+	std::list<LandscapeInclude *> &movements)
 {
-	std::vector<LandscapeInclude *>::iterator itor;
+	std::list<LandscapeInclude *>::iterator itor;
 	for (itor = movements.begin();
 		itor != movements.end();
 		++itor)
 	{
 		LandscapeInclude *movement = (*itor);
-		addMovementType(context, random, movement->movements->getChildren());
+		addMovementType(context, random, movement->movements.getChildren());
 	}
 }
 

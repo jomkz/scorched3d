@@ -104,7 +104,7 @@ void GroundMaps::generateHMap(
 	bool levelSurround = false;
 	if (!HeightMapLoader::generateTerrain(
 		defnCache_.getSeed(),
-		defnCache_.getDefn()->heightmap,
+		defnCache_.getDefn()->heightmap.getValue(),
 		map_,
 		levelSurround,
 		counter))
@@ -113,32 +113,32 @@ void GroundMaps::generateHMap(
 	}
 
 	// Generate the deform map (if any)
-	if (defnCache_.getDefn()->deform->getType() == LandscapeDefnType::eDeformFile)
+	if (defnCache_.getDefn()->deform.getValue()->getType() == LandscapeDefnDeform::eDeformFile)
 	{
 		LandscapeDefnDeformFile *file = 
-			(LandscapeDefnDeformFile *) defnCache_.getDefn()->deform;
+			(LandscapeDefnDeformFile *) defnCache_.getDefn()->deform.getValue();
 
 		// Load the landscape
-		Image image = ImageFactory::loadImage(S3D::eModLocation, file->file);
+		Image image = ImageFactory::loadImage(S3D::eModLocation, file->file.getValue());
 		if (!image.getBits())
 		{
 			S3D::dialogExit("HeightMapLoader", S3D::formatStringBuffer(
 				"Error: Unable to find deform landscape map \"%s\"",
-				file->file.c_str()));
+				file->file.getValue().c_str()));
 		}
 		if (!image.getLossless())
 		{
 			S3D::dialogExit("HeightMapLoader", S3D::formatStringBuffer(
 				"Error: Deform landscape map \"%s\" is not a lossless image format",
-				file->file.c_str()));
+				file->file.getValue().c_str()));
 		}
 		HeightMapLoader::loadTerrain(
 			deformMap_,
 			image, 
-			file->levelsurround,
+			file->levelsurround.getValue(),
 			counter);
 	}
-	else if (defnCache_.getDefn()->deform->getType() == LandscapeDefnType::eDeformSolid)
+	else if (defnCache_.getDefn()->deform.getValue()->getType() == LandscapeDefnDeform::eDeformSolid)
 	{
 		for (int x=0; x<map_.getMapWidth(); x++)
 		{
@@ -159,8 +159,8 @@ void GroundMaps::generateObject(RandomGenerator &generator,
 	if (counter) counter->setNewOp(LANG_RESOURCE("POPULATING_LANDSCAPE", "Populating Landscape"));
 
 	// Generate all the objects using the objects definitions
-	std::list<PlacementTypeChoice *>::iterator itor = place.placements->getChildren().begin(),
-		end = place.placements->getChildren().end();
+	std::list<PlacementTypeChoice *>::iterator itor = place.placements.getChildren().begin(),
+		end = place.placements.getChildren().end();
 	for (;itor!=end;++itor)
 	{
 		PlacementType *type = (*itor)->getValue();
@@ -201,9 +201,9 @@ void GroundMaps::generateObjects(
 	unsigned int playerId = TargetID::MIN_TARGET_ID;
 	{
 		// Do this for the definition file
-		std::vector<LandscapeInclude *>::iterator itor;
-		for (itor = defn->texDefn.includes.begin();
-			itor != defn->texDefn.includes.end();
+		std::list<LandscapeInclude *>::iterator itor;
+		for (itor = defn->includes.begin();
+			itor != defn->includes.end();
 			++itor)
 		{
 			LandscapeInclude *place = (*itor);
@@ -215,9 +215,9 @@ void GroundMaps::generateObjects(
 	}
 	{
 		// Do this for the texture file
-		std::vector<LandscapeInclude *>::iterator itor;
-		for (itor = tex->texDefn.includes.begin();
-			itor != tex->texDefn.includes.end();
+		std::list<LandscapeInclude *>::iterator itor;
+		for (itor = tex->includes.begin();
+			itor != tex->includes.end();
 			++itor)
 		{
 			LandscapeInclude *place = (*itor);

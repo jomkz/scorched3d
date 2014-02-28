@@ -51,7 +51,7 @@ public:
 
 	virtual bool readXML(XMLNode *node);
 
-	XMLEntryString file;
+	XMLEntryFile file;
 	XMLEntryFixed gain;
 	LandscapeMusicStateList playstatelist;
 	std::list<PlayState> playstates;

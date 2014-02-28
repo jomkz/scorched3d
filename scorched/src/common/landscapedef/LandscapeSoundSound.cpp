@@ -83,6 +83,7 @@ LandscapeSoundSoundFile::LandscapeSoundSoundFile() :
 	referencedistance("referencedistance", "", 0, 75),
 	rolloff("rolloff", "", 0, 1)
 {
+	addChildXMLEntry(&files, &gain, &referencedistance, &rolloff);
 }
 
 LandscapeSoundSoundFile::~LandscapeSoundSoundFile()

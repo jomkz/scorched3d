@@ -21,34 +21,55 @@
 #if !defined(__INCLUDE_LandscapeIncludeh_INCLUDE__)
 #define __INCLUDE_LandscapeIncludeh_INCLUDE__
 
-#include <vector>
+#include <XML/XMLEntry.h>
+#include <landscapedef/LandscapeSound.h>
+#include <landscapedef/LandscapeEvent.h>
+#include <landscapedef/LandscapeMovement.h>
+#include <landscapedef/LandscapeSound.h>
+#include <landscapedef/LandscapeMusic.h>
+#include <landscapedef/LandscapeOptions.h>
+#include <placement/PlacementType.h>
 
-class XMLNode;
-class LandscapeEventList;
-class LandscapeMovementList;
-class PlacementTypeList;
-class LandscapeSoundList;
-class LandscapeMusicList;
-class LandscapeOptionsList;
-class LandscapeDefinitions;
-class LandscapeInclude
+class LansdscapeIncludeList : public XMLEntryList<XMLEntryString>
 {
 public:
-	LandscapeInclude();
+	LansdscapeIncludeList();
+	virtual ~LansdscapeIncludeList();
+
+	virtual XMLEntryString *createXMLEntry();
+};
+
+class LandscapeDefinitions;
+class LandscapeInclude : public XMLEntryGroup
+{
+public:
+	LandscapeInclude(LandscapeDefinitions *definitions, const char *name, const char *description);
 	virtual ~LandscapeInclude();
 
-	LandscapeEventList *events;
-	LandscapeMovementList *movements;
-	LandscapeSoundList *sounds;
-	LandscapeMusicList *musics;
-	PlacementTypeList *placements;
-	LandscapeOptionsList *options;
+	LandscapeEventList events;
+	LandscapeMovementList movements;
+	LandscapeSoundList sounds;
+	LandscapeMusicList musics;
+	PlacementTypeList placements;
+	LandscapeOptionsList options;
+	
+	LansdscapeIncludeList includeList;
+	std::list<LandscapeInclude *> includes;
 
-	bool readXML(LandscapeDefinitions *definitions, XMLNode *node);
+	virtual bool readXML(XMLNode *parentNode);
+protected:
+	LandscapeDefinitions *definitions_;
 
 private:
 	LandscapeInclude(const LandscapeInclude &other);
 	LandscapeInclude &operator=(LandscapeInclude &other);
+};
+
+class LandscapeIncludeFile : public LandscapeInclude 
+{
+public:
+	LandscapeIncludeFile(LandscapeDefinitions *definitions);
+	virtual ~LandscapeIncludeFile();
 };
 
 #endif // __INCLUDE_LandscapeIncludeh_INCLUDE__

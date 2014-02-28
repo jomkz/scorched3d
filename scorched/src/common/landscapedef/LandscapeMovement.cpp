@@ -61,6 +61,7 @@ LandscapeMovement::LandscapeMovement(const char *name, const char *description) 
 	groupname("groupname", 
 		"The name of the object group that contains the objects to move")
 {
+	addChildXMLEntry(&groupname);
 }
 
 LandscapeMovement::~LandscapeMovement()
@@ -79,6 +80,8 @@ LandscapeMovementShips::LandscapeMovementShips() :
 	controlpointsrand("controlpointsrand", "The maximum amount of randomness applied to the width and height for each point"),
 	starttime("starttime", "How far around the circle this group of objects will start")
 {
+	addChildXMLEntry(&speed, &starttime);
+	addChildXMLEntry(&controlpoints, &controlpointswidth, &controlpointsheight, &controlpointsrand);
 }
 
 LandscapeMovementShips::~LandscapeMovementShips()
@@ -107,7 +110,7 @@ LandscapeMovementSpline::LandscapeMovementSpline() :
 	starttime("starttime", "How far around the circle this group of objects will start"),
 	points()
 {
-	addChildXMLEntry(&speed, &groundonly, &starttime);
+	addChildXMLEntry(&speed, &starttime, &groundonly, &points);
 }
 
 LandscapeMovementSpline::~LandscapeMovementSpline()

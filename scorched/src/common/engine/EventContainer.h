@@ -47,7 +47,7 @@ protected:
 	void addEvent(ScorchedContext &context, 
 		std::list<LandscapeEvent *> &events);
 	void addEvents(ScorchedContext &context, 
-		std::vector<LandscapeInclude *> &events);
+		std::list<LandscapeInclude *> &events);
 };
 
 #endif // __INCLUDE_EventContainerh_INCLUDE__

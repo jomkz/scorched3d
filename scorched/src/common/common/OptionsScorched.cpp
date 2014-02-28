@@ -44,8 +44,8 @@ void OptionsScorched::updateLevelOptions(ScorchedContext &context, LandscapeDefi
 
 	// Get all of the options specified in the current level
 	std::map<std::string, XMLEntrySimpleType *> values;
-	updateLevelOptions(ltex->texDefn.includes, values);
-	updateLevelOptions(ldefn->texDefn.includes, values);
+	updateLevelOptions(ltex->includes, values);
+	updateLevelOptions(ldefn->includes, values);
 
 	// Iterate over the level and current options
 	std::list<XMLEntry *> &levelOptions = getLevelOptions().getChildren();
@@ -97,19 +97,19 @@ void OptionsScorched::updateLevelOptions(ScorchedContext &context, LandscapeDefi
 	}
 }
 
-void OptionsScorched::updateLevelOptions(std::vector<LandscapeInclude *> &options,
+void OptionsScorched::updateLevelOptions(std::list<LandscapeInclude *> &options,
 	std::map<std::string, XMLEntrySimpleType *> &values)
 {
 	// For each include
-	std::vector<LandscapeInclude *>::iterator itor;
+	std::list<LandscapeInclude *>::iterator itor;
 	for (itor = options.begin();
 		itor != options.end();
 		++itor)
 	{
 		LandscapeInclude *option = (*itor);
 
-		std::list<LandscapeOptions *>::iterator oitor = option->options->getChildren().begin(),
-			oend = option->options->getChildren().end();
+		std::list<LandscapeOptions *>::iterator oitor = option->options.getChildren().begin(),
+			oend = option->options.getChildren().end();
 
 		// For each set of options
 		for (;oitor!=oend;++oend)

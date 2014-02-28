@@ -35,7 +35,7 @@ namespace HeightMapLoader
 	
 	bool generateTerrain(
 		unsigned int seed,
-		LandscapeDefnType *defn,
+		LandscapeDefnHeightMap *defn,
 		HeightMap &hmap,
 		bool &levelSurround,
 		ProgressCounter *counter = 0);

@@ -21,27 +21,16 @@
 #if !defined(__INCLUDE_LandscapeTexh_INCLUDE__)
 #define __INCLUDE_LandscapeTexh_INCLUDE__
 
-#include <landscapedef/LandscapeTexDefn.h>
-#include <common/ModelID.h>
-#include <XML/XMLFile.h>
-#include <string>
-#include <vector>
+#include <landscapedef/LandscapeInclude.h>
 
-class ScorchedContext;
-
-class LandscapeTex
+class LandscapeTex : public LandscapeInclude
 {
 public:
-	LandscapeTex();
+	LandscapeTex(LandscapeDefinitions *definitions);
 	virtual ~LandscapeTex();
 
-	unsigned int seed;
-	fixed getWaterHeight() { return -10; }
-
-	LandscapeTexDefn texDefn;
-
-	bool readXML(LandscapeDefinitions *definitions, XMLNode *node);
-
+	XMLEntryInt landscapeGenerationSeed;
+	XMLEntryFixed waterHeight;
 private:
 	LandscapeTex(const LandscapeTex &other);
 	LandscapeTex &operator=(LandscapeTex &other);

@@ -44,7 +44,7 @@ protected:
 
 	void addMovements(ScorchedContext &context, 
 		RandomGenerator &random, 
-		std::vector<LandscapeInclude *> &movements);
+		std::list<LandscapeInclude *> &movements);
 	void addMovementType(ScorchedContext &context, 
 		RandomGenerator &random, 
 		std::list<LandscapeMovementChoice *> &movementtype);
