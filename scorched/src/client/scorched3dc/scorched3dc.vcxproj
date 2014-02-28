@@ -449,6 +449,7 @@
     <ClCompile Include="InputHandlerMouse.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="noiseutils.cpp" />
     <ClCompile Include="OgreSystem.cpp" />
     <ClCompile Include="ScorchedUI.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -908,6 +909,7 @@
     <ClInclude Include="CameraController.h" />
     <ClInclude Include="InputHandlerMouse.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="noiseutils.h" />
     <ClInclude Include="OgreSystem.h" />
     <ClInclude Include="ScorchedUI.h" />
     <ClInclude Include="stdafx.h" />
@@ -972,7 +974,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OgreMain_d.lib;OIS_d.lib;CEGUIBase_d.lib;CEGUIOgreRenderer_d.lib;OgreTerrain_d.lib;zlib_d.lib;libpng_d.lib;expat_d.lib;hydrax_d.lib;skyx_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OgreMain_d.lib;OIS_d.lib;CEGUIBase_d.lib;CEGUIOgreRenderer_d.lib;OgreTerrain_d.lib;zlib_d.lib;libpng_d.lib;expat_d.lib;hydrax_d.lib;skyx_d.lib;libnoise.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(CEGUI_HOME)\lib;$(OGRE_HOME)\lib\debug;$(OGRE_HOME)\boost\lib;$(BOOST_HOME)\stage\lib;$(CEGUI_HOME)\dependencies\lib\static;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

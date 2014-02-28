@@ -1422,6 +1422,9 @@
     <ClCompile Include="InputHandlerMouse.cpp">
       <Filter>scorched3dc</Filter>
     </ClCompile>
+    <ClCompile Include="noiseutils.cpp">
+      <Filter>scorched3dc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -2784,6 +2787,9 @@
       <Filter>scorched3dc</Filter>
     </ClInclude>
     <ClInclude Include="InputHandlerMouse.h">
+      <Filter>scorched3dc</Filter>
+    </ClInclude>
+    <ClInclude Include="noiseutils.h">
       <Filter>scorched3dc</Filter>
     </ClInclude>
   </ItemGroup>

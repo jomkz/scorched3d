@@ -38,7 +38,6 @@ extern "C" {
 #endif
 
 		ScorchedUI app;
-		
 		try {
 			app.go();
 		} catch(Ogre::Exception& e) {

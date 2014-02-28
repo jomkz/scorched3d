@@ -21,6 +21,8 @@
 #include <scorched3dc/UIStatePlayingLand.h>
 #include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/OgreSystem.h>
+#include <scorched3dc/noiseutils.h>
+#include <noise/noise.h>
 #include <client/ScorchedClient.h>
 #include <landscapemap/LandscapeMaps.h>
 
@@ -156,12 +158,47 @@ Ogre::Real UIStatePlayingLand::getHeight(const Ogre::Vector3 &position)
 
 void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, long tx, long ty)
 {
-	const float maxHeight = 30.0f; // Last texture ends at height 30
-	const float blendHeightFactor = 0.4f; // Ends blend when 40% into height band
-	const float blendNormalSlopeStart = 0.9f; // Starts blending slope at .80
-	const float blendNormalSlopeLength = 0.3f; // Blends when 30% more slope
-	const float noiseMax = 0.4f;
-	const int numberSources = 3;
+	unsigned int seed = ScorchedClient::instance()->getLandscapeMaps().getDefinitions().getSeed();
+
+	// Try enabling a color map for color variation
+	Ogre::Image colourMapImage;
+	colourMapImage.load("seemlessnoise.jpg", terrain->getResourceGroup());
+	terrain->setGlobalColourMapEnabled(true, colourMapImage.getWidth());
+	Ogre::TexturePtr colourMap  = terrain->getGlobalColourMap();
+	colourMap->loadImage(colourMapImage);
+
+	// Generate a noise map for the base map
+	// This is like the detail map that adds texture variation across the terrain
+	utils::NoiseMap baseMapHeightMap;
+	{
+		module::Perlin myModule;
+		myModule.SetOctaveCount(3);
+		myModule.SetFrequency(2.0);
+		myModule.SetSeed(seed);
+
+		utils::NoiseMapBuilderPlane heightMapBuilder;
+		heightMapBuilder.SetSourceModule(myModule);
+		heightMapBuilder.SetDestNoiseMap(baseMapHeightMap);
+		heightMapBuilder.SetDestSize(terrain->getLayerBlendMapSize(), terrain->getLayerBlendMapSize());
+		heightMapBuilder.SetBounds(2.0 + tx * 4.0, 6.0 + tx * 4.0, 1.0 + ty * 4.0, 5.0 + ty * 4.0);
+		heightMapBuilder.Build();
+	}
+	// Generate a noise map for the difference map
+	// This is like the detail map that adds height band variation across the terrain
+	utils::NoiseMap differenceMapHeightMap;
+	{
+		module::Perlin myModule;
+		myModule.SetOctaveCount(3);
+		myModule.SetFrequency(2.0);
+		myModule.SetSeed(seed + 5);
+
+		utils::NoiseMapBuilderPlane heightMapBuilder;
+		heightMapBuilder.SetSourceModule(myModule);
+		heightMapBuilder.SetDestNoiseMap(differenceMapHeightMap);
+		heightMapBuilder.SetDestSize(terrain->getLayerBlendMapSize(), terrain->getLayerBlendMapSize());
+		heightMapBuilder.SetBounds(2.0 + tx * 4.0, 6.0 + tx * 4.0, 1.0 + ty * 4.0, 5.0 + ty * 4.0);
+		heightMapBuilder.Build();
+	}
 
 	// Determine the maximum height of the map
 	HeightMap &hMap = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap();
@@ -174,6 +211,13 @@ void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, long tx, long ty)
 			if (height > hMapMaxHeight) hMapMaxHeight = height;
 		}
 	}
+
+	const int numberSources = 3;
+	const float maxHeight = 30.0f; // Last texture ends at height 30
+	const float blendHeightFactor = 0.4f; // Ends blend when 40% into height band
+	const float blendNormalSlopeStart = 0.9f; // Starts blending slope at .80
+	const float blendNormalSlopeLength = 0.3f; // Blends when 30% more slope
+	const float maxOffsetHeight = (maxHeight / numberSources) / 6.0f;
 
 	Ogre::TerrainLayerBlendMap* blendMap0 = terrain->getLayerBlendMap(1);
 	Ogre::TerrainLayerBlendMap* blendMap1 = terrain->getLayerBlendMap(2);
@@ -198,10 +242,8 @@ void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, long tx, long ty)
 			// Get height and normal information
 			HeightMap::HeightData &data = hMap.getHeightData(hx, hy);
 			float normal = data.normal[2].asFloat();
-			float height = data.height.asFloat();
-			float offSetHeight = hMap.getHeight((hMap.getMapWidth() - hx), 
-					(hMap.getMapHeight() - hy)).asFloat();
-			height *= (1.0f - (noiseMax/2.0f)) + ((offSetHeight*noiseMax)/hMapMaxHeight);
+			float offSetHeight = (1.0f + differenceMapHeightMap.GetValue(x, y)) * maxOffsetHeight;
+			float height = data.height.asFloat() - offSetHeight;
 
 			// Find the index of the current texture by deviding the height into strips
 			float heightPer = (height / maxHeight) * (float) numberSources;
@@ -248,6 +290,13 @@ void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, long tx, long ty)
 					blendFirstAmount *= remainderIndex;
 					blendSecondAmount *= remainderIndex;
 				}
+			}
+
+			// Add in the base value
+			float baseValue = baseMapHeightMap.GetValue(x, y);
+			if (baseValue > 0.0f && heightIndex > 0) {
+				blendFirstAmount *= Ogre::Math::Clamp(1.0f - baseValue, (Ogre::Real) 0, (Ogre::Real) 1);
+				blendSecondAmount *= Ogre::Math::Clamp(1.0f - baseValue, (Ogre::Real) 0, (Ogre::Real) 1);
 			}
 
 			// Update maps

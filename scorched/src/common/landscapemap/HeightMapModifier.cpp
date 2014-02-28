@@ -95,6 +95,8 @@ void HeightMapModifier::noise(HeightMap &hmap,
 			hmap.setHeight(x, y, newHeight);
 		}
 	}
+
+	delete [] noisemap;
 }
 
 void HeightMapModifier::edgeEnhance(HeightMap &hmap, 
