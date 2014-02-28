@@ -18,18 +18,18 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UIProgressCounterh_INCLUDE__)
-#define __INCLUDE_UIProgressCounterh_INCLUDE__
+#if !defined(__INCLUDE_GUIProgressCounterh_INCLUDE__)
+#define __INCLUDE_GUIProgressCounterh_INCLUDE__
 
 #include <common/ProgressCounter.h>
 #include <engine/ThreadCallbackI.h>
 #include <engine/ThreadCallback.h>
 
-class UIProgressThreadCallback : public ThreadCallbackI
+class GUIProgressThreadCallback : public ThreadCallbackI
 {
 public:
-	UIProgressThreadCallback(const LangString &op, const float percentage);
-	virtual ~UIProgressThreadCallback();
+	GUIProgressThreadCallback(const LangString &op, const float percentage);
+	virtual ~GUIProgressThreadCallback();
 
 	// ThreadCallbackI
 	virtual void callbackInvoked();
@@ -39,7 +39,7 @@ private:
 	const float percentage_;
 };
 
-class UIProgressCounter : public ProgressCounterI
+class GUIProgressCounter : public ProgressCounterI
 {
 public:
 	static ProgressCounter *instance();
@@ -62,8 +62,8 @@ protected:
 private:
 	static ProgressCounter *instance_;
 
-	UIProgressCounter ();
-	virtual ~UIProgressCounter ();	
+	GUIProgressCounter ();
+	virtual ~GUIProgressCounter ();	
 };
 
 #endif

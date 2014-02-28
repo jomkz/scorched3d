@@ -34,6 +34,11 @@
 #include <common/ProgressCounter.h>
 #include <lang/LangResource.h>
 #include <math.h>
+#ifndef S3D_SERVER
+#include <client/ScorchedClient.h>
+#include <client/ClientUISync.h>
+#include <uiactions/UILandscapeDeformAction.h>
+#endif
 
 class DeformLandscapeCache
 {
@@ -392,8 +397,11 @@ void DeformLandscape::flattenArea(
 #ifndef S3D_SERVER
 		if (!context.getServerMode())
 		{
-			//Landscape::instance()->recalculateLandscape();
-			//VisibilityPatchGrid::instance()->recalculateLandscapeErrors(tankPos, size);
+			int sizei = size.asInt();
+			ScorchedClient::instance()->getClientUISync().addActionFromClient(
+				new UILandscapeDeformAction(
+					tankPos[0].asInt() - sizei, tankPos[1].asInt() - sizei, 
+					sizei * 2, sizei * 2));
 		}
 #endif
 	}
@@ -409,22 +417,23 @@ void DeformLandscape::flattenAreaInternal(
 	HeightMap &deformhmap = context.getLandscapeMaps().getGroundMaps().getDeformMap();
 	int posX = tankPos[0].asInt();
 	int posY = tankPos[1].asInt();
+	fixed newHeight = tankPos[2];
 
 	fixed lowestLandscapeHeight = fixed(context.getOptionsGame().getMinimumLandHeight());
 	LandscapeDefnType::DefnType deformType = context.getLandscapeMaps().getDefinitions().getDefn()->deform->getType();
 
 	// Flatten a small area around the tank
-	for (int x=-iSize; x<=iSize; x++)
+	for (int y=-iSize; y<=iSize; y++)
 	{
-		for (int y=-iSize; y<=iSize; y++)
+		int iy = posY + y;
+		if (iy < 0) continue;
+		if (iy >= hmap.getMapHeight()) break;
+		for (int x=-iSize; x<=iSize; x++)
 		{
 			int ix = posX + x;
-			int iy = posY + y;
-			if (ix >= 0 && iy >= 0 &&
-				ix < hmap.getMapWidth() &&
-				iy < hmap.getMapHeight())
+			if (ix < 0) continue;
+			if (ix >= hmap.getMapWidth()) break;
 			{
-				fixed newHeight = tankPos[2];
 				fixed currentHeight = hmap.getHeight(ix, iy);
 
 				fixed lowestHeight = lowestLandscapeHeight;

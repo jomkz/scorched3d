@@ -19,20 +19,20 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <scorched3dc/ScorchedUI.h>
-#include <scorched3dc/UIProgressCounter.h>
+#include <dialogs/GUIProgressCounter.h>
 #include <scorched3dc/UIState.h>
 #include <common/Logger.h>
 
-UIProgressThreadCallback::UIProgressThreadCallback(const LangString &op, const float percentage) :
+GUIProgressThreadCallback::GUIProgressThreadCallback(const LangString &op, const float percentage) :
 	op_(op), percentage_(percentage)
 {
 }
 
-UIProgressThreadCallback::~UIProgressThreadCallback()
+GUIProgressThreadCallback::~GUIProgressThreadCallback()
 {
 }
 
-void UIProgressThreadCallback::callbackInvoked()
+void GUIProgressThreadCallback::callbackInvoked()
 {
 	if (ScorchedUI::instance()->getUIState().getState() != UIState::StateProgress)
 	{
@@ -56,40 +56,40 @@ void UIProgressThreadCallback::callbackInvoked()
 	delete this;
 }
 
-ProgressCounter *UIProgressCounter::instance_(0);
+ProgressCounter *GUIProgressCounter::instance_(0);
 
-ProgressCounter *UIProgressCounter::instance()
+ProgressCounter *GUIProgressCounter::instance()
 {
-	if (!instance_) instance_ = new ProgressCounter(new UIProgressCounter());
+	if (!instance_) instance_ = new ProgressCounter(new GUIProgressCounter());
 	return instance_;
 }
 
-UIProgressCounter::UIProgressCounter() : 
+GUIProgressCounter::GUIProgressCounter() : 
 	lastTime_(0), threadCallback_(false)
 {
 }
 
-UIProgressCounter::~UIProgressCounter()
+GUIProgressCounter::~GUIProgressCounter()
 {
 }
 
-void UIProgressCounter::updateProgress()
+void GUIProgressCounter::updateProgress()
 {
 	threadCallback_.processCallbacks();
 }
 
-void UIProgressCounter::operationChange(const LangString &op)
+void GUIProgressCounter::operationChange(const LangString &op)
 {
 	progressChange(op, 0.0f);
 }
 
-void UIProgressCounter::progressChange(const LangString &op, const float percentage)
+void GUIProgressCounter::progressChange(const LangString &op, const float percentage)
 {
 	time_t currentTime = time(0);
 	if (currentTime != lastTime_)
 	{
 		lastTime_ = currentTime;
-		UIProgressThreadCallback *callback = new UIProgressThreadCallback(op, percentage);
+		GUIProgressThreadCallback *callback = new GUIProgressThreadCallback(op, percentage);
 		threadCallback_.addCallback(callback);
 	}
 }

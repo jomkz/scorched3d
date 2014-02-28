@@ -36,6 +36,9 @@ public:
 	static float OGRE_WORLD_HEIGHT_SCALE;
 	static float OGRE_WORLD_SCALE;
 
+	static void destroyAllAttachedMovableObjects(Ogre::SceneNode* node);
+	static void destroySceneNode(Ogre::SceneNode* node);
+
 	OgreSystem();
 	virtual ~OgreSystem();
 

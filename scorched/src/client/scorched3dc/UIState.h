@@ -48,6 +48,7 @@ public:
 	void updateState(float frameTime);
 
 	State getState();
+	UIStateI *getCurrentState() { return currentState_; }
 
 protected:
 	static UIState *instance_;

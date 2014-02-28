@@ -20,7 +20,7 @@
 
 #include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/UIStateJoining.h>
-#include <scorched3dc/UIProgressCounter.h>
+#include <dialogs/GUIProgressCounter.h>
 #include <engine/ThreadCallback.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientJoinGameThreadCallback.h>
@@ -51,7 +51,7 @@ void UIStateJoining::createState()
 bool UIStateJoining::join(const CEGUI::EventArgs &e)
 {
 	ScorchedUI::instance()->getUIState().setState(UIState::StateProgress);
-	UIProgressCounter::instance()->setNewOp(LANG_STRING("Waiting for server..."));
+	GUIProgressCounter::instance()->setNewOp(LANG_STRING("Waiting for server..."));
 	ScorchedClient::getClientThreadCallback().addCallback(new ClientJoinGameThreadCallback());
 	return true;
 }

@@ -22,7 +22,8 @@
 #include <scorched3dc/UIState.h>
 #include <scorched3dc/OgreSystem.h>
 #include <scorched3dc/InputManager.h>
-#include <scorched3dc/UIProgressCounter.h>
+#include <dialogs/GUIProgressCounter.h>
+#include <dialogs/GUIFrameTimer.h>
 #include <common/Clock.h>
 #include <common/Logger.h>
 #include <common/FileLogger.h>
@@ -90,7 +91,8 @@ bool ScorchedUI::go()
 		Logger::processLogEntries();
  
 		// Update UI
-		((UIProgressCounter *)UIProgressCounter::instance()->getUser())->updateProgress();
+		((GUIProgressCounter *)GUIProgressCounter::instance()->getUser())->updateProgress();
+		GUIFrameTimer::instance()->simulate(frameTime);
  
 		// Render a frame
 		uiState_->updateState(frameTime);

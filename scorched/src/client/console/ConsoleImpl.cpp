@@ -20,7 +20,7 @@
 
 #include <console/ConsoleImpl.h>
 #include <client/ScorchedClient.h>
-#include <scorched3dc/GUIConsole.h>
+#include <dialogs/GUIConsole.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
 #include <limits.h>

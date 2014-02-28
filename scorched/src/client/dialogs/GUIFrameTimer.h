@@ -18,36 +18,29 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <scorched3dc/UIStatePlayingTargets.h>
-#include <client/ScorchedClient.h>
-#include <client/ClientOptions.h>
-#include <common/DefinesString.h>
-#include <scorched3dc/ScorchedUI.h>
-#include <scorched3dc/OgreSystem.h>
-#include <landscapemap/LandscapeMaps.h>
-#include <OGRE/OgreManualObject.h>
+#if !defined(AFX_GUIFrameTimer_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)
+#define AFX_GUIFrameTimer_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_
 
-UIStatePlayingTargets::UIStatePlayingTargets(Ogre::SceneManager* sceneMgr) :
-	sceneMgr_(sceneMgr)
+class GUIFrameTimer
 {
-	create();
-}
+public:
+	static GUIFrameTimer *instance();
 
-UIStatePlayingTargets::~UIStatePlayingTargets()
-{
+	void setVisible(bool visible);
+	bool isVisible(); 
 
-}
+	void simulate(float frameTime);
 
-void UIStatePlayingTargets::update(float frameTime)
-{
-	bool targetsEnabled = (sceneMgr_->getVisibilityMask() & OgreSystem::VisibiltyMaskTargets) != 0;
-	if (targetsEnabled != ClientOptions::instance()->getTargetsDraw())
-	{
-		sceneMgr_->setVisibilityMask(sceneMgr_->getVisibilityMask() ^ OgreSystem::VisibiltyMaskTargets);
-	}
-}
+protected:
+	void create();   
+ 
+	float totalTime_;
+	int frameCount_;
+	CEGUI::Window *window_, *staticText_;
+private:
+	GUIFrameTimer();
+	virtual ~GUIFrameTimer();
 
-void UIStatePlayingTargets::create()
-{
+};
 
-}
+#endif // !defined(AFX_GUIFrameTimer_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)

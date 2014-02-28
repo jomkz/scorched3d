@@ -34,6 +34,8 @@ public:
 	UIStatePlaying();
 	virtual ~UIStatePlaying();
 
+	void updateHeight(int x, int y, int w, int h);
+
 	// UIStateI
 	virtual void createState();
 	virtual void destroyState();
@@ -41,7 +43,6 @@ public:
 
 	// CameraControllerHeightProvider
 	virtual Ogre::Real getHeight(const Ogre::Vector3 &position);
-
 protected:
 	Ogre::SceneManager* sceneMgr_;
 	CameraController *cameraController_;

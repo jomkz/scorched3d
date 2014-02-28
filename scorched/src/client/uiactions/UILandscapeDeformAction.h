@@ -18,36 +18,21 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <scorched3dc/UIStatePlayingTargets.h>
-#include <client/ScorchedClient.h>
-#include <client/ClientOptions.h>
-#include <common/DefinesString.h>
-#include <scorched3dc/ScorchedUI.h>
-#include <scorched3dc/OgreSystem.h>
-#include <landscapemap/LandscapeMaps.h>
-#include <OGRE/OgreManualObject.h>
+#if !defined(__INCLUDE_UILandscapeDeformActionh_INCLUDE__)
+#define __INCLUDE_UILandscapeDeformActionh_INCLUDE__
 
-UIStatePlayingTargets::UIStatePlayingTargets(Ogre::SceneManager* sceneMgr) :
-	sceneMgr_(sceneMgr)
+#include <client/ClientUISync.h>
+
+class UILandscapeDeformAction : public ClientUISyncAction
 {
-	create();
-}
+public:
+	UILandscapeDeformAction(int x, int y, int w, int h);
+	virtual ~UILandscapeDeformAction();
 
-UIStatePlayingTargets::~UIStatePlayingTargets()
-{
+	// ClientUISyncAction
+	virtual void performUIAction();
+protected:
+	int x_, y_, w_, h_;
+};
 
-}
-
-void UIStatePlayingTargets::update(float frameTime)
-{
-	bool targetsEnabled = (sceneMgr_->getVisibilityMask() & OgreSystem::VisibiltyMaskTargets) != 0;
-	if (targetsEnabled != ClientOptions::instance()->getTargetsDraw())
-	{
-		sceneMgr_->setVisibilityMask(sceneMgr_->getVisibilityMask() ^ OgreSystem::VisibiltyMaskTargets);
-	}
-}
-
-void UIStatePlayingTargets::create()
-{
-
-}
+#endif // __INCLUDE_UILandscapeDeformActionh_INCLUDE__

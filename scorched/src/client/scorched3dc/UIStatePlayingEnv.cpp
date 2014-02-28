@@ -232,4 +232,9 @@ void UIStatePlayingEnv::update(float frameTime)
 	{
 		hydraX_->setPolygonMode(waterPolyMode);
 	}
+
+	if (ClientOptions::instance()->getSkyDraw() != skyX_->isVisible())
+	{
+		skyX_->setVisible(ClientOptions::instance()->getSkyDraw());
+	}
 }

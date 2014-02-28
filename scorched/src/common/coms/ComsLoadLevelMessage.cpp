@@ -33,7 +33,7 @@
 #include <set>
 
 #ifndef S3D_SERVER
-#include <renderer/UITargetRenderer.h>
+#include <uiactions/UITargetRenderer.h>
 #endif
 
 ComsMessageType ComsLoadLevelMessage::ComsLoadLevelMessageType("ComsLoadLevelMessageType");

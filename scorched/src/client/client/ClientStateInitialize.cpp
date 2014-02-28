@@ -57,7 +57,7 @@
 #include <tanket/TanketTypes.h>
 #include <weapons/AccessoryStore.h>
 #include <landscapedef/LandscapeDefinitions.h>
-#include <scorched3dc/UIProgressCounter.h>
+#include <dialogs/GUIProgressCounter.h>
 #include <lang/LangResource.h>
 
 ClientStateInitialize::ClientStateInitialize(ComsMessageHandler &comsMessageHandler) :
@@ -269,7 +269,7 @@ bool ClientStateInitialize::processConnectAcceptMessage(
 	{
 		if (!ScorchedClient::instance()->getModFiles().loadModFiles(
 			ScorchedClient::instance()->getOptionsGame().getMod(), true,
-			UIProgressCounter::instance()))
+			GUIProgressCounter::instance()))
 		{
 			S3D::dialogMessage("ModFiles", 
 				S3D::formatStringBuffer("Failed to load mod \"%s\"",
@@ -348,10 +348,10 @@ bool ClientStateInitialize::processFileMessage(
 			if (doneBytes > 0) {
 				percentage = (unsigned int)(((doneBytes / 1024) * 100) / (totalBytes_ / 1024));
 			}
-			UIProgressCounter::instance()->setNewOp(
+			GUIProgressCounter::instance()->setNewOp(
 				LANG_RESOURCE_3("DOWNLOADING_FILE", "Downloading mod, {0}% {1}/{2} KB",
 				percentage, (doneBytes / 1024), (totalBytes_ / 1024)));
-			UIProgressCounter::instance()->setNewPercentage(float(percentage));
+			GUIProgressCounter::instance()->setNewPercentage(float(percentage));
 
 			// Read the size
 			unsigned int uncompressedSize = 0;
@@ -461,7 +461,7 @@ bool ClientStateInitialize::initializeMod()
 	// Load the accessory files
 	if (!ScorchedClient::instance()->getAccessoryStore().parseFile(
 		ScorchedClient::instance()->getContext(),
-		UIProgressCounter::instance())) return false;
+		GUIProgressCounter::instance())) return false;
 
 	if (!ScorchedClient::instance()->getTanketTypes().
 		loadTanketTypes(ScorchedClient::instance()->getContext())) {
@@ -474,7 +474,7 @@ bool ClientStateInitialize::initializeMod()
 	// This is after mods are complete but before any tanks models are used
 	if (!ScorchedClient::instance()->getTankModels().loadTankMeshes(
 		ScorchedClient::instance()->getContext(), 
-		UIProgressCounter::instance()))
+		GUIProgressCounter::instance()))
 	{
 		S3D::dialogMessage("Scorched 3D", "Failed to load all tank models");
 		return false;

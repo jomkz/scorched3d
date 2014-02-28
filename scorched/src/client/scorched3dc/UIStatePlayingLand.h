@@ -24,7 +24,9 @@
 #include <Terrain/OgreTerrain.h>
 #include <Terrain/OgreTerrainGroup.h>
 #include <Hydrax/Hydrax.h>
+#include <set>
 
+class HeightMap;
 class UIStatePlayingLand
 {
 public:
@@ -36,9 +38,10 @@ public:
 	virtual ~UIStatePlayingLand();
 
 	Ogre::Real getHeight(const Ogre::Vector3 &position);
-
+	
 	void updateLandscapeTextures();
 	void update(float frameTime);
+	void updateHeight(int x, int y, int w, int h);
 
 protected:
 	Ogre::Camera* camera_;
@@ -47,12 +50,18 @@ protected:
 	Ogre::TerrainGroup *terrainGroup_;
 	Ogre::Light *sunLight_, *shadowLight_;
 	Hydrax::Hydrax *hydrax_;
+	std::set<Ogre::Terrain *> dirtyTerrains_;
+	Ogre::SceneNode *landscapeGrid_;
+	HeightMap *hmap_;
 
 	void create();
 	void defineOptions();
 	void defineTerrain(long x, long y);
 	void createNormalMap(Ogre::Image &normalMapImage);
 	void initBlendMaps(Ogre::Terrain* terrain, Ogre::Image &normalMapImage, long tx, long ty);
+	void updateHeightTerrain(Ogre::Terrain *terrain, int x, int y, int w, int h, int tx, int ty);
+	void showLandscapePoints();
+	void hideLandscapePoints();
 };
 
 #endif // __INCLUDE_UIStatePlayingLandh_INCLUDE__

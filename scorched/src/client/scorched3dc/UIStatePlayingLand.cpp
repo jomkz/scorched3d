@@ -34,7 +34,7 @@ UIStatePlayingLand::UIStatePlayingLand(
 	Hydrax::Hydrax *hydrax) : 
 	sceneMgr_(sceneMgr), camera_(camera), 
 	sunLight_(sunLight), shadowLight_(shadowLight),
-	hydrax_(hydrax)
+	hydrax_(hydrax), landscapeGrid_(0), hmap_(0)
 {
 	create();
 }
@@ -45,6 +45,7 @@ UIStatePlayingLand::~UIStatePlayingLand()
 
 void UIStatePlayingLand::create()
 {
+	hmap_ = &ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap();
 	Ogre::Root *ogreRoot = ScorchedUI::instance()->getOgreSystem().getOgreRoot();
 	Ogre::RenderWindow *ogreRenderWindow = ScorchedUI::instance()->getOgreSystem().getOgreRenderWindow();
 
@@ -81,7 +82,7 @@ void UIStatePlayingLand::create()
 		}
 	}
 
-	terrainGroup_->update(true);
+	terrainGroup_->update();
 	terrainGroup_->freeTemporaryResources();
 }
 
@@ -91,7 +92,6 @@ void UIStatePlayingLand::defineOptions()
 	// Configure global
 	terrainGlobalOptions_ = new Ogre::TerrainGlobalOptions();
     terrainGlobalOptions_->setMaxPixelError(8);
-	terrainGlobalOptions_->setUseVertexCompressionWhenAvailable(false);
     terrainGlobalOptions_->setCompositeMapDistance(10000); 
 	terrainGlobalOptions_->setVisibilityFlags(OgreSystem::VisibiltyMaskLandscape);
 	terrainGlobalOptions_->setDefaultResourceGroup("Landscape");
@@ -148,15 +148,14 @@ void UIStatePlayingLand::defineOptions()
 
 void UIStatePlayingLand::createNormalMap(Ogre::Image &normalMapImage)
 {
-	HeightMap &hMap = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap();
 	unsigned char *rawData = OGRE_ALLOC_T(unsigned char, 
-		(hMap.getMapHeight() + 1)*(hMap.getMapWidth() + 1)*sizeof(unsigned char), 
+		(hmap_->getMapHeight() + 1)*(hmap_->getMapWidth() + 1)*sizeof(unsigned char), 
 		Ogre::MEMCATEGORY_GENERAL);
 	unsigned char *currentRawData = rawData;
-	for (int y=0; y<hMap.getMapHeight() + 1; y++)
+	for (int y=0; y<hmap_->getMapHeight() + 1; y++)
 	{
-		HeightMap::HeightData *data = hMap.getHeightData(hMap.getMapHeight() - y);
-		for (int x=0; x<hMap.getMapWidth() + 1; x++, currentRawData++, data++)
+		HeightMap::HeightData *data = hmap_->getHeightData(hmap_->getMapHeight() - y);
+		for (int x=0; x<hmap_->getMapWidth() + 1; x++, currentRawData++, data++)
 		{
 			FixedVector &normal = data->normal;
 			*currentRawData = (unsigned char) ((normal[2].asFloat() + 1.0f) * 126.0f);
@@ -164,9 +163,9 @@ void UIStatePlayingLand::createNormalMap(Ogre::Image &normalMapImage)
 	}
 	
 	Ogre::Terrain* firstTerrain = terrainGroup_->getTerrain(0, 0);
-	normalMapImage.loadDynamicImage(rawData, hMap.getMapWidth() + 1, hMap.getMapHeight() + 1, 1, Ogre::PF_L8, true);
-	normalMapImage.resize(hMap.getMapWidth() / 128 * firstTerrain->getLayerBlendMapSize(), 
-		hMap.getMapHeight() / 128 * firstTerrain->getLayerBlendMapSize());
+	normalMapImage.loadDynamicImage(rawData, hmap_->getMapWidth() + 1, hmap_->getMapHeight() + 1, 1, Ogre::PF_L8, true);
+	normalMapImage.resize(hmap_->getMapWidth() / 128 * firstTerrain->getLayerBlendMapSize(), 
+		hmap_->getMapHeight() / 128 * firstTerrain->getLayerBlendMapSize());
 }
 
 void UIStatePlayingLand::defineTerrain(long tx, long ty)
@@ -375,4 +374,103 @@ void UIStatePlayingLand::update(float frameTime)
 	{
 		sceneMgr_->setVisibilityMask(sceneMgr_->getVisibilityMask() ^ OgreSystem::VisibiltyMaskLandscape);
 	}
+	if ((landscapeGrid_!=0) != ClientOptions::instance()->getLandscapeGridDraw()) 
+	{
+		if (ClientOptions::instance()->getLandscapeGridDraw()) showLandscapePoints();
+		else hideLandscapePoints();
+	}
+
+	if (!dirtyTerrains_.empty())
+	{
+		std::set<Ogre::Terrain *>::iterator itor;
+		for (itor = dirtyTerrains_.begin();
+			itor != dirtyTerrains_.end();
+			++itor)
+		{
+			(*itor)->update(); // TODO: Optimize to only do once
+		}
+	}
+}
+
+void UIStatePlayingLand::updateHeight(int x, int y, int w, int h)
+{
+	// Disregard if totaly outside of heightmap
+	if (x + w < 0) return;
+	if (y + h < 0) return;
+	if (x >= hmap_->getMapWidth()) return;
+	if (y >= hmap_->getMapHeight()) return;
+
+	// Move hit box inside of bounds
+	if (x < 0) { w += x; x = 0; }
+	if (y < 0) { h += y; y = 0; }
+	int dx = x + w - hmap_->getMapWidth();
+	if (dx > 0) { w -= dx; }
+	int dy = y + h - hmap_->getMapHeight();
+	if (dy > 0) { h -= dy; }
+
+	// Find which terrain instance this is on
+	int sx = x / 128;
+	int rx = x % 128;
+	int sy = (256 - y) / 128;
+	int ry = (256 - y) % 128;
+
+	Ogre::Terrain *terrain = terrainGroup_->getTerrain(sx, sy);
+	if (rx + w > 128 && ry + h > 128)
+	{
+	}
+	else if (rx + w > 128)
+	{
+	}
+	else if (ry + h > 128)
+	{
+	}
+	else
+	{
+		updateHeightTerrain(terrain, x, y, w, h, rx, ry);
+	}
+}
+
+void UIStatePlayingLand::updateHeightTerrain(Ogre::Terrain *terrain, int x, int y, int w, int h, int tx, int ty)
+{
+	for (int b=0; b<=h; b++)
+	{
+		HeightMap::HeightData *mapHeightData = hmap_->getHeightData(x, y + b);
+		float *landscapeHeightData = terrain->getHeightData(tx, ty - b);
+		for (int a=0; a<=w; a++, mapHeightData++, landscapeHeightData++)
+		{
+			float height = mapHeightData->height.asFloat();
+			(*landscapeHeightData) = height * OgreSystem::OGRE_WORLD_HEIGHT_SCALE;
+		}
+	}
+	terrain->dirtyRect(Ogre::Rect(tx, ty - h, tx + w + 1, ty + 1));
+	dirtyTerrains_.insert(terrain);
+}
+
+void UIStatePlayingLand::showLandscapePoints() 
+{
+	// A grid of lines showing the landscape as it is in the height map
+	// This could fail in a horrible way as the hmap is being accessed while the client thread is running
+	// Oh, well cba synchronizing for this debug case
+	Ogre::SceneManager *sceneManager = ScorchedUI::instance()->getOgreSystem().getOgreLandscapeSceneManager();
+	landscapeGrid_ = sceneManager->getRootSceneNode()->createChildSceneNode("LandscapeGrid");
+	HeightMap::HeightData *heightData = hmap_->getHeightData();
+	for (int y=0; y<hmap_->getMapHeight() + 1; y++)
+	{
+		Ogre::ManualObject* manual = sceneManager->createManualObject();
+		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_LINE_STRIP);
+		for (int x=0; x<hmap_->getMapWidth() + 1; x++, heightData++)
+		{
+			manual->position(OgreSystem::OGRE_WORLD_SCALE * x, 
+				heightData->height.asFloat() * OgreSystem::OGRE_WORLD_HEIGHT_SCALE, 
+				OgreSystem::OGRE_WORLD_SCALE * y);
+		}
+		manual->end();
+		landscapeGrid_->attachObject(manual);
+	}
+}
+
+void UIStatePlayingLand::hideLandscapePoints()
+{
+	OgreSystem::destroySceneNode(landscapeGrid_);
+	landscapeGrid_ = 0;
 }

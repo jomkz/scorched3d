@@ -19,7 +19,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <scorched3dc/OgreSystem.h>
-#include <scorched3dc/GUIConsole.h>
+#include <dialogs/GUIConsole.h>
+#include <dialogs/GUIFrameTimer.h>
+#include <client/ClientOptions.h>
+#include <OgreShadowCameraSetupFocused.h>
 
 float OgreSystem::OGRE_WORLD_SIZE(6000.0f);
 float OgreSystem::OGRE_WORLD_HEIGHT_SCALE(50.0f);
@@ -99,6 +102,13 @@ bool OgreSystem::createWindow()
 
 	// Create scene manager
 	landscapeSceneManager_ = ogreRoot_->createSceneManager(Ogre::ST_GENERIC, "PlayingSceneManager");
+	if (ClientOptions::instance()->getShadows())
+	{
+		landscapeSceneManager_->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_MODULATIVE_INTEGRATED);
+		//landscapeSceneManager_->setShadowFarDistance(1000.0f);
+		landscapeSceneManager_->setShadowTextureConfig(0, 2048, 2048, Ogre::PF_X8R8G8B8);
+		landscapeSceneManager_->setShadowCameraSetup(Ogre::ShadowCameraSetupPtr(new Ogre::FocusedShadowCameraSetup()));
+	}
 
 	// Setup some defaults
 	Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
@@ -132,6 +142,7 @@ void OgreSystem::loadResources()
 
 	// Models
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/models", "FileSystem", "Models");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/models/abrams", "FileSystem", "Models");
 
 	// load resources
 	Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
@@ -155,6 +166,7 @@ bool OgreSystem::createUI()
 	CEGUI::Window *root = wmgr.loadLayoutFromFile("Root.layout");
 	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(root);
 	GUIConsole::instance()->setVisible(true);
+	GUIFrameTimer::instance()->setVisible(true);
 	return true;
 }
 
@@ -180,4 +192,29 @@ bool OgreSystem::create()
 	loadResources();
 
 	return true;
+}
+
+void OgreSystem::destroyAllAttachedMovableObjects(Ogre::SceneNode* node)
+{
+   // Destroy all the attached objects
+   Ogre::SceneNode::ObjectIterator itObject = node->getAttachedObjectIterator();
+   while (itObject.hasMoreElements())
+   {
+      node->getCreator()->destroyMovableObject(itObject.getNext());
+   }
+
+   // Recurse to child SceneNodes
+   Ogre::SceneNode::ChildNodeIterator itChild = node->getChildIterator();
+   while ( itChild.hasMoreElements() )
+   {
+      Ogre::SceneNode* pChildNode = static_cast<Ogre::SceneNode*>(itChild.getNext());
+      destroyAllAttachedMovableObjects(pChildNode);
+   }
+}
+
+void OgreSystem::destroySceneNode(Ogre::SceneNode* node)
+{
+   destroyAllAttachedMovableObjects(node);
+   node->removeAndDestroyAllChildren();
+   node->getCreator()->destroySceneNode(node);
 }

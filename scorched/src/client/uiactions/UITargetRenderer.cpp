@@ -18,7 +18,7 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <renderer/UITargetRenderer.h>
+#include <uiactions/UITargetRenderer.h>
 #include <client/ScorchedClient.h>
 #include <scorched3dc/OgreSystem.h>
 #include <scorched3dc/ScorchedUI.h>
@@ -55,9 +55,6 @@ void UITargetRenderer::performUIAction()
 		if (!targetEntity_->isVisible()) targetEntity_->setVisible(true);
 
 		Vector position = target_->getLife().getFloatPosition();
-		Logger::log(S3D::formatStringBuffer("%.2f, %.2f, %.2f",
-			position[0], position[1], position[2]));
-
 		position[0] *= OgreSystem::OGRE_WORLD_SCALE;
 		position[1] *= OgreSystem::OGRE_WORLD_SCALE;
 		position[2] *= OgreSystem::OGRE_WORLD_HEIGHT_SCALE;
@@ -97,9 +94,9 @@ void UITargetRenderer::create()
 
 	std::string entityName = S3D::formatStringBuffer("Target%u", target_->getPlayerId());
 	std::string nodeName = S3D::formatStringBuffer("TargetNode%u", target_->getPlayerId());
-	targetEntity_ = sceneManager->createEntity(entityName.c_str(), "Cube.002.mesh", "Models");
+	targetEntity_ = sceneManager->createEntity(entityName.c_str(), "abrams/abrams.mesh", "Models");
 	targetEntity_->setVisibilityFlags(OgreSystem::VisibiltyMaskTargets);
 	targetNode_ = sceneManager->getRootSceneNode()->createChildSceneNode(nodeName);
 	targetNode_->attachObject(targetEntity_);
-	targetNode_->setScale(50.0, 50.0, 50.0);
+	targetNode_->setScale(0.3, 0.3, 0.3);
 }

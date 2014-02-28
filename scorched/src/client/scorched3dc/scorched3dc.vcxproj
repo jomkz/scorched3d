@@ -445,9 +445,12 @@
     <ClCompile Include="..\console\ConsoleRuleMethodIAdapter.cpp" />
     <ClCompile Include="..\console\ConsoleRuleOptionsAdapter.cpp" />
     <ClCompile Include="..\console\ConsoleRules.cpp" />
-    <ClCompile Include="..\renderer\UITargetRenderer.cpp" />
+    <ClCompile Include="..\dialogs\GUIConsole.cpp" />
+    <ClCompile Include="..\dialogs\GUIFrameTimer.cpp" />
+    <ClCompile Include="..\dialogs\GUIProgressCounter.cpp" />
+    <ClCompile Include="..\uiactions\UILandscapeDeformAction.cpp" />
+    <ClCompile Include="..\uiactions\UITargetRenderer.cpp" />
     <ClCompile Include="CameraController.cpp" />
-    <ClCompile Include="GUIConsole.cpp" />
     <ClCompile Include="InputHandlerMouse.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
@@ -457,7 +460,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="UIProgressCounter.cpp" />
     <ClCompile Include="UIState.cpp" />
     <ClCompile Include="UIStateI.cpp" />
     <ClCompile Include="UIStateJoining.cpp" />
@@ -908,15 +910,17 @@
     <ClInclude Include="..\console\ConsoleRuleMethodIAdapter.h" />
     <ClInclude Include="..\console\ConsoleRuleOptionsAdapter.h" />
     <ClInclude Include="..\console\ConsoleRules.h" />
-    <ClInclude Include="..\renderer\UITargetRenderer.h" />
+    <ClInclude Include="..\dialogs\GUIConsole.h" />
+    <ClInclude Include="..\dialogs\GUIFrameTimer.h" />
+    <ClInclude Include="..\dialogs\GUIProgressCounter.h" />
+    <ClInclude Include="..\uiactions\UILandscapeDeformAction.h" />
+    <ClInclude Include="..\uiactions\UITargetRenderer.h" />
     <ClInclude Include="CameraController.h" />
-    <ClInclude Include="GUIConsole.h" />
     <ClInclude Include="InputHandlerMouse.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="OgreSystem.h" />
     <ClInclude Include="ScorchedUI.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="UIProgressCounter.h" />
     <ClInclude Include="UIState.h" />
     <ClInclude Include="UIStateI.h" />
     <ClInclude Include="UIStateJoining.h" />

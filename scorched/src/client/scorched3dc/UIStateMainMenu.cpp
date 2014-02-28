@@ -20,7 +20,7 @@
 
 #include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/UIStateMainMenu.h>
-#include <scorched3dc/UIProgressCounter.h>
+#include <dialogs/GUIProgressCounter.h>
 #include <client/ClientState.h>
 #include <client/ClientParams.h>
 #include <client/ScorchedClient.h>
@@ -52,7 +52,7 @@ bool UIStateMainMenu::start(const CEGUI::EventArgs &e)
 {
 	ScorchedUI::instance()->getUIState().setState(UIState::StateProgress);
 	ClientParams::instance()->setStartCustom(true);
-	ScorchedClient::startClient(UIProgressCounter::instance());
+	ScorchedClient::startClient(GUIProgressCounter::instance());
 	return true;
 }
 

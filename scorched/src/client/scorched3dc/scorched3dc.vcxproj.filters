@@ -70,8 +70,11 @@
     <Filter Include="console">
       <UniqueIdentifier>{0ee50572-b9c2-4a50-8da9-e19eb218d829}</UniqueIdentifier>
     </Filter>
-    <Filter Include="renderer">
-      <UniqueIdentifier>{f24b74d3-76cd-450e-8e9a-5de357c684b0}</UniqueIdentifier>
+    <Filter Include="dialogs">
+      <UniqueIdentifier>{b16a6f9a-b443-4f57-a0ef-a8486e750017}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="uiactions">
+      <UniqueIdentifier>{f92f80ec-a12b-4e8b-8f2c-42e520004c79}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1368,9 +1371,6 @@
     <ClCompile Include="..\..\common\common\ThreadUtils.cpp">
       <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="UIProgressCounter.cpp">
-      <Filter>scorched3dc</Filter>
-    </ClCompile>
     <ClCompile Include="..\client\ClientJoinGameThreadCallback.cpp">
       <Filter>client</Filter>
     </ClCompile>
@@ -1422,17 +1422,26 @@
     <ClCompile Include="..\client\ClientUISync.cpp">
       <Filter>client</Filter>
     </ClCompile>
-    <ClCompile Include="GUIConsole.cpp">
-      <Filter>scorched3dc</Filter>
-    </ClCompile>
     <ClCompile Include="..\console\ConsoleRuleOptionsAdapter.cpp">
       <Filter>console</Filter>
     </ClCompile>
     <ClCompile Include="UIStatePlayingTargets.cpp">
       <Filter>scorched3dc</Filter>
     </ClCompile>
-    <ClCompile Include="..\renderer\UITargetRenderer.cpp">
-      <Filter>renderer</Filter>
+    <ClCompile Include="..\dialogs\GUIConsole.cpp">
+      <Filter>dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dialogs\GUIFrameTimer.cpp">
+      <Filter>dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dialogs\GUIProgressCounter.cpp">
+      <Filter>dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uiactions\UILandscapeDeformAction.cpp">
+      <Filter>uiactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uiactions\UITargetRenderer.cpp">
+      <Filter>uiactions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2741,9 +2750,6 @@
     <ClInclude Include="..\..\common\common\ThreadUtils.h">
       <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="UIProgressCounter.h">
-      <Filter>scorched3dc</Filter>
-    </ClInclude>
     <ClInclude Include="..\client\ClientJoinGameThreadCallback.h">
       <Filter>client</Filter>
     </ClInclude>
@@ -2795,17 +2801,26 @@
     <ClInclude Include="..\client\ClientUISync.h">
       <Filter>client</Filter>
     </ClInclude>
-    <ClInclude Include="GUIConsole.h">
-      <Filter>scorched3dc</Filter>
-    </ClInclude>
     <ClInclude Include="..\console\ConsoleRuleOptionsAdapter.h">
       <Filter>console</Filter>
     </ClInclude>
     <ClInclude Include="UIStatePlayingTargets.h">
       <Filter>scorched3dc</Filter>
     </ClInclude>
-    <ClInclude Include="..\renderer\UITargetRenderer.h">
-      <Filter>renderer</Filter>
+    <ClInclude Include="..\dialogs\GUIConsole.h">
+      <Filter>dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dialogs\GUIFrameTimer.h">
+      <Filter>dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dialogs\GUIProgressCounter.h">
+      <Filter>dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uiactions\UILandscapeDeformAction.h">
+      <Filter>uiactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uiactions\UITargetRenderer.h">
+      <Filter>uiactions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

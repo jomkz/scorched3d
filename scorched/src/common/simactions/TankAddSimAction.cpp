@@ -48,7 +48,7 @@
 #ifndef S3D_SERVER
 #include <client/ClientChannelManager.h>
 #include <client/ScorchedClient.h>
-#include <renderer/UITargetRenderer.h>
+#include <uiactions/UITargetRenderer.h>
 #endif
 
 unsigned int TankAddSimAction::TankAddSimActionCount = 0;

@@ -38,8 +38,8 @@
 #include <target/TargetRenderer.h>
 #include <net/NetInterface.h>
 #include <scorched3dc/ScorchedUI.h>
-#include <scorched3dc/UIProgressCounter.h>
 #include <scorched3dc/UIState.h>
+#include <dialogs/GUIProgressCounter.h>
 
 ClientStateLoadLevel::ClientStateLoadLevel(ComsMessageHandler &comsMessageHandler) : initialLevel_(true)
 {
@@ -112,7 +112,7 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 	ScorchedClient::instance()->getLandscapeMaps().generateMaps(
 		ScorchedClient::instance()->getContext(),
 		message.getLandscapeDefinition(),
-		UIProgressCounter::instance()); // No events
+		GUIProgressCounter::instance()); // No events
 
 	// Reset and initialize simulator and
 	ScorchedClient::instance()->getClientSimulator().newLevel();

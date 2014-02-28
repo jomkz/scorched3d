@@ -96,3 +96,8 @@ Ogre::Real UIStatePlaying::getHeight(const Ogre::Vector3 &position)
 {
 	return S3D_MAX(land_->getHeight(position), env_->getWaterHeight());
 }
+
+void UIStatePlaying::updateHeight(int x, int y, int w, int h)
+{
+	land_->updateHeight(x, y, w, h);
+}

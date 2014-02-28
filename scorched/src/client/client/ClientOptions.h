@@ -38,14 +38,23 @@ public:
 	bool getWaterWireframe() { return waterWireframe_; }
 	OptionEntryBool &getWaterWireframeEntry() { return waterWireframe_; }
 
+	bool getSkyDraw() { return skyDraw_; }
+	OptionEntryBool &getSkyDrawEntry() { return skyDraw_; }
+
 	bool getLandscapeDraw() { return landscapeDraw_; }
 	OptionEntryBool &getLandscapeDrawEntry() { return landscapeDraw_; }
+
+	bool getLandscapeGridDraw() { return landscapeGridDraw_; }
+	OptionEntryBool &getLandscapeGridDrawEntry() { return landscapeGridDraw_; }
 
 	bool getCameraWireframe() { return cameraWireframe_; }
 	OptionEntryBool &getCameraWireframeEntry() { return cameraWireframe_; }
 
 	bool getTargetsDraw() { return targetsDraw_; }
 	OptionEntryBool &getTargetsDrawEntry() { return targetsDraw_; }
+
+	bool getShadows() { return shadows_; }
+	OptionEntryBool &getShadowsEntry() { return shadows_; }
 
 	bool getValidateServerIp() { return validateServerIp_; }
 	OptionEntryBool &getValidateServerIpEntry() { return validateServerIp_; }
@@ -72,9 +81,11 @@ protected:
 	OptionEntryBool waterAnimate_;
 	OptionEntryBool waterDraw_;
 	OptionEntryBool waterWireframe_;
-	OptionEntryBool landscapeDraw_;
+	OptionEntryBool skyDraw_;
+	OptionEntryBool landscapeDraw_, landscapeGridDraw_;
 	OptionEntryBool cameraWireframe_;
 	OptionEntryBool targetsDraw_;
+	OptionEntryBool shadows_;
 	OptionEntryBool validateServerIp_;
 	OptionEntryString hostDescription_;
 

@@ -275,5 +275,5 @@ void HeightMap::setHeight(int w, int h, fixed height)
 			}
 		}
 	}
-	heightData_[(width_+1) * h + w].normal.zero();
+	data->normal.zero();
 }
