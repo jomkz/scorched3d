@@ -94,9 +94,9 @@ void UITargetRenderer::create()
 
 	std::string entityName = S3D::formatStringBuffer("Target%u", target_->getPlayerId());
 	std::string nodeName = S3D::formatStringBuffer("TargetNode%u", target_->getPlayerId());
-	targetEntity_ = sceneManager->createEntity(entityName.c_str(), "abrams/abrams.mesh", "Models");
+	targetEntity_ = sceneManager->createEntity(entityName.c_str(), "abrams.mesh", "Models");
 	targetEntity_->setVisibilityFlags(OgreSystem::VisibiltyMaskTargets);
 	targetNode_ = sceneManager->getRootSceneNode()->createChildSceneNode(nodeName);
 	targetNode_->attachObject(targetEntity_);
-	targetNode_->setScale(0.3, 0.3, 0.3);
+	targetNode_->setScale(40.0f, 40.0f, 40.0f);
 }
