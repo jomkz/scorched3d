@@ -1,7 +1,8 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>[[TYPE_NAME]]</title>
-    <link rek="stylesheet" type="text/css" href="styles.css" title="Style"/>
+    <link rel="stylesheet" type="text/css" href="styles.css" title="Style"/>
   </head>
   <body BGCOLOR="white">
     <hr/>
@@ -25,7 +26,20 @@
     <p>
       [[TYPE_DESCRIPTION]]
     </p>
+    <hr/>
 
+    <p>
+      <span class='tag'>&lt;[[TYPE_NAME]]&gt;</span><br/>
+      {{loop:TAG}}
+      &nbsp;&nbsp;&nbsp;&nbsp;
+        <a class='tag' id='XML_[[TAG_NAME]]' href='#[[TAG_NAME]]'>&lt;[[TAG_NAME]]{{exists:TAG_CHOICE}}&nbsp;<span class='type'>type='...'</span>{{exists:TAG_CHOICE}}&gt;</a>
+          <span class='content'>&nbsp;[[TAG_TYPE]]</span>&nbsp;
+        <a class='tag' href='#[[TAG_NAME]]'>&lt;/[[TAG_NAME]]&gt;</a>
+        {{exists:TAG_OPTIONS}}&nbsp;<span class='option'>&lt;!-- [[TAG_OPTIONS]] --&gt;</span>{{exists:TAG_OPTIONS}}<br/>
+      {{loop:TAG}}
+      <span class='tag'>&lt;/[[TYPE_NAME]]&gt;</span><br/>
+    </p>
+    
     <hr/>
     <p>
       <table BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
@@ -48,12 +62,14 @@
         </TR>
 
         {{loop:CHILD}}
-        <TR BGCOLOR="white" CLASS="TableRowColor">
-          <TD>[[CHILD_TAGNAME]]</TD>
+        <TR BGCOLOR="white" CLASS="TableRowColor">         
+          <TD>
+              <a class='tag' id='[[CHILD_TAGNAME]]' href='#XML_[[CHILD_TAGNAME]]'>[[CHILD_TAGNAME]]</a>
+          </TD>
           <TD style="white-space: nowrap">
-            [[CHILD_TYPE]]
+            <span class='content'>[[CHILD_TYPE]]</span>
             {{exists:CHILD_OPTIONS}}
-            ([[CHILD_OPTIONS]])
+            <span class='option'>([[CHILD_OPTIONS]])</span>
             {{exists:CHILD_OPTIONS}}
           </TD>
           <TD>[[CHILD_DESCRIPTION]]</TD>

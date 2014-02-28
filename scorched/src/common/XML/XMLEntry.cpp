@@ -114,6 +114,57 @@ void XMLEntryDocumentGenerator::writeDocumentation()
 	}
 }
 
+FileTemplateVariables *XMLEntryDocumentGenerator::addTypeTags(XMLEntry *coreType,
+	std::list<std::pair<std::string, XMLEntry *> > &children)
+{
+	std::string typeType, typeTypeConverted,
+		typeDescription, typeDescriptionConverted;
+	coreType->getTypeName(typeType);
+	coreType->getDescription(typeDescription);
+	XMLNode::removeSpecialChars(typeDescription, typeDescriptionConverted);
+		
+	FileTemplateVariables *mainVariables = new FileTemplateVariables();
+	mainVariables->addVariableValue("TYPE_NAME", typeType.c_str());
+	mainVariables->addVariableValue("TYPE_DESCRIPTION", typeDescriptionConverted.c_str());
+
+	std::list<std::pair<std::string, XMLEntry *> >::iterator itor = children.begin(), end = children.end();
+	for (;itor!=end; itor++)
+	{
+		XMLEntryDocumentInfo childInfo = itor->second->generateDocumentation(*this);
+		FileTemplateVariables *childVariables = mainVariables->addLoopVariable("CHILD");
+		std::string childTypeName, childTypeNameConverted, childDescription;
+		itor->second->getTypeName(childTypeName);
+		itor->second->getDescription(childDescription);
+		getTypeReference(typeType, childTypeName, childTypeNameConverted);
+		std::string childOptions;
+		childOptions.append((itor->second->getData() & XMLEntry::eDataRequired) != 0?"":"Optional, ");
+		if ((itor->second->getData() & XMLEntry::eDataList) != 0)
+		{
+			childOptions.append("List, ");
+		}
+		else
+		{
+			childOptions.append((itor->second->getData() & XMLEntry::eDataChoice) != 0?"Choice, ":"");
+		}
+		if (!childOptions.empty()) childOptions = childOptions.substr(0, childOptions.length()-2);
+
+		childVariables->addVariableValue("CHILD_TAGNAME", itor->first.c_str());
+		childVariables->addVariableValue("CHILD_TYPE", childTypeNameConverted.c_str());
+		childVariables->addVariableValue("CHILD_DESCRIPTION", childDescription.c_str());
+		if (!childOptions.empty()) childVariables->addVariableValue("CHILD_OPTIONS", childOptions.c_str());
+
+		FileTemplateVariables *tagVariables = mainVariables->addLoopVariable("TAG");
+		tagVariables->addVariableValue("TAG_NAME", itor->first.c_str());
+		tagVariables->addVariableValue("TAG_TYPE", childTypeNameConverted.c_str());
+		if ((itor->second->getData() & XMLEntry::eDataChoice) != 0)
+		{
+			tagVariables->addVariableValue("TAG_CHOICE", "TRUE");
+		}
+		if (!childOptions.empty()) tagVariables->addVariableValue("TAG_OPTIONS", childOptions.c_str());
+	}
+	return mainVariables;
+}
+
 XMLEntry::XMLEntry()
 {
 }
@@ -305,35 +356,7 @@ XMLEntryDocumentInfo XMLEntryContainer::generateDocumentation(XMLEntryDocumentGe
 {
 	XMLEntryDocumentInfo info;
 	if (generator.hasType(xmlTypeName_)) return info;
-
-	std::string typeType, typeTypeConverted,
-		typeDescription, typeDescriptionConverted;
-	getTypeName(typeType);
-	getDescription(typeDescription);
-	XMLNode::removeSpecialChars(typeDescription, typeDescriptionConverted);
-		
-	FileTemplateVariables *mainVariables = new FileTemplateVariables();
-	mainVariables->addVariableValue("TYPE_NAME", typeType.c_str());
-	mainVariables->addVariableValue("TYPE_DESCRIPTION", typeDescriptionConverted.c_str());
-
-	std::list<std::pair<std::string, XMLEntry *> >::iterator itor = xmlEntryChildrenList_.begin(), 
-		end = xmlEntryChildrenList_.end();
-	for (;itor!=end; itor++)
-	{
-		XMLEntryDocumentInfo childInfo = itor->second->generateDocumentation(generator);
-		FileTemplateVariables *childVariables = mainVariables->addLoopVariable("CHILD");
-		std::string childTypeName, childTypeNameConverted, childDescription;
-		itor->second->getTypeName(childTypeName);
-		itor->second->getDescription(childDescription);
-		generator.getTypeReference(typeType, childTypeName, childTypeNameConverted);
-		bool required = (itor->second->getData() & eDataRequired) != 0;
-		std::string childOptions = required?"":"Optional";
-
-		childVariables->addVariableValue("CHILD_TAGNAME", itor->first.c_str());
-		childVariables->addVariableValue("CHILD_TYPE", childTypeNameConverted.c_str());
-		childVariables->addVariableValue("CHILD_DESCRIPTION", childDescription.c_str());
-		if (!childOptions.empty()) childVariables->addVariableValue("CHILD_OPTIONS", childOptions.c_str());
-	}
+	FileTemplateVariables *mainVariables = generator.addTypeTags(this, xmlEntryChildrenList_);
 	generator.addType(xmlTypeName_, "docs/XMLEntryContainer.html", mainVariables);
 	return info;
 }

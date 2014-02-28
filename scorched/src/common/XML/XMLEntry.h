@@ -35,6 +35,7 @@ private:
 };
 
 class FileTemplateVariables;
+class XMLEntry;
 class XMLEntryDocumentGenerator
 {
 public:
@@ -46,6 +47,8 @@ public:
 	void addType(const std::string &typeName, const std::string &fileName, FileTemplateVariables *variables);
 	bool hasType(const std::string &typeName);
 	void getTypeReference(const std::string &referingType, const std::string &typeName, std::string &resultType);
+
+	FileTemplateVariables *addTypeTags(XMLEntry *coreType, std::list<std::pair<std::string, XMLEntry *> > &children);
 private:
 	struct TypeEntry
 	{
@@ -69,7 +72,9 @@ public:
 		eDataRWAccess = 8,
 		eDataROAccess = 16,
 		eDataNoRestore = 32,
-		eDataDebugOnly = 64
+		eDataDebugOnly = 64,
+		eDataList = 128,
+		eDataChoice = 256
 	};
 
 	XMLEntry();
@@ -157,7 +162,7 @@ public:
 	virtual void getAllTypes(std::set<std::string> &allTypes) = 0;
 
 	// XMLEntry
-	virtual unsigned int getData() { return eDataRequired; }
+	virtual unsigned int getData() { return eDataRequired|eDataChoice; }
 	virtual void getTypeName(std::string &result) { result = xmlTypeName_; }
 	virtual void getDescription(std::string &result) { result = xmlDescription_; }
 
@@ -195,37 +200,19 @@ public:
 		XMLEntryDocumentInfo info;
 		if (generator.hasType(xmlTypeName_)) return info;
 
-		std::string typeType, typeTypeConverted,
-			typeDescription, typeDescriptionConverted;
-		getTypeName(typeType);
-		getDescription(typeDescription);
-		XMLNode::removeSpecialChars(typeDescription, typeDescriptionConverted);
-		
-		FileTemplateVariables *mainVariables = new FileTemplateVariables();
-		mainVariables->addVariableValue("TYPE_NAME", typeType.c_str());
-		mainVariables->addVariableValue("TYPE_DESCRIPTION", typeDescriptionConverted.c_str());
-
+		std::list<std::pair<std::string, XMLEntry *> > children;
 		std::set<std::string> allTypes; 
 		getAllTypes(allTypes);
 		std::set<std::string>::iterator itor = allTypes.begin(), end = allTypes.end();
 		for (;itor!=end;++itor)
 		{
 			T *tmpValue = createXMLEntry(itor->c_str());
-			XMLEntryDocumentInfo childInfo = tmpValue->generateDocumentation(generator);
-			FileTemplateVariables *childVariables = mainVariables->addLoopVariable("CHILD");
-			std::string childTypeName, childTypeNameConverted, childDescription;
-			tmpValue->getTypeName(childTypeName);
-			tmpValue->getDescription(childDescription);
-			generator.getTypeReference(typeType, childTypeName, childTypeNameConverted);
-			bool required = (tmpValue->getData() & eDataRequired) != 0;
-
-			childVariables->addVariableValue("CHILD_TYPE_ATTRIBUTE", itor->c_str());
-			childVariables->addVariableValue("CHILD_TYPE", childTypeNameConverted.c_str());
-			childVariables->addVariableValue("CHILD_DESCRIPTION", childDescription.c_str());
-			childVariables->addVariableValue("CHILD_OPTIONAL", required?"false":"true");
-			delete tmpValue;
+			children.push_back(std::pair<std::string, XMLEntry *>(*itor, tmpValue));
 		}
+
+		FileTemplateVariables *mainVariables = generator.addTypeTags(this, children);
 		generator.addType(xmlTypeName_, "docs/XMLEntryTypeChoice.html", mainVariables);
+
 		return info;
 	}
 protected:
@@ -238,7 +225,7 @@ template <class T>
 class XMLEntryList : public XMLEntry
 {
 public:
-	XMLEntryList(const char *description, int minimumListNumber = 1) :
+	XMLEntryList(const char *description, int minimumListNumber = 0) :
 		XMLEntry(),
 		xmlDescription_(description),
 		minimumListNumber_(minimumListNumber)
@@ -260,7 +247,15 @@ public:
 	virtual T *createXMLEntry() = 0;
 
 	// XMLEntry
-	virtual unsigned int getData() { return (minimumListNumber_ > 0?eDataRequired:0); }
+	virtual unsigned int getData() 
+	{ 
+		T *entry = createXMLEntry(); 
+		unsigned int typeData = entry->getData()|eDataList;
+		delete entry; 
+		if (minimumListNumber_ > 0) typeData|=eDataRequired;
+		else typeData^=eDataRequired;
+		return typeData;
+	}
 	virtual void getTypeName(std::string &result) 
 	{ 
 		T *entry = createXMLEntry(); 
