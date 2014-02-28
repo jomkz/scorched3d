@@ -28,7 +28,6 @@
 #include <common/Defines.h>
 #include <weapons/AccessoryStore.h>
 #include <simactions/TankAccessorySimAction.h>
-#include <XML/XMLFile.h>
 
 static XMLEntryStringEnum::EnumEntry weaponSetTypeEnum[] =
 {

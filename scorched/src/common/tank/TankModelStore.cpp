@@ -20,12 +20,15 @@
 
 #include <tank/TankModelStore.h>
 #include <common/Defines.h>
-#include <XML/XMLFile.h>
 #include <lang/LangResource.h>
 
-TankModelStore::TankModelStore()
+TankModelStore::TankModelStore() :
+	XMLEntryRoot<XMLEntryContainer>(S3D::eModLocation, "data/tanks.xml", "tanks",
+		"TankModelStore", "The set of tank model definitions that can be used by players")
+
 {
 	modelCatagories_.insert("All");
+	addChildXMLEntry("tank", &models_);
 }
 
 TankModelStore::~TankModelStore()
@@ -37,109 +40,35 @@ bool TankModelStore::loadTankMeshes(ScorchedContext &context, ProgressCounter *c
 {
 	clear();
 
-	// Load tank definition file
 	if (counter) counter->setNewOp(LANG_RESOURCE("LOADING_TANKS", "Loading tanks"));
-	XMLFile file;
-	if (!file.readFile(S3D::getModFile("data/tanks.xml"), true))
+
+	// Load tank definition file
+	if (!loadFile(true)) return false;
+
+	std::list<TankModel *>::iterator itor = models_.getChildren().begin(),
+		end = models_.getChildren().end();
+	for (;itor!=end;++itor)
 	{
-		S3D::dialogMessage("Scorched Models", S3D::formatStringBuffer(
-					  "Failed to parse tanks.xml\n%s", 
-					  file.getParserError()));
-		return false;
-	}
-
-	// Check file exists
-	if (!file.getRootNode())
-	{
-		S3D::dialogMessage("Scorched Models",
-					"Failed to find tank definition file \"data/tanks.xml\"");
-		return false;		
-	}
-
-	// Itterate all of the tanks in the file
-	int count = 0;
-	std::vector<TankModel *> randomModels, allModels;
-    std::list<XMLNode *>::iterator childrenItor;
-	std::list<XMLNode *> &children = file.getRootNode()->getChildren();
-    for (childrenItor = children.begin();
-        childrenItor != children.end();
-        ++childrenItor, count++)
-    {
-		if (counter) counter->
-			setNewPercentage(float(count) / float(children.size()) * 100.0f);
-		// Parse the tank entry
-        XMLNode *currentNode = (*childrenItor);
-		if (stricmp(currentNode->getName(), "tank"))
+		// Add catagories to list of all catagories
+		TankModel *tankModel = *itor;
+		std::list<XMLEntryString *> &catagories = tankModel->getCatagories();
+		std::list<XMLEntryString *>::iterator catitor = catagories.begin(),
+			catend = catagories.end();
+		for (;catitor!=catend;++catitor)
 		{
-			return currentNode->returnError("Failed to tank node");
-		}
-
-		TankModel *tankModel = new TankModel();
-		if (!tankModel->initFromXML(context, currentNode))
-		{
-			return currentNode->returnError("Failed to parse tank node");;
-		}
-
-		// Add models depending on the number of triangles in each model
-		if (strcmp(tankModel->getName(), "Random") == 0)
-		{
-			randomModels.push_back(tankModel);
-		}
-		else 
-		{
-			allModels.push_back(tankModel);
+			modelCatagories_.insert((*catitor)->getValue());
 		}
 	}
-
-	// Add tanks dependant on the set detail level
-	addModels(allModels);
-	addModels(randomModels);
-
-	// Remove any models we don't use
-	killModels(randomModels);
-	killModels(allModels);
 
 	return true;
-}
-
-void TankModelStore::addModels(std::vector<TankModel *> &src)
-{
-	while (!src.empty())
-	{
-		TankModel *tankModel = src.back();
-		src.pop_back();
-
-		// Add catagories to list of all catagories
-		std::set<std::string> &catagories = tankModel->getCatagories();
-		std::set<std::string>::iterator catitor;
-		for (catitor = catagories.begin();
-			catitor != catagories.end();
-			++catitor)
-		{
-			modelCatagories_.insert((*catitor).c_str());
-		}
-
-		models_.push_back(tankModel);
-	}
-}
-
-void TankModelStore::killModels(std::vector<TankModel *> &src)
-{
-	while (!src.empty())
-	{
-		TankModel *tankModel = src.back();
-		src.pop_back();
-		delete tankModel;
-	}
 }
 
 TankModel *TankModelStore::getRandomModel(int team, bool ai, const char *tankType)
 {
 	std::vector<TankModel *> models;
-	std::vector<TankModel *>::iterator itor;
-	for (itor = models_.begin();
-		itor != models_.end();
-		++itor)
+	std::list<TankModel *>::iterator itor = models_.getChildren().begin(),
+		end = models_.getChildren().end();
+	for (;itor!=end;++itor)
 	{
 		TankModel *model = (*itor);
 		if (strcmp(model->getName(), "Random") != 0)
@@ -148,7 +77,7 @@ TankModel *TankModelStore::getRandomModel(int team, bool ai, const char *tankTyp
 				model->isOfAi(ai) &&
 				model->isOfTankType(tankType)) 
 			{
-					models.push_back(model);
+				models.push_back(model);
 			}
 		}
 	}
@@ -167,14 +96,13 @@ TankModel *TankModelStore::getRandomModel(int team, bool ai, const char *tankTyp
 
 TankModel *TankModelStore::getModelByName(const char *name)
 {
-	DIALOG_ASSERT(models_.size());
+	DIALOG_ASSERT(models_.getChildren().size());
 
 	if (strcmp(name, "Random") == 0) return 0;
 
-	std::vector<TankModel *>::iterator itor;
-	for (itor = models_.begin();
-		 itor != models_.end();
-		 ++itor)
+	std::list<TankModel *>::iterator itor = models_.getChildren().begin(),
+		end = models_.getChildren().end();
+	for (;itor!=end;++itor)
 	{
 		TankModel *current = (*itor);
 		if (0 == strcmp(current->getName(), name))
@@ -188,13 +116,6 @@ TankModel *TankModelStore::getModelByName(const char *name)
 
 void TankModelStore::clear() 
 {
-	std::vector<TankModel *>::iterator itor;
-	for (itor = models_.begin();
-		itor != models_.end();
-		++itor)
-	{
-		delete *itor;
-	}
 	models_.clear();
 	modelCatagories_.clear();
 }

@@ -267,9 +267,6 @@
     <ClCompile Include="..\..\common\common\Matrix16.cpp">
       <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\common\ModelID.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\common\NumberParser.cpp">
       <Filter>common</Filter>
     </ClCompile>
@@ -1689,9 +1686,6 @@
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\common\Matrix16.h">
-      <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\common\ModelID.h">
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\common\NumberParser.h">

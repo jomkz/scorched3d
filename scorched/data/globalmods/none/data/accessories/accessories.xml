@@ -174,10 +174,10 @@ near the flames will lose life.</description>
 		<bundlesize>10</bundlesize>
 		<cost>10000</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
-		<model><meshname>snakeeye</meshname></model>
+		<model><meshname>snakeeye.mesh</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponNapalm'>
 				<napalmtime>4.0</napalmtime>
@@ -202,10 +202,10 @@ Any tanks near the flames will lose life.</description>
 		<bundlesize>3</bundlesize>
 		<cost>20000</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
-		<model><meshname>snakeeye</meshname></model>
+		<model><meshname>snakeeye.mesh</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponNapalm'>
 				<napalmtime>4.0</napalmtime>
@@ -232,13 +232,13 @@ with any tank.</description>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
 		<accessoryaction type='WeaponProjectile'>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponRoller'>
 				<numberrollers>8</numberrollers>
 				<time>RANGE(3,4)</time>
 				<rollermodel>
-          <meshname>cube</meshname>
+          <meshname>cube.mesh</meshname>
         </rollermodel>
 				<!--<maintainvelocity>true</maintainvelocity>-->
 				<collisionaction type='WeaponExplosion'>
@@ -262,13 +262,13 @@ contact with any tank.</description>
 		<activationsound>data/accessories/sounds/shoot/medium.wav</activationsound>
 		<accessoryaction type='WeaponProjectile'>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
       <collisionaction type='WeaponRoller'>
 				<numberrollers>6</numberrollers>
 				<time>RANGE(3,4)</time>
         <rollermodel>
-          <meshname>cube</meshname>
+          <meshname>cube.mesh</meshname>
         </rollermodel>
         <collisionaction type='WeaponExplosion'>
 					<hurtamount>1.0</hurtamount>
@@ -291,13 +291,13 @@ with any tank.</description>
 		<activationsound>data/accessories/sounds/shoot/large.wav</activationsound>
 		<accessoryaction type='WeaponProjectile'>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
       <collisionaction type='WeaponRoller'>
 				<numberrollers>6</numberrollers>
 				<time>RANGE(3,4)</time>
         <rollermodel>
-          <meshname>cube</meshname>
+          <meshname>cube.mesh</meshname>
         </rollermodel>
         <collisionaction type='WeaponExplosion'>
 					<hurtamount>1.0</hurtamount>
@@ -315,14 +315,14 @@ with any tank.</description>
 		<startingnumber>-1</startingnumber>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
     <model>
-      <meshname>snakeeye</meshname>
+      <meshname>snakeeye.mesh</meshname>
       <scale>0.5</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
 			<shieldhurtfactor>0.4</shieldhurtfactor>
 			<spinspeed>1.0</spinspeed>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponExplosion'>
 				<hurtamount>1.0</hurtamount>
@@ -340,12 +340,12 @@ with any tank.</description>
 		<cost>2000</cost>
 		<activationsound>data/accessories/sounds/shoot/medium.wav</activationsound>
     <model>
-      <meshname>snakeeye</meshname>
+      <meshname>snakeeye.mesh</meshname>
       <scale>0.75</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
       <shieldhurtfactor>0.6</shieldhurtfactor>
 			<collisionaction type='WeaponExplosion'>
@@ -363,10 +363,10 @@ with any tank.</description>
 		<bundlesize>3</bundlesize>
 		<cost>8000</cost>
 		<activationsound>data/accessories/sounds/shoot/large.wav</activationsound>
-		<model><meshname>snakeeye</meshname></model>
+		<model><meshname>snakeeye.mesh</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponExplosion'>
 				<hurtamount>1.0</hurtamount>
@@ -383,11 +383,11 @@ with any tank.</description>
 		<bundlesize>2</bundlesize>
 		<cost>12000</cost>
 		<activationsound>data/accessories/sounds/shoot/xlarge.wav</activationsound>
-		<model><meshname>snakeeye</meshname></model>
+		<model><meshname>snakeeye.mesh</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
 			<shieldhurtfactor>1.2</shieldhurtfactor>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponExplosion'>
 				<hurtamount>1.0</hurtamount>
@@ -408,13 +408,13 @@ to cover them.</description>
 		<cost>3000</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
     <model>
-      <meshname>snakeeye</meshname>
+      <meshname>snakeeye.mesh</meshname>
       <scale>0.6</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
 			<shieldhurtfactor>0.5</shieldhurtfactor>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponExplosion'>
 				<hurtamount>0.0</hurtamount>
@@ -436,12 +436,12 @@ cover them.</description>
 		<cost>5750</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
     <model>
-      <meshname>snakeeye</meshname>
+      <meshname>snakeeye.mesh</meshname>
       <scale>0.8</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
 			<shieldhurtfactor>0.8</shieldhurtfactor>
 			<collisionaction type='WeaponExplosion'>
@@ -463,10 +463,10 @@ cover them.</description>
 		<bundlesize>2</bundlesize>
 		<cost>6750</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
-		<model><meshname>snakeeye</meshname></model>
+		<model><meshname>snakeeye.mesh</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
       <collisionaction type='WeaponExplosion'>
 				<deform>up</deform>
@@ -484,10 +484,10 @@ small dirt clods in all directions.</description>
 		<bundlesize>3</bundlesize>
 		<cost>6250</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-		<model><meshname>snakeeye</meshname></model>
+		<model><meshname>snakeeye.mesh</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponMulti'>
 				<subweapon type='WeaponExplosion'>
@@ -502,7 +502,7 @@ small dirt clods in all directions.</description>
 					<aimedweapon type='WeaponProjectile'>
 						<timedcollision>0.6</timedcollision>
             <projectilemodel>
-              <meshname>moab</meshname>
+              <meshname>moab.mesh</meshname>
             </projectilemodel>
 						<collisionaction type='WeaponMulti'>
 							<subweapon type='WeaponExplosion'>
@@ -518,7 +518,7 @@ small dirt clods in all directions.</description>
 								<aimedweapon type='WeaponProjectile'>
 									<timedcollision>0.8</timedcollision>
                   <projectilemodel>
-                    <meshname>moab</meshname>
+                    <meshname>moab.mesh</meshname>
                   </projectilemodel>
 									<collisionaction type='WeaponMulti'>
 										<subweapon type='WeaponExplosion'>
@@ -536,7 +536,7 @@ small dirt clods in all directions.</description>
 											<aimedweapon type='WeaponProjectile'>
 												<timedcollision>0.8</timedcollision>
                         <projectilemodel>
-                          <meshname>moab</meshname>
+                          <meshname>moab.mesh</meshname>
                         </projectilemodel>
 												<collisionaction type='WeaponMulti'>
 													<subweapon type='WeaponExplosion'>
@@ -554,7 +554,7 @@ small dirt clods in all directions.</description>
 															<aimedweapon type='WeaponProjectile'>
 															<shieldhurtfactor>0.3</shieldhurtfactor>
 			                        <projectilemodel>
-                                <meshname>moab</meshname>
+                                <meshname>moab.mesh</meshname>
                               </projectilemodel>
                                 <collisionaction type='WeaponExplosion'>
 																	<hurtamount>0</hurtamount>
@@ -587,10 +587,10 @@ remove earth from under them.</description>
 		<bundlesize>8</bundlesize>
 		<cost>1750</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
-		<model><meshname>snakeeye</meshname></model>
+		<model><meshname>snakeeye.mesh</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
       <shieldhurtfactor>0.5</shieldhurtfactor>
 			<collisionaction type='WeaponExplosion'>
@@ -611,10 +611,10 @@ remove earth from under them.</description>
 		<bundlesize>3</bundlesize>
 		<cost>4250</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
-		<model><meshname>snakeeye</meshname></model>
+		<model><meshname>snakeeye.mesh</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponExplosion'>
 				<deform>down</deform>
@@ -633,7 +633,7 @@ your tank when covered by dirt.</description>
 		<icon>rcharge.bmp</icon>
 		<bundlesize>10</bundlesize>
 		<cost>1800</cost>
-		<model><meshname>snakeeye</meshname></model>
+		<model><meshname>snakeeye.mesh</meshname></model>
 		<accessoryaction type='WeaponTranslate'>
 			<translatedist>2.0</translatedist>
 			<nextaction type='WeaponMulti'>
@@ -673,7 +673,7 @@ your tank when covered by dirt.</description>
 		<icon>rblast.bmp</icon>
 		<bundlesize>5</bundlesize>
 		<cost>4200</cost>
-		<model><meshname>snakeeye</meshname></model>
+		<model><meshname>snakeeye.mesh</meshname></model>
 		<accessoryaction type='WeaponTranslate'>
 			<translatedist>2.0</translatedist>
 			<nextaction type='WeaponMulti'>
@@ -714,10 +714,10 @@ in the same direction.</description>
 		<bundlesize>2</bundlesize>
 		<cost>10000</cost>
 		<activationsound>data/accessories/sounds/shoot/medium.wav</activationsound>
-		<model><meshname>snakeeye</meshname></model>
+		<model><meshname>snakeeye.mesh</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponMulti'>
 				<subweapon type='WeaponExplosion'>
@@ -729,7 +729,7 @@ in the same direction.</description>
 					<bounce>0.6</bounce>
 					<collisionaction type='WeaponProjectile'>
             <projectilemodel>
-              <meshname>moab</meshname>
+              <meshname>moab.mesh</meshname>
             </projectilemodel>
 						<collisionaction type='WeaponMulti'>
 							<subweapon type='WeaponExplosion'>
@@ -741,7 +741,7 @@ in the same direction.</description>
 								<bounce>0.6</bounce>
 								<collisionaction type='WeaponProjectile'>
                   <projectilemodel>
-                    <meshname>moab</meshname>
+                    <meshname>moab.mesh</meshname>
                   </projectilemodel>
 									<collisionaction type='WeaponExplosion'>
 										<hurtamount>1.0</hurtamount>
@@ -767,12 +767,12 @@ tank-seeking riot bombs.</description>
 		<cost>6000</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
     <model>
-      <meshname>snakeeye</meshname>
+      <meshname>snakeeye.mesh</meshname>
       <scale>0.5</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<numberwarheads>3</numberwarheads>
@@ -783,7 +783,7 @@ tank-seeking riot bombs.</description>
 					<under>true</under>
 					<shieldhurtfactor>0.6</shieldhurtfactor>
           <projectilemodel>
-            <meshname>moab</meshname>
+            <meshname>moab.mesh</meshname>
           </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
@@ -804,10 +804,10 @@ tank-seeking riot bombs.</description>
 		<bundlesize>5</bundlesize>
 		<cost>7500</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-		<model><meshname>snakeeye</meshname></model>
+		<model><meshname>snakeeye.mesh</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<numberwarheads>5</numberwarheads>
@@ -818,7 +818,7 @@ tank-seeking riot bombs.</description>
 				<shieldhurtfactor>0.6</shieldhurtfactor>
 					<under>true</under>
           <projectilemodel>
-            <meshname>moab</meshname>
+            <meshname>moab.mesh</meshname>
           </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
@@ -840,12 +840,12 @@ tank-seeking riot bombs.</description>
 		<cost>6750</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
     <model>
-      <meshname>snakeeye</meshname>
+      <meshname>snakeeye.mesh</meshname>
       <scale>2</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<numberwarheads>10</numberwarheads>
@@ -856,7 +856,7 @@ tank-seeking riot bombs.</description>
 					<shieldhurtfactor>0.6</shieldhurtfactor>
 					<under>true</under>
           <projectilemodel>
-            <meshname>moab</meshname>
+            <meshname>moab.mesh</meshname>
           </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
@@ -878,12 +878,12 @@ tanks from underground.</description>
 		<cost>24000</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
     <model>
-      <meshname>snakeeye</meshname>
+      <meshname>snakeeye.mesh</meshname>
       <scale>0.5</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<numberwarheads>2</numberwarheads>
@@ -894,7 +894,7 @@ tanks from underground.</description>
 					<shieldhurtfactor>0.6</shieldhurtfactor>
 					<under>true</under>
           <projectilemodel>
-            <meshname>moab</meshname>
+            <meshname>moab.mesh</meshname>
           </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<hurtamount>1.0</hurtamount>
@@ -915,10 +915,10 @@ tanks from underground.</description>
 		<bundlesize>5</bundlesize>
 		<cost>31000</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-		<model><meshname>snakeeye</meshname></model>
+		<model><meshname>snakeeye.mesh</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<numberwarheads>6</numberwarheads>
@@ -929,7 +929,7 @@ tanks from underground.</description>
 				<shieldhurtfactor>0.6</shieldhurtfactor>
 					<under>true</under>
           <projectilemodel>
-            <meshname>moab</meshname>
+            <meshname>moab.mesh</meshname>
           </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<hurtamount>1.0</hurtamount>
@@ -951,12 +951,12 @@ tanks from underground.</description>
 		<cost>37000</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
     <model>
-      <meshname>snakeeye</meshname>
+      <meshname>snakeeye.mesh</meshname>
       <scale>2</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<numberwarheads>15</numberwarheads>
@@ -967,7 +967,7 @@ tanks from underground.</description>
 					<shieldhurtfactor>0.6</shieldhurtfactor>
 					<under>true</under>
           <projectilemodel>
-            <meshname>moab</meshname>
+            <meshname>moab.mesh</meshname>
           </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<hurtamount>1.0</hurtamount>
@@ -990,12 +990,12 @@ in a straight path.</description>
 		<cost>16000</cost>
 		<activationsound>data/accessories/sounds/shoot/large.wav</activationsound>
     <model>
-      <meshname>snakeeye</meshname>
+      <meshname>snakeeye.mesh</meshname>
     </model>
 		<accessoryaction type='WeaponProjectile'>
 			<apexcollision>true</apexcollision>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
       <collisionaction type='WeaponMirv'>
 				<numberwarheads>5</numberwarheads>
@@ -1003,7 +1003,7 @@ in a straight path.</description>
 				<vspreaddist>5.0</vspreaddist>
 				<aimedweapon type='WeaponProjectile'>
           <projectilemodel>
-            <meshname>moab</meshname>
+            <meshname>moab.mesh</meshname>
           </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
@@ -1026,12 +1026,12 @@ random direction.</description>
 		<cost>16000</cost>
 		<activationsound>data/accessories/sounds/shoot/large.wav</activationsound>
     <model>
-      <meshname>snakeeye</meshname>
+      <meshname>snakeeye.mesh</meshname>
     </model>
     <accessoryaction type='WeaponProjectile'>
 			<apexcollision>true</apexcollision>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
       <collisionaction type='WeaponMirv'>
 				<numberwarheads>5</numberwarheads>
@@ -1039,7 +1039,7 @@ random direction.</description>
 				<vspreaddist>5.0</vspreaddist>
 				<aimedweapon type='WeaponProjectile'>
           <projectilemodel>
-            <meshname>moab</meshname>
+            <meshname>moab.mesh</meshname>
           </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
@@ -1062,12 +1062,12 @@ in a random direction.</description>
 		<cost>48000</cost>
 		<activationsound>data/accessories/sounds/shoot/launch.wav</activationsound>
     <model>
-      <meshname>snakeeye</meshname>
+      <meshname>snakeeye.mesh</meshname>
       <scale>5</scale>
     </model>		<accessoryaction type='WeaponProjectile'>
 			<apexcollision>true</apexcollision>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponMirv'>
 				<numberwarheads>20</numberwarheads>
@@ -1075,7 +1075,7 @@ in a random direction.</description>
 				<vspreaddist>5.0</vspreaddist>
 				<aimedweapon type='WeaponProjectile'>
           <projectilemodel>
-            <meshname>moab</meshname>
+            <meshname>moab.mesh</meshname>
           </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
@@ -1097,10 +1097,10 @@ any nearby tanks.</description>
 		<bundlesize>2</bundlesize>
 		<cost>39000</cost>
 		<activationsound>data/accessories/sounds/shoot/large.wav</activationsound>
-		<model><meshname>snakeeye</meshname></model>
+		<model><meshname>snakeeye.mesh</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponMulti'>
 				<subweapon type='WeaponExplosion'>
@@ -1120,7 +1120,7 @@ any nearby tanks.</description>
 							<aimedweapon type='WeaponProjectile'>
 							<shieldhurtfactor>0.85</shieldhurtfactor>
                 <projectilemodel>
-                  <meshname>moab</meshname>
+                  <meshname>moab.mesh</meshname>
                 </projectilemodel>
 								<collisionaction type='WeaponRandomChoice'>
 									<weaponchoice>
@@ -1174,10 +1174,10 @@ without wasting weapons.</description>
 		<bundlesize>20</bundlesize>
 		<cost>100</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-		<model><meshname>snakeeye</meshname></model>
+		<model><meshname>snakeeye.mesh</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
 			<shieldhurtfactor>0.2</shieldhurtfactor>
 			<showendpoint>true</showendpoint>
@@ -1195,11 +1195,11 @@ range without wasting weapons.  </description>
 		<bundlesize>10</bundlesize>
 		<cost>500</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-		<model><meshname>snakeeye</meshname></model>
+		<model><meshname>snakeeye.mesh</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
 			<shieldhurtfactor>0.3</shieldhurtfactor>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
 			<showendpoint>true</showendpoint>
 			<showshotpath>true</showshotpath>
@@ -1289,7 +1289,7 @@ range without wasting weapons.  </description>
 						<inaccuracy>10</inaccuracy>
 						<aimedweapon type='WeaponProjectile'>
               <projectilemodel>
-                <meshname>moab</meshname>
+                <meshname>moab.mesh</meshname>
               </projectilemodel>
               <collisionaction type='WeaponExplosion'>
 								<hurtamount>0.0</hurtamount>
@@ -1308,7 +1308,7 @@ range without wasting weapons.  </description>
 		<bundlesize>4</bundlesize>
 		<icon>laser.bmp</icon>
     <model>
-      <meshname>snakeeye</meshname>
+      <meshname>snakeeye.mesh</meshname>
     </model>
     <description>Fires a laser that cuts through hills 
 and shields damaging the tank directly.</description>
@@ -1329,7 +1329,7 @@ and shields damaging the tank directly.</description>
 		<bundlesize>2</bundlesize>
 		<icon>hlaser.bmp</icon>
     <model>
-      <meshname>snakeeye</meshname>
+      <meshname>snakeeye.mesh</meshname>
     </model>
     <description>Fires a powerful laser that cuts through hills 
 and shields damaging the tank directly.</description>
@@ -1352,7 +1352,7 @@ and shields damaging the tank directly.</description>
 		<activationsound>none</activationsound>
 		<bundlesize>2</bundlesize>
     <model>
-      <meshname>snakeeye</meshname>
+      <meshname>snakeeye.mesh</meshname>
     </model>
     <cost>18000</cost>
 		<accessoryaction type="WeaponCenterPosition">
@@ -1426,13 +1426,13 @@ and shields damaging the tank directly.</description>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
 		<bundlesize>1</bundlesize>
     <model>
-      <meshname>snakeeye</meshname>
+      <meshname>snakeeye.mesh</meshname>
       <scale>0.5</scale>
     </model>
 		<cost>20000</cost>
 		<accessoryaction type='WeaponProjectile'>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
       <spinspeed>1.0</spinspeed>
 			<collisionaction type='WeaponTeleport'>
@@ -1454,7 +1454,7 @@ and shields damaging the tank directly.</description>
         <velocitychange>2.0</velocitychange>
         <aimedweapon type='WeaponProjectile'>
           <projectilemodel>
-            <meshname>moab</meshname>
+            <meshname>moab.mesh</meshname>
           </projectilemodel>
           <shieldhurtfactor>0.2</shieldhurtfactor>
           <wallcollision>false</wallcollision>
@@ -1470,7 +1470,7 @@ and shields damaging the tank directly.</description>
     <maximumnumber>0</maximumnumber>
     <accessoryaction type='WeaponProjectile'>
       <projectilemodel>
-        <meshname>moab</meshname>
+        <meshname>moab.mesh</meshname>
       </projectilemodel>
       <shieldhurtfactor>0.2</shieldhurtfactor>
       <wallcollision>false</wallcollision>
@@ -1488,7 +1488,7 @@ and shields damaging the tank directly.</description>
 		<cost>1875</cost>
 		<activationsound>data/accessories/sounds/shoot/medium.wav</activationsound>
     <model>
-      <meshname>snakeeye</meshname>
+      <meshname>snakeeye.mesh</meshname>
       <scale>0.75</scale>
     </model>
 		<accessoryaction type='WeaponExplosion'>
@@ -1531,7 +1531,7 @@ and shields damaging the tank directly.</description>
             <target>
 						  <name>Bannana</name>
               <model>
-                <meshname>snakeeye</meshname>
+                <meshname>snakeeye.mesh</meshname>
                 <scale>0.5</scale>
               </model>
 						  <shield>Shield</shield>
@@ -1550,12 +1550,12 @@ and shields damaging the tank directly.</description>
 		<maximumnumber>0</maximumnumber>
 		<bundlesize>2</bundlesize>
 		<cost>10000</cost>
-		<model><meshname>snakeeye</meshname></model>
+		<model><meshname>snakeeye.mesh</meshname></model>
 		<accessoryaction type='WeaponLabel'>
 			<label>label1</label>
 			<nextweapon type='WeaponProjectile'>
         <projectilemodel>
-          <meshname>moab</meshname>
+          <meshname>moab.mesh</meshname>
         </projectilemodel>
 				<collisionaction type='WeaponMulti'>
 					<subweapon type='WeaponExplosion'>
@@ -1579,12 +1579,12 @@ and shields damaging the tank directly.</description>
 		<bundlesize>2</bundlesize>
 		<cost>10000</cost>
 		<activationsound>data/accessories/sounds/shoot/medium.wav</activationsound>
-		<model><meshname>snakeeye</meshname></model>
+		<model><meshname>snakeeye.mesh</meshname></model>
 		<accessoryaction type='WeaponLabel'>
 			<label>label1</label>
 			<nextweapon type='WeaponProjectile'>
         <projectilemodel>
-          <meshname>moab</meshname>
+          <meshname>moab.mesh</meshname>
         </projectilemodel>
 				<collisionaction type='WeaponMulti'>
 					<subweapon type='WeaponExplosion'>
@@ -1609,7 +1609,7 @@ and shields damaging the tank directly.</description>
 		<maximumnumber>0</maximumnumber>
 		<bundlesize>1</bundlesize>
     <model>
-      <meshname>snakeeye</meshname>
+      <meshname>snakeeye.mesh</meshname>
     </model>
     <cost>15000</cost>
 		<accessoryaction type='WeaponSelectPosition'>

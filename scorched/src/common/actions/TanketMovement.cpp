@@ -235,31 +235,6 @@ void TanketMovement::simulationMove(fixed frameTime)
 			if (!tanket->getTargetState().getFalling() &&
 				tanket->getTargetState().getMoving() == this)
 			{
-				// Add a smoke trail
-				// Check if we are not on the server
-#ifndef S3D_SERVER
-				if (!context_->getServerMode() &&
-					tanket->getType() == Target::TypeTank)
-				{
-					Tank *tank = (Tank *) tanket;
-
-					// Check if this tank type allows smoke trails
-					TankModel *model = tank->getModelContainer().getTankModel();
-					if (model && model->getMovementSmoke())
-					{
-						if (smokeCounter_.nextDraw(frameTime.asFloat()))
-						{
-							/*
-							Landscape::instance()->getSmoke().addSmoke(
-								tanket->getLife().getFloatPosition()[0],
-								tanket->getLife().getFloatPosition()[1],
-								tanket->getLife().getFloatPosition()[2]);
-							*/
-						}
-					}
-				}
-#endif // S3D_SERVER
-
 				// Move the tank one position every stepTime seconds
 				// i.e. 1/stepTime positions a second
 				timePassed_ += frameTime;

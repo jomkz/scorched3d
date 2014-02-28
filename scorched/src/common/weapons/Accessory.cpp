@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <common/ToolTip.h>
-#include <common/ModelID.h>
 #include <weapons/Accessory.h>
 #include <weapons/AccessoryStore.h>
 #include <common/Defines.h>

@@ -21,13 +21,11 @@
 #ifndef _tankModelStore_h
 #define _tankModelStore_h
 
-#include <vector>
-#include <map>
-#include <set>
 #include <tank/TankModel.h>
 #include <common/ProgressCounter.h>
+#include <XML/XMLEntryRoot.h>
 
-class TankModelStore
+class TankModelStore : public XMLEntryRoot<XMLEntryContainer>
 {
 public:
 	TankModelStore();
@@ -39,20 +37,16 @@ public:
 	TankModel *getModelByName(const char *name);
 	TankModel *getRandomModel(int team, bool ai, const char *tankType);
 
-	std::vector<TankModel *> &getModels() { return models_; }
+	std::list<TankModel *> &getModels() { return models_.getChildren(); }
 	std::set<std::string> &getModelCatagories() { return modelCatagories_; }
 
 protected:
-	std::vector<TankModel *> models_;
+	TankModelList models_;
 	std::set<std::string, std::less<std::string> > modelCatagories_;
-
-	void addModels(std::vector<TankModel *> &src);
-	void killModels(std::vector<TankModel *> &src);
 
 private:
 	TankModelStore(const TankModelStore &);
 	const TankModelStore & operator=(const TankModelStore &);
-
 };
 
 #endif // _tankModelStore_h

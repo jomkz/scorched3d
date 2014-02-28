@@ -56,7 +56,6 @@
     <ClCompile Include="..\..\common\common\Logger.cpp" />
     <ClCompile Include="..\..\common\common\LoggerI.cpp" />
     <ClCompile Include="..\..\common\common\Matrix16.cpp" />
-    <ClCompile Include="..\..\common\common\ModelID.cpp" />
     <ClCompile Include="..\..\common\common\NumberParser.cpp" />
     <ClCompile Include="..\..\common\common\OptionsGame.cpp" />
     <ClCompile Include="..\..\common\common\OptionsMasterListServer.cpp" />
@@ -536,7 +535,6 @@
     <ClInclude Include="..\..\common\common\LoggerI.h" />
     <ClInclude Include="..\..\common\common\main.h" />
     <ClInclude Include="..\..\common\common\Matrix16.h" />
-    <ClInclude Include="..\..\common\common\ModelID.h" />
     <ClInclude Include="..\..\common\common\NumberParser.h" />
     <ClInclude Include="..\..\common\common\OptionsGame.h" />
     <ClInclude Include="..\..\common\common\OptionsMasterListServer.h" />

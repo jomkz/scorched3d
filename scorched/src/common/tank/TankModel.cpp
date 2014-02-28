@@ -24,117 +24,97 @@
 #include <XML/XMLNode.h>
 #include <engine/ScorchedContext.h>
 
-TankModel::TankModel() :
-	aiOnly_(false), 
-	movementSmoke_(true)
+TankModelTypeList::TankModelTypeList() :
+	XMLEntryList<XMLEntryString>("The set of tank types that this model can be used by", 0)
 {
-	catagories_.insert("All");
+}
+
+TankModelTypeList::~TankModelTypeList()
+{
+}
+
+XMLEntryString *TankModelTypeList::createXMLEntry(void *xmlData)
+{
+	return new XMLEntryString("A tank type that this model belongs to, "
+		"only tanks of this type will be able to select this model.  "
+		"Models with no defined tank types are available for all types.");
+}
+
+TankModelCatagoryList::TankModelCatagoryList() :
+	XMLEntryList<XMLEntryString>("The set of tank catagories that this model belongs to", 0)
+{
+}
+
+TankModelCatagoryList::~TankModelCatagoryList()
+{
+}
+
+XMLEntryString *TankModelCatagoryList::createXMLEntry(void *xmlData)
+{
+	return new XMLEntryString("A visual catagory that this model belongs to, "
+		"used for display purposes to allow the user to easily select models.");
+}
+
+TankModelTeamList::TankModelTeamList() :
+	XMLEntryList<XMLEntryInt>("The set of teams that this model can be used by", 0)
+{
+}
+
+TankModelTeamList::~TankModelTeamList()
+{
+}
+
+XMLEntryInt *TankModelTeamList::createXMLEntry(void *xmlData)
+{
+	return new XMLEntryInt("A team type that this model belongs to, "
+		"only tanks of this team will be able to select this model."
+		"Models with no defined teams are available for all teams.");
+}
+
+TankModel::TankModel() :
+	XMLEntryContainer("TankModel",
+		"The definition of a tank model that can be used by players (both human and computer controlled)."),
+	aiOnly_("This tank is only available to computer controlled players (bots)", 0, false),
+	modelName_("The name of the model")
+{
+	catagories_.getChildren().push_back(new XMLEntryString("", 0, "ALL"));
+	addChildXMLEntry("name", &modelName_);
+	addChildXMLEntry("model", &modelId_);
+	addChildXMLEntry("type", &tankTypes_);
+	addChildXMLEntry("catagory", &catagories_);
+	addChildXMLEntry("team", &teams_);
 }
 
 TankModel::~TankModel()
 {
 }
 
-bool TankModel::initFromXML(ScorchedContext &context, XMLNode *node)
-{
-	// Get the name of tank
-	if (!node->getNamedChild("name", tankName_)) return false;
-
-	// Get the tank type (if any)
-	std::string typeName;
-	while (node->getNamedChild("type", typeName, false))
-	{
-		tankTypes_.insert(typeName);
-	}
-
-	// Get the model node
-	XMLNode *modelNode;
-	if (!node->getNamedChild("model", modelNode)) return false;
-
-	// Parse the modelId which tells us which files and
-	// 3d type the model actuall is
-	// The model files are not parsed until later
-	if (!modelId_.initFromNode(modelNode))
-	{
-		return modelNode->returnError(
-			S3D::formatStringBuffer("Failed to load mesh for tank \"%s\"",
-			tankName_.c_str()));
-	}
-
-	// Get the projectile model node (if any)
-	XMLNode *projectileModelNode;
-	if (node->getNamedChild("projectilemodel", projectileModelNode, false))
-	{
-		if (!projectileModelId_.initFromNode(projectileModelNode))
-		{
-			return projectileModelNode->returnError(
-				S3D::formatStringBuffer("Failed to load projectile mesh for tank \"%s\"",
-				tankName_.c_str()));
-		}
-	}
-
-	// Get the tracks node (if any)
-	if (!loadImage(node, "tracksv", tracksVId_, "data/tanks/tracksv.bmp")) return false;
-	if (!loadImage(node, "tracksh", tracksHId_, "data/tanks/tracksh.bmp")) return false;
-	if (!loadImage(node, "tracksvh", tracksVHId_, "data/tanks/tracksvh.bmp")) return false;
-	if (!loadImage(node, "trackshv", tracksHVId_, "data/tanks/trackshv.bmp")) return false;
-
-	// Read all of the tank display catagories
-	std::string catagory;
-	while (node->getNamedChild("catagory", catagory, false))
-	{
-		catagories_.insert(catagory);
-	}
-
-	// Read all of the tank team catagories
-	int team;
-	while (node->getNamedChild("team", team, false))
-	{
-		teams_.insert(team);
-	}
-
-	// Read aionly attribute
-	aiOnly_ = false;
-	node->getNamedChild("aionly", aiOnly_, false);
-
-	// Read movementSmoke attr
-	movementSmoke_ = true;
-	node->getNamedChild("movementsmoke", movementSmoke_, false);
-
-	// Check there are no more nodes in this node
-	return node->failChildren();
-}
-
-bool TankModel::loadImage(XMLNode *node, const char *nodeName, 
-	ImageID &image, const char *backupImage)
-{
-	image.initFromString(S3D::eModLocation, backupImage, backupImage, true);
-	return true;
-}
-
-bool TankModel::lessThan(TankModel *other)
-{
-	return (strcmp(getName(), other->getName()) < 0);
-}
-
 bool TankModel::isOfCatagory(const char *catagory)
 {
-	std::set<std::string>::iterator itor =
-		catagories_.find(catagory);
-	return (itor != catagories_.end());
+	std::list<XMLEntryString *>::iterator itor = catagories_.getChildren().begin(),
+		end = catagories_.getChildren().end();
+	for (;itor!=end;++itor)
+	{
+		if ((*itor)->getValue() == catagory) return true;
+	}
+	return false;
 }
 
 bool TankModel::isOfTankType(const char *tankType)
 {
-	if (tankTypes_.empty()) return true;
-	std::set<std::string>::iterator itor =
-		tankTypes_.find(tankType);
-	return (itor != tankTypes_.end());
+	if (tankTypes_.getChildren().empty()) return true;
+	std::list<XMLEntryString *>::iterator itor = tankTypes_.getChildren().begin(),
+		end = tankTypes_.getChildren().end();
+	for (;itor!=end;++itor)
+	{
+		if ((*itor)->getValue() == tankType) return true;
+	}
+	return false;
 }
 
 bool TankModel::isOfAi(bool ai)
 {
-	if (!aiOnly_) return true;
+	if (!aiOnly_.getValue()) return true;
 	if (ai) return true;
 	return false;
 }
@@ -142,10 +122,15 @@ bool TankModel::isOfAi(bool ai)
 bool TankModel::isOfTeam(int team)
 {
 	if (team == 0) return true; // No Team
-	if (teams_.empty()) return true; // Tank not in a team
-	std::set<int>::iterator itor =
-		teams_.find(team);
-	return (itor != teams_.end());
+
+	if (teams_.getChildren().empty()) return true;
+	std::list<XMLEntryInt *>::iterator itor = teams_.getChildren().begin(),
+		end = teams_.getChildren().end();
+	for (;itor!=end;++itor)
+	{
+		if ((*itor)->getValue() == team) return true;
+	}
+	return false;
 }
 
 bool TankModel::availableForTank(Tank *tank)
@@ -158,4 +143,18 @@ bool TankModel::availableForTank(Tank *tank)
 	}
 
 	return false;
+}
+
+TankModelList::TankModelList() :
+	XMLEntryList<TankModel>("The list of tank models that can be used by players", 0)
+{
+}
+
+TankModelList::~TankModelList()
+{
+}
+
+TankModel *TankModelList::createXMLEntry(void *xmlData)
+{
+	return new TankModel();
 }

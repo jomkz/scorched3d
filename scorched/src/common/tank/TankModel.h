@@ -21,34 +21,47 @@
 #if !defined(__INCLUDE_TankModelh_INCLUDE__)
 #define __INCLUDE_TankModelh_INCLUDE__
 
-#include <common/ModelID.h>
-#include <common/Vector.h>
-#include <image/ImageID.h>
-#include <set>
-#include <string>
+#include <XML/XMLEntryComplexTypes.h>
+#include <XML/XMLEntryRoot.h>
+
+class TankModelTypeList : public XMLEntryList<XMLEntryString>
+{
+public:
+	TankModelTypeList();
+	virtual ~TankModelTypeList();
+
+	virtual XMLEntryString *createXMLEntry(void *xmlData);
+};
+
+class TankModelCatagoryList : public XMLEntryList<XMLEntryString>
+{
+public:
+	TankModelCatagoryList();
+	virtual ~TankModelCatagoryList();
+
+	virtual XMLEntryString *createXMLEntry(void *xmlData);
+};
+
+class TankModelTeamList : public XMLEntryList<XMLEntryInt>
+{
+public:
+	TankModelTeamList();
+	virtual ~TankModelTeamList();
+
+	virtual XMLEntryInt *createXMLEntry(void *xmlData);
+};
 
 class ScorchedContext;
 class Tank;
-class TankModelStore;
-class TankModel
+class TankModel : public XMLEntryContainer
 {
 public:
 	TankModel();
 	virtual ~TankModel();
 
-	bool initFromXML(ScorchedContext &context, XMLNode *node);
+	const char *getName() { return modelName_.getValue().c_str(); }
+	XMLEntryModelID &getTankModelID() { return modelId_; }
 
-	virtual bool lessThan(TankModel *other);
-
-	const char *getName() { return tankName_.c_str(); }
-	ModelID &getTankModelID() { return modelId_; }
-	ModelID &getProjectileModelID() { return projectileModelId_; }
-	ImageID &getTracksVId() { return tracksVId_; }
-	ImageID &getTracksHId() { return tracksHId_; }
-	ImageID &getTracksVHId() { return tracksVHId_; }
-	ImageID &getTracksHVId() { return tracksHVId_; }
-
-	bool getMovementSmoke() { return movementSmoke_; }
 	bool isOfCatagory(const char *catagory);
 	bool isOfAi(bool ai);
 	bool isOfTankType(const char *tankType);
@@ -56,26 +69,24 @@ public:
 
 	bool availableForTank(Tank *tank);
 
+	std::list<XMLEntryString *> &getCatagories() { return catagories_.getChildren(); }
+
 protected:
-	friend class TankModelStore;
+	XMLEntryBool aiOnly_;
+	XMLEntryString modelName_;
+	XMLEntryModelID modelId_;
+	TankModelTypeList tankTypes_;
+	TankModelCatagoryList catagories_;
+	TankModelTeamList teams_;
+};
 
-	bool aiOnly_;
-	bool movementSmoke_;
-	std::string tankName_;
-	ModelID modelId_;
-	ModelID projectileModelId_;
-	ImageID tracksVId_;
-	ImageID tracksHId_;
-	ImageID tracksVHId_;
-	ImageID tracksHVId_;
-	std::set<std::string> tankTypes_;
-	std::set<std::string> catagories_;
-	std::set<int> teams_;
+class TankModelList : public XMLEntryList<TankModel>
+{
+public:
+	TankModelList();
+	virtual ~TankModelList();
 
-	std::set<std::string> &getCatagories() { return catagories_; }
-
-	bool loadImage(XMLNode *node, const char *nodeName, 
-		ImageID &image, const char *backupImage);
+	virtual TankModel *createXMLEntry(void *xmlData);
 };
 
 #endif
