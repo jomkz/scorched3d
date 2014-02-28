@@ -54,6 +54,12 @@ void UIProjectileRenderer::performUIAction()
 		position[0].getInternalData() * OgreSystem::OGRE_WORLD_SCALE_FIXED, 
 		position[2].getInternalData() * OgreSystem::OGRE_WORLD_HEIGHT_SCALE_FIXED, 
 		position[1].getInternalData() * OgreSystem::OGRE_WORLD_SCALE_FIXED);
+	FixedVector &velocity = shotProjectile_->getPhysics().getVelocity();
+	projectileNode_->setDirection(
+		velocity[0].asFloat(),
+		velocity[2].asFloat(),
+		velocity[1].asFloat(),
+		Ogre::Node::TS_WORLD);
 }
 
 void UIProjectileRenderer::simulate(Action *action, float frametime, bool &removeAction)

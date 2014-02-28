@@ -56,8 +56,9 @@ void UIRollerRenderer::performUIAction()
 		position[2].getInternalData() * OgreSystem::OGRE_WORLD_HEIGHT_SCALE_FIXED, 
 		position[1].getInternalData() * OgreSystem::OGRE_WORLD_SCALE_FIXED);
 
-	//FixedVector4 &quat = shotBounce_->getPhysics().getRotationQuat();
-	//projectileNode_->setOrientation(quat[0].asFloat(), quat[1].asFloat(), quat[2].asFloat(), quat[3].asFloat());
+	FixedVector4 &quat = shotBounce_->getPhysics().getRotationQuat();
+	projectileNode_->setOrientation(quat[0].asFloat(), quat[1].asFloat(), 
+		quat[2].asFloat(), quat[3].asFloat());
 }
 
 void UIRollerRenderer::simulate(Action *action, float frametime, bool &removeAction)

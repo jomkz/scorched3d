@@ -32,6 +32,12 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <math.h>
 
+#ifndef S3D_SERVER
+#include <client/ScorchedClient.h>
+#include <client/ClientUISync.h>
+#include <uiactions/UIParticleAction.h>
+#endif
+
 Explosion::Explosion(FixedVector &position,
 	FixedVector &velocity,
 	ExplosionParams *params,
@@ -58,9 +64,12 @@ void Explosion::init()
 	fixed explosionSize = params_->getSize() * multiplier;	
 
 #ifndef S3D_SERVER
-	/*
 	if (!context_->getServerMode()) 
 	{
+		ScorchedClient::instance()->getClientUISync().addActionFromClient(
+			new UIParticleAction(position_, "dirtExplosion"));
+
+/*
 		float height = context_->getLandscapeMaps().getGroundMaps().getInterpHeight(
 			position_[0], position_[1]).asFloat();
 		float aboveGround = position_[2].asFloat() - height;
@@ -257,8 +266,8 @@ void Explosion::init()
 			TargetCamera *targetCamera = itor->second;
 			targetCamera->getCamera().addShake(params_->getShake().asFloat());
 		}
+		*/
 	}
-	*/
 #endif // #ifndef S3D_SERVER
 }
 

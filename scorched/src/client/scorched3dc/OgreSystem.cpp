@@ -142,6 +142,12 @@ void OgreSystem::loadResources()
 	// General
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/bloom", "FileSystem", "General");
 
+	// Particle Universe
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/particleuniverse/core ", "FileSystem", "ParticleUniverse");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/particleuniverse/textures ", "FileSystem", "ParticleUniverse");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/particleuniverse/materials ", "FileSystem", "ParticleUniverse");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/particleuniverse/scripts ", "FileSystem", "ParticleUniverse");
+
 	// Models
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/models", "FileSystem", "Models");
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/models/abrams", "FileSystem", "Models");
@@ -185,8 +191,8 @@ bool OgreSystem::create()
 		Ogre::String("Octree Scene Manager"))) return false;
 	if (!loadPlugin(Ogre::String("Plugin_CgProgramManager"), 
 		Ogre::String("Cg Program Manager"))) return false;
-	if (!loadPlugin(Ogre::String("Plugin_ParticleFX"), 
-		Ogre::String("ParticleFX"))) return false;
+	if (!loadPlugin(Ogre::String("ParticleUniverse"), 
+		Ogre::String("ParticleUniverse"))) return false;
 
 	// Create the window, initialize openGL
 	if (!createWindow()) return false;
