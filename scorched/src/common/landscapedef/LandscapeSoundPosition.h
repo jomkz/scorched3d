@@ -54,6 +54,7 @@ public:
 	virtual ~LandscapeSoundPositionChoice();
 
 	virtual LandscapeSoundPosition *createXMLEntry(const std::string &type);
+	virtual void getAllTypes(std::set<std::string> &allTypes);
 };
 
 class LandscapeSoundPositionAmbient : public LandscapeSoundPosition

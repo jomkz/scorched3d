@@ -52,7 +52,7 @@ LandscapeDefnTankStartMinMax::~LandscapeDefnTankStartMinMax()
 }
 
 LandscapeDefnTankStartPositionList::LandscapeDefnTankStartPositionList() :
-	XMLEntryList<XMLEntryFixedVector>("LandscapeDefnTankStartPositionList", 
+	XMLEntryList<XMLEntryFixedVector>(
 		"An explicit position that a tank may spawn on, the height is ignore and normalized to the lanscape height")
 {
 }
@@ -82,6 +82,12 @@ LandscapeDefnTankStart *LandscapeDefnTankStartChoice::createXMLEntry(const std::
 	if (0 == strcmp(type.c_str(), "positional")) return new LandscapeDefnTankStartPositional;
 	S3D::dialogMessage("LandscapeDefnTankStartType", S3D::formatStringBuffer("Unknown tankstart type %s", type));
 	return 0;
+}
+
+void LandscapeDefnTankStartChoice::getAllTypes(std::set<std::string> &allTypes)
+{
+	allTypes.insert("height");
+	allTypes.insert("positional");
 }
 
 LandscapeDefnTankStart::LandscapeDefnTankStart(const char *name, const char *description) :
@@ -346,9 +352,10 @@ LandscapeDefnTankStartPositional::LandscapeDefnTankStartPositional() :
 	LandscapeDefnTankStart("LandscapeDefnTankStartPositional",
 		"Explicity defines the starting position of the tanks via a set of points"),
 	height("The minimum and maximum landscape heights that tanks are allowed to spawn between"),
-	flatness("The maximum slope that a tank can spawn on", 0, 0)
+	flatness("The maximum slope that a tank can spawn on", 0, 0),
+	positions()
 {
-	addChildXMLEntry("height", &height, "flatness", &flatness);
+	addChildXMLEntry("height", &height, "flatness", &flatness, "position", &positions);
 }
 
 LandscapeDefnTankStartPositional::~LandscapeDefnTankStartPositional()

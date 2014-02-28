@@ -39,6 +39,7 @@ public:
 	virtual ~LandscapeMovementChoice();
 
 	virtual LandscapeMovement *createXMLEntry(const std::string &type);
+	virtual void getAllTypes(std::set<std::string> &allTypes);
 };
 
 class LandscapeMovementList : public XMLEntryList<LandscapeMovementChoice>

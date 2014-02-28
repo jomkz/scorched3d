@@ -38,6 +38,12 @@ LandscapeSoundTiming *LandscapeSoundTimingChoice::createXMLEntry(const std::stri
 	return 0;
 }
 
+void LandscapeSoundTimingChoice::getAllTypes(std::set<std::string> &allTypes)
+{
+	allTypes.insert("looped");
+	allTypes.insert("repeat");
+}
+
 LandscapeSoundTiming::LandscapeSoundTiming(const char *typeName, const char *description) :
 	XMLEntryContainer(typeName, description)
 {

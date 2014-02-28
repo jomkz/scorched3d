@@ -41,9 +41,15 @@ LandscapeMovement *LandscapeMovementChoice::createXMLEntry(const std::string &ty
 	return 0;
 }
 
+void LandscapeMovementChoice::getAllTypes(std::set<std::string> &allTypes)
+{
+	allTypes.insert("boids");
+	allTypes.insert("ships");
+	allTypes.insert("spline");
+}
+
 LandscapeMovementList::LandscapeMovementList() :
-	XMLEntryList("LandscapeMovementList", 
-		"A list of movement animations that can be associated with an object group")
+	XMLEntryList("A list of movement animations that can be associated with an object group")
 {
 }
 
@@ -89,7 +95,7 @@ LandscapeMovementShips::~LandscapeMovementShips()
 }
 
 LandscapeMovementSplineControlPoints::LandscapeMovementSplineControlPoints() :
-	XMLEntryList("LandscapeMovementSplineControlPoints", "The list of control points that defined the spline curve")
+	XMLEntryList("The list of control points that defined the spline curve")
 {
 }
 

@@ -69,6 +69,7 @@ public:
 	virtual ~LandscapeDefnTankStartChoice();
 
 	virtual LandscapeDefnTankStart *createXMLEntry(const std::string &type);
+	virtual void getAllTypes(std::set<std::string> &allTypes);
 };
 
 class LandscapeDefnTankStartHeight : public LandscapeDefnTankStart

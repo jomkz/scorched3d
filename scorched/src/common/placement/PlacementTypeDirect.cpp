@@ -37,7 +37,7 @@ PlacementPosition::~PlacementPosition()
 }
 
 PlacementPositionList::PlacementPositionList() :
-	XMLEntryList<PlacementPosition>("PlacementPositionList",
+	XMLEntryList<PlacementPosition>(
 		"A list of initial positions for an object, objects will cycle around the positions in the list")
 {
 }

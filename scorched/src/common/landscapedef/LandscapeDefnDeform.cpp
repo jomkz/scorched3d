@@ -39,6 +39,13 @@ LandscapeDefnDeform *LandscapeDefnDeformChoice::createXMLEntry(const std::string
 	return 0;
 }
 
+void LandscapeDefnDeformChoice::getAllTypes(std::set<std::string> &allTypes)
+{
+	allTypes.insert("solid");
+	allTypes.insert("deform");
+	allTypes.insert("file");
+}
+
 LandscapeDefnDeform::LandscapeDefnDeform(const char *name, const char *description) :
 	XMLEntryContainer(name, description)
 {

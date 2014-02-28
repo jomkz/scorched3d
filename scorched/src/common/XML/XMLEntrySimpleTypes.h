@@ -95,7 +95,7 @@ public:
 		int defaultValue);
 	virtual ~XMLEntryInt();
 
-	virtual void getTypeName(std::string &result) { result = "<number>"; }
+	virtual void getTypeName(std::string &result) { result = "number"; }
 	virtual void getValueAsString(std::string &result);
 	virtual void getDefaultValueAsString(std::string &result);
 	virtual bool setValueFromString(const std::string &string);
@@ -168,7 +168,7 @@ public:
 		bool defaultValue);
 	virtual ~XMLEntryBool();
 
-	virtual void getTypeName(std::string &result) { result = "<boolean>"; }
+	virtual void getTypeName(std::string &result) { result = "boolean"; }
 	virtual void getValueAsString(std::string &result);
 	virtual void getDefaultValueAsString(std::string &result);
 	virtual bool setValueFromString(const std::string &string);
@@ -192,7 +192,7 @@ public:
 		bool multiline = false);
 	virtual ~XMLEntryString();
 
-	virtual void getTypeName(std::string &result) { result = "<string>"; }
+	virtual void getTypeName(std::string &result) { result = "string"; }
 	virtual void getValueAsString(std::string &result);
 	virtual void getDefaultValueAsString(std::string &result);
 	virtual bool setValueFromString(const std::string &string);
@@ -255,7 +255,7 @@ public:
 		fixed defaultValue);
 	virtual ~XMLEntryFixed();
 
-	virtual void getTypeName(std::string &result) { result = "<number>"; }
+	virtual void getTypeName(std::string &result) { result = "number"; }
 	virtual void getValueAsString(std::string &result);
 	virtual void getDefaultValueAsString(std::string &result);
 	virtual bool setValueFromString(const std::string &string);
@@ -278,7 +278,7 @@ public:
 		FixedVector defaultValue);
 	virtual ~XMLEntryFixedVector();
 
-	virtual void getTypeName(std::string &result) { result = "<vector>"; }
+	virtual void getTypeName(std::string &result) { result = "vector"; }
 	virtual void getValueAsString(std::string &result);
 	virtual void getDefaultValueAsString(std::string &result);
 	virtual bool setValueFromString(const std::string &string);

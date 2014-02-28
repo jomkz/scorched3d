@@ -44,6 +44,7 @@ public:
 	virtual ~LandscapeEventConditionChoice();
 
 	virtual LandscapeEventCondition *createXMLEntry(const std::string &type);
+	virtual void getAllTypes(std::set<std::string> &allTypes);
 };
 
 class LandscapeEventConditionGroupSize : public LandscapeEventCondition

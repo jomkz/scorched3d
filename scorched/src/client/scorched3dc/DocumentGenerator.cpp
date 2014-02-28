@@ -33,4 +33,6 @@ void DocumentGenerator::generatDocumentation(const std::string &directory)
 	landscapeTex.generateDocumentation(documentGenerator);
 	LandscapeDefn landscapeDefn(0);
 	landscapeDefn.generateDocumentation(documentGenerator);
+
+	documentGenerator.writeDocumentation();
 }

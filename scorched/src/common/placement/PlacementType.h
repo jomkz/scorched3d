@@ -66,6 +66,7 @@ public:
 	virtual ~PlacementTypeChoice();
 
 	virtual PlacementType *createXMLEntry(const std::string &type);
+	virtual void getAllTypes(std::set<std::string> &allTypes);
 };
 
 class PlacementTypeList : public XMLEntryList<PlacementTypeChoice>

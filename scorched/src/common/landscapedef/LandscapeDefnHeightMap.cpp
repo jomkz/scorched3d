@@ -51,6 +51,13 @@ LandscapeDefnHeightMap *LandscapeDefnHeightMapChoice::createXMLEntry(const std::
 	return 0;
 }
 
+void LandscapeDefnHeightMapChoice::getAllTypes(std::set<std::string> &allTypes)
+{
+	allTypes.insert("generatenoise");
+	allTypes.insert("generate");
+	allTypes.insert("file");
+}
+
 LandscapeDefnHeightMap::LandscapeDefnHeightMap(const char *name, const char *description) :
 	XMLEntryContainer(name, description)
 {

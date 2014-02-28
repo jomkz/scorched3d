@@ -1,26 +1,65 @@
 <html>
   <head>
     <title>[[TYPE_NAME]]</title>
-    <style>
-#include docs/styles.css
-    </style>
+    <link rek="stylesheet" type="text/css" href="styles.css" title="Style"/>
   </head>
-  <body>
-    <table>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Optional</th>
-        <th>Description</th>
-      </tr>
-      @@CHILD@@
-      <tr>
-        <td>[[CHILD_TAGNAME]]</td>
-        <td>[[CHILD_TYPE]]</td>
-        <td>[[CHILD_OPTIONAL]]</td>
-        <td>[[CHILD_DESCRIPTION]]</td>
-      </tr>
-      @@CHILD@@
-    </table>
+  <body BGCOLOR="white">
+    <hr/>
+    <h2>
+      [[TYPE_NAME]]
+    </h2>
+
+    {{exists:REFERENCES}}
+    <dl>
+      <dt>
+        <B>All References:</B>
+      </dt>
+      <dd>
+        {{loop:REFERENCES}}
+        <a href='[[REFERENCE_NAME]].html'>[[REFERENCE_NAME]]</a>
+        {{loop:REFERENCES}}
+      </dd>
+    </dl>
+    {{exists:REFERENCES}}
+    <hr/>
+    <p>
+      [[TYPE_DESCRIPTION]]
+    </p>
+
+    <hr/>
+    <p>
+      <table BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+        <TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+          <TH ALIGN="left">
+            <FONT SIZE="+2">
+              <B>Tag Name</B>
+            </FONT>
+          </TH>
+          <TH ALIGN="left">
+            <FONT SIZE="+2">
+              <B>Type</B>
+            </FONT>
+          </TH>
+          <TH ALIGN="left">
+            <FONT SIZE="+2">
+              <B>Description</B>
+            </FONT>
+          </TH>
+        </TR>
+
+        {{loop:CHILD}}
+        <TR BGCOLOR="white" CLASS="TableRowColor">
+          <TD>[[CHILD_TAGNAME]]</TD>
+          <TD style="white-space: nowrap">
+            [[CHILD_TYPE]]
+            {{exists:CHILD_OPTIONS}}
+            ([[CHILD_OPTIONS]])
+            {{exists:CHILD_OPTIONS}}
+          </TD>
+          <TD>[[CHILD_DESCRIPTION]]</TD>
+        </TR>
+        {{loop:CHILD}}
+      </table>
+    </p>
   </body>
 </html>

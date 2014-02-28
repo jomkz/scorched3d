@@ -22,8 +22,7 @@
 #include <math.h>
 
 LandscapeMusicStateList::LandscapeMusicStateList() :
-	XMLEntryList<XMLEntryString>("LandscapeMusicStateList", 
-		"The list of state names that this music should be played in.")
+	XMLEntryList<XMLEntryString>("The list of state names that this music should be played in.")
 {
 }
 
@@ -74,7 +73,7 @@ bool LandscapeMusic::readXML(XMLNode *node)
 }
 
 LandscapeMusicList::LandscapeMusicList() : 
-	XMLEntryList<LandscapeMusic>("LandscapeMusicList", "Defines a music file that will be played continuously in the given states.")
+	XMLEntryList<LandscapeMusic>("Defines a music file that will be played continuously in the given states.")
 {
 }
 

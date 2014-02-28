@@ -35,6 +35,8 @@ public:
 	void addVariableValue(const char *name, const char *value);
 	FileTemplateVariables *addLoopVariable(const char *name);
 
+	bool hasVariableName(const char *name);
+
 	const char *getVariableValue(const char *name);
 	bool hasPermission(const char *permission);
 	FileTemplateVariables *getLoopVariableValues(const char *name);

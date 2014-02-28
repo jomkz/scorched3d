@@ -50,6 +50,11 @@ LandscapeSoundSound *LandscapeSoundSoundChoice::createXMLEntry(const std::string
 	return 0;
 }
 
+void LandscapeSoundSoundChoice::getAllTypes(std::set<std::string> &allTypes)
+{
+	allTypes.insert("file");
+}
+
 LandscapeSoundSound::LandscapeSoundSound(const char *type, const char *description) :
 	XMLEntryContainer(type, description)
 {
@@ -60,8 +65,7 @@ LandscapeSoundSound::~LandscapeSoundSound()
 }
 
 LandscapeSoundSoundFileList::LandscapeSoundSoundFileList() :
-	XMLEntryList<XMLEntryString>("LandscapeSoundSoundFileList", 
-		"A list of files to load sounds from, a random file will be chosen each time a sound is played.")
+	XMLEntryList<XMLEntryString>("A list of files to load sounds from, a random file will be chosen each time a sound is played.")
 {
 }
 

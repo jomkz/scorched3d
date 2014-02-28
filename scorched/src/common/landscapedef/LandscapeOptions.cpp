@@ -23,13 +23,17 @@
 
 LandscapeOptions::LandscapeOptions()
 {
+	required_ = false;
 }
 
 LandscapeOptions::~LandscapeOptions()
 {
 }
 
-//"Defines the game options for this level, these options override any set globaly as the server settings."
+void LandscapeOptions::getDescription(std::string &result)
+{
+	result = "Defines the game options for this level, these options override any set globaly as the server settings.";
+}
 
 bool LandscapeOptions::readXML(XMLNode *parentNode)
 {
@@ -42,4 +46,3 @@ bool LandscapeOptions::readXML(XMLNode *parentNode)
 
 	return OptionsGame::readXML(parentNode);
 }
-

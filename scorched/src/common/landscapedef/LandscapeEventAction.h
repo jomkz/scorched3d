@@ -39,6 +39,7 @@ public:
 	virtual ~LandscapeEventActionChoice();
 
 	virtual LandscapeEventAction *createXMLEntry(const std::string &type);
+	virtual void getAllTypes(std::set<std::string> &allTypes);
 };
 
 class LandscapeEventActionFireWeapon : public LandscapeEventAction

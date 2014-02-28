@@ -41,6 +41,12 @@ LandscapeEventCondition *LandscapeEventConditionChoice::createXMLEntry(const std
 	return 0;
 }
 
+void LandscapeEventConditionChoice::getAllTypes(std::set<std::string> &allTypes)
+{
+	allTypes.insert("time");
+	allTypes.insert("groupsize");
+}
+
 LandscapeEventCondition::LandscapeEventCondition(const char *name, const char *description) :
 	XMLEntryContainer(name, description)
 {

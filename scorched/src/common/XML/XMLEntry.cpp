@@ -38,19 +38,80 @@ XMLEntryDocumentGenerator::~XMLEntryDocumentGenerator()
 {
 }
 
-void XMLEntryDocumentGenerator::addType(const std::string &typeName, const std::string &fileName, FileTemplateVariables *variables)
+void XMLEntryDocumentGenerator::getTypeReference(const std::string &referingType, const std::string &typeName, std::string &resultType)
 {
-	DIALOG_ASSERT(types_.find(typeName) == types_.end());
-	types_.insert(typeName);
+	if (typeName == "number" || typeName == "string" || typeName == "boolean" || typeName =="vector")
+	{
+		resultType = typeName;
+		return;
+	}
 
 	std::string fileLocation = documentLocation_ + "/" + typeName + ".html";
-	FileTemplate::writeTemplateToFile(fileName, *variables, fileLocation);
-	delete variables;
+	resultType.append("<a href='").append(fileLocation).append("'>").append(typeName).append("</a>");
+
+	std::map<std::string, TypeEntry>::iterator itor = types_.find(typeName);
+	if (itor != types_.end())
+	{
+		itor->second.typeReferences.push_back(referingType);
+	}
+	else
+	{
+		TypeEntry entry;
+		entry.typeReferences.push_back(referingType);
+		types_[typeName] = entry;
+	}
+}
+
+void XMLEntryDocumentGenerator::addType(const std::string &typeName, const std::string &fileName, FileTemplateVariables *variables)
+{
+	DIALOG_ASSERT(!hasType(typeName));
+
+	std::map<std::string, TypeEntry>::iterator itor = types_.find(typeName);
+	if (itor != types_.end())
+	{
+		itor->second.fileName = fileName;
+		itor->second.variables = variables;
+	}
+	else
+	{
+		TypeEntry entry;
+		entry.fileName = fileName;
+		entry.variables = variables;
+		types_[typeName] = entry;
+	}
 }
 
 bool XMLEntryDocumentGenerator::hasType(const std::string &typeName)
 {
-	return types_.find(typeName) != types_.end();
+	std::map<std::string, TypeEntry>::iterator itor = types_.find(typeName);
+	if (itor == types_.end()) return false;
+	return itor->second.variables != 0;
+}
+
+void XMLEntryDocumentGenerator::writeDocumentation()
+{
+	std::map<std::string, TypeEntry>::iterator itor = types_.begin(),
+		end = types_.end();
+	for (;itor!=end;++itor)
+	{
+		if (itor->second.variables)
+		{
+			if (!itor->second.typeReferences.empty())
+			{
+				std::list<std::string>::iterator refItor = itor->second.typeReferences.begin(),
+					refEnd = itor->second.typeReferences.end();
+				for (;refItor!=refEnd;++refItor)
+				{
+					FileTemplateVariables *references = itor->second.variables->addLoopVariable("REFERENCES");
+					references->addVariableValue("REFERENCE_NAME", refItor->c_str());
+				}
+			}
+
+			std::string fileLocation = documentLocation_ + "/" + itor->first + ".html";
+			FileTemplate::writeTemplateToFile(itor->second.fileName, *itor->second.variables, fileLocation);
+			delete itor->second.variables;
+		}
+	}
 }
 
 XMLEntry::XMLEntry()
@@ -61,9 +122,10 @@ XMLEntry::~XMLEntry()
 {
 }
 
-XMLEntryContainer::XMLEntryContainer(const char *typeName, const char *description) :
+XMLEntryContainer::XMLEntryContainer(const char *typeName, const char *description, bool required) :
 	XMLEntry(),
-	xmlTypeName_(typeName), xmlDescription_(description)
+	xmlTypeName_(typeName), xmlDescription_(description),
+	required_(required)
 {
 }
 
@@ -73,79 +135,80 @@ XMLEntryContainer::~XMLEntryContainer()
 
 void XMLEntryContainer::addChildXMLEntry(const char *name1, XMLEntry *entry1)
 {
+	xmlEntryChildrenList_.push_back(std::pair<std::string, XMLEntry *>(name1, entry1));
 	xmlEntryChildren_[name1] = entry1;
 }
 
 void XMLEntryContainer::addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2)
 {
-	xmlEntryChildren_[name1] = entry1;
-	xmlEntryChildren_[name2] = entry2;
+	addChildXMLEntry(name1, entry1);
+	addChildXMLEntry(name2, entry2);
 }
 
 void XMLEntryContainer::addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
 		const char *name3, XMLEntry *entry3)
 {
-	xmlEntryChildren_[name1] = entry1;
-	xmlEntryChildren_[name2] = entry2;
-	xmlEntryChildren_[name3] = entry3;
+	addChildXMLEntry(name1, entry1);
+	addChildXMLEntry(name2, entry2);
+	addChildXMLEntry(name3, entry3);
 }
 
 void XMLEntryContainer::addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
 		const char *name3, XMLEntry *entry3, const char *name4, XMLEntry *entry4)
 {
-	xmlEntryChildren_[name1] = entry1;
-	xmlEntryChildren_[name2] = entry2;
-	xmlEntryChildren_[name3] = entry3;
-	xmlEntryChildren_[name4] = entry4;
+	addChildXMLEntry(name1, entry1);
+	addChildXMLEntry(name2, entry2);
+	addChildXMLEntry(name3, entry3);
+	addChildXMLEntry(name4, entry4);
 }
 
 void XMLEntryContainer::addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
 		const char *name3, XMLEntry *entry3, const char *name4, XMLEntry *entry4, const char *name5, XMLEntry *entry5)
 {
-	xmlEntryChildren_[name1] = entry1;
-	xmlEntryChildren_[name2] = entry2;
-	xmlEntryChildren_[name3] = entry3;
-	xmlEntryChildren_[name4] = entry4;
-	xmlEntryChildren_[name5] = entry5;
+	addChildXMLEntry(name1, entry1);
+	addChildXMLEntry(name2, entry2);
+	addChildXMLEntry(name3, entry3);
+	addChildXMLEntry(name4, entry4);
+	addChildXMLEntry(name5, entry5);
 }
 
 void XMLEntryContainer::addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
 		const char *name3, XMLEntry *entry3, const char *name4, XMLEntry *entry4, const char *name5, XMLEntry *entry5, 
 		const char *name6, XMLEntry *entry6)
 {
-	xmlEntryChildren_[name1] = entry1;
-	xmlEntryChildren_[name2] = entry2;
-	xmlEntryChildren_[name3] = entry3;
-	xmlEntryChildren_[name4] = entry4;
-	xmlEntryChildren_[name5] = entry5;
-	xmlEntryChildren_[name6] = entry6;
+	addChildXMLEntry(name1, entry1);
+	addChildXMLEntry(name2, entry2);
+	addChildXMLEntry(name3, entry3);
+	addChildXMLEntry(name4, entry4);
+	addChildXMLEntry(name5, entry5);
+	addChildXMLEntry(name6, entry6);
 }
 
 void XMLEntryContainer::addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
 		const char *name3, XMLEntry *entry3, const char *name4, XMLEntry *entry4, const char *name5, XMLEntry *entry5, 
 		const char *name6, XMLEntry *entry6, const char *name7, XMLEntry *entry7)
 {
-	xmlEntryChildren_[name1] = entry1;
-	xmlEntryChildren_[name2] = entry2;
-	xmlEntryChildren_[name3] = entry3;
-	xmlEntryChildren_[name4] = entry4;
-	xmlEntryChildren_[name5] = entry5;
-	xmlEntryChildren_[name6] = entry6;
-	xmlEntryChildren_[name7] = entry7;
+	addChildXMLEntry(name1, entry1);
+	addChildXMLEntry(name2, entry2);
+	addChildXMLEntry(name3, entry3);
+	addChildXMLEntry(name4, entry4);
+	addChildXMLEntry(name5, entry5);
+	addChildXMLEntry(name6, entry6);
+	addChildXMLEntry(name7, entry7);
 }
 
 void XMLEntryContainer::addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
 		const char *name3, XMLEntry *entry3, const char *name4, XMLEntry *entry4, const char *name5, XMLEntry *entry5, 
 		const char *name6, XMLEntry *entry6, const char *name7, XMLEntry *entry7, const char *name8, XMLEntry *entry8)
 {
-	xmlEntryChildren_[name1] = entry1;
-	xmlEntryChildren_[name2] = entry2;
-	xmlEntryChildren_[name3] = entry3;
-	xmlEntryChildren_[name4] = entry4;
-	xmlEntryChildren_[name5] = entry5;
-	xmlEntryChildren_[name6] = entry6;
-	xmlEntryChildren_[name7] = entry7;
-	xmlEntryChildren_[name8] = entry8;
+	addChildXMLEntry(name1, entry1);
+	addChildXMLEntry(name2, entry2);
+	addChildXMLEntry(name3, entry3);
+	addChildXMLEntry(name4, entry4);
+	addChildXMLEntry(name5, entry5);
+	addChildXMLEntry(name6, entry6);
+	addChildXMLEntry(name7, entry7);
+	addChildXMLEntry(name8, entry8);
 }
 
 void XMLEntryContainer::addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
@@ -153,15 +216,15 @@ void XMLEntryContainer::addChildXMLEntry(const char *name1, XMLEntry *entry1, co
 		const char *name6, XMLEntry *entry6, const char *name7, XMLEntry *entry7, const char *name8, XMLEntry *entry8, 
 		const char *name9, XMLEntry *entry9)
 {
-	xmlEntryChildren_[name1] = entry1;
-	xmlEntryChildren_[name2] = entry2;
-	xmlEntryChildren_[name3] = entry3;
-	xmlEntryChildren_[name4] = entry4;
-	xmlEntryChildren_[name5] = entry5;
-	xmlEntryChildren_[name6] = entry6;
-	xmlEntryChildren_[name7] = entry7;
-	xmlEntryChildren_[name8] = entry8;
-	xmlEntryChildren_[name9] = entry9;
+	addChildXMLEntry(name1, entry1);
+	addChildXMLEntry(name2, entry2);
+	addChildXMLEntry(name3, entry3);
+	addChildXMLEntry(name4, entry4);
+	addChildXMLEntry(name5, entry5);
+	addChildXMLEntry(name6, entry6);
+	addChildXMLEntry(name7, entry7);
+	addChildXMLEntry(name8, entry8);
+	addChildXMLEntry(name9, entry9);
 }
 
 void XMLEntryContainer::addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
@@ -169,21 +232,21 @@ void XMLEntryContainer::addChildXMLEntry(const char *name1, XMLEntry *entry1, co
 		const char *name6, XMLEntry *entry6, const char *name7, XMLEntry *entry7, const char *name8, XMLEntry *entry8, 
 		const char *name9, XMLEntry *entry9, const char *name10, XMLEntry *entry10)
 {
-	xmlEntryChildren_[name1] = entry1;
-	xmlEntryChildren_[name2] = entry2;
-	xmlEntryChildren_[name3] = entry3;
-	xmlEntryChildren_[name4] = entry4;
-	xmlEntryChildren_[name5] = entry5;
-	xmlEntryChildren_[name6] = entry6;
-	xmlEntryChildren_[name7] = entry7;
-	xmlEntryChildren_[name8] = entry8;
-	xmlEntryChildren_[name9] = entry9;
-	xmlEntryChildren_[name10] = entry10;
+	addChildXMLEntry(name1, entry1);
+	addChildXMLEntry(name2, entry2);
+	addChildXMLEntry(name3, entry3);
+	addChildXMLEntry(name4, entry4);
+	addChildXMLEntry(name5, entry5);
+	addChildXMLEntry(name6, entry6);
+	addChildXMLEntry(name7, entry7);
+	addChildXMLEntry(name8, entry8);
+	addChildXMLEntry(name9, entry9);
+	addChildXMLEntry(name10, entry10);
 }
 
 XMLEntryContainer *XMLEntryContainer::addChildXMLEntryContainer(const char *name, XMLEntryContainer *container)
 {
-	xmlEntryChildren_[name] = container;
+	addChildXMLEntry(name, container);
 	return container;
 }
 
@@ -243,9 +306,18 @@ XMLEntryDocumentInfo XMLEntryContainer::generateDocumentation(XMLEntryDocumentGe
 	XMLEntryDocumentInfo info;
 	if (generator.hasType(xmlTypeName_)) return info;
 
+	std::string typeType, typeTypeConverted,
+		typeDescription, typeDescriptionConverted;
+	getTypeName(typeType);
+	getDescription(typeDescription);
+	XMLNode::removeSpecialChars(typeDescription, typeDescriptionConverted);
+		
 	FileTemplateVariables *mainVariables = new FileTemplateVariables();
-	mainVariables->addVariableValue("TYPE_NAME", xmlTypeName_);
-	std::map<std::string, XMLEntry *>::iterator itor = xmlEntryChildren_.begin(), end = xmlEntryChildren_.end();
+	mainVariables->addVariableValue("TYPE_NAME", typeType.c_str());
+	mainVariables->addVariableValue("TYPE_DESCRIPTION", typeDescriptionConverted.c_str());
+
+	std::list<std::pair<std::string, XMLEntry *> >::iterator itor = xmlEntryChildrenList_.begin(), 
+		end = xmlEntryChildrenList_.end();
 	for (;itor!=end; itor++)
 	{
 		XMLEntryDocumentInfo childInfo = itor->second->generateDocumentation(generator);
@@ -253,13 +325,14 @@ XMLEntryDocumentInfo XMLEntryContainer::generateDocumentation(XMLEntryDocumentGe
 		std::string childTypeName, childTypeNameConverted, childDescription;
 		itor->second->getTypeName(childTypeName);
 		itor->second->getDescription(childDescription);
-		XMLNode::removeSpecialChars(childTypeName, childTypeNameConverted);
+		generator.getTypeReference(typeType, childTypeName, childTypeNameConverted);
 		bool required = (itor->second->getData() & eDataRequired) != 0;
+		std::string childOptions = required?"":"Optional";
 
 		childVariables->addVariableValue("CHILD_TAGNAME", itor->first.c_str());
 		childVariables->addVariableValue("CHILD_TYPE", childTypeNameConverted.c_str());
 		childVariables->addVariableValue("CHILD_DESCRIPTION", childDescription.c_str());
-		childVariables->addVariableValue("CHILD_OPTIONAL", required?"false":"true");
+		if (!childOptions.empty()) childVariables->addVariableValue("CHILD_OPTIONS", childOptions.c_str());
 	}
 	generator.addType(xmlTypeName_, "docs/XMLEntryContainer.html", mainVariables);
 	return info;

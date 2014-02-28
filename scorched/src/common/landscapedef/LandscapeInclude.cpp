@@ -22,7 +22,7 @@
 #include <landscapedef/LandscapeDefinitions.h>
 
 LansdscapeIncludeList::LansdscapeIncludeList() :
-	XMLEntryList<XMLEntryString>("LansdscapeIncludeList", "A set of files to include into this file")
+	XMLEntryList<XMLEntryString>("A set of files to include into this file")
 {
 }
 

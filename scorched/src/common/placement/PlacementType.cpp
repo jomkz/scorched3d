@@ -141,9 +141,18 @@ PlacementType *PlacementTypeChoice::createXMLEntry(const std::string &type)
 	return 0;
 }
 
+void PlacementTypeChoice::getAllTypes(std::set<std::string> &allTypes)
+{
+	allTypes.insert("trees");
+	allTypes.insert("mask");
+	allTypes.insert("direct");
+	allTypes.insert("count");
+	allTypes.insert("bounds");
+	allTypes.insert("tankstart");
+}
+
 PlacementTypeList::PlacementTypeList() :
-	 XMLEntryList<PlacementTypeChoice>("PlacementTypeList",
-		 "Defines the starting locations for objects placed on the landscape.")
+	 XMLEntryList<PlacementTypeChoice>("Defines the starting locations for objects placed on the landscape.")
 {
 }
 

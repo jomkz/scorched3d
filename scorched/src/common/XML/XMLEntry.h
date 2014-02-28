@@ -21,8 +21,10 @@
 #if !defined(__INCLUDE_XMLEntryh_INCLUDE__)
 #define __INCLUDE_XMLEntryh_INCLUDE__
 
+#include <common/FileTemplate.h>
 #include <XML/XMLParser.h>
 #include <set>
+#include <map>
 
 class XMLEntryDocumentInfo
 {
@@ -39,11 +41,21 @@ public:
 	XMLEntryDocumentGenerator(const std::string &documentLocation);
 	~XMLEntryDocumentGenerator();
 
+	void writeDocumentation();
+
 	void addType(const std::string &typeName, const std::string &fileName, FileTemplateVariables *variables);
 	bool hasType(const std::string &typeName);
+	void getTypeReference(const std::string &referingType, const std::string &typeName, std::string &resultType);
 private:
+	struct TypeEntry
+	{
+		std::string fileName;
+		FileTemplateVariables *variables;
+		std::list<std::string> typeReferences;
+	};
+
 	std::string documentLocation_;
-	std::set<std::string> types_;
+	std::map<std::string, TypeEntry> types_;
 };
 
 class XMLEntry
@@ -74,65 +86,10 @@ public:
 protected:
 };
 
-template <class T>
-class XMLEntryTypeChoice : public XMLEntry
-{
-public:
-	XMLEntryTypeChoice(const char *typeName, const char *description) :
-		XMLEntry(),
-		xmlTypeName_(typeName), xmlDescription_(description), 
-		value_(0)
-	{
-
-	}
-	virtual ~XMLEntryTypeChoice()
-	{
-		delete value_;
-		value_ = 0;
-	}
-
-	std::string &getChoiceType() { return type_; }
-	T *getValue() { return value_; }
-	virtual T *createXMLEntry(const std::string &type) = 0;
-
-	// XMLEntry
-	virtual unsigned int getData() { return eDataRequired; }
-	virtual void getTypeName(std::string &result) { result = xmlTypeName_; }
-	virtual void getDescription(std::string &result) { result = xmlDescription_; }
-
-	virtual bool readXML(XMLNode *node)
-	{
-		if (!node->getNamedParameter("type", type_)) 
-		{
-			return node->returnError(S3D::formatStringBuffer(
-				"Failed to find a required type attribute"));;
-		}
-		value_ = createXMLEntry(type_);
-		if (!value_)
-		{
-			return node->returnError(S3D::formatStringBuffer(
-				"Failed to create the type : \"%s\"", type_.c_str()));
-		}
-		if (!value_->readXML(node)) return false;
-
-		return true;
-	}
-	virtual void writeXML(XMLNode *node)
-	{
-		node->addParameter(new XMLNode("type", type_, XMLNode::XMLParameterType));
-		value_->writeXML(node);
-	}
-
-protected:
-	std::string type_;
-	T *value_;
-	const char *xmlTypeName_, *xmlDescription_;
-};
-
 class XMLEntryContainer : public XMLEntry
 {
 public:
-	XMLEntryContainer(const char *typeName, const char *description);
+	XMLEntryContainer(const char *typeName, const char *description, bool required = true);
 	virtual ~XMLEntryContainer();
 
 	void addChildXMLEntry(const char *name1, XMLEntry *entry1);
@@ -167,12 +124,113 @@ public:
 	// XMLEntry
 	virtual bool readXML(XMLNode *node);
 	virtual void writeXML(XMLNode *node);
-	virtual unsigned int getData() { return eDataRequired; }
+	virtual unsigned int getData() { return required_?eDataRequired:0; }
 	virtual void getTypeName(std::string &result) { result = xmlTypeName_; }
 	virtual void getDescription(std::string &result) { result = xmlDescription_; }
 	virtual XMLEntryDocumentInfo generateDocumentation(XMLEntryDocumentGenerator &generator);
 protected:
+	std::list<std::pair<std::string, XMLEntry *> > xmlEntryChildrenList_;
 	std::map<std::string, XMLEntry *> xmlEntryChildren_;
+	const char *xmlTypeName_, *xmlDescription_;
+	bool required_;
+};
+
+template <class T>
+class XMLEntryTypeChoice : public XMLEntry
+{
+public:
+	XMLEntryTypeChoice(const char *typeName, const char *description) :
+		XMLEntry(),
+		xmlTypeName_(typeName), xmlDescription_(description), 
+		value_(0)
+	{
+	}
+	virtual ~XMLEntryTypeChoice()
+	{
+		delete value_;
+		value_ = 0;
+	}
+
+	std::string &getChoiceType() { return type_; }
+	T *getValue() { return value_; }
+	virtual T *createXMLEntry(const std::string &type) = 0;
+	virtual void getAllTypes(std::set<std::string> &allTypes) = 0;
+
+	// XMLEntry
+	virtual unsigned int getData() { return eDataRequired; }
+	virtual void getTypeName(std::string &result) { result = xmlTypeName_; }
+	virtual void getDescription(std::string &result) { result = xmlDescription_; }
+
+	virtual bool readXML(XMLNode *node)
+	{
+		if (!node->getNamedParameter("type", type_)) 
+		{
+			return node->returnError(S3D::formatStringBuffer(
+				"Failed to find a required type attribute"));;
+		}
+		value_ = createXMLEntry(type_);
+		if (!value_)
+		{
+			return node->returnError(S3D::formatStringBuffer(
+				"Failed to create the type : \"%s\"", type_.c_str()));
+		}
+		std::set<std::string> allTypes; // Don't cache as it would use memory for every instance of this class
+		getAllTypes(allTypes);
+		if (allTypes.find(type_) == allTypes.end())
+		{
+			return node->returnError(S3D::formatStringBuffer(
+				"Failed to create the type not specified as a type : \"%s\"", type_.c_str()));
+		}
+		if (!value_->readXML(node)) return false;
+
+		return true;
+	}
+	virtual void writeXML(XMLNode *node)
+	{
+		node->addParameter(new XMLNode("type", type_, XMLNode::XMLParameterType));
+		value_->writeXML(node);
+	}
+	virtual XMLEntryDocumentInfo generateDocumentation(XMLEntryDocumentGenerator &generator)
+	{
+		XMLEntryDocumentInfo info;
+		if (generator.hasType(xmlTypeName_)) return info;
+
+		std::string typeType, typeTypeConverted,
+			typeDescription, typeDescriptionConverted;
+		getTypeName(typeType);
+		getDescription(typeDescription);
+		XMLNode::removeSpecialChars(typeDescription, typeDescriptionConverted);
+		
+		FileTemplateVariables *mainVariables = new FileTemplateVariables();
+		mainVariables->addVariableValue("TYPE_NAME", typeType.c_str());
+		mainVariables->addVariableValue("TYPE_DESCRIPTION", typeDescriptionConverted.c_str());
+
+		std::set<std::string> allTypes; 
+		getAllTypes(allTypes);
+		std::set<std::string>::iterator itor = allTypes.begin(), end = allTypes.end();
+		for (;itor!=end;++itor)
+		{
+			T *tmpValue = createXMLEntry(itor->c_str());
+			XMLEntryDocumentInfo childInfo = tmpValue->generateDocumentation(generator);
+			FileTemplateVariables *childVariables = mainVariables->addLoopVariable("CHILD");
+			std::string childTypeName, childTypeNameConverted, childDescription;
+			tmpValue->getTypeName(childTypeName);
+			tmpValue->getDescription(childDescription);
+			generator.getTypeReference(typeType, childTypeName, childTypeNameConverted);
+			bool required = (tmpValue->getData() & eDataRequired) != 0;
+
+			childVariables->addVariableValue("CHILD_TYPE_ATTRIBUTE", itor->c_str());
+			childVariables->addVariableValue("CHILD_TYPE", childTypeNameConverted.c_str());
+			childVariables->addVariableValue("CHILD_DESCRIPTION", childDescription.c_str());
+			childVariables->addVariableValue("CHILD_OPTIONAL", required?"false":"true");
+			delete tmpValue;
+		}
+		generator.addType(xmlTypeName_, "docs/XMLEntryTypeChoice.html", mainVariables);
+		return info;
+	}
+protected:
+	std::string type_;
+	T *value_;
 	const char *xmlTypeName_, *xmlDescription_;
 };
 
@@ -180,9 +238,10 @@ template <class T>
 class XMLEntryList : public XMLEntry
 {
 public:
-	XMLEntryList(const char *typeName, const char *description) :
-	  XMLEntry(),
-	  xmlTypeName_(typeName), xmlDescription_(description)
+	XMLEntryList(const char *description, int minimumListNumber = 1) :
+		XMLEntry(),
+		xmlDescription_(description),
+		minimumListNumber_(minimumListNumber)
 	{
 	}
 	virtual ~XMLEntryList()
@@ -201,8 +260,13 @@ public:
 	virtual T *createXMLEntry() = 0;
 
 	// XMLEntry
-	virtual unsigned int getData() { return 0; }
-	virtual void getTypeName(std::string &result) { result = xmlTypeName_; }
+	virtual unsigned int getData() { return (minimumListNumber_ > 0?eDataRequired:0); }
+	virtual void getTypeName(std::string &result) 
+	{ 
+		T *entry = createXMLEntry(); 
+		entry->getTypeName(result);
+		delete entry; 
+	}
 	virtual void getDescription(std::string &result) { result = xmlDescription_; }
 
 	virtual bool readXML(XMLNode *node)
@@ -224,9 +288,17 @@ public:
 			(*itor)->writeXML(node);
 		}
 	}
+	virtual XMLEntryDocumentInfo generateDocumentation(XMLEntryDocumentGenerator &generator)
+	{
+		T *newEntry = createXMLEntry();
+		XMLEntryDocumentInfo info = newEntry->generateDocumentation(generator);
+		delete newEntry;
+		return info;
+	}
 protected:
+	int minimumListNumber_;
 	std::list<T *> xmlEntryChildren_;
-	const char *xmlTypeName_, *xmlDescription_;
+	const char *xmlDescription_;
 };
 
 #endif

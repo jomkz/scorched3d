@@ -43,6 +43,12 @@ LandscapeEventAction *LandscapeEventActionChoice::createXMLEntry(const std::stri
 	return 0;
 }
 
+void LandscapeEventActionChoice::getAllTypes(std::set<std::string> &allTypes)
+{
+	allTypes.insert("fireweapon");
+	allTypes.insert("fireweaponfromgroup");
+}
+
 LandscapeEventAction::LandscapeEventAction(const char *name, const char *description) :
 	XMLEntryContainer(name, description)
 {

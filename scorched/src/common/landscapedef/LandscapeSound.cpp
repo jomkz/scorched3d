@@ -35,8 +35,7 @@ LandscapeSound::~LandscapeSound()
 }
 
 LandscapeSoundList::LandscapeSoundList() :
-	XMLEntryList<LandscapeSound>("LandscapeSoundList", 
-		"Specifies a list of actions that can be performed at various times during the simulation.")
+	XMLEntryList<LandscapeSound>("Specifies a list of actions that can be performed at various times during the simulation.")
 {
 }
 

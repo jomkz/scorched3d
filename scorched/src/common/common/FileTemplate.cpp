@@ -36,9 +36,15 @@ FileTemplateVariables::~FileTemplateVariables()
 			end2 = itor->second.end();
 		for (;itor2!=end2;++itor2)
 		{
-			delete *end2;
+			delete *itor2;
 		}
 	}
+}
+
+bool FileTemplateVariables::hasVariableName(const char *name)
+{
+	return loopVariableValues_.find(name) != loopVariableValues_.end() ||
+		variableValues_.find(name) != variableValues_.end();
 }
 
 void FileTemplateVariables::addVariableValue(const char *name, const char *value)
@@ -91,41 +97,6 @@ bool FileTemplateVariables::hasPermission(const char *permission)
 }
 
 bool processTemplate(FileTemplateVariables &variables, std::string &result);
-static bool performLoopSubst(FileTemplateVariables &variables, std::string &result)
-{
-	// Find start @@loop@@
-	size_t start1 = result.find("@@");
-	if (start1 == std::string::npos) return false;
-	size_t end1 = result.find("@@", start1+2);
-	if (end1 == std::string::npos) return false;
-	std::string loopVarName(result, start1 + 2, end1 - start1 - 2);
-	result.replace(start1, end1 - start1 + 2, "");
-
-	// Find end @@loop@@
-	size_t start2 = result.find(
-		S3D::formatStringBuffer("@@%s@@", loopVarName.c_str()), start1);
-	if (start2 == std::string::npos) return false;
-	result.replace(start2, 4 + loopVarName.size(), "");
-
-	std::string newTemplate = result.substr(start1, start2 - start1);
-	std::string loopResult = "";
-	for (;;)
-	{
-		FileTemplateVariables *loopVariables = variables.getLoopVariableValues(loopVarName.c_str());
-		if (!loopVariables) break;
-
-		std::string newTemplateCopy = std::string(newTemplate);
-		processTemplate(*loopVariables, newTemplateCopy);
-		loopResult.append(newTemplateCopy);
-
-		delete loopVariables; 
-	}
-
-	result.replace(start1, start2 - start1, loopResult);
-
-	return true;
-}
-
 static bool performPermissionSubst(FileTemplateVariables &variables, std::string &result)
 {
 	// Find start {{permission}}
@@ -142,10 +113,47 @@ static bool performPermissionSubst(FileTemplateVariables &variables, std::string
 	if (start2 == std::string::npos) return false;
 	result.replace(start2, 4 + perm.size(), "");
 
-	if (!variables.hasPermission(perm.c_str()))
+	std::string currentText = result.substr(start1, start2 - start1);
+	std::string newText = "";
+
+	size_t colon = perm.find(":");
+	if (colon == std::string::npos) return false;
+	std::string permOperator = perm.substr(0, colon);
+	std::string permName = perm.substr(colon+1);
+
+	if (permOperator == "perm")
 	{
-		result.replace(start1, start2 - start1, "");
+		if (variables.hasPermission(permName.c_str()))
+		{
+			newText = currentText;
+		}
 	}
+	else if (permOperator == "loop")
+	{
+		for (;;)
+		{
+			FileTemplateVariables *loopVariables = variables.getLoopVariableValues(permName.c_str());
+			if (!loopVariables) break;
+
+			std::string newTemplateCopy = std::string(currentText);
+			processTemplate(*loopVariables, newTemplateCopy);
+			newText.append(newTemplateCopy);
+
+			delete loopVariables; 
+		}
+	}
+	else if (permOperator == "exists")
+	{
+		if (variables.hasVariableName(permName.c_str()))
+		{
+			newText = currentText;
+		}
+	}
+	else
+	{
+		return false;
+	}
+	result.replace(start1, start2 - start1, newText);
 	return true;
 }
 
@@ -166,10 +174,6 @@ static bool performVariableSubst(FileTemplateVariables &variables, std::string &
 
 static bool processTemplate(FileTemplateVariables &variables, std::string &result)
 {
-	for (;;)
-	{
-		if (!performLoopSubst(variables, result)) break;
-	}
 	for (;;)
 	{
 		if (!performPermissionSubst(variables, result)) break;

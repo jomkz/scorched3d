@@ -33,6 +33,7 @@ public:
 	virtual ~LandscapeOptions();
 
 	virtual bool readXML(XMLNode *parentNode);
+	virtual void getDescription(std::string &result);
 
 	std::list<std::string> &getChangedOptionNames() { return changedOptionNames_; }
 protected:

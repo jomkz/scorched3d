@@ -55,6 +55,15 @@ LandscapeSoundPosition *LandscapeSoundPositionChoice::createXMLEntry(const std::
 	return 0;
 }
 
+void LandscapeSoundPositionChoice::getAllTypes(std::set<std::string> &allTypes)
+{
+	allTypes.insert("ambient");
+	allTypes.insert("absolute");
+	allTypes.insert("water");
+	allTypes.insert("group");
+	allTypes.insert("set");
+}
+
 LandscapeSoundPosition::LandscapeSoundPosition(const char *type, const char *description) :
 	XMLEntryContainer(type, description)
 {
