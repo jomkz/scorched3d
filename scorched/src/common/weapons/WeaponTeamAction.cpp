@@ -70,6 +70,7 @@ WeaponTeamAction::WeaponTeamAction() :
 		"Used to activate different events based on which team the firing tank is on.  "
 		"You can define different events for all 4 teams.")
 {
+	addChildXMLEntry("action", &actions_);
 }
 
 WeaponTeamAction::~WeaponTeamAction()

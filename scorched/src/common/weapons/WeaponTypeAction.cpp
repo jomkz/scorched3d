@@ -60,6 +60,7 @@ WeaponTypeAction::WeaponTypeAction() :
 	WeaponCallback("WeaponTypeAction", 
 		"Used to trigger different events based on which tank type the player is using.")
 {
+	addChildXMLEntry("action", &actions_);
 }
 
 WeaponTypeAction::~WeaponTypeAction()

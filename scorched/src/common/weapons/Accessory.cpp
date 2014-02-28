@@ -72,6 +72,7 @@ Accessory::Accessory(unsigned int accessoryId) :
 	addChildXMLEntry("positionselection", &positionSelect_, "positionselectionlimit", &positionSelectLimit_);
 	addChildXMLEntry("armslevel", &armsLevel_);
 	addChildXMLEntry("freemarketlimits", &freemarketLimits_);
+	addChildXMLEntry("accessoryaction", &accessoryAction_);
 }
 
 Accessory::~Accessory()

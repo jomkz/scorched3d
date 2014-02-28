@@ -29,15 +29,12 @@
     <hr/>
 
     <p>
-      <span class='tag'>&lt;[[TYPE_NAME]]&gt;</span><br/>
       {{loop:TAG}}
-      &nbsp;&nbsp;&nbsp;&nbsp;
         <a class='tag' id='XML_[[TAG_NAME]]' href='#[[TAG_NAME]]'>&lt;[[TAG_NAME]]{{exists:TAG_CHOICE}}&nbsp;<span class='type'>type='...'</span>{{exists:TAG_CHOICE}}&gt;</a>
           <span class='content'>&nbsp;[[TAG_TYPE]]</span>&nbsp;
         <a class='tag' href='#[[TAG_NAME]]'>&lt;/[[TAG_NAME]]&gt;</a>
         {{exists:TAG_OPTIONS}}&nbsp;<span class='option'>&lt;!-- [[TAG_OPTIONS]] --&gt;</span>{{exists:TAG_OPTIONS}}<br/>
       {{loop:TAG}}
-      <span class='tag'>&lt;/[[TYPE_NAME]]&gt;</span><br/>
     </p>
     
     <hr/>

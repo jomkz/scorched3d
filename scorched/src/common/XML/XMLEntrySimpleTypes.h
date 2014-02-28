@@ -147,6 +147,7 @@ public:
 		XMLEntryEnum::EnumEntry enums[]);
 	virtual ~XMLEntryEnum();
 
+	virtual void getTypeName(std::string &result) { result = "string"; }
 	virtual bool setValue(int value);
 	virtual void getExtraDescription(std::string &description);
 

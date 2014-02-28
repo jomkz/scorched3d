@@ -35,7 +35,7 @@ static XMLEntryEnum::EnumEntry shieldMovementEnum[] =
 {
 	{ "ShieldMovementAll", Shield::ShieldMovementAll },
 	{ "ShieldMovementNone", Shield::ShieldMovementNone },
-	{ "ShieldMovementSame", Shield::ShieldMovementSame },
+	{ "ShieldMovementTeamSame", Shield::ShieldMovementSame },
 	{ "ShieldMovementTeamRed", Shield::ShieldMovementTeamRed },
 	{ "ShieldMovementTeamBlue", Shield::ShieldMovementTeamBlue },
 	{ "ShieldMovementTeamGreen", Shield::ShieldMovementTeamGreen },
@@ -49,8 +49,8 @@ Shield::Shield(const char *typeName, const char *description) :
            "This is also adjustable in the projectile by <shieldhurtfactor> in WeaponProjectile"),
 	penetration_("How much damage makes it through to the shield"),
 	power_("The amount of damage the shield can absorb."),
-	laserProof_("If a shield will stop lasers", 0, ShieldLaserProofNone, laserProofEnum), 
-	movementProof_("If a shield will stop others from moving through it", 0, ShieldMovementAll, shieldMovementEnum)
+	laserProof_("If a shield will stop lasers.  Total proofing prevents any damage from the laser should it hit the shield.", 0, ShieldLaserProofNone, laserProofEnum), 
+	movementProof_("If a shield will allow others to move (drive) through it", 0, ShieldMovementAll, shieldMovementEnum)
 {
 	addChildXMLEntry("removepower", &removePower_);
 	addChildXMLEntry("penetration", &penetration_);

@@ -48,10 +48,13 @@ public:
 	bool hasType(const std::string &typeName);
 	void getTypeReference(const std::string &referingType, const std::string &typeName, std::string &resultType);
 
-	FileTemplateVariables *addTypeTags(XMLEntry *coreType, std::list<std::pair<std::string, XMLEntry *> > &children);
+	void addTypeTags(XMLEntry *coreType, std::list<std::pair<std::string, XMLEntry *> > &children,
+		const std::string &sourceTypeName, const std::string &sourceFileName);
 private:
 	struct TypeEntry
 	{
+		TypeEntry() : variables(0) { }
+
 		std::string fileName;
 		FileTemplateVariables *variables;
 		std::list<std::string> typeReferences;
@@ -228,9 +231,7 @@ public:
 			children.push_back(std::pair<std::string, XMLEntry *>(*itor, tmpValue));
 		}
 
-		FileTemplateVariables *mainVariables = generator.addTypeTags(this, children);
-		generator.addType(xmlTypeName_, "docs/XMLEntryTypeChoice.html", mainVariables);
-
+		generator.addTypeTags(this, children, xmlTypeName_, "docs/XMLEntryTypeChoice.html");
 		return info;
 	}
 protected:

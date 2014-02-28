@@ -40,7 +40,7 @@ XMLEntryDocumentGenerator::~XMLEntryDocumentGenerator()
 
 void XMLEntryDocumentGenerator::getTypeReference(const std::string &referingType, const std::string &typeName, std::string &resultType)
 {
-	if (typeName == "number" || typeName == "string" || typeName == "boolean" || typeName =="vector")
+	if (typeName == "number" || typeName == "string" || typeName == "boolean" || typeName =="vector" || typeName == "number expression")
 	{
 		resultType = typeName;
 		return;
@@ -129,8 +129,9 @@ void XMLEntryDocumentGenerator::writeDocumentation()
 	FileTemplate::writeTemplateToFile("docs/index.html", indexVariables, documentLocation_ + "/index.html");	
 }
 
-FileTemplateVariables *XMLEntryDocumentGenerator::addTypeTags(XMLEntry *coreType,
-	std::list<std::pair<std::string, XMLEntry *> > &children)
+void XMLEntryDocumentGenerator::addTypeTags(XMLEntry *coreType,
+	std::list<std::pair<std::string, XMLEntry *> > &children,
+	const std::string &sourceTypeName, const std::string &sourceFileName)
 {
 	std::string typeType, typeTypeConverted,
 		typeDescription, typeDescriptionConverted;
@@ -141,6 +142,7 @@ FileTemplateVariables *XMLEntryDocumentGenerator::addTypeTags(XMLEntry *coreType
 	FileTemplateVariables *mainVariables = new FileTemplateVariables();
 	mainVariables->addVariableValue("TYPE_NAME", typeType.c_str());
 	mainVariables->addVariableValue("TYPE_DESCRIPTION", typeDescriptionConverted.c_str());
+	addType(sourceTypeName, sourceFileName, mainVariables);
 
 	std::list<std::pair<std::string, XMLEntry *> >::iterator itor = children.begin(), end = children.end();
 	for (;itor!=end; itor++)
@@ -177,7 +179,6 @@ FileTemplateVariables *XMLEntryDocumentGenerator::addTypeTags(XMLEntry *coreType
 		}
 		if (!childOptions.empty()) tagVariables->addVariableValue("TAG_OPTIONS", childOptions.c_str());
 	}
-	return mainVariables;
 }
 
 XMLEntry::XMLEntry()
@@ -376,7 +377,6 @@ XMLEntryDocumentInfo XMLEntryContainer::generateDocumentation(XMLEntryDocumentGe
 {
 	XMLEntryDocumentInfo info;
 	if (generator.hasType(xmlTypeName_)) return info;
-	FileTemplateVariables *mainVariables = generator.addTypeTags(this, xmlEntryChildrenList_);
-	generator.addType(xmlTypeName_, "docs/XMLEntryContainer.html", mainVariables);
+	generator.addTypeTags(this, xmlEntryChildrenList_, xmlTypeName_, "docs/XMLEntryContainer.html");
 	return info;
 }
