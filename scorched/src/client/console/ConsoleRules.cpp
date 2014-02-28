@@ -291,12 +291,12 @@ void ConsoleRules::parseAddLine(int position, const char *line,
 	newSplit.valueString = line;
 	newSplit.position = position;
 
-	if (strcmp(line, "on") == 0)
+	if (strcmp(line, "true") == 0)
 	{
 		newSplit.type = ConsoleRuleTypeBoolean;
 		newSplit.valueBool = true;
 	}
-	else if (strcmp(line, "off") == 0)
+	else if (strcmp(line, "false") == 0)
 	{
 		newSplit.type = ConsoleRuleTypeBoolean;
 		newSplit.valueBool = false;

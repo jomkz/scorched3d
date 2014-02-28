@@ -45,7 +45,6 @@ public:
 	UniqueIdStore &getIdStore();
 protected:
 	NetBuffer recvBuffer_;
-	boost::thread *remoteConnectionThread_;
 	UniqueIdStore *idStore_;
 	unsigned int totalBytes_;
 

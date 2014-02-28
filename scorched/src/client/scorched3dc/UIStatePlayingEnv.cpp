@@ -157,7 +157,7 @@ void UIStatePlayingEnv::create()
 	Hydrax::Module::ProjectedGrid *hydraxModule = new Hydrax::Module::ProjectedGrid(// Hydrax parent pointer
 		hydraX_,
 		// Noise module
-		new Hydrax::Noise::Perlin(/*Generic one*/),
+		new Hydrax::Noise::Perlin(true),
 		// Base plane
 		Ogre::Plane(Ogre::Vector3(0,1,0), Ogre::Vector3(0,0,0)),
 		// Normal mode

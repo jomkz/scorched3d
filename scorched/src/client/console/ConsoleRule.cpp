@@ -58,7 +58,7 @@ std::string ConsoleRule::toString()
 		switch (param.getType())
 		{
 		case ConsoleRuleTypeBoolean:
-			result.append("<").append(param.getName()).append(":on|off>");
+			result.append("<").append(param.getName()).append(":true|false>");
 			break;
 		case ConsoleRuleTypeNumber:
 			result.append("<").append(param.getName()).append(":number>");
@@ -90,7 +90,15 @@ std::string ConsoleRule::toString(std::vector<ConsoleRuleValue> &values)
 		switch (param.getType())
 		{
 		case ConsoleRuleTypeBoolean:
-			result.append(value.valueString.c_str());
+			if (value.valueString.length() <= 4 &&
+				0 == _strnicmp(value.valueString.c_str(), "true", value.valueString.length())) {
+				result.append("true");
+			}
+			else if (value.valueString.length() <= 5 &&
+				0 == _strnicmp(value.valueString.c_str(), "false", value.valueString.length()))
+			{
+				result.append("false");
+			}
 			break;
 		case ConsoleRuleTypeNumber:
 			result.append(value.valueString.c_str());
@@ -120,7 +128,7 @@ std::string ConsoleRule::valuesToString(std::vector<ConsoleRuleValue> &values)
 		switch (value.type)
 		{
 		case ConsoleRuleTypeBoolean:
-			result.append("<on|off>");
+			result.append("<true|false>");
 			break;
 		case ConsoleRuleTypeNumber:
 			result.append("<number>");
@@ -191,15 +199,11 @@ bool ConsoleRule::matchesPartialParams(std::vector<ConsoleRuleValue> &values)
 		case ConsoleRuleTypeString:
 			break;
 		case ConsoleRuleTypeBoolean:
-			if (value.valueString.length() == 1 &&
-				0 != _strnicmp(value.valueString.c_str(), "o", 1)) return false;
-			else if (value.valueString.length() == 2 &&
-				(0 != _strnicmp(value.valueString.c_str(), "on", 2) &&
-				0 != _strnicmp(value.valueString.c_str(), "of", 2))) return false;
-			else if (value.valueString.length() == 3 &&
-				0 != _strnicmp(value.valueString.c_str(), "off", 3)) return false;
-			else if (value.valueString.length() > 3) return false;
-			return true;
+			if (value.valueString.length() <= 4 &&
+				0 == _strnicmp(value.valueString.c_str(), "true", value.valueString.length())) return true;
+			if (value.valueString.length() <= 5 &&
+				0 == _strnicmp(value.valueString.c_str(), "false", value.valueString.length())) return true;
+			return false;
 			break;
 		case ConsoleRuleTypeNumber:
 			if (value.type != ConsoleRuleTypeNumber) return false;

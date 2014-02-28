@@ -61,7 +61,7 @@
 #include <lang/LangResource.h>
 
 ClientStateInitialize::ClientStateInitialize(ComsMessageHandler &comsMessageHandler) :
-	remoteConnectionThread_(0), totalBytes_(0)
+	totalBytes_(0)
 {
 	comsConnectAuthMessageTypeAdapter_ =
 		new ComsMessageHandlerIAdapter<ClientStateInitialize>(
