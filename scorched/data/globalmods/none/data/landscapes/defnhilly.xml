@@ -1,0 +1,32 @@
+<defn>
+	<minplayers>0</minplayers>
+	<maxplayers>24</maxplayers>
+	<landscapewidth>256</landscapewidth>
+	<landscapeheight>256</landscapeheight>
+	<roof type="sky"></roof>
+	<tankstart type="height">
+		<startcloseness>20</startcloseness>
+		<height><min>5.5</min><max>70</max></height>
+		<startmask></startmask>
+	</tankstart>
+	<heightmap type="generate">
+		<mask></mask>
+		<landhills>
+			<min>50</min><max>70</max>
+		</landhills>
+		<landheight>
+			<min>50</min><max>70</max>
+		</landheight>
+		<landpeakwidthx>
+			<min>10</min><max>50</max>
+		</landpeakwidthx>
+		<landpeakwidthy>
+			<min>-10</min><max>10</max>
+		</landpeakwidthy>
+		<landpeakheight>
+			<min>0.5</min><max>1.5</max>
+		</landpeakheight>
+		<landsmoothing>0.04</landsmoothing>
+		<levelsurround>true</levelsurround>
+	</heightmap>
+</defn>

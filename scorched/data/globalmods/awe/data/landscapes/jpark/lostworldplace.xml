@@ -1,0 +1,100 @@
+
+<place>
+
+		<placement type="mask">
+  <numobjects>1500</numobjects>
+  <mask>data/landscapes/jpark/treemask.png</mask>
+    <mincloseness>0</mincloseness>
+
+      <minheight>8</minheight>
+      <maxheight>35</maxheight>
+  <minslope>0.5</minslope>
+           <xsnap>1</xsnap>
+  <ysnap>1</ysnap>
+   <object type='target'>
+                  <model type="MilkShape">data/meshes/jpark/fern2.txt</model>
+                  <modelscale>0.04</modelscale>
+      <nocollision>true</nocollision>
+      <modelscalediff>0.04</modelscalediff>
+                  <modelrotationsnap>1</modelrotationsnap>
+                  <modelbrightness>-1.0</modelbrightness>
+                  <displayshadow>false</displayshadow>
+                  <nodamageburn>true</nodamageburn>
+                  <displaydamage>false</displaydamage>
+                  <drawshadow>false</drawshadow>
+                  <groupname>fern</groupname>
+                  <nofalling>false</nofalling>
+                  <flattendestroy>true</flattendestroy>
+               </object>
+</placement>
+		
+
+ 	<placement type="mask">
+
+  <numobjects>300</numobjects>
+
+  <mask>data/landscapes/jpark/treemask.png</mask>
+    <mincloseness>0</mincloseness>
+
+      <minheight>8</minheight>
+      <maxheight>35</maxheight>
+  <minslope>0.5</minslope>
+           <xsnap>1</xsnap>
+
+  <ysnap>1</ysnap>
+
+
+   <object type='target'>
+                  <model type="MilkShape">data/meshes/trees/superpalm2.txt</model>
+                  <modelscale>0.23</modelscale>
+                  <modelscalediff>0.13</modelscalediff>
+                  <modelrotationsnap>1</modelrotationsnap>
+                  <modelbrightness>-1.0</modelbrightness>
+                  <displayshadow>false</displayshadow>
+                  <nodamageburn>true</nodamageburn>
+                  <displaydamage>false</displaydamage>
+                  <drawshadow>false</drawshadow>
+                  <groupname>trees</groupname>
+                  <flattendestroy>false</flattendestroy>
+               </object>
+</placement>
+
+
+<placement type="mask">
+
+  <numobjects>40</numobjects>
+
+  <mask>data/landscapes/jpark/treemask.png</mask>
+    <mincloseness>0</mincloseness>
+
+      <minheight>8</minheight>
+      <maxheight>35</maxheight>
+  <minslope>0.5</minslope>
+           <xsnap>1</xsnap>
+
+  <ysnap>1</ysnap>
+
+
+   <object type='target'>
+                  <model type="MilkShape">data/meshes/jpark/nest.txt</model>
+                      <modelscale>0.0078</modelscale>
+                  <modelscalediff>0</modelscalediff>
+                  <modelrotationsnap>1</modelrotationsnap>
+                  <modelbrightness>-1.0</modelbrightness>
+                  <displayshadow>false</displayshadow>
+                  <nodamageburn>true</nodamageburn>
+                  <displaydamage>false</displaydamage>
+                  <drawshadow>false</drawshadow>
+                  <groupname>dino nest</groupname>
+                  <flattendestroy>false</flattendestroy>
+               </object>
+</placement>
+
+
+
+
+
+</place>
+
+
+

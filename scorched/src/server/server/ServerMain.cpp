@@ -70,7 +70,7 @@ static void serverMain(ProgressCounter *counter)
 		ServerParams::instance()->getWriteFullOptions());
 
 	// Create the server states
-	if (!ScorchedServer::instance()->startServer(
+	if (!ScorchedServer::startServer(
 		settings,
 		false, counter)) exit(64);
 
@@ -153,6 +153,51 @@ bool serverLoop(fixed timeDifference)
 	return processed;
 }
 
+static boost::thread *clientServerThread;
+static bool clientServerStopped = true;
+static void clientServerLoop(ScorchedServerSettings *settings, ProgressCounter *progressCounter)
+{
+	if (!ScorchedServer::startServer(
+		*settings,
+		true,
+		progressCounter)) 
+	{
+		S3D::dialogExit("Scorched3D", 
+			S3D::formatStringBuffer("Failed to start server"),
+			false);
+		return;
+	}
+
+	serverTimer.reset();
+	while (!clientServerStopped)
+	{
+		unsigned int ticksDifference = serverTimer.getTicksDifference();
+		fixed timeDifference(true, ticksDifference * 10);
+		if (!serverLoop(timeDifference))
+		{
+			boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+		}
+	}
+	delete settings;
+	delete progressCounter;
+	ScorchedServer::instance()->stopServer();
+}
+
+void startClientServer(ScorchedServerSettings *settings, ProgressCounter *progressCounter)
+{
+	DIALOG_ASSERT(clientServerStopped && !clientServerThread);
+	clientServerStopped = false;
+	clientServerThread = new boost::thread(clientServerLoop, settings, progressCounter);
+}
+
+void stopClientServer()
+{
+	clientServerStopped = true;
+	clientServerThread->join();
+	delete clientServerThread;
+	clientServerThread = 0;
+}
+
 void consoleServer()
 {
 	ServerConsoleProgressCounter::instance();
@@ -160,7 +205,7 @@ void consoleServer()
 	ServerCommon::startFileLogger(ServerParams::instance()->getServerFile());
 	serverMain(ServerConsoleProgressCounter::instance()->getProgressCounter());
 
-	serverTimer.getTicksDifference();
+	serverTimer.reset();
 	for (;;)
 	{
 		unsigned int ticksDifference = serverTimer.getTicksDifference();

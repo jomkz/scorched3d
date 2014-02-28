@@ -424,7 +424,6 @@
     <ClCompile Include="..\client\ClientConnectionRejectHandler.cpp" />
     <ClCompile Include="..\client\ClientGameStoppedHandler.cpp" />
     <ClCompile Include="..\client\ClientHandlers.cpp" />
-    <ClCompile Include="..\client\ClientMain.cpp" />
     <ClCompile Include="..\client\ClientMessageHandler.cpp" />
     <ClCompile Include="..\client\ClientOperationHandler.cpp" />
     <ClCompile Include="..\client\ClientOptions.cpp" />
@@ -871,7 +870,6 @@
     <ClInclude Include="..\client\ClientConnectionRejectHandler.h" />
     <ClInclude Include="..\client\ClientGameStoppedHandler.h" />
     <ClInclude Include="..\client\ClientHandlers.h" />
-    <ClInclude Include="..\client\ClientMain.h" />
     <ClInclude Include="..\client\ClientMessageHandler.h" />
     <ClInclude Include="..\client\ClientOperationHandler.h" />
     <ClInclude Include="..\client\ClientOptions.h" />

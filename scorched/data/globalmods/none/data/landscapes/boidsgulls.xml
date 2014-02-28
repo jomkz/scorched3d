@@ -1,0 +1,52 @@
+<boids>
+	<placement type="bounds">
+		<count>20</count>
+		<minbounds><A>0</A><B>0</B><C>5</C></minbounds>
+		<maxbounds><A>255</A><B>255</B><C>25</C></maxbounds>
+		<object type='target'>
+			<model type='MilkShape'>data/meshes/seagull/seagull.txt</model>
+			<nocollision>true</nocollision>
+			<displayshadow>false</displayshadow>
+			<groupname>boids-gulls</groupname>
+      <groupname>camera</groupname>
+			<modelscale>0.01</modelscale>
+		</object>
+	</placement>
+	<movement type="boids">
+		<minbounds><A>0</A><B>0</B><C>5</C></minbounds>
+		<maxbounds><A>255</A><B>255</B><C>25</C></maxbounds>
+		<maxvelocity>1.0</maxvelocity>
+		<maxacceleration>1.0</maxacceleration>
+		<cruisedistance>1.0</cruisedistance>
+		<groupname>boids-gulls</groupname>
+	</movement>
+	<sound>
+		<position type='set'>
+			<maxsounds>5</maxsounds>
+			<name>boids-gulls</name>
+		</position>
+		<timing type='repeat'>
+			<min>0</min>
+			<max>4</max>
+		</timing>
+		<sound type='file'>
+			<file>data/wav/misc/gull1.wav</file>
+			<file>data/wav/misc/gull2.wav</file>
+			<file>data/wav/misc/gull4.wav</file>
+			<file>data/wav/misc/gull5.wav</file>
+			<gain>0.3</gain>
+		</sound>
+	</sound>
+	<!--
+	<event>
+		<condition type="time">
+			<mintime>0.2</mintime>
+			<maxtime>0.4</maxtime>
+			<singletimeonly>false</singletimeonly>
+		</condition>
+		<action type="fireweapon">
+			<weapon>BoidsLaser</weapon>
+		</action>
+	</event>
+	-->
+</boids>

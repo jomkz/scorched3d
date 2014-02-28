@@ -1,0 +1,8 @@
+  <music>
+	<music>
+		<playstate>playing</playstate>
+		<playstate>wait</playstate>
+		<file>data/meshes/jpark/sounds/jpark_theme.ogg</file>
+		<gain>1</gain>
+	</music>
+	</music>

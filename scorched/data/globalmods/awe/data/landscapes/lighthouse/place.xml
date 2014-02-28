@@ -1,0 +1,37 @@
+
+<place>
+		<placement type='direct'>
+			<position>
+				<position>
+					<A>256</A>
+					<B>256</B>
+					<C>0</C>
+				</position>
+			</position>
+		<object type='target'>
+		 <model type='MilkShape'>data/meshes/ww2/lighthouse.txt</model>
+		 <modelscale>0.15</modelscale>
+		 <modelrotationsnap>-1</modelrotationsnap>
+		 	<life>500</life>
+		 	 <nocollision>false</nocollision>
+      <size>
+        <A>3.5</A>
+        <B>3.5</B>
+        <C>18.3</C>
+      </size>
+      <boundingsphere>false</boundingsphere>
+                 <removeaction>lighthouseexp</removeaction>
+		  <flattenarea>0</flattenarea>
+		  <groupname>Light House</groupname>  
+		    <driveovertodestroy>false</driveovertodestroy> 
+		  <displayshadow>false</displayshadow>
+		   <displayhardwareshadow>false</displayhardwareshadow>
+                     <flattendestroy>true</flattendestroy>
+
+	     	</object>
+
+		</placement>
+</place>
+
+
+

@@ -46,7 +46,7 @@ bool Shield::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
 
 	// Get the collision sound
 	if (!accessoryNode->getNamedChild("collisionsound", collisionSound_)) return false;
-	if (!S3D::checkDataFile(S3D::formatStringBuffer("data/wav/%s", getCollisionSound()))) return false;
+	if (!S3D::checkDataFile(S3D::formatStringBuffer("%s", getCollisionSound()))) return false;
 
 	// Get the accessory color
 	XMLNode *colorNode = 0;

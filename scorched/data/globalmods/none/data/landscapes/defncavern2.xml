@@ -1,0 +1,26 @@
+<defn>
+	<minplayers>0</minplayers>
+	<maxplayers>24</maxplayers>
+	<landscapewidth>256</landscapewidth>
+	<landscapeheight>256</landscapeheight>
+  <tankstart type="height">
+    <startcloseness>20</startcloseness>
+    <height>
+      <min>5.5</min>
+      <max>60</max>
+    </height>
+    <startmask></startmask>
+  </tankstart>
+  <roof type="cavern">
+    <width>300</width>
+    <height>125</height>
+    <heightmap type="file">
+      <file>data/landscapes/circle.bmp</file>
+      <levelsurround>true</levelsurround>
+    </heightmap>
+  </roof>
+	<heightmap type="file">
+    	<file>data/landscapes/circle.bmp</file>
+    	<levelsurround>true</levelsurround>
+  </heightmap>
+</defn>

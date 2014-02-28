@@ -31,7 +31,7 @@ ServerLog *ServerLog::instance()
 
 ServerLog::ServerLog()
 {
-	Logger::addLogger(this);
+	Logger::addLogger(this, false);
 }
 
 ServerLog::~ServerLog()

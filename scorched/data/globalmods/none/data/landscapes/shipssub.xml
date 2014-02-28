@@ -1,0 +1,32 @@
+<shipgroups>
+	<placement type="count">
+		<count>2</count>
+		<object type='target'>
+			<model type='MilkShape'>data/meshes/sub/sub.txt</model>
+			<nocollision>true</nocollision>
+			<displayshadow>false</displayshadow>
+			<groupname>ships-sub</groupname>
+			<modelscale>0.035</modelscale>
+		</object>
+	</placement>
+	<movement type="ships">
+		<speed>0.03</speed>
+		<controlpoints>8</controlpoints>
+		<controlpointswidth>250</controlpointswidth>
+		<controlpointsheight>250</controlpointsheight>
+		<controlpointsrand>400</controlpointsrand>
+		<starttime>600</starttime>
+		<groupname>ships-sub</groupname>
+	</movement>
+  <event>
+    <condition type="time">
+      <mintime>10.0</mintime>
+      <maxtime>25.0</maxtime>
+      <singletimeonly>false</singletimeonly>
+    </condition>
+    <action type="fireweaponfromgroup">
+      <weapon>Fire At Tank</weapon>
+      <groupname>ships-sub</groupname>
+    </action>
+  </event>
+</shipgroups>

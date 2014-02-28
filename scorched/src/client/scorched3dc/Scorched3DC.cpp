@@ -1,6 +1,14 @@
 #include "StdAfx.h"
 #include "Scorched3DC.h"
 
+#include <common/Logger.h>
+#include <common/FileLogger.h>
+#include <client/ClientState.h>
+#include <client/ClientParams.h>
+#include <client/ScorchedClient.h>
+#include <net/NetInterface.h>
+#include <lang/Lang.h>
+
 static CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID)
 {
 	switch (buttonID)
@@ -243,6 +251,13 @@ bool Scorched3DC::quit(const CEGUI::EventArgs &e)
 	return true;
 }
 
+bool Scorched3DC::start(const CEGUI::EventArgs &e)
+{
+	ClientParams::instance()->setStartCustom(true);
+	ScorchedClient::instance()->getClientState().setState(ClientState::StateInitialize);
+	return true;
+}
+
 void Scorched3DC::createScene()
 {
 	// Create scene manager
@@ -281,12 +296,22 @@ void Scorched3DC::createScene()
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
 	CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
 
+	{
 	CEGUI::Window *quit = wmgr.createWindow("OgreTray/Button", "CEGUIDemo/QuitButton");
 	quit->setText("Quit");
 	quit->setSize(CEGUI::UVector2(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.05f, 0.0f)));
 	quit->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Scorched3DC::quit, this));
-
 	sheet->addChildWindow(quit);
+	}
+	{
+	CEGUI::Window *start = wmgr.createWindow("OgreTray/Button", "CEGUIDemo/StartButton");
+	start->setText("Start");
+	start->setPosition(CEGUI::UVector2(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.00f, 0.0f)));
+	start->setSize(CEGUI::UVector2(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.05f, 0.0f)));
+	start->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Scorched3DC::start, this));
+	sheet->addChildWindow(start);
+	}
+
 	CEGUI::System::getSingleton().setGUISheet(sheet);
 }
 
@@ -314,6 +339,14 @@ bool Scorched3DC::go()
 
 	createScene();
 
+	// Setup S3D logger
+	Logger::addLogger(new FileLogger("Scorched3D.log", ".", false), false);
+	Logger::log(S3D::formatStringBuffer("Scorched3D - Version %s (%s) - %s",
+		S3D::ScorchedVersion.c_str(), 
+		S3D::ScorchedProtocolVersion.c_str(), 
+		S3D::ScorchedBuildTime.c_str()));
+	ScorchedClient::startClient();
+
 	while(!quit_)
 	{
 		// Pump window messages for nice behaviour
@@ -324,12 +357,25 @@ bool Scorched3DC::go()
 			return false;
 		}
  
+		// Perform simulation
+		if (!ScorchedClient::instance()->getClientState().clientEventLoop()) 
+		{
+			quit_ = true;
+		}
+
 		// Render a frame
 		if(!ogreRoot_->renderOneFrame()) 
 		{
 			return false;
 		}
 	}
+
+	// When we get here we have exited the loop and are now shutting down
+	if (ScorchedClient::instance()->getContext().getNetInterfaceValid())
+	{
+		ScorchedClient::instance()->getNetInterface().disconnectAllClients();
+	}
+	Lang::instance()->saveUndefined();
 
 	return true;
 }

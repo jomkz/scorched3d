@@ -1,0 +1,19 @@
+<defn>
+	<minplayers>0</minplayers>
+	<maxplayers>24</maxplayers>
+	<landscapewidth>256</landscapewidth>
+	<landscapeheight>256</landscapeheight>
+	<roof type="sky"></roof>
+	<tankstart type="height">
+		<startcloseness>20</startcloseness>
+		<height><min>8</min><max>50</max></height>
+		<startmask></startmask>
+	</tankstart>
+	<heightmap type="file">
+		<file>data/landscapes/apoccity.bmp</file>
+		<levelsurround>true</levelsurround>
+	</heightmap>
+	<placements>
+		<placement>data/landscapes/placecityport.xml</placement>
+	</placements>
+</defn>

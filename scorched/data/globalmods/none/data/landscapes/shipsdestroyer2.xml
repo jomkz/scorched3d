@@ -1,0 +1,42 @@
+<shipgroups>
+	<placement type="count">
+		<count>2</count>
+		<object type='target'>
+			<model type='MilkShape'>data/meshes/destroyer/destroyer.txt</model>
+			<nocollision>true</nocollision>
+			<displayshadow>false</displayshadow>
+			<groupname>ships-destroyer2</groupname>
+			<modelscale>0.13</modelscale>
+		</object>
+	</placement>
+	<placement type="count">
+		<count>1</count>
+		<object type='target'>
+			<model type='MilkShape'>data/meshes/carrier/carrier.txt</model>
+			<nocollision>true</nocollision>
+			<displayshadow>false</displayshadow>
+			<groupname>ships-destroyer2</groupname>
+			<modelscale>0.04</modelscale>
+		</object>
+	</placement>
+	<movement type="ships">
+		<speed>0.01</speed>
+		<controlpoints>8</controlpoints>
+		<controlpointswidth>250</controlpointswidth>
+		<controlpointsheight>250</controlpointsheight>
+		<controlpointsrand>400</controlpointsrand>
+		<starttime>600</starttime>
+		<groupname>ships-destroyer2</groupname>
+	</movement>
+  <event>
+    <condition type="time">
+      <mintime>10.0</mintime>
+      <maxtime>25.0</maxtime>
+      <singletimeonly>false</singletimeonly>
+    </condition>
+    <action type="fireweaponfromgroup">
+      <weapon>Fire At Tank</weapon>
+      <groupname>ships-destroyer2</groupname>
+    </action>
+  </event>
+</shipgroups>

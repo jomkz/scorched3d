@@ -58,37 +58,27 @@
 #include <net/NetServerTCP3.h>
 #include <net/NetLoopBack.h>
 
-#ifndef S3D_SERVER
-#include <client/ClientParams.h>
-#include <client/ScorchedClient.h>
-#include <console/ConsoleRuleMethodIAdapter.h>
-#endif
-
 ScorchedServer *ScorchedServer::instance_ = 0;
 static ScorchedServer *instanceLock = 0;
+static boost::thread::id thread_id;
 bool ScorchedServer::started_ = false;
 TargetSpace *ScorchedServer::targetSpace_ = new TargetSpace();
 
 ScorchedServer *ScorchedServer::instance()
 {
+	DIALOG_ASSERT(instance_);
+	DIALOG_ASSERT(thread_id == boost::this_thread::get_id());
 	return instance_;
 }
 
 bool ScorchedServer::startServer(const ScorchedServerSettings &settings, 
 	bool local, ProgressCounter *counter)
 {
-#ifndef S3D_SERVER
-	if (ClientParams::instance()->getConnectedToServer() &&
-		ScorchedClient::instance()->getTargetContainer().getCurrentDestinationId() != 0)
-	{
-		DIALOG_ASSERT(0);
-	}
-#endif
-
 	stopServer();
 
 	DIALOG_ASSERT(!instanceLock);
 	instanceLock = new ScorchedServer;
+	thread_id = boost::this_thread::get_id();
 	instance_ = instanceLock;
 	instanceLock = 0;
 
@@ -260,18 +250,6 @@ bool ScorchedServer::startServerInternal(const ScorchedServerSettings &settings,
 		getEventController().addEventHandler(eventHandlerDataBase_);
 	}
 	getEventController().addEventHandler(new EventHandlerAchievementNumberRankKills(eventHandlerDataBase_));
-
-#ifndef S3D_SERVER
-	new ConsoleRuleMethodIAdapter<ActionController>(
-		&getActionController(), 
-		&ActionController::logActions, "ActionsLog");
-	new ConsoleRuleMethodIAdapter<ActionController>(
-		&getActionController(), 
-		&ActionController::startActionProfiling, "ActionsProfilingStart");
-	new ConsoleRuleMethodIAdapter<ActionController>(
-		&getActionController(), 
-		&ActionController::stopActionProfiling, "ActionsProfilingStop");
-#endif
 
 	return true;
 }

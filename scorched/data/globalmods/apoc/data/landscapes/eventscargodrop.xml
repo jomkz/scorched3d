@@ -1,0 +1,12 @@
+<events>
+	<event>
+		<condition type="time">
+			<mintime>8.0</mintime>
+			<maxtime>24.0</maxtime>
+			<singletimeonly>false</singletimeonly>
+		</condition>
+		<action type="fireweapon">
+			<weapon>CargoDrop</weapon>
+		</action>
+	</event>
+</events>

@@ -76,13 +76,14 @@ bool Accessory::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode
 	// Get the accessory icon
 	if (accessoryNode->getNamedChild("icon", iconName_, false))
 	{
-		if (!S3D::checkDataFile(S3D::formatStringBuffer("data/textures/wicons/%s", getIconName()))) return false;
+		// TODO
+		//if (!S3D::checkDataFile(S3D::formatStringBuffer("data/textures/wicons/%s", getIconName()))) return false;
 	}
 
 	// Get the accessory sound 
 	if (accessoryNode->getNamedChild("activationsound", activationSound_, false))
 	{
-		if (!S3D::checkDataFile(S3D::formatStringBuffer("data/wav/%s", getActivationSound()))) return false;
+		if (!S3D::checkDataFile(S3D::formatStringBuffer("%s", getActivationSound()))) return false;
 	}
 
 	// Get the accessory bundle

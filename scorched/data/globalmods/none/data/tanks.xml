@@ -1,0 +1,721 @@
+<tanks>
+	<tank>
+		<name>Random</name>
+		<model type="ase">
+			<mesh>data/tanks/question.ase</mesh>
+			<skin>data/tanks/question.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Cannon</name>
+		<catagory>Artillery</catagory>
+		<team>1</team>
+		<model type="MilkShape">data/tanks/cannon/cannon.txt</model>
+	</tank>	
+	<tank>
+		<name>Tiger II</name>
+		<catagory>Tank</catagory>
+		<team>2</team>
+		<model type="MilkShape">data/tanks/tiger2/tiger2.txt</model>
+	</tank>	
+	<tank>
+		<name>Sonic Hedgehog</name>
+		<catagory>Humour</catagory>
+		<model type="MilkShape">data/tanks/sonic/sonic.txt</model>
+		<projectilemodel type="MilkShape">data/accessories/sonicring/sonicring.txt</projectilemodel>
+	</tank>
+	<tank>
+		<name>Bender</name>
+		<catagory>Humour</catagory>
+		<model type="MilkShape">data/tanks/bender/bender.txt</model>
+		<projectilemodel type="MilkShape">data/accessories/beer_bottle/bottle.txt</projectilemodel>
+	</tank>
+	<tank>
+		<name>Kenny</name>
+		<catagory>Humour</catagory>
+		<model type="MilkShape">data/tanks/kenny2.txt</model>
+	</tank>
+	<tank>
+		<name>Shark</name>
+		<catagory>Humour</catagory>
+		<model type="MilkShape">data/tanks/shark.txt</model>
+	</tank>
+	<tank>
+		<name>Gorilla</name>
+		<catagory>Humour</catagory>
+		<model type="MilkShape">data/tanks/gorilla/gorilla.txt</model>
+		<projectilemodel type="MilkShape">data/accessories/banana/banana.txt</projectilemodel>
+	</tank>
+	<tank>
+		<name>Death</name>
+		<catagory>Humour</catagory>
+		<model type="MilkShape">data/tanks/death/death.txt</model>
+	</tank>
+	<tank>
+		<name>Photon Cannon</name>
+		<catagory>Future</catagory>
+		<model type="MilkShape">data/tanks/photoncannon/photoncannon.txt</model>
+		<projectilemodel type="MilkShape">data/accessories/flare.txt</projectilemodel>
+	</tank>
+	<tank>
+		<name>Battleship turret</name>
+		<catagory>Artillery</catagory>
+		<model type="MilkShape">data/tanks/battleship/battleship.txt</model>
+	</tank>
+	<tank>
+		<name>T-90</name>
+		<catagory>Tank</catagory>
+		<catagory>High Def</catagory>
+		<model type="MilkShape">data/tanks/t90/t90.txt</model>
+	</tank>
+	<tank>
+		<name>Tactical High Energy Laser</name>
+		<catagory>Future</catagory>
+		<catagory>High Def</catagory>
+		<model type="MilkShape">data/tanks/thel/thel.txt</model>
+	</tank>
+	<tank>
+		<name>SA-6 Gainful</name>
+		<catagory>Missile</catagory>
+		<catagory>High Def</catagory>
+		<model type="MilkShape">data/tanks/sa6/sa6.txt</model>
+		<projectilemodel type="MilkShape">data/accessories/sa6/sa6.txt</projectilemodel>
+	</tank>
+	<tank>
+		<name>ZSU-57 High Def</name>
+		<catagory>Artillery</catagory>
+		<catagory>High Def</catagory>
+		<model type="MilkShape">data/tanks/zsu57/zsu57.txt</model>
+	</tank>
+	<tank>
+		<name>ZSU-23 High Def</name>
+		<catagory>Artillery</catagory>
+		<catagory>High Def</catagory>
+		<model type="MilkShape">data/tanks/zsu23/zsu23.txt</model>
+	</tank>
+	<tank>
+		<name>M-48 Chaparral High Def</name>
+		<catagory>Missile</catagory>
+		<catagory>High Def</catagory>
+		<model type="MilkShape">data/tanks/m48/m48.txt</model>
+		<projectilemodel type="MilkShape">data/accessories/m48/m48.txt</projectilemodel>
+	</tank>
+	<tank>
+		<name>Lav-25 HighDef</name>
+		<catagory>Tank</catagory>
+		<catagory>High Def</catagory>
+		<model type="MilkShape">data/tanks/lav-25/lav-25.txt</model>
+	</tank>
+	<tank>
+		<name>M1A1 HighDef</name>
+		<catagory>Tank</catagory>
+		<catagory>High Def</catagory>
+		<model type="MilkShape">data/tanks/m1a1/m1a1.txt</model>
+	</tank>
+	<tank>
+		<name>Patriot HighDef</name>
+		<catagory>Missile</catagory>
+		<catagory>High Def</catagory>
+		<model type="MilkShape">data/tanks/patriot/patriot.txt</model>
+		<projectilemodel type="MilkShape">data/accessories/patriot/patriot.txt</projectilemodel>
+	</tank>
+	<tank>
+		<name>MLRS HighDef</name>
+		<catagory>Missile</catagory>
+		<catagory>High Def</catagory>
+		<model type="MilkShape">data/tanks/mlrs/mlrs.txt</model>
+		<projectilemodel type="MilkShape">data/accessories/barrage/barrage.txt</projectilemodel>
+	</tank>
+	<tank>
+		<name>Hawk HighDef</name>
+		<catagory>Missile</catagory>
+		<catagory>High Def</catagory>
+		<model type="MilkShape">data/tanks/hawk/hawk.txt</model>
+		<projectilemodel type="MilkShape">data/accessories/hawkmissile/hawk.txt</projectilemodel>
+	</tank>
+	<tank>
+		<name>Bradley</name>
+		<catagory>Tank</catagory>
+		<catagory>High Def</catagory>
+		<model type="MilkShape">data/tanks/bradley2/bradley2.txt</model>
+	</tank>
+	<tank>
+		<name>BM-13 HighDef</name>
+		<catagory>Missile</catagory>
+		<catagory>High Def</catagory>
+		<model type="MilkShape">data/tanks/bm13/bm13-2.txt</model>
+		<projectilemodel type="MilkShape">data/accessories/barrage/barrage.txt</projectilemodel>
+	</tank>
+	<tank>
+		<name>Towed Artillery HighDef</name>
+		<catagory>Artillery</catagory>
+		<catagory>High Def</catagory>
+		<model type="MilkShape">data/tanks/towedartillery2/towedartillery2.txt</model>
+	</tank>
+	<tank>
+		<name>Helder</name>
+		<catagory>Avitars</catagory>
+		<model type="MilkShape">data/tanks/helder/helder.txt</model>
+	</tank>
+	<tank>
+		<name>Helder2</name>
+		<catagory>Avitars</catagory>
+		<model type="MilkShape">data/tanks/helder/helder2.txt</model>
+	</tank>
+	<tank>
+		<name>Panzer III</name>
+		<catagory>Tank</catagory>
+		<model type="ase">
+			<mesh>data/tanks/panzer3.ase</mesh>
+			<skin>data/tanks/panzer3.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Flakpanzer Wirbelwind</name>
+		<catagory>Artillery</catagory>
+		<model type="ase">
+			<mesh>data/tanks/flakpanzerwirbelwind.ase</mesh>
+			<skin>data/tanks/flakpanzerwirbelwind.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>SA-19 GRISON (2K22 Tunguska)</name>
+		<catagory>Artillery</catagory>
+		<model type="ase">
+			<mesh>data/tanks/sa-19.ase</mesh>
+			<skin>data/tanks/sa-19.jpg</skin>
+		</model>
+		<projectilemodel type="MilkShape">data/accessories/barrage/barrage.txt</projectilemodel>
+	</tank>
+	<tank>
+		<name>ZSU-24-1 (SHILKA)</name>
+		<catagory>Artillery</catagory>
+		<model type="ase">
+			<mesh>data/tanks/zsu-24-1.ase</mesh>
+			<skin>data/tanks/zsu-24-1.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Rapier</name>
+		<catagory>Missile</catagory>
+		<model type="ase">
+			<mesh>data/tanks/rapier.ase</mesh>
+			<skin>data/tanks/rapier.jpg</skin>
+		</model>
+		<projectilemodel type="MilkShape">data/accessories/m48/m48.txt</projectilemodel>
+	</tank>
+	<tank>
+		<name>Harpoon</name>
+		<catagory>Missile</catagory>
+		<model type="ase">
+			<mesh>data/tanks/harpoon.ase</mesh>
+			<skin>data/tanks/harpoon.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>V2 Rocket</name>
+		<catagory>Missile</catagory>
+		<model type="ase">
+			<mesh>data/tanks/v2.ase</mesh>
+			<skin>data/tanks/v2.jpg</skin>
+		</model>
+		<projectilemodel type="MilkShape">data/accessories/v2missile/v2missile.txt</projectilemodel>
+	</tank>
+	<tank>
+		<name>Sea Sparrow</name>
+		<catagory>Missile</catagory>
+		<model type="ase">
+			<mesh>data/tanks/seasparrow.ase</mesh>
+			<skin>data/tanks/seasparrow.jpg</skin>
+		</model>
+		<projectilemodel type="MilkShape">data/accessories/m48/m48.txt</projectilemodel>
+	</tank>
+	<tank>
+		<name>RAM System</name>
+		<catagory>Missile</catagory>
+		<model type="ase">
+			<mesh>data/tanks/ram.ase</mesh>
+			<skin>data/tanks/ram.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>STURMPANZERWAGEN A7V</name>
+		<catagory>Tank</catagory>
+		<model type="ase">
+			<mesh>data/tanks/a7v.ase</mesh>
+			<skin>data/tanks/a7v.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Mark 1</name>
+		<catagory>Tank</catagory>
+		<model type="ase">
+			<mesh>data/tanks/mark1.ase</mesh>
+			<skin>data/tanks/mark1.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Rail Gun</name>
+		<catagory>Artillery</catagory>
+		<model type="ase">
+			<mesh>data/tanks/railgun.ase</mesh>
+			<skin>data/tanks/railgun.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Siege Tank</name>
+		<catagory>Future</catagory>
+		<model type="ase">
+			<mesh>data/tanks/siegetank.ase</mesh>
+			<skin>data/tanks/siegetank.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Siege Tank (Artillery)</name>
+		<catagory>Future</catagory>
+		<model type="ase">
+			<mesh>data/tanks/siegetank2.ase</mesh>
+			<skin>data/tanks/siegetank2.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Hoth Gun</name>
+		<catagory>Starwars</catagory>
+		<model type="ase">
+			<mesh>data/tanks/hothgun.ase</mesh>
+			<skin>data/tanks/hothgun.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Hoth Gun 2</name>
+		<catagory>Starwars</catagory>
+		<model type="ase">
+			<mesh>data/tanks/hothgun2.ase</mesh>
+			<skin>data/tanks/hothgun2.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>A.T.S.T Walker</name>
+		<catagory>Starwars</catagory>
+		<model type="ase">
+			<mesh>data/tanks/atst.ase</mesh>
+			<skin>data/tanks/atst.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>AAT</name>
+		<catagory>Starwars</catagory>
+		<model type="ase">
+			<mesh>data/tanks/aat.ase</mesh>
+			<skin>data/tanks/aat.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Phalanx C.I.W.S.</name>
+		<catagory>Artillery</catagory>
+		<model type="ase">
+			<mesh>data/tanks/phalanx.ase</mesh>
+			<skin>data/tanks/phalanx.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>TowedArtilleryB</name>
+		<catagory>Artillery</catagory>
+		<model type="ase">
+			<mesh>data/tanks/towedartillery.ase</mesh>
+			<skin>data/tanks/towedartilleryb.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Hawk</name>
+		<catagory>Missile</catagory>
+		<model type="ase">
+			<mesh>data/tanks/hawk.ase</mesh>
+			<skin>data/tanks/hawk.jpg</skin>
+		</model>
+		<projectilemodel type="MilkShape">data/accessories/hawkmissile/hawk.txt</projectilemodel>
+	</tank>
+	<tank>
+		<name>TowedArtilleryA</name>
+		<catagory>Artillery</catagory>
+		<model type="ase">
+			<mesh>data/tanks/towedartillery.ase</mesh>
+			<skin>data/tanks/towedartillery.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>AH-64 Apache</name>
+		<catagory>Helicopters</catagory>
+		<model type="ase">
+			<mesh>data/tanks/apache.ase</mesh>
+			<skin>data/tanks/apache.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>AH-64D Apache Longbow</name>
+		<catagory>Helicopters</catagory>
+		<model type="ase">
+			<mesh>data/tanks/apache-long.ase</mesh>
+			<skin>data/tanks/apache-long.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>B.M. 13 (Stalin's Organ)</name>
+		<catagory>Missile</catagory>
+		<model type="ase">
+			<mesh>data/tanks/bm13.ase</mesh>
+			<skin>data/tanks/bm13.jpg</skin>
+		</model>
+		<projectilemodel type="MilkShape">data/accessories/barrage/barrage.txt</projectilemodel>
+	</tank>
+	<tank>
+		<name>Bradley (Jungle)</name>
+		<catagory>Tank</catagory>
+		<model type="ase">
+			<mesh>data/tanks/bradley.ase</mesh>
+			<skin>data/tanks/bradley.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Bradley (Desert)</name>
+		<catagory>Tank</catagory>
+		<model type="ase">
+			<mesh>data/tanks/bradley.ase</mesh>
+			<skin>data/tanks/bradleyb.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>M-24 Hind</name>
+		<catagory>Helicopters</catagory>
+		<model type="ase">
+			<mesh>data/tanks/hind.ase</mesh>
+			<skin>data/tanks/hind.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Howitzer</name>
+		<catagory>Artillery</catagory>
+		<model type="ase">
+			<mesh>data/tanks/howitzer.ase</mesh>
+			<skin>data/tanks/howitzer.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Hummer MLRS</name>
+		<catagory>Missile</catagory>
+		<model type="ase">
+			<mesh>data/tanks/hummermlrs.ase</mesh>
+			<skin>data/tanks/hummermlrs.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Hummer SAM</name>
+		<catagory>Missile</catagory>
+		<model type="ase">
+			<mesh>data/tanks/hummersam.ase</mesh>
+			<skin>data/tanks/hummersam.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Hummer TOW</name>
+		<catagory>Missile</catagory>
+		<model type="ase">
+			<mesh>data/tanks/hummertow.ase</mesh>
+			<skin>data/tanks/hummertow.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>M 110</name>
+		<catagory>Artillery</catagory>
+		<model type="ase">
+			<mesh>data/tanks/m110.ase</mesh>
+			<skin>data/tanks/m110.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>M 198</name>
+		<catagory>Artillery</catagory>
+		<model type="ase">
+			<mesh>data/tanks/m198.ase</mesh>
+			<skin>data/tanks/m198.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>M1A1</name>
+		<catagory>Tank</catagory>
+		<model type="ase">
+			<mesh>data/tanks/m1a1.ase</mesh>
+			<skin>data/tanks/m1a1.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>M7 Priest</name>
+		<catagory>Artillery</catagory>
+		<model type="ase">
+			<mesh>data/tanks/m7priest.ase</mesh>
+			<skin>data/tanks/m7priest.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Paladin</name>
+		<catagory>Artillery</catagory>
+		<model type="ase">
+			<mesh>data/tanks/paladin.ase</mesh>
+			<skin>data/tanks/paladin.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Patriot</name>
+		<catagory>Missile</catagory>
+		<model type="ase">
+			<mesh>data/tanks/patriot.ase</mesh>
+			<skin>data/tanks/patriot.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>S.A. 6</name>
+		<catagory>Missile</catagory>
+		<model type="ase">
+			<mesh>data/tanks/sa6.ase</mesh>
+			<skin>data/tanks/sa6.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Scud</name>
+		<catagory>Missile</catagory>
+		<model type="ase">
+			<mesh>data/tanks/scud.ase</mesh>
+			<skin>data/tanks/scud.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>T-55 (Europe)</name>
+		<catagory>Tank</catagory>
+		<model type="ase">
+			<mesh>data/tanks/t55.ase</mesh>
+			<skin>data/tanks/t55.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>T-55 (Desert)</name>
+		<catagory>Tank</catagory>
+		<model type="ase">
+			<mesh>data/tanks/t55.ase</mesh>
+			<skin>data/tanks/t55b.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>T-74 (Europe)</name>
+		<catagory>Tank</catagory>
+		<model type="ase">
+			<mesh>data/tanks/t74.ase</mesh>
+			<skin>data/tanks/t74.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>T-74 (Desert)</name>
+		<catagory>Tank</catagory>
+		<model type="ase">
+			<mesh>data/tanks/t74.ase</mesh>
+			<skin>data/tanks/t74b.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Tank 2</name>
+		<catagory>Tank</catagory>
+		<model type="ase">
+			<mesh>data/tanks/tank2.ase</mesh>
+			<skin>data/tanks/tank2.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Cammo Turret</name>
+		<catagory>Artillery</catagory>
+		<model type="ase">
+			<mesh>data/tanks/tank3.ase</mesh>
+			<skin>data/tanks/tank3.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Metal Turret</name>
+		<catagory>Artillery</catagory>
+		<model type="ase">
+			<mesh>data/tanks/tank4.ase</mesh>
+			<skin>data/tanks/tank4.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Tank 5 (Europe)</name>
+		<catagory>Tank</catagory>
+		<model type="ase">
+			<mesh>data/tanks/tank5.ase</mesh>
+			<skin>data/tanks/tank5.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Tank 5 (Desert)</name>
+		<catagory>Tank</catagory>
+		<model type="ase">
+			<mesh>data/tanks/tank5.ase</mesh>
+			<skin>data/tanks/tank5a.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>M-80 (Jungle)</name>
+		<catagory>Missile</catagory>
+		<model type="ase">
+			<mesh>data/tanks/tank6.ase</mesh>
+			<skin>data/tanks/tank6.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>M-80 (Europe)</name>
+		<catagory>Missile</catagory>
+		<model type="ase">
+			<mesh>data/tanks/tank6.ase</mesh>
+			<skin>data/tanks/tank6a.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>M-80 (Desert)</name>
+		<catagory>Missile</catagory>
+		<model type="ase">
+			<mesh>data/tanks/tank6.ase</mesh>
+			<skin>data/tanks/tank6b.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>T.O.S. 1</name>
+		<catagory>Missile</catagory>
+		<model type="ase">
+			<mesh>data/tanks/tos1.ase</mesh>
+			<skin>data/tanks/tos1.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>Wespe</name>
+		<catagory>Artillery</catagory>
+		<model type="ase">
+			<mesh>data/tanks/wespe.ase</mesh>
+			<skin>data/tanks/wespe.jpg</skin>
+		</model>
+	</tank>
+	<tank>
+		<name>CF-104</name>
+		<catagory>High Def</catagory>
+		<model type="MilkShape">data/tanks/cf-104/104.txt</model>
+	</tank>
+	<tank>
+		<name>Tux</name>
+		<catagory>Humour</catagory>
+		<model type="MilkShape">data/tanks/tux/tux.txt</model>
+		<projectilemodel type="MilkShape">data/accessories/herring/herring.txt</projectilemodel>
+	</tank>
+	<tank>
+		<name>Missile Turret</name>
+		<model type="MilkShape">data/tanks/missileturret/missileturret.txt</model>
+	</tank>
+	<tank>
+		<name>Turret 2</name>
+		<model type="MilkShape">data/tanks/turret2/turret2.txt</model>
+	</tank>
+	<tank>
+		<name>Cannon Tower</name>
+		<model type="MilkShape">data/tanks/cannont/cannontower.txt</model>
+	</tank>
+	<tank>
+		<name>Sentry Gun</name>
+		<catagory>Artillery</catagory>
+		<model type="MilkShape">data/tanks/sentrygun/sentrygun.txt</model>
+	</tank>
+	<tank> 
+    	<name>Ignignokt</name> 
+		<catagory>Humour</catagory>
+		<model type="MilkShape">data/tanks/ignignokt/ignignokt.txt</model> 
+	</tank>
+  <tank>
+    <name>Semi</name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/semi/semi.txt</model>
+  </tank>
+  <tank>
+    <name>Semi Low Poly</name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/semi_low/semi_low.txt</model>
+  </tank>
+  <tank>
+    <name>Bald Eagle </name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/eagle/eagle2.txt</model>
+  </tank>
+  <tank>
+    <name>F-117 NightHawk</name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/f117/f117.txt</model>
+  </tank>
+  <tank>
+    <name>SR-71 BlackBird</name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/sr7/sr7.txt</model>
+  </tank>
+  <tank>
+    <name>F-35 Lightning II</name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/f35/f35.txt</model>
+  </tank>
+  <tank>
+    <name>Forest Eagle </name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/blackeagle/blackeagle2.txt</model>
+  </tank>
+  <tank>
+    <name>Harpoon Eagle </name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/blackeagle/harpooneagle.txt</model>
+  </tank>
+  <tank>
+    <name>Brown Eagle </name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/blackeagle/brown.txt</model>
+  </tank>
+  <tank>
+    <name>Black Eagle </name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/blackeagle/black.txt</model>
+  </tank>
+  <tank>
+    <name>M1A2</name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/m1a2/abrams.txt</model>
+  </tank>
+  <tank>
+    <name>Mobile Rocket Artillery</name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/m1a2/abrams_tel.txt</model>
+  </tank>
+  <tank>
+    <name>M1A2 TUSK</name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/m1a2/abrams_tusk.txt</model>
+  </tank>
+  <tank>
+    <name>M1A2 Missile Variant</name>
+    <catagory>Pro</catagory>
+    <model type="MilkShape">data/tanks/m1a2/abrams_variant.txt</model>
+  </tank>
+	<!--<tank>
+		<name>R2D2</name>
+		<catagory>Starwars</catagory>
+		<model type="MilkShape">data/tanks/r2d2/r2d2.txt</model>
+	</tank>
+	<tank>
+		<name>atat</name>
+		<catagory>Starwars</catagory>
+		<model type="MilkShape">data/tanks/atat/atatwalker.txt</model>
+	</tank>
+	<tank>
+		<name>Gun Tower Test</name>
+		<catagory>TestCat</catagory>
+		<model type="MilkShape">data/tanks/guntower/guntower.txt</model>
+	</tank>-->
+</tanks>

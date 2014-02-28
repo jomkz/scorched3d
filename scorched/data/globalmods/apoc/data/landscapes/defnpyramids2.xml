@@ -1,0 +1,16 @@
+<defn>
+	<minplayers>0</minplayers>
+	<maxplayers>24</maxplayers>
+	<landscapewidth>256</landscapewidth>
+	<landscapeheight>256</landscapeheight>
+	<roof type="sky"></roof>
+	<tankstart type="height">
+		<startcloseness>20</startcloseness>
+		<height><min>9</min><max>75</max></height>
+		<startmask></startmask>
+	</tankstart>
+	<heightmap type="file">
+		<file>data/landscapes/pyramids-v2.bmp</file>
+		<levelsurround>true</levelsurround>
+	</heightmap>
+</defn>

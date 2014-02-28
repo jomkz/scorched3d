@@ -47,9 +47,8 @@ static struct STATE_NAME
 };
 
 ClientState::ClientState(ComsMessageHandler &comsMessageHandler) : 
-	stopped_(false), paused_(false),
-	currentState_(StateNone),
-	serverTime_(0.0f)
+	stopped_(false), 
+	currentState_(StateMainOptions)
 {
 	clientInitialize_ = new ClientStateInitialize(comsMessageHandler);
 	clientLoadLevel_ = new ClientStateLoadLevel(comsMessageHandler);
@@ -90,22 +89,10 @@ void ClientState::setStateString(const std::string &newState)
 	}
 }
 
-void ClientState::clientEventLoop()
+bool ClientState::clientEventLoop()
 {
 	// Simulate
 	float frameTime = frameClock_.getTimeDifference();
-	if (!ClientParams::instance()->getConnectedToServer())
-	{
-		serverTime_ += frameTime;
-		if (serverTime_ > 0.05f)
-		{
-			fixed timeDifference = fixed::fromFloat(serverTime_);
-			timeDifference *= ScorchedClient::instance()->getSimulator().getFast();
-			serverLoop(timeDifference);
-			serverTime_ = 0.0f;
-		}
-	}
-
 	ScorchedClient::instance()->getClientSimulator().simulate();
 
 	Logger::processLogEntries();
@@ -138,14 +125,7 @@ void ClientState::clientEventLoop()
 			}
 		}
 	}
-}
 
-void ClientState::clientMainLoop()
-{
-	setState(StateMainOptions);
-	while (!stopped_)
-	{
-		clientEventLoop();
-	}
+	return !stopped_;
 }
 

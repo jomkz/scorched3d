@@ -1,0 +1,62 @@
+<options source='Scorched3D'>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType1</name>
+		<value>Moron</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType2</name>
+		<value>Moron</value>
+	</option>
+	<!-- The maximum number of players to allow (Max = 24, Min = 2) -->
+	<!-- (default value : "2") -->
+	<option>
+		<name>NumberOfPlayers</name>
+		<value>3</value>
+	</option>
+	<!-- The minimum number of players to allow (Max = 24, Min = 2) -->
+	<!-- (default value : "2") -->
+	<option>
+		<name>NumberOfMinPlayers</name>
+		<value>3</value>
+	</option>
+	<!-- The first round players are allowed to buy on (Max = 50, Min = 1) -->
+	<!-- (default value : "2") -->
+	<option>
+		<name>MoneyBuyOnRound</name>
+		<value>1</value>
+	</option>
+	<!-- The money awarded for each person killed * weapon used (Max = 2000, Min = 0) -->
+	<!-- (default value : "750") -->
+	<option>
+		<name>MoneyWonPerKillPoint</name>
+		<value>500</value>
+	</option>
+	<!-- The money awarded for each person hit * weapon used (Max = 2000, Min = 0) -->
+	<!-- (default value : "250") -->
+	<option>
+		<name>MoneyWonPerHitPoint</name>
+		<value>100</value>
+	</option>
+	<!-- The money each player starts with (Max = 500000, Min = 0) -->
+	<!-- (default value : "10000") -->
+	<option>
+		<name>MoneyStarting</name>
+		<value>50000</value>
+	</option>
+	<!-- The player turn mode ( possible values = [ "TurnSimultaneous"  "TurnSimultaneousNoWait"  "TurnSequentialLooserFirst"  "TurnSequentialRandom"  "TurnFree"  "TurnFreeTimed" ] ) -->
+	<!-- (default value : "TurnSequentialLooserFirst") -->
+	<option>
+		<name>TurnType</name>
+		<value>TurnSimultaneousNoWait</value>
+	</option>
+	<!-- The force of the wind ( possible values = [ "WindRandom"  "WindNone"  "Wind1"  "Wind2"  "Wind3"  "Wind4"  "Wind5"  "WindBreezy"  "WindGale" ] ) -->
+	<!-- (default value : "WindRandom") -->
+	<option>
+		<name>WindForce</name>
+		<value>WindNone</value>
+	</option>
+</options>

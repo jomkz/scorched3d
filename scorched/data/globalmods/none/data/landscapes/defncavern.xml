@@ -1,0 +1,63 @@
+<defn>
+	<minplayers>0</minplayers>
+	<maxplayers>24</maxplayers>
+	<landscapewidth>256</landscapewidth>
+	<landscapeheight>256</landscapeheight>
+	<tankstart type="height">
+		<startcloseness>20</startcloseness>
+		<height><min>5.5</min><max>60</max></height>
+		<startmask></startmask>
+	</tankstart>
+	<roof type="cavern">
+		<width>300</width>
+		<height>125</height>
+		<heightmap type="generate">
+			<mask></mask>
+			<landhills>
+				<min>120</min><max>160</max>
+			</landhills>
+			<landheight>
+				<min>40</min><max>70</max>
+			</landheight>
+			<landpeakwidthx>
+				<min>8</min><max>32</max>
+			</landpeakwidthx>
+			<landpeakwidthy>
+				<min>-4</min><max>4</max>
+			</landpeakwidthy>
+			<landpeakheight>
+				<min>0.5</min><max>1.5</max>
+			</landpeakheight>
+			<landsmoothing>0.0</landsmoothing>
+			<levelsurround>false</levelsurround>
+		</heightmap>
+    <deform type="deform">
+    </deform>
+	</roof>
+	<heightmap type="generate">
+		<mask>data/landscapes/valley-mask.bmp</mask>
+		<landhills>
+			<min>30</min><max>30</max>
+		</landhills>
+		<landheight>
+			<min>50</min><max>70</max>
+		</landheight>
+		<landpeakwidthx>
+			<min>10</min><max>50</max>
+		</landpeakwidthx>
+		<landpeakwidthy>
+			<min>-10</min><max>10</max>
+		</landpeakwidthy>
+		<landpeakheight>
+			<min>0.5</min><max>1.5</max>
+		</landpeakheight>
+		<landsmoothing>0.04</landsmoothing>
+		<levelsurround>true</levelsurround>
+	</heightmap>
+  <!--
+  <deform type="file">
+    <file>data/landscapes/craters1.bmp</file>
+    <levelsurround>true</levelsurround>
+  </deform>
+  -->
+</defn>

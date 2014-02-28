@@ -23,12 +23,12 @@
 
 ServerConsoleLogger::ServerConsoleLogger()
 {
-	Logger::instance()->addLogger(this);
+	Logger::addLogger(this, false);
 }
 
 ServerConsoleLogger::~ServerConsoleLogger()
 {
-	Logger::instance()->remLogger(this);
+	Logger::remLogger(this);
 }
 
 void ServerConsoleLogger::logMessage(LoggerInfo &info)

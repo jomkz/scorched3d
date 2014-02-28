@@ -49,10 +49,10 @@ void ServerCommon::startFileLogger(const std::string &settingsFile)
 		char buffer[256];
 		snprintf(buffer, 256, "ServerLog-%i-", optionsGame.getPortNo());
 
-		serverFileLogger = new FileLogger(buffer);
+		serverFileLogger = new FileLogger(buffer, S3D::getLogFile("."), true);
 		if (0 != strcmp(optionsGame.getServerFileLogger(), "none"))
 		{
-			Logger::addLogger(serverFileLogger);
+			Logger::addLogger(serverFileLogger, false);
 			Logger::log( "Created file logger.");
 		}
 		else

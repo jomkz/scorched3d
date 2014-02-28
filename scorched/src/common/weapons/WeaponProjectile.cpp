@@ -44,7 +44,7 @@ WeaponProjectile::WeaponProjectile() :
 	smokeStartSize_(0.5f), smokeEndSize_(4.0f),
 	thrustAmount_("WeaponProjectile::thrustAmount", 0), thrustTime_("WeaponProjectile::thrustTime", 0),
 	drag_("WeaponProjectile::drag", 0), stepSize_(true, 75),
-	engineSound_("data/wav/misc/rocket.wav"),
+	engineSound_("rocket.wav"),
 	flameTexture_("particle"), smokeTexture_("particle"),
 	animateFlameTexture_(false), animateSmokeTexture_(false),
 	scale_("WeaponProjectile::scale", 1), flareType_(0)

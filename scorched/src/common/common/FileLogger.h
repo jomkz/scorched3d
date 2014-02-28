@@ -27,18 +27,19 @@
 class FileLogger : public LoggerI
 {
 public:
-	FileLogger(const std::string &fileName);
+	FileLogger(const std::string &fileName, const std::string &directory, bool rotateLogs);
 	virtual ~FileLogger();
 
 	virtual void logMessage(LoggerInfo &info);
 
 protected:
-	std::string fileName_;
+	bool rotateLogs_;
+	std::string fileName_, fileDirectory_;
 	unsigned int fileCount_;
 	FILE *logFile_;
 	unsigned int size_;
 
-	void openFile(const char *fileName);
+	void openFile();
 
 };
 

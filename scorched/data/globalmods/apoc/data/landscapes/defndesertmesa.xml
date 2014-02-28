@@ -1,0 +1,16 @@
+<defn>
+    <minplayers>0</minplayers>
+    <maxplayers>24</maxplayers>
+	<landscapewidth>256</landscapewidth>
+	<landscapeheight>256</landscapeheight>
+	<roof type="sky"></roof>
+    <tankstart type="height">
+    	<startcloseness>20</startcloseness>
+    	<height><min>7</min><max>100</max></height>
+    	<startmask>data/landscapes/masks/start-half-vertical.bmp</startmask>
+    </tankstart>
+    <heightmap type="file">
+    	<file>data/landscapes/desertmesa.bmp</file>
+    	<levelsurround>true</levelsurround>
+    </heightmap>
+</defn>

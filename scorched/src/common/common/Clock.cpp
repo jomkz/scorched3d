@@ -23,11 +23,16 @@
 
 Clock::Clock() 
 {
-	lastTime_ = boost::posix_time::microsec_clock::local_time();
+	reset();
 }
 
 Clock::~Clock()
 {
+}
+
+void Clock::reset()
+{
+	lastTime_ = boost::posix_time::microsec_clock::local_time();
 }
 
 unsigned int Clock::getTicksDifference()
@@ -36,7 +41,7 @@ unsigned int Clock::getTicksDifference()
 	boost::posix_time::time_duration diff = now - lastTime_;
 
 	unsigned int timeDiff = (unsigned int) diff.total_microseconds();
-	if (timeDiff == 0) timeDiff = 0;
+	if (timeDiff == 0) timeDiff = 1;
 
 	lastTime_ = now;
 	return timeDiff;

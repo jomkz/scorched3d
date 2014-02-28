@@ -1,0 +1,916 @@
+<place>
+		<placement type='direct'>
+			<position>
+				<position>
+					<A>128</A>
+					<B>128</B>
+					<C>0</C>
+				</position>
+			</position>
+			<object type='random'>
+				<randomobject>
+					<object type='target'>
+						<name>Skyscraper</name>
+						<model type='MilkShape'>data/accessories/buildings/skyscraper1.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/buildings/skyscraper1burnt.txt</modelburnt>
+						<modelscale>0.066</modelscale>
+						<removeaction>Skyscraper</removeaction>
+						<burnaction>LargeBldgBurn</burnaction>
+						<flattenarea>-1.0</flattenarea>
+						<boundingsphere>false</boundingsphere>
+						<shield>none</shield>
+						<parachute>none</parachute>
+						<life>100</life>
+						<groundmap type='bmp'>
+							<image>data/landscapes/roads1.bmp</image>
+							<alpha>data/landscapes/roads1a.bmp</alpha>
+							<invert>false</invert>
+						</groundmap>
+						<groupname>skyscrapers</groupname>
+					</object>
+				</randomobject>
+				<randomobject>
+					<object type='target'>
+						<name>Skyscraper</name>
+						<model type='MilkShape'>data/accessories/buildings/skyscraper2.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/buildings/skyscraper1burnt.txt</modelburnt>
+						<modelscale>0.1</modelscale>
+						<removeaction>Skyscraper</removeaction>
+						<burnaction>LargeBldgBurn</burnaction>
+						<flattenarea>-1.0</flattenarea>
+						<boundingsphere>false</boundingsphere>
+						<shield>none</shield>
+						<parachute>none</parachute>
+						<life>100</life>
+						<groundmap type='bmp'>
+							<image>data/landscapes/roads1.bmp</image>
+							<alpha>data/landscapes/roads1a.bmp</alpha>
+							<invert>false</invert>
+						</groundmap>
+						<groupname>skyscrapers</groupname>
+					</object>
+				</randomobject>
+				<randomobject>
+					<object type='target'>
+						<name>Skyscraper</name>
+						<model type='MilkShape'>data/accessories/buildings/skyscraper3.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/buildings/skyscraper1burnt.txt</modelburnt>
+						<modelscale>0.1</modelscale>
+						<removeaction>Skyscraper</removeaction>
+						<burnaction>LargeBldgBurn</burnaction>
+						<flattenarea>-1.0</flattenarea>
+						<boundingsphere>false</boundingsphere>
+						<shield>none</shield>
+						<parachute>none</parachute>
+						<life>100</life>
+						<groundmap type='bmp'>
+							<image>data/landscapes/roads1.bmp</image>
+							<alpha>data/landscapes/roads1a.bmp</alpha>
+							<invert>false</invert>
+						</groundmap>
+						<groupname>skyscrapers</groupname>
+					</object>
+				</randomobject>
+			</object>
+		</placement>
+		<placement type='direct'>
+			<position>
+				<position>
+					<A>128</A>
+					<B>128</B>
+					<C>0</C>
+				</position>
+			</position>
+			<object type='group'>
+				<groupobject>
+					<offset>
+						<A>-8</A>
+						<B>0</B>
+						<C>0</C>
+					</offset>
+					<object type='target'>
+						<name>Office</name>
+						<model type='MilkShape'>data/accessories/buildings/office1.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/buildings/office1burnt.txt</modelburnt>
+						<modelrotationsnap>90</modelrotationsnap>
+						<removeaction>Large Bldg</removeaction>
+						<burnaction>LargeBldgBurn</burnaction>
+						<boundingsphere>false</boundingsphere>
+						<shield>none</shield>
+						<parachute>none</parachute>
+						<life>75</life>
+						<groundmap type='bmp'>
+							<image>data/landscapes/cars2.bmp</image>
+							<alpha>data/landscapes/carsa.bmp</alpha>
+							<invert>false</invert>
+						</groundmap>
+						<groupname>offices</groupname>
+					</object>
+				</groupobject>
+				<groupobject>
+					<offset>
+						<A>8</A>
+						<B>0</B>
+						<C>0</C>
+					</offset>
+					<object type='target'>
+						<name>Office</name>
+						<model type='MilkShape'>data/accessories/buildings/office2.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/buildings/office2burnt.txt</modelburnt>
+						<modelrotationsnap>90</modelrotationsnap>
+						<removeaction>Large Bldg</removeaction>
+						<burnaction>LargeBldgBurn</burnaction>
+						<boundingsphere>false</boundingsphere>
+						<shield>none</shield>
+						<parachute>none</parachute>
+						<life>75</life>
+						<groundmap type='bmp'>
+							<image>data/landscapes/cars.bmp</image>
+							<alpha>data/landscapes/carsa.bmp</alpha>
+							<invert>false</invert>
+						</groundmap>
+						<groupname>offices</groupname>
+					</object>
+				</groupobject>
+				<groupobject>
+					<offset>
+						<A>0</A>
+						<B>8</B>
+						<C>0</C>
+					</offset>
+					<object type='target'>
+						<name>Office</name>
+						<model type='MilkShape'>data/accessories/buildings/office4.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/buildings/office1burnt.txt</modelburnt>
+						<modelrotationsnap>90</modelrotationsnap>
+						<removeaction>Large Bldg</removeaction>
+						<burnaction>LargeBldgBurn</burnaction>
+						<boundingsphere>false</boundingsphere>
+						<shield>none</shield>
+						<parachute>none</parachute>
+						<life>75</life>
+						<groundmap type='bmp'>
+							<image>data/landscapes/cars2.bmp</image>
+							<alpha>data/landscapes/carsa.bmp</alpha>
+							<invert>false</invert>
+						</groundmap>
+						<groupname>offices</groupname>
+					</object>
+				</groupobject>
+				<groupobject>
+					<offset>
+						<A>0</A>
+						<B>-8</B>
+						<C>0</C>
+					</offset>
+					<object type='target'>
+						<name>Office</name>
+						<model type='MilkShape'>data/accessories/buildings/office5.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/buildings/office2burnt.txt</modelburnt>
+						<modelrotationsnap>90</modelrotationsnap>
+						<removeaction>Large Bldg</removeaction>
+						<burnaction>LargeBldgBurn</burnaction>
+						<boundingsphere>false</boundingsphere>
+						<shield>none</shield>
+						<parachute>none</parachute>
+						<life>75</life>
+						<groundmap type='bmp'>
+							<image>data/landscapes/cars.bmp</image>
+							<alpha>data/landscapes/carsa.bmp</alpha>
+							<invert>false</invert>
+						</groundmap>
+						<groupname>offices</groupname>
+					</object>
+				</groupobject>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>1</numobjects>
+			<mask>data/landscapes/masks/city3rural2.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>75</maxheight>
+			<mincloseness>5</mincloseness>
+			<minslope>0.75</minslope>
+			<xsnap>0</xsnap>
+			<ysnap>0</ysnap>
+			<object type='target'>
+				<name>Stadium</name>
+				<model type='MilkShape'>data/accessories/buildings/stadium.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/buildings/skyscraper1burnt.txt</modelburnt>
+				<modelrotationsnap>90</modelrotationsnap>
+				<removeaction>Stadium</removeaction>
+				<burnaction>LargeBldgBurn</burnaction>
+				<flattenarea>-1.0</flattenarea>
+				<border>5</border>
+				<boundingsphere>false</boundingsphere>
+				<shield>none</shield>
+				<parachute>none</parachute>
+				<life>100</life>
+				<groundmap type='bmp'>
+					<image>data/landscapes/parking.bmp</image>
+					<alpha>data/landscapes/parkinga.bmp</alpha>
+					<invert>true</invert>
+				</groundmap>
+				<groupname>stadium</groupname>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>2</numobjects>
+			<mask>data/landscapes/masks/city1rural.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>75</maxheight>
+			<mincloseness>15</mincloseness>
+			<minslope>0.85</minslope>
+			<xsnap>0</xsnap>
+			<ysnap>0</ysnap>
+			<object type='group'>
+				<groupobject>
+					<offset>
+						<A>0</A>
+						<B>0</B>
+						<C>0</C>
+					</offset>
+					<object type='target'>
+						<name>Nuclear Plant</name>
+						<model type='MilkShape'>data/accessories/buildings/nuclearplant.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/buildings/nuclearplant.txt</modelburnt>
+						<modelrotationsnap>90</modelrotationsnap>
+						<removeaction>Nuclear Plant</removeaction>
+						<burnaction>Large Bldg</burnaction>
+						<flattenarea>-1.0</flattenarea>
+						<border>15</border>
+						<boundingsphere>false</boundingsphere>
+						<shield>none</shield>
+						<parachute>none</parachute>
+						<life>100</life>
+						<groundmap type='bmp'>
+							<image>data/landscapes/parking.bmp</image>
+							<alpha>data/landscapes/parkinga.bmp</alpha>
+							<invert>true</invert>
+						</groundmap>
+						<groupname>powerplants</groupname>
+					</object>
+				</groupobject>
+				<groupobject>
+					<offset>
+						<A>5</A>
+						<B>5</B>
+						<C>0</C>
+					</offset>
+					<object type='target'>
+						<name>Soldier</name>
+						<model type="MilkShape">data/accessories/people/male1_soldier_standing.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/people/male1_soldier_standing.txt</modelburnt>
+						<modelrotation>15</modelrotation>
+						<shield>none</shield>
+						<parachute>none</parachute>
+						<life>20</life>
+						<removeaction>Small Bldg</removeaction>
+						<burnaction>Small Bldg</burnaction>
+						<boundingsphere>false</boundingsphere>
+					</object>
+				</groupobject>
+				<groupobject>
+					<offset>
+						<A>-5</A>
+						<B>-5</B>
+						<C>0</C>
+					</offset>
+					<object type='target'>
+						<name>Soldier</name>
+						<model type="MilkShape">data/accessories/people/male1_soldier_standing.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/people/male1_soldier_standing.txt</modelburnt>
+						<modelrotation>15</modelrotation>
+						<shield>none</shield>
+						<parachute>none</parachute>
+						<life>20</life>
+						<removeaction>Small Bldg</removeaction>
+						<burnaction>Small Bldg</burnaction>
+						<boundingsphere>false</boundingsphere>
+					</object>
+				</groupobject>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>15</numobjects>
+			<mask>data/landscapes/masks/city3suburban2.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>75</maxheight>
+			<mincloseness>5</mincloseness>
+			<minslope>0.66</minslope>
+			<xsnap>8</xsnap>
+			<ysnap>8</ysnap>
+			<object type='target'>
+				<name>Hospital</name>
+				<model type='MilkShape'>data/accessories/buildings/hospital.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/buildings/hospital.txt</modelburnt>
+				<modelrotationsnap>90</modelrotationsnap>
+				<removeaction>Hospital</removeaction>
+				<burnaction>Large Bldg</burnaction>
+				<flattenarea>-1.0</flattenarea>
+				<border>2</border>
+				<boundingsphere>false</boundingsphere>
+				<shield>none</shield>
+				<parachute>none</parachute>
+				<life>75</life>
+				<groundmap type='bmp'>
+					<image>data/landscapes/cars.bmp</image>
+					<alpha>data/landscapes/carsa.bmp</alpha>
+					<invert>false</invert>
+				</groundmap>
+				<groupname>hospitals</groupname>
+			</object>
+		</placement>
+		<placement type="mask">
+			<numobjects>125</numobjects>
+			<mask>data/landscapes/masks/city1urban.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>75</maxheight>
+			<mincloseness>5</mincloseness>
+			<minslope>0.66</minslope>
+			<xsnap>8</xsnap>
+			<ysnap>8</ysnap>
+			<object type='target'>
+				<name>Office</name>
+				<model type='MilkShape'>data/accessories/buildings/office1.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/buildings/office1burnt.txt</modelburnt>
+				<modelrotationsnap>90</modelrotationsnap>
+				<removeaction>Large Bldg</removeaction>
+				<burnaction>LargeBldgBurn</burnaction>
+				<boundingsphere>false</boundingsphere>
+				<shield>none</shield>
+				<parachute>none</parachute>
+				<life>75</life>
+				<groundmap type='bmp'>
+					<image>data/landscapes/cars2.bmp</image>
+					<alpha>data/landscapes/carsa.bmp</alpha>
+					<invert>false</invert>
+				</groundmap>
+				<groupname>offices</groupname>
+			</object>
+		</placement>
+		<placement type="mask">
+			<numobjects>125</numobjects>
+			<mask>data/landscapes/masks/city1urban.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>75</maxheight>
+			<mincloseness>4</mincloseness>
+			<minslope>0.66</minslope>
+			<xsnap>8</xsnap>
+			<ysnap>8</ysnap>
+			<object type='target'>
+				<name>Office</name>
+				<model type="MilkShape">data/accessories/buildings/office2.txt</model>
+				<modelburnt type="MilkShape">data/accessories/buildings/office2burnt.txt</modelburnt>
+				<modelrotationsnap>90</modelrotationsnap>
+				<removeaction>Large Bldg</removeaction>
+				<burnaction>LargeBldgBurn</burnaction>
+				<border>2</border>
+				<boundingsphere>false</boundingsphere>
+				<shield>none</shield>
+				<parachute>none</parachute>
+				<life>75</life>
+				<groundmap type="bmp">
+					<image>data/landscapes/cars.bmp</image>
+					<alpha>data/landscapes/carsa.bmp</alpha>
+					<invert>false</invert>
+				</groundmap>
+				<groupname>offices</groupname>
+			</object>
+		</placement>
+		<placement type="mask">
+			<numobjects>125</numobjects>
+			<mask>data/landscapes/masks/city1urban.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>75</maxheight>
+			<mincloseness>5</mincloseness>
+			<minslope>0.75</minslope>
+			<xsnap>8</xsnap>
+			<ysnap>8</ysnap>
+			<object type='target'>
+				<name>Office</name>
+				<model type="MilkShape">data/accessories/buildings/office3.txt</model>
+				<modelburnt type="MilkShape">data/accessories/buildings/office1burnt.txt</modelburnt>
+				<modelrotationsnap>90</modelrotationsnap>
+				<removeaction>Large Bldg</removeaction>
+				<burnaction>LargeBldgBurn</burnaction>
+				<border>2</border>
+				<boundingsphere>false</boundingsphere>
+				<shield>none</shield>
+				<parachute>none</parachute>
+				<life>75</life>
+				<groundmap type="bmp">
+					<image>data/landscapes/cars.bmp</image>
+					<alpha>data/landscapes/carsa.bmp</alpha>
+					<invert>false</invert>
+				</groundmap>
+				<groupname>offices</groupname>
+			</object>
+		</placement>
+		<placement type="mask">
+			<numobjects>125</numobjects>
+			<mask>data/landscapes/masks/city1urban.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>75</maxheight>
+			<mincloseness>5</mincloseness>
+			<minslope>0.75</minslope>
+			<xsnap>8</xsnap>
+			<ysnap>8</ysnap>
+			<object type='target'>
+				<name>Office</name>
+				<model type='MilkShape'>data/accessories/buildings/office4.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/buildings/office1burnt.txt</modelburnt>
+				<modelrotationsnap>90</modelrotationsnap>
+				<removeaction>Large Bldg</removeaction>
+				<burnaction>LargeBldgBurn</burnaction>
+				<border>2</border>
+				<boundingsphere>false</boundingsphere>
+				<shield>none</shield>
+				<parachute>none</parachute>
+				<life>75</life>
+				<groundmap type='bmp'>
+					<image>data/landscapes/cars2.bmp</image>
+					<alpha>data/landscapes/carsa.bmp</alpha>
+					<invert>false</invert>
+				</groundmap>
+				<groupname>offices</groupname>
+			</object>
+		</placement>
+		<placement type="mask">
+			<numobjects>125</numobjects>
+			<mask>data/landscapes/masks/city1urban.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>75</maxheight>
+			<mincloseness>5</mincloseness>
+			<minslope>0.75</minslope>
+			<xsnap>8</xsnap>
+			<ysnap>8</ysnap>
+			<object type='target'>
+				<name>Office</name>
+				<model type='MilkShape'>data/accessories/buildings/office5.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/buildings/office2burnt.txt</modelburnt>
+				<modelrotationsnap>90</modelrotationsnap>
+				<removeaction>Large Bldg</removeaction>
+				<burnaction>LargeBldgBurn</burnaction>
+				<border>2</border>
+				<boundingsphere>false</boundingsphere>
+				<shield>none</shield>
+				<parachute>none</parachute>
+				<life>75</life>
+				<groundmap type='bmp'>
+					<image>data/landscapes/cars.bmp</image>
+					<alpha>data/landscapes/carsa.bmp</alpha>
+					<invert>false</invert>
+				</groundmap>
+				<groupname>offices</groupname>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>2</numobjects>
+			<mask>data/landscapes/masks/city3rural.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>75</maxheight>
+			<mincloseness>5</mincloseness>
+			<minslope>0.66</minslope>
+			<xsnap>0</xsnap>
+			<ysnap>0</ysnap>
+			<object type='target'>
+				<name>Hospital</name>
+				<model type='MilkShape'>data/accessories/buildings/hospital.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/buildings/hospital.txt</modelburnt>
+				<modelrotationsnap>90</modelrotationsnap>
+				<removeaction>Hospital</removeaction>
+				<burnaction>Large Bldg</burnaction>
+				<flattenarea>-1.0</flattenarea>
+				<border>2</border>
+				<boundingsphere>false</boundingsphere>
+				<shield>none</shield>
+				<parachute>none</parachute>
+				<life>75</life>
+				<groundmap type='bmp'>
+					<image>data/landscapes/cars.bmp</image>
+					<alpha>data/landscapes/carsa.bmp</alpha>
+					<invert>false</invert>
+				</groundmap>
+				<groupname>hospitals</groupname>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>50</numobjects>
+			<mask>data/landscapes/masks/city3suburban2.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>75</maxheight>
+			<mincloseness>5</mincloseness>
+			<minslope>0.75</minslope>
+			<xsnap>8</xsnap>
+			<ysnap>8</ysnap>
+			<object type='target'>
+				<name>Gas Station</name>
+				<model type='MilkShape'>data/accessories/buildings/gasstation1.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/buildings/gasstation1burnt.txt</modelburnt>
+				<modelrotationsnap>90</modelrotationsnap>
+				<removeaction>Gas Station</removeaction>
+				<burnaction>Large Bldg</burnaction>
+				<flattenarea>-1.0</flattenarea>
+				<border>5</border>
+				<boundingsphere>false</boundingsphere>
+				<shield>none</shield>
+				<parachute>none</parachute>
+				<life>50</life>
+				<groundmap type='bmp'>
+					<image>data/landscapes/cars.bmp</image>
+					<alpha>data/landscapes/carsa.bmp</alpha>
+					<invert>false</invert>
+				</groundmap>
+				<groupname>gasstations</groupname>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>10</numobjects>
+			<mask>data/landscapes/masks/city3rural.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>75</maxheight>
+			<mincloseness>5</mincloseness>
+			<minslope>0.75</minslope>
+			<xsnap>0</xsnap>
+			<ysnap>0</ysnap>
+			<object type='target'>
+				<name>Gas Station</name>
+				<model type='MilkShape'>data/accessories/buildings/gasstation1.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/buildings/gasstation1burnt.txt</modelburnt>
+				<modelrotationsnap>90</modelrotationsnap>
+				<removeaction>Gas Station</removeaction>
+				<burnaction>Large Bldg</burnaction>
+				<flattenarea>-1.0</flattenarea>
+				<border>5</border>
+				<boundingsphere>false</boundingsphere>
+				<shield>none</shield>
+				<parachute>none</parachute>
+				<life>50</life>
+				<groundmap type='bmp'>
+					<image>data/landscapes/cars.bmp</image>
+					<alpha>data/landscapes/carsa.bmp</alpha>
+					<invert>false</invert>
+				</groundmap>
+				<groupname>gasstations</groupname>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>40</numobjects>
+			<mask>data/landscapes/masks/city3suburban2.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>75</maxheight>
+			<mincloseness>5</mincloseness>
+			<minslope>0.75</minslope>
+			<xsnap>8</xsnap>
+			<ysnap>8</ysnap>
+			<object type='target'>
+				<name>Bar</name>
+				<model type='MilkShape'>data/accessories/buildings/bar1.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/buildings/store1burnt.txt</modelburnt>
+				<modelrotationsnap>90</modelrotationsnap>
+				<removeaction>Bar</removeaction>
+				<burnaction>LargeBldgBurn</burnaction>
+				<border>5</border>
+				<boundingsphere>false</boundingsphere>
+				<shield>none</shield>
+				<parachute>none</parachute>
+				<life>50</life>
+				<groundmap type='bmp'>
+					<image>data/landscapes/cars.bmp</image>
+					<alpha>data/landscapes/carsa.bmp</alpha>
+					<invert>false</invert>
+				</groundmap>
+				<groupname>houses</groupname>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>6</numobjects>
+			<mask>data/landscapes/masks/city3rural.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>75</maxheight>
+			<mincloseness>5</mincloseness>
+			<minslope>0.75</minslope>
+			<xsnap>0</xsnap>
+			<ysnap>0</ysnap>
+			<object type='target'>
+				<name>Bar</name>
+				<model type='MilkShape'>data/accessories/buildings/bar1.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/buildings/store1burnt.txt</modelburnt>
+				<modelrotationsnap>90</modelrotationsnap>
+				<removeaction>Bar</removeaction>
+				<burnaction>LargeBldgBurn</burnaction>
+				<border>5</border>
+				<boundingsphere>false</boundingsphere>
+				<shield>none</shield>
+				<parachute>none</parachute>
+				<life>50</life>
+				<groundmap type='bmp'>
+					<image>data/landscapes/cars.bmp</image>
+					<alpha>data/landscapes/carsa.bmp</alpha>
+					<invert>false</invert>
+				</groundmap>
+				<groupname>houses</groupname>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>60</numobjects>
+			<mask>data/landscapes/masks/city3suburban2.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>75</maxheight>
+			<mincloseness>5</mincloseness>
+			<minslope>0.66</minslope>
+			<xsnap>8</xsnap>
+			<ysnap>8</ysnap>
+			<object type='target'>
+				<name>Store</name>
+				<model type='MilkShape'>data/accessories/buildings/store1.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/buildings/store1burnt.txt</modelburnt>
+				<modelrotationsnap>90</modelrotationsnap>
+				<removeaction>Dollar Store</removeaction>
+				<burnaction>SmallBldgBurn</burnaction>
+				<border>5</border>
+				<boundingsphere>false</boundingsphere>
+				<shield>none</shield>
+				<parachute>none</parachute>
+				<life>50</life>
+				<groundmap type='bmp'>
+					<image>data/landscapes/cars2.bmp</image>
+					<alpha>data/landscapes/carsa.bmp</alpha>
+					<invert>false</invert>
+				</groundmap>
+				<groupname>stores</groupname>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>10</numobjects>
+			<mask>data/landscapes/masks/city3rural.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>75</maxheight>
+			<mincloseness>5</mincloseness>
+			<minslope>0.66</minslope>
+			<xsnap>0</xsnap>
+			<ysnap>0</ysnap>
+			<object type='target'>
+				<name>Store</name>
+				<model type='MilkShape'>data/accessories/buildings/store1.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/buildings/store1burnt.txt</modelburnt>
+				<modelrotationsnap>90</modelrotationsnap>
+				<removeaction>Dollar Store</removeaction>
+				<burnaction>SmallBldgBurn</burnaction>
+				<border>5</border>
+				<boundingsphere>false</boundingsphere>
+				<shield>none</shield>
+				<parachute>none</parachute>
+				<life>50</life>
+				<groundmap type='bmp'>
+					<image>data/landscapes/cars2.bmp</image>
+					<alpha>data/landscapes/carsa.bmp</alpha>
+					<invert>false</invert>
+				</groundmap>
+				<groupname>stores</groupname>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>30</numobjects>
+			<mask>data/landscapes/masks/city3suburban2.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>75</maxheight>
+			<mincloseness>5</mincloseness>
+			<minslope>0.66</minslope>
+			<xsnap>8</xsnap>
+			<ysnap>8</ysnap>
+			<object type='model'>
+				<model type='MilkShape'>data/accessories/buildings/church1.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/buildings/church1burnt.txt</modelburnt>
+				<modelrotationsnap>90</modelrotationsnap>
+				<removeaction>Small Bldg</removeaction>
+				<burnaction>SmallBldgBurn</burnaction>
+				<border>5</border>
+				<groundmap type='bmp'>
+					<image>data/landscapes/dirt.bmp</image>
+					<alpha>data/landscapes/carsa.bmp</alpha>
+					<invert>false</invert>
+				</groundmap>
+				<groupname>churches</groupname>
+			</object>
+		</placement>
+		<placement type='trees'>
+			<numobjects>30000</numobjects>
+			<numclusters>2</numclusters>
+			<mask>data/landscapes/masks/city3rural.bmp</mask>
+			<minheight>8</minheight>
+			<maxheight>50</maxheight>
+			<object type='model'>
+				<model type='MilkShape'>data/accessories/buildings/trailorhouse1.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/buildings/trailorhouse1burnt.txt</modelburnt>
+				<modelrotationsnap>90</modelrotationsnap>
+				<removeaction>Small Bldg</removeaction>
+				<burnaction>SmallBldgBurn</burnaction>
+				<border>2</border>
+				<groupname>houses</groupname>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>12</numobjects>
+			<mask>data/landscapes/masks/city3rural.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>50</maxheight>
+			<mincloseness>5</mincloseness>
+			<minslope>0.75</minslope>
+			<xsnap>0</xsnap>
+			<ysnap>0</ysnap>
+			<object type='target'>
+				<name>Farm</name>
+				<model type='MilkShape'>data/accessories/buildings/farm1.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/buildings/farm1burnt.txt</modelburnt>
+				<modelrotationsnap>30</modelrotationsnap>
+				<removeaction>Farm</removeaction>
+				<burnaction>FarmBurn</burnaction>
+				<flattenarea>-1.0</flattenarea>
+				<border>5</border>
+				<boundingsphere>false</boundingsphere>
+				<shield>none</shield>
+				<parachute>none</parachute>
+				<life>50</life>
+				<groundmap type='bmp'>
+					<image>data/landscapes/farmland.bmp</image>
+					<alpha>data/landscapes/farmlanda.bmp</alpha>
+					<invert>false</invert>
+				</groundmap>
+				<groupname>farms</groupname>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>500</numobjects>
+			<mask>data/landscapes/masks/city3suburban.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>75</maxheight>
+			<mincloseness>3</mincloseness>
+			<minslope>0.5</minslope>
+			<xsnap>0</xsnap>
+			<ysnap>0</ysnap>
+			<object type='random'>
+				<randomobject>
+					<object type='model'>
+						<model type='MilkShape'>data/accessories/buildings/house1.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/buildings/house1burnt.txt</modelburnt>
+						<modelrotationsnap>90</modelrotationsnap>
+						<removeaction>Small Bldg</removeaction>
+						<burnaction>SmallBldgBurn</burnaction>
+						<border>3</border>
+						<groupname>houses</groupname>
+					</object>
+				</randomobject>
+				<randomobject>
+					<object type='model'>
+						<model type='MilkShape'>data/accessories/buildings/house1-2.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/buildings/house1-2burnt.txt</modelburnt>
+						<modelrotationsnap>90</modelrotationsnap>
+						<removeaction>Small Bldg</removeaction>
+						<burnaction>SmallBldgBurn</burnaction>
+						<border>3</border>
+						<groupname>houses</groupname>
+					</object>
+				</randomobject>
+				<randomobject>
+					<object type='model'>
+						<model type='MilkShape'>data/accessories/buildings/house1-3.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/buildings/house1-3burnt.txt</modelburnt>
+						<modelrotationsnap>90</modelrotationsnap>
+						<removeaction>Small Bldg</removeaction>
+						<burnaction>SmallBldgBurn</burnaction>
+						<border>3</border>
+						<groupname>houses</groupname>
+					</object>
+				</randomobject>
+				<randomobject>
+					<object type='model'>
+						<model type='MilkShape'>data/accessories/buildings/logcabin1.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/buildings/logcabin1burnt.txt</modelburnt>
+						<modelrotationsnap>90</modelrotationsnap>
+						<removeaction>Small Bldg</removeaction>
+						<burnaction>SmallBldgBurn</burnaction>
+						<border>3</border>
+						<groupname>houses</groupname>
+					</object>
+				</randomobject>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>100</numobjects>
+			<mask>data/landscapes/masks/city3rural.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>75</maxheight>
+			<mincloseness>5</mincloseness>
+			<minslope>0.5</minslope>
+			<xsnap>0</xsnap>
+			<ysnap>0</ysnap>
+			<object type='random'>
+				<randomobject>
+					<object type='model'>
+						<model type='MilkShape'>data/accessories/buildings/house1.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/buildings/house1burnt.txt</modelburnt>
+						<modelrotationsnap>90</modelrotationsnap>
+						<removeaction>Small Bldg</removeaction>
+						<burnaction>SmallBldgBurn</burnaction>
+						<border>5</border>
+						<groupname>houses</groupname>
+					</object>
+				</randomobject>
+				<randomobject>
+					<object type='model'>
+						<model type='MilkShape'>data/accessories/buildings/house1-2.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/buildings/house1-2burnt.txt</modelburnt>
+						<modelrotationsnap>90</modelrotationsnap>
+						<removeaction>Small Bldg</removeaction>
+						<burnaction>SmallBldgBurn</burnaction>
+						<border>5</border>
+						<groupname>houses</groupname>
+					</object>
+				</randomobject>
+				<randomobject>
+					<object type='model'>
+						<model type='MilkShape'>data/accessories/buildings/house1-3.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/buildings/house1-3burnt.txt</modelburnt>
+						<modelrotationsnap>90</modelrotationsnap>
+						<removeaction>Small Bldg</removeaction>
+						<burnaction>SmallBldgBurn</burnaction>
+						<border>5</border>
+						<groupname>houses</groupname>
+					</object>
+				</randomobject>
+				<randomobject>
+					<object type='model'>
+						<model type='MilkShape'>data/accessories/buildings/logcabin1.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/buildings/logcabin1burnt.txt</modelburnt>
+						<modelrotationsnap>90</modelrotationsnap>
+						<removeaction>Small Bldg</removeaction>
+						<burnaction>SmallBldgBurn</burnaction>
+						<border>5</border>
+						<groupname>houses</groupname>
+					</object>
+				</randomobject>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>24</numobjects>
+			<mask>data/landscapes/masks/city3suburban2.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>75</maxheight>
+			<mincloseness>10</mincloseness>
+			<minslope>0.75</minslope>
+			<xsnap>8</xsnap>
+			<ysnap>8</ysnap>
+			<object type='target'>
+				<name>Factory</name>
+				<model type='MilkShape'>data/accessories/buildings/factory1.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/buildings/factory1burnt.txt</modelburnt>
+				<modelrotationsnap>90</modelrotationsnap>
+				<removeaction>Factory</removeaction>
+				<burnaction>Factory Burn</burnaction>
+				<flattenarea>-1.0</flattenarea>
+				<border>10</border>
+				<boundingsphere>false</boundingsphere>
+				<shield>none</shield>
+				<parachute>none</parachute>
+				<life>50</life>
+				<groundmap type='bmp'>
+					<image>data/landscapes/cars.bmp</image>
+					<alpha>data/landscapes/carsa.bmp</alpha>
+					<invert>false</invert>
+				</groundmap>
+				<groupname>factories</groupname>
+			</object>
+		</placement>
+		<placement type='mask'>
+			<numobjects>12</numobjects>
+			<mask>data/landscapes/masks/city3rural.bmp</mask>
+			<minheight>10</minheight>
+			<maxheight>75</maxheight>
+			<mincloseness>10</mincloseness>
+			<minslope>0.75</minslope>
+			<xsnap>0</xsnap>
+			<ysnap>0</ysnap>
+			<object type='target'>
+				<name>Factory</name>
+				<model type='MilkShape'>data/accessories/buildings/factory1.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/buildings/factory1burnt.txt</modelburnt>
+				<modelrotationsnap>90</modelrotationsnap>
+				<removeaction>Factory</removeaction>
+				<burnaction>Factory Burn</burnaction>
+				<flattenarea>-1.0</flattenarea>
+				<border>10</border>
+				<boundingsphere>false</boundingsphere>
+				<shield>none</shield>
+				<parachute>none</parachute>
+				<life>50</life>
+				<groundmap type='bmp'>
+					<image>data/landscapes/cars.bmp</image>
+					<alpha>data/landscapes/carsa.bmp</alpha>
+					<invert>false</invert>
+				</groundmap>
+				<groupname>factories</groupname>
+			</object>
+		</placement>
+</place>

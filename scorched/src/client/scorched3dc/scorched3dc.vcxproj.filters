@@ -102,9 +102,6 @@
     <ClCompile Include="..\client\ClientHandlers.cpp">
       <Filter>client</Filter>
     </ClCompile>
-    <ClCompile Include="..\client\ClientMain.cpp">
-      <Filter>client</Filter>
-    </ClCompile>
     <ClCompile Include="..\client\ClientMessageHandler.cpp">
       <Filter>client</Filter>
     </ClCompile>
@@ -1413,9 +1410,6 @@
       <Filter>client</Filter>
     </ClInclude>
     <ClInclude Include="..\client\ClientHandlers.h">
-      <Filter>client</Filter>
-    </ClInclude>
-    <ClInclude Include="..\client\ClientMain.h">
       <Filter>client</Filter>
     </ClInclude>
     <ClInclude Include="..\client\ClientMessageHandler.h">

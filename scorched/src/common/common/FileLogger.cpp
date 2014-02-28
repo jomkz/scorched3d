@@ -22,8 +22,10 @@
 #include <common/Defines.h>
 #include <time.h>
 
-FileLogger::FileLogger(const std::string &fileName) : 
-	size_(0), logFile_(0), fileName_(fileName), fileCount_(0)
+FileLogger::FileLogger(const std::string &fileName, const std::string &directory, bool rotateLogs) : 
+	fileName_(fileName), fileDirectory_(directory), 
+	size_(0), logFile_(0), fileCount_(0),
+	rotateLogs_(rotateLogs)
 {
 
 }
@@ -35,29 +37,40 @@ FileLogger::~FileLogger()
 void FileLogger::logMessage(LoggerInfo &info)
 {
 	const unsigned int MaxSize = 256000;
-	if (!logFile_ || (size_>MaxSize)) openFile(fileName_.c_str());
+	if (!logFile_ || (size_>MaxSize)) openFile();
 	if (!logFile_) return;
 
 	// Log to file and flush file
-	size_ += (unsigned int) strlen(info.getMessage());
+	if (rotateLogs_)
+	{
+		size_ += (unsigned int) strlen(info.getMessage());
+	}
 	fprintf(logFile_, "%s - %s\n", info.getTime(), info.getMessage());
 	fflush(logFile_);
 }
 
-void FileLogger::openFile(const char *fileName)
+void FileLogger::openFile()
 {
 	size_ = 0;
 	if (logFile_) fclose(logFile_);
 
-	time_t theTime = time(0);
-	struct tm *newtime = localtime(&theTime); 
+	std::string logFileName;
+	if (rotateLogs_)
+	{
+		time_t theTime = time(0);
+		struct tm *newtime = localtime(&theTime); 
 
-	std::string logFileName = 
-		S3D::formatStringBuffer("%s-%i%02i%02i-%02i%02i%02i-%u.log", fileName,
-			newtime->tm_year + 1900, newtime->tm_mon + 1, newtime->tm_mday,
-			newtime->tm_hour, newtime->tm_min, newtime->tm_sec, fileCount_);
-	fileCount_++;		
+		logFileName = 
+			S3D::formatStringBuffer("%s/%s-%i%02i%02i-%02i%02i%02i-%u.log", fileDirectory_.c_str(), fileName_.c_str(),
+				newtime->tm_year + 1900, newtime->tm_mon + 1, newtime->tm_mday,
+				newtime->tm_hour, newtime->tm_min, newtime->tm_sec, fileCount_);
+		fileCount_++;		
+	} 
+	else
+	{
+		logFileName =
+			S3D::formatStringBuffer("%s/%s", fileDirectory_.c_str(), fileName_.c_str());
+	}
 
-	std::string fullLogFileName = S3D::getLogFile(logFileName.c_str());
-	logFile_ = fopen(fullLogFileName.c_str(), "w");
+	logFile_ = fopen(logFileName.c_str(), "w");
 }

@@ -1,0 +1,21 @@
+<shipgroups>
+	<placement type="count">
+		<count>3</count>
+		<object type='target'>
+			<model type='MilkShape'>data/meshes/fishboat/fishboat.txt</model>
+			<nocollision>true</nocollision>
+			<displayshadow>false</displayshadow>
+			<groupname>ships-fish</groupname>
+			<modelscale>0.2</modelscale>
+		</object>
+	</placement>
+	<movement type="ships">
+		<speed>0.01</speed>
+		<controlpoints>8</controlpoints>
+		<controlpointswidth>500</controlpointswidth>
+		<controlpointsheight>500</controlpointsheight>
+		<controlpointsrand>200</controlpointsrand>
+		<starttime>520</starttime>
+		<groupname>ships-fish</groupname>
+	</movement>
+</shipgroups>

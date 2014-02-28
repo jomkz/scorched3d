@@ -1,0 +1,17 @@
+<defn>
+	<minplayers>0</minplayers>
+	<maxplayers>24</maxplayers>
+	<landscapewidth>256</landscapewidth>
+	<landscapeheight>256</landscapeheight>
+	<roof type="sky"></roof>
+	<tankstart type="height">
+		<startcloseness>20</startcloseness>
+		<height><min>20</min><max>60</max></height>
+		<startmask></startmask>
+		<flatness>0.5</flatness>
+	</tankstart>
+	<heightmap type="file">
+    	<file>data/landscapes/glaciation3.bmp</file>
+    	<levelsurround>true</levelsurround>
+    </heightmap>
+</defn>

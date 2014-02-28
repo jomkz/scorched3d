@@ -1,0 +1,154 @@
+<shipgroups>
+
+  	<placement type="count">
+		<count>1</count>
+		<object type='target'>
+			<model type='MilkShape'>data/meshes/destroyer/destroyer.txt</model>
+			<nocollision>true</nocollision>
+			<displayshadow>false</displayshadow>
+			<groupname>ships-Destroyer</groupname>
+				<modelscale>1</modelscale>
+		</object>
+	</placement>
+
+
+	<movement type="ships">
+		<speed>0.02</speed>
+		<controlpoints>12</controlpoints>
+			<controlpointswidth>400</controlpointswidth>
+		<controlpointsheight>400</controlpointsheight>
+		<controlpointsrand>1</controlpointsrand>
+		<starttime>1800</starttime>
+		<groupname>ships-Destroyer</groupname>
+	</movement>
+  <event>
+    <condition type="time">
+      <mintime>0.0</mintime>
+      <maxtime>35.0</maxtime>
+      <singletimeonly>false</singletimeonly>
+    </condition>
+    <action type="fireweaponfromgroup">
+      <weapon>Torpedo</weapon>
+    <groupname>ships-Destroyer</groupname>
+    </action>
+  </event>
+
+
+  	<placement type="count">
+		<count>1</count>
+		<object type='target'>
+			<model type='MilkShape'>data/meshes/cruiser/cruiser.txt</model>
+			<nocollision>true</nocollision>
+			<displayshadow>false</displayshadow>
+			<groupname>ships-Cruiser</groupname>
+				<modelscale>1</modelscale>
+		</object>
+	</placement>
+
+
+		<movement type="ships">
+		<speed>0.02</speed>
+		<controlpoints>12</controlpoints>
+	    <controlpointswidth>500</controlpointswidth>
+		<controlpointsheight>500</controlpointsheight>
+		<controlpointsrand>1</controlpointsrand>
+		<starttime>1200</starttime>
+		<groupname>ships-Cruiser</groupname>
+	</movement>
+	
+
+  <event>
+    <condition type="time">
+      <mintime>18.0</mintime>
+      <maxtime>30.0</maxtime>
+      <singletimeonly>false</singletimeonly>
+    </condition>
+    <action type="fireweaponfromgroup">
+      <weapon>bombardc</weapon>
+      		<groupname>ships-Cruiser</groupname>
+    </action>
+  </event>
+  
+  
+   	<placement type="count">
+		<count>1</count>
+		<object type='target'>
+			<model type='MilkShape'>data/meshes/battleship/bship.txt</model>
+			<nocollision>true</nocollision>
+			<displayshadow>false</displayshadow>
+			<groupname>ships-Battleship</groupname>
+			<modelscale>1</modelscale>
+		</object>
+	</placement>
+	
+		<movement type="ships">
+		<speed>0.02</speed>
+<controlpoints>12</controlpoints>
+	        <controlpointswidth>600</controlpointswidth>
+		<controlpointsheight>600</controlpointsheight>
+		<controlpointsrand>1</controlpointsrand>
+		<starttime>600</starttime>
+		<groupname>ships-Battleship</groupname>
+	</movement>
+	
+
+  <event>
+    <condition type="time">
+      <mintime>15.0</mintime>
+      <maxtime>40.0</maxtime>
+      <singletimeonly>false</singletimeonly>
+    </condition>
+    <action type="fireweaponfromgroup">
+      <weapon>bombard</weapon>
+      	<groupname>ships-Battleship</groupname>
+    </action>
+  </event>
+
+  
+  
+  
+
+  	<placement type="count">
+		<count>1</count>
+		<object type='target'>
+			<model type='MilkShape'>data/meshes/carrier/russian.txt</model>
+			<nocollision>true</nocollision>
+			<displayshadow>false</displayshadow>
+			<groupname>ships-Carrier2</groupname>
+				<modelscale>1.134</modelscale>
+		</object>
+	</placement>
+
+
+	<movement type="ships">
+		<speed>0.02</speed>
+		<controlpoints>12</controlpoints>
+		<controlpointswidth>700</controlpointswidth>
+		<controlpointsheight>700</controlpointsheight>
+		<controlpointsrand>1</controlpointsrand>
+		<starttime>0</starttime>
+		<groupname>ships-Carrier2</groupname>
+	</movement>
+  <event>
+    <condition type="time">
+      <mintime>25.0</mintime>
+      <maxtime>38.0</maxtime>
+      <singletimeonly>false</singletimeonly>
+    </condition>
+    <action type="fireweaponfromgroup">
+      <weapon>carrierfire</weapon>
+      <groupname>ships-Carrier2</groupname>
+    </action>
+  </event>
+  
+
+
+
+
+
+
+</shipgroups>
+  
+  
+  
+  

@@ -22,8 +22,11 @@
 #define __INCLUDE_ServerMainh_INCLUDE__
 
 #include <common/fixed.h>
+class ScorchedServerSettings;
+class ProgressCounter;
+void startClientServer(ScorchedServerSettings *settings, ProgressCounter *progressCounter);
+void stopClientServer();
 
-bool serverLoop(fixed timeDifference);
 void consoleServer();
 
 #endif

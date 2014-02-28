@@ -1,0 +1,40 @@
+
+<place>
+
+
+
+			<placement type='direct'>
+			<position>
+			<position>
+			             	<A>128</A>
+					<B>128</B>
+					<C>0</C>
+			</position>
+			</position>
+		<object type='target'>
+		 <model type='MilkShape'>data/meshes/stonehenge/stonehenge.txt</model>
+		 <modelscale>0.1</modelscale>
+		 <modelrotationsnap>-1</modelrotationsnap>
+		 	<life>3000</life>
+		 	 <nocollision>true</nocollision>
+                 <removeaction>none</removeaction>
+		  <flattenarea>0</flattenarea>
+		  <nofalling>false</nofalling>
+		  <groupname>Stones</groupname>
+		  <displayshadow>true</displayshadow>
+	     	</object>
+		     
+		</placement>
+
+
+
+
+
+		
+
+
+
+</place>
+
+
+

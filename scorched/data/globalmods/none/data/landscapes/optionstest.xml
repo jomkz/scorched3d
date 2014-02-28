@@ -1,0 +1,16 @@
+<options>
+	<options>
+		<option>
+			<name>WallType</name>
+			<value>WallNone</value>
+		</option>
+		<option>
+			<name>Teams</name>
+			<value>2</value>
+		</option>
+		<option>
+			<name>TeamBallance</name>
+			<value>TeamBallanceAuto</value>
+		</option>
+	</options>
+</options>

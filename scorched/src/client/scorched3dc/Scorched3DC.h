@@ -46,6 +46,7 @@ protected:
 	OIS::Keyboard* keyboard_;
 
 	bool quit(const CEGUI::EventArgs &e);
+	bool start(const CEGUI::EventArgs &e);
 	bool loadPlugin(const Ogre::String &pluginName, const Ogre::String &requiredName);
 	bool createWindow();
 	bool createInput();

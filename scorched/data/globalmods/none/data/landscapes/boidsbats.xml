@@ -1,0 +1,39 @@
+<boids>
+	<placement type="bounds">
+		<count>20</count>
+		<minbounds><A>0</A><B>0</B><C>5</C></minbounds>
+		<maxbounds><A>255</A><B>255</B><C>40</C></maxbounds>
+		<object type='target'>
+			<model type='MilkShape'>data/meshes/bat/bat.txt</model>
+			<nocollision>true</nocollision>
+			<displayshadow>false</displayshadow>
+			<groupname>boids-bats</groupname>
+      <groupname>camera</groupname>
+			<modelscale>0.03</modelscale>
+		</object>
+	</placement>
+	<movement type="boids">
+		<minbounds><A>0</A><B>0</B><C>5</C></minbounds>
+		<maxbounds><A>255</A><B>255</B><C>40</C></maxbounds>
+		<maxvelocity>1.0</maxvelocity>
+		<maxacceleration>1.0</maxacceleration>
+		<cruisedistance>1.0</cruisedistance>
+		<groupname>boids-bats</groupname>
+	</movement>
+	<sound>
+		<position type='set'>
+			<maxsounds>5</maxsounds>
+			<name>boids-bats</name>
+		</position>
+		<timing type='repeat'>
+			<min>15</min>
+			<max>30</max>
+		</timing>
+		<sound type='file'>
+			<file>data/wav/misc/bats1.wav</file>
+			<file>data/wav/misc/bats2.wav</file>
+			<file>data/wav/misc/bats3.wav</file>
+			<gain>0.25</gain>
+		</sound>
+	</sound>
+</boids>

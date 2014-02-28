@@ -136,7 +136,7 @@ bool ExplosionParams::parseXML(XMLNode *accessoryNode)
 	// Get the explosion sound
 	if (accessoryNode->getNamedChild("explosionsound", explosionSound_, false))
 	{
-		if (!S3D::checkDataFile(S3D::formatStringBuffer("data/wav/%s", getExplosionSound()))) return false;
+		if (!S3D::checkDataFile(S3D::formatStringBuffer("%s", getExplosionSound()))) return false;
 	}
 
 	// Get the deform

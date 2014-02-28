@@ -34,7 +34,6 @@ void S3D::dialogMessage(const std::string &header, const std::string &text, bool
 {
 	// Make sure that this is logged
 	Logger::log(S3D::formatStringBuffer("%s : %s", header.c_str(), text.c_str()));
-	Logger::instance()->processLogEntries();
 
 	std::string newtext;
 	if (split)

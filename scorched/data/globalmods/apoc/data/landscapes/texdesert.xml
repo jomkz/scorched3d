@@ -1,0 +1,40 @@
+<tex>
+	<detail>data/textures/landscape/default/detail.jpg</detail>
+	<magmasmall>data/textures/landscape/default/magma-small.jpg</magmasmall>
+	<scorch>data/textures/landscape/tropical/scorch.jpg</scorch>
+	<skytexture>data/textures/landscape/sand/cloud1.jpg</skytexture>
+	<skytexturemask>data/textures/landscape/default/cloud1m.jpg</skytexturemask>
+	<skycolormap>data/textures/clearsky.bmp</skycolormap>
+	<skytimeofday>3</skytimeofday>
+	<skysunxy>110</skysunxy>
+	<skysunyz>25</skysunyz>
+	<skyambience><A>0.4</A><B>0.4</B><C>0.4</C></skyambience>
+	<skydiffuse><A>0.8</A><B>0.8</B><C>0.8</C></skydiffuse>
+	<fog><A>0.8</A><B>0.8</B><C>0.8</C></fog>
+	<fogdensity>0.001</fogdensity>
+	<suncolor><A>1.0</A><B>1.0</B><C>1.0</C></suncolor>
+	<suntexture>data/textures/glow1.bmp</suntexture>
+	<border type="none"></border>
+	<texture type="generate">
+		<rockside>data/textures/landscape/sand/texture2.jpg</rockside>
+		<shore>data/textures/landscape/sand/shore.jpg</shore>
+		<roof>data/textures/landscape/sand/texture0.jpg</roof>
+		<texture0>data/textures/landscape/desert/surround.jpg</texture0>
+		<texture1>data/textures/landscape/desert/surround.jpg</texture1>
+		<texture2>data/textures/landscape/sand/texture1.jpg</texture2>
+		<texture3>data/textures/landscape/sand/texture1.jpg</texture3>
+	</texture>
+	<placements><placement>data/landscapes/placedesert.xml</placement></placements>
+	<ambientsounds>
+		<ambientsound>data/landscapes/ambientsoundjet.xml</ambientsound>
+		<ambientsound>data/landscapes/ambientsoundhelicopter.xml</ambientsound>
+	</ambientsounds>
+	<precipitation type="none"></precipitation>
+	<boids>
+		<boid>data/landscapes/boidsah64d.xml</boid>
+		<boid>data/landscapes/boidshornets.xml</boid>
+	</boids>
+	<events>
+		<event>data/landscapes/eventscargodrop.xml</event>
+	</events>
+</tex>

@@ -1,0 +1,194 @@
+<place>
+	<placement type="bounds">
+		<count>1</count>
+		<minbounds><A>-100</A><B>-100</B><C>10</C></minbounds>
+		<maxbounds><A>355</A><B>355</B><C>65</C></maxbounds>
+
+    <object type="random">
+    
+      <randomobject>
+        <object type='target'>
+          <model type='MilkShape'>data/meshes/vehicles/a12/a12.txt</model>
+          <nocollision>true</nocollision>
+          <nofalling>true</nofalling>
+          <removeaction>none</removeaction>
+          <boundingsphere>false</boundingsphere>
+          <displayshadow>true</displayshadow>
+          <groupname>f-35</groupname>
+          <modelscale>0.07</modelscale>
+        </object>
+      </randomobject>
+
+    
+      <randomobject>
+        <object type='target'>
+          <model type='MilkShape'>data/meshes/vehicles/f14/f14anim.txt</model>
+          <nocollision>true</nocollision>
+          <nofalling>true</nofalling>
+          <removeaction>none</removeaction>
+          <boundingsphere>false</boundingsphere>
+          <displayshadow>true</displayshadow>
+          <groupname>f-35</groupname>
+          <modelscale>0.07</modelscale>
+        </object>
+      </randomobject>
+
+      <randomobject>
+        <object type='target'>
+          <model type='MilkShape'>data/meshes/vehicles/f35/f35.txt</model>
+          <nocollision>true</nocollision>
+          <nofalling>true</nofalling>
+          <removeaction>none</removeaction>
+          <boundingsphere>false</boundingsphere>
+          <displayshadow>true</displayshadow>
+          <groupname>f-35</groupname>
+          <modelscale>0.07</modelscale>
+        </object>
+      </randomobject>
+      <randomobject>
+        <object type='target'>
+          <model type='MilkShape'>data/meshes/vehicles/f22/f22.txt</model>
+          <nocollision>true</nocollision>
+          <nofalling>true</nofalling>
+          <removeaction>none</removeaction>
+          <boundingsphere>false</boundingsphere>
+          <displayshadow>true</displayshadow>
+          <groupname>f-35</groupname>
+          <modelscale>0.07</modelscale>
+        </object>
+      </randomobject>
+       <randomobject>
+        <object type='target'>
+          <model type='MilkShape'>data/meshes/vehicles/f22/fb22.txt</model>
+          <nocollision>true</nocollision>
+          <nofalling>true</nofalling>
+          <removeaction>none</removeaction>
+          <boundingsphere>false</boundingsphere>
+          <displayshadow>true</displayshadow>
+          <groupname>f-35</groupname>
+          <modelscale>0.07</modelscale>
+        </object>
+      </randomobject>
+      <randomobject>
+        <object type='target'>
+          <model type='MilkShape'>data/meshes/vehicles/su34/su34.txt</model>
+          <nocollision>true</nocollision>
+          <nofalling>true</nofalling>
+          <removeaction>none</removeaction>
+          <boundingsphere>false</boundingsphere>
+          <displayshadow>true</displayshadow>
+          <groupname>f-35</groupname>
+          <modelscale>0.07</modelscale>
+        </object>
+      </randomobject>
+      <randomobject>
+        <object type='target'>
+          <model type='MilkShape'>data/meshes/vehicles/yf23/yf23.txt</model>
+          <nocollision>true</nocollision>
+          <nofalling>true</nofalling>
+          <removeaction>none</removeaction>
+          <boundingsphere>false</boundingsphere>
+          <displayshadow>true</displayshadow>
+          <groupname>f-35</groupname>
+          <modelscale>0.07</modelscale>
+        </object>
+      </randomobject>
+         <randomobject>
+        <object type='target'>
+          <model type='MilkShape'>data/meshes/vehicles/j20/j20.txt</model>
+          <nocollision>true</nocollision>
+          <nofalling>true</nofalling>
+          <removeaction>none</removeaction>
+          <boundingsphere>false</boundingsphere>
+          <displayshadow>true</displayshadow>
+          <groupname>f-35</groupname>
+          <modelscale>0.07</modelscale>
+        </object>
+      </randomobject>
+      
+
+    </object>
+	</placement>
+	
+	
+	
+	
+
+	<movement type="boids">
+		<minbounds><A>-100</A><B>-100</B><C>60</C></minbounds>
+		<maxbounds><A>355</A><B>355</B><C>90</C></maxbounds>
+		<maxvelocity>12.0</maxvelocity>
+		<maxacceleration>5.0</maxacceleration>
+		<cruisedistance>4.0</cruisedistance>
+			<groupname>f-35</groupname>
+	</movement>
+
+	<sound>
+		<position type='set'>
+			<name>f-35</name>
+			<maxsounds>1</maxsounds>
+		</position>
+		<timing type='repeat'>
+			<min>20</min>
+			<max>45</max>
+		</timing>
+		<sound type='file'>
+		<file>data/wav/airplane/generic.ogg</file>
+			<gain>0.8</gain>
+		  </sound>
+		</sound>
+
+
+
+           	<event>
+		<condition type="time">
+			<mintime>1</mintime>
+			<maxtime>40</maxtime>
+			<singletimeonly>false</singletimeonly>
+		</condition>
+		<action type="fireweaponfromgroup">
+                 	<groupname>f-35</groupname>
+			<weapon>f35bomb</weapon>
+		</action>
+	</event>
+	
+		<event>
+		<condition type="time">
+			<mintime>RANGE (10,15)</mintime>
+			<maxtime>20</maxtime>
+			<singletimeonly>false</singletimeonly>
+		</condition>
+		<action type="fireweaponfromgroup">
+                 	<groupname>f-35</groupname>
+			<weapon>f35rocket</weapon>
+		</action>
+	</event>
+
+		<event>
+		<condition type="time">
+			<mintime>1.0</mintime>
+			<maxtime>60.0</maxtime>
+			<singletimeonly>false</singletimeonly>
+		</condition>
+		<action type="fireweaponfromgroup">
+                 	<groupname>f-35</groupname>
+			<weapon>30mm Vulcan</weapon>
+		</action>
+	</event>
+
+	
+<!-- <event>
+    <condition type="time">
+      <mintime>0.02</mintime>
+      <maxtime>0.02</maxtime>
+      <singletimeonly>false</singletimeonly>
+    </condition>
+    <action type="fireweaponfromgroup">
+      <weapon>f35engine</weapon>
+      	<groupname>f-35</groupname>
+    </action>
+  </event>-->
+
+		</place>
+
+

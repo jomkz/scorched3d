@@ -1,0 +1,94 @@
+<place>
+		<placement type='direct'>
+			<position>
+				<position>
+					<A>128</A>
+					<B>128</B>
+					<C>0</C>
+				</position>
+			</position>
+			<object type='group'>
+				<groupobject>
+					<offset>
+						<A>0</A>
+						<B>20</B>
+						<C>0</C>
+					</offset>
+					<object type='model'>
+						<model type='MilkShape'>data/meshes/seagull/seagull.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/banana/banana.txt</modelburnt>
+						<modelscale>0.1</modelscale>
+						<modelrotationsnap>45</modelrotationsnap>
+						<flattenarea>-1.0</flattenarea>
+						<removeaction>TestPowerUpWeapon</removeaction>
+						<groundmap type='bmp'>
+							<image>data/landscapes/parking.bmp</image>
+							<alpha>data/landscapes/parkinga.bmp</alpha>
+							<invert>true</invert>
+						</groundmap>
+						<shield>TestSquareShield</shield>
+						<displayshadow>false</displayshadow>
+						<groupname>bob</groupname>
+						<groupname>sam</groupname>
+						<groupname>testmove</groupname>
+					</object>
+				</groupobject>
+				<!--<groupobject>
+					<offset>
+						<A>0</A>
+						<B>0</B>
+						<C>0</C>
+					</offset>
+					<object type='target'>
+						<name>Test</name>
+						<model type="MilkShape">data/globalmods/apoc/data/accessories/buildings/mainport_anim.txt</model>
+						<modelburnt type='MilkShape'>data/accessories/banana/banana.txt</modelburnt>
+						<modelscale>0.1</modelscale>
+						<modelrotationsnap>45</modelrotationsnap>
+						<border>10</border>
+						<flattenarea>-1.0</flattenarea>
+						<removeaction>TestPowerUpWeapon</removeaction>
+						<groundmap type='bmp'>
+							<image>data/landscapes/parking.bmp</image>
+							<alpha>data/landscapes/parkinga.bmp</alpha>
+							<invert>true</invert>
+						</groundmap>
+						<groupname>bob</groupname>
+						<groupname>sams</groupname>
+					</object>
+				</groupobject>-->
+				<groupobject>
+					<offset>
+						<A>0</A>
+						<B>10</B>
+						<C>0</C>
+					</offset>
+					<object type='none'>
+					</object>
+				</groupobject>
+			</object>
+		</placement>
+	<!--
+	<movement type="spline">
+		<speed>0.1</speed>
+		<starttime>600</starttime>
+		<groundonly>true</groundonly>
+		<groupname>testmove</groupname>
+		<controlpoint>
+			<A>128</A>
+			<B>128</B>
+			<C>0</C>
+		</controlpoint>
+		<controlpoint>
+			<A>256</A>
+			<B>128</B>
+			<C>0</C>
+		</controlpoint>
+		<controlpoint>
+			<A>128</A>
+			<B>256</B>
+			<C>0</C>
+		</controlpoint>
+	</movement>
+	   -->
+</place>

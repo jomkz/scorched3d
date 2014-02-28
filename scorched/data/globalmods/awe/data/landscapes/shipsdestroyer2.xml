@@ -1,0 +1,41 @@
+<shipgroups>
+
+	<placement type="count">
+		<count>1</count>
+		<object type='target'>
+			<model type='MilkShape'>data/meshes/battleship/bship.txt</model>
+			<nocollision>true</nocollision>
+			<displayshadow>false</displayshadow>
+			<groupname>ships-Battleship</groupname>
+			<modelscale>1</modelscale>
+		</object>
+	</placement>
+	
+		<movement type="ships">
+		<speed>0.02</speed>
+<controlpoints>12</controlpoints>
+	        <controlpointswidth>600</controlpointswidth>
+		<controlpointsheight>600</controlpointsheight>
+		<controlpointsrand>1</controlpointsrand>
+		<starttime>300</starttime>
+		<groupname>ships-Battleship</groupname>
+	</movement>
+	
+
+  <event>
+    <condition type="time">
+      <mintime>8.0</mintime>
+      <maxtime>40.0</maxtime>
+      <singletimeonly>false</singletimeonly>
+    </condition>
+    <action type="fireweaponfromgroup">
+      <weapon>bombard</weapon>
+      	<groupname>ships-Battleship</groupname>
+    </action>
+  </event>
+
+</shipgroups>
+  
+  
+  
+  

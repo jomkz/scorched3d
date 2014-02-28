@@ -27,6 +27,7 @@ public:
 	Clock();
 	virtual ~Clock();
 
+	void reset();
 	float getTimeDifference();
 	unsigned int getTicksDifference();
 

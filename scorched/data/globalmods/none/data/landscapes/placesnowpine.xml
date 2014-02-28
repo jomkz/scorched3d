@@ -1,0 +1,79 @@
+<place>
+		<placement type='trees'>
+			<numobjects>1000000</numobjects>
+			<numclusters>25</numclusters>
+			<minheight>8</minheight>
+			<maxheight>30</maxheight>
+			<object type='random'>
+				<randomobject>
+					<object type='model'>
+						<model type='Tree'>
+							<type>pine2</type>
+							<snow>true</snow>
+							<burnt>false</burnt>
+						</model>
+						<modelburnt type='Tree'>
+							<type>pine2</type>
+							<snow>false</snow>
+							<burnt>true</burnt>
+						</modelburnt>
+						<modelscale>1.0</modelscale>
+						<modelscalediff>2.0</modelscalediff>
+						<modelrotationsnap>1</modelrotationsnap>
+						<modelbrightness>-1.0</modelbrightness>
+						<displayshadow>false</displayshadow>
+						<nodamageburn>true</nodamageburn>
+						<displaydamage>false</displaydamage>
+						<drawshadow>true</drawshadow>
+						<groupname>trees</groupname>
+					</object>
+				</randomobject>
+				<randomobject>
+					<object type='model'>
+						<model type='Tree'>
+							<type>pine3</type>
+							<snow>true</snow>
+							<burnt>false</burnt>
+						</model>
+						<modelburnt type='Tree'>
+							<type>pine3</type>
+							<snow>false</snow>
+							<burnt>true</burnt>
+						</modelburnt>
+						<modelscale>1.0</modelscale>
+						<modelscalediff>2.0</modelscalediff>
+						<modelrotationsnap>1</modelrotationsnap>
+						<modelbrightness>-1.0</modelbrightness>
+						<displayshadow>false</displayshadow>
+						<nodamageburn>true</nodamageburn>
+						<displaydamage>false</displaydamage>
+						<drawshadow>true</drawshadow>
+						<groupname>trees</groupname>
+					</object>
+				</randomobject>
+				<randomobject>
+					<object type='model'>
+						<model type='Tree'>
+							<type>pine4</type>
+							<snow>true</snow>
+							<burnt>false</burnt>
+						</model>
+						<modelburnt type='Tree'>
+							<type>pine4</type>
+							<snow>false</snow>
+							<burnt>true</burnt>
+						</modelburnt>
+						<modelscale>1.0</modelscale>
+						<modelscalediff>2.0</modelscalediff>
+						<modelrotationsnap>1</modelrotationsnap>
+						<modelbrightness>-1.0</modelbrightness>
+						<displayshadow>false</displayshadow>
+						<nodamageburn>true</nodamageburn>
+						<displaydamage>false</displaydamage>
+						<drawshadow>true</drawshadow>
+						<groupname>trees</groupname>
+					</object>
+				</randomobject>
+			</object>
+		</placement>
+</place>

@@ -1,0 +1,39 @@
+<tex>
+	<detail>data/textures/landscape/default/detail.jpg</detail>
+	<magmasmall>data/textures/landscape/default/magma-small.jpg</magmasmall>
+	<scorch>data/textures/landscape/snow/scorch.jpg</scorch>
+	<skytexture>data/textures/landscape/moon/sky.jpg</skytexture>
+	<skytexturestatic>data/textures/landscape/moon/stars.jpg</skytexturestatic>
+	<skytexturemask>data/textures/landscape/moon/sky.jpg</skytexturemask>
+	<skycolormap>data/textures/landscape/moon/sky.jpg</skycolormap>
+	<skytimeofday>8</skytimeofday>
+	<skysunxy>45</skysunxy>
+	<skysunyz>30</skysunyz>
+	<skyambience><A>0.05</A><B>0.05</B><C>0.05</C></skyambience>
+	<skydiffuse><A>0.3</A><B>0.3</B><C>0.3</C></skydiffuse>
+	<fog><A>0</A><B>0</B><C>0</C></fog>
+	<fogdensity>0.004</fogdensity>
+	<suncolor><A>1.0</A><B>1.0</B><C>1.0</C></suncolor>
+	<suntexture>data/textures/landscape/moon/earth.jpg</suntexture>
+	<suntexturemask>data/textures/landscape/moon/earthm.jpg</suntexturemask>
+	<nosunblend>true</nosunblend>
+	<nosunfog>true</nosunfog>
+	<nohorizonglow>true</nohorizonglow>
+	<border type="none"></border>
+	<texture type="generate">
+		<rockside>data/textures/landscape/moon/texture0.jpg</rockside>
+		<shore>data/textures/landscape/moon/texture0.jpg</shore>
+		<roof>data/textures/landscape/moon/texture0.jpg</roof>
+		<texture0>data/textures/landscape/moon/surround.jpg</texture0>
+		<texture1>data/textures/landscape/moon/texture0.jpg</texture1>
+		<texture2>data/textures/landscape/moon/texture1.jpg</texture2>
+		<texture3>data/textures/landscape/moon/texture3.jpg</texture3>
+	</texture>
+	<placements><placement>data/landscapes/placemoon.xml</placement></placements>
+	<ambientsounds></ambientsounds>
+	<precipitation type="none"></precipitation>
+	<events>
+		<event>data/landscapes/eventsmeteor.xml</event>
+		<event>data/landscapes/eventsatellitecrash.xml</event>
+	</events>
+</tex>

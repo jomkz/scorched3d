@@ -1,0 +1,29 @@
+<place>
+		<placement type='direct'>
+			<position>
+				<position>
+					<A>92</A>
+					<B>88</B>
+					<C>4.1</C>
+				</position>
+			</position>
+			<object type="target">
+				<name>City Port</name>
+				<model type="MilkShape">data/accessories/buildings/mainport_anim.txt</model>
+				<modelburnt type='MilkShape'>data/accessories/buildings/mainport.txt</modelburnt>
+				<modelrotation>90</modelrotation>
+				<modelscale>0.075</modelscale>
+				<shield>none</shield>
+				<parachute>none</parachute>
+				<life>100</life>
+				<removeaction>City Port</removeaction>
+				<burnaction>Large Bldg</burnaction>
+				<boundingsphere>false</boundingsphere>
+				<groundmap type="bmp">
+					<image>data/landscapes/parking.bmp</image>
+					<alpha>data/landscapes/parkinga.bmp</alpha>
+					<invert>true</invert>
+				</groundmap>
+			</object>
+		</placement>
+</place>

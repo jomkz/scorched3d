@@ -1,0 +1,182 @@
+<options source='Scorched3D'>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType2</name>
+		<value>Target</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType3</name>
+		<value>Target</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType4</name>
+		<value>Target</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType5</name>
+		<value>Target</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType6</name>
+		<value>Target</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType7</name>
+		<value>Target</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType8</name>
+		<value>Target</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType9</name>
+		<value>Target</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType10</name>
+		<value>Target</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType11</name>
+		<value>Target</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType12</name>
+		<value>Target</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType13</name>
+		<value>Target</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType14</name>
+		<value>Target</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType15</name>
+		<value>Target</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType16</name>
+		<value>Target</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType17</name>
+		<value>Target</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType18</name>
+		<value>Target</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType19</name>
+		<value>Target</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType20</name>
+		<value>Target</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType21</name>
+		<value>Target</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType22</name>
+		<value>Target</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType23</name>
+		<value>Target</value>
+	</option>
+	<!-- The type of the player e.g. human, computer etc.. -->
+	<!-- (default value : "Human") -->
+	<option>
+		<name>PlayerType24</name>
+		<value>Target</value>
+	</option>
+	<!-- The number of rounds to play in each game (Max = 50, Min = 1) -->
+	<!-- (default value : "5") -->
+	<option>
+		<name>NumberOfRounds</name>
+		<value>1</value>
+	</option>
+	<!-- The maximum number of players to allow (Max = 24, Min = 2) -->
+	<!-- (default value : "2") -->
+	<option>
+		<name>NumberOfPlayers</name>
+		<value>24</value>
+	</option>
+	<!-- The minimum number of players to allow (Max = 24, Min = 2) -->
+	<!-- (default value : "2") -->
+	<option>
+		<name>NumberOfMinPlayers</name>
+		<value>24</value>
+	</option>
+	<!-- The money awarded for each person killed * weapon used (Max = 2000, Min = 0) -->
+	<!-- (default value : "750") -->
+	<option>
+		<name>MoneyWonPerKillPoint</name>
+		<value>500</value>
+	</option>
+	<!-- The money awarded for each person hit * weapon used (Max = 2000, Min = 0) -->
+	<!-- (default value : "250") -->
+	<option>
+		<name>MoneyWonPerHitPoint</name>
+		<value>100</value>
+	</option>
+	<!-- The player turn mode ( possible values = [ "TurnSimultaneous"  "TurnSimultaneousNoWait"  "TurnSequentialLooserFirst"  "TurnSequentialRandom"  "TurnFree"  "TurnFreeTimed" ] ) -->
+	<!-- (default value : "TurnSequentialLooserFirst") -->
+	<option>
+		<name>TurnType</name>
+		<value>TurnSimultaneousNoWait</value>
+	</option>
+	<!-- Start the game will all the weapons -->
+	<!-- (default value : "off") -->
+	<option>
+		<name>GiveAllWeapons</name>
+		<value>on</value>
+	</option>
+</options>

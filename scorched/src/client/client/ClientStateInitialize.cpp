@@ -49,6 +49,7 @@
 #include <net/NetLoopBack.h>
 #include <server/ScorchedServer.h>
 #include <server/ScorchedServerSettings.h>
+#include <server/ServerMain.h>
 #include <target/TargetContainer.h>
 #include <tank/TankModelStore.h>
 #include <tankai/TankAIStrings.h>
@@ -157,8 +158,6 @@ void ClientStateInitialize::enterState()
 
 void ClientStateInitialize::connectToServer()
 {
-	ProgressCounter progressCounter;
-	progressCounter.setNewPercentage(0.0f);
 	ScorchedClient::instance();
 
 	// Tidy up any existing net handlers
@@ -212,22 +211,12 @@ void ClientStateInitialize::connectToServer()
 				ClientParams::instance()->getWriteFullOptions());
 		}
 
-		progressCounter.setNewPercentage(0.0f);
-		if (!ScorchedServer::instance()->startServer(
-			*settings,
-			true,
-			&progressCounter)) 
-		{
-			S3D::dialogExit("Scorched3D", 
-				S3D::formatStringBuffer("Failed to start server"),
-				false);
-			return;
-		}
-		delete settings;
+		ProgressCounter *progressCounter = new ProgressCounter();
+		startClientServer(settings, progressCounter);
 	}
 
 	// Do in a thread so connect can block if it wants!
-	remoteConnectionThread_ = new boost::thread(ClientStateInitialize::tryRemoteConnection, this);
+	//remoteConnectionThread_ = new boost::thread(ClientStateInitialize::tryRemoteConnection, this);
 }
 
 int ClientStateInitialize::tryRemoteConnection(void *th)

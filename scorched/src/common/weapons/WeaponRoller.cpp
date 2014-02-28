@@ -110,6 +110,7 @@ bool WeaponRoller::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 	// Get the weapon model
 	XMLNode *modelNode = 0;
 	if (!accessoryNode->getNamedChild("rollermodel", modelNode)) return false;
+
 	if (!rollerModelId_.initFromNode(modelNode)) return false;
 
 	return true;

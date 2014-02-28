@@ -60,6 +60,8 @@ bool ModelID::initFromString(
 
 bool ModelID::initFromNode(XMLNode *modelNode)
 {
+	// TODO
+	return true;
 	XMLNode *typeNode = 0;
 	if (!modelNode->getNamedParameter("type", typeNode)) return false;
 

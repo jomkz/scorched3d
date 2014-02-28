@@ -1,0 +1,26 @@
+<tanktypes>
+	<tanktype>
+		<name>none</name>
+		<life>100</life>
+		<power>1000</power>
+		<description>Normal tank</description>
+
+		<!--
+		<accessory>
+			<name>Missile</name>
+			<count>10</count>
+		</accessory>
+		<accessory>
+			<name>MIRV</name>
+			<count>-1</count>
+		</accessory>
+
+		<disableaccessory>
+			<name>Funky Bomb</name>
+		</disableaccessory>
+			<disableaccessory>
+			<name>Nuke</name>
+		</disableaccessory>
+		-->
+	</tanktype>
+</tanktypes>

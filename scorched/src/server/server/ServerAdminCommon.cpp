@@ -45,7 +45,7 @@ void ServerAdminCommon::adminLog(const ChannelText &message)
 		char buffer[256];
 		snprintf(buffer, 256, "ServerAdminLog-%i-", 
 			ScorchedServer::instance()->getOptionsGame().getPortNo());
-		serverAdminFileLogger = new FileLogger(buffer);
+		serverAdminFileLogger = new FileLogger(buffer, S3D::getLogFile("."), true);
 	}	
 
 	ScorchedServer::instance()->getServerChannelManager().sendText(message, true);

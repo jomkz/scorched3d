@@ -1,0 +1,114 @@
+<ambientsound>
+		<sound>
+			<position type='group'>
+				<name>offices</name>
+				<falloff>3.0</falloff>
+			</position>
+			<timing type='repeat'>
+				<min>10</min>
+				<max>40</max>
+			</timing>
+			<sound type='file'>
+				<file>data/wav/misc/carhorn1.wav</file>
+				<gain>1.0</gain>
+			</sound>
+		</sound>
+		<sound>
+			<position type='group'>
+				<name>offices</name>
+				<falloff>3.0</falloff>
+			</position>
+			<timing type='repeat'>
+				<min>10</min>
+				<max>40</max>
+			</timing>
+			<sound type='file'>
+				<file>data/wav/misc/carhorn2.wav</file>
+				<gain>1.0</gain>
+			</sound>
+		</sound>
+		<sound>
+			<position type='group'>
+				<name>offices</name>
+				<falloff>3.0</falloff>
+			</position>
+			<timing type='repeat'>
+				<min>10</min>
+				<max>40</max>
+			</timing>
+			<sound type='file'>
+				<file>data/wav/misc/carhorn3.wav</file>
+				<gain>1.0</gain>
+			</sound>
+		</sound>
+		<sound>
+			<position type='group'>
+				<name>offices</name>
+				<falloff>3.0</falloff>
+			</position>
+			<timing type='repeat'>
+				<min>20</min>
+				<max>50</max>
+			</timing>
+			<sound type='file'>
+				<file>data/wav/misc/carhorn4.wav</file>
+				<gain>1.0</gain>
+			</sound>
+		</sound>
+		<sound>
+			<position type='group'>
+				<name>offices</name>
+				<falloff>3.0</falloff>
+			</position>
+			<timing type='repeat'>
+				<min>20</min>
+				<max>50</max>
+			</timing>
+			<sound type='file'>
+				<file>data/wav/misc/carhorn5.wav</file>
+				<gain>1.0</gain>
+			</sound>
+		</sound>
+		<sound>
+			<position type='group'>
+				<name>offices</name>
+				<falloff>3.0</falloff>
+			</position>
+			<timing type='repeat'>
+				<min>10</min>
+				<max>40</max>
+			</timing>
+			<sound type='file'>
+				<file>data/wav/misc/carhorn6.wav</file>
+				<gain>1.0</gain>
+			</sound>
+		</sound>
+		<sound>
+			<position type='group'>
+				<name>houses</name>
+				<falloff>3.0</falloff>
+			</position>
+			<timing type='repeat'>
+				<min>20</min>
+				<max>60</max>
+			</timing>
+			<sound type='file'>
+				<file>data/wav/misc/firetruck.wav</file>
+				<gain>1.0</gain>
+			</sound>
+		</sound>
+		<sound>
+			<position type='group'>
+				<name>houses</name>
+				<falloff>3.0</falloff>
+			</position>
+			<timing type='repeat'>
+				<min>20</min>
+				<max>60</max>
+			</timing>
+			<sound type='file'>
+				<file>data/wav/misc/policecar.wav</file>
+				<gain>1.0</gain>
+			</sound>
+		</sound>
+</ambientsound>

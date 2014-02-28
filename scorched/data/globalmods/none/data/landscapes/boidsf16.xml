@@ -1,0 +1,48 @@
+<boids>
+	<placement type="bounds">
+		<count>2</count>
+		<minbounds><A>-100</A><B>-100</B><C>30</C></minbounds>
+		<maxbounds><A>355</A><B>355</B><C>65</C></maxbounds>
+		<object type='target'>
+			<model type='MilkShape'>data/meshes/f16/f16.txt</model>
+			<nocollision>true</nocollision>
+			<displayshadow>false</displayshadow>
+			<groupname>boids-f16</groupname>
+			<modelscale>0.23</modelscale>
+		</object>
+	</placement>
+	<movement type="boids">
+		<minbounds><A>-100</A><B>-100</B><C>30</C></minbounds>
+		<maxbounds><A>355</A><B>355</B><C>65</C></maxbounds>
+		<maxvelocity>9.0</maxvelocity>
+		<maxacceleration>5.0</maxacceleration>
+		<cruisedistance>9.0</cruisedistance>
+		<groupname>boids-f16</groupname>
+	</movement>
+	<sound>
+		<position type='set'>
+			<maxsounds>3</maxsounds>
+			<name>boids-f16</name>
+		</position>
+		<timing type='repeat'>
+			<min>0</min>
+			<max>11</max>
+		</timing>
+		<sound type='file'>
+			<file>data/wav/misc/f16_1.wav</file>
+			<file>data/wav/misc/f16_2.wav</file>
+			<gain>0.5</gain>
+		</sound>
+	</sound>
+  <event>
+    <condition type="time">
+      <mintime>15.0</mintime>
+      <maxtime>35.0</maxtime>
+      <singletimeonly>false</singletimeonly>
+    </condition>
+    <action type="fireweaponfromgroup">
+      <weapon>Bomb At Tank</weapon>
+      <groupname>boids-f16</groupname>
+    </action>
+  </event>
+</boids>

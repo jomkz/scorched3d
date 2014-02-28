@@ -1,0 +1,80 @@
+<boids>
+	<placement type="bounds">
+		<count>1</count>
+		<minbounds><A>0</A><B>0</B><C>30</C></minbounds>
+		<maxbounds><A>355</A><B>355</B><C>65</C></maxbounds>
+
+		  <object type="random">
+      <randomobject>
+        <object type='target'>
+     	<model type='MilkShape'>data/meshes/vehicles/sr71/sr71.txt</model>
+			<nocollision>false</nocollision>
+			 <nofalling>true</nofalling>
+			<removeaction>sr7die</removeaction>
+			 <boundingsphere>false</boundingsphere>
+			<displayshadow>false</displayshadow>
+			<groupname>sr71</groupname>
+			<modelscale>0.25</modelscale>
+
+        </object>
+      </randomobject>
+      
+         <randomobject>
+        <object type='target'>
+     	<model type='MilkShape'>data/meshes/vehicles/sr71/yf12.txt</model>
+			<nocollision>false</nocollision>
+			 <nofalling>true</nofalling>
+			<removeaction>sr7die</removeaction>
+			 <boundingsphere>false</boundingsphere>
+			<displayshadow>false</displayshadow>
+			<groupname>sr71</groupname>
+			<modelscale>0.25</modelscale>
+
+        </object>
+      </randomobject>
+
+
+
+			
+			
+
+		</object>
+	</placement>
+	
+	
+
+	<movement type="boids">
+		<minbounds><A>-100</A><B>-100</B><C>30</C></minbounds>
+		<maxbounds><A>355</A><B>355</B><C>65</C></maxbounds>
+		<maxvelocity>12.0</maxvelocity>
+		<maxacceleration>5.0</maxacceleration>
+		<cruisedistance>9.0</cruisedistance>
+			<groupname>sr71</groupname>
+	</movement>
+	<sound>
+		<position type='set'>
+			<name>sr71</name>
+			<maxsounds>3</maxsounds>
+		</position>
+		<timing type='repeat'>
+			<min>0</min>
+			<max>11</max>
+		</timing>
+		<sound type='file'>
+			<file>data/wav/misc/f16_1.wav</file>
+			<file>data/wav/misc/f16_2.wav</file>
+			<gain>0.5</gain>
+		</sound>
+	</sound>
+  <event>
+    <condition type="time">
+      <mintime>7.0</mintime>
+      <maxtime>12.0</maxtime>
+      <singletimeonly>false</singletimeonly>
+    </condition>
+    <action type="fireweaponfromgroup">
+      <weapon>jdam</weapon>
+   	<groupname>sr71</groupname>
+    </action>
+  </event>
+</boids>

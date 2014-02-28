@@ -1,0 +1,37 @@
+<tex>
+	<detail>data/textures/landscape/sahara/detail.jpg</detail>
+	<magmasmall>data/textures/landscape/default/magma-small.jpg</magmasmall>
+	<scorch>data/textures/landscape/sahara/scorch.jpg</scorch>
+	<fog><A>0.8</A><B>0.8</B><C>0.8</C></fog>
+	<fogdensity>0.001</fogdensity>
+	<skytexture>data/textures/landscape/sahara/cloud1.jpg</skytexture>
+	<skytexturemask>data/textures/landscape/sahara/cloud1m.jpg</skytexturemask>
+	<skycolormap>data/textures/landscape/sahara/clearsky.jpg</skycolormap>
+	<skytimeofday>3</skytimeofday>
+	<skysunxy>110</skysunxy>
+	<skysunyz>15</skysunyz>
+	<skyambience><A>0.4</A><B>0.4</B><C>0.4</C></skyambience>
+	<skydiffuse><A>0.7</A><B>0.7</B><C>0.7</C></skydiffuse>
+	<suncolor><A>0.4</A><B>0.4</B><C>0.4</C></suncolor>
+	<suntexture>data/textures/glow1.bmp</suntexture>
+	<border type="water">
+		<reflection>data/textures/landscape/sahara/cubemap.jpg</reflection>
+		<texture>data/textures/landscape/sahara/water.jpg</texture>
+		<wavetopa><A>0.0</A><B>0.0</B><C>0.0</C></wavetopa>
+		<wavetopb><A>0.49</A><B>0.83</B><C>0.94</C></wavetopb>
+		<wavebottoma><A>0.0</A><B>0.0</B><C>0.0</C></wavebottoma>
+		<wavebottomb><A>0.29</A><B>0.56</B><C>0.91</C></wavebottomb>
+		<wavelight><A>1.0</A><B>1.0</B><C>1.0</C></wavelight>
+		<foam>data/textures/foam.png</foam>
+		<height>5.0</height>
+	</border>
+	<texture type="generate">
+		<rockside>data/textures/landscape/sahara/rockside.jpg</rockside>
+		<shore>data/textures/landscape/sahara/shore.jpg</shore>
+		<roof>data/textures/landscape/sahara/texture0.jpg</roof>
+		<texture0>data/textures/landscape/sahara/texture0.jpg</texture0>
+		<texture1>data/textures/landscape/sahara/texture1.jpg</texture1>
+		<texture2>data/textures/landscape/sahara/texture2.jpg</texture2>
+		<texture3>data/textures/landscape/sahara/texture3.jpg</texture3>
+	</texture>
+</tex>

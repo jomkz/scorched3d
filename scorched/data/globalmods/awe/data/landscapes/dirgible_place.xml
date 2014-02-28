@@ -1,0 +1,87 @@
+<boids>
+	<placement type="bounds">
+		<count>1</count>
+		<minbounds><A>0</A><B>-0</B><C>30</C></minbounds>
+		<maxbounds><A>512</A><B>512</B><C>65</C></maxbounds>
+		<object type='target'>
+			<life>25</life>
+			<model type='MilkShape'>data/meshes/dirgible/dirgible.txt</model>
+			<nocollision>false</nocollision>
+			 <nofalling>true</nofalling>
+			<removeaction>none</removeaction>
+			 <boundingsphere>false</boundingsphere>
+			<displayshadow>false</displayshadow>
+			<groupname>dirgible_a</groupname>
+			<modelscale>0.25</modelscale>
+		</object>
+	</placement>
+	<movement type="boids">
+	<minbounds><A>0</A><B>0</B><C>30</C></minbounds>
+		<maxbounds><A>512</A><B>512</B><C>65</C></maxbounds>
+		<maxvelocity>4.0</maxvelocity>
+		<maxacceleration>1.0</maxacceleration>
+		<cruisedistance>12.0</cruisedistance>
+				<groupname>dirgible_a</groupname>
+	</movement>
+
+  <event>
+    <condition type="time">
+      <mintime>20.0</mintime>
+      <maxtime>40.0</maxtime>
+      <singletimeonly>false</singletimeonly>
+    </condition>
+    <action type="fireweaponfromgroup">
+      <weapon>Free_Fall Bomb</weapon>
+   	<groupname>dirgible_a</groupname>
+    </action>
+  </event>
+
+  
+  
+  <placement type="bounds">
+		<count>1</count>
+		<minbounds><A>0</A><B>-0</B><C>30</C></minbounds>
+		<maxbounds><A>512</A><B>512</B><C>65</C></maxbounds>
+		<object type='target'>
+			<life>25</life>
+			<model type='MilkShape'>data/meshes/dirgible/dirgible.txt</model>
+			<nocollision>false</nocollision>
+			 <nofalling>true</nofalling>
+			<removeaction>none</removeaction>
+			 <boundingsphere>false</boundingsphere>
+			<displayshadow>false</displayshadow>
+			<groupname>dirgible_b</groupname>
+			<modelscale>0.25</modelscale>
+		</object>
+	</placement>
+	<movement type="boids">
+	<minbounds><A>0</A><B>0</B><C>30</C></minbounds>
+		<maxbounds><A>512</A><B>512</B><C>65</C></maxbounds>
+		<maxvelocity>4.0</maxvelocity>
+		<maxacceleration>1.0</maxacceleration>
+		<cruisedistance>12.0</cruisedistance>
+				<groupname>dirgible_b</groupname>
+	</movement>
+
+  <event>
+    <condition type="time">
+      <mintime>60.0</mintime>
+      <maxtime>100.0</maxtime>
+      <singletimeonly>false</singletimeonly>
+    </condition>
+    <action type="fireweaponfromgroup">
+      <weapon>500lb Bomb</weapon>
+   	<groupname>dirgible_b</groupname>
+    </action>
+  </event>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+</boids>

@@ -1,0 +1,130 @@
+<ambientsound>
+		<sound>
+			<position type='group'>
+				<name>skyscrapers</name>
+				<falloff>2.0</falloff>
+			</position>
+			<timing type='looped'></timing>
+			<sound type='file'>
+				<file>data/wav/misc/citysounds.wav</file>
+				<gain>1.0</gain>
+			</sound>
+		</sound>
+		<sound>
+			<position type='group'>
+				<name>factories</name>
+				<falloff>3.0</falloff>
+			</position>
+			<timing type='looped'></timing>
+			<sound type='file'>
+				<file>data/wav/misc/factoryloop1.wav</file>
+				<gain>1.0</gain>
+			</sound>
+		</sound>
+		<sound>
+			<position type='group'>
+				<name>powerplants</name>
+				<falloff>3.0</falloff>
+			</position>
+			<timing type='looped'></timing>
+			<sound type='file'>
+				<file>data/wav/misc/nuclearloop.wav</file>
+				<gain>1.0</gain>
+			</sound>
+		</sound>
+		<sound>
+			<position type='group'>
+				<name>stadium</name>
+				<falloff>3.0</falloff>
+			</position>
+			<timing type='looped'></timing>
+			<sound type='file'>
+				<file>data/wav/misc/cheeringloop.wav</file>
+				<gain>1.0</gain>
+			</sound>
+		</sound>
+		<sound>
+			<position type='group'>
+				<name>houses</name>
+				<falloff>3.0</falloff>
+			</position>
+			<timing type='repeat'>
+				<min>10</min>
+				<max>40</max>
+			</timing>
+			<sound type='file'>
+				<file>data/wav/misc/dog.wav</file>
+				<gain>1.0</gain>
+			</sound>
+		</sound>
+		<sound>
+			<position type='group'>
+				<name>houses</name>
+				<falloff>3.0</falloff>
+			</position>
+			<timing type='repeat'>
+				<min>20</min>
+				<max>60</max>
+			</timing>
+			<sound type='file'>
+				<file>data/wav/misc/dog2.wav</file>
+				<gain>1.0</gain>
+			</sound>
+		</sound>
+		<sound>
+			<position type='group'>
+				<name>houses</name>
+				<falloff>3.0</falloff>
+			</position>
+			<timing type='repeat'>
+				<min>20</min>
+				<max>40</max>
+			</timing>
+			<sound type='file'>
+				<file>data/wav/misc/dog3.wav</file>
+				<gain>1.0</gain>
+			</sound>
+		</sound>
+		<sound>
+			<position type='group'>
+				<name>farms</name>
+				<falloff>3.0</falloff>
+			</position>
+			<timing type='repeat'>
+				<min>10</min>
+				<max>40</max>
+			</timing>
+			<sound type='file'>
+				<file>data/wav/misc/rooster.wav</file>
+				<gain>1.0</gain>
+			</sound>
+		</sound>
+		<sound>
+			<position type='group'>
+				<name>farms</name>
+				<falloff>3.0</falloff>
+			</position>
+			<timing type='repeat'>
+				<min>10</min>
+				<max>40</max>
+			</timing>
+			<sound type='file'>
+				<file>data/wav/misc/cows.wav</file>
+				<gain>1.0</gain>
+			</sound>
+		</sound>
+		<sound>
+			<position type='group'>
+				<name>farms</name>
+				<falloff>3.0</falloff>
+			</position>
+			<timing type='repeat'>
+				<min>20</min>
+				<max>50</max>
+			</timing>
+			<sound type='file'>
+				<file>data/wav/misc/sheep.wav</file>
+				<gain>1.0</gain>
+			</sound>
+		</sound>
+</ambientsound>

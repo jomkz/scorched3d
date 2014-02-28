@@ -33,14 +33,23 @@
 TargetSpace *ScorchedClient::targetSpace_ = new TargetSpace();
 
 ScorchedClient *ScorchedClient::instance_ = 0;
+static ScorchedClient *instanceLock = 0;
+static boost::thread::id thread_id;
 
 ScorchedClient *ScorchedClient::instance()
 {
-	if (!instance_)
-	{
-		instance_ = new ScorchedClient;
-	}
+	DIALOG_ASSERT(instance_);
+	DIALOG_ASSERT(thread_id == boost::this_thread::get_id());
 	return instance_;
+}
+
+void ScorchedClient::startClient()
+{
+	DIALOG_ASSERT(!instanceLock);
+	instanceLock = new ScorchedClient;
+	thread_id = boost::this_thread::get_id();
+	instance_ = instanceLock;
+	instanceLock = 0;
 }
 
 ScorchedClient::ScorchedClient() : 

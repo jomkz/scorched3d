@@ -1,0 +1,18 @@
+<defn>
+	<minplayers>0</minplayers>
+	<maxplayers>24</maxplayers>
+	<landscapewidth>256</landscapewidth>
+	<landscapeheight>512</landscapeheight>
+  <arenawidth>128</arenawidth>
+  <arenaheight>256</arenaheight>
+	<roof type="sky"></roof>
+	<tankstart type="height">
+		<startcloseness>20</startcloseness>
+		<height><min>5.5</min><max>300</max></height>
+		<startmask>data/landscapes/test-mask.bmp</startmask>
+	</tankstart>
+	<heightmap type="file">
+    	<file>data/landscapes/test.bmp</file>
+    	<levelsurround>true</levelsurround>
+    </heightmap>
+</defn>

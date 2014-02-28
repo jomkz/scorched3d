@@ -33,7 +33,7 @@ ServerConsoleProgressCounter::ServerConsoleProgressCounter() :
 	hashes_(25)
 {
 	progressCounter_.setUser(this);
-	Logger::instance()->addLogger(this);
+	Logger::addLogger(this, false);
 }
 
 ServerConsoleProgressCounter::~ServerConsoleProgressCounter()

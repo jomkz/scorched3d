@@ -1,0 +1,46 @@
+
+<modinfo>
+  <main>
+    <shortdescription>Armored Warfare Evolved</shortdescription>
+    <description>Start an AWE game. Engrossing and creative tank warfare.</description>
+    <icon>data/windows/pro.png</icon>
+    <url>http://www.scorched3d.co.uk</url>
+    <protocolversion>eu</protocolversion>
+  </main>
+   <game>
+    <shortdescription>Exhibition Mode</shortdescription>
+    <description>Watch Computer Players annihilate each other.</description>
+    <icon>data/windows/exhibition.png</icon>
+    <gamefile>data/single_exhibition.xml</gamefile>
+  </game>
+  <game>
+    <shortdescription>Sandbox</shortdescription>
+    <description>Practice against targets that don't fire back. Start with all of the weapons.</description>
+    <icon>data/windows/target.png</icon>
+    <gamefile>data/singletarget.xml</gamefile>
+  </game>
+<game>
+    <shortdescription>Beginner</shortdescription>
+    <description>Start an Easy game.</description>
+    <icon>data/windows/easy.png</icon>
+    <gamefile>data/single_easy.xml</gamefile>
+  </game>
+  <game>
+    <shortdescription>Intermediate</shortdescription>
+    <description>Start a Challenge game.</description>
+    <icon>data/windows/medium.png</icon>
+    <gamefile>data/single_medium.xml</gamefile>
+  </game>
+  <game>
+    <shortdescription>Advanced</shortdescription>
+    <description>Start a Difficult game.</description>
+    <icon>data/windows/hard.png</icon>
+    <gamefile>data/single_hard.xml</gamefile>
+  </game>
+  <game>
+    <shortdescription>Hardcore</shortdescription>
+    <description>Start a Arduous game.</description>
+    <icon>data/windows/elite.png</icon>
+    <gamefile>data/single_elite.xml</gamefile>
+  </game>
+</modinfo>

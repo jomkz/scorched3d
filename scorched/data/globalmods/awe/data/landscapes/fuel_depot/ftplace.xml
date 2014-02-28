@@ -1,0 +1,468 @@
+
+<place>
+		<placement type='direct'>
+			<position>
+				<position>
+					<A>158</A>
+					<B>256</B>
+					<C>0</C>
+				</position>
+			</position>
+		<object type='target'>
+		 <model type='MilkShape'>data/meshes/fuel/tube.txt</model>
+		 <modelscale>0.18</modelscale>
+		 <modelrotationsnap>0</modelrotationsnap>
+		 	<life>35</life>
+		 	 <nocollision>false</nocollision>
+                		<removeaction>fuel_tube_exp</removeaction>
+		  <flattenarea>1</flattenarea>
+		  <groupname>Private Property</groupname>
+		  <displayshadow>true</displayshadow>
+	     	</object>
+		     
+		</placement>
+		
+		
+	<placement type='direct'>
+			<position>
+				<position>
+					<A>158</A>
+					<B>364</B>
+					<C>0</C>
+				</position>
+			</position>
+		<object type='target'>
+		 <model type='MilkShape'>data/meshes/fuel/tube.txt</model>
+		 <modelscale>0.18</modelscale>
+		 <modelrotationsnap>0</modelrotationsnap>
+		 	<life>35</life>
+		 	 <nocollision>false</nocollision>
+                		<removeaction>fuel_tube_exp</removeaction>
+		  <flattenarea>1</flattenarea>
+		  <groupname>Private Property</groupname>
+		  <displayshadow>true</displayshadow>
+	     	</object>
+		     
+		</placement>
+		
+			<placement type='direct'>
+			<position>
+				<position>
+					<A>158</A>
+					<B>148</B>
+					<C>0</C>
+				</position>
+			</position>
+		<object type='target'>
+		 <model type='MilkShape'>data/meshes/fuel/tube.txt</model>
+		 <modelscale>0.18</modelscale>
+		 <modelrotationsnap>0</modelrotationsnap>
+		 	<life>35</life>
+		 	 <nocollision>false</nocollision>
+                		<removeaction>fuel_tube_exp</removeaction>
+		  <flattenarea>1</flattenarea>
+		  <groupname>Private Property</groupname>
+		  <displayshadow>true</displayshadow>
+	     	</object>
+		     
+		</placement>
+
+		
+		
+		<placement type='direct'>
+			<position>
+				<position>
+					<A>158</A>
+					<B>310</B>
+					<C>0</C>
+				</position>
+			</position>
+		<object type='target'>
+		 <model type='MilkShape'>data/meshes/fuel/tube.txt</model>
+		 <modelscale>0.18</modelscale>
+		 <modelrotationsnap>0</modelrotationsnap>
+		 	<life>35</life>
+		 	 <nocollision>false</nocollision>
+                		<removeaction>fuel_tube_exp</removeaction>
+		  <flattenarea>1</flattenarea>
+		  <groupname>Private Property</groupname>
+		  <displayshadow>true</displayshadow>
+	     	</object>
+		     
+		</placement>
+		
+		
+
+			<placement type='direct'>
+			<position>
+				<position>
+					<A>158</A>
+					<B>202</B>
+					<C>0</C>
+				</position>
+			</position>
+		<object type='target'>
+		 <model type='MilkShape'>data/meshes/fuel/tube.txt</model>
+		 <modelscale>0.18</modelscale>
+		 <modelrotationsnap>0</modelrotationsnap>
+		 	<life>35</life>
+		 	 <nocollision>false</nocollision>
+                		<removeaction>fuel_tube_exp</removeaction>
+		  <flattenarea>1</flattenarea>
+		  <groupname>Private Property</groupname>
+		  <displayshadow>true</displayshadow>
+	     	</object>
+		     
+		</placement>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<!--Right Side-->
+		
+			<placement type='direct'>
+			<position>
+				<position>
+					<A>364</A>
+					<B>256</B>
+					<C>0</C>
+				</position>
+			</position>
+		<object type='target'>
+		 <model type='MilkShape'>data/meshes/fuel/tube.txt</model>
+		 <modelscale>0.18</modelscale>
+		 <modelrotationsnap>0</modelrotationsnap>
+		 	<life>35</life>
+		 	 <nocollision>false</nocollision>
+                		<removeaction>fuel_tube_exp</removeaction>
+		  <flattenarea>1</flattenarea>
+		  <groupname>Private Property</groupname>
+		  <displayshadow>true</displayshadow>
+	     	</object>
+		     
+		</placement>
+		
+			<placement type='direct'>
+			<position>
+				<position>
+					<A>364</A>
+					<B>202</B>
+					<C>0</C>
+				</position>
+			</position>
+		<object type='target'>
+		 <model type='MilkShape'>data/meshes/fuel/tube.txt</model>
+		 <modelscale>0.18</modelscale>
+		 <modelrotationsnap>0</modelrotationsnap>
+		 	<life>35</life>
+		 	 <nocollision>false</nocollision>
+                		<removeaction>fuel_tube_exp</removeaction>
+		  <flattenarea>1</flattenarea>
+		  <groupname>Private Property</groupname>
+		  <displayshadow>true</displayshadow>
+	     	</object>
+		     
+		</placement>
+		
+			<placement type='direct'>
+			<position>
+				<position>
+					<A>364</A>
+					<B>310</B>
+					<C>0</C>
+				</position>
+			</position>
+		<object type='target'>
+		 <model type='MilkShape'>data/meshes/fuel/tube.txt</model>
+		 <modelscale>0.18</modelscale>
+		 <modelrotationsnap>0</modelrotationsnap>
+		 	<life>35</life>
+		 	 <nocollision>false</nocollision>
+                		<removeaction>fuel_tube_exp</removeaction>
+		  <flattenarea>1</flattenarea>
+		  <groupname>Private Property</groupname>
+		  <displayshadow>true</displayshadow>
+	     	</object>
+		     
+		</placement>
+
+			<placement type='direct'>
+			<position>
+				<position>
+					<A>364</A>
+					<B>148</B>
+					<C>0</C>
+				</position>
+			</position>
+		<object type='target'>
+		 <model type='MilkShape'>data/meshes/fuel/tube.txt</model>
+		 <modelscale>0.18</modelscale>
+		 <modelrotationsnap>0</modelrotationsnap>
+		 	<life>35</life>
+		 	 <nocollision>false</nocollision>
+                		<removeaction>fuel_tube_exp</removeaction>
+		  <flattenarea>1</flattenarea>
+		  <groupname>Private Property</groupname>
+		  <displayshadow>true</displayshadow>
+	     	</object>
+		     
+		</placement>
+
+
+                	<placement type='direct'>
+			<position>
+				<position>
+					<A>364</A>
+					<B>364</B>
+					<C>0</C>
+				</position>
+			</position>
+		<object type='target'>
+		 <model type='MilkShape'>data/meshes/fuel/tube.txt</model>
+		 <modelscale>0.18</modelscale>
+		 <modelrotationsnap>0</modelrotationsnap>
+		 	<life>35</life>
+		 	 <nocollision>false</nocollision>
+                		<removeaction>fuel_tube_exp</removeaction>
+		  <flattenarea>1</flattenarea>
+		  <groupname>Private Property</groupname>
+		  <displayshadow>true</displayshadow>
+	     	</object>
+		     
+		</placement>
+		
+		
+		
+		
+		
+
+		
+		<!--Barrel Mask Placements-->
+		
+			<placement type="mask">
+
+  <numobjects>25</numobjects>
+
+  <mask>data/landscapes/fuel_depot/fuelmask.bmp</mask>
+    <mincloseness>0</mincloseness>
+
+      <minheight>8</minheight>
+      <maxheight>35</maxheight>
+  <minslope>0.5</minslope>
+           <xsnap>1</xsnap>
+
+  <ysnap>1</ysnap>
+
+
+   <object type='target'>
+                  <model type="MilkShape">data/meshes/fuel/vert_barrel.txt</model>
+                  <modelscale>0.01</modelscale>
+                  <modelscalediff>0.0</modelscalediff>
+                  <modelrotationsnap>1</modelrotationsnap>
+                  <modelbrightness>-1.0</modelbrightness>
+                  <displayshadow>true</displayshadow>
+                  <nodamageburn>false</nodamageburn>
+         	<removeaction>fuel_pump_exp</removeaction>
+                  <displaydamage>false</displaydamage>
+                  <drawshadow>true</drawshadow>
+                  <groupname>fuel drum</groupname>
+                  <flattendestroy>true</flattendestroy>
+                  <driveovertodestroy>true</driveovertodestroy>
+               </object>
+</placement>
+
+	<placement type="mask">
+
+  <numobjects>30</numobjects>
+
+  <mask>data/landscapes/fuel_depot/fuelmask.bmp</mask>
+    <mincloseness>0</mincloseness>
+
+      <minheight>8</minheight>
+      <maxheight>35</maxheight>
+  <minslope>0.5</minslope>
+           <xsnap>1</xsnap>
+
+  <ysnap>1</ysnap>
+
+
+   <object type='target'>
+                  <model type="MilkShape">data/meshes/fuel/horiz_barrel.txt</model>
+                  <modelscale>0.01</modelscale>
+                  <modelscalediff>0.0</modelscalediff>
+                  <modelrotationsnap>1</modelrotationsnap>
+                  <modelbrightness>-1.0</modelbrightness>
+                  <displayshadow>true</displayshadow>
+                  <nodamageburn>false</nodamageburn>
+               	<removeaction>fuel_pump_exp</removeaction>
+                  <displaydamage>false</displaydamage>
+                  <drawshadow>true</drawshadow>
+                  <groupname>fuel drum</groupname>
+                  <flattendestroy>true</flattendestroy>
+                  <driveovertodestroy>true</driveovertodestroy>
+               </object>
+</placement>
+
+<!--place larger gasoline canisters-->
+
+
+<placement type='direct'>
+			<position>
+				<position>
+					<A>198</A>
+					<B>256</B>
+					<C>0</C>
+				</position>
+			</position>
+		<object type='target'>
+		 <model type='MilkShape'>data/meshes/fuel/bin.txt</model>
+	<modelscale>0.35</modelscale>
+		 <modelrotationsnap>0</modelrotationsnap>
+		 	<life>35</life>
+		 	 <nocollision>false</nocollision>
+                		<removeaction>fuel_bin_exp2</removeaction>
+		  <flattenarea>1</flattenarea>
+		  <groupname>Private Property</groupname>
+		  <displayshadow>true</displayshadow>
+	     	</object>
+		     
+		</placement>
+		
+		
+               	<placement type='direct'>
+                	<position>
+				<position>
+					<A>198</A>
+					<B>173</B>
+					<C>0</C>
+				</position>
+			</position>
+		<object type='target'>
+		 <model type='MilkShape'>data/meshes/fuel/bin.txt</model>
+		 <modelscale>0.35</modelscale>
+		 <modelrotationsnap>0</modelrotationsnap>
+		 	<life>35</life>
+		 	 <nocollision>false</nocollision>
+                		<removeaction>fuel_bin_exp2</removeaction>
+		  <flattenarea>1</flattenarea>
+		  <groupname>Private Property</groupname>
+		  <displayshadow>true</displayshadow>
+	     	</object>
+		     
+		</placement>
+		
+		
+
+		
+		<placement type='direct'>	
+		  	<position>
+				<position>
+					<A>198</A>
+					<B>339</B>
+					<C>0</C>
+				</position>
+			</position>
+		<object type='target'>
+		 <model type='MilkShape'>data/meshes/fuel/bin.txt</model>
+	<modelscale>0.35</modelscale>
+		 <modelrotationsnap>0</modelrotationsnap>
+		 	<life>35</life>
+		 	 <nocollision>false</nocollision>
+                		<removeaction>fuel_bin_exp2</removeaction>
+		  <flattenarea>1</flattenarea>
+		  <groupname>Private Property</groupname>
+		  <displayshadow>true</displayshadow>
+	     	</object>
+		     
+		</placement>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+		
+		<placement type='direct'>
+			<position>
+				<position>
+					<A>314</A>
+					<B>256</B>
+					<C>0</C>
+				</position>
+			</position>
+		<object type='target'>
+		 <model type='MilkShape'>data/meshes/fuel/bin.txt</model>
+	<modelscale>0.35</modelscale>
+		 <modelrotationsnap>0</modelrotationsnap>
+		 	<life>35</life>
+		 	 <nocollision>false</nocollision>
+                		<removeaction>fuel_bin_exp2</removeaction>
+		  <flattenarea>1</flattenarea>
+		  <groupname>Private Property</groupname>
+		  <displayshadow>true</displayshadow>
+	     	</object>
+		     
+		</placement>
+		
+
+			<placement type='direct'>
+			<position>
+				<position>
+					<A>314</A>
+					<B>173</B>
+					<C>0</C>
+				</position>
+			</position>
+		<object type='target'>
+		 <model type='MilkShape'>data/meshes/fuel/bin.txt</model>
+	       <modelscale>0.35</modelscale>
+		 <modelrotationsnap>0</modelrotationsnap>
+		 	<life>35</life>
+		 	 <nocollision>false</nocollision>
+                		<removeaction>fuel_bin_exp2</removeaction>
+		  <flattenarea>1</flattenarea>
+		  <groupname>Private Property</groupname>
+		  <displayshadow>true</displayshadow>
+	     	</object>
+		     
+		</placement>
+
+		
+			<placement type='direct'>
+			<position>
+				<position>
+					<A>314</A>
+					<B>339</B>
+					<C>0</C>
+				</position>
+			</position>
+		<object type='target'>
+		 <model type='MilkShape'>data/meshes/fuel/bin.txt</model>
+		 <modelscale>0.35</modelscale>
+		 <modelrotationsnap>0</modelrotationsnap>
+		 	<life>35</life>
+		 	 <nocollision>false</nocollision>
+                		<removeaction>fuel_bin_exp2</removeaction>
+		  <flattenarea>1</flattenarea>
+		  <groupname>Private Property</groupname>
+		  <displayshadow>true</displayshadow>
+	     	</object>
+		     
+		</placement>
+		
+
+</place>
+
+

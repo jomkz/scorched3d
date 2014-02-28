@@ -33,10 +33,8 @@ class LoggerI;
 class Logger
 {
 public:
-	static Logger *instance();
-
 	static LoggerInfo defaultInfo;
-	static void addLogger(LoggerI *logger);
+	static void addLogger(LoggerI *logger, bool logFromUIThread);
 	static void remLogger(LoggerI *logger);
 	static void processLogEntries();
 
@@ -45,12 +43,23 @@ public:
 	static void log(const std::string &text);
 
 protected:
-	static Logger *instance_;
+	class LoggerDefinition
+	{
+	public:
+		LoggerDefinition(LoggerI *logger, bool logFromUIThread) :
+			logger_(logger), logFromUIThread_(logFromUIThread)
+		{
+		}
 
-	std::list<LoggerI *> loggers_;
-	std::list<LoggerInfo *> entries_;
+		LoggerI *logger_;
+		bool logFromUIThread_;
+	};
+
+	static std::list<LoggerDefinition> loggers_;
+	static std::list<LoggerInfo *> entries_;
 
 	static void addLog(LoggerInfo &info);
+	static void addLogEntry(LoggerInfo &info);
 
 private:
 	Logger();

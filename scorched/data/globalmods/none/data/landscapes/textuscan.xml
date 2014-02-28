@@ -1,0 +1,40 @@
+<tex>
+	<detail>data/textures/landscape/tuscan/detail.jpg</detail>
+	<magmasmall>data/textures/landscape/default/magma-small.jpg</magmasmall>
+	<scorch>data/textures/landscape/tuscan/scorch.jpg</scorch>
+	<fog><A>0.8</A><B>0.7</B><C>0.5</C></fog>
+	<fogdensity>0.001</fogdensity>
+	<skytexture>data/textures/landscape/tuscan/cloud1.jpg</skytexture>
+	<skytexturemask>data/textures/landscape/default/cloud1m.jpg</skytexturemask>
+	<skycolormap>data/textures/landscape/tuscan/clearsky.jpg</skycolormap>
+	<skytimeofday>3</skytimeofday>
+	<skysunxy>110</skysunxy>
+	<skysunyz>15</skysunyz>
+	<skyambience><A>0.5</A><B>0.5</B><C>0.5</C></skyambience>
+	<skydiffuse><A>0.9</A><B>0.9</B><C>0.9</C></skydiffuse>
+	<suncolor><A>0.8</A><B>0.7</B><C>0.5</C></suncolor>
+	<suntexture>data/textures/glow1.bmp</suntexture>
+	<border type="water">
+		<reflection>data/textures/landscape/tuscan/cubemap.jpg</reflection>
+		<texture>data/textures/landscape/tuscan/water.jpg</texture>
+		<wavetopa><A>0.0</A><B>0.0</B><C>0.0</C></wavetopa>
+		<wavetopb><A>0.49</A><B>0.83</B><C>0.94</C></wavetopb>
+		<wavebottoma><A>0.0</A><B>0.0</B><C>0.0</C></wavebottoma>
+		<wavebottomb><A>0.29</A><B>0.56</B><C>0.91</C></wavebottomb>
+		<wavelight><A>1.0</A><B>1.0</B><C>1.0</C></wavelight>
+		<foam>data/textures/foam.png</foam>
+		<height>5.0</height>
+	</border>
+	<texture type="generate">
+		<rockside>data/textures/landscape/tuscan/rockside.jpg</rockside>
+		<shore>data/textures/landscape/tuscan/shore.jpg</shore>
+		<roof>data/textures/landscape/tuscan/texture0.jpg</roof>
+		<texture0>data/textures/landscape/tuscan/texture0.jpg</texture0>
+		<texture1>data/textures/landscape/tuscan/texture1.jpg</texture1>
+		<texture2>data/textures/landscape/tuscan/texture2.jpg</texture2>
+		<texture3>data/textures/landscape/tuscan/texture3.jpg</texture3>
+	</texture>
+	<ambientsounds>
+		<ambientsound>data/landscapes/ambientsoundwaves.xml</ambientsound>
+	</ambientsounds>
+</tex>

@@ -58,7 +58,7 @@ bool WeaponNapalm::parseXML(AccessoryCreateContext &context, XMLNode *accessoryN
 	if (!accessoryNode->getNamedChild("numberstreams", numberStreams_)) return false;
 	if (!accessoryNode->getNamedChild("napalmsound", napalmSound_)) return false;
 	accessoryNode->getNamedChild("landscapeerosion", landscapeErosion_, false);
-	if (!S3D::checkDataFile(S3D::formatStringBuffer("data/wav/%s", napalmSound_.c_str()))) return false;
+	if (!S3D::checkDataFile(S3D::formatStringBuffer("%s", napalmSound_.c_str()))) return false;
 
 	if (!params_.parseXML(accessoryNode)) return false;
 

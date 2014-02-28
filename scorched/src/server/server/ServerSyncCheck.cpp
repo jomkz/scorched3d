@@ -44,7 +44,7 @@ static void syncCheckLog(const std::string &message)
 {
 	if (!syncCheckFileLogger) 
 	{
-		syncCheckFileLogger = new FileLogger("SyncCheckLog-");
+		syncCheckFileLogger = new FileLogger("SyncCheckLog-", S3D::getLogFile("."), true);
 	}	
 
 	LoggerInfo info(message.c_str());

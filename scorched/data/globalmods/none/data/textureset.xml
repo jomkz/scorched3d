@@ -1,0 +1,166 @@
+<texturesets>
+  <textureset name="ring">
+    <texture>textures/ring.bmp</texture>
+  </textureset>
+	<textureset name="particle">
+		<texture>textures/particle.bmp</texture>
+	</textureset>
+	<textureset name="smoke">
+		<texture>textures/smoke01.bmp</texture>
+		<texture>textures/smoke01.bmp</texture>
+	</textureset>
+	<textureset name="exp00">
+		<texture>textures/explode/explosion0/exp0004.bmp</texture>
+		<texture>textures/explode/explosion0/exp0008.bmp</texture>
+		<texture>textures/explode/explosion0/exp0012.bmp</texture>
+		<texture>textures/explode/explosion0/exp0016.bmp</texture>
+		<texture>textures/explode/explosion0/exp0020.bmp</texture>
+		<texture>textures/explode/explosion0/exp0024.bmp</texture>
+		<texture>textures/explode/explosion0/exp0028.bmp</texture>
+		<texture>textures/explode/explosion0/exp0032.bmp</texture>
+		<texture>textures/explode/explosion0/exp0036.bmp</texture>
+		<texture>textures/explode/explosion0/exp0040.bmp</texture>
+	</textureset>
+	<textureset name="exp01">
+		<texture>textures/explode/explosion1/exp0004.bmp</texture>
+		<texture>textures/explode/explosion1/exp0008.bmp</texture>
+		<texture>textures/explode/explosion1/exp0012.bmp</texture>
+		<texture>textures/explode/explosion1/exp0016.bmp</texture>
+		<texture>textures/explode/explosion1/exp0020.bmp</texture>
+		<texture>textures/explode/explosion1/exp0024.bmp</texture>
+		<texture>textures/explode/explosion1/exp0028.bmp</texture>
+		<texture>textures/explode/explosion1/exp0032.bmp</texture>
+		<texture>textures/explode/explosion1/exp0036.bmp</texture>
+		<texture>textures/explode/explosion1/exp0040.bmp</texture>
+	</textureset>
+	<textureset name="exp02">
+		<texture>textures/explode/explosion2/exp0004.bmp</texture>
+		<texture>textures/explode/explosion2/exp0008.bmp</texture>
+		<texture>textures/explode/explosion2/exp0012.bmp</texture>
+		<texture>textures/explode/explosion2/exp0016.bmp</texture>
+		<texture>textures/explode/explosion2/exp0020.bmp</texture>
+		<texture>textures/explode/explosion2/exp0024.bmp</texture>
+		<texture>textures/explode/explosion2/exp0028.bmp</texture>
+		<texture>textures/explode/explosion2/exp0032.bmp</texture>
+		<texture>textures/explode/explosion2/exp0036.bmp</texture>
+		<texture>textures/explode/explosion2/exp0040.bmp</texture>
+	</textureset>
+	<textureset name="exp03">
+		<texture>textures/explode/explosion3/exp0006.bmp</texture>
+		<texture>textures/explode/explosion3/exp0008.bmp</texture>
+		<texture>textures/explode/explosion3/exp0010.bmp</texture>
+		<texture>textures/explode/explosion3/exp0012.bmp</texture>
+		<texture>textures/explode/explosion3/exp0014.bmp</texture>
+		<texture>textures/explode/explosion3/exp0016.bmp</texture>
+		<texture>textures/explode/explosion3/exp0020.bmp</texture>
+	</textureset>
+	<textureset name="exp04">
+		<texture>textures/explode/explosion4/exp0004.bmp</texture>
+		<texture>textures/explode/explosion4/exp0008.bmp</texture>
+		<texture>textures/explode/explosion4/exp0012.bmp</texture>
+		<texture>textures/explode/explosion4/exp0016.bmp</texture>
+		<texture>textures/explode/explosion4/exp0020.bmp</texture>
+		<texture>textures/explode/explosion4/exp0024.bmp</texture>
+		<texture>textures/explode/explosion4/exp0028.bmp</texture>
+		<texture>textures/explode/explosion4/exp0032.bmp</texture>
+		<texture>textures/explode/explosion4/exp0036.bmp</texture>
+		<texture>textures/explode/explosion4/exp0040.bmp</texture>
+	</textureset>
+	<textureset name="exp05">
+		<texture>textures/explode/explosion5/exp0004.bmp</texture>
+		<texture>textures/explode/explosion5/exp0008.bmp</texture>
+		<texture>textures/explode/explosion5/exp0012.bmp</texture>
+		<texture>textures/explode/explosion5/exp0016.bmp</texture>
+		<texture>textures/explode/explosion5/exp0020.bmp</texture>
+		<texture>textures/explode/explosion5/exp0024.bmp</texture>
+		<texture>textures/explode/explosion5/exp0028.bmp</texture>
+		<texture>textures/explode/explosion5/exp0032.bmp</texture>
+		<texture>textures/explode/explosion5/exp0036.bmp</texture>
+		<texture>textures/explode/explosion5/exp0040.bmp</texture>
+	</textureset>
+	<textureset name="exp06">
+		<texture>textures/explode/explosion6/exp0004.bmp</texture>
+		<texture>textures/explode/explosion6/exp0008.bmp</texture>
+		<texture>textures/explode/explosion6/exp0012.bmp</texture>
+		<texture>textures/explode/explosion6/exp0016.bmp</texture>
+		<texture>textures/explode/explosion6/exp0020.bmp</texture>
+		<texture>textures/explode/explosion6/exp0024.bmp</texture>
+		<texture>textures/explode/explosion6/exp0028.bmp</texture>
+		<texture>textures/explode/explosion6/exp0032.bmp</texture>
+		<texture>textures/explode/explosion6/exp0036.bmp</texture>
+		<texture>textures/explode/explosion6/exp0040.bmp</texture>
+	</textureset>
+	<textureset name="exp07">
+		<texture>textures/explode/explosion7/exp0002.bmp</texture>
+		<texture>textures/explode/explosion7/exp0004.bmp</texture>
+		<texture>textures/explode/explosion7/exp0006.bmp</texture>
+		<texture>textures/explode/explosion7/exp0008.bmp</texture>
+		<texture>textures/explode/explosion7/exp0010.bmp</texture>
+		<texture>textures/explode/explosion7/exp0014.bmp</texture>
+		<texture>textures/explode/explosion7/exp0016.bmp</texture>
+		<texture>textures/explode/explosion7/exp0018.bmp</texture>
+		<texture>textures/explode/explosion7/exp0020.bmp</texture>
+		<texture>textures/explode/explosion7/exp0024.bmp</texture>
+	</textureset>
+	<textureset name="exp08">
+		<texture>textures/explode/explosion8/exp0004.bmp</texture>
+		<texture>textures/explode/explosion8/exp0008.bmp</texture>
+		<texture>textures/explode/explosion8/exp0012.bmp</texture>
+		<texture>textures/explode/explosion8/exp0016.bmp</texture>
+		<texture>textures/explode/explosion8/exp0020.bmp</texture>
+		<texture>textures/explode/explosion8/exp0024.bmp</texture>
+		<texture>textures/explode/explosion8/exp0028.bmp</texture>
+		<texture>textures/explode/explosion8/exp0032.bmp</texture>
+		<texture>textures/explode/explosion8/exp0036.bmp</texture>
+		<texture>textures/explode/explosion8/exp0040.bmp</texture>
+	</textureset>
+	<textureset name="trans">
+		<texture>textures/explode/trans/trans0004.bmp</texture>
+		<texture>textures/explode/trans/trans0008.bmp</texture>
+		<texture>textures/explode/trans/trans0012.bmp</texture>
+		<texture>textures/explode/trans/trans0016.bmp</texture>
+		<texture>textures/explode/trans/trans0020.bmp</texture>
+		<texture>textures/explode/trans/trans0024.bmp</texture>
+		<texture>textures/explode/trans/trans0028.bmp</texture>
+		<texture>textures/explode/trans/trans0032.bmp</texture>
+		<texture>textures/explode/trans/trans0036.bmp</texture>
+		<texture>textures/explode/trans/trans0040.bmp</texture>
+		<texture>textures/explode/trans/trans0044.bmp</texture>
+		<texture>textures/explode/trans/trans0048.bmp</texture>
+	</textureset>
+	<textureset name="flames">
+		<texture>textures/flame/flame01.bmp</texture>
+		<texture>textures/flame/flame02.bmp</texture>
+		<texture>textures/flame/flame03.bmp</texture>
+		<texture>textures/flame/flame04.bmp</texture>
+		<texture>textures/flame/flame05.bmp</texture>
+		<texture>textures/flame/flame06.bmp</texture>
+		<texture>textures/flame/flame07.bmp</texture>
+		<texture>textures/flame/flame08.bmp</texture>
+		<texture>textures/flame/flame09.bmp</texture>
+		<texture>textures/flame/flame10.bmp</texture>
+		<texture>textures/flame/flame11.bmp</texture>
+		<texture>textures/flame/flame12.bmp</texture>
+		<texture>textures/flame/flame13.bmp</texture>
+		<texture>textures/flame/flame14.bmp</texture>
+		<texture>textures/flame/flame15.bmp</texture>
+		<texture>textures/flame/flame16.bmp</texture>
+		<texture>textures/flame/flame17.bmp</texture>
+		<texture>textures/flame/flame18.bmp</texture>
+		<texture>textures/flame/flame19.bmp</texture>
+		<texture>textures/flame/flame20.bmp</texture>
+		<texture>textures/flame/flame21.bmp</texture>
+		<texture>textures/flame/flame22.bmp</texture>
+		<texture>textures/flame/flame23.bmp</texture>
+		<texture>textures/flame/flame24.bmp</texture>
+		<texture>textures/flame/flame25.bmp</texture>
+		<texture>textures/flame/flame26.bmp</texture>
+		<texture>textures/flame/flame27.bmp</texture>
+		<texture>textures/flame/flame28.bmp</texture>
+		<texture>textures/flame/flame29.bmp</texture>
+		<texture>textures/flame/flame30.bmp</texture>
+		<texture>textures/flame/flame31.bmp</texture>
+		<texture>textures/flame/flame32.bmp</texture>
+		<texture>textures/flame/flame33.bmp</texture>
+	</textureset>	
+</texturesets>

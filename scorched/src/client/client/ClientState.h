@@ -30,22 +30,6 @@ class ComsMessageHandler;
 class ClientState  
 {
 public:
-	enum Stimulus
-	{
-		StimOptions = 1,
-		StimConnect,
-		StimLoadFiles,
-		StimLoadLevel,
-		StimWaitNoLandscape,
-		StimWait,
-		StimBuyWeapons,
-		StimAutoDefense,
-		StimPlaying,
-		StimDisconnected,
-		StimGameStopped,
-		StimScore
-	};
-
 	enum ClientStateEnum
 	{
 		StateOptions = 1,
@@ -58,7 +42,6 @@ public:
 		StatePlaying,
 		StateScore,
 
-		StateNone,
 		StateMainOptions,
 		StateInitialize,
 		StateLoadLevel,
@@ -69,7 +52,7 @@ public:
 	ClientState(ComsMessageHandler &comsMessageHandler);
 	virtual ~ClientState();
 
-	void clientMainLoop();
+	bool clientEventLoop();
 	void setState(ClientStateEnum newState);
 	void setStateString(const std::string &newState);
 
@@ -82,16 +65,10 @@ public:
 
 protected:
 	ClientStateEnum currentState_;
-	bool stopped_, paused_;
-	float serverTime_;
+	bool stopped_;
 	Clock frameClock_;
-	std::list<Stimulus> stimuli_;
 	ClientStateInitialize *clientInitialize_;
 	ClientStateLoadLevel *clientLoadLevel_;
-
-	void clientEventLoop();
-	bool getCurrentStimulus(Stimulus stimulus);
-	void errorCurrentStimulus();
 };
 
 #endif

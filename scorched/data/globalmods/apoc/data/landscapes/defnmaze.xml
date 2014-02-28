@@ -1,0 +1,19 @@
+<defn>
+    <minplayers>4</minplayers>
+    <maxplayers>24</maxplayers>
+	<landscapewidth>256</landscapewidth>
+	<landscapeheight>256</landscapeheight>
+	<roof type="sky"></roof>
+    <tankstart type="height">
+    	<startcloseness>20</startcloseness>
+    	<height><min>10</min><max>16</max></height>
+    	<startmask></startmask>
+    </tankstart>
+    <heightmap type="file">
+    	<file>data/landscapes/maze.bmp</file>
+    	<levelsurround>true</levelsurround>
+    </heightmap>
+	<events>
+		<event>data/landscapes/eventscargodrop.xml</event>
+	</events>
+</defn>

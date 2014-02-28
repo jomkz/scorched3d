@@ -1,0 +1,490 @@
+<ais>
+	<ai>
+		<name>Cyborg</name>
+		<description>A deady computer controlled player.  Ouch!!</description>
+		<!-- Is the random computer player allowed this tank type -->
+		<availableforrandom>true</availableforrandom>
+		<!-- Are AIs controlling players allowed to use the type -->
+		<availableforplayers>true</availableforplayers>
+
+		<weapons>
+			<!-- A list of weapon sets that will be considered during buying.
+				Only one weaponset will be selected. -->
+			<weaponset>WeaponSetFull</weaponset>
+		</weapons>
+		<defense>
+			<!-- Use batteries if available -->
+			<usebatteries>true</usebatteries>
+			<!-- Use shields if available -->
+			<useshields>true</useshields>
+			<!-- Use parachutes if available -->
+			<useparachutes>true</useparachutes>
+		</defense>
+		<attack>
+			<resign>
+				<!-- Try resigning rules -->
+				<useresign>true</useresign>
+				<!-- Don't consider resigning unless you have less than this amount of life -->
+				<resignlife>10.0</resignlife>
+			</resign>
+			<movement>
+				<!-- Tank must have fuel before movement can occur. -->
+				<!-- Try movement rules -->
+				<usefuel>true</usefuel>
+				<!-- The amount of damage taken before movement is considered-->
+				<movementdamage>300.0</movementdamage>
+				<!-- Once the above damage has been taken the chance to move out the way -->
+				<movementdamagechance>0.3</movementdamagechance>
+				<!-- The amount of life before we consider moving -->
+				<movementlife>75.0</movementlife>
+				<!-- The randomness applied to the final movement position -->
+				<movementrandom>10.0</movementrandom>
+				<!-- The distance left between the target tank and the movement destination -->
+				<movementcloseness>15.0</movementcloseness>
+			</movement>
+			<groupshot>
+				<!-- The number of tanks that need to be grouped before considering a group shot 
+					A group shot is available if targets are close together and the tank has
+					a hugeweapon. -->
+				<groupshotsize>2</groupshotsize>
+				<!-- The chance that a group shot will be considered -->
+				<groupshotchance>0.7</groupshotchance>
+				<!-- The max distance between tanks considered grouped -->
+				<grouptargetdistance>25.0</grouptargetdistance>
+			</groupshot>
+			<sniper>
+				<!-- Sniper shots are used for both lasers and projectiles on full power. -->
+				<!-- How close do I need to be from a target before considering a sniper shot -->
+				<sniperusedistance>80.0</sniperusedistance>
+				<!-- The distance in degress that my 1st sniper shot may miss by -->
+				<sniperstartdistance>0.0</sniperstartdistance>
+				<!-- The distance in degrees that my best sniper shot may miss by -->
+				<sniperenddistance>0.0</sniperenddistance>
+				<!-- The min distance in degrees that each sniper shot will improve -->
+				<snipermindecrement>2.0</snipermindecrement>
+				<!-- The max distance in degrees that each sniper shot will improve -->
+				<snipermaxdecrement>5.0</snipermaxdecrement>
+				<!-- The maximum amount of accuracy in degrees that will be lost if the tank moves -->
+				<snipermovementfactor>4.0</snipermovementfactor>
+			</sniper>
+			<projectile>
+				<!-- The minimum distance to allow for shots.  Stops self kills -->
+				<projectilemindistance>10.0</projectilemindistance>
+				<!-- These are all distances of the 1st particle of the projectile to hit the ground. -->
+				<!-- The distance that the 1st projectile shot may miss by -->
+				<projectilestartdistance>10.0</projectilestartdistance>
+				<!-- The distance that the my best projectile shot may get to -->
+				<projectileenddistance>5.0</projectileenddistance>
+				<!-- The min distance that each projecile shot will improve -->
+				<projectilemindecrement>2.0</projectilemindecrement>
+				<!-- The max distance that each projecile shot will improve -->
+				<projectilemaxdecrement>4.0</projectilemaxdecrement>
+				<!-- How close a shot do I need to get to a target before firing large weapons -->
+				<largeweaponusedistance>10.0</largeweaponusedistance>
+				<!-- The maximum amount of accuracy that will be lost if the tank moves -->
+				<projectilemovementfactor>10.0</projectilemovementfactor>
+			</projectile>
+
+			<!-- 
+				Weighting factors use to determine which tank to fire at. 
+				Targets are all ranked using these factors.
+				The top weighted targets are selected to be fired at 1st. 
+				Each factor is multiplied by the weight and then all factors are added
+				to give the total weighting. 
+				All factors are in the range -1.0 to 1.0 before weighting.
+			-->
+			<targets>
+				<health>-0.2</health>
+				<random>0.1</random>
+				<player>0</player>
+				<shield>-0.2</shield>
+				<score>0.3</score>
+				<repeat>0.3</repeat>
+				<damagetaken>0.3</damagetaken>
+				<damagedone>0.3</damagedone>
+				<distance>0.0</distance>
+			</targets>		  
+		</attack>
+	</ai>
+
+	<ai>
+		<name>Shark</name>
+		<description>A very good computer controlled player.</description>
+		<availableforrandom>true</availableforrandom>
+		<availableforplayers>true</availableforplayers>
+
+		<weapons>
+			<weaponset>WeaponSetFull</weaponset>
+		</weapons>
+		<defense>
+			<usebatteries>false</usebatteries>
+			<useshields>true</useshields>
+			<useparachutes>true</useparachutes>
+		</defense>
+		<attack>
+			<resign>
+				<useresign>true</useresign>
+				<resignlife>10.0</resignlife>
+			</resign>
+			<movement>
+				<usefuel>true</usefuel>
+				<movementdamage>300.0</movementdamage>
+				<movementdamagechance>0.3</movementdamagechance>
+				<movementlife>75.0</movementlife>
+				<movementrandom>10.0</movementrandom>
+				<movementcloseness>15.0</movementcloseness>
+			</movement>
+			<groupshot>
+				<groupshotsize>2</groupshotsize>
+				<groupshotchance>0.2</groupshotchance>
+				<grouptargetdistance>25.0</grouptargetdistance>
+			</groupshot>
+			<sniper>
+				<sniperusedistance>80.0</sniperusedistance>
+				<sniperstartdistance>10.0</sniperstartdistance>
+				<sniperenddistance>0.0</sniperenddistance>
+				<snipermindecrement>2.0</snipermindecrement>
+				<snipermaxdecrement>3.0</snipermaxdecrement>
+				<snipermovementfactor>6.0</snipermovementfactor>
+			</sniper>
+			<projectile>
+				<projectilemindistance>10.0</projectilemindistance>
+				<projectilestartdistance>25.0</projectilestartdistance>
+				<projectileenddistance>5.0</projectileenddistance>
+				<projectilemindecrement>5.0</projectilemindecrement>
+				<projectilemaxdecrement>8.0</projectilemaxdecrement>
+				<largeweaponusedistance>10.0</largeweaponusedistance>
+				<projectilemovementfactor>15.0</projectilemovementfactor>
+			</projectile>
+			<targets>
+				<health>-0.1</health>
+				<random>0.2</random>
+				<player>0</player>
+				<shield>0</shield>
+				<score>0.2</score>
+				<repeat>0.4</repeat>
+				<damagetaken>0.2</damagetaken>
+				<damagedone>0</damagedone>
+				<distance>-0.5</distance>
+			</targets>
+		</attack>
+	</ai>
+
+	<ai>
+		<name>Chooser</name>
+		<description>A good computer controlled player.</description>
+		<availableforrandom>true</availableforrandom>
+		<availableforplayers>true</availableforplayers>
+
+		<weapons>
+			<weaponset>WeaponSetLarge</weaponset>
+		</weapons>
+		<defense>
+			<usebatteries>false</usebatteries>
+			<useshields>true</useshields>
+			<useparachutes>true</useparachutes>
+		</defense>
+		<attack>
+			<resign>
+				<useresign>true</useresign>
+				<resignlife>10.0</resignlife>
+			</resign>
+			<movement>
+				<usefuel>false</usefuel>
+				<movementdamage>300.0</movementdamage>
+				<movementdamagechance>0.3</movementdamagechance>
+				<movementlife>75.0</movementlife>
+				<movementrandom>10.0</movementrandom>
+				<movementcloseness>15.0</movementcloseness>
+			</movement>
+			<groupshot>
+				<groupshotsize>2</groupshotsize>
+				<groupshotchance>0.2</groupshotchance>
+				<grouptargetdistance>25.0</grouptargetdistance>
+			</groupshot>
+			<sniper>
+				<sniperusedistance>80.0</sniperusedistance>
+				<sniperstartdistance>10.0</sniperstartdistance>
+				<sniperenddistance>0.0</sniperenddistance>
+				<snipermindecrement>2.0</snipermindecrement>
+				<snipermaxdecrement>3.0</snipermaxdecrement>
+				<snipermovementfactor>6.0</snipermovementfactor>
+			</sniper>
+			<projectile>
+				<projectilemindistance>10.0</projectilemindistance>
+				<projectilestartdistance>40.0</projectilestartdistance>
+				<projectileenddistance>5.0</projectileenddistance>
+				<projectilemindecrement>5.0</projectilemindecrement>
+				<projectilemaxdecrement>10.0</projectilemaxdecrement>
+				<largeweaponusedistance>10.0</largeweaponusedistance>
+				<projectilemovementfactor>15.0</projectilemovementfactor>
+			</projectile>
+			<targets>
+				<health>0</health>
+				<random>0</random>
+				<player>-0.25</player>
+				<shield>0</shield>
+				<score>0.4</score>
+				<repeat>0.25</repeat>
+				<damagetaken>0.5</damagetaken>
+				<damagedone>0</damagedone>
+				<distance>-1.0</distance>
+			</targets>
+		</attack>
+	</ai>
+
+	<ai>
+		<name>Tosser</name>
+		<description>An average computer controlled player.</description>
+		<availableforrandom>true</availableforrandom>
+		<availableforplayers>true</availableforplayers>
+
+		<weapons>
+			<weaponset>WeaponSetBasic</weaponset>
+		</weapons>
+		<defense>
+			<usebatteries>false</usebatteries>
+			<useshields>false</useshields>
+			<useparachutes>true</useparachutes>
+		</defense>
+		<attack>
+			<resign>
+				<useresign>true</useresign>
+				<resignlife>10.0</resignlife>
+			</resign>
+			<movement>
+				<usefuel>false</usefuel>
+				<movementdamage>300.0</movementdamage>
+				<movementdamagechance>0.1</movementdamagechance>
+				<movementlife>75.0</movementlife>
+				<movementrandom>10.0</movementrandom>
+				<movementcloseness>15.0</movementcloseness>
+			</movement>
+			<groupshot>
+				<groupshotsize>5</groupshotsize>
+				<groupshotchance>0.2</groupshotchance>
+				<grouptargetdistance>25.0</grouptargetdistance>
+			</groupshot>
+			<sniper>
+				<sniperusedistance>50.0</sniperusedistance>
+				<sniperstartdistance>10.0</sniperstartdistance>
+				<sniperenddistance>0.0</sniperenddistance>
+				<snipermindecrement>2.0</snipermindecrement>
+				<snipermaxdecrement>3.0</snipermaxdecrement>
+				<snipermovementfactor>6.0</snipermovementfactor>
+			</sniper>
+			<projectile>
+				<projectilemindistance>10.0</projectilemindistance>
+				<projectilestartdistance>50.0</projectilestartdistance>
+				<projectileenddistance>5.0</projectileenddistance>
+				<projectilemindecrement>5.0</projectilemindecrement>
+				<projectilemaxdecrement>12.0</projectilemaxdecrement>
+				<largeweaponusedistance>10.0</largeweaponusedistance>
+				<projectilemovementfactor>20.0</projectilemovementfactor>
+			</projectile>
+			<targets>
+				<health>0</health>
+				<random>0</random>
+				<player>-0.5</player>
+				<shield>0</shield>
+				<score>0</score>
+				<repeat>0</repeat>
+				<damagetaken>0.5</damagetaken>
+				<damagedone>0</damagedone>
+				<distance>-1.0</distance>
+			</targets>
+		</attack>
+	</ai>
+
+	<ai>
+		<name>Shooter</name>
+		<description>A poor computer controlled player.</description>
+		<availableforrandom>true</availableforrandom>
+		<availableforplayers>true</availableforplayers>
+
+		<weapons>
+			<weaponset>WeaponSetBasic</weaponset>
+		</weapons>
+		<defense>
+			<usebatteries>false</usebatteries>
+			<useshields>false</useshields>
+			<useparachutes>false</useparachutes>
+		</defense>
+		<attack>
+			<resign>
+				<useresign>true</useresign>
+				<resignlife>10.0</resignlife>
+			</resign>
+			<movement>
+				<usefuel>false</usefuel>
+				<movementdamage>300.0</movementdamage>
+				<movementdamagechance>0.0</movementdamagechance>
+				<movementlife>75.0</movementlife>
+				<movementrandom>10.0</movementrandom>
+				<movementcloseness>15.0</movementcloseness>
+			</movement>
+			<groupshot>
+				<groupshotsize>2</groupshotsize>
+				<groupshotchance>0.2</groupshotchance>
+				<grouptargetdistance>25.0</grouptargetdistance>
+			</groupshot>
+			<sniper>
+				<sniperusedistance>80.0</sniperusedistance>
+				<sniperstartdistance>10.0</sniperstartdistance>
+				<sniperenddistance>0.0</sniperenddistance>
+				<snipermindecrement>2.0</snipermindecrement>
+				<snipermaxdecrement>3.0</snipermaxdecrement>
+				<snipermovementfactor>8.0</snipermovementfactor>
+			</sniper>
+			<projectile>
+				<projectilemindistance>5.0</projectilemindistance>
+				<projectilestartdistance>50.0</projectilestartdistance>
+				<projectileenddistance>5.0</projectileenddistance>
+				<projectilemindecrement>5.0</projectilemindecrement>
+				<projectilemaxdecrement>10.0</projectilemaxdecrement>
+				<largeweaponusedistance>10.0</largeweaponusedistance>
+				<projectilemovementfactor>30.0</projectilemovementfactor>
+			</projectile>
+			<targets>
+				<health>0</health>
+				<random>0</random>
+				<player>-1.0</player>
+				<shield>0</shield>
+				<score>0</score>
+				<repeat>0</repeat>
+				<damagetaken>0</damagetaken>
+				<damagedone>0</damagedone>
+				<distance>-1.0</distance>
+			</targets>
+		</attack>
+	</ai>
+
+	<ai>
+		<name>Moron</name>
+		<description>A very stupid computer controlled player.</description>
+		<availableforrandom>true</availableforrandom>
+		<availableforplayers>true</availableforplayers>
+
+		<weapons>
+			<weaponset>WeaponSetMinimal</weaponset>
+		</weapons>
+		<defense>
+			<usebatteries>false</usebatteries>
+			<useshields>false</useshields>
+			<useparachutes>false</useparachutes>
+		</defense>
+		<attack>
+			<resign>
+				<useresign>false</useresign>
+				<resignlife>10.0</resignlife>
+			</resign>
+			<movement>
+				<usefuel>false</usefuel>
+				<movementdamage>300.0</movementdamage>
+				<movementdamagechance>0.0</movementdamagechance>
+				<movementlife>75.0</movementlife>
+				<movementrandom>10.0</movementrandom>
+				<movementcloseness>15.0</movementcloseness>
+			</movement>
+			<groupshot>
+				<groupshotsize>0</groupshotsize>
+				<groupshotchance>0.2</groupshotchance>
+				<grouptargetdistance>25.0</grouptargetdistance>
+			</groupshot>
+			<sniper>
+				<sniperusedistance>10.0</sniperusedistance>
+				<sniperstartdistance>10.0</sniperstartdistance>
+				<sniperenddistance>0.0</sniperenddistance>
+				<snipermindecrement>0.0</snipermindecrement>
+				<snipermaxdecrement>0.0</snipermaxdecrement>
+				<snipermovementfactor>10.0</snipermovementfactor>
+			</sniper>
+			<projectile>
+				<projectilemindistance>0.0</projectilemindistance>
+				<projectilestartdistance>50.0</projectilestartdistance>
+				<projectileenddistance>5.0</projectileenddistance>
+				<projectilemindecrement>0.0</projectilemindecrement>
+				<projectilemaxdecrement>0.0</projectilemaxdecrement>
+				<largeweaponusedistance>25.0</largeweaponusedistance>
+				<projectilemovementfactor>20.0</projectilemovementfactor>
+			</projectile>
+			<targets>
+				<health>0</health>
+				<random>1.0</random>
+				<player>0</player>
+				<shield>0</shield>
+				<score>0</score>
+				<repeat>0</repeat>
+				<damagetaken>0</damagetaken>
+				<damagedone>0</damagedone>
+				<distance>0</distance>
+			</targets>
+		</attack>
+	</ai>
+
+	<ai>
+		<name>Target</name>
+		<description>A computer controlled player. 
+These tanks act as static targets. 
+They will NEVER fire back.</description>
+		<availableforrandom>true</availableforrandom>
+		<availableforplayers>true</availableforplayers>
+
+		<weapons>
+			<weaponset>WeaponSetEmpty</weaponset>
+		</weapons>
+		<defense>
+			<usebatteries>false</usebatteries>
+			<useshields>false</useshields>
+			<useparachutes>false</useparachutes>
+		</defense>
+		<attack>
+			<resign>
+				<useresign>false</useresign>
+				<resignlife>10.0</resignlife>
+			</resign>
+			<movement>
+				<usefuel>false</usefuel>
+				<movementdamage>300.0</movementdamage>
+				<movementdamagechance>0.3</movementdamagechance>
+				<movementlife>75.0</movementlife>
+				<movementrandom>10.0</movementrandom>
+				<movementcloseness>15.0</movementcloseness>
+			</movement>
+			<groupshot>
+				<groupshotsize>0</groupshotsize>
+				<groupshotchance>0.7</groupshotchance>
+				<grouptargetdistance>25.0</grouptargetdistance>
+			</groupshot>
+			<sniper>
+				<sniperusedistance>80.0</sniperusedistance>
+				<sniperstartdistance>0.0</sniperstartdistance>
+				<sniperenddistance>0.0</sniperenddistance>
+				<snipermindecrement>2.0</snipermindecrement>
+				<snipermaxdecrement>5.0</snipermaxdecrement>
+				<snipermovementfactor>4.0</snipermovementfactor>
+			</sniper>
+			<projectile>
+				<projectilemindistance>10.0</projectilemindistance>
+				<projectilestartdistance>10.0</projectilestartdistance>
+				<projectileenddistance>5.0</projectileenddistance>
+				<projectilemindecrement>1.0</projectilemindecrement>
+				<projectilemaxdecrement>4.0</projectilemaxdecrement>
+				<largeweaponusedistance>10.0</largeweaponusedistance>
+				<projectilemovementfactor>10.0</projectilemovementfactor>
+			</projectile>
+			<targets>
+				<health>0</health>
+				<random>0</random>
+				<player>0</player>
+				<shield>0</shield>
+				<score>0</score>
+				<repeat>0</repeat>
+				<damagetaken>0</damagetaken>
+				<damagedone>0</damagedone>
+				<distance>0.0</distance>
+			</targets>
+		</attack>	
+	</ai>
+
+</ais>

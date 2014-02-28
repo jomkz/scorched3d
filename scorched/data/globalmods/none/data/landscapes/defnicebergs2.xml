@@ -1,0 +1,39 @@
+<defn>
+    <minplayers>0</minplayers>
+    <maxplayers>24</maxplayers>
+	<landscapewidth>256</landscapewidth>
+	<landscapeheight>256</landscapeheight>
+	<roof type="cavern">
+		<width>300</width>
+		<height>125</height>
+		<heightmap type="generate">
+			<mask></mask>
+			<landhills>
+				<min>120</min><max>160</max>
+			</landhills>
+			<landheight>
+				<min>40</min><max>70</max>
+			</landheight>
+			<landpeakwidthx>
+				<min>2</min><max>8</max>
+			</landpeakwidthx>
+			<landpeakwidthy>
+				<min>-1</min><max>1</max>
+			</landpeakwidthy>
+			<landpeakheight>
+				<min>0.5</min><max>1.5</max>
+			</landpeakheight>
+			<landsmoothing>0.0</landsmoothing>
+			<levelsurround>false</levelsurround>
+		</heightmap>
+	</roof>
+    <tankstart type="height">
+    	<startcloseness>20</startcloseness>
+    	<height><min>10</min><max>100</max></height>
+    	<startmask></startmask>
+    </tankstart>
+    <heightmap type="file">
+    	<file>data/landscapes/icebergs002.bmp</file>
+    	<levelsurround>true</levelsurround>
+    </heightmap>
+</defn>

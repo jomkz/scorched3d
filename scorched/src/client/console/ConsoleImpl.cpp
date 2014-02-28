@@ -28,7 +28,7 @@ ConsoleImpl::ConsoleImpl() :
 	lines_(1000), historyPosition_(-1), 
 	showCursor_(true)
 {
-	Logger::addLogger(this);
+	Logger::addLogger(this, false);
 }
 
 ConsoleImpl::~ConsoleImpl()

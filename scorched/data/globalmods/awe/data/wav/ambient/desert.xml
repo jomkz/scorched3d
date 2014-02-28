@@ -1,0 +1,21 @@
+<ambientsound>
+		<sound>
+			<position type='absolute'>
+				<position>
+					<A>256</A>
+					<B>256</B>
+					<C>50</C>
+				</position>
+			</position>
+			<timing type='repeat'>
+				<min>30</min>
+				<max>50</max>
+			</timing>
+			<sound type='file'>
+				<file>data/wav/ambient/egypt_1.ogg</file>
+                                <file>data/wav/ambient/egypt_2.ogg</file>
+                               	<file>data/wav/ambient/egypt_3.ogg</file>
+				<gain>0.4</gain>
+			</sound>
+		</sound>
+</ambientsound>

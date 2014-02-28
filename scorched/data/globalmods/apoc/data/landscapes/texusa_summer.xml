@@ -1,0 +1,50 @@
+<tex>
+	<detail>data/textures/landscape/default/detail.jpg</detail>
+	<magmasmall>data/textures/landscape/default/magma-small.jpg</magmasmall>
+	<scorch>data/textures/landscape/sand/scorch.jpg</scorch>
+	<skytexture>data/textures/landscape/sand/cloud1.jpg</skytexture>
+	<skytexturemask>data/textures/landscape/default/cloud1m.jpg</skytexturemask>
+	<skycolormap>data/textures/clearsky.bmp</skycolormap>
+	<skytimeofday>3</skytimeofday>
+	<skysunxy>110</skysunxy>
+	<skysunyz>45</skysunyz>
+	<skyambience><A>0.3</A><B>0.3</B><C>0.3</C></skyambience>
+	<skydiffuse><A>0.8</A><B>0.8</B><C>0.8</C></skydiffuse>
+	<fog><A>0.8</A><B>0.8</B><C>0.8</C></fog>
+	<fogdensity>0.001</fogdensity>
+	<suncolor><A>1.0</A><B>1.0</B><C>1.0</C></suncolor>
+	<suntexture>data/textures/glow1.bmp</suntexture>
+	<border type="water">
+		<reflection>data/textures/landscape/sand/cubemap.jpg</reflection>
+		<texture>data/textures/landscape/default/water.jpg</texture>
+		<wavetopa><A>0.0</A><B>0.0</B><C>0.0</C></wavetopa>
+		<wavetopb><A>0.49</A><B>0.83</B><C>0.94</C></wavetopb>
+		<wavebottoma><A>0.0</A><B>0.0</B><C>0.0</C></wavebottoma>
+		<wavebottomb><A>0.29</A><B>0.56</B><C>0.91</C></wavebottomb>
+		<wavelight><A>1.0</A><B>1.0</B><C>1.0</C></wavelight>
+		<foam>data/textures/foam.png</foam>
+		<height>5.0</height>
+	</border>
+	<texture type="generate">
+		<rockside>data/textures/landscape/sand/rockside.jpg</rockside>
+		<shore>data/textures/landscape/tropical/shore.jpg</shore>
+		<roof>data/textures/landscape/sand/texture0.jpg</roof>
+		<texture0>data/textures/landscape/default/texture3.jpg</texture0>
+		<texture1>data/textures/landscape/tropical/shore.jpg</texture1>
+		<texture2>data/textures/landscape/default/texture1.jpg</texture2>
+		<texture3>data/textures/landscape/storm/texture4.jpg</texture3>
+	</texture>
+	<placements><placement>data/landscapes/placeusa_summer.xml</placement></placements>
+	<ambientsounds>
+		<ambientsound>data/landscapes/ambientsoundwaves.xml</ambientsound>
+		<ambientsound>data/landscapes/ambientsoundtrees.xml</ambientsound>
+		<ambientsound>data/landscapes/ambientsoundjet.xml</ambientsound>
+	</ambientsounds>
+	<precipitation type="none"></precipitation>
+	<boids><boid>data/landscapes/boidscity.xml</boid></boids>
+	<shipgroups>
+		<shipgroup>data/landscapes/shipsdestroyer1.xml</shipgroup>
+		<shipgroup>data/landscapes/shipsfish.xml</shipgroup>
+		<shipgroup>data/landscapes/shipssub.xml</shipgroup>
+	</shipgroups>
+</tex>

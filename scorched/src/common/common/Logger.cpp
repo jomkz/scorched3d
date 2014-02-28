@@ -31,16 +31,8 @@
 // ************************************************
 
 static boost::mutex logMutex_;
-Logger * Logger::instance_ = 0;
-
-Logger * Logger::instance()
-{
-	if (!instance_)
-	{
-		instance_ = new Logger;
-	}
-	return instance_;
-}
+std::list<Logger::LoggerDefinition> Logger::loggers_;
+std::list<LoggerInfo *> Logger::entries_;
 
 Logger::Logger()
 {
@@ -50,23 +42,21 @@ Logger::~Logger()
 {
 }
 
-void Logger::addLogger(LoggerI *logger)
+void Logger::addLogger(LoggerI *logger, bool logFromUIThread)
 {
-	Logger::instance();
 	logMutex_.lock();
-	Logger::instance()->loggers_.push_back(logger);
+	loggers_.push_back(LoggerDefinition(logger, logFromUIThread));
 	logMutex_.unlock();
 }
 
 void Logger::remLogger(LoggerI *logger)
 {
-	Logger::instance();
-	std::list<LoggerI *>::iterator itor;
+	std::list<LoggerDefinition>::iterator itor;
 	logMutex_.lock();
-	itor = Logger::instance()->loggers_.begin();
-	while(itor != Logger::instance()->loggers_.end()) {
-		if (*itor == logger) {
-			Logger::instance()->loggers_.erase(itor);
+	itor = loggers_.begin();
+	while(itor != loggers_.end()) {
+		if (itor->logger_ == logger) {
+			loggers_.erase(itor);
 			break;
 		}
 		++itor;
@@ -83,24 +73,14 @@ void Logger::log(const char *text)
 {
 	if (!text) return;
 
-	Logger::instance();
-
-	logMutex_.lock();
-	
 	LoggerInfo info;
 	info.setMessage(text);
-	addLog(info);
-
-	logMutex_.unlock();
+	log(info);
 }
 
 void Logger::log(const LoggerInfo &info)
 {
-	Logger::instance();
-
-	logMutex_.lock();
 	addLog((LoggerInfo &) info);
-	logMutex_.unlock();
 }
 
 void Logger::addLog(LoggerInfo &info)
@@ -116,54 +96,77 @@ void Logger::addLog(LoggerInfo &info)
 		while (found)
 		{
 			*found = '\0';
-			LoggerInfo *newInfo = new LoggerInfo(info);
-			newInfo->setMessage(start);
-			instance_->entries_.push_back(newInfo);
+			LoggerInfo newInfo(info);
+			newInfo.setMessage(start);
+			addLogEntry(newInfo);
 			start = found;
 			start++;
 
 			found = strchr(start, '\n');
-
-			/*if (SDL_ThreadID() == threadId)
-			{
-				processLogEntries();
-			}*/
 		}
 		if (start[0] != '\0')
 		{
-			LoggerInfo *newInfo = new LoggerInfo(info);
-			newInfo->setMessage(start);
-			instance_->entries_.push_back(newInfo);
+			LoggerInfo newInfo(info);
+			newInfo.setMessage(start);
+			addLogEntry(newInfo);
 		}
 	}
 	else
 	{
-		instance_->entries_.push_back(
-			new LoggerInfo(info));
+		addLogEntry(info);
 	}
+}
+
+void Logger::addLogEntry(LoggerInfo &info)
+{
+	logMutex_.lock();
+
+	bool entryRequired = false;
+	std::list<LoggerDefinition>::iterator logItor;
+	std::list<LoggerDefinition>::iterator endItor = loggers_.end();
+	for (logItor = loggers_.begin();
+		logItor != endItor;
+		++logItor)
+	{
+		LoggerDefinition &log = (*logItor);
+		if (!log.logFromUIThread_)
+		{
+			log.logger_->logMessage(info);
+		}
+		else
+		{
+			entryRequired = true;
+		}
+	}
+	if (entryRequired)
+	{
+		entries_.push_back(new LoggerInfo(info));
+	}
+	
+	logMutex_.unlock();
 }
 
 void Logger::processLogEntries()
 {
-	Logger::instance();
-
 	logMutex_.lock();
-	std::list<LoggerInfo *> &entries = Logger::instance()->entries_;
-	while (!entries.empty())
+	while (!entries_.empty())
 	{
-		LoggerInfo *firstEntry = entries.front();
+		LoggerInfo *firstEntry = entries_.front();
 
-		std::list<LoggerI *> &loggers = Logger::instance()->loggers_;
-		std::list<LoggerI *>::iterator logItor;
-		for (logItor = loggers.begin();
-			logItor != loggers.end();
+		std::list<LoggerDefinition>::iterator logItor;
+		std::list<LoggerDefinition>::iterator endItor = loggers_.end();
+		for (logItor = loggers_.begin();
+			logItor != endItor;
 			++logItor)
 		{
-			LoggerI *log = (*logItor);
-			log->logMessage(*firstEntry);
+			LoggerDefinition &log = (*logItor);
+			if (log.logFromUIThread_)
+			{
+				log.logger_->logMessage(*firstEntry);
+			}
 		}
 
-		entries.pop_front();
+		entries_.pop_front();
 		delete firstEntry;
 	}
 	logMutex_.unlock();
