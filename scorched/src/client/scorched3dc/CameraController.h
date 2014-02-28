@@ -18,28 +18,32 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UIStatePlayingh_INCLUDE__)
-#define __INCLUDE_UIStatePlayingh_INCLUDE__
+#if !defined(__INCLUDE_CameraControllerh_INCLUDE__)
+#define __INCLUDE_CameraControllerh_INCLUDE__
 
-#include <scorched3dc/UIStateI.h>
-
-class UIStatePlayingEnv;
-class UIStatePlayingLand;
-class CameraController;
-class UIStatePlaying : public UIStateI
+class CameraController : public Ogre::FrameListener
 {
 public:
-	UIStatePlaying();
-	virtual ~UIStatePlaying();
+	CameraController(Ogre::SceneManager* sceneMgr);
+	virtual ~CameraController();
 
-	virtual void createState();
-	virtual void destroyState();
+	Ogre::Camera* getCamera() { return camera_; }
+
+	// Ogre::FrameListener
+	bool frameStarted(const Ogre::FrameEvent &e);
 
 protected:
 	Ogre::SceneManager* sceneMgr_;
-	CameraController *cameraController_;
-	UIStatePlayingEnv *env_;
-	UIStatePlayingLand *land_;
+	Ogre::Camera* camera_;
+	Ogre::SceneNode *targetNode_;
+	Ogre::SceneNode *cameraNode_;
+	Ogre::Vector3 wantedTarget_;
+	Ogre::Vector3 wantedCamera_;
+	Ogre::Real rotationRound_, rotationUpDown_;
+	Ogre::Real zoom_;
+
+	void create();
+	void calculateWantedPosition();
 };
 
-#endif // __INCLUDE_UIStatePlayingh_INCLUDE__
+#endif // __INCLUDE_CameraControllerh_INCLUDE__

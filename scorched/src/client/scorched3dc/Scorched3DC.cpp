@@ -250,6 +250,10 @@ void Scorched3DC::windowClosed(Ogre::RenderWindow* rw)
 
 void Scorched3DC::loadResources()
 {
+	// Landscape
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/land", "FileSystem", "Landscape");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/land/nvidia", "FileSystem", "Landscape");
+
 	// HydraX
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/hydrax", "FileSystem", "Hydrax");
 

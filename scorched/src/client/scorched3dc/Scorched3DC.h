@@ -37,6 +37,7 @@ public:
 
 	Ogre::Root *getOgreRoot() { return ogreRoot_; }
 	Ogre::RenderWindow *getOgreRenderWindow() { return ogreWindow_; }
+	OIS::Keyboard* getKeyboard() { return keyboard_; }
 
 	// Ogre::FrameListener
 	virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);

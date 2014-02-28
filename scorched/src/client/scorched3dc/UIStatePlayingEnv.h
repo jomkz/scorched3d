@@ -18,28 +18,34 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UIStatePlayingh_INCLUDE__)
-#define __INCLUDE_UIStatePlayingh_INCLUDE__
+#if !defined(__INCLUDE_UIStatePlayingEnvh_INCLUDE__)
+#define __INCLUDE_UIStatePlayingEnvh_INCLUDE__
 
-#include <scorched3dc/UIStateI.h>
+#include <SkyX/SkyX.h>
+#include <Hydrax/Hydrax.h>
+#include <Hydrax/Noise/Perlin/Perlin.h>
+#include <Hydrax/Modules/ProjectedGrid/ProjectedGrid.h>
 
-class UIStatePlayingEnv;
-class UIStatePlayingLand;
-class CameraController;
-class UIStatePlaying : public UIStateI
+class UIStatePlayingEnv
 {
 public:
-	UIStatePlaying();
-	virtual ~UIStatePlaying();
+	UIStatePlayingEnv(Ogre::SceneManager* sceneMgr,
+		Ogre::Camera* camera);
+	virtual ~UIStatePlayingEnv();
 
-	virtual void createState();
-	virtual void destroyState();
+	Ogre::Light *getSunLight() { return sunLight_; }
+	Ogre::Light *getShadowLight() { return shadowLight_; }
 
 protected:
+	SkyX::ColorGradient waterGradient_, sunGradient_, ambientGradient_;
+	Ogre::Camera* camera_;
 	Ogre::SceneManager* sceneMgr_;
-	CameraController *cameraController_;
-	UIStatePlayingEnv *env_;
-	UIStatePlayingLand *land_;
+	SkyX::SkyX *skyX_;
+	Hydrax::Hydrax *hydraX_;
+	Ogre::Light *sunLight_, *shadowLight_;
+
+	void create();
+	void updateLighting();
 };
 
-#endif // __INCLUDE_UIStatePlayingh_INCLUDE__
+#endif // __INCLUDE_UIStatePlayingEnvh_INCLUDE__

@@ -1407,6 +1407,15 @@
     <ClCompile Include="UIStatePlaying.cpp">
       <Filter>scorched3dc</Filter>
     </ClCompile>
+    <ClCompile Include="UIStatePlayingEnv.cpp">
+      <Filter>scorched3dc</Filter>
+    </ClCompile>
+    <ClCompile Include="UIStatePlayingLand.cpp">
+      <Filter>scorched3dc</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraController.cpp">
+      <Filter>scorched3dc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -2754,6 +2763,15 @@
       <Filter>scorched3dc</Filter>
     </ClInclude>
     <ClInclude Include="UIStatePlaying.h">
+      <Filter>scorched3dc</Filter>
+    </ClInclude>
+    <ClInclude Include="UIStatePlayingEnv.h">
+      <Filter>scorched3dc</Filter>
+    </ClInclude>
+    <ClInclude Include="UIStatePlayingLand.h">
+      <Filter>scorched3dc</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraController.h">
       <Filter>scorched3dc</Filter>
     </ClInclude>
   </ItemGroup>

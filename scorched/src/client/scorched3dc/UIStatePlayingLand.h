@@ -18,28 +18,31 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UIStatePlayingh_INCLUDE__)
-#define __INCLUDE_UIStatePlayingh_INCLUDE__
+#if !defined(__INCLUDE_UIStatePlayingLandh_INCLUDE__)
+#define __INCLUDE_UIStatePlayingLandh_INCLUDE__
 
-#include <scorched3dc/UIStateI.h>
+#include <Terrain/OgreTerrain.h>
+#include <Terrain/OgreTerrainGroup.h>
 
-class UIStatePlayingEnv;
-class UIStatePlayingLand;
-class CameraController;
-class UIStatePlaying : public UIStateI
+class UIStatePlayingLand
 {
 public:
-	UIStatePlaying();
-	virtual ~UIStatePlaying();
-
-	virtual void createState();
-	virtual void destroyState();
+	UIStatePlayingLand(Ogre::SceneManager* sceneMgr,
+		Ogre::Camera* camera,
+		Ogre::Light *sunLight);
+	virtual ~UIStatePlayingLand();
 
 protected:
+	Ogre::Camera* camera_;
 	Ogre::SceneManager* sceneMgr_;
-	CameraController *cameraController_;
-	UIStatePlayingEnv *env_;
-	UIStatePlayingLand *land_;
+	Ogre::TerrainGlobalOptions *terrainGlobalOptions_;
+	Ogre::TerrainGroup *terrainGroup_;
+	Ogre::Light *sunLight_;
+	bool terrainsImported_;
+
+	void create();
+	void defineOptions();
+	void defineTerrain(long x, long y);
 };
 
-#endif // __INCLUDE_UIStatePlayingh_INCLUDE__
+#endif // __INCLUDE_UIStatePlayingLandh_INCLUDE__
