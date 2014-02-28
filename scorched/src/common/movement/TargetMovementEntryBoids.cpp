@@ -43,10 +43,10 @@ TargetMovementEntryBoids::~TargetMovementEntryBoids()
 }
 
 void TargetMovementEntryBoids::generate(ScorchedContext &context, 
-	RandomGenerator &random, LandscapeMovementType *movementType)
+	RandomGenerator &random, LandscapeMovement *movementType)
 {
-	LandscapeMovementTypeBoids *boids = 
-		(LandscapeMovementTypeBoids *) movementType;
+	LandscapeMovementBoids *boids = 
+		(LandscapeMovementBoids *) movementType;
 
 	// Set the boid parameters
 	cruiseDistance_ = boids->cruisedistance.getValue() * fixed(10);

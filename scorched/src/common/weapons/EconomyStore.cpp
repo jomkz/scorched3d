@@ -47,8 +47,9 @@ void EconomyStore::loadEconomy()
 		ScorchedServer::instance()->getOptionsGame().getEconomy());
 	if (!economy_)
 	{
-		S3D::dialogExit("Failed to find an economy called \"%s\"",
-			ScorchedServer::instance()->getOptionsGame().getEconomy());
+		S3D::dialogExit("Economy",
+			S3D::formatStringBuffer("Failed to find an economy called \"%s\"",
+				ScorchedServer::instance()->getOptionsGame().getEconomy()));
 	}
 	economy_->loadPrices();
 }

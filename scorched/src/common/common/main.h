@@ -54,8 +54,7 @@ void run_main(int argc, char *argv[], OptionsParameters &params)
 
 	// Parse command line
 	// Read options from command line
-	if (!OptionEntryHelper::addToArgParser(
-		params.getOptions(), aParser)) exit(64);
+	params.addToArgParser(aParser);
 	if (!aParser.parse(argc, argv)) exit(64);
 	S3D::setSettingsDir(params.getSettingsDir());
 

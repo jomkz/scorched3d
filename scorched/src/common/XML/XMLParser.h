@@ -36,8 +36,10 @@ public:
 
 	void setSource(const std::string &source) { source_ = source; }
 	XMLNode *getRoot() { return root_; }
+	XMLNode *getDocument() { return document_; }
 
 protected:
+	XMLNode *document_;
 	XMLNode *root_;
 	XMLNode *current_;
 	XML_Parser p_;

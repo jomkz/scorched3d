@@ -78,7 +78,7 @@ void TankAIAdder::addTankAIs(ScorchedServer &context)
 	for (int i=0; i<maxComputerAIs; i++)
 	{
 		const char *playerType = 
-			context.getOptionsGame().getPlayerType(i);
+			context.getOptionsGame().getPlayerType(i).getValue().c_str();
 		if (0 != stricmp(playerType, "Human"))
 		{
 			addTankAI(context, playerType);

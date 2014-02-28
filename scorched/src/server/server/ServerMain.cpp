@@ -40,8 +40,7 @@ void consoleServer()
 	ScorchedServerSettingsOptions *settings =
 		new ScorchedServerSettingsOptions(
 		ServerParams::instance()->getServerFile(),
-		ServerParams::instance()->getRewriteOptions(),
-		ServerParams::instance()->getWriteFullOptions());
+		ServerParams::instance()->getRewriteOptions());
 	ScorchedServer::instance()->startServer(settings, ServerConsoleProgressCounter::instance()->getProgressCounter(), 0);
 	for (;;)
 	{

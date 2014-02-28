@@ -159,9 +159,11 @@ void GroundMaps::generateObject(RandomGenerator &generator,
 	if (counter) counter->setNewOp(LANG_RESOURCE("POPULATING_LANDSCAPE", "Populating Landscape"));
 
 	// Generate all the objects using the objects definitions
-	for (unsigned int i=0; i<place.placements.size(); i++)
+	std::list<PlacementTypeChoice *>::iterator itor = place.placements->getChildren().begin(),
+		end = place.placements->getChildren().end();
+	for (;itor!=end;++itor)
 	{
-		PlacementType *type = place.placements[i];
+		PlacementType *type = (*itor)->getValue();
 		type->createObjects(context, generator, playerId, counter);
 	}
 }

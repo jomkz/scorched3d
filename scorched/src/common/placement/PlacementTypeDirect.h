@@ -23,21 +23,37 @@
 
 #include <placement/PlacementType.h>
 
+class PlacementPosition : public XMLEntryContainer
+{
+public:
+	PlacementPosition();
+	virtual ~PlacementPosition();
+
+	XMLEntryFixedVector position;
+};
+
+class PlacementPositionList : public XMLEntryList<PlacementPosition>
+{
+public:
+	PlacementPositionList();
+	virtual ~PlacementPositionList();
+
+	PlacementPosition *createXMLEntry();
+};
+
 class PlacementTypeDirect : public PlacementType
 {
 public:
 	PlacementTypeDirect();
 	virtual ~PlacementTypeDirect();
 
-	virtual PlacementType::Type getType() { return PlacementType::eDirect; }
-	virtual bool readXML(XMLNode *node);
 	virtual void getPositions(ScorchedContext &context,
 		RandomGenerator &generator,
 		std::list<Position> &returnPositions,
 		ProgressCounter *counter = 0);
 
 protected:
-	std::list<Position> positions;
+	PlacementPositionList positions;
 };
 
 #endif // __INCLUDE_PlacementTypeDirecth_INCLUDE__

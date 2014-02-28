@@ -21,20 +21,43 @@
 #include <landscapedef/LandscapeMusic.h>
 #include <math.h>
 
-LandscapeMusicType::LandscapeMusicType()
+LandscapeMusicStateList::LandscapeMusicStateList() :
+	XMLEntryList<XMLEntryString>("playstate", 
+		"The list of state names that this music should be played in.")
 {
 }
 
-LandscapeMusicType::~LandscapeMusicType()
+LandscapeMusicStateList::~LandscapeMusicStateList()
 {
 }
 
-bool LandscapeMusicType::readXML(XMLNode *node)
+XMLEntryString *LandscapeMusicStateList::createXMLEntry()
 {
-	// Playstate
-	std::string state;
-	while (node->getNamedChild("playstate", state, false))
+	return new XMLEntryString("playstate", "Play/enable the given music for the given state.");
+}
+
+LandscapeMusic::LandscapeMusic() :
+	XMLEntryContainer("music", "Defines a music file that will be played continuously in the given states."),
+	file("file", "The location of the music file to play"),
+	gain("gain", "The gain (volume) of the played music", 0, 1),
+	playstatelist()
+{
+}
+
+LandscapeMusic::~LandscapeMusic()
+{
+}
+
+bool LandscapeMusic::readXML(XMLNode *node)
+{
+	if (!XMLEntryContainer::readXML(node)) return false;
+
+	std::list<XMLEntryString *>::iterator itor = playstatelist.getChildren().begin(),
+		end = playstatelist.getChildren().end();
+
+	for (;itor!=end; itor++)
 	{
+		std::string state = (*itor)->getValue();
 		PlayState playstate;
 		if (0 == strcmp(state.c_str(), "loading")) playstate = StateLoading;
 		else if (0 == strcmp(state.c_str(), "buying")) playstate = StateBuying;
@@ -46,12 +69,19 @@ bool LandscapeMusicType::readXML(XMLNode *node)
 		playstates.push_back(playstate);
 	}
 	if (playstates.empty()) return node->returnError("No playstats defined");
+	return true;
+}
 
-	// Sound file
-	if (!node->getNamedChild("file", file)) return false;
-	if (!S3D::checkDataFile(file.c_str())) return false;
+LandscapeMusicList::LandscapeMusicList() : 
+	XMLEntryList<LandscapeMusic>("music", "Defines a music file that will be played continuously in the given states.")
+{
+}
 
-	// Gain (volume)
-	if (!node->getNamedChild("gain", gain)) return false;
-	return node->failChildren();
+LandscapeMusicList::~LandscapeMusicList()
+{
+}
+
+LandscapeMusic *LandscapeMusicList::createXMLEntry()
+{
+	return new LandscapeMusic();
 }

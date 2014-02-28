@@ -46,7 +46,7 @@ public:
 	// Overridden from TargetMovementEntry
 	virtual void generate(ScorchedContext &context, 
 		RandomGenerator &random, 
-		LandscapeMovementType *movementType);
+		LandscapeMovement *movementType);
 	virtual void simulate(ScorchedContext &context, fixed frameTime);
 	virtual void draw();
 	virtual void reset();

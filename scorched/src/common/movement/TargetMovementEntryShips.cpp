@@ -40,7 +40,7 @@ TargetMovementEntryShips::~TargetMovementEntryShips()
 }
 
 void TargetMovementEntryShips::generate(ScorchedContext &context, 
-	RandomGenerator &random, LandscapeMovementType *movementType)
+	RandomGenerator &random, LandscapeMovement *movementType)
 {
 	int mapWidth = context.getLandscapeMaps().getGroundMaps().getLandscapeWidth();
 	int mapHeight = context.getLandscapeMaps().getGroundMaps().getLandscapeHeight();
@@ -51,8 +51,8 @@ void TargetMovementEntryShips::generate(ScorchedContext &context,
 
 	// Create the spline path the ships will move on
 	// Do this from the set of control points specified in the xml file
-	LandscapeMovementTypeShips *shipGroup = 
-		(LandscapeMovementTypeShips *) movementType;
+	LandscapeMovementShips *shipGroup = 
+		(LandscapeMovementShips *) movementType;
 	std::vector<FixedVector> controlPoints;
 	controlPoints.push_back(FixedVector::getNullVector());
 	fixed diff = fixed(360) / fixed(shipGroup->controlpoints.getValue());

@@ -39,6 +39,7 @@ public:
 		return fileError_.c_str(); 
 	}
 	XMLNode *getRootNode() { return parser_.getRoot(); }
+	XMLNode *getDocumentNode() { return parser_.getDocument(); }
 
 protected:
 	std::string fileError_;

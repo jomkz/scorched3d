@@ -197,12 +197,10 @@ void ScorchedServer::startServerInternal(ScorchedServerSettings *settings,
 		ScorchedServerSettingsOptions *options = (ScorchedServerSettingsOptions *) settings;
 
 		// Load options
-		getOptionsGame().getMainOptions().readOptionsFromFile(options->settingsFile_);
+		getOptionsGame().getMainOptions().readFromFile(options->settingsFile_);
 		if (options->rewriteOptions_)
 		{
-			getOptionsGame().getMainOptions().writeOptionsToFile(
-				options->settingsFile_,
-				options->writeFullOptions_);
+			getOptionsGame().getMainOptions().writeToFile(options->settingsFile_);
 		}
 	}
 	else if (settingsType == "SAVE")

@@ -132,6 +132,8 @@ public:
 		XMLEntry *entry6, XMLEntry *entry7, XMLEntry *entry8, XMLEntry *entry9, XMLEntry *entry10);
 	XMLEntryContainer *addChildXMLEntryContainer(XMLEntryContainer *container);
 
+	std::list<XMLEntry *> &getChildren() { return xmlEntryChildren_; }
+
 	// XMLEntry
 	virtual bool readXML(XMLNode *parentNode);
 	virtual void writeXML(XMLNode *parentNode);

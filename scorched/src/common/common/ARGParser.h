@@ -18,11 +18,6 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-
-// ARGParser.h: interface for the ARGParser class.
-//
-//////////////////////////////////////////////////////////////////////
-
 #if !defined(AFX_ARGPARSER_H__F5D7DE2F_967A_44B0_A2DF_423F96B02EC0__INCLUDED_)
 #define AFX_ARGPARSER_H__F5D7DE2F_967A_44B0_A2DF_423F96B02EC0__INCLUDED_
 
@@ -34,14 +29,14 @@ class ARGParserBoolI
 {
 public:
 	virtual ~ARGParserBoolI() {}
-	virtual bool setBoolArgument(bool value) = 0;
+	virtual bool setBoolArgument(const char *strValue, bool value) = 0;
 };
 
 class ARGParserIntI
 {
 public:
 	virtual ~ARGParserIntI() {}
-	virtual bool setIntArgument(int value) = 0;
+	virtual bool setIntArgument(const char *strValue, int value) = 0;
 };
 
 class ARGParserStringI

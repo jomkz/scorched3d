@@ -29,20 +29,18 @@ public:
 	PlacementTypeTree();
 	virtual ~PlacementTypeTree();
 
-	virtual PlacementType::Type getType() { return PlacementType::eTree; }
-	virtual bool readXML(XMLNode *node);
 	virtual void getPositions(ScorchedContext &context,
 		RandomGenerator &generator,
 		std::list<Position> &returnPositions,
 		ProgressCounter *counter = 0);
 
 protected:
-	int maxobjects;
-	int numobjects;
-	int numclusters;
-	fixed minheight, maxheight;
-	fixed mincloseness;
-	std::string mask;
+	XMLEntryInt maxobjects;
+	XMLEntryInt numobjects;
+	XMLEntryInt numclusters;
+	XMLEntryFixed minheight, maxheight;
+	XMLEntryFixed mincloseness;
+	XMLEntryString mask;
 };
 
 #endif // __INCLUDE_PlacementTypeTreeh_INCLUDE__

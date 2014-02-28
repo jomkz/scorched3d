@@ -24,7 +24,7 @@
 #include <stdio.h>
 
 XMLParser::XMLParser(bool useContentNodes) : 
-	root_(0), current_(0), 
+	root_(0), document_(0), current_(0), 
 	useContentNodes_(useContentNodes),
 	source_("Not Specified")
 {
@@ -40,7 +40,7 @@ XMLParser::~XMLParser()
 {
 	// Cleanup
 	XML_ParserFree(p_);
-	delete root_;
+	delete document_;
 }
 
 bool XMLParser::parse(const char *data, int len, int final)
@@ -70,12 +70,15 @@ void XMLParser::startElementHandler(const XML_Char *name,
 {
 	if (!root_)
 	{
+		document_ = new XMLNode("<document>");
+
 		// Create the root node
 		root_ = current_ = new XMLNode(name);
 		root_->setUseContentNodes(useContentNodes_);
 		root_->setSource(source_.c_str());
 		root_->setLine(XML_GetCurrentLineNumber(p_),
 			XML_GetCurrentColumnNumber(p_));
+		document_->addChild(root_);
 	}
 	else
 	{

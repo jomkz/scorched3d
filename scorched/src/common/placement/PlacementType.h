@@ -21,36 +21,23 @@
 #if !defined(__INCLUDE_PlacementTypeh_INCLUDE__)
 #define __INCLUDE_PlacementTypeh_INCLUDE__
 
-#include <common/FixedVector.h>
-#include <string>
-#include <list>
+#include <XML/XMLEntrySimpleTypes.h>
 
 class XMLNode;
 class ScorchedContext;
 class ProgressCounter;
 class RandomGenerator;
 class PlacementObject;
-class PlacementType
+class PlacementType  : public XMLEntryContainer
 {
 public:
-	enum Type
-	{
-		eMask,
-		eCount,
-		eTree,
-		eDirect,
-		eBounds,
-		eTankStart
-	};
 	struct Position
 	{
 		FixedVector position;
 		FixedVector velocity;
 	};
 
-	static PlacementType *create(const char *type);
-
-	PlacementType();
+	PlacementType(const char *name, const char *description);
 	virtual ~PlacementType();
 
 	void createObjects(ScorchedContext &context,
@@ -58,8 +45,6 @@ public:
 		unsigned int &playerId,
 		ProgressCounter *counter = 0);
 
-	virtual Type getType() = 0;
-	virtual bool readXML(XMLNode *node);
 	virtual void getPositions(ScorchedContext &context,
 		RandomGenerator &generator,
 		std::list<Position> &returnPositions,
@@ -72,6 +57,24 @@ protected:
 		ScorchedContext &context,
 		std::list<Position> &returnPositions,
 		fixed mincloseness);
+};
+
+class PlacementTypeChoice : public XMLEntryTypeChoice<PlacementType>
+{
+public:
+	PlacementTypeChoice(const char *name, const char *description);
+	virtual ~PlacementTypeChoice();
+
+	virtual PlacementType *createXMLEntry(const std::string &type);
+};
+
+class PlacementTypeList : public XMLEntryList<PlacementTypeChoice>
+{
+public:
+	PlacementTypeList();
+	virtual ~PlacementTypeList();
+
+	virtual PlacementTypeChoice *createXMLEntry();
 };
 
 #endif // __INCLUDE_PlacementTypeh_INCLUDE__

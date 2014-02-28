@@ -46,12 +46,10 @@ private:
 class ScorchedServerSettingsOptions : public ScorchedServerSettings
 {
 public:
-	ScorchedServerSettingsOptions(const std::string &settingsFile, 
-		bool rewriteOptions, bool writeFullOptions) :
+	ScorchedServerSettingsOptions(const std::string &settingsFile, bool rewriteOptions) :
 		ScorchedServerSettings("FILE"),
 		settingsFile_(settingsFile),
-		rewriteOptions_(rewriteOptions),
-		writeFullOptions_(writeFullOptions)
+		rewriteOptions_(rewriteOptions)
 	{
 	}
 	virtual ~ScorchedServerSettingsOptions()
@@ -60,7 +58,6 @@ public:
 
 	std::string settingsFile_;
 	bool rewriteOptions_;
-	bool writeFullOptions_;
 };
 
 class ScorchedServerSettingsSave : public ScorchedServerSettings

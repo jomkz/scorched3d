@@ -82,6 +82,21 @@ void XMLEntrySimpleType::writeXML(XMLNode *parentNode)
 	parentNode->addChild(newNode);
 }
 
+bool XMLEntrySimpleType::setBoolArgument(const char *strValue, bool value)
+{
+	return setValueFromString(strValue);
+}
+
+bool XMLEntrySimpleType::setIntArgument(const char *strValue, int value)
+{
+	return setValueFromString(strValue);
+}
+
+bool XMLEntrySimpleType::setStringArgument(const char *value)
+{
+	return setValueFromString(value);
+}
+
 XMLEntrySimpleGroup::XMLEntrySimpleGroup(const char *name, const char *description) :
 	XMLEntryGroup(name, description)
 {
@@ -209,8 +224,36 @@ bool XMLEntrySimpleGroup::readFromFile(const std::string &filePath)
 	if (!file.getRootNode()) return true;
 
 	// Read the options from the XML node
-	if (!readXML(file.getRootNode())) return false;
-	return true;
+	return readXML(file.getDocumentNode());
+}
+
+void XMLEntrySimpleGroup::addToArgParser(ARGParser &parser)
+{
+	std::map<std::string, XMLEntrySimpleType *> entryMap;
+	std::list<XMLEntry *>::iterator itor = xmlEntryChildren_.begin(),
+		end = xmlEntryChildren_.end();
+	for (;itor!=end;++itor)
+	{
+		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) *itor;
+		char name[256], description[1024];
+			snprintf(name, 256, "-%s", entry->getName().c_str());
+			snprintf(description, 1024, "%s (Default : %s)",
+				(char *) entry->getDescription().c_str(), 
+				(char *) entry->getDefaultValueAsString().c_str());
+
+		switch (entry->getTypeCatagory())
+		{
+		case XMLEntrySimpleType::eSimpleNumberType:
+			parser.addEntry(name , (ARGParserIntI *) entry, description);
+			break;
+		case XMLEntrySimpleType::eSimpleStringType:
+			parser.addEntry(name , (ARGParserStringI *) entry, description);
+			break;
+		case XMLEntrySimpleType::eSimpleBooleanType:
+			parser.addEntry(name , (ARGParserBoolI *) entry, description);
+			break;
+		}
+	}
 }
 
 XMLEntryInt::XMLEntryInt(const char *name, 

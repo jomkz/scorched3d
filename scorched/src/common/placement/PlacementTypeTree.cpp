@@ -28,24 +28,21 @@
 #include <image/ImageFactory.h>
 
 PlacementTypeTree::PlacementTypeTree() : 
-	mincloseness(0), maxobjects(2000)
+	PlacementType("PlacementTypeTree", 
+		"Attempts to place a large number of objects on the lanscape in clusters (groups), only actualy places the objects that pass the criterias"),
+	mincloseness("mincloseness", "How close objects may be placed together"),
+	numobjects("numobjects", "The number of objects to attempt to place on the landscape"),
+	maxobjects("maxobjects", "The upper limit on the number of objects that are placed on the landscape", 0, 2000),
+	mask("mask", "The name of a file containing a mask to use when placing objects", 0, ""),
+	numclusters("numclusters", "The number of clusters (groups) of objects that will be created"),
+	minheight("minheight", "The minimum landscape heights to allow objects to be placed on"),
+	maxheight("maxheight", "The maximum landscape heights to allow objects to be placed on")
+
 {
 }
 
 PlacementTypeTree::~PlacementTypeTree()
 {
-}
-
-bool PlacementTypeTree::readXML(XMLNode *node)
-{
-	node->getNamedChild("mask", mask, false);
-	if (!node->getNamedChild("numobjects", numobjects)) return false;
-	if (!node->getNamedChild("numclusters", numclusters)) return false;
-	if (!node->getNamedChild("minheight", minheight)) return false;
-	if (!node->getNamedChild("maxheight", maxheight)) return false;
-	node->getNamedChild("mincloseness", mincloseness, false);
-	node->getNamedChild("maxobjects", maxobjects, false);
-	return PlacementType::readXML(node);
 }
 
 void PlacementTypeTree::getPositions(ScorchedContext &context,
@@ -55,20 +52,20 @@ void PlacementTypeTree::getPositions(ScorchedContext &context,
 {
 	Image bmap(256, 256);
 	Image map = bmap;
-	if (mask.c_str()[0])
+	if (mask.getValue().c_str()[0])
 	{	
-		map = ImageFactory::loadImage(S3D::eModLocation, mask);
+		map = ImageFactory::loadImage(S3D::eModLocation, mask.getValue());
 		if (!map.getBits())
 		{
 			S3D::dialogExit("PlacementTypeTree",
 				S3D::formatStringBuffer("Error: failed to find mask \"%s\"",
-				mask.c_str()));
+				mask.getValue().c_str()));
 		}
 		if (!map.getLossless())
 		{
 			S3D::dialogExit("PlacementTypeTree", S3D::formatStringBuffer(
 				"Error: Placement mask \"%s\" is not a lossless image format",
-				mask.c_str()));
+				mask.getValue().c_str()));
 		}
 	}
 
@@ -82,7 +79,7 @@ void PlacementTypeTree::getPositions(ScorchedContext &context,
 	// A few points where trees will be clustered around
 	int treeMapMultWidth  = groundMapWidth / 64;
 	int treeMapMultHeight = groundMapHeight / 64;
-	for (int i=0; i<numclusters; i++)
+	for (int i=0; i<numclusters.getValue(); i++)
 	{
 		// Get a random point
 		int x = (generator.getRandFixed("PlacementTypeTree") * 64).asInt();
@@ -103,8 +100,8 @@ void PlacementTypeTree::getPositions(ScorchedContext &context,
 		unsigned char *bits = map.getBits() +
 			mx * 3 + my * map.getWidth() * 3;
 		if (bits[0] > 127 &&
-			height > minheight && 
-			height < maxheight && 
+			height > minheight.getValue() && 
+			height < maxheight.getValue() && 
 			normal[2] > fixed(true, 7000))
 		{
 			// Group other areas around this point that are likely to get trees
@@ -126,8 +123,8 @@ void PlacementTypeTree::getPositions(ScorchedContext &context,
 						context.getLandscapeMaps().
 						getGroundMaps().getHeight(
 							newX * treeMapMultWidth, newY * treeMapMultHeight);
-					if (height > minheight && 
-						height < maxheight && 
+					if (height > minheight.getValue() && 
+						height < maxheight.getValue() && 
 						normal[2] > fixed(true, 7000))
 					{
 						objectMap[newX + 64 * newY] = 64;
@@ -182,12 +179,12 @@ void PlacementTypeTree::getPositions(ScorchedContext &context,
 	// Add lots of trees, more chance of adding a tree where
 	// the map is stongest
 	int objectCount = 0;
-	const int NoIterations = numobjects;
-	for (int i=0; i<NoIterations && objectCount < maxobjects; i++)
+	const int NoIterations = numobjects.getValue();
+	for (int i=0; i<NoIterations && objectCount < maxobjects.getValue(); i++)
 	{
 		if (i % 1000 == 0) if (counter) 
 			counter->setNewPercentage(
-				S3D_MAX(float(i)/float(NoIterations), float(objectCount) / float(maxobjects)) *100.0f);
+				S3D_MAX(float(i)/float(NoIterations), float(objectCount) / float(maxobjects.getValue())) *100.0f);
 
 		fixed lx = generator.getRandFixed("PlacementTypeTree") * fixed(groundMapWidth);
 		fixed ly = generator.getRandFixed("PlacementTypeTree") * fixed(groundMapHeight);
@@ -204,7 +201,7 @@ void PlacementTypeTree::getPositions(ScorchedContext &context,
 				context.getLandscapeMaps().
 					getGroundMaps().getInterpHeight(lx, ly);
 
-			if (height > minheight + fixed(true, 5000))
+			if (height > minheight.getValue() + fixed(true, 5000))
 			{
 				objectCount ++;
 				Position position;
@@ -212,7 +209,7 @@ void PlacementTypeTree::getPositions(ScorchedContext &context,
 				position.position[1] = ly;
 				position.position[2] = height;
 				if (checkCloseness(position.position, context, 
-					returnPositions, mincloseness))
+					returnPositions, mincloseness.getValue()))
 				{
 					returnPositions.push_back(position);
 				}

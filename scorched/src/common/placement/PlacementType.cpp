@@ -34,19 +34,9 @@
 #include <common/DefinesString.h>
 #include <XML/XMLParser.h>
 
-PlacementType *PlacementType::create(const char *type)
-{
-	if (0 == strcmp(type, "trees")) return new PlacementTypeTree;
-	if (0 == strcmp(type, "mask")) return new PlacementTypeMask;
-	if (0 == strcmp(type, "direct")) return new PlacementTypeDirect;
-	if (0 == strcmp(type, "count")) return new PlacementTypeCount;
-	if (0 == strcmp(type, "bounds")) return new PlacementTypeBounds;
-	if (0 == strcmp(type, "tankstart")) return new PlacementTypeTankStart;
-	S3D::dialogMessage("PlacementType", S3D::formatStringBuffer("Unknown placement type %s", type));
-	return 0;
-}
-
-PlacementType::PlacementType() : placementobject(0)
+PlacementType::PlacementType(const char *name, const char *description) : 
+	XMLEntryContainer(name, description),
+	placementobject(0)
 {
 }
 
@@ -54,17 +44,6 @@ PlacementType::~PlacementType()
 {
 	delete placementobject;
 	placementobject = 0;
-}
-
-bool PlacementType::readXML(XMLNode *node)
-{
-	std::string objecttype;
-	XMLNode *objectNode;
-	if (!node->getNamedChild("object", objectNode)) return false;
-	if (!objectNode->getNamedParameter("type", objecttype)) return false;
-	if (!(placementobject = PlacementObject::create(objecttype.c_str()))) return false;
-	if (!placementobject->readXML(objectNode)) return false;
-	return node->failChildren();
 }
 
 void PlacementType::createObjects(ScorchedContext &context,
@@ -138,4 +117,41 @@ bool PlacementType::checkCloseness(FixedVector &position,
 	}
 
 	return true;
+}
+
+PlacementTypeChoice::PlacementTypeChoice(const char *name, const char *description) :
+	XMLEntryTypeChoice<PlacementType>(name, description)
+{
+}
+
+PlacementTypeChoice::~PlacementTypeChoice()
+{
+}
+
+PlacementType *PlacementTypeChoice::createXMLEntry(const std::string &type)
+{
+	if (0 == strcmp(type.c_str(), "trees")) return new PlacementTypeTree;
+	if (0 == strcmp(type.c_str(), "mask")) return new PlacementTypeMask;
+	if (0 == strcmp(type.c_str(), "direct")) return new PlacementTypeDirect;
+	if (0 == strcmp(type.c_str(), "count")) return new PlacementTypeCount;
+	if (0 == strcmp(type.c_str(), "bounds")) return new PlacementTypeBounds;
+	if (0 == strcmp(type.c_str(), "tankstart")) return new PlacementTypeTankStart;
+	S3D::dialogExit("PlacementType", S3D::formatStringBuffer("Unknown placement type %s", type));
+	return 0;
+}
+
+PlacementTypeList::PlacementTypeList() :
+	 XMLEntryList<PlacementTypeChoice>("placement", 
+		 "Defines the starting locations for objects placed on the landscape.")
+{
+}
+
+PlacementTypeList::~PlacementTypeList()
+{
+}
+
+PlacementTypeChoice *PlacementTypeList::createXMLEntry()
+{
+	return new PlacementTypeChoice("placement",
+		"Defines the starting location for objects placed on the landscape.");
 }

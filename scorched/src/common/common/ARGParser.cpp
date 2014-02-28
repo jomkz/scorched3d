@@ -179,7 +179,7 @@ bool ARGParser::parseArg(ARGParser::Entry &newEntry, std::list<std::string> &cmd
 	}
 	else if (newEntry.destBool)
 	{
-		if (!newEntry.destBool->setBoolArgument(true))
+		if (!newEntry.destBool->setBoolArgument("true", true))
 		{
 			showArgs("ERROR: Parameter is not within allowed values\n\n");
 			return false;
@@ -189,7 +189,7 @@ bool ARGParser::parseArg(ARGParser::Entry &newEntry, std::list<std::string> &cmd
 	{
 		if (!cmdLine.empty())
 		{
-			if (!newEntry.destInt->setIntArgument(atoi(cmdLine.front().c_str())))
+			if (!newEntry.destInt->setIntArgument(cmdLine.front().c_str(), atoi(cmdLine.front().c_str())))
 			{
 				showArgs("ERROR: Parameter is not within allowed values\n\n");
 				return false;

@@ -22,6 +22,7 @@
 #define __INCLUDE_OptionsScorchedh_INCLUDE__
 
 #include <common/OptionsGame.h>
+#include <set>
 
 #define GENERIC_GETTER(x) \
 	{ \
@@ -179,13 +180,15 @@ public:
 	bool commitChanges();
 
 protected:
+	std::set<std::string> changedOptionNames_;
+
 	OptionsGame mainOptions_;
 	OptionsGame changedOptions_;
 	OptionsGame levelOptions_;
 
 	bool hasLevelChangedValue(const char *name);
 	void updateLevelOptions(std::vector<LandscapeInclude *> &options,
-		std::map<std::string, XMLEntry *> &values);
+		std::map<std::string, XMLEntrySimpleType *> &values);
 };
 
 #endif

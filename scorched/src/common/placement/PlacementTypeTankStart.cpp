@@ -26,7 +26,12 @@
 #include <common/Defines.h>
 #include <XML/XMLParser.h>
 
-PlacementTypeTankStart::PlacementTypeTankStart() : mincloseness(0)
+PlacementTypeTankStart::PlacementTypeTankStart() : 
+	PlacementType("PlacementTypeTankStart", 
+		"Places objects in the same way that tanks are placed on the lanscape"),
+	numobjects("numobjects", "The number of objects to place"),
+	team("team", "The team to assign the objects to"),
+	mincloseness("mincloseness", "How close objects may be placed together")
 {
 }
 
@@ -34,27 +39,19 @@ PlacementTypeTankStart::~PlacementTypeTankStart()
 {
 }
 
-bool PlacementTypeTankStart::readXML(XMLNode *node)
-{
-	if (!node->getNamedChild("numobjects", numobjects)) return false;
-	if (!node->getNamedChild("team", team)) return false;
-	node->getNamedChild("mincloseness", mincloseness, false);
-	return PlacementType::readXML(node);
-}
-
 void PlacementTypeTankStart::getPositions(ScorchedContext &context,
 	RandomGenerator &generator,
 	std::list<Position> &returnPositions,
 	ProgressCounter *counter)
 {
-	for (int i=0; i<numobjects;)
+	for (int i=0; i<numobjects.getValue();)
 	{
 		Position position;
 		position.position = 
-			PlacementTankPosition::placeTank(0, team, context, generator);
+			PlacementTankPosition::placeTank(0, team.getValue(), context, generator);
 
 		if (checkCloseness(position.position, context, 
-			returnPositions, mincloseness))
+			returnPositions, mincloseness.getValue()))
 		{
 			returnPositions.push_back(position);
 			i++;

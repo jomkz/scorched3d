@@ -43,41 +43,44 @@ void OptionsScorched::updateLevelOptions(ScorchedContext &context, LandscapeDefi
 	LandscapeDefn *ldefn = context.getLandscapes().getDefn(defn.getDefn());
 
 	// Get all of the options specified in the current level
-	std::map<std::string, OptionEntry *> values;
+	std::map<std::string, XMLEntrySimpleType *> values;
 	updateLevelOptions(ltex->texDefn.includes, values);
 	updateLevelOptions(ldefn->texDefn.includes, values);
 
 	// Iterate over the level and current options
-	std::list<OptionEntry *> &levelOptions = getLevelOptions().getOptions();
-	std::list<OptionEntry *> &mainoptions = getMainOptions().getOptions();
-	std::list<OptionEntry *>::iterator levelitor;
-	std::list<OptionEntry *>::iterator mainitor;
+	std::list<XMLEntry *> &levelOptions = getLevelOptions().getChildren();
+	std::list<XMLEntry *> &mainoptions = getMainOptions().getChildren();
+	std::list<XMLEntry *>::iterator levelitor;
+	std::list<XMLEntry *>::iterator mainitor;
 	for (levelitor = levelOptions.begin(), mainitor = mainoptions.begin();
 		levelitor != levelOptions.end() && mainitor != mainoptions.end();
 		++levelitor, ++mainitor)
 	{
-		OptionEntry *mainEntry = (*mainitor);
-		OptionEntry *levelEntry = (*levelitor);
+		XMLEntrySimpleType *mainEntry = (XMLEntrySimpleType *) (*mainitor);
+		XMLEntrySimpleType *levelEntry = (XMLEntrySimpleType *) (*levelitor);
 
 		// Get the current settings value that is in use
-		OptionEntry *currentEntry = mainEntry;
-		if (levelEntry->isChangedValue()) currentEntry = levelEntry;
+		XMLEntrySimpleType *currentEntry = mainEntry;
+		if (hasLevelChangedValue(currentEntry->getName().c_str())) currentEntry = levelEntry;
 		std::string oldValue = currentEntry->getValueAsString();
 
-		// Reset the level entry
-		levelEntry->setNotChanged();
-
 		// If this level entry has changed set its new value
-		std::map<std::string, OptionEntry *>::iterator findItor = 
+		currentEntry = mainEntry;
+		std::map<std::string, XMLEntrySimpleType *>::iterator findItor = 
 			values.find(mainEntry->getName());
 		if (findItor != values.end())
 		{
+			currentEntry = levelEntry;
 			levelEntry->setValueFromString((*findItor).second->getValueAsString());
+			changedOptionNames_.insert(mainEntry->getName());
+		}
+		else
+		{
+			// Reset the level entry
+			changedOptionNames_.erase(mainEntry->getName());
 		}
 
-		// Find out the new settings value that is in use
-		currentEntry = mainEntry;
-		if (levelEntry->isChangedValue()) currentEntry = levelEntry;
+		// Find out the new settings value that is in use 
 		std::string newValue = currentEntry->getValueAsString();
 
 		// Log if the value has changed
@@ -91,7 +94,7 @@ void OptionsScorched::updateLevelOptions(ScorchedContext &context, LandscapeDefi
 }
 
 void OptionsScorched::updateLevelOptions(std::vector<LandscapeInclude *> &options,
-	std::map<std::string, OptionEntry *> &values)
+	std::map<std::string, XMLEntrySimpleType *> &values)
 {
 	// For each include
 	std::vector<LandscapeInclude *>::iterator itor;
@@ -101,25 +104,21 @@ void OptionsScorched::updateLevelOptions(std::vector<LandscapeInclude *> &option
 	{
 		LandscapeInclude *option = (*itor);
 
-		// For each set of options
-		std::vector<LandscapeOptionsType *>::iterator typeItor;
-		for (typeItor = option->options.begin();
-			typeItor != option->options.end();
-			++typeItor)
-		{
-			LandscapeOptionsType *optionType = (*typeItor);
+		std::list<LandscapeOptions *>::iterator oitor = option->options->getChildren().begin(),
+			oend = option->options->getChildren().end();
 
-			// For each option
-			std::list<OptionEntry *>::iterator srcitor;
-			for (srcitor = optionType->options.getOptions().begin();
-				srcitor != optionType->options.getOptions().end();
-				++srcitor)
+		// For each set of options
+		for (;oitor!=oend;++oend)
+		{
+			LandscapeOptions *optionType = (*oitor);
+
+			// Add the list of options that were defined in the file
+			std::list<std::string>::iterator citor = optionType->getChangedOptionNames().begin(),
+				cend = optionType->getChangedOptionNames().end();
+			for (;citor!=cend;++citor)
 			{
-				OptionEntry *srcEntry = (*srcitor);
-				if (srcEntry->isChangedValue())
-				{
-					values[srcEntry->getName()] = srcEntry;
-				}
+				XMLEntrySimpleType *type = optionType->getEntryByName(*citor);
+				if (type) values[*citor] = type;
 			}
 		}
 	}
@@ -142,16 +141,16 @@ bool OptionsScorched::commitChanges()
 	bool different = false;
 
 	// Compare buffers
-	std::list<OptionEntry *> &options = mainOptions_.getOptions();
-	std::list<OptionEntry *> &otheroptions = changedOptions_.getOptions();
-	std::list<OptionEntry *>::iterator itor;
-	std::list<OptionEntry *>::iterator otheritor;
+	std::list<XMLEntry *> &options = mainOptions_.getChildren();
+	std::list<XMLEntry *> &otheroptions = changedOptions_.getChildren();
+	std::list<XMLEntry *>::iterator itor;
+	std::list<XMLEntry *>::iterator otheritor;
 	for (itor=options.begin(), otheritor=otheroptions.begin();
 		itor!=options.end() && otheritor!=otheroptions.end();
 		++itor, ++otheritor)
 	{
-		OptionEntry *entry = *itor;
-		OptionEntry *otherentry = *otheritor;
+		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) *itor;
+		XMLEntrySimpleType *otherentry = (XMLEntrySimpleType *) *otheritor;
 
 		DIALOG_ASSERT(entry->getName() == otherentry->getName());
 
@@ -159,8 +158,8 @@ bool OptionsScorched::commitChanges()
 		std::string otherstr = otherentry->getValueAsString();
 		if (str != otherstr)
 		{
-			if (!(entry->getData() & OptionEntry::DataProtected) &&
-				!(otherentry->getData() & OptionEntry::DataProtected))
+			if (!(entry->getData() & XMLEntry::eDataProtected) &&
+				!(otherentry->getData() & XMLEntry::eDataProtected))
 			{
 				if (strlen(str.c_str()) < 20 && strlen(otherstr.c_str()) < 20)
 				{
@@ -184,13 +183,17 @@ bool OptionsScorched::commitChanges()
 
 bool OptionsScorched::hasLevelChangedValue(const char *name)
 {
-	return false;
+	return changedOptionNames_.find(name) != changedOptionNames_.end();
 }
 
 XMLEntrySimpleType *OptionsScorched::getEntryByName(const std::string &name)
 {
-	XMLEntrySimpleType *levelEntry = levelOptions_.getEntryByName(name);
-	if (levelEntry && levelEntry->isChangedValue()) return levelEntry;
-	XMLEntrySimpleType *otherEntry = mainOptions_.getEntryByName(name);
-	return otherEntry;
+	if (hasLevelChangedValue(name.c_str()))
+	{
+		return levelOptions_.getEntryByName(name);
+	}
+	else
+	{
+		return mainOptions_.getEntryByName(name);
+	}
 }

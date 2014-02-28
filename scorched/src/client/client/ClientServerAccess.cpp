@@ -36,20 +36,10 @@ int ClientServerAccess::getIntProperty(const std::string &propertyName)
 
 		virtual void callbackInvoked()
 		{
-			OptionEntry *entry = ScorchedServer::instance()->
+			XMLEntrySimpleType *entry = ScorchedServer::instance()->
 				getOptionsGame().getEntryByName(propertyName_);
-			DIALOG_ASSERT(entry);
-			if (entry->getEntryType() == OptionEntry::OptionEntryIntType)
-			{
-				OptionEntryInt *intEntry = (OptionEntryInt *) entry;
-				result_ = intEntry->getValue();
-			}
-			else if (entry->getEntryType() == OptionEntry::OptionEntryBoundedIntType)
-			{
-				OptionEntryBoundedInt *intEntry = (OptionEntryBoundedInt *) entry;
-				result_ = intEntry->getValue();
-			}
-			else DIALOG_ASSERT(entry);
+			DIALOG_ASSERT(entry && entry->getTypeCatagory() == XMLEntrySimpleType::eSimpleNumberType);
+			result_ = atoi(entry->getValueAsString().c_str());
 		}
 
 		std::string propertyName_;
@@ -73,11 +63,10 @@ std::string ClientServerAccess::getStringProperty(const std::string &propertyNam
 
 		virtual void callbackInvoked()
 		{
-			OptionEntry *entry = ScorchedServer::instance()->
+			XMLEntrySimpleType *entry = ScorchedServer::instance()->
 				getOptionsGame().getEntryByName(propertyName_);
-			DIALOG_ASSERT(entry && entry->getEntryType() == OptionEntry::OptionEntryStringType);
-			OptionEntryString *strEntry = (OptionEntryString *) entry;
-			result_ = strEntry->getValue();
+			DIALOG_ASSERT(entry && entry->getTypeCatagory() == XMLEntrySimpleType::eSimpleStringType);
+			result_ = entry->getValueAsString();
 		}
 
 		std::string propertyName_;

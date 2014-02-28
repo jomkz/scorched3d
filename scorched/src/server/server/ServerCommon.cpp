@@ -44,7 +44,7 @@ void ServerCommon::startFileLogger(const std::string &settingsFile)
 	if (!serverFileLogger) 
 	{
 		OptionsGame optionsGame;
-		optionsGame.readOptionsFromFile(settingsFile);
+		optionsGame.readFromFile(settingsFile);
 
 		char buffer[256];
 		snprintf(buffer, 256, "ServerLog-%i-", optionsGame.getPortNo());

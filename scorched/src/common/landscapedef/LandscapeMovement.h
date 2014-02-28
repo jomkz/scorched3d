@@ -23,38 +23,38 @@
 
 #include <XML/XMLEntryComplexTypes.h>
 
-class LandscapeMovementType : public XMLEntryContainer
+class LandscapeMovement : public XMLEntryContainer
 {
 public:
-	LandscapeMovementType(const char *name, const char *description);
-	virtual ~LandscapeMovementType();
+	LandscapeMovement(const char *name, const char *description);
+	virtual ~LandscapeMovement();
 
 	XMLEntryString groupname;
 };
 
-class LandscapeMovementTypeChoice : public XMLEntryTypeChoice<LandscapeMovementType>
+class LandscapeMovementChoice : public XMLEntryTypeChoice<LandscapeMovement>
 {
 public:
-	LandscapeMovementTypeChoice();
-	virtual ~LandscapeMovementTypeChoice();
+	LandscapeMovementChoice();
+	virtual ~LandscapeMovementChoice();
 
-	virtual LandscapeMovementType *createXMLEntry(const std::string &type);
+	virtual LandscapeMovement *createXMLEntry(const std::string &type);
 };
 
-class LandscapeMovementTypeList : public XMLEntryList<LandscapeMovementTypeChoice>
+class LandscapeMovementList : public XMLEntryList<LandscapeMovementChoice>
 {
 public:
-	LandscapeMovementTypeList();
-	virtual ~LandscapeMovementTypeList();
+	LandscapeMovementList();
+	virtual ~LandscapeMovementList();
 
-	virtual LandscapeMovementTypeChoice *createXMLEntry();
+	virtual LandscapeMovementChoice *createXMLEntry();
 };
 
-class LandscapeMovementTypeBoids : public LandscapeMovementType
+class LandscapeMovementBoids : public LandscapeMovement
 {
 public:
-	LandscapeMovementTypeBoids();
-	virtual ~LandscapeMovementTypeBoids();
+	LandscapeMovementBoids();
+	virtual ~LandscapeMovementBoids();
 
 	//XMLEntryModelID model;
 	XMLEntryFixedVector minbounds, maxbounds;
@@ -65,11 +65,11 @@ public:
 	virtual bool readXML(XMLNode *parentNode);
 };
 
-class LandscapeMovementTypeShips : public LandscapeMovementType
+class LandscapeMovementShips : public LandscapeMovement
 {
 public:
-	LandscapeMovementTypeShips();
-	virtual ~LandscapeMovementTypeShips();
+	LandscapeMovementShips();
+	virtual ~LandscapeMovementShips();
 
 	XMLEntryFixed speed;
 	XMLEntryInt controlpoints;
@@ -79,25 +79,25 @@ public:
 	XMLEntryFixed starttime;
 };
 
-class LandscapeMovementTypeSplineControlPoints : public XMLEntryList<XMLEntryFixedVector>
+class LandscapeMovementSplineControlPoints : public XMLEntryList<XMLEntryFixedVector>
 {
 public:
-	LandscapeMovementTypeSplineControlPoints();
-	virtual ~LandscapeMovementTypeSplineControlPoints();
+	LandscapeMovementSplineControlPoints();
+	virtual ~LandscapeMovementSplineControlPoints();
 
 	virtual XMLEntryFixedVector *createXMLEntry();
 };
 
-class LandscapeMovementTypeSpline : public LandscapeMovementType
+class LandscapeMovementSpline : public LandscapeMovement
 {
 public:
-	LandscapeMovementTypeSpline();
-	virtual ~LandscapeMovementTypeSpline();
+	LandscapeMovementSpline();
+	virtual ~LandscapeMovementSpline();
 
 	XMLEntryFixed speed;
 	XMLEntryFixed starttime;
 	XMLEntryBool groundonly;
-	LandscapeMovementTypeSplineControlPoints points;
+	LandscapeMovementSplineControlPoints points;
 
 	virtual bool readXML(XMLNode *parentNode);
 };

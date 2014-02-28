@@ -27,25 +27,22 @@
 #include <image/ImageFactory.h>
 #include <XML/XMLParser.h>
 
-PlacementTypeMask::PlacementTypeMask()
+PlacementTypeMask::PlacementTypeMask() :
+	PlacementType("PlacementTypeMask", 
+		"Places objects constained to areas defined by a mask and a set of other contraints"),
+	numobjects("numobjects", "The number of objects to place"),
+	mask("mask", "The name of a file to use as the mask"),
+	minheight("minheight", "The minimum landscape heights to allow objects to be placed on"),
+	maxheight("maxheight", "The maximum landscape heights to allow objects to be placed on"),
+	mincloseness("mincloseness", "How close objects may be placed together"),
+	minslope("minslope", "The minimum landscape slope (angle) to allow objects to be placed on"),
+	xsnap("xsnap", "Snap/align the objects to a grid of the given square size"),
+	ysnap("ysnap", "Snap/align the objects to a grid of the given square size")
 {
 }
 
 PlacementTypeMask::~PlacementTypeMask()
 {
-}
-
-bool PlacementTypeMask::readXML(XMLNode *node)
-{
-	if (!node->getNamedChild("numobjects", numobjects)) return false;
-	if (!node->getNamedChild("mask", mask)) return false;
-	if (!node->getNamedChild("minheight", minheight)) return false;
-	if (!node->getNamedChild("maxheight", maxheight)) return false;
-	if (!node->getNamedChild("mincloseness", mincloseness)) return false;
-	if (!node->getNamedChild("minslope", minslope)) return false;
-	if (!node->getNamedChild("xsnap", xsnap)) return false;
-	if (!node->getNamedChild("ysnap", ysnap)) return false;
-	return PlacementType::readXML(node);
 }
 
 void PlacementTypeMask::getPositions(ScorchedContext &context,
@@ -56,21 +53,21 @@ void PlacementTypeMask::getPositions(ScorchedContext &context,
 	int groundMapWidth = context.getLandscapeMaps().getGroundMaps().getLandscapeWidth();
 	int groundMapHeight = context.getLandscapeMaps().getGroundMaps().getLandscapeHeight();
 
-	Image map = ImageFactory::loadImage(S3D::eModLocation, mask);
+	Image map = ImageFactory::loadImage(S3D::eModLocation, mask.getValue());
 	if (!map.getBits())
 	{
 		S3D::dialogExit("PlacementTypeMask",
 			S3D::formatStringBuffer("Error: failed to find mask \"%s\"",
-			mask.c_str()));
+			mask.getValue().c_str()));
 	}
 	if (!map.getLossless())
 	{
 		S3D::dialogExit("PlacementTypeMask", S3D::formatStringBuffer(
 			"Error: Placement mask \"%s\" is not a lossless image format",
-			mask.c_str()));
+			mask.getValue().c_str()));
 	}
 
-	const int NoIterations = numobjects;
+	const int NoIterations = numobjects.getValue();
 	for (int i=0; i<NoIterations; i++)
 	{
 		if (i % 1000 == 0) if (counter) 
@@ -79,13 +76,13 @@ void PlacementTypeMask::getPositions(ScorchedContext &context,
 		fixed lx = generator.getRandFixed("PlacementTypeMask") * fixed(groundMapWidth);
 		fixed ly = generator.getRandFixed("PlacementTypeMask") * fixed(groundMapHeight);
 		
-		if (xsnap > 0) 
+		if (xsnap.getValue() > 0) 
 		{
-			lx = fixed((lx / xsnap).asInt()) * xsnap;
+			lx = fixed((lx / xsnap.getValue()).asInt()) * xsnap.getValue();
 		}
-		if (ysnap > 0)
+		if (ysnap.getValue() > 0)
 		{
-			ly = fixed((ly / ysnap).asInt()) * ysnap;
+			ly = fixed((ly / ysnap.getValue()).asInt()) * ysnap.getValue();
 		}
 		lx = S3D_MIN(S3D_MAX(fixed(0), lx), fixed(groundMapWidth));
 		ly = S3D_MIN(S3D_MAX(fixed(0), ly), fixed(groundMapHeight));
@@ -95,9 +92,9 @@ void PlacementTypeMask::getPositions(ScorchedContext &context,
 		FixedVector normal;
 		context.getLandscapeMaps().
 			getGroundMaps().getInterpNormal(lx, ly, normal);
-		if (height > minheight && 
-			height < maxheight &&
-			normal[2] > minslope)
+		if (height > minheight.getValue() && 
+			height < maxheight.getValue() &&
+			normal[2] > minslope.getValue())
 		{
 			int mx = (map.getWidth() * lx.asInt()) / groundMapWidth;
 			int my = (map.getHeight() * ly.asInt()) / groundMapHeight;
@@ -111,7 +108,7 @@ void PlacementTypeMask::getPositions(ScorchedContext &context,
 				position.position[2] = height;
 
 				if (checkCloseness(position.position, context, 
-					returnPositions, mincloseness))
+					returnPositions, mincloseness.getValue()))
 				{
 					returnPositions.push_back(position);
 				}

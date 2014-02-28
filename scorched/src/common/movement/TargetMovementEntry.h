@@ -27,13 +27,13 @@ class NetBuffer;
 class NetBufferReader;
 class RandomGenerator;
 class ScorchedContext;
-class LandscapeMovementType;
+class LandscapeMovement;
 class TargetMovementEntry
 {
 public:
 	virtual void generate(ScorchedContext &context, 
 		RandomGenerator &random, 
-		LandscapeMovementType *movementType) = 0;
+		LandscapeMovement *movementType) = 0;
 	virtual void simulate(ScorchedContext &context, fixed frameTime) = 0;
 	virtual void draw() = 0;
 	virtual void reset() = 0;

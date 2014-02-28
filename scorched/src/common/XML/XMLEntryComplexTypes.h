@@ -26,7 +26,7 @@
 class XMLEntryModelID : public XMLEntryGroup
 {
 public:
-	XMLEntryModelID(const char *tagName, unsigned int data);
+	XMLEntryModelID(const char *tagName);
 	virtual ~XMLEntryModelID();
 
 	XMLEntryString meshName;

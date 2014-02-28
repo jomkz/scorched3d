@@ -230,7 +230,7 @@ void ServerStateEnoughPlayers::addBots(int requiredPlayers, int noPlayers)
 	for (int i=0; i<maxComputerAIs; i++)
 	{
 		const char *playerType = 
-			ScorchedServer::instance()->getOptionsGame().getPlayerType(i);
+			ScorchedServer::instance()->getOptionsGame().getPlayerType(i).getValue().c_str();
 		if (0 != stricmp(playerType, "Human") &&
 			0 != stricmp(playerType, "Random"))
 		{
@@ -255,7 +255,7 @@ void ServerStateEnoughPlayers::addBots(int requiredPlayers, int noPlayers)
 	for (int i=0; i<maxComputerAIs; i++)
 	{
 		const char *playerType = 
-			ScorchedServer::instance()->getOptionsGame().getPlayerType(i);
+			ScorchedServer::instance()->getOptionsGame().getPlayerType(i).getValue().c_str();
 		if (0 != stricmp(playerType, "Human") &&
 			0 == stricmp(playerType, "Random"))
 		{

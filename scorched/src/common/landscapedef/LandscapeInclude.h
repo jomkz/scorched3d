@@ -25,11 +25,11 @@
 
 class XMLNode;
 class LandscapeEventList;
-class LandscapeMovementTypeList;
-class PlacementType;
+class LandscapeMovementList;
+class PlacementTypeList;
 class LandscapeSoundList;
-class LandscapeMusicType;
-class LandscapeOptionsType;
+class LandscapeMusicList;
+class LandscapeOptionsList;
 class LandscapeDefinitions;
 class LandscapeInclude
 {
@@ -38,11 +38,11 @@ public:
 	virtual ~LandscapeInclude();
 
 	LandscapeEventList *events;
-	LandscapeMovementTypeList *movements;
+	LandscapeMovementList *movements;
 	LandscapeSoundList *sounds;
-	std::vector<PlacementType *> placements;
-	std::vector<LandscapeMusicType *> musics;
-	std::vector<LandscapeOptionsType *> options;
+	LandscapeMusicList *musics;
+	PlacementTypeList *placements;
+	LandscapeOptionsList *options;
 
 	bool readXML(LandscapeDefinitions *definitions, XMLNode *node);
 

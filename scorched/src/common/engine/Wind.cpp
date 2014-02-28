@@ -101,13 +101,13 @@ void Wind::updateDirection()
 void Wind::updateChangeTime()
 {
 	if (windSpeed_ <= 0) return;
-	if (context_->getOptionsGame().getWindType().getValue() ==
+	if (context_->getOptionsGame().getWindType() ==
 		OptionsGame::WindChangeNever) return;
 
 	RandomGenerator &random =
 		context_->getSimulator().getRandomGenerator();
 
-	switch (context_->getOptionsGame().getWindType().getValue()) 
+	switch (context_->getOptionsGame().getWindType()) 
 	{
 	case OptionsGame::WindChangeSomeTimes:
 		windChangeTime_ = random.getRandFixed("Wind") * 30 + 30;
@@ -127,7 +127,7 @@ void Wind::updateChangeTime()
 void Wind::simulate(fixed frameTime)
 {
 	if (windSpeed_ <= 0) return;
-	if (context_->getOptionsGame().getWindType().getValue() ==
+	if (context_->getOptionsGame().getWindType() ==
 		OptionsGame::WindChangeNever) return;
 
 	windChangeTime_ -= frameTime;

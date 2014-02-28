@@ -153,8 +153,8 @@ void ServerBrowserInfo::processStatusMessage(std::list<std::string> &reply)
 	char maxplayers[25];
 	snprintf(maxplayers, 25, "%i", ScorchedServer::instance()->getOptionsGame().getNoMaxPlayers());
 	char type[100];
-	snprintf(type, 100, "%s (%s)", 
-		ScorchedServer::instance()->getOptionsGame().getTurnType().getValueAsString(),
+	snprintf(type, 100, "%i (%s)", 
+		ScorchedServer::instance()->getOptionsGame().getTurnType(),
 		((ScorchedServer::instance()->getOptionsGame().getTeams() > 1)?"Teams":"No Teams"));
 	bool stats = (0 != strcmp(ScorchedServer::instance()->getOptionsGame().getStatsLogger(), "none"));
 	unsigned currentState = ScorchedServer::instance()->getServerState().getState();
@@ -196,16 +196,16 @@ void ServerBrowserInfo::processInfoMessage(std::list<std::string> &reply)
 {
 	// Add all of the other tank options
 	// Currently nothing on the client uses this info
-	std::list<OptionEntry *> &options = ScorchedServer::instance()->getOptionsGame().
-		getMainOptions().getOptions();
-	std::list<OptionEntry *>::iterator optionItor;
+	std::list<XMLEntry *> &options = ScorchedServer::instance()->getOptionsGame().
+		getMainOptions().getChildren();
+	std::list<XMLEntry *>::iterator optionItor;
 	for (optionItor = options.begin();
 		optionItor != options.end();
 		++optionItor)
 	{
-		OptionEntry *entry = (*optionItor);
-		if (!(entry->getData() & OptionEntry::DataProtected) &&
-			!(entry->getData() & OptionEntry::DataDepricated))
+		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) (*optionItor);
+		if (!(entry->getData() & XMLEntry::eDataProtected) &&
+			!(entry->getData() & XMLEntry::eDataDepricated))
 		{
 			reply.push_back(
 				addTag(entry->getName(), entry->getValueAsString()));

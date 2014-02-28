@@ -21,11 +21,18 @@
 #if !defined(__INCLUDE_LandscapeMusich_INCLUDE__)
 #define __INCLUDE_LandscapeMusich_INCLUDE__
 
-#include <XML/XMLFile.h>
-#include <string>
-#include <vector>
+#include <XML/XMLEntrySimpleTypes.h>
 
-class LandscapeMusicType
+class LandscapeMusicStateList : public XMLEntryList<XMLEntryString>
+{
+public:
+	LandscapeMusicStateList();
+	virtual ~LandscapeMusicStateList();
+
+	virtual XMLEntryString *createXMLEntry();
+};
+
+class LandscapeMusic : public XMLEntryContainer
 {
 public:
 	enum PlayState
@@ -39,14 +46,24 @@ public:
 		StateScore
 	};
 
-	LandscapeMusicType();
-	virtual ~LandscapeMusicType();
+	LandscapeMusic();
+	virtual ~LandscapeMusic();
 
 	virtual bool readXML(XMLNode *node);
 
-	std::string file;
-	std::vector<PlayState> playstates;
-	fixed gain;
+	XMLEntryString file;
+	XMLEntryFixed gain;
+	LandscapeMusicStateList playstatelist;
+	std::list<PlayState> playstates;
+};
+
+class LandscapeMusicList : public XMLEntryList<LandscapeMusic>
+{
+public:
+	LandscapeMusicList();
+	virtual ~LandscapeMusicList();
+
+	virtual LandscapeMusic *createXMLEntry();
 };
 
 #endif // __INCLUDE_LandscapeMusich_INCLUDE__

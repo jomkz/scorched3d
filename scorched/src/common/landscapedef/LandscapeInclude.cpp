@@ -30,8 +30,11 @@
 LandscapeInclude::LandscapeInclude()
 {
 	events = new LandscapeEventList();
-	movements = new LandscapeMovementTypeList();
+	movements = new LandscapeMovementList();
 	sounds = new LandscapeSoundList();
+	musics = new LandscapeMusicList();
+	placements = new PlacementTypeList();
+	options = new LandscapeOptionsList();
 }
 
 LandscapeInclude::~LandscapeInclude()
@@ -39,27 +42,9 @@ LandscapeInclude::~LandscapeInclude()
 	delete events;
 	delete movements;
 	delete sounds;
-	{
-		while (!placements.empty())
-		{
-			delete placements.back();
-			placements.pop_back();
-		}
-	}
-	{
-		while (!musics.empty())
-		{
-			delete musics.back();
-			musics.pop_back();
-		}
-	}
-	{
-		while (!options.empty())
-		{
-			delete options.back();
-			options.pop_back();
-		}
-	}
+	delete musics;
+	delete placements;
+	delete options;
 }
 
 bool LandscapeInclude::readXML(LandscapeDefinitions *definitions, XMLNode *node)
@@ -67,35 +52,9 @@ bool LandscapeInclude::readXML(LandscapeDefinitions *definitions, XMLNode *node)
 	if (!events->readXML(node)) return false;
 	if (!movements->readXML(node)) return false;
 	if (!sounds->readXML(node)) return false;
-	{
-		XMLNode *musicNode;
-		while (node->getNamedChild("music", musicNode, false))
-		{
-			LandscapeMusicType *music = new LandscapeMusicType;
-			if (!music->readXML(musicNode)) return false;
-			musics.push_back(music);
-		}
-	}
-	{
-		XMLNode *optionsNode;
-		while (node->getNamedChild("options", optionsNode, false))
-		{
-			LandscapeOptionsType *option = new LandscapeOptionsType;
-			if (!option->readXML(optionsNode)) return false;
-			options.push_back(option);
-		}
-	}
-	{
-		XMLNode *placementNode;
-		while (node->getNamedChild("placement", placementNode, false))
-		{
-			std::string placementtype;
-			PlacementType *placement = 0;
-			if (!placementNode->getNamedParameter("type", placementtype)) return false;
-			if (!(placement = PlacementType::create(placementtype.c_str()))) return false;
-			if (!placement->readXML(placementNode)) return false;
-			placements.push_back(placement);
-		}
-	}
+	if (!musics->readXML(node)) return false;
+	if (!placements->readXML(node)) return false;
+	if (!options->readXML(node)) return false;
+
 	return node->failChildren();
 }

@@ -256,8 +256,7 @@ void ScorchedClient::startClientInternal(ProgressCounter *counter)
 
 			ScorchedServerSettingsOptions *settings =
 				new ScorchedServerSettingsOptions(clientFile,
-				ClientParams::instance()->getRewriteOptions(),
-				ClientParams::instance()->getWriteFullOptions());
+				ClientParams::instance()->getRewriteOptions());
 			ScorchedServer::startServer(settings, counter, callback);
 		}
 	}

@@ -80,13 +80,13 @@ void TargetMovement::addMovements(ScorchedContext &context,
 
 void TargetMovement::addMovementType(ScorchedContext &context, 
 	RandomGenerator &random, 
-	std::list<LandscapeMovementTypeChoice *> &movementtypes)
+	std::list<LandscapeMovementChoice *> &movementtypes)
 {
-	std::list<LandscapeMovementTypeChoice *>::iterator itor = movementtypes.begin(),
+	std::list<LandscapeMovementChoice *>::iterator itor = movementtypes.begin(),
 		end = movementtypes.end();
 	for (;itor != end; ++itor)
 	{
-		LandscapeMovementTypeChoice *movementtype = (*itor);
+		LandscapeMovementChoice *movementtype = (*itor);
 
 		TargetMovementEntry *entry = 0;
 		if (movementtype->getChoiceType() == "boids")

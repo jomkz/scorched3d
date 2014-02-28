@@ -27,7 +27,11 @@
 #include <XML/XMLEntry.h>
 #include <XML/XMLParser.h>
 
-class XMLEntrySimpleType : public XMLEntry
+class XMLEntrySimpleType : 
+	public XMLEntry,
+	public ARGParserBoolI, 
+	public ARGParserIntI,
+	public ARGParserStringI
 {
 public:
 	enum XMLEntrySimpleTypeCatagory
@@ -54,6 +58,11 @@ public:
 	// XMLEntry
 	virtual bool readXML(XMLNode *parentNode);
 	virtual void writeXML(XMLNode *parentNode);
+
+	// ARGParserBoolI, ARGParserIntI, ARGParserStringI
+	virtual bool setBoolArgument(const char *strValue, bool value);
+	virtual bool setIntArgument(const char *strValue, int value);
+	virtual bool setStringArgument(const char *value);
 protected:
 	unsigned int data_;
 	const char *name_;
@@ -73,6 +82,7 @@ public:
 	bool readFromFile(const std::string &filePath);
 	bool writeToBuffer(NetBuffer &buffer, bool useProtected);
 	bool readFromBuffer(NetBufferReader &reader, bool useProtected);
+	void addToArgParser(ARGParser &parser);
 };
 
 class XMLEntryInt : public XMLEntrySimpleType

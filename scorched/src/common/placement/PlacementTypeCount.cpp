@@ -26,7 +26,10 @@
 #include <common/Defines.h>
 #include <XML/XMLParser.h>
 
-PlacementTypeCount::PlacementTypeCount()
+PlacementTypeCount::PlacementTypeCount() :
+	PlacementType("PlacementTypeCount", 
+		"Creates a given number of objects with no defined placement."),
+	count("count", "The number of objects to create")
 {
 }
 
@@ -34,18 +37,12 @@ PlacementTypeCount::~PlacementTypeCount()
 {
 }
 
-bool PlacementTypeCount::readXML(XMLNode *node)
-{
-	if (!node->getNamedChild("count", count)) return false;
-	return PlacementType::readXML(node);
-}
-
 void PlacementTypeCount::getPositions(ScorchedContext &context,
 	RandomGenerator &generator,
 	std::list<Position> &returnPositions,
 	ProgressCounter *counter)
 {
-	for (int i=0; i<count; i++)
+	for (int i=0; i<count.getValue(); i++)
 	{
 		Position position;
 		returnPositions.push_back(position);

@@ -21,17 +21,40 @@
 #include <landscapedef/LandscapeOptions.h>
 #include <math.h>
 
-LandscapeOptionsType::LandscapeOptionsType()
+LandscapeOptions::LandscapeOptions()
 {
 }
 
-LandscapeOptionsType::~LandscapeOptionsType()
+LandscapeOptions::~LandscapeOptions()
 {
 }
 
-bool LandscapeOptionsType::readXML(XMLNode *node)
+bool LandscapeOptions::readXML(XMLNode *parentNode)
 {
-	if (!OptionEntryHelper::readFromXML(
-		options.getOptions(), node)) return false;
-	return node->failChildren();
+	XMLNode *node = 0;
+	if (!parentNode->getNamedChild(xmlEntryName_, node)) return false;
+
+	std::list<XMLNode *>::iterator itor = node->getChildren().begin(),
+		end = node->getChildren().end();
+	for (;itor!=end;++end)
+	{
+		changedOptionNames_.push_back((*itor)->getName());
+	}
+
+	return OptionsGame::readXML(parentNode);
+}
+
+LandscapeOptionsList::LandscapeOptionsList() :
+	 XMLEntryList<LandscapeOptions>("options", 
+		 "Defines the game options for this level, these options override any set globaly as the server settings.")
+{
+}
+
+LandscapeOptionsList::~LandscapeOptionsList()
+{
+}
+
+LandscapeOptions *LandscapeOptionsList::createXMLEntry()
+{
+	return new LandscapeOptions();
 }

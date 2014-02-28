@@ -26,15 +26,26 @@
 #include <string>
 #include <vector>
 
-class LandscapeOptionsType
+class LandscapeOptions : public OptionsGame
 {
 public:
-	LandscapeOptionsType();
-	virtual ~LandscapeOptionsType();
+	LandscapeOptions();
+	virtual ~LandscapeOptions();
 
-	virtual bool readXML(XMLNode *node);
+	virtual bool readXML(XMLNode *parentNode);
 
-	OptionsGame options;
+	std::list<std::string> &getChangedOptionNames() { return changedOptionNames_; }
+protected:
+	std::list<std::string> changedOptionNames_;
+};
+
+class LandscapeOptionsList : public XMLEntryList<LandscapeOptions>
+{
+public:
+	LandscapeOptionsList();
+	virtual ~LandscapeOptionsList();
+
+	virtual LandscapeOptions *createXMLEntry();
 };
 
 #endif // __INCLUDE_LandscapeOptionsh_INCLUDE__

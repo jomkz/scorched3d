@@ -22,53 +22,53 @@
 #include <XML/XMLNode.h>
 #include <common/Defines.h>
 
-LandscapeMovementTypeChoice::LandscapeMovementTypeChoice() :
-	XMLEntryTypeChoice<LandscapeMovementType>("movement", 
+LandscapeMovementChoice::LandscapeMovementChoice() :
+	XMLEntryTypeChoice<LandscapeMovement>("movement", 
 		"Associates object movement animation to a give group of objects")
 {
 }
 
-LandscapeMovementTypeChoice::~LandscapeMovementTypeChoice()
+LandscapeMovementChoice::~LandscapeMovementChoice()
 {
 }
 
-LandscapeMovementType *LandscapeMovementTypeChoice::createXMLEntry(const std::string &type)
+LandscapeMovement *LandscapeMovementChoice::createXMLEntry(const std::string &type)
 {
-	if (0 == strcmp(type.c_str(), "boids")) return new LandscapeMovementTypeBoids;
-	if (0 == strcmp(type.c_str(), "ships")) return new LandscapeMovementTypeShips;
-	if (0 == strcmp(type.c_str(), "spline")) return new LandscapeMovementTypeSpline;
-	S3D::dialogMessage("LandscapeMovementTypeChoice", S3D::formatStringBuffer("Unknown movement type %s", type));
+	if (0 == strcmp(type.c_str(), "boids")) return new LandscapeMovementBoids;
+	if (0 == strcmp(type.c_str(), "ships")) return new LandscapeMovementShips;
+	if (0 == strcmp(type.c_str(), "spline")) return new LandscapeMovementSpline;
+	S3D::dialogMessage("LandscapeMovementChoice", S3D::formatStringBuffer("Unknown movement type %s", type));
 	return 0;
 }
 
-LandscapeMovementTypeList::LandscapeMovementTypeList() :
+LandscapeMovementList::LandscapeMovementList() :
 	XMLEntryList("movement", 
 		"A list of movement animations that can be associated with an object group")
 {
 }
 
-LandscapeMovementTypeList::~LandscapeMovementTypeList()
+LandscapeMovementList::~LandscapeMovementList()
 {
 }
 
-LandscapeMovementTypeChoice *LandscapeMovementTypeList::createXMLEntry()
+LandscapeMovementChoice *LandscapeMovementList::createXMLEntry()
 {
-	return new LandscapeMovementTypeChoice();
+	return new LandscapeMovementChoice();
 }
 
-LandscapeMovementType::LandscapeMovementType(const char *name, const char *description) :
+LandscapeMovement::LandscapeMovement(const char *name, const char *description) :
 	XMLEntryContainer(name, description),
 	groupname("groupname", 
 		"The name of the object group that contains the objects to move")
 {
 }
 
-LandscapeMovementType::~LandscapeMovementType()
+LandscapeMovement::~LandscapeMovement()
 {
 }
 
-LandscapeMovementTypeShips::LandscapeMovementTypeShips() :
-	LandscapeMovementType("LandscapeMovementTypeShips", 
+LandscapeMovementShips::LandscapeMovementShips() :
+	LandscapeMovement("LandscapeMovementShips", 
 		"A special movement type for ships, this movement type moves objects circumferentially around a spline curve defined by "
 		"a series of random points around the landscape center."
 		"All movement occurs on the same horizontal plane"),
@@ -81,26 +81,26 @@ LandscapeMovementTypeShips::LandscapeMovementTypeShips() :
 {
 }
 
-LandscapeMovementTypeShips::~LandscapeMovementTypeShips()
+LandscapeMovementShips::~LandscapeMovementShips()
 {
 }
 
-LandscapeMovementTypeSplineControlPoints::LandscapeMovementTypeSplineControlPoints() :
+LandscapeMovementSplineControlPoints::LandscapeMovementSplineControlPoints() :
 	XMLEntryList("controlpoint", "The list of control points that defined the spline curve")
 {
 }
 
-LandscapeMovementTypeSplineControlPoints::~LandscapeMovementTypeSplineControlPoints()
+LandscapeMovementSplineControlPoints::~LandscapeMovementSplineControlPoints()
 {
 }
 
-XMLEntryFixedVector *LandscapeMovementTypeSplineControlPoints::createXMLEntry()
+XMLEntryFixedVector *LandscapeMovementSplineControlPoints::createXMLEntry()
 {
 	return new XMLEntryFixedVector("controlpoint", "A control point for the spline curve");
 }
 
-LandscapeMovementTypeSpline::LandscapeMovementTypeSpline() :
-	LandscapeMovementType("LandscapeMovementTypeSpline", 
+LandscapeMovementSpline::LandscapeMovementSpline() :
+	LandscapeMovement("LandscapeMovementSpline", 
 		"A movement type where objects are moved along a path defined by a series of control points joined by a spline curve."),
 	speed("speed", "The speed that animation occurs around the points"),
 	groundonly("groundonly", "If the height in the control points should be ignored and the curve should follow the landscape terrain height"),
@@ -110,20 +110,20 @@ LandscapeMovementTypeSpline::LandscapeMovementTypeSpline() :
 	addChildXMLEntry(&speed, &groundonly, &starttime);
 }
 
-LandscapeMovementTypeSpline::~LandscapeMovementTypeSpline()
+LandscapeMovementSpline::~LandscapeMovementSpline()
 {
 }
 
-bool LandscapeMovementTypeSpline::readXML(XMLNode *parentNode)
+bool LandscapeMovementSpline::readXML(XMLNode *parentNode)
 {
-	if (!LandscapeMovementType::readXML(parentNode)) return false;
+	if (!LandscapeMovement::readXML(parentNode)) return false;
 
 	if (points.getChildren().size() < 3) return parentNode->returnError("Must have at least 3 control points");
 	return true;
 }
 
-LandscapeMovementTypeBoids::LandscapeMovementTypeBoids() :
-	LandscapeMovementType("LandscapeMovementTypeBoids", 
+LandscapeMovementBoids::LandscapeMovementBoids() :
+	LandscapeMovement("LandscapeMovementBoids", 
 		"A movement type where objects are moved due to a Boids simulation, i.e. in a flocking motion"),
 	minbounds("minbounds", "The minimum extent that defines a bounding box tha will confine the boids"),
 	maxbounds("maxbounds", "The maximum extent that defines a bounding box tha will confine the boids"),
@@ -135,13 +135,13 @@ LandscapeMovementTypeBoids::LandscapeMovementTypeBoids() :
 	addChildXMLEntry(&minbounds, &maxbounds, &maxvelocity, &cruisedistance, &maxacceleration);
 }
 
-LandscapeMovementTypeBoids::~LandscapeMovementTypeBoids()
+LandscapeMovementBoids::~LandscapeMovementBoids()
 {
 }
 
-bool LandscapeMovementTypeBoids::readXML(XMLNode *parentNode)
+bool LandscapeMovementBoids::readXML(XMLNode *parentNode)
 {
-	if (!LandscapeMovementType::readXML(parentNode)) return false;
+	if (!LandscapeMovement::readXML(parentNode)) return false;
 
 	if (maxbounds.getValue()[0] - minbounds.getValue()[0] < fixed(25) ||
 		maxbounds.getValue()[1] - minbounds.getValue()[1] < fixed(25) ||

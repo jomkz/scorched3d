@@ -24,7 +24,34 @@
 #include <common/ProgressCounter.h>
 #include <XML/XMLParser.h>
 
-PlacementTypeDirect::PlacementTypeDirect()
+PlacementPosition::PlacementPosition() :
+	XMLEntryContainer("position", "The initial position of an object"),
+	position("position", "The initial position of an object, a height <= 0 will be normalized to the landscape height")
+{
+}
+
+PlacementPosition::~PlacementPosition()
+{
+}
+
+PlacementPositionList::PlacementPositionList() :
+	XMLEntryList<PlacementPosition>("position", "The initial position of an object, a height <= 0 will be normalized to the landscape height")
+{
+}
+
+PlacementPositionList::~PlacementPositionList()
+{
+}
+
+PlacementPosition *PlacementPositionList::createXMLEntry()
+{
+	return new PlacementPosition();
+}
+
+PlacementTypeDirect::PlacementTypeDirect() :
+	PlacementType("PlacementTypeDirect", 
+		"Place a set of objects using an explict set of exact coordinates"),
+	positions()
 {
 }
 
@@ -32,39 +59,26 @@ PlacementTypeDirect::~PlacementTypeDirect()
 {
 }
 
-bool PlacementTypeDirect::readXML(XMLNode *node)
-{
-	XMLNode *positionNode;
-	while (node->getNamedChild("position", positionNode, false))
-	{
-		Position position;
-		if (!positionNode->getNamedChild("position", position.position)) return false;
-		positions.push_back(position);
-
-		if (!positionNode->failChildren()) return false;
-	}
-	return PlacementType::readXML(node);
-}
-
 void PlacementTypeDirect::getPositions(ScorchedContext &context,
 	RandomGenerator &generator,
 	std::list<Position> &returnPositions,
 	ProgressCounter *counter)
 {
-	std::list<Position>::iterator itor;
+	std::list<PlacementPosition *>::iterator itor;
 	int i = 0;
-	for (itor = positions.begin();
-		itor != positions.end();
+	for (itor = positions.getChildren().begin();
+		itor != positions.getChildren().end();
 		++itor, i++)
 	{
 		if (i % 10 == 0) if (counter) 
-			counter->setNewPercentage(float(i)/float(positions.size())*100.0f);
+			counter->setNewPercentage(float(i)/float(positions.getChildren().size())*100.0f);
 
-		Position position = (*itor);
+		Position position;
+		position.position = (*itor)->position.getValue();
 		fixed height = 
 			context.getLandscapeMaps().
 				getGroundMaps().getInterpHeight(position.position[0], position.position[1]);
-		if (position.position[2] == 0) position.position[2] = height;
+		if (position.position[2] <= 0) position.position[2] = height;
 
 		returnPositions.push_back(position);
 	}

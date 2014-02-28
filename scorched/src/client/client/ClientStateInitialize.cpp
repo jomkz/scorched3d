@@ -226,7 +226,7 @@ void ClientStateInitialize::sendAuth()
 	connectMessage.setSUI(SUI);
 	connectMessage.setHostDesc(ClientOptions::instance()->getHostDescription());
 	connectMessage.setNoPlayers(noPlayers);
-	connectMessage.setCompatabilityVer((unsigned int) ClientOptions::instance()->getOptions().size());
+	connectMessage.setCompatabilityVer(0);
 
 	ComsMessageSender::sendToServer(connectMessage);
 }

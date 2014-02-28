@@ -29,15 +29,13 @@ public:
 	PlacementTypeCount();
 	virtual ~PlacementTypeCount();
 
-	virtual PlacementType::Type getType() { return PlacementType::eCount; }
-	virtual bool readXML(XMLNode *node);
 	virtual void getPositions(ScorchedContext &context,
 		RandomGenerator &generator,
 		std::list<Position> &returnPositions,
 		ProgressCounter *counter = 0);
 
 protected:
-	int count;
+	XMLEntryInt count;
 };
 
 #endif // __INCLUDE_PlacementTypeCounth_INCLUDE__

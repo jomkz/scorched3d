@@ -41,12 +41,12 @@ TargetMovementEntrySpline::~TargetMovementEntrySpline()
 }
 
 void TargetMovementEntrySpline::generate(ScorchedContext &context, 
-	RandomGenerator &random, LandscapeMovementType *movementType)
+	RandomGenerator &random, LandscapeMovement *movementType)
 {
 	// Create the spline path the target will move on
 	// Do this from the set of control points specified in the xml file
-	LandscapeMovementTypeSpline *splineGroup = 
-		(LandscapeMovementTypeSpline *) movementType;
+	LandscapeMovementSpline *splineGroup = 
+		(LandscapeMovementSpline *) movementType;
 	context_ = &context;
 	groundOnly_ = splineGroup->groundonly.getValue();
 

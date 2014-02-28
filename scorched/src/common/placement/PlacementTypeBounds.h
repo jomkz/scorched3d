@@ -29,7 +29,6 @@ public:
 	PlacementTypeBounds();
 	virtual ~PlacementTypeBounds();
 
-	virtual PlacementType::Type getType() { return PlacementType::eBounds; }
 	virtual bool readXML(XMLNode *node);
 	virtual void getPositions(ScorchedContext &context,
 		RandomGenerator &generator,
@@ -37,9 +36,9 @@ public:
 		ProgressCounter *counter = 0);
 
 protected:
-	int count;
-	bool onground;
-	FixedVector minbounds, maxbounds;
+	XMLEntryInt count;
+	XMLEntryBool onground;
+	XMLEntryFixedVector minbounds, maxbounds;
 };
 
 #endif // __INCLUDE_PlacementTypeBoundsh_INCLUDE__
