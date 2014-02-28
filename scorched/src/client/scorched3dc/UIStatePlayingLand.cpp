@@ -24,39 +24,6 @@
 #include <client/ScorchedClient.h>
 #include <landscapemap/LandscapeMaps.h>
 
-static void initBlendMaps(Ogre::Terrain* terrain)
-{
-	Ogre::TerrainLayerBlendMap* blendMap0 = terrain->getLayerBlendMap(1);
-	Ogre::TerrainLayerBlendMap* blendMap1 = terrain->getLayerBlendMap(2);
-	Ogre::Real minHeight0 = 70;
-	Ogre::Real fadeDist0 = 15;
-	Ogre::Real minHeight1 = 100;
-	Ogre::Real fadeDist1 = 40;
-	float* pBlend0 = blendMap0->getBlendPointer();
-	float* pBlend1 = blendMap1->getBlendPointer();
-	for (Ogre::uint16 y = 0; y < terrain->getLayerBlendMapSize(); ++y)
-	{
-		for (Ogre::uint16 x = 0; x < terrain->getLayerBlendMapSize(); ++x)
-		{
-			Ogre::Real tx, ty;
- 
-			blendMap0->convertImageToTerrainSpace(x, y, &tx, &ty);
-			Ogre::Real height = terrain->getHeightAtTerrainPosition(tx, ty);
-			Ogre::Real val = (height - minHeight0) / fadeDist0;
-			val = Ogre::Math::Clamp(val, (Ogre::Real)0, (Ogre::Real)1);
-			*pBlend0++ = val;
- 
-			val = (height - minHeight1) / fadeDist1;
-			val = Ogre::Math::Clamp(val, (Ogre::Real)0, (Ogre::Real)1);
-			*pBlend1++ = val;
-		}
-	}
-	blendMap0->dirty();
-	blendMap1->dirty();
-	blendMap0->update();
-	blendMap1->update();
-}
-
 UIStatePlayingLand::UIStatePlayingLand(
 	Ogre::SceneManager* sceneMgr, 
 	Ogre::Camera* camera,
@@ -97,12 +64,15 @@ void UIStatePlayingLand::create()
 
 	// Generate the terrain
 	terrainGroup_->loadAllTerrains(true);
-	Ogre::TerrainGroup::TerrainIterator ti = terrainGroup_->getTerrainIterator();
-	while(ti.hasMoreElements())
+
+	for (int x=0; x<landscapeWidth/128; x++)
 	{
-		Ogre::Terrain* terrain = ti.getNext()->instance;
-		initBlendMaps(terrain);
-		hydrax_->getMaterialManager()->addDepthTechnique(terrain->getMaterial()->createTechnique());
+		for (int y=0; y<landscapeHeight/128; y++)
+		{
+			Ogre::Terrain* terrain = terrainGroup_->getTerrain(x, y);
+			initBlendMaps(terrain, x, y);
+			hydrax_->getMaterialManager()->addDepthTechnique(terrain->getMaterial()->createTechnique());
+		}
 	}
 
 	terrainGroup_->updateDerivedData(true);
@@ -132,16 +102,22 @@ void UIStatePlayingLand::defineOptions()
     defaultimp.maxBatchSize = 65;
 
     // textures
-	defaultimp.layerList.resize(3);
+	defaultimp.layerList.resize(5);
 	defaultimp.layerList[0].worldSize = 100;
-	defaultimp.layerList[0].textureNames.push_back("dirt_grayrocky_diffusespecular.dds");
-	defaultimp.layerList[0].textureNames.push_back("dirt_grayrocky_normalheight.dds");
-	defaultimp.layerList[1].worldSize = 30;
-	defaultimp.layerList[1].textureNames.push_back("grass_green-01_diffusespecular.dds");
-	defaultimp.layerList[1].textureNames.push_back("grass_green-01_normalheight.dds");
+	defaultimp.layerList[0].textureNames.push_back("TxUGLUdirtUgrassU02.dds");
+	defaultimp.layerList[0].textureNames.push_back("TxUGLUdirtUgrassU02_n.dds");
+	defaultimp.layerList[1].worldSize = 50;
+	defaultimp.layerList[1].textureNames.push_back("TxUsandU02.dds");
+	defaultimp.layerList[1].textureNames.push_back("TxUsandU02_n.dds");
 	defaultimp.layerList[2].worldSize = 200;
-	defaultimp.layerList[2].textureNames.push_back("growth_weirdfungus-03_diffusespecular.dds");
-	defaultimp.layerList[2].textureNames.push_back("growth_weirdfungus-03_normalheight.dds");
+	defaultimp.layerList[2].textureNames.push_back("TxUAIUgrassUdirtU01.dds");
+	defaultimp.layerList[2].textureNames.push_back("TxUAIUgrassUdirtU01_n.dds");
+	defaultimp.layerList[3].worldSize = 200;
+	defaultimp.layerList[3].textureNames.push_back("TxUscrubplainU01.dds");
+	defaultimp.layerList[3].textureNames.push_back("TxUscrubplainU01_n.dds");
+	defaultimp.layerList[4].worldSize = 200;
+	defaultimp.layerList[4].textureNames.push_back("TxUcoastalUrockU01.dds");
+	defaultimp.layerList[4].textureNames.push_back("TxUcoastalUrockU01_n.dds");
 }
 
 void UIStatePlayingLand::defineTerrain(long tx, long ty)
@@ -176,4 +152,123 @@ Ogre::Real UIStatePlayingLand::getHeight(const Ogre::Vector3 &position)
 		return result.terrain->getHeightAtWorldPosition(newPosition);
 	}
 	return 0.0f;
+}
+
+void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, long tx, long ty)
+{
+	const float maxHeight = 30.0f; // Last texture ends at height 30
+	const float blendHeightFactor = 0.4f; // Ends blend when 40% into height band
+	const float blendNormalSlopeStart = 0.9f; // Starts blending slope at .80
+	const float blendNormalSlopeLength = 0.3f; // Blends when 30% more slope
+	const float noiseMax = 0.4f;
+	const int numberSources = 3;
+
+	// Determine the maximum height of the map
+	HeightMap &hMap = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap();
+	float hMapMaxHeight = 0;
+	for (int ma=0; ma<hMap.getMapWidth(); ma++)
+	{
+		for (int mb=0;mb<hMap.getMapHeight(); mb++)
+		{
+			float height = hMap.getHeight(ma, mb).asFloat();
+			if (height > hMapMaxHeight) hMapMaxHeight = height;
+		}
+	}
+
+	Ogre::TerrainLayerBlendMap* blendMap0 = terrain->getLayerBlendMap(1);
+	Ogre::TerrainLayerBlendMap* blendMap1 = terrain->getLayerBlendMap(2);
+	Ogre::TerrainLayerBlendMap* blendMap2 = terrain->getLayerBlendMap(3);
+	Ogre::TerrainLayerBlendMap* blendMapStone = terrain->getLayerBlendMap(4);
+
+	float *pBlend[numberSources];
+	pBlend[0] = blendMap0->getBlendPointer();
+	pBlend[1] = blendMap1->getBlendPointer();
+	pBlend[2] = blendMap2->getBlendPointer();
+	float* pBlendStone = blendMapStone->getBlendPointer();
+	for (Ogre::uint16 y = 0; y < terrain->getLayerBlendMapSize(); ++y)
+	{
+		for (Ogre::uint16 x = 0; x < terrain->getLayerBlendMapSize(); ++x)
+		{
+			// Figure out the height map coords
+			Ogre::Real tsx, tsy;
+			blendMap0->convertImageToTerrainSpace(x, y, &tsx, &tsy);
+			int hx = int(tsx * float(128)) + tx * 128;
+			int hy = int(tsy * float(128)) + ty * 128;
+
+			// Get height and normal information
+			HeightMap::HeightData &data = hMap.getHeightData(hx, hy);
+			float normal = data.normal[2].asFloat();
+			float height = data.height.asFloat();
+			float offSetHeight = hMap.getHeight((hMap.getMapWidth() - hx), 
+					(hMap.getMapHeight() - hy)).asFloat();
+			height *= (1.0f - (noiseMax/2.0f)) + ((offSetHeight*noiseMax)/hMapMaxHeight);
+
+			// Find the index of the current texture by deviding the height into strips
+			float heightPer = (height / maxHeight) * (float) numberSources;
+			int heightIndex = (int) heightPer;
+			if (heightIndex >= numberSources) 
+			{
+				heightIndex = numberSources - 1;
+			}
+
+			// Check if we are in a blending transition phase
+			float blendFirstAmount = 1.0f;
+			float blendSecondAmount = 0.0f;
+			if (heightIndex < numberSources - 1)
+			{
+				float remainderIndex = heightPer - heightIndex;
+				if (remainderIndex > blendHeightFactor)
+				{
+					// We need to do some blending, figure how much
+					remainderIndex -= blendHeightFactor;
+					blendSecondAmount = remainderIndex / (1.0f - blendHeightFactor);
+					blendFirstAmount = 1.0f - blendSecondAmount;
+				}
+			}
+
+			// Check to see if we need to blend in the side texture
+			float blendSideAmount = 0.0f;
+			float blendShoreAmount = 0.0f;
+			if (normal < blendNormalSlopeStart)
+			{
+				if (normal < blendNormalSlopeStart - blendNormalSlopeLength)
+				{
+					// Only use the side texture
+					blendSideAmount = 1.0f;
+					blendFirstAmount = 0.0f;
+					blendSecondAmount = 0.0f;
+				}
+				else
+				{
+					// Blend in the side texture
+					float remainderIndex = normal - (blendNormalSlopeStart - blendNormalSlopeLength);
+					remainderIndex /= blendNormalSlopeLength;
+				
+					blendSideAmount = (1.0f - remainderIndex);
+					blendFirstAmount *= remainderIndex;
+					blendSecondAmount *= remainderIndex;
+				}
+			}
+
+			// Update maps
+			for (int i=0; i<numberSources; i++)
+			{
+				if (i==heightIndex) (*pBlend[i]) = blendFirstAmount;
+				else if (i==heightIndex+1) (*pBlend[i]) = blendSecondAmount;
+				else (*pBlend[i]) = 0.0f;
+				pBlend[i]++;
+			}
+			(*pBlendStone) = blendSideAmount;
+			pBlendStone++;
+		}
+	}
+
+	blendMap0->dirty();
+	blendMap1->dirty();
+	blendMap2->dirty();
+	blendMapStone->dirty();
+	blendMap0->update();
+	blendMap1->update();
+	blendMap2->update();
+	blendMapStone->update();
 }

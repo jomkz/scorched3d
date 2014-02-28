@@ -48,6 +48,7 @@ protected:
 	void create();
 	void defineOptions();
 	void defineTerrain(long x, long y);
+	void initBlendMaps(Ogre::Terrain* terrain, long tx, long ty);
 };
 
 #endif // __INCLUDE_UIStatePlayingLandh_INCLUDE__

@@ -159,7 +159,6 @@
     <ClCompile Include="..\..\common\landscapedef\LandscapeTex.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeTexDefn.cpp" />
     <ClCompile Include="..\..\common\landscapemap\DeformLandscape.cpp" />
-    <ClCompile Include="..\..\common\landscapemap\GraphicalHeightMap.cpp" />
     <ClCompile Include="..\..\common\landscapemap\GroundMaps.cpp" />
     <ClCompile Include="..\..\common\landscapemap\HeightMap.cpp" />
     <ClCompile Include="..\..\common\landscapemap\HeightMapLoader.cpp" />
@@ -619,7 +618,6 @@
     <ClInclude Include="..\..\common\landscapedef\LandscapeTex.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeTexDefn.h" />
     <ClInclude Include="..\..\common\landscapemap\DeformLandscape.h" />
-    <ClInclude Include="..\..\common\landscapemap\GraphicalHeightMap.h" />
     <ClInclude Include="..\..\common\landscapemap\GroundMaps.h" />
     <ClInclude Include="..\..\common\landscapemap\HeightMap.h" />
     <ClInclude Include="..\..\common\landscapemap\HeightMapLoader.h" />

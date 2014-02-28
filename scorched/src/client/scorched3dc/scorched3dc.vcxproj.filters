@@ -564,9 +564,6 @@
     <ClCompile Include="..\..\common\landscapemap\DeformLandscape.cpp">
       <Filter>landscapemap</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\landscapemap\GraphicalHeightMap.cpp">
-      <Filter>landscapemap</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\landscapemap\GroundMaps.cpp">
       <Filter>landscapemap</Filter>
     </ClCompile>
@@ -1926,9 +1923,6 @@
       <Filter>landscapedef</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\landscapemap\DeformLandscape.h">
-      <Filter>landscapemap</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\landscapemap\GraphicalHeightMap.h">
       <Filter>landscapemap</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\landscapemap\GroundMaps.h">

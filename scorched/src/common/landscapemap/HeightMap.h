@@ -27,15 +27,21 @@
 #include <common/Vector.h>
 
 class Line;
-class GraphicalHeightMap;
 class HeightMap  
 {
 public:
+	struct HeightData
+	{
+		fixed height;
+		FixedVector normal;
+	};
+	static HeightData EmptyHeightData;
+
 	HeightMap();
 	virtual ~HeightMap();
 
-	void create(const int width, const int height, bool invertedNormals);
-	void reset();
+	void create(const int width, const int height, bool invertedNormals, fixed initialHeight = 0);
+	void reset(fixed initialHeight = 0);
 
 	// Height map size fns
 	int getMapWidth() { return width_; }
@@ -44,9 +50,14 @@ public:
 	// Get height fns (z values)
 	inline fixed getHeight(int w, int h) { 
 		if (w >= 0 && h >= 0 && w<=width_ && h<=height_) 
-			return heightData_[(width_+1) * h + w].position[2]; 
+			return heightData_[(width_+1) * h + w].height; 
 		return fixed(0); }
 	fixed getInterpHeight(fixed w, fixed h);
+
+	inline HeightData &getHeightData(int w, int h) { 
+		if (w >= 0 && h >= 0 && w<=width_ && h<=height_) 
+			return heightData_[(width_+1) * h + w]; 
+		return EmptyHeightData; }
 
 	// Get normal functions
 	FixedVector &getNormal(int w, int h);
@@ -57,20 +68,10 @@ public:
 	// Alters the actual internal HeightMap points
 	void setHeight(int w, int h, fixed height);
 
-	GraphicalHeightMap *getGraphicalMap() { return graphicalMap_; }
-	void setGraphicalMap(GraphicalHeightMap *map) { graphicalMap_ = map; }
-
 protected:
-	struct HeightData
-	{
-		FixedVector position;
-		FixedVector normal;
-	};
-
 	bool invertedNormals_;
 	int width_, height_;
 	HeightData *heightData_;
-	GraphicalHeightMap *graphicalMap_;
 
 	bool getVector(FixedVector &vec, int x, int y);
 	void getVectorPos(int pos, int &x, int &y, int dist=1);

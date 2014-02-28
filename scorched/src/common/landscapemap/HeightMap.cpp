@@ -20,15 +20,16 @@
 
 #include <common/Triangle.h>
 #include <landscapemap/HeightMap.h>
-#include <landscapemap/GraphicalHeightMap.h>
 #include <common/Defines.h>
 
 static const int minMapShift = 3;
 static FixedVector nvec(fixed(0), fixed(0), fixed(1));
 
+HeightMap::HeightData HeightMap::EmptyHeightData = { 0, nvec };
+
 HeightMap::HeightMap() : 
 	width_(0), height_(0),
-	heightData_(0), graphicalMap_(0),
+	heightData_(0), 
 	invertedNormals_(false)
 {
 }
@@ -37,11 +38,9 @@ HeightMap::~HeightMap()
 {
 	delete [] heightData_;
 	heightData_ = 0;
-	if (graphicalMap_) delete graphicalMap_;
-	graphicalMap_ = 0;
 }
 
-void HeightMap::create(const int width, const int height, bool invertedNormals)
+void HeightMap::create(const int width, const int height, bool invertedNormals, fixed initialHeight)
 {
 	invertedNormals_ = invertedNormals;
 	width_ = width; 
@@ -50,22 +49,17 @@ void HeightMap::create(const int width, const int height, bool invertedNormals)
 	delete [] heightData_;
 	heightData_ = new HeightData[(width_ + 1) * (height_ + 1)];
 
-	reset();
-
-	if (graphicalMap_) graphicalMap_->create(width, height);
+	reset(initialHeight);
 }
 
-void HeightMap::reset()
+void HeightMap::reset(fixed initialHeight)
 {
 	HeightData *current = heightData_;
 	for (int y=0; y<=height_; y++)
 	{
 		for (int x=0; x<=width_; x++)
 		{
-			current->position[0] = fixed(x);
-			current->position[1] = fixed(y);
-			current->position[2] = fixed(0);
-
+			current->height = initialHeight;
 			current->normal[0] = fixed(0);
 			current->normal[1] = fixed(0);
 			current->normal[2] = invertedNormals_?fixed(-1):fixed(1);
@@ -79,7 +73,9 @@ bool HeightMap::getVector(FixedVector &vec, int x, int y)
 {
 	if (x < 0 || y < 0 || x>width_ || y>height_) return false;
 
-	vec = heightData_[(width_+1) * y + x].position;
+	vec[0] = fixed(x);
+	vec[1] = fixed(y);
+	vec[2] = heightData_[(width_+1) * y + x].height;
 	return true;
 }
 
@@ -128,19 +124,26 @@ bool HeightMap::getIntersect(Line &line, Vector &intersect)
 
 fixed HeightMap::getInterpHeight(fixed w, fixed h)
 {
-	fixed ihx = w.floor(); 
-	fixed ihy = h.floor();
-	fixed ihx2 = ihx+1;
-	fixed ihy2 = ihy+1; 
-
-	fixed fhx = w - ihx;
-	fixed fhy = h - ihy;
+	int ihx = w.floor().asInt(); 
+	int ihy = h.floor().asInt();
+	int ihx2 = ihx+1;
+	int ihy2 = ihy+1; 
 	
-	fixed heightA = getHeight(ihx.asInt(), ihy.asInt());
-	fixed heightB = getHeight(ihx.asInt(), ihy2.asInt());
-	fixed heightC = getHeight(ihx2.asInt(), ihy.asInt());
-	fixed heightD = getHeight(ihx2.asInt(), ihy2.asInt());
+	if (ihx < 0 || ihy < 0 || ihx>width_ || ihy>height_ &&
+		ihx2 < 0 || ihy2 < 0 || ihx2>width_ || ihy2>height_)
+	{
+		return 0;
+	}
 
+	HeightData *startData = &heightData_[(width_+1) * ihy + ihx];
+
+	fixed heightA = startData->height;
+	fixed heightB = (startData+width_+1)->height;
+	fixed heightC = (startData+1)->height;
+	fixed heightD = (startData+width_+2)->height;
+
+	fixed fhx = w - fixed(ihx);
+	fixed fhy = h - fixed(ihy);
 	fixed heightDiffAB = heightB-heightA;
 	fixed heightDiffCD = heightD-heightC;
 	fixed heightE = heightA + (heightDiffAB * fhy);
@@ -169,7 +172,9 @@ FixedVector &HeightMap::getNormal(int w, int h)
 			int x = w;
 			int y = h;
 
-			C = heightData->position;
+			C[0] = fixed(w);
+			C[1] = fixed(h);
+			C[2] = heightData->height;
 			total.zero();
 
 			int times = 0;
@@ -201,7 +206,6 @@ FixedVector &HeightMap::getNormal(int w, int h)
 
 			normal = total.Normalize();
 			if (invertedNormals_) normal.StoreInvert();
-			if (graphicalMap_) graphicalMap_->setNormal(w, h, normal.asVector());			
 		}
 
 		return normal; 
@@ -254,9 +258,8 @@ void HeightMap::setHeight(int w, int h, fixed height)
 {
 	DIALOG_ASSERT(w >= 0 && h >= 0 && w<=width_ && h<=height_);
 
-	HeightData &data = heightData_[(width_+1) * h + w];
-	data.position[2] = height;
-	if (graphicalMap_) graphicalMap_->setHeight(w, h, height.asFloat());
+	HeightData *data = &heightData_[(width_+1) * h + w];
+	data->height = height;
 
 	// Reset all of the normals around this position
 	for (int dist=1; dist<=3; dist++)

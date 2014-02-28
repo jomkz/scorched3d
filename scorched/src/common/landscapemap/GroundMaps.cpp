@@ -137,7 +137,7 @@ void GroundMaps::generateHMap(
 			file->levelsurround,
 			counter);
 	}
-	else
+	else if (defnCache_.getDefn()->deform->getType() == LandscapeDefnType::eDeformSolid)
 	{
 		for (int x=0; x<map_.getMapWidth(); x++)
 		{
