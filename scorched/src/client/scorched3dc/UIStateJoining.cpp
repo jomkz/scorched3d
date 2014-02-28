@@ -55,7 +55,7 @@ bool UIStateJoining::join(const CEGUI::EventArgs &e)
 {
 	ScorchedUI::instance()->getUIState().setState(UIState::StateProgress);
 	UIProgressCounter::instance()->setNewOp(LANG_STRING("Waiting for server..."));
-	ScorchedClient::getThreadCallback().addCallback(new ClientJoinGameThreadCallback());
+	ScorchedClient::getClientThreadCallback().addCallback(new ClientJoinGameThreadCallback());
 	return true;
 }
 

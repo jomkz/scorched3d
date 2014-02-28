@@ -56,7 +56,7 @@ int ClientServerAccess::getIntProperty(const std::string &propertyName)
 		int result_;
 	};
 	ClientServerOptionsAccessInt callback(propertyName);
-	ScorchedServer::getThreadCallback().addCallbackSync(callback);
+	ScorchedServer::getServerThreadCallback().addCallbackSync(callback);
 	return callback.result_;
 }
 
@@ -84,6 +84,6 @@ std::string ClientServerAccess::getStringProperty(const std::string &propertyNam
 		std::string result_;
 	};
 	ClientServerOptionsAccessStr callback(propertyName);
-	ScorchedServer::getThreadCallback().addCallbackSync(callback);
+	ScorchedServer::getServerThreadCallback().addCallbackSync(callback);
 	return callback.result_;
 }

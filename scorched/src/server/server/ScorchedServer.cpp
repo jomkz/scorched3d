@@ -363,7 +363,7 @@ bool ScorchedServer::serverLoop(fixed timeDifference)
 		Logger::log(S3D::formatStringBuffer("Warning: Server loop took %.2f seconds", 
 			timeDifference.asFloat()));
 	}
-	getThreadCallback().processCallbacks();
+	getServerThreadCallback().processCallbacks();
 
 	return processed;
 }

@@ -18,43 +18,37 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UIProgressCounterh_INCLUDE__)
-#define __INCLUDE_UIProgressCounterh_INCLUDE__
+#if !defined(__INCLUDE_ClientUISynch_INCLUDE__)
+#define __INCLUDE_ClientUISynch_INCLUDE__
 
-#include <common/ProgressCounter.h>
-#include <engine/ThreadCallbackI.h>
-
-class UIProgressThreadCallback : public ThreadCallbackI
+class ClientUISyncAction
 {
 public:
-	UIProgressThreadCallback(const LangString &op, const float percentage);
-	virtual ~UIProgressThreadCallback();
+	ClientUISyncAction();
+	virtual ~ClientUISyncAction();
 
-	// ThreadCallbackI
-	virtual void callbackInvoked();
-
-private:
-	const LangString op_;
-	const float percentage_;
+	virtual void performUIAction() = 0;
 };
 
-class UIProgressCounter : public ProgressCounterI
+class ClientUISync  
 {
 public:
-	static ProgressCounter *instance();
+	ClientUISync();
+	virtual ~ClientUISync();
 
-	// ProgressCounterI
-	// ** Called from the client and server so careful with threading **
-	virtual void operationChange(const LangString &op);
-	virtual void progressChange(const LangString &op, const float percentage);
+	void checkForSyncFromClient();
+	void checkForSyncFromUI();
 
-private:
-	static ProgressCounter *instance_;
+	void addClientUISyncAction(ClientUISyncAction *action);
 
-	UIProgressCounter ();
-	virtual ~UIProgressCounter ();
-
-	time_t lastTime_;
+	bool currentlySynching() { return currentlySynching_; }
+protected:
+	int actionCount_;
+	int actionsSize_;
+	ClientUISyncAction **actions_;
+	bool currentlySynching_;
+	boost::mutex syncMutex_;
+	boost::condition_variable syncCond_;
 };
 
 #endif

@@ -49,18 +49,17 @@ ClientState::~ClientState()
 
 void ClientState::setState(ClientStateEnum newState)
 {
-	currentState_ = newState;
-	switch (currentState_) 
-	{
-	case StateInitialize:
-		clientInitialize_->enterState();
-		break;
-	}
-
 	for (int i=0; i<sizeof(STATE_NAMES)/sizeof(STATE_NAME); i++)
 	{
 		if (STATE_NAMES[i].state == newState) 
 		{
+			currentState_ = newState;
+			switch (currentState_) 
+			{
+			case StateInitialize:
+				clientInitialize_->enterState();
+				break;
+			}
 			break;
 		}
 	}

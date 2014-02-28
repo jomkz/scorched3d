@@ -28,6 +28,7 @@
 #include <common/FileLogger.h>
 #include <lang/Lang.h>
 #include <client/ScorchedClient.h>
+#include <client/ClientUISync.h>
 
 ScorchedUI *ScorchedUI::instance_(0);
 
@@ -75,11 +76,11 @@ bool ScorchedUI::go()
 	if (!ogreSystem_->createUI()) return false;
 
 	// Do some stuff to display the level early
-	ScorchedClient::startClientForDebug();
-	uiState_->setState(UIState::StatePlaying);
+	//ScorchedClient::startClientForDebug();
+	//uiState_->setState(UIState::StatePlaying);
 
 	// Create the first scene
-	//uiState_->setState(UIState::StateMainMenu);
+	uiState_->setState(UIState::StateMainMenu);
 
 	Clock timer;
 	while(!quit_)
@@ -102,6 +103,9 @@ bool ScorchedUI::go()
 		{
 			break;
 		}
+
+		// Update UI
+		ScorchedClient::getClientUISync().checkForSyncFromUI();
 	}
 
 	Lang::instance()->saveUndefined();

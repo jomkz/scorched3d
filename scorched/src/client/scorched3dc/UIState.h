@@ -22,6 +22,7 @@
 #define __INCLUDE_UIStateh_INCLUDE__
 
 #include <engine/ThreadCallback.h>
+#include <client/ClientUISync.h>
 
 class UIStateI;
 class UIStateMainMenu;
@@ -53,20 +54,17 @@ protected:
 	UIStateJoining *uiStateJoining_;
 	UIStatePlaying *uiStatePlaying_;
 	UIStateI *currentState_;
-	ThreadCallback uiThreadCallback_;
-
-private:
 
 };
 
-class UIStateThreadCallback : public ThreadCallbackI
+class UIStateClientUISyncAction : public ClientUISyncAction
 {
 public:
-	UIStateThreadCallback(UIState::State state);
-	virtual ~UIStateThreadCallback();
+	UIStateClientUISyncAction(UIState::State state);
+	virtual ~UIStateClientUISyncAction();
 
 	// ThreadCallbackI
-	virtual void callbackInvoked();
+	virtual void performUIAction();
 
 private:
 	UIState::State state_;

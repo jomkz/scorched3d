@@ -434,6 +434,7 @@
     <ClCompile Include="..\client\ClientState.cpp" />
     <ClCompile Include="..\client\ClientStateInitialize.cpp" />
     <ClCompile Include="..\client\ClientStateLoadLevel.cpp" />
+    <ClCompile Include="..\client\ClientUISync.cpp" />
     <ClCompile Include="..\client\ScorchedClient.cpp" />
     <ClCompile Include="..\client\SecureID.cpp" />
     <ClCompile Include="..\client\UniqueIdStore.cpp" />
@@ -896,6 +897,7 @@
     <ClInclude Include="..\client\ClientState.h" />
     <ClInclude Include="..\client\ClientStateInitialize.h" />
     <ClInclude Include="..\client\ClientStateLoadLevel.h" />
+    <ClInclude Include="..\client\ClientUISync.h" />
     <ClInclude Include="..\client\ScorchedClient.h" />
     <ClInclude Include="..\client\SecureID.h" />
     <ClInclude Include="..\client\UniqueIdStore.h" />

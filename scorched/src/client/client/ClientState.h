@@ -31,12 +31,7 @@ class ClientState
 public:
 	enum ClientStateEnum
 	{
-		StateOptions = 1,
-		StateConnect,
-		StateDisconnected,
-		StateLoadFiles,
-
-		StateBuyWeapons,
+		StateBuyWeapons = 1,
 		StateAutoDefense,
 		StatePlaying,
 		StateScore,

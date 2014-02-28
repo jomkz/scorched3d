@@ -83,7 +83,7 @@ public:
 	ServerFileServer &getServerFileServer() { return *serverFileServer_; }
 	EconomyStore &getEconomyStore() { return *economyStore_; }
 	EventHandlerDataBase *getEventHandlerDataBase() { return eventHandlerDataBase_; }
-	static ThreadCallback &getThreadCallback() { return *threadCallback_; }
+	static ThreadCallback &getServerThreadCallback() { return *threadCallback_; }
 
 protected:
 	static ScorchedServer *instance_;

@@ -1428,6 +1428,9 @@
     <ClCompile Include="..\..\common\landscapemap\HeightMapModifierNoise.cpp">
       <Filter>landscapemap</Filter>
     </ClCompile>
+    <ClCompile Include="..\client\ClientUISync.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -2797,6 +2800,9 @@
     </ClInclude>
     <ClInclude Include="..\..\common\landscapemap\HeightMapModifierNoise.h">
       <Filter>landscapemap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientUISync.h">
+      <Filter>client</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

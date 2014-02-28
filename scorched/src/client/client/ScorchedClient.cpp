@@ -26,6 +26,7 @@
 #include <client/ClientChannelManager.h>
 #include <client/ClientHandlers.h>
 #include <client/ClientOptions.h>
+#include <client/ClientUISync.h>
 #include <net/NetInterface.h>
 #include <net/NetServerTCP3.h>
 #include <net/NetLoopBack.h>
@@ -43,6 +44,7 @@
 
 TargetSpace *ScorchedClient::targetSpace_ = new TargetSpace();
 ThreadCallback *ScorchedClient::threadCallback_ = new ThreadCallback();
+ClientUISync *ScorchedClient::clientUISync_ = new ClientUISync();
 
 static time_t startTime = 0;
 ScorchedClient *ScorchedClient::instance_ = 0;
@@ -55,7 +57,10 @@ static bool clientStopped = false;
 ScorchedClient *ScorchedClient::instance()
 {
 	DIALOG_ASSERT(instance_);
-	DIALOG_ASSERT(thread_id == boost::this_thread::get_id());
+	if (!clientUISync_->currentlySynching())
+	{
+		DIALOG_ASSERT(thread_id == boost::this_thread::get_id());
+	}
 	return instance_;
 }
 
@@ -257,7 +262,7 @@ void ScorchedClient::serverStartedServerThread()
 	// This method is called by the server thread so switch flow to the client thread
 	ThreadCallbackI *callback = new ThreadCallbackIAdapter<ScorchedClient>(
 		instance_, &ScorchedClient::serverStartedClientThread);
-	getThreadCallback().addCallback(callback);
+	getClientThreadCallback().addCallback(callback);
 }
 
 void ScorchedClient::serverStartedClientThread()
@@ -297,7 +302,9 @@ bool ScorchedClient::clientLoop()
 			}
 		}
 	}
-	getThreadCallback().processCallbacks();
+	getClientThreadCallback().processCallbacks();
+
+	clientUISync_->checkForSyncFromClient();
 
 	return processed;
 }

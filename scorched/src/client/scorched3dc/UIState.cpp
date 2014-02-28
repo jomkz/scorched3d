@@ -25,6 +25,7 @@
 #include <scorched3dc/UIStateProgress.h>
 #include <scorched3dc/UIStateJoining.h>
 #include <scorched3dc/UIStatePlaying.h>
+#include <client/ScorchedClient.h>
 
 UIState::UIState() : currentState_(0)
 {
@@ -65,7 +66,8 @@ void UIState::setState(State nextState)
 
 void UIState::setStateNonUIThread(State nextState)
 {
-	uiThreadCallback_.addCallback(new UIStateThreadCallback(nextState));
+	ScorchedClient::getClientUISync().addClientUISyncAction(
+		new UIStateClientUISyncAction(nextState));
 }
 
 void UIState::updateState(float frameTime)
@@ -73,16 +75,17 @@ void UIState::updateState(float frameTime)
 	currentState_->updateState(frameTime);
 }
 
-UIStateThreadCallback::UIStateThreadCallback(UIState::State state) :
+UIStateClientUISyncAction::UIStateClientUISyncAction(UIState::State state) :
 	state_(state)
 {
 }
 
-UIStateThreadCallback::~UIStateThreadCallback()
+UIStateClientUISyncAction::~UIStateClientUISyncAction()
 {
 }
 
-void UIStateThreadCallback::callbackInvoked()
+void UIStateClientUISyncAction::performUIAction()
 {
 	ScorchedUI::instance()->getUIState().setState(state_);
+	delete this;
 }

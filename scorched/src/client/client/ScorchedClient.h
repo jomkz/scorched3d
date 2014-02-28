@@ -27,6 +27,7 @@
 class ParticleEngine;
 class SimulatorGameState;
 class ThreadCallback;
+class ClientUISync;
 class ClientState;
 class ClientSimulator;
 class ClientHandlers;
@@ -52,12 +53,14 @@ public:
 	ClientSimulator &getClientSimulator() { return *clientSimulator_; }
 	ClientHandlers &getClientHandlers() { return *clientHandlers_; }
 	ClientChannelManager &getClientChannelManager() { return *channelManager_; }
-	static ThreadCallback &getThreadCallback() { return *threadCallback_; }
+	static ThreadCallback &getClientThreadCallback() { return *threadCallback_; }
+	static ClientUISync &getClientUISync() { return *clientUISync_; }
 
 protected:
 	static ScorchedClient *instance_;
 	static TargetSpace *targetSpace_;
 	static ThreadCallback *threadCallback_;
+	static ClientUISync *clientUISync_;
 	ParticleEngine* particleEngine_;
 	ClientState *clientState_;
 	ClientSimulator *clientSimulator_;
