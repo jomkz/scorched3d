@@ -49,8 +49,18 @@ ClientOptions::ClientOptions() :
 		"The description of this host given to any servers for stats.", OptionEntry::DataRAccess | OptionEntry::DataNoRestore, ""),
 	validateServerIp_(options_, "ValidateServerIp",
 		"Checks if the server ip address matches the published address", OptionEntry::DataRAccess, true),
-	drawWater_(options_, "DrawWater",
-		"Should we draw the landscape water", OptionEntry::DataRWAccess, true)
+	waterAnimate_(options_, "WaterAnimate",
+		"Should we animate the landscape water", OptionEntry::DataRWAccess, true),
+	waterDraw_(options_, "WaterDraw",
+		"Should we draw the landscape water", OptionEntry::DataRWAccess, true),
+	waterWireframe_(options_, "WaterWireframe",
+		"Should we draw the landscape water as wireframe", OptionEntry::DataRWAccess, false),
+	landscapeDraw_(options_, "LandscapeDraw",
+		"Should we draw the landscape", OptionEntry::DataRWAccess, true),
+	cameraWireframe_(options_, "CameraWireframe",
+		"Should everything we draw be wireframe", OptionEntry::DataRWAccess, false),
+	targetsDraw_(options_, "TargetsDraw",
+		"Should we draw targets", OptionEntry::DataRWAccess, true)
 {
 }
 

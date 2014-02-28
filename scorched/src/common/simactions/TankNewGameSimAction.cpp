@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <simactions/TankNewGameSimAction.h>
-#include <placement/PlacementTankPosition.h>
 #include <landscapemap/DeformLandscape.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <engine/Simulator.h>

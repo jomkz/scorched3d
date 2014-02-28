@@ -445,6 +445,7 @@
     <ClCompile Include="..\console\ConsoleRuleMethodIAdapter.cpp" />
     <ClCompile Include="..\console\ConsoleRuleOptionsAdapter.cpp" />
     <ClCompile Include="..\console\ConsoleRules.cpp" />
+    <ClCompile Include="..\renderer\UITargetRenderer.cpp" />
     <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="GUIConsole.cpp" />
     <ClCompile Include="InputHandlerMouse.cpp" />
@@ -464,6 +465,7 @@
     <ClCompile Include="UIStatePlaying.cpp" />
     <ClCompile Include="UIStatePlayingEnv.cpp" />
     <ClCompile Include="UIStatePlayingLand.cpp" />
+    <ClCompile Include="UIStatePlayingTargets.cpp" />
     <ClCompile Include="UIStateProgress.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -906,6 +908,7 @@
     <ClInclude Include="..\console\ConsoleRuleMethodIAdapter.h" />
     <ClInclude Include="..\console\ConsoleRuleOptionsAdapter.h" />
     <ClInclude Include="..\console\ConsoleRules.h" />
+    <ClInclude Include="..\renderer\UITargetRenderer.h" />
     <ClInclude Include="CameraController.h" />
     <ClInclude Include="GUIConsole.h" />
     <ClInclude Include="InputHandlerMouse.h" />
@@ -921,6 +924,7 @@
     <ClInclude Include="UIStatePlaying.h" />
     <ClInclude Include="UIStatePlayingEnv.h" />
     <ClInclude Include="UIStatePlayingLand.h" />
+    <ClInclude Include="UIStatePlayingTargets.h" />
     <ClInclude Include="UIStateProgress.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

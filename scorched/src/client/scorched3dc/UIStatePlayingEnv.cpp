@@ -218,8 +218,18 @@ void UIStatePlayingEnv::updateLighting()
 void UIStatePlayingEnv::update(float frameTime)
 {
 	//updateLighting(); // Don't need to do this at the moment as the sky simulation is paused
-	if (ClientOptions::instance()->getDrawWater())
+	if (ClientOptions::instance()->getWaterAnimate())
 	{
 		hydraX_->update(frameTime);
+	}
+	if (ClientOptions::instance()->getWaterDraw() != hydraX_->isVisible())
+	{
+		hydraX_->setVisible(ClientOptions::instance()->getWaterDraw());
+	}
+	Ogre::PolygonMode waterPolyMode = 
+		ClientOptions::instance()->getWaterWireframe()?Ogre::PM_WIREFRAME:Ogre::PM_SOLID;
+	if (waterPolyMode != hydraX_->getPolygonMode())
+	{
+		hydraX_->setPolygonMode(waterPolyMode);
 	}
 }

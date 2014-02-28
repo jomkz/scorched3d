@@ -27,6 +27,7 @@
 #include <coms/ComsChannelMessage.h>
 #include <coms/ComsChannelTextMessage.h>
 #include <common/OptionsScorched.h>
+#include <common/Logger.h>
 #include <target/TargetContainer.h>
 #include <tank/Tank.h>
 #include <tank/TankState.h>
@@ -502,15 +503,6 @@ void ServerChannelManager::actualSend(const ChannelText &constText,
 	// Get the tank for this message (if any)
 	Tank *tank = ScorchedServer::instance()->getTargetContainer().getTankById(
 		text.getSrcPlayerId());
-
-	// Check that this channel exists
-	ChannelEntry *channelEntry = getChannelEntryByName(text.getChannel());
-	if (!channelEntry)
-	{
-		// This channel does not exist
-		return;
-	}
-
 	LangString filteredText(text.getMessage());
 	if (filter)
 	{
@@ -570,6 +562,14 @@ void ServerChannelManager::actualSend(const ChannelText &constText,
 
 	// Update the message with the filtered text
 	text.setMessage(filteredText);
+
+	// Check that this channel exists
+	ChannelEntry *channelEntry = getChannelEntryByName(text.getChannel());
+	if (!channelEntry)
+	{
+		// This channel does not exist
+		return;
+	}
 
 	// Send to all clients
 	std::map<unsigned int, DestinationEntry *>::iterator destItor;

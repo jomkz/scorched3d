@@ -32,6 +32,10 @@
 #include <server/ScorchedServer.h>
 #include <set>
 
+#ifndef S3D_SERVER
+#include <renderer/UITargetRenderer.h>
+#endif
+
 ComsMessageType ComsLoadLevelMessage::ComsLoadLevelMessageType("ComsLoadLevelMessageType");
 
 ComsLoadLevelMessage::ComsLoadLevelMessage() :
@@ -129,7 +133,7 @@ bool ComsLoadLevelMessage::loadTanks(ScorchedContext &context)
 #ifndef S3D_SERVER
 			if (!context.getServerMode())
 			{
-				//tank->setRenderer(new TargetRendererImplTank(tank));
+				tank->setRenderer(new UITargetRenderer(tank));
 			}
 #endif
 			context.getTargetContainer().addTarget(tank);

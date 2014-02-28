@@ -36,7 +36,8 @@ public:
 	ClientUISyncActionBuffer();
 	~ClientUISyncActionBuffer();
 
-	void addClientUISyncAction(ClientUISyncAction *action);
+	int addClientUISyncAction(ClientUISyncAction *action);
+	void removeClientUISyncAction(int position);
 
 	int getActionCount() { return actionCount_; }
 	void resetCount() { actionCount_ = 0; }
@@ -54,7 +55,8 @@ public:
 	virtual ~ClientUISyncFromClient() {}
 
 	virtual void checkForSyncFromClient() = 0;
-	virtual void addActionFromClient(ClientUISyncAction *action) = 0;
+	virtual int addActionFromClient(ClientUISyncAction *action) = 0;
+	virtual void removeActionFromClient(int position) = 0;
 };
 
 class ClientUISyncFromUI 
@@ -63,7 +65,8 @@ public:
 	virtual ~ClientUISyncFromUI() {}
 
 	virtual void checkForSyncFromUI() = 0;
-	virtual void addActionFromUI(ClientUISyncAction *action) = 0;
+	virtual int addActionFromUI(ClientUISyncAction *action) = 0;
+	virtual void removeActionFromUI(int position) = 0;
 };
 
 class ClientUISync : public ClientUISyncFromClient, 
@@ -76,8 +79,10 @@ public:
 	virtual void checkForSyncFromClient();
 	virtual void checkForSyncFromUI();
 
-	virtual void addActionFromClient(ClientUISyncAction *action);
-	virtual void addActionFromUI(ClientUISyncAction *action);
+	virtual int addActionFromClient(ClientUISyncAction *action);
+	virtual void removeActionFromClient(int position);
+	virtual int addActionFromUI(ClientUISyncAction *action);
+	virtual void removeActionFromUI(int position);
 
 	bool currentlySynching() { return currentlySynching_; }
 protected:

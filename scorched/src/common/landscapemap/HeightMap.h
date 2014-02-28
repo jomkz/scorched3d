@@ -54,11 +54,6 @@ public:
 		return fixed(0); }
 	fixed getInterpHeight(fixed w, fixed h);
 
-	inline HeightData &getHeightData(int w, int h) { 
-		if (w >= 0 && h >= 0 && w<=width_ && h<=height_) 
-			return heightData_[(width_+1) * h + w]; 
-		return EmptyHeightData; }
-
 	// Get normal functions
 	FixedVector &getNormal(int w, int h);
 	void getInterpNormal(fixed w, fixed h, FixedVector &normal);
@@ -70,7 +65,14 @@ public:
 
 	// Internal access to the data (for speed)
 	// Note: the internal size of the 2d array is (width + 1) * (height + 1)
-	HeightData *getHeightData() { return heightData_; }
+	inline HeightData *getHeightData() { return heightData_; }
+	inline HeightData *getHeightData(int h) { if (h >= 0 && h<=height_) 
+			return &heightData_[(width_+1) * h]; 
+		return 0; }
+	inline HeightData *getHeightData(int w, int h) { 
+		if (w >= 0 && h >= 0 && w<=width_ && h<=height_) 
+			return &heightData_[(width_+1) * h + w]; 
+		return 0; }
 
 protected:
 	bool invertedNormals_;

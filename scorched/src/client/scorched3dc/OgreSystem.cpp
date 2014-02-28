@@ -21,9 +21,13 @@
 #include <scorched3dc/OgreSystem.h>
 #include <scorched3dc/GUIConsole.h>
 
+float OgreSystem::OGRE_WORLD_SIZE(6000.0f);
+float OgreSystem::OGRE_WORLD_HEIGHT_SCALE(50.0f);
+float OgreSystem::OGRE_WORLD_SCALE(6000.0f / 128.0f);
+
 OgreSystem::OgreSystem() : 
 	ogreRoot_(0), ogreWindow_(0),
-	guiRenderer_(0)
+	guiRenderer_(0), landscapeSceneManager_(0)
 {
 }
 
@@ -93,6 +97,9 @@ bool OgreSystem::createWindow()
 		return false;
 	}
 
+	// Create scene manager
+	landscapeSceneManager_ = ogreRoot_->createSceneManager(Ogre::ST_GENERIC, "PlayingSceneManager");
+
 	// Setup some defaults
 	Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
 	Ogre::MaterialManager::getSingleton().setDefaultTextureFiltering(Ogre::TFO_ANISOTROPIC);
@@ -122,6 +129,9 @@ void OgreSystem::loadResources()
 
 	// General
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/bloom", "FileSystem", "General");
+
+	// Models
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/models", "FileSystem", "Models");
 
 	// load resources
 	Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();

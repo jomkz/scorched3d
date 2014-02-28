@@ -26,6 +26,7 @@
 
 class UIStatePlayingEnv;
 class UIStatePlayingLand;
+class UIStatePlayingTargets;
 class CameraController;
 class UIStatePlaying : public UIStateI, public CameraControllerHeightProvider
 {
@@ -46,6 +47,7 @@ protected:
 	CameraController *cameraController_;
 	UIStatePlayingEnv *env_;
 	UIStatePlayingLand *land_;
+	UIStatePlayingTargets *targets_;
 };
 
 #endif // __INCLUDE_UIStatePlayingh_INCLUDE__

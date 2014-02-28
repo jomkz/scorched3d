@@ -18,41 +18,21 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UIStatePlayingLandh_INCLUDE__)
-#define __INCLUDE_UIStatePlayingLandh_INCLUDE__
+#if !defined(__INCLUDE_UIStatePlayingTargetsh_INCLUDE__)
+#define __INCLUDE_UIStatePlayingTargetsh_INCLUDE__
 
-#include <Terrain/OgreTerrain.h>
-#include <Terrain/OgreTerrainGroup.h>
-#include <Hydrax/Hydrax.h>
-
-class UIStatePlayingLand
+class UIStatePlayingTargets 
 {
 public:
-	UIStatePlayingLand(Ogre::SceneManager* sceneMgr,
-		Ogre::Camera* camera,
-		Ogre::Light *sunLight,
-		Ogre::Light *shadowLight,
-		Hydrax::Hydrax *hydrax);
-	virtual ~UIStatePlayingLand();
+	UIStatePlayingTargets(Ogre::SceneManager* sceneMgr);
+	virtual ~UIStatePlayingTargets();
 
-	Ogre::Real getHeight(const Ogre::Vector3 &position);
-
-	void updateLandscapeTextures();
 	void update(float frameTime);
 
 protected:
-	Ogre::Camera* camera_;
 	Ogre::SceneManager* sceneMgr_;
-	Ogre::TerrainGlobalOptions *terrainGlobalOptions_;
-	Ogre::TerrainGroup *terrainGroup_;
-	Ogre::Light *sunLight_, *shadowLight_;
-	Hydrax::Hydrax *hydrax_;
 
 	void create();
-	void defineOptions();
-	void defineTerrain(long x, long y);
-	void createNormalMap(Ogre::Image &normalMapImage);
-	void initBlendMaps(Ogre::Terrain* terrain, Ogre::Image &normalMapImage, long tx, long ty);
 };
 
-#endif // __INCLUDE_UIStatePlayingLandh_INCLUDE__
+#endif // __INCLUDE_UIStatePlayingTargetsh_INCLUDE__

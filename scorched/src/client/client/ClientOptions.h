@@ -29,8 +29,23 @@ class ClientOptions
 public:
 	static ClientOptions *instance();
 
-	bool getDrawWater() { return drawWater_; }
-	OptionEntryBool &getDrawWaterEntry() { return drawWater_; }
+	bool getWaterAnimate() { return waterAnimate_; }
+	OptionEntryBool &getWaterAnimateEntry() { return waterAnimate_; }
+
+	bool getWaterDraw() { return waterDraw_; }
+	OptionEntryBool &getWaterDrawEntry() { return waterDraw_; }
+
+	bool getWaterWireframe() { return waterWireframe_; }
+	OptionEntryBool &getWaterWireframeEntry() { return waterWireframe_; }
+
+	bool getLandscapeDraw() { return landscapeDraw_; }
+	OptionEntryBool &getLandscapeDrawEntry() { return landscapeDraw_; }
+
+	bool getCameraWireframe() { return cameraWireframe_; }
+	OptionEntryBool &getCameraWireframeEntry() { return cameraWireframe_; }
+
+	bool getTargetsDraw() { return targetsDraw_; }
+	OptionEntryBool &getTargetsDrawEntry() { return targetsDraw_; }
 
 	bool getValidateServerIp() { return validateServerIp_; }
 	OptionEntryBool &getValidateServerIpEntry() { return validateServerIp_; }
@@ -54,7 +69,12 @@ protected:
 	std::list<OptionEntry *> options_;
 
 	ConsoleRuleOptionsAdapterHolder consoleHolder_;
-	OptionEntryBool drawWater_;
+	OptionEntryBool waterAnimate_;
+	OptionEntryBool waterDraw_;
+	OptionEntryBool waterWireframe_;
+	OptionEntryBool landscapeDraw_;
+	OptionEntryBool cameraWireframe_;
+	OptionEntryBool targetsDraw_;
 	OptionEntryBool validateServerIp_;
 	OptionEntryString hostDescription_;
 

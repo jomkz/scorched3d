@@ -21,14 +21,27 @@
 #if !defined(__INCLUDE_OgreSystemh_INCLUDE__)
 #define __INCLUDE_OgreSystemh_INCLUDE__
 
+
+
 class OgreSystem
 {
 public:
+	enum VisibiltyMasks
+	{
+		VisibiltyMaskLandscape = 0x00000001,
+		VisibiltyMaskTargets =   0x00000010,
+	};
+
+	static float OGRE_WORLD_SIZE;
+	static float OGRE_WORLD_HEIGHT_SCALE;
+	static float OGRE_WORLD_SCALE;
+
 	OgreSystem();
 	virtual ~OgreSystem();
 
 	Ogre::Root *getOgreRoot() { return ogreRoot_; }
 	Ogre::RenderWindow *getOgreRenderWindow() { return ogreWindow_; }
+	Ogre::SceneManager *getOgreLandscapeSceneManager() { return landscapeSceneManager_; }
 
 	bool create();
 	bool createUI();
@@ -37,6 +50,7 @@ protected:
 	// Ogre
 	Ogre::Root *ogreRoot_;
 	Ogre::RenderWindow* ogreWindow_;
+	Ogre::SceneManager* landscapeSceneManager_;
 
 	// CEGUI
 	CEGUI::OgreRenderer* guiRenderer_;

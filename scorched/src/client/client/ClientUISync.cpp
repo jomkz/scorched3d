@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <client/ClientUISync.h>
+#include <common/DefinesAssert.h>
 
 ClientUISyncAction::ClientUISyncAction()
 {
@@ -41,7 +42,7 @@ ClientUISyncActionBuffer::~ClientUISyncActionBuffer()
 	actions_ = 0;
 }
 
-void ClientUISyncActionBuffer::addClientUISyncAction(ClientUISyncAction *action)
+int ClientUISyncActionBuffer::addClientUISyncAction(ClientUISyncAction *action)
 {
 	if (actionCount_ == actionsSize_)
 	{
@@ -53,6 +54,13 @@ void ClientUISyncActionBuffer::addClientUISyncAction(ClientUISyncAction *action)
 	}
 	actions_[actionCount_] = action;
 	++actionCount_;
+	return actionCount_ - 1;
+}
+
+void ClientUISyncActionBuffer::removeClientUISyncAction(int position)
+{
+	DIALOG_ASSERT(position >= 0 && position < actionCount_);
+	actions_[position] = 0;
 }
 
 ClientUISync::ClientUISync() : currentlySynching_(false)
@@ -63,14 +71,24 @@ ClientUISync::~ClientUISync()
 {
 }
 
-void ClientUISync::addActionFromClient(ClientUISyncAction *action)
+int ClientUISync::addActionFromClient(ClientUISyncAction *action)
 {
-	actionsFromClient_.addClientUISyncAction(action);
+	return actionsFromClient_.addClientUISyncAction(action);
 }
 
-void ClientUISync::addActionFromUI(ClientUISyncAction *action)
+void ClientUISync::removeActionFromClient(int position)
 {
-	actionsFromUI_.addClientUISyncAction(action);
+	actionsFromClient_.removeClientUISyncAction(position);
+}
+
+int ClientUISync::addActionFromUI(ClientUISyncAction *action)
+{
+	return actionsFromUI_.addClientUISyncAction(action);
+}
+
+void ClientUISync::removeActionFromUI(int position)
+{
+	actionsFromUI_.removeClientUISyncAction(position);
 }
 
 void ClientUISync::checkForSyncFromClient()
@@ -98,7 +116,7 @@ void ClientUISync::checkForSyncFromUI()
 			ClientUISyncAction **currentAction = actionsFromClient_.getActions();
 			for (int i=0; i<actionsFromClient_.getActionCount(); ++i, ++currentAction)
 			{
-				(*currentAction)->performUIAction();
+				if (*currentAction) (*currentAction)->performUIAction();
 			}
 			actionsFromClient_.resetCount();
 		}
@@ -106,7 +124,7 @@ void ClientUISync::checkForSyncFromUI()
 			ClientUISyncAction **currentAction = actionsFromUI_.getActions();
 			for (int i=0; i<actionsFromUI_.getActionCount(); ++i, ++currentAction)
 			{
-				(*currentAction)->performUIAction();
+				if (*currentAction) (*currentAction)->performUIAction();
 			}
 			actionsFromUI_.resetCount();
 		}

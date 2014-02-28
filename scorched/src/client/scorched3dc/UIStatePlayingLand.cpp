@@ -23,6 +23,7 @@
 #include <scorched3dc/OgreSystem.h>
 #include <common/simplexnoise.h>
 #include <client/ScorchedClient.h>
+#include <client/ClientOptions.h>
 #include <landscapemap/LandscapeMaps.h>
 
 UIStatePlayingLand::UIStatePlayingLand(
@@ -33,8 +34,7 @@ UIStatePlayingLand::UIStatePlayingLand(
 	Hydrax::Hydrax *hydrax) : 
 	sceneMgr_(sceneMgr), camera_(camera), 
 	sunLight_(sunLight), shadowLight_(shadowLight),
-	hydrax_(hydrax),
-	worldSize_(6000.0f)
+	hydrax_(hydrax)
 {
 	create();
 }
@@ -49,8 +49,8 @@ void UIStatePlayingLand::create()
 	Ogre::RenderWindow *ogreRenderWindow = ScorchedUI::instance()->getOgreSystem().getOgreRenderWindow();
 
 	// Create the terrain objects
-	terrainGroup_ = new Ogre::TerrainGroup(sceneMgr_, Ogre::Terrain::ALIGN_X_Z, 129, worldSize_);
-    terrainGroup_->setOrigin(Ogre::Vector3::ZERO);
+	terrainGroup_ = new Ogre::TerrainGroup(sceneMgr_, Ogre::Terrain::ALIGN_X_Z, 129, OgreSystem::OGRE_WORLD_SIZE);
+    terrainGroup_->setOrigin(Ogre::Vector3(OgreSystem::OGRE_WORLD_SIZE / 2, 0, OgreSystem::OGRE_WORLD_SIZE + OgreSystem::OGRE_WORLD_SIZE / 2));
 
 	// Load terrain data
 	defineOptions();
@@ -93,6 +93,7 @@ void UIStatePlayingLand::defineOptions()
     terrainGlobalOptions_->setMaxPixelError(8);
 	terrainGlobalOptions_->setUseVertexCompressionWhenAvailable(false);
     terrainGlobalOptions_->setCompositeMapDistance(10000); 
+	terrainGlobalOptions_->setVisibilityFlags(OgreSystem::VisibiltyMaskLandscape);
 	terrainGlobalOptions_->setDefaultResourceGroup("Landscape");
 
     // Important to set these so that the terrain knows what to use for derived (non-realtime) data
@@ -103,13 +104,12 @@ void UIStatePlayingLand::defineOptions()
     // Configure default import settings for if we use imported image
     Ogre::Terrain::ImportData& defaultimp = terrainGroup_->getDefaultImportSettings();
     defaultimp.terrainSize = 129; 
-    defaultimp.worldSize = worldSize_;   
-    defaultimp.inputScale = 50; 
+    defaultimp.worldSize = OgreSystem::OGRE_WORLD_SIZE;   
+	defaultimp.inputScale = OgreSystem::OGRE_WORLD_HEIGHT_SCALE; 
     defaultimp.minBatchSize = 33;
     defaultimp.maxBatchSize = 65;
 
     // textures
-	
 	defaultimp.layerList.resize(5);
 	defaultimp.layerList[0].worldSize = 100;
 	defaultimp.layerList[0].textureNames.push_back("TxUscrubplainU01.dds");
@@ -153,12 +153,13 @@ void UIStatePlayingLand::createNormalMap(Ogre::Image &normalMapImage)
 		(hMap.getMapHeight() + 1)*(hMap.getMapWidth() + 1)*sizeof(unsigned char), 
 		Ogre::MEMCATEGORY_GENERAL);
 	unsigned char *currentRawData = rawData;
-	HeightMap::HeightData *heightData = hMap.getHeightData();
 	for (int y=0; y<hMap.getMapHeight() + 1; y++)
 	{
-		for (int x=0; x<hMap.getMapWidth() + 1; x++, currentRawData++, heightData++)
+		HeightMap::HeightData *data = hMap.getHeightData(hMap.getMapHeight() - y);
+		for (int x=0; x<hMap.getMapWidth() + 1; x++, currentRawData++, data++)
 		{
-			*currentRawData = (unsigned char) ((heightData->normal[2].asFloat() + 1.0f) * 126.0f);
+			FixedVector &normal = data->normal;
+			*currentRawData = (unsigned char) ((normal[2].asFloat() + 1.0f) * 126.0f);
 		}
 	}
 	
@@ -178,9 +179,10 @@ void UIStatePlayingLand::defineTerrain(long tx, long ty)
 	float *currentPoint = heightData;
 	for (int y=0; y<129; y++)
 	{
-		for (int x=0; x<129; x++, currentPoint++)
+		HeightMap::HeightData *data = map.getHeightData(startX, map.getMapHeight() - (startY + y));
+		for (int x=0; x<129; x++, currentPoint++, data++)
 		{
-			float height = map.getHeight(startX + x, startY + y).asFloat();
+			float height = data->height.asFloat();
 			*currentPoint = height;
 		}
 	}
@@ -261,7 +263,8 @@ void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, Ogre::Image &norm
 			// This stops the height bands from being too uniform
 			float offSetHeight = octave_noise_2d(1, 0.8f, 1.0f / 16.0f, -hxf, -hyf) 
 				* maxOffsetHeight;
-			float height = terrain->getHeightAtTerrainPosition(tsx, tsy) / 50.0f - offSetHeight;
+			float height = terrain->getHeightAtTerrainPosition(tsx, tsy) / 
+				OgreSystem::OGRE_WORLD_HEIGHT_SCALE - offSetHeight;
 
 			// Find the index of the current texture by deviding the height into strips
 			float heightPer = (height / maxHeight) * (float) numberSources;
@@ -362,5 +365,14 @@ void UIStatePlayingLand::updateLandscapeTextures()
 
 			hydrax_->getMaterialManager()->addDepthTechnique(technique);
 		}
+	}
+}
+
+void UIStatePlayingLand::update(float frameTime)
+{
+	bool landscapeEnabled = (sceneMgr_->getVisibilityMask() & OgreSystem::VisibiltyMaskLandscape) != 0;
+	if (landscapeEnabled != ClientOptions::instance()->getLandscapeDraw())
+	{
+		sceneMgr_->setVisibilityMask(sceneMgr_->getVisibilityMask() ^ OgreSystem::VisibiltyMaskLandscape);
 	}
 }

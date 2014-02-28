@@ -70,6 +70,9 @@
     <Filter Include="console">
       <UniqueIdentifier>{0ee50572-b9c2-4a50-8da9-e19eb218d829}</UniqueIdentifier>
     </Filter>
+    <Filter Include="renderer">
+      <UniqueIdentifier>{f24b74d3-76cd-450e-8e9a-5de357c684b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1424,6 +1427,12 @@
     </ClCompile>
     <ClCompile Include="..\console\ConsoleRuleOptionsAdapter.cpp">
       <Filter>console</Filter>
+    </ClCompile>
+    <ClCompile Include="UIStatePlayingTargets.cpp">
+      <Filter>scorched3dc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\UITargetRenderer.cpp">
+      <Filter>renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2791,6 +2800,12 @@
     </ClInclude>
     <ClInclude Include="..\console\ConsoleRuleOptionsAdapter.h">
       <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="UIStatePlayingTargets.h">
+      <Filter>scorched3dc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\UITargetRenderer.h">
+      <Filter>renderer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

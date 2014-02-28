@@ -21,6 +21,7 @@
 #include <scorched3dc/UIStatePlaying.h>
 #include <scorched3dc/UIStatePlayingEnv.h>
 #include <scorched3dc/UIStatePlayingLand.h>
+#include <scorched3dc/UIStatePlayingTargets.h>
 #include <scorched3dc/CameraController.h>
 #include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/OgreSystem.h>
@@ -35,6 +36,7 @@ UIStatePlaying::UIStatePlaying() :
 
 UIStatePlaying::~UIStatePlaying()
 {
+	delete targets_;
 	delete cameraController_;
 	delete env_;
 	delete land_;
@@ -44,11 +46,10 @@ void UIStatePlaying::createState()
 {
 	Ogre::LogManager::getSingletonPtr()->logMessage("*** Creating Playing Scene ***");
 
-	Ogre::Root *ogreRoot = ScorchedUI::instance()->getOgreSystem().getOgreRoot();
+	sceneMgr_ = ScorchedUI::instance()->getOgreSystem().getOgreLandscapeSceneManager();
 	Ogre::RenderWindow *ogreRenderWindow = ScorchedUI::instance()->getOgreSystem().getOgreRenderWindow();
 
-	// Create scene manager
-	sceneMgr_ = ogreRoot->createSceneManager(Ogre::ST_GENERIC, "PlayingSceneManager");
+	// Create camera 
 	cameraController_ = new CameraController(sceneMgr_);
 	cameraController_->setHeightProvider(this);
 
@@ -70,6 +71,9 @@ void UIStatePlaying::createState()
 		env_->getSunLight(), env_->getShadowLight(), env_->getHydraX());
 	land_->updateLandscapeTextures();
 
+	// Create the targets
+	targets_ = new UIStatePlayingTargets(sceneMgr_);
+
 	// Bloom compositor
 	Ogre::CompositorManager::getSingleton().addCompositor(vp, "Bloom2");
 	Ogre::CompositorManager::getSingleton().setCompositorEnabled(vp, "Bloom2", false);
@@ -84,6 +88,8 @@ void UIStatePlaying::updateState(float frameTime)
 {
 	cameraController_->update(frameTime);
 	env_->update(frameTime);
+	land_->update(frameTime);
+	targets_->update(frameTime);
 }
 
 Ogre::Real UIStatePlaying::getHeight(const Ogre::Vector3 &position)

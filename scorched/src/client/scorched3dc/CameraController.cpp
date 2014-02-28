@@ -22,6 +22,7 @@
 #include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/OgreSystem.h>
 #include <scorched3dc/InputManager.h>
+#include <client/ClientOptions.h>
 
 CameraController::CameraController(
 	Ogre::SceneManager* sceneMgr) : 
@@ -79,6 +80,12 @@ void CameraController::scroll(Ogre::Real distance, Ogre::Real rotation)
 
 void CameraController::update(float elapsedTime)
 {
+	Ogre::PolygonMode wantedMode = ClientOptions::instance()->getCameraWireframe()?Ogre::PM_WIREFRAME:Ogre::PM_SOLID;
+	if (camera_->getPolygonMode() != wantedMode)
+	{
+		camera_->setPolygonMode(wantedMode);
+	}
+
 	InputManager &inputManager = ScorchedUI::instance()->getInputManager();
 	if (inputManager.isKeyDown(CEGUI::Key::W))
 	{
