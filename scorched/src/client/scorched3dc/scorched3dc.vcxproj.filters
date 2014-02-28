@@ -1443,6 +1443,9 @@
     <ClCompile Include="..\uiactions\UITargetRenderer.cpp">
       <Filter>uiactions</Filter>
     </ClCompile>
+    <ClCompile Include="InputHandlerKeyboard.cpp">
+      <Filter>scorched3dc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -2821,6 +2824,9 @@
     </ClInclude>
     <ClInclude Include="..\uiactions\UITargetRenderer.h">
       <Filter>uiactions</Filter>
+    </ClInclude>
+    <ClInclude Include="InputHandlerKeyboard.h">
+      <Filter>scorched3dc</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

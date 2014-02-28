@@ -40,7 +40,7 @@ UITargetRenderer::~UITargetRenderer()
 	}
 	if (targetNode_)
 	{
-		// TODO: Destroy node
+		OgreSystem::destroySceneNode(targetNode_);
 		targetNode_ = 0;
 		targetEntity_ = 0;
 	}
@@ -98,5 +98,10 @@ void UITargetRenderer::create()
 	targetEntity_->setVisibilityFlags(OgreSystem::VisibiltyMaskTargets);
 	targetNode_ = sceneManager->getRootSceneNode()->createChildSceneNode(nodeName);
 	targetNode_->attachObject(targetEntity_);
-	targetNode_->setScale(40.0f, 40.0f, 40.0f);
+	targetNode_->setScale(30.0f, 30.0f, 30.0f);
+
+	Ogre::SkeletonInstance* skel = targetEntity_->getSkeleton();
+	Ogre::Bone* manuallyControlledBone = skel->getBone("Gun");
+	manuallyControlledBone->setManuallyControlled(true);
+	manuallyControlledBone->pitch(Ogre::Degree(45.0f));
 }

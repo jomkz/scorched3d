@@ -24,6 +24,7 @@
 #include <list>
 
 class InputHandlerMouse;
+class InputHandlerKeyboard;
 class InputManager :
 	public Ogre::FrameListener, 
 	public Ogre::WindowEventListener, 
@@ -39,7 +40,10 @@ public:
 	void addMouseHandler(InputHandlerMouse *handler);
 	void removeMouseHandler(InputHandlerMouse *handler);
 
-	bool isKeyDown(CEGUI::Key::Scan key);
+	void addKeyboardHandler(InputHandlerKeyboard *handler);
+	void removeKeyboardHandler(InputHandlerKeyboard *handler);
+
+	bool isKeyDown(OIS::KeyCode key);
 
 	// Ogre::FrameListener
 	virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
@@ -67,6 +71,7 @@ protected:
 	
 	// Mouse handling
 	std::list<InputHandlerMouse *> mouseHandlers_;
+	std::list<InputHandlerKeyboard *> keyboardHandlers_;
 	int mouseDownButton_, mouseDownX_, mouseDownY_;
 	bool mouseDragging_;
 };

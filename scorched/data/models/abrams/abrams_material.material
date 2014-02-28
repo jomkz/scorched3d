@@ -1,12 +1,12 @@
-// Material03 genrated by blender2ogre 0.6.0
+// abrams_material genrated by blender2ogre 0.6.0
 
-material Material03 
+material abrams_material 
 {
     receive_shadows on 
 
     technique
     {
-        pass Material03
+        pass abrams_material
         {
             ambient 0.800000011920929 0.800000011920929 0.800000011920929 1.0
             diffuse 0.6400000190734865 0.6400000190734865 0.6400000190734865 1.0

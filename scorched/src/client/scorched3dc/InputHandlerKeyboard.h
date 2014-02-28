@@ -18,23 +18,17 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <scorched3dc/UIStateProgress.h>
-#include <dialogs/GUIProgressCounter.h>
+#if !defined(__INCLUDE_InputHandlerKeyboardh_INCLUDE__)
+#define __INCLUDE_InputHandlerKeyboardh_INCLUDE__
 
-UIStateProgress::UIStateProgress() : UIStateI(UIState::StateProgress)
+class InputHandlerKeyboard
 {
-}
+public:
+	InputHandlerKeyboard();
+	virtual ~InputHandlerKeyboard();
 
-UIStateProgress::~UIStateProgress()
-{
-}
+	virtual void keyPressed(const OIS::KeyEvent &arg) {}
+	virtual void keyReleased(const OIS::KeyEvent &arg) {}
+};
 
-void UIStateProgress::createState()
-{
-	GUIProgress::instance()->setVisible(true);
-}
-
-void UIStateProgress::destroyState()
-{
-	GUIProgress::instance()->setVisible(false);
-}
+#endif // __INCLUDE_InputHandlerKeyboardh_INCLUDE__

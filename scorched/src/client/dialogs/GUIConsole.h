@@ -22,6 +22,7 @@
 #define AFX_GUIConsole_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_
 
 #include <engine/ThreadCallbackI.h>
+#include <scorched3dc/InputHandlerKeyboard.h>
 #include <common/LoggerI.h>
 #include <vector>
 
@@ -51,7 +52,7 @@ protected:
 	CEGUI::String currentText_;
 };
 
-class GUIConsole : public LoggerI
+class GUIConsole : public LoggerI, public InputHandlerKeyboard
 {
 public:
 	static GUIConsole *instance();
@@ -64,6 +65,10 @@ public:
 
 	// LoggerI
 	virtual void logMessage(LoggerInfo &info);
+
+	// InputHandlerKeyboard
+	virtual void keyPressed(const OIS::KeyEvent &arg);
+	virtual void keyReleased(const OIS::KeyEvent &arg);
 
 protected:
 	void create();   

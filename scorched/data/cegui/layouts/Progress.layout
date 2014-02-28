@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout version="4" >
+    <Window type="OgreTray/StaticText" name="StaticText" >
+        <Property name="Area" value="{{0,0},{1,-53},{1,0},{1,0}}" />
+        <Property name="Text" value="Test" />
+        <Property name="MaxSize" value="{{1,0},{1,0}}" />
+        <Property name="HorzFormatting" value="WordWrapCentreAligned" />
+        <Property name="VertFormatting" value="TopAligned" />
+        <Property name="HorzScrollPageSize" value="1254" />
+        <Property name="VertScrollPageSize" value="27" />
+        <Property name="HorzScrollDocumentSize" value="22" />
+        <Property name="VertScrollDocumentSize" value="12.4227" />
+        <AutoWindow namePath="__auto_hscrollbar__" >
+            <AutoWindow namePath="__auto_incbtn__" >
+                <Property name="Visible" value="False" />
+            </AutoWindow>
+            <AutoWindow namePath="__auto_decbtn__" >
+                <Property name="Visible" value="False" />
+            </AutoWindow>
+        </AutoWindow>
+        <AutoWindow namePath="__auto_vscrollbar__" >
+            <AutoWindow namePath="__auto_incbtn__" >
+                <Property name="Visible" value="False" />
+            </AutoWindow>
+            <AutoWindow namePath="__auto_decbtn__" >
+                <Property name="Visible" value="False" />
+            </AutoWindow>
+        </AutoWindow>
+        <Window type="OgreTray/ProgressBar" name="ProgressBar" >
+            <Property name="Area" value="{{0,5},{1,-25},{1,-5},{1,-5}}" />
+            <Property name="StepSize" value="0.01" />
+        </Window>
+    </Window>
+</GUILayout>

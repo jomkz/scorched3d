@@ -20,6 +20,7 @@
 
 #include <common/OptionsGame.h>
 #include <common/Defines.h>
+#include <common/Logger.h>
 #include <string.h>
 
 static OptionEntryEnum::EnumEntry scoreEnum[] =
@@ -444,6 +445,8 @@ bool OptionsGame::writeOptionsToFile(const std::string &filePath, bool allOption
 
 bool OptionsGame::readOptionsFromFile(const std::string &filePath)
 {
+	Logger::log(S3D::formatStringBuffer("Loading game options from file %s", filePath.c_str()));
+
 	std::list<OptionEntry *> saveOptions = 
 		playerTypeOptions_; // Note: The players are also loaded
         std::list<OptionEntry *>::iterator itor;

@@ -19,6 +19,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <dialogs/GUIConsole.h>
+#include <scorched3dc/ScorchedUI.h>
+#include <scorched3dc/InputManager.h>
 #include <client/ScorchedClient.h>
 #include <console/Console.h>
 #include <engine/ThreadCallback.h>
@@ -82,6 +84,7 @@ void GUIConsole::create()
 	CEGUI::WindowManager *pWindowManager = CEGUI::WindowManager::getSingletonPtr();
 	consoleWindow_ = pWindowManager->loadLayoutFromFile("GUIConsole.layout");
  
+	ScorchedUI::instance()->getInputManager().addKeyboardHandler(this);
 	if (consoleWindow_)
 	{
 		CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow()->addChild(consoleWindow_);
@@ -161,6 +164,9 @@ bool GUIConsole::handle_keyDownSubmitted(const CEGUI::EventArgs &e)
 		case CEGUI::Key::End:
 			editBox_->setCaretIndex(99999);
 			return true;
+		case CEGUI::Key::Grave:
+			setVisible(false);
+			return true;
 		}
 	}
 	return false;
@@ -213,11 +219,28 @@ void GUIConsole::setVisible(bool visible)
 {
     consoleWindow_->setVisible(visible);
  
-    if(visible) editBox_->activate();
+    if(visible) 
+	{
+		editBox_->activate();
+		editBox_->setText("");
+	}
     else editBox_->deactivate();
 }
  
 bool GUIConsole::isVisible()
 {
     return consoleWindow_->isVisible();
+}
+
+void GUIConsole::keyPressed(const OIS::KeyEvent &arg)
+{
+	if (arg.key == OIS::KC_GRAVE)
+	{
+		setVisible(!isVisible());
+	}
+}
+
+void GUIConsole::keyReleased(const OIS::KeyEvent &arg)
+{
+
 }

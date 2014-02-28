@@ -25,6 +25,30 @@
 #include <engine/ThreadCallbackI.h>
 #include <engine/ThreadCallback.h>
 
+class GUIProgress
+{
+public:
+	static GUIProgress *instance();
+
+	void setVisible(bool visible);
+	bool isVisible(); 
+
+	CEGUI::Window *getStaticText() { return staticText_; }
+	CEGUI::ProgressBar *getProgressBar() { return progressBar_; }
+
+protected:
+	void create();   
+ 
+	float totalTime_;
+	int frameCount_;
+	CEGUI::Window *window_, *staticText_;
+	CEGUI::ProgressBar *progressBar_;
+private:
+	GUIProgress();
+	virtual ~GUIProgress();
+
+};
+
 class GUIProgressThreadCallback : public ThreadCallbackI
 {
 public:

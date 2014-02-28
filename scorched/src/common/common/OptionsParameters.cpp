@@ -23,7 +23,7 @@
 
 OptionsParameters::OptionsParameters() :
 	settingsdir_(options_, "settingsdir",
-		"The directory in the users home directory that the scorched3d settings are stored in.", 0, ".scorched3d"),
+		"The directory in the users home directory that the scorched3d settings are stored in.", 0, ".scorched3do"),
 	writefulloptions_(options_, "writefulloptions",
 		"When writing options files write all options even if they are the default", 0, false),
 	rewriteoptions_(options_, "rewriteoptions",

@@ -165,7 +165,7 @@ bool OgreSystem::createUI()
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
 	CEGUI::Window *root = wmgr.loadLayoutFromFile("Root.layout");
 	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(root);
-	GUIConsole::instance()->setVisible(true);
+	GUIConsole::instance()->setVisible(false);
 	GUIFrameTimer::instance()->setVisible(true);
 	return true;
 }

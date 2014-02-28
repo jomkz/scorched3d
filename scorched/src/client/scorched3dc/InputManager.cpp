@@ -20,6 +20,7 @@
 
 #include <scorched3dc/InputManager.h>
 #include <scorched3dc/InputHandlerMouse.h>
+#include <scorched3dc/InputHandlerKeyboard.h>
 
 static CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID)
 {
@@ -108,6 +109,12 @@ bool InputManager::keyPressed(const OIS::KeyEvent &arg)
 		!sys.getDefaultGUIContext().injectChar(arg.text))
 	{
 		if (arg.key < 255) keyDownState_[arg.key] = true;
+		std::list<InputHandlerKeyboard *>::iterator itor = keyboardHandlers_.begin();
+		std::list<InputHandlerKeyboard *>::iterator endItor = keyboardHandlers_.end();
+		for (;itor != endItor; ++itor)
+		{
+			(*itor)->keyPressed(arg);
+		}
 	}
 	return true;
 }
@@ -117,11 +124,17 @@ bool InputManager::keyReleased(const OIS::KeyEvent &arg)
 	if (!CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp((CEGUI::Key::Scan) arg.key))
 	{
 		if (arg.key < 255) keyDownState_[arg.key] = false;
+		std::list<InputHandlerKeyboard *>::iterator itor = keyboardHandlers_.begin();
+		std::list<InputHandlerKeyboard *>::iterator endItor = keyboardHandlers_.end();
+		for (;itor != endItor; ++itor)
+		{
+			(*itor)->keyReleased(arg);
+		}
 	}
 	return true;
 }
 
-bool InputManager::isKeyDown(CEGUI::Key::Scan key)
+bool InputManager::isKeyDown(OIS::KeyCode key)
 {
 	if (key < 255) return keyDownState_[key];
 	return false;
@@ -262,4 +275,14 @@ void InputManager::addMouseHandler(InputHandlerMouse *handler)
 void InputManager::removeMouseHandler(InputHandlerMouse *handler)
 {
 	mouseHandlers_.remove(handler);
+}
+
+void InputManager::addKeyboardHandler(InputHandlerKeyboard *handler)
+{
+	keyboardHandlers_.push_back(handler);
+}
+
+void InputManager::removeKeyboardHandler(InputHandlerKeyboard *handler)
+{
+	keyboardHandlers_.remove(handler);
 }

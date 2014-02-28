@@ -451,6 +451,7 @@
     <ClCompile Include="..\uiactions\UILandscapeDeformAction.cpp" />
     <ClCompile Include="..\uiactions\UITargetRenderer.cpp" />
     <ClCompile Include="CameraController.cpp" />
+    <ClCompile Include="InputHandlerKeyboard.cpp" />
     <ClCompile Include="InputHandlerMouse.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
@@ -916,6 +917,7 @@
     <ClInclude Include="..\uiactions\UILandscapeDeformAction.h" />
     <ClInclude Include="..\uiactions\UITargetRenderer.h" />
     <ClInclude Include="CameraController.h" />
+    <ClInclude Include="InputHandlerKeyboard.h" />
     <ClInclude Include="InputHandlerMouse.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="OgreSystem.h" />

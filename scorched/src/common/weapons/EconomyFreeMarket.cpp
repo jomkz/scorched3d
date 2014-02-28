@@ -63,10 +63,8 @@ bool EconomyFreeMarket::loadPrices()
 	XMLFile file;
 	if (!file.readFile(getEconomyFileName()))
 	{
-		S3D::dialogMessage("EconomyFreeMarket", S3D::formatStringBuffer(
-			"Failed to parse freemarket.xml file : %s",
-			file.getParserError()));
-		return false;
+		Logger::log(S3D::formatStringBuffer("Failed to parse freemarket.xml file : %s", file.getParserError()));
+		return true;
 	}
 
 	// If there are entries in the file
