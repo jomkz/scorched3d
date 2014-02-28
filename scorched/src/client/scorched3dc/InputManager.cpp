@@ -91,26 +91,26 @@ bool InputManager::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	return true;
 }
 
-bool InputManager::keyPressed( const OIS::KeyEvent &arg )
+bool InputManager::keyPressed(const OIS::KeyEvent &arg)
 {
 	CEGUI::System &sys = CEGUI::System::getSingleton();
-	sys.injectKeyDown(arg.key);
-	sys.injectChar(arg.text);
+	sys.getDefaultGUIContext().injectKeyDown((CEGUI::Key::Scan) arg.key);
+	sys.getDefaultGUIContext().injectChar(arg.text);
 	return true;
 }
 
-bool InputManager::keyReleased( const OIS::KeyEvent &arg )
+bool InputManager::keyReleased(const OIS::KeyEvent &arg)
 {
-	CEGUI::System::getSingleton().injectKeyUp(arg.key);
+	CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp((CEGUI::Key::Scan) arg.key);
 	return true;
 }
 
-bool InputManager::mouseMoved( const OIS::MouseEvent &arg )
+bool InputManager::mouseMoved(const OIS::MouseEvent &arg)
 {
 	if (arg.state.Z.rel) 
 	{
 		CEGUI::System &sys = CEGUI::System::getSingleton();
-		if (!sys.injectMouseWheelChange(arg.state.Z.rel / 120.0f))
+		if (!sys.getDefaultGUIContext().injectMouseWheelChange(arg.state.Z.rel / 120.0f))
 		{
 			std::list<InputHandlerMouse *>::iterator itor = mouseHandlers_.begin();
 			std::list<InputHandlerMouse *>::iterator endItor = mouseHandlers_.end();
@@ -124,7 +124,7 @@ bool InputManager::mouseMoved( const OIS::MouseEvent &arg )
 	if (mouseDownButton_ == -1)
 	{
 		CEGUI::System &sys = CEGUI::System::getSingleton();
-		sys.injectMousePosition((float) arg.state.X.abs, (float) arg.state.Y.abs);
+		sys.getDefaultGUIContext().injectMousePosition((float) arg.state.X.abs, (float) arg.state.Y.abs);
 	}
 	else
 	{
@@ -146,12 +146,12 @@ bool InputManager::mouseMoved( const OIS::MouseEvent &arg )
 	return true;
 }
 
-bool InputManager::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
+bool InputManager::mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
 	if (mouseDownButton_ == -1)
 	{
 		CEGUI::System &sys = CEGUI::System::getSingleton();
-		if (!sys.injectMouseButtonDown(convertButton(id)))
+		if (!sys.getDefaultGUIContext().injectMouseButtonDown(convertButton(id)))
 		{
 			mouseDownButton_ = (int) id;
 			mouseDownX_ = arg.state.X.abs;
@@ -161,7 +161,7 @@ bool InputManager::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID 
 	return true;
 }
 
-bool InputManager::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
+bool InputManager::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
 	if (mouseDownButton_ != -1)
 	{
@@ -175,7 +175,7 @@ bool InputManager::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID
 	else
 	{
 		CEGUI::System &sys = CEGUI::System::getSingleton();
-		sys.injectMouseButtonUp(convertButton(id));
+		sys.getDefaultGUIContext().injectMouseButtonUp(convertButton(id));
 	}
 	mouseDownButton_ = -1;
 	mouseDragging_ = false;
@@ -194,7 +194,7 @@ void InputManager::windowResized(Ogre::RenderWindow* rw)
 
 	if (CEGUI::System::getSingletonPtr()) 
 	{
-		CEGUI::System::getSingleton().notifyDisplaySizeChanged(CEGUI::Size((float) width, (float) height));
+		CEGUI::System::getSingleton().notifyDisplaySizeChanged(CEGUI::Sizef((float) width, (float) height));
 	}
 }
 

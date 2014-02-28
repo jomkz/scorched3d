@@ -22,8 +22,8 @@
 #include <OISKeyboard.h>
 #include <OISMouse.h>
 
-#include <CEGUI.h>
-#include <RendererModules/Ogre/CEGUIOgreRenderer.h>
+#include <CEGUI/CEGUI.h>
+#include <CEGUI/RendererModules/Ogre/Renderer.h>
 
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>

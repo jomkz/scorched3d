@@ -31,7 +31,7 @@ UIStateProgress::~UIStateProgress()
 void UIStateProgress::createState()
 {
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-	CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
+	CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "ProgressSheet");
 
 	{
 		CEGUI::DefaultWindow* staticText = static_cast<CEGUI::DefaultWindow*>(wmgr.createWindow("OgreTray/StaticText", "StaticText"));
@@ -45,18 +45,18 @@ void UIStateProgress::createState()
 			// HorzJustified, WordWrapLeftAligned, WordWrapRightAligned, WordWrapCentred, WordWrapJustified
 		staticText->setTooltipText("This is a StaticText widget");
 		staticText->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f, 0.0f), CEGUI::UDim(0.15f, 0.0f)));
-		staticText->setSize(CEGUI::UVector2(CEGUI::UDim(0.6f, 0.0f), CEGUI::UDim(0.1f, 0.0f)));
-		sheet->addChildWindow(staticText);
+		staticText->setSize(CEGUI::USize(CEGUI::UDim(0.6f, 0.0f), CEGUI::UDim(0.1f, 0.0f)));
+		sheet->addChild(staticText);
 
 		CEGUI::ProgressBar* progressBar = static_cast<CEGUI::ProgressBar*>(wmgr.createWindow("OgreTray/ProgressBar", "ProgressBar"));
 		progressBar->setProgress(0.0f); // Initial progress of 25%
 		progressBar->setStepSize(0.10f); // Calling step() will increase the progress by 10%
 		progressBar->setPosition(CEGUI::UVector2(CEGUI::UDim(0.1f, 0.0f), CEGUI::UDim(0.5f, 0.0f)));
-		progressBar->setSize(CEGUI::UVector2(CEGUI::UDim(0.8f, 0.0f), CEGUI::UDim(0.3f, 0.0f)));
-		staticText->addChildWindow(progressBar);
+		progressBar->setSize(CEGUI::USize(CEGUI::UDim(0.8f, 0.0f), CEGUI::UDim(0.3f, 0.0f)));
+		staticText->addChild(progressBar);
 	}
 
-	CEGUI::System::getSingleton().setGUISheet(sheet);
+	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
 }
 
 void UIStateProgress::destroyState()

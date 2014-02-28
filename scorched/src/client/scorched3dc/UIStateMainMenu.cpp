@@ -42,12 +42,12 @@ void UIStateMainMenu::createState()
 		CEGUI::Window *start = wmgr.createWindow("OgreTray/Button", "CEGUIDemo/StartButton");
 		start->setText("Start");
 		start->setPosition(CEGUI::UVector2(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.00f, 0.0f)));
-		start->setSize(CEGUI::UVector2(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.05f, 0.0f)));
+		start->setSize(CEGUI::USize(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.05f, 0.0f)));
 		start->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&UIStateMainMenu::start, this));
-		sheet->addChildWindow(start);
+		sheet->addChild(start);
 	}
 
-	CEGUI::System::getSingleton().setGUISheet(sheet);
+	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
 }
 
 bool UIStateMainMenu::start(const CEGUI::EventArgs &e)

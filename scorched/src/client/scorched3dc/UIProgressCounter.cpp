@@ -35,14 +35,15 @@ UIProgressThreadCallback::~UIProgressThreadCallback()
 void UIProgressThreadCallback::callbackInvoked()
 {
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-	CEGUI::DefaultWindow* staticText = static_cast<CEGUI::DefaultWindow*>(wmgr.getWindow("StaticText"));
+	CEGUI::Window *rootWindow = CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
+	CEGUI::DefaultWindow* staticText = static_cast<CEGUI::DefaultWindow*>(rootWindow->getChild("StaticText"));
 	if (staticText)
 	{
 		std::string opStr = LangStringUtil::convertFromLang(op_.c_str());
 		staticText->setText(opStr.c_str());
 		//Logger::log(S3D::formatStringBuffer("%s\n", opStr.c_str()));
 	}
-	CEGUI::ProgressBar* progressBar = static_cast<CEGUI::ProgressBar*>(wmgr.getWindow("ProgressBar"));
+	CEGUI::ProgressBar* progressBar = static_cast<CEGUI::ProgressBar*>(rootWindow->getChild("StaticText/ProgressBar"));
 	if (progressBar)
 	{
 		progressBar->setProgress(percentage_);

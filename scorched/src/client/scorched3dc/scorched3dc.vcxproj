@@ -967,7 +967,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderOutputFile>$(ProjectDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)\src\client;$(SolutionDir)\src\server;$(SolutionDir)\src\common;$(BOOST_HOME);$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\include;$(CEGUI_HOME)\CEGUI\include;$(CEGUI_HOME)\dependencies\include;$(HYDRAX_HOME)\include;$(SKYX_HOME)\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\src\client;$(SolutionDir)\src\server;$(SolutionDir)\src\common;$(BOOST_HOME);$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\include;$(CEGUI_HOME)\CEGUI\include;$(CEGUI_HOME)\cegui-deps-0.8.x-src\dependencies\include;$(HYDRAX_HOME)\include;$(SKYX_HOME)\include</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zm175 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
@@ -979,7 +979,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>OgreMain_d.lib;OIS_d.lib;CEGUIBase_d.lib;CEGUIOgreRenderer_d.lib;OgreTerrain_d.lib;zlib_d.lib;libpng_d.lib;expat_d.lib;hydrax_d.lib;skyx_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(CEGUI_HOME)\lib;$(OGRE_HOME)\lib\debug;$(OGRE_HOME)\boost\lib;$(BOOST_HOME)\stage\lib;$(CEGUI_HOME)\dependencies\lib\static;$(SKYX_HOME)\debug;$(HYDRAX_HOME)\bin\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(CEGUI_HOME)\lib;$(OGRE_HOME)\lib\debug;$(OGRE_HOME)\boost\lib;$(BOOST_HOME)\stage\lib;$(CEGUI_HOME)\cegui-deps-0.8.x-src\dependencies\lib\static;$(SKYX_HOME)\debug;$(HYDRAX_HOME)\bin\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

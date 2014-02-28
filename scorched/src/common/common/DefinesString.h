@@ -25,7 +25,7 @@
 #include <string>
 #include <stdarg.h> // For va_list
 
-#ifndef HAVE_SNPRINTF
+#if !defined(HAVE_SNPRINTF) && !defined(_MSC_VER) // Now defined in CE_GUI
 
 #define snprintf smb_snprintf
 #define vsnprintf smb_vsnprintf

@@ -128,14 +128,14 @@ void OgreSystem::loadResources()
 bool OgreSystem::createUI()
 {
 	guiRenderer_ = &CEGUI::OgreRenderer::bootstrapSystem();
-	CEGUI::Imageset::setDefaultResourceGroup("Imagesets");
+	CEGUI::ImageManager::setImagesetDefaultResourceGroup("Imagesets");
 	CEGUI::Font::setDefaultResourceGroup("Fonts");
 	CEGUI::Scheme::setDefaultResourceGroup("Schemes");
 	CEGUI::WidgetLookManager::setDefaultResourceGroup("LookNFeel");
 	CEGUI::WindowManager::setDefaultResourceGroup("Layouts");
 
-	CEGUI::SchemeManager::getSingleton().create("OgreTray.scheme");
-	CEGUI::System::getSingleton().setDefaultMouseCursor("OgreTrayImages", "MouseArrow");
+	CEGUI::SchemeManager::getSingleton().createFromFile("OgreTray.scheme");
+	//CEGUI::System::getSingleton().getDefaultGUIContext().setMsetDefaultMouseCursor("OgreTrayImages", "MouseArrow");
 
 	return true;
 }

@@ -42,14 +42,13 @@ void UIStateJoining::createState()
 		CEGUI::Window *join = wmgr.createWindow("OgreTray/Button", "CEGUIDemo/JoinButton");
 		join->setText("Join");
 		join->setPosition(CEGUI::UVector2(CEGUI::UDim(0.3f, 0.0f), CEGUI::UDim(0.00f, 0.0f)));
-		join->setSize(CEGUI::UVector2(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.05f, 0.0f)));
+		join->setSize(CEGUI::USize(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.05f, 0.0f)));
 		join->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&UIStateJoining::join, this));
-		sheet->addChildWindow(join);
+		sheet->addChild(join);
 	}
 
-	CEGUI::System::getSingleton().setGUISheet(sheet);
+	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
 }
-
 
 bool UIStateJoining::join(const CEGUI::EventArgs &e)
 {
