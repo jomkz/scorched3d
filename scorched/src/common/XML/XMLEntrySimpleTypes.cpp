@@ -106,7 +106,7 @@ XMLEntrySimpleType *XMLEntrySimpleContainer::getEntryByName(const std::string &n
 {
 	std::map<std::string, XMLEntry *>::iterator itor = xmlEntryChildren_.find(name);
 	if (itor == xmlEntryChildren_.end()) return 0;
-	return (XMLEntrySimpleType*) &itor->second;
+	return (XMLEntrySimpleType*) itor->second;
 }
 
 bool XMLEntrySimpleContainer::writeToBuffer(NetBuffer &buffer, bool useProtected)
@@ -218,7 +218,7 @@ bool XMLEntrySimpleContainer::readFromFile(const std::string &filePath)
 	if (!file.getRootNode()) return true;
 
 	// Read the options from the XML node
-	return readXML(file.getDocumentNode());
+	return readXML(file.getRootNode());
 }
 
 void XMLEntrySimpleContainer::addToArgParser(ARGParser &parser)

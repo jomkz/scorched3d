@@ -90,6 +90,11 @@ bool XMLEntryDocumentGenerator::hasType(const std::string &typeName)
 
 void XMLEntryDocumentGenerator::writeDocumentation()
 {
+	std::string s3dVersion = S3D::ScorchedVersion + "(" + S3D::ScorchedProtocolVersion + ")";
+
+	FileTemplateVariables indexVariables;
+	indexVariables.addVariableValue("VERSION", s3dVersion.c_str());
+
 	std::map<std::string, TypeEntry>::iterator itor = types_.begin(),
 		end = types_.end();
 	for (;itor!=end;++itor)
@@ -108,10 +113,20 @@ void XMLEntryDocumentGenerator::writeDocumentation()
 			}
 
 			std::string fileLocation = documentLocation_ + "/" + itor->first + ".html";
+			itor->second.variables->addVariableValue("VERSION", s3dVersion.c_str());
 			FileTemplate::writeTemplateToFile(itor->second.fileName, *itor->second.variables, fileLocation);
+			
+			FileTemplateVariables *fileVariables = indexVariables.addLoopVariable("INDEX");
+			fileVariables->addVariableValue("INDEX_TYPE", itor->first.c_str());
+			fileVariables->addVariableValue("INDEX_DESCRIPTION", itor->second.variables->getVariableValue("TYPE_DESCRIPTION"));
+
 			delete itor->second.variables;
 		}
 	}
+
+	FileTemplateVariables stylesVariables;
+	FileTemplate::writeTemplateToFile("docs/styles.css", stylesVariables, documentLocation_ + "/styles.css");
+	FileTemplate::writeTemplateToFile("docs/index.html", indexVariables, documentLocation_ + "/index.html");	
 }
 
 FileTemplateVariables *XMLEntryDocumentGenerator::addTypeTags(XMLEntry *coreType,
