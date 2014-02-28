@@ -49,11 +49,6 @@ protected:
 	unsigned int totalBytes_;
 
 	static void getHost(std::string &host, int &port);
-	void tryConnection();
-	static int tryRemoteConnection(NetInterface *clientNetInterface);
-	void startTryRemoteConnectionServer();
-	void startTryRemoteConnection();
-	void finishedTryingConnection();
 	void finished();
 	void connectToServer();
 	void sendAuth();

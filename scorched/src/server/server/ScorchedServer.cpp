@@ -187,10 +187,6 @@ void ScorchedServer::startServerInternalStatic(ScorchedServer *instance,
 void ScorchedServer::startServerInternal(const ScorchedServerSettings &settings, 
 	ProgressCounter *counter, ThreadCallbackI *endCallback)
 {
-	Logger::log(S3D::formatStringBuffer("Scorched3D - Version %s (%s) - %s",
-		S3D::ScorchedVersion.c_str(), 
-		S3D::ScorchedProtocolVersion.c_str(), 
-		S3D::ScorchedBuildTime.c_str()));
 	std::string startTime = S3D::getStartTime();
 	Logger::log(S3D::formatStringBuffer("Server started : %s", startTime.c_str()));
 

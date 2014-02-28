@@ -129,136 +129,15 @@ void ClientStateInitialize::getHost(std::string &host, int &port)
 
 void ClientStateInitialize::enterState()
 {
-	// Check if we are connecting to a server
-	if (ClientParams::instance()->getConnect()[0])
-	{
-		return connectToServer();	
-	}
-	else if (ClientParams::instance()->getStartCustom() ||
-		ClientParams::instance()->getClientFile()[0])
-	{
-		return connectToServer();
-	}
-	else if (ClientParams::instance()->getSaveFile()[0])
-	{
-		// Or the client saved game
-		if (!S3D::fileExists(ClientParams::instance()->getSaveFile()))
-		{
-			S3D::dialogExit("Scorched3D", S3D::formatStringBuffer(
-				"Client read saved game file \"%s\" does not exist.",
-				ClientParams::instance()->getSaveFile()),
-				false);
-		}
-
-		return connectToServer();
-	}
-	else
-	{
-		S3D::dialogExit("Scorched3D", S3D::formatStringBuffer(
-				"Unknown parameter option"));
-	}
-}
-
-void ClientStateInitialize::connectToServer()
-{
-	ScorchedClient::instance();
-
-	// Tidy up any existing net handlers
-	if (ScorchedClient::instance()->getContext().getNetInterfaceValid())
-	{
-		ScorchedClient::instance()->getContext().getNetInterface().stop();
-		delete &ScorchedClient::instance()->getContext().getNetInterface();
-		ScorchedClient::instance()->getContext().setNetInterface(0);
-	}
-
-	// Create the new net handlers
-	if (ClientParams::instance()->getConnectedToServer())
-	{
-		ScorchedClient::instance()->getContext().setNetInterface(new NetServerTCP3());
-	}
-	else
-	{
-		ScorchedClient::instance()->getContext().setNetInterface(new NetLoopBack(false));
-	}
-	ScorchedClient::instance()->getNetInterface().setMessageHandler(
-		&ScorchedClient::instance()->getComsMessageHandler());
-
-	// Start the server (if required)
-	if (!ClientParams::instance()->getConnectedToServer())
-	{
-		ThreadCallbackI *callback = new ThreadCallbackIAdapter<ClientStateInitialize>(
-			this, &ClientStateInitialize::startTryRemoteConnectionServer);
-
-		if (ClientParams::instance()->getSaveFile()[0])
-		{
-			// Load the saved game state (settings)
-			ScorchedServerSettingsSave settings(ClientParams::instance()->getSaveFile());
-			ScorchedServer::startServer(settings, 0, callback);
-		}
-		else
-		{
-			std::string clientFile = ClientParams::instance()->getClientFile();
-			if (ClientParams::instance()->getStartCustom())
-			{
-				clientFile = S3D::getSettingsFile("singlecustom.xml");
-			}
-
-			// If not load the client settings file
-			if (!S3D::fileExists(clientFile.c_str()))
-			{
-				S3D::dialogExit("Scorched3D", S3D::formatStringBuffer(
-					"Client file \"%s\" does not exist.",
-					clientFile.c_str()));
-			}
-
-			ScorchedServerSettingsOptions settings(clientFile,
-				ClientParams::instance()->getRewriteOptions(),
-				ClientParams::instance()->getWriteFullOptions());
-			ScorchedServer::startServer(settings, 0, callback);
-		}
-	}
-	else
-	{
-		startTryRemoteConnection();
-	}
-}
-
-void ClientStateInitialize::startTryRemoteConnectionServer()
-{
-	// This method is called by the server thread so switch flow to the client thread
-	ThreadCallbackI *callback = new ThreadCallbackIAdapter<ClientStateInitialize>(
-		this, &ClientStateInitialize::startTryRemoteConnection);
-	ScorchedClient::getThreadCallback().addCallback(callback);
-}
-
-void ClientStateInitialize::startTryRemoteConnection()
-{
-	// Do in a thread so connect can block if it wants!
-	remoteConnectionThread_ = new boost::thread(ClientStateInitialize::tryRemoteConnection, 
-		&ScorchedClient::instance()->getNetInterface());
-	ThreadUtils::setThreadName(remoteConnectionThread_->native_handle(), "RemoteConnectionThread");
-}
-
-int ClientStateInitialize::tryRemoteConnection(NetInterface *clientNetInterface)
-{
 	// Try to connect to the server
 	std::string host;
 	int port;
 	getHost(host, port);
-	clientNetInterface->connect(host.c_str(), port);
-	return 0;
+	ScorchedClient::instance()->getNetInterface().connect(host.c_str(), port);
 }
 
 void ClientStateInitialize::connected()
 {
-	// Wait for the thread to stop (if we started one)
-	if (remoteConnectionThread_)
-	{
-		remoteConnectionThread_->join();
-		delete remoteConnectionThread_;
-		remoteConnectionThread_ = 0;
-	}
-
 	// Wait for the coms to start
 	for (int i=0; i<10 && !ScorchedClient::instance()->getNetInterface().started(); i++)
 	{

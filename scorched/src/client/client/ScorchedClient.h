@@ -22,6 +22,7 @@
 #define __INCLUDE_ScorchedClienth_INCLUDE__
 
 #include <engine/ScorchedContext.h>
+#include <common/fixed.h>
 
 class ParticleEngine;
 class SimulatorGameState;
@@ -31,11 +32,14 @@ class ClientSimulator;
 class ClientHandlers;
 class ClientMessageHandler;
 class ClientChannelManager;
+class ProgressCounter;
+class ThreadCallbackI;
 class ScorchedClient : public ScorchedContext
 {
 public:
 	static ScorchedClient *instance();
-	static void startClient();
+
+	static void startClient(ProgressCounter *counter, ThreadCallbackI *endCallback);
 	static void stopClient();
 
 	virtual bool getServerMode() { return false; }
@@ -60,6 +64,14 @@ protected:
 	ClientHandlers *clientHandlers_;
 	ClientMessageHandler *clientMessageHandler_;
 	ClientChannelManager *channelManager_;
+
+	static void startClientInternalStatic(ScorchedClient *instance, 
+		ProgressCounter *counter, ThreadCallbackI *endCallback);
+	void startClientInternal(ProgressCounter *counter, ThreadCallbackI *endCallback);
+	bool clientLoop();
+
+	void serverStartedServerThread();
+	void serverStartedClientThread();
 
 private:
 	ScorchedClient();

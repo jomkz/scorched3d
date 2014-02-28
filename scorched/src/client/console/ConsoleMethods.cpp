@@ -71,7 +71,7 @@ void ConsoleMethods::help()
 
 void ConsoleMethods::exit()
 {
-	ScorchedClient::instance()->getClientState().stop();
+	::exit(0);
 }
 
 void ConsoleMethods::consoleLoad(std::vector<ConsoleRuleValue> &values)

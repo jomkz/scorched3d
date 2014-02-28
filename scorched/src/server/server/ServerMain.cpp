@@ -23,12 +23,18 @@
 #include <server/ServerCommon.h>
 #include <server/ServerParams.h>
 #include <server/ScorchedServer.h>
+#include <common/Logger.h>
 
 void consoleServer()
 {
 	ServerConsoleProgressCounter::instance();
 	ServerConsoleLogger serverConsoleLogger;
 	ServerCommon::startFileLogger(ServerParams::instance()->getServerFile());
+
+	Logger::log(S3D::formatStringBuffer("Scorched3D - Version %s (%s) - %s",
+		S3D::ScorchedVersion.c_str(), 
+		S3D::ScorchedProtocolVersion.c_str(), 
+		S3D::ScorchedBuildTime.c_str()));
 
 	ScorchedServerSettingsOptions settings(
 		ServerParams::instance()->getServerFile(),

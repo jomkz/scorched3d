@@ -254,7 +254,7 @@ bool Scorched3DC::quit(const CEGUI::EventArgs &e)
 bool Scorched3DC::start(const CEGUI::EventArgs &e)
 {
 	ClientParams::instance()->setStartCustom(true);
-	ScorchedClient::instance()->getClientState().setState(ClientState::StateInitialize);
+	ScorchedClient::startClient(0, 0);
 	return true;
 }
 
@@ -345,7 +345,6 @@ bool Scorched3DC::go()
 		S3D::ScorchedVersion.c_str(), 
 		S3D::ScorchedProtocolVersion.c_str(), 
 		S3D::ScorchedBuildTime.c_str()));
-	ScorchedClient::startClient();
 
 	while(!quit_)
 	{
@@ -357,12 +356,6 @@ bool Scorched3DC::go()
 			return false;
 		}
  
-		// Perform simulation
-		if (!ScorchedClient::instance()->getClientState().clientEventLoop()) 
-		{
-			quit_ = true;
-		}
-
 		// Render a frame
 		if(!ogreRoot_->renderOneFrame()) 
 		{
@@ -370,11 +363,6 @@ bool Scorched3DC::go()
 		}
 	}
 
-	// When we get here we have exited the loop and are now shutting down
-	if (ScorchedClient::instance()->getContext().getNetInterfaceValid())
-	{
-		ScorchedClient::instance()->getNetInterface().disconnectAllClients();
-	}
 	Lang::instance()->saveUndefined();
 
 	return true;

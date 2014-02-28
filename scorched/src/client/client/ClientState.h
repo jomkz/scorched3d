@@ -21,7 +21,6 @@
 #if !defined(__INCLUDE_ClientStateh_INCLUDE__)
 #define __INCLUDE_ClientStateh_INCLUDE__
 
-#include <common/Clock.h>
 #include <list>
 
 class ClientStateInitialize;
@@ -52,12 +51,8 @@ public:
 	ClientState(ComsMessageHandler &comsMessageHandler);
 	virtual ~ClientState();
 
-	bool clientEventLoop();
 	void setState(ClientStateEnum newState);
 	void setStateString(const std::string &newState);
-
-	void stop() { stopped_ = true; }
-	void resetFrameClock() { frameClock_.getTimeDifference(); }
 
 	ClientStateEnum getState() { return currentState_; }
 	ClientStateInitialize &getClientInitialize() { return *clientInitialize_; }
@@ -65,8 +60,6 @@ public:
 
 protected:
 	ClientStateEnum currentState_;
-	bool stopped_;
-	Clock frameClock_;
 	ClientStateInitialize *clientInitialize_;
 	ClientStateLoadLevel *clientLoadLevel_;
 };

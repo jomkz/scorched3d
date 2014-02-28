@@ -22,17 +22,6 @@
 #include <client/ClientState.h>
 #include <client/ClientStateInitialize.h>
 #include <client/ClientStateLoadLevel.h>
-#include <client/ClientParams.h>
-#include <client/ClientSimulator.h>
-#include <server/ServerMain.h>
-#include <engine/ThreadCallback.h>
-#include <engine/Simulator.h>
-#include <common/Logger.h>
-#include <client/ClientOptions.h>
-#include <target/TargetContainer.h>
-#include <net/NetInterface.h>
-
-static time_t startTime = 0;
 
 static struct STATE_NAME
 {
@@ -48,7 +37,6 @@ static struct STATE_NAME
 };
 
 ClientState::ClientState(ComsMessageHandler &comsMessageHandler) : 
-	stopped_(false), 
 	currentState_(StateMainOptions)
 {
 	clientInitialize_ = new ClientStateInitialize(comsMessageHandler);
@@ -90,44 +78,4 @@ void ClientState::setStateString(const std::string &newState)
 	}
 }
 
-bool ClientState::clientEventLoop()
-{
-	// Simulate
-	float frameTime = frameClock_.getTimeDifference();
-	ScorchedClient::instance()->getClientSimulator().simulate();
-
-	Logger::processLogEntries();
-	if (ScorchedClient::instance()->getContext().getNetInterfaceValid())
-	{
-		ScorchedClient::instance()->getNetInterface().processMessages();
-	}
-
-	if (ClientParams::instance()->getExitTime() > 0)
-	{
-		if (startTime == 0) startTime = time(0);
-		if (time(0) - startTime > ClientParams::instance()->getExitTime())
-		{
-			exit(0);
-		}
-	}
-	if (ClientParams::instance()->getDisconnectTime() > 0)
-	{
-		if (startTime == 0) startTime = time(0);
-		if (time(0) - startTime > ClientParams::instance()->getDisconnectTime())
-		{
-			startTime = time(0);
-			if (ScorchedClient::instance()->getTargetContainer().getCurrentDestinationId())
-			{
-				ScorchedClient::instance()->getNetInterface().disconnectAllClients();
-			}
-			else
-			{
-				setState(StateInitialize);
-			}
-		}
-	}
-	ScorchedClient::instance()->getThreadCallback().processCallbacks();
-
-	return !stopped_;
-}
 

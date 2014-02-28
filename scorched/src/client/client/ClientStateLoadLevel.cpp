@@ -182,11 +182,6 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 	// Process any outstanding coms messages
 	ScorchedClient::instance()->getNetInterface().processMessages();
 
-	// As we have not returned to the main loop for ages the
-	// timer will have a lot of time in it
-	// Get rid of this time so we don't screw things up
-	ScorchedClient::instance()->getClientState().resetFrameClock();
-
 	// Reset camera positions for each tank
 	bool playerTanks = false;
 	std::map<unsigned int, Tank *>::iterator tankItor;
