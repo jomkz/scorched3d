@@ -73,10 +73,20 @@ class AccessoryMetaRegistration
 {
 public:
 	static void addMap(const char *name, AccessoryPart *action);
-	static AccessoryPart *getNewAccessory(const char *name, AccessoryStore *store);
+	static AccessoryPart *getNewAccessory(const char *name);
 
-private:
 	static std::map<std::string, AccessoryPart *> *accessoryMap;
+	static std::map<std::string, AccessoryPart *> *weaponMap;
+};
+
+class XMLEntryAccessoryPartChoice : public XMLEntryTypeChoice<AccessoryPart>
+{
+public:
+	XMLEntryAccessoryPartChoice();
+	virtual ~XMLEntryAccessoryPartChoice();
+
+	virtual AccessoryPart *createXMLEntry(const std::string &type, void *xmlData);
+	virtual void getAllTypes(std::set<std::string> &allTypes);
 };
 
 #endif // !defined(AFX_ACCESSORYPART_H__21765D5B_DB45_4275_AB63_BAD1E84C1790__INCLUDED_)

@@ -36,7 +36,7 @@ public:
 	LansdscapeIncludeList();
 	virtual ~LansdscapeIncludeList();
 
-	virtual XMLEntryString *createXMLEntry();
+	virtual XMLEntryString *createXMLEntry(void *xmlData);
 };
 
 class LandscapeDefinitions;

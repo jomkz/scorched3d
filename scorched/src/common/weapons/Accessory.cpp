@@ -40,34 +40,10 @@ static XMLEntryEnum::EnumEntry PositionSelectTypeEnum[] =
 	{ "", -1 }
 };
 
-AccessoryClassXmlEntry::AccessoryClassXmlEntry() :
-	XMLEntryTypeChoice<XMLEntry>("AccessoryClass", 
-		"Choses the class of accessory that this accessory will represent")
-{
-}
-
-AccessoryClassXmlEntry::~AccessoryClassXmlEntry()
-{
-}
-
-XMLEntry *AccessoryClassXmlEntry::createXMLEntry(const std::string &type)
-{
-	return 0;
-}
-
-void AccessoryClassXmlEntry::getAllTypes(std::set<std::string> &allTypes)
-{
-	allTypes.insert("weapon");
-	allTypes.insert("parachute");
-	allTypes.insert("shield");
-	allTypes.insert("autodefense");
-	allTypes.insert("battery");
-}
-
 Accessory::Accessory(unsigned int accessoryId) :
 	XMLEntryContainer("Accessory", 
 		"An accessory that a player can aquire to boost the capabilities of their tank.  Accessories include weapons, shields, etc..."),
-	accessoryId_(accessoryId), accessoryAction_(0),
+	accessoryId_(accessoryId), 
 	name_("The name of this accessory, as displayed in the game."), description_("The description of this accessory, as displayed in the game.", 0, ""), 
 	price_("The cost of this accessory to buy, this accessory can be bought in multiples defined by the bundle size", 0, 0), 
 	bundle_("The number of these accessories that will be purchased for the buying price", 0, 1),
@@ -100,61 +76,54 @@ Accessory::Accessory(unsigned int accessoryId) :
 
 Accessory::~Accessory()
 {
-	delete accessoryAction_;
-	accessoryAction_ = 0;
 }
 
 bool Accessory::readXML(XMLNode *accessoryNode, void *xmlData)
 {
-	// Get action
-	XMLNode *subNode = 0;
-	if (!accessoryNode->getNamedChild("accessoryaction", subNode)) return false;
-	AccessoryCreateContext *creationContext = (AccessoryCreateContext *) xmlData;
-	accessoryAction_ = creationContext->getAccessoryStore().createAccessoryPart(*creationContext, this, subNode);
-	if (!accessoryAction_)
-	{
-		S3D::dialogMessage("Accessory", S3D::formatStringBuffer(
-			"Failed to create action \"%s\"", name_.getValue().c_str()));
-		return false;
-	}
-
-	// Get the accessory groupname
-	switch (accessoryAction_->getType())
-	{
-	case AccessoryPart::AccessoryWeapon:
-		groupName_.setValue("weapon");
-		break;
-	case AccessoryPart::AccessoryParachute:
-		groupName_.setValue("parachute");
-		break;
-	case AccessoryPart::AccessoryShield:
-		groupName_.setValue("shield");
-		break;
-	case AccessoryPart::AccessoryAutoDefense:
-		groupName_.setValue("autodefense");
-		break;
-	case AccessoryPart::AccessoryBattery:
-		groupName_.setValue("battery");
-		break;
-	default:
-		groupName_.setValue("none");
-		break;
-	}
-
-	// Get the accessory tabgroupname
-	if (accessoryAction_->getType() == AccessoryPart::AccessoryWeapon)
-	{
-		tabGroupName_.setValue("weapon");
-	}
-	else
-	{
-		tabGroupName_.setValue("defense");
-	}
-
 	if (!XMLEntryContainer::readXML(accessoryNode, xmlData)) return false;
 
+	if (groupName_.getValue().empty())
+	{
+		// Get the accessory groupname
+		switch (accessoryAction_.getValue()->getType())
+		{
+		case AccessoryPart::AccessoryWeapon:
+			groupName_.setValue("weapon");
+			break;
+		case AccessoryPart::AccessoryParachute:
+			groupName_.setValue("parachute");
+			break;
+		case AccessoryPart::AccessoryShield:
+			groupName_.setValue("shield");
+			break;
+		case AccessoryPart::AccessoryAutoDefense:
+			groupName_.setValue("autodefense");
+			break;
+		case AccessoryPart::AccessoryBattery:
+			groupName_.setValue("battery");
+			break;
+		default:
+			groupName_.setValue("none");
+			break;
+		}
+	}
+
+	if (tabGroupName_.getValue().empty())
+	{
+		// Get the accessory tabgroupname
+		if (accessoryAction_.getValue()->getType() == AccessoryPart::AccessoryWeapon)
+		{
+			tabGroupName_.setValue("weapon");
+		}
+		else
+		{
+			tabGroupName_.setValue("defense");
+		}
+	}
+
 	// Get the maximum number
-	if (maximumNumber_.getValue() == 0)
+	AccessoryCreateContext *creationContext = (AccessoryCreateContext *) xmlData;
+	if (maximumNumber_.getValue() == 0 && creationContext)
 	{
 		maximumNumber_.setValue(creationContext->getOptionsGame().getMaxNumberWeapons());
 	}

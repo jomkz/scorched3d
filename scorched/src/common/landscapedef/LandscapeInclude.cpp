@@ -30,7 +30,7 @@ LansdscapeIncludeList::~LansdscapeIncludeList()
 {
 }
 
-XMLEntryString *LansdscapeIncludeList::createXMLEntry()
+XMLEntryString *LansdscapeIncludeList::createXMLEntry(void *xmlData)
 {
 	return new XMLEntryString("The name of file to include into this file");
 }

@@ -39,7 +39,7 @@ public:
 
 protected:
 	XMLEntryString weaponName_;
-	Weapon *refWeapon_;
+	XMLEntryWeaponChoice refWeapon_;
 };
 
 #endif // !defined(AFX_WeaponReference_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_)

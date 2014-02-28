@@ -51,7 +51,7 @@ WeaponTypeActionEntryList::~WeaponTypeActionEntryList()
 {
 }
 
-WeaponTypeActionEntry *WeaponTypeActionEntryList::createXMLEntry()
+WeaponTypeActionEntry *WeaponTypeActionEntryList::createXMLEntry(void *xmlData)
 {
 	return new WeaponTypeActionEntry();
 }

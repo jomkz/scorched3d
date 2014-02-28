@@ -30,9 +30,6 @@ public:
 	ShieldRound(const char *typeName, const char *description);
 	virtual ~ShieldRound();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
-
 	// ShieldRound attributes
 	fixed getActualRadius() { return radius_.getValue(); }
 

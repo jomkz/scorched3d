@@ -60,7 +60,7 @@ WeaponTeamActionEntryList::~WeaponTeamActionEntryList()
 {
 }
 
-WeaponTeamActionEntry *WeaponTeamActionEntryList::createXMLEntry()
+WeaponTeamActionEntry *WeaponTeamActionEntryList::createXMLEntry(void *xmlData)
 {
 	return new WeaponTeamActionEntry();
 }

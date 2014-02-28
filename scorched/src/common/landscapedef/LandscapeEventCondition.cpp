@@ -33,7 +33,7 @@ LandscapeEventConditionChoice::~LandscapeEventConditionChoice()
 {
 }
 
-LandscapeEventCondition *LandscapeEventConditionChoice::createXMLEntry(const std::string &type)
+LandscapeEventCondition *LandscapeEventConditionChoice::createXMLEntry(const std::string &type, void *xmlData)
 {
 	if (0 == strcmp(type.c_str(), "time")) return new LandscapeEventConditionTime;
 	if (0 == strcmp(type.c_str(), "groupsize")) return new LandscapeEventConditionGroupSize;

@@ -44,7 +44,7 @@ LandscapeSoundList::~LandscapeSoundList()
 {
 }
 
-LandscapeSound *LandscapeSoundList::createXMLEntry()
+LandscapeSound *LandscapeSoundList::createXMLEntry(void *xmlData)
 {
 	return new LandscapeSound();
 }

@@ -61,7 +61,7 @@ LandscapeDefnTankStartPositionList::~LandscapeDefnTankStartPositionList()
 {
 }
 
-XMLEntryFixedVector *LandscapeDefnTankStartPositionList::createXMLEntry()
+XMLEntryFixedVector *LandscapeDefnTankStartPositionList::createXMLEntry(void *xmlData)
 {
 	return new XMLEntryFixedVector("Defines a possible starting position of a tank");
 }
@@ -76,7 +76,7 @@ LandscapeDefnTankStartChoice::~LandscapeDefnTankStartChoice()
 {
 }
 
-LandscapeDefnTankStart *LandscapeDefnTankStartChoice::createXMLEntry(const std::string &type)
+LandscapeDefnTankStart *LandscapeDefnTankStartChoice::createXMLEntry(const std::string &type, void *xmlData)
 {
 	if (0 == strcmp(type.c_str(), "height")) return new LandscapeDefnTankStartHeight;
 	if (0 == strcmp(type.c_str(), "positional")) return new LandscapeDefnTankStartPositional;

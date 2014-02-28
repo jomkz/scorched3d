@@ -38,7 +38,7 @@ WeaponGiveAccessoryList::~WeaponGiveAccessoryList()
 {
 }
 
-XMLEntryString *WeaponGiveAccessoryList::createXMLEntry()
+XMLEntryString *WeaponGiveAccessoryList::createXMLEntry(void *xmlData)
 {
 	return new XMLEntryString("The name of an accessory that will be given to the player");
 }
@@ -70,15 +70,18 @@ bool WeaponGiveAccessory::readXML(XMLNode *node, void *xmlData)
 	for (;itor!=end;++itor)
 	{
 		AccessoryCreateContext *context = (AccessoryCreateContext *) xmlData;
-		Accessory *accessory = context->getAccessoryStore().
-			findByPrimaryAccessoryName((*itor)->getValue().c_str());
-		if (!accessory)
+		if (context)
 		{
-			return node->returnError(
-				S3D::formatStringBuffer("Failed to find accessory named %s",
-					(*itor)->getValue().c_str()));
+			Accessory *accessory = context->getAccessoryStore().
+				findByPrimaryAccessoryName((*itor)->getValue().c_str());
+			if (!accessory)
+			{
+				return node->returnError(
+					S3D::formatStringBuffer("Failed to find accessory named %s",
+						(*itor)->getValue().c_str()));
+			}
+			giveAccessoriesList_.push_back(accessory);
 		}
-		giveAccessoriesList_.push_back(accessory);
 	}
 	return true;
 }

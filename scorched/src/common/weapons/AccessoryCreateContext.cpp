@@ -19,8 +19,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include <weapons/AccessoryCreateContext.h>
 
-AccessoryCreateContext::AccessoryCreateContext(ScorchedContext &context) :
-	context_(context)
+AccessoryCreateContext::AccessoryCreateContext(ScorchedContext &context, Accessory *current) :
+	context_(context), currentAccessory_(current)
 {
 
 }

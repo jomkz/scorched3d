@@ -42,7 +42,7 @@ public:
 	LandscapeSoundList();
 	virtual ~LandscapeSoundList();
 
-	virtual LandscapeSound *createXMLEntry();
+	virtual LandscapeSound *createXMLEntry(void *xmlData);
 };
 
 #endif // __INCLUDE_LandscapeSoundh_INCLUDE__

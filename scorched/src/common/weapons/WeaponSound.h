@@ -30,7 +30,7 @@ public:
 	WeaponSoundList();
 	virtual ~WeaponSoundList();
 
-	virtual XMLEntrySoundID *createXMLEntry();
+	virtual XMLEntrySoundID *createXMLEntry(void *xmlData);
 };
 
 class WeaponSound : public Weapon

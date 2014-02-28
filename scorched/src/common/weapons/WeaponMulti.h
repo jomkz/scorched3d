@@ -31,7 +31,7 @@ public:
 	XMLEntryWeaponChoiceList();
 	virtual ~XMLEntryWeaponChoiceList();
 
-	virtual XMLEntryWeaponChoice *createXMLEntry();
+	virtual XMLEntryWeaponChoice *createXMLEntry(void *xmlData);
 };
 
 class WeaponMulti : public Weapon

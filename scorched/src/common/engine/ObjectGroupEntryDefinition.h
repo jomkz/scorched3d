@@ -33,7 +33,7 @@ public:
 	ObjectGroupEntryDefinition();
 	virtual ~ObjectGroupEntryDefinition();
 
-	virtual XMLEntryString *createXMLEntry();
+	virtual XMLEntryString *createXMLEntry(void *xmlData);
 
 	bool hasGroups() { return !getChildren().empty(); }
 	void addToGroups(ObjectGroups &objectGroups,
@@ -51,7 +51,7 @@ public:
 	ObjectGroupReferenceDefinition();
 	virtual ~ObjectGroupReferenceDefinition();
 
-	virtual XMLEntryString *createXMLEntry();
+	virtual XMLEntryString *createXMLEntry(void *xmlData);
 };
 
 #endif // __INCLUDE_ObjectGroupEntryDefinitionh_INCLUDE__

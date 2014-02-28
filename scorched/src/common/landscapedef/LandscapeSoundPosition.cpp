@@ -44,7 +44,7 @@ LandscapeSoundPositionChoice::~LandscapeSoundPositionChoice()
 {
 }
 
-LandscapeSoundPosition *LandscapeSoundPositionChoice::createXMLEntry(const std::string &type)
+LandscapeSoundPosition *LandscapeSoundPositionChoice::createXMLEntry(const std::string &type, void *xmlData)
 {
 	if (0 == strcmp(type.c_str(), "ambient")) return new LandscapeSoundPositionAmbient;
 	if (0 == strcmp(type.c_str(), "absolute")) return new LandscapeSoundPositionAbsoulte;

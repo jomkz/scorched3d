@@ -38,7 +38,7 @@ public:
 	LandscapeSoundTimingChoice();
 	virtual ~LandscapeSoundTimingChoice();
 
-	virtual LandscapeSoundTiming *createXMLEntry(const std::string &type);
+	virtual LandscapeSoundTiming *createXMLEntry(const std::string &type, void *xmlData);
 	virtual void getAllTypes(std::set<std::string> &allTypes);
 };
 

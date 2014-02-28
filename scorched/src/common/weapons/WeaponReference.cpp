@@ -29,16 +29,13 @@ WeaponReference::WeaponReference() :
 		"The reference accessory must be positioned above the accessory you are creating. "
 		"If it is not correctly positioned above the accessory or the called accessory does not exist or is misspelled, you will receive an error stating it could not find the referenced accessory and the accessory failed."
 		"This is different from WeaponInvokeWeapon as it: calculates the earnings and skill from the accessory fired rather than the reference accessory, when a player is killed it will display a kill by the fired accessory rather than the reference accessory"),
-	weaponName_("Name of the weapon you want to fire at this point.  The referenced weapon must come before the current weapon"),
-	refWeapon_(0)
+	weaponName_("Name of the weapon you want to fire at this point.  The referenced weapon must come before the current weapon")
 {
 	addChildXMLEntry("weapon", &weaponName_);
 }
 
 WeaponReference::~WeaponReference()
 {
-	delete refWeapon_;
-	refWeapon_ = 0;
 }
 
 bool WeaponReference::readXML(XMLNode *node, void *xmlData)
@@ -47,34 +44,32 @@ bool WeaponReference::readXML(XMLNode *node, void *xmlData)
 
 	// Find the accessory name
 	AccessoryCreateContext *context = (AccessoryCreateContext *) xmlData;
-	std::map<std::string, XMLNode *> &nodes = context->getAccessoryStore().getParsingNodes();
-	std::map<std::string, XMLNode *>::iterator finditor =
-		nodes.find(weaponName_.getValue());
-	if (finditor == nodes.end()) 
+	if (context)
 	{
-		S3D::dialogMessage("WeaponReference", S3D::formatStringBuffer(
-			"Failed to find weapon \"%s\"",
-			weaponName_.getValue().c_str()));
-		return false;	
-	}
-	XMLNode *weaponNode = (*finditor).second;
-	weaponNode->resurrectRemovedChildren();
+		std::map<std::string, XMLNode *> &nodes = context->getAccessoryStore().getParsingNodes();
+		std::map<std::string, XMLNode *>::iterator finditor =
+			nodes.find(weaponName_.getValue());
+		if (finditor == nodes.end()) 
+		{
+			S3D::dialogMessage("WeaponReference", S3D::formatStringBuffer(
+				"Failed to find weapon \"%s\"",
+				weaponName_.getValue().c_str()));
+			return false;	
+		}
+		XMLNode *weaponNode = (*finditor).second;
+		weaponNode->resurrectRemovedChildren();
 
-	// Action
-	XMLNode *actionNode = 0;
-	if (!weaponNode->getNamedChild("accessoryaction", actionNode)) return false;
-	
-	// Create the new weapon
-	AccessoryPart *accessory = context->getAccessoryStore().
-		createAccessoryPart(*context, parent_, actionNode);
-	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
-	{
-		S3D::dialogMessage("Accessory", S3D::formatStringBuffer(
-			"Failed to find create weapon/wrong type \"%s\"",
-			weaponName_.getValue().c_str()));
-		return false;
+		// Action
+		XMLNode *actionNode = 0;
+		if (!weaponNode->getNamedChild("accessoryaction", actionNode)) return false;
+		if (!refWeapon_.readXML(actionNode, xmlData))
+		{
+			S3D::dialogMessage("Accessory", S3D::formatStringBuffer(
+				"Failed to find create weapon/wrong type \"%s\"",
+				weaponName_.getValue().c_str()));
+			return false;
+		}
 	}
-	refWeapon_ = (Weapon*) accessory;
 
 	return true;
 }
@@ -82,6 +77,6 @@ bool WeaponReference::readXML(XMLNode *node, void *xmlData)
 void WeaponReference::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	refWeapon_->fire(context, weaponContext, position, velocity);
+	refWeapon_.getValue()->fire(context, weaponContext, position, velocity);
 }
 

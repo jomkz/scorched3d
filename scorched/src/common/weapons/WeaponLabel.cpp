@@ -52,9 +52,13 @@ bool WeaponLabel::readXMLEntry(XMLNode *node, void *xmlData, const char *name, X
 		}
 
 		AccessoryCreateContext *context = (AccessoryCreateContext *) xmlData;
-		context->addLabel(label_.getValue().c_str(), this);
-		bool result = entry->readXML(node, xmlData);
-		context->removeLabel(label_.getValue().c_str());
+		bool result = false;
+		if (context)
+		{
+			context->addLabel(label_.getValue().c_str(), this);
+			result = entry->readXML(node, xmlData);
+			context->removeLabel(label_.getValue().c_str());
+		}
 		return result;
 	}
 }

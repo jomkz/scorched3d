@@ -160,13 +160,31 @@ public:
 
 	std::string &getChoiceType() { return type_; }
 	T *getValue() { return value_; }
-	virtual T *createXMLEntry(const std::string &type) = 0;
+	virtual T *createXMLEntry(const std::string &type, void *xmlData) = 0;
 	virtual void getAllTypes(std::set<std::string> &allTypes) = 0;
 
 	// XMLEntry
 	virtual unsigned int getData() { return eDataRequired|eDataChoice; }
 	virtual void getTypeName(std::string &result) { result = xmlTypeName_; }
 	virtual void getDescription(std::string &result) { result = xmlDescription_; }
+
+	virtual std::set<std::string> *getAllTypesCached()
+	{
+		static std::map<std::string, std::set<std::string>*> cache;
+		std::set<std::string> *result = 0;
+		std::map<std::string, std::set<std::string>*>::iterator findItor = cache.find(xmlTypeName_);
+		if (findItor == cache.end())
+		{
+			result = new std::set<std::string>();
+			getAllTypes(*result);
+			cache[xmlTypeName_] = result;
+		}
+		else 
+		{
+			result = findItor->second;
+		}
+		return result;
+	}
 
 	virtual bool readXML(XMLNode *node, void *xmlData)
 	{
@@ -175,15 +193,14 @@ public:
 			return node->returnError(S3D::formatStringBuffer(
 				"Failed to find a required type attribute"));;
 		}
-		value_ = createXMLEntry(type_);
+		value_ = createXMLEntry(type_, xmlData);
 		if (!value_)
 		{
 			return node->returnError(S3D::formatStringBuffer(
 				"Failed to create the type : \"%s\"", type_.c_str()));
 		}
-		std::set<std::string> allTypes; // Don't cache as it would use memory for every instance of this class
-		getAllTypes(allTypes);
-		if (allTypes.find(type_) == allTypes.end())
+		std::set<std::string> *allTypes = getAllTypesCached();
+		if (allTypes->find(type_) == allTypes->end())
 		{
 			return node->returnError(S3D::formatStringBuffer(
 				"Failed to create the type not specified as a type : \"%s\"", type_.c_str()));
@@ -203,12 +220,11 @@ public:
 		if (generator.hasType(xmlTypeName_)) return info;
 
 		std::list<std::pair<std::string, XMLEntry *> > children;
-		std::set<std::string> allTypes; 
-		getAllTypes(allTypes);
-		std::set<std::string>::iterator itor = allTypes.begin(), end = allTypes.end();
+		std::set<std::string> *allTypes = getAllTypesCached();
+		std::set<std::string>::iterator itor = allTypes->begin(), end = allTypes->end();
 		for (;itor!=end;++itor)
 		{
-			T *tmpValue = createXMLEntry(itor->c_str());
+			T *tmpValue = createXMLEntry(itor->c_str(), 0);
 			children.push_back(std::pair<std::string, XMLEntry *>(*itor, tmpValue));
 		}
 
@@ -246,12 +262,12 @@ public:
 	
 	std::list<T *> &getChildren() { return xmlEntryChildren_; }
 
-	virtual T *createXMLEntry() = 0;
+	virtual T *createXMLEntry(void *xmlData) = 0;
 
 	// XMLEntry
 	virtual unsigned int getData() 
 	{ 
-		T *entry = createXMLEntry(); 
+		T *entry = createXMLEntry(0); 
 		unsigned int typeData = entry->getData()|eDataList;
 		delete entry; 
 		if (minimumListNumber_ > 0) typeData|=eDataRequired;
@@ -260,7 +276,7 @@ public:
 	}
 	virtual void getTypeName(std::string &result) 
 	{ 
-		T *entry = createXMLEntry(); 
+		T *entry = createXMLEntry(0); 
 		entry->getTypeName(result);
 		delete entry; 
 	}
@@ -268,7 +284,7 @@ public:
 
 	virtual bool readXML(XMLNode *node, void *xmlData)
 	{
-		T *newEntry = createXMLEntry();
+		T *newEntry = createXMLEntry(xmlData);
 		if (!newEntry->readXML(node, xmlData)) return false;
 		xmlEntryChildren_.push_back(newEntry);
 
@@ -287,7 +303,7 @@ public:
 	}
 	virtual XMLEntryDocumentInfo generateDocumentation(XMLEntryDocumentGenerator &generator)
 	{
-		T *newEntry = createXMLEntry();
+		T *newEntry = createXMLEntry(0);
 		XMLEntryDocumentInfo info = newEntry->generateDocumentation(generator);
 		delete newEntry;
 		return info;

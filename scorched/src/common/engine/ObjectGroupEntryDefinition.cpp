@@ -32,7 +32,7 @@ ObjectGroupEntryDefinition::~ObjectGroupEntryDefinition()
 {
 }
 
-XMLEntryString *ObjectGroupEntryDefinition::createXMLEntry()
+XMLEntryString *ObjectGroupEntryDefinition::createXMLEntry(void *xmlData)
 {
 	return new XMLEntryString("The name of an object group, the group will be created if it doesn't already exist");
 }
@@ -72,7 +72,7 @@ ObjectGroupReferenceDefinition::~ObjectGroupReferenceDefinition()
 {
 }
 
-XMLEntryString *ObjectGroupReferenceDefinition::createXMLEntry()
+XMLEntryString *ObjectGroupReferenceDefinition::createXMLEntry(void *xmlData)
 {
 	return new XMLEntryString("The name of an object group, the group will be used to retrieve objects from");
 }

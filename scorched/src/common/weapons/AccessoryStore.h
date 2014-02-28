@@ -35,9 +35,7 @@ class NamedNetBuffer;
 class AccessoryStore
 {
 public:
-
-	// This is mirrored by accessorySortKeyEnum in client/graph/OptionsDisplay.cpp.
-
+	// This is mirrored by accessorySortKeyEnum in client/graph/OptionsDisplay.cpp
 	enum SortKey
 	{
 		SortNothing = 0,
@@ -53,9 +51,6 @@ public:
 
 	Accessory *findByAccessoryId(unsigned int id);
 	Accessory *findByPrimaryAccessoryName(const char *name); // **careful there**
-	AccessoryPart *findAccessoryPartByAccessoryId(unsigned int id, const char *type);
-	AccessoryPart *createAccessoryPart(AccessoryCreateContext &context, 
-		Accessory *parent, XMLNode *currentNode);
 
 	std::list<Accessory *> getAllAccessories(int sortKey=SortNothing);
 	std::list<Accessory *> getAllAccessoriesByTabGroup(const char *tabgroup, int sortKey=SortNothing);
@@ -75,7 +70,6 @@ protected:
 	std::set<std::string> tabGroups_;
 	std::map<unsigned int, Accessory *> accessoriesById_;
 	std::list<Accessory *> accessories_;
-	std::list<AccessoryPart *> accessoryParts_;
 	std::map<std::string, XMLNode *> parsingNodes_;
 
 };

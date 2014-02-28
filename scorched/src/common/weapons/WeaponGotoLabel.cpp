@@ -42,10 +42,13 @@ bool WeaponGotoLabel::readXML(XMLNode *node, void *xmlData)
 	if (!Weapon::readXML(node, xmlData)) return false;
 
 	AccessoryCreateContext *context = (AccessoryCreateContext *) xmlData;
-	weaponLabel_ = context->getLabel(label_.getValue().c_str());
-	if (!weaponLabel_)
+	if (context)
 	{
-		return node->returnError("Failed to find the named label");
+		weaponLabel_ = context->getLabel(label_.getValue().c_str());
+		if (!weaponLabel_)
+		{
+			return node->returnError("Failed to find the named label");
+		}
 	}
 
 	return true;

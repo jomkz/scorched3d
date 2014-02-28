@@ -33,7 +33,7 @@ XMLEntryWeaponChoiceList::~XMLEntryWeaponChoiceList()
 {
 }
 
-XMLEntryWeaponChoice *XMLEntryWeaponChoiceList::createXMLEntry()
+XMLEntryWeaponChoice *XMLEntryWeaponChoiceList::createXMLEntry(void *xmlData)
 {
 	return new XMLEntryWeaponChoice();
 }

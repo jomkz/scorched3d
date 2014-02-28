@@ -39,7 +39,7 @@ public:
 	LandscapeDefnTankStartPositionList();
 	virtual ~LandscapeDefnTankStartPositionList();
 
-	virtual XMLEntryFixedVector *createXMLEntry();
+	virtual XMLEntryFixedVector *createXMLEntry(void *xmlData);
 };
 
 class RandomGenerator;
@@ -68,7 +68,7 @@ public:
 	LandscapeDefnTankStartChoice();
 	virtual ~LandscapeDefnTankStartChoice();
 
-	virtual LandscapeDefnTankStart *createXMLEntry(const std::string &type);
+	virtual LandscapeDefnTankStart *createXMLEntry(const std::string &type, void *xmlData);
 	virtual void getAllTypes(std::set<std::string> &allTypes);
 };
 

@@ -32,7 +32,7 @@ LandscapeMovementChoice::~LandscapeMovementChoice()
 {
 }
 
-LandscapeMovement *LandscapeMovementChoice::createXMLEntry(const std::string &type)
+LandscapeMovement *LandscapeMovementChoice::createXMLEntry(const std::string &type, void *xmlData)
 {
 	if (0 == strcmp(type.c_str(), "boids")) return new LandscapeMovementBoids;
 	if (0 == strcmp(type.c_str(), "ships")) return new LandscapeMovementShips;
@@ -57,7 +57,7 @@ LandscapeMovementList::~LandscapeMovementList()
 {
 }
 
-LandscapeMovementChoice *LandscapeMovementList::createXMLEntry()
+LandscapeMovementChoice *LandscapeMovementList::createXMLEntry(void *xmlData)
 {
 	return new LandscapeMovementChoice();
 }
@@ -103,7 +103,7 @@ LandscapeMovementSplineControlPoints::~LandscapeMovementSplineControlPoints()
 {
 }
 
-XMLEntryFixedVector *LandscapeMovementSplineControlPoints::createXMLEntry()
+XMLEntryFixedVector *LandscapeMovementSplineControlPoints::createXMLEntry(void *xmlData)
 {
 	return new XMLEntryFixedVector("A control point for the spline curve");
 }

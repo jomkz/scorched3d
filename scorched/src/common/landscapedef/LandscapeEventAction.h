@@ -38,7 +38,7 @@ public:
 	LandscapeEventActionChoice();
 	virtual ~LandscapeEventActionChoice();
 
-	virtual LandscapeEventAction *createXMLEntry(const std::string &type);
+	virtual LandscapeEventAction *createXMLEntry(const std::string &type, void *xmlData);
 	virtual void getAllTypes(std::set<std::string> &allTypes);
 };
 

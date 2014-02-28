@@ -29,12 +29,14 @@
 class OptionsScorched;
 class AccessoryStore;
 class WeaponLabel;
+class Accessory;
 class AccessoryCreateContext  
 {
 public:
-	AccessoryCreateContext(ScorchedContext &context);
+	AccessoryCreateContext(ScorchedContext &context, Accessory *current);
 	virtual ~AccessoryCreateContext();
 
+	Accessory *getAccessory() { return currentAccessory_; }
 	ScorchedContext &getScorchedContext() { return context_; }
 	OptionsScorched &getOptionsGame() { return context_.getOptionsGame(); }
 	AccessoryStore &getAccessoryStore() { return context_.getAccessoryStore(); }
@@ -43,6 +45,7 @@ public:
 	void removeLabel(const char *label);
 
 protected:
+	Accessory *currentAccessory_;
 	ScorchedContext &context_;
 	std::map<std::string, WeaponLabel*> labels_;
 

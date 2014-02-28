@@ -40,7 +40,7 @@ public:
 	LandscapeEventList();
 	virtual ~LandscapeEventList();
 
-	virtual LandscapeEvent *createXMLEntry();
+	virtual LandscapeEvent *createXMLEntry(void *xmlData);
 };
 
 #endif // __INCLUDE_LandscapeEventsh_INCLUDE__

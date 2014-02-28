@@ -65,7 +65,7 @@ public:
 	PlacementTypeChoice();
 	virtual ~PlacementTypeChoice();
 
-	virtual PlacementType *createXMLEntry(const std::string &type);
+	virtual PlacementType *createXMLEntry(const std::string &type, void *xmlData);
 	virtual void getAllTypes(std::set<std::string> &allTypes);
 };
 
@@ -75,7 +75,7 @@ public:
 	PlacementTypeList();
 	virtual ~PlacementTypeList();
 
-	virtual PlacementTypeChoice *createXMLEntry();
+	virtual PlacementTypeChoice *createXMLEntry(void *xmlData);
 };
 
 #endif // __INCLUDE_PlacementTypeh_INCLUDE__

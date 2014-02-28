@@ -30,7 +30,7 @@ LandscapeSoundTimingChoice::~LandscapeSoundTimingChoice()
 {
 }
 
-LandscapeSoundTiming *LandscapeSoundTimingChoice::createXMLEntry(const std::string &type)
+LandscapeSoundTiming *LandscapeSoundTimingChoice::createXMLEntry(const std::string &type, void *xmlData)
 {
 	if (0 == strcmp(type.c_str(), "looped")) return new LandscapeSoundTimingLooped;
 	if (0 == strcmp(type.c_str(), "repeat")) return new LandscapeSoundTimingRepeat;

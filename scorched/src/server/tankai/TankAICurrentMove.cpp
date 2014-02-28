@@ -729,9 +729,12 @@ bool TankAICurrentMove::makeMoveShot(Tanket *tanket,
 	if (!fuel) return false;
 
 	ScorchedContext &context = ScorchedServer::instance()->getContext();
-	WeaponMoveTank *moveWeapon = (WeaponMoveTank *)
-		context.getAccessoryStore().findAccessoryPartByAccessoryId(
-			fuel->getAccessoryId(), "WeaponMoveTank");
+
+	std::string typeName;
+	fuel->getAction()->getTypeName(typeName);
+	DIALOG_ASSERT(typeName == "WeaponMoveTank");
+
+	WeaponMoveTank *moveWeapon = (WeaponMoveTank *) fuel->getAction();
 	if (moveWeapon)
 	{
 		// Try to find a position to move to that we want to move to

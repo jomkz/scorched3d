@@ -38,7 +38,7 @@ public:
 	PlacementPositionList();
 	virtual ~PlacementPositionList();
 
-	PlacementPosition *createXMLEntry();
+	PlacementPosition *createXMLEntry(void *xmlData);
 };
 
 class PlacementTypeDirect : public PlacementType

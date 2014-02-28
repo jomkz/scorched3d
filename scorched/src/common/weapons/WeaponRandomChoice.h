@@ -40,7 +40,7 @@ public:
 	WeaponRandomChoiceItemList();
 	virtual ~WeaponRandomChoiceItemList();
 
-	virtual WeaponRandomChoiceItem *createXMLEntry();
+	virtual WeaponRandomChoiceItem *createXMLEntry(void *xmlData);
 };
 
 class WeaponRandomChoice : public Weapon

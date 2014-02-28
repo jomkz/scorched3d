@@ -31,7 +31,7 @@ public:
 	WeaponGiveAccessoryList();
 	virtual ~WeaponGiveAccessoryList();
 
-	virtual XMLEntryString *createXMLEntry();
+	virtual XMLEntryString *createXMLEntry(void *xmlData);
 };
 
 class WeaponGiveAccessory : public WeaponCallback

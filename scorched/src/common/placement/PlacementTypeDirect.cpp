@@ -46,7 +46,7 @@ PlacementPositionList::~PlacementPositionList()
 {
 }
 
-PlacementPosition *PlacementPositionList::createXMLEntry()
+PlacementPosition *PlacementPositionList::createXMLEntry(void *xmlData)
 {
 	return new PlacementPosition();
 }

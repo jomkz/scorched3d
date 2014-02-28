@@ -43,7 +43,7 @@ LandscapeEventList::~LandscapeEventList()
 {
 }
 
-LandscapeEvent *LandscapeEventList::createXMLEntry()
+LandscapeEvent *LandscapeEventList::createXMLEntry(void *xmlData)
 {
 	return new LandscapeEvent();
 }

@@ -43,7 +43,7 @@ LandscapeSoundSoundChoice::~LandscapeSoundSoundChoice()
 {
 }
 
-LandscapeSoundSound *LandscapeSoundSoundChoice::createXMLEntry(const std::string &type)
+LandscapeSoundSound *LandscapeSoundSoundChoice::createXMLEntry(const std::string &type, void *xmlData)
 {
 	if (0 == strcmp(type.c_str(), "file")) return new LandscapeSoundSoundFile;
 	S3D::dialogMessage("LandscapeSoundSoundChoice", S3D::formatStringBuffer("Unknown sound type %s", type));
@@ -73,7 +73,7 @@ LandscapeSoundSoundFileList::~LandscapeSoundSoundFileList()
 {
 }
 
-XMLEntryString *LandscapeSoundSoundFileList::createXMLEntry()
+XMLEntryString *LandscapeSoundSoundFileList::createXMLEntry(void *xmlData)
 {
 	return new XMLEntryString("A file to load sounds from");
 }

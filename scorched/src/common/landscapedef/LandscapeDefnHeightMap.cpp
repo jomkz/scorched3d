@@ -42,7 +42,7 @@ LandscapeDefnHeightMapChoice::~LandscapeDefnHeightMapChoice()
 {
 }
 
-LandscapeDefnHeightMap *LandscapeDefnHeightMapChoice::createXMLEntry(const std::string &type)
+LandscapeDefnHeightMap *LandscapeDefnHeightMapChoice::createXMLEntry(const std::string &type, void *xmlData)
 {
 	if (0 == strcmp(type.c_str(), "generatenoise")) return new LandscapeDefnHeightMapGenerateNoise;
 	if (0 == strcmp(type.c_str(), "generate")) return new LandscapeDefnHeightMapGenerate;

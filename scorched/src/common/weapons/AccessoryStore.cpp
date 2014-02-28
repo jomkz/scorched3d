@@ -48,7 +48,6 @@ void AccessoryStore::clearAccessories()
 		delete accessory;
 	}
 	accessoriesById_.clear();
-	accessoryParts_.clear();
 	tabGroups_.clear();
 }
 
@@ -89,8 +88,8 @@ bool AccessoryStore::parseFile(
 			float(++childCount) / float(noChildren) * 100.0f);
 
 		// Parse the accessory
-		AccessoryCreateContext createContext(context);
 		Accessory *accessory = new Accessory(++nextAccessoryId_);
+		AccessoryCreateContext createContext(context, accessory);
 		if (!accessory->readXML(currentNode, &createContext))
 		{
 			return currentNode->returnError(
@@ -123,40 +122,6 @@ bool AccessoryStore::parseFile(
 	// Clear mapping as it now contains invalid pointers
 	parsingNodes_.clear();
 	return file.getRootNode()->failChildren();
-}
-
-AccessoryPart *AccessoryStore::createAccessoryPart(
-	AccessoryCreateContext &context, 
-	Accessory *parent, XMLNode *currentNode)
-{
-	XMLNode *typeNode = 0;
-	if (!currentNode->getNamedParameter("type", typeNode)) return false;
-
-	AccessoryPart *accessoryPart = 
-		AccessoryMetaRegistration::getNewAccessory(typeNode->getContent(), this);
-	if (!accessoryPart)
-	{
-		S3D::dialogMessage("AccessoryStore", S3D::formatStringBuffer(
-						"Failed to find accessory part type \"%s\"",
-						typeNode->getContent()));
-		return 0;
-	}
-	// Set the parent accessory
-	accessoryPart->setParent(parent);
-	
-	// Tell this accessory instance to initialize its settings from
-	// the current accessory xml definition node
-	if (!accessoryPart->parseXML(context, currentNode)) return 0;
-
-	// There should not be any children left
-	// Any that are, are children that have not been
-	// handled by the parse routine
-	if (!currentNode->failChildren()) return 0;
-	DIALOG_ASSERT(accessoryPart->getParent());
-
-	// Add the accessory
-	accessoryParts_.push_back(accessoryPart);
-	return accessoryPart;
 }
 
 void AccessoryStore::sortList(std::list<Accessory *> &accList, int sortKey)
@@ -297,23 +262,6 @@ Accessory *AccessoryStore::findByAccessoryId(unsigned int id)
 		accessoriesById_.find(id);
 	if (itor == accessoriesById_.end()) return 0;
 	return itor->second;
-}
-
-AccessoryPart *AccessoryStore::findAccessoryPartByAccessoryId(unsigned int id, const char *type)
-{
-	std::list<AccessoryPart *>::iterator itor;
-	for (itor = accessoryParts_.begin();
-		itor != accessoryParts_.end();
-		++itor)
-	{
-		AccessoryPart *accessoryPart = (*itor);
-		if (accessoryPart->getParent()->getAccessoryId() == id &&
-			0 == strcmp(accessoryPart->getAccessoryTypeName(), type))
-		{
-			return accessoryPart;
-		}
-	}
-	return 0;
 }
 
 bool AccessoryStore::writeAccessory(NamedNetBuffer &buffer, Accessory *accessory)

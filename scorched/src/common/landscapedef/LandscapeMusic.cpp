@@ -41,7 +41,7 @@ LandscapeMusicStateList::~LandscapeMusicStateList()
 {
 }
 
-XMLEntryEnum *LandscapeMusicStateList::createXMLEntry()
+XMLEntryEnum *LandscapeMusicStateList::createXMLEntry(void *xmlData)
 {
 	return new XMLEntryEnum("Play/enable the given music for the given state.", LandscapeMusicStateListEnum);
 }
@@ -68,7 +68,7 @@ LandscapeMusicList::~LandscapeMusicList()
 {
 }
 
-LandscapeMusic *LandscapeMusicList::createXMLEntry()
+LandscapeMusic *LandscapeMusicList::createXMLEntry(void *xmlData)
 {
 	return new LandscapeMusic();
 }

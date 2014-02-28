@@ -33,7 +33,6 @@ public:
 	TargetDefinition();
 	virtual ~TargetDefinition();
 
-	virtual bool readXML(XMLNode *node);
 	Target *createTarget(unsigned int playerId,
 		FixedVector &position,
 		FixedVector &velocity,

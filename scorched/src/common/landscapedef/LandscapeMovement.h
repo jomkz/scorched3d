@@ -38,7 +38,7 @@ public:
 	LandscapeMovementChoice();
 	virtual ~LandscapeMovementChoice();
 
-	virtual LandscapeMovement *createXMLEntry(const std::string &type);
+	virtual LandscapeMovement *createXMLEntry(const std::string &type, void *xmlData);
 	virtual void getAllTypes(std::set<std::string> &allTypes);
 };
 
@@ -48,7 +48,7 @@ public:
 	LandscapeMovementList();
 	virtual ~LandscapeMovementList();
 
-	virtual LandscapeMovementChoice *createXMLEntry();
+	virtual LandscapeMovementChoice *createXMLEntry(void *xmlData);
 };
 
 class LandscapeMovementBoids : public LandscapeMovement
@@ -86,7 +86,7 @@ public:
 	LandscapeMovementSplineControlPoints();
 	virtual ~LandscapeMovementSplineControlPoints();
 
-	virtual XMLEntryFixedVector *createXMLEntry();
+	virtual XMLEntryFixedVector *createXMLEntry(void *xmlData);
 };
 
 class LandscapeMovementSpline : public LandscapeMovement

@@ -40,7 +40,7 @@ public:
 	LandscapeSoundSoundChoice();
 	virtual ~LandscapeSoundSoundChoice();
 
-	virtual LandscapeSoundSound *createXMLEntry(const std::string &type);
+	virtual LandscapeSoundSound *createXMLEntry(const std::string &type, void *xmlData);
 	virtual void getAllTypes(std::set<std::string> &allTypes);
 };
 
@@ -50,7 +50,7 @@ public:
 	LandscapeSoundSoundFileList();
 	virtual ~LandscapeSoundSoundFileList();
 
-	virtual XMLEntryString *createXMLEntry();
+	virtual XMLEntryString *createXMLEntry(void *xmlData);
 };
 
 class LandscapeSoundSoundFile : public LandscapeSoundSound

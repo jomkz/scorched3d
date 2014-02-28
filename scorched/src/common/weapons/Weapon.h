@@ -121,7 +121,7 @@ public:
 	XMLEntryWeaponChoice();
 	virtual ~XMLEntryWeaponChoice();
 
-	virtual Weapon *createXMLEntry(const std::string &type);
+	virtual Weapon *createXMLEntry(const std::string &type, void *xmlData);
 	virtual void getAllTypes(std::set<std::string> &allTypes);
 };
 

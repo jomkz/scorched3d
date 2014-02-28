@@ -45,7 +45,7 @@ public:
 	LandscapeDefnDeformChoice();
 	virtual ~LandscapeDefnDeformChoice();
 
-	virtual LandscapeDefnDeform *createXMLEntry(const std::string &type);
+	virtual LandscapeDefnDeform *createXMLEntry(const std::string &type, void *xmlData);
 	virtual void getAllTypes(std::set<std::string> &allTypes);
 };
 

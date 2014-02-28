@@ -49,7 +49,7 @@ public:
 	WeaponTeamActionEntryList();
 	virtual ~WeaponTeamActionEntryList();
 
-	WeaponTeamActionEntry *createXMLEntry();
+	WeaponTeamActionEntry *createXMLEntry(void *xmlData);
 };
 
 class WeaponTeamAction : public WeaponCallback

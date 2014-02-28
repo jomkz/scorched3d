@@ -126,12 +126,25 @@ XMLEntryWeaponChoice::~XMLEntryWeaponChoice()
 {
 }
 
-Weapon *XMLEntryWeaponChoice::createXMLEntry(const std::string &type)
+Weapon *XMLEntryWeaponChoice::createXMLEntry(const std::string &type, void *xmlData)
 {
-
+	AccessoryPart *part = AccessoryMetaRegistration::getNewAccessory(type.c_str());
+	AccessoryCreateContext *context = (AccessoryCreateContext *) xmlData;
+	if (context && part)
+	{
+		DIALOG_ASSERT(part->getType() == AccessoryPart::AccessoryWeapon);
+		part->setParent(context->getAccessory());
+	}
+	return (Weapon *) part;
 }
 
 void XMLEntryWeaponChoice::getAllTypes(std::set<std::string> &allTypes)
 {
-
+	std::map<std::string, AccessoryPart *>::iterator 
+		itor = AccessoryMetaRegistration::weaponMap->begin(),
+		end = AccessoryMetaRegistration::weaponMap->end();
+	for (;itor!=end;++itor)
+	{
+		allTypes.insert(itor->first);
+	}
 }

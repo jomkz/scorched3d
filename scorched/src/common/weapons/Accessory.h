@@ -28,16 +28,6 @@
 #include <string>
 #include <map>
 
-class AccessoryClassXmlEntry : public XMLEntryTypeChoice<XMLEntry>
-{
-public:
-	AccessoryClassXmlEntry();
-	virtual ~AccessoryClassXmlEntry();
-
-	virtual XMLEntry *createXMLEntry(const std::string &type);
-	virtual void getAllTypes(std::set<std::string> &allTypes);
-};
-
 class Accessory : public XMLEntryContainer
 {
 public:
@@ -75,10 +65,10 @@ public:
 	const char *getIconName() { return iconName_.getValue().c_str(); }
 	const char *getGroupName() { return groupName_.getValue().c_str(); }
 	const char *getTabGroupName() { return tabGroupName_.getValue().c_str(); }
-	AccessoryPart *getAction() { return accessoryAction_; }
+	AccessoryPart *getAction() { return accessoryAction_.getValue(); }
 	XMLEntryModelID &getModel() { return modelId_; }
 
-	AccessoryPart::AccessoryType getType() { return accessoryAction_->getType(); }
+	AccessoryPart::AccessoryType getType() { return accessoryAction_.getValue()->getType(); }
 
 	void setPrice(int p) { if (p>0) price_.setValue(p); }
 	void setSellPrice(int p) { if (p>0) sellPrice_ = p; }
@@ -90,10 +80,10 @@ public:
 protected:
 	unsigned int nextAccessoryId_;
 	unsigned int accessoryId_;
-	AccessoryPart *accessoryAction_;
 	LangString stringName_;
 	int sellPrice_, originalPrice_, originalSellPrice_;
 
+	XMLEntryAccessoryPartChoice accessoryAction_;
 	XMLEntryString name_, description_;
 	XMLEntryInt price_, bundle_;
 	XMLEntryInt startingNumber_, useNumber_, maximumNumber_;

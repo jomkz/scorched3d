@@ -30,7 +30,7 @@ LandscapeDefnDeformChoice::~LandscapeDefnDeformChoice()
 {
 }
 
-LandscapeDefnDeform *LandscapeDefnDeformChoice::createXMLEntry(const std::string &type)
+LandscapeDefnDeform *LandscapeDefnDeformChoice::createXMLEntry(const std::string &type, void *xmlData)
 {
 	if (0 == strcmp(type.c_str(), "solid")) return new LandscapeDefnDeformSolid;
 	if (0 == strcmp(type.c_str(), "deform")) return new LandscapeDefnDeformDeform;

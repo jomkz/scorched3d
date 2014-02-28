@@ -40,7 +40,7 @@ public:
 	LandscapeMusicStateList();
 	virtual ~LandscapeMusicStateList();
 
-	virtual XMLEntryEnum *createXMLEntry();
+	virtual XMLEntryEnum *createXMLEntry(void *xmlData);
 };
 
 class LandscapeMusic : public XMLEntryContainer
@@ -60,7 +60,7 @@ public:
 	LandscapeMusicList();
 	virtual ~LandscapeMusicList();
 
-	virtual LandscapeMusic *createXMLEntry();
+	virtual LandscapeMusic *createXMLEntry(void *xmlData);
 };
 
 #endif // __INCLUDE_LandscapeMusich_INCLUDE__

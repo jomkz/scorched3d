@@ -53,7 +53,7 @@ public:
 	LandscapeSoundPositionChoice();
 	virtual ~LandscapeSoundPositionChoice();
 
-	virtual LandscapeSoundPosition *createXMLEntry(const std::string &type);
+	virtual LandscapeSoundPosition *createXMLEntry(const std::string &type, void *xmlData);
 	virtual void getAllTypes(std::set<std::string> &allTypes);
 };
 

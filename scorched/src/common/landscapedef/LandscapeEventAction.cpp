@@ -35,7 +35,7 @@ LandscapeEventActionChoice::~LandscapeEventActionChoice()
 {
 }
 
-LandscapeEventAction *LandscapeEventActionChoice::createXMLEntry(const std::string &type)
+LandscapeEventAction *LandscapeEventActionChoice::createXMLEntry(const std::string &type, void *xmlData)
 {
 	if (0 == strcmp(type.c_str(), "fireweapon")) return new LandscapeEventActionFireWeapon;
 	if (0 == strcmp(type.c_str(), "fireweaponfromgroup")) return new LandscapeEventActionFireWeaponFromGroup;

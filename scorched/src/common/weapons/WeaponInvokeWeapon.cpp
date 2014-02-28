@@ -43,21 +43,24 @@ bool WeaponInvokeWeapon::readXML(XMLNode *node, void *xmlData)
 	if (!Weapon::readXML(node, xmlData)) return false;
 
 	AccessoryCreateContext *context = (AccessoryCreateContext *) xmlData;
-	Accessory *accessory = context->getAccessoryStore().
-		findByPrimaryAccessoryName(invoke_.getValue().c_str());
-	if (!accessory)
+	if (context)
 	{
-		return node->returnError(
-			S3D::formatStringBuffer("Failed to find accessory named %s",
-			invoke_.getValue().c_str()));
-	}
+		Accessory *accessory = context->getAccessoryStore().
+			findByPrimaryAccessoryName(invoke_.getValue().c_str());
+		if (!accessory)
+		{
+			return node->returnError(
+				S3D::formatStringBuffer("Failed to find accessory named %s",
+				invoke_.getValue().c_str()));
+		}
 
-	AccessoryPart *accessoryPart = accessory->getAction();
-	if (!accessoryPart || accessoryPart->getType() != AccessoryPart::AccessoryWeapon)
-	{
-		return node->returnError("Failed to find sub weapon, not a weapon");
+		AccessoryPart *accessoryPart = accessory->getAction();
+		if (!accessoryPart || accessoryPart->getType() != AccessoryPart::AccessoryWeapon)
+		{
+			return node->returnError("Failed to find sub weapon, not a weapon");
+		}
+		invokeWeapon_ = (Weapon*) accessoryPart;
 	}
-	invokeWeapon_ = (Weapon*) accessoryPart;
 
 	return true;
 }

@@ -129,7 +129,7 @@ PlacementTypeChoice::~PlacementTypeChoice()
 {
 }
 
-PlacementType *PlacementTypeChoice::createXMLEntry(const std::string &type)
+PlacementType *PlacementTypeChoice::createXMLEntry(const std::string &type, void *xmlData)
 {
 	if (0 == strcmp(type.c_str(), "trees")) return new PlacementTypeTree;
 	if (0 == strcmp(type.c_str(), "mask")) return new PlacementTypeMask;
@@ -160,7 +160,7 @@ PlacementTypeList::~PlacementTypeList()
 {
 }
 
-PlacementTypeChoice *PlacementTypeList::createXMLEntry()
+PlacementTypeChoice *PlacementTypeList::createXMLEntry(void *xmlData)
 {
 	return new PlacementTypeChoice();
 }

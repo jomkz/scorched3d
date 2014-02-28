@@ -35,7 +35,7 @@ WeaponSoundList::~WeaponSoundList()
 {
 }
 
-XMLEntrySoundID *WeaponSoundList::createXMLEntry()
+XMLEntrySoundID *WeaponSoundList::createXMLEntry(void *xmlData)
 {
 	return new XMLEntrySoundID(false);
 }

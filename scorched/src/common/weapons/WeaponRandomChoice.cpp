@@ -49,7 +49,7 @@ WeaponRandomChoiceItemList::~WeaponRandomChoiceItemList()
 {
 }
 
-WeaponRandomChoiceItem *WeaponRandomChoiceItemList::createXMLEntry()
+WeaponRandomChoiceItem *WeaponRandomChoiceItemList::createXMLEntry(void *xmlData)
 {
 	return new WeaponRandomChoiceItem();
 }

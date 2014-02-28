@@ -40,7 +40,7 @@ public:
 	WeaponTypeActionEntryList();
 	virtual ~WeaponTypeActionEntryList();
 
-	virtual WeaponTypeActionEntry *createXMLEntry();
+	virtual WeaponTypeActionEntry *createXMLEntry(void *xmlData);
 };
 
 class WeaponTypeAction : public WeaponCallback

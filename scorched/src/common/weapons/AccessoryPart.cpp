@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <weapons/AccessoryPart.h>
+#include <weapons/AccessoryCreateContext.h>
 #include <stdlib.h>
 
 unsigned int AccessoryPart::nextAccessoryPartId_ = 100000;
@@ -36,19 +37,25 @@ AccessoryPart::~AccessoryPart()
 }
 
 std::map<std::string, AccessoryPart *> *AccessoryMetaRegistration::accessoryMap = 0;
+std::map<std::string, AccessoryPart *> *AccessoryMetaRegistration::weaponMap = 0;
 
 void AccessoryMetaRegistration::addMap(const char *name, AccessoryPart *accessory)
 {
 	if (!accessoryMap) accessoryMap = new std::map<std::string, AccessoryPart *>;
+	if (!weaponMap) weaponMap = new std::map<std::string, AccessoryPart *>;
 
 	std::map<std::string, AccessoryPart *>::iterator itor = 
 		accessoryMap->find(name);
 	DIALOG_ASSERT(itor == accessoryMap->end());
 
 	(*accessoryMap)[name] = accessory;
+	if (accessory->getType() == AccessoryPart::AccessoryWeapon)
+	{
+		(*weaponMap)[name] = accessory;
+	}
 }
 
-AccessoryPart *AccessoryMetaRegistration::getNewAccessory(const char *name, AccessoryStore *store)
+AccessoryPart *AccessoryMetaRegistration::getNewAccessory(const char *name)
 {
 	std::map<std::string, AccessoryPart *>::iterator itor = 
 		accessoryMap->find(name);
@@ -56,4 +63,35 @@ AccessoryPart *AccessoryMetaRegistration::getNewAccessory(const char *name, Acce
 
 	AccessoryPart *newAccessory = (*itor).second->getAccessoryCopy();
 	return newAccessory;
+}
+
+XMLEntryAccessoryPartChoice::XMLEntryAccessoryPartChoice() :
+	XMLEntryTypeChoice<AccessoryPart>("AccessoryPartChoice", "The choice of an accessory part")
+{
+}
+
+XMLEntryAccessoryPartChoice::~XMLEntryAccessoryPartChoice()
+{
+}
+
+AccessoryPart *XMLEntryAccessoryPartChoice::createXMLEntry(const std::string &type, void *xmlData)
+{
+	AccessoryPart *result = AccessoryMetaRegistration::getNewAccessory(type.c_str());
+	AccessoryCreateContext *context = (AccessoryCreateContext *) xmlData;
+	if (context && result)
+	{
+		result->setParent(context->getAccessory());
+	}
+	return result;
+}
+
+void XMLEntryAccessoryPartChoice::getAllTypes(std::set<std::string> &allTypes)
+{
+	std::map<std::string, AccessoryPart *>::iterator 
+		itor = AccessoryMetaRegistration::accessoryMap->begin(),
+		end = AccessoryMetaRegistration::accessoryMap->end();
+	for (;itor!=end;++itor)
+	{
+		allTypes.insert(itor->first);
+	}
 }

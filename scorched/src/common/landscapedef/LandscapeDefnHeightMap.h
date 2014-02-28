@@ -54,7 +54,7 @@ public:
 	LandscapeDefnHeightMapChoice();
 	virtual ~LandscapeDefnHeightMapChoice();
 
-	virtual LandscapeDefnHeightMap *createXMLEntry(const std::string &type);
+	virtual LandscapeDefnHeightMap *createXMLEntry(const std::string &type, void *xmlData);
 	virtual void getAllTypes(std::set<std::string> &allTypes);
 };
 
