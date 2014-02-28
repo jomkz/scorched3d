@@ -93,6 +93,7 @@ void UIStatePlayingLand::defineOptions()
 	terrainGlobalOptions_ = new Ogre::TerrainGlobalOptions();
     terrainGlobalOptions_->setMaxPixelError(8);
     terrainGlobalOptions_->setCompositeMapDistance(10000); 
+	terrainGlobalOptions_->setUseVertexCompressionWhenAvailable(false);
 	terrainGlobalOptions_->setVisibilityFlags(OgreSystem::VisibiltyMaskLandscape);
 	terrainGlobalOptions_->setDefaultResourceGroup("Landscape");
 
