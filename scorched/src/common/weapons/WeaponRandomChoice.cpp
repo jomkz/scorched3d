@@ -26,64 +26,56 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponRandomChoice);
 
+WeaponRandomChoiceItem::WeaponRandomChoiceItem() :
+	XMLEntryContainer("WeaponRandomChoiceItem", 
+		"A weapon definition with a weight, the weight defines the probability that this weapon will be chosen"),
+	weight_("The probability weight")
+{
+	addChildXMLEntry("weapon", &weapon_);
+	addChildXMLEntry("weight", &weight_);
+}
+
+WeaponRandomChoiceItem::~WeaponRandomChoiceItem()
+{
+}
+
+WeaponRandomChoiceItemList::WeaponRandomChoiceItemList() :
+	XMLEntryList<WeaponRandomChoiceItem>(
+		"A list of WeaponRandomChoiceItem items, only one will be chosen based on a weighted probability", 1)
+{
+}
+
+WeaponRandomChoiceItemList::~WeaponRandomChoiceItemList()
+{
+}
+
+WeaponRandomChoiceItem *WeaponRandomChoiceItemList::createXMLEntry()
+{
+	return new WeaponRandomChoiceItem();
+}
+
 WeaponRandomChoice::WeaponRandomChoice() : 
+	Weapon("WeaponRandomChoice", "Used to randomly choose between different primitives."),
 	totalWeight_(0)
 {
+	addChildXMLEntry("weaponchoice", &itemList_);
 }
 
 WeaponRandomChoice::~WeaponRandomChoice()
 {
-	while (!weaponsChoice_.empty())
-	{
-		delete weaponsChoice_.back().weapon;
-		weaponsChoice_.pop_back();
-	}
+
 }
 
-bool WeaponRandomChoice::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
+bool WeaponRandomChoice::readXML(XMLNode *node, void *xmlData)
 {
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	for (int i=1;;i++)
+	if (!Weapon::readXML(node, xmlData)) return false;
+	std::list<WeaponRandomChoiceItem *>::iterator itor = itemList_.getChildren().begin(),
+		end = itemList_.getChildren().end();
+	for (;itor!=end;++itor)
 	{
-		// Get the next weaponchoice
-		char buffer[128];
-		snprintf(buffer, 128, "weaponchoice%i", i);
-		XMLNode *subNode = 0;
-		accessoryNode->getNamedChild(buffer, subNode, false);
-		if (!subNode) break;
-
-		// Get the weight
-		int weight = 0;
-		if (!subNode->getNamedChild("weight", weight)) return false;
-
-		// Get the weapon
-		XMLNode *weaponNode = 0;
-		if (!subNode->getNamedChild("weapon", weaponNode)) return false;
-		AccessoryPart *accessory = context.getAccessoryStore().
-			createAccessoryPart(context, parent_, weaponNode);
-		if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
-		{
-			return weaponNode->returnError("Failed to find sub weapon, not a weapon");
-		}
-		Weapon *weapon = (Weapon*) accessory;
-
-		// Add this entry
-		WeaponWeight weaponWeight = { weight, weapon };
-		weaponsChoice_.push_back(weaponWeight);
-		totalWeight_ += weight;
-
-		// Check the node is empty
-		if (!subNode->failChildren()) return false;
+		totalWeight_ += (*itor)->weight_.getValue();
 	}
-
-	if (weaponsChoice_.empty())
-	{
-		return accessoryNode->returnError(
-			"Must provide at least one random choice");
-	}
-
-	return accessoryNode->failChildren();
+	return true;
 }
 
 void WeaponRandomChoice::fireWeapon(ScorchedContext &context,
@@ -93,17 +85,16 @@ void WeaponRandomChoice::fireWeapon(ScorchedContext &context,
 	unsigned int randWeight = random.getRandUInt("WeaponRandomChoice") % totalWeight_;
 	unsigned int currentWeight = 0;
 
-	std::list<WeaponWeight>::iterator itor;
-	for (itor = weaponsChoice_.begin();
-		itor != weaponsChoice_.end();
-		++itor)
+	std::list<WeaponRandomChoiceItem *>::iterator itor = itemList_.getChildren().begin(),
+		end = itemList_.getChildren().end();
+	for (;itor!=end;++itor)
 	{
-		WeaponWeight &weightEntry = *itor;
-		currentWeight += weightEntry.weight;
+		WeaponRandomChoiceItem *weightEntry = *itor;
+		currentWeight += weightEntry->weight_.getValue();
 
 		if (currentWeight >= randWeight)
 		{
-			Weapon *weapon = weightEntry.weapon;
+			Weapon *weapon = weightEntry->weapon_.getValue();
 			weapon->fire(context, weaponContext, position, velocity);
 			break;
 		}

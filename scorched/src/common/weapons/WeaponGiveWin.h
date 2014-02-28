@@ -45,7 +45,6 @@ public:
 protected:
 	XMLEntryString objective_;
 	XMLEntryInt winningTeam_;
-
 };
 
 #endif // __INCLUDE_WeaponGiveWinh_INCLUDE__

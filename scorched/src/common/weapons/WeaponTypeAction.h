@@ -23,7 +23,7 @@
 
 #include <actions/CallbackWeapon.h>
 
-class WeaponTypeAction  : public WeaponCallback
+class WeaponTypeAction : public WeaponCallback
 {
 public:
 	WeaponTypeAction();
@@ -46,7 +46,6 @@ public:
 
 protected:
 	std::map<std::string, Weapon *> actions_;
-
 };
 
 #endif // __INCLUDE_WeaponTypeActionh_INCLUDE__

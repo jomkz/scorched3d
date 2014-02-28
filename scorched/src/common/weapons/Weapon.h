@@ -100,9 +100,6 @@ class Weapon : public AccessoryPart
 public:
 	Weapon(const char *typeName, const char *description);
 	virtual ~Weapon();
-
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
 	
 	virtual void fire(ScorchedContext &context,
 		WeaponFireContext &weaponContext,

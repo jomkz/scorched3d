@@ -22,8 +22,9 @@
 #define __INCLUDE_WeaponRollerh_INCLUDE__
 
 #include <weapons/Weapon.h>
-#include <common/ModelID.h>
+#include <engine/PhysicsParticleObject.h>
 #include <engine/ObjectGroupEntryDefinition.h>
+#include <XML/XMLEntryComplexTypes.h>
 
 class ScorchedContext;
 class WeaponRoller : public Weapon
@@ -32,25 +33,17 @@ public:
 	WeaponRoller();
 	virtual ~WeaponRoller();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
-
-	Weapon *getCollisionAction() { return collisionAction_; }
-	ModelID &getRollerModelID() { return rollerModelId_; }
-	bool getRoll() { return roll_; }
-	bool getStickyShields() { return stickyShields_; }
-	bool getNoCameraTrack() { return noCameraTrack_; }
-	bool getLandscapeCollision() { return landscapeCollision_; }
-	bool getShieldCollision() { return shieldCollision_; }
-	fixed getShieldHurtFactor(ScorchedContext &context);
-	fixed getTime(ScorchedContext &context);
-	fixed getWindFactor(ScorchedContext &context);
-	fixed getGravityFactor(ScorchedContext &context);
-	fixed getStepSize() { return stepSize_; }
-	fixed getScale(ScorchedContext &context);
+	Weapon *getCollisionAction() { return collisionAction_.getValue(); }
+	XMLEntryModelID &getRollerModelID() { return rollerModelId_; }
+	bool getRoll() { return roll_.getValue(); }
+	bool getNoCameraTrack() { return noCameraTrack_.getValue(); }
+	fixed getShieldHurtFactor(ScorchedContext &context) { return shieldHurtFactorExp_.getValue(context); }
+	fixed getTime(ScorchedContext &context) { return timeExp_.getValue(context); }
+	fixed getStepSize() { return stepSize_.getValue(); }
 
 	ObjectGroupEntryDefinition &getLocalGroups() { return localGroups_; }
 	ObjectGroupEntryDefinition &getGlobalGroups() { return globalGroups_; }
+	PhysicsParticleObjectDefinition &getParticleDefinition() { return particleDefinition_; }
 
 	// Inherited from Weapon
 	virtual void fireWeapon(ScorchedContext &context,
@@ -59,28 +52,22 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponRoller, AccessoryPart::AccessoryWeapon);
 
 protected:
-	NumberParser numberRollers_;
-	Weapon *collisionAction_;
-	ModelID rollerModelId_;
+	XMLEntryNumberParser numberRollers_;
+	XMLEntryWeaponChoice collisionAction_;
+	XMLEntryModelID rollerModelId_;
+	XMLEntryNumberParser dampenVelocityExp_;
+	XMLEntryNumberParser shieldHurtFactorExp_;
+	XMLEntryNumberParser timeExp_;
+	XMLEntryFixed stepSize_;
+	XMLEntryBool roll_;
+	XMLEntryBool maintainVelocity_;
+	XMLEntryBool noCameraTrack_;
+	PhysicsParticleObjectDefinition particleDefinition_;
 	ObjectGroupEntryDefinition localGroups_, globalGroups_;
-	NumberParser dampenVelocityExp_;
-	NumberParser shieldHurtFactorExp_;
-	NumberParser gravityFactorExp_;
-	NumberParser windFactorExp_;
-	NumberParser timeExp_;
-	NumberParser scale_;
-	fixed stepSize_;
-	bool roll_;
-	bool stickyShields_;
-	bool landscapeCollision_;
-	bool shieldCollision_;
-	bool maintainVelocity_;
-	bool noCameraTrack_;
 	
 	void addRoller(ScorchedContext &context, 
 		WeaponFireContext &weaponContext,
 		FixedVector &position, FixedVector &velocity);
-
 };
 
 #endif

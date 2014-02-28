@@ -149,7 +149,7 @@ void ShotProjectile::collision(PhysicsParticleObject &position,
 		{
 			doColl = false;
 		}
-		if ((getWeapon()->getTimedCollision(*context_) > 0) && getWeapon()->getTimedDud())
+		if (timedCollision_ > 0 && getWeapon()->getTimedDud())
 		{
 			doColl = false;
 		}
@@ -162,20 +162,6 @@ void ShotProjectile::collision(PhysicsParticleObject &position,
 void ShotProjectile::simulate(fixed frameTime, bool &remove)
 {
 	totalTime_ += frameTime;
-
-	// Water collision
-	if (!remove &&
-		getWeapon()->getWaterCollision())
-	{
-		LandscapeTex &tex = *context_->getLandscapeMaps().getDefinitions().getTex();
-		fixed waterHeight = tex.waterHeight.getValue();
-
-		if (getPhysics().getPosition()[2] < waterHeight)
-		{
-			doCollision(getPhysics().getPosition());
-			remove = true;
-		}
-	}
 
 	// Apex collision
 	if (!remove &&

@@ -23,7 +23,7 @@
 
 #include <weapons/Weapon.h>
 
-class WeaponSkyFlash  : public Weapon
+class WeaponSkyFlash : public Weapon
 {
 public:
 	WeaponSkyFlash();

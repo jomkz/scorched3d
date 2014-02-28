@@ -45,7 +45,6 @@ public:
 protected:
 	XMLEntryNumberParser life_;
 	XMLEntryBool exceedMax_;
-
 };
 
 #endif // __INCLUDE_WeaponGiveLifeh_INCLUDE__

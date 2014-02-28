@@ -23,6 +23,7 @@
 #include <engine/ActionController.h>
 #include <engine/Simulator.h>
 #include <landscapemap/LandscapeMaps.h>
+#include <landscapedef/LandscapeTex.h>
 #include <tank/Tank.h>
 #include <target/TargetSpace.h>
 #include <target/TargetShield.h>
@@ -40,10 +41,39 @@
 #include <common/Defines.h>
 #include <common/Logger.h>
 
+PhysicsParticleObjectDefinition::PhysicsParticleObjectDefinition() :
+	under_("Can the projectile tunnel underground (if it starts underground).  Can be used with WeaponAimedUnder", 0, false),
+	waterCollision_("The projectile will collide with water surface", 0, false), 
+	wallCollision_("The projectile will collide with walls", 0, true),
+	landscapeCollision_("The projectile will collide with the landscape", 0, true), 
+	shieldCollision_("The projectile will collide with shields", 0, true),
+	stickyShields_("The projectile will stick to shields", 0, false),
+	windFactor_("PhysicsParticleObjectDefinition::windFactor", "Scale of wind's effect on the projectile, default = 1.0, 0.0 = no effect", 0, "1"), 
+	gravityFactor_("PhysicsParticleObjectDefinition::gravityFactor", "Scale of gravity's effect on the projectile, default = 1.0, 0.0 = no effect", 0, "1")
+{
+}
+
+PhysicsParticleObjectDefinition::~PhysicsParticleObjectDefinition()
+{
+}
+
+void PhysicsParticleObjectDefinition::addAllEntries(XMLEntryContainer &container)
+{
+	container.addChildXMLEntry("under", &under_);
+	container.addChildXMLEntry("watercollision", &waterCollision_);
+	container.addChildXMLEntry("nowallcollision", &wallCollision_);
+	container.addChildXMLEntry("landscapecollision", &landscapeCollision_);
+	container.addChildXMLEntry("shieldcollision", &shieldCollision_);
+	container.addChildXMLEntry("stickyshields", &stickyShields_);
+	container.addChildXMLEntry("windfactor", &windFactor_);
+	container.addChildXMLEntry("gravityfactor", &gravityFactor_);
+}
+
 PhysicsParticleObject::PhysicsParticleObject() : 
 	handler_(0), context_(0), optionUnderGroundCollision_(false), iterations_(0),
 	info_(ParticleTypeNone, 0, 0), optionRotateOnCollision_(false), optionWallCollision_(true),
-	optionStickyShields_(false), optionShieldCollision_(true), optionLandscapeCollision_(true)
+	optionStickyShields_(false), optionShieldCollision_(true), optionLandscapeCollision_(true),
+	optionWaterCollision_(false)
 {
 }
 
@@ -75,6 +105,20 @@ void PhysicsParticleObject::setPhysics(
 	velocity_ = velocity;
 
 	setForces(1, 1);
+}
+
+void PhysicsParticleObject::setDefinition(
+	ScorchedContext &context, PhysicsParticleObjectDefinition &definition)
+{
+	optionUnderGroundCollision_ = definition.under_.getValue();
+	optionWallCollision_ = definition.wallCollision_.getValue();
+	optionStickyShields_ = definition.stickyShields_.getValue();
+	optionShieldCollision_ = definition.shieldCollision_.getValue();
+	optionLandscapeCollision_ = definition.landscapeCollision_.getValue();
+	optionWaterCollision_ = definition.waterCollision_.getValue();
+	fixed windFactor = definition.windFactor_.getValue(context);
+	fixed gravityFactor = definition.gravityFactor_.getValue(context);
+	setForces(windFactor, gravityFactor);
 }
 
 void PhysicsParticleObject::setForces(
@@ -474,6 +518,21 @@ bool PhysicsParticleObject::getLandscapeCollision(CollisionInfo &collision)
 			return true;
 		}
 	}
+
+	if (optionWaterCollision_)
+	{
+		LandscapeTex &tex = *context_->getLandscapeMaps().getDefinitions().getTex();
+		fixed waterHeight = tex.waterHeight.getValue();
+
+		if (position_[2] < waterHeight)
+		{
+			collision.collisionId = CollisionIdLandscape;
+			collision.deflectFactor = 1;
+			collision.normal = FixedVector(0, 0, 1);
+			return true;
+		}
+	}
+
 	return false;
 }
 

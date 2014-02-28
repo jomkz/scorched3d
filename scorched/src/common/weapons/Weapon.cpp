@@ -128,7 +128,7 @@ XMLEntryWeaponChoice::~XMLEntryWeaponChoice()
 
 Weapon *XMLEntryWeaponChoice::createXMLEntry(const std::string &type)
 {
-	return 0;
+
 }
 
 void XMLEntryWeaponChoice::getAllTypes(std::set<std::string> &allTypes)

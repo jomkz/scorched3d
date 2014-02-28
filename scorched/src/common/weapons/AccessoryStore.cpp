@@ -118,32 +118,8 @@ bool AccessoryStore::parseFile(
 		accessoriesById_[accessory->getAccessoryId()] = accessory;
 		accessories_.push_back(accessory);
 
-		// Add weapons to death animations, weighted by arms level
-		if (accessory->getAction()->getType() == AccessoryPart::AccessoryWeapon)
-		{
-			if (0 == strcmp(accessory->getName(), "WeaponMuzzle"))
-			{
-				muzzleFlash_ = accessory;
-			}
-			else if (0 == strcmp(accessory->getName(), "WeaponDeathAnimation"))
-			{
-				deathAnimation_ = accessory;
-			}
-		}	
-
 		// Add to the map so references can find it
 		parsingNodes_[accessory->getName()] = currentNode;
-	}
-
-	if (!muzzleFlash_)
-	{
-		return file.getRootNode()->returnError(
-			"Failed to find WeaponMuzzle weapon used for muzzle flash.");
-	}
-	if (!deathAnimation_)
-	{
-		return file.getRootNode()->returnError(
-			"Failed to find WeaponDeathAnimation weapon used for tank explosions.");
 	}
 
 	// Clear mapping as it now contains invalid pointers
@@ -299,16 +275,6 @@ std::list<Accessory *> AccessoryStore::getAllAccessories(int sortKey)
 
 	if (sortKey) sortList(result, sortKey);
 	return result;
-}
-
-Accessory *AccessoryStore::getMuzzelFlash()
-{
-	return muzzleFlash_;
-}
-
-Accessory *AccessoryStore::getDeathAnimation()
-{
-	return deathAnimation_;
 }
 
 Accessory *AccessoryStore::findByPrimaryAccessoryName(const char *name)

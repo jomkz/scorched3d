@@ -24,7 +24,7 @@
 #include <actions/CallbackWeapon.h>
 #include <XML/XMLEntrySimpleTypes.h>
 
-class WeaponMessage  : public WeaponCallback
+class WeaponMessage : public WeaponCallback
 {
 public:
 	WeaponMessage();

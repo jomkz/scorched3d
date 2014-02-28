@@ -35,110 +35,36 @@
 REGISTER_ACCESSORY_SOURCE(WeaponRoller);
 
 WeaponRoller::WeaponRoller() : 
-	shieldHurtFactorExp_("WeaponRoller::shieldHurtFactorExp", 0), 
-	windFactorExp_("WeaponRoller::windFactorExp", 1), 
-	gravityFactorExp_("WeaponRoller::gravityFactorExp", 1),
-	maintainVelocity_(false), roll_(true),
-	dampenVelocityExp_("WeaponRoller::dampenVelocityExp", 1), stepSize_(true, 100),
-	collisionAction_(0), stickyShields_(false),
-	landscapeCollision_(true), shieldCollision_(true),
-	noCameraTrack_(false), scale_("WeaponRoller::scale", 1),
-	timeExp_("WeaponRoller::timeExp"),
-	numberRollers_("WeaponRoller::numberRollers")
+	Weapon("WeaponRoller", "Creates a specific number of rolling warheads which roll downhill."
+		"When the rollers time out or collide with something they trigger a collisionaction."),
+	shieldHurtFactorExp_("WeaponRoller::shieldHurtFactorExp", "Amount of damage the roller does during shield collisions.  "
+		"1 = 100%, 2 = 200%, 0 = no damage, etc", 0, "0"), 
+	dampenVelocityExp_("WeaponRoller::dampenVelocityExp", "If maintainvelocity=true, multiplies the velocity by this factor to control the amount of velocity retained by the rollers."
+		"0 = none, 1.0 = full", 0, "1"), 
+	timeExp_("WeaponRoller::timeExp", "Number of seconds the rollers will roll before exploding"),
+	numberRollers_("WeaponRoller::numberRollers", "Number of rollers to create"),
+	maintainVelocity_("If true, the roller will keep its momentum when it spawns", 0, false), 
+	roll_("Whether or not the roller model will roll", 0, true),
+	stepSize_("How long should the update between each roll be", 0, fixed(true, 100)),
+	noCameraTrack_("Consider this projectile as an action camera target", 0, false)
 {
-
+	addChildXMLEntry("time", &timeExp_);
+	addChildXMLEntry("numberrollers", &numberRollers_);
+	addChildXMLEntry("collisionaction", &collisionAction_);
+	addChildXMLEntry("rollermodel", &rollerModelId_);
+	addChildXMLEntry("shieldhurtfactor", &shieldHurtFactorExp_);
+	addChildXMLEntry("dampenvelocity", &dampenVelocityExp_);
+	addChildXMLEntry("maintainvelocity", &maintainVelocity_);
+	addChildXMLEntry("roll", &roll_);
+	addChildXMLEntry("stepsize", &stepSize_);
+	addChildXMLEntry("nocameratrack", &noCameraTrack_);
+	addChildXMLEntry("localgroupname", &localGroups_);
+	addChildXMLEntry("globalgroupname", &globalGroups_);
+	particleDefinition_.addAllEntries(*this);
 }
 
 WeaponRoller::~WeaponRoller()
 {
-	delete collisionAction_;
-	collisionAction_ = 0;
-}
-
-bool WeaponRoller::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	// Get number of rollers
-	if (!accessoryNode->getNamedChild("numberrollers", numberRollers_)) return false;
-
-	accessoryNode->getNamedChild("scale", scale_, false);
-
-	// Get life time
-	if (!accessoryNode->getNamedChild("time", timeExp_)) return false;
-	accessoryNode->getNamedChild("stepsize", stepSize_, false);
-
-	accessoryNode->getNamedChild("landscapecollision", landscapeCollision_, false);
-	accessoryNode->getNamedChild("shieldcollision", shieldCollision_, false);
-
-    // Get the hurt factor (if any)
-    accessoryNode->getNamedChild("shieldhurtfactor", shieldHurtFactorExp_, false);
-
-	// Get the wind factor (if any)
-	accessoryNode->getNamedChild("windfactor", windFactorExp_, false);
-	accessoryNode->getNamedChild("gravityfactor", gravityFactorExp_, false);
-
-	// Get the maintianvelocity (if any)
-	accessoryNode->getNamedChild("maintainvelocity", maintainVelocity_, false);
-
-	// Get the velocity dampening factor (if any)
-	accessoryNode->getNamedChild("dampenvelocity", dampenVelocityExp_, false);
-
-	// Get if we are to roll
-	accessoryNode->getNamedChild("roll", roll_, false);
-
-	// Get if we are to roll
-	accessoryNode->getNamedChild("stickyshields", stickyShields_, false);
-
-	accessoryNode->getNamedChild("nocameratrack", noCameraTrack_, false);
-
-	// Groups
-	if (!localGroups_.readXML(accessoryNode, "localgroupname")) return false;
-	if (!globalGroups_.readXML(accessoryNode, "globalgroupname")) return false;
-
-	XMLNode *subNode = 0;
-	if (!accessoryNode->getNamedChild("collisionaction", subNode)) return false;
-
-	AccessoryPart *accessory = context.getAccessoryStore().
-		createAccessoryPart(context, parent_, subNode);
-	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
-	{
-		return subNode->returnError("Failed to find sub weapon, not a weapon");
-	}
-	collisionAction_ = (Weapon*) accessory;
-
-	// Get the weapon model
-	XMLNode *modelNode = 0;
-	if (!accessoryNode->getNamedChild("rollermodel", modelNode)) return false;
-
-	if (!rollerModelId_.initFromNode(modelNode)) return false;
-
-	return true;
-}
-
-fixed WeaponRoller::getWindFactor(ScorchedContext &context)
-{
-	return windFactorExp_.getValue(context);
-}
-
-fixed WeaponRoller::getGravityFactor(ScorchedContext &context)
-{
-	return gravityFactorExp_.getValue(context);
-}
-
-fixed WeaponRoller::getTime(ScorchedContext &context)
-{
-	return timeExp_.getValue(context);
-}
-
-fixed WeaponRoller::getScale(ScorchedContext &context) 
-{ 
-	return scale_.getValue(context); 
-}
-
-fixed WeaponRoller::getShieldHurtFactor(ScorchedContext &context)
-{
-	return shieldHurtFactorExp_.getValue(context);
 }
 
 void WeaponRoller::fireWeapon(ScorchedContext &context,
@@ -157,7 +83,7 @@ void WeaponRoller::fireWeapon(ScorchedContext &context,
 	}
 
 	RandomGenerator &random = context.getSimulator().getRandomGenerator();
-	int numberRollers = numberRollers_.getUInt(context);
+	int numberRollers = numberRollers_.getValue(context).asInt();
 	for (int i=0; i<numberRollers; i++)
 	{
 		FixedVector position = oldposition;
@@ -221,7 +147,7 @@ void WeaponRoller::addRoller(ScorchedContext &context,
 	RandomGenerator &random = context.getSimulator().getRandomGenerator();
 
 	FixedVector newVelocity;
-	if (maintainVelocity_)
+	if (maintainVelocity_.getValue())
 	{
 		newVelocity = velocity * dampenVelocityExp_.getValue(context);
 	}

@@ -23,7 +23,7 @@
 
 #include <weapons/Weapon.h>
 
-class WeaponTeleport  : public Weapon
+class WeaponTeleport : public Weapon
 {
 public:
 	WeaponTeleport();
@@ -46,7 +46,6 @@ protected:
 	NumberParser delay_;
 	std::string sound_;
 	bool groundOnly_;
-
 };
 
 #endif // !defined(AFX_WeaponTeleport_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_)

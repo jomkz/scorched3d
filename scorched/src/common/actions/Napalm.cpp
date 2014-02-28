@@ -50,22 +50,20 @@ static bool deformCreated = false;
 #define UINT_TO_X(pt) ((int)(pt >> 16))
 #define UINT_TO_Y(pt) ((int)(pt & 0xffff))
 
-Napalm::Napalm(int x, int y, Weapon *weapon, 
-	NapalmParams *params,
+Napalm::Napalm(int x, int y, WeaponNapalm *weapon, 
 	WeaponFireContext &weaponContext) :
 	Action(weaponContext.getInternalContext().getReferenced()),
 	startX_(x), startY_(y), napalmTime_(0), 
-	weapon_(weapon), params_(params),
+	weapon_(weapon), 
 	weaponContext_(weaponContext), 
 	totalTime_(0), hurtTime_(0),
-	counter_(0.1f, 0.1f), set_(0),
+	counter_(0.1f, 0.1f), 
 	particleSet_(0), vPoint_(0)
 {
 }
 
 Napalm::~Napalm()
 {
-	delete params_;
 	if (vPoint_) vPoint_->decrementReference();
 	while (!napalmPoints_.empty()) 
 	{
@@ -78,11 +76,17 @@ Napalm::~Napalm()
 void Napalm::init()
 {
 	edgePoints_.insert(XY_TO_UINT(startX_, startY_));
+	weaponStepTime_ = weapon_->getStepTime(*context_);
+	weaponNapalmTime_ = weapon_->getNapalmTime(*context_);
+	weaponHurtStepTime_ = weapon_->getHurtStepTime(*context_);
+	weaponNapalmHeight_ = weapon_->getNapalmHeight(*context_);
+	weaponLandscapeErosion_ = weapon_->getLandscapeErosion(*context_);
+	weaponHurtPerSecond_ = weapon_->getHurtPerSecond(*context_);
 
 #ifndef S3D_SERVER
 	if (!context_->getServerMode()) 
 	{
-		if (!params_->getNoCameraTrack())
+		if (!weapon_->getNoCameraTrack())
 		{
 			FixedVector position(fixed(startX_), fixed(startY_), context_->getLandscapeMaps().
 				getGroundMaps().getHeight(startX_, startY_));
@@ -114,14 +118,14 @@ void Napalm::simulate(fixed frameTime, bool &remove)
 	// once the time interval has expired then start taking it away
 	// Once all napalm has disapeared the simulation is over
 	totalTime_ += frameTime;
-	while (totalTime_ > params_->getStepTime())
+	while (totalTime_ > weaponStepTime_)
 	{
-		totalTime_ -= params_->getStepTime();
-		napalmTime_ += params_->getStepTime();
-		if (napalmTime_ < params_->getNapalmTime())
+		totalTime_ -= weaponStepTime_;
+		napalmTime_ += weaponStepTime_;
+		if (napalmTime_ < weaponNapalmTime_)
 		{
 			// Still within the time period, add more napalm
-			if (int(napalmPoints_.size()) < params_->getNumberParticles()) 
+			if (int(napalmPoints_.size()) < weapon_->getNumberOfParticles()) 
 			{
 				simulateAddStep();
 			}
@@ -150,9 +154,9 @@ void Napalm::simulate(fixed frameTime, bool &remove)
 
 	// Calculate how much damage to make to the tanks
 	hurtTime_ += frameTime;
-	while (hurtTime_ > params_->getHurtStepTime())
+	while (hurtTime_ > weaponHurtStepTime_)
 	{
-		hurtTime_ -= params_->getHurtStepTime();
+		hurtTime_ -= weaponHurtStepTime_;
 
 		simulateDamage();
 	}
@@ -212,7 +216,7 @@ void Napalm::simulateRmStep()
 			if (countItor->second == 0) napalmPointsCount_.erase(countItor);
 		}
 
-		context_->getLandscapeMaps().getGroundMaps().getNapalmHeight(x, y) -= params_->getNapalmHeight();
+		context_->getLandscapeMaps().getGroundMaps().getNapalmHeight(x, y) -= weaponNapalmHeight_;
 	}
 }
 
@@ -241,7 +245,7 @@ void Napalm::simulateAddEdge(int x, int y)
 	// Get the height of this point
 	fixed height = getHeight(x, y);
 
-	if (!params_->getAllowUnderWater())
+	if (!weapon_->getAllowUnderWater())
 	{
 		// Check napalm is under water 
 		LandscapeTex &tex = *context_->getLandscapeMaps().getDefinitions().getTex();
@@ -285,7 +289,7 @@ void Napalm::simulateAddEdge(int x, int y)
 	}
 #endif // #ifndef S3D_SERVER
 
-	context_->getLandscapeMaps().getGroundMaps().getNapalmHeight(x, y) += params_->getNapalmHeight();
+	context_->getLandscapeMaps().getGroundMaps().getNapalmHeight(x, y) += weaponNapalmHeight_;
 
 	// Calculate every time as the landscape may change
 	// due to other actions
@@ -294,7 +298,7 @@ void Napalm::simulateAddEdge(int x, int y)
 	fixed heightU = getHeight(x, y+1);
 	fixed heightD = getHeight(x, y-1);
 
-	if (params_->getSingleFlow()) 
+	if (weapon_->getSingleFlow()) 
 	{
 		fixed *heightLR = 0;
 		int LR = 0;
@@ -435,7 +439,7 @@ void Napalm::simulateAddEdge(int x, int y)
 
 void Napalm::simulateDamage()
 {
-	const int EffectRadius = params_->getEffectRadius();
+	const int EffectRadius = weapon_->getEffectRadius();
 
 	// Store how much each tank is damaged
 	// Keep in a map so we don't need to create multiple
@@ -462,10 +466,10 @@ void Napalm::simulateDamage()
 			fixed(y),
 			height);
 
-		if (params_->getLandscapeErosion() > 0)
+		if (weaponLandscapeErosion_ > 0)
 		{
 			DeformLandscape::deformLandscape(*context_, position, 
-				1, true, params_->getLandscapeErosion(), params_->getDeformTexture());
+				1, true, weaponLandscapeErosion_, "");
 			TargetDamageCalc::explosion(
 				*context_, weapon_, weaponContext_, 
 				position, 1, 0, true, false);
@@ -486,11 +490,11 @@ void Napalm::simulateDamage()
 					TargetDamageCalc.find(target->getPlayerId());
 				if (damageItor == TargetDamageCalc.end())
 				{
-					TargetDamageCalc[target->getPlayerId()] = count * params_->getHurtPerSecond();
+					TargetDamageCalc[target->getPlayerId()] = count * weaponHurtPerSecond_;
 				}
 				else
 				{
-					TargetDamageCalc[target->getPlayerId()] += count * params_->getHurtPerSecond();
+					TargetDamageCalc[target->getPlayerId()] += count * weaponHurtPerSecond_;
 				}
 			}
 		}
@@ -510,7 +514,7 @@ void Napalm::simulateDamage()
 
 			// Set this target to burnt
 			if (target->getRenderer() &&
-				!params_->getNoObjectDamage())
+				!weapon_->getNoObjectDamage())
 			{
 				target->getRenderer()->targetBurnt();
 			}

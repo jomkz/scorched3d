@@ -24,7 +24,7 @@
 #include <actions/CallbackWeapon.h>
 #include <XML/XMLEntrySimpleTypes.h>
 
-class WeaponGiveLives  : public WeaponCallback
+class WeaponGiveLives : public WeaponCallback
 {
 public:
 	WeaponGiveLives();
@@ -44,7 +44,6 @@ public:
 
 protected:
 	XMLEntryInt lives_;
-
 };
 
 #endif // __INCLUDE_WeaponGiveLivesh_INCLUDE__

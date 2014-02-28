@@ -22,33 +22,43 @@
 #define __INCLUDE_WeaponRandomChoiceh_INCLUDE__
 
 #include <weapons/Weapon.h>
-#include <list>
+#include <XML/XMLEntryComplexTypes.h>
 
-class WeaponRandomChoice  : public Weapon
+class WeaponRandomChoiceItem : public XMLEntryContainer
+{
+public:
+	WeaponRandomChoiceItem();
+	virtual ~WeaponRandomChoiceItem();
+
+	XMLEntryWeaponChoice weapon_;
+	XMLEntryInt weight_;
+};
+
+class WeaponRandomChoiceItemList : public XMLEntryList<WeaponRandomChoiceItem>
+{
+public:
+	WeaponRandomChoiceItemList();
+	virtual ~WeaponRandomChoiceItemList();
+
+	virtual WeaponRandomChoiceItem *createXMLEntry();
+};
+
+class WeaponRandomChoice : public Weapon
 {
 public:
 	WeaponRandomChoice();
 	virtual ~WeaponRandomChoice();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
-
 	// Inherited from Weapon
-	void fireWeapon(ScorchedContext &context,
+	virtual bool readXML(XMLNode *node, void *xmlData);
+	virtual void fireWeapon(ScorchedContext &context,
 		WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity);
 
 	REGISTER_ACCESSORY_HEADER(WeaponRandomChoice, AccessoryPart::AccessoryWeapon);
 
 protected:
-	struct WeaponWeight
-	{
-		int weight;
-		Weapon *weapon;
-	};
-
 	int totalWeight_;
-	std::list<WeaponWeight> weaponsChoice_;
-
+	WeaponRandomChoiceItemList itemList_;
 };
 
 #endif // __INCLUDE_WeaponRandomChoiceh_INCLUDE__

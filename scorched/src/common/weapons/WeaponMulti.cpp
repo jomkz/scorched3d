@@ -24,55 +24,41 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponMulti);
 
-WeaponMulti::WeaponMulti()
+XMLEntryWeaponChoiceList::XMLEntryWeaponChoiceList() :
+	XMLEntryList<XMLEntryWeaponChoice>("A list of weapons to fire", 1)
 {
+}
 
+XMLEntryWeaponChoiceList::~XMLEntryWeaponChoiceList()
+{
+}
+
+XMLEntryWeaponChoice *XMLEntryWeaponChoiceList::createXMLEntry()
+{
+	return new XMLEntryWeaponChoice();
+}
+
+WeaponMulti::WeaponMulti() :
+	Weapon("WeaponMulti", "Used to fire off multiple sets of primitives from the same point in time and space. "
+		"It is a necessity if you want to do more than one thing at a time. "),
+	subWeapons_()
+{
+	addChildXMLEntry("subweapon", &subWeapons_);
 }
 
 WeaponMulti::~WeaponMulti()
 {
-	while (!subWeapons_.empty())
-	{
-		delete subWeapons_.back();
-		subWeapons_.pop_back();
-	}
-}
 
-bool WeaponMulti::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	for (int i=1;;i++)
-	{
-		// Get the next weapon
-		char buffer[128];
-		snprintf(buffer, 128, "subweapon%i", i);
-		XMLNode *subNode = 0;
-		accessoryNode->getNamedChild(buffer, subNode, false);
-		if (!subNode) break;
-		
-		// Check next weapon is correct type
-		AccessoryPart *accessory = context.getAccessoryStore().
-			createAccessoryPart(context, parent_, subNode);
-		if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
-		{
-			return subNode->returnError("Failed to find sub weapon, not a weapon");
-		}
-		subWeapons_.push_back((Weapon*) accessory);
-	}
-
-	return true;
 }
 
 void WeaponMulti::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	std::list<Weapon *>::iterator itor;
-	for (itor = subWeapons_.begin();
-		 itor != subWeapons_.end();
-		 ++itor)
+	std::list<XMLEntryWeaponChoice *>::iterator itor = subWeapons_.getChildren().begin(),
+		end = subWeapons_.getChildren().end();
+	for (;itor!=end;++itor)
 	{
-		Weapon *weapon = *itor;
+		Weapon *weapon = (*itor)->getValue();
 		weapon->fire(context, weaponContext, position, velocity);
 	}
 }

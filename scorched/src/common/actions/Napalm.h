@@ -31,7 +31,6 @@
 
 class Target;
 class TankViewPointProvider;
-class GLTextureSet;
 class Napalm : public Action
 {
 public:
@@ -46,7 +45,7 @@ public:
 		fixed posZ;
 	};
 	
-	Napalm(int x, int y, Weapon *weapon, NapalmParams *params, 
+	Napalm(int x, int y, WeaponNapalm *weapon, 
 		WeaponFireContext &weaponContext);
 	virtual ~Napalm();
 
@@ -56,19 +55,18 @@ public:
 	virtual std::string getActionType() { return "Napalm"; }
 
 	unsigned int getPlayerId() { return weaponContext_.getPlayerId(); }
-	NapalmParams *getParams() { return params_; }
 
 protected:
 	TankViewPointProvider *vPoint_;
 	WeaponFireContext weaponContext_;
-	NapalmParams *params_;
-	Weapon *weapon_;
+	WeaponNapalm *weapon_;
 	Counter counter_;
-	GLTextureSet *set_;
 
 	// Not sent by wire
 	int particleSet_;
 	int startX_, startY_;
+	fixed weaponStepTime_, weaponNapalmTime_, weaponHurtStepTime_;
+	fixed weaponNapalmHeight_, weaponLandscapeErosion_, weaponHurtPerSecond_;
 	fixed totalTime_, hurtTime_;
 	fixed napalmTime_;
 	std::set<unsigned int> burnedTargets_;

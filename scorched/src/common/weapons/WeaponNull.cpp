@@ -22,7 +22,12 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponNull);
 
-WeaponNull::WeaponNull()
+WeaponNull::WeaponNull() :
+	Weapon("WeaponNull", 
+		"Does nothing. It can be useful if you want to prematurely 'cap off' a weapon before you are totally finished with it so you can test it out."
+		"For instance, you have just written a really long and complex weapon that ends up shooting some projectiles."
+		"You have a really complex explosion in mind, but haven't wrote it yet."
+		"You can just use a WeaponNull on the projectile's collisionactions to test the weapon out before you are finished making the explosions.")
 {
 
 }
@@ -30,12 +35,6 @@ WeaponNull::WeaponNull()
 WeaponNull::~WeaponNull()
 {
 
-}
-
-bool WeaponNull::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-	return true;
 }
 
 void WeaponNull::fireWeapon(ScorchedContext &context, 

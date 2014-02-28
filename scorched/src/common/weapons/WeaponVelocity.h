@@ -23,7 +23,7 @@
 
 #include <weapons/Weapon.h>
 
-class WeaponVelocity  : public Weapon
+class WeaponVelocity : public Weapon
 {
 public:
 	WeaponVelocity();
@@ -42,7 +42,6 @@ protected:
 	NumberParser velocityChange_;
 	Weapon *aimedWeapon_;
 	bool abs_;
-
 };
 
 #endif // !defined(AFX_WeaponVelocity_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_)

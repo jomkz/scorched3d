@@ -24,7 +24,7 @@
 #include <actions/CallbackWeapon.h>
 #include <XML/XMLEntrySimpleTypes.h>
 
-class WeaponGiveScore  : public WeaponCallback
+class WeaponGiveScore : public WeaponCallback
 {
 public:
 	WeaponGiveScore();
@@ -44,7 +44,6 @@ public:
 
 protected:
 	XMLEntryInt score_;
-
 };
 
 #endif // __INCLUDE_WeaponGiveScoreh_INCLUDE__

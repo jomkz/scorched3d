@@ -23,7 +23,7 @@
 
 #include <weapons/Weapon.h>
 
-class WeaponScatterDirection  : public Weapon
+class WeaponScatterDirection : public Weapon
 {
 public:
 	WeaponScatterDirection();

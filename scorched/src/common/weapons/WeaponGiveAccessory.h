@@ -34,7 +34,7 @@ public:
 	virtual XMLEntryString *createXMLEntry();
 };
 
-class WeaponGiveAccessory  : public WeaponCallback
+class WeaponGiveAccessory : public WeaponCallback
 {
 public:
 	WeaponGiveAccessory();

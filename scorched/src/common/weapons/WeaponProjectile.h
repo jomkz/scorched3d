@@ -22,8 +22,9 @@
 #define AFX_WEAPONPROJECTILE_H__70119A64_2064_4066_8EE5_FD6A3E24D5FC__INCLUDED_
 
 #include <weapons/Weapon.h>
-#include <common/ModelID.h>
 #include <engine/ObjectGroupEntryDefinition.h>
+#include <engine/PhysicsParticleObject.h>
+#include <XML/XMLEntryComplexTypes.h>
 
 class WeaponProjectile : public Weapon
 {
@@ -31,10 +32,7 @@ public:
 	WeaponProjectile();
 	virtual ~WeaponProjectile();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
-
-	Weapon *getCollisionAction() { return collisionAction_; }
+	Weapon *getCollisionAction() { return collisionAction_.getValue(); }
 
 	// Inherited from Weapon
 	virtual void fireWeapon(ScorchedContext &context,
@@ -42,63 +40,48 @@ public:
 
 	REGISTER_ACCESSORY_HEADER(WeaponProjectile, AccessoryPart::AccessoryWeapon);
 
-	bool getUnder() { return under_; }
-	bool getShowShotPath() { return showShotPath_; }
-	bool getShowEndPoint() { return showEndPoint_; }
-	bool getApexCollision() { return apexCollision_; }
-	bool getWaterCollision() { return waterCollision_; }
-	bool getLandscapeCollision() { return landscapeCollision_; }
-	bool getShieldCollision() { return shieldCollision_; }
-	bool getWallCollision() { return wallCollision_; }
-	bool getApexNoDud() { return apexNoDud_; }
-	bool getTimedDud() { return timedDud_; }
-	fixed getWindFactor(ScorchedContext &context);
-	fixed getGravityFactor(ScorchedContext &context);
-	fixed getShieldHurtFactor(ScorchedContext &context);
+	bool getShowShotPath() { return showShotPath_.getValue(); }
+	bool getShowEndPoint() { return showEndPoint_.getValue(); }
+	bool getApexCollision() { return apexCollision_.getValue(); }
+	bool getApexNoDud() { return apexNoDud_.getValue(); }
+	bool getTimedDud() { return timedDud_.getValue(); }
+	fixed getShieldHurtFactor(ScorchedContext &context) { return shieldHurtFactor_.getValue(context); }
 	fixed getTimedCollision(ScorchedContext &context) { return timedCollision_.getValue(context); }
 	fixed getHeightCollision(ScorchedContext &context) { return heightCollision_.getValue(context); }
 	fixed getSpinSpeed(ScorchedContext &context) { return spinSpeed_.getValue(context); }
-	fixed getStepSize() { return stepSize_; }
+	fixed getStepSize() { return stepSize_.getValue(); }
 	fixed getThrustAmount(ScorchedContext &context) { return thrustAmount_.getValue(context); }
 	fixed getThrustTime(ScorchedContext &context) { return thrustTime_.getValue(context); }
 	fixed getDrag(ScorchedContext &context) { return drag_.getValue(context); }
 	fixed getWobbleSpin(ScorchedContext &context) { return wobbleSpin_.getValue(context); }
 	fixed getWobbleAmount(ScorchedContext &context) { return wobbleAmount_.getValue(context); }
-	const char *getEngineSound() { return engineSound_.c_str(); }
-	bool getNoCameraTrack() { return noCameraTrack_; }
-	fixed getScale(ScorchedContext &context) { return scale_.getValue(context); }
-	ModelID &getModelID() { return modelId_; }
+	bool getNoCameraTrack() { return noCameraTrack_.getValue(); }
+	XMLEntryModelID &getModelID() { return modelId_; }
 	ObjectGroupEntryDefinition &getLocalGroups() { return localGroups_; }
 	ObjectGroupEntryDefinition &getGlobalGroups() { return globalGroups_; }
+	PhysicsParticleObjectDefinition &getParticleDefinition() { return particleDefinition_; }
 
 protected:
-	bool under_;
-	bool showShotPath_;
-	bool showEndPoint_;
-	bool apexCollision_;
-	bool waterCollision_, wallCollision_;
-	bool landscapeCollision_;
-	bool shieldCollision_;
-	bool apexNoDud_, timedDud_;
-	bool noCameraTrack_;
-	NumberParser spinSpeed_;
-	FixedVector spinAxis_;
+	XMLEntryBool showShotPath_;
+	XMLEntryBool showEndPoint_;
+	XMLEntryBool apexCollision_;
+	XMLEntryBool apexNoDud_, timedDud_;
+	XMLEntryBool noCameraTrack_;
+	XMLEntryNumberParser spinSpeed_;
+	XMLEntryFixedVector spinAxis_;
 
+	PhysicsParticleObjectDefinition particleDefinition_;
 	ObjectGroupEntryDefinition localGroups_, globalGroups_;
-	NumberParser thrustTime_, thrustAmount_;
-	NumberParser timedCollision_;
-	NumberParser shieldHurtFactor_;
-	NumberParser scale_;
-	NumberParser windFactor_;
-	NumberParser gravityFactor_;
-	NumberParser drag_;
-	NumberParser heightCollision_;
-	NumberParser wobbleSpin_;
-	NumberParser wobbleAmount_;
-	fixed stepSize_;
-	std::string engineSound_;
-	Weapon *collisionAction_;
-	ModelID modelId_;
+	XMLEntryNumberParser thrustTime_, thrustAmount_;
+	XMLEntryNumberParser timedCollision_;
+	XMLEntryNumberParser shieldHurtFactor_;
+	XMLEntryNumberParser drag_;
+	XMLEntryNumberParser heightCollision_;
+	XMLEntryNumberParser wobbleSpin_;
+	XMLEntryNumberParser wobbleAmount_;
+	XMLEntryFixed stepSize_;
+	XMLEntryWeaponChoice collisionAction_;
+	XMLEntryModelID modelId_;
 };
 
 #endif // !defined(AFX_WEAPONPROJECTILE_H__70119A64_2064_4066_8EE5_FD6A3E24D5FC__INCLUDED_)

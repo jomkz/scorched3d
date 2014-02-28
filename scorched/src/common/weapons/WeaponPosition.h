@@ -22,15 +22,13 @@
 #define AFX_WeaponPosition_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_
 
 #include <weapons/Weapon.h>
+#include <XML/XMLEntryComplexTypes.h>
 
-class WeaponPosition  : public Weapon
+class WeaponPosition : public Weapon
 {
 public:
 	WeaponPosition();
 	virtual ~WeaponPosition();
-
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
@@ -39,10 +37,9 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponPosition, AccessoryPart::AccessoryWeapon);
 
 protected:
-	FixedVector position_, positionOffset_;
-	Weapon *aimedWeapon_;
-	bool onGround_;
-
+	XMLEntryFixedVector position_, positionOffset_;
+	XMLEntryWeaponChoice aimedWeapon_;
+	XMLEntryBool onGround_;
 };
 
 #endif // !defined(AFX_WeaponPosition_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_)

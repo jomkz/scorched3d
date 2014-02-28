@@ -27,149 +27,50 @@
 REGISTER_ACCESSORY_SOURCE(WeaponProjectile);
 
 WeaponProjectile::WeaponProjectile() : 
-	under_(false), collisionAction_(0), 
-	apexCollision_(false), waterCollision_(false), wallCollision_(true),
-	showShotPath_(false), showEndPoint_(false), 
-	landscapeCollision_(true), shieldCollision_(true),
-	noCameraTrack_(false),
-	spinSpeed_("WeaponProjectile::spinSpeed", 1), spinAxis_(0, 0, 1), apexNoDud_(false), timedDud_(false),
-	timedCollision_("WeaponProjectile::timedCollision", 0), heightCollision_("WeaponProjectile::heightCollision", 0),
-	wobbleSpin_("WeaponProjectile::wobbleSpin", 0), wobbleAmount_("WeaponProjectile::wobbleAmount", 2),
-	shieldHurtFactor_("WeaponProjectile::shieldHurtFactor", 1), windFactor_("WeaponProjectile::windFactor", 1), 
-	gravityFactor_("WeaponProjectile::gravityFactor", 1),
-	thrustAmount_("WeaponProjectile::thrustAmount", 0), thrustTime_("WeaponProjectile::thrustTime", 0),
-	drag_("WeaponProjectile::drag", 0), stepSize_(true, 75),
-	engineSound_("rocket.wav"),
-	scale_("WeaponProjectile::scale", 1)
+	Weapon("WeaponProjectile", "Makes a projectile that collides with the ground or other targets."),
+	apexCollision_("Makes the projectile collide in mid air (at the apex of the shot) instead of with the ground, it will dud if it hits the ground first", 0, false), 
+	apexNoDud_("The projectile will not dud if it hits the ground before the apex has been reached", 0, false), 
+	timedDud_("The projectile will not dud if it hits the ground before the timeout", 0, false),
+	showShotPath_("The projectiles will leave a colored trail visible to the player", 0, false), 
+	showEndPoint_("The projectiles will leave a colored mark on the ground visible to the player", 0, false), 
+	noCameraTrack_("This projectile will be used for the action camera views", 0, false),
+	spinAxis_("The axis the projectile model should spin around", 0, FixedVector(0, 0, 1)), 
+	spinSpeed_("WeaponProjectile::spinSpeed", "How fast the projectile rotates", 0, "1"), 
+	timedCollision_("WeaponProjectile::timedCollision", "Makes the projectile collide after a number of seconds, it will dud if it hits the ground first", 0, "0"), 
+	heightCollision_("WeaponProjectile::heightCollision", "Makes the projectile collide at a certain height", 0, "0"),
+	wobbleSpin_("WeaponProjectile::wobbleSpin", "The speed that a projectile will wobble from side to side, good values are < 1.0.  Only used if wobbleamount is given.", 0, "0"), 
+	wobbleAmount_("WeaponProjectile::wobbleAmount", "The distance that a projectile will wobble from side to side, good values are < 1.0", 0, "2"),
+	shieldHurtFactor_("WeaponProjectile::shieldHurtFactor", "Affects damage the projectile does during shield collision, 1 = 100%", 0, "1"), 
+	thrustAmount_("WeaponProjectile::thrustAmount", "Amount of force applied when using thrust", 0, "0"), 
+	thrustTime_("WeaponProjectile::thrustTime", "Amount of time to apply thrust", 0, "0"),
+	drag_("WeaponProjectile::drag", "Amount of drag placed on the projectile", 0, "0"), 
+	stepSize_("This projectile will move every step size seconds", 0, fixed(true, 75))
 {
-
+	addChildXMLEntry("wobblespin", &wobbleSpin_);
+	addChildXMLEntry("wobbleamount", &wobbleAmount_);
+	addChildXMLEntry("spinspeed", &spinSpeed_);
+	addChildXMLEntry("spinaxis", &spinAxis_);
+	addChildXMLEntry("projectilemodel", &modelId_);
+	addChildXMLEntry("drag", &drag_);
+	addChildXMLEntry("stepsize", &stepSize_);
+	addChildXMLEntry("thrusttime", &thrustTime_);
+	addChildXMLEntry("thrustamount", &thrustAmount_);
+	addChildXMLEntry("showshotpath", &showShotPath_);
+	addChildXMLEntry("apexcollision", &apexCollision_);
+	addChildXMLEntry("apexnodud", &apexNoDud_);
+	addChildXMLEntry("timedcollision", &timedCollision_);
+	addChildXMLEntry("timeddud", &timedDud_);
+	addChildXMLEntry("heightcollision", &heightCollision_);
+	addChildXMLEntry("nocameratrack", &noCameraTrack_);
+	addChildXMLEntry("shieldhurtfactor", &shieldHurtFactor_);
+	addChildXMLEntry("localgroupname", &localGroups_);
+	addChildXMLEntry("globalgroupname", &globalGroups_);
+	addChildXMLEntry("collisionaction", &collisionAction_);
+	particleDefinition_.addAllEntries(*this);
 }
 
 WeaponProjectile::~WeaponProjectile()
 {
-	delete collisionAction_;
-	collisionAction_ = 0;
-}
-
-bool WeaponProjectile::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	// Get the accessory under
-	XMLNode *underNode = 0;
-	accessoryNode->getNamedChild("under", underNode, false);
-	if (underNode) under_ = true;
-
-	// Get the wobble
-	accessoryNode->getNamedChild("wobblespin", wobbleSpin_, false);
-	accessoryNode->getNamedChild("wobbleamount", wobbleAmount_, false);
-	
-	// Get the spin
-	accessoryNode->getNamedChild("spinspeed", spinSpeed_, false);
-	accessoryNode->getNamedChild("spinaxis", spinAxis_, false);
-
-	// Get the optional weapon model scale
-	accessoryNode->getNamedChild("projectilescale", scale_, false);
-
-	// Get the optional weapon model
-	XMLNode *modelNode = 0;
-	if (accessoryNode->getNamedChild("projectilemodel", modelNode, false))
-	{
-		if (!modelId_.initFromNode(modelNode)) return false;
-	}
-
-	// Drag
-	accessoryNode->getNamedChild("drag", drag_, false);
-	accessoryNode->getNamedChild("stepsize", stepSize_, false);
-
-	// Thrust
-	accessoryNode->getNamedChild("thrusttime", thrustTime_, false);
-	accessoryNode->getNamedChild("thrustamount", thrustAmount_, false);
-
-	// Get the smoke trails
-	XMLNode *smokeNode = 0;
-	accessoryNode->getNamedChild("showshotpath", smokeNode, false);
-	if (smokeNode) showShotPath_ = true;
-
-	// Get the end point
-	XMLNode *endPointNode = 0;
-	accessoryNode->getNamedChild("showendpoint", endPointNode, false);
-	if (endPointNode) showEndPoint_ = true;
-	
-	// Get the apex point
-	XMLNode *apexNode = 0, *apexNoDudNode = 0;
-	accessoryNode->getNamedChild("apexcollision", apexNode, false);
-	accessoryNode->getNamedChild("apexnodud", apexNoDudNode, false);
-	if (apexNode) apexCollision_ = true;
-	if (apexNoDudNode) apexNoDud_ = true;
-
-	// Water collision
-	XMLNode *waterNode = 0;
-	accessoryNode->getNamedChild("watercollision", waterNode, false);
-	if (waterNode) waterCollision_ = true;	
-
-	// Wall collision
-	XMLNode *wallCollNode = 0;
-	accessoryNode->getNamedChild("nowallcollision", wallCollNode, false);
-	if (wallCollNode) wallCollision_ = false;	
-
-	// Get the timed collision point
-	XMLNode *timedDudNode = 0;
-	accessoryNode->getNamedChild("timedcollision", timedCollision_, false);
-	accessoryNode->getNamedChild("timeddud", timedDudNode, false);
-	if (timedDudNode) timedDud_ = true;
-
-	// Get the height collision point
-	accessoryNode->getNamedChild("heightcollision", heightCollision_, false);
-
-	accessoryNode->getNamedChild("landscapecollision", landscapeCollision_, false);
-	accessoryNode->getNamedChild("shieldcollision", shieldCollision_, false);
-
-	accessoryNode->getNamedChild("nocameratrack", noCameraTrack_, false);
-
-	// Get the engine sound (if any)
-	accessoryNode->getNamedChild("enginesound", engineSound_, false);
-
-	// Get the hurt factor (if any)
-	accessoryNode->getNamedChild("shieldhurtfactor", shieldHurtFactor_, false);
-
-	// Get the wind factor (if any)
-	accessoryNode->getNamedChild("windfactor", windFactor_, false);
-	accessoryNode->getNamedChild("gravityfactor", gravityFactor_, false);
-
-	// Groups
-	if (!localGroups_.readXML(accessoryNode, "localgroupname")) return false;
-	if (!globalGroups_.readXML(accessoryNode, "globalgroupname")) return false;
-
-	// Get the next weapon
-	XMLNode *subNode = 0;
-	if (!accessoryNode->getNamedChild("collisionaction", subNode)) return false;
-
-	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore().
-		createAccessoryPart(context, parent_, subNode);
-	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
-	{
-		return false;
-	}
-	collisionAction_ = (Weapon*) accessory;
-
-	return true;
-}
-
-fixed WeaponProjectile::getWindFactor(ScorchedContext &context)
-{
-	return windFactor_.getValue(context);
-}
-
-fixed WeaponProjectile::getGravityFactor(ScorchedContext &context)
-{
-	return gravityFactor_.getValue(context);
-}
-
-fixed WeaponProjectile::getShieldHurtFactor(ScorchedContext &context)
-{
-	return shieldHurtFactor_.getValue(context);
 }
 
 void WeaponProjectile::fireWeapon(ScorchedContext &context,
@@ -181,6 +82,6 @@ void WeaponProjectile::fireWeapon(ScorchedContext &context,
 		this, 
 		weaponContext,
 		spinSpeed_.getValue(context),
-		spinAxis_); 
+		spinAxis_.getValue()); 
 	context.getActionController().addAction(action);	
 }

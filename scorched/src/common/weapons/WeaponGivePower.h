@@ -44,7 +44,6 @@ public:
 
 protected:
 	XMLEntryNumberParser power_;
-
 };
 
 #endif // __INCLUDE_WeaponGivePowerh_INCLUDE__

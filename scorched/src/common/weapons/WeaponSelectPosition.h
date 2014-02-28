@@ -23,7 +23,7 @@
 
 #include <weapons/Weapon.h>
 
-class WeaponSelectPosition  : public Weapon
+class WeaponSelectPosition : public Weapon
 {
 public:
 	WeaponSelectPosition();
@@ -40,7 +40,6 @@ public:
 
 protected:
 	Weapon *aimedWeapon_;
-
 };
 
 #endif // !defined(AFX_WeaponSelectPosition_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_)

@@ -23,7 +23,7 @@
 
 #include <weapons/Weapon.h>
 
-class WeaponTranslate  : public Weapon
+class WeaponTranslate : public Weapon
 {
 public:
 	WeaponTranslate();
@@ -43,7 +43,6 @@ public:
 protected:
 	NumberParser translateDist_;
 	Weapon *nextAction_;
-
 };
 
 #endif // !defined(AFX_WeaponTranslate_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_)

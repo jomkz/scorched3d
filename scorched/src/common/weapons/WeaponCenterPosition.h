@@ -24,7 +24,7 @@
 #include <weapons/Weapon.h>
 #include <XML/XMLEntryComplexTypes.h>
 
-class WeaponCenterPosition  : public Weapon
+class WeaponCenterPosition : public Weapon
 {
 public:
 	WeaponCenterPosition();

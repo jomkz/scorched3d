@@ -24,7 +24,7 @@
 #include <weapons/Weapon.h>
 #include <XML/XMLEntrySimpleTypes.h>
 
-class WeaponMoveTank  : public Weapon
+class WeaponMoveTank : public Weapon
 {
 public:
 	WeaponMoveTank();

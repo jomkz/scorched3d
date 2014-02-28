@@ -23,7 +23,7 @@
 
 #include <actions/CallbackWeapon.h>
 
-class WeaponTeamAction  : public WeaponCallback
+class WeaponTeamAction : public WeaponCallback
 {
 public:
 	WeaponTeamAction();
@@ -46,7 +46,6 @@ public:
 
 protected:
 	Weapon *action_[5];
-
 };
 
 #endif // __INCLUDE_WeaponTeamActionh_INCLUDE__

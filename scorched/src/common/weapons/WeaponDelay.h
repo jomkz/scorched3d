@@ -45,7 +45,6 @@ public:
 protected:
 	XMLEntryNumberParser delay_;
 	XMLEntryWeaponChoice delayedWeapon_;
-
 };
 
 #endif // !defined(AFX_WeaponDelay_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_)

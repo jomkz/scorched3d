@@ -44,7 +44,6 @@ public:
 
 protected:
 	XMLEntryNumberParser money_;
-
 };
 
 #endif // __INCLUDE_WeaponGiveMoneyh_INCLUDE__

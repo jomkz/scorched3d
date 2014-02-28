@@ -24,7 +24,7 @@
 #include <weapons/Weapon.h>
 #include <XML/XMLEntryComplexTypes.h>
 
-class WeaponMirv  : public Weapon
+class WeaponMirv : public Weapon
 {
 public:
 	WeaponMirv();

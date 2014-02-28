@@ -25,6 +25,7 @@
 #include <common/FixedVector.h>
 #include <common/FixedVector4.h>
 #include <engine/ScorchedCollisionIds.h>
+#include <XML/XMLEntryComplexTypes.h>
 
 enum PhysicsParticleType
 {
@@ -61,6 +62,22 @@ public:
 		ScorchedCollisionId collisionId) {}
 };
 
+class PhysicsParticleObjectDefinition
+{
+public:
+	PhysicsParticleObjectDefinition();
+	virtual ~PhysicsParticleObjectDefinition();
+
+	void addAllEntries(XMLEntryContainer &container);
+
+	XMLEntryBool waterCollision_, wallCollision_;
+	XMLEntryBool landscapeCollision_, shieldCollision_;
+	XMLEntryBool stickyShields_;
+	XMLEntryBool under_;
+	XMLEntryNumberParser windFactor_;
+	XMLEntryNumberParser gravityFactor_;
+};
+
 class Target;
 class ScorchedContext;
 class PhysicsParticleObject
@@ -73,21 +90,11 @@ public:
 		PhysicsParticleInfo info,
 		ScorchedContext &context, 
 		FixedVector &position, FixedVector &velocity);
-	void setForces(
-		fixed windFactor, fixed gravityFactor);
 
-	void setOptionUnderGroundCollision(bool underGroundCollision) 
-		{ optionUnderGroundCollision_ = underGroundCollision; }
+	void setDefinition(ScorchedContext &context, 
+		PhysicsParticleObjectDefinition &definition);
 	void setOptionRotateOnCollision(bool rotateOnCollision) 
 		{ optionRotateOnCollision_ = rotateOnCollision; }
-	void setOptionWallCollision(bool wallCollision) 
-		{ optionWallCollision_ = wallCollision; }
-	void setOptionStickyShields(bool stickyShields) 
-		{ optionStickyShields_ = stickyShields; }
-	void setOptionShieldCollision(bool shieldCollision) 
-		{ optionShieldCollision_ = shieldCollision; }
-	void setOptionLandscapeCollision(bool landscapeCollision)
-		{ optionLandscapeCollision_ = landscapeCollision; }
 
 	void applyForce(FixedVector &force);
 	void applyOffset(FixedVector &offset);
@@ -110,6 +117,7 @@ protected:
 	bool optionStickyShields_;
 	bool optionShieldCollision_;
 	bool optionLandscapeCollision_;
+	bool optionWaterCollision_;
 	unsigned int iterations_;
 	FixedVector position_;
 	FixedVector velocity_;
@@ -134,6 +142,7 @@ protected:
 	virtual void shotShieldHit(Target *target);
 	virtual void bounceShieldHit(Target *target);
 
+	void setForces(fixed windFactor, fixed gravityFactor);
 	void checkCollision();
 	CollisionAction checkShotCollision(CollisionInfo &collision, Target *target);
 	CollisionAction checkBounceCollision(CollisionInfo &collision, Target *target);

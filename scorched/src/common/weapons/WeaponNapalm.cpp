@@ -21,9 +21,6 @@
 #include <weapons/WeaponNapalm.h>
 #include <actions/Napalm.h>
 #include <common/Defines.h>
-#ifndef S3D_SERVER
-//	#include <sound/SoundUtils.h>
-#endif
 #include <engine/ActionController.h>
 #include <engine/Simulator.h>
 #include <landscapemap/LandscapeMaps.h>
@@ -31,38 +28,38 @@
 REGISTER_ACCESSORY_SOURCE(WeaponNapalm);
 
 WeaponNapalm::WeaponNapalm() :
-	napalmTime_("WeaponNapalm::napalmTime"),
-	napalmHeight_("WeaponNapalm::napalmHeight"),
-	stepTime_("WeaponNapalm::stepTime"),
-	hurtStepTime_("WeaponNapalm::hurtStepTime"),
-	hurtPerSecond_("WeaponNapalm::hurtPerSecond"),
-	landscapeErosion_("WeaponNapalm::landscapeErosion", 0)
+	Weapon("WeaponNapalm", "Flows and burns downhill over a given time for a given amount of damage."),
+	napalmTime_("WeaponNapalm::napalmTime", "Time in seconds to burn and flow down hill"),
+	napalmHeight_("WeaponNapalm::napalmHeight", "The height of the flow of napalm (the depth of the flow)"),
+	stepTime_("WeaponNapalm::stepTime", "Time in seconds between movements downhill"),
+	hurtStepTime_("WeaponNapalm::hurtStepTime", "Damage is calculated every hurtsteptime seconds"),
+	hurtPerSecond_("WeaponNapalm::hurtPerSecond", "Amount of damage napalm does per second"),
+	landscapeErosion_("WeaponNapalm::landscapeErosion", "How much height will be removed for the napalm landscape erosion", 0, "0"),
+	numberOfParticles_("How many napalm particles can be created", 0, 100),
+	numberStreams_("Number of napalm streams to create at the start point"),
+	effectRadius_("Radius within which the napalm will damage opponents"),
+	noObjectDamage_("If set, the napalm will not damage landscape objects"),
+	allowUnderWater_(" Whether or not this napalm can travel under water"),
+	singleFlow_("Use a single flow of napalm or cover the whole downward area", 0, false),
+	noCameraTrack_("Don't treat as a potential action camera target", 0, false)
 {
 
 }
 
 WeaponNapalm::~WeaponNapalm()
 {
-
-}
-
-bool WeaponNapalm::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	if (!accessoryNode->getNamedChild("napalmtime", napalmTime_)) return false;
-	if (!accessoryNode->getNamedChild("napalmheight", napalmHeight_)) return false;
-	if (!accessoryNode->getNamedChild("steptime", stepTime_)) return false;
-	if (!accessoryNode->getNamedChild("hurtsteptime", hurtStepTime_)) return false;
-	if (!accessoryNode->getNamedChild("hurtpersecond", hurtPerSecond_)) return false;
-	if (!accessoryNode->getNamedChild("numberstreams", numberStreams_)) return false;
-	if (!accessoryNode->getNamedChild("napalmsound", napalmSound_)) return false;
-	accessoryNode->getNamedChild("landscapeerosion", landscapeErosion_, false);
-	if (!S3D::checkDataFile(S3D::formatStringBuffer("%s", napalmSound_.c_str()))) return false;
-
-	if (!params_.parseXML(accessoryNode)) return false;
-
-	return true;
+	addChildXMLEntry("napalmtime", &napalmTime_);
+	addChildXMLEntry("napalmheight", &napalmHeight_);
+	addChildXMLEntry("steptime", &stepTime_);
+	addChildXMLEntry("hurtsteptime", &hurtStepTime_);
+	addChildXMLEntry("hurtpersecond", &hurtPerSecond_);
+	addChildXMLEntry("landscapeerosion", &landscapeErosion_);
+	addChildXMLEntry("numberstreams", &numberStreams_);
+	addChildXMLEntry("effectradius", &effectRadius_);
+	addChildXMLEntry("noobjectdamage", &noObjectDamage_);
+	addChildXMLEntry("allowunderwater", &allowUnderWater_);
+	addChildXMLEntry("singleflow", &singleFlow_);
+	addChildXMLEntry("nocameratrack", &noCameraTrack_);
 }
 
 void WeaponNapalm::fireWeapon(ScorchedContext &context,
@@ -81,44 +78,11 @@ void WeaponNapalm::fireWeapon(ScorchedContext &context,
 	}
 
 	RandomGenerator &random = context.getSimulator().getRandomGenerator();
-	for (int i=0; i<numberStreams_; i++)
+	for (int i=0; i<numberStreams_.getValue(); i++)
 	{
 		int x = (position[0] + random.getRandFixed("WeaponNapalm") * 4 - 2).asInt();
 		int y = (position[1] + random.getRandFixed("WeaponNapalm") * 4 - 2).asInt();
-		addNapalm(context, weaponContext, x, y);
+		context.getActionController().addAction(
+			new Napalm(x, y, this, weaponContext));
 	}
-
-#ifndef S3D_SERVER
-	/*
-	if (!context.getServerMode()) 
-	{
-		if (napalmSound_.c_str()[0] &&
-			0 != strcmp(napalmSound_.c_str(), "none"))
-		{
-			SoundBuffer *expSound = 
-				Sound::instance()->fetchOrCreateBuffer(
-					S3D::getModFile(S3D::formatStringBuffer("data/wav/%s", napalmSound_.c_str())));
-			SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
-				expSound, position.asVector());
-		}
-	}
-	*/
-#endif
-}
-
-void WeaponNapalm::addNapalm(ScorchedContext &context, 
-	WeaponFireContext &weaponContext, int x, int y)
-{
-	NapalmParams *params = new NapalmParams(params_);
-	params->setNapalmTime(napalmTime_.getValue(context));
-	params->setNapalmHeight(napalmHeight_.getValue(context));
-	params->setStepTime(stepTime_.getValue(context));
-	params->setHurtStepTime(hurtStepTime_.getValue(context));
-	params->setHurtPerSecond(hurtPerSecond_.getValue(context));
-	params->setLandscapeErosion(landscapeErosion_.getValue(context));
-
-	// Ensure that the napalm has not hit the walls
-	// or anything outside the landscape
-	context.getActionController().addAction(
-		new Napalm(x, y, this, params, weaponContext));
 }

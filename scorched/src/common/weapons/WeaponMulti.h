@@ -22,9 +22,19 @@
 #define AFX_WEAPONMULTI_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_
 
 #include <weapons/Weapon.h>
+#include <XML/XMLEntryComplexTypes.h>
 #include <list>
 
-class WeaponMulti  : public Weapon
+class XMLEntryWeaponChoiceList : public XMLEntryList<XMLEntryWeaponChoice>
+{
+public:
+	XMLEntryWeaponChoiceList();
+	virtual ~XMLEntryWeaponChoiceList();
+
+	virtual XMLEntryWeaponChoice *createXMLEntry();
+};
+
+class WeaponMulti : public Weapon
 {
 public:
 	WeaponMulti();
@@ -37,8 +47,7 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponMulti, AccessoryPart::AccessoryWeapon);
 
 protected:
-	std::list<Weapon *> subWeapons_;
-
+	XMLEntryWeaponChoiceList subWeapons_;
 };
 
 #endif // !defined(AFX_WEAPONMULTI_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_)

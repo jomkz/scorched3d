@@ -57,9 +57,6 @@ public:
 	AccessoryPart *createAccessoryPart(AccessoryCreateContext &context, 
 		Accessory *parent, XMLNode *currentNode);
 
-	Accessory *getDeathAnimation();
-	Accessory *getMuzzelFlash();
-
 	std::list<Accessory *> getAllAccessories(int sortKey=SortNothing);
 	std::list<Accessory *> getAllAccessoriesByTabGroup(const char *tabgroup, int sortKey=SortNothing);
 	std::map<std::string, XMLNode *> &getParsingNodes() { return parsingNodes_; }
@@ -80,8 +77,6 @@ protected:
 	std::list<Accessory *> accessories_;
 	std::list<AccessoryPart *> accessoryParts_;
 	std::map<std::string, XMLNode *> parsingNodes_;
-	Accessory *muzzleFlash_;
-	Accessory *deathAnimation_;
 
 };
 

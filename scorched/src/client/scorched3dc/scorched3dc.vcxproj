@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\actions\Action.cpp" />
-    <ClCompile Include="..\..\common\actions\ActionParams.cpp" />
     <ClCompile Include="..\..\common\actions\AddTarget.cpp" />
     <ClCompile Include="..\..\common\actions\CallbackWeapon.cpp" />
     <ClCompile Include="..\..\common\actions\CameraPositionAction.cpp" />
@@ -20,7 +19,6 @@
     <ClCompile Include="..\..\common\actions\Laser.cpp" />
     <ClCompile Include="..\..\common\actions\Lightning.cpp" />
     <ClCompile Include="..\..\common\actions\Napalm.cpp" />
-    <ClCompile Include="..\..\common\actions\NapalmParams.cpp" />
     <ClCompile Include="..\..\common\actions\ParticleGroup.cpp" />
     <ClCompile Include="..\..\common\actions\Resurrection.cpp" />
     <ClCompile Include="..\..\common\actions\ShieldHit.cpp" />
@@ -317,7 +315,6 @@
     <ClCompile Include="..\..\common\weapons\WeaponMirv.cpp" />
     <ClCompile Include="..\..\common\weapons\WeaponMoveTank.cpp" />
     <ClCompile Include="..\..\common\weapons\WeaponMulti.cpp" />
-    <ClCompile Include="..\..\common\weapons\WeaponMuzzle.cpp" />
     <ClCompile Include="..\..\common\weapons\WeaponNapalm.cpp" />
     <ClCompile Include="..\..\common\weapons\WeaponNull.cpp" />
     <ClCompile Include="..\..\common\weapons\WeaponPosition.cpp" />
@@ -493,7 +490,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\actions\Action.h" />
-    <ClInclude Include="..\..\common\actions\ActionParams.h" />
     <ClInclude Include="..\..\common\actions\AddTarget.h" />
     <ClInclude Include="..\..\common\actions\CallbackWeapon.h" />
     <ClInclude Include="..\..\common\actions\CameraPositionAction.h" />
@@ -501,7 +497,6 @@
     <ClInclude Include="..\..\common\actions\Laser.h" />
     <ClInclude Include="..\..\common\actions\Lightning.h" />
     <ClInclude Include="..\..\common\actions\Napalm.h" />
-    <ClInclude Include="..\..\common\actions\NapalmParams.h" />
     <ClInclude Include="..\..\common\actions\ParticleGroup.h" />
     <ClInclude Include="..\..\common\actions\Resurrection.h" />
     <ClInclude Include="..\..\common\actions\ShieldHit.h" />
@@ -802,7 +797,6 @@
     <ClInclude Include="..\..\common\weapons\WeaponMirv.h" />
     <ClInclude Include="..\..\common\weapons\WeaponMoveTank.h" />
     <ClInclude Include="..\..\common\weapons\WeaponMulti.h" />
-    <ClInclude Include="..\..\common\weapons\WeaponMuzzle.h" />
     <ClInclude Include="..\..\common\weapons\WeaponNapalm.h" />
     <ClInclude Include="..\..\common\weapons\WeaponNull.h" />
     <ClInclude Include="..\..\common\weapons\WeaponPosition.h" />

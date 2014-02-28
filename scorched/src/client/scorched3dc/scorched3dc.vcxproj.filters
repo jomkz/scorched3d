@@ -138,9 +138,6 @@
     <ClCompile Include="..\..\common\actions\Action.cpp">
       <Filter>actions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\actions\ActionParams.cpp">
-      <Filter>actions</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\actions\AddTarget.cpp">
       <Filter>actions</Filter>
     </ClCompile>
@@ -160,9 +157,6 @@
       <Filter>actions</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\actions\Napalm.cpp">
-      <Filter>actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\actions\NapalmParams.cpp">
       <Filter>actions</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\actions\ParticleGroup.cpp">
@@ -1005,9 +999,6 @@
     <ClCompile Include="..\..\common\weapons\WeaponMulti.cpp">
       <Filter>weapons</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\weapons\WeaponMuzzle.cpp">
-      <Filter>weapons</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\weapons\WeaponNapalm.cpp">
       <Filter>weapons</Filter>
     </ClCompile>
@@ -1565,9 +1556,6 @@
     <ClInclude Include="..\..\common\actions\Action.h">
       <Filter>actions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\common\actions\ActionParams.h">
-      <Filter>actions</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\common\actions\AddTarget.h">
       <Filter>actions</Filter>
     </ClInclude>
@@ -1587,9 +1575,6 @@
       <Filter>actions</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\actions\Napalm.h">
-      <Filter>actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\actions\NapalmParams.h">
       <Filter>actions</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\actions\ParticleGroup.h">
@@ -2442,9 +2427,6 @@
       <Filter>weapons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\weapons\WeaponMulti.h">
-      <Filter>weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\weapons\WeaponMuzzle.h">
       <Filter>weapons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\weapons\WeaponNapalm.h">

@@ -23,7 +23,7 @@
 
 #include <weapons/Weapon.h>
 
-class WeaponTankPosition  : public Weapon
+class WeaponTankPosition : public Weapon
 {
 public:
 	WeaponTankPosition();
@@ -41,7 +41,6 @@ public:
 protected:
 	Weapon *aimedWeapon_;
 	bool sightPos_;
-
 };
 
 #endif // !defined(AFX_WeaponTankPosition_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_)

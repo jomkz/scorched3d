@@ -22,15 +22,13 @@
 #define AFX_WeaponRedirect_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_
 
 #include <weapons/Weapon.h>
+#include <XML/XMLEntryComplexTypes.h>
 
-class WeaponRedirect  : public Weapon
+class WeaponRedirect : public Weapon
 {
 public:
 	WeaponRedirect();
 	virtual ~WeaponRedirect();
-
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
@@ -39,9 +37,9 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponRedirect, AccessoryPart::AccessoryWeapon);
 
 protected:
-	NumberParser hredirect_, vredirect_;
-	bool habs_, vabs_;
-	Weapon *nextAction_;
+	XMLEntryNumberParser hredirect_, vredirect_;
+	XMLEntryBool habs_, vabs_;
+	XMLEntryWeaponChoice nextAction_;
 };
 
 #endif // !defined(AFX_WeaponRedirect_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_)

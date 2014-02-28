@@ -28,41 +28,22 @@
 REGISTER_ACCESSORY_SOURCE(WeaponRedirect);
 
 WeaponRedirect::WeaponRedirect() :
-	hredirect_("WeaponRedirect::hredirect", 0), vredirect_("WeaponRedirect::vredirect", 0),
-	habs_(false), vabs_(false),
-	nextAction_(0)
+	Weapon("WeaponRedirect", "Used to re-aim projectiles and other weapons either relative to their current direction or to a specific angle."),
+	hredirect_("WeaponRedirect::hredirect", "If habs is true:weapon is re-aimed to the angle specified in hredirect", 0, "0"), 
+	vredirect_("WeaponRedirect::vredirect", "If vabs is true:weapon is re-aimed to the angle specified in vredirect", 0, "0"), 
+	habs_("Whether or not the horizontal angle adjustment will be to a pre-set angle or a change to current angle (absolute or relative)", 0, false), 
+	vabs_("Whether or not the vertical angle adjustment will be to a pre-set angle or a change to current angle (absolute or relative)", 0, false)
 {
-
+	addChildXMLEntry("hredirect", &hredirect_);
+	addChildXMLEntry("habs", &habs_);
+	addChildXMLEntry("vredirect", &vredirect_);
+	addChildXMLEntry("vabs", &vabs_);
+	addChildXMLEntry("nextaction", &nextAction_);
 }
 
 WeaponRedirect::~WeaponRedirect()
 {
-	delete nextAction_;
-	nextAction_ = 0;
-}
 
-bool WeaponRedirect::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	if (!accessoryNode->getNamedChild("hredirect", hredirect_)) return false;
-	if (!accessoryNode->getNamedChild("habs", habs_)) return false;
-	if (!accessoryNode->getNamedChild("vredirect", vredirect_)) return false;
-	if (!accessoryNode->getNamedChild("vabs", vabs_)) return false;
-
-	XMLNode *subNode = 0;
-	if (!accessoryNode->getNamedChild("nextaction", subNode)) return false;
-	
-	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore().
-		createAccessoryPart(context, parent_, subNode);
-	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
-	{
-		return subNode->returnError("Failed to find sub weapon, not a weapon");
-	}
-	nextAction_ = (Weapon*) accessory;
-
-	return true;
 }
 
 void WeaponRedirect::fireWeapon(ScorchedContext &context,
@@ -73,9 +54,9 @@ void WeaponRedirect::fireWeapon(ScorchedContext &context,
 	fixed dist = (velocity[0] * velocity[0] + velocity[1] * velocity[1]).sqrt();
 	fixed currentv = atan2x(dist, velocity[2]) / fixed::XPI * 180;
 
-	if (habs_) currenth = hredirect_.getValue(context);	// call NumberParser::getValue
+	if (habs_.getValue()) currenth = hredirect_.getValue(context);	// call NumberParser::getValue
 	else currenth += hredirect_.getValue(context);		// to evaluate at runtime
-	if (vabs_) currentv = vredirect_.getValue(context);
+	if (vabs_.getValue()) currentv = vredirect_.getValue(context);
 	else currentv += vredirect_.getValue(context);
 	
 	FixedVector newVelocity;
@@ -83,6 +64,6 @@ void WeaponRedirect::fireWeapon(ScorchedContext &context,
 	newVelocity.StoreNormalize();
 	newVelocity *= currentMag;
 	
-	nextAction_->fire(context, weaponContext, position, newVelocity);
+	nextAction_.getValue()->fire(context, weaponContext, position, newVelocity);
 }
 

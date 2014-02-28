@@ -23,7 +23,7 @@
 
 #include <weapons/Weapon.h>
 
-class WeaponScatterPosition  : public Weapon
+class WeaponScatterPosition : public Weapon
 {
 public:
 	WeaponScatterPosition();
@@ -42,7 +42,6 @@ protected:
 	NumberParser scatterpercentage_;
 	bool landonly_, landheight_;
 	Weapon *aimedWeapon_;
-
 };
 
 #endif // !defined(AFX_WeaponScatterPosition_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_)

@@ -63,11 +63,6 @@ void Explosion::init()
 #ifndef S3D_SERVER
 	if (!context_->getServerMode()) 
 	{
-		if (0 != strcmp(weapon_->getAccessoryTypeName(), "WeaponMuzzle")) {
-			ScorchedClient::instance()->getClientUISync().addActionFromClient(
-				new UIParticleAction(position_, "mp2_explosion_01"));
-		}
-
 		if (!weapon_->getNoCameraTrack())
 		{
 			TankViewPointProvider *vPoint = new TankViewPointProvider();
