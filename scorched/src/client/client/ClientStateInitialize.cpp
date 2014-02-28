@@ -26,6 +26,7 @@
 #include <client/ClientHandlers.h>
 #include <client/ClientState.h>
 #include <client/ClientStateLoadLevel.h>
+#include <client/ClientServerAccess.h>
 #include <client/ClientOptions.h>
 #include <common/DefinesAssert.h>
 #include <common/DefinesString.h>
@@ -322,11 +323,12 @@ void ClientStateInitialize::sendAuth()
 	if (!ClientParams::instance()->getConnectedToServer() &&
 		!ClientParams::instance()->getSaveFile()[0])
 	{
-		int maxComputerAIs = ScorchedServer::instance()->getOptionsGame().getNoMaxPlayers();
+		int maxComputerAIs = ClientServerAccess::getIntProperty("NumberOfPlayers");
 		noPlayers = 0;
 		for (int i=0; i<maxComputerAIs; i++)
 		{
-			const char *playerType = ScorchedServer::instance()->getOptionsGame().getPlayerType(i);
+			const char *playerType = ClientServerAccess::getStringProperty(
+				S3D::formatStringBuffer("PlayerType%i", (i+1)));
 			if (0 == stricmp(playerType, "Human"))
 			{
 				noPlayers++;

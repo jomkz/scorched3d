@@ -426,6 +426,7 @@
     <ClCompile Include="..\client\ClientOperationHandler.cpp" />
     <ClCompile Include="..\client\ClientOptions.cpp" />
     <ClCompile Include="..\client\ClientParams.cpp" />
+    <ClCompile Include="..\client\ClientServerAccess.cpp" />
     <ClCompile Include="..\client\ClientSimulator.cpp" />
     <ClCompile Include="..\client\ClientState.cpp" />
     <ClCompile Include="..\client\ClientStateInitialize.cpp" />
@@ -871,6 +872,7 @@
     <ClInclude Include="..\client\ClientOperationHandler.h" />
     <ClInclude Include="..\client\ClientOptions.h" />
     <ClInclude Include="..\client\ClientParams.h" />
+    <ClInclude Include="..\client\ClientServerAccess.h" />
     <ClInclude Include="..\client\ClientSimulator.h" />
     <ClInclude Include="..\client\ClientState.h" />
     <ClInclude Include="..\client\ClientStateInitialize.h" />

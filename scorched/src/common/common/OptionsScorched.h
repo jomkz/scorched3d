@@ -172,6 +172,8 @@ public:
 	OptionsGame &getMainOptions() { return mainOptions_; }
 	OptionsGame &getLevelOptions() { return levelOptions_; }
 
+	OptionEntry *getEntryByName(const std::string &name);
+
 	void updateLevelOptions(ScorchedContext &context, LandscapeDefinition &defn);
 	void updateChangeSet();
 	bool commitChanges();

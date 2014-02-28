@@ -1377,6 +1377,9 @@
     <ClCompile Include="..\..\common\engine\ThreadCallback.cpp">
       <Filter>engine</Filter>
     </ClCompile>
+    <ClCompile Include="..\client\ClientServerAccess.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -2695,6 +2698,9 @@
     </ClInclude>
     <ClInclude Include="..\..\common\engine\ThreadCallbackI.h">
       <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientServerAccess.h">
+      <Filter>client</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

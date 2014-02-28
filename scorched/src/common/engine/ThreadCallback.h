@@ -31,7 +31,7 @@ public:
 	virtual ~ThreadCallback();
 
 	void addCallback(ThreadCallbackI *callback);
-	void addCallbackSync(ThreadCallbackI *callback);
+	void addCallbackSync(ThreadCallbackI &callback);
 
 	void processCallbacks();
 protected:

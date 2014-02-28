@@ -31,21 +31,21 @@ ThreadCallback::~ThreadCallback()
 
 void ThreadCallback::addCallback(ThreadCallbackI *callback)
 {
-	callbackMutex_.lock();
+	boost::unique_lock<boost::mutex> lock(callbackMutex_);
 	callbacks_.push_back(callback);
 	callbackOutstanding_ = true;
-	callbackMutex_.unlock();
 }
 
-void ThreadCallback::addCallbackSync(ThreadCallbackI *callback)
+void ThreadCallback::addCallbackSync(ThreadCallbackI &callback)
 {
-	addCallback(callback);
-
-	// Easy but not the best
-	while (callbackOutstanding_)
-	{
-		boost::this_thread::sleep(boost::posix_time::milliseconds(10));
-	}
+	boost::unique_lock<boost::mutex> lock(callbackMutex_);
+	callback.sync = new ThreadCallbackISync();
+	callbacks_.push_back(&callback);
+	callbackOutstanding_ = true;
+	while(callback.sync->wait_)
+    {
+        callback.sync->cond_.wait(lock);
+    }
 }
 
 void ThreadCallback::processCallbacks()
@@ -58,7 +58,15 @@ void ThreadCallback::processCallbacks()
 		ThreadCallbackI *callback = callbacks_.back();
 		callbacks_.pop_back();
 		callback->callbackInvoked();
-		delete callback;
+		if (callback->sync)
+		{
+			callback->sync->wait_ = false;
+			callback->sync->cond_.notify_one();
+		}
+		else
+		{
+			delete callback;
+		}
 	}
 	callbackOutstanding_ = false;
 	callbackMutex_.unlock();

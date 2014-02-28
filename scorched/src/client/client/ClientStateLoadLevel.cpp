@@ -195,7 +195,10 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 		++tankItor)
 	{
 		Tank *current = (*tankItor).second;
-		current->getRenderer()->moved();
+		if (current->getRenderer())
+		{
+			current->getRenderer()->moved();
+		}
 		if (current->getDestinationId() != 0 &&
 			current->getPlayerId() != TargetID::SPEC_TANK_ID)
 		{

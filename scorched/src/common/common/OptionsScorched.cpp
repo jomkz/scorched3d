@@ -181,3 +181,11 @@ bool OptionsScorched::commitChanges()
 
 	return different;
 }
+
+OptionEntry *OptionsScorched::getEntryByName(const std::string &name)
+{
+	OptionEntry *levelEntry = levelOptions_.getEntryByName(name);
+	if (levelEntry && levelEntry->isChangedValue()) return levelEntry;
+	OptionEntry *otherEntry = mainOptions_.getEntryByName(name);
+	return otherEntry;
+}

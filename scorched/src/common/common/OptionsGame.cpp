@@ -459,6 +459,30 @@ bool OptionsGame::readOptionsFromFile(const std::string &filePath)
 	return true;
 }
 
+OptionEntry *OptionsGame::getEntryByName(const std::string &name)
+{
+	std::list<OptionEntry *>::iterator itor;
+	for (itor = playerTypeOptions_.begin();
+		itor != playerTypeOptions_.end();
+		++itor)
+	{
+		if (name == (*itor)->getName())
+		{
+			return *itor;
+		}
+	}
+	for (itor = options_.begin();
+		itor != options_.end();
+		++itor)
+	{
+		if (name == (*itor)->getName())
+		{
+			return *itor;
+		}
+	}
+	return 0;
+}
+
 std::list<OptionEntry *> &OptionsGame::getPlayerTypeOptions()
 {
 	return playerTypeOptions_;

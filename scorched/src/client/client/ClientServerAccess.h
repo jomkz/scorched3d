@@ -18,60 +18,21 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_ThreadCallbackI_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_)
-#define AFX_ThreadCallbackI_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_
+#if !defined(__INCLUDE_ClientServerAccessh_INCLUDE__)
+#define __INCLUDE_ClientServerAccessh_INCLUDE__
 
-#include <simactions/SimAction.h>
+#include <string>
 
-class ThreadCallbackISync 
+class ClientServerAccess 
 {
 public:
-	ThreadCallbackISync() : wait_(true)
-	{
-	}
+	static int getIntProperty(const std::string &propertyName);
+	static const char *getStringProperty(const std::string &propertyName);
 
-	boost::condition_variable cond_;
-	bool wait_;
+private:
+	ClientServerAccess();
+	virtual ~ClientServerAccess();
+
 };
 
-class ThreadCallbackI
-{
-public:
-	ThreadCallbackI() : sync(0)
-	{
-	}
-	virtual ~ThreadCallbackI()
-	{
-		delete sync;
-		sync = 0;
-	}
-
-	virtual void callbackInvoked() = 0;
-
-	ThreadCallbackISync *sync;
-};
-
-template<class T>
-class ThreadCallbackIAdapter : public ThreadCallbackI
-{
-public:
-	ThreadCallbackIAdapter(T *inst, 
-		void (T::*call)()) :
-		inst_(inst), call_(call)
-	{
-	};
-	virtual ~ThreadCallbackIAdapter()
-	{
-	};
-
-	virtual void callbackInvoked()
-	{
-		return (inst_->*call_)();
-	}
-
-protected:
-	T *inst_;
-	void (T::*call_)();
-};
-
-#endif // !defined(AFX_ThreadCallbackI_H__86995B4A_478E_4CFE_BD4C_79128DE51904__INCLUDED_)
+#endif // __INCLUDE_ClientServerAccessh_INCLUDE__

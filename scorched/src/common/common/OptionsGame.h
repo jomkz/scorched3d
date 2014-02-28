@@ -425,6 +425,7 @@ public:
 	OptionEntryBool &getDebugFeaturesEntry() { return debugFeatures_; }
 
 	// Fns used to save or restore the state of the options
+	OptionEntry *getEntryByName(const std::string &name);
 	std::list<OptionEntry *> &getOptions();
 	std::list<OptionEntry *> &getPlayerTypeOptions(); 
 	virtual bool writeOptionsToFile(const std::string &filePath, bool allOptions);
