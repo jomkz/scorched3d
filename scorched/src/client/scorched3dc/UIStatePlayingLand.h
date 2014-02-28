@@ -37,6 +37,8 @@ public:
 
 	Ogre::Real getHeight(const Ogre::Vector3 &position);
 
+	void updateLandscapeTextures();
+
 protected:
 	Ogre::Camera* camera_;
 	Ogre::SceneManager* sceneMgr_;
@@ -49,7 +51,8 @@ protected:
 	void create();
 	void defineOptions();
 	void defineTerrain(long x, long y);
-	void initBlendMaps(Ogre::Terrain* terrain, long tx, long ty);
+	void createNormalMap(Ogre::Image &normalMapImage);
+	void initBlendMaps(Ogre::Terrain* terrain, Ogre::Image &normalMapImage, long tx, long ty);
 };
 
 #endif // __INCLUDE_UIStatePlayingLandh_INCLUDE__

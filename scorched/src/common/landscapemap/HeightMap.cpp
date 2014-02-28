@@ -57,14 +57,12 @@ void HeightMap::reset(fixed initialHeight)
 	HeightData *current = heightData_;
 	for (int y=0; y<=height_; y++)
 	{
-		for (int x=0; x<=width_; x++)
+		for (int x=0; x<=width_; x++, current++)
 		{
 			current->height = initialHeight;
 			current->normal[0] = fixed(0);
 			current->normal[1] = fixed(0);
 			current->normal[2] = invertedNormals_?fixed(-1):fixed(1);
-
-			current++;
 		}
 	}
 }

@@ -28,6 +28,7 @@
 
 static LandscapeDefnType *fetchHeightMapDefnType(const char *type)
 {
+	if (0 == strcmp(type, "generatenoise")) return new LandscapeDefnHeightMapGenerateNoise;
 	if (0 == strcmp(type, "generate")) return new LandscapeDefnHeightMapGenerate;
 	if (0 == strcmp(type, "file")) return new LandscapeDefnHeightMapFile;
 	S3D::dialogMessage("LandscapeDefnType", S3D::formatStringBuffer("Unknown heightmap type %s", type));
@@ -181,6 +182,11 @@ bool LandscapeDefnHeightMapGenerate::readXML(XMLNode *node)
 	{
 		if (!S3D::checkDataFile(mask.c_str())) return false;
 	}
+	return node->failChildren();
+}
+
+bool LandscapeDefnHeightMapGenerateNoise::readXML(XMLNode *node)
+{
 	return node->failChildren();
 }
 

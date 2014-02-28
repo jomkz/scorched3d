@@ -9,8 +9,12 @@
 		<height><min>5.5</min><max>300</max></height>
 		<startmask>data/landscapes/textures/test-mask.png</startmask>
 	</tankstart>
+  <!--
 	<heightmap type="file">
     	<file>data/test.png</file>
     	<levelsurround>true</levelsurround>
     </heightmap>
+   -->
+  <heightmap type="generatenoise">
+  </heightmap>
 </defn>

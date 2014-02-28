@@ -19,6 +19,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <landscapemap/HeightMapLoader.h>
+#include <landscapemap/HeightMapModifier.h>
+#include <landscapemap/HeightMapModifierNoise.h>
 #include <image/ImageFactory.h>
 #include <common/RandomGenerator.h>
 #include <common/Defines.h>
@@ -131,6 +133,24 @@ bool HeightMapLoader::generateTerrain(
 		offsetGenerator.seed(seed);
 
 		HeightMapModifier::generateTerrain(
+			hmap, 
+			*generate, 
+			generator, 
+			offsetGenerator, 
+			counter);
+	}
+	else if (defn->getType() == LandscapeDefnType::eHeightMapGenerateNoise)
+	{
+		LandscapeDefnHeightMapGenerateNoise *generate = 
+			(LandscapeDefnHeightMapGenerateNoise *) defn;
+
+		levelSurround = false;
+		FileRandomGenerator generator;
+		FileRandomGenerator offsetGenerator;
+		generator.seed(seed);
+		offsetGenerator.seed(seed);
+
+		HeightMapModifierNoise::generateTerrain(
 			hmap, 
 			*generate, 
 			generator, 

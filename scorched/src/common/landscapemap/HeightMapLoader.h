@@ -18,14 +18,14 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #if !defined(__INCLUDE_HeightMapLoaderh_INCLUDE__)
 #define __INCLUDE_HeightMapLoaderh_INCLUDE__
 
-#include <landscapemap/HeightMapModifier.h>
 #include <landscapedef/LandscapeDefn.h>
-#include <image/Image.h>
 
+class HeightMap;
+class Image;
+class ProgressCounter;
 namespace HeightMapLoader
 {
 	void loadTerrain(HeightMap &hmap, 
@@ -40,6 +40,5 @@ namespace HeightMapLoader
 		bool &levelSurround,
 		ProgressCounter *counter = 0);
 };
-
 
 #endif

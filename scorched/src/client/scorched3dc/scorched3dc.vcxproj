@@ -71,6 +71,7 @@
     <ClCompile Include="..\..\common\common\RandomGenerator.cpp" />
     <ClCompile Include="..\..\common\common\RollingAverage.cpp" />
     <ClCompile Include="..\..\common\common\sha2.cpp" />
+    <ClCompile Include="..\..\common\common\simplexnoise.cpp" />
     <ClCompile Include="..\..\common\common\snprintf.cpp" />
     <ClCompile Include="..\..\common\common\SplineCurve.cpp" />
     <ClCompile Include="..\..\common\common\SplinePath.cpp" />
@@ -163,6 +164,7 @@
     <ClCompile Include="..\..\common\landscapemap\HeightMap.cpp" />
     <ClCompile Include="..\..\common\landscapemap\HeightMapLoader.cpp" />
     <ClCompile Include="..\..\common\landscapemap\HeightMapModifier.cpp" />
+    <ClCompile Include="..\..\common\landscapemap\HeightMapModifierNoise.cpp" />
     <ClCompile Include="..\..\common\landscapemap\LandscapeMaps.cpp" />
     <ClCompile Include="..\..\common\landscapemap\MovementMap.cpp" />
     <ClCompile Include="..\..\common\landscapemap\NapalmMap.cpp" />
@@ -449,7 +451,6 @@
     <ClCompile Include="InputHandlerMouse.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="noiseutils.cpp" />
     <ClCompile Include="OgreSystem.cpp" />
     <ClCompile Include="ScorchedUI.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -528,6 +529,7 @@
     <ClInclude Include="..\..\common\common\RandomGenerator.h" />
     <ClInclude Include="..\..\common\common\RollingAverage.h" />
     <ClInclude Include="..\..\common\common\sha2.h" />
+    <ClInclude Include="..\..\common\common\simplexnoise.h" />
     <ClInclude Include="..\..\common\common\SplineCurve.h" />
     <ClInclude Include="..\..\common\common\SplinePath.h" />
     <ClInclude Include="..\..\common\common\StdVectorPtr.h" />
@@ -623,6 +625,7 @@
     <ClInclude Include="..\..\common\landscapemap\HeightMap.h" />
     <ClInclude Include="..\..\common\landscapemap\HeightMapLoader.h" />
     <ClInclude Include="..\..\common\landscapemap\HeightMapModifier.h" />
+    <ClInclude Include="..\..\common\landscapemap\HeightMapModifierNoise.h" />
     <ClInclude Include="..\..\common\landscapemap\LandscapeMaps.h" />
     <ClInclude Include="..\..\common\landscapemap\MovementMap.h" />
     <ClInclude Include="..\..\common\landscapemap\NapalmMap.h" />
@@ -909,7 +912,6 @@
     <ClInclude Include="CameraController.h" />
     <ClInclude Include="InputHandlerMouse.h" />
     <ClInclude Include="InputManager.h" />
-    <ClInclude Include="noiseutils.h" />
     <ClInclude Include="OgreSystem.h" />
     <ClInclude Include="ScorchedUI.h" />
     <ClInclude Include="stdafx.h" />
@@ -963,7 +965,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderOutputFile>$(ProjectDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)\src\client;$(SolutionDir)\src\server;$(SolutionDir)\src\common;$(BOOST_HOME);$(OGRE_HOME)\include;$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(CEGUI_HOME)\include;$(CEGUI_HOME)\CEGUI\include;$(CEGUI_HOME)\dependencies\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\src\client;$(SolutionDir)\src\server;$(SolutionDir)\src\common;$(BOOST_HOME);$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\include;$(CEGUI_HOME)\CEGUI\include;$(CEGUI_HOME)\dependencies\include;$(HYDRAX_HOME)\include;$(SKYX_HOME)\include</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zm175 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
@@ -974,8 +976,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OgreMain_d.lib;OIS_d.lib;CEGUIBase_d.lib;CEGUIOgreRenderer_d.lib;OgreTerrain_d.lib;zlib_d.lib;libpng_d.lib;expat_d.lib;hydrax_d.lib;skyx_d.lib;libnoise.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(CEGUI_HOME)\lib;$(OGRE_HOME)\lib\debug;$(OGRE_HOME)\boost\lib;$(BOOST_HOME)\stage\lib;$(CEGUI_HOME)\dependencies\lib\static;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OgreMain_d.lib;OIS_d.lib;CEGUIBase_d.lib;CEGUIOgreRenderer_d.lib;OgreTerrain_d.lib;zlib_d.lib;libpng_d.lib;expat_d.lib;hydrax_d.lib;skyx_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(CEGUI_HOME)\lib;$(OGRE_HOME)\lib\debug;$(OGRE_HOME)\boost\lib;$(BOOST_HOME)\stage\lib;$(CEGUI_HOME)\dependencies\lib\static;$(SKYX_HOME)\debug;$(HYDRAX_HOME)\bin\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -987,7 +989,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderOutputFile>$(ProjectDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)\src\client;$(SolutionDir)\src\server;$(SolutionDir)\src\common;$(BOOST_HOME);$(OGRE_HOME)\include;$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(CEGUI_HOME)\include;$(CEGUI_HOME)\CEGUI\include;$(CEGUI_HOME)\dependencies\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\src\client;$(SolutionDir)\src\server;$(SolutionDir)\src\common;$(BOOST_HOME);$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\include;$(CEGUI_HOME)\CEGUI\include;$(CEGUI_HOME)\dependencies\include;$(HYDRAX_HOME)\include;$(SKYX_HOME)\include</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zm175 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>

@@ -36,6 +36,7 @@ public:
 		eRoofCavern,
 		eHeightMapFile,
 		eHeightMapGenerate,
+		eHeightMapGenerateNoise,
 		eDeformDeform,
 		eDeformSolid,
 		eDeformFile
@@ -124,6 +125,12 @@ public:
 
 	virtual bool readXML(XMLNode *node);
 	virtual DefnType getType() { return eHeightMapGenerate; }
+};
+
+class LandscapeDefnHeightMapGenerateNoise : public LandscapeDefnType
+{
+	virtual bool readXML(XMLNode *node);
+	virtual DefnType getType() { return eHeightMapGenerateNoise; }
 };
 
 class LandscapeDefnTypeTankStart;

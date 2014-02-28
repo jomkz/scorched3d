@@ -68,6 +68,10 @@ public:
 	// Alters the actual internal HeightMap points
 	void setHeight(int w, int h, fixed height);
 
+	// Internal access to the data (for speed)
+	// Note: the internal size of the 2d array is (width + 1) * (height + 1)
+	HeightData *getHeightData() { return heightData_; }
+
 protected:
 	bool invertedNormals_;
 	int width_, height_;

@@ -1422,8 +1422,11 @@
     <ClCompile Include="InputHandlerMouse.cpp">
       <Filter>scorched3dc</Filter>
     </ClCompile>
-    <ClCompile Include="noiseutils.cpp">
-      <Filter>scorched3dc</Filter>
+    <ClCompile Include="..\..\common\common\simplexnoise.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapemap\HeightMapModifierNoise.cpp">
+      <Filter>landscapemap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2789,8 +2792,11 @@
     <ClInclude Include="InputHandlerMouse.h">
       <Filter>scorched3dc</Filter>
     </ClInclude>
-    <ClInclude Include="noiseutils.h">
-      <Filter>scorched3dc</Filter>
+    <ClInclude Include="..\..\common\common\simplexnoise.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapemap\HeightMapModifierNoise.h">
+      <Filter>landscapemap</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
