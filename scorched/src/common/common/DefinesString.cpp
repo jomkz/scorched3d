@@ -49,7 +49,7 @@ char *S3D::stristr(const char *x, const char *y)
 # define va_copy(d, s)		(d) = (s)
 #endif
 
-std::string S3D::formatStringList(const char *format, va_list ap)
+std::string &S3D::formatStringList(const char *format, va_list ap)
 {
 	int size = 256;
 	char *p = new char[256];
@@ -79,23 +79,23 @@ std::string S3D::formatStringList(const char *format, va_list ap)
 		p = new char[size];
 	}
 
-	std::string result(p);
+	std::string &result = S3D::getThreadLocalStringCopy(p);
 	delete [] p;
 
 	return result;
 }
 
-std::string S3D::formatStringBuffer(const char *format, ...)
+std::string &S3D::formatStringBuffer(const char *format, ...)
 {
 	va_list ap; 
 	va_start(ap, format); 
-	std::string result = S3D::formatStringList(format, ap);
+	std::string &result = S3D::formatStringList(format, ap);
 	va_end(ap); 
 
 	return result;
 }
 
-std::string S3D::formatMoney(int amount)
+std::string &S3D::formatMoney(int amount)
 {
 	if (abs(amount) < 1000)
 	{
@@ -107,4 +107,48 @@ std::string S3D::formatMoney(int amount)
 		amount = abs(amount) - abs(thou * 1000);
 		return S3D::formatStringBuffer("$%i,%03i", thou, amount);
 	}
+}
+
+class ThreadLocalStringPool
+{
+public:
+	ThreadLocalStringPool() : position_(0)
+	{
+		stringPool_ = new std::string[10];
+	}
+	~ThreadLocalStringPool()
+	{
+		delete []stringPool_;
+		stringPool_ = 0;
+	}
+
+	std::string &getNext() 
+	{ 
+		position_++; 
+		return stringPool_[position_%10]; 
+	}
+
+private:
+	int position_;
+	std::string *stringPool_;
+};
+
+#include <boost/thread/tss.hpp>
+static boost::thread_specific_ptr<ThreadLocalStringPool> threadLocalStringPool;
+
+std::string &S3D::getThreadLocalString()
+{
+	if (!threadLocalStringPool.get())
+	{
+		threadLocalStringPool.reset(new ThreadLocalStringPool());
+	}
+	return threadLocalStringPool->getNext();
+}
+
+std::string &S3D::getThreadLocalStringCopy(const std::string &other)
+{
+	std::string &result = S3D::getThreadLocalString();
+	result.clear();
+	result.append(other);
+	return result;
 }

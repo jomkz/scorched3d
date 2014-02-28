@@ -173,5 +173,6 @@ void TanketResign::simulate(fixed frameTime, bool &remove)
 
 std::string TanketResign::getActionDetails()
 {
-	return S3D::formatStringBuffer("%u %s", playerId_, resignTime_.asQuickString());
+	return S3D::formatStringBuffer("%u %s", playerId_, 
+		resignTime_.asQuickString().c_str());
 }

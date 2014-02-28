@@ -65,7 +65,7 @@ void AddTarget::simulate(fixed frameTime, bool &remove)
 			S3D::formatStringBuffer("AddTarget : %u %s %s", 
 				playerId,
 				target->getCStrName().c_str(),
-				position_.asQuickString()));
+				position_.asQuickString().c_str()));
 	}
 
 	// Check if this new target can fall

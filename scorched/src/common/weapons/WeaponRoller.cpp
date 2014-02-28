@@ -46,8 +46,7 @@ WeaponRoller::WeaponRoller() :
 	numberRollers_("WeaponRoller::numberRollers", "Number of rollers to create"),
 	maintainVelocity_("If true, the roller will keep its momentum when it spawns", 0, false), 
 	roll_("Whether or not the roller model will roll", 0, true),
-	stepSize_("How long should the update between each roll be", 0, fixed(true, 100)),
-	noCameraTrack_("Consider this projectile as an action camera target", 0, false)
+	stepSize_("How long should the update between each roll be", 0, fixed(true, 100))
 {
 	addChildXMLEntry("time", &timeExp_);
 	addChildXMLEntry("timeout", &timeoutExp_);
@@ -59,7 +58,7 @@ WeaponRoller::WeaponRoller() :
 	addChildXMLEntry("maintainvelocity", &maintainVelocity_);
 	addChildXMLEntry("roll", &roll_);
 	addChildXMLEntry("stepsize", &stepSize_);
-	addChildXMLEntry("nocameratrack", &noCameraTrack_);
+	addChildXMLEntry("cameratrack", &cameraTrack_);
 	addChildXMLEntry("localgroupname", &localGroups_);
 	addChildXMLEntry("globalgroupname", &globalGroups_);
 	particleDefinition_.addAllEntries(*this);

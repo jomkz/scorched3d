@@ -20,7 +20,7 @@
 
 #include <coms/ComsLevelLoadedMessage.h>
 
-ComsMessageType ComsLevelLoadedMessage::ComsLevelLoadedMessageType("ComsLevelLoadedMessageType");
+ComsMessageType ComsLevelLoadedMessage::ComsLevelLoadedMessageType("ComsLevelLoadedMessageType", true);
 
 ComsLevelLoadedMessage::ComsLevelLoadedMessage() :
 	ComsMessage(ComsLevelLoadedMessageType)

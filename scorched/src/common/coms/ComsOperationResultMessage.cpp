@@ -20,7 +20,7 @@
 
 #include <coms/ComsOperationResultMessage.h>
 
-ComsMessageType ComsOperationResultMessage::ComsOperationResultMessageType("ComsOperationResultMessageType");
+ComsMessageType ComsOperationResultMessage::ComsOperationResultMessageType("ComsOperationResultMessageType", true);
 
 ComsOperationResultMessage::ComsOperationResultMessage() :
 	ComsMessage(ComsOperationResultMessageType)

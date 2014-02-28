@@ -74,8 +74,8 @@ void Laser::init()
 std::string Laser::getActionDetails()
 {
 	return S3D::formatStringBuffer("%s %s %s",
-		position_.asQuickString(),
-		direction_.asQuickString(),
+		position_.asQuickString().c_str(),
+		direction_.asQuickString().c_str(),
 		weapon_->getParent()->getName());
 }
 

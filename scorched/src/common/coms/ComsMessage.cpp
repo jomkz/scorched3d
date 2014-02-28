@@ -25,8 +25,8 @@
 static std::map<std::string, ComsMessageType *> *coms_message_map = 0;
 static std::vector<ComsMessageType *> *coms_message_array = 0;
 
-ComsMessageType::ComsMessageType(const std::string &name) :
-	name_(name), id_(0)
+ComsMessageType::ComsMessageType(const std::string &name, bool logMessage) :
+	name_(name), id_(0), logMessage_(logMessage)
 {
 	DIALOG_ASSERT(!coms_message_array);
 	if (!coms_message_map) {

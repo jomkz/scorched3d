@@ -20,7 +20,7 @@
 
 #include <coms/ComsBuyAccessoryMessage.h>
 
-ComsMessageType ComsBuyAccessoryMessage::ComsBuyAccessoryMessageType("ComsBuyAccessoryMessageType");
+ComsMessageType ComsBuyAccessoryMessage::ComsBuyAccessoryMessageType("ComsBuyAccessoryMessageType", true);
 
 ComsBuyAccessoryMessage::ComsBuyAccessoryMessage() :
 	ComsMessage(ComsBuyAccessoryMessageType),

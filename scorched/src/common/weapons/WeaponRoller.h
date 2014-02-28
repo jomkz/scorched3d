@@ -36,7 +36,7 @@ public:
 	Weapon *getCollisionAction() { return collisionAction_.getValue(); }
 	XMLEntryModelID &getRollerModelID() { return rollerModelId_; }
 	bool getRoll() { return roll_.getValue(); }
-	bool getNoCameraTrack() { return noCameraTrack_.getValue(); }
+	WeaponCameraTrack &getCameraTrack() { return cameraTrack_; }
 	fixed getShieldHurtFactor(ScorchedContext &context) { return shieldHurtFactorExp_.getValue(context); }
 	fixed getTime(ScorchedContext &context) { return timeExp_.getValue(context); }
 	fixed getTimeout(ScorchedContext &context) { return timeoutExp_.getValue(context); }
@@ -62,7 +62,7 @@ protected:
 	XMLEntryFixed stepSize_;
 	XMLEntryBool roll_;
 	XMLEntryBool maintainVelocity_;
-	XMLEntryBool noCameraTrack_;
+	WeaponCameraTrack cameraTrack_;
 	PhysicsParticleObjectDefinition particleDefinition_;
 	ObjectGroupEntryDefinition localGroups_, globalGroups_;
 	

@@ -26,6 +26,7 @@
 #include <common/FixedVector.h>
 #include <engine/ScorchedContext.h>
 #include <engine/ObjectGroups.h>
+#include <XML/XMLEntrySimpleTypes.h>
 
 class Weapon;
 class WeaponFireContextInternal
@@ -68,6 +69,26 @@ protected:
 private:
 	WeaponFireContextInternal(WeaponFireContextInternal &other);
 	WeaponFireContextInternal &operator=(WeaponFireContextInternal &other);
+};
+
+class CameraPositionAction;
+class TankViewPointProvider;
+class WeaponCameraTrack : public XMLEntryContainer
+{
+public:
+	WeaponCameraTrack();
+	virtual ~WeaponCameraTrack();
+
+	CameraPositionAction *createPositionAction(
+		unsigned int playerId, TankViewPointProvider *provider,
+		fixed defaultShowTime, unsigned int defaultPriority,
+		bool explosion);
+	bool getCameraTrack() { return cameraTrack_.getValue(); }
+
+private:
+	XMLEntryBool cameraTrack_;
+	XMLEntryInt showPriority_;
+	XMLEntryFixed showTime_;
 };
 
 class WeaponFireContext

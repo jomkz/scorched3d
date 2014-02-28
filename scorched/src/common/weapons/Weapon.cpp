@@ -23,6 +23,7 @@
 #include <engine/ScorchedContext.h>
 #include <engine/Simulator.h>
 #include <common/OptionsScorched.h>
+#include <actions/CameraPositionAction.h>
 
 WeaponFireContextInternal::WeaponFireContextInternal(unsigned int selectPositionX, unsigned int selectPositionY,
 		const FixedVector &velocityVector, bool referenced, bool updateStats) :
@@ -84,6 +85,38 @@ WeaponFireContext::~WeaponFireContext()
 	internalContext_->decrementReference();
 }
 
+WeaponCameraTrack::WeaponCameraTrack() :
+	XMLEntryContainer("WeaponCameraTrack",
+		"The parameters that define how the \"action\" camera perceive this weapon", 
+		false),
+	cameraTrack_("Should the action camera track this weapon (when activated)", 0, true),
+	showTime_("How long the action camera should focus on this weapon (0 = default)", 0, 0),
+	showPriority_("The priority this weapon has over the other weapons (0 = default)", 0, 0)
+{
+	addChildXMLEntry("cameratrack", &cameraTrack_);
+	addChildXMLEntry("showtime", &showTime_);
+	addChildXMLEntry("showpriority", &showPriority_);
+}
+
+WeaponCameraTrack::~WeaponCameraTrack()
+{
+}
+
+CameraPositionAction *WeaponCameraTrack::createPositionAction(unsigned int playerId, TankViewPointProvider *provider,
+	fixed defaultShowTime, unsigned int defaultPriority,
+	bool explosion)
+{
+	fixed showTime = showTime_.getValue();
+	if (showTime == 0) showTime = defaultShowTime;
+	unsigned int priority = showPriority_.getValue();
+	if (priority == 0) priority = defaultPriority;
+
+	CameraPositionAction *positionAction = new CameraPositionAction(
+		playerId, provider,
+		showTime, priority, explosion);
+	return positionAction;
+}
+
 Weapon::Weapon(const char *typeName, const char *description) : 
 	AccessoryPart(typeName, description)
 {
@@ -114,7 +147,7 @@ void Weapon::addWeaponSyncCheck(ScorchedContext &context,
 	context.getSimulator().addSyncCheck(S3D::formatStringBuffer("WeaponFire %s-%u-%s %u %s %s",
 		getParent()->getName(), getParent()->getAccessoryId(), getAccessoryTypeName(),
 		weaponContext.getPlayerId(),
-		position.asQuickString(), velocity.asQuickString()));
+		position.asQuickString(), velocity.asQuickString().c_str()));
 }
 
 XMLEntryWeaponChoice::XMLEntryWeaponChoice() :

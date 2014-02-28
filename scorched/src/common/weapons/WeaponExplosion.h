@@ -42,7 +42,7 @@ public:
 	fixed getHurtAmount(ScorchedContext &context) { return hurtAmountExp_.getValue(context); }
 	bool getExplodeUnderGround() { return explodeUnderGround_.getValue(); }
 	bool getOnlyHurtShield() { return onlyHurtShield_.getValue(); }
-	bool getNoCameraTrack() { return noCameraTrack_.getValue(); }
+	WeaponCameraTrack &getCameraTrack() { return cameraTrack_; }
 
 	// Inherited from Weapon
 	virtual void fireWeapon(ScorchedContext &context,
@@ -56,7 +56,7 @@ protected:
 	XMLEntryNumberParser hurtAmountExp_;
 	XMLEntryBool explodeUnderGround_;
 	XMLEntryBool onlyHurtShield_;
-	XMLEntryBool noCameraTrack_;
+	WeaponCameraTrack cameraTrack_;
 };
 
 #endif // !defined(AFX_WEAPONPEXPLOSION_H__70119A64_2064_4066_8EE5_FD6A3E24D5FC__INCLUDED_)

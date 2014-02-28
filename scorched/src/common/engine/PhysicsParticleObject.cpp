@@ -193,7 +193,7 @@ void PhysicsParticleObject::checkCollision()
 						S3D::formatStringBuffer("Shot Collision : %i %i %s", 
 							(int) action,
 							(int) collision.collisionId,
-							position_.asQuickString()));
+							position_.asQuickString().c_str()));
 				}
 			}
 		}

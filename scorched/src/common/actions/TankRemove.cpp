@@ -73,5 +73,6 @@ void TankRemove::simulate(fixed frameTime, bool &remove)
 
 std::string TankRemove::getActionDetails()
 {
-	return S3D::formatStringBuffer("%u %s", playerId_, removeTime_.asQuickString());
+	return S3D::formatStringBuffer("%u %s", playerId_, 
+		removeTime_.asQuickString().c_str());
 }

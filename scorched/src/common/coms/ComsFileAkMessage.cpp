@@ -20,7 +20,7 @@
 
 #include <coms/ComsFileAkMessage.h>
 
-ComsMessageType ComsFileAkMessage::ComsFileAkMessageType("ComsFileAkMessageType");
+ComsMessageType ComsFileAkMessage::ComsFileAkMessageType("ComsFileAkMessageType", false);
 
 ComsFileAkMessage::ComsFileAkMessage() :
 	ComsMessage(ComsFileAkMessageType)

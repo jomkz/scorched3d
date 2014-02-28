@@ -20,7 +20,7 @@
 
 #include <coms/ComsFileMessage.h>
 
-ComsMessageType ComsFileMessage::ComsFileMessageType("ComsFileMessageType");
+ComsMessageType ComsFileMessage::ComsFileMessageType("ComsFileMessageType", false);
 
 ComsFileMessage::ComsFileMessage() :
 	ComsMessage(ComsFileMessageType)

@@ -20,7 +20,7 @@
 
 #include <coms/ComsTankChangeMessage.h>
 
-ComsMessageType ComsTankChangeMessage::ComsTankChangeMessageType("ComsTankChangeMessageType");
+ComsMessageType ComsTankChangeMessage::ComsTankChangeMessageType("ComsTankChangeMessageType", true);
 
 ComsTankChangeMessage::ComsTankChangeMessage() :
 	ComsMessage(ComsTankChangeMessageType)

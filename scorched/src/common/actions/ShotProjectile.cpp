@@ -58,7 +58,7 @@ void ShotProjectile::init()
 	if (!context_->getServerMode()) 
 	{
 		setActionRender(new UIProjectileRenderer(this));
-		if (!weapon_->getNoCameraTrack())
+		if (weapon_->getCameraTrack().getCameraTrack())
 		{
 			vPoint_ = new TankViewPointProvider();
 			vPoint_->incrementReference();
@@ -66,7 +66,7 @@ void ShotProjectile::init()
 			velocity[2] = 10;
 			vPoint_->setValues(startPosition_, velocity);
 		
-			CameraPositionAction *positionAction = new CameraPositionAction(
+			CameraPositionAction *positionAction = weapon_->getCameraTrack().createPositionAction(
 				weaponContext_.getPlayerId(), vPoint_,
 				5, 10, false);
 			context_->getActionController().addAction(positionAction);
@@ -100,8 +100,8 @@ void ShotProjectile::init()
 std::string ShotProjectile::getActionDetails()
 {
 	return S3D::formatStringBuffer("%s %s %s",
-		startPosition_.asQuickString(),
-		velocity_.asQuickString(),
+		startPosition_.asQuickString().c_str(),
+		velocity_.asQuickString().c_str(),
 		weapon_->getParent()->getName());
 }
 

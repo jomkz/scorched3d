@@ -59,14 +59,14 @@ void ShotBounce::init()
 	if (!context_->getServerMode()) 
 	{
 		setActionRender(new UIRollerRenderer(this));
-		if (!weapon_->getNoCameraTrack())
+		if (weapon_->getCameraTrack().getCameraTrack())
 		{
 			vPoint_ = new TankViewPointProvider();
 			vPoint_->incrementReference();
 			vPoint_->setValues(startPosition_);
 
 			// Point the action camera at this event
-			CameraPositionAction *pos = new CameraPositionAction(
+			CameraPositionAction *pos = weapon_->getCameraTrack().createPositionAction(
 				weaponContext_.getPlayerId(), vPoint_, 5, 5, false);
 			context_->getActionController().addAction(pos);
 		}
@@ -90,8 +90,8 @@ ShotBounce::~ShotBounce()
 std::string ShotBounce::getActionDetails()
 {
 	return S3D::formatStringBuffer("%s %s %s",
-		startPosition_.asQuickString(),
-		velocity_.asQuickString(),
+		startPosition_.asQuickString().c_str(),
+		velocity_.asQuickString().c_str(),
 		weapon_->getParent()->getName());
 }
 

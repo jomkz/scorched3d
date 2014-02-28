@@ -21,7 +21,7 @@
 #include <coms/ComsConnectAuthMessage.h>
 #include <common/Defines.h>
 
-ComsMessageType ComsConnectAuthMessage::ComsConnectAuthMessageType("ComsConnectAuthMessageType");
+ComsMessageType ComsConnectAuthMessage::ComsConnectAuthMessageType("ComsConnectAuthMessageType", true);
 
 ComsConnectAuthMessage::ComsConnectAuthMessage() : 
 	ComsMessage(ComsConnectAuthMessageType)

@@ -56,7 +56,7 @@ public:
 	fixed getDrag(ScorchedContext &context) { return drag_.getValue(context); }
 	fixed getWobbleSpin(ScorchedContext &context) { return wobbleSpin_.getValue(context); }
 	fixed getWobbleAmount(ScorchedContext &context) { return wobbleAmount_.getValue(context); }
-	bool getNoCameraTrack() { return noCameraTrack_.getValue(); }
+	WeaponCameraTrack &getCameraTrack() { return cameraTrack_; }
 	XMLEntryModelID &getModelID() { return modelId_; }
 	ObjectGroupEntryDefinition &getLocalGroups() { return localGroups_; }
 	ObjectGroupEntryDefinition &getGlobalGroups() { return globalGroups_; }
@@ -67,7 +67,7 @@ protected:
 	XMLEntryBool showEndPoint_;
 	XMLEntryBool apexCollision_;
 	XMLEntryBool apexNoDud_, timedDud_;
-	XMLEntryBool noCameraTrack_;
+	WeaponCameraTrack cameraTrack_;
 	XMLEntryNumberParser spinSpeed_;
 	XMLEntryFixedVector spinAxis_;
 

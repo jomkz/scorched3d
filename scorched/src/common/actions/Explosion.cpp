@@ -63,11 +63,11 @@ void Explosion::init()
 #ifndef S3D_SERVER
 	if (!context_->getServerMode()) 
 	{
-		if (!weapon_->getNoCameraTrack())
+		if (weapon_->getCameraTrack().getCameraTrack())
 		{
 			TankViewPointProvider *vPoint = new TankViewPointProvider();
 			vPoint->setValues(position_, TankViewPointProvider::defaultLookFrom, explosionSize_);
-			CameraPositionAction *pos = new CameraPositionAction(
+			CameraPositionAction *pos = weapon_->getCameraTrack().createPositionAction(
 				weaponContext_.getPlayerId(),
 				vPoint,
 				4, 10, true);
@@ -109,7 +109,7 @@ void Explosion::init()
 std::string Explosion::getActionDetails()
 {
 	return S3D::formatStringBuffer("%s %s", 
-		position_.asQuickString(), 
+		position_.asQuickString().c_str(), 
 		weapon_->getParent()->getName());
 }
 

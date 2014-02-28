@@ -41,18 +41,18 @@ WeaponAimed::WeaponAimed(const char *name, const char *description) :
 	aimedWeapon_(),
 	groupNames_(),
 	randomWhenNoTargets_("If there are no targets in range, just fire random shots (true) or do nothing (false)", 0, true),
-	noSelfHoming_("If there are no tarets in range do not target the firing tank", 0, false),
+	selfHoming_("If there are no targets in range target the firing tank, i.e. consider the firing tank as a target", 0, true),
 	maxAimedDistance_("WeaponAimed::maxAimedDistance", "Weapon will aim at targets within this distance"),
 	percentageMissChance_("WeaponAimed::percentageMissChance", "Chance a projectile will miss (higher = less accurate)"),
 	maxInacuracy_("WeaponAimed::maxInacuracy", "Amount of weapon innaccuracy (higher = less accurate)")
 {
-	addChildXMLEntry("nowarheads", &warHeads_);
+	addChildXMLEntry("numberwarheads", &warHeads_);
 	addChildXMLEntry("aimedweapon", &aimedWeapon_);
 	addChildXMLEntry("randomwhennotargets", &randomWhenNoTargets_);
 	addChildXMLEntry("maxaimdistance", &maxAimedDistance_);
 	addChildXMLEntry("percentagemiss", &percentageMissChance_);
 	addChildXMLEntry("inaccuracy", &maxInacuracy_);
-	addChildXMLEntry("noselfhoming", &noSelfHoming_);
+	addChildXMLEntry("selfhoming", &selfHoming_);
 	addChildXMLEntry("groupname", &groupNames_);
 }
 
@@ -67,7 +67,7 @@ void WeaponAimed::addWeaponSyncCheck(ScorchedContext &context,
 	context.getSimulator().addSyncCheck(S3D::formatStringBuffer("WeaponFire %s-%u-%s %u %s %s",
 		getParent()->getName(), getParent()->getAccessoryId(), getAccessoryTypeName(),
 		weaponContext.getPlayerId(),
-		position.asQuickString(), velocity.asQuickString()));
+		position.asQuickString(), velocity.asQuickString().c_str()));
 }
 
 void WeaponAimed::fireAimedWeapon(ScorchedContext &context,
@@ -87,7 +87,7 @@ void WeaponAimed::fireAimedWeapon(ScorchedContext &context,
 			Tanket *tanket = itor->second;
 			if (tanket->getAlive())
 			{
-				if (noSelfHoming_.getValue() && weaponContext.getPlayerId() == tanket->getPlayerId()) continue;
+				if (!selfHoming_.getValue() && weaponContext.getPlayerId() == tanket->getPlayerId()) continue;
 				positions.push_back(&itor->second->getLife().getTargetPosition());
 			}
 		}
@@ -160,7 +160,9 @@ void WeaponAimed::fireAimedWeapon(ScorchedContext &context,
 			itor != distances.end();
 			++itor)
 		{
-			buffer += S3D::formatStringBuffer("%s %s, ", itor->first.asQuickString(), itor->second->asQuickString());
+			buffer += S3D::formatStringBuffer("%s %s, ", 
+				itor->first.asQuickString().c_str(), 
+				itor->second->asQuickString().c_str());
 		}
 		context.getSimulator().addSyncCheck(buffer);
 	}
@@ -201,9 +203,10 @@ void WeaponAimed::fireAimedWeapon(ScorchedContext &context,
 			if (context.getOptionsGame().getWeaponSyncCheck())
 			{
 				context.getSimulator().addSyncCheck(S3D::formatStringBuffer("WeaponAimed %s,%s,%s %s",
-					angleXYDegs.asQuickString(), angleYZDegs.asQuickString(),
-					power.asQuickString(),
-					shootAt->asQuickString()));
+					angleXYDegs.asQuickString().c_str(), 
+					angleYZDegs.asQuickString().c_str(),
+					power.asQuickString().c_str(),
+					shootAt->asQuickString().c_str()));
 			}
 
 			// We have a tank to aim at

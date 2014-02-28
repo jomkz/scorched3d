@@ -125,7 +125,7 @@ void Teleport::simulate(fixed frameTime, bool &remove)
 					context_->getSimulator().addSyncCheck(
 						S3D::formatStringBuffer("Telport: %u %s", 
 							tank->getPlayerId(),
-							position_.asQuickString()));
+							position_.asQuickString().c_str()));
 				}
 
 				// Set this position and flatten the landscape
@@ -139,7 +139,7 @@ void Teleport::simulate(fixed frameTime, bool &remove)
 					context_->getSimulator().addSyncCheck(
 						S3D::formatStringBuffer("Telport: %u %s", 
 							tank->getPlayerId(),
-							position_.asQuickString()));
+							position_.asQuickString().c_str()));
 				}
 
 				// Set the position, what ever this is
@@ -162,6 +162,6 @@ std::string Teleport::getActionDetails()
 {
 	return S3D::formatStringBuffer("%u %s %s", 
 		weaponContext_.getPlayerId(), 
-		position_.asQuickString(),
+		position_.asQuickString().c_str(),
 		weapon_->getParent()->getName());
 }

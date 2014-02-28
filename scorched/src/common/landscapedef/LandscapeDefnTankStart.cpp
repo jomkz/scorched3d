@@ -236,7 +236,7 @@ static bool tankTargetCloseness(ScorchedContext &context, unsigned int playerId,
 			context.getSimulator().addSyncCheck(S3D::formatStringBuffer("Tank placement current : %u %s %s - %s", 
 				thisTank->getPlayerId(), thisTank->getCStrName().c_str(), 
 				thisTank->getState().getSmallStateString(),
-				thisTank->getLife().getTargetPosition().asQuickString()));
+				thisTank->getLife().getTargetPosition().asQuickString().c_str()));
 		}
 
 		if (thisTank->getState().getTankPlaying())
@@ -291,7 +291,8 @@ FixedVector LandscapeDefnTankStartHeight::placeTank(unsigned int playerId, int t
 			{
 				context.getSimulator().addSyncCheck(
 					S3D::formatStringBuffer("Tank placement height %s %u", 
-					tankPos.asQuickString(), height.min.getValue().getInternalData()));
+					tankPos.asQuickString().c_str(), 
+					height.min.getValue().getInternalData()));
 			}
 			continue;
 		}
@@ -303,7 +304,8 @@ FixedVector LandscapeDefnTankStartHeight::placeTank(unsigned int playerId, int t
 			{
 				context.getSimulator().addSyncCheck(
 					S3D::formatStringBuffer("Tank placement flatness %s %u", 
-					normal.asQuickString(), flatness.getValue().getInternalData()));
+					normal.asQuickString().c_str(), 
+					flatness.getValue().getInternalData()));
 			}
 			continue;
 		}
@@ -316,7 +318,7 @@ FixedVector LandscapeDefnTankStartHeight::placeTank(unsigned int playerId, int t
 			{
 				context.getSimulator().addSyncCheck(
 					S3D::formatStringBuffer("Tank placement mask %i %s", 
-					team, tankPos.asQuickString()));
+					team, tankPos.asQuickString().c_str()));
 			}
 			continue;
 		}
@@ -342,7 +344,7 @@ FixedVector LandscapeDefnTankStartHeight::placeTank(unsigned int playerId, int t
 	{
 		context.getSimulator().addSyncCheck(
 			S3D::formatStringBuffer("Tank placement %u %s",
-				playerId, tankPos.asQuickString()));
+				playerId, tankPos.asQuickString().c_str()));
 	}
 
 	return tankPos;
@@ -392,7 +394,8 @@ FixedVector LandscapeDefnTankStartPositional::placeTank(unsigned int playerId, i
 			{
 				context.getSimulator().addSyncCheck(
 					S3D::formatStringBuffer("Tank placement height %s %u", 
-					tankPos.asQuickString(), height.min.getValue().getInternalData()));
+					tankPos.asQuickString().c_str(), 
+					height.min.getValue().getInternalData()));
 			}
 			continue;
 		}
@@ -404,7 +407,8 @@ FixedVector LandscapeDefnTankStartPositional::placeTank(unsigned int playerId, i
 			{
 				context.getSimulator().addSyncCheck(
 					S3D::formatStringBuffer("Tank placement flatness %s %u", 
-					normal.asQuickString(), flatness.getValue().getInternalData()));
+					normal.asQuickString().c_str(), 
+					flatness.getValue().getInternalData()));
 			}
 			continue;
 		}
@@ -430,7 +434,7 @@ FixedVector LandscapeDefnTankStartPositional::placeTank(unsigned int playerId, i
 	{
 		context.getSimulator().addSyncCheck(
 			S3D::formatStringBuffer("Tank placement %u %s",
-				playerId, tankPos.asQuickString()));
+				playerId, tankPos.asQuickString().c_str()));
 	}
 
 	return tankPos;

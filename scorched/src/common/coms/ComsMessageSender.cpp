@@ -75,7 +75,8 @@ bool ComsMessageSender::sendToServer(
 		!ScorchedClient::instance()->getNetInterface().started()) return false;
 	if (!formMessage(*defaultBuffer.getBuffer(), message, flags)) return false;
 
-	if (ScorchedClient::instance()->getComsMessageHandler().getMessageLogging())
+	if (ScorchedClient::instance()->getComsMessageHandler().getMessageLogging() &&
+		message.getComsMessageType().getLogMessage())
 	{
 		Logger::log(S3D::formatStringBuffer("Client::send(%s, %u%s)", 
 			message.getComsMessageType().getName().c_str(),
@@ -113,7 +114,8 @@ bool ComsMessageSender::sendToMultipleClients(
 		{
 			destinations.insert(destination);
 
-			if (ScorchedServer::instance()->getComsMessageHandler().getMessageLogging())
+			if (ScorchedServer::instance()->getComsMessageHandler().getMessageLogging() &&
+				message.getComsMessageType().getLogMessage())
 			{
 				Logger::log(S3D::formatStringBuffer("Server::send(%s, %u, %u%s)", 
 					message.getComsMessageType().getName().c_str(),

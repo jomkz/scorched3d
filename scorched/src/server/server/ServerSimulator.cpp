@@ -65,6 +65,13 @@ void ServerSimulator::addSimulatorAction(SimAction *action, SimulatorI *callback
 {
 	SendAction sendAction = { action, callback };
 	sendActions_.push_back(sendAction);
+
+	if (simulatorLogging_)
+	{
+		Logger::log(S3D::formatStringBuffer("Server::Added simulator action %s, %.2f",
+			action->getClassName(),
+			currentTime_.asFloat()));
+	}
 }
 
 bool ServerSimulator::continueToSimulate()

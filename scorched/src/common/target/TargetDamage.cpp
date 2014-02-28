@@ -61,7 +61,8 @@ void TargetDamage::damageTarget(ScorchedContext &context,
 	{
 		context.getSimulator().addSyncCheck(
 			S3D::formatStringBuffer("%u %s %s",
-				damagedPlayerId, damage.asQuickString(), weapon->getParent()->getName()));
+				damagedPlayerId, damage.asQuickString().c_str(), 
+				weapon->getParent()->getName()));
 	}
 
 	if (!context.getServerMode()) 
@@ -183,7 +184,7 @@ void TargetDamage::damageTarget(ScorchedContext &context,
 				S3D::formatStringBuffer("TargetDamage: %u %u %s", 
 					damagedTarget->getPlayerId(),
 					weaponContext.getPlayerId(),
-					damagedTarget->getLife().getLife().asQuickString()));
+					damagedTarget->getLife().getLife().asQuickString().c_str()));
 		}
 
 		// Check if the tank is dead

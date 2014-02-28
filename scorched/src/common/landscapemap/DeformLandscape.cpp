@@ -118,8 +118,9 @@ void DeformLandscape::deformLandscape(
 	{
 		context.getSimulator().addSyncCheck(
 			S3D::formatStringBuffer("Deform : %s %s %s", 
-				pos.asQuickString(), 
-				radius.asQuickString(), (down?"Down":"Up")));
+				pos.asQuickString().c_str(), 
+				radius.asQuickString().c_str(), 
+				(down?"Down":"Up")));
 	}
 
 	bool hits = deformLandscapeInternal(context, pos, radius, down, true, depthScale);
@@ -252,8 +253,8 @@ void DeformLandscape::flattenArea(
 	{
 		context.getSimulator().addSyncCheck(
 			S3D::formatStringBuffer("Flatten : %s %s", 
-			tankPos.asQuickString(), 
-			size.asQuickString()));
+			tankPos.asQuickString().c_str(), 
+			size.asQuickString().c_str()));
 	}
 
 	flattenAreaInternal(context, tankPos, removeObjects, size, true);

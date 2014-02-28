@@ -33,7 +33,6 @@ WeaponProjectile::WeaponProjectile() :
 	timedDud_("The projectile will not dud if it hits the ground before the timeout", 0, false),
 	showShotPath_("The projectiles will leave a colored trail visible to the player", 0, false), 
 	showEndPoint_("The projectiles will leave a colored mark on the ground visible to the player", 0, false), 
-	noCameraTrack_("This projectile will be used for the action camera views", 0, false),
 	spinAxis_("The axis the projectile model should spin around", 0, FixedVector(0, 0, 1)), 
 	spinSpeed_("WeaponProjectile::spinSpeed", "How fast the projectile rotates", 0, "1"), 
 	timedCollision_("WeaponProjectile::timedCollision", "Makes the projectile collide after a number of seconds, it will dud if it hits the ground first", 0, "0"), 
@@ -64,11 +63,11 @@ WeaponProjectile::WeaponProjectile() :
 	addChildXMLEntry("timeout", &timeout_);
 	addChildXMLEntry("timeddud", &timedDud_);
 	addChildXMLEntry("heightcollision", &heightCollision_);
-	addChildXMLEntry("nocameratrack", &noCameraTrack_);
 	addChildXMLEntry("shieldhurtfactor", &shieldHurtFactor_);
 	addChildXMLEntry("localgroupname", &localGroups_);
 	addChildXMLEntry("globalgroupname", &globalGroups_);
 	addChildXMLEntry("collisionaction", &collisionAction_);
+	addChildXMLEntry("cameratrack", &cameraTrack_);
 	particleDefinition_.addAllEntries(*this);
 }
 

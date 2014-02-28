@@ -26,6 +26,7 @@
 #include <target/TargetLife.h>
 #include <movement/TargetMovement.h>
 #include <common/OptionsScorched.h>
+#include <common/Logger.h>
 #include <landscapemap/LandscapeMaps.h>
 
 static const fixed StepSize = fixed(true, fixed::FIXED_RESOLUTION / int64_t(50));
@@ -34,7 +35,8 @@ Simulator::Simulator() :
 	speed_(1),
 	currentTime_(0),
 	actualTime_(0),
-	context_(0)
+	context_(0),
+	simulatorLogging_(true)
 {
 	lastTickTime_ = boost::posix_time::microsec_clock::local_time();
 }
@@ -117,7 +119,14 @@ void Simulator::actualSimulate(fixed frameTime)
 		{
 			context_->getSimulator().addSyncCheck(
 				S3D::formatStringBuffer("Invoking sim action : %s:%s", 
-				container->fireTime_.asQuickString(),
+				container->fireTime_.asQuickString().c_str(),
+				container->action_->getClassName()));
+		}
+		if (simulatorLogging_)
+		{
+			Logger::log(S3D::formatStringBuffer("%s::Invoking sim action : %s:%s", 
+				context_->getServerMode()?"Server":"Client",
+				container->fireTime_.asQuickString().c_str(),
 				container->action_->getClassName()));
 		}
 
@@ -134,7 +143,8 @@ void Simulator::addSyncCheck(const std::string &msg)
 {
 	syncCheck_.push_back(
 		S3D::formatStringBuffer(
-			">%s %s<", currentTime_.asQuickString(), msg.c_str()));
+			">%s %s<", currentTime_.asQuickString().c_str(), 
+			msg.c_str()));
 }
 
 void Simulator::newLevel()
@@ -172,7 +182,7 @@ void Simulator::newLevel()
 				tank->getDestinationId(), tank->getPlayerId(),  
 				tank->getCStrName().c_str(), 
 				tank->getState().getSmallStateString(),
-				tank->getLife().getTargetPosition().asQuickString()));
+				tank->getLife().getTargetPosition().asQuickString().c_str()));
 		}
 	}
 	if (context_->getOptionsGame().getTargetPlacementSyncCheck())
@@ -187,7 +197,7 @@ void Simulator::newLevel()
 			Target *target = itor->second;
 			addSyncCheck(S3D::formatStringBuffer("Target : %u %s", 
 				target->getPlayerId(),  
-				target->getLife().getTargetPosition().asQuickString()));
+				target->getLife().getTargetPosition().asQuickString().c_str()));
 		}
 	}
 }

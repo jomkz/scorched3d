@@ -35,7 +35,7 @@ WeaponMirv::WeaponMirv() :
 {
 	addChildXMLEntry("hspreaddist", &hspreadDist_);
 	addChildXMLEntry("vspreaddist", &vspreadDist_);
-	addChildXMLEntry("nowarheads", &noWarheads_);
+	addChildXMLEntry("numberwarheads", &noWarheads_);
 	addChildXMLEntry("aimedweapon", &aimedWeapon_);
 }
 

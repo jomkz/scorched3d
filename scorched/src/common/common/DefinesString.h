@@ -50,12 +50,14 @@ extern int vsnprintf(char *str, size_t size, const char *format, va_list ap);
 
 namespace S3D
 {
-	//extern const char *formatStringBuffer(const char *format, ...);
-	std::string formatMoney(int amount);
-	std::string formatStringBuffer(const char *format, ...);
-	std::string formatStringList(const char *format, va_list ap);
 	char *stristr(const char *x, const char *y);
 	void trim(std::string &value);
+
+	std::string &formatMoney(int amount);
+	std::string &formatStringBuffer(const char *format, ...);
+	std::string &formatStringList(const char *format, va_list ap);
+	std::string &getThreadLocalString();
+	std::string &getThreadLocalStringCopy(const std::string &other);
 }
 
 #endif // __SNPRINTF_SAMBA__

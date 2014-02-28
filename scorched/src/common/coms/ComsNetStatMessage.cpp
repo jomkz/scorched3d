@@ -20,7 +20,7 @@
 
 #include <coms/ComsNetStatMessage.h>
 
-ComsMessageType ComsNetStatMessage::ComsNetStatMessageType("ComsNetStatMessageType");
+ComsMessageType ComsNetStatMessage::ComsNetStatMessageType("ComsNetStatMessageType", false);
 
 ComsNetStatMessage::ComsNetStatMessage() :
 	ComsMessage(ComsNetStatMessageType)

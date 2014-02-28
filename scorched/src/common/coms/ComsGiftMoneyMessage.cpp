@@ -20,7 +20,7 @@
 
 #include <coms/ComsGiftMoneyMessage.h>
 
-ComsMessageType ComsGiftMoneyMessage::ComsGiftMoneyMessageType("ComsGiftMoneyMessageType");
+ComsMessageType ComsGiftMoneyMessage::ComsGiftMoneyMessageType("ComsGiftMoneyMessageType", true);
 
 ComsGiftMoneyMessage::ComsGiftMoneyMessage() :
 	ComsMessage(ComsGiftMoneyMessageType),

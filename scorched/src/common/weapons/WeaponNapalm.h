@@ -38,10 +38,10 @@ public:
 	fixed getLandscapeErosion(ScorchedContext &context) { return landscapeErosion_.getValue(context); }
 	int getNumberOfParticles() { return numberOfParticles_.getValue(); }
 	int getEffectRadius() { return effectRadius_.getValue(); }
-	bool getNoObjectDamage() { return noObjectDamage_.getValue();  }
+	bool getObjectDamage() { return objectDamage_.getValue();  }
 	bool getAllowUnderWater() { return allowUnderWater_.getValue(); }
 	bool getSingleFlow() { return singleFlow_.getValue(); }
-	bool getNoCameraTrack() { return noCameraTrack_.getValue(); }
+	WeaponCameraTrack &getCameraTrack() { return cameraTrack_; }
 
 	// Inherited from Weapon
 	virtual void fireWeapon(ScorchedContext &context,
@@ -59,10 +59,10 @@ protected:
 	XMLEntryNumberParser landscapeErosion_; // How much height will be removed for the erosion
 	XMLEntryInt numberOfParticles_; 
 	XMLEntryInt effectRadius_;   // How close do tanks take damage
-	XMLEntryBool noObjectDamage_;// Turns off burning damage to landscape objects
+	XMLEntryBool objectDamage_;// Turns off burning damage to landscape objects
 	XMLEntryBool allowUnderWater_;// Turns on/off napalm working under water
 	XMLEntryBool singleFlow_;    // Use a single flow of napalm or cover the whole downward area
-	XMLEntryBool noCameraTrack_;
+	WeaponCameraTrack cameraTrack_;
 };
 
 #endif

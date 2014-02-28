@@ -20,7 +20,7 @@
 
 #include <coms/ComsInitializeModMessage.h>
 
-ComsMessageType ComsInitializeModMessage::ComsInitializeModMessageType("ComsInitializeModMessageType");
+ComsMessageType ComsInitializeModMessage::ComsInitializeModMessageType("ComsInitializeModMessageType", true);
 
 ComsInitializeModMessage::ComsInitializeModMessage() :
 	ComsMessage(ComsInitializeModMessageType)

@@ -83,7 +83,7 @@ fixed::fixed(const char *nVal)
 	if (neg) m_nVal =- m_nVal;
 }
 
-std::string fixed::asString()
+std::string &fixed::asString()
 {
 	char result[20];
 	int r = 0;
@@ -129,14 +129,14 @@ std::string fixed::asString()
 	result[r++] = '\0';
 	DIALOG_ASSERT(r < 15);
 
-	return result;
+	return S3D::getThreadLocalStringCopy(result);
 }
 
-std::string fixed::asQuickString()
+std::string &fixed::asQuickString()
 {
 	char result[25];
 	snprintf(result, 25, "%lli", m_nVal);
-	return result;
+	return S3D::getThreadLocalStringCopy(result);
 }
 
 fixed fixed::operator*(fixed b)

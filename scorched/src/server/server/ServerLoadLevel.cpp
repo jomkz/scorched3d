@@ -32,6 +32,7 @@
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsLoadLevelMessage.h>
 #include <coms/ComsLevelLoadedMessage.h>
+#include <common/Logger.h>
 
 ServerLoadLevel::ServerLoadLevel(ComsMessageHandler &comsMessageHandler)
 {
@@ -122,6 +123,8 @@ bool ServerLoadLevel::processMessage(
 
 void ServerLoadLevel::setLoaded(unsigned int destinationId)
 {
+	Logger::log(S3D::formatStringBuffer("sdsd sdsd"));
+
 	// These tanks are now ready to play
 	std::map<unsigned int, Tank *>::iterator itor;
 	std::map<unsigned int, Tank *> &tanks = 
@@ -132,6 +135,9 @@ void ServerLoadLevel::setLoaded(unsigned int destinationId)
 	{
 		// For each tank
 		Tank *tank = (*itor).second;
+
+		Logger::log(S3D::formatStringBuffer("sdsd sdsd %u,%u", destinationId, tank->getDestinationId()));
+
 		if (destinationId == tank->getDestinationId())
 		{
 			TankLoadedSimAction *loadedAction = 

@@ -86,7 +86,7 @@ void Napalm::init()
 #ifndef S3D_SERVER
 	if (!context_->getServerMode()) 
 	{
-		if (!weapon_->getNoCameraTrack())
+		if (weapon_->getCameraTrack().getCameraTrack())
 		{
 			FixedVector position(fixed(startX_), fixed(startY_), context_->getLandscapeMaps().
 				getGroundMaps().getHeight(startX_, startY_));
@@ -94,7 +94,7 @@ void Napalm::init()
 			vPoint_->setValues(position);
 			vPoint_->incrementReference();
 
-			CameraPositionAction *pos = new CameraPositionAction(
+			CameraPositionAction *pos = weapon_->getCameraTrack().createPositionAction(
 				weaponContext_.getPlayerId(),
 				vPoint_,
 				5, 5, true);
@@ -514,7 +514,7 @@ void Napalm::simulateDamage()
 
 			// Set this target to burnt
 			if (target->getRenderer() &&
-				!weapon_->getNoObjectDamage())
+				weapon_->getObjectDamage())
 			{
 				target->getRenderer()->targetBurnt();
 			}

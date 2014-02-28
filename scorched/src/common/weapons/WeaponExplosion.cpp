@@ -41,15 +41,14 @@ WeaponExplosion::WeaponExplosion() :
 	deformSizeExp_("WeaponExplosion::deformSizeExp", "Actual radius of the explosion, in world units"),
 	hurtAmountExp_("WeaponExplosion::hurtAmountExp", "How much damage the explosion will do, 1 = 100 pts"),
 	explodeUnderGround_("Can the explosion be underground, if not any underground explosions will do nothing", 0, true),
-	onlyHurtShield_("Explosion will only do damage to shields", 0, false),
-	noCameraTrack_("Do use this explosion for the action camera views", 0, false)
+	onlyHurtShield_("Explosion will only do damage to shields", 0, false)
 {
 	addChildXMLEntry("deform", &deform_);
 	addChildXMLEntry("size", &deformSizeExp_);
 	addChildXMLEntry("hurtamount", &hurtAmountExp_);
 	addChildXMLEntry("explodeunderground", &explodeUnderGround_);
 	addChildXMLEntry("onlyhurtshield", &onlyHurtShield_);
-	addChildXMLEntry("nocameratrack", &noCameraTrack_);
+	addChildXMLEntry("cameratrack", &cameraTrack_);
 
 }
 

@@ -20,7 +20,7 @@
 
 #include <coms/ComsChannelMessage.h>
 
-ComsMessageType ComsChannelMessage::ComsChannelMessageType("ComsChannelMessageType");
+ComsMessageType ComsChannelMessage::ComsChannelMessageType("ComsChannelMessageType", true);
 
 ComsChannelMessage::ComsChannelMessage() :
 	ComsMessage(ComsChannelMessageType)

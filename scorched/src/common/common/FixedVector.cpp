@@ -24,11 +24,11 @@ static FixedVector nullVector;
 static FixedVector minVector = FixedVector(fixed::MIN_FIXED, fixed::MIN_FIXED, fixed::MIN_FIXED);
 static FixedVector maxVector = FixedVector(fixed::MAX_FIXED, fixed::MAX_FIXED, fixed::MAX_FIXED);
 
-std::string FixedVector::asQuickString()
+std::string &FixedVector::asQuickString()
 {
-	std::string v1 = V[0].asQuickString();
-	std::string v2 = V[0].asQuickString();
-	std::string v3 = V[0].asQuickString();
+	std::string &v1 = V[0].asQuickString();
+	std::string &v2 = V[0].asQuickString();
+	std::string &v3 = V[0].asQuickString();
 	return S3D::formatStringBuffer("%s,%s,%s", v1.c_str(), v2.c_str(), v3.c_str());
 }
 

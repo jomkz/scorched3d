@@ -29,17 +29,19 @@ class ComsMessage;
 class ComsMessageType
 {
 public:
-	ComsMessageType(const std::string &name);
+	ComsMessageType(const std::string &name, bool logMessage);
 	~ComsMessageType();
 	
 	const std::string &getName() { return name_; }
 	unsigned int getId();
+	bool getLogMessage() { return logMessage_; }
 
 	static ComsMessageType *getTypeForId(unsigned int id);
 
 protected:
 	std::string name_;
 	unsigned int id_;
+	bool logMessage_;
 
 private:
 	ComsMessageType(const ComsMessageType &other);

@@ -26,7 +26,7 @@
 #include <weapons/AccessoryStore.h>
 #include <common/OptionsScorched.h>
 
-ComsMessageType ComsConnectAcceptMessage::ComsConnectAcceptMessageType("ComsConnectAcceptMessageType");
+ComsMessageType ComsConnectAcceptMessage::ComsConnectAcceptMessageType("ComsConnectAcceptMessageType", true);
 
 ComsConnectAcceptMessage::ComsConnectAcceptMessage(unsigned int destinationId,
 	const char *serverName,

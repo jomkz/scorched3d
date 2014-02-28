@@ -74,12 +74,12 @@ void S3D::setExeName(const std::string &name)
 	exeName = name;
 }
 
-std::string S3D::getExeName()
+std::string &S3D::getExeName()
 {
 	return exeName;
 }
 
-std::string S3D::getStartTime()
+std::string &S3D::getStartTime()
 {
 	static std::string startTime;
 	if (startTime.empty())
@@ -105,7 +105,7 @@ void S3D::setDataFileMod(const std::string &mod)
 	currentMod = mod;
 }
 
-std::string S3D::getDataFileMod()
+std::string &S3D::getDataFileMod()
 {
 	return currentMod;
 }
@@ -147,11 +147,9 @@ static std::string GET_DIR(const std::string &dir)
 	return dir;
 }
 
-std::string S3D::getModFile(const std::string &filename)
+std::string &S3D::getModFile(const std::string &filename)
 {
-	std::string buffer;
-
-	buffer = S3D::getSettingsModFile(
+	std::string &buffer = S3D::getSettingsModFile(
 		S3D::formatStringBuffer("%s/%s", currentMod.c_str(), filename.c_str()));
 	S3D::fileDos2Unix(buffer);
 	if (S3D::fileExists(buffer)) return buffer;
@@ -172,10 +170,10 @@ std::string S3D::getModFile(const std::string &filename)
 	return buffer;
 }
 
-std::string S3D::getDataFile(const std::string &filename)
+std::string &S3D::getDataFile(const std::string &filename)
 {
 	std::string get_dir = GET_DIR(S3D_DATADIR);
-	std::string buffer = S3D::formatStringBuffer("%s/%s", get_dir.c_str(), filename.c_str());
+	std::string &buffer = S3D::formatStringBuffer("%s/%s", get_dir.c_str(), filename.c_str());
 	S3D::fileDos2Unix(buffer);
 
 	return buffer;
@@ -197,17 +195,17 @@ extern bool S3D::checkDataFile(const std::string &filename)
 	return true;
 }
 
-std::string S3D::getDocFile(const std::string &filename)
+std::string &S3D::getDocFile(const std::string &filename)
 {
 	std::string get_dir = GET_DIR(S3D_DOCDIR);
-	std::string buffer =
+	std::string &buffer =
 		S3D::formatStringBuffer("%s/%s", get_dir.c_str(), filename.c_str());
 	S3D::fileDos2Unix(buffer);
 	return buffer;
 }
 
 static boost::mutex home_file_mutex;
-std::string S3D::getHomeFile(const std::string &filename)
+std::string &S3D::getHomeFile(const std::string &filename)
 {
 	static std::string homeDir;
 	if (homeDir.empty())
@@ -223,14 +221,14 @@ std::string S3D::getHomeFile(const std::string &filename)
 		}
 	}
 
-	std::string buffer = S3D::formatStringBuffer(
+	std::string &buffer = S3D::formatStringBuffer(
 		"%s/%s", homeDir.c_str(), filename.c_str());
 	S3D::fileDos2Unix(buffer);
 	return buffer;
 }
 
 static boost::mutex settings_file_mutex;
-std::string S3D::getSettingsFile(const std::string &filename)
+std::string &S3D::getSettingsFile(const std::string &filename)
 {
 	static std::string homeDir;
 	if (homeDir.empty())
@@ -253,14 +251,14 @@ std::string S3D::getSettingsFile(const std::string &filename)
 		}
 	}
 
-	std::string buffer = S3D::formatStringBuffer(
+	std::string &buffer = S3D::formatStringBuffer(
 		"%s/%s", homeDir.c_str(), filename.c_str());
 	S3D::fileDos2Unix(buffer);
 	return buffer;
 }
 
 static boost::mutex log_file_mutex;
-std::string S3D::getLogFile(const std::string &filename)
+std::string &S3D::getLogFile(const std::string &filename)
 {
 	static std::string homeDir;
 	if (homeDir.empty())
@@ -276,14 +274,14 @@ std::string S3D::getLogFile(const std::string &filename)
 		}
 	}
 
-	std::string buffer = S3D::formatStringBuffer(
+	std::string &buffer = S3D::formatStringBuffer(
 		"%s/%s", homeDir.c_str(), filename.c_str());
 	S3D::fileDos2Unix(buffer);
 	return buffer;
 }
 
 static boost::mutex save_file_mutex;
-std::string S3D::getSaveFile(const std::string &filename)
+std::string &S3D::getSaveFile(const std::string &filename)
 {
 	static std::string homeDir;
 	if (homeDir.empty())
@@ -299,14 +297,14 @@ std::string S3D::getSaveFile(const std::string &filename)
 		}
 	}
 
-	std::string buffer = S3D::formatStringBuffer(
+	std::string &buffer = S3D::formatStringBuffer(
 		"%s/%s", homeDir.c_str(), filename.c_str());
 	S3D::fileDos2Unix(buffer);
 	return buffer;
 }
 
 static boost::mutex settings_mod_file_mutex;
-std::string S3D::getSettingsModFile(const std::string &filename)
+std::string &S3D::getSettingsModFile(const std::string &filename)
 {
 	static std::string modDir;
 	if (modDir.empty())
@@ -323,16 +321,16 @@ std::string S3D::getSettingsModFile(const std::string &filename)
 		}
 	}
 	         
-	std::string buffer = S3D::formatStringBuffer(
+	std::string &buffer = S3D::formatStringBuffer(
 		"%s/%s", modDir.c_str(), filename.c_str());
 	S3D::fileDos2Unix(buffer);
 	return buffer;
 }
 
-std::string S3D::getGlobalModFile(const std::string &filename)
+std::string &S3D::getGlobalModFile(const std::string &filename)
 {
 	std::string get_dir = GET_DIR(S3D_DATADIR);
-	std::string buffer = S3D::formatStringBuffer(
+	std::string &buffer = S3D::formatStringBuffer(
 		"%s/data/globalmods/%s", get_dir.c_str(), filename.c_str());
 	S3D::fileDos2Unix(buffer);
 	return buffer;

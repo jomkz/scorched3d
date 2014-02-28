@@ -36,7 +36,7 @@
 #include <uiactions/UITankRenderer.h>
 #endif
 
-ComsMessageType ComsLoadLevelMessage::ComsLoadLevelMessageType("ComsLoadLevelMessageType");
+ComsMessageType ComsLoadLevelMessage::ComsLoadLevelMessageType("ComsLoadLevelMessageType", true);
 
 ComsLoadLevelMessage::ComsLoadLevelMessage() :
 	ComsMessage(ComsLoadLevelMessageType),

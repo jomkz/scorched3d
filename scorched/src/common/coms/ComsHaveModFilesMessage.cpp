@@ -20,7 +20,7 @@
 
 #include <coms/ComsHaveModFilesMessage.h>
 
-ComsMessageType ComsHaveModFilesMessage::ComsHaveModFilesMessageType("ComsHaveModFilesMessageType");
+ComsMessageType ComsHaveModFilesMessage::ComsHaveModFilesMessageType("ComsHaveModFilesMessageType", true);
 
 ComsHaveModFilesMessage::ComsHaveModFilesMessage() :
 	ComsMessage(ComsHaveModFilesMessageType)

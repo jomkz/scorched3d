@@ -20,7 +20,7 @@
 
 #include <coms/ComsSimulateMessage.h>
 
-ComsMessageType ComsSimulateMessage::ComsSimulateMessageType("ComsSimulateMessageType");
+ComsMessageType ComsSimulateMessage::ComsSimulateMessageType("ComsSimulateMessageType", false);
 
 ComsSimulateMessage::ComsSimulateMessage() :
 	ComsMessage(ComsSimulateMessageType)

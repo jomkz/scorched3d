@@ -78,6 +78,7 @@ protected:
 	ActionController actionController_;
 	std::list<SimActionContainer *> simActions_;
 	std::vector<std::string> syncCheck_;
+	bool simulatorLogging_;
 
 	virtual void simulateTime();
 	virtual void actualSimulate(fixed frameTime);

@@ -20,7 +20,7 @@
 
 #include <coms/ComsSimulateResultMessage.h>
 
-ComsMessageType ComsSimulateResultMessage::ComsSimulateResultMessageType("ComsSimulateResultMessageType");
+ComsMessageType ComsSimulateResultMessage::ComsSimulateResultMessageType("ComsSimulateResultMessageType", false);
 
 ComsSimulateResultMessage::ComsSimulateResultMessage() :
 	ComsMessage(ComsSimulateResultMessageType)

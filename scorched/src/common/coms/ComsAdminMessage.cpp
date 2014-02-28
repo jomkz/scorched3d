@@ -20,7 +20,7 @@
 
 #include <coms/ComsAdminMessage.h>
 
-ComsMessageType ComsAdminMessage::ComsAdminMessageTyper("ComsAdminMessageType");
+ComsMessageType ComsAdminMessage::ComsAdminMessageTyper("ComsAdminMessageType", true);
 
 ComsAdminMessage::ComsAdminMessage(
 	unsigned int sid,

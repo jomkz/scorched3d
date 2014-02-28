@@ -169,7 +169,7 @@ void TargetFalling::collision(PhysicsParticleObject &position,
 			context_->getSimulator().addSyncCheck(
 				S3D::formatStringBuffer("TargetFalling: %u %s", 
 					current->getPlayerId(),
-					position.getPosition().asQuickString()));
+					position.getPosition().asQuickString().c_str()));
 		}
 
 		// Move the tank to the final position

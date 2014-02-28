@@ -38,10 +38,9 @@ WeaponNapalm::WeaponNapalm() :
 	numberOfParticles_("How many napalm particles can be created", 0, 100),
 	numberStreams_("Number of napalm streams to create at the start point"),
 	effectRadius_("Radius within which the napalm will damage opponents"),
-	noObjectDamage_("If set, the napalm will not damage landscape objects", 0, false),
+	objectDamage_("If the napalm will damage landscape objects", 0, true),
 	allowUnderWater_(" Whether or not this napalm can travel under water"),
-	singleFlow_("Use a single flow of napalm or cover the whole downward area", 0, false),
-	noCameraTrack_("Don't treat as a potential action camera target", 0, false)
+	singleFlow_("Use a single flow of napalm or cover the whole downward area", 0, false)
 {
 	addChildXMLEntry("napalmtime", &napalmTime_);
 	addChildXMLEntry("napalmheight", &napalmHeight_);
@@ -51,10 +50,10 @@ WeaponNapalm::WeaponNapalm() :
 	addChildXMLEntry("landscapeerosion", &landscapeErosion_);
 	addChildXMLEntry("numberstreams", &numberStreams_);
 	addChildXMLEntry("effectradius", &effectRadius_);
-	addChildXMLEntry("noobjectdamage", &noObjectDamage_);
+	addChildXMLEntry("objectdamage", &objectDamage_);
 	addChildXMLEntry("allowunderwater", &allowUnderWater_);
 	addChildXMLEntry("singleflow", &singleFlow_);
-	addChildXMLEntry("nocameratrack", &noCameraTrack_);
+	addChildXMLEntry("cameratrack", &cameraTrack_);
 }
 
 WeaponNapalm::~WeaponNapalm()

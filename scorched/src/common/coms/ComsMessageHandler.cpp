@@ -32,7 +32,7 @@ ComsMessageHandlerI::~ComsMessageHandlerI()
 
 ComsMessageHandler::ComsMessageHandler(const char *instanceName) : 
 	instanceName_(instanceName),
-	connectionHandler_(0), comsMessageLogging_(false)
+	connectionHandler_(0), comsMessageLogging_(true)
 {
 }
 
@@ -174,7 +174,7 @@ void ComsMessageHandler::processMessage(NetMessage &message,
 	}
 	const char *messageTypeStr = comsMessageType->getName().c_str();
 	
-	if (comsMessageLogging_)
+	if (comsMessageLogging_ && comsMessageType->getLogMessage())
 	{
 		Logger::log(S3D::formatStringBuffer("%s::process%s(%s, %i, %u%s)",
 			instanceName_.c_str(),
@@ -210,7 +210,7 @@ void ComsMessageHandler::processMessage(NetMessage &message,
 		return;
 	}
 
-	if (comsMessageLogging_)
+	if (comsMessageLogging_ && comsMessageType->getLogMessage())
 	{
 		Logger::log(S3D::formatStringBuffer("%s::processFinished%s(%s, %i)",
 			instanceName_.c_str(),

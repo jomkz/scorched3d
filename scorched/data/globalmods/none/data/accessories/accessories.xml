@@ -495,7 +495,7 @@ small dirt clods in all directions.</description>
 					<deform>down</deform><size>4</size>
 				</subweapon>
 				<subweapon type='WeaponAimedOver'>
-					<nowarheads>5</nowarheads>
+					<numberwarheads>5</numberwarheads>
 					<percentagemiss>1</percentagemiss>
 					<maxaimdistance>0</maxaimdistance>
 					<inaccuracy>50</inaccuracy>
@@ -511,7 +511,7 @@ small dirt clods in all directions.</description>
 								<size>3</size>
 							</subweapon>
 							<subweapon type='WeaponAimedOver'>
-								<nowarheads>3</nowarheads>
+								<numberwarheads>3</numberwarheads>
 								<percentagemiss>1</percentagemiss>
 								<maxaimdistance>0</maxaimdistance>
 								<inaccuracy>20</inaccuracy>
@@ -527,7 +527,7 @@ small dirt clods in all directions.</description>
 											<size>3</size>
 										</subweapon>
 										<subweapon type='WeaponAimedOver'>
-											<nowarheads>2</nowarheads>
+											<numberwarheads>2</numberwarheads>
 											<percentagemiss>5</percentagemiss>
 											<maxaimdistance>0</maxaimdistance>
 											<inaccuracy>50</inaccuracy>
@@ -545,7 +545,7 @@ small dirt clods in all directions.</description>
 														<size>2</size>
 													</subweapon>
 													<subweapon type='WeaponAimedOver'>
-														<nowarheads>2</nowarheads>
+														<numberwarheads>2</numberwarheads>
 														<percentagemiss>5</percentagemiss>
 														<maxaimdistance>0</maxaimdistance>
 														<inaccuracy>20</inaccuracy>
@@ -775,7 +775,7 @@ tank-seeking riot bombs.</description>
         <meshname>moab</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
-				<nowarheads>3</nowarheads>
+				<numberwarheads>3</numberwarheads>
 				<inaccuracy>40</inaccuracy>
 				<percentagemiss>20</percentagemiss>
 				<maxaimdistance>75</maxaimdistance>
@@ -810,7 +810,7 @@ tank-seeking riot bombs.</description>
         <meshname>moab</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
-				<nowarheads>5</nowarheads>
+				<numberwarheads>5</numberwarheads>
 				<inaccuracy>40</inaccuracy>
 				<percentagemiss>20</percentagemiss>
 				<maxaimdistance>75</maxaimdistance>
@@ -848,7 +848,7 @@ tank-seeking riot bombs.</description>
         <meshname>moab</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
-				<nowarheads>10</nowarheads>
+				<numberwarheads>10</numberwarheads>
 				<inaccuracy>40</inaccuracy>
 				<percentagemiss>20</percentagemiss>
 				<maxaimdistance>75</maxaimdistance>
@@ -886,7 +886,7 @@ tanks from underground.</description>
         <meshname>moab</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
-				<nowarheads>2</nowarheads>
+				<numberwarheads>2</numberwarheads>
 				<inaccuracy>30</inaccuracy>
 				<percentagemiss>20</percentagemiss>
 				<maxaimdistance>40</maxaimdistance>
@@ -921,7 +921,7 @@ tanks from underground.</description>
         <meshname>moab</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
-				<nowarheads>6</nowarheads>
+				<numberwarheads>6</numberwarheads>
 				<inaccuracy>30</inaccuracy>
 				<percentagemiss>20</percentagemiss>
 				<maxaimdistance>50</maxaimdistance>
@@ -959,7 +959,7 @@ tanks from underground.</description>
         <meshname>moab</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
-				<nowarheads>15</nowarheads>
+				<numberwarheads>15</numberwarheads>
 				<inaccuracy>30</inaccuracy>
 				<percentagemiss>20</percentagemiss>
 				<maxaimdistance>120</maxaimdistance>
@@ -998,7 +998,7 @@ in a straight path.</description>
         <meshname>moab</meshname>
       </projectilemodel>
       <collisionaction type='WeaponMirv'>
-				<nowarheads>5</nowarheads>
+				<numberwarheads>5</numberwarheads>
 				<hspreaddist>0.1</hspreaddist>
 				<vspreaddist>5.0</vspreaddist>
 				<aimedweapon type='WeaponProjectile'>
@@ -1034,7 +1034,7 @@ random direction.</description>
         <meshname>moab</meshname>
       </projectilemodel>
       <collisionaction type='WeaponMirv'>
-				<nowarheads>5</nowarheads>
+				<numberwarheads>5</numberwarheads>
 				<hspreaddist>1.0</hspreaddist>
 				<vspreaddist>5.0</vspreaddist>
 				<aimedweapon type='WeaponProjectile'>
@@ -1070,7 +1070,7 @@ in a random direction.</description>
         <meshname>moab</meshname>
       </projectilemodel>
 			<collisionaction type='WeaponMirv'>
-				<nowarheads>20</nowarheads>
+				<numberwarheads>20</numberwarheads>
 				<hspreaddist>1.0</hspreaddist>
 				<vspreaddist>5.0</vspreaddist>
 				<aimedweapon type='WeaponProjectile'>
@@ -1109,7 +1109,7 @@ any nearby tanks.</description>
 					<size>10</size>
 				</subweapon>			
 				<subweapon type='WeaponAimedOver'>
-					<nowarheads>12</nowarheads>
+					<numberwarheads>12</numberwarheads>
 					<percentagemiss>12</percentagemiss>
 					<maxaimdistance>RANGE(40,55)</maxaimdistance>
 					<inaccuracy>12</inaccuracy>
@@ -1283,7 +1283,7 @@ range without wasting weapons.  </description>
 					<direction>0 0 -1</direction>
 					<directionoffset>0 0 0</directionoffset>		
 					<aimedweapon type='WeaponAimedOver'>
-						<nowarheads>5</nowarheads>
+						<numberwarheads>5</numberwarheads>
 						<percentagemiss>20</percentagemiss>
 						<maxaimdistance>0</maxaimdistance>
 						<inaccuracy>10</inaccuracy>
@@ -1446,7 +1446,7 @@ and shields damaging the tank directly.</description>
     <activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
     <maximumnumber>0</maximumnumber>
     <accessoryaction type='WeaponAimedOver'>
-      <nowarheads>2</nowarheads>
+      <numberwarheads>2</numberwarheads>
       <percentagemiss>1</percentagemiss>
       <maxaimdistance>1024</maxaimdistance>
       <inaccuracy>5</inaccuracy>
@@ -1457,7 +1457,7 @@ and shields damaging the tank directly.</description>
             <meshname>moab</meshname>
           </projectilemodel>
           <shieldhurtfactor>0.2</shieldhurtfactor>
-          <nowallcollision>true</nowallcollision>
+          <wallcollision>false</wallcollision>
           <collisionaction type='WeaponNull'></collisionaction>
         </aimedweapon>
       </aimedweapon>
@@ -1473,7 +1473,7 @@ and shields damaging the tank directly.</description>
         <meshname>moab</meshname>
       </projectilemodel>
       <shieldhurtfactor>0.2</shieldhurtfactor>
-      <nowallcollision>true</nowallcollision>
+      <wallcollision>false</wallcollision>
       <collisionaction type='WeaponNull'></collisionaction>
     </accessoryaction>
   </accessory>

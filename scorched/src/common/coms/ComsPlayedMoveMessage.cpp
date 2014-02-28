@@ -20,7 +20,7 @@
 
 #include <coms/ComsPlayedMoveMessage.h>
 
-ComsMessageType ComsPlayedMoveMessage::ComsPlayedMoveMessageType("ComsPlayedMoveMessageType");
+ComsMessageType ComsPlayedMoveMessage::ComsPlayedMoveMessageType("ComsPlayedMoveMessageType", true);
 
 ComsPlayedMoveMessage::ComsPlayedMoveMessage() :
 	ComsMessage(ComsPlayedMoveMessageType),

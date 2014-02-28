@@ -37,7 +37,7 @@ protected:
 	XMLEntryNumberParser maxAimedDistance_;
 	XMLEntryNumberParser percentageMissChance_;
 	XMLEntryNumberParser maxInacuracy_;
-	XMLEntryBool noSelfHoming_;
+	XMLEntryBool selfHoming_;
 	ObjectGroupReferenceDefinition groupNames_;
 	XMLEntryBool randomWhenNoTargets_;
 

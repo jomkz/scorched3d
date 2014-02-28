@@ -217,12 +217,12 @@ Target *TargetSpace::getCollision(FixedVector &position)
 		{
 			targets.append(S3D::formatStringBuffer("%u:%s ", 
 				result->getPlayerId(),
-				result->getLife().getTargetPosition().asQuickString()));
+				result->getLife().getTargetPosition().asQuickString()).c_str());
 		}
 
 		context_->getSimulator().addSyncCheck(
 			S3D::formatStringBuffer("CollisionSet : %s %s", 
-				position.asQuickString(),
+				position.asQuickString().c_str(),
 				targets.c_str()));
 	}
 
@@ -302,13 +302,13 @@ void TargetSpace::getCollisionSet(FixedVector &position, fixed radius,
 		{
 			targets.append(S3D::formatStringBuffer("%u:%s ", 
 				itor->second->getPlayerId(),
-				itor->second->getLife().getTargetPosition().asQuickString()));
+				itor->second->getLife().getTargetPosition().asQuickString().c_str()));
 		}
 
 		context_->getSimulator().addSyncCheck(
 			S3D::formatStringBuffer("CollisionSet : %s %s \"%s\"", 
-				position.asQuickString(),
-				radius.asQuickString(),
+				position.asQuickString().c_str(),
+				radius.asQuickString().c_str(),
 				targets.c_str()));
 	}
 }

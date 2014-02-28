@@ -21,7 +21,7 @@
 #include <coms/ComsConnectMessage.h>
 #include <common/Defines.h>
 
-ComsMessageType ComsConnectMessage::ComsConnectMessageType("ComsConnectMessageType");
+ComsMessageType ComsConnectMessage::ComsConnectMessageType("ComsConnectMessageType", true);
 
 ComsConnectMessage::ComsConnectMessage() : 
 	ComsMessage(ComsConnectMessageType)

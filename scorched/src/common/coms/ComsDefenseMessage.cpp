@@ -22,7 +22,7 @@
 #include <coms/ComsDefenseMessage.h>
 #include <weapons/AccessoryStore.h>
 
-ComsMessageType ComsDefenseMessage::ComsDefenseMessageType("ComsDefenseMessageType");
+ComsMessageType ComsDefenseMessage::ComsDefenseMessageType("ComsDefenseMessageType", true);
 
 ComsDefenseMessage::ComsDefenseMessage() :
 	ComsMessage(ComsDefenseMessageType),
