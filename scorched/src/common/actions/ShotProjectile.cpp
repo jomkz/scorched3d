@@ -48,7 +48,7 @@ ShotProjectile::ShotProjectile(FixedVector &startPosition, FixedVector &velocity
 	snapTime_(fixed(true, 2000)), up_(false),
 	totalTime_(0), simulateTime_(0), 
 	spinSpeed_(spinSpeed), spinAxis_(spinAxis),
-	groups_(0), physicsSpin_(0)
+	groups_(0), physicsSpin_(0), timeout_(0)
 {
 }
 
@@ -79,6 +79,7 @@ void ShotProjectile::init()
 	getPhysics().setDefinition(*context_, weapon_->getParticleDefinition());
 
 	thrustTime_ = getWeapon()->getThrustTime(*context_);
+	timeout_ = weapon_->getTimeout(*context_);
 	thrustAmount_ = getWeapon()->getThrustAmount(*context_);
 	timedCollision_ = getWeapon()->getTimedCollision(*context_);
 	heightCollision_ = getWeapon()->getHeightCollision(*context_);
@@ -157,6 +158,13 @@ void ShotProjectile::collision(PhysicsParticleObject &position,
 void ShotProjectile::simulate(fixed frameTime, bool &remove)
 {
 	totalTime_ += frameTime;
+
+	// Timeout
+	if (timeout_ > 0 && 
+		totalTime_ > timeout_)
+	{
+		remove = true;
+	}
 
 	// Apex collision
 	if (!remove &&

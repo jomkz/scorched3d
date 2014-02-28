@@ -38,7 +38,7 @@ ShotBounce::ShotBounce(WeaponRoller *weapon,
 	PhysicsParticle(weaponContext.getInternalContext().getReferenced()),
 	startPosition_(startPosition),
 	velocity_(velocity), weapon_(weapon), weaponContext_(weaponContext),
-	totalTime_(0), simulateTime_(0),
+	totalTime_(0), simulateTime_(0), timeout_(0),
 	vPoint_(0), groups_(0)
 {
 }
@@ -53,6 +53,7 @@ void ShotBounce::init()
 	stepSize_ = weapon_->getStepSize() * 
 		fixed(true, context_->getOptionsGame().getWeaponSpeed());
 	weaponTime_ = weapon_->getTime(*context_);
+	timeout_ = weapon_->getTimeout(*context_);
 
 #ifndef S3D_SERVER
 	if (!context_->getServerMode()) 
@@ -110,6 +111,11 @@ void ShotBounce::simulate(fixed frameTime, bool &remove)
 	if (totalTime_ > weaponTime_)
 	{
 		doCollision();
+		remove = true;
+	}
+	if (timeout_ > 0 && 
+		totalTime_ > timeout_)
+	{
 		remove = true;
 	}
 

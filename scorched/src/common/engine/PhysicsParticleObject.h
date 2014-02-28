@@ -72,6 +72,7 @@ public:
 
 	XMLEntryBool waterCollision_, wallCollision_;
 	XMLEntryBool landscapeCollision_, shieldCollision_;
+	XMLEntryBool tankCollision_, targetCollision_;
 	XMLEntryBool stickyShields_;
 	XMLEntryBool under_;
 	XMLEntryNumberParser windFactor_;
@@ -118,6 +119,8 @@ protected:
 	bool optionShieldCollision_;
 	bool optionLandscapeCollision_;
 	bool optionWaterCollision_;
+	bool optionTankCollision_;
+	bool optionTargetCollision_;
 	unsigned int iterations_;
 	FixedVector position_;
 	FixedVector velocity_;

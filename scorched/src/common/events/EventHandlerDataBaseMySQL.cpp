@@ -22,6 +22,8 @@
 
 #include <events/EventHandlerDataBaseMySQL.h>
 #include <common/Logger.h>
+#include <common/Defines.h>
+#include <stdlib.h>
 
 EventHandlerDataBaseMySQL::EventHandlerDataBaseMySQL() : mysql_(0)
 {

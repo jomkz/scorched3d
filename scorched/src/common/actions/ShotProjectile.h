@@ -55,9 +55,7 @@ protected:
 	unsigned int flareType_;
 	bool up_;
 	fixed snapTime_;
-	fixed totalTime_, simulateTime_;
-	// 	things like thrusttime etc should have their 
-	// 	values set ONCE per projectile
+	fixed totalTime_, simulateTime_, timeout_;
 	fixed thrustTime_;
 	fixed thrustAmount_;
 	fixed wobbleSpin_, wobbleAmount_;

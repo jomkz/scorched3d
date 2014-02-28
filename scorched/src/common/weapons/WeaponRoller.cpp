@@ -42,6 +42,7 @@ WeaponRoller::WeaponRoller() :
 	dampenVelocityExp_("WeaponRoller::dampenVelocityExp", "If maintainvelocity=true, multiplies the velocity by this factor to control the amount of velocity retained by the rollers."
 		"0 = none, 1.0 = full", 0, "1"), 
 	timeExp_("WeaponRoller::timeExp", "Number of seconds the rollers will roll before exploding"),
+	timeoutExp_("WeaponRoller::timeoutExp", "The amount of time until the weapon duds (0 is no dud)", 0, "0"),
 	numberRollers_("WeaponRoller::numberRollers", "Number of rollers to create"),
 	maintainVelocity_("If true, the roller will keep its momentum when it spawns", 0, false), 
 	roll_("Whether or not the roller model will roll", 0, true),
@@ -49,6 +50,7 @@ WeaponRoller::WeaponRoller() :
 	noCameraTrack_("Consider this projectile as an action camera target", 0, false)
 {
 	addChildXMLEntry("time", &timeExp_);
+	addChildXMLEntry("timeout", &timeoutExp_);
 	addChildXMLEntry("numberrollers", &numberRollers_);
 	addChildXMLEntry("collisionaction", &collisionAction_);
 	addChildXMLEntry("rollermodel", &rollerModelId_);

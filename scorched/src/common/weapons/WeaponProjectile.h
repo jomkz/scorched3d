@@ -52,6 +52,7 @@ public:
 	fixed getStepSize() { return stepSize_.getValue(); }
 	fixed getThrustAmount(ScorchedContext &context) { return thrustAmount_.getValue(context); }
 	fixed getThrustTime(ScorchedContext &context) { return thrustTime_.getValue(context); }
+	fixed getTimeout(ScorchedContext &context) { return timeout_.getValue(context); }
 	fixed getDrag(ScorchedContext &context) { return drag_.getValue(context); }
 	fixed getWobbleSpin(ScorchedContext &context) { return wobbleSpin_.getValue(context); }
 	fixed getWobbleAmount(ScorchedContext &context) { return wobbleAmount_.getValue(context); }
@@ -72,7 +73,7 @@ protected:
 
 	PhysicsParticleObjectDefinition particleDefinition_;
 	ObjectGroupEntryDefinition localGroups_, globalGroups_;
-	XMLEntryNumberParser thrustTime_, thrustAmount_;
+	XMLEntryNumberParser thrustTime_, thrustAmount_, timeout_;
 	XMLEntryNumberParser timedCollision_;
 	XMLEntryNumberParser shieldHurtFactor_;
 	XMLEntryNumberParser drag_;

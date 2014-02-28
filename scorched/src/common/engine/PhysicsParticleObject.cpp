@@ -47,6 +47,8 @@ PhysicsParticleObjectDefinition::PhysicsParticleObjectDefinition() :
 	wallCollision_("The projectile will collide with walls", 0, true),
 	landscapeCollision_("The projectile will collide with the landscape", 0, true), 
 	shieldCollision_("The projectile will collide with shields", 0, true),
+	tankCollision_("The projectile will collide with tanks", 0, true),
+	targetCollision_("The projectile will collide with all targets", 0, true),
 	stickyShields_("The projectile will stick to shields", 0, false),
 	windFactor_("PhysicsParticleObjectDefinition::windFactor", "Scale of wind's effect on the projectile, default = 1.0, 0.0 = no effect", 0, "1"), 
 	gravityFactor_("PhysicsParticleObjectDefinition::gravityFactor", "Scale of gravity's effect on the projectile, default = 1.0, 0.0 = no effect", 0, "1")
@@ -61,7 +63,9 @@ void PhysicsParticleObjectDefinition::addAllEntries(XMLEntryContainer &container
 {
 	container.addChildXMLEntry("under", &under_);
 	container.addChildXMLEntry("watercollision", &waterCollision_);
-	container.addChildXMLEntry("nowallcollision", &wallCollision_);
+	container.addChildXMLEntry("wallcollision", &wallCollision_);
+	container.addChildXMLEntry("targetcollision", &targetCollision_);
+	container.addChildXMLEntry("tankcollision", &tankCollision_);
 	container.addChildXMLEntry("landscapecollision", &landscapeCollision_);
 	container.addChildXMLEntry("shieldcollision", &shieldCollision_);
 	container.addChildXMLEntry("stickyshields", &stickyShields_);
@@ -73,7 +77,7 @@ PhysicsParticleObject::PhysicsParticleObject() :
 	handler_(0), context_(0), optionUnderGroundCollision_(false), iterations_(0),
 	info_(ParticleTypeNone, 0, 0), optionRotateOnCollision_(false), optionWallCollision_(true),
 	optionStickyShields_(false), optionShieldCollision_(true), optionLandscapeCollision_(true),
-	optionWaterCollision_(false)
+	optionTankCollision_(true), optionTargetCollision_(true), optionWaterCollision_(false)
 {
 }
 
@@ -114,6 +118,8 @@ void PhysicsParticleObject::setDefinition(
 	optionWallCollision_ = definition.wallCollision_.getValue();
 	optionStickyShields_ = definition.stickyShields_.getValue();
 	optionShieldCollision_ = definition.shieldCollision_.getValue();
+	optionTankCollision_ = definition.tankCollision_.getValue();
+	optionTargetCollision_ = definition.targetCollision_.getValue();
 	optionLandscapeCollision_ = definition.landscapeCollision_.getValue();
 	optionWaterCollision_ = definition.waterCollision_.getValue();
 	fixed windFactor = definition.windFactor_.getValue(context);
@@ -702,7 +708,8 @@ bool PhysicsParticleObject::getShieldCollision(CollisionInfo &collision, Target 
 
 bool PhysicsParticleObject::getTargetCollision(CollisionInfo &collision, Target *target)
 {
-	if (!target) return false;
+	if (!target || !optionTargetCollision_) return false;
+	if (target->getType() == Target::TypeTank && !optionTankCollision_) return false;
 
 	// We cannot collide with ourselves
 	if (target->getPlayerId() == info_.playerId_) return false;
@@ -721,9 +728,10 @@ bool PhysicsParticleObject::getTargetCollision(CollisionInfo &collision, Target 
 	return false;
 }
 
-bool PhysicsParticleObject::getTargetBounceCollision(CollisionInfo &collision, Target *target)
+bool PhysicsParticleObject::getTargetBounceCollision(CollisionInfo &collision, Target *notUsedTarget)
 {
 	if (info_.type_ != ParticleTypeBounce) return false;
+	if (!optionTargetCollision_) return false;
 
 	// A special case, to add some width to the bounce particle to make it easier
 	// to hit targets with
@@ -735,6 +743,7 @@ bool PhysicsParticleObject::getTargetBounceCollision(CollisionInfo &collision, T
 		++itor)
 	{
 		Target *target = (*itor).second;
+		if (target->getType() == Target::TypeTank && !optionTankCollision_) continue;
 		if (target->getLife().collision(position_) ||
 			target->getLife().collisionDistance(position_) < 1)
 		{

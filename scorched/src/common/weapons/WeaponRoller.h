@@ -39,6 +39,7 @@ public:
 	bool getNoCameraTrack() { return noCameraTrack_.getValue(); }
 	fixed getShieldHurtFactor(ScorchedContext &context) { return shieldHurtFactorExp_.getValue(context); }
 	fixed getTime(ScorchedContext &context) { return timeExp_.getValue(context); }
+	fixed getTimeout(ScorchedContext &context) { return timeoutExp_.getValue(context); }
 	fixed getStepSize() { return stepSize_.getValue(); }
 
 	ObjectGroupEntryDefinition &getLocalGroups() { return localGroups_; }
@@ -57,7 +58,7 @@ protected:
 	XMLEntryModelID rollerModelId_;
 	XMLEntryNumberParser dampenVelocityExp_;
 	XMLEntryNumberParser shieldHurtFactorExp_;
-	XMLEntryNumberParser timeExp_;
+	XMLEntryNumberParser timeExp_, timeoutExp_;
 	XMLEntryFixed stepSize_;
 	XMLEntryBool roll_;
 	XMLEntryBool maintainVelocity_;

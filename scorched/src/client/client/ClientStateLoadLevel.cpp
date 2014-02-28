@@ -90,6 +90,12 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 	ComsLoadLevelMessage message;
 	if (!message.readMessage(reader)) return false;
 
+	// Display info
+	Logger::log(S3D::formatStringBuffer("Loading landscape %s (Defn: %s, Tex: %s)",
+		message.getLandscapeDefinition().getName(),
+		message.getLandscapeDefinition().getDefn(),
+		message.getLandscapeDefinition().getTex()));
+
 	// Read the state from the message
 	if (!message.loadState(ScorchedClient::instance()->getContext())) return false;
 	if (!message.loadTanks(ScorchedClient::instance()->getContext())) return false;

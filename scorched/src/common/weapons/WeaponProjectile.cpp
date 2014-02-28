@@ -44,6 +44,7 @@ WeaponProjectile::WeaponProjectile() :
 	thrustAmount_("WeaponProjectile::thrustAmount", "Amount of force applied when using thrust", 0, "0"), 
 	thrustTime_("WeaponProjectile::thrustTime", "Amount of time to apply thrust", 0, "0"),
 	drag_("WeaponProjectile::drag", "Amount of drag placed on the projectile", 0, "0"), 
+	timeout_("WeaponProjectile::timeout", "The amount of time until the weapon duds (0 is no dud)", 0, "0"),
 	stepSize_("This projectile will move every step size seconds", 0, fixed(true, 75))
 {
 	addChildXMLEntry("wobblespin", &wobbleSpin_);
@@ -60,6 +61,7 @@ WeaponProjectile::WeaponProjectile() :
 	addChildXMLEntry("apexcollision", &apexCollision_);
 	addChildXMLEntry("apexnodud", &apexNoDud_);
 	addChildXMLEntry("timedcollision", &timedCollision_);
+	addChildXMLEntry("timeout", &timeout_);
 	addChildXMLEntry("timeddud", &timedDud_);
 	addChildXMLEntry("heightcollision", &heightCollision_);
 	addChildXMLEntry("nocameratrack", &noCameraTrack_);
