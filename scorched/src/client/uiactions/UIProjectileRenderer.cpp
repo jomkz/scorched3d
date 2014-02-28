@@ -34,6 +34,14 @@ UIProjectileRenderer::~UIProjectileRenderer()
 	ENSURE_UI_THREAD
 	if (projectileNode_)
 	{
+		pSys_->stop();
+		projectileNode_->detachObject(pSys_);
+		Ogre::SceneManager *sceneManager = 
+			ScorchedUI::instance()->getOgreSystem().getOgreLandscapeSceneManager();
+		ParticleUniverse::ParticleSystemManager* pManager =
+			ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+		pManager->destroyParticleSystem(pSys_, sceneManager);
+
 		OgreSystem::destroySceneNode(projectileNode_);
 		projectileNode_ = 0;
 	}
@@ -77,8 +85,21 @@ void UIProjectileRenderer::create()
 {
 	Ogre::SceneManager *sceneManager = ScorchedUI::instance()->getOgreSystem().getOgreLandscapeSceneManager();
 
-	Ogre::Entity *projectileEntity = sceneManager->createEntity("cube.mesh");
+	Ogre::Entity *projectileEntity = sceneManager->createEntity("snakeeye.mesh");
 	projectileNode_ = sceneManager->getRootSceneNode()->createChildSceneNode();
 	projectileNode_->setScale(30.0f, 30.0f, 30.0f);
 	projectileNode_->attachObject(projectileEntity);
+
+	static int particleNumber = 0;
+	std::string particleName = S3D::formatStringBuffer("pr%u", ++particleNumber);
+
+	ParticleUniverse::ParticleSystemManager* pManager =
+		ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+	pSys_ = pManager->createParticleSystem(particleName, "newpropulsion", sceneManager);
+	
+	projectileNode_->attachObject(pSys_);
+	pSys_->setScale(ParticleUniverse::Vector3(OgreSystem::OGRE_WORLD_SCALE,
+		OgreSystem::OGRE_WORLD_SCALE,
+		OgreSystem::OGRE_WORLD_SCALE));
+	pSys_->start();
 }

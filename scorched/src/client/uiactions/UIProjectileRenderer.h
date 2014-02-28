@@ -38,6 +38,7 @@ public:
 	virtual void simulate(Action *action, float frametime, bool &removeAction);
 	virtual void deleteThis();
 protected:
+	ParticleUniverse::ParticleSystem* pSys_;
 	ShotProjectile *shotProjectile_;
 	Ogre::SceneNode *projectileNode_;
 

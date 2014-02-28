@@ -143,14 +143,15 @@ void OgreSystem::loadResources()
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/bloom", "FileSystem", "General");
 
 	// Particle Universe
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/particleuniverse/core ", "FileSystem", "ParticleUniverse");
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/particleuniverse/textures ", "FileSystem", "ParticleUniverse");
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/particleuniverse/materials ", "FileSystem", "ParticleUniverse");
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/particleuniverse/scripts ", "FileSystem", "ParticleUniverse");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/particleuniverse/core", "FileSystem", "ParticleUniverse");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/particleuniverse/textures", "FileSystem", "ParticleUniverse");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/particleuniverse/materials", "FileSystem", "ParticleUniverse");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/particleuniverse/scripts", "FileSystem", "ParticleUniverse");
 
 	// Models
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/models", "FileSystem", "Models");
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/models/abrams", "FileSystem", "Models");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/models/projectiles", "FileSystem", "Models");
 
 	// load resources
 	Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();

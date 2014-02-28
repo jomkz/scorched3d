@@ -21,7 +21,6 @@
 #include <uiactions/UIParticleAction.h>
 #include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/OgreSystem.h>
-#include <ParticleUniverse/ParticleUniverseSystemManager.h>
 #include <client/ScorchedClient.h>
 
 unsigned int UIParticleAction::particleNumber_(0);
@@ -65,14 +64,7 @@ void UIParticleAction::create()
 	ParticleUniverse::ParticleSystemManager* pManager =
 		ParticleUniverse::ParticleSystemManager::getSingletonPtr();
 
-	ParticleUniverse::ParticleSystem *pSysTemplate = 
-		pManager->getParticleSystemTemplate(particleScriptName_);
-	if (!pSysTemplate)
-	{
-		pSysTemplate = pManager->createParticleSystemTemplate(particleScriptName_, "ParticleUniverse");
-	}
-	pSys_ = pManager->createParticleSystem(particleName,
-		particleScriptName_, sceneManager);
+	pSys_ = pManager->createParticleSystem(particleName, particleScriptName_, sceneManager);
 
 	particleNode_ = sceneManager->getRootSceneNode()->createChildSceneNode();
 	particleNode_->setPosition(
@@ -80,10 +72,9 @@ void UIParticleAction::create()
 		position_[2].getInternalData() * OgreSystem::OGRE_WORLD_HEIGHT_SCALE_FIXED,
 		position_[1].getInternalData() * OgreSystem::OGRE_WORLD_SCALE_FIXED);
 	particleNode_->attachObject(pSys_);
-	pSys_->setScale(ParticleUniverse::Vector3(OgreSystem::OGRE_WORLD_SCALE * 10.0f,
-		OgreSystem::OGRE_WORLD_SCALE * 10.0f,
-		OgreSystem::OGRE_WORLD_SCALE * 10.0f));
-	pSys_->setScaleVelocity(OgreSystem::OGRE_WORLD_SCALE * 10.0f);
+	pSys_->setScale(ParticleUniverse::Vector3(OgreSystem::OGRE_WORLD_SCALE,
+		OgreSystem::OGRE_WORLD_SCALE,
+		OgreSystem::OGRE_WORLD_SCALE));
 	pSys_->addParticleSystemListener(this);
 	pSys_->start(10.0);
 }

@@ -996,7 +996,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderOutputFile>$(ProjectDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
       <AdditionalIncludeDirectories>$(SolutionDir)\src\client;$(SolutionDir)\src\server;$(SolutionDir)\src\common;$(BOOST_HOME);$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\include;$(CEGUI_HOME)\CEGUI\include;$(CEGUI_HOME)\cegui-deps-0.8.x-src\dependencies\include;$(HYDRAX_HOME)\include;$(SKYX_HOME)\include;$(PARTICLEUNIVERSE_HOME)\sdk\include</AdditionalIncludeDirectories>
-      <AdditionalOptions>/Zm175 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zm200 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -1020,7 +1020,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderOutputFile>$(ProjectDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
       <AdditionalIncludeDirectories>$(SolutionDir)\src\client;$(SolutionDir)\src\server;$(SolutionDir)\src\common;$(BOOST_HOME);$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\include;$(CEGUI_HOME)\CEGUI\include;$(CEGUI_HOME)\cegui-deps-0.8.x-src\dependencies\include;$(HYDRAX_HOME)\include;$(SKYX_HOME)\include;$(PARTICLEUNIVERSE_HOME)\sdk\include</AdditionalIncludeDirectories>
-      <AdditionalOptions>/Zm175 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zm200 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>

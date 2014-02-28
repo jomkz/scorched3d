@@ -29,3 +29,4 @@
 #include <boost/thread.hpp>
 #include <boost/date_time/gregorian/gregorian.hpp>
 
+#include <ParticleUniverse/ParticleUniverseSystemManager.h>
