@@ -21,8 +21,6 @@
 #if !defined(__INCLUDE_OgreSystemh_INCLUDE__)
 #define __INCLUDE_OgreSystemh_INCLUDE__
 
-
-
 class OgreSystem
 {
 public:
@@ -32,9 +30,11 @@ public:
 		VisibiltyMaskTargets =   0x00000010,
 	};
 
-	static float OGRE_WORLD_SIZE;
-	static float OGRE_WORLD_HEIGHT_SCALE;
-	static float OGRE_WORLD_SCALE;
+	static const float OGRE_WORLD_SIZE;
+	static const float OGRE_WORLD_HEIGHT_SCALE;
+	static const float OGRE_WORLD_SCALE;
+	static const float OGRE_WORLD_HEIGHT_SCALE_FIXED;
+	static const float OGRE_WORLD_SCALE_FIXED;
 
 	static void destroyAllAttachedMovableObjects(Ogre::SceneNode* node);
 	static void destroySceneNode(Ogre::SceneNode* node);

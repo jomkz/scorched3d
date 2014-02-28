@@ -20,6 +20,8 @@
 
 #include <uiactions/UITankRenderer.h>
 #include <tanket/TanketShotInfo.h>
+#include <scorched3dc/ScorchedUI.h>
+#include <scorched3dc/OgreSystem.h>
 
 UITankRenderer::UITankRenderer(Tank *tank) :
 	UITargetRenderer(tank), 
@@ -43,6 +45,18 @@ void UITankRenderer::create()
 {
 	UITargetRenderer::create();
 
+	Ogre::SceneManager *sceneManager = ScorchedUI::instance()->getOgreSystem().getOgreLandscapeSceneManager();
+
+	std::string entityName = S3D::formatStringBuffer("ActiveTankMarker%u", target_->getPlayerId());
+	std::string nodeName = S3D::formatStringBuffer("ActiveTankMarkerNode%u", target_->getPlayerId());
+	activeTankMarkerEntity_ = sceneManager->createEntity(entityName.c_str(), "cone.mesh", "Models");
+	activeTankMarkerEntity_->setVisibilityFlags(OgreSystem::VisibiltyMaskTargets);
+	Ogre::SceneNode *activeTankMarkerNode = targetNode_->createChildSceneNode(nodeName);
+	activeTankMarkerNode->attachObject(activeTankMarkerEntity_);
+	activeTankMarkerNode->setInheritScale(false);
+	activeTankMarkerNode->setPosition(0.0f, 2.0f, 0.0f);
+	activeTankMarkerNode->setScale(30.0f, 30.0f, 30.0f);
+
 	Ogre::SkeletonInstance* skel = targetEntity_->getSkeleton();
 	gunBone_ = skel->getBone("Gun");
 	gunBone_->setManuallyControlled(true);
@@ -52,6 +66,11 @@ void UITankRenderer::create()
 	turretBone_->setInitialState();
 	
 	setRotations();
+}
+
+void UITankRenderer::setActive(bool active)
+{
+	activeTankMarkerEntity_->setVisible(active);
 }
 
 void UITankRenderer::performUIActionAlive()

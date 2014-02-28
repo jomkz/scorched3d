@@ -30,6 +30,20 @@ public:
 	virtual void performUIAction() = 0;
 };
 
+class ClientUISyncActionRegisterable : public ClientUISyncAction
+{
+public:
+	ClientUISyncActionRegisterable();
+	virtual ~ClientUISyncActionRegisterable();
+
+	// ClientUISyncAction
+	virtual void performUIAction();
+
+	void registerCallback();
+protected:
+	int registered_;
+};
+
 class ClientUISyncActionBuffer
 {
 public:

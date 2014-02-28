@@ -33,10 +33,12 @@ public:
 
 	UITankShotHistory &getShotHistory() { return shotHistory_; }
 	void setRotations();
+	void setActive(bool active);
 
 protected:
 	UITankShotHistory shotHistory_;
 	Ogre::Bone *gunBone_, *turretBone_;
+	Ogre::Entity *activeTankMarkerEntity_;
 
 	virtual void create();
 	virtual void performUIActionAlive();

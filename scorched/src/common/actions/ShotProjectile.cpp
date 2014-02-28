@@ -34,6 +34,10 @@
 #include <weapons/AccessoryStore.h>
 #include <math.h>
 
+#ifndef S3D_SERVER
+#include <uiactions/UIProjectileRenderer.h>
+#endif
+
 ShotProjectile::ShotProjectile(FixedVector &startPosition, FixedVector &velocity,
 							   WeaponProjectile *weapon, WeaponFireContext &weaponContext,
 							   unsigned int flareType,
@@ -55,6 +59,7 @@ void ShotProjectile::init()
 #ifndef S3D_SERVER
 	if (!context_->getServerMode()) 
 	{
+		setActionRender(new UIProjectileRenderer(this));
 		if (!weapon_->getNoCameraTrack())
 		{
 			vPoint_ = new TankViewPointProvider();

@@ -42,8 +42,8 @@ fixed fixed::XPIO2 =   fixed(true,_XPIO2);
 #define _XLN_10   23025 // 2.30258509299404568402
 #define XLN_10   fixed(true,_XLN_10)
 
-int64_t fixed::FIXED_RESOLUTION(10000);
-float fixed::FIXED_RESOLUTION_FLOAT(10000.0f);
+const int64_t fixed::FIXED_RESOLUTION(10000);
+const float fixed::FIXED_RESOLUTION_FLOAT(10000.0f);
 
 fixed fixed::MAX_FIXED(true, int64_t(LLONG_MAX)); // 64 bit
 fixed fixed::MIN_FIXED(true, int64_t(LLONG_MIN)); // 64 bit

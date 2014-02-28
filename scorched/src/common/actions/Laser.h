@@ -35,7 +35,6 @@ public:
 
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
-	virtual void draw();
 	virtual std::string getActionDetails();
 	virtual std::string getActionType() { return "Laser"; }
 

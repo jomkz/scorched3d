@@ -21,8 +21,10 @@
 #if !defined(__INCLUDE_UIStatePlayingTargetsh_INCLUDE__)
 #define __INCLUDE_UIStatePlayingTargetsh_INCLUDE__
 
+#include <scorched3dc/InputHandlerKeyboard.h>
+
 class UITankRenderer;
-class UIStatePlayingTargets 
+class UIStatePlayingTargets : public InputHandlerKeyboard
 {
 public:
 	UIStatePlayingTargets(Ogre::SceneManager* sceneMgr);
@@ -31,6 +33,9 @@ public:
 	void setCurrentTank(UITankRenderer *tankRenderer);
 
 	void update(float frameTime);
+
+	// InputHandlerKeyboard
+	virtual void keyPressed(const OIS::KeyEvent &arg);
 
 protected:
 	Ogre::SceneManager* sceneMgr_;

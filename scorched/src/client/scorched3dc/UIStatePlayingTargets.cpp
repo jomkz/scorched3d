@@ -31,11 +31,12 @@ UIStatePlayingTargets::UIStatePlayingTargets(Ogre::SceneManager* sceneMgr) :
 	sceneMgr_(sceneMgr), tankRenderer_(0)
 {
 	create();
+	ScorchedUI::instance()->getInputManager().addKeyboardHandler(this);
 }
 
 UIStatePlayingTargets::~UIStatePlayingTargets()
 {
-
+	ScorchedUI::instance()->getInputManager().removeKeyboardHandler(this);
 }
 
 void UIStatePlayingTargets::update(float frameTime)
@@ -90,20 +91,25 @@ void UIStatePlayingTargets::update(float frameTime)
 			tankRenderer_->setRotations();
 		}
 	}
-	if (tankRenderer_)
+}
+
+void UIStatePlayingTargets::keyPressed(const OIS::KeyEvent &arg)
+{
+	if (arg.key == OIS::KC_SPACE)
 	{
-		InputManager &inputManager = ScorchedUI::instance()->getInputManager();
-		if (inputManager.isKeyDown(OIS::KC_SPACE))
+		if (tankRenderer_)
 		{
 			UITankControl::fireShot(tankRenderer_);
-			tankRenderer_ = 0;
+			setCurrentTank(0);
 		}
 	}
 }
 
 void UIStatePlayingTargets::setCurrentTank(UITankRenderer *tankRenderer)
 {
+	if (tankRenderer_) tankRenderer_->setActive(false);
 	tankRenderer_ = tankRenderer;
+	if (tankRenderer_) tankRenderer_->setActive(true);
 }
 
 void UIStatePlayingTargets::create()

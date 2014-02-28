@@ -28,16 +28,12 @@
 #include <common/Logger.h>
 
 UITargetRenderer::UITargetRenderer(Target *target) :
-	target_(target), registered_(-1), targetNode_(0), targetEntity_(0)
+	target_(target), targetNode_(0), targetEntity_(0)
 {
 }
 
 UITargetRenderer::~UITargetRenderer()
 {
-	if (registered_ != -1)
-	{
-		ScorchedClient::instance()->getClientUISync().removeActionFromClient(registered_);
-	}
 	if (targetNode_)
 	{
 		OgreSystem::destroySceneNode(targetNode_);
@@ -59,7 +55,7 @@ void UITargetRenderer::performUIAction()
 		performUIActionDead();
 	}
 
-	registered_ = -1;
+	ClientUISyncActionRegisterable::performUIAction();
 }
 
 void UITargetRenderer::performUIActionAlive()
@@ -75,7 +71,7 @@ void UITargetRenderer::performUIActionAlive()
 
 void UITargetRenderer::performUIActionDead()
 {
-	targetEntity_->setVisible(false);
+	targetNode_->setVisible(false);
 }
 
 void UITargetRenderer::changed()
@@ -106,12 +102,4 @@ void UITargetRenderer::create()
 	targetNode_ = sceneManager->getRootSceneNode()->createChildSceneNode(nodeName);
 	targetNode_->attachObject(targetEntity_);
 	targetNode_->setScale(30.0f, 30.0f, 30.0f);
-}
-
-void UITargetRenderer::registerCallback()
-{
-	if (registered_ == -1)
-	{
-		registered_ = ScorchedClient::instance()->getClientUISync().addActionFromClient(this);
-	}
 }

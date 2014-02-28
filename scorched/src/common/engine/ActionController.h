@@ -45,9 +45,7 @@ public:
 	// Set the simulation speed
 	void setScorchedContext(ScorchedContext *context);
 
-	// Inherited from GameStateI
 	void simulate(fixed frameTime, fixed time);
-	void draw();
 
 protected:
 	class ActionList

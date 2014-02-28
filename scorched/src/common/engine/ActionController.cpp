@@ -175,16 +175,6 @@ void ActionController::addNewActions(fixed time)
 	newActions_.clear();
 }
 
-void ActionController::draw()
-{
-	// Itterate and draw all of the actions
-	for (int a=0; a<actions_.actionCount; a++)
-	{
-		Action *act = actions_.actions[a];
-		act->draw();
-	}
-}
-
 void ActionController::simulate(fixed frameTime, fixed time)
 {
 	// Ensure any new actions are added

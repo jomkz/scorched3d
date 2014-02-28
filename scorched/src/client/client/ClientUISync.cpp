@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <client/ClientUISync.h>
+#include <client/ScorchedClient.h>
 #include <common/DefinesAssert.h>
 
 ClientUISyncAction::ClientUISyncAction()
@@ -27,6 +28,31 @@ ClientUISyncAction::ClientUISyncAction()
 
 ClientUISyncAction::~ClientUISyncAction()
 {
+}
+
+ClientUISyncActionRegisterable::ClientUISyncActionRegisterable() : registered_(-1)
+{
+}
+
+ClientUISyncActionRegisterable::~ClientUISyncActionRegisterable()
+{
+	if (registered_ != -1)
+	{
+		ScorchedClient::instance()->getClientUISync().removeActionFromClient(registered_);
+	}
+}
+
+void ClientUISyncActionRegisterable::performUIAction()
+{
+	registered_ = -1;
+}
+
+void ClientUISyncActionRegisterable::registerCallback()
+{
+	if (registered_ == -1)
+	{
+		registered_ = ScorchedClient::instance()->getClientUISync().addActionFromClient(this);
+	}
 }
 
 ClientUISyncActionBuffer::ClientUISyncActionBuffer()

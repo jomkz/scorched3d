@@ -211,8 +211,8 @@ public:
 
 	static fixed fromFloat(float flt);
 
-	static int64_t FIXED_RESOLUTION;
-	static float FIXED_RESOLUTION_FLOAT;
+	static const int64_t FIXED_RESOLUTION;
+	static const float FIXED_RESOLUTION_FLOAT;
 };
 
 fixed absx( fixed p_Base );

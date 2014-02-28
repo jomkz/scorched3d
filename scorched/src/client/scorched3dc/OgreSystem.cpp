@@ -24,9 +24,11 @@
 #include <client/ClientOptions.h>
 #include <OgreShadowCameraSetupFocused.h>
 
-float OgreSystem::OGRE_WORLD_SIZE(6000.0f);
-float OgreSystem::OGRE_WORLD_HEIGHT_SCALE(50.0f);
-float OgreSystem::OGRE_WORLD_SCALE(6000.0f / 128.0f);
+const float OgreSystem::OGRE_WORLD_SIZE(6000.0f);
+const float OgreSystem::OGRE_WORLD_HEIGHT_SCALE(50.0f);
+const float OgreSystem::OGRE_WORLD_SCALE(6000.0f / 128.0f);
+const float OgreSystem::OGRE_WORLD_HEIGHT_SCALE_FIXED(50.0f / fixed::FIXED_RESOLUTION_FLOAT);
+const float OgreSystem::OGRE_WORLD_SCALE_FIXED((6000.0f / 128.0f) / fixed::FIXED_RESOLUTION_FLOAT);
 
 OgreSystem::OgreSystem() : 
 	ogreRoot_(0), ogreWindow_(0),

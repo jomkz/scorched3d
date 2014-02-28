@@ -1461,6 +1461,9 @@
     <ClCompile Include="..\uiactions\UIJoinGameAction.cpp">
       <Filter>uiactions</Filter>
     </ClCompile>
+    <ClCompile Include="..\uiactions\UIProjectileRenderer.cpp">
+      <Filter>uiactions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -2856,6 +2859,9 @@
       <Filter>uiactions</Filter>
     </ClInclude>
     <ClInclude Include="..\uiactions\UIJoinGameAction.h">
+      <Filter>uiactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uiactions\UIProjectileRenderer.h">
       <Filter>uiactions</Filter>
     </ClInclude>
   </ItemGroup>

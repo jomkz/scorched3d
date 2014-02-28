@@ -18,38 +18,29 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UITargetRendererh_INCLUDE__)
-#define __INCLUDE_UITargetRendererh_INCLUDE__
+#if !defined(__INCLUDE_UIProjectileRendererh_INCLUDE__)
+#define __INCLUDE_UIProjectileRendererh_INCLUDE__
 
 #include <client/ClientUISync.h>
-#include <target/TargetRenderer.h>
-#include <target/Target.h>
+#include <actions/Action.h>
 
-class UITargetRenderer : public ClientUISyncActionRegisterable, public TargetRenderer
+class ShotProjectile;
+class UIProjectileRenderer : public ClientUISyncActionRegisterable, public ActionRenderer
 {
 public:
-	UITargetRenderer(Target *target);
-	virtual ~UITargetRenderer();
-
-	Target *getTarget() { return target_; }
+	UIProjectileRenderer(ShotProjectile *shotProjectile);
+	virtual ~UIProjectileRenderer();
 
 	// ClientUISyncAction (UI and Client Thread)
 	virtual void performUIAction();
 
-	// TargetRenderer (Client Thread)
-	virtual void changed();
-	virtual void targetBurnt();
-	virtual void shieldHit();
-	virtual void fired();
-
+	// ActionRenderer
+	virtual void simulate(Action *action, float frametime, bool &removeAction);
 protected:
-	Ogre::SceneNode *targetNode_;
-	Ogre::Entity *targetEntity_;
-	Target *target_;
+	ShotProjectile *shotProjectile_;
+	Ogre::SceneNode *projectileNode_;
 
-	virtual void performUIActionAlive();
-	virtual void performUIActionDead();
-	virtual void create();
+	void create();
 };
 
 #endif

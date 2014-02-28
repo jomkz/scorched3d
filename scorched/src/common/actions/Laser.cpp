@@ -171,8 +171,3 @@ void Laser::simulate(fixed frameTime, bool &remove)
 	remove = (totalTime_ > laserTime_);
 	Action::simulate(frameTime, remove);
 }
-
-void Laser::draw()
-{
-
-}

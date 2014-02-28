@@ -33,11 +33,6 @@ Action::~Action()
 	renderer_ = 0;
 }
 
-void Action::draw()
-{
-	if (renderer_) renderer_->draw(this);
-}
-
 void Action::setActionRender(ActionRenderer *renderer)
 {
 	if (renderer_) delete renderer_;
@@ -70,21 +65,3 @@ ActionRenderer::~ActionRenderer()
 void ActionRenderer::simulate(Action *action, float frametime, bool &removeAction)
 {
 }
-
-#ifndef S3D_SERVER
-
-SpriteAction::SpriteAction(ActionRenderer *render) : 
-	Action(false)
-{
-	setActionRender(render);
-}
-
-SpriteAction::~SpriteAction()
-{
-}
-
-void SpriteAction::init()
-{
-}
-
-#endif

@@ -34,9 +34,7 @@ public:
 	ActionRenderer();
 	virtual ~ActionRenderer();
 
-	virtual void draw(Action *action) = 0;
 	virtual void simulate(Action *action, float frametime, bool &removeAction);
-
 };
 
 class Action
@@ -47,7 +45,6 @@ public:
 
 	virtual void init() = 0;
 
-	virtual void draw();
 	virtual void simulate(fixed frameTime, bool &removeAction);	
 	virtual bool getActionSyncCheck() { return true; }
 	virtual std::string getActionType() = 0;
@@ -67,20 +64,5 @@ protected:
 	ScorchedContext *context_;
 	fixed actionStartTime_;
 };
-
-#ifndef S3D_SERVER
-
-class SpriteAction : public Action
-{
-public:
-	SpriteAction(ActionRenderer *render = 0);
-	virtual ~SpriteAction();
-
-	virtual void init();
-	virtual std::string getActionType() { return "SpriteAction"; }
-	virtual bool getActionSyncCheck() { return false; }
-};
-
-#endif
 
 #endif // !defined(AFX_ACTION_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
