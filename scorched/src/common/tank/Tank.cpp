@@ -24,11 +24,9 @@
 #include <tank/TankModelStore.h>
 #include <tank/TankScore.h>
 #include <tank/TankState.h>
-#include <tank/TankShotHistory.h>
 #include <tank/TankModelContainer.h>
 #include <tank/TankViewPoints.h>
 #include <tank/TankAvatar.h>
-#include <tank/TankWeaponSwitcher.h>
 #include <tankai/TankAI.h>
 #include <tankai/TankAIStore.h>
 #include <weapons/AccessoryStore.h>
@@ -38,8 +36,6 @@
 #include <common/Defines.h>
 #include <common/Logger.h>
 #include <algorithm>
-
-static TankWeaponSwitcher *weaponSwitcher = new TankWeaponSwitcher();
 
 Tank::Tank(ScorchedContext &context, 
 		unsigned int playerId, 
@@ -53,14 +49,10 @@ Tank::Tank(ScorchedContext &context,
 {
 	score_ = new TankScore(context);
 	state_ = new TankState(context, playerId);
-	shotHistory_ = new TankShotHistory(context);
 	modelContainer_ = new TankModelContainer(context_);
 	avatar_ = new TankAvatar();
 	viewPoints_ = new TankViewPointsCollection(context_);
 
-	getAccessories().getWeapons().setWeaponSwitcher(weaponSwitcher);
-
-	shotHistory_->setTank(this);
 	score_->setTank(this);
 	state_->setTank(this);
 	modelContainer_->setTank(this);
@@ -71,7 +63,6 @@ Tank::~Tank()
 {
 	delete score_; score_ = 0;
 	delete state_; state_ = 0;
-	delete shotHistory_; shotHistory_ = 0;
 	delete modelContainer_; modelContainer_ = 0;
 	delete avatar_; avatar_ = 0;
 	delete viewPoints_; viewPoints_ = 0;
@@ -97,12 +88,10 @@ void Tank::rezTank()
 	if (getTankAI()) getTankAI()->newGame();
 	getState().setState(TankState::sNormal);
 	getLife().setLife(getLife().getMaxLife());
-	shotHistory_->undo();
 }
 
 void Tank::clientNewGame()
 {
-	shotHistory_->clientNewGame();
 	state_->clientNewGame();
 }
 

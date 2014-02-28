@@ -36,6 +36,8 @@ public:
 
 	void updateHeight(int x, int y, int w, int h);
 
+	UIStatePlayingTargets *getTargets() { return targets_; }
+
 	// UIStateI
 	virtual void createState();
 	virtual void destroyState();

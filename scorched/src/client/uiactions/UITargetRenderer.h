@@ -35,7 +35,7 @@ public:
 	virtual void performUIAction();
 
 	// TargetRenderer (Client Thread)
-	virtual void moved();
+	virtual void changed();
 	virtual void targetBurnt();
 	virtual void shieldHit();
 	virtual void fired();
@@ -46,7 +46,10 @@ protected:
 	int registered_;
 	Target *target_;
 
-	void create();
+	virtual void performUIActionAlive();
+	virtual void performUIActionDead();
+	virtual void create();
+	void registerCallback();
 };
 
 #endif

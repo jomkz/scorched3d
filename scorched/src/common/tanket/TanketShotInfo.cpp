@@ -80,15 +80,22 @@ fixed TanketShotInfo::changePower(fixed power, bool diff)
 	else power_ = power;
 
 	if (power_ < 0) power_ = 0;
+	fixed maxPower = getMaxOverallPower();
+	if (power_ > maxPower) power_ = maxPower;
+
+	return power_;
+}
+
+fixed TanketShotInfo::getMaxOverallPower()
+{
+	fixed result = maxPower_;
 	if (context_.getOptionsGame().getLimitPowerByHealth())
 	{
 		fixed maxPosPower = 
 			tanket_->getLife().getLife() / tanket_->getLife().getMaxLife() * maxPower_;
-		if (power_ > maxPosPower) power_ = maxPosPower;
+		if (maxPosPower < result) result = maxPosPower;
 	}
-	if (power_ > maxPower_) power_ = maxPower_;
-
-	return power_;
+	return result;
 }
 
 bool TanketShotInfo::writeMessage(NamedNetBuffer &buffer)

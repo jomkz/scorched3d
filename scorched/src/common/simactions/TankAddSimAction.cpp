@@ -48,7 +48,7 @@
 #ifndef S3D_SERVER
 #include <client/ClientChannelManager.h>
 #include <client/ScorchedClient.h>
-#include <uiactions/UITargetRenderer.h>
+#include <uiactions/UITankRenderer.h>
 #endif
 
 unsigned int TankAddSimAction::TankAddSimActionCount = 0;
@@ -196,7 +196,7 @@ bool TankAddSimAction::invokeAction(ScorchedContext &context)
 #ifndef S3D_SERVER
 	if (!context.getServerMode())
 	{
-		tank->setRenderer(new UITargetRenderer(tank));
+		tank->setRenderer(new UITankRenderer(tank));
 		if (ScorchedClient::instance()->getClientChannelManager().getMutedPlayers().find(tank->getPlayerId())
 			!= ScorchedClient::instance()->getClientChannelManager().getMutedPlayers().end())
 		{

@@ -18,25 +18,21 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UIStatePlayingTargetsh_INCLUDE__)
-#define __INCLUDE_UIStatePlayingTargetsh_INCLUDE__
+#if !defined(__INCLUDE_UIActiveTankActionh_INCLUDE__)
+#define __INCLUDE_UIActiveTankActionh_INCLUDE__
 
-class UITankRenderer;
-class UIStatePlayingTargets 
+#include <client/ClientUISync.h>
+
+class UIActiveTankAction : public ClientUISyncAction
 {
 public:
-	UIStatePlayingTargets(Ogre::SceneManager* sceneMgr);
-	virtual ~UIStatePlayingTargets();
+	UIActiveTankAction(unsigned int playerId);
+	virtual ~UIActiveTankAction();
 
-	void setCurrentTank(UITankRenderer *tankRenderer);
-
-	void update(float frameTime);
-
+	// ClientUISyncAction
+	virtual void performUIAction();
 protected:
-	Ogre::SceneManager* sceneMgr_;
-	UITankRenderer *tankRenderer_;
-
-	void create();
+	unsigned int playerId_;
 };
 
-#endif // __INCLUDE_UIStatePlayingTargetsh_INCLUDE__
+#endif // __INCLUDE_UIActiveTankActionh_INCLUDE__

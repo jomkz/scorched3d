@@ -25,7 +25,6 @@
 
 class TankScore;
 class TankState;
-class TankShotHistory;
 class TankModelContainer;
 class TankAvatar;
 class TankViewPointsCollection;
@@ -73,7 +72,6 @@ public:
 
 	// Other attributes
 	TankScore &getScore() { return *score_; }
-	TankShotHistory &getShotHistory() { return *shotHistory_; }
 	TankState &getState() { return *state_; }
 	TankAvatar &getAvatar() { return *avatar_; }
 	TankModelContainer &getModelContainer() { return *modelContainer_; }
@@ -84,7 +82,6 @@ protected:
 	TankViewPointsCollection *viewPoints_;
 	TankModelContainer *modelContainer_;
 	TankScore *score_;
-	TankShotHistory *shotHistory_;
 	TankState *state_;
 	TankAvatar *avatar_;
 	Vector color_;

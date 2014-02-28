@@ -52,28 +52,35 @@ void UITargetRenderer::performUIAction()
 
 	if (target_->getAlive())
 	{
-		if (!targetEntity_->isVisible()) targetEntity_->setVisible(true);
-
-		Vector position = target_->getLife().getFloatPosition();
-		position[0] *= OgreSystem::OGRE_WORLD_SCALE;
-		position[1] *= OgreSystem::OGRE_WORLD_SCALE;
-		position[2] *= OgreSystem::OGRE_WORLD_HEIGHT_SCALE;
-		targetNode_->setPosition(position[0], position[2], position[1]);
+		performUIActionAlive();
 	}
 	else 
 	{
-		targetEntity_->setVisible(false);
+		performUIActionDead();
 	}
 
 	registered_ = -1;
 }
 
-void UITargetRenderer::moved()
+void UITargetRenderer::performUIActionAlive()
 {
-	if (registered_ == -1)
-	{
-		registered_ = ScorchedClient::instance()->getClientUISync().addActionFromClient(this);
-	}
+	if (!targetEntity_->isVisible()) targetEntity_->setVisible(true);
+
+	Vector position = target_->getLife().getFloatPosition();
+	position[0] *= OgreSystem::OGRE_WORLD_SCALE;
+	position[1] *= OgreSystem::OGRE_WORLD_SCALE;
+	position[2] *= OgreSystem::OGRE_WORLD_HEIGHT_SCALE;
+	targetNode_->setPosition(position[0], position[2], position[1]);
+}
+
+void UITargetRenderer::performUIActionDead()
+{
+	targetEntity_->setVisible(false);
+}
+
+void UITargetRenderer::changed()
+{
+	registerCallback();
 }
 
 void UITargetRenderer::targetBurnt()
@@ -99,9 +106,12 @@ void UITargetRenderer::create()
 	targetNode_ = sceneManager->getRootSceneNode()->createChildSceneNode(nodeName);
 	targetNode_->attachObject(targetEntity_);
 	targetNode_->setScale(30.0f, 30.0f, 30.0f);
+}
 
-	Ogre::SkeletonInstance* skel = targetEntity_->getSkeleton();
-	Ogre::Bone* manuallyControlledBone = skel->getBone("Gun");
-	manuallyControlledBone->setManuallyControlled(true);
-	manuallyControlledBone->pitch(Ogre::Degree(45.0f));
+void UITargetRenderer::registerCallback()
+{
+	if (registered_ == -1)
+	{
+		registered_ = ScorchedClient::instance()->getClientUISync().addActionFromClient(this);
+	}
 }

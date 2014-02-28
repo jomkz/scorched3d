@@ -30,19 +30,11 @@ class ScorchedContext;
 class Tanket;
 class Accessory;
 
-class TanketWeaponSwitcher
-{
-public:
-	virtual void switchWeapon(ScorchedContext &context, Tanket *tanket, Accessory *currentWeapon, Accessory *newWeapon) = 0;
-};
-
 class TanketWeapon  
 {
 public:
 	TanketWeapon(ScorchedContext &context);
 	virtual ~TanketWeapon();
-
-	void setWeaponSwitcher(TanketWeaponSwitcher *weaponSwitcher) { weaponSwitcher_ = weaponSwitcher; }
 
 	void setTanket(Tanket *tanket) { tanket_ = tanket; }
 
@@ -59,7 +51,6 @@ protected:
 	Accessory *currentWeapon_;
 	ScorchedContext &context_;
 	Tanket *tanket_;
-	TanketWeaponSwitcher *weaponSwitcher_;
 
 	void setCurrentWeapon(Accessory *wp);
 

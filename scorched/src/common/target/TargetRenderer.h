@@ -29,7 +29,7 @@ public:
 	TargetRenderer();
 	virtual ~TargetRenderer();
 
-	virtual void moved() = 0;
+	virtual void changed() = 0; // Moved, damaged (anything that changes TargetLife)
 	virtual void targetBurnt() = 0;
 	virtual void shieldHit() = 0;
 	virtual void fired() = 0;

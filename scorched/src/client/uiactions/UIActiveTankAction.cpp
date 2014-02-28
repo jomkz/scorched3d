@@ -18,25 +18,37 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UIStatePlayingTargetsh_INCLUDE__)
-#define __INCLUDE_UIStatePlayingTargetsh_INCLUDE__
+#include <uiactions/UIActiveTankAction.h>
+#include <uiactions/UITankRenderer.h>
+#include <client/ScorchedClient.h>
+#include <target/TargetContainer.h>
+#include <scorched3dc/ScorchedUI.h>
+#include <scorched3dc/UIState.h>
+#include <scorched3dc/UIStatePlaying.h>
+#include <scorched3dc/UIStatePlayingTargets.h>
 
-class UITankRenderer;
-class UIStatePlayingTargets 
+UIActiveTankAction::UIActiveTankAction(unsigned int playerId) :
+	playerId_(playerId)
 {
-public:
-	UIStatePlayingTargets(Ogre::SceneManager* sceneMgr);
-	virtual ~UIStatePlayingTargets();
+}
 
-	void setCurrentTank(UITankRenderer *tankRenderer);
+UIActiveTankAction::~UIActiveTankAction()
+{
+}
 
-	void update(float frameTime);
+void UIActiveTankAction::performUIAction()
+{
+	UIStateI *currentState = ScorchedUI::instance()->getUIState().getCurrentState();
+	if (currentState->getState() != UIState::StatePlaying) return;
 
-protected:
-	Ogre::SceneManager* sceneMgr_;
-	UITankRenderer *tankRenderer_;
+	UITankRenderer *renderer = 0;
+	Tank *tank = ScorchedClient::instance()->getTargetContainer().getTankById(playerId_);
+	if (tank)
+	{
+		renderer = (UITankRenderer *) tank->getRenderer();
+	}
 
-	void create();
-};
-
-#endif // __INCLUDE_UIStatePlayingTargetsh_INCLUDE__
+	UIStatePlaying *statePlaying = (UIStatePlaying *) currentState;
+	UIStatePlayingTargets *targets = statePlaying->getTargets();
+	targets->setCurrentTank(renderer);
+}

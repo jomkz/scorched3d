@@ -27,7 +27,7 @@
 
 TanketWeapon::TanketWeapon(ScorchedContext &context) : 
 	currentWeapon_(0), context_(context),
-	tanket_(0), weaponSwitcher_(0)
+	tanket_(0)
 {
 }
 
@@ -79,8 +79,6 @@ Accessory *TanketWeapon::getCurrent()
 
 void TanketWeapon::setCurrentWeapon(Accessory *wp)
 {
-	if (weaponSwitcher_) weaponSwitcher_->switchWeapon(context_, tanket_, currentWeapon_, wp);
-
 	currentWeapon_ = wp;
 }
 

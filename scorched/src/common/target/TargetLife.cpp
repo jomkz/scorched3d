@@ -247,7 +247,7 @@ void TargetLife::setBoundingSphere(bool sphereGeom)
 
 void TargetLife::updateSpace()
 {
-	if (target_->getRenderer()) target_->getRenderer()->moved();
+	if (target_->getRenderer()) target_->getRenderer()->changed();
 	targetSpace_.updateTarget(target_);
 }
 

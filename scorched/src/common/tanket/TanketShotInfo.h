@@ -51,6 +51,7 @@ public:
 	fixed getPower() { return power_; }
 
 	// Power of gun
+	fixed getMaxOverallPower();
 	fixed getMaxPower() { return maxPower_; }
 	void setMaxPower(fixed power) { maxPower_ = power; }
 

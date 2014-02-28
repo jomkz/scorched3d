@@ -27,7 +27,6 @@
 #include <target/TargetLife.h>
 #include <tank/Tank.h>
 #include <tank/TankLib.h>
-#include <tank/TankShotHistory.h>
 #include <tank/TankState.h>
 #include <target/TargetRenderer.h>
 #include <tankai/TankAIStrings.h>

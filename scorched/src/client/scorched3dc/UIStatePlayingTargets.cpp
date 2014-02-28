@@ -19,16 +19,15 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <scorched3dc/UIStatePlayingTargets.h>
+#include <scorched3dc/ScorchedUI.h>
+#include <scorched3dc/InputManager.h>
+#include <scorched3dc/OgreSystem.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientOptions.h>
-#include <common/DefinesString.h>
-#include <scorched3dc/ScorchedUI.h>
-#include <scorched3dc/OgreSystem.h>
-#include <landscapemap/LandscapeMaps.h>
-#include <OGRE/OgreManualObject.h>
+#include <uiactions/UITankRenderer.h>
 
 UIStatePlayingTargets::UIStatePlayingTargets(Ogre::SceneManager* sceneMgr) :
-	sceneMgr_(sceneMgr)
+	sceneMgr_(sceneMgr), tankRenderer_(0)
 {
 	create();
 }
@@ -45,6 +44,56 @@ void UIStatePlayingTargets::update(float frameTime)
 	{
 		sceneMgr_->setVisibilityMask(sceneMgr_->getVisibilityMask() ^ OgreSystem::VisibiltyMaskTargets);
 	}
+
+	if (tankRenderer_)
+	{
+		fixed fixedFrameTime = fixed::fromFloat(frameTime);
+
+		bool changedValues = false;
+		InputManager &inputManager = ScorchedUI::instance()->getInputManager();
+		if (inputManager.isKeyDown(OIS::KC_LEFT))
+		{
+			changedValues = true;
+			tankRenderer_->getShotHistory().rotateGunXY(fixedFrameTime * 45, true);
+		}
+		else if (inputManager.isKeyDown(OIS::KC_RIGHT))
+		{
+			changedValues = true;
+			tankRenderer_->getShotHistory().rotateGunXY(fixedFrameTime * -45, true);
+		}
+
+		if (inputManager.isKeyDown(OIS::KC_UP))
+		{
+			changedValues = true;
+			tankRenderer_->getShotHistory().rotateGunYZ(fixedFrameTime * 20, true);
+		}
+		else if (inputManager.isKeyDown(OIS::KC_DOWN))
+		{
+			changedValues = true;
+			tankRenderer_->getShotHistory().rotateGunYZ(fixedFrameTime * -20, true);
+		}
+
+		if (inputManager.isKeyDown(OIS::KC_EQUALS))
+		{
+			changedValues = true;
+			tankRenderer_->getShotHistory().changePower(fixedFrameTime * 100, true);
+		}
+		else if (inputManager.isKeyDown(OIS::KC_MINUS))
+		{
+			changedValues = true;
+			tankRenderer_->getShotHistory().changePower(fixedFrameTime * -100, true);
+		}
+
+		if (changedValues)
+		{
+			tankRenderer_->setRotations();
+		}
+	}
+}
+
+void UIStatePlayingTargets::setCurrentTank(UITankRenderer *tankRenderer)
+{
+	tankRenderer_ = tankRenderer;
 }
 
 void UIStatePlayingTargets::create()

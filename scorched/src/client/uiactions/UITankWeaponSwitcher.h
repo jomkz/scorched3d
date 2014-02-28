@@ -18,25 +18,20 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UIStatePlayingTargetsh_INCLUDE__)
-#define __INCLUDE_UIStatePlayingTargetsh_INCLUDE__
+#if !defined(AFX_UITankWeaponSwitcher_H__83501862_9536_4108_A7E6_2377AD98EB72__INCLUDED_)
+#define AFX_UITankWeaponSwitcher_H__83501862_9536_4108_A7E6_2377AD98EB72__INCLUDED_
 
-class UITankRenderer;
-class UIStatePlayingTargets 
+#include <engine/ScorchedContext.h>
+
+class Tanket;
+class Accessory;
+class UITankWeaponSwitcher 
 {
 public:
-	UIStatePlayingTargets(Ogre::SceneManager* sceneMgr);
-	virtual ~UIStatePlayingTargets();
+	UITankWeaponSwitcher();
+	virtual ~UITankWeaponSwitcher();
 
-	void setCurrentTank(UITankRenderer *tankRenderer);
-
-	void update(float frameTime);
-
-protected:
-	Ogre::SceneManager* sceneMgr_;
-	UITankRenderer *tankRenderer_;
-
-	void create();
+	virtual void switchWeapon(ScorchedContext &context, Tanket *tanket, Accessory *currentWeapon, Accessory *newWeapon);
 };
 
-#endif // __INCLUDE_UIStatePlayingTargetsh_INCLUDE__
+#endif // !defined(AFX_TANKBBATTERIES_H__83501862_9536_4108_A7E6_2377AD98EB72__INCLUDED_)

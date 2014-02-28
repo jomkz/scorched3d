@@ -34,6 +34,9 @@
 #include <weapons/Accessory.h>
 #include <client/ClientOptions.h>
 #include <client/ScorchedClient.h>
+#include <client/ClientState.h>
+#include <client/ClientUISync.h>
+#include <uiactions/UIActiveTankAction.h>
 #endif
 
 REGISTER_CLASS_SOURCE(TankStartMoveSimAction);
@@ -78,7 +81,6 @@ void TankStartMoveSimAction::startClientGame()
 	//SoundUtils::playRelativeSound(VirtualSoundPriority::eText, playSound);
 
 	// Stimulate into the new game state
-	//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
 	if (getBuying())
 	{
 		//ScorchedClient::instance()->getGameState().stimulate(
@@ -86,6 +88,8 @@ void TankStartMoveSimAction::startClientGame()
 	}
 	else
 	{
+		//ScorchedClient::instance()->getClientState().setState(
+		//	ClientState::StateWait);
 		//ScorchedClient::instance()->getGameState().stimulate(
 		//	ClientState::StimPlaying);
 
@@ -98,6 +102,10 @@ void TankStartMoveSimAction::startClientGame()
 			if (!entries.empty()) currentWeapon = entries.front();
 		}
 		current->getAccessories().getWeapons().setWeapon(currentWeapon);
+
+		// Tell UI to show the tank
+		UIActiveTankAction *activeTankAction = new UIActiveTankAction(tank->getPlayerId());
+		ScorchedClient::instance()->getClientUISync().addActionFromClient(activeTankAction);
 	}
 #endif
 }

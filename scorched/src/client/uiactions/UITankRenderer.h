@@ -18,25 +18,28 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UIStatePlayingTargetsh_INCLUDE__)
-#define __INCLUDE_UIStatePlayingTargetsh_INCLUDE__
+#if !defined(__INCLUDE_UITankRendererh_INCLUDE__)
+#define __INCLUDE_UITankRendererh_INCLUDE__
 
-class UITankRenderer;
-class UIStatePlayingTargets 
+#include <uiactions/UITargetRenderer.h>
+#include <uiactions/UITankShotHistory.h>
+#include <tank/Tank.h>
+
+class UITankRenderer : public UITargetRenderer
 {
 public:
-	UIStatePlayingTargets(Ogre::SceneManager* sceneMgr);
-	virtual ~UIStatePlayingTargets();
+	UITankRenderer(Tank *tank);
+	virtual ~UITankRenderer();
 
-	void setCurrentTank(UITankRenderer *tankRenderer);
-
-	void update(float frameTime);
+	UITankShotHistory &getShotHistory() { return shotHistory_; }
+	void setRotations();
 
 protected:
-	Ogre::SceneManager* sceneMgr_;
-	UITankRenderer *tankRenderer_;
+	UITankShotHistory shotHistory_;
+	Ogre::Bone *gunBone_, *turretBone_;
 
-	void create();
+	virtual void create();
+	virtual void performUIActionAlive();
 };
 
-#endif // __INCLUDE_UIStatePlayingTargetsh_INCLUDE__
+#endif

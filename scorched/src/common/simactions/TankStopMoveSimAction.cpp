@@ -25,6 +25,8 @@
 #ifndef S3D_SERVER
 #include <client/ScorchedClient.h>
 #include <client/ClientState.h>
+#include <client/ClientUISync.h>
+#include <uiactions/UIActiveTankAction.h>
 #endif
 
 REGISTER_CLASS_SOURCE(TankStopMoveSimAction);
@@ -66,6 +68,8 @@ void TankStopMoveSimAction::stopMove(ScorchedContext &context, Tanket *tanket)
 			{
 
 				ScorchedClient::instance()->getTargetContainer().setCurrentPlayerId(0);
+				UIActiveTankAction *activeTankAction = new UIActiveTankAction(0);
+				ScorchedClient::instance()->getClientUISync().addActionFromClient(activeTankAction);
 				//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
 				//ShotCountDown::instance()->hideMoveTime();
 			}

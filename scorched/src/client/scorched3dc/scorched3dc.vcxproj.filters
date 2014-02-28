@@ -816,9 +816,6 @@
     <ClCompile Include="..\..\common\tank\TankScore.cpp">
       <Filter>tank</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\tank\TankShotHistory.cpp">
-      <Filter>tank</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\tank\TankSort.cpp">
       <Filter>tank</Filter>
     </ClCompile>
@@ -829,9 +826,6 @@
       <Filter>tank</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\tank\TankViewPoints.cpp">
-      <Filter>tank</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\tank\TankWeaponSwitcher.cpp">
       <Filter>tank</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\tanket\Tanket.cpp">
@@ -1445,6 +1439,18 @@
     </ClCompile>
     <ClCompile Include="InputHandlerKeyboard.cpp">
       <Filter>scorched3dc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uiactions\UIActiveTankAction.cpp">
+      <Filter>uiactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uiactions\UITankRenderer.cpp">
+      <Filter>uiactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uiactions\UITankShotHistory.cpp">
+      <Filter>uiactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uiactions\UITankWeaponSwitcher.cpp">
+      <Filter>uiactions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2198,9 +2204,6 @@
     <ClInclude Include="..\..\common\tank\TankScore.h">
       <Filter>tank</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\common\tank\TankShotHistory.h">
-      <Filter>tank</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\common\tank\TankSort.h">
       <Filter>tank</Filter>
     </ClInclude>
@@ -2211,9 +2214,6 @@
       <Filter>tank</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\tank\TankViewPoints.h">
-      <Filter>tank</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\tank\TankWeaponSwitcher.h">
       <Filter>tank</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\tanket\Tanket.h">
@@ -2827,6 +2827,18 @@
     </ClInclude>
     <ClInclude Include="InputHandlerKeyboard.h">
       <Filter>scorched3dc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uiactions\UIActiveTankAction.h">
+      <Filter>uiactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uiactions\UITankRenderer.h">
+      <Filter>uiactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uiactions\UITankShotHistory.h">
+      <Filter>uiactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uiactions\UITankWeaponSwitcher.h">
+      <Filter>uiactions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
