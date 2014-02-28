@@ -34,13 +34,27 @@ public:
 protected:
 };
 
-class XMLEntryGroup : public XMLEntry
+class XMLEntryContainer : public XMLEntry
+{
+public:
+	XMLEntryContainer();
+	virtual ~XMLEntryContainer();
+
+	void addChildXMLEntry(XMLEntry *entry);
+
+	// XMLEntry
+	virtual bool readXML(XMLNode *parentNode);
+	virtual void writeXML(XMLNode *parentNode);
+
+private:
+	std::list<XMLEntry *> xmlEntryChildren_;
+};
+
+class XMLEntryGroup : public XMLEntryContainer
 {
 public:
 	XMLEntryGroup(const std::string &name, const std::string &description);
 	virtual ~XMLEntryGroup();
-
-	void addChildEntry(XMLEntry *entry);
 
 	// XMLEntry
 	virtual bool readXML(XMLNode *parentNode);
@@ -48,7 +62,6 @@ public:
 
 private:
 	std::string xmlEntryName_, xmlEntryDescription_;
-	std::list<XMLEntry *> xmlEntryChildren_;
 };
 
 #endif

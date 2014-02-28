@@ -23,17 +23,15 @@
 
 #include <list>
 #include <map>
+#include <XML/XMLEntrySimpleTypes.h>
 
 class Target;
 class Tanket;
-class XMLNode;
-class TankAICurrentTarget
+class TankAICurrentTarget : public XMLEntryGroup
 {
 public:
 	TankAICurrentTarget();
 	virtual ~TankAICurrentTarget();
-
-	virtual bool parseConfig(XMLNode *node);
 
 	void clear();
 	void getTargets(Tanket *tanket, std::list<Tanket *> &targets);
@@ -49,15 +47,15 @@ protected:
 	std::map<Tanket *, float> damageTaken_;
 	std::map<Tanket *, float> shotAt_;
 
-	float health_;
-	float random_;
-	float score_;
-	float damagedone_;
-	float damagetaken_;
-	float shield_;
-	float repeat_;
-	float player_;
-	float distance_;
+	XMLEntryFixed health_;
+	XMLEntryFixed random_;
+	XMLEntryFixed score_;
+	XMLEntryFixed damagedone_;
+	XMLEntryFixed damagetaken_;
+	XMLEntryFixed shield_;
+	XMLEntryFixed repeat_;
+	XMLEntryFixed player_;
+	XMLEntryFixed distance_;
 
 	float rankPlayer(std::list<Tanket *> &players, Tanket *player);
 	float rankPlayer(std::multimap<float, Tanket *> &players, Tanket *player);

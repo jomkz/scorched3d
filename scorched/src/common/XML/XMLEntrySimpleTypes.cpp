@@ -77,6 +77,13 @@ void XMLEntrySimpleType::writeXML(XMLNode *parentNode)
 	parentNode->addChild(newNode);
 }
 
+XMLEntryInt::XMLEntryInt(const std::string &name, 
+	const std::string &description) :
+	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eRequired), 
+	value_(0), defaultValue_(0)
+{
+}
+
 XMLEntryInt::XMLEntryInt(const std::string &name, const std::string &description,
 	unsigned int data, int value) :
 	XMLEntrySimpleType(name, description, data), 
@@ -226,6 +233,13 @@ bool XMLEntryEnum::setValueFromString(const std::string &string)
 }
 
 XMLEntryBool::XMLEntryBool(const std::string &name, 
+	const std::string &description) :
+	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eRequired),
+	value_(false), defaultValue_(false)
+{
+}
+
+XMLEntryBool::XMLEntryBool(const std::string &name, 
 	const std::string &description, 
 	unsigned int data,
 	bool value) :
@@ -360,6 +374,13 @@ bool XMLEntryStringEnum::setValue(const std::string &value)
 bool XMLEntryStringEnum::setValueFromString(const std::string &string)
 {
 	return setValue(string);
+}
+
+XMLEntryFixed::XMLEntryFixed(const std::string &name, 
+		const std::string &description) :
+	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eRequired),
+	value_(0), defaultValue_(0)
+{
 }
 
 XMLEntryFixed::XMLEntryFixed(const std::string &name,

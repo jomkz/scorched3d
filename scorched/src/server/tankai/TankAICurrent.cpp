@@ -65,7 +65,7 @@ bool TankAICurrent::parseConfig(TankAIWeaponSets &sets, XMLNode *node)
 	{
 		XMLNode *attack = 0;
 		if (!node->getNamedChild("attack", attack)) return false;
-		if (!move_.parseConfig(attack)) return false;
+		if (!move_.readXML(attack)) return false;
 	}
 
 	return node->failChildren();	

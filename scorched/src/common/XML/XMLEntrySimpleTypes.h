@@ -61,6 +61,8 @@ class XMLEntryInt : public XMLEntrySimpleType
 {
 public:
 	XMLEntryInt(const std::string &name, 
+		const std::string &description);
+	XMLEntryInt(const std::string &name, 
 		const std::string &description,
 		unsigned int data,
 		int defaultValue);
@@ -134,6 +136,8 @@ class XMLEntryBool : public XMLEntrySimpleType
 {
 public:
 	XMLEntryBool(const std::string &name, 
+		const std::string &description);
+	XMLEntryBool(const std::string &name, 
 		const std::string &description,
 		unsigned int data,
 		bool defaultValue);
@@ -203,6 +207,8 @@ protected:
 class XMLEntryFixed : public XMLEntrySimpleType
 {
 public:
+	XMLEntryFixed(const std::string &name, 
+		const std::string &description);
 	XMLEntryFixed(const std::string &name, 
 		const std::string &description,
 		unsigned int data,

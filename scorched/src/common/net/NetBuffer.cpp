@@ -18,7 +18,6 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #include <net/NetBufferPool.h>
 #include <common/Logger.h>
 #include <string.h>
@@ -196,11 +195,6 @@ void NetBuffer::addDataToBuffer(const void *add, unsigned len)
 	usedSize_ += len;
 }
 
-void NetBuffer::addToBufferNamed(const char *name, Vector &vector) 
-{ 
-	addToBuffer(vector); 
-}
-
 void NetBuffer::addToBufferNamed(const char *name, FixedVector &vector)
 { 
 	addToBuffer(vector); 
@@ -251,11 +245,6 @@ void NetBuffer::addToBufferNamed(const char *name, const int add)
 	addToBuffer(add); 
 }
 
-void NetBuffer::addToBufferNamed(const char *name, const float add)
-{ 
-	addToBuffer(add); 
-}
-
 void NetBuffer::addToBufferNamed(const char *name, const bool add)
 { 
 	addToBuffer(add); 
@@ -274,13 +263,6 @@ void NetBuffer::addToBufferNamed(const char *name, const fixed add)
 void NetBuffer::addToBufferNamed(const char *name, NetBuffer &add)
 { 
 	addToBuffer(add); 
-}
-
-void NetBuffer::addToBuffer(Vector &add)
-{
-	addToBuffer(add[0]);
-	addToBuffer(add[1]);
-	addToBuffer(add[2]);
 }
 
 void NetBuffer::addToBuffer(FixedVector &add)
@@ -306,14 +288,6 @@ void NetBuffer::addToBuffer(const fixed add)
 
 void NetBuffer::addToBuffer(const int add)
 {
-	uint32_t value = htonl(add);
-	addDataToBuffer(&value, sizeof(uint32_t));
-}
-
-void NetBuffer::addToBuffer(const float addf)
-{
-	uint32_t add = 0;
-	memcpy(&add, &addf, sizeof(uint32_t));
 	uint32_t value = htonl(add);
 	addDataToBuffer(&value, sizeof(uint32_t));
 }
@@ -425,14 +399,6 @@ void NetBufferReader::reset()
 	readSize_ = 0;
 }
 
-bool NetBufferReader::getFromBuffer(Vector &result)
-{
-	if (!getFromBuffer(result[0])) return false;
-	if (!getFromBuffer(result[1])) return false;
-	if (!getFromBuffer(result[2])) return false;
-	return true;
-}
-
 bool NetBufferReader::getFromBuffer(FixedVector &result)
 {
 	if (!getFromBuffer(result[0])) return false;
@@ -463,15 +429,6 @@ bool NetBufferReader::getFromBuffer(fixed &result)
 	int64_t value = 0;
 	if (!getDataFromBuffer(&value, sizeof(value))) return false;
 	result = fixed(true, NetBuffer::htonll(value));
-	return true;
-}
-
-bool NetBufferReader::getFromBuffer(float &resultf)
-{
-	uint32_t value = 0;
-	if (!getDataFromBuffer(&value, sizeof(value))) return false;
-	uint32_t result = ntohl(value);
-	memcpy(&resultf, &result, sizeof(uint32_t));
 	return true;
 }
 

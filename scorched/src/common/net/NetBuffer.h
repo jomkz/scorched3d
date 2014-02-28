@@ -32,7 +32,6 @@ public:
 	virtual void startSection(const char *name) {}
 	virtual void stopSection(const char *name) {}
 
-	virtual void addToBufferNamed(const char *name, Vector &vector) = 0;
 	virtual void addToBufferNamed(const char *name, FixedVector &vector) = 0;
 	virtual void addToBufferNamed(const char *name, FixedVector4 &vector) = 0;
 	virtual void addToBufferNamed(const char *name, const char *add) = 0;
@@ -43,7 +42,6 @@ public:
 	virtual void addToBufferNamed(const char *name, const char add) = 0;
 	virtual void addToBufferNamed(const char *name, const unsigned char add) = 0;
 	virtual void addToBufferNamed(const char *name, const int add) = 0;
-	virtual void addToBufferNamed(const char *name, const float add) = 0;
 	virtual void addToBufferNamed(const char *name, const bool add) = 0;
 	virtual void addToBufferNamed(const char *name, const unsigned int add) = 0;
 	virtual void addToBufferNamed(const char *name, const fixed add) = 0;
@@ -75,7 +73,6 @@ public:
 	void allocate(unsigned size);
 	void setBufferUsed(unsigned size) { usedSize_ = size; }
 
-	virtual void addToBufferNamed(const char *name, Vector &vector);
 	virtual void addToBufferNamed(const char *name, FixedVector &vector);
 	virtual void addToBufferNamed(const char *name, FixedVector4 &vector);
 	virtual void addToBufferNamed(const char *name, const char *add);
@@ -86,7 +83,6 @@ public:
 	virtual void addToBufferNamed(const char *name, const char add);
 	virtual void addToBufferNamed(const char *name, const unsigned char add);
 	virtual void addToBufferNamed(const char *name, const int add);
-	virtual void addToBufferNamed(const char *name, const float add);
 	virtual void addToBufferNamed(const char *name, const bool add);
 	virtual void addToBufferNamed(const char *name, const unsigned int add);
 	virtual void addToBufferNamed(const char *name, const fixed add);
@@ -103,7 +99,6 @@ public:
 	void addToBuffer(const char add);
 	void addToBuffer(const unsigned char add);
 	void addToBuffer(const int add);
-	void addToBuffer(const float add);
 	void addToBuffer(const bool add);
 	void addToBuffer(const unsigned int add);
 	void addToBuffer(const fixed add);
@@ -147,14 +142,12 @@ public:
 	void setReadSize(unsigned size) { readSize_ = size; }
 	void setBufferSize(unsigned size) { bufferSize_ = size; }
 
-	bool getFromBuffer(Vector &result);
 	bool getFromBuffer(FixedVector &result);
 	bool getFromBuffer(FixedVector4 &result);
 	bool getFromBuffer(fixed &result);
 	bool getFromBuffer(char &result);
 	bool getFromBuffer(unsigned char &result);
 	bool getFromBuffer(int &result);
-	bool getFromBuffer(float &result);
 	bool getFromBuffer(bool &result);
 	bool getFromBuffer(unsigned int &result);
 	bool getFromBuffer(std::string &string, bool safe = true);

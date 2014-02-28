@@ -24,15 +24,14 @@
 #include <tankai/TankAICurrentTarget.h>
 #include <tankai/TankAICurrentMoveWeapons.h>
 #include <common/Vector.h>
+#include <XML/XMLEntry.h>
 
 class TankAIAimResult;
-class TankAICurrentMove
+class TankAICurrentMove : public XMLEntryGroup
 {
 public:
 	TankAICurrentMove();
 	virtual ~TankAICurrentMove();
-
-	virtual bool parseConfig(XMLNode *node);
 
 	void clear();
 	void playMove(Tanket *tanket, 
@@ -60,21 +59,23 @@ protected:
 	Accessory *currentWeapon_;
 	TankAICurrentTarget targets_;
 	float totalDamageBeforeMove_;
-	bool useResign_, useFuel_;
-	float movementDamage_, movementDamageChance_, movementLife_;
-	float movementRandom_, movementCloseness_;
-	float groupShotChance_, groupTargetDistance_;
-	int groupShotSize_;
-	float resignLife_;
-	float largeWeaponUseDistance_;
-	float sniperUseDistance_;
-	float sniperStartDistance_, sniperEndDistance_;
-	float sniperMinDecrement_, sniperMaxDecrement_;
-	float sniperMovementFactor_;
-	float projectileStartDistance_, projectileEndDistance_;
-	float projectileMinDecrement_, projectileMaxDecrement_;
-	float projectileMovementFactor_;
-	float projectileMinDistance_;
+	XMLEntryGroup resignGroup_, movementGroup_, groupShotGroup_;
+	XMLEntryGroup sniperGroup_, projectileGroup_;
+	XMLEntryBool useResign_, useFuel_;
+	XMLEntryFixed movementDamage_, movementDamageChance_, movementLife_;
+	XMLEntryFixed movementRandom_, movementCloseness_;
+	XMLEntryFixed groupShotChance_, groupTargetDistance_;
+	XMLEntryInt groupShotSize_;
+	XMLEntryFixed resignLife_;
+	XMLEntryFixed sniperUseDistance_;
+	XMLEntryFixed sniperStartDistance_, sniperEndDistance_;
+	XMLEntryFixed sniperMinDecrement_, sniperMaxDecrement_;
+	XMLEntryFixed sniperMovementFactor_;
+	XMLEntryFixed largeWeaponUseDistance_;
+	XMLEntryFixed projectileStartDistance_, projectileEndDistance_;
+	XMLEntryFixed projectileMinDecrement_, projectileMaxDecrement_;
+	XMLEntryFixed projectileMovementFactor_;
+	XMLEntryFixed projectileMinDistance_;
 
 	void playMoveInternal(Tanket *tanket, 
 		TankAIWeaponSets::WeaponSet *weapons,

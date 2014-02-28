@@ -31,27 +31,34 @@
 #include <common/Defines.h>
 #include <XML/XMLNode.h>
 
-TankAICurrentTarget::TankAICurrentTarget()
+TankAICurrentTarget::TankAICurrentTarget() :
+	XMLEntryGroup("targets", "Weighting factors use to determine which tank to fire at."
+		"Targets are all ranked using these factors. The top weighted targets are selected to be fired at 1st."
+		"Each factor is multiplied by the weight and then all factors are added to give the total weighting."
+		"All factors are in the range -1.0 to 1.0 before weighting."),
+	health_("health", "Health weighting, multiplied by the 100% health the tank has left."),
+	random_("random", "Random weighting, used to randomize the chosen tank."),
+	score_("score", "Score weighting, multiplied by the current position of the tank ranked by current score"),
+	damagedone_("damagedone", "Damage done weighting, multiplied by the current position of the tank ranked by damage done to the ai"),
+	damagetaken_("damagetaken", "Damage taken weighting, multiplied by the current position of the tank ranked by damage taken by the ai"),
+	shield_("shield", "Shield weighting, multiplied by the current position of the tank ranked by the level of the current shield"),
+	repeat_("repeat", "Repeat weighting, multiplied by the number of times this tank has been chosen as a target"),
+	distance_("distance", "Distance weighting, multiplied by the closeness of the tank (closer is higher)"),
+	player_("player", "Player weighting, multiplied by the human/ai type of the tank (Human:-1, AI:1)")
 {
+	addChildXMLEntry(&health_);
+	addChildXMLEntry(&random_);
+	addChildXMLEntry(&score_);
+	addChildXMLEntry(&damagedone_);
+	addChildXMLEntry(&damagetaken_);
+	addChildXMLEntry(&shield_);
+	addChildXMLEntry(&repeat_);
+	addChildXMLEntry(&distance_);
+	addChildXMLEntry(&player_);
 }
 
 TankAICurrentTarget::~TankAICurrentTarget()
 {
-}
-
-bool TankAICurrentTarget::parseConfig(XMLNode *node)
-{
-	if (!node->getNamedChild("health", health_)) return false;
-	if (!node->getNamedChild("random", random_)) return false;
-	if (!node->getNamedChild("score", score_)) return false;
-	if (!node->getNamedChild("shield", shield_)) return false;
-	if (!node->getNamedChild("repeat", repeat_)) return false;
-	if (!node->getNamedChild("damagetaken", damagetaken_)) return false;
-	if (!node->getNamedChild("damagedone", damagedone_)) return false;
-	if (!node->getNamedChild("player", player_)) return false;
-	if (!node->getNamedChild("distance", distance_)) return false;
-	
-	return true;
 }
 
 void TankAICurrentTarget::clear()
@@ -227,15 +234,15 @@ void TankAICurrentTarget::getTargets(Tanket *thisTanket, std::list<Tanket *> &re
 		float distanceScore = rankPlayer(distanceSorted, currentTank);
 
 		float weight = 
-			healthScore * health_ +
-			randomScore * random_ +
-			playerScore * player_ +
-			shieldScore * shield_ +
-			scoreScore * score_ +
-			repeatScore * repeat_ +
-			damagetakenScore * damagetaken_ +
-			damagedoneScore * damagedone_ +
-			distanceScore * distance_;
+			healthScore * health_.getValue().asFloat() +
+			randomScore * random_.getValue().asFloat() +
+			playerScore * player_.getValue().asFloat() +
+			shieldScore * shield_.getValue().asFloat() +
+			scoreScore * score_.getValue().asFloat() +
+			repeatScore * repeat_.getValue().asFloat() +
+			damagetakenScore * damagetaken_.getValue().asFloat() +
+			damagedoneScore * damagedone_.getValue().asFloat() +
+			distanceScore * distance_.getValue().asFloat();
 		weightedTanks.insert(std::pair<float, Tanket *>(weight, currentTank));
 	}
 

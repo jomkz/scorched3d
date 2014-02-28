@@ -28,6 +28,38 @@ XMLEntry::~XMLEntry()
 {
 }
 
+XMLEntryContainer::XMLEntryContainer()
+{
+}
+
+XMLEntryContainer::~XMLEntryContainer()
+{
+}
+
+void XMLEntryContainer::addChildXMLEntry(XMLEntry *entry)
+{
+	xmlEntryChildren_.push_back(entry);
+}
+
+bool XMLEntryContainer::readXML(XMLNode *parentNode)
+{
+	std::list<XMLEntry *>::iterator itor, end = xmlEntryChildren_.end();
+	for (;itor!=end; itor++)
+	{
+		if (!(*itor)->readXML(parentNode)) return false;
+	}
+	return true;
+}
+
+void XMLEntryContainer::writeXML(XMLNode *parentNode)
+{
+	std::list<XMLEntry *>::iterator itor, end = xmlEntryChildren_.end();
+	for (;itor!=end; itor++)
+	{
+		(*itor)->writeXML(parentNode);
+	}
+}
+
 XMLEntryGroup::XMLEntryGroup(const std::string &name, const std::string &description) :
 	xmlEntryName_(name), xmlEntryDescription_(description)
 {
@@ -37,22 +69,13 @@ XMLEntryGroup::~XMLEntryGroup()
 {
 }
 
-void XMLEntryGroup::addChildEntry(XMLEntry *entry)
-{
-	xmlEntryChildren_.push_back(entry);
-}
-
 bool XMLEntryGroup::readXML(XMLNode *parentNode)
 {
 	XMLNode *node = 0;
 	if (!parentNode->getNamedChild(xmlEntryName_.c_str(), node)) return false;
 	
-	std::list<XMLEntry *>::iterator itor, end = xmlEntryChildren_.end();
-	for (;itor!=end; itor++)
-	{
-		if (!(*itor)->readXML(node)) return false;
-	}
-	return true;
+	if (!XMLEntryContainer::readXML(node)) return false;
+	return node->failChildren();
 }
 
 void XMLEntryGroup::writeXML(XMLNode *parentNode)
@@ -66,9 +89,5 @@ void XMLEntryGroup::writeXML(XMLNode *parentNode)
 	XMLNode *newNode = new XMLNode(xmlEntryName_.c_str());
 	parentNode->addChild(newNode);
 
-	std::list<XMLEntry *>::iterator itor, end = xmlEntryChildren_.end();
-	for (;itor!=end; itor++)
-	{
-		(*itor)->writeXML(newNode);
-	}
+	XMLEntryContainer::writeXML(newNode);
 }

@@ -47,86 +47,73 @@
 #include <XML/XMLNode.h>
 
 TankAICurrentMove::TankAICurrentMove() : 
-	useResign_(true), useFuel_(true), 
+	XMLEntryGroup("attack", "Offensive AI parameters"),
+	resignGroup_("resign", "Parameters to determine if this AI should resign"),
+	useResign_("useresign", "Enable resigning ability"),
+	resignLife_("resignlife", "Don't consider resigning unless you have less than this amount of life"),
+	movementGroup_("movement", "Parameters to determine if this AI should move.  Tank must have fuel before movement can occur."),
+	useFuel_("usefuel", "Enable movement ability"),		
+	movementDamage_("movementdamage", "The amount of damage taken before movement is considered"),
+	movementDamageChance_("movementdamagechance", "Once the above damage has been taken the chance to move out the way"),
+	movementLife_("movementlife", "The amount of life before we consider moving"),
+	movementRandom_("movementrandom", "The randomness applied to the final movement position"),
+	movementCloseness_("movementcloseness", "The distance left between the target tank and the movement destination"),
+	groupShotGroup_("groupshot", "Parameters to determine when to try to kill multiple tanks (in a group)"),
+	groupShotSize_("groupshotsize", "The number of tanks that need to be grouped before considering a group shot A group shot is available if targets are close together and the tank has a hugeweapon"),
+	groupShotChance_("groupshotchance", "The chance that a group shot will be considered"),
+	groupTargetDistance_("grouptargetdistance", "The max distance between tanks considered grouped"),
+	sniperGroup_("sniper", "Parameters to determine if this AI should use sniping shots (direct shots at max power)"),
+	sniperMovementFactor_("snipermovementfactor", "The maximum amount of accuracy in degrees that will be lost if the tank moves"),
+	sniperUseDistance_("sniperusedistance", "How close do I need to be from a target before considering a sniper shot"),
+	sniperStartDistance_("sniperstartdistance", "The distance in degress that my 1st sniper shot may miss by"),
+	sniperEndDistance_("sniperenddistance", "The distance in degrees that my best sniper shot may miss by"),
+	sniperMinDecrement_("snipermindecrement", "The min distance in degrees that each sniper shot will improve"),
+	sniperMaxDecrement_("snipermaxdecrement", "The max distance in degrees that each sniper shot will improve "),
+	projectileGroup_("projectile", "Parameters to determine how this AI should use projectiles"),
+	projectileMinDistance_("projectilemindistance", "The minimum distance to allow for shots. Stops self kills"),
+	projectileStartDistance_("projectilestartdistance", "These are all distances of the 1st particle of the projectile to hit the ground. The distance that the 1st projectile shot may miss by"),
+	projectileEndDistance_("projectileenddistance", "The distance that the my best projectile shot may get to"),
+	projectileMinDecrement_("projectilemindecrement", "The min distance that each projecile shot will improve"),
+	projectileMaxDecrement_("projectilemaxdecrement", "The max distance that each projecile shot will improve"),
+	largeWeaponUseDistance_("largeweaponusedistance", "How close a shot do I need to get to a target before firing large weapons"),
+	projectileMovementFactor_("projectilemovementfactor", "The maximum amount of accuracy that will be lost if the tank moves"),
 	totalDamageBeforeMove_(0.0f),
-	movementDamage_(300.0f), movementDamageChance_(0.3f), movementLife_(75.0f),
-	movementRandom_(10.0f), movementCloseness_(15.0f),
-	groupShotSize_(2), groupShotChance_(0.7f), groupTargetDistance_(25.0f),
-	resignLife_(10.0f), // Min life before resigning
-	largeWeaponUseDistance_(10.0f), // The distance under which large weapons will be used
-	sniperUseDistance_(80.0f), // The max distance to allow sniper shots
-	sniperStartDistance_(10.0f), sniperEndDistance_(0.0f),
-	sniperMinDecrement_(2.0f), sniperMaxDecrement_(5.0f),
-	sniperMovementFactor_(4.0f),
-	projectileStartDistance_(10.0f), projectileEndDistance_(5.0f),
-	projectileMinDecrement_(1.0f), projectileMaxDecrement_(4.0f),
-	projectileMovementFactor_(10.0f), projectileMinDistance_(10.0f),
 	currentWeapon_(0)
 {
+	addChildXMLEntry(&resignGroup_);
+	resignGroup_.addChildXMLEntry(&useResign_);
+	resignGroup_.addChildXMLEntry(&resignLife_);
+	addChildXMLEntry(&movementGroup_);
+	movementGroup_.addChildXMLEntry(&useFuel_);
+	movementGroup_.addChildXMLEntry(&movementDamage_);
+	movementGroup_.addChildXMLEntry(&movementDamageChance_);
+	movementGroup_.addChildXMLEntry(&movementLife_);
+	movementGroup_.addChildXMLEntry(&movementRandom_);
+	movementGroup_.addChildXMLEntry(&movementCloseness_);
+	addChildXMLEntry(&groupShotGroup_);
+	groupShotGroup_.addChildXMLEntry(&groupShotGroup_);
+	groupShotGroup_.addChildXMLEntry(&groupShotSize_);
+	groupShotGroup_.addChildXMLEntry(&groupShotChance_);
+	groupShotGroup_.addChildXMLEntry(&groupTargetDistance_);
+	addChildXMLEntry(&sniperGroup_);
+	sniperGroup_.addChildXMLEntry(&sniperMovementFactor_);
+	sniperGroup_.addChildXMLEntry(&sniperUseDistance_);
+	sniperGroup_.addChildXMLEntry(&sniperStartDistance_);
+	sniperGroup_.addChildXMLEntry(&sniperEndDistance_);
+	sniperGroup_.addChildXMLEntry(&sniperMinDecrement_);
+	sniperGroup_.addChildXMLEntry(&sniperMaxDecrement_);
+	addChildXMLEntry(&projectileGroup_);
+	projectileGroup_.addChildXMLEntry(&projectileMinDistance_);
+	projectileGroup_.addChildXMLEntry(&projectileMovementFactor_);
+	projectileGroup_.addChildXMLEntry(&projectileStartDistance_);
+	projectileGroup_.addChildXMLEntry(&projectileEndDistance_);
+	projectileGroup_.addChildXMLEntry(&projectileMinDecrement_);
+	projectileGroup_.addChildXMLEntry(&projectileMaxDecrement_);
+	projectileGroup_.addChildXMLEntry(&largeWeaponUseDistance_);
 }
 
 TankAICurrentMove::~TankAICurrentMove()
 {
-}
-
-bool TankAICurrentMove::parseConfig(XMLNode *node)
-{
-	{
-		XMLNode *targets = 0;
-		if (!node->getNamedChild("targets", targets)) return false;
-		if (!targets_.parseConfig(targets)) return false;
-	}
-	{
-		XMLNode *resign = 0;
-		if (!node->getNamedChild("resign", resign)) return false;
-		if (!resign->getNamedChild("useresign", useResign_)) return false;
-		if (!resign->getNamedChild("resignlife", resignLife_)) return false;
-		if (!resign->failChildren()) return false;
-	}
-	{
-		XMLNode *movement = 0;
-		if (!node->getNamedChild("movement", movement)) return false;
-		if (!movement->getNamedChild("usefuel", useFuel_)) return false;
-		if (!movement->getNamedChild("movementdamage", movementDamage_)) return false;
-		if (!movement->getNamedChild("movementdamagechance", movementDamageChance_)) return false;
-		if (!movement->getNamedChild("movementlife", movementLife_)) return false;
-		if (!movement->getNamedChild("movementrandom", movementRandom_)) return false;
-		if (!movement->getNamedChild("movementcloseness", movementCloseness_)) return false;
-		if (!movement->failChildren()) return false;
-	}
-	{
-		XMLNode *groupshot = 0;
-		if (!node->getNamedChild("groupshot", groupshot)) return false;
-		if (!groupshot->getNamedChild("groupshotsize", groupShotSize_)) return false;
-		if (!groupshot->getNamedChild("groupshotchance", groupShotChance_)) return false;
-		if (!groupshot->getNamedChild("grouptargetdistance", groupTargetDistance_)) return false;
-		if (!groupshot->failChildren()) return false;
-	}
-	{
-		XMLNode *sniper = 0;
-		if (!node->getNamedChild("sniper", sniper)) return false;
-		if (!sniper->getNamedChild("snipermovementfactor", sniperMovementFactor_)) return false;
-		if (!sniper->getNamedChild("sniperusedistance", sniperUseDistance_)) return false;
-		if (!sniper->getNamedChild("sniperstartdistance", sniperStartDistance_)) return false;
-		if (!sniper->getNamedChild("sniperenddistance", sniperEndDistance_)) return false;
-		if (!sniper->getNamedChild("snipermindecrement", sniperMinDecrement_)) return false;
-		if (!sniper->getNamedChild("snipermaxdecrement", sniperMaxDecrement_)) return false;
-		if (!sniper->failChildren()) return false;
-	}
-	{
-		XMLNode *projectile = 0;
-		if (!node->getNamedChild("projectile", projectile)) return false;
-		if (!projectile->getNamedChild("projectilemindistance", projectileMinDistance_)) return false;
-		if (!projectile->getNamedChild("projectilemovementfactor", projectileMovementFactor_)) return false;
-		if (!projectile->getNamedChild("projectilestartdistance", projectileStartDistance_)) return false;
-		if (!projectile->getNamedChild("projectileenddistance", projectileEndDistance_)) return false;
-		if (!projectile->getNamedChild("projectilemindecrement", projectileMinDecrement_)) return false;
-		if (!projectile->getNamedChild("projectilemaxdecrement", projectileMaxDecrement_)) return false;
-		if (!projectile->getNamedChild("largeweaponusedistance", largeWeaponUseDistance_)) return false;
-		if (!projectile->failChildren()) return false;
-	}
-
-	return node->failChildren();
 }
 
 void TankAICurrentMove::clear()
@@ -183,8 +170,8 @@ void TankAICurrentMove::playMoveInternal(Tanket *tanket,
 	// Check if we have taken a lot of damage and we can move
 	float totalDamage = 
 		targets_.getTotalDamageTaken() - totalDamageBeforeMove_;
-	if (totalDamage > movementDamage_ &&
-		S3D_RAND <= movementDamageChance_)
+	if (totalDamage > movementDamage_.getValue().asFloat() &&
+		S3D_RAND <= movementDamageChance_.getValue().asFloat())
 	{
 		// Bring the health back up
 		if (useBatteries)
@@ -192,7 +179,7 @@ void TankAICurrentMove::playMoveInternal(Tanket *tanket,
 			if (useAvailableBatteries(tanket, moveData)) return;
 		}
 
-		if (tanket->getLife().getLife().asFloat() > movementLife_)
+		if (tanket->getLife().getLife().asFloat() > movementLife_.getValue().asFloat())
 		{
 			// Try to move
 			if (makeMoveShot(tanket, weapons, sortedTankets, moveData)) return;
@@ -200,7 +187,7 @@ void TankAICurrentMove::playMoveInternal(Tanket *tanket,
 	}
 
 	// Check to see if we can make a huge shot at a number of tanks
-	if (S3D_RAND <= groupShotChance_)
+	if (S3D_RAND <= groupShotChance_.getValue().asFloat())
 	{
 		if (makeGroupShot(tanket, weapons, sortedTankets, moveData)) return;
 	}
@@ -244,7 +231,7 @@ void TankAICurrentMove::playMoveInternal(Tanket *tanket,
 
 	// Try to move so we can get a better shot at the targets
 	// Only move if we have a hope of hitting them
-	if (tanket->getLife().getLife().asFloat() > movementLife_)
+	if (tanket->getLife().getLife().asFloat() > movementLife_.getValue().asFloat())
 	{
 		targets_.getTargets(tanket, sortedTankets);
 		if (makeMoveShot(tanket, weapons, sortedTankets, moveData)) return;
@@ -252,9 +239,9 @@ void TankAICurrentMove::playMoveInternal(Tanket *tanket,
 
 	// Is there any point in making a move
 	// Done after select weapons to allow shields to be raised
-	if (useResign_ &&
+	if (useResign_.getValue() &&
 		ScorchedServer::instance()->getOptionsGame().getResignMode() != OptionsGame::ResignNone &&
-		tanket->getLife().getLife().asFloat() < resignLife_) 
+		tanket->getLife().getLife().asFloat() < resignLife_.getValue().asFloat()) 
 	{
 		resign(tanket, moveData);
 		return;
@@ -367,7 +354,7 @@ bool TankAICurrentMove::makeProjectileShot(Tanket *tanket, Tanket *targetTanket,
 				(actualPosition - directTarget).Magnitude();
 			float distanceFromUs = 
 				(actualPosition - tanket->getLife().getTargetPosition().asVector()).Magnitude();
-			if (distanceFromUs < projectileMinDistance_)
+			if (distanceFromUs < projectileMinDistance_.getValue().asFloat())
 			{
 				if (TankAI::getTankAILogging())
 				{
@@ -379,7 +366,7 @@ bool TankAICurrentMove::makeProjectileShot(Tanket *tanket, Tanket *targetTanket,
 			// We can fire at this tank
 			// ...
 			// Check how close we are
-			if (distanceFromTarget < largeWeaponUseDistance_)
+			if (distanceFromTarget < largeWeaponUseDistance_.getValue().asFloat())
 			{
 				if (TankAI::getTankAILogging())
 				{
@@ -497,7 +484,7 @@ bool TankAICurrentMove::makeSniperShot(Tanket *tanket, Tanket *targetTanket,
 	float offset = getShotDistance(targetTanket, false);
 	TankAIAimResult result;
 	TankAISniperGuesser sniperGuesser;
-	if (sniperGuesser.guess(tanket, directTarget, sniperUseDistance_, true, offset, result))
+	if (sniperGuesser.guess(tanket, directTarget, sniperUseDistance_.getValue().asFloat(), true, offset, result))
 	{
 		// We can make a ordinary sniper shot
 		if (TankAI::getTankAILogging())
@@ -586,7 +573,7 @@ bool TankAICurrentMove::makeLaserSniperShot(Tanket *tanket, Tanket *targetTanket
 	float offset = getShotDistance(targetTanket, false);
 	TankAIAimResult result;
 	TankAISniperGuesser sniperGuesser;
-	if (sniperGuesser.guess(tanket, directTarget, sniperUseDistance_, false, offset, result))
+	if (sniperGuesser.guess(tanket, directTarget, sniperUseDistance_.getValue().asFloat(), false, offset, result))
 	{
 		if (TankAI::getTankAILogging())
 		{
@@ -735,7 +722,7 @@ bool TankAICurrentMove::makeMoveShot(Tanket *tanket,
 		Logger::log(S3D::formatStringBuffer("TankAI - Checking movement"));
 	}
 
-	if (!useFuel_) return false;
+	if (!useFuel_.getValue()) return false;
 	if (sortedTankets.empty()) return false;
 
 	Accessory *fuel = weapons->getTankAccessoryByType(tanket, "fuel");
@@ -780,7 +767,7 @@ bool TankAICurrentMove::makeMoveShot(Tanket *tanket,
 				ScorchedServer::instance()->getLandscapeMaps().getGroundMaps().getHeight(
 					(int) x, (int) y).asFloat());
 			float distance = (position - targetPos).Magnitude();
-			if (distance > movementCloseness_)
+			if (distance > movementCloseness_.getValue().asFloat())
 			{
 				if (entry.dist.asFloat() < totalFuel)
 				{
@@ -822,7 +809,7 @@ bool TankAICurrentMove::makeGroupShot(Tanket *tanket,
 		Logger::log(S3D::formatStringBuffer("TankAI - Checking group shot"));
 	}
 
-	if (groupShotSize_ == 0) return false;
+	if (groupShotSize_.getValue() == 0) return false;
 	Accessory *explosionhuge = weapons->getTankAccessoryByType(tanket, "explosionhuge");
 	if (!explosionhuge) return false;
 	
@@ -853,7 +840,7 @@ bool TankAICurrentMove::makeGroupShot(Tanket *tanket,
 			float distance = 
 				(tanket->getLife().getTargetPosition().asVector() - 
 				entry.position).Magnitude();
-			if (distance < groupTargetDistance_ * 2.0f) continue;
+			if (distance < groupTargetDistance_.getValue().asFloat() * 2.0f) continue;
 			
 			// Find all tanks near this position			
 			std::list<Tanket *>::iterator toItor;
@@ -866,7 +853,7 @@ bool TankAICurrentMove::makeGroupShot(Tanket *tanket,
 				distance = 
 					(to->getLife().getTargetPosition().asVector() - 
 					entry.position).Magnitude();
-				if (distance < groupTargetDistance_)
+				if (distance < groupTargetDistance_.getValue().asFloat())
 				{
 					entry.totalDistance += distance;
 					entry.targets.push_back(to);
@@ -874,7 +861,7 @@ bool TankAICurrentMove::makeGroupShot(Tanket *tanket,
 			}
 
 			// Are there enough to warrent a shot
-			if (entry.targets.size() >= (unsigned int) groupShotSize_)
+			if (entry.targets.size() >= (unsigned int) groupShotSize_.getValue())
 			{
 				foundEntries.push_back(entry);
 			}
@@ -991,8 +978,8 @@ float TankAICurrentMove::getShotDistance(Tanket *tanket, bool projectile)
 		shotRecords_.find(tanket);
 	if (itor == shotRecords_.end())
 	{
-		if (projectile) return projectileStartDistance_;
-		else return sniperStartDistance_;
+		if (projectile) return projectileStartDistance_.getValue().asFloat();
+		else return sniperStartDistance_.getValue().asFloat();
 	}
 	else
 	{
@@ -1012,8 +999,8 @@ void TankAICurrentMove::shotAtTank(Tanket *tanket, bool projectile, float newDis
 	{
 		// Create one
 		ShotRecord record;
-		record.projectileCurrentDistance = projectileStartDistance_; 
-		record.sniperCurrentDistance = sniperStartDistance_;
+		record.projectileCurrentDistance = projectileStartDistance_.getValue().asFloat(); 
+		record.sniperCurrentDistance = sniperStartDistance_.getValue().asFloat();
 		record.position = tanket->getLife().getTargetPosition().asVector();
 		shotRecords_[tanket] = record;
 	}
@@ -1033,26 +1020,26 @@ void TankAICurrentMove::shotAtTank(Tanket *tanket, bool projectile, float newDis
 		record.projectileCurrentDistance = newDistance;
 
 		float decrement = 
-			projectileMinDecrement_ +
-			S3D_RAND * (projectileMaxDecrement_ - projectileMinDecrement_);
+			projectileMinDecrement_.getValue().asFloat() +
+			S3D_RAND * (projectileMaxDecrement_.getValue().asFloat() - projectileMinDecrement_.getValue().asFloat());
 		record.projectileCurrentDistance = 
-			S3D_MAX(projectileEndDistance_, record.projectileCurrentDistance - decrement);				
+			S3D_MAX(projectileEndDistance_.getValue().asFloat(), record.projectileCurrentDistance - decrement);				
 
-		distanceDec *= projectileMovementFactor_;
+		distanceDec *= projectileMovementFactor_.getValue().asFloat();
 		record.projectileCurrentDistance = 
-			S3D_MIN(projectileStartDistance_, record.projectileCurrentDistance + distanceDec);	
+			S3D_MIN(projectileStartDistance_.getValue().asFloat(), record.projectileCurrentDistance + distanceDec);	
 	}
 	else 
 	{
 		float decrement = 
-			sniperMinDecrement_ +
-			S3D_RAND * (sniperMaxDecrement_ - sniperMinDecrement_);
+			sniperMinDecrement_.getValue().asFloat() +
+			S3D_RAND * (sniperMaxDecrement_.getValue().asFloat() - sniperMinDecrement_.getValue().asFloat());
 		record.sniperCurrentDistance = 
-			S3D_MAX(sniperEndDistance_, record.sniperCurrentDistance - decrement);	
+			S3D_MAX(sniperEndDistance_.getValue().asFloat(), record.sniperCurrentDistance - decrement);	
 
-		distanceDec *= sniperMovementFactor_;
+		distanceDec *= sniperMovementFactor_.getValue().asFloat();
 		record.sniperCurrentDistance = 
-			S3D_MIN(sniperStartDistance_, record.sniperCurrentDistance + distanceDec);	
+			S3D_MIN(sniperStartDistance_.getValue().asFloat(), record.sniperCurrentDistance + distanceDec);	
 	}
 }
 
