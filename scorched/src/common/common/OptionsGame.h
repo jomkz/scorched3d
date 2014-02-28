@@ -425,6 +425,7 @@ public:
 	XMLEntryBool &getDebugFeaturesEntry() { return debugFeatures_; }
 protected:
 	std::list<XMLEntry *> playerTypeOptions_;
+	std::list<std::string> playerNames_;
 
 	XMLEntryBoundedInt weaponSpeed_;
 	XMLEntryBoundedInt startArmsLevel_;

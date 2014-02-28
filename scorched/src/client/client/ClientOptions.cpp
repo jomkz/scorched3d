@@ -130,7 +130,7 @@ void ClientOptions::loadDefaultValues()
 		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) (*itor);
 		if (!(entry->getData() & XMLEntry::eDataNoRestore))
 		{
-			entry->setValueFromString(entry->getDefaultValueAsString());
+			entry->resetDefaultValue();
 		}
 	}
 }

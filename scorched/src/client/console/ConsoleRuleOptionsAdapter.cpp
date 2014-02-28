@@ -79,14 +79,20 @@ ConsoleRuleOptionsAdapter::~ConsoleRuleOptionsAdapter()
 
 void ConsoleRuleOptionsAdapter::readValue(std::vector<ConsoleRuleValue> &values, unsigned int userData)
 {
-	CEGUI::String result = CEGUI::String(entry_.getName()) + " = " + entry_.getValueAsString();
+	std::string currentValue;
+	entry_.getValueAsString(currentValue);
+
+	CEGUI::String result = CEGUI::String(entry_.getName()) + " = " + currentValue;
 	console_.addLine(false, result);
 }
 
 void ConsoleRuleOptionsAdapter::writeValue(std::vector<ConsoleRuleValue> &values, unsigned int userData)
 {
 	entry_.setValueFromString(values[2].valueString);
-	CEGUI::String result = CEGUI::String(entry_.getName()) + " = " + entry_.getValueAsString();
+	std::string currentValue;
+	entry_.getValueAsString(currentValue);
+
+	CEGUI::String result = CEGUI::String(entry_.getName()) + " = " + currentValue;
 	console_.addLine(false, result);
 }
 

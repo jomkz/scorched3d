@@ -62,6 +62,7 @@ public:
 	virtual ~XMLNode();
 
 	bool writeToFile(const std::string &fileName);
+	bool writeChildrenToFile(const std::string &filename);
 	void addNodeToFile(FileLines &lines, int spacing);
 
 	NodeType getType() { return type_; }

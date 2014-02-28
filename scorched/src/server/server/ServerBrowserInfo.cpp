@@ -207,8 +207,10 @@ void ServerBrowserInfo::processInfoMessage(std::list<std::string> &reply)
 		if (!(entry->getData() & XMLEntry::eDataProtected) &&
 			!(entry->getData() & XMLEntry::eDataDepricated))
 		{
-			reply.push_back(
-				addTag(entry->getName(), entry->getValueAsString()));
+			std::string currentValue;
+			entry->getValueAsString(currentValue);
+
+			reply.push_back(addTag(entry->getName(), currentValue));
 		}
 	}	
 }

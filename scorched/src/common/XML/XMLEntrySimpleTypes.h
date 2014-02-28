@@ -44,15 +44,16 @@ public:
 	XMLEntrySimpleType(const char *name, const char *description, unsigned int data);
 	virtual ~XMLEntrySimpleType();
 
-	std::string getName() { return name_; }
-	virtual std::string getDescription() { return description_; }
-	virtual std::string getRangeDescription() { return ""; }
+	const char *getName() { return name_; }
+	const char *getDescription() { return description_; }
+	virtual void getExtraDescription(std::string &description) { }
 
 	virtual unsigned int getData() { return data_; }
 
-	virtual std::string getDefaultValueAsString() = 0;
-	virtual std::string getValueAsString() = 0;
+	virtual void getDefaultValueAsString(std::string &result) = 0;
+	virtual void getValueAsString(std::string &result) = 0;
 	virtual bool setValueFromString(const std::string &string) = 0;
+	virtual void resetDefaultValue();
 	virtual XMLEntrySimpleTypeCatagory getTypeCatagory() = 0;
 
 	// XMLEntry
@@ -96,8 +97,8 @@ public:
 		int defaultValue);
 	virtual ~XMLEntryInt();
 
-	virtual std::string getValueAsString();
-	virtual std::string getDefaultValueAsString();
+	virtual void getValueAsString(std::string &result);
+	virtual void getDefaultValueAsString(std::string &result);
 	virtual bool setValueFromString(const std::string &string);
 	virtual XMLEntrySimpleTypeCatagory getTypeCatagory() { return eSimpleNumberType; }
 
@@ -118,7 +119,7 @@ public:
 		int minValue, int maxValue, int stepValue);
 	virtual ~XMLEntryBoundedInt();
 
-	virtual std::string getRangeDescription();
+	virtual void getExtraDescription(std::string &description);
 	virtual bool setValue(int value);
 
 	int getMinValue() { return minValue_; }
@@ -148,10 +149,10 @@ public:
 	virtual ~XMLEntryEnum();
 
 	virtual bool setValue(int value);
-	virtual std::string getRangeDescription();
+	virtual void getExtraDescription(std::string &description);
 
-	virtual std::string getDefaultValueAsString();
-	virtual std::string getValueAsString();
+	virtual void getDefaultValueAsString(std::string &result);
+	virtual void getValueAsString(std::string &result);
 	virtual bool setValueFromString(const std::string &string);
 
 	XMLEntryEnum::EnumEntry *getEnums() { return enums_; }
@@ -172,8 +173,8 @@ public:
 		bool defaultValue);
 	virtual ~XMLEntryBool();
 
-	virtual std::string getValueAsString();
-	virtual std::string getDefaultValueAsString();
+	virtual void getValueAsString(std::string &result);
+	virtual void getDefaultValueAsString(std::string &result);
 	virtual bool setValueFromString(const std::string &string);
 	virtual XMLEntrySimpleTypeCatagory getTypeCatagory() { return eSimpleBooleanType; }
 
@@ -197,12 +198,12 @@ public:
 		bool multiline = false);
 	virtual ~XMLEntryString();
 
-	virtual std::string getValueAsString();
-	virtual std::string getDefaultValueAsString();
+	virtual void getValueAsString(std::string &result);
+	virtual void getDefaultValueAsString(std::string &result);
 	virtual bool setValueFromString(const std::string &string);
 	virtual XMLEntrySimpleTypeCatagory getTypeCatagory() { return eSimpleStringType; }
 
-	virtual std::string getValue();
+	virtual std::string &getValue();
 	virtual bool setValue(const std::string &value);
 
 protected:
@@ -227,7 +228,7 @@ public:
 	virtual ~XMLEntryStringEnum();
 
 	virtual bool setValue(const std::string &value);
-	virtual std::string getRangeDescription();
+	virtual void getExtraDescription(std::string &result);
 
 	virtual bool setValueFromString(const std::string &string);
 
@@ -248,8 +249,8 @@ public:
 		fixed defaultValue);
 	virtual ~XMLEntryFixed();
 
-	virtual std::string getValueAsString();
-	virtual std::string getDefaultValueAsString();
+	virtual void getValueAsString(std::string &result);
+	virtual void getDefaultValueAsString(std::string &result);
 	virtual bool setValueFromString(const std::string &string);
 	virtual XMLEntrySimpleTypeCatagory getTypeCatagory() { return eSimpleNumberType; }
 
@@ -272,8 +273,8 @@ public:
 		FixedVector defaultValue);
 	virtual ~XMLEntryFixedVector();
 
-	virtual std::string getValueAsString();
-	virtual std::string getDefaultValueAsString();
+	virtual void getValueAsString(std::string &result);
+	virtual void getDefaultValueAsString(std::string &result);
 	virtual bool setValueFromString(const std::string &string);
 	virtual XMLEntrySimpleTypeCatagory getTypeCatagory() { return eSimpleStringType; }
 

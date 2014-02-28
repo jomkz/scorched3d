@@ -364,16 +364,6 @@ OptionsGame::OptionsGame() :
 	waitForShotsBeforeShowingScore_("WaitForShotsBeforeShowingScore",
 		"Wait for all shots to be played out before showing the score dialog", 0, true)
 {
-	for (int i=0; i<24; i++)
-	{
-		std::string playerName = S3D::formatStringBuffer("PlayerType%i", i+1);
-		playerType_[i] = new XMLEntryString(
-			playerName.c_str(),
-			"The type of the player e.g. human, computer etc..", 0,
-			"Human");
-		addChildXMLEntry(playerType_[i]);
-	}
-
 	addChildXMLEntry(&weaponSpeed_, &startArmsLevel_, &endArmsLevel_, &shotTime_, &aiShotTime_);
 	addChildXMLEntry(&startTime_, &buyingTime_, &removeTime_, &roundTime_, &roundScoreTime_);
 	addChildXMLEntry(&scoreTime_, &idleCycleTime_, &allowedMissedMoves_, &numberOfRounds_, &maxRoundTurns_);
@@ -399,6 +389,17 @@ OptionsGame::OptionsGame() :
 	addChildXMLEntry(&authHandler_, &authHandlerParam1_, &authHandlerParam2_);
 	addChildXMLEntry(&serverName_, &serverPassword_, &portNo_, &managementPortNo_);
 	addChildXMLEntry(&publishAddress_, &publishServer_, &useUPnP_, &useUPnPLogging_, &allowSameIP_, &allowSameUniqueId_, &debugFeatures_);
+
+	// The type of the players
+	for (int i=0; i<24; i++)
+	{
+		playerNames_.push_back(S3D::formatStringBuffer("PlayerType%i", i+1)); // So we can pass a pointer to the string, without the string being destroyed
+		playerType_[i] = new XMLEntryString(
+			playerNames_.back().c_str(),
+			"The type of the player e.g. human, computer etc..", 0,
+			"Human");
+		addChildXMLEntry(playerType_[i]);
+	}
 }
 
 OptionsGame::~OptionsGame()

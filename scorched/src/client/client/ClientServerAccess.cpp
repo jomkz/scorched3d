@@ -39,7 +39,10 @@ int ClientServerAccess::getIntProperty(const std::string &propertyName)
 			XMLEntrySimpleType *entry = ScorchedServer::instance()->
 				getOptionsGame().getEntryByName(propertyName_);
 			DIALOG_ASSERT(entry && entry->getTypeCatagory() == XMLEntrySimpleType::eSimpleNumberType);
-			result_ = atoi(entry->getValueAsString().c_str());
+
+			std::string currentValue;
+			entry->getValueAsString(currentValue);
+			result_ = atoi(currentValue.c_str());
 		}
 
 		std::string propertyName_;
@@ -66,7 +69,7 @@ std::string ClientServerAccess::getStringProperty(const std::string &propertyNam
 			XMLEntrySimpleType *entry = ScorchedServer::instance()->
 				getOptionsGame().getEntryByName(propertyName_);
 			DIALOG_ASSERT(entry && entry->getTypeCatagory() == XMLEntrySimpleType::eSimpleStringType);
-			result_ = entry->getValueAsString();
+			entry->getValueAsString(result_);
 		}
 
 		std::string propertyName_;

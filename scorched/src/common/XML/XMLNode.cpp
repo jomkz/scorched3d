@@ -216,15 +216,26 @@ bool XMLNode::writeToFile(const std::string &filename)
 	return lines.writeFile(filename);
 }
 
+bool XMLNode::writeChildrenToFile(const std::string &filename)
+{
+	FileLines lines;
+	std::list<XMLNode *>::iterator itor = children_.begin(),
+		end = children_.end();
+	for (;itor!=end;++itor)
+	{
+		(*itor)->addNodeToFile(lines, 0);
+	}
+	return lines.writeFile(filename);
+}
+
 void XMLNode::addNodeToFile(FileLines &lines, int spacing)
 {
 	if (type_ == XMLNodeType)
 	{
 		std::string params;
-		std::list<XMLNode *>::iterator pitor;
-		for (pitor = parameters_.begin();
-			pitor != parameters_.end();
-			++pitor)
+		std::list<XMLNode *>::iterator pitor = parameters_.begin(),
+			pitorend = parameters_.end();
+		for (;pitor!=pitorend;++pitor)
 		{
 			XMLNode *node = (*pitor);
 			DIALOG_ASSERT(node->type_ == XMLParameterType);
@@ -253,10 +264,9 @@ void XMLNode::addNodeToFile(FileLines &lines, int spacing)
 				getSpacer(spacing),
 				name_.c_str(), params.c_str()));
 
-			std::list<XMLNode *>::iterator itor;
-			for (itor = children_.begin();
-				itor != children_.end();
-				++itor)
+			std::list<XMLNode *>::iterator itor = children_.begin(),
+				end = children_.end();
+			for (;itor!=end;++itor)
 			{
 				XMLNode *node = (*itor);
 				node->addNodeToFile(lines, spacing + 1);

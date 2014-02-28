@@ -61,8 +61,9 @@ void OptionsScorched::updateLevelOptions(ScorchedContext &context, LandscapeDefi
 
 		// Get the current settings value that is in use
 		XMLEntrySimpleType *currentEntry = mainEntry;
-		if (hasLevelChangedValue(currentEntry->getName().c_str())) currentEntry = levelEntry;
-		std::string oldValue = currentEntry->getValueAsString();
+		if (hasLevelChangedValue(currentEntry->getName())) currentEntry = levelEntry;
+		std::string oldValue;
+		currentEntry->getValueAsString(oldValue);
 
 		// If this level entry has changed set its new value
 		currentEntry = mainEntry;
@@ -71,7 +72,9 @@ void OptionsScorched::updateLevelOptions(ScorchedContext &context, LandscapeDefi
 		if (findItor != values.end())
 		{
 			currentEntry = levelEntry;
-			levelEntry->setValueFromString((*findItor).second->getValueAsString());
+			std::string currentValue;
+			(*findItor).second->getValueAsString(currentValue);
+			levelEntry->setValueFromString(currentValue);
 			changedOptionNames_.insert(mainEntry->getName());
 		}
 		else
@@ -81,7 +84,8 @@ void OptionsScorched::updateLevelOptions(ScorchedContext &context, LandscapeDefi
 		}
 
 		// Find out the new settings value that is in use 
-		std::string newValue = currentEntry->getValueAsString();
+		std::string newValue;
+		currentEntry->getValueAsString(newValue);
 
 		// Log if the value has changed
 		if (0 != strcmp(newValue.c_str(), oldValue.c_str()))
@@ -152,10 +156,12 @@ bool OptionsScorched::commitChanges()
 		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) *itor;
 		XMLEntrySimpleType *otherentry = (XMLEntrySimpleType *) *otheritor;
 
-		DIALOG_ASSERT(entry->getName() == otherentry->getName());
+		DIALOG_ASSERT(0 == strcmp(entry->getName(), otherentry->getName()));
 
-		std::string str = entry->getValueAsString();
-		std::string otherstr = otherentry->getValueAsString();
+		std::string str;
+		entry->getValueAsString(str);
+		std::string otherstr;
+		otherentry->getValueAsString(otherstr);
 		if (str != otherstr)
 		{
 			if (!(entry->getData() & XMLEntry::eDataProtected) &&
@@ -174,7 +180,7 @@ bool OptionsScorched::commitChanges()
 			}
 
 			different = true;
-			entry->setValueFromString(otherentry->getValueAsString());
+			entry->setValueFromString(otherstr);
 		}
 	}
 

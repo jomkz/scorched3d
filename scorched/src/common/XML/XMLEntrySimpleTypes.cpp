@@ -45,7 +45,7 @@ bool XMLEntrySimpleType::readXML(XMLNode *parentNode)
 		if (!setValueFromString(foundNode->getContent()))
 		{
 			return foundNode->returnError(S3D::formatStringBuffer(
-				"Failed to set XML etry \"%s\" with \"%s\"",
+				"Failed to set XML entry \"%s\" with \"%s\"",
 				name_, foundNode->getContent()));
 		}
 	}
@@ -63,23 +63,37 @@ void XMLEntrySimpleType::writeXML(XMLNode *parentNode)
 	bool required = data_ & eDataRequired;
 	std::string name = getName(),
 		description = getDescription(),
-		defaultValue = getDefaultValueAsString(), 
-		rangeDescription = getRangeDescription();
+		currentValue,
+		defaultValue,
+		rangeDescription;
+
+	getExtraDescription(rangeDescription);
+	getValueAsString(currentValue);
+	getDefaultValueAsString(defaultValue);
+
 	if (rangeDescription.length() > 0) rangeDescription = " (" + rangeDescription + ")";
 
 	// Add the comments for this node
 	parentNode->addChild(new XMLNode("", 
-		S3D::formatStringBuffer("%s%s.  %s%s", 
+		S3D::formatStringBuffer("%s - %s%s.  %s%s", 
+		name_,
 		description.c_str(), rangeDescription.c_str(),
 		required?"Required.  ":"Optional, default value ",
 		required?"":defaultValue.c_str()), 
 		XMLNode::XMLCommentType));
 
-	if (getValueAsString() == getDefaultValueAsString()) return;
+	if (currentValue == defaultValue) return;
 
 	// Add the actual node
-	XMLNode *newNode = new XMLNode(name_, getValueAsString());
+	XMLNode *newNode = new XMLNode(name_, currentValue);
 	parentNode->addChild(newNode);
+}
+
+void XMLEntrySimpleType::resetDefaultValue()
+{
+	std::string defaultValue;
+	getDefaultValueAsString(defaultValue);
+	setValueFromString(defaultValue);
 }
 
 bool XMLEntrySimpleType::setBoolArgument(const char *strValue, bool value)
@@ -136,10 +150,13 @@ bool XMLEntrySimpleGroup::writeToBuffer(NetBuffer &buffer, bool useProtected)
 		if (!(entry->getData() & XMLEntry::eDataProtected) || useProtected)
 		{
 			// Optimization, only send options that have changed from thier default
-			if (entry->getValueAsString() != entry->getDefaultValueAsString())
+			std::string currentValue, defaultValue;
+			entry->getValueAsString(currentValue);
+			entry->getDefaultValueAsString(defaultValue);
+			if (currentValue != defaultValue)
 			{
 				buffer.addToBuffer(entry->getName());
-				buffer.addToBuffer(entry->getValueAsString());
+				buffer.addToBuffer(currentValue);
 			}
 		}
 	}
@@ -163,10 +180,14 @@ bool XMLEntrySimpleGroup::readFromBuffer(NetBufferReader &reader, bool useProtec
 			std::string name = entry->getName();
 			entryMap[name] = entry;
 
+			std::string currentValue, defaultValue;
+			entry->getValueAsString(currentValue);
+			entry->getDefaultValueAsString(defaultValue);
+
 			// Reset to the default value as only the non-default values are sent
-			if (entry->getValueAsString() != entry->getDefaultValueAsString())
+			if (currentValue != defaultValue)
 			{
-				entry->setValueFromString(entry->getDefaultValueAsString());
+				entry->setValueFromString(defaultValue);
 			}
 		}
 	}
@@ -189,7 +210,7 @@ bool XMLEntrySimpleGroup::readFromBuffer(NetBufferReader &reader, bool useProtec
 		else
 		{
 			XMLEntrySimpleType *entry = (*finditor).second;
-			if (!entry->setValueFromString(value.c_str())) return false;
+			if (!entry->setValueFromString(value)) return false;
 		}
 	}
 
@@ -198,11 +219,10 @@ bool XMLEntrySimpleGroup::readFromBuffer(NetBufferReader &reader, bool useProtec
 
 bool XMLEntrySimpleGroup::writeToFile(const std::string &filePath)
 {
-	XMLNode tmpNode("tmp");
-	writeXML(&tmpNode);
-	if (tmpNode.getChildren().empty()) return false;
-	XMLNode *rootNode = tmpNode.getChildren().front();
-	if (!rootNode->writeToFile(filePath.c_str())) return false;
+	XMLNode documentNode("document");
+	writeXML(&documentNode);
+	if (documentNode.getChildren().empty()) return false;
+	if (!documentNode.writeChildrenToFile(filePath.c_str())) return false;
 	return true;
 }
 
@@ -235,16 +255,17 @@ void XMLEntrySimpleGroup::addToArgParser(ARGParser &parser)
 	for (;itor!=end;++itor)
 	{
 		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) *itor;
-		char name[256], description[1024];
-			snprintf(name, 256, "-%s", entry->getName().c_str());
-			snprintf(description, 1024, "%s (Default : %s)",
-				(char *) entry->getDescription().c_str(), 
-				(char *) entry->getDefaultValueAsString().c_str());
+
+		std::string name = std::string("-") +  entry->getName();
+		std::string defaultValue;
+		entry->getDefaultValueAsString(defaultValue);
+		std::string description = S3D::formatStringBuffer("%s (Default : %s)",
+			entry->getDescription(), defaultValue.c_str());
 
 		switch (entry->getTypeCatagory())
 		{
 		case XMLEntrySimpleType::eSimpleNumberType:
-			parser.addEntry(name , (ARGParserIntI *) entry, description);
+			parser.addEntry(name, (ARGParserIntI *) entry, description);
 			break;
 		case XMLEntrySimpleType::eSimpleStringType:
 			parser.addEntry(name , (ARGParserStringI *) entry, description);
@@ -276,14 +297,14 @@ XMLEntryInt::~XMLEntryInt()
 
 }
 
-std::string XMLEntryInt::getValueAsString()
+void XMLEntryInt::getValueAsString(std::string &result)
 {
-	return S3D::formatStringBuffer("%i", value_);
+	result = S3D::formatStringBuffer("%i", value_);
 }
 
-std::string XMLEntryInt::getDefaultValueAsString()
+void XMLEntryInt::getDefaultValueAsString(std::string &result)
 {
-	return S3D::formatStringBuffer("%i", defaultValue_);
+	result = S3D::formatStringBuffer("%i", defaultValue_);
 }
 
 bool XMLEntryInt::setValueFromString(const std::string &string)
@@ -318,9 +339,9 @@ XMLEntryBoundedInt::~XMLEntryBoundedInt()
 {
 }
 
-std::string XMLEntryBoundedInt::getRangeDescription()
+void XMLEntryBoundedInt::getExtraDescription(std::string &result)
 {
-	return S3D::formatStringBuffer("Max = %i, Min = %i", getMaxValue(), getMinValue());
+	result = S3D::formatStringBuffer("Max = %i, Min = %i", getMaxValue(), getMinValue());
 }
 
 bool XMLEntryBoundedInt::setValue(int value)
@@ -343,22 +364,20 @@ XMLEntryEnum::~XMLEntryEnum()
 {
 }
 
-std::string XMLEntryEnum::getRangeDescription()
+void XMLEntryEnum::getExtraDescription(std::string &result)
 {
-	std::string result;
 	result = "possible values = [";
-	for (EnumEntry *current = enums_; current->description[0]; current++)
+	for (EnumEntry *current = enums_; !current->description.empty(); current++)
 	{
 		result += S3D::formatStringBuffer(" \"%s\" ",
 			current->description.c_str(), current->value);
 	}
 	result += "]";
-	return result;
 }
 
 bool XMLEntryEnum::setValue(int value)
 {
-	for (EnumEntry *current = enums_; current->description[0]; current++)
+	for (EnumEntry *current = enums_; !current->description.empty(); current++)
 	{
 		if (current->value == value)
 		{
@@ -368,33 +387,35 @@ bool XMLEntryEnum::setValue(int value)
 	return false;
 }
 
-std::string XMLEntryEnum::getDefaultValueAsString()
+void XMLEntryEnum::getDefaultValueAsString(std::string &result)
 {
-	for (EnumEntry *current = enums_; current->description[0]; current++)
+	for (EnumEntry *current = enums_; !current->description.empty(); current++)
 	{
 		if (current->value == defaultValue_)
 		{
-			return current->description;
+			result = current->description;
+			return;
 		}
 	}
-	return "-";
+	result = "-";
 }
 
-std::string XMLEntryEnum::getValueAsString()
+void XMLEntryEnum::getValueAsString(std::string &result)
 {
-	for (EnumEntry *current = enums_; current->description[0]; current++)
+	for (EnumEntry *current = enums_; !current->description.empty(); current++)
 	{
 		if (current->value == value_)
 		{
-			return current->description;
+			result = current->description;
+			return;
 		}
 	}
-	return "-";
+	result = "-";
 }
 
 bool XMLEntryEnum::setValueFromString(const std::string &string)
 {
-	for (EnumEntry *current = enums_; current->description[0]; current++)
+	for (EnumEntry *current = enums_; !current->description.empty(); current++)
 	{
 		if (current->description == string)
 		{
@@ -406,7 +427,9 @@ bool XMLEntryEnum::setValueFromString(const std::string &string)
 	int val;
 	if (sscanf(string.c_str(), "%i", &val) != 1)
 	{
-		return setValueFromString(getDefaultValueAsString());
+		std::string defaultValue;
+		getDefaultValueAsString(defaultValue);
+		return setValueFromString(defaultValue);
 	}
 	return setValue(val);
 }
@@ -433,14 +456,14 @@ XMLEntryBool::~XMLEntryBool()
 	
 }
 
-std::string XMLEntryBool::getDefaultValueAsString()
+void XMLEntryBool::getDefaultValueAsString(std::string &result)
 {
-	return (defaultValue_?"true":"false");
+	result = (defaultValue_?"true":"false");
 }
 
-std::string XMLEntryBool::getValueAsString()
+void XMLEntryBool::getValueAsString(std::string &result)
 {
-	return (value_?"true":"false");
+	result = (value_?"true":"false");
 }
 
 bool XMLEntryBool::setValueFromString(const std::string &string)
@@ -493,14 +516,14 @@ XMLEntryString::~XMLEntryString()
 
 }
 
-std::string XMLEntryString::getValueAsString()
+void XMLEntryString::getValueAsString(std::string &result)
 {
-	return value_;
+	result = value_;
 }
 
-std::string XMLEntryString::getDefaultValueAsString()
+void XMLEntryString::getDefaultValueAsString(std::string &result)
 {
-	return defaultValue_;
+	result = defaultValue_;
 }
 
 bool XMLEntryString::setValueFromString(const std::string &string)
@@ -508,7 +531,7 @@ bool XMLEntryString::setValueFromString(const std::string &string)
 	return setValue(string);
 }
 
-std::string XMLEntryString::getValue() 
+std::string &XMLEntryString::getValue() 
 {
 	return value_;
 }
@@ -533,22 +556,20 @@ XMLEntryStringEnum::~XMLEntryStringEnum()
 {
 }
 
-std::string XMLEntryStringEnum::getRangeDescription()
+void XMLEntryStringEnum::getExtraDescription(std::string &result)
 {
-	std::string result;
 	result = "possible values = [";
-	for (EnumEntry *current = enums_; current->value[0]; current++)
+	for (EnumEntry *current = enums_; !current->value.empty(); current++)
 	{
 		result += S3D::formatStringBuffer(" \"%s\" ",
 			current->value.c_str());
 	}
 	result += "]";
-	return result;
 }
 
 bool XMLEntryStringEnum::setValue(const std::string &value)
 {
-	for (EnumEntry *current = enums_; current->value[0]; current++)
+	for (EnumEntry *current = enums_; !current->value.empty(); current++)
 	{
 		if (current->value == value)
 		{
@@ -585,14 +606,14 @@ XMLEntryFixed::~XMLEntryFixed()
 
 }
 
-std::string XMLEntryFixed::getValueAsString()
+void XMLEntryFixed::getValueAsString(std::string &result)
 {
-	return value_.asString();
+	result = value_.asString();
 }
 
-std::string XMLEntryFixed::getDefaultValueAsString()
+void XMLEntryFixed::getDefaultValueAsString(std::string &result)
 {
-	return defaultValue_.asString();
+	result = defaultValue_.asString();
 }
 
 bool XMLEntryFixed::setValueFromString(const std::string &string)
@@ -633,28 +654,22 @@ XMLEntryFixedVector::~XMLEntryFixedVector()
 
 }
 
-std::string XMLEntryFixedVector::getValueAsString()
+void XMLEntryFixedVector::getValueAsString(std::string &result)
 {
 	std::string a = value_[0].asString();
 	std::string b = value_[1].asString();
 	std::string c = value_[2].asString();
 
-	char value[256];
-	snprintf(value, 256, "%s %s %s", 
-		a.c_str(), b.c_str(), c.c_str());
-	return value;
+	result = a + " " + b + " " + c;
 }
 
-std::string XMLEntryFixedVector::getDefaultValueAsString()
+void XMLEntryFixedVector::getDefaultValueAsString(std::string &result)
 {
 	std::string a = defaultValue_[0].asString();
 	std::string b = defaultValue_[1].asString();
 	std::string c = defaultValue_[2].asString();
 
-	char value[256];
-	snprintf(value, 256, "%s %s %s", 
-		a.c_str(), b.c_str(), c.c_str());
-	return value;
+	result = a + " " + b + " " + c;
 }
 
 bool XMLEntryFixedVector::setValueFromString(const std::string &string)

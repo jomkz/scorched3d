@@ -197,7 +197,12 @@ void ScorchedServer::startServerInternal(ScorchedServerSettings *settings,
 		ScorchedServerSettingsOptions *options = (ScorchedServerSettingsOptions *) settings;
 
 		// Load options
-		getOptionsGame().getMainOptions().readFromFile(options->settingsFile_);
+		if (!getOptionsGame().getMainOptions().readFromFile(options->settingsFile_))
+		{
+			S3D::dialogExit("Scorched3D", 
+				S3D::formatStringBuffer("ScorchedServer::startServerInternal - Failed to read server settings file : %s",
+				options->settingsFile_.c_str()));
+		}
 		if (options->rewriteOptions_)
 		{
 			getOptionsGame().getMainOptions().writeToFile(options->settingsFile_);

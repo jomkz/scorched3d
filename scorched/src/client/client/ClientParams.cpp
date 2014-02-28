@@ -69,12 +69,12 @@ ClientParams::~ClientParams()
 
 void ClientParams::reset()
 {
-	connectAcceptDefaults_.setValueFromString(connectAcceptDefaults_.getDefaultValueAsString());
-	connect_.setValueFromString(connect_.getDefaultValueAsString());
-	client_.setValueFromString(client_.getDefaultValueAsString());
-	startcustom_.setValueFromString(startcustom_.getDefaultValueAsString());
-	save_.setValueFromString(save_.getDefaultValueAsString());
-	username_.setValueFromString(username_.getDefaultValueAsString());
-	password_.setValueFromString(password_.getDefaultValueAsString());
-	exittime_.setValueFromString(exittime_.getDefaultValueAsString());
+	connectAcceptDefaults_.resetDefaultValue();
+	connect_.resetDefaultValue();
+	client_.resetDefaultValue();
+	startcustom_.resetDefaultValue();;
+	save_.resetDefaultValue();
+	username_.resetDefaultValue();
+	password_.resetDefaultValue();
+	exittime_.resetDefaultValue();
 }
