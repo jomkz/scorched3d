@@ -162,7 +162,9 @@ void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, long tx, long ty)
 
 	// Try enabling a color map for color variation
 	Ogre::Image colourMapImage;
-	colourMapImage.load("seemlessnoise.jpg", terrain->getResourceGroup());
+	colourMapImage.load("colormap.jpg", terrain->getResourceGroup());
+    if (tx % 2 == 0) colourMapImage.flipAroundY();
+    if (ty % 2 == 0) colourMapImage.flipAroundX();
 	terrain->setGlobalColourMapEnabled(true, colourMapImage.getWidth());
 	Ogre::TexturePtr colourMap  = terrain->getGlobalColourMap();
 	colourMap->loadImage(colourMapImage);
