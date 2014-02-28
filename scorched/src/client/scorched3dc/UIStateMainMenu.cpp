@@ -36,18 +36,16 @@ UIStateMainMenu::~UIStateMainMenu()
 void UIStateMainMenu::createState()
 {
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-	CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
-
 	{
-		CEGUI::Window *start = wmgr.createWindow("OgreTray/Button", "CEGUIDemo/StartButton");
+		CEGUI::Window *start = wmgr.createWindow("OgreTray/Button", "StartButton");
 		start->setText("Start");
 		start->setPosition(CEGUI::UVector2(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.00f, 0.0f)));
 		start->setSize(CEGUI::USize(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.05f, 0.0f)));
 		start->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&UIStateMainMenu::start, this));
-		sheet->addChild(start);
-	}
 
-	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
+		CEGUI::Window *root = CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
+		root->addChild(start);
+	}
 }
 
 bool UIStateMainMenu::start(const CEGUI::EventArgs &e)
@@ -60,6 +58,7 @@ bool UIStateMainMenu::start(const CEGUI::EventArgs &e)
 
 void UIStateMainMenu::destroyState()
 {
+	CEGUI::Window *root = CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-	wmgr.destroyAllWindows();
+	wmgr.destroyWindow(root->getChild("StartButton"));
 }

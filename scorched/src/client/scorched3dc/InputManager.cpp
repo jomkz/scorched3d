@@ -88,6 +88,13 @@ bool InputManager::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	keyboard_->capture();
 	mouse_->capture();
 
+	// Allow CEGUI to know about the passing of time
+	if (CEGUI::System::getSingletonPtr())
+	{
+		CEGUI::System::getSingleton().injectTimePulse(evt.timeSinceLastFrame);
+		CEGUI::System::getSingleton().getDefaultGUIContext().injectTimePulse(evt.timeSinceLastFrame);
+	}
+
 	return true;
 }
 

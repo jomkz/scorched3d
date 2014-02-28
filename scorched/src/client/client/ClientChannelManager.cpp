@@ -56,17 +56,17 @@ bool ClientChannelManager::ChannelEntry::hasChannel(const std::string &channel)
 
 unsigned int ClientChannelManager::nextRecieverId_ = 0;
 
-ClientChannelManager::ClientChannelManager(ComsMessageHandler &comsMessageHandler)
+ClientChannelManager::ClientChannelManager(ComsMessageHandler &comsMessageHandler, Console &console)
 {
-	new ComsMessageHandlerIAdapter<ClientChannelManager>(
+	channelMessageTypeAdapter_ = new ComsMessageHandlerIAdapter<ClientChannelManager>(
 		this, &ClientChannelManager::processChannelMessage,
 		ComsChannelMessage::ComsChannelMessageType,
 		comsMessageHandler);
-	new ComsMessageHandlerIAdapter<ClientChannelManager>(
+	channelTextMessageTypeAdapter_ = new ComsMessageHandlerIAdapter<ClientChannelManager>(
 		this, &ClientChannelManager::processChannelTextMessage,
 		ComsChannelTextMessage::ComsChannelTextMessageType,
 		comsMessageHandler);
-	new ConsoleRuleMethodIAdapterEx<ClientChannelManager>(
+	consoleRule_ = new ConsoleRuleMethodIAdapterEx<ClientChannelManager>(console,
 		this, &ClientChannelManager::say, "Say", 
 		ConsoleUtil::formParams(
 		ConsoleRuleParam("channel", ConsoleRuleTypeString),
@@ -75,6 +75,9 @@ ClientChannelManager::ClientChannelManager(ComsMessageHandler &comsMessageHandle
 
 ClientChannelManager::~ClientChannelManager()
 {
+	delete channelMessageTypeAdapter_;
+	delete channelTextMessageTypeAdapter_;
+	delete consoleRule_;
 }
 
 bool ClientChannelManager::registerClient(ClientChannelManagerI *reciever,

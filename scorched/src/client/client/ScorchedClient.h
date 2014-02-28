@@ -24,15 +24,19 @@
 #include <engine/ScorchedContext.h>
 #include <common/fixed.h>
 
+class ComsMessageHandlerI;
 class ParticleEngine;
 class SimulatorGameState;
 class ThreadCallback;
 class ClientUISync;
+class ClientUISyncExternal;
 class ClientState;
 class ClientSimulator;
 class ClientHandlers;
 class ClientMessageHandler;
 class ClientChannelManager;
+class ClientAdmin;
+class Console;
 class ProgressCounter;
 class ScorchedClient : public ScorchedContext
 {
@@ -53,20 +57,29 @@ public:
 	ClientSimulator &getClientSimulator() { return *clientSimulator_; }
 	ClientHandlers &getClientHandlers() { return *clientHandlers_; }
 	ClientChannelManager &getClientChannelManager() { return *channelManager_; }
+	Console &getConsole() { return *console_; }
+	ClientUISync &getClientUISync() { return *clientUISync_; }
+	ClientAdmin &getClientAdmin() { return *clientAdmin_; }
 	static ThreadCallback &getClientThreadCallback() { return *threadCallback_; }
-	static ClientUISync &getClientUISync() { return *clientUISync_; }
+	static ClientUISyncExternal &getClientUISyncExternal() { return *clientUISyncExternal_; }
 
 protected:
 	static ScorchedClient *instance_;
 	static TargetSpace *targetSpace_;
 	static ThreadCallback *threadCallback_;
-	static ClientUISync *clientUISync_;
+	static ClientUISyncExternal *clientUISyncExternal_;
+	ClientUISync *clientUISync_;
 	ParticleEngine* particleEngine_;
+	ClientAdmin *clientAdmin_;
 	ClientState *clientState_;
 	ClientSimulator *clientSimulator_;
 	ClientHandlers *clientHandlers_;
 	ClientMessageHandler *clientMessageHandler_;
 	ClientChannelManager *channelManager_;
+	Console *console_;
+
+	ComsMessageHandlerI *processComsSimulateMessageAdapter_;
+	ComsMessageHandlerI *processNetStatMessageAdapter_;
 
 	static void startClientInternalStatic(ScorchedClient *instance, ProgressCounter *counter);
 	void startClientInternal(ProgressCounter *counter);

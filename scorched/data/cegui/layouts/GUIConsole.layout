@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout version="4" >
+    <Window type="OgreTray/FrameWindow" name="ConsoleRoot" >
+        <Property name="Area" value="{{0,0},{0,0},{0.3,209},{0.3,97}}" />
+        <Property name="Font" value="DejaVuSans-10" />
+        <Property name="Text" value="Console" />
+        <Property name="Alpha" value="0.8" />
+        <Property name="DragDropTarget" value="False" />
+        <AutoWindow namePath="__auto_closebutton__" >
+            <Property name="NonClient" value="True" />
+        </AutoWindow>
+        <Window type="OgreTray/Listbox" name="DisplayLines" >
+            <Property name="Area" value="{{0,2},{0,2},{1,-2},{1,-29}}" />
+            <Property name="Font" value="DejaVuSans-8" />
+            <AutoWindow namePath="__auto_hscrollbar__" >
+                <AutoWindow namePath="__auto_incbtn__" >
+                    <Property name="Visible" value="False" />
+                </AutoWindow>
+                <AutoWindow namePath="__auto_decbtn__" >
+                    <Property name="Visible" value="False" />
+                </AutoWindow>
+            </AutoWindow>
+            <AutoWindow namePath="__auto_vscrollbar__" >
+                <AutoWindow namePath="__auto_incbtn__" >
+                    <Property name="Visible" value="False" />
+                </AutoWindow>
+                <AutoWindow namePath="__auto_decbtn__" >
+                    <Property name="Visible" value="False" />
+                </AutoWindow>
+            </AutoWindow>
+        </Window>
+        <Window type="OgreTray/Editbox" name="EditBox" >
+            <Property name="Area" value="{{0,2},{1,-27},{1,-70},{1,-2}}" />
+            <Property name="Font" value="DejaVuSans-10" />
+        </Window>
+        <Window type="OgreTray/Button" name="AddButton" >
+            <Property name="Area" value="{{1,-68},{1,-27},{1,-2},{1,-2}}" />
+            <Property name="Font" value="DejaVuSans-10" />
+            <Property name="Text" value="Add" />
+        </Window>
+    </Window>
+</GUILayout>

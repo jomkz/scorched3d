@@ -4171,7 +4171,7 @@
         </StateImagery>
     </WidgetLook>
     <!--
-:::: Basic Listbox Item.  This is the XML side of CE's Über-hack for getting the
+:::: Basic Listbox Item.  This is the XML side of CE's Ãber-hack for getting the
 :::: non-window based ListboxItem to render via a Falagard skin.  This is
 :::: largely a clone of the skin for ItemEntry, except the text colours are not
 :::: configurable; there are ways that could be done, but for this skin, perhaps

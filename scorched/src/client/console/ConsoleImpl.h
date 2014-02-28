@@ -21,46 +21,39 @@
 #if !defined(AFX_ConsoleImpl_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)
 #define AFX_ConsoleImpl_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_
 
-#include <common/LoggerI.h>
 #include <console/Console.h>
 #include <console/ConsoleMethods.h>
-#include <console/ConsoleLines.h>
 #include <console/ConsoleRules.h>
+#include <client/ClientUISync.h>
 
-class ConsoleImpl : public LoggerI, public Console
+class GUIConsoleWriteAction : public ClientUISyncAction 
+{
+public:
+	GUIConsoleWriteAction(const CEGUI::String &text);
+	virtual ~GUIConsoleWriteAction();
+	
+	// ClientUISyncAction
+	virtual void performUIAction();
+
+private:
+	CEGUI::String text_;
+};
+
+class ConsoleImpl : public Console
 {
 public:
 	ConsoleImpl();
 	virtual ~ConsoleImpl();
 
-	virtual void init();
-
 	virtual void addRule(ConsoleRule *rule) { rules_.addRule(rule); }
 	virtual void removeRule(ConsoleRule *rule) { rules_.removeRule(rule); }
 
-	virtual void addLine(bool parse, const std::string &line);
-	virtual void clear() { lines_.clear(); }
+	virtual void addLine(bool parse, const CEGUI::String &line);
 	virtual void help();
 
-	std::deque<ConsoleLine *> &getLines() { return lines_.getLines(); }
-
-	// Inherited from LoggerI
-	virtual void logMessage(LoggerInfo &info);
-
 protected:
-	float height_;
-	bool opening_;
-	bool showCursor_;
-	ConsoleLines lines_;
 	ConsoleRules rules_;
 	ConsoleMethods methods_;
-	std::string currentLine_;
-	int historyPosition_;
-	std::deque<std::string> history_;
-
-	void resetPositions();
-	void drawBackdrop(float width, float top);
-	void drawText(float width, float top);
 };
 
 #endif // !defined(AFX_ConsoleImpl_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)

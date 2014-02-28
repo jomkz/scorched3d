@@ -26,19 +26,11 @@
 class Console
 {
 public:
-	static Console *instance();
-
-	virtual void init() = 0;
-
 	virtual void addRule(ConsoleRule *rule) = 0;
 	virtual void removeRule(ConsoleRule *rule) = 0;
 
-	virtual void addLine(bool parse, const std::string &line) = 0;
-	virtual void clear() = 0;
+	virtual void addLine(bool parse, const CEGUI::String &line) = 0;
 	virtual void help() = 0;
-
-private:
-	static Console *instance_;
 };
 
 #endif // !defined(AFX_Console_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)

@@ -26,18 +26,20 @@
 
 ClientConnectionRejectHandler::ClientConnectionRejectHandler(ComsMessageHandler &comsMessageHandler)
 {
-	comsMessageHandler.addHandler(
-		ComsConnectRejectMessage::ComsConnectRejectMessageType,
-		this);
+	comsConnectRejectMessageTypeAdapter_ =
+		new ComsMessageHandlerIAdapter<ClientConnectionRejectHandler>(
+			this, &ClientConnectionRejectHandler::processMessage,
+			ComsConnectRejectMessage::ComsConnectRejectMessageType,
+			comsMessageHandler);
 }
 
 ClientConnectionRejectHandler::~ClientConnectionRejectHandler()
 {
+	delete comsConnectRejectMessageTypeAdapter_;
 }
 
 bool ClientConnectionRejectHandler::processMessage(
 	NetMessage &netNessage,
-	const char *messageType,
 	NetBufferReader &reader)
 {
 	ComsConnectRejectMessage message;

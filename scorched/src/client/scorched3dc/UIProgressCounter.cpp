@@ -48,6 +48,7 @@ void UIProgressThreadCallback::callbackInvoked()
 	{
 		progressBar->setProgress(percentage_);
 	}
+	delete this;
 }
 
 ProgressCounter *UIProgressCounter::instance_(0);

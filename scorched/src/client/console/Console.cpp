@@ -19,12 +19,4 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <console/Console.h>
-#include <console/ConsoleImpl.h>
 
-Console *Console::instance_ = 0;
-
-Console *Console::instance()
-{
-	if (!instance_) instance_ = new ConsoleImpl();
-	return instance_;
-}

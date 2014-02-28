@@ -23,12 +23,14 @@
 class TestClass
 {
 public:
-	TestClass() 
+	TestClass(Console &console) 
 	{
 		new ConsoleRuleMethodIAdapter<TestClass>(
+			console,
 			this, &TestClass::test2, 
 			"test2", std::vector<ConsoleRuleParam>());
 		new ConsoleRuleMethodIAdapterEx<TestClass>(
+			console,
 			this, &TestClass::test, 
 			"test", std::vector<ConsoleRuleParam>());
 	}

@@ -57,15 +57,12 @@ void ThreadCallback::processCallbacks()
 	{
 		ThreadCallbackI *callback = callbacks_.back();
 		callbacks_.pop_back();
+		ThreadCallbackISync *sync = callback->sync;
 		callback->callbackInvoked();
-		if (callback->sync)
+		if (sync)
 		{
-			callback->sync->wait_ = false;
-			callback->sync->cond_.notify_one();
-		}
-		else
-		{
-			delete callback;
+			sync->wait_ = false;
+			sync->cond_.notify_one();
 		}
 	}
 	callbackOutstanding_ = false;

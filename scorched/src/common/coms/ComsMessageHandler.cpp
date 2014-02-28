@@ -54,12 +54,24 @@ void ComsMessageHandler::addHandler(ComsMessageType &comsMessageType,
 	recvHandlers_[id] = handler;
 }
 
+void ComsMessageHandler::removeHandler(ComsMessageType &comsMessageType)
+{
+	unsigned int id = comsMessageType.getId();
+	recvHandlers_[id] = 0;
+}
+
 void ComsMessageHandler::addSentHandler(ComsMessageType &comsMessageType,
 		ComsMessageHandlerI *handler)
 {
 	unsigned int id = comsMessageType.getId();
 	if (sentHandlers_.size() < id + 1) sentHandlers_.resize(id + 1);
 	sentHandlers_[id] = handler;
+}
+
+void ComsMessageHandler::removeSentHandler(ComsMessageType &comsMessageType)
+{
+	unsigned int id = comsMessageType.getId();
+	sentHandlers_[id] = 0;
 }
 
 void ComsMessageHandler::processMessage(NetMessage &message)

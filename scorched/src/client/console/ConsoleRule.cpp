@@ -204,6 +204,24 @@ bool ConsoleRule::matchesPartialParams(std::vector<ConsoleRuleValue> &values)
 	return true;
 }
 
+ConsoleRuleDeleter::ConsoleRuleDeleter()
+{
+}
+
+ConsoleRuleDeleter::~ConsoleRuleDeleter()
+{
+	while (!rules_.empty())
+	{
+		delete rules_.back();
+		rules_.pop_back();
+	}
+}
+
+void ConsoleRuleDeleter::addRule(ConsoleRule *rule)
+{
+	rules_.push_back(rule);
+}
+
 std::vector<ConsoleRuleParam> ConsoleUtil::formParams(
 	const ConsoleRuleParam &param1)
 {

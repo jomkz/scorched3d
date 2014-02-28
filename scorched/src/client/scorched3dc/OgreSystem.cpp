@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <scorched3dc/OgreSystem.h>
+#include <scorched3dc/GUIConsole.h>
 
 OgreSystem::OgreSystem() : 
 	ogreRoot_(0), ogreWindow_(0),
@@ -114,6 +115,7 @@ void OgreSystem::loadResources()
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/cegui/fonts", "FileSystem", "Fonts");
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/cegui/schemes", "FileSystem", "Schemes");
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/cegui/looknfeel", "FileSystem", "LookNFeel");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/cegui/layouts", "FileSystem", "Layouts");
 
 	// SkyX
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/skyx", "FileSystem", "SkyX");
@@ -135,8 +137,14 @@ bool OgreSystem::createUI()
 	CEGUI::WindowManager::setDefaultResourceGroup("Layouts");
 
 	CEGUI::SchemeManager::getSingleton().createFromFile("OgreTray.scheme");
-	//CEGUI::System::getSingleton().getDefaultGUIContext().setMsetDefaultMouseCursor("OgreTrayImages", "MouseArrow");
+	CEGUI::System::getSingleton().getDefaultGUIContext().setDefaultFont("DejaVuSans-10");
+	CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage("OgreTrayImages/MouseArrow");
+	CEGUI::System::getSingleton().getDefaultGUIContext().setDefaultTooltipType("OgreTray/Tooltip");
 
+	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
+	CEGUI::Window *root = wmgr.loadLayoutFromFile("Root.layout");
+	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(root);
+	GUIConsole::instance()->setVisible(true);
 	return true;
 }
 

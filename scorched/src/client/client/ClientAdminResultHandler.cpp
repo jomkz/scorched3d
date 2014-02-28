@@ -26,18 +26,20 @@
 
 ClientAdminResultHandler::ClientAdminResultHandler(ComsMessageHandler &comsMessageHandler) : sid_(0)
 {
-	comsMessageHandler.addHandler(
-		ComsAdminResultMessage::ComsAdminResultMessageType,
-		this);
+	comsAdminResultMessageTypeAdapter_ =
+		new ComsMessageHandlerIAdapter<ClientAdminResultHandler>(
+			this, &ClientAdminResultHandler::processMessage,
+			ComsAdminResultMessage::ComsAdminResultMessageType,
+			comsMessageHandler);
 }
 
 ClientAdminResultHandler::~ClientAdminResultHandler()
 {
+	delete comsAdminResultMessageTypeAdapter_;
 }
 
 bool ClientAdminResultHandler::processMessage(
 	NetMessage &netMessage,
-	const char *messageType,
 	NetBufferReader &reader)
 {
 	ComsAdminResultMessage message;

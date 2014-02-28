@@ -29,7 +29,7 @@
 class ClientChannelManager 
 {
 public:
-	ClientChannelManager(ComsMessageHandler &comsMessageHandler);
+	ClientChannelManager(ComsMessageHandler &comsMessageHandler, Console &console);
 	virtual ~ClientChannelManager();
 
 	void showText(const ChannelText &text);
@@ -69,6 +69,9 @@ protected:
 
 	std::set<unsigned int> mutedPlayers_;
 	std::map<unsigned int, ChannelEntry *> recievers_;
+	ComsMessageHandlerI *channelMessageTypeAdapter_;
+	ComsMessageHandlerI *channelTextMessageTypeAdapter_;
+	ConsoleRule *consoleRule_;
 	unsigned int getChannelEntry(ClientChannelManagerI *reciever);
 	void say(std::vector<ConsoleRuleValue> &values);
 	bool processChannelMessage(NetMessage &message, NetBufferReader &reader);

@@ -24,8 +24,7 @@
 
 #include <coms/ComsMessageHandler.h>
 
-class ClientGameStoppedHandler  : 
-	public ComsMessageHandlerI
+class ClientGameStoppedHandler
 {
 public:
 	ClientGameStoppedHandler(ComsMessageHandler &comsMessageHandler);
@@ -33,8 +32,10 @@ public:
 
 	virtual bool processMessage(
 		NetMessage &message,
-		const char *messageType,
 		NetBufferReader &reader);
+
+protected:
+	ComsMessageHandlerI *comsGameStoppedMessageTypeAdapter_;
 };
 
 #endif

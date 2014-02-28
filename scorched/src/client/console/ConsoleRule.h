@@ -24,6 +24,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <list>
 
 enum ConsoleRuleType
 {
@@ -87,6 +88,17 @@ protected:
 	std::vector<ConsoleRuleParam> params_;
 	unsigned int userData_;
 
+};
+
+class ConsoleRuleDeleter
+{
+public:
+	ConsoleRuleDeleter();
+	virtual ~ConsoleRuleDeleter();
+
+	void addRule(ConsoleRule *rule);
+protected:
+	std::list<ConsoleRule *> rules_;
 };
 
 class ConsoleUtil

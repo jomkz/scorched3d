@@ -63,26 +63,34 @@
 ClientStateInitialize::ClientStateInitialize(ComsMessageHandler &comsMessageHandler) :
 	remoteConnectionThread_(0), totalBytes_(0)
 {
-	new ComsMessageHandlerIAdapter<ClientStateInitialize>(
-		this, &ClientStateInitialize::processConnectAuthMessage,
-		ComsConnectAuthMessage::ComsConnectAuthMessageType,
-		comsMessageHandler);
-	new ComsMessageHandlerIAdapter<ClientStateInitialize>(
-		this, &ClientStateInitialize::processConnectAcceptMessage,
-		ComsConnectAcceptMessage::ComsConnectAcceptMessageType,
-		comsMessageHandler);	
-	new ComsMessageHandlerIAdapter<ClientStateInitialize>(
-		this, &ClientStateInitialize::processFileMessage,
-		ComsFileMessage::ComsFileMessageType,
-		comsMessageHandler);	
-	new ComsMessageHandlerIAdapter<ClientStateInitialize>(
-		this, &ClientStateInitialize::processInitializeModMessage,
-		ComsInitializeModMessage::ComsInitializeModMessageType,
-		comsMessageHandler);		
+	comsConnectAuthMessageTypeAdapter_ =
+		new ComsMessageHandlerIAdapter<ClientStateInitialize>(
+			this, &ClientStateInitialize::processConnectAuthMessage,
+			ComsConnectAuthMessage::ComsConnectAuthMessageType,
+			comsMessageHandler);
+	comsConnectAcceptMessageTypeAdapter_ =
+		new ComsMessageHandlerIAdapter<ClientStateInitialize>(
+			this, &ClientStateInitialize::processConnectAcceptMessage,
+			ComsConnectAcceptMessage::ComsConnectAcceptMessageType,
+			comsMessageHandler);	
+	comsFileMessageTypeAdapter_ =
+		new ComsMessageHandlerIAdapter<ClientStateInitialize>(
+			this, &ClientStateInitialize::processFileMessage,
+			ComsFileMessage::ComsFileMessageType,
+			comsMessageHandler);	
+	comsInitializeModMessageTypeAdapter_ =
+		new ComsMessageHandlerIAdapter<ClientStateInitialize>(
+			this, &ClientStateInitialize::processInitializeModMessage,
+			ComsInitializeModMessage::ComsInitializeModMessageType,
+			comsMessageHandler);		
 }
 
 ClientStateInitialize::~ClientStateInitialize()
-{
+{	
+	delete comsConnectAuthMessageTypeAdapter_;
+	delete comsConnectAcceptMessageTypeAdapter_;
+	delete comsFileMessageTypeAdapter_;
+	delete comsInitializeModMessageTypeAdapter_;
 }
 
 UniqueIdStore &ClientStateInitialize::getIdStore()

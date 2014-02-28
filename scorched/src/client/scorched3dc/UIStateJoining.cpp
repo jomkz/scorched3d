@@ -36,18 +36,16 @@ UIStateJoining::~UIStateJoining()
 void UIStateJoining::createState()
 {
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-	CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
-
 	{
-		CEGUI::Window *join = wmgr.createWindow("OgreTray/Button", "CEGUIDemo/JoinButton");
+		CEGUI::Window *join = wmgr.createWindow("OgreTray/Button", "JoinButton");
 		join->setText("Join");
 		join->setPosition(CEGUI::UVector2(CEGUI::UDim(0.3f, 0.0f), CEGUI::UDim(0.00f, 0.0f)));
 		join->setSize(CEGUI::USize(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.05f, 0.0f)));
 		join->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&UIStateJoining::join, this));
-		sheet->addChild(join);
-	}
 
-	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
+		CEGUI::Window *root = CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
+		root->addChild(join);
+	}
 }
 
 bool UIStateJoining::join(const CEGUI::EventArgs &e)
@@ -60,6 +58,7 @@ bool UIStateJoining::join(const CEGUI::EventArgs &e)
 
 void UIStateJoining::destroyState()
 {
+	CEGUI::Window *root = CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-	wmgr.destroyAllWindows();
+	wmgr.destroyWindow(root->getChild("JoinButton"));
 }

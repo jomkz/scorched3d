@@ -87,4 +87,6 @@ void ClientJoinGameThreadCallback::callbackInvoked()
 		}
 	}
 	*/
+
+	delete this;
 }

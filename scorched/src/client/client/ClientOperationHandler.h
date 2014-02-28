@@ -23,8 +23,7 @@
 
 #include <coms/ComsMessageHandler.h>
 
-class ClientOperationHandler : 
-	public ComsMessageHandlerI
+class ClientOperationHandler 
 {
 public:
 	ClientOperationHandler(ComsMessageHandler &comsMessageHandler);
@@ -32,8 +31,10 @@ public:
 
 	virtual bool processMessage(
 		NetMessage &message,
-		const char *messageType,
 		NetBufferReader &reader);
+
+protected:
+	ComsMessageHandlerI *comsOperationMessageTyperAdapter_;
 };
 
 #endif

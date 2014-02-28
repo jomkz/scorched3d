@@ -61,8 +61,10 @@ public:
 		ComsMessageConnectionHandlerI *handler);
 	void addHandler(ComsMessageType &comsMessageType,
 		ComsMessageHandlerI *handler);
+	void removeHandler(ComsMessageType &comsMessageType);
 	void addSentHandler(ComsMessageType &comsMessageType,
 		ComsMessageHandlerI *handler);
+	void removeSentHandler(ComsMessageType &comsMessageType);
 
 	// Inherited from NetMessageHandlerI
 	virtual void processMessage(NetMessage &message);
@@ -92,12 +94,14 @@ public:
 		bool (T::*call)(NetMessage &message, NetBufferReader &reader), 
 		ComsMessageType &comsMessageType,
 		ComsMessageHandler &handler) :
-		inst_(inst), call_(call)
+		inst_(inst), call_(call), 
+		comsMessageType_(comsMessageType), handler_(handler)
 	{
 		handler.addHandler(comsMessageType, this);
 	};
 	virtual ~ComsMessageHandlerIAdapter()
 	{
+		handler_.removeHandler(comsMessageType_);
 	};
 
 	virtual bool processMessage(
@@ -109,6 +113,8 @@ public:
 	}
 
 protected:
+	ComsMessageHandler &handler_;
+	ComsMessageType &comsMessageType_;
 	T *inst_;
 	bool (T::*call_)(NetMessage &message, NetBufferReader &reader);
 };

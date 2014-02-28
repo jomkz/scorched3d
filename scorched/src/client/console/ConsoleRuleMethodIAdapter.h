@@ -22,6 +22,7 @@
 #define __INCLUDE_ConsoleRuleMethodIAdapterh_INCLUDE__
 
 #include <console/Console.h>
+#include <client/ScorchedClient.h>
 
 // Q. Hmm what happens when you have a long winded naming scheme?
 // A. name -> inf
@@ -35,24 +36,26 @@ template<class T>
 class ConsoleRuleMethodIAdapter : public ConsoleRule
 {
 public:
-	ConsoleRuleMethodIAdapter(T *inst, 
+	ConsoleRuleMethodIAdapter(Console &console, T *inst, 
 		void (T::*call)(), 
 		const char *name) : 
-		ConsoleRule(name, std::vector<ConsoleRuleParam>()), inst_(inst), call_(call)
+		ConsoleRule(name, std::vector<ConsoleRuleParam>()), 
+		console_(console), inst_(inst), call_(call)
 	{
-		Console::instance()->addRule(this);
+		console_.addRule(this);
 	};
 
-	ConsoleRuleMethodIAdapter(T *inst, 
+	ConsoleRuleMethodIAdapter(Console &console, T *inst, 
 		void (T::*call)(), 
 		const char *name, const std::vector<ConsoleRuleParam> &params) : 
-		ConsoleRule(name, params), inst_(inst), call_(call)
+		ConsoleRule(name, params),
+		console_(console), inst_(inst), call_(call)
 	{
-		Console::instance()->addRule(this);
+		console_.addRule(this);
 	};
 	virtual ~ConsoleRuleMethodIAdapter()
 	{
-		Console::instance()->removeRule(this);
+		console_.removeRule(this);
 	};
 
 	virtual void runRule(
@@ -64,6 +67,7 @@ public:
 	};
 
 protected:
+	Console &console_;
 	std::string name_;
 	T *inst_;
 	void (T::*call_)();
@@ -74,16 +78,17 @@ template<class T>
 class ConsoleRuleMethodIAdapterEx : public ConsoleRule
 {
 public:
-	ConsoleRuleMethodIAdapterEx(T *inst, 
+	ConsoleRuleMethodIAdapterEx(Console &console, T *inst, 
 		void (T::*call)(std::vector<ConsoleRuleValue>&), 
 		const char *name, const std::vector<ConsoleRuleParam> &params) :
-		ConsoleRule(name, params), inst_(inst), call_(call)
+		ConsoleRule(name, params), 
+		console_(console), inst_(inst), call_(call)
 	{
-		Console::instance()->addRule(this);
+		console_.addRule(this);
 	};
 	virtual ~ConsoleRuleMethodIAdapterEx()
 	{
-		Console::instance()->removeRule(this);
+		console_.removeRule(this);
 	};
 
 	virtual void runRule(
@@ -95,6 +100,7 @@ public:
 	};
 
 protected:
+	Console &console_;
 	std::string name_;
 	T *inst_;
 	void (T::*call_)(std::vector<ConsoleRuleValue>&);
@@ -105,17 +111,18 @@ template<class T>
 class ConsoleRuleMethodIAdapterEx2 : public ConsoleRule
 {
 public:
-	ConsoleRuleMethodIAdapterEx2(T *inst, 
+	ConsoleRuleMethodIAdapterEx2(Console &console, T *inst, 
 		void (T::*call)(std::vector<ConsoleRuleValue>&, unsigned int), 
 		const char *name, const std::vector<ConsoleRuleParam> &params,
 		unsigned int userData) :
-		ConsoleRule(name, params, userData), inst_(inst), call_(call)
+		ConsoleRule(name, params, userData), 
+		console_(console), inst_(inst), call_(call)
 	{
-		Console::instance()->addRule(this);
+		console_.addRule(this);
 	};
 	virtual ~ConsoleRuleMethodIAdapterEx2()
 	{
-		Console::instance()->removeRule(this);
+		console_.removeRule(this);
 	};
 
 	virtual void runRule(
@@ -127,6 +134,7 @@ public:
 	};
 
 protected:
+	Console &console_;
 	std::string name_;
 	T *inst_;
 	void (T::*call_)(std::vector<ConsoleRuleValue>&, unsigned int);

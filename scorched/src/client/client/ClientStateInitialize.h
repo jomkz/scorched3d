@@ -24,6 +24,7 @@
 #include <string>
 #include <net/NetBuffer.h>
 
+class ComsMessageHandlerI;
 class NetMessage;
 class NetBufferReader;
 class NetInterface;
@@ -47,6 +48,11 @@ protected:
 	boost::thread *remoteConnectionThread_;
 	UniqueIdStore *idStore_;
 	unsigned int totalBytes_;
+
+	ComsMessageHandlerI *comsConnectAuthMessageTypeAdapter_;
+	ComsMessageHandlerI *comsConnectAcceptMessageTypeAdapter_;
+	ComsMessageHandlerI *comsFileMessageTypeAdapter_;
+	ComsMessageHandlerI *comsInitializeModMessageTypeAdapter_;
 
 	static void getHost(std::string &host, int &port);
 	void finished();

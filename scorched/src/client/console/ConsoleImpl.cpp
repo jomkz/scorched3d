@@ -19,16 +19,30 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <console/ConsoleImpl.h>
+#include <client/ScorchedClient.h>
+#include <scorched3dc/GUIConsole.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
 #include <limits.h>
 
-ConsoleImpl::ConsoleImpl() : 
-	height_(0.0f), opening_(false), 
-	lines_(1000), historyPosition_(-1), 
-	showCursor_(true)
+GUIConsoleWriteAction::GUIConsoleWriteAction(const CEGUI::String &text) :
+	text_(text)
 {
-	Logger::addLogger(this, false);
+}
+
+GUIConsoleWriteAction::~GUIConsoleWriteAction()
+{
+}
+
+void GUIConsoleWriteAction::performUIAction()
+{
+	GUIConsole::instance()->outputText(text_);
+	delete this;
+}
+
+ConsoleImpl::ConsoleImpl()
+{
+	methods_.init(*this);
 }
 
 ConsoleImpl::~ConsoleImpl()
@@ -36,25 +50,10 @@ ConsoleImpl::~ConsoleImpl()
 
 }
 
-void ConsoleImpl::init()
+void ConsoleImpl::addLine(bool parse, const CEGUI::String &text)
 {
-	methods_.init();
-}
-
-void ConsoleImpl::logMessage(LoggerInfo &info)
-{
-	addLine(false, info.getMessage());
-}
-
-void ConsoleImpl::resetPositions()
-{
-	historyPosition_ = -1;
-	lines_.resetScroll();
-}
-
-void ConsoleImpl::addLine(bool parse, const std::string &text)
-{
-	lines_.addLine(text, parse);
+	GUIConsoleWriteAction *writeAction = new GUIConsoleWriteAction(text);
+	ScorchedClient::instance()->getClientUISync().addClientUISyncAction(writeAction);
 	if (parse)
 	{
 		rules_.addLine(this, text.c_str());

@@ -29,7 +29,7 @@ class ConsoleRuleFnIBooleanAdapter :
 	public ConsoleRuleFnI
 {
 public:
-	ConsoleRuleFnIBooleanAdapter(const std::string &name, bool &param);
+	ConsoleRuleFnIBooleanAdapter(Console &console, const std::string &name, bool &param);
 	virtual ~ConsoleRuleFnIBooleanAdapter();
 
 	// Inherited from ConsoleRuleFnI
@@ -37,6 +37,7 @@ public:
 	virtual void setBoolParam(const std::string &name, bool value);
 
 protected:
+	Console &console_;
 	ConsoleRuleFn *readRule_, *writeRule_;
 	std::string name_;
 	bool &param_;
@@ -47,7 +48,7 @@ class ConsoleRuleFnINumberAdapter :
 	public ConsoleRuleFnI
 {
 public:
-	ConsoleRuleFnINumberAdapter(const std::string &name, float &param);
+	ConsoleRuleFnINumberAdapter(Console &console, const std::string &name, float &param);
 	virtual ~ConsoleRuleFnINumberAdapter();
 
 	// Inherited from ConsoleRuleFnI
@@ -55,6 +56,7 @@ public:
 	virtual void  setNumberParam(const std::string &name, float value);
 
 protected:
+	Console &console_;
 	ConsoleRuleFn *readRule_, *writeRule_;
 	std::string name_;
 	float &param_;
@@ -65,7 +67,7 @@ class ConsoleRuleFnIOptionsAdapter :
 	public ConsoleRuleFnI
 {
 public:
-	ConsoleRuleFnIOptionsAdapter(OptionEntry &entry, bool write = false);
+	ConsoleRuleFnIOptionsAdapter(Console &console, OptionEntry &entry, bool write = false);
 	virtual ~ConsoleRuleFnIOptionsAdapter();
 
 	// Inherited from ConsoleRuleFnI
@@ -77,6 +79,7 @@ public:
 	virtual void setStringParam(const std::string &name, const std::string &value);
 
 protected:
+	Console &console_;
 	OptionEntry &entry_;
 	ConsoleRuleFn *readRule_, *writeRule_;
 };

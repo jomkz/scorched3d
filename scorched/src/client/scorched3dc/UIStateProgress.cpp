@@ -31,8 +31,7 @@ UIStateProgress::~UIStateProgress()
 void UIStateProgress::createState()
 {
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-	CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "ProgressSheet");
-
+	
 	{
 		CEGUI::DefaultWindow* staticText = static_cast<CEGUI::DefaultWindow*>(wmgr.createWindow("OgreTray/StaticText", "StaticText"));
 		staticText->setText("");
@@ -43,10 +42,8 @@ void UIStateProgress::createState()
 		staticText->setProperty("VertFormatting", "TopAligned"); // TopAligned, BottomAligned, VertCentred
 		staticText->setProperty("HorzFormatting", "HorzCentred"); // LeftAligned, RightAligned, HorzCentred
 			// HorzJustified, WordWrapLeftAligned, WordWrapRightAligned, WordWrapCentred, WordWrapJustified
-		staticText->setTooltipText("This is a StaticText widget");
 		staticText->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f, 0.0f), CEGUI::UDim(0.15f, 0.0f)));
 		staticText->setSize(CEGUI::USize(CEGUI::UDim(0.6f, 0.0f), CEGUI::UDim(0.1f, 0.0f)));
-		sheet->addChild(staticText);
 
 		CEGUI::ProgressBar* progressBar = static_cast<CEGUI::ProgressBar*>(wmgr.createWindow("OgreTray/ProgressBar", "ProgressBar"));
 		progressBar->setProgress(0.0f); // Initial progress of 25%
@@ -54,13 +51,15 @@ void UIStateProgress::createState()
 		progressBar->setPosition(CEGUI::UVector2(CEGUI::UDim(0.1f, 0.0f), CEGUI::UDim(0.5f, 0.0f)));
 		progressBar->setSize(CEGUI::USize(CEGUI::UDim(0.8f, 0.0f), CEGUI::UDim(0.3f, 0.0f)));
 		staticText->addChild(progressBar);
-	}
 
-	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
+		CEGUI::Window *root = CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
+		root->addChild(staticText);
+	}
 }
 
 void UIStateProgress::destroyState()
 {
+	CEGUI::Window *root = CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-	wmgr.destroyAllWindows();
+	wmgr.destroyWindow(root->getChild("StaticText"));
 }

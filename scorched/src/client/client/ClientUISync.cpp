@@ -86,3 +86,17 @@ void ClientUISync::checkForSyncFromUI()
 		syncCond_.notify_one();
 	}
 }
+
+ClientUISyncExternal::ClientUISyncExternal() : sync_(0)
+{
+}
+
+ClientUISyncExternal::~ClientUISyncExternal()
+{
+
+}
+
+void ClientUISyncExternal::checkForSyncFromUI()
+{
+	if (sync_) sync_->checkForSyncFromUI();
+}

@@ -1335,13 +1335,7 @@
     <ClCompile Include="..\console\Console.cpp">
       <Filter>console</Filter>
     </ClCompile>
-    <ClCompile Include="..\console\ConsoleFileReader.cpp">
-      <Filter>console</Filter>
-    </ClCompile>
     <ClCompile Include="..\console\ConsoleImpl.cpp">
-      <Filter>console</Filter>
-    </ClCompile>
-    <ClCompile Include="..\console\ConsoleLines.cpp">
       <Filter>console</Filter>
     </ClCompile>
     <ClCompile Include="..\console\ConsoleMethods.cpp">
@@ -1430,6 +1424,9 @@
     </ClCompile>
     <ClCompile Include="..\client\ClientUISync.cpp">
       <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIConsole.cpp">
+      <Filter>scorched3dc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2708,13 +2705,7 @@
     <ClInclude Include="..\console\Console.h">
       <Filter>console</Filter>
     </ClInclude>
-    <ClInclude Include="..\console\ConsoleFileReader.h">
-      <Filter>console</Filter>
-    </ClInclude>
     <ClInclude Include="..\console\ConsoleImpl.h">
-      <Filter>console</Filter>
-    </ClInclude>
-    <ClInclude Include="..\console\ConsoleLines.h">
       <Filter>console</Filter>
     </ClInclude>
     <ClInclude Include="..\console\ConsoleMethods.h">
@@ -2803,6 +2794,9 @@
     </ClInclude>
     <ClInclude Include="..\client\ClientUISync.h">
       <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIConsole.h">
+      <Filter>scorched3dc</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -439,9 +439,7 @@
     <ClCompile Include="..\client\SecureID.cpp" />
     <ClCompile Include="..\client\UniqueIdStore.cpp" />
     <ClCompile Include="..\console\Console.cpp" />
-    <ClCompile Include="..\console\ConsoleFileReader.cpp" />
     <ClCompile Include="..\console\ConsoleImpl.cpp" />
-    <ClCompile Include="..\console\ConsoleLines.cpp" />
     <ClCompile Include="..\console\ConsoleMethods.cpp" />
     <ClCompile Include="..\console\ConsoleRule.cpp" />
     <ClCompile Include="..\console\ConsoleRuleFn.cpp" />
@@ -449,6 +447,7 @@
     <ClCompile Include="..\console\ConsoleRuleMethodIAdapter.cpp" />
     <ClCompile Include="..\console\ConsoleRules.cpp" />
     <ClCompile Include="CameraController.cpp" />
+    <ClCompile Include="GUIConsole.cpp" />
     <ClCompile Include="InputHandlerMouse.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
@@ -902,9 +901,7 @@
     <ClInclude Include="..\client\SecureID.h" />
     <ClInclude Include="..\client\UniqueIdStore.h" />
     <ClInclude Include="..\console\Console.h" />
-    <ClInclude Include="..\console\ConsoleFileReader.h" />
     <ClInclude Include="..\console\ConsoleImpl.h" />
-    <ClInclude Include="..\console\ConsoleLines.h" />
     <ClInclude Include="..\console\ConsoleMethods.h" />
     <ClInclude Include="..\console\ConsoleRule.h" />
     <ClInclude Include="..\console\ConsoleRuleFn.h" />
@@ -912,6 +909,7 @@
     <ClInclude Include="..\console\ConsoleRuleMethodIAdapter.h" />
     <ClInclude Include="..\console\ConsoleRules.h" />
     <ClInclude Include="CameraController.h" />
+    <ClInclude Include="GUIConsole.h" />
     <ClInclude Include="InputHandlerMouse.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="OgreSystem.h" />

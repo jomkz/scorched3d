@@ -18,52 +18,44 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ClientUISynch_INCLUDE__)
-#define __INCLUDE_ClientUISynch_INCLUDE__
+#if !defined(AFX_GUIConsole_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)
+#define AFX_GUIConsole_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_
 
-class ClientUISyncAction
+#include <engine/ThreadCallbackI.h>
+
+class GUIConsoleClientThreadCallback : public ThreadCallbackI 
 {
 public:
-	ClientUISyncAction();
-	virtual ~ClientUISyncAction();
+	GUIConsoleClientThreadCallback(const CEGUI::String &inMsg);
+	virtual ~GUIConsoleClientThreadCallback();
 
-	virtual void performUIAction() = 0;
-};
-
-class ClientUISync  
-{
-public:
-	ClientUISync();
-	virtual ~ClientUISync();
-
-	void checkForSyncFromClient();
-	void checkForSyncFromUI();
-
-	void addClientUISyncAction(ClientUISyncAction *action);
-
-	bool currentlySynching() { return currentlySynching_; }
-protected:
-	int actionCount_;
-	int actionsSize_;
-	ClientUISyncAction **actions_;
-	bool currentlySynching_;
-	boost::mutex syncMutex_;
-	boost::condition_variable syncCond_;
-};
-
-// Wrapper class so UI doesn't need ScorchedClient::instance
-class ClientUISyncExternal
-{
-public:
-	ClientUISyncExternal();
-	virtual ~ClientUISyncExternal();
-
-	void checkForSyncFromUI();
-
-	void setClientUISync(ClientUISync *sync) { sync_ = sync; }
+	// ThreadCallbackI
+	virtual void callbackInvoked();
 
 protected:
-	ClientUISync *sync_;
+	const CEGUI::String inMsg_;
 };
 
-#endif
+class GUIConsole
+{
+public:
+	static GUIConsole *instance();
+
+	void setVisible(bool visible);
+	bool isVisible(); 
+ 
+	void outputText(const CEGUI::String &inMsg, const CEGUI::Colour &colour = CEGUI::Colour( 0xFFFFFFFF)); 
+
+protected:
+	void create();   
+	bool handle_TextSubmitted(const CEGUI::EventArgs &e);
+ 
+	CEGUI::Window *consoleWindow_;
+
+private:
+	GUIConsole();
+	virtual ~GUIConsole();
+
+};
+
+#endif // !defined(AFX_GUIConsole_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)

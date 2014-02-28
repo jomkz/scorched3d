@@ -27,6 +27,8 @@
 #include <client/ClientHandlers.h>
 #include <client/ClientOptions.h>
 #include <client/ClientUISync.h>
+#include <client/ClientAdmin.h>
+#include <console/ConsoleImpl.h>
 #include <net/NetInterface.h>
 #include <net/NetServerTCP3.h>
 #include <net/NetLoopBack.h>
@@ -44,7 +46,7 @@
 
 TargetSpace *ScorchedClient::targetSpace_ = new TargetSpace();
 ThreadCallback *ScorchedClient::threadCallback_ = new ThreadCallback();
-ClientUISync *ScorchedClient::clientUISync_ = new ClientUISync();
+ClientUISyncExternal *ScorchedClient::clientUISyncExternal_ = new ClientUISyncExternal();
 
 static time_t startTime = 0;
 ScorchedClient *ScorchedClient::instance_ = 0;
@@ -57,7 +59,7 @@ static bool clientStopped = false;
 ScorchedClient *ScorchedClient::instance()
 {
 	DIALOG_ASSERT(instance_);
-	if (!clientUISync_->currentlySynching())
+	if (!instance_->clientUISync_->currentlySynching())
 	{
 		DIALOG_ASSERT(thread_id == boost::this_thread::get_id());
 	}
@@ -125,17 +127,21 @@ ScorchedClient::ScorchedClient() :
 	clientMessageHandler_ = new ClientMessageHandler();
 	getComsMessageHandler().setConnectionHandler(clientMessageHandler_);
 
-	channelManager_ = new ClientChannelManager(getComsMessageHandler());
+	console_ = new ConsoleImpl();
+	channelManager_ = new ClientChannelManager(getComsMessageHandler(), *console_);
 	clientHandlers_ = new ClientHandlers(getComsMessageHandler());
 	clientState_ = new ClientState(getComsMessageHandler());
 	clientSimulator_ = new ClientSimulator();
 	clientSimulator_->setScorchedContext(this);
+	clientAdmin_ = new ClientAdmin(*console_);
+	clientUISync_ = new ClientUISync();
+	clientUISyncExternal_->setClientUISync(clientUISync_);
 
-	new ComsMessageHandlerIAdapter<ClientSimulator>(
+	processComsSimulateMessageAdapter_ = new ComsMessageHandlerIAdapter<ClientSimulator>(
 		clientSimulator_, &ClientSimulator::processComsSimulateMessage,
 		ComsSimulateMessage::ComsSimulateMessageType,
 		getComsMessageHandler());
-	new ComsMessageHandlerIAdapter<ClientSimulator>(
+	processNetStatMessageAdapter_ = new ComsMessageHandlerIAdapter<ClientSimulator>(
 		clientSimulator_, &ClientSimulator::processNetStatMessage,
 		ComsNetStatMessage::ComsNetStatMessageType,
 		getComsMessageHandler());
@@ -143,7 +149,17 @@ ScorchedClient::ScorchedClient() :
 
 ScorchedClient::~ScorchedClient()
 {
+	clientUISyncExternal_->setClientUISync(0);
 	targetSpace_->clear();
+	delete channelManager_;
+	delete clientHandlers_;
+	delete clientState_;
+	delete clientSimulator_;
+	delete clientUISync_;
+	delete clientAdmin_;
+	delete processComsSimulateMessageAdapter_;
+	delete processNetStatMessageAdapter_;
+	delete console_;
 }
 
 Simulator &ScorchedClient::getSimulator() 

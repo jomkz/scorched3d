@@ -25,18 +25,20 @@
 
 ClientGameStoppedHandler::ClientGameStoppedHandler(ComsMessageHandler &comsMessageHandler)
 {
-	comsMessageHandler.addHandler(
-		ComsGameStoppedMessage::ComsGameStoppedMessageType,
-		this);
+	comsGameStoppedMessageTypeAdapter_ =
+		new ComsMessageHandlerIAdapter<ClientGameStoppedHandler>(
+			this, &ClientGameStoppedHandler::processMessage,
+			ComsGameStoppedMessage::ComsGameStoppedMessageType,
+			comsMessageHandler);
 }
 
 ClientGameStoppedHandler::~ClientGameStoppedHandler()
 {
+	delete comsGameStoppedMessageTypeAdapter_;
 }
 
 bool ClientGameStoppedHandler::processMessage(
 	NetMessage &netMessage,
-	const char *messageType,
 	NetBufferReader &reader)
 {
 	ComsGameStoppedMessage message;

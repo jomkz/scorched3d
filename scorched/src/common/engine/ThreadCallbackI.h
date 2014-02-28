@@ -67,6 +67,7 @@ public:
 	virtual void callbackInvoked()
 	{
 		return (inst_->*call_)();
+		delete this;
 	}
 
 protected:

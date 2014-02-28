@@ -105,7 +105,7 @@ bool ScorchedUI::go()
 		}
 
 		// Update UI
-		ScorchedClient::getClientUISync().checkForSyncFromUI();
+		ScorchedClient::getClientUISyncExternal().checkForSyncFromUI();
 	}
 
 	Lang::instance()->saveUndefined();

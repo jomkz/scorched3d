@@ -29,144 +29,157 @@
 #include <coms/ComsAdminMessage.h>
 #include <common/Defines.h>
 
-ClientAdmin *ClientAdmin::instance_ = 0;
-
-ClientAdmin *ClientAdmin::instance()
-{
-	if (!instance_)
-	{
-		instance_ = new ClientAdmin();
-	}
-	return instance_;
-}
-
-ClientAdmin::ClientAdmin() 
+ClientAdmin::ClientAdmin(Console &console) 
 {
 	// Help
-	new ConsoleRuleMethodIAdapter<ClientAdmin>(
-		this, &ClientAdmin::adminHelp, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("help")));
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapter<ClientAdmin>(console,
+			this, &ClientAdmin::adminHelp, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("help"))));
 
 	// No Params
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminNoParams, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("killall")),
-		(unsigned int) ComsAdminMessage::AdminKillAll);
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminNoParams, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("newgame")),
-		(unsigned int) ComsAdminMessage::AdminNewGame);
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminNoParams, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("showbanned")),
-		(unsigned int) ComsAdminMessage::AdminShowBanned);
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminNoParams, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("show")),
-		(unsigned int) ComsAdminMessage::AdminShow);
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminNoParams, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("logout")),
-		(unsigned int) ComsAdminMessage::AdminLogout);
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminNoParams, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("synccheck")),
-		(unsigned int) ComsAdminMessage::AdminSyncCheck);
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminNoParams, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("killall")),
+			(unsigned int) ComsAdminMessage::AdminKillAll));
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminNoParams, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("newgame")),
+			(unsigned int) ComsAdminMessage::AdminNewGame));
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminNoParams, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("showbanned")),
+			(unsigned int) ComsAdminMessage::AdminShowBanned));
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminNoParams, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("show")),
+			(unsigned int) ComsAdminMessage::AdminShow));
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminNoParams, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("logout")),
+			(unsigned int) ComsAdminMessage::AdminLogout));
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminNoParams, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("synccheck")),
+			(unsigned int) ComsAdminMessage::AdminSyncCheck));
 
 	// One Number Param 
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminOneParam, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("kick"), 
-		ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
-		(unsigned int) ComsAdminMessage::AdminKick);
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminOneParam, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("kill"), 
-		ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
-		(unsigned int) ComsAdminMessage::AdminKill);
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminOneParam, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("ban"), 
-		ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
-		(unsigned int) ComsAdminMessage::AdminBan);
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminOneParam, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("flag"), 
-		ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
-		(unsigned int) ComsAdminMessage::AdminFlag);
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminOneParam, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("mute"), 
-		ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
-		(unsigned int) ComsAdminMessage::AdminMute);
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminOneParam, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("permmute"), 
-		ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
-		(unsigned int) ComsAdminMessage::AdminPermMute);
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminOneParam, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("unpermmute"), 
-		ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
-		(unsigned int) ComsAdminMessage::AdminUnPermMute);
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminOneParam, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("unmute"), 
-		ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
-		(unsigned int) ComsAdminMessage::AdminUnMute);
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminOneParam, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("poor"), 
-		ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
-		(unsigned int) ComsAdminMessage::AdminPoor);
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminOneParam, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("kick"), 
+			ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
+			(unsigned int) ComsAdminMessage::AdminKick));
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminOneParam, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("kill"), 
+			ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
+			(unsigned int) ComsAdminMessage::AdminKill));
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminOneParam, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("ban"), 
+			ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
+			(unsigned int) ComsAdminMessage::AdminBan));
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminOneParam, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("flag"), 
+			ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
+			(unsigned int) ComsAdminMessage::AdminFlag));
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminOneParam, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("mute"), 
+			ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
+			(unsigned int) ComsAdminMessage::AdminMute));
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminOneParam, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("permmute"), 
+			ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
+			(unsigned int) ComsAdminMessage::AdminPermMute));
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminOneParam, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("unpermmute"), 
+			ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
+			(unsigned int) ComsAdminMessage::AdminUnPermMute));
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminOneParam, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("unmute"), 
+			ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
+			(unsigned int) ComsAdminMessage::AdminUnMute));
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminOneParam, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("poor"), 
+			ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
+			(unsigned int) ComsAdminMessage::AdminPoor));
 
 	// One String Param
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminOneParam, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("talk"), 
-		ConsoleRuleParam("text", ConsoleRuleTypeString)),
-		(unsigned int) ComsAdminMessage::AdminTalk);
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminOneParam, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("admintalk"), 
-		ConsoleRuleParam("text", ConsoleRuleTypeString)),
-		(unsigned int) ComsAdminMessage::AdminAdminTalk);
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminOneParam, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("message"), 
-		ConsoleRuleParam("text", ConsoleRuleTypeString)),
-		(unsigned int) ComsAdminMessage::AdminMessage);
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminOneParam, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("add"), 
-		ConsoleRuleParam("playertype", ConsoleRuleTypeString)),
-		(unsigned int) ComsAdminMessage::AdminAdd);
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminOneParam, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("talk"), 
+			ConsoleRuleParam("text", ConsoleRuleTypeString)),
+			(unsigned int) ComsAdminMessage::AdminTalk));
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminOneParam, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("admintalk"), 
+			ConsoleRuleParam("text", ConsoleRuleTypeString)),
+			(unsigned int) ComsAdminMessage::AdminAdminTalk));
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminOneParam, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("message"), 
+			ConsoleRuleParam("text", ConsoleRuleTypeString)),
+			(unsigned int) ComsAdminMessage::AdminMessage));
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminOneParam, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("add"), 
+			ConsoleRuleParam("playertype", ConsoleRuleTypeString)),
+			(unsigned int) ComsAdminMessage::AdminAdd));
 
 	// Two Number Params
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminTwoParam, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("slap"), 
-		ConsoleRuleParam("player", ConsoleRuleTypeNumber),
-		ConsoleRuleParam("amount", ConsoleRuleTypeNumber)),
-		(unsigned int) ComsAdminMessage::AdminSlap);
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminTwoParam, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("changename"), 
-		ConsoleRuleParam("player", ConsoleRuleTypeNumber),
-		ConsoleRuleParam("name", ConsoleRuleTypeString)),
-		(unsigned int) ComsAdminMessage::AdminChangeName);
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminTwoParam, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("slap"), 
+			ConsoleRuleParam("player", ConsoleRuleTypeNumber),
+			ConsoleRuleParam("amount", ConsoleRuleTypeNumber)),
+			(unsigned int) ComsAdminMessage::AdminSlap));
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminTwoParam, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("changename"), 
+			ConsoleRuleParam("player", ConsoleRuleTypeNumber),
+			ConsoleRuleParam("name", ConsoleRuleTypeString)),
+			(unsigned int) ComsAdminMessage::AdminChangeName));
 
 	// Two String Params
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminTwoParam, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("login"), 
-		ConsoleRuleParam("username", ConsoleRuleTypeString),
-		ConsoleRuleParam("password", ConsoleRuleTypeString)),
-		(unsigned int) ComsAdminMessage::AdminLogin);
-	new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(
-		this, &ClientAdmin::adminNoParams, "admin", 
-		ConsoleUtil::formParams(ConsoleRuleParam("login")),
-		(unsigned int) ComsAdminMessage::AdminLogin);
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminTwoParam, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("login"), 
+			ConsoleRuleParam("username", ConsoleRuleTypeString),
+			ConsoleRuleParam("password", ConsoleRuleTypeString)),
+			(unsigned int) ComsAdminMessage::AdminLogin));
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+			this, &ClientAdmin::adminNoParams, "admin", 
+			ConsoleUtil::formParams(ConsoleRuleParam("login")),
+			(unsigned int) ComsAdminMessage::AdminLogin));
 }
 
 ClientAdmin::~ClientAdmin()
@@ -232,25 +245,25 @@ void ClientAdmin::adminTwoParam(std::vector<ConsoleRuleValue> &values,
 
 void ClientAdmin::adminHelp()
 {
-	Console::instance()->addLine(false, "  help - This help");
-	Console::instance()->addLine(false, "  login <username> <password> - Login as admin");
-	Console::instance()->addLine(false, "  logout - Logoff as admin");
-	Console::instance()->addLine(false, "  show - Show ids for all current players");
-	Console::instance()->addLine(false, "  showbanned - Shows all banned/perm muted players");
-	Console::instance()->addLine(false, "  killall - Kills all current players and starts next round");
-	Console::instance()->addLine(false, "  newgame - Kills all current players and starts new game");	
-	Console::instance()->addLine(false, "  kick <player id> - Kicks specified player");
-	Console::instance()->addLine(false, "  ban <player id> - Bans and kicks specified player");
-	Console::instance()->addLine(false, "  poor <player id> - Removes all money from player");
-	Console::instance()->addLine(false, "  kill <player id> - Kill specified player");
-	Console::instance()->addLine(false, "  mute <player id> - Mutes specified player for everyone");
-	Console::instance()->addLine(false, "  flag <player id> - Flags specified player for all admins");
-	Console::instance()->addLine(false, "  unmute <player id> - Un-mutes specified player for everyone");
-	Console::instance()->addLine(false, "  permmute <player id> - Mutes specified player for everyone perminantly");
-	Console::instance()->addLine(false, "  unpermmute <player id> - Un-Mutes specified player for everyone perminantly");
-	Console::instance()->addLine(false, "  slap <player id> <health> - Removes health from specified player");
-	Console::instance()->addLine(false, "  talk <text> - Admin talk to all players (white with no name)");
-	Console::instance()->addLine(false, "  admintalk <text> - Admin talk to all admin players only");
-	Console::instance()->addLine(false, "  message <text> - Message to all players (yellow in center of screen)");
-	Console::instance()->addLine(false, "  synccheck - Check client landscape is in sync with server");
+	ScorchedClient::instance()->getConsole().addLine(false, "  help - This help");
+	ScorchedClient::instance()->getConsole().addLine(false, "  login <username> <password> - Login as admin");
+	ScorchedClient::instance()->getConsole().addLine(false, "  logout - Logoff as admin");
+	ScorchedClient::instance()->getConsole().addLine(false, "  show - Show ids for all current players");
+	ScorchedClient::instance()->getConsole().addLine(false, "  showbanned - Shows all banned/perm muted players");
+	ScorchedClient::instance()->getConsole().addLine(false, "  killall - Kills all current players and starts next round");
+	ScorchedClient::instance()->getConsole().addLine(false, "  newgame - Kills all current players and starts new game");	
+	ScorchedClient::instance()->getConsole().addLine(false, "  kick <player id> - Kicks specified player");
+	ScorchedClient::instance()->getConsole().addLine(false, "  ban <player id> - Bans and kicks specified player");
+	ScorchedClient::instance()->getConsole().addLine(false, "  poor <player id> - Removes all money from player");
+	ScorchedClient::instance()->getConsole().addLine(false, "  kill <player id> - Kill specified player");
+	ScorchedClient::instance()->getConsole().addLine(false, "  mute <player id> - Mutes specified player for everyone");
+	ScorchedClient::instance()->getConsole().addLine(false, "  flag <player id> - Flags specified player for all admins");
+	ScorchedClient::instance()->getConsole().addLine(false, "  unmute <player id> - Un-mutes specified player for everyone");
+	ScorchedClient::instance()->getConsole().addLine(false, "  permmute <player id> - Mutes specified player for everyone perminantly");
+	ScorchedClient::instance()->getConsole().addLine(false, "  unpermmute <player id> - Un-Mutes specified player for everyone perminantly");
+	ScorchedClient::instance()->getConsole().addLine(false, "  slap <player id> <health> - Removes health from specified player");
+	ScorchedClient::instance()->getConsole().addLine(false, "  talk <text> - Admin talk to all players (white with no name)");
+	ScorchedClient::instance()->getConsole().addLine(false, "  admintalk <text> - Admin talk to all admin players only");
+	ScorchedClient::instance()->getConsole().addLine(false, "  message <text> - Message to all players (yellow in center of screen)");
+	ScorchedClient::instance()->getConsole().addLine(false, "  synccheck - Check client landscape is in sync with server");
 }

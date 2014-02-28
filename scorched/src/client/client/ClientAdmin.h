@@ -26,10 +26,10 @@
 class ClientAdmin
 {
 public:
-	static ClientAdmin *instance();
-
+	ClientAdmin(Console &console);
+	virtual ~ClientAdmin();
 protected:
-	static ClientAdmin *instance_;
+	ConsoleRuleDeleter deleter_;
 
 	void adminNoParams(std::vector<ConsoleRuleValue> &split, 
 		unsigned int userData);
@@ -38,10 +38,6 @@ protected:
 	void adminTwoParam(std::vector<ConsoleRuleValue> &split, 
 		unsigned int userData);
 	void adminHelp();
-
-private:
-	ClientAdmin();
-	virtual ~ClientAdmin();
 
 };
 

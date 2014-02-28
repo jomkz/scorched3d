@@ -20,7 +20,6 @@
 
 #include <console/ConsoleRuleMethodIAdapter.h>
 #include <console/ConsoleMethods.h>
-#include <console/ConsoleFileReader.h>
 #include <common/DefinesString.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientState.h>
@@ -35,61 +34,31 @@ ConsoleMethods::~ConsoleMethods()
 
 }
 
-void ConsoleMethods::init()
+void ConsoleMethods::init(Console &console)
 {
-	new ConsoleRuleMethodIAdapter<ConsoleMethods>(
-		this, &ConsoleMethods::clear, 
-		"clear");
-	new ConsoleRuleMethodIAdapter<ConsoleMethods>(
-		this, &ConsoleMethods::exit, 
-		"exit");
-	new ConsoleRuleMethodIAdapter<ConsoleMethods>(
-		this, &ConsoleMethods::exit, 
-		"quit");
-	new ConsoleRuleMethodIAdapter<ConsoleMethods>(
-		this, &ConsoleMethods::help, 
-		"help");
-	new ConsoleRuleMethodIAdapterEx<ConsoleMethods>(
-		this, &ConsoleMethods::consoleLoad, 
-		"consoleload", 
-		ConsoleUtil::formParams(ConsoleRuleParam("filename", ConsoleRuleTypeString)));
-	new ConsoleRuleMethodIAdapterEx<ConsoleMethods>(
-		this, &ConsoleMethods::consoleSave, 
-		"consolesave", 
-		ConsoleUtil::formParams(ConsoleRuleParam("filename", ConsoleRuleTypeString)));
-}
-
-void ConsoleMethods::clear()
-{
-	Console::instance()->clear();
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapter<ConsoleMethods>(
+			console,
+			this, &ConsoleMethods::exit, 
+			"exit"));
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapter<ConsoleMethods>(
+			console,
+			this, &ConsoleMethods::exit, 
+			"quit"));
+	deleter_.addRule(
+		new ConsoleRuleMethodIAdapter<ConsoleMethods>(
+			console,
+			this, &ConsoleMethods::help, 
+			"help"));
 }
 
 void ConsoleMethods::help()
 {
-	Console::instance()->help();
+	ScorchedClient::instance()->getConsole().help();
 }
 
 void ConsoleMethods::exit()
 {
 	::exit(0);
-}
-
-void ConsoleMethods::consoleLoad(std::vector<ConsoleRuleValue> &values)
-{
-	ConsoleRuleValue option = values[1];
-	std::string errorString;
-	if (!ConsoleFileReader::loadFileIntoConsole(
-		option.valueString.c_str(), errorString))
-	{
-		Console::instance()->addLine(false, 
-			S3D::formatStringBuffer("Failed to load to console \"%s\"",
-			errorString.c_str()));
-	}
-}
-
-void ConsoleMethods::consoleSave(std::vector<ConsoleRuleValue> &values)
-{
-	ConsoleRuleValue option = values[1];
-	ConsoleFileReader::saveConsoleIntoFile(
-		option.valueString.c_str());
 }

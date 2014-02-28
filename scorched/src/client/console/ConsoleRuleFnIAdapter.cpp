@@ -21,21 +21,23 @@
 #include <common/Defines.h>
 #include <console/Console.h>
 #include <console/ConsoleRuleFnIAdapter.h>
+#include <client/ScorchedClient.h>
 
-ConsoleRuleFnIBooleanAdapter::ConsoleRuleFnIBooleanAdapter(const std::string &name, bool &param) : 
+ConsoleRuleFnIBooleanAdapter::ConsoleRuleFnIBooleanAdapter(Console &console, const std::string &name, bool &param) : 
+	console_(console),
 	name_(name), param_(param),
 	readRule_(0), writeRule_(0)
 {
 	readRule_ = new ConsoleRuleFn(name, this, ConsoleRuleTypeBoolean, false);
 	writeRule_ = new ConsoleRuleFn(name, this, ConsoleRuleTypeBoolean, true);
-	Console::instance()->addRule(readRule_);
-	Console::instance()->addRule(writeRule_);
+	console_.addRule(readRule_);
+	console_.addRule(writeRule_);
 }
 
 ConsoleRuleFnIBooleanAdapter::~ConsoleRuleFnIBooleanAdapter()
 {
-	Console::instance()->removeRule(readRule_);
-	Console::instance()->removeRule(writeRule_);
+	console_.removeRule(readRule_);
+	console_.removeRule(writeRule_);
 	delete readRule_;
 	delete writeRule_;
 }
@@ -52,20 +54,21 @@ void ConsoleRuleFnIBooleanAdapter::setBoolParam(const std::string &name, bool va
 	param_ = value;
 }
 
-ConsoleRuleFnINumberAdapter::ConsoleRuleFnINumberAdapter(const std::string &name, float &param) : 
+ConsoleRuleFnINumberAdapter::ConsoleRuleFnINumberAdapter(Console &console, const std::string &name, float &param) : 
+	console_(console),
 	name_(name), param_(param),
 	readRule_(0), writeRule_(0)
 {
 	readRule_ = new ConsoleRuleFn(name, this, ConsoleRuleTypeNumber, false);
 	writeRule_ = new ConsoleRuleFn(name, this, ConsoleRuleTypeNumber, true);
-	Console::instance()->addRule(readRule_);
-	Console::instance()->addRule(writeRule_);
+	console_.addRule(readRule_);
+	console_.addRule(writeRule_);
 }
 
 ConsoleRuleFnINumberAdapter::~ConsoleRuleFnINumberAdapter()
 {
-	Console::instance()->removeRule(readRule_);
-	Console::instance()->removeRule(writeRule_);
+	console_.removeRule(readRule_);
+	console_.removeRule(writeRule_);
 	delete readRule_;
 	delete writeRule_;
 }
@@ -82,7 +85,8 @@ void ConsoleRuleFnINumberAdapter::setNumberParam(const std::string &name, float 
 	param_ = value;
 }
 
-ConsoleRuleFnIOptionsAdapter::ConsoleRuleFnIOptionsAdapter(OptionEntry &entry, bool write) :
+ConsoleRuleFnIOptionsAdapter::ConsoleRuleFnIOptionsAdapter(Console &console, OptionEntry &entry, bool write) :
+	console_(console),
 	entry_(entry),
 	readRule_(0), writeRule_(0)
 {
@@ -111,11 +115,11 @@ ConsoleRuleFnIOptionsAdapter::ConsoleRuleFnIOptionsAdapter(OptionEntry &entry, b
 	}
 
 	readRule_ = new ConsoleRuleFn(entry.getName(), this, type, false);
-	Console::instance()->addRule(readRule_);
+	console_.addRule(readRule_);
 	if (write) 
 	{
 		writeRule_ = new ConsoleRuleFn(entry.getName(), this, type, true);
-		Console::instance()->addRule(writeRule_);
+		console_.addRule(writeRule_);
 	}
 }
 
@@ -123,12 +127,12 @@ ConsoleRuleFnIOptionsAdapter::~ConsoleRuleFnIOptionsAdapter()
 {
 	if (readRule_)
 	{
-		Console::instance()->removeRule(readRule_);
+		console_.removeRule(readRule_);
 		delete readRule_;
 	}
 	if (writeRule_)
 	{
-		Console::instance()->removeRule(writeRule_);
+		console_.removeRule(writeRule_);
 		delete writeRule_;
 	}
 }

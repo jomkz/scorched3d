@@ -24,18 +24,20 @@
 
 ClientOperationHandler::ClientOperationHandler(ComsMessageHandler &comsMessageHandler)
 {
-	comsMessageHandler.addHandler(
-		ComsOperationMessage::ComsOperationMessageTyper,
-		this);
+	comsOperationMessageTyperAdapter_ =
+		new ComsMessageHandlerIAdapter<ClientOperationHandler>(
+			this, &ClientOperationHandler::processMessage,
+			ComsOperationMessage::ComsOperationMessageTyper,
+			comsMessageHandler);
 }
 
 ClientOperationHandler::~ClientOperationHandler()
 {
+	delete comsOperationMessageTyperAdapter_;
 }
 
 bool ClientOperationHandler::processMessage(
 	NetMessage &netMessage,
-	const char *messageType,
 	NetBufferReader &reader)
 {
 	ComsOperationMessage message;

@@ -31,8 +31,7 @@ public:
 	virtual void adminResult(unsigned int sid, ComsAdminMessage::ComsAdminMessageType type) = 0;
 };
 
-class ClientAdminResultHandler : 
-	public ComsMessageHandlerI
+class ClientAdminResultHandler 
 {
 public:
 	ClientAdminResultHandler(ComsMessageHandler &comsMessageHandler);
@@ -48,11 +47,11 @@ public:
 	// Inherited from ComsMessageHandlerI
 	virtual bool processMessage(
 		NetMessage &message,
-		const char *messageType,
 		NetBufferReader &reader);
 protected:
 	std::set<ClientAdminResultHandlerI *> handlers_;
 	unsigned int sid_;
+	ComsMessageHandlerI *comsAdminResultMessageTypeAdapter_;
 };
 
 #endif

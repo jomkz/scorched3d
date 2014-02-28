@@ -30,14 +30,13 @@ public:
 	ConsoleMethods();
 	virtual ~ConsoleMethods();
 
-	void init();
+	void init(Console &console);
 
 private:
-	void clear();
+	ConsoleRuleDeleter deleter_;
+
 	void exit();
 	void help();
-	void consoleLoad(std::vector<ConsoleRuleValue> &values);
-	void consoleSave(std::vector<ConsoleRuleValue> &values);
 };
 
 #endif // !defined(AFX_ConsoleMETHODS_H__D5E893D4_E73A_49CB_B0E8_8C945C692CC7__INCLUDED_)
