@@ -24,6 +24,7 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <net/NetBuffer.h>
 #include <net/NetInterface.h>
+#include <net/NetBufferPool.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
 #ifndef S3D_SERVER
@@ -34,18 +35,16 @@
 #include <set>
 #include <zlib.h>
 
-static NetBuffer defaultBuffer;
-
-bool ComsMessageSender::formMessage(ComsMessage &message, unsigned int flags)
+bool ComsMessageSender::formMessage(NetBuffer &buffer, ComsMessage &message, unsigned int flags)
 {
 	// Write the message and its type to the buffer
-	defaultBuffer.reset();
-	if (!message.writeTypeMessage(defaultBuffer))
+	buffer.reset();
+	if (!message.writeTypeMessage(buffer))
 	{
 		Logger::log( "ERROR: ComsMessageSender - Failed to write message type");
 		return false;
 	}
-	if (!message.writeMessage(defaultBuffer))
+	if (!message.writeMessage(buffer))
 	{
 		Logger::log( "ERROR: ComsMessageSender - Failed to write message");
 		return false;
@@ -55,13 +54,13 @@ bool ComsMessageSender::formMessage(ComsMessage &message, unsigned int flags)
 #ifdef S3D_SERVER
 	if (flags & NetInterfaceFlags::fCompress)
 	{
-		defaultBuffer.compressBuffer();
-		defaultBuffer.addToBuffer(true);
+		buffer.compressBuffer();
+		buffer.addToBuffer(true);
 	}
 	else
 #endif
 	{
-		defaultBuffer.addToBuffer(false);
+		buffer.addToBuffer(false);
 	}
 
 	return true;
@@ -71,19 +70,20 @@ bool ComsMessageSender::formMessage(ComsMessage &message, unsigned int flags)
 bool ComsMessageSender::sendToServer(
 	ComsMessage &message, unsigned int flags)
 {
+	NetBufferPoolReturner defaultBuffer(NetBufferPool::instance()->getFromPool());
 	if (!ScorchedClient::instance()->getNetInterfaceValid() ||
 		!ScorchedClient::instance()->getNetInterface().started()) return false;
-	if (!formMessage(message, flags)) return false;
+	if (!formMessage(*defaultBuffer.getBuffer(), message, flags)) return false;
 
 	if (ScorchedClient::instance()->getComsMessageHandler().getMessageLogging())
 	{
 		Logger::log(S3D::formatStringBuffer("Client::send(%s, %u%s)", 
 			message.getComsMessageType().getName().c_str(),
-			defaultBuffer.getBufferUsed(),
+			defaultBuffer.getBuffer()->getBufferUsed(),
 			(flags & NetInterfaceFlags::fCompress)?", compressed":""));
 	}	
 	ScorchedClient::instance()->getNetInterface().sendMessageServer(
-		defaultBuffer, flags);
+		*defaultBuffer.getBuffer(), flags);
 	return true;
 }
 #endif
@@ -91,8 +91,9 @@ bool ComsMessageSender::sendToServer(
 bool ComsMessageSender::sendToMultipleClients(
 	ComsMessage &message, std::list<unsigned int> sendDestinations, unsigned int flags)
 {
+	NetBufferPoolReturner defaultBuffer(NetBufferPool::instance()->getFromPool());
 	if (sendDestinations.empty()) return true;
-	if (!formMessage(message, flags)) return false;
+	if (!formMessage(*defaultBuffer.getBuffer(), message, flags)) return false;
 
 	// Used to ensure we only send messages to each
 	// destination once
@@ -117,7 +118,7 @@ bool ComsMessageSender::sendToMultipleClients(
 				Logger::log(S3D::formatStringBuffer("Server::send(%s, %u, %u%s)", 
 					message.getComsMessageType().getName().c_str(),
 					destination,
-					defaultBuffer.getBufferUsed(),
+					defaultBuffer.getBuffer()->getBufferUsed(),
 					(flags & NetInterfaceFlags::fCompress)?", compressed":""));
 			}	
 			if (!ScorchedServer::instance()->getNetInterfaceValid() ||
@@ -127,7 +128,7 @@ bool ComsMessageSender::sendToMultipleClients(
 				return false;
 			}
 			ScorchedServer::instance()->getNetInterface().sendMessageDest(
-				defaultBuffer, destination, flags);
+				*defaultBuffer.getBuffer(), destination, flags);
 		}
 	}
 

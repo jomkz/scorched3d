@@ -42,5 +42,16 @@ private:
 	virtual ~NetBufferPool();
 };
 
+class NetBufferPoolReturner 
+{
+public:
+	NetBufferPoolReturner(NetBuffer *message) : message_(message) {}
+	~NetBufferPoolReturner() { NetBufferPool::instance()->addToPool(message_); }
+
+	NetBuffer *getBuffer() { return message_; }
+
+protected:
+	NetBuffer *message_;
+};
 
 #endif

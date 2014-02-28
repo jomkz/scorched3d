@@ -41,7 +41,7 @@ public:
 
 protected:
 
-	static bool formMessage(
+	static bool formMessage(NetBuffer &buffer, 
 		ComsMessage &message, unsigned int flags);
 
 private:
