@@ -28,7 +28,6 @@
 #include <tank/TankModelContainer.h>
 #include <tank/TankViewPoints.h>
 #include <tank/TankAvatar.h>
-#include <tank/TankCamera.h>
 #include <tank/TankWeaponSwitcher.h>
 #include <tankai/TankAI.h>
 #include <tankai/TankAIStore.h>
@@ -57,7 +56,6 @@ Tank::Tank(ScorchedContext &context,
 	shotHistory_ = new TankShotHistory(context);
 	modelContainer_ = new TankModelContainer(context_);
 	avatar_ = new TankAvatar();
-	camera_ = new TankCamera(context);
 	viewPoints_ = new TankViewPointsCollection(context_);
 
 	getAccessories().getWeapons().setWeaponSwitcher(weaponSwitcher);
@@ -76,7 +74,6 @@ Tank::~Tank()
 	delete shotHistory_; shotHistory_ = 0;
 	delete modelContainer_; modelContainer_ = 0;
 	delete avatar_; avatar_ = 0;
-	delete camera_; camera_ = 0;
 	delete viewPoints_; viewPoints_ = 0;
 }
 

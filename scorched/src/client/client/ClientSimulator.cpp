@@ -21,7 +21,6 @@
 #include <client/ClientSimulator.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientState.h>
-#include <graph/ShotCountDown.h>
 #include <coms/ComsSimulateMessage.h>
 #include <coms/ComsSimulateResultMessage.h>
 #include <coms/ComsNetStatMessage.h>
@@ -55,7 +54,6 @@ void ClientSimulator::simulate()
 void ClientSimulator::actualSimulate(fixed frameTime)
 {
 	Simulator::actualSimulate(frameTime);
-	ShotCountDown::instance()->simulateTime(frameTime);
 }
 
 bool ClientSimulator::processNetStatMessage(
@@ -139,14 +137,15 @@ void ClientSimulator::newLevel()
 	Simulator::newLevel();
 
 	// Reset times
-	lastTickTime_ = SDL_GetTicks() - 1;
+	lastTickTime_ = boost::posix_time::microsec_clock::local_time();
+	lastTickTime_-= boost::posix_time::milliseconds(10);
 	serverTimeDifference_.reset(0);
 }
 
 void ClientSimulator::setSimulationTime(fixed actualTime)
 {
 	// Set actual time
-	lastTickTime_ = SDL_GetTicks();
+	lastTickTime_ = boost::posix_time::microsec_clock::local_time();
 	actualTime_ = actualTime;
 	serverTimeDifference_.reset(0);
 

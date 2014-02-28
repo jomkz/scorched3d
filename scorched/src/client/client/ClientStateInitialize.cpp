@@ -227,7 +227,7 @@ void ClientStateInitialize::connectToServer()
 	}
 
 	// Do in a thread so connect can block if it wants!
-	remoteConnectionThread_ = SDL_CreateThread(ClientStateInitialize::tryRemoteConnection, this);
+	remoteConnectionThread_ = new boost::thread(ClientStateInitialize::tryRemoteConnection, this);
 }
 
 int ClientStateInitialize::tryRemoteConnection(void *th)
@@ -247,15 +247,15 @@ void ClientStateInitialize::connected()
 	// Wait for the thread to stop (if we started one)
 	if (remoteConnectionThread_)
 	{
-		int status = 0;
-		SDL_WaitThread(remoteConnectionThread_, &status);
+		remoteConnectionThread_->join();
+		delete remoteConnectionThread_;
 		remoteConnectionThread_ = 0;
 	}
 
 	// Wait for the coms to start
 	for (int i=0; i<10 && !ScorchedClient::instance()->getNetInterface().started(); i++)
 	{
-		SDL_Delay(500);
+		boost::this_thread::sleep(boost::posix_time::milliseconds(500));
 	}
 
 	// If we connected then send our details to the server
@@ -304,16 +304,12 @@ void ClientStateInitialize::sendAuth()
 	std::string uniqueId, SUI;
 	if (ClientParams::instance()->getConnectedToServer())
 	{
-		IPaddress address;
-		if (SDLNet_ResolveHost(&address, (char *) hostName.c_str(), 0) == 0)
-		{
-			unsigned int ipAddress = SDLNet_Read32(&address.host);
-			// TODO
-			uniqueId = "";//ConnectDialog::instance()->getIdStore().getUniqueId(ipAddress);
+		unsigned int ipAddress = NetInterface::getIpAddressFromName(hostName.c_str());
+		// TODO
+		uniqueId = "";//ConnectDialog::instance()->getIdStore().getUniqueId(ipAddress);
 
-			SecureID MakeKey;
-			SUI = MakeKey.getSecureID(ipAddress);
-		}
+		SecureID MakeKey;
+		SUI = MakeKey.getSecureID(ipAddress);
 	}
 
 	// Check the number of players that are connecting
@@ -605,11 +601,6 @@ bool ClientStateInitialize::initializeMod()
 
 	// Load the landscape definitions
 	if (!ScorchedClient::instance()->getLandscapes().readLandscapeDefinitions()) return false;
-
-	// Load textures
-	if (!ExplosionTextures::instance()->createTextures(&progressCounter)) 
-			S3D::dialogExit("Scorched3D", "Failed to load explosion textures");
-	GLLenseFlare::instance()->init(&progressCounter);
 		
 	return true;
 }

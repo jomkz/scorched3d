@@ -35,7 +35,6 @@
 	x_.setName(y); \
 	params_.push_back(&x_);
 
-struct lua_State;
 class XMLNode;
 class ActionParam
 {
@@ -45,7 +44,6 @@ public:
 
 	virtual void copy(ActionParam *other) = 0;
 	virtual bool parseXML(XMLNode *accessoryNode) = 0;
-	virtual void initLUA(lua_State *L, int position) = 0;
 	virtual void initXML(ScorchedContext &context) = 0;
 		
 protected:
@@ -62,7 +60,6 @@ public:
 
 	virtual void copy(ActionParam *other);
 	virtual bool parseXML(XMLNode *accessoryNode);
-	virtual void initLUA(lua_State *L, int position);
 	virtual void initXML(ScorchedContext &context);
 
 protected:
@@ -76,7 +73,6 @@ public:
 	ActionParams();
 
 	bool parseXML(XMLNode *accessoryNode);
-	void initLUA(lua_State *L, int position);
 	void initXML(ScorchedContext &context);
 
 	void copy(ActionParams &other);

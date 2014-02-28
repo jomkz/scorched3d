@@ -21,7 +21,6 @@
 #include <client/ClientGameStoppedHandler.h>
 #include <client/ClientState.h>
 #include <client/ScorchedClient.h>
-#include <GLW/GLWWindowManager.h>
 #include <coms/ComsGameStoppedMessage.h>
 
 ClientGameStoppedHandler::ClientGameStoppedHandler(ComsMessageHandler &comsMessageHandler)

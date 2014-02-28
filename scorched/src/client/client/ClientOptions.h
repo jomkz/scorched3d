@@ -142,9 +142,6 @@ public:
 	bool getSideScroll() { return sideScroll_; }
 	OptionEntryBool &getSideScrollEntry() { return sideScroll_; }
 
-	bool getStorePlayerCamera() { return storePlayerCamera_; }
-	OptionEntryBool &getStorePlayerCameraEntry() { return storePlayerCamera_; }
-
 	bool getRestrictedCameraMovement() { return restricedCameraMovement_; }
 	OptionEntryBool &getRestrictedCameraMovementEntry() { return restricedCameraMovement_; }
 
@@ -414,32 +411,6 @@ protected:
 	static OptionsDisplay *instance_;
 	std::list<OptionEntry *> options_;
 
-	OptionEntryBool depricatedNoBoidSound_;
-	OptionEntryBool depricatedNoBOIDS_;
-	OptionEntryBoundedInt depricatedMaxModelTriPercentage_;
-	OptionEntryBool depricatedUseHex_;
-	OptionEntryInt depricatedDayTime_;
-	OptionEntryInt depricatedSunYZAng_;
-	OptionEntryInt depricatedSunXYAng_;
-	OptionEntryInt bannerRowsDepricated_;
-	OptionEntryString depricatedUniqueUserId_;
-	OptionEntryBool depricatedNoShips_;
-	OptionEntryBool depricatedDrawShipPaths_;
-	OptionEntryBool depricatedFirstTimePlayed_;
-	OptionEntryBool depricatedNoWaves_;
-	OptionEntryBool depricatedNoCg_;
-	OptionEntryBool depricatedNoAmbientSound_;
-	OptionEntryBool depricatedFullClear_;
-	OptionEntryInt depricatedRoamVarianceStart_;
-	OptionEntryInt depricatedRoamVarianceRamp_;
-	OptionEntryInt depricatedRoamVarianceTank_;
-	OptionEntryBool depricatedNoROAM_;
-	OptionEntryBool depricatedNoTessalation_;
-	OptionEntryBool depricatedNoGLCompiledArrays_;
-	OptionEntryFloat depricatedDrawDistance_;
-	OptionEntryFloat depricatedDrawDistanceFade_;
-	OptionEntryInt depricatedLandDetailLevelRamp_;
-
 	OptionEntryBoundedInt brightness_;
 	OptionEntryBoundedInt explosionParts_;
 	OptionEntryBoundedInt explosionSubParts_;
@@ -499,8 +470,6 @@ protected:
 	OptionEntryBool drawBoundingSpheres_;
 	OptionEntryBool noLenseFlare_;
 	OptionEntryBool noSkins_;
-	OptionEntryBool depricatedNoArenaMoveVisibility_;
-	OptionEntryBool deprecatedSortAccessories_;
 	OptionEntryEnum accessorySortKey_;
 	OptionEntryBool drawWater_;
 	OptionEntryBool drawLandscape_;
@@ -518,7 +487,6 @@ protected:
 	OptionEntryBool hideFinalScore_;
 	OptionEntryBool hideMenus_;
 	OptionEntryBool noVBO_;
-	OptionEntryBool depricatedNoModelLOD_;
 	OptionEntryBool noModelLighting_;
 	OptionEntryBool useLandscapeTexture_;
 	OptionEntryBool useWaterTexture_;
@@ -526,7 +494,6 @@ protected:
 	OptionEntryBool noSkyMovement_;
 	OptionEntryBool noPrecipitation_;
 	OptionEntryBool frameTimer_;
-	OptionEntryBool depricatedMoWaterBuffers_;
 	OptionEntryBool noWaterMovement_;
 	OptionEntryBool noWaterWaves_;
 	OptionEntryBool noWaterLOD_;
@@ -538,7 +505,6 @@ protected:
 	OptionEntryBool lowTreeDetail_;
 	OptionEntryBool softwareMouse_;
 	OptionEntryBool sideScroll_;
-	OptionEntryBool storePlayerCamera_;
 	OptionEntryBool restricedCameraMovement_;
 	OptionEntryBool swapYAxis_;
 	OptionEntryBool clientLogToFile_;

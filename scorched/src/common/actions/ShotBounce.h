@@ -27,7 +27,6 @@
 #include <weapons/WeaponRoller.h>
 
 class TankViewPointProvider;
-class ModelRendererSimulator;
 class ShotBounce : public PhysicsParticle
 {
 public:
@@ -57,7 +56,6 @@ protected:
 	WeaponFireContext weaponContext_;
 	fixed totalTime_, simulateTime_, stepSize_;
 	fixed weaponTime_;
-	ModelRendererSimulator *model_;
 	float scale_;
 
 	void doCollision();

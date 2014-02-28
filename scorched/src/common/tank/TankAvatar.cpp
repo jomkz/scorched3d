@@ -24,20 +24,10 @@
 #include <stdio.h>
 #include <zlib.h>
 
-#ifndef S3D_SERVER
-#include <GLEXT/GLTexture.h>
-
-GLTexture *TankAvatar::defaultTexture_ = 0;
-std::list<TankAvatar::AvatarStore> TankAvatar::storeEntries_;
-#endif
-
 static NetBuffer tmpBuffer;
 
 TankAvatar::TankAvatar()
 {
-#ifndef S3D_SERVER
-	texture_ = 0;
-#endif
 	file_ = new NetBuffer();
 }
 
@@ -57,9 +47,6 @@ bool TankAvatar::writeMessage(NamedNetBuffer &buffer)
 
 void TankAvatar::clear()
 {
-#ifndef S3D_SERVER
-	texture_ = 0;
-#endif
 	name_ = "";
 	file_->reset();
 }
@@ -113,55 +100,5 @@ bool TankAvatar::setFromBuffer(const std::string &fileName, NetBuffer &buffer)
 	file_->addDataToBuffer(buffer.getBuffer(), 
 		buffer.getBufferUsed());
 
-#ifndef S3D_SERVER
-	{
-		texture_ = 0;
-		unsigned int crc = getCrc();
-		std::list<AvatarStore>::iterator itor;
-		for (itor = storeEntries_.begin();
-			itor != storeEntries_.end();
-			++itor)
-		{
-			AvatarStore &store = (*itor);
-			if (store.crc_ == crc &&
-				0 == strcmp(store.name_.c_str(), name_.c_str()))
-			{
-				texture_ = store.texture_;
-				break;
-			}
-		}
-		if (!texture_)
-		{
-			texture_ = new GLTexture;
-			texture_->create(png);
-			AvatarStore store;
-			store.crc_ = crc;
-			store.name_ = name_;
-			store.texture_ = texture_;
-			storeEntries_.push_back(store);
-		}
-	}
-#endif
-
 	return true;
 }
-
-#ifndef S3D_SERVER
-GLTexture *TankAvatar::getDefaultTexture()
-{
-	if (!defaultTexture_)
-	{
-		defaultTexture_ = new GLTexture();
-		std::string file = S3D::getDataFile("data/avatars/player.png");
-		Image png = ImagePngFactory::loadFromFile(file.c_str());
-		defaultTexture_->create(png);
-	}
-	return defaultTexture_;
-}
-
-GLTexture *TankAvatar::getTexture()
-{
-	if (!texture_) return getDefaultTexture();
-	return texture_; 
-}
-#endif

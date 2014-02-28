@@ -53,11 +53,6 @@ public:
 	void setComponents(int components) { data_->setComponents(components); }
 
 	virtual bool writeToFile(const std::string &filename);
-
-#ifndef S3D_SERVER
-	Image createAlphaMult(float mult);
-	Image createResize(int newWidth, int newHeight);
-#endif
 private:
 	ImageData *data_;
 };

@@ -32,7 +32,8 @@
 #include <common/Logger.h>
 
 static fixed maxStepSize(true, 1 * fixed::FIXED_RESOLUTION);
-static fixed minStepSize(true, fixed::FIXED_RESOLUTION / Sint64(10));
+static fixed minStepSize(true, fixed::FIXED_RESOLUTION / int64_t(10));
+static boost::posix_time::ptime time_t_epoch(boost::gregorian::date(1970,1,1)); 
 
 ServerSimulator::ServerSimulator() :
 	sendStepSize_(true, 1 * fixed::FIXED_RESOLUTION),
@@ -114,8 +115,12 @@ void ServerSimulator::nextSendTime()
 	sendActions_.clear();
 
 	// Send the time and actions to the client
-	unsigned int serverTime = SDL_GetTicks();
-	ComsSimulateMessage simulateMessage(nextEventTime_, actualTime_, serverTime, actions);
+	boost::posix_time::ptime now = boost::posix_time::microsec_clock::local_time();
+	boost::posix_time::time_duration diff = now - time_t_epoch;
+	int64_t serverTime = diff.total_milliseconds();
+	fixed serverTimef = fixed(true, serverTime * 10);
+
+	ComsSimulateMessage simulateMessage(nextEventTime_, actualTime_, serverTimef, actions);
 	ComsMessageSender::sendToAllLoadedClients(simulateMessage);
 	if (levelMessage_)
 	{
@@ -136,7 +141,7 @@ fixed ServerSimulator::calcSendStepSize()
 	{
 		ServerDestination *destination = destItor->second;
 		fixed value = destination->getPing().getAverage() + 
-			fixed(true, fixed::FIXED_RESOLUTION / Sint64(10));
+			fixed(true, fixed::FIXED_RESOLUTION / int64_t(10));
 		if (value > max)
 		{
 			max = value;
@@ -163,9 +168,12 @@ bool ServerSimulator::processMessage(
 
 	if (destination->getState() == ServerDestination::sFinished)
 	{
-		unsigned int serverTime = SDL_GetTicks();
-		unsigned int roundTripTime = serverTime - message.getServerTime();
-		fixed fixedRoundTripTime(true, roundTripTime * 10);
+		boost::posix_time::ptime now = boost::posix_time::microsec_clock::local_time();
+		boost::posix_time::time_duration diff = now - time_t_epoch;
+		int64_t serverTime = diff.total_milliseconds();
+		fixed serverTimef = fixed(true, serverTime * 10);
+
+		fixed fixedRoundTripTime = serverTimef - message.getServerTime();
 
 		destination->getPing().addValue(fixedRoundTripTime);
 		if (currentTime_ > destination->getLastSentPingTime() + 2)

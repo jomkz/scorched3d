@@ -31,11 +31,6 @@
 #include <actions/Napalm.h>
 #include <actions/CameraPositionAction.h>
 #ifndef S3D_SERVER
-	#include <sprites/ExplosionTextures.h>
-	#include <GLEXT/GLStateExtension.h>
-	#include <landscape/Landscape.h>
-	#include <landscape/DeformTextures.h>
-	#include <landscape/Smoke.h>
 	#include <client/ScorchedClient.h>
 #endif
 #include <landscapemap/LandscapeMaps.h>
@@ -121,8 +116,8 @@ void Napalm::init()
 			context_->getActionController().addAction(pos);
 		}
 
-		set_ = ExplosionTextures::instance()->getTextureSetByName(
-			params_->getNapalmTexture());
+		//set_ = ExplosionTextures::instance()->getTextureSetByName(
+		//	params_->getNapalmTexture());
 	}
 #endif // #ifndef S3D_SERVER
 }
@@ -156,8 +151,8 @@ void Napalm::simulate(fixed frameTime, bool &remove)
 			fixed posZ = 
 				ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeight(
 				entry->posX, entry->posY);
-			Landscape::instance()->getSmoke().
-				addSmoke(float(entry->posX), float(entry->posY), posZ.asFloat());
+			//Landscape::instance()->getSmoke().
+			//	addSmoke(float(entry->posX), float(entry->posY), posZ.asFloat());
 		}
 	}
 #endif // #ifndef S3D_SERVER
@@ -326,6 +321,7 @@ void Napalm::simulateAddEdge(int x, int y)
 #ifndef S3D_SERVER
 	if (!context_->getServerMode())
 	{
+		/*
 		ParticleEmitter emitter;
 		emitter.setAttributes(
 			params_->getNapalmTime().asFloat(), params_->getNapalmTime().asFloat(),
@@ -375,6 +371,7 @@ void Napalm::simulateAddEdge(int x, int y)
 				}
 			}
 		}
+		*/
 	}
 #endif // #ifndef S3D_SERVER
 

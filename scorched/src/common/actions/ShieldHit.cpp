@@ -27,10 +27,6 @@
 #include <target/TargetContainer.h>
 #include <target/TargetShield.h>
 #include <target/TargetRenderer.h>
-#ifndef S3D_SERVER
-	#include <sound/SoundUtils.h>
-	#include <GLEXT/GLLenseFlare.h>
-#endif
 
 ShieldHit::ShieldHit(unsigned int playerId,
 	FixedVector &position,
@@ -69,12 +65,13 @@ void ShieldHit::simulate(fixed frameTime, bool &remove)
 #ifndef S3D_SERVER
 				if (!context_->getServerMode()) 
 				{
+					/*
 					SoundBuffer *shieldSound = 
 						Sound::instance()->fetchOrCreateBuffer(
 							S3D::getModFile(S3D::formatStringBuffer("data/wav/%s", shield->getCollisionSound())));
 					SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
 						shieldSound, position_.asVector());
-
+					*/
 					TargetRenderer *renderer = target->getRenderer();
 					if (renderer)
 					{
@@ -100,8 +97,8 @@ void ShieldHit::draw()
 #ifndef S3D_SERVER
 	if (!context_->getServerMode())
 	{
-		GLLenseFlare::instance()->draw(position_.asVector(), false, 0, 
-			1.0f, 1.0f);
+		//GLLenseFlare::instance()->draw(position_.asVector(), false, 0, 
+		//	1.0f, 1.0f);
 	}
 #endif // #ifndef S3D_SERVER
 }

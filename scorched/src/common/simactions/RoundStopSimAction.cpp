@@ -21,9 +21,6 @@
 #include <simactions/RoundStopSimAction.h>
 #include <simactions/TankStopMoveSimAction.h>
 #include <target/TargetContainer.h>
-#ifndef S3D_SERVER
-#include <graph/ShotCountDown.h>
-#endif
 
 REGISTER_CLASS_SOURCE(RoundStopSimAction);
 
@@ -54,7 +51,7 @@ bool RoundStopSimAction::invokeAction(ScorchedContext &context)
 	if (!context.getServerMode())
 	{
 #ifndef S3D_SERVER
-		ShotCountDown::instance()->hideRoundTime();
+		//ShotCountDown::instance()->hideRoundTime();
 #endif
 	}
 

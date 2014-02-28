@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <actions/ActionParams.h>
-#include <lua/LUAUtil.h>
 #include <XML/XMLNode.h>
 
 void FixedActionParam::copy(ActionParam *other)
@@ -30,11 +29,6 @@ void FixedActionParam::copy(ActionParam *other)
 bool FixedActionParam::parseXML(XMLNode *accessoryNode)
 {
 	return accessoryNode->getNamedChild(name_.c_str(), value_);
-}
-
-void FixedActionParam::initLUA(lua_State *L, int position)
-{
-	value_ = LUAUtil::getNumberFromTable(L, position, name_.c_str(), value_);
 }
 
 void FixedActionParam::initXML(ScorchedContext &context)
@@ -57,19 +51,6 @@ bool ActionParams::parseXML(XMLNode *accessoryNode)
 	}
 
 	return true;
-}
-
-void ActionParams::initLUA(lua_State *L, int position)
-{
-	luaL_checktype(L, position, LUA_TTABLE);
-
-	std::vector<ActionParam *>::iterator itor;
-	for (itor = params_.begin();
-		itor != params_.end();
-		++itor)
-	{
-		(*itor)->initLUA(L, position);
-	}
 }
 
 void ActionParams::initXML(ScorchedContext &context)

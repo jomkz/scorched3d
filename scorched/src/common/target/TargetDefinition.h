@@ -25,7 +25,6 @@
 #include <common/RandomGenerator.h>
 #include <engine/ScorchedContext.h>
 #include <engine/ObjectGroupEntryDefinition.h>
-#include <placement/PlacementShadowDefinition.h>
 
 class Target;
 class TargetDefinition
@@ -41,7 +40,6 @@ public:
 		ScorchedContext &context,
 		RandomGenerator &generator);
 
-	PlacementShadowDefinition &getShadow() { return shadow_; }
 	ObjectGroupEntryDefinition &getGroups() { return groups_; }
 
 protected:
@@ -69,7 +67,6 @@ protected:
 	std::string collisionaction_;
 	ModelID modelId_;
 	ModelID modelburntId_;
-	PlacementShadowDefinition shadow_;
 	ObjectGroupEntryDefinition groups_;
 };
 

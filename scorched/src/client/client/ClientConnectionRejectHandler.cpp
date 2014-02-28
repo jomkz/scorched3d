@@ -20,7 +20,6 @@
 
 #include <client/ClientConnectionRejectHandler.h>
 #include <client/ScorchedClient.h>
-#include <dialogs/MsgBoxDialog.h>
 #include <lang/LangResource.h>
 #include <coms/ComsConnectRejectMessage.h>
 #include <common/Logger.h>
@@ -47,6 +46,5 @@ bool ClientConnectionRejectHandler::processMessage(
 	LangString msg = LANG_RESOURCE_1("DISCONNECTED",
 		"Disconnected from server due to : {0}", message.getText());
 	Logger::log(LangStringUtil::convertFromLang(msg));
-	MsgBoxDialog::show(msg);
 	return true;
 }

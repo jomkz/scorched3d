@@ -26,13 +26,6 @@
 #include <weapons/AccessoryStore.h>
 #include <common/OptionsScorched.h>
 #include <tank/TankViewPoints.h>
-#ifndef S3D_SERVER
-	#include <GLEXT/GLState.h>
-	#include <graph/ModelRenderer.h>
-	#include <graph/ModelRendererStore.h>
-	#include <graph/ModelRendererSimulator.h>
-#endif
-#include <3dsparse/Model.h>
 #include <string.h>
 
 ShotBounce::ShotBounce(WeaponRoller *weapon, 
@@ -42,7 +35,7 @@ ShotBounce::ShotBounce(WeaponRoller *weapon,
 	startPosition_(startPosition),
 	velocity_(velocity), weapon_(weapon), weaponContext_(weaponContext),
 	totalTime_(0), simulateTime_(0),
-	model_(0), vPoint_(0), groups_(0)
+	vPoint_(0), groups_(0)
 {
 }
 
@@ -85,9 +78,6 @@ void ShotBounce::init()
 
 ShotBounce::~ShotBounce()
 {
-#ifndef S3D_SERVER
-	delete model_;
-#endif
 	if (vPoint_) vPoint_->decrementReference();
 	delete groups_;
 }
@@ -135,30 +125,11 @@ void ShotBounce::draw()
 		static float rotMatrix[16];
 		getPhysics().getRotationQuat().getOpenGLRotationMatrix(rotMatrix);
 
-		if (!model_)
-		{
-			ModelID &id = ((WeaponRoller *) weapon_)->getRollerModelID();
-			model_ = new ModelRendererSimulator(
-				ModelRendererStore::instance()->loadModel(id));
-		}
 
 		if (vPoint_)
 		{
 			vPoint_->setValues(getPhysics().getPosition(), lookFrom_);
 		}
-
-		GLState state(GLState::TEXTURE_OFF);
-		glPushMatrix();
-			glTranslatef(
-				getPhysics().getPosition()[0].asFloat(), 
-				getPhysics().getPosition()[1].asFloat(), 
-				getPhysics().getPosition()[2].asFloat() -
-				model_->getRenderer()->getModel()->getMin()[2].asFloat() * 0.08f);
-
-			glMultMatrixf(rotMatrix);
-			glScalef(0.08f * scale_, 0.08f * scale_, 0.08f * scale_);
-			model_->draw();
-		glPopMatrix();
 	}
 #endif // #ifndef S3D_SERVER
 }

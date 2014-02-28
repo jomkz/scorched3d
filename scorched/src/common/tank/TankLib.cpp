@@ -27,9 +27,6 @@
 #include <common/RandomGenerator.h>
 #include <common/Defines.h>
 #include <landscapemap/LandscapeMaps.h>
-#ifndef S3D_SERVER
-	#include <GLEXT/GLState.h>
-#endif
 #include <math.h>
 
 fixed TankLib::getDistanceToTank(FixedVector &position, Target *targetTank)

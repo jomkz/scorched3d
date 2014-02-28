@@ -21,14 +21,11 @@
 #include <lang/LangImpl.h>
 #include <lang/ResourceBundleEntryImpl.h>
 #include <common/Defines.h>
-#include <SDL/SDL.h>
-#include <SDL/SDL_thread.h>
 
-static SDL_mutex *langMutex = 0;
+boost::mutex langMutex;
 
 LangImpl::LangImpl() : undefinedBundle_(0)
 {
-	langMutex = SDL_CreateMutex();
 	init();
 }
 
@@ -52,7 +49,7 @@ void LangImpl::clear()
 
 void LangImpl::init()
 {
-	SDL_LockMutex(langMutex);
+	langMutex.lock();
 
 	// Read the platform default language from the language file
 	std::string currentLang = "EN";
@@ -86,7 +83,7 @@ void LangImpl::init()
 
 	undefinedBundle_ = new ResourceBundle();
 	bundles_.push_back(undefinedBundle_);
-	SDL_UnlockMutex(langMutex);
+	langMutex.unlock();
 }
 
 void LangImpl::saveUndefined()
@@ -103,7 +100,7 @@ ResourceBundleEntry *LangImpl::getEntry(
 ResourceBundleEntry *LangImpl::getEntry(
 	const std::string &key, const LangString &value)
 {
-	SDL_LockMutex(langMutex);
+	langMutex.lock();
 
 	ResourceBundleEntry *entry = 0;
 	std::vector<ResourceBundle *>::iterator itor;
@@ -121,6 +118,6 @@ ResourceBundleEntry *LangImpl::getEntry(
 		undefinedBundle_->addEntry(entry);
 	}
 
-	SDL_UnlockMutex(langMutex);
+	langMutex.unlock();
 	return entry;
 }

@@ -27,7 +27,7 @@ ComsSimulateResultMessage::ComsSimulateResultMessage() :
 {
 }
 
-ComsSimulateResultMessage::ComsSimulateResultMessage(unsigned int serverTime) :
+ComsSimulateResultMessage::ComsSimulateResultMessage(fixed serverTime) :
 	ComsMessage(ComsSimulateResultMessageType),
 	serverTime_(serverTime)
 {

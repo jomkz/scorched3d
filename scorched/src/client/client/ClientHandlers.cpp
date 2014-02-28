@@ -22,7 +22,6 @@
 
 ClientHandlers::ClientHandlers(ComsMessageHandler &comsMessageHandler) :
 	connectionRejectHandler_(comsMessageHandler),
-	linesHandler_(comsMessageHandler),
 	operationHandler_(comsMessageHandler),
 	gameStoppedHandler_(comsMessageHandler),
 	adminResultHandler_(comsMessageHandler)

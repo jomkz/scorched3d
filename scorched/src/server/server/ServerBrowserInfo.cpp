@@ -43,10 +43,8 @@ ServerBrowserInfo *ServerBrowserInfo::instance()
 	return instance_;
 }
 
-ServerBrowserInfo::ServerBrowserInfo() : udpsock_(0)
+ServerBrowserInfo::ServerBrowserInfo()
 {
-	packetV_ = SDLNet_AllocPacketV(4, 10000);
-	packetVOut_ = SDLNet_AllocPacketV(20, 10000);
 }
 
 ServerBrowserInfo::~ServerBrowserInfo()
@@ -55,41 +53,56 @@ ServerBrowserInfo::~ServerBrowserInfo()
 
 bool ServerBrowserInfo::start()
 {
-	udpsock_ = SDLNet_UDP_Open(ScorchedServer::instance()->getOptionsGame().getPortNo() + 1);
-	if(!udpsock_) return false;
+	boost::thread newThread(ServerBrowserInfo::threadFunc);
 	return true;
 }
 
-void ServerBrowserInfo::processMessages()
-{ 
-	if (!udpsock_) return;
-
-	int numrecv = SDLNet_UDP_RecvV(udpsock_, packetV_);
-	if(numrecv <=0) return;
-	
-	int numsent = 0;
-	for(int i=0; i<numrecv; i++) 
+void ServerBrowserInfo::threadFunc()
+{
+	for (;;)
 	{
-		if (packetV_[i]->len == 0) packetV_[i]->data[0] = '\0';
+		if (!instance_->processMessages()) break;
+	}
+}
 
+bool ServerBrowserInfo::processMessages()
+{ 
+	int port = ScorchedServer::instance()->getOptionsGame().getPortNo() + 1;
+	boost::asio::ip::udp::socket sock = 
+		boost::asio::ip::udp::socket(io_service_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port));
+	if (!sock.is_open()) return false;
+
+	const int max_length = 2048;
+	char data[max_length];
+    boost::asio::ip::udp::endpoint sender_endpoint;
+	boost::system::error_code ec;
+	size_t length = sock.receive_from(
+        boost::asio::buffer(data, max_length), sender_endpoint, 0, ec);
+
+	if(length==0 || ec) return false;
+	if (length == max_length) length = max_length - 1;
+	data[length] = '\0';
+
+	int numsent = 0;
+	{
 		//printf("Packet = %s\n", (char *) packetV_[i]->data);
-		NetInterface::getBytesIn() += packetV_[i]->len;
+		NetInterface::getBytesIn() += length;
 		NetInterface::getPings() ++;
 
 		// Only compare the first few characters so a NULL is not needed
 		std::list<std::string> reply;
 		const char *wrapper = "pong";
-		if (0 == strncmp((char *) packetV_[i]->data, "status", 6))
+		if (0 == strncmp(data, "status", 6))
 		{
 			wrapper = "status";
 			processStatusMessage(reply);
 		}
-		else if (0 == strncmp((char *) packetV_[i]->data, "info", 4))
+		else if (0 == strncmp(data, "info", 4))
 		{
 			wrapper = "info";
 			processInfoMessage(reply);
 		}
-		else if (0 == strncmp((char *) packetV_[i]->data, "players", 7))
+		else if (0 == strncmp(data, "players", 7))
 		{
 			wrapper = "players";
 			processPlayerMessage(reply);
@@ -117,22 +130,15 @@ void ServerBrowserInfo::processMessages()
 			buffer += "/>";
 			
 			int len = (int) strlen(buffer.c_str())+1;
-			memcpy(packetVOut_[numsent]->data, buffer.c_str(), len);
-			packetVOut_[numsent]->len = len;
-			packetVOut_[numsent]->address.host = packetV_[i]->address.host;
-			packetVOut_[numsent]->address.port = packetV_[i]->address.port;
-			packetVOut_[numsent]->channel = packetV_[i]->channel;
+			sock.send_to(boost::asio::buffer(buffer.c_str(), len), sender_endpoint);
 			
 			NetInterface::getBytesOut() += len;
 			//printf("Packet len = %i\n", packetVOut_[numsent]->len);
 			//printf("Packet = %s\n", packetVOut_[numsent]->data);
-			
-			if (++numsent > 20) break;
+			//printf("Sending %i packets\n", numsent);
 		}
 	}
-	
-	//printf("Sending %i packets\n", numsent);
-	SDLNet_UDP_SendV(udpsock_, packetVOut_, numsent);
+	return true;
 }
 
 void ServerBrowserInfo::processStatusMessage(std::list<std::string> &reply)

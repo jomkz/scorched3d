@@ -28,7 +28,7 @@
 #include <common/OptionsScorched.h>
 #include <landscapemap/LandscapeMaps.h>
 
-static const fixed StepSize = fixed(true, fixed::FIXED_RESOLUTION / Sint64(50));
+static const fixed StepSize = fixed(true, fixed::FIXED_RESOLUTION / int64_t(50));
 
 Simulator::Simulator() :
 	speed_(1),
@@ -36,7 +36,7 @@ Simulator::Simulator() :
 	actualTime_(0),
 	context_(0)
 {
-	lastTickTime_ = SDL_GetTicks();
+	lastTickTime_ = boost::posix_time::microsec_clock::local_time();
 }
 
 Simulator::~Simulator()
@@ -66,8 +66,9 @@ void Simulator::setScorchedContext(ScorchedContext *context)
 
 void Simulator::simulate()
 {
-	unsigned int currentTime = SDL_GetTicks();
-	unsigned int timeDiff = currentTime - lastTickTime_;
+	boost::posix_time::ptime currentTime = boost::posix_time::microsec_clock::local_time();
+	boost::posix_time::time_duration timeDiffP = currentTime - lastTickTime_;
+	unsigned int timeDiff = (unsigned int) timeDiffP.total_milliseconds();
 	lastTickTime_ = currentTime;
 
 	if (timeDiff > 0)
@@ -146,7 +147,7 @@ void Simulator::newLevel()
 	// Reset times
 	currentTime_ = 0;
 	actualTime_ = 0;
-	lastTickTime_ = SDL_GetTicks();
+	lastTickTime_ = boost::posix_time::microsec_clock::local_time();
 
 	// Reset events
 	random_.seed(context_->getLandscapeMaps().getDefinitions().getSeed());

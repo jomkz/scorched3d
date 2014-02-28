@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <actions/NapalmParams.h>
-#include <lua/LUAUtil.h>
 #include <XML/XMLNode.h>
 
 NapalmParams::NapalmParams() : 
@@ -81,26 +80,4 @@ bool NapalmParams::parseXML(XMLNode *accessoryNode)
 	if (noObjectDamageNode) noObjectDamage_ = true;
 
 	return true;
-}
-
-void NapalmParams::parseLUA(lua_State *L, int position)
-{
-	luaL_checktype(L, position, LUA_TTABLE);
-
-	napalmTime_ = LUAUtil::getNumberFromTable(L, position, "napalmtime", napalmTime_);
-	napalmHeight_ = LUAUtil::getNumberFromTable(L, position, "napalmheight", napalmHeight_);
-	stepTime_ = LUAUtil::getNumberFromTable(L, position, "steptime", stepTime_);
-	hurtStepTime_ = LUAUtil::getNumberFromTable(L, position, "hurtsteptime", hurtStepTime_);
-	hurtPerSecond_ = LUAUtil::getNumberFromTable(L, position, "hurtpersecond", hurtPerSecond_);
-	groundScorchPer_ = LUAUtil::getNumberFromTable(L, position, "groundscorchper", groundScorchPer_);
-	landscapeErosion_ = LUAUtil::getNumberFromTable(L, position, "landscapeerosion", landscapeErosion_);
-	effectRadius_ = LUAUtil::getIntFromTable(L, position, "effectradius", effectRadius_);
-	numberParticles_ = LUAUtil::getIntFromTable(L, position, "numberparticles", numberParticles_);
-	noSmoke_ = LUAUtil::getBoolFromTable(L, position, "nosmoke", noSmoke_);
-	noObjectDamage_ = LUAUtil::getBoolFromTable(L, position, "noobjectdamage", noObjectDamage_);
-	allowUnderWater_ = LUAUtil::getBoolFromTable(L, position, "allowunderwater", allowUnderWater_);
-	luminance_ = LUAUtil::getBoolFromTable(L, position, "luminance", luminance_);
-	singleFlow_ = LUAUtil::getBoolFromTable(L, position, "singleflow", singleFlow_);
-	napalmTexture_ = LUAUtil::getStringFromTable(L, position, "napalmtexture", napalmTexture_);
-	deformTexture_ = LUAUtil::getStringFromTable(L, position, "deformtexture", deformTexture_);
 }

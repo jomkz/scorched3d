@@ -83,6 +83,5 @@ void WeaponRedirect::fireWeapon(ScorchedContext &context,
 	newVelocity *= currentMag;
 	
 	nextAction_->fire(context, weaponContext, position, newVelocity);
-
 }
 

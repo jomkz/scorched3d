@@ -54,11 +54,18 @@ unsigned int NetInterface::getIpAddressFromName(const char *name)
 	boost::asio::ip::tcp::v4(), name, "27270");
 		boost::asio::ip::tcp::resolver::iterator end, endpoint_iterator = resolver.resolve(query);
 
-	unsigned int result = 0;
 	if (endpoint_iterator != end)
 	{
 		boost::asio::ip::tcp::endpoint endpoint = *endpoint_iterator;
-		result = endpoint.address().to_v4().to_ulong();
+		unsigned int result = endpoint.address().to_v4().to_ulong();
+		return result;
 	}
-	return result;
+	return 0;
+}
+
+unsigned int NetInterface::getIpAddressFromSocket(boost::asio::ip::tcp::socket *socket)
+{
+	boost::asio::ip::tcp::endpoint endpoint = socket->remote_endpoint();
+	unsigned int addr = endpoint.address().to_v4().to_ulong();
+	return addr;
 }

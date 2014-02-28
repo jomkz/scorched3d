@@ -68,7 +68,7 @@ protected:
 		fixed fireTime_;
 	};
 
-	unsigned int lastTickTime_;
+	boost::posix_time::ptime lastTickTime_;
 	fixed speed_;
 	fixed currentTime_, actualTime_;
 	ScorchedContext *context_;

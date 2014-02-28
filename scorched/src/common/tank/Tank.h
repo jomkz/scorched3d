@@ -28,7 +28,6 @@ class TankState;
 class TankShotHistory;
 class TankModelContainer;
 class TankAvatar;
-class TankCamera;
 class TankViewPointsCollection;
 class Tank : public Tanket
 {
@@ -77,7 +76,6 @@ public:
 	TankShotHistory &getShotHistory() { return *shotHistory_; }
 	TankState &getState() { return *state_; }
 	TankAvatar &getAvatar() { return *avatar_; }
-	TankCamera &getCamera() { return *camera_; }
 	TankModelContainer &getModelContainer() { return *modelContainer_; }
 	TankViewPointsCollection &getViewPoints() { return *viewPoints_; }
 
@@ -89,7 +87,6 @@ protected:
 	TankShotHistory *shotHistory_;
 	TankState *state_;
 	TankAvatar *avatar_;
-	TankCamera *camera_;
 	Vector color_;
 	std::string uniqueId_;
 	std::string SUI_;

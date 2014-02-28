@@ -21,7 +21,6 @@
 #include <net/NetServerTCP3Send.h>
 #include <net/NetMessagePool.h>
 #include <common/Logger.h>
-#include <common/stdtypes.h>
 
 NetServerTCP3Send::NetServerTCP3Send(
 	boost::asio::ip::tcp::socket *socket, 

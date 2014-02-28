@@ -62,8 +62,8 @@ bool LandscapeSoundPositionSet::setPosition(VirtualSoundSource *source, Landscap
 
 	Vector position = entry->getPosition().asVector();
 	Vector velocity = entry->getVelocity().asVector();
-	source->setPosition(position);
-	source->setVelocity(velocity);
+	//source->setPosition(position);
+	//source->setVelocity(velocity);
 #endif
 
 	return true;
@@ -114,6 +114,8 @@ bool LandscapeSoundPositionGroup::setPosition(VirtualSoundSource *source, Landsc
 	if (!objectGroup) return false;
 	if (objectGroup->getObjectCount() <= 0) return false;
 
+	/*
+	TODO
 	TargetCamera *targetCamera = TargetCamera::getTargetCameraByName("main");
 	if (!targetCamera) return false;
 	Vector &cameraPos = targetCamera->getCamera().getCurrentPos();
@@ -144,6 +146,7 @@ bool LandscapeSoundPositionGroup::setPosition(VirtualSoundSource *source, Landsc
 
 	source->setRelative();
 	source->setPosition(position);
+	*/
 #endif
 
 	return true;
@@ -158,6 +161,7 @@ bool LandscapeSoundPositionWater::readXML(XMLNode *node)
 bool LandscapeSoundPositionWater::setPosition(VirtualSoundSource *source, LandscapeSoundItem *data)
 {
 #ifndef S3D_SERVER
+	/*
 	TargetCamera *targetCamera = TargetCamera::getTargetCameraByName("main");
 	if (!targetCamera) return false;
 
@@ -171,6 +175,7 @@ bool LandscapeSoundPositionWater::setPosition(VirtualSoundSource *source, Landsc
 
 	source->setRelative();
 	source->setPosition(position);
+	*/
 #endif
 
 	return true;
@@ -184,8 +189,8 @@ bool LandscapeSoundPositionAmbient::readXML(XMLNode *node)
 bool LandscapeSoundPositionAmbient::setPosition(VirtualSoundSource *source, LandscapeSoundItem *data)
 {
 #ifndef S3D_SERVER
-	source->setRelative();
-	source->setPosition(Vector::getNullVector());
+	//source->setRelative();
+	//source->setPosition(Vector::getNullVector());
 #endif
 
 	return true;
@@ -200,7 +205,7 @@ bool LandscapeSoundPositionAbsoulte::readXML(XMLNode *node)
 bool LandscapeSoundPositionAbsoulte::setPosition(VirtualSoundSource *source, LandscapeSoundItem *data)
 {
 #ifndef S3D_SERVER
-	source->setPosition(position);
+	//source->setPosition(position);
 #endif
 	return true;
 }
@@ -250,6 +255,7 @@ bool LandscapeSoundSoundFile::readXML(XMLNode *node)
 bool LandscapeSoundSoundFile::play(VirtualSoundSource *source, float ambientGain)
 {
 #ifndef S3D_SERVER
+	/*
 	std::string &file = files[rand() % files.size()];
 	SoundBuffer *buffer = 
 		Sound::instance()->fetchOrCreateBuffer(file.c_str());
@@ -259,6 +265,7 @@ bool LandscapeSoundSoundFile::play(VirtualSoundSource *source, float ambientGain
 	source->setRolloff(rolloff);
 	source->setReferenceDistance(referencedistance);
 	source->play(buffer);
+	*/
 #endif
 
 	return true;

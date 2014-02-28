@@ -170,6 +170,6 @@ void TargetMovementEntrySpline::reset()
 void TargetMovementEntrySpline::draw()
 {
 #ifndef S3D_SERVER
-	path_.draw();
+	// TODO
 #endif
 }

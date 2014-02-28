@@ -19,8 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <tank/TankModelStore.h>
-#include <3dsparse/ModelStore.h>
-#include <3dsparse/Model.h>
 #include <common/Defines.h>
 #include <XML/XMLFile.h>
 #include <lang/LangResource.h>
@@ -84,18 +82,13 @@ bool TankModelStore::loadTankMeshes(ScorchedContext &context,
 		}
 
 		// Add models depending on the number of triangles in each model
-		Model *model = ModelStore::instance()->loadModel(
-			tankModel->getTankModelID());
 		if (strcmp(tankModel->getName(), "Random") == 0)
 		{
 			randomModels.push_back(tankModel);
 		}
 		else 
 		{
-			int triangles = model->getNumberTriangles();
-			if (triangles <= 250) lowModels.push_back(tankModel);
-			else if (triangles <= 500) midModels.push_back(tankModel);
-			else highModels.push_back(tankModel);
+			lowModels.push_back(tankModel);
 		}
 	}
 

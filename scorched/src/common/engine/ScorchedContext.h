@@ -38,8 +38,6 @@ class TanketContainer;
 class TankModelStore;
 class TanketTypes;
 class TankTeamScore;
-class LUAScriptFactory;
-class LUAScriptHook;
 class Simulator;
 class TankAIStrings;
 class ObjectGroups;
@@ -72,8 +70,6 @@ public:
 	LandscapeDefinitions &getLandscapes() { return *landscapes_; }
 	TanketTypes &getTanketTypes() { return *tanketTypes_; }
 	TankModelStore &getTankModels() { return *tankModelStore_; }
-	LUAScriptFactory &getLUAScriptFactory() { return *luaScriptFactory_; }
-	LUAScriptHook &getLUAScriptHook() { return *luaScriptHook_; }
 	TankAIStrings &getTankAIStrings() { return *tankAIStrings_; }
 	ObjectGroups &getObjectGroups() { return *objectGroups_; }
 	EventController &getEventController() { return *eventController_; }
@@ -92,8 +88,6 @@ protected:
 	TankTeamScore *tankTeamScore_;
 	TanketTypes *tanketTypes_;
 	TargetMovement *targetMovement_;
-	LUAScriptFactory *luaScriptFactory_;
-	LUAScriptHook *luaScriptHook_;
 	TankAIStrings *tankAIStrings_;
 	ObjectGroups *objectGroups_;
 	EventController *eventController_;

@@ -29,7 +29,6 @@
 #ifndef S3D_SERVER
 #include <client/ScorchedClient.h>
 #include <client/ClientState.h>
-#include <client/ClientSaveScreenState.h>
 #endif
 
 bool ShowScoreAction::finalScoreStatic_ = false;
@@ -77,8 +76,6 @@ void ShowScoreAction::init()
 #ifndef S3D_SERVER
 	if (!context_->getServerMode())
 	{
-		ClientSaveScreenState::instance()->saveScreen();
-
 		//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
 		//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimScore);
 	}

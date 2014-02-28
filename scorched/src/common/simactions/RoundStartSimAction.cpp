@@ -20,9 +20,6 @@
 
 #include <simactions/RoundStartSimAction.h>
 #include <target/TargetContainer.h>
-#ifndef S3D_SERVER
-#include <graph/ShotCountDown.h>
-#endif
 
 REGISTER_CLASS_SOURCE(RoundStartSimAction);
 
@@ -49,7 +46,7 @@ bool RoundStartSimAction::invokeAction(ScorchedContext &context)
 		if (!context.getServerMode())
 		{
 #ifndef S3D_SERVER
-		ShotCountDown::instance()->showRoundTime(timeout_);
+		//ShotCountDown::instance()->showRoundTime(timeout_);
 #endif
 		}
 	}

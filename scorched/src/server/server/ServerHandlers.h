@@ -31,7 +31,6 @@
 #include <server/ServerGiftMoneyHandler.h>
 #include <server/ServerHaveModFilesHandler.h>
 #include <server/ServerInitializeModHandler.h>
-#include <server/ServerLinesHandler.h>
 #include <server/ServerPlayedMoveHandler.h>
 #include <server/ServerOperationResultHandler.h>
 
@@ -55,7 +54,6 @@ protected:
 	ServerGiftMoneyHandler serverGiftMoneyHandler_;
 	ServerHaveModFilesHandler serverHaveModFileHandler_;
 	ServerInitializeModHandler serverInitializeModHandler_;
-	ServerLinesHandler serverLinesHandler_;
 	ServerPlayedMoveHandler serverPlayedMoveHandler_;
 	ServerOperationResultHandler serverOperationResultHandler_;
 };

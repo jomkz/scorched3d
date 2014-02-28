@@ -21,6 +21,7 @@
 #if !defined(__INCLUDE_XMLParserh_INCLUDE__)
 #define __INCLUDE_XMLParserh_INCLUDE__
 
+#define XML_STATIC
 #include <expat.h>
 #include <XML/XMLNode.h>
 

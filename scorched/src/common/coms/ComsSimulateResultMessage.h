@@ -29,17 +29,17 @@ public:
 	static ComsMessageType ComsSimulateResultMessageType;
 
 	ComsSimulateResultMessage();
-	ComsSimulateResultMessage(unsigned int serverTime);
+	ComsSimulateResultMessage(fixed serverTime);
 	virtual ~ComsSimulateResultMessage();
 
 	// Inherited from ComsMessage
     virtual bool writeMessage(NetBuffer &buffer);
     virtual bool readMessage(NetBufferReader &reader);
 
-	unsigned int getServerTime() { return serverTime_; }
+	fixed getServerTime() { return serverTime_; }
 
 protected:
-	unsigned int serverTime_;
+	fixed serverTime_;
 
 private:
 	ComsSimulateResultMessage(const ComsSimulateResultMessage &);

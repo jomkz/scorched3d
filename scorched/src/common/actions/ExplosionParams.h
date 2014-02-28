@@ -23,7 +23,6 @@
 
 #include <common/FixedVector.h>
 
-struct lua_State;
 class XMLNode;
 class ExplosionParams
 {

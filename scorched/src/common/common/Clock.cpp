@@ -20,11 +20,10 @@
 
 #include <common/Defines.h>
 #include <common/Clock.h>
-#include <SDL/SDL.h>
 
 Clock::Clock() 
 {
-	dwLastTime_ = SDL_GetTicks();
+	lastTime_ = boost::posix_time::microsec_clock::local_time();
 }
 
 Clock::~Clock()
@@ -33,15 +32,14 @@ Clock::~Clock()
 
 unsigned int Clock::getTicksDifference()
 {
-	unsigned int  dwCurrentTime = SDL_GetTicks();
-	unsigned int  dwTimeDiff = 1;
-	if (dwCurrentTime >= dwLastTime_)
-	{
-		dwTimeDiff = dwCurrentTime - dwLastTime_;
-	}
+	boost::posix_time::ptime now = boost::posix_time::microsec_clock::local_time();
+	boost::posix_time::time_duration diff = now - lastTime_;
 
-	dwLastTime_ = dwCurrentTime;
-	return dwTimeDiff;
+	unsigned int timeDiff = (unsigned int) diff.total_microseconds();
+	if (timeDiff == 0) timeDiff = 0;
+
+	lastTime_ = now;
+	return timeDiff;
 }
 
 float Clock::getTimeDifference()

@@ -53,7 +53,6 @@
 #include <target/TargetSpace.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <coms/ComsSimulateResultMessage.h>
-#include <lua/LUAScriptHook.h>
 #include <weapons/EconomyStore.h>
 #include <weapons/AccessoryStore.h>
 #include <net/NetServerTCP3.h>
@@ -132,7 +131,6 @@ ScorchedServer::ScorchedServer() :
 	getComsMessageHandler().addHandler(
 		ComsSimulateResultMessage::ComsSimulateResultMessageType,
 		serverSimulator_);
-	getLUAScriptHook().addHookProvider("server_channeltext");
 
 	serverMessageHandler_ = new ServerMessageHandler();
 	getComsMessageHandler().setConnectionHandler(serverMessageHandler_);
@@ -254,9 +252,6 @@ bool ScorchedServer::startServerInternal(const ScorchedServerSettings &settings,
 	getTankAIStrings().load();
 
 	checkSettings();
-
-	// Load all script hooks
-	if (!getLUAScriptHook().loadHooks()) return false;
 
 	// Add event hooks
 	eventHandlerDataBase_ = EventHandlerDataBase::createInstance();

@@ -51,10 +51,4 @@ void PlacementObjectTarget::createObject(ScorchedContext &context,
 	++playerId;
 	Target *target = targetDef_.createTarget(
 		playerId, position.position, position.velocity, context, generator);
-
-	context.getLandscapeMaps().getGroundMaps().getShadows().push_back(
-		PlacementShadowDefinition::Entry(
-		&targetDef_.getShadow(),
-		position.position,
-		target->getLife().getSize()));
 }

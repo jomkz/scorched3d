@@ -30,16 +30,8 @@
 #define snprintf smb_snprintf
 #define vsnprintf smb_vsnprintf
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 extern int snprintf(char *str, size_t size, const char *format, ...);
 extern int vsnprintf(char *str, size_t size, const char *format, va_list ap);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif // HAVE_SNPRINTF
 

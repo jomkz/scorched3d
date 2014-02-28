@@ -546,19 +546,6 @@ protected:
 	OptionEntryBool allowSameIP_;
 	OptionEntryBool allowSameUniqueId_;
 	OptionEntryBool debugFeatures_;
-
-	// Depricated (old) 
-	OptionEntryBoundedInt depricatedIdleKickTime_;
-	OptionEntryBoundedInt depricatedIdleShotKickTime_;
-	OptionEntryBoundedInt depricatedKeepAliveTime_;
-	OptionEntryBoundedInt depricatedKeepAliveTimeoutTime_;
-	OptionEntryEnum depricatedScoreType_;
-	OptionEntryBool depricatedAutoBallanceTeams_;
-	OptionEntryBoundedInt depricatedMaxArmsLevel_;
-	OptionEntryString depricatedServerAdminPassword_;
-	OptionEntryString depricatedMasterListServer_;
-	OptionEntryString depricatedMasterListServerURI_;
-
 };
 
 #endif

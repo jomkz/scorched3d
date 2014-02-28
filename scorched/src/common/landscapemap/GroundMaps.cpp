@@ -190,9 +190,6 @@ void GroundMaps::generateObjects(
 		}
 	}
 
-	// Remove any existing shadows
-	getShadows().clear();
-
 	// Remove any existing groups
 	context.getObjectGroups().clearGroups();
 
@@ -225,21 +222,6 @@ void GroundMaps::generateObjects(
 			objectsGenerator.seed(defnCache_.getSeed());
 			generateObject(objectsGenerator, *place, 
 				context, playerId, counter);
-		}
-	}
-
-	// Deform the main map with respect to the objects
-	{
-		std::list<PlacementShadowDefinition::Entry> &shadows = getShadows();
-		std::list<PlacementShadowDefinition::Entry>::iterator itor;
-		for (itor = shadows.begin();
-			itor != shadows.end();
-			++itor)
-		{
-			PlacementShadowDefinition::Entry &entry = (*itor);
-			entry.definition_->updateLandscapeHeight(
-				context,
-				entry.position_, entry.size_);
 		}
 	}
 }

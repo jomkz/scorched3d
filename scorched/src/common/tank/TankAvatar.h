@@ -39,29 +39,11 @@ public:
 	bool loadFromFile(const std::string &fileName);
 	bool setFromBuffer(const std::string &fileName, NetBuffer &buffer);
 
-#ifndef S3D_SERVER
-	GLTexture *getTexture();
-	static GLTexture *getDefaultTexture();
-#endif
-
 	const char *getName() { return name_.c_str(); }
 	NetBuffer &getFile() { return *file_; }
 	unsigned int getCrc();
 	
 protected:
-#ifndef S3D_SERVER
-	static GLTexture *defaultTexture_;
-	class AvatarStore
-	{
-	public:
-		GLTexture *texture_;
-		unsigned int crc_;
-		std::string name_;
-	};
-	static std::list<AvatarStore> storeEntries_;
-	GLTexture *texture_;
-#endif
-
 	NetBuffer *file_;
 	std::string name_;
 };

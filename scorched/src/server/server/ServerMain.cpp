@@ -25,7 +25,6 @@
 #include <weapons/EconomyStore.h>
 #include <net/NetLoopBack.h>
 #include <net/NetServerTCP3.h>
-#include <lua/LUAScriptHook.h>
 #include <common/Defines.h>
 #include <common/Clock.h>
 #include <common/ARGParser.h>
@@ -56,9 +55,6 @@
 #include <server/ServerState.h>
 #include <server/ServerTimedMessage.h>
 #include <server/ServerParams.h>
-#include <SDL/SDL.h>
-
-#include <igd/igd.h>
 
 #ifdef S3D_SERVER
 #include <webserver/ServerWebServer.h>
@@ -94,8 +90,9 @@ static void serverMain(ProgressCounter *counter)
 	// Try to update the route to add the external port mapping
 	if (ScorchedServer::instance()->getOptionsGame().getUseUPnP())
 	{
-		igd pnpigd;
-		pnpigd.sendInitialRequest(ScorchedServer::instance()->getOptionsGame().getPortNo());
+		// TODO
+		//igd pnpigd;
+		//pnpigd.sendInitialRequest(ScorchedServer::instance()->getOptionsGame().getPortNo());
 	}
 
 	// Contact the registration server
@@ -170,7 +167,7 @@ void consoleServer()
 		fixed timeDifference(true, ticksDifference * 10);
 		if (!serverLoop(timeDifference))
 		{
-			SDL_Delay(10);
+			boost::this_thread::sleep(boost::posix_time::milliseconds(10));
 		}
 
 		if (ServerParams::instance()->getExitTime() > 0)

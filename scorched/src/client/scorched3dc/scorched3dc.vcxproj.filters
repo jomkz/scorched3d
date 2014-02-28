@@ -96,16 +96,10 @@
     <ClCompile Include="..\client\ClientConnectionRejectHandler.cpp">
       <Filter>client</Filter>
     </ClCompile>
-    <ClCompile Include="..\client\ClientDisconnected.cpp">
-      <Filter>client</Filter>
-    </ClCompile>
     <ClCompile Include="..\client\ClientGameStoppedHandler.cpp">
       <Filter>client</Filter>
     </ClCompile>
     <ClCompile Include="..\client\ClientHandlers.cpp">
-      <Filter>client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\client\ClientLinesHandler.cpp">
       <Filter>client</Filter>
     </ClCompile>
     <ClCompile Include="..\client\ClientMain.cpp">
@@ -118,12 +112,6 @@
       <Filter>client</Filter>
     </ClCompile>
     <ClCompile Include="..\client\ClientParams.cpp">
-      <Filter>client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\client\ClientProcessingLoop.cpp">
-      <Filter>client</Filter>
-    </ClCompile>
-    <ClCompile Include="..\client\ClientReloadAdaptor.cpp">
       <Filter>client</Filter>
     </ClCompile>
     <ClCompile Include="..\client\ClientSimulator.cpp">
@@ -327,9 +315,6 @@
     <ClCompile Include="..\..\common\common\sha2.cpp">
       <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\common\snprintf.c">
-      <Filter>common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\common\SplineCurve.cpp">
       <Filter>common</Filter>
     </ClCompile>
@@ -403,9 +388,6 @@
       <Filter>coms</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\coms\ComsLevelLoadedMessage.cpp">
-      <Filter>coms</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\coms\ComsLinesMessage.cpp">
       <Filter>coms</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\coms\ComsLoadLevelMessage.cpp">
@@ -723,13 +705,7 @@
     <ClCompile Include="..\..\common\placement\PlacementObjectRandom.cpp">
       <Filter>placement</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\placement\PlacementObjectShadow.cpp">
-      <Filter>placement</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\placement\PlacementObjectTarget.cpp">
-      <Filter>placement</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\placement\PlacementShadowDefinition.cpp">
       <Filter>placement</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\placement\PlacementTankPosition.cpp">
@@ -829,9 +805,6 @@
       <Filter>tank</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\tank\TankAvatar.cpp">
-      <Filter>tank</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\tank\TankCamera.cpp">
       <Filter>tank</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\tank\TankColorGenerator.cpp">
@@ -1248,9 +1221,6 @@
     <ClCompile Include="..\..\server\server\ServerInitializeModHandler.cpp">
       <Filter>server</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\server\server\ServerLinesHandler.cpp">
-      <Filter>server</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\server\server\ServerLoadLevel.cpp">
       <Filter>server</Filter>
     </ClCompile>
@@ -1413,6 +1383,9 @@
     <ClCompile Include="..\..\common\net\NetServerTCP3Send.cpp">
       <Filter>net</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\common\snprintf.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1436,16 +1409,10 @@
     <ClInclude Include="..\client\ClientConnectionRejectHandler.h">
       <Filter>client</Filter>
     </ClInclude>
-    <ClInclude Include="..\client\ClientDisconnected.h">
-      <Filter>client</Filter>
-    </ClInclude>
     <ClInclude Include="..\client\ClientGameStoppedHandler.h">
       <Filter>client</Filter>
     </ClInclude>
     <ClInclude Include="..\client\ClientHandlers.h">
-      <Filter>client</Filter>
-    </ClInclude>
-    <ClInclude Include="..\client\ClientLinesHandler.h">
       <Filter>client</Filter>
     </ClInclude>
     <ClInclude Include="..\client\ClientMain.h">
@@ -1458,12 +1425,6 @@
       <Filter>client</Filter>
     </ClInclude>
     <ClInclude Include="..\client\ClientParams.h">
-      <Filter>client</Filter>
-    </ClInclude>
-    <ClInclude Include="..\client\ClientProcessingLoop.h">
-      <Filter>client</Filter>
-    </ClInclude>
-    <ClInclude Include="..\client\ClientReloadAdaptor.h">
       <Filter>client</Filter>
     </ClInclude>
     <ClInclude Include="..\client\ClientSimulator.h">
@@ -1746,9 +1707,6 @@
       <Filter>coms</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\coms\ComsLevelLoadedMessage.h">
-      <Filter>coms</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\coms\ComsLinesMessage.h">
       <Filter>coms</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\coms\ComsLoadLevelMessage.h">
@@ -2075,13 +2033,7 @@
     <ClInclude Include="..\..\common\placement\PlacementObjectRandom.h">
       <Filter>placement</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\common\placement\PlacementObjectShadow.h">
-      <Filter>placement</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\common\placement\PlacementObjectTarget.h">
-      <Filter>placement</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\placement\PlacementShadowDefinition.h">
       <Filter>placement</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\placement\PlacementTankPosition.h">
@@ -2181,9 +2133,6 @@
       <Filter>tank</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\tank\TankAvatar.h">
-      <Filter>tank</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\tank\TankCamera.h">
       <Filter>tank</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\tank\TankColorGenerator.h">
@@ -2600,9 +2549,6 @@
     <ClInclude Include="..\..\server\server\ServerInitializeModHandler.h">
       <Filter>server</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\server\server\ServerLinesHandler.h">
-      <Filter>server</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\server\server\ServerLoadLevel.h">
       <Filter>server</Filter>
     </ClInclude>
@@ -2765,10 +2711,5 @@
     <ClInclude Include="..\..\common\net\NetServerTCP3Send.h">
       <Filter>net</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="..\..\common\common\include.rc">
-      <Filter>common</Filter>
-    </ResourceCompile>
   </ItemGroup>
 </Project>

@@ -24,7 +24,6 @@
 #include <string>
 #include <common/fixed.h>
 
-struct lua_State;
 class XMLNode;
 class NapalmParams 
 {
@@ -33,7 +32,6 @@ public:
 	~NapalmParams();
 
 	bool parseXML(XMLNode *accessoryNode);
-	void parseLUA(lua_State *L, int position);
 
 	void setNapalmTime(fixed value) { napalmTime_ = value; }
 	void setNapalmHeight(fixed value) { napalmHeight_ = value; }

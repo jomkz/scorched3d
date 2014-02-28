@@ -31,8 +31,7 @@ public:
 	unsigned int getTicksDifference();
 
 protected:
-	unsigned int  dwLastTime_;
-
+	boost::posix_time::ptime lastTime_;
 };
 
 #endif /* _CLOCK_H_ */

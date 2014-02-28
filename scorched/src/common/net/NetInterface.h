@@ -53,6 +53,7 @@ public:
 	static unsigned int &getConnects() { return connects_; }
 	static const char *getIpName(unsigned int ipAddress);
 	static unsigned int getIpAddressFromName(const char *name);
+	static unsigned int getIpAddressFromSocket(boost::asio::ip::tcp::socket *socket);
 
 protected:
 	static unsigned int bytesIn_;

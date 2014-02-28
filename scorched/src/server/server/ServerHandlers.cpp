@@ -31,7 +31,6 @@ ServerHandlers::ServerHandlers(ComsMessageHandler &comsMessageHandler) :
 	serverGiftMoneyHandler_(comsMessageHandler),
 	serverHaveModFileHandler_(comsMessageHandler),
 	serverInitializeModHandler_(comsMessageHandler),
-	serverLinesHandler_(comsMessageHandler),
 	serverPlayedMoveHandler_(comsMessageHandler),
 	serverOperationResultHandler_(comsMessageHandler)
 {

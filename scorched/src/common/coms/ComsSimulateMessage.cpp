@@ -27,8 +27,7 @@ ComsSimulateMessage::ComsSimulateMessage() :
 {
 }
 
-ComsSimulateMessage::ComsSimulateMessage(fixed eventTime, fixed actualTime,
-	unsigned int serverTime,
+ComsSimulateMessage::ComsSimulateMessage(fixed eventTime, fixed actualTime, fixed serverTime,
 	std::list<SimAction *> &actions) :
 	ComsMessage(ComsSimulateMessageType),
 	eventTime_(eventTime), actualTime_(actualTime), serverTime_(serverTime)

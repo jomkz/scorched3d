@@ -71,8 +71,8 @@ TanketMovement::~TanketMovement()
 #ifndef S3D_SERVER
 	if (!context_->getServerMode())
 	{
-		delete moveSoundSource_;
-		moveSoundSource_ = 0;
+		//delete moveSoundSource_;
+		//moveSoundSource_ = 0;
 	}
 #endif
 	if (vPoint_) vPoint_->decrementReference();
@@ -214,7 +214,7 @@ void TanketMovement::simulate(fixed frameTime, bool &remove)
 #ifndef S3D_SERVER
 	if (remove && moveSoundSource_)
 	{
-		moveSoundSource_->stop();
+		//moveSoundSource_->stop();
 	}
 #endif // #ifndef S3D_SERVER
 	
@@ -427,42 +427,14 @@ void TanketMovement::moveTanket(Tanket *tanket)
 			TankModel *model = tank->getModelContainer().getTankModel();
 			if (model)
 			{
-				Image image;
-				if (firstx == secondx)
-				{
-					image = ImageStore::instance()->
-						loadImage(model->getTracksVId());
-				}
-				else if (firsty == secondy)
-				{
-					image = ImageStore::instance()->
-						loadImage(model->getTracksHId());
-				}
-				else if (firsty - secondy == firstx - secondx)
-				{
-					image = ImageStore::instance()->
-						loadImage(model->getTracksVHId());
-				}
-				else 
-				{
-					image = ImageStore::instance()->
-						loadImage(model->getTracksHVId());
-				}
-
-				ImageModifier::addBitmapToLandscape(
-					*context_,
-					image,
-					newPos[0].asFloat(), 
-					newPos[1].asFloat(),
-					0.04f, 0.04f,
-					true);
+				// TODO
 			}
 		}
 
 		if (vPoint_) vPoint_->setValues(newPos);
 	}
 
-	if (moveSoundSource_) moveSoundSource_->setPosition(newPos.asVector());
+	//if (moveSoundSource_) moveSoundSource_->setPosition(newPos.asVector());
 
 #endif // #ifndef S3D_SERVER
 }

@@ -22,7 +22,6 @@
 #define __INCLUDE_ClientHandlersh_INCLUDE__
 
 #include <client/ClientConnectionRejectHandler.h>
-#include <client/ClientLinesHandler.h>
 #include <client/ClientOperationHandler.h>
 #include <client/ClientGameStoppedHandler.h>
 #include <client/ClientAdminResultHandler.h>
@@ -37,7 +36,6 @@ public:
 
 protected:
 	ClientConnectionRejectHandler connectionRejectHandler_;
-	ClientLinesHandler linesHandler_;
 	ClientOperationHandler operationHandler_;
 	ClientGameStoppedHandler gameStoppedHandler_;
 	ClientAdminResultHandler adminResultHandler_;

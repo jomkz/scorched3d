@@ -21,7 +21,6 @@
 #include <client/ClientStateLoadLevel.h>
 #include <client/ClientSimulator.h>
 #include <client/ScorchedClient.h>
-#include <client/ClientReloadAdaptor.h>
 #include <client/ClientState.h>
 #include <coms/ComsMessageHandler.h>
 #include <coms/ComsLoadLevelMessage.h>
@@ -36,7 +35,6 @@
 #include <landscapemap/LandscapeMaps.h>
 #include <lang/LangResource.h>
 #include <tank/Tank.h>
-#include <tank/TankCamera.h>
 #include <target/TargetContainer.h>
 #include <target/TargetRenderer.h>
 #include <net/NetInterface.h>
@@ -178,15 +176,6 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 	// Reset stuff
 	/*
 	ScorchedClient::instance()->getParticleEngine().killAll();
-	std::map<std::string, TargetCamera *>::iterator itor;
-	for (itor = TargetCamera::getAllTargetCameras().begin();
-		itor != TargetCamera::getAllTargetCameras().end();
-		++itor)
-	{
-		TargetCamera *targetCamera = itor->second;
-		targetCamera->getPrecipitationEngine().killAll();
-	}
-
 	RenderTracer::instance()->newGame();
 	SpeedChange::instance()->resetSpeed();
 	*/
@@ -208,7 +197,6 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 	{
 		Tank *current = (*tankItor).second;
 		current->getRenderer()->moved();
-		current->getCamera().setCameraType(1);
 		if (current->getDestinationId() != 0 &&
 			current->getPlayerId() != TargetID::SPEC_TANK_ID)
 		{
@@ -220,7 +208,6 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 		//TargetCamera *targetCamera = TargetCamera::getTargetCameraByName("main");
 		//if (targetCamera) targetCamera->setCameraType(TargetCamera::CamSpectator);
 	}
-	ClientReloadAdaptor::instance();
 
 	// Make sure simulator knows we are not loading a level
 	ScorchedClient::instance()->getClientSimulator().setLoadingLevel(false);

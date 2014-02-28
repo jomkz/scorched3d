@@ -24,15 +24,14 @@
 NetServerTCP3Destination::NetServerTCP3Destination(
 	NetMessageHandler *recieveMessageHandler, 
 	boost::asio::ip::tcp::socket *socket,
-	unsigned int destinationId) :
+	unsigned int destinationId,
+	unsigned int ipAddress) :
 	socket_(socket), destinationId_(destinationId),
-	send_(socket, destinationId, 
-		getIpAddressFromSocket(socket), recieveMessageHandler),
-	recv_(socket, destinationId, 
-		getIpAddressFromSocket(socket), recieveMessageHandler),
-	running_(true)
+	send_(socket, destinationId, ipAddress, recieveMessageHandler),
+	recv_(socket, destinationId, ipAddress, recieveMessageHandler),
+	running_(true), ipAddress_(ipAddress)
 {
-	ipAddress_ = getIpAddressFromSocket(socket_);
+	
 }
 
 NetServerTCP3Destination::~NetServerTCP3Destination()

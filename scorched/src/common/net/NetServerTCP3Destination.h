@@ -28,7 +28,9 @@ class NetServerTCP3Destination
 {
 public:
 	NetServerTCP3Destination(NetMessageHandler *recieveMessageHandler,
-		boost::asio::ip::tcp::socket *socket, unsigned int destinationId);
+		boost::asio::ip::tcp::socket *socket, 
+		unsigned int destinationId,
+		unsigned int ipAddress);
 	virtual ~NetServerTCP3Destination();
 
 	void sendMessage(NetMessage *message);

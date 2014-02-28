@@ -26,9 +26,6 @@
 #include <target/TargetLife.h>
 #include <target/TargetShield.h>
 #include <target/TargetParachute.h>
-#ifndef S3D_SERVER
-#include <sound/SoundUtils.h>
-#endif
 
 REGISTER_CLASS_SOURCE(TankDefenseSimAction);
 
@@ -73,6 +70,7 @@ bool TankDefenseSimAction::invokeAction(ScorchedContext &context)
 #ifndef S3D_SERVER
 				if (!context.getServerMode())
 				{
+					/*
 					if (battery->getActivationSound() &&
 						0 != strcmp("none", battery->getActivationSound()))
 					{
@@ -82,6 +80,7 @@ bool TankDefenseSimAction::invokeAction(ScorchedContext &context)
 						SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
 							batSound, tanket->getLife().getTargetPosition().asVector());
 					}
+					*/
 				}
 #endif
 			}
@@ -105,11 +104,13 @@ bool TankDefenseSimAction::invokeAction(ScorchedContext &context)
 						if (accessory->getActivationSound() &&
 							0 != strcmp("none", accessory->getActivationSound()))
 						{
+							/*
 							SoundBuffer *activateSound = 
 								Sound::instance()->fetchOrCreateBuffer(
 									S3D::getModFile(S3D::formatStringBuffer("data/wav/%s", accessory->getActivationSound())));
 							SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
 								activateSound, tanket->getLife().getTargetPosition().asVector());
+							*/
 						}
 					}
 #endif
@@ -143,11 +144,13 @@ bool TankDefenseSimAction::invokeAction(ScorchedContext &context)
 						if (parachute->getActivationSound() &&
 							0 != strcmp("none", parachute->getActivationSound()))
 						{
+							/*
 							SoundBuffer *paraSound = 
 								Sound::instance()->fetchOrCreateBuffer(
 									S3D::getModFile(S3D::formatStringBuffer("data/wav/%s", parachute->getActivationSound())));
 							SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
 								paraSound, tanket->getLife().getTargetPosition().asVector());
+							*/
 						}
 					}
 #endif

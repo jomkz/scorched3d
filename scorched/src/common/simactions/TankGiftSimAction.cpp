@@ -25,9 +25,6 @@
 #include <tank/TankScore.h>
 #include <lang/LangResource.h>
 #include <common/ChannelManager.h>
-#ifndef S3D_SERVER
-#include <dialogs/BuyAccessoryDialog.h>
-#endif
 
 REGISTER_CLASS_SOURCE(TankGiftSimAction);
 
@@ -83,21 +80,6 @@ bool TankGiftSimAction::invokeAction(ScorchedContext &context)
 		fromTank->getScore().getMoney() - money);
 	toTank->getScore().setMoney(
 		toTank->getScore().getMoney() + money);
-
-#ifndef S3D_SERVER
-	if (!context.getServerMode()) 
-	{
-		if (BuyAccessoryDialogTankInfo::instance()->tankId == fromTank->getPlayerId())
-		{
-			BuyAccessoryDialogTankInfo::instance()->tankMoney -= money;
-		}
-		if (BuyAccessoryDialogTankInfo::instance()->tankId == toTank->getPlayerId())
-		{
-			BuyAccessoryDialogTankInfo::instance()->tankMoney += money;
-		}
-		BuyAccessoryDialog::instance()->playerRefreshKeepPos();
-	}
-#endif
 
 	// Log transaction
 	ChannelText text("combat", 

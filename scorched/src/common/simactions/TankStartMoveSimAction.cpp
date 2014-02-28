@@ -24,7 +24,6 @@
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
 #include <tank/TankScore.h>
-#include <tank/TankCamera.h>
 #include <target/TargetContainer.h>
 #include <tanket/TanketAccessories.h>
 #include <tanket/TanketShotInfo.h>
@@ -33,11 +32,7 @@
 #include <common/OptionsScorched.h>
 #ifndef S3D_SERVER
 #include <weapons/Accessory.h>
-#include <landscape/Landscape.h>
-#include <graph/ShotCountDown.h>
 #include <client/ClientOptions.h>
-#include <graph/MainCamera.h>
-#include <sound/SoundUtils.h>
 #include <client/ScorchedClient.h>
 #endif
 
@@ -75,48 +70,12 @@ void TankStartMoveSimAction::startClientGame()
 		return;
 	}
 
-	// Set the camera back to this players camera position
-	if (OptionsDisplay::instance()->getStorePlayerCamera())
-	{
-		int counter = 0;
-		unsigned int currentDestinationId = ScorchedClient::instance()->
-			getTargetContainer().getCurrentDestinationId();
-		std::map<unsigned int, Tank *> &tanks = ScorchedClient::instance()->
-			getTargetContainer().getTanks();
-		std::map<unsigned int, Tank *>::iterator itor;
-		for (itor = tanks.begin();
-			itor != tanks.end();
-			++itor)
-		{
-			Tank *tank = itor->second;
-			if (tank->getDestinationId() == currentDestinationId &&
-				tank->getAlive())
-			{
-				counter++;
-			}
-		}
-
-		// Only reset the position if there is more than one human player
-		// from the same destination
-		if (counter > 1)
-		{
-			TargetCamera *targetCamera = TargetCamera::getTargetCameraByName("main");
-			if (targetCamera)
-			{
-				targetCamera->getCamera().setLookAt(current->getCamera().getCameraLookAt());
-				Vector rotation = current->getCamera().getCameraRotation();
-				targetCamera->getCamera().movePosition(rotation[0], rotation[1], rotation[2]);
-				targetCamera->setCameraType((TargetCamera::CamType) current->getCamera().getCameraType());
-			}
-		}
-	}
-
 	// Ensure that the landscape is set to the "proper" texture
-	Landscape::instance()->restoreLandscapeTexture();
+	//Landscape::instance()->restoreLandscapeTexture();
 
 	// make sound to tell client a new game is commencing
-	CACHE_SOUND(playSound, S3D::getModFile("data/wav/misc/play.wav"));
-	SoundUtils::playRelativeSound(VirtualSoundPriority::eText, playSound);
+	//CACHE_SOUND(playSound, S3D::getModFile("data/wav/misc/play.wav"));
+	//SoundUtils::playRelativeSound(VirtualSoundPriority::eText, playSound);
 
 	// Stimulate into the new game state
 	//ScorchedClient::instance()->getGameState().stimulate(ClientState::StimWait);
@@ -173,10 +132,11 @@ bool TankStartMoveSimAction::invokeAction(ScorchedContext &context)
 			if (tank->getDestinationId() == context.getTargetContainer().getCurrentDestinationId())
 			{
 				startClientGame();
-				ShotCountDown::instance()->showMoveTime(
+				/*ShotCountDown::instance()->showMoveTime(
 					timeout_, 
 					buying_?ShotCountDown::eBuying:ShotCountDown::ePlaying,
 					playerId_);
+				*/
 			}
 		}
 #endif

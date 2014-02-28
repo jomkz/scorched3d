@@ -32,8 +32,6 @@ public:
 	NetServerTCP3();
 	virtual ~NetServerTCP3();
 
-	static unsigned int getIpAddressFromSocket(boost::asio::ip::tcp::socket *socket);
-
 	// NetInterface
 	virtual bool started();
 	virtual bool connect(const char *hostName, int portNo);

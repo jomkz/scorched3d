@@ -21,11 +21,6 @@
 #include <actions/Lightning.h>
 #include <common/Defines.h>
 #include <common/RandomGenerator.h>
-#ifndef S3D_SERVER
-	#include <sound/SoundUtils.h>
-	#include <GLEXT/GLCamera.h>
-	#include <sprites/ExplosionTextures.h>
-#endif
 #include <target/TargetContainer.h>
 #include <target/TargetDamageCalc.h>
 #include <target/TargetLife.h>
@@ -71,14 +66,6 @@ void Lightning::init()
 			*context_, playerId, weapon_, weaponContext_, 
 			damage, true, false, false);
 	}
-
-#ifndef S3D_SERVER
-	texture_.setImageID(
-		ImageID(S3D::eModLocation, 
-		weapon_->getTexture(), 
-		weapon_->getTexture(), 
-		false));
-#endif
 }
 
 std::string Lightning::getActionDetails()
@@ -100,11 +87,13 @@ void Lightning::simulate(fixed frameTime, bool &remove)
 			if (weapon_->getSound() &&
 				0 != strcmp("none", weapon_->getSound()))
 			{
+				/*
 				SoundBuffer *expSound =
 					Sound::instance()->fetchOrCreateBuffer(
 						S3D::getModFile(weapon_->getSound()));
 				SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
 					expSound, position_.asVector());
+				*/
 			}
 		} 
 	}
@@ -118,6 +107,7 @@ void Lightning::simulate(fixed frameTime, bool &remove)
 void Lightning::draw()
 {
 #ifndef S3D_SERVER
+	/*
 	if (!context_->getServerMode())
 	{
 		Vector &cameraPos = 
@@ -171,6 +161,7 @@ void Lightning::draw()
 		glDepthMask(GL_TRUE);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
+	*/
 #endif // #ifndef S3D_SERVER
 }
 

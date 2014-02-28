@@ -20,46 +20,10 @@
 
 #include <image/ImageBitmapFactory.h>
 #include <common/Defines.h>
-#include <SDL/SDL.h>
 
 Image ImageBitmapFactory::loadFromFile(const char * filename, bool alpha)
 {
-	SDL_Surface *image = SDL_LoadBMP(filename);
-	if (!image) return Image();
+	DIALOG_ASSERT(0);
 
-	if (image->format->BitsPerPixel != 24)
-	{
-		S3D::dialogExit("ImageBitmap",
-			S3D::formatStringBuffer("ERROR: Bitmap \"%s\" is not encoded as a 24bit bitmap",
-				filename));
-	}
-
-	// Create the internal byte array
-	Image result(image->w, image->h, alpha);
-
-	// Convert the returned bits from BGR to RGB
-	// and flip the verticle scan lines
-	unsigned char *from = (unsigned char *) image->pixels;
-	for (int i=0; i<result.getHeight(); i ++)
-	{
-		unsigned char *destRow = ((unsigned char *) result.getBits()) + 
-			((result.getHeight() - i - 1) * (result.getWidth() * result.getComponents()));
-		for (int j=0; j<result.getWidth(); j++)
-		{
-			unsigned char *dest = destRow + (j * result.getComponents());
-
-			dest[0] = from[2];
-			dest[1] = from[1];
-			dest[2] = from[0];
-			if (alpha)
-			{
-				dest[3] = (unsigned char)(from[0]+from[1]+from[2]==0?0:255);
-			}
-			
-			from+=3;
-		}
-	}
-	
-	SDL_FreeSurface(image);
-	return result;
+	return Image();
 }

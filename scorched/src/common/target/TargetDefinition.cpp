@@ -35,8 +35,6 @@
 #include <target/TargetContainer.h>
 #include <tankai/TankAIStore.h>
 #include <server/ScorchedServer.h>
-#include <3dsparse/ModelStore.h>
-#include <3dsparse/Model.h>
 #include <common/Defines.h>
 #include <XML/XMLNode.h>
 
@@ -50,7 +48,6 @@ TargetDefinition::TargetDefinition() :
 	nodamageburn_(false), nocollision_(false), nofalling_(false),
 	nofallingdamage_(false), billboard_(false), team_(0), useNormalMoves_(true)
 {
-	shadow_.setDrawShadow(false);
 }
 
 TargetDefinition::~TargetDefinition()
@@ -104,7 +101,6 @@ bool TargetDefinition::readXML(XMLNode *node)
 	node->getNamedChild("team", team_, false);
 	node->getNamedChild("usenormalmoves", useNormalMoves_, false);
 
-	if (!shadow_.readXML(node)) return false;
 	if (!groups_.readXML(node, "groupname")) return false;
 
 	return node->failChildren();
@@ -160,14 +156,7 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 		finalBrightness = generator.getRandFixed("Target Definition") * fixed(true, 7000) + fixed(true, 3000);
 	}
 
-	FixedVector finalSize = size_;
-	if (finalSize == FixedVector::getNullVector())
-	{
-		Model *model = ModelStore::instance()->loadModel(modelId_);
-		finalSize = model->getMax() - model->getMin();
-		finalSize *= finalModelScale;
-	}
-
+	FixedVector finalSize = size_ * finalModelScale;
 	target->getTargetState().setNoCollision(nocollision_);
 	target->getTargetState().setDisplayDamage(displaydamage_);
 	target->getTargetState().setDisplayShadow(displayshadow_);

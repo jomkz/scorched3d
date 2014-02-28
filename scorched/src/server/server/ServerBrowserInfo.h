@@ -31,15 +31,13 @@ public:
 	static ServerBrowserInfo *instance();
 
 	bool start();
-	void processMessages();
 
 protected:
 	static ServerBrowserInfo *instance_;
-	UDPsocket udpsock_;
-	UDPpacket **packetV_;
-	UDPpacket **packetVOut_;
+	static void threadFunc();
+	boost::asio::io_service io_service_;
 
-	void processMessage(UDPpacket *packet);
+	bool processMessages();
 	void processStatusMessage(std::list<std::string> &reply);
 	void processPlayerMessage(std::list<std::string> &reply);
 	void processInfoMessage(std::list<std::string> &reply);

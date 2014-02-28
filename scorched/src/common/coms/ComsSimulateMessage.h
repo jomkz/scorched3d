@@ -31,8 +31,7 @@ public:
 	static ComsMessageType ComsSimulateMessageType;
 
 	ComsSimulateMessage();
-	ComsSimulateMessage(fixed eventTime, fixed actualTime, 
-		unsigned int serverTime,
+	ComsSimulateMessage(fixed eventTime, fixed actualTime, fixed serverTime,
 		std::list<SimAction *> &actions);
 	virtual ~ComsSimulateMessage();
 
@@ -40,14 +39,14 @@ public:
     virtual bool writeMessage(NetBuffer &buffer);
     virtual bool readMessage(NetBufferReader &reader);
 
-	fixed &getEventTime() { return eventTime_; }
-	fixed &getActualTime() { return actualTime_; }
-	unsigned int getServerTime() { return serverTime_; }
+	fixed getEventTime() { return eventTime_; }
+	fixed getActualTime() { return actualTime_; }
+	fixed getServerTime() { return serverTime_; }
 	std::list<SimAction *> &getActions() { return actions_; }
 
 protected:
 	fixed eventTime_, actualTime_;
-	unsigned int serverTime_;
+	fixed serverTime_;
 	std::list<SimAction *> actions_;
 
 private:

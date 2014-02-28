@@ -71,7 +71,7 @@
     <ClCompile Include="..\..\common\common\RandomGenerator.cpp" />
     <ClCompile Include="..\..\common\common\RollingAverage.cpp" />
     <ClCompile Include="..\..\common\common\sha2.cpp" />
-    <ClCompile Include="..\..\common\common\snprintf.c" />
+    <ClCompile Include="..\..\common\common\snprintf.cpp" />
     <ClCompile Include="..\..\common\common\SplineCurve.cpp" />
     <ClCompile Include="..\..\common\common\SplinePath.cpp" />
     <ClCompile Include="..\..\common\common\ToolTip.cpp" />
@@ -97,7 +97,6 @@
     <ClCompile Include="..\..\common\coms\ComsHaveModFilesMessage.cpp" />
     <ClCompile Include="..\..\common\coms\ComsInitializeModMessage.cpp" />
     <ClCompile Include="..\..\common\coms\ComsLevelLoadedMessage.cpp" />
-    <ClCompile Include="..\..\common\coms\ComsLinesMessage.cpp" />
     <ClCompile Include="..\..\common\coms\ComsLoadLevelMessage.cpp" />
     <ClCompile Include="..\..\common\coms\ComsMessage.cpp" />
     <ClCompile Include="..\..\common\coms\ComsMessageHandler.cpp" />
@@ -204,9 +203,7 @@
     <ClCompile Include="..\..\common\placement\PlacementObjectHeight.cpp" />
     <ClCompile Include="..\..\common\placement\PlacementObjectNone.cpp" />
     <ClCompile Include="..\..\common\placement\PlacementObjectRandom.cpp" />
-    <ClCompile Include="..\..\common\placement\PlacementObjectShadow.cpp" />
     <ClCompile Include="..\..\common\placement\PlacementObjectTarget.cpp" />
-    <ClCompile Include="..\..\common\placement\PlacementShadowDefinition.cpp" />
     <ClCompile Include="..\..\common\placement\PlacementTankPosition.cpp" />
     <ClCompile Include="..\..\common\placement\PlacementType.cpp" />
     <ClCompile Include="..\..\common\placement\PlacementTypeBounds.cpp" />
@@ -248,7 +245,6 @@
     <ClCompile Include="..\..\common\tanket\TanketWeapon.cpp" />
     <ClCompile Include="..\..\common\tank\Tank.cpp" />
     <ClCompile Include="..\..\common\tank\TankAvatar.cpp" />
-    <ClCompile Include="..\..\common\tank\TankCamera.cpp" />
     <ClCompile Include="..\..\common\tank\TankColorGenerator.cpp" />
     <ClCompile Include="..\..\common\tank\TankDeadContainer.cpp" />
     <ClCompile Include="..\..\common\tank\TankLib.cpp" />
@@ -378,7 +374,6 @@
     <ClCompile Include="..\..\server\server\ServerHandlers.cpp" />
     <ClCompile Include="..\..\server\server\ServerHaveModFilesHandler.cpp" />
     <ClCompile Include="..\..\server\server\ServerInitializeModHandler.cpp" />
-    <ClCompile Include="..\..\server\server\ServerLinesHandler.cpp" />
     <ClCompile Include="..\..\server\server\ServerLoadLevel.cpp" />
     <ClCompile Include="..\..\server\server\ServerLog.cpp" />
     <ClCompile Include="..\..\server\server\ServerMain.cpp" />
@@ -427,17 +422,13 @@
     <ClCompile Include="..\client\ClientChannelManager.cpp" />
     <ClCompile Include="..\client\ClientChannelManagerI.cpp" />
     <ClCompile Include="..\client\ClientConnectionRejectHandler.cpp" />
-    <ClCompile Include="..\client\ClientDisconnected.cpp" />
     <ClCompile Include="..\client\ClientGameStoppedHandler.cpp" />
     <ClCompile Include="..\client\ClientHandlers.cpp" />
-    <ClCompile Include="..\client\ClientLinesHandler.cpp" />
     <ClCompile Include="..\client\ClientMain.cpp" />
     <ClCompile Include="..\client\ClientMessageHandler.cpp" />
     <ClCompile Include="..\client\ClientOperationHandler.cpp" />
     <ClCompile Include="..\client\ClientOptions.cpp" />
     <ClCompile Include="..\client\ClientParams.cpp" />
-    <ClCompile Include="..\client\ClientProcessingLoop.cpp" />
-    <ClCompile Include="..\client\ClientReloadAdaptor.cpp" />
     <ClCompile Include="..\client\ClientSimulator.cpp" />
     <ClCompile Include="..\client\ClientState.cpp" />
     <ClCompile Include="..\client\ClientStateInitialize.cpp" />
@@ -550,7 +541,6 @@
     <ClInclude Include="..\..\common\coms\ComsHaveModFilesMessage.h" />
     <ClInclude Include="..\..\common\coms\ComsInitializeModMessage.h" />
     <ClInclude Include="..\..\common\coms\ComsLevelLoadedMessage.h" />
-    <ClInclude Include="..\..\common\coms\ComsLinesMessage.h" />
     <ClInclude Include="..\..\common\coms\ComsLoadLevelMessage.h" />
     <ClInclude Include="..\..\common\coms\ComsMessage.h" />
     <ClInclude Include="..\..\common\coms\ComsMessageHandler.h" />
@@ -660,9 +650,7 @@
     <ClInclude Include="..\..\common\placement\PlacementObjectHeight.h" />
     <ClInclude Include="..\..\common\placement\PlacementObjectNone.h" />
     <ClInclude Include="..\..\common\placement\PlacementObjectRandom.h" />
-    <ClInclude Include="..\..\common\placement\PlacementObjectShadow.h" />
     <ClInclude Include="..\..\common\placement\PlacementObjectTarget.h" />
-    <ClInclude Include="..\..\common\placement\PlacementShadowDefinition.h" />
     <ClInclude Include="..\..\common\placement\PlacementTankPosition.h" />
     <ClInclude Include="..\..\common\placement\PlacementType.h" />
     <ClInclude Include="..\..\common\placement\PlacementTypeBounds.h" />
@@ -704,7 +692,6 @@
     <ClInclude Include="..\..\common\tanket\TanketWeapon.h" />
     <ClInclude Include="..\..\common\tank\Tank.h" />
     <ClInclude Include="..\..\common\tank\TankAvatar.h" />
-    <ClInclude Include="..\..\common\tank\TankCamera.h" />
     <ClInclude Include="..\..\common\tank\TankColorGenerator.h" />
     <ClInclude Include="..\..\common\tank\TankDeadContainer.h" />
     <ClInclude Include="..\..\common\tank\TankLib.h" />
@@ -834,7 +821,6 @@
     <ClInclude Include="..\..\server\server\ServerHandlers.h" />
     <ClInclude Include="..\..\server\server\ServerHaveModFilesHandler.h" />
     <ClInclude Include="..\..\server\server\ServerInitializeModHandler.h" />
-    <ClInclude Include="..\..\server\server\ServerLinesHandler.h" />
     <ClInclude Include="..\..\server\server\ServerLoadLevel.h" />
     <ClInclude Include="..\..\server\server\ServerLog.h" />
     <ClInclude Include="..\..\server\server\ServerMain.h" />
@@ -883,17 +869,13 @@
     <ClInclude Include="..\client\ClientChannelManager.h" />
     <ClInclude Include="..\client\ClientChannelManagerI.h" />
     <ClInclude Include="..\client\ClientConnectionRejectHandler.h" />
-    <ClInclude Include="..\client\ClientDisconnected.h" />
     <ClInclude Include="..\client\ClientGameStoppedHandler.h" />
     <ClInclude Include="..\client\ClientHandlers.h" />
-    <ClInclude Include="..\client\ClientLinesHandler.h" />
     <ClInclude Include="..\client\ClientMain.h" />
     <ClInclude Include="..\client\ClientMessageHandler.h" />
     <ClInclude Include="..\client\ClientOperationHandler.h" />
     <ClInclude Include="..\client\ClientOptions.h" />
     <ClInclude Include="..\client\ClientParams.h" />
-    <ClInclude Include="..\client\ClientProcessingLoop.h" />
-    <ClInclude Include="..\client\ClientReloadAdaptor.h" />
     <ClInclude Include="..\client\ClientSimulator.h" />
     <ClInclude Include="..\client\ClientState.h" />
     <ClInclude Include="..\client\ClientStateInitialize.h" />
@@ -913,9 +895,6 @@
     <ClInclude Include="..\console\ConsoleRules.h" />
     <ClInclude Include="Scorched3DC.h" />
     <ClInclude Include="stdafx.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="..\..\common\common\include.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F27B2892-60F6-40E6-81AA-953B53D433B7}</ProjectGuid>
@@ -966,8 +945,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OgreMain_d.lib;OIS_d.lib;CEGUIBase_d.lib;CEGUIOgreRenderer_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(CEGUI_HOME)\lib;$(OGRE_HOME)\lib\debug;$(OGRE_HOME)\boost\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OgreMain_d.lib;OIS_d.lib;CEGUIBase_d.lib;CEGUIOgreRenderer_d.lib;zlib_d.lib;jpeg_d.lib;libpng_d.lib;expat_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(CEGUI_HOME)\lib;$(OGRE_HOME)\lib\debug;$(OGRE_HOME)\boost\lib;$(BOOST_HOME)\stage\lib;$(CEGUI_HOME)\dependencies\lib\static;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -991,7 +970,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>OgreMain.lib;OIS.lib;CEGUIBase.lib;CEGUIOgreRenderer.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(CEGUI_HOME)\lib;$(OGRE_HOME)\lib\release;$(OGRE_HOME)\boost\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(CEGUI_HOME)\lib;$(OGRE_HOME)\lib\release;$(OGRE_HOME)\boost\lib;$(BOOST_HOME)\stage\lib;$(CEGUI_HOME)\dependencies\lib\static;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

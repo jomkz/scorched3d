@@ -55,11 +55,6 @@ void ShotProjectile::init()
 #ifndef S3D_SERVER
 	if (!context_->getServerMode()) 
 	{
-		setActionRender(new MissileActionRenderer(flareType_, 
-				weaponScale.asFloat(),
-				spinSpeed_.asFloat(),
-				spinAxis_));
-
 		if (!weapon_->getNoCameraTrack())
 		{
 			vPoint_ = new TankViewPointProvider();
@@ -269,12 +264,14 @@ void ShotProjectile::simulate(fixed frameTime, bool &remove)
 			snapTime_ += frameTime;
 			if (snapTime_.asFloat() > 0.1f || remove)
 			{
+				/*
 				Vector up (0.0f, 0.0f, 1.0f);
 				RenderTracer::TracerLinePoint point;
 				point.position = getPhysics().getPosition().asVector();
 				point.cross = (getPhysics().getVelocity().asVector() * up).Normalize();
 				positions_.push_back(point);
 				snapTime_ = 0;
+				*/
 			}
 		}
 	}
@@ -302,14 +299,18 @@ void ShotProjectile::doCollision(FixedVector &position)
 	{
 		if (getWeapon()->getShowShotPath())
 		{
+			/*
 			RenderTracer::instance()->
 				addSmokeTracer(weaponContext_.getPlayerId(), 
 					position.asVector(), positions_);
+			*/
 		}
 		else if (getWeapon()->getShowEndPoint())
 		{
+			/*
 			RenderTracer::instance()->
 				addTracer(weaponContext_.getPlayerId(), position.asVector());
+			*/
 		}
 	}
 #endif // #ifndef S3D_SERVER

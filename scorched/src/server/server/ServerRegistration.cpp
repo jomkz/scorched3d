@@ -87,7 +87,7 @@ ServerRegistrationEntry::~ServerRegistrationEntry()
 
 void ServerRegistrationEntry::start()
 {
-	SDL_CreateThread(ServerRegistrationEntry::threadFunc, (void *) this);
+	boost::thread(ServerRegistrationEntry::threadFunc, (void *) this);
 }
 
 int ServerRegistrationEntry::threadFunc(void *param)
@@ -121,7 +121,7 @@ void ServerRegistrationEntry::actualThreadFunc()
 			for (;;)
 			{
 				// Check for any replies or timeout every 1 seconds
-				SDL_Delay(1000);
+				boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
 				netServer_.processMessages();
 
 				// We have recieved a disconnect
@@ -150,7 +150,7 @@ void ServerRegistrationEntry::actualThreadFunc()
 		// Wait for TimeBetweenRegistrations seconds before registering again
 		// unless we have had an error, in which case try again in 30 seconds
 		int waitTime = (success_?TimeBetweenRegistrations:30);
-		SDL_Delay(1000 * waitTime);
+		boost::this_thread::sleep(boost::posix_time::milliseconds(1000 * waitTime));
 	}
 }
 

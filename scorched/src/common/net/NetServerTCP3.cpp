@@ -421,9 +421,11 @@ unsigned int NetServerTCP3::addDestination(boost::asio::ip::tcp::socket *socket)
 	unsigned int destinationId = nextDestinationId_;
 
 	// Create new destination 
+	unsigned int ipAddress = NetInterface::getIpAddressFromSocket(socket);
 	NetServerTCP3Destination *destination = 
 		new NetServerTCP3Destination(
-			&incomingMessageHandler_, socket, destinationId);
+			&incomingMessageHandler_, socket, 
+			destinationId, ipAddress);
 	destinations_[destinationId] = destination;
 
 	// Get a new buffer from the pool (with the connect type set)
@@ -436,9 +438,3 @@ unsigned int NetServerTCP3::addDestination(boost::asio::ip::tcp::socket *socket)
 	return destinationId;
 }
 
-unsigned int NetServerTCP3::getIpAddressFromSocket(boost::asio::ip::tcp::socket *socket)
-{
-	boost::asio::ip::tcp::endpoint endpoint = socket->remote_endpoint();
-	unsigned int addr = endpoint.address().to_v4().to_ulong();
-	return addr;
-}

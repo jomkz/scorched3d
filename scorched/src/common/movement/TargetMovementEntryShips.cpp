@@ -177,6 +177,6 @@ void TargetMovementEntryShips::reset()
 void TargetMovementEntryShips::draw()
 {
 #ifndef S3D_SERVER
-	path_.draw();
+	// TODO
 #endif
 }
