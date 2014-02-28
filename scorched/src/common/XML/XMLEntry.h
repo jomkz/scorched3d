@@ -40,7 +40,22 @@ public:
 	XMLEntryContainer();
 	virtual ~XMLEntryContainer();
 
-	void addChildXMLEntry(XMLEntry *entry);
+	void addChildXMLEntry(XMLEntry *entry1);
+	void addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2);
+	void addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3);
+	void addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3, XMLEntry *entry4);
+	void addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3, XMLEntry *entry4, XMLEntry *entry5);
+	void addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3, XMLEntry *entry4, XMLEntry *entry5,
+		XMLEntry *entry6);
+	void addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3, XMLEntry *entry4, XMLEntry *entry5,
+		XMLEntry *entry6, XMLEntry *entry7);
+	void addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3, XMLEntry *entry4, XMLEntry *entry5,
+		XMLEntry *entry6, XMLEntry *entry7, XMLEntry *entry8);
+	void addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3, XMLEntry *entry4, XMLEntry *entry5,
+		XMLEntry *entry6, XMLEntry *entry7, XMLEntry *entry8, XMLEntry *entry9);
+	void addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3, XMLEntry *entry4, XMLEntry *entry5,
+		XMLEntry *entry6, XMLEntry *entry7, XMLEntry *entry8, XMLEntry *entry9, XMLEntry *entry10);
+	XMLEntryContainer *addChildXMLEntryContainer(XMLEntryContainer *container);
 
 	// XMLEntry
 	virtual bool readXML(XMLNode *parentNode);

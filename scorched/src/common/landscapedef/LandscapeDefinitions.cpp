@@ -306,7 +306,7 @@ LandscapeDefinitionsEntry *LandscapeDefinitions::getRandomLandscapeDefnEntry(
 	}
 	else
 	{
-		float totalWeight = 0.0f;
+		fixed totalWeight = 0;
 		std::list<LandscapeDefinitionsEntry*>::iterator passedItor;
 		for (passedItor = passedLandscapes.begin();
 			passedItor != passedLandscapes.end();
@@ -317,8 +317,8 @@ LandscapeDefinitionsEntry *LandscapeDefinitions::getRandomLandscapeDefnEntry(
 		}
 
 		// Choose a map based on probablity
-		float pos = S3D_RAND * totalWeight;
-		float soFar = 0.0f;
+		fixed pos = fixed(true, rand() % fixed::FIXED_RESOLUTION) * totalWeight;
+		fixed soFar = 0;
 		for (passedItor = passedLandscapes.begin();
 			passedItor != passedLandscapes.end();
 			++passedItor)

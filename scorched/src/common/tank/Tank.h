@@ -37,7 +37,7 @@ public:
 		unsigned int playerId, 
 		unsigned int destinationId,
 		const LangString &name, 
-		Vector &color);
+		FixedVector &color);
 	virtual ~Tank();
 
 	virtual TargetType getType() { return Target::TypeTank; }
@@ -64,8 +64,8 @@ public:
 	void setSUI(const char *SecID) { SUI_ = SecID; }
 	const char *getHostDesc() { return hostDesc_.c_str(); }
 	void setHostDesc(const char *id) { hostDesc_ = id; }
-	Vector &getColor();
-	void setColor(const Vector &color) { color_ = color; }
+	FixedVector &getColor();
+	void setColor(const FixedVector &color) { color_ = color; }
 	unsigned int getIpAddress() { return ipAddress_; }
 	void setIpAddress(unsigned int ipAddress) { ipAddress_ = ipAddress; }
 	virtual Accessory *getDeathAction();
@@ -84,7 +84,7 @@ protected:
 	TankScore *score_;
 	TankState *state_;
 	TankAvatar *avatar_;
-	Vector color_;
+	FixedVector color_;
 	std::string uniqueId_;
 	std::string SUI_;
 	std::string hostDesc_;

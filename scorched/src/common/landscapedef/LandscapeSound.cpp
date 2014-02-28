@@ -229,7 +229,8 @@ bool LandscapeSoundTimingRepeat::readXML(XMLNode *node)
 
 float LandscapeSoundTimingRepeat::getNextEventTime()
 {
-	return min + max * S3D_RAND;
+	fixed result = min + max * fixed(true, rand() % fixed::FIXED_RESOLUTION);
+	return result.asFloat();
 }
 
 bool LandscapeSoundSoundFile::readXML(XMLNode *node)
@@ -242,11 +243,11 @@ bool LandscapeSoundSoundFile::readXML(XMLNode *node)
 	}
 	if (files.empty()) return node->returnError("No file node");
 
-	gain = 1.0f;
+	gain = 1;
 	node->getNamedChild("gain", gain, false);
-	referencedistance = 75.0f;
+	referencedistance = 75;
 	node->getNamedChild("referencedistance", referencedistance, false);
-	rolloff = 1.0f;
+	rolloff = 1;
 	node->getNamedChild("rolloff", rolloff, false);
 
 	return node->failChildren();

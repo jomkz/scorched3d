@@ -34,8 +34,7 @@ public:
 	ShotProjectile(
 		FixedVector &startPosition, FixedVector &velocity,
 		WeaponProjectile *weapon, WeaponFireContext &weaponContext,
-		unsigned int flareType, 
-		fixed spinSpeed, const Vector &spinAxis);
+		fixed spinSpeed, const FixedVector &spinAxis);
 	virtual ~ShotProjectile();
 
 	virtual void simulate(fixed frameTime, bool &remove);
@@ -66,7 +65,7 @@ protected:
 	fixed timedCollision_, heightCollision_;
 	fixed spinSpeed_;
 	fixed physicsSpin_;
-	Vector spinAxis_;
+	FixedVector spinAxis_;
 
 	void doCollision(FixedVector &position);
 

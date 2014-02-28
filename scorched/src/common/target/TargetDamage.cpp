@@ -463,7 +463,7 @@ void TargetDamage::logDeath(ScorchedContext &context, WeaponFireContext &weaponC
 	if (firedPlayerId != 0) firedTank = context.getTargetContainer().getTankById(firedPlayerId);
 	else
 	{
-		Vector white(1.0f, 1.0f, 1.0f);
+		FixedVector white(1, 1, 1);
 		if (context.getServerMode())
 		{
 			static Tank serverEnvTank(context, 0, 0, 

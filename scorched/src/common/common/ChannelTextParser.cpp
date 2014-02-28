@@ -183,7 +183,7 @@ bool ChannelTextParser::createWeaponEntry(ScorchedContext &context,
 	entry.text.push_back('[');
 	entry.text.append(part);
 	entry.text.push_back(']');
-	entry.color = Vector(1.0f, 1.0f, 1.0f);
+	entry.color = FixedVector(1, 1, 1);
 	std::string accessoryName(LangStringUtil::convertFromLang(part));
 	Accessory *accessory = context.getAccessoryStore().
 		findByPrimaryAccessoryName(accessoryName.c_str());
@@ -197,7 +197,7 @@ bool ChannelTextParser::createTipEntry(ScorchedContext &context,
 {
 	entry.type = eTipEntry;
 	entry.text = part;
-	entry.color = Vector(1.0f, 1.0f, 0.0f);
+	entry.color = FixedVector(1, 1, 0);
 
 	return true;
 }
@@ -220,7 +220,7 @@ bool ChannelTextParser::createAdminEntry(ScorchedContext &context,
 	entry.text.append(part);
 	entry.text.push_back(' ');
 	entry.text.append(LANG_RESOURCE("ADMIN_BRK", "(Admin)"));
-	entry.color = Vector(1.0f, 1.0f, 1.0f);
+	entry.color = FixedVector(1, 1, 1);
 
 	return true;
 }

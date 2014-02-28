@@ -80,36 +80,36 @@ TankAICurrentMove::TankAICurrentMove() :
 	totalDamageBeforeMove_(0.0f),
 	currentWeapon_(0)
 {
-	addChildXMLEntry(&resignGroup_);
-	resignGroup_.addChildXMLEntry(&useResign_);
-	resignGroup_.addChildXMLEntry(&resignLife_);
-	addChildXMLEntry(&movementGroup_);
-	movementGroup_.addChildXMLEntry(&useFuel_);
-	movementGroup_.addChildXMLEntry(&movementDamage_);
-	movementGroup_.addChildXMLEntry(&movementDamageChance_);
-	movementGroup_.addChildXMLEntry(&movementLife_);
-	movementGroup_.addChildXMLEntry(&movementRandom_);
-	movementGroup_.addChildXMLEntry(&movementCloseness_);
-	addChildXMLEntry(&groupShotGroup_);
-	groupShotGroup_.addChildXMLEntry(&groupShotGroup_);
-	groupShotGroup_.addChildXMLEntry(&groupShotSize_);
-	groupShotGroup_.addChildXMLEntry(&groupShotChance_);
-	groupShotGroup_.addChildXMLEntry(&groupTargetDistance_);
-	addChildXMLEntry(&sniperGroup_);
-	sniperGroup_.addChildXMLEntry(&sniperMovementFactor_);
-	sniperGroup_.addChildXMLEntry(&sniperUseDistance_);
-	sniperGroup_.addChildXMLEntry(&sniperStartDistance_);
-	sniperGroup_.addChildXMLEntry(&sniperEndDistance_);
-	sniperGroup_.addChildXMLEntry(&sniperMinDecrement_);
-	sniperGroup_.addChildXMLEntry(&sniperMaxDecrement_);
-	addChildXMLEntry(&projectileGroup_);
-	projectileGroup_.addChildXMLEntry(&projectileMinDistance_);
-	projectileGroup_.addChildXMLEntry(&projectileMovementFactor_);
-	projectileGroup_.addChildXMLEntry(&projectileStartDistance_);
-	projectileGroup_.addChildXMLEntry(&projectileEndDistance_);
-	projectileGroup_.addChildXMLEntry(&projectileMinDecrement_);
-	projectileGroup_.addChildXMLEntry(&projectileMaxDecrement_);
-	projectileGroup_.addChildXMLEntry(&largeWeaponUseDistance_);
+	addChildXMLEntryContainer(&resignGroup_)->addChildXMLEntry(
+		&useResign_, 
+		&resignLife_);
+	addChildXMLEntryContainer(&movementGroup_)->addChildXMLEntry(
+		&useFuel_,
+		&movementDamage_,
+		&movementDamageChance_,
+		&movementLife_,
+		&movementRandom_,
+		&movementCloseness_);
+	addChildXMLEntryContainer(&groupShotGroup_)->addChildXMLEntry(
+		&groupShotSize_,
+		&groupShotChance_,
+		&groupTargetDistance_);
+	addChildXMLEntryContainer(&sniperGroup_)->addChildXMLEntry(
+		&sniperMovementFactor_,
+		&sniperUseDistance_,
+		&sniperStartDistance_,
+		&sniperEndDistance_,
+		&sniperMinDecrement_,
+		&sniperMaxDecrement_);
+	addChildXMLEntryContainer(&projectileGroup_)->addChildXMLEntry(
+		&projectileMinDistance_,
+		&projectileMovementFactor_,
+		&projectileStartDistance_,
+		&projectileEndDistance_,
+		&projectileMinDecrement_,
+		&projectileMaxDecrement_,
+		&largeWeaponUseDistance_);
+	addChildXMLEntryContainer(&targets_);
 }
 
 TankAICurrentMove::~TankAICurrentMove()

@@ -31,23 +31,16 @@ WeaponProjectile::WeaponProjectile() :
 	apexCollision_(false), waterCollision_(false), wallCollision_(true),
 	showShotPath_(false), showEndPoint_(false), 
 	landscapeCollision_(true), shieldCollision_(true),
-	createSmoke_(true),	createFlame_(true), noCameraTrack_(false),
-	spinSpeed_("WeaponProjectile::spinSpeed", 1), spinAxis_(0.0f, 0.0f, 1.0f), apexNoDud_(false), timedDud_(false),
+	noCameraTrack_(false),
+	spinSpeed_("WeaponProjectile::spinSpeed", 1), spinAxis_(0, 0, 1), apexNoDud_(false), timedDud_(false),
 	timedCollision_("WeaponProjectile::timedCollision", 0), heightCollision_("WeaponProjectile::heightCollision", 0),
 	wobbleSpin_("WeaponProjectile::wobbleSpin", 0), wobbleAmount_("WeaponProjectile::wobbleAmount", 2),
 	shieldHurtFactor_("WeaponProjectile::shieldHurtFactor", 1), windFactor_("WeaponProjectile::windFactor", 1), 
 	gravityFactor_("WeaponProjectile::gravityFactor", 1),
-	flameLife_(1.0f), smokeLife_(4.0f),
-	flameStartColor1_(0.9f, 0.0f, 0.0f), flameStartColor2_(1.0f, 0.2f, 0.2f),
-	flameEndColor1_(0.95f, 0.9f, 0.2f), flameEndColor2_(1.0f, 1.0f, 0.3f),
-	flameStartSize_(0.5f), flameEndSize_(3.0f),
-	smokeStartSize_(0.5f), smokeEndSize_(4.0f),
 	thrustAmount_("WeaponProjectile::thrustAmount", 0), thrustTime_("WeaponProjectile::thrustTime", 0),
 	drag_("WeaponProjectile::drag", 0), stepSize_(true, 75),
 	engineSound_("rocket.wav"),
-	flameTexture_("particle"), smokeTexture_("particle"),
-	animateFlameTexture_(false), animateSmokeTexture_(false),
-	scale_("WeaponProjectile::scale", 1), flareType_(0)
+	scale_("WeaponProjectile::scale", 1)
 {
 
 }
@@ -85,30 +78,6 @@ bool WeaponProjectile::parseXML(AccessoryCreateContext &context, XMLNode *access
 		if (!modelId_.initFromNode(modelNode)) return false;
 	}
 
-	// Get smoke life
-	accessoryNode->getNamedChild("smokelife", smokeLife_, false);
-	accessoryNode->getNamedChild("flamelife", flameLife_, false);
-	accessoryNode->getNamedChild("flamestartsize", flameStartSize_, false);
-	accessoryNode->getNamedChild("flameendsize", flameEndSize_, false);
-	accessoryNode->getNamedChild("smokestartsize", smokeStartSize_, false);
-	accessoryNode->getNamedChild("smokeendsize", smokeEndSize_, false);
-
-	// flame color
-	accessoryNode->getNamedChild("flamestartcolor1", flameStartColor1_, false);
-	accessoryNode->getNamedChild("flamestartcolor2", flameStartColor2_, false);
-	accessoryNode->getNamedChild("flameendcolor1", flameEndColor1_, false);
-	accessoryNode->getNamedChild("flameendcolor2", flameEndColor2_, false);
-	accessoryNode->getNamedChild("flametexture", flameTexture_, false);
-
-
-	// Get the no smoke node
-	XMLNode *animateFlameTexture = 0, *animateSmokeTexture = 0;
-	accessoryNode->getNamedChild("animateflametexture", animateFlameTexture, false);
-	accessoryNode->getNamedChild("animatesmoketexture", animateSmokeTexture, false);
-	if (animateFlameTexture) animateFlameTexture_ = true;
-	if (animateSmokeTexture) animateSmokeTexture_ = true;
-	accessoryNode->getNamedChild("smoketexture", smokeTexture_, false);
-	
 	// Drag
 	accessoryNode->getNamedChild("drag", drag_, false);
 	accessoryNode->getNamedChild("stepsize", stepSize_, false);
@@ -156,23 +125,10 @@ bool WeaponProjectile::parseXML(AccessoryCreateContext &context, XMLNode *access
 	accessoryNode->getNamedChild("landscapecollision", landscapeCollision_, false);
 	accessoryNode->getNamedChild("shieldcollision", shieldCollision_, false);
 
-	// Get the no smoke node
-	XMLNode *noCreateSmokeNode = 0;
-	accessoryNode->getNamedChild("nocreatesmoke", noCreateSmokeNode, false);
-	if (noCreateSmokeNode) createSmoke_ = false;
-
 	accessoryNode->getNamedChild("nocameratrack", noCameraTrack_, false);
-
-	// Get the no smoke node
-	XMLNode *noCreateFlameNode = 0;
-	accessoryNode->getNamedChild("nocreateflame", noCreateFlameNode, false);
-	if (noCreateFlameNode) createFlame_ = false;
 
 	// Get the engine sound (if any)
 	accessoryNode->getNamedChild("enginesound", engineSound_, false);
-
-	// Get the flare type (if any)
-	accessoryNode->getNamedChild("flaretype", flareType_, false);
 
 	// Get the hurt factor (if any)
 	accessoryNode->getNamedChild("shieldhurtfactor", shieldHurtFactor_, false);
@@ -224,7 +180,6 @@ void WeaponProjectile::fireWeapon(ScorchedContext &context,
 		velocity,
 		this, 
 		weaponContext,
-		flareType_, // FlareType
 		spinSpeed_.getValue(context),
 		spinAxis_); 
 	context.getActionController().addAction(action);	

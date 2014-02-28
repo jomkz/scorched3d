@@ -23,13 +23,13 @@
 
 LaserParams::LaserParams() : 
 	hurtFirer_(false),
-	color_(1.0f, 0.0f, 0.0f),
+	color_(1, 0, 0),
 	totalTime_(1),
 	minimumDistance_(10), maximumDistance_(200),
 	minimumHurt_(34), maximumHurt_(40),
 	hurtRadius_(2),
 	ringTexture_("ring"),
-	ringRadius_(0.0f)
+	ringRadius_(0)
 {
 }
 

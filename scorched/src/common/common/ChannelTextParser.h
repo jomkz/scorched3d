@@ -22,7 +22,7 @@
 #define __INCLUDE_ChannelTextParserh_INCLUDE__
 
 #include <lang/LangString.h>
-#include <common/Vector.h>
+#include <common/FixedVector.h>
 #include <vector>
 
 class ScorchedContext;
@@ -45,7 +45,7 @@ public:
 		unsigned int data; // Not a pointer incase for e.g. the tank disconects 
 		LangString text;
 		LangString part;
-		Vector color;
+		FixedVector color;
 	};
 
 	ChannelTextParser();

@@ -87,11 +87,11 @@ TankAddSimAction::~TankAddSimAction()
 bool TankAddSimAction::invokeAction(ScorchedContext &context)
 {
 	// Alocate new color
-	Vector color = TankColorGenerator::instance()->getNextColor(
+	FixedVector color = TankColorGenerator::instance()->getNextColor(
 		context.getTargetContainer().getTanks());
 	if (playerId_ == TargetID::SPEC_TANK_ID)
 	{
-		color = Vector(0.7f, 0.7f, 0.7f);
+		color = FixedVector(fixed(true, 7000), fixed(true, 7000), fixed(true, 7000));
 	}
 
 	// Create tank

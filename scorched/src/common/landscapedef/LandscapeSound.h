@@ -46,7 +46,7 @@ public:
 	virtual float getNextEventTime();
 
 protected:
-	float min, max;
+	fixed min, max;
 };
 
 class LandscapeSoundItem 
@@ -85,7 +85,7 @@ public:
 	virtual bool setPosition(VirtualSoundSource *source, LandscapeSoundItem *data);
 
 protected:
-	Vector position;
+	FixedVector position;
 };
 
 class LandscapeSoundPositionWater : public LandscapeSoundPosition
@@ -95,7 +95,7 @@ public:
 	virtual bool setPosition(VirtualSoundSource *source, LandscapeSoundItem *data);
 
 protected:
-	float falloff;
+	fixed falloff;
 };
 
 class LandscapeSoundPositionGroup : public LandscapeSoundPosition
@@ -106,7 +106,7 @@ public:
 
 protected:
 	std::string name;
-	float falloff;
+	fixed falloff;
 };
 
 class ObjectGroupEntryReference;
@@ -149,13 +149,13 @@ class LandscapeSoundSoundFile : public LandscapeSoundSound
 public:
 	virtual bool readXML(XMLNode *node);
 	virtual bool play(VirtualSoundSource *source, float ambientGain);
-	virtual float getGain() { return gain; }
+	virtual float getGain() { return gain.asFloat(); }
 
 protected:
 	std::vector<std::string> files;
-	float gain;
-	float referencedistance;
-	float rolloff;
+	fixed gain;
+	fixed referencedistance;
+	fixed rolloff;
 };
 
 class LandscapeSoundType

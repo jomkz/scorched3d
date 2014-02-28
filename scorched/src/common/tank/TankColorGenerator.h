@@ -24,7 +24,7 @@
 
 #include <map>
 #include <vector>
-#include <common/Vector.h>
+#include <common/FixedVector.h>
 
 class Tank;
 class TankColorGenerator
@@ -32,21 +32,21 @@ class TankColorGenerator
 public:
 	static TankColorGenerator *instance();
 
-	Vector &getNextColor(std::map<unsigned int, Tank *> &tanks);
+	FixedVector &getNextColor(std::map<unsigned int, Tank *> &tanks);
 
 	bool colorAvailable(
-		Vector &color, std::map<unsigned int, Tank *> &tanks,
+		FixedVector &color, std::map<unsigned int, Tank *> &tanks,
 		Tank *currentTank = 0);
-	std::vector<Vector *> getAvailableColors(std::map<unsigned int, Tank *> &tanks,
+	std::vector<FixedVector *> getAvailableColors(std::map<unsigned int, Tank *> &tanks,
 		Tank *currentTank = 0);
-	std::vector<Vector *> &getAllColors() { return availableColors_; }
+	std::vector<FixedVector *> &getAllColors() { return availableColors_; }
 
-	static Vector &getTeamColor(int team);
+	static FixedVector &getTeamColor(int team);
 	static const char *getTeamName(int team);
 
 protected:
 	static TankColorGenerator *instance_;
-	std::vector<Vector *> availableColors_;
+	std::vector<FixedVector *> availableColors_;
 
 	void addColor(unsigned r, unsigned g, unsigned b);
 

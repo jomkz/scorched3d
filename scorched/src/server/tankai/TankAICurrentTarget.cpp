@@ -46,15 +46,16 @@ TankAICurrentTarget::TankAICurrentTarget() :
 	distance_("distance", "Distance weighting, multiplied by the closeness of the tank (closer is higher)"),
 	player_("player", "Player weighting, multiplied by the human/ai type of the tank (Human:-1, AI:1)")
 {
-	addChildXMLEntry(&health_);
-	addChildXMLEntry(&random_);
-	addChildXMLEntry(&score_);
-	addChildXMLEntry(&damagedone_);
-	addChildXMLEntry(&damagetaken_);
-	addChildXMLEntry(&shield_);
-	addChildXMLEntry(&repeat_);
-	addChildXMLEntry(&distance_);
-	addChildXMLEntry(&player_);
+	addChildXMLEntry(
+		&health_, 
+		&random_,
+		&score_,
+		&damagedone_,
+		&damagetaken_,
+		&shield_,
+		&repeat_,
+		&distance_,
+		&player_);
 }
 
 TankAICurrentTarget::~TankAICurrentTarget()

@@ -63,7 +63,6 @@ public:
 	fixed getHitRemovePower() { return removePower_; }
 	fixed getHitPenetration() { return penetration_; }
 	fixed getPower() { return power_; }
-	Vector &getColor() { return color_; }
 	ShieldLaserProofType getLaserProof() { return laserProof_; }
 	ShieldMovementType getMovementProof() { return movementProof_; }
 
@@ -75,7 +74,6 @@ public:
 
 protected:
 	std::string collisionSound_;
-	Vector color_;
 	fixed removePower_;
 	fixed penetration_;
 	fixed power_;

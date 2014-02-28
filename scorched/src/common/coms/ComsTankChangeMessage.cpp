@@ -48,7 +48,7 @@ ComsTankChangeMessage::ComsTankChangeMessage(ComsTankChangeMessage &other) :
 ComsTankChangeMessage::ComsTankChangeMessage(
 		unsigned int playerId,
 		const LangString &playerName,
-		Vector playerColor,
+		FixedVector playerColor,
 		const char *tankType,
 		const char *modelName,
 		unsigned int destinationId,

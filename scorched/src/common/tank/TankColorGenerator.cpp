@@ -69,14 +69,14 @@ TankColorGenerator::~TankColorGenerator()
 
 void TankColorGenerator::addColor(unsigned r, unsigned g, unsigned b)
 {
-	Vector newColor(
-		float(int(float(r) / 2.550f)) / 100.0f, 
-		float(int(float(g) / 2.550f)) / 100.0f, 
-		float(int(float(b) / 2.550f)) / 100.0f);
-	availableColors_.push_back(new Vector(newColor));
+	FixedVector newColor(
+		fixed(true, r) / fixed(255),
+		fixed(true, g) / fixed(255),
+		fixed(true, b) / fixed(255));
+	availableColors_.push_back(new FixedVector(newColor));
 }
 
-bool TankColorGenerator::colorAvailable(Vector &color,
+bool TankColorGenerator::colorAvailable(FixedVector &color,
 	std::map<unsigned int, Tank *> &tanks,
 	Tank *currentTank)
 {
@@ -100,17 +100,17 @@ bool TankColorGenerator::colorAvailable(Vector &color,
 	return available;
 }
 
-std::vector<Vector *> TankColorGenerator::getAvailableColors(
+std::vector<FixedVector *> TankColorGenerator::getAvailableColors(
 	std::map<unsigned int, Tank *> &tanks,
 	Tank *currentTank)
 {
-	std::vector<Vector*> leftColors;
-	std::vector<Vector*>::iterator coloritor;
+	std::vector<FixedVector*> leftColors;
+	std::vector<FixedVector*>::iterator coloritor;
 	for (coloritor = availableColors_.begin();
 		coloritor != availableColors_.end();
 		++coloritor)
 	{
-		Vector *color = (*coloritor);
+		FixedVector *color = (*coloritor);
 		if (colorAvailable(*color, tanks, currentTank))
 		{
 			leftColors.push_back(color);
@@ -119,29 +119,29 @@ std::vector<Vector *> TankColorGenerator::getAvailableColors(
 	return leftColors;
 }
 
-Vector &TankColorGenerator::getNextColor(std::map<unsigned int, Tank *> &tanks)
+FixedVector &TankColorGenerator::getNextColor(std::map<unsigned int, Tank *> &tanks)
 {
-	std::vector<Vector *> leftColors = getAvailableColors(tanks);
+	std::vector<FixedVector *> leftColors = getAvailableColors(tanks);
 	if (!leftColors.empty())
 	{
 		return *leftColors[0];
 	}
 
-	static Vector defaultColor(0.8f, 0.8f, 0.8f);
+	static FixedVector defaultColor(fixed(true, 8000), fixed(true, 8000), fixed(true, 8000));
 	return defaultColor;
 }
 
-Vector &TankColorGenerator::getTeamColor(int team)
+FixedVector &TankColorGenerator::getTeamColor(int team)
 {
-	static Vector red(1.0f, 0.0f, 0.0f);
-	static Vector blue(0.0f, 0.3f, 1.0f);
-	static Vector green(0.0f, 1.0f, 0.0f);
-	static Vector yellow(1.0f, 1.0f, 0.0f);
+	static FixedVector red(1, 0, 0);
+	static FixedVector blue(0, fixed(true, 3000), 1);
+	static FixedVector green(0, 1, 0);
+	static FixedVector yellow(1, 1, 0);
 	if (team == 1) return red;
 	else if (team == 2) return blue;
 	else if (team == 3) return green;
 	else if (team == 4) return yellow;
-	return Vector::getNullVector();
+	return FixedVector::getNullVector();
 }
 
 const char *TankColorGenerator::getTeamName(int team)

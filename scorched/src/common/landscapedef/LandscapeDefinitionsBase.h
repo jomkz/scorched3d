@@ -34,7 +34,7 @@ public:
 	std::string name; 
 	std::vector<std::string> texs; 
 	std::vector<std::string> defns; 
-	float weight; // The posibility this defn will be choosen
+	fixed weight; // The posibility this defn will be choosen
 	std::string description;  // Description of this landscape definition type
 	std::string picture; // Visible view of this landscape definition type
 

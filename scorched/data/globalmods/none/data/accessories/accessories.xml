@@ -80,11 +80,6 @@ Shields must be activated to work.</description>
 		<accessoryaction type='ShieldRound'>
 			<radius>4</radius>
 			<halfshield>false</halfshield>
-			<color>
-				<r>1.0</r>
-				<g>1.0</g>
-				<b>1.0</b>
-			</color>
 			<collisionsound>data/accessories/sounds/shield/hit.wav</collisionsound>
 			<removepower>10</removepower>
 			<penetration>0.7</penetration>
@@ -104,11 +99,6 @@ Shields must be activated to work.</description>
 		<accessoryaction type='ShieldRound'>
 			<radius>5.0</radius>
 			<halfshield>false</halfshield>
-			<color>
-				<r>1.0</r>
-				<g>1.0</g>
-				<b>1.0</b>
-			</color>
 			<collisionsound>data/accessories/sounds/shield/hit.wav</collisionsound>
 			<removepower>8</removepower>
 			<penetration>0.7</penetration>
@@ -129,11 +119,6 @@ be activated before they work.</description>
 			<radius>4</radius>
 			<halfshield>false</halfshield>
 			<deflectfactor>1.0</deflectfactor>
-			<color>
-				<r>0.5</r>
-				<g>1.0</g>
-				<b>1.0</b>
-			</color>
 			<collisionsound>data/accessories/sounds/shield/hit2.wav</collisionsound>
 			<removepower>10</removepower>
 			<penetration>0.7</penetration>
@@ -154,11 +139,6 @@ before they can directly hit the tank.</description>
 			<radius>3.0</radius>
 			<halfshield>true</halfshield>
 			<deflectpower>50</deflectpower>
-			<color>
-				<r>0.0</r>
-				<g>1.0</g>
-				<b>0.0</b>
-			</color>
 			<collisionsound>data/accessories/sounds/shield/hit2.wav</collisionsound>
 			<removepower>4</removepower>
 			<penetration>1.0</penetration>
@@ -179,11 +159,6 @@ before they can directly hit the tank.</description>
 			<radius>6.0</radius>
 			<halfshield>true</halfshield>
 			<deflectpower>120</deflectpower>
-			<color>
-				<r>1.0</r>
-				<g>0.0</g>
-				<b>0.0</b>
-			</color>
 			<collisionsound>data/accessories/sounds/shield/hit2.wav</collisionsound>
 			<removepower>2</removepower>
 			<penetration>0.7</penetration>
@@ -532,7 +507,6 @@ small dirt clods in all directions.</description>
 					<maxaimdistance>0</maxaimdistance>
 					<inaccuracy>50</inaccuracy>
 					<aimedweapon type='WeaponProjectile'>
-						<nocreateflame/><nocreatesmoke/>
 						<timedcollision>0.6</timedcollision>
 						<projectilescale>0.8</projectilescale>
 						<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
@@ -551,8 +525,6 @@ small dirt clods in all directions.</description>
 								<maxaimdistance>0</maxaimdistance>
 								<inaccuracy>20</inaccuracy>
 								<aimedweapon type='WeaponProjectile'>
-									<nocreateflame/>
-									<nocreatesmoke/>
 									<timedcollision>0.8</timedcollision>
 									<projectilescale>0.6</projectilescale>
 									<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
@@ -573,8 +545,6 @@ small dirt clods in all directions.</description>
 											<aimedweapon type='WeaponVelocity'>
 											<velocitychange>0.85</velocitychange>
 											<aimedweapon type='WeaponProjectile'>
-												<nocreateflame/>
-												<nocreatesmoke/>
 												<timedcollision>0.8</timedcollision>
 												<projectilescale>0.5</projectilescale>
 												<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
@@ -595,8 +565,6 @@ small dirt clods in all directions.</description>
 														<aimedweapon type='WeaponVelocity'>
 														    <velocitychange>0.7</velocitychange>
 															<aimedweapon type='WeaponProjectile'>
-															<nocreateflame/>
-															<nocreatesmoke/>
 															<projectilescale>0.5</projectilescale>
 															<shieldhurtfactor>0.3</shieldhurtfactor>
 															<projectilemodel type='ase'>
@@ -1263,7 +1231,6 @@ without wasting weapons.</description>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
 		<model type='MilkShape'>data/accessories/flare.txt</model>
 		<accessoryaction type='WeaponProjectile'>
-			<nocreateflame></nocreateflame>
 			<projectilemodel type='MilkShape'>data/accessories/flare.txt</projectilemodel>
 			<shieldhurtfactor>0.2</shieldhurtfactor>
 			<showendpoint></showendpoint>
@@ -1283,7 +1250,6 @@ range without wasting weapons.  </description>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
 		<model type='MilkShape'>data/accessories/flare.txt</model>
 		<accessoryaction type='WeaponProjectile'>
-			<nocreateflame></nocreateflame>
 			<shieldhurtfactor>0.3</shieldhurtfactor>
 			<projectilemodel type='MilkShape'>data/accessories/flare.txt</projectilemodel>
 			<showendpoint></showendpoint>
@@ -1424,12 +1390,11 @@ and shields damaging the tank directly.</description>
 			<minimumhurt>34</minimumhurt>
 			<maximumhurt>40</maximumhurt>
 			<hurtradius>2</hurtradius>
-      <ringradius>1.5</ringradius>
       <color>
-				<A>1.0</A>
-				<B>0.0</B>
-				<C>0.0</C>
-			</color>
+        <A>0.0</A>
+        <B>0.0</B>
+        <C>1.0</C>
+      </color>
 		</accessoryaction>
 	</accessory>
 	<accessory>
@@ -1590,7 +1555,6 @@ and shields damaging the tank directly.</description>
     <accessoryaction type='WeaponProjectile'>
       <projectilemodel type='MilkShape'>data/accessories/littleboy/littleboy.txt</projectilemodel>
       <shieldhurtfactor>0.2</shieldhurtfactor>
-      <nocreateflame/>
       <nowallcollision/>
       <collisionaction type='WeaponNull'></collisionaction>
     </accessoryaction>
@@ -1627,11 +1591,6 @@ and shields damaging the tank directly.</description>
 		<accessoryaction type='ShieldRound'>
 			<radius>8.0</radius>
 			<halfshield>false</halfshield>
-			<color>
-				<r>1.0</r>
-				<g>1.0</g>
-				<b>1.0</b>
-			</color>
 			<collisionsound>data/accessories/sounds/shield/hit.wav</collisionsound>
 			<removepower>20</removepower>
 			<penetration>1.0</penetration>
@@ -1795,11 +1754,6 @@ and shields damaging the tank directly.</description>
 				<b>3.0</b>
 				<c>3.0</c>
 			</size>
-			<color>
-				<r>1.0</r>
-				<g>1.0</g>
-				<b>1.0</b>
-			</color>
 			<collisionsound>data/accessories/sounds/shield/hit.wav</collisionsound>
 			<removepower>20</removepower>
 			<penetration>1.0</penetration>

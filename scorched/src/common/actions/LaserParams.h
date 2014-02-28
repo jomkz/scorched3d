@@ -22,8 +22,7 @@
 #define __INCLUDE_LaserParamsh_INCLUDE__
 
 #include <string>
-#include <common/fixed.h>
-#include <common/Vector.h>
+#include <common/FixedVector.h>
 
 class XMLNode;
 class LaserParams 
@@ -48,9 +47,9 @@ public:
 	fixed getHurtRadius() { return hurtRadius_; }
 	fixed getTotalTime() { return totalTime_; }
 	bool getHurtFirer() { return hurtFirer_; }
-	Vector &getColor() { return color_; }
+	FixedVector &getColor() { return color_; }
 
-	float getRingRadius() { return ringRadius_; }
+	fixed getRingRadius() { return ringRadius_; }
 	std::string &getRingTexture() { return ringTexture_; }
 
 protected:
@@ -60,8 +59,8 @@ protected:
 	fixed hurtRadius_;
 	fixed totalTime_;
 	bool hurtFirer_;
-	Vector color_;
-	float ringRadius_;
+	FixedVector color_;
+	fixed ringRadius_;
 };
 
 #endif // __INCLUDE_LaserParamsh_INCLUDE__

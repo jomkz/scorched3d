@@ -80,7 +80,7 @@ bool EconomyFreeMarket::loadPrices()
 		{
 			XMLNode *node = *itor;
 			std::string name;
-			float price;
+			fixed price;
 
 			if (!node->getNamedChild("name", name)) return false;
 			if (!node->getNamedChild("buyprice", price)) return false;
@@ -94,7 +94,7 @@ bool EconomyFreeMarket::loadPrices()
 				if (validAccessory(accessory))
 				{
 					// Set the actual accessory price (based on the last used market prices)
-					accessoryPrice_[accessory->getAccessoryId()] = price;
+					accessoryPrice_[accessory->getAccessoryId()] = price.asFloat();
 				}
 			}
 		}

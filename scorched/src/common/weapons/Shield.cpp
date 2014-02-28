@@ -48,13 +48,6 @@ bool Shield::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
 	if (!accessoryNode->getNamedChild("collisionsound", collisionSound_)) return false;
 	if (!S3D::checkDataFile(S3D::formatStringBuffer("%s", getCollisionSound()))) return false;
 
-	// Get the accessory color
-	XMLNode *colorNode = 0;
-	if (!accessoryNode->getNamedChild("color", colorNode)) return false;
-	if (!colorNode->getNamedChild("r", color_[0])) return false;
-	if (!colorNode->getNamedChild("g", color_[1])) return false;
-	if (!colorNode->getNamedChild("b", color_[2])) return false;
-
 	std::string laserproof;
 	if (accessoryNode->getNamedChild("laserproof", laserproof, false))
 	{

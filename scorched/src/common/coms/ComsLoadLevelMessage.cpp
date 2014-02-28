@@ -129,7 +129,7 @@ bool ComsLoadLevelMessage::loadTanks(ScorchedContext &context)
 				playerId,
 				0, 
 				LangString(),
-				Vector::getNullVector());
+				FixedVector::getNullVector());
 #ifndef S3D_SERVER
 			if (!context.getServerMode())
 			{

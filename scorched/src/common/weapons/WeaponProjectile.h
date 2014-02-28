@@ -51,8 +51,6 @@ public:
 	bool getShieldCollision() { return shieldCollision_; }
 	bool getWallCollision() { return wallCollision_; }
 	bool getApexNoDud() { return apexNoDud_; }
-	bool getCreateSmoke() { return createSmoke_; }
-	bool getCreateFlame() { return createFlame_; }
 	bool getTimedDud() { return timedDud_; }
 	fixed getWindFactor(ScorchedContext &context);
 	fixed getGravityFactor(ScorchedContext &context);
@@ -61,26 +59,12 @@ public:
 	fixed getHeightCollision(ScorchedContext &context) { return heightCollision_.getValue(context); }
 	fixed getSpinSpeed(ScorchedContext &context) { return spinSpeed_.getValue(context); }
 	fixed getStepSize() { return stepSize_; }
-	float getFlameLife() { return flameLife_; }
-	float getFlameStartSize() { return flameStartSize_; }
-	float getFlameEndSize() { return flameEndSize_; }
-	float getSmokeLife() { return smokeLife_; }
-	float getSmokeStartSize() { return smokeStartSize_; }
-	float getSmokeEndSize() { return smokeEndSize_; }
 	fixed getThrustAmount(ScorchedContext &context) { return thrustAmount_.getValue(context); }
 	fixed getThrustTime(ScorchedContext &context) { return thrustTime_.getValue(context); }
 	fixed getDrag(ScorchedContext &context) { return drag_.getValue(context); }
 	fixed getWobbleSpin(ScorchedContext &context) { return wobbleSpin_.getValue(context); }
 	fixed getWobbleAmount(ScorchedContext &context) { return wobbleAmount_.getValue(context); }
-	Vector &getFlameStartColor1() { return flameStartColor1_; }
-	Vector &getFlameStartColor2() { return flameStartColor2_; }
-	Vector &getFlameEndColor1() { return flameEndColor1_; }
-	Vector &getFlameEndColor2() { return flameEndColor2_; }
 	const char *getEngineSound() { return engineSound_.c_str(); }
-	const char *getFlameTexture() { return flameTexture_.c_str(); }
-	const char *getSmokeTexture() { return smokeTexture_.c_str(); }
-	bool getAnimateFlameTexture() { return animateFlameTexture_; }
-	bool getAnimateSmokeTexture() { return animateSmokeTexture_; }
 	bool getNoCameraTrack() { return noCameraTrack_; }
 	fixed getScale(ScorchedContext &context) { return scale_.getValue(context); }
 	ModelID &getModelID() { return modelId_; }
@@ -98,12 +82,8 @@ protected:
 	bool apexNoDud_, timedDud_;
 	bool noCameraTrack_;
 	NumberParser spinSpeed_;
-	Vector spinAxis_;
+	FixedVector spinAxis_;
 
-	bool createSmoke_, createFlame_;
-	float flameLife_, smokeLife_;
-	float flameStartSize_, flameEndSize_;
-	float smokeStartSize_, smokeEndSize_;
 	ObjectGroupEntryDefinition localGroups_, globalGroups_;
 	NumberParser thrustTime_, thrustAmount_;
 	NumberParser timedCollision_;
@@ -116,14 +96,9 @@ protected:
 	NumberParser wobbleSpin_;
 	NumberParser wobbleAmount_;
 	fixed stepSize_;
-	Vector flameStartColor1_, flameStartColor2_;
-	Vector flameEndColor1_, flameEndColor2_;
-	std::string engineSound_, flameTexture_, smokeTexture_;
-	bool animateFlameTexture_, animateSmokeTexture_;
+	std::string engineSound_;
 	Weapon *collisionAction_;
 	ModelID modelId_;
-	int flareType_;
-
 };
 
 #endif // !defined(AFX_WEAPONPROJECTILE_H__70119A64_2064_4066_8EE5_FD6A3E24D5FC__INCLUDED_)

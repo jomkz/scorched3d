@@ -41,7 +41,7 @@ Tank::Tank(ScorchedContext &context,
 		unsigned int playerId, 
 		unsigned int destinationId,
 		const LangString &name, 
-		Vector &color) :
+		FixedVector &color) :
 	Tanket(context, playerId, destinationId, name), 
 	context_(context),
 	color_(color), 
@@ -136,7 +136,7 @@ Accessory *Tank::getDeathAction()
 	return context_.getAccessoryStore().getDeathAnimation();
 }
 
-Vector &Tank::getColor()
+FixedVector &Tank::getColor()
 {
 	if (getTeam() > 0) return TankColorGenerator::getTeamColor(getTeam());
 	return color_;

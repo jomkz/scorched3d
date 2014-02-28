@@ -22,7 +22,7 @@
 #define _ComsTankChangeMessage_h
 
 #include <coms/ComsMessage.h>
-#include <common/Vector.h>
+#include <common/FixedVector.h>
 
 class ComsTankChangeMessage : public ComsMessage
 {
@@ -34,7 +34,7 @@ public:
 	ComsTankChangeMessage(
 		unsigned int playerId,
 		const LangString &playerName,
-		Vector playerColor,
+		FixedVector playerColor,
 		const char *tankType,
 		const char *modelName,
 		unsigned int destinationId,
@@ -50,7 +50,7 @@ public:
 	const char *getTankType() { return tankType_.c_str(); }
 	void setModelName(const char *modelName) { modelName_ = modelName; }
 	unsigned int getPlayerId() { return playerId_; }
-	Vector &getPlayerColor() { return playerColor_; }
+	FixedVector &getPlayerColor() { return playerColor_; }
 	unsigned int getDestinationId() { return destinationId_; }
 	unsigned int getPlayerTeam() { return playerTeam_; }
 	bool getSpectate() { return spectate_; }
@@ -72,7 +72,7 @@ protected:
 	std::string playerType_;
 	std::string modelName_;
 	std::string playerIconName_;
-	Vector playerColor_;
+	FixedVector playerColor_;
 	bool spectate_;
 	NetBuffer playerIcon_;
 

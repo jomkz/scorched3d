@@ -46,7 +46,7 @@ public:
 
 	std::string file;
 	std::vector<PlayState> playstates;
-	float gain;
+	fixed gain;
 };
 
 #endif // __INCLUDE_LandscapeMusich_INCLUDE__

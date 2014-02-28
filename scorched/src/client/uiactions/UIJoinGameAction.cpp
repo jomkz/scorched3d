@@ -50,7 +50,7 @@ void UIJoinGameAction::performUIAction()
 			// Add this player
 			ComsTankChangeMessage message(tank->getPlayerId(),
 				LANG_STRING("TestName"),
-				Vector(),
+				FixedVector(),
 				"none",
 				"none",
 				ScorchedClient::instance()->getTargetContainer().getCurrentDestinationId(),
