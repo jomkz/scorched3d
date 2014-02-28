@@ -31,6 +31,7 @@ XMLEntry *LandscapeEventActionFactory::createXMLEntry(const std::string &type)
 {
 	if (0 == strcmp(type.c_str(), "fireweapon")) return new LandscapeEventActionFireWeapon;
 	if (0 == strcmp(type.c_str(), "fireweaponfromgroup")) return new LandscapeEventActionFireWeaponFromGroup;
+	S3D::dialogMessage("LandscapeEventAction", S3D::formatStringBuffer("Unknown event action type %s", type));
 	return 0;
 }
 

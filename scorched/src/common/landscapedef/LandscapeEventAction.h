@@ -21,10 +21,9 @@
 #if !defined(__INCLUDE_LandscapeEventActionsh_INCLUDE__)
 #define __INCLUDE_LandscapeEventActionsh_INCLUDE__
 
-#include <common/fixed.h>
 #include <XML/XMLEntrySimpleTypes.h>
 
-class LandscapeEventActionFactory : public XMLEntryFactory
+class LandscapeEventActionFactory : public XMLEntryTypeFactory
 {
 public:
 	static LandscapeEventActionFactory *instance;

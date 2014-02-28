@@ -29,6 +29,7 @@ XMLEntry *LandscapeEventConditionFactory::createXMLEntry(const std::string &type
 {
 	if (0 == strcmp(type.c_str(), "time")) return new LandscapeEventConditionTime;
 	if (0 == strcmp(type.c_str(), "groupsize")) return new LandscapeEventConditionGroupSize;
+	S3D::dialogMessage("LandscapeEventCondition", S3D::formatStringBuffer("Unknown event condition type %s", type));
 	return 0;
 }
 

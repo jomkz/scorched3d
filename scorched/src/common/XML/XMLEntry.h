@@ -37,6 +37,12 @@ protected:
 class XMLEntryFactory
 {
 public:
+	virtual XMLEntry *createXMLEntry() = 0;
+};
+
+class XMLEntryTypeFactory
+{
+public:
 	virtual XMLEntry *createXMLEntry(const std::string &type) = 0;
 };
 
@@ -46,7 +52,7 @@ public:
 	XMLEntryTypeChoice(const std::string &name, const std::string &description);
 	virtual ~XMLEntryTypeChoice();
 
-	void setXMLEntryFactory(XMLEntryFactory *factory) { factory_ = factory; }
+	void setXMLEntryFactory(XMLEntryTypeFactory *factory) { factory_ = factory; }
 	XMLEntry *getValue() { return value_; }
 
 	// XMLEntry
@@ -56,7 +62,7 @@ public:
 protected:
 	std::string type_;
 	XMLEntry *value_;
-	XMLEntryFactory *factory_;
+	XMLEntryTypeFactory *factory_;
 	std::string name_, description_;
 };
 
@@ -110,6 +116,21 @@ public:
 	// XMLEntry
 	virtual bool readXML(XMLNode *parentNode);
 	virtual void writeXML(XMLNode *parentNode);
+};
+
+class XMLEntryList : public XMLEntry
+{
+public:
+	XMLEntryList();
+	virtual ~XMLEntryList();
+	
+	std::list<XMLEntry *> getChildren() { return xmlEntryChildren_; }
+
+	// XMLEntry
+	virtual bool readXML(XMLNode *parentNode);
+	virtual void writeXML(XMLNode *parentNode);
+protected:
+	std::list<XMLEntry *> xmlEntryChildren_;
 };
 
 #endif

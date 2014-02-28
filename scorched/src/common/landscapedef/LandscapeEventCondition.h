@@ -24,7 +24,7 @@
 #include <common/fixed.h>
 #include <XML/XMLEntrySimpleTypes.h>
 
-class LandscapeEventConditionFactory : public XMLEntryFactory
+class LandscapeEventConditionFactory : public XMLEntryTypeFactory
 {
 public:
 	static LandscapeEventConditionFactory *instance;

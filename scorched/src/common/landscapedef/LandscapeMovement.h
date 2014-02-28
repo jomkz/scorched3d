@@ -21,65 +21,63 @@
 #if !defined(__INCLUDE_LandscapeMovementh_INCLUDE__)
 #define __INCLUDE_LandscapeMovementh_INCLUDE__
 
-#include <vector>
-#include <common/FixedVector.h>
-#include <common/ModelID.h>
+#include <XML/XMLEntrySimpleTypes.h>
 
-class LandscapeMovementType
+class LandscapeMovementTypeFactory : public XMLEntryTypeFactory
 {
 public:
-	enum Type
-	{
-		eShips,
-		eBoids,
-		eSpline
-	};
+	static LandscapeMovementTypeFactory *instance;
 
-	static LandscapeMovementType *create(const char *type);
+	// XMLEntryFactory
+	virtual XMLEntry *createXMLEntry(const std::string &type);
+};
 
-	virtual bool readXML(XMLNode *node);
-	virtual Type getType() = 0;
+class LandscapeMovementType : public XMLEntryNamedContainer
+{
+public:
+	LandscapeMovementType(const std::string &name, const std::string &description);
+	virtual ~LandscapeMovementType();
 
-	std::string groupname;
+	XMLEntryString groupname;
 };
 
 class LandscapeMovementTypeBoids : public LandscapeMovementType
 {
 public:
-	ModelID model;
-	FixedVector minbounds, maxbounds;
-	fixed maxvelocity;
-	fixed cruisedistance;
-	fixed maxacceleration;
+	LandscapeMovementTypeBoids();
+	virtual ~LandscapeMovementTypeBoids();
 
-	virtual bool readXML(XMLNode *node);
-	virtual Type getType() { return eBoids; }
+	ModelID model;
+	XMLEntryFixedVector minbounds, maxbounds;
+	XMLEntryFixed maxvelocity;
+	XMLEntryFixed cruisedistance;
+	XMLEntryFixed maxacceleration;
 };
 
 class LandscapeMovementTypeShips : public LandscapeMovementType
 {
 public:
-	fixed speed;
-	int controlpoints;
-	fixed controlpointswidth;
-	fixed controlpointsheight;
-	fixed controlpointsrand;
-	fixed starttime;
+	LandscapeMovementTypeShips();
+	virtual ~LandscapeMovementTypeShips();
 
-	virtual bool readXML(XMLNode *node);
-	virtual Type getType() { return eShips; }
+	XMLEntryFixed speed;
+	XMLEntryInt controlpoints;
+	XMLEntryFixed controlpointswidth;
+	XMLEntryFixed controlpointsheight;
+	XMLEntryFixed controlpointsrand;
+	XMLEntryFixed starttime;
 };
 
 class LandscapeMovementTypeSpline : public LandscapeMovementType
 {
 public:
-	fixed speed;
-	fixed starttime;
-	bool groundonly;
-	std::vector<FixedVector> points;
+	LandscapeMovementTypeSpline();
+	virtual ~LandscapeMovementTypeSpline();
 
-	virtual bool readXML(XMLNode *node);
-	virtual Type getType() { return eSpline; }
+	XMLEntryFixed speed;
+	XMLEntryFixed starttime;
+	XMLEntryBool groundonly;
+	std::vector<FixedVector> points;
 };
 
 
