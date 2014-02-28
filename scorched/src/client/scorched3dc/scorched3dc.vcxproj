@@ -401,6 +401,7 @@
     <ClCompile Include="..\..\server\tankai\TankAI.cpp" />
     <ClCompile Include="..\..\server\tankai\TankAIAdder.cpp" />
     <ClCompile Include="..\..\server\tankai\TankAIAimGuesser.cpp" />
+    <ClCompile Include="..\..\server\tankai\TankAIAimResult.cpp" />
     <ClCompile Include="..\..\server\tankai\TankAICurrent.cpp" />
     <ClCompile Include="..\..\server\tankai\TankAICurrentDefenses.cpp" />
     <ClCompile Include="..\..\server\tankai\TankAICurrentMove.cpp" />
@@ -422,7 +423,6 @@
     <ClCompile Include="..\client\ClientConnectionRejectHandler.cpp" />
     <ClCompile Include="..\client\ClientGameStoppedHandler.cpp" />
     <ClCompile Include="..\client\ClientHandlers.cpp" />
-    <ClCompile Include="..\client\ClientJoinGameThreadCallback.cpp" />
     <ClCompile Include="..\client\ClientMessageHandler.cpp" />
     <ClCompile Include="..\client\ClientOperationHandler.cpp" />
     <ClCompile Include="..\client\ClientOptions.cpp" />
@@ -447,7 +447,9 @@
     <ClCompile Include="..\dialogs\GUIFrameTimer.cpp" />
     <ClCompile Include="..\dialogs\GUIProgressCounter.cpp" />
     <ClCompile Include="..\uiactions\UIActiveTankAction.cpp" />
+    <ClCompile Include="..\uiactions\UIJoinGameAction.cpp" />
     <ClCompile Include="..\uiactions\UILandscapeDeformAction.cpp" />
+    <ClCompile Include="..\uiactions\UIRotateTankAction.cpp" />
     <ClCompile Include="..\uiactions\UITankRenderer.cpp" />
     <ClCompile Include="..\uiactions\UITankShotHistory.cpp" />
     <ClCompile Include="..\uiactions\UITankWeaponSwitcher.cpp" />
@@ -472,6 +474,7 @@
     <ClCompile Include="UIStatePlayingLand.cpp" />
     <ClCompile Include="UIStatePlayingTargets.cpp" />
     <ClCompile Include="UIStateProgress.cpp" />
+    <ClCompile Include="UITankControl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\actions\Action.h" />
@@ -869,6 +872,7 @@
     <ClInclude Include="..\..\server\tankai\TankAI.h" />
     <ClInclude Include="..\..\server\tankai\TankAIAdder.h" />
     <ClInclude Include="..\..\server\tankai\TankAIAimGuesser.h" />
+    <ClInclude Include="..\..\server\tankai\TankAIAimResult.h" />
     <ClInclude Include="..\..\server\tankai\TankAICurrent.h" />
     <ClInclude Include="..\..\server\tankai\TankAICurrentDefenses.h" />
     <ClInclude Include="..\..\server\tankai\TankAICurrentMove.h" />
@@ -890,7 +894,6 @@
     <ClInclude Include="..\client\ClientConnectionRejectHandler.h" />
     <ClInclude Include="..\client\ClientGameStoppedHandler.h" />
     <ClInclude Include="..\client\ClientHandlers.h" />
-    <ClInclude Include="..\client\ClientJoinGameThreadCallback.h" />
     <ClInclude Include="..\client\ClientMessageHandler.h" />
     <ClInclude Include="..\client\ClientOperationHandler.h" />
     <ClInclude Include="..\client\ClientOptions.h" />
@@ -915,7 +918,9 @@
     <ClInclude Include="..\dialogs\GUIFrameTimer.h" />
     <ClInclude Include="..\dialogs\GUIProgressCounter.h" />
     <ClInclude Include="..\uiactions\UIActiveTankAction.h" />
+    <ClInclude Include="..\uiactions\UIJoinGameAction.h" />
     <ClInclude Include="..\uiactions\UILandscapeDeformAction.h" />
+    <ClInclude Include="..\uiactions\UIRotateTankAction.h" />
     <ClInclude Include="..\uiactions\UITankRenderer.h" />
     <ClInclude Include="..\uiactions\UITankShotHistory.h" />
     <ClInclude Include="..\uiactions\UITankWeaponSwitcher.h" />
@@ -936,6 +941,7 @@
     <ClInclude Include="UIStatePlayingLand.h" />
     <ClInclude Include="UIStatePlayingTargets.h" />
     <ClInclude Include="UIStateProgress.h" />
+    <ClInclude Include="UITankControl.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F27B2892-60F6-40E6-81AA-953B53D433B7}</ProjectGuid>

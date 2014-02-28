@@ -18,40 +18,10 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UITargetRendererh_INCLUDE__)
-#define __INCLUDE_UITargetRendererh_INCLUDE__
+#include <tankai/TankAIAimResult.h>
 
-#include <client/ClientUISync.h>
-#include <target/TargetRenderer.h>
-#include <target/Target.h>
-
-class UITargetRenderer : public ClientUISyncAction, public TargetRenderer
+TankAIAimResult::TankAIAimResult(fixed rotation, fixed elevation, fixed power) :
+	rotation_(rotation), elevation_(elevation), power_(power),
+	selectPositionX_(0), selectPositionY_(0)
 {
-public:
-	UITargetRenderer(Target *target);
-	virtual ~UITargetRenderer();
-
-	Target *getTarget() { return target_; }
-
-	// ClientUISyncAction (UI and Client Thread)
-	virtual void performUIAction();
-
-	// TargetRenderer (Client Thread)
-	virtual void changed();
-	virtual void targetBurnt();
-	virtual void shieldHit();
-	virtual void fired();
-
-protected:
-	Ogre::SceneNode* targetNode_;
-	Ogre::Entity* targetEntity_;
-	int registered_;
-	Target *target_;
-
-	virtual void performUIActionAlive();
-	virtual void performUIActionDead();
-	virtual void create();
-	void registerCallback();
-};
-
-#endif
+}

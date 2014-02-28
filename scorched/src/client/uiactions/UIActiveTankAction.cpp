@@ -39,16 +39,18 @@ UIActiveTankAction::~UIActiveTankAction()
 void UIActiveTankAction::performUIAction()
 {
 	UIStateI *currentState = ScorchedUI::instance()->getUIState().getCurrentState();
-	if (currentState->getState() != UIState::StatePlaying) return;
-
-	UITankRenderer *renderer = 0;
-	Tank *tank = ScorchedClient::instance()->getTargetContainer().getTankById(playerId_);
-	if (tank)
+	if (currentState->getState() == UIState::StatePlaying) 
 	{
-		renderer = (UITankRenderer *) tank->getRenderer();
-	}
+		UITankRenderer *renderer = 0;
+		Tank *tank = ScorchedClient::instance()->getTargetContainer().getTankById(playerId_);
+		if (tank)
+		{
+			renderer = (UITankRenderer *) tank->getRenderer();
+		}
 
-	UIStatePlaying *statePlaying = (UIStatePlaying *) currentState;
-	UIStatePlayingTargets *targets = statePlaying->getTargets();
-	targets->setCurrentTank(renderer);
+		UIStatePlaying *statePlaying = (UIStatePlaying *) currentState;
+		UIStatePlayingTargets *targets = statePlaying->getTargets();
+		targets->setCurrentTank(renderer);
+	}
+	delete this;
 }

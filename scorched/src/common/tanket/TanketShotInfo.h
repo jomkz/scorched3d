@@ -37,27 +37,10 @@ public:
 	// State change
 	void newGame();
 
-	// Gun/Turret Rotation, position
-	fixed rotateGunXY(fixed angle, bool diff=true);
-	fixed rotateGunYZ(fixed angle, bool diff=true);
-	void setSelectPosition(int x, int y) { 
-		selectPositionX_ = x; selectPositionY_ = y; }
-	fixed changePower(fixed power, bool diff=true);
-
-	fixed getRotationGunXY() { return turretRotXY_; }
-	fixed getRotationGunYZ() { return turretRotYZ_; }
-	int getSelectPositionX() { return selectPositionX_; }
-	int getSelectPositionY() { return selectPositionY_; }
-	fixed getPower() { return power_; }
-
 	// Power of gun
 	fixed getMaxOverallPower();
 	fixed getMaxPower() { return maxPower_; }
-	void setMaxPower(fixed power) { maxPower_ = power; }
-
-	const char *getRotationString();
-	const char *getElevationString();
-	const char *getPowerString();
+	void setMaxPower(fixed power);
 
 	// Move stuff
 	void setMoveId(unsigned int moveId) { moveId_ = moveId; }
@@ -81,11 +64,7 @@ protected:
 	unsigned int moveId_;
 	int missedMoves_;
 	int skippedShots_;
-
-	// Turret angles
-	fixed turretRotXY_, turretRotYZ_, power_;
 	fixed maxPower_;
-	int selectPositionX_, selectPositionY_;
 };
 
 #endif

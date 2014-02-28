@@ -177,13 +177,6 @@ void TargetDamage::damageTarget(ScorchedContext &context,
 		if (damage > damagedTarget->getLife().getLife()) damage = 
 			damagedTarget->getLife().getLife();
 		damagedTarget->getLife().setLife(damagedTarget->getLife().getLife() - damage);
-		if (context.getOptionsGame().getLimitPowerByHealth() &&
-			damagedTarget->getType() != Target::TypeTarget)
-		{
-			Tanket *damagedTank = (Tanket *) damagedTarget;
-			damagedTank->getShotInfo().changePower(0, true);
-		}
-
 		if (context.getOptionsGame().getActionSyncCheck())
 		{
 			context.getSimulator().addSyncCheck(

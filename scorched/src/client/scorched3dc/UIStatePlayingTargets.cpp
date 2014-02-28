@@ -22,6 +22,7 @@
 #include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/InputManager.h>
 #include <scorched3dc/OgreSystem.h>
+#include <scorched3dc/UITankControl.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientOptions.h>
 #include <uiactions/UITankRenderer.h>
@@ -87,6 +88,15 @@ void UIStatePlayingTargets::update(float frameTime)
 		if (changedValues)
 		{
 			tankRenderer_->setRotations();
+		}
+	}
+	if (tankRenderer_)
+	{
+		InputManager &inputManager = ScorchedUI::instance()->getInputManager();
+		if (inputManager.isKeyDown(OIS::KC_SPACE))
+		{
+			UITankControl::fireShot(tankRenderer_);
+			tankRenderer_ = 0;
 		}
 	}
 }

@@ -27,7 +27,6 @@
 class ComsMessageHandlerI;
 class ParticleEngine;
 class SimulatorGameState;
-class ThreadCallback;
 class ClientUISync;
 class ClientUISyncFromUI;
 class ClientUISyncFromClient;
@@ -61,13 +60,11 @@ public:
 	Console &getConsole() { return *console_; }
 	ClientUISyncFromClient &getClientUISync();
 	ClientAdmin &getClientAdmin() { return *clientAdmin_; }
-	static ThreadCallback &getClientThreadCallback() { return *threadCallback_; }
 	static ClientUISyncFromUI &getClientUISyncExternal();
 
 protected:
 	static ScorchedClient *instance_;
 	static TargetSpace *targetSpace_;
-	static ThreadCallback *threadCallback_;
 	static ClientUISync *clientUISync_;
 	ParticleEngine* particleEngine_;
 	ClientAdmin *clientAdmin_;

@@ -18,19 +18,23 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ClientJoinGameThreadCallbackh_INCLUDE__)
-#define __INCLUDE_ClientJoinGameThreadCallbackh_INCLUDE__
+#if !defined(__INCLUDE_TankAIAimResult_INCLUDE__)
+#define __INCLUDE_TankAIAimResult_INCLUDE__
 
-#include <engine/ThreadCallbackI.h>
+#include <common/fixed.h>
 
-class ClientJoinGameThreadCallback : public ThreadCallbackI
+class TankAIAimResult
 {
 public:
-	ClientJoinGameThreadCallback();
-	virtual ~ClientJoinGameThreadCallback();
+	TankAIAimResult(fixed rotation = 0, 
+		fixed elevation = 0, 
+		fixed power = 0);
 
-	// ThreadCallbackI
-	virtual void callbackInvoked();
+	fixed rotation_;
+	fixed elevation_;
+	fixed power_;
+	int selectPositionX_;
+	int selectPositionY_;
 };
 
 #endif

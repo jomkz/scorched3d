@@ -18,40 +18,35 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UITargetRendererh_INCLUDE__)
-#define __INCLUDE_UITargetRendererh_INCLUDE__
+#include <uiactions/UIRotateTankAction.h>
+#include <uiactions/UITankRenderer.h>
+#include <client/ScorchedClient.h>
+#include <target/TargetContainer.h>
+#include <scorched3dc/ScorchedUI.h>
+#include <scorched3dc/UIState.h>
+#include <scorched3dc/UIStatePlaying.h>
+#include <scorched3dc/UIStatePlayingTargets.h>
 
-#include <client/ClientUISync.h>
-#include <target/TargetRenderer.h>
-#include <target/Target.h>
-
-class UITargetRenderer : public ClientUISyncAction, public TargetRenderer
+UIRotateTankAction::UIRotateTankAction(unsigned int playerId, fixed rotation, fixed elevation) :
+	playerId_(playerId), rotation_(rotation), elevation_(elevation)
 {
-public:
-	UITargetRenderer(Target *target);
-	virtual ~UITargetRenderer();
+}
 
-	Target *getTarget() { return target_; }
+UIRotateTankAction::~UIRotateTankAction()
+{
+}
 
-	// ClientUISyncAction (UI and Client Thread)
-	virtual void performUIAction();
-
-	// TargetRenderer (Client Thread)
-	virtual void changed();
-	virtual void targetBurnt();
-	virtual void shieldHit();
-	virtual void fired();
-
-protected:
-	Ogre::SceneNode* targetNode_;
-	Ogre::Entity* targetEntity_;
-	int registered_;
-	Target *target_;
-
-	virtual void performUIActionAlive();
-	virtual void performUIActionDead();
-	virtual void create();
-	void registerCallback();
-};
-
-#endif
+void UIRotateTankAction::performUIAction()
+{
+	Tank *tank = ScorchedClient::instance()->getTargetContainer().getTankById(playerId_);
+	if (tank)
+	{
+		UITankRenderer *renderer = (UITankRenderer *) tank->getRenderer();
+		if (renderer)
+		{
+			renderer->getShotHistory().rotateGunXY(rotation_, false);
+			renderer->getShotHistory().rotateGunXY(elevation_, false);
+		}
+	}
+	delete this;
+}

@@ -26,35 +26,35 @@
 #include <engine/ThreadCallback.h>
 #include <common/Logger.h>
 
-GUIConsoleClientThreadCallback::GUIConsoleClientThreadCallback(const CEGUI::String &inMsg) :
+GUIConsoleClientUISyncAction::GUIConsoleClientUISyncAction(const CEGUI::String &inMsg) :
 	inMsg_(inMsg)
 {
 
 }
 
-GUIConsoleClientThreadCallback::~GUIConsoleClientThreadCallback()
+GUIConsoleClientUISyncAction::~GUIConsoleClientUISyncAction()
 {
 
 }
 
-void GUIConsoleClientThreadCallback::callbackInvoked()
+void GUIConsoleClientUISyncAction::performUIAction()
 {
 	ScorchedClient::instance()->getConsole().addLine(true, inMsg_);
 	delete this;
 }
 
-GUIConsoleTabCompleteClientThreadCallback::GUIConsoleTabCompleteClientThreadCallback(const CEGUI::String &currentText) :
+GUIConsoleTabCompleteUISyncAction::GUIConsoleTabCompleteUISyncAction(const CEGUI::String &currentText) :
 	currentText_(currentText)
 {
 
 }
 
-GUIConsoleTabCompleteClientThreadCallback::~GUIConsoleTabCompleteClientThreadCallback()
+GUIConsoleTabCompleteUISyncAction::~GUIConsoleTabCompleteUISyncAction()
 {
 
 }
 
-void GUIConsoleTabCompleteClientThreadCallback::callbackInvoked()
+void GUIConsoleTabCompleteUISyncAction::performUIAction()
 {
 	ScorchedClient::instance()->getConsole().matchRule(currentText_);
 	delete this;
@@ -108,8 +108,8 @@ bool GUIConsole::handle_TextSubmitted(const CEGUI::EventArgs &e)
 	const CEGUI::String msg = editBox_->getText();
 	editBox_->setText("");
 
-	GUIConsoleClientThreadCallback *clientCallback = new GUIConsoleClientThreadCallback(msg);
-	ScorchedClient::getClientThreadCallback().addCallback(clientCallback);
+	GUIConsoleClientUISyncAction *clientCallback = new GUIConsoleClientUISyncAction(msg);
+	ScorchedClient::getClientUISyncExternal().addActionFromUI(clientCallback);
 
 	return true;
 }
@@ -174,9 +174,9 @@ bool GUIConsole::handle_keyDownSubmitted(const CEGUI::EventArgs &e)
 
 void GUIConsole::tabComplete()
 {
-	GUIConsoleTabCompleteClientThreadCallback *tabComplete = 
-		new GUIConsoleTabCompleteClientThreadCallback(editBox_->getText());
-	ScorchedClient::getClientThreadCallback().addCallback(tabComplete);
+	GUIConsoleTabCompleteUISyncAction *tabComplete = 
+		new GUIConsoleTabCompleteUISyncAction(editBox_->getText());
+	ScorchedClient::getClientUISyncExternal().addActionFromUI(tabComplete);
 }
 
 void GUIConsole::setText(const CEGUI::String &text)

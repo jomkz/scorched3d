@@ -18,22 +18,22 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <client/ClientJoinGameThreadCallback.h>
+#include <uiactions/UIJoinGameAction.h>
 #include <client/ScorchedClient.h>
 #include <target/TargetContainer.h>
 #include <tank/Tank.h>
 #include <coms/ComsTankChangeMessage.h>
 #include <coms/ComsMessageSender.h>
 
-ClientJoinGameThreadCallback::ClientJoinGameThreadCallback()
+UIJoinGameAction::UIJoinGameAction()
 {
 }
 
-ClientJoinGameThreadCallback::~ClientJoinGameThreadCallback()
+UIJoinGameAction::~UIJoinGameAction()
 {
 }
 
-void ClientJoinGameThreadCallback::callbackInvoked()
+void UIJoinGameAction::performUIAction()
 {
 	std::map<unsigned int, Tank *> &tanks = 
 		ScorchedClient::instance()->getTargetContainer().getTanks();

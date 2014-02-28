@@ -36,7 +36,8 @@ TankAISniperGuesser::~TankAISniperGuesser()
 }
 
 bool TankAISniperGuesser::guess(Tanket *tanket, Vector &target, 
-	float distForSniper, bool checkIntersection, float offset)
+	float distForSniper, bool checkIntersection, float offset,
+	TankAIAimResult &result)
 {
 	fixed angleXYDegs, angleYZDegs, power;
 	FileRandomGenerator generator;
@@ -54,9 +55,9 @@ bool TankAISniperGuesser::guess(Tanket *tanket, Vector &target,
 		fixed xyOffset = generator.getRandFixed("TankAISniperGuesser") * fixed::fromFloat(offset);
 		fixed yzOffset = fixed::fromFloat(offset) - xyOffset;
 
-		tanket->getShotInfo().rotateGunXY(angleXYDegs + xyOffset, false);
-		tanket->getShotInfo().rotateGunYZ(angleYZDegs + yzOffset, false);
-		tanket->getShotInfo().changePower(power, false);
+		result.rotation_ = angleXYDegs + xyOffset;
+		result.elevation_ = angleYZDegs + yzOffset;
+		result.power_ = power;
 
 		return true;
 	}

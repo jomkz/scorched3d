@@ -22,6 +22,7 @@
 #define __INCLUDE_TankAIAimGuesserh_INCLUDE__
 
 #include <engine/PhysicsParticleObject.h>
+#include <tankai/TankAIAimResult.h>
 
 class Tanket;
 class TankAIAimGuesser : public PhysicsParticleObjectHandler
@@ -32,7 +33,8 @@ public:
 
 	bool guess(Tanket *tanket, Vector &target, 
 		float angleXYDegs, float distance, 
-		Vector &actualPosition);
+		Vector &actualPosition,
+		TankAIAimResult &result);
 
 	// PhysicsParticleObjectHandler
 	virtual void collision(PhysicsParticleObject &position, 
@@ -45,10 +47,12 @@ protected:
 	ScorchedContext &context_;
 	PhysicsParticleObject currentGuess_;
 
-	void getCurrentGuess(Tanket *tanket);
-	void initialShot(Tanket *tanket, Vector &target);
+	void getCurrentGuess(Tanket *tanket, TankAIAimResult &result);
+	void initialShot(Tanket *tanket, Vector &target,
+		TankAIAimResult &result);
 	void refineShot(Tanket *tanket,
-		Vector &currentPos, Vector &wantedPos);
+		Vector &currentPos, Vector &wantedPos,
+		TankAIAimResult &result);
 };
 
 #endif // __INCLUDE_TankAIAimGuesserh_INCLUDE__

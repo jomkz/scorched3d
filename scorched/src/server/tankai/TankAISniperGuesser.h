@@ -22,6 +22,7 @@
 #define __INCLUDE_TankAISniperGuesserh_INCLUDE__
 
 #include <common/Vector.h>
+#include <tankai/TankAIAimResult.h>
 
 class Tanket;
 class TankAISniperGuesser
@@ -31,7 +32,8 @@ public:
 	virtual ~TankAISniperGuesser();
 
 	bool guess(Tanket *tanket, Vector &target, 
-		float distForSniper, bool checkIntersection, float offset);
+		float distForSniper, bool checkIntersection, float offset,
+		TankAIAimResult &result);
 };
 
 #endif // __INCLUDE_TankAISniperGuesserh_INCLUDE__

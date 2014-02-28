@@ -21,32 +21,32 @@
 #if !defined(AFX_GUIConsole_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)
 #define AFX_GUIConsole_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_
 
-#include <engine/ThreadCallbackI.h>
+#include <client/ClientUISync.h>
 #include <scorched3dc/InputHandlerKeyboard.h>
 #include <common/LoggerI.h>
 #include <vector>
 
-class GUIConsoleClientThreadCallback : public ThreadCallbackI 
+class GUIConsoleClientUISyncAction : public ClientUISyncAction 
 {
 public:
-	GUIConsoleClientThreadCallback(const CEGUI::String &inMsg);
-	virtual ~GUIConsoleClientThreadCallback();
+	GUIConsoleClientUISyncAction(const CEGUI::String &inMsg);
+	virtual ~GUIConsoleClientUISyncAction();
 
-	// ThreadCallbackI
-	virtual void callbackInvoked();
+	// ClientUISyncAction
+	virtual void performUIAction();
 
 protected:
 	CEGUI::String inMsg_;
 };
 
-class GUIConsoleTabCompleteClientThreadCallback : public ThreadCallbackI 
+class GUIConsoleTabCompleteUISyncAction : public ClientUISyncAction 
 {
 public:
-	GUIConsoleTabCompleteClientThreadCallback(const CEGUI::String &currentText);
-	virtual ~GUIConsoleTabCompleteClientThreadCallback();
+	GUIConsoleTabCompleteUISyncAction(const CEGUI::String &currentText);
+	virtual ~GUIConsoleTabCompleteUISyncAction();
 
-	// ThreadCallbackI
-	virtual void callbackInvoked();
+	// ClientUISyncAction
+	virtual void performUIAction();
 
 protected:
 	CEGUI::String currentText_;

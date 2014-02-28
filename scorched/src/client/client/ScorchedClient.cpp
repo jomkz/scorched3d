@@ -45,7 +45,6 @@
 #include <server/ScorchedServerSettings.h>
 
 TargetSpace *ScorchedClient::targetSpace_ = new TargetSpace();
-ThreadCallback *ScorchedClient::threadCallback_ = new ThreadCallback(false);
 ClientUISync *ScorchedClient::clientUISync_ = new ClientUISync();
 
 static time_t startTime = 0;
@@ -55,6 +54,7 @@ static boost::thread::id thread_id;
 static boost::thread *clientThread;
 static boost::mutex creationMutex;
 static bool clientStopped = false;
+static bool serverStarted = false;
 
 ScorchedClient *ScorchedClient::instance()
 {
@@ -222,6 +222,7 @@ void ScorchedClient::startClientInternal(ProgressCounter *counter)
 	// Start the server (if required)
 	if (!ClientParams::instance()->getConnectedToServer())
 	{
+		serverStarted = false;
 		ThreadCallbackI *callback = new ThreadCallbackIAdapter<ScorchedClient>(
 			this, &ScorchedClient::serverStartedServerThread);
 
@@ -273,9 +274,7 @@ void ScorchedClient::startClientInternal(ProgressCounter *counter)
 void ScorchedClient::serverStartedServerThread()
 {
 	// This method is called by the server thread so switch flow to the client thread
-	ThreadCallbackI *callback = new ThreadCallbackIAdapter<ScorchedClient>(
-		instance_, &ScorchedClient::serverStartedClientThread);
-	getClientThreadCallback().addCallback(callback);
+	serverStarted = true;
 }
 
 void ScorchedClient::serverStartedClientThread()
@@ -314,7 +313,11 @@ bool ScorchedClient::clientLoop()
 			}
 		}
 	}
-	getClientThreadCallback().processCallbacks();
+	if (serverStarted)
+	{
+		serverStarted = false;
+		serverStartedClientThread();
+	}
 
 	clientUISync_->checkForSyncFromClient();
 

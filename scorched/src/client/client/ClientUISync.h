@@ -49,6 +49,13 @@ protected:
 	ClientUISyncAction **actions_;
 };
 
+class ClientUISyncActionBuffers
+{
+public:
+	ClientUISyncActionBuffer actionsFromClient;
+	ClientUISyncActionBuffer actionsFromUI;
+};
+
 class ClientUISyncFromClient 
 {
 public:
@@ -86,8 +93,9 @@ public:
 
 	bool currentlySynching() { return currentlySynching_; }
 protected:
-	ClientUISyncActionBuffer actionsFromClient_;
-	ClientUISyncActionBuffer actionsFromUI_;
+	ClientUISyncActionBuffers firstBuffers_, secondBuffers_;
+	ClientUISyncActionBuffers *currentBuffers_;
+	bool pointingToFirstBuffers_;
 	bool currentlySynching_;
 	boost::mutex syncMutex_;
 	boost::condition_variable syncCond_;

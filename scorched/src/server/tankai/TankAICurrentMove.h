@@ -25,6 +25,7 @@
 #include <tankai/TankAICurrentMoveWeapons.h>
 #include <common/Vector.h>
 
+class TankAIAimResult;
 class TankAICurrentMove
 {
 public:
@@ -108,7 +109,7 @@ protected:
 	void useBattery(Tanket *tanket, unsigned int batteryId, MoveData &moveData);
 	void resign(Tanket *tanket, MoveData &moveData);
 	void skipMove(Tanket *tanket, MoveData &moveData);
-	void fireShot(Tanket *tanket, MoveData &moveData);
+	void fireShot(Tanket *tanket, MoveData &moveData, TankAIAimResult &result);
 
 };
 

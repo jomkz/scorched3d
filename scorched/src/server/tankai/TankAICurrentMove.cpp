@@ -356,7 +356,8 @@ bool TankAICurrentMove::makeProjectileShot(Tanket *tanket, Tanket *targetTanket,
 		// Check this angle
 		Vector actualPosition;
 		TankAIAimGuesser aimGuesser(ScorchedServer::instance()->getContext());
-		if (aimGuesser.guess(tanket, aimPosition, degs, aimDistance, actualPosition))
+		TankAIAimResult result;
+		if (aimGuesser.guess(tanket, aimPosition, degs, aimDistance, actualPosition, result))
 		{	
 			// Check we are not firing too close to us
 			float distanceFromTarget = 
@@ -449,7 +450,7 @@ bool TankAICurrentMove::makeProjectileShot(Tanket *tanket, Tanket *targetTanket,
 
 			// Fire the shot
 			shotAtTank(targetTanket, true, distanceFromTarget);
-			fireShot(tanket, moveData);
+			fireShot(tanket, moveData, result);
 			return true;
 		}
 		else
@@ -491,8 +492,9 @@ bool TankAICurrentMove::makeSniperShot(Tanket *tanket, Tanket *targetTanket,
 	// First check to see if we can make a sniper shot that carries all the way
 	// as this is generaly an easier shot
 	float offset = getShotDistance(targetTanket, false);
+	TankAIAimResult result;
 	TankAISniperGuesser sniperGuesser;
-	if (sniperGuesser.guess(tanket, directTarget, sniperUseDistance_, true, offset))
+	if (sniperGuesser.guess(tanket, directTarget, sniperUseDistance_, true, offset, result))
 	{
 		// We can make a ordinary sniper shot
 		if (TankAI::getTankAILogging())
@@ -539,7 +541,7 @@ bool TankAICurrentMove::makeSniperShot(Tanket *tanket, Tanket *targetTanket,
 
 			// Fire the shot
 			shotAtTank(targetTanket, false, 0.0f);
-			fireShot(tanket, moveData);
+			fireShot(tanket, moveData, result);
 			return true;
 		}
 		else if (weapons.laser)
@@ -547,7 +549,7 @@ bool TankAICurrentMove::makeSniperShot(Tanket *tanket, Tanket *targetTanket,
 			// They have a reflective shield but we can use a laser
 			// Set and fire the laser
 			shotAtTank(targetTanket, false, 0.0f);
-			fireShot(tanket, moveData);
+			fireShot(tanket, moveData, result);
 			return true;
 		}
 	}
@@ -579,8 +581,9 @@ bool TankAICurrentMove::makeLaserSniperShot(Tanket *tanket, Tanket *targetTanket
 	// Second check to see if we can make a sniper shot that is obstructed
 	// but could use a laser
 	float offset = getShotDistance(targetTanket, false);
+	TankAIAimResult result;
 	TankAISniperGuesser sniperGuesser;
-	if (sniperGuesser.guess(tanket, directTarget, sniperUseDistance_, false, offset))
+	if (sniperGuesser.guess(tanket, directTarget, sniperUseDistance_, false, offset, result))
 	{
 		if (TankAI::getTankAILogging())
 		{
@@ -590,7 +593,7 @@ bool TankAICurrentMove::makeLaserSniperShot(Tanket *tanket, Tanket *targetTanket
 		// Set and fire the laser
 		shotAtTank(targetTanket, false, 0.0f);
 		setWeapon(tanket, weapons.laser);
-		fireShot(tanket, moveData);
+		fireShot(tanket, moveData, result);
 		return true;
 	}
 
@@ -626,8 +629,7 @@ bool TankAICurrentMove::makeBurriedShot(Tanket *tanket, Tanket *targetTanket,
 	// Check if this shot is burried
 	FixedVector tankTurretPosition, tankGunPosition;
 	tanket->getLife().getTankTurretPosition(tankTurretPosition);
-	TankLib::getTankGunPosition(tankGunPosition, tankTurretPosition, 
-			tanket->getShotInfo().getRotationGunXY(), tanket->getShotInfo().getRotationGunYZ());
+	TankLib::getTankGunPosition(tankGunPosition, tankTurretPosition, xy, yz);
 	if (TankLib::intersection(
 		ScorchedServer::instance()->getContext(), 
 		tankGunPosition,
@@ -639,12 +641,9 @@ bool TankAICurrentMove::makeBurriedShot(Tanket *tanket, Tanket *targetTanket,
 		}
 
 		// Try to uncover the tank
-		tanket->getShotInfo().rotateGunXY(xy, false);
-		tanket->getShotInfo().rotateGunYZ(yz, false);
-		tanket->getShotInfo().changePower(power, false);
-
+		TankAIAimResult result(xy, yz, power);
 		setWeapon(tanket, weapons.uncover);
-		fireShot(tanket, moveData);
+		fireShot(tanket, moveData, result);
 		return true;
 	}
 
@@ -786,9 +785,11 @@ bool TankAICurrentMove::makeMoveShot(Tanket *tanket,
 					totalDamageBeforeMove_ = targets_.getTotalDamageTaken();
 
 					// Move
-					tanket->getShotInfo().setSelectPosition((int) x, (int) y);
+					TankAIAimResult result;
+					result.selectPositionX_ = (int) x;
+					result.selectPositionY_ = (int) y;
 					setWeapon(tanket, fuel);
-					fireShot(tanket, moveData);
+					fireShot(tanket, moveData, result);
 
 					return true;
 				}
@@ -903,12 +904,13 @@ bool TankAICurrentMove::makeGroupShot(Tanket *tanket,
 			{
 				// Check this angle
 				Vector actualPosition;
+				TankAIAimResult result;
 				TankAIAimGuesser aimGuesser(ScorchedServer::instance()->getContext());
 				if (aimGuesser.guess(tanket, current->position, 
-					degs, 15.0f, actualPosition))
+					degs, 15.0f, actualPosition, result))
 				{
 					setWeapon(tanket, explosionhuge);
-					fireShot(tanket, moveData);
+					fireShot(tanket, moveData, result);
 					return true;
 				}
 			}
@@ -1089,7 +1091,7 @@ void TankAICurrentMove::resign(Tanket *tanket, MoveData &moveData)
 	moveData.madeMove = true;
 }
 
-void TankAICurrentMove::fireShot(Tanket *tanket, MoveData &moveData)
+void TankAICurrentMove::fireShot(Tanket *tanket, MoveData &moveData, TankAIAimResult &result)
 {
 	if (TankAI::getTankAILogging())
 	{
@@ -1110,11 +1112,11 @@ void TankAICurrentMove::fireShot(Tanket *tanket, MoveData &moveData)
 			ComsPlayedMoveMessage::eShot);
 		message.setShot(
 			currentWeapon->getAccessoryId(),
-			tanket->getShotInfo().getRotationGunXY(),
-			tanket->getShotInfo().getRotationGunYZ(),
-			tanket->getShotInfo().getPower(),
-			tanket->getShotInfo().getSelectPositionX(),
-			tanket->getShotInfo().getSelectPositionY());
+			result.rotation_,
+			result.elevation_,
+			result.power_,
+			result.selectPositionX_,
+			result.selectPositionY_);
 	
 		ScorchedServer::instance()->getServerState().moveFinished(message);
 		moveData.madeMove = true;

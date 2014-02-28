@@ -29,7 +29,6 @@ UITankRenderer::UITankRenderer(Tank *tank) :
 
 UITankRenderer::~UITankRenderer()
 {
-
 }
 
 void UITankRenderer::setRotations()

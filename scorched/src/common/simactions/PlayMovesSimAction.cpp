@@ -38,6 +38,8 @@
 #include <server/ServerChannelManager.h>
 #include <server/ScorchedServer.h>
 #ifndef S3D_SERVER
+#include <uiactions/UIRotateTankAction.h>
+#include <client/ScorchedClient.h>
 //	#include <sound/SoundUtils.h>
 #endif
 
@@ -161,6 +163,12 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 		context.getAccessoryStore().findByAccessoryId(message.getWeaponId());
 	if (!accessory) return;
 
+	// Check the tank has the accessory
+	if (tanket->getAccessories().getAccessoryCount(accessory) == 0)
+	{
+		return;
+	}
+
 	Weapon *weapon = (Weapon *) accessory->getAction();
 	if (accessory->getUseNumber() > 0)
 	{
@@ -169,6 +177,9 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 		// This is done sperately in the tank movement action
 		tanket->getAccessories().rm(accessory, accessory->getUseNumber());
 	}
+
+	// Check the maximum allowed power
+	fixed power = S3D_MIN(message.getPower(), tanket->getShotInfo().getMaxOverallPower());
 
 	if (tanket->getType() == Target::TypeTank)
 	{
@@ -180,16 +191,9 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 		{
 			if (tank->getDestinationId() != context.getTargetContainer().getCurrentDestinationId())
 			{
-
-				tanket->getShotInfo().rotateGunXY(
-					message.getRotationXY(), false);
-				tanket->getShotInfo().rotateGunYZ(
-					message.getRotationYZ(), false);
-				tanket->getShotInfo().changePower(
-					message.getPower(), false);
-				tanket->getShotInfo().setSelectPosition(
-					message.getSelectPositionX(), 
-					message.getSelectPositionY());
+				UIRotateTankAction *rotateAction = new UIRotateTankAction(tank->getPlayerId(),
+					message.getRotationXY(), message.getRotationYZ());
+				ScorchedClient::instance()->getClientUISync().addActionFromClient(rotateAction);
 			}
 		}
 #endif
@@ -246,7 +250,7 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 		newVelocity,
 		referenced_, 
 		(tanket->getType() == Target::TypeTank));
-	FixedVector velocity = newVelocity * (message.getPower() + 1);
+	FixedVector velocity = newVelocity * (power + 1);
 	FixedVector tankTurretPosition;
 	tanket->getLife().getTankTurretPosition(tankTurretPosition);
 	FixedVector position;

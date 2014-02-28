@@ -1365,9 +1365,6 @@
     <ClCompile Include="..\..\common\common\ThreadUtils.cpp">
       <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="..\client\ClientJoinGameThreadCallback.cpp">
-      <Filter>client</Filter>
-    </ClCompile>
     <ClCompile Include="UIState.cpp">
       <Filter>scorched3dc</Filter>
     </ClCompile>
@@ -1450,6 +1447,18 @@
       <Filter>uiactions</Filter>
     </ClCompile>
     <ClCompile Include="..\uiactions\UITankWeaponSwitcher.cpp">
+      <Filter>uiactions</Filter>
+    </ClCompile>
+    <ClCompile Include="UITankControl.cpp">
+      <Filter>scorched3dc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\tankai\TankAIAimResult.cpp">
+      <Filter>tankai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uiactions\UIRotateTankAction.cpp">
+      <Filter>uiactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uiactions\UIJoinGameAction.cpp">
       <Filter>uiactions</Filter>
     </ClCompile>
   </ItemGroup>
@@ -2753,9 +2762,6 @@
     <ClInclude Include="..\..\common\common\ThreadUtils.h">
       <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="..\client\ClientJoinGameThreadCallback.h">
-      <Filter>client</Filter>
-    </ClInclude>
     <ClInclude Include="UIState.h">
       <Filter>scorched3dc</Filter>
     </ClInclude>
@@ -2838,6 +2844,18 @@
       <Filter>uiactions</Filter>
     </ClInclude>
     <ClInclude Include="..\uiactions\UITankWeaponSwitcher.h">
+      <Filter>uiactions</Filter>
+    </ClInclude>
+    <ClInclude Include="UITankControl.h">
+      <Filter>scorched3dc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\tankai\TankAIAimResult.h">
+      <Filter>tankai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uiactions\UIRotateTankAction.h">
+      <Filter>uiactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uiactions\UIJoinGameAction.h">
       <Filter>uiactions</Filter>
     </ClInclude>
   </ItemGroup>

@@ -18,40 +18,19 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UITargetRendererh_INCLUDE__)
-#define __INCLUDE_UITargetRendererh_INCLUDE__
+#if !defined(__INCLUDE_UIJoinGameActionh_INCLUDE__)
+#define __INCLUDE_UIJoinGameActionh_INCLUDE__
 
 #include <client/ClientUISync.h>
-#include <target/TargetRenderer.h>
-#include <target/Target.h>
 
-class UITargetRenderer : public ClientUISyncAction, public TargetRenderer
+class UIJoinGameAction : public ClientUISyncAction
 {
 public:
-	UITargetRenderer(Target *target);
-	virtual ~UITargetRenderer();
+	UIJoinGameAction();
+	virtual ~UIJoinGameAction();
 
-	Target *getTarget() { return target_; }
-
-	// ClientUISyncAction (UI and Client Thread)
+	// ClientUISyncAction
 	virtual void performUIAction();
-
-	// TargetRenderer (Client Thread)
-	virtual void changed();
-	virtual void targetBurnt();
-	virtual void shieldHit();
-	virtual void fired();
-
-protected:
-	Ogre::SceneNode* targetNode_;
-	Ogre::Entity* targetEntity_;
-	int registered_;
-	Target *target_;
-
-	virtual void performUIActionAlive();
-	virtual void performUIActionDead();
-	virtual void create();
-	void registerCallback();
 };
 
 #endif

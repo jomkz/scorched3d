@@ -63,8 +63,10 @@ void ClientUISyncActionBuffer::removeClientUISyncAction(int position)
 	actions_[position] = 0;
 }
 
-ClientUISync::ClientUISync() : currentlySynching_(false)
+ClientUISync::ClientUISync() : 
+	currentlySynching_(false), pointingToFirstBuffers_(true)
 {
+	currentBuffers_ = &firstBuffers_;
 }
 
 ClientUISync::~ClientUISync()
@@ -73,27 +75,28 @@ ClientUISync::~ClientUISync()
 
 int ClientUISync::addActionFromClient(ClientUISyncAction *action)
 {
-	return actionsFromClient_.addClientUISyncAction(action);
+	return currentBuffers_->actionsFromClient.addClientUISyncAction(action);
 }
 
 void ClientUISync::removeActionFromClient(int position)
 {
-	actionsFromClient_.removeClientUISyncAction(position);
+	currentBuffers_->actionsFromClient.removeClientUISyncAction(position);
 }
 
 int ClientUISync::addActionFromUI(ClientUISyncAction *action)
 {
-	return actionsFromUI_.addClientUISyncAction(action);
+	return currentBuffers_->actionsFromUI.addClientUISyncAction(action);
 }
 
 void ClientUISync::removeActionFromUI(int position)
 {
-	actionsFromUI_.removeClientUISyncAction(position);
+	currentBuffers_->actionsFromUI.removeClientUISyncAction(position);
 }
 
 void ClientUISync::checkForSyncFromClient()
 {
-	if (!actionsFromClient_.getActionCount()) return;
+	if (!currentBuffers_->actionsFromClient.getActionCount() &&
+		!currentBuffers_->actionsFromUI.getActionCount()) return;
 
 	{
 		boost::unique_lock<boost::mutex> lock(syncMutex_);
@@ -112,21 +115,28 @@ void ClientUISync::checkForSyncFromUI()
 	{
 		boost::unique_lock<boost::mutex> lock(syncMutex_);
 
+		// Swap buffers, so the actions themselves can add new actions
+		// without needing to synchronize the buffers
+		ClientUISyncActionBuffers *iterationBuffers = currentBuffers_;
+		if (pointingToFirstBuffers_) currentBuffers_ = &secondBuffers_;
+		else currentBuffers_ = &firstBuffers_;
+		pointingToFirstBuffers_ = !pointingToFirstBuffers_;
+
 		{
-			ClientUISyncAction **currentAction = actionsFromClient_.getActions();
-			for (int i=0; i<actionsFromClient_.getActionCount(); ++i, ++currentAction)
+			ClientUISyncAction **currentAction = iterationBuffers->actionsFromClient.getActions();
+			for (int i=0; i<iterationBuffers->actionsFromClient.getActionCount(); ++i, ++currentAction)
 			{
 				if (*currentAction) (*currentAction)->performUIAction();
 			}
-			actionsFromClient_.resetCount();
+			iterationBuffers->actionsFromClient.resetCount();
 		}
 		{
-			ClientUISyncAction **currentAction = actionsFromUI_.getActions();
-			for (int i=0; i<actionsFromUI_.getActionCount(); ++i, ++currentAction)
+			ClientUISyncAction **currentAction = iterationBuffers->actionsFromUI.getActions();
+			for (int i=0; i<iterationBuffers->actionsFromUI.getActionCount(); ++i, ++currentAction)
 			{
 				if (*currentAction) (*currentAction)->performUIAction();
 			}
-			actionsFromUI_.resetCount();
+			iterationBuffers->actionsFromUI.resetCount();
 		}
 
 		currentlySynching_ = false;

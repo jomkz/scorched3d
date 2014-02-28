@@ -39,4 +39,5 @@ void UILandscapeDeformAction::performUIAction()
 	{
 		((UIStatePlaying *) currentState)->updateHeight(x_, y_, w_, h_);
 	}
+	delete this;
 }

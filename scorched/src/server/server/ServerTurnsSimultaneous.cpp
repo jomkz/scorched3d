@@ -23,8 +23,6 @@
 #include <server/ScorchedServer.h>
 #include <coms/ComsPlayedMoveMessage.h>
 #include <common/OptionsScorched.h>
-#include <simactions/PlayMovesSimAction.h>
-#include <simactions/TankStopMoveSimAction.h>
 #include <target/TargetContainer.h>
 #include <tanket/TanketShotInfo.h>
 #include <tank/Tank.h>

@@ -24,8 +24,6 @@
 #include <common/OptionsGame.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
-#include <simactions/PlayMovesSimAction.h>
-#include <simactions/TankStopMoveSimAction.h>
 #include <coms/ComsPlayedMoveMessage.h>
 #include <tank/TankSort.h>
 #include <tanket/Tanket.h>
