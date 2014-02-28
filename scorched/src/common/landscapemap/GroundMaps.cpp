@@ -25,6 +25,7 @@
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <landscapedef/LandscapeDefinitionCache.h>
+#include <placement/PlacementType.h>
 #include <engine/ObjectGroups.h>
 #include <target/Target.h>
 #include <target/TargetContainer.h>

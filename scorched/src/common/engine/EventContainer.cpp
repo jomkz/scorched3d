@@ -60,17 +60,15 @@ void EventContainer::addEvents(ScorchedContext &context,
 		++itor)
 	{
 		LandscapeInclude *event = (*itor);
-		addEvent(context, event->events);
+		addEvent(context, event->events->getChildren());
 	}
 }
 
 void EventContainer::addEvent(ScorchedContext &context, 
-	std::vector<LandscapeEvent *> &events)
+	std::list<LandscapeEvent *> &events)
 {
-	std::vector<LandscapeEvent *>::iterator itor;
-	for (itor = events.begin();
-		itor != events.end();
-		++itor)
+	std::list<LandscapeEvent *>::iterator itor;
+	for (itor = events.begin(); itor != events.end(); ++itor)
 	{
 		LandscapeEvent *evt = (*itor);
 		LandscapeEventCondition *condition = (LandscapeEventCondition *)

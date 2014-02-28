@@ -37,7 +37,7 @@ LandscapeMovementType *LandscapeMovementTypeChoice::createXMLEntry(const std::st
 	if (0 == strcmp(type.c_str(), "boids")) return new LandscapeMovementTypeBoids;
 	if (0 == strcmp(type.c_str(), "ships")) return new LandscapeMovementTypeShips;
 	if (0 == strcmp(type.c_str(), "spline")) return new LandscapeMovementTypeSpline;
-	S3D::dialogMessage("LandscapeMovementType", S3D::formatStringBuffer("Unknown movement type %s", type));
+	S3D::dialogMessage("LandscapeMovementTypeChoice", S3D::formatStringBuffer("Unknown movement type %s", type));
 	return 0;
 }
 

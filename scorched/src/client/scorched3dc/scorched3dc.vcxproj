@@ -159,6 +159,9 @@
     <ClCompile Include="..\..\common\landscapedef\LandscapeMusic.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeOptions.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeSound.cpp" />
+    <ClCompile Include="..\..\common\landscapedef\LandscapeSoundPosition.cpp" />
+    <ClCompile Include="..\..\common\landscapedef\LandscapeSoundSound.cpp" />
+    <ClCompile Include="..\..\common\landscapedef\LandscapeSoundTiming.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeTex.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeTexDefn.cpp" />
     <ClCompile Include="..\..\common\landscapemap\DeformLandscape.cpp" />
@@ -640,6 +643,9 @@
     <ClInclude Include="..\..\common\landscapedef\LandscapeMusic.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeOptions.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeSound.h" />
+    <ClInclude Include="..\..\common\landscapedef\LandscapeSoundPosition.h" />
+    <ClInclude Include="..\..\common\landscapedef\LandscapeSoundSound.h" />
+    <ClInclude Include="..\..\common\landscapedef\LandscapeSoundTiming.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeTex.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeTexDefn.h" />
     <ClInclude Include="..\..\common\landscapemap\DeformLandscape.h" />

@@ -31,24 +31,19 @@ LandscapeInclude::LandscapeInclude()
 {
 	events = new LandscapeEventList();
 	movements = new LandscapeMovementTypeList();
+	sounds = new LandscapeSoundList();
 }
 
 LandscapeInclude::~LandscapeInclude()
 {
 	delete events;
 	delete movements;
+	delete sounds;
 	{
 		while (!placements.empty())
 		{
 			delete placements.back();
 			placements.pop_back();
-		}
-	}
-	{
-		while (!sounds.empty())
-		{
-			delete sounds.back();
-			sounds.pop_back();
 		}
 	}
 	{
@@ -71,15 +66,7 @@ bool LandscapeInclude::readXML(LandscapeDefinitions *definitions, XMLNode *node)
 {
 	if (!events->readXML(node)) return false;
 	if (!movements->readXML(node)) return false;
-	{
-		XMLNode *soundNode;
-		while (node->getNamedChild("sound", soundNode, false))
-		{
-			LandscapeSoundType *sound = new LandscapeSoundType;
-			if (!sound->readXML(soundNode)) return false;
-			sounds.push_back(sound);
-		}
-	}
+	if (!sounds->readXML(node)) return false;
 	{
 		XMLNode *musicNode;
 		while (node->getNamedChild("music", musicNode, false))

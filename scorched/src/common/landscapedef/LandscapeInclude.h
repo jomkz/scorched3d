@@ -27,7 +27,7 @@ class XMLNode;
 class LandscapeEventList;
 class LandscapeMovementTypeList;
 class PlacementType;
-class LandscapeSoundType;
+class LandscapeSoundList;
 class LandscapeMusicType;
 class LandscapeOptionsType;
 class LandscapeDefinitions;
@@ -39,8 +39,8 @@ public:
 
 	LandscapeEventList *events;
 	LandscapeMovementTypeList *movements;
+	LandscapeSoundList *sounds;
 	std::vector<PlacementType *> placements;
-	std::vector<LandscapeSoundType *> sounds;
 	std::vector<LandscapeMusicType *> musics;
 	std::vector<LandscapeOptionsType *> options;
 

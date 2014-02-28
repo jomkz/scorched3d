@@ -1497,6 +1497,15 @@
     <ClCompile Include="..\..\common\XML\XMLEntryComplexTypes.cpp">
       <Filter>XML</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeSoundPosition.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeSoundSound.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeSoundTiming.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -2926,6 +2935,15 @@
     </ClInclude>
     <ClInclude Include="..\..\common\XML\XMLEntryComplexTypes.h">
       <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeSoundPosition.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeSoundSound.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeSoundTiming.h">
+      <Filter>landscapedef</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -21,9 +21,8 @@
 #if !defined(__INCLUDE_EventContainerh_INCLUDE__)
 #define __INCLUDE_EventContainerh_INCLUDE__
 
-#include <common/fixed.h>
 #include <landscapedef/LandscapeInclude.h>
-#include <map>
+#include <landscapedef/LandscapeEvent.h>
 
 class EventContainer
 {
@@ -46,7 +45,7 @@ protected:
 	std::vector<EventEntry> events_;
 
 	void addEvent(ScorchedContext &context, 
-		std::vector<LandscapeEvent *> &events);
+		std::list<LandscapeEvent *> &events);
 	void addEvents(ScorchedContext &context, 
 		std::vector<LandscapeInclude *> &events);
 };
