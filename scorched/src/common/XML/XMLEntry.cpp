@@ -19,6 +19,39 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <XML/XMLEntry.h>
+#include <common/FileTemplate.h>
+
+XMLEntryDocumentInfo::XMLEntryDocumentInfo()
+{
+}
+
+XMLEntryDocumentInfo::~XMLEntryDocumentInfo()
+{
+}
+
+XMLEntryDocumentGenerator::XMLEntryDocumentGenerator(const std::string &documentLocation) :
+	documentLocation_(documentLocation)
+{
+}
+
+XMLEntryDocumentGenerator::~XMLEntryDocumentGenerator()
+{
+}
+
+void XMLEntryDocumentGenerator::addType(const std::string &typeName, const std::string &fileName, FileTemplateVariables *variables)
+{
+	DIALOG_ASSERT(types_.find(typeName) == types_.end());
+	types_.insert(typeName);
+
+	std::string fileLocation = documentLocation_ + "/" + typeName + ".html";
+	FileTemplate::writeTemplateToFile(fileName, *variables, fileLocation);
+	delete variables;
+}
+
+bool XMLEntryDocumentGenerator::hasType(const std::string &typeName)
+{
+	return types_.find(typeName) != types_.end();
+}
 
 XMLEntry::XMLEntry()
 {
@@ -28,9 +61,9 @@ XMLEntry::~XMLEntry()
 {
 }
 
-XMLEntryContainer::XMLEntryContainer(const char *name, const char *description) :
+XMLEntryContainer::XMLEntryContainer(const char *typeName, const char *description) :
 	XMLEntry(),
-	xmlEntryName_(name), xmlEntryDescription_(description)
+	xmlTypeName_(typeName), xmlDescription_(description)
 {
 }
 
@@ -38,160 +71,196 @@ XMLEntryContainer::~XMLEntryContainer()
 {
 }
 
-void XMLEntryContainer::addChildXMLEntry(XMLEntry *entry1)
+void XMLEntryContainer::addChildXMLEntry(const char *name1, XMLEntry *entry1)
 {
-	xmlEntryChildren_.push_back(entry1);
+	xmlEntryChildren_[name1] = entry1;
 }
 
-void XMLEntryContainer::addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2)
+void XMLEntryContainer::addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2)
 {
-	xmlEntryChildren_.push_back(entry1);
-	xmlEntryChildren_.push_back(entry2);
+	xmlEntryChildren_[name1] = entry1;
+	xmlEntryChildren_[name2] = entry2;
 }
 
-void XMLEntryContainer::addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3)
+void XMLEntryContainer::addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
+		const char *name3, XMLEntry *entry3)
 {
-	xmlEntryChildren_.push_back(entry1);
-	xmlEntryChildren_.push_back(entry2);
-	xmlEntryChildren_.push_back(entry3);
+	xmlEntryChildren_[name1] = entry1;
+	xmlEntryChildren_[name2] = entry2;
+	xmlEntryChildren_[name3] = entry3;
 }
 
-void XMLEntryContainer::addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3, XMLEntry *entry4)
+void XMLEntryContainer::addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
+		const char *name3, XMLEntry *entry3, const char *name4, XMLEntry *entry4)
 {
-	xmlEntryChildren_.push_back(entry1);
-	xmlEntryChildren_.push_back(entry2);
-	xmlEntryChildren_.push_back(entry3);
-	xmlEntryChildren_.push_back(entry4);
+	xmlEntryChildren_[name1] = entry1;
+	xmlEntryChildren_[name2] = entry2;
+	xmlEntryChildren_[name3] = entry3;
+	xmlEntryChildren_[name4] = entry4;
 }
 
-void XMLEntryContainer::addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3, XMLEntry *entry4, XMLEntry *entry5)
+void XMLEntryContainer::addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
+		const char *name3, XMLEntry *entry3, const char *name4, XMLEntry *entry4, const char *name5, XMLEntry *entry5)
 {
-	xmlEntryChildren_.push_back(entry1);
-	xmlEntryChildren_.push_back(entry2);
-	xmlEntryChildren_.push_back(entry3);
-	xmlEntryChildren_.push_back(entry4);
-	xmlEntryChildren_.push_back(entry5);
+	xmlEntryChildren_[name1] = entry1;
+	xmlEntryChildren_[name2] = entry2;
+	xmlEntryChildren_[name3] = entry3;
+	xmlEntryChildren_[name4] = entry4;
+	xmlEntryChildren_[name5] = entry5;
 }
 
-void XMLEntryContainer::addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3, XMLEntry *entry4, XMLEntry *entry5,
-		XMLEntry *entry6)
+void XMLEntryContainer::addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
+		const char *name3, XMLEntry *entry3, const char *name4, XMLEntry *entry4, const char *name5, XMLEntry *entry5, 
+		const char *name6, XMLEntry *entry6)
 {
-	xmlEntryChildren_.push_back(entry1);
-	xmlEntryChildren_.push_back(entry2);
-	xmlEntryChildren_.push_back(entry3);
-	xmlEntryChildren_.push_back(entry4);
-	xmlEntryChildren_.push_back(entry5);
-	xmlEntryChildren_.push_back(entry6);
+	xmlEntryChildren_[name1] = entry1;
+	xmlEntryChildren_[name2] = entry2;
+	xmlEntryChildren_[name3] = entry3;
+	xmlEntryChildren_[name4] = entry4;
+	xmlEntryChildren_[name5] = entry5;
+	xmlEntryChildren_[name6] = entry6;
 }
 
-void XMLEntryContainer::addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3, XMLEntry *entry4, XMLEntry *entry5,
-		XMLEntry *entry6, XMLEntry *entry7)
+void XMLEntryContainer::addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
+		const char *name3, XMLEntry *entry3, const char *name4, XMLEntry *entry4, const char *name5, XMLEntry *entry5, 
+		const char *name6, XMLEntry *entry6, const char *name7, XMLEntry *entry7)
 {
-	xmlEntryChildren_.push_back(entry1);
-	xmlEntryChildren_.push_back(entry2);
-	xmlEntryChildren_.push_back(entry3);
-	xmlEntryChildren_.push_back(entry4);
-	xmlEntryChildren_.push_back(entry5);
-	xmlEntryChildren_.push_back(entry6);
-	xmlEntryChildren_.push_back(entry7);
+	xmlEntryChildren_[name1] = entry1;
+	xmlEntryChildren_[name2] = entry2;
+	xmlEntryChildren_[name3] = entry3;
+	xmlEntryChildren_[name4] = entry4;
+	xmlEntryChildren_[name5] = entry5;
+	xmlEntryChildren_[name6] = entry6;
+	xmlEntryChildren_[name7] = entry7;
 }
 
-void XMLEntryContainer::addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3, XMLEntry *entry4, XMLEntry *entry5,
-		XMLEntry *entry6, XMLEntry *entry7, XMLEntry *entry8)
+void XMLEntryContainer::addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
+		const char *name3, XMLEntry *entry3, const char *name4, XMLEntry *entry4, const char *name5, XMLEntry *entry5, 
+		const char *name6, XMLEntry *entry6, const char *name7, XMLEntry *entry7, const char *name8, XMLEntry *entry8)
 {
-	xmlEntryChildren_.push_back(entry1);
-	xmlEntryChildren_.push_back(entry2);
-	xmlEntryChildren_.push_back(entry3);
-	xmlEntryChildren_.push_back(entry4);
-	xmlEntryChildren_.push_back(entry5);
-	xmlEntryChildren_.push_back(entry6);
-	xmlEntryChildren_.push_back(entry7);
-	xmlEntryChildren_.push_back(entry8);
+	xmlEntryChildren_[name1] = entry1;
+	xmlEntryChildren_[name2] = entry2;
+	xmlEntryChildren_[name3] = entry3;
+	xmlEntryChildren_[name4] = entry4;
+	xmlEntryChildren_[name5] = entry5;
+	xmlEntryChildren_[name6] = entry6;
+	xmlEntryChildren_[name7] = entry7;
+	xmlEntryChildren_[name8] = entry8;
 }
 
-void XMLEntryContainer::addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3, XMLEntry *entry4, XMLEntry *entry5,
-		XMLEntry *entry6, XMLEntry *entry7, XMLEntry *entry8, XMLEntry *entry9)
+void XMLEntryContainer::addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
+		const char *name3, XMLEntry *entry3, const char *name4, XMLEntry *entry4, const char *name5, XMLEntry *entry5, 
+		const char *name6, XMLEntry *entry6, const char *name7, XMLEntry *entry7, const char *name8, XMLEntry *entry8, 
+		const char *name9, XMLEntry *entry9)
 {
-	xmlEntryChildren_.push_back(entry1);
-	xmlEntryChildren_.push_back(entry2);
-	xmlEntryChildren_.push_back(entry3);
-	xmlEntryChildren_.push_back(entry4);
-	xmlEntryChildren_.push_back(entry5);
-	xmlEntryChildren_.push_back(entry6);
-	xmlEntryChildren_.push_back(entry7);
-	xmlEntryChildren_.push_back(entry8);
-	xmlEntryChildren_.push_back(entry9);
+	xmlEntryChildren_[name1] = entry1;
+	xmlEntryChildren_[name2] = entry2;
+	xmlEntryChildren_[name3] = entry3;
+	xmlEntryChildren_[name4] = entry4;
+	xmlEntryChildren_[name5] = entry5;
+	xmlEntryChildren_[name6] = entry6;
+	xmlEntryChildren_[name7] = entry7;
+	xmlEntryChildren_[name8] = entry8;
+	xmlEntryChildren_[name9] = entry9;
 }
 
-
-void XMLEntryContainer::addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3, XMLEntry *entry4, XMLEntry *entry5,
-		XMLEntry *entry6, XMLEntry *entry7, XMLEntry *entry8, XMLEntry *entry9, XMLEntry *entry10)
+void XMLEntryContainer::addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
+		const char *name3, XMLEntry *entry3, const char *name4, XMLEntry *entry4, const char *name5, XMLEntry *entry5, 
+		const char *name6, XMLEntry *entry6, const char *name7, XMLEntry *entry7, const char *name8, XMLEntry *entry8, 
+		const char *name9, XMLEntry *entry9, const char *name10, XMLEntry *entry10)
 {
-	xmlEntryChildren_.push_back(entry1);
-	xmlEntryChildren_.push_back(entry2);
-	xmlEntryChildren_.push_back(entry3);
-	xmlEntryChildren_.push_back(entry4);
-	xmlEntryChildren_.push_back(entry5);
-	xmlEntryChildren_.push_back(entry6);
-	xmlEntryChildren_.push_back(entry7);
-	xmlEntryChildren_.push_back(entry8);
-	xmlEntryChildren_.push_back(entry9);
-	xmlEntryChildren_.push_back(entry10);
+	xmlEntryChildren_[name1] = entry1;
+	xmlEntryChildren_[name2] = entry2;
+	xmlEntryChildren_[name3] = entry3;
+	xmlEntryChildren_[name4] = entry4;
+	xmlEntryChildren_[name5] = entry5;
+	xmlEntryChildren_[name6] = entry6;
+	xmlEntryChildren_[name7] = entry7;
+	xmlEntryChildren_[name8] = entry8;
+	xmlEntryChildren_[name9] = entry9;
+	xmlEntryChildren_[name10] = entry10;
 }
 
-XMLEntryContainer *XMLEntryContainer::addChildXMLEntryContainer(XMLEntryContainer *container)
+XMLEntryContainer *XMLEntryContainer::addChildXMLEntryContainer(const char *name, XMLEntryContainer *container)
 {
-	xmlEntryChildren_.push_back(container);
+	xmlEntryChildren_[name] = container;
 	return container;
 }
 
-bool XMLEntryContainer::readXML(XMLNode *parentNode)
+bool XMLEntryContainer::readXML(XMLNode *node)
 {
-	std::list<XMLEntry *>::iterator itor = xmlEntryChildren_.begin(), end = xmlEntryChildren_.end();
-	for (;itor!=end; itor++)
+	std::set<std::string> seenTags;
 	{
-		if (!(*itor)->readXML(parentNode)) return false;
+		std::list<XMLNode *>::iterator itor = node->getChildren().begin(), end = node->getChildren().end();
+		for (;itor!=end;++itor)
+		{
+			std::map<std::string, XMLEntry *>::iterator findItor =
+				xmlEntryChildren_.find((*itor)->getName());
+			if (findItor == xmlEntryChildren_.end()) return (*itor)->returnError("Unrecognised XML element");
+			if (!findItor->second->readXML(*itor)) return (*itor)->returnError("Failed to parse XML element");
+			seenTags.insert((*itor)->getName());
+		}
 	}
+	{
+		std::map<std::string, XMLEntry *>::iterator itor = xmlEntryChildren_.begin(), end = xmlEntryChildren_.end();
+		for (;itor!=end;++itor)
+		{
+			if (seenTags.find(itor->first) == seenTags.end() &&
+				itor->second->getData() & eDataRequired)
+			{
+				return node->returnError(S3D::formatStringBuffer(
+					"Failed to find required child XML element \"%s\"", itor->first.c_str()));
+			}
+		}
+	}
+
 	return true;
 }
 
 void XMLEntryContainer::writeXML(XMLNode *parentNode)
 {
-	std::list<XMLEntry *>::iterator itor = xmlEntryChildren_.begin(), end = xmlEntryChildren_.end();
-	for (;itor!=end; itor++)
+	std::map<std::string, XMLEntry *>::iterator itor = xmlEntryChildren_.begin(), end = xmlEntryChildren_.end();
+	for (;itor!=end;++itor)
 	{
-		(*itor)->writeXML(parentNode);
+		if (itor->second->getData() & eDataDepricated) continue;
+
+		// Add the comments for this node
+		std::string description;
+		itor->second->getDescription(description);
+		parentNode->addChild(new XMLNode("", 
+			S3D::formatStringBuffer("%s", description.c_str()), 
+			XMLNode::XMLCommentType));
+
+		// Add the actual node
+		XMLNode *newNode = new XMLNode(itor->first.c_str());
+		parentNode->addChild(newNode);
+		itor->second->writeXML(newNode);
 	}
 }
 
-XMLEntryGroup::XMLEntryGroup(const char *name, const char *description) :
-	XMLEntryContainer(name, description)
+XMLEntryDocumentInfo XMLEntryContainer::generateDocumentation(XMLEntryDocumentGenerator &generator)
 {
-}
+	XMLEntryDocumentInfo info;
+	if (generator.hasType(xmlTypeName_)) return info;
 
-XMLEntryGroup::~XMLEntryGroup()
-{
-}
+	FileTemplateVariables *mainVariables = new FileTemplateVariables();
+	mainVariables->addVariableValue("TYPE_NAME", xmlTypeName_);
+	std::map<std::string, XMLEntry *>::iterator itor = xmlEntryChildren_.begin(), end = xmlEntryChildren_.end();
+	for (;itor!=end; itor++)
+	{
+		XMLEntryDocumentInfo childInfo = itor->second->generateDocumentation(generator);
+		FileTemplateVariables *childVariables = mainVariables->addLoopVariable("CHILD");
+		std::string childTypeName, childTypeNameConverted, childDescription;
+		itor->second->getTypeName(childTypeName);
+		itor->second->getDescription(childDescription);
+		XMLNode::removeSpecialChars(childTypeName, childTypeNameConverted);
+		bool required = (itor->second->getData() & eDataRequired) != 0;
 
-bool XMLEntryGroup::readXML(XMLNode *parentNode)
-{
-	XMLNode *node = 0;
-	if (!parentNode->getNamedChild(xmlEntryName_, node)) return false;
-	
-	if (!XMLEntryContainer::readXML(node)) return false;
-	return node->failChildren();
-}
-
-void XMLEntryGroup::writeXML(XMLNode *parentNode)
-{
-	// Add the comments for this node
-	parentNode->addChild(new XMLNode("", 
-		S3D::formatStringBuffer("%s", xmlEntryDescription_), 
-		XMLNode::XMLCommentType));
-
-	// Add the actual node
-	XMLNode *newNode = new XMLNode(xmlEntryName_);
-	parentNode->addChild(newNode);
-
-	XMLEntryContainer::writeXML(newNode);
+		childVariables->addVariableValue("CHILD_TAGNAME", itor->first.c_str());
+		childVariables->addVariableValue("CHILD_TYPE", childTypeNameConverted.c_str());
+		childVariables->addVariableValue("CHILD_DESCRIPTION", childDescription.c_str());
+		childVariables->addVariableValue("CHILD_OPTIONAL", required?"false":"true");
+	}
+	generator.addType(xmlTypeName_, "docs/XMLEntryContainer.html", mainVariables);
+	return info;
 }

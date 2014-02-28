@@ -27,13 +27,17 @@
 #include <XML/XMLParser.h>
 
 PlacementTypeBounds::PlacementTypeBounds() : 
-	PlacementType("PlacementTypeBounds", 
+	PlacementType("PlacementTypeBounds",
 		"Defines the placement of objects by randomly distributing them in a given bounding box"),
-	onground("onground", "If objects should be aligned to the landscape surface", 0, false),
-	count("count", "The number of objects to place"),
-	minbounds("minbounds", "The minimum extent of the placement bounding box"),
-	maxbounds("maxbounds", "The maximum extent of the placement bounding box")
+	onground("If objects should be aligned to the landscape surface", 0, false),
+	count("The number of objects to place"),
+	minbounds("The minimum extent of the placement bounding box"),
+	maxbounds("The maximum extent of the placement bounding box")
 {
+	addChildXMLEntry("onground", &onground);
+	addChildXMLEntry("count", &count);
+	addChildXMLEntry("minbounds", &minbounds);
+	addChildXMLEntry("maxbounds", &maxbounds);
 }
 
 PlacementTypeBounds::~PlacementTypeBounds()

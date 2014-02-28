@@ -23,10 +23,10 @@
 
 #include <XML/XMLEntrySimpleTypes.h>
 
-class XMLEntryModelID : public XMLEntryGroup
+class XMLEntryModelID : public XMLEntryContainer
 {
 public:
-	XMLEntryModelID(const char *tagName);
+	XMLEntryModelID();
 	virtual ~XMLEntryModelID();
 
 	XMLEntryString meshName;

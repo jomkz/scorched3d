@@ -112,6 +112,7 @@ public:
 	void addChild(XMLNode *node); 
 	void addParameter(XMLNode *node);
 	void addContent(const char *data, int len);
+	void setContent(const char *content);
 
 	void clear();
 

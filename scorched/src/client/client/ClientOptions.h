@@ -24,7 +24,7 @@
 #include <XML/XMLEntrySimpleTypes.h>
 #include <console/ConsoleRuleOptionsAdapter.h>
 
-class ClientOptions : public XMLEntrySimpleGroup
+class ClientOptions : public XMLEntrySimpleContainer
 {
 public:
 	static ClientOptions *instance();

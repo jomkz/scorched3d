@@ -557,6 +557,18 @@ const char *XMLNode::getContent()
 	}
 }
 
+void XMLNode::setContent(const char *content)
+{
+	if (useContentNodes_ &&
+		getType() == XMLNodeType)
+	{
+	} 
+	else
+	{
+		content_ = content;
+	}
+}
+
 void XMLNode::setSource(const char *source)
 { 
 	source_ = source; 

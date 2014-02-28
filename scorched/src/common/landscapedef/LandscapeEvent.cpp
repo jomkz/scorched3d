@@ -21,12 +21,11 @@
 #include <landscapedef/LandscapeEvent.h>
 
 LandscapeEvent::LandscapeEvent() :
-	XMLEntryGroup("event", 
-		"Specifies actions that can be performed at various times during the simulation."),
-	condition("condition", "A condition to determine when this action fires"), 
-	action("action", "An action to perform when this action fires")
+	XMLEntryContainer("LandscapeEvent", "Specifies actions that can be performed at various times during the simulation."),
+	condition(), 
+	action()
 {
-	addChildXMLEntry(&condition, &action);
+	addChildXMLEntry("condition", &condition, "action", &action);
 }
 
 LandscapeEvent::~LandscapeEvent()
@@ -34,7 +33,7 @@ LandscapeEvent::~LandscapeEvent()
 }
 
 LandscapeEventList::LandscapeEventList() :
-	XMLEntryList<LandscapeEvent>("event", 
+	XMLEntryList<LandscapeEvent>("LandscapeEventList", 
 		"Specifies a list of actions that can be performed at various times during the simulation.")
 {
 }

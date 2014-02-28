@@ -40,7 +40,7 @@ public:
 };
 
 class LandscapeDefinitions;
-class LandscapeInclude : public XMLEntryGroup
+class LandscapeInclude : public XMLEntryContainer
 {
 public:
 	LandscapeInclude(LandscapeDefinitions *definitions, const char *name, const char *description);
@@ -51,7 +51,7 @@ public:
 	LandscapeSoundList sounds;
 	LandscapeMusicList musics;
 	PlacementTypeList placements;
-	LandscapeOptionsList options;
+	LandscapeOptions options;
 	
 	LansdscapeIncludeList includeList;
 	std::list<LandscapeInclude *> includes;

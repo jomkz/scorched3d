@@ -22,7 +22,7 @@
 #include <landscapedef/LandscapeDefinitions.h>
 
 LansdscapeIncludeList::LansdscapeIncludeList() :
-	XMLEntryList<XMLEntryString>("include", "A set of files to include into this file")
+	XMLEntryList<XMLEntryString>("LansdscapeIncludeList", "A set of files to include into this file")
 {
 }
 
@@ -32,19 +32,19 @@ LansdscapeIncludeList::~LansdscapeIncludeList()
 
 XMLEntryString *LansdscapeIncludeList::createXMLEntry()
 {
-	return new XMLEntryString("include", "The name of file to include into this file");
+	return new XMLEntryString("The name of file to include into this file");
 }
 
 LandscapeInclude::LandscapeInclude(LandscapeDefinitions *definitions, const char *name, const char *description) :
-	XMLEntryGroup(name, description),
+	XMLEntryContainer(name, description),
 	definitions_(definitions)
 {
-	addChildXMLEntry(&events);
-	addChildXMLEntry(&movements);
-	addChildXMLEntry(&sounds);
-	addChildXMLEntry(&musics);
-	addChildXMLEntry(&placements);
-	addChildXMLEntry(&options);
+	addChildXMLEntry("event", &events);
+	addChildXMLEntry("movement", &movements);
+	addChildXMLEntry("sound", &sounds);
+	addChildXMLEntry("music", &musics);
+	addChildXMLEntry("placement", &placements);
+	addChildXMLEntry("options", &options);
 }
 
 LandscapeInclude::~LandscapeInclude()
@@ -53,7 +53,7 @@ LandscapeInclude::~LandscapeInclude()
 
 bool LandscapeInclude::readXML(XMLNode *parentNode)
 {
-	if (!XMLEntryGroup::readXML(parentNode)) return false;
+	if (!XMLEntryContainer::readXML(parentNode)) return false;
 
 	std::list<XMLEntryString *>::iterator itor = includeList.getChildren().begin(),
 		end = includeList.getChildren().end();
@@ -70,7 +70,7 @@ bool LandscapeInclude::readXML(XMLNode *parentNode)
 }
 
 LandscapeIncludeFile::LandscapeIncludeFile(LandscapeDefinitions *definitions) :
-	LandscapeInclude(definitions, "include", 
+	LandscapeInclude(definitions, "LandscapeIncludeFile", 
 		"A landscape/scene definition fragment, this fragment can contain many different types of Scorched3D artifact")
 {
 

@@ -52,6 +52,7 @@
     <ClCompile Include="..\..\common\common\FileLines.cpp" />
     <ClCompile Include="..\..\common\common\FileList.cpp" />
     <ClCompile Include="..\..\common\common\FileLogger.cpp" />
+    <ClCompile Include="..\..\common\common\FileTemplate.cpp" />
     <ClCompile Include="..\..\common\common\fixed.cpp" />
     <ClCompile Include="..\..\common\common\FixedVector.cpp" />
     <ClCompile Include="..\..\common\common\FixedVector4.cpp" />
@@ -471,6 +472,7 @@
     <ClCompile Include="..\uiactions\UITargetModel.cpp" />
     <ClCompile Include="..\uiactions\UITargetRenderer.cpp" />
     <ClCompile Include="CameraController.cpp" />
+    <ClCompile Include="DocumentGenerator.cpp" />
     <ClCompile Include="InputHandlerKeyboard.cpp" />
     <ClCompile Include="InputHandlerMouse.cpp" />
     <ClCompile Include="InputManager.cpp" />
@@ -533,6 +535,7 @@
     <ClInclude Include="..\..\common\common\FileLines.h" />
     <ClInclude Include="..\..\common\common\FileList.h" />
     <ClInclude Include="..\..\common\common\FileLogger.h" />
+    <ClInclude Include="..\..\common\common\FileTemplate.h" />
     <ClInclude Include="..\..\common\common\fixed.h" />
     <ClInclude Include="..\..\common\common\FixedVector.h" />
     <ClInclude Include="..\..\common\common\FixedVector4.h" />
@@ -956,6 +959,7 @@
     <ClInclude Include="..\uiactions\UITargetModel.h" />
     <ClInclude Include="..\uiactions\UITargetRenderer.h" />
     <ClInclude Include="CameraController.h" />
+    <ClInclude Include="DocumentGenerator.h" />
     <ClInclude Include="InputHandlerKeyboard.h" />
     <ClInclude Include="InputHandlerMouse.h" />
     <ClInclude Include="InputManager.h" />

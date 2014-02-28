@@ -35,7 +35,7 @@ public:
 class LandscapeEventActionChoice : public XMLEntryTypeChoice<LandscapeEventAction>
 {
 public:
-	LandscapeEventActionChoice(const char *name, const char *description);
+	LandscapeEventActionChoice();
 	virtual ~LandscapeEventActionChoice();
 
 	virtual LandscapeEventAction *createXMLEntry(const std::string &type);

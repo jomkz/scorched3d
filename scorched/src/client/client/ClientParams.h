@@ -34,6 +34,8 @@ public:
 	std::string getUserName() { return username_.getValue(); }
 	std::string getPassword() { return password_.getValue(); }
 	std::string getNonParam() { return nonParam_.getValue(); }
+	std::string getDocumentationLocation() { return documentationLocation_.getValue(); }
+
 	int getExitTime() { return exittime_.getValue(); }
 	int getDisconnectTime() { return disconnecttime_.getValue(); }
 	bool getStartCustom() { return startcustom_.getValue(); }
@@ -52,6 +54,7 @@ public:
 protected:
 	static ClientParams *instance_;
 
+	XMLEntryString documentationLocation_;
 	XMLEntryString connect_;
 	XMLEntryString client_;
 	XMLEntryString password_;

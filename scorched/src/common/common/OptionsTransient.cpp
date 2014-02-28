@@ -28,17 +28,14 @@
 #include <math.h>
 
 OptionsTransient::OptionsTransient(OptionsScorched &optionsGame) :
-	XMLEntrySimpleGroup("options", 
+	XMLEntrySimpleContainer("OptionsTransient", 
 		"The options that change from one turn to the next"),
 	optionsGame_(optionsGame), newGame_(false),
-	currentRoundNo_("CurrentRoundNo", 
-		"The current number of rounds played in this game", 0, 0),
-	currentTurnNo_("CurrentTurnNo", 
-		"The current number of turns played in this round", 0, 1),
-	wallType_("WallType",
-		"The current wall type", 0, 0)
+	currentRoundNo_("The current number of rounds played in this game", 0, 0),
+	currentTurnNo_("The current number of turns played in this round", 0, 1),
+	wallType_("The current wall type", 0, 0)
 {
-	addChildXMLEntry(&currentRoundNo_, &currentTurnNo_, &wallType_);
+	addChildXMLEntry("CurrentRoundNo", &currentRoundNo_, "CurrentTurnNo", &currentTurnNo_, "WallType", &wallType_);
 }
 
 OptionsTransient::~OptionsTransient()

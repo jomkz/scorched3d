@@ -22,13 +22,11 @@
 #include <common/Defines.h>
 
 OptionsParameters::OptionsParameters(const char *name, const char *description) :
-	XMLEntrySimpleGroup(name, description),
-	settingsdir_( "settingsdir",
-		"The directory in the users home directory that the scorched3d settings are stored in.", 0, ".scorched3do"),
-	rewriteoptions_( "rewriteoptions",
-		"When reading options files rewrite them to refresh all options", 0, false)
+	XMLEntrySimpleContainer(name, description),
+	settingsdir_("The directory in the users home directory that the scorched3d settings are stored in.", 0, ".scorched3do"),
+	rewriteoptions_("When reading options files rewrite them to refresh all options", 0, false)
 {
-	addChildXMLEntry(&settingsdir_, &rewriteoptions_);
+	addChildXMLEntry("settingsdir", &settingsdir_, "rewriteoptions", &rewriteoptions_);
 }
 
 OptionsParameters::~OptionsParameters()

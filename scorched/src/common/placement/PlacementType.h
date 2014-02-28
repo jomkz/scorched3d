@@ -37,7 +37,7 @@ public:
 		FixedVector velocity;
 	};
 
-	PlacementType(const char *name, const char *description);
+	PlacementType(const char *typeName, const char *description);
 	virtual ~PlacementType();
 
 	void createObjects(ScorchedContext &context,
@@ -62,7 +62,7 @@ protected:
 class PlacementTypeChoice : public XMLEntryTypeChoice<PlacementType>
 {
 public:
-	PlacementTypeChoice(const char *name, const char *description);
+	PlacementTypeChoice();
 	virtual ~PlacementTypeChoice();
 
 	virtual PlacementType *createXMLEntry(const std::string &type);

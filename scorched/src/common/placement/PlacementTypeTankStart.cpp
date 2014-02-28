@@ -27,12 +27,15 @@
 #include <XML/XMLParser.h>
 
 PlacementTypeTankStart::PlacementTypeTankStart() : 
-	PlacementType("PlacementTypeTankStart", 
+	PlacementType("PlacementTypeTankStart",
 		"Places objects in the same way that tanks are placed on the lanscape"),
-	numobjects("numobjects", "The number of objects to place"),
-	team("team", "The team to assign the objects to"),
-	mincloseness("mincloseness", "How close objects may be placed together")
+	numobjects("The number of objects to place"),
+	team("The team to assign the objects to"),
+	mincloseness("How close objects may be placed together")
 {
+	addChildXMLEntry("numobjects", &numobjects);
+	addChildXMLEntry("team", &team);
+	addChildXMLEntry("mincloseness", &mincloseness);
 }
 
 PlacementTypeTankStart::~PlacementTypeTankStart()

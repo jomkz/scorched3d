@@ -34,8 +34,8 @@
 #include <common/DefinesString.h>
 #include <XML/XMLParser.h>
 
-PlacementType::PlacementType(const char *name, const char *description) : 
-	XMLEntryContainer(name, description),
+PlacementType::PlacementType(const char *typeName, const char *description) : 
+	XMLEntryContainer(typeName, description),
 	placementobject(0)
 {
 }
@@ -119,8 +119,9 @@ bool PlacementType::checkCloseness(FixedVector &position,
 	return true;
 }
 
-PlacementTypeChoice::PlacementTypeChoice(const char *name, const char *description) :
-	XMLEntryTypeChoice<PlacementType>(name, description)
+PlacementTypeChoice::PlacementTypeChoice() :
+	XMLEntryTypeChoice<PlacementType>("PlacementTypeChoice", 
+		"A choice of placement types that define the starting locations for objects placed on the landscape.")
 {
 }
 
@@ -141,7 +142,7 @@ PlacementType *PlacementTypeChoice::createXMLEntry(const std::string &type)
 }
 
 PlacementTypeList::PlacementTypeList() :
-	 XMLEntryList<PlacementTypeChoice>("placement", 
+	 XMLEntryList<PlacementTypeChoice>("PlacementTypeList",
 		 "Defines the starting locations for objects placed on the landscape.")
 {
 }
@@ -152,6 +153,5 @@ PlacementTypeList::~PlacementTypeList()
 
 PlacementTypeChoice *PlacementTypeList::createXMLEntry()
 {
-	return new PlacementTypeChoice("placement",
-		"Defines the starting location for objects placed on the landscape.");
+	return new PlacementTypeChoice();
 }

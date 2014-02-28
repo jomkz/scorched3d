@@ -47,69 +47,69 @@
 #include <XML/XMLNode.h>
 
 TankAICurrentMove::TankAICurrentMove() : 
-	XMLEntryGroup("attack", "Offensive AI parameters"),
-	resignGroup_("resign", "Parameters to determine if this AI should resign"),
-	useResign_("useresign", "Enable resigning ability"),
-	resignLife_("resignlife", "Don't consider resigning unless you have less than this amount of life"),
-	movementGroup_("movement", "Parameters to determine if this AI should move.  Tank must have fuel before movement can occur."),
-	useFuel_("usefuel", "Enable movement ability"),		
-	movementDamage_("movementdamage", "The amount of damage taken before movement is considered"),
-	movementDamageChance_("movementdamagechance", "Once the above damage has been taken the chance to move out the way"),
-	movementLife_("movementlife", "The amount of life before we consider moving"),
-	movementRandom_("movementrandom", "The randomness applied to the final movement position"),
-	movementCloseness_("movementcloseness", "The distance left between the target tank and the movement destination"),
-	groupShotGroup_("groupshot", "Parameters to determine when to try to kill multiple tanks (in a group)"),
-	groupShotSize_("groupshotsize", "The number of tanks that need to be grouped before considering a group shot A group shot is available if targets are close together and the tank has a hugeweapon"),
-	groupShotChance_("groupshotchance", "The chance that a group shot will be considered"),
-	groupTargetDistance_("grouptargetdistance", "The max distance between tanks considered grouped"),
-	sniperGroup_("sniper", "Parameters to determine if this AI should use sniping shots (direct shots at max power)"),
-	sniperMovementFactor_("snipermovementfactor", "The maximum amount of accuracy in degrees that will be lost if the tank moves"),
-	sniperUseDistance_("sniperusedistance", "How close do I need to be from a target before considering a sniper shot"),
-	sniperStartDistance_("sniperstartdistance", "The distance in degress that my 1st sniper shot may miss by"),
-	sniperEndDistance_("sniperenddistance", "The distance in degrees that my best sniper shot may miss by"),
-	sniperMinDecrement_("snipermindecrement", "The min distance in degrees that each sniper shot will improve"),
-	sniperMaxDecrement_("snipermaxdecrement", "The max distance in degrees that each sniper shot will improve "),
-	projectileGroup_("projectile", "Parameters to determine how this AI should use projectiles"),
-	projectileMinDistance_("projectilemindistance", "The minimum distance to allow for shots. Stops self kills"),
-	projectileStartDistance_("projectilestartdistance", "These are all distances of the 1st particle of the projectile to hit the ground. The distance that the 1st projectile shot may miss by"),
-	projectileEndDistance_("projectileenddistance", "The distance that the my best projectile shot may get to"),
-	projectileMinDecrement_("projectilemindecrement", "The min distance that each projecile shot will improve"),
-	projectileMaxDecrement_("projectilemaxdecrement", "The max distance that each projecile shot will improve"),
-	largeWeaponUseDistance_("largeweaponusedistance", "How close a shot do I need to get to a target before firing large weapons"),
-	projectileMovementFactor_("projectilemovementfactor", "The maximum amount of accuracy that will be lost if the tank moves"),
+	XMLEntryContainer("TankAICurrentMove", "Offensive AI parameters"),
+	resignGroup_("TankAICurrentMoveResign", "Parameters to determine if this AI should resign"),
+	useResign_("Enable resigning ability"),
+	resignLife_("Don't consider resigning unless you have less than this amount of life"),
+	movementGroup_("TankAICurrentMoveMovement", "Parameters to determine if this AI should move.  Tank must have fuel before movement can occur."),
+	useFuel_("Enable movement ability"),		
+	movementDamage_("The amount of damage taken before movement is considered"),
+	movementDamageChance_("Once the above damage has been taken the chance to move out the way"),
+	movementLife_("The amount of life before we consider moving"),
+	movementRandom_("The randomness applied to the final movement position"),
+	movementCloseness_("The distance left between the target tank and the movement destination"),
+	groupShotGroup_("TankAICurrentMoveGroupShot", "Parameters to determine when to try to kill multiple tanks (in a group)"),
+	groupShotSize_("The number of tanks that need to be grouped before considering a group shot A group shot is available if targets are close together and the tank has a hugeweapon"),
+	groupShotChance_("The chance that a group shot will be considered"),
+	groupTargetDistance_("The max distance between tanks considered grouped"),
+	sniperGroup_("TankAICurrentMoveSniper", "Parameters to determine if this AI should use sniping shots (direct shots at max power)"),
+	sniperMovementFactor_("The maximum amount of accuracy in degrees that will be lost if the tank moves"),
+	sniperUseDistance_("How close do I need to be from a target before considering a sniper shot"),
+	sniperStartDistance_("The distance in degress that my 1st sniper shot may miss by"),
+	sniperEndDistance_("The distance in degrees that my best sniper shot may miss by"),
+	sniperMinDecrement_("The min distance in degrees that each sniper shot will improve"),
+	sniperMaxDecrement_("The max distance in degrees that each sniper shot will improve "),
+	projectileGroup_("TankAICurrentMoveProjectile", "Parameters to determine how this AI should use projectiles"),
+	projectileMinDistance_("The minimum distance to allow for shots. Stops self kills"),
+	projectileStartDistance_("These are all distances of the 1st particle of the projectile to hit the ground. The distance that the 1st projectile shot may miss by"),
+	projectileEndDistance_("The distance that the my best projectile shot may get to"),
+	projectileMinDecrement_("The min distance that each projecile shot will improve"),
+	projectileMaxDecrement_("The max distance that each projecile shot will improve"),
+	largeWeaponUseDistance_("How close a shot do I need to get to a target before firing large weapons"),
+	projectileMovementFactor_("The maximum amount of accuracy that will be lost if the tank moves"),
 	totalDamageBeforeMove_(0.0f),
 	currentWeapon_(0)
 {
-	addChildXMLEntryContainer(&resignGroup_)->addChildXMLEntry(
-		&useResign_, 
-		&resignLife_);
-	addChildXMLEntryContainer(&movementGroup_)->addChildXMLEntry(
-		&useFuel_,
-		&movementDamage_,
-		&movementDamageChance_,
-		&movementLife_,
-		&movementRandom_,
-		&movementCloseness_);
-	addChildXMLEntryContainer(&groupShotGroup_)->addChildXMLEntry(
-		&groupShotSize_,
-		&groupShotChance_,
-		&groupTargetDistance_);
-	addChildXMLEntryContainer(&sniperGroup_)->addChildXMLEntry(
-		&sniperMovementFactor_,
-		&sniperUseDistance_,
-		&sniperStartDistance_,
-		&sniperEndDistance_,
-		&sniperMinDecrement_,
-		&sniperMaxDecrement_);
-	addChildXMLEntryContainer(&projectileGroup_)->addChildXMLEntry(
-		&projectileMinDistance_,
-		&projectileMovementFactor_,
-		&projectileStartDistance_,
-		&projectileEndDistance_,
-		&projectileMinDecrement_,
-		&projectileMaxDecrement_,
-		&largeWeaponUseDistance_);
-	addChildXMLEntryContainer(&targets_);
+	addChildXMLEntryContainer("resign", &resignGroup_)->addChildXMLEntry(
+		"useresign", &useResign_, 
+		"resignlife", &resignLife_);
+	addChildXMLEntryContainer("movement", &movementGroup_)->addChildXMLEntry(
+		"usefuel", &useFuel_,
+		"movementdamage", &movementDamage_,
+		"movementdamagechance", &movementDamageChance_,
+		"movementlife", &movementLife_,
+		"movementrandom", &movementRandom_,
+		"movementcloseness", &movementCloseness_);
+	addChildXMLEntryContainer("groupshot", &groupShotGroup_)->addChildXMLEntry(
+		"groupshotsize", &groupShotSize_,
+		"groupshotchance", &groupShotChance_,
+		"grouptargetdistance", &groupTargetDistance_);
+	addChildXMLEntryContainer("sniper", &sniperGroup_)->addChildXMLEntry(
+		"snipermovementfactor", &sniperMovementFactor_,
+		"sniperusedistance", &sniperUseDistance_,
+		"sniperstartdistance", &sniperStartDistance_,
+		"sniperenddistance", &sniperEndDistance_,
+		"snipermindecrement", &sniperMinDecrement_,
+		"snipermaxdecrement", &sniperMaxDecrement_);
+	addChildXMLEntryContainer("projectile", &projectileGroup_)->addChildXMLEntry(
+		"projectilemindistance", &projectileMinDistance_,
+		"projectilestartdistance", &projectileMovementFactor_,
+		"projectileenddistance", &projectileStartDistance_,
+		"projectilemindecrement", &projectileEndDistance_,
+		"projectilemaxdecrement", &projectileMinDecrement_,
+		"largeweaponusedistance", &projectileMaxDecrement_,
+		"projectilemovementfactor", &largeWeaponUseDistance_);
+	addChildXMLEntryContainer("targets", &targets_);
 }
 
 TankAICurrentMove::~TankAICurrentMove()

@@ -25,9 +25,11 @@
 #include <XML/XMLParser.h>
 
 PlacementPosition::PlacementPosition() :
-	XMLEntryContainer("position", "The initial position of an object"),
-	position("position", "The initial position of an object, a height <= 0 will be normalized to the landscape height")
+	XMLEntryContainer("PlacementPosition", 
+		"The initial position of an object"),
+	position("The initial position of an object, a height <= 0 will be normalized to the landscape height")
 {
+	addChildXMLEntry("position", &position);
 }
 
 PlacementPosition::~PlacementPosition()
@@ -35,7 +37,8 @@ PlacementPosition::~PlacementPosition()
 }
 
 PlacementPositionList::PlacementPositionList() :
-	XMLEntryList<PlacementPosition>("position", "The initial position of an object, a height <= 0 will be normalized to the landscape height")
+	XMLEntryList<PlacementPosition>("PlacementPositionList",
+		"A list of initial positions for an object, objects will cycle around the positions in the list")
 {
 }
 
@@ -49,10 +52,11 @@ PlacementPosition *PlacementPositionList::createXMLEntry()
 }
 
 PlacementTypeDirect::PlacementTypeDirect() :
-	PlacementType("PlacementTypeDirect", 
+	PlacementType("PlacementTypeDirect",
 		"Place a set of objects using an explict set of exact coordinates"),
 	positions()
 {
+	addChildXMLEntry("position", &positions);
 }
 
 PlacementTypeDirect::~PlacementTypeDirect()

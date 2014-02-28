@@ -27,7 +27,7 @@
 #include <XML/XMLEntry.h>
 
 class TankAIAimResult;
-class TankAICurrentMove : public XMLEntryGroup
+class TankAICurrentMove : public XMLEntryContainer
 {
 public:
 	TankAICurrentMove();
@@ -59,8 +59,8 @@ protected:
 	Accessory *currentWeapon_;
 	TankAICurrentTarget targets_;
 	float totalDamageBeforeMove_;
-	XMLEntryGroup resignGroup_, movementGroup_, groupShotGroup_;
-	XMLEntryGroup sniperGroup_, projectileGroup_;
+	XMLEntryContainer resignGroup_, movementGroup_, groupShotGroup_;
+	XMLEntryContainer sniperGroup_, projectileGroup_;
 	XMLEntryBool useResign_, useFuel_;
 	XMLEntryFixed movementDamage_, movementDamageChance_, movementLife_;
 	XMLEntryFixed movementRandom_, movementCloseness_;

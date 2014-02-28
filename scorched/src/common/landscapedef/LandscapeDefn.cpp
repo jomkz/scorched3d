@@ -27,17 +27,18 @@
 #include <time.h>
 
 LandscapeDefn::LandscapeDefn(LandscapeDefinitions *definitions) :
-	LandscapeInclude(definitions, "defn", "A landscape/scene definition, usualy related to the physical aspects of the landscape"),
-	minplayers("minplayers", "The minimum number of players that must be playing before this map is chosen"),
-	maxplayers("maxplayers", "The maximum number of players that must be playing before this map is chosen"),
-	landscapewidth("landscapewidth", "The width  of the landscape, must be a multiple of 128"),
-	landscapeheight("landscapeheight", "The height  of the landscape, must be a multiple of 128"),
-	arenawidth("arenawidth", "The playable width of the landscape", 0, -1),
-	arenaheight("arenaheight", "The playable height of the landscape", 0, -1)
+	LandscapeInclude(definitions, "LandscapeDefn", 
+		"A landscape/scene definition, usualy related to the physical aspects of the landscape"),
+	minplayers("The minimum number of players that must be playing before this map is chosen"),
+	maxplayers("The maximum number of players that must be playing before this map is chosen"),
+	landscapewidth("The width  of the landscape, must be a multiple of 128"),
+	landscapeheight("The height  of the landscape, must be a multiple of 128"),
+	arenawidth("The playable width of the landscape", 0, -1),
+	arenaheight("The playable height of the landscape", 0, -1)
 {
-	addChildXMLEntry(&minplayers, &maxplayers);
-	addChildXMLEntry(&landscapewidth, &landscapeheight, &arenawidth, &arenaheight);
-	addChildXMLEntry(&tankstart, &heightmap, &deform);
+	addChildXMLEntry("minplayers", &minplayers, "maxplayers", &maxplayers);
+	addChildXMLEntry("landscapewidth", &landscapewidth, "landscapeheight", &landscapeheight, "arenawidth", &arenawidth, "arenaheight", &arenaheight);
+	addChildXMLEntry("tankstart", &tankstart, "heightmap", &heightmap, "deform", &deform);
 }
 
 LandscapeDefn::~LandscapeDefn()

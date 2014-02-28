@@ -24,7 +24,7 @@
 #include <common/OptionsScorched.h>
 
 class TargetContainer;
-class OptionsTransient : public XMLEntrySimpleGroup
+class OptionsTransient : public XMLEntrySimpleContainer
 {
 public:
 	OptionsTransient(OptionsScorched &optionsGame);

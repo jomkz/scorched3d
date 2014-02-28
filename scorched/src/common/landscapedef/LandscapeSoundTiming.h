@@ -26,7 +26,7 @@
 class LandscapeSoundTiming : public XMLEntryContainer
 {
 public:
-	LandscapeSoundTiming(const char *name, const char *description);
+	LandscapeSoundTiming(const char *typeName, const char *description);
 	virtual ~LandscapeSoundTiming();
 
 	virtual float getNextEventTime() = 0;

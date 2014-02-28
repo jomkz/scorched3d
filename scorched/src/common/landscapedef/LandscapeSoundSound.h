@@ -27,7 +27,7 @@ class VirtualSoundSource;
 class LandscapeSoundSound : public XMLEntryContainer
 {
 public:
-	LandscapeSoundSound(const char *name, const char *description);
+	LandscapeSoundSound(const char *type, const char *description);
 	virtual ~LandscapeSoundSound();
 
 	virtual bool play(VirtualSoundSource *source, float ambientGain) = 0;

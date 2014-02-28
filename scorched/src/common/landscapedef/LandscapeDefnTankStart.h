@@ -24,10 +24,10 @@
 #include <XML/XMLEntrySimpleTypes.h>
 #include <image/Image.h>
 
-class LandscapeDefnTankStartMinMax : public XMLEntryGroup
+class LandscapeDefnTankStartMinMax : public XMLEntryContainer
 {
 public:
-	LandscapeDefnTankStartMinMax(const char *tagName, const char *description);
+	LandscapeDefnTankStartMinMax(const char *description);
 	virtual ~LandscapeDefnTankStartMinMax();
 
 	XMLEntryFixed min, max;

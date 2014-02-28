@@ -30,11 +30,11 @@
 
 // LandscapeTex
 LandscapeTex::LandscapeTex(LandscapeDefinitions *definitions) : 
-	LandscapeInclude(definitions, "tex", "A landscape/scene definition, usualy related to the visual aspects of the landscape"),
-	landscapeGenerationSeed("landscapegenerationseed", "A seed usualy used to create random lanscapes", 0, 0),
-	waterHeight("waterheight", "The height of the lanscape water", 0, -10)
+	LandscapeInclude(definitions, "LandscapeTex", "A landscape/scene definition, usualy related to the visual aspects of the landscape"),
+	landscapeGenerationSeed("A seed usualy used to create random lanscapes", 0, 0),
+	waterHeight("The height of the lanscape water", 0, -10)
 {
-	addChildXMLEntry(&landscapeGenerationSeed, &waterHeight);
+	addChildXMLEntry("landscapegenerationseed", &landscapeGenerationSeed, "waterheight", &waterHeight);
 }
 
 LandscapeTex::~LandscapeTex()

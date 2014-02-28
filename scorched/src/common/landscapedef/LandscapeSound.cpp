@@ -21,13 +21,13 @@
 #include <landscapedef/LandscapeSound.h>
 
 LandscapeSound::LandscapeSound() :
-	XMLEntryGroup("sound", 
+	XMLEntryContainer("LandscapeSound",
 		"Specifies actions that can be performed at various times during the simulation."),
 	position(), 
 	sound(),
 	timing()
 {
-	addChildXMLEntry(&position, &sound, &timing);
+	addChildXMLEntry("position", &position, "sound", &sound, "timing", &timing);
 }
 
 LandscapeSound::~LandscapeSound()
@@ -35,7 +35,7 @@ LandscapeSound::~LandscapeSound()
 }
 
 LandscapeSoundList::LandscapeSoundList() :
-	XMLEntryList<LandscapeSound>("sound", 
+	XMLEntryList<LandscapeSound>("LandscapeSoundList", 
 		"Specifies a list of actions that can be performed at various times during the simulation.")
 {
 }

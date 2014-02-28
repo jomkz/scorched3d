@@ -27,10 +27,11 @@
 #include <XML/XMLParser.h>
 
 PlacementTypeCount::PlacementTypeCount() :
-	PlacementType("PlacementTypeCount", 
+	PlacementType("PlacementTypeCount",
 		"Creates a given number of objects with no defined placement."),
-	count("count", "The number of objects to create")
+	count("The number of objects to create")
 {
+	addChildXMLEntry("count", &count);
 }
 
 PlacementTypeCount::~PlacementTypeCount()

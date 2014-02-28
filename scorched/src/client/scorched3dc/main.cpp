@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <common/main.h>
 #include <client/ClientParams.h>
+#include <scorched3dc/DocumentGenerator.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,6 +37,13 @@ extern "C" {
 	{
 		run_main(argc, argv, *ClientParams::instance());
 #endif
+
+		if (!ClientParams::instance()->getDocumentationLocation().empty())
+		{
+			DocumentGenerator::generatDocumentation(
+				ClientParams::instance()->getDocumentationLocation());
+			return 0;
+		}
 
 		ScorchedUI app;
 		try {

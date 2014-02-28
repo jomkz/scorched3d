@@ -41,20 +41,21 @@ public:
 		eSimpleBooleanType
 	};
 
-	XMLEntrySimpleType(const char *name, const char *description, unsigned int data);
+	XMLEntrySimpleType(const char *description, unsigned int data);
 	virtual ~XMLEntrySimpleType();
 
-	const char *getName() { return name_; }
-	const char *getDescription() { return description_; }
+	virtual void getDescription(std::string &result);
 	virtual void getExtraDescription(std::string &description) { }
 
 	virtual unsigned int getData() { return data_; }
-
+	virtual bool isRequired() { return data_ & eDataRequired; }
 	virtual void getDefaultValueAsString(std::string &result) = 0;
 	virtual void getValueAsString(std::string &result) = 0;
 	virtual bool setValueFromString(const std::string &string) = 0;
 	virtual void resetDefaultValue();
 	virtual XMLEntrySimpleTypeCatagory getTypeCatagory() = 0;
+
+	virtual XMLEntryDocumentInfo generateDocumentation(XMLEntryDocumentGenerator &generator);
 
 	// XMLEntry
 	virtual bool readXML(XMLNode *parentNode);
@@ -66,15 +67,14 @@ public:
 	virtual bool setStringArgument(const char *value);
 protected:
 	unsigned int data_;
-	const char *name_;
 	const char *description_;
 };
 
-class XMLEntrySimpleGroup : public XMLEntryGroup
+class XMLEntrySimpleContainer : public XMLEntryContainer
 {
 public:
-	XMLEntrySimpleGroup(const char *name, const char *description);
-	virtual ~XMLEntrySimpleGroup();
+	XMLEntrySimpleContainer(const char *typeName, const char *description);
+	virtual ~XMLEntrySimpleContainer();
 
 	XMLEntrySimpleType *getEntryByName(const std::string &name);
 
@@ -89,14 +89,13 @@ public:
 class XMLEntryInt : public XMLEntrySimpleType
 {
 public:
-	XMLEntryInt(const char *name, 
-		const char *description);
-	XMLEntryInt(const char *name, 
-		const char *description,
+	XMLEntryInt(const char *description);
+	XMLEntryInt(const char *description,
 		unsigned int data,
 		int defaultValue);
 	virtual ~XMLEntryInt();
 
+	virtual void getTypeName(std::string &result) { result = "<number>"; }
 	virtual void getValueAsString(std::string &result);
 	virtual void getDefaultValueAsString(std::string &result);
 	virtual bool setValueFromString(const std::string &string);
@@ -112,8 +111,7 @@ protected:
 class XMLEntryBoundedInt : public XMLEntryInt
 {
 public:
-	XMLEntryBoundedInt(const char *name, 
-		const char *description,
+	XMLEntryBoundedInt(const char *description,
 		unsigned int data,
 		int defaultValue,
 		int minValue, int maxValue, int stepValue);
@@ -141,8 +139,7 @@ public:
 		int value;
 	};
 
-	XMLEntryEnum(const char *name, 
-		const char *description,
+	XMLEntryEnum(const char *description,
 		unsigned int data,
 		int value,
 		XMLEntryEnum::EnumEntry enums[]);
@@ -165,14 +162,13 @@ protected:
 class XMLEntryBool : public XMLEntrySimpleType
 {
 public:
-	XMLEntryBool(const char *name, 
-		const char *description);
-	XMLEntryBool(const char *name, 
-		const char *description,
+	XMLEntryBool(const char *description);
+	XMLEntryBool(const char *description,
 		unsigned int data,
 		bool defaultValue);
 	virtual ~XMLEntryBool();
 
+	virtual void getTypeName(std::string &result) { result = "<boolean>"; }
 	virtual void getValueAsString(std::string &result);
 	virtual void getDefaultValueAsString(std::string &result);
 	virtual bool setValueFromString(const std::string &string);
@@ -189,15 +185,14 @@ protected:
 class XMLEntryString : public XMLEntrySimpleType
 {
 public:
-	XMLEntryString(const char *name,
-		const char *description);
-	XMLEntryString(const char *name,
-		const char *description,
+	XMLEntryString(const char *description);
+	XMLEntryString(const char *description,
 		unsigned int data,
 		const std::string &defaultValue,
 		bool multiline = false);
 	virtual ~XMLEntryString();
 
+	virtual void getTypeName(std::string &result) { result = "<string>"; }
 	virtual void getValueAsString(std::string &result);
 	virtual void getDefaultValueAsString(std::string &result);
 	virtual bool setValueFromString(const std::string &string);
@@ -215,10 +210,8 @@ protected:
 class XMLEntryFile : public XMLEntryString
 {
 public:
-	XMLEntryFile(const char *name,
-		const char *description);
-	XMLEntryFile(const char *name,
-		const char *description,
+	XMLEntryFile(const char *description);
+	XMLEntryFile(const char *description,
 		unsigned int data,
 		const std::string &defaultValue);
 	virtual ~XMLEntryFile();
@@ -236,8 +229,7 @@ public:
 		std::string value;
 	};
 
-	XMLEntryStringEnum(const char *name, 
-		const char *description,
+	XMLEntryStringEnum(const char *description,
 		unsigned int data,
 		const std::string &value,
 		XMLEntryStringEnum::EnumEntry enums[]);
@@ -257,14 +249,13 @@ protected:
 class XMLEntryFixed : public XMLEntrySimpleType
 {
 public:
-	XMLEntryFixed(const char *name, 
-		const char *description);
-	XMLEntryFixed(const char *name, 
-		const char *description,
+	XMLEntryFixed(const char *description);
+	XMLEntryFixed(const char *description,
 		unsigned int data,
 		fixed defaultValue);
 	virtual ~XMLEntryFixed();
 
+	virtual void getTypeName(std::string &result) { result = "<number>"; }
 	virtual void getValueAsString(std::string &result);
 	virtual void getDefaultValueAsString(std::string &result);
 	virtual bool setValueFromString(const std::string &string);
@@ -281,14 +272,13 @@ protected:
 class XMLEntryFixedVector : public XMLEntrySimpleType
 {
 public:
-	XMLEntryFixedVector(const char *name, 
-		const char *description);
-	XMLEntryFixedVector(const char *name, 
-		const char *description,
+	XMLEntryFixedVector(const char *description);
+	XMLEntryFixedVector(const char *description,
 		unsigned int data,
 		FixedVector defaultValue);
 	virtual ~XMLEntryFixedVector();
 
+	virtual void getTypeName(std::string &result) { result = "<vector>"; }
 	virtual void getValueAsString(std::string &result);
 	virtual void getDefaultValueAsString(std::string &result);
 	virtual bool setValueFromString(const std::string &string);

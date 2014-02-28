@@ -20,12 +20,12 @@
 
 #include <landscapedef/LandscapeDefnHeightMap.h>
 
-LandscapeDefnHeightMapMinMax::LandscapeDefnHeightMapMinMax(const char *tagName, const char *description) :
-	XMLEntryGroup(tagName, description),
-	min("min", "The minimum value"),
-	max("max", "The maximum value")
+LandscapeDefnHeightMapMinMax::LandscapeDefnHeightMapMinMax(const char *description) :
+	XMLEntryContainer("LandscapeDefnHeightMapMinMax", description),
+	min("The minimum value"),
+	max("The maximum value")
 {
-	addChildXMLEntry(&min, &max);
+	addChildXMLEntry("min", &min, "max", &max);
 }
 
 LandscapeDefnHeightMapMinMax::~LandscapeDefnHeightMapMinMax()
@@ -33,7 +33,7 @@ LandscapeDefnHeightMapMinMax::~LandscapeDefnHeightMapMinMax()
 }
 
 LandscapeDefnHeightMapChoice::LandscapeDefnHeightMapChoice() :
-	XMLEntryTypeChoice<LandscapeDefnHeightMap>("heightmap", 
+	XMLEntryTypeChoice<LandscapeDefnHeightMap>("LandscapeDefnHeightMapChoice", 
 		"Defines the landscape surface (the height map)")
 {
 }
@@ -63,10 +63,10 @@ LandscapeDefnHeightMap::~LandscapeDefnHeightMap()
 LandscapeDefnHeightMapFile::LandscapeDefnHeightMapFile() :
 	LandscapeDefnHeightMap("LandscapeDefnHeightMapFile", 
 		"Loads the landscape surface heights from a file"),
-	file("file", "The filename to load the landsacape from"),
-	levelsurround("levelsurround", "Should the border of the landscape be flattened to zero height")
+	file("The filename to load the landsacape from"),
+	levelsurround("Should the border of the landscape be flattened to zero height")
 {
-	addChildXMLEntry(&file, &levelsurround);
+	addChildXMLEntry("file", &file, "levelsurround", &levelsurround);
 }
 
 LandscapeDefnHeightMapFile::~LandscapeDefnHeightMapFile()
@@ -76,28 +76,41 @@ LandscapeDefnHeightMapFile::~LandscapeDefnHeightMapFile()
 LandscapeDefnHeightMapGenerate::LandscapeDefnHeightMapGenerate() :
 	LandscapeDefnHeightMap("LandscapeDefnHeightMapGenerate", 
 		"Procedurally/randomly generates the landscape"),
-	mask("mask", "A filename containing a mask file, the mask defines areas that will not have height applied to them"),
-	landsmoothing("landsmoothing", "The amount of smoothing to apply to the landscape"),
-	levelsurround("levelsurround", "Should the border of the landscape be flattened to zero height"),
-	noisefactor("noisefactor", "The amount of noise to apply to the landscape", 0, 1),
-	noisewidth("noisewidth", "The grid size for the noise", 0, 64),
-	noiseheight("noiseheight", "The grid size for the noise", 0, 64),
-	errosions("errosions", "The amount of errosion to apply to the landscape", 0, 0),
-	errosionlayering("errosionlayering", "", 0, 0),
-	errosionsurroundsize("errosionsurroundsize", "", 0, 25),
-	errosionforce("errosionforce", "", 0, fixed(1) / fixed(25)),
-	errosionsurroundforce("errosionsurroundforce", "", 0, 1),
-	errosionmaxdepth("errosionmaxdepth", "", 0, 4),
-	landhills("landhills", "Defines the minimum and maximum hills that will be generated on the landscape"),
-	landpeakwidthx("landpeakwidthx", "Defines the minimum and maximum x width of the generated hills"),
-	landpeakwidthy("landpeakwidthy", "Defines the minimum and maximum y width of the generated hills"),
-	landpeakheight("landpeakheight", "Defines the minimum and maximum height of the generated hills"),
-	landheight("landheight", "Defines the minimum and maximum landscape height, the generated landscape will be scaled to fit between these values")
+	mask("A filename containing a mask file, the mask defines areas that will not have height applied to them"),
+	landsmoothing("The amount of smoothing to apply to the landscape"),
+	levelsurround("Should the border of the landscape be flattened to zero height"),
+	noisefactor("The amount of noise to apply to the landscape", 0, 1),
+	noisewidth("The grid size for the noise", 0, 64),
+	noiseheight("The grid size for the noise", 0, 64),
+	errosions("The number of errosion streams to apply to the landscape", 0, 0),
+	errosionlayering("The number of errossions that can be applied to the same point in the landscape", 0, 0),
+	errosionforce("The depth to errode the landscape per distance erroded", 0, fixed(1) / fixed(25)),
+	errosionmaxdepth("The maximum amount of errossion (depth) that can be take from a point on the landscape", 0, 4),
+	errosionsurroundsize("The area surrounding erroded points that will be smoothed to make the errosion less severe", 0, 25),
+	errosionsurroundforce("The depth that will be taken from the surrounding points per distance away", 0, 1),
+	landhills("Defines the minimum and maximum hills that will be generated on the landscape"),
+	landpeakwidthx("Defines the minimum and maximum x width of the generated hills"),
+	landpeakwidthy("Defines the minimum and maximum y width of the generated hills"),
+	landpeakheight("Defines the minimum and maximum height of the generated hills"),
+	landheight("Defines the minimum and maximum landscape height, the generated landscape will be scaled to fit between these values")
 {
-	addChildXMLEntry(&landhills, &landpeakwidthx, &landpeakwidthy, &landpeakheight, &landheight);
-	addChildXMLEntry(&mask, &landsmoothing, &levelsurround);
-	addChildXMLEntry(&noisefactor, &noisewidth, &noiseheight);
-	addChildXMLEntry(&errosions, &errosionlayering, &errosionsurroundsize, &errosionforce, &errosionsurroundforce, &errosionmaxdepth);
+	addChildXMLEntry("landhills", &landhills, 
+		"landpeakwidthx", &landpeakwidthx, 
+		"landpeakwidthy", &landpeakwidthy, 
+		"landpeakheight", &landpeakheight, 
+		"landheight", &landheight);
+	addChildXMLEntry("mask", &mask, 
+		"landsmoothing", &landsmoothing, 
+		"levelsurround", &levelsurround);
+	addChildXMLEntry("noisefactor", &noisefactor, 
+		"noisewidth", &noisewidth, 
+		"noiseheight", &noiseheight);
+	addChildXMLEntry("errosions", &errosions, 
+		"errosionlayering", &errosionlayering, 
+		"errosionforce", &errosionforce, 
+		"errosionmaxdepth", &errosionmaxdepth,
+		"errosionsurroundforce", &errosionsurroundforce, 
+		"errosionsurroundsize", &errosionsurroundsize);
 }
 
 LandscapeDefnHeightMapGenerate::~LandscapeDefnHeightMapGenerate()

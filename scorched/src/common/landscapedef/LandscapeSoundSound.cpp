@@ -34,7 +34,7 @@
 #include <math.h>
 
 LandscapeSoundSoundChoice::LandscapeSoundSoundChoice() :
-	XMLEntryTypeChoice<LandscapeSoundSound>("sound", 
+	XMLEntryTypeChoice<LandscapeSoundSound>("LandscapeSoundSoundChoice",
 		"Associates sounds with a given position")
 {
 }
@@ -50,9 +50,8 @@ LandscapeSoundSound *LandscapeSoundSoundChoice::createXMLEntry(const std::string
 	return 0;
 }
 
-LandscapeSoundSound::LandscapeSoundSound(const char *name, const char *description) :
-	XMLEntryContainer("LandscapeSoundSound", 
-		"Specifies where to load sounds files from")
+LandscapeSoundSound::LandscapeSoundSound(const char *type, const char *description) :
+	XMLEntryContainer(type, description)
 {
 }
 
@@ -61,7 +60,7 @@ LandscapeSoundSound::~LandscapeSoundSound()
 }
 
 LandscapeSoundSoundFileList::LandscapeSoundSoundFileList() :
-	XMLEntryList<XMLEntryString>("file", 
+	XMLEntryList<XMLEntryString>("LandscapeSoundSoundFileList", 
 		"A list of files to load sounds from, a random file will be chosen each time a sound is played.")
 {
 }
@@ -72,18 +71,18 @@ LandscapeSoundSoundFileList::~LandscapeSoundSoundFileList()
 
 XMLEntryString *LandscapeSoundSoundFileList::createXMLEntry()
 {
-	return new XMLEntryString("file", "A file to load sounds from");
+	return new XMLEntryString("A file to load sounds from");
 }
 
 LandscapeSoundSoundFile::LandscapeSoundSoundFile() :
 	LandscapeSoundSound("LandscapeSoundSoundFile", 
 		"Loads a sound file from a file on the file system"),
-	gain("gain", "The amound of extra gain (volume) to apply to the sound, 1.0 = no gain", 0, 1),
+	gain("The amound of extra gain (volume) to apply to the sound, 1.0 = no gain", 0, 1),
 	files(),
-	referencedistance("referencedistance", "", 0, 75),
-	rolloff("rolloff", "", 0, 1)
+	referencedistance("", 0, 75),
+	rolloff("", 0, 1)
 {
-	addChildXMLEntry(&files, &gain, &referencedistance, &rolloff);
+	addChildXMLEntry("file", &files, "gain", &gain,"referencedistance",  &referencedistance, "rolloff", &rolloff);
 }
 
 LandscapeSoundSoundFile::~LandscapeSoundSoundFile()

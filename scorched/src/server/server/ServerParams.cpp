@@ -33,21 +33,15 @@ ServerParams *ServerParams::instance()
 }
 
 ServerParams::ServerParams() :
-	OptionsParameters("options", "The command line options for the Scorched3D server"),
-	server_("startserver",
-		"Starts a scorched 3d server, requires the name of the server settings file e.g. data/server.xml", 0, ""),
-	hideWindow_("hidewindow",
-		"Hides the scorched3d console window (windows)", 0, false),
-	startCustom_("startcustom",
-		"Starts a scorched 3d server, uses the last server made", 0, false),
-	exitOnSyncFailure_("exitonsyncfailure",
-		"Exits the server if a sync failure is found", 0, false),
-	exitTime_("exittime",
-		"Exits the server after a given time period (in seconds)", 0, 0)
-
+	OptionsParameters("ServerParams", "The command line options for the Scorched3D server"),
+	server_("Starts a scorched 3d server, requires the name of the server settings file e.g. data/server.xml", 0, ""),
+	hideWindow_("Hides the scorched3d console window (windows)", 0, false),
+	startCustom_("Starts a scorched 3d server, uses the last server made", 0, false),
+	exitOnSyncFailure_("Exits the server if a sync failure is found", 0, false),
+	exitTime_("Exits the server after a given time period (in seconds)", 0, 0)
 {
-	addChildXMLEntry(&server_, &hideWindow_);
-	addChildXMLEntry(&startCustom_, &exitOnSyncFailure_, &exitTime_);
+	addChildXMLEntry("startserver", &server_, "hidewindow", &hideWindow_);
+	addChildXMLEntry("startcustom", &startCustom_, "exitonsyncfailure", &exitOnSyncFailure_, "exittime", &exitTime_);
 }
 
 ServerParams::~ServerParams()

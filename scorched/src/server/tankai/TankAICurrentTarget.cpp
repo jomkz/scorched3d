@@ -32,30 +32,30 @@
 #include <XML/XMLNode.h>
 
 TankAICurrentTarget::TankAICurrentTarget() :
-	XMLEntryGroup("targets", "Weighting factors use to determine which tank to fire at."
+	XMLEntryContainer("TankAICurrentTarget", "Weighting factors use to determine which tank to fire at."
 		"Targets are all ranked using these factors. The top weighted targets are selected to be fired at 1st."
 		"Each factor is multiplied by the weight and then all factors are added to give the total weighting."
 		"All factors are in the range -1.0 to 1.0 before weighting."),
-	health_("health", "Health weighting, multiplied by the 100% health the tank has left."),
-	random_("random", "Random weighting, used to randomize the chosen tank."),
-	score_("score", "Score weighting, multiplied by the current position of the tank ranked by current score"),
-	damagedone_("damagedone", "Damage done weighting, multiplied by the current position of the tank ranked by damage done to the ai"),
-	damagetaken_("damagetaken", "Damage taken weighting, multiplied by the current position of the tank ranked by damage taken by the ai"),
-	shield_("shield", "Shield weighting, multiplied by the current position of the tank ranked by the level of the current shield"),
-	repeat_("repeat", "Repeat weighting, multiplied by the number of times this tank has been chosen as a target"),
-	distance_("distance", "Distance weighting, multiplied by the closeness of the tank (closer is higher)"),
-	player_("player", "Player weighting, multiplied by the human/ai type of the tank (Human:-1, AI:1)")
+	health_("Health weighting, multiplied by the 100% health the tank has left."),
+	random_("Random weighting, used to randomize the chosen tank."),
+	score_("Score weighting, multiplied by the current position of the tank ranked by current score"),
+	damagedone_("Damage done weighting, multiplied by the current position of the tank ranked by damage done to the ai"),
+	damagetaken_("Damage taken weighting, multiplied by the current position of the tank ranked by damage taken by the ai"),
+	shield_("Shield weighting, multiplied by the current position of the tank ranked by the level of the current shield"),
+	repeat_("Repeat weighting, multiplied by the number of times this tank has been chosen as a target"),
+	distance_("Distance weighting, multiplied by the closeness of the tank (closer is higher)"),
+	player_("Player weighting, multiplied by the human/ai type of the tank (Human:-1, AI:1)")
 {
 	addChildXMLEntry(
-		&health_, 
-		&random_,
-		&score_,
-		&damagedone_,
-		&damagetaken_,
-		&shield_,
-		&repeat_,
-		&distance_,
-		&player_);
+		"health", &health_, 
+		"random", &random_,
+		"score", &score_,
+		"damagedone", &damagedone_,
+		"damagetaken", &damagetaken_,
+		"shield", &shield_,
+		"repeat", &repeat_,
+		"distance", &distance_,
+		"player", &player_);
 }
 
 TankAICurrentTarget::~TankAICurrentTarget()

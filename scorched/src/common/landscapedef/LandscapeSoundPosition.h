@@ -38,7 +38,7 @@ class VirtualSoundSource;
 class LandscapeSoundPosition : public XMLEntryContainer
 {
 public:
-	LandscapeSoundPosition(const char *name, const char *description);
+	LandscapeSoundPosition(const char *type, const char *description);
 	virtual ~LandscapeSoundPosition();
 
 	virtual bool setPosition(VirtualSoundSource *source, LandscapeSoundItem *data) = 0;

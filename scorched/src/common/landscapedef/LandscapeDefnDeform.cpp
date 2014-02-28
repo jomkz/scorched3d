@@ -21,7 +21,7 @@
 #include <landscapedef/LandscapeDefnDeform.h>
 
 LandscapeDefnDeformChoice::LandscapeDefnDeformChoice() :
-	XMLEntryTypeChoice<LandscapeDefnDeform>("deform", 
+	XMLEntryTypeChoice<LandscapeDefnDeform>("LandscapeDefnDeformChoice", 
 		"Defines how the landscape surface can be deformed by player actions")
 {
 }
@@ -51,10 +51,10 @@ LandscapeDefnDeform::~LandscapeDefnDeform()
 LandscapeDefnDeformFile::LandscapeDefnDeformFile() :
 	LandscapeDefnDeform("LandscapeDefnDeformFile", 
 		"Defines the areas of the lansdscape that can be deformed by player actions via a mask file"),
-	file("file", "The file containing the mask that cannot be deformed"),
-	levelsurround("levelsurround", "A flag indicating if the surround of the mask should be flattened")
+	file("The file containing the mask that cannot be deformed"),
+	levelsurround("A flag indicating if the surround of the mask should be flattened")
 {
-	addChildXMLEntry(&file, &levelsurround);
+	addChildXMLEntry("file", &file, "levelsurround", &levelsurround);
 }
 
 LandscapeDefnDeformFile::~LandscapeDefnDeformFile()
@@ -62,7 +62,7 @@ LandscapeDefnDeformFile::~LandscapeDefnDeformFile()
 }
 
 LandscapeDefnDeformSolid::LandscapeDefnDeformSolid() :
-	LandscapeDefnDeform("LandscapeDefnDeformFile", 
+	LandscapeDefnDeform("LandscapeDefnDeformSolid", 
 		"Specifies that the landscape cannot be deformed by player actions")
 {
 }

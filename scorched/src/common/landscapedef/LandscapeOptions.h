@@ -39,13 +39,4 @@ protected:
 	std::list<std::string> changedOptionNames_;
 };
 
-class LandscapeOptionsList : public XMLEntryList<LandscapeOptions>
-{
-public:
-	LandscapeOptionsList();
-	virtual ~LandscapeOptionsList();
-
-	virtual LandscapeOptions *createXMLEntry();
-};
-
 #endif // __INCLUDE_LandscapeOptionsh_INCLUDE__

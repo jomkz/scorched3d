@@ -25,7 +25,7 @@
 #include <landscapedef/LandscapeSoundSound.h>
 #include <landscapedef/LandscapeSoundTiming.h>
 
-class LandscapeSound : public XMLEntryGroup
+class LandscapeSound : public XMLEntryContainer
 {
 public:
 	LandscapeSound();

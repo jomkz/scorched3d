@@ -40,7 +40,7 @@ public:
 class LandscapeEventConditionChoice : public XMLEntryTypeChoice<LandscapeEventCondition>
 {
 public:
-	LandscapeEventConditionChoice(const char *name, const char *description);
+	LandscapeEventConditionChoice();
 	virtual ~LandscapeEventConditionChoice();
 
 	virtual LandscapeEventCondition *createXMLEntry(const std::string &type);

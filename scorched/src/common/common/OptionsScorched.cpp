@@ -48,39 +48,39 @@ void OptionsScorched::updateLevelOptions(ScorchedContext &context, LandscapeDefi
 	updateLevelOptions(ldefn->includes, values);
 
 	// Iterate over the level and current options
-	std::list<XMLEntry *> &levelOptions = getLevelOptions().getChildren();
-	std::list<XMLEntry *> &mainoptions = getMainOptions().getChildren();
-	std::list<XMLEntry *>::iterator levelitor;
-	std::list<XMLEntry *>::iterator mainitor;
+	std::map<std::string, XMLEntry *> &levelOptions = getLevelOptions().getChildren();
+	std::map<std::string, XMLEntry *> &mainoptions = getMainOptions().getChildren();
+	std::map<std::string, XMLEntry *>::iterator levelitor;
+	std::map<std::string, XMLEntry *>::iterator mainitor;
 	for (levelitor = levelOptions.begin(), mainitor = mainoptions.begin();
 		levelitor != levelOptions.end() && mainitor != mainoptions.end();
 		++levelitor, ++mainitor)
 	{
-		XMLEntrySimpleType *mainEntry = (XMLEntrySimpleType *) (*mainitor);
-		XMLEntrySimpleType *levelEntry = (XMLEntrySimpleType *) (*levelitor);
+		XMLEntrySimpleType *mainEntry = (XMLEntrySimpleType *) mainitor->second;
+		XMLEntrySimpleType *levelEntry = (XMLEntrySimpleType *) levelitor->second;
 
 		// Get the current settings value that is in use
 		XMLEntrySimpleType *currentEntry = mainEntry;
-		if (hasLevelChangedValue(currentEntry->getName())) currentEntry = levelEntry;
+		if (hasLevelChangedValue(mainitor->first.c_str())) currentEntry = levelEntry;
 		std::string oldValue;
 		currentEntry->getValueAsString(oldValue);
 
 		// If this level entry has changed set its new value
 		currentEntry = mainEntry;
 		std::map<std::string, XMLEntrySimpleType *>::iterator findItor = 
-			values.find(mainEntry->getName());
+			values.find(mainitor->first);
 		if (findItor != values.end())
 		{
 			currentEntry = levelEntry;
 			std::string currentValue;
 			(*findItor).second->getValueAsString(currentValue);
 			levelEntry->setValueFromString(currentValue);
-			changedOptionNames_.insert(mainEntry->getName());
+			changedOptionNames_.insert(mainitor->first);
 		}
 		else
 		{
 			// Reset the level entry
-			changedOptionNames_.erase(mainEntry->getName());
+			changedOptionNames_.erase(mainitor->first);
 		}
 
 		// Find out the new settings value that is in use 
@@ -91,7 +91,7 @@ void OptionsScorched::updateLevelOptions(ScorchedContext &context, LandscapeDefi
 		if (0 != strcmp(newValue.c_str(), oldValue.c_str()))
 		{
 			Logger::log(S3D::formatStringBuffer("Level option %s has been changed from %s to %s",
-				mainEntry->getName(),
+				mainitor->first.c_str(),
 				oldValue.c_str(), newValue.c_str()));
 		}
 	}
@@ -107,23 +107,15 @@ void OptionsScorched::updateLevelOptions(std::list<LandscapeInclude *> &options,
 		++itor)
 	{
 		LandscapeInclude *option = (*itor);
+		LandscapeOptions *optionType = &option->options;
 
-		std::list<LandscapeOptions *>::iterator oitor = option->options.getChildren().begin(),
-			oend = option->options.getChildren().end();
-
-		// For each set of options
-		for (;oitor!=oend;++oend)
+		// Add the list of options that were defined in the file
+		std::list<std::string>::iterator citor = optionType->getChangedOptionNames().begin(),
+			cend = optionType->getChangedOptionNames().end();
+		for (;citor!=cend;++citor)
 		{
-			LandscapeOptions *optionType = (*oitor);
-
-			// Add the list of options that were defined in the file
-			std::list<std::string>::iterator citor = optionType->getChangedOptionNames().begin(),
-				cend = optionType->getChangedOptionNames().end();
-			for (;citor!=cend;++citor)
-			{
-				XMLEntrySimpleType *type = optionType->getEntryByName(*citor);
-				if (type) values[*citor] = type;
-			}
+			XMLEntrySimpleType *type = optionType->getEntryByName(*citor);
+			if (type) values[*citor] = type;
 		}
 	}
 }
@@ -145,18 +137,18 @@ bool OptionsScorched::commitChanges()
 	bool different = false;
 
 	// Compare buffers
-	std::list<XMLEntry *> &options = mainOptions_.getChildren();
-	std::list<XMLEntry *> &otheroptions = changedOptions_.getChildren();
-	std::list<XMLEntry *>::iterator itor;
-	std::list<XMLEntry *>::iterator otheritor;
+	std::map<std::string, XMLEntry *> &options = mainOptions_.getChildren();
+	std::map<std::string, XMLEntry *> &otheroptions = changedOptions_.getChildren();
+	std::map<std::string, XMLEntry *>::iterator itor;
+	std::map<std::string, XMLEntry *>::iterator otheritor;
 	for (itor=options.begin(), otheritor=otheroptions.begin();
 		itor!=options.end() && otheritor!=otheroptions.end();
 		++itor, ++otheritor)
 	{
-		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) *itor;
-		XMLEntrySimpleType *otherentry = (XMLEntrySimpleType *) *otheritor;
+		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) itor->second;
+		XMLEntrySimpleType *otherentry = (XMLEntrySimpleType *) otheritor->second;
 
-		DIALOG_ASSERT(0 == strcmp(entry->getName(), otherentry->getName()));
+		DIALOG_ASSERT(0 == strcmp(itor->first.c_str(), otheritor->first.c_str()));
 
 		std::string str;
 		entry->getValueAsString(str);
@@ -170,12 +162,12 @@ bool OptionsScorched::commitChanges()
 				if (strlen(str.c_str()) < 20 && strlen(otherstr.c_str()) < 20)
 				{
 					Logger::log(S3D::formatStringBuffer("Option %s has been changed from %s to %s",
-						entry->getName(), str.c_str(), otherstr.c_str()));
+						itor->first.c_str(), str.c_str(), otherstr.c_str()));
 				}
 				else
 				{
 					Logger::log(S3D::formatStringBuffer("Option %s has been changed.",
-						entry->getName()));
+						itor->first.c_str()));
 				}
 			}
 

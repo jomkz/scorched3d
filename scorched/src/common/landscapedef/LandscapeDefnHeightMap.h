@@ -23,10 +23,10 @@
 
 #include <XML/XMLEntrySimpleTypes.h>
 
-class LandscapeDefnHeightMapMinMax : public XMLEntryGroup
+class LandscapeDefnHeightMapMinMax : public XMLEntryContainer
 {
 public:
-	LandscapeDefnHeightMapMinMax(const char *tagName, const char *description);
+	LandscapeDefnHeightMapMinMax(const char *description);
 	virtual ~LandscapeDefnHeightMapMinMax();
 
 	XMLEntryFixed min, max;

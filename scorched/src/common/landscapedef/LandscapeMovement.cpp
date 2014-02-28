@@ -23,7 +23,7 @@
 #include <common/Defines.h>
 
 LandscapeMovementChoice::LandscapeMovementChoice() :
-	XMLEntryTypeChoice<LandscapeMovement>("movement", 
+	XMLEntryTypeChoice<LandscapeMovement>("LandscapeMovementChoice", 
 		"Associates object movement animation to a give group of objects")
 {
 }
@@ -42,7 +42,7 @@ LandscapeMovement *LandscapeMovementChoice::createXMLEntry(const std::string &ty
 }
 
 LandscapeMovementList::LandscapeMovementList() :
-	XMLEntryList("movement", 
+	XMLEntryList("LandscapeMovementList", 
 		"A list of movement animations that can be associated with an object group")
 {
 }
@@ -58,10 +58,9 @@ LandscapeMovementChoice *LandscapeMovementList::createXMLEntry()
 
 LandscapeMovement::LandscapeMovement(const char *name, const char *description) :
 	XMLEntryContainer(name, description),
-	groupname("groupname", 
-		"The name of the object group that contains the objects to move")
+	groupname("The name of the object group that contains the objects to move")
 {
-	addChildXMLEntry(&groupname);
+	addChildXMLEntry("groupname", &groupname);
 }
 
 LandscapeMovement::~LandscapeMovement()
@@ -73,15 +72,16 @@ LandscapeMovementShips::LandscapeMovementShips() :
 		"A special movement type for ships, this movement type moves objects circumferentially around a spline curve defined by "
 		"a series of random points around the landscape center."
 		"All movement occurs on the same horizontal plane"),
-	speed("speed", "The speed that animation occurs around the points"),
-	controlpoints("controlpoints", "The number of random control points to generate"),
-	controlpointswidth("controlpointswidth", "The width of the circle points will be generated on"),
-	controlpointsheight("controlpointsheight", "The height of the circle points will be generated on"),
-	controlpointsrand("controlpointsrand", "The maximum amount of randomness applied to the width and height for each point"),
-	starttime("starttime", "How far around the circle this group of objects will start")
+	speed("The speed that animation occurs around the points"),
+	controlpoints("The number of random control points to generate"),
+	controlpointswidth("The width of the circle points will be generated on"),
+	controlpointsheight("The height of the circle points will be generated on"),
+	controlpointsrand("The maximum amount of randomness applied to the width and height for each point"),
+	starttime("How far around the circle this group of objects will start")
 {
-	addChildXMLEntry(&speed, &starttime);
-	addChildXMLEntry(&controlpoints, &controlpointswidth, &controlpointsheight, &controlpointsrand);
+	addChildXMLEntry("speed", &speed, "starttime", &starttime);
+	addChildXMLEntry("controlpoints", &controlpoints, "controlpointswidth", &controlpointswidth, 
+		"controlpointsheight", &controlpointsheight, "controlpointsrand", &controlpointsrand);
 }
 
 LandscapeMovementShips::~LandscapeMovementShips()
@@ -89,7 +89,7 @@ LandscapeMovementShips::~LandscapeMovementShips()
 }
 
 LandscapeMovementSplineControlPoints::LandscapeMovementSplineControlPoints() :
-	XMLEntryList("controlpoint", "The list of control points that defined the spline curve")
+	XMLEntryList("LandscapeMovementSplineControlPoints", "The list of control points that defined the spline curve")
 {
 }
 
@@ -99,18 +99,18 @@ LandscapeMovementSplineControlPoints::~LandscapeMovementSplineControlPoints()
 
 XMLEntryFixedVector *LandscapeMovementSplineControlPoints::createXMLEntry()
 {
-	return new XMLEntryFixedVector("controlpoint", "A control point for the spline curve");
+	return new XMLEntryFixedVector("A control point for the spline curve");
 }
 
 LandscapeMovementSpline::LandscapeMovementSpline() :
 	LandscapeMovement("LandscapeMovementSpline", 
 		"A movement type where objects are moved along a path defined by a series of control points joined by a spline curve."),
-	speed("speed", "The speed that animation occurs around the points"),
-	groundonly("groundonly", "If the height in the control points should be ignored and the curve should follow the landscape terrain height"),
-	starttime("starttime", "How far around the circle this group of objects will start"),
+	speed("The speed that animation occurs around the points"),
+	groundonly("If the height in the control points should be ignored and the curve should follow the landscape terrain height"),
+	starttime("How far around the circle this group of objects will start"),
 	points()
 {
-	addChildXMLEntry(&speed, &starttime, &groundonly, &points);
+	addChildXMLEntry("speed", &speed, "starttime", &starttime, "groundonly", &groundonly, "controlpoint", &points);
 }
 
 LandscapeMovementSpline::~LandscapeMovementSpline()
@@ -128,14 +128,15 @@ bool LandscapeMovementSpline::readXML(XMLNode *parentNode)
 LandscapeMovementBoids::LandscapeMovementBoids() :
 	LandscapeMovement("LandscapeMovementBoids", 
 		"A movement type where objects are moved due to a Boids simulation, i.e. in a flocking motion"),
-	minbounds("minbounds", "The minimum extent that defines a bounding box tha will confine the boids"),
-	maxbounds("maxbounds", "The maximum extent that defines a bounding box tha will confine the boids"),
-	maxvelocity("maxvelocity", "The maximum velocity a boid can reach"),
-	cruisedistance("cruisedistance", "The ideal distance between boids that will be strived for"),
-	maxacceleration("maxacceleration", "The maximum acceleration a boid can reach")//,
+	minbounds("The minimum extent that defines a bounding box tha will confine the boids"),
+	maxbounds("The maximum extent that defines a bounding box tha will confine the boids"),
+	maxvelocity("The maximum velocity a boid can reach"),
+	cruisedistance("The ideal distance between boids that will be strived for"),
+	maxacceleration("The maximum acceleration a boid can reach")//,
 	//model("", "")
 {
-	addChildXMLEntry(&minbounds, &maxbounds, &maxvelocity, &cruisedistance, &maxacceleration);
+	addChildXMLEntry("minbounds", &minbounds, "maxbounds", &maxbounds, "maxvelocity", &maxvelocity, 
+		"cruisedistance", &cruisedistance, "maxacceleration", &maxacceleration);
 }
 
 LandscapeMovementBoids::~LandscapeMovementBoids()

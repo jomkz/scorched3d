@@ -29,13 +29,12 @@ LandscapeOptions::~LandscapeOptions()
 {
 }
 
+//"Defines the game options for this level, these options override any set globaly as the server settings."
+
 bool LandscapeOptions::readXML(XMLNode *parentNode)
 {
-	XMLNode *node = 0;
-	if (!parentNode->getNamedChild(xmlEntryName_, node)) return false;
-
-	std::list<XMLNode *>::iterator itor = node->getChildren().begin(),
-		end = node->getChildren().end();
+	std::list<XMLNode *>::iterator itor = parentNode->getChildren().begin(),
+		end = parentNode->getChildren().end();
 	for (;itor!=end;++end)
 	{
 		changedOptionNames_.push_back((*itor)->getName());
@@ -44,17 +43,3 @@ bool LandscapeOptions::readXML(XMLNode *parentNode)
 	return OptionsGame::readXML(parentNode);
 }
 
-LandscapeOptionsList::LandscapeOptionsList() :
-	 XMLEntryList<LandscapeOptions>("options", 
-		 "Defines the game options for this level, these options override any set globaly as the server settings.")
-{
-}
-
-LandscapeOptionsList::~LandscapeOptionsList()
-{
-}
-
-LandscapeOptions *LandscapeOptionsList::createXMLEntry()
-{
-	return new LandscapeOptions();
-}

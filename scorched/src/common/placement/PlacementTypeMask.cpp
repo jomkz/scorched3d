@@ -28,17 +28,25 @@
 #include <XML/XMLParser.h>
 
 PlacementTypeMask::PlacementTypeMask() :
-	PlacementType("PlacementTypeMask", 
+	PlacementType("PlacementTypeMask",
 		"Places objects constained to areas defined by a mask and a set of other contraints"),
-	numobjects("numobjects", "The number of objects to place"),
-	mask("mask", "The name of a file to use as the mask"),
-	minheight("minheight", "The minimum landscape heights to allow objects to be placed on"),
-	maxheight("maxheight", "The maximum landscape heights to allow objects to be placed on"),
-	mincloseness("mincloseness", "How close objects may be placed together"),
-	minslope("minslope", "The minimum landscape slope (angle) to allow objects to be placed on"),
-	xsnap("xsnap", "Snap/align the objects to a grid of the given square size"),
-	ysnap("ysnap", "Snap/align the objects to a grid of the given square size")
+	numobjects("The number of objects to place"),
+	mask("The name of a file to use as the mask"),
+	minheight("The minimum landscape heights to allow objects to be placed on"),
+	maxheight("The maximum landscape heights to allow objects to be placed on"),
+	mincloseness("How close objects may be placed together"),
+	minslope("The minimum landscape slope (angle) to allow objects to be placed on"),
+	xsnap("Snap/align the objects to a grid of the given square size"),
+	ysnap("Snap/align the objects to a grid of the given square size")
 {
+	addChildXMLEntry("numobjects", &numobjects);
+	addChildXMLEntry("mask", &mask);
+	addChildXMLEntry("minheight", &minheight);
+	addChildXMLEntry("maxheight", &maxheight);
+	addChildXMLEntry("mincloseness", &mincloseness);
+	addChildXMLEntry("minslope", &minslope);
+	addChildXMLEntry("xsnap", &xsnap);
+	addChildXMLEntry("ysnap", &ysnap);
 }
 
 PlacementTypeMask::~PlacementTypeMask()

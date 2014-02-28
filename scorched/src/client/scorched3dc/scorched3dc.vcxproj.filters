@@ -1506,6 +1506,12 @@
     <ClCompile Include="..\..\common\landscapedef\LandscapeDefnHeightMap.cpp">
       <Filter>landscapedef</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\common\FileTemplate.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="DocumentGenerator.cpp">
+      <Filter>scorched3dc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -2944,6 +2950,12 @@
     </ClInclude>
     <ClInclude Include="..\..\common\landscapedef\LandscapeDefnHeightMap.h">
       <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\FileTemplate.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="DocumentGenerator.h">
+      <Filter>scorched3dc</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

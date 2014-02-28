@@ -21,13 +21,13 @@
 #include <XML/XMLEntrySimpleTypes.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
+#include <common/FileTemplate.h>
 #include <XML/XMLFile.h>
 #include <stdio.h>
 #include <map>
 
-XMLEntrySimpleType::XMLEntrySimpleType(const char *name, const char *description, unsigned int data) :
+XMLEntrySimpleType::XMLEntrySimpleType(const char *description, unsigned int data) :
 	data_(data),
-	name_(name),
 	description_(description)
 {
 }
@@ -36,59 +36,33 @@ XMLEntrySimpleType::~XMLEntrySimpleType()
 {
 }
 
-bool XMLEntrySimpleType::readXML(XMLNode *parentNode)
+void XMLEntrySimpleType::getDescription(std::string &result)
 {
-	bool required = data_ & eDataRequired;
-	XMLNode *foundNode = 0;
-	if (parentNode->getNamedChild(name_, foundNode, required)) 
+	result = description_;
+	std::string extraDescription;
+	getExtraDescription(extraDescription);
+	if (!extraDescription.empty())
 	{
-		if (!setValueFromString(foundNode->getContent()))
-		{
-			return foundNode->returnError(S3D::formatStringBuffer(
-				"Failed to set XML entry \"%s\" with \"%s\"",
-				name_, foundNode->getContent()));
-		}
+		result.append(" (").append(extraDescription).append(")");
 	}
-	else if (required)
+}
+
+bool XMLEntrySimpleType::readXML(XMLNode *node)
+{
+	if (!setValueFromString(node->getContent()))
 	{
-		return parentNode->returnError(S3D::formatStringBuffer(
-			"Failed to find a XML value for required entry \"%s\"",
-			name_));;
+		return node->returnError(S3D::formatStringBuffer(
+			"Failed to set XML entry with \"%s\"",
+			node->getContent()));
 	}
 	return true;
 }
 
 void XMLEntrySimpleType::writeXML(XMLNode *parentNode)
 {
-	if (data_ & eDataDepricated) return;
-
-	bool required = data_ & eDataRequired;
-	std::string name = getName(),
-		description = getDescription(),
-		currentValue,
-		defaultValue,
-		rangeDescription;
-
-	getExtraDescription(rangeDescription);
+	std::string currentValue;
 	getValueAsString(currentValue);
-	getDefaultValueAsString(defaultValue);
-
-	if (rangeDescription.length() > 0) rangeDescription = " (" + rangeDescription + ")";
-
-	// Add the comments for this node
-	parentNode->addChild(new XMLNode("", 
-		S3D::formatStringBuffer("%s - %s%s.  %s%s", 
-		name_,
-		description.c_str(), rangeDescription.c_str(),
-		required?"Required.  ":"Optional, default value ",
-		required?"":defaultValue.c_str()), 
-		XMLNode::XMLCommentType));
-
-	if (currentValue == defaultValue) return;
-
-	// Add the actual node
-	XMLNode *newNode = new XMLNode(name_, currentValue);
-	parentNode->addChild(newNode);
+	parentNode->setContent(currentValue.c_str());
 }
 
 void XMLEntrySimpleType::resetDefaultValue()
@@ -113,41 +87,39 @@ bool XMLEntrySimpleType::setStringArgument(const char *value)
 	return setValueFromString(value);
 }
 
-XMLEntrySimpleGroup::XMLEntrySimpleGroup(const char *name, const char *description) :
-	XMLEntryGroup(name, description)
+XMLEntryDocumentInfo XMLEntrySimpleType::generateDocumentation(XMLEntryDocumentGenerator &generator)
+{
+	XMLEntryDocumentInfo info;
+	return info;
+}
+
+XMLEntrySimpleContainer::XMLEntrySimpleContainer(const char *typeName, const char *description) :
+	XMLEntryContainer(typeName, description)
 {
 }
 
-XMLEntrySimpleGroup::~XMLEntrySimpleGroup()
+XMLEntrySimpleContainer::~XMLEntrySimpleContainer()
 {
 }
 
-XMLEntrySimpleType *XMLEntrySimpleGroup::getEntryByName(const std::string &name)
+XMLEntrySimpleType *XMLEntrySimpleContainer::getEntryByName(const std::string &name)
 {
-	std::list<XMLEntry *>::iterator itor = xmlEntryChildren_.begin(),
-		end = xmlEntryChildren_.end();
-	for (;itor!=end;++itor)
-	{
-		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) *itor;
-		if (name == entry->getName())
-		{
-			return entry;
-		}
-	}
-	return 0;
+	std::map<std::string, XMLEntry *>::iterator itor = xmlEntryChildren_.find(name);
+	if (itor == xmlEntryChildren_.end()) return 0;
+	return (XMLEntrySimpleType*) &itor->second;
 }
 
-bool XMLEntrySimpleGroup::writeToBuffer(NetBuffer &buffer, bool useProtected)
+bool XMLEntrySimpleContainer::writeToBuffer(NetBuffer &buffer, bool useProtected)
 {
 	// Write out all of the options
 	// We do this as strings this make the message larger than it needs to be but
 	// we always know how to read the options at the other end.
 	// Even if the other end does not have all the options this end does.
-	std::list<XMLEntry *>::iterator itor = xmlEntryChildren_.begin(),
+	std::map<std::string, XMLEntry *>::iterator itor = xmlEntryChildren_.begin(),
 		end = xmlEntryChildren_.end();
 	for (;itor!=end;++itor)
 	{
-		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) *itor;
+		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) itor->second;
 		// Only send data that is allowed to be sent
 		if (!(entry->getData() & XMLEntry::eDataProtected) || useProtected)
 		{
@@ -157,7 +129,7 @@ bool XMLEntrySimpleGroup::writeToBuffer(NetBuffer &buffer, bool useProtected)
 			entry->getDefaultValueAsString(defaultValue);
 			if (currentValue != defaultValue)
 			{
-				buffer.addToBuffer(entry->getName());
+				buffer.addToBuffer(itor->first);
 				buffer.addToBuffer(currentValue);
 			}
 		}
@@ -166,20 +138,20 @@ bool XMLEntrySimpleGroup::writeToBuffer(NetBuffer &buffer, bool useProtected)
 	return true;
 }
 
-bool XMLEntrySimpleGroup::readFromBuffer(NetBufferReader &reader, bool useProtected)
+bool XMLEntrySimpleContainer::readFromBuffer(NetBufferReader &reader, bool useProtected)
 {
 	// Create a map from string name to existing options
 	// So we can find the named option when reading the buffer
 	std::map<std::string, XMLEntrySimpleType *> entryMap;
-	std::list<XMLEntry *>::iterator itor = xmlEntryChildren_.begin(),
+	std::map<std::string, XMLEntry *>::iterator itor = xmlEntryChildren_.begin(),
 		end = xmlEntryChildren_.end();
 	for (;itor!=end;++itor)
 	{
-		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) *itor;
+		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) itor->second;
 		if (!(entry->getData() & XMLEntry::eDataProtected) || useProtected)
 		{
 			// Create map
-			std::string name = entry->getName();
+			std::string name = itor->first;
 			entryMap[name] = entry;
 
 			std::string currentValue, defaultValue;
@@ -219,7 +191,7 @@ bool XMLEntrySimpleGroup::readFromBuffer(NetBufferReader &reader, bool useProtec
 	return true;
 }
 
-bool XMLEntrySimpleGroup::writeToFile(const std::string &filePath)
+bool XMLEntrySimpleContainer::writeToFile(const std::string &filePath)
 {
 	XMLNode documentNode("document");
 	writeXML(&documentNode);
@@ -228,7 +200,7 @@ bool XMLEntrySimpleGroup::writeToFile(const std::string &filePath)
 	return true;
 }
 
-bool XMLEntrySimpleGroup::readFromFile(const std::string &filePath)
+bool XMLEntrySimpleContainer::readFromFile(const std::string &filePath)
 {
 	// Parse the XML file
 	XMLFile file;
@@ -249,46 +221,45 @@ bool XMLEntrySimpleGroup::readFromFile(const std::string &filePath)
 	return readXML(file.getDocumentNode());
 }
 
-void XMLEntrySimpleGroup::addToArgParser(ARGParser &parser)
+void XMLEntrySimpleContainer::addToArgParser(ARGParser &parser)
 {
 	std::map<std::string, XMLEntrySimpleType *> entryMap;
-	std::list<XMLEntry *>::iterator itor = xmlEntryChildren_.begin(),
+	std::map<std::string, XMLEntry *>::iterator itor = xmlEntryChildren_.begin(),
 		end = xmlEntryChildren_.end();
 	for (;itor!=end;++itor)
 	{
-		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) *itor;
+		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) itor->second;
 
-		std::string name = std::string("-") +  entry->getName();
-		std::string defaultValue;
+		std::string name = std::string("-") +  itor->first;
+		std::string defaultValue, description;
 		entry->getDefaultValueAsString(defaultValue);
-		std::string description = S3D::formatStringBuffer("%s (Default : %s)",
-			entry->getDescription(), defaultValue.c_str());
+		entry->getDescription(description);
+		std::string fullDescription = S3D::formatStringBuffer("%s (Default : %s)",
+			description.c_str(), defaultValue.c_str());
 
 		switch (entry->getTypeCatagory())
 		{
 		case XMLEntrySimpleType::eSimpleNumberType:
-			parser.addEntry(name, (ARGParserIntI *) entry, description);
+			parser.addEntry(name, (ARGParserIntI *) entry, fullDescription);
 			break;
 		case XMLEntrySimpleType::eSimpleStringType:
-			parser.addEntry(name , (ARGParserStringI *) entry, description);
+			parser.addEntry(name , (ARGParserStringI *) entry, fullDescription);
 			break;
 		case XMLEntrySimpleType::eSimpleBooleanType:
-			parser.addEntry(name , (ARGParserBoolI *) entry, description);
+			parser.addEntry(name , (ARGParserBoolI *) entry, fullDescription);
 			break;
 		}
 	}
 }
 
-XMLEntryInt::XMLEntryInt(const char *name, 
-	const char *description) :
-	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eDataRequired), 
+XMLEntryInt::XMLEntryInt(const char *description) :
+	XMLEntrySimpleType(description, XMLEntrySimpleType::eDataRequired), 
 	value_(0), defaultValue_(0)
 {
 }
 
-XMLEntryInt::XMLEntryInt(const char *name, const char *description,
-	unsigned int data, int value) :
-	XMLEntrySimpleType(name, description, data), 
+XMLEntryInt::XMLEntryInt(const char *description, unsigned int data, int value) :
+	XMLEntrySimpleType(description, data), 
 	value_(value), defaultValue_(value)
 {
 	
@@ -327,12 +298,11 @@ bool XMLEntryInt::setValue(int value)
 	return true;
 }
 
-XMLEntryBoundedInt::XMLEntryBoundedInt(const char *name,
-	const char *description,
+XMLEntryBoundedInt::XMLEntryBoundedInt(const char *description,
 	unsigned int data,
 	int value,
 	int minValue, int maxValue, int stepValue) :
-	XMLEntryInt(name, description, data, value), 
+	XMLEntryInt(description, data, value), 
 	minValue_(minValue), maxValue_(maxValue), stepValue_(stepValue)
 {
 }
@@ -352,12 +322,11 @@ bool XMLEntryBoundedInt::setValue(int value)
 	return XMLEntryInt::setValue(value);
 }
 
-XMLEntryEnum::XMLEntryEnum(const char *name,
-	const char *description,
+XMLEntryEnum::XMLEntryEnum(const char *description,
 	unsigned int data,
 	int value,
 	XMLEntryEnum::EnumEntry enums[]) :
-	XMLEntryInt(name, description, data, value), 
+	XMLEntryInt(description, data, value), 
 	enums_(enums)
 {	
 }
@@ -436,18 +405,16 @@ bool XMLEntryEnum::setValueFromString(const std::string &string)
 	return setValue(val);
 }
 
-XMLEntryBool::XMLEntryBool(const char *name, 
-	const char *description) :
-	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eDataRequired),
+XMLEntryBool::XMLEntryBool(const char *description) :
+	XMLEntrySimpleType(description, XMLEntrySimpleType::eDataRequired),
 	value_(false), defaultValue_(false)
 {
 }
 
-XMLEntryBool::XMLEntryBool(const char *name, 
-	const char *description, 
+XMLEntryBool::XMLEntryBool(const char *description, 
 	unsigned int data,
 	bool value) :
-	XMLEntrySimpleType(name, description, data), 
+	XMLEntrySimpleType(description, data), 
 	value_(value), defaultValue_(value)
 {
 	
@@ -494,20 +461,18 @@ bool XMLEntryBool::getValue()
 	return ((value_==0)?false:true);
 }
 
-XMLEntryString::XMLEntryString(const char *name,
-	const char *description) :
-	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eDataRequired),
+XMLEntryString::XMLEntryString(const char *description) :
+	XMLEntrySimpleType(description, XMLEntrySimpleType::eDataRequired),
 	value_(""), defaultValue_(""), multiline_(false)
 {
 
 }
 
-XMLEntryString::XMLEntryString(const char *name, 
-	const char *description, 
+XMLEntryString::XMLEntryString(const char *description, 
 	unsigned int data,
 	const std::string &value,
 	bool multiline) :
-	XMLEntrySimpleType(name, description, data),
+	XMLEntrySimpleType(description, data),
 	value_(value), defaultValue_(value), multiline_(multiline)
 {
 	
@@ -544,17 +509,15 @@ bool XMLEntryString::setValue(const std::string &value)
 	return true;
 }
 
-XMLEntryFile::XMLEntryFile(const char *name,
-	const char *description) :
-	XMLEntryString(name, description)
+XMLEntryFile::XMLEntryFile(const char *description) :
+	XMLEntryString(description)
 {
 }
 
-XMLEntryFile::XMLEntryFile(const char *name,
-	const char *description,
+XMLEntryFile::XMLEntryFile(const char *description,
 	unsigned int data,
 	const std::string &defaultValue) :
-	XMLEntryString(name, description, data, defaultValue)
+	XMLEntryString(description, data, defaultValue)
 {
 }
 
@@ -568,12 +531,11 @@ bool XMLEntryFile::setValueFromString(const std::string &string)
 	return XMLEntryString::setValueFromString(string);
 }
 
-XMLEntryStringEnum::XMLEntryStringEnum(const char *name,
-	const char *description,
+XMLEntryStringEnum::XMLEntryStringEnum(const char *description,
 	unsigned int data,
 	const std::string &value,
 	XMLEntryStringEnum::EnumEntry enums[]) :
-	XMLEntryString(name, description, data, value), 
+	XMLEntryString(description, data, value), 
 	enums_(enums)
 {	
 }
@@ -610,18 +572,16 @@ bool XMLEntryStringEnum::setValueFromString(const std::string &string)
 	return setValue(string);
 }
 
-XMLEntryFixed::XMLEntryFixed(const char *name, 
-		const char *description) :
-	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eDataRequired),
+XMLEntryFixed::XMLEntryFixed(const char *description) :
+	XMLEntrySimpleType(description, XMLEntrySimpleType::eDataRequired),
 	value_(0), defaultValue_(0)
 {
 }
 
-XMLEntryFixed::XMLEntryFixed(const char *name,
-	const char *description,
+XMLEntryFixed::XMLEntryFixed(const char *description,
 	unsigned int data,
 	fixed value) :
-	XMLEntrySimpleType(name, description, data), 
+	XMLEntrySimpleType(description, data), 
 	value_(value), defaultValue_(value)
 {
 	
@@ -658,18 +618,16 @@ bool XMLEntryFixed::setValue(fixed value)
 	return true;
 }
 
-XMLEntryFixedVector::XMLEntryFixedVector(const char *name, 
-	const char *description) :
-	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eDataRequired)
+XMLEntryFixedVector::XMLEntryFixedVector(const char *description) :
+	XMLEntrySimpleType(description, XMLEntrySimpleType::eDataRequired)
 {
 
 }
 
-XMLEntryFixedVector::XMLEntryFixedVector(const char *name,
-	const char *description,
+XMLEntryFixedVector::XMLEntryFixedVector(const char *description,
 	unsigned int data,
 	FixedVector value) :
-	XMLEntrySimpleType(name, description, data), 
+	XMLEntrySimpleType(description, data), 
 	value_(value), defaultValue_(value)
 {
 	

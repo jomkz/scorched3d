@@ -28,17 +28,24 @@
 #include <image/ImageFactory.h>
 
 PlacementTypeTree::PlacementTypeTree() : 
-	PlacementType("PlacementTypeTree", 
+	PlacementType("PlacementTypeTree",
 		"Attempts to place a large number of objects on the lanscape in clusters (groups), only actualy places the objects that pass the criterias"),
-	mincloseness("mincloseness", "How close objects may be placed together"),
-	numobjects("numobjects", "The number of objects to attempt to place on the landscape"),
-	maxobjects("maxobjects", "The upper limit on the number of objects that are placed on the landscape", 0, 2000),
-	mask("mask", "The name of a file containing a mask to use when placing objects", 0, ""),
-	numclusters("numclusters", "The number of clusters (groups) of objects that will be created"),
-	minheight("minheight", "The minimum landscape heights to allow objects to be placed on"),
-	maxheight("maxheight", "The maximum landscape heights to allow objects to be placed on")
+	mincloseness("How close objects may be placed together"),
+	numobjects("The number of objects to attempt to place on the landscape"),
+	maxobjects("The upper limit on the number of objects that are placed on the landscape", 0, 2000),
+	mask("The name of a file containing a mask to use when placing objects", 0, ""),
+	numclusters("The number of clusters (groups) of objects that will be created"),
+	minheight("The minimum landscape heights to allow objects to be placed on"),
+	maxheight("The maximum landscape heights to allow objects to be placed on")
 
 {
+	addChildXMLEntry("mincloseness", &mincloseness);
+	addChildXMLEntry("numobjects", &numobjects);
+	addChildXMLEntry("maxobjects", &maxobjects);
+	addChildXMLEntry("mask", &mask);
+	addChildXMLEntry("numclusters", &numclusters);
+	addChildXMLEntry("minheight", &minheight);
+	addChildXMLEntry("maxheight", &maxheight);
 }
 
 PlacementTypeTree::~PlacementTypeTree()

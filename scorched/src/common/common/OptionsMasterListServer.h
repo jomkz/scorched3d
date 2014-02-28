@@ -23,7 +23,7 @@
 
 #include <XML/XMLEntrySimpleTypes.h>
 
-class OptionsMasterListServer : public XMLEntrySimpleGroup
+class OptionsMasterListServer : public XMLEntrySimpleContainer
 {
 public:
 	static OptionsMasterListServer *instance();

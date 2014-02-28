@@ -23,8 +23,9 @@
 #include <engine/ObjectGroupEntry.h>
 #include <engine/Simulator.h>
 
-LandscapeEventConditionChoice::LandscapeEventConditionChoice(const char *name, const char *description) :
-	XMLEntryTypeChoice<LandscapeEventCondition>(name, description)
+LandscapeEventConditionChoice::LandscapeEventConditionChoice() :
+	XMLEntryTypeChoice<LandscapeEventCondition>("LandscapeEventConditionChoice", 
+		"A choice of condition to determine when this action fires")
 {
 }
 
@@ -53,10 +54,10 @@ LandscapeEventCondition::~LandscapeEventCondition()
 LandscapeEventConditionGroupSize::LandscapeEventConditionGroupSize() :
 	LandscapeEventCondition("LandscapeEventConditionGroupSize", 
 		"Fires an event when the number of objects in the specified group falls below a given number"),
-	groupsize("groupsize", "The size threshold that will fire the event."),
-	groupname("groupname", "The name of the group to check the size for.")
+	groupsize("The size threshold that will fire the event."),
+	groupname("The name of the group to check the size for.")
 {
-	addChildXMLEntry(&groupsize, &groupname);
+	addChildXMLEntry("groupsize", &groupsize, "groupname", &groupname);
 }
 
 LandscapeEventConditionGroupSize::~LandscapeEventConditionGroupSize()
@@ -91,11 +92,11 @@ LandscapeEventConditionTime::LandscapeEventConditionTime() :
 		"Fires an event during the specified time interval."
 		"  The interval is defined as a minimum and maximum value."
 		"  The event will be fired at some point during the specified interval."),
-	mintime("mintime", "The minimum amount of time that must pass before the event is fired."),
-	maxtime("maxtime", "The maximum amount of time that can pass before the event is fired."),
-	singletimeonly("singletimeonly", "If this event only fires once (at the start) or continues to fire.")
+	mintime("The minimum amount of time that must pass before the event is fired."),
+	maxtime("The maximum amount of time that can pass before the event is fired."),
+	singletimeonly("If this event only fires once (at the start) or continues to fire.")
 {
-	addChildXMLEntry(&mintime, &maxtime, &singletimeonly);
+	addChildXMLEntry("mintime", &mintime, "maxtime", &maxtime, "singletimeonly", &singletimeonly);
 }
 
 LandscapeEventConditionTime::~LandscapeEventConditionTime()

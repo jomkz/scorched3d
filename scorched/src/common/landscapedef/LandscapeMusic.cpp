@@ -22,7 +22,7 @@
 #include <math.h>
 
 LandscapeMusicStateList::LandscapeMusicStateList() :
-	XMLEntryList<XMLEntryString>("playstate", 
+	XMLEntryList<XMLEntryString>("LandscapeMusicStateList", 
 		"The list of state names that this music should be played in.")
 {
 }
@@ -33,16 +33,16 @@ LandscapeMusicStateList::~LandscapeMusicStateList()
 
 XMLEntryString *LandscapeMusicStateList::createXMLEntry()
 {
-	return new XMLEntryString("playstate", "Play/enable the given music for the given state.");
+	return new XMLEntryString("Play/enable the given music for the given state.");
 }
 
 LandscapeMusic::LandscapeMusic() :
-	XMLEntryContainer("music", "Defines a music file that will be played continuously in the given states."),
-	file("file", "The location of the music file to play"),
-	gain("gain", "The gain (volume) of the played music", 0, 1),
+	XMLEntryContainer("LandscapeMusic", "Defines a music file that will be played continuously in the given states."),
+	file("The location of the music file to play"),
+	gain("The gain (volume) of the played music", 0, 1),
 	playstatelist()
 {
-	addChildXMLEntry(&file, &gain, &playstatelist);
+	addChildXMLEntry("file", &file, "gain", &gain, "playstate", &playstatelist);
 }
 
 LandscapeMusic::~LandscapeMusic()
@@ -74,7 +74,7 @@ bool LandscapeMusic::readXML(XMLNode *node)
 }
 
 LandscapeMusicList::LandscapeMusicList() : 
-	XMLEntryList<LandscapeMusic>("music", "Defines a music file that will be played continuously in the given states.")
+	XMLEntryList<LandscapeMusic>("LandscapeMusicList", "Defines a music file that will be played continuously in the given states.")
 {
 }
 

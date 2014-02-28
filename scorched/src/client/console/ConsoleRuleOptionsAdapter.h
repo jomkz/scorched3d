@@ -28,10 +28,11 @@
 class ConsoleRuleOptionsAdapter
 {
 public:
-	ConsoleRuleOptionsAdapter(Console &console, XMLEntrySimpleType &entry);
+	ConsoleRuleOptionsAdapter(Console &console, const std::string &name, XMLEntrySimpleType &entry);
 	virtual ~ConsoleRuleOptionsAdapter();
 protected:
 	Console &console_;
+	std::string name_;
 	XMLEntrySimpleType &entry_;
 	ConsoleRuleMethodIAdapterEx<ConsoleRuleOptionsAdapter> *readRule_, *writeRule_;
 
@@ -45,7 +46,7 @@ public:
 	ConsoleRuleOptionsAdapterHolder();
 	virtual ~ConsoleRuleOptionsAdapterHolder();
 
-	void addToConsole(Console &console, std::list<XMLEntry *> &options);
+	void addToConsole(Console &console, std::map<std::string, XMLEntry *> &options);
 
 protected:
 	std::list<ConsoleRuleOptionsAdapter *> adapters_;

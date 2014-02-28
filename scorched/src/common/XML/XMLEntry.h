@@ -22,6 +22,29 @@
 #define __INCLUDE_XMLEntryh_INCLUDE__
 
 #include <XML/XMLParser.h>
+#include <set>
+
+class XMLEntryDocumentInfo
+{
+public:
+	XMLEntryDocumentInfo();
+	~XMLEntryDocumentInfo();
+private:
+};
+
+class FileTemplateVariables;
+class XMLEntryDocumentGenerator
+{
+public:
+	XMLEntryDocumentGenerator(const std::string &documentLocation);
+	~XMLEntryDocumentGenerator();
+
+	void addType(const std::string &typeName, const std::string &fileName, FileTemplateVariables *variables);
+	bool hasType(const std::string &typeName);
+private:
+	std::string documentLocation_;
+	std::set<std::string> types_;
+};
 
 class XMLEntry
 {
@@ -40,8 +63,14 @@ public:
 	XMLEntry();
 	virtual ~XMLEntry();
 
-	virtual bool readXML(XMLNode *parentNode) = 0;
-	virtual void writeXML(XMLNode *parentNode) = 0;
+	virtual bool readXML(XMLNode *node) = 0;
+	virtual void writeXML(XMLNode *node) = 0;
+	virtual unsigned int getData() = 0;
+
+	virtual void getTypeName(std::string &result) = 0;
+	virtual void getDescription(std::string &result) = 0;
+
+	virtual XMLEntryDocumentInfo generateDocumentation(XMLEntryDocumentGenerator &generator) { XMLEntryDocumentInfo info; return info; }
 protected:
 };
 
@@ -49,9 +78,10 @@ template <class T>
 class XMLEntryTypeChoice : public XMLEntry
 {
 public:
-	XMLEntryTypeChoice(const char *name, const char *description) :
+	XMLEntryTypeChoice(const char *typeName, const char *description) :
 		XMLEntry(),
-		name_(name), description_(description), value_(0)
+		xmlTypeName_(typeName), xmlDescription_(description), 
+		value_(0)
 	{
 
 	}
@@ -66,102 +96,93 @@ public:
 	virtual T *createXMLEntry(const std::string &type) = 0;
 
 	// XMLEntry
-	virtual bool readXML(XMLNode *parentNode)
+	virtual unsigned int getData() { return eDataRequired; }
+	virtual void getTypeName(std::string &result) { result = xmlTypeName_; }
+	virtual void getDescription(std::string &result) { result = xmlDescription_; }
+
+	virtual bool readXML(XMLNode *node)
 	{
-		XMLNode *child = 0;
-		if (!parentNode->getNamedChild(name_, child))
+		if (!node->getNamedParameter("type", type_)) 
 		{
-			return false;
-		}
-		if (!child->getNamedParameter("type", type_)) 
-		{
-			return child->returnError(S3D::formatStringBuffer(
+			return node->returnError(S3D::formatStringBuffer(
 				"Failed to find a required type attribute"));;
 		}
 		value_ = createXMLEntry(type_);
 		if (!value_)
 		{
-			return child->returnError(S3D::formatStringBuffer(
+			return node->returnError(S3D::formatStringBuffer(
 				"Failed to create the type : \"%s\"", type_.c_str()));
 		}
-		if (!value_->readXML(child)) return false;
+		if (!value_->readXML(node)) return false;
 
 		return true;
 	}
-	virtual void writeXML(XMLNode *parentNode)
+	virtual void writeXML(XMLNode *node)
 	{
-		// Add the comments for this node
-		parentNode->addChild(new XMLNode("", 
-			S3D::formatStringBuffer("%s", description_), 
-			XMLNode::XMLCommentType));
-
-		// Add the actual node
-		XMLNode *newNode = new XMLNode(name_);
-		parentNode->addChild(newNode);
-		newNode->addParameter(new XMLNode("type", type_, XMLNode::XMLParameterType));
-
-		// Add contents
-		value_->writeXML(newNode);
+		node->addParameter(new XMLNode("type", type_, XMLNode::XMLParameterType));
+		value_->writeXML(node);
 	}
 
 protected:
 	std::string type_;
 	T *value_;
-	const char *name_, *description_;
+	const char *xmlTypeName_, *xmlDescription_;
 };
 
 class XMLEntryContainer : public XMLEntry
 {
 public:
-	XMLEntryContainer(const char *name, const char *description);
+	XMLEntryContainer(const char *typeName, const char *description);
 	virtual ~XMLEntryContainer();
 
-	void addChildXMLEntry(XMLEntry *entry1);
-	void addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2);
-	void addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3);
-	void addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3, XMLEntry *entry4);
-	void addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3, XMLEntry *entry4, XMLEntry *entry5);
-	void addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3, XMLEntry *entry4, XMLEntry *entry5,
-		XMLEntry *entry6);
-	void addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3, XMLEntry *entry4, XMLEntry *entry5,
-		XMLEntry *entry6, XMLEntry *entry7);
-	void addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3, XMLEntry *entry4, XMLEntry *entry5,
-		XMLEntry *entry6, XMLEntry *entry7, XMLEntry *entry8);
-	void addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3, XMLEntry *entry4, XMLEntry *entry5,
-		XMLEntry *entry6, XMLEntry *entry7, XMLEntry *entry8, XMLEntry *entry9);
-	void addChildXMLEntry(XMLEntry *entry1, XMLEntry *entry2, XMLEntry *entry3, XMLEntry *entry4, XMLEntry *entry5,
-		XMLEntry *entry6, XMLEntry *entry7, XMLEntry *entry8, XMLEntry *entry9, XMLEntry *entry10);
-	XMLEntryContainer *addChildXMLEntryContainer(XMLEntryContainer *container);
+	void addChildXMLEntry(const char *name1, XMLEntry *entry1);
+	void addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2);
+	void addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
+		const char *name3, XMLEntry *entry3);
+	void addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
+		const char *name3, XMLEntry *entry3, const char *name4, XMLEntry *entry4);
+	void addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
+		const char *name3, XMLEntry *entry3, const char *name4, XMLEntry *entry4, const char *name5, XMLEntry *entry5);
+	void addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
+		const char *name3, XMLEntry *entry3, const char *name4, XMLEntry *entry4, const char *name5, XMLEntry *entry5, 
+		const char *name6, XMLEntry *entry6);
+	void addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
+		const char *name3, XMLEntry *entry3, const char *name4, XMLEntry *entry4, const char *name5, XMLEntry *entry5, 
+		const char *name6, XMLEntry *entry6, const char *name7, XMLEntry *entry7);
+	void addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
+		const char *name3, XMLEntry *entry3, const char *name4, XMLEntry *entry4, const char *name5, XMLEntry *entry5, 
+		const char *name6, XMLEntry *entry6, const char *name7, XMLEntry *entry7, const char *name8, XMLEntry *entry8);
+	void addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
+		const char *name3, XMLEntry *entry3, const char *name4, XMLEntry *entry4, const char *name5, XMLEntry *entry5, 
+		const char *name6, XMLEntry *entry6, const char *name7, XMLEntry *entry7, const char *name8, XMLEntry *entry8, 
+		const char *name9, XMLEntry *entry9);
+	void addChildXMLEntry(const char *name1, XMLEntry *entry1, const char *name2, XMLEntry *entry2, 
+		const char *name3, XMLEntry *entry3, const char *name4, XMLEntry *entry4, const char *name5, XMLEntry *entry5, 
+		const char *name6, XMLEntry *entry6, const char *name7, XMLEntry *entry7, const char *name8, XMLEntry *entry8, 
+		const char *name9, XMLEntry *entry9, const char *name10, XMLEntry *entry10);
+	XMLEntryContainer *addChildXMLEntryContainer(const char *name, XMLEntryContainer *container);
 
-	std::list<XMLEntry *> &getChildren() { return xmlEntryChildren_; }
+	std::map<std::string, XMLEntry *> &getChildren() { return xmlEntryChildren_; }
 
 	// XMLEntry
-	virtual bool readXML(XMLNode *parentNode);
-	virtual void writeXML(XMLNode *parentNode);
-
+	virtual bool readXML(XMLNode *node);
+	virtual void writeXML(XMLNode *node);
+	virtual unsigned int getData() { return eDataRequired; }
+	virtual void getTypeName(std::string &result) { result = xmlTypeName_; }
+	virtual void getDescription(std::string &result) { result = xmlDescription_; }
+	virtual XMLEntryDocumentInfo generateDocumentation(XMLEntryDocumentGenerator &generator);
 protected:
-	std::list<XMLEntry *> xmlEntryChildren_;
-	const char *xmlEntryName_, *xmlEntryDescription_;
-};
-
-class XMLEntryGroup : public XMLEntryContainer
-{
-public:
-	XMLEntryGroup(const char *name, const char *description);
-	virtual ~XMLEntryGroup();
-
-	// XMLEntry
-	virtual bool readXML(XMLNode *parentNode);
-	virtual void writeXML(XMLNode *parentNode);
+	std::map<std::string, XMLEntry *> xmlEntryChildren_;
+	const char *xmlTypeName_, *xmlDescription_;
 };
 
 template <class T>
 class XMLEntryList : public XMLEntry
 {
 public:
-	XMLEntryList(const char *tagName, const char *description) :
+	XMLEntryList(const char *typeName, const char *description) :
 	  XMLEntry(),
-	  tagName_(tagName), description_(description)
+	  xmlTypeName_(typeName), xmlDescription_(description)
 	{
 	}
 	virtual ~XMLEntryList()
@@ -180,31 +201,32 @@ public:
 	virtual T *createXMLEntry() = 0;
 
 	// XMLEntry
-	virtual bool readXML(XMLNode *parentNode)
+	virtual unsigned int getData() { return 0; }
+	virtual void getTypeName(std::string &result) { result = xmlTypeName_; }
+	virtual void getDescription(std::string &result) { result = xmlDescription_; }
+
+	virtual bool readXML(XMLNode *node)
 	{
-		XMLNode *node = 0;
-		while (parentNode->getNamedChild(tagName_, node, false, false))
-		{
-			T *newEntry = createXMLEntry();
-			if (!newEntry->readXML(parentNode)) return false;
-			xmlEntryChildren_.push_back(newEntry);
-		}
+		T *newEntry = createXMLEntry();
+		if (!newEntry->readXML(node)) return false;
+		xmlEntryChildren_.push_back(newEntry);
 
 		return true;
 	}
 
-	virtual void writeXML(XMLNode *parentNode)
+	virtual void writeXML(XMLNode *node)
 	{
+		// TODO: Fixme
 		std::list<T *>::iterator itor = xmlEntryChildren_.begin(),
 			end = xmlEntryChildren_.end();
 		for (;itor!=end; ++itor)
 		{
-			(*itor)->writeXML(parentNode);
+			(*itor)->writeXML(node);
 		}
 	}
 protected:
 	std::list<T *> xmlEntryChildren_;
-	const char *tagName_, *description_;
+	const char *xmlTypeName_, *xmlDescription_;
 };
 
 #endif

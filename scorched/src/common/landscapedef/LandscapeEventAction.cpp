@@ -25,8 +25,9 @@
 #include <engine/ObjectGroupEntry.h>
 #include <engine/Simulator.h>
 
-LandscapeEventActionChoice::LandscapeEventActionChoice(const char *name, const char *description) :
-	XMLEntryTypeChoice<LandscapeEventAction>(name, description)
+LandscapeEventActionChoice::LandscapeEventActionChoice() :
+	XMLEntryTypeChoice<LandscapeEventAction>("LandscapeEventActionChoice", 
+		"A choice of actions to perform when this action fires")
 {
 }
 
@@ -55,9 +56,9 @@ LandscapeEventAction::~LandscapeEventAction()
 LandscapeEventActionFireWeapon::LandscapeEventActionFireWeapon() :
 	LandscapeEventAction("LandscapeEventActionFireWeapon", 
 		"When the event fires, fires the given weapon."),
-	weapon("weapon", "The name of the weapon to fire, weapons are defined in the accessories file.")
+	weapon("The name of the weapon to fire, weapons are defined in the accessories file.")
 {
-	addChildXMLEntry(&weapon);
+	addChildXMLEntry("weapon", &weapon);
 }
 
 LandscapeEventActionFireWeapon::~LandscapeEventActionFireWeapon()
@@ -85,10 +86,10 @@ void LandscapeEventActionFireWeapon::fireAction(ScorchedContext &context)
 LandscapeEventActionFireWeaponFromGroup::LandscapeEventActionFireWeaponFromGroup() :
 	LandscapeEventAction("LandscapeEventActionFireWeaponFromGroup", 
 		"When the event fires, fires the given weapon from an object in the specified group."),
-	weapon("weapon", "The name of the weapon to fire, weapons are defined in the accessories file."),
-	groupname("groupname", "The name of the group to randomly choose an object from.")
+	weapon("The name of the weapon to fire, weapons are defined in the accessories file."),
+	groupname("The name of the group to randomly choose an object from.")
 {
-	addChildXMLEntry(&weapon, &groupname);
+	addChildXMLEntry("weapon", &weapon, "groupname", &groupname);
 }
 
 LandscapeEventActionFireWeaponFromGroup::~LandscapeEventActionFireWeaponFromGroup()

@@ -18,29 +18,19 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_LandscapeEventsh_INCLUDE__)
-#define __INCLUDE_LandscapeEventsh_INCLUDE__
+#include <scorched3dc/DocumentGenerator.h>
+#include <landscapedef/LandscapeTex.h>
+#include <landscapedef/LandscapeDefn.h>
+#include <common/OptionsGame.h>
 
-#include <landscapedef/LandscapeEventAction.h>
-#include <landscapedef/LandscapeEventCondition.h>
-
-class LandscapeEvent : public XMLEntryContainer
+void DocumentGenerator::generatDocumentation(const std::string &directory)
 {
-public:
-	LandscapeEvent();
-	virtual ~LandscapeEvent();
+	XMLEntryDocumentGenerator documentGenerator(directory);
 
-	LandscapeEventConditionChoice condition;
-	LandscapeEventActionChoice action;
-};
-
-class LandscapeEventList : public XMLEntryList<LandscapeEvent>
-{
-public:
-	LandscapeEventList();
-	virtual ~LandscapeEventList();
-
-	virtual LandscapeEvent *createXMLEntry();
-};
-
-#endif // __INCLUDE_LandscapeEventsh_INCLUDE__
+	OptionsGame optionsGame;
+	optionsGame.generateDocumentation(documentGenerator);
+	LandscapeTex landscapeTex(0);
+	landscapeTex.generateDocumentation(documentGenerator);
+	LandscapeDefn landscapeDefn(0);
+	landscapeDefn.generateDocumentation(documentGenerator);
+}

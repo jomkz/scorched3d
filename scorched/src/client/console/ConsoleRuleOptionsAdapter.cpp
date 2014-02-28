@@ -23,8 +23,9 @@
 #include <console/ConsoleRuleOptionsAdapter.h>
 #include <client/ScorchedClient.h>
 
-ConsoleRuleOptionsAdapter::ConsoleRuleOptionsAdapter(Console &console, XMLEntrySimpleType &entry) :
+ConsoleRuleOptionsAdapter::ConsoleRuleOptionsAdapter(Console &console, const std::string &name, XMLEntrySimpleType &entry) :
 	console_(console),
+	name_(name),
 	entry_(entry),
 	readRule_(0), writeRule_(0)
 {
@@ -47,20 +48,24 @@ ConsoleRuleOptionsAdapter::ConsoleRuleOptionsAdapter(Console &console, XMLEntryS
 
 	if (entry.getData() & XMLEntry::eDataRWAccess ||
 		entry.getData() & XMLEntry::eDataROAccess) {
+		std::string description;
+		entry.getDescription(description);
 		readRule_ = new ConsoleRuleMethodIAdapterEx<ConsoleRuleOptionsAdapter>(
 			console, this,
 			&ConsoleRuleOptionsAdapter::readValue, 
-			"get", ConsoleUtil::formParams(ConsoleRuleParam(entry.getName())),
-			entry.getDescription());
+			"get", ConsoleUtil::formParams(ConsoleRuleParam(name)),
+			description);
 		console_.addRule(readRule_);
 	}
 	if (entry.getData() & XMLEntry::eDataRWAccess) 
 	{
+		std::string description;
+		entry.getDescription(description);
 		writeRule_ = new ConsoleRuleMethodIAdapterEx<ConsoleRuleOptionsAdapter>(
 			console, this,
 			&ConsoleRuleOptionsAdapter::writeValue, 
-			"set", ConsoleUtil::formParams(ConsoleRuleParam(entry.getName()), ConsoleRuleParam("value", type)),
-			entry.getDescription());
+			"set", ConsoleUtil::formParams(ConsoleRuleParam(name), ConsoleRuleParam("value", type)),
+			description);
 		console_.addRule(writeRule_);
 	}
 }
@@ -82,7 +87,7 @@ void ConsoleRuleOptionsAdapter::readValue(std::vector<ConsoleRuleValue> &values,
 	std::string currentValue;
 	entry_.getValueAsString(currentValue);
 
-	CEGUI::String result = CEGUI::String(entry_.getName()) + " = " + currentValue;
+	CEGUI::String result = CEGUI::String(name_) + " = " + currentValue;
 	console_.addLine(false, result);
 }
 
@@ -92,7 +97,7 @@ void ConsoleRuleOptionsAdapter::writeValue(std::vector<ConsoleRuleValue> &values
 	std::string currentValue;
 	entry_.getValueAsString(currentValue);
 
-	CEGUI::String result = CEGUI::String(entry_.getName()) + " = " + currentValue;
+	CEGUI::String result = CEGUI::String(name_) + " = " + currentValue;
 	console_.addLine(false, result);
 }
 
@@ -101,14 +106,14 @@ ConsoleRuleOptionsAdapterHolder::ConsoleRuleOptionsAdapterHolder()
 
 }
 
-void ConsoleRuleOptionsAdapterHolder::addToConsole(Console &console, std::list<XMLEntry *> &options)
+void ConsoleRuleOptionsAdapterHolder::addToConsole(Console &console, std::map<std::string, XMLEntry *> &options)
 {
-	std::list<XMLEntry *>::iterator itor;
+	std::map<std::string, XMLEntry *>::iterator itor;
 	for (itor = options.begin();
 		itor != options.end();
 		++itor)
 	{
-		ConsoleRuleOptionsAdapter *adapter = new ConsoleRuleOptionsAdapter(console, (XMLEntrySimpleType &) *(*itor));
+		ConsoleRuleOptionsAdapter *adapter = new ConsoleRuleOptionsAdapter(console, itor->first, (XMLEntrySimpleType &) *itor->second);
 		adapters_.push_back(adapter);
 	}
 }

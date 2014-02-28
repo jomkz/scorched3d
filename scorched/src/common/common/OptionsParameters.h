@@ -23,7 +23,7 @@
 
 #include <XML/XMLEntrySimpleTypes.h>
 
-class OptionsParameters : public XMLEntrySimpleGroup
+class OptionsParameters : public XMLEntrySimpleContainer
 {
 public:
 	OptionsParameters(const char *name, const char *description);

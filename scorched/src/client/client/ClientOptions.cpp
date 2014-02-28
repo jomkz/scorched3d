@@ -45,38 +45,27 @@ ClientOptions *ClientOptions::instance()
 }
 
 ClientOptions::ClientOptions() :
-	XMLEntrySimpleGroup("options", 
+	XMLEntrySimpleContainer("ClientOptions", 
 		"The Scorched3D client side options, these options change aspects of the game not relating to gameplay"),
-	hostDescription_("HostDescription",
-		"The description of this host given to any servers for stats.", XMLEntry::eDataRWAccess | XMLEntry::eDataNoRestore, ""),
-	validateServerIp_("ValidateServerIp",
-		"Checks if the server ip address matches the published address", XMLEntry::eDataRWAccess, true),
-	waterAnimate_("WaterAnimate",
-		"Should we animate the landscape water", XMLEntry::eDataRWAccess, true),
-	waterDraw_("WaterDraw",
-		"Should we draw the landscape water", XMLEntry::eDataRWAccess, true),
-	waterWireframe_("WaterWireframe",
-		"Should we draw the landscape water as wireframe", XMLEntry::eDataRWAccess | XMLEntry::eDataDebugOnly, false),
-	skyDraw_("SkyDraw",
-		"Should we draw the sky", XMLEntry::eDataRWAccess, true),
-	landscapeDraw_("LandscapeDraw",
-		"Should we draw the landscape", XMLEntry::eDataRWAccess, true),
-	landscapeGridDraw_("LandscapeGridDraw",
-		"Should we draw the landscape grid", XMLEntry::eDataRWAccess | XMLEntry::eDataDebugOnly, false),
-	shadows_("Shadows",
-		"Should we draw shadows", XMLEntry::eDataRWAccess, false),
-	cameraWireframe_("CameraWireframe",
-		"Should everything we draw be wireframe", XMLEntry::eDataRWAccess | XMLEntry::eDataDebugOnly, false),
-	targetsDraw_("TargetsDraw",
-		"Should we draw targets", XMLEntry::eDataRWAccess, true)
+	hostDescription_("The description of this host given to any servers for stats.", XMLEntry::eDataRWAccess | XMLEntry::eDataNoRestore, ""),
+	validateServerIp_("Checks if the server ip address matches the published address", XMLEntry::eDataRWAccess, true),
+	waterAnimate_("Should we animate the landscape water", XMLEntry::eDataRWAccess, true),
+	waterDraw_("Should we draw the landscape water", XMLEntry::eDataRWAccess, true),
+	waterWireframe_("Should we draw the landscape water as wireframe", XMLEntry::eDataRWAccess | XMLEntry::eDataDebugOnly, false),
+	skyDraw_("Should we draw the sky", XMLEntry::eDataRWAccess, true),
+	landscapeDraw_("Should we draw the landscape", XMLEntry::eDataRWAccess, true),
+	landscapeGridDraw_("Should we draw the landscape grid", XMLEntry::eDataRWAccess | XMLEntry::eDataDebugOnly, false),
+	shadows_("Should we draw shadows", XMLEntry::eDataRWAccess, false),
+	cameraWireframe_("Should everything we draw be wireframe", XMLEntry::eDataRWAccess | XMLEntry::eDataDebugOnly, false),
+	targetsDraw_("Should we draw targets", XMLEntry::eDataRWAccess, true)
 {
-	addChildXMLEntry(&waterAnimate_, &waterDraw_, &waterWireframe_);
-	addChildXMLEntry(&skyDraw_);
-	addChildXMLEntry(&landscapeDraw_, &landscapeGridDraw_);
-	addChildXMLEntry(&cameraWireframe_);
-	addChildXMLEntry(&targetsDraw_);
-	addChildXMLEntry(&shadows_);
-	addChildXMLEntry(&validateServerIp_, &hostDescription_);
+	addChildXMLEntry("WaterAnimate", &waterAnimate_, "WaterDraw", &waterDraw_, "WaterWireframe", &waterWireframe_);
+	addChildXMLEntry("SkyDraw", &skyDraw_);
+	addChildXMLEntry("LandscapeDraw", &landscapeDraw_, "LandscapeGridDraw", &landscapeGridDraw_);
+	addChildXMLEntry("CameraWireframe", &cameraWireframe_);
+	addChildXMLEntry("TargetsDraw", &targetsDraw_);
+	addChildXMLEntry("Shadows", &shadows_);
+	addChildXMLEntry("ValidateServerIp", &validateServerIp_, "HostDescription", &hostDescription_);
 }
 
 ClientOptions::~ClientOptions()
@@ -123,11 +112,11 @@ bool ClientOptions::readOptionsFromFile()
 
 void ClientOptions::loadDefaultValues()
 {
-	std::list<XMLEntry *>::iterator itor = xmlEntryChildren_.begin(),
+	std::map<std::string, XMLEntry *>::iterator itor = xmlEntryChildren_.begin(),
 		end = xmlEntryChildren_.end();
 	for (;itor!=end;++itor)
 	{
-		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) (*itor);
+		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) itor->second;
 		if (!(entry->getData() & XMLEntry::eDataNoRestore))
 		{
 			entry->resetDefaultValue();

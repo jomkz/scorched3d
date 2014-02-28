@@ -196,21 +196,21 @@ void ServerBrowserInfo::processInfoMessage(std::list<std::string> &reply)
 {
 	// Add all of the other tank options
 	// Currently nothing on the client uses this info
-	std::list<XMLEntry *> &options = ScorchedServer::instance()->getOptionsGame().
+	std::map<std::string, XMLEntry *> &options = ScorchedServer::instance()->getOptionsGame().
 		getMainOptions().getChildren();
-	std::list<XMLEntry *>::iterator optionItor;
+	std::map<std::string, XMLEntry *>::iterator optionItor;
 	for (optionItor = options.begin();
 		optionItor != options.end();
 		++optionItor)
 	{
-		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) (*optionItor);
+		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) optionItor->second;
 		if (!(entry->getData() & XMLEntry::eDataProtected) &&
 			!(entry->getData() & XMLEntry::eDataDepricated))
 		{
 			std::string currentValue;
 			entry->getValueAsString(currentValue);
 
-			reply.push_back(addTag(entry->getName(), currentValue));
+			reply.push_back(addTag(optionItor->first, currentValue));
 		}
 	}	
 }

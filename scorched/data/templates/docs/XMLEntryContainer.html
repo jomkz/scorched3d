@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>[[TYPE_NAME]]</title>
+    <style>
+#include docs/styles.css
+    </style>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Optional</th>
+        <th>Description</th>
+      </tr>
+      @@CHILD@@
+      <tr>
+        <td>[[CHILD_TAGNAME]]</td>
+        <td>[[CHILD_TYPE]]</td>
+        <td>[[CHILD_OPTIONAL]]</td>
+        <td>[[CHILD_DESCRIPTION]]</td>
+      </tr>
+      @@CHILD@@
+    </table>
+  </body>
+</html>

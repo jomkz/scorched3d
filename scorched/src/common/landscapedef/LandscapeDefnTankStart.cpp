@@ -39,12 +39,12 @@
 #include <stdlib.h>
 #include <time.h>
 
-LandscapeDefnTankStartMinMax::LandscapeDefnTankStartMinMax(const char *tagName, const char *description) :
-	XMLEntryGroup(tagName, description),
-	min("min", "The minimum value"),
-	max("max", "The maximum value")
+LandscapeDefnTankStartMinMax::LandscapeDefnTankStartMinMax(const char *description) :
+	XMLEntryContainer("LandscapeDefnTankStartMinMax", description),
+	min("The minimum value"),
+	max("The maximum value")
 {
-	addChildXMLEntry(&min, &max);
+	addChildXMLEntry("min", &min, "max", &max);
 }
 
 LandscapeDefnTankStartMinMax::~LandscapeDefnTankStartMinMax()
@@ -52,7 +52,7 @@ LandscapeDefnTankStartMinMax::~LandscapeDefnTankStartMinMax()
 }
 
 LandscapeDefnTankStartPositionList::LandscapeDefnTankStartPositionList() :
-	XMLEntryList<XMLEntryFixedVector>("position", 
+	XMLEntryList<XMLEntryFixedVector>("LandscapeDefnTankStartPositionList", 
 		"An explicit position that a tank may spawn on, the height is ignore and normalized to the lanscape height")
 {
 }
@@ -63,11 +63,11 @@ LandscapeDefnTankStartPositionList::~LandscapeDefnTankStartPositionList()
 
 XMLEntryFixedVector *LandscapeDefnTankStartPositionList::createXMLEntry()
 {
-	return new XMLEntryFixedVector("position", "Defines a possible starting position of a tank");
+	return new XMLEntryFixedVector("Defines a possible starting position of a tank");
 }
 
 LandscapeDefnTankStartChoice::LandscapeDefnTankStartChoice() :
-	XMLEntryTypeChoice<LandscapeDefnTankStart>("tankstart", 
+	XMLEntryTypeChoice<LandscapeDefnTankStart>("LandscapeDefnTankStartChoice", 
 		"Defines where tanks should start on the lanscape")
 {
 }
@@ -96,13 +96,13 @@ LandscapeDefnTankStart::~LandscapeDefnTankStart()
 LandscapeDefnTankStartHeight::LandscapeDefnTankStartHeight() :
 	LandscapeDefnTankStart("LandscapeDefnTankStartHeight",
 		"Defines the starting position of the tanks via a set of criteria, height included"),
-	startcloseness("startcloseness", "How close are tanks allows to start to other tanks"),
-	height("height", "The minimum and maximum landscape heights that tanks are allowed to spawn between"),
-	startmask("startmask", "A filename of a mask that defines areas that tanks can and cannot spawn", 0, "none"),
-	flatness("flatness", "The maximum slope that a tank can spawn on", 0, 0)
+	startcloseness("How close are tanks allows to start to other tanks"),
+	height("The minimum and maximum landscape heights that tanks are allowed to spawn between"),
+	startmask("A filename of a mask that defines areas that tanks can and cannot spawn", 0, "none"),
+	flatness("The maximum slope that a tank can spawn on", 0, 0)
 {
-	addChildXMLEntry(&startcloseness, &height);
-	addChildXMLEntry(&startmask, &flatness);
+	addChildXMLEntry("startcloseness", &startcloseness, "height", &height);
+	addChildXMLEntry("startmask", &startmask, "flatness", &flatness);
 }
 
 LandscapeDefnTankStartHeight::~LandscapeDefnTankStartHeight()
@@ -345,10 +345,10 @@ FixedVector LandscapeDefnTankStartHeight::placeTank(unsigned int playerId, int t
 LandscapeDefnTankStartPositional::LandscapeDefnTankStartPositional() :
 	LandscapeDefnTankStart("LandscapeDefnTankStartPositional",
 		"Explicity defines the starting position of the tanks via a set of points"),
-	height("height", "The minimum and maximum landscape heights that tanks are allowed to spawn between"),
-	flatness("flatness", "The maximum slope that a tank can spawn on", 0, 0)
+	height("The minimum and maximum landscape heights that tanks are allowed to spawn between"),
+	flatness("The maximum slope that a tank can spawn on", 0, 0)
 {
-	addChildXMLEntry(&height, &flatness);
+	addChildXMLEntry("height", &height, "flatness", &flatness);
 }
 
 LandscapeDefnTankStartPositional::~LandscapeDefnTankStartPositional()

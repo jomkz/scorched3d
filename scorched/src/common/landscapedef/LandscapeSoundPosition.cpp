@@ -34,7 +34,8 @@
 #include <math.h>
 
 LandscapeSoundPositionChoice::LandscapeSoundPositionChoice() :
-	XMLEntryTypeChoice<LandscapeSoundPosition>("position", 
+	XMLEntryTypeChoice<LandscapeSoundPosition>(
+		"LandscapeSoundPositionChoice",
 		"Associates sounds with a given position")
 {
 }
@@ -54,8 +55,8 @@ LandscapeSoundPosition *LandscapeSoundPositionChoice::createXMLEntry(const std::
 	return 0;
 }
 
-LandscapeSoundPosition::LandscapeSoundPosition(const char *name, const char *description) :
-	XMLEntryContainer(name, description)
+LandscapeSoundPosition::LandscapeSoundPosition(const char *type, const char *description) :
+	XMLEntryContainer(type, description)
 {
 }
 
@@ -74,12 +75,12 @@ LandscapeSoundPositionSetItem::~LandscapeSoundPositionSetItem()
 }
 
 LandscapeSoundPositionSet::LandscapeSoundPositionSet() :
-	LandscapeSoundPosition("LandscapeSoundPositionSet", 
+	LandscapeSoundPosition("LandscapeSoundPositionSet",
 		"Sound location from an object in the specified object group"),
-	name("name", "The name of the object group to take objects from"),
-	maxsounds("maxsounds", "The maximum number of sounds to play at the same time")
+	name("The name of the object group to take objects from"),
+	maxsounds("The maximum number of sounds to play at the same time")
 {
-	addChildXMLEntry(&name, &maxsounds);
+	addChildXMLEntry("name", &name, "maxsounds", &maxsounds);
 }
 
 LandscapeSoundPositionSet::~LandscapeSoundPositionSet()
@@ -137,10 +138,10 @@ LandscapeSoundItem *LandscapeSoundPositionSet::getInitData(int count)
 LandscapeSoundPositionGroup::LandscapeSoundPositionGroup() :
 	LandscapeSoundPosition("LandscapeSoundPositionGroup",
 		"Sound location played when close to any object in the specified object group"),
-	falloff("falloff", "The distance that the sounds will disipate over"),
-	name("name", "The name of the object group to take objects from")
+	falloff("The distance that the sounds will disipate over"),
+	name("The name of the object group to take objects from")
 {
-	addChildXMLEntry(&name, &falloff);
+	addChildXMLEntry("name", &name, "falloff", &falloff);
 }
 
 LandscapeSoundPositionGroup::~LandscapeSoundPositionGroup()
@@ -196,9 +197,9 @@ bool LandscapeSoundPositionGroup::setPosition(VirtualSoundSource *source, Landsc
 LandscapeSoundPositionWater::LandscapeSoundPositionWater() :
 	LandscapeSoundPosition("LandscapeSoundPositionWater",
 		"Sound location played when close to the water shore"),
-	falloff("falloff", "The distance that the sounds will disipate over")
+	falloff("The distance that the sounds will disipate over")
 {
-	addChildXMLEntry(&falloff);
+	addChildXMLEntry("falloff", &falloff);
 }
 
 LandscapeSoundPositionWater::~LandscapeSoundPositionWater()
@@ -251,9 +252,9 @@ bool LandscapeSoundPositionAmbient::setPosition(VirtualSoundSource *source, Land
 LandscapeSoundPositionAbsoulte::LandscapeSoundPositionAbsoulte() :
 	LandscapeSoundPosition("LandscapeSoundPositionAbsoulte",
 		"Sound location played from an absolutely specified position"),
-	position("position", "The absolute position to play the sound from")
+	position("The absolute position to play the sound from")
 {
-	addChildXMLEntry(&position);
+	addChildXMLEntry("position", &position);
 }
 
 LandscapeSoundPositionAbsoulte::~LandscapeSoundPositionAbsoulte()

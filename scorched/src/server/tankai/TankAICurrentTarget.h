@@ -27,7 +27,7 @@
 
 class Target;
 class Tanket;
-class TankAICurrentTarget : public XMLEntryGroup
+class TankAICurrentTarget : public XMLEntryContainer
 {
 public:
 	TankAICurrentTarget();

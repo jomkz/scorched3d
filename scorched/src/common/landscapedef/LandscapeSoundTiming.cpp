@@ -21,7 +21,7 @@
 #include <landscapedef/LandscapeSoundTiming.h>
 
 LandscapeSoundTimingChoice::LandscapeSoundTimingChoice() :
-	XMLEntryTypeChoice<LandscapeSoundTiming>("timing", 
+	XMLEntryTypeChoice<LandscapeSoundTiming>("LandscapeSoundTimingChoice",
 		"Associates sounds with a given timing loop")
 {
 }
@@ -38,8 +38,8 @@ LandscapeSoundTiming *LandscapeSoundTimingChoice::createXMLEntry(const std::stri
 	return 0;
 }
 
-LandscapeSoundTiming::LandscapeSoundTiming(const char *name, const char *description) :
-	XMLEntryContainer("LandscapeSoundTiming", "Specifies how often sounds will repeat")
+LandscapeSoundTiming::LandscapeSoundTiming(const char *typeName, const char *description) :
+	XMLEntryContainer(typeName, description)
 {
 }
 
@@ -48,7 +48,7 @@ LandscapeSoundTiming::~LandscapeSoundTiming()
 }
 
 LandscapeSoundTimingLooped::LandscapeSoundTimingLooped() :
-	LandscapeSoundTiming("LandscapeSoundTimingLooped", 
+	LandscapeSoundTiming("LandscapeSoundTimingLooped",
 		"Loops the sound continually with no pause")
 {
 }
@@ -63,12 +63,12 @@ float LandscapeSoundTimingLooped::getNextEventTime()
 }
 
 LandscapeSoundTimingRepeat::LandscapeSoundTimingRepeat() :
-	LandscapeSoundTiming("LandscapeSoundTimingRepeat", 
+	LandscapeSoundTiming("LandscapeSoundTimingRepeat",
 		"Loops the sound pausing for between min and max seconds"),
-	min("min", "The minimum amount of time to wait before playing this sound again"),
-	max("max", "The maximum amount of time to wait before playing this sound again")
+	min("The minimum amount of time to wait before playing this sound again"),
+	max("The maximum amount of time to wait before playing this sound again")
 {
-	addChildXMLEntry(&min, &max);
+	addChildXMLEntry("min", &min, "max", &max);
 }
 
 LandscapeSoundTimingRepeat::~LandscapeSoundTimingRepeat()

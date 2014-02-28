@@ -18,29 +18,13 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_LandscapeEventsh_INCLUDE__)
-#define __INCLUDE_LandscapeEventsh_INCLUDE__
+#if !defined(__INCLUDE_DocumentGeneratorh_INCLUDE__)
+#define __INCLUDE_DocumentGeneratorh_INCLUDE__
 
-#include <landscapedef/LandscapeEventAction.h>
-#include <landscapedef/LandscapeEventCondition.h>
-
-class LandscapeEvent : public XMLEntryContainer
+class DocumentGenerator 
 {
 public:
-	LandscapeEvent();
-	virtual ~LandscapeEvent();
-
-	LandscapeEventConditionChoice condition;
-	LandscapeEventActionChoice action;
+	static void generatDocumentation(const std::string &directory);
 };
 
-class LandscapeEventList : public XMLEntryList<LandscapeEvent>
-{
-public:
-	LandscapeEventList();
-	virtual ~LandscapeEventList();
-
-	virtual LandscapeEvent *createXMLEntry();
-};
-
-#endif // __INCLUDE_LandscapeEventsh_INCLUDE__
+#endif // __INCLUDE_CameraControllerh_INCLUDE__
