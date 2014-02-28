@@ -19,22 +19,22 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <net/NetServerTCP3Send.h>
-#include <net/NetServerTCP3Coms.h>
 #include <net/NetMessagePool.h>
 #include <common/Logger.h>
+#include <common/stdtypes.h>
 
 NetServerTCP3Send::NetServerTCP3Send(
-	TCPsocket socket, 
+	boost::asio::ip::tcp::socket *socket, 
 	unsigned int destinationId, unsigned int ipAddress,
 	NetMessageHandler *recieveMessageHandler) :
-	socket_(socket), 
+	socket_(socket),  sendThread_(0),
 	destinationId_(destinationId), ipAddress_(ipAddress),
 	recieveMessageHandler_(recieveMessageHandler),
 	messagesSent_(0), bytesOut_(0),
 	stopped_(false), running_(true)
 {
 	sendMessageHandler_.setMessageHandler(this);
-	sendThread_ = SDL_CreateThread(
+	sendThread_ = new boost::thread(
 		NetServerTCP3Send::sendThreadFunc, (void *) this);
 	if (sendThread_ == 0)
 	{
@@ -45,6 +45,8 @@ NetServerTCP3Send::NetServerTCP3Send(
 
 NetServerTCP3Send::~NetServerTCP3Send()
 {
+	delete sendThread_;
+	sendThread_ = 0;
 	std::list<NetMessage *>::iterator itor;
 	for (itor = outgoingMessages_.begin();
 		itor != outgoingMessages_.end();
@@ -79,7 +81,7 @@ bool NetServerTCP3Send::actualSendFunc()
 	{
 		if (!running_) return false;
 
-		SDL_Delay(10);
+		boost::this_thread::sleep(boost::posix_time::milliseconds(10));
 		return true;
 	}
 
@@ -87,12 +89,11 @@ bool NetServerTCP3Send::actualSendFunc()
 	NetMessage *message = outgoingMessages_.front();
 
 	// Send the length of the string
-	Uint32 len = message->getBuffer().getBufferUsed();
-	Uint32 netlen = 0;
-	SDLNet_Write32(len, &netlen);
+	uint32_t len = message->getBuffer().getBufferUsed();
+	uint32_t netlen = 0;
+	netlen = htonl(len);
 
-	int result = NetServerTCP3Coms::SDLNet_TCP_Send_Wrapper(
-		socket_, &netlen, sizeof(netlen));
+	int result = boost::asio::write(*socket_, boost::asio::buffer(&netlen, sizeof(netlen)));
 	if(result < (int) sizeof(netlen))
 	{
 		Logger::log(S3D::formatStringBuffer(
@@ -102,8 +103,7 @@ bool NetServerTCP3Send::actualSendFunc()
 	}
 	
 	// Send the buffer
-	result = NetServerTCP3Coms::SDLNet_TCP_Send_Wrapper(
-		socket_, message->getBuffer().getBuffer(), len);
+	result = boost::asio::write(*socket_, boost::asio::buffer(message->getBuffer().getBuffer(), sizeof(len)));
 	if(result<int(len))
 	{
 		Logger::log(S3D::formatStringBuffer(
@@ -167,6 +167,6 @@ void NetServerTCP3Send::processMessage(NetMessage &oldmessage)
 
 void NetServerTCP3Send::wait()
 {
-	int status;
-	SDL_WaitThread(sendThread_, &status);
+	// Should do nothing
+	sendThread_->join();	
 }

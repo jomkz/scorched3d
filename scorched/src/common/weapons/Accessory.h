@@ -30,10 +30,6 @@
 #include <string>
 #include <map>
 
-#ifndef S3D_SERVER
-#include <GLEXT/GLTextureReference.h>
-#endif
-
 class Tank;
 class MissileMesh;
 class Accessory  
@@ -89,14 +85,6 @@ public:
 
 	static void resetAccessoryIds() { nextAccessoryId_ = 0; }
 	unsigned int getAccessoryId() { return accessoryId_; }
-
-#ifndef S3D_SERVER
-	GLTextureReference &getTexture() { return texture_; }
-	static MissileMesh *getWeaponMesh(ModelID &id, Tank *currentPlayer);
-	static std::map<std::string, MissileMesh *> loadedMeshes_;
-	GLTextureReference texture_;
-#endif
-
 protected:
 	static unsigned int nextAccessoryId_;
 	unsigned int accessoryId_;

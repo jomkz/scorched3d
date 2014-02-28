@@ -22,7 +22,6 @@
 #include <common/Defines.h>
 #include <net/NetBuffer.h>
 #include <XML/XMLParser.h>
-#include <3dsparse/TreeModelFactory.h>
 
 ModelID::ModelID()
 {
@@ -119,16 +118,6 @@ bool ModelID::initFromNode(XMLNode *modelNode)
 		if (!modelNode->getNamedChild("type", meshName)) return false;
 		if (!modelNode->getNamedChild("snow", snow)) return false;
 		if (!modelNode->getNamedChild("burnt", burnt)) return false;
-
-		TreeModelFactory::TreeType normalType, burntType;
-		if (!TreeModelFactory::getTypes(meshName.c_str(), true, 
-			normalType, burntType))
-		{
-			return modelNode->returnError(
-				S3D::formatStringBuffer(
-					"Tree type \"%s\" does not exist",
-					meshName.c_str()));
-		}
 
 		skinName_ = S3D::formatStringBuffer("%s", (snow?"S":"N"));
 		meshName_ = S3D::formatStringBuffer("%s:%s", (burnt?"B":"N"), meshName.c_str());

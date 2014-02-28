@@ -39,7 +39,7 @@
 #include <server/ServerChannelManager.h>
 #include <server/ScorchedServer.h>
 #ifndef S3D_SERVER
-	#include <sound/SoundUtils.h>
+//	#include <sound/SoundUtils.h>
 #endif
 
 REGISTER_CLASS_SOURCE(PlayMovesSimAction);
@@ -224,12 +224,14 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 		if (weapon->getParent()->getActivationSound() &&
 			0 != strcmp("none", weapon->getParent()->getActivationSound()))
 		{
+			/*
 			SoundBuffer *firedSound = 
 				Sound::instance()->fetchOrCreateBuffer(
 					S3D::getModFile(S3D::formatStringBuffer("data/wav/%s", 
 					weapon->getParent()->getActivationSound())));
 			SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
 				firedSound, tanket->getLife().getTargetPosition().asVector());
+			*/
 		}
 	}
 #endif // #ifndef S3D_SERVER

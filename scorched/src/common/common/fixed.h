@@ -25,16 +25,10 @@
 #ifndef _FIXED_H
 #define _FIXED_H
 
-#include <SDL/SDL.h>
-
-#ifndef SDL_HAS_64BIT_TYPE
-#error 64 bit type has not been found for this system
-#endif
-
 class fixed
 {
 private:
-	Sint64 m_nVal;
+	int64_t m_nVal;
 public:
 	fixed()
 	{
@@ -46,22 +40,22 @@ public:
 		m_nVal = fixedVal.m_nVal;
 	}
 
-	fixed(bool bInternal, Sint64 nVal)
+	fixed(bool bInternal, int64_t nVal)
 	{
 		m_nVal = nVal;
 	}
 
 	fixed(unsigned int nVal)
 	{
-		m_nVal = Sint64(nVal)*FIXED_RESOLUTION;
+		m_nVal = int64_t(nVal)*FIXED_RESOLUTION;
 	}
 
 	fixed(int nVal)
 	{
-		m_nVal = Sint64(nVal)*FIXED_RESOLUTION;
+		m_nVal = int64_t(nVal)*FIXED_RESOLUTION;
 	}
 
-	fixed(Sint64 nVal)
+	fixed(int64_t nVal)
 	{
 		m_nVal = nVal*FIXED_RESOLUTION;
 	}
@@ -138,7 +132,7 @@ public:
 		return (int)(m_nVal/FIXED_RESOLUTION);
 	}
 
-	Sint64 getInternalData() 
+	int64_t getInternalData() 
 	{ 
 		return m_nVal; 
 	}
@@ -150,7 +144,7 @@ public:
 
 	fixed ceil()
 	{
-		return fixed(m_nVal/FIXED_RESOLUTION+Sint64(1));
+		return fixed(m_nVal/FIXED_RESOLUTION+int64_t(1));
 	}
 
 	fixed operator+(fixed b)
@@ -183,7 +177,7 @@ public:
 
 	fixed abs()
 	{
-		if (m_nVal > Sint64(0)) return fixed(*this);
+		if (m_nVal > int64_t(0)) return fixed(*this);
 		else return fixed(true, -m_nVal);
 	}
 
@@ -217,7 +211,7 @@ public:
 
 	static fixed fromFloat(float flt);
 
-	static Sint64 FIXED_RESOLUTION;
+	static int64_t FIXED_RESOLUTION;
 	static float FIXED_RESOLUTION_FLOAT;
 };
 

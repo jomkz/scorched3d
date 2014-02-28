@@ -21,8 +21,6 @@
 #include <common/Defines.h>
 #include <common/Logger.h>
 #include <common/LoggerI.h>
-#include <SDL/SDL.h>
-#include <SDL/SDL_thread.h>
 #include <time.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -32,8 +30,7 @@
 // NOTE: This logger is and needs to be thread safe
 // ************************************************
 
-static SDL_mutex *logMutex_ = 0;
-static Uint32 threadId = (Uint32) -1;
+static boost::mutex logMutex_;
 Logger * Logger::instance_ = 0;
 
 Logger * Logger::instance()
@@ -47,7 +44,6 @@ Logger * Logger::instance()
 
 Logger::Logger()
 {
-	if (!logMutex_) logMutex_ = SDL_CreateMutex();
 }
 
 Logger::~Logger()
@@ -57,16 +53,16 @@ Logger::~Logger()
 void Logger::addLogger(LoggerI *logger)
 {
 	Logger::instance();
-	SDL_LockMutex(logMutex_);
+	logMutex_.lock();
 	Logger::instance()->loggers_.push_back(logger);
-	SDL_UnlockMutex(logMutex_);
+	logMutex_.unlock();
 }
 
 void Logger::remLogger(LoggerI *logger)
 {
 	Logger::instance();
 	std::list<LoggerI *>::iterator itor;
-	SDL_LockMutex(logMutex_);
+	logMutex_.lock();
 	itor = Logger::instance()->loggers_.begin();
 	while(itor != Logger::instance()->loggers_.end()) {
 		if (*itor == logger) {
@@ -75,7 +71,7 @@ void Logger::remLogger(LoggerI *logger)
 		}
 		++itor;
 	}
-	SDL_UnlockMutex(logMutex_);
+	logMutex_.unlock();
 }
 
 void Logger::log(const std::string &text)
@@ -89,27 +85,22 @@ void Logger::log(const char *text)
 
 	Logger::instance();
 
-	SDL_LockMutex(logMutex_);
+	logMutex_.lock();
 	
 	LoggerInfo info;
 	info.setMessage(text);
 	addLog(info);
 
-	SDL_UnlockMutex(logMutex_);
-
-	if (SDL_ThreadID() == threadId)
-	{
-		processLogEntries();
-	}
+	logMutex_.unlock();
 }
 
 void Logger::log(const LoggerInfo &info)
 {
 	Logger::instance();
 
-	SDL_LockMutex(logMutex_);
+	logMutex_.lock();
 	addLog((LoggerInfo &) info);
-	SDL_UnlockMutex(logMutex_);
+	logMutex_.unlock();
 }
 
 void Logger::addLog(LoggerInfo &info)
@@ -154,14 +145,9 @@ void Logger::addLog(LoggerInfo &info)
 
 void Logger::processLogEntries()
 {
-	if (threadId == (Uint32) -1)
-	{
-		threadId = SDL_ThreadID();
-	}
-
 	Logger::instance();
 
-	SDL_LockMutex(logMutex_);
+	logMutex_.lock();
 	std::list<LoggerInfo *> &entries = Logger::instance()->entries_;
 	while (!entries.empty())
 	{
@@ -180,6 +166,6 @@ void Logger::processLogEntries()
 		entries.pop_front();
 		delete firstEntry;
 	}
-	SDL_UnlockMutex(logMutex_);
+	logMutex_.unlock();
 }
 

@@ -21,7 +21,9 @@
 #include <net/NetServerTCPProtocol.h>
 #include <net/NetServerTCPRead.h>
 #include <net/NetMessagePool.h>
+#include <net/NetServerTCP3.h>
 #include <common/Logger.h>
+#include <boost/asio.hpp>
 
 NetServerTCPProtocol::NetServerTCPProtocol()
 {
@@ -39,14 +41,13 @@ NetServerTCPScorchedProtocol::~NetServerTCPScorchedProtocol()
 {
 }
 
-bool NetServerTCPScorchedProtocol::sendBuffer(NetBuffer &buffer, TCPsocket socket, unsigned int id)
+bool NetServerTCPScorchedProtocol::sendBuffer(NetBuffer &buffer, boost::asio::ip::tcp::socket *socket, unsigned int id)
 {
-	Uint32 len = buffer.getBufferUsed();
-	Uint32 netlen=0;
-	SDLNet_Write32(len, &netlen);
+	uint32_t len = buffer.getBufferUsed();
+	uint32_t netlen = htonl(len);
 
 	// send the length of the string
-	int result = SDLNet_TCP_Send(socket, &netlen, sizeof(netlen));
+	int result = boost::asio::write(*socket, boost::asio::buffer(&netlen, sizeof(netlen)));
 	if(result<(int) sizeof(netlen))
 	{
 		Logger::log(S3D::formatStringBuffer("Failed to send buffer length. Sent %i of %i.",
@@ -55,7 +56,7 @@ bool NetServerTCPScorchedProtocol::sendBuffer(NetBuffer &buffer, TCPsocket socke
 	}
 	
 	// send the buffer
-	result = SDLNet_TCP_Send(socket,buffer.getBuffer(),len);
+	result = boost::asio::write(*socket, boost::asio::buffer(buffer.getBuffer(), len));
 	if(result<int(len))
 	{
 		Logger::log(S3D::formatStringBuffer("Failed to send buffer. Sent %i of %i.",
@@ -68,43 +69,20 @@ bool NetServerTCPScorchedProtocol::sendBuffer(NetBuffer &buffer, TCPsocket socke
 	return true;
 }
 
-static bool realSDLNet_TCP_Recv(TCPsocket socket, char *dest, int len)
-{
-	int result = 0;
-	while (len > 0)
-	{
-		int recv = SDLNet_TCP_Recv(socket, &dest[result], len);
-		if (recv <= 0) 
-		{
-			return false;
-		}
-
-		result += recv;
-		len -= recv;
-
-		if (len > 0)
-		{
-			//Logger::log( "Partial read, %i/%i %s", recv, len + recv, 
-				//SDLNet_GetError());
-			SDL_Delay(10);
-		}
-	}	
-
-	return true;
-}
-
-NetMessage *NetServerTCPScorchedProtocol::readBuffer(TCPsocket socket, unsigned int id)
+NetMessage *NetServerTCPScorchedProtocol::readBuffer(boost::asio::ip::tcp::socket *socket, unsigned int id)
 {
 	// receive the length of the string message
 	char lenbuf[4];
-	if (!realSDLNet_TCP_Recv(socket, lenbuf, 4))
+	if (boost::asio::read(*socket, boost::asio::buffer(lenbuf, 4)) != 4)
 	{
 		Logger::log( "Socket closed.");
 		return 0;
 	}
 
 	// swap byte order to our local order
-	Uint32 len = SDLNet_Read32(lenbuf);
+	uint32_t netlen = 0;
+	memcpy(&netlen, lenbuf, sizeof(netlen));
+	uint32_t len = ntohl(netlen);
 	
 	// check if anything is strange, like a zero length buffer
 	if(len == 0)
@@ -125,14 +103,12 @@ NetMessage *NetServerTCPScorchedProtocol::readBuffer(TCPsocket socket, unsigned 
 	NetMessage *buffer = NetMessagePool::instance()->
 		getFromPool(NetMessage::BufferMessage, 
 				id,
-				NetServerTCPRead::getIpAddressFromSocket(socket));
+				NetServerTCP3::getIpAddressFromSocket(socket));
 	buffer->getBuffer().allocate(len);
 	buffer->getBuffer().setBufferUsed(len);
 
 	// get the string buffer over the socket
-	if (!realSDLNet_TCP_Recv(socket, 
-		buffer->getBuffer().getBuffer(),
-		len))
+	if (boost::asio::read(*socket, boost::asio::buffer(buffer->getBuffer().getBuffer(),	len)) != len)
 	{
 		Logger::log( "Read failed for buffer");
 		NetMessagePool::instance()->addToPool(buffer);
@@ -153,12 +129,12 @@ NetServerHTTPProtocolSend::~NetServerHTTPProtocolSend()
 {
 }
 
-bool NetServerHTTPProtocolSend::sendBuffer(NetBuffer &buffer, TCPsocket socket, unsigned int id)
+bool NetServerHTTPProtocolSend::sendBuffer(NetBuffer &buffer, boost::asio::ip::tcp::socket *socket, unsigned int id)
 {
-	Uint32 len = buffer.getBufferUsed();
+	uint32_t len = buffer.getBufferUsed();
 	
 	// send the buffer
-	int result = SDLNet_TCP_Send(socket,buffer.getBuffer(),len);
+	int result = boost::asio::write(*socket, boost::asio::buffer(buffer.getBuffer(), len));
 	if(result<int(len))
 	{
 		Logger::log(S3D::formatStringBuffer("Failed to send HTTP buffer. Sent %i of %i.",
@@ -171,21 +147,21 @@ bool NetServerHTTPProtocolSend::sendBuffer(NetBuffer &buffer, TCPsocket socket, 
 	return true;
 }
 
-NetMessage *NetServerHTTPProtocolSend::readBuffer(TCPsocket socket, unsigned int id)
+NetMessage *NetServerHTTPProtocolSend::readBuffer(boost::asio::ip::tcp::socket *socket, unsigned int id)
 {
 	// allocate the buffer memory
 	NetMessage *netBuffer = NetMessagePool::instance()->
 		getFromPool(NetMessage::BufferMessage,
 				id,
-				NetServerTCPRead::getIpAddressFromSocket(socket));
+				NetServerTCP3::getIpAddressFromSocket(socket));
 	netBuffer->getBuffer().reset();
 
 	// get the string buffer over the socket
-	Uint32 len = 0;
+	uint32_t len = 0;
 	char buffer[1];
 	for (;;)
 	{
-		int recv = SDLNet_TCP_Recv(socket, buffer, 1);
+		int recv = boost::asio::read(*socket, boost::asio::buffer(buffer, 1));
 		if (recv <= 0) 
 		{
 			// For HTTP the socket being closed signifies the end
@@ -216,12 +192,12 @@ NetServerHTTPProtocolRecv::~NetServerHTTPProtocolRecv()
 {
 }
 
-bool NetServerHTTPProtocolRecv::sendBuffer(NetBuffer &buffer, TCPsocket socket, unsigned int id)
+bool NetServerHTTPProtocolRecv::sendBuffer(NetBuffer &buffer, boost::asio::ip::tcp::socket *socket, unsigned int id)
 {
-	Uint32 len = buffer.getBufferUsed();
+	uint32_t len = buffer.getBufferUsed();
 	
 	// send the buffer
-	int result = SDLNet_TCP_Send(socket,buffer.getBuffer(),len);
+	int result = boost::asio::write(*socket, boost::asio::buffer(buffer.getBuffer(), len));
 	if(result<int(len))
 	{
 		Logger::log(S3D::formatStringBuffer("Failed to send HTTP buffer. Sent %i of %i.",
@@ -234,13 +210,13 @@ bool NetServerHTTPProtocolRecv::sendBuffer(NetBuffer &buffer, TCPsocket socket, 
 	return true;
 }
 
-NetMessage *NetServerHTTPProtocolRecv::readBuffer(TCPsocket socket, unsigned int id)
+NetMessage *NetServerHTTPProtocolRecv::readBuffer(boost::asio::ip::tcp::socket *socket, unsigned int id)
 {
 	// allocate the buffer memory
 	NetMessage *netBuffer = NetMessagePool::instance()->
 		getFromPool(NetMessage::BufferMessage,
 				id,
-				NetServerTCPRead::getIpAddressFromSocket(socket));
+				NetServerTCP3::getIpAddressFromSocket(socket));
 	netBuffer->getBuffer().reset();
 
 	// get the string buffer over the socket
@@ -249,7 +225,7 @@ NetMessage *NetServerHTTPProtocolRecv::readBuffer(TCPsocket socket, unsigned int
 	char buffer[1];
 	for (;;)
 	{
-		int recv = SDLNet_TCP_Recv(socket, buffer, 1);
+		int recv = boost::asio::read(*socket, boost::asio::buffer(buffer, 1));
 		if (recv <= 0) 
 		{
 			// For HTTP the socket being closed signifies the end

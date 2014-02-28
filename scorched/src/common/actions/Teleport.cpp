@@ -35,8 +35,8 @@
 #include <landscapemap/DeformLandscape.h>
 #include <landscapemap/LandscapeMaps.h>
 #ifndef S3D_SERVER
-	#include <sound/SoundUtils.h>
-	#include <sprites/TeleportRenderer.h>
+//	#include <sound/SoundUtils.h>
+//	#include <sprites/TeleportRenderer.h>
 #endif
 
 Teleport::Teleport(FixedVector position,
@@ -65,10 +65,12 @@ void Teleport::init()
 		if (tank && tank->getState().getState() == TankState::sNormal)
 		{
 			Vector white(1.0f, 1.0f, 1.0f);
+			/*
 			TeleportRenderer *teleport = new TeleportRenderer(
 				tank->getLife().getTargetPosition().asVector(),
 				white);
 			context_->getActionController().addAction(new SpriteAction(teleport));
+			*/
 		}
 
 		TankViewPointProvider *vPoint = new TankViewPointProvider();
@@ -93,11 +95,13 @@ void Teleport::simulate(fixed frameTime, bool &remove)
 			Tank *tank = context_->getTargetContainer().getTankById(weaponContext_.getPlayerId());
 			if (tank && tank->getState().getState() == TankState::sNormal)
 			{
+				/*
 				SoundBuffer *activateSound = 
 					Sound::instance()->fetchOrCreateBuffer(
 						S3D::getModFile(weapon_->getSound()));
 				SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
 					activateSound, tank->getLife().getTargetPosition().asVector());
+				*/
 			}
 		}
 #endif // #ifndef S3D_SERVER

@@ -23,7 +23,7 @@
 #include <actions/CameraPositionAction.h>
 #include <actions/Resurrection.h>
 #ifndef S3D_SERVER
-	#include <sprites/TextActionRenderer.h>
+//	#include <sprites/TextActionRenderer.h>
 #endif
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
@@ -153,6 +153,7 @@ void TargetDamage::damageTarget(ScorchedContext &context,
 	if (damage > 0 && !shieldOnlyDamage)
 	{
 #ifndef S3D_SERVER
+		/*
 		if (!context.getServerMode() &&
 			damagedTarget->getTargetState().getDisplayDamage())
 		{
@@ -169,6 +170,7 @@ void TargetDamage::damageTarget(ScorchedContext &context,
 						redColor,
 						S3D::formatStringBuffer("%.0f", damage.asFloat()))));
 		}
+		*/
 #endif // #ifndef S3D_SERVER
 
 		// Remove the life

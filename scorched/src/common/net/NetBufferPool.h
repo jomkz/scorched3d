@@ -24,7 +24,7 @@
 
 #include <net/NetBuffer.h>
 #include <list>
-#include <SDL/SDL_thread.h>
+#include <boost/thread.hpp>
 
 class NetBufferPool
 {
@@ -37,7 +37,7 @@ public:
 protected:
 	static NetBufferPool *instance_;
 	std::list<NetBuffer *> messagePool_;
-	SDL_mutex *messagePoolMutex_;
+	boost::mutex messagePoolMutex_;
 
 private:
 	NetBufferPool();

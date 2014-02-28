@@ -27,7 +27,6 @@
 #include <movement/TargetMovement.h>
 #include <common/OptionsScorched.h>
 #include <landscapemap/LandscapeMaps.h>
-#include <SDL/SDL.h>
 
 static const fixed StepSize = fixed(true, fixed::FIXED_RESOLUTION / Sint64(50));
 

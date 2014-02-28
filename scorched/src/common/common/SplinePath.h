@@ -36,7 +36,6 @@ public:
 		int polynomials = 3,
 		fixed pointsPerSecond = 5);
 
-	void draw();
 	void simulate(fixed frameTime);
 	void getPathAttrs(FixedVector &position, FixedVector &direction);
 

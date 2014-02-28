@@ -23,7 +23,7 @@
 
 NetServerTCP3Destination::NetServerTCP3Destination(
 	NetMessageHandler *recieveMessageHandler, 
-	TCPsocket socket,
+	boost::asio::ip::tcp::socket *socket,
 	unsigned int destinationId) :
 	socket_(socket), destinationId_(destinationId),
 	send_(socket, destinationId, 
@@ -37,17 +37,6 @@ NetServerTCP3Destination::NetServerTCP3Destination(
 
 NetServerTCP3Destination::~NetServerTCP3Destination()
 {
-}
-
-unsigned int NetServerTCP3Destination::getIpAddressFromSocket(TCPsocket socket)
-{
-	unsigned int addr = 0;
-	IPaddress *address = SDLNet_TCP_GetPeerAddress(socket);
-	if (address)
-	{
-		addr = SDLNet_Read32(&address->host);
-	}
-	return addr;
 }
 
 void NetServerTCP3Destination::printStats()
@@ -89,7 +78,8 @@ bool NetServerTCP3Destination::allFinished()
 	{
 		send_.wait();
 		recv_.wait();
-		SDLNet_TCP_Close(socket_);
+		delete socket_;
+		socket_ = 0;
 		return true;
 	}
 	return false;

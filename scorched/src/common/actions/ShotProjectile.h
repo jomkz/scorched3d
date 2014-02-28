@@ -23,9 +23,6 @@
 
 #include <engine/PhysicsParticle.h>
 #include <engine/ScorchedCollisionIds.h>
-#ifndef	S3D_SERVER
-	#include <tankgraph/RenderTracer.h>
-#endif
 #include <actions/ParticleGroup.h>
 #include <weapons/WeaponProjectile.h>
 #include <list>
@@ -50,10 +47,6 @@ public:
 
 	unsigned int getPlayerId() { return weaponContext_.getPlayerId(); }
 	WeaponProjectile *getWeapon() { return weapon_; }
-#ifndef S3D_SERVER
-	std::list<RenderTracer::TracerLinePoint> &getPositions() { return positions_; }
-#endif
-
 protected:
 	ParticleGroup *groups_;
 	FixedVector startPosition_, velocity_;
@@ -74,9 +67,6 @@ protected:
 	fixed spinSpeed_;
 	fixed physicsSpin_;
 	Vector spinAxis_;
-#ifndef S3D_SERVER
-	std::list<RenderTracer::TracerLinePoint> positions_;
-#endif
 
 	void doCollision(FixedVector &position);
 

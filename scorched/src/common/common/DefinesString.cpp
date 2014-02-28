@@ -22,8 +22,6 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <common/Defines.h>
-#include <SDL/SDL.h>
-#include <SDL/SDL_thread.h>
 
 void S3D::trim(std::string &value)
 {

@@ -31,10 +31,6 @@
 #include <target/TargetSpace.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
-#ifndef S3D_SERVER
-	#include <GLEXT/GLState.h>
-	#include <sprites/ExplosionTextures.h>
-#endif
 #include <math.h>
 #include <set>
 
@@ -178,78 +174,5 @@ void Laser::simulate(fixed frameTime, bool &remove)
 
 void Laser::draw()
 {
-#ifndef S3D_SERVER
-	if (!context_->getServerMode() && (drawLength_ > 0))
-	{
-		static GLUquadric *obj = 0;
-		if (!obj)
-		{
-			obj = gluNewQuadric();
-		}
-		float timePer = (1.0f - totalTime_.asFloat() / laserTime_.asFloat()) * 0.5f;
-		float radius1 = 0.05f / 2.0f * hurtRadius_.asFloat();
-		float radius2 = 0.2f / 2.0f * hurtRadius_.asFloat();
 
-		glColor4f(1.0f, 1.0f, 1.0f,	timePer);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-
-		GLTextureSet *set = ExplosionTextures::instance()->getTextureSetByName(params_->getRingTexture());
-
-		float floatLength = drawLength_.asFloat();
-
-		GLState glState(GLState::TEXTURE_OFF | GLState::BLEND_ON | GLState::ALPHATEST_OFF);
-		glDepthMask(GL_FALSE);
-		
-		glPushMatrix();
-			glTranslatef(
-				position_[0].asFloat(), 
-				position_[1].asFloat(), 
-				position_[2].asFloat());
-			glRotatef(angXY_, 0.0f, 0.0f, 1.0f);
-			glRotatef(angYZ_, 1.0f, 0.0f, 0.0f);
-
-			glColor4f(1.0f, 1.0f, 1.0f,	timePer);
-			gluCylinder(obj, radius1, radius1, floatLength, 3, 1);
-
-			glColor4f(
-				params_->getColor()[0],
-				params_->getColor()[1],
-				params_->getColor()[2],
-				timePer);
-			gluCylinder(obj, radius2, radius2, floatLength, 5, 1);
-
-			if (params_->getRingRadius() > 0)
-			{
-				GLState glState(GLState::TEXTURE_ON);
-				set->getTexture(0)->draw();
-				glBegin(GL_QUADS);
-				float moveAmount = 1.0f;
-				float size = params_->getRingRadius();
-				for (float f=0.0f; f<floatLength; f+=moveAmount)
-				{
-					glTexCoord2f(0.0f, 0.0f);
-					glVertex3f(-size, -size, f);
-					glTexCoord2f(0.0f, 1.0f);
-					glVertex3f(-size, size, f);
-					glTexCoord2f(1.0f, 1.0f);
-					glVertex3f(size, size, f);
-					glTexCoord2f(1.0f, 0.0f);
-					glVertex3f(size, -size, f);
-
-					glTexCoord2f(1.0f, 1.0f);
-					glVertex3f(size, size, f);
-					glTexCoord2f(0.0f, 1.0f);
-					glVertex3f(-size, size, f);
-					glTexCoord2f(0.0f, 0.0f);
-					glVertex3f(-size, -size, f);
-					glTexCoord2f(1.0f, 0.0f);
-					glVertex3f(size, -size, f);
-				}
-				glEnd();
-			}
-		glPopMatrix();
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glDepthMask(GL_TRUE);
-	}
-#endif // #ifndef S3D_SERVER
 }

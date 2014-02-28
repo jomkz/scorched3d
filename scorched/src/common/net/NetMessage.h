@@ -50,7 +50,7 @@ public:
 	unsigned int getDestinationId() { return destinationId_; }
 	unsigned int getIpAddress() { return ipAddress_; }
 	unsigned int getFlags() { return flags_; }
-	unsigned int getRecvTime() { return recvTime_; }
+	//unsigned int getRecvTime() { return recvTime_; }
 	MessageType getMessageType() { return type_; }
 	NetBuffer &getBuffer() { return messageBuffer_; }
 	void setType(MessageType type) { type_ = type; }

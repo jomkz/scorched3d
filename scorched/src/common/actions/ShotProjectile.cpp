@@ -20,10 +20,6 @@
 
 #include <actions/ShotProjectile.h>
 #include <actions/CameraPositionAction.h>
-#ifndef S3D_SERVER
-	#include <sprites/MissileActionRenderer.h>
-	#include <tankgraph/RenderTracer.h>
-#endif
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeTex.h>
 #include <tank/TankViewPoints.h>

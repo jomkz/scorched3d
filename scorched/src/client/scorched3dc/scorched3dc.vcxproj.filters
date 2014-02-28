@@ -1,0 +1,2774 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="scorched3dc">
+      <UniqueIdentifier>{6f057f9a-3d28-4e5d-b470-d1d38cc4c8d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="client">
+      <UniqueIdentifier>{142309b6-3406-4aeb-b03a-8ed50b5bd9ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="actions">
+      <UniqueIdentifier>{22b083ac-a21a-4fb4-ace4-b59dc668e50b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{552d93c5-e55a-4008-bd3e-94a23ed78856}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="coms">
+      <UniqueIdentifier>{6a81823f-8df9-434a-92f5-70fd60f4ceca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine">
+      <UniqueIdentifier>{3c47c4d4-4aec-4dd2-b8f3-e836048ff54b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="events">
+      <UniqueIdentifier>{57b981c5-7352-4f23-bf15-3157512caea8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="image">
+      <UniqueIdentifier>{07751f22-2c59-436e-bbab-1a6945342456}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="landscapedef">
+      <UniqueIdentifier>{15bf2286-e624-4a42-b3b8-c700965303d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="landscapemap">
+      <UniqueIdentifier>{a279baed-0012-4c21-93b6-1eec96532c3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lang">
+      <UniqueIdentifier>{c102d848-1688-4dc5-8c11-f6c66826cc85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="movement">
+      <UniqueIdentifier>{5e910d53-d3e5-46df-bacd-1b053ebf0125}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net">
+      <UniqueIdentifier>{f03c2ab6-57d1-4bd9-82bd-373cd9daf5c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="placement">
+      <UniqueIdentifier>{e9cc2472-5265-4f03-bd79-af8cdd54ecec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="simactions">
+      <UniqueIdentifier>{15bb93bb-fdb8-4835-a68e-edf9e416c3df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tank">
+      <UniqueIdentifier>{96bb7e82-451c-4bc7-b92c-4290b4557cf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tanket">
+      <UniqueIdentifier>{9bcc7d46-ce2b-4ba6-aaf9-0e7dfecbe756}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="target">
+      <UniqueIdentifier>{b245ba46-4f38-4ac7-a141-3ad9635e8561}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="weapons">
+      <UniqueIdentifier>{189f22a2-e9b2-4780-bf29-2bf06f2bc79e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XML">
+      <UniqueIdentifier>{6a47ca1c-6849-4f2d-892a-0249a0add630}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="server">
+      <UniqueIdentifier>{ec6dc9ba-4e42-4c74-9b42-b744d22e7d38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tankai">
+      <UniqueIdentifier>{d95a671c-95eb-47a3-80c2-a77ee9dae387}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="console">
+      <UniqueIdentifier>{0ee50572-b9c2-4a50-8da9-e19eb218d829}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>scorched3dc</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>scorched3dc</Filter>
+    </ClCompile>
+    <ClCompile Include="Scorched3DC.cpp">
+      <Filter>scorched3dc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientAdmin.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientAdminResultHandler.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientChannelManager.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientChannelManagerI.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientConnectionRejectHandler.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientDisconnected.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientGameStoppedHandler.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientHandlers.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientLinesHandler.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientMain.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientMessageHandler.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientOperationHandler.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientParams.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientProcessingLoop.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientReloadAdaptor.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientSimulator.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientState.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientStateInitialize.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientStateLoadLevel.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ScorchedClient.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\SecureID.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\UniqueIdStore.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\Action.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\ActionParams.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\AddTarget.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\CallbackWeapon.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\CameraPositionAction.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\Explosion.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\ExplosionParams.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\Laser.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\LaserParams.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\Lightning.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\Napalm.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\NapalmParams.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\ParticleGroup.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\Resurrection.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\ShieldHit.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\ShotBounce.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\ShotProjectile.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\ShowScoreAction.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\SkyFlash.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\SoundAction.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\TanketMovement.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\TanketResign.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\TankRemove.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\TankSay.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\TargetFalling.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\actions\Teleport.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\ARGParser.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\ChannelManager.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\ChannelText.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\ChannelTextParser.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\Clock.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\Counter.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\Defines.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\DefinesAssert.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\DefinesFile.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\DefinesMath.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\DefinesScorched.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\DefinesString.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\FileLines.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\FileList.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\FileLogger.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\fixed.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\FixedVector.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\FixedVector4.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\Line.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\Logger.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\LoggerI.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\Matrix16.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\ModelID.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\NumberParser.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\OptionEntry.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\OptionsGame.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\OptionsMasterListServer.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\OptionsParameters.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\OptionsScorched.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\OptionsTransient.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\ProgressCounter.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\RandomGenerator.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\RollingAverage.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\sha2.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\snprintf.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\SplineCurve.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\SplinePath.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\ToolTip.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\ToolTipResource.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\Triangle.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\Vector.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\Vector4.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\common\VectorLib.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsAdminMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsAdminResultMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsBuyAccessoryMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsChannelMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsChannelTextMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsConnectAcceptMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsConnectAuthMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsConnectMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsConnectRejectMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsDefenseMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsFileAkMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsFileMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsGameStoppedMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsGiftMoneyMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsHaveModFilesMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsInitializeModMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsLevelLoadedMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsLinesMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsLoadLevelMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsMessageHandler.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsMessageSender.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsNetStatMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsOperationMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsOperationResultMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsPlayedMoveMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsSimulateMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsSimulateResultMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsSyncCheckMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coms\ComsTankChangeMessage.cpp">
+      <Filter>coms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\engine\ActionController.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\engine\EventContainer.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\engine\MetaClass.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\engine\ModDirs.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\engine\ModFileEntry.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\engine\ModFileEntryLoader.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\engine\ModFiles.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\engine\ModInfo.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\engine\ObjectGroup.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\engine\ObjectGroupEntry.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\engine\ObjectGroupEntryDefinition.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\engine\ObjectGroups.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\engine\PhysicsParticle.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\engine\PhysicsParticleObject.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\engine\SaveGame.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\engine\ScorchedCollisionIds.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\engine\ScorchedContext.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\engine\Simulator.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\engine\Wind.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\events\EventController.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\events\EventHandler.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\events\EventHandlerAchievement.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\events\EventHandlerAchievementNumberRank.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\events\EventHandlerAchievementNumberRankKills.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\events\EventHandlerDataBase.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\events\EventHandlerDataBaseMySQL.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\events\EventHandlerDataBasePGSQL.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\image\Image.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\image\ImageBitmapFactory.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\image\ImageData.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\image\ImageFactory.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\image\ImageID.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\image\ImageJpgFactory.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\image\ImageLuminanceFactory.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\image\ImagePngFactory.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\image\ImageStore.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeDefinition.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeDefinitionCache.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeDefinitions.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeDefinitionsBase.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeDefn.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeDefnTankStart.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeEvents.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeInclude.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeMovement.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeMusic.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeOptions.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeSound.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeTex.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeTexDefn.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapemap\DeformLandscape.cpp">
+      <Filter>landscapemap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapemap\GraphicalHeightMap.cpp">
+      <Filter>landscapemap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapemap\GroundMaps.cpp">
+      <Filter>landscapemap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapemap\HeightMap.cpp">
+      <Filter>landscapemap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapemap\HeightMapLoader.cpp">
+      <Filter>landscapemap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapemap\HeightMapModifier.cpp">
+      <Filter>landscapemap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapemap\LandscapeMaps.cpp">
+      <Filter>landscapemap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapemap\MovementMap.cpp">
+      <Filter>landscapemap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapemap\NapalmMap.cpp">
+      <Filter>landscapemap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapemap\RoofMaps.cpp">
+      <Filter>landscapemap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\lang\CachedValueString.cpp">
+      <Filter>lang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\lang\Lang.cpp">
+      <Filter>lang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\lang\LangImpl.cpp">
+      <Filter>lang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\lang\LangParam.cpp">
+      <Filter>lang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\lang\LangResource.cpp">
+      <Filter>lang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\lang\LangString.cpp">
+      <Filter>lang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\lang\ResourceBundle.cpp">
+      <Filter>lang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\lang\ResourceBundleEntry.cpp">
+      <Filter>lang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\lang\ResourceBundleEntryImpl.cpp">
+      <Filter>lang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\movement\Boid2.cpp">
+      <Filter>movement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\movement\TargetMovement.cpp">
+      <Filter>movement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\movement\TargetMovementEntry.cpp">
+      <Filter>movement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\movement\TargetMovementEntryBoids.cpp">
+      <Filter>movement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\movement\TargetMovementEntryShips.cpp">
+      <Filter>movement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\movement\TargetMovementEntrySpline.cpp">
+      <Filter>movement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\net\NetBuffer.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\net\NetBufferPool.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\net\NetInterface.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\net\NetLoopBack.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\net\NetMessage.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\net\NetMessageHandler.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\net\NetMessagePool.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\net\NetServerTCP.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\net\NetServerTCP3.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\net\NetServerTCP3Destination.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\net\NetServerTCP3Recv.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\net\NetServerTCPProtocol.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\net\NetServerTCPRead.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\placement\PlacementObject.cpp">
+      <Filter>placement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\placement\PlacementObjectGroup.cpp">
+      <Filter>placement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\placement\PlacementObjectHeight.cpp">
+      <Filter>placement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\placement\PlacementObjectNone.cpp">
+      <Filter>placement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\placement\PlacementObjectRandom.cpp">
+      <Filter>placement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\placement\PlacementObjectShadow.cpp">
+      <Filter>placement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\placement\PlacementObjectTarget.cpp">
+      <Filter>placement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\placement\PlacementShadowDefinition.cpp">
+      <Filter>placement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\placement\PlacementTankPosition.cpp">
+      <Filter>placement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\placement\PlacementType.cpp">
+      <Filter>placement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\placement\PlacementTypeBounds.cpp">
+      <Filter>placement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\placement\PlacementTypeCount.cpp">
+      <Filter>placement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\placement\PlacementTypeDirect.cpp">
+      <Filter>placement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\placement\PlacementTypeMask.cpp">
+      <Filter>placement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\placement\PlacementTypeTankStart.cpp">
+      <Filter>placement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\placement\PlacementTypeTree.cpp">
+      <Filter>placement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\AdminSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\NextTurnSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\PlayMovesSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\RoundStartSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\RoundStopSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\ShowScoreSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\SimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\SyncCheckSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\TankAccessorySimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\TankAchievementSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\TankAddSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\TankBuyingSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\TankChangeSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\TankDefenseSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\TankGiftSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\TankLoadedSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\TankNewGameSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\TankNewMatchSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\TankRankSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\TankRemoveSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\TankStartMoveSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\TankStopMoveSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\TankTeamBallanceSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tank\Tank.cpp">
+      <Filter>tank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tank\TankAvatar.cpp">
+      <Filter>tank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tank\TankCamera.cpp">
+      <Filter>tank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tank\TankColorGenerator.cpp">
+      <Filter>tank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tank\TankDeadContainer.cpp">
+      <Filter>tank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tank\TankLib.cpp">
+      <Filter>tank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tank\TankModel.cpp">
+      <Filter>tank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tank\TankModelContainer.cpp">
+      <Filter>tank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tank\TankModelStore.cpp">
+      <Filter>tank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tank\TankScore.cpp">
+      <Filter>tank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tank\TankShotHistory.cpp">
+      <Filter>tank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tank\TankSort.cpp">
+      <Filter>tank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tank\TankState.cpp">
+      <Filter>tank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tank\TankTeamScore.cpp">
+      <Filter>tank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tank\TankViewPoints.cpp">
+      <Filter>tank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tank\TankWeaponSwitcher.cpp">
+      <Filter>tank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tanket\Tanket.cpp">
+      <Filter>tanket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tanket\TanketAccessories.cpp">
+      <Filter>tanket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tanket\TanketAutoDefense.cpp">
+      <Filter>tanket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tanket\TanketBatteries.cpp">
+      <Filter>tanket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tanket\TanketShotInfo.cpp">
+      <Filter>tanket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tanket\TanketType.cpp">
+      <Filter>tanket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tanket\TanketTypes.cpp">
+      <Filter>tanket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\tanket\TanketWeapon.cpp">
+      <Filter>tanket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\target\Target.cpp">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\target\TargetContainer.cpp">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\target\TargetDamage.cpp">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\target\TargetDamageCalc.cpp">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\target\TargetDefinition.cpp">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\target\TargetGroup.cpp">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\target\TargetLife.cpp">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\target\TargetParachute.cpp">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\target\TargetRenderer.cpp">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\target\TargetShield.cpp">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\target\TargetSpace.cpp">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\target\TargetSpaceContainment.cpp">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\target\TargetState.cpp">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\Accessory.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\AccessoryCreateContext.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\AccessoryPart.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\AccessoryStore.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\AutoDefense.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\Battery.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\Economy.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\EconomyFreeMarket.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\EconomyNone.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\EconomyStore.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\Parachute.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\Shield.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\ShieldRound.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\ShieldRoundMag.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\ShieldRoundReflective.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\ShieldSquare.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\ShieldSquareReflective.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\Weapon.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponAddTarget.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponAimed.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponAimedOver.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponAimedUnder.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponAnimation.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponCenterPosition.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponDelay.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponExplosion.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponGiveAccessory.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponGiveLife.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponGiveLives.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponGiveMoney.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponGivePower.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponGiveScore.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponGiveWin.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponGotoLabel.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponGroupSelect.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponInvokeWeapon.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponLabel.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponLaser.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponLeapFrog.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponLightning.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponMessage.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponMirv.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponMoveTank.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponMulti.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponMuzzle.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponNapalm.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponNull.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponPosition.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponProjectile.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponRandomChoice.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponRedirect.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponReference.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponRepeat.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponRoller.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponScatterDirection.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponScatterPosition.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponSelectPosition.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponSkyFlash.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponSound.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponTankPosition.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponTankVelocity.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponTeamAction.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponTeleport.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponTranslate.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponTypeAction.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\weapons\WeaponVelocity.cpp">
+      <Filter>weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\XML\XMLDiff.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\XML\XMLFile.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\XML\XmlNamedNetBuffer.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\XML\XMLNode.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\XML\XMLParser.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\XML\XMLStringBuffer.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientOptions.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ScorchedServer.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ScorchedServerSettings.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerAdminCommon.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerAdminHandler.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerAdminSessions.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerAuthHandler.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerAuthHandlerDefault.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerAuthHandlerForumLogin.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerAuthHandlerMinKills.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerAuthHandlerPrefered.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerAuthHandlerStore.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerBanned.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerBrowserInfo.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerBuyAccessoryHandler.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerChannelAuth.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerChannelFilter.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerChannelManager.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerCommon.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerConnectAuthHandler.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerConnectHandler.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerConsoleLogger.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerConsoleProgressCounter.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerDefenseHandler.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerDestination.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerDestinations.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerFileAkHandler.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerFileServer.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerGiftMoneyHandler.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerHandlers.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerHaveModFilesHandler.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerInitializeModHandler.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerLinesHandler.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerLoadLevel.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerLog.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerMain.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerMessageHandler.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerOperationResultHandler.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerParams.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerPlayedMoveHandler.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerRegistration.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerSimulator.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerState.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerStateBuying.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerStateEnoughPlayers.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerStateFinishWait.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerStateNewGame.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerStatePlaying.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerStateScore.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerStateStartingMatch.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerStateTankNewGame.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerSyncCheck.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerTankChangeHandler.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerTextFilter.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerTimedMessage.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerTurns.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerTurnsFree.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerTurnsSequential.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\server\ServerTurnsSimultaneous.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\tankai\TankAI.cpp">
+      <Filter>tankai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\tankai\TankAIAdder.cpp">
+      <Filter>tankai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\tankai\TankAIAimGuesser.cpp">
+      <Filter>tankai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\tankai\TankAICurrent.cpp">
+      <Filter>tankai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\tankai\TankAICurrentDefenses.cpp">
+      <Filter>tankai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\tankai\TankAICurrentMove.cpp">
+      <Filter>tankai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\tankai\TankAICurrentMoveWeapons.cpp">
+      <Filter>tankai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\tankai\TankAICurrentTarget.cpp">
+      <Filter>tankai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\tankai\TankAICurrentWeapons.cpp">
+      <Filter>tankai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\tankai\TankAINames.cpp">
+      <Filter>tankai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\tankai\TankAINone.cpp">
+      <Filter>tankai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\tankai\TankAIRandom.cpp">
+      <Filter>tankai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\tankai\TankAIShallow.cpp">
+      <Filter>tankai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\tankai\TankAISniperGuesser.cpp">
+      <Filter>tankai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\tankai\TankAIStore.cpp">
+      <Filter>tankai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\tankai\TankAIStrings.cpp">
+      <Filter>tankai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\server\tankai\TankAIWeaponSets.cpp">
+      <Filter>tankai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\console\Console.cpp">
+      <Filter>console</Filter>
+    </ClCompile>
+    <ClCompile Include="..\console\ConsoleFileReader.cpp">
+      <Filter>console</Filter>
+    </ClCompile>
+    <ClCompile Include="..\console\ConsoleImpl.cpp">
+      <Filter>console</Filter>
+    </ClCompile>
+    <ClCompile Include="..\console\ConsoleLines.cpp">
+      <Filter>console</Filter>
+    </ClCompile>
+    <ClCompile Include="..\console\ConsoleMethods.cpp">
+      <Filter>console</Filter>
+    </ClCompile>
+    <ClCompile Include="..\console\ConsoleRule.cpp">
+      <Filter>console</Filter>
+    </ClCompile>
+    <ClCompile Include="..\console\ConsoleRuleFn.cpp">
+      <Filter>console</Filter>
+    </ClCompile>
+    <ClCompile Include="..\console\ConsoleRuleFnIAdapter.cpp">
+      <Filter>console</Filter>
+    </ClCompile>
+    <ClCompile Include="..\console\ConsoleRuleMethodIAdapter.cpp">
+      <Filter>console</Filter>
+    </ClCompile>
+    <ClCompile Include="..\console\ConsoleRules.cpp">
+      <Filter>console</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\net\NetServerTCP3Send.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>scorched3dc</Filter>
+    </ClInclude>
+    <ClInclude Include="Scorched3DC.h">
+      <Filter>scorched3dc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientAdmin.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientAdminResultHandler.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientChannelManager.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientChannelManagerI.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientConnectionRejectHandler.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientDisconnected.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientGameStoppedHandler.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientHandlers.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientLinesHandler.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientMain.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientMessageHandler.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientOperationHandler.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientParams.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientProcessingLoop.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientReloadAdaptor.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientSimulator.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientState.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientStateInitialize.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientStateLoadLevel.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ScorchedClient.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\SecureID.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\UniqueIdStore.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\Action.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\ActionParams.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\AddTarget.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\CallbackWeapon.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\CameraPositionAction.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\Explosion.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\ExplosionParams.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\Laser.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\LaserParams.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\Lightning.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\Napalm.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\NapalmParams.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\ParticleGroup.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\Resurrection.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\ShieldHit.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\ShotBounce.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\ShotProjectile.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\ShowScoreAction.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\SkyFlash.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\SoundAction.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\TanketMovement.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\TanketResign.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\TankRemove.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\TankSay.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\TargetFalling.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\actions\Teleport.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\ARGParser.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\ChannelManager.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\ChannelText.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\ChannelTextParser.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\Clock.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\Counter.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\Defines.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\DefinesAssert.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\DefinesFile.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\DefinesMath.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\DefinesScorched.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\DefinesString.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\FileLines.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\FileList.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\FileLogger.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\fixed.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\FixedVector.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\FixedVector4.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\Line.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\Logger.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\LoggerI.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\main.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\Matrix16.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\ModelID.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\NumberParser.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\OptionEntry.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\OptionsGame.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\OptionsMasterListServer.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\OptionsParameters.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\OptionsScorched.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\OptionsTransient.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\ProgressCounter.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\RandomGenerator.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\RollingAverage.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\sha2.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\SplineCurve.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\SplinePath.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\StdVectorPtr.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\ToolTip.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\ToolTipResource.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\Triangle.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\Vector.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\Vector4.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\VectorLib.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsAdminMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsAdminResultMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsBuyAccessoryMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsChannelMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsChannelTextMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsConnectAcceptMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsConnectAuthMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsConnectMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsConnectRejectMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsDefenseMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsFileAkMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsFileMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsGameStoppedMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsGiftMoneyMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsHaveModFilesMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsInitializeModMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsLevelLoadedMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsLinesMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsLoadLevelMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsMessageHandler.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsMessageSender.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsNetStatMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsOperationMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsOperationResultMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsPlayedMoveMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsSimulateMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsSimulateResultMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsSyncCheckMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coms\ComsTankChangeMessage.h">
+      <Filter>coms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\ActionController.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\EventContainer.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\MetaClass.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\ModDirs.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\ModFileEntry.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\ModFileEntryLoader.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\ModFiles.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\ModInfo.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\ObjectGroup.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\ObjectGroupEntry.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\ObjectGroupEntryDefinition.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\ObjectGroups.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\PhysicsParticle.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\PhysicsParticleObject.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\SaveGame.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\ScorchedCollisionIds.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\ScorchedContext.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\Simulator.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\SimulatorI.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\Wind.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\events\EventController.h">
+      <Filter>events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\events\EventHandler.h">
+      <Filter>events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\events\EventHandlerAchievement.h">
+      <Filter>events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\events\EventHandlerAchievementNumberRank.h">
+      <Filter>events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\events\EventHandlerAchievementNumberRankKills.h">
+      <Filter>events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\events\EventHandlerDataBase.h">
+      <Filter>events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\events\EventHandlerDataBaseMySQL.h">
+      <Filter>events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\events\EventHandlerDataBasePGSQL.h">
+      <Filter>events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\image\Image.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\image\ImageBitmapFactory.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\image\ImageData.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\image\ImageFactory.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\image\ImageID.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\image\ImageJpgFactory.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\image\ImageLuminanceFactory.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\image\ImagePngFactory.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\image\ImageStore.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeDefinition.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeDefinitionCache.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeDefinitions.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeDefinitionsBase.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeDefinitionsItem.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeDefn.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeDefnTankStart.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeEvents.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeInclude.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeMovement.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeMusic.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeOptions.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeSound.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeTex.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeTexDefn.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapemap\DeformLandscape.h">
+      <Filter>landscapemap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapemap\GraphicalHeightMap.h">
+      <Filter>landscapemap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapemap\GroundMaps.h">
+      <Filter>landscapemap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapemap\HeightMap.h">
+      <Filter>landscapemap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapemap\HeightMapLoader.h">
+      <Filter>landscapemap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapemap\HeightMapModifier.h">
+      <Filter>landscapemap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapemap\LandscapeMaps.h">
+      <Filter>landscapemap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapemap\MovementMap.h">
+      <Filter>landscapemap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapemap\NapalmMap.h">
+      <Filter>landscapemap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapemap\RoofMaps.h">
+      <Filter>landscapemap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\lang\CachedValueString.h">
+      <Filter>lang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\lang\Lang.h">
+      <Filter>lang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\lang\LangImpl.h">
+      <Filter>lang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\lang\LangParam.h">
+      <Filter>lang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\lang\LangResource.h">
+      <Filter>lang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\lang\LangString.h">
+      <Filter>lang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\lang\ResourceBundle.h">
+      <Filter>lang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\lang\ResourceBundleEntry.h">
+      <Filter>lang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\lang\ResourceBundleEntryImpl.h">
+      <Filter>lang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\movement\Boid2.h">
+      <Filter>movement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\movement\TargetMovement.h">
+      <Filter>movement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\movement\TargetMovementEntry.h">
+      <Filter>movement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\movement\TargetMovementEntryBoids.h">
+      <Filter>movement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\movement\TargetMovementEntryShips.h">
+      <Filter>movement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\movement\TargetMovementEntrySpline.h">
+      <Filter>movement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\net\NetBuffer.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\net\NetBufferPool.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\net\NetInterface.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\net\NetInterfaceFlags.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\net\NetLoopBack.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\net\NetMessage.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\net\NetMessageHandler.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\net\NetMessagePool.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\net\NetServerTCP.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\net\NetServerTCP3.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\net\NetServerTCP3Destination.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\net\NetServerTCP3Recv.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\net\NetServerTCPProtocol.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\net\NetServerTCPRead.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\placement\PlacementObject.h">
+      <Filter>placement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\placement\PlacementObjectGroup.h">
+      <Filter>placement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\placement\PlacementObjectHeight.h">
+      <Filter>placement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\placement\PlacementObjectNone.h">
+      <Filter>placement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\placement\PlacementObjectRandom.h">
+      <Filter>placement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\placement\PlacementObjectShadow.h">
+      <Filter>placement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\placement\PlacementObjectTarget.h">
+      <Filter>placement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\placement\PlacementShadowDefinition.h">
+      <Filter>placement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\placement\PlacementTankPosition.h">
+      <Filter>placement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\placement\PlacementType.h">
+      <Filter>placement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\placement\PlacementTypeBounds.h">
+      <Filter>placement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\placement\PlacementTypeCount.h">
+      <Filter>placement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\placement\PlacementTypeDirect.h">
+      <Filter>placement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\placement\PlacementTypeMask.h">
+      <Filter>placement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\placement\PlacementTypeTankStart.h">
+      <Filter>placement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\placement\PlacementTypeTree.h">
+      <Filter>placement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\AdminSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\NextTurnSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\PlayMovesSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\RoundStartSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\RoundStopSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\ShowScoreSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\SimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\SyncCheckSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\TankAccessorySimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\TankAchievementSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\TankAddSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\TankBuyingSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\TankChangeSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\TankDefenseSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\TankGiftSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\TankLoadedSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\TankNewGameSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\TankNewMatchSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\TankRankSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\TankRemoveSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\TankStartMoveSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\TankStopMoveSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\TankTeamBallanceSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tank\Tank.h">
+      <Filter>tank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tank\TankAvatar.h">
+      <Filter>tank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tank\TankCamera.h">
+      <Filter>tank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tank\TankColorGenerator.h">
+      <Filter>tank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tank\TankDeadContainer.h">
+      <Filter>tank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tank\TankLib.h">
+      <Filter>tank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tank\TankModel.h">
+      <Filter>tank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tank\TankModelContainer.h">
+      <Filter>tank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tank\TankModelStore.h">
+      <Filter>tank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tank\TankScore.h">
+      <Filter>tank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tank\TankShotHistory.h">
+      <Filter>tank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tank\TankSort.h">
+      <Filter>tank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tank\TankState.h">
+      <Filter>tank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tank\TankTeamScore.h">
+      <Filter>tank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tank\TankViewPoints.h">
+      <Filter>tank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tank\TankWeaponSwitcher.h">
+      <Filter>tank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tanket\Tanket.h">
+      <Filter>tanket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tanket\TanketAccessories.h">
+      <Filter>tanket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tanket\TanketAutoDefense.h">
+      <Filter>tanket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tanket\TanketBatteries.h">
+      <Filter>tanket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tanket\TanketShotInfo.h">
+      <Filter>tanket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tanket\TanketType.h">
+      <Filter>tanket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tanket\TanketTypes.h">
+      <Filter>tanket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tanket\TanketWeapon.h">
+      <Filter>tanket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\target\Target.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\target\TargetContainer.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\target\TargetDamage.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\target\TargetDamageCalc.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\target\TargetDefinition.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\target\TargetGroup.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\target\TargetLife.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\target\TargetParachute.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\target\TargetRenderer.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\target\TargetShield.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\target\TargetSpace.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\target\TargetSpaceContainment.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\target\TargetState.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\Accessory.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\AccessoryCreateContext.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\AccessoryPart.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\AccessoryStore.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\AutoDefense.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\Battery.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\Economy.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\EconomyFreeMarket.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\EconomyNone.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\EconomyStore.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\Parachute.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\Shield.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\ShieldRound.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\ShieldRoundMag.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\ShieldRoundReflective.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\ShieldSquare.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\ShieldSquareReflective.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\Weapon.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponAddTarget.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponAimed.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponAimedOver.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponAimedUnder.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponAnimation.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponCenterPosition.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponDelay.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponExplosion.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponGiveAccessory.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponGiveLife.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponGiveLives.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponGiveMoney.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponGivePower.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponGiveScore.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponGiveWin.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponGotoLabel.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponGroupSelect.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponInvokeWeapon.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponLabel.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponLaser.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponLeapFrog.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponLightning.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponMessage.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponMirv.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponMoveTank.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponMulti.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponMuzzle.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponNapalm.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponNull.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponPosition.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponProjectile.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponRandomChoice.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponRedirect.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponReference.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponRepeat.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponRoller.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponScatterDirection.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponScatterPosition.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponSelectPosition.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponSkyFlash.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponSound.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponTankPosition.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponTankVelocity.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponTeamAction.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponTeleport.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponTranslate.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponTypeAction.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weapons\WeaponVelocity.h">
+      <Filter>weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\XML\XMLDiff.h">
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\XML\XMLFile.h">
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\XML\XmlNamedNetBuffer.h">
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\XML\XMLNode.h">
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\XML\XMLParser.h">
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\XML\XMLStringBuffer.h">
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientOptions.h">
+      <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ScorchedServer.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ScorchedServerSettings.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerAdminCommon.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerAdminHandler.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerAdminSessions.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerAuthHandler.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerAuthHandlerDefault.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerAuthHandlerForumLogin.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerAuthHandlerMinKills.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerAuthHandlerPrefered.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerAuthHandlerStore.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerBanned.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerBrowserInfo.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerBuyAccessoryHandler.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerChannelAuth.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerChannelFilter.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerChannelManager.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerCommon.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerConnectAuthHandler.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerConnectHandler.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerConsoleLogger.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerConsoleProgressCounter.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerDefenseHandler.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerDestination.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerDestinations.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerFileAkHandler.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerFileServer.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerGiftMoneyHandler.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerHandlers.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerHaveModFilesHandler.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerInitializeModHandler.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerLinesHandler.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerLoadLevel.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerLog.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerMain.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerMessageHandler.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerOperationResultHandler.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerParams.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerPlayedMoveHandler.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerRegistration.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerSimulator.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerState.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerStateBuying.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerStateEnoughPlayers.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerStateFinishWait.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerStateNewGame.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerStatePlaying.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerStateScore.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerStateStartingMatch.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerStateTankNewGame.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerSyncCheck.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerTankChangeHandler.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerTextFilter.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerTimedMessage.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerTurns.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerTurnsFree.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerTurnsSequential.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\server\ServerTurnsSimultaneous.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\tankai\TankAI.h">
+      <Filter>tankai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\tankai\TankAIAdder.h">
+      <Filter>tankai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\tankai\TankAIAimGuesser.h">
+      <Filter>tankai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\tankai\TankAICurrent.h">
+      <Filter>tankai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\tankai\TankAICurrentDefenses.h">
+      <Filter>tankai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\tankai\TankAICurrentMove.h">
+      <Filter>tankai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\tankai\TankAICurrentMoveWeapons.h">
+      <Filter>tankai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\tankai\TankAICurrentTarget.h">
+      <Filter>tankai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\tankai\TankAICurrentWeapons.h">
+      <Filter>tankai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\tankai\TankAINames.h">
+      <Filter>tankai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\tankai\TankAINone.h">
+      <Filter>tankai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\tankai\TankAIRandom.h">
+      <Filter>tankai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\tankai\TankAIShallow.h">
+      <Filter>tankai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\tankai\TankAISniperGuesser.h">
+      <Filter>tankai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\tankai\TankAIStore.h">
+      <Filter>tankai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\tankai\TankAIStrings.h">
+      <Filter>tankai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\server\tankai\TankAIWeaponSets.h">
+      <Filter>tankai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\console\Console.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\console\ConsoleFileReader.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\console\ConsoleImpl.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\console\ConsoleLines.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\console\ConsoleMethods.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\console\ConsoleRule.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\console\ConsoleRuleFn.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\console\ConsoleRuleFnIAdapter.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\console\ConsoleRuleMethodIAdapter.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\console\ConsoleRules.h">
+      <Filter>console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\net\NetServerTCP3Send.h">
+      <Filter>net</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\common\common\include.rc">
+      <Filter>common</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

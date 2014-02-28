@@ -18,6 +18,7 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <boost/asio.hpp>
 #include <common/RandomGenerator.h>
 #include <common/Defines.h>
 #include <common/OptionsScorched.h>
@@ -59,7 +60,7 @@ FileRandomGenerator::FileRandomGenerator() :
 		for (unsigned int i=0; i<bufferSize_; i++)
 		{
 			unsigned int value = tmpbuffer[i];
-			buffer_[i] = SDLNet_Read32(&value);
+			buffer_[i] = ntohl(value);
 		}
 		delete [] tmpbuffer;
 	}

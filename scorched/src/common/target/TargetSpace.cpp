@@ -314,6 +314,7 @@ void TargetSpace::getCollisionSet(FixedVector &position, fixed radius,
 }
 
 #ifndef S3D_SERVER
+/*
 #include <GLEXT/GLState.h>
 #include <client/ScorchedClient.h>
 #include <landscapemap/LandscapeMaps.h>
@@ -425,4 +426,5 @@ void TargetSpace::draw()
 		}
 	}
 }
+*/
 #endif

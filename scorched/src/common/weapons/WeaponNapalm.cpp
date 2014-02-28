@@ -22,7 +22,7 @@
 #include <actions/Napalm.h>
 #include <common/Defines.h>
 #ifndef S3D_SERVER
-	#include <sound/SoundUtils.h>
+//	#include <sound/SoundUtils.h>
 #endif
 #include <engine/ActionController.h>
 #include <engine/Simulator.h>
@@ -89,6 +89,7 @@ void WeaponNapalm::fireWeapon(ScorchedContext &context,
 	}
 
 #ifndef S3D_SERVER
+	/*
 	if (!context.getServerMode()) 
 	{
 		if (napalmSound_.c_str()[0] &&
@@ -101,6 +102,7 @@ void WeaponNapalm::fireWeapon(ScorchedContext &context,
 				expSound, position.asVector());
 		}
 	}
+	*/
 #endif
 }
 

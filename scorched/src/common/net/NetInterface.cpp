@@ -44,3 +44,21 @@ const char *NetInterface::getIpName(unsigned int ipAddress)
 		(ipAddress & 0x000000FF) >> 0);
 	return result;
 }
+
+unsigned int NetInterface::getIpAddressFromName(const char *name)
+{
+	boost::asio::io_service io_service;
+	boost::asio::ip::tcp::resolver resolver(io_service);
+
+	boost::asio::ip::tcp::resolver::query query(
+	boost::asio::ip::tcp::v4(), name, "27270");
+		boost::asio::ip::tcp::resolver::iterator end, endpoint_iterator = resolver.resolve(query);
+
+	unsigned int result = 0;
+	if (endpoint_iterator != end)
+	{
+		boost::asio::ip::tcp::endpoint endpoint = *endpoint_iterator;
+		result = endpoint.address().to_v4().to_ulong();
+	}
+	return result;
+}

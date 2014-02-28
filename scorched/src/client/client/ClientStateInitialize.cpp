@@ -26,9 +26,7 @@
 #include <client/ClientHandlers.h>
 #include <client/ClientState.h>
 #include <client/ClientStateLoadLevel.h>
-#include <graph/OptionsDisplay.h>
-#include <GLEXT/GLLenseFlare.h>
-#include <sprites/ExplosionTextures.h>
+#include <client/ClientOptions.h>
 #include <common/DefinesAssert.h>
 #include <common/DefinesString.h>
 #include <common/ProgressCounter.h>
@@ -310,6 +308,7 @@ void ClientStateInitialize::sendAuth()
 		if (SDLNet_ResolveHost(&address, (char *) hostName.c_str(), 0) == 0)
 		{
 			unsigned int ipAddress = SDLNet_Read32(&address.host);
+			// TODO
 			uniqueId = "";//ConnectDialog::instance()->getIdStore().getUniqueId(ipAddress);
 
 			SecureID MakeKey;

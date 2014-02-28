@@ -20,7 +20,6 @@
 
 #include <client/ClientOperationHandler.h>
 #include <client/ScorchedClient.h>
-#include <graph/MainCamera.h>
 #include <coms/ComsOperationMessage.h>
 
 ClientOperationHandler::ClientOperationHandler(ComsMessageHandler &comsMessageHandler)
@@ -41,8 +40,6 @@ bool ClientOperationHandler::processMessage(
 {
 	ComsOperationMessage message;
 	if (!message.readMessage(reader)) return false;
-
-	//MainCamera::instance()->saveScreen_.saveScreenTest_ = true;
 
 	return true;
 }

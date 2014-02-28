@@ -32,13 +32,6 @@
 
 unsigned int Accessory::nextAccessoryId_ = 0;
 
-#ifndef S3D_SERVER
-#include <3dsparse/Model.h>
-#include <3dsparse/ModelStore.h>
-#include <tankgraph/MissileMesh.h>
-#include <image/ImageFactory.h>
-#endif
-
 Accessory::Accessory() :
 	accessoryId_(++nextAccessoryId_),
 	name_("NONAME"), description_("NODESC"), 
@@ -85,23 +78,6 @@ bool Accessory::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode
 	{
 		if (!S3D::checkDataFile(S3D::formatStringBuffer("data/textures/wicons/%s", getIconName()))) return false;
 	}
-
-#ifndef S3D_SERVER
-	if (getIconName()[0])
-	{
-		texture_.setImageID(ImageID(
-			S3D::eModLocation,
-			"",
-			S3D::formatStringBuffer("data/textures/wicons/%s", getIconName())));
-	}
-	else
-	{
-		texture_.setImageID(ImageID(
-			S3D::eModLocation,
-			"",
-			S3D::formatStringBuffer("data/textures/wicons/%s", "tracer.bmp")));
-	}
-#endif
 
 	// Get the accessory sound 
 	if (accessoryNode->getNamedChild("activationsound", activationSound_, false))
@@ -262,62 +238,3 @@ const char *Accessory::getActivationSound()
 	if (!activationSound_.c_str()[0]) return 0;
 	return activationSound_.c_str();
 }
-
-#ifndef S3D_SERVER
-
-std::map<std::string, MissileMesh *> Accessory::loadedMeshes_;
-
-MissileMesh *Accessory::getWeaponMesh(ModelID &id, Tank *currentPlayer)
-{
-	// Set the default model to use if neither the tank
-	// or weapon have one
-	static ModelID defaultModelId;
-	if (!defaultModelId.modelValid())
-	{
-		defaultModelId.initFromString(
-			"MilkShape",
-			"data/accessories/v2missile/v2missile.txt",
-			"");
-	}
-
-	// Set the model to use as the default model id
-	ModelID *usedModelId = &defaultModelId;
-
-	// Get the model to use from the weapon (if there is one)
-	if (id.modelValid())
-	{
-		usedModelId = &id;
-	}
-	else
-	{
-		// The weapon does not have a model defined for it
-		// check the player to see if they have a default model
-		if (currentPlayer)
-		{
-			TankModel *model = currentPlayer->getModelContainer().getTankModel();
-			if (model && 
-				model->getProjectileModelID().modelValid())
-			{
-				usedModelId = &model->getProjectileModelID();
-			}
-		}
-	}
-
-	// Load or find the correct missile mesh
-	MissileMesh *mesh = 0;
-	const char *name = usedModelId->getStringHash();
-	std::map<std::string, MissileMesh *>::iterator itor =
-		loadedMeshes_.find(name);
-	if (itor == loadedMeshes_.end())
-	{
-		mesh = new MissileMesh(*usedModelId);
-		loadedMeshes_[name] = mesh;
-	}
-	else
-	{
-		// Find
-		mesh = (*itor).second;
-	}
-	return mesh;
-}
-#endif // S3D_SERVER

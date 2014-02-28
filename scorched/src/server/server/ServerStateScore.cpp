@@ -26,7 +26,6 @@
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <simactions/ShowScoreSimAction.h>
-#include <lua/LUAScriptHook.h>
 
 ServerStateScore::ServerStateScore()
 {
@@ -63,9 +62,6 @@ void ServerStateScore::enterState(ServerStateEnoughPlayers &enoughPlayers)
 	{
 		scoreTime = fixed(ScorchedServer::instance()->getOptionsGame().getRoundScoreTime());
 	}
-
-	// Tell scripts to score 
-	ScorchedServer::instance()->getLUAScriptHook().callHook("server_score", overAllWinner_);
 
 	// Add score simaction
 	fixed(ScorchedServer::instance()->getOptionsGame().getScoreTime());

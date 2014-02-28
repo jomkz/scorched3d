@@ -22,7 +22,6 @@
 #define __INCLUDE_ClientStateInitializeh_INCLUDE__
 
 #include <string>
-#include <SDL/SDL.h>
 #include <net/NetBuffer.h>
 
 class NetMessage;
@@ -44,7 +43,7 @@ public:
 	UniqueIdStore &getIdStore();
 protected:
 	NetBuffer recvBuffer_;
-	SDL_Thread *remoteConnectionThread_;
+	boost::thread *remoteConnectionThread_;
 	UniqueIdStore *idStore_;
 	unsigned int totalBytes_;
 

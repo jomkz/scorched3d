@@ -34,12 +34,6 @@
 #include <common/ProgressCounter.h>
 #include <lang/LangResource.h>
 #include <math.h>
-#ifndef S3D_SERVER
-	#include <landscape/Landscape.h>
-	#include <landscape/DeformTextures.h>
-	#include <land/VisibilityPatchGrid.h>
-	#include <sprites/ExplosionTextures.h>
-#endif
 
 class DeformLandscapeCache
 {
@@ -130,8 +124,10 @@ void DeformLandscape::deformLandscape(
 #ifndef S3D_SERVER
 		if (hits && !context.getServerMode())
 		{
+			/*
 			Landscape::instance()->recalculateRoof();
 			VisibilityPatchGrid::instance()->recalculateRoofErrors(pos, radius);
+			*/
 		}
 #endif
 	}
@@ -140,6 +136,7 @@ void DeformLandscape::deformLandscape(
 #ifndef S3D_SERVER
 	if (hits && !context.getServerMode() && deformTexture)
 	{
+		/*
 		Landscape::instance()->recalculateLandscape();
 		VisibilityPatchGrid::instance()->recalculateLandscapeErrors(pos, radius);
 
@@ -148,6 +145,7 @@ void DeformLandscape::deformLandscape(
 			radius.asFloat(),  
 			ExplosionTextures::instance()->getScorchBitmap(deformTexture),
 			deformMap);
+		*/
 	}
 #endif
 }
@@ -391,8 +389,8 @@ void DeformLandscape::flattenArea(
 #ifndef S3D_SERVER
 		if (!context.getServerMode())
 		{
-			Landscape::instance()->recalculateLandscape();
-			VisibilityPatchGrid::instance()->recalculateLandscapeErrors(tankPos, size);
+			//Landscape::instance()->recalculateLandscape();
+			//VisibilityPatchGrid::instance()->recalculateLandscapeErrors(tankPos, size);
 		}
 #endif
 	}

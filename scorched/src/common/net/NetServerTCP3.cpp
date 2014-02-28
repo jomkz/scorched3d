@@ -27,16 +27,18 @@
 NetServerTCP3::NetServerTCP3() : 
 	serverDestinationId_(UINT_MAX), nextDestinationId_(1),
 	sendRecvThread_(0),
-	serverSock_(0), serverSockSet_(0),
+	serverSock_(0),
 	stopped_(false)
 {
-	serverSockSet_ = SDLNet_AllocSocketSet(1);
+
 }
 
 NetServerTCP3::~NetServerTCP3()
 {
-	SDLNet_FreeSocketSet(serverSockSet_);
-	serverSockSet_ = 0;
+	delete sendRecvThread_;
+	sendRecvThread_ = 0;
+	delete serverSock_;
+	serverSock_ = 0;
 }
 
 bool NetServerTCP3::started()
@@ -47,29 +49,23 @@ bool NetServerTCP3::started()
 
 bool NetServerTCP3::connect(const char *hostName, int portNo)
 {
-	if(SDLNet_Init()==-1)
-	{
-		return false;
-	}
-
-	// Resolve server address
-	IPaddress serverAddress;
-	if (SDLNet_ResolveHost(&serverAddress, hostName, portNo) != 0)
-	{
-		Logger::log(S3D::formatStringBuffer("NetServerTCP3: Failed to resolve host %s:%i",
-			hostName, portNo));
-		return false;
-	}
-
 	// Stop any previous connections
 	stop();
 
+	// Resolve server address
+	std::string portStr = S3D::formatStringBuffer("%i", portNo);
+	boost::asio::ip::tcp::resolver resolver(io_service_);
+    boost::asio::ip::tcp::resolver::query query(boost::asio::ip::tcp::v4(), hostName, portStr.c_str());
+	boost::asio::ip::tcp::resolver::iterator iterator = resolver.resolve(query);
+	
 	// Create a new socket for the client
-	TCPsocket clientSock = SDLNet_TCP_Open(&serverAddress);
-	if (!clientSock)
+    boost::asio::ip::tcp::socket *clientSock = new boost::asio::ip::tcp::socket(io_service_);
+	boost::system::error_code ec;
+    clientSock->connect(*iterator, ec);
+	if (ec) 
 	{
-		Logger::log(S3D::formatStringBuffer("NetServerTCP3: Failed to open client socket : %s",
-			SDLNet_GetError()));
+		Logger::log(S3D::formatStringBuffer("NetServerTCP3: Failed to resolve host %s:%i %s",
+			hostName, portNo, ec.message().c_str()));
 		return false;
 	}
 
@@ -84,31 +80,18 @@ bool NetServerTCP3::connect(const char *hostName, int portNo)
 
 bool NetServerTCP3::start(int portNo)
 {
-	if(SDLNet_Init()==-1)
-	{
-		return false;
-	}
-
 	// Stop any previous connections
 	stop();
 
 	// Get the local ip address
-	IPaddress localip;
-	if(SDLNet_ResolveHost(&localip, NULL, portNo)==-1)
-	{
-		return false;
-	}
+	serverSock_ = new boost::asio::ip::tcp::acceptor(io_service_, 
+		boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), portNo));
+	if (!serverSock_->is_open()) return false;	
 
-	// we seem to be able to open the same port
-	// multiple times!!!
-	// This is fixed as the server info port catches it
-	serverSock_ = SDLNet_TCP_Open(&localip);
-	if (!serverSock_)
-	{
-		Logger::log(S3D::formatStringBuffer("NetServerTCP3: Failed to open server socket %i", portNo));
-		return false;
-	}
-	SDLNet_TCP_AddSocket(serverSockSet_, serverSock_);
+	// Set non-blocking accepts
+	boost::system::error_code ec;
+	serverSock_->non_blocking(true, ec);
+	if (ec) return false;
 
 	// Start sending/recieving on this socket
 	if (!startProcessing()) return false;
@@ -120,10 +103,9 @@ void NetServerTCP3::stop()
 {
 	if (started())
 	{
-		SDL_Thread *localSendRecvThread = sendRecvThread_;
+		boost::thread *localSendRecvThread = sendRecvThread_;
 		disconnectAllClients();
-		int status;
-		SDL_WaitThread(localSendRecvThread, &status);
+		localSendRecvThread->join();
 	}
 }
 
@@ -136,14 +118,8 @@ bool NetServerTCP3::startProcessing()
 	outgoingMessageHandler_.setMessageHandler(this);
 
 	// Create the processing thread
-	sendRecvThread_ = SDL_CreateThread(
+	sendRecvThread_ = new boost::thread(
 		NetServerTCP3::sendRecvThreadFunc, (void *) this);
-	if (sendRecvThread_ == 0)
-	{
-		Logger::log(S3D::formatStringBuffer("NetServerTCP3: Failed to create NetServerTCP3 thread"));
-		return false;
-	}
-
 	return true;
 }
 
@@ -153,8 +129,10 @@ int NetServerTCP3::sendRecvThreadFunc(void *c)
 	NetServerTCP3 *th = (NetServerTCP3*) c;
 	th->actualSendRecvFunc();
 
-	th->sendRecvThread_ = 0;
 	Logger::log(S3D::formatStringBuffer("NetServerTCP3: shutdown"));
+
+	delete th->sendRecvThread_;
+	th->sendRecvThread_ = 0;
 	return 0;
 }
 
@@ -186,7 +164,7 @@ void NetServerTCP3::actualSendRecvFunc()
 		}
 
 		// sleep so we don't go into an infinite loop
-		SDL_Delay(10);
+		boost::this_thread::sleep(boost::posix_time::milliseconds(10));
 		netClock.getTimeDifference();
 
 		// Check for any new messages we should send and process them
@@ -209,10 +187,14 @@ void NetServerTCP3::actualSendRecvFunc()
 			delete destination;
 			finishedDestinations_.pop_front();
 		}
-		SDL_Delay(10);
+		boost::this_thread::sleep(boost::posix_time::milliseconds(10));
 	}
 
-	if (serverSock_) SDLNet_TCP_Close(serverSock_);
+	if (serverSock_) 
+	{
+		serverSock_->close();
+		delete serverSock_;
+	}
 	serverSock_ = 0;
 }
 
@@ -220,19 +202,18 @@ void NetServerTCP3::checkNewConnections()
 {
 	if (!serverSock_) return; // Check if we are running a server
 
-	int numready = SDLNet_CheckSockets(serverSockSet_, 10);
-	if (numready == -1) return;
-	if (numready == 0) return;
-
-	if(SDLNet_SocketReady(serverSock_))
+	boost::asio::ip::tcp::socket *clientSock = new boost::asio::ip::tcp::socket(io_service_);
+	boost::system::error_code ec;
+	serverSock_->accept(*clientSock, ec);
+	if (ec) 
 	{
-		TCPsocket clientSock = SDLNet_TCP_Accept(serverSock_);
-		if (clientSock)
-		{
-			// add client
-			addDestination(clientSock);
-		}
+		delete clientSock;
+		boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+		return;
 	}
+
+	// add client
+	addDestination(clientSock);
 }
 
 void NetServerTCP3::checkClients()
@@ -429,7 +410,7 @@ void NetServerTCP3::destroyDestination(NetBuffer &disconectMessage,
 	incomingMessageHandler_.addMessage(message);
 }
 
-unsigned int NetServerTCP3::addDestination(TCPsocket &socket)
+unsigned int NetServerTCP3::addDestination(boost::asio::ip::tcp::socket *socket)
 {
 	NetInterface::getConnects() ++;
 
@@ -453,4 +434,11 @@ unsigned int NetServerTCP3::addDestination(TCPsocket &socket)
 
 	// Return new id
 	return destinationId;
+}
+
+unsigned int NetServerTCP3::getIpAddressFromSocket(boost::asio::ip::tcp::socket *socket)
+{
+	boost::asio::ip::tcp::endpoint endpoint = socket->remote_endpoint();
+	unsigned int addr = endpoint.address().to_v4().to_ulong();
+	return addr;
 }

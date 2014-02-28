@@ -25,7 +25,6 @@
 #include <common/fixed.h>
 #include <common/Vector.h>
 
-struct lua_State;
 class XMLNode;
 class LaserParams 
 {
@@ -34,7 +33,6 @@ public:
 	~LaserParams();
 
 	bool parseXML(XMLNode *accessoryNode);
-	void parseLUA(lua_State *L, int position);
 
 	void setMinimumHurt(fixed value) { minimumHurt_ = value; }
 	void setMaximumHurt(fixed value) { maximumHurt_ = value; }

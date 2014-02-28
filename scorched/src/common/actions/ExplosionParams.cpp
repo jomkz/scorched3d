@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <actions/ExplosionParams.h>
-#include <lua/LUAUtil.h>
 #include <XML/XMLNode.h>
 
 ExplosionParams::ExplosionParams() :
@@ -165,37 +164,4 @@ bool ExplosionParams::parseXML(XMLNode *accessoryNode)
 	}
 
 	return true;
-}
-
-void ExplosionParams::parseLUA(lua_State *L, int position)
-{
-	luaL_checktype(L, position, LUA_TTABLE);
-
-	size_ = LUAUtil::getNumberFromTable(L, position, "size", size_);
-	deformSize_ = LUAUtil::getNumberFromTable(L, position, "deformsize", size_);
-	hurtAmount_ = LUAUtil::getNumberFromTable(L, position, "hurtamount", hurtAmount_);
-
-	shake_ = LUAUtil::getNumberFromTable(L, position, "shake", shake_);
-	minLife_ = LUAUtil::getNumberFromTable(L, position, "minlife", minLife_);
-	maxLife_ = LUAUtil::getNumberFromTable(L, position, "maxlife", maxLife_);
-	createMushroomAmount_ = LUAUtil::getNumberFromTable(L, position, "createmushroomamount", createMushroomAmount_);
-
-	luminance_ = LUAUtil::getBoolFromTable(L, position, "luminance", luminance_);
-	windAffected_ = LUAUtil::getBoolFromTable(L, position, "windaffected", windAffected_);
-	multiColored_ = LUAUtil::getBoolFromTable(L, position, "multicolored", multiColored_);
-	createDebris_ = LUAUtil::getBoolFromTable(L, position, "createdebris", createDebris_);
-	createSplash_ = LUAUtil::getBoolFromTable(L, position, "createsplash", createSplash_);
-	explodeUnderGround_ = LUAUtil::getBoolFromTable(L, position, "explodeunderground", explodeUnderGround_);
-	onlyHurtShield_ = LUAUtil::getBoolFromTable(L, position, "onlyhurtshield", onlyHurtShield_);
-	animate_ = LUAUtil::getBoolFromTable(L, position, "animate", animate_);
-	
-	deformTexture_ = LUAUtil::getStringFromTable(L, position, "deformtexture", deformTexture_);
-	explosionTexture_ = LUAUtil::getStringFromTable(L, position, "explosiontexture", explosionTexture_);
-	mushroomTexture_ = LUAUtil::getStringFromTable(L, position, "mushroomtexture", mushroomTexture_);
-	explosionSound_ = LUAUtil::getStringFromTable(L, position, "explosionsound", explosionSound_);
-
-	fixed deform = LUAUtil::getNumberFromTable(L, position, "deform", int(deform_));
-	deform_ = (DeformType) deform.asInt();
-	fixed explosiontype = LUAUtil::getNumberFromTable(L, position, "explosiontype", int(explosionType_));
-	explosionType_ = (ExplosionType) explosiontype.asInt();
 }

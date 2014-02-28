@@ -1,3 +1,0 @@
-IDI_ICON1               ICON                    "../../../data/images/tank2.ico"
-
-#include "wx/msw/wx.rc"

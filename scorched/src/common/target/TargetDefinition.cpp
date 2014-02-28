@@ -22,7 +22,7 @@
 #include <common/RandomGenerator.h>
 #include <common/DefinesAssert.h>
 #ifndef S3D_SERVER
-	#include <tankgraph/TargetRendererImplTarget.h>
+//	#include <tankgraph/TargetRendererImplTarget.h>
 #endif
 #include <tanket/Tanket.h>
 #include <tanket/TanketShotInfo.h>
@@ -255,7 +255,7 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 	}
 
 #ifndef S3D_SERVER
-	if (!context.getServerMode())
+/*	if (!context.getServerMode())
 	{
 		target->setRenderer(
 			new TargetRendererImplTarget(
@@ -263,6 +263,7 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 				finalModelScale.asFloat(), finalBrightness.asFloat(), 
 				billboard_));
 	}
+*/
 #endif // #ifndef S3D_SERVER
 
 	target->getLife().setTargetPosition(position);

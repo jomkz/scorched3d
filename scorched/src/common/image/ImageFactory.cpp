@@ -67,31 +67,6 @@ Image ImageFactory::loadImage(
 	return loadImageID(imageId);
 }
 
-#ifndef S3D_SERVER
-
-#include <GLEXT/GLState.h>
-#include <common/Defines.h>
-
-Image ImageFactory::grabScreen()
-{
-	GLint		viewport[4];		/* Current viewport */
-	glGetIntegerv(GL_VIEWPORT, viewport);
-
-	Image map(viewport[2], viewport[3], false);
-
-	glFinish();				/* Finish all OpenGL commands */
-	glPixelStorei(GL_PACK_ALIGNMENT, 4);	/* Force 4-byte alignment */
-	glPixelStorei(GL_PACK_ROW_LENGTH, 0);
-	glPixelStorei(GL_PACK_SKIP_ROWS, 0);
-	glPixelStorei(GL_PACK_SKIP_PIXELS, 0);
-
-	glReadPixels(0, 0, map.getWidth(), map.getHeight(), 
-		GL_RGB, GL_UNSIGNED_BYTE, map.getBits());
-
-	return map;
-}
-#endif
-
 Image ImageFactory::loadImageInternal(S3D::FileLocation imageLocation, const std::string &filename, bool loadAlpha)
 {
 	std::string expandedFilename = S3D::getLocation(imageLocation, filename);

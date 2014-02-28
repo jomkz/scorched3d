@@ -24,12 +24,6 @@
 #include <lang/LangString.h>
 #include <common/FixedVector4.h>
 #include <common/FixedVector.h>
-#include <SDL/SDL.h>
-#ifdef __MACOSX__
-#include <SDL_net/SDL_net.h>
-#else
-#include <SDL/SDL_net.h>
-#endif
 
 class NetBuffer;
 class NamedNetBuffer
@@ -127,6 +121,8 @@ public:
 	// NOTE: Care must be taken to ensure that the added data
 	// is in network byte ordering
 	void addDataToBuffer(const void *add, unsigned len);
+
+	static uint64_t htonll(uint64_t value);
 
 protected:
 	char *buffer_;

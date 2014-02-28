@@ -27,7 +27,7 @@
 class NetServerTCP3Send : public NetMessageHandlerI
 {
 public:
-	NetServerTCP3Send(TCPsocket socket, 
+	NetServerTCP3Send(boost::asio::ip::tcp::socket *socket, 
 		unsigned int destinationId, unsigned int ipAddress,
 		NetMessageHandler *recieveMessageHandler);
 	virtual ~NetServerTCP3Send();
@@ -43,8 +43,8 @@ public:
 
 protected:
 	unsigned int destinationId_, ipAddress_;
-	TCPsocket socket_;
-	SDL_Thread *sendThread_;
+	boost::asio::ip::tcp::socket *socket_;
+	boost::thread *sendThread_;
 	NetMessageHandler sendMessageHandler_;
 	NetMessageHandler *recieveMessageHandler_;
 	std::list<NetMessage *> outgoingMessages_;

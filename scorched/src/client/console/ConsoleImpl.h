@@ -22,14 +22,12 @@
 #define AFX_ConsoleImpl_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_
 
 #include <common/LoggerI.h>
-#include <engine/GameStateI.h>
-#include <GLEXT/GLFont2d.h>
 #include <console/Console.h>
 #include <console/ConsoleMethods.h>
 #include <console/ConsoleLines.h>
 #include <console/ConsoleRules.h>
 
-class ConsoleImpl : public GameStateI, public LoggerI, public Console
+class ConsoleImpl : public LoggerI, public Console
 {
 public:
 	ConsoleImpl();
@@ -46,14 +44,6 @@ public:
 
 	std::deque<ConsoleLine *> &getLines() { return lines_.getLines(); }
 
-	// Inherited from GameStateI
-	virtual void simulate(const unsigned state, float frameTime);
-	virtual void draw(const unsigned state);
-	virtual void keyboardCheck(const unsigned state, float frameTime, 
-							   char *buffer, unsigned int keyState,
-							   KeyboardHistory::HistoryElement *history, int hisCount, 
-							   bool &skipRest);
-
 	// Inherited from LoggerI
 	virtual void logMessage(LoggerInfo &info);
 
@@ -61,7 +51,6 @@ protected:
 	float height_;
 	bool opening_;
 	bool showCursor_;
-	GLFont2d *font_;
 	ConsoleLines lines_;
 	ConsoleRules rules_;
 	ConsoleMethods methods_;

@@ -21,7 +21,6 @@
 #if !defined(__INCLUDE_ClientStateh_INCLUDE__)
 #define __INCLUDE_ClientStateh_INCLUDE__
 
-#include <graph/FrameLimiter.h>
 #include <common/Clock.h>
 #include <list>
 
@@ -84,7 +83,6 @@ public:
 protected:
 	ClientStateEnum currentState_;
 	bool stopped_, paused_;
-	FrameLimiter frameLimiter_;
 	float serverTime_;
 	Clock frameClock_;
 	std::list<Stimulus> stimuli_;

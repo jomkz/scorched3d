@@ -29,8 +29,8 @@ public:
 	NetServerTCPProtocol();
 	virtual ~NetServerTCPProtocol();
 
-	virtual bool sendBuffer(NetBuffer &buffer, TCPsocket socket, unsigned int id) = 0;
-	virtual NetMessage *readBuffer(TCPsocket socket, unsigned int id) = 0;
+	virtual bool sendBuffer(NetBuffer &buffer, boost::asio::ip::tcp::socket *socket, unsigned int id) = 0;
+	virtual NetMessage *readBuffer(boost::asio::ip::tcp::socket *socket, unsigned int id) = 0;
 };
 
 class NetServerTCPScorchedProtocol : public NetServerTCPProtocol
@@ -39,8 +39,8 @@ public:
 	NetServerTCPScorchedProtocol();
 	virtual ~NetServerTCPScorchedProtocol();
 
-	virtual bool sendBuffer(NetBuffer &buffer, TCPsocket socket, unsigned int id);
-	virtual NetMessage *readBuffer(TCPsocket socket, unsigned int id);
+	virtual bool sendBuffer(NetBuffer &buffer, boost::asio::ip::tcp::socket *socket, unsigned int id);
+	virtual NetMessage *readBuffer(boost::asio::ip::tcp::socket *socket, unsigned int id);
 };
 
 class NetServerHTTPProtocolSend : public NetServerTCPProtocol
@@ -49,8 +49,8 @@ public:
 	NetServerHTTPProtocolSend();
 	virtual ~NetServerHTTPProtocolSend();
 
-	virtual bool sendBuffer(NetBuffer &buffer, TCPsocket socket, unsigned int id);
-	virtual NetMessage *readBuffer(TCPsocket socket, unsigned int id);
+	virtual bool sendBuffer(NetBuffer &buffer, boost::asio::ip::tcp::socket *socket, unsigned int id);
+	virtual NetMessage *readBuffer(boost::asio::ip::tcp::socket *socket, unsigned int id);
 };
 
 class NetServerHTTPProtocolRecv : public NetServerTCPProtocol
@@ -59,8 +59,8 @@ public:
 	NetServerHTTPProtocolRecv();
 	virtual ~NetServerHTTPProtocolRecv();
 
-	virtual bool sendBuffer(NetBuffer &buffer, TCPsocket socket, unsigned int id);
-	virtual NetMessage *readBuffer(TCPsocket socket, unsigned int id);
+	virtual bool sendBuffer(NetBuffer &buffer, boost::asio::ip::tcp::socket *socket, unsigned int id);
+	virtual NetMessage *readBuffer(boost::asio::ip::tcp::socket *socket, unsigned int id);
 };
 
 #endif

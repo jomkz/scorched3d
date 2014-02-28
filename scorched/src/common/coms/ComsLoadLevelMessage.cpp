@@ -31,9 +31,6 @@
 #include <weapons/AccessoryStore.h>
 #include <server/ScorchedServer.h>
 #include <set>
-#ifndef S3D_SERVER
-#include <tankgraph/TargetRendererImplTank.h>
-#endif
 
 ComsMessageType ComsLoadLevelMessage::ComsLoadLevelMessageType("ComsLoadLevelMessageType");
 
@@ -132,7 +129,7 @@ bool ComsLoadLevelMessage::loadTanks(ScorchedContext &context)
 #ifndef S3D_SERVER
 			if (!context.getServerMode())
 			{
-				tank->setRenderer(new TargetRendererImplTank(tank));
+				//tank->setRenderer(new TargetRendererImplTank(tank));
 			}
 #endif
 			context.getTargetContainer().addTarget(tank);

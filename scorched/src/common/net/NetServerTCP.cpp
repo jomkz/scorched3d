@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <net/NetServerTCP.h>
-#include <net/NetBufferUtil.h>
 #include <net/NetMessageHandler.h>
 #include <net/NetMessagePool.h>
 #include <common/Defines.h>
@@ -27,21 +26,17 @@
 #include <common/Clock.h>
 
 NetServerTCP::NetServerTCP(NetServerTCPProtocol *protocol) : 
-	sockSet_(0), firstDestination_(0),
+	firstDestination_(0),
 	server_(0), protocol_(protocol), checkDeleted_(false),
 	lastId_(0)
 {
-	sockSet_ = SDLNet_AllocSocketSet(1);
-	setMutex_ = SDL_CreateMutex();
-	SDL_CreateThread(NetServerTCP::threadFunc, (void *) this);
+	new boost::thread(NetServerTCP::threadFunc, (void *) this);
 }
 
 NetServerTCP::~NetServerTCP()
 {
-	SDL_DestroyMutex(setMutex_); 
-	setMutex_ = 0;
-	SDLNet_FreeSocketSet(sockSet_);
-	sockSet_ = 0;
+	delete server_;
+	server_ = 0;
 }
 
 void NetServerTCP::setMessageHandler(NetMessageHandlerI *handler) 
@@ -61,27 +56,15 @@ bool NetServerTCP::started()
 
 bool NetServerTCP::start(int port)
 {
-	if(SDLNet_Init()==-1)
-	{
-		return false;
-	}
+	// Create socket
+	server_ = new boost::asio::ip::tcp::acceptor(io_service_, 
+		boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port));
+	if (!server_->is_open()) return false;	
 
-	IPaddress ip;
-	if(SDLNet_ResolveHost(&ip,NULL,port)==-1)
-	{
-		return false;
-	}
-
-	// we seem to be able to open the same port
-	// multiple times!!!
-	// This is fixed as the server info port catches it
-	server_=SDLNet_TCP_Open(&ip);
-	if (!server_)
-	{
-		return false;
-	}
-	NetBufferUtil::setBlockingIO(server_);
-	SDLNet_TCP_AddSocket(sockSet_, server_);
+	// Set non-blocking accepts
+	boost::system::error_code ec;
+	server_->non_blocking(true, ec);
+	if (ec) return false;
 
 	return true;
 }
@@ -93,25 +76,22 @@ void NetServerTCP::stop()
 
 bool NetServerTCP::connect(const char *hostName, int portNo)
 {
-	if(SDLNet_Init()==-1)
+	// Resolve server address
+	std::string portStr = S3D::formatStringBuffer("%i", portNo);
+	boost::asio::ip::tcp::resolver resolver(io_service_);
+    boost::asio::ip::tcp::resolver::query query(boost::asio::ip::tcp::v4(), hostName, portStr.c_str());
+	boost::asio::ip::tcp::resolver::iterator iterator = resolver.resolve(query);
+	
+	// Create a new socket for the client
+    boost::asio::ip::tcp::socket *clientSock = new boost::asio::ip::tcp::socket(io_service_);
+	boost::system::error_code ec;
+    clientSock->connect(*iterator, ec);
+	if (ec) 
 	{
 		return false;
 	}
 
-	IPaddress ip;
-	if(SDLNet_ResolveHost(&ip,(char *) hostName,portNo)==-1)
-	{
-		return false;
-	}
-
-	TCPsocket client=SDLNet_TCP_Open(&ip);
-	if (!client)
-	{
-		return false;
-	}
-	NetBufferUtil::setBlockingIO(client);
-
-	addClient(client);
+	addClient(clientSock);
 	return true;
 }
 
@@ -141,7 +121,7 @@ int NetServerTCP::threadFunc(void *param)
 				timeDiff));
 		}
 
-		SDL_Delay(100);
+		boost::this_thread::sleep(boost::posix_time::milliseconds(100));
 	}
 
 	return 0;
@@ -149,28 +129,27 @@ int NetServerTCP::threadFunc(void *param)
 
 bool NetServerTCP::pollIncoming()
 {
-	DIALOG_ASSERT(sockSet_ && server_);
-	int numready = SDLNet_CheckSockets(sockSet_, 10);
-	if (numready == -1) return false;
-	if (numready == 0) return true;
+	DIALOG_ASSERT(server_);
 
-	if(SDLNet_SocketReady(server_))
+	boost::asio::ip::tcp::socket *clientSock = new boost::asio::ip::tcp::socket(io_service_);
+	boost::system::error_code ec;
+	server_->accept(*clientSock, ec);
+	if (ec) 
 	{
-		TCPsocket sock = SDLNet_TCP_Accept(server_);
-		if (sock)
-		{
-			NetBufferUtil::setBlockingIO(sock);
-			addClient(sock);
-			getConnects()++;
-		}
+		delete clientSock;
+		boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+		return false;
 	}
+
+	addClient(clientSock);
+	getConnects()++;
 
 	return true;
 }
 
 bool NetServerTCP::pollDeleted()
 {
-	SDL_LockMutex(setMutex_);
+	setMutex_.lock();
 	std::list<unsigned int> remove;
 	std::map<unsigned int, NetServerTCPRead *>::iterator itor;
 	for (itor = connections_.begin();
@@ -193,29 +172,29 @@ bool NetServerTCP::pollDeleted()
 		unsigned int id = (*itor2);
 		connections_.erase(id);
 	}
-	SDL_UnlockMutex(setMutex_);
+	setMutex_.unlock();
 	return true;
 }
 
-void NetServerTCP::addClient(TCPsocket client)
+void NetServerTCP::addClient(boost::asio::ip::tcp::socket *client)
 {
 	// Calculate the current client id
 	// Mutex protect incase addClient is called from different threads
 	// (unlikely)
-	SDL_LockMutex(setMutex_);
+	setMutex_.lock();
 	if (++lastId_ == 0) ++lastId_;
 	unsigned int currentId = lastId_;
-	SDL_UnlockMutex(setMutex_);
+	setMutex_.unlock();
 
 	// Create the thread to read this socket
 	NetServerTCPRead *serverRead = new NetServerTCPRead(
 		currentId, client, protocol_, &messageHandler_, &checkDeleted_);
 
 	// Add this to the collection of sockets (connections)
-	SDL_LockMutex(setMutex_);
+	setMutex_.lock();
 	connections_[currentId] = serverRead;
 	firstDestination_ = currentId;
-	SDL_UnlockMutex(setMutex_);
+	setMutex_.unlock();
 
 	// Start the sockets
 	serverRead->start();
@@ -223,7 +202,7 @@ void NetServerTCP::addClient(TCPsocket client)
 
 void NetServerTCP::disconnectAllClients()
 {
-	SDL_LockMutex(setMutex_);
+	setMutex_.lock();
 	std::map<unsigned int, NetServerTCPRead *>::iterator itor;
 	for (itor = connections_.begin();
 		itor != connections_.end();
@@ -232,7 +211,7 @@ void NetServerTCP::disconnectAllClients()
 		unsigned int id = (*itor).first;
 		disconnectClient(id);
 	}
-	SDL_UnlockMutex(setMutex_);
+	setMutex_.unlock();
 }
 
 void NetServerTCP::disconnectClient(NetBuffer &buffer, unsigned int dest)
@@ -278,7 +257,7 @@ void NetServerTCP::sendMessageDest(NetBuffer &buffer,
 void NetServerTCP::sendMessage(unsigned int client, NetMessage *message)
 {
 	// Find the client
-	SDL_LockMutex(setMutex_);
+	setMutex_.lock();
 	std::map<unsigned int, NetServerTCPRead *>::iterator itor = 
 		connections_.find(client);
 	if (itor != connections_.end()) 
@@ -293,13 +272,13 @@ void NetServerTCP::sendMessage(unsigned int client, NetMessage *message)
 		Logger::log(S3D::formatStringBuffer("Unknown sendMessage destination %u",
 			client));
 	}
-	SDL_UnlockMutex(setMutex_);
+	setMutex_.unlock();
 }
 
 unsigned int NetServerTCP::getIpAddress(unsigned int destination)
 {
 	unsigned int addr = 0;
-	SDL_LockMutex(setMutex_);
+	setMutex_.lock();
 	std::map<unsigned int, NetServerTCPRead *>::iterator itor = 
 		connections_.find(destination);
 	if (itor != connections_.end()) 
@@ -307,7 +286,7 @@ unsigned int NetServerTCP::getIpAddress(unsigned int destination)
 		NetServerTCPRead *read = (*itor).second;
 		addr = read->getIpAddress();
 	}
-	SDL_UnlockMutex(setMutex_);
+	setMutex_.unlock();
 
 	return addr;
 }

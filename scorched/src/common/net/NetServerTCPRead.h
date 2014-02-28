@@ -28,7 +28,7 @@ class NetServerTCPRead
 {
 public:
 	NetServerTCPRead(unsigned int id,
-		TCPsocket socket,
+		boost::asio::ip::tcp::socket *socket,
 		NetServerTCPProtocol *protocol,
 		NetMessageHandler *messageHandler,
 		bool *checkDeleted);
@@ -39,20 +39,17 @@ public:
 	void addMessage(NetMessage *message);
 	unsigned int getIpAddress();
 
-	static unsigned int getIpAddressFromSocket(TCPsocket socket);
-
 protected:
 	unsigned int id_;
 	bool *checkDeleted_;
 	bool disconnect_, sentDisconnect_;
-	TCPsocket socket_;
-	SDLNet_SocketSet sockSet_;
+	boost::asio::ip::tcp::socket *socket_;
 	NetServerTCPProtocol *protocol_;
 	NetMessageHandler *messageHandler_;
-	SDL_mutex *outgoingMessagesMutex_;
-	SDL_Thread *sendThread_;
-	SDL_Thread *recvThread_;
-	SDL_Thread *ctrlThread_;
+	boost::mutex outgoingMessagesMutex_;
+	boost::thread *sendThread_;
+	boost::thread *recvThread_;
+	boost::thread *ctrlThread_;
 	std::list<NetMessage *> newMessages_;
 	unsigned int startCount_;
 

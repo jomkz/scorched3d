@@ -45,7 +45,6 @@ public:
 	~ExplosionParams();
 
 	bool parseXML(XMLNode *accessoryNode);
-	void parseLUA(lua_State *L, int position);
 
 	void setSize(fixed size) { size_ = size; }
 	void setDeformSize(fixed size) { deformSize_ = size; }

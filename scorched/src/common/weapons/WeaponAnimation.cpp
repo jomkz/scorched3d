@@ -23,7 +23,7 @@
 #include <engine/ActionController.h>
 #include <common/Defines.h>
 #ifndef S3D_SERVER
-#include <sprites/MetaActionRenderer.h>
+//#include <sprites/MetaActionRenderer.h>
 #endif
 
 REGISTER_ACCESSORY_SOURCE(WeaponAnimation);
@@ -62,6 +62,7 @@ void WeaponAnimation::fireWeapon(ScorchedContext &context,
 {
 
 #ifndef S3D_SERVER
+	/*
 	if (!context.getServerMode())
 	{
 		MetaActionRenderer *renderer = (MetaActionRenderer *) 
@@ -80,5 +81,6 @@ void WeaponAnimation::fireWeapon(ScorchedContext &context,
 						  rendererName_.c_str()));
 		}
 	}
+	*/
 #endif // #ifndef S3D_SERVER
 }

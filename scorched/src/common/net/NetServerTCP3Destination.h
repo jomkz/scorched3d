@@ -28,7 +28,7 @@ class NetServerTCP3Destination
 {
 public:
 	NetServerTCP3Destination(NetMessageHandler *recieveMessageHandler,
-		TCPsocket socket, unsigned int destinationId);
+		boost::asio::ip::tcp::socket *socket, unsigned int destinationId);
 	virtual ~NetServerTCP3Destination();
 
 	void sendMessage(NetMessage *message);
@@ -44,10 +44,8 @@ protected:
 	NetServerTCP3Send send_;
 	NetServerTCP3Recv recv_;
 	unsigned int destinationId_, ipAddress_;
-	TCPsocket socket_;
+	boost::asio::ip::tcp::socket *socket_;
 	bool running_;
-
-	static unsigned int getIpAddressFromSocket(TCPsocket socket);
 };
 
 #endif // __INCLUDE_NetServerTCP3Destinationh_INCLUDE__

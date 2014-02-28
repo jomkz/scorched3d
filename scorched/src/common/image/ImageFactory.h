@@ -39,10 +39,6 @@ public:
 		S3D::FileLocation imageLocation,
 		const std::string &filename);
 
-#ifndef S3D_SERVER
-	static Image grabScreen();
-#endif
-
 protected:
 	static Image loadImageInternal(S3D::FileLocation imageLocation, const std::string &filename, bool alphaName);
 	static Image combineImage(Image file, Image alphaFile, bool invert);

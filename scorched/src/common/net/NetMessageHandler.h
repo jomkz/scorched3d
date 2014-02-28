@@ -22,7 +22,6 @@
 #define __INCLUDE_NetMessageHandlerh_INCLUDE__
 
 #include <net/NetMessage.h>
-#include <SDL/SDL_thread.h>
 #include <list>
 
 class NetMessageHandlerI
@@ -47,7 +46,7 @@ public:
 protected:
 	NetMessageHandlerI *handler_;
 	std::list<NetMessage *> messages_;
-	SDL_mutex *messagesMutex_;
+	boost::mutex messagesMutex_;
 	bool messagesWaiting_;
 
 	bool processSingleMessage();

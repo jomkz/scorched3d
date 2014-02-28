@@ -35,7 +35,7 @@
 #include <weapons/Accessory.h>
 #include <landscape/Landscape.h>
 #include <graph/ShotCountDown.h>
-#include <graph/OptionsDisplay.h>
+#include <client/ClientOptions.h>
 #include <graph/MainCamera.h>
 #include <sound/SoundUtils.h>
 #include <client/ScorchedClient.h>

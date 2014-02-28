@@ -50,30 +50,6 @@ void ConsoleLine::set(const LangString &line, LineType type)
 	lineNumberStr_= LANG_STRING(S3D::formatStringBuffer("%4i", lineNumber_));
 }
 
-void ConsoleLine::drawLine(float x, float y, GLFont2d *font)
-{
-	static Vector color(0.9f, 0.9f, 0.9f);
-	if (lineType_ != eNone)
-	{
-		if (lineType_ == eCommand)
-		{
-			// We show a line number of those lines with commands
-			// on them
-			font->draw(color, 12, x, y, 0.0f, lineNumberStr_);
-			font->draw(color, 12, x + 50.0f, y, 0.0f, line_);
-		}
-		else
-		{
-			font->draw(color, 12, x + 50.0f, y, 0.0f, "...");
-			font->draw(color, 12, x + 90.0f, y, 0.0f, line_);
-		}
-	}
-	else
-	{
-		font->draw(color, 12, x + 50.0f, y, 0.0f, line_);
-	}
-}
-
 ConsoleLines::ConsoleLines(int maxLines) :
 	maxLines_(maxLines), currentLine_(0)
 {
@@ -156,57 +132,5 @@ void ConsoleLines::addSmallLine(int sectionNo, const LangString &text, bool show
 		currentLine_ ++;
 		if (currentLine_ > (int) lines_.size()) 
 			currentLine_ = (int) lines_.size();
-	}
-}
-
-void ConsoleLines::drawLines(GLFont2d *font, float startHeight, float totalHeight, float totalWidth)
-{
-	if (currentLine_ != 0)
-	{
-		// Draw arrows at the bottom of the screen if stuff off bottom
-		glColor3f(0.7f, 0.7f, 0.7f);
-		glBegin(GL_TRIANGLES);
-			for (float a=100.0f; a<totalWidth - 100.0f; a+=totalWidth / 25.0f)
-			{
-				glVertex2f(a + 20.0f, startHeight - 4.0f);
-				glVertex2f(a + 24.0f, startHeight - 8.0f);
-				glVertex2f(a + 28.0f, startHeight - 4.0f);
-			}
-		glEnd();
-	}
-
-	bool offTop = false;
-	{
-		// Draw all of the text
-		// Stops each drawLine() from changing state
-		GLState currentState(GLState::TEXTURE_ON | GLState::BLEND_ON);
-
-		float position = startHeight + 20.0f;
-		for (int i=currentLine_; i<(int) lines_.size(); i++)
-		{
-			ConsoleLine *line = lines_[i];
-			line->drawLine(20.0f, position, font);
-
-			position += 15.0f;
-			if (position > totalHeight - 20.0f)
-			{
-				offTop = true;
-				break;
-			}
-		}
-	}
-
-	if (offTop)
-	{
-		// Draw arrows at top of screen if stuff off top
-		glColor3f(0.7f, 0.7f, 0.7f);
-		glBegin(GL_TRIANGLES);
-			for (float a=100.0f; a<totalWidth - 100.0f; a+=totalWidth / 25.0f)
-			{
-				glVertex2f(a + 24.0f, totalHeight - 4.0f);
-				glVertex2f(a + 20.0f, totalHeight - 8.0f);
-				glVertex2f(a + 28.0f, totalHeight - 8.0f);
-			}
-		glEnd();
 	}
 }

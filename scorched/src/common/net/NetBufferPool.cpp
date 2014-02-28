@@ -31,26 +31,24 @@ NetBufferPool *NetBufferPool::instance()
 	return instance_;
 }
 
-NetBufferPool::NetBufferPool() : messagePoolMutex_(0)
+NetBufferPool::NetBufferPool()
 {
-	messagePoolMutex_ = SDL_CreateMutex();
 }
 
 NetBufferPool::~NetBufferPool()
 {
-	SDL_DestroyMutex(messagePoolMutex_);
 }
 
 void NetBufferPool::addToPool(NetBuffer *message)
 {
-	SDL_LockMutex(messagePoolMutex_);
+	messagePoolMutex_.lock();
 	messagePool_.push_back(message);
-	SDL_UnlockMutex(messagePoolMutex_);
+	messagePoolMutex_.unlock();
 }
 
 NetBuffer *NetBufferPool::getFromPool()
 {
-	SDL_LockMutex(messagePoolMutex_);
+	messagePoolMutex_.lock();
 
 	NetBuffer *result = 0;
 	if (messagePool_.empty())
@@ -63,7 +61,7 @@ NetBuffer *NetBufferPool::getFromPool()
 		messagePool_.pop_front();
 	}
 	result->reset();
-	SDL_UnlockMutex(messagePoolMutex_);
+	messagePoolMutex_.unlock();
 
 	return result;
 }

@@ -24,16 +24,11 @@
 #include <client/ClientMessageHandler.h>
 #include <client/ClientChannelManager.h>
 #include <client/ClientHandlers.h>
-#include <engine/MainLoop.h>
-#include <engine/GameState.h>
-#include <graph/MainCamera.h>
-#include <graph/ParticleEngine.h>
-#include <graph/OptionsDisplay.h>
+#include <client/ClientOptions.h>
 #include <target/TargetSpace.h>
 #include <coms/ComsSimulateMessage.h>
 #include <coms/ComsNetStatMessage.h>
 #include <landscapemap/LandscapeMaps.h>
-#include <landscape/GraphicalLandscapeMap.h>
 
 TargetSpace *ScorchedClient::targetSpace_ = new TargetSpace();
 
@@ -77,12 +72,6 @@ ScorchedClient::ScorchedClient() :
 		numberOfBilboards = 100;
 	else if (OptionsDisplay::instance()->getEffectsDetail() == 2) 
 		numberOfBilboards = 10000;
-	particleEngine_ = new ParticleEngine(numberOfBilboards);
-
-	getLandscapeMaps().getGroundMaps().getHeightMap().setGraphicalMap(
-		new GraphicalLandscapeMap());
-	getLandscapeMaps().getRoofMaps().getRoofMap().setGraphicalMap(
-		new GraphicalLandscapeMap());
 }
 
 ScorchedClient::~ScorchedClient()

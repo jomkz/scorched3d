@@ -21,57 +21,13 @@
 #include <client/ClientMain.h>
 #include <client/ClientState.h>
 #include <client/ScorchedClient.h>
+#include <client/ClientOptions.h>
 #include <net/NetInterface.h>
-#include <SDL/SDL.h>
 #include <common/ProgressCounter.h>
 #include <common/Logger.h>
 #include <common/Defines.h>
-#include <common/Keyboard.h>
-#include <sound/Sound.h>
-#include <graph/OptionsDisplay.h>
 #include <lang/LangResource.h>
-#include <ui/RocketGameState.h>
 
-static bool initHardware(ProgressCounter *progressCounter)
-{
-	progressCounter->setNewPercentage(0.0f);
-	progressCounter->setNewOp(LANG_RESOURCE("INITIALIZING_KEYBOARD", "Initializing Keyboard"));
-	if (!Keyboard::instance()->init())
-	{
-		S3D::dialogMessage("Scorched3D Keyboard", 
-			"SDL failed to aquire keyboard.\n"
-#ifdef WIN32
-			"Is DirectX 5.0 installed?"
-#endif
-		);
-		return false;
-	}
-	progressCounter->setNewOp(LANG_RESOURCE("LOADING_KEYBOARD", "Loading Keyboard Bindings"));
-	if (!Keyboard::instance()->loadKeyFile())
-	{
-		S3D::dialogMessage("Scorched3D Keyboard", 
-			"Failed to process keyboard file keys.xml");
-		return false;
-	}
-
-	if (!OptionsDisplay::instance()->getNoSound())
-	{
-		progressCounter->setNewOp(LANG_RESOURCE("INITIALIZING_SOUND", "Initializing Sound"));
-		if (!Sound::instance()->init(
-			OptionsDisplay::instance()->getSoundChannels()))
-		{
-			S3D::dialogMessage("Scorched3D Sound", 
-				"Failed to aquire sound.\n"
-				"Is anything else currently using the sound card?");
-		}
-		else
-		{
-			Sound::instance()->getDefaultListener()->setGain(
-				float(OptionsDisplay::instance()->getSoundVolume()) / 128.0f);
-		}
-	}
-	return true;
-}
 
 bool ClientMain::clientMain()
 {
@@ -81,11 +37,7 @@ bool ClientMain::clientMain()
 		S3D::ScorchedBuildTime.c_str()));
 
 	ProgressCounter progressCounter;
-	if (!initHardware(&progressCounter)) return false;
-
-	// Create the actual window
-	RocketGameState::instance()->create();
-
+	
 	// Start the initial windows
 	/*
 	ClientState::setupGameState();
@@ -110,9 +62,6 @@ bool ClientMain::clientMain()
 	{
 		ScorchedClient::instance()->getNetInterface().disconnectAllClients();
 	}
-	RocketGameState::instance()->destroy();
-    SDL_Delay(1000);
-	Sound::instance()->destroy();
 	Lang::instance()->saveUndefined();
 
 	return true;

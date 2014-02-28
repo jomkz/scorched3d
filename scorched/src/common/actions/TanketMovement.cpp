@@ -32,11 +32,11 @@
 #include <landscapemap/MovementMap.h>
 #include <landscapemap/DeformLandscape.h>
 #ifndef S3D_SERVER
-	#include <landscape/Smoke.h>
-	#include <landscape/Landscape.h>
-	#include <image/ImageStore.h>
-	#include <GLEXT/GLImageModifier.h>
-	#include <sound/Sound.h>
+//	#include <landscape/Smoke.h>
+//	#include <landscape/Landscape.h>
+//	#include <image/ImageStore.h>
+//	#include <GLEXT/GLImageModifier.h>
+//	#include <sound/Sound.h>
 #endif
 #include <target/TargetContainer.h>
 #include <tank/Tank.h>
@@ -104,12 +104,14 @@ void TanketMovement::init()
 			false);
 		context_->getActionController().addAction(positionAction);
 
+		/*
 		SoundBuffer *moveSound = 
 			Sound::instance()->fetchOrCreateBuffer(
 				S3D::getModFile("data/wav/movement/tankmove.wav"));
 		moveSoundSource_ = new VirtualSoundSource(VirtualSoundPriority::eAction, true, false);
 		moveSoundSource_->setPosition(tanket->getLife().getTargetPosition().asVector());
 		moveSoundSource_->play(moveSound);
+		*/
 	}
 #endif // #ifndef S3D_SERVER
 
@@ -247,10 +249,12 @@ void TanketMovement::simulationMove(fixed frameTime)
 					{
 						if (smokeCounter_.nextDraw(frameTime.asFloat()))
 						{
+							/*
 							Landscape::instance()->getSmoke().addSmoke(
 								tanket->getLife().getFloatPosition()[0],
 								tanket->getLife().getFloatPosition()[1],
 								tanket->getLife().getFloatPosition()[2]);
+							*/
 						}
 					}
 				}

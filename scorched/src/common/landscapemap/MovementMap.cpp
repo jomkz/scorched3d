@@ -561,6 +561,7 @@ void MovementMap::calculateAllPositions(fixed fuel)
 }
 
 #ifndef S3D_SERVER
+/*
 #include <landscape/Landscape.h>
 #include <client/ScorchedClient.h>
 
@@ -708,5 +709,5 @@ void MovementMap::limitTexture(FixedVector &center, int limit)
 	Landscape::instance()->getMainTexture().replace(newMap, false);
 	Landscape::instance()->setTextureType(Landscape::eOther);
 }
-
+*/
 #endif // #ifndef S3D_SERVER

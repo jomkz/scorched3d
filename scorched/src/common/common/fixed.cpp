@@ -42,11 +42,11 @@ fixed fixed::XPIO2 =   fixed(true,_XPIO2);
 #define _XLN_10   23025 // 2.30258509299404568402
 #define XLN_10   fixed(true,_XLN_10)
 
-Sint64 fixed::FIXED_RESOLUTION(10000);
+int64_t fixed::FIXED_RESOLUTION(10000);
 float fixed::FIXED_RESOLUTION_FLOAT(10000.0f);
 
-fixed fixed::MAX_FIXED(true, Sint64(LLONG_MAX)); // 64 bit
-fixed fixed::MIN_FIXED(true, Sint64(LLONG_MIN)); // 64 bit
+fixed fixed::MAX_FIXED(true, int64_t(LLONG_MAX)); // 64 bit
+fixed fixed::MIN_FIXED(true, int64_t(LLONG_MIN)); // 64 bit
 
 fixed::fixed(const char *nVal)
 {
@@ -75,8 +75,8 @@ fixed::fixed(const char *nVal)
 	i[ip] = '\0';
 	f[4] = '\0';
 
-	Sint64 ipa = atol(i);
-	Sint64 fpa = atol(f);
+	int64_t ipa = atol(i);
+	int64_t fpa = atol(f);
 
 	m_nVal = ipa * FIXED_RESOLUTION + fpa;
 	if (neg) m_nVal =- m_nVal;
@@ -176,9 +176,9 @@ fixed fixed::operator/=(fixed b)
         root = root >> 1;                               \
     }
 
-static Sint64 iSqrt(Sint64 value)
+static int64_t iSqrt(int64_t value)
 {
-    Sint64 root = 0;
+    int64_t root = 0;
 
     sqrt_step( 0);
     sqrt_step( 2);
@@ -280,8 +280,8 @@ static fixed ilog10( fixed p_Base )
 
 fixed fixed::sqrt()
 {
-	Sint64 val = iSqrt(m_nVal);
-	val *= Sint64(100);
+	int64_t val = iSqrt(m_nVal);
+	val *= int64_t(100);
 	return fixed(true, val);
 }
 
@@ -505,7 +505,7 @@ fixed tanx(fixed x)
 fixed fixed::fromFloat(float flt)
 {
 	fixed result;
-	result.m_nVal = Sint64(flt * FIXED_RESOLUTION_FLOAT);
+	result.m_nVal = int64_t(flt * FIXED_RESOLUTION_FLOAT);
 	return result;
 }
 

@@ -24,7 +24,6 @@
 
 #include <net/NetMessage.h>
 #include <list>
-#include <SDL/SDL_thread.h>
 
 class NetMessagePool
 {
@@ -41,7 +40,7 @@ public:
 protected:
 	static NetMessagePool *instance_;
 	std::list<NetMessage *> messagePool_;
-	SDL_mutex *messagePoolMutex_;
+	boost::mutex messagePoolMutex_;
 
 private:
 	NetMessagePool();

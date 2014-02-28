@@ -31,17 +31,10 @@
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
 #include <common/ChannelManager.h>
-#include <sound/Sound.h>
 #include <image/ImageFactory.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <landscapemap/LandscapeMaps.h>
-#include <landscape/Landscape.h>
 #include <lang/LangResource.h>
-#include <graph/OptionsDisplayConsole.h>
-#include <graph/ParticleEngine.h>
-#include <graph/MainCamera.h>
-#include <graph/SpeedChange.h>
-#include <tankgraph/RenderTracer.h>
 #include <tank/Tank.h>
 #include <tank/TankCamera.h>
 #include <target/TargetContainer.h>
@@ -102,9 +95,6 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 	if (!message.loadState(ScorchedClient::instance()->getContext())) return false;
 	if (!message.loadTanks(ScorchedClient::instance()->getContext())) return false;
 
-	// make sure we can only see the correct settings
-	OptionsDisplayConsole::instance()->addDisplayToConsole();
-
 	// Set the progress dialog nicities
 	LandscapeDefinitionsEntry *landscapeDefinition =
 		ScorchedClient::instance()->getLandscapes().getLandscapeByName(
@@ -129,7 +119,7 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 	ScorchedClient::instance()->getClientSimulator().newLevel();
 
 	// Calculate all the new landscape settings (graphics)
-	Landscape::instance()->generate(&counter); // No events
+	// Landscape::instance()->generate(&counter); // No events
 
 	// Add all missed actions to the simulator
 	std::list<ComsSimulateMessage *> simulateMessages;
@@ -158,7 +148,7 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 	}
 
 	// Sync the simulator
-	Sound::instance()->setPlaySounds(false);
+	// Sound::instance()->setPlaySounds(false);
 	Clock generateClock;
 	fixed actualTime = message.getActualTime();
 	fixed actualTimeCurrent = 0;
@@ -177,15 +167,16 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 		ScorchedClient::instance()->getClientSimulator().
 			setSimulationTime(actualTimeCurrent);
 	}
-	Sound::instance()->setPlaySounds(true);
+	//Sound::instance()->setPlaySounds(true);
 	float deformTime = generateClock.getTimeDifference();
 	Logger::log(S3D::formatStringBuffer("Landscape sync event time %.2f seconds", deformTime));
 
 	// Make sure the landscape has been optimized
-	Landscape::instance()->recalculateLandscape();
-	Landscape::instance()->recalculateRoof();
+	//Landscape::instance()->recalculateLandscape();
+	//Landscape::instance()->recalculateRoof();
 
 	// Reset stuff
+	/*
 	ScorchedClient::instance()->getParticleEngine().killAll();
 	std::map<std::string, TargetCamera *>::iterator itor;
 	for (itor = TargetCamera::getAllTargetCameras().begin();
@@ -198,6 +189,7 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 
 	RenderTracer::instance()->newGame();
 	SpeedChange::instance()->resetSpeed();
+	*/
 
 	// Process any outstanding coms messages
 	ScorchedClient::instance()->getNetInterface().processMessages();
@@ -225,8 +217,8 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 	}
 	if (playerTanks)
 	{
-		TargetCamera *targetCamera = TargetCamera::getTargetCameraByName("main");
-		if (targetCamera) targetCamera->setCameraType(TargetCamera::CamSpectator);
+		//TargetCamera *targetCamera = TargetCamera::getTargetCameraByName("main");
+		//if (targetCamera) targetCamera->setCameraType(TargetCamera::CamSpectator);
 	}
 	ClientReloadAdaptor::instance();
 

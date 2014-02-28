@@ -52,12 +52,12 @@ public:
 
 protected:
 	NetServerTCPProtocol *protocol_;
-	TCPsocket server_;
+	boost::asio::ip::tcp::acceptor  *server_;
+	boost::asio::io_service io_service_;
 	unsigned int lastId_;
 	unsigned int firstDestination_;
-	SDLNet_SocketSet sockSet_;
 	std::map<unsigned int, NetServerTCPRead *> connections_;
-	SDL_mutex *setMutex_;
+	boost::mutex setMutex_;
 	NetMessageHandler messageHandler_;
 	bool checkDeleted_;
 
@@ -65,7 +65,7 @@ protected:
 
 	bool pollIncoming();
 	bool pollDeleted();
-	void addClient(TCPsocket client);
+	void addClient(boost::asio::ip::tcp::socket *client);
 	void sendMessage(unsigned int client, NetMessage *message);
 	unsigned int getIpAddress(unsigned int destination);
 

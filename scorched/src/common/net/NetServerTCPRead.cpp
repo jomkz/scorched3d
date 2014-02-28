@@ -21,58 +21,40 @@
 #include <net/NetServerTCPRead.h>
 #include <net/NetServerTCP.h>
 #include <net/NetMessagePool.h>
+#include <net/NetServerTCP3.h>
 #include <common/Clock.h>
 #include <common/Logger.h>
 #include <common/Defines.h>
 
 NetServerTCPRead::NetServerTCPRead(unsigned int id,
-							 TCPsocket socket,
+							 boost::asio::ip::tcp::socket *socket,
 							 NetServerTCPProtocol *protocol,
 							 NetMessageHandler *messageHandler,
 							 bool *checkDeleted) : 
 	id_(id),
-	socket_(socket), sockSet_(0), protocol_(protocol), 
-	outgoingMessagesMutex_(0), checkDeleted_(checkDeleted),
+	socket_(socket), protocol_(protocol), 
+	checkDeleted_(checkDeleted),
 	disconnect_(false), messageHandler_(messageHandler),
 	sentDisconnect_(false), startCount_(0),
 	ctrlThread_(0), recvThread_(0), sendThread_(0)
 {
-	sockSet_ = SDLNet_AllocSocketSet(1);
-	SDLNet_TCP_AddSocket(sockSet_, socket);
-	outgoingMessagesMutex_ = SDL_CreateMutex();
 }
 
 NetServerTCPRead::~NetServerTCPRead()
 {
-	SDL_LockMutex(outgoingMessagesMutex_);
+	outgoingMessagesMutex_.lock();
 	while (!newMessages_.empty())
 	{
 		NetMessage *message = newMessages_.front();
 		newMessages_.pop_front();
 		NetMessagePool::instance()->addToPool(message);
 	}
-	SDL_UnlockMutex(outgoingMessagesMutex_);
-
-	SDL_DestroyMutex(outgoingMessagesMutex_);
-	outgoingMessagesMutex_ = 0;
-	SDLNet_FreeSocketSet(sockSet_);
-	sockSet_ = 0;
-}
-
-unsigned int NetServerTCPRead::getIpAddressFromSocket(TCPsocket socket)
-{
-	unsigned int addr = 0;
-	IPaddress *address = SDLNet_TCP_GetPeerAddress(socket);
-	if (address)
-	{
-		addr = SDLNet_Read32(&address->host);
-	}
-	return addr;
+	outgoingMessagesMutex_.unlock();
 }
 
 unsigned int NetServerTCPRead::getIpAddress()
 {
-	return getIpAddressFromSocket(socket_);
+	return NetServerTCP3::getIpAddressFromSocket(socket_);
 }
 
 void NetServerTCPRead::start()
@@ -84,16 +66,12 @@ void NetServerTCPRead::start()
 		getIpAddress());
 	messageHandler_->addMessage(message);
 
-	recvThread_ = SDL_CreateThread(
+	recvThread_ = new boost::thread(
 		NetServerTCPRead::recvThreadFunc, (void *) this);
-	sendThread_ = SDL_CreateThread(
+	sendThread_ = new boost::thread(
 		NetServerTCPRead::sendThreadFunc, (void *) this);
-	ctrlThread_ = SDL_CreateThread(
+	ctrlThread_ = new boost::thread(
 		NetServerTCPRead::ctrlThreadFunc, (void *) this);
-	if (!ctrlThread_ || !recvThread_ || !sendThread_)
-	{
-		Logger::log( "ERROR: Run out of threads");
-	}
 }
 
 void NetServerTCPRead::addMessage(NetMessage *message)
@@ -104,7 +82,7 @@ void NetServerTCPRead::addMessage(NetMessage *message)
 		DIALOG_ASSERT(0); 
 	}
 
-	SDL_LockMutex(outgoingMessagesMutex_);
+	outgoingMessagesMutex_.lock();
 	newMessages_.push_back(message);
 	if (message->getMessageType() == NetMessage::DisconnectMessage &&
 		!sentDisconnect_)
@@ -116,19 +94,19 @@ void NetServerTCPRead::addMessage(NetMessage *message)
 				getIpAddress());
 		messageHandler_->addMessage(message);
 	}
-	SDL_UnlockMutex(outgoingMessagesMutex_);
+	outgoingMessagesMutex_.unlock();
 }
 
 bool NetServerTCPRead::getDisconnect()
 { 
-	SDL_LockMutex(outgoingMessagesMutex_);
+	outgoingMessagesMutex_.lock();
 	bool result = disconnect_;	
-	SDL_UnlockMutex(outgoingMessagesMutex_);
+	outgoingMessagesMutex_.unlock();
 
 	if (result)
 	{
-		int status = 0;
-		SDL_WaitThread(ctrlThread_, &status);
+		delete ctrlThread_;
+		ctrlThread_ = 0;
 	}
 	return result; 
 }
@@ -160,32 +138,34 @@ void NetServerTCPRead::actualCtrlThreadFunc()
 	bool done = false;
 	while (!done)
 	{
-		SDL_LockMutex(outgoingMessagesMutex_);
+		outgoingMessagesMutex_.lock();
 		if (startCount_ == 2) done = true;
-		SDL_UnlockMutex(outgoingMessagesMutex_);
-		SDL_Delay(100);
+		outgoingMessagesMutex_.unlock();
+		boost::this_thread::sleep(boost::posix_time::milliseconds(100));
 	}
 
 	// Wait for the other threads to end
-	int status;
-	SDL_WaitThread(sendThread_, &status);
-	SDL_WaitThread(recvThread_, &status);
+	delete recvThread_;
+	delete sendThread_;
+	recvThread_ = 0;
+	sendThread_ = 0;
 
 	// Tidy socket
-	SDLNet_TCP_Close(socket_);
+	delete socket_;
+	socket_ = 0;
 
 	// Delete self
-	SDL_LockMutex(outgoingMessagesMutex_);
+	outgoingMessagesMutex_.lock();
 	disconnect_ = true;
 	*checkDeleted_ = true;
-	SDL_UnlockMutex(outgoingMessagesMutex_);
+	outgoingMessagesMutex_.unlock();
 }
 
 void NetServerTCPRead::actualSendRecvThreadFunc(bool send)
 {
-	SDL_LockMutex(outgoingMessagesMutex_);
+	outgoingMessagesMutex_.lock();
 	startCount_++;
-	SDL_UnlockMutex(outgoingMessagesMutex_);
+	outgoingMessagesMutex_.unlock();
 
 	Clock netClock;
 	while (!sentDisconnect_)
@@ -211,7 +191,7 @@ void NetServerTCPRead::actualSendRecvThreadFunc(bool send)
 		}
 	}
 
-	SDL_LockMutex(outgoingMessagesMutex_);
+	outgoingMessagesMutex_.lock();
 	if (!sentDisconnect_)
 	{
 		sentDisconnect_ = true;
@@ -221,20 +201,13 @@ void NetServerTCPRead::actualSendRecvThreadFunc(bool send)
 				getIpAddress());
 		messageHandler_->addMessage(message);
 	}
-	SDL_UnlockMutex(outgoingMessagesMutex_);
+	outgoingMessagesMutex_.unlock();
 }
 
 bool NetServerTCPRead::pollIncoming()
 {
-	int numready = SDLNet_CheckSockets(sockSet_, 100);
-	if (numready == -1) return false;
-	if (numready == 0)
-	{
-		SDL_Delay(10);
-		return true;
-	}
-
-	if(SDLNet_SocketReady(socket_))
+	boost::system::error_code ec;
+	if (socket_->available(ec) > 0)
 	{
 		NetMessage *message = protocol_->readBuffer(socket_, id_);
 		if (!message)
@@ -255,6 +228,11 @@ bool NetServerTCPRead::pollIncoming()
 			}
 		}
 	}
+	else
+	{
+		if (ec) return false;
+		boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+	}
 
 	return true;
 }
@@ -262,13 +240,13 @@ bool NetServerTCPRead::pollIncoming()
 bool NetServerTCPRead::pollOutgoing()
 {
 	NetMessage *message = 0;
-	SDL_LockMutex(outgoingMessagesMutex_);
+	outgoingMessagesMutex_.lock();
 	if (!newMessages_.empty())
 	{
 		message = newMessages_.front();
 		newMessages_.pop_front();
 	}
-	SDL_UnlockMutex(outgoingMessagesMutex_);
+	outgoingMessagesMutex_.unlock();
 
 	bool result = true;
 	if (message)
@@ -288,7 +266,10 @@ bool NetServerTCPRead::pollOutgoing()
 		message->setType(NetMessage::SentMessage);
 		messageHandler_->addMessage(message);
 	}
-	else SDL_Delay(100);
+	else 
+	{
+		boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+	}
 
 	return result;
 }

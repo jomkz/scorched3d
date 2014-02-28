@@ -52,6 +52,7 @@ public:
 	static unsigned int &getPings() { return pings_; }
 	static unsigned int &getConnects() { return connects_; }
 	static const char *getIpName(unsigned int ipAddress);
+	static unsigned int getIpAddressFromName(const char *name);
 
 protected:
 	static unsigned int bytesIn_;

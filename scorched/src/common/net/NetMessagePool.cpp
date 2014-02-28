@@ -18,7 +18,6 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #include <net/NetMessagePool.h>
 
 NetMessagePool *NetMessagePool::instance_ = 0;
@@ -32,21 +31,19 @@ NetMessagePool *NetMessagePool::instance()
 	return instance_;
 }
 
-NetMessagePool::NetMessagePool() : messagePoolMutex_(0)
+NetMessagePool::NetMessagePool()
 {
-	messagePoolMutex_ = SDL_CreateMutex();
 }
 
 NetMessagePool::~NetMessagePool()
 {
-	SDL_DestroyMutex(messagePoolMutex_);
 }
 
 void NetMessagePool::addToPool(NetMessage *message)
 {
-	SDL_LockMutex(messagePoolMutex_);
+	messagePoolMutex_.lock();
 	messagePool_.push_back(message);
-	SDL_UnlockMutex(messagePoolMutex_);
+	messagePoolMutex_.unlock();
 }
 
 NetMessage *NetMessagePool::getFromPool(NetMessage::MessageType type,
@@ -55,7 +52,7 @@ NetMessage *NetMessagePool::getFromPool(NetMessage::MessageType type,
 	unsigned int flags,
 	unsigned int recvTime)
 {
-	SDL_LockMutex(messagePoolMutex_);
+	messagePoolMutex_.lock();
 
 	NetMessage *result = 0;
 	if (messagePool_.empty())
@@ -74,7 +71,7 @@ NetMessage *NetMessagePool::getFromPool(NetMessage::MessageType type,
 	result->setFlags(flags);
 	result->setRecvTime(recvTime);
 
-	SDL_UnlockMutex(messagePoolMutex_);
+	messagePoolMutex_.unlock();
 
 	return result;
 }

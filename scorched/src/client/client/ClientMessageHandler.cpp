@@ -23,7 +23,6 @@
 #include <client/ClientStateInitialize.h>
 #include <client/ClientParams.h>
 #include <client/ScorchedClient.h>
-#include <dialogs/MsgBoxDialog.h>
 #include <target/TargetContainer.h>
 #include <lang/LangResource.h>
 #include <common/Logger.h>

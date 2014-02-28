@@ -300,24 +300,22 @@ void NetBuffer::addToBuffer(FixedVector4 &add)
 
 void NetBuffer::addToBuffer(const fixed add)
 {
-	Sint64 value = SDL_SwapBE64(fixed(add).getInternalData());
-	addDataToBuffer(&value, sizeof(Sint64));
+	int64_t value = htonll(fixed(add).getInternalData());
+	addDataToBuffer(&value, sizeof(int64_t));
 }
 
 void NetBuffer::addToBuffer(const int add)
 {
-	Uint32 value = 0;
-	SDLNet_Write32(add, &value);
-	addDataToBuffer(&value, sizeof(Uint32));
+	uint32_t value = htonl(add);
+	addDataToBuffer(&value, sizeof(uint32_t));
 }
 
 void NetBuffer::addToBuffer(const float addf)
 {
-	Uint32 value = 0;
-	Uint32 add = 0;
-	memcpy(&add, &addf, sizeof(Uint32));
-	SDLNet_Write32(add, &value);
-	addDataToBuffer(&value, sizeof(Uint32));
+	uint32_t add = 0;
+	memcpy(&add, &addf, sizeof(uint32_t));
+	uint32_t value = htonl(add);
+	addDataToBuffer(&value, sizeof(uint32_t));
 }
 
 void NetBuffer::addToBuffer(const bool add)
@@ -338,9 +336,8 @@ void NetBuffer::addToBuffer(const char add)
 
 void NetBuffer::addToBuffer(const unsigned int add)
 {
-	Uint32 value = 0;
-	SDLNet_Write32(add, &value);
-	addDataToBuffer(&value, sizeof(Uint32));
+	uint32_t value = htonl(add);
+	addDataToBuffer(&value, sizeof(uint32_t));
 }
 
 void NetBuffer::addToBuffer(const char *add)
@@ -384,6 +381,25 @@ unsigned NetBuffer::getCrc()
 	unsigned int crc =  crc32(0L, Z_NULL, 0);
 	crc = crc32(crc, (unsigned char *) getBuffer(), getBufferUsed());
 	return crc;
+}
+
+uint64_t NetBuffer::htonll(uint64_t value)
+{
+	// The answer is 42
+	static const int num = 42;
+
+	// Check the endianness
+	if (*reinterpret_cast<const char*>(&num) == num)
+	{
+		const uint32_t high_part = htonl(static_cast<uint32_t>(value >> 32));
+		const uint32_t low_part = htonl(static_cast<uint32_t>(value & 0xFFFFFFFFLL));
+
+		return (static_cast<uint64_t>(low_part) << 32) | high_part;
+	} 
+	else
+	{
+		return value;
+	}
 }
 
 NetBufferReader::NetBufferReader() :
@@ -436,26 +452,26 @@ bool NetBufferReader::getFromBuffer(FixedVector4 &result)
 
 bool NetBufferReader::getFromBuffer(int &result)
 {
-	Uint32 value = 0;
+	uint32_t value = 0;
 	if (!getDataFromBuffer(&value, sizeof(value))) return false;
-	result = SDLNet_Read32(&value);
+	result = ntohl(value);
 	return true;
 }
 
 bool NetBufferReader::getFromBuffer(fixed &result)
 {
-	Sint64 value = 0;
+	int64_t value = 0;
 	if (!getDataFromBuffer(&value, sizeof(value))) return false;
-	result = fixed(true, SDL_SwapBE64(value));
+	result = fixed(true, NetBuffer::htonll(value));
 	return true;
 }
 
 bool NetBufferReader::getFromBuffer(float &resultf)
 {
-	Uint32 value = 0;
+	uint32_t value = 0;
 	if (!getDataFromBuffer(&value, sizeof(value))) return false;
-	Uint32 result = SDLNet_Read32(&value);
-	memcpy(&resultf, &result, sizeof(Uint32));
+	uint32_t result = ntohl(value);
+	memcpy(&resultf, &result, sizeof(uint32_t));
 	return true;
 }
 
@@ -481,9 +497,9 @@ bool NetBufferReader::getFromBuffer(unsigned char &result)
 
 bool NetBufferReader::getFromBuffer(unsigned int &result)
 {
-	Uint32 value = 0;
+	uint32_t value = 0;
 	if (!getDataFromBuffer(&value, sizeof(value))) return false;
-	result = SDLNet_Read32(&value);
+	result = ntohl(value);
 	return true;
 }
 

@@ -25,9 +25,9 @@
 #include <weapons/AccessoryStore.h>
 #include <weapons/WeaponMoveTank.h>
 #ifndef S3D_SERVER
-	#include <client/ScorchedClient.h>
-	#include <client/ClientState.h>
-	#include <landscape/Landscape.h>
+//	#include <client/ScorchedClient.h>
+//	#include <client/ClientState.h>
+//	#include <landscape/Landscape.h>
 #endif
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapemap/MovementMap.h>
@@ -46,6 +46,7 @@ TankWeaponSwitcher::~TankWeaponSwitcher()
 void TankWeaponSwitcher::switchWeapon(ScorchedContext &context, Tanket *tanket, Accessory *currentWeapon, Accessory *newWeapon) 
 {
 #ifndef S3D_SERVER
+	/*
 	if (!context.getServerMode() && tanket->getType() == Target::TypeTank)
 	{
 		Tank *tank = (Tank *) tanket;
@@ -105,5 +106,6 @@ void TankWeaponSwitcher::switchWeapon(ScorchedContext &context, Tanket *tanket, 
 
 		}
 	}
+	*/
 #endif
 }

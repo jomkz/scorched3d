@@ -19,12 +19,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <net/NetServerTCP3Recv.h>
-#include <net/NetServerTCP3Coms.h>
 #include <net/NetMessagePool.h>
 #include <common/Logger.h>
 
 NetServerTCP3Recv::NetServerTCP3Recv(
-	TCPsocket socket, 
+	boost::asio::ip::tcp::socket *socket, 
 	unsigned int destinationId, unsigned int ipAddress,
 	NetMessageHandler *recieveMessageHandler) :
 	socket_(socket), 
@@ -33,9 +32,7 @@ NetServerTCP3Recv::NetServerTCP3Recv(
 	messagesRecieved_(0), bytesIn_(0),
 	stopped_(false), running_(true)
 {
-	socketSet_ = SDLNet_AllocSocketSet(1);
-	SDLNet_TCP_AddSocket(socketSet_, socket_);
-	recvThread_ = SDL_CreateThread(
+	recvThread_ = new boost::thread(
 		NetServerTCP3Recv::recvThreadFunc, (void *) this);
 	if (recvThread_ == 0)
 	{
@@ -46,8 +43,8 @@ NetServerTCP3Recv::NetServerTCP3Recv(
 
 NetServerTCP3Recv::~NetServerTCP3Recv()
 {
-	SDLNet_FreeSocketSet(socketSet_);
-	socketSet_ = 0;
+	delete recvThread_;
+	recvThread_ = 0;
 }
 
 int NetServerTCP3Recv::recvThreadFunc(void *c)
@@ -64,18 +61,15 @@ int NetServerTCP3Recv::recvThreadFunc(void *c)
 
 bool NetServerTCP3Recv::actualRecvFunc()
 {
-	// Check if there is anything to recieve
-	int numready = SDLNet_CheckSockets(socketSet_, 100);
-	if (numready == -1) return false;
-	if (numready == 0) return true;
-
 	// Receive the length of the string message
 	char lenbuf[4];
-	if (!NetServerTCP3Coms::SDLNet_TCP_Recv_Full(socket_, lenbuf, 4))
+	if (boost::asio::read(*socket_, boost::asio::buffer(lenbuf, 4)) != 4)
 	{
 		return false;
 	}
-	Uint32 len = SDLNet_Read32(lenbuf);
+	uint32_t netlen = 0;
+	memcpy(&netlen, lenbuf, sizeof(netlen));
+	uint32_t len = ntohl(netlen);
 	
 	// Cannot recieve a message larger than 
 	if (len > 15000000 || len == 0)
@@ -87,7 +81,7 @@ bool NetServerTCP3Recv::actualRecvFunc()
 	}
 
 	// allocate the buffer memory
-	unsigned int recvTime = (unsigned int) SDL_GetTicks();
+	unsigned int recvTime = 0;
 	NetMessage *buffer = NetMessagePool::instance()->
 		getFromPool(NetMessage::BufferMessage, 
 		destinationId_, ipAddress_, 0, recvTime);
@@ -95,9 +89,7 @@ bool NetServerTCP3Recv::actualRecvFunc()
 	buffer->getBuffer().setBufferUsed(len);
 
 	// get the string buffer over the socket
-	if (!NetServerTCP3Coms::SDLNet_TCP_Recv_Full(socket_, 
-		buffer->getBuffer().getBuffer(),
-		len))
+	if (boost::asio::read(*socket_, boost::asio::buffer(buffer->getBuffer().getBuffer(), len)) != len)
 	{
 		Logger::log(S3D::formatStringBuffer(
 			"NetServerTCP3Recv: Read failed for buffer"));
@@ -116,6 +108,6 @@ bool NetServerTCP3Recv::actualRecvFunc()
 
 void NetServerTCP3Recv::wait()
 {
-	int status;
-	SDL_WaitThread(recvThread_, &status);
+	// Should do nothing
+	recvThread_->join();	
 }

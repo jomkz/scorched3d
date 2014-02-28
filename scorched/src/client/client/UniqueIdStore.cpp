@@ -21,14 +21,13 @@
 #include <client/UniqueIdStore.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
-#include <graph/OptionsDisplay.h>
+#include <client/ClientOptions.h>
 #include <net/NetInterface.h>
 #include <XML/XMLFile.h>
 #include <stdlib.h>
 
 UniqueIdStore::UniqueIdStore()
 {
-	DIALOG_ASSERT(SDLNet_Init()!=-1);
 }
 
 UniqueIdStore::~UniqueIdStore()
@@ -54,7 +53,7 @@ bool UniqueIdStore::loadStore()
 
 	// return true for an empty file
 	if (!file.getRootNode()) return true;
-
+	
 	XMLNode *node;
 	while (file.getRootNode()->getNamedChild("id", node, false))
 	{
@@ -62,12 +61,7 @@ bool UniqueIdStore::loadStore()
 		if (!node->getNamedChild("id", entry.id)) return false;
 		if (!node->getNamedChild("published", entry.published)) return false;
 
-		IPaddress ipAddress;
-		if (SDLNet_ResolveHost(&ipAddress, (char *) entry.published.c_str(), 0) == 0)
-		{
-			entry.ip = SDLNet_Read32(&ipAddress.host);
-		}
-		else entry.ip = 0;
+		entry.ip = NetInterface::getIpAddressFromName((char *) entry.published.c_str());
 		ids_.push_back(entry);
 	}
 	return file.getRootNode()->failChildren();
@@ -124,14 +118,7 @@ bool UniqueIdStore::saveUniqueId(unsigned int ip, const char *id,
 	if (0 == strcmp(published, "AutoDetect")) return true;
 
 	// Check the published ip matches the actual server ip
-	IPaddress address;
-	if (SDLNet_ResolveHost(&address, (char *) published, 0) != 0)
-	{
-		Logger::log(S3D::formatStringBuffer("Failed to resolve published server host \"%s\"", published));
-		return false;
-	}
-
-	unsigned int ipAddress = SDLNet_Read32(&address.host);
+	unsigned int ipAddress = NetInterface::getIpAddressFromName(published);
 	if (ipAddress != ip) 
 	{
 		std::string actualIp = NetInterface::getIpName(ip);

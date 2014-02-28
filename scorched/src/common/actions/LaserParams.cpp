@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <actions/LaserParams.h>
-#include <lua/LUAUtil.h>
 #include <XML/XMLNode.h>
 
 LaserParams::LaserParams() : 
@@ -46,17 +45,4 @@ bool LaserParams::parseXML(XMLNode *accessoryNode)
 	accessoryNode->getNamedChild("ringradius", ringRadius_, false);
 
 	return true;
-}
-
-void LaserParams::parseLUA(lua_State *L, int position)
-{
-	luaL_checktype(L, position, LUA_TTABLE);
-
-	minimumHurt_ = LUAUtil::getNumberFromTable(L, position, "minimumhurt", minimumHurt_);
-	maximumHurt_ = LUAUtil::getNumberFromTable(L, position, "maximumhurt", maximumHurt_);
-	minimumDistance_ = LUAUtil::getNumberFromTable(L, position, "minimumdistance", minimumDistance_);
-	maximumDistance_ = LUAUtil::getNumberFromTable(L, position, "maximumdistance", maximumDistance_);
-	hurtRadius_ = LUAUtil::getNumberFromTable(L, position, "hurtradius", hurtRadius_);
-	totalTime_ = LUAUtil::getNumberFromTable(L, position, "totaltime", totalTime_);
-	hurtFirer_ = LUAUtil::getBoolFromTable(L, position, "hurtfirer", hurtFirer_);
 }

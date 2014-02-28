@@ -27,7 +27,7 @@
 class NetServerTCP3Recv
 {
 public:
-	NetServerTCP3Recv(TCPsocket socket, 
+	NetServerTCP3Recv(boost::asio::ip::tcp::socket *socket, 
 		unsigned int destinationId, unsigned int ipAddress,
 		NetMessageHandler *recieveMessageHandler);
 	virtual ~NetServerTCP3Recv();
@@ -42,9 +42,8 @@ public:
 protected:
 	bool stopped_, running_;
 	unsigned int destinationId_, ipAddress_;
-	TCPsocket socket_;
-	SDLNet_SocketSet socketSet_;
-	SDL_Thread *recvThread_;
+	boost::asio::ip::tcp::socket *socket_;
+	boost::thread *recvThread_;
 	NetMessageHandler *recieveMessageHandler_;
 	unsigned int messagesRecieved_, bytesIn_;
 

@@ -28,22 +28,8 @@
 #include <actions/CameraPositionAction.h>
 #include <engine/ScorchedContext.h>
 #include <engine/ActionController.h>
-#ifndef S3D_SERVER
-	#include <graph/OptionsDisplay.h>
-	#include <graph/ParticleEmitter.h>
-	#include <graph/MainCamera.h>
-	#include <client/ScorchedClient.h>
-	#include <sound/SoundUtils.h>
-#endif
 #include <landscapemap/DeformLandscape.h>
 #include <landscapemap/LandscapeMaps.h>
-#ifndef S3D_SERVER
-	#include <landscape/Landscape.h>
-	#include <water/Water.h>
-	#include <landscape/Smoke.h>
-	#include <sprites/ExplosionNukeRenderer.h>
-	#include <sprites/ExplosionTextures.h>
-#endif
 #include <math.h>
 
 Explosion::Explosion(FixedVector &position,
@@ -72,6 +58,7 @@ void Explosion::init()
 	fixed explosionSize = params_->getSize() * multiplier;	
 
 #ifndef S3D_SERVER
+	/*
 	if (!context_->getServerMode()) 
 	{
 		float height = context_->getLandscapeMaps().getGroundMaps().getInterpHeight(
@@ -82,9 +69,9 @@ void Explosion::init()
 		bool waterSplash = false;
 		if (params_->getCreateSplash())
 		{
-			waterSplash = 
-				Landscape::instance()->getWater().explosion(
-					position_.asVector(), params_->getSize().asFloat());
+			//waterSplash = 
+			//	Landscape::instance()->getWater().explosion(
+			//		position_.asVector(), params_->getSize().asFloat());
 		}
 
 		// Create particles from the center of the explosion
@@ -271,6 +258,7 @@ void Explosion::init()
 			targetCamera->getCamera().addShake(params_->getShake().asFloat());
 		}
 	}
+	*/
 #endif // #ifndef S3D_SERVER
 }
 
@@ -288,6 +276,7 @@ void Explosion::simulate(fixed frameTime, bool &remove)
 	{
 		firstTime_ = false;
 #ifndef S3D_SERVER
+		/*
 		if (!context_->getServerMode()) 
 		{
 			if (params_->getExplosionSound() &&
@@ -300,6 +289,7 @@ void Explosion::simulate(fixed frameTime, bool &remove)
 					expSound, position_.asVector());
 			}
 		}
+		*/
 #endif // #ifndef S3D_SERVER
 
 		// Get the land height at the explosion

@@ -21,9 +21,8 @@
 #if !defined(AFX_ConsoleLINES_H__2DA65C94_3E52_43C6_B75B_D0CEDBF6A9DE__INCLUDED_)
 #define AFX_ConsoleLINES_H__2DA65C94_3E52_43C6_B75B_D0CEDBF6A9DE__INCLUDED_
 
-#include <GLEXT/GLFont2d.h>
 #include <deque>
-#include <string>
+#include <lang/Lang.h>
 
 class ConsoleLine
 {
@@ -39,7 +38,6 @@ public:
 	virtual ~ConsoleLine();
 
 	void set(const LangString &line, LineType type);
-	void drawLine(float x, float y, GLFont2d *font);
 
 	LineType getLineType() { return lineType_; }
 	const LangString &getLine() { return line_; }
@@ -60,7 +58,6 @@ public:
 	virtual ~ConsoleLines();
 
 	void addLine(const std::string &line, bool showPointer);
-	void drawLines(GLFont2d *font, float startHeight, float totalHeight, float totalWidth);
 
 	void clear();
 

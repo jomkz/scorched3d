@@ -25,10 +25,6 @@
 #include <weapons/WeaponLightning.h>
 #include <list>
 
-#ifndef S3D_SERVER
-#include <GLEXT/GLTextureReference.h>
-#endif
-
 class Target;
 class Lightning : public Action
 {
@@ -57,9 +53,6 @@ protected:
 	fixed totalTime_;
 	std::list<Segment> segments_;
 
-#ifndef S3D_SERVER
-	GLTextureReference texture_;
-#endif
 	WeaponLightning *weapon_;
 	FixedVector position_;
 	FixedVector velocity_;

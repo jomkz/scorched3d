@@ -20,8 +20,8 @@
 
 #include <actions/TankSay.h>
 #ifndef S3D_SERVER
-	#include <sprites/TalkRenderer.h>
-	#include <sprites/ExplosionTextures.h>
+//	#include <sprites/TalkRenderer.h>
+//	#include <sprites/ExplosionTextures.h>
 #endif
 #include <target/TargetContainer.h>
 #include <tank/Tank.h>
@@ -54,10 +54,11 @@ void TankSay::init()
 		{
 			// put a speach bubble over the talking tank
 			Vector white(1.0f, 1.0f, 1.0f);
-			TalkRenderer *talk = new TalkRenderer(
+			/*TalkRenderer *talk = new TalkRenderer(
 				tank->getLife().getTankTurretPosition().asVector(),
 				white);
 			context_->getActionController().addAction(new SpriteAction(talk));
+			*/
 
 			ChannelText text("general", text_);
 			text.setSrcPlayerId(playerId_);

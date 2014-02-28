@@ -23,9 +23,6 @@
 #include <engine/ScorchedContext.h>
 #include <engine/ScorchedContext.h>
 #include <movement/TargetMovement.h>
-#ifndef S3D_SERVER
-	#include <land/VisibilityPatchGrid.h>
-#endif
 
 LandscapeMaps::LandscapeMaps() :
 	gMaps_(dCache_), rMaps_(dCache_)
@@ -44,12 +41,6 @@ void LandscapeMaps::generateMaps(
 	dCache_.setDefinition(context, defn);
 	gMaps_.generateMaps(context, counter);
 	rMaps_.generateMaps(context, counter);
-#ifndef S3D_SERVER
-	if (!context.getServerMode())
-	{
-		VisibilityPatchGrid::instance()->generate();
-	}
-#endif
 	gMaps_.generateObjects(context, counter);
 
 	// Create movement after targets, so we can mark 

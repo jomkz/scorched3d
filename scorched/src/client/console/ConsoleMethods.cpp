@@ -21,9 +21,9 @@
 #include <console/ConsoleRuleMethodIAdapter.h>
 #include <console/ConsoleMethods.h>
 #include <console/ConsoleFileReader.h>
+#include <common/DefinesString.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientState.h>
-#include <engine/MainLoop.h>
 
 ConsoleMethods::ConsoleMethods()
 {

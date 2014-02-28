@@ -19,7 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <engine/ScorchedContext.h>
-#include <engine/GameState.h>
 #include <engine/ActionController.h>
 #include <engine/Simulator.h>
 #include <engine/ModFiles.h>
@@ -37,7 +36,6 @@
 #include <landscapedef/LandscapeDefinitions.h>
 #include <weapons/AccessoryStore.h>
 #include <tankai/TankAIStrings.h>
-#include <lua/LUAScriptHook.h>
 #include <events/EventController.h>
 
 ScorchedContext::ScorchedContext(const char *name)

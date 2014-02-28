@@ -22,7 +22,7 @@
 #include <weapons/WeaponSound.h>
 #include <weapons/AccessoryStore.h>
 #ifndef S3D_SERVER
-	#include <sound/SoundUtils.h>
+//	#include <sound/SoundUtils.h>
 #endif
 #include <common/Defines.h>
 
@@ -46,6 +46,7 @@ void SoundAction::simulate(fixed frameTime, bool &remove)
 #ifndef S3D_SERVER
 	if (!context_->getServerMode())
 	{
+		/*
 		SoundBuffer *activateSound = 
 			Sound::instance()->fetchOrCreateBuffer(
 				S3D::getModFile(weapon_->getSound()));
@@ -58,6 +59,7 @@ void SoundAction::simulate(fixed frameTime, bool &remove)
 		source->setReferenceDistance(weapon_->getReferenceDistance().asFloat());
 		source->setRolloff(weapon_->getRolloff().asFloat());
 		source->play(activateSound);
+		*/
 	}
 #endif // #ifndef S3D_SERVER
 

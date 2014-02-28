@@ -27,31 +27,28 @@ NetMessageHandlerI::~NetMessageHandlerI()
 }
 
 NetMessageHandler::NetMessageHandler() : 
-	handler_(0), messagesMutex_(0), messagesWaiting_(false)
+	handler_(0), messagesWaiting_(false)
 {
-	messagesMutex_ = SDL_CreateMutex();
 }
 
 NetMessageHandler::~NetMessageHandler()
 {
-	SDL_LockMutex(messagesMutex_);
+	messagesMutex_.lock();
 	while (!messages_.empty())
 	{
 		NetMessage *message = messages_.front();
 		messages_.pop_front();
 		NetMessagePool::instance()->addToPool(message);
 	}	
-	SDL_UnlockMutex(messagesMutex_);
-
-	SDL_DestroyMutex(messagesMutex_);
+	messagesMutex_.unlock();
 }
 
 void NetMessageHandler::addMessage(NetMessage *message)
 {
-	SDL_LockMutex(messagesMutex_);
+	messagesMutex_.lock();
 	messages_.push_back(message);
 	messagesWaiting_ = true;
-	SDL_UnlockMutex(messagesMutex_);
+	messagesMutex_.unlock();
 }
 
 int NetMessageHandler::processMessages()
@@ -71,14 +68,14 @@ bool NetMessageHandler::processSingleMessage()
 	// Get the list of messages that should be processed
 	// Process one at a time, incase this method is called re-entrantly
 	NetMessage *message = 0;
-	SDL_LockMutex(messagesMutex_);
+	messagesMutex_.lock();
 	if (!messages_.empty())
 	{
 		message = messages_.front();
 		messages_.pop_front();
 	}
 	messagesWaiting_ = !messages_.empty();
-	SDL_UnlockMutex(messagesMutex_);
+	messagesMutex_.unlock();
 
 	if (message)
 	{

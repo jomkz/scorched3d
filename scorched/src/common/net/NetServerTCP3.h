@@ -32,6 +32,8 @@ public:
 	NetServerTCP3();
 	virtual ~NetServerTCP3();
 
+	static unsigned int getIpAddressFromSocket(boost::asio::ip::tcp::socket *socket);
+
 	// NetInterface
 	virtual bool started();
 	virtual bool connect(const char *hostName, int portNo);
@@ -58,9 +60,9 @@ protected:
 
 	NetMessageHandler outgoingMessageHandler_;
 	NetMessageHandler incomingMessageHandler_;
-	TCPsocket serverSock_;
-	SDLNet_SocketSet serverSockSet_;
-	SDL_Thread *sendRecvThread_;
+	boost::asio::ip::tcp::acceptor  *serverSock_;
+	boost::asio::io_service io_service_;
+	boost::thread *sendRecvThread_;
 	bool stopped_;
 	std::map<unsigned int, NetServerTCP3Destination *> destinations_;
 	std::list<NetServerTCP3Destination *> finishedDestinations_;
@@ -80,7 +82,7 @@ protected:
 	void destroyDestination(NetBuffer &disconectMessage,
 		unsigned int destinationId, 
 		NetMessage::DisconnectFlags type);
-	unsigned int addDestination(TCPsocket &socket);
+	unsigned int addDestination(boost::asio::ip::tcp::socket *socket);
 };
 
 #endif // __INCLUDE_NetServerTCP3h_INCLUDE__
